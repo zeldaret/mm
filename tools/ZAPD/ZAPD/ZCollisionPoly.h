@@ -3,28 +3,27 @@
 #include "ZFile.h"
 #include "ZResource.h"
 
-
 class ZCollisionPoly : public ZResource
 {
-public: 
-    uint16_t type;
+public:
+	uint16_t type;
 	uint16_t vtxA, vtxB, vtxC;
 	uint16_t normX, normY, normZ;
-    uint16_t dist;
+	uint16_t dist;
 
-    ZCollisionPoly(ZFile* nParent);
-    ~ZCollisionPoly();
+	ZCollisionPoly(ZFile* nParent);
+	~ZCollisionPoly();
 
-    void ParseRawData() override;
-    void DeclareReferences(const std::string& prefix) override;
+	void ParseRawData() override;
+	void DeclareReferences(const std::string& prefix) override;
 
-    std::string GetBodySourceCode() const override;
-    std::string GetDefaultName(const std::string& prefix) const override;
+	std::string GetBodySourceCode() const override;
+	std::string GetDefaultName(const std::string& prefix) const override;
 
-    std::string GetSourceTypeName() const override;
-    ZResourceType GetResourceType() const override;
+	std::string GetSourceTypeName() const override;
+	ZResourceType GetResourceType() const override;
 
-    bool DoesSupportArray() const override;
+	bool DoesSupportArray() const override;
 
-    size_t GetRawDataSize() const override;
+	size_t GetRawDataSize() const override;
 };

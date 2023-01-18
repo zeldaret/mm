@@ -18,7 +18,7 @@ void EnTanron1_Draw(Actor* thisx, PlayState* play);
 void func_80BB5318(EnTanron1* this, PlayState* play);
 void func_80BB5AAC(EnTanron1* this, PlayState* play);
 
-const ActorInit En_Tanron1_InitVars = {
+ActorInit En_Tanron1_InitVars = {
     ACTOR_EN_TANRON1,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -149,7 +149,7 @@ void EnTanron1_Update(Actor* thisx, PlayState* play) {
             break;
     }
 
-    if ((player->itemActionParam == 7) && (player->unk_B28 != 0)) {
+    if ((player->heldItemAction == PLAYER_IA_STICK) && (player->unk_B28 != 0)) {
         this->unk_14C.x = player->meleeWeaponInfo[0].tip.x;
         this->unk_14C.y = player->meleeWeaponInfo[0].tip.y;
         this->unk_14C.z = player->meleeWeaponInfo[0].tip.z;

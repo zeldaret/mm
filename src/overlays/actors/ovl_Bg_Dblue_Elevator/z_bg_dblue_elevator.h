@@ -14,6 +14,4 @@ typedef struct BgDblueElevator {
     /* 0x160 */ char unk_160[0x10];
 } BgDblueElevator; // size = 0x170
 
-extern const ActorInit Bg_Dblue_Elevator_InitVars;
-
 #endif // Z_BG_DBLUE_ELEVATOR_H

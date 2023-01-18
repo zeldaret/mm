@@ -4,6 +4,7 @@
  * Description: Keaton grass
  */
 
+#include "prevent_bss_reordering.h"
 #include "z_en_kusa2.h"
 #include "objects/gameplay_field_keep/gameplay_field_keep.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
@@ -44,16 +45,16 @@ void func_80A5E6F0(Actor* thisx, PlayState* play);
 void func_80A5E9B4(Actor* thisx, PlayState* play);
 void func_80A5EA48(Actor* thisx, PlayState* play);
 
-static EnKusa2UnkBssStruct D_80A5F1C0;
-static u32 D_80A60900;
-static MtxF D_80A60908[8];
-static s16 D_80A60B08;
-static s16 D_80A60B0A;
-static s16 D_80A60B0C;
-static s16 D_80A60B0E;
-static s16 D_80A60B10;
+EnKusa2UnkBssStruct D_80A5F1C0;
+u32 D_80A60900;
+MtxF D_80A60908[8];
+s16 D_80A60B08;
+s16 D_80A60B0A;
+s16 D_80A60B0C;
+s16 D_80A60B0E;
+s16 D_80A60B10;
 
-const ActorInit En_Kusa2_InitVars = {
+ActorInit En_Kusa2_InitVars = {
     ACTOR_EN_KUSA2,
     ACTORCAT_PROP,
     FLAGS,
@@ -85,11 +86,11 @@ static ColliderCylinderInit sCylinderInit = {
     { 6, 44, 0, { 0, 0, 0 } },
 };
 
-static u8 D_80A5EAEC = 1;
-static s16 D_80A5EAF0 = 0;
-static Vec3s D_80A5EAF4 = { 0, 0, 0 };
-static Vec3s D_80A5EAFC = { 0, 0, 0 };
-static Vec3s D_80A5EB04 = { 0, 0, 0 };
+u8 D_80A5EAEC = 1;
+s16 D_80A5EAF0 = 0;
+Vec3s D_80A5EAF4 = { 0, 0, 0 };
+Vec3s D_80A5EAFC = { 0, 0, 0 };
+Vec3s D_80A5EB04 = { 0, 0, 0 };
 
 void func_80A5B160(EnKusa2* this, PlayState* play) {
     s32 i;
@@ -136,7 +137,7 @@ void func_80A5B334(EnKusa2* this, PlayState* play) {
 
         if (*ptr != NULL) {
             if (!Actor_HasParent(&(*ptr)->actor, play)) {
-                Actor_MarkForDeath(&(*ptr)->actor);
+                Actor_Kill(&(*ptr)->actor);
             }
             *ptr = NULL;
         }
@@ -379,7 +380,7 @@ s32 func_80A5BFD8(EnKusa2* this, PlayState* play) {
         func_80A5BD14(this, play, (this->collider.info.acHitInfo->toucher.dmgFlags & 0x1000000) ? 1 : 0);
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 20, NA_SE_EV_PLANT_BROKEN);
         func_80A5BD94(this);
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return true;
     }
     return false;
@@ -878,18 +879,19 @@ void EnKusa2_Init(Actor* thisx, PlayState* play) {
     } else {
         Collider_InitCylinder(play, &this->collider);
         if (!func_80A5BA58(this, play)) {
-            Actor_MarkForDeath(&this->actor);
-        } else {
-            Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
-            Collider_UpdateCylinder(&this->actor, &this->collider);
-            this->actor.colChkInfo.mass = MASS_IMMOVABLE;
-            this->unk_1CE = D_80A5EAF0 & 7;
-            D_80A5EAF0++;
-            this->actor.shape.shadowAlpha = 0;
-            this->unk_1CF = 255;
-            this->actor.shape.shadowScale = 1.0f;
-            func_80A5D7A4(this);
+            Actor_Kill(&this->actor);
+            return;
         }
+
+        Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
+        Collider_UpdateCylinder(&this->actor, &this->collider);
+        this->actor.colChkInfo.mass = MASS_IMMOVABLE;
+        this->unk_1CE = D_80A5EAF0 & 7;
+        D_80A5EAF0++;
+        this->actor.shape.shadowAlpha = 0;
+        this->unk_1CF = 255;
+        this->actor.shape.shadowScale = 1.0f;
+        func_80A5D7A4(this);
     }
 }
 
@@ -1096,7 +1098,7 @@ void func_80A5DC98(EnKusa2* this, PlayState* play) {
         } else if (this->unk_1CA > 0) {
             this->unk_1CA--;
         } else {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     }
 }
@@ -1241,7 +1243,7 @@ void func_80A5E210(EnKusa2* this, PlayState* play) {
         if (this->unk_1B8 != NULL) {
             this->unk_1B8->unk_28 = func_80A5C718;
         }
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -1273,7 +1275,7 @@ void func_80A5E4BC(EnKusa2* this, PlayState* play) {
 
     this->unk_1CF -= 15;
     if (this->unk_1CF <= 15) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -1342,7 +1344,7 @@ void func_80A5E80C(PlayState* play, s32 arg1) {
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, arg1);
-    gSPDisplayList(POLY_XLU_DISP++, gKusaBushType2);
+    gSPDisplayList(POLY_XLU_DISP++, gKusaBushType2DL);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
@@ -1355,7 +1357,7 @@ void EnKusa2_Draw(Actor* thisx, PlayState* play) {
             (this->actor.projectedPos.z < 400.0f)) {
             func_80A5B954(&D_80A60908[this->unk_1CE], 0.0015f);
         }
-        Gfx_DrawDListOpa(play, gKusaBushType1);
+        Gfx_DrawDListOpa(play, gKusaBushType1DL);
     } else if (this->actor.projectedPos.z < 1300.0f) {
         func_80A5E80C(play, (1300.0f - this->actor.projectedPos.z) * 2.55f);
     }
@@ -1369,14 +1371,14 @@ void func_80A5E9B4(Actor* thisx, PlayState* play) {
     sp18.z = thisx->shape.rot.z + D_80A5EAFC.z;
     Matrix_SetTranslateRotateYXZ(thisx->world.pos.x, thisx->world.pos.y, thisx->world.pos.z, &sp18);
     Matrix_Scale(thisx->scale.x, thisx->scale.y, thisx->scale.z, MTXMODE_APPLY);
-    Gfx_DrawDListOpa(play, gKusaBushType1);
+    Gfx_DrawDListOpa(play, gKusaBushType1DL);
 }
 
 void func_80A5EA48(Actor* thisx, PlayState* play) {
     EnKusa2* this = THIS;
 
     if (this->unk_1CF == 0xFF) {
-        Gfx_DrawDListOpa(play, gKusaBushType1);
+        Gfx_DrawDListOpa(play, gKusaBushType1DL);
     } else {
         func_80A5E80C(play, this->unk_1CF);
     }

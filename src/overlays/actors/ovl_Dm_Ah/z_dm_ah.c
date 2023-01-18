@@ -15,7 +15,7 @@ void DmAh_Destroy(Actor* thisx, PlayState* play);
 void DmAh_Update(Actor* thisx, PlayState* play);
 void DmAh_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit Dm_Ah_InitVars = {
+ActorInit Dm_Ah_InitVars = {
     ACTOR_DM_AH,
     ACTORCAT_NPC,
     FLAGS,
@@ -52,7 +52,7 @@ void func_80C1D458(DmAh* this) {
     }
 }
 
-s32 func_80C1D4D0(DmAh* this, s32 arg1) {
+s32 func_80C1D4D0(DmAh* this, PlayState* play) {
     s32 pad;
     Vec3f sp40;
     Vec3f sp34;

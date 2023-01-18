@@ -57,7 +57,7 @@ void func_8089C398(EnDinofos* this);
 void func_8089C164(EnDinofos* this);
 void func_8089C244(EnDinofos* this);
 
-const ActorInit En_Dinofos_InitVars = {
+ActorInit En_Dinofos_InitVars = {
     ACTOR_EN_DINOFOS,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -369,7 +369,7 @@ void func_8089ABF4(EnDinofos* this, PlayState* play) {
         this->subCamId = SUB_CAM_ID_DONE;
         ActorCutscene_Stop(this->actor.cutscene);
         if (this->actor.colChkInfo.health == 0) {
-            func_800B724C(play, &this->actor, 6);
+            func_800B724C(play, &this->actor, PLAYER_CSMODE_6);
         }
     }
 }
@@ -1145,7 +1145,7 @@ void func_8089D018(EnDinofos* this, PlayState* play) {
         }
 
         if (temp_v0 <= 0) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             this->unk_288 = 0;
         } else {
             this->unk_288 = temp_v0;
@@ -1206,7 +1206,7 @@ void func_8089D318(EnDinofos* this, PlayState* play) {
     if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
         if (this->actor.colChkInfo.health == 0) {
             ActorCutscene_Start(this->actor.cutscene, &this->actor);
-            func_800B724C(play, &this->actor, 7);
+            func_800B724C(play, &this->actor, PLAYER_CSMODE_7);
         } else {
             ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
         }

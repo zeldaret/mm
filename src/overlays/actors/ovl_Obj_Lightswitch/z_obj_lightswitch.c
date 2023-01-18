@@ -27,7 +27,7 @@ void ObjLightSwitch_SetupDisabled(ObjLightswitch* this);
 void ObjLightSwitch_Disabled(ObjLightswitch* this, PlayState* play);
 void ObjLightswitch_Idle(ObjLightswitch* this, PlayState* play);
 
-const ActorInit Obj_Lightswitch_InitVars = {
+ActorInit Obj_Lightswitch_InitVars = {
     ACTOR_OBJ_LIGHTSWITCH,
     ACTORCAT_SWITCH,
     FLAGS,
@@ -173,7 +173,7 @@ void ObjLightswitch_Init(Actor* thisx, PlayState* play) {
     }
 
     if (isTriggered) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -315,10 +315,11 @@ void ObjLightSwitch_Fade(ObjLightswitch* this, PlayState* play) {
     this->colorAlpha -= 200;
     ObjLightswitch_SpawnEffects(this, play); // spawn burning fire effect
     if (this->colorAlpha < 0) {
-        Actor_MarkForDeath(&this->actor);
-    } else {
-        func_800B9010(&this->actor, NA_SE_EN_COMMON_EXTINCT_LEV - SFX_FLAG); // "burn into ashes"
+        Actor_Kill(&this->actor);
+        return;
     }
+
+    func_800B9010(&this->actor, NA_SE_EN_COMMON_EXTINCT_LEV - SFX_FLAG); // "burn into ashes"
 }
 
 void ObjLightswitch_Update(Actor* thisx, PlayState* play) {

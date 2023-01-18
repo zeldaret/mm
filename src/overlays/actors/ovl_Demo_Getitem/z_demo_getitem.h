@@ -17,6 +17,4 @@ typedef struct DemoGetitem {
     /* 0x14C */ DemoGetitemActionFunc actionFunc;
 } DemoGetitem; // size = 0x150
 
-extern const ActorInit Demo_Getitem_InitVars;
-
 #endif // Z_DEMO_GETITEM_H

@@ -18,7 +18,7 @@ void func_80C229AC(DmTag* this, PlayState* play);
 void func_80C229EC(DmTag* this, PlayState* play);
 void func_80C229FC(DmTag* this, PlayState* play);
 
-const ActorInit Dm_Tag_InitVars = {
+ActorInit Dm_Tag_InitVars = {
     ACTOR_DM_TAG,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -158,8 +158,8 @@ s32 func_80C224D8(DmTag* this, PlayState* play) {
             play->nextEntrance = ENTRANCE(STOCK_POT_INN, 5);
             gSaveContext.nextCutsceneIndex = 0;
             play->transitionTrigger = TRANS_TRIGGER_START;
-            play->transitionType = TRANS_TYPE_02;
-            gSaveContext.nextTransitionType = TRANS_TYPE_06;
+            play->transitionType = TRANS_TYPE_FADE_BLACK;
+            gSaveContext.nextTransitionType = TRANS_TYPE_FADE_BLACK_SLOW;
             this->unk_1A4++;
             break;
     }
@@ -172,8 +172,8 @@ s32 func_80C227E8(DmTag* this, PlayState* play) {
         play->nextEntrance = ENTRANCE(STOCK_POT_INN, 4);
         gSaveContext.nextCutsceneIndex = 0;
         play->transitionTrigger = TRANS_TRIGGER_START;
-        play->transitionType = TRANS_TYPE_02;
-        gSaveContext.nextTransitionType = TRANS_TYPE_06;
+        play->transitionType = TRANS_TYPE_FADE_BLACK;
+        gSaveContext.nextTransitionType = TRANS_TYPE_FADE_BLACK_SLOW;
         this->unk_1A4++;
     }
     return false;
@@ -230,8 +230,8 @@ void DmTag_Init(Actor* thisx, PlayState* play) {
     DmTag* this = (DmTag*)thisx;
     Player* player = GET_PLAYER(play);
 
-    if (gSaveContext.save.weekEventReg[85] & 4) {
-        Actor_MarkForDeath(&this->actor);
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_85_04)) {
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -243,7 +243,7 @@ void DmTag_Init(Actor* thisx, PlayState* play) {
         this->actor.flags &= ~ACTOR_FLAG_1;
         this->actionFunc = func_80C229EC;
     } else if (this->actor.room == 2) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     } else {
         this->actor.targetMode = 1;
         this->unk_18E = 1;

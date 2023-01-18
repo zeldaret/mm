@@ -16,7 +16,7 @@ void BgKeikokuSpr_Destroy(Actor* thisx, PlayState* play);
 void BgKeikokuSpr_Update(Actor* thisx, PlayState* play);
 void BgKeikokuSpr_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit Bg_Keikoku_Spr_InitVars = {
+ActorInit Bg_Keikoku_Spr_InitVars = {
     ACTOR_BG_KEIKOKU_SPR,
     ACTORCAT_PROP,
     FLAGS,

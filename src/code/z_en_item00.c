@@ -23,7 +23,7 @@ void EnItem00_DrawSprite(EnItem00* this, PlayState* play);
 void EnItem00_DrawHeartContainer(EnItem00* this, PlayState* play);
 void EnItem00_DrawHeartPiece(EnItem00* this, PlayState* play);
 
-const ActorInit En_Item00_InitVars = {
+ActorInit En_Item00_InitVars = {
     ACTOR_EN_ITEM00,
     ACTORCAT_MISC,
     FLAGS,
@@ -86,7 +86,7 @@ void EnItem00_Init(Actor* thisx, PlayState* play) {
             this->collectibleFlag = 0;
             this->actor.params = ITEM00_RECOVERY_HEART;
         } else {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             return;
         }
     }
@@ -358,7 +358,7 @@ void func_800A640C(EnItem00* this, PlayState* play) {
     if (this->unk152 == 0) {
         if ((this->actor.params != ITEM00_SMALL_KEY) && (this->actor.params != ITEM00_HEART_PIECE) &&
             (this->actor.params != ITEM00_HEART_CONTAINER)) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     }
 
@@ -464,7 +464,7 @@ void func_800A6A40(EnItem00* this, PlayState* play) {
     }
 
     if (this->unk152 == 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -487,7 +487,7 @@ void EnItem00_Update(Actor* thisx, PlayState* play) {
     EnItem00* this = THIS;
     s32 pad;
     Player* player = GET_PLAYER(play);
-    s32 sp38 = player->stateFlags3 & 0x1000;
+    s32 sp38 = player->stateFlags3 & PLAYER_STATE3_1000;
     s32 getItemId = GI_NONE;
     s32 params;
 
@@ -510,7 +510,7 @@ void EnItem00_Update(Actor* thisx, PlayState* play) {
         Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 15.0f, 15.0f, 0x1D);
 
         if (this->actor.floorHeight <= BGCHECK_Y_MIN) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             return;
         }
     }
@@ -659,7 +659,7 @@ void EnItem00_Update(Actor* thisx, PlayState* play) {
         case ITEM00_COMPASS:
             if (Actor_HasParent(&this->actor, play)) {
                 Flags_SetCollectible(play, this->collectibleFlag);
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
             }
             return;
 
@@ -672,7 +672,7 @@ void EnItem00_Update(Actor* thisx, PlayState* play) {
     } else if (getItemId != GI_NONE) {
         if (Actor_HasParent(&this->actor, play)) {
             Flags_SetCollectible(play, this->collectibleFlag);
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
         return;
     } else {
@@ -819,7 +819,7 @@ void EnItem00_DrawSprite(EnItem00* this, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    POLY_OPA_DISP = func_801660B8(play, POLY_OPA_DISP);
+    POLY_OPA_DISP = Play_SetFog(play, POLY_OPA_DISP);
 
     if (this->actor.params == ITEM00_NUTS_10) {
         texIndex = 6;

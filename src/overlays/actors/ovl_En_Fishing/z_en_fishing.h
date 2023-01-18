@@ -61,6 +61,4 @@ typedef struct EnFishing {
     /* 0x248 */ ColliderJntSphElement colliderElements[12];
 } EnFishing; // size = 0x548
 
-extern const ActorInit En_Fishing_InitVars;
-
 #endif // Z_EN_FISHING_H

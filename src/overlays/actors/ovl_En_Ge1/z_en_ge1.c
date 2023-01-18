@@ -15,7 +15,7 @@ void EnGe1_Destroy(Actor* thisx, PlayState* play);
 void EnGe1_Update(Actor* thisx, PlayState* play);
 void EnGe1_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit En_Ge1_InitVars = {
+ActorInit En_Ge1_InitVars = {
     ACTOR_EN_GE1,
     ACTORCAT_NPC,
     FLAGS,
@@ -308,7 +308,7 @@ void EnGe1_PerformCutsceneActions(EnGe1* this, PlayState* play) {
                     break;
 
                 case 7:
-                    Actor_MarkForDeath(&this->picto.actor);
+                    Actor_Kill(&this->picto.actor);
                     break;
 
                     // Twister cutscene
@@ -384,10 +384,10 @@ void EnGe1_Update(Actor* thisx, PlayState* play) {
 }
 
 s32 EnGe1_ValidatePictograph(PlayState* play, Actor* thisx) {
-    s32 ret = Snap_ValidatePictograph(play, thisx, PICTOGRAPH_PIRATE_GOOD, &thisx->focus.pos, &thisx->shape.rot, 10.0f,
+    s32 ret = Snap_ValidatePictograph(play, thisx, PICTO_VALID_PIRATE_GOOD, &thisx->focus.pos, &thisx->shape.rot, 10.0f,
                                       400.0f, -1);
 
-    ret |= Snap_ValidatePictograph(play, thisx, PICTOGRAPH_PIRATE_TOO_FAR, &thisx->focus.pos, &thisx->shape.rot, 10.0f,
+    ret |= Snap_ValidatePictograph(play, thisx, PICTO_VALID_PIRATE_TOO_FAR, &thisx->focus.pos, &thisx->shape.rot, 10.0f,
                                    1200.0f, -1);
 
     return ret;

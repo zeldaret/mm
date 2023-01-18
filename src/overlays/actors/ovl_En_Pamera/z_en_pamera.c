@@ -69,7 +69,7 @@ void func_80BDA288(EnPamera* this);
 void func_80BDA2E0(EnPamera* this, PlayState* play);
 void func_80BDA344(Actor* thisx, PlayState* play);
 
-const ActorInit En_Pamera_InitVars = {
+ActorInit En_Pamera_InitVars = {
     ACTOR_EN_PAMERA,
     ACTORCAT_NPC,
     FLAGS,
@@ -153,17 +153,19 @@ void EnPamera_Init(Actor* thisx, PlayState* play) {
     } else {
         func_80BD8588(this, play);
         func_80BD8658(this);
+
         if (1) {}
-        if (!(gSaveContext.save.weekEventReg[14] & 4) || (gSaveContext.save.weekEventReg[52] & 0x20) ||
-            (gSaveContext.save.weekEventReg[75] & 0x20) || (gSaveContext.save.entrance == ENTRANCE(IKANA_CANYON, 9))) {
-            Actor_MarkForDeath(&this->actor);
+
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_14_04) || CHECK_WEEKEVENTREG(WEEKEVENTREG_52_20) ||
+            CHECK_WEEKEVENTREG(WEEKEVENTREG_75_20) || (gSaveContext.save.entrance == ENTRANCE(IKANA_CANYON, 9))) {
+            Actor_Kill(&this->actor);
         }
-        if (gSaveContext.save.weekEventReg[61] & 4) {
-            if (!(gSaveContext.save.weekEventReg[59] & 1) ||
-                (gSaveContext.save.entrance != ENTRANCE(IKANA_CANYON, 2))) {
+
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_61_04)) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_59_01) || (gSaveContext.save.entrance != ENTRANCE(IKANA_CANYON, 2))) {
                 if ((gSaveContext.save.entrance != ENTRANCE(IKANA_CANYON, 2)) &&
-                    (gSaveContext.save.weekEventReg[59] & 1)) {
-                    gSaveContext.save.weekEventReg[59] &= (u8)~1;
+                    CHECK_WEEKEVENTREG(WEEKEVENTREG_59_01)) {
+                    CLEAR_WEEKEVENTREG(WEEKEVENTREG_59_01);
                 }
                 func_80BD8700(this);
             } else {
@@ -174,7 +176,7 @@ void EnPamera_Init(Actor* thisx, PlayState* play) {
                 func_80BD8CCC(this);
             }
         } else {
-            gSaveContext.save.weekEventReg[59] |= 1;
+            SET_WEEKEVENTREG(WEEKEVENTREG_59_01);
             func_80BD8FF0(this);
         }
     }
@@ -199,9 +201,9 @@ void func_80BD8588(EnPamera* this, PlayState* play) {
     Vec3f sp28;
 
     if (path == NULL) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
-    if (gSaveContext.save.weekEventReg[61] & 4) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_61_04)) {
         path = &play->setupPathList[path->unk1];
     }
     this->pathPoints = Lib_SegmentedToVirtual(path->points);
@@ -290,7 +292,7 @@ void func_80BD8964(EnPamera* this, PlayState* play) {
     if (Math_Vec3f_StepTo(&this->actor.world.pos, &vec, 1.0f) < 5.0f) {
         this->actor.speedXZ = 1.5f;
         Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 1);
-        gSaveContext.save.weekEventReg[59] |= 1;
+        SET_WEEKEVENTREG(WEEKEVENTREG_59_01);
         func_80BD8B50(this);
     }
 }
@@ -305,10 +307,10 @@ void func_80BD8A7C(EnPamera* this, PlayState* play) {
                        0x3000, 0x100);
     this->actor.world.rot.y = this->actor.shape.rot.y;
     if (Math_Vec3f_StepTo(&this->actor.world.pos, &this->actor.home.pos, 1.5f) < 10.0f) {
-        gSaveContext.save.weekEventReg[59] &= (u8)~1;
-        if (!(gSaveContext.save.weekEventReg[61] & 4)) {
+        CLEAR_WEEKEVENTREG(WEEKEVENTREG_59_01);
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_61_04)) {
             func_80BD92D0(this, play);
-            gSaveContext.save.weekEventReg[61] |= 4;
+            SET_WEEKEVENTREG(WEEKEVENTREG_61_04);
         }
         func_80BD8700(this);
     }
@@ -567,7 +569,7 @@ void func_80BD9840(EnPamera* this, PlayState* play) {
     this->actor.update = func_80BDA344;
     this->actor.flags |= ACTOR_FLAG_2000000;
     this->actor.flags |= ACTOR_FLAG_100000;
-    if ((gSaveContext.save.weekEventReg[75] & 0x20) || (gSaveContext.save.weekEventReg[52] & 0x20)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_75_20) || CHECK_WEEKEVENTREG(WEEKEVENTREG_52_20)) {
         func_80BD9E60(this);
         func_80BD9938(this);
     } else {
@@ -575,7 +577,7 @@ void func_80BD9840(EnPamera* this, PlayState* play) {
         func_80BD9E60(this);
         func_80BD9904(this);
     }
-    if (gSaveContext.save.weekEventReg[14] & 4) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_14_04)) {
         func_801A0204(NA_BGM_MUSIC_BOX_HOUSE);
     } else {
         func_801A0204(NA_BGM_INSIDE_A_HOUSE);
@@ -603,7 +605,7 @@ void func_80BD994C(EnPamera* this, PlayState* play) {
 
             this->unk_324 = 0x15A8;
         } else if ((gSaveContext.save.playerForm != PLAYER_FORM_HUMAN) ||
-                   ((gSaveContext.save.weekEventReg[52] & 0x20) && (!(gSaveContext.save.weekEventReg[75] & 0x20)))) {
+                   (CHECK_WEEKEVENTREG(WEEKEVENTREG_52_20) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_75_20))) {
             func_80BD93CC(this, 1, 0);
             Message_StartTextbox(play, 0x158E, &this->actor);
             this->unk_324 = 0x158E;
@@ -689,7 +691,7 @@ void func_80BD9C70(EnPamera* this, PlayState* play) {
     play->nextEntrance = ENTRANCE(IKANA_CANYON, 2);
     play->transitionTrigger = TRANS_TRIGGER_START;
     play->transitionType = TRANS_TYPE_70;
-    gSaveContext.nextTransitionType = TRANS_TYPE_02;
+    gSaveContext.nextTransitionType = TRANS_TYPE_FADE_BLACK;
 }
 
 s32 func_80BD9CB8(EnPamera* this, PlayState* play) {
@@ -729,7 +731,7 @@ s32 func_80BD9CB8(EnPamera* this, PlayState* play) {
         this->setupFunc(this, play);
         return 1;
     }
-    if ((play->csCtx.state == 0) && (gSaveContext.save.weekEventReg[75] & 0x20)) {
+    if ((play->csCtx.state == 0) && CHECK_WEEKEVENTREG(WEEKEVENTREG_75_20)) {
         if ((this->actionFunc != func_80BD994C) && (this->actionFunc != EnPamera_HandleDialogue)) {
             this->actor.shape.rot.y = this->actor.world.rot.y;
             func_80BD9904(this);
@@ -853,11 +855,11 @@ void func_80BDA344(Actor* thisx, PlayState* play) {
     func_80BD9384(this, play);
     if (func_80BD9CB8(this, play)) {
         // Pamela is outside
-        if (gSaveContext.save.weekEventReg[59] & 1) {
-            gSaveContext.save.weekEventReg[59] &= (u8)~1;
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_59_01)) {
+            CLEAR_WEEKEVENTREG(WEEKEVENTREG_59_01);
         }
-        if (!(gSaveContext.save.weekEventReg[61] & 4)) {
-            gSaveContext.save.weekEventReg[61] |= 4;
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_61_04)) {
+            SET_WEEKEVENTREG(WEEKEVENTREG_61_04);
         }
         Actor_TrackNone(&this->headRot, &this->torsoRot);
     } else {
@@ -866,7 +868,7 @@ void func_80BDA344(Actor* thisx, PlayState* play) {
             Collider_UpdateCylinder(&this->actor, &this->collider);
             CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
         }
-        if (gSaveContext.save.weekEventReg[14] & 4) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_14_04)) {
             play->roomCtx.unk7A[0]++;
         }
     }

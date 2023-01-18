@@ -25,7 +25,7 @@ void EnSsh_Start(EnSsh* this, PlayState* play);
 
 extern AnimationHeader D_06000304;
 
-const ActorInit En_Ssh_InitVars = {
+ActorInit En_Ssh_InitVars = {
     ACTOR_EN_SSH,
     ACTORCAT_NPC,
     FLAGS,
@@ -595,7 +595,7 @@ s32 EnSsh_SetCylinderOC(EnSsh* this, PlayState* play) {
 
         Matrix_Push();
         Matrix_Translate(colliderPos.x, colliderPos.y, colliderPos.z, MTXMODE_NEW);
-        Matrix_RotateYF(BINANG_TO_RAD(this->initialYaw), MTXMODE_APPLY);
+        Matrix_RotateYF(BINANG_TO_RAD_ALT(this->initialYaw), MTXMODE_APPLY);
         Matrix_MultVec3f(&colliderOffsets[i], &colliderPos);
         Matrix_Pop();
 
@@ -655,7 +655,7 @@ void EnSsh_Init(Actor* thisx, PlayState* play) {
     this->initialYaw = this->actor.world.rot.y;
     EnSsh_SetupAction(this, EnSsh_Start);
     if (Inventory_GetSkullTokenCount(play->sceneId) >= 30) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -708,11 +708,11 @@ void EnSsh_Talk(EnSsh* this, PlayState* play) {
 void func_809756D0(EnSsh* this, PlayState* play) {
     u16 phi_a1;
 
-    if (gSaveContext.save.weekEventReg[34] & 8) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_34_08)) {
         phi_a1 = 0x914;
     } else {
         phi_a1 = 0x910;
-        gSaveContext.save.weekEventReg[34] |= 8;
+        SET_WEEKEVENTREG(WEEKEVENTREG_34_08);
     }
     Message_StartTextbox(play, phi_a1, &this->actor);
 }

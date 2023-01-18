@@ -30,7 +30,7 @@ void func_80A5A184(Actor* thisx, PlayState* play2);
 void func_80A5A534(Actor* thisx, PlayState* play);
 void func_80A5A6B8(Actor* thisx, PlayState* play2);
 
-const ActorInit En_Water_Effect_InitVars = {
+ActorInit En_Water_Effect_InitVars = {
     ACTOR_EN_WATER_EFFECT,
     ACTORCAT_BOSS,
     FLAGS,
@@ -482,7 +482,7 @@ void func_80A59C04(Actor* thisx, PlayState* play2) {
                                 player->flameTimers[j] = Rand_S16Offset(0, 200);
                             }
                             player->isBurning = true;
-                            func_800B8E58(player, player->ageProperties->unk_92 + NA_SE_VO_LI_DEMO_DAMAGE);
+                            func_800B8E58(player, player->ageProperties->voiceSfxIdOffset + NA_SE_VO_LI_DEMO_DAMAGE);
                         }
                     }
 
@@ -570,7 +570,7 @@ void func_80A5A184(Actor* thisx, PlayState* play2) {
         }
     }
 
-    POLY_OPA_DISP = func_801660B8(play, POLY_OPA_DISP);
+    POLY_OPA_DISP = Play_SetFog(play, POLY_OPA_DISP);
 
     CLOSE_DISPS(gfxCtx);
 }
@@ -580,7 +580,7 @@ void func_80A5A534(Actor* thisx, PlayState* play) {
     s32 i;
 
     if (this->unk_E38 < 1.0f) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 
     this->unk_DC4++;

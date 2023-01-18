@@ -17,6 +17,4 @@ typedef struct EnHata {
     /* 0x2A4 */ Vec3f unk_2A4;
 } EnHata; /* size = 0x2B0 */
 
-extern const ActorInit En_Hata_InitVars;
-
 #endif // Z_EN_HATA_H

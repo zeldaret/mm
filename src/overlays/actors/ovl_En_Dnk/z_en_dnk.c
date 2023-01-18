@@ -24,7 +24,7 @@ void func_80A52134(EnDnk* this, PlayState* play);
 
 static s16 D_80A521A0 = 0;
 
-const ActorInit En_Dnk_InitVars = {
+ActorInit En_Dnk_InitVars = {
     ACTOR_EN_DNK,
     ACTORCAT_NPC,
     FLAGS,
@@ -242,7 +242,7 @@ void EnDnk_Init(Actor* thisx, PlayState* play) {
     if (this->unk_28E >= 0) {
         this->actionFunc = func_80A51648;
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 
     this->unk_2A2 = D_80A521A0;
