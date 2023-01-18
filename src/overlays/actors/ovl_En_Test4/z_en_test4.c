@@ -283,7 +283,7 @@ void func_80A425E4(EnTest4* this, PlayState* play) {
             gSaveContext.screenScale = 1000.0f;
         }
         if (gSaveContext.screenScale != 1000.0f) {
-            gSaveContext.screenScaleFlag = 1;
+            gSaveContext.screenScaleFlag = true;
         }
     }
 }
@@ -310,7 +310,7 @@ void EnTest4_Init(Actor* thisx, PlayState* play) {
     } else {
         sIsLoaded = true;
         this->actor.room = -1;
-        gSaveContext.screenScaleFlag = 0;
+        gSaveContext.screenScaleFlag = false;
         gSaveContext.screenScale = 1000.0f;
         if (CURRENT_DAY == 0) {
             if (gSaveContext.save.time < CLOCK_TIME(6, 1)) {
@@ -355,7 +355,7 @@ void EnTest4_Init(Actor* thisx, PlayState* play) {
 
     this->lastBellTime = gSaveContext.save.time;
     if ((sCutscenes[this->unk_144] < 0) || (play->actorCtx.flags & ACTORCTX_FLAG_1)) {
-        gSaveContext.screenScaleFlag = 0;
+        gSaveContext.screenScaleFlag = false;
         gSaveContext.screenScale = 1000.0f;
     }
 }
@@ -381,8 +381,8 @@ void func_80A42AB8(EnTest4* this, PlayState* play) {
 
         if ((temp_a3 * temp_a2) <= 0) {
             gSaveContext.unk_3CA7 = 1;
-            if (play->actorCtx.flags & ACTORCTX_FLAG_2) {
-                play->actorCtx.flags &= ~ACTORCTX_FLAG_2;
+            if (play->actorCtx.flags & ACTORCTX_FLAG_PICTO_BOX_ON) {
+                play->actorCtx.flags &= ~ACTORCTX_FLAG_PICTO_BOX_ON;
             }
 
             if (temp_a0 != CLOCK_TIME(6, 0)) {
@@ -456,7 +456,7 @@ void func_80A42AB8(EnTest4* this, PlayState* play) {
                     }
                     gSaveContext.nextCutsceneIndex = 0xFFF1;
                     play->transitionTrigger = TRANS_TRIGGER_START;
-                    play->transitionType = TRANS_TYPE_02;
+                    play->transitionType = TRANS_TYPE_FADE_BLACK;
                     player->stateFlags1 |= PLAYER_STATE1_200;
                     Actor_Kill(&this->actor);
                 }

@@ -4,6 +4,7 @@
  * Description: Igos du Ikana window - curtains and ray effects
  */
 
+#include "prevent_bss_reordering.h"
 #include "z_boss_06.h"
 #include "z64shrink_window.h"
 #include "overlays/actors/ovl_En_Knight/z_en_knight.h"
@@ -220,7 +221,7 @@ void func_809F24C8(Boss06* this, PlayState* play) {
         case 1:
             if (this->unk_1CA >= 10) {
                 Math_ApproachF(&this->unk_1E4, 30.0f, 0.2f, 1.0f);
-                play->envCtx.fillScreen = 1;
+                play->envCtx.fillScreen = true;
                 play->envCtx.screenFillColor[2] = 0;
                 play->envCtx.screenFillColor[1] = 0;
                 play->envCtx.screenFillColor[0] = 0;
@@ -233,7 +234,7 @@ void func_809F24C8(Boss06* this, PlayState* play) {
             }
 
             if (this->unk_1CA >= 60) {
-                play->envCtx.fillScreen = 0;
+                play->envCtx.fillScreen = false;
                 this->unk_1C8 = 0;
                 this->unk_1DC = 0.0f;
                 this->unk_1D8 = 0.0f;

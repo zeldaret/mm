@@ -18,7 +18,7 @@ f32 D_808144F14 = 8.0f;
 f32 D_808144F18 = 100.0f;
 s32 D_808144F1C = 0;
 
-Gfx sScreenFillSetupDL[] = {
+static Gfx sScreenFillSetupDL[] = {
     gsDPPipeSync(),
     gsSPClearGeometryMode(G_ZBUFFER | G_SHADE | G_CULL_BOTH | G_FOG | G_LIGHTING | G_TEXTURE_GEN |
                           G_TEXTURE_GEN_LINEAR | G_LOD | G_SHADING_SMOOTH),
