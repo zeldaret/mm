@@ -151,8 +151,8 @@ void func_80A94AB8(EnAz* this, PlayState* play, s32 spawnIndex) {
     play->nextEntrance = Entrance_CreateFromSpawn(spawnIndex);
     gSaveContext.nextCutsceneIndex = 0;
     play->transitionTrigger = TRANS_TRIGGER_START;
-    play->transitionType = TRANS_TYPE_03;
-    gSaveContext.nextTransitionType = TRANS_TYPE_03;
+    play->transitionType = TRANS_TYPE_FADE_WHITE;
+    gSaveContext.nextTransitionType = TRANS_TYPE_FADE_WHITE;
 }
 
 void func_80A94B20(PlayState* play) {
@@ -1471,7 +1471,7 @@ void func_80A97C4C(EnAz* this, PlayState* play) {
         gSaveContext.nextCutsceneIndex = 0;
         play->transitionTrigger = TRANS_TRIGGER_START;
         play->transitionType = TRANS_TYPE_80;
-        gSaveContext.nextTransitionType = TRANS_TYPE_03;
+        gSaveContext.nextTransitionType = TRANS_TYPE_FADE_WHITE;
         func_80A979DC(this, play);
     } else {
         Actor_MoveWithGravity(&this->actor);
@@ -1552,8 +1552,8 @@ void func_80A97F9C(EnAz* this, PlayState* play) {
         play->nextEntrance = Entrance_CreateFromSpawn(2);
         gSaveContext.nextCutsceneIndex = 0;
         play->transitionTrigger = TRANS_TRIGGER_START;
-        play->transitionType = TRANS_TYPE_03;
-        gSaveContext.nextTransitionType = TRANS_TYPE_03;
+        play->transitionType = TRANS_TYPE_FADE_WHITE;
+        gSaveContext.nextTransitionType = TRANS_TYPE_FADE_WHITE;
         this->actor.speedXZ = 0.0f;
         func_80A979DC(this, play);
     } else {

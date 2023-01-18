@@ -424,7 +424,7 @@ void func_80BD1DB8(EnZov* this, PlayState* play) {
 
             case 0x1039:
                 play->nextEntrance = play->setupExitList[ENZOV_GET_FE00(&this->picto.actor)];
-                play->transitionType = TRANS_TYPE_05;
+                play->transitionType = TRANS_TYPE_FADE_WHITE_FAST;
                 play->transitionTrigger = TRANS_TRIGGER_START;
                 SET_WEEKEVENTREG(WEEKEVENTREG_78_01);
                 this->actionFunc = func_80BD1D94;
@@ -460,11 +460,11 @@ s32 EnZov_ValidatePictograph(PlayState* play, Actor* thisx) {
     s32 ret;
     EnZov* this = THIS;
 
-    ret = Snap_ValidatePictograph(play, &this->picto.actor, PICTOGRAPH_LULU_HEAD, &this->picto.actor.focus.pos,
+    ret = Snap_ValidatePictograph(play, &this->picto.actor, PICTO_VALID_LULU_HEAD, &this->picto.actor.focus.pos,
                                   &this->picto.actor.shape.rot, 10.0f, 300.0f, -1);
-    ret |= Snap_ValidatePictograph(play, &this->picto.actor, PICTOGRAPH_LULU_RIGHT_ARM, &this->unk_308,
+    ret |= Snap_ValidatePictograph(play, &this->picto.actor, PICTO_VALID_LULU_RIGHT_ARM, &this->unk_308,
                                    &this->picto.actor.shape.rot, 50.0f, 160.0f, 0x3000);
-    ret |= Snap_ValidatePictograph(play, &this->picto.actor, PICTOGRAPH_LULU_LEFT_ARM, &this->unk_314,
+    ret |= Snap_ValidatePictograph(play, &this->picto.actor, PICTO_VALID_LULU_LEFT_ARM, &this->unk_314,
                                    &this->picto.actor.shape.rot, 50.0f, 160.0f, 0x3000);
     return ret;
 }

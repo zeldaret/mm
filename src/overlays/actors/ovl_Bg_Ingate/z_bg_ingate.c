@@ -251,8 +251,8 @@ void func_809542A0(BgIngate* this, PlayState* play) {
     }
     gSaveContext.nextCutsceneIndex = 0;
     play->transitionTrigger = TRANS_TRIGGER_START;
-    play->transitionType = TRANS_TYPE_03;
-    gSaveContext.nextTransitionType = TRANS_TYPE_03;
+    play->transitionType = TRANS_TYPE_FADE_WHITE;
+    gSaveContext.nextTransitionType = TRANS_TYPE_FADE_WHITE;
     this->actionFunc = func_80953F8C;
     CLEAR_WEEKEVENTREG(WEEKEVENTREG_90_40);
     Environment_StartTime();

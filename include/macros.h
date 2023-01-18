@@ -140,6 +140,10 @@ extern GraphicsContext* __gfxCtx;
 #define CLAMP_MAX(x, max) ((x) > (max) ? (max) : (x))
 #define CLAMP_MIN(x, min) ((x) < (min) ? (min) : (x))
 
+#define RGBA16_GET_R(pixel) (((pixel) >> 11) & 0x1F)
+#define RGBA16_GET_G(pixel) (((pixel) >> 6) & 0x1F)
+#define RGBA16_GET_B(pixel) (((pixel) >> 1) & 0x1F)
+
 #define ROUND(x) (s32)(((x) >= 0.0) ? ((x) + 0.5) : ((x) - 0.5))
 
 #define SWAP(type, a, b)  \

@@ -1,7 +1,8 @@
 #ifndef Z_FBDEMO_WIPE5_H
 #define Z_FBDEMO_WIPE5_H
 
-#include "global.h"
+#include "ultra64.h"
+#include "color.h"
 
 typedef struct {
     /* 0x00 */ Color_RGBA8_u32 primColor;

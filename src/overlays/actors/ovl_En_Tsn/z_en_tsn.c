@@ -326,12 +326,12 @@ void func_80AE04FC(EnTsn* this, PlayState* play) {
             this->actionFunc = func_80AE0704;
             if (itemAction == PLAYER_IA_PICTO_BOX) {
                 if (CHECK_QUEST_ITEM(QUEST_PICTOGRAPH)) {
-                    if (Snap_CheckFlag(PICTOGRAPH_PIRATE_GOOD)) {
+                    if (Snap_CheckFlag(PICTO_VALID_PIRATE_GOOD)) {
                         player->actor.textId = 0x107B;
                         return;
                     }
 
-                    if (Snap_CheckFlag(PICTOGRAPH_PIRATE_TOO_FAR)) {
+                    if (Snap_CheckFlag(PICTO_VALID_PIRATE_TOO_FAR)) {
                         player->actor.textId = 0x10A9;
                         return;
                     }
