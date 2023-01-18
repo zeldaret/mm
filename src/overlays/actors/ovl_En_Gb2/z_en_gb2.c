@@ -433,7 +433,7 @@ void func_80B0FFA8(EnGb2* this, PlayState* play) {
                     Rupees_ChangeBy(-this->unk_288);
                     play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                     play->msgCtx.stateTimer = 4;
-                    func_800B7298(play, NULL, 7);
+                    func_800B7298(play, NULL, PLAYER_CSMODE_7);
                     this->actionFunc = func_80B11344;
                     break;
 
@@ -488,7 +488,7 @@ void func_80B10344(EnGb2* this, PlayState* play) {
         if (this->unk_280 == 3) {
             this->unk_26C &= ~0x200;
             gSaveContext.timerStates[TIMER_ID_MINIGAME_1] = TIMER_STATE_STOP;
-            func_800FE498();
+            Environment_StartTime();
             SET_EVENTINF(EVENTINF_46);
             func_80B0FE7C(play);
         } else if (this->unk_280 == 2) {
@@ -585,7 +585,7 @@ void func_80B10634(EnGb2* this, PlayState* play) {
                     Rupees_ChangeBy(-this->unk_288);
                     play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                     play->msgCtx.stateTimer = 4;
-                    func_800B7298(play, NULL, 7);
+                    func_800B7298(play, NULL, PLAYER_CSMODE_7);
                     this->actionFunc = func_80B11344;
                 }
                 break;
@@ -892,7 +892,7 @@ void EnGb2_Init(Actor* thisx, PlayState* play) {
             }
 
             if (gSaveContext.save.entrance == ENTRANCE(GHOST_HUT, 1)) {
-                func_800FE484();
+                Environment_StopTime();
                 this->actionFunc = func_80B10240;
                 break;
             }

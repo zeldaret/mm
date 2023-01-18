@@ -151,8 +151,8 @@ void func_80A94AB8(EnAz* this, PlayState* play, s32 spawnIndex) {
     play->nextEntrance = Entrance_CreateFromSpawn(spawnIndex);
     gSaveContext.nextCutsceneIndex = 0;
     play->transitionTrigger = TRANS_TRIGGER_START;
-    play->transitionType = TRANS_TYPE_03;
-    gSaveContext.nextTransitionType = TRANS_TYPE_03;
+    play->transitionType = TRANS_TYPE_FADE_WHITE;
+    gSaveContext.nextTransitionType = TRANS_TYPE_FADE_WHITE;
 }
 
 void func_80A94B20(PlayState* play) {
@@ -1337,7 +1337,7 @@ void func_80A97410(EnAz* this, PlayState* play) {
                     func_80A97114(this, play);
                     this->unk_378 = 2;
                 } else if (func_800B8500(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel,
-                                         PLAYER_AP_MINUS1)) {
+                                         PLAYER_IA_MINUS1)) {
                     this->actor.textId = func_80A973B4(this, play);
                 }
             } else {
@@ -1471,7 +1471,7 @@ void func_80A97C4C(EnAz* this, PlayState* play) {
         gSaveContext.nextCutsceneIndex = 0;
         play->transitionTrigger = TRANS_TRIGGER_START;
         play->transitionType = TRANS_TYPE_80;
-        gSaveContext.nextTransitionType = TRANS_TYPE_03;
+        gSaveContext.nextTransitionType = TRANS_TYPE_FADE_WHITE;
         func_80A979DC(this, play);
     } else {
         Actor_MoveWithGravity(&this->actor);
@@ -1482,9 +1482,9 @@ void func_80A97D5C(EnAz* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     player->stateFlags1 |= PLAYER_STATE1_20;
-    func_80112AFC(play);
+    Interface_InitMinigame(play);
     gSaveContext.minigameScore = (this->unk_374 & 2) ? 25 : 20;
-    play->interfaceCtx.unk_280 = 1;
+    play->interfaceCtx.minigameState = MINIGAME_STATE_COUNTDOWN_SETUP_3;
     if ((this->unk_2FA == 1) || (this->unk_2FA == 3)) {
         Interface_StartTimer(TIMER_ID_MINIGAME_2, 120);
     } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_25_01)) {
@@ -1498,7 +1498,7 @@ void func_80A97D5C(EnAz* this, PlayState* play) {
 void func_80A97E48(EnAz* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (play->interfaceCtx.unk_280 >= 8) {
+    if (play->interfaceCtx.minigameState >= MINIGAME_STATE_COUNTDOWN_GO) {
         player->stateFlags1 &= ~PLAYER_STATE1_20;
         func_80A97EAC(this, play);
     }
@@ -1552,8 +1552,8 @@ void func_80A97F9C(EnAz* this, PlayState* play) {
         play->nextEntrance = Entrance_CreateFromSpawn(2);
         gSaveContext.nextCutsceneIndex = 0;
         play->transitionTrigger = TRANS_TRIGGER_START;
-        play->transitionType = TRANS_TYPE_03;
-        gSaveContext.nextTransitionType = TRANS_TYPE_03;
+        play->transitionType = TRANS_TYPE_FADE_WHITE;
+        gSaveContext.nextTransitionType = TRANS_TYPE_FADE_WHITE;
         this->actor.speedXZ = 0.0f;
         func_80A979DC(this, play);
     } else {
@@ -1600,8 +1600,8 @@ void func_80A982E0(PlayState* play, ActorPathing* actorPathing) {
     sp28.z = actorPathing->curPoint.z - actorPathing->worldPos->z;
     actorPathing->distSqToCurPointXZ = Math3D_XZLengthSquared(sp28.x, sp28.z);
     actorPathing->distSqToCurPoint = Math3D_LengthSquared(&sp28);
-    actorPathing->rotToCurPoint.y = Math_FAtan2F(sp28.z, sp28.x);
-    actorPathing->rotToCurPoint.x = Math_FAtan2F(sqrtf(actorPathing->distSqToCurPointXZ), -sp28.y);
+    actorPathing->rotToCurPoint.y = Math_Atan2S_XY(sp28.z, sp28.x);
+    actorPathing->rotToCurPoint.x = Math_Atan2S_XY(sqrtf(actorPathing->distSqToCurPointXZ), -sp28.y);
     actorPathing->rotToCurPoint.z = 0;
 }
 

@@ -73,7 +73,7 @@ void GameOver_Update(PlayState* play) {
                 if (gSaveContext.respawnFlag != -7) {
                     gSaveContext.respawnFlag = -6;
                 }
-                gSaveContext.nextTransitionType = TRANS_TYPE_02;
+                gSaveContext.nextTransitionType = TRANS_TYPE_FADE_BLACK;
                 gSaveContext.save.playerData.health = 0x30;
                 gameOverCtx->state++;
                 if (INV_CONTENT(ITEM_MASK_DEKU) == ITEM_MASK_DEKU) {

@@ -996,7 +996,7 @@ void AnimationContext_SetLoadFrame(PlayState* play, LinkAnimationHeader* animati
 
     if (entry != NULL) {
         LinkAnimationHeader* linkAnimHeader = Lib_SegmentedToVirtual(animation);
-        u32 ram = frameTable;
+        uintptr_t ram = frameTable;
 
         osCreateMesgQueue(&entry->data.load.msgQueue, &entry->data.load.msg, 1);
         DmaMgr_SendRequestImpl(&entry->data.load.req, ram,
@@ -1187,7 +1187,7 @@ void AnimationContext_Update(PlayState* play, AnimationContext* animationCtx) {
  * tables if not given.
  */
 void SkelAnime_InitLink(PlayState* play, SkelAnime* skelAnime, FlexSkeletonHeader* skeletonHeaderSeg,
-                        LinkAnimationHeader* animation, s32 flags, Vec3s* jointTable, Vec3s* morphTable,
+                        LinkAnimationHeader* animation, s32 flags, void* jointTableBuffer, void* morphTableBuffer,
                         s32 limbBufCount) {
     FlexSkeletonHeader* skeletonHeader;
     s32 headerJointCount;
@@ -1216,12 +1216,12 @@ void SkelAnime_InitLink(PlayState* play, SkelAnime* skelAnime, FlexSkeletonHeade
         allocSize += 2;
     }
 
-    if (jointTable == NULL) {
+    if (jointTableBuffer == NULL) {
         skelAnime->jointTable = ZeldaArena_Malloc(allocSize);
         skelAnime->morphTable = ZeldaArena_Malloc(allocSize);
     } else {
-        skelAnime->jointTable = (Vec3s*)ALIGN16((u32)jointTable);
-        skelAnime->morphTable = (Vec3s*)ALIGN16((u32)morphTable);
+        skelAnime->jointTable = (void*)ALIGN16((uintptr_t)jointTableBuffer);
+        skelAnime->morphTable = (void*)ALIGN16((uintptr_t)morphTableBuffer);
     }
 
     LinkAnimation_Change(play, skelAnime, animation, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f);
@@ -1443,12 +1443,12 @@ void LinkAnimation_InterpJointMorph(PlayState* play, SkelAnime* skelAnime, f32 w
  * Requests loading frame data from the Link animations and blending them, placing the result in jointTable
  */
 void LinkAnimation_BlendToJoint(PlayState* play, SkelAnime* skelAnime, LinkAnimationHeader* animation1, f32 frame1,
-                                LinkAnimationHeader* animation2, f32 frame2, f32 blendWeight, Vec3s* blendTable) {
-    Vec3s* alignedBlendTable;
+                                LinkAnimationHeader* animation2, f32 frame2, f32 blendWeight, void* blendTableBuffer) {
+    void* alignedBlendTable;
 
     AnimationContext_SetLoadFrame(play, animation1, (s32)frame1, skelAnime->limbCount, skelAnime->jointTable);
 
-    alignedBlendTable = (Vec3s*)ALIGN16((u32)blendTable);
+    alignedBlendTable = (void*)ALIGN16((uintptr_t)blendTableBuffer);
 
     AnimationContext_SetLoadFrame(play, animation2, (s32)frame2, skelAnime->limbCount, alignedBlendTable);
     AnimationContext_SetInterp(play, skelAnime->limbCount, skelAnime->jointTable, alignedBlendTable, blendWeight);
@@ -1458,12 +1458,12 @@ void LinkAnimation_BlendToJoint(PlayState* play, SkelAnime* skelAnime, LinkAnima
  * Requests loading frame data from the Link animations and blending them, placing the result in morphTable
  */
 void LinkAnimation_BlendToMorph(PlayState* play, SkelAnime* skelAnime, LinkAnimationHeader* animation1, f32 frame1,
-                                LinkAnimationHeader* animation2, f32 frame2, f32 blendWeight, Vec3s* blendTable) {
-    Vec3s* alignedBlendTable;
+                                LinkAnimationHeader* animation2, f32 frame2, f32 blendWeight, void* blendTableBuffer) {
+    void* alignedBlendTable;
 
     AnimationContext_SetLoadFrame(play, animation1, (s32)frame1, skelAnime->limbCount, skelAnime->morphTable);
 
-    alignedBlendTable = (Vec3s*)ALIGN16((u32)blendTable);
+    alignedBlendTable = (void*)ALIGN16((uintptr_t)blendTableBuffer);
 
     AnimationContext_SetLoadFrame(play, animation2, (s32)frame2, skelAnime->limbCount, alignedBlendTable);
     AnimationContext_SetInterp(play, skelAnime->limbCount, skelAnime->morphTable, alignedBlendTable, blendWeight);

@@ -1756,37 +1756,37 @@ void Message_LoadItemIcon(PlayState* play, u16 itemId, s16 arg2) {
         msgCtx->unk12010 = (msgCtx->unk11FF8 - D_801CFF88[gSaveContext.options.language]);
         msgCtx->unk12012 = (arg2 + 0xA);
         msgCtx->unk12014 = 0x10;
-        func_80178E3C(SEGMENT_ROM_START(icon_item_static_test), ITEM_SONG_SONATA, msgCtx->textboxSegment + 0x1000,
-                      0x180);
+        CmpDma_LoadFile(SEGMENT_ROM_START(icon_item_static_test), ITEM_SONG_SONATA, msgCtx->textboxSegment + 0x1000,
+                        0x180);
     } else if (itemId == ITEM_BOMBERS_NOTEBOOK) {
         msgCtx->unk12010 = (msgCtx->unk11FF8 - D_801CFF70[gSaveContext.options.language]);
         msgCtx->unk12012 = (arg2 + 6);
         msgCtx->unk12014 = 0x20;
-        func_80178E3C(SEGMENT_ROM_START(icon_item_static_test), ITEM_SONG_SONATA, msgCtx->textboxSegment + 0x1000,
-                      0x1000);
+        CmpDma_LoadFile(SEGMENT_ROM_START(icon_item_static_test), ITEM_SONG_SONATA, msgCtx->textboxSegment + 0x1000,
+                        0x1000);
     } else if (itemId <= ITEM_REMAINS_TWINMOLD) {
         msgCtx->unk12010 = (msgCtx->unk11FF8 - D_801CFF70[gSaveContext.options.language]);
         msgCtx->unk12012 = (arg2 + 6);
         msgCtx->unk12014 = 0x20;
-        func_80178E3C(SEGMENT_ROM_START(icon_item_static_test), itemId, msgCtx->textboxSegment + 0x1000, 0x1000);
+        CmpDma_LoadFile(SEGMENT_ROM_START(icon_item_static_test), itemId, msgCtx->textboxSegment + 0x1000, 0x1000);
     } else if (itemId == ITEM_CC) {
         msgCtx->unk12010 = (msgCtx->unk11FF8 - D_801CFF70[gSaveContext.options.language]);
         msgCtx->unk12012 = (arg2 + 8);
         msgCtx->unk12014 = 0x20;
-        func_80178E3C(SEGMENT_ROM_START(schedule_dma_static_test), ITEM_POTION_BLUE, msgCtx->textboxSegment + 0x1000,
-                      0x400);
+        CmpDma_LoadFile(SEGMENT_ROM_START(schedule_dma_static_test), ITEM_POTION_BLUE, msgCtx->textboxSegment + 0x1000,
+                        0x400);
     } else if (itemId >= ITEM_B8) {
         msgCtx->unk12010 = (msgCtx->unk11FF8 - D_801CFF70[gSaveContext.options.language]);
         msgCtx->unk12012 = (arg2 + 8);
         msgCtx->unk12014 = 0x20;
-        func_80178E3C(SEGMENT_ROM_START(schedule_dma_static_test), (itemId - ITEM_B8), msgCtx->textboxSegment + 0x1000,
-                      0x800);
+        CmpDma_LoadFile(SEGMENT_ROM_START(schedule_dma_static_test), (itemId - ITEM_B8),
+                        msgCtx->textboxSegment + 0x1000, 0x800);
     } else if (itemId >= ITEM_SKULL_TOKEN) {
         msgCtx->unk12010 = (msgCtx->unk11FF8 - D_801CFF7C[gSaveContext.options.language]);
         msgCtx->unk12012 = (arg2 + 0xA);
         msgCtx->unk12014 = 0x18;
-        func_80178E3C(SEGMENT_ROM_START(icon_item_24_static_test), (itemId - ITEM_SKULL_TOKEN),
-                      msgCtx->textboxSegment + 0x1000, 0x900);
+        CmpDma_LoadFile(SEGMENT_ROM_START(icon_item_24_static_test), (itemId - ITEM_SKULL_TOKEN),
+                        msgCtx->textboxSegment + 0x1000, 0x900);
     }
 
     if (play->pauseCtx.bombersNotebookOpen) {
@@ -2318,9 +2318,9 @@ void Message_ContinueTextbox(PlayState* play, u16 textId) {
 
     if (interfaceCtx->unk_222 == 0) {
         if (textId != 0x1B93) {
-            func_8011552C(play, 0x10);
+            func_8011552C(play, DO_ACTION_NEXT);
         } else if (textId != 0xF8) {
-            func_8011552C(play, 6);
+            func_8011552C(play, DO_ACTION_DECIDE);
         }
     }
     msgCtx->textboxColorAlphaCurrent = msgCtx->textboxColorAlphaTarget;

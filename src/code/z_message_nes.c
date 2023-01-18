@@ -371,13 +371,9 @@ void Message_LoadTimeNES(PlayState* play, u8 arg1, s32* offset, f32* arg3, s16* 
     s16 i;
 
     if (arg1 == 0xCF) {
-        // Calculates the time left before the moon crashes.
-        // The day begins at CLOCK_TIME(6, 0) so it must be offset.
-        timeLeft = (4 - CURRENT_DAY) * DAY_LENGTH - (u16)(((void)0, gSaveContext.save.time) - CLOCK_TIME(6, 0));
+        timeLeft = TIME_UNTIL_MOON_CRASH;
     } else {
-        // Calculates the time left before a new day.
-        // The day begins at CLOCK_TIME(6, 0) so it must be offset.
-        timeLeft = DAY_LENGTH - (u16)(((void)0, gSaveContext.save.time) - CLOCK_TIME(6, 0));
+        timeLeft = TIME_UNTIL_NEW_DAY;
     }
 
     timeLeftInMinutes = TIME_TO_MINUTES_F(timeLeft);

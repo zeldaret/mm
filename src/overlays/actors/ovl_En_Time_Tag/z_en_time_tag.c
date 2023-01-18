@@ -274,7 +274,7 @@ void func_80ACA724(EnTimeTag* this, PlayState* play) {
 
 void func_80ACA7C4(EnTimeTag* this, PlayState* play) {
     if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_63_01) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_63_02)) {
-        func_800B7298(play, &this->actor, 7);
+        func_800B7298(play, &this->actor, PLAYER_CSMODE_7);
         Message_StartTextbox(play, ENTIMETAG_GET_1FE0(&this->actor) + 0x1883, NULL);
         this->actionFunc = func_80ACA724;
     }
@@ -295,7 +295,7 @@ void func_80ACA840(EnTimeTag* this, PlayState* play) {
             }
         } else if ((temp_ft4 == this->actor.home.rot.x) && (temp_hi == this->actor.home.rot.y) &&
                    !Play_InCsMode(play)) {
-            func_800B7298(play, &this->actor, 7);
+            func_800B7298(play, &this->actor, PLAYER_CSMODE_7);
             Message_StartTextbox(play, ENTIMETAG_GET_1FE0(&this->actor) + 0x1883, NULL);
             this->actionFunc = func_80ACA724;
         }

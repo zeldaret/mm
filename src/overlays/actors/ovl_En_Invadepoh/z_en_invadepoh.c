@@ -3,7 +3,7 @@
  * Overlay: ovl_En_Invadepoh
  * Description: Ranch nighttime actors
  */
-
+#include "prevent_bss_reordering.h"
 #include "z_en_invadepoh.h"
 #include "overlays/actors/ovl_En_Door/z_en_door.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
@@ -830,7 +830,7 @@ s32 func_80B440B8(EnInvadepoh* this, f32 arg1, f32 arg2) {
 
     sp40 = temp_a3->x - sp48->x;
     sp3C = temp_a3->z - sp48->z;
-    sp1E = Math_FAtan2F(sp3C, sp40);
+    sp1E = Math_Atan2S_XY(sp3C, sp40);
     sp38 = Math_CosS(sp1E);
     sp34 = Math_SinS(sp1E);
     sp30 = this->actor.world.pos.x - sp48->x;
@@ -1160,8 +1160,8 @@ s32 func_80B44C80(EnInvadepoh* this, PlayState* play) {
     }
 
     Math_SmoothStepToS(&this->actor.world.rot.y,
-                       Math_FAtan2F(((sp60.z + temp_f0_2) * 0.9f) + sp6C.z, ((sp60.x + temp_f0_3) * 0.9f) + sp6C.x), 4,
-                       0xFA0, 0x64);
+                       Math_Atan2S_XY(((sp60.z + temp_f0_2) * 0.9f) + sp6C.z, ((sp60.x + temp_f0_3) * 0.9f) + sp6C.x),
+                       4, 0xFA0, 0x64);
     Actor_MoveWithGravity(&this->actor);
     if (func_80B440B8(this, 50.0f, 15.0f)) {
         phi_v0 = 4;
@@ -3016,7 +3016,7 @@ void func_80B49C38(EnInvadepoh* this, PlayState* play) {
         if (this->unk378 == 0) {
             temp_v0_2 = func_800FE620(play);
             if (temp_v0_2 > 0) {
-                temp_v0_2 = (REG(15) * -16.0f / temp_v0_2) - 0.5f;
+                temp_v0_2 = (R_TIME_SPEED * -16.0f / temp_v0_2) - 0.5f;
                 this->unk378 = func_80B45550(this, play, SQ(80.0f), temp_v0_2);
             }
         }
@@ -3454,7 +3454,7 @@ void func_80B4AF94(EnInvadepoh* this, PlayState* play) {
         func_80151BB4(play, 5);
         func_80B4ADB8(this);
     } else {
-        func_800B85E0(&this->actor, play, 2000.0f, PLAYER_AP_MINUS1);
+        func_800B85E0(&this->actor, play, 2000.0f, PLAYER_IA_MINUS1);
     }
 }
 
@@ -3968,7 +3968,7 @@ void func_80B4C730(EnInvadepoh* this, PlayState* play) {
         if (this->unk378 == 0) {
             temp_v0_2 = func_800FE620(play);
             if (temp_v0_2 > 0) {
-                temp_v0_2 = (REG(15) * -23.0f / temp_v0_2) - 0.5f;
+                temp_v0_2 = (R_TIME_SPEED * -23.0f / temp_v0_2) - 0.5f;
                 this->unk378 = func_80B45550(this, play, SQ(80.0f), temp_v0_2);
             }
         }

@@ -80,7 +80,7 @@ void OceffSpot_End(OceffSpot* this, PlayState* play) {
         this->unk16C -= 0.05f;
     } else {
         Actor_Kill(&this->actor);
-        if ((REG(15) != 0x190) && !play->msgCtx.blockSunsSong) {
+        if ((R_TIME_SPEED != 400) && !play->msgCtx.blockSunsSong) {
             if ((play->msgCtx.ocarinaAction != OCARINA_ACTION_CHECK_NOTIME_DONE) ||
                 (play->msgCtx.ocarinaMode != OCARINA_MODE_PLAYED_SUNS)) {
                 gSaveContext.sunsSongState = SUNSSONG_START;

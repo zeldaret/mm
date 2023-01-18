@@ -1,7 +1,7 @@
 /*
  * File: z_en_test4.c
  * Overlay: ovl_En_Test4
- * Description: Three-Day Timer
+ * Description: Three-Day Events
  */
 
 #include "prevent_bss_reordering.h"
@@ -59,7 +59,7 @@ void func_80A41D70(EnTest4* this, PlayState* play) {
             this->unk_146 = gSaveContext.save.time += CLOCK_TIME_MINUTE;
         }
 
-        func_8010EE74(play, CURRENT_DAY);
+        Interface_NewDay(play, CURRENT_DAY);
         D_801BDBC8 = 0xFE;
         func_800FB758(play);
         func_800FEAF4(&play->envCtx);
@@ -95,7 +95,7 @@ void func_80A41FA4(EnTest4* this, PlayState* play) {
     } else if ((sCutscenes[this->unk_144] < 0) || (play->actorCtx.flags & ACTORCTX_FLAG_1)) {
         Sram_IncrementDay();
         gSaveContext.save.time = CLOCK_TIME(6, 0);
-        func_8010EE74(play, CURRENT_DAY);
+        Interface_NewDay(play, CURRENT_DAY);
         Message_DisplaySceneTitleCard(play, sDayMessages2[CURRENT_DAY - 1]);
         D_801BDBC8 = 0xFE;
         func_800FB758(play);
@@ -283,7 +283,7 @@ void func_80A425E4(EnTest4* this, PlayState* play) {
             gSaveContext.screenScale = 1000.0f;
         }
         if (gSaveContext.screenScale != 1000.0f) {
-            gSaveContext.screenScaleFlag = 1;
+            gSaveContext.screenScaleFlag = true;
         }
     }
 }
@@ -310,7 +310,7 @@ void EnTest4_Init(Actor* thisx, PlayState* play) {
     } else {
         sIsLoaded = true;
         this->actor.room = -1;
-        gSaveContext.screenScaleFlag = 0;
+        gSaveContext.screenScaleFlag = false;
         gSaveContext.screenScale = 1000.0f;
         if (CURRENT_DAY == 0) {
             if (gSaveContext.save.time < CLOCK_TIME(6, 1)) {
@@ -355,7 +355,7 @@ void EnTest4_Init(Actor* thisx, PlayState* play) {
 
     this->lastBellTime = gSaveContext.save.time;
     if ((sCutscenes[this->unk_144] < 0) || (play->actorCtx.flags & ACTORCTX_FLAG_1)) {
-        gSaveContext.screenScaleFlag = 0;
+        gSaveContext.screenScaleFlag = false;
         gSaveContext.screenScale = 1000.0f;
     }
 }
@@ -381,8 +381,8 @@ void func_80A42AB8(EnTest4* this, PlayState* play) {
 
         if ((temp_a3 * temp_a2) <= 0) {
             gSaveContext.unk_3CA7 = 1;
-            if (play->actorCtx.flags & ACTORCTX_FLAG_2) {
-                play->actorCtx.flags &= ~ACTORCTX_FLAG_2;
+            if (play->actorCtx.flags & ACTORCTX_FLAG_PICTO_BOX_ON) {
+                play->actorCtx.flags &= ~ACTORCTX_FLAG_PICTO_BOX_ON;
             }
 
             if (temp_a0 != CLOCK_TIME(6, 0)) {
@@ -398,7 +398,7 @@ void func_80A42AB8(EnTest4* this, PlayState* play) {
                 } else {
                     gSaveContext.screenScale = 0.0f;
                     Play_SetRespawnData(&play->state, RESPAWN_MODE_DOWN, Entrance_CreateFromSpawn(0), player->unk_3CE,
-                                        0xBFF, &player->unk_3C0, player->unk_3CC);
+                                        PLAYER_PARAMS(0xFF, PLAYER_INITMODE_B), &player->unk_3C0, player->unk_3CC);
                     func_80169EFC(&play->state);
                     if (player->stateFlags1 & PLAYER_STATE1_800000) {
                         EnHorse* rideActor = (EnHorse*)player->rideActor;
@@ -442,9 +442,9 @@ void func_80A42AB8(EnTest4* this, PlayState* play) {
                     u32 entrance = gSaveContext.save.entrance;
 
                     if ((play->actorCtx.flags & ACTORCTX_FLAG_1)) {
-                        playerParams = 0xCFF;
+                        playerParams = PLAYER_PARAMS(0xFF, PLAYER_INITMODE_TELESCOPE);
                     } else {
-                        playerParams = 0xBFF;
+                        playerParams = PLAYER_PARAMS(0xFF, PLAYER_INITMODE_B);
                     }
                     Play_SetRespawnData(&play->state, RESPAWN_MODE_RETURN, entrance, player->unk_3CE, playerParams,
                                         &player->unk_3C0, player->unk_3CC);
@@ -456,7 +456,7 @@ void func_80A42AB8(EnTest4* this, PlayState* play) {
                     }
                     gSaveContext.nextCutsceneIndex = 0xFFF1;
                     play->transitionTrigger = TRANS_TRIGGER_START;
-                    play->transitionType = TRANS_TYPE_02;
+                    play->transitionType = TRANS_TYPE_FADE_BLACK;
                     player->stateFlags1 |= PLAYER_STATE1_200;
                     Actor_Kill(&this->actor);
                 }

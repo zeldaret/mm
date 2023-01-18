@@ -253,7 +253,7 @@ s32 EnTrt_TestCancelOption(EnTrt* this, PlayState* play, Input* input) {
 }
 
 void EnTrt_SetupStartShopping(PlayState* play, EnTrt* this, u8 skipHello) {
-    func_8011552C(play, 0x10);
+    func_8011552C(play, DO_ACTION_NEXT);
     if (!skipHello) {
         this->actionFunc = EnTrt_Hello;
     } else {
@@ -263,7 +263,7 @@ void EnTrt_SetupStartShopping(PlayState* play, EnTrt* this, u8 skipHello) {
 
 void EnTrt_StartShopping(PlayState* play, EnTrt* this) {
     Message_ContinueTextbox(play, 0x83E);
-    func_8011552C(play, 6);
+    func_8011552C(play, DO_ACTION_DECIDE);
     this->stickLeftPrompt.isEnabled = false;
     this->stickRightPrompt.isEnabled = true;
     this->actionFunc = EnTrt_FaceShopkeeper;
@@ -349,7 +349,7 @@ void EnTrt_GetMushroom(EnTrt* this, PlayState* play) {
                 this->textId = 0x884;
                 Message_StartTextbox(play, this->textId, &this->actor);
                 SET_WEEKEVENTREG(WEEKEVENTREG_53_08);
-                func_80123D50(play, GET_PLAYER(play), ITEM_BOTTLE, PLAYER_AP_BOTTLE);
+                Player_UpdateBottleHeld(play, GET_PLAYER(play), ITEM_BOTTLE, PLAYER_IA_BOTTLE);
                 break;
             case 0x888:
                 this->textId = 0x889;
@@ -375,7 +375,7 @@ void EnTrt_GetMushroom(EnTrt* this, PlayState* play) {
 void EnTrt_PayForMushroom(EnTrt* this, PlayState* play) {
     if (Actor_HasParent(&this->actor, play)) {
         this->actor.parent = NULL;
-        func_80123D50(play, GET_PLAYER(play), ITEM_BOTTLE, PLAYER_AP_BOTTLE);
+        Player_UpdateBottleHeld(play, GET_PLAYER(play), ITEM_BOTTLE, PLAYER_IA_BOTTLE);
         this->actionFunc = EnTrt_SetupItemGiven;
     } else {
         Actor_PickUp(&this->actor, play, GI_RUPEE_RED, 300.0f, 300.0f);
@@ -479,7 +479,7 @@ void EnTrt_GivenRedPotionForKoume(EnTrt* this, PlayState* play) {
                 ActorCutscene_SetIntentToPlay(this->cutscene);
             }
         }
-        func_800B85E0(&this->actor, play, 400.0f, PLAYER_AP_MINUS1);
+        func_800B85E0(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
         this->actionFunc = EnTrt_ItemGiven;
     }
 }
@@ -532,7 +532,7 @@ void EnTrt_FaceShopkeeper(EnTrt* this, PlayState* play) {
         ActorCutscene_SetIntentToPlay(this->cutscene);
         this->cutsceneState = ENTRT_CUTSCENESTATE_WAITING;
     } else if (talkState == TEXT_STATE_CHOICE) {
-        func_8011552C(play, 6);
+        func_8011552C(play, DO_ACTION_DECIDE);
         if (!EnTrt_TestEndInteraction(this, play, CONTROLLER1(&play->state))) {
             if ((!Message_ShouldAdvance(play) || !EnTrt_FacingShopkeeperDialogResult(this, play)) &&
                 (this->stickAccumX > 0)) {
@@ -540,7 +540,7 @@ void EnTrt_FaceShopkeeper(EnTrt* this, PlayState* play) {
                 if (cursorIndex != CURSOR_INVALID) {
                     this->cursorIndex = cursorIndex;
                     this->actionFunc = EnTrt_LookToShelf;
-                    func_8011552C(play, 6);
+                    func_8011552C(play, DO_ACTION_DECIDE);
                     this->stickRightPrompt.isEnabled = false;
                     play_sound(NA_SE_SY_CURSOR);
                 }
@@ -634,7 +634,7 @@ void EnTrt_BrowseShelf(EnTrt* this, PlayState* play) {
         this->stickLeftPrompt.isEnabled = true;
         EnTrt_UpdateCursorPos(play, this);
         if (talkState == TEXT_STATE_5) {
-            func_8011552C(play, 6);
+            func_8011552C(play, DO_ACTION_DECIDE);
             if (!EnTrt_HasPlayerSelectedItem(play, this, CONTROLLER1(&play->state))) {
                 EnTrt_CursorLeftRight(play, this);
                 if (this->cursorIndex != prevCursorIdx) {
@@ -727,7 +727,7 @@ void EnTrt_SelectItem(EnTrt* this, PlayState* play) {
 
     if (EnTrt_TakeItemOffShelf(this)) {
         if (talkState == TEXT_STATE_CHOICE) {
-            func_8011552C(play, 6);
+            func_8011552C(play, DO_ACTION_DECIDE);
             if (!EnTrt_TestCancelOption(this, play, CONTROLLER1(&play->state)) && Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.choiceIndex) {
                     case 0:
@@ -896,7 +896,7 @@ void EnTrt_BeginInteraction(EnTrt* this, PlayState* play) {
             case 0x834:
                 if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_12_08) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_84_40) &&
                     !CHECK_WEEKEVENTREG(WEEKEVENTREG_16_10) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_17_01)) {
-                    func_8011552C(play, 6);
+                    func_8011552C(play, DO_ACTION_DECIDE);
                     this->stickLeftPrompt.isEnabled = false;
                     this->stickRightPrompt.isEnabled = true;
                     this->actionFunc = EnTrt_Hello;
@@ -905,7 +905,7 @@ void EnTrt_BeginInteraction(EnTrt* this, PlayState* play) {
                 }
                 break;
             case 0x83E:
-                func_8011552C(play, 6);
+                func_8011552C(play, DO_ACTION_DECIDE);
                 this->stickLeftPrompt.isEnabled = false;
                 this->stickRightPrompt.isEnabled = true;
                 this->actionFunc = EnTrt_FaceShopkeeper;
@@ -1031,7 +1031,7 @@ void EnTrt_ItemGiven(EnTrt* this, PlayState* play) {
         }
         Message_ContinueTextbox(play, this->textId);
     } else {
-        func_800B85E0(&this->actor, play, 400.0f, PLAYER_AP_MINUS1);
+        func_800B85E0(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
     }
 }
 
@@ -1104,7 +1104,7 @@ void EnTrt_SetupItemGiven(EnTrt* this, PlayState* play) {
             this->cutscene = this->lookToShopkeeperCutscene;
             ActorCutscene_SetIntentToPlay(this->cutscene);
         }
-        func_800B85E0(&this->actor, play, 400.0f, PLAYER_AP_MINUS1);
+        func_800B85E0(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
     }
 }
 
@@ -1114,7 +1114,7 @@ void EnTrt_ContinueShopping(EnTrt* this, PlayState* play) {
     EnGirlA* item;
 
     if (talkState == TEXT_STATE_CHOICE) {
-        func_8011552C(play, 6);
+        func_8011552C(play, DO_ACTION_DECIDE);
         if (Message_ShouldAdvance(play)) {
             EnTrt_ResetItemPosition(this);
             item = this->items[this->cursorIndex];
@@ -1127,7 +1127,7 @@ void EnTrt_ContinueShopping(EnTrt* this, PlayState* play) {
                         player->stateFlags2 |= PLAYER_STATE2_20000000;
                         Message_StartTextbox(play, this->textId, &this->actor);
                         EnTrt_SetupStartShopping(play, this, true);
-                        func_800B85E0(&this->actor, play, 400.0f, PLAYER_AP_MINUS1);
+                        func_800B85E0(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
                         break;
                     case 1:
                     default:
@@ -1380,7 +1380,7 @@ void EnTrt_OpenEyesThenSetToBlink(EnTrt* this) {
 void EnTrt_TalkToShopkeeper(EnTrt* this, PlayState* play) {
     u8 talkState = talkState = Message_GetState(&play->msgCtx);
     Player* player = GET_PLAYER(play);
-    s32 itemGiven;
+    PlayerItemAction itemAction;
 
     if (talkState == TEXT_STATE_5) {
         if (Message_ShouldAdvance(play)) {
@@ -1391,16 +1391,16 @@ void EnTrt_TalkToShopkeeper(EnTrt* this, PlayState* play) {
             }
         }
     } else if (talkState == TEXT_STATE_16) {
-        itemGiven = func_80123810(play);
-        if (itemGiven > PLAYER_AP_NONE) {
-            if (itemGiven == PLAYER_AP_BOTTLE_MUSHROOM) {
+        itemAction = func_80123810(play);
+        if (itemAction > PLAYER_IA_NONE) {
+            if (itemAction == PLAYER_IA_BOTTLE_MUSHROOM) {
                 if (CHECK_WEEKEVENTREG(WEEKEVENTREG_53_08)) {
                     player->actor.textId = 0x888;
                 } else {
                     player->actor.textId = 0x883;
                 }
                 this->textId = player->actor.textId;
-                player->exchangeItemId = itemGiven;
+                player->exchangeItemId = itemAction;
                 this->actionFunc = EnTrt_GetMushroom;
             } else {
                 if (this->flags & ENTRT_GIVEN_MUSHROOM) {
@@ -1412,7 +1412,7 @@ void EnTrt_TalkToShopkeeper(EnTrt* this, PlayState* play) {
                 this->actionFunc = EnTrt_Goodbye;
             }
             Message_CloseTextbox(play);
-        } else if (itemGiven < PLAYER_AP_NONE) {
+        } else if (itemAction <= PLAYER_IA_MINUS1) {
             if (this->flags & ENTRT_GIVEN_MUSHROOM) {
                 this->textId = 0x88B;
             } else {
@@ -1427,7 +1427,7 @@ void EnTrt_TalkToShopkeeper(EnTrt* this, PlayState* play) {
 void EnTrt_SetupTalkToShopkeeper(PlayState* play, EnTrt* this) {
     this->actionFunc = EnTrt_TalkToShopkeeper;
     Message_ContinueTextbox(play, this->talkOptionTextId);
-    func_8011552C(play, 6);
+    func_8011552C(play, DO_ACTION_DECIDE);
     this->stickLeftPrompt.isEnabled = false;
     this->stickRightPrompt.isEnabled = false;
 }
@@ -1711,7 +1711,7 @@ void EnTrt_TrackPlayer(EnTrt* this, PlayState* play) {
     this->headYaw = CLAMP(this->headYaw, -0x38E0, 0x38E0);
 
     playerPos = player->actor.world.pos;
-    playerPos.y = player->bodyPartsPos[7].y + 3.0f;
+    playerPos.y = player->bodyPartsPos[PLAYER_BODYPART_HEAD].y + 3.0f;
     pos = this->actor.world.pos;
     Math_SmoothStepToS(&this->headPitch, Math_Vec3f_Pitch(&pos, &playerPos), 4, 0x1C70, 1);
     this->headPitch = CLAMP(this->headPitch, -0x1C70, 0x1C70);

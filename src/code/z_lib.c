@@ -251,7 +251,7 @@ void func_800FF3A0(f32* distOut, s16* angleOut, Input* input) {
     if (dist > 0.0f) {
         x = input->cur.stick_x;
         y = input->cur.stick_y;
-        *angleOut = Math_FAtan2F(y, -x);
+        *angleOut = Math_Atan2S_XY(y, -x);
     } else {
         *angleOut = 0;
     }
@@ -420,11 +420,11 @@ f32 Math_Vec3f_DiffY(Vec3f* a, Vec3f* b) {
 s16 Math_Vec3f_Yaw(Vec3f* a, Vec3f* b) {
     f32 f14 = b->x - a->x;
     f32 f12 = b->z - a->z;
-    return Math_FAtan2F(f12, f14);
+    return Math_Atan2S_XY(f12, f14);
 }
 
 s16 Math_Vec3f_Pitch(Vec3f* a, Vec3f* b) {
-    return Math_FAtan2F(Math_Vec3f_DistXZ(a, b), a->y - b->y);
+    return Math_Atan2S_XY(Math_Vec3f_DistXZ(a, b), a->y - b->y);
 }
 
 void IChain_Apply_u8(u8* ptr, InitChainEntry* ichain);

@@ -263,7 +263,7 @@ void func_809EC568(Boss04* this, PlayState* play) {
                     this->subCamId = Play_CreateSubCamera(play);
                     Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
                     Play_ChangeCameraStatus(play, this->subCamId, CAM_STATUS_ACTIVE);
-                    func_800B7298(play, &this->actor, 7);
+                    func_800B7298(play, &this->actor, PLAYER_CSMODE_7);
                     player->actor.world.pos.x = this->unk_6E8;
                     player->actor.world.pos.z = this->unk_6F0 + 410.0f;
                     player->actor.shape.rot.y = 0x7FFF;
@@ -271,7 +271,7 @@ void func_809EC568(Boss04* this, PlayState* play) {
                     Math_Vec3f_Copy(&this->subCamEye, &player->actor.world.pos);
                     this->subCamEye.y += 100.0f;
                     Math_Vec3f_Copy(&this->subCamAt, &this->actor.world.pos);
-                    func_8016566C(150);
+                    Play_EnableMotionBlur(150);
                     this->subCamFov = 60.0f;
 
                     boss = play->actorCtx.actorLists[ACTORCAT_BOSS].first;
@@ -313,7 +313,7 @@ void func_809EC568(Boss04* this, PlayState* play) {
             if (this->unk_704 == 45) {
                 this->unk_708 = 1;
                 this->unk_704 = 0;
-                func_800B7298(play, &this->actor, 0x15);
+                func_800B7298(play, &this->actor, PLAYER_CSMODE_21);
                 this->actor.gravity = 0.0f;
                 break;
             }
@@ -390,8 +390,8 @@ void func_809EC568(Boss04* this, PlayState* play) {
                 func_80169AFC(play, this->subCamId, 0);
                 this->subCamId = SUB_CAM_ID_DONE;
                 Cutscene_End(play, &play->csCtx);
-                func_800B7298(play, &this->actor, 6);
-                func_80165690();
+                func_800B7298(play, &this->actor, PLAYER_CSMODE_6);
+                Play_DisableMotionBlur();
                 SET_EVENTINF(EVENTINF_60);
             }
             break;
@@ -828,7 +828,7 @@ void Boss04_Draw(Actor* thisx, PlayState* play) {
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           Boss04_OverrideLimbDraw, Boss04_PostLimbDraw, &this->actor);
 
-    POLY_OPA_DISP = func_801660B8(play, POLY_OPA_DISP);
+    POLY_OPA_DISP = Play_SetFog(play, POLY_OPA_DISP);
 
     if (this->actionFunc != func_809EC568) {
         func_8012C448(play->state.gfxCtx);

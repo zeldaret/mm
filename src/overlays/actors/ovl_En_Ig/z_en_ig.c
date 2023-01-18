@@ -876,7 +876,7 @@ void func_80BF2A50(EnIg* this, PlayState* play) {
 void func_80BF2AF8(EnIg* this, PlayState* play) {
     ScheduleOutput sp20;
 
-    this->timePathTimeSpeed = REG(15) + ((void)0, gSaveContext.save.daySpeed);
+    this->timePathTimeSpeed = R_TIME_SPEED + ((void)0, gSaveContext.save.timeSpeedOffset);
 
     if (!Schedule_RunScript(play, D_80BF3260, &sp20) ||
         ((this->scheduleResult != sp20.result) && !func_80BF2368(this, play, &sp20))) {
@@ -950,7 +950,7 @@ void EnIg_Update(Actor* thisx, PlayState* play) {
         func_80BF1258(this);
         func_80BF13E4(this);
         func_80BF15EC(this);
-        func_8013C964(&this->actor, play, 60.0f, 30.0f, PLAYER_AP_NONE, this->unk_3D0 & 7);
+        func_8013C964(&this->actor, play, 60.0f, 30.0f, PLAYER_IA_NONE, this->unk_3D0 & 7);
         Actor_MoveWithGravity(&this->actor);
         Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, 4);
         func_80BF1354(this, play);

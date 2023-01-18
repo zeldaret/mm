@@ -123,7 +123,7 @@ s32 func_80B34FB4(EnGg* this, PlayState* play) {
     s16 pitch;
 
     sp40 = player->actor.world.pos;
-    sp40.y = player->bodyPartsPos[7].y + 3.0f;
+    sp40.y = player->bodyPartsPos[PLAYER_BODYPART_HEAD].y + 3.0f;
     sp34 = this->actor.world.pos;
     sp34.y += 70.0f;
     pitch = Math_Vec3f_Pitch(&sp34, &sp40);

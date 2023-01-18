@@ -179,7 +179,7 @@ void EnBigokuta_ShootPlayer(EnBigokuta* this, PlayState* play) {
 }
 
 s32 EnBigokuta_ValidatePictograph(PlayState* play, Actor* thisx) {
-    return Snap_ValidatePictograph(play, thisx, PICTOGRAPH_BIG_OCTO, &thisx->focus.pos, &thisx->shape.rot, 280.0f,
+    return Snap_ValidatePictograph(play, thisx, PICTO_VALID_BIG_OCTO, &thisx->focus.pos, &thisx->shape.rot, 280.0f,
                                    1800.0f, -1);
 }
 
@@ -378,7 +378,7 @@ void EnBigokuta_PlayDeathCutscene(EnBigokuta* this, PlayState* play) {
         ActorCutscene_Start(this->cutscene, &this->picto.actor);
 
         if (!CHECK_EVENTINF(EVENTINF_41) && !CHECK_EVENTINF(EVENTINF_35)) {
-            func_800B724C(play, &this->picto.actor, 7);
+            func_800B724C(play, &this->picto.actor, PLAYER_CSMODE_7);
         } else {
             player = GET_PLAYER(play);
             player->stateFlags1 |= PLAYER_STATE1_20;
@@ -454,7 +454,7 @@ void EnBigokuta_PlayDeathEffects(EnBigokuta* this, PlayState* play) {
                 Actor_Kill(&this->picto.actor);
 
                 if (!CHECK_EVENTINF(EVENTINF_41) && !CHECK_EVENTINF(EVENTINF_35)) {
-                    func_800B724C(play, &this->picto.actor, 6);
+                    func_800B724C(play, &this->picto.actor, PLAYER_CSMODE_6);
                 } else {
                     Player* player = GET_PLAYER(play);
 

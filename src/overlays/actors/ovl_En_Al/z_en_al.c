@@ -659,7 +659,7 @@ s32 func_80BDF308(EnAl* this, PlayState* play, ScheduleOutput* scheduleOutput) {
             break;
 
         case 2:
-            this->unk_4F0 = PLAYER_AP_NONE;
+            this->unk_4F0 = PLAYER_IA_NONE;
             this->unk_4EA = 0;
             func_80BDE27C(this, 2);
             break;
@@ -672,7 +672,7 @@ s32 func_80BDF390(EnAl* this, PlayState* play, ScheduleOutput* scheduleOutput) {
 
     this->actor.flags |= ACTOR_FLAG_1;
     this->actor.targetMode = 0;
-    this->unk_4F0 = PLAYER_AP_NONE;
+    this->unk_4F0 = PLAYER_IA_NONE;
     this->unk_4C2 = 0;
     this->unk_4D4 = 40.0f;
 
@@ -748,7 +748,7 @@ void func_80BDF578(EnAl* this, PlayState* play) {
 void func_80BDF5E8(EnAl* this, PlayState* play) {
     ScheduleOutput sp20;
 
-    this->unk_4E0 = REG(15) + ((void)0, gSaveContext.save.daySpeed);
+    this->unk_4E0 = R_TIME_SPEED + ((void)0, gSaveContext.save.timeSpeedOffset);
     if (!Schedule_RunScript(play, D_80BDFC70, &sp20) ||
         ((this->unk_35C != sp20.result) && !func_80BDF390(this, play, &sp20))) {
         this->actor.shape.shadowDraw = NULL;

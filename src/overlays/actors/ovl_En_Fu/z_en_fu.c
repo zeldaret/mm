@@ -119,7 +119,7 @@ void func_809616E0(EnFu* this, PlayState* play) {
     for (i = 0; i < this->unk_520; i++) {
         temp_f20 = this->actor.world.pos.x - this->unk_538[i].x;
         temp_f22 = this->actor.world.pos.z - this->unk_538[i].z;
-        atan = Math_FAtan2F(temp_f22, temp_f20);
+        atan = Math_Atan2S_XY(temp_f22, temp_f20);
 
         if (!spA0 || ((i % 2) != 0)) {
             Actor_Spawn(&play->actorCtx, play, this->unk_544, this->unk_538[i].x, this->unk_538[i].y,
@@ -800,7 +800,7 @@ void func_80962F4C(EnFu* this, PlayState* play) {
             gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2] = SECONDS_TO_TIMER(0);
             gSaveContext.timerStates[TIMER_ID_MINIGAME_2] = TIMER_STATE_STOP;
             Audio_PlayFanfare(NA_BGM_GET_ITEM | 0x900);
-            func_8011B4E0(play, 1);
+            Interface_SetPerfectLetters(play, PERFECT_LETTERS_TYPE_1);
             this->unk_54A = 3;
             func_809632D0(this);
         }
@@ -848,7 +848,7 @@ void func_80963350(EnFu* this, PlayState* play) {
         D_80964C24 = 1;
     }
 
-    if ((this->unk_54A == 3) && (play->interfaceCtx.unk_286 == 0)) {
+    if ((this->unk_54A == 3) && !play->interfaceCtx.perfectLettersOn) {
         this->unk_54A = 2;
         D_80964C24 = 1;
     }
@@ -935,7 +935,7 @@ void func_80963630(EnFu* this, PlayState* play) {
         player->stateFlags1 &= ~PLAYER_STATE1_20;
     } else {
         this->actor.child->freezeTimer = 10;
-        func_800B85E0(&this->actor, play, 500.0f, PLAYER_AP_MINUS1);
+        func_800B85E0(&this->actor, play, 500.0f, PLAYER_IA_MINUS1);
     }
 }
 
@@ -1448,7 +1448,7 @@ void func_80964950(PlayState* play, EnFuUnkStruct* ptr, s32 len) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    POLY_OPA_DISP = func_801660B8(play, POLY_OPA_DISP);
+    POLY_OPA_DISP = Play_SetFog(play, POLY_OPA_DISP);
     POLY_OPA_DISP = func_8012C724(POLY_OPA_DISP);
 
     for (i = 0; i < len; i++, ptr++) {

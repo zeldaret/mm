@@ -185,7 +185,7 @@ s32 func_80B761FC(EnTruMt* this, PlayState* play) {
                 this->unk_3A4 = 0;
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KOUME_DAMAGE2);
             }
-            play->interfaceCtx.unk_25E = 1;
+            play->interfaceCtx.minigameHiddenPoints = 1;
             Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 25);
             return true;
         }
@@ -318,7 +318,7 @@ void func_80B7679C(EnTruMt* this, PlayState* play) {
     this->unk_34A = CLAMP(this->unk_34A, -0x38E0, 0x38E0);
 
     sp40 = player->actor.world.pos;
-    sp40.y = player->bodyPartsPos[7].y + 3.0f;
+    sp40.y = player->bodyPartsPos[PLAYER_BODYPART_HEAD].y + 3.0f;
 
     sp34 = this->actor.world.pos;
     sp34.y += 30.0f;
@@ -342,7 +342,7 @@ void func_80B76924(EnTruMt* this) {
 void func_80B76980(EnTruMt* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (gSaveContext.unk_3F3C >= 10) {
+    if (gSaveContext.minigameHiddenScore >= 10) {
         Message_StartTextbox(play, 0x87F, &this->actor);
         SET_EVENTINF(EVENTINF_36);
         SET_EVENTINF(EVENTINF_40);
@@ -394,8 +394,8 @@ void func_80B76BB8(EnTruMt* this, PlayState* play) {
     if (Message_GetState(&play->msgCtx) == TEXT_STATE_5) {
         if (Message_ShouldAdvance(play)) {
             play->nextEntrance = ENTRANCE(TOURIST_INFORMATION, 1);
-            play->transitionType = TRANS_TYPE_03;
-            gSaveContext.nextTransitionType = TRANS_TYPE_03;
+            play->transitionType = TRANS_TYPE_FADE_WHITE;
+            gSaveContext.nextTransitionType = TRANS_TYPE_FADE_WHITE;
             play->transitionTrigger = TRANS_TRIGGER_START;
         }
     }

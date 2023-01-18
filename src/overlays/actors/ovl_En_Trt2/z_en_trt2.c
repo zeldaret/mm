@@ -615,7 +615,7 @@ s16 func_80AD48F8(Path* path, s32 arg1, Vec3f* arg2, f32* arg3) {
         phi_f12 = 0.0f;
     }
     *arg3 = SQ(phi_f14) + SQ(phi_f12);
-    return RADF_TO_BINANG(Math_Acot2F(phi_f12, phi_f14));
+    return RADF_TO_BINANG(Math_Atan2F_XY(phi_f12, phi_f14));
 }
 
 f32 func_80AD49B8(Path* path, s32 arg1, Vec3f* arg2, Vec3s* arg3) {
@@ -850,9 +850,9 @@ void func_80AD5234(EnTrt2* this, PlayState* play) {
     sp40 = player->actor.world.pos;
 
     if (this->unk_3B2 == 8) {
-        sp40.y = player->bodyPartsPos[7].y + 3.0f;
+        sp40.y = player->bodyPartsPos[PLAYER_BODYPART_HEAD].y + 3.0f;
     } else {
-        sp40.y = player->bodyPartsPos[7].y + 45.0f;
+        sp40.y = player->bodyPartsPos[PLAYER_BODYPART_HEAD].y + 45.0f;
     }
 
     sp34 = this->actor.world.pos;

@@ -1024,9 +1024,9 @@ void DmStk_Init(Actor* thisx, PlayState* play) {
         this->deflectCount = 0;
         this->maskType = SK_MASK_TYPE_NORMAL;
         this->animIndex = SK_ANIM_IDLE;
-        this->fogR = play->lightCtx.unk7;
-        this->fogG = play->lightCtx.unk8;
-        this->fogB = play->lightCtx.unk9;
+        this->fogR = play->lightCtx.fogColor.r;
+        this->fogG = play->lightCtx.fogColor.g;
+        this->fogB = play->lightCtx.fogColor.b;
 
         if ((play->sceneId == SCENE_LOST_WOODS) && (gSaveContext.sceneLayer == 1)) {
             this->alpha = 0;
@@ -1154,7 +1154,7 @@ void DmStk_WaitForTelescope(DmStk* this, PlayState* play) {
         if (play->view.fovy < 25.0f) {
             if ((screenPos.x >= 70.0f) && (screenPos.x < (SCREEN_WIDTH - 70.0f)) && (screenPos.y >= 30.0f) &&
                 (screenPos.y < (SCREEN_HEIGHT - 30.0f))) {
-                func_800FE484();
+                Environment_StopTime();
                 this->actionFunc = DmStk_StartTelescopeCutscene;
             }
         }
@@ -1181,7 +1181,7 @@ void DmStk_StartTelescopeCutscene(DmStk* this, PlayState* play) {
 
     if (ActorCutscene_GetCanPlayNext(cutscene)) {
         ActorCutscene_Start(cutscene, &this->actor);
-        func_800FE498();
+        Environment_StartTime();
         this->actionFunc = DmStk_DoNothing;
     } else {
         ActorCutscene_SetIntentToPlay(cutscene);
@@ -1594,9 +1594,9 @@ void DmStk_UpdateCutscenes(DmStk* this, PlayState* play) {
             this->fadeInState++;
         }
 
-        this->fogR = play->lightCtx.unk7 * this->fogScale;
-        this->fogG = play->lightCtx.unk8 * this->fogScale;
-        this->fogB = play->lightCtx.unk9 * this->fogScale;
+        this->fogR = play->lightCtx.fogColor.r * this->fogScale;
+        this->fogG = play->lightCtx.fogColor.g * this->fogScale;
+        this->fogB = play->lightCtx.fogColor.b * this->fogScale;
     } else if (this->fadeInState == SK_FADE_IN_STATE_INCREASE_FOG) {
         if (this->fogN < 996) {
             this->fogN += 10;
@@ -1816,9 +1816,10 @@ void DmStk_Update(Actor* thisx, PlayState* play) {
             (play->msgCtx.currentTextId == 0x5E6) && !FrameAdvance_IsEnabled(&play->state) &&
             (play->transitionTrigger == TRANS_TRIGGER_OFF) && (ActorCutscene_GetCurrentIndex() == -1) &&
             (play->csCtx.state == 0)) {
-            gSaveContext.save.time = ((void)0, gSaveContext.save.time) + (u16)REG(15);
-            if (REG(15) != 0) {
-                gSaveContext.save.time = ((void)0, gSaveContext.save.time) + (u16)((void)0, gSaveContext.save.daySpeed);
+            gSaveContext.save.time = ((void)0, gSaveContext.save.time) + (u16)R_TIME_SPEED;
+            if (R_TIME_SPEED != 0) {
+                gSaveContext.save.time =
+                    ((void)0, gSaveContext.save.time) + (u16)((void)0, gSaveContext.save.timeSpeedOffset);
             }
         }
     }
@@ -1894,7 +1895,7 @@ void DmStk_PostLimbDraw2(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot
                     POLY_OPA_DISP = Gfx_SetFog(POLY_OPA_DISP, this->fogR, this->fogG, this->fogB, this->fogA,
                                                this->fogN, this->fogF);
                     gSPDisplayList(POLY_OPA_DISP++, gSkullKidMajorasMask1DL);
-                    POLY_OPA_DISP = func_801660B8(play, POLY_OPA_DISP);
+                    POLY_OPA_DISP = Play_SetFog(play, POLY_OPA_DISP);
                 } else {
                     gSPDisplayList(POLY_OPA_DISP++, gSkullKidMajorasMask1DL);
                 }

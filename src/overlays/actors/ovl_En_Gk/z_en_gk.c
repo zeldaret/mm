@@ -442,7 +442,7 @@ s32 func_80B5100C(EnGk* this, PlayState* play) {
     this->unk_324 = CLAMP(this->unk_324, -0x1C70, 0x1C70);
 
     sp40 = player->actor.world.pos;
-    sp40.y = player->bodyPartsPos[7].y + 3.0f;
+    sp40.y = player->bodyPartsPos[PLAYER_BODYPART_HEAD].y + 3.0f;
 
     sp34 = this->actor.world.pos;
     sp34.y += 70.0f;
@@ -722,8 +722,8 @@ void func_80B51B40(EnGk* this, PlayState* play) {
                 if (this->unk_31C == 0xE8F) {
                     play->nextEntrance = ENTRANCE(GORON_RACETRACK, 1);
                     play->transitionTrigger = TRANS_TRIGGER_START;
-                    play->transitionType = TRANS_TYPE_03;
-                    gSaveContext.nextTransitionType = TRANS_TYPE_03;
+                    play->transitionType = TRANS_TYPE_FADE_WHITE;
+                    gSaveContext.nextTransitionType = TRANS_TYPE_FADE_WHITE;
                     Magic_Add(play, MAGIC_FILL_TO_CAPACITY);
                 } else {
                     this->actionFunc = func_80B51760;

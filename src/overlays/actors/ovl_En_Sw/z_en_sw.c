@@ -277,7 +277,7 @@ void func_808D90F0(EnSw* this, s32 arg1, s16 arg2) {
         temp = arg2;
     }
 
-    Matrix_RotateAxisF(BINANG_TO_RAD(temp), &this->unk_368, MTXMODE_NEW);
+    Matrix_RotateAxisF(BINANG_TO_RAD_ALT(temp), &this->unk_368, MTXMODE_NEW);
     Matrix_MultVec3f(&this->unk_350, &sp2C);
     Math_Vec3f_Copy(&this->unk_350, &sp2C);
     Math3D_CrossProduct(&this->unk_368, &this->unk_350, &this->unk_35C);
@@ -761,7 +761,7 @@ void func_808DA3F4(EnSw* this, PlayState* play) {
         Math_Vec3f_Copy(&sp38, &this->unk_374);
         func_808D9894(this, &sp38);
 
-        temp_v0 = Math_FAtan2F(sp38.z, sp38.x);
+        temp_v0 = Math_Atan2S_XY(sp38.z, sp38.x);
         if (ABS_ALT(temp_v0) < temp_s1) {
             this->skelAnime.curFrame = 0.0f;
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALWALL_DASH);
@@ -794,7 +794,7 @@ void func_808DA578(EnSw* this, PlayState* play) {
         if ((this->actor.speedXZ == 0.0f) && (this->unk_44C != 0.0f)) {
             Math_Vec3f_Copy(&sp30, &this->unk_374);
             func_808D9894(this, &sp30);
-            temp2 = Math_FAtan2F(sp30.z, sp30.x);
+            temp2 = Math_Atan2S_XY(sp30.z, sp30.x);
             func_808D94D0(this, play, 0, 0, temp2);
         }
     } else if (this->unk_410 & 0x20) {
@@ -825,7 +825,7 @@ void func_808DA6FC(EnSw* this, PlayState* play) {
         if ((this->actor.speedXZ == 0.0f) && (this->unk_44C != 0.0f)) {
             Math_Vec3f_Copy(&sp38, &this->unk_374);
             func_808D9894(this, &sp38);
-            temp2 = Math_FAtan2F(sp38.z, sp38.x);
+            temp2 = Math_Atan2S_XY(sp38.z, sp38.x);
             func_808D94D0(this, play, 0, 0, temp2);
         }
     } else {
@@ -916,7 +916,7 @@ void func_808DAA60(EnSw* this, PlayState* play) {
             if (this->unk_45E == 0) {
                 Math_Vec3s_ToVec3f(&sp34, &sp44[this->unk_4A0]);
                 func_808D9894(this, &sp34);
-                temp_v0 = Math_FAtan2F(sp34.z, sp34.x);
+                temp_v0 = Math_Atan2S_XY(sp34.z, sp34.x);
                 if (ABS_ALT(temp_v0) < sp40) {
                     this->skelAnime.curFrame = 0.0f;
                     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALWALL_DASH);
@@ -967,7 +967,7 @@ void func_808DACF4(EnSw* this, PlayState* play) {
 
             Math_Vec3f_Copy(&sp38, &this->unk_374);
             func_808D9894(this, &sp38);
-            temp_f6 = Math_FAtan2F(sp38.z, sp38.x);
+            temp_f6 = Math_Atan2S_XY(sp38.z, sp38.x);
             func_808D94D0(this, play, 0, 0, temp_f6);
         }
     } else {

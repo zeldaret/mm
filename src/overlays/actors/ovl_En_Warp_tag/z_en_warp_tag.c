@@ -96,10 +96,10 @@ void EnWarpTag_WaitForPlayer(EnWarptag* this, PlayState* play) {
     if (!Player_InCsMode(play) && (this->dyna.actor.xzDistToPlayer <= 30.0f) &&
         (this->dyna.actor.playerHeightRel <= 10.0f)) {
         if (WARPTAG_GET_INVISIBLE(&this->dyna.actor)) {
-            func_800B7298(play, NULL, 0x51);
+            func_800B7298(play, NULL, PLAYER_CSMODE_81);
             this->actionFunc = EnWarpTag_GrottoReturn;
         } else {
-            func_800B7298(play, NULL, 0xF);
+            func_800B7298(play, NULL, PLAYER_CSMODE_15);
             this->actionFunc = EnWarpTag_RespawnPlayer;
         }
     }
@@ -128,7 +128,7 @@ void EnWarpTag_Unused809C09A0(EnWarptag* this, PlayState* play) {
  */
 void EnWarpTag_Unused809C0A20(EnWarptag* this, PlayState* play) {
     if (play->msgCtx.ocarinaMode == OCARINA_MODE_PLAYED_STORMS) {
-        func_800B7298(play, NULL, 7);
+        func_800B7298(play, NULL, PLAYER_CSMODE_7);
         this->actionFunc = EnWarpTag_RespawnPlayer;
         ActorCutscene_Stop(ActorCutscene_GetCurrentIndex());
 
@@ -159,7 +159,7 @@ void EnWarpTag_RespawnPlayer(EnWarptag* this, PlayState* play) {
         } else {
             ActorCutscene_StartAndSetUnkLinkFields(play->playerActorCsIds[4], &this->dyna.actor);
             func_800B8E58(player, NA_SE_PL_WARP_PLATE);
-            func_8016566C(0);
+            Play_EnableMotionBlur(0);
         }
 
     } else {
@@ -203,21 +203,21 @@ void EnWarpTag_RespawnPlayer(EnWarptag* this, PlayState* play) {
                 newRespawnPos.z = playerActorEntry->pos.z;
 
                 if (WARPTAG_GET_3C0_MAX(&this->dyna.actor) == WARPTAG_3C0_MAX) {
-                    playerParams = 0x9FF;
+                    playerParams = PLAYER_PARAMS(0xFF, PLAYER_INITMODE_9);
                 } else { // not used by any known variant
-                    playerParams = 0x8FF;
+                    playerParams = PLAYER_PARAMS(0xFF, PLAYER_INITMODE_8);
                 }
 
                 // why are we getting player home rotation from the room data? doesnt player have home.rot.y?
                 // especially because we are converting from deg to binang, but isnt home.rot.y already in binang??
                 Play_SetRespawnData(
-                    &play->state, 0, entrance, // parameter 3 is called "sceneSetup"
-                    play->setupEntranceList[playerSpawnIndex].room, playerParams, &newRespawnPos,
+                    &play->state, 0, entrance, play->setupEntranceList[playerSpawnIndex].room, playerParams,
+                    &newRespawnPos,
                     ((((playerActorEntry->rot.y >> 7) & 0x1FF) / 180.0f) * 32768.0f)); // DEG_TO_BINANG ?
 
                 func_80169EFC(&play->state);
-                gSaveContext.respawnFlag = ~0x4;
-                func_80165690();
+                gSaveContext.respawnFlag = -5;
+                Play_DisableMotionBlur();
             }
         }
 
@@ -226,7 +226,7 @@ void EnWarpTag_RespawnPlayer(EnWarptag* this, PlayState* play) {
         if (new15E < 0) {
             new15E = 0;
         }
-        func_80165658(new15E * 0.04f); // unknown Play_ function
+        Play_SetMotionBlurAlpha(new15E * (1 / 25.0f));
     }
 }
 

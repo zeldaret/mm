@@ -17,11 +17,15 @@ ZTexture::ZTexture(ZFile* nParent) : ZResource(nParent)
 	width = 0;
 	height = 0;
 	dWordAligned = true;
+	splitTlut = false;
 
 	RegisterRequiredAttribute("Width");
 	RegisterRequiredAttribute("Height");
 	RegisterRequiredAttribute("Format");
 	RegisterOptionalAttribute("TlutOffset");
+	RegisterOptionalAttribute("ExternalTlut");
+	RegisterOptionalAttribute("ExternalTlutOffset");
+	RegisterOptionalAttribute("SplitTlut");
 }
 
 void ZTexture::ExtractFromBinary(uint32_t nRawDataIndex, int32_t nWidth, int32_t nHeight,
@@ -56,6 +60,7 @@ void ZTexture::ParseXML(tinyxml2::XMLElement* reader)
 
 	std::string widthXml = registeredAttributes.at("Width").value;
 	std::string heightXml = registeredAttributes.at("Height").value;
+	std::string SplitTlutXml = registeredAttributes.at("SplitTlut").value;
 
 	if (!StringHelper::HasOnlyDigits(widthXml))
 	{
@@ -70,6 +75,27 @@ void ZTexture::ParseXML(tinyxml2::XMLElement* reader)
 			"value of 'Height' attribute has non-decimal digits: '%s'", heightXml.c_str());
 		HANDLE_ERROR_RESOURCE(WarningType::InvalidAttributeValue, parent, this, rawDataIndex,
 		                      errorHeader, "");
+	}
+
+	if (!registeredAttributes.at("ExternalTlut").wasSet &&
+	    registeredAttributes.at("SplitTlut").wasSet)
+	{
+		std::string errorHeader =
+			StringHelper::Sprintf("SplitTlut set without using an external tlut");
+		HANDLE_WARNING_RESOURCE(WarningType::InvalidAttributeValue, parent, this, rawDataIndex,
+		                        errorHeader, "");
+	}
+
+	if (!SplitTlutXml.empty())
+	{
+		if (!tinyxml2::XMLUtil::ToBool(SplitTlutXml.c_str(), &splitTlut))
+		{
+			std::string errorHeader = StringHelper::Sprintf(
+				"Invalid value passed to SplitTlut: '%s'. Valid values are true, false, 1, 0",
+				SplitTlutXml.c_str());
+			HANDLE_ERROR_RESOURCE(WarningType::InvalidAttributeValue, parent, this, rawDataIndex,
+			                      errorHeader, "");
+		}
 	}
 
 	width = StringHelper::StrToL(widthXml);
@@ -142,6 +168,47 @@ void ZTexture::ParseRawData()
 		                      StringHelper::Sprintf("Invalid texture format", format), "");
 		assert(!"TODO");
 		break;
+	}
+}
+
+void ZTexture::ParseRawDataLate()
+{
+	if (registeredAttributes["ExternalTlut"].wasSet)
+	{
+		const std::string externPalette = registeredAttributes["ExternalTlut"].value;
+		for (const auto& file : Globals::Instance->files)
+		{
+			if (file->GetName() == externPalette)
+			{
+				offset_t palOffset = 0;
+				if (registeredAttributes["ExternalTlutOffset"].wasSet)
+				{
+					palOffset =
+						StringHelper::StrToL(registeredAttributes["ExternalTlutOffset"].value, 16);
+				}
+				else
+				{
+					HANDLE_WARNING_RESOURCE(
+						WarningType::MissingOffsets, parent, this, rawDataIndex,
+						StringHelper::Sprintf(
+							"No ExternalTlutOffset Given. Assuming offset of 0x0"),
+						"");
+				}
+				for (const auto& res : file->resources)
+				{
+					if (res->GetRawDataIndex() == palOffset)
+					{
+						ZTexture* palette = (ZTexture*)res;
+						ZTexture tlutTemp(file);
+
+						tlut = &tlutTemp;
+						tlut->ExtractFromBinary(palOffset, palette->width, palette->height,
+						                        TextureType::RGBA16bpp, true);
+						SetTlut(tlut);
+					}
+				}
+			}
+		}
 	}
 }
 
@@ -871,7 +938,7 @@ void ZTexture::SetTlut(ZTexture* nTlut)
 	assert(nTlut->isPalette);
 	tlut = nTlut;
 
-	textureData.SetPalette(tlut->textureData);
+	textureData.SetPalette(tlut->textureData, splitTlut ? 128 : 0);
 }
 
 bool ZTexture::HasTlut() const

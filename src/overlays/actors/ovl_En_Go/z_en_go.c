@@ -1816,7 +1816,7 @@ void func_80A153FC(EnGo* this, PlayState* play) {
 }
 
 s32* func_80A15684(EnGo* this, PlayState* play) {
-    static s32 D_80A16704[] = {
+    static s32* D_80A16704[] = {
         D_80A16100,
         D_80A16164,
     };
@@ -1929,10 +1929,10 @@ void EnGo_Update(Actor* thisx, PlayState* play) {
         } else {
             phi_f0 = this->colliderCylinder.dim.radius + 40;
         }
-        func_8013C964(&this->actor, play, phi_f0, 20.0f, PLAYER_AP_NONE, this->unk_390 & 7);
+        func_8013C964(&this->actor, play, phi_f0, 20.0f, PLAYER_IA_NONE, this->unk_390 & 7);
     } else if ((this->unk_390 & 0x200) && (this->unk_3EC != 0)) {
         phi_f0 = this->colliderCylinder.dim.radius + 40;
-        func_8013C964(&this->actor, play, phi_f0, 20.0f, PLAYER_AP_NONE, this->unk_390 & 7);
+        func_8013C964(&this->actor, play, phi_f0, 20.0f, PLAYER_IA_NONE, this->unk_390 & 7);
     }
 
     if ((ENGO_GET_F(&this->actor) != ENGO_F_8) && (ENGO_GET_F(&this->actor) != ENGO_F_2) &&

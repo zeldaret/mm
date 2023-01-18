@@ -75,7 +75,7 @@ void func_809CCDE0(EnBji01* this, PlayState* play) {
     s32 pad[2];
 
     Math_Vec3f_Copy(&pitchTarget, &player->actor.world.pos);
-    pitchTarget.y = player->bodyPartsPos[7].y + 3.0f;
+    pitchTarget.y = player->bodyPartsPos[PLAYER_BODYPART_HEAD].y + 3.0f;
     SubS_TrackPointStep(&this->actor.world.pos, &this->actor.focus.pos, this->actor.shape.rot.y,
                         &player->actor.world.pos, &pitchTarget, &this->headZRotStep, &this->headXRotStep,
                         &this->torsoZRotStep, &this->torsoXRotStep, 0x1554, 0x1FFE, 0xE38, 0x1C70);
@@ -109,12 +109,12 @@ void func_809CCEE8(EnBji01* this, PlayState* play) {
         } else {
             this->moonsTear = (ObjMoonStone*)SubS_FindActor(play, NULL, ACTORCAT_PROP, ACTOR_OBJ_MOON_STONE);
         }
-        func_800B8500(&this->actor, play, 60.0f, 10.0f, PLAYER_AP_NONE);
+        func_800B8500(&this->actor, play, 60.0f, 10.0f, PLAYER_IA_NONE);
     }
 }
 
 void func_809CD028(EnBji01* this, PlayState* play) {
-    f32 timeBeforeMoonCrash;
+    f32 timeUntilMoonCrash;
 
     switch (this->actor.params) {
         case SHIKASHI_TYPE_DEFAULT:
@@ -162,7 +162,7 @@ void func_809CD028(EnBji01* this, PlayState* play) {
                         this->textId = 0x5F1;
                     }
                     func_800B8500(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel,
-                                  PLAYER_AP_NONE);
+                                  PLAYER_IA_NONE);
                     break;
                 case PLAYER_FORM_HUMAN:
                     this->textId = 0x5F7;
@@ -177,11 +177,8 @@ void func_809CD028(EnBji01* this, PlayState* play) {
                             this->textId = 0x5EA;
                             break;
                         case 3:
-                            // Calculates the time left before the moon crashes.
-                            // The day begins at CLOCK_TIME(6, 0) so it must be offset.
-                            timeBeforeMoonCrash = (4 - CURRENT_DAY) * DAY_LENGTH -
-                                                  (u16)(((void)0, gSaveContext.save.time) - CLOCK_TIME(6, 0));
-                            if (timeBeforeMoonCrash < CLOCK_TIME_F(1, 0)) {
+                            timeUntilMoonCrash = TIME_UNTIL_MOON_CRASH;
+                            if (timeUntilMoonCrash < CLOCK_TIME_F(1, 0)) {
                                 this->textId = 0x5E8;
                             } else {
                                 this->textId = 0x5EB;
