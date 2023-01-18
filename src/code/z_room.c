@@ -159,7 +159,7 @@ void Room_DrawCullable(PlayState* play, Room* room, u32 flags) {
             }
         }
     } else {
-        f32 var_fa1 = 1.0f / play->unk_187F0.z; // sp54
+        f32 var_fa1 = 1.0f / play->projectionMtxFDiagonal.z; // sp54
         s32 pad5;
 
         // Pick and sort entries by depth
@@ -182,7 +182,7 @@ void Room_DrawCullable(PlayState* play, Room* room, u32 flags) {
                 entryBoundsNearZ = projectedPos.z - var_fv1;
 
                 // If the entry bounding sphere isn't fully beyond the rendered depth range
-                if (entryBoundsNearZ < play->lightCtx.unkC) {
+                if (entryBoundsNearZ < play->lightCtx.zFar) {
 
                     // This entry will be rendered
                     insert->entry = roomShapeCullableEntry;
