@@ -183,16 +183,16 @@ void func_80A90730(EnTest6* this, PlayState* play) {
     }
 }
 
-void func_80A90C08(s16 arg0) {
-    func_8016566C(arg0);
+void EnTest6_EnableMotionBlur(s16 alpha) {
+    Play_EnableMotionBlur(alpha);
 }
 
-void func_80A90C34(void) {
-    func_80165690();
+void EnTest6_DisableMotionBlur(void) {
+    Play_DisableMotionBlur();
 }
 
 void func_80A90C54(PlayState* play, f32 arg1) {
-    play->envCtx.fillScreen = 1;
+    play->envCtx.fillScreen = true;
     play->envCtx.screenFillColor[0] = 250;
     play->envCtx.screenFillColor[1] = 250;
     play->envCtx.screenFillColor[2] = 250;
@@ -200,7 +200,7 @@ void func_80A90C54(PlayState* play, f32 arg1) {
 }
 
 void func_80A90D20(PlayState* play) {
-    play->envCtx.fillScreen = 0;
+    play->envCtx.fillScreen = false;
 }
 
 void func_80A90D34(EnTest6* this, PlayState* play, EnTest6Struct* ptr) {
@@ -211,7 +211,7 @@ void func_80A90D34(EnTest6* this, PlayState* play, EnTest6Struct* ptr) {
     if (ptr->unk_00 != 0) {
         Matrix_Translate(ptr->unk_08 * ptr->unk_04, ptr->unk_0C, ptr->unk_10 * ptr->unk_04, MTXMODE_NEW);
         Matrix_Scale(ptr->unk_04 * 0.02f, ptr->unk_04 * 0.02f, ptr->unk_04 * 0.02f, MTXMODE_APPLY);
-        POLY_OPA_DISP = func_801660B8(play, POLY_OPA_DISP);
+        POLY_OPA_DISP = Play_SetFog(play, POLY_OPA_DISP);
         POLY_OPA_DISP = func_8012C724(POLY_OPA_DISP);
 
         gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80A9402C[ptr->unk_00]));
@@ -338,8 +338,8 @@ void EnTest6_Destroy(Actor* thisx, PlayState* play2) {
     play->envCtx.lightSettings.fogColor[1] = 0;
     play->envCtx.lightSettings.fogColor[2] = 0;
     play->envCtx.lightSettings.fogNear = 0;
-    play->envCtx.lightSettings.fogFar = 0;
-    play->envCtx.fillScreen = 0;
+    play->envCtx.lightSettings.zFar = 0;
+    play->envCtx.fillScreen = false;
 
     for (i = 0; i < ARRAY_COUNT(this->lights); i++) {
         LightContext_RemoveLight(play, &play->lightCtx, this->lights[i].node);
@@ -393,10 +393,10 @@ void func_80A916F0(EnTest6* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     player->actor.freezeTimer = 0;
-    play->unk_18844 = 0;
+    play->unk_18844 = false;
     ActorCutscene_Stop(play->playerActorCsIds[8]);
     func_800B7298(play, NULL, PLAYER_CSMODE_6);
-    func_80A90C34();
+    EnTest6_DisableMotionBlur();
     Distortion_RemoveRequest(DISTORTION_TYPE_SONG_OF_TIME);
     Actor_Kill(&this->actor);
 }
@@ -462,10 +462,10 @@ void func_80A91760(EnTest6* this, PlayState* play) {
                                                 ((subCam->at.z - subCam->eye.z) * 0.2f);
                     }
                 }
-                func_80A90C08(0x78);
+                EnTest6_EnableMotionBlur(120);
                 Distortion_Request(DISTORTION_TYPE_SONG_OF_TIME);
                 Distortion_SetDuration(80);
-                play->unk_18844 = 1;
+                play->unk_18844 = true;
                 this->unk_274 = 95;
             }
             break;
@@ -517,9 +517,9 @@ void func_80A91760(EnTest6* this, PlayState* play) {
 
             if (this->unk_27A == 10) {
                 this->unk_14C = 0.1f;
-                func_80A90C34();
+                EnTest6_DisableMotionBlur();
                 Distortion_RemoveRequest(DISTORTION_TYPE_SONG_OF_TIME);
-                play->unk_18844 = 0;
+                play->unk_18844 = false;
                 if (this->unk_254 != NULL) {
                     ZeldaArena_Free(this->unk_254);
                 }
@@ -614,10 +614,10 @@ void func_80A92118(EnTest6* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     player->actor.freezeTimer = 0;
-    play->unk_18844 = 0;
+    play->unk_18844 = false;
     ActorCutscene_Stop(play->playerActorCsIds[8]);
     func_800B7298(play, NULL, PLAYER_CSMODE_6);
-    func_80A90C34();
+    EnTest6_DisableMotionBlur();
     Distortion_RemoveRequest(DISTORTION_TYPE_SONG_OF_TIME);
     Actor_Kill(&this->actor);
 }
@@ -657,7 +657,7 @@ void func_80A92188(EnTest6* this, PlayState* play) {
         func_800FD5E0(play, &D_80A94070, 1.0f);
         func_800FD654(play, &D_80A94068, 1.0f);
         func_800FD698(play, D_80A94074, D_80A94078, 1.0f);
-        play->unk_18844 = 1;
+        play->unk_18844 = true;
     }
 
     if (this->unk_27A == 15) {
@@ -665,7 +665,7 @@ void func_80A92188(EnTest6* this, PlayState* play) {
         func_800FD5E0(play, &D_80A94070, 0.0f);
         func_800FD654(play, &D_80A94068, 0.0f);
         func_800FD698(play, D_80A94074, D_80A94078, 0.0f);
-        play->unk_18844 = 0;
+        play->unk_18844 = false;
     }
 
     if (this->unk_286 >= 20) {
@@ -673,18 +673,18 @@ void func_80A92188(EnTest6* this, PlayState* play) {
         func_800FD5E0(play, &D_80A94070, this->unk_160);
         func_800FD654(play, &D_80A94068, this->unk_160);
         func_800FD698(play, D_80A94074, D_80A94078, this->unk_160);
-        play->unk_18844 = 0;
+        play->unk_18844 = false;
     }
 
     func_800B8F98(&player->actor, NA_SE_PL_FLYING_AIR - SFX_FLAG);
 
     switch (this->unk_27A) {
         case 119:
-            func_80A90C08(0x32);
+            EnTest6_EnableMotionBlur(50);
             break;
 
         case 115:
-            func_80A90C08(0x14);
+            EnTest6_EnableMotionBlur(20);
             Distortion_Request(DISTORTION_TYPE_SONG_OF_TIME);
             Distortion_SetDuration(90);
             this->unk_274 = 2;
@@ -704,24 +704,24 @@ void func_80A92188(EnTest6* this, PlayState* play) {
             break;
 
         case 61:
-            func_80A90C08(0x96);
+            EnTest6_EnableMotionBlur(150);
             this->unk_274 = 4;
             break;
 
         case 51:
-            func_80A90C08(0xB4);
+            EnTest6_EnableMotionBlur(180);
             this->unk_274 = 5;
             break;
 
         case 14:
         case 15:
-            func_80A90C08(0x32);
+            EnTest6_EnableMotionBlur(50);
             Distortion_RemoveRequest(DISTORTION_TYPE_SONG_OF_TIME);
             this->unk_274 = 0;
             break;
 
         case 1:
-            func_80A90C34();
+            EnTest6_DisableMotionBlur();
             if (CHECK_EVENTINF(EVENTINF_52)) {
                 this->unk_274 = 9;
             }
@@ -976,7 +976,7 @@ void func_80A92950(EnTest6* this, PlayState* play) {
                 this->unk_276 = 99;
                 play->transitionTrigger = TRANS_TRIGGER_START;
                 play->nextEntrance = gSaveContext.respawn[RESPAWN_MODE_RETURN].entrance;
-                play->transitionType = TRANS_TYPE_02;
+                play->transitionType = TRANS_TYPE_FADE_BLACK;
                 if ((gSaveContext.save.time > CLOCK_TIME(18, 0)) || (gSaveContext.save.time < CLOCK_TIME(6, 0))) {
                     gSaveContext.respawnFlag = -0x63;
                     SET_EVENTINF(EVENTINF_27);
@@ -1058,7 +1058,7 @@ void func_80A92950(EnTest6* this, PlayState* play) {
                     this->unk_276 = 99;
                     play->transitionTrigger = TRANS_TRIGGER_START;
                     play->nextEntrance = gSaveContext.respawn[RESPAWN_MODE_RETURN].entrance;
-                    play->transitionType = TRANS_TYPE_02;
+                    play->transitionType = TRANS_TYPE_FADE_BLACK;
                     gSaveContext.respawnFlag = 2;
                     play->msgCtx.ocarinaMode = 4;
                 }

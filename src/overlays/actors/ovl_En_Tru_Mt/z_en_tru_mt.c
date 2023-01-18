@@ -394,8 +394,8 @@ void func_80B76BB8(EnTruMt* this, PlayState* play) {
     if (Message_GetState(&play->msgCtx) == TEXT_STATE_5) {
         if (Message_ShouldAdvance(play)) {
             play->nextEntrance = ENTRANCE(TOURIST_INFORMATION, 1);
-            play->transitionType = TRANS_TYPE_03;
-            gSaveContext.nextTransitionType = TRANS_TYPE_03;
+            play->transitionType = TRANS_TYPE_FADE_WHITE;
+            gSaveContext.nextTransitionType = TRANS_TYPE_FADE_WHITE;
             play->transitionTrigger = TRANS_TRIGGER_START;
         }
     }

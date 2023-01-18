@@ -3,7 +3,6 @@
  * Overlay: ovl_En_Fishing
  * Description: Fishing Pond Elements (Owner, Fish, Props, Effects...)
  */
-
 #include "prevent_bss_reordering.h"
 #include "z_en_fishing.h"
 #include "z64rumble.h"
