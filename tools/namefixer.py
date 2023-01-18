@@ -472,6 +472,7 @@ wordReplace = {
     "func_800DFC90": "Camera_GetCamDir",
     "func_800DFD04": "Camera_AddQuake",
     "func_800DFFAC": "Camera_ChangeDoorCam",
+
     "func_801694DC": "Play_CreateSubCamera",
     "Play_GetActiveCameraIndex": "Play_GetActiveCamId",
     "func_80169590": "Play_ChangeCameraStatus",
@@ -499,6 +500,12 @@ wordReplace = {
     "func_80169E6C": "Play_SetupRespawnPoint",
     "func_8016A0AC": "Play_IsUnderwater",
     "func_801690CC": "Play_InCsMode",
+    "func_80165658": "Play_SetMotionBlurAlpha",
+    "func_8016566C": "Play_EnableMotionBlur",
+    "func_80165690": "Play_DisableMotionBlur",
+    "func_801660B8": "Play_SetFog",
+
+    "func_801129E4": "Interface_SetSceneRestrictions",
     "func_8011B4E0": "Interface_SetPerfectLetters",
     "func_80112AFC": "Interface_InitMinigame",
     "func_8010E9F0": "Interface_StartTimer",
@@ -518,7 +525,7 @@ wordReplace = {
     "func_80115130": "Inventory_ConsumeFairy",
     "func_801152B8": "Inventory_UpdateItem",
     "func_80115908": "Health_ChangeBy",
-    "func_801159c0": "Health_GiveHearts",
+    "func_801159C0": "Health_GiveHearts",
     "func_801159EC": "Rupees_ChangeBy",
     "func_80115A14": "Inventory_ChangeAmmo",
     "Parameter_AddMagic": "Magic_Add",
@@ -642,6 +649,8 @@ wordReplace = {
 
     "Entrance_CreateIndex": "Entrance_Create",
     "Entrance_CreateIndexFromSpawn": "Entrance_CreateFromSpawn",
+
+    "func_80102544": "LightContext_SetFog",
 
     # Structs
     "ActorAnimationEntry": "AnimationInfo",
@@ -811,6 +820,8 @@ wordReplace = {
     "ICHAIN_F32_DIV1000(minVelocityY,": "ICHAIN_F32_DIV1000(terminalVelocity,",
     "ICHAIN_F32(minVelocityY,": "ICHAIN_F32(terminalVelocity,",
 
+    "ACTORCTX_FLAG_2": "ACTORCTX_FLAG_PICTO_BOX_ON",
+
     "EXCH_ITEM_MINUS1": "PLAYER_IA_MINUS1",
     "EXCH_ITEM_NONE": "PLAYER_IA_NONE",
     "EXCH_ITEM_PICTO_BOX": "PLAYER_IA_PICTO_BOX",
@@ -827,6 +838,30 @@ wordReplace = {
     "ITEM_FISHING_POLE": "ITEM_FISHING_ROD",
     "PLAYER_AP_FISHING_POLE": "PLAYER_IA_FISHING_ROD",
 
+    # Enums
+    "TRANS_TYPE_00": "TRANS_TYPE_WIPE",
+    "TRANS_TYPE_01": "TRANS_TYPE_TRIFORCE",
+    "TRANS_TYPE_02": "TRANS_TYPE_FADE_BLACK",
+    "TRANS_TYPE_03": "TRANS_TYPE_FADE_WHITE",
+    "TRANS_TYPE_04": "TRANS_TYPE_FADE_BLACK_FAST",
+    "TRANS_TYPE_05": "TRANS_TYPE_FADE_WHITE_FAST",
+    "TRANS_TYPE_06": "TRANS_TYPE_FADE_BLACK_SLOW",
+    "TRANS_TYPE_07": "TRANS_TYPE_FADE_WHITE_SLOW",
+    "TRANS_TYPE_08": "TRANS_TYPE_WIPE_FAST",
+    "TRANS_TYPE_09": "TRANS_TYPE_FILL_WHITE_FAST",
+    "TRANS_TYPE_10": "TRANS_TYPE_FILL_WHITE",
+    "TRANS_TYPE_11": "TRANS_TYPE_INSTANT",
+    "TRANS_TYPE_12": "TRANS_TYPE_FILL_BROWN",
+    "TRANS_TYPE_13": "TRANS_TYPE_FADE_WHITE_CS_DELAYED",
+    "TRANS_TYPE_14": "TRANS_TYPE_SANDSTORM_PERSIST",
+    "TRANS_TYPE_15": "TRANS_TYPE_SANDSTORM_END",
+    "TRANS_TYPE_16": "TRANS_TYPE_CS_BLACK_FILL",
+    "TRANS_TYPE_17": "TRANS_TYPE_FADE_WHITE_INSTANT",
+    "TRANS_TYPE_18": "TRANS_TYPE_FADE_GREEN",
+    "TRANS_TYPE_19": "TRANS_TYPE_FADE_BLUE",
+    "TRANS_TYPE_20": "TRANS_TYPE_FADE_DYNAMIC",
+    "TRANS_TYPE_21": "TRANS_TYPE_CIRCLE",
+    "TRANS_TYPE_22": "TRANS_TYPE_WIPE5",
     # Example of custom behaviour:
     # "PLAYER": ("GET_PLAYER(play)", {"ignore": (-1, '"PLAYER"')}), # ignore "PLAYER" in sSoundBankNames
 }

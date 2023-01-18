@@ -566,8 +566,8 @@ void KaleidoScope_UpdateMaskCursor(PlayState* play) {
                         }
                     }
 
-                    if ((Player_GetEnvTimerType(play) >= PLAYER_ENV_TIMER_UNDERWATER_FLOOR) &&
-                        (Player_GetEnvTimerType(play) <= PLAYER_ENV_TIMER_UNDERWATER_FREE) &&
+                    if ((Player_GetEnvironmentalHazard(play) >= PLAYER_ENV_HAZARD_UNDERWATER_FLOOR) &&
+                        (Player_GetEnvironmentalHazard(play) <= PLAYER_ENV_HAZARD_UNDERWATER_FREE) &&
                         ((cursorSlot == (SLOT_MASK_DEKU - ITEM_NUM_SLOTS)) ||
                          (cursorSlot == (SLOT_MASK_GORON - ITEM_NUM_SLOTS)))) {
                         play_sound(NA_SE_SY_ERROR);
