@@ -6246,7 +6246,7 @@ s32 Camera_Demo3(Camera* camera) {
             // Init Data
             camera->animState++;
             rwData->timer = 125;
-            Distortion_SetType(DISTORTION_TYPE_3);
+            Distortion_SetType(DISTORTION_TYPE_ZORA_SWIMMING);
             Distortion_SetCountdown(60);
             break;
 
@@ -6259,7 +6259,7 @@ s32 Camera_Demo3(Camera* camera) {
             if (rwData->timer <= 0) {
                 rwData->timer = 20;
                 camera->animState++;
-                Distortion_SetType(DISTORTION_TYPE_4);
+                Distortion_SetType(DISTORTION_TYPE_UNDERWATER_ENTRY);
                 Distortion_SetCountdown(80);
             }
             break;
@@ -6282,8 +6282,8 @@ s32 Camera_Demo3(Camera* camera) {
             camera->fov += rwData->unk_00 * rwData->timer;
             if (rwData->timer >= 15) {
                 Distortion_ClearType(DISTORTION_TYPE_A);
-                Distortion_ClearType(DISTORTION_TYPE_4);
-                Distortion_ClearType(DISTORTION_TYPE_3);
+                Distortion_ClearType(DISTORTION_TYPE_UNDERWATER_ENTRY);
+                Distortion_ClearType(DISTORTION_TYPE_ZORA_SWIMMING);
                 camera->animState++;
             }
             break;
