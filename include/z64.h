@@ -245,9 +245,9 @@ typedef struct GraphicsContext {
     /* 0x2E4 */ u32         viConfigFeatures;
     /* 0x2E8 */ char        unk_2E8[0x2];
     /* 0x2EA */ u8          updateViMode;
-    /* 0x2EB */ u8          framebufferIdx;
+    /* 0x2EB */ u8          framebufferIndex;
     /* 0x2EC */ void        (*callback)(struct GraphicsContext*, u32);
-    /* 0x2F0 */ u32         callbackParam;
+    /* 0x2F0 */ u32         callbackArg;
     /* 0x2F4 */ f32         xScale;
     /* 0x2F8 */ f32         yScale;
     /* 0x2FC */ GfxMasterList* masterList;
@@ -534,8 +534,8 @@ typedef struct {
     /* 0xE5 */ u8 fillScreen;
     /* 0xE6 */ u8 screenFillColor[4];
     /* 0xEA */ u8 sandstormState;
-    /* 0xEB */ u8 unk_EB;
-    /* 0xEC */ u8 unk_EC;
+    /* 0xEB */ u8 sandstormPrimA;
+    /* 0xEC */ u8 sandstormEnvA;
     /* 0xED */ u8 unk_ED;
     /* 0xEE */ u8 unk_EE[4];
     /* 0xF2 */ u8 unk_F2[8]; // [3] is used by both DemoKankyo and ObjectKankyo effect count
@@ -619,64 +619,6 @@ typedef struct {
     /* 0x24 */ u32 flags;
 } PreRenderParams; // size = 0x28
 
-#define TRANS_TRIGGER_OFF 0 // transition is not active
-#define TRANS_TRIGGER_START 20 // start transition (exiting an area)
-#define TRANS_TRIGGER_END -20 // transition is ending (arriving in a new area)
-
-typedef enum TransitionMode {
-    /*  0 */ TRANS_MODE_OFF,
-    /*  1 */ TRANS_MODE_01,
-    /*  2 */ TRANS_MODE_02,
-    /*  3 */ TRANS_MODE_03,
-    /*  4 */ TRANS_MODE_04,
-    /*  5 */ TRANS_MODE_05,
-    /*  6 */ TRANS_MODE_06,
-    /*  7 */ TRANS_MODE_07,
-    /*  8 */ TRANS_MODE_08,
-    /*  9 */ TRANS_MODE_09,
-    /* 10 */ TRANS_MODE_10,
-    /* 11 */ TRANS_MODE_11,
-    /* 12 */ TRANS_MODE_12,
-    /* 13 */ TRANS_MODE_13,
-    /* 14 */ TRANS_MODE_14,
-    /* 15 */ TRANS_MODE_15,
-    /* 16 */ TRANS_MODE_16,
-    /* 17 */ TRANS_MODE_17
-} TransitionMode;
-
-typedef enum TransitionType {
-    /*  0 */ TRANS_TYPE_00,
-    /*  1 */ TRANS_TYPE_01,
-    /*  2 */ TRANS_TYPE_02,
-    /*  3 */ TRANS_TYPE_03,
-    /*  4 */ TRANS_TYPE_04,
-    /*  5 */ TRANS_TYPE_05,
-    /*  6 */ TRANS_TYPE_06,
-    /*  7 */ TRANS_TYPE_07,
-    /*  8 */ TRANS_TYPE_08,
-    /*  9 */ TRANS_TYPE_09, 
-    /* 10 */ TRANS_TYPE_10,
-    /* 11 */ TRANS_TYPE_11,
-    /* 12 */ TRANS_TYPE_12,
-    /* 13 */ TRANS_TYPE_13,
-    /* 14 */ TRANS_TYPE_14,
-    /* 15 */ TRANS_TYPE_15,
-    /* 16 */ TRANS_TYPE_16,
-    /* 17 */ TRANS_TYPE_17,
-    /* 18 */ TRANS_TYPE_18,
-    /* 19 */ TRANS_TYPE_19,
-    /* 20 */ TRANS_TYPE_20,
-    /* 21 */ TRANS_TYPE_21,
-    /* 64 */ TRANS_TYPE_64 = 64,
-    /* 70 */ TRANS_TYPE_70 = 70,
-    /* 72 */ TRANS_TYPE_72 = 72,
-    /* 73 */ TRANS_TYPE_73,
-    /* 80 */ TRANS_TYPE_80 = 80,
-    /* 86 */ TRANS_TYPE_86 = 86
-} TransitionType;
-
-#define TRANS_NEXT_TYPE_DEFAULT 0xFF
-
 typedef struct FaultAddrConvClient {
     /* 0x0 */ struct FaultAddrConvClient* next;
     /* 0x4 */ void* (*callback)(void*, void*);
@@ -707,10 +649,6 @@ typedef struct {
     /* 0x7E4 */ Input padInput[4];
     /* 0x844 */ void* fb;
 } FaultThreadStruct; // size = 0x848
-
-typedef struct FireObj FireObj;
-
-typedef struct FireObjLight FireObjLight;
 
 struct GameState;
 
@@ -767,15 +705,14 @@ typedef struct {
     /* 0x10 */ OSTime resetTime;
 } PreNmiBuff; // size = 0x18 (actually osAppNmiBuffer is 0x40 bytes large but the rest is unused)
 
-typedef struct PlayState PlayState;
 
-typedef s32 (*ColChkResetFunc)(PlayState*, Collider*);
-typedef void (*ColChkBloodFunc)(PlayState*, Collider*, Vec3f*);
-typedef void (*ColChkApplyFunc)(PlayState*, CollisionCheckContext*, Collider*);
-typedef void (*ColChkVsFunc)(PlayState*, CollisionCheckContext*, Collider*, Collider*);
-typedef s32 (*ColChkLineFunc)(PlayState*, CollisionCheckContext*, Collider*, Vec3f*, Vec3f*);
+typedef s32 (*ColChkResetFunc)(struct PlayState*, Collider*);
+typedef void (*ColChkBloodFunc)(struct PlayState*, Collider*, Vec3f*);
+typedef void (*ColChkApplyFunc)(struct PlayState*, CollisionCheckContext*, Collider*);
+typedef void (*ColChkVsFunc)(struct PlayState*, CollisionCheckContext*, Collider*, Collider*);
+typedef s32 (*ColChkLineFunc)(struct PlayState*, CollisionCheckContext*, Collider*, Vec3f*, Vec3f*);
 
-typedef void(*room_draw_func)(PlayState* play, Room* room, u32 flags);
+typedef void(*room_draw_func)(struct PlayState* play, Room* room, u32 flags);
 
 typedef struct {
     /* 0x000 */ u8 controllers; // bit 0 is set if controller 1 is plugged in, etc.
@@ -816,11 +753,11 @@ typedef enum {
     STACK_STATUS_OVERFLOW = 2
 } StackStatus;
 
-struct FireObjLight {
+typedef struct FireObjLight {
     /* 0x00 */ LightNode* light;
     /* 0x04 */ LightInfo lightInfo;
     /* 0x12 */ u8 lightParamsIndex;
-}; // size = 0x14
+} FireObjLight; // size = 0x14
 
 #define OS_SC_RETRACE_MSG       1
 #define OS_SC_DONE_MSG          2
@@ -859,7 +796,7 @@ typedef struct {
     /* 0x5E */ u16 age;
 } EffFootmark; // size = 0x60
 
-struct FireObj {
+typedef struct FireObj {
     /* 0x00 */ Vec3f position;
     /* 0x0C */ f32 size;
     /* 0x10 */ f32 sizeInv;
@@ -876,7 +813,7 @@ struct FireObj {
     /* 0x2A */ s16 ignitionDelay;
     /* 0x2C */ ColliderCylinder collision;
     /* 0x78 */ FireObjLight light;
-}; // size = 0x8B
+} FireObj; // size = 0x8B
 
 typedef struct {
     /* 0x0 */ u8   seqId;
@@ -904,7 +841,7 @@ typedef struct {
     /* 0x0 */ u16 state;
 } GameOverContext; // size = 0x2
 
-struct PlayState {
+typedef struct PlayState {
     /* 0x00000 */ GameState state;
     /* 0x000A4 */ s16 sceneId;
     /* 0x000A6 */ u8 sceneConfig;
@@ -951,12 +888,12 @@ struct PlayState {
     /* 0x18798 */ s32 (*setPlayerTalkAnim)(struct PlayState* play, LinkAnimationHeader* talkAnim, s32 animMode);
     /* 0x1879C */ s16 playerActorCsIds[10];
     /* 0x187B0 */ MtxF viewProjectionMtxF;
-    /* 0x187F0 */ Vec3f unk_187F0;
+    /* 0x187F0 */ Vec3f projectionMtxFDiagonal;
     /* 0x187FC */ MtxF billboardMtxF;
     /* 0x1883C */ Mtx* billboardMtx;
     /* 0x18840 */ u32 gameplayFrames;
     /* 0x18844 */ u8 unk_18844;
-    /* 0x18845 */ u8 unk_18845;
+    /* 0x18845 */ u8 haltAllActors;
     /* 0x18846 */ s16 numSetupActors;
     /* 0x18848 */ u8 numRooms;
     /* 0x1884C */ RomFile* roomList;
@@ -971,7 +908,7 @@ struct PlayState {
     /* 0x18870 */ void* specialEffects;
     /* 0x18874 */ u8 skyboxId;
     /* 0x18875 */ s8 transitionTrigger; // "fade_direction"
-    /* 0x18876 */ s16 unk_18876;
+    /* 0x18876 */ s16 worldCoverAlpha;
     /* 0x18878 */ s16 bgCoverAlpha;
     /* 0x1887A */ u16 nextEntrance;
     /* 0x1887C */ s8 unk_1887C; // shootingGalleryStatus?
@@ -985,14 +922,57 @@ struct PlayState {
     /* 0x18B49 */ u8 unk_18B49;
     /* 0x18B4A */ u8 transitionMode;
     /* 0x18B4C */ PreRender pauseBgPreRender;
-    /* 0x18B9C */ char unk_18B9C[0x2B8];
+    /* 0x18B9C */ char unk_18B9C[0x54];
+    /* 0x18BF0 */ TransitionContext transitionCtx;
+    /* 0x18E48 */ TransitionFade unk_18E48;
     /* 0x18E54 */ SceneTableEntry* loadedScene;
-    /* 0x18E58 */ char unk_18E58[0x4];
+    /* 0x18E58 */ void* unk_18E58;
     /* 0x18E5C */ TexturePtr pictoPhotoI8;
-    /* 0x18E60 */ char unk_18E60[0x8];
+    /* 0x18E60 */ void* unk_18E60;
+    /* 0x18E64 */ void* unk_18E64;
     /* 0x18E68 */ void* unk_18E68; // framebuffer related to Lens of Truth
     /* 0x18E6C */ char unk_18E6C[0x3EC];
-}; // size = 0x19258
+} PlayState; // size = 0x19258
+
+typedef struct {
+    /* 0x00 */ u8 unk_00;
+    /* 0x01 */ char unk_01[0x3F];
+    /* 0x40 */ void* unk_40;
+    /* 0x44 */ u32 unk_44;
+    /* 0x48 */ u32 unk_48;
+    /* 0x4C */ DmaRequest unk_4C;
+    /* 0x6C */ OSMesgQueue unk_6C;
+    /* 0x84 */ OSMesg unk_84[1];
+    /* 0x88 */ void* unk_88;
+    /* 0x8C */ uintptr_t unk_8C;
+    /* 0x90 */ size_t unk_90;
+    /* 0x94 */ s32 unk_94;
+    /* 0x98 */ s32 unk_98;
+    /* 0x9C */ s32 unk_9C;
+    /* 0xA0 */ char unk_A0[0x4];
+    /* 0xA4 */ s32 unk_A4;
+    /* 0xA8 */ s32 unk_A8;
+} BombersNotebook; // size = 0xAC
+
+typedef enum {
+    /* 0 */ PICTO_PHOTO_STATE_OFF,
+    /* 1 */ PICTO_PHOTO_STATE_SETUP,
+    /* 2 */ PICTO_PHOTO_STATE_PROCESS,
+    /* 3 */ PICTO_PHOTO_STATE_READY
+} PictoPhotoState;
+
+// OoT's TransitionUnk
+typedef struct {
+    /* 0x00 */ char unk_00[0xDC];
+} FbDemoStruct; // size = 0xDC
+
+typedef struct {
+    /* 0x00 */ u8 mode;
+    /* 0x04 */ f32 scale;
+    /* 0x08 */ f32 lodProportion; // expected to be between 0.0f and 1.0f
+    /* 0x0C */ Color_RGBA8_u32 primColor;
+    /* 0x10 */ Color_RGBA8_u32 envColor;
+} Struct_80140E80; // size = 0x14
 
 typedef struct {
     /* 0x00 */ s32 unk0;

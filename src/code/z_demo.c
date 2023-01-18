@@ -161,8 +161,8 @@ void Cutscene_Command_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdBase* c
             }
             break;
         case 0x3:
-            if (play->envCtx.lightSettings.fogFar < 12800) {
-                play->envCtx.lightSettings.fogFar += 35;
+            if (play->envCtx.lightSettings.zFar < 12800) {
+                play->envCtx.lightSettings.zFar += 35;
             }
             break;
         case 0x4:
@@ -206,16 +206,16 @@ void Cutscene_Command_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdBase* c
             }
             break;
         case 0xA:
-            D_801F6D30.r = 255;
-            D_801F6D30.g = 255;
-            D_801F6D30.b = 255;
-            D_801F6D30.a = 255 * progress;
+            gVisMonoColor.r = 255;
+            gVisMonoColor.g = 255;
+            gVisMonoColor.b = 255;
+            gVisMonoColor.a = 255 * progress;
             break;
         case 0xB:
-            D_801F6D30.r = 255;
-            D_801F6D30.g = 180;
-            D_801F6D30.b = 100;
-            D_801F6D30.a = 255 * progress;
+            gVisMonoColor.r = 255;
+            gVisMonoColor.g = 180;
+            gVisMonoColor.b = 100;
+            gVisMonoColor.a = 255 * progress;
             break;
         case 0xC:
             play->roomCtx.curRoom.segment = NULL;
@@ -236,10 +236,10 @@ void Cutscene_Command_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdBase* c
             }
             break;
         case 0xE:
-            play->unk_18845 = 1;
+            play->haltAllActors = true;
             break;
         case 0xF:
-            play->unk_18845 = 0;
+            play->haltAllActors = false;
             break;
         case 0x10:
             if (isStartFrame) {
@@ -295,7 +295,7 @@ void Cutscene_Command_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdBase* c
                 play->nextEntrance = ENTRANCE(CUTSCENE, 0);
                 gSaveContext.nextCutsceneIndex = 0xFFF8;
                 play->transitionTrigger = TRANS_TRIGGER_START;
-                play->transitionType = TRANS_TYPE_03;
+                play->transitionType = TRANS_TYPE_FADE_WHITE;
             }
             break;
         case 0x1C:
@@ -555,7 +555,7 @@ void Cutscene_Command_SetTime(PlayState* play, CutsceneContext* csCtx, CsCmdDayT
 
 void Cutscene_TerminatorImpl(PlayState* play, CutsceneContext* csCtx, CsCmdBase* cmd) {
     csCtx->state = CS_STATE_4;
-    func_80165690();
+    Play_DisableMotionBlur();
     Audio_SetCutsceneFlag(false);
     gSaveContext.cutsceneTransitionControl = 1;
 
@@ -575,7 +575,7 @@ void Cutscene_TerminatorImpl(PlayState* play, CutsceneContext* csCtx, CsCmdBase*
             if (D_801BB12C >= 2) {
                 D_801BB12C = 0;
             }
-            play->transitionType = TRANS_TYPE_04;
+            play->transitionType = TRANS_TYPE_FADE_BLACK_FAST;
         }
 
         if ((play->nextEntrance & 0xF) > 0) {
@@ -594,19 +594,19 @@ void Cutscene_Command_Terminator(PlayState* play, CutsceneContext* csCtx, CsCmdB
         }
     } else if (cmd->base == 2) {
         if (csCtx->frames == cmd->startFrame) {
-            func_80165690();
+            Play_DisableMotionBlur();
 
             switch (D_801F4DE2) {
                 case 0x1F:
                     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_20_02)) {
                         play->nextEntrance = ENTRANCE(WOODFALL_TEMPLE, 1);
                         play->transitionTrigger = TRANS_TRIGGER_START;
-                        play->transitionType = TRANS_TYPE_03;
+                        play->transitionType = TRANS_TYPE_FADE_WHITE;
                     } else {
                         play->nextEntrance = ENTRANCE(WOODFALL, 0);
                         gSaveContext.nextCutsceneIndex = 0xFFF0;
                         play->transitionTrigger = TRANS_TRIGGER_START;
-                        play->transitionType = TRANS_TYPE_03;
+                        play->transitionType = TRANS_TYPE_FADE_WHITE;
                     }
                     break;
 
@@ -614,12 +614,12 @@ void Cutscene_Command_Terminator(PlayState* play, CutsceneContext* csCtx, CsCmdB
                     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_33_80)) {
                         play->nextEntrance = ENTRANCE(MOUNTAIN_VILLAGE_SPRING, 7);
                         play->transitionTrigger = TRANS_TRIGGER_START;
-                        play->transitionType = TRANS_TYPE_03;
+                        play->transitionType = TRANS_TYPE_FADE_WHITE;
                     } else {
                         play->nextEntrance = ENTRANCE(MOUNTAIN_VILLAGE_SPRING, 0);
                         gSaveContext.nextCutsceneIndex = 0xFFF0;
                         play->transitionTrigger = TRANS_TRIGGER_START;
-                        play->transitionType = TRANS_TYPE_03;
+                        play->transitionType = TRANS_TYPE_FADE_WHITE;
                     }
                     break;
 
@@ -628,7 +628,7 @@ void Cutscene_Command_Terminator(PlayState* play, CutsceneContext* csCtx, CsCmdB
                     play->nextEntrance = ENTRANCE(ZORA_CAPE, 8);
                     gSaveContext.nextCutsceneIndex = 0xFFF0;
                     play->transitionTrigger = TRANS_TRIGGER_START;
-                    play->transitionType = TRANS_TYPE_03;
+                    play->transitionType = TRANS_TYPE_FADE_WHITE;
                     break;
 
                 case 0x36:
@@ -636,7 +636,7 @@ void Cutscene_Command_Terminator(PlayState* play, CutsceneContext* csCtx, CsCmdB
                     play->nextEntrance = ENTRANCE(IKANA_CANYON, 0);
                     gSaveContext.nextCutsceneIndex = 0xFFF1;
                     play->transitionTrigger = TRANS_TRIGGER_START;
-                    play->transitionType = TRANS_TYPE_03;
+                    play->transitionType = TRANS_TYPE_FADE_WHITE;
                     break;
             }
         }
@@ -764,16 +764,16 @@ void Cutscene_Command_ChooseCreditsScenes(PlayState* play, CutsceneContext* csCt
 void Cutscene_Command_MotionBlur(PlayState* play, CutsceneContext* csCtx, CsCmdBase* cmd) {
     if ((csCtx->frames >= cmd->startFrame) && (cmd->endFrame >= csCtx->frames)) {
         if ((csCtx->frames == cmd->startFrame) && (cmd->base == 1)) {
-            func_8016566C(180);
+            Play_EnableMotionBlur(180);
         }
 
         if (cmd->base == 2) {
             f32 progress = Environment_LerpWeight(cmd->endFrame, cmd->startFrame, csCtx->frames);
 
             if (progress >= 0.9f) {
-                func_80165690();
+                Play_DisableMotionBlur();
             } else {
-                func_80165658((1.0f - progress) * 180.0f);
+                Play_SetMotionBlurAlpha((1.0f - progress) * 180.0f);
             }
         }
     }
