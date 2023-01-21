@@ -538,7 +538,7 @@ s32 func_80A1222C(EnGo* this, PlayState* play) {
     if (((player->transformation == PLAYER_FORM_GORON) && (play->msgCtx.ocarinaMode == 3) &&
          (play->msgCtx.lastPlayedSong == OCARINA_SONG_GORON_LULLABY) && (this->unk_3EC == 0) &&
          (this->actor.xzDistToPlayer < 400.0f)) ||
-        (!(gSaveContext.save.weekEventReg[22] & 4) && (play->sceneId == SCENE_16GORON_HOUSE) &&
+        (!CHECK_WEEKEVENTREG(WEEKEVENTREG_22_04) && (play->sceneId == SCENE_16GORON_HOUSE) &&
          (gSaveContext.sceneLayer == 0) && (this->unk_3EC == 0) && (play->csCtx.currentCsIndex == 1))) {
         ret = true;
     }
@@ -945,7 +945,7 @@ void func_80A132C8(EnGo* this, PlayState* play) {
     if ((fabsf(this->actor.playerHeightRel) > 20.0f) || (this->actor.xzDistToPlayer > 300.0f)) {
         SubS_UpdateFlags(&this->unk_390, 3, 7);
     } else if ((player->transformation != PLAYER_FORM_GORON) || (ABS_ALT(temp_v1) >= 0x1C70) ||
-               (gSaveContext.save.weekEventReg[21] & 4) || (gSaveContext.save.weekEventReg[21] & 8)) {
+               CHECK_WEEKEVENTREG(WEEKEVENTREG_21_04) || CHECK_WEEKEVENTREG(WEEKEVENTREG_21_08)) {
         SubS_UpdateFlags(&this->unk_390, 3, 7);
     } else {
         SubS_UpdateFlags(&this->unk_390, 4, 7);
@@ -953,7 +953,7 @@ void func_80A132C8(EnGo* this, PlayState* play) {
 }
 
 void func_80A133A8(EnGo* this, PlayState* play) {
-    if (gSaveContext.save.weekEventReg[21] & 8) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_21_08)) {
         SubS_UpdateFlags(&this->unk_390, 3, 7);
     } else {
         SubS_UpdateFlags(&this->unk_390, 4, 7);
@@ -988,7 +988,7 @@ Actor* func_80A13400(EnGo* this, PlayState* play) {
 }
 
 void func_80A134B0(EnGo* this, PlayState* play, s32 arg2) {
-    if ((gSaveContext.save.weekEventReg[18] & 0x80) || (play->actorCtx.flags & ACTORCTX_FLAG_0) || arg2) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_18_80) || (play->actorCtx.flags & ACTORCTX_FLAG_0) || arg2) {
         this->colliderSphere.dim.modelSphere.radius = 300;
     } else {
         this->colliderSphere.dim.modelSphere.radius = 380;
@@ -1178,7 +1178,7 @@ s32 func_80A13B1C(EnGo* this, PlayState* play) {
                 func_80A13728(this, play);
                 this->unk_3C4++;
                 this->unk_3C2 = 0;
-                gSaveContext.save.weekEventReg[88] |= 0x40;
+                SET_WEEKEVENTREG(WEEKEVENTREG_88_40);
             }
             break;
 
@@ -1198,19 +1198,19 @@ s32 func_80A13B1C(EnGo* this, PlayState* play) {
             if (this->unk_3C0 >= 65) {
                 switch (player->transformation) {
                     case PLAYER_FORM_HUMAN:
-                        gSaveContext.save.weekEventReg[88] |= 0x80;
+                        SET_WEEKEVENTREG(WEEKEVENTREG_88_80);
                         break;
 
                     case PLAYER_FORM_GORON:
-                        gSaveContext.save.weekEventReg[89] |= 4;
+                        SET_WEEKEVENTREG(WEEKEVENTREG_89_04);
                         break;
 
                     case PLAYER_FORM_ZORA:
-                        gSaveContext.save.weekEventReg[89] |= 2;
+                        SET_WEEKEVENTREG(WEEKEVENTREG_89_02);
                         break;
 
                     case PLAYER_FORM_DEKU:
-                        gSaveContext.save.weekEventReg[89] |= 1;
+                        SET_WEEKEVENTREG(WEEKEVENTREG_89_01);
                         break;
                 }
                 ret = true;
@@ -1376,7 +1376,7 @@ void func_80A143A8(EnGo* this, PlayState* play) {
 void func_80A14430(EnGo* this, PlayState* play) {
     if (((gSaveContext.save.entrance == ENTRANCE(GORON_RACETRACK, 0)) ||
          (gSaveContext.save.entrance == ENTRANCE(GORON_RACETRACK, 2))) &&
-        (gSaveContext.save.weekEventReg[33] & 0x80)) {
+        (CHECK_WEEKEVENTREG(WEEKEVENTREG_33_80))) {
         func_80A14018(this, play);
         this->actionFunc = func_80A149B0;
     } else {
@@ -1414,7 +1414,7 @@ void func_80A145AC(EnGo* this, PlayState* play) {
     if ((ENGO_GET_70(&this->actor) == ENGO_70_1) &&
         (((play->sceneId == SCENE_10YUKIYAMANOMURA2) && (gSaveContext.sceneLayer == 1) &&
           (play->csCtx.currentCsIndex == 0)) ||
-         !(gSaveContext.save.weekEventReg[21] & 8))) {
+         !CHECK_WEEKEVENTREG(WEEKEVENTREG_21_08))) {
         this->actor.child = func_80A13400(this, play);
         this->actor.child->child = &this->actor;
         func_80A141D4(this, play);
@@ -1426,7 +1426,7 @@ void func_80A145AC(EnGo* this, PlayState* play) {
 }
 
 void func_80A14668(EnGo* this, PlayState* play) {
-    if (!(gSaveContext.save.weekEventReg[22] & 4)) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_22_04)) {
         func_80A14324(this, play);
         this->actionFunc = func_80A149B0;
     } else {
@@ -1571,7 +1571,7 @@ void func_80A14B30(EnGo* this, PlayState* play) {
             this->unk_390 &= ~0x200;
             this->unk_390 |= 0x8000;
             this->actor.shape.yOffset = 0.0f;
-        } else if ((this->unk_3EC != 0) && (gSaveContext.save.weekEventReg[22] & 4)) {
+        } else if ((this->unk_3EC != 0) && CHECK_WEEKEVENTREG(WEEKEVENTREG_22_04)) {
             this->actor.scale.x = this->unk_3A4 - (Math_SinS(this->unk_3AE) * 0.001f);
             this->actor.scale.y = (Math_SinS(this->unk_3AE) * 0.001f) + this->unk_3A4;
             this->actor.scale.z = (Math_SinS(this->unk_3AE) * 0.001f) + this->unk_3A4;
@@ -1816,7 +1816,7 @@ void func_80A153FC(EnGo* this, PlayState* play) {
 }
 
 s32* func_80A15684(EnGo* this, PlayState* play) {
-    static s32 D_80A16704[] = {
+    static s32* D_80A16704[] = {
         D_80A16100,
         D_80A16164,
     };
@@ -1929,10 +1929,10 @@ void EnGo_Update(Actor* thisx, PlayState* play) {
         } else {
             phi_f0 = this->colliderCylinder.dim.radius + 40;
         }
-        func_8013C964(&this->actor, play, phi_f0, 20.0f, PLAYER_AP_NONE, this->unk_390 & 7);
+        func_8013C964(&this->actor, play, phi_f0, 20.0f, PLAYER_IA_NONE, this->unk_390 & 7);
     } else if ((this->unk_390 & 0x200) && (this->unk_3EC != 0)) {
         phi_f0 = this->colliderCylinder.dim.radius + 40;
-        func_8013C964(&this->actor, play, phi_f0, 20.0f, PLAYER_AP_NONE, this->unk_390 & 7);
+        func_8013C964(&this->actor, play, phi_f0, 20.0f, PLAYER_IA_NONE, this->unk_390 & 7);
     }
 
     if ((ENGO_GET_F(&this->actor) != ENGO_F_8) && (ENGO_GET_F(&this->actor) != ENGO_F_2) &&

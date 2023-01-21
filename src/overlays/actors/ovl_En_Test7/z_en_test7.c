@@ -438,7 +438,7 @@ void func_80AF19A8(EnTest7* this, PlayState* play) {
     } else {
         ActorCutscene_Start(play->playerActorCsIds[8], NULL);
         func_80AF082C(this, func_80AF1A2C);
-        play->unk_18844 = 1;
+        play->unk_18844 = true;
     }
 }
 
@@ -461,7 +461,7 @@ void func_80AF1A2C(EnTest7* this, PlayState* play) {
         func_80AF082C(this, func_80AF1CA0);
         this->unk_144 |= 0x20;
         Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_PL_WARP_WING_OPEN);
-        func_8016566C(0x78);
+        Play_EnableMotionBlur(120);
     }
 }
 
@@ -599,10 +599,10 @@ void func_80AF2030(EnTest7* this, PlayState* play) {
         R_PLAY_FILL_SCREEN_G = 255;
         R_PLAY_FILL_SCREEN_B = 255;
         R_PLAY_FILL_SCREEN_ALPHA = 255;
-        play->unk_18844 = 0;
+        play->unk_18844 = false;
         this->unk_144 &= ~4;
         func_80AF082C(this, func_80AF21E8);
-        func_80165690();
+        Play_DisableMotionBlur();
     }
 }
 
@@ -667,16 +667,16 @@ void func_80AF2350(EnTest7* this, PlayState* play) {
         gSaveContext.respawnFlag = -6;
     } else {
         play->nextEntrance = D_80AF343C[ENTEST7_GET(&this->actor) - ENTEST7_1C];
-        if ((play->nextEntrance == ENTRANCE(SOUTHERN_SWAMP_POISONED, 10)) && (gSaveContext.save.weekEventReg[20] & 2)) {
+        if ((play->nextEntrance == ENTRANCE(SOUTHERN_SWAMP_POISONED, 10)) && CHECK_WEEKEVENTREG(WEEKEVENTREG_20_02)) {
             play->nextEntrance = ENTRANCE(SOUTHERN_SWAMP_CLEARED, 10);
         } else if ((play->nextEntrance == ENTRANCE(MOUNTAIN_VILLAGE_WINTER, 8)) &&
-                   (gSaveContext.save.weekEventReg[33] & 0x80)) {
+                   CHECK_WEEKEVENTREG(WEEKEVENTREG_33_80)) {
             play->nextEntrance = ENTRANCE(MOUNTAIN_VILLAGE_SPRING, 8);
         }
     }
 
     play->transitionTrigger = TRANS_TRIGGER_START;
-    play->transitionType = TRANS_TYPE_02;
+    play->transitionType = TRANS_TYPE_FADE_BLACK;
     gSaveContext.seqId = (u8)NA_BGM_DISABLED;
     gSaveContext.ambienceId = AMBIENCE_ID_DISABLED;
 }
@@ -957,7 +957,7 @@ void EnTest7_Draw(Actor* thisx, PlayState* play) {
     s32 sp40;
 
     if (this->unk_144 & 1) {
-        Mtx* mtx = GRAPH_ALLOC(play->state.gfxCtx, ALIGN16(sizeof(Mtx) * this->unk_18CC.unk_18->unk_1));
+        Mtx* mtx = GRAPH_ALLOC(play->state.gfxCtx, this->unk_18CC.unk_18->unk_1 * sizeof(Mtx));
 
         if (mtx != NULL) {
             func_8018450C(play, &this->unk_18CC, mtx, func_80AF31D0, NULL, &this->actor);

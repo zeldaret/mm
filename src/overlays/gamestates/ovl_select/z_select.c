@@ -35,7 +35,7 @@ void MapSelect_LoadGame(MapSelectState* this, u32 entrance, s32 spawn) {
 
     if (spawn != 0) {
         gSaveContext.save.entrance =
-            Entrance_Create((s32)gSaveContext.save.entrance >> 9, spawn, gSaveContext.save.entrance & 0xF);
+            Entrance_Create(gSaveContext.save.entrance >> 9, spawn, gSaveContext.save.entrance & 0xF);
     }
     if (gSaveContext.save.entrance == ENTRANCE(CLOCK_TOWER_INTERIOR, 0)) {
         gSaveContext.save.day = 0;
@@ -517,7 +517,7 @@ void MapSelect_UpdateMenu(MapSelectState* this) {
                 gSaveContext.timerStopTimes[i] = SECONDS_TO_TIMER(0);
                 gSaveContext.timerPausedOsTimes[i] = 0;
             }
-            gSaveContext.minigameState = 0;
+            gSaveContext.minigameStatus = MINIGAME_STATUS_INACTIVE;
 
             if (this->scenes[this->currentScene].loadFunc != NULL) {
                 this->scenes[this->currentScene].loadFunc(this, this->scenes[this->currentScene].entrance, this->opt);
@@ -994,7 +994,7 @@ void MapSelect_DrawMenu(MapSelectState* this) {
     GfxPrint_Open(printer, POLY_OPA_DISP);
 
     MapSelect_PrintMenu(this, printer);
-    MapSelect_PrintAgeSetting(this, printer, ((void)0, gSaveContext.save.playerForm));
+    MapSelect_PrintAgeSetting(this, printer, GET_PLAYER_FORM);
     MapSelect_PrintCutsceneSetting(this, printer, ((void)0, gSaveContext.save.cutscene));
 
     POLY_OPA_DISP = GfxPrint_Close(printer);

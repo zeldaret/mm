@@ -141,7 +141,7 @@ void EnJgameTsn_Destroy(Actor* thisx, PlayState* play) {
     EnJgameTsn* this = THIS;
 
     Collider_DestroyCylinder(play, &this->collider);
-    gSaveContext.save.weekEventReg[90] &= (u8)~0x20;
+    CLEAR_WEEKEVENTREG(WEEKEVENTREG_90_20);
 }
 
 void func_80C13B74(EnJgameTsn* this) {
@@ -284,9 +284,9 @@ void func_80C1410C(EnJgameTsn* this, PlayState* play) {
 
     player->stateFlags1 |= PLAYER_STATE1_20;
     func_801A2BB8(0x25);
-    play->interfaceCtx.unk_280 = 1;
-    func_80112AFC(play);
-    gSaveContext.save.weekEventReg[90] |= 0x20;
+    play->interfaceCtx.minigameState = MINIGAME_STATE_COUNTDOWN_SETUP_3;
+    Interface_InitMinigame(play);
+    SET_WEEKEVENTREG(WEEKEVENTREG_90_20);
     Interface_StartTimer(TIMER_ID_MINIGAME_2, 120);
     this->actionFunc = func_80C1418C;
 }
@@ -294,7 +294,7 @@ void func_80C1410C(EnJgameTsn* this, PlayState* play) {
 void func_80C1418C(EnJgameTsn* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (play->interfaceCtx.unk_280 == 8) {
+    if (play->interfaceCtx.minigameState == MINIGAME_STATE_COUNTDOWN_GO) {
         func_80C141DC(this);
         player->stateFlags1 &= ~PLAYER_STATE1_20;
     }
@@ -370,7 +370,7 @@ void func_80C144F8(EnJgameTsn* this, PlayState* play) {
     play->nextEntrance = ENTRANCE(GREAT_BAY_COAST, 13);
     play->transitionTrigger = TRANS_TRIGGER_START;
     play->transitionType = TRANS_TYPE_80;
-    gSaveContext.nextTransitionType = TRANS_TYPE_03;
+    gSaveContext.nextTransitionType = TRANS_TYPE_FADE_WHITE;
 }
 
 void func_80C14540(EnJgameTsn* this) {
@@ -379,11 +379,11 @@ void func_80C14540(EnJgameTsn* this) {
 
 void func_80C14554(EnJgameTsn* this, PlayState* play) {
     if (Actor_HasParent(&this->actor, play)) {
-        if (!(gSaveContext.save.weekEventReg[82] & 0x10)) {
-            gSaveContext.save.weekEventReg[82] |= 0x10;
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_82_10)) {
+            SET_WEEKEVENTREG(WEEKEVENTREG_82_10);
         }
         func_80C145FC(this);
-    } else if (gSaveContext.save.weekEventReg[82] & 0x10) {
+    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_82_10)) {
         Actor_PickUp(&this->actor, play, GI_RUPEE_PURPLE, 500.0f, 100.0f);
     } else {
         Actor_PickUp(&this->actor, play, GI_HEART_PIECE, 500.0f, 100.0f);
@@ -478,9 +478,9 @@ void func_80C147B4(EnJgameTsn* this, PlayState* play) {
             case 0x10A0:
             case 0x10A1:
                 func_801477B4(play);
-                gSaveContext.minigameState = 3;
+                gSaveContext.minigameStatus = MINIGAME_STATUS_END;
                 gSaveContext.timerStates[TIMER_ID_MINIGAME_2] = TIMER_STATE_STOP;
-                gSaveContext.save.weekEventReg[90] &= (u8)~0x20;
+                CLEAR_WEEKEVENTREG(WEEKEVENTREG_90_20);
                 func_80C144E4(this);
                 break;
 
@@ -563,14 +563,14 @@ s32 func_80C14BCC(EnJgameTsn* this, PlayState* play) {
         if (phi_s3 == this->unk_218) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_TRE_BOX_APPEAR);
             *this->unk_208[phi_s3] |= OBJLUPYGAMELIFT_DISPLAY_CORRECT;
-            play->interfaceCtx.unk_25C = 1;
+            play->interfaceCtx.minigamePoints = 1;
             return true;
         }
 
         if (*this->unk_208[phi_s3] & OBJLUPYGAMELIFT_IGNITE_FIRE) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_TRE_BOX_APPEAR);
             *this->unk_208[phi_s3] |= OBJLUPYGAMELIFT_DISPLAY_CORRECT;
-            play->interfaceCtx.unk_25C = 1;
+            play->interfaceCtx.minigamePoints = 1;
         } else {
             *this->unk_208[phi_s3] |= OBJLUPYGAMELIFT_DISPLAY_INCORRECT;
             Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_ERROR);

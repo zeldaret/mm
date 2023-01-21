@@ -55,7 +55,7 @@
         <Limb Name="gMajorasIncarnationEyestalkLimb" Type="Standard" EnumName="MAJORAS_INCARNATION_LIMB_EYESTALK" Offset="0x9934" />
 
         <!-- Majora's Incarnation Skeleton -->
-        <Skeleton Name="gMajorasIncarnationSkel" Type="Flex" LimbType="Standard" LimbNone="MAJORAS_INCARNATION_LIMB_NONE" LimbMax="MAJORAS_INCARNATION_LIMB_MAX" EnumName="MajorasIncarnationLimbs" Offset="0x99A0" />
+        <Skeleton Name="gMajorasIncarnationSkel" Type="Flex" LimbType="Standard" LimbNone="MAJORAS_INCARNATION_LIMB_NONE" LimbMax="MAJORAS_INCARNATION_LIMB_MAX" EnumName="MajorasIncarnationLimb" Offset="0x99A0" />
 
         <!-- Majora's Incarnation Animations -->
         <Animation Name="gMajorasIncarnationFallOverStartAnim" Offset="0x9C7C" /> <!-- Original name is "last2_koke" ("stupidity; a fool") -->
@@ -98,7 +98,7 @@
         <!-- Boss Mask Textures -->
         <Texture Name="gBossMaskOdolwaFaceTLUT" OutName="boss_mask_odolwa_face_tlut" Format="rgba16" Width="4" Height="4" Offset="0xCFB0" />
         <Texture Name="gBossMaskOdolwaEarTLUT" OutName="boss_mask_odolwa_ear_tlut" Format="rgba16" Width="4" Height="4" Offset="0xCFD0" />
-        <Texture Name="gBossMaskOdolwaHairTex" OutName="boss_mask_odolwa_hair" Format="rgba16" Width="16" Height="16" Offset="0xCFF0" />
+        <Texture Name="gBossMaskOdolwaPlumeTex" OutName="boss_mask_odolwa_plume" Format="rgba16" Width="16" Height="16" Offset="0xCFF0" />
         <Texture Name="gBossMaskOdolwaFaceTex" OutName="boss_mask_odolwa_face" Format="ci4" Width="64" Height="64" Offset="0xD1F0" />
         <Texture Name="gBossMaskOdolwaEarTex" OutName="boss_mask_odolwa_ear" Format="ci4" Width="64" Height="64" Offset="0xD9F0" />
         <Texture Name="gBossMaskGyorgSkinTLUT" OutName="boss_mask_gyorg_skin_tlut" Format="rgba16" Width="4" Height="4" Offset="0xE1F0" />
@@ -110,7 +110,7 @@
         <Texture Name="gBossMaskGyorgToothHornTex" OutName="boss_mask_gyorg_tooth_horn" Format="ci4" Width="16" Height="16" Offset="0xFA50" />
         <Texture Name="gBossMaskGohtEyeTex" OutName="boss_mask_goht_eye" Format="rgba16" Width="32" Height="64" Offset="0xFAD0" />
         <Texture Name="gBossMaskGohtTopPatternTex" OutName="boss_mask_goht_top_pattern" Format="rgba16" Width="32" Height="64" Offset="0x10AD0" />
-        <Texture Name="gBossMaskGohtTwinmoldPatternTex" OutName="boss_mask_goht_twinmold_pattern" Format="rgba16" Width="32" Height="64" Offset="0x11AD0" /> <!-- Used for the lower part of Goht's mask for the mouth of Twinmold's mask -->
+        <Texture Name="gBossMaskGohtTwinmoldPatternTex" OutName="boss_mask_goht_twinmold_pattern" Format="rgba16" Width="32" Height="64" Offset="0x11AD0" /> <!-- Used for the lower part of Goht's mask and for the mouth of Twinmold's mask -->
         <Texture Name="gBossMaskGohtSpikeTwinmoldMandibleTex" OutName="boss_mask_goht_spike_twinmold_mandible" Format="rgba16" Width="32" Height="32" Offset="0x12AD0" />
         <Texture Name="gBossMaskTwinmoldSkinTLUT" OutName="boss_mask_twinmold_skin_tlut" Format="rgba16" Width="4" Height="4" Offset="0x132D0" />
         <Texture Name="gBossMaskTwinmoldSnoutTLUT" OutName="boss_mask_twinmold_snout_tlut" Format="rgba16" Width="4" Height="4" Offset="0x132F0" />
@@ -144,12 +144,12 @@
         <Limb Name="gMajorasMaskLeftSpike3Limb" Type="Standard" EnumName="MAJORAS_MASK_LIMB_LEFT_SPIKE3" Offset="0x19C04" />
 
         <!-- Majora's Mask Skeleton -->
-        <Skeleton Name="gMajorasMaskSkel" Type="Normal" LimbType="Standard" LimbNone="MAJORAS_MASK_LIMB_NONE" LimbMax="MAJORAS_MASK_LIMB_MAX" EnumName="MajorasMaskLimbs" Offset="0x19C58" />
+        <Skeleton Name="gMajorasMaskSkel" Type="Normal" LimbType="Standard" LimbNone="MAJORAS_MASK_LIMB_NONE" LimbMax="MAJORAS_MASK_LIMB_MAX" EnumName="MajorasMaskLimb" Offset="0x19C58" />
 
         <!-- Majora's Mask Animation -->
         <Animation Name="gMajorasMaskFloatingAnim" Offset="0x19E48" /> <!-- Original name is "last3_stop" -->
 
-        <!-- Majora's Wrath Animations-->
+        <!-- Majora's Wrath Animations. For unused animations, we don't know what the whips are supposed to do, since their physics are controlled by the Boss07 actor.  -->
         <Animation Name="gMajorasWrathFlipLeftAndSpin" Offset="0x1AE1C" /> <!-- Original name is "last_ac01". Unused -->
         <Animation Name="gMajorasWrathDoubleKickAndJumpBackAnim" Offset="0x1C430" /> <!-- Original name is "last_ac02". Unused -->
         <Animation Name="gMajorasWrathBackflipUppercutAttackAnim" Offset="0x1CFF0" /> <!-- Original name is "last_ac03". Unused -->
@@ -197,7 +197,7 @@
         <DList Name="gMajorasWrathDeathLightModelDL" Offset="0x2EFE8" />
 
         <!-- Majora's Wrath Top DisplayList-->
-        <DList Name="gMajorasWrathTopDL" Offset="0x2F640" />
+        <DList Name="gMajorasWrathSpinningTopDL" Offset="0x2F640" />
 
         <!-- Majora Title Cards -->
         <Texture Name="gMajorasMaskTitleCardTex" OutName="majoras_mask_title_card" Format="i8" Width="128" Height="40" Offset="0x2F840" />
@@ -234,7 +234,7 @@
         <Limb Name="gMajorasWrathThirdEyeLimb" Type="Standard" EnumName="MAJORAS_WRATH_LIMB_THIRD_EYE" Offset="0x33578" />
 
         <!-- Majora's Wrath Skeleton -->
-        <Skeleton Name="gMajorasWrathSkel" Type="Flex" LimbType="Standard" LimbNone="MAJORAS_WRATH_LIMB_NONE" LimbMax="MAJORAS_WRATH_LIMB_MAX" EnumName="MajorasWrathLimbs" Offset="0x335F0" />
+        <Skeleton Name="gMajorasWrathSkel" Type="Flex" LimbType="Standard" LimbNone="MAJORAS_WRATH_LIMB_NONE" LimbMax="MAJORAS_WRATH_LIMB_MAX" EnumName="MajorasWrathLimb" Offset="0x335F0" />
 
         <!-- Majora's Wrath Animations -->
         <Animation Name="gMajorasWrathShortSingleWhipAttackAnim" Offset="0x33F80" /> <!-- Original name is "last_muti" ("whip") -->

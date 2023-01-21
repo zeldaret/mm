@@ -103,7 +103,7 @@ void EnCne01_UpdateModel(EnCne01* this, PlayState* play) {
     EnHy_UpdateSkelAnime(&this->enHy, play);
     if (SubS_AngleDiffLessEqual(this->enHy.actor.shape.rot.y, 0x36B0, this->enHy.actor.yawTowardsPlayer)) {
         point.x = player->actor.world.pos.x;
-        point.y = player->bodyPartsPos[7].y + 3.0f;
+        point.y = player->bodyPartsPos[PLAYER_BODYPART_HEAD].y + 3.0f;
         point.z = player->actor.world.pos.z;
         SubS_TrackPoint(&point, &this->enHy.actor.focus.pos, &this->enHy.actor.shape.rot, &this->enHy.trackTarget,
                         &this->enHy.headRot, &this->enHy.torsoRot, &sTrackOptions);
@@ -142,7 +142,7 @@ s32 func_809CB4A0(EnCne01* this, PlayState* play) {
     Actor_GetScreenPos(play, &this->enHy.actor, &x, &y);
     //! @bug: Both x and y conditionals are always true, || should be an &&
     if (!this->enHy.waitingOnInit && ((x >= 0) || (x < SCREEN_WIDTH)) && ((y >= 0) || (y < SCREEN_HEIGHT))) {
-        func_800B85E0(&this->enHy.actor, play, 30.0f, PLAYER_AP_MAGIC_BEANS);
+        func_800B85E0(&this->enHy.actor, play, 30.0f, PLAYER_IA_MAGIC_BEANS);
     }
     return true;
 }

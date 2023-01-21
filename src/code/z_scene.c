@@ -148,8 +148,9 @@ void Scene_HeaderCmdSpawnList(PlayState* play, SceneCmd* cmd) {
 
     play->linkActorEntry =
         (ActorEntry*)Lib_SegmentedToVirtual(cmd->spawnList.segment) + play->setupEntranceList[play->curSpawn].spawn;
-    if ((play->linkActorEntry->params & 0x0F00) >> 8 == 0x0C ||
-        (gSaveContext.respawnFlag == 0x02 && gSaveContext.respawn[RESPAWN_MODE_RETURN].playerParams == 0x0CFF)) {
+    if ((PLAYER_GET_INITMODE(play->linkActorEntry) == PLAYER_INITMODE_TELESCOPE) ||
+        ((gSaveContext.respawnFlag == 2) &&
+         (gSaveContext.respawn[RESPAWN_MODE_RETURN].playerParams == PLAYER_PARAMS(0xFF, PLAYER_INITMODE_TELESCOPE)))) {
         // Skull Kid Object
         Object_Spawn(&play->objectCtx, OBJECT_STK);
         return;
@@ -159,7 +160,7 @@ void Scene_HeaderCmdSpawnList(PlayState* play, SceneCmd* cmd) {
     nextObject = play->objectCtx.status[play->objectCtx.num].segment;
     play->objectCtx.num = loadedCount;
     play->objectCtx.spawnedObjectCount = loadedCount;
-    playerObjectId = gPlayerFormObjectIndices[(void)0, gSaveContext.save.playerForm];
+    playerObjectId = gPlayerFormObjectIndices[GET_PLAYER_FORM];
     gActorOverlayTable[0].initInfo->objectId = playerObjectId;
     Object_Spawn(&play->objectCtx, playerObjectId);
 
@@ -230,7 +231,7 @@ void Scene_HeaderCmdSpecialFiles(PlayState* play, SceneCmd* cmd) {
     }
 
     if (cmd->specialFiles.naviQuestHintFileId != NAVI_QUEST_HINTS_NONE) {
-        play->naviQuestHints = Play_LoadScene(play, &naviQuestHintFiles[cmd->specialFiles.naviQuestHintFileId - 1]);
+        play->naviQuestHints = Play_LoadFile(play, &naviQuestHintFiles[cmd->specialFiles.naviQuestHintFileId - 1]);
     }
 }
 
@@ -377,30 +378,31 @@ void Scene_HeaderCmdSkyboxDisables(PlayState* play, SceneCmd* cmd) {
 
 // SceneTableEntry Header Command 0x10: Time Settings
 void Scene_HeaderCmdTimeSettings(PlayState* play, SceneCmd* cmd) {
-    if (cmd->timeSettings.hour != 0xFF && cmd->timeSettings.min != 0xFF) {
+    if ((cmd->timeSettings.hour != 0xFF) && (cmd->timeSettings.min != 0xFF)) {
         gSaveContext.skyboxTime = gSaveContext.save.time =
-            (u16)(((cmd->timeSettings.hour + (cmd->timeSettings.min / 60.0f)) * 60.0f) / 0.021972656f);
+            CLOCK_TIME_ALT2_F(cmd->timeSettings.hour, cmd->timeSettings.min);
     }
 
-    if (cmd->timeSettings.unk6 != 0xFF) {
-        play->envCtx.timeIncrement = cmd->timeSettings.unk6;
+    if (cmd->timeSettings.timeSpeed != 0xFF) {
+        play->envCtx.sceneTimeSpeed = cmd->timeSettings.timeSpeed;
     } else {
-        play->envCtx.timeIncrement = 0;
+        play->envCtx.sceneTimeSpeed = 0;
     }
 
-    if ((gSaveContext.save.inventory.items[SLOT_OCARINA] == ITEM_NONE) && (play->envCtx.timeIncrement != 0)) {
-        play->envCtx.timeIncrement = 5;
+    // Increase time speed during first cycle
+    if ((gSaveContext.save.inventory.items[SLOT_OCARINA] == ITEM_NONE) && (play->envCtx.sceneTimeSpeed != 0)) {
+        play->envCtx.sceneTimeSpeed = 5;
     }
 
     if (gSaveContext.sunsSongState == SUNSSONG_INACTIVE) {
-        REG(15) = play->envCtx.timeIncrement;
+        R_TIME_SPEED = play->envCtx.sceneTimeSpeed;
     }
 
-    play->envCtx.unk_4 = -(Math_SinS(((void)0, gSaveContext.save.time) - 0x8000) * 120.0f) * 25.0f;
-    play->envCtx.unk_8 = (Math_CosS(((void)0, gSaveContext.save.time) - 0x8000) * 120.0f) * 25.0f;
-    play->envCtx.unk_C = (Math_CosS(((void)0, gSaveContext.save.time) - 0x8000) * 20.0f) * 25.0f;
+    play->envCtx.sunPos.x = -(Math_SinS(((void)0, gSaveContext.save.time) - CLOCK_TIME(12, 0)) * 120.0f) * 25.0f;
+    play->envCtx.sunPos.y = (Math_CosS(((void)0, gSaveContext.save.time) - CLOCK_TIME(12, 0)) * 120.0f) * 25.0f;
+    play->envCtx.sunPos.z = (Math_CosS(((void)0, gSaveContext.save.time) - CLOCK_TIME(12, 0)) * 20.0f) * 25.0f;
 
-    if ((play->envCtx.timeIncrement == 0) && (gSaveContext.save.cutscene < 0xFFF0)) {
+    if ((play->envCtx.sceneTimeSpeed == 0) && (gSaveContext.save.cutscene < 0xFFF0)) {
         gSaveContext.skyboxTime = gSaveContext.save.time;
 
         if ((gSaveContext.skyboxTime >= CLOCK_TIME(4, 0)) && (gSaveContext.skyboxTime < CLOCK_TIME(6, 30))) {
@@ -591,7 +593,7 @@ s32 Scene_ProcessHeader(PlayState* play, SceneCmd* header) {
 }
 
 /**
- * Creates an entrance from the scene, spawn, and lyaer.
+ * Creates an entrance from the scene, spawn, and layer.
  */
 u16 Entrance_Create(s32 scene, s32 spawn, s32 layer) {
     return (scene << 9) | (spawn << 4) | layer;
@@ -601,5 +603,5 @@ u16 Entrance_Create(s32 scene, s32 spawn, s32 layer) {
  * Creates an layer 0 entranace from the current entrance and the given spawn.
  */
 u16 Entrance_CreateFromSpawn(s32 spawn) {
-    return Entrance_Create(gSaveContext.save.entrance >> 9, spawn, 0);
+    return Entrance_Create((u32)gSaveContext.save.entrance >> 9, spawn, 0);
 }

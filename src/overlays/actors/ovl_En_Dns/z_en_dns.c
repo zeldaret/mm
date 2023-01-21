@@ -144,7 +144,7 @@ void func_8092C740(EnDns* this, PlayState* play) {
     this->unk_2CE = CLAMP(this->unk_2CE, -0x3FFC, 0x3FFC);
 
     Math_Vec3f_Copy(&sp28, &player->actor.world.pos);
-    sp28.y = player->bodyPartsPos[7].y + 3.0f;
+    sp28.y = player->bodyPartsPos[PLAYER_BODYPART_HEAD].y + 3.0f;
     Math_Vec3f_Copy(&sp34, &this->actor.world.pos);
     sp34.y += 10.0f;
     temp = Math_Vec3f_Pitch(&sp34, &sp28);
@@ -180,7 +180,7 @@ void func_8092C934(EnDns* this) {
 s32* func_8092C9BC(EnDns* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (!(gSaveContext.save.weekEventReg[23] & 0x20)) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_23_20)) {
         if (player->transformation != PLAYER_FORM_DEKU) {
             return &D_8092DCB0[16];
         } else if (this->unk_2FC != 0) {
@@ -359,14 +359,14 @@ s32 func_8092D068(EnDns* this) {
     s32 ret = false;
 
     if (ENDNS_GET_8000(&this->actor)) {
-        if (gSaveContext.save.weekEventReg[23] & 0x20) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_23_20)) {
             ret = true;
         }
     } else if (ENDNS_GET_4000(&this->actor)) {
-        if ((gSaveContext.save.weekEventReg[9] & 0x80) && !(gSaveContext.save.weekEventReg[23] & 0x20)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_09_80) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_23_20)) {
             ret = true;
         }
-    } else if (!(gSaveContext.save.weekEventReg[9] & 0x80) && !(gSaveContext.save.weekEventReg[23] & 0x20)) {
+    } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_09_80) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_23_20)) {
         ret = true;
     }
 
@@ -397,16 +397,16 @@ void func_8092D1B8(EnDns* this, PlayState* play) {
     }
 
     if (!ENDNS_GET_4000(&this->actor) || (this->unk_2D2 != 0)) {
-        if (!(gSaveContext.save.weekEventReg[23] & 0x20) && !(gSaveContext.eventInf[1] & 0x20) && func_8092CC68(play)) {
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_23_20) && !CHECK_EVENTINF(EVENTINF_15) && func_8092CC68(play)) {
             player->stateFlags1 |= PLAYER_STATE1_20;
             this->unk_2C6 |= 0x100;
             SubS_UpdateFlags(&this->unk_2C6, 4, 7);
             play_sound(NA_SE_SY_FOUND);
-            gSaveContext.eventInf[1] |= 0x20;
+            SET_EVENTINF(EVENTINF_15);
             this->unk_2F4 = func_8092CCEC;
             func_8092C63C(this, EN_DNS_ANIM_WALK_1);
             this->actionFunc = EnDns_DoNothing;
-        } else if (gSaveContext.eventInf[1] & 0x40) {
+        } else if (CHECK_EVENTINF(EVENTINF_16)) {
             func_8092CCEC(this, play);
             func_8092C63C(this, EN_DNS_ANIM_WALK_1);
             this->actionFunc = func_8092D330;
@@ -440,8 +440,8 @@ void func_8092D330(EnDns* this, PlayState* play) {
         play->nextEntrance = ENTRANCE(DEKU_PALACE, 1);
         gSaveContext.nextCutsceneIndex = 0;
         play->transitionTrigger = TRANS_TRIGGER_START;
-        play->transitionType = TRANS_TYPE_03;
-        gSaveContext.nextTransitionType = TRANS_TYPE_03;
+        play->transitionType = TRANS_TYPE_FADE_WHITE;
+        gSaveContext.nextTransitionType = TRANS_TYPE_FADE_WHITE;
     }
 }
 
@@ -456,7 +456,7 @@ void func_8092D4D8(EnDns* this, PlayState* play) {
         SubS_UpdateFlags(&this->unk_2C6, 3, 7);
         this->unk_2F4 = NULL;
         if (ENDNS_GET_4000(&this->actor)) {
-            if (!(gSaveContext.eventInf[1] & 0x20)) {
+            if (!CHECK_EVENTINF(EVENTINF_15)) {
                 this->skelAnime.curFrame = this->unk_2F0;
                 this->actor.world.rot.y = this->unk_2DA;
                 func_8092C63C(this, EN_DNS_ANIM_DANCE);
@@ -521,14 +521,14 @@ void EnDns_Init(Actor* thisx, PlayState* play) {
     SubS_UpdateFlags(&this->unk_2C6, 3, 7);
     this->unk_2C6 |= (0x40 | 0x10);
     this->unk_2C6 |= 0x200;
-    if (gSaveContext.save.weekEventReg[9] & 0x80) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_09_80)) {
         this->unk_2FC = 1;
     } else {
         this->unk_2FC = 0;
     }
     this->actionFunc = func_8092D1B8;
-    gSaveContext.eventInf[1] &= (u8)~0x20;
-    gSaveContext.eventInf[1] &= (u8)~0x40;
+    CLEAR_EVENTINF(EVENTINF_15);
+    CLEAR_EVENTINF(EVENTINF_16);
 }
 
 void EnDns_Destroy(Actor* thisx, PlayState* play) {
@@ -550,7 +550,7 @@ void EnDns_Update(Actor* thisx, PlayState* play) {
         func_8092C934(this);
         func_8092C86C(this, play);
         Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, 4);
-        func_8013C964(&this->actor, play, 80.0f, 40.0f, PLAYER_AP_NONE, this->unk_2C6 & 7);
+        func_8013C964(&this->actor, play, 80.0f, 40.0f, PLAYER_IA_NONE, this->unk_2C6 & 7);
         Actor_SetFocus(&this->actor, 34.0f);
         func_8092C6FC(this, play);
         func_8092C5C0(this);

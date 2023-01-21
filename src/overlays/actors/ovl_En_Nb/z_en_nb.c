@@ -66,7 +66,7 @@ static u8 sScheduleScript[] = {
     /* 0x3E */ SCHEDULE_CMD_RET_VAL_L(EN_NB_SCH_1),
     /* 0x41 */ SCHEDULE_CMD_RET_VAL_L(EN_NB_SCH_2),
     /* 0x44 */ SCHEDULE_CMD_RET_VAL_L(EN_NB_SCH_1),
-    /* 0x47 */ SCHEDULE_CMD_CHECK_FLAG_S(0x32, 0x20, 0x57 - 0x4B),
+    /* 0x47 */ SCHEDULE_CMD_CHECK_FLAG_S(WEEKEVENTREG_50_20, 0x57 - 0x4B),
     /* 0x4B */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(8, 0, 18, 0, 0x54 - 0x51),
     /* 0x51 */ SCHEDULE_CMD_RET_VAL_L(EN_NB_SCH_3),
     /* 0x54 */ SCHEDULE_CMD_RET_VAL_L(EN_NB_SCH_1),
@@ -335,7 +335,7 @@ s32 func_80BC01DC(Actor* thisx, PlayState* play) {
             R_PLAY_FILL_SCREEN_ALPHA = (s16)(s32)(255.0f - (((f32)ABS_ALT(20 - this->storyTimer) / 20.0f) * 255.0f));
 
             if (this->storyTimer == 20) {
-                if (gSaveContext.eventInf[4] & 4) {
+                if (CHECK_EVENTINF(EVENTINF_42)) {
                     // play->interfaceCtx.storyType = STORY_TYPE_MASK_FESTIVAL;
                     play->interfaceCtx.storyType = 0;
                 } else {
@@ -365,7 +365,7 @@ s32 func_80BC01DC(Actor* thisx, PlayState* play) {
             this->behaviour++;
             // fallthrough
         case ENNB_BEHAVIOUR_5:
-            if (!(gSaveContext.eventInf[4] & 4)) {
+            if (!CHECK_EVENTINF(EVENTINF_42)) {
                 gSaveContext.save.time = CLOCK_TIME(8, 0);
                 Sram_IncrementDay();
             } else {
@@ -376,9 +376,9 @@ s32 func_80BC01DC(Actor* thisx, PlayState* play) {
             play->nextEntrance = ENTRANCE(STOCK_POT_INN, 2);
             gSaveContext.nextCutsceneIndex = 0;
             play->transitionTrigger = TRANS_TRIGGER_START;
-            play->transitionType = TRANS_TYPE_02;
-            gSaveContext.nextTransitionType = TRANS_TYPE_06;
-            gSaveContext.eventInf[4] |= 8;
+            play->transitionType = TRANS_TYPE_FADE_BLACK;
+            gSaveContext.nextTransitionType = TRANS_TYPE_FADE_BLACK_SLOW;
+            SET_EVENTINF(EVENTINF_43);
             break;
     }
 
@@ -386,7 +386,7 @@ s32 func_80BC01DC(Actor* thisx, PlayState* play) {
 }
 
 u8* func_80BC045C(EnNb* this, PlayState* play) {
-    if (gSaveContext.eventInf[4] & 8) {
+    if (CHECK_EVENTINF(EVENTINF_43)) {
         this->msgEventCallback = func_80BC01DC;
         return D_80BC1464;
     } else if (this->scheduleResult == EN_NB_SCH_2) {
@@ -424,7 +424,7 @@ void func_80BC05A8(EnNb* this, PlayState* play) {
     TextState talkState = Message_GetState(&play->msgCtx);
     u16 textId = play->msgCtx.currentTextId;
 
-    if ((&this->actor == player->targetActor) && ((textId < 0xFF) || (textId > 0x200)) && (talkState == TEXT_STATE_3) &&
+    if ((&this->actor == player->talkActor) && ((textId < 0xFF) || (textId > 0x200)) && (talkState == TEXT_STATE_3) &&
         (this->prevTalkState == TEXT_STATE_3)) {
         if ((play->state.frames % 3) == 0) {
             if (this->unk_26C == 120.0f) {
@@ -586,7 +586,7 @@ s32 func_80BC0B98(EnNb* this, PlayState* play, ScheduleOutput* scheduleOutput) {
 }
 
 s32 func_80BC0C0C(EnNb* this, PlayState* play, ScheduleOutput* scheduleOutput) {
-    if (!(gSaveContext.eventInf[4] & 8)) {
+    if (!CHECK_EVENTINF(EVENTINF_43)) {
         SubS_UpdateFlags(&this->stateFlags, EN_NB_FLAG_1 | EN_NB_FLAG_2, EN_NB_FLAG_1 | EN_NB_FLAG_2 | EN_NB_FLAG_4);
     } else {
         SubS_UpdateFlags(&this->stateFlags, EN_NB_FLAG_4, EN_NB_FLAG_1 | EN_NB_FLAG_2 | EN_NB_FLAG_4);
@@ -638,9 +638,9 @@ void EnNb_HandleSchedule(EnNb* this, PlayState* play) {
 void EnNb_FollowSchedule(EnNb* this, PlayState* play) {
     ScheduleOutput scheduleOutput;
 
-    this->timePathTimeSpeed = REG(15) + ((void)0, gSaveContext.save.daySpeed);
+    this->timePathTimeSpeed = R_TIME_SPEED + ((void)0, gSaveContext.save.timeSpeedOffset);
 
-    if (gSaveContext.eventInf[4] & 8) {
+    if (CHECK_EVENTINF(EVENTINF_43)) {
         scheduleOutput.result = EN_NB_SCH_1;
         EnNb_ProcessScheduleOutput(this, play, &scheduleOutput);
         this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
@@ -663,9 +663,9 @@ void EnNb_FollowSchedule(EnNb* this, PlayState* play) {
 
 void func_80BC0EAC(EnNb* this, PlayState* play) {
     if (func_8010BF58(&this->actor, play, this->msgEventScript, this->msgEventCallback, &this->msgEventArg4)) {
-        if (gSaveContext.eventInf[4] & 8) {
-            gSaveContext.eventInf[4] &= (u8)~4;
-            gSaveContext.eventInf[4] &= (u8)~8;
+        if (CHECK_EVENTINF(EVENTINF_43)) {
+            CLEAR_EVENTINF(EVENTINF_42);
+            CLEAR_EVENTINF(EVENTINF_43);
         }
 
         SubS_UpdateFlags(&this->stateFlags, EN_NB_FLAG_1 | EN_NB_FLAG_2, EN_NB_FLAG_1 | EN_NB_FLAG_2 | EN_NB_FLAG_4);
@@ -695,11 +695,11 @@ void EnNb_Init(Actor* thisx, PlayState* play) {
     Actor_SetScale(&this->actor, 0.01f);
     this->stateFlags = EN_NB_FLAG_NONE;
 
-    if (gSaveContext.eventInf[4] & 8) {
+    if (CHECK_EVENTINF(EVENTINF_43)) {
         SubS_UpdateFlags(&this->stateFlags, EN_NB_FLAG_4, EN_NB_FLAG_1 | EN_NB_FLAG_2 | EN_NB_FLAG_4);
     } else {
-        gSaveContext.eventInf[4] &= (u8)~4;
-        gSaveContext.eventInf[4] &= (u8)~8;
+        CLEAR_EVENTINF(EVENTINF_42);
+        CLEAR_EVENTINF(EVENTINF_43);
     }
 
     this->actionFunc = EnNb_FollowSchedule;

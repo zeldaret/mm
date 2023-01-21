@@ -107,7 +107,7 @@ void EnZov_Init(Actor* thisx, PlayState* play) {
         case ENZOV_F_1:
             this->actionFunc = func_80BD1F1C;
             func_80BD1570(this, 9, ANIMMODE_LOOP);
-            if (!(gSaveContext.save.weekEventReg[55] & 0x80)) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80)) {
                 Actor_Kill(&this->picto.actor);
                 return;
             }
@@ -120,7 +120,7 @@ void EnZov_Init(Actor* thisx, PlayState* play) {
 
         default:
             this->unk_320 |= 2;
-            if ((gSaveContext.save.weekEventReg[55] & 0x80) || (gSaveContext.save.weekEventReg[53] & 0x20)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80) || CHECK_WEEKEVENTREG(WEEKEVENTREG_53_20)) {
                 Actor_Kill(&this->picto.actor);
             }
             break;
@@ -185,7 +185,7 @@ s32 func_80BD15A4(EnZov* this, PlayState* play) {
 void func_80BD160C(EnZov* this, PlayState* play) {
     s32 textId = 0;
 
-    if (gSaveContext.save.weekEventReg[53] & 0x20) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_53_20)) {
         this->unk_320 &= ~2;
         if (gSaveContext.save.playerForm != PLAYER_FORM_ZORA) {
             textId = 0x1024;
@@ -391,7 +391,7 @@ void func_80BD1D30(EnZov* this, PlayState* play) {
     u16 textId;
 
     if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
-        if (gSaveContext.save.weekEventReg[79] & 1) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_79_01)) {
             textId = 0x1032;
         } else {
             textId = 0x1033;
@@ -424,9 +424,9 @@ void func_80BD1DB8(EnZov* this, PlayState* play) {
 
             case 0x1039:
                 play->nextEntrance = play->setupExitList[ENZOV_GET_FE00(&this->picto.actor)];
-                play->transitionType = TRANS_TYPE_05;
+                play->transitionType = TRANS_TYPE_FADE_WHITE_FAST;
                 play->transitionTrigger = TRANS_TRIGGER_START;
-                gSaveContext.save.weekEventReg[78] |= 1;
+                SET_WEEKEVENTREG(WEEKEVENTREG_78_01);
                 this->actionFunc = func_80BD1D94;
                 play->msgCtx.msgLength = 0;
                 Audio_QueueSeqCmd(0x101400FF);
@@ -460,11 +460,11 @@ s32 EnZov_ValidatePictograph(PlayState* play, Actor* thisx) {
     s32 ret;
     EnZov* this = THIS;
 
-    ret = Snap_ValidatePictograph(play, &this->picto.actor, PICTOGRAPH_LULU_HEAD, &this->picto.actor.focus.pos,
+    ret = Snap_ValidatePictograph(play, &this->picto.actor, PICTO_VALID_LULU_HEAD, &this->picto.actor.focus.pos,
                                   &this->picto.actor.shape.rot, 10.0f, 300.0f, -1);
-    ret |= Snap_ValidatePictograph(play, &this->picto.actor, PICTOGRAPH_LULU_RIGHT_ARM, &this->unk_308,
+    ret |= Snap_ValidatePictograph(play, &this->picto.actor, PICTO_VALID_LULU_RIGHT_ARM, &this->unk_308,
                                    &this->picto.actor.shape.rot, 50.0f, 160.0f, 0x3000);
-    ret |= Snap_ValidatePictograph(play, &this->picto.actor, PICTOGRAPH_LULU_LEFT_ARM, &this->unk_314,
+    ret |= Snap_ValidatePictograph(play, &this->picto.actor, PICTO_VALID_LULU_LEFT_ARM, &this->unk_314,
                                    &this->picto.actor.shape.rot, 50.0f, 160.0f, 0x3000);
     return ret;
 }
