@@ -47,7 +47,7 @@ typedef enum {
     /* 3 */ HG_CS_SONG_OF_HEALING,
 } HgCsIndex;
 
-const ActorInit En_Hg_InitVars = {
+ActorInit En_Hg_InitVars = {
     ACTOR_EN_HG,
     ACTORCAT_PROP,
     FLAGS,
@@ -142,7 +142,7 @@ void EnHg_Init(Actor* thisx, PlayState* play) {
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit2);
-    if ((gSaveContext.save.weekEventReg[75] & 0x20) || (gSaveContext.save.weekEventReg[52] & 0x20)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_75_20) || CHECK_WEEKEVENTREG(WEEKEVENTREG_52_20)) {
         Actor_Kill(&this->actor);
     }
     this->actor.targetMode = 1;
@@ -326,7 +326,7 @@ void EnHg_HandleCsAction(EnHg* this, PlayState* play) {
                     break;
 
                 case 6:
-                    gSaveContext.save.weekEventReg[75] |= 0x20;
+                    SET_WEEKEVENTREG(WEEKEVENTREG_75_20);
                     Actor_Kill(&this->actor);
                     break;
             }
@@ -405,9 +405,8 @@ void EnHg_WaitForPlayerAction(EnHg* this, PlayState* play) {
     } else {
         if ((this->actor.xzDistToPlayer < 60.0f) && (fabsf(this->actor.playerHeightRel) < 40.0f)) {
             if ((this->actionFunc != EnHg_PlayCutscene) && (this->actionFunc != EnHg_HandleCsAction)) {
-
-                if (!(gSaveContext.save.weekEventReg[61] & 2)) {
-                    gSaveContext.save.weekEventReg[61] |= 2;
+                if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_61_02)) {
+                    SET_WEEKEVENTREG(WEEKEVENTREG_61_02);
                     this->cutsceneIndex = HG_CS_FIRST_ENCOUNTER;
                 } else {
                     this->cutsceneIndex = HG_CS_SUBSEQUENT_ENCOUNTER;

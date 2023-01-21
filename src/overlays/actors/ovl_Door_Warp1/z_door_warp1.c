@@ -163,8 +163,8 @@ void DoorWarp1_Init(Actor* thisx, PlayState* play) {
 
     if ((play->sceneId == SCENE_MITURIN_BS) || (play->sceneId == SCENE_HAKUGIN_BS) ||
         (play->sceneId == SCENE_INISIE_BS) || (play->sceneId == SCENE_SEA_BS)) {
-        func_800FE484();
-        play->interfaceCtx.restrictions.unk_312 = 1;
+        Environment_StopTime();
+        play->interfaceCtx.restrictions.songOfTime = 1;
         play->interfaceCtx.restrictions.songOfSoaring = 1;
     }
 }
@@ -270,7 +270,7 @@ void func_808B8E78(DoorWarp1* this, PlayState* play) {
     this->unk_1A4 = 700.0f;
     if (play->sceneId == SCENE_INISIE_N) {
         DoorWarp1_SetupAction(this, func_808B96A0);
-    } else if (gSaveContext.save.weekEventReg[86] & 0x80) {
+    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_86_80)) {
         this->unk_1D4 = 0;
         DoorWarp1_SetupAction(this, func_808B921C);
     } else {
@@ -344,7 +344,7 @@ void func_808B921C(DoorWarp1* this, PlayState* play) {
     }
 
     if (func_808B866C(this, play) && !Play_InCsMode(play)) {
-        func_800B7298(play, &this->dyna.actor, 7);
+        func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_7);
         Message_StartTextbox(play, 0xF2, &this->dyna.actor);
         DoorWarp1_SetupAction(this, func_808B93A0);
     }
@@ -360,14 +360,14 @@ void func_808B93A0(DoorWarp1* this, PlayState* play) {
         func_801477B4(play);
         if (play->msgCtx.choiceIndex == 0) {
             func_8019F208();
-            func_800B7298(play, &this->dyna.actor, 9);
+            func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_9);
             player->unk_3A0.x = this->dyna.actor.world.pos.x;
             player->unk_3A0.z = this->dyna.actor.world.pos.z;
             this->unk_1CA = 1;
             DoorWarp1_SetupAction(this, func_808B9524);
         } else {
             func_8019F230();
-            func_800B7298(play, &this->dyna.actor, 6);
+            func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_6);
             DoorWarp1_SetupAction(this, func_808B94A4);
         }
     }
@@ -410,8 +410,8 @@ void func_808B958C(DoorWarp1* this, PlayState* play) {
     this->unk_1D0++;
     if ((this->unk_1D0 > 120) && (gSaveContext.nextCutsceneIndex == 0xFFEF)) {
         func_808BA10C(this, play);
-        play->transitionType = TRANS_TYPE_03;
-        gSaveContext.nextTransitionType = TRANS_TYPE_03;
+        play->transitionType = TRANS_TYPE_FADE_WHITE;
+        gSaveContext.nextTransitionType = TRANS_TYPE_FADE_WHITE;
     }
 
     Math_SmoothStepToF(&this->unk_1A8, 6.0f, 0.2f, 0.02f, 0.01f);
@@ -448,7 +448,7 @@ void func_808B977C(DoorWarp1* this, PlayState* play) {
 
         AudioSfx_PlaySfx(NA_SE_EV_LINK_WARP, &player->actor.projectedPos, 4, &gSfxDefaultFreqAndVolScale,
                          &gSfxDefaultFreqAndVolScale, &gSfxDefaultReverb);
-        func_800B7298(play, &this->dyna.actor, 9);
+        func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_9);
         player->unk_3A0.x = this->dyna.actor.world.pos.x;
         player->unk_3A0.z = this->dyna.actor.world.pos.z;
         this->unk_1CA = 1;
@@ -599,7 +599,7 @@ void func_808B9F10(DoorWarp1* this, PlayState* play) {
         Player* player = GET_PLAYER(play);
 
         Interface_SetHudVisibility(HUD_VISIBILITY_NONE);
-        func_800B7298(play, &this->dyna.actor, 9);
+        func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_9);
         player->unk_3A0.x = this->dyna.actor.world.pos.x;
         player->unk_3A0.z = this->dyna.actor.world.pos.z;
         this->unk_1CA = 20;
@@ -652,7 +652,7 @@ void func_808BA10C(DoorWarp1* this, PlayState* play) {
 
         if (this->unk_202 != 0) {
             if (phi_v0_2 > 0) {
-                gSaveContext.save.weekEventReg[7] |= 0x80;
+                SET_WEEKEVENTREG(WEEKEVENTREG_07_80);
             }
 
             switch (phi_v0_2) {
@@ -705,64 +705,64 @@ void func_808BA10C(DoorWarp1* this, PlayState* play) {
             }
 
             play->transitionTrigger = TRANS_TRIGGER_START;
-            play->transitionType = TRANS_TYPE_03;
-            gSaveContext.nextTransitionType = TRANS_TYPE_03;
+            play->transitionType = TRANS_TYPE_FADE_WHITE;
+            gSaveContext.nextTransitionType = TRANS_TYPE_FADE_WHITE;
         } else {
             switch (phi_v0_2) {
                 case 0:
-                    if (gSaveContext.save.weekEventReg[20] & 2) {
-                        gSaveContext.save.weekEventReg[7] |= 0x80;
+                    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_20_02)) {
+                        SET_WEEKEVENTREG(WEEKEVENTREG_07_80);
                         play->nextEntrance = ENTRANCE(WOODFALL_TEMPLE, 1);
                         play->transitionTrigger = TRANS_TRIGGER_START;
-                        play->transitionType = TRANS_TYPE_03;
-                        gSaveContext.nextTransitionType = TRANS_TYPE_03;
+                        play->transitionType = TRANS_TYPE_FADE_WHITE;
+                        gSaveContext.nextTransitionType = TRANS_TYPE_FADE_WHITE;
                     } else {
                         play->nextEntrance = ENTRANCE(WOODFALL, 0);
                         gSaveContext.nextCutsceneIndex = 0xFFF0;
                         play->transitionTrigger = TRANS_TRIGGER_START;
-                        play->transitionType = TRANS_TYPE_03;
-                        gSaveContext.nextTransitionType = TRANS_TYPE_03;
+                        play->transitionType = TRANS_TYPE_FADE_WHITE;
+                        gSaveContext.nextTransitionType = TRANS_TYPE_FADE_WHITE;
                     }
                     break;
 
                 case 1:
-                    gSaveContext.save.weekEventReg[33] |= 0x80;
+                    SET_WEEKEVENTREG(WEEKEVENTREG_33_80);
                     play->nextEntrance = ENTRANCE(MOUNTAIN_VILLAGE_SPRING, 7);
                     play->transitionTrigger = TRANS_TRIGGER_START;
-                    play->transitionType = TRANS_TYPE_03;
-                    gSaveContext.nextTransitionType = TRANS_TYPE_03;
+                    play->transitionType = TRANS_TYPE_FADE_WHITE;
+                    gSaveContext.nextTransitionType = TRANS_TYPE_FADE_WHITE;
                     break;
 
                 case 3:
-                    if (gSaveContext.save.weekEventReg[55] & 0x80) {
+                    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80)) {
                         play->nextEntrance = ENTRANCE(ZORA_CAPE, 9);
                         gSaveContext.nextCutsceneIndex = 0xFFF0;
                         play->transitionTrigger = TRANS_TRIGGER_START;
-                        play->transitionType = TRANS_TYPE_03;
-                        gSaveContext.nextTransitionType = TRANS_TYPE_03;
+                        play->transitionType = TRANS_TYPE_FADE_WHITE;
+                        gSaveContext.nextTransitionType = TRANS_TYPE_FADE_WHITE;
                     } else {
-                        gSaveContext.save.weekEventReg[55] |= 0x80;
+                        SET_WEEKEVENTREG(WEEKEVENTREG_55_80);
                         play->nextEntrance = ENTRANCE(ZORA_CAPE, 8);
                         gSaveContext.nextCutsceneIndex = 0xFFF0;
                         play->transitionTrigger = TRANS_TRIGGER_START;
-                        play->transitionType = TRANS_TYPE_03;
-                        gSaveContext.nextTransitionType = TRANS_TYPE_03;
+                        play->transitionType = TRANS_TYPE_FADE_WHITE;
+                        gSaveContext.nextTransitionType = TRANS_TYPE_FADE_WHITE;
                     }
                     break;
 
                 case 2:
-                    gSaveContext.save.weekEventReg[52] |= 0x20;
+                    SET_WEEKEVENTREG(WEEKEVENTREG_52_20);
                     play->nextEntrance = ENTRANCE(IKANA_CANYON, 15);
                     gSaveContext.nextCutsceneIndex = 0xFFF2;
                     play->transitionTrigger = TRANS_TRIGGER_START;
-                    play->transitionType = TRANS_TYPE_03;
-                    gSaveContext.nextTransitionType = TRANS_TYPE_03;
+                    play->transitionType = TRANS_TYPE_FADE_WHITE;
+                    gSaveContext.nextTransitionType = TRANS_TYPE_FADE_WHITE;
                     break;
             }
         }
     } else if (DOORWARP1_GET_FF00_1(&this->dyna.actor) != 0xFF) {
         if (DOORWARP1_GET_FF(&this->dyna.actor) == ENDOORWARP1_FF_6) {
-            gSaveContext.respawnFlag = ~1;
+            gSaveContext.respawnFlag = -2;
         }
         play->nextEntrance = play->setupExitList[DOORWARP1_GET_FF00_3(&this->dyna.actor)];
         Scene_SetExitFade(play);
@@ -833,7 +833,7 @@ void func_808BA550(DoorWarp1* this, PlayState* play) {
     }
 
     if (this->unk_1D0 > 140) {
-        play->envCtx.fillScreen = 1;
+        play->envCtx.fillScreen = true;
         temp_f0 = (this->unk_1D0 - 140) / 20.0f;
         if (temp_f0 > 1.0f) {
             temp_f0 = 1.0f;
@@ -886,14 +886,14 @@ void func_808BAAF4(DoorWarp1* this, PlayState* play) {
         phi_f2 = 85.0f;
     }
 
-    if (!(gSaveContext.save.weekEventReg[86] & 0x80) && (fabsf(this->dyna.actor.xzDistToPlayer) < phi_f2) &&
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_86_80) && (fabsf(this->dyna.actor.xzDistToPlayer) < phi_f2) &&
         ((player->actor.world.pos.y - 20.0f) < this->dyna.actor.world.pos.y) &&
         (this->dyna.actor.world.pos.y < (player->actor.world.pos.y + 20.0f))) {
         cutscene = this->dyna.actor.cutscene;
 
         if (ActorCutscene_GetCanPlayNext(cutscene)) {
             ActorCutscene_Start(cutscene, &this->dyna.actor);
-            gSaveContext.save.weekEventReg[86] |= 0x80;
+            SET_WEEKEVENTREG(WEEKEVENTREG_86_80);
             DoorWarp1_SetupAction(this, func_808BABF4);
         } else {
             ActorCutscene_SetIntentToPlay(cutscene);

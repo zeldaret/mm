@@ -170,7 +170,7 @@ void EnGs_Destroy(Actor* thisx, PlayState* play) {
     EnGs* this = THIS;
 
     Collider_DestroyCylinder(play, &this->collider);
-    func_80165690();
+    Play_DisableMotionBlur();
 }
 
 void func_80997D14(EnGs* this, PlayState* play) {
@@ -184,7 +184,7 @@ void func_80997D38(EnGs* this, PlayState* play) {
     if (Message_GetState(&play->msgCtx) == TEXT_STATE_NONE) {
         if (this->actor.xzDistToPlayer <= D_8099A408[this->actor.params]) {
             func_8013E8F8(&this->actor, play, D_8099A408[this->actor.params], D_8099A408[this->actor.params],
-                          PLAYER_AP_NONE, 0x2000, 0x2000);
+                          PLAYER_IA_NONE, 0x2000, 0x2000);
         }
     }
 
@@ -372,7 +372,7 @@ void func_809984F4(EnGs* this, PlayState* play) {
         }
     } while (gossipStone != NULL);
 
-    func_800B7298(play, &this->actor, 7);
+    func_800B7298(play, &this->actor, PLAYER_CSMODE_7);
     this->actionFunc = func_809985B8;
 }
 
@@ -459,29 +459,29 @@ void func_8099874C(EnGs* this, PlayState* play) {
                 this->unk_20C = -1;
                 switch (this->unk_194) {
                     case 1:
-                        if (!(gSaveContext.save.weekEventReg[77] & 8)) {
+                        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_77_08)) {
                             this->unk_20C = 6;
-                            gSaveContext.save.weekEventReg[77] |= 8;
+                            SET_WEEKEVENTREG(WEEKEVENTREG_77_08);
                         }
                         break;
 
                     case 3:
-                        if (!(gSaveContext.save.weekEventReg[77] & 0x10)) {
+                        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_77_10)) {
                             this->unk_20C = 6;
-                            gSaveContext.save.weekEventReg[77] |= 0x10;
+                            SET_WEEKEVENTREG(WEEKEVENTREG_77_10);
                         }
                         break;
 
                     case 2:
-                        if (!(gSaveContext.save.weekEventReg[77] & 0x20)) {
+                        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_77_20)) {
                             this->unk_20C = 6;
-                            gSaveContext.save.weekEventReg[77] |= 0x20;
+                            SET_WEEKEVENTREG(WEEKEVENTREG_77_20);
                         }
                         break;
                 }
 
-                if (!(gSaveContext.save.weekEventReg[90] & 0x10)) {
-                    gSaveContext.save.weekEventReg[90] |= 0x10;
+                if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_90_10)) {
+                    SET_WEEKEVENTREG(WEEKEVENTREG_90_10);
                     this->unk_20C = 12;
                 }
 
@@ -902,16 +902,16 @@ void func_80999AC0(EnGs* this) {
 void func_80999B34(EnGs* this) {
     if (this->unk_216 > 0) {
         if (this->unk_218 == 0) {
-            func_8016566C(this->unk_216);
+            Play_EnableMotionBlur(this->unk_216);
             this->unk_218 = this->unk_216;
         } else {
-            func_80165658(this->unk_218);
+            Play_SetMotionBlurAlpha(this->unk_218);
         }
     } else if (this->unk_218 > 0) {
         Math_StepToS(&this->unk_218, this->unk_216, 20);
-        func_80165658(this->unk_218);
+        Play_SetMotionBlurAlpha(this->unk_218);
         if (this->unk_218 <= 0) {
-            func_80165690();
+            Play_DisableMotionBlur();
         }
     }
 }

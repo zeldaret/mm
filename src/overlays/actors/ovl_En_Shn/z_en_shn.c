@@ -181,7 +181,7 @@ void func_80AE6488(EnShn* this, PlayState* play) {
     this->unk_2D4 += (this->unk_2D0 != 0.0f) ? 40.0f : -40.0f;
     this->unk_2D4 = CLAMP(this->unk_2D4, 0.0f, 80.0f);
     Matrix_Translate(this->unk_2D4, 0.0f, 0.0f, MTXMODE_APPLY);
-    if ((&this->actor == player->targetActor) &&
+    if ((&this->actor == player->talkActor) &&
         ((play->msgCtx.currentTextId < 0xFF) || (play->msgCtx.currentTextId >= 0x201)) && (talkState == TEXT_STATE_3) &&
         (this->prevTalkState == TEXT_STATE_3)) {
         if (play->state.frames % 2 == 0) {
@@ -216,7 +216,7 @@ s32 func_80AE65F4(EnShn* this, PlayState* play) {
         this->unk_1DA = temp;
         this->unk_1D8 |= 0x40;
     } else if (this->unk_1D8 & 0x40) {
-        if (!(gSaveContext.save.weekEventReg[23] & 8)) {
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_23_08)) {
             func_80AE615C(this, 3);
         }
         this->unk_1DA = 0;
@@ -227,8 +227,8 @@ s32 func_80AE65F4(EnShn* this, PlayState* play) {
 
 s32 func_80AE6704(Actor* thisx, PlayState* play) {
     static s32 sPictographFlags[] = {
-        PICTOGRAPH_0,      PICTOGRAPH_MONKEY,    PICTOGRAPH_BIG_OCTO,
-        PICTOGRAPH_TINGLE, PICTOGRAPH_DEKU_KING, PICTOGRAPH_IN_SWAMP,
+        PICTO_VALID_0,      PICTO_VALID_MONKEY,    PICTO_VALID_BIG_OCTO,
+        PICTO_VALID_TINGLE, PICTO_VALID_DEKU_KING, PICTO_VALID_IN_SWAMP,
     };
     EnShn* this = THIS;
     s32 ret = 0;
@@ -258,13 +258,13 @@ s32 func_80AE6704(Actor* thisx, PlayState* play) {
             break;
 
         case 6:
-            gSaveContext.save.weekEventReg[90] &= (u8)~0x40;
-            func_800B7298(play, &this->actor, 7);
+            CLEAR_WEEKEVENTREG(WEEKEVENTREG_90_40);
+            func_800B7298(play, &this->actor, PLAYER_CSMODE_7);
             play->nextEntrance = ENTRANCE(SOUTHERN_SWAMP_POISONED, 6);
             gSaveContext.nextCutsceneIndex = 0;
             play->transitionTrigger = TRANS_TRIGGER_START;
-            play->transitionType = TRANS_TYPE_03;
-            gSaveContext.nextTransitionType = TRANS_TYPE_07;
+            play->transitionType = TRANS_TYPE_FADE_WHITE;
+            gSaveContext.nextTransitionType = TRANS_TYPE_FADE_WHITE_SLOW;
             this->unk_2C6++;
             break;
     }
@@ -293,17 +293,17 @@ s32 func_80AE68F0(EnShn* this, PlayState* play) {
     if (this->unk_1D8 & 7) {
         if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
             this->unk_1D8 &= ~0x180;
-            if (player->exchangeItemId == PLAYER_AP_PICTO_BOX) {
+            if (player->exchangeItemId == PLAYER_IA_PICTO_BOX) {
                 this->unk_1D8 |= 0x80;
                 this->unk_2E4 = player->exchangeItemId;
-            } else if (player->exchangeItemId != PLAYER_AP_NONE) {
+            } else if (player->exchangeItemId != PLAYER_IA_NONE) {
                 this->unk_1D8 |= 0x100;
                 this->unk_2E4 = player->exchangeItemId;
             }
             SubS_UpdateFlags(&this->unk_1D8, 0, 7);
             this->unk_1DC = func_80AE6880(this, play);
             this->unk_2C6 = 0;
-            if (gSaveContext.save.weekEventReg[23] & 8) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_23_08)) {
                 this->unk_1D8 |= 8;
             }
             this->actionFunc = func_80AE6A64;
@@ -315,7 +315,7 @@ s32 func_80AE68F0(EnShn* this, PlayState* play) {
 
 void func_80AE69E8(EnShn* this, PlayState* play) {
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.world.rot.y, 3, 0x2AA8);
-    if ((gSaveContext.save.weekEventReg[23] & 8) && EnShn_IsFacingPlayer(this)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_23_08) && EnShn_IsFacingPlayer(this)) {
         this->unk_1D8 |= 8;
     } else {
         this->unk_1D8 &= ~0x8;
@@ -350,7 +350,7 @@ void EnShn_Init(Actor* thisx, PlayState* play) {
     SkelAnime_InitFlex(play, &this->skelAnime, &gBurlyGuySkel, NULL, this->jointTable, this->morphTable,
                        BURLY_GUY_LIMB_MAX);
     this->unk_2E8 = -1;
-    if (gSaveContext.save.weekEventReg[23] & 8) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_23_08)) {
         func_80AE615C(this, 0);
     } else {
         func_80AE615C(this, 2);
@@ -382,7 +382,7 @@ void EnShn_Update(Actor* thisx, PlayState* play) {
     func_80AE6130(this);
     func_80AE63A8(this, play);
     this->unk_2E0 = 0;
-    func_8013C964(&this->actor, play, 120.0f, 40.0f, PLAYER_AP_NONE, this->unk_1D8 & 7);
+    func_8013C964(&this->actor, play, 120.0f, 40.0f, PLAYER_IA_NONE, this->unk_1D8 & 7);
 }
 
 s32 EnShn_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {

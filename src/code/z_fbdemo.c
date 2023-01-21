@@ -5,13 +5,13 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_fbdemo/func_8016418C.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_fbdemo/func_8016424C.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_fbdemo/TransitionUnk_Destroy.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_fbdemo/func_801642D8.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_fbdemo/TransitionUnk_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_fbdemo/func_80164438.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_fbdemo/func_8016454C.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_fbdemo/TransitionUnk_Draw.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_fbdemo/func_80164678.s")
 

@@ -87,7 +87,7 @@ void func_80ADFCEC(EnTsn* this, PlayState* play) {
 
     switch (ENTSN_GET_F(&this->actor)) {
         case ENTSN_F_0:
-            if (gSaveContext.save.weekEventReg[26] & 8) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_26_08)) {
                 Actor_Kill(&this->actor);
                 return;
             }
@@ -95,7 +95,7 @@ void func_80ADFCEC(EnTsn* this, PlayState* play) {
             break;
 
         case ENTSN_F_1:
-            if (gSaveContext.save.weekEventReg[26] & 4) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_26_04)) {
                 this->actor.textId = 0x1091;
             } else {
                 this->actor.textId = 0x108A;
@@ -103,7 +103,7 @@ void func_80ADFCEC(EnTsn* this, PlayState* play) {
             break;
     }
 
-    if (gSaveContext.save.weekEventReg[55] & 0x80) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80)) {
         if ((ENTSN_GET_F(&this->actor)) == ENTSN_F_0) {
             this->actionFunc = func_80AE0D78;
         } else {
@@ -144,7 +144,7 @@ void EnTsn_Init(Actor* thisx, PlayState* play) {
     this->actor.terminalVelocity = -9.0f;
     this->actor.gravity = -1.0f;
 
-    if (gSaveContext.save.weekEventReg[55] & 0x80) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80)) {
         Actor_Kill(&this->actor);
     }
 }
@@ -158,15 +158,15 @@ void EnTsn_Destroy(Actor* thisx, PlayState* play) {
 void func_80ADFF84(EnTsn* this, PlayState* play) {
     u16 textId;
 
-    if (gSaveContext.save.weekEventReg[26] & 8) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_26_08)) {
         textId = 0x107E;
     } else if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
-        if (gSaveContext.save.weekEventReg[25] & 0x80) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_25_80)) {
             textId = 0x1083;
         } else {
             textId = 0x107F;
         }
-    } else if (gSaveContext.save.weekEventReg[26] & 1) {
+    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_26_01)) {
         textId = 0x1089;
     } else {
         textId = 0x1084;
@@ -208,14 +208,14 @@ void func_80AE0010(EnTsn* this, PlayState* play) {
 
             case 0x1082:
                 Animation_MorphToLoop(&this->skelAnime, &object_tsn_Anim_0092FC, -10.0f);
-                gSaveContext.save.weekEventReg[25] |= 0x80;
+                SET_WEEKEVENTREG(WEEKEVENTREG_25_80);
                 func_801477B4(play);
                 this->actionFunc = func_80AE0304;
                 this->actor.textId = 0;
                 break;
 
             case 0x1083:
-                gSaveContext.save.weekEventReg[25] |= 0x80;
+                SET_WEEKEVENTREG(WEEKEVENTREG_25_80);
                 func_801477B4(play);
                 this->actionFunc = func_80AE0304;
                 this->actor.textId = 0;
@@ -233,7 +233,7 @@ void func_80AE0010(EnTsn* this, PlayState* play) {
 
             case 0x1089:
             case 0x1093:
-                gSaveContext.save.weekEventReg[26] |= 1;
+                SET_WEEKEVENTREG(WEEKEVENTREG_26_01);
                 func_801477B4(play);
                 Animation_MorphToLoop(&this->skelAnime, &object_tsn_Anim_0092FC, -10.0f);
                 this->actionFunc = func_80AE0304;
@@ -246,7 +246,7 @@ void func_80AE0010(EnTsn* this, PlayState* play) {
                 break;
 
             case 0x1088:
-                gSaveContext.save.weekEventReg[26] |= 1;
+                SET_WEEKEVENTREG(WEEKEVENTREG_26_01);
                 if (INV_CONTENT(ITEM_MASK_ZORA) == ITEM_MASK_ZORA) {
                     func_801477B4(play);
                     Animation_MorphToLoop(&this->skelAnime, &object_tsn_Anim_0092FC, -10.0f);
@@ -311,26 +311,27 @@ void func_80AE04C4(EnTsn* this, PlayState* play) {
 }
 
 void func_80AE04FC(EnTsn* this, PlayState* play) {
-    s32 sp24;
+    PlayerItemAction itemAction;
     Player* player = GET_PLAYER(play);
 
     if (Message_GetState(&play->msgCtx) == TEXT_STATE_16) {
-        sp24 = func_80123810(play);
-        if (sp24 != 0) {
-            gSaveContext.save.weekEventReg[26] |= 2;
+        itemAction = func_80123810(play);
+
+        if (itemAction != PLAYER_IA_NONE) {
+            SET_WEEKEVENTREG(WEEKEVENTREG_26_02);
         }
 
-        if (sp24 > 0) {
+        if (itemAction > PLAYER_IA_NONE) {
             func_801477B4(play);
             this->actionFunc = func_80AE0704;
-            if (sp24 == 19) {
+            if (itemAction == PLAYER_IA_PICTO_BOX) {
                 if (CHECK_QUEST_ITEM(QUEST_PICTOGRAPH)) {
-                    if (Snap_CheckFlag(PICTOGRAPH_PIRATE_GOOD)) {
+                    if (Snap_CheckFlag(PICTO_VALID_PIRATE_GOOD)) {
                         player->actor.textId = 0x107B;
                         return;
                     }
 
-                    if (Snap_CheckFlag(PICTOGRAPH_PIRATE_TOO_FAR)) {
+                    if (Snap_CheckFlag(PICTO_VALID_PIRATE_TOO_FAR)) {
                         player->actor.textId = 0x10A9;
                         return;
                     }
@@ -345,7 +346,7 @@ void func_80AE04FC(EnTsn* this, PlayState* play) {
                 return;
             }
 
-            if (sp24 == 13) {
+            if (itemAction == PLAYER_IA_HOOKSHOT) {
                 player->actor.textId = 0x1075;
                 return;
             }
@@ -355,7 +356,7 @@ void func_80AE04FC(EnTsn* this, PlayState* play) {
             return;
         }
 
-        if (sp24 < 0) {
+        if (itemAction <= PLAYER_IA_MINUS1) {
             func_80151938(play, 0x1078);
             Animation_MorphToLoop(&this->unk_1D8->skelAnime, &object_tsn_Anim_001198, -10.0f);
             this->actionFunc = func_80AE0704;
@@ -389,13 +390,13 @@ void func_80AE0704(EnTsn* this, PlayState* play) {
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
                     case 0x106E:
-                        if (gSaveContext.save.weekEventReg[25] & 0x40) {
+                        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_25_40)) {
                             func_80151938(play, 0x1074);
                         } else {
                             func_80151938(play, 0x106F);
                         }
                         this->unk_220 |= 2;
-                        gSaveContext.save.weekEventReg[25] |= 0x40;
+                        SET_WEEKEVENTREG(WEEKEVENTREG_25_40);
                         ENTSN_SET_Z(&this->unk_1D8->actor, true);
                         this->unk_220 |= 4;
                         break;
@@ -426,7 +427,7 @@ void func_80AE0704(EnTsn* this, PlayState* play) {
 
                     case 0x107C:
                         if (Inventory_HasEmptyBottle()) {
-                            gSaveContext.save.weekEventReg[26] |= 8;
+                            SET_WEEKEVENTREG(WEEKEVENTREG_26_08);
                             func_801477B4(play);
                             this->actionFunc = func_80AE0460;
                             func_80AE0460(this, play);
@@ -463,7 +464,7 @@ void func_80AE0704(EnTsn* this, PlayState* play) {
 
                     case 0x108A:
                     case 0x1091:
-                        gSaveContext.save.weekEventReg[26] |= 4;
+                        SET_WEEKEVENTREG(WEEKEVENTREG_26_04);
                         func_80151938(play, play->msgCtx.currentTextId + 1);
                         this->unk_220 |= 2;
                         this->actor.textId = 0x1091;
@@ -478,7 +479,7 @@ void func_80AE0704(EnTsn* this, PlayState* play) {
                         break;
 
                     case 0x1092:
-                        if (gSaveContext.save.weekEventReg[26] & 8) {
+                        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_26_08)) {
                             func_80AE0698(this, play);
                         } else {
                             func_80151938(play, 0x10A7);

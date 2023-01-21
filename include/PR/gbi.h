@@ -4132,7 +4132,7 @@ _DW({									\
 #define	gDPLoadMultiTile(pkt, timg, tmem, rtile, fmt, siz, width, height,\
 		uls, ult, lrs, lrt, pal,				\
 		cms, cmt, masks, maskt, shifts, shiftt)			\
-{									\
+_DW({									\
 	gDPSetTextureImage(pkt, fmt, siz, width, timg);			\
 	gDPSetTile(pkt, fmt, siz,					\
 		(((((lrs)-(uls)+1) * siz##_TILE_BYTES)+7)>>3), tmem,	\
@@ -4154,7 +4154,7 @@ _DW({									\
 			(ult)<<G_TEXTURE_IMAGE_FRAC,			\
 			(lrs)<<G_TEXTURE_IMAGE_FRAC,			\
 			(lrt)<<G_TEXTURE_IMAGE_FRAC);			\
-}
+})
 
 
 #define	gsDPLoadTextureTile(timg, fmt, siz, width, height,		\

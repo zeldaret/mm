@@ -4,7 +4,6 @@
  * Description: Great Bay Temple - Waterwheels, push switches, gear shafts, and whirlpools
  */
 
-#include "prevent_bss_reordering.h"
 #include "z_bg_dblue_movebg.h"
 #include "objects/object_dblue_object/object_dblue_object.h"
 #include "overlays/actors/ovl_Obj_Hunsui/z_obj_hunsui.h"
@@ -812,7 +811,7 @@ void BgDblueMovebg_Draw(Actor* thisx, PlayState* play2) {
     CLOSE_DISPS(play->state.gfxCtx);
 
     if ((this->unk_160 == 8) && (this->unk_172 & 0x20)) {
-        AnimatedMat_Draw(play, Lib_SegmentedToVirtual(&gGreatBayTempleObjectWaterwheelSplashTexAnim));
+        AnimatedMat_Draw(play, Lib_SegmentedToVirtual(gGreatBayTempleObjectWaterwheelSplashTexAnim));
 
         OPEN_DISPS(play->state.gfxCtx);
 

@@ -674,7 +674,7 @@ s32 EnHorse_PlayerCanMove(EnHorse* this, PlayState* play) {
         (((this->stateFlags & ENHORSE_FLAG_19) || (this->stateFlags & ENHORSE_FLAG_29)) && !this->inRace) ||
         (this->action == ENHORSE_ACTION_HBA) || (player->actor.flags & ACTOR_FLAG_100) ||
         (play->csCtx.state != CS_STATE_0) || (ActorCutscene_GetCurrentIndex() != -1) ||
-        (player->stateFlags1 & PLAYER_STATE1_20) || (player->csMode != 0)) {
+        (player->stateFlags1 & PLAYER_STATE1_20) || (player->csMode != PLAYER_CSMODE_0)) {
         return false;
     }
     return true;
@@ -792,8 +792,8 @@ void EnHorse_Init(Actor* thisx, PlayState* play2) {
         this->stateFlags = 0;
     }
 
-    if (((play->sceneId == SCENE_KOEPONARACE) && (GET_RACE_FLAGS == 1)) ||
-        ((gSaveContext.save.entrance == ENTRANCE(ROMANI_RANCH, 0)) && Cutscene_GetSceneLayer(play))) {
+    if (((play->sceneId == SCENE_KOEPONARACE) && (GET_WEEKEVENTREG_RACE_FLAGS == WEEKEVENTREG_RACE_FLAG_START)) ||
+        ((gSaveContext.save.entrance == ENTRANCE(ROMANI_RANCH, 0)) && (Cutscene_GetSceneLayer(play) != 0))) {
         this->stateFlags |= ENHORSE_FLAG_25;
     }
 
@@ -875,7 +875,7 @@ void EnHorse_Init(Actor* thisx, PlayState* play2) {
         EnHorse_InitCutscene(this, play);
     } else if (thisx->params == ENHORSE_10) {
         EnHorse_InitHorsebackArchery(this);
-        func_80112AFC(play);
+        Interface_InitMinigame(play);
     } else if (thisx->params == ENHORSE_14) {
         func_808846F0(this, play);
         if ((play->sceneId == SCENE_LOST_WOODS) && !Cutscene_IsPlaying(play)) {
@@ -1131,6 +1131,7 @@ void EnHorse_StartMountedIdle(EnHorse* this) {
             }
         }
     }
+
     curFrame = this->skin.skelAnime.curFrame;
     Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animIndex], 1.0f, curFrame,
                      Animation_GetLastFrame(sAnimationHeaders[this->type][this->animIndex]), ANIMMODE_ONCE, -3.0f);
@@ -1569,7 +1570,7 @@ void EnHorse_Stopping(EnHorse* this, PlayState* play) {
     if ((this->stateFlags & ENHORSE_STOPPING_NEIGH_SOUND) && (this->skin.skelAnime.curFrame > 29.0f)) {
         this->actor.speedXZ = 0.0f;
         if ((Rand_ZeroOne() > 0.5f) &&
-            ((gSaveContext.save.entrance != ENTRANCE(ROMANI_RANCH, 0)) || !Cutscene_GetSceneLayer(play))) {
+            ((gSaveContext.save.entrance != ENTRANCE(ROMANI_RANCH, 0)) || (Cutscene_GetSceneLayer(play) == 0))) {
             if (this->stateFlags & ENHORSE_DRAW) {
                 if (this->type == HORSE_TYPE_2) {
                     Audio_PlaySfxAtPos(&this->unk_218, NA_SE_EV_KID_HORSE_NEIGH);
@@ -2471,7 +2472,7 @@ void func_808819D8(EnHorse* this, PlayState* play) {
         func_8088168C(this);
     }
 
-    if (GET_RACE_FLAGS == 3) {
+    if (GET_WEEKEVENTREG_RACE_FLAGS == WEEKEVENTREG_RACE_FLAG_3) {
         this->rider->unk488 = 7;
     } else {
         EnHorse_SetIngoAnimation(this->animIndex, this->skin.skelAnime.curFrame, this->unk_394 & 1,
@@ -2916,22 +2917,23 @@ void EnHorse_UpdateHorsebackArchery(EnHorse* this, PlayState* play) {
         EnHorse_PlayWalkingSound(this);
     }
 
-    if (play->interfaceCtx.hbaAmmo == 0) {
+    if (play->interfaceCtx.minigameAmmo == 0) {
         this->hbaTimer++;
     }
 
-    sp28 = Audio_IsSequencePlaying(0x41);
+    sp28 = Audio_IsSequencePlaying(NA_BGM_HORSE_GOAL);
     EnHorse_UpdateHbaRaceInfo(this, play, &sHbaInfo);
 
-    if (((this->hbaFlags & 1) || (this->hbaTimer > 45)) && (sp28 != 1) && (gSaveContext.minigameState != 3)) {
+    if (((this->hbaFlags & 1) || (this->hbaTimer > 45)) && (sp28 != 1) &&
+        (gSaveContext.minigameStatus != MINIGAME_STATUS_END)) {
         gSaveContext.save.cutscene = 0;
         play->transitionTrigger = TRANS_TRIGGER_START;
         play->transitionType = TRANS_TYPE_64;
     }
 
-    if (play->interfaceCtx.hbaAmmo) {}
+    if (play->interfaceCtx.minigameAmmo) {}
 
-    if (((play->interfaceCtx.hbaAmmo == 0) || (this->hbaFlags & 2)) && (this->hbaFlags & 4)) {
+    if (((play->interfaceCtx.minigameAmmo == 0) || (this->hbaFlags & 2)) && (this->hbaFlags & 4)) {
         this->hbaFlags &= ~4;
         Audio_QueueSeqCmd(0x8041);
     }
