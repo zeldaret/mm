@@ -1,0 +1,8 @@
+﻿<Root>
+    <File Name="object_zg" Segment="6">
+        <Texture Name="object_zg_Tex_000000" OutName="tex_000000" Format="rgba16" Width="32" Height="32" Offset="0x0" />
+        <Texture Name="object_zg_Tex_000800" OutName="tex_000800" Format="rgba16" Width="32" Height="32" Offset="0x800" />
+        <DList Name="object_zg_DL_001080" Offset="0x1080" />
+        <!-- <Blob Name="object_zg_Blob_001160" Size="0xA0" Offset="0x1160" /> -->
+    </File>
+</Root>

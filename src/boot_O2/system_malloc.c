@@ -1,16 +1,17 @@
 #include "global.h"
+#include "os_malloc.h"
 
 Arena gSystemArena;
 
-void* SystemArena_Malloc(u32 size) {
+void* SystemArena_Malloc(size_t size) {
     return __osMalloc(&gSystemArena, size);
 }
 
-void* SystemArena_MallocR(u32 size) {
+void* SystemArena_MallocR(size_t size) {
     return __osMallocR(&gSystemArena, size);
 }
 
-void* SystemArena_Realloc(void* oldPtr, u32 newSize) {
+void* SystemArena_Realloc(void* oldPtr, size_t newSize) {
     return __osRealloc(&gSystemArena, oldPtr, newSize);
 }
 
@@ -18,9 +19,9 @@ void SystemArena_Free(void* ptr) {
     __osFree(&gSystemArena, ptr);
 }
 
-void* SystemArena_Calloc(u32 elements, u32 size) {
+void* SystemArena_Calloc(u32 elements, size_t size) {
     void* ptr;
-    u32 totalSize = elements * size;
+    size_t totalSize = elements * size;
 
     ptr = __osMalloc(&gSystemArena, totalSize);
     if (ptr != NULL) {
@@ -29,15 +30,15 @@ void* SystemArena_Calloc(u32 elements, u32 size) {
     return ptr;
 }
 
-void SystemArena_AnalyzeArena(u32* maxFreeBlock, u32* bytesFree, u32* bytesAllocated) {
-    __osAnalyzeArena(&gSystemArena, maxFreeBlock, bytesFree, bytesAllocated);
+void SystemArena_GetSizes(size_t* maxFreeBlock, size_t* bytesFree, size_t* bytesAllocated) {
+    __osGetSizes(&gSystemArena, maxFreeBlock, bytesFree, bytesAllocated);
 }
 
 u32 SystemArena_CheckArena(void) {
     return __osCheckArena(&gSystemArena);
 }
 
-void SystemArena_InitArena(void* start, u32 size) {
+void SystemArena_InitArena(void* start, size_t size) {
     __osMallocInit(&gSystemArena, start, size);
 }
 

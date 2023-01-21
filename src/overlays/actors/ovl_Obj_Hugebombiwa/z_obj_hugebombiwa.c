@@ -1,16 +1,34 @@
-#include "z_obj_hugebombiwa.h"
+/*
+ * File: z_obj_hugebombiwa.c
+ * Overlay: ovl_Obj_Hugebombiwa
+ * Description: Boulder Blocking Goron Racetrack/Milk Road
+ */
 
-#define FLAGS 0x00000010
+#include "z_obj_hugebombiwa.h"
+#include "z64quake.h"
+#include "z64rumble.h"
+#include "objects/object_bombiwa/object_bombiwa.h"
+
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((ObjHugebombiwa*)thisx)
 
-void ObjHugebombiwa_Init(Actor* thisx, GlobalContext* globalCtx);
-void ObjHugebombiwa_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void ObjHugebombiwa_Update(Actor* thisx, GlobalContext* globalCtx);
-void ObjHugebombiwa_Draw(Actor* thisx, GlobalContext* globalCtx);
+void ObjHugebombiwa_Init(Actor* thisx, PlayState* play);
+void ObjHugebombiwa_Destroy(Actor* thisx, PlayState* play2);
+void ObjHugebombiwa_Update(Actor* thisx, PlayState* play);
+void ObjHugebombiwa_Draw(Actor* thisx, PlayState* play);
 
-#if 0
-const ActorInit Obj_Hugebombiwa_InitVars = {
+void func_80A54BF0(ObjHugebombiwa* this);
+void func_80A54C04(ObjHugebombiwa* this, PlayState* play);
+void func_80A54CD8(ObjHugebombiwa* this);
+void func_80A54CEC(ObjHugebombiwa* this, PlayState* play);
+void func_80A54E10(ObjHugebombiwa* this);
+void func_80A55064(ObjHugebombiwa* this, PlayState* play);
+void func_80A55310(ObjHugebombiwa* this);
+void func_80A55564(ObjHugebombiwa* this, PlayState* play);
+void func_80A55B34(Actor* thisx, PlayState* play);
+
+ActorInit Obj_Hugebombiwa_InitVars = {
     ACTOR_OBJ_HUGEBOMBIWA,
     ACTORCAT_PROP,
     FLAGS,
@@ -22,64 +40,684 @@ const ActorInit Obj_Hugebombiwa_InitVars = {
     (ActorFunc)ObjHugebombiwa_Draw,
 };
 
-// static ColliderCylinderInit sCylinderInit = {
-static ColliderCylinderInit D_80A55D00 = {
-    { COLTYPE_HARD, AT_NONE, AC_ON | AC_HARD | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_2, COLSHAPE_CYLINDER, },
-    { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0x81C37BB6, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
+static ColliderCylinderInit sCylinderInit = {
+    {
+        COLTYPE_HARD,
+        AT_NONE,
+        AC_ON | AC_HARD | AC_TYPE_PLAYER,
+        OC1_ON | OC1_TYPE_ALL,
+        OC2_TYPE_2,
+        COLSHAPE_CYLINDER,
+    },
+    {
+        ELEMTYPE_UNK0,
+        { 0x00000000, 0x00, 0x00 },
+        { 0x81C37BB6, 0x00, 0x00 },
+        TOUCH_NONE | TOUCH_SFX_NORMAL,
+        BUMP_ON,
+        OCELEM_ON,
+    },
     { 180, 226, 0, { 0, 0, 0 } },
 };
 
-// static InitChainEntry sInitChain[] = {
-static InitChainEntry D_80A55D7C[] = {
+static Vec3f D_80A55D2C = { 0.0f, 0.3f, 0.0f };
+
+void func_80A53BE0(PlayState* play, Vec3f* arg1) {
+    Vec3f spBC;
+    Vec3f spB0;
+    s32 i;
+    s32 gravity;
+    s16 phi_v0;
+    s16 life;
+    s16 phi_v1;
+
+    for (i = 0, gravity = -300; i < 16; i++, gravity -= 30) {
+        spBC.x = (Rand_ZeroOne() - 0.5f) * 260.0f;
+        spBC.y = i * (40.0f / 3);
+        spBC.z = (Rand_ZeroOne() - 0.5f) * 260.0f;
+
+        spB0.x = ((Rand_ZeroOne() - 0.5f) * 5.7f) + (spBC.x * 0.035f);
+        spB0.y = (Rand_ZeroOne() * 16.0f) + 5.0f + ((16 - i) * 0.25f);
+        spB0.z = ((Rand_ZeroOne() - 0.5f) * 5.7f) + (spBC.z * 0.035f);
+
+        spBC.x += arg1->x;
+        spBC.y += arg1->y;
+        spBC.z += arg1->z;
+
+        if (i >= 14) {
+            phi_v0 = 37;
+            life = 70;
+        } else {
+            phi_v0 = 65;
+            if (i >= 12) {
+                life = 70;
+            } else {
+                life = 40;
+                if (Rand_ZeroOne() < 0.7f) {
+                    phi_v0 = 64;
+                } else {
+                    phi_v0 = 32;
+                }
+            }
+        }
+
+        phi_v1 = i;
+        if (phi_v1 <= 0) {
+            phi_v1 = 1;
+            if (1) {}
+        }
+
+        EffectSsKakera_Spawn(play, &spBC, &spB0, &spBC, gravity, phi_v0, 15, 0, 0, phi_v1, 1, 0, life, -1,
+                             OBJECT_BOMBIWA, object_bombiwa_DL_001990);
+    }
+}
+
+void func_80A53E60(PlayState* play, Vec3f* arg1, f32 arg2, f32 arg3) {
+    static Color_RGBA8 D_80A55D38 = { 210, 210, 210, 255 };
+    static Color_RGBA8 D_80A55D3C = { 140, 140, 140, 255 };
+    static f32 D_80A55D40[] = { 3.0f, 5.0f, 9.0f, 18.0f };
+    Vec3f spDC;
+    Vec3f spD0;
+    s32 i;
+    f32 temp_f0;
+    s32 phi_s1;
+    s32 phi_s2;
+    s32 phi_v0;
+    s32 phi_v1;
+    s16 phi_s0;
+    s32 pad;
+
+    for (phi_s2 = -300, i = 0; phi_s2 > -540; phi_s2 -= 60, i++) {
+        spDC.x = (Rand_ZeroOne() - 0.5f) * 11.0f;
+        spDC.y = (Rand_ZeroOne() - 0.2f) * 8.0f;
+        spDC.z = (Rand_ZeroOne() - 0.5f) * 11.0f;
+
+        spD0.x = ((Rand_ZeroOne() - 0.5f) * 5.0f) + (spDC.x * 1.4f);
+        spD0.y = (Rand_ZeroOne() * 13.0f) + 8.2f + (arg2 * -0.26f);
+        if (1) {}
+        spD0.z = ((Rand_ZeroOne() - 0.5f) * 5.0f) + (spDC.z * 1.4f);
+
+        spDC.x += arg1->x;
+        spDC.y += arg1->y;
+        spDC.z += arg1->z;
+
+        if ((s32)(phi_s2 & 0xFFFFFFFF) == -480) {
+            phi_v0 = 33;
+            phi_s0 = 70;
+        } else {
+            phi_v0 = 65;
+            if (phi_s2 == -420) {
+                phi_s0 = 70;
+            } else {
+                phi_s0 = 40;
+                if (Rand_ZeroOne() < 0.7f) {
+                    phi_v0 = 64;
+                } else {
+                    phi_v0 = 32;
+                }
+            }
+        }
+
+        temp_f0 = D_80A55D40[i] * arg3;
+        if (temp_f0 <= 1.0f) {
+            phi_v1 = 1;
+        } else {
+            phi_v1 = temp_f0;
+        }
+
+        EffectSsKakera_Spawn(play, &spDC, &spD0, &spDC, phi_s2, phi_v0, 15, 0, 0, phi_v1, 1, 0, phi_s0, -1,
+                             OBJECT_BOMBIWA, object_bombiwa_DL_001990);
+
+        spDC.x += (Rand_ZeroOne() - 0.5f) * 270.0f;
+        spDC.y += (Rand_ZeroOne() - 0.1f) * 150.0f;
+        spDC.z += (Rand_ZeroOne() - 0.5f) * 270.0f;
+
+        phi_s0 = (Rand_ZeroOne() * 160.0f) + 140.0f;
+        phi_s1 = (Rand_ZeroOne() * 180.0f) + 120.0f;
+        func_800B0E48(play, &spDC, &gZeroVec3f, &D_80A55D2C, &D_80A55D38, &D_80A55D3C, phi_s0, phi_s1);
+    }
+}
+
+void func_80A541F4(ObjHugebombiwa* this, PlayState* play) {
+    static s16 D_80A55D50[] = { 24, 17, 13, 7, 6, 5, 3, 2 };
+    s32 i;
+    s32 pad[2];
+    s32 phi_s2;
+    Vec3f spF4;
+    Vec3f spE8;
+    Vec3f spDC;
+    Vec3f spD0;
+    Vec3f spC4;
+    f32 temp_f0;
+    f32 temp_f20;
+    f32 temp_f22;
+    f32 temp_f24;
+    s32 phi_s0;
+    f32 phi_f30;
+
+    for (i = 0, phi_s2 = 0, phi_f30 = 0.0f; i < 13; i++, phi_s2 += 0x4E20, phi_f30 += (230.0f / 13)) {
+        temp_f0 = Rand_ZeroOne();
+        temp_f22 = (1.0f - SQ(temp_f0)) * 120.0f;
+        temp_f20 = Math_SinS(phi_s2 & 0xFFFF);
+        temp_f24 = Math_CosS(phi_s2 & 0xFFFF);
+
+        spF4.x = (temp_f20 * temp_f22) + this->actor.world.pos.x;
+        spF4.y = this->actor.world.pos.y + phi_f30;
+        spF4.z = (temp_f24 * temp_f22) + this->actor.world.pos.z;
+
+        spE8.x = temp_f20 * 10.0f;
+        spE8.y = (Rand_ZeroOne() * 18.0f) + 10.0f;
+        spE8.z = temp_f24 * 10.0f;
+
+        EffectSsKakera_Spawn(play, &spF4, &spE8, &spF4, -650, 37, 15, 0, 0, D_80A55D50[i & 7], 1, 0, 60, -1,
+                             OBJECT_BOMBIWA, object_bombiwa_DL_0009E0);
+
+        spDC.x = ((Rand_ZeroOne() - 0.5f) * 230.0f) + spF4.x;
+        spDC.y = ((Rand_ZeroOne() - 0.2f) * 200.0f) + spF4.y;
+        spDC.z = ((Rand_ZeroOne() - 0.5f) * 230.0f) + spF4.z;
+
+        spD0.x = temp_f20 * 7.0f;
+        spD0.y = -7.0f;
+        spD0.z = temp_f24 * 7.0f;
+
+        spC4.x = temp_f20 * -0.07f;
+        spC4.y = 0.24f;
+        spC4.z = temp_f24 * -0.07f;
+
+        func_800B12F0(play, &spDC, &spD0, &spC4, (s32)(Rand_ZeroOne() * 800.0f) + 1000, -49, 20);
+
+        spDC.x = ((Rand_ZeroOne() - 0.5f) * 160.0f) + spF4.x;
+        spDC.y = ((Rand_ZeroOne() - 0.2f) * 140.0f) + spF4.y;
+        spDC.z = ((Rand_ZeroOne() - 0.5f) * 160.0f) + spF4.z;
+
+        spD0.x = temp_f20 * 15.0f;
+        spD0.y = 0.0f;
+        spD0.z = temp_f24 * 15.0f;
+
+        spC4.x = temp_f20 * -0.09f;
+        spC4.y = 0.3f;
+        spC4.z = temp_f24 * -0.09f;
+
+        func_800B12F0(play, &spDC, &spD0, &spC4, (s32)(Rand_ZeroOne() * 100.0f) + 40,
+                      (s32)(Rand_ZeroOne() * 200.0f) + 20, 10);
+    }
+}
+
+void func_80A54600(PlayState* play, Vec3f* arg1, f32 arg2, f32 arg3) {
+    static f32 D_80A55D60[] = { 3.0f, 5.0f, 9.0f, 18.0f };
+    static s8 D_80A55D70 = 0;
+    Vec3f spCC;
+    Vec3f spC0;
+    s32 i;
+    f32 spA0;
+    s16 temp_s0;
+    s16 temp_s1;
+    s32 phi_v0;
+    s16 phi_v1;
+    f32 temp;
+
+    for (i = 0; i < 2; i++) {
+        spCC.x = (Rand_ZeroOne() - 0.5f) * 11.0f;
+        spCC.y = (Rand_ZeroOne() - 0.2f) * 8.0f;
+        spCC.z = (Rand_ZeroOne() - 0.5f) * 11.0f;
+
+        spC0.x = ((Rand_ZeroOne() - 0.5f) * 5.0f) + (spCC.x * 1.4f);
+        spC0.y = (Rand_ZeroOne() * 13.0f) + 8.2f + (arg2 * -0.38f);
+        spC0.z = ((Rand_ZeroOne() - 0.5f) * 5.0f) + (spCC.z * 1.4f);
+
+        spCC.x += arg1->x;
+        spCC.y += arg1->y;
+        spCC.z += arg1->z;
+
+        temp = D_80A55D60[D_80A55D70] * arg3;
+        phi_v1 = (D_80A55D70 * -90) - 350;
+        D_80A55D70++;
+        D_80A55D70 &= 3;
+
+        if (temp <= 1.0f) {
+            phi_v0 = 1;
+        } else {
+            phi_v0 = temp;
+        }
+
+        EffectSsKakera_Spawn(play, &spCC, &spC0, &spCC, phi_v1, 33, 15, 0, 0, phi_v0, 1, 0, 70, -1, OBJECT_BOMBIWA,
+                             object_bombiwa_DL_0009E0);
+
+        spCC.x += (Rand_ZeroOne() - 0.5f) * 270.0f;
+        spCC.y += (Rand_ZeroOne() - 0.1f) * 150.0f;
+        spCC.z += (Rand_ZeroOne() - 0.5f) * 270.0f;
+
+        temp_s0 = (Rand_ZeroOne() * 160.0f) + 140.0f;
+        temp_s1 = (Rand_ZeroOne() * 180.0f) + 120.0f;
+        func_800B1210(play, &spCC, &gZeroVec3f, &D_80A55D2C, temp_s0, temp_s1);
+    }
+}
+
+void ObjHugebombiwa_AddQuake(ObjHugebombiwa* this, PlayState* play, s32 quakeVerticalMag) {
+    s32 pad[2];
+    s16 quakeIndex = Quake_Add(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
+
+    Quake_SetSpeed(quakeIndex, 20000);
+    Quake_SetQuakeValues(quakeIndex, quakeVerticalMag, 0, 0, 0);
+    Quake_SetCountdown(quakeIndex, 7);
+
+    Rumble_Request(this->actor.xyzDistToPlayerSq, 255, 20, 150);
+}
+
+s32 func_80A54A0C(ObjHugebombiwa* this) {
+    static f32 D_80A55D74[] = { 62500.0f, 108900.0f };
+    s32 sp2C;
+    Actor* ac;
+    s32 params;
+    Vec3f sp20;
+
+    if ((this->collider.base.acFlags & AC_HIT) && (this->collider.info.acHitInfo->toucher.dmgFlags & 0x80000000)) {
+        ac = this->collider.base.ac;
+        params = ENHUGEBOMBIWA_GET_100(&this->actor);
+
+        sp20.x = this->actor.world.pos.x;
+        sp20.y = this->actor.world.pos.y + 50.0f;
+        sp20.z = this->actor.world.pos.z;
+        if (ac != NULL) {
+            if (Math3D_Vec3fDistSq(&sp20, &ac->world.pos) < D_80A55D74[params]) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneForward, 3700, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneScale, 900, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneDownward, 900, ICHAIN_STOP),
 };
 
-#endif
+void ObjHugebombiwa_Init(Actor* thisx, PlayState* play) {
+    s32 pad;
+    ObjHugebombiwa* this = THIS;
 
-extern ColliderCylinderInit D_80A55D00;
-extern InitChainEntry D_80A55D7C[];
+    Actor_ProcessInitChain(&this->actor, sInitChain);
+    Collider_InitCylinder(play, &this->collider);
 
-extern UNK_TYPE D_060009E0;
-extern UNK_TYPE D_06001820;
-extern UNK_TYPE D_06001990;
-extern UNK_TYPE D_06002F60;
+    if (Flags_GetSwitch(play, ENHUGEBOMBIWA_GET_7F(&this->actor))) {
+        Actor_Kill(&this->actor);
+        return;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Hugebombiwa/func_80A53BE0.s")
+    Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
+    Collider_UpdateCylinder(&this->actor, &this->collider);
+    this->actor.colChkInfo.mass = MASS_IMMOVABLE;
+    if ((ENHUGEBOMBIWA_GET_100(&this->actor)) == 1) {
+        this->actor.draw = func_80A55B34;
+        Actor_SetScale(&this->actor, 0.74f);
+        this->collider.dim.radius = 204;
+        this->collider.dim.height = 230;
+    } else {
+        Actor_SetScale(&this->actor, 0.067f);
+        this->collider.dim.radius = 120;
+        this->collider.dim.height = 151;
+    }
+    func_80A54BF0(this);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Hugebombiwa/func_80A53E60.s")
+void ObjHugebombiwa_Destroy(Actor* thisx, PlayState* play2) {
+    PlayState* play = play2;
+    ObjHugebombiwa* this = THIS;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Hugebombiwa/func_80A541F4.s")
+    Collider_DestroyCylinder(play, &this->collider);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Hugebombiwa/func_80A54600.s")
+void func_80A54BF0(ObjHugebombiwa* this) {
+    this->actionFunc = func_80A54C04;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Hugebombiwa/func_80A54980.s")
+void func_80A54C04(ObjHugebombiwa* this, PlayState* play) {
+    s32 pad;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Hugebombiwa/func_80A54A0C.s")
+    if (this->collider.base.acFlags & AC_HIT) {
+        this->unk_4B3 = 5;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Hugebombiwa/ObjHugebombiwa_Init.s")
+    if (func_80A54A0C(this)) {
+        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+        func_80A54CD8(this);
+        return;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Hugebombiwa/ObjHugebombiwa_Destroy.s")
+    this->collider.base.acFlags &= ~AC_HIT;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Hugebombiwa/func_80A54BF0.s")
+    if (this->unk_4B3 > 0) {
+        this->unk_4B3--;
+        if (this->unk_4B3 == 0) {
+            this->collider.base.colType = COLTYPE_HARD;
+        } else {
+            this->collider.base.colType = COLTYPE_NONE;
+        }
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Hugebombiwa/func_80A54C04.s")
+    CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
+    CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Hugebombiwa/func_80A54CD8.s")
+void func_80A54CD8(ObjHugebombiwa* this) {
+    this->actionFunc = func_80A54CEC;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Hugebombiwa/func_80A54CEC.s")
+void func_80A54CEC(ObjHugebombiwa* this, PlayState* play) {
+    s32 pad;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Hugebombiwa/func_80A54E10.s")
+    if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
+        ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
+        Flags_SetSwitch(play, ENHUGEBOMBIWA_GET_7F(&this->actor));
+        if (!(ENHUGEBOMBIWA_GET_100(&this->actor)) &&
+            ((play->sceneId == SCENE_17SETUGEN) || (play->sceneId == SCENE_17SETUGEN2))) {
+            gSaveContext.save.weekEventReg[19] |= 2;
+        }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Hugebombiwa/func_80A55064.s")
+        if (!(ENHUGEBOMBIWA_GET_100(&this->actor))) {
+            SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 80, NA_SE_EV_WALL_BROKEN);
+        } else {
+            SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 80, NA_SE_EV_SNOWBALL_BROKEN);
+        }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Hugebombiwa/func_80A55310.s")
+        if (!(ENHUGEBOMBIWA_GET_100(&this->actor))) {
+            func_80A53BE0(play, &this->actor.world.pos);
+            func_80A54E10(this);
+        } else {
+            func_80A541F4(this, play);
+            func_80A55310(this);
+        }
+    } else {
+        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Hugebombiwa/func_80A55564.s")
+void func_80A54E10(ObjHugebombiwa* this) {
+    s32 i;
+    EnHugebombiwaStruct* ptr;
+    f32 temp_f20;
+    f32 temp_f20_2;
+    s16 phi_s2;
+    s32 pad;
+    Vec3f sp84;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Hugebombiwa/ObjHugebombiwa_Update.s")
+    Matrix_Push();
+    Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_NEW);
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Hugebombiwa/ObjHugebombiwa_Draw.s")
+    for (i = 0, phi_s2 = 0x1000; i < 20; i++, phi_s2 += 0x4000) {
+        ptr = &this->unk_190[i];
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Hugebombiwa/func_80A55B34.s")
+        temp_f20 = (Rand_ZeroOne() * 0.06f) + 0.013f;
+        ptr->unk_00.x = ((Rand_ZeroOne() * 0.6f) + 0.6f) * temp_f20;
+        ptr->unk_00.y = ((Rand_ZeroOne() * 0.6f) + 0.4f) * temp_f20;
+        ptr->unk_00.z = ((Rand_ZeroOne() * 0.6f) + 0.6f) * temp_f20;
+
+        temp_f20_2 = (Rand_ZeroOne() * 55.0f) + 47.0f;
+        sp84.x = Math_SinS(phi_s2) * temp_f20_2;
+        sp84.y = (i + 1) * 10.0f;
+        sp84.z = fabsf(Math_CosS(phi_s2)) * temp_f20_2;
+
+        Matrix_MultVec3f(&sp84, &ptr->unk_0C);
+
+        ptr->unk_0C.x += this->actor.world.pos.x;
+        ptr->unk_0C.y += this->actor.world.pos.y;
+        ptr->unk_0C.z += this->actor.world.pos.z;
+
+        ptr->unk_18 = (i * 1.04f) + 2.4f;
+        ptr->unk_1C.x = phi_s2;
+        ptr->unk_1C.y = Rand_Next() >> 0x10;
+        ptr->unk_1C.z = 0;
+        ptr->unk_22 = Rand_ZeroFloat(5000.0f);
+        ptr->unk_24 = 0;
+    }
+
+    this->unk_4B0 = 0;
+    this->unk_4B2 = 100;
+    Matrix_Pop();
+    this->actionFunc = func_80A55064;
+}
+
+void func_80A55064(ObjHugebombiwa* this, PlayState* play) {
+    s32 i;
+    s32 pad;
+    Vec3f spA4;
+    s32 pad2;
+    CollisionPoly* sp9C;
+    s32 sp98;
+    f32 temp_f0;
+    EnHugebombiwaStruct* ptr;
+    s16 phi_s3 = this->actor.shape.rot.y - 0x4000;
+
+    for (i = 0; i < ARRAY_COUNT(this->unk_190); i++, phi_s3 += 0x666) {
+        ptr = &this->unk_190[i];
+        if (ptr->unk_24 != 0) {
+            continue;
+        }
+
+        ptr->unk_18 -= 3.0f;
+        if (ptr->unk_18 < -30.0f) {
+            ptr->unk_18 = -30.0f;
+        }
+
+        ptr->unk_0C.x += Math_SinS(phi_s3) * 4.0f;
+        ptr->unk_0C.y += ptr->unk_18;
+        ptr->unk_0C.z += Math_CosS(phi_s3) * 4.0f;
+
+        ptr->unk_1C.x += ptr->unk_22;
+
+        spA4.x = ptr->unk_0C.x;
+        spA4.y = ptr->unk_0C.y + 60.0f;
+        spA4.z = ptr->unk_0C.z;
+
+        temp_f0 = BgCheck_EntityRaycastFloor5(&play->colCtx, &sp9C, &sp98, &this->actor, &spA4);
+        if ((temp_f0 <= BGCHECK_Y_MIN + 10.0f) || ((ptr->unk_0C.y - (350.0f * ptr->unk_00.y)) < temp_f0)) {
+            this->unk_4B0++;
+            ptr->unk_24 = 1;
+            func_80A53E60(play, &ptr->unk_0C, ptr->unk_18, ptr->unk_00.y * 9.8f);
+            if ((play->gameplayFrames % 4) == 0) {
+                ObjHugebombiwa_AddQuake(this, play, (s32)(Rand_ZeroOne() * 5.5f) + 1);
+            }
+        }
+    }
+
+    this->unk_4B2--;
+    if ((this->unk_4B0 >= 20) || (this->unk_4B2 <= 0)) {
+        ActorCutscene_Stop(this->actor.cutscene);
+        Actor_Kill(&this->actor);
+    }
+}
+
+void func_80A55310(ObjHugebombiwa* this) {
+    s32 i;
+    EnHugebombiwaStruct* ptr;
+    s32 pad;
+    f32 temp_f20;
+    f32 temp_f20_2;
+    s16 phi_s2;
+    Vec3f sp84;
+
+    Matrix_Push();
+    Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_NEW);
+
+    for (i = 0, phi_s2 = 0x1000; i < ARRAY_COUNT(this->unk_190); i++, phi_s2 += 0x4000) {
+        ptr = &this->unk_190[i];
+
+        temp_f20 = (Rand_ZeroOne() * 0.09f) + 0.016f;
+        ptr->unk_00.x = ((Rand_ZeroOne() * 0.1f) + 0.95f) * temp_f20;
+        ptr->unk_00.y = ((Rand_ZeroOne() * 0.1f) + 0.95f) * temp_f20;
+        ptr->unk_00.z = ((Rand_ZeroOne() * 0.1f) + 0.95f) * temp_f20;
+
+        temp_f20_2 = (Rand_ZeroOne() * 85.0f) + 77.0f;
+        sp84.x = Math_SinS(phi_s2) * temp_f20_2;
+        sp84.y = (i + 1) * 14.0f;
+        sp84.z = fabsf(Math_CosS(phi_s2)) * temp_f20_2;
+        Matrix_MultVec3f(&sp84, &ptr->unk_0C);
+
+        ptr->unk_0C.x += this->actor.world.pos.x;
+        ptr->unk_0C.y += this->actor.world.pos.y;
+        ptr->unk_0C.z += this->actor.world.pos.z;
+
+        ptr->unk_18 = (i * 1.04f) + 2.4f;
+
+        ptr->unk_1C.x = phi_s2;
+        ptr->unk_1C.y = Rand_Next() >> 0x10;
+        ptr->unk_1C.z = 0;
+
+        ptr->unk_22 = Rand_ZeroFloat(5000.0f);
+        ptr->unk_24 = 0;
+    }
+
+    this->unk_4B0 = 0;
+    this->unk_4B2 = 100;
+    Matrix_Pop();
+    this->actionFunc = func_80A55564;
+}
+
+void func_80A55564(ObjHugebombiwa* this, PlayState* play) {
+    s32 i;
+    EnHugebombiwaStruct* ptr;
+    Vec3f spA4;
+    s32 pad;
+    CollisionPoly* sp9C;
+    s32 sp98;
+    f32 temp_f0;
+    s16 phi_s3 = this->actor.shape.rot.y - 0x4000;
+
+    for (i = 0; i < ARRAY_COUNT(this->unk_190); i++, phi_s3 += 0x666) {
+        ptr = &this->unk_190[i];
+
+        if (ptr->unk_24 != 0) {
+            continue;
+        }
+
+        ptr->unk_18 -= 3.0f;
+        if (ptr->unk_18 < -30.0f) {
+            ptr->unk_18 = -30.0f;
+        }
+
+        ptr->unk_0C.x += (Math_SinS(phi_s3) * 4.0f);
+        ptr->unk_0C.y += ptr->unk_18;
+        ptr->unk_0C.z += (Math_CosS(phi_s3) * 4.0f);
+
+        ptr->unk_1C.x += ptr->unk_22;
+
+        spA4.x = ptr->unk_0C.x;
+        spA4.y = ptr->unk_0C.y + 60.0f;
+        spA4.z = ptr->unk_0C.z;
+
+        temp_f0 = BgCheck_EntityRaycastFloor5(&play->colCtx, &sp9C, &sp98, &this->actor, &spA4);
+        if ((temp_f0 <= BGCHECK_Y_MIN + 10.0f) || (ptr->unk_0C.y < temp_f0)) {
+            this->unk_4B0++;
+            ptr->unk_24 = 1;
+            func_80A54600(play, &ptr->unk_0C, ptr->unk_18, ptr->unk_00.y * 10.1f);
+            if ((play->gameplayFrames % 4) == 0) {
+                ObjHugebombiwa_AddQuake(this, play, (s32)(Rand_ZeroOne() * 5.5f) + 1);
+            }
+        }
+    }
+
+    this->unk_4B2--;
+    if ((this->unk_4B0 >= 20) || (this->unk_4B2 <= 0)) {
+        ActorCutscene_Stop(this->actor.cutscene);
+        Actor_Kill(&this->actor);
+    }
+}
+
+void ObjHugebombiwa_Update(Actor* thisx, PlayState* play) {
+    ObjHugebombiwa* this = THIS;
+
+    this->actionFunc(this, play);
+}
+
+void ObjHugebombiwa_Draw(Actor* thisx, PlayState* play) {
+    ObjHugebombiwa* this = THIS;
+    s32 pad[8];
+    f32 sp38;
+
+    OPEN_DISPS(play->state.gfxCtx);
+
+    if ((this->actionFunc == func_80A54C04) || (this->actionFunc == func_80A54CEC)) {
+        if (this->actor.projectedPos.z <= 4300.0f) {
+            func_8012C28C(play->state.gfxCtx);
+
+            gSPSegment(POLY_OPA_DISP++, 0x08, D_801AEFA0);
+            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gDPSetPrimColor(POLY_OPA_DISP++, 0, 0xFF, 255, 255, 255, 255);
+            gSPDisplayList(POLY_OPA_DISP++, object_bombiwa_DL_002F60);
+
+            func_8012C2DC(play->state.gfxCtx);
+
+            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPDisplayList(POLY_XLU_DISP++, object_bombiwa_DL_003110);
+
+        } else if (this->actor.projectedPos.z < 4500.0f) {
+            sp38 = (4500.0f - this->actor.projectedPos.z) * 1.275f;
+            func_8012C2DC(play->state.gfxCtx);
+
+            gSPSegment(POLY_XLU_DISP++, 0x08, D_801AEF88);
+            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0xFF, 255, 255, 255, (s32)sp38);
+            gSPDisplayList(POLY_XLU_DISP++, object_bombiwa_DL_002F60);
+        }
+    } else {
+        s32 i;
+        EnHugebombiwaStruct* ptr;
+        Gfx* gfx = POLY_OPA_DISP;
+
+        gSPDisplayList(gfx++, &sSetupDL[6 * 25]);
+
+        for (i = 0; i < ARRAY_COUNT(this->unk_190); i++) {
+            ptr = &this->unk_190[i];
+
+            if (ptr->unk_24 == 0) {
+                Matrix_SetTranslateRotateYXZ(ptr->unk_0C.x, ptr->unk_0C.y, ptr->unk_0C.z, &ptr->unk_1C);
+                Matrix_Scale(ptr->unk_00.x, ptr->unk_00.x, ptr->unk_00.x, MTXMODE_APPLY);
+
+                gSPMatrix(gfx++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                gSPDisplayList(gfx++, object_bombiwa_DL_001990);
+            }
+        }
+
+        POLY_OPA_DISP = gfx;
+    }
+
+    CLOSE_DISPS(play->state.gfxCtx);
+}
+
+void func_80A55B34(Actor* thisx, PlayState* play) {
+    ObjHugebombiwa* this = THIS;
+    s32 i;
+    Gfx* gfx;
+    EnHugebombiwaStruct* ptr;
+
+    if ((this->actionFunc == func_80A54C04) || (this->actionFunc == func_80A54CEC)) {
+        Gfx_DrawDListOpa(play, object_bombiwa_DL_001820);
+        return;
+    }
+
+    OPEN_DISPS(play->state.gfxCtx);
+    gfx = POLY_OPA_DISP;
+
+    gSPDisplayList(gfx++, &sSetupDL[6 * 25]);
+
+    for (i = 0; i < ARRAY_COUNT(this->unk_190); i++) {
+        ptr = &this->unk_190[i];
+
+        if (ptr->unk_24 != 0) {
+            continue;
+        }
+
+        Matrix_SetTranslateRotateYXZ(ptr->unk_0C.x, ptr->unk_0C.y + (325.0f * ptr->unk_00.y), ptr->unk_0C.z,
+                                     &ptr->unk_1C);
+        Matrix_Scale(ptr->unk_00.x, ptr->unk_00.y, ptr->unk_00.z, MTXMODE_APPLY);
+        Matrix_Translate(0.0f, -325.0f, 0.0f, MTXMODE_APPLY);
+
+        gSPMatrix(gfx++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPDisplayList(gfx++, object_bombiwa_DL_0009E0);
+    }
+
+    POLY_OPA_DISP = gfx;
+
+    CLOSE_DISPS(play->state.gfxCtx);
+}

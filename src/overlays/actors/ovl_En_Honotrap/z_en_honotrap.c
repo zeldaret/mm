@@ -1,31 +1,37 @@
+/*
+ * File: z_en_honotrap.c
+ * Overlay: ovl_En_Honotrap
+ * Description: Eye switch that shoots fire
+ */
+
 #include "z_en_honotrap.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((EnHonotrap*)thisx)
 
-void EnHonotrap_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnHonotrap_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnHonotrap_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnHonotrap_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnHonotrap_Init(Actor* thisx, PlayState* play);
+void EnHonotrap_Destroy(Actor* thisx, PlayState* play);
+void EnHonotrap_Update(Actor* thisx, PlayState* play);
+void EnHonotrap_Draw(Actor* thisx, PlayState* play);
 
-void func_8092EBDC(EnHonotrap* this, GlobalContext* globalCtx);
-void func_8092ECF0(EnHonotrap* this, GlobalContext* globalCtx);
-void func_8092EDD8(EnHonotrap* this, GlobalContext* globalCtx);
-void func_8092EE1C(EnHonotrap* this, GlobalContext* globalCtx);
-void func_8092EE90(EnHonotrap* this, GlobalContext* globalCtx);
-void func_8092EF98(EnHonotrap* this, GlobalContext* globalCtx);
-void func_8092F074(EnHonotrap* this, GlobalContext* globalCtx);
-void func_8092F0B8(EnHonotrap* this, GlobalContext* globalCtx);
-void func_8092F10C(EnHonotrap* this, GlobalContext* globalCtx);
-void func_8092F208(EnHonotrap* this, GlobalContext* globalCtx);
-void func_8092F3D8(EnHonotrap* this, GlobalContext* globalCtx);
-void func_8092F5EC(EnHonotrap* this, GlobalContext* globalCtx);
-void func_8092F7BC(EnHonotrap* this, GlobalContext* globalCtx);
-void func_8092F878(EnHonotrap* this, GlobalContext* globalCtx);
+void func_8092EBDC(EnHonotrap* this, PlayState* play);
+void func_8092ECF0(EnHonotrap* this, PlayState* play);
+void func_8092EDD8(EnHonotrap* this, PlayState* play);
+void func_8092EE1C(EnHonotrap* this, PlayState* play);
+void func_8092EE90(EnHonotrap* this, PlayState* play);
+void func_8092EF98(EnHonotrap* this, PlayState* play);
+void func_8092F074(EnHonotrap* this, PlayState* play);
+void func_8092F0B8(EnHonotrap* this, PlayState* play);
+void func_8092F10C(EnHonotrap* this, PlayState* play);
+void func_8092F208(EnHonotrap* this, PlayState* play);
+void func_8092F3D8(EnHonotrap* this, PlayState* play);
+void func_8092F5EC(EnHonotrap* this, PlayState* play);
+void func_8092F7BC(EnHonotrap* this, PlayState* play);
+void func_8092F878(EnHonotrap* this, PlayState* play);
 
 #if 0
-const ActorInit En_Honotrap_InitVars = {
+ActorInit En_Honotrap_InitVars = {
     ACTOR_EN_HONOTRAP,
     ACTORCAT_PROP,
     FLAGS,
@@ -52,7 +58,7 @@ static ColliderTrisElementInit D_80930424[2] = {
 // static ColliderTrisInit sTrisInit = {
 static ColliderTrisInit D_8093049C = {
     { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_NONE, OC2_NONE, COLSHAPE_TRIS, },
-    2, D_80930424, // sTrisElementsInit,
+    ARRAY_COUNT(sTrisElementsInit), D_80930424, // sTrisElementsInit,
 };
 
 // static ColliderCylinderInit sCylinderInit = {

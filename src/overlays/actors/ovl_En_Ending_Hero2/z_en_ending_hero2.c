@@ -1,18 +1,25 @@
-#include "z_en_ending_hero2.h"
+/*
+ * File: z_en_ending_hero2.c
+ * Overlay: ovl_En_Ending_Hero2
+ * Description: Viscen watching moon disappearance and wedding
+ */
 
-#define FLAGS 0x00000009
+#include "z_en_ending_hero2.h"
+#include "objects/object_bai/object_bai.h"
+
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
 
 #define THIS ((EnEndingHero2*)thisx)
 
-void EnEndingHero2_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnEndingHero2_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnEndingHero2_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnEndingHero2_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnEndingHero2_Init(Actor* thisx, PlayState* play);
+void EnEndingHero2_Destroy(Actor* thisx, PlayState* play);
+void EnEndingHero2_Update(Actor* thisx, PlayState* play);
+void EnEndingHero2_Draw(Actor* thisx, PlayState* play);
 
 void func_80C232E8(EnEndingHero2* this);
-void func_80C23304(EnEndingHero2* this, GlobalContext* globalCtx);
+void func_80C23304(EnEndingHero2* this, PlayState* play);
 
-const ActorInit En_Ending_Hero2_InitVars = {
+ActorInit En_Ending_Hero2_InitVars = {
     ACTOR_EN_ENDING_HERO2,
     ACTORCAT_NPC,
     FLAGS,
@@ -24,23 +31,20 @@ const ActorInit En_Ending_Hero2_InitVars = {
     (ActorFunc)EnEndingHero2_Draw,
 };
 
-extern FlexSkeletonHeader D_06007908;
-extern AnimationHeader D_060011C0;
-
-void EnEndingHero2_Init(Actor* thisx, GlobalContext* globalCtx) {
+void EnEndingHero2_Init(Actor* thisx, PlayState* play) {
     EnEndingHero2* this = THIS;
 
-    this->actor.colChkInfo.mass = 0xFF;
+    this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     Actor_SetScale(&this->actor, 0.01f);
     this->actor.targetMode = 6;
     this->actor.gravity = -3.0f;
-    SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06007908, &D_060011C0, this->limbDrawTable,
-                     this->transitionDrawTable, 20);
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 25.0f);
+    SkelAnime_InitFlex(play, &this->skelAnime, &object_bai_Skel_007908, &object_bai_Anim_0011C0, this->jointTable,
+                       this->morphTable, 20);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 25.0f);
     func_80C232E8(this);
 }
 
-void EnEndingHero2_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnEndingHero2_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void func_80C232E8(EnEndingHero2* this) {
@@ -48,23 +52,23 @@ void func_80C232E8(EnEndingHero2* this) {
     this->actionFunc = func_80C23304;
 }
 
-void func_80C23304(EnEndingHero2* this, GlobalContext* globalCtx) {
-    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+void func_80C23304(EnEndingHero2* this, PlayState* play) {
+    SkelAnime_Update(&this->skelAnime);
 }
 
-void EnEndingHero2_Update(Actor* thisx, GlobalContext* globalCtx) {
+void EnEndingHero2_Update(Actor* thisx, PlayState* play) {
     EnEndingHero2* this = THIS;
 
-    this->actionFunc(this, globalCtx);
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 20.0f, 20.0f, 50.0f, 0x1D);
+    this->actionFunc(this, play);
+    Actor_MoveWithGravity(&this->actor);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 50.0f, 0x1D);
 }
 
-void EnEndingHero2_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void EnEndingHero2_Draw(Actor* thisx, PlayState* play) {
     EnEndingHero2* this = THIS;
 
-    func_8012C28C(globalCtx->state.gfxCtx);
-    func_8012C2DC(globalCtx->state.gfxCtx);
-    SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount, 0, 0,
-                     &this->actor);
+    func_8012C28C(play->state.gfxCtx);
+    func_8012C2DC(play->state.gfxCtx);
+    SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, NULL,
+                          NULL, &this->actor);
 }

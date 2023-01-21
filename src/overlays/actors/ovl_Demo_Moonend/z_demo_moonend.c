@@ -1,16 +1,22 @@
+/*
+ * File: z_demo_moonend.c
+ * Overlay: ovl_Demo_Moonend
+ * Description: Moon Disappearing (cutscene)
+ */
+
 #include "z_demo_moonend.h"
 
-#define FLAGS 0x00000030
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((DemoMoonend*)thisx)
 
-void DemoMoonend_Init(Actor* thisx, GlobalContext* globalCtx);
-void DemoMoonend_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void DemoMoonend_Update(Actor* thisx, GlobalContext* globalCtx);
-void DemoMoonend_Draw(Actor* thisx, GlobalContext* globalCtx);
+void DemoMoonend_Init(Actor* thisx, PlayState* play);
+void DemoMoonend_Destroy(Actor* thisx, PlayState* play);
+void DemoMoonend_Update(Actor* thisx, PlayState* play);
+void DemoMoonend_Draw(Actor* thisx, PlayState* play);
 
 #if 0
-const ActorInit Demo_Moonend_InitVars = {
+ActorInit Demo_Moonend_InitVars = {
     ACTOR_DEMO_MOONEND,
     ACTORCAT_ITEMACTION,
     FLAGS,

@@ -5,13 +5,13 @@
 
 struct BgCtowerRot;
 
-typedef void (*BgCtowerRotActionFunc)(struct BgCtowerRot*, GlobalContext*);
+typedef void (*BgCtowerRotActionFunc)(struct BgCtowerRot*, PlayState*);
 
 typedef enum {
-    /* 0 */ CORRIDOR,
-    /* 1 */ MAIN_DOOR, // Main door controls cutscene flow (updating Link fields and playing sounds). It is the one on
-                       // the left when entering from the Lost Woods
-    /* 2 */ DOOR,
+    /* 0 */ BGCTOWERROT_CORRIDOR,
+    /* 1 */ BGCTOWERROT_STONE_DOOR_MAIN, // Main door controls cutscene flow (updating Link fields and playing sounds). 
+                                         // It is the one on the left when entering from the Lost Woods
+    /* 2 */ BGCTOWERROT_STONE_DOOR,
 } BgCtowerRotType;
 
 typedef struct BgCtowerRot {
@@ -20,7 +20,5 @@ typedef struct BgCtowerRot {
     /* 0x160 */ f32 unk160; // Set to 0 but never used
     /* 0x164 */ f32 timer;
 } BgCtowerRot; // size = 0x168
-
-extern const ActorInit Bg_Ctower_Rot_InitVars;
 
 #endif // Z_BG_CTOWER_ROT_H

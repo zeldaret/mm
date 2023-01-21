@@ -1,12 +1,18 @@
+/*
+ * File: z_en_tag_obj.c
+ * Overlay: ovl_En_Tag_Obj
+ * Description: Unused Seahorse Spawner
+ */
+
 #include "z_en_tag_obj.h"
 
 #define FLAGS 0x00000000
 
 #define THIS ((EnTagObj*)thisx)
 
-void EnTagObj_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnTagObj_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnTagObj_Update(Actor* thisx, GlobalContext* globalCtx);
+void EnTagObj_Init(Actor* thisx, PlayState* play);
+void EnTagObj_Destroy(Actor* thisx, PlayState* play);
+void EnTagObj_Update(Actor* thisx, PlayState* play);
 
 static ColliderCylinderInit sUnusedColliderInit = {
     {
@@ -28,7 +34,7 @@ static ColliderCylinderInit sUnusedColliderInit = {
     { 20, 30, 0, { 0, 0, 0 } },
 };
 
-const ActorInit En_Tag_Obj_InitVars = {
+ActorInit En_Tag_Obj_InitVars = {
     ACTOR_EN_TAG_OBJ,
     ACTORCAT_PROP,
     FLAGS,
@@ -40,21 +46,21 @@ const ActorInit En_Tag_Obj_InitVars = {
     (ActorFunc)NULL,
 };
 
-void EnTagObj_Init(Actor* thisx, GlobalContext* globalCtx) {
-    EnTagObj* this = (EnTagObj*)thisx;
+void EnTagObj_Init(Actor* thisx, PlayState* play) {
+    EnTagObj* this = THIS;
 
-    this->hasSpawnedSeahorse = 0;
+    this->hasSpawnedSeahorse = false;
 }
 
-void EnTagObj_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnTagObj_Destroy(Actor* thisx, PlayState* play) {
 }
 
-void EnTagObj_Update(Actor* thisx, GlobalContext* globalCtx) {
-    EnTagObj* this = (EnTagObj*)thisx;
+void EnTagObj_Update(Actor* thisx, PlayState* play) {
+    EnTagObj* this = THIS;
 
     if (!this->hasSpawnedSeahorse) {
-        Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_OT, this->actor.world.pos.x, this->actor.world.pos.y,
+        Actor_Spawn(&play->actorCtx, play, ACTOR_EN_OT, this->actor.world.pos.x, this->actor.world.pos.y,
                     this->actor.world.pos.z, 0, 0, 0, 0);
-        this->hasSpawnedSeahorse = 1;
+        this->hasSpawnedSeahorse = true;
     }
 }

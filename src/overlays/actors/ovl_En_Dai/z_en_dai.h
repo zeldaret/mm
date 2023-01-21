@@ -5,9 +5,9 @@
 
 struct EnDai;
 
-typedef void (*EnDaiActionFunc)(struct EnDai*, GlobalContext*);
+typedef void (*EnDaiActionFunc)(struct EnDai*, PlayState*);
 
-typedef struct EnDaiParticle {
+typedef struct EnDaiEffect {
     /* 0x00 */ u8 isEnabled;
     /* 0x01 */ u8 unk_01;
     /* 0x02 */ u8 unk_02;
@@ -17,7 +17,9 @@ typedef struct EnDaiParticle {
     /* 0x28 */ Vec3f unk_28;
     /* 0x34 */ f32 unk_34;
     /* 0x38 */ f32 unk_38;
-} EnDaiParticle; // size = 0x3C
+} EnDaiEffect; // size = 0x3C
+
+#define EN_DAI_EFFECT_COUNT 32
 
 typedef struct EnDai {
     /* 0x000 */ Actor actor;
@@ -39,11 +41,9 @@ typedef struct EnDai {
     /* 0x1FC */ Vec3f unk_1FC;
     /* 0x208 */ Vec3s jointTable[19];
     /* 0x27A */ Vec3s morphTable[19];
-    /* 0x2EC */ EnDaiParticle particles[32];
+    /* 0x2EC */ EnDaiEffect effects[EN_DAI_EFFECT_COUNT];
     /* 0xA6C */ s32 unk_A6C;
     /* 0xA70 */ s32 unk_A70;
 } EnDai; // size = 0xA74
-
-extern const ActorInit En_Dai_InitVars;
 
 #endif // Z_EN_DAI_H

@@ -1,16 +1,32 @@
-#include "z_en_horse_link_child.h"
+/*
+ * File: z_en_horse_link_child.c
+ * Overlay: ovl_En_Horse_Link_Child
+ * Description: Child Epona
+ */
 
-#define FLAGS 0x02000010
+#include "z_en_horse_link_child.h"
+#include "objects/object_horse_link_child/object_horse_link_child.h"
+
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
 
 #define THIS ((EnHorseLinkChild*)thisx)
 
-void EnHorseLinkChild_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnHorseLinkChild_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnHorseLinkChild_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnHorseLinkChild_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnHorseLinkChild_Init(Actor* thisx, PlayState* play);
+void EnHorseLinkChild_Destroy(Actor* thisx, PlayState* play);
+void EnHorseLinkChild_Update(Actor* thisx, PlayState* play);
+void EnHorseLinkChild_Draw(Actor* thisx, PlayState* play);
 
-#if 0
-const ActorInit En_Horse_Link_Child_InitVars = {
+void func_808DEA0C(EnHorseLinkChild* this, PlayState* play);
+void func_808DEB14(EnHorseLinkChild* this, PlayState* play);
+void func_808DECA0(EnHorseLinkChild* this);
+void func_808DED40(EnHorseLinkChild* this, PlayState* play);
+void func_808DEFE8(EnHorseLinkChild* this);
+void func_808DF194(EnHorseLinkChild* this, PlayState* play);
+void func_808DF620(EnHorseLinkChild* this, PlayState* play);
+void func_808DF788(EnHorseLinkChild* this);
+void func_808DF838(EnHorseLinkChild* this, PlayState* play);
+
+ActorInit En_Horse_Link_Child_InitVars = {
     ACTOR_EN_HORSE_LINK_CHILD,
     ACTORCAT_BG,
     FLAGS,
@@ -22,77 +38,559 @@ const ActorInit En_Horse_Link_Child_InitVars = {
     (ActorFunc)EnHorseLinkChild_Draw,
 };
 
-// static ColliderJntSphElementInit sJntSphElementsInit[1] = {
-static ColliderJntSphElementInit D_808DFED4[1] = {
+AnimationHeader* D_808DFEC0[] = { &object_horse_link_child_Anim_006D44, &object_horse_link_child_Anim_007468 };
+
+AnimationHeader* D_808DFEC8[] = { &object_horse_link_child_Anim_007D50, &object_horse_link_child_Anim_0043AC,
+                                  &object_horse_link_child_Anim_002F98 };
+
+static ColliderJntSphElementInit sJntSphElementsInit[] = {
     {
-        { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0x00000000, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_NONE, OCELEM_ON, },
+        {
+            ELEMTYPE_UNK0,
+            { 0x00000000, 0x00, 0x00 },
+            { 0x00000000, 0x00, 0x00 },
+            TOUCH_NONE | TOUCH_SFX_NORMAL,
+            BUMP_NONE,
+            OCELEM_ON,
+        },
         { 13, { { 0, 0, 0 }, 10 }, 100 },
     },
 };
 
-// static ColliderJntSphInit sJntSphInit = {
-static ColliderJntSphInit D_808DFEF8 = {
-    { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1 | OC2_UNK1, COLSHAPE_JNTSPH, },
-    1, D_808DFED4, // sJntSphElementsInit,
+static ColliderJntSphInit sJntSphInit = {
+    {
+        COLTYPE_NONE,
+        AT_NONE,
+        AC_ON | AC_TYPE_PLAYER,
+        OC1_ON | OC1_TYPE_ALL,
+        OC2_TYPE_1 | OC2_UNK1,
+        COLSHAPE_JNTSPH,
+    },
+    ARRAY_COUNT(sJntSphElementsInit),
+    sJntSphElementsInit,
 };
 
-// sColChkInfoInit
-static CollisionCheckInfoInit D_808DFF08 = { 10, 35, 100, MASS_HEAVY };
+static CollisionCheckInfoInit sColChkInfoInit = { 10, 35, 100, MASS_HEAVY };
 
-// static InitChainEntry sInitChain[] = {
-static InitChainEntry D_808DFF2C[] = {
+s32 D_808DFF10[] = { 1, 19 };
+
+f32 D_808DFF18[] = { 1.0f, 1.0f, 1.5f, 1.5f, 1.5f };
+
+static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneScale, 1200, ICHAIN_STOP),
 };
 
-#endif
+EnHorseLinkChildUnkFunc D_808DFF30[] = {
+    func_808DEA0C, func_808DED40, func_808DEB14, func_808DF194, func_808DF838, func_808DF620,
+};
 
-extern ColliderJntSphElementInit D_808DFED4[1];
-extern ColliderJntSphInit D_808DFEF8;
-extern CollisionCheckInfoInit D_808DFF08;
-extern InitChainEntry D_808DFF2C[];
+TexturePtr D_808DFF48[] = { object_horse_link_child_Tex_001D28, object_horse_link_child_Tex_001928,
+                            object_horse_link_child_Tex_001B28 };
 
-extern UNK_TYPE D_06002F98;
+s8 D_808DFF54[] = { 0, 1, 2, 1 };
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Horse_Link_Child/func_808DE5C0.s")
+void func_808DE5C0(EnHorseLinkChild* this) {
+    if ((D_808DFF10[this->unk_1E8] < this->skin.skelAnime.curFrame) &&
+        ((this->unk_1E8 != 0) || !(D_808DFF10[1] < this->skin.skelAnime.curFrame))) {
+        Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_EV_KID_HORSE_WALK);
+        this->unk_1E8++;
+        if (this->unk_1E8 >= 2) {
+            this->unk_1E8 = 0;
+        }
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Horse_Link_Child/func_808DE660.s")
+void func_808DE660(EnHorseLinkChild* this) {
+    if (this->unk_148 == 2) {
+        func_808DE5C0(this);
+    } else if (this->skin.skelAnime.curFrame == 0.0f) {
+        if ((this->unk_148 == 3) || (this->unk_148 == 4)) {
+            Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_EV_KID_HORSE_RUN);
+        } else if (this->unk_148 == 1) {
+            if (Rand_ZeroOne() > 0.5f) {
+                Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_EV_KID_HORSE_GROAN);
+            } else {
+                Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_EV_KID_HORSE_NEIGH);
+            }
+        }
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Horse_Link_Child/func_808DE728.s")
+f32 func_808DE728(EnHorseLinkChild* this) {
+    f32 phi_fv1;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Horse_Link_Child/EnHorseLinkChild_Init.s")
+    if (this->unk_148 == 2) {
+        phi_fv1 = D_808DFF18[this->unk_148] * this->actor.speedXZ * (1.0f / 2.0f);
+    } else if (this->unk_148 == 3) {
+        phi_fv1 = D_808DFF18[this->unk_148] * this->actor.speedXZ * (1.0f / 3.0f);
+    } else if (this->unk_148 == 4) {
+        phi_fv1 = D_808DFF18[this->unk_148] * this->actor.speedXZ * (1.0f / 5.0f);
+    } else {
+        phi_fv1 = D_808DFF18[this->unk_148];
+    }
+    return phi_fv1;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Horse_Link_Child/EnHorseLinkChild_Destroy.s")
+void EnHorseLinkChild_Init(Actor* thisx, PlayState* play) {
+    EnHorseLinkChild* this = THIS;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Horse_Link_Child/func_808DE9A8.s")
+    Actor_ProcessInitChain(&this->actor, sInitChain);
+    Actor_SetScale(&this->actor, 0.00648f);
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Horse_Link_Child/func_808DEA0C.s")
+    this->actor.gravity = -3.5f;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Horse_Link_Child/func_808DEA54.s")
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawHorse, 20.0f);
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Horse_Link_Child/func_808DEB14.s")
+    this->unk_144 = 1;
+    this->actor.speedXZ = 0.0f;
+    this->actor.focus.pos = this->actor.world.pos;
+    this->actor.focus.pos.y += 70.0f;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Horse_Link_Child/func_808DECA0.s")
+    Skin_Init(&play->state, &this->skin, &object_horse_link_child_Skel_00A480, &object_horse_link_child_Anim_002F98);
+    this->unk_148 = 0;
+    Animation_PlayOnce(&this->skin.skelAnime, D_808DFEC0[0]);
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Horse_Link_Child/func_808DED40.s")
+    Collider_InitCylinder(play, &this->colldierCylinder);
+    Collider_InitJntSph(play, &this->colliderJntSph);
+    Collider_SetJntSph(play, &this->colliderJntSph, &this->actor, &sJntSphInit, this->colliderJntSphElements);
+    CollisionCheck_SetInfo(&this->actor.colChkInfo, NULL, &sColChkInfoInit);
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Horse_Link_Child/func_808DEFE8.s")
+    this->unk_1E8 = 0;
+    this->unk_1E4 = 0;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Horse_Link_Child/func_808DF088.s")
+    if (gSaveContext.sceneLayer >= 4) {
+        func_808DEFE8(this);
+    } else {
+        func_808DEFE8(this);
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Horse_Link_Child/func_808DF194.s")
+    this->actor.home.rot.z = this->actor.world.rot.z = this->actor.shape.rot.z = 0;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Horse_Link_Child/func_808DF560.s")
+void EnHorseLinkChild_Destroy(Actor* thisx, PlayState* play) {
+    EnHorseLinkChild* this = THIS;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Horse_Link_Child/func_808DF620.s")
+    Skin_Free(&play->state, &this->skin);
+    Collider_DestroyCylinder(play, &this->colldierCylinder);
+    Collider_DestroyJntSph(play, &this->colliderJntSph);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Horse_Link_Child/func_808DF788.s")
+void func_808DE9A8(EnHorseLinkChild* this) {
+    this->unk_144 = 0;
+    this->unk_148++;
+    if (this->unk_148 >= ARRAY_COUNT(D_808DFF18)) {
+        this->unk_148 = 0;
+    }
+    Animation_PlayOnce(&this->skin.skelAnime, D_808DFEC0[this->unk_148]);
+    this->skin.skelAnime.playSpeed = func_808DE728(this);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Horse_Link_Child/func_808DF838.s")
+void func_808DEA0C(EnHorseLinkChild* this, PlayState* play) {
+    this->actor.speedXZ = 0.0f;
+    if (SkelAnime_Update(&this->skin.skelAnime)) {
+        func_808DE9A8(this);
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Horse_Link_Child/EnHorseLinkChild_Update.s")
+void func_808DEA54(EnHorseLinkChild* this, s32 arg1) {
+    this->unk_144 = 2;
+    this->actor.speedXZ = 0.0f;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Horse_Link_Child/func_808DFC3C.s")
+    if ((arg1 != 0) && (arg1 != 1)) {
+        arg1 = 0;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Horse_Link_Child/func_808DFDC8.s")
+    if (arg1 != this->unk_148) {
+        this->unk_148 = arg1;
+        Animation_Change(&this->skin.skelAnime, D_808DFEC0[this->unk_148], func_808DE728(this), 0.0f,
+                         Animation_GetLastFrame(D_808DFEC0[this->unk_148]), ANIMMODE_ONCE, -5.0f);
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Horse_Link_Child/EnHorseLinkChild_Draw.s")
+void func_808DEB14(EnHorseLinkChild* this, PlayState* play) {
+    f32 sp44 = Actor_XZDistanceBetweenActors(&this->actor, &GET_PLAYER(play)->actor);
+    s32 phi_v0;
+
+    if (SkelAnime_Update(&this->skin.skelAnime)) {
+        if ((sp44 < 1000.0f) && (sp44 > 70.0f)) {
+            func_808DECA0(this);
+            return;
+        }
+
+        if (this->unk_148 == 1) {
+            phi_v0 = 0;
+        } else {
+            phi_v0 = 1;
+        }
+
+        if (phi_v0 != this->unk_148) {
+            this->unk_148 = phi_v0;
+            Animation_Change(&this->skin.skelAnime, D_808DFEC0[this->unk_148], func_808DE728(this), 0.0f,
+                             Animation_GetLastFrame(D_808DFEC0[this->unk_148]), ANIMMODE_ONCE, -5.0f);
+        } else {
+            Animation_Change(&this->skin.skelAnime, D_808DFEC0[this->unk_148], func_808DE728(this), 0.0f,
+                             Animation_GetLastFrame(D_808DFEC0[this->unk_148]), ANIMMODE_ONCE, 0.0f);
+        }
+    }
+}
+
+void func_808DECA0(EnHorseLinkChild* this) {
+    this->unk_144 = 1;
+    this->unk_148 = 0;
+    this->actor.speedXZ = 0.0f;
+    Animation_Change(&this->skin.skelAnime, D_808DFEC0[this->unk_148], func_808DE728(this), 0.0f,
+                     Animation_GetLastFrame(D_808DFEC0[this->unk_148]), ANIMMODE_ONCE, -5.0f);
+}
+
+void func_808DED40(EnHorseLinkChild* this, PlayState* play) {
+    f32 temp_fv0;
+    s16 temp_a0;
+    s32 phi_v0;
+
+    if ((this->unk_148 == 4) || (this->unk_148 == 3) || (this->unk_148 == 2)) {
+        temp_a0 = Actor_YawBetweenActors(&this->actor, &GET_PLAYER(play)->actor) - this->actor.world.rot.y;
+        if (temp_a0 > 0x12C) {
+            this->actor.world.rot.y += 0x12C;
+        } else if (temp_a0 < -0x12C) {
+            this->actor.world.rot.y -= 0x12C;
+        } else {
+            this->actor.world.rot.y += temp_a0;
+        }
+        this->actor.shape.rot.y = this->actor.world.rot.y;
+    }
+
+    if (SkelAnime_Update(&this->skin.skelAnime)) {
+        temp_fv0 = Actor_XZDistanceBetweenActors(&this->actor, &GET_PLAYER(play)->actor);
+        if (temp_fv0 > 1000.0f) {
+            func_808DEA54(this, 0);
+            return;
+        }
+
+        if ((temp_fv0 < 1000.0f) && (temp_fv0 >= 300.0f)) {
+            phi_v0 = 4;
+            this->actor.speedXZ = 6.0f;
+        } else if ((temp_fv0 < 300.0f) && (temp_fv0 >= 150.0f)) {
+            phi_v0 = 3;
+            this->actor.speedXZ = 4.0f;
+        } else if ((temp_fv0 < 150.0f) && (temp_fv0 >= 70.0f)) {
+            phi_v0 = 2;
+            this->unk_1E8 = 0;
+            this->actor.speedXZ = 2.0f;
+        } else {
+            func_808DEA54(this, 1);
+            return;
+        }
+
+        if (phi_v0 != this->unk_148) {
+            this->unk_148 = phi_v0;
+            Animation_Change(&this->skin.skelAnime, D_808DFEC0[this->unk_148], func_808DE728(this), 0.0f,
+                             Animation_GetLastFrame(D_808DFEC0[this->unk_148]), ANIMMODE_ONCE, -5.0f);
+        } else {
+            Animation_Change(&this->skin.skelAnime, D_808DFEC0[this->unk_148], func_808DE728(this), 0.0f,
+                             Animation_GetLastFrame(D_808DFEC0[this->unk_148]), ANIMMODE_ONCE, 0.0f);
+        }
+    }
+}
+
+void func_808DEFE8(EnHorseLinkChild* this) {
+    this->unk_144 = 3;
+    this->unk_148 = 0;
+    this->actor.speedXZ = 0.0f;
+    Animation_Change(&this->skin.skelAnime, D_808DFEC0[this->unk_148], func_808DE728(this), 0.0f,
+                     Animation_GetLastFrame(D_808DFEC0[this->unk_148]), ANIMMODE_ONCE, -5.0f);
+}
+
+void func_808DF088(EnHorseLinkChild* this, PlayState* play) {
+    if ((this->unk_148 == 4) || (this->unk_148 == 3) || (this->unk_148 == 2)) {
+        Player* player = GET_PLAYER(play);
+        s16 sp32;
+        s32 phi_v0;
+        s32 pad;
+
+        if (Math3D_Distance(&player->actor.world.pos, &this->actor.home.pos) < 250.0f) {
+            sp32 = player->actor.shape.rot.y;
+            if (Actor_YawBetweenActors(&this->actor, &player->actor) > 0) {
+                phi_v0 = 1;
+            } else {
+                phi_v0 = -1;
+            }
+            sp32 += (phi_v0 << 0xE);
+        } else {
+            sp32 = Math_Vec3f_Yaw(&this->actor.world.pos, &this->actor.home.pos) - this->actor.world.rot.y;
+        }
+
+        if (sp32 > 0x12C) {
+            this->actor.world.rot.y += 0x12C;
+        } else if (sp32 < -0x12C) {
+            this->actor.world.rot.y += -0x12C;
+        } else {
+            this->actor.world.rot.y += sp32;
+        }
+
+        this->actor.shape.rot.y = this->actor.world.rot.y;
+    }
+}
+
+void func_808DF194(EnHorseLinkChild* this, PlayState* play) {
+    Player* player;
+    f32 sp50;
+    s32 sp4C;
+    s32 sp48;
+
+    func_808DF088(this, play);
+
+    player = GET_PLAYER(play);
+    sp50 = Actor_XZDistanceBetweenActors(&this->actor, &player->actor);
+    sp48 = this->unk_148;
+    sp4C = SkelAnime_Update(&this->skin.skelAnime);
+
+    if ((sp4C != 0) || (this->unk_148 == 1) || (this->unk_148 == 0)) {
+        if ((gSaveContext.save.weekEventReg[1] & 0x20)) {
+            f32 sp44 = Math3D_Distance(&this->actor.world.pos, &this->actor.home.pos);
+            s32 pad;
+
+            if (Math3D_Distance(&player->actor.world.pos, &this->actor.home.pos) > 250.0f) {
+                if (sp44 >= 300.0f) {
+                    sp48 = 4;
+                    this->actor.speedXZ = 6.0f;
+                } else if ((sp44 < 300.0f) && (sp44 >= 150.0f)) {
+                    sp48 = 3;
+                    this->actor.speedXZ = 4.0f;
+                } else if ((sp44 < 150.0f) && (sp44 >= 70.0f)) {
+                    sp48 = 2;
+                    this->unk_1E8 = 0;
+                    this->actor.speedXZ = 2.0f;
+                } else {
+                    this->actor.speedXZ = 0.0f;
+                    if (this->unk_148 == 0) {
+                        sp48 = (sp4C == 1) ? 1 : 0;
+                    } else {
+                        sp48 = (sp4C == 1) ? 0 : 1;
+                    }
+                }
+            } else if (sp50 < 200.0f) {
+                sp48 = 4;
+                this->actor.speedXZ = 6.0f;
+            } else if (sp50 < 300.0f) {
+                sp48 = 3;
+                this->actor.speedXZ = 4.0f;
+            } else if (sp50 < 400.0f) {
+                sp48 = 2;
+                this->unk_1E8 = 0;
+                this->actor.speedXZ = 2.0f;
+            } else {
+                this->actor.speedXZ = 0.0f;
+                if (this->unk_148 == 0) {
+                    sp48 = (sp4C == 1) ? 1 : 0;
+                } else {
+                    sp48 = (sp4C == 1) ? 0 : 1;
+                }
+            }
+        } else {
+            this->actor.speedXZ = 0.0f;
+            if (this->unk_148 == 0) {
+                sp48 = (sp4C == 1) ? 1 : 0;
+            } else {
+                sp48 = (sp4C == 1) ? 0 : 1;
+            }
+        }
+    }
+
+    if ((sp48 != this->unk_148) || (sp4C == 1)) {
+        this->unk_148 = sp48;
+        Animation_Change(&this->skin.skelAnime, D_808DFEC0[this->unk_148], func_808DE728(this), 0.0f,
+                         Animation_GetLastFrame(D_808DFEC0[this->unk_148]), ANIMMODE_ONCE, -5.0f);
+    } else {
+        Animation_Change(&this->skin.skelAnime, D_808DFEC0[this->unk_148], func_808DE728(this),
+                         this->skin.skelAnime.curFrame, Animation_GetLastFrame(D_808DFEC0[this->unk_148]),
+                         ANIMMODE_ONCE, 0.0f);
+    }
+}
+
+void func_808DF560(EnHorseLinkChild* this) {
+    this->unk_144 = 5;
+
+    if (Rand_ZeroOne() > 0.5f) {
+        this->unk_148 = 0;
+    } else {
+        this->unk_148 = 1;
+    }
+
+    D_801BDAA4 = 0;
+    Animation_Change(&this->skin.skelAnime, D_808DFEC0[this->unk_148], func_808DE728(this), 0.0f,
+                     Animation_GetLastFrame(D_808DFEC0[this->unk_148]), ANIMMODE_ONCE, 0.0f);
+}
+
+void func_808DF620(EnHorseLinkChild* this, PlayState* play) {
+    s16 sp36;
+
+    if (D_801BDAA4 != 0) {
+        D_801BDAA4 = 0;
+        Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_EV_KID_HORSE_NEIGH);
+        func_808DF788(this);
+        return;
+    }
+
+    this->actor.speedXZ = 0.0f;
+    sp36 = Actor_YawBetweenActors(&this->actor, &GET_PLAYER(play)->actor) - this->actor.world.rot.y;
+
+    if ((Math_CosS(sp36) < 0.7071f) && (this->unk_148 == 2)) {
+        func_800F415C(&this->actor, &GET_PLAYER(play)->actor.world.pos, 0x12C);
+    }
+
+    if (SkelAnime_Update(&this->skin.skelAnime)) {
+        if (Math_CosS(sp36) < 0.0f) {
+            this->unk_148 = 2;
+            Animation_Change(&this->skin.skelAnime, D_808DFEC0[this->unk_148], D_808DFF18[this->unk_148], 0.0f,
+                             Animation_GetLastFrame(D_808DFEC8[0]), ANIMMODE_ONCE, -5.0f);
+        } else {
+            func_808DF560(this);
+        }
+    }
+}
+
+void func_808DF788(EnHorseLinkChild* this) {
+    this->unk_1DC = 0;
+    this->unk_144 = 4;
+    this->unk_148 = 2;
+    this->unk_1E0 = 0;
+    this->actor.speedXZ = 2.0f;
+    Animation_Change(&this->skin.skelAnime, D_808DFEC0[this->unk_148], func_808DE728(this), 0.0f,
+                     Animation_GetLastFrame(D_808DFEC0[this->unk_148]), ANIMMODE_ONCE, -5.0f);
+}
+
+void func_808DF838(EnHorseLinkChild* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
+    f32 phi_fv0;
+    s32 phi_v0;
+
+    this->unk_1DC++;
+    if (this->unk_1DC > 300) {
+        this->unk_1E0 = 1;
+    }
+
+    if ((this->unk_148 == 4) || (this->unk_148 == 3) || (this->unk_148 == 2)) {
+        if (this->unk_1E0 == 0) {
+            func_800F415C(&this->actor, &player->actor.world.pos, 0x12C);
+        } else {
+            func_800F415C(&this->actor, &this->actor.home.pos, 0x12C);
+        }
+    }
+
+    if (SkelAnime_Update(&this->skin.skelAnime)) {
+        if (this->unk_1E0 == 0) {
+            phi_fv0 = Actor_XZDistanceBetweenActors(&this->actor, &GET_PLAYER(play)->actor);
+        } else {
+            phi_fv0 = Math3D_Distance(&this->actor.world.pos, &this->actor.home.pos);
+        }
+
+        if (this->unk_1E0 == 0) {
+            if (phi_fv0 >= 300.0f) {
+                phi_v0 = 4;
+                this->actor.speedXZ = 6.0f;
+            } else if (phi_fv0 >= 150.0f) {
+                phi_v0 = 3;
+                this->actor.speedXZ = 4.0f;
+            } else {
+                phi_v0 = 2;
+                this->unk_1E8 = 0;
+                this->actor.speedXZ = 2.0f;
+            }
+        } else if (phi_fv0 >= 300.0f) {
+            phi_v0 = 4;
+            this->actor.speedXZ = 6.0f;
+        } else if (phi_fv0 >= 150.0f) {
+            phi_v0 = 3;
+            this->actor.speedXZ = 4.0f;
+        } else if (phi_fv0 >= 70.0f) {
+            phi_v0 = 2;
+            this->unk_1E8 = 0;
+            this->actor.speedXZ = 2.0f;
+        } else {
+            func_808DF560(this);
+            return;
+        }
+
+        if (phi_v0 != this->unk_148) {
+            this->unk_148 = phi_v0;
+            Animation_Change(&this->skin.skelAnime, D_808DFEC0[this->unk_148], func_808DE728(this), 0.0f,
+                             Animation_GetLastFrame(D_808DFEC0[this->unk_148]), ANIMMODE_ONCE, -5.0f);
+        } else {
+            Animation_Change(&this->skin.skelAnime, D_808DFEC0[this->unk_148], func_808DE728(this), 0.0f,
+                             Animation_GetLastFrame(D_808DFEC0[this->unk_148]), ANIMMODE_ONCE, 0.0f);
+        }
+    }
+}
+
+void EnHorseLinkChild_Update(Actor* thisx, PlayState* play) {
+    s32 pad;
+    EnHorseLinkChild* this = THIS;
+
+    D_808DFF30[this->unk_144](this, play);
+    Actor_MoveWithGravity(&this->actor);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 55.0f, 100.0f, 0x1D);
+
+    this->actor.focus.pos = this->actor.world.pos;
+    this->actor.focus.pos.y += 70.0f;
+
+    if ((Rand_ZeroOne() < 0.025f) && (this->unk_1E4 == 0)) {
+        this->unk_1E4++;
+    } else if (this->unk_1E4 > 0) {
+        this->unk_1E4++;
+        if (this->unk_1E4 >= 4) {
+            this->unk_1E4 = 0;
+        }
+    }
+
+    Collider_UpdateCylinder(&this->actor, &this->colldierCylinder);
+    CollisionCheck_SetOC(play, &play->colChkCtx, &this->colldierCylinder.base);
+
+    func_808DE660(this);
+}
+
+void EnHorseLinkChild_PostSkinDraw(Actor* thisx, PlayState* play, Skin* skin) {
+    Vec3f sp4C;
+    Vec3f sp40;
+    EnHorseLinkChild* this = THIS;
+    s32 i;
+
+    for (i = 0; i < this->colliderJntSph.count; i++) {
+        sp4C.x = this->colliderJntSph.elements[i].dim.modelSphere.center.x;
+        sp4C.y = this->colliderJntSph.elements[i].dim.modelSphere.center.y;
+        sp4C.z = this->colliderJntSph.elements[i].dim.modelSphere.center.z;
+
+        Skin_GetLimbPos(skin, this->colliderJntSph.elements[i].dim.limb, &sp4C, &sp40);
+
+        this->colliderJntSph.elements[i].dim.worldSphere.center.x = sp40.x;
+        this->colliderJntSph.elements[i].dim.worldSphere.center.y = sp40.y;
+        this->colliderJntSph.elements[i].dim.worldSphere.center.z = sp40.z;
+        this->colliderJntSph.elements[i].dim.worldSphere.radius =
+            this->colliderJntSph.elements[i].dim.modelSphere.radius * this->colliderJntSph.elements[i].dim.scale;
+    }
+
+    CollisionCheck_SetOC(play, &play->colChkCtx, &this->colliderJntSph.base);
+}
+
+s32 EnHorseLinkChild_OverrideSkinDraw(Actor* thisx, PlayState* play, s32 limbIndex, Skin* skin) {
+    EnHorseLinkChild* this = THIS;
+
+    OPEN_DISPS(play->state.gfxCtx);
+
+    if (limbIndex == OBJECT_HORSE_LINK_CHILD_LIMB_0D) {
+        u8 index = D_808DFF54[this->unk_1E4];
+
+        gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_808DFF48[index]));
+    }
+
+    CLOSE_DISPS(play->state.gfxCtx);
+
+    return true;
+}
+
+void EnHorseLinkChild_Draw(Actor* thisx, PlayState* play) {
+    EnHorseLinkChild* this = THIS;
+
+    func_8012C28C(play->state.gfxCtx);
+    func_80138258(&this->actor, play, &this->skin, EnHorseLinkChild_PostSkinDraw, EnHorseLinkChild_OverrideSkinDraw,
+                  true);
+}

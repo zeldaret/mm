@@ -1,20 +1,30 @@
-#include "z_obj_aqua.h"
+/*
+ * File: z_obj_aqua.c
+ * Overlay: ovl_Obj_Aqua
+ * Description: Water poured out of a bottle
+ */
 
-#define FLAGS 0x00000010
+#include "z_obj_aqua.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
+
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((ObjAqua*)thisx)
 
-void ObjAqua_Init(Actor* thisx, GlobalContext* globalCtx);
-void ObjAqua_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void ObjAqua_Update(Actor* thisx, GlobalContext* globalCtx);
-void ObjAqua_Draw(Actor* thisx, GlobalContext* globalCtx);
+void ObjAqua_Init(Actor* thisx, PlayState* play);
+void ObjAqua_Destroy(Actor* thisx, PlayState* play);
+void ObjAqua_Update(Actor* thisx, PlayState* play);
+void ObjAqua_Draw(Actor* thisx, PlayState* play);
 
-void func_80ACBC8C(ObjAqua* this, GlobalContext* globalCtx);
-void func_80ACBD48(ObjAqua* this, GlobalContext* globalCtx);
-void func_80ACBDFC(ObjAqua* this, GlobalContext* globalCtx);
+void func_80ACBC70(ObjAqua* this);
+void func_80ACBDCC(ObjAqua* this);
+void func_80ACBC8C(ObjAqua* this, PlayState* play);
+void func_80ACBD48(ObjAqua* this, PlayState* play);
+void func_80ACBDFC(ObjAqua* this, PlayState* play);
 
-#if 0
-const ActorInit Obj_Aqua_InitVars = {
+void func_80ACBD34(ObjAqua* this);
+
+ActorInit Obj_Aqua_InitVars = {
     ACTOR_OBJ_AQUA,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -26,55 +36,262 @@ const ActorInit Obj_Aqua_InitVars = {
     (ActorFunc)ObjAqua_Draw,
 };
 
-// static ColliderCylinderInit sCylinderInit = {
-static ColliderCylinderInit D_80ACC2C0 = {
-    { COLTYPE_NONE, AT_ON | AT_TYPE_OTHER, AC_NONE, OC1_NONE, OC2_NONE, COLSHAPE_CYLINDER, },
-    { ELEMTYPE_UNK0, { 0xF7CFFFFF, 0x00, 0x00 }, { 0x00000000, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NONE, BUMP_NONE, OCELEM_NONE, },
+static ColliderCylinderInit sCylinderInit = {
+    {
+        COLTYPE_NONE,
+        AT_ON | AT_TYPE_OTHER,
+        AC_NONE,
+        OC1_NONE,
+        OC2_NONE,
+        COLSHAPE_CYLINDER,
+    },
+    {
+        ELEMTYPE_UNK0,
+        { 0xF7CFFFFF, 0x00, 0x00 },
+        { 0x00000000, 0x00, 0x00 },
+        TOUCH_ON | TOUCH_SFX_NONE,
+        BUMP_NONE,
+        OCELEM_NONE,
+    },
     { 6, 10, 0, { 0, 0, 0 } },
 };
 
-// static InitChainEntry sInitChain[] = {
-static InitChainEntry D_80ACC2EC[] = {
-    ICHAIN_VEC3S(shape.rot, 0, ICHAIN_CONTINUE),
-    ICHAIN_VEC3S(world.rot, 0, ICHAIN_CONTINUE),
-    ICHAIN_F32_DIV1000(gravity, -900, ICHAIN_CONTINUE),
-    ICHAIN_F32_DIV1000(minVelocityY, -4000, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneScale, 300, ICHAIN_CONTINUE),
+static InitChainEntry sInitChain[] = {
+    ICHAIN_VEC3S(shape.rot, 0, ICHAIN_CONTINUE),          ICHAIN_VEC3S(world.rot, 0, ICHAIN_CONTINUE),
+    ICHAIN_F32_DIV1000(gravity, -900, ICHAIN_CONTINUE),   ICHAIN_F32_DIV1000(terminalVelocity, -4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE), ICHAIN_F32(uncullZoneScale, 300, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneDownward, 300, ICHAIN_STOP),
 };
 
-#endif
+Vec3f D_80ACC308 = { 1.0f / 1000.0f, 7.0f / 10000.0f, 1.0f / 1000.0f };
+Vec3f D_80ACC314 = { 8.6f / 1000.0f, 8.0f / 10000.0f, 8.6f / 1000.0f };
+Vec3f D_80ACC320 = { 1.0f / 100.0f, 2.6f / 1000.0f, 1.0f / 100.0f };
 
-extern ColliderCylinderInit D_80ACC2C0;
-extern InitChainEntry D_80ACC2EC[];
+void func_80ACB6A0(ObjAqua* this, PlayState* play) {
+    s32 pad;
+    Vec3f sp58;
+    s32 angleOffset = 0;
+    s32 i;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Aqua/func_80ACB6A0.s")
+    sp58.y = this->actor.world.pos.y + this->actor.depthInWater;
+    for (i = 0; i < 4; i++) {
+        sp58.x = this->actor.world.pos.x + Math_SinS((s32)(Rand_ZeroOne() * 7200.0f) + angleOffset) * 8.0f;
+        sp58.z = this->actor.world.pos.z + Math_CosS((s32)(Rand_ZeroOne() * 7200.0f) + angleOffset) * 8.0f;
+        EffectSsGSplash_Spawn(play, &sp58, NULL, NULL, 0, 120);
+        angleOffset += 0x4000;
+    }
+    sp58.x = this->actor.world.pos.x;
+    sp58.z = this->actor.world.pos.z;
+    EffectSsGSplash_Spawn(play, &sp58, NULL, NULL, 0, 300);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Aqua/func_80ACB7F4.s")
+void func_80ACB7F4(ObjAqua* this, PlayState* play) {
+    s32 pad;
+    Vec3f effectPos;
+    s32 angleOffset = 0;
+    s32 i;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Aqua/func_80ACB940.s")
+    effectPos.y = this->actor.floorHeight;
+    for (i = 0; i < 4; i++) {
+        effectPos.x = (this->actor.world.pos.x + Math_SinS((s32)(Rand_ZeroOne() * 7200.0f) + angleOffset) * 8.0f);
+        effectPos.z = (this->actor.world.pos.z + Math_CosS((s32)(Rand_ZeroOne() * 7200.0f) + angleOffset) * 8.0f);
+        EffectSsGSplash_Spawn(play, &effectPos, NULL, NULL, 0, 120);
+        angleOffset += 0x4000;
+    }
+    effectPos.x = this->actor.world.pos.x;
+    effectPos.z = this->actor.world.pos.z;
+    EffectSsGSplash_Spawn(play, &effectPos, NULL, NULL, 0, 300);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Aqua/func_80ACBA10.s")
+void func_80ACB940(ObjAqua* this, PlayState* play) {
+    s32 pad;
+    Vec3f effectPos;
+    Vec3f effectVel;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Aqua/func_80ACBA60.s")
+    effectVel.x = Rand_ZeroOne() - 0.5f;
+    effectVel.y = 2.0f;
+    effectVel.z = Rand_ZeroOne() - 0.5f;
+    effectPos.x = this->actor.world.pos.x + (effectVel.x * 40.0f);
+    effectPos.y = this->actor.world.pos.y;
+    effectPos.z = this->actor.world.pos.z + (effectVel.z * 40.0f);
+    EffectSsIceSmoke_Spawn(play, &effectPos, &effectVel, &gZeroVec3f, (s32)(Rand_ZeroOne() * 24.0f) + 70);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Aqua/ObjAqua_Init.s")
+void func_80ACBA10(ObjAqua* this) {
+    s32 pad;
+    MtxF sp2C;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Aqua/ObjAqua_Destroy.s")
+    func_800C0094(this->actor.floorPoly, this->actor.world.pos.x, this->actor.floorHeight, this->actor.world.pos.z,
+                  &sp2C);
+    Matrix_MtxFToYXZRot(&sp2C, &this->actor.shape.rot, false);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Aqua/func_80ACBC70.s")
+s32 func_80ACBA60(ObjAqua* this, PlayState* play) {
+    s32 pad;
+    WaterBox* waterBox;
+    f32 ySurface;
+    s32 bgId;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Aqua/func_80ACBC8C.s")
+    if (WaterBox_GetSurfaceImpl(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &ySurface,
+                                &waterBox, &bgId) &&
+        (this->actor.world.pos.y < ySurface)) {
+        return true;
+    }
+    return false;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Aqua/func_80ACBD34.s")
+void ObjAqua_Init(Actor* thisx, PlayState* play) {
+    ObjAqua* this = THIS;
+    s32 i;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Aqua/func_80ACBD48.s")
+    Actor_ProcessInitChain(&this->actor, sInitChain);
+    this->actor.scale.x = 0.0009f;
+    this->actor.scale.y = 0.0005f;
+    this->actor.scale.z = 0.0009f;
+    Collider_InitCylinder(play, &this->collider);
+    Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 60.0f);
+    if (1) {};
+    this->actor.shape.shadowAlpha = 140;
+    this->alpha = 255;
+    if (func_80ACBA60(this, play)) {
+        for (i = 0; i < 8; i++) {
+            EffectSsBubble_Spawn(play, &this->actor.world.pos, -4.0f, 4.0f, 4.0f, (Rand_ZeroOne() * 0.09f) + 0.03f);
+        }
+        func_80ACBDCC(this);
+    } else {
+        func_80ACBC70(this);
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Aqua/func_80ACBDCC.s")
+void ObjAqua_Destroy(Actor* thisx, PlayState* play) {
+    ObjAqua* this = THIS;
+    Collider_DestroyCylinder(play, &this->collider);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Aqua/func_80ACBDFC.s")
+void func_80ACBC70(ObjAqua* this) {
+    this->counter = 200;
+    this->actionFunc = func_80ACBC8C;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Aqua/ObjAqua_Update.s")
+void func_80ACBC8C(ObjAqua* this, PlayState* play) {
+    if (this->actor.bgCheckFlags & 0x21) {
+        if (this->actor.bgCheckFlags & 1) {
+            func_80ACB7F4(this, play);
+            func_80ACBA10(this);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BOTTLE_WATERING);
+            func_80ACBD34(this);
+        } else {
+            func_80ACB6A0(this, play);
+            SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 0x28, NA_SE_EV_BOMB_DROP_WATER);
+            Actor_Kill(&this->actor);
+        }
+    } else if (this->counter <= 0) {
+        Actor_Kill(&this->actor);
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Aqua/ObjAqua_Draw.s")
+void func_80ACBD34(ObjAqua* this) {
+    this->actionFunc = func_80ACBD48;
+}
+
+void func_80ACBD48(ObjAqua* this, PlayState* play) {
+    if ((AQUA_HOT(&this->actor) == 1) && (this->alpha > 90)) {
+        func_80ACB940(this, play);
+    }
+    if (this->alpha > 5) {
+        this->alpha -= 5;
+    } else {
+        this->alpha = 0;
+    }
+    if (this->actor.shape.shadowAlpha > 2) {
+        this->actor.shape.shadowAlpha -= 2;
+    } else {
+        Actor_Kill(&this->actor);
+    }
+}
+
+void func_80ACBDCC(ObjAqua* this) {
+    this->actor.gravity = -0.1f;
+    this->counter = 40;
+    this->alpha = 140;
+    this->actionFunc = func_80ACBDFC;
+}
+
+void func_80ACBDFC(ObjAqua* this, PlayState* play) {
+    s32 pad;
+    f32 temp = this->counter;
+
+    this->alpha = (s32)(temp * 3.25f) + 10;
+    this->actor.shape.shadowAlpha = this->alpha;
+    this->unk_198 += 1000;
+    if (AQUA_HOT(&this->actor) == 1) {
+        f32 temp_f2 = this->actor.scale.x * 10000.0f;
+
+        EffectSsBubble_Spawn(play, &this->actor.world.pos, temp_f2 * -0.5f, temp_f2, temp_f2,
+                             (Rand_ZeroOne() * 0.1f) + 0.03f);
+    }
+    if (this->counter <= 0) {
+        Actor_Kill(&this->actor);
+    }
+}
+
+void ObjAqua_Update(Actor* thisx, PlayState* play) {
+    ObjAqua* this = THIS;
+    s32 pad;
+
+    if (this->counter > 0) {
+        this->counter--;
+    }
+    this->actionFunc(this, play);
+    if (this->actor.update) {
+        if (this->actionFunc == func_80ACBC8C) {
+            Math_Vec3f_StepTo(&this->actor.scale, &D_80ACC308, 0.00006f);
+        } else if (this->actionFunc == func_80ACBD48) {
+            Math_Vec3f_StepTo(&this->actor.scale, &D_80ACC314, 0.00095f);
+        } else {
+            Math_Vec3f_StepTo(&this->actor.scale, &D_80ACC320, 0.0004f);
+        }
+        this->actor.velocity.y *= 0.9f;
+        Actor_MoveWithGravity(&this->actor);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 12.0f, 4.0f, 0.0f, 5);
+        if (this->actionFunc != func_80ACBDFC) {
+            Collider_UpdateCylinder(&this->actor, &this->collider);
+            this->collider.dim.radius = this->actor.scale.x * 3000.0f;
+            CollisionCheck_SetAT(play, &play->colChkCtx, &this->collider.base);
+        }
+    }
+}
+
+void ObjAqua_Draw(Actor* thisx, PlayState* play) {
+    ObjAqua* this = THIS;
+    s32 framesTemp;
+    s32 pad;
+    s16 yaw = Camera_GetCamDirYaw(GET_ACTIVE_CAM(play)) + 0x8000;
+    s32 actionFuncTemp = this->actionFunc == func_80ACBDFC;
+
+    OPEN_DISPS(play->state.gfxCtx);
+    func_8012C2DC(play->state.gfxCtx);
+    framesTemp = ((play->gameplayFrames & 0x7FFFFFFF) * -0xA) & 0x1FF;
+    if (actionFuncTemp) {
+        framesTemp >>= 1;
+    }
+    gSPSegment(POLY_XLU_DISP++, 0x08,
+               Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, 0, 0x20, 0x40, 1, 0, framesTemp, 0x20, 0x80));
+    gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 170, 255, 255, this->alpha);
+    gDPSetEnvColor(POLY_XLU_DISP++, 0, 150, 255, 0);
+    if (actionFuncTemp) {
+        s16 rotation = Math_SinS(this->unk_198) * 8000.0f;
+
+        Matrix_RotateZS(rotation, MTXMODE_APPLY);
+        Matrix_Scale(1.3f, 1.0f, 1.0f, MTXMODE_APPLY);
+        Matrix_RotateZS(rotation * -1, MTXMODE_APPLY);
+        Matrix_Scale(10.0f / 13.0f, 1.0f, 1.0f, MTXMODE_APPLY);
+    }
+
+    Matrix_RotateYS(yaw, MTXMODE_APPLY);
+    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(POLY_XLU_DISP++, gEffFire1DL);
+
+    CLOSE_DISPS(play->state.gfxCtx);
+}

@@ -2,7 +2,7 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/Math3D_Normalize.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/func_80179678.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/Math3D_PlaneVsLineSegClosestPoint.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/func_80179798.s")
 
@@ -46,7 +46,7 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/Math3D_Vec3fMagnitude.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/Math3D_DistanceSquared.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/Math3D_Vec3fDistSq.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/Math3D_Distance.s")
 
@@ -60,15 +60,15 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/Math3D_CrossProduct.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/Math3D_NormalVector.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/Math3D_SurfaceNorm.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/func_8017A954.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/Math3D_PointRelativeToCubeFaces.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/func_8017AA0C.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/Math3D_PointRelativeToCubeEdges.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/func_8017ABBC.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/Math3D_PointRelativeToCubeVertices.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/func_8017AD38.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/Math3D_LineVsCube.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/func_8017B68C.s")
 
@@ -80,57 +80,57 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/func_8017B9D8.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/Math3D_NormalizedDistanceFromPlane.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/Math3D_UDistPlaneToPos.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/Math3D_NormalizedSignedDistanceFromPlane.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/Math3D_DistPlaneToPos.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/func_8017BAD0.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/Math3D_TriChkPointParaYDist.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/func_8017BD98.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/func_8017BDE0.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/func_8017BE30.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/Math3D_TriChkPointParaYIntersectDist.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/func_8017BEE0.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/Math3D_TriChkPointParaYIntersectInsideTri.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/func_8017BF8C.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/func_8017C008.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/Math3D_TriChkLineSegParaYIntersect.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/func_8017C17C.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/func_8017C1F0.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/func_8017C494.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/Math3D_TriChkPointParaYIntersectInsideTri2.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/func_8017C540.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/Math3D_TriChkPointParaXDist.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/func_8017C808.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/func_8017C850.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/Math3D_TriChkPointParaXIntersect.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/func_8017C904.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/func_8017C980.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/Math3D_TriChkLineSegParaXIntersect.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/func_8017CB08.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/func_8017CB7C.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/Math3D_TriChkLineSegParaZDist.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/func_8017CEA8.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/func_8017CEF0.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/Math3D_TriChkPointParaZIntersect.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/func_8017CFA4.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/func_8017D020.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/Math3D_TriChkLineSegParaZIntersect.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/func_8017D1AC.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/func_8017D220.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/func_8017D2FC.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/Math3D_LineSegVsPlane.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/func_8017D404.s")
 
@@ -138,7 +138,7 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/Math3D_IsPointInSphere.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/func_8017D668.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/Math3D_PointDistToLine2D.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/func_8017D7C0.s")
 
@@ -148,7 +148,7 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/func_8017DA24.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/Math3D_ColSphereLineSeg.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/Math3D_LineVsSph.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/func_8017DD34.s")
 
@@ -162,7 +162,7 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/func_8017F1A0.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/Math3D_ColSphereSphere.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/Math3D_SphVsSph.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/Math3D_ColSphereSphereIntersect.s")
 
@@ -178,11 +178,11 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/Math3d_ColTriTri.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/func_8017F9C0.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/Math3D_XZInSphere.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/func_8017FA34.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/Math3D_XYInSphere.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/func_8017FAA8.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/Math3D_YZInSphere.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/func_8017FB1C.s")
 

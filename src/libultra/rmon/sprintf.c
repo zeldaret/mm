@@ -14,12 +14,15 @@ int vsprintf(char* dst, char* fmt, va_list args) {
 
 int sprintf(char* dst, char* fmt, ...) {
     int ans;
-    va_list ap;
-    va_start(ap, fmt);
+    va_list args;
+    va_start(args, fmt);
 
-    ans = _Printf(&proutSprintf, dst, fmt, ap);
+    ans = _Printf(&proutSprintf, dst, fmt, args);
     if (ans > -1) {
         dst[ans] = 0;
     }
+
+    va_end(args);
+
     return ans;
 }

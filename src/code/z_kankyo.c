@@ -8,7 +8,7 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800F5954.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800F5A8C.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Environment_LerpWeight.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800F5B10.s")
 
@@ -64,7 +64,7 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800FB010.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800FB320.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Environment_AddLightningBolts.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800FB388.s")
 
@@ -74,11 +74,11 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800FBCBC.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800FBDEC.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Kankyo_InitGameOverLights.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800FBF3C.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Kankyo_FadeInGameOverLights.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800FC158.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Kankyo_FadeOutGameOverLights.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800FC3DC.s")
 

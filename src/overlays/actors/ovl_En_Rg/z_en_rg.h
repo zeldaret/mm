@@ -5,15 +5,51 @@
 
 struct EnRg;
 
-typedef void (*EnRgActionFunc)(struct EnRg*, GlobalContext*);
+typedef void (*EnRgActionFunc)(struct EnRg*, PlayState*);
+
+#define ENRG_GET_7F80(thisx) ((((thisx)->params & 0x7F80) >> 7) & 0xFF)
+
+typedef struct {
+    /* 0x00 */ u8 unk_00;
+    /* 0x01 */ u8 unk_01;
+    /* 0x02 */ u8 unk_02;
+    /* 0x03 */ UNK_TYPE1 unk_03[0xD];
+    /* 0x10 */ Vec3f unk_10;
+    /* 0x1C */ Vec3f unk_1C;
+    /* 0x28 */ Vec3f unk_28;
+    /* 0x34 */ f32 unk_34;
+    /* 0x38 */ f32 unk_38;
+} EnRgStruct; // size = 0x3C
 
 typedef struct EnRg {
-    /* 0x0000 */ Actor actor;
-    /* 0x0144 */ char unk_144[0x44];
-    /* 0x0188 */ EnRgActionFunc actionFunc;
-    /* 0x018C */ char unk_18C[0x940];
+    /* 0x000 */ Actor actor;
+    /* 0x144 */ SkelAnime skelAnime;
+    /* 0x188 */ EnRgActionFunc actionFunc;
+    /* 0x18C */ Actor* unk_18C;
+    /* 0x190 */ ColliderCylinder collider1;
+    /* 0x1DC */ ColliderSphere collider2;
+    /* 0x234 */ Path* path;
+    /* 0x238 */ Vec3s jointTable[18];
+    /* 0x2A4 */ Vec3s morphTable[18];
+    /* 0x310 */ u16 unk_310;
+    /* 0x314 */ f32 unk_314;
+    /* 0x318 */ s16 unk_318;
+    /* 0x31A */ UNK_TYPE1 unk31A[2];
+    /* 0x31C */ s16 unk_31C;
+    /* 0x31E */ s16 unk_31E;
+    /* 0x320 */ s16 unk_320;
+    /* 0x322 */ s16 unk_322;
+    /* 0x324 */ s16 unk_324;
+    /* 0x326 */ s16 unk_326;
+    /* 0x328 */ s16 unk_328[3];
+    /* 0x32E */ s16 unk_32E[3];
+    /* 0x334 */ s32 unk_334;
+    /* 0x338 */ UNK_TYPE1 unk338[4];
+    /* 0x33C */ s32 unk_33C;
+    /* 0x340 */ s32 unk_340;
+    /* 0x344 */ s32 unk_344;
+    /* 0x348 */ s32 numCheckpointsAheadOfPlayer;
+    /* 0x34C */ EnRgStruct unk_34C[32];
 } EnRg; // size = 0xACC
-
-extern const ActorInit En_Rg_InitVars;
 
 #endif // Z_EN_RG_H

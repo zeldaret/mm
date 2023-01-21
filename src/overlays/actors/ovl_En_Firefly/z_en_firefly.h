@@ -5,7 +5,7 @@
 
 struct EnFirefly;
 
-typedef void (*EnFireflyActionFunc)(struct EnFirefly*, GlobalContext*);
+typedef void (*EnFireflyActionFunc)(struct EnFirefly*, PlayState*);
 
 typedef enum {
     /* 0 */ KEESE_FIRE_FLY,
@@ -24,20 +24,18 @@ typedef struct EnFirefly {
     /* 0x18C */ u8 auraType;
     /* 0x18D */ u8 currentType;
     /* 0x18E */ u8 isInvisible;
-    /* 0x18F */ u8 unk_18F;
+    /* 0x18F */ u8 drawDmgEffType;
     /* 0x190 */ s16 timer;
-    /* 0x192 */ s16 targetPitch;
+    /* 0x192 */ s16 pitchTarget;
     /* 0x194 */ Vec3s jointTable[28];
     /* 0x23C */ Vec3s morphTable[28];
     /* 0x2E4 */ f32 maxAltitude;
-    /* 0x2E8 */ Vec3f unk_2E8;
-    /* 0x2F4 */ u32 unk_2F4;
-    /* 0x2F8 */ Vec3f unk_2F8;
-    /* 0x304 */ Vec3f unk_304;
-    /* 0x304 */ Vec3f unk_310;
+    /* 0x2E8 */ f32 drawDmgEffAlpha;
+    /* 0x2E8 */ f32 drawDmgEffScale;
+    /* 0x2E8 */ f32 drawDmgEffFrozenSteamScale;
+    /* 0x2F4 */ u32 lastDrawnFrame;
+    /* 0x2F8 */ Vec3f limbPos[3];
     /* 0x31C */ ColliderSphere collider;
 } EnFirefly; // size = 0x374
-
-extern const ActorInit En_Firefly_InitVars;
 
 #endif // Z_EN_FIREFLY_H

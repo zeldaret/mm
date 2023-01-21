@@ -1,15 +1,21 @@
+/*
+ * File: z_bg_danpei_movebg.c
+ * Overlay: ovl_Bg_Danpei_Movebg
+ * Description: Moving platforms beneath Dampe's house
+ */
+
 #include "z_bg_danpei_movebg.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((BgDanpeiMovebg*)thisx)
 
-void BgDanpeiMovebg_Init(Actor* thisx, GlobalContext* globalCtx);
-void BgDanpeiMovebg_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void BgDanpeiMovebg_Update(Actor* thisx, GlobalContext* globalCtx);
+void BgDanpeiMovebg_Init(Actor* thisx, PlayState* play);
+void BgDanpeiMovebg_Destroy(Actor* thisx, PlayState* play);
+void BgDanpeiMovebg_Update(Actor* thisx, PlayState* play);
 
 #if 0
-const ActorInit Bg_Danpei_Movebg_InitVars = {
+ActorInit Bg_Danpei_Movebg_InitVars = {
     ACTOR_BG_DANPEI_MOVEBG,
     ACTORCAT_BG,
     FLAGS,

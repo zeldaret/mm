@@ -1,14 +1,14 @@
-#include "global.h"
+#include "z_title_setup.h"
 #include "overlays/gamestates/ovl_title/z_title.h"
 
-void TitleSetup_GameStateResetContext(void) {
+void Setup_SetRegs(void) {
     XREG(2) = 0;
     XREG(10) = 0x1A;
     XREG(11) = 0x14;
     XREG(12) = 0xE;
     XREG(13) = 0;
     XREG(31) = 0;
-    XREG(41) = 0x50;
+    R_MAGIC_CONSUME_TIMER_GIANTS_MASK = 80;
     XREG(43) = 0xFC54;
 
     XREG(44) = 0xD7;
@@ -23,13 +23,13 @@ void TitleSetup_GameStateResetContext(void) {
     XREG(77) = 0x3C;
     XREG(78) = 0x2F;
     XREG(79) = 0x62;
-    XREG(87) = 0;
+    R_PAUSE_OWLWARP_ALPHA = 0;
     XREG(88) = 0x56;
     XREG(89) = 0x258;
     XREG(90) = 0x1C2;
-    XREG(91) = 0;
-    XREG(94) = 0;
-    XREG(95) = 0;
+    R_STORY_FILL_SCREEN_ALPHA = 0;
+    R_REVERSE_FLOOR_INDEX = 0;
+    R_MINIMAP_DISABLED = false;
 
     YREG(32) = 0x50;
     YREG(33) = 0x3C;
@@ -45,23 +45,21 @@ void TitleSetup_GameStateResetContext(void) {
     YREG(43) = 0xB1;
 }
 
-void TitleSetup_InitImpl(GameState* gameState) {
+void Setup_InitImpl(SetupState* this) {
     func_80185908();
-    func_800E9360();
-    TitleSetup_GameStateResetContext();
+    SaveContext_Init();
+    Setup_SetRegs();
 
-    gameState->running = 0;
-
-setNextGamestate
-    :; // This label is probably a leftover of a debug ifdef, it's essential to not have gameState->running reordered!
-    SET_NEXT_GAMESTATE(gameState, Title_Init, TitleContext);
+    STOP_GAMESTATE(&this->state);
+    SET_NEXT_GAMESTATE(&this->state, ConsoleLogo_Init, sizeof(ConsoleLogoState));
 }
 
-void TitleSetup_Destroy(GameState* gameState) {
-    ;
+void Setup_Destroy(GameState* thisx) {
 }
 
-void TitleSetup_Init(GameState* gameState) {
-    gameState->destroy = &TitleSetup_Destroy;
-    TitleSetup_InitImpl(gameState);
+void Setup_Init(GameState* thisx) {
+    SetupState* this = (SetupState*)thisx;
+
+    this->state.destroy = Setup_Destroy;
+    Setup_InitImpl(this);
 }

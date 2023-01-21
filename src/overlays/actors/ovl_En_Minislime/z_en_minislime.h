@@ -5,7 +5,7 @@
 
 struct EnMinislime;
 
-typedef void (*EnMinislimeActionFunc)(struct EnMinislime*, GlobalContext*);
+typedef void (*EnMinislimeActionFunc)(struct EnMinislime*, PlayState*);
 
 #define MINISLIME_NUM_SPAWN 15
 
@@ -49,7 +49,5 @@ typedef struct EnMinislime {
     /* 0x154 */ Vec3f shakeRefPos;
     /* 0x160 */ ColliderCylinder collider;
 } EnMinislime; // size = 0x1AC
-
-extern const ActorInit En_Minislime_InitVars;
 
 #endif // Z_EN_MINISLIME_H

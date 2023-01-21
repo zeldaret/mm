@@ -1,0 +1,13 @@
+﻿<Root>
+    <File Name="object_hana" Segment="6">
+        <DList Name="object_hana_DL_000000" Offset="0x0" />
+        <DList Name="object_hana_DL_0000A0" Offset="0xA0" />
+        <DList Name="object_hana_DL_000140" Offset="0x140" />
+        <DList Name="object_hana_DL_0001E0" Offset="0x1E0" />
+        <DList Name="object_hana_DL_000280" Offset="0x280" />
+        <DList Name="object_hana_DL_000320" Offset="0x320" />
+        <DList Name="object_hana_DL_0003C0" Offset="0x3C0" />
+        <DList Name="object_hana_DL_000460" Offset="0x460" />
+        <DList Name="object_hana_DL_000500" Offset="0x500" />
+    </File>
+</Root>

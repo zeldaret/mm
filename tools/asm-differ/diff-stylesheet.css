@@ -3,6 +3,9 @@ table.diff {
     font-family: Monospace;
     white-space: pre;
 }
+tr.data-ref {
+    background-color: gray;
+}
 .immediate {
     color: lightblue;
 }

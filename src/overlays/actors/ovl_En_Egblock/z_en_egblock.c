@@ -1,16 +1,22 @@
+/*
+ * File: z_en_egblock.c
+ * Overlay: ovl_En_Egblock
+ * Description: Eyegore Block
+ */
+
 #include "z_en_egblock.h"
 
-#define FLAGS 0x08000000
+#define FLAGS (ACTOR_FLAG_8000000)
 
 #define THIS ((EnEgblock*)thisx)
 
-void EnEgblock_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnEgblock_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnEgblock_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnEgblock_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnEgblock_Init(Actor* thisx, PlayState* play);
+void EnEgblock_Destroy(Actor* thisx, PlayState* play);
+void EnEgblock_Update(Actor* thisx, PlayState* play);
+void EnEgblock_Draw(Actor* thisx, PlayState* play);
 
 #if 0
-const ActorInit En_Egblock_InitVars = {
+ActorInit En_Egblock_InitVars = {
     ACTOR_EN_EGBLOCK,
     ACTORCAT_PROP,
     FLAGS,

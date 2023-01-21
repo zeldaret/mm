@@ -1,28 +1,34 @@
+/*
+ * File: z_en_po_composer.c
+ * Overlay: ovl_En_Po_Composer
+ * Description: Poe Composers
+ */
+
 #include "z_en_po_composer.h"
 
-#define FLAGS 0x02100019
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_100000 | ACTOR_FLAG_2000000)
 
 #define THIS ((EnPoComposer*)thisx)
 
-void EnPoComposer_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnPoComposer_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnPoComposer_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnPoComposer_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnPoComposer_Init(Actor* thisx, PlayState* play);
+void EnPoComposer_Destroy(Actor* thisx, PlayState* play);
+void EnPoComposer_Update(Actor* thisx, PlayState* play);
+void EnPoComposer_Draw(Actor* thisx, PlayState* play);
 
-void func_80BC5294(EnPoComposer* this, GlobalContext* globalCtx);
-void func_80BC52F0(EnPoComposer* this, GlobalContext* globalCtx);
-void func_80BC53A0(EnPoComposer* this, GlobalContext* globalCtx);
-void func_80BC5404(EnPoComposer* this, GlobalContext* globalCtx);
-void func_80BC5570(EnPoComposer* this, GlobalContext* globalCtx);
-void func_80BC55E0(EnPoComposer* this, GlobalContext* globalCtx);
-void func_80BC5670(EnPoComposer* this, GlobalContext* globalCtx);
-void func_80BC56D0(EnPoComposer* this, GlobalContext* globalCtx);
-void func_80BC5780(EnPoComposer* this, GlobalContext* globalCtx);
-void func_80BC5830(EnPoComposer* this, GlobalContext* globalCtx);
-void func_80BC58E0(EnPoComposer* this, GlobalContext* globalCtx);
+void func_80BC5294(EnPoComposer* this, PlayState* play);
+void func_80BC52F0(EnPoComposer* this, PlayState* play);
+void func_80BC53A0(EnPoComposer* this, PlayState* play);
+void func_80BC5404(EnPoComposer* this, PlayState* play);
+void func_80BC5570(EnPoComposer* this, PlayState* play);
+void func_80BC55E0(EnPoComposer* this, PlayState* play);
+void func_80BC5670(EnPoComposer* this, PlayState* play);
+void func_80BC56D0(EnPoComposer* this, PlayState* play);
+void func_80BC5780(EnPoComposer* this, PlayState* play);
+void func_80BC5830(EnPoComposer* this, PlayState* play);
+void func_80BC58E0(EnPoComposer* this, PlayState* play);
 
 #if 0
-const ActorInit En_Po_Composer_InitVars = {
+ActorInit En_Po_Composer_InitVars = {
     ACTOR_EN_PO_COMPOSER,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -52,7 +58,7 @@ static ColliderJntSphElementInit D_80BC67AC[1] = {
 // static ColliderJntSphInit sJntSphInit = {
 static ColliderJntSphInit D_80BC67D0 = {
     { COLTYPE_HIT3, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_JNTSPH, },
-    1, D_80BC67AC, // sJntSphElementsInit,
+    ARRAY_COUNT(sJntSphElementsInit), D_80BC67AC, // sJntSphElementsInit,
 };
 
 // sColChkInfoInit

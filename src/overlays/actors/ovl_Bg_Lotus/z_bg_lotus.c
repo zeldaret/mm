@@ -5,21 +5,22 @@
  */
 
 #include "z_bg_lotus.h"
+#include "objects/object_lotus/object_lotus.h"
 
 #define FLAGS 0x00000000
 
 #define THIS ((BgLotus*)thisx)
 
-void BgLotus_Init(Actor* thisx, GlobalContext* globalCtx);
-void BgLotus_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void BgLotus_Update(Actor* thisx, GlobalContext* globalCtx);
-void BgLotus_Draw(Actor* thisx, GlobalContext* globalCtx);
+void BgLotus_Init(Actor* thisx, PlayState* play);
+void BgLotus_Destroy(Actor* thisx, PlayState* play);
+void BgLotus_Update(Actor* thisx, PlayState* play);
+void BgLotus_Draw(Actor* thisx, PlayState* play);
 
-void BgLotus_Wait(BgLotus* this, GlobalContext* globalCtx);
-void BgLotus_Sink(BgLotus* this, GlobalContext* globalCtx);
-void BgLotus_WaitToAppear(BgLotus* this, GlobalContext* globalCtx);
+void BgLotus_Wait(BgLotus* this, PlayState* play);
+void BgLotus_Sink(BgLotus* this, PlayState* play);
+void BgLotus_WaitToAppear(BgLotus* this, PlayState* play);
 
-const ActorInit Bg_Lotus_InitVars = {
+ActorInit Bg_Lotus_InitVars = {
     ACTOR_BG_LOTUS,
     ACTORCAT_BG,
     FLAGS,
@@ -35,28 +36,25 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-extern CollisionHeader D_06000A20; // Lilypad collision
-extern Gfx D_06000040[];           // Lilypad model
-
-void BgLotus_Init(Actor* thisx, GlobalContext* globalCtx) {
+void BgLotus_Init(Actor* thisx, PlayState* play) {
     BgLotus* this = THIS;
     s32 pad;
-    s32 sp2C;
+    s32 bgId;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    BcCheck3_BgActorInit(&this->dyna, 1);
-    BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_06000A20);
-    this->dyna.actor.floorHeight =
-        func_800C411C(&globalCtx->colCtx, &thisx->floorPoly, &sp2C, &this->dyna.actor, &this->dyna.actor.world.pos);
+    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_LoadMesh(play, &this->dyna, &gLilyPadCol);
+    this->dyna.actor.floorHeight = BgCheck_EntityRaycastFloor5(&play->colCtx, &thisx->floorPoly, &bgId,
+                                                               &this->dyna.actor, &this->dyna.actor.world.pos);
     this->timer2 = 96;
-    this->dyna.actor.world.rot.y = Rand_Next() >> 0x10;
+    this->dyna.actor.world.rot.y = (s32)Rand_Next() >> 0x10;
     this->actionFunc = BgLotus_Wait;
 }
 
-void BgLotus_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void BgLotus_Destroy(Actor* thisx, PlayState* play) {
     BgLotus* this = THIS;
 
-    BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
 
 void BgLotus_SetScaleXZ(BgLotus* this) {
@@ -69,7 +67,7 @@ void BgLotus_SetScaleXZ(BgLotus* this) {
     }
 }
 
-void BgLotus_Wait(BgLotus* this, GlobalContext* globalCtx) {
+void BgLotus_Wait(BgLotus* this, PlayState* play) {
     f32 moveDist; // distance for the xz position of the lilypad to move
 
     this->timer2--;
@@ -84,7 +82,7 @@ void BgLotus_Wait(BgLotus* this, GlobalContext* globalCtx) {
 
         if (this->timer2 == 0) {
             this->timer2 = 96;
-            this->dyna.actor.world.rot.y += (s16)(Rand_Next() >> 0x12);
+            this->dyna.actor.world.rot.y += (s16)((s32)Rand_Next() >> 0x12);
         }
     }
 
@@ -93,15 +91,15 @@ void BgLotus_Wait(BgLotus* this, GlobalContext* globalCtx) {
     } else {
         this->dyna.actor.world.pos.y = this->height;
 
-        if (func_800CAF70(&this->dyna)) {
+        if (DynaPolyActor_IsInRidingMovingState(&this->dyna)) {
             if (this->hasSpawnedRipples == 0) {
-                EffectSsGRipple_Spawn(globalCtx, &this->dyna.actor.world.pos, 1000, 1400, 0);
-                EffectSsGRipple_Spawn(globalCtx, &this->dyna.actor.world.pos, 1000, 1400, 8);
+                EffectSsGRipple_Spawn(play, &this->dyna.actor.world.pos, 1000, 1400, 0);
+                EffectSsGRipple_Spawn(play, &this->dyna.actor.world.pos, 1000, 1400, 8);
                 this->timer = 40;
             }
-            if (gSaveContext.playerForm != 3) {
+            if (gSaveContext.save.playerForm != PLAYER_FORM_DEKU) {
                 this->timer = 40;
-                this->dyna.actor.flags |= 0x10;
+                this->dyna.actor.flags |= ACTOR_FLAG_10;
                 this->actionFunc = BgLotus_Sink;
                 return;
             }
@@ -119,7 +117,7 @@ void BgLotus_Wait(BgLotus* this, GlobalContext* globalCtx) {
     BgLotus_SetScaleXZ(this);
 }
 
-void BgLotus_Sink(BgLotus* this, GlobalContext* globalCtx) {
+void BgLotus_Sink(BgLotus* this, PlayState* play) {
     if (this->height < this->dyna.actor.world.pos.y) {
         this->dyna.actor.world.pos.y = this->height;
     }
@@ -138,7 +136,7 @@ void BgLotus_Sink(BgLotus* this, GlobalContext* globalCtx) {
         if (Math_StepToF(&this->dyna.actor.scale.x, 0, 0.0050000003539f)) {
             this->dyna.actor.draw = NULL;
             this->timer = 100;
-            func_800C62BC(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+            func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
             this->actionFunc = BgLotus_WaitToAppear;
         }
 
@@ -146,15 +144,15 @@ void BgLotus_Sink(BgLotus* this, GlobalContext* globalCtx) {
     }
 }
 
-void BgLotus_WaitToAppear(BgLotus* this, GlobalContext* globalCtx) {
+void BgLotus_WaitToAppear(BgLotus* this, PlayState* play) {
     if (this->timer > 0) {
         this->timer--;
     } else if ((this->dyna.actor.xzDistToPlayer > 100.0f) && (this->dyna.actor.projectedPos.z < 0.0f)) {
         this->dyna.actor.draw = BgLotus_Draw;
-        func_800C6314(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+        func_800C6314(play, &play->colCtx.dyna, this->dyna.bgId);
         Actor_SetScale(&this->dyna.actor, 0.1f);
         this->dyna.actor.world.pos.y = CLAMP_MIN(this->height, this->dyna.actor.floorHeight);
-        this->dyna.actor.flags &= ~0x10;
+        this->dyna.actor.flags &= ~ACTOR_FLAG_10;
         this->timer2 = 96;
         this->actionFunc = BgLotus_Wait;
         this->dyna.actor.world.pos.x = this->dyna.actor.home.pos.x;
@@ -162,16 +160,16 @@ void BgLotus_WaitToAppear(BgLotus* this, GlobalContext* globalCtx) {
     }
 }
 
-void BgLotus_Update(Actor* thisx, GlobalContext* globalCtx) {
+void BgLotus_Update(Actor* thisx, PlayState* play) {
     BgLotus* this = THIS;
     s32 pad;
-    void* sp2C;
+    WaterBox* waterBox;
 
-    func_800CA1E8(globalCtx, &globalCtx->colCtx, this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.z,
-                  &this->height, &sp2C);
-    this->actionFunc(this, globalCtx);
+    WaterBox_GetSurface1_2(play, &play->colCtx, this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.z,
+                           &this->height, &waterBox);
+    this->actionFunc(this, play);
 }
 
-void BgLotus_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    func_800BDFC0(globalCtx, D_06000040);
+void BgLotus_Draw(Actor* thisx, PlayState* play) {
+    Gfx_DrawDListOpa(play, gLilyPadDL);
 }

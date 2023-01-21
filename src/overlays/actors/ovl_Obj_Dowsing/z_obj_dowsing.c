@@ -1,15 +1,23 @@
+/*
+ * File: z_obj_dowsing.c
+ * Overlay: ovl_Obj_Dowsing
+ * Description: Rumbles controller if switch or collectible/chest flag is unset
+ */
+
 #include "z_obj_dowsing.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((ObjDowsing*)thisx)
 
-void ObjDowsing_Init(Actor* thisx, GlobalContext* globalCtx);
-void ObjDowsing_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void ObjDowsing_Update(Actor* thisx, GlobalContext* globalCtx);
+void ObjDowsing_Init(Actor* thisx, PlayState* play);
+void ObjDowsing_Destroy(Actor* thisx, PlayState* play);
+void ObjDowsing_Update(Actor* thisx, PlayState* play);
 
-#if 0
-const ActorInit Obj_Dowsing_InitVars = {
+s32 ObjDowsing_GetFlag(ObjDowsing* this, PlayState* play);
+s32 ObjDowsing_CheckValidSpawn(ObjDowsing* this, PlayState* play);
+
+ActorInit Obj_Dowsing_InitVars = {
     ACTOR_OBJ_DOWSING,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -21,14 +29,42 @@ const ActorInit Obj_Dowsing_InitVars = {
     (ActorFunc)NULL,
 };
 
-#endif
+s32 ObjDowsing_GetFlag(ObjDowsing* this, PlayState* play) {
+    s32 type = DOWSING_GET_TYPE(&this->actor);
+    s32 flag = DOWSING_GET_FLAG(&this->actor);
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Dowsing/func_80B23D50.s")
+    if (type == DOWSING_COLLECTIBLE) {
+        return Flags_GetCollectible(play, flag);
+    } else if (type == DOWSING_CHEST) {
+        return Flags_GetTreasure(play, flag);
+    } else if (type == DOWSING_SWITCH) {
+        return Flags_GetSwitch(play, flag);
+    } else {
+        return 0;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Dowsing/func_80B23DD0.s")
+s32 ObjDowsing_CheckValidSpawn(ObjDowsing* this, PlayState* play) {
+    if (ObjDowsing_GetFlag(this, play)) {
+        Actor_Kill(&this->actor);
+        return true;
+    }
+    return false;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Dowsing/ObjDowsing_Init.s")
+void ObjDowsing_Init(Actor* thisx, PlayState* play) {
+    ObjDowsing* this = THIS;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Dowsing/ObjDowsing_Destroy.s")
+    ObjDowsing_CheckValidSpawn(this, play);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Dowsing/ObjDowsing_Update.s")
+void ObjDowsing_Destroy(Actor* thisx, PlayState* play) {
+}
+
+void ObjDowsing_Update(Actor* thisx, PlayState* play) {
+    ObjDowsing* this = THIS;
+
+    if (!ObjDowsing_CheckValidSpawn(this, play)) {
+        func_800B8C50(thisx, play);
+    }
+}

@@ -1,25 +1,22 @@
 #include "ZSkeleton.h"
 
 #include <cassert>
-#include "BitConverter.h"
-#include "HighLevel/HLModelIntermediette.h"
-#include "StringHelper.h"
+
+#include "Globals.h"
+#include "Utils/BitConverter.h"
+#include "Utils/StringHelper.h"
+#include "WarningHandler.h"
 
 REGISTER_ZFILENODE(Skeleton, ZSkeleton);
 REGISTER_ZFILENODE(LimbTable, ZLimbTable);
 
-ZSkeleton::ZSkeleton(ZFile* nParent) : ZResource(nParent), limbsTable(nParent)
+ZSkeleton::ZSkeleton(ZFile* nParent) : ZResource(nParent)
 {
 	RegisterRequiredAttribute("Type");
 	RegisterRequiredAttribute("LimbType");
-}
-
-void ZSkeleton::ExtractFromXML(tinyxml2::XMLElement* reader, uint32_t nRawDataIndex)
-{
-	ZResource::ExtractFromXML(reader, nRawDataIndex);
-
-	parent->AddDeclaration(rawDataIndex, DeclarationAlignment::Align4, GetRawDataSize(),
-	                       GetSourceTypeName(), name, "");
+	RegisterOptionalAttribute("EnumName");
+	RegisterOptionalAttribute("LimbNone");
+	RegisterOptionalAttribute("LimbMax");
 }
 
 void ZSkeleton::ParseXML(tinyxml2::XMLElement* reader)
@@ -34,24 +31,54 @@ void ZSkeleton::ParseXML(tinyxml2::XMLElement* reader)
 		type = ZSkeletonType::Curve;
 	else if (skelTypeXml != "Normal")
 	{
-		fprintf(stderr,
-		        "ZSkeleton::ParseXML: Warning in '%s'.\n"
-		        "\t Invalid Type found: '%s'.\n"
-		        "\t Defaulting to 'Normal'.\n",
-		        name.c_str(), skelTypeXml.c_str());
-		type = ZSkeletonType::Normal;
+		HANDLE_ERROR_RESOURCE(WarningType::InvalidAttributeValue, parent, this, rawDataIndex,
+		                      "invalid value found for 'Type' attribute", "");
 	}
 
 	std::string limbTypeXml = registeredAttributes.at("LimbType").value;
 	limbType = ZLimb::GetTypeByAttributeName(limbTypeXml);
 	if (limbType == ZLimbType::Invalid)
 	{
-		fprintf(stderr,
-		        "ZSkeleton::ParseXML: Warning in '%s'.\n"
-		        "\t Invalid LimbType found: '%s'.\n"
-		        "\t Defaulting to 'Standard'.\n",
-		        name.c_str(), limbTypeXml.c_str());
-		limbType = ZLimbType::Standard;
+		HANDLE_ERROR_RESOURCE(
+			WarningType::InvalidAttributeValue, parent, this, rawDataIndex,
+			StringHelper::Sprintf("invalid value '%s' found for 'LimbType' attribute",
+		                          limbTypeXml.c_str()),
+			"Defaulting to 'Standard'.");
+	}
+
+	enumName = registeredAttributes.at("EnumName").value;
+	limbNoneName = registeredAttributes.at("LimbNone").value;
+	limbMaxName = registeredAttributes.at("LimbMax").value;
+
+	if (enumName != "")
+	{
+		if (limbNoneName == "" || limbMaxName == "")
+		{
+			HANDLE_ERROR_RESOURCE(WarningType::MissingAttribute, parent, this, rawDataIndex,
+			                      "'EnumName' attribute was used but either 'LimbNone' or "
+			                      "'LimbMax' attribute is missing",
+			                      "");
+		}
+	}
+
+	if (limbNoneName != "")
+	{
+		if (limbMaxName == "")
+		{
+			HANDLE_ERROR_RESOURCE(
+				WarningType::MissingAttribute, parent, this, rawDataIndex,
+				"'LimbNone' attribute was used but 'LimbMax' attribute is missing", "");
+		}
+	}
+
+	if (limbMaxName != "")
+	{
+		if (limbNoneName == "")
+		{
+			HANDLE_ERROR_RESOURCE(
+				WarningType::MissingAttribute, parent, this, rawDataIndex,
+				"'LimbMax' attribute was used but 'LimbNone' attribute is missing", "");
+		}
 	}
 }
 
@@ -62,12 +89,10 @@ void ZSkeleton::ParseRawData()
 	const auto& rawData = parent->GetRawData();
 	limbsArrayAddress = BitConverter::ToUInt32BE(rawData, rawDataIndex);
 	limbCount = BitConverter::ToUInt8BE(rawData, rawDataIndex + 4);
-	dListCount = BitConverter::ToUInt8BE(rawData, rawDataIndex + 8);
 
-	if (limbsArrayAddress != 0 && GETSEGNUM(limbsArrayAddress) == parent->segment)
+	if (type == ZSkeletonType::Flex)
 	{
-		uint32_t ptr = Seg2Filespace(limbsArrayAddress, parent->baseAddress);
-		limbsTable.ExtractFromBinary(ptr, limbType, limbCount);
+		dListCount = BitConverter::ToUInt8BE(rawData, rawDataIndex + 8);
 	}
 }
 
@@ -77,43 +102,69 @@ void ZSkeleton::DeclareReferences(const std::string& prefix)
 	if (defaultPrefix == "")
 		defaultPrefix = prefix;
 
-	if (limbsArrayAddress != 0 && GETSEGNUM(limbsArrayAddress) == parent->segment)
+	ZResource::DeclareReferences(defaultPrefix);
+
+	if (limbsArrayAddress != SEGMENTED_NULL && GETSEGNUM(limbsArrayAddress) == parent->segment)
 	{
-		uint32_t ptr = Seg2Filespace(limbsArrayAddress, parent->baseAddress);
+		offset_t ptr = Seg2Filespace(limbsArrayAddress, parent->baseAddress);
+
 		if (!parent->HasDeclaration(ptr))
 		{
-			limbsTable.SetName(StringHelper::Sprintf("%sLimbs", defaultPrefix.c_str()));
-			limbsTable.DeclareReferences(prefix);
-			limbsTable.GetSourceOutputCode(prefix);
+			limbsTable = new ZLimbTable(parent);
+			limbsTable->ExtractFromBinary(ptr, limbType, limbCount);
+			limbsTable->SetName(StringHelper::Sprintf("%sLimbs", defaultPrefix.c_str()));
+			parent->AddResource(limbsTable);
+		}
+		else
+		{
+			limbsTable = static_cast<ZLimbTable*>(parent->FindResource(ptr));
+		}
+
+		if (limbsTable->enumName == "")
+		{
+			limbsTable->enumName = enumName;
+		}
+		if (limbsTable->limbNoneName == "")
+		{
+			limbsTable->limbNoneName = limbNoneName;
+		}
+		if (limbsTable->limbMaxName == "")
+		{
+			limbsTable->limbMaxName = limbMaxName;
 		}
 	}
 }
 
 std::string ZSkeleton::GetBodySourceCode() const
 {
-	std::string limbTableName = parent->GetDeclarationPtrName(limbsArrayAddress);
+	std::string limbArrayName;
+	Globals::Instance->GetSegmentedPtrName(limbsArrayAddress, parent, "", limbArrayName);
 
-	std::string headerStr;
+	std::string countStr;
+	assert(limbsTable != nullptr);
+	// There are some Skeletons with the wrong limb count on them, so this check is necessary.
+	if (limbsTable->count == limbCount)
+	{
+		countStr = StringHelper::Sprintf("ARRAY_COUNT(%s)", limbArrayName.c_str());
+	}
+	else
+	{
+		countStr = StringHelper::Sprintf("%i", limbCount);
+	}
+
 	switch (type)
 	{
 	case ZSkeletonType::Normal:
 	case ZSkeletonType::Curve:
-		headerStr = StringHelper::Sprintf("\n\t%s, %i\n", limbTableName.c_str(), limbCount);
-		break;
+		return StringHelper::Sprintf("\n\t%s, %s\n", limbArrayName.c_str(), countStr.c_str());
+
 	case ZSkeletonType::Flex:
-		headerStr = StringHelper::Sprintf("\n\t{ %s, %i }, %i\n", limbTableName.c_str(), limbCount,
-		                                  dListCount);
-		break;
+		return StringHelper::Sprintf("\n\t{ %s, %s }, %i\n", limbArrayName.c_str(),
+		                             countStr.c_str(), dListCount);
 	}
 
-	return headerStr;
-}
-
-void ZSkeleton::GenerateHLIntermediette(HLFileIntermediette& hlFile)
-{
-	HLModelIntermediette* mdl = (HLModelIntermediette*)&hlFile;
-	HLModelIntermediette::FromZSkeleton(mdl, this);
-	mdl->blocks.push_back(new HLTerminator());
+	// TODO: Throw exception?
+	return "ERROR";
 }
 
 size_t ZSkeleton::GetRawDataSize() const
@@ -127,25 +178,6 @@ size_t ZSkeleton::GetRawDataSize() const
 	default:
 		return 0x8;
 	}
-}
-
-std::string ZSkeleton::GetSourceOutputCode(const std::string& prefix)
-{
-	std::string headerStr = GetBodySourceCode();
-
-	Declaration* decl = parent->GetDeclaration(GetAddress());
-
-	if (decl == nullptr)
-	{
-		parent->AddDeclaration(GetAddress(), DeclarationAlignment::Align16, GetRawDataSize(),
-		                       GetSourceTypeName(), name, headerStr);
-	}
-	else
-	{
-		decl->text = headerStr;
-	}
-
-	return "";
 }
 
 std::string ZSkeleton::GetSourceTypeName() const
@@ -168,9 +200,9 @@ ZResourceType ZSkeleton::GetResourceType() const
 	return ZResourceType::Skeleton;
 }
 
-segptr_t ZSkeleton::GetAddress()
+DeclarationAlignment ZSkeleton::GetDeclarationAlignment() const
 {
-	return rawDataIndex;
+	return DeclarationAlignment::Align4;
 }
 
 uint8_t ZSkeleton::GetLimbCount()
@@ -184,14 +216,9 @@ ZLimbTable::ZLimbTable(ZFile* nParent) : ZResource(nParent)
 {
 	RegisterRequiredAttribute("LimbType");
 	RegisterRequiredAttribute("Count");
-}
-
-void ZLimbTable::ExtractFromXML(tinyxml2::XMLElement* reader, uint32_t nRawDataIndex)
-{
-	ZResource::ExtractFromXML(reader, nRawDataIndex);
-
-	parent->AddDeclarationArray(rawDataIndex, DeclarationAlignment::Align4, GetRawDataSize(),
-	                            GetSourceTypeName(), name, limbsAddresses.size(), "");
+	RegisterOptionalAttribute("EnumName");
+	RegisterOptionalAttribute("LimbNone");
+	RegisterOptionalAttribute("LimbMax");
 }
 
 void ZLimbTable::ExtractFromBinary(uint32_t nRawDataIndex, ZLimbType nLimbType, size_t nCount)
@@ -211,15 +238,47 @@ void ZLimbTable::ParseXML(tinyxml2::XMLElement* reader)
 	limbType = ZLimb::GetTypeByAttributeName(limbTypeXml);
 	if (limbType == ZLimbType::Invalid)
 	{
-		fprintf(stderr,
-		        "ZLimbTable::ParseXML: Warning in '%s'.\n"
-		        "\t Invalid LimbType found: '%s'.\n"
-		        "\t Defaulting to 'Standard'.\n",
-		        name.c_str(), limbTypeXml.c_str());
+		HANDLE_WARNING_RESOURCE(WarningType::InvalidAttributeValue, parent, this, rawDataIndex,
+		                        "invalid value found for 'LimbType' attribute.",
+		                        "Defaulting to 'Standard'.");
 		limbType = ZLimbType::Standard;
 	}
 
 	count = StringHelper::StrToL(registeredAttributes.at("Count").value);
+
+	enumName = registeredAttributes.at("EnumName").value;
+	limbNoneName = registeredAttributes.at("LimbNone").value;
+	limbMaxName = registeredAttributes.at("LimbMax").value;
+
+	if (enumName != "")
+	{
+		if (limbNoneName == "" || limbMaxName == "")
+		{
+			HANDLE_ERROR_RESOURCE(
+				WarningType::MissingAttribute, parent, this, rawDataIndex,
+				"'EnumName' attribute was used but 'LimbNone'/'LimbMax' attributes is missing", "");
+		}
+	}
+
+	if (limbNoneName != "")
+	{
+		if (limbMaxName == "")
+		{
+			HANDLE_ERROR_RESOURCE(
+				WarningType::MissingAttribute, parent, this, rawDataIndex,
+				"'LimbNone' attribute was used but 'LimbMax' attribute is missing", "");
+		}
+	}
+
+	if (limbMaxName != "")
+	{
+		if (limbNoneName == "")
+		{
+			HANDLE_ERROR_RESOURCE(
+				WarningType::MissingAttribute, parent, this, rawDataIndex,
+				"'LimbMax' attribute was used but 'LimbNone' attribute is missing", "");
+		}
+	}
 }
 
 void ZLimbTable::ParseRawData()
@@ -237,9 +296,9 @@ void ZLimbTable::ParseRawData()
 
 void ZLimbTable::DeclareReferences(const std::string& prefix)
 {
-	std::string varPrefix = prefix;
-	if (name != "")
-		varPrefix = name;
+	std::string varPrefix = name;
+	if (varPrefix == "")
+		varPrefix = prefix;
 
 	ZResource::DeclareReferences(varPrefix);
 
@@ -250,25 +309,62 @@ void ZLimbTable::DeclareReferences(const std::string& prefix)
 		if (limbAddress != 0 && GETSEGNUM(limbAddress) == parent->segment)
 		{
 			uint32_t limbOffset = Seg2Filespace(limbAddress, parent->baseAddress);
+			ZLimb* limb;
+
 			if (!parent->HasDeclaration(limbOffset))
 			{
-				ZLimb* limb = new ZLimb(limbType, varPrefix, limbOffset, parent);
+				limb = new ZLimb(parent);
+				limb->ExtractFromBinary(limbOffset, limbType);
+				limb->SetName(limb->GetDefaultName(varPrefix));
+				limb->DeclareVar(varPrefix, "");
 				limb->DeclareReferences(varPrefix);
-				limb->GetSourceOutputCode(varPrefix);
 				parent->AddResource(limb);
 			}
+			else
+			{
+				limb = static_cast<ZLimb*>(parent->FindResource(limbOffset));
+				assert(limb != nullptr);
+				assert(limb->GetResourceType() == ZResourceType::Limb);
+			}
+
+			limb->limbsTable = this;
+			limb->SetLimbIndex(i + 1);
+
+			limbsReferences.push_back(limb);
 		}
 	}
 }
 
+Declaration* ZLimbTable::DeclareVar(const std::string& prefix, const std::string& bodyStr)
+{
+	std::string auxName = name;
+
+	if (name == "")
+		auxName = GetDefaultName(prefix);
+
+	Declaration* decl =
+		parent->AddDeclarationArray(rawDataIndex, GetDeclarationAlignment(), GetRawDataSize(),
+	                                GetSourceTypeName(), auxName, limbsAddresses.size(), bodyStr);
+	decl->staticConf = staticConf;
+	return decl;
+}
+
 std::string ZLimbTable::GetBodySourceCode() const
 {
-	std::string body = "";
+	std::string body;
 
 	for (size_t i = 0; i < count; i++)
 	{
-		std::string limbName = parent->GetDeclarationPtrName(limbsAddresses[i]);
+		std::string limbName;
+		Globals::Instance->GetSegmentedPtrName(limbsAddresses[i], parent, "", limbName);
 		body += StringHelper::Sprintf("\t%s,", limbName.c_str());
+
+		auto& limb = limbsReferences.at(i);
+		std::string limbEnumName = limb->enumName;
+		if (limbEnumName != "")
+		{
+			body += StringHelper::Sprintf(" /* %s */", limbEnumName.c_str());
+		}
 
 		if (i + 1 < count)
 			body += "\n";
@@ -277,18 +373,44 @@ std::string ZLimbTable::GetBodySourceCode() const
 	return body;
 }
 
-std::string ZLimbTable::GetSourceOutputCode(const std::string& prefix)
+std::string ZLimbTable::GetSourceOutputHeader([[maybe_unused]] const std::string& prefix)
 {
-	std::string body = GetBodySourceCode();
+	if (limbNoneName == "" || limbMaxName == "" || enumName == "")
+	{
+		// Don't produce a enum of any of those attributes is missing
+		return "";
+	}
 
-	Declaration* decl = parent->GetDeclaration(rawDataIndex);
-	if (decl == nullptr || decl->isPlaceholder)
-		parent->AddDeclarationArray(rawDataIndex, DeclarationAlignment::Align4, GetRawDataSize(),
-		                            GetSourceTypeName(), name, limbsAddresses.size(), body);
-	else
-		decl->text = body;
+	std::string limbEnum = StringHelper::Sprintf("typedef enum %s {\n", enumName.c_str());
 
-	return "";
+	// This assumes there isn't any skeleton with more than 0x100 limbs
+
+	limbEnum += StringHelper::Sprintf("    /* 0x00 */ %s,\n", limbNoneName.c_str());
+
+	size_t i = 0;
+	for (; i < count; i++)
+	{
+		auto& limb = limbsReferences.at(i);
+		std::string limbEnumName = limb->enumName;
+
+		if (limbEnumName == "")
+		{
+			HANDLE_ERROR_RESOURCE(
+				WarningType::MissingAttribute, parent, this, rawDataIndex,
+				"Skeleton's enum attributes were used but at least one limb is missing its "
+				"'LimbName' attribute",
+				StringHelper::Sprintf("When processing limb %02i, named '%s' at offset '0x%X'",
+			                          i + 1, limb->GetName().c_str(), limb->GetRawDataIndex()));
+		}
+
+		limbEnum += StringHelper::Sprintf("    /* 0x%02X */ %s,\n", i + 1, limbEnumName.c_str());
+	}
+
+	limbEnum += StringHelper::Sprintf("    /* 0x%02X */ %s\n", i + 1, limbMaxName.c_str());
+
+	limbEnum += StringHelper::Sprintf("} %s;\n", enumName.c_str());
+
+	return limbEnum;
 }
 
 std::string ZLimbTable::GetSourceTypeName() const
@@ -305,6 +427,7 @@ std::string ZLimbTable::GetSourceTypeName() const
 		return StringHelper::Sprintf("%s*", ZLimb::GetSourceTypeName(limbType));
 
 	case ZLimbType::Invalid:
+		// TODO: Proper error message or something.
 		assert("Invalid limb type.\n");
 	}
 
@@ -319,4 +442,29 @@ ZResourceType ZLimbTable::GetResourceType() const
 size_t ZLimbTable::GetRawDataSize() const
 {
 	return 4 * limbsAddresses.size();
+}
+
+std::string ZLimbTable::GetLimbEnumName(uint8_t limbIndex) const
+{
+	if (limbIndex == 0xFF)
+	{
+		return "LIMB_DONE";
+	}
+
+	if (limbIndex < count)
+	{
+		std::string limbEnumName = limbsReferences.at(limbIndex)->enumName;
+		if (limbEnumName != "")
+		{
+			return StringHelper::Sprintf("%s - 1", limbEnumName.c_str());
+		}
+	}
+	else
+	{
+		HANDLE_WARNING_RESOURCE(WarningType::InvalidExtractedData, parent, this, rawDataIndex,
+		                        StringHelper::Sprintf("Limb index '%02i' out of range", limbIndex),
+		                        "");
+	}
+
+	return StringHelper::Sprintf("0x%02X", limbIndex);
 }

@@ -1,34 +1,42 @@
-#include "z_bg_ikana_shutter.h"
+/*
+ * File: z_bg_ikana_shutter.c
+ * Overlay: ovl_Bg_Ikana_Shutter
+ * Description: Metal shutter in switch room of Stone Tower Temple
+ */
 
-#define FLAGS 0x00000010
+#include "z_bg_ikana_shutter.h"
+#include "z64quake.h"
+#include "objects/object_ikana_obj/object_ikana_obj.h"
+
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((BgIkanaShutter*)thisx)
 
-void BgIkanaShutter_Init(Actor* thisx, GlobalContext* globalCtx);
-void BgIkanaShutter_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void BgIkanaShutter_Update(Actor* thisx, GlobalContext* globalCtx);
-void BgIkanaShutter_Draw(Actor* thisx, GlobalContext* globalCtx);
+void BgIkanaShutter_Init(Actor* thisx, PlayState* play);
+void BgIkanaShutter_Destroy(Actor* thisx, PlayState* play);
+void BgIkanaShutter_Update(Actor* thisx, PlayState* play);
+void BgIkanaShutter_Draw(Actor* thisx, PlayState* play);
 
 void func_80BD5828(BgIkanaShutter* this);
-void func_80BD5844(BgIkanaShutter* this, GlobalContext* globalCtx);
+void func_80BD5844(BgIkanaShutter* this, PlayState* play);
 void func_80BD5878(BgIkanaShutter* this);
-void func_80BD5894(BgIkanaShutter* this, GlobalContext* globalCtx);
+void func_80BD5894(BgIkanaShutter* this, PlayState* play);
 void func_80BD58F0(BgIkanaShutter* this);
-void func_80BD5910(BgIkanaShutter* this, GlobalContext* globalCtx);
+void func_80BD5910(BgIkanaShutter* this, PlayState* play);
 void func_80BD599C(BgIkanaShutter* this);
-void func_80BD59C4(BgIkanaShutter* this, GlobalContext* globalCtx);
+void func_80BD59C4(BgIkanaShutter* this, PlayState* play);
 void func_80BD59F8(BgIkanaShutter* this);
-void func_80BD5A18(BgIkanaShutter* this, GlobalContext* globalCtx);
+void func_80BD5A18(BgIkanaShutter* this, PlayState* play);
 void func_80BD5AE8(BgIkanaShutter* this);
-void func_80BD5B04(BgIkanaShutter* this, GlobalContext* globalCtx);
+void func_80BD5B04(BgIkanaShutter* this, PlayState* play);
 void func_80BD5B44(BgIkanaShutter* this);
-void func_80BD5B60(BgIkanaShutter* this, GlobalContext* globalCtx);
+void func_80BD5B60(BgIkanaShutter* this, PlayState* play);
 void func_80BD5BC4(BgIkanaShutter* this);
-void func_80BD5BD8(BgIkanaShutter* this, GlobalContext* globalCtx);
+void func_80BD5BD8(BgIkanaShutter* this, PlayState* play);
 void BgIkanaShutter_SetupDoNothing(BgIkanaShutter* this);
-void BgIkanaShutter_DoNothing(BgIkanaShutter* this, GlobalContext* globalCtx);
+void BgIkanaShutter_DoNothing(BgIkanaShutter* this, PlayState* play);
 
-const ActorInit Bg_Ikana_Shutter_InitVars = {
+ActorInit Bg_Ikana_Shutter_InitVars = {
     ACTOR_BG_IKANA_SHUTTER,
     ACTORCAT_SWITCH,
     FLAGS,
@@ -47,41 +55,38 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-extern CollisionHeader D_06000F28;
-extern Gfx D_06000CE8[];
-
-s32 BgIkanaShutter_AllSwitchesPressed(BgIkanaShutter* this, GlobalContext* globalCtx) {
-    return Flags_GetSwitch(globalCtx, this->dyna.actor.params & 0x7F) &&
-           Flags_GetSwitch(globalCtx, (this->dyna.actor.params & 0x7F) + 1) &&
-           Flags_GetSwitch(globalCtx, (this->dyna.actor.params & 0x7F) + 2) &&
-           Flags_GetSwitch(globalCtx, (this->dyna.actor.params & 0x7F) + 3);
+s32 BgIkanaShutter_AllSwitchesPressed(BgIkanaShutter* this, PlayState* play) {
+    return Flags_GetSwitch(play, this->dyna.actor.params & 0x7F) &&
+           Flags_GetSwitch(play, (this->dyna.actor.params & 0x7F) + 1) &&
+           Flags_GetSwitch(play, (this->dyna.actor.params & 0x7F) + 2) &&
+           Flags_GetSwitch(play, (this->dyna.actor.params & 0x7F) + 3);
 }
 
-void BgIkanaShutter_Init(Actor* thisx, GlobalContext* globalCtx) {
+void BgIkanaShutter_Init(Actor* thisx, PlayState* play) {
     BgIkanaShutter* this = THIS;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    BcCheck3_BgActorInit(&this->dyna, 0);
-    BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_06000F28);
+    DynaPolyActor_Init(&this->dyna, 0);
+    DynaPolyActor_LoadMesh(play, &this->dyna, &object_ikana_obj_Colheader_000F28);
     if (!((this->dyna.actor.params >> 8) & 1)) {
-        if (BgIkanaShutter_AllSwitchesPressed(this, globalCtx)) {
+        if (BgIkanaShutter_AllSwitchesPressed(this, play)) {
             func_80BD599C(this);
             return;
         }
         func_80BD5828(this);
         return;
     }
-    if (Actor_GetRoomCleared(globalCtx, this->dyna.actor.room)) {
+    if (Flags_GetClear(play, this->dyna.actor.room)) {
         BgIkanaShutter_SetupDoNothing(this);
         return;
     }
     func_80BD5AE8(this);
 }
 
-void BgIkanaShutter_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void BgIkanaShutter_Destroy(Actor* thisx, PlayState* play) {
     BgIkanaShutter* this = THIS;
 
-    BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
 
 void func_80BD5828(BgIkanaShutter* this) {
@@ -89,8 +94,8 @@ void func_80BD5828(BgIkanaShutter* this) {
     this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y;
 }
 
-void func_80BD5844(BgIkanaShutter* this, GlobalContext* globalCtx) {
-    if (BgIkanaShutter_AllSwitchesPressed(this, globalCtx)) {
+void func_80BD5844(BgIkanaShutter* this, PlayState* play) {
+    if (BgIkanaShutter_AllSwitchesPressed(this, play)) {
         func_80BD5878(this);
     }
 }
@@ -100,7 +105,7 @@ void func_80BD5878(BgIkanaShutter* this) {
     this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y;
 }
 
-void func_80BD5894(BgIkanaShutter* this, GlobalContext* globalCtx) {
+void func_80BD5894(BgIkanaShutter* this, PlayState* play) {
     if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
         func_80BD58F0(this);
@@ -114,7 +119,7 @@ void func_80BD58F0(BgIkanaShutter* this) {
     this->actionFunc = func_80BD5910;
 }
 
-void func_80BD5910(BgIkanaShutter* this, GlobalContext* globalCtx) {
+void func_80BD5910(BgIkanaShutter* this, PlayState* play) {
     Math_StepToF(&this->dyna.actor.velocity.y, 4.0f, 0.5f);
     if (Math_SmoothStepToF(&this->dyna.actor.world.pos.y, this->dyna.actor.home.pos.y + 220.0f, 0.5f,
                            this->dyna.actor.velocity.y, 1.0f) < 0.5f) {
@@ -127,8 +132,8 @@ void func_80BD599C(BgIkanaShutter* this) {
     this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y + 220.0f;
 }
 
-void func_80BD59C4(BgIkanaShutter* this, GlobalContext* globalCtx) {
-    if (BgIkanaShutter_AllSwitchesPressed(this, globalCtx) == 0) {
+void func_80BD59C4(BgIkanaShutter* this, PlayState* play) {
+    if (!BgIkanaShutter_AllSwitchesPressed(this, play)) {
         func_80BD59F8(this);
     }
 }
@@ -138,18 +143,19 @@ void func_80BD59F8(BgIkanaShutter* this) {
     this->dyna.actor.velocity.y = -23.0f;
 }
 
-void func_80BD5A18(BgIkanaShutter* this, GlobalContext* globalCtx) {
+void func_80BD5A18(BgIkanaShutter* this, PlayState* play) {
     s32 pad[2];
-    s16 quake;
+    s16 quakeIndex;
 
     this->dyna.actor.velocity.y += -5.0f;
     this->dyna.actor.velocity.y *= 0.978f;
     this->dyna.actor.world.pos.y += this->dyna.actor.velocity.y;
     if (this->dyna.actor.world.pos.y <= this->dyna.actor.home.pos.y) {
-        quake = Quake_Add(ACTIVE_CAM, 3);
-        Quake_SetSpeed(quake, 0x5420);
-        Quake_SetQuakeValues(quake, 4, 0, 0, 0);
-        Quake_SetCountdown(quake, 12);
+        quakeIndex = Quake_Add(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
+        Quake_SetSpeed(quakeIndex, 21536);
+        Quake_SetQuakeValues(quakeIndex, 4, 0, 0, 0);
+        Quake_SetCountdown(quakeIndex, 12);
+
         func_80BD5828(this);
     }
 }
@@ -159,8 +165,8 @@ void func_80BD5AE8(BgIkanaShutter* this) {
     this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y;
 }
 
-void func_80BD5B04(BgIkanaShutter* this, GlobalContext* globalCtx) {
-    if (Actor_GetRoomClearedTemp(globalCtx, this->dyna.actor.room)) {
+void func_80BD5B04(BgIkanaShutter* this, PlayState* play) {
+    if (Flags_GetClearTemp(play, this->dyna.actor.room)) {
         func_80BD5B44(this);
     }
 }
@@ -170,10 +176,10 @@ void func_80BD5B44(BgIkanaShutter* this) {
     this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y;
 }
 
-void func_80BD5B60(BgIkanaShutter* this, GlobalContext* globalCtx) {
+void func_80BD5B60(BgIkanaShutter* this, PlayState* play) {
     if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
-        Actor_SetRoomCleared(globalCtx, this->dyna.actor.room);
+        Flags_SetClear(play, this->dyna.actor.room);
         func_80BD5BC4(this);
         return;
     }
@@ -184,7 +190,7 @@ void func_80BD5BC4(BgIkanaShutter* this) {
     this->actionFunc = func_80BD5BD8;
 }
 
-void func_80BD5BD8(BgIkanaShutter* this, GlobalContext* globalCtx) {
+void func_80BD5BD8(BgIkanaShutter* this, PlayState* play) {
     Math_StepToF(&this->dyna.actor.velocity.y, 4.0f, 0.5f);
     if (Math_SmoothStepToF(&this->dyna.actor.world.pos.y, this->dyna.actor.home.pos.y + -220.0f, 0.5f,
                            this->dyna.actor.velocity.y, 1.0f) < 0.5f) {
@@ -197,15 +203,15 @@ void BgIkanaShutter_SetupDoNothing(BgIkanaShutter* this) {
     this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y + -220.0f;
 }
 
-void BgIkanaShutter_DoNothing(BgIkanaShutter* this, GlobalContext* globalCtx) {
+void BgIkanaShutter_DoNothing(BgIkanaShutter* this, PlayState* play) {
 }
 
-void BgIkanaShutter_Update(Actor* thisx, GlobalContext* globalCtx) {
+void BgIkanaShutter_Update(Actor* thisx, PlayState* play) {
     BgIkanaShutter* this = THIS;
 
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
 }
 
-void BgIkanaShutter_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    func_800BDFC0(globalCtx, D_06000CE8);
+void BgIkanaShutter_Draw(Actor* thisx, PlayState* play) {
+    Gfx_DrawDListOpa(play, object_ikana_obj_DL_000CE8);
 }

@@ -1,8 +1,9 @@
+#include "prevent_bss_reordering.h"
 #include "global.h"
 
 u8 sYaz0DataBuffer[0x400];
 u8* sYaz0CurDataEnd;
-u32 sYaz0CurRomStart;
+uintptr_t sYaz0CurRomStart;
 u32 sYaz0CurSize;
 u8* sYaz0MaxPtr;
 u8* D_8009BE20;
@@ -17,7 +18,7 @@ void* Yaz0_FirstDMA() {
     curSize = (u32)sYaz0CurDataEnd - (u32)sYaz0DataBuffer;
     dmaSize = (curSize > sYaz0CurSize) ? sYaz0CurSize : curSize;
 
-    DmaMgr_DMARomToRam(sYaz0CurRomStart, sYaz0DataBuffer, dmaSize);
+    DmaMgr_DmaRomToRam(sYaz0CurRomStart, sYaz0DataBuffer, dmaSize);
     sYaz0CurRomStart += dmaSize;
     sYaz0CurSize -= dmaSize;
     return sYaz0DataBuffer;
@@ -40,7 +41,7 @@ void* Yaz0_NextDMA(void* curSrcPos) {
     }
 
     if (dmaSize != 0) {
-        DmaMgr_DMARomToRam(sYaz0CurRomStart, dst + restSize, dmaSize);
+        DmaMgr_DmaRomToRam(sYaz0CurRomStart, dst + restSize, dmaSize);
         sYaz0CurRomStart += dmaSize;
         sYaz0CurSize -= dmaSize;
         if (!sYaz0CurSize) {
@@ -122,7 +123,7 @@ s32 Yaz0_DecompressImpl(u8* src, u8* dst) {
     return 0;
 }
 
-void Yaz0_Decompress(u32 romStart, void* dst, u32 size) {
+void Yaz0_Decompress(uintptr_t romStart, void* dst, size_t size) {
     s32 status;
     u32 pad;
     char sp80[0x50];

@@ -1,11 +1,27 @@
 #include "global.h"
 
-#pragma GLOBAL_ASM("asm/non_matchings/boot/sleep/Sleep_Cycles.s")
+void Sleep_Cycles(u64 time) {
+    OSMesgQueue mq;
+    OSMesg msg;
+    OSTimer timer;
 
-#pragma GLOBAL_ASM("asm/non_matchings/boot/sleep/Sleep_Nsec.s")
+    osCreateMesgQueue(&mq, &msg, OS_MESG_BLOCK);
+    osSetTimer(&timer, time, 0, &mq, NULL);
+    osRecvMesg(&mq, NULL, OS_MESG_BLOCK);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/boot/sleep/Sleep_Usec.s")
+void Sleep_Nsec(u32 nsec) {
+    Sleep_Cycles(OS_NSEC_TO_CYCLES(nsec));
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/boot/sleep/Sleep_Msec.s")
+void Sleep_Usec(u32 usec) {
+    Sleep_Cycles(OS_USEC_TO_CYCLES(usec));
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/boot/sleep/Sleep_Sec.s")
+void Sleep_Msec(u32 ms) {
+    Sleep_Cycles((ms * OS_CPU_COUNTER) / 1000ULL);
+}
+
+void Sleep_Sec(u32 sec) {
+    Sleep_Cycles(sec * OS_CPU_COUNTER);
+}

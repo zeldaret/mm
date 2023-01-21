@@ -6,48 +6,37 @@
 
 #include "z_en_dg.h"
 
-#define FLAGS 0x00800019
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_800000)
 
 #define THIS ((EnDg*)thisx)
 
-void EnDg_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnDg_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnDg_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnDg_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnDg_Init(Actor* thisx, PlayState* play);
+void EnDg_Destroy(Actor* thisx, PlayState* play);
+void EnDg_Update(Actor* thisx, PlayState* play);
+void EnDg_Draw(Actor* thisx, PlayState* play);
 
-void func_8098A468(EnDg* this, GlobalContext* globalCtx);
-void func_8098A55C(EnDg* this, GlobalContext* globalCtx);
-void func_8098A618(EnDg* this, GlobalContext* globalCtx);
-void func_8098A70C(EnDg* this, GlobalContext* globalCtx);
-void func_8098A89C(EnDg* this, GlobalContext* globalCtx);
-void func_8098A938(EnDg* this, GlobalContext* globalCtx);
-void func_8098AB48(EnDg* this, GlobalContext* globalCtx);
-void func_8098AC34(EnDg* this, GlobalContext* globalCtx);
-void func_8098AF44(EnDg* this, GlobalContext* globalCtx);
-void func_8098AF98(EnDg* this, GlobalContext* globalCtx);
-void func_8098B004(EnDg* this, GlobalContext* globalCtx);
-void func_8098B198(EnDg* this, GlobalContext* globalCtx);
-void func_8098B28C(EnDg* this, GlobalContext* globalCtx);
-void func_8098B390(EnDg* this, GlobalContext* globalCtx);
-void func_8098B560(EnDg* this, GlobalContext* globalCtx);
-void func_8098B88C(EnDg* this, GlobalContext* globalCtx);
-void func_8098BA64(EnDg* this, GlobalContext* globalCtx);
-void func_8098BB10(EnDg* this, GlobalContext* globalCtx);
-void func_8098BBEC(EnDg* this, GlobalContext* globalCtx);
-void func_8098BC54(EnDg* this, GlobalContext* globalCtx);
+void EnDg_IdleMove(EnDg* this, PlayState* play);
+void EnDg_IdleBark(EnDg* this, PlayState* play);
+void EnDg_BackAwayFromGoron(EnDg* this, PlayState* play);
+void EnDg_RunAwayFromGoron(EnDg* this, PlayState* play);
+void EnDg_BarkAtGoron(EnDg* this, PlayState* play);
+void EnDg_ApproachPlayerToAttack(EnDg* this, PlayState* play);
+void EnDg_SitNextToPlayer(EnDg* this, PlayState* play);
+void EnDg_JumpAttack(EnDg* this, PlayState* play);
+void EnDg_SetupBremenMaskApproachPlayer(EnDg* this, PlayState* play);
+void EnDg_Fall(EnDg* this, PlayState* play);
+void EnDg_ApproachPlayer(EnDg* this, PlayState* play);
+void EnDg_SlowlyBackUpBeforeAttacking(EnDg* this, PlayState* play);
+void EnDg_BackAwayFromPlayer(EnDg* this, PlayState* play);
+void EnDg_BarkAtPlayer(EnDg* this, PlayState* play);
+void EnDg_Swim(EnDg* this, PlayState* play);
+void EnDg_JumpOutOfWater(EnDg* this, PlayState* play);
+void EnDg_Held(EnDg* this, PlayState* play);
+void EnDg_Thrown(EnDg* this, PlayState* play);
+void EnDg_SetupTalk(EnDg* this, PlayState* play);
+void EnDg_Talk(EnDg* this, PlayState* play);
 
-extern AnimationHeader D_06000998;
-extern AnimationHeader D_06001048;
-extern AnimationHeader D_06001348;
-extern AnimationHeader D_06001560;
-extern AnimationHeader D_060017C0;
-extern AnimationHeader D_06001A84;
-extern AnimationHeader D_06001BD8;
-extern AnimationHeader D_06001FB0;
-extern AnimationHeader D_060021C8;
-extern FlexSkeletonHeader D_060080F0;
-
-const ActorInit En_Dg_InitVars = {
+ActorInit En_Dg_InitVars = {
     ACTOR_EN_DG,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -59,28 +48,64 @@ const ActorInit En_Dg_InitVars = {
     (ActorFunc)EnDg_Draw,
 };
 
-static u8 D_8098C2A0 = 0;
+#define DOG_FLAG_NONE 0
+#define DOG_FLAG_HELD (1 << 0)
+#define DOG_FLAG_JUMP_ATTACKING (1 << 1)
+#define DOG_FLAG_SWIMMING (1 << 2)
+#define DOG_FLAG_BOUNCED (1 << 3)
+#define DOG_FLAG_THROWN (1 << 4)
+#define DOG_FLAG_FOLLOWING_BREMEN_MASK (1 << 5)
 
+#define ENDG_INDEX_NO_BREMEN_MASK_FOLLOWER 99
+
+typedef enum {
+    /* 0 */ DOG_GRAB_STATE_NONE,
+    /* 1 */ DOG_GRAB_STATE_HELD,
+    /* 2 */ DOG_GRAB_STATE_THROWN_OR_SITTING_AFTER_THROW,
+} DogGrabState;
+
+typedef enum {
+    /* 0 */ DOG_BEHAVIOR_INITIAL, // Gets immediately replaced by DOG_BEHAVIOR_DEFAULT in EnDg_Update
+    /* 1 */ DOG_BEHAVIOR_HUMAN,   // Gets immediately replaced by DOG_BEHAVIOR_DEFAULT in EnDg_Update
+    /* 2 */ DOG_BEHAVIOR_GORON,
+    /* 3 */ DOG_BEHAVIOR_GORON_WAIT,
+    /* 4 */ DOG_BEHAVIOR_ZORA,
+    /* 5 */ DOG_BEHAVIOR_ZORA_WAIT,
+    /* 6 */ DOG_BEHAVIOR_DEKU,
+    /* 7 */ DOG_BEHAVIOR_DEKU_WAIT,
+    /* 8 */ DOG_BEHAVIOR_DEFAULT,
+} DogBehavior;
+
+static u8 sIsAnyDogHeld = false;
+
+static s16 sBremenMaskFollowerIndex = ENDG_INDEX_NO_BREMEN_MASK_FOLLOWER;
+
+/**
+ * Stores the state for the dogs milling about at the Doggy Racetrack.
+ */
 typedef struct {
-    s16 unk_00;
-    s16 unk_02;
-} D_8098C2A4_s;
+    s16 color;  // The dog's color, which is used as an index into sBaseSpeeds
+    s16 index;  // The dog's index within sDogInfo
+    s16 textId; // The ID of the text to display when the dog is picked up
+} RacetrackDogInfo;
 
-static D_8098C2A4_s D_8098C2A4 = { 0x0063, 0x0000 };
-
-typedef struct {
-    s16 unk_00;
-    s16 unk_02;
-    s16 unk_04;
-} D_8098C2A8_s;
-
-static D_8098C2A8_s D_8098C2A8[] = {
-    { 3, 0, 0x3539 },  { 1, 1, 0x353A },  { 5, 2, 0x353B },  { 2, 3, 0x353C },  { 4, 4, 0x3538 },
-    { 2, 5, 0x353E },  { 3, 6, 0x353F },  { 1, 7, 0x3540 },  { 1, 8, 0x3541 },  { 6, 9, 0x3542 },
-    { 2, 10, 0x3543 }, { 3, 11, 0x3544 }, { 1, 12, 0x3545 }, { 4, 13, 0x3546 },
+/**
+ * A table of RacetrackDogInfo for every dog at the Doggy Racetrack. Note that the textId values
+ * in this table are updated by functions within this actor.
+ */
+static RacetrackDogInfo sRacetrackDogInfo[] = {
+    { DOG_COLOR_BEIGE, 0, 0x3539 },  { DOG_COLOR_WHITE, 1, 0x353A },  { DOG_COLOR_BLUE, 2, 0x353B },
+    { DOG_COLOR_GRAY, 3, 0x353C },   { DOG_COLOR_BROWN, 4, 0x3538 },  { DOG_COLOR_GRAY, 5, 0x353E },
+    { DOG_COLOR_BEIGE, 6, 0x353F },  { DOG_COLOR_WHITE, 7, 0x3540 },  { DOG_COLOR_WHITE, 8, 0x3541 },
+    { DOG_COLOR_GOLD, 9, 0x3542 },   { DOG_COLOR_GRAY, 10, 0x3543 },  { DOG_COLOR_BEIGE, 11, 0x3544 },
+    { DOG_COLOR_WHITE, 12, 0x3545 }, { DOG_COLOR_BROWN, 13, 0x3546 },
 };
 
-static D_8098C2A8_s D_8098C2FC = { 0, -1, 0x353E };
+/**
+ * Stores the RacetrackDogInfo for the dog that is selected by the player. These values are just
+ * placeholders, and the actual value gets grabbed from sRacetrackDogInfo in EnDg_TryPickUp.
+ */
+static RacetrackDogInfo sSelectedRacetrackDogInfo = { DOG_COLOR_DEFAULT, -1, 0x353E };
 
 static ColliderCylinderInit sCylinderInit = {
     {
@@ -139,112 +164,141 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(0, 0x0),
 };
 
-static ActorAnimationEntryS sAnimations[] = {
-    { &D_060021C8, 1.0f, 0, -1, 0, 0 },   { &D_060021C8, 1.0f, 0, -1, 0, -6 },  { &D_06001BD8, 1.0f, 0, -1, 0, 0 },
-    { &D_06000998, 1.0f, 0, -1, 0, -6 },  { &D_06001FB0, 1.0f, 0, -1, 2, -6 },  { &D_06001FB0, 1.0f, 0, -1, 4, -6 },
-    { &D_06001048, 1.0f, 0, -1, 2, -6 },  { &D_06001348, 1.0f, 0, -1, 0, -6 },  { &D_06001048, 1.0f, 0, 27, 2, -6 },
-    { &D_06001048, 1.0f, 28, -1, 2, -6 }, { &D_06001048, 1.0f, 54, 54, 2, -6 }, { &D_060021C8, -1.5f, -1, 0, 0, -6 },
-    { &D_06001560, 1.0f, 0, -1, 2, 0 },   { &D_06001A84, 1.2f, 0, -1, 2, 0 },   { &D_060017C0, 1.2f, 0, -1, 2, 0 },
-    { &D_060021C8, 0.5f, 0, -1, 0, 0 },
+typedef enum {
+    /*  0 */ DOG_ANIM_WALK_AFTER_TALKING,
+    /*  1 */ DOG_ANIM_WALK,
+    /*  2 */ DOG_ANIM_RUN,
+    /*  3 */ DOG_ANIM_BARK,
+    /*  4 */ DOG_ANIM_SIT_DOWN_ONCE, // unused
+    /*  5 */ DOG_ANIM_SIT_DOWN,
+    /*  6 */ DOG_ANIM_LYING_DOWN_START_1, // unused
+    /*  7 */ DOG_ANIM_LYING_DOWN_LOOP,    // unused
+    /*  8 */ DOG_ANIM_LYING_DOWN_START_2, // unused
+    /*  9 */ DOG_ANIM_LYING_DOWN_START_3, // unused
+    /* 10 */ DOG_ANIM_LYING_DOWN_START_4, // unused
+    /* 11 */ DOG_ANIM_WALK_BACKWARDS,
+    /* 12 */ DOG_ANIM_JUMP,
+    /* 13 */ DOG_ANIM_LONG_JUMP, // unused
+    /* 14 */ DOG_ANIM_JUMP_ATTACK,
+    /* 15 */ DOG_ANIM_SWIM,
+    /* 16 */ DOG_ANIM_MAX
+} DogAnimation;
+
+static AnimationInfoS sAnimationInfo[] = {
+    { &gDogWalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },        { &gDogWalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -6 },
+    { &gDogRunAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },         { &gDogBarkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -6 },
+    { &gDogSitAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -6 },        { &gDogSitAnim, 1.0f, 0, -1, ANIMMODE_LOOP_PARTIAL, -6 },
+    { &gDogLyingDownAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -6 },  { &gDogLyingDownLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -6 },
+    { &gDogLyingDownAnim, 1.0f, 0, 27, ANIMMODE_ONCE, -6 },  { &gDogLyingDownAnim, 1.0f, 28, -1, ANIMMODE_ONCE, -6 },
+    { &gDogLyingDownAnim, 1.0f, 54, 54, ANIMMODE_ONCE, -6 }, { &gDogWalkAnim, -1.5f, -1, 0, ANIMMODE_LOOP, -6 },
+    { &gDogJumpAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },        { &gDogLongJumpAnim, 1.2f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &gDogJumpAttackAnim, 1.2f, 0, -1, ANIMMODE_ONCE, 0 },  { &gDogWalkAnim, 0.5f, 0, -1, ANIMMODE_LOOP, 0 },
 };
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneForward, 1000, ICHAIN_STOP),
 };
 
-void func_80989140(SkelAnime* skelAnime, ActorAnimationEntryS arg1[], s32 arg2) {
+void EnDg_ChangeAnim(SkelAnime* skelAnime, AnimationInfoS* animationInfo, s32 animIndex) {
     f32 frameCount;
 
-    arg1 += arg2;
-    if (arg1->frameCount < 0) {
-        frameCount = SkelAnime_GetFrameCount(&arg1->animationSeg->common);
+    animationInfo += animIndex;
+    if (animationInfo->frameCount < 0) {
+        frameCount = Animation_GetLastFrame(animationInfo->animation);
     } else {
-        frameCount = arg1->frameCount;
+        frameCount = animationInfo->frameCount;
     }
 
-    SkelAnime_ChangeAnim(skelAnime, arg1->animationSeg, arg1->playbackSpeed + (BREG(88) * 0.1f), arg1->frame,
-                         frameCount, arg1->mode, arg1->transitionRate);
+    Animation_Change(skelAnime, animationInfo->animation, animationInfo->playSpeed + (BREG(88) * 0.1f),
+                     animationInfo->startFrame, frameCount, animationInfo->mode, animationInfo->morphFrames);
 }
 
-void func_80989204(EnDg* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+void EnDg_UpdateCollision(EnDg* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
 
     this->collider.dim.pos.x = this->actor.world.pos.x;
     this->collider.dim.pos.y = this->actor.world.pos.y;
     this->collider.dim.pos.z = this->actor.world.pos.z;
     Collider_UpdateCylinder(&this->actor, &this->collider);
-    if ((player->transformation == PLAYER_FORM_DEKU) && (this->actionFunc == func_8098AC34)) {
-        CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+
+    if ((player->transformation == PLAYER_FORM_DEKU) && (this->actionFunc == EnDg_JumpAttack)) {
+        CollisionCheck_SetAT(play, &play->colChkCtx, &this->collider.base);
     } else {
-        Collider_ResetCylinderAT(globalCtx, &this->collider.base);
+        Collider_ResetCylinderAT(play, &this->collider.base);
     }
 
-    if ((this->unk_290 != 1) && !(this->unk_280 & 2)) {
-        CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+    // The check for DOG_FLAG_JUMP_ATTACKING here makes it so the dog passes through the
+    // player if it hits them with their jump attack.
+    if ((this->grabState != DOG_GRAB_STATE_HELD) && !(this->dogFlags & DOG_FLAG_JUMP_ATTACKING)) {
+        CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
     } else {
-        Collider_ResetCylinderOC(globalCtx, &this->collider.base);
+        Collider_ResetCylinderOC(play, &this->collider.base);
     }
 
-    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 26.0f, 10.0f, 0.0f, 5);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 26.0f, 10.0f, 0.0f, 5);
 }
 
-void func_8098933C(EnDg* this, Vec3f* arg1) {
-    f32 sp24;
-    f32 sp20;
-    f32 sp1C;
+void EnDg_GetFloorRot(EnDg* this, Vec3f* floorRot) {
+    f32 nx;
+    f32 ny;
+    f32 nz;
 
     if (this->actor.floorPoly != NULL) {
-        sp24 = COLPOLY_GET_NORMAL(this->actor.floorPoly->normal.x);
-        sp20 = COLPOLY_GET_NORMAL(this->actor.floorPoly->normal.y);
-        sp1C = COLPOLY_GET_NORMAL(this->actor.floorPoly->normal.z);
+        nx = COLPOLY_GET_NORMAL(this->actor.floorPoly->normal.x);
+        ny = COLPOLY_GET_NORMAL(this->actor.floorPoly->normal.y);
+        nz = COLPOLY_GET_NORMAL(this->actor.floorPoly->normal.z);
 
-        __sinf(0.0f);
-        __cosf(0.0f);
-        arg1->x = -Math_Acot2F(1.0f, -sp1C * sp20);
-        arg1->z = Math_Acot2F(1.0f, -sp24 * sp20);
+        sinf(0.0f);
+        cosf(0.0f);
+        floorRot->x = -Math_Acot2F(1.0f, -nz * ny);
+        floorRot->z = Math_Acot2F(1.0f, -nx * ny);
     }
 }
 
-s32 func_80989418(EnDg* this, Path* arg1, s32 arg2) {
-    Vec3s* sp5C = (Vec3s*)Lib_SegmentedToVirtual(arg1->points);
-    s32 count = arg1->count;
-    s32 idx = arg2;
-    s32 sp50 = false;
-    f32 phi_f12;
-    f32 phi_f14;
-    f32 sp44;
-    f32 sp40;
-    f32 sp3C;
-    Vec3f sp30;
+s32 EnDg_HasReachedPoint(EnDg* this, Path* path, s32 pointIndex) {
+    Vec3s* points = Lib_SegmentedToVirtual(path->points);
+    s32 pathCount = path->count;
+    s32 currentPoint = pointIndex;
+    s32 reached = false;
+    f32 diffX;
+    f32 diffZ;
+    f32 px;
+    f32 pz;
+    f32 d;
+    Vec3f point;
 
-    Math_Vec3s_ToVec3f(&sp30, &sp5C[idx]);
-    if (idx == 0) {
-        phi_f12 = sp5C[1].x - sp5C[0].x;
-        phi_f14 = sp5C[1].z - sp5C[0].z;
-    } else if ((idx + 1) == ((void)0, count)) {
-        phi_f12 = sp5C[count - 1].x - sp5C[count - 2].x;
-        phi_f14 = sp5C[count - 1].z - sp5C[count - 2].z;
+    Math_Vec3s_ToVec3f(&point, &points[currentPoint]);
+    if (currentPoint == 0) {
+        diffX = points[1].x - points[0].x;
+        diffZ = points[1].z - points[0].z;
+    } else if (currentPoint == pathCount - 1) {
+        diffX = points[pathCount - 1].x - points[pathCount - 2].x;
+        diffZ = points[pathCount - 1].z - points[pathCount - 2].z;
     } else {
-        phi_f12 = sp5C[idx + 1].x - sp5C[idx - 1].x;
-        phi_f14 = sp5C[idx + 1].z - sp5C[idx - 1].z;
+        diffX = points[currentPoint + 1].x - points[currentPoint - 1].x;
+        diffZ = points[currentPoint + 1].z - points[currentPoint - 1].z;
     }
 
-    func_8017B7F8(&sp30, func_80086B30(phi_f12, phi_f14) * 10430.378f, &sp44, &sp40, &sp3C);
-    if (((this->actor.world.pos.x * sp44) + (sp40 * this->actor.world.pos.z) + sp3C) > 0.0f) {
-        sp50 = true;
+    func_8017B7F8(&point, RADF_TO_BINANG(func_80086B30(diffX, diffZ)), &px, &pz, &d);
+
+    if (((this->actor.world.pos.x * px) + (pz * this->actor.world.pos.z) + d) > 0.0f) {
+        reached = true;
     }
 
-    return sp50;
+    return reached;
 }
 
-s16 func_809895B4(Path* path, s32 idx, Vec3f* pos, f32* distSQ) {
+/**
+ * Returns the Y-rotation the dog should have to move to the next point along its path.
+ */
+s16 EnDg_GetYRotation(Path* path, s32 index, Vec3f* pos, f32* distSq) {
     Vec3s* points;
     f32 diffX;
     f32 diffZ;
 
     if (path != NULL) {
-        points = (Vec3s*)Lib_SegmentedToVirtual(path->points);
-        points = &points[idx];
+        points = Lib_SegmentedToVirtual(path->points);
+        points = &points[index];
         diffX = points->x - pos->x;
         diffZ = points->z - pos->z;
     } else {
@@ -252,238 +306,278 @@ s16 func_809895B4(Path* path, s32 idx, Vec3f* pos, f32* distSQ) {
         diffZ = 0.0f;
     }
 
-    *distSQ = SQ(diffX) + SQ(diffZ);
+    *distSq = SQ(diffX) + SQ(diffZ);
 
     return RADF_TO_BINANG(Math_Acot2F(diffZ, diffX));
 }
 
-void func_80989674(EnDg* this, GlobalContext* globalCtx) {
-    s16 phi_a1;
-    f32 sp30;
+/**
+ * Updates the dog's Y-rotation and speed so that it moves along its path.
+ */
+void EnDg_MoveAlongPath(EnDg* this, PlayState* play) {
+    s16 yRotation;
+    f32 distSq;
 
-    if (this->unk_1DC != NULL) {
-        phi_a1 = func_809895B4(this->unk_1DC, this->unk_1E0, &this->actor.world.pos, &sp30);
+    if (this->path != NULL) {
+        yRotation = EnDg_GetYRotation(this->path, this->currentPoint, &this->actor.world.pos, &distSq);
         if (this->actor.bgCheckFlags & 8) {
-            phi_a1 = this->actor.wallYaw;
+            yRotation = this->actor.wallYaw;
         }
 
-        Math_SmoothStepToS(&this->actor.world.rot.y, phi_a1, 4, 0x3E8, 1);
+        Math_SmoothStepToS(&this->actor.world.rot.y, yRotation, 4, 0x3E8, 1);
         this->actor.shape.rot.y = this->actor.world.rot.y;
-        if (func_80989418(this, this->unk_1DC, this->unk_1E0)) {
-            if (this->unk_1E0 >= (this->unk_1DC->count - 1)) {
-                this->unk_1E0 = 0;
+        if (EnDg_HasReachedPoint(this, this->path, this->currentPoint)) {
+            if (this->currentPoint >= (this->path->count - 1)) {
+                this->currentPoint = 0;
             } else {
-                this->unk_1E0++;
+                this->currentPoint++;
             }
         }
 
-        if ((this->unk_286 == 21) || ((this->unk_286 == 20) && (globalCtx->sceneNum == SCENE_OMOYA))) {
+        if ((this->index == ENDG_INDEX_SWAMP_SPIDER_HOUSE) ||
+            ((this->index == ENDG_INDEX_ROMANI_RANCH) && (play->sceneId == SCENE_OMOYA))) {
             Math_ApproachF(&this->actor.speedXZ, 1.0f, 0.2f, 1.0f);
-        } else if (this->unk_286 == 20) {
+        } else if (this->index == ENDG_INDEX_ROMANI_RANCH) {
             Math_ApproachF(&this->actor.speedXZ, 3.5f, 0.2f, 1.0f);
-        } else if (globalCtx->sceneNum == SCENE_CLOCKTOWER) {
+        } else if (play->sceneId == SCENE_CLOCKTOWER) {
             Math_ApproachF(&this->actor.speedXZ, 3.5f, 0.2f, 1.0f);
-        } else if (D_8098C2A8[this->unk_286].unk_04 & 0x11) {
+        } else if (sRacetrackDogInfo[this->index].textId & 0x11) {
             Math_ApproachF(&this->actor.speedXZ, 1.0f, 0.2f, 1.0f);
         } else {
             Math_ApproachF(&this->actor.speedXZ, 3.5f, 0.2f, 1.0f);
         }
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
-void func_80989864(EnDg* this, GlobalContext* globalCtx) {
-    s16 frame = this->skelAnime.animCurrentFrame;
+void EnDg_SpawnFloorDustRing(EnDg* this, PlayState* play) {
+    s16 curFrame = this->skelAnime.curFrame;
     s16 mod = (this->actor.speedXZ > 6.0f) ? 2 : 3;
-    Vec3f sp38;
+    Vec3f pos;
 
-    if (((this->unk_286 + frame) % mod) == 0) {
-        sp38.x = randPlusMinusPoint5Scaled(15.0f) + this->actor.world.pos.x;
-        sp38.y = this->actor.world.pos.y;
-        sp38.z = randPlusMinusPoint5Scaled(15.0f) + this->actor.world.pos.z;
-        func_800BBDAC(globalCtx, &this->actor, &sp38, 10.0f, 0, 2.0f, 300, 0, 1);
+    if (((this->index + curFrame) % mod) == 0) {
+        pos.x = randPlusMinusPoint5Scaled(15.0f) + this->actor.world.pos.x;
+        pos.y = this->actor.world.pos.y;
+        pos.z = randPlusMinusPoint5Scaled(15.0f) + this->actor.world.pos.z;
+        Actor_SpawnFloorDustRing(play, &this->actor, &pos, 10.0f, 0, 2.0f, 300, 0, true);
     }
 }
 
-void func_80989974(EnDg* this) {
-    if (func_801378B8(&this->skelAnime, 1.0f) || func_801378B8(&this->skelAnime, 7.0f)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_MONKEY_WALK);
+void EnDg_PlaySfxWalk(EnDg* this) {
+    if (Animation_OnFrame(&this->skelAnime, 1.0f) || Animation_OnFrame(&this->skelAnime, 7.0f)) {
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_MONKEY_WALK);
     }
 }
 
-void func_809899C8(EnDg* this, f32 arg1) {
-    if (func_801378B8(&this->skelAnime, arg1)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_SMALL_DOG_BARK);
+void EnDg_PlaySfxBark(EnDg* this, f32 frame) {
+    if (Animation_OnFrame(&this->skelAnime, frame)) {
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SMALL_DOG_BARK);
     }
 }
 
-void func_80989A08(EnDg* this, f32 arg1) {
-    if (func_801378B8(&this->skelAnime, arg1)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_SMALL_DOG_ANG_BARK);
+void EnDg_PlaySfxAngryBark(EnDg* this, f32 frame) {
+    if (Animation_OnFrame(&this->skelAnime, frame)) {
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SMALL_DOG_ANG_BARK);
     }
 }
 
-void func_80989A48(EnDg* this) {
-    if (func_801378B8(&this->skelAnime, 23.0f) || func_801378B8(&this->skelAnime, 28.0f)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_SMALL_DOG_WHINE);
+void EnDg_PlaySfxWhine(EnDg* this) {
+    if (Animation_OnFrame(&this->skelAnime, 23.0f) || Animation_OnFrame(&this->skelAnime, 28.0f)) {
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SMALL_DOG_WHINE);
     }
 }
 
-void func_80989A9C(EnDg* this, f32 arg1) {
-    if (func_801378B8(&this->skelAnime, arg1)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_SMALL_DOG_GROAN);
+void EnDg_PlaySfxGrowl(EnDg* this, f32 frame) {
+    if (Animation_OnFrame(&this->skelAnime, frame)) {
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SMALL_DOG_GROAN);
     }
 }
 
-void func_80989ADC(EnDg* this, GlobalContext* globalCtx) {
+void EnDg_SetupIdleMove(EnDg* this, PlayState* play) {
     if (!(this->actor.bgCheckFlags & 0x20)) {
-        if ((this->unk_286 == 21) || ((this->unk_286 == 20) && (globalCtx->sceneNum == SCENE_OMOYA))) {
-            func_80989140(&this->skelAnime, sAnimations, 1);
-        } else if (this->unk_286 == 20) {
-            func_80989140(&this->skelAnime, sAnimations, 2);
-        } else if (globalCtx->sceneNum == SCENE_CLOCKTOWER) {
-            func_80989140(&this->skelAnime, sAnimations, 2);
-        } else if (D_8098C2A8[this->unk_286].unk_04 & 0x11) {
-            func_80989140(&this->skelAnime, sAnimations, 1);
+        if ((this->index == ENDG_INDEX_SWAMP_SPIDER_HOUSE) ||
+            ((this->index == ENDG_INDEX_ROMANI_RANCH) && (play->sceneId == SCENE_OMOYA))) {
+            EnDg_ChangeAnim(&this->skelAnime, sAnimationInfo, DOG_ANIM_WALK);
+        } else if (this->index == ENDG_INDEX_ROMANI_RANCH) {
+            EnDg_ChangeAnim(&this->skelAnime, sAnimationInfo, DOG_ANIM_RUN);
+        } else if (play->sceneId == SCENE_CLOCKTOWER) {
+            EnDg_ChangeAnim(&this->skelAnime, sAnimationInfo, DOG_ANIM_RUN);
+        } else if (sRacetrackDogInfo[this->index].textId & 0x11) {
+            EnDg_ChangeAnim(&this->skelAnime, sAnimationInfo, DOG_ANIM_WALK);
         } else {
-            func_80989140(&this->skelAnime, sAnimations, 2);
+            EnDg_ChangeAnim(&this->skelAnime, sAnimationInfo, DOG_ANIM_RUN);
         }
-        this->actionFunc = func_8098A468;
+
+        this->actionFunc = EnDg_IdleMove;
     }
 }
 
-void func_80989BF8(EnDg* this) {
-    if (this->unk_286 < 14) {
-        if (this->unk_286 % 2) {
-            D_8098C2A8[this->unk_286].unk_04 =
-                0x3538 + ((gSaveContext.weekEventReg[42 + (this->unk_286 / 2)] & 0xF0) >> 4);
+/**
+ * Updates the text ID in sRacetrackDogInfo based on what was set in the weekEventRegs by
+ * En_Aob_01. This makes it sp the proper message can be displayed when the player picks up
+ * the dog with the Mask of Truth equipped.
+ */
+void EnDg_UpdateTextId(EnDg* this) {
+    if (this->index < 14) {
+        // Assuming that the weekEventRegs haven't been tampered with, then this will produce a text ID in
+        // the range of 0x3538 to 0x3545.
+        if (this->index % 2) {
+            sRacetrackDogInfo[this->index].textId =
+                0x3538 + ((gSaveContext.save.weekEventReg[42 + (this->index / 2)] & 0xF0) >> 4);
         } else {
-            D_8098C2A8[this->unk_286].unk_04 = 0x3538 + (gSaveContext.weekEventReg[42 + (this->unk_286 / 2)] & 0xF);
+            sRacetrackDogInfo[this->index].textId =
+                0x3538 + (gSaveContext.save.weekEventReg[42 + (this->index / 2)] & 0x0F);
         }
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 
-    if ((D_8098C2A8[this->unk_286].unk_04 >= 0x3547) || (D_8098C2A8[this->unk_286].unk_04 < 0x3538)) {
-        D_8098C2A8[this->unk_286].unk_04 = 0x353E;
+    // As a sanity check, this makes sure the text ID is something in the expected range of 0x3538 to 0x3546.
+    if ((sRacetrackDogInfo[this->index].textId > 0x3546) || (sRacetrackDogInfo[this->index].textId < 0x3538)) {
+        sRacetrackDogInfo[this->index].textId = 0x353E;
     }
 
-    if (D_8098C2A8[this->unk_286].unk_04 == 0x353D) {
-        D_8098C2A8[this->unk_286].unk_04 = 0x3538;
+    // Text ID 0x353D is the text for the Romani Ranch dog, which is in the middle of the race dog block. If
+    // the dog ends up with this text ID, adjust it so the dog says a different message indcating it's in
+    // good condition.
+    if (sRacetrackDogInfo[this->index].textId == 0x353D) {
+        sRacetrackDogInfo[this->index].textId = 0x3538;
     }
 }
 
-void func_80989D38(EnDg* this, GlobalContext* globalCtx) {
-    if (this->unk_286 == 21) {
+void EnDg_StartTextBox(EnDg* this, PlayState* play) {
+    if (this->index == ENDG_INDEX_SWAMP_SPIDER_HOUSE) {
         if (CURRENT_DAY == 1) {
-            func_801518B0(globalCtx, 0x91C, NULL);
+            // Stupid master...
+            Message_StartTextbox(play, 0x91C, NULL);
         } else {
-            func_801518B0(globalCtx, 0x91E, NULL);
+            // I miss the ranch...
+            Message_StartTextbox(play, 0x91E, NULL);
         }
-    } else if ((this->unk_286 >= 0) && (this->unk_286 < 14)) {
-        func_801518B0(globalCtx, D_8098C2A8[this->unk_286].unk_04, NULL);
-    } else if (this->unk_286 == 20) {
-        func_801518B0(globalCtx, 0x353D, NULL);
+    } else if ((this->index >= ENDG_INDEX_RACETRACK_0) && (this->index <= ENDG_INDEX_RACETRACK_13)) {
+        Message_StartTextbox(play, sRacetrackDogInfo[this->index].textId, NULL);
+    } else if (this->index == ENDG_INDEX_ROMANI_RANCH) {
+        // I wonder if I can stop practicing...
+        Message_StartTextbox(play, 0x353D, NULL);
     } else {
-        func_801518B0(globalCtx, 0x627, NULL);
+        // Where did that Deku Scrub go?
+        Message_StartTextbox(play, 0x627, NULL);
     }
 }
 
-void func_80989E18(EnDg* this, GlobalContext* globalCtx) {
-    D_8098C2A8_s* temp;
-
-    if ((D_8098C2A0 != 0) && !(this->unk_280 & 1)) {
-        this->actor.flags |= 0x8000000;
-        this->unk_280 |= 1;
-    } else if ((D_8098C2A0 == 0) && (this->unk_280 & 1)) {
-        this->actor.flags &= ~0x8000000;
-        this->unk_280 &= ~1;
+/**
+ * Checks to see if the player picked up the dog and sets the appropriate state if they did.
+ */
+void EnDg_TryPickUp(EnDg* this, PlayState* play) {
+    if (sIsAnyDogHeld && !(this->dogFlags & DOG_FLAG_HELD)) {
+        this->actor.flags |= ACTOR_FLAG_8000000;
+        this->dogFlags |= DOG_FLAG_HELD;
+    } else if (!sIsAnyDogHeld && (this->dogFlags & DOG_FLAG_HELD)) {
+        this->actor.flags &= ~ACTOR_FLAG_8000000;
+        this->dogFlags &= ~DOG_FLAG_HELD;
     }
 
-    if (Actor_HasParent(&this->actor, globalCtx)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_SMALL_DOG_BARK);
-        this->unk_290 = 1;
-        D_8098C2FC = D_8098C2A8[this->unk_286];
-        if (D_8098C2A0 == 0) {
-            this->actor.flags |= 0x8000000;
-            D_8098C2A0 = 1;
-            this->unk_280 |= 1;
+    if (Actor_HasParent(&this->actor, play)) {
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SMALL_DOG_BARK);
+        this->grabState = DOG_GRAB_STATE_HELD;
+        sSelectedRacetrackDogInfo = sRacetrackDogInfo[this->index];
+        if (!sIsAnyDogHeld) {
+            this->actor.flags |= ACTOR_FLAG_8000000;
+            sIsAnyDogHeld = true;
+            this->dogFlags |= DOG_FLAG_HELD;
         }
 
-        func_80989140(&this->skelAnime, sAnimations, 5);
-        this->actor.flags &= ~1;
+        EnDg_ChangeAnim(&this->skelAnime, sAnimationInfo, DOG_ANIM_SIT_DOWN);
+        this->actor.flags &= ~ACTOR_FLAG_1;
         this->actor.speedXZ = 0.0f;
-        if (Player_GetMask(globalCtx) == PLAYER_MASK_MASK_OF_TRUTH) {
-            this->actor.flags |= 0x10000;
-            func_800B8614(&this->actor, globalCtx, 100.0f);
-            this->actionFunc = func_8098BBEC;
+        if (Player_GetMask(play) == PLAYER_MASK_TRUTH) {
+            this->actor.flags |= ACTOR_FLAG_10000;
+            func_800B8614(&this->actor, play, 100.0f);
+            this->actionFunc = EnDg_SetupTalk;
         } else {
-            this->actionFunc = func_8098BA64;
+            this->actionFunc = EnDg_Held;
         }
     } else {
-        func_800B8BB0(&this->actor, globalCtx);
+        Actor_LiftActor(&this->actor, play);
     }
 }
 
-s32 func_80989FC8(GlobalContext* globalCtx) {
-    EnDg* enemy = (EnDg*)globalCtx->actorCtx.actorList[ACTORCAT_ENEMY].first;
+/**
+ * Returns true if it finds a dog to follow the player around while they're marching with
+ * the Bremen Mask. The index of the dog it finds is stored in sBremenMaskFollowerIndex.
+ */
+s32 EnDg_FindFollowerForBremenMask(PlayState* play) {
+    Actor* enemy = play->actorCtx.actorLists[ACTORCAT_ENEMY].first;
     f32 minDist = 9999.0f;
     f32 dist;
 
     while (enemy != NULL) {
-        if (enemy->actor.id == ACTOR_EN_DG) {
-            if (enemy->actor.isTargeted) {
-                D_8098C2A4.unk_00 = enemy->unk_286;
+        if (enemy->id == ACTOR_EN_DG) {
+            if (enemy->isTargeted) {
+                sBremenMaskFollowerIndex = ((EnDg*)enemy)->index;
                 return true;
             }
 
-            dist = enemy->actor.xzDistToPlayer;
+            dist = enemy->xzDistToPlayer;
             if (dist < minDist) {
-                D_8098C2A4.unk_00 = enemy->unk_286;
+                sBremenMaskFollowerIndex = ((EnDg*)enemy)->index;
                 minDist = dist;
             }
         }
-        enemy = (EnDg*)enemy->actor.next;
+
+        enemy = enemy->next;
     }
 
-    if (D_8098C2A4.unk_00 != 99) {
+    if (sBremenMaskFollowerIndex != ENDG_INDEX_NO_BREMEN_MASK_FOLLOWER) {
         return true;
     }
 
     return false;
 }
 
-void func_8098A064(EnDg* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+/**
+ * This checks for two conditions:
+ * - If the player has started marching with the Bremen Mask, then it makes the dog
+ *   start following the player around (assuming it's the best candidate found in
+ *   EnDg_FindFollowerForBremenMask above).
+ * - If the player has stopped marching with the Bremen Mask, and this dog was
+ *   following them around, then it returns the dog to its idle state.
+ */
+void EnDg_CheckForBremenMaskMarch(EnDg* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
 
-    if (player->stateFlags3 & 0x20000000) {
-        if (D_8098C2A4.unk_00 == 99) {
-            func_80989FC8(globalCtx);
+    if (player->stateFlags3 & PLAYER_STATE3_20000000) {
+        if (sBremenMaskFollowerIndex == ENDG_INDEX_NO_BREMEN_MASK_FOLLOWER) {
+            EnDg_FindFollowerForBremenMask(play);
         }
 
-        if (this->unk_286 == D_8098C2A4.unk_00) {
-            if (!(this->unk_280 & 0x20)) {
-                this->unk_280 |= 0x20;
-                func_80989140(&this->skelAnime, sAnimations, 1);
-                this->actionFunc = func_8098AF44;
-            } else if ((this->actionFunc == func_8098B004) || (this->actionFunc == func_8098AB48)) {
-                if (DECR(this->unk_292) == 0) {
-                    this->unk_292 = 10;
-                    Audio_PlayActorSound2(&this->actor, NA_SE_EV_SMALL_DOG_BARK);
+        if (this->index == sBremenMaskFollowerIndex) {
+            if (!(this->dogFlags & DOG_FLAG_FOLLOWING_BREMEN_MASK)) {
+                this->dogFlags |= DOG_FLAG_FOLLOWING_BREMEN_MASK;
+                EnDg_ChangeAnim(&this->skelAnime, sAnimationInfo, DOG_ANIM_WALK);
+                this->actionFunc = EnDg_SetupBremenMaskApproachPlayer;
+            } else if ((this->actionFunc == EnDg_ApproachPlayer) || (this->actionFunc == EnDg_SitNextToPlayer)) {
+                if (DECR(this->bremenBarkTimer) == 0) {
+                    this->bremenBarkTimer = 10;
+                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SMALL_DOG_BARK);
                 }
             }
         }
-    } else if (this->unk_286 == D_8098C2A4.unk_00) {
-        this->unk_280 &= ~0x20;
-        D_8098C2A4.unk_00 = 99;
-        func_80989ADC(this, globalCtx);
-        this->actionFunc = func_8098A468;
+    } else if (this->index == sBremenMaskFollowerIndex) {
+        this->dogFlags &= ~DOG_FLAG_FOLLOWING_BREMEN_MASK;
+        sBremenMaskFollowerIndex = ENDG_INDEX_NO_BREMEN_MASK_FOLLOWER;
+        EnDg_SetupIdleMove(this, play);
+        this->actionFunc = EnDg_IdleMove;
     }
 }
 
-s32 func_8098A1B4(EnDg* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+/**
+ * Returns true if the player is not human and the dog is close enough to start
+ * reacting to their current form.
+ */
+s32 EnDg_ShouldReactToNonHumanPlayer(EnDg* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
 
     switch (player->transformation) {
         case PLAYER_FORM_GORON:
@@ -491,7 +585,7 @@ s32 func_8098A1B4(EnDg* this, GlobalContext* globalCtx) {
             if (this->actor.xzDistToPlayer < 300.0f) {
                 return true;
             }
-
+            // fallthrough
         case PLAYER_FORM_DEKU:
             if (this->actor.xzDistToPlayer < 250.0f) {
                 return true;
@@ -502,144 +596,167 @@ s32 func_8098A1B4(EnDg* this, GlobalContext* globalCtx) {
     return false;
 }
 
-void func_8098A234(EnDg* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+/**
+ * Sets the appropriate actionFunc given the player's current form and the dog's current behavior.
+ * Specifically, it makes sure that the dog doesn't start reacting to the player's form until the
+ * player starts moving a bit. This was presumably done so the player could more easily react to
+ * the dog changing its behavior; it would be strange if the dog attacked the player the instant
+ * they put on the Deku Mask, for example.
+ */
+void EnDg_ChooseActionForForm(EnDg* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
 
     if (!(this->actor.bgCheckFlags & 0x20)) {
         switch (player->transformation) {
             case PLAYER_FORM_HUMAN:
-                if (this->unk_28C != 1) {
-                    this->unk_28C = 1;
-                    this->unk_280 &= ~2;
-                    func_80989ADC(this, globalCtx);
+                if (this->behavior != DOG_BEHAVIOR_HUMAN) {
+                    this->behavior = DOG_BEHAVIOR_HUMAN;
+                    this->dogFlags &= ~DOG_FLAG_JUMP_ATTACKING;
+                    EnDg_SetupIdleMove(this, play);
                 }
                 break;
 
             case PLAYER_FORM_ZORA:
-                this->unk_280 &= ~2;
-                if ((this->unk_28C != 4) && (player->actor.speedXZ > 1.0f)) {
-                    this->unk_28C = 4;
-                    func_80989140(&this->skelAnime, sAnimations, 2);
-                    this->actionFunc = func_8098B004;
+                this->dogFlags &= ~DOG_FLAG_JUMP_ATTACKING;
+                if ((this->behavior != DOG_BEHAVIOR_ZORA) && (player->actor.speedXZ > 1.0f)) {
+                    this->behavior = DOG_BEHAVIOR_ZORA;
+                    EnDg_ChangeAnim(&this->skelAnime, sAnimationInfo, DOG_ANIM_RUN);
+                    this->actionFunc = EnDg_ApproachPlayer;
                 }
 
-                if ((this->unk_28C != 5) && (this->unk_28C != 4)) {
-                    this->unk_28C = 5;
-                    func_80989ADC(this, globalCtx);
+                if ((this->behavior != DOG_BEHAVIOR_ZORA_WAIT) && (this->behavior != DOG_BEHAVIOR_ZORA)) {
+                    this->behavior = DOG_BEHAVIOR_ZORA_WAIT;
+                    EnDg_SetupIdleMove(this, play);
                 }
                 break;
 
             case PLAYER_FORM_GORON:
-                this->unk_280 &= ~2;
-                if ((this->unk_28C != 2) && (player->actor.speedXZ > 1.0f)) {
-                    this->unk_28C = 2;
-                    func_80989140(&this->skelAnime, sAnimations, 11);
-                    this->unk_282 = 50;
-                    this->actionFunc = func_8098A618;
+                this->dogFlags &= ~DOG_FLAG_JUMP_ATTACKING;
+                if ((this->behavior != DOG_BEHAVIOR_GORON) && (player->actor.speedXZ > 1.0f)) {
+                    this->behavior = DOG_BEHAVIOR_GORON;
+                    EnDg_ChangeAnim(&this->skelAnime, sAnimationInfo, DOG_ANIM_WALK_BACKWARDS);
+                    this->timer = 50;
+                    this->actionFunc = EnDg_BackAwayFromGoron;
                 }
 
-                if ((this->unk_28C != 3) && (this->unk_28C != 2)) {
-                    this->unk_28C = 3;
-                    func_80989ADC(this, globalCtx);
+                if ((this->behavior != DOG_BEHAVIOR_GORON_WAIT) && (this->behavior != DOG_BEHAVIOR_GORON)) {
+                    this->behavior = DOG_BEHAVIOR_GORON_WAIT;
+                    EnDg_SetupIdleMove(this, play);
                 }
                 break;
 
             case PLAYER_FORM_DEKU:
-                this->unk_280 &= ~2;
-                if ((this->unk_28C != 6) && (player->actor.speedXZ > 1.0f)) {
-                    this->unk_28C = 6;
-                    func_80989140(&this->skelAnime, sAnimations, 2);
-                    this->actionFunc = func_8098A938;
+                this->dogFlags &= ~DOG_FLAG_JUMP_ATTACKING;
+                if ((this->behavior != DOG_BEHAVIOR_DEKU) && (player->actor.speedXZ > 1.0f)) {
+                    this->behavior = DOG_BEHAVIOR_DEKU;
+                    EnDg_ChangeAnim(&this->skelAnime, sAnimationInfo, DOG_ANIM_RUN);
+                    this->actionFunc = EnDg_ApproachPlayerToAttack;
                 }
 
-                if ((this->unk_28C != 7) && (this->unk_28C != 6)) {
-                    this->unk_28C = 7;
-                    func_80989ADC(this, globalCtx);
+                if ((this->behavior != DOG_BEHAVIOR_DEKU_WAIT) && (this->behavior != DOG_BEHAVIOR_DEKU)) {
+                    this->behavior = DOG_BEHAVIOR_DEKU_WAIT;
+                    EnDg_SetupIdleMove(this, play);
                 }
                 break;
         }
     }
 }
 
-void func_8098A468(EnDg* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+/**
+ * Moves the dog along its path, stopping to bark at random intervals.
+ */
+void EnDg_IdleMove(EnDg* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
 
     this->actor.velocity.y = 0.0f;
     this->actor.gravity = -3.0f;
-    func_80989674(this, globalCtx);
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    EnDg_MoveAlongPath(this, play);
+    Actor_MoveWithGravity(&this->actor);
     if (player->transformation == PLAYER_FORM_HUMAN) {
-        func_80989E18(this, globalCtx);
+        EnDg_TryPickUp(this, play);
     }
 
-    func_8098A064(this, globalCtx);
-    func_80989974(this);
+    EnDg_CheckForBremenMaskMarch(this, play);
+    EnDg_PlaySfxWalk(this);
     if (!(this->actor.bgCheckFlags & 1)) {
-        this->actionFunc = func_8098AF98;
+        this->actionFunc = EnDg_Fall;
     }
 
-    if (DECR(this->unk_282) == 0) {
-        this->unk_282 = Rand_S16Offset(20, 20);
-        func_80989140(&this->skelAnime, sAnimations, 3);
-        this->actionFunc = func_8098A55C;
+    if (DECR(this->timer) == 0) {
+        this->timer = Rand_S16Offset(20, 20);
+        EnDg_ChangeAnim(&this->skelAnime, sAnimationInfo, DOG_ANIM_BARK);
+        this->actionFunc = EnDg_IdleBark;
     }
 }
 
-void func_8098A55C(EnDg* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+/**
+ * Stops and barks, before returning to moving along its path.
+ */
+void EnDg_IdleBark(EnDg* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
 
     if (player->transformation == PLAYER_FORM_HUMAN) {
-        func_80989E18(this, globalCtx);
+        EnDg_TryPickUp(this, play);
     }
 
-    func_809899C8(this, 13.0f);
-    func_809899C8(this, 19.0f);
+    EnDg_PlaySfxBark(this, 13.0f);
+    EnDg_PlaySfxBark(this, 19.0f);
+
     if (!(this->actor.bgCheckFlags & 1)) {
-        this->actionFunc = func_8098AF98;
+        this->actionFunc = EnDg_Fall;
     }
 
-    if (DECR(this->unk_282) == 0) {
-        this->unk_282 = Rand_S16Offset(60, 60);
-        func_80989ADC(this, globalCtx);
+    if (DECR(this->timer) == 0) {
+        this->timer = Rand_S16Offset(60, 60);
+        EnDg_SetupIdleMove(this, play);
     }
 }
 
-void func_8098A618(EnDg* this, GlobalContext* globalCtx) {
+/**
+ * Slowly back away from the player while growling. After a short time backing away,
+ * this function will make the dog away from the player.
+ */
+void EnDg_BackAwayFromGoron(EnDg* this, PlayState* play) {
     this->actor.velocity.y = 0.0f;
     this->actor.gravity = -3.0f;
 
-    if (DECR(this->unk_282) == 0) {
-        this->unk_282 = 50;
-        func_80989140(&this->skelAnime, sAnimations, 2);
-        this->actionFunc = func_8098A70C;
+    if (DECR(this->timer) == 0) {
+        this->timer = 50;
+        EnDg_ChangeAnim(&this->skelAnime, sAnimationInfo, DOG_ANIM_RUN);
+        this->actionFunc = EnDg_RunAwayFromGoron;
     } else {
         Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 4, 0x3E8, 1);
         if (this->actor.bgCheckFlags & 8) {
             this->actor.shape.rot.y = this->actor.wallYaw;
         }
+
         this->actor.world.rot.y = this->actor.shape.rot.y;
         Math_ApproachF(&this->actor.speedXZ, -1.5f, 0.2f, 1.0f);
-        Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+        Actor_MoveWithGravity(&this->actor);
     }
 
-    func_80989974(this);
-    func_80989A9C(this, 0);
+    EnDg_PlaySfxWalk(this);
+    EnDg_PlaySfxGrowl(this, 0);
 }
 
-void func_8098A70C(EnDg* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
-    s16 phi_a1;
+/**
+ * Quickly run away from the player. Once the dog is far enough from the player,
+ * this function will make them start barking at them.
+ */
+void EnDg_RunAwayFromGoron(EnDg* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
+    s16 yRotation;
 
     if (this->actor.xzDistToPlayer < 250.0f) {
         Math_ApproachS(&this->actor.shape.rot.y, -this->actor.yawTowardsPlayer, 4, 0xC00);
 
         if (this->actor.bgCheckFlags & 8) {
-            phi_a1 = this->actor.wallYaw;
+            yRotation = this->actor.wallYaw;
         } else {
-            phi_a1 = 0;
+            yRotation = 0;
         }
 
-        Math_SmoothStepToS(&this->actor.world.rot.y, phi_a1, 4, 0x3E8, 1);
+        Math_SmoothStepToS(&this->actor.world.rot.y, yRotation, 4, 0x3E8, 1);
         this->actor.world.rot.y = this->actor.shape.rot.y;
         if (player->actor.speedXZ != 0.0f) {
             Math_ApproachF(&this->actor.speedXZ, player->actor.speedXZ, 0.2f, 1.0f);
@@ -647,38 +764,42 @@ void func_8098A70C(EnDg* this, GlobalContext* globalCtx) {
             Math_ApproachF(&this->actor.speedXZ, 3.5f, 0.2f, 1.0f);
         }
     } else {
-        func_80989140(&this->skelAnime, sAnimations, 3);
-        this->actionFunc = func_8098A89C;
+        EnDg_ChangeAnim(&this->skelAnime, sAnimationInfo, DOG_ANIM_BARK);
+        this->actionFunc = EnDg_BarkAtGoron;
     }
 
     if (this->actor.speedXZ > 7.0f) {
         this->actor.speedXZ = 7.0f;
     }
 
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
-    func_80989974(this);
-    if (func_801378B8(&this->skelAnime, 3.0f)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_SMALL_DOG_CRY);
-    } else if (func_801378B8(&this->skelAnime, 6.0f)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_MONKEY_WALK);
+    Actor_MoveWithGravity(&this->actor);
+    EnDg_PlaySfxWalk(this);
+
+    if (Animation_OnFrame(&this->skelAnime, 3.0f)) {
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SMALL_DOG_CRY);
+    } else if (Animation_OnFrame(&this->skelAnime, 6.0f)) {
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_MONKEY_WALK);
     }
 }
 
-void func_8098A89C(EnDg* this, GlobalContext* globalCtx) {
+/**
+ * Bark at the player until they get close enough, at which point the dog starts backing away.
+ */
+void EnDg_BarkAtGoron(EnDg* this, PlayState* play) {
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 4, 0xC00);
     this->actor.world.rot.y = this->actor.shape.rot.y;
     if (this->actor.xzDistToPlayer < 250.0f) {
-        func_80989140(&this->skelAnime, sAnimations, 11);
-        this->unk_282 = 50;
-        this->actionFunc = func_8098A618;
+        EnDg_ChangeAnim(&this->skelAnime, sAnimationInfo, DOG_ANIM_WALK_BACKWARDS);
+        this->timer = 50;
+        this->actionFunc = EnDg_BackAwayFromGoron;
     }
 
-    func_80989A08(this, 13.0f);
-    func_80989A08(this, 19.0f);
+    EnDg_PlaySfxAngryBark(this, 13.0f);
+    EnDg_PlaySfxAngryBark(this, 19.0f);
 }
 
-void func_8098A938(EnDg* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+void EnDg_ApproachPlayerToAttack(EnDg* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
 
     this->actor.velocity.y = 0.0f;
     this->actor.gravity = -3.0f;
@@ -689,17 +810,17 @@ void func_8098A938(EnDg* this, GlobalContext* globalCtx) {
     this->actor.world.rot.y = this->actor.shape.rot.y;
     if (this->actor.xzDistToPlayer < 70.0f) {
         Math_ApproachZeroF(&this->actor.speedXZ, 0.2f, 1.0f);
-        if (func_801378B8(&this->skelAnime, 7.0f)) {
-            s16 y = ABS_ALT(player->actor.shape.rot.y - this->actor.shape.rot.y);
+        if (Animation_OnFrame(&this->skelAnime, 7.0f)) {
+            s16 yawDiff = ABS_ALT(player->actor.shape.rot.y - this->actor.shape.rot.y);
 
-            this->unk_28E = 20;
-            if (y < 0x4000) {
-                func_80989140(&this->skelAnime, sAnimations, 14);
-                this->actionFunc = func_8098AC34;
+            this->attackTimer = 20;
+            if (yawDiff < 0x4000) {
+                EnDg_ChangeAnim(&this->skelAnime, sAnimationInfo, DOG_ANIM_JUMP_ATTACK);
+                this->actionFunc = EnDg_JumpAttack;
             } else {
-                func_80989140(&this->skelAnime, sAnimations, 11);
-                sAnimations[11].playbackSpeed = -1.0f;
-                this->actionFunc = func_8098B198;
+                EnDg_ChangeAnim(&this->skelAnime, sAnimationInfo, DOG_ANIM_WALK_BACKWARDS);
+                sAnimationInfo[DOG_ANIM_WALK_BACKWARDS].playSpeed = -1.0f;
+                this->actionFunc = EnDg_SlowlyBackUpBeforeAttacking;
             }
         }
     } else {
@@ -707,138 +828,161 @@ void func_8098A938(EnDg* this, GlobalContext* globalCtx) {
         Math_ApproachF(&this->actor.speedXZ, 5.0f, 0.2f, 1.0f);
     }
 
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
-    func_80989974(this);
-    func_80989A08(this, 5.0f);
+    Actor_MoveWithGravity(&this->actor);
+    EnDg_PlaySfxWalk(this);
+    EnDg_PlaySfxAngryBark(this, 5.0f);
 }
 
-void func_8098AAAC(EnDg* this, GlobalContext* globalCtx) {
-    this->unk_280 &= ~8;
+/**
+ * Makes the dog run around for a bit after attacking before it
+ * starts to approach the player for another attack.
+ */
+void EnDg_RunAfterAttacking(EnDg* this, PlayState* play) {
+    this->dogFlags &= ~DOG_FLAG_BOUNCED;
     Math_ApproachF(&this->actor.speedXZ, 3.5f, 0.1f, 0.5f);
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
-    if (DECR(this->unk_28E) == 0) {
-        this->unk_28E = 20;
-        this->actionFunc = func_8098A938;
+    Actor_MoveWithGravity(&this->actor);
+    if (DECR(this->attackTimer) == 0) {
+        this->attackTimer = 20;
+        this->actionFunc = EnDg_ApproachPlayerToAttack;
     }
 
-    func_80989974(this);
-    func_80989A08(this, 3.0f);
+    EnDg_PlaySfxWalk(this);
+    EnDg_PlaySfxAngryBark(this, 3.0f);
 }
 
-void func_8098AB48(EnDg* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+/**
+ * Makes the dog sit next to the player until they get too far away, at which point
+ * it will attempt to approach them again.
+ */
+void EnDg_SitNextToPlayer(EnDg* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
 
     if (!(this->actor.bgCheckFlags & 1)) {
-        this->actionFunc = func_8098AF98;
+        this->actionFunc = EnDg_Fall;
     }
 
     if (this->actor.xzDistToPlayer < 50.0f) {
         Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 4, 0xC00);
         this->actor.world.rot.y = this->actor.shape.rot.y;
     } else {
-        if (player->stateFlags3 & 0x20000000) {
-            func_80989140(&this->skelAnime, sAnimations, 1);
+        if (player->stateFlags3 & PLAYER_STATE3_20000000) {
+            EnDg_ChangeAnim(&this->skelAnime, sAnimationInfo, DOG_ANIM_WALK);
         } else {
-            func_80989140(&this->skelAnime, sAnimations, 2);
+            EnDg_ChangeAnim(&this->skelAnime, sAnimationInfo, DOG_ANIM_RUN);
         }
-        this->actionFunc = func_8098B004;
+
+        this->actionFunc = EnDg_ApproachPlayer;
     }
 
-    func_8098A064(this, globalCtx);
-    if (!(this->unk_280 & 0x20)) {
-        func_80989A48(this);
+    EnDg_CheckForBremenMaskMarch(this, play);
+
+    // If we're in this function, the player is either marching with the Bremen Mask, or
+    // they're a Zora. The below code will make the dog repeatedly whine in the latter case.
+    if (!(this->dogFlags & DOG_FLAG_FOLLOWING_BREMEN_MASK)) {
+        EnDg_PlaySfxWhine(this);
     }
 }
 
-void func_8098AC34(EnDg* this, GlobalContext* globalCtx) {
-    s16 sp26 = this->skelAnime.animCurrentFrame;
+void EnDg_JumpAttack(EnDg* this, PlayState* play) {
+    s16 curFrame = this->skelAnime.curFrame;
 
     if ((this->actor.xyzDistToPlayerSq < 800.0f) && (this->collider.base.atFlags & AT_BOUNCED)) {
-        this->unk_28E = 60;
-        this->unk_280 &= ~2;
-        this->unk_280 |= 8;
+        this->attackTimer = 60;
+        this->dogFlags &= ~DOG_FLAG_JUMP_ATTACKING;
+        this->dogFlags |= DOG_FLAG_BOUNCED;
         this->collider.base.atFlags &= ~AT_BOUNCED;
         this->actor.speedXZ *= -1.0f;
-        func_80989140(&this->skelAnime, sAnimations, 2);
-        this->actionFunc = func_8098AAAC;
+        EnDg_ChangeAnim(&this->skelAnime, sAnimationInfo, DOG_ANIM_RUN);
+        this->actionFunc = EnDg_RunAfterAttacking;
         return;
     }
 
-    if (DECR(this->unk_28E) == 0) {
-        this->unk_28E = 60;
-        this->unk_280 &= ~2;
-        func_80989140(&this->skelAnime, sAnimations, 2);
-        this->actionFunc = func_8098AAAC;
+    if (DECR(this->attackTimer) == 0) {
+        this->attackTimer = 60;
+        this->dogFlags &= ~DOG_FLAG_JUMP_ATTACKING;
+        EnDg_ChangeAnim(&this->skelAnime, sAnimationInfo, DOG_ANIM_RUN);
+        this->actionFunc = EnDg_RunAfterAttacking;
     }
 
-    if (sp26 < 9) {
-        if (func_801378B8(&this->skelAnime, 0.0f)) {
-            sAnimations[14].playbackSpeed = randPlusMinusPoint5Scaled(1.0f) + 3.0f;
+    if (curFrame < 9) {
+        if (Animation_OnFrame(&this->skelAnime, 0.0f)) {
+            sAnimationInfo[DOG_ANIM_JUMP_ATTACK].playSpeed = randPlusMinusPoint5Scaled(1.0f) + 3.0f;
         }
-        func_80989864(this, globalCtx);
+
+        EnDg_SpawnFloorDustRing(this, play);
     } else {
-        this->unk_280 |= 2;
-        if (func_801378B8(&this->skelAnime, 9.0f)) {
+        this->dogFlags |= DOG_FLAG_JUMP_ATTACKING;
+        if (Animation_OnFrame(&this->skelAnime, 9.0f)) {
             f32 rand = randPlusMinusPoint5Scaled(1.5f);
 
-            sAnimations[14].playbackSpeed = 1.2f;
+            sAnimationInfo[DOG_ANIM_JUMP_ATTACK].playSpeed = 1.2f;
             this->actor.velocity.y = 2.0f * rand + 3.0f;
             this->actor.speedXZ = 8.0f + rand;
-        } else if (sp26 >= 0x15) {
+        } else if (curFrame > 20) {
             Math_ApproachF(&this->actor.speedXZ, 2.5f, 0.2f, 1.0f);
         }
-        if (sp26 >= 0x18) {
-            func_80989864(this, globalCtx);
+
+        if (curFrame > 23) {
+            EnDg_SpawnFloorDustRing(this, play);
         }
-        Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+
+        Actor_MoveWithGravity(&this->actor);
     }
 
-    func_80989A9C(this, 10.0f);
+    EnDg_PlaySfxGrowl(this, 10.0f);
 }
 
-// Unused?
-void func_8098AE58(EnDg* this, GlobalContext* globalCtx) {
+/**
+ * An unused function that will make the dog walk slowly towards the player until they're
+ * in a specific range, at which point they will bark at them. This might be part of an
+ * unused or early variation of how dogs react to Goron Link.
+ */
+void EnDg_WalkToPlayer(EnDg* this, PlayState* play) {
     if (this->actor.xzDistToPlayer < 150.0f) {
-        func_80989140(&this->skelAnime, sAnimations, 11);
-        this->actionFunc = func_8098B28C;
+        EnDg_ChangeAnim(&this->skelAnime, sAnimationInfo, DOG_ANIM_WALK_BACKWARDS);
+        this->actionFunc = EnDg_BackAwayFromPlayer;
     } else if (this->actor.xzDistToPlayer < 200.0f) {
-        func_80989140(&this->skelAnime, sAnimations, 3);
-        this->actionFunc = func_8098B390;
+        EnDg_ChangeAnim(&this->skelAnime, sAnimationInfo, DOG_ANIM_BARK);
+        this->actionFunc = EnDg_BarkAtPlayer;
     } else {
         Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 4, 0xC00);
         this->actor.world.rot.y = this->actor.shape.rot.y;
         Math_ApproachF(&this->actor.speedXZ, 2.0f, 0.2f, 1.0f);
-        Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+        Actor_MoveWithGravity(&this->actor);
     }
 
-    func_80989974(this);
-    func_809899C8(this, 5.0f);
+    EnDg_PlaySfxWalk(this);
+    EnDg_PlaySfxBark(this, 5.0f);
 }
 
-void func_8098AF44(EnDg* this, GlobalContext* globalCtx) {
+void EnDg_SetupBremenMaskApproachPlayer(EnDg* this, PlayState* play) {
     if (func_801A46F8() == 1) {
-        this->unk_292 = 10;
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_SMALL_DOG_BARK);
-        this->actionFunc = func_8098B004;
+        this->bremenBarkTimer = 10;
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SMALL_DOG_BARK);
+        this->actionFunc = EnDg_ApproachPlayer;
     }
 }
 
-void func_8098AF98(EnDg* this, GlobalContext* globalCtx) {
+void EnDg_Fall(EnDg* this, PlayState* play) {
     if (this->actor.bgCheckFlags & 1) {
-        func_80989140(&this->skelAnime, sAnimations, 2);
-        this->actionFunc = func_8098A468;
+        EnDg_ChangeAnim(&this->skelAnime, sAnimationInfo, DOG_ANIM_RUN);
+        this->actionFunc = EnDg_IdleMove;
     }
 
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
-    func_809899C8(this, 3.0f);
+    Actor_MoveWithGravity(&this->actor);
+    EnDg_PlaySfxBark(this, 3.0f);
 }
 
-void func_8098B004(EnDg* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+/**
+ * Approach the player non-aggressively. If the player stops moving, then
+ * eventually the dog will sit down next to them.
+ */
+void EnDg_ApproachPlayer(EnDg* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
 
     this->actor.velocity.y = 0.0f;
     this->actor.gravity = -3.0f;
-    if ((this->actor.xzDistToPlayer < 60.0f) && (this->collider.base.ocFlags1 & 2)) {
+    if ((this->actor.xzDistToPlayer < 60.0f) && (this->collider.base.ocFlags1 & OC1_HIT)) {
         this->actor.shape.rot.y += 0x71C;
     } else {
         Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 4, 0xC00);
@@ -846,9 +990,9 @@ void func_8098B004(EnDg* this, GlobalContext* globalCtx) {
 
     this->actor.world.rot.y = this->actor.shape.rot.y;
     if (this->actor.xzDistToPlayer < 40.0f) {
-        func_80989140(&this->skelAnime, sAnimations, 5);
-        this->actionFunc = func_8098AB48;
-    } else if (player->stateFlags3 & 0x20000000) {
+        EnDg_ChangeAnim(&this->skelAnime, sAnimationInfo, DOG_ANIM_SIT_DOWN);
+        this->actionFunc = EnDg_SitNextToPlayer;
+    } else if (player->stateFlags3 & PLAYER_STATE3_20000000) {
         if ((this->actor.xzDistToPlayer > 40.0f) && (player->linearVelocity == 0.0f)) {
             Math_ApproachF(&this->actor.speedXZ, 1.5f, 0.2f, 1.0f);
         } else {
@@ -858,41 +1002,54 @@ void func_8098B004(EnDg* this, GlobalContext* globalCtx) {
         Math_ApproachF(&this->actor.speedXZ, 3.5f, 0.2f, 1.0f);
     }
 
-    func_8098A064(this, globalCtx);
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
-    func_80989974(this);
-    if (!(this->unk_280 & 0x20)) {
-        func_809899C8(this, 3.0f);
+    EnDg_CheckForBremenMaskMarch(this, play);
+    Actor_MoveWithGravity(&this->actor);
+    EnDg_PlaySfxWalk(this);
+
+    // If we're in this function, the player is either marching with the Bremen Mask, or
+    // they're a Zora. The below code will make the dog repeatedly bark in the latter case.
+    if (!(this->dogFlags & DOG_FLAG_FOLLOWING_BREMEN_MASK)) {
+        EnDg_PlaySfxBark(this, 3.0f);
     }
 }
 
-void func_8098B198(EnDg* this, GlobalContext* globalCtx) {
+/**
+ * Makes the dog slowly back up and face the player before performing a jump attack. Used to
+ * give the dog a bit of time to correct its angle if they were unlikely to hit the player.
+ */
+void EnDg_SlowlyBackUpBeforeAttacking(EnDg* this, PlayState* play) {
     if (this->actor.xzDistToPlayer > 72.0f) {
-        func_80989140(&this->skelAnime, sAnimations, 14);
-        this->actionFunc = func_8098AC34;
+        EnDg_ChangeAnim(&this->skelAnime, sAnimationInfo, DOG_ANIM_JUMP_ATTACK);
+        this->actionFunc = EnDg_JumpAttack;
     }
 
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 4, 0x3E8, 1);
     if (this->actor.bgCheckFlags & 8) {
         this->actor.shape.rot.y = this->actor.wallYaw;
-        func_80989140(&this->skelAnime, sAnimations, 14);
-        this->actionFunc = func_8098AC34;
+        EnDg_ChangeAnim(&this->skelAnime, sAnimationInfo, DOG_ANIM_JUMP_ATTACK);
+        this->actionFunc = EnDg_JumpAttack;
     }
 
     this->actor.world.rot.y = this->actor.shape.rot.y;
     Math_ApproachF(&this->actor.speedXZ, -1.0f, 0.2f, 1.0f);
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
-    func_80989974(this);
-    func_80989A9C(this, 4.0f);
+    Actor_MoveWithGravity(&this->actor);
+    EnDg_PlaySfxWalk(this);
+    EnDg_PlaySfxGrowl(this, 4.0f);
 }
 
-void func_8098B28C(EnDg* this, GlobalContext* globalCtx) {
+/**
+ * An unused function that will make the dog back away from the player while growling.
+ * It is quite similar to EnDg_BackAwayFromGoron; perhaps this is an earlier version of it?
+ * Unlike that function, this will make the dog approach the player if they move too far away.
+ * It also lacks the behavior where the dog runs away in a panic after a short time.
+ */
+void EnDg_BackAwayFromPlayer(EnDg* this, PlayState* play) {
     if (this->actor.xzDistToPlayer > 200.0f) {
-        func_80989140(&this->skelAnime, sAnimations, 1);
-        this->actionFunc = func_8098AE58;
+        EnDg_ChangeAnim(&this->skelAnime, sAnimationInfo, DOG_ANIM_WALK);
+        this->actionFunc = EnDg_WalkToPlayer;
     } else if (this->actor.xzDistToPlayer > 150.0f) {
-        func_80989140(&this->skelAnime, sAnimations, 3);
-        this->actionFunc = func_8098B390;
+        EnDg_ChangeAnim(&this->skelAnime, sAnimationInfo, DOG_ANIM_BARK);
+        this->actionFunc = EnDg_BarkAtPlayer;
     } else {
         Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 4, 0x3E8, 1);
         if (this->actor.bgCheckFlags & 8) {
@@ -901,337 +1058,374 @@ void func_8098B28C(EnDg* this, GlobalContext* globalCtx) {
 
         this->actor.world.rot.y = this->actor.shape.rot.y;
         Math_ApproachF(&this->actor.speedXZ, -2.0f, 0.2f, 1.0f);
-        Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+        Actor_MoveWithGravity(&this->actor);
     }
 
-    func_80989974(this);
-    Audio_PlayActorSound2(&this->actor, NA_SE_EV_SMALL_DOG_GROAN);
+    EnDg_PlaySfxWalk(this);
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SMALL_DOG_GROAN);
 }
 
-void func_8098B390(EnDg* this, GlobalContext* globalCtx) {
+/**
+ * An unused function that will make the dog bark at the player endlessly.
+ * It is quite similar to EnDg_BarkAtGoron; perhaps this is an earlier version of it?
+ * Unlike that function, this will make the dog approach the player if they move too far away.
+ * It also mixes in multiple growls into the bark.
+ */
+void EnDg_BarkAtPlayer(EnDg* this, PlayState* play) {
     if (this->actor.xzDistToPlayer < 150.0f) {
-        func_80989140(&this->skelAnime, sAnimations, 11);
-        this->actionFunc = func_8098B28C;
+        EnDg_ChangeAnim(&this->skelAnime, sAnimationInfo, DOG_ANIM_WALK_BACKWARDS);
+        this->actionFunc = EnDg_BackAwayFromPlayer;
     } else if (this->actor.xzDistToPlayer > 200.0f) {
-        func_80989140(&this->skelAnime, sAnimations, 1);
-        this->actionFunc = func_8098AE58;
+        EnDg_ChangeAnim(&this->skelAnime, sAnimationInfo, DOG_ANIM_WALK);
+        this->actionFunc = EnDg_WalkToPlayer;
     }
 
-    func_80989A9C(this, 0.0f);
-    func_80989A9C(this, 1.0f);
-    func_80989A9C(this, 2.0f);
-    func_80989A9C(this, 3.0f);
-    func_809899C8(this, 5.0f);
+    EnDg_PlaySfxGrowl(this, 0.0f);
+    EnDg_PlaySfxGrowl(this, 1.0f);
+    EnDg_PlaySfxGrowl(this, 2.0f);
+    EnDg_PlaySfxGrowl(this, 3.0f);
+    EnDg_PlaySfxBark(this, 5.0f);
 }
 
-void func_8098B464(EnDg* this, GlobalContext* globalCtx) {
-    Vec3f sp2C;
+/**
+ * Makes a splash effect and plays the splash sfx when the dog enters the water, then
+ * makes them start swimming.
+ */
+void EnDg_SetupSwim(EnDg* this, PlayState* play) {
+    Vec3f pos;
 
-    sp2C.x = this->actor.world.pos.x;
-    sp2C.y = this->actor.world.pos.y + this->actor.yDistToWater;
-    sp2C.z = this->actor.world.pos.z + 20.0f;
-    EffectSsGSplash_Spawn(globalCtx, &sp2C, NULL, NULL, 0, 800);
-    EffectSsGRipple_Spawn(globalCtx, &sp2C, 100, 500, 30);
-    if (this->actor.yDistToWater > 0.0f) {
+    pos.x = this->actor.world.pos.x;
+    pos.y = this->actor.world.pos.y + this->actor.depthInWater;
+    pos.z = this->actor.world.pos.z + 20.0f;
+    EffectSsGSplash_Spawn(play, &pos, NULL, NULL, 0, 800);
+    EffectSsGRipple_Spawn(play, &pos, 100, 500, 30);
+
+    if (this->actor.depthInWater > 0.0f) {
         this->actor.gravity = 0.0f;
         this->actor.velocity.y = -3.0f;
-        this->unk_284 = 10;
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_BOMB_DROP_WATER);
-        this->actionFunc = func_8098B560;
+        this->swimTimer = 10;
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BOMB_DROP_WATER);
+        this->actionFunc = EnDg_Swim;
     }
 
     Math_ApproachF(&this->actor.speedXZ, 1.0f, 0.2f, 1.0f);
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
 }
 
-void func_8098B560(EnDg* this, GlobalContext* globalCtx) {
-    Vec3f sp54;
-    Vec3f sp48;
-    s16 sp46 = 0;
-    WaterBox* sp40;
-    f32 sp3C;
-    s32 sp38;
-    f32 sp34;
+/**
+ * Makes the dog swim until it either:
+ * - Touches land, at which point it will just resume its idle movement.
+ * - Touches a wall, at which point it will attempt to jump out of the water.
+ */
+void EnDg_Swim(EnDg* this, PlayState* play) {
+    Vec3f ripplePos;
+    Vec3f pos;
+    s16 yRotation = 0;
+    WaterBox* waterBox;
+    f32 waterSurface;
+    CollisionPoly* poly;
+    f32 floorHeight;
 
-    sp54.x = this->actor.world.pos.x;
-    sp54.y = this->actor.world.pos.y + this->actor.yDistToWater;
-    sp54.z = this->actor.world.pos.z + 20.0f;
-    sp48.x = (Math_SinS(this->actor.world.rot.y) * 50.0f) + this->actor.world.pos.x;
-    sp48.y = this->actor.home.pos.y + 100.0f;
-    sp48.z = (Math_CosS(this->actor.world.rot.y) * 50.0f) + this->actor.world.pos.z;
+    ripplePos.x = this->actor.world.pos.x;
+    ripplePos.y = this->actor.world.pos.y + this->actor.depthInWater;
+    ripplePos.z = this->actor.world.pos.z + 20.0f;
+    pos.x = (Math_SinS(this->actor.world.rot.y) * 50.0f) + this->actor.world.pos.x;
+    pos.y = this->actor.home.pos.y + 100.0f;
+    pos.z = (Math_CosS(this->actor.world.rot.y) * 50.0f) + this->actor.world.pos.z;
 
-    if (DECR(this->unk_284) == 0) {
-        if (!(this->unk_280 & 4)) {
-            this->unk_280 |= 4;
-            Audio_PlayActorSound2(&this->actor, NA_SE_EV_OUT_OF_WATER);
+    if (DECR(this->swimTimer) == 0) {
+        if (!(this->dogFlags & DOG_FLAG_SWIMMING)) {
+            this->dogFlags |= DOG_FLAG_SWIMMING;
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_OUT_OF_WATER);
         }
-        this->unk_284 = 5;
-        EffectSsGRipple_Spawn(globalCtx, &sp54, 100, 500, 30);
+
+        this->swimTimer = 5;
+        EffectSsGRipple_Spawn(play, &ripplePos, 100, 500, 30);
     }
 
-    if (this->actor.yDistToWater > 15.0f) {
+    if (this->actor.depthInWater > 15.0f) {
         this->actor.velocity.y = 0.5f;
-    } else if (this->actor.yDistToWater < 10.0f) {
+    } else if (this->actor.depthInWater < 10.0f) {
         this->actor.velocity.y = -0.5f;
     }
 
-    sp34 = func_800C4000(globalCtx, &globalCtx->colCtx, &sp38, &sp48);
+    floorHeight = BgCheck_EntityRaycastFloor2(play, &play->colCtx, &poly, &pos);
+
+    // The below code checks *only* that the dog is touching a wall, which can result in
+    // some strange behavior if the dog is touching a wall that is too tall for it to jump
+    // over. For example, if the player throws the dog at a tall wall next to some water,
+    // this code will make the dog "skip" along the water's surface, assuming the floor
+    // height is low enough to make it try to jump out.
     if (this->actor.bgCheckFlags & 8) {
-        if (!func_800CA1AC(globalCtx, &globalCtx->colCtx, sp48.x, sp48.z, &sp3C, &sp40)) {
-            if (sp34 > -100.0f) {
-                this->unk_280 &= ~4;
-                this->actionFunc = func_8098B88C;
+        if (!WaterBox_GetSurface1(play, &play->colCtx, pos.x, pos.z, &waterSurface, &waterBox)) {
+            if (floorHeight > -100.0f) {
+                this->dogFlags &= ~DOG_FLAG_SWIMMING;
+                this->actionFunc = EnDg_JumpOutOfWater;
             } else {
-                sp46 = this->actor.wallYaw;
+                yRotation = this->actor.wallYaw;
             }
-        } else if (sp34 > -100.0f) {
-            if (sp3C < sp34) {
-                this->unk_280 &= ~4;
-                this->actionFunc = func_8098B88C;
+        } else if (floorHeight > -100.0f) {
+            if (waterSurface < floorHeight) {
+                this->dogFlags &= ~DOG_FLAG_SWIMMING;
+                this->actionFunc = EnDg_JumpOutOfWater;
             } else {
-                sp46 = this->actor.wallYaw;
+                yRotation = this->actor.wallYaw;
             }
         } else {
-            sp46 = this->actor.wallYaw;
+            yRotation = this->actor.wallYaw;
         }
     } else if ((this->actor.bgCheckFlags & 1) && !(this->actor.bgCheckFlags & 0x20)) {
         this->actor.gravity = -3.0f;
-        this->unk_280 &= ~4;
-        this->unk_28C = 8;
-        this->unk_282 = Rand_S16Offset(60, 60);
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_OUT_OF_WATER);
-        func_80989140(&this->skelAnime, sAnimations, 2);
+        this->dogFlags &= ~DOG_FLAG_SWIMMING;
+        this->behavior = DOG_BEHAVIOR_DEFAULT;
+        this->timer = Rand_S16Offset(60, 60);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_OUT_OF_WATER);
+        EnDg_ChangeAnim(&this->skelAnime, sAnimationInfo, DOG_ANIM_RUN);
         Math_ApproachF(&this->actor.speedXZ, 3.5f, 0.2f, 1.0f);
-        this->actionFunc = func_8098A468;
+        this->actionFunc = EnDg_IdleMove;
     }
 
-    Math_SmoothStepToS(&this->actor.world.rot.y, sp46, 4, 0x3E8, 1);
+    Math_SmoothStepToS(&this->actor.world.rot.y, yRotation, 4, 0x3E8, 1);
     this->actor.shape.rot.y = this->actor.world.rot.y;
     Math_ApproachF(&this->actor.speedXZ, 0.5f, 0.2f, 1.0f);
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
 }
 
-void func_8098B88C(EnDg* this, GlobalContext* globalCtx) {
-    Vec3f sp34;
+/**
+ * This function attempts to get the dog out of water by making it jump near walls.
+ * The point of this is seemingly to let the dog escape the shallow water pools in
+ * South Clock Town.
+ */
+void EnDg_JumpOutOfWater(EnDg* this, PlayState* play) {
+    Vec3f pos;
 
-    sp34.x = this->actor.world.pos.x;
-    sp34.y = this->actor.world.pos.y + this->actor.yDistToWater;
-    sp34.z = this->actor.world.pos.z + 20.0f;
+    pos.x = this->actor.world.pos.x;
+    pos.y = this->actor.world.pos.y + this->actor.depthInWater;
+    pos.z = this->actor.world.pos.z + 20.0f;
 
-    if (DECR(this->unk_284) == 0) {
-        this->unk_284 = 5;
-        EffectSsGRipple_Spawn(globalCtx, &sp34, 100, 500, 30);
+    if (DECR(this->swimTimer) == 0) {
+        this->swimTimer = 5;
+        EffectSsGRipple_Spawn(play, &pos, 100, 500, 30);
     }
 
-    if (this->actor.yDistToWater > 15.0f) {
+    if (this->actor.depthInWater > 15.0f) {
         this->actor.velocity.y = 1.0f;
-    } else if (this->actor.yDistToWater < 10.0f) {
+    } else if (this->actor.depthInWater < 10.0f) {
         this->actor.velocity.y = -1.0f;
     }
 
     if (this->actor.bgCheckFlags & 8) {
-        this->actor.world.pos.y = sp34.y;
+        this->actor.world.pos.y = pos.y;
         this->actor.velocity.y = 10.0f;
-        EffectSsGSplash_Spawn(globalCtx, &sp34, NULL, NULL, 0, 800);
+        EffectSsGSplash_Spawn(play, &pos, NULL, NULL, 0, 800);
     }
 
     if (!(this->actor.bgCheckFlags & 0x20)) {
-        this->unk_28C = 8;
+        this->behavior = DOG_BEHAVIOR_DEFAULT;
         this->actor.velocity.y = 10.0f;
         this->actor.gravity = -3.0f;
-        this->unk_282 = Rand_S16Offset(60, 60);
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_OUT_OF_WATER);
-        func_80989140(&this->skelAnime, sAnimations, 2);
-        this->actionFunc = func_8098A468;
+        this->timer = Rand_S16Offset(60, 60);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_OUT_OF_WATER);
+        EnDg_ChangeAnim(&this->skelAnime, sAnimationInfo, DOG_ANIM_RUN);
+        this->actionFunc = EnDg_IdleMove;
         Math_ApproachF(&this->actor.speedXZ, 3.5f, 0.2f, 1.0f);
     } else {
         Math_ApproachF(&this->actor.speedXZ, 0.5f, 0.2f, 1.0f);
     }
 
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
 }
 
-void func_8098BA64(EnDg* this, GlobalContext* globalCtx) {
-    if (Actor_HasNoParent(&this->actor, globalCtx)) {
-        this->unk_290 = 2;
-        this->actor.flags |= 1;
-        if (D_8098C2A0 != 0) {
-            this->actor.flags &= ~0x8000000;
-            D_8098C2A0 = 0;
-            this->unk_280 &= ~1;
+void EnDg_Held(EnDg* this, PlayState* play) {
+    if (Actor_HasNoParent(&this->actor, play)) {
+        this->grabState = DOG_GRAB_STATE_THROWN_OR_SITTING_AFTER_THROW;
+        this->actor.flags |= ACTOR_FLAG_1;
+        if (sIsAnyDogHeld) {
+            this->actor.flags &= ~ACTOR_FLAG_8000000;
+            sIsAnyDogHeld = false;
+            this->dogFlags &= ~DOG_FLAG_HELD;
         }
-        this->unk_288 = -1;
-        D_8098C2FC.unk_02 = this->unk_288;
-        this->unk_28A = 100;
-        Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
-        this->unk_280 |= 0x10;
-        this->actionFunc = func_8098BB10;
+
+        this->selectedDogIndex = -1;
+        sSelectedRacetrackDogInfo.index = this->selectedDogIndex;
+        this->sitAfterThrowTimer = 100;
+        Actor_MoveWithGravity(&this->actor);
+        this->dogFlags |= DOG_FLAG_THROWN;
+        this->actionFunc = EnDg_Thrown;
     }
 }
 
-void func_8098BB10(EnDg* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+void EnDg_Thrown(EnDg* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
 
     if (this->actor.bgCheckFlags & 1) {
-        if (this->unk_280 & 0x10) {
-            this->unk_280 &= ~0x10;
-            Audio_PlayActorSound2(&this->actor, NA_SE_EV_MONKEY_WALK);
+        if (this->dogFlags & DOG_FLAG_THROWN) {
+            this->dogFlags &= ~DOG_FLAG_THROWN;
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_MONKEY_WALK);
         }
 
         this->actor.speedXZ = 0.0f;
         this->actor.gravity = -3.0f;
         if (player->transformation == PLAYER_FORM_HUMAN) {
-            func_80989E18(this, globalCtx);
+            EnDg_TryPickUp(this, play);
         }
     }
 
-    if (DECR(this->unk_28A) == 0) {
-        this->unk_290 = 0;
-        func_80989ADC(this, globalCtx);
-        this->actionFunc = func_8098A468;
+    if (DECR(this->sitAfterThrowTimer) == 0) {
+        this->grabState = DOG_GRAB_STATE_NONE;
+        EnDg_SetupIdleMove(this, play);
+        this->actionFunc = EnDg_IdleMove;
     }
 
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
 }
 
-void func_8098BBEC(EnDg* this, GlobalContext* globalCtx) {
-    if (func_800B84D0(&this->actor, globalCtx)) {
-        this->actor.flags &= ~0x10000;
-        func_80989D38(this, globalCtx);
-        this->actionFunc = func_8098BC54;
+void EnDg_SetupTalk(EnDg* this, PlayState* play) {
+    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+        this->actor.flags &= ~ACTOR_FLAG_10000;
+        EnDg_StartTextBox(this, play);
+        this->actionFunc = EnDg_Talk;
     } else {
-        func_800B8614(&this->actor, globalCtx, 100.0f);
+        func_800B8614(&this->actor, play, 100.0f);
     }
 }
 
-void func_8098BC54(EnDg* this, GlobalContext* globalCtx) {
-    if (func_80152498(&globalCtx->msgCtx) == 2) {
-        func_80989140(&this->skelAnime, sAnimations, 0);
-        this->actionFunc = func_8098BA64;
+void EnDg_Talk(EnDg* this, PlayState* play) {
+    if (Message_GetState(&play->msgCtx) == TEXT_STATE_CLOSING) {
+        EnDg_ChangeAnim(&this->skelAnime, sAnimationInfo, DOG_ANIM_WALK_AFTER_TALKING);
+        this->actionFunc = EnDg_Held;
     }
 }
 
-void EnDg_Init(Actor* thisx, GlobalContext* globalCtx) {
+void EnDg_Init(Actor* thisx, PlayState* play) {
     EnDg* this = THIS;
     s32 pad;
 
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 24.0f);
-    SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_060080F0, NULL, this->jointTable, this->morphTable, 13);
-    Collider_InitCylinder(globalCtx, &this->collider);
-    Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gDogSkel, NULL, this->jointTable, this->morphTable, DOG_LIMB_MAX);
+    Collider_InitCylinder(play, &this->collider);
+    Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    this->unk_1DC = func_8013D648(globalCtx, ENDG_GET_FC00(&this->actor), 0x3F);
+
+    this->path = SubS_GetPathByIndex(play, ENDG_GET_PATH(&this->actor), 0x3F);
     Actor_SetScale(&this->actor, 0.0075f);
     this->actor.targetMode = 1;
     this->actor.gravity = -3.0f;
-    this->unk_282 = Rand_S16Offset(60, 60);
-    this->unk_280 = 0;
-    this->unk_28E = 20;
-    this->unk_284 = 10;
-    this->unk_286 = ENDG_GET_3E0(&this->actor);
-    this->unk_28C = 0;
-    this->unk_290 = 0;
-    if (globalCtx->sceneNum == SCENE_F01_B) {
-        this->unk_28A = 100;
-        func_80989BF8(this);
+    this->timer = Rand_S16Offset(60, 60);
+    this->dogFlags = DOG_FLAG_NONE;
+    this->attackTimer = 20;
+    this->swimTimer = 10;
+    this->index = ENDG_GET_INDEX(&this->actor);
+    this->behavior = DOG_BEHAVIOR_INITIAL;
+    this->grabState = DOG_GRAB_STATE_NONE;
+    if (play->sceneId == SCENE_F01_B) {
+        this->sitAfterThrowTimer = 100;
+        EnDg_UpdateTextId(this);
     }
-    func_80989ADC(this, globalCtx);
+
+    EnDg_SetupIdleMove(this, play);
 }
 
-void EnDg_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnDg_Destroy(Actor* thisx, PlayState* play) {
     EnDg* this = THIS;
 
-    Collider_DestroyCylinder(globalCtx, &this->collider);
+    Collider_DestroyCylinder(play, &this->collider);
 }
 
-void EnDg_Update(Actor* thisx, GlobalContext* globalCtx) {
+void EnDg_Update(Actor* thisx, PlayState* play) {
     EnDg* this = THIS;
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(play);
     s32 pad;
-    Vec3f sp28 = { 0.0f, 0.0f, 0.0f };
+    Vec3f floorRot = { 0.0f, 0.0f, 0.0f };
 
-    this->unk_288 = D_8098C2FC.unk_02;
-    if (!(player->stateFlags1 & 0x20) || (globalCtx->sceneNum != SCENE_CLOCKTOWER)) {
-        if (func_8098A1B4(this, globalCtx)) {
-            func_8098A234(this, globalCtx);
-        } else if (this->unk_28C != 8) {
-            this->unk_28C = 8;
-            func_80989ADC(this, globalCtx);
+    this->selectedDogIndex = sSelectedRacetrackDogInfo.index;
+    if (!(player->stateFlags1 & PLAYER_STATE1_20) || (play->sceneId != SCENE_CLOCKTOWER)) {
+        if (EnDg_ShouldReactToNonHumanPlayer(this, play)) {
+            EnDg_ChooseActionForForm(this, play);
+        } else if (this->behavior != DOG_BEHAVIOR_DEFAULT) {
+            this->behavior = DOG_BEHAVIOR_DEFAULT;
+            EnDg_SetupIdleMove(this, play);
         }
 
-        if ((this->actor.bgCheckFlags & 0x40) && Actor_HasNoParent(&this->actor, globalCtx)) {
-            func_80989140(&this->skelAnime, sAnimations, 15);
-            this->actionFunc = func_8098B464;
+        if ((this->actor.bgCheckFlags & 0x40) && Actor_HasNoParent(&this->actor, play)) {
+            EnDg_ChangeAnim(&this->skelAnime, sAnimationInfo, DOG_ANIM_SWIM);
+            this->actionFunc = EnDg_SetupSwim;
         }
 
-        this->actionFunc(this, globalCtx);
-        func_80989204(this, globalCtx);
-        func_8098933C(this, &sp28);
-        Math_ApproachF(&this->unk_294.x, sp28.x, 0.2f, 0.1f);
-        Math_ApproachF(&this->unk_294.z, sp28.z, 0.2f, 0.1f);
-        SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+        this->actionFunc(this, play);
+        EnDg_UpdateCollision(this, play);
+        EnDg_GetFloorRot(this, &floorRot);
+        Math_ApproachF(&this->curRot.x, floorRot.x, 0.2f, 0.1f);
+        Math_ApproachF(&this->curRot.z, floorRot.z, 0.2f, 0.1f);
+        SkelAnime_Update(&this->skelAnime);
     }
 }
 
-s32 func_8098BFB8(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    return 0;
+s32 EnDg_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+    return false;
 }
 
-void func_8098BFD4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void EnDg_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnDg* this = THIS;
-    Vec3f sp20 = { 0.0f, 20.0f, 0.0f };
+    Vec3f sFocusOffset = { 0.0f, 20.0f, 0.0f };
 
-    if (limbIndex == 5) {
-        if (this->actionFunc == func_8098BBEC) {
-            sp20.x = 5000.0f;
-            SysMatrix_MultiplyVector3fByState(&sp20, &this->actor.focus.pos);
-        } else if (this->actionFunc != func_8098BC54) {
-            SysMatrix_MultiplyVector3fByState(&sp20, &this->actor.focus.pos);
+    if (limbIndex == DOG_LIMB_HEAD) {
+        if (this->actionFunc == EnDg_SetupTalk) {
+            sFocusOffset.x = 5000.0f;
+            Matrix_MultVec3f(&sFocusOffset, &this->actor.focus.pos);
+        } else if (this->actionFunc != EnDg_Talk) {
+            Matrix_MultVec3f(&sFocusOffset, &this->actor.focus.pos);
         }
     }
 }
 
-void EnDg_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void EnDg_Draw(Actor* thisx, PlayState* play) {
     EnDg* this = THIS;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(globalCtx->state.gfxCtx);
+    func_8012C28C(play->state.gfxCtx);
 
     gDPPipeSync(POLY_OPA_DISP++);
 
-    switch (D_8098C2A8[this->unk_286].unk_00) {
-        case 3:
+    switch (sRacetrackDogInfo[this->index].color) {
+        case DOG_COLOR_BEIGE:
             gDPSetEnvColor(POLY_OPA_DISP++, 255, 255, 200, 0);
             break;
-        case 1:
+
+        case DOG_COLOR_WHITE:
             gDPSetEnvColor(POLY_OPA_DISP++, 255, 255, 255, 0);
             break;
-        case 5:
+
+        case DOG_COLOR_BLUE:
             gDPSetEnvColor(POLY_OPA_DISP++, 79, 79, 143, 0);
             break;
-        case 6:
+
+        case DOG_COLOR_GOLD:
             gDPSetEnvColor(POLY_OPA_DISP++, 255, 207, 47, 0);
             break;
-        case 4:
+
+        case DOG_COLOR_BROWN:
             gDPSetEnvColor(POLY_OPA_DISP++, 143, 79, 47, 0);
             break;
-        case 2:
+
+        case DOG_COLOR_GRAY:
             gDPSetEnvColor(POLY_OPA_DISP++, 143, 143, 143, 0);
             break;
+
         default:
             gDPSetEnvColor(POLY_OPA_DISP++, 255, 255, 200, 0);
             break;
     }
 
-    SysMatrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
-    SysMatrix_RotateStateAroundXAxis(this->unk_294.x);
-    SysMatrix_InsertZRotation_f(this->unk_294.z, MTXMODE_APPLY);
-    Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_APPLY);
+    Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
+    Matrix_RotateXFApply(this->curRot.x);
+    Matrix_RotateZF(this->curRot.z, MTXMODE_APPLY);
+    Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_APPLY);
     Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-    SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount,
-                     func_8098BFB8, func_8098BFD4, &this->actor);
+    SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+                          EnDg_OverrideLimbDraw, EnDg_PostLimbDraw, &this->actor);
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }

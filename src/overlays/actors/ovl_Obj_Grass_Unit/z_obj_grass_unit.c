@@ -1,13 +1,19 @@
+/*
+ * File: z_obj_grass_unit.c
+ * Overlay: ovl_Obj_Grass_Unit
+ * Description: Spawner for circular patch of grass
+ */
+
 #include "z_obj_grass_unit.h"
 
 #define FLAGS 0x00000000
 
 #define THIS ((ObjGrassUnit*)thisx)
 
-void ObjGrassUnit_Init(Actor* thisx, GlobalContext* globalCtx);
+void ObjGrassUnit_Init(Actor* thisx, PlayState* play);
 
 #if 0
-const ActorInit Obj_Grass_Unit_InitVars = {
+ActorInit Obj_Grass_Unit_InitVars = {
     ACTOR_OBJ_GRASS_UNIT,
     ACTORCAT_BG,
     FLAGS,

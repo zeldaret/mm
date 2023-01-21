@@ -7,17 +7,18 @@
 #include "z_obj_boyo.h"
 #include "overlays/actors/ovl_En_Kaizoku/z_en_kaizoku.h"
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
+#include "objects/object_boyo/object_boyo.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((ObjBoyo*)thisx)
 
-void ObjBoyo_Init(Actor* thisx, GlobalContext* globalCtx);
-void ObjBoyo_Destroy(Actor* thisx, GlobalContext* globalCtx2);
-void ObjBoyo_Update(Actor* thisx, GlobalContext* globalCtx2);
-void ObjBoyo_Draw(Actor* thisx, GlobalContext* globalCtx);
+void ObjBoyo_Init(Actor* thisx, PlayState* play);
+void ObjBoyo_Destroy(Actor* thisx, PlayState* play2);
+void ObjBoyo_Update(Actor* thisx, PlayState* play2);
+void ObjBoyo_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit Obj_Boyo_InitVars = {
+ActorInit Obj_Boyo_InitVars = {
     ACTOR_OBJ_BOYO,
     ACTORCAT_PROP,
     FLAGS,
@@ -56,25 +57,22 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-extern Gfx D_06000300[];
-extern AnimatedMaterial D_06000E88;
-
-void ObjBoyo_Init(Actor* thisx, GlobalContext* globalCtx) {
+void ObjBoyo_Init(Actor* thisx, PlayState* play) {
     ObjBoyo* this = THIS;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    Collider_InitCylinder(globalCtx, &this->collider);
-    Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
+    Collider_InitCylinder(play, &this->collider);
+    Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     Collider_UpdateCylinder(&this->actor, &this->collider);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
-    this->unk_190 = Lib_SegmentedToVirtual(&D_06000E88);
+    this->unk_190 = Lib_SegmentedToVirtual(object_boyo_Matanimheader_000E88);
 }
 
-void ObjBoyo_Destroy(Actor* thisx, GlobalContext* globalCtx2) {
-    GlobalContext* globalCtx = globalCtx2;
+void ObjBoyo_Destroy(Actor* thisx, PlayState* play2) {
+    PlayState* play = play2;
     ObjBoyo* this = THIS;
 
-    Collider_DestroyCylinder(globalCtx, &this->collider);
+    Collider_DestroyCylinder(play, &this->collider);
 }
 
 void ObjBoyo_UpdatePlayerBumpValues(ObjBoyo* this, Player* target) {
@@ -97,14 +95,14 @@ BumperCollideInfo sBumperCollideInfo[] = {
     { ACTOR_EN_BOM, (BumperCollideActorFunc)ObjBoyo_UpdateBombBumpValues },
 };
 
-Actor* ObjBoyo_GetCollidedActor(ObjBoyo* this, GlobalContext* globalCtx, s32* num) {
+Actor* ObjBoyo_GetCollidedActor(ObjBoyo* this, PlayState* play, s32* num) {
     Actor* collideActor;
     BumperCollideInfo* collideInfo;
     s32 i;
 
     if (this->collider.base.ocFlags2 & OC2_HIT_PLAYER) {
         *num = 0;
-        return &PLAYER->actor;
+        return &GET_PLAYER(play)->actor;
     }
 
     if (this->collider.base.ocFlags1 & OC2_UNK1) {
@@ -120,13 +118,13 @@ Actor* ObjBoyo_GetCollidedActor(ObjBoyo* this, GlobalContext* globalCtx, s32* nu
     return NULL;
 }
 
-void ObjBoyo_Update(Actor* thisx, GlobalContext* globalCtx2) {
+void ObjBoyo_Update(Actor* thisx, PlayState* play2) {
+    PlayState* play = play2;
     ObjBoyo* this = THIS;
-    GlobalContext* globalCtx = globalCtx2;
     Actor* target;
     s32 num;
 
-    target = ObjBoyo_GetCollidedActor(this, globalCtx, &num);
+    target = ObjBoyo_GetCollidedActor(this, play, &num);
 
     if (target != NULL) {
         sBumperCollideInfo[num].actorCollideFunc(this, (void*)target);
@@ -171,16 +169,16 @@ void ObjBoyo_Update(Actor* thisx, GlobalContext* globalCtx2) {
     this->collider.base.ocFlags1 &= ~OC1_HIT;
     this->collider.base.ocFlags2 &= ~OC2_HIT_PLAYER;
 
-    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+    CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
 
     if (thisx->xzDistToPlayer < 2000.0f) {
-        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+        CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
     }
 }
 
-void ObjBoyo_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void ObjBoyo_Draw(Actor* thisx, PlayState* play) {
     ObjBoyo* this = THIS;
 
-    AnimatedMat_Draw(globalCtx, this->unk_190);
-    func_800BDFC0(globalCtx, D_06000300);
+    AnimatedMat_Draw(play, this->unk_190);
+    Gfx_DrawDListOpa(play, object_boyo_DL_000300);
 }

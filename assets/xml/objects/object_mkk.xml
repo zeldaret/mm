@@ -1,0 +1,15 @@
+﻿<Root>
+    <File Name="object_mkk" Segment="6">
+        <DList Name="object_mkk_DL_000030" Offset="0x30" />
+        <DList Name="object_mkk_DL_0000B0" Offset="0xB0" />
+        <DList Name="object_mkk_DL_0000C8" Offset="0xC8" />
+        <DList Name="object_mkk_DL_000140" Offset="0x140" />
+        <DList Name="object_mkk_DL_0001F0" Offset="0x1F0" />
+        <DList Name="object_mkk_DL_000278" Offset="0x278" />
+        <DList Name="object_mkk_DL_000290" Offset="0x290" />
+        <DList Name="object_mkk_DL_000310" Offset="0x310" />
+        <Texture Name="object_mkk_Tex_000390" OutName="tex_000390" Format="i4" Width="16" Height="16" Offset="0x390" />
+        <Texture Name="object_mkk_Tex_000410" OutName="tex_000410" Format="i4" Width="16" Height="16" Offset="0x410" />
+        <Texture Name="object_mkk_Tex_000490" OutName="tex_000490" Format="rgba16" Width="8" Height="8" Offset="0x490" />
+    </File>
+</Root>

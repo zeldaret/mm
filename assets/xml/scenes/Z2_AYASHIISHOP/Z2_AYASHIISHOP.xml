@@ -1,4 +1,5 @@
 <Root>
+    <ExternalFile XmlPath="misc/scene_texture_02.xml" OutPath="misc/scene_texture_02/"/>
     <File Name="Z2_AYASHIISHOP" Segment="2" Game="MM">
         <Scene Name="Z2_AYASHIISHOP" Offset="0x0"/>
     </File>

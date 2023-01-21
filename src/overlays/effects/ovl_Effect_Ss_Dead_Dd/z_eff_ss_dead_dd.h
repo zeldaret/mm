@@ -3,6 +3,11 @@
 
 #include "global.h"
 
+typedef enum {
+    /* 0 */ DEADDD_TYPE_0,
+    /* 1 */ DEADDD_TYPE_1 // Unused
+} DeadDDType;
+
 typedef struct {
     /* 0x00 */ Vec3f pos;
     /* 0x0C */ Vec3f velocity;

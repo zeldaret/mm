@@ -1,16 +1,24 @@
-#include "z_en_nimotsu.h"
+/*
+ * File: z_en_nimotsu.c
+ * Overlay: ovl_En_Nimotsu
+ * Description: Bomb Shop Bag Stolen by Sakon
+ */
 
-#define FLAGS 0x00000010
+#include "z_en_nimotsu.h"
+#include "assets/objects/object_boj/object_boj.h"
+
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((EnNimotsu*)thisx)
 
-void EnNimotsu_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnNimotsu_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnNimotsu_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnNimotsu_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnNimotsu_Init(Actor* thisx, PlayState* play);
+void EnNimotsu_Destroy(Actor* thisx, PlayState* play);
+void EnNimotsu_Update(Actor* thisx, PlayState* play);
+void EnNimotsu_Draw(Actor* thisx, PlayState* play);
 
-#if 0
-const ActorInit En_Nimotsu_InitVars = {
+void EnNimotsu_UpdateCollision(EnNimotsu* this, PlayState* play);
+
+ActorInit En_Nimotsu_InitVars = {
     ACTOR_EN_NIMOTSU,
     ACTORCAT_PROP,
     FLAGS,
@@ -22,25 +30,93 @@ const ActorInit En_Nimotsu_InitVars = {
     (ActorFunc)EnNimotsu_Draw,
 };
 
-// static ColliderCylinderInit sCylinderInit = {
-static ColliderCylinderInit D_80BE1FB0 = {
-    { COLTYPE_NONE, AT_NONE, AC_NONE, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_2, COLSHAPE_CYLINDER, },
-    { ELEMTYPE_UNK4, { 0x00000000, 0x00, 0x00 }, { 0x00000000, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_NONE, OCELEM_ON, },
+static ColliderCylinderInit sCylinderInit = {
+    {
+        COLTYPE_NONE,
+        AT_NONE,
+        AC_NONE,
+        OC1_ON | OC1_TYPE_ALL,
+        OC2_TYPE_2,
+        COLSHAPE_CYLINDER,
+    },
+    {
+        ELEMTYPE_UNK4,
+        { 0x00000000, 0x00, 0x00 },
+        { 0x00000000, 0x00, 0x00 },
+        TOUCH_NONE | TOUCH_SFX_NORMAL,
+        BUMP_NONE,
+        OCELEM_ON,
+    },
     { 10, 30, 0, { 0, 0, 0 } },
 };
 
-#endif
+void EnNimotsu_UpdateCollision(EnNimotsu* this, PlayState* play) {
+    Collider_UpdateCylinder(&this->actor, &this->collider);
+    CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 32.0f, 30.0f, 0.0f, 4);
+}
 
-extern ColliderCylinderInit D_80BE1FB0;
+void EnNimotsu_Init(Actor* thisx, PlayState* play) {
+    EnNimotsu* this = THIS;
 
-extern UNK_TYPE D_06013380;
+    Collider_InitCylinder(play, &this->collider);
+    Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Nimotsu/func_80BE1C80.s")
+    this->timer = 10;
+    this->actor.gravity = -0.5f;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Nimotsu/EnNimotsu_Init.s")
+    Actor_SetScale(&this->actor, 0.01f);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Nimotsu/EnNimotsu_Destroy.s")
+void EnNimotsu_Destroy(Actor* thisx, PlayState* play) {
+    EnNimotsu* this = THIS;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Nimotsu/EnNimotsu_Update.s")
+    Collider_DestroyCylinder(play, &this->collider);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Nimotsu/EnNimotsu_Draw.s")
+void EnNimotsu_Update(Actor* thisx, PlayState* play) {
+    s32 pad;
+    EnNimotsu* this = THIS;
+    Vec3f dustPosition;
+
+    Actor_MoveWithGravity(&this->actor);
+
+    if (!(this->dustDone & 1) && (this->actor.bgCheckFlags & 1)) {
+        if (DECR(this->timer) == 0) {
+            this->dustDone |= 1;
+        }
+
+        if ((play->state.frames % 3) == 0) {
+            dustPosition.x = this->actor.world.pos.x + randPlusMinusPoint5Scaled(15.0f);
+            dustPosition.y = this->actor.world.pos.y;
+            dustPosition.z = this->actor.world.pos.z + randPlusMinusPoint5Scaled(15.0f);
+            Actor_SpawnFloorDustRing(play, &this->actor, &dustPosition, 20.0f, 0, 2.0f, 0, 0, 0);
+        }
+    }
+
+    EnNimotsu_UpdateCollision(this, play);
+}
+
+void EnNimotsu_Draw(Actor* thisx, PlayState* play) {
+    s32 pad;
+    EnNimotsu* this = THIS;
+    Vec3f position;
+    Vec3f scale;
+
+    OPEN_DISPS(play->state.gfxCtx);
+    func_8012C28C(play->state.gfxCtx);
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(POLY_OPA_DISP++, &gBombShopBagDL);
+    func_8012C2DC(play->state.gfxCtx);
+
+    position.x = this->actor.world.pos.x + 7.0f;
+    position.y = this->actor.world.pos.y;
+    position.z = this->actor.world.pos.z + 2.0f;
+
+    scale.x = 0.2f;
+    scale.y = 0.2f;
+    scale.z = 0.2f;
+
+    func_800BC620(&position, &scale, 255, play);
+    CLOSE_DISPS(play->state.gfxCtx);
+}

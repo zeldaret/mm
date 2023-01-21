@@ -4,8 +4,10 @@
 #include "global.h"
 
 typedef struct {
-    char unk_0[UNK_SIZE];
-} EffectSsSbnInitParams; // size = ?
+    /* 0x00 */ Vec3f pos;
+    /* 0x0C */ CollisionPoly* colPoly;
+    /* 0x10 */ f32 scale;
+} EffectSsSbnInitParams; // size = 0x14
 
 extern const EffectSsInit Effect_Ss_Sbn_InitVars;
 

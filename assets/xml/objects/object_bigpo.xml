@@ -1,0 +1,47 @@
+﻿<Root>
+    <!-- Assets for Big Poes -->
+    <File Name="object_bigpo" Segment="6">
+        <Animation Name="gBigpoSwingLampAttackAnim" Offset="0x158" />
+        <Animation Name="gBigpoShockAnim" Offset="0x454" />
+        <Animation Name="gBigpoBackpeddleAnim" Offset="0x608" />
+        <Animation Name="gBigpoFloatAnim" Offset="0x924" />
+        <Animation Name="gBigpoAwakenSpawnAnim" Offset="0xF9C" />
+        <Animation Name="gBigpoAwakenStretchAnim" Offset="0x1360" />
+        <Texture Name="gBigpoSoulFace" OutName="bigpo_soul_face" Format="i8" Width="32" Height="64" Offset="0x1370" />
+        <DList Name="gBigpoDrawSoulDL" Offset="0x1BB0" />
+        <Texture Name="gBigpoNecklaceSkullHalfTex" OutName="bigpo_skull_necklace" Format="rgba16" Width="16" Height="16" Offset="0x1C70" />
+        <Texture Name="gBigpoLanternGlassTex" OutName="bigpo_lantern_glass" Format="rgba16" Width="16" Height="16" Offset="0x1E70" />
+        <Texture Name="gBigpoTornRobeTex" OutName="bigpo_torn_robe" Format="rgba16" Width="32" Height="32" Offset="0x2070" />
+        <Texture Name="gBigpoArmSectionTex" OutName="bigpo_arm_section" Format="rgba16" Width="16" Height="16" Offset="0x2870" />
+        <Texture Name="gBigpoHoodEdge" OutName="bigpo_hood_edge" Format="rgba16" Width="8" Height="8" Offset="0x2A70" />
+        <Texture Name="gBigpoNecklaceBeadsTex" OutName="bigpo_necklace_beads" Format="rgba16" Width="16" Height="8" Offset="0x2AF0" />
+        <Texture Name="gBigpoShawlTex" OutName="bigpo_shawl" Format="rgba16" Width="16" Height="16" Offset="0x2BF0" />
+        <Texture Name="gBigpoGlowingEyeTex" OutName="bigpo_glowing_eye" Format="rgba16" Width="16" Height="16" Offset="0x2DF0" />
+        <!-- <Blob Name="object_bigpo_Blob_003200" Size="0x350" Offset="0x3200" /> -->
+        <!-- <Blob Name="object_bigpo_Blob_003790" Size="0x370" Offset="0x3790" /> -->
+        <DList Name="gBigpoDrawLanternFallingDL" Offset="0x41A0" />
+        <DList Name="gBigpoDrawLanternMainDL" Offset="0x42C8" />
+        <DList Name="gBigpoDrawLanternPurpleTopDL" Offset="0x43F8" />
+        <DList Name="gBigpoDrawHandDL" Offset="0x4488" />
+        <DList Name="gBigpoDrawSmallArmDL" Offset="0x4538" />
+        <DList Name="gBigpoDrawBigArmDL" Offset="0x45D8" />
+        <DList Name="gBigpoDrawArmAndGrowthDL" Offset="0x4680" />
+        <DList Name="gBigpoDrawMediumArmDL" Offset="0x4768" />
+        <DList Name="gBigpoDrawNecklaceHoodShawlDL" Offset="0x4808" />
+        <DList Name="gBigpoDrawFaceDL" Offset="0x4AE8" />
+        <DList Name="gBigpoDrawLowerRobeDL" Offset="0x4BD8" />
+        <Texture Name="gBigpoCrispyPiecesTex" OutName="bigpo_crispy_pieces" Format="rgba16" Width="16" Height="16" Offset="0x4C98" />
+        <Texture Name="gBigpoCrispyEyesTex" OutName="bigpo_crispy_eyes" Format="rgba16" Width="8" Height="8" Offset="0x4E98" />
+        <DList Name="gBigpoDrawCrispyBodyDL" Offset="0x58B8" />
+        <Limb Name="gBigpoFaceLimb" Type="Standard" Offset="0x5B88" />
+        <Limb Name="gBigpoLeftArmUpperLimb" Type="Standard" Offset="0x5B94" />
+        <Limb Name="gBigpoLeftForarmLimb" Type="Standard" Offset="0x5BA0" />
+        <Limb Name="gBigpoRightArmUpperLimb" Type="Standard" Offset="0x5BAC" />
+        <Limb Name="gBigpoRightForarmLimb" Type="Standard" Offset="0x5BB8" />
+        <Limb Name="gBigpoRightHandLimb" Type="Standard" Offset="0x5BC4" />
+        <Limb Name="gBigpoLanternLimb" Type="Standard" Offset="0x5BD0" />
+        <Limb Name="gBigpoHatAndCloakLimb" Type="Standard" Offset="0x5BDC" />
+        <Limb Name="gBigpoLowerRobe" Type="Standard" Offset="0x5BE8" />
+        <Skeleton Name="gBigpoSkeleton" Type="Normal" LimbType="Standard" Offset="0x5C18" />
+    </File>
+</Root>

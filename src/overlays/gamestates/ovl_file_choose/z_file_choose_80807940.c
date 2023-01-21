@@ -5,6 +5,7 @@
  */
 
 #include "z_file_choose.h"
+#include "z64rumble.h"
 
 extern UNK_TYPE D_01002800;
 extern UNK_TYPE D_01007980;
@@ -12,7 +13,9 @@ extern UNK_TYPE D_0102A6B0;
 extern UNK_TYPE D_0102B170;
 extern UNK_TYPE D_010310F0;
 extern UNK_TYPE D_010311F0;
-extern UNK_TYPE D_0E0002E0;
+
+// there are uses of D_0E000000.fillRect (appearing as D_0E0002E0) in this file
+extern GfxMasterList D_0E000000;
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_80807940.s")
 

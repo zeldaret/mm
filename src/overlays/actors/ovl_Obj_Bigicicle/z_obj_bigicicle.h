@@ -5,14 +5,18 @@
 
 struct ObjBigicicle;
 
-typedef void (*ObjBigicicleActionFunc)(struct ObjBigicicle*, GlobalContext*);
+typedef void (*ObjBigicicleActionFunc)(struct ObjBigicicle*, PlayState*);
+
+#define OBJBIGICLE_GET_FF00(thisx) (((thisx)->params >> 8) & 0xFF)
 
 typedef struct ObjBigicicle {
-    /* 0x0000 */ Actor actor;
-    /* 0x0144 */ ObjBigicicleActionFunc actionFunc;
-    /* 0x0148 */ char unk_144[0x9C];
+    /* 0x000 */ Actor actor;
+    /* 0x144 */ ObjBigicicleActionFunc actionFunc;
+    /* 0x148 */ u8 unk_148;
+    /* 0x149 */ u8 unk_149;
+    /* 0x14A */ s16 unk_14A;
+    /* 0x14C */ ColliderCylinder collider1;
+    /* 0x198 */ ColliderCylinder collider2;
 } ObjBigicicle; // size = 0x1E4
-
-extern const ActorInit Obj_Bigicicle_InitVars;
 
 #endif // Z_OBJ_BIGICICLE_H

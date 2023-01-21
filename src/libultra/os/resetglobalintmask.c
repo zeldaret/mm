@@ -1,3 +1,8 @@
 #include "global.h"
 
-#pragma GLOBAL_ASM("asm/non_matchings/boot/resetglobalintmask/__osResetGlobalIntMask.s")
+void __osResetGlobalIntMask(u32 mask) {
+    register s32 prevInt = __osDisableInt();
+
+    __OSGlobalIntMask &= ~(mask & ~0x401);
+    __osRestoreInt(prevInt);
+}

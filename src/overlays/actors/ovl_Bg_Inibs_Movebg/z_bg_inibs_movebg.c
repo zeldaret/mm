@@ -1,15 +1,21 @@
-#include "z_bg_inibs_movebg.h"
+/*
+ * File: z_bg_inibs_movebg.c
+ * Overlay: ovl_Bg_Inibs_Movebg
+ * Description: Twinmold Arena
+ */
 
-#define FLAGS 0x00000030
+#include "z_bg_inibs_movebg.h"
+#include "objects/object_inibs_object/object_inibs_object.h"
+
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((BgInibsMovebg*)thisx)
 
-void BgInibsMovebg_Init(Actor* thisx, GlobalContext* globalCtx);
-void BgInibsMovebg_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void BgInibsMovebg_Draw(Actor* thisx, GlobalContext* globalCtx);
+void BgInibsMovebg_Init(Actor* thisx, PlayState* play);
+void BgInibsMovebg_Destroy(Actor* thisx, PlayState* play);
+void BgInibsMovebg_Draw(Actor* thisx, PlayState* play);
 
-#if 0
-const ActorInit Bg_Inibs_Movebg_InitVars = {
+ActorInit Bg_Inibs_Movebg_InitVars = {
     ACTOR_BG_INIBS_MOVEBG,
     ACTORCAT_BG,
     FLAGS,
@@ -21,17 +27,49 @@ const ActorInit Bg_Inibs_Movebg_InitVars = {
     (ActorFunc)BgInibsMovebg_Draw,
 };
 
-// static InitChainEntry sInitChain[] = {
-static InitChainEntry D_80B96578[] = {
+Gfx* sOpaDLists[] = { gTwinmoldArenaNormalModeSandDL, gTwinmoldArenaGiantModeSandDL };
+Gfx* sXluDLists[] = { gTwinmoldArenaNormalModeCenterPlatformDL, gTwinmoldArenaGiantModeCenterPlatformDL };
+AnimatedMaterial* sSandTexAnims[] = { gTwinmoldArenaNormalModeSandTexAnim, gTwinmoldArenaGiantModeSandTexAnim };
+
+static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 1000, ICHAIN_STOP),
 };
 
-#endif
+void BgInibsMovebg_Init(Actor* thisx, PlayState* play) {
+    BgInibsMovebg* this = THIS;
 
-extern InitChainEntry D_80B96578[];
+    Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
+    DynaPolyActor_Init(&this->dyna, 1);
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Inibs_Movebg/BgInibsMovebg_Init.s")
+    this->opaDList = sOpaDLists[BG_INIBS_MOVEBG_GET_MODE(thisx)];
+    this->xluDList = sXluDLists[BG_INIBS_MOVEBG_GET_MODE(thisx)];
+    this->sandTexAnim = sSandTexAnims[BG_INIBS_MOVEBG_GET_MODE(thisx)];
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Inibs_Movebg/BgInibsMovebg_Destroy.s")
+void BgInibsMovebg_Destroy(Actor* thisx, PlayState* play) {
+    BgInibsMovebg* this = THIS;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Inibs_Movebg/BgInibsMovebg_Draw.s")
+    DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
+}
+
+void BgInibsMovebg_Draw(Actor* thisx, PlayState* play) {
+    BgInibsMovebg* this = THIS;
+    AnimatedMaterial* sandTexAnim;
+    Gfx* opaDList;
+    Gfx* xluDList;
+
+    sandTexAnim = this->sandTexAnim;
+    if (sandTexAnim != NULL) {
+        AnimatedMat_Draw(play, Lib_SegmentedToVirtual(this->sandTexAnim));
+    }
+
+    opaDList = this->opaDList;
+    if (opaDList != NULL) {
+        Gfx_DrawDListOpa(play, this->opaDList);
+    }
+
+    xluDList = this->xluDList;
+    if (xluDList != NULL) {
+        Gfx_DrawDListXlu(play, this->xluDList);
+    }
+}

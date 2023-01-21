@@ -1,0 +1,14 @@
+<Root>
+    <File Name="ovl_En_Sth" BaseAddress="0x80B66D30" RangeStart="0x1890" RangeEnd="0x646C">
+        <DList Name="ovl_En_Sth_DL_0034A0" Offset="0x34A0"/>
+        <DList Name="ovl_En_Sth_DL_0037C0" Offset="0x37C0"/>
+        <Animation Name="ovl_En_Sth_Anim_003F50" Offset="0x3F50" />
+        <Animation Name="ovl_En_Sth_Anim_0045B4" Offset="0x45B4" />
+        <Animation Name="ovl_En_Sth_Anim_004CC0" Offset="0x4CC0" />
+        <Animation Name="ovl_En_Sth_Anim_00533C" Offset="0x533C" />
+        <Animation Name="ovl_En_Sth_Anim_0059B8" Offset="0x59B8" />
+        <Animation Name="ovl_En_Sth_Anim_005E40" Offset="0x5E40" />
+        <Animation Name="ovl_En_Sth_Anim_006354" Offset="0x6354" />
+        <Animation Name="ovl_En_Sth_Anim_00645C" Offset="0x645C" />
+    </File>
+</Root>

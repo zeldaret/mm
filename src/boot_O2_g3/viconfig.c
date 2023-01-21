@@ -3,13 +3,13 @@
 void ViConfig_UpdateVi(u32 mode) {
     if (mode != 0) {
         switch (osTvType) {
-            case 2:
+            case OS_TV_MPAL:
                 osViSetMode(&osViModeMpalLan1);
                 break;
-            case 0:
+            case OS_TV_PAL:
                 osViSetMode(&osViModePalLan1);
                 break;
-            case 1:
+            case OS_TV_NTSC:
             default:
                 osViSetMode(&osViModeNtscLan1);
                 break;
@@ -47,8 +47,8 @@ void ViConfig_UpdateVi(u32 mode) {
 
 void ViConfig_UpdateBlack(void) {
     if (gViConfigUseDefault != 0) {
-        osViBlack(1);
+        osViBlack(true);
     } else {
-        osViBlack(0);
+        osViBlack(false);
     }
 }

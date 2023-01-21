@@ -1,43 +1,50 @@
-#include "z_en_knight.h"
+/*
+ * File: z_en_knight.c
+ * Overlay: ovl_En_Knight
+ * Description: Igos du Ikana and his lackeys
+ */
 
-#define FLAGS 0x00000035
+#include "z_en_knight.h"
+#include "z64shrink_window.h"
+
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnKnight*)thisx)
 
-void EnKnight_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnKnight_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnKnight_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnKnight_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnKnight_Init(Actor* thisx, PlayState* play);
+void EnKnight_Destroy(Actor* thisx, PlayState* play);
+void EnKnight_Update(Actor* thisx, PlayState* play);
+void EnKnight_Draw(Actor* thisx, PlayState* play);
 
-void func_809B331C(EnKnight* this, GlobalContext* globalCtx);
-void func_809B33F0(EnKnight* this, GlobalContext* globalCtx);
-void func_809B3618(EnKnight* this, GlobalContext* globalCtx);
-void func_809B3834(EnKnight* this, GlobalContext* globalCtx);
-void func_809B3958(EnKnight* this, GlobalContext* globalCtx);
-void func_809B3B94(EnKnight* this, GlobalContext* globalCtx);
-void func_809B40E8(EnKnight* this, GlobalContext* globalCtx);
-void func_809B41F8(EnKnight* this, GlobalContext* globalCtx);
-void func_809B4308(EnKnight* this, GlobalContext* globalCtx);
-void func_809B4C58(EnKnight* this, GlobalContext* globalCtx);
-void func_809B4ED8(EnKnight* this, GlobalContext* globalCtx);
-void func_809B5058(EnKnight* this, GlobalContext* globalCtx);
-void func_809B52E8(EnKnight* this, GlobalContext* globalCtx);
-void func_809B5698(EnKnight* this, GlobalContext* globalCtx);
-void func_809B58D4(EnKnight* this, GlobalContext* globalCtx);
-void func_809B5B08(EnKnight* this, GlobalContext* globalCtx);
-void func_809B5D54(EnKnight* this, GlobalContext* globalCtx);
-void func_809B5ED0(EnKnight* this, GlobalContext* globalCtx);
-void func_809B601C(EnKnight* this, GlobalContext* globalCtx);
-void func_809B6764(EnKnight* this, GlobalContext* globalCtx);
-void func_809B6C54(EnKnight* this, GlobalContext* globalCtx);
-void func_809B6D94(EnKnight* this, GlobalContext* globalCtx);
-void func_809B6F40(EnKnight* this, GlobalContext* globalCtx);
-void func_809B71DC(EnKnight* this, GlobalContext* globalCtx);
-void func_809B7778(EnKnight* this, GlobalContext* globalCtx);
-void func_809B7950(EnKnight* this, GlobalContext* globalCtx);
-void func_809B8458(EnKnight* this, GlobalContext* globalCtx);
-void func_809BA0CC(EnKnight* this, GlobalContext* globalCtx);
-void func_809BA978(EnKnight* this, GlobalContext* globalCtx);
+void func_809B331C(EnKnight* this, PlayState* play);
+void func_809B33F0(EnKnight* this, PlayState* play);
+void func_809B3618(EnKnight* this, PlayState* play);
+void func_809B3834(EnKnight* this, PlayState* play);
+void func_809B3958(EnKnight* this, PlayState* play);
+void func_809B3B94(EnKnight* this, PlayState* play);
+void func_809B40E8(EnKnight* this, PlayState* play);
+void func_809B41F8(EnKnight* this, PlayState* play);
+void func_809B4308(EnKnight* this, PlayState* play);
+void func_809B4C58(EnKnight* this, PlayState* play);
+void func_809B4ED8(EnKnight* this, PlayState* play);
+void func_809B5058(EnKnight* this, PlayState* play);
+void func_809B52E8(EnKnight* this, PlayState* play);
+void func_809B5698(EnKnight* this, PlayState* play);
+void func_809B58D4(EnKnight* this, PlayState* play);
+void func_809B5B08(EnKnight* this, PlayState* play);
+void func_809B5D54(EnKnight* this, PlayState* play);
+void func_809B5ED0(EnKnight* this, PlayState* play);
+void func_809B601C(EnKnight* this, PlayState* play);
+void func_809B6764(EnKnight* this, PlayState* play);
+void func_809B6C54(EnKnight* this, PlayState* play);
+void func_809B6D94(EnKnight* this, PlayState* play);
+void func_809B6F40(EnKnight* this, PlayState* play);
+void func_809B71DC(EnKnight* this, PlayState* play);
+void func_809B7778(EnKnight* this, PlayState* play);
+void func_809B7950(EnKnight* this, PlayState* play);
+void func_809B8458(EnKnight* this, PlayState* play);
+void func_809BA0CC(EnKnight* this, PlayState* play);
+void func_809BA978(EnKnight* this, PlayState* play);
 
 #if 0
 // static DamageTable sDamageTable = {
@@ -123,7 +130,7 @@ static ColliderJntSphElementInit D_809BDB44[1] = {
 // static ColliderJntSphInit sJntSphInit = {
 static ColliderJntSphInit D_809BDB8C = {
     { COLTYPE_METAL, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_HARD | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_PLAYER, OC2_TYPE_1, COLSHAPE_JNTSPH, },
-    1, D_809BDB44, // sJntSphElementsInit,
+    ARRAY_COUNT(sJntSphElementsInit), D_809BDB44, // sJntSphElementsInit,
 };
 
 // static ColliderJntSphElementInit sJntSphElementsInit[1] = {
@@ -137,7 +144,7 @@ static ColliderJntSphElementInit D_809BDB68[1] = {
 // static ColliderJntSphInit sJntSphInit = {
 static ColliderJntSphInit D_809BDB9C = {
     { COLTYPE_METAL, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_HARD | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_PLAYER, OC2_TYPE_1, COLSHAPE_JNTSPH, },
-    1, D_809BDB68, // sJntSphElementsInit,
+    ARRAY_COUNT(sJntSphElementsInit), D_809BDB68, // sJntSphElementsInit,
 };
 
 // static ColliderJntSphElementInit sJntSphElementsInit[1] = {
@@ -151,7 +158,7 @@ static ColliderJntSphElementInit D_809BDBAC[1] = {
 // static ColliderJntSphInit sJntSphInit = {
 static ColliderJntSphInit D_809BDBD0 = {
     { COLTYPE_METAL, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_HARD | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_PLAYER, OC2_TYPE_1, COLSHAPE_JNTSPH, },
-    1, D_809BDBAC, // sJntSphElementsInit,
+    ARRAY_COUNT(sJntSphElementsInit), D_809BDBAC, // sJntSphElementsInit,
 };
 
 // static ColliderJntSphElementInit sJntSphElementsInit[2] = {
@@ -169,7 +176,7 @@ static ColliderJntSphElementInit D_809BDBE0[2] = {
 // static ColliderJntSphInit sJntSphInit = {
 static ColliderJntSphInit D_809BDC28 = {
     { COLTYPE_HIT3, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_PLAYER | OC1_TYPE_1, OC2_TYPE_1, COLSHAPE_JNTSPH, },
-    2, D_809BDBE0, // sJntSphElementsInit,
+    ARRAY_COUNT(sJntSphElementsInit), D_809BDBE0, // sJntSphElementsInit,
 };
 
 // static ColliderCylinderInit sCylinderInit = {
@@ -186,7 +193,7 @@ static ColliderCylinderInit D_809BDC64 = {
     { 20, 40, 0, { 0, 0, 0 } },
 };
 
-const ActorInit En_Knight_InitVars = {
+ActorInit En_Knight_InitVars = {
     ACTOR_EN_KNIGHT,
     ACTORCAT_BOSS,
     FLAGS,

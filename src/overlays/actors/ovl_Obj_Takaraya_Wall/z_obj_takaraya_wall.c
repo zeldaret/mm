@@ -1,18 +1,24 @@
+/*
+ * File: z_obj_takaraya_wall.c
+ * Overlay: ovl_Obj_Takaraya_Wall
+ * Description: Treasure Chest Shop rising wall
+ */
+
 #include "z_obj_takaraya_wall.h"
 
-#define FLAGS 0x00000030
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((ObjTakarayaWall*)thisx)
 
-void ObjTakarayaWall_Init(Actor* thisx, GlobalContext* globalCtx);
-void ObjTakarayaWall_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void ObjTakarayaWall_Update(Actor* thisx, GlobalContext* globalCtx);
-void ObjTakarayaWall_Draw(Actor* thisx, GlobalContext* globalCtx);
+void ObjTakarayaWall_Init(Actor* thisx, PlayState* play);
+void ObjTakarayaWall_Destroy(Actor* thisx, PlayState* play);
+void ObjTakarayaWall_Update(Actor* thisx, PlayState* play);
+void ObjTakarayaWall_Draw(Actor* thisx, PlayState* play);
 
-void func_80AD9B04(ObjTakarayaWall* this, GlobalContext* globalCtx);
+void func_80AD9B04(ObjTakarayaWall* this, PlayState* play);
 
 #if 0
-const ActorInit Obj_Takaraya_Wall_InitVars = {
+ActorInit Obj_Takaraya_Wall_InitVars = {
     ACTOR_OBJ_TAKARAYA_WALL,
     ACTORCAT_BG,
     FLAGS,

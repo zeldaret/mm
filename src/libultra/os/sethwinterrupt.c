@@ -1,3 +1,10 @@
 #include "global.h"
 
-#pragma GLOBAL_ASM("asm/non_matchings/boot/sethwinterrupt/__osSetHWIntrRoutine.s")
+void __osSetHWIntrRoutine(s32 idx, OSMesgQueue* queue, OSMesg msg) {
+    register s32 prevInt = __osDisableInt();
+
+    __osHwIntTable[idx].queue = queue;
+    __osHwIntTable[idx].msg = msg;
+
+    __osRestoreInt(prevInt);
+}

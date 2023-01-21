@@ -5,56 +5,26 @@
  */
 
 #include "z_en_dnk.h"
+#include "objects/object_dnk/object_dnk.h"
+#include "objects/object_hintnuts/object_hintnuts.h"
+#include "objects/object_dekunuts/object_dekunuts.h"
 
-#define FLAGS 0x00000009
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
 
 #define THIS ((EnDnk*)thisx)
 
-void EnDnk_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnDnk_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnDnk_Update(Actor* thisx, GlobalContext* globalCtx);
+void EnDnk_Init(Actor* thisx, PlayState* play);
+void EnDnk_Destroy(Actor* thisx, PlayState* play);
+void EnDnk_Update(Actor* thisx, PlayState* play);
 
-void func_80A51890(EnDnk* this, GlobalContext* globalCtx);
-void EnDnk_DoNothing(EnDnk* this, GlobalContext* globalCtx);
-void func_80A52018(Actor* thisx, GlobalContext* globalCtx);
-void func_80A52134(EnDnk* this, GlobalContext* globalCtx);
-
-extern AnimationHeader D_06000168;
-extern AnimationHeader D_0600031C;
-extern AnimationHeader D_06000430;
-extern AnimationHeader D_060006CC;
-extern AnimationHeader D_06000894;
-extern AnimationHeader D_06000B70;
-extern UNK_PTR D_06001680[];
-extern UNK_PTR D_06001700[];
-extern UNK_PTR D_06001780[];
-extern SkeletonHeader D_060023B8;
-extern SkeletonHeader D_06002468;
-extern AnimationHeader D_060024CC;
-extern AnimationHeader D_0600259C;
-extern AnimationHeader D_060026C4;
-extern SkeletonHeader D_06002848;
-extern AnimationHeader D_06002894;
-extern AnimationHeader D_06002950;
-extern AnimationHeader D_060029BC;
-extern AnimationHeader D_06002A08;
-extern AnimationHeader D_06002A5C;
-extern AnimationHeader D_06002B6C;
-extern AnimationHeader D_06002B90;
-extern AnimationHeader D_06002BD4;
-extern AnimationHeader D_06002DD4;
-extern AnimationHeader D_06002E84;
-extern AnimationHeader D_06002F7C;
-extern AnimationHeader D_06002FA4;
-extern AnimationHeader D_06003128;
-extern AnimationHeader D_06003180;
-extern AnimationHeader D_0600326C;
-extern AnimationHeader D_060033E4;
-extern AnimationHeader D_06003780;
+void func_80A51890(EnDnk* this, PlayState* play);
+void EnDnk_DoNothing(EnDnk* this, PlayState* play);
+void func_80A52018(Actor* thisx, PlayState* play);
+void func_80A52134(EnDnk* this, PlayState* play);
 
 static s16 D_80A521A0 = 0;
 
-const ActorInit En_Dnk_InitVars = {
+ActorInit En_Dnk_InitVars = {
     ACTOR_EN_DNK,
     ACTORCAT_NPC,
     FLAGS,
@@ -123,19 +93,43 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
-static ActorAnimationEntryS sAnimations[] = {
-    { &D_06000B70, 1.0f, 0, -1, 2, 0 },  { &D_06000B70, 1.0f, 0, -1, 2, -4 }, { &D_06002A08, 1.0f, 0, -1, 0, -4 },
-    { &D_0600031C, 1.0f, 0, -1, 0, -4 }, { &D_06000430, 1.0f, -1, -1, 2, 0 }, { &D_06000430, 1.0f, 0, -1, 2, -4 },
-    { &D_06000894, 1.0f, 0, -1, 2, -4 }, { &D_06002B6C, 1.0f, 0, -1, 0, 0 },  { &D_06002B6C, 1.0f, 0, -1, 0, -4 },
-    { &D_060006CC, 1.0f, 0, -1, 0, -4 }, { &D_06000168, 1.0f, 0, -1, 2, -4 }, { &D_060024CC, 1.0f, -1, -1, 2, 0 },
-    { &D_060024CC, 1.0f, 0, -1, 2, -4 }, { &D_060026C4, 1.0f, 0, -1, 2, -4 }, { &D_06002894, 1.0f, 0, -1, 2, -4 },
-    { &D_06002B90, 1.0f, 0, -1, 2, -4 }, { &D_06002F7C, 1.0f, 0, -1, 0, 0 },  { &D_06002F7C, 1.0f, 0, -1, 0, -4 },
-    { &D_06003128, 1.0f, 0, -1, 0, 0 },  { &D_06003128, 1.0f, 0, -1, 0, -4 }, { &D_060029BC, 1.0f, 0, -1, 0, -4 },
-    { &D_06002E84, 1.0f, 0, -1, 0, -4 }, { &D_06000168, 1.0f, 0, -1, 0, -4 }, { &D_0600259C, 1.0f, 0, -1, 2, -4 },
-    { &D_06002A5C, 1.0f, 0, -1, 2, 0 },  { &D_06002A5C, 1.0f, 0, -1, 2, -4 }, { &D_06002BD4, 1.0f, 0, -1, 2, -4 },
-    { &D_06002DD4, 1.0f, 0, -1, 2, -4 }, { &D_06002FA4, 1.0f, 0, -1, 0, -4 }, { &D_06003180, 1.0f, 0, -1, 2, -4 },
-    { &D_0600326C, 1.0f, 0, -1, 0, 0 },  { &D_0600326C, 1.0f, 0, -1, 0, -4 }, { &D_060033E4, 1.0f, 0, -1, 0, -4 },
-    { &D_06003780, 1.0f, 0, -1, 0, 0 },  { &D_06003780, 1.0f, 0, -1, 0, -4 }, { &D_06002950, 1.0f, 0, -1, 0, 0 },
+static AnimationInfoS sAnimationInfo[] = {
+    { &gDekuPalaceGuardStartAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &gDekuPalaceGuardStartAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &gDekuPalaceGuardWaitAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &gDekuPalaceGuardAttackAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &gDekuPalaceGuardDigAnim, 1.0f, -1, -1, ANIMMODE_ONCE, 0 },
+    { &gDekuPalaceGuardDigAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &gDekuPalaceGuardJumpAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &gDekuPalaceGuardWalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gDekuPalaceGuardWalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &gDekuPalaceGuardHappyAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_hintnuts_Anim_000168, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_hintnuts_Anim_0024CC, 1.0f, -1, -1, ANIMMODE_ONCE, 0 },
+    { &object_hintnuts_Anim_0024CC, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_hintnuts_Anim_0026C4, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_hintnuts_Anim_002894, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_hintnuts_Anim_002B90, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_hintnuts_Anim_002F7C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_hintnuts_Anim_002F7C, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_hintnuts_Anim_003128, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_hintnuts_Anim_003128, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_hintnuts_Anim_0029BC, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_hintnuts_Anim_002E84, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &gDekuScrubSpitAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &gDekuScrubDamageAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &gDekuScrubBurrowAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &gDekuScrubBurrowAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &gDekuScrubDieAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &gDekuScrubUnburrowAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &gDekuScrubLookAroundAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &gDekuScrubUpAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &gDekuScrubIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gDekuScrubIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &gDekuScrubPantingAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &gDekuScrubRunAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gDekuScrubRunAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &gDekuScrubStandingIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
 };
 
 s32 func_80A514F0(SkelAnime* skelAnime, s16 animIndex) {
@@ -144,18 +138,18 @@ s32 func_80A514F0(SkelAnime* skelAnime, s16 animIndex) {
     s32 sp30 = false;
 
     if (animIndex >= 0) {
-        if (animIndex < 36) {
+        if (animIndex < ARRAY_COUNT(sAnimationInfo)) {
             sp30 = true;
-            frameCount = sAnimations[animIndex].frameCount;
+            frameCount = sAnimationInfo[animIndex].frameCount;
             if (frameCount < 0) {
-                frameCount = SkelAnime_GetFrameCount(&(sAnimations[animIndex].animationSeg)->common);
+                frameCount = Animation_GetLastFrame(sAnimationInfo[animIndex].animation);
             }
-            frame = sAnimations[animIndex].frame;
+            frame = sAnimationInfo[animIndex].startFrame;
             if (frame < 0) {
                 frame = frameCount;
             }
-            SkelAnime_ChangeAnim(skelAnime, sAnimations[animIndex].animationSeg, sAnimations[animIndex].playbackSpeed,
-                                 frame, frameCount, sAnimations[animIndex].mode, sAnimations[animIndex].transitionRate);
+            Animation_Change(skelAnime, sAnimationInfo[animIndex].animation, sAnimationInfo[animIndex].playSpeed, frame,
+                             frameCount, sAnimationInfo[animIndex].mode, sAnimationInfo[animIndex].morphFrames);
         }
     }
     return sp30;
@@ -175,104 +169,107 @@ s32 func_80A515C4(EnDnk* this) {
     return ret;
 }
 
-void func_80A51648(EnDnk* this, GlobalContext* globalCtx) {
-    if (func_8013D8DC(this->unk_28E, globalCtx) == 1) {
-        gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[this->unk_28E].segment);
+void func_80A51648(EnDnk* this, PlayState* play) {
+    if (SubS_IsObjectLoaded(this->unk_28E, play) == true) {
+        gSegments[0x06] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[this->unk_28E].segment);
         this->actor.draw = func_80A52018;
         this->actor.objBankIndex = this->unk_28E;
         ActorShape_Init(&this->actor.shape, 0.0f, NULL, 18.0f);
 
         switch (ENDNK_GET_3(&this->actor)) {
             case ENDNK_GET_3_0:
-                SkelAnime_Init(globalCtx, &this->skelAnime, &D_06002848, NULL, this->jointTable, this->morphTable, 11);
+                SkelAnime_Init(play, &this->skelAnime, &gDekuPalaceGuardSkel, NULL, this->jointTable, this->morphTable,
+                               DEKU_PALACE_GUARD_LIMB_MAX);
                 func_80A514F0(&this->skelAnime, 7);
                 break;
 
             case ENDNK_GET_3_1:
-                SkelAnime_Init(globalCtx, &this->skelAnime, &D_060023B8, NULL, this->jointTable, this->morphTable, 10);
+                SkelAnime_Init(play, &this->skelAnime, &object_hintnuts_Skel_0023B8.sh, NULL, this->jointTable,
+                               this->morphTable, 10);
                 func_80A514F0(&this->skelAnime, 18);
                 break;
 
             case ENDNK_GET_3_2:
-                SkelAnime_Init(globalCtx, &this->skelAnime, &D_06002468, NULL, this->jointTable, this->morphTable, 10);
+                SkelAnime_Init(play, &this->skelAnime, &gDekuScrubSkel, NULL, this->jointTable, this->morphTable,
+                               DEKU_SCRUB_LIMB_MAX);
                 func_80A514F0(&this->skelAnime, 35);
                 break;
         }
 
-        Collider_InitCylinder(globalCtx, &this->collider);
-        Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
+        Collider_InitCylinder(play, &this->collider);
+        Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
         CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
         if (ENDNK_GET_3C(&this->actor) == 4) {
-            this->actor.flags &= ~1;
-            this->actor.flags |= (0x10 | 0x20);
+            this->actor.flags &= ~ACTOR_FLAG_1;
+            this->actor.flags |= (ACTOR_FLAG_10 | ACTOR_FLAG_20);
             this->actionFunc = func_80A51890;
             Actor_SetScale(&this->actor, 0.1f);
         } else {
-            this->actor.flags &= ~1;
+            this->actor.flags &= ~ACTOR_FLAG_1;
             this->actionFunc = EnDnk_DoNothing;
             Actor_SetScale(&this->actor, 0.01f);
         }
     }
 }
 
-void func_80A51890(EnDnk* this, GlobalContext* globalCtx) {
-    if (func_800EE29C(globalCtx, 0x7E)) {
-        func_800EDF24(&this->actor, globalCtx, func_800EE200(globalCtx, 0x7E));
+void func_80A51890(EnDnk* this, PlayState* play) {
+    if (Cutscene_CheckActorAction(play, 126)) {
+        Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetActorActionIndex(play, 126));
     }
 }
 
-void EnDnk_DoNothing(EnDnk* this, GlobalContext* globalCtx) {
+void EnDnk_DoNothing(EnDnk* this, PlayState* play) {
 }
 
-void EnDnk_Init(Actor* thisx, GlobalContext* globalCtx) {
+void EnDnk_Init(Actor* thisx, PlayState* play) {
     EnDnk* this = THIS;
 
     this->unk_28E = -1;
     switch (ENDNK_GET_3(&this->actor)) {
         case ENDNK_GET_3_1:
-            this->unk_28E = func_8013D924(0x12B, globalCtx);
+            this->unk_28E = SubS_GetObjectIndex(OBJECT_HINTNUTS, play);
             break;
 
         case ENDNK_GET_3_0:
-            this->unk_28E = func_8013D924(0x135, globalCtx);
+            this->unk_28E = SubS_GetObjectIndex(OBJECT_DNK, play);
             break;
 
         case ENDNK_GET_3_2:
-            this->unk_28E = func_8013D924(0x40, globalCtx);
+            this->unk_28E = SubS_GetObjectIndex(OBJECT_DEKUNUTS, play);
             break;
     }
 
     if (this->unk_28E >= 0) {
         this->actionFunc = func_80A51648;
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 
     this->unk_2A2 = D_80A521A0;
     D_80A521A0++;
 }
 
-void EnDnk_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnDnk_Destroy(Actor* thisx, PlayState* play) {
     EnDnk* this = THIS;
 
-    Collider_DestroyCylinder(globalCtx, &this->collider);
+    Collider_DestroyCylinder(play, &this->collider);
 }
 
-void EnDnk_Update(Actor* thisx, GlobalContext* globalCtx) {
+void EnDnk_Update(Actor* thisx, PlayState* play) {
     EnDnk* this = THIS;
     s32 pad;
 
-    this->actionFunc(this, globalCtx);
-    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    this->actionFunc(this, play);
+    SkelAnime_Update(&this->skelAnime);
     func_80A515C4(this);
-    Actor_SetHeight(&this->actor, 34.0f);
+    Actor_SetFocus(&this->actor, 34.0f);
     Collider_UpdateCylinder(&this->actor, &this->collider);
-    CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
-    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
-    func_80A52134(this, globalCtx);
+    CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
+    CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
+    func_80A52134(this, play);
 }
 
-s32 func_80A51A78(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+s32 func_80A51A78(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnDnk* this = THIS;
 
     this->unk_260[limbIndex] = *dList;
@@ -280,18 +277,18 @@ s32 func_80A51A78(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
     return false;
 }
 
-void func_80A51AA4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void func_80A51AA4(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnDnk* this = THIS;
     MtxF sp5C;
-    Vec3f sp50 = D_801D15B0;
+    Vec3f sp50 = gZeroVec3f;
     Vec3f sp44;
     Vec3s sp3C;
 
     if (limbIndex == 2) {
-        SysMatrix_MultiplyVector3fByState(&sp50, &sp44);
-        SysMatrix_CopyCurrentState(&sp5C);
-        func_8018219C(&sp5C, &sp3C, 0);
-        SysMatrix_InsertTranslation(sp44.x, sp44.y, sp44.z, MTXMODE_NEW);
+        Matrix_MultVec3f(&sp50, &sp44);
+        Matrix_Get(&sp5C);
+        Matrix_MtxFToYXZRot(&sp5C, &sp3C, false);
+        Matrix_Translate(sp44.x, sp44.y, sp44.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
         if (this->unk_28C & 0x10) {
             if (this->unk_28C & 0x20) {
@@ -314,41 +311,41 @@ void func_80A51AA4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
             this->unk_294 = sp3C.z;
         }
 
-        Matrix_RotateY(this->unk_292, MTXMODE_APPLY);
-        SysMatrix_InsertXRotation_s(this->unk_290, MTXMODE_APPLY);
-        SysMatrix_InsertZRotation_s(this->unk_294, MTXMODE_APPLY);
+        Matrix_RotateYS(this->unk_292, MTXMODE_APPLY);
+        Matrix_RotateXS(this->unk_290, MTXMODE_APPLY);
+        Matrix_RotateZS(this->unk_294, MTXMODE_APPLY);
     }
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, this->unk_260[limbIndex]);
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }
 
-void func_80A51CB8(EnDnk* this, GlobalContext* globalCtx) {
-    static UNK_PTR D_80A5245C[] = {
-        D_06001680,
-        D_06001700,
-        D_06001780,
+void func_80A51CB8(EnDnk* this, PlayState* play) {
+    static TexturePtr D_80A5245C[] = {
+        gDekuPalaceGuardEyeOpenTex,
+        gDekuPalaceGuardEyeHalfTex,
+        gDekuPalaceGuardEyeClosedTex,
     };
     s32 pad;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(globalCtx->state.gfxCtx);
+    func_8012C28C(play->state.gfxCtx);
 
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80A5245C[this->unk_2A0]));
     gDPPipeSync(POLY_OPA_DISP++);
 
-    SkelAnime_Draw(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, func_80A51A78, func_80A51AA4,
-                   &this->actor);
+    SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, func_80A51A78, func_80A51AA4,
+                      &this->actor);
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }
 
-s32 func_80A51D78(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+s32 func_80A51D78(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnDnk* this = THIS;
 
     this->unk_260[limbIndex] = *dList;
@@ -356,18 +353,18 @@ s32 func_80A51D78(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
     return false;
 }
 
-void func_80A51DA4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void func_80A51DA4(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnDnk* this = THIS;
     MtxF sp5C;
-    Vec3f sp50 = D_801D15B0;
+    Vec3f sp50 = gZeroVec3f;
     Vec3f sp44;
     Vec3s sp3C;
 
     if (limbIndex == 2) {
-        SysMatrix_MultiplyVector3fByState(&sp50, &sp44);
-        SysMatrix_CopyCurrentState(&sp5C);
-        func_8018219C(&sp5C, &sp3C, 0);
-        SysMatrix_InsertTranslation(sp44.x, sp44.y, sp44.z, MTXMODE_NEW);
+        Matrix_MultVec3f(&sp50, &sp44);
+        Matrix_Get(&sp5C);
+        Matrix_MtxFToYXZRot(&sp5C, &sp3C, false);
+        Matrix_Translate(sp44.x, sp44.y, sp44.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
 
         if (this->unk_28C & 0x10) {
@@ -391,42 +388,42 @@ void func_80A51DA4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
             this->unk_294 = sp3C.z;
         }
 
-        Matrix_RotateY(this->unk_292, MTXMODE_APPLY);
-        SysMatrix_InsertXRotation_s(this->unk_290, MTXMODE_APPLY);
-        SysMatrix_InsertZRotation_s(this->unk_294, MTXMODE_APPLY);
+        Matrix_RotateYS(this->unk_292, MTXMODE_APPLY);
+        Matrix_RotateXS(this->unk_290, MTXMODE_APPLY);
+        Matrix_RotateZS(this->unk_294, MTXMODE_APPLY);
     }
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, this->unk_260[limbIndex]);
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }
 
-void func_80A51FC0(EnDnk* this, GlobalContext* globalCtx) {
-    func_8012C28C(globalCtx->state.gfxCtx);
-    SkelAnime_Draw(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, func_80A51D78, func_80A51DA4,
-                   &this->actor);
+void func_80A51FC0(EnDnk* this, PlayState* play) {
+    func_8012C28C(play->state.gfxCtx);
+    SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, func_80A51D78, func_80A51DA4,
+                      &this->actor);
 }
 
-void func_80A52018(Actor* thisx, GlobalContext* globalCtx) {
+void func_80A52018(Actor* thisx, PlayState* play) {
     EnDnk* this = THIS;
 
     switch (ENDNK_GET_3(thisx)) {
         case ENDNK_GET_3_0:
-            func_80A51CB8(this, globalCtx);
+            func_80A51CB8(this, play);
             break;
 
         case ENDNK_GET_3_1:
         case ENDNK_GET_3_2:
-            func_80A51FC0(this, globalCtx);
+            func_80A51FC0(this, play);
             break;
     }
 }
 
-void func_80A52074(EnDnk* this, GlobalContext* globalCtx) {
-    switch (globalCtx->csCtx.frames) {
+void func_80A52074(EnDnk* this, PlayState* play) {
+    switch (play->csCtx.frames) {
         case 80:
             func_8019F128(NA_SE_EN_DEKNUTS_DANCE1);
             break;
@@ -436,22 +433,22 @@ void func_80A52074(EnDnk* this, GlobalContext* globalCtx) {
             break;
 
         case 438:
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_DEKNUTS_DANCE_BIG);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DEKNUTS_DANCE_BIG);
             break;
 
         case 493:
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKIDS_APPEAR);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_APPEAR);
             break;
     }
 
-    if ((globalCtx->csCtx.frames >= 198) && (globalCtx->csCtx.frames < 438)) {
+    if ((play->csCtx.frames >= 198) && (play->csCtx.frames < 438)) {
         func_8019F128(NA_SE_EN_DEKNUTS_DANCE - SFX_FLAG);
     }
 }
 
-void func_80A52134(EnDnk* this, GlobalContext* globalCtx) {
-    if ((globalCtx->csCtx.state != 0) && (ENDNK_GET_3C(&this->actor) == 4) && (globalCtx->sceneNum == SCENE_SPOT00) &&
-        (gSaveContext.sceneSetupIndex == 2)) {
-        func_80A52074(this, globalCtx);
+void func_80A52134(EnDnk* this, PlayState* play) {
+    if ((play->csCtx.state != 0) && (ENDNK_GET_3C(&this->actor) == 4) && (play->sceneId == SCENE_SPOT00) &&
+        (gSaveContext.sceneLayer == 2)) {
+        func_80A52074(this, play);
     }
 }

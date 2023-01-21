@@ -1,12 +1,18 @@
+/*
+ * File: z_en_kaizoku.c
+ * Overlay: ovl_En_Kaizoku
+ * Description: Fighter pirate
+ */
+
 #include "z_en_kaizoku.h"
 
-#define FLAGS 0x00100015
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_100000)
 
 #define THIS ((EnKaizoku*)thisx)
 
-void EnKaizoku_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnKaizoku_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnKaizoku_Update(Actor* thisx, GlobalContext* globalCtx);
+void EnKaizoku_Init(Actor* thisx, PlayState* play);
+void EnKaizoku_Destroy(Actor* thisx, PlayState* play);
+void EnKaizoku_Update(Actor* thisx, PlayState* play);
 
 #if 0
 // static DamageTable sDamageTable = {
@@ -45,7 +51,7 @@ static DamageTable D_80B8AB3C = {
     /* Powder Keg     */ DMG_ENTRY(1, 0xE),
 };
 
-const ActorInit En_Kaizoku_InitVars = {
+ActorInit En_Kaizoku_InitVars = {
     ACTOR_EN_KAIZOKU,
     ACTORCAT_ENEMY,
     FLAGS,

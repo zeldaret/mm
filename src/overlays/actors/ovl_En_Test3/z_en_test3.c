@@ -1,15 +1,21 @@
+/*
+ * File: z_en_test3.c
+ * Overlay: ovl_En_Test3
+ * Description: Kafei
+ */
+
 #include "z_en_test3.h"
 
-#define FLAGS 0x04000030
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_4000000)
 
 #define THIS ((EnTest3*)thisx)
 
-void EnTest3_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnTest3_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnTest3_Update(Actor* thisx, GlobalContext* globalCtx);
+void EnTest3_Init(Actor* thisx, PlayState* play);
+void EnTest3_Destroy(Actor* thisx, PlayState* play);
+void EnTest3_Update(Actor* thisx, PlayState* play);
 
 #if 0
-const ActorInit En_Test3_InitVars = {
+ActorInit En_Test3_InitVars = {
     ACTOR_EN_TEST3,
     ACTORCAT_NPC,
     FLAGS,

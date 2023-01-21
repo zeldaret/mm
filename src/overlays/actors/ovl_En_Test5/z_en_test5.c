@@ -1,19 +1,22 @@
+/*
+ * File: z_en_test5.c
+ * Overlay: ovl_En_Test5
+ * Description: Spring Water Modifier
+ */
+
 #include "z_en_test5.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((EnTest5*)thisx)
 
-void EnTest5_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnTest5_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnTest5_Update(Actor* thisx, GlobalContext* globalCtx);
-
-void func_80A90478(EnTest5* this, GlobalContext* globalCtx);
-
+void EnTest5_Init(Actor* thisx, PlayState* play2);
+void EnTest5_Destroy(Actor* thisx, PlayState* play);
+void EnTest5_Update(Actor* thisx, PlayState* play2);
+void EnTest5_HandleBottleAction(EnTest5* this, PlayState* play);
 void EnTest5_SetupAction(EnTest5* this, EnTest5ActionFunc actionFunc);
 
-#if 0
-const ActorInit En_Test5_InitVars = {
+ActorInit En_Test5_InitVars = {
     ACTOR_EN_TEST5,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -25,14 +28,81 @@ const ActorInit En_Test5_InitVars = {
     (ActorFunc)NULL,
 };
 
-#endif
+void EnTest5_SetupAction(EnTest5* this, EnTest5ActionFunc actionFunc) {
+    this->actionFunc = actionFunc;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Test5/EnTest5_SetupAction.s")
+void EnTest5_Init(Actor* thisx, PlayState* play2) {
+    PlayState* play = play2;
+    EnTest5* this = THIS;
+    WaterBox* water;
+    f32 ySurface;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Test5/EnTest5_Init.s")
+    // If not spawned above a water source, immediately despawn
+    if (!WaterBox_GetSurface1(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &ySurface,
+                              &water)) {
+        Actor_Kill(&this->actor);
+        return;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Test5/EnTest5_Destroy.s")
+    Math_Vec3s_ToVec3f(&this->minPos, &water->minPos);
+    this->xLength = (f32)water->xLength;
+    this->zLength = (f32)water->zLength;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Test5/func_80A90478.s")
+    EnTest5_SetupAction(this, EnTest5_HandleBottleAction);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Test5/EnTest5_Update.s")
+void EnTest5_Destroy(Actor* thisx, PlayState* play) {
+}
+
+void EnTest5_HandleBottleAction(EnTest5* this, PlayState* play) {
+    Player* player;
+    Vec3f playerPosRelativeToWater;
+
+    if (Actor_HasParent(&this->actor, play)) {
+        this->actor.parent = NULL;
+        return;
+    }
+
+    player = GET_PLAYER(play);
+
+    if (player->interactRangeActor == NULL || player->getItemId != GI_MAX) {
+        Math_Vec3f_DistXYZAndStoreDiff(&this->minPos, &player->actor.world.pos, &playerPosRelativeToWater);
+
+        // Make sure that the player is within the bounds of the water and deep enough to grab some
+        if (playerPosRelativeToWater.x >= 0.0f && playerPosRelativeToWater.x <= this->xLength &&
+            playerPosRelativeToWater.z >= 0.0f && playerPosRelativeToWater.z <= this->zLength &&
+            fabsf(playerPosRelativeToWater.y) < 100.0f && player->actor.depthInWater > 12.0f) {
+            Actor_PickUp(&this->actor, play, GI_MAX, this->actor.xzDistToPlayer, fabsf(this->actor.playerHeightRel));
+        }
+    }
+}
+
+void EnTest5_Update(Actor* thisx, PlayState* play2) {
+    PlayState* play = play2;
+    EnTest5* this = THIS;
+    Vec3f steamPos;
+    CollisionPoly* poly;
+    s32 pad;
+
+    this->actionFunc(this, play);
+
+    // If it's the hot spring variant, generate steam clouds
+    if (ENTEST5_IS_HOT_SPRING(&this->actor) && (play->state.frames % 4) == 0) {
+        steamPos.x = (Rand_ZeroOne() * this->xLength) + this->minPos.x;
+        steamPos.y = this->minPos.y + 100.0f;
+        steamPos.z = (Rand_ZeroOne() * this->zLength) + this->minPos.z;
+
+        if ((BgCheck_EntityRaycastFloor2(play, &play->colCtx, &poly, &steamPos) + 10.0f) < this->minPos.y) {
+            Vec3f steamVel;
+
+            steamPos.y = this->minPos.y + 10.0f;
+            steamVel.y = 0.5f;
+            steamVel.x = 0.0f;
+            steamVel.z = 0.0f;
+
+            EffectSsIceSmoke_Spawn(play, &steamPos, &steamVel, &gZeroVec3f,
+                                   (s16)((-200) - (s32)(Rand_ZeroOne() * 50.0f)));
+        }
+    }
+}

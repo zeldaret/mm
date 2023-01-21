@@ -7,7 +7,7 @@ void osViSetMode(OSViMode* modep) {
 
     __osViNext->modep = modep;
     __osViNext->state = 1;
-    __osViNext->control = __osViNext->modep->comRegs.ctrl;
+    __osViNext->features = __osViNext->modep->comRegs.ctrl;
 
     __osRestoreInt(saveMask);
 }

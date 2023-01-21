@@ -5,15 +5,27 @@
 
 struct BgDblueWaterfall;
 
-typedef void (*BgDblueWaterfallActionFunc)(struct BgDblueWaterfall*, GlobalContext*);
+typedef void (*BgDblueWaterfallActionFunc)(struct BgDblueWaterfall*, PlayState*);
+
+#define BGDBLUEWATERFALL_GET_7F(thisx) ((thisx)->params & 0x7F)
+#define BGDBLUEWATERFALL_GET_100(thisx) (((thisx)->params >> 8) & 1)
 
 typedef struct BgDblueWaterfall {
-    /* 0x0000 */ Actor actor;
-    /* 0x0144 */ char unk_144[0x50];
-    /* 0x0194 */ BgDblueWaterfallActionFunc actionFunc;
-    /* 0x0198 */ char unk_198[0x14];
+    /* 0x000 */ Actor actor;
+    /* 0x144 */ ColliderCylinder collider;
+    /* 0x190 */ AnimatedMaterial* unk_190;
+    /* 0x194 */ BgDblueWaterfallActionFunc actionFunc;
+    /* 0x198 */ f32 unk_198;
+    /* 0x19C */ s16 unk_19C;
+    /* 0x19E */ u8 unk_19E;
+    /* 0x19F */ u8 unk_19F;
+    /* 0x1A0 */ u8 unk_1A0;
+    /* 0x1A1 */ UNK_TYPE1 unk1A1[2];
+    /* 0x1A3 */ s8 unk_1A3;
+    /* 0x1A4 */ s16 unk_1A4;
+    /* 0x1A6 */ UNK_TYPE1 unk1A6[1];
+    /* 0x1A7 */ s8 unk_1A7;
+    /* 0x1A8 */ f32 unk_1A8;
 } BgDblueWaterfall; // size = 0x1AC
-
-extern const ActorInit Bg_Dblue_Waterfall_InitVars;
 
 #endif // Z_BG_DBLUE_WATERFALL_H

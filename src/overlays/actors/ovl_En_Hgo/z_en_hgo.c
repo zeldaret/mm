@@ -1,15 +1,53 @@
+/*
+ * File: z_en_hgo.c
+ * Overlay: ovl_En_Hgo
+ * Description: Pamela's Father (Human)
+ */
+
 #include "z_en_hgo.h"
 
-#define FLAGS 0x02000019
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
 
 #define THIS ((EnHgo*)thisx)
 
-void EnHgo_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnHgo_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnHgo_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnHgo_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnHgo_Init(Actor* thisx, PlayState* play);
+void EnHgo_Destroy(Actor* thisx, PlayState* play);
+void EnHgo_Update(Actor* thisx, PlayState* play);
+void EnHgo_Draw(Actor* thisx, PlayState* play);
 
-#if 0
+void EnHgo_SetupDoNothing(EnHgo* this);
+void EnHgo_DoNothing(EnHgo* this, PlayState* play);
+void EnHgo_UpdateCollision(EnHgo* this, PlayState* play);
+void EnHgo_SetupTalk(EnHgo* this);
+void EnHgo_Talk(EnHgo* this, PlayState* play);
+void EnHgo_SetupDialogueHandler(EnHgo* this);
+void EnHgo_DefaultDialogueHandler(EnHgo* this, PlayState* play);
+void EnHgo_HandlePlayerChoice(EnHgo* this, PlayState* play);
+s32 EnHgo_HandleCsAction(EnHgo* this, PlayState* play);
+s32 EnHgo_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
+void EnHgo_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* pos, Actor* thisx);
+
+#define TALK_FLAG_NONE 0
+#define TALK_FLAG_HAS_SPOKEN_WITH_HUMAN (1 << 0)
+#define TALK_FLAG_HAS_SPOKEN_WITH_OTHER_MASK_FORM (1 << 1)
+#define TALK_FLAG_HAS_SPOKEN_WITH_GIBDO_MASK (1 << 2)
+
+typedef enum {
+    /* 0 */ HGO_EYE_OPEN,
+    /* 1 */ HGO_EYE_HALF,
+    /* 2 */ HGO_EYE_CLOSED
+} EyeState;
+
+typedef enum {
+    /* 0 */ HGO_ANIM_ARMS_FOLDED,
+    /* 1 */ HGO_ANIM_ASTONISHED,
+    /* 2 */ HGO_ANIM_KNEEL_DOWN_AND_HUG,
+    /* 3 */ HGO_ANIM_CONSOLE,
+    /* 4 */ HGO_ANIM_CONSOLE_HEAD_UP,
+    /* 5 */ HGO_ANIM_REACH_DOWN_TO_LIFT,
+    /* 6 */ HGO_ANIM_TOSS,
+} HgoAnimation;
+
 const ActorInit En_Hgo_InitVars = {
     ACTOR_EN_HGO,
     ACTORCAT_NPC,
@@ -22,54 +60,367 @@ const ActorInit En_Hgo_InitVars = {
     (ActorFunc)EnHgo_Draw,
 };
 
-// static ColliderCylinderInit sCylinderInit = {
-static ColliderCylinderInit D_80BD0F48 = {
-    { COLTYPE_NONE, AT_NONE, AC_NONE, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_2, COLSHAPE_CYLINDER, },
-    { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0x00000000, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_NONE, OCELEM_ON, },
+static AnimationInfo sAnimationInfo[] = {
+    { &gPamelasFatherArmsFoldedAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
+    { &gPamelasFatherAstonishedAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &gPamelasFatherKneelDownAndHugAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
+    { &gPamelasFatherConsoleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &gPamelasFatherConsoleHeadUpAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &gPamelasFatherReachDownToLiftAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
+    { &gPamelasFatherTossAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+};
+
+static ColliderCylinderInit sCylinderInit = {
+    {
+        COLTYPE_NONE,
+        AT_NONE,
+        AC_NONE,
+        OC1_ON | OC1_TYPE_ALL,
+        OC2_TYPE_2,
+        COLSHAPE_CYLINDER,
+    },
+    {
+        ELEMTYPE_UNK0,
+        { 0x00000000, 0x00, 0x00 },
+        { 0x00000000, 0x00, 0x00 },
+        TOUCH_NONE | TOUCH_SFX_NORMAL,
+        BUMP_NONE,
+        OCELEM_ON,
+    },
     { 18, 46, 0, { 0, 0, 0 } },
 };
 
-// sColChkInfoInit
-static CollisionCheckInfoInit2 D_80BD0F74 = { 0, 0, 0, 0, MASS_IMMOVABLE };
+static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
-#endif
+void EnHgo_Init(Actor* thisx, PlayState* play) {
+    s32 pad;
+    EnHgo* this = THIS;
 
-extern ColliderCylinderInit D_80BD0F48;
-extern CollisionCheckInfoInit2 D_80BD0F74;
+    ActorShape_Init(&thisx->shape, 0.0f, ActorShadow_DrawCircle, 36.0f);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gPamelasFatherHumanSkel, &gPamelasFatherArmsFoldedAnim,
+                       this->jointTable, this->morphTable, PAMELAS_FATHER_HUMAN_LIMB_MAX);
+    Collider_InitCylinder(play, &this->collider);
+    Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
+    CollisionCheck_SetInfo2(&thisx->colChkInfo, NULL, &sColChkInfoInit);
+    thisx->targetMode = 6;
+    this->eyeIndex = 0;
+    this->blinkTimer = 0;
+    this->textId = 0;
+    this->talkFlags = TALK_FLAG_NONE;
+    this->isInCutscene = false;
+    if ((gSaveContext.save.weekEventReg[75] & 0x20) || (gSaveContext.save.weekEventReg[52] & 0x20)) {
+        EnHgo_SetupTalk(this);
+    } else {
+        thisx->draw = NULL;
+        EnHgo_SetupDoNothing(this);
+    }
+}
 
-extern UNK_TYPE D_0600B644;
-extern UNK_TYPE D_0600F248;
+void EnHgo_Destroy(Actor* thisx, PlayState* play) {
+    EnHgo* this = THIS;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hgo/EnHgo_Init.s")
+    Collider_DestroyCylinder(play, &this->collider);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hgo/EnHgo_Destroy.s")
+void EnHgo_SetupDoNothing(EnHgo* this) {
+    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actionFunc = EnHgo_DoNothing;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hgo/func_80BD03EC.s")
+void EnHgo_DoNothing(EnHgo* this, PlayState* play) {
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hgo/func_80BD0410.s")
+void EnHgo_SetupInitCollision(EnHgo* this) {
+    this->actionFunc = EnHgo_UpdateCollision;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hgo/func_80BD0420.s")
+void EnHgo_UpdateCollision(EnHgo* this, PlayState* play) {
+    this->collider.dim.pos.x = this->actor.focus.pos.x;
+    this->collider.dim.pos.y = this->actor.world.pos.y;
+    this->collider.dim.pos.z = this->actor.focus.pos.z;
+    CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hgo/func_80BD0434.s")
+void EnHgo_SetupTalk(EnHgo* this) {
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 0);
+    this->actionFunc = EnHgo_Talk;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hgo/func_80BD049C.s")
+void EnHgo_Talk(EnHgo* this, PlayState* play) {
+    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+        if (Player_GetMask(play) == PLAYER_MASK_GIBDO) {
+            if (!(this->talkFlags & TALK_FLAG_HAS_SPOKEN_WITH_GIBDO_MASK)) {
+                this->talkFlags |= TALK_FLAG_HAS_SPOKEN_WITH_GIBDO_MASK;
+                Message_StartTextbox(play, 0x15A5, &this->actor);
+                this->textId = 0x15A5; // That mask is a gibdo
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hgo/func_80BD04E0.s")
+            } else {
+                Message_StartTextbox(play, 0x15A7, &this->actor);
+                this->textId = 0x15A7; // can I research that mask
+            }
+        } else if (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN) {
+            if (!(this->talkFlags & TALK_FLAG_HAS_SPOKEN_WITH_HUMAN)) {
+                this->talkFlags |= TALK_FLAG_HAS_SPOKEN_WITH_HUMAN;
+                Message_StartTextbox(play, 0x158F, &this->actor);
+                this->textId = 0x158F; // Isn't this a fairy
+            } else {
+                Message_StartTextbox(play, 0x1593, &this->actor);
+                this->textId = 0x1593; // Never seen a fairy this lively
+            }
+        } else {
+            if (!(this->talkFlags & TALK_FLAG_HAS_SPOKEN_WITH_OTHER_MASK_FORM)) {
+                this->talkFlags |= TALK_FLAG_HAS_SPOKEN_WITH_OTHER_MASK_FORM;
+                Message_StartTextbox(play, 0x1595, &this->actor);
+                this->textId = 0x1595; // ghost radar is reacting
+            } else {
+                Message_StartTextbox(play, 0x1598, &this->actor);
+                this->textId = 0x1598; // you seem to be similar to a ghost
+            }
+        }
+        EnHgo_SetupDialogueHandler(this);
+    } else {
+        func_800B8614(&this->actor, play, 100.0f);
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hgo/func_80BD064C.s")
+void EnHgo_SetupDialogueHandler(EnHgo* this) {
+    this->actionFunc = EnHgo_DefaultDialogueHandler;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hgo/func_80BD0660.s")
+void EnHgo_DefaultDialogueHandler(EnHgo* this, PlayState* play) {
+    switch (Message_GetState(&play->msgCtx)) {
+        case TEXT_STATE_NONE:
+        case TEXT_STATE_1:
+        case TEXT_STATE_CLOSING:
+        case TEXT_STATE_3:
+        case TEXT_STATE_CHOICE:
+            break;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hgo/func_80BD06FC.s")
+        case TEXT_STATE_5:
+            EnHgo_HandlePlayerChoice(this, play);
+            break;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hgo/func_80BD0898.s")
+        case TEXT_STATE_DONE:
+            if (Message_ShouldAdvance(play)) {
+                EnHgo_SetupTalk(this);
+            }
+            break;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hgo/func_80BD0B8C.s")
+    Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 0xA, 0x71C, 0xB6);
+    this->actor.shape.rot.y = this->actor.world.rot.y;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hgo/EnHgo_Update.s")
+// Handles the next dialogue based on player's selection
+void EnHgo_HandlePlayerChoice(EnHgo* this, PlayState* play) {
+    if (Message_ShouldAdvance(play)) {
+        switch (this->textId) {
+            case 0x158F:
+                Message_StartTextbox(play, 0x1590, &this->actor);
+                this->textId = 0x1590;
+                break;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hgo/func_80BD0CF0.s")
+            case 0x1590:
+                if (gSaveContext.save.weekEventReg[14] & 4) {
+                    Message_StartTextbox(play, 0x1591, &this->actor);
+                    this->textId = 0x1591;
+                    break;
+                }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hgo/func_80BD0D38.s")
+                Message_StartTextbox(play, 0x1592, &this->actor);
+                this->textId = 0x1592;
+                break;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hgo/EnHgo_Draw.s")
+            case 0x1591:
+                Message_StartTextbox(play, 0x1592, &this->actor);
+                this->textId = 0x1592;
+                break;
+
+            case 0x1593:
+                Message_StartTextbox(play, 0x1594, &this->actor);
+                this->textId = 0x1594;
+                break;
+
+            case 0x1595:
+                Message_StartTextbox(play, 0x1596, &this->actor);
+                this->textId = 0x1596;
+                break;
+
+            case 0x1596:
+                Message_StartTextbox(play, 0x1597, &this->actor);
+                this->textId = 0x1597;
+                break;
+
+            case 0x1598:
+                Message_StartTextbox(play, 0x1599, &this->actor);
+                this->textId = 0x1599;
+                break;
+
+            case 0x15A5:
+                Message_StartTextbox(play, 0x15A6, &this->actor);
+                this->textId = 0x15A6;
+                break;
+
+            case 0x15A6:
+                Message_StartTextbox(play, 0x15A7, &this->actor);
+                this->textId = 0x15A7;
+                break;
+
+            case 0x15A7:
+                func_801477B4(play);
+                EnHgo_SetupTalk(this);
+                break;
+        }
+    }
+}
+
+s32 EnHgo_HandleCsAction(EnHgo* this, PlayState* play) {
+    s32 actionIndex;
+
+    if (Cutscene_CheckActorAction(play, 486)) {
+        actionIndex = Cutscene_GetActorActionIndex(play, 486);
+        if (this->csAction != play->csCtx.actorActions[actionIndex]->action) {
+            this->csAction = play->csCtx.actorActions[actionIndex]->action;
+            switch (play->csCtx.actorActions[actionIndex]->action) {
+                case 1:
+                    this->animIndex = HGO_ANIM_ARMS_FOLDED;
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 0);
+                    break;
+
+                case 2:
+                    this->actor.draw = EnHgo_Draw;
+                    this->animIndex = HGO_ANIM_ASTONISHED;
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 1);
+                    break;
+
+                case 3:
+                    this->animIndex = HGO_ANIM_KNEEL_DOWN_AND_HUG;
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 2);
+                    break;
+
+                case 4:
+                    this->animIndex = HGO_ANIM_CONSOLE;
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 3);
+                    break;
+
+                case 5:
+                    this->animIndex = HGO_ANIM_CONSOLE_HEAD_UP;
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 4);
+                    break;
+
+                case 6:
+                    this->animIndex = HGO_ANIM_REACH_DOWN_TO_LIFT;
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 5);
+                    break;
+            }
+        } else if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
+            switch (this->animIndex) {
+                case HGO_ANIM_ASTONISHED:
+                    if ((Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) &&
+                        (this->isInCutscene == false)) {
+                        this->isInCutscene = true;
+                        if ((gSaveContext.sceneLayer == 0) &&
+                            ((play->csCtx.currentCsIndex == 2) || (play->csCtx.currentCsIndex == 4))) {
+                            Actor_PlaySfxAtPos(&this->actor, NA_SE_VO_GBVO02);
+                        }
+                    }
+                    break;
+
+                case HGO_ANIM_KNEEL_DOWN_AND_HUG:
+                    this->animIndex = HGO_ANIM_CONSOLE;
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 3);
+                    break;
+
+                case HGO_ANIM_REACH_DOWN_TO_LIFT:
+                    this->animIndex = HGO_ANIM_TOSS;
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 6);
+            }
+        }
+
+        Cutscene_ActorTranslateAndYaw(&this->actor, play, actionIndex);
+        return true;
+    }
+
+    if ((play->csCtx.state == 0) && (((gSaveContext.save.weekEventReg[75]) & 0x20)) &&
+        (this->actionFunc == EnHgo_DoNothing)) {
+        this->actor.shape.rot.y = this->actor.world.rot.y;
+        Actor_Spawn(&play->actorCtx, play, ACTOR_ELF_MSG2, this->actor.focus.pos.x, this->actor.focus.pos.y,
+                    this->actor.focus.pos.z, 7, 0, 0, 0x7F5A);
+        EnHgo_SetupInitCollision(this);
+    }
+
+    this->csAction = 0x63;
+    return false;
+}
+
+void EnHgo_UpdateModel(EnHgo* this, PlayState* play) {
+    Actor_TrackPlayer(play, &this->actor, &this->headRot, &this->torsoRot, this->actor.focus.pos);
+    if (this->blinkTimer > 2) {
+        this->blinkTimer--;
+    } else if (this->blinkTimer == 2) {
+        this->eyeIndex = HGO_EYE_HALF;
+        this->blinkTimer = 1;
+    } else if (this->blinkTimer == 1) {
+        this->eyeIndex = HGO_EYE_CLOSED;
+        this->blinkTimer = 0;
+    } else {
+        this->eyeIndex = HGO_EYE_OPEN;
+        this->blinkTimer = 60;
+    }
+}
+
+void EnHgo_Update(Actor* thisx, PlayState* play) {
+    EnHgo* this = THIS;
+    s32 pad;
+
+    this->actionFunc(this, play);
+    SkelAnime_Update(&this->skelAnime);
+    if (EnHgo_HandleCsAction(this, play)) {
+        Actor_TrackNone(&this->headRot, &this->torsoRot);
+    } else if (this->actionFunc != EnHgo_DoNothing) {
+        if (this->actionFunc != EnHgo_UpdateCollision) {
+            Collider_UpdateCylinder(&this->actor, &this->collider);
+            CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
+            EnHgo_UpdateModel(this, play);
+        }
+    }
+}
+
+s32 EnHgo_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+    EnHgo* this = THIS;
+
+    if (limbIndex == PAMELAS_FATHER_HUMAN_LIMB_HEAD) {
+        rot->x += this->headRot.y;
+        rot->z += this->headRot.x;
+    }
+    return false;
+}
+
+void EnHgo_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* pos, Actor* thisx) {
+    EnHgo* this = THIS;
+
+    if (limbIndex == PAMELAS_FATHER_HUMAN_LIMB_HEAD) {
+        Matrix_Get(&this->mf);
+        Matrix_MultZero(&this->actor.focus.pos);
+    }
+}
+
+static TexturePtr sEyeTextures[] = {
+    gPamelasFatherHumanEyeOpenTex,
+    gPamelasFatherHumanEyeHalfTex,
+    gPamelasFatherHumanEyeClosedTex,
+};
+
+void EnHgo_Draw(Actor* thisx, PlayState* play) {
+    EnHgo* this = THIS;
+
+    OPEN_DISPS(play->state.gfxCtx);
+    func_8012C28C(play->state.gfxCtx);
+    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyeTextures[this->eyeIndex]));
+    SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+                          EnHgo_OverrideLimbDraw, &EnHgo_PostLimbDraw, &this->actor);
+    Matrix_Put(&this->mf);
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(POLY_OPA_DISP++, gPamelasFatherHumanEyebrowsDL);
+    CLOSE_DISPS(play->state.gfxCtx);
+}

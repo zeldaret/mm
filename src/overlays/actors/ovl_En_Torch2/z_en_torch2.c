@@ -5,19 +5,21 @@
  */
 
 #include "z_en_torch2.h"
-#define FLAGS 0x00000010
+#include "objects/gameplay_keep/gameplay_keep.h"
+
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((EnTorch2*)thisx)
 
-void EnTorch2_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnTorch2_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnTorch2_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnTorch2_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnTorch2_Init(Actor* thisx, PlayState* play);
+void EnTorch2_Destroy(Actor* thisx, PlayState* play);
+void EnTorch2_Update(Actor* thisx, PlayState* play);
+void EnTorch2_Draw(Actor* thisx, PlayState* play2);
 
-void EnTorch2_UpdateIdle(Actor* thisx, GlobalContext* globalCtx);
-void EnTorch2_UpdateDeath(Actor* thisx, GlobalContext* globalCtx);
+void EnTorch2_UpdateIdle(Actor* thisx, PlayState* play);
+void EnTorch2_UpdateDeath(Actor* thisx, PlayState* play);
 
-const ActorInit En_Torch2_InitVars = {
+ActorInit En_Torch2_InitVars = {
     ACTOR_EN_TORCH2,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -30,9 +32,22 @@ const ActorInit En_Torch2_InitVars = {
 };
 
 static ColliderCylinderInit sCylinderInit = {
-    { COLTYPE_METAL, AT_NONE, AC_ON | AC_HARD | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_PLAYER | OC1_TYPE_1 | OC1_TYPE_2,
-      OC2_TYPE_2, COLSHAPE_CYLINDER },
-    { ELEMTYPE_UNK2, { 0x00100000, 0, 0 }, { 0xF7CFFFFF, 0, 0 }, TOUCH_NONE, BUMP_ON | BUMP_HOOKABLE, OCELEM_ON },
+    {
+        COLTYPE_METAL,
+        AT_NONE,
+        AC_ON | AC_HARD | AC_TYPE_PLAYER,
+        OC1_ON | OC1_TYPE_PLAYER | OC1_TYPE_1 | OC1_TYPE_2,
+        OC2_TYPE_2,
+        COLSHAPE_CYLINDER,
+    },
+    {
+        ELEMTYPE_UNK2,
+        { 0x00100000, 0, 0 },
+        { 0xF7CFFFFF, 0, 0 },
+        TOUCH_NONE,
+        BUMP_ON | BUMP_HOOKABLE,
+        OCELEM_ON,
+    },
     { 20, 60, 0, { 0, 0, 0 } },
 };
 
@@ -43,40 +58,37 @@ static InitChainEntry sInitChain[] = {
 // Shells for each of Link's different forms
 // (Playing elegy as Fierce Deity puts down a human shell)
 static Gfx* sShellDLists[] = {
-    D_0401C430, // Human
-    D_04048DF0, // Zora
-    D_04089070, // Deku
-    D_04057B10, // Goron
-    D_0401C430, // Human
+    gElegyShellHumanDL, gElegyShellGoronDL, gElegyShellZoraDL, gElegyShellDekuDL, gElegyShellHumanDL,
 };
 
-void EnTorch2_Init(Actor* thisx, GlobalContext* globalCtx) {
+void EnTorch2_Init(Actor* thisx, PlayState* play) {
     EnTorch2* this = THIS;
     s16 params;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
+    Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
 
     // params: which form Link is in (e.g. human, deku, etc.)
     params = this->actor.params;
     if (params != TORCH2_PARAM_DEKU) {
-        this->actor.flags |= 0x4000000; // Can press switch
+        this->actor.flags |= ACTOR_FLAG_4000000; // Can press switch
         if (params == TORCH2_PARAM_GORON) {
-            this->actor.flags |= 0x20000; // Can press heavy switches
+            this->actor.flags |= ACTOR_FLAG_20000; // Can press heavy switches
         }
     }
     this->framesUntilNextState = 20;
 }
 
-void EnTorch2_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnTorch2_Destroy(Actor* thisx, PlayState* play) {
     EnTorch2* this = THIS;
 
-    Collider_DestroyCylinder(globalCtx, &this->collider);
-    func_80169DCC(globalCtx, this->actor.params + 3, 0xFF, 0, 0xBFF, &this->actor.world.pos, this->actor.shape.rot.y);
-    globalCtx->actorCtx.unk254[this->actor.params] = 0;
+    Collider_DestroyCylinder(play, &this->collider);
+    Play_SetRespawnData(&play->state, this->actor.params + RESPAWN_MODE_GORON - 1, 0xFF, 0, 0xBFF,
+                        &this->actor.world.pos, this->actor.shape.rot.y);
+    play->actorCtx.unk254[this->actor.params] = 0;
 }
 
-void EnTorch2_Update(Actor* thisx, GlobalContext* globalCtx) {
+void EnTorch2_Update(Actor* thisx, PlayState* play) {
     EnTorch2* this = THIS;
     u16 targetAlpha;
     u16 remainingFrames;
@@ -88,8 +100,8 @@ void EnTorch2_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     this->actor.gravity = -1.0f;
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, 20.0f, 70.0f, 0x05);
+    Actor_MoveWithGravity(&this->actor);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 20.0f, 70.0f, 0x05);
 
     if (this->framesUntilNextState == 0) {
         remainingFrames = 0;
@@ -108,21 +120,21 @@ void EnTorch2_Update(Actor* thisx, GlobalContext* globalCtx) {
             targetAlpha = 0;
         } else if (this->state == TORCH2_STATE_FADING_IN) {
             // Stay semitransparent until the player moves away
-            if ((this->actor.xzDistToPlayer > 32.0f) || (fabsf(this->actor.yDistToPlayer) > 70.0f)) {
+            if ((this->actor.xzDistToPlayer > 32.0f) || (fabsf(this->actor.playerHeightRel) > 70.0f)) {
                 this->state = TORCH2_STATE_SOLID;
             }
             targetAlpha = 60;
         } else {
             // Once the player has moved away, update collision and become opaque
             Collider_UpdateCylinder(&this->actor, &this->collider);
-            CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+            CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
             targetAlpha = 255;
         }
         Math_StepToS(&this->alpha, targetAlpha, 8);
     }
 }
 
-void EnTorch2_UpdateIdle(Actor* thisx, GlobalContext* globalCtx) {
+void EnTorch2_UpdateIdle(Actor* thisx, PlayState* play) {
     EnTorch2* this = THIS;
 
     if (this->state == TORCH2_STATE_DYING) {
@@ -132,33 +144,33 @@ void EnTorch2_UpdateIdle(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-void EnTorch2_UpdateDeath(Actor* thisx, GlobalContext* globalCtx) {
+void EnTorch2_UpdateDeath(Actor* thisx, PlayState* play) {
     EnTorch2* this = THIS;
 
     // Fall down and become transparent, then delete once invisible
     if (Math_StepToS(&this->alpha, 0, 8)) {
-        Actor_MarkForDeath(&this->actor);
-    } else {
-        this->actor.gravity = -1.0f;
-        Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+        Actor_Kill(&this->actor);
+        return;
     }
+
+    this->actor.gravity = -1.0f;
+    Actor_MoveWithGravity(&this->actor);
 }
 
-void EnTorch2_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void EnTorch2_Draw(Actor* thisx, PlayState* play2) {
+    PlayState* play = play2;
     EnTorch2* this = THIS;
+    Gfx* gfx = sShellDLists[this->actor.params];
 
-    GlobalContext* unused = globalCtx;
-    Gfx* gfx = sShellDLists[thisx->params];
-
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
     if (this->alpha == 0xFF) {
-        Scene_SetRenderModeXlu(globalCtx, 0, 0x01);
+        Scene_SetRenderModeXlu(play, 0, 0x01);
         gDPSetEnvColor(POLY_OPA_DISP++, 255, 255, 255, 255);
-        func_800BDFC0(globalCtx, gfx);
+        Gfx_DrawDListOpa(play, gfx);
     } else {
-        Scene_SetRenderModeXlu(globalCtx, 1, 0x02);
+        Scene_SetRenderModeXlu(play, 1, 0x02);
         gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 255, this->alpha);
-        func_800BE03C(globalCtx, gfx);
+        Gfx_DrawDListXlu(play, gfx);
     }
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }

@@ -8,7 +8,7 @@
 
 struct ObjHsStump;
 
-typedef void (*ObjHsStumpActionFunc)(struct ObjHsStump*, GlobalContext*);
+typedef void (*ObjHsStumpActionFunc)(struct ObjHsStump*, PlayState*);
 
 typedef struct ObjHsStump {
     /* 0x000 */ DynaPolyActor dyna;
@@ -19,7 +19,5 @@ typedef struct ObjHsStump {
     /* 0x166 */ s16 rotAngle;
     /* 0x168 */ f32 rotFactor;
 } ObjHsStump; // size = 0x16C
-
-extern const ActorInit Obj_HsStump_InitVars;
 
 #endif // Z_OBJ_HSSTUMP_H

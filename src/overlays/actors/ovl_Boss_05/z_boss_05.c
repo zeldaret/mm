@@ -1,26 +1,32 @@
+/*
+ * File: z_boss_05.c
+ * Overlay: ovl_Boss_05
+ * Description: Bio Deku Baba
+ */
+
 #include "z_boss_05.h"
 
-#define FLAGS 0x00000005
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4)
 
 #define THIS ((Boss05*)thisx)
 
-void Boss05_Init(Actor* thisx, GlobalContext* globalCtx);
-void Boss05_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void Boss05_Update(Actor* thisx, GlobalContext* globalCtx);
-void Boss05_Draw(Actor* thisx, GlobalContext* globalCtx);
+void Boss05_Init(Actor* thisx, PlayState* play);
+void Boss05_Destroy(Actor* thisx, PlayState* play);
+void Boss05_Update(Actor* thisx, PlayState* play);
+void Boss05_Draw(Actor* thisx, PlayState* play);
 
-void func_809EEDE8(Boss05* this, GlobalContext* globalCtx);
-void func_809EF9BC(Boss05* this, GlobalContext* globalCtx);
-void func_809EFAB4(Boss05* this, GlobalContext* globalCtx);
-void func_809F010C(Boss05* this, GlobalContext* globalCtx);
-void func_809F0244(Boss05* this, GlobalContext* globalCtx);
-void func_809F0374(Boss05* this, GlobalContext* globalCtx);
-void func_809F04C0(Boss05* this, GlobalContext* globalCtx);
-void func_809F0590(Boss05* this, GlobalContext* globalCtx);
-void func_809F06B8(Boss05* this, GlobalContext* globalCtx);
-void func_809F0780(Boss05* this, GlobalContext* globalCtx);
-void func_809F0ABC(Boss05* this, GlobalContext* globalCtx);
-void func_809F0B0C(Boss05* this, GlobalContext* globalCtx);
+void func_809EEDE8(Boss05* this, PlayState* play);
+void func_809EF9BC(Boss05* this, PlayState* play);
+void func_809EFAB4(Boss05* this, PlayState* play);
+void func_809F010C(Boss05* this, PlayState* play);
+void func_809F0244(Boss05* this, PlayState* play);
+void func_809F0374(Boss05* this, PlayState* play);
+void func_809F04C0(Boss05* this, PlayState* play);
+void func_809F0590(Boss05* this, PlayState* play);
+void func_809F06B8(Boss05* this, PlayState* play);
+void func_809F0780(Boss05* this, PlayState* play);
+void func_809F0ABC(Boss05* this, PlayState* play);
+void func_809F0B0C(Boss05* this, PlayState* play);
 
 #if 0
 // static ColliderJntSphElementInit sJntSphElementsInit[2] = {
@@ -38,7 +44,7 @@ static ColliderJntSphElementInit D_809F1B2C[2] = {
 // static ColliderJntSphInit sJntSphInit = {
 static ColliderJntSphInit D_809F1B74 = {
     { COLTYPE_HIT3, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_PLAYER, OC2_TYPE_1, COLSHAPE_JNTSPH, },
-    2, D_809F1B2C, // sJntSphElementsInit,
+    ARRAY_COUNT(sJntSphElementsInit), D_809F1B2C, // sJntSphElementsInit,
 };
 
 // static ColliderJntSphElementInit sJntSphElementsInit[1] = {
@@ -52,7 +58,7 @@ static ColliderJntSphElementInit D_809F1B84[1] = {
 // static ColliderJntSphInit sJntSphInit = {
 static ColliderJntSphInit D_809F1BA8 = {
     { COLTYPE_HIT3, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_PLAYER, OC2_TYPE_1, COLSHAPE_JNTSPH, },
-    1, D_809F1B84, // sJntSphElementsInit,
+    ARRAY_COUNT(sJntSphElementsInit), D_809F1B84, // sJntSphElementsInit,
 };
 
 // static ColliderJntSphElementInit sJntSphElementsInit[1] = {
@@ -66,7 +72,7 @@ static ColliderJntSphElementInit D_809F1BB8[1] = {
 // static ColliderJntSphInit sJntSphInit = {
 static ColliderJntSphInit D_809F1BDC = {
     { COLTYPE_HIT3, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_PLAYER, OC2_TYPE_1, COLSHAPE_JNTSPH, },
-    1, D_809F1BB8, // sJntSphElementsInit,
+    ARRAY_COUNT(sJntSphElementsInit), D_809F1BB8, // sJntSphElementsInit,
 };
 
 // static DamageTable sDamageTable = {
@@ -141,7 +147,7 @@ static DamageTable D_809F1C20 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0xF),
 };
 
-const ActorInit Boss_05_InitVars = {
+ActorInit Boss_05_InitVars = {
     ACTOR_BOSS_05,
     ACTORCAT_ENEMY,
     FLAGS,

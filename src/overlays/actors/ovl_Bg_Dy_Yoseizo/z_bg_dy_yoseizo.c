@@ -1,26 +1,32 @@
+/*
+ * File: z_bg_dy_yoseizo.c
+ * Overlay: ovl_Bg_Dy_Yoseizo
+ * Description: Great Fairy
+ */
+
 #include "z_bg_dy_yoseizo.h"
 
-#define FLAGS 0x02000030
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_2000000)
 
 #define THIS ((BgDyYoseizo*)thisx)
 
-void BgDyYoseizo_Init(Actor* thisx, GlobalContext* globalCtx);
-void BgDyYoseizo_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void BgDyYoseizo_Update(Actor* thisx, GlobalContext* globalCtx);
+void BgDyYoseizo_Init(Actor* thisx, PlayState* play);
+void BgDyYoseizo_Destroy(Actor* thisx, PlayState* play);
+void BgDyYoseizo_Update(Actor* thisx, PlayState* play);
 
-void func_80A0AE1C(BgDyYoseizo* this, GlobalContext* globalCtx);
-void func_80A0B078(BgDyYoseizo* this, GlobalContext* globalCtx);
-void func_80A0B184(BgDyYoseizo* this, GlobalContext* globalCtx);
-void func_80A0B290(BgDyYoseizo* this, GlobalContext* globalCtx);
-void func_80A0B35C(BgDyYoseizo* this, GlobalContext* globalCtx);
-void func_80A0B500(BgDyYoseizo* this, GlobalContext* globalCtx);
-void func_80A0B5F0(BgDyYoseizo* this, GlobalContext* globalCtx);
-void func_80A0B75C(BgDyYoseizo* this, GlobalContext* globalCtx);
-void func_80A0B8CC(BgDyYoseizo* this, GlobalContext* globalCtx);
-void func_80A0BB08(BgDyYoseizo* this, GlobalContext* globalCtx);
+void func_80A0AE1C(BgDyYoseizo* this, PlayState* play);
+void func_80A0B078(BgDyYoseizo* this, PlayState* play);
+void func_80A0B184(BgDyYoseizo* this, PlayState* play);
+void func_80A0B290(BgDyYoseizo* this, PlayState* play);
+void func_80A0B35C(BgDyYoseizo* this, PlayState* play);
+void func_80A0B500(BgDyYoseizo* this, PlayState* play);
+void func_80A0B5F0(BgDyYoseizo* this, PlayState* play);
+void func_80A0B75C(BgDyYoseizo* this, PlayState* play);
+void func_80A0B8CC(BgDyYoseizo* this, PlayState* play);
+void func_80A0BB08(BgDyYoseizo* this, PlayState* play);
 
 #if 0
-const ActorInit Bg_Dy_Yoseizo_InitVars = {
+ActorInit Bg_Dy_Yoseizo_InitVars = {
     ACTOR_BG_DY_YOSEIZO,
     ACTORCAT_PROP,
     FLAGS,

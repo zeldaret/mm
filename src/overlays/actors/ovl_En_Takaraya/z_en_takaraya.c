@@ -1,16 +1,22 @@
+/*
+ * File: z_en_takaraya.c
+ * Overlay: ovl_En_Takaraya
+ * Description: Treasure Chest Shop Gal
+ */
+
 #include "z_en_takaraya.h"
 
-#define FLAGS 0x00000039
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnTakaraya*)thisx)
 
-void EnTakaraya_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnTakaraya_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnTakaraya_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnTakaraya_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnTakaraya_Init(Actor* thisx, PlayState* play);
+void EnTakaraya_Destroy(Actor* thisx, PlayState* play);
+void EnTakaraya_Update(Actor* thisx, PlayState* play);
+void EnTakaraya_Draw(Actor* thisx, PlayState* play);
 
 #if 0
-const ActorInit En_Takaraya_InitVars = {
+ActorInit En_Takaraya_InitVars = {
     ACTOR_EN_TAKARAYA,
     ACTORCAT_NPC,
     FLAGS,

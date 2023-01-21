@@ -10,9 +10,11 @@ __pycache__/
 CMakeLists.txt
 cmake-build-debug
 venv/
+tags
 
 # Project-specific ignores
 *.z64
+*.sra
 *.bin
 *.elf
 archive/
@@ -31,6 +33,10 @@ tools/qemu-mips
 tools/ido_recomp/* binary
 ctx.c
 graphs/
+*.c.m2c
+tools/**/*dSYM/
+tools/decomp-permuter/
+tools/mips_to_c/
 
 # Assets
 *.png
@@ -38,5 +44,11 @@ graphs/
 !*_custom*
 .extracted-assets.json
 
+# Docs
+!docs/**/*.png
+docs/doxygen/
+!.vscode/extensions.json
+
 # Per-user configuration
 .python-version
+.make_options

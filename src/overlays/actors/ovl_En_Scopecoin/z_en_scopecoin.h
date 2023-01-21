@@ -5,15 +5,15 @@
 
 struct EnScopecoin;
 
-typedef void (*EnScopecoinActionFunc)(struct EnScopecoin*, GlobalContext*);
+#define OBJMUPICT_GET_RUPEE_INDEX(thisx) ((thisx)->params & 0xF)
+#define OBJMUPICT_GET_RUPEE_FLAG(thisx) (((thisx)->params & 0x7F0) >> 4)
+
+typedef void (*EnScopecoinActionFunc)(struct EnScopecoin*, PlayState*);
 
 typedef struct EnScopecoin {
     /* 0x000 */ Actor actor;
     /* 0x144 */ EnScopecoinActionFunc actionFunc;
-    /* 0x148 */ s16 unk148;
-    /* 0x14A */ s16 unk14A;
+    /* 0x148 */ s16 rupeeIndex;
 } EnScopecoin; // size = 0x14C
-
-extern const ActorInit En_Scopecoin_InitVars;
 
 #endif // Z_EN_SCOPECOIN_H

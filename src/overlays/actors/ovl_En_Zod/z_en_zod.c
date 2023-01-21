@@ -1,16 +1,22 @@
+/*
+ * File: z_en_zod.c
+ * Overlay: ovl_En_Zod
+ * Description: Zora Drummer Tijo
+ */
+
 #include "z_en_zod.h"
 
-#define FLAGS 0x00000009
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
 
 #define THIS ((EnZod*)thisx)
 
-void EnZod_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnZod_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnZod_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnZod_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnZod_Init(Actor* thisx, PlayState* play);
+void EnZod_Destroy(Actor* thisx, PlayState* play);
+void EnZod_Update(Actor* thisx, PlayState* play);
+void EnZod_Draw(Actor* thisx, PlayState* play);
 
 #if 0
-const ActorInit En_Zod_InitVars = {
+ActorInit En_Zod_InitVars = {
     ACTOR_EN_ZOD,
     ACTORCAT_NPC,
     FLAGS,

@@ -1,16 +1,22 @@
+/*
+ * File: z_bg_dblue_elevator.c
+ * Overlay: ovl_Bg_Dblue_Elevator
+ * Description: Great Bay Temple - Elevator
+ */
+
 #include "z_bg_dblue_elevator.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((BgDblueElevator*)thisx)
 
-void BgDblueElevator_Init(Actor* thisx, GlobalContext* globalCtx);
-void BgDblueElevator_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void BgDblueElevator_Update(Actor* thisx, GlobalContext* globalCtx);
-void BgDblueElevator_Draw(Actor* thisx, GlobalContext* globalCtx);
+void BgDblueElevator_Init(Actor* thisx, PlayState* play);
+void BgDblueElevator_Destroy(Actor* thisx, PlayState* play);
+void BgDblueElevator_Update(Actor* thisx, PlayState* play);
+void BgDblueElevator_Draw(Actor* thisx, PlayState* play);
 
 #if 0
-const ActorInit Bg_Dblue_Elevator_InitVars = {
+ActorInit Bg_Dblue_Elevator_InitVars = {
     ACTOR_BG_DBLUE_ELEVATOR,
     ACTORCAT_BG,
     FLAGS,

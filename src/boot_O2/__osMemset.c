@@ -1,6 +1,6 @@
 #include "global.h"
 
-void* __osMemset(void* ptr, s32 val, u32 size) {
+void* __osMemset(void* ptr, s32 val, size_t size) {
     u8* dst = ptr;
     register s32 rem;
 

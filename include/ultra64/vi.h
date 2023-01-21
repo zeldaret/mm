@@ -1,15 +1,18 @@
 #ifndef _ULTRA64_VI_H_
 #define _ULTRA64_VI_H_
 
+#include "PR/ultratypes.h"
+#include "ultra64/message.h"
+
 /* Special Features */
-#define OS_VI_GAMMA_ON          0x0001
-#define OS_VI_GAMMA_OFF         0x0002
-#define OS_VI_GAMMA_DITHER_ON   0x0004
-#define OS_VI_GAMMA_DITHER_OFF  0x0008
-#define OS_VI_DIVOT_ON          0x0010
-#define OS_VI_DIVOT_OFF         0x0020
-#define OS_VI_DITHER_FILTER_ON  0x0040
-#define OS_VI_DITHER_FILTER_OFF 0x0080
+#define OS_VI_GAMMA_ON          (1 << 0)
+#define OS_VI_GAMMA_OFF         (1 << 1)
+#define OS_VI_GAMMA_DITHER_ON   (1 << 2)
+#define OS_VI_GAMMA_DITHER_OFF  (1 << 3)
+#define OS_VI_DIVOT_ON          (1 << 4)
+#define OS_VI_DIVOT_OFF         (1 << 5)
+#define OS_VI_DITHER_FILTER_ON  (1 << 6)
+#define OS_VI_DITHER_FILTER_OFF (1 << 7)
 
 #define OS_VI_GAMMA         0x08
 #define OS_VI_GAMMA_DITHER  0x04
@@ -60,12 +63,12 @@ typedef struct {
     /* 0x02 */ u16 retraceCount;
     /* 0x04 */ void* buffer;
     /* 0x08 */ OSViMode* modep;
-    /* 0x0c */ u32 features;
+    /* 0x0C */ u32 features;
     /* 0x10 */ OSMesgQueue* mq;
     /* 0x14 */ OSMesg* msg;
     /* 0x18 */ __OSViScale x;
     /* 0x24 */ __OSViScale y;
-} OSViContext; // size = 0x30
+} __OSViContext; // size = 0x30
 
 #define OS_VI_NTSC_LPN1     0   /* NTSC */
 #define OS_VI_NTSC_LPF1     1
@@ -96,6 +99,36 @@ typedef struct {
 #define OS_VI_PAL_HAF1      25
 #define OS_VI_PAL_HPN2      26
 #define OS_VI_PAL_HPF2      27
+
+#define OS_VI_MPAL_LPN1     28  /* MPAL */
+#define OS_VI_MPAL_LPF1     29
+#define OS_VI_MPAL_LAN1     30
+#define OS_VI_MPAL_LAF1     31
+#define OS_VI_MPAL_LPN2     32
+#define OS_VI_MPAL_LPF2     33
+#define OS_VI_MPAL_LAN2     34
+#define OS_VI_MPAL_LAF2     35
+#define OS_VI_MPAL_HPN1     36
+#define OS_VI_MPAL_HPF1     37
+#define OS_VI_MPAL_HAN1     38
+#define OS_VI_MPAL_HAF1     39
+#define OS_VI_MPAL_HPN2     40
+#define OS_VI_MPAL_HPF2     41
+
+#define OS_VI_FPAL_LPN1     42  /* FPAL */
+#define OS_VI_FPAL_LPF1     43
+#define OS_VI_FPAL_LAN1     44
+#define OS_VI_FPAL_LAF1     45
+#define OS_VI_FPAL_LPN2     46
+#define OS_VI_FPAL_LPF2     47
+#define OS_VI_FPAL_LAN2     48
+#define OS_VI_FPAL_LAF2     49
+#define OS_VI_FPAL_HPN1     50
+#define OS_VI_FPAL_HPF1     51
+#define OS_VI_FPAL_HAN1     52
+#define OS_VI_FPAL_HAF1     53
+#define OS_VI_FPAL_HPN2     54
+#define OS_VI_FPAL_HPF2     55
 
 #define OS_TV_PAL           0
 #define OS_TV_NTSC          1

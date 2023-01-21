@@ -3,6 +3,9 @@
 
 #include "PR/ultratypes.h"
 
+// For checking the alpha bit in an RGBA16 pixel
+#define RGBA16_PIXEL_OPAQUE 1
+
 typedef struct {
     /* 0x0 */ u8 r;
     /* 0x1 */ u8 g;
@@ -15,6 +18,12 @@ typedef struct {
     /* 0x2 */ u8 b;
     /* 0x3 */ u8 a;
 } Color_RGBA8; // size = 0x4
+
+typedef struct {
+    /* 0x0 */ s16 r;
+    /* 0x2 */ s16 g;
+    /* 0x4 */ s16 b;
+} Color_RGB16; // size = 0x6
 
 // only use when necessary for alignment purposes
 typedef union {
@@ -41,5 +50,7 @@ typedef union {
     };
     u16 rgba;
 } Color_RGBA16;
+
+#define RGBA8(r, g, b, a) ((((r) & 0xFF) << 24) | (((g) & 0xFF) << 16) | (((b) & 0xFF) << 8) | (((a) & 0xFF) << 0))
 
 #endif

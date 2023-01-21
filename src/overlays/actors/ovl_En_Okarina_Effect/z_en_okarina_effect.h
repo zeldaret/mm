@@ -5,7 +5,7 @@
 
 struct EnOkarinaEffect;
 
-typedef void (*EnOkarinaEffectActionFunc)(struct EnOkarinaEffect*, GlobalContext*);
+typedef void (*EnOkarinaEffectActionFunc)(struct EnOkarinaEffect*, PlayState*);
 
 typedef struct EnOkarinaEffect {
     /* 0x000 */ Actor actor;
@@ -13,7 +13,5 @@ typedef struct EnOkarinaEffect {
     /* 0x146 */ u16 unk146;
     /* 0x148 */ EnOkarinaEffectActionFunc actionFunc;
 } EnOkarinaEffect; // size = 0x14C
-
-extern const ActorInit En_Okarina_Effect_InitVars;
 
 #endif // Z_EN_OKARINA_EFFECT_H

@@ -1,17 +1,22 @@
+/*
+ * File: z_en_hit_tag.c
+ * Overlay: ovl_En_Hit_Tag
+ * Description: Invisible hitbox that can spawn rupees
+ */
+
 #include "z_en_hit_tag.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((EnHitTag*)thisx)
 
-void EnHitTag_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnHitTag_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnHitTag_Update(Actor* thisx, GlobalContext* globalCtx);
+void EnHitTag_Init(Actor* thisx, PlayState* play);
+void EnHitTag_Destroy(Actor* thisx, PlayState* play);
+void EnHitTag_Update(Actor* thisx, PlayState* play);
 
-void func_80BE20E8(EnHitTag* this, GlobalContext* globalCtx);
+void EnHitTag_WaitForHit(EnHitTag* this, PlayState* play);
 
-#if 0
-const ActorInit En_Hit_Tag_InitVars = {
+ActorInit En_Hit_Tag_InitVars = {
     ACTOR_EN_HIT_TAG,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -23,21 +28,65 @@ const ActorInit En_Hit_Tag_InitVars = {
     (ActorFunc)NULL,
 };
 
-// static ColliderCylinderInit sCylinderInit = {
-static ColliderCylinderInit D_80BE21F0 = {
-    { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_PLAYER, OC2_TYPE_1, COLSHAPE_CYLINDER, },
-    { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_NONE, },
+static ColliderCylinderInit sCylinderInit = {
+    {
+        COLTYPE_NONE,
+        AT_NONE,
+        AC_ON | AC_TYPE_PLAYER,
+        OC1_ON | OC1_TYPE_PLAYER,
+        OC2_TYPE_1,
+        COLSHAPE_CYLINDER,
+    },
+    {
+        ELEMTYPE_UNK0,
+        { 0x00000000, 0x00, 0x00 },
+        { 0xF7CFFFFF, 0x00, 0x00 },
+        TOUCH_NONE | TOUCH_SFX_NORMAL,
+        BUMP_ON,
+        OCELEM_NONE,
+    },
     { 16, 32, 0, { 0, 0, 0 } },
 };
 
-#endif
+void EnHitTag_Init(Actor* thisx, PlayState* play) {
+    s32 pad;
+    EnHitTag* this = THIS;
 
-extern ColliderCylinderInit D_80BE21F0;
+    Actor_SetScale(&this->actor, 1.0f);
+    this->actionFunc = EnHitTag_WaitForHit;
+    Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
+    Collider_UpdateCylinder(&this->actor, &this->collider);
+    if (Flags_GetSwitch(play, ENHITTAG_GET_SWITCHFLAG(thisx))) {
+        Actor_Kill(&this->actor);
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hit_Tag/EnHitTag_Init.s")
+void EnHitTag_Destroy(Actor* thisx, PlayState* play) {
+    EnHitTag* this = THIS;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hit_Tag/EnHitTag_Destroy.s")
+    Collider_DestroyCylinder(play, &this->collider);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hit_Tag/func_80BE20E8.s")
+void EnHitTag_WaitForHit(EnHitTag* this, PlayState* play) {
+    Vec3f dropLocation;
+    s32 i;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hit_Tag/EnHitTag_Update.s")
+    if (this->collider.base.acFlags & AC_HIT) {
+        play_sound(NA_SE_SY_GET_RUPY);
+        Actor_Kill(&this->actor);
+        dropLocation.x = this->actor.world.pos.x;
+        dropLocation.y = this->actor.world.pos.y;
+        dropLocation.z = this->actor.world.pos.z;
+
+        for (i = 0; i < 3; i++) {
+            Item_DropCollectible(play, &dropLocation, ITEM00_RUPEE_GREEN);
+        }
+    } else {
+        CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
+    }
+}
+
+void EnHitTag_Update(Actor* thisx, PlayState* play) {
+    EnHitTag* this = THIS;
+    this->actionFunc(this, play);
+}

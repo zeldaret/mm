@@ -10,7 +10,7 @@ typedef void (*BumperCollideActorFunc)(struct ObjBoyo*, void*);
 typedef struct {
     /* 0x0 */ s16 id;
     /* 0x4 */ BumperCollideActorFunc actorCollideFunc;
-} BumperCollideInfo;
+} BumperCollideInfo; // size = 0x8
 
 typedef struct ObjBoyo {
     /* 0x000 */ Actor actor;
@@ -27,7 +27,5 @@ typedef struct ObjBoyo {
     /* 0x1AA */ s16 unk_1AA;
     /* 0x1AC */ s16 unk_1AC;
 } ObjBoyo; // size = 0x1B0
-
-extern const ActorInit Obj_Boyo_InitVars;
 
 #endif // Z_OBJ_BOYO_H

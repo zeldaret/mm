@@ -1,28 +1,56 @@
+/*
+ * File: z_en_baba.c
+ * Overlay: ovl_En_Baba
+ * Description: Bomb Shop Lady
+ */
+
 #include "z_en_baba.h"
 
-#define FLAGS 0x00000019
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
 
 #define THIS ((EnBaba*)thisx)
 
-void EnBaba_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnBaba_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnBaba_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnBaba_Draw(Actor* thisx, GlobalContext* globalCtx);
+#define BOMB_SHOP_LADY_STATE_END_CONVERSATION (1 << 0)
+#define BOMB_SHOP_LADY_STATE_VISIBLE (1 << 1)
+#define BOMB_SHOP_LADY_STATE_KNOCKED_OVER (1 << 2) // Don't track player
+#define BOMB_SHOP_LADY_STATE_AUTOTALK (1 << 3)
+#define BOMB_SHOP_LADY_STATE_GIVE_BLAST_MASK (1 << 5)
+#define BOMB_SHOP_LADY_STATE_GAVE_BLAST_MASK (1 << 6)
+#define BOMB_SHOP_LADY_STATE_DRAW_SHADOW (1 << 7)
 
-void func_80BA9480(EnBaba* this, GlobalContext* globalCtx);
-void func_80BA9758(EnBaba* this, GlobalContext* globalCtx);
-void func_80BA9848(EnBaba* this, GlobalContext* globalCtx);
-void func_80BA98EC(EnBaba* this, GlobalContext* globalCtx);
-void func_80BA9AB8(EnBaba* this, GlobalContext* globalCtx);
-void func_80BA9B24(EnBaba* this, GlobalContext* globalCtx);
-void func_80BA9B80(EnBaba* this, GlobalContext* globalCtx);
-void func_80BA9CD4(EnBaba* this, GlobalContext* globalCtx);
-void func_80BA9E00(EnBaba* this, GlobalContext* globalCtx);
-void func_80BA9E10(EnBaba* this, GlobalContext* globalCtx);
-void func_80BA9E48(EnBaba* this, GlobalContext* globalCtx);
+void EnBaba_Init(Actor* thisx, PlayState* play);
+void EnBaba_Destroy(Actor* thisx, PlayState* play);
+void EnBaba_Update(Actor* thisx, PlayState* play);
+void EnBaba_Draw(Actor* thisx, PlayState* play);
 
-#if 0
-const ActorInit En_Baba_InitVars = {
+void EnBaba_FinishInit(EnBaba* this, PlayState* play);
+void EnBaba_Idle(EnBaba* this, PlayState* play);
+void EnBaba_FollowSchedule_Talk(EnBaba* this, PlayState* play);
+void EnBaba_Talk(EnBaba* this, PlayState* play);
+void EnBaba_GiveBlastMask(EnBaba* this, PlayState* play);
+void EnBaba_GaveBlastMask(EnBaba* this, PlayState* play);
+void EnBaba_FollowSchedule(EnBaba* this, PlayState* play);
+void EnBaba_KnockedOver(EnBaba* this, PlayState* play);
+void EnBaba_DoNothing(EnBaba* this, PlayState* play);
+void EnBaba_Walk(EnBaba* this, PlayState* play);
+void EnBaba_FaceForward(EnBaba* this, PlayState* play);
+
+typedef enum {
+    /* 0 */ BOMB_SHOP_LADY_ANIM_IDLE_HOLDING_BAG,
+    /* 1 */ BOMB_SHOP_LADY_ANIM_IDLE,
+    /* 2 */ BOMB_SHOP_LADY_ANIM_WALKING_HOLDING_BAG,
+    /* 3 */ BOMB_SHOP_LADY_ANIM_KNOCKED_OVER,
+    /* 4 */ BOMB_SHOP_LADY_ANIM_LYING_DOWN,
+    /* 5 */ BOMB_SHOP_LADY_ANIM_SWAY
+} BombShopLadyAnimation;
+
+typedef enum {
+    /* 0 */ BOMB_SHOP_LADY_SCH_NONE,
+    /* 1 */ BOMB_SHOP_LADY_SCH_KNOCKED_OVER,
+    /* 2 */ BOMB_SHOP_LADY_SCH_FOLLOW_TIME_PATH
+} BombShopLadyScheduleResult;
+
+ActorInit En_Baba_InitVars = {
     ACTOR_EN_BABA,
     ACTORCAT_NPC,
     FLAGS,
@@ -34,18 +62,38 @@ const ActorInit En_Baba_InitVars = {
     (ActorFunc)EnBaba_Draw,
 };
 
-// static ColliderCylinderInit sCylinderInit = {
-static ColliderCylinderInit D_80BAA430 = {
-    { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
-    { ELEMTYPE_UNK1, { 0x00000000, 0x00, 0x00 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
+static AnimationInfo sAnimationInfo[] = {
+    { &gBbaIdleHoldingBagAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &gBbaIdleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &gBbaWalkingHoldingBagAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &gBbaKnockedOverAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
+    { &gBbaLyingDownAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &gBbaSwayAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+};
+
+static ColliderCylinderInit sCylinderInit = {
+    {
+        COLTYPE_NONE,
+        AT_NONE,
+        AC_ON | AC_TYPE_PLAYER,
+        OC1_ON | OC1_TYPE_ALL,
+        OC2_TYPE_1,
+        COLSHAPE_CYLINDER,
+    },
+    {
+        ELEMTYPE_UNK1,
+        { 0x00000000, 0x00, 0x00 },
+        { 0xF7CFFFFF, 0x00, 0x00 },
+        TOUCH_NONE | TOUCH_SFX_NORMAL,
+        BUMP_ON,
+        OCELEM_ON,
+    },
     { 18, 64, 0, { 0, 0, 0 } },
 };
 
-// sColChkInfoInit
-static CollisionCheckInfoInit2 D_80BAA45C = { 0, 0, 0, 0, MASS_IMMOVABLE };
+static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
-// static DamageTable sDamageTable = {
-static DamageTable D_80BAA468 = {
+static DamageTable sDamageTable = {
     /* Deku Nut       */ DMG_ENTRY(1, 0x0),
     /* Deku Stick     */ DMG_ENTRY(1, 0x0),
     /* Horse trample  */ DMG_ENTRY(1, 0x0),
@@ -80,67 +128,711 @@ static DamageTable D_80BAA468 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
-#endif
+static u8 sSchedule[] = {
+    /* 0x00 */ SCHEDULE_CMD_CHECK_NOT_IN_DAY_S(1, 0x1D - 0x04),
+    /* 0x04 */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_BACKTOWN, 0x1C - 0x08),
+    /* 0x08 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(0, 0, 0, 30, 0x16 - 0x0E),
+    /* 0x0E */ SCHEDULE_CMD_CHECK_BEFORE_TIME_S(0, 30, 0x15 - 0x12),
+    /* 0x12 */ SCHEDULE_CMD_RET_VAL_L(BOMB_SHOP_LADY_SCH_KNOCKED_OVER),
+    /* 0x15 */ SCHEDULE_CMD_RET_NONE(),
+    /* 0x16 */ SCHEDULE_CMD_RET_TIME(0, 0, 0, 30, BOMB_SHOP_LADY_SCH_FOLLOW_TIME_PATH),
+    /* 0x1C */ SCHEDULE_CMD_RET_NONE(),
+    /* 0x1D */ SCHEDULE_CMD_RET_NONE(),
+};
 
-extern ColliderCylinderInit D_80BAA430;
-extern CollisionCheckInfoInit2 D_80BAA45C;
-extern DamageTable D_80BAA468;
+static s32 sSearchTimePathLimit[] = { -1, -1, 0 };
 
-extern UNK_TYPE D_06006B10;
-extern UNK_TYPE D_060092A0;
+static TrackOptionsSet sTrackOptions = {
+    { 0xFA0, 4, 1, 3 },
+    { 0x1770, 4, 1, 6 },
+    { 0xFA0, 4, 1, 3 },
+    { 0x1770, 4, 1, 6 },
+};
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Baba/func_80BA8820.s")
+s32 EnBaba_FindBombShopkeeper(EnBaba* this, PlayState* play) {
+    //! The bomb shopkeeper is an EnSob1, but initalizes itself with id `ACTOR_EN_OSSAN`
+    //! Note if there are other `EnOssan` actors, it may find that instance instead
+    //! in which case `EnSob1` struct acceses would be incorrect
+    this->bombShopkeeper = (EnSob1*)SubS_FindActor(play, &this->bombShopkeeper->actor, ACTORCAT_NPC, ACTOR_EN_OSSAN);
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Baba/func_80BA886C.s")
+    if (this->bombShopkeeper != NULL) {
+        return true;
+    }
+    return false;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Baba/func_80BA8C4C.s")
+void EnBaba_HandleConversation(EnBaba* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Baba/func_80BA8C90.s")
+    switch (this->textId) {
+        case 0:
+            if (this->stateFlags & BOMB_SHOP_LADY_STATE_AUTOTALK) {
+                if (gSaveContext.save.weekEventReg[33] & 8) {
+                    // Thanks. Can stock Bomb Bags tomorrow
+                    this->textId = 0x2A34;
+                    break;
+                }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Baba/func_80BA8D2C.s")
+                if (gSaveContext.save.weekEventReg[79] & 0x40) {
+                    this->stateFlags |= BOMB_SHOP_LADY_STATE_END_CONVERSATION;
+                    // Oh my, learned my lesson. Can't stock Bomb Bags tomorrow
+                    this->textId = 0x2A33;
+                    break;
+                }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Baba/func_80BA8DF4.s")
+                this->stateFlags |= BOMB_SHOP_LADY_STATE_END_CONVERSATION;
+                // Can't stock Bomb Bags tomorrow
+                this->textId = 0x2A32;
+                break;
+            } else if (player->transformation == PLAYER_FORM_DEKU) {
+                if (!(gSaveContext.save.weekEventReg[79] & 0x20)) {
+                    gSaveContext.save.weekEventReg[79] |= 0x20;
+                    this->stateFlags |= BOMB_SHOP_LADY_STATE_END_CONVERSATION;
+                    // Small customer, use bombs as adult
+                    this->textId = 0x2A37;
+                    break;
+                } else {
+                    this->stateFlags |= BOMB_SHOP_LADY_STATE_END_CONVERSATION;
+                    // use bombs as adult
+                    this->textId = 0x2A38;
+                }
+                break;
+            } else if (!(gSaveContext.save.weekEventReg[33] & 8)) {
+                if (!(gSaveContext.save.weekEventReg[73] & 1)) {
+                    // Thought could sell Big Bomb Bags
+                    this->textId = 0x660;
+                    break;
+                }
+                // Can't judge people
+                this->textId = 0x662;
+                break;
+            } else {
+                if (!(gSaveContext.save.weekEventReg[73] & 2)) {
+                    // Someone helped me out
+                    this->textId = 0x65A;
+                    break;
+                }
+                // Buy Big Bomb Bag
+                this->textId = 0x65E;
+                break;
+            }
+            break;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Baba/func_80BA8F88.s")
+        case 0x660:
+            Actor_ChangeFocus(&this->actor, play, &this->bombShopkeeper->actor);
+            // Don't go by yourself
+            this->textId = 0x661;
+            break;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Baba/func_80BA9110.s")
+        case 0x661:
+            Actor_ChangeFocus(&this->bombShopkeeper->actor, play, &this->actor);
+            // Can't judge people
+            this->textId = 0x662;
+            break;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Baba/func_80BA9160.s")
+        case 0x662:
+            Actor_ChangeFocus(&this->actor, play, &this->bombShopkeeper->actor);
+            // I'll go next time
+            this->textId = 0x663;
+            gSaveContext.save.weekEventReg[73] |= 1;
+            this->stateFlags |= BOMB_SHOP_LADY_STATE_END_CONVERSATION;
+            break;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Baba/func_80BA93AC.s")
+        case 0x65A:
+            Actor_ChangeFocus(&this->actor, play, &this->bombShopkeeper->actor);
+            // Don't pick up Bomb bags at night
+            this->textId = 0x65B;
+            break;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Baba/func_80BA9480.s")
+        case 0x65B:
+            Actor_ChangeFocus(&this->bombShopkeeper->actor, play, &this->actor);
+            // Lifelong dream to sell Big Bomb Bags
+            this->textId = 0x65C;
+            break;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Baba/func_80BA9758.s")
+        case 0x65C:
+            Actor_ChangeFocus(&this->actor, play, &this->bombShopkeeper->actor);
+            // I worry about you
+            this->textId = 0x65D;
+            gSaveContext.save.weekEventReg[73] |= 2;
+            this->stateFlags |= BOMB_SHOP_LADY_STATE_END_CONVERSATION;
+            break;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Baba/func_80BA9848.s")
+        case 0x65E:
+            Actor_ChangeFocus(&this->actor, play, &this->bombShopkeeper->actor);
+            // I worry about you
+            this->textId = 0x65F;
+            this->stateFlags |= BOMB_SHOP_LADY_STATE_END_CONVERSATION;
+            break;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Baba/func_80BA98EC.s")
+        case 0x2A34:
+            if (INV_CONTENT(ITEM_MASK_BLAST) == ITEM_MASK_BLAST) {
+                this->stateFlags |= BOMB_SHOP_LADY_STATE_END_CONVERSATION;
+                // Thank you
+                this->textId = 0x2A36;
+                break;
+            }
+            this->stateFlags |= BOMB_SHOP_LADY_STATE_GIVE_BLAST_MASK;
+            // It's a dangerous mask
+            this->textId = 0x2A35;
+            break;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Baba/func_80BA9AB8.s")
+        case 0x2A35:
+            this->stateFlags |= BOMB_SHOP_LADY_STATE_END_CONVERSATION;
+            // Thank you
+            this->textId = 0x2A36;
+            break;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Baba/func_80BA9B24.s")
+        case 0x2A30:
+        case 0x2A31:
+            this->stateFlags |= BOMB_SHOP_LADY_STATE_END_CONVERSATION;
+            break;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Baba/func_80BA9B80.s")
+    Message_StartTextbox(play, this->textId, &this->actor);
+    if (this->stateFlags & BOMB_SHOP_LADY_STATE_END_CONVERSATION) {
+        if (this->stateFlags & BOMB_SHOP_LADY_STATE_GAVE_BLAST_MASK) {
+            this->stateFlags &= ~BOMB_SHOP_LADY_STATE_GAVE_BLAST_MASK;
+            func_80151BB4(play, 0x33);
+        }
+        func_80151BB4(play, 4);
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Baba/func_80BA9CD4.s")
+void EnBaba_TriggerTransition(PlayState* play, u16 nextEntrance) {
+    play->nextEntrance = nextEntrance;
+    play->transitionType = TRANS_TYPE_64;
+    gSaveContext.nextTransitionType = TRANS_TYPE_64;
+    play->transitionTrigger = TRANS_TRIGGER_START;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Baba/func_80BA9E00.s")
+void EnBaba_UpdateCollider(EnBaba* this, PlayState* play) {
+    this->collider.dim.pos.x = this->actor.world.pos.x + 5.0f;
+    this->collider.dim.pos.y = this->actor.world.pos.y;
+    this->collider.dim.pos.z = this->actor.world.pos.z + 22.0f;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Baba/func_80BA9E10.s")
+    CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
+    CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Baba/func_80BA9E48.s")
+s32 EnBaba_MoveForward(EnBaba* this, f32 speedTarget) {
+    s16 rotStep;
+    s32 reachedEnd = false;
+    Vec3f point;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Baba/EnBaba_Init.s")
+    Math_SmoothStepToF(&this->actor.speedXZ, speedTarget, 0.4f, 1000.0f, 0.0f);
+    rotStep = this->actor.speedXZ * 400.0f;
+    if (SubS_CopyPointFromPath(this->path, this->waypoint, &point) &&
+        SubS_MoveActorToPoint(&this->actor, &point, rotStep)) {
+        this->waypoint++;
+        if (this->waypoint >= this->path->count) {
+            reachedEnd = true;
+        }
+    }
+    return reachedEnd;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Baba/EnBaba_Destroy.s")
+void EnBaba_UpdateModel(EnBaba* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
+    Vec3f point;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Baba/EnBaba_Update.s")
+    SkelAnime_Update(&this->skelAnime);
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Baba/func_80BA9FB0.s")
+    if (SubS_AngleDiffLessEqual(this->actor.shape.rot.y, 0x36B0, this->actor.yawTowardsPlayer) &&
+        !(this->stateFlags & BOMB_SHOP_LADY_STATE_KNOCKED_OVER)) {
+        point.x = player->actor.world.pos.x;
+        point.y = player->bodyPartsPos[7].y + 3.0f;
+        point.z = player->actor.world.pos.z;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Baba/func_80BAA198.s")
+        SubS_TrackPoint(&point, &this->actor.focus.pos, &this->actor.shape.rot, &this->trackTarget, &this->headRot,
+                        &this->torsoRot, &sTrackOptions);
+    } else {
+        Math_SmoothStepToS(&this->trackTarget.x, 0, 4, 0x3E8, 1);
+        Math_SmoothStepToS(&this->trackTarget.y, 0, 4, 0x3E8, 1);
+        Math_SmoothStepToS(&this->headRot.x, 0, 4, 0x3E8, 1);
+        Math_SmoothStepToS(&this->headRot.y, 0, 4, 0x3E8, 1);
+        Math_SmoothStepToS(&this->torsoRot.x, 0, 4, 0x3E8, 1);
+        Math_SmoothStepToS(&this->torsoRot.y, 0, 4, 0x3E8, 1);
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Baba/func_80BAA20C.s")
+    SubS_FillLimbRotTables(play, this->limbRotTableY, this->limbRotTableZ, ARRAY_COUNT(this->limbRotTableY));
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Baba/EnBaba_Draw.s")
+    if (this->stateFlags & BOMB_SHOP_LADY_STATE_VISIBLE) {
+        EnBaba_UpdateCollider(this, play);
+    }
+}
+
+s32 EnBaba_InitTimePath(EnBaba* this, PlayState* play, ScheduleOutput* scheduleOutput) {
+    u16 now = SCHEDULE_TIME_NOW;
+    u16 startTime;
+    u8 pathIndex = BOMB_SHOP_LADY_GET_PATH_INDEX(&this->actor);
+    u16 numWaypoints;
+
+    if (sSearchTimePathLimit[scheduleOutput->result] >= 0) {
+        this->timePath = SubS_GetAdditionalPath(play, pathIndex, sSearchTimePathLimit[scheduleOutput->result]);
+    }
+
+    if (this->timePath == NULL) {
+        return false;
+    }
+
+    if ((this->scheduleResult != BOMB_SHOP_LADY_SCH_NONE) && (this->timePathTimeSpeed >= 0)) {
+        startTime = now;
+    } else {
+        startTime = scheduleOutput->time0;
+    }
+
+    if (scheduleOutput->time1 < startTime) {
+        this->timePathTotalTime = (startTime - scheduleOutput->time1) + (DAY_LENGTH - 1);
+    } else {
+        this->timePathTotalTime = scheduleOutput->time1 - startTime;
+    }
+
+    this->timePathElapsedTime = now - startTime;
+
+    numWaypoints = startTime = this->timePath->count - (SUBS_TIME_PATHING_ORDER - 1);
+    this->timePathWaypointTime = this->timePathTotalTime / numWaypoints;
+
+    this->timePathIsSetup = false;
+    this->timePathWaypoint = (this->timePathElapsedTime / this->timePathWaypointTime) + (SUBS_TIME_PATHING_ORDER - 1);
+    this->timePathHasReachedEnd = false;
+
+    return true;
+}
+
+s32 EnBaba_ProcessScheduleOutput(EnBaba* this, PlayState* play, ScheduleOutput* scheduleOutput) {
+    s32 success;
+
+    switch (scheduleOutput->result) {
+        default:
+            success = false;
+            break;
+
+        case BOMB_SHOP_LADY_SCH_FOLLOW_TIME_PATH:
+            success = EnBaba_InitTimePath(this, play, scheduleOutput);
+            break;
+
+        case BOMB_SHOP_LADY_SCH_KNOCKED_OVER:
+            success = true;
+            break;
+    }
+    return success;
+}
+
+s32 EnBaba_FollowTimePath(EnBaba* this, PlayState* play) {
+    f32 weightArray[265];
+    Vec3f worldPos;
+    Vec3f timePathPointNew; // used to compute yaw after update
+    Vec3f timePathPoint;    // used in setup and to store a backup before update
+    s32 prevTimePathElapsedTime = 0;
+    s32 prevTimePathWaypoint = 0;
+    s32 pad;
+
+    SubS_TimePathing_FillKnots(weightArray, SUBS_TIME_PATHING_ORDER, this->timePath->count + SUBS_TIME_PATHING_ORDER);
+
+    if (!this->timePathIsSetup) {
+        timePathPoint = gZeroVec3f;
+
+        SubS_TimePathing_Update(this->timePath, &this->timePathProgress, &this->timePathElapsedTime,
+                                this->timePathWaypointTime, this->timePathTotalTime, &this->timePathWaypoint,
+                                weightArray, &timePathPoint, this->timePathTimeSpeed);
+        SubS_TimePathing_ComputeInitialY(play, this->timePath, this->timePathWaypoint, &timePathPoint);
+        this->actor.world.pos.y = timePathPoint.y;
+        this->timePathIsSetup = true;
+    } else {
+        timePathPoint = this->timePathPoint;
+    }
+
+    this->actor.world.pos.x = timePathPoint.x;
+    this->actor.world.pos.z = timePathPoint.z;
+
+    if (SubS_InCsMode(play)) {
+        prevTimePathElapsedTime = this->timePathElapsedTime;
+        prevTimePathWaypoint = this->timePathWaypoint;
+        timePathPoint = this->actor.world.pos;
+    }
+
+    this->timePathPoint = gZeroVec3f;
+
+    if (SubS_TimePathing_Update(this->timePath, &this->timePathProgress, &this->timePathElapsedTime,
+                                this->timePathWaypointTime, this->timePathTotalTime, &this->timePathWaypoint,
+                                weightArray, &this->timePathPoint, this->timePathTimeSpeed)) {
+        this->timePathHasReachedEnd = true;
+    } else {
+        worldPos = this->actor.world.pos;
+        timePathPointNew = this->timePathPoint;
+        this->actor.world.rot.y = Math_Vec3f_Yaw(&worldPos, &timePathPointNew);
+    }
+
+    if (SubS_InCsMode(play)) {
+        this->timePathElapsedTime = prevTimePathElapsedTime;
+        this->timePathWaypoint = prevTimePathWaypoint;
+        this->timePathPoint = timePathPoint;
+    }
+
+    return false;
+}
+
+void EnBaba_HandleSchedule(EnBaba* this, PlayState* play) {
+    switch (this->scheduleResult) {
+        case BOMB_SHOP_LADY_SCH_FOLLOW_TIME_PATH:
+            gSaveContext.save.weekEventReg[58] |= 0x40;
+            this->stateFlags |= BOMB_SHOP_LADY_STATE_VISIBLE;
+            EnBaba_FollowTimePath(this, play);
+            break;
+
+        case BOMB_SHOP_LADY_SCH_KNOCKED_OVER:
+            this->animIndex = BOMB_SHOP_LADY_ANIM_KNOCKED_OVER;
+            // Ouch
+            this->textId = 0x2A30;
+            this->actor.speedXZ = 0.0f;
+            Enemy_StartFinishingBlow(play, &this->actor);
+            this->stateFlags |= BOMB_SHOP_LADY_STATE_KNOCKED_OVER;
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, this->animIndex);
+            this->actionFunc = EnBaba_KnockedOver;
+            break;
+    }
+    Math_ApproachS(&this->actor.shape.rot.y, this->actor.world.rot.y, 4, 0x1554);
+}
+
+void EnBaba_FinishInit(EnBaba* this, PlayState* play) {
+    SkelAnime_InitFlex(play, &this->skelAnime, &gBbaSkel, &gBbaWalkingHoldingBagAnim, this->jointTable,
+                       this->morphTable, BBA_LIMB_MAX);
+
+    this->actor.draw = EnBaba_Draw;
+    this->stateFlags |= BOMB_SHOP_LADY_STATE_DRAW_SHADOW;
+    this->actor.flags |= ACTOR_FLAG_1;
+
+    if (play->sceneId == SCENE_BOMYA) {
+        this->stateFlags |= BOMB_SHOP_LADY_STATE_VISIBLE;
+        this->animIndex = BOMB_SHOP_LADY_ANIM_IDLE;
+        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, this->animIndex);
+        this->actionFunc = EnBaba_Idle;
+    } else if (play->sceneId == SCENE_BACKTOWN) {
+        if ((BOMB_SHOP_LADY_GET_TYPE(&this->actor) == BOMB_SHOP_LADY_TYPE_FOLLOW_SCHEDULE) &&
+            (gSaveContext.save.entrance != ENTRANCE(NORTH_CLOCK_TOWN, 7)) &&
+            (BOMB_SHOP_LADY_GET_PATH_INDEX(&this->actor) != 0x3F)) {
+            if ((gSaveContext.save.weekEventReg[58] & 0x40) ||
+                (gSaveContext.save.time >= CLOCK_TIME(0, 20) && (gSaveContext.save.time < CLOCK_TIME(6, 0)))) {
+                Actor_Kill(&this->actor);
+                return;
+            }
+
+            this->sakonDeadTimer = 50;
+            this->animIndex = BOMB_SHOP_LADY_ANIM_WALKING_HOLDING_BAG;
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, this->animIndex);
+            this->actionFunc = EnBaba_FollowSchedule;
+        } else if ((BOMB_SHOP_LADY_GET_TYPE(&this->actor) == BOMB_SHOP_LADY_TYPE_IDLE) &&
+                   (gSaveContext.save.entrance == ENTRANCE(NORTH_CLOCK_TOWN, 7))) {
+            if (gSaveContext.save.weekEventReg[81] & 2) {
+                Actor_Kill(&this->actor);
+                return;
+            }
+
+            this->stateFlags |= BOMB_SHOP_LADY_STATE_VISIBLE;
+            if (gSaveContext.save.weekEventReg[33] & 8) {
+                this->animIndex = BOMB_SHOP_LADY_ANIM_IDLE_HOLDING_BAG;
+            } else {
+                this->animIndex = BOMB_SHOP_LADY_ANIM_IDLE;
+            }
+
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, this->animIndex);
+            this->stateFlags |= BOMB_SHOP_LADY_STATE_AUTOTALK;
+            this->actionFunc = EnBaba_Idle;
+        } else {
+            Actor_Kill(&this->actor);
+            return;
+        }
+    } else {
+        this->stateFlags |= BOMB_SHOP_LADY_STATE_VISIBLE;
+        if (BOMB_SHOP_LADY_GET_TYPE(&this->actor) == BOMB_SHOP_LADY_TYPE_SWAY) {
+            this->actor.flags &= ~ACTOR_FLAG_1;
+            this->animIndex = BOMB_SHOP_LADY_ANIM_SWAY;
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, this->animIndex);
+            this->actionFunc = EnBaba_DoNothing;
+        } else if (BOMB_SHOP_LADY_GET_PATH_INDEX(&this->actor) != 0x3F) {
+            this->animIndex = BOMB_SHOP_LADY_ANIM_WALKING_HOLDING_BAG;
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, this->animIndex);
+            this->actionFunc = EnBaba_Walk;
+        } else {
+            this->animIndex = BOMB_SHOP_LADY_ANIM_IDLE_HOLDING_BAG;
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, this->animIndex);
+            this->actionFunc = EnBaba_FaceForward;
+        }
+    }
+}
+
+void EnBaba_Idle(EnBaba* this, PlayState* play) {
+    if ((this->stateFlags & BOMB_SHOP_LADY_STATE_AUTOTALK) || (this->bombShopkeeper != NULL) ||
+        EnBaba_FindBombShopkeeper(this, play)) {
+        if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+            EnBaba_HandleConversation(this, play);
+            if (this->stateFlags & BOMB_SHOP_LADY_STATE_AUTOTALK) {
+                this->actor.flags &= ~ACTOR_FLAG_10000;
+            }
+            this->actionFunc = EnBaba_Talk;
+        } else if (this->actor.xzDistToPlayer < 100.0f) {
+            if (this->stateFlags & BOMB_SHOP_LADY_STATE_AUTOTALK) {
+                this->actor.flags |= ACTOR_FLAG_10000;
+            }
+            func_800B8614(&this->actor, play, 100.0f);
+        }
+    }
+}
+
+void EnBaba_FollowSchedule_Talk(EnBaba* this, PlayState* play) {
+    u8 talkState = Message_GetState(&play->msgCtx);
+
+    if (((talkState == TEXT_STATE_5) || (talkState == TEXT_STATE_DONE)) && Message_ShouldAdvance(play)) {
+        play->msgCtx.msgMode = 0x43;
+        play->msgCtx.stateTimer = 4;
+        this->actionFunc = EnBaba_FollowSchedule;
+    }
+    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 5, 0x1000, 0x100);
+}
+
+void EnBaba_Talk(EnBaba* this, PlayState* play) {
+    u8 talkState = Message_GetState(&play->msgCtx);
+
+    if (talkState == TEXT_STATE_5) {
+        if (Message_ShouldAdvance(play)) {
+            if (this->stateFlags & BOMB_SHOP_LADY_STATE_END_CONVERSATION) {
+                this->stateFlags &= ~BOMB_SHOP_LADY_STATE_END_CONVERSATION;
+                play->msgCtx.msgMode = 0x43;
+                play->msgCtx.stateTimer = 4;
+                if (this->stateFlags & BOMB_SHOP_LADY_STATE_AUTOTALK) {
+                    if (CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
+                        if (play->msgCtx.unk120B1 == 0) {
+                            gSaveContext.save.weekEventReg[81] |= 2;
+                            EnBaba_TriggerTransition(play, ENTRANCE(NORTH_CLOCK_TOWN, 7));
+                            return;
+                        }
+                    } else {
+                        gSaveContext.save.weekEventReg[81] |= 2;
+                        EnBaba_TriggerTransition(play, ENTRANCE(NORTH_CLOCK_TOWN, 7));
+                    }
+                } else {
+                    this->textId = 0;
+                    this->actionFunc = EnBaba_Idle;
+                }
+            } else if (this->stateFlags & BOMB_SHOP_LADY_STATE_GIVE_BLAST_MASK) {
+                this->stateFlags &= ~BOMB_SHOP_LADY_STATE_GIVE_BLAST_MASK;
+                play->msgCtx.msgMode = 0x43;
+                play->msgCtx.stateTimer = 4;
+                this->actionFunc = EnBaba_GiveBlastMask;
+            } else {
+                EnBaba_HandleConversation(this, play);
+            }
+        }
+    } else if (talkState == TEXT_STATE_DONE) {
+        if (Message_ShouldAdvance(play) && (play->msgCtx.unk120B1 == 0)) {
+            gSaveContext.save.weekEventReg[81] |= 2;
+            EnBaba_TriggerTransition(play, ENTRANCE(NORTH_CLOCK_TOWN, 7));
+        }
+    }
+}
+
+void EnBaba_GiveBlastMask(EnBaba* this, PlayState* play) {
+    if (Actor_HasParent(&this->actor, play)) {
+        this->actor.parent = NULL;
+        this->stateFlags |= BOMB_SHOP_LADY_STATE_GAVE_BLAST_MASK;
+        this->actionFunc = EnBaba_GaveBlastMask;
+    } else {
+        Actor_PickUp(&this->actor, play, GI_MASK_BLAST, 300.0f, 300.0f);
+    }
+}
+
+void EnBaba_GaveBlastMask(EnBaba* this, PlayState* play) {
+    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+        EnBaba_HandleConversation(this, play);
+        this->actionFunc = EnBaba_Talk;
+    } else {
+        func_800B85E0(&this->actor, play, 400.0f, PLAYER_AP_MINUS1);
+    }
+}
+
+void EnBaba_FollowSchedule(EnBaba* this, PlayState* play) {
+    ScheduleOutput scheduleOutput;
+
+    this->timePathTimeSpeed = REG(15) + ((void)0, gSaveContext.save.daySpeed);
+
+    if (!Schedule_RunScript(play, sSchedule, &scheduleOutput) ||
+        ((this->scheduleResult != scheduleOutput.result) &&
+         !EnBaba_ProcessScheduleOutput(this, play, &scheduleOutput))) {
+        this->stateFlags &= ~BOMB_SHOP_LADY_STATE_DRAW_SHADOW;
+        this->actor.flags &= ~ACTOR_FLAG_1;
+        scheduleOutput.result = BOMB_SHOP_LADY_SCH_NONE;
+    } else {
+        this->stateFlags |= BOMB_SHOP_LADY_STATE_DRAW_SHADOW;
+        this->actor.flags |= ACTOR_FLAG_1;
+    }
+    this->scheduleResult = scheduleOutput.result;
+
+    EnBaba_HandleSchedule(this, play);
+
+    if (this->stateFlags & BOMB_SHOP_LADY_STATE_VISIBLE) {
+        if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+            Message_StartTextbox(play, 0x2A39, &this->actor); // "I'm sorry"
+            this->actionFunc = EnBaba_FollowSchedule_Talk;
+        } else if ((this->actor.xzDistToPlayer < 100.0f) || this->actor.isTargeted) {
+            func_800B863C(&this->actor, play);
+        }
+    }
+    Actor_MoveWithGravity(&this->actor);
+}
+
+void EnBaba_KnockedOver(EnBaba* this, PlayState* play) {
+    s16 curFrame = this->skelAnime.curFrame;
+    s16 endFrame = Animation_GetLastFrame(sAnimationInfo[this->animIndex].animation);
+
+    this->collider.dim.height = 37;
+    this->collider.dim.radius = 23;
+
+    if (this->animIndex == BOMB_SHOP_LADY_ANIM_KNOCKED_OVER) {
+        if (Animation_OnFrame(&this->skelAnime, 0.0f)) {
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_VO_BBVO00);
+        }
+
+        if (curFrame == endFrame) {
+            this->animIndex = BOMB_SHOP_LADY_ANIM_LYING_DOWN;
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, this->animIndex);
+        }
+    } else {
+        if ((gSaveContext.save.weekEventReg[79] & 0x40) && (DECR(this->sakonDeadTimer) == 0)) {
+            Audio_QueueSeqCmd(0x101400FF);
+            EnBaba_TriggerTransition(play, ENTRANCE(NORTH_CLOCK_TOWN, 7));
+        } else {
+            Actor_MoveWithGravity(&this->actor);
+        }
+    }
+}
+
+void EnBaba_DoNothing(EnBaba* this, PlayState* play) {
+}
+
+void EnBaba_Walk(EnBaba* this, PlayState* play) {
+    if (EnBaba_MoveForward(this, 1.0f)) {
+        this->waypoint = 0;
+    }
+}
+
+void EnBaba_FaceForward(EnBaba* this, PlayState* play) {
+    this->actor.shape.rot = this->actor.world.rot;
+}
+
+void EnBaba_Init(Actor* thisx, PlayState* play) {
+    s32 pad;
+    EnBaba* this = THIS;
+
+    Collider_InitCylinder(play, &this->collider);
+    Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
+    CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
+
+    this->path = SubS_GetPathByIndex(play, BOMB_SHOP_LADY_GET_PATH_INDEX(&this->actor), 0x3F);
+
+    Actor_SetScale(&this->actor, 0.01f);
+
+    this->actor.targetMode = 0;
+    this->actor.gravity = -4.0f;
+    this->actionFunc = EnBaba_FinishInit;
+}
+
+void EnBaba_Destroy(Actor* thisx, PlayState* play) {
+    EnBaba* this = THIS;
+
+    Collider_DestroyCylinder(play, &this->collider);
+}
+
+void EnBaba_Update(Actor* thisx, PlayState* play) {
+    EnBaba* this = THIS;
+
+    this->actionFunc(this, play);
+
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+    EnBaba_UpdateModel(this, play);
+}
+
+s32 EnBaba_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+    EnBaba* this = THIS;
+
+    if (limbIndex == BBA_LIMB_NECK) {
+        Matrix_Translate(1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_RotateXS(this->headRot.y, MTXMODE_APPLY);
+        Matrix_RotateZS(-this->headRot.x, MTXMODE_APPLY);
+        Matrix_Translate(-1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+    }
+
+    if (limbIndex == BBA_LIMB_UPPER_ROOT) {
+        Matrix_RotateXS(-this->torsoRot.y, MTXMODE_APPLY);
+        Matrix_RotateZS(-this->torsoRot.x, MTXMODE_APPLY);
+    }
+
+    if ((limbIndex == BBA_LIMB_NECK) && (this->inMsgState3 != 0) && ((play->state.frames % 2) == 0)) {
+        Matrix_Translate(40.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+    }
+
+    if ((limbIndex == BBA_LIMB_UPPER_ROOT) || (limbIndex == BBA_LIMB_LEFT_UPPER_ARM) ||
+        (limbIndex == BBA_LIMB_RIGHT_UPPER_ARM)) {
+        rot->y += (s16)(Math_SinS(this->limbRotTableY[limbIndex]) * 200.0f);
+        rot->z += (s16)(Math_CosS(this->limbRotTableZ[limbIndex]) * 200.0f);
+    }
+
+    if (((this->animIndex == BOMB_SHOP_LADY_ANIM_IDLE) || (this->animIndex == BOMB_SHOP_LADY_ANIM_KNOCKED_OVER) ||
+         (this->animIndex == BOMB_SHOP_LADY_ANIM_LYING_DOWN) ||
+         (BOMB_SHOP_LADY_GET_TYPE(&this->actor) == BOMB_SHOP_LADY_TYPE_SWAY)) &&
+        (limbIndex == BBA_LIMB_BAG)) {
+        *dList = NULL;
+    }
+    return false;
+}
+
+void EnBaba_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+    EnBaba* this = THIS;
+    Vec3f sp18 = { 0.0f, 0.0f, 0.0f };
+
+    if (limbIndex == BBA_LIMB_HEAD) {
+        this->actor.focus.pos.x = this->actor.world.pos.x;
+        this->actor.focus.pos.y = this->actor.world.pos.y;
+        this->actor.focus.pos.z = this->actor.world.pos.z;
+        Matrix_MultVec3f(&sp18, &this->actor.focus.pos);
+    }
+}
+
+void EnBaba_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
+}
+
+void EnBaba_Draw(Actor* thisx, PlayState* play) {
+    s32 pad;
+    EnBaba* this = THIS;
+    Vec3f pos;
+    Vec3f scale;
+
+    if (this->stateFlags & BOMB_SHOP_LADY_STATE_VISIBLE) {
+        OPEN_DISPS(play->state.gfxCtx);
+
+        func_8012C5B0(play->state.gfxCtx);
+
+        gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(gBbaEyeTex));
+
+        SkelAnime_DrawTransformFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
+                                       this->skelAnime.dListCount, EnBaba_OverrideLimbDraw, EnBaba_PostLimbDraw,
+                                       EnBaba_TransformLimbDraw, &this->actor);
+
+        if (this->stateFlags & BOMB_SHOP_LADY_STATE_DRAW_SHADOW) {
+            if ((this->animIndex == BOMB_SHOP_LADY_ANIM_KNOCKED_OVER) ||
+                (this->animIndex == BOMB_SHOP_LADY_ANIM_LYING_DOWN)) {
+                func_8012C2DC(play->state.gfxCtx);
+                pos.x = this->actor.world.pos.x + 20.0f;
+                pos.y = this->actor.world.pos.y;
+                pos.z = this->actor.world.pos.z + 20.0f;
+            } else {
+                pos = this->actor.world.pos;
+            }
+
+            scale.x = scale.y = scale.z = 0.3f;
+            func_800BC620(&pos, &scale, 255, play);
+        }
+
+        CLOSE_DISPS(play->state.gfxCtx);
+    }
+}

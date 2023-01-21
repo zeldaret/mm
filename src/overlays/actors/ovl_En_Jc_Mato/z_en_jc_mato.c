@@ -5,21 +5,22 @@
  */
 
 #include "z_en_jc_mato.h"
+#include "objects/object_tru/object_tru.h"
 
-#define FLAGS 0x00004030
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_4000)
 
 #define THIS ((EnJcMato*)thisx)
 
-void EnJcMato_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnJcMato_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnJcMato_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnJcMato_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnJcMato_Init(Actor* thisx, PlayState* play);
+void EnJcMato_Destroy(Actor* thisx, PlayState* play);
+void EnJcMato_Update(Actor* thisx, PlayState* play);
+void EnJcMato_Draw(Actor* thisx, PlayState* play);
 
-s32 EnJcMato_CheckForHit(EnJcMato* this, GlobalContext* globalCtx);
+s32 EnJcMato_CheckForHit(EnJcMato* this, PlayState* play);
 void EnJcMato_SetupIdle(EnJcMato* this);
-void EnJcMato_Idle(EnJcMato* this, GlobalContext* globalCtx);
+void EnJcMato_Idle(EnJcMato* this, PlayState* play);
 
-const ActorInit En_Jc_Mato_InitVars = {
+ActorInit En_Jc_Mato_InitVars = {
     ACTOR_EN_JC_MATO,
     ACTORCAT_PROP,
     FLAGS,
@@ -86,21 +87,19 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
-extern Gfx D_06000390[];
-
-s32 EnJcMato_CheckForHit(EnJcMato* this, GlobalContext* globalCtx) {
+s32 EnJcMato_CheckForHit(EnJcMato* this, PlayState* play) {
     this->collider.dim.worldSphere.center.x = this->pos.x;
     this->collider.dim.worldSphere.center.y = this->pos.y;
     this->collider.dim.worldSphere.center.z = this->pos.z;
     if ((this->collider.base.acFlags & AC_HIT) && !this->hitFlag && (this->actor.colChkInfo.damageEffect == 0xF)) {
         this->collider.base.acFlags &= ~AC_HIT;
-        Audio_PlayActorSound2(&this->actor, NA_SE_SY_TRE_BOX_APPEAR);
-        globalCtx->interfaceCtx.unk_25C = 1;
-        this->hitFlag = 1;
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_TRE_BOX_APPEAR);
+        play->interfaceCtx.unk_25C = 1;
+        this->hitFlag = true;
         return 1;
     } else {
-        CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
-        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+        CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
+        CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
         return 0;
     }
 }
@@ -109,60 +108,51 @@ void EnJcMato_SetupIdle(EnJcMato* this) {
     this->actionFunc = EnJcMato_Idle;
 }
 
-void EnJcMato_Idle(EnJcMato* this, GlobalContext* globalCtx) {
-    s16 shouldDespawn;
-
-    if (this->hitFlag != 0) {
-        if (this->despawnTimer == 0) {
-            shouldDespawn = 0;
-        } else {
-            this->despawnTimer--;
-            shouldDespawn = this->despawnTimer;
-        }
-        if (shouldDespawn == 0) {
-            Actor_MarkForDeath(&this->actor);
+void EnJcMato_Idle(EnJcMato* this, PlayState* play) {
+    if (this->hitFlag) {
+        if (DECR(this->despawnTimer) == 0) {
+            Actor_Kill(&this->actor);
         }
     }
 }
 
-void EnJcMato_Init(Actor* thisx, GlobalContext* globalCtx) {
+void EnJcMato_Init(Actor* thisx, PlayState* play) {
     EnJcMato* this = THIS;
 
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 24.0f);
-    Collider_InitSphere(globalCtx, &this->collider);
-    Collider_SetSphere(globalCtx, &this->collider, &this->actor, &sSphereInit);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
+    Collider_InitSphere(play, &this->collider);
+    Collider_SetSphere(play, &this->collider, &this->actor, &sSphereInit);
     this->collider.dim.worldSphere.radius = 0xF;
     this->actor.colChkInfo.damageTable = &sDamageTable;
     Actor_SetScale(&this->actor, 0.008f);
-    this->hitFlag = 0;
+    this->hitFlag = false;
     this->despawnTimer = 25;
     EnJcMato_SetupIdle(this);
 }
 
-void EnJcMato_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnJcMato_Destroy(Actor* thisx, PlayState* play) {
     EnJcMato* this = THIS;
 
-    Collider_DestroySphere(globalCtx, &this->collider);
+    Collider_DestroySphere(play, &this->collider);
 }
 
-void EnJcMato_Update(Actor* thisx, GlobalContext* globalCtx) {
+void EnJcMato_Update(Actor* thisx, PlayState* play) {
     EnJcMato* this = THIS;
 
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
     if (!(gSaveContext.eventInf[4] & 1)) {
-        EnJcMato_CheckForHit(this, globalCtx);
+        EnJcMato_CheckForHit(this, play);
     }
 }
 
-static Vec3f movement = { 0.0f, -2500.0f, 0.0f };
-
-void EnJcMato_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void EnJcMato_Draw(Actor* thisx, PlayState* play) {
+    static Vec3f sOffset = { 0.0f, -2500.0f, 0.0f };
     EnJcMato* this = THIS;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
-    func_8012C28C(globalCtx->state.gfxCtx);
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, D_06000390);
-    SysMatrix_MultiplyVector3fByState(&movement, &this->pos);
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
+    func_8012C28C(play->state.gfxCtx);
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(POLY_OPA_DISP++, gKoumeTargetDL);
+    Matrix_MultVec3f(&sOffset, &this->pos);
+    CLOSE_DISPS(play->state.gfxCtx);
 }

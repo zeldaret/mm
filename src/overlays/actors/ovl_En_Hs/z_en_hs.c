@@ -1,24 +1,29 @@
+/*
+ * File: z_en_hs.c
+ * Overlay: ovl_En_Hs
+ * Description: Grog
+ */
+
 #include "z_en_hs.h"
 
-#define FLAGS 0x00000019
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
 
 #define THIS ((EnHs*)thisx)
 
-void EnHs_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnHs_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnHs_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnHs_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnHs_Init(Actor* thisx, PlayState* play);
+void EnHs_Destroy(Actor* thisx, PlayState* play);
+void EnHs_Update(Actor* thisx, PlayState* play);
+void EnHs_Draw(Actor* thisx, PlayState* play);
 
-void func_80952FE0(EnHs* this, GlobalContext* globalCtx);
-void func_80953098(EnHs* this, GlobalContext* globalCtx);
-void func_80953180(EnHs* this, GlobalContext* globalCtx);
-void func_809532C0(EnHs* this, GlobalContext* globalCtx);
-void func_809532D0(EnHs* this, GlobalContext* globalCtx);
-void func_80953354(EnHs* this, GlobalContext* globalCtx);
-void func_8095345C(EnHs* this, GlobalContext* globalCtx);
+void func_80952FE0(EnHs* this, PlayState* play);
+void func_80953098(EnHs* this, PlayState* play);
+void func_80953180(EnHs* this, PlayState* play);
+void EnHs_DoNothing(EnHs* this, PlayState* play);
+void EnHs_SceneTransitToBunnyHoodDialogue(EnHs* this, PlayState* play);
+void func_80953354(EnHs* this, PlayState* play);
+void func_8095345C(EnHs* this, PlayState* play);
 
-#if 0
-const ActorInit En_Hs_InitVars = {
+ActorInit En_Hs_InitVars = {
     ACTOR_EN_HS,
     ACTORCAT_NPC,
     FLAGS,
@@ -30,51 +35,328 @@ const ActorInit En_Hs_InitVars = {
     (ActorFunc)EnHs_Draw,
 };
 
-// static ColliderCylinderInit sCylinderInit = {
-static ColliderCylinderInit D_80953910 = {
-    { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_ENEMY, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
-    { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
+static ColliderCylinderInit sCylinderInit = {
+    {
+        COLTYPE_NONE,
+        AT_NONE,
+        AC_ON | AC_TYPE_ENEMY,
+        OC1_ON | OC1_TYPE_ALL,
+        OC2_TYPE_1,
+        COLSHAPE_CYLINDER,
+    },
+    {
+        ELEMTYPE_UNK0,
+        { 0x00000000, 0x00, 0x00 },
+        { 0xF7CFFFFF, 0x00, 0x00 },
+        TOUCH_NONE | TOUCH_SFX_NORMAL,
+        BUMP_ON,
+        OCELEM_ON,
+    },
     { 40, 40, 0, { 0, 0, 0 } },
 };
 
-#endif
+Vec3f D_8095393C = { 300.0f, 1000.0f, 0.0f };
 
-extern ColliderCylinderInit D_80953910;
+void func_80952C50(EnHs* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
+    s32 i;
 
-extern UNK_TYPE D_060005C0;
+    for (i = 0; i < ARRAY_COUNT(this->nwcPos); i++) {
+        Math_Vec3f_Copy(&this->nwcPos[i], &player->actor.world.pos);
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hs/func_80952C50.s")
+    this->actor.home.rot.x = 0; // reset adult transformed count
+    this->actor.home.rot.z = 0; // reset chick count
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hs/EnHs_Init.s")
+void EnHs_Init(Actor* thisx, PlayState* play) {
+    s32 pad;
+    EnHs* this = THIS;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hs/EnHs_Destroy.s")
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 36.0f);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gHsSkeleton, &gHsIdleAnim, this->jointTable, this->morphTable,
+                       OBJECT_HS_LIMB_MAX);
+    Animation_PlayLoop(&this->skelAnime, &gHsIdleAnim);
+    Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
+    this->actor.colChkInfo.mass = MASS_IMMOVABLE;
+    Actor_SetScale(&this->actor, 0.01f);
+    this->actionFunc = func_8095345C;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hs/func_80952DFC.s")
+    if (play->curSpawn == 1) {
+        this->actor.flags |= ACTOR_FLAG_10000;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hs/func_80952E50.s")
+    this->stateFlags = 0;
+    this->actor.targetMode = 6;
+    func_80952C50(this, play);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hs/func_80952F00.s")
+void EnHs_Destroy(Actor* thisx, PlayState* play) {
+    EnHs* this = THIS;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hs/func_80952FE0.s")
+    Collider_DestroyCylinder(play, &this->collider);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hs/func_80953098.s")
+void func_80952DFC(PlayState* play) {
+    if (INV_CONTENT(ITEM_MASK_BUNNY) == ITEM_MASK_BUNNY) {
+        func_80151BB4(play, 0x2E);
+    }
+    func_80151BB4(play, 0x10);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hs/func_80953180.s")
+void EnHs_UpdateChickPos(Vec3f* dst, Vec3f src, f32 offset) {
+    Vec3f diff;
+    f32 distance;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hs/func_809532C0.s")
+    Math_Vec3f_Diff(&src, dst, &diff);
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hs/func_809532D0.s")
+    distance = SQ(diff.x) + SQ(diff.z); // gets un-squared after we check if we are too close
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hs/func_80953354.s")
+    if (SQ(offset) > distance) {
+        return;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hs/func_809533A0.s")
+    distance = sqrtf(distance);
+    diff.x *= (distance - offset) / distance;
+    diff.z *= (distance - offset) / distance;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hs/func_8095345C.s")
+    dst->x += diff.x;
+    dst->z += diff.z;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hs/EnHs_Update.s")
+void func_80952F00(EnHs* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
+    s32 i;
+    f32 offset;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hs/func_8095376C.s")
+    if (this->actor.home.rot.z >= 20) { // current chick count >= 10
+        offset = 15.0f;
+    } else {
+        offset = 10.0f;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hs/func_80953848.s")
+    EnHs_UpdateChickPos(&this->nwcPos[0], player->actor.world.pos, offset);
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hs/EnHs_Draw.s")
+    for (i = 1; i < ARRAY_COUNT(this->nwcPos); i++) {
+        EnHs_UpdateChickPos(&this->nwcPos[i], this->nwcPos[i - 1], offset);
+    }
+}
+
+void func_80952FE0(EnHs* this, PlayState* play) {
+    if (this->stateTimer < 40) {
+        Math_SmoothStepToS(&this->headRot.y, 0x1F40, 6, 0x1838, 0x64);
+    } else if (this->stateTimer < 80) {
+        Math_SmoothStepToS(&this->headRot.y, -0x1F40, 6, 0x1838, 0x64);
+    } else {
+        this->actionFunc = func_80953180;
+        this->stateFlags &= ~4;
+        func_80151938(play, 0x33F6);
+        func_80952DFC(play);
+    }
+    this->stateTimer++;
+}
+
+void func_80953098(EnHs* this, PlayState* play) {
+    if (Actor_HasParent(&this->actor, play)) {
+        this->actor.parent = NULL;
+        this->actionFunc = func_8095345C;
+        this->actor.flags |= ACTOR_FLAG_10000;
+        this->stateFlags |= 0x10;
+        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_AP_MINUS1);
+    } else {
+        this->stateFlags |= 8;
+        if (INV_CONTENT(ITEM_MASK_BUNNY) == ITEM_MASK_BUNNY) {
+            Actor_PickUp(&this->actor, play, GI_RUPEE_RED, 10000.0f, 50.0f);
+        } else {
+            Actor_PickUp(&this->actor, play, GI_MASK_BUNNY, 10000.0f, 50.0f);
+        }
+    }
+}
+
+void func_80953180(EnHs* this, PlayState* play) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+        switch (play->msgCtx.currentTextId) {
+            case 0x33F4: // text: laughing that they are all roosters (!)
+            case 0x33F6: // text: Grog regrets not being able to see his chicks reach adult hood
+                func_801477B4(play);
+                this->actionFunc = func_8095345C;
+                break;
+
+            case 0x33F7: // text: notice his chicks are grown up, happy, wants to give you bunny hood
+                this->actor.flags &= ~ACTOR_FLAG_10000;
+                func_801477B4(play);
+                this->actionFunc = func_80953098;
+                func_80953098(this, play);
+                break;
+
+            case 0x33F9: // text: laughing that they are all roosters (.)
+                this->actor.flags &= ~ACTOR_FLAG_10000;
+                func_801477B4(play);
+                this->actionFunc = func_8095345C;
+                break;
+
+            case 0x33F5: // He heard from his gramps (?) the moon is going to fall
+                play->msgCtx.msgLength = 0;
+                this->actionFunc = func_80952FE0;
+                this->stateTimer = 0;
+                this->headRot.z = 0;
+                this->stateFlags |= 4;
+                break;
+
+            default:
+                func_801477B4(play);
+                this->actionFunc = func_8095345C;
+                break;
+        }
+    }
+}
+
+void EnHs_DoNothing(EnHs* this, PlayState* play) {
+}
+
+void EnHs_SceneTransitToBunnyHoodDialogue(EnHs* this, PlayState* play) {
+    if (DECR(this->stateTimer) == 0) {
+        play->nextEntrance = play->setupExitList[HS_GET_EXIT_INDEX(&this->actor)];
+        play->transitionTrigger = TRANS_TRIGGER_START;
+        gSaveContext.save.weekEventReg[25] |= 8;
+        this->actionFunc = EnHs_DoNothing;
+    }
+}
+
+void func_80953354(EnHs* this, PlayState* play) {
+    if (!Play_InCsMode(play)) {
+        func_800B7298(play, &this->actor, 7);
+        this->actionFunc = EnHs_SceneTransitToBunnyHoodDialogue;
+    }
+}
+
+void func_809533A0(EnHs* this, PlayState* play) {
+    u16 sp1E;
+
+    if ((play->curSpawn == 1) && !(this->stateFlags & 0x20)) {
+        sp1E = 0x33F7;
+        this->stateFlags |= 0x20;
+    } else if (this->stateFlags & 0x10) {
+        sp1E = 0x33F9;
+        this->stateFlags &= ~0x10;
+    } else if (gSaveContext.save.weekEventReg[25] & 8) {
+        sp1E = 0x33F4;
+    } else {
+        sp1E = 0x33F5;
+    }
+
+    Message_StartTextbox(play, sp1E, &this->actor);
+
+    if (sp1E == 0x33F4) {
+        func_80952DFC(play);
+    }
+}
+
+void func_8095345C(EnHs* this, PlayState* play) {
+    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+        this->actionFunc = func_80953180;
+        func_809533A0(this, play);
+        if (this->stateFlags & 8) {
+            func_80952DFC(play);
+            this->stateFlags &= ~8;
+        }
+    } else if (this->actor.home.rot.x >= 20) { // chicks turned adult >= 10
+        this->actionFunc = func_80953354;
+        this->stateTimer = 40;
+    } else if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_10000)) {
+        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_AP_MINUS1);
+        this->stateFlags |= 1;
+    } else if ((this->actor.xzDistToPlayer < 120.0f) && Player_IsFacingActor(&this->actor, 0x2000, play)) {
+        func_800B8614(&this->actor, play, 130.0f);
+        this->stateFlags |= 1;
+    } else {
+        this->stateFlags &= ~1;
+    }
+}
+
+void EnHs_Update(Actor* thisx, PlayState* play) {
+    s32 pad;
+    EnHs* this = THIS;
+
+    Collider_UpdateCylinder(&this->actor, &this->collider);
+    CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
+
+    Actor_MoveWithGravity(&this->actor);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+
+    if (SkelAnime_Update(&this->skelAnime)) {
+        this->skelAnime.curFrame = 0.0f;
+    }
+
+    this->actionFunc(this, play);
+
+    func_80952F00(this, play);
+
+    if (this->stateFlags & 4) {
+        Math_SmoothStepToS(&this->headRot.x, 0, 6, 0x1838, 0x64);
+        Math_SmoothStepToS(&this->unusedRot.x, 0, 6, 0x1838, 0x64);
+        Math_SmoothStepToS(&this->unusedRot.y, 0, 6, 0x1838, 0x64);
+    } else if (this->stateFlags & 1) {
+        Actor_TrackPlayer(play, &this->actor, &this->headRot, &this->unusedRot, this->actor.focus.pos);
+    } else {
+        Math_SmoothStepToS(&this->headRot.x, 0x3200, 6, 0x1838, 0x64);
+        Math_SmoothStepToS(&this->headRot.y, 0, 6, 0x1838, 0x64);
+        Math_SmoothStepToS(&this->unusedRot.x, 0, 6, 0x1838, 0x64);
+        Math_SmoothStepToS(&this->unusedRot.y, 0, 6, 0x1838, 0x64);
+    }
+}
+
+s32 EnHs_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+    EnHs* this = THIS;
+
+    switch (limbIndex) {
+        case HS_LIMB_HEAD:
+            rot->x += this->headRot.y;
+            rot->z += this->headRot.x;
+            break;
+
+        case HS_LIMB_HAIR_SPIKES:
+            rot->x += this->headRot.y;
+            rot->z += this->headRot.x;
+            break;
+
+        case HS_LIMB_HIDDEN_HAIR:
+            // for some reason this hair is always removed here in the Override limb
+            // if you do re-enable, make sure you add the head rot like above
+            *dList = NULL;
+            return false;
+
+        // these two limbs both have empty enddisplaylist, they do nothing
+        // at the same time (params == HS_TYPE_UNK1) is always false, because vanilla params is 0xFE01
+        case OBJECT_HS_LIMB_0C:
+            if (this->actor.params == HS_TYPE_UNK1) {
+                *dList = NULL;
+                return false;
+            }
+            break;
+
+        case OBJECT_HS_LIMB_0D:
+            if (this->actor.params == HS_TYPE_UNK1) {
+                *dList = NULL;
+                return false;
+            }
+            break;
+    }
+    return false;
+}
+
+void EnHs_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+    EnHs* this = THIS;
+
+    if (limbIndex == HS_LIMB_HEAD) {
+        Matrix_MultVec3f(&D_8095393C, &this->actor.focus.pos);
+    }
+}
+
+void EnHs_Draw(Actor* thisx, PlayState* play) {
+    EnHs* this = THIS;
+
+    func_8012C5B0(play->state.gfxCtx);
+    SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+                          EnHs_OverrideLimbDraw, EnHs_PostLimbDraw, &this->actor);
+}

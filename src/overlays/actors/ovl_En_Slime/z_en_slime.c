@@ -1,33 +1,39 @@
+/*
+ * File: z_en_slime.c
+ * Overlay: ovl_En_Slime
+ * Description: Chuchu
+ */
+
 #include "z_en_slime.h"
 
-#define FLAGS 0x00000215
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_200)
 
 #define THIS ((EnSlime*)thisx)
 
-void EnSlime_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnSlime_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnSlime_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnSlime_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnSlime_Init(Actor* thisx, PlayState* play);
+void EnSlime_Destroy(Actor* thisx, PlayState* play);
+void EnSlime_Update(Actor* thisx, PlayState* play);
+void EnSlime_Draw(Actor* thisx, PlayState* play);
 
-void func_80A2F140(EnSlime* this, GlobalContext* globalCtx);
-void func_80A2F1A4(EnSlime* this, GlobalContext* globalCtx);
-void func_80A2F418(EnSlime* this, GlobalContext* globalCtx);
-void func_80A2F6CC(EnSlime* this, GlobalContext* globalCtx);
-void func_80A2F8E0(EnSlime* this, GlobalContext* globalCtx);
-void func_80A2FA88(EnSlime* this, GlobalContext* globalCtx);
-void func_80A2FBA0(EnSlime* this, GlobalContext* globalCtx);
-void func_80A2FE38(EnSlime* this, GlobalContext* globalCtx);
-void func_80A30344(EnSlime* this, GlobalContext* globalCtx);
-void func_80A304B8(EnSlime* this, GlobalContext* globalCtx);
-void func_80A30820(EnSlime* this, GlobalContext* globalCtx);
-void func_80A30944(EnSlime* this, GlobalContext* globalCtx);
-void func_80A30A20(EnSlime* this, GlobalContext* globalCtx);
-void func_80A30AE4(EnSlime* this, GlobalContext* globalCtx);
-void func_80A30C2C(EnSlime* this, GlobalContext* globalCtx);
-void func_80A30CEC(EnSlime* this, GlobalContext* globalCtx);
+void func_80A2F140(EnSlime* this, PlayState* play);
+void func_80A2F1A4(EnSlime* this, PlayState* play);
+void func_80A2F418(EnSlime* this, PlayState* play);
+void func_80A2F6CC(EnSlime* this, PlayState* play);
+void func_80A2F8E0(EnSlime* this, PlayState* play);
+void func_80A2FA88(EnSlime* this, PlayState* play);
+void func_80A2FBA0(EnSlime* this, PlayState* play);
+void func_80A2FE38(EnSlime* this, PlayState* play);
+void func_80A30344(EnSlime* this, PlayState* play);
+void func_80A304B8(EnSlime* this, PlayState* play);
+void func_80A30820(EnSlime* this, PlayState* play);
+void func_80A30944(EnSlime* this, PlayState* play);
+void func_80A30A20(EnSlime* this, PlayState* play);
+void func_80A30AE4(EnSlime* this, PlayState* play);
+void func_80A30C2C(EnSlime* this, PlayState* play);
+void func_80A30CEC(EnSlime* this, PlayState* play);
 
 #if 0
-const ActorInit En_Slime_InitVars = {
+ActorInit En_Slime_InitVars = {
     ACTOR_EN_SLIME,
     ACTORCAT_ENEMY,
     FLAGS,

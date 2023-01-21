@@ -3,16 +3,17 @@
 
 #include "global.h"
 
+#define OBJ_SWPRIZE_GET_SWITCH_FLAG(thisx) ((thisx)->params & 0x7F)
+#define OBJ_SWPRIZE_GET_TYPE(thisx) (((thisx)->params >> 8) & 3)
+
 struct ObjSwprize;
 
-typedef void (*ObjSwprizeActionFunc)(struct ObjSwprize*, GlobalContext*);
+typedef void (*ObjSwprizeActionFunc)(struct ObjSwprize*, PlayState*);
 
 typedef struct ObjSwprize {
-    /* 0x0000 */ Actor actor;
-    /* 0x0144 */ ObjSwprizeActionFunc actionFunc;
-    /* 0x0148 */ char unk_144[0x4];
+    /* 0x000 */ Actor actor;
+    /* 0x144 */ ObjSwprizeActionFunc actionFunc;
+    /* 0x148 */ s16 timer;
 } ObjSwprize; // size = 0x14C
-
-extern const ActorInit Obj_Swprize_InitVars;
 
 #endif // Z_OBJ_SWPRIZE_H

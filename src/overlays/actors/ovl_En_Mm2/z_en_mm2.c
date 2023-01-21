@@ -1,19 +1,24 @@
+/*
+ * File: z_en_mm2.c
+ * Overlay: ovl_En_Mm2
+ * Description: Postman's Letter to Himself
+ */
+
 #include "z_en_mm2.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((EnMm2*)thisx)
 
-void EnMm2_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnMm2_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnMm2_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnMm2_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnMm2_Init(Actor* thisx, PlayState* play);
+void EnMm2_Destroy(Actor* thisx, PlayState* play);
+void EnMm2_Update(Actor* thisx, PlayState* play);
+void EnMm2_Draw(Actor* thisx, PlayState* play);
 
-void func_809A2080(EnMm2* this, GlobalContext* globalCtx);
-void func_809A20FC(EnMm2* this, GlobalContext* globalCtx);
+void EnMm2_Reading(EnMm2* this, PlayState* play);
+void EnMm2_WaitForRead(EnMm2* this, PlayState* play);
 
-#if 0
-const ActorInit En_Mm2_InitVars = {
+ActorInit En_Mm2_InitVars = {
     ACTOR_EN_MM2,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -25,16 +30,61 @@ const ActorInit En_Mm2_InitVars = {
     (ActorFunc)EnMm2_Draw,
 };
 
-#endif
+#include "overlays/ovl_En_Mm2/ovl_En_Mm2.c"
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mm2/EnMm2_Init.s")
+void EnMm2_Init(Actor* thisx, PlayState* play) {
+    EnMm2* this = THIS;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mm2/EnMm2_Destroy.s")
+    Actor_SetScale(&this->actor, 0.015f);
+    this->actionFunc = EnMm2_WaitForRead;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mm2/func_809A2080.s")
+void EnMm2_Destroy(Actor* thisx, PlayState* play) {
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mm2/func_809A20FC.s")
+/**
+ * Action function whilst Link is reading the letter.
+ */
+void EnMm2_Reading(EnMm2* this, PlayState* play) {
+    switch (Message_GetState(&play->msgCtx)) {
+        case TEXT_STATE_5:
+            if (Message_ShouldAdvance(play)) {
+                func_801477B4(play);
+                this->actionFunc = EnMm2_WaitForRead;
+            }
+            break;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mm2/EnMm2_Update.s")
+        case TEXT_STATE_CLOSING:
+            this->actionFunc = EnMm2_WaitForRead;
+            break;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mm2/EnMm2_Draw.s")
+/**
+ * Action function that awaits Link to read the letter, changing the A button to "Check" when he is within range to do
+ * so (and facing the letter).
+ */
+void EnMm2_WaitForRead(EnMm2* this, PlayState* play) {
+    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+        Message_StartTextbox(play, 0x277B, &this->actor);
+        this->actionFunc = EnMm2_Reading;
+    } else if ((this->actor.xzDistToPlayer < 60.0f) && (Player_IsFacingActor(&this->actor, 0x3000, play))) {
+        func_800B8614(&this->actor, play, 110.0f);
+    }
+}
+
+void EnMm2_Update(Actor* thisx, PlayState* play) {
+    EnMm2* this = THIS;
+
+    this->actionFunc(this, play);
+}
+
+void EnMm2_Draw(Actor* thisx, PlayState* play) {
+    OPEN_DISPS(play->state.gfxCtx);
+
+    func_8012C28C(play->state.gfxCtx);
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(POLY_OPA_DISP++, sEnMm2DL);
+
+    CLOSE_DISPS(play->state.gfxCtx);
+}

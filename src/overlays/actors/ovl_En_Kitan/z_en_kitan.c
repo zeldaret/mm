@@ -1,15 +1,21 @@
+/*
+ * File: z_en_kitan.c
+ * Overlay: ovl_En_Kitan
+ * Description:
+ */
+
 #include "z_en_kitan.h"
 
-#define FLAGS 0x00000009
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
 
 #define THIS ((EnKitan*)thisx)
 
-void EnKitan_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnKitan_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnKitan_Update(Actor* thisx, GlobalContext* globalCtx);
+void EnKitan_Init(Actor* thisx, PlayState* play);
+void EnKitan_Destroy(Actor* thisx, PlayState* play);
+void EnKitan_Update(Actor* thisx, PlayState* play);
 
 #if 0
-const ActorInit En_Kitan_InitVars = {
+ActorInit En_Kitan_InitVars = {
     ACTOR_EN_KITAN,
     ACTORCAT_NPC,
     FLAGS,

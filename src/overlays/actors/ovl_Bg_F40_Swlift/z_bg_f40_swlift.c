@@ -1,16 +1,22 @@
+/*
+ * File: z_bg_f40_swlift.c
+ * Overlay: ovl_Bg_F40_Swlift
+ * Description: Unused Stone Tower vertically-oscillating platform
+ */
+
 #include "z_bg_f40_swlift.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((BgF40Swlift*)thisx)
 
-void BgF40Swlift_Init(Actor* thisx, GlobalContext* globalCtx);
-void BgF40Swlift_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void BgF40Swlift_Update(Actor* thisx, GlobalContext* globalCtx);
-void BgF40Swlift_Draw(Actor* thisx, GlobalContext* globalCtx);
+void BgF40Swlift_Init(Actor* thisx, PlayState* play);
+void BgF40Swlift_Destroy(Actor* thisx, PlayState* play);
+void BgF40Swlift_Update(Actor* thisx, PlayState* play);
+void BgF40Swlift_Draw(Actor* thisx, PlayState* play);
 
 #if 0
-const ActorInit Bg_F40_Swlift_InitVars = {
+ActorInit Bg_F40_Swlift_InitVars = {
     ACTOR_BG_F40_SWLIFT,
     ACTORCAT_BG,
     FLAGS,

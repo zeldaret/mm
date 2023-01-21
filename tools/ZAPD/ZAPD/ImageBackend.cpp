@@ -5,7 +5,8 @@
 #include <png.h>
 #include <stdexcept>
 
-#include "StringHelper.h"
+#include "Utils/StringHelper.h"
+#include "WarningHandler.h"
 
 /* ImageBackend */
 
@@ -20,19 +21,28 @@ void ImageBackend::ReadPng(const char* filename)
 
 	FILE* fp = fopen(filename, "rb");
 	if (fp == nullptr)
-		throw std::runtime_error(StringHelper::Sprintf(
-			"ImageBackend::ReadPng: Error.\n\t Couldn't open file '%s'.", filename));
+	{
+		std::string errorHeader = StringHelper::Sprintf("could not open file '%s'", filename);
+		HANDLE_ERROR(WarningType::InvalidPNG, errorHeader, "");
+	}
 
 	png_structp png = png_create_read_struct(PNG_LIBPNG_VER_STRING, nullptr, nullptr, nullptr);
-	if (!png)
-		throw std::runtime_error("ImageBackend::ReadPng: Error.\n\t Couldn't create png struct.");
+	if (png == nullptr)
+	{
+		HANDLE_ERROR(WarningType::InvalidPNG, "could not create png struct", "");
+	}
 
 	png_infop info = png_create_info_struct(png);
-	if (!info)
-		throw std::runtime_error("ImageBackend::ReadPng: Error.\n\t Couldn't create png info.");
+	if (info == nullptr)
+	{
+		HANDLE_ERROR(WarningType::InvalidPNG, "could not create png info", "");
+	}
 
 	if (setjmp(png_jmpbuf(png)))
-		throw std::runtime_error("ImageBackend::ReadPng: Error.\n\t setjmp(png_jmpbuf(png)).");
+	{
+		// TODO: better warning explanation
+		HANDLE_ERROR(WarningType::InvalidPNG, "setjmp(png_jmpbuf(png))", "");
+	}
 
 	png_init_io(png, fp);
 
@@ -145,20 +155,30 @@ void ImageBackend::WritePng(const char* filename)
 	assert(hasImageData);
 
 	FILE* fp = fopen(filename, "wb");
-	if (!fp)
-		throw std::runtime_error(StringHelper::Sprintf(
-			"ImageBackend::WritePng: Error.\n\t Couldn't open file '%s' in write mode.", filename));
+	if (fp == nullptr)
+	{
+		std::string errorHeader =
+			StringHelper::Sprintf("could not open file '%s' in write mode", filename);
+		HANDLE_ERROR(WarningType::InvalidPNG, errorHeader, "");
+	}
 
 	png_structp png = png_create_write_struct(PNG_LIBPNG_VER_STRING, nullptr, nullptr, nullptr);
-	if (!png)
-		throw std::runtime_error("ImageBackend::WritePng: Error.\n\t Couldn't create png struct.");
+	if (png == nullptr)
+	{
+		HANDLE_ERROR(WarningType::InvalidPNG, "could not create png struct", "");
+	}
 
 	png_infop info = png_create_info_struct(png);
-	if (!info)
-		throw std::runtime_error("ImageBackend::WritePng: Error.\n\t Couldn't create png info.");
+	if (info == nullptr)
+	{
+		HANDLE_ERROR(WarningType::InvalidPNG, "could not create png info", "");
+	}
 
 	if (setjmp(png_jmpbuf(png)))
-		throw std::runtime_error("ImageBackend::WritePng: Error.\n\t setjmp(png_jmpbuf(png)).");
+	{
+		// TODO: better warning description
+		HANDLE_ERROR(WarningType::InvalidPNG, "setjmp(png_jmpbuf(png))", "");
+	}
 
 	png_init_io(png, fp);
 
@@ -216,7 +236,9 @@ void ImageBackend::WritePng(const char* filename)
 
 void ImageBackend::WritePng(const fs::path& filename)
 {
-	WritePng(filename.c_str());
+	// Note: The .string() is necessary for MSVC, due to the implementation of std::filesystem
+	// differing from GCC. Do not remove!
+	WritePng(filename.string().c_str());
 }
 
 void ImageBackend::SetTextureData(const std::vector<std::vector<RGBAPixel>>& texData,
@@ -385,11 +407,22 @@ void ImageBackend::SetPalette(const ImageBackend& pal)
 	{
 		for (size_t x = 0; x < pal.width; x++)
 		{
+			size_t index = y * pal.width + x;
+			if (index >= paletteSize)
+			{
+				/*
+				 * Some TLUTs are bigger than 256 colors.
+				 * For those cases, we will only take the first 256
+				 * to colorize this CI texture.
+				 */
+				return;
+			}
+
 			uint8_t r = pal.pixelMatrix[y][x * bytePerPixel + 0];
 			uint8_t g = pal.pixelMatrix[y][x * bytePerPixel + 1];
 			uint8_t b = pal.pixelMatrix[y][x * bytePerPixel + 2];
 			uint8_t a = pal.pixelMatrix[y][x * bytePerPixel + 3];
-			SetPaletteIndex(y * pal.width + x, r, g, b, a);
+			SetPaletteIndex(index, r, g, b, a);
 		}
 	}
 }
@@ -428,7 +461,7 @@ double ImageBackend::GetBytesPerPixel() const
 		return 1 * bitDepth / 8;
 
 	default:
-		throw std::invalid_argument("ImageBackend::GetBytesPerPixel():\n\t Invalid color type.");
+		HANDLE_ERROR(WarningType::InvalidPNG, "invalid color type", "");
 	}
 }
 

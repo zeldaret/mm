@@ -5,15 +5,53 @@
 
 struct EnPr;
 
-typedef void (*EnPrActionFunc)(struct EnPr*, GlobalContext*);
+typedef void (*EnPrActionFunc)(struct EnPr*, PlayState*);
+
+#define ENPR_GET_FF00(thisx) (((thisx)->params >> 8) & 0xFF)
+
+#define ENPR_FF00_MAX 20
+#define ENPR_FF00_MIN 0
 
 typedef struct EnPr {
-    /* 0x0000 */ Actor actor;
-    /* 0x0144 */ char unk_144[0xBC];
-    /* 0x0200 */ EnPrActionFunc actionFunc;
-    /* 0x0204 */ char unk_204[0x144];
+    /* 0x000 */ Actor actor;
+    /* 0x144 */ SkelAnime skelAnime;
+    /* 0x188 */ Vec3s jointTable[10];
+    /* 0x1C4 */ Vec3s morphTable[10];
+    /* 0x200 */ EnPrActionFunc actionFunc;
+    /* 0x204 */ u8 unk_204;
+    /* 0x206 */ s16 unk_206;
+    /* 0x208 */ s16 unk_208;
+    /* 0x20A */ s16 unk_20A;
+    /* 0x20C */ s16 unk_20C;
+    /* 0x20E */ s16 unk_20E;
+    /* 0x210 */ s16 unk_210;
+    /* 0x212 */ s16 unk_212;
+    /* 0x214 */ s16 unk_214;
+    /* 0x216 */ s16 unk_216;
+    /* 0x218 */ UNK_TYPE1 unk218[4];
+    /* 0x21C */ s32 unk_21C;
+    /* 0x220 */ UNK_TYPE1 unk220[0x8];
+    /* 0x228 */ s32 unk_228;
+    /* 0x22C */ s16 unk_22C;
+    /* 0x22E */ s16 drawDmgEffAlpha;
+    /* 0x230 */ s16 drawDmgEffType;
+    /* 0x234 */ f32 unk_234;
+    /* 0x238 */ f32 unk_238;
+    /* 0x23C */ Vec3f limbPos[10];
+    /* 0x2B4 */ f32 unk_2B4;
+    /* 0x2B8 */ f32 unk_2B8;
+    /* 0x2BC */ f32 unk_2BC;
+    /* 0x2C0 */ f32 unk_2C0;
+    /* 0x2C4 */ f32 unk_2C4;
+    /* 0x2C8 */ f32 unk_2C8;
+    /* 0x2CC */ f32 unk_2CC;
+    /* 0x2D0 */ s16 unk_2D0;
+    /* 0x2D2 */ s16 unk_2D2;
+    /* 0x2D4 */ Vec3f unk_2D4;
+    /* 0x2E0 */ Vec3f unk_2E0;
+    /* 0x2EC */ UNK_TYPE1 unk2EC[0xC];
+    /* 0x2F8 */ Actor* unk_2F8;
+    /* 0x2FC */ ColliderCylinder collider;
 } EnPr; // size = 0x348
-
-extern const ActorInit En_Pr_InitVars;
 
 #endif // Z_EN_PR_H

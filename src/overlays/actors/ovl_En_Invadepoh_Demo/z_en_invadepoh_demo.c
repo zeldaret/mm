@@ -1,23 +1,29 @@
+/*
+ * File: z_en_invadepoh_demo.c
+ * Overlay: ovl_En_Invadepoh_Demo
+ * Description:
+ */
+
 #include "z_en_invadepoh_demo.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((EnInvadepohDemo*)thisx)
 
-void EnInvadepohDemo_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnInvadepohDemo_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnInvadepohDemo_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnInvadepohDemo_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnInvadepohDemo_Init(Actor* thisx, PlayState* play);
+void EnInvadepohDemo_Destroy(Actor* thisx, PlayState* play);
+void EnInvadepohDemo_Update(Actor* thisx, PlayState* play);
+void EnInvadepohDemo_Draw(Actor* thisx, PlayState* play);
 
-void func_80C19AB4(EnInvadepohDemo* this, GlobalContext* globalCtx);
-void func_80C19D00(EnInvadepohDemo* this, GlobalContext* globalCtx);
-void func_80C19D48(EnInvadepohDemo* this, GlobalContext* globalCtx);
-void func_80C19E04(EnInvadepohDemo* this, GlobalContext* globalCtx);
-void func_80C19EC0(EnInvadepohDemo* this, GlobalContext* globalCtx);
-void func_80C19F7C(EnInvadepohDemo* this, GlobalContext* globalCtx);
+void func_80C19AB4(EnInvadepohDemo* this, PlayState* play);
+void func_80C19D00(EnInvadepohDemo* this, PlayState* play);
+void func_80C19D48(EnInvadepohDemo* this, PlayState* play);
+void func_80C19E04(EnInvadepohDemo* this, PlayState* play);
+void func_80C19EC0(EnInvadepohDemo* this, PlayState* play);
+void func_80C19F7C(EnInvadepohDemo* this, PlayState* play);
 
 #if 0
-const ActorInit En_Invadepoh_Demo_InitVars = {
+ActorInit En_Invadepoh_Demo_InitVars = {
     ACTOR_EN_INVADEPOH_DEMO,
     ACTORCAT_PROP,
     FLAGS,
@@ -62,7 +68,7 @@ static InitChainEntry D_80C1AAB0[] = {
     ICHAIN_F32(uncullZoneScale, 1000, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneDownward, 1000, ICHAIN_CONTINUE),
     ICHAIN_VEC3S(shape.rot, 0, ICHAIN_CONTINUE),
-    ICHAIN_F32(minVelocityY, -100, ICHAIN_CONTINUE),
+    ICHAIN_F32(terminalVelocity, -100, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 800, ICHAIN_STOP),
 };
 

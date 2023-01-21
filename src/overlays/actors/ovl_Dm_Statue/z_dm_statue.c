@@ -1,15 +1,22 @@
-#include "z_dm_statue.h"
+/*
+ * File: z_dm_statue.c
+ * Overlay: ovl_Dm_Statue
+ * Description: Pillars of water in Giant's Chamber
+ */
 
-#define FLAGS 0x04000030
+#include "z_dm_statue.h"
+#include "objects/object_smtower/object_smtower.h"
+
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_4000000)
 
 #define THIS ((DmStatue*)thisx)
 
-void DmStatue_Init(Actor* thisx, GlobalContext* globalCtx);
-void DmStatue_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void DmStatue_Update(Actor* thisx, GlobalContext* globalCtx);
-void DmStatue_Draw(Actor* thisx, GlobalContext* globalCtx);
+void DmStatue_Init(Actor* thisx, PlayState* play);
+void DmStatue_Destroy(Actor* thisx, PlayState* play);
+void DmStatue_Update(Actor* thisx, PlayState* play);
+void DmStatue_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit Dm_Statue_InitVars = {
+ActorInit Dm_Statue_InitVars = {
     ACTOR_DM_STATUE,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -21,22 +28,19 @@ const ActorInit Dm_Statue_InitVars = {
     (ActorFunc)DmStatue_Draw,
 };
 
-extern AnimatedMaterial D_06001788;
-extern Gfx D_06000520[];
-
-void DmStatue_Init(Actor* thisx, GlobalContext* globalCtx) {
+void DmStatue_Init(Actor* thisx, PlayState* play) {
     DmStatue* this = THIS;
 
     Actor_SetScale(&this->actor, 10.0f);
 }
 
-void DmStatue_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void DmStatue_Destroy(Actor* thisx, PlayState* play) {
 }
 
-void DmStatue_Update(Actor* thisx, GlobalContext* globalCtx) {
+void DmStatue_Update(Actor* thisx, PlayState* play) {
 }
 
-void DmStatue_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&D_06001788));
-    func_800BE03C(globalCtx, D_06000520);
+void DmStatue_Draw(Actor* thisx, PlayState* play) {
+    AnimatedMat_Draw(play, Lib_SegmentedToVirtual(object_smtower_Matanimheader_001788));
+    Gfx_DrawDListXlu(play, object_smtower_DL_000520);
 }

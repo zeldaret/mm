@@ -78,8 +78,8 @@ void AudioMgr_ThreadEntry(void* arg) {
     s16* msg = NULL;
     s32 exit;
 
-    func_801A4C30();
-    func_80190B38(DmaMgr_DmaCallback0);
+    Audio_Init();
+    AudioLoad_SetDmaHandler(DmaMgr_DmaHandler);
     func_801A4D00();
     osSendMesg(&audioMgr->lockMsgQ, NULL, OS_MESG_BLOCK);
     IrqMgr_AddClient(audioMgr->irqMgr, &irqClient, &audioMgr->interruptMsgQ);

@@ -1,4 +1,7 @@
 #include "global.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
+
+LightsBuffer sLightsBuffer;
 
 void Lights_PointSetInfo(LightInfo* info, s16 x, s16 y, s16 z, u8 r, u8 g, u8 b, s16 radius, s32 type) {
     info->type = type;
@@ -121,17 +124,18 @@ void Lights_BindPointWithReference(Lights* lights, LightParams* params, Vec3f* p
     }
 }
 
-void Lights_BindPoint(Lights* lights, LightParams* params, GlobalContext* globalCtx) {
+void Lights_BindPoint(Lights* lights, LightParams* params, PlayState* play) {
     Light* light;
     f32 radiusF = params->point.radius;
     Vec3f posF;
     Vec3f adjustedPos;
     u32 pad;
+
     if (radiusF > 0) {
         posF.x = params->point.x;
         posF.y = params->point.y;
         posF.z = params->point.z;
-        SkinMatrix_Vec3fMtxFMultXYZ(&globalCtx->projectionMatrix, &posF, &adjustedPos);
+        SkinMatrix_Vec3fMtxFMultXYZ(&play->viewProjectionMtxF, &posF, &adjustedPos);
         if ((adjustedPos.z > -radiusF) && (600 + radiusF > adjustedPos.z) && (400 > fabsf(adjustedPos.x) - radiusF) &&
             (400 > fabsf(adjustedPos.y) - radiusF)) {
             light = Lights_FindSlot(lights);
@@ -185,7 +189,7 @@ void Lights_BindDirectional(Lights* lights, LightParams* params, void* unused) {
  * Note: Lights in a given list can only be binded to however many free slots are
  * available in the Lights group. This is at most 7 slots for a new group, but could be less.
  */
-void Lights_BindAll(Lights* lights, LightNode* listHead, Vec3f* refPos, GlobalContext* globalCtx) {
+void Lights_BindAll(Lights* lights, LightNode* listHead, Vec3f* refPos, PlayState* play) {
     static LightsPosBindFunc posBindFuncs[] = {
         Lights_BindPoint,
         (LightsPosBindFunc)Lights_BindDirectional,
@@ -200,7 +204,7 @@ void Lights_BindAll(Lights* lights, LightNode* listHead, Vec3f* refPos, GlobalCo
     if (listHead != NULL) {
         if ((refPos == NULL) && (lights->enablePosLights == 1)) {
             do {
-                posBindFuncs[listHead->info->type](lights, &listHead->info->params, globalCtx);
+                posBindFuncs[listHead->info->type](lights, &listHead->info->params, play);
                 listHead = listHead->next;
             } while (listHead != NULL);
         } else {
@@ -212,7 +216,7 @@ void Lights_BindAll(Lights* lights, LightNode* listHead, Vec3f* refPos, GlobalCo
     }
 }
 
-LightNode* Lights_FindBufSlot() {
+LightNode* Lights_FindBufSlot(void) {
     LightNode* ret;
 
     if (sLightsBuffer.numOccupied >= LIGHTS_BUFFER_SIZE) {
@@ -244,8 +248,8 @@ void Lights_FreeNode(LightNode* light) {
     }
 }
 
-void LightContext_Init(GlobalContext* globalCtx, LightContext* lightCtx) {
-    LightContext_InitList(globalCtx, lightCtx);
+void LightContext_Init(PlayState* play, LightContext* lightCtx) {
+    LightContext_InitList(play, lightCtx);
     LightContext_SetAmbientColor(lightCtx, 80, 80, 80);
     func_80102544(lightCtx, 0, 0, 0, 0x3E4, 0x3200);
     bzero(&sLightsBuffer, sizeof(LightsBuffer));
@@ -272,13 +276,13 @@ Lights* LightContext_NewLights(LightContext* lightCtx, GraphicsContext* gfxCtx) 
     return Lights_New(gfxCtx, lightCtx->ambient.r, lightCtx->ambient.g, lightCtx->ambient.b);
 }
 
-void LightContext_InitList(GlobalContext* globalCtx, LightContext* lightCtx) {
+void LightContext_InitList(PlayState* play, LightContext* lightCtx) {
     lightCtx->listHead = NULL;
 }
 
-void LightContext_DestroyList(GlobalContext* globalCtx, LightContext* lightCtx) {
+void LightContext_DestroyList(PlayState* play, LightContext* lightCtx) {
     while (lightCtx->listHead != NULL) {
-        LightContext_RemoveLight(globalCtx, lightCtx, lightCtx->listHead);
+        LightContext_RemoveLight(play, lightCtx, lightCtx->listHead);
         lightCtx->listHead = lightCtx->listHead->next;
     }
 }
@@ -289,7 +293,7 @@ void LightContext_DestroyList(GlobalContext* globalCtx, LightContext* lightCtx) 
  * Note: Due to the limited number of slots in a Lights group, inserting too many lights in the
  * list may result in older entries not being bound to a Light when calling Lights_BindAll
  */
-LightNode* LightContext_InsertLight(GlobalContext* globalCtx, LightContext* lightCtx, LightInfo* info) {
+LightNode* LightContext_InsertLight(PlayState* play, LightContext* lightCtx, LightInfo* info) {
     LightNode* light;
 
     light = Lights_FindBufSlot();
@@ -308,7 +312,7 @@ LightNode* LightContext_InsertLight(GlobalContext* globalCtx, LightContext* ligh
     return light;
 }
 
-void LightContext_RemoveLight(GlobalContext* globalCtx, LightContext* lightCtx, LightNode* light) {
+void LightContext_RemoveLight(PlayState* play, LightContext* lightCtx, LightNode* light) {
     if (light != NULL) {
         if (light->prev != NULL) {
             light->prev->next = light->next;
@@ -329,9 +333,7 @@ Lights* Lights_NewAndDraw(GraphicsContext* gfxCtx, u8 ambientR, u8 ambientG, u8 
     Lights* lights;
     s32 i;
 
-    // TODO allocation should be a macro
-    lights = (Lights*)((int)gfxCtx->polyOpa.d - sizeof(Lights));
-    gfxCtx->polyOpa.d = (void*)lights;
+    lights = GRAPH_ALLOC(gfxCtx, sizeof(Lights));
 
     lights->l.a.l.col[0] = lights->l.a.l.colc[0] = ambientR;
     lights->l.a.l.col[1] = lights->l.a.l.colc[1] = ambientG;
@@ -356,9 +358,7 @@ Lights* Lights_NewAndDraw(GraphicsContext* gfxCtx, u8 ambientR, u8 ambientG, u8 
 Lights* Lights_New(GraphicsContext* gfxCtx, u8 ambientR, u8 ambientG, u8 ambientB) {
     Lights* lights;
 
-    // TODO allocation should be a macro
-    lights = (Lights*)((int)gfxCtx->polyOpa.d - sizeof(Lights));
-    gfxCtx->polyOpa.d = (void*)lights;
+    lights = GRAPH_ALLOC(gfxCtx, sizeof(Lights));
 
     lights->l.a.l.col[0] = ambientR;
     lights->l.a.l.colc[0] = ambientR;
@@ -372,29 +372,29 @@ Lights* Lights_New(GraphicsContext* gfxCtx, u8 ambientR, u8 ambientG, u8 ambient
     return lights;
 }
 
-void Lights_GlowCheck(GlobalContext* globalCtx) {
-    LightNode* light = globalCtx->lightCtx.listHead;
+void Lights_GlowCheck(PlayState* play) {
+    LightNode* light = play->lightCtx.listHead;
 
     while (light != NULL) {
-        LightPoint* params = (LightPoint*)&light->info->params;
+        LightPoint* params = &light->info->params.point;
 
         if (light->info->type == LIGHT_POINT_GLOW) {
-            Vec3f pos;
-            Vec3f multDest;
-            f32 wDest;
+            Vec3f worldPos;
+            Vec3f projectedPos;
+            f32 invW;
 
-            pos.x = params->x;
-            pos.y = params->y;
-            pos.z = params->z;
-            func_800B4EDC(globalCtx, &pos, &multDest, &wDest);
+            worldPos.x = params->x;
+            worldPos.y = params->y;
+            worldPos.z = params->z;
+            Actor_GetProjectedPos(play, &worldPos, &projectedPos, &invW);
 
             params->drawGlow = 0;
 
-            if ((multDest.z > 1) && (fabsf(multDest.x * wDest) < 1) && (fabsf(multDest.y * wDest) < 1)) {
-                s32 wX = multDest.x * wDest * 160 + 160;
-                s32 wY = multDest.y * wDest * -120 + 120;
-                s32 wZ = (s32)((multDest.z * wDest) * 16352) + 16352;
-                s32 zBuf = func_80178A94(wX, wY);
+            if ((projectedPos.z > 1) && (fabsf(projectedPos.x * invW) < 1) && (fabsf(projectedPos.y * invW) < 1)) {
+                s32 screenPosX = PROJECTED_TO_SCREEN_X(projectedPos, invW);
+                s32 screenPosY = PROJECTED_TO_SCREEN_Y(projectedPos, invW);
+                s32 wZ = (s32)((projectedPos.z * invW) * 16352.0f) + 16352;
+                s32 zBuf = func_80178A94(screenPosX, screenPosY);
 
                 if (wZ < zBuf) {
                     params->drawGlow = 1;
@@ -406,39 +406,37 @@ void Lights_GlowCheck(GlobalContext* globalCtx) {
     }
 }
 
-void Lights_DrawGlow(GlobalContext* globalCtx) {
+void Lights_DrawGlow(PlayState* play) {
     Gfx* dl;
     LightPoint* params;
-    LightNode* light = globalCtx->lightCtx.listHead;
+    LightNode* light = play->lightCtx.listHead;
 
     if (light != NULL) {
-        OPEN_DISPS(globalCtx->state.gfxCtx);
+        OPEN_DISPS(play->state.gfxCtx);
 
         dl = func_8012C7FC(POLY_XLU_DISP);
 
-        gSPSetOtherMode(dl++, G_SETOTHERMODE_H, 4, 4,
-                        0x00000080); //! This doesn't resolve to any of the macros in gdi.h
+        gDPSetDither(dl++, G_CD_NOISE);
 
         gDPSetCombineLERP(dl++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE,
                           0);
 
-        gSPDisplayList(dl++, D_04029CB0);
+        gSPDisplayList(dl++, gameplay_keep_DL_029CB0);
 
         do {
             if (light->info->type == LIGHT_POINT_GLOW) {
-                params = (LightPoint*)&light->info->params;
+                params = &light->info->params.point;
                 if (params->drawGlow) {
                     f32 scale = SQ((f32)params->radius) * 2e-6f;
 
                     gDPSetPrimColor(dl++, 0, 0, params->color[0], params->color[1], params->color[2], 50);
 
-                    SysMatrix_InsertTranslation(params->x, params->y, params->z, 0);
+                    Matrix_Translate(params->x, params->y, params->z, MTXMODE_NEW);
                     Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
 
-                    gSPMatrix(dl++, Matrix_NewMtx(globalCtx->state.gfxCtx),
-                              G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                    gSPMatrix(dl++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-                    gSPDisplayList(dl++, D_04029CF0);
+                    gSPDisplayList(dl++, gameplay_keep_DL_029CF0);
                 }
             }
 
@@ -447,6 +445,6 @@ void Lights_DrawGlow(GlobalContext* globalCtx) {
 
         POLY_XLU_DISP = dl;
 
-        CLOSE_DISPS(globalCtx->state.gfxCtx);
+        CLOSE_DISPS(play->state.gfxCtx);
     }
 }

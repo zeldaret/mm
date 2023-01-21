@@ -1,27 +1,33 @@
+/*
+ * File: z_en_ge2.c
+ * Overlay: ovl_En_Ge2
+ * Description: Purple-clad Gerudo Pirate
+ */
+
 #include "z_en_ge2.h"
 
-#define FLAGS 0x80000009
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_80000000)
 
 #define THIS ((EnGe2*)thisx)
 
-void EnGe2_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnGe2_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnGe2_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnGe2_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnGe2_Init(Actor* thisx, PlayState* play);
+void EnGe2_Destroy(Actor* thisx, PlayState* play);
+void EnGe2_Update(Actor* thisx, PlayState* play);
+void EnGe2_Draw(Actor* thisx, PlayState* play);
 
-void func_80B8BCEC(EnGe2* this, GlobalContext* globalCtx);
-void func_80B8BD38(EnGe2* this, GlobalContext* globalCtx);
-void func_80B8BE08(EnGe2* this, GlobalContext* globalCtx);
-void func_80B8BF04(EnGe2* this, GlobalContext* globalCtx);
-void func_80B8C048(EnGe2* this, GlobalContext* globalCtx);
-void func_80B8C0B0(EnGe2* this, GlobalContext* globalCtx);
-void func_80B8C45C(EnGe2* this, GlobalContext* globalCtx);
-void func_80B8C59C(EnGe2* this, GlobalContext* globalCtx);
-void func_80B8C644(EnGe2* this, GlobalContext* globalCtx);
-void func_80B8C9B8(EnGe2* this, GlobalContext* globalCtx);
+void func_80B8BCEC(EnGe2* this, PlayState* play);
+void func_80B8BD38(EnGe2* this, PlayState* play);
+void func_80B8BE08(EnGe2* this, PlayState* play);
+void func_80B8BF04(EnGe2* this, PlayState* play);
+void func_80B8C048(EnGe2* this, PlayState* play);
+void func_80B8C0B0(EnGe2* this, PlayState* play);
+void func_80B8C45C(EnGe2* this, PlayState* play);
+void func_80B8C59C(EnGe2* this, PlayState* play);
+void func_80B8C644(EnGe2* this, PlayState* play);
+void func_80B8C9B8(EnGe2* this, PlayState* play);
 
 #if 0
-const ActorInit En_Ge2_InitVars = {
+ActorInit En_Ge2_InitVars = {
     ACTOR_EN_GE2,
     ACTORCAT_NPC,
     FLAGS,

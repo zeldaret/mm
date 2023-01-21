@@ -3,6 +3,11 @@
 
 #include "global.h"
 
+typedef enum EffectSsEnIceType {
+    /* 0 */ ENICE_TYPE_FLYING,
+    /* 1 */ ENICE_TYPE_NORMAL
+} EffectSsEnIceType;
+
 typedef struct {
     /* 0x00 */ Actor* actor;
     /* 0x04 */ Vec3f pos;

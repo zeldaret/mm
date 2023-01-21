@@ -1,16 +1,27 @@
-#include "z_en_ms.h"
+/*
+ * File: z_en_ms.c
+ * Overlay: ovl_En_Ms
+ * Description: Bean Seller
+ */
 
-#define FLAGS 0x00000009
+#include "z_en_ms.h"
+#include "objects/object_ms/object_ms.h"
+
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
 
 #define THIS ((EnMs*)thisx)
 
-void EnMs_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnMs_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnMs_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnMs_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnMs_Init(Actor* thisx, PlayState* play);
+void EnMs_Destroy(Actor* thisx, PlayState* play);
+void EnMs_Update(Actor* thisx, PlayState* play);
+void EnMs_Draw(Actor* thisx, PlayState* play);
 
-#if 0
-const ActorInit En_Ms_InitVars = {
+void EnMs_Wait(EnMs* this, PlayState* play);
+void EnMs_Talk(EnMs* this, PlayState* play);
+void EnMs_Sell(EnMs* this, PlayState* play);
+void EnMs_TalkAfterPurchase(EnMs* this, PlayState* play);
+
+ActorInit En_Ms_InitVars = {
     ACTOR_EN_MS,
     ACTORCAT_NPC,
     FLAGS,
@@ -22,38 +33,155 @@ const ActorInit En_Ms_InitVars = {
     (ActorFunc)EnMs_Draw,
 };
 
-// static ColliderCylinderInitType1 sCylinderInit = {
-static ColliderCylinderInitType1 D_80952BA0 = {
-    { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, COLSHAPE_CYLINDER, },
-    { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
+static ColliderCylinderInitType1 sCylinderInit = {
+    {
+        COLTYPE_NONE,
+        AT_NONE,
+        AC_ON | AC_TYPE_PLAYER,
+        OC1_ON | OC1_TYPE_ALL,
+        COLSHAPE_CYLINDER,
+    },
+    {
+        ELEMTYPE_UNK0,
+        { 0x00000000, 0x00, 0x00 },
+        { 0xF7CFFFFF, 0x00, 0x00 },
+        TOUCH_NONE | TOUCH_SFX_NORMAL,
+        BUMP_ON,
+        OCELEM_ON,
+    },
     { 22, 37, 0, { 0, 0, 0 } },
 };
 
-// static InitChainEntry sInitChain[] = {
-static InitChainEntry D_80952BCC[] = {
+static InitChainEntry sInitChain[] = {
     ICHAIN_U8(targetMode, 2, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 500, ICHAIN_STOP),
 };
 
-#endif
+void EnMs_Init(Actor* thisx, PlayState* play) {
+    EnMs* this = THIS;
 
-extern ColliderCylinderInit D_80952BA0;
-extern InitChainEntry D_80952BCC[];
+    Actor_ProcessInitChain(thisx, sInitChain);
+    SkelAnime_InitFlex(play, &this->skelAnime, &object_ms_Skel_003DC0, &object_ms_Anim_0005EC, this->jointTable,
+                       this->morphTable, 9);
+    Collider_InitCylinder(play, &this->collider);
+    Collider_SetCylinderType1(play, &this->collider, &this->actor, &sCylinderInit);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 35.0f);
+    Actor_SetScale(&this->actor, 0.015f);
+    this->actor.colChkInfo.mass = MASS_IMMOVABLE; // Eating Magic Beans all day will do that to you
+    this->actionFunc = EnMs_Wait;
+    this->actor.speedXZ = 0.0f;
+    this->actor.velocity.y = 0.0f;
+    this->actor.gravity = -1.0f;
+}
 
-extern UNK_TYPE D_060005EC;
+void EnMs_Destroy(Actor* thisx, PlayState* play) {
+    EnMs* this = THIS;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ms/EnMs_Init.s")
+    Collider_DestroyCylinder(play, &this->collider);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ms/EnMs_Destroy.s")
+void EnMs_Wait(EnMs* this, PlayState* play) {
+    s16 yawDiff = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ms/func_80952734.s")
+    if (gSaveContext.save.inventory.items[SLOT_MAGIC_BEANS] == ITEM_NONE) {
+        this->actor.textId = 0x92E; // "[...] You're the first customer [...]"
+    } else {
+        this->actor.textId = 0x932; // "[...] So you liked my Magic Beans [...]"
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ms/func_809527F8.s")
+    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+        this->actionFunc = EnMs_Talk;
+    } else if ((this->actor.xzDistToPlayer < 90.0f) && (ABS_ALT(yawDiff) < 0x2000)) {
+        func_800B8614(&this->actor, play, 90.0f);
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ms/func_809529AC.s")
+void EnMs_Talk(EnMs* this, PlayState* play) {
+    switch (Message_GetState(&play->msgCtx)) {
+        case TEXT_STATE_DONE:
+            if (Message_ShouldAdvance(play)) {
+                this->actionFunc = EnMs_Wait;
+            }
+            break;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ms/func_80952A1C.s")
+        case TEXT_STATE_5:
+            if (Message_ShouldAdvance(play)) {
+                func_801477B4(play);
+                Actor_PickUp(&this->actor, play, GI_MAGIC_BEANS, this->actor.xzDistToPlayer,
+                             this->actor.playerHeightRel);
+                this->actionFunc = EnMs_Sell;
+            }
+            break;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ms/EnMs_Update.s")
+        case TEXT_STATE_CHOICE:
+            if (Message_ShouldAdvance(play)) {
+                switch (play->msgCtx.choiceIndex) {
+                    case 0: // yes
+                        func_801477B4(play);
+                        if (gSaveContext.save.playerData.rupees < 10) {
+                            play_sound(NA_SE_SY_ERROR);
+                            func_80151938(play, 0x935); // "[...] You don't have enough Rupees."
+                        } else if (AMMO(ITEM_MAGIC_BEANS) >= 20) {
+                            play_sound(NA_SE_SY_ERROR);
+                            func_80151938(play, 0x937); // "[...] You can't carry anymore."
+                        } else {
+                            func_8019F208();
+                            Actor_PickUp(&this->actor, play, GI_MAGIC_BEANS, 90.0f, 10.0f);
+                            Rupees_ChangeBy(-10);
+                            this->actionFunc = EnMs_Sell;
+                        }
+                        break;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ms/EnMs_Draw.s")
+                    case 1: // no
+                    default:
+                        func_8019F230();
+                        func_80151938(play, 0x934); // "[...] Well, if your mood changes [...]"
+                        break;
+                }
+            }
+            break;
+
+        default:
+            break;
+    }
+}
+
+void EnMs_Sell(EnMs* this, PlayState* play) {
+    if (Actor_HasParent(&this->actor, play)) {
+        this->actor.textId = 0;
+        func_800B8500(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel, PLAYER_AP_NONE);
+        this->actionFunc = EnMs_TalkAfterPurchase;
+    } else {
+        Actor_PickUp(&this->actor, play, GI_MAGIC_BEANS, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
+    }
+}
+
+void EnMs_TalkAfterPurchase(EnMs* this, PlayState* play) {
+    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+        func_80151938(play, 0x936); // "You can plant 'em whenever you want [...]"
+        this->actionFunc = EnMs_Talk;
+    } else {
+        func_800B8500(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel, PLAYER_AP_MINUS1);
+    }
+}
+
+void EnMs_Update(Actor* thisx, PlayState* play) {
+    s32 pad;
+    EnMs* this = THIS;
+
+    Actor_SetFocus(&this->actor, 20.0f);
+    this->actor.targetArrowOffset = 500.0f;
+    Actor_SetScale(&this->actor, 0.015f);
+    SkelAnime_Update(&this->skelAnime);
+    this->actionFunc(this, play);
+    Collider_UpdateCylinder(&this->actor, &this->collider);
+    CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
+}
+
+void EnMs_Draw(Actor* thisx, PlayState* play) {
+    EnMs* this = THIS;
+
+    func_8012C28C(play->state.gfxCtx);
+    SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, NULL,
+                          NULL, &this->actor);
+}

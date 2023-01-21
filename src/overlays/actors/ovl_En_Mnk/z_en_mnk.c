@@ -1,16 +1,22 @@
+/*
+ * File: z_en_mnk.c
+ * Overlay: ovl_En_Mnk
+ * Description: Monkey
+ */
+
 #include "z_en_mnk.h"
 
-#define FLAGS 0x00000019
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
 
 #define THIS ((EnMnk*)thisx)
 
-void EnMnk_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnMnk_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnMnk_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnMnk_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnMnk_Init(Actor* thisx, PlayState* play);
+void EnMnk_Destroy(Actor* thisx, PlayState* play);
+void EnMnk_Update(Actor* thisx, PlayState* play);
+void EnMnk_Draw(Actor* thisx, PlayState* play);
 
 #if 0
-const ActorInit En_Mnk_InitVars = {
+ActorInit En_Mnk_InitVars = {
     ACTOR_EN_MNK,
     ACTORCAT_NPC,
     FLAGS,
@@ -67,7 +73,7 @@ extern UNK_TYPE D_060105DC;
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mnk/func_80AB5A64.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mnk/func_80AB5B38.s")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mnk/EnMnk_ValidatePictograph.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mnk/func_80AB5B84.s")
 

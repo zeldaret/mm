@@ -5,7 +5,7 @@
 
 struct EnDaiku2;
 
-typedef void (*EnDaiku2ActionFunc)(struct EnDaiku2*, GlobalContext*);
+typedef void (*EnDaiku2ActionFunc)(struct EnDaiku2*, PlayState*);
 
 #define ENDAIKU2_GET_7F(thisx) ((thisx)->params & 0x7F);
 #define ENDAIKU2_GET_1F80(thisx) (((thisx)->params >> 7) & 0x3F);
@@ -17,7 +17,7 @@ enum {
     /* 127 */ ENDAIKU2_GET_7F_127 = 127,
 };
 
-typedef struct EnDaiku2Particle {
+typedef struct EnDaiku2Effect {
     /* 0x00 */ u8 isEnabled;
     /* 0x04 */ Vec3f unk_04;
     /* 0x10 */ Vec3f unk_10;
@@ -25,7 +25,9 @@ typedef struct EnDaiku2Particle {
     /* 0x28 */ Vec3s unk_28;
     /* 0x30 */ f32 unk_30;
     /* 0x34 */ s16 unk_34;
-} EnDaiku2Particle; // size = 0x38
+} EnDaiku2Effect; // size = 0x38
+
+#define EN_DAIKU2_EFFECT_COUNT 50
 
 typedef struct EnDaiku2 {
     /* 0x000 */ Actor actor;
@@ -47,10 +49,8 @@ typedef struct EnDaiku2 {
     /* 0x284 */ f32 unk_284;
     /* 0x288 */ s16 unk_288;
     /* 0x28A */ s16 unk_28A;
-    /* 0x28C */ EnDaiku2Particle particles[50];
+    /* 0x28C */ EnDaiku2Effect effects[EN_DAIKU2_EFFECT_COUNT];
     /* 0xD7C */ ColliderCylinder collider;
 } EnDaiku2; // size = 0xDC8
-
-extern const ActorInit En_Daiku2_InitVars;
 
 #endif // Z_EN_DAIKU2_H

@@ -23,7 +23,7 @@ typedef struct {
     /* 0x12 */ s16 fogColor[3];
     /* 0x18 */ s16 fogNear;
     /* 0x1A */ s16 fogFar;
-} LightSettings2;  // size = 0x1C
+} EnvLightSettings; // size = 0x1C
 
 typedef struct {
     /* 0x0 */ s16 x;
@@ -57,18 +57,12 @@ typedef struct Lights {
     /* 0x08 */ Lightsn l;
 } Lights; // size = 0x80
 
-typedef struct LightInfoPositional {
-    /* 0x0 */ u8 type;
-    /* 0x2 */ LightPoint params;
-} LightInfoPositional; // size = 0xE
-
 typedef struct LightNode {
     /* 0x0 */ LightInfo* info;
     /* 0x4 */ struct LightNode* prev;
     /* 0x8 */ struct LightNode* next;
 } LightNode; // size = 0xC
 
-// TODO move LightsBuffer to .c file once .bss has been split
 #define LIGHTS_BUFFER_SIZE 32
 
 typedef struct LightsBuffer {
@@ -88,14 +82,12 @@ typedef struct LightContext {
 } LightContext; // size = 0x10
 
 typedef enum LightType {
-    /* 0x00 */ LIGHT_POINT_NOGLOW,
-    /* 0x01 */ LIGHT_DIRECTIONAL,
-    /* 0x02 */ LIGHT_POINT_GLOW
+    /* 0 */ LIGHT_POINT_NOGLOW,
+    /* 1 */ LIGHT_DIRECTIONAL,
+    /* 2 */ LIGHT_POINT_GLOW
 } LightType;
 
-typedef struct GlobalContext GlobalContext;
-
 typedef void (*LightsBindFunc)(Lights* lights, LightParams* params, Vec3f* vec);
-typedef void (*LightsPosBindFunc)(Lights* lights, LightParams* params, GlobalContext* globalCtx);
+typedef void (*LightsPosBindFunc)(Lights* lights, LightParams* params, struct PlayState* play);
 
 #endif

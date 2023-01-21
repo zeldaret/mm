@@ -1,0 +1,6 @@
+﻿<Root>
+    <File Name="object_big_fwall" Segment="6">
+        <Texture Name="object_big_fwall_Tex_000000" OutName="tex_000000" Format="i8" Width="32" Height="64" Offset="0x0" />
+        <DList Name="object_big_fwall_DL_0009A0" Offset="0x9A0" />
+    </File>
+</Root>

@@ -1,16 +1,22 @@
-#include "z_obj_jg_gakki.h"
+/*
+ * File: z_obj_jg_gakki.c
+ * Overlay: ovl_Obj_Jg_Gakki
+ * Description: Goron Elder's Drum
+ */
 
-#define FLAGS 0x00000020
+#include "z_obj_jg_gakki.h"
+#include "objects/object_jg/object_jg.h"
+
+#define FLAGS (ACTOR_FLAG_20)
 
 #define THIS ((ObjJgGakki*)thisx)
 
-void ObjJgGakki_Init(Actor* thisx, GlobalContext* globalCtx);
-void ObjJgGakki_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void ObjJgGakki_Update(Actor* thisx, GlobalContext* globalCtx);
-void ObjJgGakki_Draw(Actor* thisx, GlobalContext* globalCtx);
+void ObjJgGakki_Init(Actor* thisx, PlayState* play2);
+void ObjJgGakki_Destroy(Actor* thisx, PlayState* play);
+void ObjJgGakki_Update(Actor* thisx, PlayState* play);
+void ObjJgGakki_Draw(Actor* thisx, PlayState* play);
 
-#if 0
-const ActorInit Obj_Jg_Gakki_InitVars = {
+ActorInit Obj_Jg_Gakki_InitVars = {
     ACTOR_OBJ_JG_GAKKI,
     ACTORCAT_PROP,
     FLAGS,
@@ -22,14 +28,39 @@ const ActorInit Obj_Jg_Gakki_InitVars = {
     (ActorFunc)ObjJgGakki_Draw,
 };
 
-#endif
+void ObjJgGakki_Init(Actor* thisx, PlayState* play2) {
+    PlayState* play = play2;
+    ObjJgGakki* this = THIS;
+    f32 frameCount = Animation_GetLastFrame(&gGoronElderDrumTakeOutAnim);
 
-extern UNK_TYPE D_0601B1E8;
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
+    SkelAnime_Init(play, &this->skelAnime, &gGoronElderDrumSkel, NULL, NULL, NULL, 0);
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Jg_Gakki/ObjJgGakki_Init.s")
+    if (((play->sceneId == SCENE_SPOT00) && (gSaveContext.sceneLayer == 7)) && (play->csCtx.currentCsIndex == 0)) {
+        Animation_Change(&this->skelAnime, &gGoronElderDrumTakeOutAnim, 1.0f, frameCount, frameCount, ANIMMODE_ONCE,
+                         0.0f);
+    } else if ((play->sceneId == SCENE_17SETUGEN) || (play->sceneId == SCENE_10YUKIYAMANOMURA)) {
+        Animation_Change(&this->skelAnime, &gGoronElderDrumTakeOutAnim, 1.0f, 0.0f, frameCount, ANIMMODE_ONCE, 0.0f);
+    } else {
+        Actor_Kill(&this->actor);
+    }
+    Actor_SetScale(&this->actor, 0.01f);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Jg_Gakki/ObjJgGakki_Destroy.s")
+void ObjJgGakki_Destroy(Actor* thisx, PlayState* play) {
+    ObjJgGakki* this = THIS;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Jg_Gakki/ObjJgGakki_Update.s")
+    Collider_DestroyCylinder(play, &this->collider);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Jg_Gakki/ObjJgGakki_Draw.s")
+void ObjJgGakki_Update(Actor* thisx, PlayState* play) {
+    ObjJgGakki* this = THIS;
+
+    SkelAnime_Update(&this->skelAnime);
+}
+
+void ObjJgGakki_Draw(Actor* thisx, PlayState* play) {
+    ObjJgGakki* this = THIS;
+
+    SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, NULL, NULL, &this->actor);
+}

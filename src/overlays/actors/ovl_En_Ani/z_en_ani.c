@@ -1,16 +1,46 @@
-#include "z_en_ani.h"
+/*
+ * File: z_en_ani.c
+ * Overlay: ovl_En_Ani
+ * Description: Man in Tree in South Termina Field
+ *    version in shop at night is EnOssan actor using object_ani
+ */
 
-#define FLAGS 0x00000009
+#include "z_en_ani.h"
+#include "z64quake.h"
+
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
 
 #define THIS ((EnAni*)thisx)
 
-void EnAni_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnAni_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnAni_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnAni_Draw(Actor* thisx, GlobalContext* globalCtx);
+// clang-format off
+#define ANI_STATE_STANDING  (0)
+#define ANI_STATE_UNK       (1 << 0)
+#define ANI_STATE_WRITHING (1 << 1)
+#define ANI_STATE_CLIMBING  (1 << 2)
+#define ANI_STATE_FALLING   (1 << 3)
+// clang-format on
 
-#if 0
-const ActorInit En_Ani_InitVars = {
+void EnAni_Init(Actor* thisx, PlayState* play);
+void EnAni_Destroy(Actor* thisx, PlayState* play);
+void EnAni_Update(Actor* thisx, PlayState* play);
+void EnAni_Draw(Actor* thisx, PlayState* play);
+
+void EnAni_DefaultBlink(EnAni* this);
+void EnAni_WaitForEyeClose(EnAni* this);
+void EnAni_WaitForEyeOpen(EnAni* this);
+
+void EnAni_SetText(EnAni* this, PlayState* play, u16 textId);
+
+void EnAni_HangInTree(EnAni* this, PlayState* play);
+void EnAni_LoseBalance(EnAni* this, PlayState* play);
+void EnAni_FallToGround(EnAni* this, PlayState* play);
+void EnAni_LandOnFoot(EnAni* this, PlayState* play);
+void EnAni_FallOverInPain(EnAni* this, PlayState* play);
+void EnAni_IdleInPain(EnAni* this, PlayState* play);
+void EnAni_Talk(EnAni* this, PlayState* play);
+void EnAni_IdleStanding(EnAni* this, PlayState* play);
+
+ActorInit En_Ani_InitVars = {
     ACTOR_EN_ANI,
     ACTORCAT_NPC,
     FLAGS,
@@ -22,62 +52,306 @@ const ActorInit En_Ani_InitVars = {
     (ActorFunc)EnAni_Draw,
 };
 
-// static ColliderCylinderInit sCylinderInit = {
-static ColliderCylinderInit D_80968670 = {
-    { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_ENEMY, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
-    { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
+// two different colliders, but only one init for both
+static ColliderCylinderInit sCylinderInit = {
+    {
+        COLTYPE_NONE,
+        AT_NONE,
+        AC_ON | AC_TYPE_ENEMY,
+        OC1_ON | OC1_TYPE_ALL,
+        OC2_TYPE_1,
+        COLSHAPE_CYLINDER,
+    },
+    {
+        ELEMTYPE_UNK0,
+        { 0x00000000, 0x00, 0x00 },
+        { 0xF7CFFFFF, 0x00, 0x00 },
+        TOUCH_NONE | TOUCH_SFX_NORMAL,
+        BUMP_ON,
+        OCELEM_ON,
+    },
     { 30, 40, 0, { 0, 0, 0 } },
 };
 
-// static InitChainEntry sInitChain[] = {
-static InitChainEntry D_8096869C[] = {
+static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 10, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneForward, 850, ICHAIN_STOP),
 };
 
-#endif
+void EnAni_DefaultBlink(EnAni* this) {
+    if (DECR(this->blinkTimer) == 0) {
+        this->blinkTimer = Rand_S16Offset(60, 60);
+    }
 
-extern ColliderCylinderInit D_80968670;
-extern InitChainEntry D_8096869C[];
+    this->eyeState = this->blinkTimer;
+    if (this->eyeState >= 3) {
+        this->eyeState = 0;
+    }
+}
 
-extern UNK_TYPE D_06000C14;
-extern UNK_TYPE D_060011CC;
-extern UNK_TYPE D_060027A0;
-extern UNK_TYPE D_06009220;
-extern UNK_TYPE D_06009D34;
+void EnAni_WaitForEyeClose(EnAni* this) {
+    if (this->blinkTimer > 0) {
+        this->blinkTimer--;
+    } else if (this->eyeState < 2) {
+        this->eyeState++;
+    } else {
+        this->blinkFunc = EnAni_WaitForEyeOpen;
+        this->blinkTimer = Rand_S16Offset(20, 20);
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ani/func_809679D0.s")
+void EnAni_WaitForEyeOpen(EnAni* this) {
+    if (this->blinkTimer > 0) {
+        this->blinkTimer--;
+    } else if (this->eyeState > 0) {
+        this->eyeState--;
+    } else {
+        this->blinkFunc = EnAni_WaitForEyeClose;
+        this->blinkTimer = Rand_S16Offset(10, 10);
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ani/func_80967A48.s")
+void EnAni_Init(Actor* thisx, PlayState* play) {
+    s32 pad;
+    EnAni* this = THIS;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ani/func_80967AB4.s")
+    Actor_ProcessInitChain(&this->actor, sInitChain);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gAniSkeleton, &gAniStandingNormalAnim, this->jointTable,
+                       this->morphTable, ANI_LIMB_MAX);
+    Animation_PlayOnce(&this->skelAnime, &gAniStandingNormalAnim);
+    Collider_InitAndSetCylinder(play, &this->collider1, &this->actor, &sCylinderInit);
+    Collider_InitAndSetCylinder(play, &this->collider2, &this->actor, &sCylinderInit);
+    Collider_UpdateCylinder(&this->actor, &this->collider2);
+    this->actor.colChkInfo.mass = MASS_IMMOVABLE;
+    this->stateFlags = ANI_STATE_STANDING;
+    this->unk2EE = 0;
+    this->treeReachTimer = 0;
+    this->blinkFunc = EnAni_DefaultBlink;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ani/EnAni_Init.s")
+    if (ANI_GET_TYPE(thisx) == ANI_TYPE_TREE_HANGING) {
+        Animation_Change(&this->skelAnime, &gAniTreeHangingAnim, 1.0f, 0.0f,
+                         Animation_GetLastFrame(&gAniTreeHangingAnim), ANIMMODE_ONCE, 0.0f);
+        this->actionFunc = EnAni_HangInTree;
+        this->actor.velocity.y = 0.0f;
+        this->actor.terminalVelocity = 0.0f;
+        this->actor.gravity = 0.0f;
+        this->actor.flags |= ACTOR_FLAG_10;
+        this->stateFlags |= ANI_STATE_CLIMBING;
+        gSaveContext.eventInf[1] &= (u8)~0x10;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ani/EnAni_Destroy.s")
+    } else { // ANI_TYPE_STANDING
+        // ( unused code )
+        // for some reason standing he has a large collider
+        // possibly he was meant to be a blocking npc like bomber
+        this->collider2.dim.radius = 60;
+        this->actionFunc = EnAni_IdleStanding;
+        this->actor.velocity.y = -25.0f;
+        this->actor.terminalVelocity = -25.0f;
+        this->actor.gravity = -5.0f;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ani/func_80967D20.s")
+void EnAni_Destroy(Actor* thisx, PlayState* play) {
+    EnAni* this = THIS;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ani/func_80967DA0.s")
+    Collider_DestroyCylinder(play, &this->collider1);
+    Collider_DestroyCylinder(play, &this->collider2);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ani/func_80967DCC.s")
+void EnAni_SetText(EnAni* this, PlayState* play, u16 textId) {
+    s16 diffAngle = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ani/func_80967E34.s")
+    this->actor.textId = textId;
+    if ((this->stateFlags & ANI_STATE_WRITHING) || ABS_ALT(diffAngle) <= 0x4300) {
+        if (this->actor.xzDistToPlayer < 100.0f) {
+            func_800B8614(&this->actor, play, 120.0f);
+        }
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ani/func_80967E90.s")
+void EnAni_IdleStanding(EnAni* this, PlayState* play) {
+    SkelAnime_Update(&this->skelAnime);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ani/func_80967F20.s")
+void EnAni_Talk(EnAni* this, PlayState* play) {
+    SkelAnime_Update(&this->skelAnime);
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_CLOSING) && play->msgCtx.currentTextId == 0x6DE) {
+        this->actionFunc = EnAni_IdleInPain;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ani/func_80967FA4.s")
+void EnAni_IdleInPain(EnAni* this, PlayState* play) {
+    SkelAnime_Update(&this->skelAnime);
+    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+        this->actionFunc = EnAni_Talk;
+    } else {
+        // telling you not to take his rupees you knocked from the tree
+        EnAni_SetText(this, play, 0x6DE);
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ani/func_809680B0.s")
+void EnAni_FallOverInPain(EnAni* this, PlayState* play) {
+    if (SkelAnime_Update(&this->skelAnime)) {
+        this->blinkFunc = EnAni_WaitForEyeOpen;
+        this->actionFunc = EnAni_IdleInPain;
+        Animation_Change(&this->skelAnime, &gAniHoldingFootWrithingInPainAnim, 1.0f, 0.0f,
+                         Animation_GetLastFrame(&gAniHoldingFootWrithingInPainAnim), ANIMMODE_LOOP, 0.0f);
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ani/func_80968164.s")
+void EnAni_LandOnFoot(EnAni* this, PlayState* play) {
+    if (SkelAnime_Update(&this->skelAnime)) {
+        this->actionFunc = EnAni_FallOverInPain;
+        Animation_Change(&this->skelAnime, &gAniFallOverHoldingFootAnim, 1.0f, 0.0f,
+                         Animation_GetLastFrame(&gAniFallOverHoldingFootAnim), ANIMMODE_ONCE, 0.0f);
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ani/EnAni_Update.s")
+void EnAni_FallToGround(EnAni* this, PlayState* play) {
+    s32 pad;
+    s16 quakeIndex;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ani/func_80968504.s")
+    if (this->actor.bgCheckFlags & 1) { // hit the ground
+        this->actor.flags &= ~ACTOR_FLAG_10;
+        this->actionFunc = EnAni_LandOnFoot;
+        this->actor.velocity.x = 0.0f;
+        this->actor.velocity.z = 0.0f;
+        // the animation gets cut short, (first 16 frames only) only the landing part is seen
+        Animation_Change(&this->skelAnime, &gAniLandingThenStandingUpAnim, 1.0f, 0.0f, 16.0f, ANIMMODE_ONCE, 0.0f);
+        this->stateFlags |= ANI_STATE_WRITHING;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ani/func_8096854C.s")
+        quakeIndex = Quake_Add(play->cameraPtrs[CAM_ID_MAIN], QUAKE_TYPE_3);
+        Quake_SetSpeed(quakeIndex, 27000);
+        Quake_SetQuakeValues(quakeIndex, 7, 0, 0, 0);
+        Quake_SetCountdown(quakeIndex, 20);
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ani/EnAni_Draw.s")
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_HAMMER_HIT);
+    }
+
+    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0x2, 0x7D0, 0x100);
+    this->actor.world.rot.y = this->actor.shape.rot.y;
+}
+
+void EnAni_LoseBalance(EnAni* this, PlayState* play) {
+    s32 pad;
+
+    if (SkelAnime_Update(&this->skelAnime)) {
+        this->actor.terminalVelocity = -20.0f;
+        this->actor.gravity = -5.0f;
+        this->actor.velocity.y = 0.0f;
+        this->actor.velocity.z = -4.0f;
+        // frame count : 0.0f, only first frame, rest is handled in next action func
+        Animation_Change(&this->skelAnime, &gAniLandingThenStandingUpAnim, 0.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 5.0f);
+        this->actionFunc = EnAni_FallToGround;
+        gSaveContext.eventInf[1] |= 0x10;
+    }
+}
+
+void EnAni_HangInTree(EnAni* this, PlayState* play) {
+    if (SkelAnime_Update(&this->skelAnime)) {
+        if (this->treeReachTimer > 0) {
+            this->treeReachTimer--;
+            if (this->treeReachTimer > 0) {
+                Animation_PlayOnce(&this->skelAnime, &gAniTreeHangingReachAnim);
+            } else {
+                Animation_PlayOnce(&this->skelAnime, &gAniTreeHangingAnim);
+            }
+        } else if (Rand_ZeroFloat(1.0f) < 0.4f) {
+            Animation_PlayOnce(&this->skelAnime, &gAniTreeHangingReachAnim);
+            this->treeReachTimer = 2;
+        } else {
+            Animation_PlayOnce(&this->skelAnime, &gAniTreeHangingAnim);
+        }
+    }
+
+    // his bonk detection is based on his tilt, neat
+    if (this->actor.home.rot.x != 0) {
+        this->stateFlags |= ANI_STATE_FALLING;
+        this->actionFunc = EnAni_LoseBalance;
+        Animation_Change(&this->skelAnime, &gAniTreeHangLosingBalanceAnim, 1.0f, 0.0f,
+                         Animation_GetLastFrame(&gAniTreeHangLosingBalanceAnim), ANIMMODE_ONCE, -5.0f);
+    }
+}
+
+void EnAni_Update(Actor* thisx, PlayState* play) {
+    EnAni* this = THIS;
+    f32 minVelocity;
+
+    Collider_UpdateCylinder(&this->actor, &this->collider1);
+    Collider_UpdateCylinder(&this->actor, &this->collider2);
+    CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider1.base);
+    if (!(this->stateFlags & ANI_STATE_UNK)) {
+        CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider2.base);
+    }
+
+    this->actor.velocity.y += this->actor.gravity;
+    minVelocity = this->actor.terminalVelocity;
+    if (this->actor.velocity.y < minVelocity) {
+        this->actor.velocity.y = minVelocity;
+    }
+
+    Actor_UpdatePos(&this->actor);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+    this->actionFunc(this, play);
+    if (this->actor.xzDistToPlayer < 100.0f && !(this->stateFlags & ANI_STATE_CLIMBING)) {
+        Actor_TrackPlayer(play, &this->actor, &this->headRot, &this->chestRot, this->actor.focus.pos);
+        this->chestRot.x = this->chestRot.y = this->chestRot.z = 0;
+    } else {
+        Math_SmoothStepToS(&this->headRot.x, 0, 0x6, 0x1838, 0x64);
+        Math_SmoothStepToS(&this->headRot.y, 0, 0x6, 0x1838, 0x64);
+        Math_SmoothStepToS(&this->chestRot.x, 0, 0x6, 0x1838, 0x64);
+        Math_SmoothStepToS(&this->chestRot.y, 0, 0x6, 0x1838, 0x64);
+    }
+
+    this->blinkFunc(this);
+    if (this->stateFlags & ANI_STATE_FALLING) {
+        if (this->actor.cutscene == -1) {
+            this->stateFlags &= ~ANI_STATE_FALLING;
+        } else if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
+            ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
+            this->actor.cutscene = ActorCutscene_GetAdditionalCutscene(this->actor.cutscene);
+            Camera_SetToTrackActor(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(this->actor.cutscene)),
+                                   &this->actor);
+        } else {
+            ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+        }
+    }
+}
+
+s32 EnAni_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+    EnAni* this = THIS;
+
+    if (limbIndex == ANI_LIMB_HEAD) {
+        rot->x += this->headRot.y;
+        rot->z += this->headRot.x;
+    }
+
+    return false;
+}
+
+void EnAni_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+    static Vec3f D_809686A4 = { 800.0f, 500.0f, 0.0f };
+
+    if (limbIndex == ANI_LIMB_HEAD) {
+        Matrix_MultVec3f(&D_809686A4, &thisx->focus.pos);
+    }
+}
+
+void EnAni_Draw(Actor* thisx, PlayState* play) {
+    static TexturePtr sEyeTextures[] = { gAniOpenEyeTex, gAniClosingEyeTex, gAniClosedEyeTex };
+    s32 pad;
+    EnAni* this = THIS;
+
+    OPEN_DISPS(play->state.gfxCtx);
+
+    Matrix_Translate(0.0f, 0.0f, -1000.0f, MTXMODE_APPLY);
+    func_8012C5B0(play->state.gfxCtx);
+
+    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyeTextures[this->eyeState]));
+
+    SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+                          EnAni_OverrideLimbDraw, EnAni_PostLimbDraw, &this->actor);
+
+    CLOSE_DISPS(play->state.gfxCtx);
+}

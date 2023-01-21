@@ -2,19 +2,23 @@
 #define Z_EN_OSSAN_H
 
 #include "global.h"
-
 #include "overlays/actors/ovl_En_GirlA/z_en_girla.h"
+#include "objects/object_ani/object_ani.h"
+#include "objects/object_fsn/object_fsn.h"
+
+// Note: adding 1 to FSN_LIMB_MAX due to bug in object_fsn, see bug in object_fsn.xml
+#define ENOSSAN_LIMB_MAX MAX((s32)FSN_LIMB_MAX + 1, (s32)ANI_LIMB_MAX)
 
 struct EnOssan;
 
-typedef void (*EnOssanActionFunc)(struct EnOssan*, GlobalContext*);
+typedef void (*EnOssanActionFunc)(struct EnOssan*, PlayState*);
 typedef void (*EnOssanBlinkFunc)(struct EnOssan*);
 
 typedef struct EnOssan {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
     /* 0x188 */ EnOssanActionFunc actionFunc;
-    /* 0x18C */ EnOssanActionFunc tmpActionFunc; // Used to restore back to correct browsing function
+    /* 0x18C */ EnOssanActionFunc prevActionFunc; // Used to restore back to correct browsing function
     /* 0x190 */ ColliderCylinder collider;
     /* 0x1DC */ s16 delayTimer;
     /* 0x1DE */ s8 objIndex;
@@ -31,7 +35,7 @@ typedef struct EnOssan {
     /* 0x230 */ f32 cursorAnimTween;
     /* 0x234 */ u8 cursorAnimState;
     /* 0x235 */ u8 drawCursor;
-    /* 0x236 */ u8 cursorIdx;
+    /* 0x236 */ u8 cursorIndex;
     /* 0x238 */ StickDirectionPrompt stickLeftPrompt;
     /* 0x270 */ StickDirectionPrompt stickRightPrompt;
     /* 0x2A8 */ f32 arrowAnimTween;
@@ -50,10 +54,10 @@ typedef struct EnOssan {
     /* 0x2CC */ Vec3s unk2CC; // Set but never used
     /* 0x2D2 */ s16 limbRotTableY[19];
     /* 0x2F8 */ s16 limbRotTableZ[19];
-    /* 0x31E */ Vec3s limbDrawTbl[19];
-    /* 0x390 */ Vec3s transitionDrawTbl[19];
-    /* 0x402 */ s16 animationIdx;
-    /* 0x404 */ Vec3s headRotPartTimeWorker;
+    /* 0x31E */ Vec3s jointTable[ENOSSAN_LIMB_MAX];
+    /* 0x390 */ Vec3s morphTable[ENOSSAN_LIMB_MAX];
+    /* 0x402 */ s16 animIndex;
+    /* 0x404 */ Vec3s partTimerHeadRot;
     /* 0x40A */ u16 flags;
 } EnOssan; // size = 0x40C
 
@@ -67,13 +71,5 @@ typedef enum {
     /* 0 */ ENOSSAN_CURIOSITY_SHOP_MAN,
     /* 1 */ ENOSSAN_PART_TIME_WORKER
 } EnOssanWorker;
-
-typedef enum {
-    /* 0 */ ENOSSAN_CUTSCENESTATE_STOPPED,
-    /* 1 */ ENOSSAN_CUTSCENESTATE_WAITING,
-    /* 2 */ ENOSSAN_CUTSCENESTATE_PLAYING
-} EnOssanCutsceneState;
-
-extern const ActorInit En_Ossan_InitVars;
 
 #endif // Z_EN_OSSAN_H

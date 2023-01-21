@@ -5,11 +5,13 @@
 
 struct BgInibsMovebg;
 
-typedef struct BgInibsMovebg {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x24];
-} BgInibsMovebg; // size = 0x168
+#define BG_INIBS_MOVEBG_GET_MODE(thisx) ((u16)((thisx)->params) & 0xF)
 
-extern const ActorInit Bg_Inibs_Movebg_InitVars;
+typedef struct BgInibsMovebg {
+    /* 0x000 */ DynaPolyActor dyna;
+    /* 0x15C */ Gfx* opaDList;
+    /* 0x160 */ Gfx* xluDList;
+    /* 0x164 */ AnimatedMaterial* sandTexAnim;
+} BgInibsMovebg; // size = 0x168
 
 #endif // Z_BG_INIBS_MOVEBG_H

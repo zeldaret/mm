@@ -99,8 +99,8 @@
 
 typedef struct {
     /* 0x00 */ u32 ramarray[15];
-    /* 0x3C */ u32 pifstatus;
-} OSPifRam;
+    /* 0x3C */ u32 status;
+} OSPifRam; // size = 0x40
 
 
 typedef struct {
@@ -114,16 +114,17 @@ typedef struct {
 } __OSContReadFormat;
 
 
+// Original name: __OSContRequesFormat
 typedef struct {
-    /* 0x0 */ u8 dummy;
-    /* 0x1 */ u8 txsize;
-    /* 0x2 */ u8 rxsize;
-    /* 0x3 */ u8 cmd;
-    /* 0x4 */ u8 typeh;
-    /* 0x5 */ u8 typel;
-    /* 0x6 */ u8 status;
-    /* 0x7 */ u8 dummy1;
-} __OSContRequesFormat;
+    /* 0x00 */ u8 align;
+    /* 0x01 */ u8 txsize;
+    /* 0x02 */ u8 rxsize;
+    /* 0x03 */ u8 poll;
+    /* 0x04 */ u8 typeh;
+    /* 0x05 */ u8 typel;
+    /* 0x06 */ u8 status;
+    /* 0x07 */ u8 align1;
+} __OSContRequestHeader; // size = 0x8
 
 typedef struct {
     /* 0x00 */ u8 txsize;
@@ -139,10 +140,24 @@ typedef struct {
     /* 0x01 */ u8 txsize;
     /* 0x02 */ u8 rxsize;
     /* 0x03 */ u8 cmd;
-    /* 0x04 */ u16 address;
+    /* 0x04 */ u8 hi;
+    /* 0x05 */ u8 lo;
     /* 0x06 */ u8 data[32];
     /* 0x26 */ u8 datacrc;
 } __OSContRamReadFormat;
 
+extern OSPifRam __osContPifRam;
+// extern UNK_TYPE1 D_8009CF0C;
+extern u8 __osContLastPoll;
+extern u8 __osMaxControllers;
+// extern OSMesgQueue D_8009CF38;
+// extern OSMesg D_8009CF50;
+
+typedef struct {
+    /* 0x00 */ OSContPad cur;
+    /* 0x06 */ OSContPad prev;
+    /* 0x0C */ OSContPad press; // X/Y store delta from last frame
+    /* 0x12 */ OSContPad rel; // X/Y store adjusted
+} Input; // size = 0x18
 
 #endif

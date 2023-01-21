@@ -1,19 +1,25 @@
+/*
+ * File: z_en_si.c
+ * Overlay: ovl_En_Si
+ * Description: Golden Skulltula Token
+ */
+
 #include "z_en_si.h"
 
-#define FLAGS 0x00000201
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_200)
 
 #define THIS ((EnSi*)thisx)
 
-void EnSi_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnSi_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnSi_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnSi_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnSi_Init(Actor* thisx, PlayState* play);
+void EnSi_Destroy(Actor* thisx, PlayState* play);
+void EnSi_Update(Actor* thisx, PlayState* play);
+void EnSi_Draw(Actor* thisx, PlayState* play);
 
-void func_8098CB70(EnSi* this, GlobalContext* globalCtx);
-void func_8098CBDC(EnSi* this, GlobalContext* globalCtx);
+void func_8098CB70(EnSi* this, PlayState* play);
+void func_8098CBDC(EnSi* this, PlayState* play);
 
 #if 0
-const ActorInit En_Si_InitVars = {
+ActorInit En_Si_InitVars = {
     ACTOR_EN_SI,
     ACTORCAT_ITEMACTION,
     FLAGS,

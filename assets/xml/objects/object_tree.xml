@@ -1,0 +1,9 @@
+﻿<Root>
+    <File Name="object_tree" Segment="6">
+        <DList Name="object_tree_DL_000680" Offset="0x680" />
+        <DList Name="object_tree_DL_0007C8" Offset="0x7C8" />
+        <Texture Name="object_tree_Tex_0008B8" OutName="tex_0008B8" Format="rgba16" Width="32" Height="32" Offset="0x8B8" />
+        <Texture Name="object_tree_Tex_0010B8" OutName="tex_0010B8" Format="rgba16" Width="32" Height="32" Offset="0x10B8" />
+        <Collision Name="object_tree_Colheader_001B2C" Offset="0x1B2C" />
+    </File>
+</Root>

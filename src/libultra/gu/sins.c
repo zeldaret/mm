@@ -1,4 +1,4 @@
-#include "math.h"
+#include "libc/math.h"
 
 static s16 sintable[0x400] = {
     0x0000, 0x0032, 0x0064, 0x0096, 0x00C9, 0x00FB, 0x012D, 0x0160, 0x0192, 0x01C4, 0x01F7, 0x0229, 0x025B, 0x028E,
@@ -77,8 +77,12 @@ static s16 sintable[0x400] = {
     0x7FFE, 0x7FFF,
 };
 
-short sins(unsigned short x) {
-    short val;
+/**
+ * Compute the sine of a hex angle and return a short, using a lookup table for the first quadrant, extrapolating to the
+ * others using the equivalents of sin(pi-x) = sin(x) and sin(pi+x) = -sin(x).
+ */
+s16 sins(u16 x) {
+    s16 val;
 
     x >>= 4;
     if ((x & 0x400) != 0) {

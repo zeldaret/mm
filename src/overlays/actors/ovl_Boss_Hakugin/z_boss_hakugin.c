@@ -1,32 +1,40 @@
-#include "z_boss_hakugin.h"
+/*
+ * File: z_boss_hakugin.c
+ * Overlay: ovl_Boss_Hakugin
+ * Description: Goht
+ */
 
-#define FLAGS 0x00000035
+#include "z_boss_hakugin.h"
+#include "z64quake.h"
+#include "z64rumble.h"
+
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((BossHakugin*)thisx)
 
-void BossHakugin_Init(Actor* thisx, GlobalContext* globalCtx);
-void BossHakugin_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void BossHakugin_Update(Actor* thisx, GlobalContext* globalCtx);
-void BossHakugin_Draw(Actor* thisx, GlobalContext* globalCtx);
+void BossHakugin_Init(Actor* thisx, PlayState* play);
+void BossHakugin_Destroy(Actor* thisx, PlayState* play);
+void BossHakugin_Update(Actor* thisx, PlayState* play);
+void BossHakugin_Draw(Actor* thisx, PlayState* play);
 
-void func_80B08018(BossHakugin* this, GlobalContext* globalCtx);
-void func_80B0813C(BossHakugin* this, GlobalContext* globalCtx);
-void func_80B082AC(BossHakugin* this, GlobalContext* globalCtx);
-void func_80B0863C(BossHakugin* this, GlobalContext* globalCtx);
-void func_80B08960(BossHakugin* this, GlobalContext* globalCtx);
-void func_80B08CB8(BossHakugin* this, GlobalContext* globalCtx);
-void func_80B091D8(BossHakugin* this, GlobalContext* globalCtx);
-void func_80B094E0(BossHakugin* this, GlobalContext* globalCtx);
-void func_80B098BC(BossHakugin* this, GlobalContext* globalCtx);
-void func_80B09C78(BossHakugin* this, GlobalContext* globalCtx);
-void func_80B09E20(BossHakugin* this, GlobalContext* globalCtx);
-void func_80B09EDC(BossHakugin* this, GlobalContext* globalCtx);
-void func_80B0A2A4(BossHakugin* this, GlobalContext* globalCtx);
-void func_80B0A638(BossHakugin* this, GlobalContext* globalCtx);
-void func_80B0A8C4(BossHakugin* this, GlobalContext* globalCtx);
+void func_80B08018(BossHakugin* this, PlayState* play);
+void func_80B0813C(BossHakugin* this, PlayState* play);
+void func_80B082AC(BossHakugin* this, PlayState* play);
+void func_80B0863C(BossHakugin* this, PlayState* play);
+void func_80B08960(BossHakugin* this, PlayState* play);
+void func_80B08CB8(BossHakugin* this, PlayState* play);
+void func_80B091D8(BossHakugin* this, PlayState* play);
+void func_80B094E0(BossHakugin* this, PlayState* play);
+void func_80B098BC(BossHakugin* this, PlayState* play);
+void func_80B09C78(BossHakugin* this, PlayState* play);
+void func_80B09E20(BossHakugin* this, PlayState* play);
+void func_80B09EDC(BossHakugin* this, PlayState* play);
+void func_80B0A2A4(BossHakugin* this, PlayState* play);
+void func_80B0A638(BossHakugin* this, PlayState* play);
+void func_80B0A8C4(BossHakugin* this, PlayState* play);
 
 #if 0
-const ActorInit Boss_Hakugin_InitVars = {
+ActorInit Boss_Hakugin_InitVars = {
     ACTOR_BOSS_HAKUGIN,
     ACTORCAT_BOSS,
     FLAGS,
@@ -121,7 +129,7 @@ static ColliderJntSphElementInit D_80B0E700[19] = {
 // static ColliderJntSphInit sJntSphInit = {
 static ColliderJntSphInit D_80B0E9AC = {
     { COLTYPE_METAL, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_HARD | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_JNTSPH, },
-    19, D_80B0E700, // sJntSphElementsInit,
+    ARRAY_COUNT(sJntSphElementsInit), D_80B0E700, // sJntSphElementsInit,
 };
 
 // static ColliderTrisElementInit sTrisElementsInit[1] = {
@@ -135,7 +143,7 @@ static ColliderTrisElementInit D_80B0E9BC[1] = {
 // static ColliderTrisInit sTrisInit = {
 static ColliderTrisInit D_80B0E9F8 = {
     { COLTYPE_NONE, AT_ON | AT_TYPE_ENEMY, AC_NONE, OC1_NONE, OC2_TYPE_1, COLSHAPE_TRIS, },
-    1, D_80B0E9BC, // sTrisElementsInit,
+    ARRAY_COUNT(sTrisElementsInit), D_80B0E9BC, // sTrisElementsInit,
 };
 
 // static ColliderSphereInit sSphereInit = {

@@ -1,15 +1,21 @@
+/*
+ * File: z_obj_sound.c
+ * Overlay: ovl_Obj_Sound
+ * Description: Plays certain sounds (e.g., swamp waterfall noise)
+ */
+
 #include "z_obj_sound.h"
 
-#define FLAGS 0x00000030
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((ObjSound*)thisx)
 
-void ObjSound_Init(Actor* thisx, GlobalContext* globalCtx);
-void ObjSound_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void ObjSound_Update(Actor* thisx, GlobalContext* globalCtx);
+void ObjSound_Init(Actor* thisx, PlayState* play);
+void ObjSound_Destroy(Actor* thisx, PlayState* play);
+void ObjSound_Update(Actor* thisx, PlayState* play);
 
 #if 0
-const ActorInit Obj_Sound_InitVars = {
+ActorInit Obj_Sound_InitVars = {
     ACTOR_OBJ_SOUND,
     ACTORCAT_ITEMACTION,
     FLAGS,

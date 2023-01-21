@@ -1,3 +1,5 @@
+compiler_type = "ido"
+
 [preserve_macros]
 "g[DS]P.*" = "void"
 "gs[DS]P.*" = "void"
@@ -9,5 +11,20 @@ SET_FULLSCREEN_VIEWPORT = "void"
 OPEN_DISPS = "void"
 CLOSE_DISPS = "void"
 ABS = "int"
+ABS_ALT = "int"
 SQ = "int"
+ARRAY_COUNT = "int"
+ARRAY_COUNTU = "int"
 CLAMP = "int"
+CLOCK_TIME = "int"
+CURRENT_DAY = "int"
+CHECK_NEWF = "int"
+NULL = "int"
+
+[decompme.compilers]
+"tools/ido_recomp/linux/7.1/cc" = "ido7.1"
+"tools/ido_recomp/macos/7.1/cc" = "ido7.1"
+"tools/ido_recomp/windows/7.1/cc" = "ido7.1"
+"tools/ido_recomp/linux/5.3/cc" = "ido5.3"
+"tools/ido_recomp/macos/5.3/cc" = "ido5.3"
+"tools/ido_recomp/windows/5.3/cc" = "ido5.3"

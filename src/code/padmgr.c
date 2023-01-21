@@ -1,4 +1,5 @@
 #include "global.h"
+#include "ultra64/motor.h"
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/padmgr/Padmgr_GetControllerBitmask.s")
 
@@ -30,9 +31,9 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/padmgr/func_8017544C.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/padmgr/func_80175474.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/padmgr/PadMgr_RumbleSet.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/padmgr/func_801754C0.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/padmgr/PadMgr_ControllerHasRumblePak.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/padmgr/Padmgr_CalcStickEdges.s")
 
@@ -54,4 +55,4 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/padmgr/Padmgr_ThreadEntry.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/padmgr/Padmgr_Start.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/padmgr/PadMgr_Init.s")

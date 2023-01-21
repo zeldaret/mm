@@ -1,16 +1,22 @@
+/*
+ * File: z_dm_tsg.c
+ * Overlay: ovl_Dm_Tsg
+ * Description: Handles all the masks scrolling by as Link falls in the intro
+ */
+
 #include "z_dm_tsg.h"
 
-#define FLAGS 0x00000030
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((DmTsg*)thisx)
 
-void DmTsg_Init(Actor* thisx, GlobalContext* globalCtx);
-void DmTsg_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void DmTsg_Update(Actor* thisx, GlobalContext* globalCtx);
-void DmTsg_Draw(Actor* thisx, GlobalContext* globalCtx);
+void DmTsg_Init(Actor* thisx, PlayState* play);
+void DmTsg_Destroy(Actor* thisx, PlayState* play);
+void DmTsg_Update(Actor* thisx, PlayState* play);
+void DmTsg_Draw(Actor* thisx, PlayState* play);
 
 #if 0
-const ActorInit Dm_Tsg_InitVars = {
+ActorInit Dm_Tsg_InitVars = {
     ACTOR_DM_TSG,
     ACTORCAT_ITEMACTION,
     FLAGS,

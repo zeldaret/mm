@@ -8,6 +8,4 @@ typedef struct {
     /* 0x0C */ s16 yaw;
 } EffectSsStickInitParams; // size = 0x10
 
-extern const EffectSsInit Effect_Ss_Stick_InitVars;
-
 #endif

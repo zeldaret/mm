@@ -1,21 +1,27 @@
+/*
+ * File: z_oceff_spot.c
+ * Overlay: ovl_Oceff_Spot
+ * Description: Sun's Song Ocarina Effect
+ */
+
 #include "z_oceff_spot.h"
 
-#define FLAGS 0x02000010
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
 
 #define THIS ((OceffSpot*)thisx)
 
-void OceffSpot_Init(Actor* thisx, GlobalContext* globalCtx);
-void OceffSpot_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void OceffSpot_Update(Actor* thisx, GlobalContext* globalCtx);
-void OceffSpot_Draw(Actor* thisx, GlobalContext* globalCtx);
+void OceffSpot_Init(Actor* thisx, PlayState* play2);
+void OceffSpot_Destroy(Actor* thisx, PlayState* play2);
+void OceffSpot_Update(Actor* thisx, PlayState* play);
+void OceffSpot_Draw(Actor* thisx, PlayState* play);
 
-void func_809728F8(OceffSpot* this, GlobalContext* globalCtx);
-void func_80972934(OceffSpot* this, GlobalContext* globalCtx);
+void OceffSpot_Wait(OceffSpot* this, PlayState* play);
+void OceffSpot_GrowCylinder(OceffSpot* this, PlayState* play);
+void OceffSpot_End(OceffSpot* this, PlayState* play);
 
 void OceffSpot_SetupAction(OceffSpot* this, OceffSpotActionFunc actionFunc);
 
-#if 0
-const ActorInit Oceff_Spot_InitVars = {
+ActorInit Oceff_Spot_InitVars = {
     ACTOR_OCEFF_SPOT,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -27,28 +33,140 @@ const ActorInit Oceff_Spot_InitVars = {
     (ActorFunc)OceffSpot_Draw,
 };
 
-// static InitChainEntry sInitChain[] = {
-static InitChainEntry D_80973478[] = {
+#include "assets/overlays/ovl_Oceff_Spot/ovl_Oceff_Spot.c"
+
+static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 0, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneForward, 1500, ICHAIN_STOP),
 };
 
-#endif
+void OceffSpot_SetupAction(OceffSpot* this, OceffSpotActionFunc actionFunc) {
+    this->actionFunc = actionFunc;
+}
 
-extern InitChainEntry D_80973478[];
+void OceffSpot_Init(Actor* thisx, PlayState* play2) {
+    PlayState* play = play2;
+    OceffSpot* this = THIS;
+    Player* player = GET_PLAYER(play);
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Oceff_Spot/OceffSpot_SetupAction.s")
+    Actor_ProcessInitChain(&this->actor, sInitChain);
+    OceffSpot_SetupAction(this, OceffSpot_GrowCylinder);
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Oceff_Spot/OceffSpot_Init.s")
+    Lights_PointNoGlowSetInfo(&this->lightInfo1, this->actor.world.pos.x, this->actor.world.pos.y,
+                              this->actor.world.pos.z, 0, 0, 0, 0);
+    this->lightNode1 = LightContext_InsertLight(play, &play->lightCtx, &this->lightInfo1);
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Oceff_Spot/OceffSpot_Destroy.s")
+    Lights_PointNoGlowSetInfo(&this->lightInfo2, this->actor.world.pos.x, this->actor.world.pos.y,
+                              this->actor.world.pos.z, 0, 0, 0, 0);
+    this->lightNode2 = LightContext_InsertLight(play, &play->lightCtx, &this->lightInfo2);
+    this->actor.scale.y = 0.3f;
+    this->unk16C = 0.0f;
+    this->actor.world.pos.y = player->actor.world.pos.y;
+    this->actor.world.pos.x = player->bodyPartsPos[0].x;
+    this->actor.world.pos.z = player->bodyPartsPos[0].z;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Oceff_Spot/func_80972844.s")
+void OceffSpot_Destroy(Actor* thisx, PlayState* play2) {
+    PlayState* play = play2;
+    OceffSpot* this = THIS;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Oceff_Spot/func_809728F8.s")
+    LightContext_RemoveLight(play, &play->lightCtx, this->lightNode1);
+    LightContext_RemoveLight(play, &play->lightCtx, this->lightNode2);
+    Magic_Reset(play);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Oceff_Spot/func_80972934.s")
+void OceffSpot_End(OceffSpot* this, PlayState* play) {
+    if (this->unk16C > 0.0f) {
+        this->unk16C -= 0.05f;
+    } else {
+        Actor_Kill(&this->actor);
+        if ((REG(15) != 0x190) && (play->msgCtx.unk12046 == 0)) {
+            if ((play->msgCtx.ocarinaAction != 0x39) || (play->msgCtx.ocarinaMode != 0xA)) {
+                gSaveContext.sunsSongState = SUNSSONG_START;
+            }
+        } else {
+            play->msgCtx.ocarinaMode = 4;
+        }
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Oceff_Spot/OceffSpot_Update.s")
+void OceffSpot_Wait(OceffSpot* this, PlayState* play) {
+    if (this->timer > 0) {
+        this->timer--;
+    } else {
+        OceffSpot_SetupAction(this, OceffSpot_End);
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Oceff_Spot/OceffSpot_Draw.s")
+void OceffSpot_GrowCylinder(OceffSpot* this, PlayState* play) {
+    if (this->unk16C < 1.0f) {
+        this->unk16C += 0.05f;
+    } else {
+        OceffSpot_SetupAction(this, OceffSpot_Wait);
+        this->timer = 60;
+    }
+}
+
+void OceffSpot_Update(Actor* thisx, PlayState* play) {
+    f32 scale;
+    s32 pad;
+    Player* player = GET_PLAYER(play);
+    f32 temp;
+    OceffSpot* this = THIS;
+
+    temp = (1.0f - cosf(this->unk16C * M_PI)) * 0.5f;
+    this->actionFunc(this, play);
+
+    switch (gSaveContext.save.playerForm) {
+        default:
+            scale = 1.0f;
+            break;
+
+        case PLAYER_FORM_DEKU:
+            scale = 1.3f;
+            break;
+
+        case PLAYER_FORM_ZORA:
+            scale = 1.2f;
+            break;
+
+        case PLAYER_FORM_GORON:
+            scale = 2.0f;
+            break;
+    }
+
+    this->actor.scale.z = (scale * 0.42f) * temp;
+    this->actor.scale.x = (scale * 0.42f) * temp;
+
+    this->actor.world.pos = player->actor.world.pos;
+    this->actor.world.pos.y = this->actor.world.pos.y + 5.0f;
+
+    temp = (2.0f - this->unk16C) * this->unk16C;
+
+    func_800FD2B4(play, temp * 0.5f, 880.0f, 0.2f, 0.9f);
+
+    Lights_PointNoGlowSetInfo(&this->lightInfo1, this->actor.world.pos.x, this->actor.world.pos.y + 55.0f,
+                              this->actor.world.pos.z, (s32)(255.0f * temp), (s32)(255.0f * temp), (s32)(200.0f * temp),
+                              100.0f * temp);
+    Lights_PointNoGlowSetInfo(
+        &this->lightInfo2, this->actor.world.pos.x + (Math_SinS(player->actor.shape.rot.y) * 20.0f),
+        this->actor.world.pos.y + 20.0f, this->actor.world.pos.z + (Math_CosS(player->actor.shape.rot.y) * 20.0f),
+        (s32)(255.0f * temp), (s32)(255.0f * temp), (s32)(200.0f * temp), 100.0f * temp);
+}
+
+void OceffSpot_Draw(Actor* thisx, PlayState* play) {
+    OceffSpot* this = THIS;
+    u32 scroll = play->state.frames & 0xFFFF;
+
+    OPEN_DISPS(play->state.gfxCtx);
+
+    func_8012C2DC(play->state.gfxCtx);
+
+    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(POLY_XLU_DISP++, &sSunSongEffectCylinderMaterialDL);
+    gSPDisplayList(POLY_XLU_DISP++, Gfx_TwoTexScroll(play->state.gfxCtx, 0, scroll * 2, scroll * -2, 0x20, 0x20, 1, 0,
+                                                     scroll * -8, 0x20, 0x20));
+    gSPDisplayList(POLY_XLU_DISP++, &sSunSongEffectCylinderModelDL);
+
+    CLOSE_DISPS(play->state.gfxCtx);
+}

@@ -1,32 +1,38 @@
+/*
+ * File: z_en_dekubaba.c
+ * Overlay: ovl_En_Dekubaba
+ * Description: Deku Baba
+ */
+
 #include "z_en_dekubaba.h"
 
-#define FLAGS 0x00000405
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_400)
 
 #define THIS ((EnDekubaba*)thisx)
 
-void EnDekubaba_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnDekubaba_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnDekubaba_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnDekubaba_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnDekubaba_Init(Actor* thisx, PlayState* play);
+void EnDekubaba_Destroy(Actor* thisx, PlayState* play);
+void EnDekubaba_Update(Actor* thisx, PlayState* play);
+void EnDekubaba_Draw(Actor* thisx, PlayState* play);
 
-void func_808B1B14(EnDekubaba* this, GlobalContext* globalCtx);
-void func_808B1CF0(EnDekubaba* this, GlobalContext* globalCtx);
-void func_808B2240(EnDekubaba* this, GlobalContext* globalCtx);
-void func_808B2660(EnDekubaba* this, GlobalContext* globalCtx);
-void func_808B28B4(EnDekubaba* this, GlobalContext* globalCtx);
-void func_808B29C4(EnDekubaba* this, GlobalContext* globalCtx);
-void func_808B2CB8(EnDekubaba* this, GlobalContext* globalCtx);
-void func_808B3078(EnDekubaba* this, GlobalContext* globalCtx);
-void func_808B3280(EnDekubaba* this, GlobalContext* globalCtx);
-void func_808B3404(EnDekubaba* this, GlobalContext* globalCtx);
-void func_808B37E8(EnDekubaba* this, GlobalContext* globalCtx);
-void func_808B3B48(EnDekubaba* this, GlobalContext* globalCtx);
-void func_808B3C50(EnDekubaba* this, GlobalContext* globalCtx);
-void func_808B3DA8(EnDekubaba* this, GlobalContext* globalCtx);
-void func_808B3EE8(EnDekubaba* this, GlobalContext* globalCtx);
+void func_808B1B14(EnDekubaba* this, PlayState* play);
+void func_808B1CF0(EnDekubaba* this, PlayState* play);
+void func_808B2240(EnDekubaba* this, PlayState* play);
+void func_808B2660(EnDekubaba* this, PlayState* play);
+void func_808B28B4(EnDekubaba* this, PlayState* play);
+void func_808B29C4(EnDekubaba* this, PlayState* play);
+void func_808B2CB8(EnDekubaba* this, PlayState* play);
+void func_808B3078(EnDekubaba* this, PlayState* play);
+void func_808B3280(EnDekubaba* this, PlayState* play);
+void func_808B3404(EnDekubaba* this, PlayState* play);
+void func_808B37E8(EnDekubaba* this, PlayState* play);
+void func_808B3B48(EnDekubaba* this, PlayState* play);
+void func_808B3C50(EnDekubaba* this, PlayState* play);
+void func_808B3DA8(EnDekubaba* this, PlayState* play);
+void func_808B3EE8(EnDekubaba* this, PlayState* play);
 
 #if 0
-const ActorInit En_Dekubaba_InitVars = {
+ActorInit En_Dekubaba_InitVars = {
     ACTOR_EN_DEKUBABA,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -73,7 +79,7 @@ static ColliderJntSphElementInit D_808B4D60[7] = {
 // static ColliderJntSphInit sJntSphInit = {
 static ColliderJntSphInit D_808B4E5C = {
     { COLTYPE_HIT6, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_JNTSPH, },
-    7, D_808B4D60, // sJntSphElementsInit,
+    ARRAY_COUNT(sJntSphElementsInit), D_808B4D60, // sJntSphElementsInit,
 };
 
 // sColChkInfoInit

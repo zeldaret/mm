@@ -8,7 +8,7 @@ void osViBlack(u8 active) {
     if (active) {
         __osViNext->state |= 0x20;
     } else {
-        __osViNext->state &= 0xffdf;
+        __osViNext->state &= ~0x20;
     }
 
     __osRestoreInt(saveMask);

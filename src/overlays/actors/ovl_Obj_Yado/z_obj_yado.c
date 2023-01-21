@@ -1,16 +1,22 @@
-#include "z_obj_yado.h"
+/*
+ * File: z_obj_yado.c
+ * Overlay: ovl_Obj_Yado
+ * Description: Stockpot Inn - 2nd Floor Window
+ */
 
-#define FLAGS 0x00000030
+#include "z_obj_yado.h"
+#include "objects/object_yado_obj/object_yado_obj.h"
+
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((ObjYado*)thisx)
 
-void ObjYado_Init(Actor* thisx, GlobalContext* globalCtx);
-void ObjYado_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void ObjYado_Update(Actor* thisx, GlobalContext* globalCtx);
-void ObjYado_Draw(Actor* thisx, GlobalContext* globalCtx);
+void ObjYado_Init(Actor* thisx, PlayState* play);
+void ObjYado_Destroy(Actor* thisx, PlayState* play);
+void ObjYado_Update(Actor* thisx, PlayState* play);
+void ObjYado_Draw(Actor* thisx, PlayState* play);
 
-#if 0
-const ActorInit Obj_Yado_InitVars = {
+ActorInit Obj_Yado_InitVars = {
     ACTOR_OBJ_YADO,
     ACTORCAT_BG,
     FLAGS,
@@ -22,22 +28,46 @@ const ActorInit Obj_Yado_InitVars = {
     (ActorFunc)ObjYado_Draw,
 };
 
-// static InitChainEntry sInitChain[] = {
-static InitChainEntry D_80C16420[] = {
+static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-#endif
+AnimatedMaterial* D_80C16470;
 
-extern InitChainEntry D_80C16420[];
+void ObjYado_Init(Actor* thisx, PlayState* play) {
+    ObjYado* this = THIS;
 
-extern UNK_TYPE D_06000430;
-extern UNK_TYPE D_060012E8;
+    Actor_ProcessInitChain(&this->actor, sInitChain);
+    D_80C16470 = Lib_SegmentedToVirtual(object_yado_obj_Matanimheader_0012E8);
+    this->isNight = gSaveContext.save.isNight;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Yado/ObjYado_Init.s")
+void ObjYado_Destroy(Actor* thisx, PlayState* play) {
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Yado/ObjYado_Destroy.s")
+void ObjYado_Update(Actor* thisx, PlayState* play) {
+    ObjYado* this = THIS;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Yado/ObjYado_Update.s")
+    this->isNight = gSaveContext.save.isNight;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Yado/ObjYado_Draw.s")
+void ObjYado_Draw(Actor* thisx, PlayState* play) {
+    s32 pad;
+    ObjYado* this = THIS;
+
+    OPEN_DISPS(play->state.gfxCtx);
+
+    if (this->isNight) {
+        gSPSegment(POLY_XLU_DISP++, 0x09, Gfx_PrimColor(play->state.gfxCtx, 128, 95, 95, 70, 155));
+        gSPSegment(POLY_OPA_DISP++, 0x0A, Gfx_PrimColor(play->state.gfxCtx, 128, 0, 40, 40, 255));
+    } else {
+        gSPSegment(POLY_XLU_DISP++, 0x09, Gfx_PrimColor(play->state.gfxCtx, 128, 255, 255, 215, 110));
+        gSPSegment(POLY_OPA_DISP++, 0x0A, Gfx_PrimColor(play->state.gfxCtx, 128, 255, 255, 215, 255));
+    }
+
+    AnimatedMat_Draw(play, D_80C16470);
+    Gfx_DrawDListOpa(play, object_yado_obj_DL_000430);
+    Gfx_DrawDListXlu(play, object_yado_obj_DL_000320);
+
+    CLOSE_DISPS(play->state.gfxCtx);
+}
