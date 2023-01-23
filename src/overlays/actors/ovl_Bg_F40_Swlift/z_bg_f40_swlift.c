@@ -13,7 +13,7 @@
 
 void BgF40Swlift_Init(Actor* thisx, PlayState* play);
 void BgF40Swlift_Destroy(Actor* thisx, PlayState* play);
-void BgF40Swlift_Update(Actor* thisx, PlayState* play);
+void BgF40Swlift_Update(Actor* thisx, PlayState* play2);
 void BgF40Swlift_Draw(Actor* thisx, PlayState* play);
 
 static s32 sParams[4] = { 0xFF, 0xFF, 0xFF, 0xFF };
