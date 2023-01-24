@@ -2177,8 +2177,7 @@ beginseg
     name "ovl_Obj_Grass_Unit"
     compress
     include "build/src/overlays/actors/ovl_Obj_Grass_Unit/z_obj_grass_unit.o"
-    include "build/data/ovl_Obj_Grass_Unit/ovl_Obj_Grass_Unit.data.o"
-    include "build/data/ovl_Obj_Grass_Unit/ovl_Obj_Grass_Unit.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Grass_Unit/ovl_Obj_Grass_Unit_reloc.o"
 endseg
 
 beginseg
