@@ -675,6 +675,7 @@ void EnSth_Update(Actor* thisx, PlayState* play) {
     if (EnSth_DetectSpeakingRange(this, play) && !(this->sthFlags & STH_FLAG_DISABLE_HEAD_TRACK) &&
         (this->curAnimIndex != STH_ANIM_LOOKING_AROUND)) {
         Vec3s torsoRot;
+        
         torsoRot.x = torsoRot.y = torsoRot.z = 0; // this should block torso rot from working
 
         Actor_TrackPlayer(play, &this->actor, &this->headRot, &torsoRot, this->actor.focus.pos);

@@ -17,7 +17,7 @@
 
         <DList Name="gAhgBeardedHeadDL" Offset="0x2FF0" />
         <DList Name="gAhgRightHandDL" Offset="0x3400" />
-        <DList Name="gAhgRightForArmDL" Offset="0x3570" />
+        <DList Name="gAhgRightForearmDL" Offset="0x3570" />
         <DList Name="gAhgRightUpperArmDL" Offset="0x36A0" />
         <DList Name="gAhgLeftHandDL" Offset="0x37D8" />
         <DList Name="gAhgLeftForearmDL" Offset="0x3948" />
