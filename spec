@@ -554,8 +554,6 @@ beginseg
     include "build/src/code/z_fbdemo_circle.o"
     include "build/src/code/z_overlay.o"
     include "build/src/code/z_play.o"
-    include "build/data/code/z_play.data.o"
-    include "build/data/code/z_play.bss.o"
     include "build/src/code/z_play_hireso.o"
     include "build/data/code/z_play_hireso.data.o"
     include "build/src/code/PreRender.o"
@@ -581,9 +579,9 @@ beginseg
     include "build/data/code/speed_meter.data.o"
     include "build/data/code/speed_meter.bss.o"
     include "build/src/code/su_mtx.o"
+    include "build/src/code/sys_cfb.o"
     include "build/data/code/sys_cfb.bss.o"
     include "build/src/code/sys_cmpdma.o"
-    include "build/data/code/sys_cmpdma.bss.o"
     include "build/src/code/sys_initial_check.o"
     include "build/src/code/sys_math.o"
     include "build/src/code/sys_math3d.o"
@@ -4209,8 +4207,7 @@ beginseg
     name "ovl_En_Zod"
     compress
     include "build/src/overlays/actors/ovl_En_Zod/z_en_zod.o"
-    include "build/data/ovl_En_Zod/ovl_En_Zod.data.o"
-    include "build/data/ovl_En_Zod/ovl_En_Zod.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Zod/ovl_En_Zod_reloc.o"
 endseg
 
 beginseg
