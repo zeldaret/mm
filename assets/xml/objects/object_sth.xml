@@ -1,9 +1,13 @@
 ﻿<Root>
     <!-- Assets for the guy looking up at the moon, and the guy you find in Spider Houses. -->
+    <!-- This object is almost a copy of object_boj, with the animations removed -->
     <File Name="object_sth" Segment="6">
-        <!-- not a texutre?  -->
 
-        <!-- <Blob Name="gSth_Blob_000000" Size="0x530" Offset="0x0" /> -->
+        <!-- Unused copy of head from object_boj (Jugler). -->
+        <Array Name="gSthUnusedVtx" Count="83" Offset="0x0">
+            <Vtx/>
+        </Array>
+
         <DList Name="gSthHeadDL" Offset="0x1C30" />
         <DList Name="gSthRightHandDL" Offset="0x1C38" />
         <DList Name="gSthRightForearmDL" Offset="0x1D80" />
@@ -11,7 +15,7 @@
         <DList Name="gSthLeftHandDL" Offset="0x1F90" />
         <DList Name="gSthLeftForearmDL" Offset="0x20D8" />
         <DList Name="gSthLeftUpperArmDL" Offset="0x21E0" />
-        <DList Name="gSthChestDL" Offset="0x22E8" />
+        <DList Name="gSthTorsoDL" Offset="0x22E8" />
         <DList Name="gSthRightFootDL" Offset="0x24C0" />
         <DList Name="gSthRightShinDL" Offset="0x25D8" />
         <DList Name="gSthRightThighDL" Offset="0x26E8" />
@@ -35,13 +39,14 @@
         <Limb Name="gSthRightThighLimb" Type="Standard" EnumName="STH_LIMB_RIGHT_THIGH" Offset="0x3138" />
         <Limb Name="gSthRightShinLimb" Type="Standard" EnumName="STH_LIMB_RIGHT_SHIN" Offset="0x3144" />
         <Limb Name="gSthRightFootLimb" Type="Standard" EnumName="STH_LIMB_RIGHT_FOOT" Offset="0x3150" />
-        <Limb Name="gSthChestLimb" Type="Standard" EnumName="STH_LIMB_CHEST" Offset="0x315C" />
+        <Limb Name="gSthTorsoLimb" Type="Standard" EnumName="STH_LIMB_CHEST" Offset="0x315C" />
         <Limb Name="gSthLeftUpperArmLimb" Type="Standard" EnumName="STH_LIMB_LEFT_UPPER_ARM" Offset="0x3168" />
         <Limb Name="gSthLeftForearmLimb" Type="Standard" EnumName="STH_LIMB_LEFT_FOREARM" Offset="0x3174" />
         <Limb Name="gSthLeftHandLimb" Type="Standard" EnumName="STH_LIMB_LEFT_HAND" Offset="0x3180" />
         <Limb Name="gSthRightUpperArmLimb" Type="Standard" EnumName="STH_LIMB_RIGHT_UPPER_ARM" Offset="0x318C" />
         <Limb Name="gSthRightForearmLimb" Type="Standard" EnumName="STH_LIMB_RIGHT_FOREARM" Offset="0x3198" />
         <Limb Name="gSthRightHandLimb" Type="Standard" EnumName="STH_LIMB_RIGHT_HAND" Offset="0x31A4" />
+        <!-- EnSth2 uses this head, EnSth1 has a replacement head embedded in its overlay. -->
         <Limb Name="gSthHeadLimb" Type="Standard" EnumName="STH_LIMB_HEAD" Offset="0x31B0" />
         <Skeleton Name="gSthSkel" Type="Flex" LimbType="Standard" LimbNone="STH_LIMB_NONE" LimbMax="STH_LIMB_MAX" EnumName="ObjectSthLimb" Offset="0x31F8" />
     </File>

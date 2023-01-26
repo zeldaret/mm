@@ -36,17 +36,17 @@ typedef enum {
     /* 1 */ STH_TYPE_UNUSED_1 = 1,
     /* 2 */ STH_TYPE_SWAMP_SPIDERHOUSE_CURED, // cursed is EnSsh
     /* 3 */ STH_TYPE_MOON_LOOKING, // southclocktown, looking up at the moon
-    /* 4 */ STH_TYPE_OCEAN_SPIDERHOUSE_GREETING, // looking for shelter
-    /* 5 */ STH_TYPE_OCEAN_SPIDERHOUSE_SUFFERING, // shelter was not enough
+    /* 4 */ STH_TYPE_OCEAN_SPIDERHOUSE_GREET, // looking for shelter
+    /* 5 */ STH_TYPE_OCEAN_SPIDERHOUSE_PANIC, // shelter was not enough
     // Other values: Actor will spawn and animate with arm waving, no further interaction.
 } EnSthTypes;
 
 // This actor has its own flags system
-#define STH_FLAG_CLEAR              (0)
-#define STH_FLAG_DRAW_TRUTH_MASK    (1 << 0)
-#define STH_FLAG_CURED              (1 << 1)
-#define STH_FLAG_SAVED              (1 << 2) // set, but not read 
-#define STH_FLAG_DISABLE_HEAD_TRACK (1 << 3)
+#define STH_FLAG_CLEAR                    (0)
+#define STH_FLAG_DRAW_TRUTH_MASK          (1 << 0)
+#define STH_FLAG_OCEAN_SPIDERHOUSE_GREET  (1 << 1)
+#define STH_FLAG_SAVED                    (1 << 2) // set, but not read 
+#define STH_FLAG_DISABLE_HEAD_TRACK       (1 << 3)
 
 #define STH_SWAMP_SPIDER_TOKENS_REQUIRED 30
 #define STH_OCEAN_SPIDER_TOKENS_REQUIRED 30
