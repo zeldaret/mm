@@ -21,69 +21,71 @@ ActorInit Obj_Grass_Unit_InitVars = {
 };
 
 typedef struct {
-    f32 x;
-    s16 z;
-} Test;
+    f32 distance;
+    s16 rotY;
+} PolarCoord;
 
-Test D_809AC360[] = {
+static PolarCoord sGrassPatternCircle[] = {
     { 0.0f, 0x0000 },  { 80.0f, 0x0000 }, { 80.0f, 0x2000 }, { 80.0f, 0x4000 }, { 80.0f, 0x6000 },
     { 80.0f, 0x8000 }, { 80.0f, 0xA000 }, { 80.0f, 0xC000 }, { 80.0f, 0xE000 },
 };
 
-Test D_809AC3A8[] = {
+PolarCoord sGrassPattern2[] = {
     { 40.0f, 0x0666 }, { 40.0f, 0x2CCC }, { 40.0f, 0x5999 }, { 40.0f, 0x8667 }, { 20.0f, 0xC000 }, { 80.0f, 0x1333 },
     { 80.0f, 0x4000 }, { 80.0f, 0x6CCC }, { 80.0f, 0x9334 }, { 80.0f, 0xACCD }, { 80.0f, 0xC667 }, { 60.0f, 0xE000 },
 };
 
 typedef struct {
     s32 count;
-    Test* positions;
-} T_809AC408;
+    PolarCoord* positions;
+} ObjGrassUnitPattern;
 
-T_809AC408 D_809AC408[2] = { { 9, D_809AC360 }, { 12, D_809AC3A8 }, };
+static ObjGrassUnitPattern sGrassPatterns[2] = {
+    { ARRAY_COUNT(sGrassPatternCircle), sGrassPatternCircle },
+    { ARRAY_COUNT(sGrassPattern2), sGrassPattern2 },
+};
 
-ObjGrass* D_809AC418 = NULL;
-ObjGrassCarry* D_809AC41C = NULL;
-ObjGrassCarry* D_809AC420 = NULL;
-s32 D_809AC424 = 0;
+ObjGrass* sGrassManager = NULL;
+ObjGrassCarry* sGrassCarry0 = NULL;
+ObjGrassCarry* sGrassCarry1 = NULL;
+s32 sInitialized = 0;
 
-s32 func_809ABDE0(Actor* this, PlayState* play) {
-
-    D_809AC418 = Actor_Spawn(&play->actorCtx, play, ACTOR_OBJ_GRASS, 0.0f, 0.0f, 0.0f, 0, 0, 0, -1);
-    if (D_809AC418 != NULL) {
-        D_809AC418->actor.room = this->room;
+s32 ObjGrassUnit_SpawnObjGrass(Actor* this, PlayState* play) {
+    sGrassManager = (ObjGrass*)Actor_Spawn(&play->actorCtx, play, ACTOR_OBJ_GRASS, 0.0f, 0.0f, 0.0f, 0, 0, 0, -1);
+    if (sGrassManager != NULL) {
+        sGrassManager->actor.room = this->room;
         return true;
     }
     return false;
 }
 
-s32 func_809ABE54(Actor* this, PlayState* play) {
-
-    D_809AC41C = Actor_Spawn(&play->actorCtx, play, ACTOR_OBJ_GRASS_CARRY, 0.0f, 0.0f, 0.0f, 0, 0, 0, 0);
-    if (D_809AC41C != NULL) {
-        D_809AC41C->actor.room = this->room;
+s32 ObjGrassUnit_SpawnObjGrassCarry0(Actor* this, PlayState* play) {
+    sGrassCarry0 =
+        (ObjGrassCarry*)Actor_Spawn(&play->actorCtx, play, ACTOR_OBJ_GRASS_CARRY, 0.0f, 0.0f, 0.0f, 0, 0, 0, 0);
+    if (sGrassCarry0 != NULL) {
+        sGrassCarry0->actor.room = this->room;
         return true;
     }
     return false;
 }
 
-s32 func_809ABEC4(Actor* this, PlayState* play) {
-
-    D_809AC420 = Actor_Spawn(&play->actorCtx, play, ACTOR_OBJ_GRASS_CARRY, 0.0f, 0.0f, 0.0f, 0, 0, 0, 1);
-    if (D_809AC420 != NULL) {
-        D_809AC420->actor.room = this->room;
+s32 ObjGrassUnit_SpawnObjGrassCarry1(Actor* this, PlayState* play) {
+    sGrassCarry1 =
+        (ObjGrassCarry*)Actor_Spawn(&play->actorCtx, play, ACTOR_OBJ_GRASS_CARRY, 0.0f, 0.0f, 0.0f, 0, 0, 0, 1);
+    if (sGrassCarry1 != NULL) {
+        sGrassCarry1->actor.room = this->room;
         return true;
     }
     return false;
 }
 
-s32 func_809ABF38(PlayState* play, Vec3f* arg1) {
-    WaterBox* sp34;
-    f32 sp30;
-    s32 sp2C;
+s32 ObjGrassUnit_IsUnderwater(PlayState* play, Vec3f* pos) {
+    WaterBox* waterBox;
+    f32 ySurface;
+    s32 bgId;
 
-    if ((WaterBox_GetSurfaceImpl(play, &play->colCtx, arg1->x, arg1->z, &sp30, &sp34, &sp2C) != 0) &&
-        (arg1->y < sp30)) {
+    if (WaterBox_GetSurfaceImpl(play, &play->colCtx, pos->x, pos->z, &ySurface, &waterBox, &bgId) &&
+        (pos->y < ySurface)) {
         return true;
     }
     return false;
@@ -91,73 +93,73 @@ s32 func_809ABF38(PlayState* play, Vec3f* arg1) {
 
 void ObjGrassUnit_Init(Actor* this, PlayState* play2) {
     PlayState* play = play2;
-    ObjGrassStruct1_1* temp_s0;
-    ObjGrass* sp94;
-    f32 var_fs0;
+    ObjGrassGroup* grassGroup;
+    ObjGrass* grassManager;
+    f32 homePosYSum;
     f32 tmp;
-    s32 var_s4; // i
-    Test* temp_s1;
-    CollisionPoly* sp80;
-    s32 sp7C;
-    ObjGrassStruct1* temp_s2_2;
-    T_809AC408* temp_s6;
-    s8 sp73;
+    s32 i;
+    PolarCoord* grassPos;
+    CollisionPoly* poly;
+    s32 bgId;
+    ObjGrassElement* grassElem;
+    ObjGrassUnitPattern* grassPattern;
+    s8 dropTable;
 
-    sp73 = ((s16)this->params >> 8) & 0x1F;
-    if ((D_809AC418 == NULL) && (func_809ABDE0(this, play) == 0)) { // obj_grass
+    dropTable = ((s16)this->params >> 8) & 0x1F;
+    if ((sGrassManager == NULL) && !ObjGrassUnit_SpawnObjGrass(this, play)) {
         Actor_Kill(this);
         return;
     }
-    if ((D_809AC41C == NULL) && (func_809ABE54(this, play) != 0)) { // obj_grass_carry
-        D_809AC41C->unk_190 = D_809AC418;
+    if ((sGrassCarry0 == NULL) && ObjGrassUnit_SpawnObjGrassCarry0(this, play)) {
+        sGrassCarry0->grassManager = sGrassManager;
     }
-    if ((D_809AC420 == NULL) && (func_809ABEC4(this, play) != 0)) { // obj_grass_carry
-        D_809AC420->unk_190 = D_809AC418;
+    if ((sGrassCarry1 == NULL) && ObjGrassUnit_SpawnObjGrassCarry1(this, play)) {
+        sGrassCarry1->grassManager = sGrassManager;
     }
-    if ((D_809AC424 == 0) && (D_809AC418 != NULL) && (D_809AC41C != NULL) && (D_809AC420 != NULL)) {
-        D_809AC424 = 1;
-        D_809AC418->unk_3298[0] = D_809AC41C;
-        D_809AC418->unk_3298[1] = D_809AC420;
-        D_809AC41C->unk_190 = D_809AC418;
-        D_809AC420->unk_190 = D_809AC418;
+    if (!sInitialized && (sGrassManager != NULL) && (sGrassCarry0 != NULL) && (sGrassCarry1 != NULL)) {
+        sInitialized = true;
+        sGrassManager->grassCarry[0] = sGrassCarry0;
+        sGrassManager->grassCarry[1] = sGrassCarry1;
+        sGrassCarry0->grassManager = sGrassManager;
+        sGrassCarry1->grassManager = sGrassManager;
     }
 
-    sp94 = D_809AC418;
-    if (D_809AC418->unk_2944 >= 0x28) {
+    grassManager = sGrassManager;
+    if (sGrassManager->activeGrassGroups >= ARRAY_COUNT(sGrassManager->grassGroups)) {
         Actor_Kill(this);
         return;
     }
 
-    var_fs0 = 0.0f;
-    temp_s2_2 = &sp94->unk_144[D_809AC418->unk_2944];
-    temp_s2_2->unk_FC = 0;
-    temp_s6 = &D_809AC408[(this->params & 1)];
+    homePosYSum = 0.0f;
+    grassGroup = &grassManager->grassGroups[sGrassManager->activeGrassGroups];
+    grassGroup->count = 0;
+    grassPattern = &sGrassPatterns[(this->params & 1)];
 
-    for (var_s4 = 0; var_s4 < temp_s6->count; var_s4++) {
-        temp_s0 = &temp_s2_2->unk_0C[temp_s2_2->unk_FC];
-        temp_s1 = &temp_s6->positions[var_s4];
+    for (i = 0; i < grassPattern->count; i++) {
+        grassElem = &grassGroup->elements[grassGroup->count];
+        grassPos = &grassPattern->positions[i];
 
-        temp_s0->unk_00.x = (Math_CosS((this->home.rot.y + temp_s1->z)) * temp_s1->x) + this->home.pos.x;
-        temp_s0->unk_00.y = this->home.pos.y + 100.0f;
-        temp_s0->unk_00.z = (Math_SinS((this->home.rot.y + temp_s1->z)) * temp_s1->x) + this->home.pos.z;
+        grassElem->pos.x = (Math_CosS((this->home.rot.y + grassPos->rotY)) * grassPos->distance) + this->home.pos.x;
+        grassElem->pos.y = this->home.pos.y + 100.0f;
+        grassElem->pos.z = (Math_SinS((this->home.rot.y + grassPos->rotY)) * grassPos->distance) + this->home.pos.z;
 
-        temp_s0->unk_00.y = BgCheck_EntityRaycastFloor5(&play->colCtx, &sp80, &sp7C, this, &temp_s0->unk_00);
-        tmp = temp_s0->unk_00.y - this->home.pos.y;
-        if ((fabsf(tmp) < 80.0f) && (temp_s0->unk_00.y > -32000.0f)) {
-            temp_s2_2->unk_FC++;
-            temp_s0->unk_0C = (s16)(Rand_Next() >> 0x10);
-            temp_s0->unk_0E = sp73;
-            if (func_809ABF38(play, &temp_s0->unk_00) != 0) {
-                temp_s0->unk_0F |= 8;
+        grassElem->pos.y = BgCheck_EntityRaycastFloor5(&play->colCtx, &poly, &bgId, this, &grassElem->pos);
+        tmp = grassElem->pos.y - this->home.pos.y;
+        if ((fabsf(tmp) < 80.0f) && (grassElem->pos.y > BGCHECK_Y_MIN)) {
+            grassGroup->count++;
+            grassElem->rotY = (s16)(Rand_Next() >> 0x10);
+            grassElem->dropTable = dropTable;
+            if (ObjGrassUnit_IsUnderwater(play, &grassElem->pos)) {
+                grassElem->elem_flags |= 8;
             }
-            var_fs0 += temp_s0->unk_00.y;
+            homePosYSum += grassElem->pos.y;
         }
     }
-    if (temp_s2_2->unk_FC > 0) {
-        sp94->unk_2944++;
-        temp_s2_2->unk_00.x = this->home.pos.x;
-        temp_s2_2->unk_00.y = (var_fs0 / temp_s2_2->unk_FC);
-        temp_s2_2->unk_00.z = this->home.pos.z;
+    if (grassGroup->count > 0) {
+        grassManager->activeGrassGroups++;
+        grassGroup->homePos.x = this->home.pos.x;
+        grassGroup->homePos.y = (homePosYSum / grassGroup->count);
+        grassGroup->homePos.z = this->home.pos.z;
     }
     Actor_Kill(this);
 }
