@@ -63,10 +63,9 @@ endif
 
 #### Tools ####
 
-ifeq ($(shell type mips-linux-gnu-ld >/dev/null 2>/dev/null; echo $$?), 0)
-  MIPS_BINUTILS_PREFIX := mips-linux-gnu-
-else
-  $(error Please install or build mips-linux-gnu)
+MIPS_BINUTILS_PREFIX ?= mips-linux-gnu-
+ifneq ($(shell type $(MIPS_BINUTILS_PREFIX)ld >/dev/null 2>/dev/null; echo $$?), 0)
+   $(error Please install or build mips-linux-gnu [Unable to find $(MIPS_BINUTILS_PREFIX)ld])
 endif
 
 CC       := tools/ido_recomp/$(DETECTED_OS)/7.1/cc
