@@ -11172,7 +11172,7 @@
     0x80A81D70:("ObjMine_Water_SetCollider",),
     0x80A81DEC:("ObjMine_Water_SetWorld",),
     0x80A81E7C:("func_80A81E7C",),
-    0x80A81FFC:("func_80A81FFC",),
+    0x80A81FFC:("ObjMine_Water_ApplyForces",),
     0x80A828A8:("func_80A828A8",),
     0x80A82C28:("ObjMine_Water_UpdateChain",),
     0x80A82C5C:("ObjMine_Init",),

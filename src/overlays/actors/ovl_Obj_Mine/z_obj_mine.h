@@ -15,6 +15,8 @@ typedef void (*ObjMineActionFunc)(struct ObjMine*, PlayState*);
 #define OBJMINE_SET_PARAM0(pathIndex, pathSpeed, type) ((pathIndex) | ((pathSpeed) << 8))
 #define OBJMINE_SET_PARAM12(linkCount, type) ((linkCount) | ((type) << 0xC))
 
+#define OBJMINE_CHAIN_MAX 63
+
 typedef enum {
     /* 0 */ OBJMINE_TYPE_PATH,
     /* 1 */ OBJMINE_TYPE_AIR,
@@ -28,103 +30,53 @@ typedef struct {
 } ObjMineMtxF3; // size = 0x24
 
 typedef struct {
-    /* 0x00 */ s16 unk_00;
-    /* 0x02 */ s16 unk_02;
+    /* 0x00 */ s16 twist;
+    /* 0x02 */ s16 spin;
 } ObjMineAirLink; // size = 0x4
 
 typedef struct {
     /* 0x00 */ ObjMineMtxF3 basis;
-    /* 0x24 */ Vec3f unk_24;
-    /* 0x30 */ f32 unk_30;
-    /* 0x34 */ f32 unk_34;
-    /* 0x38 */ f32 unk_38;
-    /* 0x3C */ f32 unk_3C;
-    /* 0x40 */ f32 unk_40;
-    /* 0x44 */ f32 unk_44;
-    /* 0x48 */ f32 unk_48;
-    /* 0x4C */ s16 unk_4C;
-    /* 0x50 */ f32 unk_50;
-    /* 0x54 */ s16 unk_54;
-    /* 0x58 */ f32 unk_58;
-    /* 0x5C */ f32 unk_5C;
-    /* 0x60 */ ObjMineAirLink links[0x3F];
+    /* 0x24 */ Vec3f translation;
+    /* 0x30 */ f32 xDiff;
+    /* 0x34 */ f32 zDiff;
+    /* 0x38 */ f32 xVel;
+    /* 0x3C */ f32 zVel;
+    /* 0x40 */ f32 restore;
+    /* 0x44 */ f32 drag;
+    /* 0x48 */ f32 knockback;
+    /* 0x4C */ s16 knockbackAngle;
+    /* 0x50 */ f32 wobbleSize;
+    /* 0x54 */ s16 wobblePhase;
+    /* 0x58 */ f32 wobble;
+    /* 0x5C */ f32 wallCheckDist;
+    /* 0x60 */ ObjMineAirLink links[OBJMINE_CHAIN_MAX];
 } ObjMineAirChain; // size = 0x15C
 
 typedef struct {
     /* 0x00 */ ObjMineMtxF3 basis;
-    /* 0x24 */ Vec3f unk_24;
-    /* 0x30 */ Vec3f unk_30;
-    /* 0x3C */ Vec3f unk_3C;
+    /* 0x24 */ Vec3f pos; 
+    /* 0x30 */ Vec3f vel;
+    /* 0x3C */ Vec3f accel; 
 } ObjMineWaterLink; // size = 0x48
 
 typedef struct {
-    /* 0x0000 */ f32 unk_00;
-    /* 0x0004 */ Vec3f unk_04;
-    /* 0x0010 */ f32 unk_10;
-    /* 0x0014 */ f32 unk_14;
-    /* 0x0018 */ f32 unk_18;
-    /* 0x001C */ f32 unk_1C;
-    /* 0x0020 */ s16 unk_20;
-    /* 0x0024 */ f32 unk_24;
-    /* 0x0028 */ f32 unk_28;
-    /* 0x002C */ f32 unk_2C;
-    /* 0x0030 */ f32 unk_30;
-    /* 0x0034 */ f32 unk_34;
-    /* 0x0038 */ f32 unk_38;
-    /* 0x003C */ f32 unk_3C;
-    /* 0x0040 */ s8 unk_40;
-    /* 0x0044 */ ObjMineWaterLink links[0x3F];
+    /* 0x00 */ f32 drag;
+    /* 0x04 */ Vec3f knockbackDir;
+    /* 0x10 */ f32 knockback;
+    /* 0x14 */ f32 wobbleXZ;
+    /* 0x18 */ f32 wobbleY;
+    /* 0x1C */ f32 wobble;
+    /* 0x20 */ s16 wobblePhaseVel;
+    /* 0x24 */ f32 restoreX;
+    /* 0x28 */ f32 maxY;
+    /* 0x2C */ f32 restY;
+    /* 0x30 */ f32 restoreY;
+    /* 0x34 */ f32 wallCheckDist;
+    /* 0x38 */ f32 wallEjectX;
+    /* 0x3C */ f32 wallEjectZ;
+    /* 0x40 */ s8 touchWall;
+    /* 0x44 */ ObjMineWaterLink links[OBJMINE_CHAIN_MAX];
 } ObjMineWaterChain; // size = 0x11FC
-
-// definitely fake
-typedef struct {
-    char unk_00[0x8];
-    Vec3f unk_08;
-    char unk_14[0xC];
-    Vec3f unk_20;
-    char unk_2C[0x1C];
-} NextUnkStruct; // size = 0x48
-
-// maybe fake
-typedef struct {
-    /* 0x00 */ s16 unk_00;
-    /* 0x02 */ s16 unk_02;
-} ObjMineUnkStruct3;
-
-typedef struct {
-    /* 0x00 */ Vec3f unk_00;
-    /* 0x0C */ Vec3f unk_0C;
-    /* 0x18 */ Vec3f unk_18;
-    ///* 0x24 */ char unk_24[0x3C];
-    /* 0x24 */ Vec3f unk_24;
-    /* 0x30 */ f32 unk_30;
-    /* 0x34 */ f32 unk_34;
-    /* 0x38 */ f32 unk_38;
-    /* 0x3C */ f32 unk_3C;
-    /* 0x40 */ f32 unk_40;
-    /* 0x44 */ f32 unk_44;
-    /* 0x48 */ f32 unk_48;
-    /* 0x4C */ s16 unk_4C;
-    /* 0x50 */ f32 unk_50;
-    /* 0x54 */ s16 unk_54;
-    /* 0x58 */ f32 unk_58;
-    /* 0x5C */ f32 unk_5C;
-    /* 0x60 */ ObjMineUnkStruct3 unk_60[1];
-} ObjMineUnkStruct; // size = ?? 0x44??? 48 array???
-
-// probably fake
-typedef struct {
-    /* 0x00 */ Vec3f unk_00;
-    /* 0x0c */ Vec3f unk_0C;
-    ///* 0x10 */ f32 unk_10;
-    ///* 0x14 */ char unk_14[0x4];
-    /* 0x18 */ Vec3f unk_18;
-    ///* 0x1C */ char unk_1C[0x4];
-    ///* 0x20 */ f32 unk_20;
-    /* 0x24 */ Vec3f unk_24;
-    /* 0x30 */ Vec3f unk_30;
-    /* 0x3C */ Vec3f unk_3C;
-} ObjMineUnkStruct2; // size = 0x48???
 
 typedef struct ObjMine {
     /* 0x0000 */ Actor actor;

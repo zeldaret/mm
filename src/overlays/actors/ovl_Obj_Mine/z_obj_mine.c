@@ -12,6 +12,15 @@
 
 #define THIS ((ObjMine*)thisx)
 
+#define LINK_SIZE 12.0f
+#define ATTACH_OFFSET 10.0f
+#define AIR_RADIUS 24.0f
+#define WATER_RADIUS 36.0f
+#define BOMB_SPAWN_OFFSET 15.0f
+
+#define RAND_PLUSMINUS(limit) (Rand_ZeroOne()*(2.0f * (limit)) - (limit))
+#define RAND_PLUSMINUSALT(limit) ((Rand_ZeroOne() - 0.5f) * (2.0f * limit))
+
 void ObjMine_Init(Actor* thisx, PlayState* play);
 void ObjMine_Destroy(Actor* thisx, PlayState* play);
 void ObjMine_Path_Update(Actor* thisx, PlayState* play);
@@ -97,15 +106,15 @@ void ObjMine_Path_MoveToWaypoint(ObjMine* this, s32 index) {
 }
 
 s32 ObjMine_GetUnitVec3f(Vec3f* src, Vec3f* dst) {
-    f32 temp_f0 = Math3D_Vec3fMagnitude(src);
+    f32 mag = Math3D_Vec3fMagnitude(src);
 
-    if (temp_f0 < 0.001f) {
+    if (mag < 0.001f) {
         return false;
     }
 
-    dst->x = src->x * (1.0f / temp_f0);
-    dst->y = src->y * (1.0f / temp_f0);
-    dst->z = src->z * (1.0f / temp_f0);
+    dst->x = src->x * (1.0f / mag);
+    dst->y = src->y * (1.0f / mag);
+    dst->z = src->z * (1.0f / mag);
     return true;
 }
 
@@ -162,49 +171,50 @@ s32 ObjMine_AirWater_CheckOC(ObjMine* this) {
     return false;
 }
 
-void ObjMine_Air_CheckAC(ObjMine* this, s16* arg1, s16* arg2) {
+void ObjMine_Air_CheckAC(ObjMine* this, s16* hitAngle, s16* hitTorque) {
     s32 pad[2];
     Vec3s* centerPos3s = &this->collider.elements[0].dim.worldSphere.center;
     Vec3f centerPos;
-    s16 sp3E;
+    s16 yawToAttack;
     Actor* attackActor = this->collider.base.ac;
 
     Math_Vec3s_ToVec3f(&centerPos, centerPos3s);
-    sp3E = Math_Vec3f_Yaw(&attackActor->world.pos, &centerPos);
+    yawToAttack = Math_Vec3f_Yaw(&attackActor->world.pos, &centerPos);
 
     // dmgFlag check is (DMG_DEKU_BUBBLE | DMG_FIRE_ARROW | DMG_ICE_ARROW | DMG_FIRE_ARROW | DMG_NORMAL_ARROW)
     if (this->collider.elements[0].info.acHitInfo->toucher.dmgFlags & 0x13820) {
-        *arg1 = attackActor->shape.rot.y;
-        *arg2 = attackActor->shape.rot.y - sp3E;
+        *hitAngle = attackActor->shape.rot.y;
+        *hitTorque = attackActor->shape.rot.y - yawToAttack;
     } else {
         Vec3f hitPos;
         Vec3s* hitPos3s = &this->collider.elements[0].info.bumper.hitPos;
 
         Math_Vec3s_ToVec3f(&hitPos, hitPos3s);
-        *arg1 = Actor_YawBetweenActors(attackActor, &this->actor);
-        *arg2 = Math_Vec3f_Yaw(&attackActor->world.pos, &hitPos) - sp3E;
+        *hitAngle = Actor_YawBetweenActors(attackActor, &this->actor);
+        *hitTorque = Math_Vec3f_Yaw(&attackActor->world.pos, &hitPos) - yawToAttack;
     }
 }
 
-void ObjMine_Water_CheckAC(ObjMine* this, Vec3f* arg1) {
+void ObjMine_Water_CheckAC(ObjMine* this, Vec3f* knockbackDir) {
     Actor* attackActor = this->collider.base.ac;
 
-    // dmgFlag check is (DMG_DEKU_BUBBLE | DMG_FIRE_ARROW | DMG_ICE_ARROW | DMG_FIRE_ARROW | DMG_NORMAL_ARROW)
+    // dmgFlag check is (DMG_DEKU_BUBBLE | DMG_LIGHT_ARROW | DMG_ICE_ARROW | DMG_FIRE_ARROW | DMG_NORMAL_ARROW)
     if ((this->collider.elements[0].info.acHitInfo->toucher.dmgFlags & 0x13820)) {
         Matrix_Push();
         Matrix_RotateYS(attackActor->shape.rot.y, MTXMODE_NEW);
         Matrix_RotateXS(attackActor->shape.rot.x, MTXMODE_APPLY);
-        Matrix_MultVecZ(1.0f, arg1);
+        Matrix_MultVecZ(1.0f, knockbackDir);
         Matrix_Pop();
     } else {
-        Vec3f sp20;
+        Vec3f posDiff;
         Sphere16* sphere = &this->collider.elements[0].dim.worldSphere;
 
-        sp20.x = sphere->center.x - attackActor->world.pos.x;
-        sp20.y = sphere->center.y - attackActor->world.pos.y;
-        sp20.z = sphere->center.z - attackActor->world.pos.z;
-        if (!ObjMine_GetUnitVec3f(&sp20, arg1)) {
-            Math_Vec3f_Copy(arg1, &sStandardBasis.y);
+        posDiff.x = sphere->center.x - attackActor->world.pos.x;
+        posDiff.y = sphere->center.y - attackActor->world.pos.y;
+        posDiff.z = sphere->center.z - attackActor->world.pos.z;
+
+        if (!ObjMine_GetUnitVec3f(&posDiff, knockbackDir)) {
+            Math_Vec3f_Copy(knockbackDir, &sStandardBasis.y);
         }
     }
 }
@@ -245,25 +255,25 @@ void ObjMine_ReplaceRotation(ObjMineMtxF3* rotation) {
 }
 
 s32 ObjMine_StepUntilParallel(Vec3f* value, Vec3f* target, f32 angleStep) {
-    Vec3f sp3C;
-    Vec3f sp30;
-    Vec3f sp24;
-    f32 sp20 = Math3D_Parallel(value, target);
+    Vec3f perpVec;
+    Vec3f prevValue;
+    Vec3f perpNormal;
+    f32 cosAngle = Math3D_Parallel(value, target);
 
-    if (cos_rad(angleStep) <= sp20) {
+    if (cos_rad(angleStep) <= cosAngle) {
         Math_Vec3f_Copy(value, target);
         return true;
     }
 
     Matrix_Push();
-    Math_Vec3f_Copy(&sp30, value);
-    Math3D_CrossProduct(value, target, &sp3C);
-    if (ObjMine_GetUnitVec3f(&sp3C, &sp24)) {
-        Matrix_RotateAxisS(RADF_TO_BINANG(angleStep), &sp24, MTXMODE_NEW);
-        Matrix_MultVec3f(&sp30, value);
+    Math_Vec3f_Copy(&prevValue, value);
+    Math3D_CrossProduct(value, target, &perpVec);
+    if (ObjMine_GetUnitVec3f(&perpVec, &perpNormal)) {
+        Matrix_RotateAxisS(RADF_TO_BINANG(angleStep), &perpNormal, MTXMODE_NEW);
+        Matrix_MultVec3f(&prevValue, value);
     } else {
         Matrix_RotateXFNew(angleStep);
-        Matrix_MultVec3f(&sp30, value);
+        Matrix_MultVec3f(&prevValue, value);
     }
 
     Matrix_Pop();
@@ -277,34 +287,34 @@ void ObjMine_UpdateCollider(ObjMine* this) {
 }
 
 void ObjMine_Air_InitChain(ObjMine* this, s32 linkCount) {
-    f32 arg1f = linkCount;
-    ObjMineAirChain* chain1 = &this->chain.air;
-    ObjMineAirLink* link1;
+    f32 linkCountF = linkCount;
+    ObjMineAirChain* airChain = &this->chain.air;
+    ObjMineAirLink* airLink;
     s32 i;
-    f32 temp_f12 = this->actor.home.rot.z * 5.0f;
+    f32 wallCheckRadius = this->actor.home.rot.z * 5.0f;
 
-    chain1->basis.x.x = 1.0f;
-    chain1->basis.y.y = 1.0f;
-    chain1->basis.z.z = 1.0f;
-    chain1->unk_24.y = 1.0f;
+    airChain->basis.x.x = 1.0f;
+    airChain->basis.y.y = 1.0f;
+    airChain->basis.z.z = 1.0f;
+    airChain->translation.y = 1.0f;
 
     if (linkCount > 0) {
-        chain1->unk_40 = -sqrtf(0.001984f / arg1f); // approx 1/504 = 1/8 * 1/63
-        chain1->unk_44 =  0.95f + (0.00031746097f * arg1f); // approx 1/3150 = 1/50 * 1/63
+        airChain->restore = -sqrtf(0.001984f / linkCountF); // approx 1/504 = 1/8 * 1/63
+        airChain->drag =  0.95f + (0.00031746097f * linkCountF); // approx 1/3150 = 1/50 * 1/63
     }
 
-    chain1->unk_58 = 0.0002f;
+    airChain->wobble = 0.0002f;
 
-    for (i = 0, link1 = chain1->links; i < linkCount; i++, link1++) {
-        link1->unk_00 = 0x4000;
+    for (i = 0, airLink = airChain->links; i < linkCount; i++, airLink++) {
+        airLink->twist = 0x4000;
     }
 
-    if (temp_f12 < 0.0f) {
-        chain1->unk_5C = -1.0f;
-    } else if (temp_f12 <= 21.0f) {
-        chain1->unk_5C = 0.0f;
+    if (wallCheckRadius < 0.0f) {
+        airChain->wallCheckDist = -1.0f;
+    } else if (wallCheckRadius <= 20.0f + 1.0f) {
+        airChain->wallCheckDist = 0.0f;
     } else {
-        chain1->unk_5C = SQ(temp_f12 - 20.0f);
+        airChain->wallCheckDist = SQ(wallCheckRadius - 20.0f);
     }
 }
 
@@ -315,88 +325,88 @@ void ObjMine_Air_SetCollider(ObjMine* this, s32 linkCount) {
 }
 
 void ObjMine_Air_SetBasis(ObjMine* this) {
-    ObjMineAirChain* chain1 = &this->chain.air;
-    Vec3f sp28;
+    ObjMineAirChain* airChain = &this->chain.air;
+    Vec3f tempVec;
 
-    sp28.x = -chain1->unk_30;
-    sp28.y = 1.0f;
-    sp28.z = -chain1->unk_34;
+    tempVec.x = -airChain->xDiff;
+    tempVec.y = 1.0f;
+    tempVec.z = -airChain->zDiff;
 
-    ObjMine_GetUnitVec3f(&sp28, &chain1->basis.y);
-    Math3D_CrossProduct(&sStandardBasis.x, &chain1->basis.y, &sp28);
-    ObjMine_GetUnitVec3f(&sp28, &chain1->basis.z);
-    Math3D_CrossProduct(&chain1->basis.y, &chain1->basis.z, &sp28);
-    ObjMine_GetUnitVec3f(&sp28, &chain1->basis.x);
+    ObjMine_GetUnitVec3f(&tempVec, &airChain->basis.y);
+    Math3D_CrossProduct(&sStandardBasis.x, &airChain->basis.y, &tempVec);
+    ObjMine_GetUnitVec3f(&tempVec, &airChain->basis.z);
+    Math3D_CrossProduct(&airChain->basis.y, &airChain->basis.z, &tempVec);
+    ObjMine_GetUnitVec3f(&tempVec, &airChain->basis.x);
 }
 
 void ObjMine_Air_SetWorld(ObjMine* this) {
     s32 linkCount = OBJMINE_GET_LINK_COUNT(&this->actor);
-    f32 temp_f0 = 10.0f + (linkCount * 12.0f);
+    f32 chainLength = 10.0f + (linkCount * 12.0f);
 
-    this->actor.world.pos.x = (this->chain.air.basis.y.x * -temp_f0) + this->actor.home.pos.x;
-    this->actor.world.pos.y = (this->chain.air.basis.y.y * -temp_f0) + this->actor.home.pos.y;
-    this->actor.world.pos.z = (this->chain.air.basis.y.z * -temp_f0) + this->actor.home.pos.z;
+    this->actor.world.pos.x = (this->chain.air.basis.y.x * -chainLength) + this->actor.home.pos.x;
+    this->actor.world.pos.y = (this->chain.air.basis.y.y * -chainLength) + this->actor.home.pos.y;
+    this->actor.world.pos.z = (this->chain.air.basis.y.z * -chainLength) + this->actor.home.pos.z;
 }
 
 void ObjMine_Air_SetChain3034(ObjMine* this) {
     s32 linkCount = OBJMINE_GET_LINK_COUNT(&this->actor);
-    f32 temp_f0 = 1.0f / (10.0f + (linkCount * 12.0f));
+    f32 invLength = 1.0f / (10.0f + (linkCount * 12.0f));
     f32 dx = this->actor.world.pos.x - this->actor.home.pos.x;
     f32 dz = this->actor.world.pos.z - this->actor.home.pos.z;
 
-    this->chain.air.unk_30 = dx * temp_f0;
-    this->chain.air.unk_34 = dz * temp_f0;
+    this->chain.air.xDiff = dx * invLength;
+    this->chain.air.zDiff = dz * invLength;
 }
 
 void ObjMine_Water_InitChain(ObjMine* this, s32 linkCount) {
-    ObjMineWaterChain* chain2 = &this->chain.water;
-    ObjMineWaterLink* link2;
+    ObjMineWaterChain* waterChain = &this->chain.water;
+    ObjMineWaterLink* waterLink;
     s32 i;
-    f32 sp58 = this->actor.home.rot.z * 5.0f;
-    f32 temp_f24;
-    f32 temp_f26;
+    f32 wallCheckRadius = this->actor.home.rot.z * 5.0f;
+    f32 linkY;
+    f32 wobbleVel;
 
-    chain2->unk_00 = 0.9f;
-    chain2->unk_1C = 0.003f;
+    waterChain->drag = 0.9f;
+    waterChain->wobble = 0.003f;
 
-    chain2->unk_20 = RANDU_BITS(13);
-    chain2->unk_24 = -0.0002f;
-    chain2->unk_30 = -0.0002f;
+    waterChain->wobblePhaseVel = RANDU_BITS(13);
+    waterChain->restoreX = -0.0002f;
+    waterChain->restoreY = -0.0002f;
 
-    temp_f26 = chain2->unk_1C * 6.0f;
-    temp_f24 = this->actor.home.pos.y;
+    wobbleVel = waterChain->wobble * 6.0f;
+    linkY = this->actor.home.pos.y;
 
-    for (i = 0, link2 = chain2->links; i < linkCount; i++, link2++) {
-        temp_f24 += 12.0f;
-        link2->basis.x.x = 1.0f;
-        link2->basis.y.y = 1.0f;
-        link2->basis.z.z = 1.0f;
-        link2->unk_24.x = this->actor.home.pos.x;
-        link2->unk_24.y = temp_f24;
-        link2->unk_24.z = this->actor.home.pos.z;
-        link2->unk_30.x = (Rand_ZeroOne() - 0.5f) * temp_f26;
-        link2->unk_30.y = (Rand_ZeroOne() - 0.5f) * temp_f26;
-        link2->unk_30.z = (Rand_ZeroOne() - 0.5f) * temp_f26;
+    for (i = 0, waterLink = waterChain->links; i < linkCount; i++, waterLink++) {
+        linkY += 12.0f;
+        waterLink->basis.x.x = 1.0f;
+        waterLink->basis.y.y = 1.0f;
+        waterLink->basis.z.z = 1.0f;
+        waterLink->pos.x = this->actor.home.pos.x;
+        waterLink->pos.y = linkY;
+        waterLink->pos.z = this->actor.home.pos.z;
+        waterLink->vel.x = (Rand_ZeroOne() - 0.5f) * wobbleVel;
+        waterLink->vel.y = (Rand_ZeroOne() - 0.5f) * wobbleVel;
+        waterLink->vel.z = (Rand_ZeroOne() - 0.5f) * wobbleVel;
+    }
+    waterChain->maxY = linkY;
+    
+    waterChain->restY = waterChain->maxY * 0.97f;
+    linkY -= 18.0f;
+
+    if (waterChain->restY < linkY) {
+        waterChain->restY = linkY;
     }
 
-    chain2->unk_28 = temp_f24;
-    chain2->unk_2C = temp_f24 * 0.97f;
-    temp_f24 -= 18.0f;
-
-    if (chain2->unk_2C < temp_f24) {
-        chain2->unk_2C = temp_f24;
-    }
-
-    if (sp58 < 0.0f) {
-        chain2->unk_34 = -1.0f;
-    } else if (sp58 <= 37.0f) {
-        chain2->unk_34 = 0.0f;
+    if (wallCheckRadius < 0.0f) {
+        waterChain->wallCheckDist = -1.0f;
+    } else if (wallCheckRadius <= 36.0f + 1.0f) {
+        waterChain->wallCheckDist = 0.0f;
     } else {
-        chain2->unk_34 = SQ(sp58 - 36.0f);
+        waterChain->wallCheckDist = SQ(wallCheckRadius - 36.0f);
     }
 }
 
-void ObjMine_Water_SetCollider(ObjMine* this, s32 linkCount) {
+void ObjMine_Water_InitCollider(ObjMine* this, s32 linkCount) {
     Matrix_Translate(this->actor.home.pos.x, this->actor.home.pos.y + (linkCount * 12.0f) + 10.0f,
                              this->actor.home.pos.z, MTXMODE_NEW);
     Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
@@ -406,227 +416,227 @@ void ObjMine_Water_SetCollider(ObjMine* this, s32 linkCount) {
 void ObjMine_Water_SetWorld(ObjMine* this) {
     s32 pad;
     s32 linkCount = OBJMINE_GET_LINK_COUNT(&this->actor);
-    ObjMineWaterChain* chain2 = &this->chain.water;
+    ObjMineWaterChain* waterChain = &this->chain.water;
     
     if (linkCount == 0) {
         this->actor.world.pos.y = this->actor.home.pos.y + 12.0f + 10.0f;
     } else {
-        ObjMineWaterLink* link2 = &chain2->links[linkCount - 1];
-        Vec3f sp1C;
+        ObjMineWaterLink* lastLink = &waterChain->links[linkCount - 1];
+        Vec3f mineOffset;
 
-        Math_Vec3f_ScaleAndStore(&link2->basis.y, 10.0f, &sp1C);
-        Math_Vec3f_Sum(&link2->unk_24, &sp1C, &this->actor.world.pos);
+        Math_Vec3f_ScaleAndStore(&lastLink->basis.y, 10.0f, &mineOffset);
+        Math_Vec3f_Sum(&lastLink->pos, &mineOffset, &this->actor.world.pos);
     }
 }
 
-void func_80A81E7C(ObjMine* this, PlayState* play) {
+void ObjMine_Water_WallCheck(ObjMine* this, PlayState* play) {
     s32 pad;
-    ObjMineWaterChain* chain2 = &this->chain.water;
+    ObjMineWaterChain* waterChain = &this->chain.water;
     
-    chain2->unk_40 = false;
-    if ((-0.000001f < chain2->unk_34) && (chain2->unk_34 <= Math3D_XZDistanceSquared(this->actor.home.pos.x, this->actor.home.pos.z,
-                                                        this->actor.world.pos.x, this->actor.world.pos.z))) {
-        Vec3f sp7C;
-        Vec3f sp70;
-        Vec3f sp64;
-        Vec3f xzDistFromHome;
-        Vec3f xzDirFromHome;
-        CollisionPoly* dummyPoly;
-        s32 dummyBgId;
-        f32 dummyNorm;
-        f32 dummyInvNorm;
+    waterChain->touchWall = false;
+    if (waterChain->wallCheckDist > -1e-6f) {
+        if (waterChain->wallCheckDist <= Math3D_XZDistanceSquared(this->actor.home.pos.x, this->actor.home.pos.z,
+                                                        this->actor.world.pos.x, this->actor.world.pos.z)) {
+            Vec3f centerPos;
+            Vec3f offsetPos;
+            Vec3f dummyResult;
+            Vec3f xzDistFromHome;
+            Vec3f xzDirFromHome;
+            CollisionPoly* dummyPoly;
+            s32 dummyBgId;
+            f32 dummyNorm;
+            f32 dummyInvNorm;
 
-        xzDistFromHome.x = this->actor.world.pos.x - this->actor.home.pos.x;
-        xzDistFromHome.y = 0.0f;
-        xzDistFromHome.z = this->actor.world.pos.z - this->actor.home.pos.z;
+            xzDistFromHome.x = this->actor.world.pos.x - this->actor.home.pos.x;
+            xzDistFromHome.y = 0.0f;
+            xzDistFromHome.z = this->actor.world.pos.z - this->actor.home.pos.z;
 
-        if (ObjMine_GetUnitVec3fNorm(&xzDistFromHome, &xzDirFromHome, &dummyNorm, &dummyInvNorm)) {
+            if (ObjMine_GetUnitVec3fNorm(&xzDistFromHome, &xzDirFromHome, &dummyNorm, &dummyInvNorm)) {
 
-            sp70.x = this->actor.world.pos.x + (xzDirFromHome.x * 36.0f);
-            sp70.y = this->actor.world.pos.y;
-            sp70.z = this->actor.world.pos.z + (xzDirFromHome.z * 36.0f);
+                offsetPos.x = this->actor.world.pos.x + (xzDirFromHome.x * 36.0f);
+                offsetPos.y = this->actor.world.pos.y;
+                offsetPos.z = this->actor.world.pos.z + (xzDirFromHome.z * 36.0f);
 
-            sp7C.x = this->actor.home.pos.x;
-            sp7C.y = this->actor.world.pos.y;
-            sp7C.z = this->actor.home.pos.z;
+                centerPos.x = this->actor.home.pos.x;
+                centerPos.y = this->actor.world.pos.y;
+                centerPos.z = this->actor.home.pos.z;
 
-            if (BgCheck_EntityLineTest1(&play->colCtx, &sp7C, &sp70, &sp64, &dummyPoly, 1, 0, 0, 1, &dummyBgId)) {
-                chain2->unk_40 = true;
-                chain2->unk_38 = xzDirFromHome.x * -0.2f;
-                chain2->unk_3C = xzDirFromHome.z * -0.2f;
+                if (BgCheck_EntityLineTest1(&play->colCtx, &centerPos, &offsetPos, &dummyResult, &dummyPoly, true, false, false, true, &dummyBgId)) {
+                    waterChain->touchWall = true;
+                    waterChain->wallEjectX = xzDirFromHome.x * -0.2f;
+                    waterChain->wallEjectZ = xzDirFromHome.z * -0.2f;
+                }
             }
         }
     }
 }
 
-#ifdef NON_MATCHING
+#if 0
 // Probably equivalent, but nightmare loop unrolls.
-void func_80A81FFC(ObjMine *this) {
-    static Vec3f D_80A849D0[0x40]; 
-    ObjMineWaterChain *chain2 = &this->chain.water;
-    ObjMineWaterLink *link2;
+void ObjMine_Water_ApplyForces(ObjMine *this) {
+    static Vec3f sLinkAccel[0x40]; 
+    ObjMineWaterChain *waterChain = &this->chain.water;
+    ObjMineWaterLink *waterLink;
     s32 i;
-    s16 var_s3;
+    s16 wobblePhase;
     s32 linkCount = OBJMINE_GET_LINK_COUNT(&this->actor);
-    f32 invLinkCount = 1.0f / (f32) linkCount;
-    f32 temp_fs0 = (chain2->links[linkCount - 1].unk_24.y - chain2->unk_2C) * chain2->unk_30;
-    Vec3f sp90;
-    f32 temp_ft4;
+    f32 inverseCount = 1.0f / (f32) linkCount;
+    f32 restoreY = (waterChain->links[linkCount - 1].pos.y - waterChain->restY) * waterChain->restoreY;
+    Vec3f tension;
+    f32 scaledKnockback;
 
-    for(i = 0, link2 = chain2->links, var_s3 = 0; i < linkCount; i++, link2++, var_s3 += chain2->unk_20) {
-        Math_Vec3f_Copy(&D_80A849D0[i], &link2->unk_3C);
-        if (link2->unk_24.y <= this->actor.home.pos.y) {
-            link2->unk_3C.y = chain2->unk_30 * -96.0f;
-        } else if (temp_fs0 > 0.0f) {
-            link2->unk_3C.y = (i + 1) * invLinkCount * (temp_fs0 / 0.3f);
+    for(i = 0, waterLink = waterChain->links, wobblePhase = 0; i < linkCount; i++, waterLink++, wobblePhase += waterChain->wobblePhaseVel) {
+        Math_Vec3f_Copy(&sLinkAccel[i], &waterLink->accel);
+        if (waterLink->pos.y <= this->actor.home.pos.y) {
+            waterLink->accel.y = waterChain->restoreY * -96.0f;
+        } else if (restoreY > 0.0f) {
+            waterLink->accel.y = (i + 1) * inverseCount * (restoreY / 0.3f);
         } else {
-            link2->unk_3C.y = temp_fs0;
+            waterLink->accel.y = restoreY;
         }
-        link2->unk_3C.x = (link2->unk_24.x - this->actor.home.pos.x) * chain2->unk_24;
-        link2->unk_3C.z = (link2->unk_24.z - this->actor.home.pos.z) * chain2->unk_24;
-        link2->unk_3C.x += chain2->unk_14 * Math_SinS(var_s3);
-        link2->unk_3C.y += chain2->unk_18;
-        link2->unk_3C.z += chain2->unk_14 * Math_CosS(var_s3);
+        waterLink->accel.x = (waterLink->pos.x - this->actor.home.pos.x) * waterChain->restoreX;
+        waterLink->accel.z = (waterLink->pos.z - this->actor.home.pos.z) * waterChain->restoreX;
+        waterLink->accel.x += waterChain->wobbleXZ * Math_SinS(wobblePhase);
+        waterLink->accel.y += waterChain->wobbleY;
+        waterLink->accel.z += waterChain->wobbleXZ * Math_CosS(wobblePhase);
     }
-    if (chain2->unk_10 > 0.0001f) {
-        for(i = 0, link2 = chain2->links; i < linkCount; i++, link2++) {
-            temp_ft4 = SQ((linkCount - i) * invLinkCount);
+    if (waterChain->knockback > 0.0001f) {
+        for(i = 0, waterLink = waterChain->links; i < linkCount; i++, waterLink++) {
+            scaledKnockback = SQ((linkCount - i) * inverseCount);
             
-            link2->unk_3C.x += chain2->unk_04.x * temp_ft4;
-            link2->unk_3C.y += chain2->unk_04.y * temp_ft4;
-            link2->unk_3C.z += chain2->unk_04.z * temp_ft4;
+            waterLink->accel.x += waterChain->knockbackDir.x * scaledKnockback;
+            waterLink->accel.y += waterChain->knockbackDir.y * scaledKnockback;
+            waterLink->accel.z += waterChain->knockbackDir.z * scaledKnockback;
         }
     }
-    if (chain2->unk_40) {
-        for(i = 0, link2 = chain2->links; i < linkCount; i++, link2++) {
-            link2->unk_3C.x += chain2->unk_38;
-            link2->unk_3C.z += chain2->unk_3C;
+    if (waterChain->touchWall) {
+        for(i = 0, waterLink = waterChain->links; i < linkCount; i++, waterLink++) {
+            waterLink->accel.x += waterChain->wallEjectX;
+            waterLink->accel.z += waterChain->wallEjectZ;
         }
     }
 
-    for(i = 0, link2 = chain2->links; i < linkCount; i++, link2++) {             
-        Math_Vec3f_Copy(&sp90, &gZeroVec3f);
+    for(i = 0, waterLink = waterChain->links; i < linkCount; i++, waterLink++) {             
+        Math_Vec3f_Copy(&tension, &gZeroVec3f);
         if(i - 2 >= 0) {
-            sp90.x += D_80A849D0[i - 2].x * 0.075f;
-            sp90.y += D_80A849D0[i - 2].y * 0.075f;
-            sp90.z += D_80A849D0[i - 2].z * 0.075f;
+            tension.x += sLinkAccel[i - 2].x * 0.075f;
+            tension.y += sLinkAccel[i - 2].y * 0.075f;
+            tension.z += sLinkAccel[i - 2].z * 0.075f;
         }
         if(i - 1 >= 0) {
-            sp90.x += D_80A849D0[i - 1].x * 0.15f;
-            sp90.y += D_80A849D0[i - 1].y * 0.15f;
-            sp90.z += D_80A849D0[i - 1].z * 0.15f;
+            tension.x += sLinkAccel[i - 1].x * 0.15f;
+            tension.y += sLinkAccel[i - 1].y * 0.15f;
+            tension.z += sLinkAccel[i - 1].z * 0.15f;
         }
-            sp90.x += D_80A849D0[i].x * 0.3f;
-            sp90.y += D_80A849D0[i].y * 0.3f;
-            sp90.z += D_80A849D0[i].z * 0.3f;
+            tension.x += sLinkAccel[i].x * 0.3f;
+            tension.y += sLinkAccel[i].y * 0.3f;
+            tension.z += sLinkAccel[i].z * 0.3f;
         if(i + 1 < linkCount) {
-            sp90.x += D_80A849D0[i + 1].x * 0.15f;
-            sp90.y += D_80A849D0[i + 1].y * 0.15f;
-            sp90.z += D_80A849D0[i + 1].z * 0.15f;
+            tension.x += sLinkAccel[i + 1].x * 0.15f;
+            tension.y += sLinkAccel[i + 1].y * 0.15f;
+            tension.z += sLinkAccel[i + 1].z * 0.15f;
         }
         if(i + 2 < linkCount) {
-            sp90.x += D_80A849D0[i + 2].x * 0.075f;
-            sp90.y += D_80A849D0[i + 2].y * 0.075f;
-            sp90.z += D_80A849D0[i + 2].z * 0.075f;
+            tension.x += sLinkAccel[i + 2].x * 0.075f;
+            tension.y += sLinkAccel[i + 2].y * 0.075f;
+            tension.z += sLinkAccel[i + 2].z * 0.075f;
         }
-        link2->unk_3C.x += sp90.x;
-        link2->unk_3C.y += sp90.y;
-        link2->unk_3C.z += sp90.z;
+        waterLink->accel.x += tension.x;
+        waterLink->accel.y += tension.y;
+        waterLink->accel.z += tension.z;
     }
 
 }
 #else
 Vec3f D_80A849D0[0x40];
-void func_80A81FFC(ObjMine* this);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Mine/func_80A81FFC.s")
+void ObjMine_Water_ApplyForces(ObjMine* this);
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Mine/ObjMine_Water_ApplyForces.s")
 #endif
 
-void func_80A828A8(ObjMine* this) {
+void ObjMine_Water_UpdateLinks(ObjMine* this) {
     s32 pad;
-    Vec3f spE0;
-    Vec3f spD4;
-    Vec3f spC8;
-    s32 spC4 = OBJMINE_GET_LINK_COUNT(&this->actor);
-    ObjMineWaterChain* chain2 = &this->chain.water;
-    ObjMineWaterLink* link2;
+    ObjMineMtxF3 newBasis;
+    s32 linkCount = OBJMINE_GET_LINK_COUNT(&this->actor);
+    ObjMineWaterChain* waterChain = &this->chain.water;
+    ObjMineWaterLink* waterLink;
     s32 i;
-    Vec3f* phi_s3;
-    Vec3f spA8;
-    Vec3f sp9C;
-    Vec3f sp90;
-    Vec3f sp84;
-    s32 phi_s5;
-    f32 sp7C;
-    f32 sp78;
-    Vec3f* phi_x;
+    Vec3f* lastBasisX;
+    Vec3f tempVec;
+    Vec3f diffDir;
+    Vec3f unusedLinkPos;
+    Vec3f lastLinkPos;
+    s32 changeBasis;
+    f32 diffNorm;
+    f32 dummyInvNorm;
+    Vec3f* tempBasisX;
 
-    sp84.x = this->actor.home.pos.x;
-    sp84.y = this->actor.home.pos.y + 6.0f;
-    sp84.z = this->actor.home.pos.z;
+    lastLinkPos.x = this->actor.home.pos.x;
+    lastLinkPos.y = this->actor.home.pos.y + 6.0f;
+    lastLinkPos.z = this->actor.home.pos.z;
 
-    for (i = 0, phi_s3 = NULL, link2 = chain2->links; i < spC4; i++, phi_s3 = &link2->basis.x, link2++) {
-        phi_s5 = false;
+    for (i = 0, lastBasisX = NULL, waterLink = waterChain->links; i < linkCount; i++, lastBasisX = &waterLink->basis.x, waterLink++) {
+        changeBasis = false;
 
-        link2->unk_30.x += link2->unk_3C.x;
-        link2->unk_30.y += link2->unk_3C.y;
-        link2->unk_30.z += link2->unk_3C.z;
+        waterLink->vel.x += waterLink->accel.x;
+        waterLink->vel.y += waterLink->accel.y;
+        waterLink->vel.z += waterLink->accel.z;
 
-        Math_Vec3f_Scale(&link2->unk_30, chain2->unk_00);
-        Math_Vec3f_Copy(&sp90, &link2->unk_24);
+        Math_Vec3f_Scale(&waterLink->vel, waterChain->drag);
+        Math_Vec3f_Copy(&unusedLinkPos, &waterLink->pos);
 
-        link2->unk_24.x += link2->unk_30.x;
-        link2->unk_24.y += link2->unk_30.y;
-        link2->unk_24.z += link2->unk_30.z;
+        waterLink->pos.x += waterLink->vel.x;
+        waterLink->pos.y += waterLink->vel.y;
+        waterLink->pos.z += waterLink->vel.z;
 
-        if ((link2->unk_24.y <= this->actor.home.pos.y) && (link2->unk_30.y < 0.0f)) {
-            link2->unk_30.y *= 0.1f;
+        if ((waterLink->pos.y <= this->actor.home.pos.y) && (waterLink->vel.y < 0.0f)) {
+            waterLink->vel.y *= 0.1f;
         }
 
-        Math_Vec3f_Diff(&link2->unk_24, &sp84, &spA8);
+        Math_Vec3f_Diff(&waterLink->pos, &lastLinkPos, &tempVec);
 
-        if (ObjMine_GetUnitVec3fNorm(&spA8, &sp9C, &sp7C, &sp78) && (sp7C > 4.0f)) {
-            Math_Vec3f_Copy(&spD4, &link2->basis.y);
-            ObjMine_StepUntilParallel(&spD4, &sp9C, M_PI / 30);
-            phi_x = (phi_s3 == NULL) ? &sStandardBasis.x : phi_s3;
+        if (ObjMine_GetUnitVec3fNorm(&tempVec, &diffDir, &diffNorm, &dummyInvNorm) && (diffNorm > 4.0f)) {
+            Math_Vec3f_Copy(&newBasis.y, &waterLink->basis.y);
+            ObjMine_StepUntilParallel(&newBasis.y, &diffDir, M_PI / 30);
+            tempBasisX = (lastBasisX == NULL) ? &sStandardBasis.x : lastBasisX;
 
-            Math3D_CrossProduct(phi_x, &spD4, &spA8);
+            Math3D_CrossProduct(tempBasisX, &newBasis.y, &tempVec);
 
-            if (ObjMine_GetUnitVec3f(&spA8, &spE0)) {
-                Math3D_CrossProduct(&spD4, &spE0, &spA8);
-                if (ObjMine_GetUnitVec3f(&spA8, &spC8)) {
-                    phi_s5 = true;
+            if (ObjMine_GetUnitVec3f(&tempVec, &newBasis.z)) {
+                Math3D_CrossProduct(&newBasis.y, &newBasis.z, &tempVec);
+                if (ObjMine_GetUnitVec3f(&tempVec, &newBasis.x)) {
+                    changeBasis = true;
                 }
             }
         }
 
-        if (phi_s5) {
-            Math_Vec3f_Copy(&link2->basis.x, &spC8);
-            Math_Vec3f_Copy(&link2->basis.y, &spD4);
-            Math_Vec3f_Copy(&link2->basis.z, &spE0);
+        if (changeBasis) {
+            Math_Vec3f_Copy(&waterLink->basis.x, &newBasis.x);
+            Math_Vec3f_Copy(&waterLink->basis.y, &newBasis.y);
+            Math_Vec3f_Copy(&waterLink->basis.z, &newBasis.z);
         } else {
-            sp7C = 4.0f;
+            diffNorm = 4.0f;
         }
 
-        if (sp7C >= 6.0f) {
-            link2->unk_24.x = sp84.x + (link2->basis.y.x * 6.0f);
-            link2->unk_24.y = sp84.y + (link2->basis.y.y * 6.0f);
-            link2->unk_24.z = sp84.z + (link2->basis.y.z * 6.0f);
+        if (diffNorm >= 6.0f) {
+            waterLink->pos.x = lastLinkPos.x + (waterLink->basis.y.x * 6.0f);
+            waterLink->pos.y = lastLinkPos.y + (waterLink->basis.y.y * 6.0f);
+            waterLink->pos.z = lastLinkPos.z + (waterLink->basis.y.z * 6.0f);
         } else {
-            link2->unk_24.x = sp84.x + (link2->basis.y.x * sp7C);
-            link2->unk_24.y = sp84.y + (link2->basis.y.y * sp7C);
-            link2->unk_24.z = sp84.z + (link2->basis.y.z * sp7C);
+            waterLink->pos.x = lastLinkPos.x + (waterLink->basis.y.x * diffNorm);
+            waterLink->pos.y = lastLinkPos.y + (waterLink->basis.y.y * diffNorm);
+            waterLink->pos.z = lastLinkPos.z + (waterLink->basis.y.z * diffNorm);
         }
 
-        sp84.x = link2->unk_24.x + (link2->basis.y.x * 6.0f);
-        sp84.y = link2->unk_24.y + (link2->basis.y.y * 6.0f);
-        sp84.z = link2->unk_24.z + (link2->basis.y.z * 6.0f);
+        lastLinkPos.x = waterLink->pos.x + (waterLink->basis.y.x * 6.0f);
+        lastLinkPos.y = waterLink->pos.y + (waterLink->basis.y.y * 6.0f);
+        lastLinkPos.z = waterLink->pos.z + (waterLink->basis.y.z * 6.0f);
     }
 }
 
 void ObjMine_Water_UpdateChain(ObjMine* this, PlayState* play) {
-    func_80A81E7C(this, play);
-    func_80A81FFC(this);
-    func_80A828A8(this);
+    ObjMine_Water_WallCheck(this, play);
+    ObjMine_Water_ApplyForces(this); // ObjMine_Water_ApplyForces
+    ObjMine_Water_UpdateLinks(this);
 }
 
 void ObjMine_Init(Actor* thisx, PlayState* play) {
@@ -691,7 +701,7 @@ void ObjMine_Init(Actor* thisx, PlayState* play) {
             this->actor.draw = ObjMine_Water_Draw;
             ObjMine_Water_InitChain(this, linkCount);
             this->actor.world.pos.y =  10.0f + (linkCount * 12.0f) + this->actor.home.pos.y;
-            ObjMine_Water_SetCollider(this, linkCount);
+            ObjMine_Water_InitCollider(this, linkCount);
             if (linkCount == 0) {
                 ObjMine_Water_SetupStationary(this);
             } else {
@@ -796,16 +806,15 @@ void ObjMine_Air_SetupChained(ObjMine* this) {
 void ObjMine_Air_Chained(ObjMine* this, PlayState* play) {
     s32 pad;
     s32 linkCount = OBJMINE_GET_LINK_COUNT(&this->actor);
-    ObjMineAirChain* chain1 = &this->chain.air;
-    ObjMineAirLink* link1;
+    ObjMineAirChain* airChain = &this->chain.air;
+    ObjMineAirLink* airLink;
     s32 i;
-    f32 sp90;
-    f32 sp8C;
-    f32 sp88;
-    s16 sp86;
-    s16 sp84;
+    f32 xAccel;
+    f32 zAccel;
+    f32 torque;
+    s16 twistDiff;
 
-    Math_Vec3f_Copy(&chain1->unk_24, &chain1->basis.y);
+    Math_Vec3f_Copy(&airChain->translation, &airChain->basis.y);
     if (ObjMine_AirWater_CheckOC(this)) {
         ObjMine_AirWater_SpawnBomb(this, play);
         ObjMine_AirWater_Noop(this);
@@ -813,86 +822,90 @@ void ObjMine_Air_Chained(ObjMine* this, PlayState* play) {
         return;
     }
 
-    if (this->collider.base.acFlags & AC_HIT) {
+    if (this->collider.base.acFlags & AC_HIT) { // initial knockback calc
+        s16 torqueAngle;
+        f32 torque;
+        f32 torqueDiff;
+        
         this->collider.base.acFlags &= ~AC_HIT;
-        chain1->unk_48 = 0.04f;
-        ObjMine_Air_CheckAC(this, &chain1->unk_4C, &sp84);
-        sp88 = sp8C = Math_SinS(sp84) * 150.0f;
-        sp8C = -(sp8C / linkCount);
+        airChain->knockback = 0.04f;
+        ObjMine_Air_CheckAC(this, &airChain->knockbackAngle, &torqueAngle);
+        torque = Math_SinS(torqueAngle) * 150.0f;
+        torqueDiff = -(torque / linkCount);
 
-        for (i = 0, link1 = chain1->links; i < linkCount; i++, link1++) {
-            link1->unk_02 += (s16)sp88;
-            link1->unk_02 = CLAMP(link1->unk_02, -800, 800);
-            sp88 -= sp8C;
+        for (i = 0, airLink = airChain->links; i < linkCount; i++, airLink++) {
+            airLink->spin += (s16)torque;
+            airLink->spin = CLAMP(airLink->spin, -800, 800);
+            torque -= torqueDiff;
         }
     }
 
-    if (chain1->unk_48 > 0.0001f) {
-        sp90 = Math_SinS(chain1->unk_4C) * chain1->unk_48;
-        sp8C = Math_CosS(chain1->unk_4C) * chain1->unk_48;
-        chain1->unk_38 += sp90;
-        chain1->unk_3C += sp8C;
-        Math_StepToF(&chain1->unk_48, 0.0f, 0.02f);
+    if (airChain->knockback > 0.0001f) { // residual knockback calc
+        xAccel = Math_SinS(airChain->knockbackAngle) * airChain->knockback;
+        zAccel = Math_CosS(airChain->knockbackAngle) * airChain->knockback;
+        airChain->xVel += xAccel;
+        airChain->zVel += zAccel;
+        Math_StepToF(&airChain->knockback, 0.0f, 0.02f);
     }
 
-    if (RANDU_BITS(5) == 0) {
-        chain1->unk_50 = Rand_ZeroOne() * chain1->unk_58;
-        chain1->unk_54 = RANDU_BITS(16);
+    if (RANDU_BITS(5) == 0) { // wobble
+        airChain->wobbleSize = Rand_ZeroOne() * airChain->wobble;
+        airChain->wobblePhase = RANDU_BITS(16);
     }
 
-    sp90 = Math_SinS(chain1->unk_54) * chain1->unk_50;
-    sp8C = Math_CosS(chain1->unk_54) * chain1->unk_50;
-    chain1->unk_38 += sp90;
-    chain1->unk_3C += sp8C;
+    xAccel = Math_SinS(airChain->wobblePhase) * airChain->wobbleSize;
+    zAccel = Math_CosS(airChain->wobblePhase) * airChain->wobbleSize;
+    airChain->xVel += xAccel;
+    airChain->zVel += zAccel;
 
-    chain1->unk_38 += chain1->unk_30 * chain1->unk_40;
-    chain1->unk_3C += chain1->unk_34 * chain1->unk_40;
+    airChain->xVel += airChain->xDiff * airChain->restore;
+    airChain->zVel += airChain->zDiff * airChain->restore;
 
-    chain1->unk_38 *= chain1->unk_44;
-    chain1->unk_3C *= chain1->unk_44;
+    airChain->xVel *= airChain->drag;
+    airChain->zVel *= airChain->drag;
 
-    chain1->unk_30 += chain1->unk_38;
-    chain1->unk_34 += chain1->unk_3C;
+    airChain->xDiff += airChain->xVel;
+    airChain->zDiff += airChain->zVel;
 
-    chain1->unk_30 = CLAMP(chain1->unk_30, -5.0f, 5.0f);
-    chain1->unk_34 = CLAMP(chain1->unk_34, -5.0f, 5.0f);
+    airChain->xDiff = CLAMP(airChain->xDiff, -5.0f, 5.0f);
+    airChain->zDiff = CLAMP(airChain->zDiff, -5.0f, 5.0f);
 
     ObjMine_Air_SetBasis(this);
     ObjMine_Air_SetWorld(this);
 
-    if (chain1->unk_5C > -0.000001f) {
-        Vec3f* world = &this->actor.world.pos;
-        Vec3f* home = &this->actor.home.pos;
+    if (airChain->wallCheckDist > -1e-6f) {
+        // Vec3f* world = &this->actor.world.pos;
+        // Vec3f* home = &this->actor.home.pos;
 
-        if (chain1->unk_5C <= Math3D_XZDistanceSquared(world->x, world->z, home->x, home->z)) {
+        if (airChain->wallCheckDist <= Math3D_XZDistanceSquared(this->actor.world.pos.x, this->actor.world.pos.z, this->actor.home.pos.x, this->actor.home.pos.z)) {
 
             Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 20.0f, 0.0f, 1);
 
             if ((this->actor.bgCheckFlags & 8) && (this->actor.wallPoly != NULL)) {
-                Vec3f sp70;
-                Vec3f sp64;
-                Vec3f sp58;
-                Vec3f sp4C;
-                f32 sp48;
-                f32 sp44;
+                Vec3f xzDir;
+                Vec3f reflectedDir;
+                Vec3f wallNormal;
+                Vec3f xzVel;
+                f32 xzSpeed;
+                f32 dummyInvNorm;
 
-                sp4C.x = chain1->unk_38;
-                sp4C.y = 0.0f;
-                sp4C.z = chain1->unk_3C;
+                xzVel.x = airChain->xVel;
+                xzVel.y = 0.0f;
+                xzVel.z = airChain->zVel;
 
-                if (ObjMine_GetUnitVec3fNorm(&sp4C, &sp70, &sp48, &sp44)) {
-                    sp58.x = COLPOLY_GET_NORMAL(this->actor.wallPoly->normal.x);
-                    sp58.y = COLPOLY_GET_NORMAL(this->actor.wallPoly->normal.y);
-                    sp58.z = COLPOLY_GET_NORMAL(this->actor.wallPoly->normal.z);
+                if (ObjMine_GetUnitVec3fNorm(&xzVel, &xzDir, &xzSpeed, &dummyInvNorm)) {
+                    wallNormal.x = COLPOLY_GET_NORMAL(this->actor.wallPoly->normal.x);
+                    wallNormal.y = COLPOLY_GET_NORMAL(this->actor.wallPoly->normal.y);
+                    wallNormal.z = COLPOLY_GET_NORMAL(this->actor.wallPoly->normal.z);
 
-                    func_80179F64(&sp70, &sp58, &sp64);
+                    func_80179F64(&xzDir, &wallNormal, &reflectedDir);
 
-                    sp48 *= 0.5f;
-                    chain1->unk_38 = sp64.x * sp48;
-                    chain1->unk_3C = sp64.z * sp48;
+                    xzSpeed /= 2.0f;
+                    airChain->xVel = reflectedDir.x * xzSpeed;
+                    airChain->zVel = reflectedDir.z * xzSpeed;
                 } else {
-                    chain1->unk_38 *= -0.1f;
-                    chain1->unk_3C *= -0.1f;
+                    airChain->xVel *= -0.1f;
+                    airChain->zVel *= -0.1f;
                 }
                 ObjMine_Air_SetChain3034(this);
                 ObjMine_Air_SetBasis(this);
@@ -901,12 +914,12 @@ void ObjMine_Air_Chained(ObjMine* this, PlayState* play) {
         }
     }
 
-    for (i = 0, link1 = chain1->links; i < linkCount; i++, link1++) {
-        sp86 = link1->unk_00 - 0x4000;
-        sp88 = link1->unk_02 + (sp86 * -0.05f) + ((Rand_ZeroOne() * 30.0f) - 15.0f);
-        sp88 *= 0.995f;
-        link1->unk_02 = sp88;
-        link1->unk_00 += link1->unk_02;
+    for (i = 0, airLink = airChain->links; i < linkCount; i++, airLink++) {
+        twistDiff = airLink->twist - 0x4000;
+        torque = airLink->spin + (twistDiff * -0.05f) + RAND_PLUSMINUS(15.0f);
+        torque *= 0.995f;
+        airLink->spin = torque;
+        airLink->twist += airLink->spin;
     }
 
     func_800B4AEC(play, &this->actor, 0.0f);
@@ -936,7 +949,7 @@ void ObjMine_Water_SetupChained(ObjMine* this) {
 }
 
 void ObjMine_Water_Chained(ObjMine* this, PlayState* play) {
-    ObjMineWaterChain* chain2 = &this->chain.water;
+    ObjMineWaterChain* waterChain = &this->chain.water;
 
     if (ObjMine_AirWater_CheckOC(this)) {
         ObjMine_AirWater_SpawnBomb(this, play);
@@ -947,26 +960,26 @@ void ObjMine_Water_Chained(ObjMine* this, PlayState* play) {
 
     if (this->collider.base.acFlags & AC_HIT) {
         this->collider.base.acFlags &= ~AC_HIT;
-        ObjMine_Water_CheckAC(this, &chain2->unk_04);
-        chain2->unk_10 = 7.0f;
-        Math_Vec3f_Scale(&chain2->unk_04, 7.0f);
+        ObjMine_Water_CheckAC(this, &waterChain->knockbackDir);
+        waterChain->knockback = 7.0f;
+        Math_Vec3f_Scale(&waterChain->knockbackDir, 7.0f);
     }
 
-    if (chain2->unk_10 > 0.0001f) {
-        chain2->unk_10 = Math_Vec3f_StepTo(&chain2->unk_04, &gZeroVec3f, 2.8f);
+    if (waterChain->knockback > 0.0001f) {
+        waterChain->knockback = Math_Vec3f_StepTo(&waterChain->knockbackDir, &gZeroVec3f, 2.8f);
     }
 
-    chain2->unk_00 = 0.9f;
-    chain2->unk_24 = -0.0002f;
-    chain2->unk_30 = -0.0002f;
-    chain2->unk_1C = 0.003f;
+    waterChain->drag = 0.9f;
+    waterChain->restoreX = -0.0002f;
+    waterChain->restoreY = -0.0002f;
+    waterChain->wobble = 0.003f;
 
     if (RANDU_BITS(5) == 0) {
         s16 randAngle = RANDU_BITS(16);
 
-        chain2->unk_14 = Math_SinS(randAngle) * 1.8f * chain2->unk_1C;
-        chain2->unk_18 = Math_CosS(randAngle) * 0.2f * chain2->unk_1C;
-        chain2->unk_20 = RANDU_BITS(13);
+        waterChain->wobbleXZ = Math_SinS(randAngle) * 1.8f * waterChain->wobble;
+        waterChain->wobbleY = Math_CosS(randAngle) * 0.2f * waterChain->wobble;
+        waterChain->wobblePhaseVel = RANDU_BITS(13); 
     }
 
     ObjMine_Water_UpdateChain(this, play);
@@ -1031,7 +1044,7 @@ void ObjMine_Path_Draw(Actor* thisx, PlayState* play) {
         Collider_UpdateSpheres(0, &this->collider);
     }
 
-    func_800B8050(&this->actor, play, 1);
+    func_800B8050(&this->actor, play, true);
     func_8012C28C(play->state.gfxCtx);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -1048,7 +1061,7 @@ void ObjMine_DrawExplosion(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_800B8118(thisx, play, 1);
+    func_800B8118(thisx, play, true);
     func_8012C2DC(play->state.gfxCtx);
 
     gDPSetRenderMode(POLY_XLU_DISP++, G_RM_PASS, G_RM_AA_ZB_XLU_SURF2);
@@ -1063,14 +1076,14 @@ void ObjMine_Air_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
     ObjMine* this = THIS;
     s32 linkCount = OBJMINE_GET_LINK_COUNT(&this->actor);
-    ObjMineAirChain* chain1 = &this->chain.air;
-    ObjMineAirLink* link1;
+    ObjMineAirChain* airChain = &this->chain.air;
+    ObjMineAirLink* airLink;
     s32 i;
-    Vec3f sp94;
-    Vec3f sp88;
+    Vec3f linkPos;
+    Vec3f linkOffset;
     Gfx* gfx;
 
-    func_800B8050(&this->actor, play, 1);
+    func_800B8050(&this->actor, play, true);
 
     OPEN_DISPS(play->state.gfxCtx);
     gfx = POLY_OPA_DISP;
@@ -1079,21 +1092,21 @@ void ObjMine_Air_Draw(Actor* thisx, PlayState* play) {
     gSPMatrix(gfx++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(gfx++, object_ny_DL_000030);
 
-    ObjMine_ReplaceRotation(&chain1->basis);
+    ObjMine_ReplaceRotation(&airChain->basis);
     Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
     if (linkCount != 0) {
-        Math_Vec3f_ScaleAndStore(&chain1->basis.y, -6.0f, &sp88);
-        sp94.x = this->actor.home.pos.x - sp88.x;
-        sp94.y = this->actor.home.pos.y - 6.0f - sp88.y;
-        sp94.z = this->actor.home.pos.z - sp88.z;
-        Math_Vec3f_ScaleAndStore(&chain1->basis.y, -12.0f, &sp88);
+        Math_Vec3f_ScaleAndStore(&airChain->basis.y, -6.0f, &linkOffset);
+        linkPos.x = this->actor.home.pos.x - linkOffset.x;
+        linkPos.y = this->actor.home.pos.y - 6.0f - linkOffset.y;
+        linkPos.z = this->actor.home.pos.z - linkOffset.z;
 
-        for (i = 0, link1 = chain1->links; i < linkCount; i++, link1++) {
-            Matrix_RotateYS(link1->unk_00, MTXMODE_APPLY);
-            sp94.x += sp88.x;
-            sp94.y += sp88.y;
-            sp94.z += sp88.z;
-            ObjMine_ReplaceTranslation(&sp94);
+        Math_Vec3f_ScaleAndStore(&airChain->basis.y, -12.0f, &linkOffset);
+        for (i = 0, airLink = airChain->links; i < linkCount; i++, airLink++) {
+            Matrix_RotateYS(airLink->twist, MTXMODE_APPLY);
+            linkPos.x += linkOffset.x;
+            linkPos.y += linkOffset.y;
+            linkPos.z += linkOffset.z;
+            ObjMine_ReplaceTranslation(&linkPos);
 
             gSPMatrix(gfx++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(gfx++, object_ny_DL_000030);
@@ -1119,12 +1132,12 @@ void ObjMine_Water_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
     ObjMine* this = THIS;
     s32 linkCount = OBJMINE_GET_LINK_COUNT(&this->actor);
-    ObjMineWaterChain* chain2 = &this->chain.water;
-    ObjMineWaterLink* link2;
+    ObjMineWaterChain* waterChain = &this->chain.water;
+    ObjMineWaterLink* waterLink;
     s32 i;
     Gfx* gfx;
 
-    func_800B8050(&this->actor, play, 1);
+    func_800B8050(&this->actor, play, true);
 
     OPEN_DISPS(play->state.gfxCtx);
     gfx = POLY_OPA_DISP;
@@ -1133,13 +1146,13 @@ void ObjMine_Water_Draw(Actor* thisx, PlayState* play) {
     gSPMatrix(gfx++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(gfx++, object_ny_DL_000030);
 
-    for (i = 0, link2 = chain2->links; i < linkCount; i++, link2++) {
-        ObjMine_ReplaceRotation(&link2->basis);
+    for (i = 0, waterLink = waterChain->links; i < linkCount; i++, waterLink++) {
+        ObjMine_ReplaceRotation(&waterLink->basis);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
         if ((i % 2) == 0) {
             Matrix_RotateYS(0x4000, MTXMODE_APPLY);
         }
-        ObjMine_ReplaceTranslation(&link2->unk_24);
+        ObjMine_ReplaceTranslation(&waterLink->pos);
 
         gSPMatrix(gfx++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(gfx++, object_ny_DL_000030);
