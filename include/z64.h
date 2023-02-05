@@ -119,10 +119,10 @@ typedef struct {
 typedef struct {
     /* 0x00 */ int unk0;
     /* 0x04 */ void* unk4;
-    /* 0x08 */ int unk8;
-    /* 0x0C */ int unkC;
-    /* 0x10 */ int unk10;
-    /* 0x14 */ OSMesgQueue unk14;
+    /* 0x08 */ void* addr;
+    /* 0x0C */ s32 pageNum;
+    /* 0x10 */ s32 pageCount;
+    /* 0x14 */ OSMesgQueue messageQueue;
 } s80185D40; // size = 0x2C
 
 // End of RDRAM without the Expansion Pak installed
@@ -640,6 +640,12 @@ typedef struct {
 #define FRAM_BASE_ADDRESS 0x08000000           // FRAM Base Address in Cart Memory
 #define FRAM_STATUS_REGISTER FRAM_BASE_ADDRESS // FRAM Base Address in Cart Memory
 #define FRAM_COMMAND_REGISTER 0x10000          // Located at 0x08010000 on the Cart
+
+#define FLASH_VERSION_MX_PROTO_A 0x00c20000
+#define FLASH_VERSION_MX_A       0x00c20001
+#define FLASH_VERSION_MX_C       0x00c2001e
+#define FLASH_VERSION_MX_B_AND_D 0x00c2001d
+#define FLASH_VERSION_MEI        0x003200f1
 
 enum fram_command {
     /* Does nothing for FRAM_COMMAND_SET_MODE_READ_AND_STATUS, FRAM_MODE_NOP, FRAM_COMMAND_SET_MODE_STATUS_AND_STATUS

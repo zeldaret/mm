@@ -2520,7 +2520,6 @@ extern Vec3f D_801FBDA4;
 extern Vec3f D_801FBDE8;
 extern MtxF* sMatrixStack;
 extern MtxF* sCurrentMatrix;
-
 extern s32 D_801FD120;
 // extern UNK_TYPE1 D_801FD140;
 // extern UNK_TYPE1 D_801FD158;

@@ -2227,18 +2227,18 @@ void func_8018450C(PlayState* play, SkeletonInfo* skeleton, Mtx* mtx, OverrideKe
 
 // void func_801857C0(void);
 // char* func_801857D0(void);
-// void func_80185864(void);
-u32 func_80185908(void);
-UNK_TYPE func_80185968(void* arg0, UNK_TYPE arg1, UNK_TYPE arg2);
+// void SysFlashrom_CheckFlashType(void);
+s32 SysFlashrom_InitFlash(void);
+UNK_TYPE SysFlashrom_ReadData(void* arg0, UNK_TYPE arg1, UNK_TYPE arg2);
 // void func_801859F0(void);
-// void func_80185A2C(void);
-// void func_80185B1C(void);
+// void SysFlashrom_WriteData(void);
+// void SysFlashrom_AttemptWrite(void);
 // void func_80185BE4(void);
 // void func_80185C24(void);
-void SysFlashrom_ThreadEntry(s80185D40* param_1);
-void func_80185DDC(u8* arg0, u32 arg1, u32 arg2);
+void SysFlashrom_ThreadEntry(void* param_1);
+void SysFlashrom_CreateRequest(u8* arg0, u32 arg1, u32 arg2);
 s32 func_80185EC4(void);
-s32 func_80185F04(void);
+s32 SysFlashrom_DestroyThread(void);
 void func_80185F64(void* arg0, UNK_TYPE arg1, UNK_TYPE arg2);
 s32 func_80185F90(u32 param_1);
 u32 osFlashGetAddr(u32 pageNum);

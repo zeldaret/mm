@@ -945,14 +945,14 @@ void Sram_ResetSaveFromMoonCrash(SramContext* sramCtx) {
 
     bzero(sramCtx->saveBuf, SAVE_BUFFER_SIZE);
 
-    if (func_80185968(sramCtx->saveBuf, D_801C67C8[gSaveContext.fileNum * 2], D_801C67F0[gSaveContext.fileNum * 2]) !=
+    if (SysFlashrom_ReadData(sramCtx->saveBuf, D_801C67C8[gSaveContext.fileNum * 2], D_801C67F0[gSaveContext.fileNum * 2]) !=
         0) {
-        func_80185968(sramCtx->saveBuf, D_801C67C8[gSaveContext.fileNum * 2 + 1],
+        SysFlashrom_ReadData(sramCtx->saveBuf, D_801C67C8[gSaveContext.fileNum * 2 + 1],
                       D_801C67F0[gSaveContext.fileNum * 2 + 1]);
     }
     Lib_MemCpy(&gSaveContext.save, sramCtx->saveBuf, sizeof(Save));
     if (CHECK_NEWF(gSaveContext.save.saveInfo.playerData.newf)) {
-        func_80185968(sramCtx->saveBuf, D_801C67C8[gSaveContext.fileNum * 2 + 1],
+        SysFlashrom_ReadData(sramCtx->saveBuf, D_801C67C8[gSaveContext.fileNum * 2 + 1],
                       D_801C67F0[gSaveContext.fileNum * 2 + 1]);
         Lib_MemCpy(&gSaveContext, sramCtx->saveBuf, sizeof(Save));
     }
@@ -1005,27 +1005,27 @@ void Sram_OpenSave(FileSelectState* fileSelect, SramContext* sramCtx) {
         bzero(sramCtx->saveBuf, SAVE_BUFFER_SIZE);
 
         if (gSaveContext.fileNum == 0xFF) {
-            func_80185968(sramCtx->saveBuf, D_801C67C8[0], D_801C67F0[0]);
+            SysFlashrom_ReadData(sramCtx->saveBuf, D_801C67C8[0], D_801C67F0[0]);
         } else if (fileSelect->unk_2446A[gSaveContext.fileNum] != 0) {
             phi_t1 = gSaveContext.fileNum + 2;
             phi_t1 *= 2;
 
-            if (func_80185968(sramCtx->saveBuf, D_801C67C8[phi_t1], D_801C67F0[phi_t1]) != 0) {
-                func_80185968(sramCtx->saveBuf, D_801C67C8[phi_t1 + 1], D_801C67F0[phi_t1 + 1]);
+            if (SysFlashrom_ReadData(sramCtx->saveBuf, D_801C67C8[phi_t1], D_801C67F0[phi_t1]) != 0) {
+                SysFlashrom_ReadData(sramCtx->saveBuf, D_801C67C8[phi_t1 + 1], D_801C67F0[phi_t1 + 1]);
             }
         } else {
             phi_t1 = gSaveContext.fileNum;
             phi_t1 *= 2;
 
-            if (func_80185968(sramCtx->saveBuf, D_801C67C8[phi_t1], D_801C67F0[phi_t1]) != 0) {
-                func_80185968(sramCtx->saveBuf, D_801C67C8[phi_t1 + 1], D_801C67F0[phi_t1 + 1]);
+            if (SysFlashrom_ReadData(sramCtx->saveBuf, D_801C67C8[phi_t1], D_801C67F0[phi_t1]) != 0) {
+                SysFlashrom_ReadData(sramCtx->saveBuf, D_801C67C8[phi_t1 + 1], D_801C67F0[phi_t1 + 1]);
             }
         }
 
         Lib_MemCpy(&gSaveContext, sramCtx->saveBuf, D_801C6870[phi_t1]);
 
         if (CHECK_NEWF(gSaveContext.save.saveInfo.playerData.newf)) {
-            func_80185968(sramCtx->saveBuf, D_801C67C8[phi_t1 + 1], D_801C67F0[phi_t1 + 1]);
+            SysFlashrom_ReadData(sramCtx->saveBuf, D_801C67C8[phi_t1 + 1], D_801C67F0[phi_t1 + 1]);
             Lib_MemCpy(&gSaveContext, sramCtx->saveBuf, D_801C6870[phi_t1]);
         }
     }
@@ -1185,9 +1185,9 @@ void func_801457CC(FileSelectState* fileSelect2, SramContext* sramCtx) {
 
             phi_s2 = false;
             sp6E = 0;
-            if (func_80185968(sramCtx->saveBuf, D_801C67C8[sp64], D_801C67F0[sp64])) {
+            if (SysFlashrom_ReadData(sramCtx->saveBuf, D_801C67C8[sp64], D_801C67F0[sp64])) {
                 sp6E = 1;
-                if (func_80185968(sramCtx->saveBuf, D_801C67C8[sp64 + 1], D_801C67F0[sp64 + 1])) {
+                if (SysFlashrom_ReadData(sramCtx->saveBuf, D_801C67C8[sp64 + 1], D_801C67F0[sp64 + 1])) {
                     phi_s2 = true;
                 }
             }
@@ -1210,7 +1210,7 @@ void func_801457CC(FileSelectState* fileSelect2, SramContext* sramCtx) {
                         if (CHECK_NEWF2(gSaveContext.save.saveInfo.playerData.newf)) {}
 
                         phi_s2 = false;
-                        if (func_80185968(sramCtx->saveBuf, D_801C67C8[sp64 + 1], D_801C67F0[sp64 + 1])) {
+                        if (SysFlashrom_ReadData(sramCtx->saveBuf, D_801C67C8[sp64 + 1], D_801C67F0[sp64 + 1])) {
                             phi_s2 = true;
                         }
 
@@ -1266,7 +1266,7 @@ void func_801457CC(FileSelectState* fileSelect2, SramContext* sramCtx) {
                     func_80146EBC(sramCtx, D_801C67C8[sp64], D_801C6818[sp64]);
                 } else if (sp6E == 0) { // TODO: == 0?
                     temp_s2 = gSaveContext.save.saveInfo.checksum;
-                    if (func_80185968(sramCtx->saveBuf, D_801C67C8[sp64 + 1], D_801C67F0[sp64 + 1])) {
+                    if (SysFlashrom_ReadData(sramCtx->saveBuf, D_801C67C8[sp64 + 1], D_801C67F0[sp64 + 1])) {
                         phi_s2_3 = 1;
                     } else {
                         Lib_MemCpy(&gSaveContext.save, sramCtx->saveBuf, sizeof(Save));
@@ -1277,7 +1277,7 @@ void func_801457CC(FileSelectState* fileSelect2, SramContext* sramCtx) {
 
                     if (CHECK_NEWF(gSaveContext.save.saveInfo.playerData.newf) || (phi_s2_3 != sp7A) ||
                         (phi_s2_3 != temp_s2)) {
-                        func_80185968(sramCtx->saveBuf, D_801C67C8[sp64], D_801C67F0[sp64]);
+                        SysFlashrom_ReadData(sramCtx->saveBuf, D_801C67C8[sp64], D_801C67F0[sp64]);
                         Lib_MemCpy(&gSaveContext.save, sramCtx->saveBuf, sizeof(Save));
                         Lib_MemCpy(&sramCtx->saveBuf[0x2000], &gSaveContext.save, sizeof(Save));
                         func_80146EBC(sramCtx, D_801C67C8[sp64], D_801C6818[sp64]);
@@ -1305,7 +1305,7 @@ void func_801457CC(FileSelectState* fileSelect2, SramContext* sramCtx) {
                                 phi_s2 = false;
                             }
 
-                            if (func_80185968(sramCtx->saveBuf, D_801C67C8[sp64 + 1], D_801C67F0[sp64 + 1])) {
+                            if (SysFlashrom_ReadData(sramCtx->saveBuf, D_801C67C8[sp64 + 1], D_801C67F0[sp64 + 1])) {
                                 phi_s2 = true;
                             }
 
@@ -1362,7 +1362,7 @@ void func_801457CC(FileSelectState* fileSelect2, SramContext* sramCtx) {
                         func_80146EBC(sramCtx, D_801C67C8[sp64 + 1], D_801C67F0[sp64 + 1]);
                     } else if (!sp6E) { // TODO: == 0?
                         temp_s2 = gSaveContext.save.saveInfo.checksum;
-                        if (func_80185968(sramCtx->saveBuf, D_801C67C8[sp64 + 1], D_801C67F0[sp64 + 1])) {
+                        if (SysFlashrom_ReadData(sramCtx->saveBuf, D_801C67C8[sp64 + 1], D_801C67F0[sp64 + 1])) {
                             phi_s2_3 = 1;
                         } else {
                             Lib_MemCpy(&gSaveContext, sramCtx->saveBuf, D_801C6870[sp64]);
@@ -1374,7 +1374,7 @@ void func_801457CC(FileSelectState* fileSelect2, SramContext* sramCtx) {
 
                         if (CHECK_NEWF(gSaveContext.save.saveInfo.playerData.newf) || (phi_s2_3 != sp7A) ||
                             (phi_s2_3 != temp_s2)) {
-                            func_80185968(sramCtx->saveBuf, D_801C67C8[sp64], D_801C67F0[sp64]);
+                            SysFlashrom_ReadData(sramCtx->saveBuf, D_801C67C8[sp64], D_801C67F0[sp64]);
                             Lib_MemCpy(&gSaveContext, sramCtx->saveBuf, D_801C6870[sp64]);
                             func_80146EBC(sramCtx, D_801C67C8[sp64], D_801C67F0[sp64]);
                             func_80146EBC(sramCtx, D_801C67C8[sp64 + 1], D_801C67F0[sp64 + 1]);
@@ -1476,10 +1476,10 @@ void func_80146628(FileSelectState* fileSelect2, SramContext* sramCtx) {
         // clear buffer
         bzero(sramCtx->saveBuf, SAVE_BUFFER_SIZE);
         // read to buffer
-        func_80185968(sramCtx->saveBuf, D_801C67C8[fileSelect->unk_2448E * 2], D_801C67F0[fileSelect->unk_2448E * 2]);
+        SysFlashrom_ReadData(sramCtx->saveBuf, D_801C67C8[fileSelect->unk_2448E * 2], D_801C67F0[fileSelect->unk_2448E * 2]);
 
         if (1) {}
-        func_80185968(&sramCtx->saveBuf[0x2000], D_801C67C8[fileSelect->unk_2448E * 2 + 1],
+        SysFlashrom_ReadData(&sramCtx->saveBuf[0x2000], D_801C67C8[fileSelect->unk_2448E * 2 + 1],
                       D_801C67F0[fileSelect->unk_2448E * 2 + 1]);
         if (1) {}
 
@@ -1658,7 +1658,7 @@ void func_80147008(SramContext* sramCtx, u32 curPage, u32 numPages) {
 
 void func_80147020(SramContext* sramCtx) {
     // async flash write
-    func_80185DDC(sramCtx->saveBuf, sramCtx->curPage, sramCtx->numPages);
+    SysFlashrom_CreateRequest(sramCtx->saveBuf, sramCtx->curPage, sramCtx->numPages);
 
     sramCtx->unk_18 = osGetTime();
     sramCtx->status = 2;
@@ -1667,7 +1667,7 @@ void func_80147020(SramContext* sramCtx) {
 void func_80147068(SramContext* sramCtx) {
     if (sramCtx->status == 2) {
         if (func_80185EC4() != 0) {     // if task running
-            if (func_80185F04() == 0) { // wait for task done
+            if (SysFlashrom_DestroyThread() == 0) { // wait for task done
                 // task success
                 sramCtx->status = 4;
             } else {
@@ -1687,7 +1687,7 @@ void func_80147138(SramContext* sramCtx, s32 curPage, s32 numPages) {
 }
 
 void func_80147150(SramContext* sramCtx) {
-    func_80185DDC(sramCtx->saveBuf, sramCtx->curPage, sramCtx->numPages);
+    SysFlashrom_CreateRequest(sramCtx->saveBuf, sramCtx->curPage, sramCtx->numPages);
 
     sramCtx->unk_18 = osGetTime();
     sramCtx->status = 7;
@@ -1696,17 +1696,17 @@ void func_80147150(SramContext* sramCtx) {
 void func_80147198(SramContext* sramCtx) {
     if (sramCtx->status == 7) {
         if (func_80185EC4() != 0) {     // Is task running
-            if (func_80185F04() == 0) { // Wait for task done
-                func_80185DDC(sramCtx->saveBuf, sramCtx->curPage + 0x80, sramCtx->numPages);
+            if (SysFlashrom_DestroyThread() == 0) { // Wait for task done
+                SysFlashrom_CreateRequest(sramCtx->saveBuf, sramCtx->curPage + 0x80, sramCtx->numPages);
                 sramCtx->status = 8;
             } else {
-                func_80185DDC(sramCtx->saveBuf, sramCtx->curPage + 0x80, sramCtx->numPages);
+                SysFlashrom_CreateRequest(sramCtx->saveBuf, sramCtx->curPage + 0x80, sramCtx->numPages);
                 sramCtx->status = 8;
             }
         }
     } else if (sramCtx->status == 8) {
         if (func_80185EC4() != 0) {     // Is task running
-            if (func_80185F04() == 0) { // Wait for task done
+            if (SysFlashrom_DestroyThread() == 0) { // Wait for task done
                 sramCtx->status = 4;
             } else {
                 sramCtx->status = 4;
@@ -1718,7 +1718,7 @@ void func_80147198(SramContext* sramCtx) {
         gSaveContext.save.isOwlSave = false;
         gSaveContext.save.saveInfo.checksum = 0;
         // flash read to buffer then copy to save context
-        func_80185968(sramCtx->saveBuf, sramCtx->curPage, sramCtx->numPages);
+        SysFlashrom_ReadData(sramCtx->saveBuf, sramCtx->curPage, sramCtx->numPages);
         Lib_MemCpy(&gSaveContext, sramCtx->saveBuf, offsetof(SaveContext, fileNum));
     }
 }
@@ -1759,9 +1759,9 @@ void func_80147414(SramContext* sramCtx, s32 fileNum, s32 arg2) {
     bzero(sramCtx->saveBuf, SAVE_BUFFER_SIZE);
 
     // Read save file
-    if (func_80185968(sramCtx->saveBuf, D_801C6840[fileNum * 2], D_801C6850[fileNum * 2]) != 0) {
+    if (SysFlashrom_ReadData(sramCtx->saveBuf, D_801C6840[fileNum * 2], D_801C6850[fileNum * 2]) != 0) {
         // If failed, read backup save file
-        func_80185968(sramCtx->saveBuf, D_801C6840[fileNum * 2 + 1], D_801C6850[fileNum * 2 + 1]);
+        SysFlashrom_ReadData(sramCtx->saveBuf, D_801C6840[fileNum * 2 + 1], D_801C6850[fileNum * 2 + 1]);
     }
 
     // Copy buffer to save context
