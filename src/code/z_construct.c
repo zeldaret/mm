@@ -1,4 +1,5 @@
 #include "global.h"
 
-void func_801AAAA0(PlayState* play) {
+// Remnant from OoT
+void Regs_InitData(PlayState* play) {
 }
