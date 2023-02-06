@@ -13,7 +13,6 @@
 #define THIS ((ObjMine*)thisx)
 
 #define LINK_SIZE 12.0f
-// #define (LINK_SIZE / 2.0f) (LINK_SIZE / 2.0f)
 #define ATTACH_OFFSET 10.0f
 #define PATH_RADIUS 32.0f
 #define AIR_RADIUS 20.0f

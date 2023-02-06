@@ -11167,7 +11167,7 @@
     0x80A819A4:("ObjMine_Air_SetCollider",),
     0x80A81A00:("ObjMine_Air_SetBasis",),
     0x80A81AA4:("ObjMine_Air_SetWorld",),
-    0x80A81B14:("ObjMine_Air_SetChain3034",),
+    0x80A81B14:("ObjMine_Air_SetChainXZ",),
     0x80A81B7C:("ObjMine_Water_InitChain",),
     0x80A81D70:("ObjMine_Water_SetCollider",),
     0x80A81DEC:("ObjMine_Water_SetWorld",),
