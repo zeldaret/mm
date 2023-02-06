@@ -36,7 +36,7 @@ typedef struct {
 
 typedef struct {
     /* 0x00 */ ObjMineMtxF3 basis;
-    /* 0x24 */ Vec3f translation;
+    /* 0x24 */ Vec3f translation; // unused
     /* 0x30 */ f32 xDiff;
     /* 0x34 */ f32 zDiff;
     /* 0x38 */ f32 xVel;
@@ -67,7 +67,7 @@ typedef struct {
     /* 0x18 */ f32 wobbleY;
     /* 0x1C */ f32 wobble;
     /* 0x20 */ s16 wobblePhaseVel;
-    /* 0x24 */ f32 restoreX;
+    /* 0x24 */ f32 restoreXZ;
     /* 0x28 */ f32 maxY;
     /* 0x2C */ f32 restY;
     /* 0x30 */ f32 restoreY;
