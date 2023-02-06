@@ -17,6 +17,7 @@ void EnSi_Draw(Actor* thisx, PlayState* play);
 
 void func_8098CB70(EnSi* this, PlayState* play);
 void func_8098CBDC(EnSi* this, PlayState* play);
+void func_8098CAD0(EnSi* this, PlayState* play);
 
 #if 0
 ActorInit En_Si_InitVars = {
@@ -83,17 +84,78 @@ extern ColliderSphereInit D_8098CD80;
 extern CollisionCheckInfoInit2 D_8098CDAC;
 extern DamageTable D_8098CDB8;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Si/func_8098CA20.s")
+// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Si/func_8098CA20.s")
+void func_8098CA20(EnSi *this, PlayState *play) {
+    this->collider_sphere.dim.worldSphere.center.x = (s16) (s32) this->actor.world.pos.x;
+    this->collider_sphere.dim.worldSphere.center.y = (s16) (s32) this->actor.world.pos.y;
+    this->collider_sphere.dim.worldSphere.center.z = (s16) (s32) this->actor.world.pos.z;
+    this->collider_sphere.dim.worldSphere.radius = (s16) (s32) ((f32) this->collider_sphere.dim.modelSphere.radius * 
+                                                                      this->collider_sphere.dim.worldSphere.radius);
+    if ((s32) this->actor.colChkInfo.health > 0) {
+        CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider_sphere.base);
+    }
+    CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider_sphere.base);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Si/func_8098CAD0.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Si/func_8098CB70.s")
+// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Si/func_8098CAD0.s")
+void func_8098CAD0(EnSi *this, PlayState *play) {
+    s32 temp_a2;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Si/func_8098CBDC.s")
+    temp_a2 = (s32) (this->actor.params & 0xFC) >> 2;
+    if ((temp_a2 < 0x20) && (temp_a2 >= 0)) {
+        Flags_SetTreasure(play, temp_a2);
+    }
+    Item_Give(play, 0x6EU);
+    if (Inventory_GetSkullTokenCount(play->sceneId) >= 0x1E) {
+        Message_StartTextbox(play, 0xFCU, NULL);
+        Audio_PlayFanfare(0x922U);
+        return;
+    }
+    Message_StartTextbox(play, 0x52U, NULL);
+    Audio_PlayFanfare(0x39U);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Si/EnSi_Init.s")
+// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Si/func_8098CB70.s")
+void func_8098CB70(EnSi *this, PlayState *play) {
+    if ((this->actor.flags & 0x2000) == 0x2000) {
+        this->actionFunc = func_8098CBDC;
+        goto block_4;
+    }
+    if (this->collider_sphere.base.ocFlags2 & 1) {
+        func_8098CAD0(this, play);
+        Actor_Kill(&this->actor);
+        return;
+    }
+block_4:
+    this->actor.shape.rot.y += 0x38E;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Si/EnSi_Destroy.s")
+// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Si/func_8098CBDC.s")
+void func_8098CBDC(EnSi *this, PlayState *play) {
+    if ((this->actor.flags & 0x2000) != 0x2000) {
+        func_8098CAD0(this, play);
+        Actor_Kill(&this->actor);
+    }
+}
+
+
+// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Si/EnSi_Init.s")
+void EnSi_Init(Actor *thisx, PlayState *play) {
+    EnSi *this = THIS;
+
+    Collider_InitSphere(play, &this->collider_sphere);
+    Collider_SetSphere(play, &this->collider_sphere, &this->actor, &D_8098CD80);
+    CollisionCheck_SetInfo2(&this->actor.colChkInfo, &D_8098CDB8, &D_8098CDAC);
+    Actor_SetScale(&this->actor, 0.25f);
+    this->actionFunc = func_8098CB70;
+}
+
+// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Si/EnSi_Destroy.s")
+void EnSi_Destroy(Actor *thisx, PlayState *play) {
+    EnSi *this = (EnSi *) thisx;
+    Collider_DestroySphere(play, &this->collider_sphere);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Si/EnSi_Update.s")
 
