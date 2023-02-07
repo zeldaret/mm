@@ -90,7 +90,7 @@ void func_8098CA20(EnSi *this, PlayState *play) {
     this->collider_sphere.dim.worldSphere.center.y = (s16) (s32) this->actor.world.pos.y;
     this->collider_sphere.dim.worldSphere.center.z = (s16) (s32) this->actor.world.pos.z;
     this->collider_sphere.dim.worldSphere.radius = (s16) (s32) ((f32) this->collider_sphere.dim.modelSphere.radius * 
-                                                                      this->collider_sphere.dim.worldSphere.radius);
+                                                                      this->collider_sphere.dim.scale);
     if ((s32) this->actor.colChkInfo.health > 0) {
         CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider_sphere.base);
     }
