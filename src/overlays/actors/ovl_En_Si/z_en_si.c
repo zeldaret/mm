@@ -110,7 +110,7 @@ void func_8098CAD0(EnSi* this, PlayState* play) {
         Flags_SetTreasure(play, temp_a2);
     }
     Item_Give(play, ITEM_SKULL_TOKEN);
-    if (Inventory_GetSkullTokenCount(play->sceneId) >= 0x1E) {
+    if (Inventory_GetSkullTokenCount(play->sceneId) >= 30) {
         Message_StartTextbox(play, 0xFC, NULL);
         Audio_PlayFanfare(NA_BGM_GET_ITEM | 0x900);
         return;
@@ -122,19 +122,16 @@ void func_8098CAD0(EnSi* this, PlayState* play) {
 void func_8098CB70(EnSi* this, PlayState* play) {
     if ((this->actor.flags & 0x2000) == 0x2000) {
         this->actionFunc = func_8098CBDC;
-        goto block_4;
-    }
-    if (this->collider_sphere.base.ocFlags2 & OC2_HIT_PLAYER) {
+    } else if (this->collider_sphere.base.ocFlags2 & OC2_HIT_PLAYER) {
         func_8098CAD0(this, play);
         Actor_Kill(&this->actor);
         return;
     }
-block_4:
     this->actor.shape.rot.y += 0x38E;
 }
 
 void func_8098CBDC(EnSi* this, PlayState* play) {
-    if ((this->actor.flags & 0x2000) != 0x2000) {
+    if (!CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_2000)) {
         func_8098CAD0(this, play);
         Actor_Kill(&this->actor);
     }
