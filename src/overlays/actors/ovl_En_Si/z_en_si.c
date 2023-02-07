@@ -34,8 +34,22 @@ ActorInit En_Si_InitVars = {
 
 // static ColliderSphereInit sSphereInit = {
 static ColliderSphereInit sSphereInit = {
-    { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_NO_PUSH | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_SPHERE, },
-    { ELEMTYPE_UNK0, { 0xF7CFFFFF, 0x00, 0x00 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NORMAL, BUMP_ON | BUMP_HOOKABLE, OCELEM_ON, },
+    {
+        COLTYPE_NONE,
+        AT_NONE,
+        AC_ON | AC_TYPE_PLAYER,
+        OC1_ON | OC1_NO_PUSH | OC1_TYPE_ALL,
+        OC2_TYPE_1,
+        COLSHAPE_SPHERE,
+    },
+    {
+        ELEMTYPE_UNK0,
+        { 0xF7CFFFFF, 0x00, 0x00 },
+        { 0xF7CFFFFF, 0x00, 0x00 },
+        TOUCH_ON | TOUCH_SFX_NORMAL,
+        BUMP_ON | BUMP_HOOKABLE,
+        OCELEM_ON,
+    },
     { 0, { { 0, 0, 0 }, 10 }, 100 },
 };
 
@@ -76,22 +90,22 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
-void func_8098CA20(EnSi *this, PlayState *play) {
-    this->collider_sphere.dim.worldSphere.center.x = (s16) (s32) this->actor.world.pos.x;
-    this->collider_sphere.dim.worldSphere.center.y = (s16) (s32) this->actor.world.pos.y;
-    this->collider_sphere.dim.worldSphere.center.z = (s16) (s32) this->actor.world.pos.z;
-    this->collider_sphere.dim.worldSphere.radius = (s16) (s32) ((f32) this->collider_sphere.dim.modelSphere.radius * 
-                                                                      this->collider_sphere.dim.scale);
-    if ((s32) this->actor.colChkInfo.health > 0) {
+void func_8098CA20(EnSi* this, PlayState* play) {
+    this->collider_sphere.dim.worldSphere.center.x = (s16)(s32)this->actor.world.pos.x;
+    this->collider_sphere.dim.worldSphere.center.y = (s16)(s32)this->actor.world.pos.y;
+    this->collider_sphere.dim.worldSphere.center.z = (s16)(s32)this->actor.world.pos.z;
+    this->collider_sphere.dim.worldSphere.radius =
+        (s16)(s32)((f32)this->collider_sphere.dim.modelSphere.radius * this->collider_sphere.dim.scale);
+    if ((s32)this->actor.colChkInfo.health > 0) {
         CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider_sphere.base);
     }
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider_sphere.base);
 }
 
-void func_8098CAD0(EnSi *this, PlayState *play) {
+void func_8098CAD0(EnSi* this, PlayState* play) {
     s32 temp_a2;
 
-    temp_a2 = (s32) (this->actor.params & 0xFC) >> 2;
+    temp_a2 = (s32)(this->actor.params & 0xFC) >> 2;
     if ((temp_a2 < 0x20) && (temp_a2 >= 0)) {
         Flags_SetTreasure(play, temp_a2);
     }
@@ -105,7 +119,7 @@ void func_8098CAD0(EnSi *this, PlayState *play) {
     Audio_PlayFanfare(NA_BGM_GET_SMALL_ITEM);
 }
 
-void func_8098CB70(EnSi *this, PlayState *play) {
+void func_8098CB70(EnSi* this, PlayState* play) {
     if ((this->actor.flags & 0x2000) == 0x2000) {
         this->actionFunc = func_8098CBDC;
         goto block_4;
@@ -119,16 +133,15 @@ block_4:
     this->actor.shape.rot.y += 0x38E;
 }
 
-void func_8098CBDC(EnSi *this, PlayState *play) {
+void func_8098CBDC(EnSi* this, PlayState* play) {
     if ((this->actor.flags & 0x2000) != 0x2000) {
         func_8098CAD0(this, play);
         Actor_Kill(&this->actor);
     }
 }
 
-
-void EnSi_Init(Actor *thisx, PlayState *play) {
-    EnSi *this = THIS;
+void EnSi_Init(Actor* thisx, PlayState* play) {
+    EnSi* this = THIS;
 
     Collider_InitSphere(play, &this->collider_sphere);
     Collider_SetSphere(play, &this->collider_sphere, &this->actor, &sSphereInit);
@@ -137,20 +150,20 @@ void EnSi_Init(Actor *thisx, PlayState *play) {
     this->actionFunc = func_8098CB70;
 }
 
-void EnSi_Destroy(Actor *thisx, PlayState *play) {
-    EnSi *this = THIS;
+void EnSi_Destroy(Actor* thisx, PlayState* play) {
+    EnSi* this = THIS;
     Collider_DestroySphere(play, &this->collider_sphere);
 }
 
-void EnSi_Update(Actor *thisx, PlayState *play) {
-    EnSi *this = THIS;
+void EnSi_Update(Actor* thisx, PlayState* play) {
+    EnSi* this = THIS;
     this->actionFunc(this, play);
     func_8098CA20(this, play);
     Actor_SetFocus(&this->actor, 0.0f);
 }
 
-void EnSi_Draw(Actor *thisx, PlayState *play) {
-    EnSi *this = THIS;
+void EnSi_Draw(Actor* thisx, PlayState* play) {
+    EnSi* this = THIS;
     func_800B8118(&this->actor, play, 0);
     func_800B8050(&this->actor, play, 0);
     GetItem_Draw(play, GID_SKULL_TOKEN_2);
