@@ -6,6 +6,8 @@
 
 #include "z_en_si.h"
 
+#define ENSI_GET_PARAMS_FC(thisx) (((thisx)->params & 0xFC) >> 2)
+
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_200)
 
 #define THIS ((EnSi*)thisx)
@@ -91,21 +93,20 @@ static DamageTable sDamageTable = {
 };
 
 void func_8098CA20(EnSi* this, PlayState* play) {
-    this->collider_sphere.dim.worldSphere.center.x = this->actor.world.pos.x;
-    this->collider_sphere.dim.worldSphere.center.y = this->actor.world.pos.y;
-    this->collider_sphere.dim.worldSphere.center.z = this->actor.world.pos.z;
-    this->collider_sphere.dim.worldSphere.radius =
-        (this->collider_sphere.dim.modelSphere.radius * this->collider_sphere.dim.scale);
+    this->colliderSphere.dim.worldSphere.center.x = this->actor.world.pos.x;
+    this->colliderSphere.dim.worldSphere.center.y = this->actor.world.pos.y;
+    this->colliderSphere.dim.worldSphere.center.z = this->actor.world.pos.z;
+    this->colliderSphere.dim.worldSphere.radius =
+        this->colliderSphere.dim.modelSphere.radius * this->colliderSphere.dim.scale;
     if (this->actor.colChkInfo.health > 0) {
-        CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider_sphere.base);
+        CollisionCheck_SetAC(play, &play->colChkCtx, &this->colliderSphere.base);
     }
-    CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider_sphere.base);
+    CollisionCheck_SetOC(play, &play->colChkCtx, &this->colliderSphere.base);
 }
 
 void func_8098CAD0(EnSi* this, PlayState* play) {
-    s32 temp_a2;
+    s32 temp_a2 = ENSI_GET_PARAMS_FC(&this->actor);
 
-    temp_a2 = (s32)(this->actor.params & 0xFC) >> 2;
     if ((temp_a2 < 0x20) && (temp_a2 >= 0)) {
         Flags_SetTreasure(play, temp_a2);
     }
@@ -122,7 +123,7 @@ void func_8098CAD0(EnSi* this, PlayState* play) {
 void func_8098CB70(EnSi* this, PlayState* play) {
     if ((this->actor.flags & 0x2000) == 0x2000) {
         this->actionFunc = func_8098CBDC;
-    } else if (this->collider_sphere.base.ocFlags2 & OC2_HIT_PLAYER) {
+    } else if (this->colliderSphere.base.ocFlags2 & OC2_HIT_PLAYER) {
         func_8098CAD0(this, play);
         Actor_Kill(&this->actor);
         return;
@@ -140,8 +141,8 @@ void func_8098CBDC(EnSi* this, PlayState* play) {
 void EnSi_Init(Actor* thisx, PlayState* play) {
     EnSi* this = THIS;
 
-    Collider_InitSphere(play, &this->collider_sphere);
-    Collider_SetSphere(play, &this->collider_sphere, &this->actor, &sSphereInit);
+    Collider_InitSphere(play, &this->colliderSphere);
+    Collider_SetSphere(play, &this->colliderSphere, &this->actor, &sSphereInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
     Actor_SetScale(&this->actor, 0.25f);
     this->actionFunc = func_8098CB70;
@@ -150,7 +151,7 @@ void EnSi_Init(Actor* thisx, PlayState* play) {
 void EnSi_Destroy(Actor* thisx, PlayState* play) {
     EnSi* this = THIS;
 
-    Collider_DestroySphere(play, &this->collider_sphere);
+    Collider_DestroySphere(play, &this->colliderSphere);
 }
 
 void EnSi_Update(Actor* thisx, PlayState* play) {
