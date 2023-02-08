@@ -1725,7 +1725,7 @@ f32 D_801C0938[PLAYER_FORM_MAX] = {
 };
 
 /**
- * Adjuts player's legs to slopes and spawns flames when running on lava
+ * Adjusts player's legs to slopes and spawns flames when running on lava
  */
 void func_80124870(PlayState* play, Player* player, SkelAnime* skelAnime, Vec3f* pos, Vec3s* rot, s32 thighLimbIndex,
                    s32 shinLimbIndex, s32 footLimbIndex) {
