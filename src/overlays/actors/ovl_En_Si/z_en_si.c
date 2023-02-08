@@ -6,7 +6,7 @@
 
 #include "z_en_si.h"
 
-#define ENSI_GET_PARAMS_FC(thisx) (((thisx)->params & 0xFC) >> 2)
+#define ENSI_GET_CHEST_FLAG(thisx) (((thisx)->params & 0xFC) >> 2)
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_200)
 
@@ -101,23 +101,23 @@ void func_8098CA20(EnSi* this, PlayState* play) {
 }
 
 void func_8098CAD0(EnSi* this, PlayState* play) {
-    s32 temp_a2 = ENSI_GET_PARAMS_FC(&this->actor);
+    s32 chestFlag = ENSI_GET_CHEST_FLAG(&this->actor);
 
-    if ((temp_a2 < 0x20) && (temp_a2 >= 0)) {
-        Flags_SetTreasure(play, temp_a2);
+    if ((chestFlag < 0x20) && (chestFlag >= 0)) {
+        Flags_SetTreasure(play, chestFlag);
     }
     Item_Give(play, ITEM_SKULL_TOKEN);
     if (Inventory_GetSkullTokenCount(play->sceneId) >= 30) {
         Message_StartTextbox(play, 0xFC, NULL);
         Audio_PlayFanfare(NA_BGM_GET_ITEM | 0x900);
-        return;
+    } else {
+        Message_StartTextbox(play, 0x52, NULL);
+        Audio_PlayFanfare(NA_BGM_GET_SMALL_ITEM);
     }
-    Message_StartTextbox(play, 0x52, NULL);
-    Audio_PlayFanfare(NA_BGM_GET_SMALL_ITEM);
 }
 
 void func_8098CB70(EnSi* this, PlayState* play) {
-    if ((this->actor.flags & 0x2000) == 0x2000) {
+    if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_2000)) {
         this->actionFunc = func_8098CBDC;
     } else if (this->colliderSphere.base.ocFlags2 & OC2_HIT_PLAYER) {
         func_8098CAD0(this, play);
