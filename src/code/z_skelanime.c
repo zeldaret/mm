@@ -1011,7 +1011,7 @@ void AnimationContext_SetLoadFrame(PlayState* play, PlayerAnimationHeader* anima
         osCreateMesgQueue(&entry->data.load.msgQueue, entry->data.load.msg, ARRAY_COUNT(entry->data.load.msg));
         DmaMgr_SendRequestImpl(
             &entry->data.load.req, ram,
-            LINK_ANIMETION_OFFSET(playerAnimHeader->segment, (sizeof(Vec3s) * limbCount + sizeof(s16)) * frame),
+            LINK_ANIMETION_OFFSET(playerAnimHeader->linkAnimSegment, (sizeof(Vec3s) * limbCount + sizeof(s16)) * frame),
             sizeof(Vec3s) * limbCount + sizeof(s16), 0, &entry->data.load.msgQueue, NULL);
     }
 }

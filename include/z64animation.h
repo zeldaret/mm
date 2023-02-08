@@ -154,7 +154,7 @@ typedef struct {
     /* 0x0 */ AnimationHeaderCommon common;
     /* 0x4 */ union {
                 void* segmentVoid;
-                struct PlayerAnimationFrame* segment;
+                struct PlayerAnimationFrame* linkAnimSegment;
             };
 } PlayerAnimationHeader; // size = 0x8
 
