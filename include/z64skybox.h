@@ -59,9 +59,9 @@ void func_80143148(SkyboxContext* skyboxCtx, s32 arg1);
 void Skybox_Setup(struct GameState* gameState, SkyboxContext* skyboxCtx, s16 skyboxId);
 void func_80143324(struct PlayState* play, SkyboxContext* skyboxCtx, s16 skyboxId);
 void Skybox_Init(struct GameState* gameState, SkyboxContext* skyboxCtx, s16 skyboxId);
-Mtx* SkyboxDraw_UpdateMatrix(SkyboxContext* skyboxCtx, f32 x, f32 y, f32 z);
-void SkyboxDraw_SetColors(SkyboxContext* skyboxCtx, u8 primR, u8 primG, u8 primB, u8 envR, u8 envG, u8 envB);
-void SkyboxDraw_Draw(SkyboxContext* skyboxCtx, struct GraphicsContext* gfxCtx, s16 skyboxId, s16 blend, f32 x, f32 y, f32 z);
-void SkyboxDraw_Update(SkyboxContext* skyboxCtx);
+Mtx* Skybox_UpdateMatrix(SkyboxContext* skyboxCtx, f32 x, f32 y, f32 z);
+void Skybox_SetColors(SkyboxContext* skyboxCtx, u8 primR, u8 primG, u8 primB, u8 envR, u8 envG, u8 envB);
+void Skybox_Draw(SkyboxContext* skyboxCtx, struct GraphicsContext* gfxCtx, s16 skyboxId, s16 blend, f32 x, f32 y, f32 z);
+void Skybox_Update(SkyboxContext* skyboxCtx);
 
 #endif

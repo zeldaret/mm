@@ -989,7 +989,7 @@ void Play_UpdateMain(PlayState* this) {
 
             Room_nop8012D510(this, &this->roomCtx.curRoom, &input[1], 0);
             Room_nop8012D510(this, &this->roomCtx.prevRoom, &input[1], 1);
-            SkyboxDraw_Update(&this->skyboxCtx);
+            Skybox_Update(&this->skyboxCtx);
 
             if ((this->pauseCtx.state != 0) || (this->pauseCtx.debugEditor != DEBUG_EDITOR_NONE)) {
                 KaleidoScopeCall_Update(this);
@@ -1265,10 +1265,10 @@ void Play_DrawMain(PlayState* this) {
                     if (this->skyboxId && !this->envCtx.skyboxDisabled) {
                         if ((this->skyboxId == 1) || (this->skyboxId == 3)) {
                             Environment_UpdateSkybox(this->skyboxId, &this->envCtx, &this->skyboxCtx);
-                            SkyboxDraw_Draw(&this->skyboxCtx, gfxCtx, this->skyboxId, this->envCtx.unk_13,
+                            Skybox_Draw(&this->skyboxCtx, gfxCtx, this->skyboxId, this->envCtx.unk_13,
                                             this->view.eye.x, this->view.eye.y, this->view.eye.z);
                         } else if (!this->skyboxCtx.skyboxShouldDraw) {
-                            SkyboxDraw_Draw(&this->skyboxCtx, gfxCtx, this->skyboxId, 0, this->view.eye.x,
+                            Skybox_Draw(&this->skyboxCtx, gfxCtx, this->skyboxId, 0, this->view.eye.x,
                                             this->view.eye.y, this->view.eye.z);
                         }
                     }
@@ -1300,7 +1300,7 @@ void Play_DrawMain(PlayState* this) {
 
                     if (1) {}
                     Camera_GetQuakeOffset(&sp78, GET_ACTIVE_CAM(this));
-                    SkyboxDraw_Draw(&this->skyboxCtx, gfxCtx, this->skyboxId, 0, this->view.eye.x + sp78.x,
+                    Skybox_Draw(&this->skyboxCtx, gfxCtx, this->skyboxId, 0, this->view.eye.x + sp78.x,
                                     this->view.eye.y + sp78.y, this->view.eye.z + sp78.z);
                 }
 
@@ -1412,7 +1412,7 @@ void Play_DrawMain(PlayState* this) {
         View_UpdateViewingMatrix(&this->view);
         this->view.unk164 = 0;
         if ((this->skyboxId != 0) && !this->envCtx.skyboxDisabled) {
-            SkyboxDraw_UpdateMatrix(&this->skyboxCtx, this->view.eye.x, this->view.eye.y, this->view.eye.z);
+            Skybox_UpdateMatrix(&this->skyboxCtx, this->view.eye.x, this->view.eye.y, this->view.eye.z);
         }
     }
 
