@@ -1262,8 +1262,8 @@ void Play_DrawMain(PlayState* this) {
 
             if (this->unk_18844 == 0) {
                 if (1) {
-                    if (this->skyboxId && !this->envCtx.skyboxDisabled) {
-                        if ((this->skyboxId == 1) || (this->skyboxId == 3)) {
+                    if ((this->skyboxId != SKYBOX_NONE) && !this->envCtx.skyboxDisabled) {
+                        if ((this->skyboxId == SKYBOX_NORMAL_SKY) || (this->skyboxId == SKYBOX_3)) {
                             Environment_UpdateSkybox(this->skyboxId, &this->envCtx, &this->skyboxCtx);
                             Skybox_Draw(&this->skyboxCtx, gfxCtx, this->skyboxId, this->envCtx.unk_13,
                                             this->view.eye.x, this->view.eye.y, this->view.eye.z);
@@ -1411,7 +1411,7 @@ void Play_DrawMain(PlayState* this) {
         Camera_Update(&sp4C, GET_ACTIVE_CAM(this));
         View_UpdateViewingMatrix(&this->view);
         this->view.unk164 = 0;
-        if ((this->skyboxId != 0) && !this->envCtx.skyboxDisabled) {
+        if ((this->skyboxId != SKYBOX_NONE) && !this->envCtx.skyboxDisabled) {
             Skybox_UpdateMatrix(&this->skyboxCtx, this->view.eye.x, this->view.eye.y, this->view.eye.z);
         }
     }
