@@ -25,6 +25,8 @@ RUN_CC_CHECK ?= 1
 OBJDUMP_BUILD ?= 0
 # Number of threads to disassmble, extract, and compress with
 N_THREADS ?= $(shell nproc)
+# Prefix for mips binutils binaries.  Change for non-standard mips-linux-gnu installations
+MIPS_BINUTILS_PREFIX ?= mips-linux-gnu-
 
 #### Setup ####
 
@@ -63,7 +65,6 @@ endif
 
 #### Tools ####
 
-MIPS_BINUTILS_PREFIX ?= mips-linux-gnu-
 ifneq ($(shell type $(MIPS_BINUTILS_PREFIX)ld >/dev/null 2>/dev/null; echo $$?), 0)
   $(error Unable to find $(MIPS_BINUTILS_PREFIX)ld. Please install or build MIPS binutils, commonly mips-linux-gnu. (or set MIPS_BINUTILS_PREFIX if your MIPS binutils install uses another prefix))
 endif
