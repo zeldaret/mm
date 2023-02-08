@@ -14,8 +14,8 @@ typedef void (*EnSlimeActionFunc)(struct EnSlime*, PlayState*);
 typedef struct EnSlime {
     /* 0x000 */ Actor actor;
     /* 0x144 */ EnSlimeActionFunc actionFunc;
-    /* 0x148 */ u8 alpha;
-    /* 0x149 */ u8 unk149; //Index into cycling asset load, probably texture, like a blink.
+    /* 0x148 */ u8 iceBlockLevel;
+    /* 0x149 */ u8 eyeTexIndex;
     /* 0x14A */ u8 damageEffectType;
     /* 0x14B */ char pad14B[1];
     /* 0x14C */ s16 timer; //? Used for different things? Like for respawn countdown, or just general behavior changes?
