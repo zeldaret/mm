@@ -17,10 +17,7 @@ void EnSi_Destroy(Actor* thisx, PlayState* play);
 void EnSi_Update(Actor* thisx, PlayState* play);
 void EnSi_Draw(Actor* thisx, PlayState* play);
 
-void func_8098CB70(EnSi* this, PlayState* play);
 void func_8098CBDC(EnSi* this, PlayState* play);
-void func_8098CAD0(EnSi* this, PlayState* play);
-void func_8098CA20(EnSi* this, PlayState* play);
 
 ActorInit En_Si_InitVars = {
     ACTOR_EN_SI,
@@ -34,7 +31,6 @@ ActorInit En_Si_InitVars = {
     (ActorFunc)EnSi_Draw,
 };
 
-// static ColliderSphereInit sSphereInit = {
 static ColliderSphereInit sSphereInit = {
     {
         COLTYPE_NONE,
