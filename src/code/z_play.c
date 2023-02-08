@@ -1265,11 +1265,11 @@ void Play_DrawMain(PlayState* this) {
                     if ((this->skyboxId != SKYBOX_NONE) && !this->envCtx.skyboxDisabled) {
                         if ((this->skyboxId == SKYBOX_NORMAL_SKY) || (this->skyboxId == SKYBOX_3)) {
                             Environment_UpdateSkybox(this->skyboxId, &this->envCtx, &this->skyboxCtx);
-                            Skybox_Draw(&this->skyboxCtx, gfxCtx, this->skyboxId, this->envCtx.unk_13,
-                                            this->view.eye.x, this->view.eye.y, this->view.eye.z);
+                            Skybox_Draw(&this->skyboxCtx, gfxCtx, this->skyboxId, this->envCtx.unk_13, this->view.eye.x,
+                                        this->view.eye.y, this->view.eye.z);
                         } else if (!this->skyboxCtx.skyboxShouldDraw) {
-                            Skybox_Draw(&this->skyboxCtx, gfxCtx, this->skyboxId, 0, this->view.eye.x,
-                                            this->view.eye.y, this->view.eye.z);
+                            Skybox_Draw(&this->skyboxCtx, gfxCtx, this->skyboxId, 0, this->view.eye.x, this->view.eye.y,
+                                        this->view.eye.z);
                         }
                     }
 
@@ -1301,7 +1301,7 @@ void Play_DrawMain(PlayState* this) {
                     if (1) {}
                     Camera_GetQuakeOffset(&sp78, GET_ACTIVE_CAM(this));
                     Skybox_Draw(&this->skyboxCtx, gfxCtx, this->skyboxId, 0, this->view.eye.x + sp78.x,
-                                    this->view.eye.y + sp78.y, this->view.eye.z + sp78.z);
+                                this->view.eye.y + sp78.y, this->view.eye.z + sp78.z);
                 }
 
                 // envCtx.precipitation[PRECIP_RAIN_CUR]
