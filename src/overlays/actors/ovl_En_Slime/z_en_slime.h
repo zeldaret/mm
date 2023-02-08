@@ -14,15 +14,17 @@ typedef void (*EnSlimeActionFunc)(struct EnSlime*, PlayState*);
 typedef struct EnSlime {
     /* 0x000 */ Actor actor;
     /* 0x144 */ EnSlimeActionFunc actionFunc;
-    /* 0x148 */ u8 iceBlockLevel;
+    /* 0x148 */ u8 iceBlockTimer;
     /* 0x149 */ u8 eyeTexIndex;
     /* 0x14A */ u8 damageEffectType;
-    /* 0x14B */ char pad14B[1];
-    /* 0x14C */ s16 timer; //? Used for different things? Like for respawn countdown, or just general behavior changes?
+    /* 0x14C */ s16 timer;
     /* 0x14E */ s16 idleRotY;
     /* 0x150 */ s16 respawnRotY;
     /* 0x152 */ s16 respawnTime;
-    /* 0x154 */ Vec3f unk154;
+    /* 0x154 */ union { 
+                    Vec3f iceBlockSnapPos;
+                    Vec3f wobbleRot;
+                };
     /* 0x160 */ void* dropObjectTex;
     /* 0x164 */ f32 effectAlpha;
     /* 0x168 */ f32 effectScale;

@@ -10149,7 +10149,7 @@
     0x80A30344:("EnSlime_UpdateDamageReaction",),
     0x80A30454:("EnSlime_InitializeDeath",),
     0x80A304B8:("EnSlime_Expire",),
-    0x80A3072C:("func_80A3072C",),
+    0x80A3072C:("EnSlime_SnapIceBlockPosition",),
     0x80A30778:("EnSlime_InitIceBlock",),
     0x80A30820:("EnSlime_SpawnIceBlock",),
     0x80A30924:("EnSlime_SetIceBlockedState",),
