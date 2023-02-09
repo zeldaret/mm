@@ -807,7 +807,6 @@ extern KaleidoMgrOverlay* gKaleidoMgrCurOvl;
 // extern UNK_TYPE4 D_801D0BB0;
 // extern UNK_TYPE1 D_801D0C80;
 // extern UNK_TYPE1 D_801D0CB0;
-extern Gfx sCircleSetupDL[];
 extern s32 gDbgCamEnabled;
 // extern UNK_TYPE1 D_801D0D54;
 // extern UNK_TYPE2 sQuakeIndex;

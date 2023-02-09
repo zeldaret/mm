@@ -45,6 +45,9 @@ void TransitionFade_Start(void* thisx) {
         case TRANS_FADE_TYPE_FLASH:
             this->color.a = 0;
             break;
+
+        default:
+            break;
     }
     this->isDone = false;
 }
@@ -72,8 +75,8 @@ void TransitionFade_Update(void* thisx, s32 updateRate) {
             //! FAKE:
             THIS->timer += updateRate;
 
-            if (this->timer >= gSaveContext.transFadeDuration) {
-                this->timer = gSaveContext.transFadeDuration;
+            if (this->timer >= ((void)0, gSaveContext.transFadeDuration)) {
+                this->timer = ((void)0, gSaveContext.transFadeDuration);
                 this->isDone = true;
             }
 
@@ -97,6 +100,9 @@ void TransitionFade_Update(void* thisx, s32 updateRate) {
                 }
             }
             this->color.a = newAlpha;
+            break;
+
+        default:
             break;
     }
 }

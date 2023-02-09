@@ -123,6 +123,9 @@ void TransitionTriforce_Draw(void* thisx, Gfx** gfxP) {
                 gSP2Triangles(gfx++, 1, 7, 8, 0, 1, 8, 9, 0);
                 gSP2Triangles(gfx++, 1, 9, 2, 0, 2, 9, 6, 0);
                 break;
+
+            default:
+                break;
         }
 
     } else {
@@ -132,6 +135,9 @@ void TransitionTriforce_Draw(void* thisx, Gfx** gfxP) {
 
             case TRANS_INSTANCE_TYPE_FILL_IN:
                 gSP1Quadrangle(gfx++, 6, 7, 8, 9, 0);
+                break;
+
+            default:
                 break;
         }
     }
