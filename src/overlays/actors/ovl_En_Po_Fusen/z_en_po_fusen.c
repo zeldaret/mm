@@ -62,38 +62,38 @@ typedef enum {
 } PoeBalloonDamageEffect;
 
 static DamageTable sDamageTable = {
-    /* Deku Nut       */ DMG_ENTRY(0, POFUSEN_DMGEFF_NONE),
-    /* Deku Stick     */ DMG_ENTRY(0, POFUSEN_DMGEFF_NONE),
-    /* Horse trample  */ DMG_ENTRY(0, POFUSEN_DMGEFF_NONE),
-    /* Explosives     */ DMG_ENTRY(0, POFUSEN_DMGEFF_NONE),
-    /* Zora boomerang */ DMG_ENTRY(0, POFUSEN_DMGEFF_NONE),
-    /* Normal arrow   */ DMG_ENTRY(1, POFUSEN_DMGEFF_POP),
-    /* UNK_DMG_0x06   */ DMG_ENTRY(0, POFUSEN_DMGEFF_NONE),
-    /* Hookshot       */ DMG_ENTRY(0, POFUSEN_DMGEFF_NONE),
-    /* Goron punch    */ DMG_ENTRY(0, POFUSEN_DMGEFF_NONE),
-    /* Sword          */ DMG_ENTRY(0, POFUSEN_DMGEFF_NONE),
-    /* Goron pound    */ DMG_ENTRY(0, POFUSEN_DMGEFF_NONE),
-    /* Fire arrow     */ DMG_ENTRY(1, POFUSEN_DMGEFF_POP),
-    /* Ice arrow      */ DMG_ENTRY(1, POFUSEN_DMGEFF_POP),
-    /* Light arrow    */ DMG_ENTRY(1, POFUSEN_DMGEFF_POP),
-    /* Goron spikes   */ DMG_ENTRY(1, POFUSEN_DMGEFF_POP),
-    /* Deku spin      */ DMG_ENTRY(0, POFUSEN_DMGEFF_NONE),
-    /* Deku bubble    */ DMG_ENTRY(0, POFUSEN_DMGEFF_NONE),
-    /* Deku launch    */ DMG_ENTRY(0, POFUSEN_DMGEFF_NONE),
-    /* UNK_DMG_0x12   */ DMG_ENTRY(0, POFUSEN_DMGEFF_NONE),
-    /* Zora barrier   */ DMG_ENTRY(0, POFUSEN_DMGEFF_NONE),
-    /* Normal shield  */ DMG_ENTRY(0, POFUSEN_DMGEFF_NONE),
-    /* Light ray      */ DMG_ENTRY(0, POFUSEN_DMGEFF_NONE),
-    /* Thrown object  */ DMG_ENTRY(0, POFUSEN_DMGEFF_NONE),
-    /* Zora punch     */ DMG_ENTRY(0, POFUSEN_DMGEFF_NONE),
-    /* Spin attack    */ DMG_ENTRY(0, POFUSEN_DMGEFF_NONE),
-    /* Sword beam     */ DMG_ENTRY(0, POFUSEN_DMGEFF_NONE),
-    /* Normal Roll    */ DMG_ENTRY(0, POFUSEN_DMGEFF_NONE),
-    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, POFUSEN_DMGEFF_NONE),
-    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, POFUSEN_DMGEFF_NONE),
-    /* Unblockable    */ DMG_ENTRY(0, POFUSEN_DMGEFF_NONE),
-    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, POFUSEN_DMGEFF_NONE),
-    /* Powder Keg     */ DMG_ENTRY(0, POFUSEN_DMGEFF_NONE),
+    /* Deku Nut       */ DMG_ENTRY(0, POE_BALLOON_DMGEFF_NONE),
+    /* Deku Stick     */ DMG_ENTRY(0, POE_BALLOON_DMGEFF_NONE),
+    /* Horse trample  */ DMG_ENTRY(0, POE_BALLOON_DMGEFF_NONE),
+    /* Explosives     */ DMG_ENTRY(0, POE_BALLOON_DMGEFF_NONE),
+    /* Zora boomerang */ DMG_ENTRY(0, POE_BALLOON_DMGEFF_NONE),
+    /* Normal arrow   */ DMG_ENTRY(1, POE_BALLOON_DMGEFF_POP),
+    /* UNK_DMG_0x06   */ DMG_ENTRY(0, POE_BALLOON_DMGEFF_NONE),
+    /* Hookshot       */ DMG_ENTRY(0, POE_BALLOON_DMGEFF_NONE),
+    /* Goron punch    */ DMG_ENTRY(0, POE_BALLOON_DMGEFF_NONE),
+    /* Sword          */ DMG_ENTRY(0, POE_BALLOON_DMGEFF_NONE),
+    /* Goron pound    */ DMG_ENTRY(0, POE_BALLOON_DMGEFF_NONE),
+    /* Fire arrow     */ DMG_ENTRY(1, POE_BALLOON_DMGEFF_POP),
+    /* Ice arrow      */ DMG_ENTRY(1, POE_BALLOON_DMGEFF_POP),
+    /* Light arrow    */ DMG_ENTRY(1, POE_BALLOON_DMGEFF_POP),
+    /* Goron spikes   */ DMG_ENTRY(1, POE_BALLOON_DMGEFF_POP),
+    /* Deku spin      */ DMG_ENTRY(0, POE_BALLOON_DMGEFF_NONE),
+    /* Deku bubble    */ DMG_ENTRY(0, POE_BALLOON_DMGEFF_NONE),
+    /* Deku launch    */ DMG_ENTRY(0, POE_BALLOON_DMGEFF_NONE),
+    /* UNK_DMG_0x12   */ DMG_ENTRY(0, POE_BALLOON_DMGEFF_NONE),
+    /* Zora barrier   */ DMG_ENTRY(0, POE_BALLOON_DMGEFF_NONE),
+    /* Normal shield  */ DMG_ENTRY(0, POE_BALLOON_DMGEFF_NONE),
+    /* Light ray      */ DMG_ENTRY(0, POE_BALLOON_DMGEFF_NONE),
+    /* Thrown object  */ DMG_ENTRY(0, POE_BALLOON_DMGEFF_NONE),
+    /* Zora punch     */ DMG_ENTRY(0, POE_BALLOON_DMGEFF_NONE),
+    /* Spin attack    */ DMG_ENTRY(0, POE_BALLOON_DMGEFF_NONE),
+    /* Sword beam     */ DMG_ENTRY(0, POE_BALLOON_DMGEFF_NONE),
+    /* Normal Roll    */ DMG_ENTRY(0, POE_BALLOON_DMGEFF_NONE),
+    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, POE_BALLOON_DMGEFF_NONE),
+    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, POE_BALLOON_DMGEFF_NONE),
+    /* Unblockable    */ DMG_ENTRY(0, POE_BALLOON_DMGEFF_NONE),
+    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, POE_BALLOON_DMGEFF_NONE),
+    /* Powder Keg     */ DMG_ENTRY(0, POE_BALLOON_DMGEFF_NONE),
 };
 
 void EnPoFusen_Init(Actor* thisx, PlayState* play) {
@@ -175,7 +175,7 @@ u16 EnPoFusen_CheckCollision(EnPoFusen* this, PlayState* play) {
     this->collider.dim.worldSphere.center.y = this->actor.world.pos.y + 20.0f;
     this->collider.dim.worldSphere.center.z = this->actor.world.pos.z;
 
-    if ((this->collider.base.acFlags & AC_HIT) && (this->actor.colChkInfo.damageEffect == POFUSEN_DMGEFF_POP)) {
+    if ((this->collider.base.acFlags & AC_HIT) && (this->actor.colChkInfo.damageEffect == POE_BALLOON_DMGEFF_POP)) {
         this->collider.base.acFlags &= ~AC_HIT;
         return true;
     }
