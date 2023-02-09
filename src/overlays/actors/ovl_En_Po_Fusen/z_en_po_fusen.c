@@ -57,9 +57,9 @@ static ColliderSphereInit sSphereInit = {
 };
 
 typedef enum {
-    /* 0x0 */ POFUSEN_DMGEFF_NONE,
-    /* 0xF */ POFUSEN_DMGEFF_POP = 0xF,
-} PoFusenDamageEffect;
+    /* 0x0 */ POE_BALLOON_DMGEFF_NONE,
+    /* 0xF */ POE_BALLOON_DMGEFF_POP = 0xF,
+} PoeBalloonDamageEffect;
 
 static DamageTable sDamageTable = {
     /* Deku Nut       */ DMG_ENTRY(0, POFUSEN_DMGEFF_NONE),

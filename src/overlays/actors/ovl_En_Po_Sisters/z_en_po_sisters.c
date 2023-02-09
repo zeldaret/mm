@@ -97,12 +97,12 @@ static ColliderCylinderInit sCylinderInit = {
 static CollisionCheckInfoInit sColChkInfoInit = { 6, 25, 60, 50 };
 
 typedef enum {
-    /* 0x0 */ POSISTERS_DMGEFF_NONE,
-    /* 0x1 */ POSISTERS_DMGEFF_UNKDMG12, // set in DamageTable, but unused
-    /* 0x4 */ POSISTERS_DMGEFF_LIGHTARROWS = 0x4,
-    /* 0xE */ POSISTERS_DMGEFF_SPINATTACK = 0xE,
-    /* 0xF */ POSISTERS_DMGEFF_DEKUNUT = 0xF,
-} PoSisterDamageEffect;
+    /* 0x0 */ POE_SISTERS_DMGEFF_NONE,
+    /* 0x1 */ POE_SISTERS_DMGEFF_UNKDMG12, // set in DamageTable, but unused
+    /* 0x4 */ POE_SISTERS_DMGEFF_LIGHTARROWS = 0x4,
+    /* 0xE */ POE_SISTERS_DMGEFF_SPINATTACK = 0xE,
+    /* 0xF */ POE_SISTERS_DMGEFF_DEKUNUT = 0xF,
+} PoeSisterDamageEffect;
 
 static DamageTable sDamageTable = {
     /* Deku Nut       */ DMG_ENTRY(0, POSISTERS_DMGEFF_DEKUNUT),
