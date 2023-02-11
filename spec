@@ -2562,9 +2562,7 @@ beginseg
     name "ovl_En_Slime"
     compress
     include "build/src/overlays/actors/ovl_En_Slime/z_en_slime.o"
-    include "build/data/ovl_En_Slime/ovl_En_Slime.data.o"
-    include "build/data/ovl_En_Slime/ovl_En_Slime.bss.o"
-    include "build/data/ovl_En_Slime/ovl_En_Slime.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Slime/ovl_En_Slime_reloc.o"
 endseg
 
 beginseg
