@@ -34,11 +34,11 @@ void EnSlime_Draw(Actor* thisx, PlayState* play);
 
 void EnSlime_InitIceStun(EnSlime* this);
 void EnSlime_UpdateIceEffects(EnSlime* this, PlayState* play);
-void EnSlime_UpdateBlink(EnSlime* this); 
+void EnSlime_UpdateBlink(EnSlime* this);
 
 void EnSlime_InitBehavior(EnSlime* this);
-void EnSlime_InitializeIdle(EnSlime* this, PlayState* play); //Default action func
-void EnSlime_ReturnToIdle(EnSlime* this);    
+void EnSlime_InitializeIdle(EnSlime* this, PlayState* play);
+void EnSlime_ReturnToIdle(EnSlime* this);
 void EnSlime_SitIdle(EnSlime* this, PlayState* play);
 void EnSlime_ChangeDirectionIdle(EnSlime* this);
 void EnSlime_MoveInDirectionIdle(EnSlime* this, PlayState* play);
@@ -52,8 +52,8 @@ void EnSlime_FinishJump(EnSlime* this);
 void EnSlime_UpdateJumpLanding(EnSlime* this, PlayState* play);
 void EnSlime_ReactToBluntHit(EnSlime* this);
 void EnSlime_UpdateBluntHitReaction(EnSlime* this, PlayState* play);
-void EnSlime_ReactToDamage(EnSlime* this, PlayState* play, s32 arg2);
-void EnSlime_UpdateDamageReaction(EnSlime* this, PlayState* play); //Action func
+void EnSlime_ReactToDamage(EnSlime* this, PlayState* play, s32 faceDamageSource);
+void EnSlime_UpdateDamageReaction(EnSlime* this, PlayState* play);
 void EnSlime_InitializeDeath(EnSlime* this);
 void EnSlime_Expire(EnSlime* this, PlayState* play);
 f32 EnSlime_SnapIceBlockPosition(f32, f32);
@@ -68,7 +68,7 @@ void EnSlime_UpdateIceBlockUnfreeze(EnSlime* this, PlayState* play);
 void EnSlime_HideDead(EnSlime* this);
 void EnSlime_CountdownRespawn(EnSlime* this, PlayState* play);
 void EnSlime_BeginRespawn(EnSlime* this);
-void EnSlime_UpdateRespawn(EnSlime* this, PlayState* play); //Action func
+void EnSlime_UpdateRespawn(EnSlime* this, PlayState* play);
 void EnSlime_CheckACHit(EnSlime* this, PlayState* play);
 
 const ActorInit En_Slime_InitVars = {
@@ -84,8 +84,22 @@ const ActorInit En_Slime_InitVars = {
 };
 
 static ColliderCylinderInit sCylinderInit = {
-    { COLTYPE_NONE, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
-    { ELEMTYPE_UNK0, { 0xF7CFFFFF, 0x00, 0x04 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_HARD, BUMP_ON | BUMP_HOOKABLE, OCELEM_ON, },
+    {
+        COLTYPE_NONE,
+        AT_ON | AT_TYPE_ENEMY,
+        AC_ON | AC_TYPE_PLAYER,
+        OC1_ON | OC1_TYPE_ALL,
+        OC2_TYPE_1,
+        COLSHAPE_CYLINDER,
+    },
+    {
+        ELEMTYPE_UNK0,
+        { 0xF7CFFFFF, 0x00, 0x04 },
+        { 0xF7CFFFFF, 0x00, 0x00 },
+        TOUCH_ON | TOUCH_SFX_HARD,
+        BUMP_ON | BUMP_HOOKABLE,
+        OCELEM_ON,
+    },
     { 22, 35, 0, { 0, 0, 0 } },
 };
 
@@ -126,10 +140,10 @@ static DamageTable sDamageTable = {
 
 static CollisionCheckInfoInit sColChkInfoInit = { 1, 22, 35, 60 };
 
-static TexturePtr sEyeTextures[] = { 
-    gChuchuEyeOpenTex, 
-    gChuchuEyeHalfTex, 
-    gChuchuEyeClosedTex, 
+static TexturePtr sEyeTextures[] = {
+    gChuchuEyeOpenTex,
+    gChuchuEyeHalfTex,
+    gChuchuEyeClosedTex,
     gChuchuEyeHalfTex,
 };
 
@@ -142,32 +156,32 @@ static s32 sVirtualAddrInit = false;
 
 static Color_RGBA8 sBubblePrimColor = { 0xff, 0xff, 0xff, 0xff };
 static Color_RGBA8 sBubbleEnvColor = { 0x96, 0x96, 0x96, 0x00 };
-static Vec3f sBubbleAccel = {0.0, -0.8, 0.0};
+static Vec3f sBubbleAccel = { 0.0, -0.8, 0.0 };
 
 static Color_RGBA8 sPrimColors[] = {
-    { 0xff, 0xff, 0xff, 0xff }, 
-    { 0xff, 0xff, 0x00, 0xff }, 
-    { 0xff, 0xff, 0xc8, 0xff }, 
+    { 0xff, 0xff, 0xff, 0xff },
+    { 0xff, 0xff, 0x00, 0xff },
+    { 0xff, 0xff, 0xc8, 0xff },
     { 0xe1, 0xc8, 0xff, 0xff },
 };
 
 static Color_RGBA8 sEnvColors[] = {
-    { 0x8c, 0xff, 0xc3, 0xff }, 
-    { 0x32, 0xff, 0x00, 0xff }, 
-    { 0xff, 0xb4, 0x00, 0xff }, 
+    { 0x8c, 0xff, 0xc3, 0xff },
+    { 0x32, 0xff, 0x00, 0xff },
+    { 0xff, 0xb4, 0x00, 0xff },
     { 0xff, 0x32, 0x9b, 0xff },
 };
 
 static Vec3f sLimbPosMultipliers[] = {
-    { 2000.0, 2000.0, 0.0 },
-    { -1500.0, 2500.0, -500.0 },
-    { -500.0, 1000.0, 2500.0 },
-    { 0.0, 4000.0, 0.0 },    
-    { 0.0, 2000.0, -2000.0 },
+    { 2000.0, 2000.0, 0.0 }, { -1500.0, 2500.0, -500.0 }, { -500.0, 1000.0, 2500.0 },
+    { 0.0, 4000.0, 0.0 },    { 0.0, 2000.0, -2000.0 },
 };
 
 static AnimatedMaterial* sSlimeAnimTex;
 
+/**
+ * Initialize EnSlime instance.
+ */
 void EnSlime_Init(Actor* thisx, PlayState* play) {
     s32 actorParamsHi;
     s32 i;
@@ -178,10 +192,11 @@ void EnSlime_Init(Actor* thisx, PlayState* play) {
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 38.0f);
 
-    this->iceBlockTimer = 0xFF;
+    this->iceBlockTimer = 0xFF; // 0xFF is the value used when the ice block is not in use
     this->eyeTexIndex = EN_SLIME_EYETEX_OPEN;
     this->wobbleRot.y = 0.0f;
 
+    // Sets maximum distance chuchu will move from its home before turning around.
     if (this->actor.shape.rot.x <= 0) {
         this->distLimit = 30000.0f;
     } else {
@@ -196,9 +211,10 @@ void EnSlime_Init(Actor* thisx, PlayState* play) {
         actorParamsHi = 0;
     }
 
-    //Upper byte of actorParams at init is # of seconds past 10s to respawn.
+    // Upper byte of actorParams at init is # of seconds past 10s to respawn.
     this->respawnTime = (actorParamsHi * 20) + 200;
 
+    // Update addresses of texture assets (if another instance hasn't already)
     if (!sVirtualAddrInit) {
         for (i = 0; i < 4; i++) {
             sEyeTextures[i] = Lib_SegmentedToVirtual(sEyeTextures[i]);
@@ -207,6 +223,8 @@ void EnSlime_Init(Actor* thisx, PlayState* play) {
         sVirtualAddrInit = true;
     }
 
+    // Lower byte of actorParams is the chuchu color type
+    // Set hint IDs and drop item icon depending on chuchu color
     if (this->actor.params == EN_SLIME_TYPE_YELLOW) {
         this->dropObjectTex = Lib_SegmentedToVirtual(gDropArrows1Tex);
         this->actor.hintId = TATL_HINT_ID_YELLOW_CHUCHU;
@@ -220,30 +238,41 @@ void EnSlime_Init(Actor* thisx, PlayState* play) {
         this->actor.hintId = TATL_HINT_ID_BLUE_CHUCHU;
     }
 
+    // Sets actor scale and initial action func
     EnSlime_InitBehavior(this);
 }
 
+/**
+ * Destroy EnSlime instance.
+ */
 void EnSlime_Destroy(Actor* thisx, PlayState* play) {
     EnSlime* this = THIS;
     Collider_DestroyCylinder(play, &this->collider);
 }
 
-//80A2EFAC - Update func
+/**
+ * Upon immobilization via ice arrow (for chuchu types outside of blue), initialize
+ * ice visual effects before chuchu enters immobile state.
+ */
 void EnSlime_InitIceStun(EnSlime* this) {
     this->damageEffectType = ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX;
     this->effectScale = 0.4f;
     this->collider.base.colType = COLTYPE_HIT3;
     this->frozenSteamScale = 0.6f;
     this->effectAlpha = 1.0f;
-    this->timer = 0x50;
+    this->timer = 80;
     this->actor.flags &= ~ACTOR_FLAG_400;
-    Actor_SetColorFilter(&this->actor, 0x4000, 0xFF, 0x2000, 0x50);
+    Actor_SetColorFilter(&this->actor, 0x4000, 0xFF, 0x2000, 80);
 }
 
-//80A2F028 - Update func
+/**
+ * If ice effect was recently activated (ie. non-blue chuchu was frozen by ice arrow),
+ * and the particle effect hasn't spawned yet, update the damage effect state and
+ * spawn the ice effects.
+ */
 void EnSlime_UpdateIceEffects(EnSlime* this, PlayState* play) {
     if (this->damageEffectType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
-        this->damageEffectType = 0;
+        this->damageEffectType = 0; // So it's not triggered again until InitIceStun has been called again.
         this->collider.base.colType = COLTYPE_NONE;
         this->effectAlpha = 0.0f;
         Actor_SpawnIceEffects(play, &this->actor, this->limbPos, EN_SLIME_LIMBPOS_COUNT, 2, 0.2f, 0.2f);
@@ -251,7 +280,10 @@ void EnSlime_UpdateIceEffects(EnSlime* this, PlayState* play) {
     }
 }
 
-//80A2F0A8 - Called by action funcs
+/**
+ * If blink animation is in progress, advance to next frame.
+ * If eyes are open, randomly (5% chance) initialize new blink cycle.
+ */
 void EnSlime_UpdateBlink(EnSlime* this) {
     if (this->eyeTexIndex != EN_SLIME_EYETEX_OPEN) {
         if (++this->eyeTexIndex == 4) {
@@ -262,7 +294,9 @@ void EnSlime_UpdateBlink(EnSlime* this) {
     }
 }
 
-//80A2F110 - Called at end of init
+/**
+ * Set the actor's initial scale and action function.
+ */
 void EnSlime_InitBehavior(EnSlime* this) {
     this->actor.scale.x = 0.008f;
     this->actor.scale.z = 0.008f;
@@ -270,7 +304,11 @@ void EnSlime_InitBehavior(EnSlime* this) {
     this->actionFunc = EnSlime_InitializeIdle;
 }
 
-//80A2F140 - Initial action function
+/**
+ * Once BGCHECK_CHECK_WALL flag is set, idle action cycle is entered.
+ * This function is only called right after the actor is first initialized.
+ * It is not set as the action function again.
+ */
 void EnSlime_InitializeIdle(EnSlime* this, PlayState* play) {
     if (this->actor.bgCheckFlags & BGCHECK_CHECK_WALL) {
         this->actor.flags &= ~ACTOR_FLAG_10;
@@ -278,14 +316,22 @@ void EnSlime_InitializeIdle(EnSlime* this, PlayState* play) {
     }
 }
 
-//80A2F180 - Called by 80A2F140 (action func). Seems to reset default idle state?
+/**
+ * Set or restore idle action state.
+ * Sets timer to 25 and cycles to SitIdle action.
+ */
 void EnSlime_ReturnToIdle(EnSlime* this) {
     this->timer = 25;
     this->actionFunc = EnSlime_SitIdle;
     this->actor.speedXZ = 0.0f;
 }
 
-//80A2F1A4 - Action function set by initial action function. Checks if it notices player.
+/**
+ * Sit idle for one frame, updating rotation and scale to give
+ * the actor an amorphous, oozing effect.
+ * Chuchu will engage player during idle sit if player is visible and
+ * close enough to it.
+ */
 void EnSlime_SitIdle(EnSlime* this, PlayState* play) {
     f32 sqrtFactor;
     f32 sinFactor;
@@ -303,17 +349,29 @@ void EnSlime_SitIdle(EnSlime* this, PlayState* play) {
 
     this->actor.shape.rot.x = randPlusMinusPoint5Scaled(512.0f) * sqrtFactor;
     this->actor.shape.rot.z = randPlusMinusPoint5Scaled(512.0f) * sqrtFactor;
+
+    /*If player is not wearing the stone mask, is within 280 units of the chuchu, and the chuchu
+        is facing the player, initialize chase/attack cycle.*/
     if ((Player_GetMask(play) != PLAYER_MASK_STONE) && (this->actor.xzDistToPlayer < 280.0f) &&
         Actor_IsFacingPlayer(&this->actor, 0x5000)) {
         EnSlime_EngagePlayer(this);
     } else if (this->timer == 0) {
+        // Done sitting, start moving (remaining idle)
         EnSlime_ChangeDirectionIdle(this);
     }
 }
 
-// 80A2F354 - Called by action func when chuchu is idle and timer is zero
+/**
+ * Reset the action timer (to 120), then select a new direction for
+ * chuchu to move.
+ * Set action function to MoveInDirectionIdle
+ */
 void EnSlime_ChangeDirectionIdle(EnSlime* this) {
-    this->timer = 0x78;
+    this->timer = 120;
+
+    /*If actor is more than 120 units from its home, set the new direction to be towards its home.
+     * Otherwise, the new direction to move is pretty much random.
+     */
     if (Actor_XZDistanceToPoint(&this->actor, &this->actor.home.pos) > 120.0f) {
         this->idleRotY = Actor_YawToPoint(&this->actor, &this->actor.home.pos);
     } else if (Rand_ZeroOne() < 0.7f) {
@@ -323,20 +381,30 @@ void EnSlime_ChangeDirectionIdle(EnSlime* this) {
     this->actionFunc = EnSlime_MoveInDirectionIdle;
 }
 
-//80A2F418 - Action function. Set when chuchu is idle and timer is zero
+/**
+ * While moving idle, update rotation, speed, scale in a sinusoidal fashion to
+ * give oozing effect.
+ * If actor has hit a wall or is too far from home, turn around.
+ * Chuchu will engage player during idle movement if player is visible and
+ * close enough to it.
+ */
 void EnSlime_MoveInDirectionIdle(EnSlime* this, PlayState* play) {
     f32 sinFactor;
 
     EnSlime_UpdateBlink(this);
     this->timer--;
     Math_ApproachS(&this->actor.shape.rot.y, this->idleRotY, 4, 0x100);
-    if (this->actor.bgCheckFlags & 8) {
+
+    /* If actor is touching a wall (bgCheckFlag 8?), set target rotation to match wall where it is touching.
+     * If actor is more than 120 units from its home, turn around to face home.
+     */
+    if (this->actor.bgCheckFlags & BGCHECK_CHECK_ONE_FACE) {
         this->idleRotY = this->actor.wallYaw;
-    } else {
-        if (Actor_XZDistanceToPoint(&this->actor, &this->actor.home.pos) > 120.0f) {
-            this->idleRotY = Actor_YawToPoint(&this->actor, &this->actor.home.pos);
-        }
+    } else if (Actor_XZDistanceToPoint(&this->actor, &this->actor.home.pos) > 120.0f) {
+        this->idleRotY = Actor_YawToPoint(&this->actor, &this->actor.home.pos);
     }
+
+    // Update actor scale, xz speed, and rotation to provide amorphous effect
     sinFactor = fabsf(sin_rad((f32)this->timer * 0.1308997f));
     Math_StepToF(&this->actor.scale.z, ((0.15f * sinFactor) + 1.0f) * 0.01f, 0.0002f);
     Math_StepToF(&this->actor.scale.x, (1.0f - (0.2f * sinFactor)) * 0.01f, 0.0002f);
@@ -346,25 +414,38 @@ void EnSlime_MoveInDirectionIdle(EnSlime* this, PlayState* play) {
     this->actor.shape.rot.x = (s16)(2048.0f * sinFactor);
     this->actor.world.rot.y = this->actor.shape.rot.y;
 
-    if (this->distLimit < Actor_XZDistanceToPoint(&this->actor, &this->actor.home.pos)) {
+    if (Actor_XZDistanceToPoint(&this->actor, &this->actor.home.pos) > this->distLimit) {
+        // If actor is too far from home, start return home cycle
         EnSlime_ReturnHome(this);
     } else if ((Player_GetMask(play) != PLAYER_MASK_STONE) && (this->actor.xzDistToPlayer < 280.0f) &&
                (Actor_IsFacingPlayer(&this->actor, 0x5000))) {
+        // If player is close enough to chuchu while not wearing the stone mask, and the chuchu is facing player,
+        //  initialize attack cycle
         EnSlime_EngagePlayer(this);
     } else if (this->timer == 0) {
+        // If move timer runs out, restart idle cycle (sit in place for 25 frames)
         EnSlime_ReturnToIdle(this);
     }
 }
 
-//80A2F684 - Called by action func 80A2FBA0
+/**
+ * Reset the action timer (to 24), then set the target y angle to face home.
+ * Set action function to MoveToHome.
+ */
 void EnSlime_ReturnHome(EnSlime* this) {
-    this->timer = 0x18;
+    this->timer = 24;
     this->idleRotY = Actor_YawToPoint(&this->actor, &this->actor.home.pos);
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->actionFunc = EnSlime_MoveToHome;
 }
 
-//EnSlime_MoveToHome - Action func for wobbling home
+/**
+ * While moving towards home point, update rotation, speed, scale
+ * in a sinusoidal fashion to give oozing effect.
+ * If actor has hit a wall, turn around.
+ * Once it is close enough to home point, return to idle cycle.
+ * Chuchu will not engage player while the return home cycle is active.
+ */
 void EnSlime_MoveToHome(EnSlime* this, PlayState* play) {
     f32 sinFactor;
 
@@ -372,6 +453,7 @@ void EnSlime_MoveToHome(EnSlime* this, PlayState* play) {
     this->timer--;
     Math_ApproachS(&this->actor.shape.rot.y, this->idleRotY, 4, 0x400);
     if (this->actor.bgCheckFlags & BGCHECK_CHECK_ONE_FACE) {
+        // If hit wall, turn around.
         this->idleRotY = this->actor.wallYaw;
     } else {
         this->idleRotY = Actor_YawToPoint(&this->actor, &this->actor.home.pos);
@@ -386,15 +468,20 @@ void EnSlime_MoveToHome(EnSlime* this, PlayState* play) {
     this->actor.shape.rot.x = (s16)(s32)(2048.0f * sinFactor);
     this->actor.world.rot.y = this->actor.shape.rot.y;
 
+    // Reset timer
     if (this->timer == 0) {
         this->timer = 24;
     }
+
+    // Only return to idle once actor is close enough to home point.
     if (Actor_XZDistanceToPoint(&this->actor, &this->actor.home.pos) < (this->distLimit * 0.8f)) {
         EnSlime_ReturnToIdle(this);
     }
 }
 
-//80A2F8B4 - Called by action func 80A2F1A4/80A2FBA0 if chuchu decides to engage/continue engaging player on action cycle
+/**
+ * Initialize or restart the engage/attack player cycle.
+ */
 void EnSlime_EngagePlayer(EnSlime* this) {
     this->actor.shape.rot.x = 0;
     this->actor.shape.rot.z = 0;
@@ -403,7 +490,10 @@ void EnSlime_EngagePlayer(EnSlime* this) {
     this->actor.speedXZ = 0.0f;
 }
 
-//80A2F8E0 - Action function when chuchu is engaged with player
+/**
+ * Update actor angle and ooze effect as chuchu initially
+ * turns to face player.
+ */
 void EnSlime_TurnToPlayer(EnSlime* this, PlayState* play) {
     f32 factorY;
     f32 factorXZ;
@@ -423,7 +513,11 @@ void EnSlime_TurnToPlayer(EnSlime* this, PlayState* play) {
     }
 }
 
-//80A2F9A0 - Called by action func 80A2F8E0
+/**
+ * Initialize jump toward player. If fewer than 120 units from
+ * the player, start a larger attack lunge. Otherwise, hop forward.
+ * Set action function to EnSlime_UpdateJump
+ */
 void EnSlime_JumpAtPlayer(EnSlime* this) {
     if (this->actor.xzDistToPlayer > 120.0f) {
         this->actor.velocity.y = 11.0f;
@@ -444,11 +538,15 @@ void EnSlime_JumpAtPlayer(EnSlime* this) {
     this->actionFunc = EnSlime_UpdateJump;
 }
 
-//80A2FA88 - Action function (engaged with player)
+/**
+ * Check for collision and whether actor has stopped falling.
+ * Update actor scale for slime effect.
+ * If collision, knockback actor. If actor has stopped moving
+ * in Y direction, initialize landing action.
+ */
 void EnSlime_UpdateJump(EnSlime* this, PlayState* play) {
     this->timer--;
     if (this->collider.base.atFlags & AT_HIT) {
-        //Knockback if hit?
         if (this->actor.speedXZ > 0.0f) {
             this->actor.speedXZ *= -1.2f;
             this->collider.base.atFlags &= ~AT_HIT;
@@ -462,7 +560,11 @@ void EnSlime_UpdateJump(EnSlime* this, PlayState* play) {
     }
 }
 
-//80A2FB60 - Called by action func 80A2FA88
+/**
+ * Initialize jump landing.
+ * Adjust timer and scale, and stop xz movement.
+ * Set action function to UpdateJumpLanding
+ */
 void EnSlime_FinishJump(EnSlime* this) {
     this->timer = 15;
     this->actor.scale.x = 0.0132f;
@@ -472,7 +574,15 @@ void EnSlime_FinishJump(EnSlime* this) {
     this->actor.speedXZ = 0.0f;
 }
 
-//80A2FBA0 - Action function (engaged with player)
+/**
+ * Update scale/rot for ooze jiggle effect (XZ), update Y scale
+ * to make it appear as though chuchu is compressing.
+ * If > 12 frames have passed since jump start, check again if player
+ * is in range and restart engage/jump cycle if so.
+ * If too far from home, initialize return home cycle (takes priority over
+ * player engage check).
+ * Otherwise, if timer is up, return to idle.
+ */
 void EnSlime_UpdateJumpLanding(EnSlime* this, PlayState* play) {
     f32 factorScaleY;
     f32 factorRotXZ;
@@ -490,18 +600,22 @@ void EnSlime_UpdateJumpLanding(EnSlime* this, PlayState* play) {
     }
     this->actor.shape.rot.x = (s16)(s32)(randPlusMinusPoint5Scaled(512.0f) * factorRotXZ);
     this->actor.shape.rot.z = (s16)(s32)(randPlusMinusPoint5Scaled(512.0f) * factorRotXZ);
+
     if (Actor_XZDistanceToPoint(&this->actor, &this->actor.home.pos) > this->distLimit) {
         EnSlime_ReturnHome(this);
     } else if ((Player_GetMask(play) != PLAYER_MASK_STONE) && (this->actor.xzDistToPlayer < 280.0f) &&
                (this->timer < 12)) {
         EnSlime_EngagePlayer(this);
-    }
-    else if (this->timer == 0) {
+    } else if (this->timer == 0) {
         EnSlime_ReturnToIdle(this);
     }
 }
 
-//80A2FD94 - Update func
+/**
+ * Initialize reaction to receiving a blunt hit (such as with Goron Punch etc.)
+ * Chuchu does not take damage, but appears slide backwards.
+ * Action function set to UpdateBluntHitReaction.
+ */
 void EnSlime_ReactToBluntHit(EnSlime* this) {
     this->actor.speedXZ = 10.0f;
     if (this->actor.velocity.y > 0.0f) {
@@ -518,7 +632,14 @@ void EnSlime_ReactToBluntHit(EnSlime* this) {
     this->actionFunc = EnSlime_UpdateBluntHitReaction;
 }
 
-//80A2FE38 - Action func
+/**
+ * Update reaction to receiving a blunt hit (such as with Goron Punch etc.)
+ * Update XZ speed and jiggle effect
+ * AC_ON flag is off until 15 frames of reaction remain.
+ * When timer is up, chuchu will choose whether to engage player, return home,
+ * or return to idle. If chuchu is too far from home, returning home will
+ * take precedence.
+ */
 void EnSlime_UpdateBluntHitReaction(EnSlime* this, PlayState* play) {
     f32 timerFactor;
     f32 scaleFactor;
@@ -538,18 +659,25 @@ void EnSlime_UpdateBluntHitReaction(EnSlime* this, PlayState* play) {
     this->actor.scale.y = ((sin_rad((f32)this->timer * 1.2566371f) * (0.07f * timerFactor)) + 1.0f) * 0.01f;
     this->actor.shape.rot.x = (s16)(s32)(randPlusMinusPoint5Scaled(512.0f) * timerFactor);
     this->actor.shape.rot.z = (s16)(s32)(randPlusMinusPoint5Scaled(512.0f) * timerFactor);
+
     if (this->timer == 0) {
-        if (this->distLimit < Actor_XZDistanceToPoint(&this->actor, &this->actor.home.pos)) {
+        if (Actor_XZDistanceToPoint(&this->actor, &this->actor.home.pos) > this->distLimit) {
             EnSlime_ReturnHome(this);
         } else if ((this->actor.xzDistToPlayer < 280.0f) && (Player_GetMask(play) != PLAYER_MASK_STONE)) {
             EnSlime_EngagePlayer(this);
-        } else
+        } else {
             EnSlime_ReturnToIdle(this);
+        }
     }
 }
 
-//80A30018 - Action/Update func
-void EnSlime_ReactToDamage(EnSlime* this, PlayState* play, s32 arg2) {
+/**
+ * Initialize reaction to taking damage.
+ * (I am not confident in what the last arg is for, but it seems to be a boolean of some kind).
+ * Spawn bubbles & splash, start actor rebuff wobble, push actor, and play sfx.
+ * Set action function to UpdateDamageReaction
+ */
+void EnSlime_ReactToDamage(EnSlime* this, PlayState* play, s32 faceDamageSource) {
     s32 i;
     Vec3f effectVelocity;
     Vec3f effectPos;
@@ -565,7 +693,8 @@ void EnSlime_ReactToDamage(EnSlime* this, PlayState* play, s32 arg2) {
     Actor_SetColorFilter(&this->actor, 0x4000, 0xFF, 0x2000, 0x14);
     this->timer = 20;
     this->actor.speedXZ = 10.0f;
-    if (arg2 == 1) {
+    if (faceDamageSource == true) {
+        // This function changes actor's world Y rotation - I think it's maybe to face source of damage?
         func_800BE504(&this->actor, &this->collider);
     }
 
@@ -602,7 +731,11 @@ void EnSlime_ReactToDamage(EnSlime* this, PlayState* play, s32 arg2) {
     this->actionFunc = EnSlime_UpdateDamageReaction;
 }
 
-//80A30344 - Action func, set by 80A30018. Some kind of damage checker. Wobble or slide back on damage reception?
+/**
+ * Update reaction to taking damage.
+ * Updates the rebuff wobble. Once timer drops to 0, actor initializes death cycle,
+ * re-engages player, or returns to idle.
+ */
 void EnSlime_UpdateDamageReaction(EnSlime* this, PlayState* play) {
     this->timer--;
     Math_StepToF(&this->actor.speedXZ, 0.0f, 1.0f);
@@ -615,8 +748,9 @@ void EnSlime_UpdateDamageReaction(EnSlime* this, PlayState* play) {
             this->collider.base.acFlags |= AC_ON;
             if ((this->actor.xzDistToPlayer < 280.0f) && (Player_GetMask(play) != PLAYER_MASK_STONE)) {
                 EnSlime_EngagePlayer(this);
+            } else {
+                EnSlime_ReturnToIdle(this);
             }
-            else EnSlime_ReturnToIdle(this);
         } else {
             SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 40, NA_SE_EN_SLIME_BREAK);
             EnSlime_InitializeDeath(this);
@@ -624,7 +758,11 @@ void EnSlime_UpdateDamageReaction(EnSlime* this, PlayState* play) {
     }
 }
 
-//80A30454 - Called by action func 80A30344
+/**
+ * Initialize death action cycle. Disable AC_ON flag,
+ * make actor stop moving, and shrink the actor.
+ * Set action function to Expire.
+ */
 void EnSlime_InitializeDeath(EnSlime* this) {
     this->collider.base.acFlags &= ~AC_ON;
     if (this->actor.velocity.y > 0.0f) {
@@ -635,7 +773,12 @@ void EnSlime_InitializeDeath(EnSlime* this) {
     this->actor.speedXZ = 0.0f;
 }
 
-//80A304B8 - Action func, set by 80A30454 (probably part of death sequence)
+/**
+ * Spawn random effects (bubbles, splash) for death sequence.
+ * If chuchu is red, green, or yellow, spawn item drop.
+ * Shrink actor scale to 0.
+ * Call HideDead function for cleanup.
+ */
 void EnSlime_Expire(EnSlime* this, PlayState* play) {
     s32 i;
     Vec3f velocity;
@@ -644,7 +787,7 @@ void EnSlime_Expire(EnSlime* this, PlayState* play) {
     f32 random;
     s32 factor;
 
-    if (Math_StepToF(&this->actor.scale.x, 0.0f, 0.002f) != 0) {
+    if (Math_StepToF(&this->actor.scale.x, 0.0f, 0.002f)) {
         effectPos.x = this->actor.world.pos.x;
         effectPos.y = this->actor.world.pos.y + 20.0f;
         effectPos.z = this->actor.world.pos.z;
@@ -653,17 +796,19 @@ void EnSlime_Expire(EnSlime* this, PlayState* play) {
         for (i = 0; i < 15; i++) {
             random = Rand_ZeroOne();
 
-            if (Rand_ZeroOne() < 0.5f)
+            if (Rand_ZeroOne() < 0.5f) {
                 factor = -1;
-            else
+            } else {
                 factor = 1;
+            }
             velocity.x = factor * ((random * 2.5f) + 2.0f);
 
             random = Rand_ZeroOne();
-            if (Rand_ZeroOne() < 0.5f)
+            if (Rand_ZeroOne() < 0.5f) {
                 factor = -1;
-            else
+            } else {
                 factor = 1;
+            }
             velocity.z = factor * ((random * 2.5f) + 2.0f);
 
             velocity.y = (Rand_ZeroOne() * 6.0f) + 2.0f;
@@ -684,10 +829,15 @@ void EnSlime_Expire(EnSlime* this, PlayState* play) {
     this->actor.scale.z = this->actor.scale.x;
 }
 
-//80A3072C - Update func
+/**
+ * Calculate a new "current" position value that is a multiple of 60
+ * away from the "home" position.
+ * This is for use by blue chuchus frozen into an ice block so that
+ * their position is a multiple of the ice block size.
+ */
 f32 EnSlime_SnapIceBlockPosition(f32 currentPosition, f32 homePosition) {
     s32 dist = (s32)(currentPosition - homePosition);
-    
+
     if (dist > 0) {
         dist += 30;
     } else {
@@ -696,7 +846,13 @@ f32 EnSlime_SnapIceBlockPosition(f32 currentPosition, f32 homePosition) {
     return ((f32)(dist / 60) * 60.0f) + homePosition;
 }
 
-//80A30778 - Update func
+/**
+ * Prepare actor for ice block to spawn around it.
+ * The actor will stop moving, have AC_ON cleared, and
+ * target position will be snapped to a multiple of the size of
+ * an ice block.
+ * Set action function to SpawnIceBlock
+ */
 void EnSlime_InitIceBlock(EnSlime* this) {
     this->collider.base.acFlags &= ~AC_ON;
     this->actor.flags &= ~ACTOR_FLAG_1;
@@ -712,9 +868,13 @@ void EnSlime_InitIceBlock(EnSlime* this) {
     this->actionFunc = EnSlime_SpawnIceBlock;
 }
 
-//80A30820 - action func, set by 80A30778
+/**
+ * Attempt to move the chuchu to snapped position and
+ * spawn an ice block actor as a child of the chuchu actor.
+ * If ice block spawn fails, chuchu returns to idle.
+ */
 void EnSlime_SpawnIceBlock(EnSlime* this, PlayState* play) {
-    s32 stepCheck; //bool
+    s32 stepCheck; // bool
 
     stepCheck = Math_StepToF(&this->actor.world.pos.x, this->iceBlockSnapPos.x, 10.0f);
     stepCheck &= Math_StepToF(&this->actor.world.pos.z, this->iceBlockSnapPos.z, 10.0f);
@@ -723,7 +883,7 @@ void EnSlime_SpawnIceBlock(EnSlime* this, PlayState* play) {
     if (stepCheck) {
         this->actor.child =
             Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_OBJ_ICEBLOCK, this->actor.world.pos.x,
-                                               this->actor.world.pos.y + 30.0f, this->actor.world.pos.z, 0, 0, 0, 0);
+                               this->actor.world.pos.y + 30.0f, this->actor.world.pos.z, 0, 0, 0, 0);
         if (this->actor.child != NULL) {
             this->actor.child->cutscene = this->actor.cutscene;
             EnSlime_SetIceBlockedState(this);
@@ -738,16 +898,26 @@ void EnSlime_SpawnIceBlock(EnSlime* this, PlayState* play) {
     }
 }
 
-//80A30924 - Called by action func 80A30820
+/**
+ * Enter state as a chuchu frozen in an ice block.
+ * This function is called after ice block spawn is successful.
+ * Action function set to UpdateIceBlockedState
+ */
 void EnSlime_SetIceBlockedState(EnSlime* this) {
     this->actor.flags |= ACTOR_FLAG_10;
     this->actionFunc = EnSlime_UpdateIceBlockedState;
 }
 
-//80A30944 - Action func, set by 80A30924
+/**
+ * Decrement the ice block timer, or if it has hit zero, check to
+ * see if the ice block child actor link has been broken or if it has
+ * shrunk sufficiently.
+ * If timer is up and ice block is sufficiently "gone", init unfreeze.
+ */
 void EnSlime_UpdateIceBlockedState(EnSlime* this, PlayState* play) {
     if (this->iceBlockTimer == 0) {
-        //Proceed to next action if ice block link or its update link are broken or the ice block has shrunk sufficiently.
+        // Proceed to next action if ice block link or its update link are broken or the ice block has shrunk
+        // sufficiently.
         if ((this->actor.child == NULL) || (this->actor.child->update == NULL) ||
             !(this->actor.child->scale.y >= 0.1f)) {
             EnSlime_InitIceBlockUnfreeze(this);
@@ -756,12 +926,16 @@ void EnSlime_UpdateIceBlockedState(EnSlime* this, PlayState* play) {
         this->actor.colorFilterTimer = 10;
         if (this->iceBlockTimer - 5 < 0) {
             this->iceBlockTimer = 0;
-        } else
+        } else {
             this->iceBlockTimer -= 5;
+        }
     }
 }
 
-//80A309C8 - Update func
+/**
+ * Prepare the actor to behave as if stunned. Set speed to zero,
+ * and set action function to UpdateStunnedState.
+ */
 void EnSlime_EnterStunnedState(EnSlime* this) {
     this->actor.speedXZ = 0.0f;
     func_800BE504(&this->actor, &this->collider);
@@ -771,7 +945,11 @@ void EnSlime_EnterStunnedState(EnSlime* this) {
     this->actionFunc = EnSlime_UpdateStunnedState;
 }
 
-//80A30A20 - Action func, set by 80A309C8
+/**
+ * Check the actor's timer to see whether stun has worn off.
+ * If so, either react to damage and initialize death, or start
+ * idly wobbling in a new direction.
+ */
 void EnSlime_UpdateStunnedState(EnSlime* this, PlayState* play) {
     this->timer--;
     if (this->timer == 0) {
@@ -785,7 +963,10 @@ void EnSlime_UpdateStunnedState(EnSlime* this, PlayState* play) {
     }
 }
 
-//80A30A90 - Called by action func 80A30944
+/**
+ * Setup ice block unfreeze
+ * Set action function to UpdateIceBlockUnfreeze
+ */
 void EnSlime_InitIceBlockUnfreeze(EnSlime* this) {
     this->actor.colorFilterTimer = 0;
     this->actor.gravity = -2.0f;
@@ -793,19 +974,23 @@ void EnSlime_InitIceBlockUnfreeze(EnSlime* this) {
     this->actionFunc = EnSlime_UpdateIceBlockUnfreeze;
 }
 
-//80A30AE4 - Action func, set by 80A30A90
+/**
+ * Update the actor's ice block timer to match state of ice block.
+ * When it reaches the "unset" value (255), return actor to idle.
+ */
 void EnSlime_UpdateIceBlockUnfreeze(EnSlime* this, PlayState* play) {
-    s32 temp;
+    s32 iceBlockTimerAdj;
 
     this->actor.colorFilterTimer = 10;
     if ((this->actor.child != NULL) && (this->actor.child->update != NULL)) {
-        temp = (0.1f - this->actor.child->scale.y) * 10.0f * 255.0f;
-        this->iceBlockTimer = (u8)(CLAMP(temp, 0, 0xff));
+        iceBlockTimerAdj = (0.1f - this->actor.child->scale.y) * 10.0f * 255.0f;
+        this->iceBlockTimer = (u8)(CLAMP(iceBlockTimerAdj, 0, 0xff));
     } else {
         this->actor.child = NULL;
-        temp = this->iceBlockTimer + 10;
-        this->iceBlockTimer = (u8)(CLAMP_MAX(temp, 0xff));
+        iceBlockTimerAdj = this->iceBlockTimer + 10;
+        this->iceBlockTimer = (u8)(CLAMP_MAX(iceBlockTimerAdj, 0xff));
     }
+
     if (this->iceBlockTimer == 0xFF) {
         this->collider.base.acFlags |= AC_ON;
         this->actor.flags |= ACTOR_FLAG_1;
@@ -814,7 +999,11 @@ void EnSlime_UpdateIceBlockUnfreeze(EnSlime* this, PlayState* play) {
     }
 }
 
-//80A30BE0 - Called by action func 80A304B8
+/**
+ * Set speed to zero, and make undrawable.
+ * Initialize respawn timer.
+ * Set action function to CountdownRespawn
+ */
 void EnSlime_HideDead(EnSlime* this) {
     this->actor.draw = NULL;
     this->actor.flags |= ACTOR_FLAG_10;
@@ -827,15 +1016,23 @@ void EnSlime_HideDead(EnSlime* this) {
     this->actionFunc = EnSlime_CountdownRespawn;
 }
 
-//80A30C2C - Action func, set by 80A30BE0
+/**
+ * Decrement the respawn timer, or if it is zero,
+ * initialize respawn action cycle.
+ */
 void EnSlime_CountdownRespawn(EnSlime* this, PlayState* play) {
-    if (this->timer == 0)
+    if (this->timer == 0) {
         EnSlime_BeginRespawn(this);
-    else
+    } else {
         this->timer--;
+    }
 }
 
-//80A30C68 - Called by action func 80A30C2C. Respawn?
+/**
+ * Re-enable drawing, reset the actor's health and home,
+ * and setup and initialize respawn action.
+ * Set action function to UpdateRespawn
+ */
 void EnSlime_BeginRespawn(EnSlime* this) {
     this->actor.draw = EnSlime_Draw;
     this->actor.colChkInfo.health = sColChkInfoInit.health;
@@ -849,47 +1046,50 @@ void EnSlime_BeginRespawn(EnSlime* this) {
     this->actor.gravity = -2.0f;
 }
 
-//80A30CEC - Action func, set by 80A30C68. I think bubbling back up when respawning.
+/**
+ * Update bubbling back up effect. After 21 frames, OC1_ON is set.
+ * After 28 frames, AC_ON is set and actor returns to idle movement.
+ */
 void EnSlime_UpdateRespawn(EnSlime* this, PlayState* play) {
-    f32 temp_f0;
-    f32 temp_f1;
+    f32 rescaleFactor1;
+    f32 rescaleFactor2;
 
-    if (++this->timer == 0x1C) {
+    if (++this->timer == 28) {
         this->actor.flags &= ~ACTOR_FLAG_10;
         this->actor.flags |= ACTOR_FLAG_1;
         this->collider.base.acFlags |= AC_ON;
         this->actor.shape.rot.y = this->actor.home.rot.y;
         EnSlime_ChangeDirectionIdle(this);
     } else {
-        if (this->timer < 0xC) {
-            temp_f0 = this->timer * 0.0008333333f;
-            this->respawnScale.x = temp_f0;
-            this->respawnScale.z = temp_f0;
-            this->respawnScale.y = 2.0f * temp_f0;
+        if (this->timer < 12) {
+            rescaleFactor1 = this->timer * 0.0008333333f;
+            this->respawnScale.x = rescaleFactor1;
+            this->respawnScale.z = rescaleFactor1;
+            this->respawnScale.y = 2.0f * rescaleFactor1;
             this->respawnRotY = this->timer * 1638.4f;
-        } else if (this->timer < 0x14) {
-            temp_f0 = (this->timer - 0xC) * 0.000625f;
-            temp_f1 = 0.01f + temp_f0;
-            this->respawnScale.x = temp_f1;
-            this->respawnScale.z = temp_f1;
-            this->respawnScale.y = 2.0f * (0.01f - temp_f0);
+        } else if (this->timer < 20) {
+            rescaleFactor1 = (this->timer - 12) * 0.000625f;
+            rescaleFactor2 = 0.01f + rescaleFactor1;
+            this->respawnScale.x = rescaleFactor2;
+            this->respawnScale.z = rescaleFactor2;
+            this->respawnScale.y = 2.0f * (0.01f - rescaleFactor1);
             this->respawnRotY = this->timer * 1638.4f;
-        } else if (this->timer < 0x18) {
-            temp_f0 = (this->timer - 0x14) * 0.0033333332f;
-            temp_f1 = 0.015f - temp_f0;
-            this->respawnScale.x = temp_f1;
-            this->respawnScale.z = temp_f1;
-            this->respawnScale.y = (2.0f * temp_f0) + 0.01f;
-            Actor_SetScale(&this->actor, 1.5f * temp_f0);
-            this->respawnRotY = ((0x17 - this->timer) * 7281.778f) + 10922.667f;
-            this->actor.shape.rot.y = (0x1C - this->timer) * 4096.0f;
+        } else if (this->timer < 24) {
+            rescaleFactor1 = (this->timer - 20) * 0.0033333332f;
+            rescaleFactor2 = 0.015f - rescaleFactor1;
+            this->respawnScale.x = rescaleFactor2;
+            this->respawnScale.z = rescaleFactor2;
+            this->respawnScale.y = (2.0f * rescaleFactor1) + 0.01f;
+            Actor_SetScale(&this->actor, 1.5f * rescaleFactor1);
+            this->respawnRotY = ((23 - this->timer) * 7281.778f) + 10922.667f;
+            this->actor.shape.rot.y = (28 - this->timer) * 4096.0f;
         } else {
-            Actor_SetScale(&this->actor, (((0x1C - this->timer) * 0.1f) + 1.0f) * 0.01f);
+            Actor_SetScale(&this->actor, (((28 - this->timer) * 0.1f) + 1.0f) * 0.01f);
             Math_Vec3f_Copy(&this->respawnScale, &gZeroVec3f);
-            this->actor.shape.rot.y = ((0x1C - this->timer) * 4096.0f);
+            this->actor.shape.rot.y = ((28 - this->timer) * 4096.0f);
         }
 
-        if (this->timer == 0x15) {
+        if (this->timer == 21) {
             this->collider.base.ocFlags1 |= OC1_ON;
         }
 
@@ -898,21 +1098,23 @@ void EnSlime_UpdateRespawn(EnSlime* this, PlayState* play) {
     }
 }
 
-//80A30F98 - Update function called before action. Checks if AC collider hit occured in last frame, and does updates if so.
+/**
+ * Check actor AC hit since last update. If hit, initialize appropriate action cycle.
+ */
 void EnSlime_CheckACHit(EnSlime* this, PlayState* play) {
     if (this->collider.base.acFlags & AC_HIT) {
         this->collider.base.acFlags &= ~AC_HIT;
+
         if ((this->damageEffectType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) ||
             !(this->collider.info.acHitInfo->toucher.dmgFlags & 0xDB0B3)) {
 
             EnSlime_UpdateIceEffects(this, play);
             if ((this->actor.params == EN_SLIME_TYPE_BLUE) &&
                 (this->actor.colChkInfo.damageEffect == EnSlime_DmgType_IceArrow)) {
-                //Blue immune to this type of damage? Ice arrows? or is that effect 1?
+                // Blue chuchus take no damage from ice arrows.
                 this->actor.colChkInfo.damage = 0;
             }
 
-            //Actor_ApplyDamage returns remaining health?
             if (Actor_ApplyDamage(&this->actor) == 0) {
                 Actor_SetDropFlag(&this->actor, &this->collider.info);
                 Enemy_StartFinishingBlow(play, &this->actor);
@@ -927,10 +1129,9 @@ void EnSlime_CheckACHit(EnSlime* this, PlayState* play) {
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
                 EnSlime_EnterStunnedState(this);
             } else if (this->actor.colChkInfo.damageEffect != EnSlime_DmgType_Hookshot) {
-                //No idea what damage type this is
                 if (this->actor.colChkInfo.damageEffect == EnSlime_DmgType_IceArrow) {
                     if (this->actor.params == EN_SLIME_TYPE_BLUE) {
-                        EnSlime_InitIceBlock(this); //Okay, this spawns an ice block. Must be ice arrow.
+                        EnSlime_InitIceBlock(this);
                     } else {
                         EnSlime_InitIceStun(this);
                         if (this->actor.colChkInfo.health == 0) {
@@ -945,13 +1146,14 @@ void EnSlime_CheckACHit(EnSlime* this, PlayState* play) {
                         this->effectScale = 0.4f;
                         this->damageEffectType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
                         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->collider.info.bumper.hitPos.x,
-                                    this->collider.info.bumper.hitPos.y, this->collider.info.bumper.hitPos.z, 0, 0, 0, 4);
+                                    this->collider.info.bumper.hitPos.y, this->collider.info.bumper.hitPos.z, 0, 0, 0,
+                                    4);
                     } else if (this->actor.colChkInfo.damageEffect == EnSlime_DmgType_Electric) {
                         this->damageEffectType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_LARGE;
                         this->effectAlpha = 4.0f;
                         this->effectScale = 0.4f;
                     }
-                    EnSlime_ReactToDamage(this, play, 1);
+                    EnSlime_ReactToDamage(this, play, true);
                 }
             }
         }
@@ -966,7 +1168,7 @@ void EnSlime_Update(Actor* thisx, PlayState* play) {
     EnSlime_CheckACHit(this, play);
     this->actionFunc(this, play);
 
-    //Note: Does not match if you use this->actor instead of thisx
+    // Note: Does not match if you use this->actor instead of thisx
     thisx->shape.shadowAlpha = this->iceBlockTimer;
     if (this->iceBlockTimer == 0xFF) {
         if (thisx->scale.y > 0.0001f) {
@@ -1093,8 +1295,8 @@ void EnSlime_Draw(Actor* thisx, PlayState* play) {
         gSPDisplayList(POLY_OPA_DISP++, gItemDropDL);
     }
 
-    Actor_DrawDamageEffects(play, &this->actor, this->limbPos, EN_SLIME_LIMBPOS_COUNT, this->effectScale, this->frozenSteamScale,
-                            this->effectAlpha, this->damageEffectType);
+    Actor_DrawDamageEffects(play, &this->actor, this->limbPos, EN_SLIME_LIMBPOS_COUNT, this->effectScale,
+                            this->frozenSteamScale, this->effectAlpha, this->damageEffectType);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
