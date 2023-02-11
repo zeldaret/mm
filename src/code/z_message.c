@@ -32,10 +32,17 @@ u16 D_801C6AB8[] = {
     0x2168, 0x2169, 0x216A, 0x216B, 0x216C, 0x216D, 0x216E, 0x216F, 0x2170, 0x2171, 0x2172, 0x2173, 0x2174, 0,
 };
 u16 D_801C6B28[] = {
-    0x4408, 0x4201, 0x4202, 0x4204, 0x4208, 0x4210, 0x4220, 0x4240, 0x4280, 0x4301, 0x4302, 0x4304, 0x4308, 0x4310,
-    0x4320, 0x4340, 0x4380, 0x4401, 0x4402, 0x4404, 0x4410, 0x4420, 0x4440, 0x4480, 0x4501, 0x4502, 0x4504, 0x4508,
-    0x4510, 0x4520, 0x4540, 0x4580, 0x4601, 0x4602, 0x4604, 0x4608, 0x4610, 0x4620, 0x4640, 0x4680, 0x4701, 0x4702,
-    0x4704, 0x4708, 0x4710, 0x4720, 0x4740, 0x4780, 0x4801, 0x4802, 0x4804, 0x4808, 0x4810, 0x4820, 0x4840, 0,
+    WEEKEVENTREG_68_08, WEEKEVENTREG_66_01, WEEKEVENTREG_66_02, WEEKEVENTREG_66_04, WEEKEVENTREG_66_08,
+    WEEKEVENTREG_66_10, WEEKEVENTREG_66_20, WEEKEVENTREG_66_40, WEEKEVENTREG_66_80, WEEKEVENTREG_67_01,
+    WEEKEVENTREG_67_02, WEEKEVENTREG_67_04, WEEKEVENTREG_67_08, WEEKEVENTREG_67_10, WEEKEVENTREG_67_20,
+    WEEKEVENTREG_67_40, WEEKEVENTREG_67_80, WEEKEVENTREG_68_01, WEEKEVENTREG_68_02, WEEKEVENTREG_68_04,
+    WEEKEVENTREG_68_10, WEEKEVENTREG_68_20, WEEKEVENTREG_68_40, WEEKEVENTREG_68_80, WEEKEVENTREG_69_01,
+    WEEKEVENTREG_69_02, WEEKEVENTREG_69_04, WEEKEVENTREG_69_08, WEEKEVENTREG_69_10, WEEKEVENTREG_69_20,
+    WEEKEVENTREG_69_40, WEEKEVENTREG_69_80, WEEKEVENTREG_70_01, WEEKEVENTREG_70_02, WEEKEVENTREG_70_04,
+    WEEKEVENTREG_70_08, WEEKEVENTREG_70_10, WEEKEVENTREG_70_20, WEEKEVENTREG_70_40, WEEKEVENTREG_70_80,
+    WEEKEVENTREG_71_01, WEEKEVENTREG_71_02, WEEKEVENTREG_71_04, WEEKEVENTREG_71_08, WEEKEVENTREG_71_10,
+    WEEKEVENTREG_71_20, WEEKEVENTREG_71_40, WEEKEVENTREG_71_80, WEEKEVENTREG_72_01, WEEKEVENTREG_72_02,
+    WEEKEVENTREG_72_04, WEEKEVENTREG_72_08, WEEKEVENTREG_72_10, WEEKEVENTREG_72_20, WEEKEVENTREG_72_40,
 };
 
 // TODO: Scripts
@@ -4073,7 +4080,7 @@ void Message_Update(PlayState* play) {
     SramContext* sramCtx = &play->sramCtx; // Optional
     PauseContext* pauseCtx = &play->pauseCtx;
     InterfaceContext* interfaceCtx = &play->interfaceCtx;
-    Input* input = CONTROLLER1(&play->state);
+    s32 pad;
     s16 var_v1;
     s16 sp50;
     u16 temp_v1_2;
@@ -4084,7 +4091,7 @@ void Message_Update(PlayState* play) {
     s32 sp40;
     u16 sp3E;
     s16 averageY;
-    s32 pad;
+    Input* input = CONTROLLER1(&play->state);
 
     msgCtx->stickAdjX = input->rel.stick_x;
     msgCtx->stickAdjY = input->rel.stick_y;
@@ -4437,12 +4444,12 @@ void Message_Update(PlayState* play) {
                     if (Message_ShouldAdvance(play)) {
                         if (msgCtx->choiceIndex == 0) {
                             func_8019F208();
-                            if (gSaveContext.save.daySpeed == 0) {
+                            if (gSaveContext.save.timeSpeedOffset == 0) {
                                 play->msgCtx.ocarinaMode = OCARINA_MODE_APPLY_INV_SOT_SLOW;
-                                gSaveContext.save.daySpeed = -2;
+                                gSaveContext.save.timeSpeedOffset = -2;
                             } else {
                                 play->msgCtx.ocarinaMode = OCARINA_MODE_APPLY_INV_SOT_FAST;
-                                gSaveContext.save.daySpeed = 0;
+                                gSaveContext.save.timeSpeedOffset = 0;
                             }
                             Message_CloseTextbox(play);
                         } else {
@@ -4617,7 +4624,7 @@ void Message_Update(PlayState* play) {
 
                 if (msgCtx->ocarinaAction != OCARINA_ACTION_CHECK_NOTIME_DONE) {
                     if (sLastPlayedSong == OCARINA_SONG_TIME) {
-                        if (interfaceCtx->restrictions.unk_312 == 0) {
+                        if (interfaceCtx->restrictions.songOfTime == 0) {
                             Message_StartTextbox(play, 0x1B8A, NULL);
                             play->msgCtx.ocarinaMode = OCARINA_MODE_PROCESS_SOT;
                         } else {
@@ -4626,9 +4633,9 @@ void Message_Update(PlayState* play) {
                             play->msgCtx.ocarinaMode = OCARINA_MODE_PROCESS_RESTRICTED_SONG;
                         }
                     } else if (sLastPlayedSong == OCARINA_SONG_INVERTED_TIME) {
-                        if (interfaceCtx->restrictions.unk_314 == 0) {
+                        if (interfaceCtx->restrictions.invSongOfTime == 0) {
                             if (gGameInfo->data[0xF] != 0) {
-                                if (gSaveContext.save.daySpeed == 0) {
+                                if (gSaveContext.save.timeSpeedOffset == 0) {
                                     Message_StartTextbox(play, 0x1B8C, NULL);
                                 } else {
                                     Message_StartTextbox(play, 0x1B8D, NULL);
@@ -4644,7 +4651,7 @@ void Message_Update(PlayState* play) {
                             play->msgCtx.ocarinaMode = OCARINA_MODE_PROCESS_RESTRICTED_SONG;
                         }
                     } else if (sLastPlayedSong == OCARINA_SONG_DOUBLE_TIME) {
-                        if (interfaceCtx->restrictions.unk_313 == 0) {
+                        if (interfaceCtx->restrictions.songOfDoubleTime == 0) {
                             if ((CURRENT_DAY != 3) || (gSaveContext.save.isNight == 0)) {
                                 if (gSaveContext.save.isNight) {
                                     Message_StartTextbox(play, D_801D0464[CURRENT_DAY - 1], NULL);
@@ -4821,7 +4828,7 @@ void Message_Update(PlayState* play) {
             if (msgCtx->msgMode == MSGMODE_OWL_SAVE_2) {
                 gSaveContext.gameMode = 4;
                 play->transitionTrigger = TRANS_TRIGGER_START;
-                play->transitionType = TRANS_TYPE_02;
+                play->transitionType = TRANS_TYPE_FADE_BLACK;
                 play->nextEntrance = ENTRANCE(CUTSCENE, 0);
                 gSaveContext.save.cutscene = 0;
                 gSaveContext.sceneLayer = 0;
