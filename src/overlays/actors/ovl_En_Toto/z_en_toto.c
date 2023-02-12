@@ -296,7 +296,7 @@ void func_80BA3BFC(EnToto* this, PlayState* play) {
         this->unk2B4 = 0;
     } else {
         if (this->text->unk0 == 4) {
-            func_80151BB4(play, 9);
+            Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_TOTO);
         }
         Animation_MorphToLoop(&this->skelAnime, &object_zm_Anim_00B3E0, -4.0f);
     }
@@ -339,9 +339,9 @@ void func_80BA3DBC(EnToto* this, PlayState* play) {
     } else {
         player = GET_PLAYER(play);
         if ((player->stateFlags1 & PLAYER_STATE1_400) && player->unk_AE7 != 0) {
-            func_80151BB4(play, 48);
-            func_80151BB4(play, 9);
-            func_80151BB4(play, 10);
+            Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_RECEIVED_CIRCUS_LEADERS_MASK);
+            Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_TOTO);
+            Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN);
         } else {
             return;
         }
@@ -375,7 +375,7 @@ s32 func_80BA3F2C(EnToto* this, PlayState* play) {
         func_80BA3EE8(this, play);
     }
     if (this->text->unk0 == 4) {
-        func_80151BB4(play, 9);
+        Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_TOTO);
     }
     return 0;
 }
@@ -691,8 +691,8 @@ void func_80BA4CB4(EnToto* this, PlayState* play) {
                 Animation_PlayOnce(&this->skelAnime,
                                    this->unk2B5 == 1 ? &object_zm_Anim_0016A4 : &object_zm_Anim_0022C8);
                 if (this->unk2B5 == 2 && this->unk2B3 != 0xF) {
-                    func_80151BB4(play, 9);
-                    func_80151BB4(play, 10);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_TOTO);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN);
                 }
             }
         }

@@ -25,24 +25,68 @@ u8 D_801C6A98[][5] = {
     { BTN_ENABLED, BTN_ENABLED, BTN_DISABLED, BTN_ENABLED, BTN_ENABLED },
 };
 
-u16 D_801C6AB8[] = {
+u16 sBombersNotebookEventMessages[] = {
     0x2147, 0x2134, 0x2135, 0x2136, 0x2137, 0x2138, 0x2139, 0x213A, 0x213B, 0x213C, 0x213D, 0x213E, 0x213F, 0x2140,
     0x2141, 0x2142, 0x2143, 0x2144, 0x2145, 0x2146, 0x2152, 0x2153, 0x2154, 0,      0x2156, 0x2157, 0x2158, 0x2159,
     0x215A, 0x215B, 0,      0x215D, 0,      0x215F, 0x2160, 0x2161, 0,      0x2163, 0x2164, 0x2165, 0x2166, 0x2167,
     0x2168, 0x2169, 0x216A, 0x216B, 0x216C, 0x216D, 0x216E, 0x216F, 0x2170, 0x2171, 0x2172, 0x2173, 0x2174, 0,
 };
-u16 D_801C6B28[] = {
-    WEEKEVENTREG_68_08, WEEKEVENTREG_66_01, WEEKEVENTREG_66_02, WEEKEVENTREG_66_04, WEEKEVENTREG_66_08,
-    WEEKEVENTREG_66_10, WEEKEVENTREG_66_20, WEEKEVENTREG_66_40, WEEKEVENTREG_66_80, WEEKEVENTREG_67_01,
-    WEEKEVENTREG_67_02, WEEKEVENTREG_67_04, WEEKEVENTREG_67_08, WEEKEVENTREG_67_10, WEEKEVENTREG_67_20,
-    WEEKEVENTREG_67_40, WEEKEVENTREG_67_80, WEEKEVENTREG_68_01, WEEKEVENTREG_68_02, WEEKEVENTREG_68_04,
-    WEEKEVENTREG_68_10, WEEKEVENTREG_68_20, WEEKEVENTREG_68_40, WEEKEVENTREG_68_80, WEEKEVENTREG_69_01,
-    WEEKEVENTREG_69_02, WEEKEVENTREG_69_04, WEEKEVENTREG_69_08, WEEKEVENTREG_69_10, WEEKEVENTREG_69_20,
-    WEEKEVENTREG_69_40, WEEKEVENTREG_69_80, WEEKEVENTREG_70_01, WEEKEVENTREG_70_02, WEEKEVENTREG_70_04,
-    WEEKEVENTREG_70_08, WEEKEVENTREG_70_10, WEEKEVENTREG_70_20, WEEKEVENTREG_70_40, WEEKEVENTREG_70_80,
-    WEEKEVENTREG_71_01, WEEKEVENTREG_71_02, WEEKEVENTREG_71_04, WEEKEVENTREG_71_08, WEEKEVENTREG_71_10,
-    WEEKEVENTREG_71_20, WEEKEVENTREG_71_40, WEEKEVENTREG_71_80, WEEKEVENTREG_72_01, WEEKEVENTREG_72_02,
-    WEEKEVENTREG_72_04, WEEKEVENTREG_72_08, WEEKEVENTREG_72_10, WEEKEVENTREG_72_20, WEEKEVENTREG_72_40,
+u16 sBombersNotebookEventWeekEventFlags[] = {
+    WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_MET_BOMBERS,
+    WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_MET_ANJU,
+    WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_MET_KAFEI,
+    WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_MET_CURIOSITY_SHOP_MAN,
+    WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_MET_BOMB_SHOP_LADY,
+    WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_MET_ROMANI,
+    WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_MET_CREMIA,
+    WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_MET_MAYOR_DOTOUR,
+    WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_MET_MADAOME_AROMA,
+    WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_MET_TOTO,
+    WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_MET_GORMAN,
+    WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_MET_POSTMAN,
+    WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_MET_ROSA_SISTERS,
+    WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_MET_TOILET_HAND,
+    WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_MET_ANJUS_GRANDMOTHER,
+    WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_MET_KAMARO,
+    WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_MET_GROG,
+    WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_MET_GORMAN_BROTHERS,
+    WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_MET_SHIRO,
+    WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_MET_GURU_GUGU,
+    WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_RECEIVED_ROOM_KEY,
+    WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_PROMISED_MIDNIGHT_MEETING,
+    WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_PROMISED_TO_MEET_KAFEI,
+    WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_RECEIVED_LETTER_TO_KAFEI,
+    WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_DEPOSITED_LETTER_TO_KAFEI,
+    WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_RECEIVED_PENDANT_OF_MEMORIES,
+    WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_DELIVERED_PENDANT_OF_MEMORIES,
+    WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_ESCAPED_SAKONS_HIDEOUT,
+    WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_PROMISED_TO_HELP_WITH_THEM,
+    WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_DEFENDED_AGAINST_THEM,
+    WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_RECEIVED_MILK_BOTTLE,
+    WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_ESCORTED_CREMIA,
+    WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_RECEIVED_ROMANIS_MASK,
+    WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_RECEIVED_KEATON_MASK,
+    WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_RECEIVED_PRIORITY_MAIL,
+    WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_DELIVERED_PRIORITY_MAIL,
+    WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_LEARNED_SECRET_CODE,
+    WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_RECEIVED_BOMBERS_NOTEBOOK,
+    WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_RECEIVED_MAYOR_HP,
+    WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_RECEIVED_ROSA_SISTERS_HP,
+    WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_RECEIVED_TOILET_HAND_HP,
+    WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_RECEIVED_GRANDMA_SHORT_STORY_HP,
+    WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_RECEIVED_GRANDMA_LONG_STORY_HP,
+    WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_RECEIVED_POSTMAN_HP,
+    WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_RECEIVED_KAFEIS_MASK,
+    WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_RECEIVED_ALL_NIGHT_MASK,
+    WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_RECEIVED_BUNNY_HOOD,
+    WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_RECEIVED_GAROS_MASK,
+    WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_RECEIVED_CIRCUS_LEADERS_MASK,
+    WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_RECEIVED_POSTMANS_HAT,
+    WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_RECEIVED_COUPLES_MASK,
+    WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_RECEIVED_BLAST_MASK,
+    WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_RECEIVED_KAMAROS_MASK,
+    WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_RECEIVED_STONE_MASK,
+    WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_RECEIVED_BREMEN_MASK,
 };
 
 // TODO: Scripts
@@ -2215,13 +2259,13 @@ void Message_OpenText(PlayState* play, u16 textId) {
     }
 
     if (textId == 0x1467) {
-        func_80151BB4(play, 2);
+        Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_KAFEI);
     }
 
     if (textId == 0x2955) {
-        func_80151BB4(play, 1);
-        func_80151BB4(play, 2);
-        func_80151BB4(play, 0x32);
+        Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_ANJU);
+        Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_KAFEI);
+        Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_RECEIVED_COUPLES_MASK);
     }
 }
 
@@ -2368,36 +2412,39 @@ void Message_DisplaySceneTitleCard(PlayState* play, u16 textId) {
     }
 }
 
-void func_80151BB4(PlayState* play, u8 arg1) {
+void Message_BombersNotebookQueueEvent(PlayState* play, u8 bombersNotebookEvent) {
     MessageContext* msgCtx = &play->msgCtx;
 
     if (CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
-        if (!CHECK_WEEKEVENTREG(D_801C6B28[arg1])) {
-            msgCtx->unk120B2[msgCtx->unk120B1] = arg1;
-            msgCtx->unk120B1++;
+        if (!CHECK_WEEKEVENTREG(sBombersNotebookEventWeekEventFlags[bombersNotebookEvent])) {
+            msgCtx->bombersNotebookNewEventQueue[msgCtx->bombersNotebookNewEventQueueSize] = bombersNotebookEvent;
+            msgCtx->bombersNotebookNewEventQueueSize++;
         }
-    } else if (arg1 >= 20) {
-        if (!CHECK_WEEKEVENTREG(D_801C6B28[arg1])) {
-            msgCtx->unk120B2[msgCtx->unk120B1] = arg1;
-            msgCtx->unk120B1++;
+    } else if (bombersNotebookEvent >= 20) { // Entries 0-19 are "met someone" entries. The rest are processed even if the player doesn't have the notebook.
+        if (!CHECK_WEEKEVENTREG(sBombersNotebookEventWeekEventFlags[bombersNotebookEvent])) {
+            msgCtx->bombersNotebookNewEventQueue[msgCtx->bombersNotebookNewEventQueueSize] = bombersNotebookEvent;
+            msgCtx->bombersNotebookNewEventQueueSize++;
         }
     }
 }
 
-s32 func_80151C9C(PlayState* play) {
+/**
+ * @return s32 true if an entry to be shown was found and triggered
+ */
+s32 Message_BombersNotebookProcessEventQueue(PlayState* play) {
     MessageContext* msgCtx = &play->msgCtx;
 
     while (true) {
-        if (msgCtx->unk120B1 == 0) {
+        if (msgCtx->bombersNotebookNewEventQueueSize == 0) {
             return false;
         }
-        msgCtx->unk120B1--;
+        msgCtx->bombersNotebookNewEventQueueSize--;
 
-        if (!CHECK_WEEKEVENTREG(D_801C6B28[msgCtx->unk120B2[msgCtx->unk120B1]])) {
-            SET_WEEKEVENTREG(D_801C6B28[msgCtx->unk120B2[msgCtx->unk120B1]]);
+        if (!CHECK_WEEKEVENTREG(sBombersNotebookEventWeekEventFlags[msgCtx->bombersNotebookNewEventQueue[msgCtx->bombersNotebookNewEventQueueSize]])) {
+            SET_WEEKEVENTREG(sBombersNotebookEventWeekEventFlags[msgCtx->bombersNotebookNewEventQueue[msgCtx->bombersNotebookNewEventQueueSize]]);
 
-            if ((D_801C6AB8[msgCtx->unk120B2[msgCtx->unk120B1]] != 0) && CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
-                Message_ContinueTextbox(play, D_801C6AB8[msgCtx->unk120B2[msgCtx->unk120B1]]);
+            if ((sBombersNotebookEventMessages[msgCtx->bombersNotebookNewEventQueue[msgCtx->bombersNotebookNewEventQueueSize]] != 0) && CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
+                Message_ContinueTextbox(play, sBombersNotebookEventMessages[msgCtx->bombersNotebookNewEventQueue[msgCtx->bombersNotebookNewEventQueueSize]]);
                 play_sound(NA_SE_SY_SCHEDULE_WRITE);
                 return true;
             }
@@ -2626,7 +2673,7 @@ u8 Message_GetState(MessageContext* msgCtx) {
     if (msgCtx->msgMode == MSGMODE_40) {
         return TEXT_STATE_13;
     }
-    if ((msgCtx->msgMode == MSGMODE_TEXT_CLOSING) && (msgCtx->stateTimer == 1) && (msgCtx->unk120B1 == 0)) {
+    if ((msgCtx->msgMode == MSGMODE_TEXT_CLOSING) && (msgCtx->stateTimer == 1) && (msgCtx->bombersNotebookNewEventQueueSize == 0)) {
         return TEXT_STATE_CLOSING;
     }
 
@@ -4347,8 +4394,8 @@ void Message_Update(PlayState* play) {
                     if (msgCtx->unk11F14 != 0xFFFF) {
                         play_sound(NA_SE_SY_MESSAGE_PASS);
                         Message_ContinueTextbox(play, msgCtx->unk11F14);
-                    } else if (msgCtx->unk120B1 != 0) {
-                        if (func_80151C9C(play) == 0) {
+                    } else if (msgCtx->bombersNotebookNewEventQueueSize != 0) {
+                        if (Message_BombersNotebookProcessEventQueue(play) == 0) {
                             Message_CloseTextbox(play);
                         }
                     } else {
@@ -4386,8 +4433,8 @@ void Message_Update(PlayState* play) {
                                 Message_ContinueTextbox(play, msgCtx->unk11F14);
                                 return;
                             }
-                            if (msgCtx->unk120B1 != 0) {
-                                if (func_80151C9C(play) == 0) {
+                            if (msgCtx->bombersNotebookNewEventQueueSize != 0) {
+                                if (Message_BombersNotebookProcessEventQueue(play) == 0) {
                                     Message_CloseTextbox(play);
                                     return;
                                 }
@@ -4517,7 +4564,7 @@ void Message_Update(PlayState* play) {
                         if (msgCtx->unk11F14 != 0xFFFF) {
                             play_sound(NA_SE_SY_MESSAGE_PASS);
                             Message_ContinueTextbox(play, msgCtx->unk11F14);
-                        } else if ((msgCtx->unk120B1 == 0) || (func_80151C9C(play) != 1)) {
+                        } else if ((msgCtx->bombersNotebookNewEventQueueSize == 0) || (Message_BombersNotebookProcessEventQueue(play) != 1)) {
                             if (msgCtx->currentTextId == 0x579) {
                                 gSaveContext.hudVisibility = HUD_VISIBILITY_IDLE;
                             }
@@ -4595,8 +4642,8 @@ void Message_Update(PlayState* play) {
 
             if ((msgCtx->currentTextId >= 0x1BB2) && (msgCtx->currentTextId < 0x1BB7) && (play->actorCtx.flags & 2)) {
                 Message_StartTextbox(play, 0x5E6, NULL);
-            } else if (msgCtx->unk120B1 != 0) {
-                if (func_80151C9C(play) == 0) {
+            } else if (msgCtx->bombersNotebookNewEventQueueSize != 0) {
+                if (Message_BombersNotebookProcessEventQueue(play) == 0) {
                     msgCtx->stateTimer = 1;
                 }
             } else {

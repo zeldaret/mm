@@ -133,9 +133,9 @@ void EnYb_Destroy(Actor* thisx, PlayState* play) {
 
 void func_80BFA2FC(PlayState* play) {
     if (INV_CONTENT(ITEM_MASK_KAMARO) == ITEM_MASK_KAMARO) {
-        func_80151BB4(play, 0x34);
+        Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_RECEIVED_KAMAROS_MASK);
     }
-    func_80151BB4(play, 0xF);
+    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_KAMARO);
 }
 
 /**

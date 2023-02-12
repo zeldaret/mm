@@ -2743,7 +2743,7 @@ void func_80B490F0(Actor* thisx, PlayState* play) {
     s32 isTalking = Actor_ProcessTalkRequest(&this->actor, &play->state);
 
     if (isTalking) {
-        func_80151BB4(play, 5);
+        Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_ROMANI);
         func_80B48DE4(this);
     }
     this->actionFunc(this, play);
@@ -3126,7 +3126,7 @@ void func_80B4A1B8(Actor* thisx, PlayState* play) {
     s32 isTalking = Actor_ProcessTalkRequest(&this->actor, &play->state);
 
     if (isTalking) {
-        func_80151BB4(play, 5);
+        Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_ROMANI);
         func_80B49DA0(this);
     }
     this->actionFunc(this, play);
@@ -3355,7 +3355,7 @@ void func_80B4ABDC(Actor* thisx, PlayState* play) {
     s32 isTalking = Actor_ProcessTalkRequest(&this->actor, &play->state);
 
     if (isTalking) {
-        func_80151BB4(play, 5);
+        Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_ROMANI);
         func_80B4A7C0(this);
     }
     this->actionFunc(this, play);
@@ -3405,8 +3405,8 @@ void func_80B4ADCC(EnInvadepoh* this, PlayState* play) {
         if (this->textId == 0x3331) {
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_22_02)) {
                 EnInvadepoh_SetTextID(this, play, 0x3334);
-                func_80151BB4(play, 0x1D);
-                func_80151BB4(play, 5);
+                Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_DEFENDED_AGAINST_THEM);
+                Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_ROMANI);
                 return;
             }
             EnInvadepoh_SetTextID(this, play, 0x3333);
@@ -3449,9 +3449,9 @@ void func_80B4AF80(EnInvadepoh* this) {
 void func_80B4AF94(EnInvadepoh* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         EnInvadepoh_SetTextID(this, play, 0x3334);
-        func_80151BB4(play, 0x1E);
-        func_80151BB4(play, 0x1D);
-        func_80151BB4(play, 5);
+        Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_RECEIVED_MILK_BOTTLE);
+        Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_DEFENDED_AGAINST_THEM);
+        Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_ROMANI);
         func_80B4ADB8(this);
     } else {
         func_800B85E0(&this->actor, play, 2000.0f, PLAYER_IA_MINUS1);
@@ -3464,7 +3464,7 @@ void func_80B4B024(EnInvadepoh* this) {
 }
 
 void func_80B4B048(EnInvadepoh* this, PlayState* play) {
-    if (play->msgCtx.unk120B1 == 0) {
+    if (play->msgCtx.bombersNotebookNewEventQueueSize == 0) {
         if (play->msgCtx.msgMode == MSGMODE_NONE) {
             D_80B4E998 = 1;
         } else if ((Message_GetState(&play->msgCtx) == TEXT_STATE_DONE) ||
@@ -3915,7 +3915,7 @@ void func_80B4C5C0(Actor* thisx, PlayState* play) {
     s32 isTalking = Actor_ProcessTalkRequest(&this->actor, &play->state);
 
     if (isTalking) {
-        func_80151BB4(play, 6);
+        Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_CREMIA);
         func_80B4BFFC(this);
     }
     this->actionFunc(this, play);
@@ -4124,7 +4124,7 @@ void func_80B4D054(Actor* thisx, PlayState* play) {
     s32 isTalking = Actor_ProcessTalkRequest(&this->actor, &play->state);
 
     if (isTalking) {
-        func_80151BB4(play, 5);
+        Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_ROMANI);
         func_80B4CAB0(this);
     }
     this->actionFunc(this, play);
