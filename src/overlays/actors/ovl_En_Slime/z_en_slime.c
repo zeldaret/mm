@@ -295,12 +295,12 @@ void EnSlime_InitBehavior(EnSlime* this) {
 }
 
 /**
- * Once BGCHECK_CHECK_WALL flag is set, idle action cycle is entered.
+ * Once bgCheckFlag 0x1 is set, idle action cycle is entered.
  * This function is only called right after the actor is first initialized.
  * It is not set as the action function again.
  */
 void EnSlime_InitializeIdle(EnSlime* this, PlayState* play) {
-    if (this->actor.bgCheckFlags & BGCHECK_CHECK_WALL) {
+    if (this->actor.bgCheckFlags & 1) {
         this->actor.flags &= ~ACTOR_FLAG_10;
         EnSlime_ReturnToIdle(this);
     }
@@ -388,7 +388,7 @@ void EnSlime_MoveInDirectionIdle(EnSlime* this, PlayState* play) {
     /* If actor is touching a wall (bgCheckFlag 8?), set target rotation to match wall where it is touching.
      * If actor is more than 120 units from its home, turn around to face home.
      */
-    if (this->actor.bgCheckFlags & BGCHECK_CHECK_ONE_FACE) {
+    if (this->actor.bgCheckFlags & 8) {
         this->idleRotY = this->actor.wallYaw;
     } else if (Actor_XZDistanceToPoint(&this->actor, &this->actor.home.pos) > 120.0f) {
         this->idleRotY = Actor_YawToPoint(&this->actor, &this->actor.home.pos);
@@ -442,7 +442,7 @@ void EnSlime_MoveToHome(EnSlime* this, PlayState* play) {
     EnSlime_UpdateBlink(this);
     this->timer--;
     Math_ApproachS(&this->actor.shape.rot.y, this->idleRotY, 4, 0x400);
-    if (this->actor.bgCheckFlags & BGCHECK_CHECK_ONE_FACE) {
+    if (this->actor.bgCheckFlags & 8) {
         // If hit wall, turn around.
         this->idleRotY = this->actor.wallYaw;
     } else {
@@ -545,7 +545,7 @@ void EnSlime_UpdateJump(EnSlime* this, PlayState* play) {
     Math_StepToF(&this->actor.scale.x, 0.008f, 0.0025f);
     Math_StepToF(&this->actor.scale.y, 0.011f, 0.0025f);
     this->actor.scale.z = this->actor.scale.x;
-    if ((this->actor.velocity.y < 0.0f) && (this->actor.bgCheckFlags & BGCHECK_CHECK_WALL)) {
+    if ((this->actor.velocity.y < 0.0f) && (this->actor.bgCheckFlags & 1)) {
         EnSlime_FinishJump(this);
     }
 }
