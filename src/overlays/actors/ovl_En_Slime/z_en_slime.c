@@ -1200,7 +1200,7 @@ void EnSlime_Update(Actor* thisx, PlayState* play) {
                 Math_StepToF(&this->effectAlpha, 0.0f, 0.05f);
                 this->effectScale = (this->effectAlpha + 1.0f) * 0.2f;
                 this->effectScale = CLAMP_MAX(this->effectScale, 0.4f);
-            } else if (Math_StepToF(&this->frozenSteamScale, 0.4f, 0.01f) == 0) {
+            } else if (!Math_StepToF(&this->frozenSteamScale, 0.4f, 0.01f)) {
                 func_800B9010(thisx, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
             }
         }
