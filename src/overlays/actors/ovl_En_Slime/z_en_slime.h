@@ -7,6 +7,9 @@
 
 #define EN_SLIME_LIMBPOS_COUNT 5
 
+#define EN_SLIME_GET_MAIN_TYPE(thisx) ((thisx)->params)
+#define EN_SLIME_GET_RESPAWN_TIME(thisx) ((((thisx)->params) >> 8) & 0xFF)
+
 struct EnSlime;
 
 typedef void (*EnSlimeActionFunc)(struct EnSlime*, PlayState*);
@@ -33,15 +36,13 @@ typedef struct EnSlime {
     /* 0x174 */ Vec3f respawnScale;
     /* 0x180 */ Vec3f limbPos[EN_SLIME_LIMBPOS_COUNT];
     /* 0x1BC */ ColliderCylinder collider;
-} EnSlime; /* size = 0x208 */
+} EnSlime; // size = 0x208
 
 typedef enum EnSlimeType {
-    /* 0x0 */ EN_SLIME_TYPE_BLUE,
-    /* 0x1 */ EN_SLIME_TYPE_GREEN,
-    /* 0x2 */ EN_SLIME_TYPE_YELLOW,
-    /* 0x3 */ EN_SLIME_TYPE_RED,
+    /* 0 */ EN_SLIME_TYPE_BLUE,
+    /* 1 */ EN_SLIME_TYPE_GREEN,
+    /* 2 */ EN_SLIME_TYPE_YELLOW,
+    /* 3 */ EN_SLIME_TYPE_RED,
 } EnSlimeType;
-
-extern const ActorInit En_Slime_InitVars;
 
 #endif // Z_EN_SLIME_H
