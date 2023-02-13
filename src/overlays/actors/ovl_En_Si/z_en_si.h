@@ -3,6 +3,8 @@
 
 #include "global.h"
 
+#define ENSI_GET_CHEST_FLAG(thisx) (((thisx)->params & 0xFC) >> 2)
+
 struct EnSi;
 
 typedef void (*EnSiActionFunc)(struct EnSi*, PlayState*);

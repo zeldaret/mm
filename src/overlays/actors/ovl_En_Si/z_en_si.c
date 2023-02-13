@@ -6,8 +6,6 @@
 
 #include "z_en_si.h"
 
-#define ENSI_GET_CHEST_FLAG(thisx) (((thisx)->params & 0xFC) >> 2)
-
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_200)
 
 #define THIS ((EnSi*)thisx)
