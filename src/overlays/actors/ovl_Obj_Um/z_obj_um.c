@@ -844,7 +844,7 @@ s32 func_80B795A0(PlayState* play, ObjUm* this, s32 arg2) {
             } else {
                 Actor_ContinueText(play, &this->dyna.actor, 0x33B5);
                 func_8019F230();
-                func_80151BB4(play, 6);
+                Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_CREMIA);
                 phi_v1 = false;
             }
             break;
