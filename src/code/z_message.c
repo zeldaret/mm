@@ -2420,7 +2420,8 @@ void Message_BombersNotebookQueueEvent(PlayState* play, u8 bombersNotebookEvent)
             msgCtx->bombersNotebookNewEventQueue[msgCtx->bombersNotebookNewEventQueueSize] = bombersNotebookEvent;
             msgCtx->bombersNotebookNewEventQueueSize++;
         }
-    } else if (bombersNotebookEvent >= 20) { // Entries 0-19 are "met someone" entries. The rest are processed even if the player doesn't have the notebook.
+    } else if (bombersNotebookEvent >= 20) { // Entries 0-19 are "met someone" entries. The rest are processed even if
+                                             // the player doesn't have the notebook.
         if (!CHECK_WEEKEVENTREG(sBombersNotebookEventWeekEventFlags[bombersNotebookEvent])) {
             msgCtx->bombersNotebookNewEventQueue[msgCtx->bombersNotebookNewEventQueueSize] = bombersNotebookEvent;
             msgCtx->bombersNotebookNewEventQueueSize++;
@@ -2440,11 +2441,17 @@ s32 Message_BombersNotebookProcessEventQueue(PlayState* play) {
         }
         msgCtx->bombersNotebookNewEventQueueSize--;
 
-        if (!CHECK_WEEKEVENTREG(sBombersNotebookEventWeekEventFlags[msgCtx->bombersNotebookNewEventQueue[msgCtx->bombersNotebookNewEventQueueSize]])) {
-            SET_WEEKEVENTREG(sBombersNotebookEventWeekEventFlags[msgCtx->bombersNotebookNewEventQueue[msgCtx->bombersNotebookNewEventQueueSize]]);
+        if (!CHECK_WEEKEVENTREG(sBombersNotebookEventWeekEventFlags
+                                    [msgCtx->bombersNotebookNewEventQueue[msgCtx->bombersNotebookNewEventQueueSize]])) {
+            SET_WEEKEVENTREG(sBombersNotebookEventWeekEventFlags
+                                 [msgCtx->bombersNotebookNewEventQueue[msgCtx->bombersNotebookNewEventQueueSize]]);
 
-            if ((sBombersNotebookEventMessages[msgCtx->bombersNotebookNewEventQueue[msgCtx->bombersNotebookNewEventQueueSize]] != 0) && CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
-                Message_ContinueTextbox(play, sBombersNotebookEventMessages[msgCtx->bombersNotebookNewEventQueue[msgCtx->bombersNotebookNewEventQueueSize]]);
+            if ((sBombersNotebookEventMessages
+                     [msgCtx->bombersNotebookNewEventQueue[msgCtx->bombersNotebookNewEventQueueSize]] != 0) &&
+                CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
+                Message_ContinueTextbox(
+                    play, sBombersNotebookEventMessages
+                              [msgCtx->bombersNotebookNewEventQueue[msgCtx->bombersNotebookNewEventQueueSize]]);
                 play_sound(NA_SE_SY_SCHEDULE_WRITE);
                 return true;
             }
@@ -2673,7 +2680,8 @@ u8 Message_GetState(MessageContext* msgCtx) {
     if (msgCtx->msgMode == MSGMODE_40) {
         return TEXT_STATE_13;
     }
-    if ((msgCtx->msgMode == MSGMODE_TEXT_CLOSING) && (msgCtx->stateTimer == 1) && (msgCtx->bombersNotebookNewEventQueueSize == 0)) {
+    if ((msgCtx->msgMode == MSGMODE_TEXT_CLOSING) && (msgCtx->stateTimer == 1) &&
+        (msgCtx->bombersNotebookNewEventQueueSize == 0)) {
         return TEXT_STATE_CLOSING;
     }
 
@@ -4564,7 +4572,8 @@ void Message_Update(PlayState* play) {
                         if (msgCtx->unk11F14 != 0xFFFF) {
                             play_sound(NA_SE_SY_MESSAGE_PASS);
                             Message_ContinueTextbox(play, msgCtx->unk11F14);
-                        } else if ((msgCtx->bombersNotebookNewEventQueueSize == 0) || (Message_BombersNotebookProcessEventQueue(play) != 1)) {
+                        } else if ((msgCtx->bombersNotebookNewEventQueueSize == 0) ||
+                                   (Message_BombersNotebookProcessEventQueue(play) != 1)) {
                             if (msgCtx->currentTextId == 0x579) {
                                 gSaveContext.hudVisibility = HUD_VISIBILITY_IDLE;
                             }
