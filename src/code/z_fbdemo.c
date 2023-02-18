@@ -203,7 +203,7 @@ void TransitionTile_Suck(TransitionTile* this) {
         for (col = 0; col < this->cols + 1; col++) {
             diffX = (this->vtxData + col + row * (this->cols + 1))->x - (this->vtxData + 5 + 4 * (this->cols + 1))->x;
             diffY = (this->vtxData + col + row * (this->cols + 1))->y - (this->vtxData + 5 + 4 * (this->cols + 1))->y;
-            scale = (SQ(diffX) + SQ(diffY)) / 100.0f;
+            scale = (SQ(diffX) + SQ(diffY)) / SQ(10.0f);
             if (scale != 0.0f) {
                 if (scale < 1.0f) {
                     scale = 1.0f;
