@@ -438,9 +438,9 @@ void func_80AE7F34(EnStopheishi* this, PlayState* play) {
         this->messageIndex += sp32;
         this->messageIndex += phi_a2 * 2;
     } else {
-        this->messageIndex = 0x40;
+        this->messageIndex = 64;
         if (sp32 != 0) {
-            this->messageIndex = 0x48;
+            this->messageIndex = 72;
         }
         this->messageIndex += this->unk_276 * 2;
     }
