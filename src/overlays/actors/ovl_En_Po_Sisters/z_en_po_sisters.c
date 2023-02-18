@@ -150,10 +150,10 @@ static InitChainEntry sInitChain[] = {
 #define POE_SISTERS_FLAG_CHECK_AC              (1 << 0)
 #define POE_SISTERS_FLAG_UPDATE_SHAPE_ROT      (1 << 1)
 #define POE_SISTERS_FLAG_CHECK_Z_TARGET        (1 << 2) // Meg doesnt go invisible if you ztarget her for too long
-#define POE_SISTERS_FLAG_MATCH_PLAYER_HEIGHT   (1 << 3) // the Poe is attempting to level with player's height
+#define POE_SISTERS_FLAG_MATCH_PLAYER_HEIGHT   (1 << 3) // The Poe is attempting to level with player's height
 #define POE_SISTERS_FLAG_UPDATE_BGCHECK_INFO   (1 << 4)
 #define POE_SISTERS_FLAG_UPDATE_FIRES          (1 << 5) // firePos updated to match limb in PostLimbDraw
-#define POE_SISTERS_FLAG_REAL_MEG_ROTATION     (1 << 6) // real meg rotates different than her clones for one cycle
+#define POE_SISTERS_FLAG_REAL_MEG_ROTATION     (1 << 6) // Real Meg rotates different than her clones for one cycle
 #define POE_SISTERS_FLAG_DRAW_TORCH            (1 << 7)
 // clang-format on
 
@@ -187,7 +187,7 @@ void EnPoSisters_Init(Actor* thisx, PlayState* play) {
     thisx->flags &= ~ACTOR_FLAG_1;
 
     if (POE_SISTERS_GET_OBSERVER_FLAG(&this->actor)) {
-        // if flagged observer, they are a floating prop spawned by EnGb2 (Poe Hut Proprieter)
+        // "Flagged observer": non-enemy floating prop spawned by EnGb2 (Poe Hut Proprieter) for display
         EnPoSisters_SetupObserverIdle(this);
     } else if (this->type == POE_SISTERS_TYPE_MEG) {
         if (this->megCloneId == POE_SISTERS_MEG_REAL) {
@@ -733,7 +733,7 @@ void EnPoSisters_SpawnMegClones(EnPoSisters* this, PlayState* play) {
                                        this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, 0, 0,
                                        0, POE_SISTERS_PARAMS(false, POE_SISTERS_MEG_CLONE3, POE_SISTERS_TYPE_MEG));
 
-    // if we cannot spawn all clones: abort
+    // If we cannot spawn all clones: Abort
     if ((clone1 == NULL) || (clone2 == NULL) || (clone3 == NULL)) {
         if (clone1 != NULL) {
             Actor_Kill(clone1);
@@ -768,10 +768,10 @@ void EnPoSisters_MegCloneVanish(EnPoSisters* this, PlayState* play) {
         pos.x = this->actor.world.pos.x;
         pos.y = this->actor.world.pos.y + 45.0f;
         pos.z = this->actor.world.pos.z;
-        func_800B3030(play, &pos, &gZeroVec3f, &gZeroVec3f, 150, 0, 3); // spawns EffectSsDeadDb
+        func_800B3030(play, &pos, &gZeroVec3f, &gZeroVec3f, 150, 0, 3); // Spawns EffectSsDeadDb (flame effects)
     }
 
-    Lights_PointSetColorAndRadius(&this->lightInfo, 0, 0, 0, 0); // light OFF
+    Lights_PointSetColorAndRadius(&this->lightInfo, 0, 0, 0, 0); // Light OFF
     this->actionFunc = EnPoSisters_MegCloneWaitForSpinBack;
 }
 
@@ -818,12 +818,12 @@ void EnPoSisters_MegSurroundPlayer(EnPoSisters* this, PlayState* play) {
         SkelAnime_Update(&this->skelAnime);
         if (this->megCloneId == POE_SISTERS_MEG_REAL) {
             if (ABS_ALT(16 - this->floatingBobbingTimer) < 14) {
-                // every x frames rotate around player, the fewer meg clones remaining the faster they spin
+                // Every N frames rotate around player. The fewer Meg clones remaining the faster they spin.
                 this->actor.shape.rot.y += (s16)((0x580 - (this->megClonesRemaining * 0x180)) *
                                                  fabsf(Math_SinS(this->floatingBobbingTimer * 0x800)));
             }
 
-            // twirl the real meg backwards for a bit for visual tell to player
+            // Twirl the real Meg backwards for a bit for a visual tell to player.
             if ((this->megSurroundTimer >= 284) || (this->megSurroundTimer <= 30)) {
                 this->poSisterFlags |= POE_SISTERS_FLAG_REAL_MEG_ROTATION;
             } else {
@@ -851,12 +851,13 @@ void EnPoSisters_MegSurroundPlayer(EnPoSisters* this, PlayState* play) {
     } else if (this->megCloneId != POE_SISTERS_MEG_REAL) {
         parent = (EnPoSisters*)this->actor.parent;
         if (parent->actionFunc == EnPoSisters_DamageFlinch) {
-            // flinch clones if you hit the real meg
+            // Clones flinch if you hit the real Meg
             EnPoSisters_SetupDamageFlinch(this);
         }
     } else if (this->megClonesRemaining == 0) {
-        // all meg clones have been killed, meg waits 15 frames then spin attacks
-        // timer is negative because megClonesRemaining and megAttackTimer are the same union'd variable
+        // All Meg clones have been killed: Real Meg waits 15 frames then spin attacks in retaliation
+        // Timer is negative (inrecrements to zero)
+        //  because megClonesRemaining and megAttackTimer are the same union'd variable
         this->megAttackTimer = -15;
     } else if (this->megAttackTimer < 0) {
         this->megAttackTimer++;
@@ -923,8 +924,8 @@ void EnPoSisters_CheckCollision(EnPoSisters* this, PlayState* play) {
                        (this->actor.colChkInfo.damageEffect == POE_SISTERS_DMGEFF_SPINATTACK) &&
                        (this->actionFunc == EnPoSisters_MegSurroundPlayer)) {
                 if (this->megClonesRemaining == 0) {
-                    // all meg clones have been killed, meg waits 45 frames then spin attacks
-                    // timer is negative because megClonesRemaining and megAttackTimer are the same union'd variable
+                    // All Meg clones have been killed: Real Meg waits 45 frames then spin attacks
+                    // Timer is negative because megClonesRemaining and megAttackTimer are the same union'd variable
                     this->megAttackTimer = -45;
                 }
             } else {
@@ -1041,7 +1042,7 @@ void EnPoSisters_UpdateColors(EnPoSisters* this) {
         this->color.g = CLAMP_MAX(this->color.g + 5, 255);
         this->color.b = CLAMP_MAX(this->color.b + 5, 225);
     } else if (this->skelAnime.animation == &gPoeSistersDamagedAnim) {
-        // flash every other frame after taking damage
+        // Flash every other frame after taking damage
         if (this->actor.colorFilterTimer & 0x2) {
             this->color.r = 0;
             this->color.g = 0;
@@ -1166,7 +1167,7 @@ void EnPoSisters_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s
         if (this->fireCount > 0) {
             Color_RGBA8* flameColor = &sPoSisterFlameColors[this->type];
 
-            brightness = Rand_ZeroFloat(0.3f) + 0.7f; // flickering torch light level
+            brightness = Rand_ZeroFloat(0.3f) + 0.7f; // Flickering torch light level
 
             if (this->actionFunc == EnPoSisters_DeathStage2) {
                 Lights_PointNoGlowSetInfo(&this->lightInfo, this->firePos[0].x, this->firePos[0].y + 15.0f,
@@ -1205,13 +1206,13 @@ void EnPoSisters_Draw(Actor* thisx, PlayState* play) {
 
     if ((this->color.a == 255) || (this->color.a == 0)) {
         gDPSetEnvColor(POLY_OPA_DISP++, this->color.r, this->color.g, this->color.b, this->color.a);
-        gSPSegment(POLY_OPA_DISP++, 0x09, D_801AEFA0); // empty
+        gSPSegment(POLY_OPA_DISP++, 0x09, D_801AEFA0); // Empty DL
         POLY_OPA_DISP =
             SkelAnime_Draw(play, this->skelAnime.skeleton, this->skelAnime.jointTable, EnPoSisters_OverrideLimbDraw,
                            EnPoSisters_PostLimbDraw, &this->actor, POLY_OPA_DISP);
     } else {
         gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 255, this->color.a);
-        gSPSegment(POLY_XLU_DISP++, 0x09, D_801AEF88); // xlu only DL
+        gSPSegment(POLY_XLU_DISP++, 0x09, D_801AEF88); // XLU only DL
         POLY_XLU_DISP =
             SkelAnime_Draw(play, this->skelAnime.skeleton, this->skelAnime.jointTable, EnPoSisters_OverrideLimbDraw,
                            EnPoSisters_PostLimbDraw, &this->actor, POLY_XLU_DISP);
