@@ -149,8 +149,8 @@ static InitChainEntry sInitChain[] = {
 #define POE_SISTERS_FLAG_CLEAR                 (0)
 #define POE_SISTERS_FLAG_CHECK_AC              (1 << 0)
 #define POE_SISTERS_FLAG_UPDATE_SHAPE_ROT      (1 << 1)
-#define POE_SISTERS_FLAG_CHECK_Z_TARGET        (1 << 2) // meg doesnt go invis if you ztarget her for too long
-#define POE_SISTERS_FLAG_MATCH_PLAYER_HEIGHT   (1 << 3) // the po is attempting to level with player's height
+#define POE_SISTERS_FLAG_CHECK_Z_TARGET        (1 << 2) // Meg doesnt go invisible if you ztarget her for too long
+#define POE_SISTERS_FLAG_MATCH_PLAYER_HEIGHT   (1 << 3) // the Poe is attempting to level with player's height
 #define POE_SISTERS_FLAG_UPDATE_BGCHECK_INFO   (1 << 4)
 #define POE_SISTERS_FLAG_UPDATE_FIRES          (1 << 5) // firePos updated to match limb in PostLimbDraw
 #define POE_SISTERS_FLAG_REAL_MEG_ROTATION     (1 << 6) // real meg rotates different than her clones for one cycle
@@ -187,7 +187,7 @@ void EnPoSisters_Init(Actor* thisx, PlayState* play) {
     thisx->flags &= ~ACTOR_FLAG_1;
 
     if (POE_SISTERS_GET_OBSERVER_FLAG(&this->actor)) {
-        // if flagged observer, they are a floating prop spawned by EnGb2 (po hut proprieter)
+        // if flagged observer, they are a floating prop spawned by EnGb2 (Poe Hut Proprieter)
         EnPoSisters_SetupObserverIdle(this);
     } else if (this->type == POE_SISTERS_TYPE_MEG) {
         if (this->megCloneId == POE_SISTERS_MEG_REAL) {
