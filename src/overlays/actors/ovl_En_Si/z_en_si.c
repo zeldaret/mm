@@ -90,8 +90,7 @@ void EnSi_UpdateCollision(EnSi* this, PlayState* play) {
     this->collider.dim.worldSphere.center.x = this->actor.world.pos.x;
     this->collider.dim.worldSphere.center.y = this->actor.world.pos.y;
     this->collider.dim.worldSphere.center.z = this->actor.world.pos.z;
-    this->collider.dim.worldSphere.radius =
-        this->collider.dim.modelSphere.radius * this->collider.dim.scale;
+    this->collider.dim.worldSphere.radius = this->collider.dim.modelSphere.radius * this->collider.dim.scale;
     if (this->actor.colChkInfo.health > 0) {
         CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
     }
