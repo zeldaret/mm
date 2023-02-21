@@ -961,11 +961,6 @@ typedef enum {
     /* 3 */ PICTO_PHOTO_STATE_READY
 } PictoPhotoState;
 
-// OoT's TransitionUnk
-typedef struct {
-    /* 0x00 */ char unk_00[0xDC];
-} FbDemoStruct; // size = 0xDC
-
 typedef struct {
     /* 0x00 */ u8 mode;
     /* 0x04 */ f32 scale;
