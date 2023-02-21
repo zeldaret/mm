@@ -253,7 +253,7 @@ typedef struct SavePlayerData {
 } SavePlayerData; // size = 0x28
 
 typedef struct Save {
-    /* 0x0000 */ u32 entrance;                          // "scene_no"
+    /* 0x0000 */ s32 entrance;                          // "scene_no"
     /* 0x0004 */ u8 equippedMask;                       // "player_mask"
     /* 0x0005 */ u8 isFirstCycle;                       // "opening_flag"
     /* 0x0006 */ u8 unk_06;
