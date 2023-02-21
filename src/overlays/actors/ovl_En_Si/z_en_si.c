@@ -98,7 +98,7 @@ void EnSi_UpdateCollision(EnSi* this, PlayState* play) {
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
 }
 
-void func_8098CAD0(EnSi* this, PlayState* play) {
+void EnSi_GiveToken(EnSi* this, PlayState* play) {
     s32 chestFlag = ENSI_GET_CHEST_FLAG(&this->actor);
 
     if ((chestFlag < 0x20) && (chestFlag >= 0)) {
@@ -118,7 +118,7 @@ void func_8098CB70(EnSi* this, PlayState* play) {
     if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_2000)) {
         this->actionFunc = EnSi_DraggedByHookshot;
     } else if (this->collider.base.ocFlags2 & OC2_HIT_PLAYER) {
-        func_8098CAD0(this, play);
+        EnSi_GiveToken(this, play);
         Actor_Kill(&this->actor);
         return;
     }
@@ -127,7 +127,7 @@ void func_8098CB70(EnSi* this, PlayState* play) {
 
 void EnSi_DraggedByHookshot(EnSi* this, PlayState* play) {
     if (!CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_2000)) {
-        func_8098CAD0(this, play);
+        EnSi_GiveToken(this, play);
         Actor_Kill(&this->actor);
     }
 }
