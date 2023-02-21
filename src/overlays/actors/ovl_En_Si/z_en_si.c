@@ -86,7 +86,7 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
-void func_8098CA20(EnSi* this, PlayState* play) {
+void EnSi_UpdateCollision(EnSi* this, PlayState* play) {
     this->collider.dim.worldSphere.center.x = this->actor.world.pos.x;
     this->collider.dim.worldSphere.center.y = this->actor.world.pos.y;
     this->collider.dim.worldSphere.center.z = this->actor.world.pos.z;
@@ -152,7 +152,7 @@ void EnSi_Update(Actor* thisx, PlayState* play) {
     EnSi* this = THIS;
 
     this->actionFunc(this, play);
-    func_8098CA20(this, play);
+    EnSi_UpdateCollision(this, play);
     Actor_SetFocus(&this->actor, 0.0f);
 }
 
