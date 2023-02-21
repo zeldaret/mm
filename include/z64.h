@@ -930,7 +930,7 @@ typedef struct PlayState {
     /* 0x18E5C */ TexturePtr pictoPhotoI8;
     /* 0x18E60 */ void* unk_18E60;
     /* 0x18E64 */ void* unk_18E64;
-    /* 0x18E68 */ void* unk_18E68;
+    /* 0x18E68 */ void* unk_18E68; // framebuffer related to Lens of Truth
     /* 0x18E6C */ char unk_18E6C[0x3EC];
 } PlayState; // size = 0x19258
 

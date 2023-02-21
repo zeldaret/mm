@@ -721,7 +721,7 @@ void Actor_DeactivateLens(PlayState* play);
 void func_800B9120(ActorContext* actorCtx);
 void Actor_InitContext(PlayState* play, ActorContext* actorCtx, ActorEntry* actorEntry);
 void Actor_UpdateAll(PlayState* play, ActorContext* actorCtx);
-s32 Actor_RecordUndrawnActor(PlayState* play, Actor* actor);
+s32 Actor_AddToLensActors(PlayState* play, Actor* actor);
 void Actor_DrawAll(PlayState* play, ActorContext* actorCtx);
 void func_800BA6FC(PlayState* play, ActorContext* actorCtx);
 void func_800BA798(PlayState* play, ActorContext* actorCtx);
