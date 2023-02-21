@@ -3,16 +3,16 @@
     <File Name="object_dekubaba" Segment="6">
 
         <!-- Deku Baba animations -->
-        <Animation Name="gDekuBabaPauseChompAnim" Offset="0x208"/>
-        <Animation Name="gDekuBabaFastChompAnim" Offset="0x2B8"/>
+        <Animation Name="gDekuBabaPauseChompAnim" Offset="0x208"/> <!-- Original name is "db_P_kougeki" ("attack; assault") -->
+        <Animation Name="gDekuBabaFastChompAnim" Offset="0x2B8"/> <!-- Original name is "db_P_tobidasu" ("to appear (suddenly)​") -->
 
         <!-- Deku Baba body DLists (not all are limb DLists) -->
         <DList Name="gDekuBabaLowerJawDL" Offset="0x580"/>
         <DList Name="gDekuBabaUpperJawDL" Offset="0xB68"/>
-        <DList Name="gDekuBabaBaseLeavesDL" Offset="0x10F0"/>
-        <DList Name="gDekuBabaStemTopDL" Offset="0x1330"/>
-        <DList Name="gDekuBabaStemMiddleDL" Offset="0x1628"/>
-        <DList Name="gDekuBabaStemBaseDL" Offset="0x1828"/>
+        <DList Name="gDekuBabaBaseLeavesDL" Offset="0x10F0"/> <!-- Original name is "db_ha_model" ("leaf; blade of grass") -->
+        <DList Name="gDekuBabaStemTopDL" Offset="0x1330"/> <!-- Original name is "db_miki1_model" ("miki" = "trunk") -->
+        <DList Name="gDekuBabaStemMiddleDL" Offset="0x1628"/> <!-- Original name is "db_miki2_model" -->
+        <DList Name="gDekuBabaStemBaseDL" Offset="0x1828"/> <!-- Original name is "db_miki3_model" -->
 
         <!-- Deku Baba body textures -->
         <Texture Name="gDekuBabaJawOuterTex" OutName="deku_baba_jaw_outer" Format="rgba16" Width="16" Height="32" Offset="0x18D0"/>

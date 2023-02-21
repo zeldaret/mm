@@ -1,13 +1,13 @@
 ﻿<Root>
     <File Name="object_dinofos" Segment="6">
-        <Animation Name="object_dinofos_Anim_000580" Offset="0x580" />
-        <Animation Name="object_dinofos_Anim_000AF0" Offset="0xAF0" />
-        <Animation Name="object_dinofos_Anim_001040" Offset="0x1040" />
-        <Animation Name="object_dinofos_Anim_0013C0" Offset="0x13C0" />
-        <Animation Name="object_dinofos_Anim_0017B8" Offset="0x17B8" />
-        <Animation Name="object_dinofos_Anim_001CCC" Offset="0x1CCC" />
-        <Animation Name="object_dinofos_Anim_0025B4" Offset="0x25B4" />
-        <Animation Name="object_dinofos_Anim_002E40" Offset="0x2E40" />
+        <Animation Name="object_dinofos_Anim_000580" Offset="0x580" /> <!-- Original name is "zf2_aruku" -->
+        <Animation Name="object_dinofos_Anim_000AF0" Offset="0xAF0" /> <!-- Original name is "zf2_chakuti" -->
+        <Animation Name="object_dinofos_Anim_001040" Offset="0x1040" /> <!-- Original name is "zf2_fire1" -->
+        <Animation Name="object_dinofos_Anim_0013C0" Offset="0x13C0" /> <!-- Original name is "zf2_fire2" -->
+        <Animation Name="object_dinofos_Anim_0017B8" Offset="0x17B8" /> <!-- Original name is "zf2_fire3" -->
+        <Animation Name="object_dinofos_Anim_001CCC" Offset="0x1CCC" /> <!-- Original name is "zf2_jump" -->
+        <Animation Name="object_dinofos_Anim_0025B4" Offset="0x25B4" /> <!-- Original name is "zf2_kiru" -->
+        <Animation Name="object_dinofos_Anim_002E40" Offset="0x2E40" /> <!-- Original name is "zf2_matsu" -->
         <DList Name="object_dinofos_DL_005B10" Offset="0x5B10" />
         <DList Name="object_dinofos_DL_005D00" Offset="0x5D00" />
         <DList Name="object_dinofos_DL_005E60" Offset="0x5E60" />
@@ -62,10 +62,10 @@
         <Limb Name="object_dinofos_Standardlimb_009508" Type="Standard" EnumName="OBJECT_DINOFOS_LIMB_13" Offset="0x9508" />
         <Limb Name="object_dinofos_Standardlimb_009514" Type="Standard" EnumName="OBJECT_DINOFOS_LIMB_14" Offset="0x9514" />
         <Skeleton Name="object_dinofos_Skel_009570" Type="Flex" LimbType="Standard" LimbNone="OBJECT_DINOFOS_LIMB_NONE" LimbMax="OBJECT_DINOFOS_LIMB_MAX" EnumName="ObjectDinofosLimb" Offset="0x9570" />
-        <Animation Name="object_dinofos_Anim_009B70" Offset="0x9B70" />
-        <Animation Name="object_dinofos_Anim_00ABD0" Offset="0xABD0" />
-        <Animation Name="object_dinofos_Anim_00C974" Offset="0xC974" />
-        <Animation Name="object_dinofos_Anim_00D21C" Offset="0xD21C" />
-        <Animation Name="object_dinofos_Anim_00D62C" Offset="0xD62C" />
+        <Animation Name="object_dinofos_Anim_009B70" Offset="0x9B70" /> <!-- Original name is "zf2_sakebi" -->
+        <Animation Name="object_dinofos_Anim_00ABD0" Offset="0xABD0" /> <!-- Original name is "zf2_shini" -->
+        <Animation Name="object_dinofos_Anim_00C974" Offset="0xC974" /> <!-- Original name is "zf2_startDEMO" -->
+        <Animation Name="object_dinofos_Anim_00D21C" Offset="0xD21C" /> <!-- Original name is "zf2_yarare" -->
+        <Animation Name="object_dinofos_Anim_00D62C" Offset="0xD62C" /> <!-- Original name is "zf2_yokoaruki" -->
     </File>
 </Root>
