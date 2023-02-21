@@ -15,7 +15,7 @@ void EnSi_Destroy(Actor* thisx, PlayState* play);
 void EnSi_Update(Actor* thisx, PlayState* play);
 void EnSi_Draw(Actor* thisx, PlayState* play);
 
-void func_8098CBDC(EnSi* this, PlayState* play);
+void EnSi_DraggedByHookshot(EnSi* this, PlayState* play);
 
 ActorInit En_Si_InitVars = {
     ACTOR_EN_SI,
@@ -116,7 +116,7 @@ void func_8098CAD0(EnSi* this, PlayState* play) {
 
 void func_8098CB70(EnSi* this, PlayState* play) {
     if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_2000)) {
-        this->actionFunc = func_8098CBDC;
+        this->actionFunc = EnSi_DraggedByHookshot;
     } else if (this->collider.base.ocFlags2 & OC2_HIT_PLAYER) {
         func_8098CAD0(this, play);
         Actor_Kill(&this->actor);
@@ -125,7 +125,7 @@ void func_8098CB70(EnSi* this, PlayState* play) {
     this->actor.shape.rot.y += 0x38E;
 }
 
-void func_8098CBDC(EnSi* this, PlayState* play) {
+void EnSi_DraggedByHookshot(EnSi* this, PlayState* play) {
     if (!CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_2000)) {
         func_8098CAD0(this, play);
         Actor_Kill(&this->actor);
