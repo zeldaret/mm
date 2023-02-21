@@ -114,7 +114,7 @@ void EnSi_GiveToken(EnSi* this, PlayState* play) {
     }
 }
 
-void func_8098CB70(EnSi* this, PlayState* play) {
+void EnSi_Wait(EnSi* this, PlayState* play) {
     if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_2000)) {
         this->actionFunc = EnSi_DraggedByHookshot;
     } else if (this->collider.base.ocFlags2 & OC2_HIT_PLAYER) {
@@ -139,7 +139,7 @@ void EnSi_Init(Actor* thisx, PlayState* play) {
     Collider_SetSphere(play, &this->collider, &this->actor, &sSphereInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
     Actor_SetScale(&this->actor, 0.25f);
-    this->actionFunc = func_8098CB70;
+    this->actionFunc = EnSi_Wait;
 }
 
 void EnSi_Destroy(Actor* thisx, PlayState* play) {
