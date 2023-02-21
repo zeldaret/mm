@@ -963,8 +963,7 @@ beginseg
     name "ovl_En_Dekubaba"
     compress
     include "build/src/overlays/actors/ovl_En_Dekubaba/z_en_dekubaba.o"
-    include "build/data/ovl_En_Dekubaba/ovl_En_Dekubaba.data.o"
-    include "build/data/ovl_En_Dekubaba/ovl_En_Dekubaba.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Dekubaba/ovl_En_Dekubaba_reloc.o"
 endseg
 
 beginseg
