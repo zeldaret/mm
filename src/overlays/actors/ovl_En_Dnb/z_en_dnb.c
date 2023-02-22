@@ -8,7 +8,7 @@
 #include "objects/object_hanareyama_obj/object_hanareyama_obj.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_80)
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_REACT_TO_LENS)
 
 #define THIS ((EnDnb*)thisx)
 

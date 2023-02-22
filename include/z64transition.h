@@ -1,13 +1,39 @@
-#ifndef Z64_TRANSITION_H
-#define Z64_TRANSITION_H
+#ifndef Z64TRANSITION_H
+#define Z64TRANSITION_H
 
 #include "ultra64.h"
-
 #include "overlays/fbdemos/ovl_fbdemo_triforce/z_fbdemo_triforce.h"
 #include "overlays/fbdemos/ovl_fbdemo_wipe1/z_fbdemo_wipe1.h"
 #include "overlays/fbdemos/ovl_fbdemo_wipe3/z_fbdemo_wipe3.h"
 #include "overlays/fbdemos/ovl_fbdemo_wipe4/z_fbdemo_wipe4.h"
 #include "overlays/fbdemos/ovl_fbdemo_wipe5/z_fbdemo_wipe5.h"
+
+typedef enum {
+    /* 0 */ TRANS_TILE_OFF, // Inactive, do nothing
+    /* 1 */ TRANS_TILE_SETUP, // Save the necessary buffers
+    /* 2 */ TRANS_TILE_PROCESS, // Initialize the transition
+    /* 3 */ TRANS_TILE_READY // The transition is ready, so will update and draw each frame
+} TransitionTileState;
+
+typedef struct {
+    /* 0x0 */ f32 x;
+    /* 0x4 */ f32 y;
+} TransitionTileVtxData; // size = 0x8
+
+typedef struct {
+    /* 0x00 */ s32 cols;
+    /* 0x04 */ s32 rows;
+    /* 0x08 */ s32 frame;
+    /* 0x0C */ TransitionTileVtxData* vtxData;
+    /* 0x10 */ Vtx* vtxFrame1;
+    /* 0x14 */ Vtx* vtxFrame2;
+    /* 0x18 */ Mtx projection;
+    /* 0x58 */ Mtx modelView;
+    /* 0x98 */ Mtx unk_98;
+    /* 0xD8 */ Gfx* gfx; // "gfxtbl"
+    /* 0xDC */ u16* zBuffer;
+} TransitionTile; // size = 0xE0
+
 
 #define TC_SET_PARAMS (1 << 7)
 
