@@ -2,7 +2,7 @@
 
 Mtx* sSkyboxDrawMatrix;
 
-Mtx* SkyboxDraw_UpdateMatrix(SkyboxContext* skyboxCtx, f32 x, f32 y, f32 z) {
+Mtx* Skybox_UpdateMatrix(SkyboxContext* skyboxCtx, f32 x, f32 y, f32 z) {
     Matrix_Translate(x, y, z, MTXMODE_NEW);
     Matrix_Scale(1.0f, 1.0f, 1.0f, MTXMODE_APPLY);
     Matrix_RotateXFApply(skyboxCtx->rotX);
@@ -11,7 +11,7 @@ Mtx* SkyboxDraw_UpdateMatrix(SkyboxContext* skyboxCtx, f32 x, f32 y, f32 z) {
     return Matrix_ToMtx(sSkyboxDrawMatrix);
 }
 
-void SkyboxDraw_SetColors(SkyboxContext* skyboxCtx, u8 primR, u8 primG, u8 primB, u8 envR, u8 envG, u8 envB) {
+void Skybox_SetColors(SkyboxContext* skyboxCtx, u8 primR, u8 primG, u8 primB, u8 envR, u8 envG, u8 envB) {
     skyboxCtx->primR = primR;
     skyboxCtx->primG = primG;
     skyboxCtx->primB = primB;
@@ -20,7 +20,7 @@ void SkyboxDraw_SetColors(SkyboxContext* skyboxCtx, u8 primR, u8 primG, u8 primB
     skyboxCtx->envB = envB;
 }
 
-void SkyboxDraw_Draw(SkyboxContext* skyboxCtx, GraphicsContext* gfxCtx, s16 skyboxId, s16 blend, f32 x, f32 y, f32 z) {
+void Skybox_Draw(SkyboxContext* skyboxCtx, GraphicsContext* gfxCtx, s16 skyboxId, s16 blend, f32 x, f32 y, f32 z) {
     OPEN_DISPS(gfxCtx);
 
     func_8012C6AC(gfxCtx);
@@ -63,5 +63,5 @@ void SkyboxDraw_Draw(SkyboxContext* skyboxCtx, GraphicsContext* gfxCtx, s16 skyb
     CLOSE_DISPS(gfxCtx);
 }
 
-void SkyboxDraw_Update(SkyboxContext* skyboxCtx) {
+void Skybox_Update(SkyboxContext* skyboxCtx) {
 }
