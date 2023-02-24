@@ -290,7 +290,7 @@ typedef enum PlayerDoorType {
 } PlayerDoorType;
 
 typedef enum PlayerAnimType {
-    /* 0 */ PLAYER_ANIMTYPE_0, // DEFAULT
+    /* 0 */ PLAYER_ANIMTYPE_DEFAULT, // DEFAULT
     /* 1 */ PLAYER_ANIMTYPE_1,
     /* 2 */ PLAYER_ANIMTYPE_2,
     /* 3 */ PLAYER_ANIMTYPE_3, // Two hand weapon
@@ -392,8 +392,13 @@ typedef enum PlayerFacialExpression {
     /* 15 */ PLAYER_FACE_15
 } PlayerFacialExpression;
 
-// TODO: Contains more than just the face info, should be renamed appropriately
-#define GET_FACE_FROM_JOINTTABLE(jointTable) (((PlayerAnimationFrame*)(jointTable))->faceInfo)
+#define GET_EXPRESSION_FROM_JOINTTABLE(jointTable)        (((PlayerAnimationFrame *)(jointTable))->expressionInfo)
+#define GET_EYE_INDEX_FROM_JOINTTABLE(jointTable)         ((GET_EXPRESSION_FROM_JOINTTABLE(jointTable) & 0xF) - 1)
+#define GET_MOUTH_INDEX_FROM_JOINTTABLE(jointTable)       (((GET_EXPRESSION_FROM_JOINTTABLE(jointTable) >> 4) & 0xF) - 1)
+
+// Note the returned value from this macro needs to be shifted
+#define GET_LEFT_HAND_INDEX_FROM_JOINTTABLE(jointTable)   (GET_EXPRESSION_FROM_JOINTTABLE(jointTable) & 0xF000)
+#define GET_RIGHT_HAND_INDEX_FROM_JOINTTABLE(jointTable)  (GET_EXPRESSION_FROM_JOINTTABLE(jointTable) & 0x0F00)
 
 typedef enum PlayerLimb {
     /* 0x00 */ PLAYER_LIMB_NONE,
@@ -445,7 +450,7 @@ typedef enum PlayerBodyPart {
 
 typedef struct PlayerAnimationFrame {
     /* 0x000 */ Vec3s frameTable[PLAYER_LIMB_MAX];
-    /* 0x108 */ s16 faceInfo;
+    /* 0x108 */ s16 expressionInfo;
 } PlayerAnimationFrame; // size = 0x10A
 
 #define PLAYER_LIMB_BUF_SIZE (ALIGN16(sizeof(PlayerAnimationFrame)) + 0xF)

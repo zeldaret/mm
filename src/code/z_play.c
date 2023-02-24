@@ -1260,7 +1260,7 @@ void Play_DrawMain(PlayState* this) {
                 goto PostWorldDraw;
             }
 
-            if (this->unk_18844 == 0) {
+            if (!this->unk_18844) {
                 if (1) {
                     if (this->skyboxId && !this->envCtx.skyboxDisabled) {
                         if ((this->skyboxId == 1) || (this->skyboxId == 3)) {
