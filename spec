@@ -3427,8 +3427,7 @@ beginseg
     name "ovl_En_Stop_heishi"
     compress
     include "build/src/overlays/actors/ovl_En_Stop_heishi/z_en_stop_heishi.o"
-    include "build/data/ovl_En_Stop_heishi/ovl_En_Stop_heishi.data.o"
-    include "build/data/ovl_En_Stop_heishi/ovl_En_Stop_heishi.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Stop_heishi/ovl_En_Stop_heishi_reloc.o"
 endseg
 
 beginseg
