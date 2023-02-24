@@ -702,7 +702,7 @@ void func_808A6A78(EnSt* this, PlayState* play) {
         CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
 
         if (ENST_GET_1C0(&this->actor) == ENST_1C0_1) {
-            this->actor.flags |= ACTOR_FLAG_80;
+            this->actor.flags |= ACTOR_FLAG_REACT_TO_LENS;
         }
 
         Actor_SetScale(&this->actor, 0.04f);
@@ -867,8 +867,8 @@ void EnSt_Update(Actor* thisx, PlayState* play) {
         return;
     }
 
-    if (!(this->actor.flags & ACTOR_FLAG_80) && func_808A6A3C(this)) {
-        this->actor.flags |= ACTOR_FLAG_80;
+    if (!(this->actor.flags & ACTOR_FLAG_REACT_TO_LENS) && func_808A6A3C(this)) {
+        this->actor.flags |= ACTOR_FLAG_REACT_TO_LENS;
     }
 
     if (func_808A6580(this, play)) {

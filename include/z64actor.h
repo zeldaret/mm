@@ -392,6 +392,13 @@ typedef struct ActorListEntry {
     /* 0x8 */ s32 unk_08;
 } ActorListEntry; // size = 0xC
 
+typedef enum {
+    /* 0 */ LENS_MODE_HIDE_ACTORS, // lens actors are visible by default, and hidden by using lens (for example, fake walls)
+    /* 1 */ LENS_MODE_SHOW_ACTORS // lens actors are invisible by default, and shown by using lens (for example, invisible enemies)
+} LensMode;
+
+#define LENS_ACTOR_MAX 32
+
 // Target size when activated
 #define LENS_MASK_ACTIVE_SIZE 100
 
@@ -421,9 +428,9 @@ typedef struct ActorContext {
     /* 0x00B */ s8 lensActorsDrawn;
     /* 0x00C */ s16 halfDaysBit; // A single bit indicating the current half-day. It is one of HALFDAYBIT_DAYX_ macro values
     /* 0x00E */ u8 totalLoadedActors;
-    /* 0x00F */ u8 undrawnActorCount;
+    /* 0x00F */ u8 numLensActors;
     /* 0x010 */ ActorListEntry actorLists[ACTORCAT_MAX];
-    /* 0x0A0 */ Actor* undrawnActors[32]; // Records the first 32 actors drawn each frame
+    /* 0x0A0 */ Actor* lensActors[LENS_ACTOR_MAX]; // Draws up to LENS_ACTOR_MAX number of invisible actors
     /* 0x120 */ TargetContext targetContext;
     /* 0x1B8 */ ActorContextSceneFlags sceneFlags;
     /* 0x1E4 */ TitleCardContext titleCtxt;
@@ -485,8 +492,8 @@ typedef enum {
 #define ACTOR_FLAG_20            (1 << 5)
 // 
 #define ACTOR_FLAG_40            (1 << 6)
-// Invisible
-#define ACTOR_FLAG_80            (1 << 7)
+// hidden or revealed by Lens of Truth (depending on room lensMode)
+#define ACTOR_FLAG_REACT_TO_LENS (1 << 7)
 // Player has requested to talk to the actor; Player uses this flag differently than every other actor
 #define ACTOR_FLAG_TALK_REQUESTED (1 << 8)
 // 

@@ -6,7 +6,7 @@
 
 #include "z_en_stone_heishi.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_80)
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_REACT_TO_LENS)
 
 #define THIS ((EnStoneheishi*)thisx)
 
@@ -164,7 +164,7 @@ void func_80BC94B0(EnStoneheishi* this) {
     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_41_40)) { // After drinking bottle
         EnStoneheishi_ChangeAnim(this, EN_STONE_HEISHI_ANIM_CHEER_WITH_SPEAR);
         this->textIdIndex = 8;
-        this->actor.flags &= ~ACTOR_FLAG_80;
+        this->actor.flags &= ~ACTOR_FLAG_REACT_TO_LENS;
     } else { // Initial configuration
         EnStoneheishi_ChangeAnim(this, EN_STONE_HEISHI_ANIM_WAVE);
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_41_80)) {
