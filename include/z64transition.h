@@ -147,6 +147,7 @@ typedef enum {
     /* 22 */ TRANS_TYPE_WIPE5,
     // transition types 23 - 31 are unused
     // transition types 32 - 39 are Wipe4 TODO needs macro
+    /* 38 */ TRANS_TYPE_38 = 38,
     // transition types 40 - 63 are unused
     // transition types 64 - 127 are Wipe3 TODO needs macro
     /* 64 */ TRANS_TYPE_64 = 64,
