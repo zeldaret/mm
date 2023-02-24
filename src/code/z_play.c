@@ -1543,7 +1543,7 @@ void Play_GetFloorSurface(PlayState* this, MtxF* mtx, Vec3f* pos) {
 
 void* Play_LoadFile(PlayState* this, RomFile* entry) {
     size_t size = entry->vromEnd - entry->vromStart;
-    void* allocp = THA_AllocEndAlign16(&this->state.heap, size);
+    void* allocp = THA_AllocTailAlign16(&this->state.heap, size);
 
     DmaMgr_SendRequest0(allocp, entry->vromStart, size);
 
@@ -2294,9 +2294,9 @@ void Play_Init(GameState* thisx) {
     D_801F6D4C->envColor.b = 0;
     D_801F6D4C->envColor.a = 0;
     EnvFlags_UnsetAll(this);
-    THA_GetSize(&this->state.heap);
-    zAllocSize = THA_GetSize(&this->state.heap);
-    zAlloc = (uintptr_t)THA_AllocEndAlign16(&this->state.heap, zAllocSize);
+    THA_GetRemaining(&this->state.heap);
+    zAllocSize = THA_GetRemaining(&this->state.heap);
+    zAlloc = (uintptr_t)THA_AllocTailAlign16(&this->state.heap, zAllocSize);
     ZeldaArena_Init(((zAlloc + 8) & ~0xF), (zAllocSize - ((zAlloc + 8) & ~0xF)) + zAlloc); //! @bug: Incorrect ALIGN16s
     Actor_InitContext(this, &this->actorCtx, this->linkActorEntry);
 

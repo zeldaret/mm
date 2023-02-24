@@ -1,65 +1,105 @@
-#include "global.h"
+/**
+ * @file TwoHeadGfxArena.c
+ *
+ * This file implements a particular use of the double-ended stack allocator from TwoHeadArena.c for graphics data.
+ *
+ * Display list commands are allocated from the head while other graphics data such as matrices and vertices are
+ * allocated from the tail end.
+ *
+ * @see TwoHeadArena.c
+ */
 
-void THGA_Ct(TwoHeadGfxArena* thga, Gfx* start, size_t size) {
-    THA_Ct((TwoHeadArena*)thga, start, size);
+#include "thga.h"
+#include "alignment.h"
+#include "functions.h"
+
+void THGA_Init(TwoHeadGfxArena* thga, void* start, size_t size) {
+    THA_Init(&thga->tha, start, size);
 }
 
-void THGA_Dt(TwoHeadGfxArena* thga) {
-    THA_Dt((TwoHeadArena*)thga);
+void THGA_Destroy(TwoHeadGfxArena* thga) {
+    THA_Destroy(&thga->tha);
 }
 
 u32 THGA_IsCrash(TwoHeadGfxArena* thga) {
-    return THA_IsCrash((TwoHeadArena*)thga);
+    return THA_IsCrash(&thga->tha);
 }
 
-void THGA_Init(TwoHeadGfxArena* thga) {
-    THA_Init((TwoHeadArena*)thga);
+void THGA_Reset(TwoHeadGfxArena* thga) {
+    THA_Reset(&thga->tha);
 }
 
-s32 THGA_GetSize(TwoHeadGfxArena* thga) {
-    return THA_GetSize((TwoHeadArena*)thga);
+s32 THGA_GetRemaining(TwoHeadGfxArena* thga) {
+    return THA_GetRemaining(&thga->tha);
 }
 
 Gfx* THGA_GetHead(TwoHeadGfxArena* thga) {
-    return THA_GetHead((TwoHeadArena*)thga);
+    return THA_GetHead(&thga->tha);
 }
 
 void THGA_SetHead(TwoHeadGfxArena* thga, Gfx* start) {
-    THA_SetHead((TwoHeadArena*)thga, start);
+    THA_SetHead(&thga->tha, start);
 }
 
-Gfx* THGA_GetTail(TwoHeadGfxArena* thga) {
-    return THA_GetTail((TwoHeadArena*)thga);
+void* THGA_GetTail(TwoHeadGfxArena* thga) {
+    return THA_GetTail(&thga->tha);
 }
 
-Gfx* THGA_AllocStartArray8(TwoHeadGfxArena* thga, u32 count) {
-    return THA_AllocStart((TwoHeadArena*)thga, count * 8);
+/**
+ * Allocates a display list of `num` Gfx commands to the head of the Two Head Gfx Arena.
+ */
+Gfx* THGA_AllocDisplayList(TwoHeadGfxArena* thga, u32 count) {
+    return THA_AllocHead(&thga->tha, count * sizeof(Gfx));
 }
 
-Gfx* THGA_AllocStart8(TwoHeadGfxArena* thga) {
-    return THGA_AllocStartArray8(thga, 1);
+/**
+ * Allocates a single Gfx command to the head of the Two Head Gfx Arena.
+ */
+Gfx* THGA_AllocGfx(TwoHeadGfxArena* thga) {
+    return THGA_AllocDisplayList(thga, 1);
 }
 
-Gfx* THGA_AllocStart8Wrapper(TwoHeadGfxArena* thga) {
-    return THGA_AllocStart8(thga);
+/**
+ * Identical to `THGA_AllocGfx`
+ *
+ * @see THGA_AllocGfx
+ */
+Gfx* THGA_AllocGfx2(TwoHeadGfxArena* thga) {
+    return THGA_AllocGfx(thga);
 }
 
-Gfx* THGA_AllocEnd(TwoHeadGfxArena* thga, size_t size) {
-    return THA_AllocEnd((TwoHeadArena*)thga, size);
+/**
+ * Allocates to the end of the Two Head Gfx Arena. Intended for data complementary to the display lists such as
+ * matrices and vertices that are only needed for a single graphics task.
+ */
+void* THGA_AllocTail(TwoHeadGfxArena* thga, size_t size) {
+    return THA_AllocTail(&thga->tha, size);
 }
 
-Gfx* THGA_AllocEndArray64(TwoHeadGfxArena* thga, u32 count) {
-    return THGA_AllocEnd(thga, count * 0x40);
+/**
+ * Allocates `num` matrices to the tail end of the Two Head Gfx Arena.
+ */
+Mtx* THGA_AllocMtxArray(TwoHeadGfxArena* thga, u32 count) {
+    return THGA_AllocTail(thga, count * sizeof(Mtx));
 }
 
-Gfx* THGA_AllocEnd64(TwoHeadGfxArena* thga) {
-    return THGA_AllocEnd(thga, 0x40);
+/**
+ * Allocates a matrix to the tail end of the Two Head Gfx Arena.
+ */
+Mtx* THGA_AllocMtx(TwoHeadGfxArena* thga) {
+    return THGA_AllocTail(thga, sizeof(Mtx));
 }
 
-Gfx* THGA_AllocEndArray16(TwoHeadGfxArena* thga, u32 count) {
-    return THGA_AllocEnd(thga, count * 0x10);
+/**
+ * Allocates `num` vertices to the tail end of the Two Head Gfx Arena.
+ */
+Vtx* THGA_AllocVtxArray(TwoHeadGfxArena* thga, u32 count) {
+    return THGA_AllocTail(thga, count * sizeof(Vtx));
 }
 
-Gfx* THGA_AllocEnd16(TwoHeadGfxArena* thga) {
-    return THGA_AllocEnd(thga, 0x10);
+/**
+ * Allocates a vertex to the tail end of the Two Head Gfx Arena.
+ */
+Vtx* THGA_AllocVtx(TwoHeadGfxArena* thga) {
+    return THGA_AllocTail(thga, sizeof(Vtx));
 }

@@ -23,6 +23,8 @@
 #include "sfx.h"
 #include "message_data_static.h"
 
+#include "tha.h"
+#include "thga.h"
 #include "gfxprint.h"
 #include "sys_matrix.h"
 #include "z64actor.h"
@@ -172,20 +174,6 @@ typedef struct {
     /* 0x08 */ UNK_TYPE1 pad_08[0xC];
     /* 0x14 */ s16 data[REG_GROUPS * REG_PER_GROUP]; // 0xAE0 entries
 } GameInfo; // size = 0x15D4
-
-typedef struct {
-    /* 0x0 */ u32    size;
-    /* 0x4 */ void*  bufp;
-    /* 0x8 */ void*  head;
-    /* 0xC */ void*  tail;
-} TwoHeadArena; // size = 0x10
-
-typedef struct {
-    /* 0x0 */ u32    size;
-    /* 0x4 */ Gfx*   bufp;
-    /* 0x8 */ Gfx*   p;
-    /* 0xC */ Gfx*   d;
-} TwoHeadGfxArena; // size = 0x10
 
 typedef struct {
     /* 0x000 */ Gfx taskStart[9];
