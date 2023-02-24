@@ -1,12 +1,11 @@
 #ifndef Z_FBDEMO_WIPE4_H
 #define Z_FBDEMO_WIPE4_H
 
-#include "global.h"
+#include "ultra64.h"
+#include "color.h"
 
 typedef struct {
-    /* 0x0000 */ char unk_0[0x28];
+    /* 0x00 */ char unk_0[0x28];
 } TransitionWipe4; // size = 0x28
-
-extern const TransitionInit TransitionWipe4_InitVars;
 
 #endif

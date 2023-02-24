@@ -26,7 +26,7 @@ void func_80ABCCE4(BgHakuginBombwall* this, PlayState* play);
 void func_80ABCD98(BgHakuginBombwall* this, PlayState* play);
 void func_80ABCE60(BgHakuginBombwall* this, PlayState* play);
 
-const ActorInit Bg_Hakugin_Bombwall_InitVars = {
+ActorInit Bg_Hakugin_Bombwall_InitVars = {
     ACTOR_BG_HAKUGIN_BOMBWALL,
     ACTORCAT_BG,
     FLAGS,
@@ -317,7 +317,7 @@ void BgHakuginBombwall_Init(Actor* thisx, PlayState* play) {
     Collider_InitCylinder(play, &this->collider);
 
     if (Flags_GetSwitch(play, BGHAKUGIN_BOMBWALL_SWITCHFLAG(&this->dyna.actor))) {
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
         return;
     }
 
@@ -414,7 +414,7 @@ void func_80ABCE60(BgHakuginBombwall* this, PlayState* play) {
     this->unk_1AC--;
     if (this->unk_1AC <= 0) {
         ActorCutscene_Stop(this->dyna.actor.cutscene);
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
     } else if (this->unk_1AC == ptr->unk_2C) {
         ptr->unk_28(this, play);
     }

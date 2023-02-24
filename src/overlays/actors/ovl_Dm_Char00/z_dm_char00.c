@@ -15,12 +15,12 @@
 void DmChar00_Init(Actor* thisx, PlayState* play);
 void DmChar00_Destroy(Actor* thisx, PlayState* play);
 void DmChar00_Update(Actor* thisx, PlayState* play);
-void DmChar00_Draw(Actor* thisx, PlayState* play);
+void DmChar00_Draw(Actor* thisx, PlayState* play2);
 
 void func_80AA67F8(DmChar00* this, PlayState* play);
 void func_80AA695C(DmChar00* this, PlayState* play);
 
-const ActorInit Dm_Char00_InitVars = {
+ActorInit Dm_Char00_InitVars = {
     ACTOR_DM_CHAR00,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -449,15 +449,15 @@ void func_80AA5E2C(DmChar00* this, PlayState* play) {
 
 void func_80AA5EBC(DmChar00* this, PlayState* play) {
     if (play->csCtx.state != 0) {
-        switch (play->sceneNum) {
+        switch (play->sceneId) {
             case SCENE_LOST_WOODS:
-                if (gSaveContext.sceneSetupIndex == 1) {
+                if (gSaveContext.sceneLayer == 1) {
                     func_80AA561C(this, play);
                 }
                 break;
 
             case SCENE_OPENINGDAN:
-                if (gSaveContext.sceneSetupIndex == 0) {
+                if (gSaveContext.sceneLayer == 0) {
                     if (play->csCtx.currentCsIndex == 0) {
                         func_80AA5720(this, play);
                     } else if (play->csCtx.currentCsIndex == 1) {
@@ -469,7 +469,7 @@ void func_80AA5EBC(DmChar00* this, PlayState* play) {
                 break;
 
             case SCENE_OKUJOU:
-                if (gSaveContext.sceneSetupIndex == 0) {
+                if (gSaveContext.sceneLayer == 0) {
                     if (play->csCtx.currentCsIndex == 0) {
                         func_80AA58CC(this, play);
                     } else if (play->csCtx.currentCsIndex == 1) {
@@ -477,7 +477,7 @@ void func_80AA5EBC(DmChar00* this, PlayState* play) {
                     } else if (play->csCtx.currentCsIndex == 2) {
                         func_80AA5960(this, play);
                     }
-                } else if (gSaveContext.sceneSetupIndex == 2) {
+                } else if (gSaveContext.sceneLayer == 2) {
                     if (play->csCtx.currentCsIndex == 0) {
                         func_80AA59E4(this, play);
                     } else if (play->csCtx.currentCsIndex == 1) {
@@ -487,13 +487,13 @@ void func_80AA5EBC(DmChar00* this, PlayState* play) {
                 break;
 
             case SCENE_00KEIKOKU:
-                if (gSaveContext.sceneSetupIndex == 3) {
+                if (gSaveContext.sceneLayer == 3) {
                     if (play->csCtx.currentCsIndex == 0) {
                         func_80AA5AF4(this, play);
                     } else if (play->csCtx.currentCsIndex == 2) {
                         func_80AA5E2C(this, play);
                     }
-                } else if (gSaveContext.sceneSetupIndex == 7) {
+                } else if (gSaveContext.sceneLayer == 7) {
                     if (play->csCtx.currentCsIndex == 0) {
                         func_80AA5BF8(this, play);
                     } else if (play->csCtx.currentCsIndex == 1) {
@@ -503,19 +503,19 @@ void func_80AA5EBC(DmChar00* this, PlayState* play) {
                 break;
 
             case SCENE_MITURIN:
-                if ((gSaveContext.sceneSetupIndex == 0) && (play->csCtx.currentCsIndex == 1)) {
+                if ((gSaveContext.sceneLayer == 0) && (play->csCtx.currentCsIndex == 1)) {
                     func_80AA5DC8(this, play);
                 }
                 break;
 
             case SCENE_INSIDETOWER:
-                if ((gSaveContext.sceneSetupIndex == 0) && (play->csCtx.currentCsIndex == 0)) {
+                if ((gSaveContext.sceneLayer == 0) && (play->csCtx.currentCsIndex == 0)) {
                     func_80AA5D10(this, play);
                 }
                 break;
 
             case SCENE_PIRATE:
-                if ((gSaveContext.sceneSetupIndex == 0) && (play->csCtx.currentCsIndex == 0)) {
+                if ((gSaveContext.sceneLayer == 0) && (play->csCtx.currentCsIndex == 0)) {
                     func_80AA5D6C(this, play);
                 }
                 break;
@@ -527,8 +527,8 @@ void DmChar00_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     DmChar00* this = THIS;
 
-    if ((play->sceneNum == SCENE_LOST_WOODS) && !Cutscene_IsPlaying(play)) {
-        Actor_MarkForDeath(thisx);
+    if ((play->sceneId == SCENE_LOST_WOODS) && !Cutscene_IsPlaying(play)) {
+        Actor_Kill(thisx);
     }
 
     this->unk_240 = D_80AA77A8[DMCHAR00_GET(thisx)];
@@ -648,7 +648,7 @@ void func_80AA62FC(DmChar00* this, PlayState* play) {
                         break;
 
                     case 0x16:
-                        Actor_MarkForDeath(&this->actor);
+                        Actor_Kill(&this->actor);
                         break;
 
                     case 0x17:
@@ -853,7 +853,7 @@ void func_80AA62FC(DmChar00* this, PlayState* play) {
 void func_80AA67F8(DmChar00* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if ((play->csCtx.state == 0) && (gSaveContext.sceneSetupIndex == 0) && (play->csCtx.currentCsIndex == 1)) {
+    if ((play->csCtx.state == 0) && (gSaveContext.sceneLayer == 0) && (play->csCtx.currentCsIndex == 1)) {
         if (this->unk_261 != 42) {
             this->unk_261 = 42;
             func_80AA5580(&this->skelAnime, &sAnimationInfo[this->unk_261], 0);
@@ -912,11 +912,11 @@ void DmChar00_Draw(Actor* thisx, PlayState* play2) {
     DmChar00* this = THIS;
     s32 phi_a0;
     s32 pad;
-    Gfx* gfx = GRAPH_ALLOC(play->state.gfxCtx, sizeof(Gfx) * 4);
+    Gfx* gfx = GRAPH_ALLOC(play->state.gfxCtx, 4 * sizeof(Gfx));
 
-    if ((play->csCtx.state == 0) && ((play->sceneNum != SCENE_OPENINGDAN) || (gSaveContext.sceneSetupIndex != 0) ||
-                                     (play->roomCtx.currRoom.num != 0) || (play->csCtx.currentCsIndex != 1) ||
-                                     (DMCHAR00_GET(&this->actor) != DMCHAR00_0))) {
+    if ((play->csCtx.state == 0) &&
+        ((play->sceneId != SCENE_OPENINGDAN) || (gSaveContext.sceneLayer != 0) || (play->roomCtx.curRoom.num != 0) ||
+         (play->csCtx.currentCsIndex != 1) || (DMCHAR00_GET(&this->actor) != DMCHAR00_0))) {
         return;
     }
 

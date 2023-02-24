@@ -85,7 +85,7 @@ static s16 sZeldaEffectColorTargetIndex = 0;
 static s16 sTextAlphaTargetIndex = 0;
 static s16 sTextAlphaTimer = 20;
 
-const ActorInit En_Mag_InitVars = {
+ActorInit En_Mag_InitVars = {
     ACTOR_EN_MAG,
     ACTORCAT_PROP,
     FLAGS,
@@ -135,7 +135,7 @@ void EnMag_Init(Actor* thisx, PlayState* play) {
     this->unk11F02 = 30;
     this->unk11F00 = this->state = MAG_STATE_INITIAL;
 
-    if (gSaveContext.unk_3F1E != 0) {
+    if (gSaveContext.hudVisibilityForceButtonAlphasByStatus) {
         this->mainTitleAlpha = 210;
         this->unk11F32 = 255;
         this->copyrightAlpha = 255;
@@ -158,7 +158,7 @@ void EnMag_Init(Actor* thisx, PlayState* play) {
         this->displayEffectEnvColor[1] = 255;
         this->displayEffectEnvColor[2] = 155;
 
-        gSaveContext.unk_3F1E = 0;
+        gSaveContext.hudVisibilityForceButtonAlphasByStatus = false;
         this->state = MAG_STATE_FADE_IN_MASK;
         sInputDelayTimer = 20;
         gSaveContext.transFadeDuration = 1;
@@ -390,10 +390,10 @@ void EnMag_Update(Actor* thisx, PlayState* play) {
                                 play_sound(NA_SE_SY_PIECE_OF_HEART);
                                 gSaveContext.gameMode = 2; // Go to FileChoose
                                 play->transitionTrigger = TRANS_TRIGGER_START;
-                                play->transitionType = TRANS_TYPE_02;
+                                play->transitionType = TRANS_TYPE_FADE_BLACK;
                                 play->nextEntrance = ENTRANCE(CUTSCENE, 0);
                                 gSaveContext.save.cutscene = 0;
-                                gSaveContext.sceneSetupIndex = 0;
+                                gSaveContext.sceneLayer = 0;
                             }
                             this->unk11F54 = 15;
                             this->unk11F56 = 25;

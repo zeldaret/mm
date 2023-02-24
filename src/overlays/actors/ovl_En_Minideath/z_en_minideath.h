@@ -13,6 +13,4 @@ typedef struct EnMinideath {
     /* 0x148 */ char unk_148[0x164];
 } EnMinideath; // size = 0x2AC
 
-extern const ActorInit En_Minideath_InitVars;
-
 #endif // Z_EN_MINIDEATH_H

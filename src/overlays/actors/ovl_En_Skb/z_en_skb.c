@@ -145,7 +145,7 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(1, 0xF),
 };
 
-const ActorInit En_Skb_InitVars = {
+ActorInit En_Skb_InitVars = {
     ACTOR_EN_SKB,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -230,7 +230,7 @@ void EnSkb_Init(Actor* thisx, PlayState* play) {
     this->unk_3D6 = ENSKB_GET_F0(&this->actor);
     this->actor.floorHeight = this->actor.world.pos.y;
 
-    if ((play->sceneNum == SCENE_BOTI) && (gSaveContext.sceneSetupIndex == 1) && (play->csCtx.currentCsIndex == 0)) {
+    if ((play->sceneId == SCENE_BOTI) && (gSaveContext.sceneLayer == 1) && (play->csCtx.currentCsIndex == 0)) {
         this->actor.flags |= ACTOR_FLAG_100000;
     }
 
@@ -555,7 +555,7 @@ void func_8099599C(EnSkb* this, PlayState* play) {
     Math_ApproachF(&this->actor.shape.shadowScale, 0.0f, 1.0f, 2.5f);
 
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -800,14 +800,14 @@ void func_80996474(EnSkb* this) {
 
 void func_809964A0(EnSkb* this, PlayState* play) {
     if (this->unk_3D0++ >= 19) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
 void func_809964DC(EnSkb* this, PlayState* play) {
     if (this->unk_3D6 == 0) {
         if ((this->actionFunc != func_80994E94) && (this->actionFunc != func_80996284) &&
-            (this->actionFunc != func_809964A0) && (gSaveContext.save.weekEventReg[85] & 0x40)) {
+            (this->actionFunc != func_809964A0) && CHECK_WEEKEVENTREG(WEEKEVENTREG_85_40)) {
             this->actor.colChkInfo.health = 0;
             func_809961E4(this, play);
         }

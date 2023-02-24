@@ -19,9 +19,9 @@ void DmAn_Update(Actor* thisx, PlayState* play);
 void func_80C1C958(DmAn* this, PlayState* play);
 void func_80C1CAB0(DmAn* this, PlayState* play);
 void func_80C1CC80(DmAn* this, PlayState* play);
-void func_80C1D0B0(Actor* this, PlayState* play);
+void func_80C1D0B0(Actor* thisx, PlayState* play);
 
-const ActorInit Dm_An_InitVars = {
+ActorInit Dm_An_InitVars = {
     ACTOR_DM_AN,
     ACTORCAT_NPC,
     FLAGS,
@@ -183,7 +183,7 @@ void func_80C1C958(DmAn* this, PlayState* play) {
         this->unk_2AE |= 1;
         this->actor.draw = func_80C1D0B0;
 
-        if ((play->sceneNum == SCENE_YADOYA) && (play->curSpawn == 4)) {
+        if ((play->sceneId == SCENE_YADOYA) && (play->curSpawn == 4)) {
             this->unk_2B4 = func_80C1C8E8(play);
             func_80C1C4D8(this, play, 1);
             this->actionFunc = func_80C1CC80;

@@ -1,7 +1,7 @@
 ﻿<Root>
     <!-- Object for the mannequin inside Anju's room which holds her wedding dress --> 
     <File Name="object_drs" Segment="6">
-        <Animation Name="gWeddingDressMannequinIdleAnim" Offset="0x1C" />
+        <Animation Name="gWeddingDressMannequinIdleAnim" Offset="0x1C" /> <!-- Original name is "drs_kihon" -->
         <DList Name="gWeddingDressMannequinDL" Offset="0x3120" />
         <DList Name="gWeddingDressMannequinPatternDL" Offset="0x3EA8" />
         <DList Name="gWeddingDressMannequinMaskDL" Offset="0x3F80" />

@@ -5,6 +5,7 @@
  */
 
 #include "z_bg_ikana_shutter.h"
+#include "z64quake.h"
 #include "objects/object_ikana_obj/object_ikana_obj.h"
 
 #define FLAGS (ACTOR_FLAG_10)
@@ -35,7 +36,7 @@ void func_80BD5BD8(BgIkanaShutter* this, PlayState* play);
 void BgIkanaShutter_SetupDoNothing(BgIkanaShutter* this);
 void BgIkanaShutter_DoNothing(BgIkanaShutter* this, PlayState* play);
 
-const ActorInit Bg_Ikana_Shutter_InitVars = {
+ActorInit Bg_Ikana_Shutter_InitVars = {
     ACTOR_BG_IKANA_SHUTTER,
     ACTORCAT_SWITCH,
     FLAGS,
@@ -144,16 +145,17 @@ void func_80BD59F8(BgIkanaShutter* this) {
 
 void func_80BD5A18(BgIkanaShutter* this, PlayState* play) {
     s32 pad[2];
-    s16 quake;
+    s16 quakeIndex;
 
     this->dyna.actor.velocity.y += -5.0f;
     this->dyna.actor.velocity.y *= 0.978f;
     this->dyna.actor.world.pos.y += this->dyna.actor.velocity.y;
     if (this->dyna.actor.world.pos.y <= this->dyna.actor.home.pos.y) {
-        quake = Quake_Add(GET_ACTIVE_CAM(play), 3);
-        Quake_SetSpeed(quake, 0x5420);
-        Quake_SetQuakeValues(quake, 4, 0, 0, 0);
-        Quake_SetCountdown(quake, 12);
+        quakeIndex = Quake_Add(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
+        Quake_SetSpeed(quakeIndex, 21536);
+        Quake_SetQuakeValues(quakeIndex, 4, 0, 0, 0);
+        Quake_SetCountdown(quakeIndex, 12);
+
         func_80BD5828(this);
     }
 }

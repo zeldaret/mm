@@ -41,6 +41,4 @@ typedef struct EnTrt2 {
     /* 0x3DA */ s16 unk_3DA;
 } EnTrt2; // size = 0x3DC
 
-extern const ActorInit En_Trt2_InitVars;
-
 #endif // Z_EN_TRT2_H

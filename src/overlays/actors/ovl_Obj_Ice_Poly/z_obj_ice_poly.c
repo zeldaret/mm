@@ -22,7 +22,7 @@ void func_80931A38(ObjIcePoly* this, PlayState* play);
 void func_80931E58(ObjIcePoly* this, PlayState* play);
 void func_80931EEC(ObjIcePoly* this, PlayState* play);
 
-const ActorInit Obj_Ice_Poly_InitVars = {
+ActorInit Obj_Ice_Poly_InitVars = {
     ACTOR_OBJ_ICE_POLY,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -116,8 +116,8 @@ void ObjIcePoly_Init(Actor* thisx, PlayState* play) {
     thisx->shape.rot.z = -0x500;
 
     if (((this->unk_149 != OBJICEPOLY_FF_FF) && Flags_GetSwitch(play, this->unk_149)) ||
-        ((play->sceneNum == SCENE_KAJIYA) && (gSaveContext.save.weekEventReg[33] & 0x80))) {
-        Actor_MarkForDeath(thisx);
+        ((play->sceneId == SCENE_KAJIYA) && CHECK_WEEKEVENTREG(WEEKEVENTREG_33_80))) {
+        Actor_Kill(thisx);
         return;
     }
 
@@ -178,7 +178,7 @@ void func_80931A38(ObjIcePoly* this, PlayState* play) {
     s32 pad3;
     f32 sp58;
 
-    if (!(player->stateFlags2 & 0x4000) && (this->unk_14A != 0)) {
+    if (!(player->stateFlags2 & PLAYER_STATE2_4000) && (this->unk_14A != 0)) {
         this->unk_14A--;
     }
 
@@ -205,7 +205,7 @@ void func_80931A38(ObjIcePoly* this, PlayState* play) {
         this->actionFunc = func_80931E58;
         this->actor.focus.rot.y = this->actor.yawTowardsPlayer;
 
-        if (play->sceneNum == SCENE_00KEIKOKU) {
+        if (play->sceneId == SCENE_00KEIKOKU) {
             Actor* actor = NULL;
 
             do {
@@ -269,12 +269,13 @@ void func_80931E58(ObjIcePoly* this, PlayState* play) {
         ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
         if (this->unk_14A == 1) {
             func_80931828(this, play);
-            Actor_MarkForDeath(&this->actor);
-        } else {
-            this->unk_14A = 40;
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_ICE_MELT);
-            this->actionFunc = func_80931EEC;
+            Actor_Kill(&this->actor);
+            return;
         }
+
+        this->unk_14A = 40;
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_ICE_MELT);
+        this->actionFunc = func_80931EEC;
     } else {
         ActorCutscene_SetIntentToPlay(this->actor.cutscene);
     }
@@ -330,7 +331,7 @@ void func_80931EEC(ObjIcePoly* this, PlayState* play) {
         if (this->unk_149 != OBJICEPOLY_FF_FF) {
             Flags_SetSwitch(play, this->unk_149);
         }
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 

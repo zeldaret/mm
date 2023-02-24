@@ -30,7 +30,7 @@ void EnBigokuta_PlayDeathCutscene(EnBigokuta* this, PlayState* play);
 void EnBigokuta_SetupDeathEffects(EnBigokuta* this);
 void EnBigokuta_PlayDeathEffects(EnBigokuta* this, PlayState* play);
 
-const ActorInit En_Bigokuta_InitVars = {
+ActorInit En_Bigokuta_InitVars = {
     ACTOR_EN_BIGOKUTA,
     ACTORCAT_BOSS,
     FLAGS,
@@ -104,9 +104,9 @@ void EnBigokuta_Init(Actor* thisx, PlayState* play) {
     CollisionCheck_SetInfo(&this->picto.actor.colChkInfo, NULL, &sColChkInfoInit);
     this->cutscene = ActorCutscene_GetAdditionalCutscene(this->picto.actor.cutscene);
 
-    if (gSaveContext.save.weekEventReg[20] & 2 ||
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_20_02) ||
         ((this->picto.actor.params != 0xFF) && Flags_GetSwitch(play, this->picto.actor.params))) {
-        Actor_MarkForDeath(&this->picto.actor);
+        Actor_Kill(&this->picto.actor);
     } else {
         this->picto.actor.world.pos.y -= 99.0f;
         EnBigokuta_SetupIdle(this);
@@ -179,7 +179,7 @@ void EnBigokuta_ShootPlayer(EnBigokuta* this, PlayState* play) {
 }
 
 s32 EnBigokuta_ValidatePictograph(PlayState* play, Actor* thisx) {
-    return Snap_ValidatePictograph(play, thisx, PICTOGRAPH_BIG_OCTO, &thisx->focus.pos, &thisx->shape.rot, 280.0f,
+    return Snap_ValidatePictograph(play, thisx, PICTO_VALID_BIG_OCTO, &thisx->focus.pos, &thisx->shape.rot, 280.0f,
                                    1800.0f, -1);
 }
 
@@ -377,11 +377,11 @@ void EnBigokuta_PlayDeathCutscene(EnBigokuta* this, PlayState* play) {
     } else if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
         ActorCutscene_Start(this->cutscene, &this->picto.actor);
 
-        if (!(gSaveContext.eventInf[4] & 2) && !(gSaveContext.eventInf[3] & 0x20)) {
-            func_800B724C(play, &this->picto.actor, 7);
+        if (!CHECK_EVENTINF(EVENTINF_41) && !CHECK_EVENTINF(EVENTINF_35)) {
+            func_800B724C(play, &this->picto.actor, PLAYER_CSMODE_7);
         } else {
             player = GET_PLAYER(play);
-            player->stateFlags1 |= 0x20;
+            player->stateFlags1 |= PLAYER_STATE1_20;
         }
 
         if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
@@ -451,14 +451,14 @@ void EnBigokuta_PlayDeathEffects(EnBigokuta* this, PlayState* play) {
                 }
 
                 ActorCutscene_Stop(this->cutscene);
-                Actor_MarkForDeath(&this->picto.actor);
+                Actor_Kill(&this->picto.actor);
 
-                if (!(gSaveContext.eventInf[4] & 2) && !(gSaveContext.eventInf[3] & 0x20)) {
-                    func_800B724C(play, &this->picto.actor, 6);
+                if (!CHECK_EVENTINF(EVENTINF_41) && !CHECK_EVENTINF(EVENTINF_35)) {
+                    func_800B724C(play, &this->picto.actor, PLAYER_CSMODE_6);
                 } else {
                     Player* player = GET_PLAYER(play);
 
-                    player->stateFlags1 &= ~0x20;
+                    player->stateFlags1 &= ~PLAYER_STATE1_20;
                 }
             }
 
@@ -485,7 +485,7 @@ s32 EnBigokuta_IsNearSwampBoat(EnBigokuta* this, PlayState* play) {
 void EnBigokuta_CheckOneHitKill(EnBigokuta* this, PlayState* play) {
     if ((this->bodyCollider.base.acFlags & AC_ON) &&
         ((this->bodyCollider.base.acFlags & AC_HIT) ||
-         ((play->sceneNum == SCENE_20SICHITAI || play->sceneNum == SCENE_20SICHITAI2) &&
+         ((play->sceneId == SCENE_20SICHITAI || play->sceneId == SCENE_20SICHITAI2) &&
           EnBigokuta_IsNearSwampBoat(this, play)))) {
         Enemy_StartFinishingBlow(play, &this->picto.actor);
 
@@ -517,7 +517,7 @@ void EnBigokuta_Update(Actor* thisx, PlayState* play) {
     EnBigokuta* this = THIS;
 
     if (!EnBigokuta_IsInWater(this, play)) {
-        Actor_MarkForDeath(&this->picto.actor);
+        Actor_Kill(&this->picto.actor);
         return;
     }
 

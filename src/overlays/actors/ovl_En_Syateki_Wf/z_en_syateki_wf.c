@@ -13,22 +13,22 @@
 
 void EnSyatekiWf_Init(Actor* thisx, PlayState* play);
 void EnSyatekiWf_Destroy(Actor* thisx, PlayState* play);
-void EnSyatekiWf_Update(Actor* thisx, PlayState* play);
+void EnSyatekiWf_Update(Actor* thisx, PlayState* play2);
 void EnSyatekiWf_Draw(Actor* thisx, PlayState* play);
 
-void func_80A201CC(EnSyatekiWf* this);
-void func_80A20284(EnSyatekiWf* this, PlayState* play);
-void func_80A2030C(EnSyatekiWf* this);
-void func_80A20320(EnSyatekiWf* this, PlayState* play);
-void func_80A20378(EnSyatekiWf* this);
-void func_80A203DC(EnSyatekiWf* this, PlayState* play);
-void func_80A20670(EnSyatekiWf* this);
-void func_80A206DC(EnSyatekiWf* this, PlayState* play);
-void func_80A20710(EnSyatekiWf* this);
-void func_80A2075C(EnSyatekiWf* this, PlayState* play);
-void func_80A2079C(EnSyatekiWf* this);
-void func_80A20800(EnSyatekiWf* this, PlayState* play);
-void func_80A208F8(EnSyatekiWf* this, PlayState* play);
+void EnSyatekiWf_SetupWaitForSignal(EnSyatekiWf* this);
+void EnSyatekiWf_WaitForSignal(EnSyatekiWf* this, PlayState* play);
+void EnSyatekiWf_SetupWaitToMove(EnSyatekiWf* this);
+void EnSyatekiWf_WaitToMove(EnSyatekiWf* this, PlayState* play);
+void EnSyatekiWf_SetupRun(EnSyatekiWf* this);
+void EnSyatekiWf_Run(EnSyatekiWf* this, PlayState* play);
+void EnSyatekiWf_SetupJump(EnSyatekiWf* this);
+void EnSyatekiWf_Jump(EnSyatekiWf* this, PlayState* play);
+void EnSyatekiWf_SetupLand(EnSyatekiWf* this);
+void EnSyatekiWf_Land(EnSyatekiWf* this, PlayState* play);
+void EnSyatekiWf_SetupHowl(EnSyatekiWf* this);
+void EnSyatekiWf_Howl(EnSyatekiWf* this, PlayState* play);
+void EnSyatekiWf_Dead(EnSyatekiWf* this, PlayState* play);
 
 static ColliderJntSphElementInit sJntSphElementsInit[1] = {
     {
@@ -40,11 +40,11 @@ static ColliderJntSphElementInit sJntSphElementsInit[1] = {
             BUMP_ON,
             OCELEM_ON,
         },
-        { 17, { { 800, 0, 0 }, 25 }, 100 },
+        { WOLFOS_NORMAL_LIMB_HEAD, { { 800, 0, 0 }, 25 }, 100 },
     },
 };
 
-static ColliderCylinderInit sCylinderInit1 = {
+static ColliderCylinderInit sBodyCylinderInit = {
     {
         COLTYPE_HIT5,
         AT_NONE,
@@ -77,7 +77,7 @@ static ColliderJntSphInit sJntSphInit = {
     sJntSphElementsInit,
 };
 
-static ColliderCylinderInit sCylinderInit2 = {
+static ColliderCylinderInit sTailCylinderInit = {
     {
         COLTYPE_HIT5,
         AT_NONE,
@@ -97,11 +97,11 @@ static ColliderCylinderInit sCylinderInit2 = {
     { 15, 20, -15, { 0, 0, 0 } },
 };
 
-static Vec3f D_80A20EDC = { 0.0f, 20.0f, 0.0f };
+static Vec3f sVelocity = { 0.0f, 20.0f, 0.0f };
 
-static Vec3f D_80A20EE8 = { 0.0f, 0.0f, 0.0f };
+static Vec3f sAccel = { 0.0f, 0.0f, 0.0f };
 
-const ActorInit En_Syateki_Wf_InitVars = {
+ActorInit En_Syateki_Wf_InitVars = {
     ACTOR_EN_SYATEKI_WF,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -113,30 +113,29 @@ const ActorInit En_Syateki_Wf_InitVars = {
     (ActorFunc)EnSyatekiWf_Draw,
 };
 
+typedef enum {
+    /* 0 */ EN_SYATEKI_WF_ANIM_WAIT, // unused
+    /* 1 */ EN_SYATEKI_WF_ANIM_RUN,
+    /* 2 */ EN_SYATEKI_WF_ANIM_JUMP,
+    /* 3 */ EN_SYATEKI_WF_ANIM_LAND,
+    /* 4 */ EN_SYATEKI_WF_ANIM_BACKFLIP, // unused
+    /* 5 */ EN_SYATEKI_WF_ANIM_DAMAGED,
+    /* 6 */ EN_SYATEKI_WF_ANIM_REAR_UP_FALL_OVER,
+} EnSyatekiWfAnimation;
+
 static AnimationInfo sAnimationInfo[] = {
-    { &gWolfosWaitingAnim, 2.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -1.0f },
-    { &gWolfosRunningAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
-    { &gWolfosRunningAnim, 1.0f, 0.0f, 4.0f, ANIMMODE_ONCE, 1.0f },
-    { &gWolfosRunningAnim, 1.0f, 4.0f, 8.0f, ANIMMODE_ONCE, 1.0f },
-    { &gWolfosBackflippingAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
+    { &gWolfosWaitAnim, 2.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -1.0f },
+    { &gWolfosRunAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
+    { &gWolfosRunAnim, 1.0f, 0.0f, 4.0f, ANIMMODE_ONCE, 1.0f },
+    { &gWolfosRunAnim, 1.0f, 4.0f, 8.0f, ANIMMODE_ONCE, 1.0f },
+    { &gWolfosBackflipAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
     { &gWolfosDamagedAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 8.0f },
-    { &gWolfosRearingUpFallingOverAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
+    { &gWolfosRearUpFallOverAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
 };
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_F32(targetArrowOffset, 2000, ICHAIN_CONTINUE),
     ICHAIN_F32_DIV1000(gravity, -2000, ICHAIN_STOP),
-};
-
-static Vec3f D_80A20FC4 = { 0.0f, 0.5f, 0.0f };
-
-static Vec3f D_80A20FD0 = { 1200.0f, 0.0f, 0.0f };
-
-static TexturePtr sEyeTextures[] = {
-    gWolfosNormalEyeOpenTex,
-    gWolfosNormalEyeHalfTex,
-    gWolfosNormalEyeNarrowTex,
-    gWolfosNormalEyeHalfTex,
 };
 
 void EnSyatekiWf_Init(Actor* thisx, PlayState* play) {
@@ -151,21 +150,21 @@ void EnSyatekiWf_Init(Actor* thisx, PlayState* play) {
         path = &play->setupPathList[path->unk1];
     }
 
-    for (i = 0; i < EN_SYATEKI_WF_GET_NUMBER(&this->actor); i++) {
+    for (i = 0; i < EN_SYATEKI_WF_GET_INDEX(&this->actor); i++) {
         path = &play->setupPathList[path->unk1];
     }
 
     if (path == NULL) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
-    this->unk_2A0 = Lib_SegmentedToVirtual(path->points);
-    this->unk_2A4 = 1;
-    this->unk_2A6 = path->count;
+    this->pathPoints = Lib_SegmentedToVirtual(path->points);
+    this->currentPointIndex = 1;
+    this->maxPointIndex = path->count;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    this->unk_29C = 0;
+    this->waitTimer = 0;
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 0.0f);
     this->actor.focus.pos = this->actor.world.pos;
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
@@ -175,45 +174,46 @@ void EnSyatekiWf_Init(Actor* thisx, PlayState* play) {
     this->eyeIndex = 0;
     this->unk_2AC = 10.0f;
 
-    Collider_InitCylinder(play, &this->unk_2B4);
-    Collider_SetCylinder(play, &this->unk_2B4, &this->actor, &sCylinderInit1);
-    Collider_InitCylinder(play, &this->unk_300);
-    Collider_SetCylinder(play, &this->unk_300, &this->actor, &sCylinderInit2);
-    Collider_InitJntSph(play, &this->unk_34C);
-    Collider_SetJntSph(play, &this->unk_34C, &this->actor, &sJntSphInit, this->unk_36C);
-    this->unk_34C.elements->dim.worldSphere.radius = sJntSphInit.elements[0].dim.modelSphere.radius;
+    Collider_InitCylinder(play, &this->bodyCollider);
+    Collider_SetCylinder(play, &this->bodyCollider, &this->actor, &sBodyCylinderInit);
+    Collider_InitCylinder(play, &this->tailCollider);
+    Collider_SetCylinder(play, &this->tailCollider, &this->actor, &sTailCylinderInit);
+    Collider_InitJntSph(play, &this->headCollider);
+    Collider_SetJntSph(play, &this->headCollider, &this->actor, &sJntSphInit, this->headColliderElements);
+    this->headCollider.elements->dim.worldSphere.radius = sJntSphInit.elements[0].dim.modelSphere.radius;
 
-    SkelAnime_InitFlex(play, &this->skelAnime, &gWolfosNormalSkel, &gWolfosWaitingAnim, this->jointTable,
-                       this->morphTable, WOLFOS_NORMAL_LIMB_MAX);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gWolfosNormalSkel, &gWolfosWaitAnim, this->jointTable, this->morphTable,
+                       WOLFOS_NORMAL_LIMB_MAX);
     Actor_SetScale(&this->actor, 0.01f);
     this->actor.hintId = TATL_HINT_ID_WOLFOS;
 
-    func_80A201CC(this);
+    EnSyatekiWf_SetupWaitForSignal(this);
 }
 
 void EnSyatekiWf_Destroy(Actor* thisx, PlayState* play) {
     EnSyatekiWf* this = THIS;
 
-    Collider_DestroyCylinder(play, &this->unk_2B4);
-    Collider_DestroyCylinder(play, &this->unk_300);
+    Collider_DestroyCylinder(play, &this->bodyCollider);
+    Collider_DestroyCylinder(play, &this->tailCollider);
 }
 
-void func_80A200E0(EnSyatekiWf* this) {
-    Vec3f sp24;
-    s16 temp;
+/**
+ * Positions the Wolfos at the start of its assigned path and rotates it to face
+ * the next point on the path.
+ */
+void EnSyatekiWf_InitPathStart(EnSyatekiWf* this) {
+    Vec3f targetPos;
 
-    this->actor.world.pos.x = this->unk_2A0[0].x;
-    this->actor.world.pos.y = this->unk_2A0[0].y;
-    this->actor.world.pos.z = this->unk_2A0[0].z;
-    sp24.x = this->unk_2A0[this->unk_2A4].x;
-    sp24.y = this->unk_2A0[this->unk_2A4].y;
-    sp24.z = this->unk_2A0[this->unk_2A4].z;
-    temp = Math_Vec3f_Yaw(&this->actor.world.pos, &sp24);
-    this->actor.shape.rot.y = temp;
-    this->actor.world.rot.y = temp;
+    this->actor.world.pos.x = this->pathPoints[0].x;
+    this->actor.world.pos.y = this->pathPoints[0].y;
+    this->actor.world.pos.z = this->pathPoints[0].z;
+    targetPos.x = this->pathPoints[this->currentPointIndex].x;
+    targetPos.y = this->pathPoints[this->currentPointIndex].y;
+    targetPos.z = this->pathPoints[this->currentPointIndex].z;
+    this->actor.world.rot.y = this->actor.shape.rot.y = Math_Vec3f_Yaw(&this->actor.world.pos, &targetPos);
 }
 
-void func_80A201CC(EnSyatekiWf* this) {
+void EnSyatekiWf_SetupWaitForSignal(EnSyatekiWf* this) {
     EnSyatekiMan* syatekiMan = (EnSyatekiMan*)this->actor.parent;
 
     this->actor.speedXZ = 0.0f;
@@ -222,67 +222,79 @@ void func_80A201CC(EnSyatekiWf* this) {
     this->actor.shape.rot = this->actor.world.rot;
     this->actor.colChkInfo.health = 2;
     this->actor.draw = NULL;
-    this->unk_2A4 = 1;
-    this->unk_298 = 0;
-    syatekiMan->wolfosFlags &= ~(1 << EN_SYATEKI_WF_GET_NUMBER(&this->actor));
-    this->actionFunc = func_80A20284;
+    this->currentPointIndex = 1;
+    this->isActive = false;
+    syatekiMan->wolfosFlags &= ~(1 << EN_SYATEKI_WF_GET_INDEX(&this->actor));
+    this->actionFunc = EnSyatekiWf_WaitForSignal;
 }
 
-void func_80A20284(EnSyatekiWf* this, PlayState* play) {
+/**
+ * Waits until the shooting gallery man sets the appropriate Wolfos flag.
+ */
+void EnSyatekiWf_WaitForSignal(EnSyatekiWf* this, PlayState* play) {
     EnSyatekiMan* syatekiMan;
 
     if (this->actor.parent != NULL) {
         syatekiMan = (EnSyatekiMan*)this->actor.parent;
-        if ((syatekiMan->shootingGameState == SG_GAME_STATE_RUNNING) && (this->unk_298 == 1)) {
-            func_80A200E0(this);
-            func_80A2030C(this);
-        } else if (syatekiMan->wolfosFlags & (1 << EN_SYATEKI_WF_GET_NUMBER(&this->actor))) {
-            this->unk_298 = 1;
+        if ((syatekiMan->shootingGameState == SG_GAME_STATE_RUNNING) && (this->isActive == true)) {
+            EnSyatekiWf_InitPathStart(this);
+            EnSyatekiWf_SetupWaitToMove(this);
+        } else if (syatekiMan->wolfosFlags & (1 << EN_SYATEKI_WF_GET_INDEX(&this->actor))) {
+            this->isActive = true;
         }
     }
 }
 
-void func_80A2030C(EnSyatekiWf* this) {
-    this->actionFunc = func_80A20320;
+void EnSyatekiWf_SetupWaitToMove(EnSyatekiWf* this) {
+    this->actionFunc = EnSyatekiWf_WaitToMove;
 }
 
-void func_80A20320(EnSyatekiWf* this, PlayState* play) {
-    if (this->unk_29C >= 11) {
+/**
+ * Waits 11 frames, then makes the Wolfos start running forward.
+ */
+void EnSyatekiWf_WaitToMove(EnSyatekiWf* this, PlayState* play) {
+    if (this->waitTimer >= 11) {
         Actor_PlaySfxAtPos(this->actor.parent, NA_SE_EN_WOLFOS_APPEAR);
-        this->unk_29C = 0;
-        func_80A20378(this);
+        this->waitTimer = 0;
+        EnSyatekiWf_SetupRun(this);
     } else {
-        this->unk_29C++;
+        this->waitTimer++;
     }
 }
 
-void func_80A20378(EnSyatekiWf* this) {
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 1);
+void EnSyatekiWf_SetupRun(EnSyatekiWf* this) {
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_SYATEKI_WF_ANIM_RUN);
     this->actor.speedXZ = 10.0f;
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->actor.draw = EnSyatekiWf_Draw;
-    this->actionFunc = func_80A203DC;
+    this->actionFunc = EnSyatekiWf_Run;
 }
 
-void func_80A203DC(EnSyatekiWf* this, PlayState* play) {
-    Vec3f sp54;
-    f32 sp50;
-    s16 temp_v0;
+/**
+ * Runs forward along its assigned path. If the Wolfos encounters a wall directly
+ * in front of it, this function will make it jump. If the Wolfos reaches a certain
+ * point along the path (which is specified via its params), this function will make
+ * it stop running and howl in place.
+ */
+void EnSyatekiWf_Run(EnSyatekiWf* this, PlayState* play) {
+    Vec3f targetPoint;
+    f32 distToTarget;
+    s16 wallYawDiff;
     EnSyatekiMan* syatekiMan = (EnSyatekiMan*)this->actor.parent;
 
     if (syatekiMan->shootingGameState != SG_GAME_STATE_RUNNING) {
-        func_80A201CC(this);
+        EnSyatekiWf_SetupWaitForSignal(this);
     }
 
-    sp54.x = this->unk_2A0[this->unk_2A4].x;
-    sp54.y = this->unk_2A0[this->unk_2A4].y;
-    sp54.z = this->unk_2A0[this->unk_2A4].z;
-    temp_v0 = (this->actor.wallYaw - this->actor.world.rot.y) + 0x8000;
+    targetPoint.x = this->pathPoints[this->currentPointIndex].x;
+    targetPoint.y = this->pathPoints[this->currentPointIndex].y;
+    targetPoint.z = this->pathPoints[this->currentPointIndex].z;
+    wallYawDiff = (this->actor.wallYaw - this->actor.world.rot.y) + 0x8000;
 
     if (this->actor.bgCheckFlags & 1) {
         if (this->actor.bgCheckFlags & 8) {
-            if ((ABS(temp_v0) < 0x1555) && (this->actor.wallPoly != this->actor.floorPoly)) {
-                func_80A20670(this);
+            if ((ABS(wallYawDiff) < 0x1555) && (this->actor.wallPoly != this->actor.floorPoly)) {
+                EnSyatekiWf_SetupJump(this);
                 return;
             }
         }
@@ -291,13 +303,13 @@ void func_80A203DC(EnSyatekiWf* this, PlayState* play) {
             this->actor.velocity.y = 2.0f;
         }
 
-        sp50 = Math_Vec3f_DistXZ(&this->actor.world.pos, &sp54);
-        this->unk_2A8 = Math_Vec3f_Yaw(&this->actor.world.pos, &sp54);
+        distToTarget = Math_Vec3f_DistXZ(&this->actor.world.pos, &targetPoint);
+        this->yawTarget = Math_Vec3f_Yaw(&this->actor.world.pos, &targetPoint);
 
-        if (sp50 > 15.0f) {
-            Math_SmoothStepToS(&this->actor.world.rot.y, this->unk_2A8, 5, 0x3000, 0x100);
+        if (distToTarget > 15.0f) {
+            Math_SmoothStepToS(&this->actor.world.rot.y, this->yawTarget, 5, 0x3000, 0x100);
             this->actor.shape.rot.y = this->actor.world.rot.y;
-            if (sp50 < 50.0f) {
+            if (distToTarget < 50.0f) {
                 if (this->actor.speedXZ > 3.0f) {
                     this->actor.speedXZ = this->actor.speedXZ - 0.5f;
                 } else {
@@ -305,16 +317,16 @@ void func_80A203DC(EnSyatekiWf* this, PlayState* play) {
                 }
             }
         } else {
-            if (this->unk_2A4 < (this->unk_2A6 - 1)) {
-                if (this->unk_2A4 == EN_SYATEKI_WF_GET_PARAM_F0(&this->actor)) {
-                    func_80A2079C(this);
+            if (this->currentPointIndex < (this->maxPointIndex - 1)) {
+                if (this->currentPointIndex == EN_SYATEKI_WF_GET_POINT_TO_HOWL(&this->actor)) {
+                    EnSyatekiWf_SetupHowl(this);
                 }
 
-                this->unk_2A4++;
+                this->currentPointIndex++;
             } else {
-                this->unk_298 = 0;
-                this->unk_2A4 = 1;
-                func_80A201CC(this);
+                this->isActive = false;
+                this->currentPointIndex = 1;
+                EnSyatekiWf_SetupWaitForSignal(this);
             }
         }
 
@@ -324,76 +336,82 @@ void func_80A203DC(EnSyatekiWf* this, PlayState* play) {
     }
 }
 
-void func_80A20670(EnSyatekiWf* this) {
+void EnSyatekiWf_SetupJump(EnSyatekiWf* this) {
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_TEKU_JUMP);
     this->actor.velocity.y = 20.0f;
     this->actor.speedXZ = 5.0f;
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 2);
-    this->actionFunc = func_80A206DC;
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_SYATEKI_WF_ANIM_JUMP);
+    this->actionFunc = EnSyatekiWf_Jump;
 }
 
-void func_80A206DC(EnSyatekiWf* this, PlayState* play) {
+void EnSyatekiWf_Jump(EnSyatekiWf* this, PlayState* play) {
     if (this->actor.bgCheckFlags & 2) {
-        func_80A20710(this);
+        EnSyatekiWf_SetupLand(this);
     }
 }
 
-void func_80A20710(EnSyatekiWf* this) {
+void EnSyatekiWf_SetupLand(EnSyatekiWf* this) {
     this->actor.speedXZ = 0.0f;
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 3);
-    this->actionFunc = func_80A2075C;
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_SYATEKI_WF_ANIM_LAND);
+    this->actionFunc = EnSyatekiWf_Land;
 }
 
-void func_80A2075C(EnSyatekiWf* this, PlayState* play) {
+/**
+ * Freezes the Wolfos in place until its landing animation is complete, then makes it start running.
+ */
+void EnSyatekiWf_Land(EnSyatekiWf* this, PlayState* play) {
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-        func_80A20378(this);
+        EnSyatekiWf_SetupRun(this);
     }
 }
 
-void func_80A2079C(EnSyatekiWf* this) {
-    this->unk_29A = 40;
+void EnSyatekiWf_SetupHowl(EnSyatekiWf* this) {
+    this->timer = 40;
     this->actor.speedXZ = 0.0f;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_WOLFOS_APPEAR);
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 5);
-    this->actionFunc = func_80A20800;
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_SYATEKI_WF_ANIM_DAMAGED);
+    this->actionFunc = EnSyatekiWf_Howl;
 }
 
-void func_80A20800(EnSyatekiWf* this, PlayState* play) {
+/**
+ * Makes the Wolfos stand completely still until 40 frames after its damaged animation is complete.
+ */
+void EnSyatekiWf_Howl(EnSyatekiWf* this, PlayState* play) {
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-        this->unk_29A--;
-        if (this->unk_29A == 0) {
-            func_80A20378(this);
+        this->timer--;
+        if (this->timer == 0) {
+            EnSyatekiWf_SetupRun(this);
         }
     }
 }
 
-void func_80A20858(EnSyatekiWf* this, PlayState* play) {
+void EnSyatekiWf_SetupDead(EnSyatekiWf* this, PlayState* play) {
     EnSyatekiMan* syatekiMan = (EnSyatekiMan*)this->actor.parent;
 
-    this->unk_298 = 0;
+    this->isActive = false;
     this->actor.speedXZ = 0.0f;
-    EffectSsExtra_Spawn(play, &this->actor.world.pos, &D_80A20EDC, &D_80A20EE8, 5, 2);
+    EffectSsExtra_Spawn(play, &this->actor.world.pos, &sVelocity, &sAccel, 5, 2);
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_WOLFOS_DEAD);
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 6);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_SYATEKI_WF_ANIM_REAR_UP_FALL_OVER);
     syatekiMan->score += 100;
-    this->actionFunc = func_80A208F8;
+    this->actionFunc = EnSyatekiWf_Dead;
 }
 
-void func_80A208F8(EnSyatekiWf* this, PlayState* play) {
+void EnSyatekiWf_Dead(EnSyatekiWf* this, PlayState* play) {
     s32 pad;
 
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-        func_80A201CC(this);
+        EnSyatekiWf_SetupWaitForSignal(this);
     } else {
-        Vec3f sp68;
-        Vec3f sp5C = D_80A20FC4;
+        Vec3f firePos;
+        Vec3f sFireVelocityAndAccel = { 0.0f, 0.5f, 0.0f };
         s32 i;
 
         for (i = (s32)this->skelAnime.animLength - (s32)this->skelAnime.curFrame; i >= 0; i--) {
-            sp68.x = randPlusMinusPoint5Scaled(60.0f) + this->actor.world.pos.x;
-            sp68.z = randPlusMinusPoint5Scaled(60.0f) + this->actor.world.pos.z;
-            sp68.y = randPlusMinusPoint5Scaled(50.0f) + (this->actor.world.pos.y + 20.0f);
-            func_800B3030(play, &sp68, &sp5C, &sp5C, 0x64, 0, 2);
+            firePos.x = randPlusMinusPoint5Scaled(60.0f) + this->actor.world.pos.x;
+            firePos.z = randPlusMinusPoint5Scaled(60.0f) + this->actor.world.pos.z;
+            firePos.y = randPlusMinusPoint5Scaled(50.0f) + (this->actor.world.pos.y + 20.0f);
+            func_800B3030(play, &firePos, &sFireVelocityAndAccel, &sFireVelocityAndAccel, 100, 0, 2);
         }
     }
 }
@@ -402,7 +420,7 @@ void EnSyatekiWf_Update(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     EnSyatekiWf* this = THIS;
 
-    if (this->actionFunc != func_80A20284) {
+    if (this->actionFunc != EnSyatekiWf_WaitForSignal) {
         SkelAnime_Update(&this->skelAnime);
     }
 
@@ -417,26 +435,34 @@ void EnSyatekiWf_Update(Actor* thisx, PlayState* play2) {
         Math_SmoothStepToS(&this->actor.shape.rot.z, 0, 1, 0x3E8, 0);
     }
 
-    if ((this->unk_2B4.base.acFlags & AC_HIT) || (this->unk_300.base.acFlags & AC_HIT) ||
-        (this->unk_34C.base.acFlags & AC_HIT)) {
-        this->unk_2B4.base.acFlags &= ~AC_HIT;
-        this->unk_300.base.acFlags &= ~AC_HIT;
-        this->unk_34C.base.acFlags &= ~AC_HIT;
+    if ((this->bodyCollider.base.acFlags & AC_HIT) || (this->tailCollider.base.acFlags & AC_HIT) ||
+        (this->headCollider.base.acFlags & AC_HIT)) {
+        this->bodyCollider.base.acFlags &= ~AC_HIT;
+        this->tailCollider.base.acFlags &= ~AC_HIT;
+        this->headCollider.base.acFlags &= ~AC_HIT;
+
+        // The Wolfos always starts with 2 health, so the subtraction below is guaranteed to kill it;
+        // the else-block is never reached in practice. If you *could* damage the Wolfos without killing
+        // it, then the number "30" would appear every time you hit it, and the player's displayed score
+        // would increase by 30. However, the else-block doesn't increase the shooting gallery man's
+        // "score" variable, so it would become desynchronized from the displayed score. This could cause
+        // weird behavior, like not getting a free replay after finishing a game with 2000 or more points.
         this->actor.colChkInfo.health -= 2;
         if (this->actor.colChkInfo.health == 0) {
-            func_801A3098(NA_BGM_GET_ITEM | 0x900);
-            func_80A20858(this, play);
+            Audio_PlayFanfare(NA_BGM_GET_ITEM | 0x900);
+            EnSyatekiWf_SetupDead(this, play);
         } else {
             play_sound(NA_SE_SY_TRE_BOX_APPEAR);
-            EffectSsExtra_Spawn(play, &this->actor.world.pos, &D_80A20EDC, &D_80A20EE8, 3, 0);
+            EffectSsExtra_Spawn(play, &this->actor.world.pos, &sVelocity, &sAccel, 3, 0);
         }
     }
 
-    Collider_UpdateCylinder(&this->actor, &this->unk_2B4);
-    if ((this->actionFunc != func_80A20284) && (this->actionFunc != func_80A208F8) && (this->actor.draw != NULL)) {
-        CollisionCheck_SetAC(play, &play->colChkCtx, &this->unk_300.base);
-        CollisionCheck_SetAC(play, &play->colChkCtx, &this->unk_2B4.base);
-        CollisionCheck_SetAC(play, &play->colChkCtx, &this->unk_34C.base);
+    Collider_UpdateCylinder(&this->actor, &this->bodyCollider);
+    if ((this->actionFunc != EnSyatekiWf_WaitForSignal) && (this->actionFunc != EnSyatekiWf_Dead) &&
+        (this->actor.draw != NULL)) {
+        CollisionCheck_SetAC(play, &play->colChkCtx, &this->tailCollider.base);
+        CollisionCheck_SetAC(play, &play->colChkCtx, &this->bodyCollider.base);
+        CollisionCheck_SetAC(play, &play->colChkCtx, &this->headCollider.base);
         this->actor.focus.pos = this->actor.world.pos;
         this->actor.focus.pos.y += 25.0f;
     }
@@ -455,19 +481,26 @@ s32 EnSyatekiWf_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Ve
 }
 
 void EnSyatekiWf_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+    static Vec3f sTailColliderOffset = { 1200.0f, 0.0f, 0.0f };
     EnSyatekiWf* this = THIS;
-    Vec3f sp18;
+    Vec3f tailColliderPos;
 
-    Collider_UpdateSpheres(limbIndex, &this->unk_34C);
+    Collider_UpdateSpheres(limbIndex, &this->headCollider);
     if (limbIndex == WOLFOS_NORMAL_LIMB_TAIL) {
-        Matrix_MultVec3f(&D_80A20FD0, &sp18);
-        this->unk_300.dim.pos.x = sp18.x;
-        this->unk_300.dim.pos.y = sp18.y;
-        this->unk_300.dim.pos.z = sp18.z;
+        Matrix_MultVec3f(&sTailColliderOffset, &tailColliderPos);
+        this->tailCollider.dim.pos.x = tailColliderPos.x;
+        this->tailCollider.dim.pos.y = tailColliderPos.y;
+        this->tailCollider.dim.pos.z = tailColliderPos.z;
     }
 }
 
 void EnSyatekiWf_Draw(Actor* thisx, PlayState* play) {
+    static TexturePtr sEyeTextures[] = {
+        gWolfosNormalEyeOpenTex,
+        gWolfosNormalEyeHalfTex,
+        gWolfosNormalEyeNarrowTex,
+        gWolfosNormalEyeHalfTex,
+    };
     EnSyatekiWf* this = THIS;
 
     OPEN_DISPS(play->state.gfxCtx);

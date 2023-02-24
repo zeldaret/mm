@@ -16,7 +16,7 @@ void EnScopecoin_Destroy(Actor* thisx, PlayState* play);
 void EnScopecoin_Update(Actor* thisx, PlayState* play);
 void EnScopecoin_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit En_Scopecoin_InitVars = {
+ActorInit En_Scopecoin_InitVars = {
     ACTOR_EN_SCOPECOIN,
     ACTORCAT_NPC,
     FLAGS,
@@ -35,7 +35,7 @@ void EnScopecoin_Spin(EnScopecoin* this, PlayState* play) {
 void EnScopecoin_CheckCollectible(EnScopecoin* this, PlayState* play) {
     if (Flags_GetCollectible(play, OBJMUPICT_GET_RUPEE_FLAG(&this->actor))) {
         Item_DropCollectible(play, &this->actor.world.pos, ITEM00_RUPEE_RED);
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -53,7 +53,7 @@ void EnScopecoin_Init(Actor* thisx, PlayState* play) {
     if (play->actorCtx.flags & ACTORCTX_FLAG_1) {
         if ((this->rupeeIndex == 2) || (this->rupeeIndex == 6)) {
             if (Flags_GetCollectible(play, OBJMUPICT_GET_RUPEE_FLAG(&this->actor))) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
                 return;
             }
         }
@@ -62,13 +62,13 @@ void EnScopecoin_Init(Actor* thisx, PlayState* play) {
     } else {
         if ((this->rupeeIndex == 2) || (this->rupeeIndex == 6)) {
             if (Flags_GetCollectible(play, OBJMUPICT_GET_RUPEE_FLAG(&this->actor))) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
                 return;
             }
             this->actor.draw = NULL;
             this->actionFunc = EnScopecoin_CheckCollectible;
         } else {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     }
 }

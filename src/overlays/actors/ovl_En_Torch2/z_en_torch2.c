@@ -14,12 +14,12 @@
 void EnTorch2_Init(Actor* thisx, PlayState* play);
 void EnTorch2_Destroy(Actor* thisx, PlayState* play);
 void EnTorch2_Update(Actor* thisx, PlayState* play);
-void EnTorch2_Draw(Actor* thisx, PlayState* play);
+void EnTorch2_Draw(Actor* thisx, PlayState* play2);
 
 void EnTorch2_UpdateIdle(Actor* thisx, PlayState* play);
 void EnTorch2_UpdateDeath(Actor* thisx, PlayState* play);
 
-const ActorInit En_Torch2_InitVars = {
+ActorInit En_Torch2_InitVars = {
     ACTOR_EN_TORCH2,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -58,11 +58,7 @@ static InitChainEntry sInitChain[] = {
 // Shells for each of Link's different forms
 // (Playing elegy as Fierce Deity puts down a human shell)
 static Gfx* sShellDLists[] = {
-    gameplay_keep_DL_01C430, // Human
-    gameplay_keep_DL_048DF0, // Zora
-    gameplay_keep_DL_089070, // Deku
-    gameplay_keep_DL_057B10, // Goron
-    gameplay_keep_DL_01C430, // Human
+    gElegyShellHumanDL, gElegyShellGoronDL, gElegyShellZoraDL, gElegyShellDekuDL, gElegyShellHumanDL,
 };
 
 void EnTorch2_Init(Actor* thisx, PlayState* play) {
@@ -87,9 +83,9 @@ void EnTorch2_Destroy(Actor* thisx, PlayState* play) {
     EnTorch2* this = THIS;
 
     Collider_DestroyCylinder(play, &this->collider);
-    Play_SetRespawnData(&play->state, this->actor.params + RESPAWN_MODE_GORON - 1, 0xFF, 0, 0xBFF,
-                        &this->actor.world.pos, this->actor.shape.rot.y);
-    play->actorCtx.unk254[this->actor.params] = 0;
+    Play_SetRespawnData(&play->state, this->actor.params + RESPAWN_MODE_GORON - 1, 0xFF, 0,
+                        PLAYER_PARAMS(0xFF, PLAYER_INITMODE_B), &this->actor.world.pos, this->actor.shape.rot.y);
+    play->actorCtx.elegyShells[this->actor.params] = NULL;
 }
 
 void EnTorch2_Update(Actor* thisx, PlayState* play) {
@@ -153,17 +149,18 @@ void EnTorch2_UpdateDeath(Actor* thisx, PlayState* play) {
 
     // Fall down and become transparent, then delete once invisible
     if (Math_StepToS(&this->alpha, 0, 8)) {
-        Actor_MarkForDeath(&this->actor);
-    } else {
-        this->actor.gravity = -1.0f;
-        Actor_MoveWithGravity(&this->actor);
+        Actor_Kill(&this->actor);
+        return;
     }
+
+    this->actor.gravity = -1.0f;
+    Actor_MoveWithGravity(&this->actor);
 }
 
 void EnTorch2_Draw(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     EnTorch2* this = THIS;
-    Gfx* gfx = sShellDLists[thisx->params];
+    Gfx* gfx = sShellDLists[this->actor.params];
 
     OPEN_DISPS(play->state.gfxCtx);
     if (this->alpha == 0xFF) {

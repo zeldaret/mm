@@ -11,7 +11,7 @@
 
 #define THIS ((EnTest7*)thisx)
 
-void EnTest7_Init(Actor* thisx, PlayState* play);
+void EnTest7_Init(Actor* thisx, PlayState* play2);
 void EnTest7_Destroy(Actor* thisx, PlayState* play);
 void EnTest7_Update(Actor* thisx, PlayState* play);
 void EnTest7_Draw(Actor* thisx, PlayState* play);
@@ -34,7 +34,7 @@ void func_80AF2EC8(EnTest7* this, PlayState* play);
 void func_80AF2F98(EnTest7* this, PlayState* play);
 void func_80AF30F4(EnTest7* this, PlayState* play);
 
-const ActorInit En_Test7_InitVars = {
+ActorInit En_Test7_InitVars = {
     ACTOR_EN_TEST7,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -409,16 +409,16 @@ void EnTest7_Init(Actor* thisx, PlayState* play2) {
     } else {
         func_80AF082C(this, func_80AF19A8);
         EnTest7_SetupAction(this, func_80AF2854);
-        func_801A2E54(NA_BGM_SONG_OF_SOARING);
+        Audio_PlayBgm_StorePrevBgm(NA_BGM_SONG_OF_SOARING);
     }
 
     if (play->playerActorCsIds[8] == -1) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
     ActorCutscene_SetIntentToPlay(play->playerActorCsIds[8]);
-    player2->stateFlags1 |= 0x20;
+    player2->stateFlags1 |= PLAYER_STATE1_20;
     Lights_PointNoGlowSetInfo(&this->lightInfo, (Math_SinS(this->unk_1E8E) * 90.0f) + player->actor.world.pos.x,
                               player->actor.world.pos.y + 10.0f,
                               (Math_CosS(this->unk_1E8E) * 90.0f) + player->actor.world.pos.z, 255, 255, 255, 255);
@@ -438,7 +438,7 @@ void func_80AF19A8(EnTest7* this, PlayState* play) {
     } else {
         ActorCutscene_Start(play->playerActorCsIds[8], NULL);
         func_80AF082C(this, func_80AF1A2C);
-        play->unk_18844 = 1;
+        play->unk_18844 = true;
     }
 }
 
@@ -461,7 +461,7 @@ void func_80AF1A2C(EnTest7* this, PlayState* play) {
         func_80AF082C(this, func_80AF1CA0);
         this->unk_144 |= 0x20;
         Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_PL_WARP_WING_OPEN);
-        func_8016566C(0x78);
+        Play_EnableMotionBlur(120);
     }
 }
 
@@ -594,15 +594,15 @@ void func_80AF2030(EnTest7* this, PlayState* play) {
     subCam->fov = ((subCam->fov - this->subCamFov) * sp1C) + this->subCamFov;
 
     if (this->unk_1E54 >= 100) {
-        MREG(64) = 1;
-        MREG(65) = 255;
-        MREG(66) = 255;
-        MREG(67) = 255;
-        MREG(68) = 255;
-        play->unk_18844 = 0;
+        R_PLAY_FILL_SCREEN_ON = true;
+        R_PLAY_FILL_SCREEN_R = 255;
+        R_PLAY_FILL_SCREEN_G = 255;
+        R_PLAY_FILL_SCREEN_B = 255;
+        R_PLAY_FILL_SCREEN_ALPHA = 255;
+        play->unk_18844 = false;
         this->unk_144 &= ~4;
         func_80AF082C(this, func_80AF21E8);
-        func_80165690();
+        Play_DisableMotionBlur();
     }
 }
 
@@ -612,13 +612,13 @@ void func_80AF21E8(EnTest7* this, PlayState* play) {
     Color_RGB8 sp24 = { 64, 0, 0 };
     Color_RGB8 sp20 = { 220, 220, 255 };
 
-    if (MREG(64) != 0) {
+    if (R_PLAY_FILL_SCREEN_ON) {
         Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_PL_WARP_WING_VANISH);
-        MREG(64) = 0;
-        MREG(65) = 0;
-        MREG(66) = 0;
-        MREG(67) = 0;
-        MREG(68) = 0;
+        R_PLAY_FILL_SCREEN_ON = false;
+        R_PLAY_FILL_SCREEN_R = 0;
+        R_PLAY_FILL_SCREEN_G = 0;
+        R_PLAY_FILL_SCREEN_B = 0;
+        R_PLAY_FILL_SCREEN_ALPHA = 0;
     }
 
     sp1C = 1.0f - (sp2C / 10.0f);
@@ -658,7 +658,7 @@ void func_80AF2350(EnTest7* this, PlayState* play) {
 
     this->unk_148.unk_10 -= 0x2EE0;
 
-    if (play->sceneNum == SCENE_SECOM) {
+    if (play->sceneId == SCENE_SECOM) {
         play->nextEntrance = ENTRANCE(IKANA_CANYON, 6);
     } else if (ENTEST7_GET(&this->actor) == ENTEST7_26) {
         func_80169F78(&play->state);
@@ -667,18 +667,18 @@ void func_80AF2350(EnTest7* this, PlayState* play) {
         gSaveContext.respawnFlag = -6;
     } else {
         play->nextEntrance = D_80AF343C[ENTEST7_GET(&this->actor) - ENTEST7_1C];
-        if ((play->nextEntrance == ENTRANCE(SOUTHERN_SWAMP_POISONED, 10)) && (gSaveContext.save.weekEventReg[20] & 2)) {
+        if ((play->nextEntrance == ENTRANCE(SOUTHERN_SWAMP_POISONED, 10)) && CHECK_WEEKEVENTREG(WEEKEVENTREG_20_02)) {
             play->nextEntrance = ENTRANCE(SOUTHERN_SWAMP_CLEARED, 10);
         } else if ((play->nextEntrance == ENTRANCE(MOUNTAIN_VILLAGE_WINTER, 8)) &&
-                   (gSaveContext.save.weekEventReg[33] & 0x80)) {
+                   CHECK_WEEKEVENTREG(WEEKEVENTREG_33_80)) {
             play->nextEntrance = ENTRANCE(MOUNTAIN_VILLAGE_SPRING, 8);
         }
     }
 
     play->transitionTrigger = TRANS_TRIGGER_START;
-    play->transitionType = TRANS_TYPE_02;
-    gSaveContext.seqIndex = 0xFF;
-    gSaveContext.nightSeqIndex = 0xFF;
+    play->transitionType = TRANS_TYPE_FADE_BLACK;
+    gSaveContext.seqId = (u8)NA_BGM_DISABLED;
+    gSaveContext.ambienceId = AMBIENCE_ID_DISABLED;
 }
 
 void func_80AF24D8(EnTest7* this, PlayState* play, f32 arg2) {
@@ -759,10 +759,10 @@ void func_80AF2938(EnTest7* this, PlayState* play) {
 
     this->unk_1E98 = player->actor.draw;
     player->actor.draw = NULL;
-    player->stateFlags2 |= 0x20000000;
+    player->stateFlags2 |= PLAYER_STATE2_20000000;
     this->unk_144 |= 2;
     this->unk_148.unk_04 = 30.0f;
-    if (play->roomCtx.currRoom.unk3 != 1) {
+    if (play->roomCtx.curRoom.unk3 != 1) {
         func_80AF082C(this, func_80AF2AE8);
     } else {
         func_80AF082C(this, func_80AF2EC8);
@@ -911,7 +911,7 @@ void func_80AF2F98(EnTest7* this, PlayState* play) {
         this->unk_148.unk_00 = this->unk_148.unk_04;
         this->unk_148.unk_08 = ((this->unk_148.unk_04 * -0.29999998f) / 11.0f) + 0.7f;
         this->unk_148.unk_0C = ((this->unk_148.unk_04 * -0.29999998f) / 11.0f) + 0.7f;
-        player->stateFlags2 &= ~0x20000000;
+        player->stateFlags2 &= ~PLAYER_STATE2_20000000;
     }
 }
 
@@ -919,9 +919,9 @@ void func_80AF30F4(EnTest7* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (this->unk_1E54 > 90) {
-        player->stateFlags1 &= ~0x20;
-        player->stateFlags1 &= ~0x20000000;
-        Actor_MarkForDeath(&this->actor);
+        player->stateFlags1 &= ~PLAYER_STATE1_20;
+        player->stateFlags1 &= ~PLAYER_STATE1_20000000;
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -957,7 +957,7 @@ void EnTest7_Draw(Actor* thisx, PlayState* play) {
     s32 sp40;
 
     if (this->unk_144 & 1) {
-        Mtx* mtx = GRAPH_ALLOC(play->state.gfxCtx, ALIGN16(sizeof(Mtx) * this->unk_18CC.unk_18->unk_1));
+        Mtx* mtx = GRAPH_ALLOC(play->state.gfxCtx, this->unk_18CC.unk_18->unk_1 * sizeof(Mtx));
 
         if (mtx != NULL) {
             func_8018450C(play, &this->unk_18CC, mtx, func_80AF31D0, NULL, &this->actor);

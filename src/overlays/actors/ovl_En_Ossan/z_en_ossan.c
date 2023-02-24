@@ -92,7 +92,7 @@ typedef enum {
     /* 12 */ ANI_ANIM_MAX
 } AniAnimation;
 
-const ActorInit En_Ossan_InitVars = {
+ActorInit En_Ossan_InitVars = {
     ACTOR_EN_OSSAN,
     ACTORCAT_NPC,
     FLAGS,
@@ -212,19 +212,19 @@ void EnOssan_CheckValidSpawn(EnOssan* this) {
         case 2:
             if (gSaveContext.save.time <= CLOCK_TIME(21, 30) && gSaveContext.save.time > CLOCK_TIME(6, 00)) {
                 if (this->actor.params != ENOSSAN_CURIOSITY_SHOP_MAN) {
-                    Actor_MarkForDeath(&this->actor);
+                    Actor_Kill(&this->actor);
                 }
             } else if (this->actor.params == ENOSSAN_CURIOSITY_SHOP_MAN) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
             }
             break;
         case 3:
             if (this->actor.params == ENOSSAN_CURIOSITY_SHOP_MAN) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
             }
             if (!(gSaveContext.save.time <= CLOCK_TIME(22, 00) && gSaveContext.save.time >= CLOCK_TIME(6, 00))) {
                 if (this->actor.params != ENOSSAN_CURIOSITY_SHOP_MAN) {
-                    Actor_MarkForDeath(&this->actor);
+                    Actor_Kill(&this->actor);
                 }
             }
             break;
@@ -266,14 +266,14 @@ void EnOssan_Init(Actor* thisx, PlayState* play) {
     s16 id;
 
     //! @bug Condition is impossible, params cannot be both greater then 1 AND less then 0.
-    if (this->actor.params > ENOSSAN_PART_TIME_WORKER && this->actor.params < ENOSSAN_CURIOSITY_SHOP_MAN) {
-        Actor_MarkForDeath(&this->actor);
+    if ((this->actor.params > ENOSSAN_PART_TIME_WORKER) && (this->actor.params < ENOSSAN_CURIOSITY_SHOP_MAN)) {
+        Actor_Kill(&this->actor);
         return;
     }
     id = sObjectIds[this->actor.params];
     this->objIndex = Object_GetIndex(&play->objectCtx, id);
     if (this->objIndex < 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
     EnOssan_CheckValidSpawn(this);
@@ -302,11 +302,11 @@ void EnOssan_EndInteraction(PlayState* play, EnOssan* this) {
     Actor_ProcessTalkRequest(&this->actor, &play->state);
     play->msgCtx.msgMode = 0x43;
     play->msgCtx.stateTimer = 4;
-    Interface_ChangeAlpha(50);
+    Interface_SetHudVisibility(HUD_VISIBILITY_ALL);
     this->drawCursor = 0;
     this->stickLeftPrompt.isEnabled = false;
     this->stickRightPrompt.isEnabled = false;
-    player->stateFlags2 &= ~0x20000000;
+    player->stateFlags2 &= ~PLAYER_STATE2_20000000;
     play->interfaceCtx.unk_222 = 0;
     play->interfaceCtx.unk_224 = 0;
     if (this->cutsceneState == ENOSSAN_CUTSCENESTATE_PLAYING) {
@@ -339,7 +339,7 @@ s32 EnOssan_TestCancelOption(EnOssan* this, PlayState* play, Input* input) {
 }
 
 void EnOssan_SetupStartShopping(PlayState* play, EnOssan* this, u8 skipHello) {
-    func_8011552C(play, 0x10);
+    func_8011552C(play, DO_ACTION_NEXT);
     if (!skipHello) {
         EnOssan_SetupAction(this, EnOssan_Hello);
     } else {
@@ -350,7 +350,7 @@ void EnOssan_SetupStartShopping(PlayState* play, EnOssan* this, u8 skipHello) {
 void EnOssan_StartShopping(PlayState* play, EnOssan* this) {
     EnOssan_SetupAction(this, EnOssan_FaceShopkeeper);
     func_80151938(play, 0x640);
-    func_8011552C(play, 6);
+    func_8011552C(play, DO_ACTION_DECIDE);
     this->stickRightPrompt.isEnabled = true;
     this->stickLeftPrompt.isEnabled = true;
 }
@@ -366,7 +366,7 @@ void EnOssan_Idle(EnOssan* this, PlayState* play) {
 
     SubS_FillLimbRotTables(play, this->limbRotTableY, this->limbRotTableZ, ARRAY_COUNT(this->limbRotTableY));
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-        player->stateFlags2 |= 0x20000000;
+        player->stateFlags2 |= PLAYER_STATE2_20000000;
         EnOssan_SetupAction(this, EnOssan_BeginInteraction);
         if (this->cutsceneState == ENOSSAN_CUTSCENESTATE_STOPPED) {
             if (ActorCutscene_GetCurrentIndex() == 0x7C) {
@@ -603,7 +603,7 @@ s32 EnOssan_FacingShopkeeperDialogResult(EnOssan* this, PlayState* play) {
             }
             EnOssan_SetupAction(this, EnOssan_TalkToShopkeeper);
             func_80151938(play, sTalkOptionTextIds[this->actor.params]);
-            func_8011552C(play, 6);
+            func_8011552C(play, DO_ACTION_DECIDE);
             this->stickLeftPrompt.isEnabled = false;
             this->stickRightPrompt.isEnabled = false;
             return true;
@@ -630,7 +630,7 @@ void EnOssan_FaceShopkeeper(EnOssan* this, PlayState* play) {
         this->cutsceneState = ENOSSAN_CUTSCENESTATE_WAITING;
     } else {
         if (talkState == TEXT_STATE_CHOICE) {
-            func_8011552C(play, 6);
+            func_8011552C(play, DO_ACTION_DECIDE);
             if (!EnOssan_TestEndInteraction(this, play, CONTROLLER1(&play->state)) &&
                 (!Message_ShouldAdvance(play) || !EnOssan_FacingShopkeeperDialogResult(this, play))) {
                 if (this->stickAccumX < 0) {
@@ -638,7 +638,7 @@ void EnOssan_FaceShopkeeper(EnOssan* this, PlayState* play) {
                     if (cursorIndex != CURSOR_INVALID) {
                         this->cursorIndex = cursorIndex;
                         EnOssan_SetupAction(this, EnOssan_LookToLeftShelf);
-                        func_8011552C(play, 6);
+                        func_8011552C(play, DO_ACTION_DECIDE);
                         this->stickLeftPrompt.isEnabled = false;
                         play_sound(NA_SE_SY_CURSOR);
                     }
@@ -647,7 +647,7 @@ void EnOssan_FaceShopkeeper(EnOssan* this, PlayState* play) {
                     if (cursorIndex != CURSOR_INVALID) {
                         this->cursorIndex = cursorIndex;
                         EnOssan_SetupAction(this, EnOssan_LookToRightShelf);
-                        func_8011552C(play, 6);
+                        func_8011552C(play, DO_ACTION_DECIDE);
                         this->stickRightPrompt.isEnabled = false;
                         play_sound(NA_SE_SY_CURSOR);
                     }
@@ -853,7 +853,7 @@ void EnOssan_BrowseLeftShelf(EnOssan* this, PlayState* play) {
         this->stickRightPrompt.isEnabled = true;
         EnOssan_UpdateCursorPos(play, this);
         if (talkState == TEXT_STATE_5) {
-            func_8011552C(play, 6);
+            func_8011552C(play, DO_ACTION_DECIDE);
             if (!EnOssan_HasPlayerSelectedItem(play, this, CONTROLLER1(&play->state))) {
                 if (this->moveHorizontal) {
                     if (this->stickAccumX > 0) {
@@ -911,7 +911,7 @@ void EnOssan_BrowseRightShelf(EnOssan* this, PlayState* play) {
         this->stickLeftPrompt.isEnabled = true;
         EnOssan_UpdateCursorPos(play, this);
         if (talkState == TEXT_STATE_5) {
-            func_8011552C(play, 6);
+            func_8011552C(play, DO_ACTION_DECIDE);
             if (!EnOssan_HasPlayerSelectedItem(play, this, CONTROLLER1(&play->state))) {
                 if (this->moveHorizontal != 0) {
                     if (this->stickAccumX < 0) {
@@ -984,8 +984,8 @@ void EnOssan_SetupBuyItemWithFanfare(PlayState* play, EnOssan* this) {
     Actor_PickUp(&this->actor, play, this->items[this->cursorIndex]->getItemId, 300.0f, 300.0f);
     play->msgCtx.msgMode = 0x43;
     play->msgCtx.stateTimer = 4;
-    player->stateFlags2 &= ~0x20000000;
-    Interface_ChangeAlpha(50);
+    player->stateFlags2 &= ~PLAYER_STATE2_20000000;
+    Interface_SetHudVisibility(HUD_VISIBILITY_ALL);
     this->drawCursor = 0;
     EnOssan_SetupAction(this, EnOssan_BuyItemWithFanfare);
 }
@@ -1052,7 +1052,7 @@ void EnOssan_SelectItem(EnOssan* this, PlayState* play) {
     u8 talkState = Message_GetState(&play->msgCtx);
 
     if (EnOssan_TakeItemOffShelf(this) && (talkState == TEXT_STATE_CHOICE)) {
-        func_8011552C(play, 6);
+        func_8011552C(play, DO_ACTION_DECIDE);
         if (!EnOssan_TestCancelOption(this, play, CONTROLLER1(&play->state)) && Message_ShouldAdvance(play)) {
             switch (play->msgCtx.choiceIndex) {
                 case 0:
@@ -1109,7 +1109,7 @@ void EnOssan_SetupItemPurchased(EnOssan* this, PlayState* play) {
             this->cutscene = this->lookToShopkeeperCutscene;
             ActorCutscene_SetIntentToPlay(this->cutscene);
         }
-        func_800B85E0(&this->actor, play, 400.0f, PLAYER_AP_MINUS1);
+        func_800B85E0(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
     }
 }
 
@@ -1119,7 +1119,7 @@ void EnOssan_ContinueShopping(EnOssan* this, PlayState* play) {
     EnGirlA* item;
 
     if (talkState == TEXT_STATE_CHOICE) {
-        func_8011552C(play, 6);
+        func_8011552C(play, DO_ACTION_DECIDE);
         if (Message_ShouldAdvance(play)) {
             EnOssan_ResetItemPosition(this);
             item = this->items[this->cursorIndex];
@@ -1129,10 +1129,10 @@ void EnOssan_ContinueShopping(EnOssan* this, PlayState* play) {
                     case 0:
                         func_8019F208();
                         player->actor.shape.rot.y = BINANG_ROT180(player->actor.shape.rot.y);
-                        player->stateFlags2 |= 0x20000000;
+                        player->stateFlags2 |= PLAYER_STATE2_20000000;
                         Message_StartTextbox(play, this->textId, &this->actor);
                         EnOssan_SetupStartShopping(play, this, true);
-                        func_800B85E0(&this->actor, play, 100.0f, PLAYER_AP_MINUS1);
+                        func_800B85E0(&this->actor, play, 100.0f, PLAYER_IA_MINUS1);
                         break;
                     case 1:
                     default:
@@ -1147,10 +1147,10 @@ void EnOssan_ContinueShopping(EnOssan* this, PlayState* play) {
         item = this->items[this->cursorIndex];
         item->restockFunc(play, item);
         player->actor.shape.rot.y = BINANG_ROT180(player->actor.shape.rot.y);
-        player->stateFlags2 |= 0x20000000;
+        player->stateFlags2 |= PLAYER_STATE2_20000000;
         Message_StartTextbox(play, this->textId, &this->actor);
         EnOssan_SetupStartShopping(play, this, true);
-        func_800B85E0(&this->actor, play, 100.0f, PLAYER_AP_MINUS1);
+        func_800B85E0(&this->actor, play, 100.0f, PLAYER_IA_MINUS1);
     }
 }
 
@@ -1160,7 +1160,7 @@ void EnOssan_ItemPurchased(EnOssan* this, PlayState* play) {
     if (this->cutsceneState == ENOSSAN_CUTSCENESTATE_STOPPED) {
         if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
             ActorCutscene_StartAndSetFlag(this->cutscene, &this->actor);
-            player->stateFlags2 |= 0x20000000;
+            player->stateFlags2 |= PLAYER_STATE2_20000000;
             EnOssan_SetupAction(this, EnOssan_ContinueShopping);
             this->cutsceneState = ENOSSAN_CUTSCENESTATE_PLAYING;
         } else {
@@ -1174,7 +1174,7 @@ void EnOssan_ItemPurchased(EnOssan* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         func_80151938(play, 0x642);
     } else {
-        func_800B85E0(&this->actor, play, 400.0f, PLAYER_AP_MINUS1);
+        func_800B85E0(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
     }
 }
 
@@ -1386,19 +1386,19 @@ u16 EnOssan_CuriosityShopMan_GetWelcome(EnOssan* this, PlayState* play) {
     switch (player->transformation) {
         case PLAYER_FORM_DEKU:
             this->animIndex = FSN_ANIM_SLAM_COUNTER_START;
-            if (gSaveContext.save.weekEventReg[18] & 0x10) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_18_10)) {
                 return sWelcomeDekuTextIds[ENOSSAN_CURIOSITY_SHOP_MAN];
             }
             return sWelcomeDekuFirstTimeTextIds[ENOSSAN_CURIOSITY_SHOP_MAN];
         case PLAYER_FORM_ZORA:
             this->animIndex = FSN_ANIM_LEAN_FORWARD_START;
-            if (gSaveContext.save.weekEventReg[18] & 8) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_18_08)) {
                 return sWelcomeZoraTextIds[ENOSSAN_CURIOSITY_SHOP_MAN];
             }
             return sWelcomeZoraFirstTimeTextIds[ENOSSAN_CURIOSITY_SHOP_MAN];
         case PLAYER_FORM_GORON:
             this->animIndex = FSN_ANIM_HAND_ON_FACE_START;
-            if (gSaveContext.save.weekEventReg[18] & 4) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_18_04)) {
                 return sWelcomeGoronTextIds[ENOSSAN_CURIOSITY_SHOP_MAN];
             }
             return sWelcomeGoronFirstTimeTextIds[ENOSSAN_CURIOSITY_SHOP_MAN];
@@ -1417,17 +1417,17 @@ u16 EnOssan_PartTimer_GetWelcome(EnOssan* this, PlayState* play) {
     }
     switch (player->transformation) {
         case PLAYER_FORM_DEKU:
-            if (gSaveContext.save.weekEventReg[55] & 0x10) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_55_10)) {
                 return sWelcomeDekuTextIds[ENOSSAN_PART_TIME_WORKER];
             }
             return sWelcomeDekuFirstTimeTextIds[ENOSSAN_PART_TIME_WORKER];
         case PLAYER_FORM_ZORA:
-            if (gSaveContext.save.weekEventReg[55] & 8) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_55_08)) {
                 return sWelcomeZoraTextIds[ENOSSAN_PART_TIME_WORKER];
             }
             return sWelcomeZoraFirstTimeTextIds[ENOSSAN_PART_TIME_WORKER];
         case PLAYER_FORM_GORON:
-            if (gSaveContext.save.weekEventReg[55] & 4) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_55_04)) {
                 return sWelcomeGoronTextIds[ENOSSAN_PART_TIME_WORKER];
             }
             return sWelcomeGoronFirstTimeTextIds[ENOSSAN_PART_TIME_WORKER];
@@ -1438,22 +1438,22 @@ u16 EnOssan_PartTimer_GetWelcome(EnOssan* this, PlayState* play) {
 void EnOssan_SetHaveMet(EnOssan* this) {
     switch (this->textId) {
         case 0x06A9:
-            gSaveContext.save.weekEventReg[18] |= 0x10;
+            SET_WEEKEVENTREG(WEEKEVENTREG_18_10);
             break;
         case 0x06C6:
-            gSaveContext.save.weekEventReg[55] |= 0x10;
+            SET_WEEKEVENTREG(WEEKEVENTREG_55_10);
             break;
         case 0x06A7:
-            gSaveContext.save.weekEventReg[18] |= 8;
+            SET_WEEKEVENTREG(WEEKEVENTREG_18_08);
             break;
         case 0x06C4:
-            gSaveContext.save.weekEventReg[55] |= 8;
+            SET_WEEKEVENTREG(WEEKEVENTREG_55_08);
             break;
         case 0x06A5:
-            gSaveContext.save.weekEventReg[18] |= 4;
+            SET_WEEKEVENTREG(WEEKEVENTREG_18_04);
             break;
         case 0x06C2:
-            gSaveContext.save.weekEventReg[55] |= 4;
+            SET_WEEKEVENTREG(WEEKEVENTREG_55_04);
             break;
     }
 }

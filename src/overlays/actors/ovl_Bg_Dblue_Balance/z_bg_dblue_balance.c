@@ -30,7 +30,7 @@ void func_80B83758(Actor* thisx, PlayState* play);
 AnimatedMaterial* D_80B83C70;
 AnimatedMaterial* D_80B83C74;
 
-const ActorInit Bg_Dblue_Balance_InitVars = {
+ActorInit Bg_Dblue_Balance_InitVars = {
     ACTOR_BG_DBLUE_BALANCE,
     ACTORCAT_BG,
     FLAGS,

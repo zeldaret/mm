@@ -1,4 +1,6 @@
 #include "global.h"
+#include "z64shrink_window.h"
+#include "z64view.h"
 #include "message_data_static.h"
 #include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
 
@@ -254,34 +256,33 @@ void func_8014CCB4(PlayState* play, s16* decodedBufPos, s32* offset, f32* arg3) 
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_8014D304.s")
 
-extern u16 D_801D0188[][9];
-extern s16 D_801D0250[];
+extern u16 D_801D0188[OWL_WARP_MAX][9];
+extern s16 D_801D0250[OWL_WARP_MAX];
 
 void func_8014D62C(PlayState* play, s32* arg1, f32* arg2, s16* arg3) {
     MessageContext* msgCtx = &play->msgCtx;
     PauseContext* pauseCtx = &play->pauseCtx;
-    s16 temp_s6;
+    s16 stringLimit;
     s16 temp_s1 = *arg3;
     s32 temp_s2 = *arg1;
     f32 sp3C = *arg2;
-    s16 phi_v0;
+    s16 owlWarpId;
     s16 phi_s0;
 
-    if ((func_8010A0A4(play) != 0) || (play->sceneNum == 0x4F)) {
-        phi_v0 = 0xA;
+    if (func_8010A0A4(play) || (play->sceneId == SCENE_SECOM)) {
+        owlWarpId = OWL_WARP_ENTRANCE;
     } else {
-        phi_v0 = pauseCtx->unk_238[PAUSE_WORLD_MAP];
+        owlWarpId = pauseCtx->cursorPoint[PAUSE_WORLD_MAP];
     }
+    stringLimit = D_801D0250[owlWarpId];
 
-    temp_s6 = D_801D0250[phi_v0];
-
-    for (phi_s0 = 0; phi_s0 < temp_s6; phi_s0++, temp_s1++, temp_s2 += 0x80) {
-        msgCtx->decodedBuffer.wchar[temp_s1] = D_801D0188[phi_v0][phi_s0];
-        Font_LoadChar(play, D_801D0188[phi_v0][phi_s0], temp_s2);
+    for (phi_s0 = 0; phi_s0 < stringLimit; phi_s0++, temp_s1++, temp_s2 += 0x80) {
+        msgCtx->decodedBuffer.wchar[temp_s1] = D_801D0188[owlWarpId][phi_s0];
+        Font_LoadChar(play, D_801D0188[owlWarpId][phi_s0], temp_s2);
     }
 
     temp_s1--;
-    sp3C += (temp_s6 - 1) * (16.0f * msgCtx->unk12098);
+    sp3C += (stringLimit - 1) * (16.0f * msgCtx->unk12098);
 
     *arg3 = temp_s1;
     *arg1 = temp_s2;
@@ -321,14 +322,14 @@ void func_80151938(PlayState* play, u16 textId) {
 
     if (interfaceCtx->unk_222 == 0) {
         if (textId != 0x1B93) {
-            func_8011552C(play, 0x10);
+            func_8011552C(play, DO_ACTION_NEXT);
         } else if (textId != 0xF8) {
-            func_8011552C(play, 6);
+            func_8011552C(play, DO_ACTION_DECIDE);
         }
     }
     msgCtx->unk1203C = msgCtx->unk1203A;
 
-    if (play->pauseCtx.unk_1F0 != 0) {
+    if (play->pauseCtx.bombersNotebookOpen) {
         msgCtx->unk12004 = 0x22;
         msgCtx->unk12006 = 0x15E;
         func_80149C18(play);
@@ -360,7 +361,7 @@ void func_80151A68(PlayState* play, u16 textId) {
         XREG(77) = 0x3C;
         XREG(76) = 0x1C;
         msgCtx->unk11F1A[0] = msgCtx->unk11F1A[1] = msgCtx->unk11F1A[2] = 0;
-        Interface_ChangeAlpha(1);
+        Interface_SetHudVisibility(HUD_VISIBILITY_NONE);
     }
 }
 
@@ -369,12 +370,12 @@ void func_80151BB4(PlayState* play, u8 arg1) {
     u8 temp = arg1;
 
     if (CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
-        if ((gSaveContext.save.weekEventReg[D_801C6B28[arg1] >> 8] & (u8)D_801C6B28[arg1]) == 0) {
+        if (!CHECK_WEEKEVENTREG(D_801C6B28[arg1])) {
             msgCtx->unk120B2[msgCtx->unk120B1] = temp;
             msgCtx->unk120B1++;
         }
     } else if (arg1 >= 20) {
-        if ((gSaveContext.save.weekEventReg[D_801C6B28[arg1] >> 8] & (u8)D_801C6B28[arg1]) == 0) {
+        if (!CHECK_WEEKEVENTREG(D_801C6B28[arg1])) {
             msgCtx->unk120B2[msgCtx->unk120B1] = temp;
             msgCtx->unk120B1++;
         }
@@ -390,11 +391,8 @@ u32 func_80151C9C(PlayState* play) {
         }
         msgCtx->unk120B1--;
 
-        if ((gSaveContext.save.weekEventReg[D_801C6B28[msgCtx->unk120B2[msgCtx->unk120B1]] >> 8] &
-             (u8)D_801C6B28[msgCtx->unk120B2[msgCtx->unk120B1]]) == 0) {
-            gSaveContext.save.weekEventReg[D_801C6B28[msgCtx->unk120B2[msgCtx->unk120B1]] >> 8] =
-                ((void)0, gSaveContext.save.weekEventReg[D_801C6B28[msgCtx->unk120B2[msgCtx->unk120B1]] >> 8]) |
-                (u8)D_801C6B28[msgCtx->unk120B2[msgCtx->unk120B1]];
+        if (!CHECK_WEEKEVENTREG(D_801C6B28[msgCtx->unk120B2[msgCtx->unk120B1]])) {
+            SET_WEEKEVENTREG(D_801C6B28[msgCtx->unk120B2[msgCtx->unk120B1]]);
 
             if ((D_801C6AB8[msgCtx->unk120B2[msgCtx->unk120B1]] != 0) && CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
                 func_80151938(play, D_801C6AB8[msgCtx->unk120B2[msgCtx->unk120B1]]);
@@ -489,7 +487,7 @@ u8 Message_GetState(MessageContext* msgCtx) {
 
 void func_80152C64(View* view) {
     SET_FULLSCREEN_VIEWPORT(view);
-    func_8013FBC8(view);
+    View_ApplyOrthoToOverlay(view);
 }
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80152CAC.s")
@@ -533,7 +531,7 @@ void func_80153E7C(PlayState* play, void* arg1) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_801541D4.s")
 
-void func_80156758(PlayState* play) {
+void Message_Draw(PlayState* play) {
     Gfx* nextDisplayList;
     Gfx* polyOpa;
     GraphicsContext* gfxCtx = play->state.gfxCtx;
@@ -553,7 +551,7 @@ void func_80156758(PlayState* play) {
     CLOSE_DISPS(gfxCtx);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_8015680C.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_message/Message_Update.s")
 
 void func_801586A4(PlayState* play) {
     play->msgCtx.messageEntryTableNes = D_801C6B98;

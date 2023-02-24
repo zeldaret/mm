@@ -13,7 +13,7 @@
 
 void EnIk_Init(Actor* thisx, PlayState* play);
 void EnIk_Destroy(Actor* thisx, PlayState* play);
-void EnIk_Update(Actor* thisx, PlayState* play);
+void EnIk_Update(Actor* thisx, PlayState* play2);
 void EnIk_Draw(Actor* thisx, PlayState* play);
 
 void EnIk_Thaw(EnIk* this, PlayState* play);
@@ -74,7 +74,7 @@ static Gfx* sIronKnuckleArmorType[3][3] = {
     { gIronKnuckleWhiteArmorMaterialDL, gIronKnuckleGoldArmorMaterialDL, gIronKnuckleGoldArmorMaterialDL },
 };
 
-const ActorInit En_Ik_InitVars = {
+ActorInit En_Ik_InitVars = {
     ACTOR_EN_IK,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -387,7 +387,7 @@ void EnIk_Idle(EnIk* this, PlayState* play) {
         }
     } else if (this->colliderCylinder.base.acFlags & AC_HIT) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_IRONNACK_ARMOR_HIT);
-        func_801A2E54(NA_BGM_MINI_BOSS);
+        Audio_PlayBgm_StorePrevBgm(NA_BGM_MINI_BOSS);
         this->actor.hintId = TATL_HINT_ID_IRON_KNUCKLE;
         this->colliderCylinder.base.acFlags &= ~AC_HIT;
         this->invincibilityFrames = 12;
@@ -694,7 +694,7 @@ void EnIk_Die(EnIk* this, PlayState* play) {
             if (this->timer == 0) {
                 Item_DropCollectibleRandom(play, &this->actor, &this->actor.world.pos, 0xB0);
                 ActorCutscene_Stop(this->actor.cutscene);
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
             }
         }
     } else if (Animation_OnFrame(&this->skelAnime, 23.0f)) {
@@ -786,7 +786,7 @@ void EnIk_UpdateDamage(EnIk* this, PlayState* play) {
                     isArmorBroken = true;
                 } else {
                     Enemy_StartFinishingBlow(play, &this->actor);
-                    func_801A2ED8();
+                    Audio_RestorePrevBgm();
                 }
             }
             if (isArmorBroken == true) {

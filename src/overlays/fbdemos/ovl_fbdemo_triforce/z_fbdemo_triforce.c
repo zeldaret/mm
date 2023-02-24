@@ -4,6 +4,7 @@
  * Description:
  */
 
+#include "global.h"
 #include "z_fbdemo_triforce.h"
 #include "assets/objects/object_fbdemo_triforce/ovl_fbdemo_triforce.c"
 
@@ -16,7 +17,7 @@ void TransitionTriforce_SetType(void* thisx, s32 type);
 void TransitionTriforce_SetColor(void* thisx, u32 color);
 s32 TransitionTriforce_IsDone(void* thisx);
 
-const TransitionInit TransitionTriforce_InitVars = {
+TransitionInit TransitionTriforce_InitVars = {
     TransitionTriforce_Init,   TransitionTriforce_Destroy, TransitionTriforce_Update,   TransitionTriforce_Draw,
     TransitionTriforce_Start,  TransitionTriforce_SetType, TransitionTriforce_SetColor, NULL,
     TransitionTriforce_IsDone,

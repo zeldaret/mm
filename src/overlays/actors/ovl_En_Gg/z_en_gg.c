@@ -8,7 +8,7 @@
 #include "objects/gameplay_keep/gameplay_keep.h"
 #include "objects/object_gg/object_gg.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_80)
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_REACT_TO_LENS)
 
 #define THIS ((EnGg*)thisx)
 
@@ -26,7 +26,7 @@ void func_80B359DC(EnGg* this, PlayState* play);
 void func_80B363E8(EnGgStruct* ptr, PlayState* play, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3);
 void func_80B364D4(EnGgStruct* ptr, PlayState* play);
 
-const ActorInit En_Gg_InitVars = {
+ActorInit En_Gg_InitVars = {
     ACTOR_EN_GG,
     ACTORCAT_NPC,
     FLAGS,
@@ -123,13 +123,13 @@ s32 func_80B34FB4(EnGg* this, PlayState* play) {
     s16 pitch;
 
     sp40 = player->actor.world.pos;
-    sp40.y = player->bodyPartsPos[7].y + 3.0f;
+    sp40.y = player->bodyPartsPos[PLAYER_BODYPART_HEAD].y + 3.0f;
     sp34 = this->actor.world.pos;
     sp34.y += 70.0f;
     pitch = Math_Vec3f_Pitch(&sp34, &sp40);
 
     if ((this->actor.xzDistToPlayer < 250.0f) && (this->actor.xzDistToPlayer > 50.0f) &&
-        (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_80) || (gSaveContext.save.weekEventReg[19] & 0x80))) {
+        (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_REACT_TO_LENS) || CHECK_WEEKEVENTREG(WEEKEVENTREG_19_80))) {
         Math_SmoothStepToS(&this->unk_2E8, pitch, 4, 0x2AA8, 1);
     } else {
         Math_SmoothStepToS(&this->unk_2E8, 0, 4, 0x2AA8, 1);
@@ -212,7 +212,7 @@ void func_80B352A4(EnGg* this, PlayState* play) {
                 Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 0);
                 break;
         }
-        gSaveContext.save.weekEventReg[19] |= 0x80;
+        SET_WEEKEVENTREG(WEEKEVENTREG_19_80);
         this->actionFunc = func_80B3556C;
     } else if ((this->unk_2E6 == 0) && ((this->actor.textId == 0xCED) || (this->actor.textId == 0xCEE))) {
         if (sp26 < (lastFrame - 1)) {
@@ -225,21 +225,21 @@ void func_80B352A4(EnGg* this, PlayState* play) {
 }
 
 void func_80B35450(EnGg* this, PlayState* play) {
-    if ((gSaveContext.save.weekEventReg[91] & 0x10) && (play->csCtx.state == 0)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_91_10) && (play->csCtx.state == 0)) {
         func_80B359DC(this, play);
     }
 
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-        if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_80)) {
+        if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_REACT_TO_LENS)) {
             Actor_DeactivateLens(play);
         }
         this->unk_308 = 1;
         this->actionFunc = func_80B352A4;
     } else if ((this->actor.xzDistToPlayer < 200.0f) && (this->actor.xzDistToPlayer > 50.0f)) {
-        if (gSaveContext.save.weekEventReg[19] & 0x80) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_19_80)) {
             func_800B863C(&this->actor, play);
             this->actor.textId = 0xCEE;
-        } else if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_80)) {
+        } else if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_REACT_TO_LENS)) {
             func_800B863C(&this->actor, play);
             this->actor.textId = 0xCE5;
         }
@@ -252,7 +252,7 @@ void func_80B3556C(EnGg* this, PlayState* play) {
             play->msgCtx.msgMode = 0x43;
             play->msgCtx.stateTimer = 4;
             this->unk_308 = 0;
-            this->actor.flags &= ~ACTOR_FLAG_80;
+            this->actor.flags &= ~ACTOR_FLAG_REACT_TO_LENS;
             func_80B35250(this);
         } else {
             this->actor.textId = func_80B357F0(this);
@@ -319,7 +319,7 @@ void func_80B35634(EnGg* this, PlayState* play) {
                     break;
 
                 case 8:
-                    Actor_MarkForDeath(&this->actor);
+                    Actor_Kill(&this->actor);
                     return;
 
                 default:
@@ -390,18 +390,18 @@ void func_80B359DC(EnGg* this, PlayState* play) {
 
     if (this->actor.xzDistToPlayer < 200.0f) {
         if (this->unk_306 == 0) {
-            if (player->stateFlags2 & 0x8000000) {
+            if (player->stateFlags2 & PLAYER_STATE2_8000000) {
                 this->unk_306 = 1;
                 play_sound(NA_SE_SY_TRE_BOX_APPEAR);
             }
-        } else if (!(player->stateFlags2 & 0x8000000)) {
+        } else if (!(player->stateFlags2 & PLAYER_STATE2_8000000)) {
             this->unk_306 = 0;
         }
 
         if ((player->transformation == PLAYER_FORM_HUMAN) && (play->msgCtx.ocarinaMode == 3) &&
             (play->msgCtx.lastPlayedSong == OCARINA_SONG_HEALING)) {
-            if (!(gSaveContext.save.weekEventReg[19] & 0x80)) {
-                gSaveContext.save.weekEventReg[19] |= 0x80;
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_19_80)) {
+                SET_WEEKEVENTREG(WEEKEVENTREG_19_80);
             }
             this->unk_307 = true;
         }
@@ -530,7 +530,7 @@ void func_80B35C84(EnGgStruct* ptr, PlayState* play) {
         Matrix_Mult(&play->billboardMtxF, MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_XLU_DISP++, gOwlStatueWhiteFlashDL);
+        gSPDisplayList(POLY_XLU_DISP++, gEffFlash1DL);
     }
 
     Matrix_Pop();
@@ -554,7 +554,7 @@ void func_80B35C84(EnGgStruct* ptr, PlayState* play) {
         Matrix_Mult(&play->billboardMtxF, MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_XLU_DISP++, gOwlStatueWhiteFlashDL);
+        gSPDisplayList(POLY_XLU_DISP++, gEffFlash1DL);
     }
 
     Matrix_Pop();
@@ -607,7 +607,7 @@ void func_80B3610C(EnGgStruct* ptr, PlayState* play) {
             Matrix_Mult(&play->billboardMtxF, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, gOwlStatueWhiteFlashDL);
+            gSPDisplayList(POLY_XLU_DISP++, gEffFlash1DL);
         }
 
         Matrix_Pop();
@@ -647,7 +647,7 @@ void EnGg_Init(Actor* thisx, PlayState* play) {
     EnGg* this = THIS;
 
     if (INV_CONTENT(ITEM_MASK_GORON) == ITEM_MASK_GORON) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -660,10 +660,10 @@ void EnGg_Init(Actor* thisx, PlayState* play) {
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
 
-    gSaveContext.save.weekEventReg[20] &= (u8)~4;
-    gSaveContext.save.weekEventReg[20] &= (u8)~8;
-    gSaveContext.save.weekEventReg[20] &= (u8)~0x10;
-    this->actor.flags &= ~ACTOR_FLAG_80;
+    CLEAR_WEEKEVENTREG(WEEKEVENTREG_20_04);
+    CLEAR_WEEKEVENTREG(WEEKEVENTREG_20_08);
+    CLEAR_WEEKEVENTREG(WEEKEVENTREG_20_10);
+    this->actor.flags &= ~ACTOR_FLAG_REACT_TO_LENS;
     this->unk_310 = this->actor.home.pos.y;
     this->unk_2DC = this->actor.cutscene;
     this->actor.flags |= ACTOR_FLAG_2000000;
@@ -683,14 +683,14 @@ void EnGg_Update(Actor* thisx, PlayState* play) {
     EnGg* this = THIS;
 
     if (play->actorCtx.lensMaskSize == LENS_MASK_ACTIVE_SIZE) {
-        this->actor.flags |= ACTOR_FLAG_80;
+        this->actor.flags |= ACTOR_FLAG_REACT_TO_LENS;
         this->actor.flags |= ACTOR_FLAG_1;
     } else {
-        this->actor.flags &= ~ACTOR_FLAG_80;
+        this->actor.flags &= ~ACTOR_FLAG_REACT_TO_LENS;
         this->actor.flags &= ~ACTOR_FLAG_1;
     }
 
-    if (gSaveContext.save.weekEventReg[19] & 0x80) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_19_80)) {
         if (play->csCtx.state == 0) {
             this->actor.flags |= ACTOR_FLAG_1;
         } else {
@@ -708,10 +708,10 @@ void EnGg_Update(Actor* thisx, PlayState* play) {
         func_80B35968(this, play);
     }
 
-    if (!(gSaveContext.save.weekEventReg[91] & 0x10) &&
-        ((gSaveContext.save.weekEventReg[19] & 0x80) || CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_80) ||
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_91_10) &&
+        (CHECK_WEEKEVENTREG(WEEKEVENTREG_19_80) || CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_REACT_TO_LENS) ||
          (this->unk_308 == 1))) {
-        gSaveContext.save.weekEventReg[91] |= 0x10;
+        SET_WEEKEVENTREG(WEEKEVENTREG_91_10);
     }
 
     this->actionFunc(this, play);
@@ -789,7 +789,7 @@ void EnGg_Draw(Actor* thisx, PlayState* play) {
         this->unk_344.unk_38(&this->unk_344, play);
     }
 
-    if (gSaveContext.save.weekEventReg[19] & 0x80) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_19_80)) {
         func_8012C28C(play->state.gfxCtx);
 
         gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80B36DFC[this->unk_2E2]));
@@ -797,7 +797,7 @@ void EnGg_Draw(Actor* thisx, PlayState* play) {
         POLY_OPA_DISP =
             SkelAnime_DrawFlex(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                                EnGg_OverrideLimbDraw, EnGg_PostLimbDraw, &this->actor, POLY_OPA_DISP);
-    } else if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_80) || (this->unk_308 == 1)) {
+    } else if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_REACT_TO_LENS) || (this->unk_308 == 1)) {
         func_8012C2DC(play->state.gfxCtx);
 
         gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(D_80B36DFC[this->unk_2E2]));

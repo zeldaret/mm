@@ -23,7 +23,7 @@ void EnBombers2_ChangeAnim(EnBombers2* this, s32 animIndex, f32 playSpeed);
 void func_80C04D00(EnBombers2* this);
 void func_80C050B8(EnBombers2* this, PlayState* play);
 
-const ActorInit En_Bombers2_InitVars = {
+ActorInit En_Bombers2_InitVars = {
     ACTOR_EN_BOMBERS2,
     ACTORCAT_NPC,
     FLAGS,
@@ -94,7 +94,8 @@ void EnBombers2_Init(Actor* thisx, PlayState* play) {
                        this->jointTable, OBJECT_CS_LIMB_MAX);
     this->actor.targetMode = 6;
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
-    if ((gSaveContext.save.weekEventReg[73] & 0x80) || (gSaveContext.save.entrance == ENTRANCE(EAST_CLOCK_TOWN, 2))) {
+
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_73_80) || (gSaveContext.save.entrance == ENTRANCE(EAST_CLOCK_TOWN, 2))) {
         this->actor.world.pos.x += Math_SinS(this->actor.home.rot.y + 0xC100) * 50.0f;
         cos = Math_CosS(this->actor.home.rot.y + 0xC100) * 50.0f;
         this->unk_2AC = 1;
@@ -102,7 +103,7 @@ void EnBombers2_Init(Actor* thisx, PlayState* play) {
     }
     this->cutscene = this->actor.cutscene;
     if (this->cutscene == 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
     func_80C04B40(this);
 }
@@ -165,7 +166,7 @@ void func_80C04BA0(EnBombers2* this, PlayState* play) {
 
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->unk_2B6 = this->actor.world.rot.y;
-        gSaveContext.save.weekEventReg[86] |= 2;
+        SET_WEEKEVENTREG(WEEKEVENTREG_86_02);
         func_80C04D00(this);
         return;
     }
@@ -329,7 +330,7 @@ void func_80C0520C(EnBombers2* this, PlayState* play) {
                 EnBombers2_ChangeAnim(this, 6, 1.0f);
                 this->unk_2A8 = 0;
                 this->unk_2C0 = 1;
-                gSaveContext.save.weekEventReg[73] |= 0x80;
+                SET_WEEKEVENTREG(WEEKEVENTREG_73_80);
                 ActorCutscene_Stop(this->cutscene);
                 this->unk_2AC = 1;
                 this->actor.textId = sTextIds[this->textIdIndex];

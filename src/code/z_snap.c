@@ -21,8 +21,8 @@ s32 Snap_RecordPictographedActors(PlayState* play) {
     gSaveContext.save.pictoFlags0 = 0;
     gSaveContext.save.pictoFlags1 = 0;
 
-    if (play->sceneNum == SCENE_20SICHITAI) {
-        Snap_SetFlag(PICTOGRAPH_IN_SWAMP);
+    if (play->sceneId == SCENE_20SICHITAI) {
+        Snap_SetFlag(PICTO_VALID_IN_SWAMP);
     }
 
     for (; category < ACTORCAT_MAX; category++) {
@@ -30,7 +30,7 @@ s32 Snap_RecordPictographedActors(PlayState* play) {
             seen = 0;
 
             // Actors which must be pictographed in a specific scene
-            switch (play->sceneNum) {
+            switch (play->sceneId) {
                 case SCENE_20SICHITAI:
                     if ((actor->id == ACTOR_EN_MNK) || (actor->id == ACTOR_EN_BIGOKUTA)) {
                         seen = PICTO_SEEN_IN_SCENE;
@@ -155,43 +155,43 @@ s32 Snap_ValidatePictograph(PlayState* play, Actor* actor, s32 flag, Vec3f* pos,
     // Check distance
     distance = OLib_Vec3fDist(pos, &camera->eye);
     if ((distance < distanceMin) || (distanceMax < distance)) {
-        Snap_SetFlag(PICTOGRAPH_BAD_DISTANCE);
-        ret = PICTOGRAPH_BAD_DISTANCE;
+        Snap_SetFlag(PICTO_VALID_BAD_DISTANCE);
+        ret = PICTO_VALID_BAD_DISTANCE;
     }
 
     // Check rot is facing camera?
     x = Snap_AbsS(Camera_GetCamDirPitch(camera) + rot->x);
     y = Snap_AbsS(Camera_GetCamDirYaw(camera) - BINANG_SUB(rot->y, 0x7FFF));
     if ((0 < angleRange) && ((angleRange < x) || (angleRange < y))) {
-        Snap_SetFlag(PICTOGRAPH_BAD_ANGLE);
-        ret |= PICTOGRAPH_BAD_ANGLE;
+        Snap_SetFlag(PICTO_VALID_BAD_ANGLE);
+        ret |= PICTO_VALID_BAD_ANGLE;
     }
 
     // Check in capture region
     Actor_GetProjectedPos(play, pos, &projectedPos, &distance);
     // Convert to projected position to device coordinates, shift to be relative to the capture region's top-left corner
-    x = (s16)PROJECTED_TO_SCREEN_X(projectedPos, distance) - PICTO_CAPTURE_REGION_TOPLEFT_X;
-    y = (s16)PROJECTED_TO_SCREEN_Y(projectedPos, distance) - PICTO_CAPTURE_REGION_TOPLEFT_Y;
+    x = (s16)PROJECTED_TO_SCREEN_X(projectedPos, distance) - PICTO_VALID_TOPLEFT_X;
+    y = (s16)PROJECTED_TO_SCREEN_Y(projectedPos, distance) - PICTO_VALID_TOPLEFT_Y;
 
     // checks if the coordinates are within the capture region
-    if ((x < 0) || (x > PICTO_RESOLUTION_HORIZONTAL) || (y < 0) || (y > PICTO_RESOLUTION_VERTICAL)) {
-        Snap_SetFlag(PICTOGRAPH_NOT_IN_VIEW);
-        ret |= PICTOGRAPH_NOT_IN_VIEW;
+    if ((x < 0) || (x > PICTO_VALID_WIDTH) || (y < 0) || (y > PICTO_VALID_HEIGHT)) {
+        Snap_SetFlag(PICTO_VALID_NOT_IN_VIEW);
+        ret |= PICTO_VALID_NOT_IN_VIEW;
     }
 
     // Check not obscured by bg collision
     if (BgCheck_ProjectileLineTest(&play->colCtx, pos, &camera->eye, &projectedPos, &poly, true, true, true, true,
                                    &bgId)) {
-        Snap_SetFlag(PICTOGRAPH_BEHIND_BG);
-        ret |= PICTOGRAPH_BEHIND_BG;
+        Snap_SetFlag(PICTO_VALID_BEHIND_BG);
+        ret |= PICTO_VALID_BEHIND_BG;
     }
 
     // Check not obscured by actor collision
     actors[0] = actor;
     actors[1] = &GET_PLAYER(play)->actor;
     if (CollisionCheck_LineOCCheck(play, &play->colChkCtx, pos, &camera->eye, actors, 2)) {
-        Snap_SetFlag(PICTOGRAPH_BEHIND_COLLISION);
-        ret |= PICTOGRAPH_BEHIND_COLLISION;
+        Snap_SetFlag(PICTO_VALID_BEHIND_COLLISION);
+        ret |= PICTO_VALID_BEHIND_COLLISION;
     }
 
     // If all of the above checks pass, set the flag

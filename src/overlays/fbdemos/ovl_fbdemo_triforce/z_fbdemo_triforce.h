@@ -1,7 +1,8 @@
 #ifndef Z_FBDEMO_TRIFORCE_H
 #define Z_FBDEMO_TRIFORCE_H
 
-#include "global.h"
+#include "ultra64.h"
+#include "color.h"
 
 typedef enum {
     /* 0 */ STATE_NONE,
@@ -27,7 +28,5 @@ typedef struct {
     /* 0x058 */ s32 frame;
     /* 0x060 */ Mtx modelView[2][3];
 } TransitionTriforce; // size = 0x1E0
-
-extern const TransitionInit TransitionTriforce_InitVars;
 
 #endif

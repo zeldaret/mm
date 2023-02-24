@@ -15,7 +15,7 @@ void DmAh_Destroy(Actor* thisx, PlayState* play);
 void DmAh_Update(Actor* thisx, PlayState* play);
 void DmAh_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit Dm_Ah_InitVars = {
+ActorInit Dm_Ah_InitVars = {
     ACTOR_DM_AH,
     ACTORCAT_NPC,
     FLAGS,
@@ -52,7 +52,7 @@ void func_80C1D458(DmAh* this) {
     }
 }
 
-s32 func_80C1D4D0(DmAh* this, s32 arg1) {
+s32 func_80C1D4D0(DmAh* this, PlayState* play) {
     s32 pad;
     Vec3f sp40;
     Vec3f sp34;
@@ -162,7 +162,7 @@ void DmAh_Init(Actor* thisx, PlayState* play) {
     this->actor.flags &= ~ACTOR_FLAG_1;
     Actor_SetScale(&this->actor, 0.01f);
     this->unk_27C |= 1;
-    if ((play->sceneNum == SCENE_YADOYA) && (play->curSpawn == 4)) {
+    if ((play->sceneId == SCENE_YADOYA) && (play->curSpawn == 4)) {
         this->unk_280 = func_80C1D78C(play);
         func_80C1D410(this, 1);
         this->actionFunc = func_80C1D92C;

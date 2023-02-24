@@ -10,7 +10,7 @@ void AudioHeap_DiscardSampleCaches(void);
 void AudioHeap_DiscardSampleBank(s32 sampleBankId);
 void AudioHeap_ApplySampleBankCacheInternal(s32 apply, s32 sampleBankId);
 void AudioHeap_DiscardSampleBanks(void);
-void AudioHeap_InitReverb(s32 reverbIndex, ReverbSettings* settings, s32 flags);
+void AudioHeap_InitReverb(s32 reverbIndex, ReverbSettings* settings, s32 isFirstInit);
 
 #define gTatumsPerBeat (gAudioTatumInit[1])
 
@@ -20,7 +20,7 @@ void AudioHeap_InitReverb(s32 reverbIndex, ReverbSettings* settings, s32 flags);
  * i.e. (256.0f * `updatesPerFrameInvScaled`) is just `updatesPerFrameInv`
  */
 f32 AudioHeap_CalculateAdsrDecay(f32 scaleInv) {
-    return 256.0f * gAudioContext.audioBufferParameters.updatesPerFrameInvScaled / scaleInv;
+    return 256.0f * gAudioCtx.audioBufferParameters.updatesPerFrameInvScaled / scaleInv;
 }
 
 /**
@@ -29,45 +29,45 @@ f32 AudioHeap_CalculateAdsrDecay(f32 scaleInv) {
 void AudioHeap_InitAdsrDecayTable(void) {
     s32 i;
 
-    gAudioContext.adsrDecayTable[255] = AudioHeap_CalculateAdsrDecay(0.25f);
-    gAudioContext.adsrDecayTable[254] = AudioHeap_CalculateAdsrDecay(0.33f);
-    gAudioContext.adsrDecayTable[253] = AudioHeap_CalculateAdsrDecay(0.5f);
-    gAudioContext.adsrDecayTable[252] = AudioHeap_CalculateAdsrDecay(0.66f);
-    gAudioContext.adsrDecayTable[251] = AudioHeap_CalculateAdsrDecay(0.75f);
+    gAudioCtx.adsrDecayTable[255] = AudioHeap_CalculateAdsrDecay(0.25f);
+    gAudioCtx.adsrDecayTable[254] = AudioHeap_CalculateAdsrDecay(0.33f);
+    gAudioCtx.adsrDecayTable[253] = AudioHeap_CalculateAdsrDecay(0.5f);
+    gAudioCtx.adsrDecayTable[252] = AudioHeap_CalculateAdsrDecay(0.66f);
+    gAudioCtx.adsrDecayTable[251] = AudioHeap_CalculateAdsrDecay(0.75f);
 
     for (i = 128; i < 251; i++) {
-        gAudioContext.adsrDecayTable[i] = AudioHeap_CalculateAdsrDecay(251 - i);
+        gAudioCtx.adsrDecayTable[i] = AudioHeap_CalculateAdsrDecay(251 - i);
     }
 
     for (i = 16; i < 128; i++) {
-        gAudioContext.adsrDecayTable[i] = AudioHeap_CalculateAdsrDecay(4 * (143 - i));
+        gAudioCtx.adsrDecayTable[i] = AudioHeap_CalculateAdsrDecay(4 * (143 - i));
     }
 
     for (i = 1; i < 16; i++) {
-        gAudioContext.adsrDecayTable[i] = AudioHeap_CalculateAdsrDecay(60 * (23 - i));
+        gAudioCtx.adsrDecayTable[i] = AudioHeap_CalculateAdsrDecay(60 * (23 - i));
     }
 
-    gAudioContext.adsrDecayTable[0] = 0.0f;
+    gAudioCtx.adsrDecayTable[0] = 0.0f;
 }
 
 void AudioHeap_ResetLoadStatus(void) {
     s32 i;
 
-    for (i = 0; i < ARRAY_COUNT(gAudioContext.fontLoadStatus); i++) {
-        if (gAudioContext.fontLoadStatus[i] != LOAD_STATUS_PERMANENT) {
-            gAudioContext.fontLoadStatus[i] = LOAD_STATUS_NOT_LOADED;
+    for (i = 0; i < ARRAY_COUNT(gAudioCtx.fontLoadStatus); i++) {
+        if (gAudioCtx.fontLoadStatus[i] != LOAD_STATUS_PERMANENT) {
+            gAudioCtx.fontLoadStatus[i] = LOAD_STATUS_NOT_LOADED;
         }
     }
 
-    for (i = 0; i < ARRAY_COUNT(gAudioContext.sampleFontLoadStatus); i++) {
-        if (gAudioContext.sampleFontLoadStatus[i] != LOAD_STATUS_PERMANENT) {
-            gAudioContext.sampleFontLoadStatus[i] = LOAD_STATUS_NOT_LOADED;
+    for (i = 0; i < ARRAY_COUNT(gAudioCtx.sampleFontLoadStatus); i++) {
+        if (gAudioCtx.sampleFontLoadStatus[i] != LOAD_STATUS_PERMANENT) {
+            gAudioCtx.sampleFontLoadStatus[i] = LOAD_STATUS_NOT_LOADED;
         }
     }
 
-    for (i = 0; i < ARRAY_COUNT(gAudioContext.seqLoadStatus); i++) {
-        if (gAudioContext.seqLoadStatus[i] != LOAD_STATUS_PERMANENT) {
-            gAudioContext.seqLoadStatus[i] = LOAD_STATUS_NOT_LOADED;
+    for (i = 0; i < ARRAY_COUNT(gAudioCtx.seqLoadStatus); i++) {
+        if (gAudioCtx.seqLoadStatus[i] != LOAD_STATUS_PERMANENT) {
+            gAudioCtx.seqLoadStatus[i] = LOAD_STATUS_NOT_LOADED;
         }
     }
 }
@@ -75,8 +75,8 @@ void AudioHeap_ResetLoadStatus(void) {
 void AudioHeap_DiscardFont(s32 fontId) {
     s32 i;
 
-    for (i = 0; i < gAudioContext.numNotes; i++) {
-        Note* note = &gAudioContext.notes[i];
+    for (i = 0; i < gAudioCtx.numNotes; i++) {
+        Note* note = &gAudioCtx.notes[i];
 
         if (note->playbackState.fontId == fontId) {
             if ((note->playbackState.status == PLAYBACK_STATUS_0) && (note->playbackState.priority != 0)) {
@@ -86,7 +86,7 @@ void AudioHeap_DiscardFont(s32 fontId) {
 
             AudioPlayback_NoteDisable(note);
             AudioPlayback_AudioListRemove(&note->listItem);
-            AudioSeq_AudioListPushBack(&gAudioContext.noteFreeLists.disabled, &note->listItem);
+            AudioSeq_AudioListPushBack(&gAudioCtx.noteFreeLists.disabled, &note->listItem);
         }
     }
 }
@@ -94,14 +94,14 @@ void AudioHeap_DiscardFont(s32 fontId) {
 void AudioHeap_ReleaseNotesForFont(s32 fontId) {
     s32 i;
 
-    for (i = 0; i < gAudioContext.numNotes; i++) {
-        Note* note = &gAudioContext.notes[i];
+    for (i = 0; i < gAudioCtx.numNotes; i++) {
+        Note* note = &gAudioCtx.notes[i];
         NotePlaybackState* playbackState = &note->playbackState;
 
         if (playbackState->fontId == fontId) {
             if (playbackState->priority != 0) {
                 playbackState->priority = 1;
-                playbackState->adsr.fadeOutVel = gAudioContext.audioBufferParameters.updatesPerFrameInv;
+                playbackState->adsr.fadeOutVel = gAudioCtx.audioBufferParameters.updatesPerFrameInv;
                 playbackState->adsr.action.s.release = true;
             }
         }
@@ -111,9 +111,9 @@ void AudioHeap_ReleaseNotesForFont(s32 fontId) {
 void AudioHeap_DiscardSequence(s32 seqId) {
     s32 i;
 
-    for (i = 0; i < gAudioContext.audioBufferParameters.numSequencePlayers; i++) {
-        if (gAudioContext.seqPlayers[i].enabled && gAudioContext.seqPlayers[i].seqId == seqId) {
-            AudioSeq_SequencePlayerDisable(&gAudioContext.seqPlayers[i]);
+    for (i = 0; i < gAudioCtx.audioBufferParameters.numSequencePlayers; i++) {
+        if (gAudioCtx.seqPlayers[i].enabled && gAudioCtx.seqPlayers[i].seqId == seqId) {
+            AudioSeq_SequencePlayerDisable(&gAudioCtx.seqPlayers[i]);
         }
     }
 }
@@ -137,8 +137,8 @@ void* AudioHeap_WritebackDCache(void* addr, size_t size) {
 void* AudioHeap_AllocZeroedAttemptExternal(AudioAllocPool* pool, size_t size) {
     void* addr = NULL;
 
-    if (gAudioContext.externalPool.startAddr != NULL) {
-        addr = AudioHeap_AllocZeroed(&gAudioContext.externalPool, size);
+    if (gAudioCtx.externalPool.startAddr != NULL) {
+        addr = AudioHeap_AllocZeroed(&gAudioCtx.externalPool, size);
     }
 
     if (addr == NULL) {
@@ -155,8 +155,8 @@ void* AudioHeap_AllocZeroedAttemptExternal(AudioAllocPool* pool, size_t size) {
 void* AudioHeap_AllocAttemptExternal(AudioAllocPool* pool, size_t size) {
     void* addr = NULL;
 
-    if (gAudioContext.externalPool.startAddr != NULL) {
-        addr = AudioHeap_Alloc(&gAudioContext.externalPool, size);
+    if (gAudioCtx.externalPool.startAddr != NULL) {
+        addr = AudioHeap_Alloc(&gAudioCtx.externalPool, size);
     }
 
     if (addr == NULL) {
@@ -277,18 +277,18 @@ void AudioHeap_PopPersistentCache(s32 tableType) {
 
     switch (tableType) {
         case SEQUENCE_TABLE:
-            loadedCache = &gAudioContext.seqCache;
-            loadStatus = gAudioContext.seqLoadStatus;
+            loadedCache = &gAudioCtx.seqCache;
+            loadStatus = gAudioCtx.seqLoadStatus;
             break;
 
         case FONT_TABLE:
-            loadedCache = &gAudioContext.fontCache;
-            loadStatus = gAudioContext.fontLoadStatus;
+            loadedCache = &gAudioCtx.fontCache;
+            loadStatus = gAudioCtx.fontLoadStatus;
             break;
 
         case SAMPLE_TABLE:
-            loadedCache = &gAudioContext.sampleBankCache;
-            loadStatus = gAudioContext.sampleFontLoadStatus;
+            loadedCache = &gAudioCtx.sampleBankCache;
+            loadStatus = gAudioCtx.sampleFontLoadStatus;
             break;
     }
 
@@ -315,64 +315,63 @@ void AudioHeap_PopPersistentCache(s32 tableType) {
 }
 
 void AudioHeap_InitMainPool(size_t initPoolSize) {
-    AudioHeap_InitPool(&gAudioContext.initPool, gAudioContext.audioHeap, initPoolSize);
-    AudioHeap_InitPool(&gAudioContext.sessionPool, gAudioContext.audioHeap + initPoolSize,
-                       gAudioContext.audioHeapSize - initPoolSize);
+    AudioHeap_InitPool(&gAudioCtx.initPool, gAudioCtx.audioHeap, initPoolSize);
+    AudioHeap_InitPool(&gAudioCtx.sessionPool, gAudioCtx.audioHeap + initPoolSize,
+                       gAudioCtx.audioHeapSize - initPoolSize);
 
-    gAudioContext.externalPool.startAddr = NULL;
+    gAudioCtx.externalPool.startAddr = NULL;
 }
 
 void AudioHeap_InitSessionPool(AudioSessionPoolSplit* split) {
-    gAudioContext.sessionPool.curAddr = gAudioContext.sessionPool.startAddr;
+    gAudioCtx.sessionPool.curAddr = gAudioCtx.sessionPool.startAddr;
 
-    AudioHeap_InitPool(&gAudioContext.miscPool, AudioHeap_Alloc(&gAudioContext.sessionPool, split->miscPoolSize),
+    AudioHeap_InitPool(&gAudioCtx.miscPool, AudioHeap_Alloc(&gAudioCtx.sessionPool, split->miscPoolSize),
                        split->miscPoolSize);
-    AudioHeap_InitPool(&gAudioContext.cachePool, AudioHeap_Alloc(&gAudioContext.sessionPool, split->cachePoolSize),
+    AudioHeap_InitPool(&gAudioCtx.cachePool, AudioHeap_Alloc(&gAudioCtx.sessionPool, split->cachePoolSize),
                        split->cachePoolSize);
 }
 
 void AudioHeap_InitCachePool(AudioCachePoolSplit* split) {
-    gAudioContext.cachePool.curAddr = gAudioContext.cachePool.startAddr;
+    gAudioCtx.cachePool.curAddr = gAudioCtx.cachePool.startAddr;
 
-    AudioHeap_InitPool(&gAudioContext.persistentCommonPool,
-                       AudioHeap_Alloc(&gAudioContext.cachePool, split->persistentCommonPoolSize),
+    AudioHeap_InitPool(&gAudioCtx.persistentCommonPool,
+                       AudioHeap_Alloc(&gAudioCtx.cachePool, split->persistentCommonPoolSize),
                        split->persistentCommonPoolSize);
-    AudioHeap_InitPool(&gAudioContext.temporaryCommonPool,
-                       AudioHeap_Alloc(&gAudioContext.cachePool, split->temporaryCommonPoolSize),
+    AudioHeap_InitPool(&gAudioCtx.temporaryCommonPool,
+                       AudioHeap_Alloc(&gAudioCtx.cachePool, split->temporaryCommonPoolSize),
                        split->temporaryCommonPoolSize);
 }
 
 void AudioHeap_InitPersistentPoolsAndCaches(AudioCommonPoolSplit* split) {
-    gAudioContext.persistentCommonPool.curAddr = gAudioContext.persistentCommonPool.startAddr;
+    gAudioCtx.persistentCommonPool.curAddr = gAudioCtx.persistentCommonPool.startAddr;
 
-    AudioHeap_InitPool(&gAudioContext.seqCache.persistent.pool,
-                       AudioHeap_Alloc(&gAudioContext.persistentCommonPool, split->seqCacheSize), split->seqCacheSize);
-    AudioHeap_InitPool(&gAudioContext.fontCache.persistent.pool,
-                       AudioHeap_Alloc(&gAudioContext.persistentCommonPool, split->fontCacheSize),
-                       split->fontCacheSize);
-    AudioHeap_InitPool(&gAudioContext.sampleBankCache.persistent.pool,
-                       AudioHeap_Alloc(&gAudioContext.persistentCommonPool, split->sampleBankCacheSize),
+    AudioHeap_InitPool(&gAudioCtx.seqCache.persistent.pool,
+                       AudioHeap_Alloc(&gAudioCtx.persistentCommonPool, split->seqCacheSize), split->seqCacheSize);
+    AudioHeap_InitPool(&gAudioCtx.fontCache.persistent.pool,
+                       AudioHeap_Alloc(&gAudioCtx.persistentCommonPool, split->fontCacheSize), split->fontCacheSize);
+    AudioHeap_InitPool(&gAudioCtx.sampleBankCache.persistent.pool,
+                       AudioHeap_Alloc(&gAudioCtx.persistentCommonPool, split->sampleBankCacheSize),
                        split->sampleBankCacheSize);
 
-    AudioHeap_InitPersistentCache(&gAudioContext.seqCache.persistent);
-    AudioHeap_InitPersistentCache(&gAudioContext.fontCache.persistent);
-    AudioHeap_InitPersistentCache(&gAudioContext.sampleBankCache.persistent);
+    AudioHeap_InitPersistentCache(&gAudioCtx.seqCache.persistent);
+    AudioHeap_InitPersistentCache(&gAudioCtx.fontCache.persistent);
+    AudioHeap_InitPersistentCache(&gAudioCtx.sampleBankCache.persistent);
 }
 
 void AudioHeap_InitTemporaryPoolsAndCaches(AudioCommonPoolSplit* split) {
-    gAudioContext.temporaryCommonPool.curAddr = gAudioContext.temporaryCommonPool.startAddr;
+    gAudioCtx.temporaryCommonPool.curAddr = gAudioCtx.temporaryCommonPool.startAddr;
 
-    AudioHeap_InitPool(&gAudioContext.seqCache.temporary.pool,
-                       AudioHeap_Alloc(&gAudioContext.temporaryCommonPool, split->seqCacheSize), split->seqCacheSize);
-    AudioHeap_InitPool(&gAudioContext.fontCache.temporary.pool,
-                       AudioHeap_Alloc(&gAudioContext.temporaryCommonPool, split->fontCacheSize), split->fontCacheSize);
-    AudioHeap_InitPool(&gAudioContext.sampleBankCache.temporary.pool,
-                       AudioHeap_Alloc(&gAudioContext.temporaryCommonPool, split->sampleBankCacheSize),
+    AudioHeap_InitPool(&gAudioCtx.seqCache.temporary.pool,
+                       AudioHeap_Alloc(&gAudioCtx.temporaryCommonPool, split->seqCacheSize), split->seqCacheSize);
+    AudioHeap_InitPool(&gAudioCtx.fontCache.temporary.pool,
+                       AudioHeap_Alloc(&gAudioCtx.temporaryCommonPool, split->fontCacheSize), split->fontCacheSize);
+    AudioHeap_InitPool(&gAudioCtx.sampleBankCache.temporary.pool,
+                       AudioHeap_Alloc(&gAudioCtx.temporaryCommonPool, split->sampleBankCacheSize),
                        split->sampleBankCacheSize);
 
-    AudioHeap_InitTemporaryCache(&gAudioContext.seqCache.temporary);
-    AudioHeap_InitTemporaryCache(&gAudioContext.fontCache.temporary);
-    AudioHeap_InitTemporaryCache(&gAudioContext.sampleBankCache.temporary);
+    AudioHeap_InitTemporaryCache(&gAudioCtx.seqCache.temporary);
+    AudioHeap_InitTemporaryCache(&gAudioCtx.fontCache.temporary);
+    AudioHeap_InitTemporaryCache(&gAudioCtx.sampleBankCache.temporary);
 }
 
 void* AudioHeap_AllocCached(s32 tableType, size_t size, s32 cache, s32 id) {
@@ -389,18 +388,18 @@ void* AudioHeap_AllocCached(s32 tableType, size_t size, s32 cache, s32 id) {
 
     switch (tableType) {
         case SEQUENCE_TABLE:
-            loadedCache = &gAudioContext.seqCache;
-            loadStatus = gAudioContext.seqLoadStatus;
+            loadedCache = &gAudioCtx.seqCache;
+            loadStatus = gAudioCtx.seqLoadStatus;
             break;
 
         case FONT_TABLE:
-            loadedCache = &gAudioContext.fontCache;
-            loadStatus = gAudioContext.fontLoadStatus;
+            loadedCache = &gAudioCtx.fontCache;
+            loadStatus = gAudioCtx.fontLoadStatus;
             break;
 
         case SAMPLE_TABLE:
-            loadedCache = &gAudioContext.sampleBankCache;
-            loadStatus = gAudioContext.sampleFontLoadStatus;
+            loadedCache = &gAudioCtx.sampleBankCache;
+            loadStatus = gAudioCtx.sampleFontLoadStatus;
             break;
     }
 
@@ -419,28 +418,28 @@ void* AudioHeap_AllocCached(s32 tableType, size_t size, s32 cache, s32 id) {
 
         if (tableType == FONT_TABLE) {
             if (loadStatusEntry0 == LOAD_STATUS_MAYBE_DISCARDABLE) {
-                for (i = 0; i < gAudioContext.numNotes; i++) {
-                    if ((gAudioContext.notes[i].playbackState.fontId == temporaryCache->entries[0].id) &&
-                        gAudioContext.notes[i].noteSubEu.bitField0.enabled) {
+                for (i = 0; i < gAudioCtx.numNotes; i++) {
+                    if ((gAudioCtx.notes[i].playbackState.fontId == temporaryCache->entries[0].id) &&
+                        gAudioCtx.notes[i].sampleState.bitField0.enabled) {
                         break;
                     }
                 }
 
-                if (i == gAudioContext.numNotes) {
+                if (i == gAudioCtx.numNotes) {
                     AudioLoad_SetFontLoadStatus(temporaryCache->entries[0].id, LOAD_STATUS_DISCARDABLE);
                     loadStatusEntry0 = LOAD_STATUS_DISCARDABLE;
                 }
             }
 
             if (loadStatusEntry1 == LOAD_STATUS_MAYBE_DISCARDABLE) {
-                for (i = 0; i < gAudioContext.numNotes; i++) {
-                    if ((gAudioContext.notes[i].playbackState.fontId == temporaryCache->entries[1].id) &&
-                        gAudioContext.notes[i].noteSubEu.bitField0.enabled) {
+                for (i = 0; i < gAudioCtx.numNotes; i++) {
+                    if ((gAudioCtx.notes[i].playbackState.fontId == temporaryCache->entries[1].id) &&
+                        gAudioCtx.notes[i].sampleState.bitField0.enabled) {
                         break;
                     }
                 }
 
-                if (i == gAudioContext.numNotes) {
+                if (i == gAudioCtx.numNotes) {
                     AudioLoad_SetFontLoadStatus(temporaryCache->entries[1].id, LOAD_STATUS_DISCARDABLE);
                     loadStatusEntry1 = LOAD_STATUS_DISCARDABLE;
                 }
@@ -461,54 +460,54 @@ void* AudioHeap_AllocCached(s32 tableType, size_t size, s32 cache, s32 id) {
             // Check if there is a side which isn't in active use, if so, evict that one.
             if (tableType == SEQUENCE_TABLE) {
                 if (loadStatusEntry0 == LOAD_STATUS_COMPLETE) {
-                    for (i = 0; i < gAudioContext.audioBufferParameters.numSequencePlayers; i++) {
-                        if (gAudioContext.seqPlayers[i].enabled &&
-                            gAudioContext.seqPlayers[i].seqId == temporaryCache->entries[0].id) {
+                    for (i = 0; i < gAudioCtx.audioBufferParameters.numSequencePlayers; i++) {
+                        if (gAudioCtx.seqPlayers[i].enabled &&
+                            gAudioCtx.seqPlayers[i].seqId == temporaryCache->entries[0].id) {
                             break;
                         }
                     }
 
-                    if (i == gAudioContext.audioBufferParameters.numSequencePlayers) {
+                    if (i == gAudioCtx.audioBufferParameters.numSequencePlayers) {
                         temporaryCache->nextSide = 0;
                         goto done;
                     }
                 }
 
                 if (loadStatusEntry1 == LOAD_STATUS_COMPLETE) {
-                    for (i = 0; i < gAudioContext.audioBufferParameters.numSequencePlayers; i++) {
-                        if (gAudioContext.seqPlayers[i].enabled &&
-                            gAudioContext.seqPlayers[i].seqId == temporaryCache->entries[1].id) {
+                    for (i = 0; i < gAudioCtx.audioBufferParameters.numSequencePlayers; i++) {
+                        if (gAudioCtx.seqPlayers[i].enabled &&
+                            gAudioCtx.seqPlayers[i].seqId == temporaryCache->entries[1].id) {
                             break;
                         }
                     }
 
-                    if (i == gAudioContext.audioBufferParameters.numSequencePlayers) {
+                    if (i == gAudioCtx.audioBufferParameters.numSequencePlayers) {
                         temporaryCache->nextSide = 1;
                         goto done;
                     }
                 }
             } else if (tableType == FONT_TABLE) {
                 if (loadStatusEntry0 == LOAD_STATUS_COMPLETE) {
-                    for (i = 0; i < gAudioContext.numNotes; i++) {
-                        if ((gAudioContext.notes[i].playbackState.fontId == temporaryCache->entries[0].id) &&
-                            gAudioContext.notes[i].noteSubEu.bitField0.enabled) {
+                    for (i = 0; i < gAudioCtx.numNotes; i++) {
+                        if ((gAudioCtx.notes[i].playbackState.fontId == temporaryCache->entries[0].id) &&
+                            gAudioCtx.notes[i].sampleState.bitField0.enabled) {
                             break;
                         }
                     }
-                    if (i == gAudioContext.numNotes) {
+                    if (i == gAudioCtx.numNotes) {
                         temporaryCache->nextSide = 0;
                         goto done;
                     }
                 }
 
                 if (loadStatusEntry1 == LOAD_STATUS_COMPLETE) {
-                    for (i = 0; i < gAudioContext.numNotes; i++) {
-                        if ((gAudioContext.notes[i].playbackState.fontId == temporaryCache->entries[1].id) &&
-                            gAudioContext.notes[i].noteSubEu.bitField0.enabled) {
+                    for (i = 0; i < gAudioCtx.numNotes; i++) {
+                        if ((gAudioCtx.notes[i].playbackState.fontId == temporaryCache->entries[1].id) &&
+                            gAudioCtx.notes[i].sampleState.bitField0.enabled) {
                             break;
                         }
                     }
-                    if (i == gAudioContext.numNotes) {
+                    if (i == gAudioCtx.numNotes) {
                         temporaryCache->nextSide = 1;
                         goto done;
                     }
@@ -667,15 +666,15 @@ void* AudioHeap_SearchRegularCaches(s32 tableType, s32 cache, s32 id) {
 
     switch (tableType) {
         case SEQUENCE_TABLE:
-            loadedCache = &gAudioContext.seqCache;
+            loadedCache = &gAudioCtx.seqCache;
             break;
 
         case FONT_TABLE:
-            loadedCache = &gAudioContext.fontCache;
+            loadedCache = &gAudioCtx.fontCache;
             break;
 
         case SAMPLE_TABLE:
-            loadedCache = &gAudioContext.sampleBankCache;
+            loadedCache = &gAudioCtx.sampleBankCache;
             break;
     }
 
@@ -814,18 +813,18 @@ void AudioHeap_UpdateReverb(SynthesisReverb* reverb) {
 
 void AudioHeap_UpdateReverbs(void) {
     s32 count;
-    s32 i;
+    s32 reverbIndex;
     s32 j;
 
-    if (gAudioContext.audioBufferParameters.specUnk4 == 2) {
+    if (gAudioCtx.audioBufferParameters.specUnk4 == 2) {
         count = 2;
     } else {
         count = 1;
     }
 
-    for (i = 0; i < gAudioContext.numSynthesisReverbs; i++) {
+    for (reverbIndex = 0; reverbIndex < gAudioCtx.numSynthesisReverbs; reverbIndex++) {
         for (j = 0; j < count; j++) {
-            AudioHeap_UpdateReverb(&gAudioContext.synthesisReverbs[i]);
+            AudioHeap_UpdateReverb(&gAudioCtx.synthesisReverbs[reverbIndex]);
         }
     }
 }
@@ -834,13 +833,13 @@ void AudioHeap_UpdateReverbs(void) {
  * Clear the Audio Interface Buffers
  */
 void AudioHeap_ClearAiBuffers(void) {
-    s32 curAiBufferIndex = gAudioContext.curAiBufferIndex;
+    s32 curAiBufferIndex = gAudioCtx.curAiBufferIndex;
     s32 i;
 
-    gAudioContext.aiBufNumSamples[curAiBufferIndex] = gAudioContext.audioBufferParameters.minAiBufNumSamples;
+    gAudioCtx.numSamplesPerFrame[curAiBufferIndex] = gAudioCtx.audioBufferParameters.numSamplesPerFrameMin;
 
     for (i = 0; i < AIBUF_LEN; i++) {
-        gAudioContext.aiBuffers[curAiBufferIndex][i] = 0;
+        gAudioCtx.aiBuffers[curAiBufferIndex][i] = 0;
     }
 }
 
@@ -849,55 +848,55 @@ s32 AudioHeap_ResetStep(void) {
     s32 j;
     s32 count;
 
-    if (gAudioContext.audioBufferParameters.specUnk4 == 2) {
+    if (gAudioCtx.audioBufferParameters.specUnk4 == 2) {
         count = 2;
     } else {
         count = 1;
     }
 
-    switch (gAudioContext.resetStatus) {
+    switch (gAudioCtx.resetStatus) {
         case 5:
-            for (i = 0; i < gAudioContext.audioBufferParameters.numSequencePlayers; i++) {
-                AudioSeq_SequencePlayerDisableAsFinished(&gAudioContext.seqPlayers[i]);
+            for (i = 0; i < gAudioCtx.audioBufferParameters.numSequencePlayers; i++) {
+                AudioSeq_SequencePlayerDisableAsFinished(&gAudioCtx.seqPlayers[i]);
             }
-            gAudioContext.audioResetFadeOutFramesLeft = 2 / count;
-            gAudioContext.resetStatus--;
+            gAudioCtx.audioResetFadeOutFramesLeft = 2 / count;
+            gAudioCtx.resetStatus--;
             break;
 
         case 4:
-            if (gAudioContext.audioResetFadeOutFramesLeft != 0) {
-                gAudioContext.audioResetFadeOutFramesLeft--;
+            if (gAudioCtx.audioResetFadeOutFramesLeft != 0) {
+                gAudioCtx.audioResetFadeOutFramesLeft--;
                 AudioHeap_UpdateReverbs();
             } else {
-                for (i = 0; i < gAudioContext.numNotes; i++) {
-                    if (gAudioContext.notes[i].noteSubEu.bitField0.enabled &&
-                        gAudioContext.notes[i].playbackState.adsr.action.s.state != ADSR_STATE_DISABLED) {
-                        gAudioContext.notes[i].playbackState.adsr.fadeOutVel =
-                            gAudioContext.audioBufferParameters.updatesPerFrameInv;
-                        gAudioContext.notes[i].playbackState.adsr.action.s.release = true;
+                for (i = 0; i < gAudioCtx.numNotes; i++) {
+                    if (gAudioCtx.notes[i].sampleState.bitField0.enabled &&
+                        gAudioCtx.notes[i].playbackState.adsr.action.s.state != ADSR_STATE_DISABLED) {
+                        gAudioCtx.notes[i].playbackState.adsr.fadeOutVel =
+                            gAudioCtx.audioBufferParameters.updatesPerFrameInv;
+                        gAudioCtx.notes[i].playbackState.adsr.action.s.release = true;
                     }
                 }
-                gAudioContext.audioResetFadeOutFramesLeft = 8 / count;
-                gAudioContext.resetStatus--;
+                gAudioCtx.audioResetFadeOutFramesLeft = 8 / count;
+                gAudioCtx.resetStatus--;
             }
             break;
 
         case 3:
-            if (gAudioContext.audioResetFadeOutFramesLeft != 0) {
-                gAudioContext.audioResetFadeOutFramesLeft--;
+            if (gAudioCtx.audioResetFadeOutFramesLeft != 0) {
+                gAudioCtx.audioResetFadeOutFramesLeft--;
                 AudioHeap_UpdateReverbs();
             } else {
-                gAudioContext.audioResetFadeOutFramesLeft = 2 / count;
-                gAudioContext.resetStatus--;
+                gAudioCtx.audioResetFadeOutFramesLeft = 2 / count;
+                gAudioCtx.resetStatus--;
             }
             break;
 
         case 2:
             AudioHeap_ClearAiBuffers();
-            if (gAudioContext.audioResetFadeOutFramesLeft != 0) {
-                gAudioContext.audioResetFadeOutFramesLeft--;
+            if (gAudioCtx.audioResetFadeOutFramesLeft != 0) {
+                gAudioCtx.audioResetFadeOutFramesLeft--;
             } else {
-                gAudioContext.resetStatus--;
+                gAudioCtx.resetStatus--;
                 AudioHeap_DiscardSampleCaches();
                 AudioHeap_DiscardSampleBanks();
             }
@@ -905,17 +904,17 @@ s32 AudioHeap_ResetStep(void) {
 
         case 1:
             AudioHeap_Init();
-            gAudioContext.resetStatus = 0;
-            for (i = 0; i < ARRAY_COUNT(gAudioContext.aiBufNumSamples); i++) {
-                gAudioContext.aiBufNumSamples[i] = gAudioContext.audioBufferParameters.maxAiBufNumSamples;
+            gAudioCtx.resetStatus = 0;
+            for (i = 0; i < ARRAY_COUNT(gAudioCtx.numSamplesPerFrame); i++) {
+                gAudioCtx.numSamplesPerFrame[i] = gAudioCtx.audioBufferParameters.numSamplesPerFrameMax;
                 for (j = 0; j < AIBUF_LEN; j++) {
-                    gAudioContext.aiBuffers[i][j] = 0;
+                    gAudioCtx.aiBuffers[i][j] = 0;
                 }
             }
             break;
     }
 
-    if (gAudioContext.resetStatus < 3) {
+    if (gAudioCtx.resetStatus < 3) {
         return false;
     }
 
@@ -930,72 +929,70 @@ void AudioHeap_Init(void) {
     size_t cachePoolSize;
     size_t miscPoolSize;
     u32 intMask;
+    s32 reverbIndex;
     s32 i;
-    s32 j;
     s32 pad2;
-    AudioSpec* spec = &gAudioSpecs[gAudioContext.audioResetSpecIdToLoad]; // Audio Specifications
+    AudioSpec* spec = &gAudioSpecs[gAudioCtx.specId]; // Audio Specifications
 
-    gAudioContext.sampleDmaCount = 0;
+    gAudioCtx.sampleDmaCount = 0;
 
     // audio buffer parameters
-    gAudioContext.audioBufferParameters.samplingFreq = spec->samplingFreq;
-    gAudioContext.audioBufferParameters.aiSamplingFreq =
-        osAiSetFrequency(gAudioContext.audioBufferParameters.samplingFreq);
+    gAudioCtx.audioBufferParameters.samplingFreq = spec->samplingFreq;
+    gAudioCtx.audioBufferParameters.aiSamplingFreq = osAiSetFrequency(gAudioCtx.audioBufferParameters.samplingFreq);
 
-    gAudioContext.audioBufferParameters.samplesPerFrameTarget =
-        ALIGN16(gAudioContext.audioBufferParameters.samplingFreq / gAudioContext.refreshRate);
-    gAudioContext.audioBufferParameters.minAiBufNumSamples =
-        gAudioContext.audioBufferParameters.samplesPerFrameTarget - 0x10;
-    gAudioContext.audioBufferParameters.maxAiBufNumSamples =
-        gAudioContext.audioBufferParameters.samplesPerFrameTarget + 0x10;
-    gAudioContext.audioBufferParameters.updatesPerFrame =
-        ((gAudioContext.audioBufferParameters.samplesPerFrameTarget + 0x10) / 0xD0) + 1;
-    gAudioContext.audioBufferParameters.samplesPerUpdate = (gAudioContext.audioBufferParameters.samplesPerFrameTarget /
-                                                            gAudioContext.audioBufferParameters.updatesPerFrame) &
-                                                           ~7;
-    gAudioContext.audioBufferParameters.samplesPerUpdateMax = gAudioContext.audioBufferParameters.samplesPerUpdate + 8;
-    gAudioContext.audioBufferParameters.samplesPerUpdateMin = gAudioContext.audioBufferParameters.samplesPerUpdate - 8;
-    gAudioContext.audioBufferParameters.resampleRate = 32000.0f / (s32)gAudioContext.audioBufferParameters.samplingFreq;
-    gAudioContext.audioBufferParameters.updatesPerFrameInvScaled =
-        (1.0f / 256.0f) / gAudioContext.audioBufferParameters.updatesPerFrame;
-    gAudioContext.audioBufferParameters.updatesPerFrameScaled =
-        gAudioContext.audioBufferParameters.updatesPerFrame / 4.0f;
-    gAudioContext.audioBufferParameters.updatesPerFrameInv = 1.0f / gAudioContext.audioBufferParameters.updatesPerFrame;
+    gAudioCtx.audioBufferParameters.numSamplesPerFrameTarget =
+        ALIGN16(gAudioCtx.audioBufferParameters.samplingFreq / gAudioCtx.refreshRate);
+    gAudioCtx.audioBufferParameters.numSamplesPerFrameMin =
+        gAudioCtx.audioBufferParameters.numSamplesPerFrameTarget - 0x10;
+    gAudioCtx.audioBufferParameters.numSamplesPerFrameMax =
+        gAudioCtx.audioBufferParameters.numSamplesPerFrameTarget + 0x10;
+    gAudioCtx.audioBufferParameters.updatesPerFrame =
+        ((gAudioCtx.audioBufferParameters.numSamplesPerFrameTarget + 0x10) / 0xD0) + 1;
+    gAudioCtx.audioBufferParameters.numSamplesPerUpdate =
+        (gAudioCtx.audioBufferParameters.numSamplesPerFrameTarget / gAudioCtx.audioBufferParameters.updatesPerFrame) &
+        ~7;
+    gAudioCtx.audioBufferParameters.numSamplesPerUpdateMax = gAudioCtx.audioBufferParameters.numSamplesPerUpdate + 8;
+    gAudioCtx.audioBufferParameters.numSamplesPerUpdateMin = gAudioCtx.audioBufferParameters.numSamplesPerUpdate - 8;
+    gAudioCtx.audioBufferParameters.resampleRate = 32000.0f / (s32)gAudioCtx.audioBufferParameters.samplingFreq;
+    gAudioCtx.audioBufferParameters.updatesPerFrameInvScaled =
+        (1.0f / 256.0f) / gAudioCtx.audioBufferParameters.updatesPerFrame;
+    gAudioCtx.audioBufferParameters.updatesPerFrameScaled = gAudioCtx.audioBufferParameters.updatesPerFrame / 4.0f;
+    gAudioCtx.audioBufferParameters.updatesPerFrameInv = 1.0f / gAudioCtx.audioBufferParameters.updatesPerFrame;
 
     // sample dma size
-    gAudioContext.sampleDmaBufSize1 = spec->sampleDmaBufSize1;
-    gAudioContext.sampleDmaBufSize2 = spec->sampleDmaBufSize2;
+    gAudioCtx.sampleDmaBufSize1 = spec->sampleDmaBufSize1;
+    gAudioCtx.sampleDmaBufSize2 = spec->sampleDmaBufSize2;
 
-    gAudioContext.numNotes = spec->numNotes;
-    gAudioContext.audioBufferParameters.numSequencePlayers = spec->numSequencePlayers;
+    gAudioCtx.numNotes = spec->numNotes;
+    gAudioCtx.audioBufferParameters.numSequencePlayers = spec->numSequencePlayers;
 
-    if (gAudioContext.audioBufferParameters.numSequencePlayers > 5) {
-        gAudioContext.audioBufferParameters.numSequencePlayers = 5;
+    if (gAudioCtx.audioBufferParameters.numSequencePlayers > 5) {
+        gAudioCtx.audioBufferParameters.numSequencePlayers = 5;
     }
 
-    gAudioContext.unk_29BC = 8;
-    gAudioContext.unk_2 = spec->unk_14;
-    gAudioContext.tempoInternalToExternal = (u32)(gAudioContext.audioBufferParameters.updatesPerFrame * 2880000.0f /
-                                                  gTatumsPerBeat / gAudioContext.unk_2960);
+    gAudioCtx.numAbiCmdsMax = 8;
+    gAudioCtx.unk_2 = spec->unk_14;
+    gAudioCtx.maxTempo =
+        (u32)(gAudioCtx.audioBufferParameters.updatesPerFrame * 2880000.0f / gTatumsPerBeat / gAudioCtx.unk_2960);
 
-    gAudioContext.unk_2870 = gAudioContext.refreshRate;
-    gAudioContext.unk_2870 *= gAudioContext.audioBufferParameters.updatesPerFrame;
-    gAudioContext.unk_2870 /= gAudioContext.audioBufferParameters.aiSamplingFreq;
-    gAudioContext.unk_2870 /= gAudioContext.tempoInternalToExternal;
+    gAudioCtx.unk_2870 = gAudioCtx.refreshRate;
+    gAudioCtx.unk_2870 *= gAudioCtx.audioBufferParameters.updatesPerFrame;
+    gAudioCtx.unk_2870 /= gAudioCtx.audioBufferParameters.aiSamplingFreq;
+    gAudioCtx.unk_2870 /= gAudioCtx.maxTempo;
 
-    gAudioContext.audioBufferParameters.specUnk4 = spec->unk_04;
-    gAudioContext.audioBufferParameters.samplesPerFrameTarget *= gAudioContext.audioBufferParameters.specUnk4;
-    gAudioContext.audioBufferParameters.maxAiBufNumSamples *= gAudioContext.audioBufferParameters.specUnk4;
-    gAudioContext.audioBufferParameters.minAiBufNumSamples *= gAudioContext.audioBufferParameters.specUnk4;
-    gAudioContext.audioBufferParameters.updatesPerFrame *= gAudioContext.audioBufferParameters.specUnk4;
+    gAudioCtx.audioBufferParameters.specUnk4 = spec->unk_04;
+    gAudioCtx.audioBufferParameters.numSamplesPerFrameTarget *= gAudioCtx.audioBufferParameters.specUnk4;
+    gAudioCtx.audioBufferParameters.numSamplesPerFrameMax *= gAudioCtx.audioBufferParameters.specUnk4;
+    gAudioCtx.audioBufferParameters.numSamplesPerFrameMin *= gAudioCtx.audioBufferParameters.specUnk4;
+    gAudioCtx.audioBufferParameters.updatesPerFrame *= gAudioCtx.audioBufferParameters.specUnk4;
 
-    if (gAudioContext.audioBufferParameters.specUnk4 >= 2) {
-        gAudioContext.audioBufferParameters.maxAiBufNumSamples -= 0x10;
+    if (gAudioCtx.audioBufferParameters.specUnk4 >= 2) {
+        gAudioCtx.audioBufferParameters.numSamplesPerFrameMax -= 0x10;
     }
 
     // Determine the maximum allowable number of audio command list entries for the rsp microcode
-    gAudioContext.maxAudioCmds =
-        gAudioContext.numNotes * 20 * gAudioContext.audioBufferParameters.updatesPerFrame + spec->numReverbs * 30 + 800;
+    gAudioCtx.maxAudioCmds =
+        gAudioCtx.numNotes * 20 * gAudioCtx.audioBufferParameters.updatesPerFrame + spec->numReverbs * 30 + 800;
 
     // Calculate sizes for various caches on the audio heap
     persistentSize =
@@ -1003,81 +1000,81 @@ void AudioHeap_Init(void) {
     temporarySize =
         spec->temporarySeqCacheSize + spec->temporaryFontCacheSize + spec->temporarySampleBankCacheSize + 0x10;
     cachePoolSize = persistentSize + temporarySize;
-    miscPoolSize = gAudioContext.sessionPool.size - cachePoolSize - 0x100;
+    miscPoolSize = gAudioCtx.sessionPool.size - cachePoolSize - 0x100;
 
-    if (gAudioContext.externalPool.startAddr != NULL) {
-        gAudioContext.externalPool.curAddr = gAudioContext.externalPool.startAddr;
+    if (gAudioCtx.externalPool.startAddr != NULL) {
+        gAudioCtx.externalPool.curAddr = gAudioCtx.externalPool.startAddr;
     }
 
     // Session Pool Split (split into Cache and Misc heaps)
-    gAudioContext.sessionPoolSplit.miscPoolSize = miscPoolSize;
-    gAudioContext.sessionPoolSplit.cachePoolSize = cachePoolSize;
-    AudioHeap_InitSessionPool(&gAudioContext.sessionPoolSplit);
+    gAudioCtx.sessionPoolSplit.miscPoolSize = miscPoolSize;
+    gAudioCtx.sessionPoolSplit.cachePoolSize = cachePoolSize;
+    AudioHeap_InitSessionPool(&gAudioCtx.sessionPoolSplit);
 
     // Cache Pool Split (Split into Persistent and Temporary heaps)
-    gAudioContext.cachePoolSplit.persistentCommonPoolSize = persistentSize;
-    gAudioContext.cachePoolSplit.temporaryCommonPoolSize = temporarySize;
-    AudioHeap_InitCachePool(&gAudioContext.cachePoolSplit);
+    gAudioCtx.cachePoolSplit.persistentCommonPoolSize = persistentSize;
+    gAudioCtx.cachePoolSplit.temporaryCommonPoolSize = temporarySize;
+    AudioHeap_InitCachePool(&gAudioCtx.cachePoolSplit);
 
     // Persistent Pool Split (Split into Sequences, SoundFonts, Samples)
-    gAudioContext.persistentCommonPoolSplit.seqCacheSize = spec->persistentSeqCacheSize;
-    gAudioContext.persistentCommonPoolSplit.fontCacheSize = spec->persistentFontCacheSize;
-    gAudioContext.persistentCommonPoolSplit.sampleBankCacheSize = spec->persistentSampleBankCacheSize;
-    AudioHeap_InitPersistentPoolsAndCaches(&gAudioContext.persistentCommonPoolSplit);
+    gAudioCtx.persistentCommonPoolSplit.seqCacheSize = spec->persistentSeqCacheSize;
+    gAudioCtx.persistentCommonPoolSplit.fontCacheSize = spec->persistentFontCacheSize;
+    gAudioCtx.persistentCommonPoolSplit.sampleBankCacheSize = spec->persistentSampleBankCacheSize;
+    AudioHeap_InitPersistentPoolsAndCaches(&gAudioCtx.persistentCommonPoolSplit);
 
     // Temporary Pool Split (Split into Sequences, SoundFonts, Samples)
-    gAudioContext.temporaryCommonPoolSplit.seqCacheSize = spec->temporarySeqCacheSize;
-    gAudioContext.temporaryCommonPoolSplit.fontCacheSize = spec->temporaryFontCacheSize;
-    gAudioContext.temporaryCommonPoolSplit.sampleBankCacheSize = spec->temporarySampleBankCacheSize;
-    AudioHeap_InitTemporaryPoolsAndCaches(&gAudioContext.temporaryCommonPoolSplit);
+    gAudioCtx.temporaryCommonPoolSplit.seqCacheSize = spec->temporarySeqCacheSize;
+    gAudioCtx.temporaryCommonPoolSplit.fontCacheSize = spec->temporaryFontCacheSize;
+    gAudioCtx.temporaryCommonPoolSplit.sampleBankCacheSize = spec->temporarySampleBankCacheSize;
+    AudioHeap_InitTemporaryPoolsAndCaches(&gAudioCtx.temporaryCommonPoolSplit);
 
     AudioHeap_ResetLoadStatus();
 
     // Initialize notes
-    gAudioContext.notes = AudioHeap_AllocZeroed(&gAudioContext.miscPool, gAudioContext.numNotes * sizeof(Note));
+    gAudioCtx.notes = AudioHeap_AllocZeroed(&gAudioCtx.miscPool, gAudioCtx.numNotes * sizeof(Note));
     AudioPlayback_NoteInitAll();
     AudioPlayback_InitNoteFreeList();
-    gAudioContext.noteSubsEu =
-        AudioHeap_AllocZeroed(&gAudioContext.miscPool, gAudioContext.audioBufferParameters.updatesPerFrame *
-                                                           gAudioContext.numNotes * sizeof(NoteSubEu));
+    gAudioCtx.sampleStateList =
+        AudioHeap_AllocZeroed(&gAudioCtx.miscPool, gAudioCtx.audioBufferParameters.updatesPerFrame *
+                                                       gAudioCtx.numNotes * sizeof(NoteSampleState));
 
     // Initialize audio binary interface command list buffer
-    for (j = 0; j < ARRAY_COUNT(gAudioContext.abiCmdBufs); j++) {
-        gAudioContext.abiCmdBufs[j] =
-            AudioHeap_AllocDmaMemoryZeroed(&gAudioContext.miscPool, gAudioContext.maxAudioCmds * sizeof(Acmd));
+    for (i = 0; i < ARRAY_COUNT(gAudioCtx.abiCmdBufs); i++) {
+        gAudioCtx.abiCmdBufs[i] =
+            AudioHeap_AllocDmaMemoryZeroed(&gAudioCtx.miscPool, gAudioCtx.maxAudioCmds * sizeof(Acmd));
     }
 
     // Initialize the decay rate table for ADSR
-    gAudioContext.adsrDecayTable = AudioHeap_Alloc(&gAudioContext.miscPool, 0x100 * sizeof(f32));
+    gAudioCtx.adsrDecayTable = AudioHeap_Alloc(&gAudioCtx.miscPool, 0x100 * sizeof(f32));
     AudioHeap_InitAdsrDecayTable();
 
     // Initialize reverbs
-    for (i = 0; i < ARRAY_COUNT(gAudioContext.synthesisReverbs); i++) {
-        gAudioContext.synthesisReverbs[i].useReverb = 0;
+    for (reverbIndex = 0; reverbIndex < ARRAY_COUNT(gAudioCtx.synthesisReverbs); reverbIndex++) {
+        gAudioCtx.synthesisReverbs[reverbIndex].useReverb = 0;
     }
 
-    gAudioContext.numSynthesisReverbs = spec->numReverbs;
-    for (i = 0; i < gAudioContext.numSynthesisReverbs; i++) {
-        AudioHeap_InitReverb(i, &spec->reverbSettings[i], 1);
+    gAudioCtx.numSynthesisReverbs = spec->numReverbs;
+    for (reverbIndex = 0; reverbIndex < gAudioCtx.numSynthesisReverbs; reverbIndex++) {
+        AudioHeap_InitReverb(reverbIndex, &spec->reverbSettings[reverbIndex], true);
     }
 
     // Initialize sequence players
     AudioSeq_InitSequencePlayers();
-    for (j = 0; j < gAudioContext.audioBufferParameters.numSequencePlayers; j++) {
-        AudioSeq_InitSequencePlayerChannels(j);
-        AudioSeq_ResetSequencePlayer(&gAudioContext.seqPlayers[j]);
+    for (i = 0; i < gAudioCtx.audioBufferParameters.numSequencePlayers; i++) {
+        AudioSeq_InitSequencePlayerChannels(i);
+        AudioSeq_ResetSequencePlayer(&gAudioCtx.seqPlayers[i]);
     }
 
     // Initialize two additional caches on the audio heap to store individual audio samples
     AudioHeap_InitSampleCaches(spec->persistentSampleCacheSize, spec->temporarySampleCacheSize);
-    AudioLoad_InitSampleDmaBuffers(gAudioContext.numNotes);
+    AudioLoad_InitSampleDmaBuffers(gAudioCtx.numNotes);
 
     // Initalize Loads
-    gAudioContext.preloadSampleStackTop = 0;
+    gAudioCtx.preloadSampleStackTop = 0;
     AudioLoad_InitSlowLoads();
     AudioLoad_InitScriptLoads();
     AudioLoad_InitAsyncLoads();
-    gAudioContext.unk_4 = 0x1000;
+    gAudioCtx.unk_4 = 0x1000;
     AudioLoad_LoadPermanentSamples();
 
     intMask = osSetIntMask(1);
@@ -1088,9 +1085,9 @@ void AudioHeap_Init(void) {
 void* AudioHeap_SearchPermanentCache(s32 tableType, s32 id) {
     s32 i;
 
-    for (i = 0; i < gAudioContext.permanentPool.count; i++) {
-        if (gAudioContext.permanentEntries[i].tableType == tableType && gAudioContext.permanentEntries[i].id == id) {
-            return gAudioContext.permanentEntries[i].addr;
+    for (i = 0; i < gAudioCtx.permanentPool.count; i++) {
+        if (gAudioCtx.permanentEntries[i].tableType == tableType && gAudioCtx.permanentEntries[i].id == id) {
+            return gAudioCtx.permanentEntries[i].addr;
         }
     }
     return NULL;
@@ -1098,18 +1095,18 @@ void* AudioHeap_SearchPermanentCache(s32 tableType, s32 id) {
 
 void* AudioHeap_AllocPermanent(s32 tableType, s32 id, size_t size) {
     void* addr;
-    s32 index = gAudioContext.permanentPool.count;
+    s32 index = gAudioCtx.permanentPool.count;
 
-    addr = AudioHeap_Alloc(&gAudioContext.permanentPool, size);
-    gAudioContext.permanentEntries[index].addr = addr;
+    addr = AudioHeap_Alloc(&gAudioCtx.permanentPool, size);
+    gAudioCtx.permanentEntries[index].addr = addr;
 
     if (addr == NULL) {
         return NULL;
     }
 
-    gAudioContext.permanentEntries[index].tableType = tableType;
-    gAudioContext.permanentEntries[index].id = id;
-    gAudioContext.permanentEntries[index].size = size;
+    gAudioCtx.permanentEntries[index].tableType = tableType;
+    gAudioCtx.permanentEntries[index].id = id;
+    gAudioCtx.permanentEntries[index].size = size;
     //! @bug UB: missing return. "addr" is in v0 at this point, but doing an
     // explicit return uses an additional register.
     // return addr;
@@ -1140,22 +1137,22 @@ void* AudioHeap_AllocSampleCache(size_t size, s32 sampleBankId, void* sampleAddr
 void AudioHeap_InitSampleCaches(size_t persistentSampleCacheSize, size_t temporarySampleCacheSize) {
     void* addr;
 
-    addr = AudioHeap_AllocAttemptExternal(&gAudioContext.miscPool, persistentSampleCacheSize);
+    addr = AudioHeap_AllocAttemptExternal(&gAudioCtx.miscPool, persistentSampleCacheSize);
     if (addr == NULL) {
-        gAudioContext.persistentSampleCache.pool.size = 0;
+        gAudioCtx.persistentSampleCache.pool.size = 0;
     } else {
-        AudioHeap_InitPool(&gAudioContext.persistentSampleCache.pool, addr, persistentSampleCacheSize);
+        AudioHeap_InitPool(&gAudioCtx.persistentSampleCache.pool, addr, persistentSampleCacheSize);
     }
 
-    addr = AudioHeap_AllocAttemptExternal(&gAudioContext.miscPool, temporarySampleCacheSize);
+    addr = AudioHeap_AllocAttemptExternal(&gAudioCtx.miscPool, temporarySampleCacheSize);
     if (addr == NULL) {
-        gAudioContext.temporarySampleCache.pool.size = 0;
+        gAudioCtx.temporarySampleCache.pool.size = 0;
     } else {
-        AudioHeap_InitPool(&gAudioContext.temporarySampleCache.pool, addr, temporarySampleCacheSize);
+        AudioHeap_InitPool(&gAudioCtx.temporarySampleCache.pool, addr, temporarySampleCacheSize);
     }
 
-    gAudioContext.persistentSampleCache.numEntries = 0;
-    gAudioContext.temporarySampleCache.numEntries = 0;
+    gAudioCtx.persistentSampleCache.numEntries = 0;
+    gAudioCtx.temporarySampleCache.numEntries = 0;
 }
 
 SampleCacheEntry* AudioHeap_AllocTemporarySampleCacheEntry(size_t size) {
@@ -1173,7 +1170,7 @@ SampleCacheEntry* AudioHeap_AllocTemporarySampleCacheEntry(size_t size) {
     u8* startAddr;
     u8* endAddr;
 
-    cache = &gAudioContext.temporarySampleCache;
+    cache = &gAudioCtx.temporarySampleCache;
     allocBefore = cache->pool.curAddr;
     addr = AudioHeap_Alloc(&cache->pool, size);
     if (addr == NULL) {
@@ -1194,8 +1191,8 @@ SampleCacheEntry* AudioHeap_AllocTemporarySampleCacheEntry(size_t size) {
     allocAfter = cache->pool.curAddr;
 
     index = -1;
-    for (i = 0; i < gAudioContext.preloadSampleStackTop; i++) {
-        preload = &gAudioContext.preloadSampleStack[i];
+    for (i = 0; i < gAudioCtx.preloadSampleStackTop; i++) {
+        preload = &gAudioCtx.preloadSampleStack[i];
         if (preload->isFree == false) {
             startAddr = preload->ramAddr;
             endAddr = preload->ramAddr + preload->sample->size - 1;
@@ -1267,7 +1264,7 @@ void AudioHeap_UnapplySampleCacheForFont(SampleCacheEntry* entry, s32 fontId) {
     s32 drumId;
     s32 sfxId;
 
-    for (instId = 0; instId < gAudioContext.soundFontList[fontId].numInstruments; instId++) {
+    for (instId = 0; instId < gAudioCtx.soundFontList[fontId].numInstruments; instId++) {
         inst = AudioPlayback_GetInstrumentInner(fontId, instId);
         if (inst != NULL) {
             if (inst->normalRangeLo != 0) {
@@ -1280,14 +1277,14 @@ void AudioHeap_UnapplySampleCacheForFont(SampleCacheEntry* entry, s32 fontId) {
         }
     }
 
-    for (drumId = 0; drumId < gAudioContext.soundFontList[fontId].numDrums; drumId++) {
+    for (drumId = 0; drumId < gAudioCtx.soundFontList[fontId].numDrums; drumId++) {
         drum = AudioPlayback_GetDrum(fontId, drumId);
         if (drum != NULL) {
             AudioHeap_UnapplySampleCache(entry, drum->tunedSample.sample);
         }
     }
 
-    for (sfxId = 0; sfxId < gAudioContext.soundFontList[fontId].numSfx; sfxId++) {
+    for (sfxId = 0; sfxId < gAudioCtx.soundFontList[fontId].numSfx; sfxId++) {
         soundEffect = AudioPlayback_GetSoundEffect(fontId, sfxId);
         if (soundEffect != NULL) {
             AudioHeap_UnapplySampleCache(entry, soundEffect->tunedSample.sample);
@@ -1301,10 +1298,10 @@ void AudioHeap_DiscardSampleCacheEntry(SampleCacheEntry* entry) {
     s32 sampleBankId2;
     s32 fontId;
 
-    numFonts = gAudioContext.soundFontTable->numEntries;
+    numFonts = gAudioCtx.soundFontTable->numEntries;
     for (fontId = 0; fontId < numFonts; fontId++) {
-        sampleBankId1 = gAudioContext.soundFontList[fontId].sampleBankId1;
-        sampleBankId2 = gAudioContext.soundFontList[fontId].sampleBankId2;
+        sampleBankId1 = gAudioCtx.soundFontList[fontId].sampleBankId1;
+        sampleBankId2 = gAudioCtx.soundFontList[fontId].sampleBankId2;
         if (((sampleBankId1 != 0xFF) && (entry->sampleBankId == sampleBankId1)) ||
             ((sampleBankId2 != 0xFF) && (entry->sampleBankId == sampleBankId2)) || entry->sampleBankId == 0 ||
             entry->sampleBankId == 0xFE) {
@@ -1332,7 +1329,7 @@ SampleCacheEntry* AudioHeap_AllocPersistentSampleCacheEntry(size_t size) {
     SampleCacheEntry* entry;
     void* addr;
 
-    cache = &gAudioContext.persistentSampleCache;
+    cache = &gAudioCtx.persistentSampleCache;
     addr = AudioHeap_Alloc(&cache->pool, size);
     if (addr == NULL) {
         return NULL;
@@ -1365,10 +1362,10 @@ void AudioHeap_DiscardSampleCaches(void) {
     s32 fontId;
     s32 j;
 
-    numFonts = gAudioContext.soundFontTable->numEntries;
+    numFonts = gAudioCtx.soundFontTable->numEntries;
     for (fontId = 0; fontId < numFonts; fontId++) {
-        sampleBankId1 = gAudioContext.soundFontList[fontId].sampleBankId1;
-        sampleBankId2 = gAudioContext.soundFontList[fontId].sampleBankId2;
+        sampleBankId1 = gAudioCtx.soundFontList[fontId].sampleBankId1;
+        sampleBankId2 = gAudioCtx.soundFontList[fontId].sampleBankId2;
         if ((sampleBankId1 == 0xFF) && (sampleBankId2 == 0xFF)) {
             continue;
         }
@@ -1377,12 +1374,12 @@ void AudioHeap_DiscardSampleCaches(void) {
             continue;
         }
 
-        for (j = 0; j < gAudioContext.persistentSampleCache.numEntries; j++) {
-            AudioHeap_DiscardSampleCacheForFont(&gAudioContext.persistentSampleCache.entries[j], sampleBankId1,
+        for (j = 0; j < gAudioCtx.persistentSampleCache.numEntries; j++) {
+            AudioHeap_DiscardSampleCacheForFont(&gAudioCtx.persistentSampleCache.entries[j], sampleBankId1,
                                                 sampleBankId2, fontId);
         }
-        for (j = 0; j < gAudioContext.temporarySampleCache.numEntries; j++) {
-            AudioHeap_DiscardSampleCacheForFont(&gAudioContext.temporarySampleCache.entries[j], sampleBankId1,
+        for (j = 0; j < gAudioCtx.temporarySampleCache.numEntries; j++) {
+            AudioHeap_DiscardSampleCacheForFont(&gAudioCtx.temporarySampleCache.entries[j], sampleBankId1,
                                                 sampleBankId2, fontId);
         }
     }
@@ -1439,8 +1436,8 @@ void AudioHeap_ApplySampleBankCacheInternal(s32 apply, s32 sampleBankId) {
     uintptr_t* newAddr;
     s32 pad[4];
 
-    sampleBankTable = gAudioContext.sampleBankTable;
-    numFonts = gAudioContext.soundFontTable->numEntries;
+    sampleBankTable = gAudioCtx.sampleBankTable;
+    numFonts = gAudioCtx.soundFontTable->numEntries;
     change.oldAddr = AudioHeap_SearchCaches(SAMPLE_TABLE, CACHE_EITHER, sampleBankId);
     if (change.oldAddr == 0) {
         return;
@@ -1462,8 +1459,8 @@ void AudioHeap_ApplySampleBankCacheInternal(s32 apply, s32 sampleBankId) {
     }
 
     for (fontId = 0; fontId < numFonts; fontId++) {
-        sampleBankId1 = gAudioContext.soundFontList[fontId].sampleBankId1;
-        sampleBankId2 = gAudioContext.soundFontList[fontId].sampleBankId2;
+        sampleBankId1 = gAudioCtx.soundFontList[fontId].sampleBankId1;
+        sampleBankId2 = gAudioCtx.soundFontList[fontId].sampleBankId2;
         if ((sampleBankId1 != 0xFF) || (sampleBankId2 != 0xFF)) {
             if (!AudioLoad_IsFontLoadComplete(fontId) ||
                 AudioHeap_SearchCaches(FONT_TABLE, CACHE_EITHER, fontId) == NULL) {
@@ -1476,7 +1473,7 @@ void AudioHeap_ApplySampleBankCacheInternal(s32 apply, s32 sampleBankId) {
                 continue;
             }
 
-            for (instId = 0; instId < gAudioContext.soundFontList[fontId].numInstruments; instId++) {
+            for (instId = 0; instId < gAudioCtx.soundFontList[fontId].numInstruments; instId++) {
                 inst = AudioPlayback_GetInstrumentInner(fontId, instId);
                 if (inst != NULL) {
                     if (inst->normalRangeLo != 0) {
@@ -1489,14 +1486,14 @@ void AudioHeap_ApplySampleBankCacheInternal(s32 apply, s32 sampleBankId) {
                 }
             }
 
-            for (drumId = 0; drumId < gAudioContext.soundFontList[fontId].numDrums; drumId++) {
+            for (drumId = 0; drumId < gAudioCtx.soundFontList[fontId].numDrums; drumId++) {
                 drum = AudioPlayback_GetDrum(fontId, drumId);
                 if (drum != NULL) {
                     AudioHeap_ChangeStorage(&change, drum->tunedSample.sample);
                 }
             }
 
-            for (sfxId = 0; sfxId < gAudioContext.soundFontList[fontId].numSfx; sfxId++) {
+            for (sfxId = 0; sfxId < gAudioCtx.soundFontList[fontId].numSfx; sfxId++) {
                 soundEffect = AudioPlayback_GetSoundEffect(fontId, sfxId);
                 if (soundEffect != NULL) {
                     AudioHeap_ChangeStorage(&change, soundEffect->tunedSample.sample);
@@ -1512,7 +1509,7 @@ void AudioHeap_DiscardSampleBanks(void) {
     AudioTemporaryCache* temporary;
     u32 i;
 
-    cache = &gAudioContext.sampleBankCache;
+    cache = &gAudioCtx.sampleBankCache;
     temporary = &cache->temporary;
 
     if (temporary->entries[0].id != -1) {
@@ -1529,149 +1526,159 @@ void AudioHeap_DiscardSampleBanks(void) {
     }
 }
 
-void AudioHeap_SetReverbData(s32 reverbIndex, u32 dataType, s32 data, s32 flags) {
-    s32 windowSize;
-    SynthesisReverb* reverb = &gAudioContext.synthesisReverbs[reverbIndex];
+void AudioHeap_SetReverbData(s32 reverbIndex, u32 dataType, s32 data, s32 isFirstInit) {
+    s32 delayNumSamples;
+    SynthesisReverb* reverb = &gAudioCtx.synthesisReverbs[reverbIndex];
 
     switch (dataType) {
-        case 0:
-            AudioHeap_InitReverb(reverbIndex, (ReverbSettings*)data, 0);
+        case REVERB_DATA_TYPE_SETTINGS:
+            AudioHeap_InitReverb(reverbIndex, (ReverbSettings*)data, false);
             break;
-        case 1:
+
+        case REVERB_DATA_TYPE_DELAY:
             if (data < 4) {
                 data = 4;
             }
 
-            windowSize = data * 64;
-            if (windowSize < 0x100) {
-                windowSize = 0x100;
+            delayNumSamples = data * 64;
+            if (delayNumSamples < (16 * SAMPLES_PER_FRAME)) {
+                delayNumSamples = 16 * SAMPLES_PER_FRAME;
             }
 
-            windowSize /= reverb->downsampleRate;
+            delayNumSamples /= reverb->downsampleRate;
 
-            if (flags == 0) {
-                if (reverb->unk_1E >= (data / reverb->downsampleRate)) {
-                    if ((reverb->nextRingBufPos >= windowSize) || (reverb->unk_24 >= windowSize)) {
-                        reverb->nextRingBufPos = 0;
-                        reverb->unk_24 = 0;
-                    }
-                } else {
+            if (!isFirstInit) {
+                if (reverb->delayNumSamplesAfterDownsampling < (data / reverb->downsampleRate)) {
                     break;
+                }
+                if ((reverb->nextReverbBufPos >= delayNumSamples) || (reverb->delayNumSamplesUnk >= delayNumSamples)) {
+                    reverb->nextReverbBufPos = 0;
+                    reverb->delayNumSamplesUnk = 0;
                 }
             }
 
-            reverb->windowSize = windowSize;
+            reverb->delayNumSamples = delayNumSamples;
 
-            if ((reverb->downsampleRate != 1) || reverb->unk_18) {
-                reverb->unk_0E = 0x8000 / reverb->downsampleRate;
-                if (reverb->unk_30 == NULL) {
-                    reverb->unk_30 = AudioHeap_AllocZeroed(&gAudioContext.miscPool, 0x20);
-                    reverb->unk_34 = AudioHeap_AllocZeroed(&gAudioContext.miscPool, 0x20);
-                    reverb->unk_38 = AudioHeap_AllocZeroed(&gAudioContext.miscPool, 0x20);
-                    reverb->unk_3C = AudioHeap_AllocZeroed(&gAudioContext.miscPool, 0x20);
-                    if (reverb->unk_3C == NULL) {
+            if ((reverb->downsampleRate != 1) || reverb->resampleEffectOn) {
+                reverb->downsamplePitch = 0x8000 / reverb->downsampleRate;
+                if (reverb->leftLoadResampleBuf == NULL) {
+                    reverb->leftLoadResampleBuf = AudioHeap_AllocZeroed(&gAudioCtx.miscPool, sizeof(RESAMPLE_STATE));
+                    reverb->rightLoadResampleBuf = AudioHeap_AllocZeroed(&gAudioCtx.miscPool, sizeof(RESAMPLE_STATE));
+                    reverb->leftSaveResampleBuf = AudioHeap_AllocZeroed(&gAudioCtx.miscPool, sizeof(RESAMPLE_STATE));
+                    reverb->rightSaveResampleBuf = AudioHeap_AllocZeroed(&gAudioCtx.miscPool, sizeof(RESAMPLE_STATE));
+                    if (reverb->rightSaveResampleBuf == NULL) {
                         reverb->downsampleRate = 1;
                     }
                 }
             }
             break;
-        case 2:
-            gAudioContext.synthesisReverbs[reverbIndex].unk_0C = data;
+
+        case REVERB_DATA_TYPE_DECAY:
+            gAudioCtx.synthesisReverbs[reverbIndex].decayRatio = data;
             break;
-        case 3:
-            gAudioContext.synthesisReverbs[reverbIndex].unk_16 = data;
+
+        case REVERB_DATA_TYPE_SUB_VOLUME:
+            gAudioCtx.synthesisReverbs[reverbIndex].subVolume = data;
             break;
-        case 4:
-            gAudioContext.synthesisReverbs[reverbIndex].unk_0A = data;
+
+        case REVERB_DATA_TYPE_VOLUME:
+            gAudioCtx.synthesisReverbs[reverbIndex].volume = data;
             break;
-        case 5:
-            gAudioContext.synthesisReverbs[reverbIndex].leakRtl = data;
+
+        case REVERB_DATA_TYPE_LEAK_RIGHT:
+            gAudioCtx.synthesisReverbs[reverbIndex].leakRtl = data;
             break;
-        case 6:
-            gAudioContext.synthesisReverbs[reverbIndex].leakLtr = data;
+
+        case REVERB_DATA_TYPE_LEAK_LEFT:
+            gAudioCtx.synthesisReverbs[reverbIndex].leakLtr = data;
             break;
-        case 7:
+
+        case REVERB_DATA_TYPE_FILTER_LEFT:
             if (data != 0) {
-                if ((flags != 0) || (reverb->unk_278 == 0)) {
-                    reverb->filterLeftState = AudioHeap_AllocDmaMemoryZeroed(&gAudioContext.miscPool, 0x40);
-                    reverb->unk_278 = AudioHeap_AllocDmaMemory(&gAudioContext.miscPool, 0x10);
+                if (isFirstInit || (reverb->filterLeftInit == NULL)) {
+                    reverb->filterLeftState =
+                        AudioHeap_AllocDmaMemoryZeroed(&gAudioCtx.miscPool, 2 * (FILTER_BUF_PART1 + FILTER_BUF_PART2));
+                    reverb->filterLeftInit = AudioHeap_AllocDmaMemory(&gAudioCtx.miscPool, FILTER_SIZE);
                 }
 
-                reverb->filterLeft = reverb->unk_278;
-                if (reverb->filterLeft != 0) {
+                reverb->filterLeft = reverb->filterLeftInit;
+                if (reverb->filterLeft != NULL) {
                     AudioHeap_LoadLowPassFilter(reverb->filterLeft, data);
                 }
             } else {
-                reverb->filterLeft = 0;
+                reverb->filterLeft = NULL;
 
-                if (flags != 0) {
-                    reverb->unk_278 = 0;
+                if (isFirstInit) {
+                    reverb->filterLeftInit = NULL;
                 }
             }
-
             break;
-        case 8:
+
+        case REVERB_DATA_TYPE_FILTER_RIGHT:
             if (data != 0) {
-                if ((flags != 0) || (reverb->unk_27C == 0)) {
-                    reverb->filterRightState = AudioHeap_AllocDmaMemoryZeroed(&gAudioContext.miscPool, 0x40);
-                    reverb->unk_27C = AudioHeap_AllocDmaMemory(&gAudioContext.miscPool, 0x10);
+                if (isFirstInit || (reverb->filterRightInit == NULL)) {
+                    reverb->filterRightState =
+                        AudioHeap_AllocDmaMemoryZeroed(&gAudioCtx.miscPool, 2 * (FILTER_BUF_PART1 + FILTER_BUF_PART2));
+                    reverb->filterRightInit = AudioHeap_AllocDmaMemory(&gAudioCtx.miscPool, FILTER_SIZE);
                 }
-                reverb->filterRight = reverb->unk_27C;
-                if (reverb->unk_27C != 0) {
-                    AudioHeap_LoadLowPassFilter(reverb->unk_27C, data);
+                reverb->filterRight = reverb->filterRightInit;
+                if (reverb->filterRight != NULL) {
+                    AudioHeap_LoadLowPassFilter(reverb->filterRight, data);
                 }
             } else {
-                reverb->filterRight = 0;
-                if (flags != 0) {
-                    reverb->unk_27C = 0;
+                reverb->filterRight = NULL;
+                if (isFirstInit) {
+                    reverb->filterRightInit = NULL;
                 }
             }
             break;
-        case 9:
-            reverb->unk_19 = data;
+
+        case REVERB_DATA_TYPE_9:
+            reverb->resampleEffectExtraSamples = data;
             if (data == 0) {
-                reverb->unk_18 = false;
+                reverb->resampleEffectOn = false;
             } else {
-                reverb->unk_18 = true;
+                reverb->resampleEffectOn = true;
             }
             break;
+
         default:
             break;
     }
 }
 
-void AudioHeap_InitReverb(s32 reverbIndex, ReverbSettings* settings, s32 flags) {
-    SynthesisReverb* reverb = &gAudioContext.synthesisReverbs[reverbIndex];
+void AudioHeap_InitReverb(s32 reverbIndex, ReverbSettings* settings, s32 isFirstInit) {
+    SynthesisReverb* reverb = &gAudioCtx.synthesisReverbs[reverbIndex];
 
-    if (flags != 0) {
-        reverb->unk_1E = settings->windowSize / settings->downsampleRate;
-        reverb->unk_30 = 0;
-    } else if (reverb->unk_1E < (settings->windowSize / settings->downsampleRate)) {
+    if (isFirstInit) {
+        reverb->delayNumSamplesAfterDownsampling = settings->delayNumSamples / settings->downsampleRate;
+        reverb->leftLoadResampleBuf = NULL;
+    } else if (reverb->delayNumSamplesAfterDownsampling < (settings->delayNumSamples / settings->downsampleRate)) {
         return;
     }
 
     reverb->downsampleRate = settings->downsampleRate;
-    reverb->unk_18 = false;
-    reverb->unk_19 = 0;
-    reverb->unk_1A = 0;
-    reverb->unk_1C = 0;
-    AudioHeap_SetReverbData(reverbIndex, 1, settings->windowSize, flags);
-    reverb->unk_0C = settings->unk_4;
-    reverb->unk_0A = settings->unk_A;
-    reverb->unk_14 = settings->unk_6 << 6;
-    reverb->unk_16 = settings->unk_8;
+    reverb->resampleEffectOn = false;
+    reverb->resampleEffectExtraSamples = 0;
+    reverb->resampleEffectLoadUnk = 0;
+    reverb->resampleEffectSaveUnk = 0;
+    AudioHeap_SetReverbData(reverbIndex, REVERB_DATA_TYPE_DELAY, settings->delayNumSamples, isFirstInit);
+    reverb->decayRatio = settings->decayRatio;
+    reverb->volume = settings->volume;
+    reverb->subDelay = settings->subDelay * 64;
+    reverb->subVolume = settings->subVolume;
     reverb->leakRtl = settings->leakRtl;
     reverb->leakLtr = settings->leakLtr;
-    reverb->unk_05 = settings->unk_10;
-    reverb->unk_08 = settings->unk_12;
-    reverb->useReverb = 8;
+    reverb->mixReverbIndex = settings->mixReverbIndex;
+    reverb->mixReverbStrength = settings->mixReverbStrength;
+    reverb->useReverb = 8; // used as a boolean
 
-    if (flags != 0) {
-        reverb->leftRingBuf = AudioHeap_AllocZeroedAttemptExternal(&gAudioContext.miscPool, reverb->windowSize * 2);
-        reverb->rightRingBuf = AudioHeap_AllocZeroedAttemptExternal(&gAudioContext.miscPool, reverb->windowSize * 2);
+    if (isFirstInit) {
+        reverb->leftReverbBuf = AudioHeap_AllocZeroedAttemptExternal(&gAudioCtx.miscPool, reverb->delayNumSamples * 2);
+        reverb->rightReverbBuf = AudioHeap_AllocZeroedAttemptExternal(&gAudioCtx.miscPool, reverb->delayNumSamples * 2);
         reverb->resampleFlags = 1;
-        reverb->nextRingBufPos = 0;
-        reverb->unk_24 = 0;
+        reverb->nextReverbBufPos = 0;
+        reverb->delayNumSamplesUnk = 0;
         reverb->curFrame = 0;
         reverb->framesToIgnore = 2;
     }
@@ -1681,12 +1688,13 @@ void AudioHeap_InitReverb(s32 reverbIndex, ReverbSettings* settings, s32 flags) 
     reverb->tunedSample.tuning = 1.0f;
     reverb->sample.codec = CODEC_REVERB;
     reverb->sample.medium = MEDIUM_RAM;
-    reverb->sample.size = reverb->windowSize * 2;
-    reverb->sample.sampleAddr = (u8*)reverb->leftRingBuf;
+    reverb->sample.size = reverb->delayNumSamples * SAMPLE_SIZE;
+    reverb->sample.sampleAddr = (u8*)reverb->leftReverbBuf;
     reverb->loop.start = 0;
     reverb->loop.count = 1;
-    reverb->loop.end = reverb->windowSize;
+    reverb->loop.loopEnd = reverb->delayNumSamples;
 
-    AudioHeap_SetReverbData(reverbIndex, 7, settings->lowPassFilterCutoffLeft, flags);
-    AudioHeap_SetReverbData(reverbIndex, 8, settings->lowPassFilterCutoffRight, flags);
+    AudioHeap_SetReverbData(reverbIndex, REVERB_DATA_TYPE_FILTER_LEFT, settings->lowPassFilterCutoffLeft, isFirstInit);
+    AudioHeap_SetReverbData(reverbIndex, REVERB_DATA_TYPE_FILTER_RIGHT, settings->lowPassFilterCutoffRight,
+                            isFirstInit);
 }

@@ -50,6 +50,4 @@ typedef struct EnMinislime {
     /* 0x160 */ ColliderCylinder collider;
 } EnMinislime; // size = 0x1AC
 
-extern const ActorInit En_Minislime_InitVars;
-
 #endif // Z_EN_MINISLIME_H

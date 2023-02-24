@@ -35,6 +35,4 @@ typedef struct EnMa4 {
     /* 0x33E */ u16 textId;
 } EnMa4; // size = 0x340
 
-extern const ActorInit En_Ma4_InitVars;
-
 #endif // Z_EN_MA4_H

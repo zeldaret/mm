@@ -27,7 +27,7 @@ void func_808DDE9C(Actor* thisx, PlayState* play2);
 
 static f32 D_808DE5B0;
 
-const ActorInit Object_Kankyo_InitVars = {
+ActorInit Object_Kankyo_InitVars = {
     ACTOR_OBJECT_KANKYO,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -125,7 +125,7 @@ void ObjectKankyo_Init(Actor* thisx, PlayState* play) {
 void ObjectKankyo_Destroy(Actor* thisx, PlayState* play) {
     ObjectKankyo* this = THIS;
 
-    Actor_MarkForDeath(&this->actor);
+    Actor_Kill(&this->actor);
 }
 
 void func_808DC18C(ObjectKankyo* this, PlayState* play) {
@@ -588,7 +588,7 @@ void func_808DD970(Actor* thisx, PlayState* play2) {
     ObjectKankyo* this = THIS;
     f32 tempA;
 
-    if (play->sceneNum == SCENE_KYOJINNOMA) {
+    if (play->sceneId == SCENE_KYOJINNOMA) {
         phi_f26 = 1.0f;
     } else {
         tempA = Camera_GetWaterYPos(GET_ACTIVE_CAM(play));

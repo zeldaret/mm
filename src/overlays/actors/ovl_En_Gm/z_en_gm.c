@@ -80,7 +80,7 @@ static u8 D_80951820[] = {
     /* 0x134 */ SCHEDULE_CMD_RET_TIME(12, 55, 13, 0, 20),
     /* 0x13A */ SCHEDULE_CMD_RET_NONE(),
     /* 0x13B */ SCHEDULE_CMD_CHECK_NOT_IN_DAY_L(2, 0x1EB - 0x140),
-    /* 0x140 */ SCHEDULE_CMD_CHECK_FLAG_L(0x32, 0x01, 0x1CD - 0x145),
+    /* 0x140 */ SCHEDULE_CMD_CHECK_FLAG_L(WEEKEVENTREG_50_01, 0x1CD - 0x145),
     /* 0x145 */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_YADOYA, 0x17A - 0x149),
     /* 0x149 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(6, 0, 18, 0, 0x174 - 0x14F),
     /* 0x14F */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(18, 0, 21, 0, 0x16E - 0x155),
@@ -155,7 +155,7 @@ static s32 D_80951C2C[] = { 0x0E295A2D, 0x000A0C10 };
 
 static s32 D_80951C34[] = { 0x0E29622D, 0x000A0C10 };
 
-const ActorInit En_Gm_InitVars = {
+ActorInit En_Gm_InitVars = {
     ACTOR_EN_GM,
     ACTORCAT_NPC,
     FLAGS,
@@ -328,8 +328,8 @@ s32 func_8094E054(EnGm* this, PlayState* play, s32 arg2) {
 s32 func_8094E0F8(EnGm* this, PlayState* play) {
     s32 ret = false;
 
-    if ((this->unk_260 != play->roomCtx.currRoom.num) && (play->roomCtx.unk31 == 0)) {
-        this->unk_260 = play->roomCtx.currRoom.num;
+    if ((this->unk_260 != play->roomCtx.curRoom.num) && (play->roomCtx.unk31 == 0)) {
+        this->unk_260 = play->roomCtx.curRoom.num;
         this->unk_262 = SubS_GetObjectIndex(OBJECT_IN2, play);
         this->actor.draw = NULL;
         this->unk_3FC = 1;
@@ -463,7 +463,7 @@ s32 func_8094E52C(EnGm* this, PlayState* play) {
             }
 
         case 2:
-            if (!(gSaveContext.save.weekEventReg[86] & 0x40) && (this->unk_3E0 == 2)) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_86_40) && (this->unk_3E0 == 2)) {
                 ActorCutscene_Stop(sp2A);
             } else {
                 Camera_SetTargetActor(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(sp2A)), &this->actor);
@@ -632,8 +632,8 @@ s32 func_8094EB1C(EnGm* this, PlayState* play) {
 
     switch (this->unk_3E0) {
         case 0:
-            if ((gSaveContext.save.weekEventReg[50] & 1) || (gSaveContext.save.weekEventReg[51] & 0x80) ||
-                (gSaveContext.save.weekEventReg[75] & 2)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_50_01) || CHECK_WEEKEVENTREG(WEEKEVENTREG_51_80) ||
+                CHECK_WEEKEVENTREG(WEEKEVENTREG_75_02)) {
                 ret = true;
                 break;
             }
@@ -739,14 +739,14 @@ s32 func_8094EE84(EnGm* this, PlayState* play) {
             this->actor.child = this->unk_268;
             this->unk_264 = func_8094EDBC(this, play);
 
-            if ((this->unk_258 == 5) && !(gSaveContext.save.weekEventReg[50] & 1) &&
-                !(gSaveContext.save.weekEventReg[51] & 0x80) && !(gSaveContext.save.weekEventReg[75] & 2)) {
+            if ((this->unk_258 == 5) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_50_01) &&
+                !CHECK_WEEKEVENTREG(WEEKEVENTREG_51_80) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_75_02)) {
                 this->unk_3A4 |= 0x20;
             } else if ((this->unk_258 != 1) && (this->unk_258 != 5) && (this->unk_258 != 7)) {
                 this->unk_3A4 |= 0x20;
             }
 
-            if ((this->unk_258 == 3) && (gSaveContext.save.weekEventReg[75] & 1)) {
+            if ((this->unk_258 == 3) && CHECK_WEEKEVENTREG(WEEKEVENTREG_75_01)) {
                 this->unk_3A4 &= ~0x20;
             }
 
@@ -762,7 +762,7 @@ s32 func_8094EFC4(EnGm* this, PlayState* play) {
 
     if (play->csCtx.state != 0) {
         if (this->unk_3F8 == 0) {
-            if ((play->sceneNum == SCENE_MILK_BAR) && (gSaveContext.sceneSetupIndex == 2)) {
+            if ((play->sceneId == SCENE_MILK_BAR) && (gSaveContext.sceneLayer == 2)) {
                 func_8094E054(this, play, 0);
                 this->unk_258 = 255;
             }
@@ -771,7 +771,7 @@ s32 func_8094EFC4(EnGm* this, PlayState* play) {
         }
         ret = true;
     } else if (this->unk_3F8 != 0) {
-        if (play->sceneNum == SCENE_MILK_BAR) {
+        if (play->sceneId == SCENE_MILK_BAR) {
             this->unk_400 = 0;
         }
         this->unk_3F8 = 0;
@@ -860,7 +860,7 @@ void func_8094F3D0(EnGm* this, PlayState* play) {
     s32 talkState = Message_GetState(&play->msgCtx);
     s32 textId = play->msgCtx.currentTextId;
 
-    if ((&this->actor == player->targetActor) && ((textId < 0xFF) || (textId > 0x200)) && (talkState == TEXT_STATE_3) &&
+    if ((&this->actor == player->talkActor) && ((textId < 0xFF) || (textId > 0x200)) && (talkState == TEXT_STATE_3) &&
         (this->prevTalkState == TEXT_STATE_3)) {
         if ((play->state.frames % 3) == 0) {
             if (this->unk_3AC == 120.0f) {
@@ -892,7 +892,7 @@ s32 func_8094F53C(EnGm* this, PlayState* play) {
     Actor* al = func_8094DEE0(this, play, ACTORCAT_NPC, ACTOR_EN_AL);
     Actor* toto = func_8094DEE0(this, play, ACTORCAT_NPC, ACTOR_EN_TOTO);
 
-    if (player->stateFlags1 & 0x440) {
+    if (player->stateFlags1 & (PLAYER_STATE1_40 | PLAYER_STATE1_400)) {
         this->unk_3A4 |= 0x400;
         if (this->unk_3A6 != sp32) {
             switch (sp32) {
@@ -1105,7 +1105,7 @@ s32 func_8094FCC4(EnGm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
             func_8094E054(this, play, 0);
         } else {
             func_8094E054(this, play, 9);
-            this->skelAnime.moveFlags = 0x10;
+            this->skelAnime.moveFlags = ANIM_FLAG_NOMOVE;
         }
         this->unk_3A4 |= 0x100;
         this->unk_3A4 |= 0x200;
@@ -1137,7 +1137,7 @@ s32 func_8094FE10(EnGm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
         func_8094E054(this, play, 11);
         SubS_UpdateFlags(&this->unk_3A4, 3, 7);
         this->unk_268 = al;
-        if (!(gSaveContext.save.weekEventReg[86] & 0x20)) {
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_86_20)) {
             this->unk_3C8 = 2;
             this->unk_3CA = 2;
             this->unk_3CC = 8;
@@ -1181,7 +1181,7 @@ s32 func_8094FF04(EnGm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
         } else {
             Math_Vec3f_Copy(&this->actor.world.pos, &sp30);
             func_8094E054(this, play, 9);
-            this->skelAnime.moveFlags = 0x10;
+            this->skelAnime.moveFlags = ANIM_FLAG_NOMOVE;
         }
         this->unk_400 = 0;
         this->unk_3A4 |= 0x100;
@@ -1352,7 +1352,7 @@ s32 func_80950490(EnGm* this, PlayState* play) {
     };
     s32 pad;
 
-    if ((gSaveContext.save.weekEventReg[50] & 1) || (gSaveContext.save.weekEventReg[51] & 0x80)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_50_01) || CHECK_WEEKEVENTREG(WEEKEVENTREG_51_80)) {
         if (this->unk_400 == 0) {
             this->unk_3C8 = 1;
             this->unk_3CA = 1;
@@ -1412,7 +1412,7 @@ s32 func_80950690(EnGm* this, PlayState* play) {
             al = func_8094DEE0(this, play, ACTORCAT_NPC, ACTOR_EN_AL);
             toto = func_8094DEE0(this, play, ACTORCAT_NPC, ACTOR_EN_TOTO);
             if ((al != NULL) && (al->update != NULL) && (toto != NULL) && (toto->update != NULL) &&
-                !(player->stateFlags1 & 0x40)) {
+                !(player->stateFlags1 & PLAYER_STATE1_40)) {
                 if (DECR(this->unk_3B8) == 0) {
                     if (al == this->unk_268) {
                         this->unk_268 = toto;
@@ -1582,7 +1582,7 @@ void func_80950C24(EnGm* this, PlayState* play) {
 void func_80950CDC(EnGm* this, PlayState* play) {
     ScheduleOutput sp20;
 
-    this->timePathTimeSpeed = REG(15) + ((void)0, gSaveContext.save.daySpeed);
+    this->timePathTimeSpeed = R_TIME_SPEED + ((void)0, gSaveContext.save.timeSpeedOffset);
 
     if (!Schedule_RunScript(play, D_80951820, &sp20) ||
         ((this->unk_258 != sp20.result) && !func_80950280(this, play, &sp20))) {
@@ -1665,7 +1665,7 @@ void EnGm_Init(Actor* thisx, PlayState* play) {
     EnGm* this = THIS;
 
     if (func_8094DEE0(this, play, ACTORCAT_NPC, ACTOR_EN_GM)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -1711,7 +1711,7 @@ void EnGm_Update(Actor* thisx, PlayState* play) {
             func_8094DFF8(this, play);
             func_8094E2D0(this);
             func_8094F2E8(this);
-            func_8013C964(&this->actor, play, this->unk_3B4, 30.0f, PLAYER_AP_NONE, this->unk_3A4 & 7);
+            func_8013C964(&this->actor, play, this->unk_3B4, 30.0f, PLAYER_IA_NONE, this->unk_3A4 & 7);
             if ((this->unk_258 != 3) && (this->unk_258 != 5) && (this->unk_258 != 8)) {
                 Actor_MoveWithGravity(&this->actor);
                 Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, 4);

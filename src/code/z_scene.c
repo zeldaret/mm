@@ -28,12 +28,12 @@ void Object_InitBank(GameState* gameState, ObjectContext* objectCtx) {
     u32 spaceSize;
     s32 i;
 
-    if (play->sceneNum == SCENE_CLOCKTOWER || play->sceneNum == SCENE_TOWN || play->sceneNum == SCENE_BACKTOWN ||
-        play->sceneNum == SCENE_ICHIBA) {
+    if (play->sceneId == SCENE_CLOCKTOWER || play->sceneId == SCENE_TOWN || play->sceneId == SCENE_BACKTOWN ||
+        play->sceneId == SCENE_ICHIBA) {
         spaceSize = OBJECT_SPACE_SIZE_CLOCK_TOWN;
-    } else if (play->sceneNum == SCENE_MILK_BAR) {
+    } else if (play->sceneId == SCENE_MILK_BAR) {
         spaceSize = OBJECT_SPACE_SIZE_MILK_BAR;
-    } else if (play->sceneNum == SCENE_00KEIKOKU) {
+    } else if (play->sceneId == SCENE_00KEIKOKU) {
         spaceSize = OBJECT_SPACE_SIZE_TERMINA_FIELD;
     } else {
         spaceSize = OBJECT_SPACE_SIZE_DEFAULT;
@@ -52,7 +52,7 @@ void Object_InitBank(GameState* gameState, ObjectContext* objectCtx) {
     objectCtx->spaceEnd = (void*)((u32)objectCtx->spaceStart + spaceSize);
     objectCtx->mainKeepIndex = Object_Spawn(objectCtx, GAMEPLAY_KEEP);
 
-    gSegments[0x04] = PHYSICAL_TO_VIRTUAL(objectCtx->status[objectCtx->mainKeepIndex].segment);
+    gSegments[0x04] = VIRTUAL_TO_PHYSICAL(objectCtx->status[objectCtx->mainKeepIndex].segment);
 }
 
 void Object_UpdateBank(ObjectContext* objectCtx) {
@@ -108,7 +108,7 @@ s32 Object_IsLoaded(ObjectContext* objectCtx, s32 index) {
 void Object_LoadAll(ObjectContext* objectCtx) {
     s32 i;
     s32 id;
-    u32 vromSize;
+    uintptr_t vromSize;
 
     for (i = 0; i < objectCtx->num; i++) {
         id = objectCtx->status[i].id;
@@ -124,7 +124,7 @@ void Object_LoadAll(ObjectContext* objectCtx) {
 
 void* func_8012F73C(ObjectContext* objectCtx, s32 iParm2, s16 id) {
     u32 addr;
-    u32 vromSize;
+    uintptr_t vromSize;
     RomFile* fileTableEntry;
 
     objectCtx->status[iParm2].id = -id;
@@ -148,8 +148,9 @@ void Scene_HeaderCmdSpawnList(PlayState* play, SceneCmd* cmd) {
 
     play->linkActorEntry =
         (ActorEntry*)Lib_SegmentedToVirtual(cmd->spawnList.segment) + play->setupEntranceList[play->curSpawn].spawn;
-    if ((play->linkActorEntry->params & 0x0F00) >> 8 == 0x0C ||
-        (gSaveContext.respawnFlag == 0x02 && gSaveContext.respawn[RESPAWN_MODE_RETURN].playerParams == 0x0CFF)) {
+    if ((PLAYER_GET_INITMODE(play->linkActorEntry) == PLAYER_INITMODE_TELESCOPE) ||
+        ((gSaveContext.respawnFlag == 2) &&
+         (gSaveContext.respawn[RESPAWN_MODE_RETURN].playerParams == PLAYER_PARAMS(0xFF, PLAYER_INITMODE_TELESCOPE)))) {
         // Skull Kid Object
         Object_Spawn(&play->objectCtx, OBJECT_STK);
         return;
@@ -159,7 +160,7 @@ void Scene_HeaderCmdSpawnList(PlayState* play, SceneCmd* cmd) {
     nextObject = play->objectCtx.status[play->objectCtx.num].segment;
     play->objectCtx.num = loadedCount;
     play->objectCtx.spawnedObjectCount = loadedCount;
-    playerObjectId = gPlayerFormObjectIndices[(void)0, gSaveContext.save.playerForm];
+    playerObjectId = gPlayerFormObjectIndices[GET_PLAYER_FORM];
     gActorOverlayTable[0].initInfo->objectId = playerObjectId;
     Object_Spawn(&play->objectCtx, playerObjectId);
 
@@ -216,7 +217,9 @@ void Scene_HeaderCmdEntranceList(PlayState* play, SceneCmd* cmd) {
 
 // SceneTableEntry Header Command 0x07: Special Files
 void Scene_HeaderCmdSpecialFiles(PlayState* play, SceneCmd* cmd) {
-    static RomFile tatlMessageFiles[2] = {
+    // @note These quest hint files are identical to OoT's.
+    // They are not relevant in this game and the system to process these scripts has been removed.
+    static RomFile naviQuestHintFiles[2] = {
         { SEGMENT_ROM_START(elf_message_field), SEGMENT_ROM_END(elf_message_field) },
         { SEGMENT_ROM_START(elf_message_ydan), SEGMENT_ROM_END(elf_message_ydan) },
     };
@@ -224,27 +227,27 @@ void Scene_HeaderCmdSpecialFiles(PlayState* play, SceneCmd* cmd) {
     if (cmd->specialFiles.subKeepIndex != 0) {
         play->objectCtx.subKeepIndex = Object_Spawn(&play->objectCtx, cmd->specialFiles.subKeepIndex);
         // TODO: Segment number enum?
-        gSegments[0x05] = PHYSICAL_TO_VIRTUAL(play->objectCtx.status[play->objectCtx.subKeepIndex].segment);
+        gSegments[0x05] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[play->objectCtx.subKeepIndex].segment);
     }
 
-    if (cmd->specialFiles.cUpElfMsgNum != 0) {
-        play->unk_18868 = Play_LoadScene(play, &tatlMessageFiles[cmd->specialFiles.cUpElfMsgNum - 1]);
+    if (cmd->specialFiles.naviQuestHintFileId != NAVI_QUEST_HINTS_NONE) {
+        play->naviQuestHints = Play_LoadFile(play, &naviQuestHintFiles[cmd->specialFiles.naviQuestHintFileId - 1]);
     }
 }
 
 // SceneTableEntry Header Command 0x08: Room Behavior
 void Scene_HeaderCmdRoomBehavior(PlayState* play, SceneCmd* cmd) {
-    play->roomCtx.currRoom.unk3 = cmd->roomBehavior.gpFlag1;
-    play->roomCtx.currRoom.unk2 = cmd->roomBehavior.gpFlag2 & 0xFF;
-    play->roomCtx.currRoom.unk5 = (cmd->roomBehavior.gpFlag2 >> 8) & 1;
+    play->roomCtx.curRoom.unk3 = cmd->roomBehavior.gpFlag1;
+    play->roomCtx.curRoom.unk2 = cmd->roomBehavior.gpFlag2 & 0xFF;
+    play->roomCtx.curRoom.lensMode = (cmd->roomBehavior.gpFlag2 >> 8) & 1;
     play->msgCtx.unk12044 = (cmd->roomBehavior.gpFlag2 >> 0xA) & 1;
-    play->roomCtx.currRoom.enablePosLights = (cmd->roomBehavior.gpFlag2 >> 0xB) & 1;
+    play->roomCtx.curRoom.enablePosLights = (cmd->roomBehavior.gpFlag2 >> 0xB) & 1;
     play->envCtx.unk_E2 = (cmd->roomBehavior.gpFlag2 >> 0xC) & 1;
 }
 
 // SceneTableEntry Header Command 0x0A: Mesh Header
 void Scene_HeaderCmdMesh(PlayState* play, SceneCmd* cmd) {
-    play->roomCtx.currRoom.mesh = Lib_SegmentedToVirtual(cmd->mesh.segment);
+    play->roomCtx.curRoom.mesh = Lib_SegmentedToVirtual(cmd->mesh.segment);
 }
 
 // SceneTableEntry Header Command 0x0B:  Object List
@@ -350,7 +353,7 @@ void Scene_LoadAreaTextures(PlayState* play, s32 fileIndex) {
         { SEGMENT_ROM_START(scene_texture_07), SEGMENT_ROM_END(scene_texture_07) },
         { SEGMENT_ROM_START(scene_texture_08), SEGMENT_ROM_END(scene_texture_08) },
     };
-    u32 vromStart = sceneTextureFiles[fileIndex].vromStart;
+    uintptr_t vromStart = sceneTextureFiles[fileIndex].vromStart;
     size_t size = sceneTextureFiles[fileIndex].vromEnd - vromStart;
 
     if (size != 0) {
@@ -375,30 +378,31 @@ void Scene_HeaderCmdSkyboxDisables(PlayState* play, SceneCmd* cmd) {
 
 // SceneTableEntry Header Command 0x10: Time Settings
 void Scene_HeaderCmdTimeSettings(PlayState* play, SceneCmd* cmd) {
-    if (cmd->timeSettings.hour != 0xFF && cmd->timeSettings.min != 0xFF) {
+    if ((cmd->timeSettings.hour != 0xFF) && (cmd->timeSettings.min != 0xFF)) {
         gSaveContext.skyboxTime = gSaveContext.save.time =
-            (u16)(((cmd->timeSettings.hour + (cmd->timeSettings.min / 60.0f)) * 60.0f) / 0.021972656f);
+            CLOCK_TIME_ALT2_F(cmd->timeSettings.hour, cmd->timeSettings.min);
     }
 
-    if (cmd->timeSettings.unk6 != 0xFF) {
-        play->envCtx.timeIncrement = cmd->timeSettings.unk6;
+    if (cmd->timeSettings.timeSpeed != 0xFF) {
+        play->envCtx.sceneTimeSpeed = cmd->timeSettings.timeSpeed;
     } else {
-        play->envCtx.timeIncrement = 0;
+        play->envCtx.sceneTimeSpeed = 0;
     }
 
-    if ((gSaveContext.save.inventory.items[SLOT_OCARINA] == ITEM_NONE) && (play->envCtx.timeIncrement != 0)) {
-        play->envCtx.timeIncrement = 5;
+    // Increase time speed during first cycle
+    if ((gSaveContext.save.inventory.items[SLOT_OCARINA] == ITEM_NONE) && (play->envCtx.sceneTimeSpeed != 0)) {
+        play->envCtx.sceneTimeSpeed = 5;
     }
 
     if (gSaveContext.sunsSongState == SUNSSONG_INACTIVE) {
-        REG(15) = play->envCtx.timeIncrement;
+        R_TIME_SPEED = play->envCtx.sceneTimeSpeed;
     }
 
-    play->envCtx.unk_4 = -(Math_SinS(((void)0, gSaveContext.save.time) - 0x8000) * 120.0f) * 25.0f;
-    play->envCtx.unk_8 = (Math_CosS(((void)0, gSaveContext.save.time) - 0x8000) * 120.0f) * 25.0f;
-    play->envCtx.unk_C = (Math_CosS(((void)0, gSaveContext.save.time) - 0x8000) * 20.0f) * 25.0f;
+    play->envCtx.sunPos.x = -(Math_SinS(((void)0, gSaveContext.save.time) - CLOCK_TIME(12, 0)) * 120.0f) * 25.0f;
+    play->envCtx.sunPos.y = (Math_CosS(((void)0, gSaveContext.save.time) - CLOCK_TIME(12, 0)) * 120.0f) * 25.0f;
+    play->envCtx.sunPos.z = (Math_CosS(((void)0, gSaveContext.save.time) - CLOCK_TIME(12, 0)) * 20.0f) * 25.0f;
 
-    if ((play->envCtx.timeIncrement == 0) && (gSaveContext.save.cutscene < 0xFFF0)) {
+    if ((play->envCtx.sceneTimeSpeed == 0) && (gSaveContext.save.cutscene < 0xFFF0)) {
         gSaveContext.skyboxTime = gSaveContext.save.time;
 
         if ((gSaveContext.skyboxTime >= CLOCK_TIME(4, 0)) && (gSaveContext.skyboxTime < CLOCK_TIME(6, 30))) {
@@ -436,17 +440,18 @@ void Scene_HeaderCmd09(PlayState* play, SceneCmd* cmd) {
 
 // SceneTableEntry Header Command 0x15: Sound Settings=
 void Scene_HeaderCmdSoundSettings(PlayState* play, SceneCmd* cmd) {
-    play->soundCtx.seqIndex = cmd->soundSettings.musicSeq;
-    play->soundCtx.nightSeqIndex = cmd->soundSettings.nighttimeSFX;
+    play->sequenceCtx.seqId = cmd->soundSettings.seqId;
+    play->sequenceCtx.ambienceId = cmd->soundSettings.ambienceId;
 
-    if (gSaveContext.seqIndex == (u8)NA_BGM_DISABLED || func_801A8A50(0) == NA_BGM_FINAL_HOURS) {
-        audio_setBGM(cmd->soundSettings.bgmId);
+    if (gSaveContext.seqId == (u8)NA_BGM_DISABLED ||
+        Audio_GetActiveSequence(SEQ_PLAYER_BGM_MAIN) == NA_BGM_FINAL_HOURS) {
+        Audio_SetSpec(cmd->soundSettings.specId);
     }
 }
 
 // SceneTableEntry Header Command 0x16: Echo Setting
 void Scene_HeaderCmdEchoSetting(PlayState* play, SceneCmd* cmd) {
-    play->roomCtx.currRoom.echo = cmd->echoSettings.echo;
+    play->roomCtx.curRoom.echo = cmd->echoSettings.echo;
 }
 
 // SceneTableEntry Header Command 0x18: Alternate Header List=
@@ -454,9 +459,9 @@ void Scene_HeaderCmdAltHeaderList(PlayState* play, SceneCmd* cmd) {
     SceneCmd** altHeaderList;
     SceneCmd* altHeader;
 
-    if (gSaveContext.sceneSetupIndex != 0) {
+    if (gSaveContext.sceneLayer != 0) {
         altHeaderList = Lib_SegmentedToVirtual(cmd->altHeaders.segment);
-        altHeader = altHeaderList[gSaveContext.sceneSetupIndex - 1];
+        altHeader = altHeaderList[gSaveContext.sceneLayer - 1];
 
         if (altHeader != NULL) {
             Scene_ProcessHeader(play, Lib_SegmentedToVirtual(altHeader));
@@ -467,8 +472,8 @@ void Scene_HeaderCmdAltHeaderList(PlayState* play, SceneCmd* cmd) {
 
 // SceneTableEntry Header Command 0x17: Cutscene List
 void Scene_HeaderCmdCutsceneList(PlayState* play, SceneCmd* cmd) {
-    play->csCtx.sceneCsCount = cmd->base.data1;
-    play->csCtx.sceneCsList = Lib_SegmentedToVirtual(cmd->base.data2);
+    play->csCtx.sceneCsCount = cmd->cutsceneList.sceneCsCount;
+    play->csCtx.sceneCsList = Lib_SegmentedToVirtual(cmd->cutsceneList.segment);
 }
 
 // SceneTableEntry Header Command 0x1B: Actor Cutscene List
@@ -491,30 +496,31 @@ void Scene_HeaderCmdMiniMapCompassInfo(PlayState* play, SceneCmd* cmd) {
     func_8010565C(play, cmd->minimapChests.num, cmd->minimapChests.segment);
 }
 
-// SceneTableEntry Header Command 0x1A: Sets Area Visited Flag
-void Scene_HeaderCmdSetAreaVisitedFlag(PlayState* play, SceneCmd* cmd) {
+// SceneTableEntry Header Command 0x19: Sets Region Visited Flag
+void Scene_HeaderCmdSetRegionVisitedFlag(PlayState* play, SceneCmd* cmd) {
     s16 j = 0;
     s16 i = 0;
 
     while (true) {
-        if (gScenesPerRegion[i][j] == 0xFFFF) {
+        if (gSceneIdsPerRegion[i][j] == 0xFFFF) {
             i++;
             j = 0;
 
-            if (i == ARRAY_COUNT(gScenesPerRegion)) {
+            if (i == REGION_MAX) {
                 break;
             }
         }
 
-        if (play->sceneNum == gScenesPerRegion[i][j]) {
+        if (play->sceneId == gSceneIdsPerRegion[i][j]) {
             break;
         }
 
         j++;
     }
 
-    if (i < ARRAY_COUNT(gScenesPerRegion)) {
-        gSaveContext.save.mapsVisited = (gBitFlags[i] | gSaveContext.save.mapsVisited) | gSaveContext.save.mapsVisited;
+    if (i < REGION_MAX) {
+        gSaveContext.save.regionsVisited =
+            (gBitFlags[i] | gSaveContext.save.regionsVisited) | gSaveContext.save.regionsVisited;
     }
 }
 
@@ -560,7 +566,7 @@ s32 Scene_ProcessHeader(PlayState* play, SceneCmd* header) {
         Scene_HeaderCmdEchoSetting,
         Scene_HeaderCmdCutsceneList,
         Scene_HeaderCmdAltHeaderList,
-        Scene_HeaderCmdSetAreaVisitedFlag,
+        Scene_HeaderCmdSetRegionVisitedFlag,
         Scene_HeaderCmdAnimatedMaterials,
         Scene_HeaderCmdActorCutsceneList,
         Scene_HeaderCmdMiniMap,
@@ -587,7 +593,7 @@ s32 Scene_ProcessHeader(PlayState* play, SceneCmd* header) {
 }
 
 /**
- * Creates an entrance from the scene, spawn, and lyaer.
+ * Creates an entrance from the scene, spawn, and layer.
  */
 u16 Entrance_Create(s32 scene, s32 spawn, s32 layer) {
     return (scene << 9) | (spawn << 4) | layer;
@@ -597,5 +603,5 @@ u16 Entrance_Create(s32 scene, s32 spawn, s32 layer) {
  * Creates an layer 0 entranace from the current entrance and the given spawn.
  */
 u16 Entrance_CreateFromSpawn(s32 spawn) {
-    return Entrance_Create(gSaveContext.save.entrance >> 9, spawn, 0);
+    return Entrance_Create((u32)gSaveContext.save.entrance >> 9, spawn, 0);
 }

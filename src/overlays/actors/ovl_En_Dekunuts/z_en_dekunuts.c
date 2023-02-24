@@ -39,7 +39,7 @@ void func_808BE4D4(EnDekunuts* this, PlayState* play);
 void func_808BE680(EnDekunuts* this);
 void func_808BE6C4(EnDekunuts* this, PlayState* play);
 
-const ActorInit En_Dekunuts_InitVars = {
+ActorInit En_Dekunuts_InitVars = {
     ACTOR_EN_DEKUNUTS,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -544,7 +544,7 @@ void func_808BE4D4(EnDekunuts* this, PlayState* play) {
                     DEKU_FLOWER_PARAMS(DEKU_FLOWER_TYPE_PINK_WITH_INITIAL_BOUNCE));
         EffectSsHahen_SpawnBurst(play, &this->actor.home.pos, 6.0f, 0, 6, 2, 15, OBJECT_DEKUNUTS, 10,
                                  gDekuScrubFlowerFragmentDL);
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 

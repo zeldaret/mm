@@ -71,7 +71,7 @@ static TexturePtr sEyeSwitchTextures[][4] = {
 
 static s32 sIsSegmentTableInit = false;
 
-const ActorInit Obj_Switch_InitVars = {
+ActorInit Obj_Switch_InitVars = {
     ACTOR_OBJ_SWITCH,
     ACTORCAT_SWITCH,
     FLAGS,
@@ -348,7 +348,7 @@ void ObjSwitch_Init(Actor* thisx, PlayState* play) {
         DynaPolyActor_LoadMesh(play, &this->dyna, &gFloorSwitchCol);
     }
     if (type == OBJSWITCH_TYPE_FLOOR) {
-        if (play->sceneNum == SCENE_SECOM) {
+        if (play->sceneId == SCENE_SECOM) {
             this->floorSwitchUpScale = 33.0f / 200.0f / 3.0f;
             this->floorSwitchDownScale = 33.0f / 2000.0f / 3.0f;
         } else {
@@ -357,7 +357,7 @@ void ObjSwitch_Init(Actor* thisx, PlayState* play) {
         }
     }
     if (type == OBJSWITCH_TYPE_FLOOR || type == OBJSWITCH_TYPE_FLOOR_LARGE) {
-        if (play->sceneNum == SCENE_SECOM) {
+        if (play->sceneId == SCENE_SECOM) {
             Color_RGB8* color = &sSakonHideoutColor[OBJ_SWITCH_GET_COLOR_ID(&this->dyna.actor)];
 
             this->color.r = color->r;
@@ -411,7 +411,7 @@ void ObjSwitch_Init(Actor* thisx, PlayState* play) {
         }
     }
     if (type == OBJSWITCH_TYPE_CRYSTAL) {
-        sCrystalSwitchAnimatedMat = Lib_SegmentedToVirtual(&gCrystalSwitchTexAnim);
+        sCrystalSwitchAnimatedMat = Lib_SegmentedToVirtual(gCrystalSwitchTexAnim);
     }
     if (OBJ_SWITCH_IS_FROZEN(&this->dyna.actor)) {
         ObjSwitch_EyeSwitchFrozenInit(this);
@@ -584,7 +584,7 @@ void ObjSwitch_FloorSwitchDown(ObjSwitch* this, PlayState* play) {
         case OBJSWITCH_SUBTYPE_ONCE:
         case OBJSWITCH_SUBTYPE_SYNC:
             if (!Flags_GetSwitch(play, OBJ_SWITCH_GET_SWITCH_FLAG(&this->dyna.actor))) {
-                if (play->sceneNum == SCENE_SECOM && DynaPolyActor_IsInSwitchPressedState(&this->dyna)) {
+                if ((play->sceneId == SCENE_SECOM) && DynaPolyActor_IsInSwitchPressedState(&this->dyna)) {
                     ObjSwitch_SetSwitchFlagState(this, play, true);
                 } else {
                     ObjSwitch_FloorSwitchRiseUpInit(this);
@@ -595,7 +595,7 @@ void ObjSwitch_FloorSwitchDown(ObjSwitch* this, PlayState* play) {
         case OBJSWITCH_SUBTYPE_RESET:
         case OBJSWITCH_SUBTYPE_RESET_INVERTED:
             if (!DynaPolyActor_IsInSwitchPressedState(&this->dyna) &&
-                (!Player_InCsMode(play) || play->sceneNum == SCENE_SECOM)) {
+                (!Player_InCsMode(play) || (play->sceneId == SCENE_SECOM))) {
                 if (this->floorSwitchReleaseTimer <= 0) {
                     if (subType == OBJSWITCH_SUBTYPE_RESET) {
                         ObjSwitch_SetSwitchFlagState(this, play, false);
@@ -607,7 +607,7 @@ void ObjSwitch_FloorSwitchDown(ObjSwitch* this, PlayState* play) {
                     }
                 }
             } else {
-                if (play->sceneNum == SCENE_SECOM) {
+                if (play->sceneId == SCENE_SECOM) {
                     this->floorSwitchReleaseTimer = 2;
                 } else {
                     this->floorSwitchReleaseTimer = 6;

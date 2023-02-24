@@ -18,7 +18,7 @@ void ObjBoat_Draw(Actor* thisx, PlayState* play);
 
 void ObjBoat_UpdateCutscene(Actor* thisx, PlayState* play);
 
-const ActorInit Obj_Boat_InitVars = {
+ActorInit Obj_Boat_InitVars = {
     ACTOR_OBJ_BOAT,
     ACTORCAT_BG,
     FLAGS,
@@ -134,7 +134,7 @@ void ObjBoat_Update(Actor* thisx, PlayState* play) {
         }
     }
 
-    if (player->csMode != 0x1A) {
+    if (player->csMode != PLAYER_CSMODE_26) {
         Math_ScaledStepToS(&this->dyna.actor.shape.rot.y, yawTarget, (s32)(fabsf(this->dyna.actor.speedXZ) * 40.0f));
         this->dyna.actor.world.rot.y = this->dyna.actor.shape.rot.y;
         Math_StepToF(&this->dyna.actor.speedXZ, speedTarget, 0.05f);

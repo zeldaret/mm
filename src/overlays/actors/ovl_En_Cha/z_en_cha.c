@@ -13,12 +13,12 @@
 
 void EnCha_Init(Actor* thisx, PlayState* play);
 void EnCha_Destroy(Actor* thisx, PlayState* play);
-void EnCha_Update(Actor* thisx, PlayState* play);
+void EnCha_Update(Actor* thisx, PlayState* play2);
 void EnCha_Draw(Actor* thisx, PlayState* play);
 
 void EnCha_Idle(EnCha* this, PlayState* play);
 
-const ActorInit En_Cha_InitVars = {
+ActorInit En_Cha_InitVars = {
     ACTOR_EN_CHA,
     ACTORCAT_PROP,
     FLAGS,
@@ -61,7 +61,7 @@ void EnCha_Init(Actor* thisx, PlayState* play) {
     this->actor.home.rot.z = 0;
     this->actionFunc = EnCha_Idle;
     this->actor.home.rot.x = this->actor.home.rot.z;
-    gSaveContext.save.weekEventReg[60] &= (u8)~4;
+    CLEAR_WEEKEVENTREG(WEEKEVENTREG_60_04);
 }
 
 void EnCha_Destroy(Actor* thisx, PlayState* play) {
@@ -83,16 +83,16 @@ void EnCha_Ring(EnCha* this, PlayState* play) {
 }
 
 void EnCha_Idle(EnCha* this, PlayState* play) {
-    if (gSaveContext.save.weekEventReg[60] & 4) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_60_04)) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_DOOR_BELL);
-        gSaveContext.save.weekEventReg[60] &= (u8)~4;
+        CLEAR_WEEKEVENTREG(WEEKEVENTREG_60_04);
         this->actor.home.rot.z = 0x7D0;
     }
     if (this->collider.base.acFlags & AC_HIT) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_DOOR_BELL);
         this->actor.home.rot.z = 0x7D0;
-        if (!(gSaveContext.save.weekEventReg[51] & 4)) {
-            gSaveContext.save.weekEventReg[51] |= 4;
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_51_04)) {
+            SET_WEEKEVENTREG(WEEKEVENTREG_51_04);
             this->actionFunc = EnCha_Ring;
         }
     }

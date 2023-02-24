@@ -149,7 +149,7 @@ Gfx object_dns_DL_001A50[] = {
 };
 ```
 
-Using `0x08000000` with `gsDPLoadTextureBlock` signals that this display list is expecting a texture in segment 8. What kind of texture is it expecting? We can look at the arguments after the `0x08000000`. It's looking for an RBGA16 texture with dimensions of 8x8, so we can define these textures in the XML like so:
+Using `0x08000000` with `gsDPLoadTextureBlock` signals that this display list is expecting a texture in segment 8. What kind of texture is it expecting? We can look at the arguments after the `0x08000000`. It's looking for an RGBA16 texture with dimensions of 8x8, so we can define these textures in the XML like so:
 
 ```xml
 <Texture Name="object_dns_Tex_0028E8" OutName="tex_0028E8" Format="rgba16" Width="8" Height="8" Offset="0x28E8" />
