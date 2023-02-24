@@ -171,7 +171,7 @@ void EnYb_ActorShadowFunc(Actor* thisx, Lights* mapper, PlayState* play) {
 
 void EnYb_ChangeAnim(PlayState* play, EnYb* this, s16 animIndex, u8 animMode, f32 morphFrames) {
     if (animIndex >= 0 && animIndex < 3) {
-        if (animIndex != this->animIndex || animMode != ANIMMODE_LOOP) {
+        if ((animIndex != this->animIndex) || (animMode != ANIMMODE_LOOP)) {
             if (animIndex > 0) {
                 if (animMode == ANIMMODE_LOOP) {
                     PlayerAnimation_Change(play, &this->skelAnime, gPlayerAnimations[animIndex - 1], 1.0f, 0.0f,
