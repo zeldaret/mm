@@ -1,14 +1,43 @@
 #!/usr/bin/env python3
 
-import argparse, os, subprocess, sys
+import argparse
+import os
+import sys
+import subprocess
+import tempfile
 from pathlib import Path
 
-script_dir = os.path.dirname(os.path.realpath(__file__))
-root_dir = script_dir + "/../"
-src_dir = root_dir + "src/"
+script_dir = Path(os.path.dirname(os.path.realpath(__file__)))
+root_dir = script_dir / ".."
+src_dir = root_dir / "src"
+
+# Project-specific
+CPP_FLAGS = [
+    "-Iinclude",
+    "-Iassets",
+    "-Isrc",
+
+    "-D__sgi",
+    "-D_LANGUAGE_C",
+    "-DNON_MATCHING",
+    "-D_Static_assert(x, y)=",
+    "-D__attribute__(x)="
+    "-DNDEBUG",
+    "-D_FINALROM",
+    "-D_MIPS_SZLONG=32",
+    "-DSCRIPT(x)="
+    "-D__attribute__(x)=",
+    "-D__asm__(x)=",
+    "-ffreestanding",
+    "-DM2CTX",
+    "-DNON_MATCHING",
+
+    "-std=gnu89",
+]
 
 # Read through the processes context and replace whatever
 def custom_replacements(output):
+    actorList = []
     output = output.splitlines()
 
     i = 0
@@ -36,7 +65,6 @@ def custom_replacements(output):
                 "door",
                 "chest",
             ]
-            actorList = []
             for x in range(12):
                 actorList.append(actorListText.replace("first;", f"{actorCats[x]};") + "\n")
                 if x == 2:
@@ -48,63 +76,55 @@ def custom_replacements(output):
         i += 1
     return "\n".join(output)
 
-def get_c_dir(dirname):
-    for root, dirs, files in os.walk(src_dir):
-        for directory in dirs:
-            if directory == dirname:
-                return os.path.join(root, directory)
-
-
-def get_c_file(directory):
-    for root, dirs, files in os.walk(directory):
-        for file in files:
-            if file.endswith(".c") and "data" not in file:
-                return file
-
-
-def import_c_file(in_file):
+def import_c_file(in_file) -> str:
     in_file = os.path.relpath(in_file, root_dir)
-    cpp_command = ["gcc", "-E", "-P", "-Iinclude", "-Iassets", "-Isrc", "-undef", "-D__sgi", "-D_LANGUAGE_C",
-                   "-DNON_MATCHING", "-D_Static_assert(x, y)=", "-D__attribute__(x)=", in_file]
+
+    cpp_command = ["gcc", "-E", "-P", "-undef", "-dM", *CPP_FLAGS, in_file]
+    cpp_command2 = ["gcc", "-E", "-P", "-undef", *CPP_FLAGS, in_file]
+
+    with tempfile.NamedTemporaryFile(suffix=".c") as tmp:
+        stock_macros = subprocess.check_output(["gcc", "-E", "-P", "-undef", "-dM", tmp.name], cwd=root_dir, encoding="utf-8")
+
+    out_text = ""
     try:
-        return subprocess.check_output(cpp_command, cwd=root_dir, encoding="utf-8")
+        out_text += subprocess.check_output(cpp_command, cwd=root_dir, encoding="utf-8")
+        out_text += subprocess.check_output(cpp_command2, cwd=root_dir, encoding="utf-8")
     except subprocess.CalledProcessError:
         print(
             "Failed to preprocess input file, when running command:\n"
-            + cpp_command,
+            + " ".join(cpp_command),
             file=sys.stderr,
-        )
+            )
         sys.exit(1)
+
+    if not out_text:
+        print("Output is empty - aborting")
+        sys.exit(1)
+
+    for line in stock_macros.strip().splitlines():
+        out_text = out_text.replace(line + "\n", "")
+    return out_text
 
 
 def main():
     parser = argparse.ArgumentParser(usage="./m2ctx.py path/to/file.c or ./m2ctx.py (from an actor or gamestate's asm dir)",
-                                     description="Creates a ctx.c file for mips2c. "
-                                     "Output will be saved as oot/ctx.c")
+                                     description="Creates a ctx.c file for m2c or decomp.me. "
+                                     "Output will be saved as ctx.c")
     parser.add_argument('filepath', help="path of c file to be processed")
-    parser.add_argument("--custom", "-c", dest="custom", action="store_true", default=False, 
-                            help="Apply custom replacements to the output to help aid m2c output")
+    parser.add_argument("--custom", "-c", dest="custom", action="store_true", default=False,
+                        help="Apply custom replacements to the output to help aid m2c output")
     args = parser.parse_args()
 
-    if args.filepath:
-        c_file_path = args.filepath
-        print("Using file: {}".format(c_file_path))
-    else:
-        this_dir = Path.cwd()
-        c_dir_path = get_c_dir(this_dir.name)
-        if c_dir_path is None:
-            sys.exit(
-                "Cannot find appropriate c file dir. In argumentless mode, run this script from the c file's corresponding asm dir.")
-        c_file = get_c_file(c_dir_path)
-        c_file_path = os.path.join(c_dir_path, c_file)
-        print("Using file: {}".format(c_file_path))
+    c_file_path = args.filepath
+    print("Using file: {}".format(c_file_path))
 
     output = import_c_file(c_file_path)
 
     if args.custom:
         output = custom_replacements(output)
 
-    with open(os.path.join(root_dir, "ctx.c"), "w", encoding="UTF-8") as f:
+    ctxPath = root_dir / "ctx.c"
+    with ctxPath.open("w", encoding="UTF-8") as f:
         f.write(output)
 
 
