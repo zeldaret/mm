@@ -126,8 +126,8 @@ void EnGe2_Init(Actor* thisx, PlayState* play) {
             break;
 
         case GERUDO_PURPLE_TYPE_AVEIL_GUARD:
-            if (gSaveContext.save.weekEventReg[83] & 2) { // Knocked the beehive down
-                Actor_MarkForDeath(&this->picto.actor);
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_83_02)) {
+                Actor_Kill(&this->picto.actor);
             }
             break;
 
@@ -484,7 +484,7 @@ void EnGe2_PatrolDuties(EnGe2* this, PlayState* play) {
         Animation_Change(&this->skelAnime, &gGerudoPurpleLookingAboutAnim, 1.0f, 0.0f,
                          Animation_GetLastFrame(&gGerudoPurpleLookingAboutAnim), 0, -8.0f);
         this->stateFlags |= GERUDO_PURPLE_STATE_CAPTURING;
-    } else if (gSaveContext.save.weekEventReg[80] & 8) { // Aveil has spotted Player
+    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_80_08)) {
         this->picto.actor.speedXZ = 0.0f;
         this->actionFunc = EnGe2_TurnToPlayerFast;
         Animation_Change(&this->skelAnime, &gGerudoPurpleLookingAboutAnim, 1.0f, 0.0f,
@@ -611,7 +611,7 @@ void EnGe2_PerformCutsceneActions(EnGe2* this, PlayState* play) {
                     break;
 
                 case ENGE2_CSACTION_BEEHIVE_EXIT:
-                    Actor_MarkForDeath(&this->picto.actor);
+                    Actor_Kill(&this->picto.actor);
                     break;
 
                 case ENGE2_CSACTION_GBT_ENTR_STAND_STILL:
@@ -728,10 +728,10 @@ void EnGe2_Update(Actor* thisx, PlayState* play) {
 }
 
 s32 EnGe2_ValidatePictograph(PlayState* play, Actor* thisx) {
-    s32 ret = Snap_ValidatePictograph(play, thisx, PICTOGRAPH_PIRATE_GOOD, &thisx->focus.pos, &thisx->shape.rot, 10.0f,
+    s32 ret = Snap_ValidatePictograph(play, thisx, PICTO_VALID_PIRATE_GOOD, &thisx->focus.pos, &thisx->shape.rot, 10.0f,
                                       400.0f, -1);
 
-    ret |= Snap_ValidatePictograph(play, thisx, PICTOGRAPH_PIRATE_TOO_FAR, &thisx->focus.pos, &thisx->shape.rot, 10.0f,
+    ret |= Snap_ValidatePictograph(play, thisx, PICTO_VALID_PIRATE_TOO_FAR, &thisx->focus.pos, &thisx->shape.rot, 10.0f,
                                    1200.0f, -1);
     return ret;
 }
