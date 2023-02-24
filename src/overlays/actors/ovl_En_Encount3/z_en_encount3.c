@@ -21,15 +21,15 @@ void func_809AD1EC(EnEncount3* this, PlayState* play);
 
 #if 0
 ActorInit En_Encount3_InitVars = {
-    /**/    ACTOR_EN_ENCOUNT3,
-    /**/    ACTORCAT_ENEMY,
-    /**/    FLAGS,
-    /**/    OBJECT_BIG_FWALL,
-    /**/    sizeof(EnEncount3),
-    /**/    EnEncount3_Init,
-    /**/    EnEncount3_Destroy,
-    /**/    EnEncount3_Update,
-    /**/    EnEncount3_Draw,
+    /**/ ACTOR_EN_ENCOUNT3,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ OBJECT_BIG_FWALL,
+    /**/ sizeof(EnEncount3),
+    /**/ EnEncount3_Init,
+    /**/ EnEncount3_Destroy,
+    /**/ EnEncount3_Update,
+    /**/ EnEncount3_Draw,
 };
 
 #endif

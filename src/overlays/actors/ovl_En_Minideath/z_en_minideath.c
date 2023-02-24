@@ -30,15 +30,15 @@ void func_808CB7CC(EnMinideath* this, PlayState* play);
 
 #if 0
 ActorInit En_Minideath_InitVars = {
-    /**/    ACTOR_EN_MINIDEATH,
-    /**/    ACTORCAT_ENEMY,
-    /**/    FLAGS,
-    /**/    OBJECT_DEATH,
-    /**/    sizeof(EnMinideath),
-    /**/    EnMinideath_Init,
-    /**/    EnMinideath_Destroy,
-    /**/    EnMinideath_Update,
-    /**/    NULL,
+    /**/ ACTOR_EN_MINIDEATH,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ OBJECT_DEATH,
+    /**/ sizeof(EnMinideath),
+    /**/ EnMinideath_Init,
+    /**/ EnMinideath_Destroy,
+    /**/ EnMinideath_Update,
+    /**/ NULL,
 };
 
 // static ColliderJntSphElementInit sJntSphElementsInit[3] = {

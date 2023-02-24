@@ -14,15 +14,15 @@ void ObjGrassUnit_Init(Actor* thisx, PlayState* play);
 
 #if 0
 ActorInit Obj_Grass_Unit_InitVars = {
-    /**/    ACTOR_OBJ_GRASS_UNIT,
-    /**/    ACTORCAT_BG,
-    /**/    FLAGS,
-    /**/    GAMEPLAY_FIELD_KEEP,
-    /**/    sizeof(ObjGrassUnit),
-    /**/    ObjGrassUnit_Init,
-    /**/    Actor_Noop,
-    /**/    Actor_Noop,
-    /**/    NULL,
+    /**/ ACTOR_OBJ_GRASS_UNIT,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_FIELD_KEEP,
+    /**/ sizeof(ObjGrassUnit),
+    /**/ ObjGrassUnit_Init,
+    /**/ Actor_Noop,
+    /**/ Actor_Noop,
+    /**/ NULL,
 };
 
 #endif

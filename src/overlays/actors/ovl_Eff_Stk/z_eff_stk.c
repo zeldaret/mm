@@ -17,15 +17,15 @@ void EffStk_Draw(Actor* thisx, PlayState* play);
 
 #if 0
 ActorInit Eff_Stk_InitVars = {
-    /**/    ACTOR_EFF_STK,
-    /**/    ACTORCAT_ITEMACTION,
-    /**/    FLAGS,
-    /**/    OBJECT_STK2,
-    /**/    sizeof(EffStk),
-    /**/    EffStk_Init,
-    /**/    EffStk_Destroy,
-    /**/    EffStk_Update,
-    /**/    EffStk_Draw,
+    /**/ ACTOR_EFF_STK,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ OBJECT_STK2,
+    /**/ sizeof(EffStk),
+    /**/ EffStk_Init,
+    /**/ EffStk_Destroy,
+    /**/ EffStk_Update,
+    /**/ EffStk_Draw,
 };
 
 #endif

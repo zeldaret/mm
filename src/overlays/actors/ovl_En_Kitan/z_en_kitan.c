@@ -16,15 +16,15 @@ void EnKitan_Update(Actor* thisx, PlayState* play);
 
 #if 0
 ActorInit En_Kitan_InitVars = {
-    /**/    ACTOR_EN_KITAN,
-    /**/    ACTORCAT_NPC,
-    /**/    FLAGS,
-    /**/    OBJECT_KITAN,
-    /**/    sizeof(EnKitan),
-    /**/    EnKitan_Init,
-    /**/    EnKitan_Destroy,
-    /**/    EnKitan_Update,
-    /**/    NULL,
+    /**/ ACTOR_EN_KITAN,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_KITAN,
+    /**/ sizeof(EnKitan),
+    /**/ EnKitan_Init,
+    /**/ EnKitan_Destroy,
+    /**/ EnKitan_Update,
+    /**/ NULL,
 };
 
 // static ColliderCylinderInit sCylinderInit = {

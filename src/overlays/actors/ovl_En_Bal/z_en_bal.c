@@ -17,15 +17,15 @@ void EnBal_Draw(Actor* thisx, PlayState* play);
 
 #if 0
 ActorInit En_Bal_InitVars = {
-    /**/    ACTOR_EN_BAL,
-    /**/    ACTORCAT_NPC,
-    /**/    FLAGS,
-    /**/    OBJECT_BAL,
-    /**/    sizeof(EnBal),
-    /**/    EnBal_Init,
-    /**/    EnBal_Destroy,
-    /**/    EnBal_Update,
-    /**/    EnBal_Draw,
+    /**/ ACTOR_EN_BAL,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_BAL,
+    /**/ sizeof(EnBal),
+    /**/ EnBal_Init,
+    /**/ EnBal_Destroy,
+    /**/ EnBal_Update,
+    /**/ EnBal_Draw,
 };
 
 // static DamageTable sDamageTable = {

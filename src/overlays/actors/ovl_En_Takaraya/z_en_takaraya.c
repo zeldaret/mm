@@ -17,15 +17,15 @@ void EnTakaraya_Draw(Actor* thisx, PlayState* play);
 
 #if 0
 ActorInit En_Takaraya_InitVars = {
-    /**/    ACTOR_EN_TAKARAYA,
-    /**/    ACTORCAT_NPC,
-    /**/    FLAGS,
-    /**/    OBJECT_BG,
-    /**/    sizeof(EnTakaraya),
-    /**/    EnTakaraya_Init,
-    /**/    EnTakaraya_Destroy,
-    /**/    EnTakaraya_Update,
-    /**/    EnTakaraya_Draw,
+    /**/ ACTOR_EN_TAKARAYA,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_BG,
+    /**/ sizeof(EnTakaraya),
+    /**/ EnTakaraya_Init,
+    /**/ EnTakaraya_Destroy,
+    /**/ EnTakaraya_Update,
+    /**/ EnTakaraya_Draw,
 };
 
 // static InitChainEntry sInitChain[] = {

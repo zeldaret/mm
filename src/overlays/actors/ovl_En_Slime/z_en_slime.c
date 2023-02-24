@@ -34,15 +34,15 @@ void func_80A30CEC(EnSlime* this, PlayState* play);
 
 #if 0
 ActorInit En_Slime_InitVars = {
-    /**/    ACTOR_EN_SLIME,
-    /**/    ACTORCAT_ENEMY,
-    /**/    FLAGS,
-    /**/    OBJECT_SLIME,
-    /**/    sizeof(EnSlime),
-    /**/    EnSlime_Init,
-    /**/    EnSlime_Destroy,
-    /**/    EnSlime_Update,
-    /**/    EnSlime_Draw,
+    /**/ ACTOR_EN_SLIME,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ OBJECT_SLIME,
+    /**/ sizeof(EnSlime),
+    /**/ EnSlime_Init,
+    /**/ EnSlime_Destroy,
+    /**/ EnSlime_Update,
+    /**/ EnSlime_Draw,
 };
 
 // static ColliderCylinderInit sCylinderInit = {

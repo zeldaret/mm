@@ -22,15 +22,15 @@ void func_80A1F63C(DmHina* this, PlayState* play);
 
 #if 0
 ActorInit Dm_Hina_InitVars = {
-    /**/    ACTOR_DM_HINA,
-    /**/    ACTORCAT_ITEMACTION,
-    /**/    FLAGS,
-    /**/    OBJECT_BSMASK,
-    /**/    sizeof(DmHina),
-    /**/    DmHina_Init,
-    /**/    DmHina_Destroy,
-    /**/    DmHina_Update,
-    /**/    DmHina_Draw,
+    /**/ ACTOR_DM_HINA,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ OBJECT_BSMASK,
+    /**/ sizeof(DmHina),
+    /**/ DmHina_Init,
+    /**/ DmHina_Destroy,
+    /**/ DmHina_Update,
+    /**/ DmHina_Draw,
 };
 
 #endif

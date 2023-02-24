@@ -17,15 +17,15 @@ void ObjWind_Draw(Actor* thisx, PlayState* play);
 
 #if 0
 ActorInit Obj_Wind_InitVars = {
-    /**/    ACTOR_OBJ_WIND,
-    /**/    ACTORCAT_ITEMACTION,
-    /**/    FLAGS,
-    /**/    GAMEPLAY_KEEP,
-    /**/    sizeof(ObjWind),
-    /**/    ObjWind_Init,
-    /**/    ObjWind_Destroy,
-    /**/    ObjWind_Update,
-    /**/    ObjWind_Draw,
+    /**/ ACTOR_OBJ_WIND,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(ObjWind),
+    /**/ ObjWind_Init,
+    /**/ ObjWind_Destroy,
+    /**/ ObjWind_Update,
+    /**/ ObjWind_Draw,
 };
 
 // static InitChainEntry sInitChain[] = {

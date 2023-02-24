@@ -17,15 +17,15 @@ void BgF40Swlift_Draw(Actor* thisx, PlayState* play);
 
 #if 0
 ActorInit Bg_F40_Swlift_InitVars = {
-    /**/    ACTOR_BG_F40_SWLIFT,
-    /**/    ACTORCAT_BG,
-    /**/    FLAGS,
-    /**/    OBJECT_F40_OBJ,
-    /**/    sizeof(BgF40Swlift),
-    /**/    BgF40Swlift_Init,
-    /**/    BgF40Swlift_Destroy,
-    /**/    BgF40Swlift_Update,
-    /**/    BgF40Swlift_Draw,
+    /**/ ACTOR_BG_F40_SWLIFT,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ OBJECT_F40_OBJ,
+    /**/ sizeof(BgF40Swlift),
+    /**/ BgF40Swlift_Init,
+    /**/ BgF40Swlift_Destroy,
+    /**/ BgF40Swlift_Update,
+    /**/ BgF40Swlift_Draw,
 };
 
 // static InitChainEntry sInitChain[] = {

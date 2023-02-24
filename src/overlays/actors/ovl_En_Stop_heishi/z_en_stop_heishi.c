@@ -21,15 +21,15 @@ void func_80AE85C4(EnStopheishi* this, PlayState* play);
 
 #if 0
 ActorInit En_Stop_heishi_InitVars = {
-    /**/    ACTOR_EN_STOP_HEISHI,
-    /**/    ACTORCAT_NPC,
-    /**/    FLAGS,
-    /**/    OBJECT_SDN,
-    /**/    sizeof(EnStopheishi),
-    /**/    EnStopheishi_Init,
-    /**/    EnStopheishi_Destroy,
-    /**/    EnStopheishi_Update,
-    /**/    EnStopheishi_Draw,
+    /**/ ACTOR_EN_STOP_HEISHI,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_SDN,
+    /**/ sizeof(EnStopheishi),
+    /**/ EnStopheishi_Init,
+    /**/ EnStopheishi_Destroy,
+    /**/ EnStopheishi_Update,
+    /**/ EnStopheishi_Draw,
 };
 
 // static ColliderCylinderInit sCylinderInit = {
