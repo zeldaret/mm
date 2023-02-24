@@ -332,20 +332,20 @@ void ObjDora_Draw(Actor* thisx, PlayState* play) {
         Matrix_Push();
         Matrix_RotateXS(this->gongRotation.x, MTXMODE_APPLY);
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_OPA_DISP++, &gDoraGongDL);
+        gSPDisplayList(POLY_OPA_DISP++, &gDoraChainDL);
 
         Matrix_Translate(position.x, position.y + gongForceX, position.z + gongForceX, MTXMODE_APPLY);
         Matrix_RotateXS(this->gongRotation.z - this->gongRotation.x, MTXMODE_APPLY);
         Matrix_Translate(-position.x, -position.y, -position.z, MTXMODE_APPLY);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_OPA_DISP++, &gDoraChainDL);
+        gSPDisplayList(POLY_OPA_DISP++, &gDoraGongDL);
 
         Matrix_Pop();
     } else {
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_OPA_DISP++, &gDoraChainDL);
         gSPDisplayList(POLY_OPA_DISP++, &gDoraGongDL);
+        gSPDisplayList(POLY_OPA_DISP++, &gDoraChainDL);
     }
 
     CLOSE_DISPS(play->state.gfxCtx);

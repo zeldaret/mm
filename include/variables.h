@@ -657,8 +657,11 @@ extern u8 gItemSlots[];
 extern s16 gItemPrices[];
 extern u16 gSceneIdsPerRegion[11][27];
 extern u8 gPlayerFormItemRestrictions[PLAYER_FORM_MAX][114];
-extern s16 gPlayerFormObjectIndices[8];
-extern RomFile gObjectTable[643];
+
+extern s16 gPlayerFormObjectIndices[PLAYER_FORM_MAX];
+extern ObjectId gObjectTableSize;
+extern RomFile gObjectTable[OBJECT_ID_MAX];
+
 extern SceneTableEntry gSceneTable[];
 extern UNK_PTR D_801C5C50;
 // extern UNK_TYPE1 D_801C5C9C;
@@ -2481,9 +2484,8 @@ extern void (*sKaleidoScopeDrawFunc)(PlayState* play);
 extern FaultAddrConvClient sKaleidoAreaFaultClient;
 extern s16 sTransitionFillTimer;
 extern Input D_801F6C18;
-extern FbDemoStruct sTrnsnUnk;
-extern u16* D_801F6D0C;
-extern s32 gTrnsnUnkState;
+extern TransitionTile sTransitionTile;
+extern s32 gTransitionTileState;
 extern VisMono sVisMono;
 extern Color_RGBA8_u32 gVisMonoColor;
 extern Struct_80140E80 D_801F6D38;

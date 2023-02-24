@@ -14,7 +14,7 @@ Most discussions happen on our [Discord Server](https://discord.zelda64.dev) whe
 - [Style Guide](STYLE.md) - Description of the project style that we ask contributors to adhere to.
 - [Code Review Guidelines](REVIEWING.md) - These are the guidelines that reviewers will be using when reviewing your code. Good to be familiar with these before submitting your code.
 
-- [Zelda 64 Reverse Engineering Website](https://zelda64.dev/mm) - Our homepage, with FAQ and progress graph :chart_with_upwards_trend:.
+- [Zelda 64 Reverse Engineering Website](https://zelda64.dev/games/mm) - Our homepage, with FAQ and progress graph :chart_with_upwards_trend:.
 - [MM decomp tutorial](tutorial/contents.md) Detailed tutorial for learning in general how decomp works and how to decompile a small, simple file.
 - [Introduction to OOT decomp](https://github.com/zeldaret/oot/blob/master/docs/tutorial/contents.md) - The tutorial the MM one was based on. For OOT, but largely applicable to MM as well. Covers slightly different topics, including how to get your data OK with `vbindiff`.
 - The `#resources` channel on the Discord contains many more links on specific details of decompiling IDO MIPS code.
