@@ -121,9 +121,9 @@ void THA_Reset(TwoHeadArena* tha) {
 /**
  * Creates a new Two Head Arena at `start` with available size `size`
  */
-void THA_Init(TwoHeadArena* tha, void* ptr, size_t size) {
+void THA_Init(TwoHeadArena* tha, void* start, size_t size) {
     bzero(tha, sizeof(TwoHeadArena));
-    tha->start = ptr;
+    tha->start = start;
     tha->size = size;
     THA_Reset(tha);
 }

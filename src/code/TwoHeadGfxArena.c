@@ -37,8 +37,8 @@ Gfx* THGA_GetHead(TwoHeadGfxArena* thga) {
     return THA_GetHead(&thga->tha);
 }
 
-void THGA_SetHead(TwoHeadGfxArena* thga, Gfx* start) {
-    THA_SetHead(&thga->tha, start);
+void THGA_SetHead(TwoHeadGfxArena* thga, Gfx* newHead) {
+    THA_SetHead(&thga->tha, newHead);
 }
 
 void* THGA_GetTail(TwoHeadGfxArena* thga) {
@@ -48,8 +48,8 @@ void* THGA_GetTail(TwoHeadGfxArena* thga) {
 /**
  * Allocates a display list of `num` Gfx commands to the head of the Two Head Gfx Arena.
  */
-Gfx* THGA_AllocDisplayList(TwoHeadGfxArena* thga, u32 count) {
-    return THA_AllocHead(&thga->tha, count * sizeof(Gfx));
+Gfx* THGA_AllocDisplayList(TwoHeadGfxArena* thga, size_t num) {
+    return THA_AllocHead(&thga->tha, num * sizeof(Gfx));
 }
 
 /**
@@ -79,8 +79,8 @@ void* THGA_AllocTail(TwoHeadGfxArena* thga, size_t size) {
 /**
  * Allocates `num` matrices to the tail end of the Two Head Gfx Arena.
  */
-Mtx* THGA_AllocMtxArray(TwoHeadGfxArena* thga, u32 count) {
-    return THGA_AllocTail(thga, count * sizeof(Mtx));
+Mtx* THGA_AllocMtxArray(TwoHeadGfxArena* thga, size_t num) {
+    return THGA_AllocTail(thga, num * sizeof(Mtx));
 }
 
 /**
@@ -93,8 +93,8 @@ Mtx* THGA_AllocMtx(TwoHeadGfxArena* thga) {
 /**
  * Allocates `num` vertices to the tail end of the Two Head Gfx Arena.
  */
-Vtx* THGA_AllocVtxArray(TwoHeadGfxArena* thga, u32 count) {
-    return THGA_AllocTail(thga, count * sizeof(Vtx));
+Vtx* THGA_AllocVtxArray(TwoHeadGfxArena* thga, u32 num) {
+    return THGA_AllocTail(thga, num * sizeof(Vtx));
 }
 
 /**
