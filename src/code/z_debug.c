@@ -1,5 +1,6 @@
 #include "regs.h"
 #include "system_malloc.h"
+#include "macros.h"
 
 RegEditor* gRegEditor;
 
