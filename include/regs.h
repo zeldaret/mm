@@ -123,6 +123,7 @@
 #define R_REVERSE_FLOOR_INDEX               XREG(94)
 #define R_MINIMAP_DISABLED                  XREG(95)
 
+#define R_TRANS_FADE_FLASH_ALPHA_STEP     iREG(50) // Set to a negative number to start the flash
 #define R_ROOM_CULL_DEBUG_MODE            iREG(86)
 #define R_ROOM_CULL_NUM_ENTRIES           iREG(87)
 #define R_ROOM_CULL_USED_ENTRIES          iREG(88)

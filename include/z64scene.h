@@ -338,7 +338,7 @@ typedef struct {
     /* 0x02 */ u8 behaviorType2;
     /* 0x03 */ u8 behaviorType1;
     /* 0x04 */ s8 echo;
-    /* 0x05 */ u8 unk5;
+    /* 0x05 */ u8 lensMode;
     /* 0x06 */ u8 enablePosLights;
     /* 0x07 */ UNK_TYPE1 pad7[0x1];
     /* 0x08 */ RoomShape* roomShape;
@@ -365,7 +365,7 @@ typedef struct {
 
 typedef void(*RoomDrawHandler)(struct PlayState* play, Room* room, u32 flags);
 
-typedef struct {
+typedef struct TransitionActorEntry {
     struct {
         s8 room;    // Room to switch to
         s8 bgCamIndex; // How the camera reacts during the transition. -2 for spiral staircase. -1 for generic door. 0+ will index scene CamData
