@@ -24,7 +24,7 @@ void Main(void* arg) {
     startHeapSize = fb - sysHeap;
     SystemArena_Init(sysHeap, startHeapSize);
 
-    GameInfo_Init();
+    Regs_Init();
 
     R_ENABLE_ARENA_DBG = 0;
 

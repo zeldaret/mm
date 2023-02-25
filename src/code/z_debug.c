@@ -1,20 +1,20 @@
-#include "global.h"
+#include "regs.h"
 #include "system_malloc.h"
 
-GameInfo* gGameInfo;
+RegEditor* gRegEditor;
 
-void GameInfo_Init(void) {
+void Regs_Init(void) {
     s32 i;
 
-    gGameInfo = SystemArena_Malloc(sizeof(GameInfo));
+    gRegEditor = SystemArena_Malloc(sizeof(RegEditor));
     if (1) {}
-    gGameInfo->unk_00 = 0;
-    gGameInfo->unk_01 = 0;
-    gGameInfo->unk_02 = 0;
-    gGameInfo->unk_04 = 0;
-    gGameInfo->unk_03 = 0;
+    gRegEditor->unk_00 = 0;
+    gRegEditor->unk_01 = 0;
+    gRegEditor->unk_02 = 0;
+    gRegEditor->unk_04 = 0;
+    gRegEditor->unk_03 = 0;
 
-    for (i = 0; i < ARRAY_COUNT(gGameInfo->data); i++) {
-        gGameInfo->data[i] = 0;
+    for (i = 0; i < ARRAY_COUNT(gRegEditor->data); i++) {
+        gRegEditor->data[i] = 0;
     }
 }
