@@ -67,7 +67,8 @@ void FireObj_StepSize(FireObj* fire) {
         if (Math_StepToF(&fire->dynamicSize, 1.0f, fire->dynamicSizeStep)) {
             FireObj_SetState(fire, fire->dynamicSizeStep, FIRE_STATE_FULLY_LIT);
         }
-    } else if ((fire->state == FIRE_STATE_SHRINKING) && (Math_StepToF(&fire->dynamicSize, 0.0f, fire->dynamicSizeStep))) {
+    } else if ((fire->state == FIRE_STATE_SHRINKING) &&
+               (Math_StepToF(&fire->dynamicSize, 0.0f, fire->dynamicSizeStep))) {
         FireObj_SetState(fire, fire->dynamicSizeStep, FIRE_STATE_NOT_LIT);
     }
     if (fire->sizeGrowsCos2 == 1) {
@@ -221,7 +222,8 @@ void FireObj_Update(PlayState* play, FireObj* fire, Actor* actor) {
 
     FireObj_UpdateStateTransitions(play, fire);
     if (fire->state == FIRE_STATE_NOT_LIT) {
-        if ((fire->collision.base.acFlags & AC_HIT) && (fire->collision.info.acHitInfo->toucher.dmgFlags & DMG_FIRE_ARROW)) {
+        if ((fire->collision.base.acFlags & AC_HIT) &&
+            (fire->collision.info.acHitInfo->toucher.dmgFlags & DMG_FIRE_ARROW)) {
             FireObj_SetState(fire, fire->dynamicSizeStep, FIRE_STATE_GROWING);
         }
     } else if ((fire->collision.base.acFlags & AC_HIT) && (arrow->actor.update != NULL) &&
