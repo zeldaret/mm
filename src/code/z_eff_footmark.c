@@ -11,9 +11,9 @@ void EffFootmark_Init(PlayState* play) {
 
     for (footmark = play->footprintInfo, i = 0; i < ARRAY_COUNT(play->footprintInfo); i++, footmark++) {
         footmark->actor = NULL;
-        footmark->location.x = 0;
-        footmark->location.y = 0;
-        footmark->location.z = 0;
+        footmark->position.x = 0;
+        footmark->position.y = 0;
+        footmark->position.z = 0;
         footmark->flags = 0;
         footmark->id = 0;
         footmark->alpha = 0;
@@ -21,8 +21,8 @@ void EffFootmark_Init(PlayState* play) {
     }
 }
 
-void EffFootmark_Add(PlayState* play, MtxF* displayMatrix, Actor* actor, u8 id, Vec3f* location, u16 size, u8 red,
-                     u8 green, u8 blue, u16 alpha, u16 alphaChange, u16 fadeoutDelay) {
+void EffFootmark_Add(PlayState* play, MtxF* displayMatrix, Actor* actor, u8 id, Vec3f* position, u16 size, u8 red,
+                     u8 green, u8 blue, u16 alpha, u16 alphaChange, u16 fadeOutDelay) {
     s32 i;
     EffFootmark* footmark;
     EffFootmark* destination = NULL;
@@ -31,14 +31,14 @@ void EffFootmark_Add(PlayState* play, MtxF* displayMatrix, Actor* actor, u8 id, 
 
     for (footmark = play->footprintInfo, i = 0; i < ARRAY_COUNT(play->footprintInfo); i++, footmark++) {
         if (((actor == footmark->actor) && (footmark->id == id)) && !(footmark->flags & FOOTMARK_FLAG_1)) {
-            if (fabsf(footmark->location.x - location->x) <= 1) {
-                if (fabsf(footmark->location.z - location->z) <= 1) {
+            if (fabsf(footmark->position.x - position->x) <= 1) {
+                if (fabsf(footmark->position.z - position->z) <= 1) {
                     isNew = false;
                     break;
                 }
             }
 
-            // This footmark is being re-added at a new location. Let's mark this one to start fading out.
+            // This footmark is being re-added at a new position. Let's mark this one to start fading out.
             footmark->flags = FOOTMARK_FLAG_1;
         }
 
@@ -57,9 +57,9 @@ void EffFootmark_Add(PlayState* play, MtxF* displayMatrix, Actor* actor, u8 id, 
         }
         Matrix_MtxFCopy(&destination->displayMatrix, displayMatrix);
         destination->actor = actor;
-        destination->location.x = location->x;
-        destination->location.y = location->y;
-        destination->location.z = location->z;
+        destination->position.x = position->x;
+        destination->position.y = position->y;
+        destination->position.z = position->z;
         destination->flags = 0;
         destination->id = id;
         destination->red = red;
@@ -68,7 +68,7 @@ void EffFootmark_Add(PlayState* play, MtxF* displayMatrix, Actor* actor, u8 id, 
         destination->alpha = alpha;
         destination->alphaChange = alphaChange;
         destination->size = size;
-        destination->fadeoutDelay = fadeoutDelay;
+        destination->fadeOutDelay = fadeOutDelay;
         destination->age = 0;
     }
 }
@@ -87,14 +87,14 @@ void EffFootmark_Update(PlayState* play) {
                 footmark->age++;
             }
 
-            if (footmark->fadeoutDelay == 0) {
+            if (footmark->fadeOutDelay == 0) {
                 if (footmark->alpha >= footmark->alphaChange + 0x1000) {
                     footmark->alpha -= footmark->alphaChange;
                 } else {
                     footmark->actor = NULL;
                 }
-            } else if (footmark->fadeoutDelay > 0) {
-                footmark->fadeoutDelay--;
+            } else if (footmark->fadeOutDelay > 0) {
+                footmark->fadeOutDelay--;
             }
         }
     }
