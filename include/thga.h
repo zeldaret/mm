@@ -10,7 +10,7 @@ typedef union TwoHeadGfxArena {
         /* 0x8 */ Gfx* p;
         /* 0xC */ void* d;
     };
-    /* 0x00 */ TwoHeadArena tha;
+    /* 0x0 */ TwoHeadArena tha;
 } TwoHeadGfxArena; // size = 0x10
 
 void THGA_Init(TwoHeadGfxArena* thga, void* start, size_t size);
