@@ -115,7 +115,7 @@ void FireObj_UpdateStateTransitions(PlayState* play, FireObj* fire) {
     }
     if ((fire->flags & FIRE_FLAG_2) && (player->heldItemAction == PLAYER_IA_STICK)) {
         Math_Vec3f_Diff(&player->meleeWeaponInfo[0].tip, &fire->position, &dist);
-        if (Math3D_LengthSquared(&dist) < 400.0f) {
+        if (Math3D_LengthSquared(&dist) < SQ(20.0f)) {
             sp40 = true;
         }
     }
@@ -126,10 +126,10 @@ void FireObj_UpdateStateTransitions(PlayState* play, FireObj* fire) {
                 FireObj_SetState(fire, fire->dynamicSizeStep, FIRE_STATE_GROWING);
             }
         } else if (player->unk_B28 == 0) {
-            player->unk_B28 = 0xD2;
+            player->unk_B28 = 210;
             SoundSource_PlaySfxAtFixedWorldPos(play, &fire->position, 20, NA_SE_EV_FLAME_IGNITION);
-        } else if (player->unk_B28 < 0xC8) {
-            player->unk_B28 = 0xC8;
+        } else if (player->unk_B28 < 200) {
+            player->unk_B28 = 200;
         }
     }
 }
