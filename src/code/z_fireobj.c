@@ -1,13 +1,7 @@
-#include "global.h"
+//#include "global.h"
+#include "z_fireobj.h"
 #include "overlays/actors/ovl_En_Arrow/z_en_arrow.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
-
-typedef enum {
-    FIRE_STATE_0,
-    FIRE_STATE_1,
-    FIRE_STATE_2,
-    FIRE_STATE_3,
-} FireState;
 
 ColliderCylinderInit sFireObjCollisionInit = {
     {
@@ -226,13 +220,13 @@ void FireObj_Update(PlayState* play, FireObj* fire, Actor* actor) {
 
     FireObj_UpdateStateTransitions(play, fire);
     if (fire->state == FIRE_STATE_3) {
-        if ((fire->collision.base.acFlags & AC_HIT) && (fire->collision.info.acHitInfo->toucher.dmgFlags & 0x800)) {
+        if ((fire->collision.base.acFlags & AC_HIT) && (fire->collision.info.acHitInfo->toucher.dmgFlags & DMG_FIRE_ARROW)) {
             FireObj_SetState(fire, fire->dynamicSizeStep, FIRE_STATE_0);
         }
     } else if ((fire->collision.base.acFlags & AC_HIT) && (arrow->actor.update != NULL) &&
                (arrow->actor.id == ACTOR_EN_ARROW)) {
         arrow->actor.params = 0;
-        arrow->collider.info.toucher.dmgFlags = 0x800;
+        arrow->collider.info.toucher.dmgFlags = DMG_FIRE_ARROW;
     }
     fire->collision.dim.pos.x = fire->position.x;
     fire->collision.dim.pos.y = fire->position.y;
