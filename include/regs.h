@@ -57,7 +57,8 @@ extern RegEditor* gRegEditor;
 #define kREG(r) BASE_REG(27, r)
 #define bREG(r) BASE_REG(28, r)
 
-/* TODO: Actually confirm these */
+/* TODO: There are still a few OoT defines here that need confirmation */
+
 #define R_TIME_SPEED                      REG(15)
 #define R_RUN_SPEED_LIMIT                 REG(45)
 
