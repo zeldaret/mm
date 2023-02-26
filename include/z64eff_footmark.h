@@ -23,6 +23,8 @@ typedef struct EffFootmark {
     /* 0x5E */ u16 age;
 } EffFootmark; // size = 0x60
 
+#define FOOTMARK_FLAG_1 (1 << 0)
+
 extern Vtx D_801BC210[];
 extern Gfx D_801BC240[];
 extern Gfx D_801BC288[];

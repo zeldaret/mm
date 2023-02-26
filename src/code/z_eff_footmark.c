@@ -1,5 +1,7 @@
 #include "z64eff_footmark.h"
 #include "z64.h"
+#include "macros.h"
+#include "functions.h"
 
 void EffFootmark_Init(PlayState* play) {
     EffFootmark* footmark;
@@ -26,7 +28,7 @@ void EffFootmark_Add(PlayState* play, MtxF* displayMatrix, Actor* actor, u8 id, 
     s32 isNew = true;
 
     for (footmark = play->footprintInfo, i = 0; i < ARRAY_COUNT(play->footprintInfo); i++, footmark++) {
-        if (((actor == footmark->actor) && (footmark->id == id)) && !(footmark->flags & 1)) {
+        if (((actor == footmark->actor) && (footmark->id == id)) && !(footmark->flags & FOOTMARK_FLAG_1)) {
             if (fabsf(footmark->location.x - location->x) <= 1) {
                 if (fabsf(footmark->location.z - location->z) <= 1) {
                     isNew = false;
@@ -35,16 +37,14 @@ void EffFootmark_Add(PlayState* play, MtxF* displayMatrix, Actor* actor, u8 id, 
             }
 
             // This footmark is being re-added at a new location. Let's mark this one to start fading out.
-            footmark->flags = 1;
+            footmark->flags = FOOTMARK_FLAG_1;
         }
 
         if (footmark->actor == NULL) {
             destination = footmark;
-        } else {
-            if (destination == NULL) {
-                if ((oldest != NULL && footmark->age > oldest->age) || (oldest == NULL)) {
-                    oldest = footmark;
-                }
+        } else if (destination == NULL) {
+            if (((oldest != NULL) && (footmark->age > oldest->age)) || (oldest == NULL)) {
+                oldest = footmark;
             }
         }
     }
@@ -77,7 +77,7 @@ void EffFootmark_Update(PlayState* play) {
 
     for (footmark = play->footprintInfo, i = 0; i < ARRAY_COUNT(play->footprintInfo); i++, footmark++) {
         if (footmark->actor != NULL) {
-            if ((footmark->flags & 1) == 1) {
+            if (CHECK_FLAG_ALL(footmark->flags, FOOTMARK_FLAG_1)) {
                 if ((u32)footmark->age < UINT16_MAX) {
                     footmark->age++;
                 }
