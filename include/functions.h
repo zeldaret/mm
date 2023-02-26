@@ -1256,10 +1256,6 @@ u8 Cutscene_IsPlaying(PlayState* play);
 
 void GetItem_Draw(PlayState* play, s16 drawId);
 
-void EffFootmark_Init(PlayState* play);
-void EffFootmark_Add(PlayState* play, MtxF* displayMatrix, Actor* actor, u8 id, Vec3f* location, u16 size, u8 red, u8 green, u8 blue, u16 alpha, u16 alphaChange, u16 fadeoutDelay);
-void EffFootmark_Update(PlayState* play);
-void EffFootmark_Draw(PlayState* play);
 void SoundSource_InitAll(PlayState* play);
 void SoundSource_UpdateAll(PlayState* play);
 void SoundSource_PlaySfxAtFixedWorldPos(PlayState* play, Vec3f* worldPos, u32 duration, u16 sfxId);
