@@ -3,6 +3,8 @@
 #include "macros.h"
 #include "functions.h"
 
+#include "assets/code/eff_footmark/eff_footmark.c"
+
 void EffFootmark_Init(PlayState* play) {
     EffFootmark* footmark;
     s32 i;
