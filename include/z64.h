@@ -23,10 +23,10 @@
 #include "sfx.h"
 #include "message_data_static.h"
 
-#include "tha.h"
-#include "thga.h"
 #include "gfxprint.h"
 #include "sys_matrix.h"
+#include "tha.h"
+#include "thga.h"
 #include "z64actor.h"
 #include "z64animation.h"
 #include "z64audio.h"
