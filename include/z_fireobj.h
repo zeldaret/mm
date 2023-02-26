@@ -11,7 +11,7 @@ struct PlayState;
 struct Actor;
 
 
-typedef struct {
+typedef struct FireObjInitParams {
     /* 0x0 */ f32 size;
     /* 0x4 */ f32 dynamicSizeStep;
     /* 0x8 */ u8 state;
@@ -47,24 +47,25 @@ typedef struct FireObj {
     /* 0x18 */ f32 yScale;
     /* 0x1C */ f32 dynamicSize;
     /* 0x20 */ f32 dynamicSizeStep;
-    /* 0x24 */ u8 state; // 0 - growing, 1 - shrinking, 2 - fully lit, 3 - not lit
+    /* 0x24 */ u8 state; // @see FireState enum
     /* 0x25 */ u8 sizeGrowsCos2;
-    /* 0x26 */ u8 unk26;
+    /* 0x26 */ u8 timer;
     /* 0x27 */ u8 colorsIndex;
-    /* 0x28 */ u8 flags; // bit 0 - ?, bit 1 - ?
-    /* 0x29 */ UNK_TYPE1 pad29[0x1];
+    /* 0x28 */ u8 flags; // @see FIRE_FLAG_
     /* 0x2A */ s16 ignitionDelay;
     /* 0x2C */ ColliderCylinder collision;
     /* 0x78 */ FireObjLight light;
 } FireObj; // size = 0x8B
 
-typedef enum {
-    FIRE_STATE_0,
-    FIRE_STATE_1,
-    FIRE_STATE_2,
-    FIRE_STATE_3,
+typedef enum FireState {
+    /* 0 */ FIRE_STATE_GROWING,
+    /* 1 */ FIRE_STATE_SHRINKING,
+    /* 2 */ FIRE_STATE_FULLY_LIT,
+    /* 3 */ FIRE_STATE_NOT_LIT,
 } FireState;
 
+#define FIRE_FLAG_1 (1 << 0)
+#define FIRE_FLAG_2 (1 << 1)
 
 void FireObj_SetPosition(FireObj* fire, Vec3f* pos);
 void FireObj_Draw(struct PlayState* play, FireObj* fire);

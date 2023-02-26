@@ -63,7 +63,7 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 static FireObjInitParams sFireObjInit = {
-    0.00405000010505f, 0.0500000007451f, 3, 1, 0, 0, 0,
+    0.00405000010505f, 0.0500000007451f, FIRE_STATE_NOT_LIT, 1, 0, 0, 0,
 };
 
 static s16 sInitialAnglePerPetal[] = { 0x0000, 0x2AAA, 0x5555, 0x8000, 0xAAAA, 0xD555 };
