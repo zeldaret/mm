@@ -5,10 +5,10 @@
 
 typedef union TwoHeadGfxArena {
     struct {       // Same as TwoHeadArena, with different types and field names for the head and tail pointers
-        /* 0x00 */ size_t size;
-        /* 0x04 */ void* start;
-        /* 0x08 */ Gfx* p;
-        /* 0x0C */ void* d;
+        /* 0x0 */ size_t size;
+        /* 0x4 */ void* start;
+        /* 0x8 */ Gfx* p;
+        /* 0xC */ void* d;
     };
     /* 0x00 */ TwoHeadArena tha;
 } TwoHeadGfxArena; // size = 0x10

@@ -5,10 +5,10 @@
 #include "libc/stdint.h"
 
 typedef struct TwoHeadArena {
-    /* 0x00 */ size_t size;
-    /* 0x04 */ void* start;
-    /* 0x08 */ void* head;
-    /* 0x0C */ void* tail;
+    /* 0x0 */ size_t size;
+    /* 0x4 */ void* start;
+    /* 0x8 */ void* head;
+    /* 0xC */ void* tail;
 } TwoHeadArena; // size = 0x10
 
 void* THA_GetHead(TwoHeadArena* tha);
