@@ -4,13 +4,13 @@
 #include "tha.h"
 
 typedef union TwoHeadGfxArena {
-    /* 0x00 */ TwoHeadArena tha;
     struct {       // Same as TwoHeadArena, with different types and field names for the head and tail pointers
         /* 0x00 */ size_t size;
         /* 0x04 */ void* start;
         /* 0x08 */ Gfx* p;
         /* 0x0C */ void* d;
     };
+    /* 0x00 */ TwoHeadArena tha;
 } TwoHeadGfxArena; // size = 0x10
 
 void THGA_Init(TwoHeadGfxArena* thga, void* start, size_t size);
