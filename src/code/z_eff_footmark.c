@@ -78,21 +78,23 @@ void EffFootmark_Update(PlayState* play) {
     s32 i;
 
     for (footmark = play->footprintInfo, i = 0; i < ARRAY_COUNT(play->footprintInfo); i++, footmark++) {
-        if (footmark->actor != NULL) {
-            if (CHECK_FLAG_ALL(footmark->flags, FOOTMARK_FLAG_1)) {
-                if ((u32)footmark->age < UINT16_MAX) {
-                    footmark->age++;
-                }
+        if (footmark->actor == NULL) {
+            continue;
+        }
 
-                if (footmark->fadeoutDelay == 0) {
-                    if (footmark->alpha >= footmark->alphaChange + 0x1000) {
-                        footmark->alpha -= footmark->alphaChange;
-                    } else {
-                        footmark->actor = NULL;
-                    }
-                } else if (footmark->fadeoutDelay > 0) {
-                    footmark->fadeoutDelay--;
+        if (CHECK_FLAG_ALL(footmark->flags, FOOTMARK_FLAG_1)) {
+            if ((u32)footmark->age < UINT16_MAX) {
+                footmark->age++;
+            }
+
+            if (footmark->fadeoutDelay == 0) {
+                if (footmark->alpha >= footmark->alphaChange + 0x1000) {
+                    footmark->alpha -= footmark->alphaChange;
+                } else {
+                    footmark->actor = NULL;
                 }
+            } else if (footmark->fadeoutDelay > 0) {
+                footmark->fadeoutDelay--;
             }
         }
     }
