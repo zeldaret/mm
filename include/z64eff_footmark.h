@@ -23,6 +23,10 @@ typedef struct EffFootmark {
     /* 0x5E */ u16 age;
 } EffFootmark; // size = 0x60
 
+extern Vtx D_801BC210[];
+extern Gfx D_801BC240[];
+extern Gfx D_801BC288[];
+
 void EffFootmark_Init(struct PlayState* play);
 void EffFootmark_Add(struct PlayState* play, MtxF* displayMatrix, struct Actor* actor, u8 id, Vec3f* location, u16 size, u8 red, u8 green, u8 blue, u16 alpha, u16 alphaChange, u16 fadeoutDelay);
 void EffFootmark_Update(struct PlayState* play);

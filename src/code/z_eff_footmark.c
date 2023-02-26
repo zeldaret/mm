@@ -1,10 +1,11 @@
-#include "global.h"
+#include "z64eff_footmark.h"
+#include "z64.h"
 
 void EffFootmark_Init(PlayState* play) {
     EffFootmark* footmark;
     s32 i;
 
-    for (footmark = play->footprintInfo, i = 0; i < 100; i++, footmark++) {
+    for (footmark = play->footprintInfo, i = 0; i < ARRAY_COUNT(play->footprintInfo); i++, footmark++) {
         footmark->actor = NULL;
         footmark->location.x = 0;
         footmark->location.y = 0;
@@ -22,13 +23,13 @@ void EffFootmark_Add(PlayState* play, MtxF* displayMatrix, Actor* actor, u8 id, 
     EffFootmark* footmark;
     EffFootmark* destination = NULL;
     EffFootmark* oldest = NULL;
-    s32 isNew = 1;
+    s32 isNew = true;
 
-    for (footmark = play->footprintInfo, i = 0; i < 100; i++, footmark++) {
-        if (((actor == footmark->actor) && (footmark->id == id)) && ((footmark->flags & 1) == 0)) {
-            if (fabsf((footmark->location).x - location->x) <= 1) {
-                if (fabsf((footmark->location).z - location->z) <= 1) {
-                    isNew = 0;
+    for (footmark = play->footprintInfo, i = 0; i < ARRAY_COUNT(play->footprintInfo); i++, footmark++) {
+        if (((actor == footmark->actor) && (footmark->id == id)) && !(footmark->flags & 1)) {
+            if (fabsf(footmark->location.x - location->x) <= 1) {
+                if (fabsf(footmark->location.z - location->z) <= 1) {
+                    isNew = false;
                     break;
                 }
             }
@@ -48,7 +49,7 @@ void EffFootmark_Add(PlayState* play, MtxF* displayMatrix, Actor* actor, u8 id, 
         }
     }
 
-    if ((isNew) && ((destination != NULL || (oldest != NULL)))) {
+    if (isNew && ((destination != NULL) || (oldest != NULL))) {
         if (destination == NULL) {
             destination = oldest;
         }
@@ -74,7 +75,7 @@ void EffFootmark_Update(PlayState* play) {
     EffFootmark* footmark;
     s32 i;
 
-    for (footmark = play->footprintInfo, i = 0; i < 100; i++, footmark++) {
+    for (footmark = play->footprintInfo, i = 0; i < ARRAY_COUNT(play->footprintInfo); i++, footmark++) {
         if (footmark->actor != NULL) {
             if ((footmark->flags & 1) == 1) {
                 if ((u32)footmark->age < UINT16_MAX) {
@@ -104,7 +105,7 @@ void EffFootmark_Draw(PlayState* play) {
 
     gSPDisplayList(gfxCtx->polyXlu.p++, D_801BC240);
 
-    for (footmark = play->footprintInfo, i = 0; i < 100; i++, footmark++) {
+    for (footmark = play->footprintInfo, i = 0; i < ARRAY_COUNT(play->footprintInfo); i++, footmark++) {
         if (footmark->actor != NULL) {
             Matrix_Put(&footmark->displayMatrix);
             Matrix_Scale(footmark->size * (1.0f / 0x100) * 0.7f, 1, footmark->size * (1.0f / 0x100), MTXMODE_APPLY);
