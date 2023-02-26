@@ -117,6 +117,21 @@ wordReplace = {
     "Actor_MarkForDeath": "Actor_Kill",
     "func_800B84D0": "Actor_ProcessTalkRequest",
     "func_8017D668": "Math3D_PointDistToLine2D",
+
+    "THGA_AllocStartArray8": "THGA_AllocDisplayList",
+    "THGA_AllocStart8": "THGA_AllocGfx",
+    "THGA_AllocStart8Wrapper": "THGA_AllocGfx2",
+    "THGA_AllocEnd": "THGA_AllocTail",
+    "THGA_AllocEndArray64": "THGA_AllocMtxArray",
+    "THGA_AllocEnd64": "THGA_AllocMtx",
+    "THGA_AllocEndArray16": "THGA_AllocVtxArray",
+    "THGA_AllocEnd16": "THGA_AllocVtx",
+    "THA_AllocStart": "THA_AllocHead",
+    "THA_AllocStart1": "THA_AllocHeadByte",
+    "THA_AllocEnd": "THA_AllocTail",
+    "THA_AllocEndAlign16": "THA_AllocTailAlign16"
+    "THA_AllocEndAlign": "THA_AllocTailAlign",
+
     "func_800BDFC0": "Gfx_DrawDListOpa",
     "func_800BE03C": "Gfx_DrawDListXlu",
     "func_800B6FC8": "Player_GetHeight",
