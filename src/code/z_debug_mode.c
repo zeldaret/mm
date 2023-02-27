@@ -1,161 +1,160 @@
+#include "z64debug.h"
 #include "global.h"
 
 typedef struct {
-    u8 colorIndex;
-    char text[11];
-} TextInfo;
+    /* 0x0 */ u8 colorIndex;
+    /* 0x1 */ char text[11];
+} DebugTextBufferEntry; // size = 0xC
 
 typedef struct {
-    u8 x;
-    u8 y;
-    u8 colorIndex;
-    char text[41];
-} TextInfo2;
+    /* 0x0 */ u8 x;
+    /* 0x1 */ u8 y;
+    /* 0x2 */ u8 colorIndex;
+    /* 0x3 */ char text[41];
+} DebugCamTextBufferEntry; // size = 0x2C
 
+#define DEBUG_TEXT_DRAW_TEXT (1 << 0)
+#define DEBUG_TEXT_DRAW_CAM_TEXT (1 << 1)
 
-s32 D_801BB090 = 0;
+s32 sDebugTextDrawFlags = 0;
 
-TextInfo D_801BB094[6] = {
-    { 0, "          " },
-    { 0, "          " },
-    { 0, "          " },
-    { 0, "          " },
-    { 0, "          " },
-    { 0, "          " },
+DebugTextBufferEntry sDebugTextBuffer[] = {
+    { 0, "          " }, { 0, "          " }, { 0, "          " },
+    { 0, "          " }, { 0, "          " }, { 0, "          " },
 };
 
-Color_RGBA8 D_801BB0DC[8] = {
-    { 0, 0, 0, 64 },
-    { 0, 0, 255, 64 },
-    { 255, 0, 0, 64 },
-    { 255, 0, 255, 64 },
-    { 0, 255, 0, 64 },
-    { 0, 255, 255, 64 },
-    { 255, 255, 0, 64 },
-    { 255, 255, 255, 64 },
+Color_RGBA8 sDebugTextColors[] = {
+    { 0, 0, 0, 64 },       // DEBUG_TEXT_BLACK
+    { 0, 0, 255, 64 },     // DEBUG_TEXT_BLUE
+    { 255, 0, 0, 64 },     // DEBUG_TEXT_RED
+    { 255, 0, 255, 64 },   // DEBUG_TEXT_PURPLE
+    { 0, 255, 0, 64 },     // DEBUG_TEXT_GREEN
+    { 0, 255, 255, 64 },   // DEBUG_TEXT_CYAN
+    { 255, 255, 0, 64 },   // DEBUG_TEXT_YELLOW
+    { 255, 255, 255, 64 }, // DEBUG_TEXT_WHITE
 };
 
-s16 D_801BB0FC = 0;
+DebugCamTextBufferEntry sDebugCamTextBuffer[80];
 
-Color_RGBA8 D_801BB100[8] = {
-    { 255, 255, 32, 192 },
-    { 255, 150, 128, 192 },
-    { 128, 96, 0, 64 },
-    { 192, 128, 16, 128 },
-    { 255, 192, 32, 128 },
-    { 230, 230, 220, 64 },
-    { 128, 150, 255, 128 },
-    { 128, 255, 32, 128 },
+s16 sDebugCamTextEntryCount = 0;
+
+Color_RGBA8 sDebugCamTextColors[] = {
+    { 255, 255, 32, 192 },  // DEBUG_CAM_TEXT_YELLOW
+    { 255, 150, 128, 192 }, // DEBUG_CAM_TEXT_PEACH
+    { 128, 96, 0, 64 },     // DEBUG_CAM_TEXT_BROWN
+    { 192, 128, 16, 128 },  // DEBUG_CAM_TEXT_ORANGE
+    { 255, 192, 32, 128 },  // DEBUG_CAM_TEXT_GOLD
+    { 230, 230, 220, 64 },  // DEBUG_CAM_TEXT_WHITE
+    { 128, 150, 255, 128 }, // DEBUG_CAM_TEXT_BLUE
+    { 128, 255, 32, 128 },  // DEBUG_CAM_TEXT_GREEN
 };
 
-TextInfo2 D_801F3F80[80];
-
-void func_800E9C90(void) {
-    D_801BB090 = 0;
+void Debug_ClearTextDrawFlags(void) {
+    sDebugTextDrawFlags = 0;
 }
 
-void func_800E9CA0(s32 arg0, s32 arg1, const char* arg2) {
-    TextInfo* textInfo = &D_801BB094[arg0];
-    char* text = textInfo->text;
+void Debug_ScreenText(s32 index, s32 colorIndex, const char* text) {
+    DebugTextBufferEntry* textInfo = &sDebugTextBuffer[index];
+    char* textDest = textInfo->text;
 
-    D_801BB090 |= 1;
-    textInfo->colorIndex = arg1;
+    sDebugTextDrawFlags |= DEBUG_TEXT_DRAW_TEXT;
+    textInfo->colorIndex = colorIndex;
 
     do {
-        *text++ = *arg2;
-    } while (*arg2++ != 0);
+        *textDest++ = *text;
+    } while (*text++ != '\0');
 }
 
-void func_800E9CFC(GfxPrint* arg0) {
-    Color_RGBA8* temp_v0;
-    TextInfo* var_s0;
-    s32 var_s1;
+void Debug_DrawScreenText(GfxPrint* printer) {
+    DebugTextBufferEntry* entry;
+    Color_RGBA8* color;
+    s32 y;
 
-    var_s0 = D_801BB094;
-    for (var_s1= 0x14; var_s1 < 0x1A; var_s1++) {
-        GfxPrint_SetPos(arg0, 0x1A, var_s1);
-        temp_v0 = &D_801BB0DC[var_s0->colorIndex];
-        GfxPrint_SetColor(arg0, temp_v0->r, temp_v0->g, temp_v0->b, temp_v0->a);
-        GfxPrint_Printf(arg0, "%s", var_s0->text);
-        *var_s0->text = '\0';
-        var_s0++;
-    };
-}
-
-void func_800E9DBC(u8 arg0, u8 arg1, u8 arg2, const char* arg3) {
-    TextInfo2* temp_v0 = &D_801F3F80[D_801BB0FC];
-    char* text;
-    s16 var_v1;
-    char tmp;
-
-    D_801BB090 |= 2;
-    if (D_801BB0FC < ARRAY_COUNT(D_801F3F80)) {
-        temp_v0->x = arg0;
-        temp_v0->y = arg1;
-        temp_v0->colorIndex = arg2;
-
-        var_v1 = 0;
-        text = temp_v0->text;
-
-        while((*text++ = *arg3++) != '\0') {
-            if (var_v1++ >= ARRAY_COUNT(temp_v0->text)) {
-                break;
-            }
-        }
-        *text = '\0';
-        
-        D_801BB0FC++;
+    entry = sDebugTextBuffer;
+    for (y = 20; y < 20 + ARRAY_COUNT(sDebugTextBuffer); y++) {
+        GfxPrint_SetPos(printer, 26, y);
+        color = &sDebugTextColors[entry->colorIndex];
+        GfxPrint_SetColor(printer, color->r, color->g, color->b, color->a);
+        GfxPrint_Printf(printer, "%s", entry->text);
+        *entry->text = '\0';
+        entry++;
     }
 }
 
-void func_800E9E94(GfxPrint* arg0) {
-    Color_RGBA8* temp_v0;
-    TextInfo2* var_s0;
-    char* text;
-    s32 var_s2;
+void DebugCamera_ScreenText(u8 x, u8 y, u8 colorIndex, const char* text) {
+    DebugCamTextBufferEntry* entry = &sDebugCamTextBuffer[sDebugCamTextEntryCount];
+    char* textDest;
+    s16 charCount;
 
-    for(var_s2 = 0; var_s2 < D_801BB0FC; var_s2++) {
-        var_s0 = &D_801F3F80[var_s2];
-        temp_v0 = &D_801BB100[var_s0->colorIndex];
-        GfxPrint_SetColor(arg0, temp_v0->r, temp_v0->g, temp_v0->b, temp_v0->a);
-        GfxPrint_SetPos(arg0, var_s0->x, var_s0->y);
-        GfxPrint_Printf(arg0, "%s", var_s0->text);
-    };
+    sDebugTextDrawFlags |= DEBUG_TEXT_DRAW_CAM_TEXT;
+    if (sDebugCamTextEntryCount < ARRAY_COUNT(sDebugCamTextBuffer)) {
+        entry->x = x;
+        entry->y = y;
+        entry->colorIndex = colorIndex;
+
+        // Copy text into the entry, truncating if needed
+        charCount = 0;
+        textDest = entry->text;
+
+        while ((*textDest++ = *text++) != '\0') {
+            if (charCount++ >= ARRAY_COUNT(entry->text)) {
+                break;
+            }
+        }
+
+        *textDest = '\0';
+
+        sDebugCamTextEntryCount++;
+    }
 }
 
-void func_800E9F78(GraphicsContext* gfxCtx) {
-    Gfx* sp64;
-    Gfx* sp60;
-    GfxPrint sp30;
-    Gfx* temp_v0;
+void DebugCamera_DrawScreenText(GfxPrint* printer) {
+    DebugCamTextBufferEntry* entry;
+    Color_RGBA8* color;
+    s32 i;
+
+    for (i = 0; i < sDebugCamTextEntryCount; i++) {
+        entry = &sDebugCamTextBuffer[i];
+        color = &sDebugCamTextColors[entry->colorIndex];
+
+        GfxPrint_SetColor(printer, color->r, color->g, color->b, color->a);
+        GfxPrint_SetPos(printer, entry->x, entry->y);
+        GfxPrint_Printf(printer, "%s", entry->text);
+    }
+}
+
+void Debug_DrawText(GraphicsContext* gfxCtx) {
+    Gfx* gfx;
+    Gfx* gfxHead;
+    GfxPrint printer;
 
     if (THGA_GetSize(&gfxCtx->polyOpa) >= 0x2800) {
-        GfxPrint_Init(&sp30);
+        GfxPrint_Init(&printer);
 
         OPEN_DISPS(gfxCtx);
 
-        sp60 = POLY_OPA_DISP;
-        temp_v0 = Graph_GfxPlusOne(sp60);
-        gSPDisplayList(DEBUG_DISP++, temp_v0);
+        gfxHead = POLY_OPA_DISP;
+        gfx = Graph_GfxPlusOne(gfxHead);
+        gSPDisplayList(DEBUG_DISP++, gfx);
 
-        GfxPrint_Open(&sp30, temp_v0);
+        GfxPrint_Open(&printer, gfx);
 
-        if (D_801BB090 & 2) {
-            func_800E9E94(&sp30);
+        if (sDebugTextDrawFlags & DEBUG_TEXT_DRAW_CAM_TEXT) {
+            DebugCamera_DrawScreenText(&printer);
         }
-        D_801BB0FC = 0;
+        sDebugCamTextEntryCount = 0;
 
-        if (D_801BB090 & 1) {
-            func_800E9CFC(&sp30);
+        if (sDebugTextDrawFlags & DEBUG_TEXT_DRAW_TEXT) {
+            Debug_DrawScreenText(&printer);
         }
 
-        sp64 = GfxPrint_Close(&sp30);
-        gSPEndDisplayList(sp64++);
-        Graph_BranchDlist(sp60, sp64);
-        POLY_OPA_DISP = sp64;
+        gfx = GfxPrint_Close(&printer);
+        gSPEndDisplayList(gfx++);
+        Graph_BranchDlist(gfxHead, gfx);
+        POLY_OPA_DISP = gfx;
 
         CLOSE_DISPS(gfxCtx);
 
-        GfxPrint_Destroy(&sp30);
+        GfxPrint_Destroy(&printer);
     }
 }

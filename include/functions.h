@@ -1230,12 +1230,6 @@ void GameInfo_Init(void);
 DebugDispObject* DebugDisplay_Init(void);
 void DebugDisplay_DrawObjects(PlayState* play);
 DebugDispObject* DebugDisplay_AddObject(f32 posX, f32 posY, f32 posZ, s16 rotX, s16 rotY, s16 rotZ, f32 scaleX, f32 scaleY, f32 scaleZ, u8 red, u8 green, u8 blue, u8 alpha, s16 type, GraphicsContext* gfxCtx);
-// void func_800E9C90(void);
-void func_800E9CA0(s32 arg0, s32 arg1, const char* arg2);
-// void func_800E9CFC(void);
-void func_800E9DBC(u8 arg0, u8 arg1, u8 arg2, const char* arg3);
-// void func_800E9E94(void);
-void func_800E9F78(GraphicsContext* gfxCtx);
 
 void Cutscene_Init(PlayState* play, CutsceneContext* csCtx);
 void Cutscene_Start(PlayState* play, CutsceneContext* csCtx);
