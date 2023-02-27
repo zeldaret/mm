@@ -442,7 +442,7 @@
     0x801AEDD4:("D_801AEDD4","UNK_TYPE4","",0x4),
     0x801AEE28:("D_801AEE28","UNK_TYPE4","",0x4),
     0x801AEE30:("D_801AEE30","UNK_TYPE4","",0x4),
-    0x801AEE38:("D_801AEE38","struct_801AEE38","[14]",0x150),
+    0x801AEE38:("sNpcTrackingPresets","NpcTrackingParams","[14]",0x150),
     0x801AEF88:("D_801AEF88","UNK_TYPE1","",0x1),
     0x801AEFA0:("D_801AEFA0","UNK_TYPE1","",0x1),
     0x801AEFA8:("sElectricSparkTextures","UNK_TYPE1","",0x1),

@@ -1268,29 +1268,29 @@ void EnMaYto_ChangeAnim(EnMaYto* this, s32 animIndex) {
 
 void func_80B90C78(EnMaYto* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    s16 flag;
+    s16 trackingMode;
 
     SkelAnime_Update(&this->skelAnime);
-    flag = this->unk31E == 2 ? true : false;
+    trackingMode = (this->unk31E == 2) ? NPC_TRACKING_NONE : NPC_TRACKING_PLAYER_AUTO_TURN;
 
     if (this->unk31E == 0) {
-        this->unk_1D8.unk_18 = player->actor.world.pos;
-        this->unk_1D8.unk_14 = 0.0f;
+        this->interactInfo.trackPos = player->actor.world.pos;
+        this->interactInfo.yOffset = 0.0f;
     } else if (this->unk31E == 1) {
-        Math_Vec3f_StepTo(&this->unk_1D8.unk_18, &this->actor.child->world.pos, 8.0f);
-        this->unk_1D8.unk_14 = 0.0f;
+        Math_Vec3f_StepTo(&this->interactInfo.trackPos, &this->actor.child->world.pos, 8.0f);
+        this->interactInfo.yOffset = 0.0f;
     }
 
     if (this->unk320 == 0) {
         if (this->actionFunc == EnMaYto_WarmFuzzyFeelingCs) {
-            this->unk_1D8.unk_08.y = 0;
-            this->unk_1D8.unk_08.x = 0;
+            this->interactInfo.headRot.y = 0;
+            this->interactInfo.headRot.x = 0;
         } else {
-            func_800BD888(&this->actor, &this->unk_1D8, 0xD, flag);
+            Npc_TrackPoint(&this->actor, &this->interactInfo, 13, trackingMode);
         }
     } else {
-        Math_SmoothStepToS(&this->unk_1D8.unk_08.y, 0, 3, 0x71C, 0xB6);
-        Math_SmoothStepToS(&this->unk_1D8.unk_08.x, 0x18E3, 5, 0x71C, 0xB6);
+        Math_SmoothStepToS(&this->interactInfo.headRot.y, 0, 3, 0x71C, 0xB6);
+        Math_SmoothStepToS(&this->interactInfo.headRot.x, 0x18E3, 5, 0x71C, 0xB6);
     }
 
     EnMaYto_UpdateEyes(this);
@@ -1426,14 +1426,14 @@ s32 EnMaYto_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f*
     Vec3s sp4;
 
     if (limbIndex == CREMIA_LIMB_HEAD) {
-        sp4 = this->unk_1D8.unk_08;
+        sp4 = this->interactInfo.headRot;
 
         rot->x += sp4.y;
         rot->z += sp4.x;
     } else if (limbIndex == CREMIA_LIMB_TORSO) {
         if (this->skelAnime.animation != &gCremiaSittingPetCowAnim &&
             this->skelAnime.animation != &gCremiaSittingLookDownAnim) {
-            sp4 = this->unk_1D8.unk_0E;
+            sp4 = this->interactInfo.torsoRot;
 
             rot->x += sp4.y;
             if (this->skelAnime.animation == &gCremiaIdleAnim || this->skelAnime.animation == &gCremiaSittingAnim ||

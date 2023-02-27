@@ -142,19 +142,21 @@ void EnMa4_ChangeAnim(EnMa4* this, s32 animIndex) {
 
 void func_80ABDD9C(EnMa4* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    s16 flag;
+    s16 trackingMode;
 
-    if (this->unk_1D8.unk_00 == 0 &&
+    if ((this->interactInfo.talkState == NPC_TALK_STATE_IDLE) &&
         ((this->skelAnime.animation == &gRomaniRunAnim) || (this->skelAnime.animation == &gRomaniLookAroundAnim) ||
          (this->skelAnime.animation == &gRomaniShootBowAnim))) {
-        flag = 1;
+        trackingMode = NPC_TRACKING_NONE;
     } else {
-        flag = (this->type == MA4_TYPE_ALIENS_WON && this->actionFunc != EnMa4_DialogueHandler) ? 1 : 0;
+        trackingMode = ((this->type == MA4_TYPE_ALIENS_WON) && (this->actionFunc != EnMa4_DialogueHandler))
+                           ? NPC_TRACKING_NONE
+                           : NPC_TRACKING_PLAYER_AUTO_TURN;
     }
 
-    this->unk_1D8.unk_18 = player->actor.world.pos;
-    this->unk_1D8.unk_18.y -= -10.0f;
-    func_800BD888(&this->actor, &this->unk_1D8, 0, flag);
+    this->interactInfo.trackPos = player->actor.world.pos;
+    this->interactInfo.trackPos.y -= -10.0f;
+    Npc_TrackPoint(&this->actor, &this->interactInfo, 0, trackingMode);
 }
 
 void EnMa4_InitPath(EnMa4* this, PlayState* play) {
@@ -192,7 +194,7 @@ void EnMa4_Init(Actor* thisx, PlayState* play) {
     Actor_SetScale(&this->actor, 0.01f);
 
     this->actor.targetMode = 0;
-    this->unk_1D8.unk_00 = 0;
+    this->interactInfo.talkState = NPC_TALK_STATE_IDLE;
     this->unk_334 = 0;
     this->hasBow = true;
     this->mouthTexIndex = 0;
@@ -1030,12 +1032,12 @@ s32 EnMa4_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
     Vec3s sp4;
 
     if (limbIndex == ROMANI_LIMB_HEAD) {
-        sp4 = this->unk_1D8.unk_08;
+        sp4 = this->interactInfo.headRot;
         rot->x = rot->x + sp4.y;
         rot->z = rot->z + sp4.x;
     }
     if (limbIndex == ROMANI_LIMB_TORSO) {
-        sp4 = this->unk_1D8.unk_0E;
+        sp4 = this->interactInfo.torsoRot;
         rot->x = rot->x - sp4.y;
         rot->z = rot->z - sp4.x;
     }
