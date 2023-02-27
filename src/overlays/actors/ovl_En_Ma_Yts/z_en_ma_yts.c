@@ -501,18 +501,18 @@ void EnMaYts_Update(Actor* thisx, PlayState* play) {
 
 s32 EnMaYts_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnMaYts* this = THIS;
-    Vec3s sp4;
+    Vec3s limbRot;
 
     if (limbIndex == ROMANI_LIMB_HEAD) {
-        sp4 = this->interactInfo.headRot;
-        rot->x += sp4.y;
+        limbRot = this->interactInfo.headRot;
+        rot->x += limbRot.y;
         if ((this->skelAnime.animation == &gRomaniIdleAnim) || (this->skelAnime.animation == &gRomaniSittingAnim)) {
-            rot->z += sp4.x;
+            rot->z += limbRot.x;
         }
     } else if (limbIndex == ROMANI_LIMB_TORSO) {
-        sp4 = this->interactInfo.torsoRot;
-        rot->x += sp4.y;
-        rot->z += sp4.x;
+        limbRot = this->interactInfo.torsoRot;
+        rot->x += limbRot.y;
+        rot->z += limbRot.x;
     }
 
     return false;

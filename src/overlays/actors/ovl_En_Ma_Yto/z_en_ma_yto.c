@@ -1423,26 +1423,26 @@ void EnMaYto_Update(Actor* thisx, PlayState* play) {
 
 s32 EnMaYto_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnMaYto* this = THIS;
-    Vec3s sp4;
+    Vec3s limbRot;
 
     if (limbIndex == CREMIA_LIMB_HEAD) {
-        sp4 = this->interactInfo.headRot;
+        limbRot = this->interactInfo.headRot;
 
-        rot->x += sp4.y;
-        rot->z += sp4.x;
+        rot->x += limbRot.y;
+        rot->z += limbRot.x;
     } else if (limbIndex == CREMIA_LIMB_TORSO) {
-        if (this->skelAnime.animation != &gCremiaSittingPetCowAnim &&
-            this->skelAnime.animation != &gCremiaSittingLookDownAnim) {
-            sp4 = this->interactInfo.torsoRot;
+        if ((this->skelAnime.animation != &gCremiaSittingPetCowAnim) &&
+            (this->skelAnime.animation != &gCremiaSittingLookDownAnim)) {
+            limbRot = this->interactInfo.torsoRot;
 
-            rot->x += sp4.y;
-            if (this->skelAnime.animation == &gCremiaIdleAnim || this->skelAnime.animation == &gCremiaSittingAnim ||
-                this->skelAnime.animation == &gCremiaSittingLookDownAnim) {
-                rot->z += sp4.x;
+            rot->x += limbRot.y;
+            if ((this->skelAnime.animation == &gCremiaIdleAnim) || (this->skelAnime.animation == &gCremiaSittingAnim) ||
+                (this->skelAnime.animation == &gCremiaSittingLookDownAnim)) {
+                rot->z += limbRot.x;
             }
         }
     }
-    return 0;
+    return false;
 }
 
 void EnMaYto_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {

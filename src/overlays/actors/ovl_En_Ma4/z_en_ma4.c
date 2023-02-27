@@ -1029,17 +1029,17 @@ void EnMa4_Update(Actor* thisx, PlayState* play) {
 
 s32 EnMa4_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnMa4* this = THIS;
-    Vec3s sp4;
+    Vec3s limbRot;
 
     if (limbIndex == ROMANI_LIMB_HEAD) {
-        sp4 = this->interactInfo.headRot;
-        rot->x = rot->x + sp4.y;
-        rot->z = rot->z + sp4.x;
+        limbRot = this->interactInfo.headRot;
+        rot->x += limbRot.y;
+        rot->z += limbRot.x;
     }
     if (limbIndex == ROMANI_LIMB_TORSO) {
-        sp4 = this->interactInfo.torsoRot;
-        rot->x = rot->x - sp4.y;
-        rot->z = rot->z - sp4.x;
+        limbRot = this->interactInfo.torsoRot;
+        rot->x -= limbRot.y;
+        rot->z -= limbRot.x;
     }
 
     return false;
