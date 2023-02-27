@@ -35,6 +35,7 @@
 #include "z64cutscene.h"
 #include "z64dma.h"
 #include "z64effect.h"
+#include "z64frameadvance.h"
 #include "z64interface.h"
 #include "z64item.h"
 #include "z64light.h"
@@ -752,11 +753,6 @@ typedef struct {
     /* 0x0 */ u8   seqId;
     /* 0x1 */ u8   ambienceId;
 } SequenceContext; // size = 0x2
-
-typedef struct {
-    /* 0x0 */ s32 enabled;
-    /* 0x4 */ s32 timer;
-} FrameAdvanceContext; // size = 0x8
 
 typedef enum {
     /*  0 */ GAMEOVER_INACTIVE,
