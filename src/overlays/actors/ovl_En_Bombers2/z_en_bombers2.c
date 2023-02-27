@@ -220,7 +220,8 @@ void func_80C04D8C(EnBombers2* this, PlayState* play) {
             s32 correctDigits;
 
             for (i = 0; i < ARRAY_COUNT(this->correctDigitSlots); i++) {
-                if (!(this->correctDigitSlots[i]) && (play->msgCtx.unk12054[i] == gSaveContext.save.saveInfo.bomberCode[i])) {
+                if (!(this->correctDigitSlots[i]) &&
+                    (play->msgCtx.unk12054[i] == gSaveContext.save.saveInfo.bomberCode[i])) {
                     this->correctDigitSlots[i] = true;
                 }
             }

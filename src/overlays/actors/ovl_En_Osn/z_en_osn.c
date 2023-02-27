@@ -443,7 +443,8 @@ s32 EnOsn_GetInitialMaskText(EnOsn* this, PlayState* play) {
 s32 EnOsn_GetInitialText(EnOsn* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if ((gSaveContext.save.saveInfo.inventory.items[SLOT_OCARINA] != ITEM_NONE) && CHECK_QUEST_ITEM(QUEST_SONG_HEALING)) {
+    if ((gSaveContext.save.saveInfo.inventory.items[SLOT_OCARINA] != ITEM_NONE) &&
+        CHECK_QUEST_ITEM(QUEST_SONG_HEALING)) {
         if (this->stateFlags & OSN_STATE_SPECIAL_CONVERSTATION) {
             this->stateFlags |= OSN_STATE_END_CONVERSATION;
             if ((gSaveContext.save.saveInfo.inventory.items[SLOT_OCARINA] != ITEM_NONE) &&
@@ -719,7 +720,8 @@ void EnOsn_ChooseAction(EnOsn* this, PlayState* play) {
 void EnOsn_Idle(EnOsn* this, PlayState* play) {
     s16 yaw = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
 
-    if ((gSaveContext.save.saveInfo.inventory.items[SLOT_OCARINA] != ITEM_NONE) && !CHECK_QUEST_ITEM(QUEST_SONG_HEALING)) {
+    if ((gSaveContext.save.saveInfo.inventory.items[SLOT_OCARINA] != ITEM_NONE) &&
+        !CHECK_QUEST_ITEM(QUEST_SONG_HEALING)) {
         if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
             this->actionFunc = EnOsn_StartCutscene;
         } else if (((this->actor.xzDistToPlayer < 100.0f) || this->actor.isTargeted) && (yaw < 0x4000) &&

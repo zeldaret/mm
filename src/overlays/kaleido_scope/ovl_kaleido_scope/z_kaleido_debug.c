@@ -859,14 +859,16 @@ void KaleidoScope_UpdateInventoryEditor(PlayState* play) {
                             gSaveContext.save.saveInfo.inventory.items[slot] = ITEM_BOTTLE;
                         } else if ((gSaveContext.save.saveInfo.inventory.items[slot] >= ITEM_BOTTLE) &&
                                    (gSaveContext.save.saveInfo.inventory.items[slot] <= ITEM_HYLIAN_LOACH)) {
-                            gSaveContext.save.saveInfo.inventory.items[slot] = gSaveContext.save.saveInfo.inventory.items[slot] + 1;
+                            gSaveContext.save.saveInfo.inventory.items[slot] =
+                                gSaveContext.save.saveInfo.inventory.items[slot] + 1;
                         }
                     } else if (CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
                         if (gSaveContext.save.saveInfo.inventory.items[slot] == ITEM_NONE) {
                             gSaveContext.save.saveInfo.inventory.items[slot] = ITEM_OBABA_DRINK;
                         } else if ((gSaveContext.save.saveInfo.inventory.items[slot] >= ITEM_POTION_RED) &&
                                    (gSaveContext.save.saveInfo.inventory.items[slot] <= ITEM_OBABA_DRINK)) {
-                            gSaveContext.save.saveInfo.inventory.items[slot] = gSaveContext.save.saveInfo.inventory.items[slot] - 1;
+                            gSaveContext.save.saveInfo.inventory.items[slot] =
+                                gSaveContext.save.saveInfo.inventory.items[slot] - 1;
                         }
                     }
                 } else {
@@ -990,13 +992,15 @@ void KaleidoScope_UpdateInventoryEditor(PlayState* play) {
                 // Gold Skulls (Oceans Spider House)
                 if (CHECK_BTN_ALL(input->press.button, BTN_CUP) || CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
                     if (((u16)gSaveContext.save.saveInfo.skullTokenCount) != 0) {
-                        gSaveContext.save.saveInfo.skullTokenCount = (((u16)gSaveContext.save.saveInfo.skullTokenCount - 1) & 0xFFFF) |
-                                                            (gSaveContext.save.saveInfo.skullTokenCount & 0xFFFF0000);
+                        gSaveContext.save.saveInfo.skullTokenCount =
+                            (((u16)gSaveContext.save.saveInfo.skullTokenCount - 1) & 0xFFFF) |
+                            (gSaveContext.save.saveInfo.skullTokenCount & 0xFFFF0000);
                     }
                 } else if (CHECK_BTN_ALL(input->press.button, BTN_CDOWN) ||
                            CHECK_BTN_ALL(input->press.button, BTN_CRIGHT)) {
-                    gSaveContext.save.saveInfo.skullTokenCount = (((u16)gSaveContext.save.saveInfo.skullTokenCount + 1) & 0xFFFF) |
-                                                        (gSaveContext.save.saveInfo.skullTokenCount & 0xFFFF0000);
+                    gSaveContext.save.saveInfo.skullTokenCount =
+                        (((u16)gSaveContext.save.saveInfo.skullTokenCount + 1) & 0xFFFF) |
+                        (gSaveContext.save.saveInfo.skullTokenCount & 0xFFFF0000);
                 }
 
             } else if (sCurSection == INV_EDITOR_SECTION_NOTEBOOK) {

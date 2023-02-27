@@ -46,7 +46,7 @@ ActorInit En_Kujiya_InitVars = {
     (ActorFunc)EnKujiya_Draw,
 };
 
-#define CHECK_LOTTERY_NUMBERS                                                     \
+#define CHECK_LOTTERY_NUMBERS                                                              \
     (((u32)((void)0, gSaveContext.save.saveInfo.lotteryCodes[CURRENT_DAY - 1][0]) ==       \
       ((((void)0, gSaveContext.save.saveInfo.lotteryCodeGuess & 0xFFFF) & 0xF00) >> 8)) && \
      ((u32)((void)0, gSaveContext.save.saveInfo.lotteryCodes[CURRENT_DAY - 1][1]) ==       \

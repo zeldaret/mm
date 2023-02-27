@@ -258,8 +258,8 @@ void KaleidoScope_DrawMaskSelect(PlayState* play) {
 
                 gSPVertex(POLY_OPA_DISP++, &pauseCtx->maskVtx[j + 0], 4, 0);
                 KaleidoScope_DrawTexQuadRGBA32(
-                    play->state.gfxCtx, gItemIcons[((void)0, gSaveContext.save.saveInfo.inventory.items[i + NUM_ITEM_SLOTS])],
-                    32, 32, 0);
+                    play->state.gfxCtx,
+                    gItemIcons[((void)0, gSaveContext.save.saveInfo.inventory.items[i + NUM_ITEM_SLOTS])], 32, 32, 0);
             }
         }
     }
@@ -371,7 +371,8 @@ void KaleidoScope_UpdateMaskCursor(PlayState* play) {
                 }
 
                 if (moveCursorResult == PAUSE_CURSOR_RESULT_SLOT) {
-                    cursorItem = gSaveContext.save.saveInfo.inventory.items[pauseCtx->cursorPoint[PAUSE_MASK] + NUM_ITEM_SLOTS];
+                    cursorItem =
+                        gSaveContext.save.saveInfo.inventory.items[pauseCtx->cursorPoint[PAUSE_MASK] + NUM_ITEM_SLOTS];
                     if (CHECK_GIVEN_MASK_ON_MOON(pauseCtx->cursorPoint[PAUSE_MASK])) {
                         cursorItem = ITEM_NONE;
                     }
@@ -500,12 +501,14 @@ void KaleidoScope_UpdateMaskCursor(PlayState* play) {
             pauseCtx->cursorColorSet = PAUSE_CURSOR_COLOR_SET_YELLOW;
 
             if (moveCursorResult == PAUSE_CURSOR_RESULT_SLOT) {
-                cursorItem = gSaveContext.save.saveInfo.inventory.items[pauseCtx->cursorPoint[PAUSE_MASK] + NUM_ITEM_SLOTS];
+                cursorItem =
+                    gSaveContext.save.saveInfo.inventory.items[pauseCtx->cursorPoint[PAUSE_MASK] + NUM_ITEM_SLOTS];
                 if (CHECK_GIVEN_MASK_ON_MOON(pauseCtx->cursorPoint[PAUSE_MASK])) {
                     cursorItem = ITEM_NONE;
                 }
             } else if (moveCursorResult != PAUSE_CURSOR_RESULT_SPECIAL_POS) {
-                cursorItem = gSaveContext.save.saveInfo.inventory.items[pauseCtx->cursorPoint[PAUSE_MASK] + NUM_ITEM_SLOTS];
+                cursorItem =
+                    gSaveContext.save.saveInfo.inventory.items[pauseCtx->cursorPoint[PAUSE_MASK] + NUM_ITEM_SLOTS];
                 if (CHECK_GIVEN_MASK_ON_MOON(pauseCtx->cursorPoint[PAUSE_MASK])) {
                     cursorItem = ITEM_NONE;
                 }

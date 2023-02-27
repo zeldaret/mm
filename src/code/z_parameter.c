@@ -2593,7 +2593,8 @@ s32 Health_ChangeBy(PlayState* play, s16 healthChange) {
 
     gSaveContext.save.saveInfo.playerData.health += healthChange;
 
-    if (((void)0, gSaveContext.save.saveInfo.playerData.health) > ((void)0, gSaveContext.save.saveInfo.playerData.healthCapacity)) {
+    if (((void)0, gSaveContext.save.saveInfo.playerData.health) >
+        ((void)0, gSaveContext.save.saveInfo.playerData.healthCapacity)) {
         gSaveContext.save.saveInfo.playerData.health = gSaveContext.save.saveInfo.playerData.healthCapacity;
     }
 
@@ -3108,8 +3109,8 @@ void Magic_DrawMeter(PlayState* play) {
             gDPLoadTextureBlock_4b(OVERLAY_DISP++, gMagicMeterFillTex, G_IM_FMT_I, 16, 16, 0, G_TX_NOMIRROR | G_TX_WRAP,
                                    G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
             gSPTextureRectangle(OVERLAY_DISP++, 104, (magicBarY + 3) << 2,
-                                (((void)0, gSaveContext.save.saveInfo.playerData.magic) + 26) << 2, (magicBarY + 10) << 2,
-                                G_TX_RENDERTILE, 0, 0, 1 << 10, 1 << 10);
+                                (((void)0, gSaveContext.save.saveInfo.playerData.magic) + 26) << 2,
+                                (magicBarY + 10) << 2, G_TX_RENDERTILE, 0, 0, 1 << 10, 1 << 10);
 
             // Fill the rest of the meter with the normal magic color
             gDPPipeSync(OVERLAY_DISP++);
@@ -3123,7 +3124,8 @@ void Magic_DrawMeter(PlayState* play) {
 
             gSPTextureRectangle(
                 OVERLAY_DISP++, 104, (magicBarY + 3) << 2,
-                ((((void)0, gSaveContext.save.saveInfo.playerData.magic) - ((void)0, gSaveContext.magicToConsume)) + 26) << 2,
+                ((((void)0, gSaveContext.save.saveInfo.playerData.magic) - ((void)0, gSaveContext.magicToConsume)) + 26)
+                    << 2,
                 (magicBarY + 10) << 2, G_TX_RENDERTILE, 0, 0, 1 << 10, 1 << 10);
         } else {
             // Fill the whole meter with the normal magic color
@@ -3138,8 +3140,8 @@ void Magic_DrawMeter(PlayState* play) {
             gDPLoadTextureBlock_4b(OVERLAY_DISP++, gMagicMeterFillTex, G_IM_FMT_I, 16, 16, 0, G_TX_NOMIRROR | G_TX_WRAP,
                                    G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
             gSPTextureRectangle(OVERLAY_DISP++, 104, (magicBarY + 3) << 2,
-                                (((void)0, gSaveContext.save.saveInfo.playerData.magic) + 26) << 2, (magicBarY + 10) << 2,
-                                G_TX_RENDERTILE, 0, 0, 1 << 10, 1 << 10);
+                                (((void)0, gSaveContext.save.saveInfo.playerData.magic) + 26) << 2,
+                                (magicBarY + 10) << 2, G_TX_RENDERTILE, 0, 0, 1 << 10, 1 << 10);
         }
     }
 
@@ -4562,7 +4564,8 @@ void Interface_DrawTimers(PlayState* play) {
                     break;
 
                 case TIMER_STATE_ENV_HAZARD_START:
-                    gSaveContext.timerCurTimes[sTimerId] = SECONDS_TO_TIMER(gSaveContext.save.saveInfo.playerData.health >> 1);
+                    gSaveContext.timerCurTimes[sTimerId] =
+                        SECONDS_TO_TIMER(gSaveContext.save.saveInfo.playerData.health >> 1);
                     gSaveContext.timerDirections[sTimerId] = TIMER_COUNT_DOWN;
                     gSaveContext.timerTimeLimits[sTimerId] = gSaveContext.timerCurTimes[sTimerId];
                     sTimerStateTimer = 20;
@@ -4739,7 +4742,8 @@ void Interface_DrawTimers(PlayState* play) {
                     }
                 } else if (CHECK_EVENTINF(EVENTINF_34) && (play->sceneId == SCENE_DEKUTES)) {
                     if ((((void)0, gSaveContext.timerCurTimes[sTimerId]) >
-                         (gSaveContext.save.saveInfo.dekuPlaygroundHighScores[CURRENT_DAY - 1] - SECONDS_TO_TIMER(9))) &&
+                         (gSaveContext.save.saveInfo.dekuPlaygroundHighScores[CURRENT_DAY - 1] -
+                          SECONDS_TO_TIMER(9))) &&
                         (sTimerBeepSfxSeconds != sTimerDigits[4])) {
                         play_sound(NA_SE_SY_WARNING_COUNT_E);
                         sTimerBeepSfxSeconds = sTimerDigits[4];
@@ -5637,7 +5641,8 @@ void Interface_Update(PlayState* play) {
             play_sound(NA_SE_SY_HP_RECOVER);
         }
 
-        if (((void)0, gSaveContext.save.saveInfo.playerData.health) >= ((void)0, gSaveContext.save.saveInfo.playerData.healthCapacity)) {
+        if (((void)0, gSaveContext.save.saveInfo.playerData.health) >=
+            ((void)0, gSaveContext.save.saveInfo.playerData.healthCapacity)) {
             gSaveContext.save.saveInfo.playerData.health = gSaveContext.save.saveInfo.playerData.healthCapacity;
             gSaveContext.healthAccumulator = 0;
         }
@@ -5833,9 +5838,11 @@ void Interface_Update(PlayState* play) {
             R_MAGIC_DBG_SET_UPGRADE = MAGIC_DBG_SET_UPGRADE_NO_ACTION;
         }
 
-        if ((gSaveContext.save.saveInfo.playerData.isMagicAcquired) && (gSaveContext.save.saveInfo.playerData.magicLevel == 0)) {
+        if ((gSaveContext.save.saveInfo.playerData.isMagicAcquired) &&
+            (gSaveContext.save.saveInfo.playerData.magicLevel == 0)) {
             // Prepare to step `magicCapacity` to full capacity
-            gSaveContext.save.saveInfo.playerData.magicLevel = gSaveContext.save.saveInfo.playerData.isDoubleMagicAcquired + 1;
+            gSaveContext.save.saveInfo.playerData.magicLevel =
+                gSaveContext.save.saveInfo.playerData.isDoubleMagicAcquired + 1;
             gSaveContext.magicFillTarget = gSaveContext.save.saveInfo.playerData.magic;
             gSaveContext.save.saveInfo.playerData.magic = 0;
             gSaveContext.magicState = MAGIC_STATE_STEP_CAPACITY;

@@ -169,8 +169,8 @@ void EnGinkoMan_DepositDialogue(EnGinkoMan* this, PlayState* play) {
                 SET_WEEKEVENTREG(WEEKEVENTREG_59_40);
                 Message_StartTextbox(play, 0x45B, &this->actor);
                 this->curTextId = 0x45B; // "What's this? You've already saved up 200 Rupees!?!
-            } else if (((gSaveContext.save.saveInfo.bankRupees & 0xFFFF) >= 1000) && ((this->previousBankValue) < 1000) &&
-                       !CHECK_WEEKEVENTREG(WEEKEVENTREG_59_80)) {
+            } else if (((gSaveContext.save.saveInfo.bankRupees & 0xFFFF) >= 1000) &&
+                       ((this->previousBankValue) < 1000) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_59_80)) {
                 SET_WEEKEVENTREG(WEEKEVENTREG_59_80);
                 Message_StartTextbox(play, 0x45C, &this->actor);
                 this->curTextId = 0x45C; // "What's this? You've already saved up 1000 Rupees!?!

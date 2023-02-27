@@ -888,7 +888,8 @@ s16 func_800A7650(s16 dropId) {
     }
 
     if (dropId == ITEM00_RECOVERY_HEART) {
-        if (((void)0, gSaveContext.save.saveInfo.playerData.healthCapacity) == ((void)0, gSaveContext.save.saveInfo.playerData.health)) {
+        if (((void)0, gSaveContext.save.saveInfo.playerData.healthCapacity) ==
+            ((void)0, gSaveContext.save.saveInfo.playerData.health)) {
             return ITEM00_RUPEE_GREEN;
         }
     }
@@ -1160,12 +1161,14 @@ void Item_DropCollectibleRandom(PlayState* play, Actor* fromActor, Vec3f* spawnP
                 params = 0x10;
                 dropId = ITEM00_RECOVERY_HEART;
                 dropQuantity = 1;
-            } else if ((gSaveContext.save.saveInfo.playerData.magicLevel != 0) && (gSaveContext.save.saveInfo.playerData.magic == 0)) {
+            } else if ((gSaveContext.save.saveInfo.playerData.magicLevel != 0) &&
+                       (gSaveContext.save.saveInfo.playerData.magic == 0)) {
                 params = 0xD0;
                 dropId = ITEM00_MAGIC_LARGE;
                 dropQuantity = 1;
             } else if ((gSaveContext.save.saveInfo.playerData.magicLevel != 0) &&
-                       ((gSaveContext.save.saveInfo.playerData.magicLevel >> 1) >= gSaveContext.save.saveInfo.playerData.magic)) {
+                       ((gSaveContext.save.saveInfo.playerData.magicLevel >> 1) >=
+                        gSaveContext.save.saveInfo.playerData.magic)) {
                 params = 0xD0;
                 dropId = ITEM00_MAGIC_LARGE;
                 dropQuantity = 1;

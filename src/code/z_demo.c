@@ -1479,12 +1479,13 @@ void func_800EDBE0(PlayState* play) {
                     if (play->csCtx.sceneCsList[temp_v0_3].unk7 == 0xFE) {
                         ActorCutscene_Start(sp2A, NULL);
                         gSaveContext.showTitleCard = false;
-                    } else if (!(((void)0,
-                                  gSaveContext.save.saveInfo.weekEventReg[(play->csCtx.sceneCsList[temp_v0_3].unk7 / 8)]) &
+                    } else if (!(((void)0, gSaveContext.save.saveInfo
+                                               .weekEventReg[(play->csCtx.sceneCsList[temp_v0_3].unk7 / 8)]) &
                                  (1 << (play->csCtx.sceneCsList[temp_v0_3].unk7 % 8)))) {
                         // TODO: macros for this kind of weekEventReg access
                         gSaveContext.save.saveInfo.weekEventReg[(play->csCtx.sceneCsList[temp_v0_3].unk7 / 8)] =
-                            ((void)0, gSaveContext.save.saveInfo.weekEventReg[(play->csCtx.sceneCsList[temp_v0_3].unk7 / 8)]) |
+                            ((void)0,
+                             gSaveContext.save.saveInfo.weekEventReg[(play->csCtx.sceneCsList[temp_v0_3].unk7 / 8)]) |
                             (1 << (play->csCtx.sceneCsList[temp_v0_3].unk7 % 8));
                         ActorCutscene_Start(sp2A, NULL);
                         gSaveContext.showTitleCard = false;

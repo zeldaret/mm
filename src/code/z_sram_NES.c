@@ -755,7 +755,8 @@ void Sram_InitNewSave(void) {
     Lib_MemCpy(&gSaveContext.save.saveInfo.playerData, &sSaveDefaultPlayerData, sizeof(SavePlayerData));
     Lib_MemCpy(&gSaveContext.save.saveInfo.equips, &sSaveDefaultItemEquips, sizeof(ItemEquips));
     Lib_MemCpy(&gSaveContext.save.saveInfo.inventory, &sSaveDefaultInventory, sizeof(Inventory));
-    Lib_MemCpy(&gSaveContext.save.saveInfo.checksum, &sSaveDefaultChecksum, sizeof(gSaveContext.save.saveInfo.checksum));
+    Lib_MemCpy(&gSaveContext.save.saveInfo.checksum, &sSaveDefaultChecksum,
+               sizeof(gSaveContext.save.saveInfo.checksum));
 
     gSaveContext.save.saveInfo.horseData.sceneId = SCENE_F01;
     gSaveContext.save.saveInfo.horseData.pos.x = -1420;
@@ -1256,7 +1257,8 @@ void func_801457CC(FileSelectState* fileSelect2, SramContext* sramCtx) {
                         }
                     }
                     fileSelect->maskCount[sp76] = phi_a0;
-                    fileSelect->heartPieceCount[sp76] = ((gSaveContext.save.saveInfo.inventory.questItems & 0xF0000000) >> 0x1C);
+                    fileSelect->heartPieceCount[sp76] =
+                        ((gSaveContext.save.saveInfo.inventory.questItems & 0xF0000000) >> 0x1C);
                 }
 
                 if (sp6E == 1) {
@@ -1273,7 +1275,8 @@ void func_801457CC(FileSelectState* fileSelect2, SramContext* sramCtx) {
                         sp7A = Sram_CalcChecksum(&gSaveContext.save, sizeof(Save));
                     }
 
-                    if (CHECK_NEWF(gSaveContext.save.saveInfo.playerData.newf) || (phi_s2_3 != sp7A) || (phi_s2_3 != temp_s2)) {
+                    if (CHECK_NEWF(gSaveContext.save.saveInfo.playerData.newf) || (phi_s2_3 != sp7A) ||
+                        (phi_s2_3 != temp_s2)) {
                         func_80185968(sramCtx->saveBuf, D_801C67C8[sp64], D_801C67F0[sp64]);
                         Lib_MemCpy(&gSaveContext.save, sramCtx->saveBuf, sizeof(Save));
                         Lib_MemCpy(&sramCtx->saveBuf[0x2000], &gSaveContext.save, sizeof(Save));
@@ -1466,7 +1469,8 @@ void func_80146628(FileSelectState* fileSelect2, SramContext* sramCtx) {
             }
 
             fileSelect->unk_2447A[fileSelect->fileNum] = maskCount;
-            fileSelect->unk_2447E[fileSelect->fileNum] = (gSaveContext.save.saveInfo.inventory.questItems & 0xF0000000) >> 0x1C;
+            fileSelect->unk_2447E[fileSelect->fileNum] =
+                (gSaveContext.save.saveInfo.inventory.questItems & 0xF0000000) >> 0x1C;
         }
 
         // clear buffer
@@ -1531,7 +1535,8 @@ void Sram_InitSave(FileSelectState* fileSelect2, SramContext* sramCtx) {
         }
 
         for (phi_v0 = 0; phi_v0 < ARRAY_COUNT(gSaveContext.save.saveInfo.playerData.playerName); phi_v0++) {
-            gSaveContext.save.saveInfo.playerData.playerName[phi_v0] = fileSelect->unk_24414[fileSelect->unk_24480][phi_v0];
+            gSaveContext.save.saveInfo.playerData.playerName[phi_v0] =
+                fileSelect->unk_24414[fileSelect->unk_24480][phi_v0];
         }
 
         gSaveContext.save.saveInfo.playerData.newf[0] = 'Z';

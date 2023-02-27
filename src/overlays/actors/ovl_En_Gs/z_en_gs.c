@@ -389,7 +389,7 @@ void func_809985B8(EnGs* this, PlayState* play) {
         Math_Vec3f_Copy(&player->actor.prevPos, &player->actor.world.pos);
         this->unk_200 = 0.0f;
         gSaveContext.save.saveInfo.unk_EC4 = ((u32)gSaveContext.save.saveInfo.unk_EC4 & ~(7 << (this->unk_198 * 3))) |
-                                    ((this->unk_194 & 7) << (this->unk_198 * 3));
+                                             ((this->unk_194 & 7) << (this->unk_198 * 3));
         gossipStone = NULL;
 
         do {

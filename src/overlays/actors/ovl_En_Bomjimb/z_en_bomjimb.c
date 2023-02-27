@@ -687,7 +687,8 @@ void func_80C02740(EnBomjimb* this, PlayState* play) {
     }
 
     Message_StartTextbox(play, D_80C03230[((void)0, gSaveContext.save.saveInfo.bombersCaughtNum)], &this->actor);
-    gSaveContext.save.saveInfo.bombersCaughtOrder[((void)0, gSaveContext.save.saveInfo.bombersCaughtNum)] = this->unk_2C8 + 1;
+    gSaveContext.save.saveInfo.bombersCaughtOrder[((void)0, gSaveContext.save.saveInfo.bombersCaughtNum)] =
+        this->unk_2C8 + 1;
     gSaveContext.save.saveInfo.bombersCaughtNum++;
 
     if (gSaveContext.save.saveInfo.bombersCaughtNum > 4) {

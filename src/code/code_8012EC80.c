@@ -656,8 +656,8 @@ void Inventory_SetWorldMapCloudVisibility(s16 tingleIndex) {
                 index = 6;
             }
 
-            gSaveContext.save.saveInfo.scenesVisible[index] =
-                gSaveContext.save.saveInfo.scenesVisible[index] | gBitFlags[(s16)(*tingleMapSceneIds)[i] - (index << 5)];
+            gSaveContext.save.saveInfo.scenesVisible[index] = gSaveContext.save.saveInfo.scenesVisible[index] |
+                                                              gBitFlags[(s16)(*tingleMapSceneIds)[i] - (index << 5)];
             i++;
         }
 
@@ -701,8 +701,8 @@ void Inventory_IncrementSkullTokenCount(s16 sceneIndex) {
             (gSaveContext.save.saveInfo.skullTokenCount & 0xFFFF);
     } else {
         // Ocean Spider House (increment low bits of skullTokenCount)
-        gSaveContext.save.saveInfo.skullTokenCount =
-            (((u16)gSaveContext.save.saveInfo.skullTokenCount + 1) & 0xFFFF) | (gSaveContext.save.saveInfo.skullTokenCount & 0xFFFF0000);
+        gSaveContext.save.saveInfo.skullTokenCount = (((u16)gSaveContext.save.saveInfo.skullTokenCount + 1) & 0xFFFF) |
+                                                     (gSaveContext.save.saveInfo.skullTokenCount & 0xFFFF0000);
     }
 }
 

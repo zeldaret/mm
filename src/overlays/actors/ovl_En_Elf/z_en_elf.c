@@ -355,7 +355,8 @@ void EnElf_Init(Actor* thisx, PlayState* play2) {
             this->elfMsg = NULL;
             this->unk_234 = NULL;
             this->unk_269 = 20;
-            if ((gSaveContext.save.saveInfo.playerData.tatlTimer >= 25800) || (gSaveContext.save.saveInfo.playerData.tatlTimer < 3000)) {
+            if ((gSaveContext.save.saveInfo.playerData.tatlTimer >= 25800) ||
+                (gSaveContext.save.saveInfo.playerData.tatlTimer < 3000)) {
                 gSaveContext.save.saveInfo.playerData.tatlTimer = 0;
             }
             this->unk_266 = QuestHint_GetTatlTextId(play);
@@ -1459,7 +1460,8 @@ void func_8089010C(Actor* thisx, PlayState* play) {
     }
 
     if ((player->tatlTextId == 0) && (player->targetedActor == NULL)) {
-        if ((gSaveContext.save.saveInfo.playerData.tatlTimer >= 600) && (gSaveContext.save.saveInfo.playerData.tatlTimer <= 3000)) {
+        if ((gSaveContext.save.saveInfo.playerData.tatlTimer >= 600) &&
+            (gSaveContext.save.saveInfo.playerData.tatlTimer <= 3000)) {
             player->tatlTextId = QuestHint_GetTatlTextId(play);
         }
     }

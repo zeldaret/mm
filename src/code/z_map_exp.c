@@ -156,7 +156,8 @@ void Map_InitRoomData(PlayState* play, s16 room) {
 
     if (room >= 0) {
         if (Map_IsInDungeonOrBossArea(play)) {
-            gSaveContext.save.saveInfo.permanentSceneFlags[Play_GetOriginalSceneId(play->sceneId)].rooms |= gBitFlags[room];
+            gSaveContext.save.saveInfo.permanentSceneFlags[Play_GetOriginalSceneId(play->sceneId)].rooms |=
+                gBitFlags[room];
             interfaceCtx->mapRoomNum = room;
             interfaceCtx->dungeonOrBossAreaMapIndex = mapIndex;
         }
