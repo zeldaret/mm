@@ -467,7 +467,7 @@ void func_80B973BC(EnZot* this, PlayState* play) {
                 break;
 
             case 0x1275:
-                if (gSaveContext.save.playerData.rupees < 10) {
+                if (gSaveContext.save.saveInfo.playerData.rupees < 10) {
                     func_80151938(play, 0x1277);
                 } else {
                     func_80151938(play, 0x1278);

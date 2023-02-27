@@ -511,12 +511,12 @@ u8 Inventory_DeleteEquipment(PlayState* play, s16 equipment) {
 }
 
 void Inventory_ChangeUpgrade(s16 upgrade, u32 value) {
-    u32 upgrades = gSaveContext.save.inventory.upgrades;
+    u32 upgrades = gSaveContext.save.saveInfo.inventory.upgrades;
 
     upgrades &= gUpgradeNegMasks[upgrade];
     upgrades |= value << gUpgradeShifts[upgrade];
 
-    gSaveContext.save.inventory.upgrades = upgrades;
+    gSaveContext.save.saveInfo.inventory.upgrades = upgrades;
 }
 
 s32 Inventory_IsMapVisible(s16 sceneId) {
@@ -685,11 +685,11 @@ void Inventory_SetWorldMapCloudVisibility(s16 tingleIndex) {
 void Inventory_SaveDekuPlaygroundHighScore(s16 timerId) {
     s16 i;
 
-    gSaveContext.save.dekuPlaygroundHighScores[CURRENT_DAY - 1] = gSaveContext.timerCurTimes[timerId];
+    gSaveContext.save.saveInfo.dekuPlaygroundHighScores[CURRENT_DAY - 1] = gSaveContext.timerCurTimes[timerId];
 
     for (i = 0; i < 8; i++) {
-        gSaveContext.save.inventory.dekuPlaygroundPlayerName[CURRENT_DAY - 1][i] =
-            gSaveContext.save.playerData.playerName[i];
+        gSaveContext.save.saveInfo.inventory.dekuPlaygroundPlayerName[CURRENT_DAY - 1][i] =
+            gSaveContext.save.saveInfo.playerData.playerName[i];
     }
 }
 

@@ -120,7 +120,7 @@ void EnMk_Destroy(Actor* thisx, PlayState* play) {
 }
 
 s32 func_80959524(PlayState* play) {
-    return gSaveContext.save.permanentSceneFlags[play->sceneId].unk_14 & 7;
+    return gSaveContext.save.saveInfo.permanentSceneFlags[play->sceneId].unk_14 & 7;
 }
 
 void func_8095954C(EnMk* this, PlayState* play) {

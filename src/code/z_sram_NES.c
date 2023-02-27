@@ -1175,7 +1175,7 @@ void func_801457CC(FileSelectState* fileSelect2, SramContext* sramCtx) {
     u16 phi_a0; // maskCount
 
     if (gSaveContext.unk_3F3F) {
-        D_801F6AF0 = gSaveContext.save.saveInfo.time;
+        D_801F6AF0 = gSaveContext.save.time;
         D_801F6AF2 = gSaveContext.unk_3F3F;
         sp64 = 0;
 
@@ -1244,7 +1244,7 @@ void func_801457CC(FileSelectState* fileSelect2, SramContext* sramCtx) {
                     fileSelect->health[sp76] = gSaveContext.save.saveInfo.playerData.health;
                     fileSelect->unk_24454[sp76] = gSaveContext.save.saveInfo.inventory.defenseHearts;
                     fileSelect->unk_24444[sp76] = gSaveContext.save.saveInfo.inventory.questItems;
-                    fileSelect->unk_24458[sp76] = gSaveContext.save.saveInfo.time;
+                    fileSelect->unk_24458[sp76] = gSaveContext.save.time;
                     fileSelect->unk_24460[sp76] = gSaveContext.save.day;
                     fileSelect->unk_24468[sp76] = gSaveContext.save.isOwlSave;
                     fileSelect->rupees[sp76] = gSaveContext.save.saveInfo.playerData.rupees;
@@ -1338,7 +1338,7 @@ void func_801457CC(FileSelectState* fileSelect2, SramContext* sramCtx) {
                         fileSelect->health[sp76] = gSaveContext.save.saveInfo.playerData.health;
                         fileSelect->unk_24454[sp76] = gSaveContext.save.saveInfo.inventory.defenseHearts;
                         fileSelect->unk_24444[sp76] = gSaveContext.save.saveInfo.inventory.questItems;
-                        fileSelect->unk_24458[sp76] = gSaveContext.save.saveInfo.time;
+                        fileSelect->unk_24458[sp76] = gSaveContext.save.time;
                         fileSelect->unk_24460[sp76] = gSaveContext.save.day;
                         fileSelect->unk_24468[sp76] = gSaveContext.save.isOwlSave;
                         fileSelect->rupees[sp76] = gSaveContext.save.saveInfo.playerData.rupees;
@@ -1404,7 +1404,7 @@ void func_801457CC(FileSelectState* fileSelect2, SramContext* sramCtx) {
             }
         }
 
-        gSaveContext.save.saveInfo.time = D_801F6AF0;
+        gSaveContext.save.time = D_801F6AF0;
         gSaveContext.unk_3F3F = D_801F6AF2;
     }
 

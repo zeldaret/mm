@@ -1614,7 +1614,7 @@ void EnBigslime_AttackPlayerInBigslime(EnBigslime* this, PlayState* play) {
         if (this->numGekkoMeleeAttacks == 0) {
             this->numGekkoPosGrabPlayer--;
 
-            if ((gSaveContext.save.playerData.health < 5) || (this->numGekkoPosGrabPlayer == 0)) {
+            if ((gSaveContext.save.saveInfo.playerData.health < 5) || (this->numGekkoPosGrabPlayer == 0)) {
                 this->numGekkoPosGrabPlayer = 0;
                 this->gekkoRot.y = this->actor.world.rot.y;
                 this->gekkoPosOffset.x = Math_SinS(this->gekkoRot.y) * -50.0f;

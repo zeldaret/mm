@@ -576,7 +576,7 @@ PlayerItemAction func_80123810(PlayState* play) {
     ItemId itemId;
     s32 i;
 
-    if (gSaveContext.save.unk_06 == 0) {
+    if (gSaveContext.save.saveInfo.unk_06 == 0) {
         if (CHECK_BTN_ANY(CONTROLLER1(&play->state)->press.button, BTN_A | BTN_B)) {
             play->interfaceCtx.unk_222 = 0;
             play->interfaceCtx.unk_224 = 0;
@@ -584,7 +584,7 @@ PlayerItemAction func_80123810(PlayState* play) {
             return PLAYER_IA_MINUS1;
         }
     } else {
-        gSaveContext.save.unk_06--;
+        gSaveContext.save.saveInfo.unk_06--;
     }
 
     for (i = 0; i < ARRAY_COUNT(sCItemButtons); i++) {

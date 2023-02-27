@@ -50,13 +50,13 @@ void func_800F4A10(PlayState* play) {
         }
     } else {
         for (i = OWL_WARP_STONE_TOWER; i >= OWL_WARP_GREAT_BAY_COAST; i--) {
-            if ((gSaveContext.save.playerData.owlActivationFlags >> i) & 1) {
+            if ((gSaveContext.save.saveInfo.playerData.owlActivationFlags >> i) & 1) {
                 pauseCtx->worldMapPoints[i] = true;
                 pauseCtx->cursorPoint[PAUSE_WORLD_MAP] = i;
             }
         }
 
-        if ((gSaveContext.save.playerData.owlActivationFlags >> 4) & 1) {
+        if ((gSaveContext.save.saveInfo.playerData.owlActivationFlags >> 4) & 1) {
             pauseCtx->cursorPoint[PAUSE_WORLD_MAP] = 4;
         }
     }

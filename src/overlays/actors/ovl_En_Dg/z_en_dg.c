@@ -426,10 +426,10 @@ void EnDg_UpdateTextId(EnDg* this) {
         // the range of 0x3538 to 0x3545.
         if (this->index % 2) {
             sRacetrackDogInfo[this->index].textId =
-                0x3538 + ((gSaveContext.save.weekEventReg[42 + (this->index / 2)] & 0xF0) >> 4);
+                0x3538 + ((gSaveContext.save.saveInfo.weekEventReg[42 + (this->index / 2)] & 0xF0) >> 4);
         } else {
             sRacetrackDogInfo[this->index].textId =
-                0x3538 + (gSaveContext.save.weekEventReg[42 + (this->index / 2)] & 0x0F);
+                0x3538 + (gSaveContext.save.saveInfo.weekEventReg[42 + (this->index / 2)] & 0x0F);
         }
     } else {
         Actor_Kill(&this->actor);

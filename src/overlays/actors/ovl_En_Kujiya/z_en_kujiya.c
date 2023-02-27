@@ -111,7 +111,7 @@ void EnKujiya_Wait(EnKujiya* this, PlayState* play) {
 void EnKujiya_HandlePlayerChoice(EnKujiya* this, PlayState* play) {
     if (Message_ShouldAdvance(play)) {
         if (play->msgCtx.choiceIndex == 0) { // Buy
-            if (gSaveContext.save.playerData.rupees < 10) {
+            if (gSaveContext.save.saveInfo.playerData.rupees < 10) {
                 play_sound(NA_SE_SY_ERROR);
                 Message_StartTextbox(play, 0x2B62, &this->actor);
                 this->textId = 0x2B62; // Not enough Rupees

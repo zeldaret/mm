@@ -436,7 +436,7 @@ void func_80A42AB8(EnTest4* this, PlayState* play) {
 
             if (CURRENT_DAY == 3) {
                 if ((this->nextBellTime == CLOCK_TIME(0, 0)) &&
-                    ((gSaveContext.save.inventory.items[SLOT_OCARINA] == ITEM_NONE) ||
+                    ((gSaveContext.save.saveInfo.inventory.items[SLOT_OCARINA] == ITEM_NONE) ||
                      (play->sceneId == SCENE_CLOCKTOWER))) {
                     s32 playerParams;
                     u32 entrance = gSaveContext.save.entrance;

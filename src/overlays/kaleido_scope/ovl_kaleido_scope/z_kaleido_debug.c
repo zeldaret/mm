@@ -370,14 +370,14 @@ void KaleidoScope_DrawInventoryEditor(PlayState* play) {
     gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 0);
 
     // Current Health Quarter (X / 4)
-    KaleidoScope_DrawDigit(play, (((void)0, gSaveContext.save.playerData.health) % 0x10) / 4, 217, 15);
+    KaleidoScope_DrawDigit(play, (((void)0, gSaveContext.save.saveInfo.playerData.health) % 0x10) / 4, 217, 15);
 
     gDPPipeSync(POLY_OPA_DISP++);
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, 255);
 
     // Rupees
     counterDigits[0] = counterDigits[1] = counterDigits[2] = 0;
-    counterDigits[3] = gSaveContext.save.playerData.rupees;
+    counterDigits[3] = gSaveContext.save.saveInfo.playerData.rupees;
     while (counterDigits[3] >= 1000) {
         counterDigits[0]++;
         counterDigits[3] -= 1000;
@@ -400,7 +400,7 @@ void KaleidoScope_DrawInventoryEditor(PlayState* play) {
 
     // Health capacity
     counterDigits[2] = 0;
-    counterDigits[3] = gSaveContext.save.playerData.healthCapacity / 0x10;
+    counterDigits[3] = gSaveContext.save.saveInfo.playerData.healthCapacity / 0x10;
     while (counterDigits[3] >= 10) {
         counterDigits[2]++;
         counterDigits[3] -= 10;
@@ -411,7 +411,7 @@ void KaleidoScope_DrawInventoryEditor(PlayState* play) {
 
     // Health
     counterDigits[2] = 0;
-    counterDigits[3] = gSaveContext.save.playerData.health / 0x10;
+    counterDigits[3] = gSaveContext.save.saveInfo.playerData.health / 0x10;
     while (counterDigits[3] >= 10) {
         counterDigits[2]++;
         counterDigits[3] -= 10;
@@ -431,10 +431,10 @@ void KaleidoScope_DrawInventoryEditor(PlayState* play) {
                 (slot == SLOT_MAGIC_BEANS)) {
                 counterDigits[3] = AMMO(gAmmoItems[slot]);
             } else if ((slot == SLOT_TRADE_DEED) || (slot == SLOT_TRADE_KEY_MAMA) || (slot == SLOT_TRADE_COUPLE)) {
-                counterDigits[3] = gSaveContext.save.inventory.items[slot];
+                counterDigits[3] = gSaveContext.save.saveInfo.inventory.items[slot];
             } else if (slot >= SLOT_BOTTLE_1) {
-                counterDigits[3] = gSaveContext.save.inventory.items[slot];
-            } else if (gSaveContext.save.inventory.items[slot] != ITEM_NONE) {
+                counterDigits[3] = gSaveContext.save.saveInfo.inventory.items[slot];
+            } else if (gSaveContext.save.saveInfo.inventory.items[slot] != ITEM_NONE) {
                 counterDigits[3] = 1;
             }
 
@@ -461,7 +461,7 @@ void KaleidoScope_DrawInventoryEditor(PlayState* play) {
         for (j = 0, rectLeft = 204; j < 6; j++, slot++, rectLeft += 14) {
             counterDigits[2] = 0;
 
-            if (gSaveContext.save.inventory.items[SLOT_MASK_POSTMAN + slot] != ITEM_NONE) {
+            if (gSaveContext.save.saveInfo.inventory.items[SLOT_MASK_POSTMAN + slot] != ITEM_NONE) {
                 counterDigits[2] = 1;
             }
             KaleidoScope_DrawDigit(play, counterDigits[2], rectLeft, rectTop);
@@ -583,7 +583,7 @@ void KaleidoScope_DrawInventoryEditor(PlayState* play) {
     // Dungeon Items
     // Loop over columns (i), (counterDigits[1] stores rectLeft)
     for (counterDigits[1] = 129, i = 0; i < 4; i++) {
-        counterDigits[2] = gSaveContext.save.inventory.dungeonItems[i] & gEquipMasks[0];
+        counterDigits[2] = gSaveContext.save.saveInfo.inventory.dungeonItems[i] & gEquipMasks[0];
         KaleidoScope_DrawDigit(play, counterDigits[2], counterDigits[1], 168);
         counterDigits[1] += 12;
     }
@@ -591,7 +591,7 @@ void KaleidoScope_DrawInventoryEditor(PlayState* play) {
     // Stray Fairies
     // Loop over columns (i), (counterDigits[1] stores rectLeft)
     for (counterDigits[1] = 202, i = 0; i < 4; i++) {
-        counterDigits[3] = gSaveContext.save.inventory.strayFairies[i];
+        counterDigits[3] = gSaveContext.save.saveInfo.inventory.strayFairies[i];
         counterDigits[2] = counterDigits[3] / 10;
         counterDigits[3] -= counterDigits[2] * 10;
         if (counterDigits[2] != 0) {
@@ -602,11 +602,11 @@ void KaleidoScope_DrawInventoryEditor(PlayState* play) {
     }
 
     // Double Defence
-    KaleidoScope_DrawDigit(play, gSaveContext.save.playerData.doubleDefense, 44, 202);
+    KaleidoScope_DrawDigit(play, gSaveContext.save.saveInfo.playerData.doubleDefense, 44, 202);
 
     // Magic
-    //! @bug should be gSaveContext.save.playerData.doubleMagic
-    KaleidoScope_DrawDigit(play, gSaveContext.save.playerData.doubleDefense, 75, 202);
+    //! @bug should be gSaveContext.save.saveInfo.playerData.doubleMagic
+    KaleidoScope_DrawDigit(play, gSaveContext.save.saveInfo.playerData.doubleDefense, 75, 202);
 
     // Lottery
     // Loop over columns (i), (counterDigits[1] stores rectLeft)
@@ -709,24 +709,24 @@ void KaleidoScope_UpdateInventoryEditor(PlayState* play) {
         case INV_EDITOR_SECTION_RUPEE:
             // Rupees
             if (CHECK_BTN_ALL(input->press.button, BTN_CUP)) {
-                gSaveContext.save.playerData.rupees -= 100;
-                if (gSaveContext.save.playerData.rupees < 0) {
-                    gSaveContext.save.playerData.rupees = 0;
+                gSaveContext.save.saveInfo.playerData.rupees -= 100;
+                if (gSaveContext.save.saveInfo.playerData.rupees < 0) {
+                    gSaveContext.save.saveInfo.playerData.rupees = 0;
                 }
             } else if (CHECK_BTN_ALL(input->press.button, BTN_CDOWN)) {
-                gSaveContext.save.playerData.rupees += 100;
-                if (gSaveContext.save.playerData.rupees >= 9999) {
-                    gSaveContext.save.playerData.rupees = 9999;
+                gSaveContext.save.saveInfo.playerData.rupees += 100;
+                if (gSaveContext.save.saveInfo.playerData.rupees >= 9999) {
+                    gSaveContext.save.saveInfo.playerData.rupees = 9999;
                 }
             } else if (CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
-                gSaveContext.save.playerData.rupees--;
-                if (gSaveContext.save.playerData.rupees < 0) {
-                    gSaveContext.save.playerData.rupees = 0;
+                gSaveContext.save.saveInfo.playerData.rupees--;
+                if (gSaveContext.save.saveInfo.playerData.rupees < 0) {
+                    gSaveContext.save.saveInfo.playerData.rupees = 0;
                 }
             } else if (CHECK_BTN_ALL(input->press.button, BTN_CRIGHT)) {
-                gSaveContext.save.playerData.rupees++;
-                if (gSaveContext.save.playerData.rupees >= 9999) {
-                    gSaveContext.save.playerData.rupees = 9999;
+                gSaveContext.save.saveInfo.playerData.rupees++;
+                if (gSaveContext.save.saveInfo.playerData.rupees >= 9999) {
+                    gSaveContext.save.saveInfo.playerData.rupees = 9999;
                 }
             }
             break;
@@ -734,15 +734,15 @@ void KaleidoScope_UpdateInventoryEditor(PlayState* play) {
         case INV_EDITOR_SECTION_HEALTH_CAPACITY:
             // Health Capacity
             if (CHECK_BTN_ALL(input->press.button, BTN_CUP) || CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
-                gSaveContext.save.playerData.healthCapacity -= 0x10;
-                if (gSaveContext.save.playerData.healthCapacity < 0x30) {
-                    gSaveContext.save.playerData.healthCapacity = 0x30;
+                gSaveContext.save.saveInfo.playerData.healthCapacity -= 0x10;
+                if (gSaveContext.save.saveInfo.playerData.healthCapacity < 0x30) {
+                    gSaveContext.save.saveInfo.playerData.healthCapacity = 0x30;
                 }
             } else if (CHECK_BTN_ALL(input->press.button, BTN_CDOWN) ||
                        CHECK_BTN_ALL(input->press.button, BTN_CRIGHT)) {
-                gSaveContext.save.playerData.healthCapacity += 0x10;
-                if (gSaveContext.save.playerData.healthCapacity >= 0x140) {
-                    gSaveContext.save.playerData.healthCapacity = 0x140;
+                gSaveContext.save.saveInfo.playerData.healthCapacity += 0x10;
+                if (gSaveContext.save.saveInfo.playerData.healthCapacity >= 0x140) {
+                    gSaveContext.save.saveInfo.playerData.healthCapacity = 0x140;
                 }
             }
             break;
@@ -806,48 +806,48 @@ void KaleidoScope_UpdateInventoryEditor(PlayState* play) {
                     } else if (slot == SLOT_TRADE_DEED) {
                         if (CHECK_BTN_ALL(input->press.button, BTN_CRIGHT)) {
                             if (INV_CONTENT(ITEM_MOON_TEAR) == ITEM_NONE) {
-                                gSaveContext.save.inventory.items[slot] = ITEM_MOON_TEAR;
+                                gSaveContext.save.saveInfo.inventory.items[slot] = ITEM_MOON_TEAR;
                             } else if ((INV_CONTENT(ITEM_MOON_TEAR) >= ITEM_MOON_TEAR) &&
                                        (INV_CONTENT(ITEM_MOON_TEAR) <= ITEM_DEED_MOUNTAIN)) {
-                                gSaveContext.save.inventory.items[slot] = INV_CONTENT(ITEM_MOON_TEAR) + 1;
+                                gSaveContext.save.saveInfo.inventory.items[slot] = INV_CONTENT(ITEM_MOON_TEAR) + 1;
                             }
                         } else if (CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
                             if (INV_CONTENT(ITEM_MOON_TEAR) == ITEM_NONE) {
-                                gSaveContext.save.inventory.items[slot] = ITEM_DEED_OCEAN;
+                                gSaveContext.save.saveInfo.inventory.items[slot] = ITEM_DEED_OCEAN;
                             } else if ((INV_CONTENT(ITEM_MOON_TEAR) >= ITEM_DEED_LAND) &&
                                        (INV_CONTENT(ITEM_MOON_TEAR) <= ITEM_DEED_OCEAN)) {
-                                gSaveContext.save.inventory.items[slot] = INV_CONTENT(ITEM_MOON_TEAR) - 1;
+                                gSaveContext.save.saveInfo.inventory.items[slot] = INV_CONTENT(ITEM_MOON_TEAR) - 1;
                             }
                         }
                     } else if (slot == SLOT_TRADE_KEY_MAMA) {
                         if (CHECK_BTN_ALL(input->press.button, BTN_CRIGHT)) {
                             if (INV_CONTENT(ITEM_ROOM_KEY) == ITEM_NONE) {
-                                gSaveContext.save.inventory.items[slot] = ITEM_ROOM_KEY;
+                                gSaveContext.save.saveInfo.inventory.items[slot] = ITEM_ROOM_KEY;
                             } else if ((INV_CONTENT(ITEM_ROOM_KEY) >= ITEM_ROOM_KEY) &&
                                        (INV_CONTENT(ITEM_ROOM_KEY) <= ITEM_ROOM_KEY)) {
-                                gSaveContext.save.inventory.items[slot] = INV_CONTENT(ITEM_ROOM_KEY) + 1;
+                                gSaveContext.save.saveInfo.inventory.items[slot] = INV_CONTENT(ITEM_ROOM_KEY) + 1;
                             }
                         } else if (CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
                             if (INV_CONTENT(ITEM_ROOM_KEY) == ITEM_NONE) {
-                                gSaveContext.save.inventory.items[slot] = ITEM_LETTER_MAMA;
+                                gSaveContext.save.saveInfo.inventory.items[slot] = ITEM_LETTER_MAMA;
                             } else if ((INV_CONTENT(ITEM_ROOM_KEY) >= ITEM_LETTER_MAMA) &&
                                        (INV_CONTENT(ITEM_ROOM_KEY) <= ITEM_LETTER_MAMA)) {
-                                gSaveContext.save.inventory.items[slot] = INV_CONTENT(ITEM_ROOM_KEY) - 1;
+                                gSaveContext.save.saveInfo.inventory.items[slot] = INV_CONTENT(ITEM_ROOM_KEY) - 1;
                             }
                         }
                     } else if (CHECK_BTN_ALL(input->press.button, BTN_CRIGHT)) {
                         if (INV_CONTENT(ITEM_LETTER_TO_KAFEI) == ITEM_NONE) {
-                            gSaveContext.save.inventory.items[slot] = ITEM_LETTER_TO_KAFEI;
+                            gSaveContext.save.saveInfo.inventory.items[slot] = ITEM_LETTER_TO_KAFEI;
                         } else if ((INV_CONTENT(ITEM_LETTER_TO_KAFEI) >= ITEM_LETTER_TO_KAFEI) &&
                                    (INV_CONTENT(ITEM_LETTER_TO_KAFEI) <= ITEM_LETTER_TO_KAFEI)) {
-                            gSaveContext.save.inventory.items[slot] = INV_CONTENT(ITEM_LETTER_TO_KAFEI) + 1;
+                            gSaveContext.save.saveInfo.inventory.items[slot] = INV_CONTENT(ITEM_LETTER_TO_KAFEI) + 1;
                         }
                     } else if (CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
                         if (INV_CONTENT(ITEM_LETTER_TO_KAFEI) == ITEM_NONE) {
-                            gSaveContext.save.inventory.items[slot] = ITEM_PENDANT_OF_MEMORIES;
+                            gSaveContext.save.saveInfo.inventory.items[slot] = ITEM_PENDANT_OF_MEMORIES;
                         } else if ((INV_CONTENT(ITEM_LETTER_TO_KAFEI) >= ITEM_PENDANT_OF_MEMORIES) &&
                                    (INV_CONTENT(ITEM_LETTER_TO_KAFEI) <= ITEM_PENDANT_OF_MEMORIES)) {
-                            gSaveContext.save.inventory.items[slot] = INV_CONTENT(ITEM_LETTER_TO_KAFEI) - 1;
+                            gSaveContext.save.saveInfo.inventory.items[slot] = INV_CONTENT(ITEM_LETTER_TO_KAFEI) - 1;
                         }
                     }
                 } else if ((slot >= SLOT_BOTTLE_1) && (slot <= SLOT_BOTTLE_6)) {
@@ -855,18 +855,18 @@ void KaleidoScope_UpdateInventoryEditor(PlayState* play) {
                         value = ITEM_BOTTLE + slot - SLOT_BOTTLE_1;
                         Inventory_DeleteItem(value, SLOT(ITEM_BOTTLE) + slot - SLOT_BOTTLE_1);
                     } else if (CHECK_BTN_ALL(input->press.button, BTN_CRIGHT)) {
-                        if (gSaveContext.save.inventory.items[slot] == ITEM_NONE) {
-                            gSaveContext.save.inventory.items[slot] = ITEM_BOTTLE;
-                        } else if ((gSaveContext.save.inventory.items[slot] >= ITEM_BOTTLE) &&
-                                   (gSaveContext.save.inventory.items[slot] <= ITEM_HYLIAN_LOACH)) {
-                            gSaveContext.save.inventory.items[slot] = gSaveContext.save.inventory.items[slot] + 1;
+                        if (gSaveContext.save.saveInfo.inventory.items[slot] == ITEM_NONE) {
+                            gSaveContext.save.saveInfo.inventory.items[slot] = ITEM_BOTTLE;
+                        } else if ((gSaveContext.save.saveInfo.inventory.items[slot] >= ITEM_BOTTLE) &&
+                                   (gSaveContext.save.saveInfo.inventory.items[slot] <= ITEM_HYLIAN_LOACH)) {
+                            gSaveContext.save.saveInfo.inventory.items[slot] = gSaveContext.save.saveInfo.inventory.items[slot] + 1;
                         }
                     } else if (CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
-                        if (gSaveContext.save.inventory.items[slot] == ITEM_NONE) {
-                            gSaveContext.save.inventory.items[slot] = ITEM_OBABA_DRINK;
-                        } else if ((gSaveContext.save.inventory.items[slot] >= ITEM_POTION_RED) &&
-                                   (gSaveContext.save.inventory.items[slot] <= ITEM_OBABA_DRINK)) {
-                            gSaveContext.save.inventory.items[slot] = gSaveContext.save.inventory.items[slot] - 1;
+                        if (gSaveContext.save.saveInfo.inventory.items[slot] == ITEM_NONE) {
+                            gSaveContext.save.saveInfo.inventory.items[slot] = ITEM_OBABA_DRINK;
+                        } else if ((gSaveContext.save.saveInfo.inventory.items[slot] >= ITEM_POTION_RED) &&
+                                   (gSaveContext.save.saveInfo.inventory.items[slot] <= ITEM_OBABA_DRINK)) {
+                            gSaveContext.save.saveInfo.inventory.items[slot] = gSaveContext.save.saveInfo.inventory.items[slot] - 1;
                         }
                     }
                 } else {
@@ -874,7 +874,7 @@ void KaleidoScope_UpdateInventoryEditor(PlayState* play) {
                         CHECK_BTN_ALL(input->press.button, BTN_CDOWN) ||
                         CHECK_BTN_ALL(input->press.button, BTN_CRIGHT)) {
                         value = sSlotItems[slot];
-                        if (gSaveContext.save.inventory.items[slot] == ITEM_NONE) {
+                        if (gSaveContext.save.saveInfo.inventory.items[slot] == ITEM_NONE) {
                             INV_CONTENT(value) = value;
                         } else {
                             Inventory_DeleteItem(value, slot);
@@ -895,7 +895,7 @@ void KaleidoScope_UpdateInventoryEditor(PlayState* play) {
 
                     if (value != 0) {
                         CUR_FORM_EQUIP(EQUIP_SLOT_B) = value + (ITEM_SWORD_KOKIRI - 1);
-                        gSaveContext.save.playerData.swordHealth = 100;
+                        gSaveContext.save.saveInfo.playerData.swordHealth = 100;
                     } else {
                         CUR_FORM_EQUIP(EQUIP_SLOT_B) = ITEM_NONE;
                     }
@@ -910,7 +910,7 @@ void KaleidoScope_UpdateInventoryEditor(PlayState* play) {
                     SET_EQUIP_VALUE(EQUIP_TYPE_SWORD, value);
 
                     CUR_FORM_EQUIP(EQUIP_SLOT_B) = value + (ITEM_SWORD_KOKIRI - 1);
-                    gSaveContext.save.playerData.swordHealth = 100;
+                    gSaveContext.save.saveInfo.playerData.swordHealth = 100;
                 }
 
                 Interface_LoadItemIconImpl(play, EQUIP_SLOT_B);
@@ -1002,13 +1002,13 @@ void KaleidoScope_UpdateInventoryEditor(PlayState* play) {
             } else if (sCurSection == INV_EDITOR_SECTION_NOTEBOOK) {
                 // Bombers Notebook
                 if (CHECK_BTN_ALL(input->press.button, BTN_CUP) || CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
-                    gSaveContext.save.inventory.questItems ^= gBitFlags[QUEST_BOMBERS_NOTEBOOK];
+                    gSaveContext.save.saveInfo.inventory.questItems ^= gBitFlags[QUEST_BOMBERS_NOTEBOOK];
                 }
 
             } else if (sCurSection == INV_EDITOR_SECTION_LULLABY_INTRO) {
                 // Goron Lullaby Intro
                 if (CHECK_BTN_ALL(input->press.button, BTN_CUP) || CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
-                    gSaveContext.save.inventory.questItems ^= gBitFlags[QUEST_SONG_LULLABY_INTRO];
+                    gSaveContext.save.saveInfo.inventory.questItems ^= gBitFlags[QUEST_SONG_LULLABY_INTRO];
                 }
 
             } else if (sCurSection < INV_EDITOR_SECTION_LULLABY_INTRO) {
@@ -1017,7 +1017,7 @@ void KaleidoScope_UpdateInventoryEditor(PlayState* play) {
                 //! have also been taken
                 slot = sCurSection - INV_EDITOR_SECTION_BOSS;
                 if (CHECK_BTN_ALL(input->press.button, BTN_CUP) || CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
-                    gSaveContext.save.inventory.questItems ^= gBitFlags[slot];
+                    gSaveContext.save.saveInfo.inventory.questItems ^= gBitFlags[slot];
                 }
 
             } else if (sCurSection < INV_EDITOR_SECTION_DUNGEON_ITEMS) {
@@ -1045,30 +1045,30 @@ void KaleidoScope_UpdateInventoryEditor(PlayState* play) {
                 slot = sCurSection - INV_EDITOR_SECTION_DUNGEON_ITEMS;
                 if (CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
                     // Map
-                    gSaveContext.save.inventory.dungeonItems[slot] ^= 4;
+                    gSaveContext.save.saveInfo.inventory.dungeonItems[slot] ^= 4;
                 }
                 if (CHECK_BTN_ALL(input->press.button, BTN_CDOWN)) {
                     // Compass
-                    gSaveContext.save.inventory.dungeonItems[slot] ^= 2;
+                    gSaveContext.save.saveInfo.inventory.dungeonItems[slot] ^= 2;
                 }
                 if (CHECK_BTN_ALL(input->press.button, BTN_CRIGHT)) {
                     // Boss Key
-                    gSaveContext.save.inventory.dungeonItems[slot] ^= 1;
+                    gSaveContext.save.saveInfo.inventory.dungeonItems[slot] ^= 1;
                 }
 
             } else if (sCurSection < INV_EDITOR_SECTION_DOUBLE_DEFENSE) {
                 // Stray Fairies
                 slot = sCurSection - INV_EDITOR_SECTION_STRAY_FAIRIES;
                 if (CHECK_BTN_ALL(input->press.button, BTN_CUP) || CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
-                    gSaveContext.save.inventory.strayFairies[slot]--;
-                    if (gSaveContext.save.inventory.strayFairies[slot] < 0) {
-                        gSaveContext.save.inventory.strayFairies[slot] = 0;
+                    gSaveContext.save.saveInfo.inventory.strayFairies[slot]--;
+                    if (gSaveContext.save.saveInfo.inventory.strayFairies[slot] < 0) {
+                        gSaveContext.save.saveInfo.inventory.strayFairies[slot] = 0;
                     }
                 } else if (CHECK_BTN_ALL(input->press.button, BTN_CDOWN) ||
                            CHECK_BTN_ALL(input->press.button, BTN_CRIGHT)) {
-                    gSaveContext.save.inventory.strayFairies[slot]++;
-                    if (gSaveContext.save.inventory.strayFairies[slot] >= 99) {
-                        gSaveContext.save.inventory.strayFairies[slot] = 99;
+                    gSaveContext.save.saveInfo.inventory.strayFairies[slot]++;
+                    if (gSaveContext.save.saveInfo.inventory.strayFairies[slot] >= 99) {
+                        gSaveContext.save.saveInfo.inventory.strayFairies[slot] = 99;
                     }
                 }
 
@@ -1076,11 +1076,11 @@ void KaleidoScope_UpdateInventoryEditor(PlayState* play) {
                 // Double Defence
                 if (CHECK_BTN_ALL(input->press.button, BTN_CUP) || CHECK_BTN_ALL(input->press.button, BTN_CLEFT) ||
                     CHECK_BTN_ALL(input->press.button, BTN_CDOWN) || CHECK_BTN_ALL(input->press.button, BTN_CRIGHT)) {
-                    gSaveContext.save.playerData.doubleDefense ^= 1;
-                    if (!gSaveContext.save.playerData.doubleDefense) {
-                        gSaveContext.save.inventory.defenseHearts = 0;
+                    gSaveContext.save.saveInfo.playerData.doubleDefense ^= 1;
+                    if (!gSaveContext.save.saveInfo.playerData.doubleDefense) {
+                        gSaveContext.save.saveInfo.inventory.defenseHearts = 0;
                     } else {
-                        gSaveContext.save.inventory.defenseHearts = 20;
+                        gSaveContext.save.saveInfo.inventory.defenseHearts = 20;
                     }
                 }
             }

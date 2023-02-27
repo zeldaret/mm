@@ -83,7 +83,7 @@ void EnMs_Destroy(Actor* thisx, PlayState* play) {
 void EnMs_Wait(EnMs* this, PlayState* play) {
     s16 yawDiff = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
 
-    if (gSaveContext.save.inventory.items[SLOT_MAGIC_BEANS] == ITEM_NONE) {
+    if (gSaveContext.save.saveInfo.inventory.items[SLOT_MAGIC_BEANS] == ITEM_NONE) {
         this->actor.textId = 0x92E; // "[...] You're the first customer [...]"
     } else {
         this->actor.textId = 0x932; // "[...] So you liked my Magic Beans [...]"
@@ -118,7 +118,7 @@ void EnMs_Talk(EnMs* this, PlayState* play) {
                 switch (play->msgCtx.choiceIndex) {
                     case 0: // yes
                         func_801477B4(play);
-                        if (gSaveContext.save.playerData.rupees < 10) {
+                        if (gSaveContext.save.saveInfo.playerData.rupees < 10) {
                             play_sound(NA_SE_SY_ERROR);
                             func_80151938(play, 0x935); // "[...] You don't have enough Rupees."
                         } else if (AMMO(ITEM_MAGIC_BEANS) >= 20) {

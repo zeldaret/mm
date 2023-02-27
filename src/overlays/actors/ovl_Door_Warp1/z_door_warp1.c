@@ -553,28 +553,28 @@ void func_808B9CE8(DoorWarp1* this, PlayState* play) {
 
     switch (play->sceneId) {
         case SCENE_MITURIN_BS:
-            gSaveContext.save.unk_ECC[0] =
-                (((void)0, gSaveContext.save.unk_ECC[0]) & 0xFFFFFF00) | (((u8)gSaveContext.save.unk_ECC[1]) & 0xFF);
+            gSaveContext.save.saveInfo.unk_ECC[0] =
+                (((void)0, gSaveContext.save.saveInfo.unk_ECC[0]) & 0xFFFFFF00) | (((u8)gSaveContext.save.saveInfo.unk_ECC[1]) & 0xFF);
             break;
 
         case SCENE_HAKUGIN_BS:
-            gSaveContext.save.unk_ECC[0] = (((void)0, gSaveContext.save.unk_ECC[0]) & 0xFFFF00FF) |
-                                           ((((u8)gSaveContext.save.unk_ECC[1]) & 0xFF) << 8);
+            gSaveContext.save.saveInfo.unk_ECC[0] = (((void)0, gSaveContext.save.saveInfo.unk_ECC[0]) & 0xFFFF00FF) |
+                                           ((((u8)gSaveContext.save.saveInfo.unk_ECC[1]) & 0xFF) << 8);
             break;
 
         case SCENE_INISIE_BS:
-            gSaveContext.save.unk_ECC[0] = (((void)0, gSaveContext.save.unk_ECC[0]) & 0xFF00FFFF) |
-                                           ((((u8)gSaveContext.save.unk_ECC[1]) & 0xFF) << 0x10);
+            gSaveContext.save.saveInfo.unk_ECC[0] = (((void)0, gSaveContext.save.saveInfo.unk_ECC[0]) & 0xFF00FFFF) |
+                                           ((((u8)gSaveContext.save.saveInfo.unk_ECC[1]) & 0xFF) << 0x10);
             break;
 
         case SCENE_SEA_BS:
-            gSaveContext.save.unk_ECC[0] = (((void)0, gSaveContext.save.unk_ECC[0]) & 0x00FFFFFF) |
-                                           ((((u8)gSaveContext.save.unk_ECC[1]) & 0xFF) << 0x18);
+            gSaveContext.save.saveInfo.unk_ECC[0] = (((void)0, gSaveContext.save.saveInfo.unk_ECC[0]) & 0x00FFFFFF) |
+                                           ((((u8)gSaveContext.save.saveInfo.unk_ECC[1]) & 0xFF) << 0x18);
             break;
     }
 
-    gSaveContext.save.unk_ECC[1] =
-        (gSaveContext.save.unk_ECC[1] & 0xFFFFFF00) | ((((u8)gSaveContext.save.unk_ECC[1]) + 1) & 0xFF);
+    gSaveContext.save.saveInfo.unk_ECC[1] =
+        (gSaveContext.save.saveInfo.unk_ECC[1] & 0xFFFFFF00) | ((((u8)gSaveContext.save.saveInfo.unk_ECC[1]) + 1) & 0xFF);
     Item_Give(play, func_808B849C(this, play) + (ITEM_REMAINS_ODOLWA - 1));
     DoorWarp1_SetupAction(this, func_808B9E94);
 }
@@ -657,19 +657,19 @@ void func_808BA10C(DoorWarp1* this, PlayState* play) {
 
             switch (phi_v0_2) {
                 case 0:
-                    phi_a0 = gSaveContext.save.unk_ECC[0] & 0xFF;
+                    phi_a0 = gSaveContext.save.saveInfo.unk_ECC[0] & 0xFF;
                     break;
 
                 case 1:
-                    phi_a0 = (gSaveContext.save.unk_ECC[0] & 0xFF00) >> 8;
+                    phi_a0 = (gSaveContext.save.saveInfo.unk_ECC[0] & 0xFF00) >> 8;
                     break;
 
                 case 2:
-                    phi_a0 = (gSaveContext.save.unk_ECC[0] & 0xFF0000) >> 0x10;
+                    phi_a0 = (gSaveContext.save.saveInfo.unk_ECC[0] & 0xFF0000) >> 0x10;
                     break;
 
                 case 3:
-                    phi_a0 = (gSaveContext.save.unk_ECC[0] & 0xFF000000) >> 0x18;
+                    phi_a0 = (gSaveContext.save.saveInfo.unk_ECC[0] & 0xFF000000) >> 0x18;
                     break;
 
                 default:

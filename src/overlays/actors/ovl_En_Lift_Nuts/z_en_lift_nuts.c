@@ -393,7 +393,7 @@ void func_80AEA1A0(EnLiftNuts* this, PlayState* play) {
                     }
                 } else {
                     if (((void)0, gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2]) >=
-                        gSaveContext.save.dekuPlaygroundHighScores[CURRENT_DAY - 1]) {
+                        gSaveContext.save.saveInfo.dekuPlaygroundHighScores[CURRENT_DAY - 1]) {
                         if (gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2] < 0x2EE0) {
                             Message_StartTextbox(play, 0x27F9, &this->actor);
                             this->textId = 0x27F9;
@@ -452,7 +452,7 @@ void func_80AEA7A4(EnLiftNuts* this, PlayState* play) {
         switch (this->textId) {
             case 0x27E2:
                 if (play->msgCtx.choiceIndex == 0) { // Yes
-                    if (gSaveContext.save.playerData.rupees >= 10) {
+                    if (gSaveContext.save.saveInfo.playerData.rupees >= 10) {
                         func_8019F208();
                         Message_StartTextbox(play, 0x27E5, &this->actor);
                         this->textId = 0x27E5;
@@ -784,7 +784,7 @@ void func_80AEB294(EnLiftNuts* this, PlayState* play) {
         player->stateFlags1 |= PLAYER_STATE1_20;
 
         if (((void)0, gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2]) <
-            gSaveContext.save.dekuPlaygroundHighScores[CURRENT_DAY - 1]) {
+            gSaveContext.save.saveInfo.dekuPlaygroundHighScores[CURRENT_DAY - 1]) {
             Flags_SetSwitch(play, 0x40);
         }
         Flags_SetSwitch(play, 0x41);
@@ -804,7 +804,7 @@ void func_80AEB428(EnLiftNuts* this, PlayState* play) {
 
     if (this->unk_354 == 10) {
         if (((void)0, gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2]) >
-            gSaveContext.save.dekuPlaygroundHighScores[CURRENT_DAY - 1]) {
+            gSaveContext.save.saveInfo.dekuPlaygroundHighScores[CURRENT_DAY - 1]) {
             Message_StartTextbox(play, 0x27EA, &this->actor);
             this->textId = 0x27EA;
         } else if (*this->ptr_1EC == 300) {

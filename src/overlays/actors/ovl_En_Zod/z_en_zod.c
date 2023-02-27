@@ -115,7 +115,7 @@ void EnZod_Init(Actor* thisx, PlayState* play) {
 
     switch (ENZOD_GET_TYPE(thisx)) {
         case ENZOD_TYPE_1:
-            if (gSaveContext.save.weekEventReg[78] & 1) {
+            if (gSaveContext.save.saveInfo.weekEventReg[78] & 1) {
                 this->actionFunc = func_80BAFDB4;
                 EnZod_ChangeAnim(this, ENZOD_ANIM_PLAYING_VIVACE, ANIMMODE_ONCE);
                 this->actor.flags |= ACTOR_FLAG_10;
@@ -124,7 +124,7 @@ void EnZod_Init(Actor* thisx, PlayState* play) {
             }
 
             this->actionFunc = func_80BAFB84;
-            if (!(gSaveContext.save.weekEventReg[55] & 0x80)) {
+            if (!(gSaveContext.save.saveInfo.weekEventReg[55] & 0x80)) {
                 Actor_Kill(&this->actor);
                 break;
             }
@@ -137,7 +137,7 @@ void EnZod_Init(Actor* thisx, PlayState* play) {
             break;
 
         default:
-            if (gSaveContext.save.weekEventReg[55] & 0x80) {
+            if (gSaveContext.save.saveInfo.weekEventReg[55] & 0x80) {
                 Actor_Kill(&this->actor);
             }
             this->actor.flags |= ACTOR_FLAG_10;
@@ -156,19 +156,19 @@ void EnZod_HandleRoomConversation(EnZod* this, PlayState* play) {
 
     if (gSaveContext.save.playerForm != PLAYER_FORM_ZORA) {
         textId = 0x1227;
-        if (gSaveContext.save.weekEventReg[32] & 8) {
+        if (gSaveContext.save.saveInfo.weekEventReg[32] & 8) {
             textId = 0x1229;
         } else {
-            gSaveContext.save.weekEventReg[32] |= 8;
+            gSaveContext.save.saveInfo.weekEventReg[32] |= 8;
         }
     } else if (this->stateFlags & TIJO_STATE_1) {
         textId = 0x1225;
     } else {
         textId = 0x1219;
-        if (gSaveContext.save.weekEventReg[32] & 0x10) {
+        if (gSaveContext.save.saveInfo.weekEventReg[32] & 0x10) {
             textId = 0x1226;
         } else {
-            gSaveContext.save.weekEventReg[32] |= 0x10;
+            gSaveContext.save.saveInfo.weekEventReg[32] |= 0x10;
         }
         this->stateFlags |= TIJO_STATE_1;
     }
@@ -394,14 +394,14 @@ void func_80BAFA44(EnZod* this, PlayState* play) {
     u16 textId;
 
     if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
-        if (gSaveContext.save.weekEventReg[79] & 1) {
+        if (gSaveContext.save.saveInfo.weekEventReg[79] & 1) {
             textId = 0x1253;
         } else {
             textId = 0x1251;
-            if (gSaveContext.save.weekEventReg[78] & 0x20) {
+            if (gSaveContext.save.saveInfo.weekEventReg[78] & 0x20) {
                 textId = 0x1252;
             } else {
-                gSaveContext.save.weekEventReg[78] |= 0x20;
+                gSaveContext.save.saveInfo.weekEventReg[78] |= 0x20;
             }
         }
     } else {
@@ -453,7 +453,7 @@ void EnZod_Rehearse(EnZod* this, PlayState* play) {
             play->nextEntrance = play->setupExitList[ENZOD_GET_ENTRANCE_INDEX(&this->actor)];
             play->transitionType = TRANS_TYPE_FADE_WHITE_FAST;
             play->transitionTrigger = TRANS_TRIGGER_START;
-            gSaveContext.save.weekEventReg[78] &= (u8)~1;
+            gSaveContext.save.saveInfo.weekEventReg[78] &= (u8)~1;
         } else {
             ActorCutscene_SetIntentToPlay(this->actor.cutscene);
         }
@@ -471,7 +471,7 @@ void EnZod_SetupRehearse(EnZod* this, PlayState* play) {
         ActorCutscene_Stop(this->actor.cutscene);
         this->actor.cutscene = ActorCutscene_GetAdditionalCutscene(this->actor.cutscene);
         ActorCutscene_SetIntentToPlay(this->actor.cutscene);
-        gSaveContext.save.weekEventReg[79] |= 1;
+        gSaveContext.save.saveInfo.weekEventReg[79] |= 1;
         Audio_QueueSeqCmd(NA_BGM_INDIGO_GO_SESSION | 0x8000);
     }
 }

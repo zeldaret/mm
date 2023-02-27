@@ -443,9 +443,9 @@ void EnRacedog_UpdateTextId(EnRacedog* this) {
     // range of 0x3539 to 0x3546.
     if (this->index % 2) {
         sDogInfo[this->index].textId =
-            (((gSaveContext.save.weekEventReg[42 + (this->index / 2)]) & 0xF0) >> 4) + 0x3539;
+            (((gSaveContext.save.saveInfo.weekEventReg[42 + (this->index / 2)]) & 0xF0) >> 4) + 0x3539;
     } else {
-        sDogInfo[this->index].textId = ((gSaveContext.save.weekEventReg[42 + (this->index / 2)]) & 0x0F) + 0x3539;
+        sDogInfo[this->index].textId = ((gSaveContext.save.saveInfo.weekEventReg[42 + (this->index / 2)]) & 0x0F) + 0x3539;
     }
 
     // As a sanity check, this makes sure the text ID is something in the expected range of 0x3539 to 0x3546.

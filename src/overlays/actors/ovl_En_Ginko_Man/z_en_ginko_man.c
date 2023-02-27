@@ -240,7 +240,7 @@ void EnGinkoMan_DepositDialogue(EnGinkoMan* this, PlayState* play) {
                 if ((u32)(gSaveContext.save.bankRupees & 0xFFFF) >= 5000) {
                     Message_StartTextbox(play, 0x45F, &this->actor);
                     this->curTextId = 0x45F; // "Excuuuse me! But I can't take anymore deposits!
-                } else if (gSaveContext.save.playerData.rupees == 0) {
+                } else if (gSaveContext.save.saveInfo.playerData.rupees == 0) {
                     Message_StartTextbox(play, 0x458, &this->actor);
                     this->curTextId =
                         0x458; // "Hmm...You play mean jokes, little guy! You haven't even got a single Rupee!
@@ -324,7 +324,7 @@ void EnGinkoMan_WaitForDialogueInput(EnGinkoMan* this, PlayState* play) {
                     Message_StartTextbox(play, 0x45F, &this->actor);
                     this->curTextId = 0x45F; // bank full, cannot accept more
                 } else {
-                    if (gSaveContext.save.playerData.rupees > 0) {
+                    if (gSaveContext.save.saveInfo.playerData.rupees > 0) {
                         func_8019F208();
                         Message_StartTextbox(play, 0x44F, &this->actor);
                         this->curTextId = 0x44F; // "All right! so..."
@@ -342,7 +342,7 @@ void EnGinkoMan_WaitForDialogueInput(EnGinkoMan* this, PlayState* play) {
             break;
         case 0x452: // Really? are you really depositing rupees?
             if (play->msgCtx.choiceIndex == GINKOMAN_CHOICE_YES) {
-                if (gSaveContext.save.playerData.rupees < play->msgCtx.bankRupeesSelected) {
+                if (gSaveContext.save.saveInfo.playerData.rupees < play->msgCtx.bankRupeesSelected) {
                     play_sound(NA_SE_SY_ERROR);
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, GINKO_ANIM_SITTING);
                     Message_StartTextbox(play, 0x459, &this->actor);
@@ -410,7 +410,7 @@ void EnGinkoMan_WaitForDialogueInput(EnGinkoMan* this, PlayState* play) {
                     Message_StartTextbox(play, 0x476, &this->actor);
                     this->curTextId = 0x476; // you dont have enough deposited to withdrawl
                 } else if (CUR_CAPACITY(UPG_WALLET) <
-                           (play->msgCtx.bankRupeesSelected + gSaveContext.save.playerData.rupees)) {
+                           (play->msgCtx.bankRupeesSelected + gSaveContext.save.saveInfo.playerData.rupees)) {
                     // check if wallet is big enough
                     play_sound(NA_SE_SY_ERROR);
                     Message_StartTextbox(play, 0x475, &this->actor);
