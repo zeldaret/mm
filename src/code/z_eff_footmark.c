@@ -11,9 +11,9 @@ void EffFootmark_Init(PlayState* play) {
 
     for (footmark = play->footprintInfo, i = 0; i < ARRAY_COUNT(play->footprintInfo); i++, footmark++) {
         footmark->actor = NULL;
-        footmark->position.x = 0;
-        footmark->position.y = 0;
-        footmark->position.z = 0;
+        footmark->pos.x = 0;
+        footmark->pos.y = 0;
+        footmark->pos.z = 0;
         footmark->flags = 0;
         footmark->id = 0;
         footmark->alpha = 0;
@@ -21,7 +21,7 @@ void EffFootmark_Init(PlayState* play) {
     }
 }
 
-void EffFootmark_Add(PlayState* play, MtxF* displayMatrix, Actor* actor, u8 id, Vec3f* position, u16 size, u8 red,
+void EffFootmark_Add(PlayState* play, MtxF* displayMatrix, Actor* actor, u8 id, Vec3f* pos, u16 size, u8 red,
                      u8 green, u8 blue, u16 alpha, u16 alphaChange, u16 fadeOutDelay) {
     s32 i;
     EffFootmark* footmark;
@@ -31,14 +31,14 @@ void EffFootmark_Add(PlayState* play, MtxF* displayMatrix, Actor* actor, u8 id, 
 
     for (footmark = play->footprintInfo, i = 0; i < ARRAY_COUNT(play->footprintInfo); i++, footmark++) {
         if (((actor == footmark->actor) && (footmark->id == id)) && !(footmark->flags & FOOTMARK_FLAG_1)) {
-            if (fabsf(footmark->position.x - position->x) <= 1) {
-                if (fabsf(footmark->position.z - position->z) <= 1) {
+            if (fabsf(footmark->pos.x - pos->x) <= 1) {
+                if (fabsf(footmark->pos.z - pos->z) <= 1) {
                     isNew = false;
                     break;
                 }
             }
 
-            // This footmark is being re-added at a new position. Let's mark this one to start fading out.
+            // This footmark is being re-added at a new pos. Let's mark this one to start fading out.
             footmark->flags = FOOTMARK_FLAG_1;
         }
 
@@ -57,9 +57,9 @@ void EffFootmark_Add(PlayState* play, MtxF* displayMatrix, Actor* actor, u8 id, 
         }
         Matrix_MtxFCopy(&destination->displayMatrix, displayMatrix);
         destination->actor = actor;
-        destination->position.x = position->x;
-        destination->position.y = position->y;
-        destination->position.z = position->z;
+        destination->pos.x = pos->x;
+        destination->pos.y = pos->y;
+        destination->pos.z = pos->z;
         destination->flags = 0;
         destination->id = id;
         destination->red = red;
