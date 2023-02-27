@@ -29,7 +29,7 @@ typedef struct EnGe1 {
     /* 0x2A4 */ Vec3s headRot;
     /* 0x2AA */ Vec3s torsoRot;
     /* 0x2B0 */ Path* path;
-    /* 0x2B4 */ s32 curPoint;
+    /* 0x2B4 */ s32 curPointIndex;
     /* 0x2B8 */ s16 eyeIndex;
     /* 0x2BA */ s16 blinkTimer;
     /* 0x2BC */ u16 stateFlags;

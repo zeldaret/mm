@@ -3,9 +3,8 @@
  * Overlay: ovl_En_Ot
  * Description: Seahorse
  */
-
-#include "z_en_ot.h"
 #include "prevent_bss_reordering.h"
+#include "z_en_ot.h"
 #include "objects/object_ot/object_ot.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 

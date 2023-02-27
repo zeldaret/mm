@@ -1,25 +1,25 @@
 ﻿<Root>
     <File Name="object_dnt" Segment="6">
-        <Animation Name="object_dnt_Anim_000994" Offset="0x994" />
-        <Animation Name="object_dnt_Anim_0012F4" Offset="0x12F4" />
+        <Animation Name="object_dnt_Anim_000994" Offset="0x994" /> <!-- Original name is "dnt_banban" -->
+        <Animation Name="object_dnt_Anim_0012F4" Offset="0x12F4" /> <!-- Original name is "dnt_boyon" -->
         <DList Name="object_dnt_DL_001350" Offset="0x1350" />
         <DList Name="object_dnt_DL_001420" Offset="0x1420" />
-        <Animation Name="object_dnt_Anim_001BC8" Offset="0x1BC8" />
-        <Animation Name="object_dnt_Anim_001E2C" Offset="0x1E2C" />
-        <Animation Name="object_dnt_Anim_002268" Offset="0x2268" />
-        <Animation Name="object_dnt_Anim_002670" Offset="0x2670" />
-        <Animation Name="object_dnt_Anim_0029E8" Offset="0x29E8" />
-        <Animation Name="object_dnt_Anim_002F08" Offset="0x2F08" />
-        <Animation Name="object_dnt_Anim_003438" Offset="0x3438" />
-        <Animation Name="object_dnt_Anim_0038CC" Offset="0x38CC" />
-        <Animation Name="object_dnt_Anim_003CC0" Offset="0x3CC0" />
+        <Animation Name="object_dnt_Anim_001BC8" Offset="0x1BC8" /> <!-- Original name is "dnt_fly" -->
+        <Animation Name="object_dnt_Anim_001E2C" Offset="0x1E2C" /> <!-- Original name is "dnt_iyaiya" -->
+        <Animation Name="object_dnt_Anim_002268" Offset="0x2268" /> <!-- Original name is "dnt_iyaiyaTOmuun" -->
+        <Animation Name="object_dnt_Anim_002670" Offset="0x2670" /> <!-- Original name is "dnt_kouka" -->
+        <Animation Name="object_dnt_Anim_0029E8" Offset="0x29E8" /> <!-- Original name is "dnt_moguru" -->
+        <Animation Name="object_dnt_Anim_002F08" Offset="0x2F08" /> <!-- Original name is "dnt_muun" -->
+        <Animation Name="object_dnt_Anim_003438" Offset="0x3438" /> <!-- Original name is "dnt_nooo" -->
+        <Animation Name="object_dnt_Anim_0038CC" Offset="0x38CC" /> <!-- Original name is "dnt_onedari" -->
+        <Animation Name="object_dnt_Anim_003CC0" Offset="0x3CC0" /> <!-- Original name is "dnt_onedariTOwait" -->
         <Blob Name="object_dnt_Blob_003CD0" Size="0x10" Offset="0x3CD0" />
-        <Animation Name="object_dnt_Anim_004700" Offset="0x4700" />
-        <Animation Name="object_dnt_Anim_004AA0" Offset="0x4AA0" />
-        <Animation Name="object_dnt_Anim_004E38" Offset="0x4E38" />
-        <Animation Name="object_dnt_Anim_005488" Offset="0x5488" />
-        <Animation Name="object_dnt_Anim_00577C" Offset="0x577C" />
-        <Animation Name="object_dnt_Anim_005CA8" Offset="0x5CA8" />
+        <Animation Name="object_dnt_Anim_004700" Offset="0x4700" /> <!-- Original name is "dnt_spoon" -->
+        <Animation Name="object_dnt_Anim_004AA0" Offset="0x4AA0" /> <!-- Original name is "dnt_tobidasu01" -->
+        <Animation Name="object_dnt_Anim_004E38" Offset="0x4E38" /> <!-- Original name is "dnt_tobidasu02" -->
+        <Animation Name="object_dnt_Anim_005488" Offset="0x5488" /> <!-- Original name is "dnt_wait" -->
+        <Animation Name="object_dnt_Anim_00577C" Offset="0x577C" /> <!-- Original name is "dnt_wait02" -->
+        <Animation Name="object_dnt_Anim_005CA8" Offset="0x5CA8" /> <!-- Original name is "dnt_waitTOonedari" -->
         <DList Name="object_dnt_DL_007EA0" Offset="0x7EA0" />
         <DList Name="object_dnt_DL_008048" Offset="0x8048" />
         <DList Name="object_dnt_DL_008290" Offset="0x8290" />
@@ -85,7 +85,7 @@
         <Limb Name="object_dnt_Standardlimb_00ABEC" Type="Standard" EnumName="OBJECT_DNT_LIMB_1A" Offset="0xABEC" />
         <Limb Name="object_dnt_Standardlimb_00ABF8" Type="Standard" EnumName="OBJECT_DNT_LIMB_1B" Offset="0xABF8" />
         <Skeleton Name="object_dnt_Skel_00AC70" Type="Flex" LimbType="Standard" LimbNone="OBJECT_DNT_LIMB_NONE" LimbMax="OBJECT_DNT_LIMB_MAX" EnumName="ObjectDntLimb" Offset="0xAC70" />
-        <Animation Name="object_dnt_Anim_00B0B4" Offset="0xB0B4" />
+        <Animation Name="object_dnt_Anim_00B0B4" Offset="0xB0B4" /> <!-- Original name is "dnt_walk" -->
         <Texture Name="object_dnt_Tex_00B0D0" OutName="tex_00B0D0" Format="rgba16" Width="16" Height="16" Offset="0xB0D0" />
     </File>
 </Root>

@@ -2623,18 +2623,18 @@ void func_800B9D1C(Actor* actor) {
     }
 }
 
-void Actor_DrawAllSetup(PlayState* play) {
-    play->actorCtx.undrawnActorCount = 0;
+void Actor_ResetLensActors(PlayState* play) {
+    play->actorCtx.numLensActors = 0;
     play->actorCtx.lensActorsDrawn = false;
 }
 
-s32 Actor_RecordUndrawnActor(PlayState* play, Actor* actor) {
-    if (play->actorCtx.undrawnActorCount >= 32) {
+s32 Actor_AddToLensActors(PlayState* play, Actor* actor) {
+    if (play->actorCtx.numLensActors >= LENS_ACTOR_MAX) {
         return false;
     }
 
-    play->actorCtx.undrawnActors[play->actorCtx.undrawnActorCount] = actor;
-    play->actorCtx.undrawnActorCount++;
+    play->actorCtx.lensActors[play->actorCtx.numLensActors] = actor;
+    play->actorCtx.numLensActors++;
     return true;
 }
 
@@ -2643,125 +2643,126 @@ void Actor_DrawLensOverlay(Gfx** gfxP, s32 lensMaskSize) {
                                        ((LENS_MASK_ACTIVE_SIZE - lensMaskSize) * 0.003f) + 1.0f);
 }
 
-void Actor_DrawLensActors(PlayState* play, s32 numInvisibleActors, Actor** invisibleActors) {
+void Actor_DrawLensActors(PlayState* play, s32 numLensActors, Actor** lensActors) {
+    GraphicsContext* gfxCtx = play->state.gfxCtx;
+    Actor** lensActor;
+    s32 i;
+    Gfx* gfx;
+    Gfx* gfxTemp;
+    void* zbuffer;
+    void* spA4;
     s32 dbgVar1;
     s32 dbgVar2;
-    s32 spB4;
-    Actor** invisibleActor;
-    Gfx* spAC;
-    void* spA8;
-    void* spA4;
-    GraphicsContext* gfxCtx = play->state.gfxCtx;
-    Gfx* tmp;
     s32 pad[2];
 
+    // Remnant of debug
     dbgVar1 = true;
     dbgVar2 = true;
 
     if (dbgVar1) {
-        dbgVar1 = numInvisibleActors > 0;
+        dbgVar1 = (numLensActors > 0);
     }
 
     OPEN_DISPS(gfxCtx);
 
     if (dbgVar1) {
-        tmp = POLY_XLU_DISP;
-        spA8 = gfxCtx->zbuffer;
+        gfx = POLY_XLU_DISP;
+        zbuffer = gfxCtx->zbuffer;
         spA4 = play->unk_18E68;
 
         if (dbgVar2) {
-            PreRender_SetValues(&play->pauseBgPreRender, gCfbWidth, gCfbHeight, gfxCtx->curFrameBuffer, spA8);
+            PreRender_SetValues(&play->pauseBgPreRender, gCfbWidth, gCfbHeight, gfxCtx->curFrameBuffer, zbuffer);
 
-            spAC = tmp;
-            func_80170200(&play->pauseBgPreRender, &spAC, spA8, spA4);
-            tmp = spAC;
+            gfxTemp = gfx;
+            func_80170200(&play->pauseBgPreRender, &gfxTemp, zbuffer, spA4);
+            gfx = gfxTemp;
         }
 
-        gDPPipeSync(tmp++);
-        gDPSetPrimDepth(tmp++, 0, 0);
+        gDPPipeSync(gfx++);
+        gDPSetPrimDepth(gfx++, 0, 0);
 
-        gDPSetOtherMode(tmp++,
+        gDPSetOtherMode(gfx++,
                         G_AD_DISABLE | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
                             G_TD_CLAMP | G_TP_NONE | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
                         G_AC_THRESHOLD | G_ZS_PRIM | Z_UPD | IM_RD | CVG_DST_SAVE | ZMODE_OPA | FORCE_BL |
                             GBL_c1(G_BL_CLR_BL, G_BL_0, G_BL_CLR_MEM, G_BL_1MA) |
                             GBL_c2(G_BL_CLR_BL, G_BL_0, G_BL_CLR_MEM, G_BL_1MA));
 
-        gDPSetPrimColor(tmp++, 0, 0, 0, 0, 0, 255);
+        gDPSetPrimColor(gfx++, 0, 0, 0, 0, 0, 255);
 
-        if (play->roomCtx.curRoom.unk5 == 0) {
-            gDPSetCombineLERP(tmp++, 1, TEXEL0, PRIMITIVE, 0, 1, TEXEL0, PRIMITIVE, 0, 1, TEXEL0, PRIMITIVE, 0, 1,
+        if (play->roomCtx.curRoom.lensMode == LENS_MODE_HIDE_ACTORS) {
+            gDPSetCombineLERP(gfx++, 1, TEXEL0, PRIMITIVE, 0, 1, TEXEL0, PRIMITIVE, 0, 1, TEXEL0, PRIMITIVE, 0, 1,
                               TEXEL0, PRIMITIVE, 0);
         } else {
-            gDPSetCombineMode(tmp++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
+            gDPSetCombineMode(gfx++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
         }
 
-        spAC = tmp;
-        Actor_DrawLensOverlay(&spAC, play->actorCtx.lensMaskSize);
-        tmp = Play_SetFog(play, spAC);
+        gfxTemp = gfx;
+        Actor_DrawLensOverlay(&gfxTemp, play->actorCtx.lensMaskSize);
+        gfx = Play_SetFog(play, gfxTemp);
 
-        for (spB4 = 0, invisibleActor = invisibleActors; spB4 < numInvisibleActors; spB4++, invisibleActor++) {
-            POLY_XLU_DISP = tmp;
-            Actor_Draw(play, *invisibleActor);
-            tmp = POLY_XLU_DISP;
+        for (i = 0, lensActor = lensActors; i < numLensActors; i++, lensActor++) {
+            POLY_XLU_DISP = gfx;
+            Actor_Draw(play, *lensActor);
+            gfx = POLY_XLU_DISP;
         }
 
         if (dbgVar2) {
-            gDPPipeSync(tmp++);
+            gDPPipeSync(gfx++);
 
-            gDPSetOtherMode(tmp++,
+            gDPSetOtherMode(gfx++,
                             G_AD_DISABLE | G_CD_DISABLE | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
                                 G_TD_CLAMP | G_TP_NONE | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
                             G_AC_THRESHOLD | G_ZS_PRIM | AA_EN | IM_RD | CVG_DST_WRAP | ZMODE_OPA | CVG_X_ALPHA |
                                 ALPHA_CVG_SEL | FORCE_BL | GBL_c1(G_BL_CLR_IN, G_BL_0, G_BL_CLR_MEM, G_BL_1) |
                                 GBL_c2(G_BL_CLR_IN, G_BL_0, G_BL_CLR_MEM, G_BL_1));
 
-            gDPSetBlendColor(tmp++, 255, 255, 255, 0);
-            gDPSetPrimColor(tmp++, 0, 0xFF, 0, 0, 0, 32);
+            gDPSetBlendColor(gfx++, 255, 255, 255, 0);
+            gDPSetPrimColor(gfx++, 0, 0xFF, 0, 0, 0, 32);
 
-            if (play->roomCtx.curRoom.unk5 == 0) {
-                gDPSetCombineMode(tmp++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
+            if (play->roomCtx.curRoom.lensMode == LENS_MODE_HIDE_ACTORS) {
+                gDPSetCombineMode(gfx++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
             } else {
-                gDPSetCombineLERP(tmp++, 1, TEXEL0, PRIMITIVE, 0, 1, TEXEL0, PRIMITIVE, 0, 1, TEXEL0, PRIMITIVE, 0, 1,
+                gDPSetCombineLERP(gfx++, 1, TEXEL0, PRIMITIVE, 0, 1, TEXEL0, PRIMITIVE, 0, 1, TEXEL0, PRIMITIVE, 0, 1,
                                   TEXEL0, PRIMITIVE, 0);
             }
 
-            gDPSetColorImage(tmp++, G_IM_FMT_RGBA, G_IM_SIZ_16b, play->pauseBgPreRender.width, spA4);
+            gDPSetColorImage(gfx++, G_IM_FMT_RGBA, G_IM_SIZ_16b, play->pauseBgPreRender.width, spA4);
 
-            spAC = tmp;
-            Actor_DrawLensOverlay(&spAC, play->actorCtx.lensMaskSize);
-            tmp = spAC;
+            gfxTemp = gfx;
+            Actor_DrawLensOverlay(&gfxTemp, play->actorCtx.lensMaskSize);
+            gfx = gfxTemp;
 
-            gDPPipeSync(tmp++);
-            gDPSetBlendColor(tmp++, 255, 255, 255, 8);
+            gDPPipeSync(gfx++);
+            gDPSetBlendColor(gfx++, 255, 255, 255, 8);
 
-            gDPSetColorImage(tmp++, G_IM_FMT_RGBA, G_IM_SIZ_16b, play->pauseBgPreRender.width,
+            gDPSetColorImage(gfx++, G_IM_FMT_RGBA, G_IM_SIZ_16b, play->pauseBgPreRender.width,
                              play->pauseBgPreRender.fbuf);
 
-            spAC = tmp;
-            func_8016FDB8(&play->pauseBgPreRender, &spAC, (void*)spA4, spA8, 1);
-            tmp = spAC;
+            gfxTemp = gfx;
+            func_8016FDB8(&play->pauseBgPreRender, &gfxTemp, spA4, zbuffer, 1);
+            gfx = gfxTemp;
         }
 
-        POLY_XLU_DISP = tmp;
+        POLY_XLU_DISP = gfx;
     }
 
-    tmp = OVERLAY_DISP;
+    gfx = OVERLAY_DISP;
 
-    gDPPipeSync(tmp++);
+    gDPPipeSync(gfx++);
 
-    gDPSetOtherMode(tmp++,
+    gDPSetOtherMode(gfx++,
                     G_AD_DISABLE | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
                         G_TD_CLAMP | G_TP_NONE | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
                     G_AC_THRESHOLD | G_ZS_PRIM | G_RM_CLD_SURF | G_RM_CLD_SURF2);
 
-    gDPSetCombineLERP(tmp++, 1, TEXEL0, PRIMITIVE, 0, 1, TEXEL0, PRIMITIVE, 0, 1, TEXEL0, PRIMITIVE, 0, 1, TEXEL0,
+    gDPSetCombineLERP(gfx++, 1, TEXEL0, PRIMITIVE, 0, 1, TEXEL0, PRIMITIVE, 0, 1, TEXEL0, PRIMITIVE, 0, 1, TEXEL0,
                       PRIMITIVE, 0);
-    gDPSetPrimColor(tmp++, 0, 0, 74, 0, 0, 74);
+    gDPSetPrimColor(gfx++, 0, 0, 74, 0, 0, 74);
 
-    spAC = tmp;
-    Actor_DrawLensOverlay(&spAC, play->actorCtx.lensMaskSize);
-    OVERLAY_DISP = spAC;
+    gfxTemp = gfx;
+    Actor_DrawLensOverlay(&gfxTemp, play->actorCtx.lensMaskSize);
+    OVERLAY_DISP = gfxTemp;
 
     CLOSE_DISPS(gfxCtx);
 }
@@ -2817,7 +2818,7 @@ void Actor_DrawAll(PlayState* play, ActorContext* actorCtx) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    Actor_DrawAllSetup(play);
+    Actor_ResetLensActors(play);
 
     sp58 = POLY_XLU_DISP;
     POLY_XLU_DISP = &sp58[1];
@@ -2841,10 +2842,11 @@ void Actor_DrawAll(PlayState* play, ActorContext* actorCtx) {
 
             actor->isDrawn = false;
             if ((actor->init == NULL) && (actor->draw != NULL) && (actor->flags & actorFlags)) {
-                if ((actor->flags & ACTOR_FLAG_80) &&
-                    ((play->roomCtx.curRoom.unk5 == 0) || (play->actorCtx.lensMaskSize == LENS_MASK_ACTIVE_SIZE) ||
+                if ((actor->flags & ACTOR_FLAG_REACT_TO_LENS) &&
+                    ((play->roomCtx.curRoom.lensMode == LENS_MODE_HIDE_ACTORS) ||
+                     (play->actorCtx.lensMaskSize == LENS_MASK_ACTIVE_SIZE) ||
                      (actor->room != play->roomCtx.curRoom.num))) {
-                    if (Actor_RecordUndrawnActor(play, actor)) {}
+                    if (Actor_AddToLensActors(play, actor)) {}
                 } else {
                     Actor_Draw(play, actor);
                 }
@@ -2870,9 +2872,10 @@ void Actor_DrawAll(PlayState* play, ActorContext* actorCtx) {
     } else {
         Math_StepToC(&play->actorCtx.lensMaskSize, 0, 10);
     }
+
     if (play->actorCtx.lensMaskSize != 0) {
         play->actorCtx.lensActorsDrawn = true;
-        Actor_DrawLensActors(play, play->actorCtx.undrawnActorCount, play->actorCtx.undrawnActors);
+        Actor_DrawLensActors(play, play->actorCtx.numLensActors, play->actorCtx.lensActors);
     }
 
     tmp2 = POLY_XLU_DISP;
