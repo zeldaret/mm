@@ -592,9 +592,7 @@ void Sram_ResetSave(void) {
     gSaveContext.save.hasTatl = false;
     gSaveContext.save.isOwlSave = false;
 
-    // Instead of bloating all save context accesses with an extra sub-struct, the size of the would-be sub-struct
-    // is calculated manually
-    bzero(&gSaveContext.save.playerData, sizeof(Save) - offsetof(Save, playerData));
+    bzero(&gSaveContext.save.saveInfo, sizeof(SaveInfo));
 }
 
 /**

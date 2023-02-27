@@ -252,6 +252,47 @@ typedef struct SavePlayerData {
     /* 0x26 */ s16 savedSceneId;                      // "scene_data_ID"
 } SavePlayerData; // size = 0x28
 
+typedef struct SaveInfo {
+    /* 0x000 */ SavePlayerData playerData;
+    /* 0x028 */ ItemEquips equips;
+    /* 0x04C */ Inventory inventory;
+    /* 0x0D4 */ PermanentSceneFlags permanentSceneFlags[120];
+    /* 0xDF4 */ u8 unk_E18[0x54];
+    /* 0xE48 */ u32 dekuPlaygroundHighScores[3];
+    /* 0xE54 */ u32 pictoFlags0;                       // Flags set by `PictoActor`s if pictograph is valid
+    /* 0xE58 */ u32 pictoFlags1;                       // Flags set by Snap_ValidatePictograph() to record errors; volatile since that function is run many times in succession
+    /* 0xE5C */ u32 unk_E80;
+    /* 0xE60 */ u32 unk_E84;
+    /* 0xE64 */ u32 unk_E88[7];                        // Invadepoh flags
+    /* 0xE80 */ u32 scenesVisible[7];                  // tingle maps and clouded regions on pause map. Stores scenes bitwise for up to 224 scenes even though there are not that many scenes
+    /* 0xE9C */ u32 skullTokenCount;                   // upper 16 bits store Swamp skulls, lower 16 bits store Ocean skulls
+    /* 0xEA0 */ u32 unk_EC4;                           // Gossic stone heart piece flags
+    /* 0xEA4 */ u32 unk_EC8;
+    /* 0xEA8 */ u32 unk_ECC[2];                        // Related to blue warps
+    /* 0xEB0 */ u32 stolenItems;                       // Items stolen by Takkuri and given to Curiosity Shop Man
+    /* 0xEB4 */ u32 unk_DD8;
+    /* 0xEB8 */ u32 bankRupees;
+    /* 0xEBC */ u32 unk_EE0;
+    /* 0xEC0 */ u32 unk_EE4;                           // Fishing flags
+    /* 0xEC4 */ u32 unk_EE8;
+    /* 0xEC8 */ u32 horseBackBalloonHighScore;
+    /* 0xECC */ u32 lotteryCodeGuess;                  // Lottery code chosen by player (only uses lower three hex digits)
+    /* 0xED0 */ u32 shootingGalleryHighScores;         // High scores for both shooting galleries. Town uses lower 16 bits, Swamp uses higher 16 bits.
+    /* 0xED4 */ u8 weekEventReg[100];                  // "week_event_reg"
+    /* 0xF38 */ u32 regionsVisited;                    // "area_arrival"
+    /* 0xF3C */ u32 worldMapCloudVisibility;           // "cloud_clear"
+    /* 0xF40 */ u8 unk_F64;                            // "oca_rec_flag"                   has scarecrows song
+    /* 0xF41 */ u8 unk_F65;                            // "oca_rec_flag8"                  scarecrows song set?
+    /* 0xF42 */ u8 scarecrowSpawnSong[128];
+    /* 0xFC2 */ s8 bombersCaughtNum;                   // "aikotoba_index"
+    /* 0xFC3 */ s8 bombersCaughtOrder[5];              // "aikotoba_table"
+    /* 0xFC8 */ s8 lotteryCodes[3][3];                 // "numbers_table", Preset lottery codes
+    /* 0xFD1 */ s8 spiderHouseMaskOrder[6];            // "kinsta_color_table"
+    /* 0xFD7 */ s8 bomberCode[5];                      // "bombers_aikotoba_table"
+    /* 0xFDC */ HorseData horseData;
+    /* 0xFE6 */ u16 checksum;                          // "check_sum"
+} SaveInfo; // size = 0xFE8
+
 typedef struct Save {
     /* 0x0000 */ s32 entrance;                          // "scene_no"
     /* 0x0004 */ u8 equippedMask;                       // "player_mask"
@@ -269,44 +310,7 @@ typedef struct Save {
     /* 0x0021 */ u8 snowheadCleared;                    // "spring_flag"
     /* 0x0022 */ u8 hasTatl;                            // "bell_flag"
     /* 0x0023 */ u8 isOwlSave;
-    /* 0x0024 */ SavePlayerData playerData;
-    /* 0x004C */ ItemEquips equips;
-    /* 0x0070 */ Inventory inventory;
-    /* 0x00F8 */ PermanentSceneFlags permanentSceneFlags[120];
-    /* 0x0E18 */ u8 unk_E18[0x54];
-    /* 0x0E6C */ u32 dekuPlaygroundHighScores[3];
-    /* 0x0E78 */ u32 pictoFlags0;                       // Flags set by `PictoActor`s if pictograph is valid
-    /* 0x0E7C */ u32 pictoFlags1;                       // Flags set by Snap_ValidatePictograph() to record errors; volatile since that function is run many times in succession
-    /* 0x0E80 */ u32 unk_E80;
-    /* 0x0E84 */ u32 unk_E84;
-    /* 0x0E88 */ u32 unk_E88[7];                        // Invadepoh flags
-    /* 0x0EA4 */ u32 scenesVisible[7];                  // tingle maps and clouded regions on pause map. Stores scenes bitwise for up to 224 scenes even though there are not that many scenes
-    /* 0x0EC0 */ u32 skullTokenCount;                   // upper 16 bits store Swamp skulls, lower 16 bits store Ocean skulls
-    /* 0x0EC4 */ u32 unk_EC4;                           // Gossic stone heart piece flags
-    /* 0x0EC8 */ u32 unk_EC8;
-    /* 0x0ECC */ u32 unk_ECC[2];                        // Related to blue warps
-    /* 0x0ED4 */ u32 stolenItems;                       // Items stolen by Takkuri and given to Curiosity Shop Man
-    /* 0x0ED8 */ u32 unk_DD8;
-    /* 0x0EDC */ u32 bankRupees;
-    /* 0x0EE0 */ u32 unk_EE0;
-    /* 0x0EE4 */ u32 unk_EE4;                           // Fishing flags
-    /* 0x0EE8 */ u32 unk_EE8;
-    /* 0x0EEC */ u32 horseBackBalloonHighScore;
-    /* 0x0EF0 */ u32 lotteryCodeGuess;                  // Lottery code chosen by player (only uses lower three hex digits)
-    /* 0x0EF4 */ u32 shootingGalleryHighScores;         // High scores for both shooting galleries. Town uses lower 16 bits, Swamp uses higher 16 bits.
-    /* 0x0EF8 */ u8 weekEventReg[100];                  // "week_event_reg"
-    /* 0x0F5C */ u32 regionsVisited;                    // "area_arrival"
-    /* 0x0F60 */ u32 worldMapCloudVisibility;           // "cloud_clear"
-    /* 0x0F64 */ u8 unk_F64;                            // "oca_rec_flag"                   has scarecrows song
-    /* 0x0F65 */ u8 unk_F65;                            // "oca_rec_flag8"                  scarecrows song set?
-    /* 0x0F66 */ u8 scarecrowSpawnSong[128];
-    /* 0x0FE6 */ s8 bombersCaughtNum;                   // "aikotoba_index"
-    /* 0x0FE7 */ s8 bombersCaughtOrder[5];              // "aikotoba_table"
-    /* 0x0FEC */ s8 lotteryCodes[3][3];                 // "numbers_table", Preset lottery codes
-    /* 0x0FF5 */ s8 spiderHouseMaskOrder[6];            // "kinsta_color_table"
-    /* 0x0FFB */ s8 bomberCode[5];                      // "bombers_aikotoba_table"
-    /* 0x1000 */ HorseData horseData;
-    /* 0x100A */ u16 checksum;                          // "check_sum"
+    /* 0x0024 */ SaveInfo saveInfo;
 } Save; // size = 0x100C
 
 typedef struct SaveContext {
