@@ -21,8 +21,8 @@ void EffFootmark_Init(PlayState* play) {
     }
 }
 
-void EffFootmark_Add(PlayState* play, MtxF* mf, Actor* actor, u8 id, Vec3f* pos, u16 size, u8 red,
-                     u8 green, u8 blue, u16 alpha, u16 alphaChange, u16 fadeOutDelay) {
+void EffFootmark_Add(PlayState* play, MtxF* mf, Actor* actor, u8 id, Vec3f* pos, u16 size, u8 red, u8 green, u8 blue,
+                     u16 alpha, u16 alphaChange, u16 fadeOutDelay) {
     s32 i;
     EffFootmark* footmark;
     EffFootmark* destination = NULL;
