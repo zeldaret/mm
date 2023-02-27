@@ -44,7 +44,7 @@ void func_800F4A10(PlayState* play) {
 
     if (pauseCtx->state == PAUSE_STATE_OPENING_0) {
         for (i = 0; i < REGION_MAX; i++) {
-            if ((gSaveContext.save.regionsVisited >> i) & 1) {
+            if ((gSaveContext.save.saveInfo.regionsVisited >> i) & 1) {
                 pauseCtx->worldMapPoints[i] = true;
             }
         }

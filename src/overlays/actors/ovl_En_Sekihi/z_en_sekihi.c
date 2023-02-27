@@ -59,7 +59,7 @@ void EnSekihi_Init(Actor* thisx, PlayState* play) {
         return;
     }
 
-    if ((params == SEKIHI_TYPE_4) && (((gSaveContext.save.skullTokenCount & 0xFFFF)) >= 30)) {
+    if ((params == SEKIHI_TYPE_4) && (((gSaveContext.save.saveInfo.skullTokenCount & 0xFFFF)) >= 30)) {
         SET_WEEKEVENTREG(WEEKEVENTREG_13_20);
     }
 

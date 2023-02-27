@@ -642,7 +642,7 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
     // Draw clouds over the world map
     // Iterate over cloud bits (n)
     for (n = 0; n < 15; n++) {
-        if (!(((void)0, gSaveContext.save.worldMapCloudVisibility) & gBitFlags[n])) {
+        if (!(((void)0, gSaveContext.save.saveInfo.worldMapCloudVisibility) & gBitFlags[n])) {
 
             gSPVertex(POLY_OPA_DISP++, &pauseCtx->mapPageVtx[60 + n * 4], 4, 0);
 
@@ -674,7 +674,7 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
                        sWorldMapDotEnvColors[0][2], 0);
 
         if (R_PAUSE_DBG_MAP_CLOUD_ON) {
-            gSaveContext.save.worldMapCloudVisibility |= (u16)~0x8000;
+            gSaveContext.save.saveInfo.worldMapCloudVisibility |= (u16)~0x8000;
 
             pauseCtx->mapPageVtx[120].v.ob[0] = pauseCtx->mapPageVtx[122].v.ob[0] = R_PAUSE_DBG_MAP_CLOUD_X;
 
@@ -706,7 +706,7 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, pauseCtx->alpha);
 
         if (R_PAUSE_DBG_MAP_CLOUD_ON) {
-            gSaveContext.save.worldMapCloudVisibility |= (u16)~0x8000;
+            gSaveContext.save.saveInfo.worldMapCloudVisibility |= (u16)~0x8000;
 
             pauseCtx->mapPageVtx[164].v.ob[0] = pauseCtx->mapPageVtx[166].v.ob[0] = R_PAUSE_DBG_MAP_CLOUD_X;
 

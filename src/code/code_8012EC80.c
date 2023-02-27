@@ -543,7 +543,7 @@ s32 Inventory_IsMapVisible(s16 sceneId) {
         }
     }
 
-    if (gSaveContext.save.scenesVisible[index] & gBitFlags[sceneId - (index << 5)]) {
+    if (gSaveContext.save.saveInfo.scenesVisible[index] & gBitFlags[sceneId - (index << 5)]) {
         return true;
     }
 
@@ -656,23 +656,23 @@ void Inventory_SetWorldMapCloudVisibility(s16 tingleIndex) {
                 index = 6;
             }
 
-            gSaveContext.save.scenesVisible[index] =
-                gSaveContext.save.scenesVisible[index] | gBitFlags[(s16)(*tingleMapSceneIds)[i] - (index << 5)];
+            gSaveContext.save.saveInfo.scenesVisible[index] =
+                gSaveContext.save.saveInfo.scenesVisible[index] | gBitFlags[(s16)(*tingleMapSceneIds)[i] - (index << 5)];
             i++;
         }
 
         if (*tingleMapSceneIds == sSceneIdsPerTingleMap[TINGLE_MAP_CLOCK_TOWN]) {
-            gSaveContext.save.worldMapCloudVisibility |= 3;
+            gSaveContext.save.saveInfo.worldMapCloudVisibility |= 3;
         } else if (*tingleMapSceneIds == sSceneIdsPerTingleMap[TINGLE_MAP_WOODFALL]) {
-            gSaveContext.save.worldMapCloudVisibility |= 0x1C;
+            gSaveContext.save.saveInfo.worldMapCloudVisibility |= 0x1C;
         } else if (*tingleMapSceneIds == sSceneIdsPerTingleMap[TINGLE_MAP_SNOWHEAD]) {
-            gSaveContext.save.worldMapCloudVisibility |= 0xE0;
+            gSaveContext.save.saveInfo.worldMapCloudVisibility |= 0xE0;
         } else if (*tingleMapSceneIds == sSceneIdsPerTingleMap[TINGLE_MAP_ROMANI_RANCH]) {
-            gSaveContext.save.worldMapCloudVisibility |= 0x100;
+            gSaveContext.save.saveInfo.worldMapCloudVisibility |= 0x100;
         } else if (*tingleMapSceneIds == sSceneIdsPerTingleMap[TINGLE_MAP_GREAT_BAY]) {
-            gSaveContext.save.worldMapCloudVisibility |= 0x1E00;
+            gSaveContext.save.saveInfo.worldMapCloudVisibility |= 0x1E00;
         } else if (*tingleMapSceneIds == sSceneIdsPerTingleMap[TINGLE_MAP_STONE_TOWER]) {
-            gSaveContext.save.worldMapCloudVisibility |= 0x6000;
+            gSaveContext.save.saveInfo.worldMapCloudVisibility |= 0x6000;
         }
     }
 
@@ -696,23 +696,23 @@ void Inventory_SaveDekuPlaygroundHighScore(s16 timerId) {
 void Inventory_IncrementSkullTokenCount(s16 sceneIndex) {
     if (sceneIndex == SCENE_KINSTA1) {
         // Swamp Spider House (increment high bits of skullTokenCount)
-        gSaveContext.save.skullTokenCount =
-            ((u16)(((gSaveContext.save.skullTokenCount & 0xFFFF0000) >> 0x10) + 1) << 0x10) |
-            (gSaveContext.save.skullTokenCount & 0xFFFF);
+        gSaveContext.save.saveInfo.skullTokenCount =
+            ((u16)(((gSaveContext.save.saveInfo.skullTokenCount & 0xFFFF0000) >> 0x10) + 1) << 0x10) |
+            (gSaveContext.save.saveInfo.skullTokenCount & 0xFFFF);
     } else {
         // Ocean Spider House (increment low bits of skullTokenCount)
-        gSaveContext.save.skullTokenCount =
-            (((u16)gSaveContext.save.skullTokenCount + 1) & 0xFFFF) | (gSaveContext.save.skullTokenCount & 0xFFFF0000);
+        gSaveContext.save.saveInfo.skullTokenCount =
+            (((u16)gSaveContext.save.saveInfo.skullTokenCount + 1) & 0xFFFF) | (gSaveContext.save.saveInfo.skullTokenCount & 0xFFFF0000);
     }
 }
 
 s16 Inventory_GetSkullTokenCount(s16 sceneIndex) {
     if (sceneIndex == SCENE_KINSTA1) {
         // Swamp Spider House
-        return (gSaveContext.save.skullTokenCount & 0xFFFF0000) >> 0x10;
+        return (gSaveContext.save.saveInfo.skullTokenCount & 0xFFFF0000) >> 0x10;
     } else {
         // Ocean Spider House
-        return gSaveContext.save.skullTokenCount & 0xFFFF;
+        return gSaveContext.save.saveInfo.skullTokenCount & 0xFFFF;
     }
 }
 
@@ -722,6 +722,6 @@ void Inventory_SaveLotteryCodeGuess(PlayState* play) {
     lotteryCodeGuess = ((play->msgCtx.unk12054[0] & 0xF) << 8);  // First Digit
     lotteryCodeGuess |= ((play->msgCtx.unk12054[1] & 0xF) << 4); // Second Digit
     lotteryCodeGuess |= (play->msgCtx.unk12054[2] & 0xF);        // Third Digit
-    gSaveContext.save.lotteryCodeGuess =
-        (gSaveContext.save.lotteryCodeGuess & 0xFFFF0000) | (lotteryCodeGuess & 0xFFFF);
+    gSaveContext.save.saveInfo.lotteryCodeGuess =
+        (gSaveContext.save.saveInfo.lotteryCodeGuess & 0xFFFF0000) | (lotteryCodeGuess & 0xFFFF);
 }

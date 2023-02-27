@@ -611,13 +611,13 @@ void KaleidoScope_DrawInventoryEditor(PlayState* play) {
     // Lottery
     // Loop over columns (i), (counterDigits[1] stores rectLeft)
     for (counterDigits[1] = 139, i = 0; i < 3; i++) {
-        counterDigits[2] = gSaveContext.save.lotteryCodes[0][i];
+        counterDigits[2] = gSaveContext.save.saveInfo.lotteryCodes[0][i];
 
         KaleidoScope_DrawDigit(play, counterDigits[2], counterDigits[1], 184);
-        counterDigits[2] = gSaveContext.save.lotteryCodes[1][i];
+        counterDigits[2] = gSaveContext.save.saveInfo.lotteryCodes[1][i];
         KaleidoScope_DrawDigit(play, counterDigits[2], counterDigits[1], 198);
 
-        counterDigits[2] = gSaveContext.save.lotteryCodes[2][i];
+        counterDigits[2] = gSaveContext.save.saveInfo.lotteryCodes[2][i];
         KaleidoScope_DrawDigit(play, counterDigits[2], counterDigits[1], 212);
 
         counterDigits[1] += 12;
@@ -626,7 +626,7 @@ void KaleidoScope_DrawInventoryEditor(PlayState* play) {
     // Oceanside Spider House Mask Order
     // Loop over columns (i), (counterDigits[1] stores rectLeft)
     for (counterDigits[1] = 217, i = 0; i < 6; i++) {
-        counterDigits[2] = gSaveContext.save.spiderHouseMaskOrder[i];
+        counterDigits[2] = gSaveContext.save.saveInfo.spiderHouseMaskOrder[i];
         KaleidoScope_DrawDigit(play, counterDigits[2], counterDigits[1], 186);
 
         counterDigits[1] += 12;
@@ -635,7 +635,7 @@ void KaleidoScope_DrawInventoryEditor(PlayState* play) {
     // Bombers code
     // Loop over columns (i), (counterDigits[1] stores rectLeft)
     for (counterDigits[1] = 220, i = 0; i < 5; i++) {
-        counterDigits[2] = gSaveContext.save.bomberCode[i];
+        counterDigits[2] = gSaveContext.save.saveInfo.bomberCode[i];
         KaleidoScope_DrawDigit(play, counterDigits[2], counterDigits[1], 210);
 
         counterDigits[1] += 12;
@@ -974,29 +974,29 @@ void KaleidoScope_UpdateInventoryEditor(PlayState* play) {
             } else if (sCurSection == INV_EDITOR_SECTION_SWAMP_GOLD_SKULLS) {
                 // Gold Skulls (Swamp Spider House)
                 if (CHECK_BTN_ALL(input->press.button, BTN_CUP) || CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
-                    if (((gSaveContext.save.skullTokenCount & 0xFFFF0000) >> 0x10) != 0) {
-                        gSaveContext.save.skullTokenCount =
-                            ((u16)(((gSaveContext.save.skullTokenCount & 0xFFFF0000) >> 0x10) - 1) << 0x10) |
-                            (gSaveContext.save.skullTokenCount & 0xFFFF);
+                    if (((gSaveContext.save.saveInfo.skullTokenCount & 0xFFFF0000) >> 0x10) != 0) {
+                        gSaveContext.save.saveInfo.skullTokenCount =
+                            ((u16)(((gSaveContext.save.saveInfo.skullTokenCount & 0xFFFF0000) >> 0x10) - 1) << 0x10) |
+                            (gSaveContext.save.saveInfo.skullTokenCount & 0xFFFF);
                     }
                 } else if (CHECK_BTN_ALL(input->press.button, BTN_CDOWN) ||
                            CHECK_BTN_ALL(input->press.button, BTN_CRIGHT)) {
-                    gSaveContext.save.skullTokenCount =
-                        ((u16)(((gSaveContext.save.skullTokenCount & 0xFFFF0000) >> 0x10) + 1) << 0x10) |
-                        (gSaveContext.save.skullTokenCount & 0xFFFF);
+                    gSaveContext.save.saveInfo.skullTokenCount =
+                        ((u16)(((gSaveContext.save.saveInfo.skullTokenCount & 0xFFFF0000) >> 0x10) + 1) << 0x10) |
+                        (gSaveContext.save.saveInfo.skullTokenCount & 0xFFFF);
                 }
 
             } else if (sCurSection == INV_EDITOR_SECTION_OCEAN_GOLD_SKULLS) {
                 // Gold Skulls (Oceans Spider House)
                 if (CHECK_BTN_ALL(input->press.button, BTN_CUP) || CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
-                    if (((u16)gSaveContext.save.skullTokenCount) != 0) {
-                        gSaveContext.save.skullTokenCount = (((u16)gSaveContext.save.skullTokenCount - 1) & 0xFFFF) |
-                                                            (gSaveContext.save.skullTokenCount & 0xFFFF0000);
+                    if (((u16)gSaveContext.save.saveInfo.skullTokenCount) != 0) {
+                        gSaveContext.save.saveInfo.skullTokenCount = (((u16)gSaveContext.save.saveInfo.skullTokenCount - 1) & 0xFFFF) |
+                                                            (gSaveContext.save.saveInfo.skullTokenCount & 0xFFFF0000);
                     }
                 } else if (CHECK_BTN_ALL(input->press.button, BTN_CDOWN) ||
                            CHECK_BTN_ALL(input->press.button, BTN_CRIGHT)) {
-                    gSaveContext.save.skullTokenCount = (((u16)gSaveContext.save.skullTokenCount + 1) & 0xFFFF) |
-                                                        (gSaveContext.save.skullTokenCount & 0xFFFF0000);
+                    gSaveContext.save.saveInfo.skullTokenCount = (((u16)gSaveContext.save.saveInfo.skullTokenCount + 1) & 0xFFFF) |
+                                                        (gSaveContext.save.saveInfo.skullTokenCount & 0xFFFF0000);
                 }
 
             } else if (sCurSection == INV_EDITOR_SECTION_NOTEBOOK) {

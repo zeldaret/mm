@@ -519,8 +519,8 @@ void Scene_HeaderCmdSetRegionVisitedFlag(PlayState* play, SceneCmd* cmd) {
     }
 
     if (i < REGION_MAX) {
-        gSaveContext.save.regionsVisited =
-            (gBitFlags[i] | gSaveContext.save.regionsVisited) | gSaveContext.save.regionsVisited;
+        gSaveContext.save.saveInfo.regionsVisited =
+            (gBitFlags[i] | gSaveContext.save.saveInfo.regionsVisited) | gSaveContext.save.saveInfo.regionsVisited;
     }
 }
 

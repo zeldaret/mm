@@ -18,8 +18,8 @@ s32 Snap_RecordPictographedActors(PlayState* play) {
     s32 seen;
     s32 validCount = 0;
 
-    gSaveContext.save.pictoFlags0 = 0;
-    gSaveContext.save.pictoFlags1 = 0;
+    gSaveContext.save.saveInfo.pictoFlags0 = 0;
+    gSaveContext.save.saveInfo.pictoFlags1 = 0;
 
     if (play->sceneId == SCENE_20SICHITAI) {
         Snap_SetFlag(PICTO_VALID_IN_SWAMP);
@@ -92,20 +92,20 @@ s32 Snap_RecordPictographedActors(PlayState* play) {
 // Only used in this file
 void Snap_SetFlag(s32 flag) {
     if (flag < 0x20) {
-        gSaveContext.save.pictoFlags0 |= (1 << flag);
+        gSaveContext.save.saveInfo.pictoFlags0 |= (1 << flag);
     } else {
         flag &= 0x1F;
-        gSaveContext.save.pictoFlags1 |= (1 << flag);
+        gSaveContext.save.saveInfo.pictoFlags1 |= (1 << flag);
     }
 }
 
 // Unused
 void Snap_UnsetFlag(s32 flag) {
     if (flag < 0x20) {
-        gSaveContext.save.pictoFlags0 &= ~(1 << flag);
+        gSaveContext.save.saveInfo.pictoFlags0 &= ~(1 << flag);
     } else {
         flag &= 0x1F;
-        gSaveContext.save.pictoFlags1 &= ~(1 << flag);
+        gSaveContext.save.saveInfo.pictoFlags1 &= ~(1 << flag);
     }
 }
 
@@ -113,10 +113,10 @@ u32 Snap_CheckFlag(s32 flag) {
     SaveContext* saveCtx = &gSaveContext;
 
     if (flag < 0x20) {
-        return saveCtx->save.pictoFlags0 & (1 << flag);
+        return saveCtx->save.saveInfo.pictoFlags0 & (1 << flag);
     } else {
         flag &= 0x1F;
-        return saveCtx->save.pictoFlags1 & (1 << flag);
+        return saveCtx->save.saveInfo.pictoFlags1 & (1 << flag);
     }
 }
 

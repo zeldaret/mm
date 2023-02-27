@@ -125,7 +125,7 @@ void EnSth_Init(Actor* thisx, PlayState* play) {
             break;
 
         case ENSTH_F_3:
-            if ((gSaveContext.save.skullTokenCount & 0xFFFF) >= 30) {
+            if ((gSaveContext.save.saveInfo.skullTokenCount & 0xFFFF) >= 30) {
                 Actor_Kill(&this->actor);
                 return;
             }
