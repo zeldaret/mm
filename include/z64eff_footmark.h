@@ -8,7 +8,7 @@ struct PlayState;
 struct Actor;
 
 typedef struct EffFootmark {
-    /* 0x00 */ MtxF displayMatrix;
+    /* 0x00 */ MtxF mf;
     /* 0x40 */ struct Actor* actor;
     /* 0x44 */ Vec3f pos;
     /* 0x50 */ u8 flags; // bit 0 - footmark fades out
@@ -26,7 +26,7 @@ typedef struct EffFootmark {
 #define FOOTMARK_FLAG_1 (1 << 0)
 
 void EffFootmark_Init(struct PlayState* play);
-void EffFootmark_Add(struct PlayState* play, MtxF* displayMatrix, struct Actor* actor, u8 id, Vec3f* pos, u16 size, u8 red, u8 green, u8 blue, u16 alpha, u16 alphaChange, u16 fadeOutDelay);
+void EffFootmark_Add(struct PlayState* play, MtxF* mf, struct Actor* actor, u8 id, Vec3f* pos, u16 size, u8 red, u8 green, u8 blue, u16 alpha, u16 alphaChange, u16 fadeOutDelay);
 void EffFootmark_Update(struct PlayState* play);
 void EffFootmark_Draw(struct PlayState* play);
 

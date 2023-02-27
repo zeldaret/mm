@@ -21,7 +21,7 @@ void EffFootmark_Init(PlayState* play) {
     }
 }
 
-void EffFootmark_Add(PlayState* play, MtxF* displayMatrix, Actor* actor, u8 id, Vec3f* pos, u16 size, u8 red,
+void EffFootmark_Add(PlayState* play, MtxF* mf, Actor* actor, u8 id, Vec3f* pos, u16 size, u8 red,
                      u8 green, u8 blue, u16 alpha, u16 alphaChange, u16 fadeOutDelay) {
     s32 i;
     EffFootmark* footmark;
@@ -55,7 +55,7 @@ void EffFootmark_Add(PlayState* play, MtxF* displayMatrix, Actor* actor, u8 id, 
         if (destination == NULL) {
             destination = oldest;
         }
-        Matrix_MtxFCopy(&destination->displayMatrix, displayMatrix);
+        Matrix_MtxFCopy(&destination->mf, mf);
         destination->actor = actor;
         destination->pos.x = pos->x;
         destination->pos.y = pos->y;
@@ -111,7 +111,7 @@ void EffFootmark_Draw(PlayState* play) {
 
     for (footmark = play->footprintInfo, i = 0; i < ARRAY_COUNT(play->footprintInfo); i++, footmark++) {
         if (footmark->actor != NULL) {
-            Matrix_Put(&footmark->displayMatrix);
+            Matrix_Put(&footmark->mf);
             Matrix_Scale(footmark->size * (1.0f / 0x100) * 0.7f, 1, footmark->size * (1.0f / 0x100), MTXMODE_APPLY);
 
             gSPMatrix(gfxCtx->polyXlu.p++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD);
