@@ -1,10 +1,10 @@
 ﻿<Root>
     <File Name="object_fb" Segment="6">
-        <Animation Name="object_fb_Anim_0006D8" Offset="0x6D8" />
-        <Animation Name="object_fb_Anim_0007D4" Offset="0x7D4" />
-        <Animation Name="object_fb_Anim_000ACC" Offset="0xACC" />
-        <Animation Name="object_fb_Anim_001174" Offset="0x1174" />
-        <Animation Name="object_fb_Anim_0013AC" Offset="0x13AC" />
+        <Animation Name="object_fb_Anim_0006D8" Offset="0x6D8" /> <!-- Original name is "fb_eat" -->
+        <Animation Name="object_fb_Anim_0007D4" Offset="0x7D4" /> <!-- Original name is "fb_fastswim" -->
+        <Animation Name="object_fb_Anim_000ACC" Offset="0xACC" /> <!-- Original name is "fb_neweat" -->
+        <Animation Name="object_fb_Anim_001174" Offset="0x1174" /> <!-- Original name is "fb_spitout" -->
+        <Animation Name="object_fb_Anim_0013AC" Offset="0x13AC" /> <!-- Original name is "fb_swim" -->
         <DList Name="object_fb_DL_002000" Offset="0x2000" />
         <DList Name="object_fb_DL_002088" Offset="0x2088" />
         <DList Name="object_fb_DL_002110" Offset="0x2110" />
