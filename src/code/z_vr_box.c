@@ -191,7 +191,7 @@ void Skybox_Setup(GameState* gameState, SkyboxContext* skyboxCtx, s16 skyboxId) 
     skyboxCtx->rotZ = 0.0f;
 
     switch (skyboxId) {
-        case 1:
+        case SKYBOX_NORMAL_SKY:
             // Send a DMA request for the cloudy sky texture
             skyboxCtx->staticSegments[0] = &D_80025D00;
             size = SEGMENT_ROM_SIZE(d2_cloud_static);
@@ -224,7 +224,7 @@ void Skybox_Setup(GameState* gameState, SkyboxContext* skyboxCtx, s16 skyboxId) 
             }
             break;
 
-        case 2:
+        case SKYBOX_2:
             break;
 
         default:
@@ -236,7 +236,7 @@ void func_80143324(PlayState* play, SkyboxContext* skyboxCtx, s16 skyboxId) {
     size_t size;
 
     switch (skyboxId) {
-        case 1:
+        case SKYBOX_NORMAL_SKY:
             osCreateMesgQueue(&skyboxCtx->loadQueue, &skyboxCtx->loadMsg, 1);
 
             if (play->envCtx.skybox1Index == 0) {
@@ -293,10 +293,10 @@ void Skybox_Init(GameState* gameState, SkyboxContext* skyboxCtx, s16 skyboxId) {
 
     Skybox_Setup(gameState, skyboxCtx, skyboxId);
 
-    if (skyboxId != 0) {
+    if (skyboxId != SKYBOX_NONE) {
         skyboxCtx->dListBuf = THA_AllocEndAlign16(&gameState->heap, 0x3840);
 
-        if (skyboxId == 5) {
+        if (skyboxId == SKYBOX_CUTSCENE_MAP) {
             // Allocate enough space for the vertices for a 6 sided skybox (cube)
             skyboxCtx->roomVtx = THA_AllocEndAlign16(&gameState->heap, sizeof(Vtx) * 32 * 6);
             func_80143148(skyboxCtx, 6);

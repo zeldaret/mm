@@ -2068,8 +2068,7 @@ void FileSelect_UpdateAndDrawSkybox(FileSelectState* this) {
     eyeZ = 1000.0f * Math_SinS(sFileSelectSkyboxRotation) + 1000.0f * Math_CosS(sFileSelectSkyboxRotation);
 
     FileSelect_SetView(this, eyeX, eyeY, eyeZ);
-    SkyboxDraw_Draw(&this->skyboxCtx, this->state.gfxCtx, SKYBOX_NORMAL_SKY, this->envCtx.skyboxBlend, eyeX, eyeY,
-                    eyeZ);
+    Skybox_Draw(&this->skyboxCtx, this->state.gfxCtx, SKYBOX_NORMAL_SKY, this->envCtx.skyboxBlend, eyeX, eyeY, eyeZ);
 
     gDPSetTextureLUT(POLY_OPA_DISP++, G_TT_NONE);
 
