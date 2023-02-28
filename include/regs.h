@@ -122,6 +122,8 @@
 #define R_REVERSE_FLOOR_INDEX               XREG(94)
 #define R_MINIMAP_DISABLED                  XREG(95)
 
+#define R_TRANS_FADE_FLASH_ALPHA_STEP     iREG(50) // Set to a negative number to start the flash
+
 #define R_B_LABEL_DD                      WREG(0)
 #define R_OW_MINIMAP_X                    WREG(29)
 #define R_OW_MINIMAP_Y                    WREG(30)

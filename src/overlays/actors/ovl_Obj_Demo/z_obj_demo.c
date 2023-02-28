@@ -1,7 +1,7 @@
 /*
  * File: z_obj_demo.c
  * Overlay: ovl_Obj_Demo
- * Description:
+ * Description: Cutscene triggers when player is in range
  */
 
 #include "z_obj_demo.h"

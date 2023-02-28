@@ -463,7 +463,6 @@ beginseg
     include "build/src/code/z_demo.o"
     include "build/src/code/z_draw.o"
     include "build/src/code/z_eff_footmark.o"
-    include "build/data/code/z_eff_footmark.data.o"
     include "build/src/code/z_sound_source.o"
     include "build/src/code/z_elf_message.o"
     include "build/src/code/z_en_hy_code.o"
@@ -512,7 +511,7 @@ beginseg
     pad_text
     include "build/data/code/code_801C2410.data.o"
     include "build/src/code/z_scene.o"
-    include "build/data/code/code_801C2730.data.o"
+    include "build/src/code/object_table.o"
     include "build/src/code/z_scene_proc.o"
     include "build/src/code/z_scene_table.o"
     include "build/src/code/z_schedule.o"
@@ -548,7 +547,6 @@ beginseg
     include "build/src/code/z_kaleido_scope_call.o"
     include "build/src/code/z_fbdemo_dlftbls.o"
     include "build/src/code/z_fbdemo.o"
-    include "build/data/code/z_fbdemo.data.o"
     include "build/src/code/z_fbdemo_fade.o"
     include "build/src/code/z_fbdemo_circle.o"
     include "build/src/code/z_overlay.o"
@@ -962,8 +960,7 @@ beginseg
     name "ovl_En_Dekubaba"
     compress
     include "build/src/overlays/actors/ovl_En_Dekubaba/z_en_dekubaba.o"
-    include "build/data/ovl_En_Dekubaba/ovl_En_Dekubaba.data.o"
-    include "build/data/ovl_En_Dekubaba/ovl_En_Dekubaba.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Dekubaba/ovl_En_Dekubaba_reloc.o"
 endseg
 
 beginseg
@@ -3428,8 +3425,7 @@ beginseg
     name "ovl_En_Stop_heishi"
     compress
     include "build/src/overlays/actors/ovl_En_Stop_heishi/z_en_stop_heishi.o"
-    include "build/data/ovl_En_Stop_heishi/ovl_En_Stop_heishi.data.o"
-    include "build/data/ovl_En_Stop_heishi/ovl_En_Stop_heishi.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Stop_heishi/ovl_En_Stop_heishi_reloc.o"
 endseg
 
 beginseg
@@ -4023,8 +4019,7 @@ beginseg
     name "ovl_En_Ge2"
     compress
     include "build/src/overlays/actors/ovl_En_Ge2/z_en_ge2.o"
-    include "build/data/ovl_En_Ge2/ovl_En_Ge2.data.o"
-    include "build/data/ovl_En_Ge2/ovl_En_Ge2.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Ge2/ovl_En_Ge2_reloc.o"
 endseg
 
 beginseg

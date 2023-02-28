@@ -1135,7 +1135,7 @@ void func_80B43074(EnKgy* this, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     func_8012C28C(play->state.gfxCtx);
-    func_800B8050(&this->actor, play, MTXMODE_NEW);
+    func_800B8050(&this->actor, play, 0);
     Matrix_Push();
     Matrix_Translate(-800.0f, 3100.0f, 8400.0f, MTXMODE_APPLY);
     Matrix_RotateXS(0x4000, MTXMODE_APPLY);

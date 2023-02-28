@@ -1261,7 +1261,8 @@ void EnWiz_UpdateDamage(EnWiz* this, PlayState* play) {
             // If the player throws a Deku Nut or hits a ghost's collider (something that is impossible
             // in the final game, since EnWiz_Init effectively disables them), then the below code will
             // "destroy" the ghost by turning into a cloud of smoke.
-            if ((iREG(50) != 0) || (this->ghostColliders.elements[i + 1].info.bumperFlags & BUMP_HIT)) {
+            if ((R_TRANS_FADE_FLASH_ALPHA_STEP != 0) ||
+                (this->ghostColliders.elements[i + 1].info.bumperFlags & BUMP_HIT)) {
                 //! @bug: If a single ghost is destroyed, then changing the fight state here will cause
                 //! strange behavior; the ghosts will stand still and pretend to attack the player like
                 //! the real Wizrobe. Since Deku Nuts destroy all ghosts at once, and since the ghost

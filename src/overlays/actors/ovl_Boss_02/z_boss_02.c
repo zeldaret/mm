@@ -1287,17 +1287,17 @@ void Boss02_Static_Update(Actor* thisx, PlayState* play) {
         this->unk_1D74 = KREG(23) + -15.0f;
         D_801F4E30 = 0;
         play->envCtx.lightSettingOverride = 1;
-        play->skyboxId = 1;
+        play->skyboxId = SKYBOX_NORMAL_SKY;
     } else if (!sIsInGiantMode) {
         this->unk_1D74 = 0.0f;
         D_801F4E30 = this->unk_1D7C;
         play->envCtx.lightSettingOverride = 0;
-        play->skyboxId = 2;
+        play->skyboxId = SKYBOX_2;
     } else {
         this->unk_1D74 = KREG(23) + -15.0f;
         D_801F4E30 = ((KREG(24) * 0.1f) + 1.0f) * this->unk_1D7C;
         play->envCtx.lightSettingOverride = 1;
-        play->skyboxId = 1;
+        play->skyboxId = SKYBOX_NORMAL_SKY;
     }
 
     Math_ApproachS(&this->unk_1D7C, this->unk_1D7E, 1, 3);

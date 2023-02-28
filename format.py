@@ -52,7 +52,7 @@ def get_tidy_version(tidy_executable: str):
 
 CLANG_FORMAT = get_clang_executable([f"clang-format-{CLANG_VER}"])
 if CLANG_FORMAT is None:
-    sys.exit(f"Error: clang-format-{CLANG_VER} found")
+    sys.exit(f"Error: clang-format-{CLANG_VER} not found")
 
 CLANG_TIDY = get_clang_executable([f"clang-tidy-{CLANG_VER}", "clang-tidy"])
 if CLANG_TIDY is None:

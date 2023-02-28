@@ -479,9 +479,6 @@ extern EffectShieldParticleInit shieldParticleInitWood;
 
 extern u8 gOpeningEntranceIndex;
 
-// extern UNK_TYPE1 D_801BC210;
-extern Gfx D_801BC240[9];
-extern Gfx D_801BC288[3];
 extern ActorCutscene sGlobalCutsceneList[8];
 extern GameStateOverlay gGameStateOverlayTable[];
 extern s32 graphNumGameStates;
@@ -647,8 +644,11 @@ extern u8 gItemSlots[];
 extern s16 gItemPrices[];
 extern u16 gSceneIdsPerRegion[11][27];
 extern u8 gPlayerFormItemRestrictions[PLAYER_FORM_MAX][114];
-extern s16 gPlayerFormObjectIndices[8];
-extern RomFile gObjectTable[643];
+
+extern s16 gPlayerFormObjectIndices[PLAYER_FORM_MAX];
+extern ObjectId gObjectTableSize;
+extern RomFile gObjectTable[OBJECT_ID_MAX];
+
 extern SceneTableEntry gSceneTable[];
 extern UNK_PTR D_801C5C50;
 // extern UNK_TYPE1 D_801C5C9C;
@@ -797,7 +797,6 @@ extern KaleidoMgrOverlay* gKaleidoMgrCurOvl;
 // extern UNK_TYPE4 D_801D0BB0;
 // extern UNK_TYPE1 D_801D0C80;
 // extern UNK_TYPE1 D_801D0CB0;
-extern Gfx D_801D0D00[];
 extern s32 gDbgCamEnabled;
 // extern UNK_TYPE1 D_801D0D54;
 // extern UNK_TYPE2 sQuakeIndex;
@@ -2472,9 +2471,8 @@ extern FaultAddrConvClient sKaleidoAreaFaultClient;
 
 extern s16 sTransitionFillTimer;
 extern Input D_801F6C18;
-extern FbDemoStruct sTrnsnUnk;
-extern u16* D_801F6D0C;
-extern s32 gTrnsnUnkState;
+extern TransitionTile sTransitionTile;
+extern s32 gTransitionTileState;
 extern VisMono sVisMono;
 extern Color_RGBA8_u32 gVisMonoColor;
 extern Struct_80140E80 D_801F6D38;
