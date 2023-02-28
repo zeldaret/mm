@@ -117,10 +117,10 @@ void func_80AFDE00(EnColMan* this, PlayState* play) {
     if (this->actor.bgCheckFlags & 1) {
         if (this->actor.params == EN_COL_MAN_HEART_PIECE) {
             this->actor.params = EN_COL_MAN_RECOVERY_HEART;
-            this->actor.speedXZ = 2.0f;
+            this->actor.speed = 2.0f;
             this->actor.velocity.y = 8.0f;
         } else {
-            this->actor.speedXZ = 0.0f;
+            this->actor.speed = 0.0f;
         }
     }
     if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_56_02)) {
@@ -164,7 +164,7 @@ void func_80AFDFB4(EnColMan* this, PlayState* play) {
     if ((this->actor.bgCheckFlags & 1) && (this->actor.velocity.y < 0.0f)) {
         if (!this->hasSetRandomValues) {
             this->actor.world.rot.y = randPlusMinusPoint5Scaled(30000.0f);
-            this->actor.speedXZ = 2.0f + BREG(56) + Rand_ZeroFloat(2.0f);
+            this->actor.speed = 2.0f + BREG(56) + Rand_ZeroFloat(2.0f);
             this->actor.velocity.y = 12.0f + BREG(57) + Rand_ZeroFloat(5.0f);
             this->hasSetRandomValues = true;
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_ANSATSUSYA_ROCK);

@@ -1023,14 +1023,14 @@ s32 func_80AF87C4(EnPm* this, PlayState* play) {
             func_80AF7E98(this, 0);
             this->unk_258 = 255;
             this->unk_380 = true;
-            this->actor.speedXZ = 4.0f;
+            this->actor.speed = 4.0f;
             this->actor.gravity = -1.0f;
         }
         ret = true;
     } else if (this->unk_380) {
         this->unk_258 = 0;
         this->unk_380 = false;
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
     }
     return ret;
 }

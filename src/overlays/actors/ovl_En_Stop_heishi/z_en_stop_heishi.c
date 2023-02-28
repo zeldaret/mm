@@ -351,7 +351,7 @@ void func_80AE7E9C(EnStopheishi* this) {
     this->unk_274 = 0;
     this->disableCollider = false;
     this->actionFunc = func_80AE7F34;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
 }
 
 void func_80AE7F34(EnStopheishi* this, PlayState* play) {

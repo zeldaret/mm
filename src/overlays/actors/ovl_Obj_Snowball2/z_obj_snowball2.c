@@ -417,7 +417,7 @@ void func_80B39FA8(ObjSnowball2* this, PlayState* play) {
 
     if (Actor_HasNoParent(&this->actor, play)) {
         this->actor.room = play->roomCtx.curRoom.num;
-        this->actor.speedXZ *= 3.8f;
+        this->actor.speed *= 3.8f;
         this->actor.velocity.y *= 0.4f;
         this->actor.gravity = -2.8f;
         Actor_MoveWithGravity(&this->actor);
@@ -470,7 +470,7 @@ void func_80B3A13C(ObjSnowball2* this, PlayState* play) {
 
     sp30 = false;
     if (this->actor.bgCheckFlags & 0x60) {
-        if ((this->actor.bgCheckFlags & 0x40) || (this->actor.speedXZ > 3.0f)) {
+        if ((this->actor.bgCheckFlags & 0x40) || (this->actor.speed > 3.0f)) {
             if (this->actor.depthInWater < (1200.0f * this->actor.scale.y)) {
                 func_80B39470(&this->actor, play);
                 func_80B395EC(&this->actor, play);
@@ -488,20 +488,20 @@ void func_80B3A13C(ObjSnowball2* this, PlayState* play) {
         this->unk_1AA >>= 1;
 
         if (sp34) {
-            this->actor.speedXZ *= 0.8f;
+            this->actor.speed *= 0.8f;
         } else {
-            this->actor.speedXZ *= 0.65f;
+            this->actor.speed *= 0.65f;
         }
         this->actor.velocity.y *= 0.27f;
         this->actor.gravity *= 0.27f;
-        if (this->actor.speedXZ < 0.4f) {
+        if (this->actor.speed < 0.4f) {
             sp30 = true;
         }
     } else {
         if (sp34) {
-            this->actor.speedXZ *= 0.8f;
+            this->actor.speed *= 0.8f;
         } else {
-            this->actor.speedXZ *= 0.96f;
+            this->actor.speed *= 0.96f;
         }
         this->actor.velocity.y *= 0.96f;
     }
@@ -527,7 +527,7 @@ void func_80B3A498(ObjSnowball2* this) {
     this->actor.home.pos.z = this->actor.world.pos.z;
     this->actor.world.pos.y = this->actor.world.pos.y + (this->actor.shape.yOffset * this->actor.scale.y);
     this->actor.shape.yOffset = 0.0f;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actionFunc = func_80B3A500;
 }
 
@@ -539,7 +539,7 @@ void func_80B3A500(ObjSnowball2* this, PlayState* play) {
 
     this->unk_1AC--;
 
-    this->actor.speedXZ *= 0.7f;
+    this->actor.speed *= 0.7f;
 
     this->unk_1A8 >>= 1;
     this->unk_1AA >>= 1;

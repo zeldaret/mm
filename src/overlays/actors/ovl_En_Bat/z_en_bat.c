@@ -203,7 +203,7 @@ void EnBat_SetupPerch(EnBat* this) {
     this->collider.dim.worldSphere.center.x = this->actor.focus.pos.x;
     this->collider.dim.worldSphere.center.y = this->actor.focus.pos.y;
     this->collider.dim.worldSphere.center.z = this->actor.focus.pos.z;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actionFunc = EnBat_Perch;
 }
 
@@ -214,7 +214,7 @@ void EnBat_Perch(EnBat* this, PlayState* play) {
 void EnBat_SetupFlyIdle(EnBat* this) {
     this->timer = 100;
     this->collider.base.acFlags |= AC_ON;
-    this->actor.speedXZ = 3.5f;
+    this->actor.speed = 3.5f;
     this->actionFunc = EnBat_FlyIdle;
 }
 
@@ -262,7 +262,7 @@ void EnBat_FlyIdle(EnBat* this, PlayState* play) {
 void EnBat_SetupDiveAttack(EnBat* this) {
     this->collider.base.atFlags |= AT_ON;
     this->timer = 300;
-    this->actor.speedXZ = 4.0f;
+    this->actor.speed = 4.0f;
     sNumberAttacking++;
     this->actionFunc = EnBat_DiveAttack;
 }
@@ -317,7 +317,7 @@ void EnBat_DiveAttack(EnBat* this, PlayState* play) {
 void EnBat_SetupDie(EnBat* this, PlayState* play) {
     this->actor.flags &= ~ACTOR_FLAG_1;
     Enemy_StartFinishingBlow(play, &this->actor);
-    this->actor.speedXZ *= Math_CosS(this->actor.world.rot.x);
+    this->actor.speed *= Math_CosS(this->actor.world.rot.x);
     this->actor.bgCheckFlags &= ~1;
     this->actor.velocity.y = 0.0f;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_FFLY_DEAD);
@@ -343,7 +343,7 @@ void EnBat_SetupDie(EnBat* this, PlayState* play) {
     Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 40);
 
     if (this->actor.flags & ACTOR_FLAG_8000) {
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
     }
 
     this->collider.base.acFlags &= ~AC_ON;
@@ -352,7 +352,7 @@ void EnBat_SetupDie(EnBat* this, PlayState* play) {
 }
 
 void EnBat_Die(EnBat* this, PlayState* play) {
-    Math_StepToF(&this->actor.speedXZ, 0.0f, 0.5f);
+    Math_StepToF(&this->actor.speed, 0.0f, 0.5f);
     this->actor.colorFilterTimer = 40;
 
     if (!(this->actor.flags & ACTOR_FLAG_8000)) { // Carried by arrow
@@ -397,7 +397,7 @@ void EnBat_SetupStunned(EnBat* this) {
     if (this->actionFunc != EnBat_Stunned) {
         this->actor.shape.yOffset = 700.0f;
         this->actor.velocity.y = 0.0f;
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
         this->actor.world.pos.y += 13.0f;
     }
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);

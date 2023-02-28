@@ -220,8 +220,8 @@ void EnZo_FollowPath(EnZo* this, PlayState* play) {
     s16 speed;
     Vec3f pos;
 
-    Math_SmoothStepToF(&this->actor.speedXZ, 1.0f, 0.4f, 1000.0f, 0.0f);
-    speed = this->actor.speedXZ * 400.0f;
+    Math_SmoothStepToF(&this->actor.speed, 1.0f, 0.4f, 1000.0f, 0.0f);
+    speed = this->actor.speed * 400.0f;
     if (SubS_CopyPointFromPath(this->path, this->waypoint, &pos) && SubS_MoveActorToPoint(&this->actor, &pos, speed)) {
         this->waypoint++;
         if (this->waypoint >= this->path->count) {
@@ -233,7 +233,7 @@ void EnZo_FollowPath(EnZo* this, PlayState* play) {
         EnZo_ChangeAnim(&this->skelAnime, 1);
         this->actionFunc = EnZo_TreadWater;
         this->actor.gravity = 0.0f;
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
     }
 }
 

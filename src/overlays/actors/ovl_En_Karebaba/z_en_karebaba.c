@@ -380,7 +380,7 @@ void EnKarebaba_SetupDying(EnKarebaba* this) {
         this->actor.gravity = -0.8f;
         this->actor.velocity.y = 4.0f;
         this->actor.world.rot.y = BINANG_ROT180(this->actor.shape.rot.y);
-        this->actor.speedXZ = 3.0f;
+        this->actor.speed = 3.0f;
     } else {
         this->timer = 3;
     }
@@ -401,13 +401,13 @@ void EnKarebaba_Dying(EnKarebaba* this, PlayState* play) {
         this->timer--;
         if (this->timer == 0) {
             this->actor.gravity = -0.8f;
-            this->actor.speedXZ = 3.0f;
+            this->actor.speed = 3.0f;
             this->actor.velocity.y = 4.0f;
             this->actor.world.rot.y = BINANG_ROT180(this->actor.shape.rot.y);
             EnKarebaba_SpawnIceEffects(this, play);
         }
     } else {
-        Math_StepToF(&this->actor.speedXZ, 0.0f, 0.1f);
+        Math_StepToF(&this->actor.speed, 0.0f, 0.1f);
 
         if (this->timer == 0) {
             Math_ScaledStepToS(&this->actor.shape.rot.x, 0x4800, 0x71C);
@@ -417,7 +417,7 @@ void EnKarebaba_Dying(EnKarebaba* this, PlayState* play) {
                 this->actor.scale.z = 0.0f;
                 this->actor.scale.y = 0.0f;
                 this->actor.scale.x = 0.0f;
-                this->actor.speedXZ = 0.0f;
+                this->actor.speed = 0.0f;
                 this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_4);
                 EffectSsHahen_SpawnBurst(play, &this->actor.world.pos, 3.0f, 0, 12, 5, 15, HAHEN_OBJECT_DEFAULT, 10,
                                          NULL);

@@ -273,7 +273,7 @@ void EnBbfall_SetupWaitForPlayer(EnBbfall* this) {
     this->actor.colChkInfo.health = sColChkInfoInit.health;
     this->actor.colorFilterTimer = 0;
     this->isBgCheckCollisionEnabled = false;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actor.gravity = 0.0f;
     this->actor.velocity.y = 0.0f;
     Math_Vec3f_Copy(&this->actor.world.pos, &this->actor.home.pos);
@@ -323,7 +323,7 @@ void EnBbfall_SetupFly(EnBbfall* this) {
     this->flameOpacity = 255;
     this->isBgCheckCollisionEnabled = true;
     this->actor.bgCheckFlags &= ~1;
-    this->actor.speedXZ = 5.0f;
+    this->actor.speed = 5.0f;
     this->actor.gravity = -1.0f;
     this->actionFunc = EnBbfall_Fly;
 }
@@ -372,7 +372,7 @@ void EnBbfall_SetupDown(EnBbfall* this) {
     this->timer = 200;
     this->flameOpacity = 0;
     this->collider.base.acFlags |= AC_ON;
-    this->actor.speedXZ = 2.0f;
+    this->actor.speed = 2.0f;
     this->flameScaleY = 0.0f;
     this->flameScaleX = 0.0f;
     this->actor.gravity = -2.0f;
@@ -430,11 +430,11 @@ void EnBbfall_SetupDead(EnBbfall* this, PlayState* play) {
     func_800BE5CC(&this->actor, &this->collider, 0);
     this->timer = 15;
     this->actor.shape.rot.x += 0x4E20;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 40, NA_SE_EN_BUBLE_DEAD);
     Item_DropCollectibleRandom(play, &this->actor, &this->actor.world.pos, 0x70);
     this->actor.velocity.y = 0.0f;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->bodyPartDrawStatus = BBFALL_BODY_PART_DRAW_STATUS_DEAD;
     this->actor.gravity = -1.5f;
 
@@ -488,20 +488,20 @@ void EnBbfall_SetupDamage(EnBbfall* this) {
         this->drawDmgEffScale = 0.4f;
     } else if (this->actor.colChkInfo.damageEffect == EN_BBFALL_DMGEFF_STUN) {
         Actor_SetColorFilter(&this->actor, 0, 255, 0, 20);
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
     } else if (this->actor.colChkInfo.damageEffect == EN_BBFALL_DMGEFF_HOOKSHOT) {
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
     } else {
         Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 20);
-        this->actor.speedXZ = 7.0f;
+        this->actor.speed = 7.0f;
     }
 
     this->actionFunc = EnBbfall_Damage;
 }
 
 void EnBbfall_Damage(EnBbfall* this, PlayState* play) {
-    Math_SmoothStepToF(&this->actor.speedXZ, 0.0f, 1.0f, 0.5f, 0.0f);
-    if ((this->actor.bgCheckFlags & 1) && (this->actor.speedXZ < 0.1f)) {
+    Math_SmoothStepToF(&this->actor.speed, 0.0f, 1.0f, 0.5f, 0.0f);
+    if ((this->actor.bgCheckFlags & 1) && (this->actor.speed < 0.1f)) {
         if (EnBbfall_IsTouchingLava(this, play)) {
             EnBbfall_SetupSinkIntoLava(this);
         } else {
@@ -511,7 +511,7 @@ void EnBbfall_Damage(EnBbfall* this, PlayState* play) {
 }
 
 void EnBbfall_SetupFrozen(EnBbfall* this) {
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     if (this->actor.velocity.y > 0.0f) {
         this->actor.velocity.y = 0.0f;
     }

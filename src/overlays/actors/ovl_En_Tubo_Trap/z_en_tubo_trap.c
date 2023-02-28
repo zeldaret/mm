@@ -257,7 +257,7 @@ void EnTuboTrap_Levitate(EnTuboTrap* this, PlayState* play) {
     Math_ApproachF(&this->actor.world.pos.y, this->targetHeight, 0.8f, 3.0f);
 
     if (fabsf(this->actor.world.pos.y - this->targetHeight) < 10.0f) {
-        this->actor.speedXZ = 10.0f;
+        this->actor.speed = 10.0f;
         this->actor.world.rot.y = this->actor.yawTowardsPlayer;
         this->actionFunc = EnTuboTrap_FlyAtPlayer;
     }

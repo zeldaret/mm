@@ -499,7 +499,7 @@ void EnFall_MoonsTear_Initialize(EnFall* this) {
     }
     this->actor.world.rot.y = Math_Vec3f_Yaw(&this->actor.world.pos, &this->actor.home.pos);
     this->actor.world.rot.x = Math_Vec3f_Pitch(&this->actor.world.pos, &this->actor.home.pos);
-    this->actor.speedXZ = Math_Vec3f_DistXYZ(&this->actor.world.pos, &this->actor.home.pos) / 82.0f;
+    this->actor.speed = Math_Vec3f_DistXYZ(&this->actor.world.pos, &this->actor.home.pos) / 82.0f;
     this->actor.shape.rot.x = this->actor.world.rot.x;
     this->actor.shape.rot.y = this->actor.world.rot.y;
 }
@@ -516,7 +516,7 @@ void EnFall_MoonsTear_Fall(EnFall* this, PlayState* play) {
     }
 
     if (this->actor.draw != NULL) {
-        if (Math_Vec3f_StepTo(&this->actor.world.pos, &this->actor.home.pos, this->actor.speedXZ) <= 0.0f) {
+        if (Math_Vec3f_StepTo(&this->actor.world.pos, &this->actor.home.pos, this->actor.speed) <= 0.0f) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_GORON_BOUND_1);
             SET_WEEKEVENTREG(WEEKEVENTREG_74_80);
             SET_WEEKEVENTREG(WEEKEVENTREG_74_20);

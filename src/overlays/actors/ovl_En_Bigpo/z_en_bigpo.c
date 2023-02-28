@@ -482,7 +482,7 @@ void EnBigpo_SetupWarpOut(EnBigpo* this) {
     this->rotVelocity = 0x2000;
     this->idleTimer = 32;
     this->actor.flags &= ~ACTOR_FLAG_1; // targetable OFF
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PO_DISAPPEAR);
     this->actionFunc = EnBigpo_WarpingOut;
 }
@@ -556,7 +556,7 @@ void EnBigpo_IdleFlying(EnBigpo* this, PlayState* play) {
     this->hoverHeightCycleTimer = (this->hoverHeightCycleTimer == 0) ? 40 : (this->hoverHeightCycleTimer - 1);
     Math_StepToF(&this->savedHeight, player->actor.world.pos.y + 100.0f, 1.5f);
     this->actor.world.pos.y = (sin_rad(this->hoverHeightCycleTimer * (M_PI / 20)) * 10.0f) + this->savedHeight;
-    Math_StepToF(&this->actor.speedXZ, 3.0f, 0.2f);
+    Math_StepToF(&this->actor.speed, 3.0f, 0.2f);
     func_800B9010(&this->actor, NA_SE_EN_PO_FLY - SFX_FLAG);
     if (Actor_XZDistanceToPoint(&this->actor, &this->actor.home.pos) > 300.0f) {
         this->unk208 = Actor_YawToPoint(&this->actor, &this->actor.home.pos);
@@ -580,7 +580,7 @@ void EnBigpo_SetupSpinUp(EnBigpo* this) {
     this->collider.base.atFlags |= AT_ON;
     this->rotVelocity = 0x800;
     this->actionFunc = EnBigpo_SpinningUp;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
 }
 
 void EnBigpo_SpinningUp(EnBigpo* this, PlayState* play) {
@@ -603,7 +603,7 @@ void EnBigpo_SpinAttack(EnBigpo* this, PlayState* play) {
     s16 yawDiff;
 
     SkelAnime_Update(&this->skelAnime);
-    Math_StepToF(&this->actor.speedXZ, 10.0f, 1.0f);
+    Math_StepToF(&this->actor.speed, 10.0f, 1.0f);
     Math_SmoothStepToF(&this->actor.world.pos.y, player->actor.world.pos.y, 0.3f, 7.5f, 1.0f);
     EnBigpo_UpdateSpin(this);
     yawDiff = this->actor.yawTowardsPlayer - this->actor.world.rot.y;
@@ -628,7 +628,7 @@ void EnBigpo_SpinningDown(EnBigpo* this, PlayState* play) {
 
     SkelAnime_Update(&this->skelAnime);
     Math_SmoothStepToF(&this->actor.world.pos.y, player->actor.world.pos.y + 100.0f, 0.3f, 5.0f, 1.0f);
-    Math_StepToF(&this->actor.speedXZ, 0.0f, 0.2f);
+    Math_StepToF(&this->actor.speed, 0.0f, 0.2f);
     if (Math_ScaledStepToS(&this->rotVelocity, 0, 0x200)) {
         // spin down complete, re-allow hittable
         this->collider.base.colType = COLTYPE_HIT3;
@@ -649,14 +649,14 @@ void EnBigpo_HitStun(EnBigpo* this) {
     this->collider.base.acFlags &= ~AC_ON;
     func_800BE504(&this->actor, &this->collider);
     this->actionFunc = EnBigpo_CheckHealth;
-    this->actor.speedXZ = 5.0f;
+    this->actor.speed = 5.0f;
 }
 
 /*
  * check if just damaged or dead
  */
 void EnBigpo_CheckHealth(EnBigpo* this, PlayState* play) {
-    Math_StepToF(&this->actor.speedXZ, 0.0f, 0.5f);
+    Math_StepToF(&this->actor.speed, 0.0f, 0.5f);
     if (SkelAnime_Update(&this->skelAnime)) {
         if (this->actor.colChkInfo.health == 0) {
             EnBigpo_SetupDeath(this);
@@ -668,7 +668,7 @@ void EnBigpo_CheckHealth(EnBigpo* this, PlayState* play) {
 
 void EnBigpo_SetupDeath(EnBigpo* this) {
     this->idleTimer = 0;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->actor.hintId = TATL_HINT_ID_NONE;
     this->collider.base.ocFlags1 &= ~OC1_ON;

@@ -172,7 +172,7 @@ s32 EnNwc_IsFound(EnNwc* this, PlayState* play) {
 }
 
 void EnNwc_ChangeState(EnNwc* this, s16 newState) {
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     switch (newState) {
         case NWC_STATE_CHECK_BREMAN:
             this->stateTimer = 10;
@@ -209,7 +209,7 @@ void EnNwc_ChangeState(EnNwc* this, s16 newState) {
  *     If previously checking for breman -> select random (NWC_STATE_TURNING, NWC_STATE_HOPPING_FORWARD)
  */
 void EnNwc_ToggleState(EnNwc* this) {
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     if (this->state != NWC_STATE_CHECK_BREMAN) {
         EnNwc_ChangeState(this, NWC_STATE_CHECK_BREMAN);
     } else {
@@ -276,7 +276,7 @@ void EnNwc_Follow(EnNwc* this, PlayState* play) {
         s16 targetUpperBodyRot = 0;
         s16 targetFootRot = 0;
 
-        if (this->actor.speedXZ > 0.0f) {
+        if (this->actor.speed > 0.0f) {
             if (this->stateTimer & 4) {
                 targetFootRot = 0x1B58;
                 targetUpperBodyRot = -0x2710;
@@ -312,7 +312,7 @@ void EnNwc_Follow(EnNwc* this, PlayState* play) {
 
     Math_Vec3f_Diff(&chickCoords[this->actor.home.rot.z], &this->actor.world.pos, &targetVector);
     if (SQXZ(targetVector) < SQ(5.0f)) { // too close to keep moving, stop
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
 
         // first nwc in the line follows player, the rest follow the previous one
         if (this->actor.home.rot.z == 1) {
@@ -329,7 +329,7 @@ void EnNwc_Follow(EnNwc* this, PlayState* play) {
         } else if (this->randomRot < -0x1388) {
             this->randomRot = -0x1388;
         }
-        this->actor.speedXZ = 2.0f;
+        this->actor.speed = 2.0f;
         newRotY = Math_Vec3f_Yaw(&this->actor.world.pos, &chickCoords[this->actor.home.rot.z]) + this->randomRot;
     }
 
@@ -358,7 +358,7 @@ void EnNwc_Follow(EnNwc* this, PlayState* play) {
     if (this->grog->actor.home.rot.x >= 20) { // all chicks have turned into adult cucco, stop and crow
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CHICKEN_CRY_M);
         this->actionFunc = EnNwc_CrowAtTheEnd;
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
         Actor_SetScale(&this->actor, 0.01f);
     }
 }
@@ -383,9 +383,9 @@ void EnNwc_HopForward(EnNwc* this, PlayState* play) {
 
     // they only move forward while off the ground, which gives the visual of them hopping to move
     if (this->actor.bgCheckFlags & 0x1) { // touching floor
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
     } else {
-        this->actor.speedXZ = 2.0f;
+        this->actor.speed = 2.0f;
     }
 }
 
@@ -407,7 +407,7 @@ void EnNwc_RunAway(EnNwc* this, PlayState* play) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CHICK_SONG);
     }
 
-    this->actor.speedXZ = 2.0f;
+    this->actor.speed = 2.0f;
     if (this->actor.bgCheckFlags & 0x8) { // touching wall
         EnNwc_ToggleState(this);
     }

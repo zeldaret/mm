@@ -314,17 +314,17 @@ void func_80BA2C94(ObjNozoki* this, PlayState* play) {
             Flags_UnsetSwitch(play, this->dyna.actor.world.rot.x);
         }
 
-        Math_StepToF(&this->dyna.actor.speedXZ, D_80BA34E4[this->unk_15D], 0.1f);
+        Math_StepToF(&this->dyna.actor.speed, D_80BA34E4[this->unk_15D], 0.1f);
 
         if ((play->actorCtx.flags & ACTORCTX_FLAG_6) || (play->actorCtx.flags & ACTORCTX_FLAG_5)) {
             temp_f0 = 0.5f;
         } else {
-            temp_f0 = this->dyna.actor.speedXZ;
+            temp_f0 = this->dyna.actor.speed;
         }
 
         sp34 = Math_Vec3f_StepToXZ(&this->dyna.actor.world.pos, &this->dyna.actor.home.pos, temp_f0);
 
-        D_80BA36B8 += this->dyna.actor.speedXZ;
+        D_80BA36B8 += this->dyna.actor.speed;
 
         if (play->actorCtx.flags & ACTORCTX_FLAG_6) {
             if (sp34 <= 5.0f) {
@@ -355,14 +355,14 @@ void func_80BA2C94(ObjNozoki* this, PlayState* play) {
         }
     }
 
-    this->dyna.actor.velocity.x += this->dyna.actor.speedXZ * 0.66f;
+    this->dyna.actor.velocity.x += this->dyna.actor.speed * 0.66f;
     if (this->dyna.actor.velocity.x >= 0x10000) {
         this->dyna.actor.velocity.x -= 0x10000;
     }
 
     play->roomCtx.unk7A[0] = this->dyna.actor.velocity.x;
 
-    func_8019FAD8(&gSfxDefaultPos, NA_SE_EV_SECOM_CONVEYOR - SFX_FLAG, this->dyna.actor.speedXZ);
+    func_8019FAD8(&gSfxDefaultPos, NA_SE_EV_SECOM_CONVEYOR - SFX_FLAG, this->dyna.actor.speed);
 }
 
 void func_80BA3044(ObjNozoki* this, PlayState* play) {

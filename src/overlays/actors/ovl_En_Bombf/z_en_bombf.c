@@ -168,7 +168,7 @@ void func_808AEAE0(EnBombf* this, PlayState* play) {
         } else if ((this->colliderCylinder.base.acFlags & AC_HIT) &&
                    ((this->colliderCylinder.info.acHitInfo->toucher.dmgFlags & 0x13828) ||
                     ((this->colliderCylinder.info.acHitInfo->toucher.dmgFlags & 0x200) &&
-                     (player->transformation == PLAYER_FORM_GORON) && (player->actor.speedXZ > 15.0f)))) {
+                     (player->transformation == PLAYER_FORM_GORON) && (player->actor.speed > 15.0f)))) {
             this->colliderCylinder.base.acFlags &= ~AC_HIT;
             if (this->colliderCylinder.base.ac->category != ACTORCAT_BOSS) {
                 bombf = (EnBombf*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOMBF, this->actor.world.pos.x,
@@ -233,11 +233,11 @@ void func_808AEE3C(EnBombf* this, PlayState* play) {
 
     this->unk_204 = 1.0f;
     if (!(this->actor.bgCheckFlags & 1)) {
-        Math_SmoothStepToF(&this->actor.speedXZ, 0.0f, 1.0f, 0.025f, 0.0f);
+        Math_SmoothStepToF(&this->actor.speed, 0.0f, 1.0f, 0.025f, 0.0f);
         return;
     }
 
-    Math_SmoothStepToF(&this->actor.speedXZ, 0.0f, 1.0f, 1.5f, 0.0f);
+    Math_SmoothStepToF(&this->actor.speed, 0.0f, 1.0f, 1.5f, 0.0f);
     if (this->actor.bgCheckFlags & 2) {
         func_800B8EF4(play, &this->actor);
         if (this->actor.velocity.y < -6.0f) {
@@ -345,7 +345,7 @@ void EnBombf_Update(Actor* thisx, PlayState* play) {
             this->actor.velocity.y = -this->actor.velocity.y;
         }
 
-        if ((this->actor.speedXZ != 0.0f) && (this->actor.bgCheckFlags & 8)) {
+        if ((this->actor.speed != 0.0f) && (this->actor.bgCheckFlags & 8)) {
             s16 yDiff = BINANG_SUB(this->actor.wallYaw, this->actor.world.rot.y);
 
             if (ABS_ALT(yDiff) > 0x4000) {
@@ -357,7 +357,7 @@ void EnBombf_Update(Actor* thisx, PlayState* play) {
             DREG(6) = 1;
             Actor_UpdateBgCheckInfo(play, &this->actor, 5.0f, 10.0f, 0.0f, 0x1F);
             DREG(6) = 0;
-            this->actor.speedXZ *= 0.7f;
+            this->actor.speed *= 0.7f;
             this->actor.bgCheckFlags &= ~8;
         }
 

@@ -156,7 +156,7 @@ void EnScRuppe_Init(Actor* thisx, PlayState* play) {
     if ((this->ruppeIndex < RUPEE_GREEN) || (this->ruppeIndex >= RUPEE_UNUSED)) {
         this->ruppeIndex = RUPEE_GREEN;
     }
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actionFunc = func_80BD6A8C;
     this->actor.gravity = -0.5f;
     this->actor.shape.yOffset = 700.0f;

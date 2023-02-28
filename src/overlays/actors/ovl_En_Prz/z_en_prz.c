@@ -218,7 +218,7 @@ s32 func_80A762C0(EnPrz* this, PlayState* play) {
 }
 
 void func_80A76388(EnPrz* this) {
-    this->actor.speedXZ = randPlusMinusPoint5Scaled(1.0f) + 4.0f;
+    this->actor.speed = randPlusMinusPoint5Scaled(1.0f) + 4.0f;
     func_80A75F18(this, 0);
     this->unk_1EA = 1;
     this->actionFunc = func_80A763E8;
@@ -302,7 +302,7 @@ void func_80A76634(EnPrz* this, PlayState* play) {
 }
 
 void func_80A76748(EnPrz* this) {
-    this->actor.speedXZ = randPlusMinusPoint5Scaled(1.0f) + 3.0f;
+    this->actor.speed = randPlusMinusPoint5Scaled(1.0f) + 3.0f;
     this->unk_1EE = 0;
     this->unk_1EA = 3;
     this->skelAnime.playSpeed = 2.0f;
@@ -317,7 +317,7 @@ void func_80A767A8(EnPrz* this, PlayState* play) {
 
     if (func_80A762C0(this, play)) {
         func_80A75F18(this, 0);
-        this->actor.speedXZ = randPlusMinusPoint5Scaled(1.0f) + 4.0f;
+        this->actor.speed = randPlusMinusPoint5Scaled(1.0f) + 4.0f;
         func_80A76604(this, play);
         return;
     }
@@ -373,7 +373,7 @@ void func_80A76A1C(EnPrz* this) {
     }
 
     this->unk_1FE = this->actor.world.rot.y;
-    this->actor.speedXZ = Rand_ZeroFloat(0.5f);
+    this->actor.speed = Rand_ZeroFloat(0.5f);
     this->actor.world.rot.y = randPlusMinusPoint5Scaled(0x8000);
 
     Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 30);

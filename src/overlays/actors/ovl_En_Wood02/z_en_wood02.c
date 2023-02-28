@@ -436,7 +436,7 @@ void EnWood02_Update(Actor* thisx, PlayState* play2) {
         if ((this->unk_146 >= -1) && (((player->rideActor == NULL) && (sqrtf(thisx->xyzDistToPlayerSq) < 20.0f) &&
                                        (player->linearVelocity != 0.0f)) ||
                                       ((player->rideActor != NULL) && (sqrtf(thisx->xyzDistToPlayerSq) < 60.0f) &&
-                                       (player->rideActor->speedXZ != 0.0f)))) {
+                                       (player->rideActor->speed != 0.0f)))) {
             func_808C4458(this, play, &thisx->world.pos, 1);
             this->unk_146 = -0x15;
             Actor_PlaySfxAtPos(thisx, NA_SE_EV_TREE_SWING);

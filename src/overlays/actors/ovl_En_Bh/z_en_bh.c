@@ -52,7 +52,7 @@ void func_80C22DEC(EnBh* this, PlayState* play) {
     s16 yRot;
     s16 zRot;
 
-    this->actor.speedXZ = 3.0f;
+    this->actor.speed = 3.0f;
     xDiff = this->pos.x - this->actor.world.pos.x;
     yDiff = this->pos.y - this->actor.world.pos.y;
     zDiff = this->pos.z - this->actor.world.pos.z;

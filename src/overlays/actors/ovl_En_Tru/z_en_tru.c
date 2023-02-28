@@ -736,7 +736,7 @@ s32 func_80A87400(EnTru* this, PlayState* play) {
     this->unk_360 = CLAMP(this->unk_360 + 2000, 0, 0x4000);
 
     Math_ApproachF(&this->unk_35C, 30.0f, 0.08f, 1000.0f);
-    Math_ApproachF(&this->actor.speedXZ, 30.0f, 0.2f, 1000.0f);
+    Math_ApproachF(&this->actor.speed, 30.0f, 0.2f, 1000.0f);
 
     if (this->path != NULL) {
         sp4C = Lib_SegmentedToVirtual(this->path->points);

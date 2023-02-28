@@ -287,8 +287,8 @@ void func_808F3690(EnIn* this, PlayState* play) {
     s16 sp36;
     Vec3f sp28;
 
-    Math_SmoothStepToF(&this->actor.speedXZ, 1.0f, 0.4f, 1000.0f, 0.0f);
-    sp36 = this->actor.speedXZ * 400.0f;
+    Math_SmoothStepToF(&this->actor.speed, 1.0f, 0.4f, 1000.0f, 0.0f);
+    sp36 = this->actor.speed * 400.0f;
     if (SubS_CopyPointFromPath(this->path, this->unk244, &sp28) && SubS_MoveActorToPoint(&this->actor, &sp28, sp36)) {
         this->unk244++;
         if (this->unk244 >= this->path->count) {

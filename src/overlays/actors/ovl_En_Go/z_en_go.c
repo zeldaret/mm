@@ -1770,7 +1770,7 @@ void func_80A153FC(EnGo* this, PlayState* play) {
 
         func_80A118F8(this->unk_3F8, this->actor.world.pos);
         this->actor.shape.rot.x = 0;
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
 
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_GOLON_COLD);
 
@@ -1809,8 +1809,8 @@ void func_80A153FC(EnGo* this, PlayState* play) {
             func_800AEF44(Effect_GetByIndex(this->unk_3E8));
         }
 
-        this->actor.speedXZ = 4.0f;
-        this->actor.shape.rot.x += (s16)(this->actor.speedXZ * 546.0f);
+        this->actor.speed = 4.0f;
+        this->actor.shape.rot.x += (s16)(this->actor.speed * 546.0f);
         Actor_MoveWithGravity(&this->actor);
     }
 }

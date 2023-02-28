@@ -163,7 +163,7 @@ void EnCrow_FlyIdle(EnCrow* this, PlayState* play) {
 
     SkelAnime_Update(&this->skelAnime);
     onInitialAnimFrame = Animation_OnFrame(&this->skelAnime, 0.0f);
-    this->actor.speedXZ = (Rand_ZeroOne() * 1.5f) + 3.0f;
+    this->actor.speed = (Rand_ZeroOne() * 1.5f) + 3.0f;
 
     if ((this->actor.parent != NULL) && (this->actor.parent->home.rot.z == 0)) {
         this->actor.home.pos.x = this->actor.parent->world.pos.x;
@@ -233,7 +233,7 @@ void EnCrow_FlyIdle(EnCrow* this, PlayState* play) {
 void EnCrow_SetupDiveAttack(EnCrow* this) {
     this->timer = 300;
     this->actionFunc = EnCrow_DiveAttack;
-    this->actor.speedXZ = 4.0f;
+    this->actor.speed = 4.0f;
     this->skelAnime.playSpeed = 2.0f;
 }
 
@@ -295,7 +295,7 @@ void EnCrow_CheckIfFrozen(EnCrow* this, PlayState* play) {
 void EnCrow_SetupDamaged(EnCrow* this, PlayState* play) {
     f32 scale;
 
-    this->actor.speedXZ *= Math_CosS(this->actor.world.rot.x);
+    this->actor.speed *= Math_CosS(this->actor.world.rot.x);
     this->actor.velocity.y = 0.0f;
     Animation_Change(&this->skelAnime, &gGuayFlyAnim, 0.4f, 0.0f, 0.0f, ANIMMODE_LOOP_INTERP, -3.0f);
     this->actor.shape.yOffset = 0.0f;
@@ -325,7 +325,7 @@ void EnCrow_SetupDamaged(EnCrow* this, PlayState* play) {
 
     Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 40);
     if (this->actor.flags & ACTOR_FLAG_8000) {
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
     }
 
     this->collider.base.acFlags &= ~AC_ON;
@@ -335,7 +335,7 @@ void EnCrow_SetupDamaged(EnCrow* this, PlayState* play) {
 }
 
 void EnCrow_Damaged(EnCrow* this, PlayState* play) {
-    Math_StepToF(&this->actor.speedXZ, 0.0f, 0.5f);
+    Math_StepToF(&this->actor.speed, 0.0f, 0.5f);
     this->actor.colorFilterTimer = 40;
 
     if (!(this->actor.flags & ACTOR_FLAG_8000)) {
@@ -385,7 +385,7 @@ void EnCrow_Die(EnCrow* this, PlayState* play) {
 void EnCrow_SetupTurnAway(EnCrow* this) {
     this->timer = 100;
     this->pitchTarget = -0x1000;
-    this->actor.speedXZ = 3.5f;
+    this->actor.speed = 3.5f;
     this->yawTarget = this->actor.yawTowardsPlayer + 0x8000;
     this->skelAnime.playSpeed = 2.0f;
     if (this->actor.colChkInfo.damageEffect == GUAY_DMGEFF_STUN) {

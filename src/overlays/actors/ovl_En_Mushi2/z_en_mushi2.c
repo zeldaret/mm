@@ -275,9 +275,9 @@ s32 func_80A68DD4(EnMushi2* this, PlayState* play) {
 }
 
 void func_80A68ED8(EnMushi2* this) {
-    this->actor.velocity.x = this->actor.speedXZ * this->unk_328.x;
-    this->actor.velocity.y = this->actor.speedXZ * this->unk_328.y;
-    this->actor.velocity.z = this->actor.speedXZ * this->unk_328.z;
+    this->actor.velocity.x = this->actor.speed * this->unk_328.x;
+    this->actor.velocity.y = this->actor.speed * this->unk_328.y;
+    this->actor.velocity.z = this->actor.speed * this->unk_328.z;
     Actor_UpdatePos(&this->actor);
 }
 
@@ -797,7 +797,7 @@ void func_80A6A36C(EnMushi2* this, PlayState* play) {
     s32 pad;
     s32 sp20 = false;
 
-    Math_StepToF(&this->actor.speedXZ, 0.0f, 0.2f);
+    Math_StepToF(&this->actor.speed, 0.0f, 0.2f);
     this->actor.velocity.y -= this->actor.velocity.y * D_80A6BA14[ENMUSHI2_GET_3(&this->actor)];
     Actor_MoveWithGravity(&this->actor);
     func_80A69424(this, play);
@@ -853,11 +853,11 @@ void func_80A6A5C0(EnMushi2* this, PlayState* play) {
     EnMushi2* this2 = this;
 
     func_80A69D3C(this);
-    Math_SmoothStepToF(&this->actor.speedXZ, this->unk_35C, 0.1f, 0.5f, 0.0f);
+    Math_SmoothStepToF(&this->actor.speed, this->unk_35C, 0.1f, 0.5f, 0.0f);
     if (this->unk_354 < SQ(40.0f)) {
         f32 temp = 1.0f - ((SQ(40.0f) - this->unk_354) * (1.0f / (10.0f * SQ(40.0f))));
 
-        this->actor.speedXZ *= temp;
+        this->actor.speed *= temp;
     }
 
     func_80A68ED8(this);
@@ -866,7 +866,7 @@ void func_80A6A5C0(EnMushi2* this, PlayState* play) {
         func_80A69388(this);
     }
 
-    this->skelAnime.playSpeed = this->actor.speedXZ * 1.6f;
+    this->skelAnime.playSpeed = this->actor.speed * 1.6f;
     this2->skelAnime.playSpeed = CLAMP(this2->skelAnime.playSpeed, 0.1f, 1.9f);
 
     if ((this->unk_36A <= 0) || func_80A68BA0(this)) {
@@ -896,7 +896,7 @@ void func_80A6A794(EnMushi2* this) {
 void func_80A6A824(EnMushi2* this, PlayState* play) {
     EnMushi2* this2 = this;
 
-    Math_SmoothStepToF(&this->actor.speedXZ, this->unk_35C, 0.1f, 0.5f, 0.0f);
+    Math_SmoothStepToF(&this->actor.speed, this->unk_35C, 0.1f, 0.5f, 0.0f);
     func_80A68ED8(this);
     func_80A697C4(this, play);
 
@@ -904,7 +904,7 @@ void func_80A6A824(EnMushi2* this, PlayState* play) {
         func_80A69388(this);
     }
 
-    this->skelAnime.playSpeed = (Rand_ZeroOne() * 0.8f) + (this->actor.speedXZ * 1.2f);
+    this->skelAnime.playSpeed = (Rand_ZeroOne() * 0.8f) + (this->actor.speed * 1.2f);
     this2->skelAnime.playSpeed = CLAMP(this2->skelAnime.playSpeed, 0.0f, 1.9f);
 
     if ((this->unk_36A <= 0) || func_80A68BA0(this)) {
@@ -963,9 +963,9 @@ void func_80A6AB08(EnMushi2* this, PlayState* play) {
     s16 temp;
 
     if (this->unk_368 > 80) {
-        Math_StepToF(&this->actor.speedXZ, 0.6f, 0.08f);
+        Math_StepToF(&this->actor.speed, 0.6f, 0.08f);
     } else {
-        Math_StepToF(&this->actor.speedXZ, 0.0f, 0.02f);
+        Math_StepToF(&this->actor.speed, 0.0f, 0.02f);
     }
 
     Actor_MoveWithGravity(&this->actor);
@@ -1025,8 +1025,8 @@ void func_80A6AE7C(EnMushi2* this, PlayState* play) {
 
     this->actor.shape.rot.x -= 0x1F4;
     this->actor.shape.rot.y += 0xC8;
-    this->actor.speedXZ += (Rand_ZeroOne() - 0.5f) * 0.16f;
-    this->actor.speedXZ *= 0.9f;
+    this->actor.speed += (Rand_ZeroOne() - 0.5f) * 0.16f;
+    this->actor.speed *= 0.9f;
     this->actor.world.rot.y += (s16)((Rand_ZeroOne() - 0.5f) * 2000.0f);
     this->actor.gravity = -0.04f - (Rand_ZeroOne() * 0.02f);
     this->actor.velocity.y *= 0.95f;
@@ -1058,7 +1058,7 @@ void func_80A6B0D8(EnMushi2* this, PlayState* play) {
     s32 pad[2];
     f32 temp_f2;
 
-    Math_SmoothStepToF(&this->actor.speedXZ, 0.0f, 0.4f, 1.2f, 0.0f);
+    Math_SmoothStepToF(&this->actor.speed, 0.0f, 0.4f, 1.2f, 0.0f);
     temp_f2 = this->actor.scale.x - 0.0002f;
     Actor_SetScale(&this->actor, CLAMP_MIN(temp_f2, 0.001f));
 
@@ -1077,11 +1077,11 @@ void func_80A6B0D8(EnMushi2* this, PlayState* play) {
     }
 
     this->actor.velocity.x =
-        (this->actor.speedXZ * this->unk_328.x) + (-0.01f * this->unk_31C.x) + (this->unk_310.x * temp_f2);
+        (this->actor.speed * this->unk_328.x) + (-0.01f * this->unk_31C.x) + (this->unk_310.x * temp_f2);
     this->actor.velocity.y =
-        (this->actor.speedXZ * this->unk_328.y) + (-0.01f * this->unk_31C.y) + (this->unk_310.y * temp_f2);
+        (this->actor.speed * this->unk_328.y) + (-0.01f * this->unk_31C.y) + (this->unk_310.y * temp_f2);
     this->actor.velocity.z =
-        (this->actor.speedXZ * this->unk_328.z) + (-0.01f * this->unk_31C.z) + (this->unk_310.z * temp_f2);
+        (this->actor.speed * this->unk_328.z) + (-0.01f * this->unk_31C.z) + (this->unk_310.z * temp_f2);
 
     if ((this->actor.flags & ACTOR_FLAG_40) && (this->unk_368 > 20) && (Rand_ZeroOne() < 0.15f)) {
         Vec3f sp48;

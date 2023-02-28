@@ -246,8 +246,8 @@ void func_809AB610(ObjGrassCarry* this, PlayState* play) {
 
     if (Actor_HasNoParent(&this->actor, play)) {
         func_809AB6FC(this);
-        this->actor.velocity.x = Math_SinS(this->actor.world.rot.y) * this->actor.speedXZ;
-        this->actor.velocity.z = Math_CosS(this->actor.world.rot.y) * this->actor.speedXZ;
+        this->actor.velocity.x = Math_SinS(this->actor.world.rot.y) * this->actor.speed;
+        this->actor.velocity.z = Math_CosS(this->actor.world.rot.y) * this->actor.speed;
         this->actor.gravity = -0.1f;
         this->actor.terminalVelocity = -17.0f;
         func_809AAF18(this);

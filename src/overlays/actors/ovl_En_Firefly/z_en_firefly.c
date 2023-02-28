@@ -215,7 +215,7 @@ s32 EnFirefly_ReturnToPerch(EnFirefly* this, PlayState* play) {
             EnFirefly_SetupPerch(this);
         } else {
             if (distFromHome * 0.05f < 1.0f) {
-                this->actor.speedXZ *= distFromHome * 0.05f;
+                this->actor.speed *= distFromHome * 0.05f;
             }
 
             Math_ScaledStepToS(&this->actor.shape.rot.y, Actor_YawToPoint(&this->actor, &this->actor.home.pos), 0x300);
@@ -272,7 +272,7 @@ s32 EnFirefly_SeekTorch(EnFirefly* this, PlayState* play) {
 
 void EnFirefly_SetupFlyIdle(EnFirefly* this) {
     this->timer = Rand_S16Offset(70, 100);
-    this->actor.speedXZ = (Rand_ZeroOne() * 1.5f) + 1.5f;
+    this->actor.speed = (Rand_ZeroOne() * 1.5f) + 1.5f;
     Math_ScaledStepToS(&this->actor.shape.rot.y, Actor_YawToPoint(&this->actor, &this->actor.home.pos), 0x300);
     this->pitchTarget = ((this->maxAltitude < this->actor.world.pos.y) ? 0xC00 : -0xC00) + 0x1554;
     this->skelAnime.playSpeed = 1.0f;
@@ -289,7 +289,7 @@ void EnFirefly_FlyIdle(EnFirefly* this, PlayState* play) {
     }
 
     isSkelAnimeUpdated = Animation_OnFrame(&this->skelAnime, 0.0f);
-    this->actor.speedXZ = (Rand_ZeroOne() * 1.5f) + 1.5f;
+    this->actor.speed = (Rand_ZeroOne() * 1.5f) + 1.5f;
 
     if (!EnFirefly_ReturnToPerch(this, play) && !EnFirefly_SeekTorch(this, play)) {
         if (isSkelAnimeUpdated) {
@@ -370,7 +370,7 @@ void EnFirefly_SetupFall(EnFirefly* this, PlayState* play) {
     }
 
     if (this->actor.flags & ACTOR_FLAG_8000) {
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
     }
 
     this->actionFunc = EnFirefly_Fall;
@@ -379,7 +379,7 @@ void EnFirefly_SetupFall(EnFirefly* this, PlayState* play) {
 // Fall to the ground after being hit
 void EnFirefly_Fall(EnFirefly* this, PlayState* play) {
     this->actor.colorFilterTimer = 40;
-    Math_StepToF(&this->actor.speedXZ, 0.0f, 0.5f);
+    Math_StepToF(&this->actor.speed, 0.0f, 0.5f);
 
     if (!(this->actor.flags & ACTOR_FLAG_8000)) {
         if (this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
@@ -396,7 +396,7 @@ void EnFirefly_Fall(EnFirefly* this, PlayState* play) {
 
 void EnFirefly_SetupDie(EnFirefly* this) {
     this->timer = 15;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actionFunc = EnFirefly_Die;
 }
 
@@ -432,7 +432,7 @@ void EnFirefly_DiveAttack(EnFirefly* this, PlayState* play) {
         this->timer--;
     }
 
-    Math_StepToF(&this->actor.speedXZ, 4.0f, 0.5f);
+    Math_StepToF(&this->actor.speed, 4.0f, 0.5f);
 
     if (this->actor.bgCheckFlags & 8) {
         Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.wallYaw, 2, 0xC00, 0x300);
@@ -478,7 +478,7 @@ void EnFirefly_SetupRebound(EnFirefly* this) {
     this->actor.world.rot.x = 0x7000;
     this->timer = 18;
     this->skelAnime.playSpeed = 1.0f;
-    this->actor.speedXZ = 2.5f;
+    this->actor.speed = 2.5f;
     this->actionFunc = EnFirefly_Rebound;
 }
 
@@ -487,7 +487,7 @@ void EnFirefly_Rebound(EnFirefly* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     Math_ScaledStepToS(&this->actor.shape.rot.x, 0, 0x100);
     Math_StepToF(&this->actor.velocity.y, 0.0f, 0.4f);
-    if (Math_StepToF(&this->actor.speedXZ, 0.0f, 0.15f)) {
+    if (Math_StepToF(&this->actor.speed, 0.0f, 0.15f)) {
         if (this->timer != 0) {
             this->timer--;
         }
@@ -519,7 +519,7 @@ void EnFirefly_FlyAway(EnFirefly* this, PlayState* play) {
         return;
     }
 
-    Math_StepToF(&this->actor.speedXZ, 3.0f, 0.3f);
+    Math_StepToF(&this->actor.speed, 3.0f, 0.3f);
 
     if (this->actor.bgCheckFlags & 1) {
         this->pitchTarget = 0x954;
@@ -547,7 +547,7 @@ void EnFirefly_SetupStunned(EnFirefly* this) {
 
     if (this->actionFunc != EnFirefly_Stunned) {
         this->actor.velocity.y = 0.0f;
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
     }
 
     this->auraType = KEESE_AURA_NONE;
@@ -583,7 +583,7 @@ void EnFirefly_Stunned(EnFirefly* this, PlayState* play) {
 void EnFirefly_SetupPerch(EnFirefly* this) {
     this->timer = 1;
     this->actionFunc = EnFirefly_Perch;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
 }
 
 // When perching, sit on collision and flap at random intervals
@@ -608,7 +608,7 @@ void EnFirefly_SetupDisturbDiveAttack(EnFirefly* this) {
     this->actor.shape.rot.x = 0x1554;
     this->actor.shape.rot.y = this->actor.yawTowardsPlayer;
     this->timer = 50;
-    this->actor.speedXZ = 3.0f;
+    this->actor.speed = 3.0f;
     this->actionFunc = EnFirefly_DisturbDiveAttack;
 }
 

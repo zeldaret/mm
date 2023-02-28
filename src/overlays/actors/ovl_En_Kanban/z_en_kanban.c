@@ -359,10 +359,10 @@ void EnKanban_Update(Actor* thisx, PlayState* play) {
                         if ((hitItem->toucher.dmgFlags & 0x10) || (hitItem->toucher.dmgFlags & 8) ||
                             (hitItem->toucher.dmgFlags & 0x80000000)) {
                             piece->actor.velocity.y = Rand_ZeroFloat(3.0f) + 6.0f;
-                            piece->actor.speedXZ = Rand_ZeroFloat(4.0f) + 6.0f;
+                            piece->actor.speed = Rand_ZeroFloat(4.0f) + 6.0f;
                         } else {
                             piece->actor.velocity.y = Rand_ZeroFloat(2.0f) + 3.0f;
-                            piece->actor.speedXZ = Rand_ZeroFloat(2.0f) + 3.0f;
+                            piece->actor.speed = Rand_ZeroFloat(2.0f) + 3.0f;
                         }
 
                         if (piece->partCount >= 4) {
@@ -499,7 +499,7 @@ void EnKanban_Update(Actor* thisx, PlayState* play) {
                 if (!(this->actor.bgCheckFlags & 1)) {
                     Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_WOODPLATE_BOUND);
                 }
-                this->actor.speedXZ *= -0.5f;
+                this->actor.speed *= -0.5f;
             }
 
             if (this->actor.bgCheckFlags & 0x40) {
@@ -539,12 +539,12 @@ void EnKanban_Update(Actor* thisx, PlayState* play) {
 
                 if (this->unk_197 != 0) {
                     if (this->unk_197 > 0) {
-                        this->actor.speedXZ = 0.0f;
+                        this->actor.speed = 0.0f;
                     } else if ((this->floorRot.x > 0.1f) || (this->floorRot.z > 0.1f)) {
                         this->airTimer = 10;
                         if (this->actor.bgCheckFlags & 8) {
                             this->actionState = ENKANBAN_GROUND;
-                            this->actor.speedXZ = 0.0f;
+                            this->actor.speed = 0.0f;
                             goto nextCase;
                         } else {
                             Vec3f spC8;
@@ -556,14 +556,14 @@ void EnKanban_Update(Actor* thisx, PlayState* play) {
                             Math_ApproachF(&this->actor.velocity.z, spC8.z, 0.5f, (KREG(21) * 0.01f) + 0.3f);
                             this->actor.world.rot.y = Math_Atan2S(spC8.x, spC8.z);
                             this->unk_198 = 1;
-                            this->actor.speedXZ = sqrtf(SQXZ(this->actor.velocity));
+                            this->actor.speed = sqrtf(SQXZ(this->actor.velocity));
                         }
                     } else {
                         this->unk_198 = 0;
-                        Math_ApproachZeroF(&this->actor.speedXZ, 1, 0.1f);
+                        Math_ApproachZeroF(&this->actor.speed, 1, 0.1f);
                     }
                 } else {
-                    this->actor.speedXZ *= 0.7f;
+                    this->actor.speed *= 0.7f;
                 }
 
                 if (this->spinRot.x == 0) {
@@ -687,38 +687,38 @@ void EnKanban_Update(Actor* thisx, PlayState* play) {
                 s16 rippleDelay;
                 s32 rippleScale;
 
-                if ((player->actor.speedXZ > 0.0f) && (player->actor.world.pos.y < this->actor.world.pos.y) &&
+                if ((player->actor.speed > 0.0f) && (player->actor.world.pos.y < this->actor.world.pos.y) &&
                     (this->actor.xyzDistToPlayerSq < SQ(50.0f))) {
-                    Math_ApproachF(&this->actor.speedXZ, player->actor.speedXZ, 1.0f, 0.2f);
-                    if (this->actor.speedXZ > 1.0f) {
-                        this->actor.speedXZ = 1.0f;
+                    Math_ApproachF(&this->actor.speed, player->actor.speed, 1.0f, 0.2f);
+                    if (this->actor.speed > 1.0f) {
+                        this->actor.speed = 1.0f;
                     }
 
                     if (Math_SmoothStepToS(&this->actor.world.rot.y, BINANG_ROT180(this->actor.yawTowardsPlayer), 1,
                                            0x1000, 0) > 0) {
-                        this->spinVel.y = this->actor.speedXZ * 1000.0f;
+                        this->spinVel.y = this->actor.speed * 1000.0f;
                     } else {
-                        this->spinVel.y = this->actor.speedXZ * -1000.0f;
+                        this->spinVel.y = this->actor.speed * -1000.0f;
                     }
                 }
 
                 if (this->actor.bgCheckFlags & 1) {
-                    this->actor.speedXZ = 0.0f;
+                    this->actor.speed = 0.0f;
                 }
 
                 Actor_MoveWithGravity(&this->actor);
 
-                if (this->actor.speedXZ != 0.0f) {
+                if (this->actor.speed != 0.0f) {
                     Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 10.0f, 50.0f, 5);
                     if (this->actor.bgCheckFlags & 8) {
-                        this->actor.speedXZ *= -0.5f;
+                        this->actor.speed *= -0.5f;
                         if (this->spinVel.y > 0) {
                             this->spinVel.y = -2000;
                         } else {
                             this->spinVel.y = 2000;
                         }
                     }
-                    Math_ApproachZeroF(&this->actor.speedXZ, 1.0f, 0.15f);
+                    Math_ApproachZeroF(&this->actor.speed, 1.0f, 0.15f);
                 }
                 this->actor.shape.rot.y += this->spinVel.y;
                 Math_ApproachS(&this->spinVel.y, 0, 1, 0x3A);
@@ -728,9 +728,9 @@ void EnKanban_Update(Actor* thisx, PlayState* play) {
                 Math_ApproachZeroF(&this->floorRot.x, 0.5f, 0.2f);
                 Math_ApproachZeroF(&this->floorRot.z, 0.5f, 0.2f);
 
-                if (fabsf(this->actor.speedXZ) > 1.0f) {
+                if (fabsf(this->actor.speed) > 1.0f) {
                     rippleDelay = 0;
-                } else if (fabsf(this->actor.speedXZ) > 0.5f) {
+                } else if (fabsf(this->actor.speed) > 0.5f) {
                     rippleDelay = 3;
                 } else {
                     rippleDelay = 7;
@@ -756,12 +756,12 @@ void EnKanban_Update(Actor* thisx, PlayState* play) {
                     this->bounceX = Rand_ZeroFloat(10.0f) + 6.0f;
                     this->bounceZ = Rand_ZeroFloat(10.0f) + 6.0f;
                     this->actor.velocity.y = 2.0f + hammerStrength;
-                    this->actor.speedXZ = Rand_ZeroFloat(1.0f);
+                    this->actor.speed = Rand_ZeroFloat(1.0f);
                 } else {
                     this->bounceX = Rand_ZeroFloat(7.0f) + 3.0f;
                     this->bounceZ = Rand_ZeroFloat(7.0f) + 3.0f;
                     this->actor.velocity.y = 3.0f + hammerStrength;
-                    this->actor.speedXZ = Rand_ZeroFloat(1.5f);
+                    this->actor.speed = Rand_ZeroFloat(1.5f);
                 }
 
                 this->spinVel.y = randPlusMinusPoint5Scaled(0x1800);
@@ -801,12 +801,12 @@ void EnKanban_Update(Actor* thisx, PlayState* play) {
                             this->bounceX = Rand_ZeroFloat(10.0f) + 6.0f;
                             this->bounceZ = Rand_ZeroFloat(10.0f) + 6.0f;
                             this->actor.velocity.y = 2.5f + bombStrength;
-                            this->actor.speedXZ = 3.0f + bombStrength;
+                            this->actor.speed = 3.0f + bombStrength;
                         } else {
                             this->bounceX = Rand_ZeroFloat(7.0f) + 3.0f;
                             this->bounceZ = Rand_ZeroFloat(7.0f) + 3.0f;
                             this->actor.velocity.y = 5.0f + bombStrength;
-                            this->actor.speedXZ = 4.0f + bombStrength;
+                            this->actor.speed = 4.0f + bombStrength;
                         }
 
                         this->spinVel.y = randPlusMinusPoint5Scaled(0x1800);

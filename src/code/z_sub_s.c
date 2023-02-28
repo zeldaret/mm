@@ -762,7 +762,7 @@ s32 SubS_WeightPathing_Move(Actor* actor, Path* path, s32* waypoint, f32* progre
     }
     while (true) {
         if (!SubS_WeightPathing_ComputePoint(path, *waypoint, &point, *progress, direction) ||
-            ((s32)(actor->speedXZ * 10000.0f) == 0)) {
+            ((s32)(actor->speed * 10000.0f) == 0)) {
             return false;
         }
         dist = Math_Vec3f_DistXZ(&actor->world.pos, &point);

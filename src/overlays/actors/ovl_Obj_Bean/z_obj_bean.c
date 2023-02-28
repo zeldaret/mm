@@ -235,15 +235,15 @@ void func_809372D0(ObjBean* this) {
     sp34 = Math3D_Vec3fMagnitude(&actor->velocity);
     temp_f2 = D_80938FF8[this->unk_1DE].x;
     temp_f12 = D_80938FF8[this->unk_1DE].z;
-    if (sp34 < (actor->speedXZ * 8.0f)) {
+    if (sp34 < (actor->speed * 8.0f)) {
         temp_f2 = ((temp_f2 - 2.0f) * 0.1f) + 2.0f;
         temp_f12 *= 0.4f;
     }
 
-    Math_StepToF(&actor->speedXZ, temp_f2, temp_f12);
+    Math_StepToF(&actor->speed, temp_f2, temp_f12);
 
-    if ((actor->speedXZ + 0.05f) < sp34) {
-        Math_Vec3f_Scale(&actor->velocity, actor->speedXZ / sp34);
+    if ((actor->speed + 0.05f) < sp34) {
+        Math_Vec3f_Scale(&actor->velocity, actor->speed / sp34);
         this->unk_1BC.x += actor->velocity.x;
         this->unk_1BC.y += actor->velocity.y;
         this->unk_1BC.z += actor->velocity.z;
@@ -255,7 +255,7 @@ void func_809372D0(ObjBean* this) {
         } else {
             this->unk_1DC++;
         }
-        actor->speedXZ *= 0.5f;
+        actor->speed *= 0.5f;
     }
 }
 
@@ -775,7 +775,7 @@ void func_80938874(ObjBean* this) {
     this->actionFunc = func_809388A8;
     this->dyna.actor.draw = func_80938E00;
     this->dyna.actor.flags |= ACTOR_FLAG_10;
-    this->dyna.actor.speedXZ = 0.0f;
+    this->dyna.actor.speed = 0.0f;
 }
 
 void func_809388A8(ObjBean* this, PlayState* play) {

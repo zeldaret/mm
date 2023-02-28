@@ -386,7 +386,7 @@ s32 EnRat_IsTouchingSurface(EnRat* this, PlayState* play) {
 
     bgIdUpDown = bgIdSide = BGCHECK_SCENE;
 
-    lineLength = 2.0f * this->actor.speedXZ;
+    lineLength = 2.0f * this->actor.speed;
 
     posA.x = this->actor.world.pos.x + (this->axisUp.x * 5.0f);
     posA.y = this->actor.world.pos.y + (this->axisUp.y * 5.0f);
@@ -409,7 +409,7 @@ s32 EnRat_IsTouchingSurface(EnRat* this, PlayState* play) {
             this->shouldRotateOntoSurfaces |= EnRat_UpdateFloorPoly(this, polySide, play);
             Math_Vec3f_Copy(&this->actor.world.pos, &posSide);
             this->actor.floorBgId = bgIdSide;
-            this->actor.speedXZ = 0.0f;
+            this->actor.speed = 0.0f;
         } else {
             if (polyUpDown != this->actor.floorPoly) {
                 this->shouldRotateOntoSurfaces |= EnRat_UpdateFloorPoly(this, polyUpDown, play);
@@ -419,7 +419,7 @@ s32 EnRat_IsTouchingSurface(EnRat* this, PlayState* play) {
             this->actor.floorBgId = bgIdUpDown;
         }
     } else {
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
         lineLength *= 3.0f;
         Math_Vec3f_Copy(&posA, &posB);
 
@@ -535,7 +535,7 @@ void EnRat_SetupRevive(EnRat* this) {
     EnRat_InitializeAxes(this);
     EnRat_UpdateRotation(this);
     this->actor.flags &= ~ACTOR_FLAG_1;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     Animation_PlayLoopSetSpeed(&this->skelAnime, &gRealBombchuSpotAnim, 0.0f);
     this->revivePosY = 2666.6667f;
     this->actor.draw = NULL;
@@ -573,7 +573,7 @@ void EnRat_Revive(EnRat* this, PlayState* play) {
 void EnRat_SetupIdle(EnRat* this) {
     Animation_PlayLoop(&this->skelAnime, &gRealBombchuRunAnim);
     this->animLoopCounter = 5;
-    this->actor.speedXZ = 2.0f;
+    this->actor.speed = 2.0f;
     this->actionFunc = EnRat_Idle;
 }
 
@@ -583,7 +583,7 @@ void EnRat_SetupIdle(EnRat* this) {
 void EnRat_Idle(EnRat* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    this->actor.speedXZ = 2.0f;
+    this->actor.speed = 2.0f;
     if (Animation_OnFrame(&this->skelAnime, 0.0f)) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BOMCHU_WALK);
         if (this->animLoopCounter != 0) {
@@ -606,7 +606,7 @@ void EnRat_SetupSpottedPlayer(EnRat* this) {
     this->actor.flags |= ACTOR_FLAG_10;
     Animation_MorphToLoop(&this->skelAnime, &gRealBombchuSpotAnim, -5.0f);
     this->animLoopCounter = 3;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actionFunc = EnRat_SpottedPlayer;
 }
 
@@ -640,7 +640,7 @@ void EnRat_UpdateSparkOffsets(EnRat* this) {
 
 void EnRat_SetupChasePlayer(EnRat* this) {
     Animation_MorphToLoop(&this->skelAnime, &gRealBombchuRunAnim, -5.0f);
-    this->actor.speedXZ = 6.1f;
+    this->actor.speed = 6.1f;
     EnRat_UpdateSparkOffsets(this);
     this->actionFunc = EnRat_ChasePlayer;
 }
@@ -659,7 +659,7 @@ void EnRat_ChasePlayer(EnRat* this, PlayState* play) {
     Vec3f blureP1;
     Vec3f blureP2;
 
-    this->actor.speedXZ = 6.1f;
+    this->actor.speed = 6.1f;
     if (this->hasLostTrackOfPlayer) {
         if (!(player->stateFlags3 & PLAYER_STATE3_100) && (Player_GetMask(play) != PLAYER_MASK_STONE) &&
             Actor_IsFacingPlayer(&this->actor, 0x3000)) {
@@ -713,7 +713,7 @@ void EnRat_ChasePlayer(EnRat* this, PlayState* play) {
 }
 
 void EnRat_SetupBounced(EnRat* this) {
-    this->actor.speedXZ = 5.0f;
+    this->actor.speed = 5.0f;
     this->actor.velocity.y = 8.0f;
     this->actor.world.rot.y = this->actor.yawTowardsPlayer + 0x8000;
     this->actor.gravity = -1.0f;
@@ -750,7 +750,7 @@ void EnRat_Explode(EnRat* this, PlayState* play) {
         Item_DropCollectibleRandom(play, &this->actor, &this->actor.world.pos, 0x100);
     }
 
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actionFunc = EnRat_PostDetonation;
 }
 
@@ -793,7 +793,7 @@ void EnRat_Update(Actor* thisx, PlayState* play) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
             Actor_SetColorFilter(&this->actor, 0, 120, 0, 40);
             if (this->actionFunc == EnRat_Bounced) {
-                this->actor.speedXZ = 0.0f;
+                this->actor.speed = 0.0f;
                 if (this->actor.velocity.y > 0.0f) {
                     this->actor.velocity.y = 0.0f;
                 }

@@ -95,11 +95,11 @@ void func_8099FB64(Actor* thisx, PlayState* play) {
         actor->parent = thisx;
         if (rotCheck) {
             actor->velocity.y = 10.0f;
-            actor->speedXZ = 3.0f;
+            actor->speed = 3.0f;
         } else {
             speedXZ = sqrtf((destVec.x * destVec.x) + (destVec.z * destVec.z));
             actor->velocity.y = (4 * destVec.y) + 4.0f;
-            actor->speedXZ = (2 * speedXZ) + 2.0f;
+            actor->speed = (2 * speedXZ) + 2.0f;
         }
     }
 }

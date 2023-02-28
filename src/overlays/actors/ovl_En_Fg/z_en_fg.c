@@ -212,7 +212,7 @@ void EnFg_Idle(EnFg* this, PlayState* play) {
             this->actor.world.rot.y = Math_Vec3f_Yaw(&ac->world.pos, &this->actor.world.pos);
             this->actor.shape.rot = this->actor.world.rot;
             this->actor.velocity.y = 10.0f;
-            this->actor.speedXZ = 3.0f;
+            this->actor.speed = 3.0f;
             this->actor.gravity = -0.8f;
             this->bounceCounter = 1;
             this->timer = 0;
@@ -263,7 +263,7 @@ void EnFg_Jump(EnFg* this, PlayState* play) {
             this->actor.world.rot.y = Math_Vec3f_Yaw(&ac->world.pos, &this->actor.world.pos);
             this->actor.shape.rot = this->actor.world.rot;
             this->actor.velocity.y = 10.0f;
-            this->actor.speedXZ = 3.0f;
+            this->actor.speed = 3.0f;
             this->actor.gravity = -0.8f;
             this->bounceCounter = 1;
             this->timer = 0;

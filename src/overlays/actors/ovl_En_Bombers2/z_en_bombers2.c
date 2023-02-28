@@ -322,7 +322,7 @@ void func_80C0520C(EnBombers2* this, PlayState* play) {
         if ((fabsf(this->unk_29C.x - this->actor.world.pos.x) < 3.0f) &&
             (fabsf(this->unk_29C.z - this->actor.world.pos.z) < 3.0f)) {
             this->unk_2B6 = this->actor.yawTowardsPlayer;
-            this->actor.speedXZ = 0.0f;
+            this->actor.speed = 0.0f;
             if (fabsf(this->actor.world.rot.y - this->actor.yawTowardsPlayer) < 100.0f) {
                 func_801477B4(play);
                 this->talkState = TEXT_STATE_5;

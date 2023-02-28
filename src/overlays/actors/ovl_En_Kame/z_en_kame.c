@@ -185,7 +185,7 @@ void func_80AD7018(EnKame* this, PlayState* play) {
 
 void func_80AD70A0(EnKame* this) {
     Animation_MorphToPlayOnce(&this->skelAnime1, &object_tl_Anim_004210, -5.0f);
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actionFunc = func_80AD70EC;
 }
 
@@ -207,7 +207,7 @@ void func_80AD70EC(EnKame* this, PlayState* play) {
 
 void func_80AD71B4(EnKame* this) {
     Animation_MorphToLoop(&this->skelAnime1, &object_tl_Anim_00823C, -5.0f);
-    this->actor.speedXZ = 0.5f;
+    this->actor.speed = 0.5f;
     this->unk_29E = Animation_GetLastFrame(&object_tl_Anim_00823C) * ((s32)Rand_ZeroFloat(5.0f) + 3);
     this->unk_2A4 = this->actor.shape.rot.y;
     this->collider.base.acFlags |= (AC_HARD | AC_ON);
@@ -246,7 +246,7 @@ void func_80AD73A8(EnKame* this) {
     this->unk_29E = 0;
     this->unk_2AC = 1.0f;
     this->unk_2A8 = 1.0f;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     if (this->unk_2A0 == 0) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PAMET_VOICE);
     }
@@ -278,7 +278,7 @@ void func_80AD7424(EnKame* this, PlayState* play) {
 }
 
 void func_80AD7568(EnKame* this) {
-    this->actor.speedXZ = this->unk_2A6 * (5.0f / 7552);
+    this->actor.speed = this->unk_2A6 * (5.0f / 7552);
     this->actor.shape.rot.z = this->unk_2A6 * 0.11016949f;
 }
 
@@ -287,7 +287,7 @@ void func_80AD75A8(EnKame* this, PlayState* play) {
     static Color_RGBA8 D_80AD8E58 = { 180, 180, 180, 255 };
     static Vec3f D_80AD8E5C = { 0.0f, 0.75f, 0.0f };
 
-    if ((this->actor.bgCheckFlags & 1) && (this->actor.speedXZ >= 3.0f)) {
+    if ((this->actor.bgCheckFlags & 1) && (this->actor.speed >= 3.0f)) {
         if ((play->gameplayFrames % 2) == 0) {
             u32 temp_v0 = func_800C9BB8(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
 
@@ -312,7 +312,7 @@ void func_80AD76CC(EnKame* this) {
         this->unk_2AC = 0.5f;
         func_80AD7568(this);
         this->unk_29E = 15;
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PAMET_CUTTER_ON);
         this->unk_2BC.y = this->actor.home.pos.y - 100.0f;
     } else {
@@ -401,7 +401,7 @@ void func_80AD7948(EnKame* this, PlayState* play) {
 void func_80AD7B18(EnKame* this) {
     this->actor.draw = EnKame_Draw;
     Animation_MorphToPlayOnce(&this->skelAnime1, &object_tl_Anim_0031DC, -3.0f);
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->unk_2AC = 0.1f;
     this->unk_2A8 = 1.0f;
     this->actor.world.rot.y = this->actor.shape.rot.y;
@@ -434,7 +434,7 @@ void func_80AD7C54(EnKame* this) {
     }
 
     this->actor.draw = EnKame_Draw;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->collider.base.acFlags &= ~AC_ON;
     this->collider.base.atFlags &= ~AT_ON;
     this->collider.base.atFlags &= ~(AT_BOUNCED | AT_HIT);
@@ -460,7 +460,7 @@ void func_80AD7DA4(EnKame* this) {
     this->collider.base.acFlags |= AC_ON;
     this->collider.base.acFlags &= ~AC_HARD;
     this->collider.base.colType = COLTYPE_HIT6;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actionFunc = func_80AD7E0C;
 }
 
@@ -498,7 +498,7 @@ void func_80AD7F10(EnKame* this, PlayState* play) {
 }
 
 void func_80AD7FA4(EnKame* this) {
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     if (this->actor.velocity.y > 0.0f) {
         this->actor.velocity.y = 0.0f;
     }
@@ -545,7 +545,7 @@ void func_80AD8148(EnKame* this, PlayState* play) {
     this->collider.base.atFlags &= ~AT_ON;
     this->collider.base.atFlags &= ~(AC_HARD | AC_HIT);
     this->actor.velocity.y = 15.0f;
-    this->actor.speedXZ = 1.5f;
+    this->actor.speed = 1.5f;
     if (play != NULL) {
         Enemy_StartFinishingBlow(play, &this->actor);
         if (this->actor.draw == func_80AD8D64) {
@@ -581,7 +581,7 @@ void func_80AD825C(EnKame* this, PlayState* play) {
 
 void func_80AD8364(EnKame* this) {
     this->unk_29E = 20;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actionFunc = func_80AD8388;
 }
 

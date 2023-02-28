@@ -214,7 +214,7 @@ void func_808FA19C(EnRr* this, PlayState* play) {
 }
 
 void func_808FA238(EnRr* this, f32 arg1) {
-    this->actor.speedXZ = arg1;
+    this->actor.speed = arg1;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_LIKE_WALK);
 }
 
@@ -271,7 +271,7 @@ void func_808FA3F8(EnRr* this, Player* player) {
     this->actor.flags &= ~ACTOR_FLAG_1;
     this->unk_1F0 = 8;
     this->unk_1E1 = 0;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->unk_218 = 0.0f;
     this->unk_210 = 0.0f;
     this->unk_204 = 0.15f;
@@ -575,7 +575,7 @@ void func_808FAF94(EnRr* this, PlayState* play) {
         (Player_GetMask(play) != PLAYER_MASK_STONE) &&
         (this->actor.xzDistToPlayer < (8421.053f * this->actor.scale.x))) {
         func_808FA260(this);
-    } else if ((this->actor.xzDistToPlayer < 400.0f) && (this->actor.speedXZ == 0.0f)) {
+    } else if ((this->actor.xzDistToPlayer < 400.0f) && (this->actor.speed == 0.0f)) {
         func_808FA238(this, 2.0f);
     }
 }
@@ -742,7 +742,7 @@ void func_808FB680(EnRr* this, PlayState* play) {
     } else {
         Math_SmoothStepToS(&this->actor.shape.rot.y, BINANG_ROT180(this->actor.yawTowardsPlayer), 10, 1000, 0);
         this->actor.world.rot.y = this->actor.shape.rot.y;
-        if (this->actor.speedXZ == 0.0f) {
+        if (this->actor.speed == 0.0f) {
             func_808FA238(this, 2.0f);
         }
     }
@@ -801,9 +801,9 @@ void EnRr_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
 
     if (this->actor.params == ENRR_2) {
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
     } else {
-        Math_StepToF(&this->actor.speedXZ, 0.0f, 0.1f);
+        Math_StepToF(&this->actor.speed, 0.0f, 0.1f);
     }
 
     Actor_MoveWithGravity(&this->actor);

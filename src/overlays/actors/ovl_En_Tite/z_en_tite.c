@@ -287,7 +287,7 @@ void func_80893E54(EnTite* this, PlayState* play) {
 void func_80893ED4(EnTite* this) {
     Animation_MorphToLoop(&this->skelAnime, &object_tite_Anim_0012E4, 4.0f);
     this->unk_2BC = Rand_S16Offset(15, 30);
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actionFunc = func_80893F30;
 }
 
@@ -305,7 +305,7 @@ void func_80893F30(EnTite* this, PlayState* play) {
 void func_80893FD0(EnTite* this) {
     Animation_PlayOnce(&this->skelAnime, &object_tite_Anim_00083C);
     this->actor.velocity.y = 0.0f;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->actionFunc = func_80894024;
 }
@@ -358,7 +358,7 @@ void func_8089408C(EnTite* this, PlayState* play) {
 
     this->actor.bgCheckFlags &= ~(0x40 | 0x20 | 0x2 | 0x1);
     this->actor.gravity = -1.0f;
-    this->actor.speedXZ = 4.0f;
+    this->actor.speed = 4.0f;
     this->actionFunc = func_808942B4;
 }
 
@@ -366,7 +366,7 @@ void func_808942B4(EnTite* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     if (((this->actor.bgCheckFlags & 1) || (func_80893ADC(this) && (this->actor.depthInWater > 0.0f))) &&
         (this->actor.velocity.y <= 0.0f)) {
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
         this->collider.base.atFlags &= ~AT_HIT;
         if (!func_80893ADC(this)) {
             func_80893BCC(this, play);
@@ -430,7 +430,7 @@ void func_808945B4(EnTite* this, PlayState* play) {
 
 void func_808945EC(EnTite* this) {
     Animation_PlayLoop(&this->skelAnime, &object_tite_Anim_000A14);
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actor.velocity.y = 0.0f;
     this->actionFunc = func_80894638;
 }
@@ -480,7 +480,7 @@ void func_8089484C(EnTite* this) {
     }
     this->actor.velocity.y = 9.5f;
     this->actor.gravity = -1.0f;
-    this->actor.speedXZ = 4.0f;
+    this->actor.speed = 4.0f;
     if (func_80893ADC(this)) {
         this->actor.world.pos.y += this->actor.depthInWater;
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_TEKU_JUMP_WATER);
@@ -493,7 +493,7 @@ void func_8089484C(EnTite* this) {
 void func_80894910(EnTite* this, PlayState* play) {
     Vec3f sp34;
 
-    Math_SmoothStepToF(&this->actor.speedXZ, 0.0f, 0.1f, 1.0f, 0.0f);
+    Math_SmoothStepToF(&this->actor.speed, 0.0f, 0.1f, 1.0f, 0.0f);
     SkelAnime_Update(&this->skelAnime);
     if (this->actor.bgCheckFlags & 0x40) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_TEKU_LAND_WATER);
@@ -510,7 +510,7 @@ void func_80894910(EnTite* this, PlayState* play) {
 
     if (((this->actor.bgCheckFlags & 1) || (func_80893ADC(this) && (this->actor.depthInWater > 0.0f))) &&
         (this->actor.velocity.y <= 0.0f)) {
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
         Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 4000);
         this->actor.world.rot.y = this->actor.shape.rot.y;
 
@@ -536,7 +536,7 @@ void func_80894910(EnTite* this, PlayState* play) {
 
 void func_80894B2C(EnTite* this) {
     Animation_MorphToLoop(&this->skelAnime, &object_tite_Anim_0012E4, 4.0f);
-    this->actor.speedXZ = -6.0f;
+    this->actor.speed = -6.0f;
     this->actor.gravity = -1.0f;
     if (this->collider.base.ac != NULL) {
         func_800BE568(&this->actor, &this->collider);
@@ -548,7 +548,7 @@ void func_80894B2C(EnTite* this) {
 }
 
 void func_80894BC8(EnTite* this, PlayState* play) {
-    Math_SmoothStepToF(&this->actor.speedXZ, 0.0f, 1.0f, 0.5f, 0.0f);
+    Math_SmoothStepToF(&this->actor.speed, 0.0f, 1.0f, 0.5f, 0.0f);
     SkelAnime_Update(&this->skelAnime);
     if (func_80893ADC(this) && (this->actor.velocity.y <= 0.0f)) {
         this->actor.gravity = 0.0f;
@@ -562,7 +562,7 @@ void func_80894BC8(EnTite* this, PlayState* play) {
         func_80893BCC(this, play);
     }
 
-    if ((this->actor.speedXZ == 0.0f) && ((this->actor.bgCheckFlags & 1) || func_80893ADC(this))) {
+    if ((this->actor.speed == 0.0f) && ((this->actor.bgCheckFlags & 1) || func_80893ADC(this))) {
         this->actor.world.rot.y = this->actor.shape.rot.y;
         this->collider.base.acFlags |= AC_ON;
         if ((Player_GetMask(play) == PLAYER_MASK_STONE) ||
@@ -579,7 +579,7 @@ void func_80894BC8(EnTite* this, PlayState* play) {
 }
 
 void func_80894DD0(EnTite* this) {
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     if (this->actor.velocity.y > 0.0f) {
         this->actor.velocity.y = 0.0f;
     }
@@ -629,7 +629,7 @@ void func_80895020(EnTite* this, PlayState* play) {
     f32 temp_f0;
     Vec3f* ptr;
 
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->collider.base.acFlags &= ~AC_ON;
     this->actor.colorFilterTimer = 0;
     SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 40, NA_SE_EN_TEKU_DEAD);
@@ -640,7 +640,7 @@ void func_80895020(EnTite* this, PlayState* play) {
     this->unk_2BC = 25;
     this->actor.gravity = -0.58f;
     this->actor.velocity.y = 0.0f;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
 
     ptr = &this->unk_33C[0];
     for (i = 0; i < ARRAY_COUNT(this->limbPos); i++, ptr++) {
@@ -685,7 +685,7 @@ void func_808952EC(EnTite* this) {
     func_80893A18(this);
     this->unk_2B9 = 1;
     this->unk_2BC = 400;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actor.gravity = -1.0f;
     this->unk_2B8 = Rand_ZeroOne() * 50.0f;
     this->actor.bgCheckFlags &= ~1;
@@ -770,7 +770,7 @@ void func_80895738(EnTite* this, PlayState* play) {
     }
 
     if (this->unk_2BC == -1) {
-        Math_StepToF(&this->actor.speedXZ, 0.0f, 0.3f);
+        Math_StepToF(&this->actor.speed, 0.0f, 0.3f);
         if (this->actor.bgCheckFlags & 1) {
             this->actor.world.rot.y = this->actor.shape.rot.y;
             func_80893ED4(this);
@@ -778,13 +778,13 @@ void func_80895738(EnTite* this, PlayState* play) {
         }
     } else if (this->unk_2BC > 0) {
         this->unk_2BC--;
-        Math_StepToF(&this->actor.speedXZ, 10.0f, 0.3f);
+        Math_StepToF(&this->actor.speed, 10.0f, 0.3f);
         this->actor.flags |= ACTOR_FLAG_1000000;
         CollisionCheck_SetAT(play, &play->colChkCtx, &this->collider.base);
         if (!func_80893A34(this, play)) {
             this->unk_2BC = 0;
         }
-    } else if ((this->unk_2BC == 0) && Math_StepToF(&this->actor.speedXZ, 0.0f, 0.3f)) {
+    } else if ((this->unk_2BC == 0) && Math_StepToF(&this->actor.speed, 0.0f, 0.3f)) {
         this->actor.world.rot.y = this->actor.shape.rot.y;
         func_80893A18(this);
         if ((Player_GetMask(play) == PLAYER_MASK_STONE) || (this->actor.xzDistToPlayer > 450.0f) ||
@@ -796,7 +796,7 @@ void func_80895738(EnTite* this, PlayState* play) {
             func_80893A9C(this, play);
         }
     }
-    this->actor.shape.rot.y += (s16)(this->actor.speedXZ * 768.0f);
+    this->actor.shape.rot.y += (s16)(this->actor.speed * 768.0f);
 }
 
 void func_8089595C(EnTite* this, PlayState* play) {
@@ -813,7 +813,7 @@ void func_80895A10(EnTite* this) {
     s16 rand;
 
     Animation_Change(&this->skelAnime, &object_tite_Anim_000A14, 2.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 4.0f);
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     rand = Rand_S16Offset(20, 20);
     this->unk_2BC = ((Rand_ZeroOne() < 0.5f) ? -1 : 1) * rand;
     this->actionFunc = func_80895AC0;
@@ -862,7 +862,7 @@ void func_80895AC0(EnTite* this, PlayState* play) {
 
 void func_80895CB0(EnTite* this) {
     this->skelAnime.playSpeed = 1.0f;
-    this->actor.speedXZ = 1.0f;
+    this->actor.speed = 1.0f;
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->unk_2BC = Rand_S16Offset(20, 20);
     this->actionFunc = func_80895D08;
@@ -890,7 +890,7 @@ void func_80895DE8(EnTite* this) {
     this->collider.base.acFlags &= ~AC_ON;
     this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
     this->skelAnime.playSpeed = 1.0f;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actionFunc = func_80895E28;
 }
 

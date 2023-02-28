@@ -186,7 +186,7 @@ void func_80B22040(EnHakurock* this, PlayState* play) {
 void func_80B220A8(EnHakurock* this) {
     this->actor.params = EN_HAKUROCK_TYPE_BOULDER;
     this->actor.draw = func_80B228F4;
-    this->actor.speedXZ = Rand_ZeroFloat(3.5f) + 2.5f;
+    this->actor.speed = Rand_ZeroFloat(3.5f) + 2.5f;
     this->actor.velocity.y = Rand_ZeroFloat(4.5f) + 18.0f;
     Actor_SetScale(&this->actor, (Rand_ZeroFloat(5.0f) + 15.0f) * 0.001f);
     this->actor.world.rot.y = ((s32)Rand_Next() >> 0x12) + this->actor.parent->shape.rot.y + 0x8000;

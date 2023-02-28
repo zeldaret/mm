@@ -215,7 +215,7 @@ s32 func_80C012FC(EnBomjimb* this, PlayState* play) {
 
     if (!Play_InCsMode(play) && (this->actor.xzDistToPlayer < 40.0f) &&
         (fabsf(player->actor.world.pos.y - this->actor.world.pos.y) < 50.0f) && (play->msgCtx.msgLength == 0)) {
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
         func_80C02740(this, play);
         return true;
     }
@@ -368,7 +368,7 @@ void func_80C01A24(EnBomjimb* this, PlayState* play) {
         if ((this->unk_2E4 != NULL) && (this->unk_2E4->update != NULL)) {
             ((EnNiw*)this->unk_2E4)->unk2BC.z = 90000.0f;
         }
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
         this->unk_2E4 = NULL;
         this->actor.gravity = -2.0f;
         func_80C02108(this);
@@ -380,7 +380,7 @@ void func_80C01A24(EnBomjimb* this, PlayState* play) {
     }
 
     if (this->unk_2C0 != 0) {
-        Math_ApproachF(&this->actor.speedXZ, 6.0f, 0.5f, 2.0f);
+        Math_ApproachF(&this->actor.speed, 6.0f, 0.5f, 2.0f);
     }
 
     if ((this->unk_2C0 != 0) && !(this->actor.bgCheckFlags & 1)) {
@@ -395,13 +395,13 @@ void func_80C01B40(EnBomjimb* this) {
 }
 
 void func_80C01B74(EnBomjimb* this, PlayState* play) {
-    Math_ApproachF(&this->actor.speedXZ, 6.0f, 0.5f, 2.0f);
+    Math_ApproachF(&this->actor.speed, 6.0f, 0.5f, 2.0f);
     if ((this->collider.base.acFlags & AC_HIT) || (this->actor.bgCheckFlags & 1)) {
         this->collider.base.acFlags &= ~AC_HIT;
         if ((this->unk_2E4 != NULL) && (this->unk_2E4->update != NULL)) {
             ((EnNiw*)this->unk_2E4)->unk2BC.z = 90000.0f;
         }
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
         this->unk_2E4 = NULL;
         this->actor.gravity = -2.0f;
         func_80C02108(this);
@@ -419,7 +419,7 @@ void func_80C01C18(EnBomjimb* this, PlayState* play) {
             this->unk_294.z = this->unk_2E4->world.pos.z;
         }
     }
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->unk_2CA = 2;
     this->actionFunc = func_80C01CD0;
 }
@@ -553,7 +553,7 @@ void func_80C0217C(EnBomjimb* this, PlayState* play) {
         return;
     }
 
-    Math_ApproachF(&this->actor.speedXZ, 8.0f, 0.5f, 2.0f);
+    Math_ApproachF(&this->actor.speed, 8.0f, 0.5f, 2.0f);
     Math_Vec3f_Copy(&sp74, &this->actor.world.pos);
 
     sp74.x += Math_SinS(this->actor.world.rot.y) * 50.0f;
@@ -611,7 +611,7 @@ void func_80C0217C(EnBomjimb* this, PlayState* play) {
 void func_80C0250C(EnBomjimb* this) {
     func_80C0113C(this, 15, 1.0f);
     this->unk_2D4 = 0;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->unk_2D6 = BINANG_ROT180(this->actor.yawTowardsPlayer);
     func_80C012E0(this);
     this->unk_2CA = 6;
@@ -640,7 +640,7 @@ void func_80C02570(EnBomjimb* this, PlayState* play) {
 void func_80C0267C(EnBomjimb* this) {
     func_80C012E0(this);
     func_80C0113C(this, 8, 1.0f);
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actor.world.rot.y = this->actor.yawTowardsPlayer;
     this->unk_2AE = 40;
     this->unk_2C2 = 0;

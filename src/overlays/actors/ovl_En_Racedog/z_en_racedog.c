@@ -515,16 +515,16 @@ void EnRacedog_UpdateSpeed(EnRacedog* this) {
         this->actor.shape.rot.y = this->actor.world.rot.y;
     }
 
-    Math_ApproachF(&this->actor.speedXZ, this->targetSpeed, 0.5f, 3.0f);
+    Math_ApproachF(&this->actor.speed, this->targetSpeed, 0.5f, 3.0f);
 
     // The dog that the player has selected has a slightly higher max speed than the other dogs.
     if (this->index == this->selectedDogIndex) {
-        if (this->actor.speedXZ > 7.5f) {
-            this->actor.speedXZ = 7.5f;
+        if (this->actor.speed > 7.5f) {
+            this->actor.speed = 7.5f;
         }
     } else {
-        if (this->actor.speedXZ > 7.0f) {
-            this->actor.speedXZ = 7.0f;
+        if (this->actor.speed > 7.0f) {
+            this->actor.speed = 7.0f;
         }
     }
 }
@@ -602,7 +602,7 @@ void EnRacedog_CheckForFinish(EnRacedog* this) {
  * to normal speed otherwise.
  */
 void EnRacedog_UpdateRunAnimationPlaySpeed(EnRacedog* this) {
-    if (this->actor.speedXZ < 3.0f) {
+    if (this->actor.speed < 3.0f) {
         sAnimationInfo[RACEDOG_ANIM_RUN].playSpeed = 0.9f;
     } else {
         sAnimationInfo[RACEDOG_ANIM_RUN].playSpeed = 1.0f;
@@ -660,7 +660,7 @@ s32 EnRacedog_IsOverFinishLine(EnRacedog* this, Vec2f* finishLineCoordinates) {
 
 void EnRacedog_SpawnFloorDustRing(EnRacedog* this, PlayState* play) {
     s16 curFrame = this->skelAnime.curFrame;
-    s16 mod = (this->actor.speedXZ > 6.0f) ? 2 : 3;
+    s16 mod = (this->actor.speed > 6.0f) ? 2 : 3;
     Vec3f pos;
 
     if (((this->index + curFrame) % mod) == 0) {

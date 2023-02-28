@@ -397,11 +397,11 @@ void EnGrasshopper_Fly(EnGrasshopper* this, PlayState* play) {
         Math_SmoothStepToS(&this->actor.world.rot.z, this->targetRot.z, 5, 0x3E8, 5);
         this->targetRot.z *= 0.8f;
         if (this->waitTimer != 0) {
-            Math_ApproachZeroF(&this->actor.speedXZ, 0.2f, 0.5f);
+            Math_ApproachZeroF(&this->actor.speed, 0.2f, 0.5f);
         } else {
             this->targetRot.z = (this->actor.world.rot.y - this->targetRot.y) * 0.2f;
             targetSpeed = (this->index * 0.1f) + 4.0f;
-            Math_ApproachF(&this->actor.speedXZ, targetSpeed, 0.4f, 0.7f);
+            Math_ApproachF(&this->actor.speed, targetSpeed, 0.4f, 0.7f);
             Math_ApproachF(&this->rotationalVelocity, 2000.0f, 1.0f, 50.0f);
             Math_SmoothStepToS(&this->actor.world.rot.y, this->targetRot.y, 5, this->rotationalVelocity, 5);
             if (this->timer == 0) {
@@ -464,7 +464,7 @@ void EnGrasshopper_RoamInCircles(EnGrasshopper* this, PlayState* play) {
             rotationSpeed = this->index + 70;
             targetSpeed = (this->index * 0.05f) + 4.0f;
             this->targetRot.y = Math_Atan2S(diffX, diffZ);
-            Math_ApproachF(&this->actor.speedXZ, targetSpeed, 0.4f, 0.8f);
+            Math_ApproachF(&this->actor.speed, targetSpeed, 0.4f, 0.8f);
             Math_SmoothStepToS(&this->actor.world.rot.y, this->targetRot.y, rotationSpeed, 0xFA0, 0xA);
         }
     }
@@ -478,7 +478,7 @@ void EnGrasshopper_SetupBank(EnGrasshopper* this) {
     this->targetBankRot.y = this->actor.world.rot.y + 0x8000;
     this->action = EN_GRASSHOPPER_ACTION_BANK;
     this->bankState = EN_GRASSHOPPER_BANK_STATE_BANKING;
-    this->actor.speedXZ = 2.0f;
+    this->actor.speed = 2.0f;
     this->actionFunc = EnGrasshopper_Bank;
 }
 
@@ -531,7 +531,7 @@ void EnGrasshopper_Bounced(EnGrasshopper* this, PlayState* play) {
 
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BATTA_FLY - SFX_FLAG);
     targetSpeed = (this->index * 0.05f) + 7.0f;
-    Math_ApproachF(&this->actor.speedXZ, targetSpeed, 0.4f, 0.8f);
+    Math_ApproachF(&this->actor.speed, targetSpeed, 0.4f, 0.8f);
     Math_SmoothStepToS(&this->actor.world.rot.z, this->targetRot.z, 5, 0x3E8, 5);
     this->targetRot.z *= 0.8f;
     Math_SmoothStepToS(&this->actor.world.rot.y, this->targetRot.y, 5, this->rotationalVelocity, 5);
@@ -603,7 +603,7 @@ void EnGrasshopper_SetupAttack(EnGrasshopper* this) {
     EnGrasshopper_ChangeAnim(this, EN_GRASSHOPPER_ANIM_ATTACK);
     this->approachSpeed = 0.0f;
     Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 0xA, 0xFA0, 0xA);
-    this->actor.speedXZ = 3.0f;
+    this->actor.speed = 3.0f;
     this->baseFlyHeight = this->actor.world.pos.y;
     this->collider.elements[0].info.toucherFlags &= ~(TOUCH_ON | TOUCH_SFX_WOOD);
     this->collider.elements[1].info.toucherFlags |= (TOUCH_ON | TOUCH_SFX_WOOD);
@@ -675,7 +675,7 @@ void EnGrasshopper_SetupWaitAfterAttack(EnGrasshopper* this) {
     Math_ApproachF(&this->actor.world.pos.y, this->targetPosY, 0.1f, 10.0f);
     this->action = EN_GRASSHOPPER_ACTION_WAIT_AFTER_ATTACK;
     this->waitTimer = 20;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->collider.elements[1].info.toucherFlags &= ~(TOUCH_ON | TOUCH_SFX_WOOD);
     this->actionFunc = EnGrasshopper_WaitAfterAttack;
 }
@@ -697,7 +697,7 @@ void EnGrasshopper_SetupDamaged(EnGrasshopper* this, PlayState* play) {
     Vec3f damagedVelocity;
 
     EnGrasshopper_ChangeAnim(this, EN_GRASSHOPPER_ANIM_DAMAGE);
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actor.flags |= ACTOR_FLAG_1;
     this->approachSpeed = 0.0f;
     this->collider.elements[1].info.toucherFlags &= ~(TOUCH_ON | TOUCH_SFX_WOOD);
@@ -727,7 +727,7 @@ void EnGrasshopper_Damaged(EnGrasshopper* this, PlayState* play) {
 void EnGrasshopper_SetupDead(EnGrasshopper* this, PlayState* play) {
     EnGrasshopper_ChangeAnim(this, EN_GRASSHOPPER_ANIM_DEAD);
     this->actor.flags |= ACTOR_FLAG_8000000;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->approachSpeed = 0.0f;
     this->actor.velocity.y = 5.0f;
     this->actor.gravity = -0.5f;
@@ -768,7 +768,7 @@ void EnGrasshopper_Dead(EnGrasshopper* this, PlayState* play) {
 void EnGrasshopper_SetupFall(EnGrasshopper* this) {
     EnGrasshopper_ChangeAnim(this, EN_GRASSHOPPER_ANIM_FALL);
     this->action = EN_GRASSHOPPER_ACTION_FALL;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->approachSpeed = 0.0f;
     this->actionFunc = EnGrasshopper_Fall;
 }

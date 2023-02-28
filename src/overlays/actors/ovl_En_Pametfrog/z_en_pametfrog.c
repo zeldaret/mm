@@ -497,7 +497,7 @@ void EnPametfrog_SetupFallOffSnapper(EnPametfrog* this, PlayState* play) {
 
     Animation_PlayOnce(&this->skelAnime, &gGekkoFallInAirAnim);
     this->actor.params = GEKKO_FALL_OFF_SNAPPER;
-    this->actor.speedXZ = 7.0f;
+    this->actor.speed = 7.0f;
     this->actor.velocity.y = 15.0f;
     this->actor.world.rot.y = BINANG_ROT180(this->actor.child->world.rot.y);
     this->actor.shape.rot.y = this->actor.world.rot.y;
@@ -548,9 +548,9 @@ void EnPametfrog_JumpToWall(EnPametfrog* this, PlayState* play) {
         EnPametfrog_SetupWallCrawl(this);
     } else if (!(this->actor.bgCheckFlags & 1) ||
                ((this->skelAnime.curFrame > 1.0f) && (this->skelAnime.curFrame < 12.0f))) {
-        this->actor.speedXZ = 12.0f;
+        this->actor.speed = 12.0f;
     } else {
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
     }
 }
 
@@ -580,7 +580,7 @@ void EnPametfrog_SetupWallCrawl(EnPametfrog* this) {
     }
 
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_FROG_RUNAWAY);
-    this->actor.speedXZ = 8.0f;
+    this->actor.speed = 8.0f;
     this->timer = Rand_S16Offset(35, 15);
     this->actionFunc = EnPametfrog_WallCrawl;
 }
@@ -602,8 +602,8 @@ void EnPametfrog_WallCrawl(EnPametfrog* this, PlayState* play) {
     } else {
         SkelAnime_Update(&this->skelAnime);
         this->timer--;
-        this->actor.speedXZ = 8.0f;
-        doubleSpeedXZ = this->actor.speedXZ * 2.0f;
+        this->actor.speed = 8.0f;
+        doubleSpeedXZ = this->actor.speed * 2.0f;
         vec1.x = this->actor.world.pos.x + this->unk_2DC.x * 2.0f;
         vec1.y = this->actor.world.pos.y + this->unk_2DC.y * 2.0f;
         vec1.z = this->actor.world.pos.z + this->unk_2DC.z * 2.0f;
@@ -619,7 +619,7 @@ void EnPametfrog_WallCrawl(EnPametfrog* this, PlayState* play) {
                 isSuccess = func_8086A2CC(this, poly1);
                 Math_Vec3f_Copy(&this->actor.world.pos, &worldPos1);
                 this->actor.floorBgId = bgId1;
-                this->actor.speedXZ = 0.0f;
+                this->actor.speed = 0.0f;
             } else {
                 if (this->actor.floorPoly != poly2) {
                     isSuccess = func_8086A2CC(this, poly2);
@@ -659,7 +659,7 @@ void EnPametfrog_SetupWallPause(EnPametfrog* this) {
     s32 pad;
     f32 randFloat;
 
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->skelAnime.playSpeed = 1.5f;
     if (this->timer != 0) {
         this->wallRotation = this->unk_2E8.y > 0.0f ? (M_PI / 30) : (-M_PI / 30);
@@ -705,7 +705,7 @@ void EnPametfrog_SetupClimbDownWall(EnPametfrog* this) {
     this->actor.shape.rot.x = 0;
     this->actor.shape.rot.z = 0;
     this->actor.colChkInfo.mass = 50;
-    this->actor.speedXZ = 5.0f;
+    this->actor.speed = 5.0f;
     this->collider.base.acFlags &= ~AC_ON;
     this->actor.velocity.y = 0.0f;
     this->actor.gravity = -1.0f;
@@ -744,9 +744,9 @@ void EnPametfrog_RunToSnapper(EnPametfrog* this, PlayState* play) {
     this->actor.shape.rot.y = Actor_YawBetweenActors(&this->actor, this->actor.child);
     this->actor.world.rot.y = this->actor.shape.rot.y;
     if (!(this->actor.bgCheckFlags & 1) || ((this->skelAnime.curFrame > 1.0f) && (this->skelAnime.curFrame < 12.0f))) {
-        this->actor.speedXZ = 12.0f;
+        this->actor.speed = 12.0f;
     } else {
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
     }
 
     if ((this->actor.child->params == 1) && (Actor_XZDistanceBetweenActors(&this->actor, this->actor.child) < 120.0f) &&
@@ -760,7 +760,7 @@ void EnPametfrog_SetupJumpOnSnapper(EnPametfrog* this) {
     this->timer = 6;
     this->collider.base.ocFlags1 &= ~OC1_ON;
     this->collider.base.acFlags &= ~AC_ON;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actor.velocity.y = 0.0f;
     this->actor.shape.rot.y = Actor_YawBetweenActors(&this->actor, this->actor.child);
     this->actor.world.rot.y = this->actor.shape.rot.y;
@@ -811,7 +811,7 @@ void EnPametfrog_SetupFallInAir(EnPametfrog* this, PlayState* play) {
         this->actor.params = GEKKO_RETURN_TO_SNAPPER;
     }
 
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actor.velocity.y = 0.0f;
     this->collider.base.acFlags &= ~AC_ON;
     this->timer = 10;
@@ -997,7 +997,7 @@ void EnPametfrog_SetupCutscene(EnPametfrog* this) {
 
     ActorCutscene_SetIntentToPlay(this->cutscene);
     this->actionFunc = EnPametfrog_PlayCutscene;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actor.velocity.y = 0.0f;
 }
 
@@ -1023,7 +1023,7 @@ void EnPametfrog_PlayCutscene(EnPametfrog* this, PlayState* play) {
 void EnPametfrog_SetupLookAround(EnPametfrog* this) {
     Animation_PlayOnce(&this->skelAnime, &gGekkoLookAroundAnim);
     this->collider.base.atFlags &= ~AT_ON;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->actionFunc = EnPametfrog_LookAround;
 }
@@ -1054,9 +1054,9 @@ void EnPametfrog_JumpToLink(EnPametfrog* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     EnPametfrog_JumpOnGround(this, play);
     if (!(this->actor.bgCheckFlags & 1) || (this->skelAnime.curFrame > 1.0f && this->skelAnime.curFrame < 12.0f)) {
-        this->actor.speedXZ = 8.0f;
+        this->actor.speed = 8.0f;
     } else {
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
     }
 
     if ((this->collider.base.ocFlags1 & OC1_HIT) && (this->collider.base.ocFlags2 & OC2_HIT_PLAYER) &&
@@ -1069,7 +1069,7 @@ void EnPametfrog_JumpToLink(EnPametfrog* this, PlayState* play) {
 void EnPametfrog_SetupMeleeAttack(EnPametfrog* this) {
     Animation_PlayOnce(&this->skelAnime, &gGekkoBoxingStanceAnim);
     this->timer = 7;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actionFunc = EnPametfrog_MeleeAttack;
 }
 
@@ -1113,7 +1113,7 @@ void EnPametfrog_SetupDamage(EnPametfrog* this) {
     this->timer = 20;
     this->collider.base.atFlags &= ~AT_ON;
     this->collider.base.acFlags &= ~AC_ON;
-    this->actor.speedXZ = 10.0f;
+    this->actor.speed = 10.0f;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_FROG_DAMAGE);
     Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 20);
     func_800BE5CC(&this->actor, &this->collider, 0);
@@ -1124,7 +1124,7 @@ void EnPametfrog_SetupDamage(EnPametfrog* this) {
 void EnPametfrog_Damage(EnPametfrog* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     this->timer--;
-    Math_StepToF(&this->actor.speedXZ, 0.0f, 0.5f);
+    Math_StepToF(&this->actor.speed, 0.0f, 0.5f);
     if (this->timer == 0) {
         if (this->actor.colChkInfo.health > 0) {
             EnPametfrog_SetupJumpToLink(this);
@@ -1141,7 +1141,7 @@ void EnPametfrog_SetupStun(EnPametfrog* this) {
     }
 
     this->collider.base.atFlags &= ~AT_ON;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
 
     if (this->actor.colChkInfo.health == 0) {
         this->collider.base.acFlags &= ~AC_ON;

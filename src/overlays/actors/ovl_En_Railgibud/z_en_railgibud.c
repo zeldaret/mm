@@ -286,7 +286,7 @@ void EnRailgibud_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void EnRailgibud_SetupWalkInCircles(EnRailgibud* this) {
-    this->actor.speedXZ = 0.6f;
+    this->actor.speed = 0.6f;
     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_RAILGIBUD_ANIM_WALK);
     this->actionFunc = EnRailgibud_WalkInCircles;
 }
@@ -359,7 +359,7 @@ void EnRailgibud_AttemptPlayerFreeze(EnRailgibud* this, PlayState* play) {
 
 void EnRailgibud_SetupWalkToPlayer(EnRailgibud* this) {
     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_RAILGIBUD_ANIM_WALK);
-    this->actor.speedXZ = 0.4f;
+    this->actor.speed = 0.4f;
 
     if (this->actionFunc == EnRailgibud_AttemptPlayerFreeze) {
         this->playerStunWaitTimer = 80;
@@ -491,13 +491,13 @@ void EnRailgibud_Grab(EnRailgibud* this, PlayState* play) {
 void EnRailgibud_SetupGrabFail(EnRailgibud* this) {
     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_RAILGIBUD_ANIM_DAMAGE);
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_DAMAGE);
-    this->actor.speedXZ = -2.0f;
+    this->actor.speed = -2.0f;
     this->actionFunc = EnRailgibud_GrabFail;
 }
 
 void EnRailgibud_GrabFail(EnRailgibud* this, PlayState* play) {
-    if (this->actor.speedXZ < 0.0f) {
-        this->actor.speedXZ += 0.15f;
+    if (this->actor.speed < 0.0f) {
+        this->actor.speed += 0.15f;
     }
 
     this->actor.world.rot.y = this->actor.yawTowardsPlayer;
@@ -530,7 +530,7 @@ void EnRailgibud_TurnAwayAndShakeHead(EnRailgibud* this, PlayState* play) {
 
 void EnRailgibud_SetupWalkToHome(EnRailgibud* this) {
     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_RAILGIBUD_ANIM_WALK);
-    this->actor.speedXZ = 0.4f;
+    this->actor.speed = 0.4f;
     this->actionFunc = EnRailgibud_WalkToHome;
 }
 
@@ -538,10 +538,10 @@ void EnRailgibud_WalkToHome(EnRailgibud* this, PlayState* play) {
     Math_SmoothStepToS(&this->headRotation.y, 0, 1, 100, 0);
     Math_SmoothStepToS(&this->upperBodyRotation.y, 0, 1, 100, 0);
     if (Actor_XZDistanceToPoint(&this->actor, &this->actor.home.pos) < 5.0f) {
-        if (this->actor.speedXZ > 0.2f) {
-            this->actor.speedXZ -= 0.2f;
+        if (this->actor.speed > 0.2f) {
+            this->actor.speed -= 0.2f;
         } else {
-            this->actor.speedXZ = 0.0f;
+            this->actor.speed = 0.0f;
         }
 
         Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.home.rot.y, 1, 200, 10);
@@ -567,13 +567,13 @@ void EnRailgibud_SetupDamage(EnRailgibud* this) {
     this->stunTimer = 0;
     this->grabWaitTimer = 0;
     this->actor.world.rot.y = this->actor.yawTowardsPlayer;
-    this->actor.speedXZ = -2.0f;
+    this->actor.speed = -2.0f;
     this->actionFunc = EnRailgibud_Damage;
 }
 
 void EnRailgibud_Damage(EnRailgibud* this, PlayState* play) {
-    if (this->actor.speedXZ < 0.0f) {
-        this->actor.speedXZ += 0.15f;
+    if (this->actor.speed < 0.0f) {
+        this->actor.speed += 0.15f;
     }
 
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
@@ -963,7 +963,7 @@ void EnRailgibud_CheckIfTalkingToPlayer(EnRailgibud* this, PlayState* play) {
             Message_StartTextbox(play, 0x13B2, &this->actor);
             this->textId = 0x13B2;
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_AIM);
-            this->actor.speedXZ = 0.0f;
+            this->actor.speed = 0.0f;
         } else if (CHECK_FLAG_ALL(this->actor.flags, (ACTOR_FLAG_1 | ACTOR_FLAG_8)) &&
                    !(this->collider.base.acFlags & AC_HIT)) {
             func_800B8614(&this->actor, play, 100.0f);
@@ -981,7 +981,7 @@ void EnRailgibud_CheckIfTalkingToPlayer(EnRailgibud* this, PlayState* play) {
                 if (Message_ShouldAdvance(play)) {
                     this->textId = 0;
                     this->isInvincible = false;
-                    this->actor.speedXZ = 0.6f;
+                    this->actor.speed = 0.6f;
                 }
                 break;
 
