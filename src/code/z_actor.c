@@ -4282,6 +4282,9 @@ void Npc_TrackPoint(Actor* actor, NpcInteractInfo* interactInfo, s16 presetIndex
         case NPC_TRACKING_HEAD_AND_TORSO:
             rotLimits.rotateYaw = false;
             break;
+
+        default:
+            break;
     }
 
     Npc_TrackPointWithLimits(actor, interactInfo, rotLimits.maxHeadYaw, rotLimits.maxHeadPitch, rotLimits.minHeadPitch,
