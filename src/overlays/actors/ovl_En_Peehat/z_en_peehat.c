@@ -449,7 +449,7 @@ void func_80897A94(EnPeehat* this, PlayState* play) {
         this->unk_2B0 = 40;
     } else if (this->colliderCylinder.base.ocFlags1 & OC1_HIT) {
         this->colliderCylinder.base.ocFlags1 &= ~OC1_HIT;
-        if ((BINANG_SUB(Actor_YawBetweenActors(&this->actor, this->colliderCylinder.base.oc),
+        if ((BINANG_SUB(Actor_WorldYawTowardActor(&this->actor, this->colliderCylinder.base.oc),
                         this->actor.world.rot.y)) > 0) {
             this->actor.world.rot.y -= 0x2000;
         } else {

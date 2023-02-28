@@ -327,8 +327,8 @@ void func_80B5BE88(EnOt* this, PlayState* play) {
 
 void func_80B5BED4(EnOt* this, PlayState* play) {
     func_800BE33C(&this->actor.world.pos, &this->unk_360->actor.world.pos, &this->actor.world.rot, 0);
-    Math_SmoothStepToS(&this->actor.shape.rot.y, Actor_YawBetweenActors(&this->actor, &this->unk_360->actor), 3, 0xE38,
-                       0x38E);
+    Math_SmoothStepToS(&this->actor.shape.rot.y, Actor_WorldYawTowardActor(&this->actor, &this->unk_360->actor), 3,
+                       0xE38, 0x38E);
     this->actor.speedXZ = 3.5f;
     this->actor.world.pos.y = this->unk_360->actor.world.pos.y;
     Actor_MoveWithoutGravityReverse(&this->actor);
@@ -348,10 +348,10 @@ void func_80B5BFB8(EnOt* this, PlayState* play) {
         Math_StepToF(&this->actor.world.pos.y, temp_f0, 2.0f);
     }
 
-    Math_SmoothStepToS(&this->actor.shape.rot.y, Actor_YawBetweenActors(&this->actor, &this->unk_360->actor), 3, 0xE38,
-                       0x38E);
+    Math_SmoothStepToS(&this->actor.shape.rot.y, Actor_WorldYawTowardActor(&this->actor, &this->unk_360->actor), 3,
+                       0xE38, 0x38E);
 
-    if (Actor_DistanceBetweenActors(&this->actor, &this->unk_360->actor) <= 52.519997f) {
+    if (Actor_WorldDistXYZToActor(&this->actor, &this->unk_360->actor) <= 52.519997f) {
         this->unk_73C = 50;
         Matrix_RotateYS(this->actor.world.rot.y, MTXMODE_NEW);
         Matrix_MultVecZ(52.519997f, &sp34);
@@ -400,7 +400,7 @@ void func_80B5C244(EnOt* this, PlayState* play) {
 }
 
 void func_80B5C25C(EnOt* this, PlayState* play) {
-    this->unk_390 = Actor_YawBetweenActors(&this->actor, &this->unk_360->actor);
+    this->unk_390 = Actor_WorldYawTowardActor(&this->actor, &this->unk_360->actor);
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->unk_390, 3, 0xE38, 0x38E);
     if (BINANG_SUB(BINANG_ROT180(this->unk_360->actor.shape.rot.y), this->actor.shape.rot.y) < 0x38E) {
         this->unk_32C |= 0x80;
@@ -449,7 +449,7 @@ void func_80B5C3D8(EnOt* this, PlayState* play) {
 
     Math_Vec3f_Copy(&this->actor.world.pos, &this->unk_348);
     Math_Vec3f_Copy(&this->unk_360->actor.world.pos, &this->unk_360->unk_348);
-    temp = Actor_YawBetweenActors(&this->actor, &this->unk_360->actor);
+    temp = Actor_WorldYawTowardActor(&this->actor, &this->unk_360->actor);
     this->actor.shape.rot.y = temp;
     this->unk_360->actor.shape.rot.y = BINANG_ROT180(temp);
 
@@ -498,7 +498,7 @@ void func_80B5C6DC(EnOt* this, PlayState* play) {
     s16 sp3E;
     Vec3f sp30;
 
-    sp3E = Actor_YawToPoint(&player->actor, &this->unk_394);
+    sp3E = Actor_WorldYawTowardPoint(&player->actor, &this->unk_394);
     Matrix_RotateYS(BINANG_ADD(sp3E, 0x4000), MTXMODE_NEW);
     if (this->unk_33C == 2) {
         Matrix_MultVecZ(26.259998f, &sp30);

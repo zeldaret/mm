@@ -442,8 +442,8 @@ s32 func_80AECE60(EnTk* this, PlayState* play) {
         do {
             doorIter = SubS_FindActor(play, doorIter, ACTORCAT_DOOR, ACTOR_EN_DOOR);
             if (doorIter != NULL) {
-                if (Actor_XZDistanceBetweenActors(&this->actor, doorIter) <= 120.0f) {
-                    if (ABS(BINANG_SUB(Actor_YawToPoint(&this->actor, &doorIter->world.pos),
+                if (Actor_WorldDistXZToActor(&this->actor, doorIter) <= 120.0f) {
+                    if (ABS(BINANG_SUB(Actor_WorldYawTowardPoint(&this->actor, &doorIter->world.pos),
                                        this->actor.shape.rot.y)) <= 0x2000) {
                         this->unk_2CA |= 0x400;
                         door = (EnDoor*)doorIter;
@@ -459,7 +459,7 @@ s32 func_80AECE60(EnTk* this, PlayState* play) {
         do {
             doorIter = SubS_FindActor(play, doorIter, ACTORCAT_DOOR, ACTOR_EN_DOOR);
             if (doorIter != NULL) {
-                if (Actor_XZDistanceBetweenActors(&this->actor, doorIter) <= 160.0f) {
+                if (Actor_WorldDistXZToActor(&this->actor, doorIter) <= 160.0f) {
                     door = (EnDoor*)doorIter;
                     break;
                 }
@@ -911,7 +911,7 @@ s32 func_80AEE300(PlayState* play, Actor* arg1, Actor* arg2, void* _arg3) {
     f32 temp_f0;
 
     if ((arg2 != arg1) && (ENTK_GET_F(arg2) == 3)) {
-        temp_f0 = Actor_DistanceBetweenActors(arg1, arg2);
+        temp_f0 = Actor_WorldDistXYZToActor(arg1, arg2);
         if (temp_f0 < arg3->unk_04) {
             arg3->unk_00 = arg2;
             arg3->unk_04 = temp_f0;
@@ -932,7 +932,7 @@ void func_80AEE374(EnTk* this, PlayState* play) {
         return;
     }
 
-    this->unk_2CC = Actor_YawToPoint(&this->actor, &sp30.unk_00->world.pos);
+    this->unk_2CC = Actor_WorldYawTowardPoint(&this->actor, &sp30.unk_00->world.pos);
     this->actionFunc = func_80AEE414;
 }
 
@@ -968,7 +968,7 @@ void func_80AEE4D0(EnTk* this, PlayState* play) {
                 bigPoe = SubS_FindActor(play, bigPoe, ACTORCAT_PROP, ACTOR_EN_BIGPO);
 
                 if (bigPoe != NULL) {
-                    if ((bigPoe->params == 3) && (Actor_DistanceBetweenActors(&this->actor, bigPoe) < 80.0f)) {
+                    if ((bigPoe->params == 3) && (Actor_WorldDistXYZToActor(&this->actor, bigPoe) < 80.0f)) {
                         bigPoe->params = 4;
                         this->unk_2CA |= 0x20;
                         this->unk_2E4++;

@@ -431,7 +431,8 @@ void func_80A2844C(EnBigpamet* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime2);
 
     if (this->actor.parent->params == GEKKO_RETURN_TO_SNAPPER) {
-        Math_ScaledStepToS(&this->actor.shape.rot.y, Actor_YawBetweenActors(&this->actor, this->actor.parent), 0x400);
+        Math_ScaledStepToS(&this->actor.shape.rot.y, Actor_WorldYawTowardActor(&this->actor, this->actor.parent),
+                           0x400);
         this->actor.world.rot.y = this->actor.shape.rot.y;
     } else if (this->actor.parent->params == GEKKO_JUMP_ON_SNAPPER) {
         this->actor.speedXZ = 0.0f;
@@ -622,7 +623,7 @@ void func_80A28B98(EnBigpamet* this, PlayState* play) {
     if ((this->actor.draw == func_80A2966C) && (this->actionFunc != func_80A28DC0)) {
         this->actor.draw = EnBigpamet_Draw;
     } else if (this->collider.base.ac != NULL) {
-        this->actor.world.rot.y = BINANG_ROT180(Actor_YawBetweenActors(&this->actor, this->collider.base.ac));
+        this->actor.world.rot.y = BINANG_ROT180(Actor_WorldYawTowardActor(&this->actor, this->collider.base.ac));
     }
 
     this->actor.shape.rot.y = this->actor.world.rot.y;
@@ -638,7 +639,7 @@ void func_80A28B98(EnBigpamet* this, PlayState* play) {
     collectible = Item_DropCollectible(play, &this->actor.world.pos, ITEM00_ARROWS_10);
     if (collectible != NULL) {
         collectible->velocity.y = 15.0f;
-        collectible->world.rot.y = Actor_YawToPoint(&this->actor, &this->actor.home.pos);
+        collectible->world.rot.y = Actor_WorldYawTowardPoint(&this->actor, &this->actor.home.pos);
     }
 
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_B_PAMET_REVERSE);

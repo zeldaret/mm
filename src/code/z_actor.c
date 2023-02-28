@@ -1207,44 +1207,44 @@ void Actor_UpdatePosFromSkelAnime(Actor* actor, SkelAnime* skelAnime) {
     actor->world.pos.z += pos.z * actor->scale.z;
 }
 
-s16 Actor_YawBetweenActors(Actor* from, Actor* to) {
-    return Math_Vec3f_Yaw(&from->world.pos, &to->world.pos);
+s16 Actor_WorldYawTowardActor(Actor* actorA, Actor* actorB) {
+    return Math_Vec3f_Yaw(&actorA->world.pos, &actorB->world.pos);
 }
 
-s16 Actor_YawBetweenActorsTop(Actor* from, Actor* to) {
-    return Math_Vec3f_Yaw(&from->focus.pos, &to->focus.pos);
+s16 Actor_FocusYawTowardActor(Actor* actorA, Actor* actorB) {
+    return Math_Vec3f_Yaw(&actorA->focus.pos, &actorB->focus.pos);
 }
 
-s16 Actor_YawToPoint(Actor* actor, Vec3f* point) {
-    return Math_Vec3f_Yaw(&actor->world.pos, point);
+s16 Actor_WorldYawTowardPoint(Actor* actor, Vec3f* refPoint) {
+    return Math_Vec3f_Yaw(&actor->world.pos, refPoint);
 }
 
-s16 Actor_PitchBetweenActors(Actor* from, Actor* to) {
-    return Math_Vec3f_Pitch(&from->world.pos, &to->world.pos);
+s16 Actor_WorldPitchTowardActor(Actor* actorA, Actor* actorB) {
+    return Math_Vec3f_Pitch(&actorA->world.pos, &actorB->world.pos);
 }
 
-s16 Actor_PitchBetweenActorsTop(Actor* from, Actor* to) {
-    return Math_Vec3f_Pitch(&from->focus.pos, &to->focus.pos);
+s16 Actor_FocusPitchTowardActor(Actor* actorA, Actor* actorB) {
+    return Math_Vec3f_Pitch(&actorA->focus.pos, &actorB->focus.pos);
 }
 
-s16 Actor_PitchToPoint(Actor* actor, Vec3f* point) {
-    return Math_Vec3f_Pitch(&actor->world.pos, point);
+s16 Actor_WorldPitchTowardPoint(Actor* actor, Vec3f* refPoint) {
+    return Math_Vec3f_Pitch(&actor->world.pos, refPoint);
 }
 
-f32 Actor_DistanceBetweenActors(Actor* actor1, Actor* actor2) {
-    return Math_Vec3f_DistXYZ(&actor1->world.pos, &actor2->world.pos);
+f32 Actor_WorldDistXYZToActor(Actor* actorA, Actor* actorB) {
+    return Math_Vec3f_DistXYZ(&actorA->world.pos, &actorB->world.pos);
 }
 
-f32 Actor_DistanceToPoint(Actor* actor, Vec3f* point) {
-    return Math_Vec3f_DistXYZ(&actor->world.pos, point);
+f32 Actor_WorldDistXYZToPoint(Actor* actor, Vec3f* refPoint) {
+    return Math_Vec3f_DistXYZ(&actor->world.pos, refPoint);
 }
 
-f32 Actor_XZDistanceBetweenActors(Actor* actor1, Actor* actor2) {
-    return Math_Vec3f_DistXZ(&actor1->world.pos, &actor2->world.pos);
+f32 Actor_WorldDistXZToActor(Actor* actorA, Actor* actorB) {
+    return Math_Vec3f_DistXZ(&actorA->world.pos, &actorB->world.pos);
 }
 
-f32 Actor_XZDistanceToPoint(Actor* actor, Vec3f* point) {
-    return Math_Vec3f_DistXZ(&actor->world.pos, point);
+f32 Actor_WorldDistXZToPoint(Actor* actor, Vec3f* refPoint) {
+    return Math_Vec3f_DistXZ(&actor->world.pos, refPoint);
 }
 
 /**
@@ -1416,7 +1416,7 @@ s32 Player_IsFacingActor(Actor* actor, s16 maxAngleDiff, PlayState* play) {
  * This function is unused in the original game.
  */
 s32 Actor_ActorBIsFacingActorA(Actor* actorA, Actor* actorB, s16 maxAngleDiff) {
-    s16 angle = BINANG_ROT180(Actor_YawBetweenActors(actorA, actorB));
+    s16 angle = BINANG_ROT180(Actor_WorldYawTowardActor(actorA, actorB));
     s16 dist = angle - actorB->shape.rot.y;
 
     if (ABS_ALT(dist) < maxAngleDiff) {
@@ -1444,7 +1444,7 @@ s32 Actor_IsFacingPlayer(Actor* actor, s16 angle) {
  * The maximum angle difference that qualifies as "facing" is specified by `maxAngleDiff`.
  */
 s32 Actor_ActorAIsFacingActorB(Actor* actorA, Actor* actorB, s16 maxAngleDiff) {
-    s16 dist = Actor_YawBetweenActors(actorA, actorB) - actorA->shape.rot.y;
+    s16 dist = Actor_WorldYawTowardActor(actorA, actorB) - actorA->shape.rot.y;
 
     if (ABS_ALT(dist) < maxAngleDiff) {
         return true;
@@ -1477,8 +1477,8 @@ s32 Actor_IsFacingAndNearPlayer(Actor* actor, f32 range, s16 maxAngleDiff) {
  * The maximum distance that qualifies as "nearby" is specified by `range`.
  */
 s32 Actor_ActorAIsFacingAndNearActorB(Actor* actorA, Actor* actorB, f32 range, s16 maxAngleDiff) {
-    if (Actor_DistanceBetweenActors(actorA, actorB) < range) {
-        s16 dist = Actor_YawBetweenActors(actorA, actorB) - actorA->shape.rot.y;
+    if (Actor_WorldDistXYZToActor(actorA, actorB) < range) {
+        s16 dist = Actor_WorldYawTowardActor(actorA, actorB) - actorA->shape.rot.y;
 
         if (ABS_ALT(dist) < maxAngleDiff) {
             return true;
@@ -2362,11 +2362,11 @@ Actor* Actor_UpdateActor(UpdateActor_Params* params) {
                 CollisionCheck_ResetDamage(&actor->colChkInfo);
             } else {
                 Math_Vec3f_Copy(&actor->prevPos, &actor->world.pos);
-                actor->xzDistToPlayer = Actor_XZDistanceBetweenActors(actor, &params->player->actor);
+                actor->xzDistToPlayer = Actor_WorldDistXZToActor(actor, &params->player->actor);
                 actor->playerHeightRel = Actor_HeightDiff(actor, &params->player->actor);
                 actor->xyzDistToPlayerSq = SQ(actor->xzDistToPlayer) + SQ(actor->playerHeightRel);
 
-                actor->yawTowardsPlayer = Actor_YawBetweenActors(actor, &params->player->actor);
+                actor->yawTowardsPlayer = Actor_WorldYawTowardActor(actor, &params->player->actor);
                 actor->flags &= ~ACTOR_FLAG_1000000;
 
                 if ((DECR(actor->freezeTimer) == 0) && (actor->flags & params->unk_18)) {
@@ -3584,8 +3584,8 @@ s32 func_800BC188(s32 index) {
 }
 
 s32 func_800BC1B4(Actor* actor, Actor* arg1, f32 arg2, f32 arg3) {
-    if ((arg3 > 0.0f) && (Actor_DistanceBetweenActors(arg1, actor) < ((arg3 * 2.5f) + arg2))) {
-        s16 temp_v1 = BINANG_SUB(Actor_YawBetweenActors(arg1, actor), arg1->world.rot.y);
+    if ((arg3 > 0.0f) && (Actor_WorldDistXYZToActor(arg1, actor) < ((arg3 * 2.5f) + arg2))) {
+        s16 temp_v1 = BINANG_SUB(Actor_WorldYawTowardActor(arg1, actor), arg1->world.rot.y);
 
         if (ABS_ALT(temp_v1) < 0x1400) {
             return true;
@@ -4296,7 +4296,7 @@ Actor* Actor_FindNearby(PlayState* play, Actor* inActor, s16 actorId, u8 actorCa
             continue;
         }
 
-        if (Actor_DistanceBetweenActors(inActor, actor) <= distance) {
+        if (Actor_WorldDistXYZToActor(inActor, actor) <= distance) {
             return actor;
         }
 
@@ -4416,7 +4416,7 @@ void func_800BE504(Actor* actor, ColliderCylinder* collider) {
     if ((collider->info.acHitInfo->toucher.dmgFlags & (0x10000 | 0x2000 | 0x1000 | 0x800 | 0x20))) {
         actor->world.rot.y = collider->base.ac->shape.rot.y;
     } else {
-        actor->world.rot.y = Actor_YawBetweenActors(collider->base.ac, actor);
+        actor->world.rot.y = Actor_WorldYawTowardActor(collider->base.ac, actor);
     }
 }
 
@@ -4424,7 +4424,7 @@ void func_800BE568(Actor* actor, ColliderSphere* collider) {
     if (collider->info.acHitInfo->toucher.dmgFlags & (0x10000 | 0x2000 | 0x1000 | 0x800 | 0x20)) {
         actor->world.rot.y = collider->base.ac->shape.rot.y;
     } else {
-        actor->world.rot.y = Actor_YawBetweenActors(collider->base.ac, actor);
+        actor->world.rot.y = Actor_WorldYawTowardActor(collider->base.ac, actor);
     }
 }
 
@@ -4433,7 +4433,7 @@ void func_800BE5CC(Actor* actor, ColliderJntSph* collider, s32 colliderIndex) {
         (0x10000 | 0x2000 | 0x1000 | 0x800 | 0x20)) {
         actor->world.rot.y = collider->base.ac->shape.rot.y;
     } else {
-        actor->world.rot.y = Actor_YawBetweenActors(collider->base.ac, actor);
+        actor->world.rot.y = Actor_WorldYawTowardActor(collider->base.ac, actor);
     }
 }
 
@@ -4733,7 +4733,7 @@ void Actor_SpawnIceEffects(PlayState* play, Actor* actor, Vec3f limbPos[], s32 l
     SoundSource_PlaySfxAtFixedWorldPos(play, &actor->world.pos, 30, NA_SE_EV_ICE_BROKEN);
 
     for (i = 0; i < limbPosCount; i++) {
-        yaw = Actor_YawToPoint(actor, limbPos);
+        yaw = Actor_WorldYawTowardPoint(actor, limbPos);
 
         for (j = 0; j < effectsPerLimb; j++) {
             randomYaw = ((s32)Rand_Next() >> 0x13) + yaw;

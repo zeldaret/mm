@@ -798,7 +798,7 @@ void EnFall_LodMoon_DrawWithoutLerp(Actor* thisx, PlayState* play) {
  * to be 9000 units away before drawing it.
  */
 void EnFall_LodMoon_DrawWithLerp(Actor* thisx, PlayState* play) {
-    f32 distanceToEye = Actor_DistanceToPoint(thisx, &play->view.eye);
+    f32 distanceToEye = Actor_WorldDistXYZToPoint(thisx, &play->view.eye);
     f32 scale;
     Vec3f translation;
 

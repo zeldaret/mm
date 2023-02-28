@@ -838,8 +838,8 @@ void func_80895AC0(EnTite* this, PlayState* play) {
             if (temp_v0 > 0x3000) {
                 this->unk_2BC = (temp_v0 >> 9) * this->unk_2BC;
             }
-        } else if (Actor_XZDistanceToPoint(&this->actor, &this->actor.home.pos) < 200.0f) {
-            temp_v1 = this->actor.shape.rot.y - Actor_YawToPoint(&this->actor, &this->actor.home.pos);
+        } else if (Actor_WorldDistXZToPoint(&this->actor, &this->actor.home.pos) < 200.0f) {
+            temp_v1 = this->actor.shape.rot.y - Actor_WorldYawTowardPoint(&this->actor, &this->actor.home.pos);
             temp_v0 = ABS_ALT(temp_v1);
             if (temp_v0 > 0x2000) {
                 this->unk_2BC = (temp_v0 >> 9) * this->unk_2BC;
