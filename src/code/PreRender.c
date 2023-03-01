@@ -421,8 +421,8 @@ void PreRender_ApplyFiltersSlowlyInit(PreRender* this) {
         }
 
         this->unk_4D = 1;
-        StackCheck_Init(&slowlyStackEntry, slowlyStack, &slowlyStack[4096], 0, 0x100, "slowly");
-        Slowly_Start(&D_801F6E00, &D_801F7FE8, PreRender_ApplyFilters, this, NULL);
+        StackCheck_Init(&slowlyStackEntry, slowlyStack, STACK_TOP(slowlyStack), 0, 0x100, "slowly");
+        Slowly_Start(&D_801F6E00, STACK_TOP(slowlyStack), PreRender_ApplyFilters, this, NULL);
         D_801F6FC0 = true;
     }
 }

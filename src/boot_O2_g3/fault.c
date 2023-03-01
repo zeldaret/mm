@@ -889,8 +889,8 @@ void Fault_Start(void) {
     sFaultContext->faultActive = 0;
     gFaultStruct.faultHandlerEnabled = 1;
     osCreateMesgQueue(&sFaultContext->queue, sFaultContext->msg, ARRAY_COUNT(sFaultContext->msg));
-    StackCheck_Init(&sFaultThreadInfo, sFaultStack, sFaultStack + sizeof(sFaultStack), 0, 0x100, "fault");
-    osCreateThread(&sFaultContext->thread, 2, Fault_ThreadEntry, NULL, sFaultStack + sizeof(sFaultStack), 0x7F);
+    StackCheck_Init(&sFaultThreadInfo, sFaultStack, STACK_TOP(sFaultStack), 0, 0x100, "fault");
+    osCreateThread(&sFaultContext->thread, 2, Fault_ThreadEntry, NULL, STACK_TOP(sFaultStack), 0x7F);
     osStartThread(&sFaultContext->thread);
 }
 

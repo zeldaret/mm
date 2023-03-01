@@ -33,23 +33,23 @@ void Main(void* arg) {
 
     osCreateMesgQueue(&irqMgrMsgQ, irqMgrMsgBuf, ARRAY_COUNT(irqMgrMsgBuf));
 
-    StackCheck_Init(&schedStackEntry, schedStack, schedStack + sizeof(schedStack), 0, 0x100, "sched");
-    Sched_Init(&gSchedContext, schedStack + sizeof(schedStack), Z_PRIORITY_SCHED, D_8009B290, 1, &gIrqMgr);
+    StackCheck_Init(&schedStackEntry, schedStack, STACK_TOP(schedStack), 0, 0x100, "sched");
+    Sched_Init(&gSchedContext, STACK_TOP(schedStack), Z_PRIORITY_SCHED, D_8009B290, 1, &gIrqMgr);
 
     CIC6105_AddRomInfoFaultPage();
 
     IrqMgr_AddClient(&gIrqMgr, &irqClient, &irqMgrMsgQ);
 
-    StackCheck_Init(&audioStackEntry, audioStack, audioStack + sizeof(audioStack), 0, 0x100, "audio");
-    AudioMgr_Init(&audioContext, audioStack + sizeof(audioStack), Z_PRIORITY_AUDIOMGR, 0xA, &gSchedContext, &gIrqMgr);
+    StackCheck_Init(&audioStackEntry, audioStack, STACK_TOP(audioStack), 0, 0x100, "audio");
+    AudioMgr_Init(&audioContext, STACK_TOP(audioStack), Z_PRIORITY_AUDIOMGR, 0xA, &gSchedContext, &gIrqMgr);
 
-    StackCheck_Init(&padmgrStackEntry, padmgrStack, padmgrStack + sizeof(padmgrStack), 0, 0x100, "padmgr");
-    PadMgr_Init(&sSiIntMsgQ, &gIrqMgr, 7, Z_PRIORITY_PADMGR, padmgrStack + sizeof(padmgrStack));
+    StackCheck_Init(&padmgrStackEntry, padmgrStack, STACK_TOP(padmgrStack), 0, 0x100, "padmgr");
+    PadMgr_Init(&sSiIntMsgQ, &gIrqMgr, 7, Z_PRIORITY_PADMGR, STACK_TOP(padmgrStack));
 
     AudioMgr_Unlock(&audioContext);
 
-    StackCheck_Init(&sGraphStackInfo, sGraphStack, sGraphStack + sizeof(sGraphStack), 0, 0x100, "graph");
-    osCreateThread(&sGraphThread, Z_THREAD_ID_GRAPH, Graph_ThreadEntry, arg, sGraphStack + sizeof(sGraphStack),
+    StackCheck_Init(&sGraphStackInfo, sGraphStack, STACK_TOP(sGraphStack), 0, 0x100, "graph");
+    osCreateThread(&sGraphThread, Z_THREAD_ID_GRAPH, Graph_ThreadEntry, arg, STACK_TOP(sGraphStack),
                    Z_PRIORITY_GRAPH);
     osStartThread(&sGraphThread);
 

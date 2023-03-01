@@ -9,10 +9,10 @@ f32 gViConfigXScale = 1.0f;
 f32 gViConfigYScale = 1.0f;
 
 IrqMgr gIrqMgr;
-u8 sIrqMgrStack[0x500];
+STACK(sIrqMgrStack, 0x500);
 StackEntry sIrqMgrStackInfo;
 OSThread gMainThread;
-u8 sMainStack[0x900];
+STACK(sMainStack, 0x900);
 StackEntry sMainStackInfo;
 OSMesg sPiMgrCmdBuff[50];
 OSMesgQueue gPiMgrCmdQ;
@@ -71,8 +71,8 @@ void Idle_InitCodeAndMemory(void) {
 }
 
 void Main_ThreadEntry(void* arg) {
-    StackCheck_Init(&sIrqMgrStackInfo, sIrqMgrStack, sIrqMgrStack + sizeof(sIrqMgrStack), 0, 0x100, "irqmgr");
-    IrqMgr_Init(&gIrqMgr, &sIrqMgrStackInfo, Z_PRIORITY_IRQMGR, 1);
+    StackCheck_Init(&sIrqMgrStackInfo, sIrqMgrStack, STACK_TOP(sIrqMgrStack), 0, 0x100, "irqmgr");
+    IrqMgr_Init(&gIrqMgr, STACK_TOP(sIrqMgrStack), Z_PRIORITY_IRQMGR, 1);
     DmaMgr_Start();
     Idle_InitCodeAndMemory();
     Main(arg);
@@ -108,8 +108,8 @@ void Idle_InitVideo(void) {
 void Idle_ThreadEntry(void* arg) {
     Idle_InitVideo();
     osCreatePiManager(150, &gPiMgrCmdQ, sPiMgrCmdBuff, ARRAY_COUNT(sPiMgrCmdBuff));
-    StackCheck_Init(&sMainStackInfo, sMainStack, sMainStack + sizeof(sMainStack), 0, 0x400, "main");
-    osCreateThread(&gMainThread, Z_THREAD_ID_MAIN, Main_ThreadEntry, arg, sMainStack + sizeof(sMainStack),
+    StackCheck_Init(&sMainStackInfo, sMainStack, STACK_TOP(sMainStack), 0, 0x400, "main");
+    osCreateThread(&gMainThread, Z_THREAD_ID_MAIN, Main_ThreadEntry, arg, STACK_TOP(sMainStack),
                    Z_PRIORITY_MAIN);
     osStartThread(&gMainThread);
     osSetThreadPri(NULL, 0);
