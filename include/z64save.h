@@ -313,7 +313,7 @@ typedef struct SaveContext {
     /* 0x0000 */ Save save;
     /* 0x100C */ u8 eventInf[8];                        // "event_inf"
     /* 0x1014 */ u8 unk_1014;                           // "stone_set_flag"
-    /* 0x1015 */ u8 unk_1015;
+    /* 0x1015 */ u8 bButtonStatus;
     /* 0x1016 */ u16 jinxTimer;
     /* 0x1018 */ s16 rupeeAccumulator;                  // "lupy_udct"
     /* 0x101A */ u8 bottleTimerStates[BOTTLE_MAX]; // See the `BottleTimerState` enum. "bottle_status"
