@@ -1,5 +1,5 @@
-#ifndef Z64_SKYBOX_H
-#define Z64_SKYBOX_H
+#ifndef Z64SKYBOX_H
+#define Z64SKYBOX_H
 
 #include "PR/ultratypes.h"
 #include "PR/gbi.h"
