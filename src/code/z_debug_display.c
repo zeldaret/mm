@@ -6,7 +6,7 @@ DebugDispObject* sDebugObjectListHead;
 typedef struct {
     /* 0x0 */ s16 drawType;  // indicates which draw function to use when displaying the object
     /* 0x4 */ void* drawArg; // segment address (display list or texture) passed to the draw funciton when called
-} DebugDispObjectInfo; // size = 0x8
+} DebugDispObjectInfo;       // size = 0x8
 
 typedef void (*DebugDispObjectDrawFunc)(DebugDispObject*, void*, PlayState*);
 
@@ -49,7 +49,7 @@ DebugDispObjectDrawFunc sDebugObjectDrawFuncTable[] = { DebugDisplay_DrawSpriteI
 
 DebugDispObjectInfo sDebugObjectInfoTable[] = {
     { 0, sDebugDisplayCircleTex }, { 0, sDebugDisplayCrossTex }, { 0, sDebugDisplayBallTex },
-    { 0, sDebugDisplayCursorTex }, { 1, sDebugDisplay1DL },     { 1, sDebugDisplay3DL },
+    { 0, sDebugDisplayCursorTex }, { 1, sDebugDisplay1DL },      { 1, sDebugDisplay3DL },
     { 1, sDebugDisplay2DL },
 };
 
