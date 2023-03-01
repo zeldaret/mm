@@ -91,7 +91,7 @@ GameStateOverlay* Graph_GetNextGameState(GameState* gameState) {
     return NULL;
 }
 
-void* Graph_FaultAddrConvFunc(void* address, void* param) {
+void* Graph_FaultAddrConv(void* address, void* param) {
     uintptr_t addr = address;
     GameStateOverlay* gameStateOvl = &gGameStateOverlayTable[0];
     uintptr_t ramConv;
@@ -123,7 +123,7 @@ void Graph_Init(GraphicsContext* gfxCtx) {
     gfxCtx->yScale = gViConfigYScale;
     osCreateMesgQueue(&gfxCtx->queue, gfxCtx->msgBuff, ARRAY_COUNT(gfxCtx->msgBuff));
     Fault_AddClient(&sGraphFaultClient, Graph_FaultClient, NULL, NULL);
-    Fault_AddAddrConvClient(&sGraphFaultAddrConvClient, Graph_FaultAddrConvFunc, NULL);
+    Fault_AddAddrConvClient(&sGraphFaultAddrConvClient, Graph_FaultAddrConv, NULL);
 }
 
 void Graph_Destroy(GraphicsContext* gfxCtx) {
