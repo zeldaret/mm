@@ -304,8 +304,8 @@ void Sram_ActivateOwl(u8 owlId) {
 }
 
 void Sram_ClearHighscores(void) {
-    gSaveContext.save.saveInfo.unk_EE8 = (gSaveContext.save.saveInfo.unk_EE8 & 0xFFFF) | 0x130000;
-    gSaveContext.save.saveInfo.unk_EE8 = (gSaveContext.save.saveInfo.unk_EE8 & 0xFFFF0000) | 0xA;
+    gSaveContext.save.saveInfo.unk_EC4 = (gSaveContext.save.saveInfo.unk_EC4 & 0xFFFF) | 0x130000;
+    gSaveContext.save.saveInfo.unk_EC4 = (gSaveContext.save.saveInfo.unk_EC4 & 0xFFFF0000) | 0xA;
     gSaveContext.save.saveInfo.horseBackBalloonHighScore = SECONDS_TO_TIMER(60);
     SET_TOWN_SHOOTING_GALLERY_HIGH_SCORE(39);
     SET_SWAMP_SHOOTING_GALLERY_HIGH_SCORE(10);
@@ -523,15 +523,15 @@ void Sram_SaveEndOfCycle(PlayState* play) {
 
     gSaveContext.save.saveInfo.skullTokenCount &= ~0xFFFF0000;
     gSaveContext.save.saveInfo.skullTokenCount &= ~0x0000FFFF;
-    gSaveContext.save.saveInfo.unk_EC4 = 0;
+    gSaveContext.save.saveInfo.unk_EA0 = 0;
 
-    gSaveContext.save.saveInfo.unk_E88[0] = 0;
-    gSaveContext.save.saveInfo.unk_E88[1] = 0;
-    gSaveContext.save.saveInfo.unk_E88[2] = 0;
-    gSaveContext.save.saveInfo.unk_E88[3] = 0;
-    gSaveContext.save.saveInfo.unk_E88[4] = 0;
-    gSaveContext.save.saveInfo.unk_E88[5] = 0;
-    gSaveContext.save.saveInfo.unk_E88[6] = 0;
+    gSaveContext.save.saveInfo.unk_E64[0] = 0;
+    gSaveContext.save.saveInfo.unk_E64[1] = 0;
+    gSaveContext.save.saveInfo.unk_E64[2] = 0;
+    gSaveContext.save.saveInfo.unk_E64[3] = 0;
+    gSaveContext.save.saveInfo.unk_E64[4] = 0;
+    gSaveContext.save.saveInfo.unk_E64[5] = 0;
+    gSaveContext.save.saveInfo.unk_E64[6] = 0;
 
     Sram_ClearHighscores();
 
@@ -542,7 +542,7 @@ void Sram_SaveEndOfCycle(PlayState* play) {
     }
 
     gSaveContext.save.saveInfo.playerData.rupees = 0;
-    gSaveContext.save.saveInfo.unk_F65 = 0;
+    gSaveContext.save.saveInfo.unk_F41 = 0;
     gSaveContext.powderKegTimer = 0;
     gSaveContext.unk_1014 = 0;
     gSaveContext.jinxTimer = 0;
@@ -1081,7 +1081,7 @@ void Sram_OpenSave(FileSelectState* fileSelect, SramContext* sramCtx) {
             gSaveContext.cycleSceneFlags[i].collectible = gSaveContext.save.saveInfo.permanentSceneFlags[i].collectible;
         }
 
-        if (gSaveContext.save.saveInfo.unk_F65) {
+        if (gSaveContext.save.saveInfo.unk_F41) {
             Lib_MemCpy(gScarecrowSpawnSongPtr, gSaveContext.save.saveInfo.scarecrowSpawnSong,
                        sizeof(gSaveContext.save.saveInfo.scarecrowSpawnSong));
 

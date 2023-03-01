@@ -257,32 +257,32 @@ typedef struct SaveInfo {
     /* 0x028 */ ItemEquips equips;
     /* 0x04C */ Inventory inventory;
     /* 0x0D4 */ PermanentSceneFlags permanentSceneFlags[120];
-    /* 0xDF4 */ u8 unk_E18[0x54];
+    /* 0xDF4 */ UNK_TYPE1 unk_DF4[0x54];
     /* 0xE48 */ u32 dekuPlaygroundHighScores[3];
     /* 0xE54 */ u32 pictoFlags0;                       // Flags set by `PictoActor`s if pictograph is valid
     /* 0xE58 */ u32 pictoFlags1;                       // Flags set by Snap_ValidatePictograph() to record errors; volatile since that function is run many times in succession
-    /* 0xE5C */ u32 unk_E80;
-    /* 0xE60 */ u32 unk_E84;
-    /* 0xE64 */ u32 unk_E88[7];                        // Invadepoh flags
+    /* 0xE5C */ u32 unk_E5C;
+    /* 0xE60 */ u32 unk_E60;
+    /* 0xE64 */ u32 unk_E64[7];                        // Invadepoh flags
     /* 0xE80 */ u32 scenesVisible[7];                  // tingle maps and clouded regions on pause map. Stores scenes bitwise for up to 224 scenes even though there are not that many scenes
     /* 0xE9C */ u32 skullTokenCount;                   // upper 16 bits store Swamp skulls, lower 16 bits store Ocean skulls
-    /* 0xEA0 */ u32 unk_EC4;                           // Gossic stone heart piece flags
-    /* 0xEA4 */ u32 unk_EC8;
-    /* 0xEA8 */ u32 unk_ECC[2];                        // Related to blue warps
+    /* 0xEA0 */ u32 unk_EA0;                           // Gossic stone heart piece flags
+    /* 0xEA4 */ u32 unk_EA4;
+    /* 0xEA8 */ u32 unk_EA8[2];                        // Related to blue warps
     /* 0xEB0 */ u32 stolenItems;                       // Items stolen by Takkuri and given to Curiosity Shop Man
-    /* 0xEB4 */ u32 unk_DD8;
+    /* 0xEB4 */ u32 unk_EB4;
     /* 0xEB8 */ u32 bankRupees;
-    /* 0xEBC */ u32 unk_EE0;
-    /* 0xEC0 */ u32 unk_EE4;                           // Fishing flags
-    /* 0xEC4 */ u32 unk_EE8;
+    /* 0xEBC */ u32 unk_EBC;
+    /* 0xEC0 */ u32 unk_EC0;                           // Fishing flags
+    /* 0xEC4 */ u32 unk_EC4;
     /* 0xEC8 */ u32 horseBackBalloonHighScore;
     /* 0xECC */ u32 lotteryCodeGuess;                  // Lottery code chosen by player (only uses lower three hex digits)
     /* 0xED0 */ u32 shootingGalleryHighScores;         // High scores for both shooting galleries. Town uses lower 16 bits, Swamp uses higher 16 bits.
     /* 0xED4 */ u8 weekEventReg[100];                  // "week_event_reg"
     /* 0xF38 */ u32 regionsVisited;                    // "area_arrival"
     /* 0xF3C */ u32 worldMapCloudVisibility;           // "cloud_clear"
-    /* 0xF40 */ u8 unk_F64;                            // "oca_rec_flag"                   has scarecrows song
-    /* 0xF41 */ u8 unk_F65;                            // "oca_rec_flag8"                  scarecrows song set?
+    /* 0xF40 */ u8 unk_F40;                            // "oca_rec_flag"                   has scarecrows song
+    /* 0xF41 */ u8 unk_F41;                            // "oca_rec_flag8"                  scarecrows song set?
     /* 0xF42 */ u8 scarecrowSpawnSong[128];
     /* 0xFC2 */ s8 bombersCaughtNum;                   // "aikotoba_index"
     /* 0xFC3 */ s8 bombersCaughtOrder[5];              // "aikotoba_table"

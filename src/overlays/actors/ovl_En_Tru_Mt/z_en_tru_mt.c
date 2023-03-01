@@ -352,9 +352,9 @@ void func_80B76980(EnTruMt* this, PlayState* play) {
     } else if (CHECK_EVENTINF(EVENTINF_40)) {
         u32 score = gSaveContext.minigameScore;
 
-        if (((gSaveContext.save.saveInfo.unk_EE8 & 0xFFFF0000) >> 0x10) < score) {
-            gSaveContext.save.saveInfo.unk_EE8 =
-                ((gSaveContext.minigameScore & 0xFFFF) << 0x10) | (gSaveContext.save.saveInfo.unk_EE8 & 0xFFFF);
+        if (((gSaveContext.save.saveInfo.unk_EC4 & 0xFFFF0000) >> 0x10) < score) {
+            gSaveContext.save.saveInfo.unk_EC4 =
+                ((gSaveContext.minigameScore & 0xFFFF) << 0x10) | (gSaveContext.save.saveInfo.unk_EC4 & 0xFFFF);
             SET_EVENTINF(EVENTINF_37);
         }
     }
