@@ -95,7 +95,7 @@ void func_808A24DC(EnBoom* this, PlayState* play) {
             EffectSsGSplash_Spawn(play, &sp34, NULL, NULL, 0, 300);
         }
 
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_DIVE_INTO_WATER_L);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_DIVE_INTO_WATER_L);
 
         EffectSsGRipple_Spawn(play, &sp34, 100, 500, 0);
         EffectSsGRipple_Spawn(play, &sp34, 100, 500, 4);

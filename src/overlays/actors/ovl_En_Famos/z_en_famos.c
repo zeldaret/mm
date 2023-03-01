@@ -308,12 +308,12 @@ void EnFamos_UpdateFlipStatus(EnFamos* this) {
         if (this->hasFinishedRotating == true) {
             if (this->animatedMaterialIndex != FAMOS_ANIMATED_MAT_NORMAL) {
                 this->animatedMaterialIndex = FAMOS_ANIMATED_MAT_NORMAL;
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_FAMOS_REVERSE2);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_FAMOS_REVERSE2);
             } else {
                 this->animatedMaterialIndex = FAMOS_ANIMATED_MAT_FLIPPED;
                 this->flippedTimer = 100;
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_FAMOS_REVERSE1);
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_EYEGOLE_DAMAGE);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_FAMOS_REVERSE1);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_EYEGOLE_DAMAGE);
             }
             this->hasFinishedRotating = false;
         }
@@ -322,7 +322,7 @@ void EnFamos_UpdateFlipStatus(EnFamos* this) {
         this->flippedTimer--;
         if (this->flippedTimer == 0) {
             if (this->animatedMaterialIndex != FAMOS_ANIMATED_MAT_NORMAL) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_FAMOS_REVERSE2);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_FAMOS_REVERSE2);
             }
 
             this->animatedMaterialIndex = FAMOS_ANIMATED_MAT_NORMAL;
@@ -515,7 +515,7 @@ void EnFamos_Chase(EnFamos* this, PlayState* play) {
 void EnFamos_SetupAttackAim(EnFamos* this) {
     Animation_PlayOnce(&this->skelAnime, &gFamosShakeAnim);
     this->actor.speedXZ = 0.0f;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_AMOS_VOICE);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_AMOS_VOICE);
     this->actionFunc = EnFamos_AttackAim;
 }
 
@@ -586,7 +586,7 @@ void EnFamos_SetupFinishAttack(EnFamos* this) {
     this->emblemCollider.base.acFlags |= AC_ON;
     this->stateTimer = 3;
     this->actor.speedXZ = 0.0f;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_EXPLOSION);
+    Actor_PlaySfx(&this->actor, NA_SE_EV_EXPLOSION);
     this->actionFunc = EnFamos_FinishAttack;
 }
 
@@ -655,7 +655,7 @@ void EnFamos_SetupDeathSlam(EnFamos* this) {
     Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 20);
     this->flippedTimer = -1;
     this->actor.world.pos.y = this->actor.floorHeight - 60.0f;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_EYEGOLE_DEAD);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_EYEGOLE_DEAD);
     this->actionFunc = EnFamos_DeathSlam;
 }
 

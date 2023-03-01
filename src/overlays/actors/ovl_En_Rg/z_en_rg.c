@@ -285,11 +285,11 @@ void func_80BF3FF8(EnRg* this) {
 s32 func_80BF4024(EnRg* this, PlayState* play) {
     if ((play->csCtx.state == 0) && (this->unk_334 == 1)) {
         if (Animation_OnFrame(&this->skelAnime, 2.0f)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_GOLON_CIRCLE);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_GOLON_CIRCLE);
         }
 
         if (Animation_OnFrame(&this->skelAnime, 22.0f)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_GOLON_SIT_IMT);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_GOLON_SIT_IMT);
         }
     }
 
@@ -319,7 +319,7 @@ void func_80BF40F4(EnRg* this) {
 
 s32 func_80BF416C(EnRg* this, PlayState* play) {
     if ((this->actor.bgCheckFlags & 1) && (this->actor.speedXZ >= 0.01f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_GOLON_ROLLING - SFX_FLAG);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_GOLON_ROLLING - SFX_FLAG);
         func_800AE930(&play->colCtx, Effect_GetByIndex(this->unk_340), &this->actor.world.pos, 18.0f,
                       this->actor.shape.rot.y, this->actor.floorPoly, this->actor.floorBgId);
     } else {
@@ -501,7 +501,7 @@ s32 func_80BF47AC(EnRg* this, PlayState* play) {
 
 void func_80BF4934(EnRg* this) {
     if (this->unk_318 == 1) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_GOLON_DASH);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_GOLON_DASH);
     }
 }
 

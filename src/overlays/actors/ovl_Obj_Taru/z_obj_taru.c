@@ -316,7 +316,7 @@ void ObjTaru_Update(Actor* thisx, PlayState* play) {
         if (this->unk_1AD >= 0) {
             switch (this->unk_1AD) {
                 case 0:
-                    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EN_STALGOLD_ROLL);
+                    Actor_PlaySfx(&this->dyna.actor, NA_SE_EN_STALGOLD_ROLL);
                     if (Rand_ZeroOne() < 0.1f) {
                         this->unk_1AD = Rand_S16Offset(40, 80);
                     } else {

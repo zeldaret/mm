@@ -358,9 +358,9 @@ void EnGe2_SpawnEffects(EnGe2* this, PlayState* play) {
 
 void EnGe2_Scream(EnGe2* this) {
     if ((s32)Rand_ZeroFloat(2.0f) == 0) {
-        Actor_PlaySfxAtPos(&this->picto.actor, NA_SE_VO_FPVO00);
+        Actor_PlaySfx(&this->picto.actor, NA_SE_VO_FPVO00);
     } else {
-        Actor_PlaySfxAtPos(&this->picto.actor, NA_SE_VO_FPVO01);
+        Actor_PlaySfx(&this->picto.actor, NA_SE_VO_FPVO01);
     }
 }
 
@@ -417,7 +417,7 @@ void EnGe2_Charge(EnGe2* this, PlayState* play) {
     }
 
     if (Animation_OnFrame(&this->skelAnime, 2.0f) || Animation_OnFrame(&this->skelAnime, 6.0f)) {
-        Actor_PlaySfxAtPos(&this->picto.actor, NA_SE_EV_PIRATE_WALK);
+        Actor_PlaySfx(&this->picto.actor, NA_SE_EV_PIRATE_WALK);
     }
 }
 
@@ -513,7 +513,7 @@ void EnGe2_PatrolDuties(EnGe2* this, PlayState* play) {
             this->timer = 200;
             this->picto.actor.speedXZ = 0.0f;
             this->actionFunc = EnGe2_KnockedOut;
-            Actor_PlaySfxAtPos(&this->picto.actor, NA_SE_EN_PIRATE_DEAD);
+            Actor_PlaySfx(&this->picto.actor, NA_SE_EN_PIRATE_DEAD);
             this->picto.actor.flags &= ~ACTOR_FLAG_1;
             this->stateFlags |= GERUDO_PURPLE_STATE_KO;
         }
@@ -637,7 +637,7 @@ void EnGe2_PerformCutsceneActions(EnGe2* this, PlayState* play) {
             this->picto.actor.speedXZ = 5.0f;
 
             if (Animation_OnFrame(&this->skelAnime, 2.0f) || Animation_OnFrame(&this->skelAnime, 6.0f)) {
-                Actor_PlaySfxAtPos(&this->picto.actor, NA_SE_EV_PIRATE_WALK);
+                Actor_PlaySfx(&this->picto.actor, NA_SE_EV_PIRATE_WALK);
             }
 
             if (this->screamTimer > 0) {

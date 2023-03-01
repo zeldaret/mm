@@ -554,7 +554,7 @@ void func_80B5C910(EnOt* this, PlayState* play) {
 
 void func_80B5C950(EnOt* this, PlayState* play) {
     if (this->unk_32C & 8) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SEAHORSE_OUT_BOTTLE);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_SEAHORSE_OUT_BOTTLE);
         SET_WEEKEVENTREG(WEEKEVENTREG_25_04);
         func_80B5CAD0(this, play);
     }
@@ -575,7 +575,7 @@ void func_80B5C9D0(EnOt* this, PlayState* play) {
     this->actor.world.rot.x = this->actor.world.rot.x;
     this->actor.world.rot.y = this->actor.world.rot.y;
     this->actor.world.rot.z = this->actor.world.rot.z;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SEAHORSE_OUT_BOTTLE);
+    Actor_PlaySfx(&this->actor, NA_SE_EV_SEAHORSE_OUT_BOTTLE);
     this->actionFunc = func_80B5CA30;
 }
 
@@ -929,7 +929,7 @@ void EnOt_Update(Actor* thisx, PlayState* play) {
     EnOt* this = THIS;
 
     if ((this->animIndex == 1) && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SEAHORSE_SWIM);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_SEAHORSE_SWIM);
     }
 
     this->actionFunc(this, play);

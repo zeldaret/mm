@@ -188,7 +188,7 @@ void func_80C1FE30(EnHintSkb* this) {
 
 void func_80C1FE80(EnHintSkb* this, PlayState* play) {
     if (Animation_OnFrame(&this->skelAnime, 8.0f) || Animation_OnFrame(&this->skelAnime, 15.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKID_WALK);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_STALKID_WALK);
     }
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 1, 750, 0);
     this->actor.world.rot.y = this->actor.shape.rot.y;
@@ -211,7 +211,7 @@ void func_80C1FF88(EnHintSkb* this, PlayState* play) {
     }
 
     if (Animation_OnFrame(&this->skelAnime, 3.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKID_ATTACK);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_STALKID_ATTACK);
     }
 
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
@@ -244,7 +244,7 @@ void func_80C2011C(EnHintSkb* this) {
     if (this->actor.bgCheckFlags & 1) {
         this->actor.speedXZ = 0.0f;
     }
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_FREEZE);
     this->actionFunc = func_80C2016C;
 }
 
@@ -284,7 +284,7 @@ void func_80C20274(EnHintSkb* this) {
             this->actor.speedXZ = -4.0f;
         }
     }
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKID_DAMAGE);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_STALKID_DAMAGE);
     this->actionFunc = func_80C20334;
 }
 
@@ -337,7 +337,7 @@ void func_80C20540(EnHintSkb* this) {
     if (this->actor.bgCheckFlags & 1) {
         this->actor.speedXZ = 0.0f;
     }
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_FREEZE);
     this->actionFunc = func_80C20590;
 }
 
@@ -349,7 +349,7 @@ void func_80C20590(EnHintSkb* this, PlayState* play) {
         if (this->actor.colChkInfo.health != 0) {
             Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 8);
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 3);
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKID_DAMAGE);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_STALKID_DAMAGE);
             this->unk_3E8 |= 1;
             func_80C20274(this);
         } else {
@@ -376,7 +376,7 @@ void func_80C2069C(EnHintSkb* this, PlayState* play) {
         if (this->actor.colChkInfo.health != 0) {
             Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 8);
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 3);
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKID_DAMAGE);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_STALKID_DAMAGE);
             this->unk_3E8 |= 1;
             func_80C20274(this);
         } else {
@@ -676,13 +676,13 @@ void func_80C20E90(EnHintSkb* this, PlayState* play) {
                 this->drawDmgEffAlpha = 1.0f;
                 this->drawDmgEffScale = 0.0f;
                 Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 8);
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKID_DAMAGE);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_STALKID_DAMAGE);
                 this->unk_3E8 |= 1;
                 func_80C20274(this);
                 break;
             case 3:
                 if (this->actor.colChkInfo.health != 0) {
-                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKID_DAMAGE);
+                    Actor_PlaySfx(&this->actor, NA_SE_EN_STALKID_DAMAGE);
                     this->drawDmgEffTimer = 80;
                 } else {
                     this->drawDmgEffTimer = 3;
@@ -699,7 +699,7 @@ void func_80C20E90(EnHintSkb* this, PlayState* play) {
                 this->drawDmgEffAlpha = 1.0f;
                 this->drawDmgEffScale = 0.5f;
                 Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 8);
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKID_DAMAGE);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_STALKID_DAMAGE);
                 Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 3);
                 func_80C2066C(this);
                 break;
@@ -718,7 +718,7 @@ void func_80C20E90(EnHintSkb* this, PlayState* play) {
 
             case 13:
                 Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 8);
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKID_DAMAGE);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_STALKID_DAMAGE);
                 Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 3);
                 func_80C20274(this);
                 break;

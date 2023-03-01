@@ -193,7 +193,7 @@ void EnBat_StepAnimation(EnBat* this, s32 frameStep) {
         this->animationFrame -= ARRAY_COUNT(sWingsDLs);
     }
     if ((prevFrame < BAD_BAT_FLAP_FRAME) && (this->animationFrame >= BAD_BAT_FLAP_FRAME)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_FFLY_FLY);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_FFLY_FLY);
     }
 }
 
@@ -299,7 +299,7 @@ void EnBat_DiveAttack(EnBat* this, PlayState* play) {
         (this->actor.depthInWater > -40.0f)) {
         if (this->collider.base.atFlags & AT_HIT) {
             this->collider.base.atFlags &= ~AT_HIT;
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_FFLY_ATTACK);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_FFLY_ATTACK);
         }
         this->collider.base.atFlags &= ~AT_ON;
         sNumberAttacking--;
@@ -320,7 +320,7 @@ void EnBat_SetupDie(EnBat* this, PlayState* play) {
     this->actor.speedXZ *= Math_CosS(this->actor.world.rot.x);
     this->actor.bgCheckFlags &= ~1;
     this->actor.velocity.y = 0.0f;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_FFLY_DEAD);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_FFLY_DEAD);
 
     if (this->actor.colChkInfo.damageEffect == BAD_BAT_DMGEFF_ICE) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX;
@@ -400,7 +400,7 @@ void EnBat_SetupStunned(EnBat* this) {
         this->actor.speedXZ = 0.0f;
         this->actor.world.pos.y += 13.0f;
     }
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_FREEZE);
     Actor_SetColorFilter(&this->actor, 0, 255, 0, this->timer);
     this->actionFunc = EnBat_Stunned;
 }

@@ -202,7 +202,7 @@ void EnMinislime_AddIceShardEffect(EnMinislime* this) {
     }
 
     this->frozenAlpha = 0;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_ICE_BROKEN);
+    Actor_PlaySfx(&this->actor, NA_SE_EV_ICE_BROKEN);
 }
 
 void EnMinislime_AddIceSmokeEffect(EnMinislime* this, PlayState* play) {
@@ -391,7 +391,7 @@ void EnMinislime_SetupGrowAndShrink(EnMinislime* this) {
     this->actor.scale.x = 0.19f;
     this->actor.scale.y = 0.044999998f;
     this->actor.scale.z = 0.19f;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_SLIME_JUMP2);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_SLIME_JUMP2);
     this->actionFunc = EnMinislime_GrowAndShrink;
 }
 
@@ -453,7 +453,7 @@ void EnMinislime_Idle(EnMinislime* this, PlayState* play) {
 void EnMinislime_SetupBounce(EnMinislime* this) {
     this->actor.speedXZ = 0.0f;
     this->bounceTimer = (this->actionFunc == EnMinislime_GrowAndShrink) ? 1 : 4;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_SLIME_JUMP1);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_SLIME_JUMP1);
     this->actionFunc = EnMinislime_Bounce;
 }
 

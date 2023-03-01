@@ -414,7 +414,7 @@ void EnSnowman_MoveSnowPile(EnSnowman* this, PlayState* play) {
 
 void EnSnowman_SetupEmerge(EnSnowman* this, PlayState* play) {
     Animation_PlayOnce(&this->skelAnime, &gEenoEmergeAnim);
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_YMAJIN_SURFACE);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_YMAJIN_SURFACE);
     this->collider.dim.radius = this->eenoScale * 40.0f;
     this->collider.dim.height = this->eenoScale * 25.0f;
     this->actor.draw = EnSnowman_Draw;
@@ -494,9 +494,9 @@ void EnSnowman_ReadySnowball(EnSnowman* this, PlayState* play) {
         EnSnowman_SetupThrowSnowball(this);
     } else if (Animation_OnFrame(&this->skelAnime, this->fwork.frameToStartHoldingSnowball)) {
         if (EN_SNOWMAN_GET_TYPE(&this->actor) == EN_SNOWMAN_TYPE_LARGE) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_YMAJIN_HOLD_SNOW);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_YMAJIN_HOLD_SNOW);
         } else {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_YMAJIN_MINI_HOLD);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_YMAJIN_MINI_HOLD);
         }
 
         this->isHoldingSnowball = true;
@@ -539,10 +539,10 @@ void EnSnowman_ThrowSnowball(EnSnowman* this, PlayState* play) {
         this->isHoldingSnowball = false;
         if (EN_SNOWMAN_GET_TYPE(&this->actor) == EN_SNOWMAN_TYPE_LARGE) {
             params = EN_SNOWMAN_TYPE_LARGE_SNOWBALL;
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_YMAJIN_THROW);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_YMAJIN_THROW);
         } else {
             params = EN_SNOWMAN_TYPE_SMALL_SNOWBALL;
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_YMAJIN_MINI_THROW);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_YMAJIN_MINI_THROW);
         }
 
         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_SNOWMAN, this->snowballPos.x, this->snowballPos.y,
@@ -572,7 +572,7 @@ void EnSnowman_SetupSubmerge(EnSnowman* this, PlayState* play) {
     Animation_Change(&this->skelAnime, &gEenoEmergeAnim, -1.0f, Animation_GetLastFrame(&gEenoEmergeAnim), 0.0f,
                      ANIMMODE_ONCE, -3.0f);
     EnSnowman_SpawnCircularDustEffect(this, play);
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_YMAJIN_HIDE);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_YMAJIN_HIDE);
     this->actionFunc = EnSnowman_Submerge;
 }
 
@@ -676,9 +676,9 @@ void EnSnowman_SetupDamaged(EnSnowman* this) {
     func_800BE504(&this->actor, &this->collider);
 
     if (EN_SNOWMAN_GET_TYPE(&this->actor) == EN_SNOWMAN_TYPE_LARGE) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_YMAJIN_DAMAGE);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_YMAJIN_DAMAGE);
     } else {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_YMAJIN_MINI_DAMAGE);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_YMAJIN_MINI_DAMAGE);
     }
 
     this->actionFunc = EnSnowman_Damaged;
@@ -706,7 +706,7 @@ void EnSnowman_Damaged(EnSnowman* this, PlayState* play) {
     if (this->work.timer > 0) {
         this->work.timer--;
     } else if (EN_SNOWMAN_GET_TYPE(&this->actor) == EN_SNOWMAN_TYPE_LARGE) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_YMAJIN_SPLIT);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_YMAJIN_SPLIT);
         EnSnowman_SpawnCircularDustEffect(this, play);
         this->drawDmgEffAlpha = 0.0f;
         EnSnowman_CreateSplitEeno((EnSnowman*)this->actor.parent, &this->actor.world.pos,
@@ -844,7 +844,7 @@ void EnSnowman_CreateSplitEeno(EnSnowman* this, Vec3f* basePos, s32 yRot) {
  * target scale increases.
  */
 void EnSnowman_AbsorbEeno(EnSnowman* smallerEeno, EnSnowman* largerEeno) {
-    Actor_PlaySfxAtPos(&largerEeno->actor, NA_SE_EN_YMAJIN_UNITE);
+    Actor_PlaySfx(&largerEeno->actor, NA_SE_EN_YMAJIN_UNITE);
     largerEeno->fwork.targetScaleDuringCombine += 0.005f;
     smallerEeno->combineState = EN_SNOWMAN_COMBINE_STATE_BEING_ABSORBED_OR_DONE;
     smallerEeno->collider.base.ocFlags1 &= ~OC1_HIT;
@@ -977,14 +977,14 @@ void EnSnowman_UpdateDamage(EnSnowman* this, PlayState* play) {
                     EnSnowman_SetupEmerge(this, play);
                 } else if (this->actor.colChkInfo.damageEffect == EN_SNOWMAN_DMGEFF_STUN) {
                     Actor_SetColorFilter(&this->actor, 0, 255, 0, 40);
-                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
+                    Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_FREEZE);
                     EnSnowman_SetupStun(this);
                 } else if (this->actor.colChkInfo.damageEffect == EN_SNOWMAN_DMGEFF_ELECTRIC_STUN) {
                     Actor_SetColorFilter(&this->actor, 0, 255, 0, 40);
                     this->drawDmgEffScale = 0.55f;
                     this->drawDmgEffAlpha = 2.0f;
                     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_LARGE;
-                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
+                    Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_FREEZE);
                     EnSnowman_SetupStun(this);
                 } else if (EN_SNOWMAN_GET_TYPE(&this->actor) == EN_SNOWMAN_TYPE_LARGE) {
                     if (this->isHoldingSnowball == true) {

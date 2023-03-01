@@ -167,7 +167,7 @@ void func_80AFDFB4(EnColMan* this, PlayState* play) {
             this->actor.speedXZ = 2.0f + BREG(56) + Rand_ZeroFloat(2.0f);
             this->actor.velocity.y = 12.0f + BREG(57) + Rand_ZeroFloat(5.0f);
             this->hasSetRandomValues = true;
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_ANSATSUSYA_ROCK);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_ANSATSUSYA_ROCK);
             return;
         }
 
@@ -210,7 +210,7 @@ void func_80AFE25C(EnColMan* this, PlayState* play) {
             }
         }
 
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_BOMB_EXPLOSION);
+        Actor_PlaySfx(&this->actor, NA_SE_IT_BOMB_EXPLOSION);
         Actor_Kill(&this->actor);
     }
 }
