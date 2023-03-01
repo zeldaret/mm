@@ -36,7 +36,7 @@ ActorOverlay gActorOverlayTable[] = {
 #undef DEFINE_ACTOR_INTERNAL
 #undef DEFINE_ACTOR_UNSET
 
-s32 gMaxActorId = 0;
+ActorId gMaxActorId = 0;
 
 FaultClient sActorOverlayTableFaultClient;
 FaultAddrConvClient sActorOverlayTableFaultAddrConvClient;
@@ -44,17 +44,17 @@ FaultAddrConvClient sActorOverlayTableFaultAddrConvClient;
 void ActorOverlayTable_FaultClient(void* arg0, void* arg1) {
     ActorOverlay* overlayEntry;
     u32 overlaySize;
-    s32 i;
+    ActorId actorId;
 
     FaultDrawer_SetCharPad(-2, 0);
 
     FaultDrawer_Printf("actor_dlftbls %u\n", gMaxActorId);
     FaultDrawer_Printf("No. RamStart- RamEnd cn  Name\n");
 
-    for (i = 0, overlayEntry = &gActorOverlayTable[0]; i < gMaxActorId; i++, overlayEntry++) {
+    for (actorId = 0, overlayEntry = &gActorOverlayTable[0]; actorId < gMaxActorId; actorId++, overlayEntry++) {
         overlaySize = VRAM_PTR_SIZE(overlayEntry);
         if (overlayEntry->loadedRamAddr != NULL) {
-            FaultDrawer_Printf("%3d %08x-%08x %3d %s\n", i, overlayEntry->loadedRamAddr,
+            FaultDrawer_Printf("%3d %08x-%08x %3d %s\n", actorId, overlayEntry->loadedRamAddr,
                                (u32)overlayEntry->loadedRamAddr + overlaySize, overlayEntry->numLoaded, "");
         }
     }
@@ -66,9 +66,9 @@ void* ActorOverlayTable_FaultAddrConv(void* address, void* param) {
     uintptr_t ramConv;
     void* ramStart;
     uintptr_t diff;
-    s32 i;
+    ActorId actorId;
 
-    for (i = 0; i < gMaxActorId; i++, actorOvl++) {
+    for (actorId = 0; actorId < gMaxActorId; actorId++, actorOvl++) {
         diff = VRAM_PTR_SIZE(actorOvl);
         ramStart = actorOvl->loadedRamAddr;
         ramConv = (uintptr_t)actorOvl->vramStart - (uintptr_t)ramStart;
