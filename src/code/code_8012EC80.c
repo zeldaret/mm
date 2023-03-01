@@ -474,7 +474,7 @@ u16 gSceneIdsPerRegion[REGION_MAX][27] = {
 s32 Inventory_GetBtnBItem(PlayState* play) {
     if (gSaveContext.buttonStatus[0] == BTN_DISABLED) {
         return ITEM_NONE;
-    } else if (gSaveContext.bButtonStatus == ITEM_NONE) {
+    } else if (gSaveContext.bButtonStatus == BTN_DISABLED) {
         return ITEM_NONE;
     } else if (CUR_FORM_EQUIP(EQUIP_SLOT_B) == ITEM_NONE) {
         if (play->interfaceCtx.unk_21C != 0) {

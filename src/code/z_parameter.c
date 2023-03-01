@@ -4121,7 +4121,7 @@ void Interface_DrawAmmoCount(PlayState* play, s16 button, s16 alpha) {
             gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 120, 255, 0, alpha);
         }
 
-        if (!ammo) {
+        if ((u32)ammo == 0) {
             gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 100, 100, 100, alpha);
         }
 
@@ -4130,7 +4130,7 @@ void Interface_DrawAmmoCount(PlayState* play, s16 button, s16 alpha) {
         }
 
         // Draw upper digit (tens)
-        if (i) {
+        if ((u32)i != 0) {
             OVERLAY_DISP = Gfx_DrawTexRectIA8(OVERLAY_DISP, ((u8*)gAmmoDigit0Tex + ((8 * 8) * i)), 8, 8,
                                               D_801BFB04[button], D_801BFB0C[button], 8, 8, 1 << 10, 1 << 10);
         }
