@@ -22,7 +22,6 @@ void* KaleidoManager_FaultAddrConv(void* address, void* param) {
     uintptr_t ramConv;
     void* ramStart;
     uintptr_t diff;
-    s32 i;
 
     if (kaleidoMgrOvl != NULL) {
         diff = VRAM_PTR_SIZE(kaleidoMgrOvl);
