@@ -582,7 +582,7 @@ asm/non_matchings/code/z_bgcheck/SurfaceType_IsSoft.s,SurfaceType_IsSoft,0x800C9
 asm/non_matchings/code/z_bgcheck/SurfaceType_IsHorseBlocked.s,SurfaceType_IsHorseBlocked,0x800C9B90,0xA
 asm/non_matchings/code/z_bgcheck/SurfaceType_GetMaterial.s,SurfaceType_GetMaterial,0x800C9BB8,0x9
 asm/non_matchings/code/z_bgcheck/SurfaceType_GetSfxOffset.s,SurfaceType_GetSfxOffset,0x800C9BDC,0x12
-asm/non_matchings/code/z_bgcheck/SurfaceType_IsSoftMaterial.s,SurfaceType_IsSoftMaterial,0x800C9C24,0x14
+asm/non_matchings/code/z_bgcheck/SurfaceType_HasMaterialProperty.s,SurfaceType_HasMaterialProperty,0x800C9C24,0x14
 asm/non_matchings/code/z_bgcheck/SurfaceType_GetFloorEffect.s,SurfaceType_GetFloorEffect,0x800C9C74,0xA
 asm/non_matchings/code/z_bgcheck/SurfaceType_GetLightSettingIndex.s,SurfaceType_GetLightSettingIndex,0x800C9C9C,0xA
 asm/non_matchings/code/z_bgcheck/SurfaceType_GetEcho.s,SurfaceType_GetEcho,0x800C9CC4,0xA

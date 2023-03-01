@@ -234,9 +234,9 @@ void ActorShadow_DrawFeet(Actor* actor, Lights* mapper, PlayState* play) {
                 if (distToFloor <= 10.0f) {
                     actor->shape.feetFloorFlags |= spB8;
 
-                    if ((actor->depthInWater < 0.0f) && (bgId == BGCHECK_SCENE) &&
-                        ((actor->shape.unk_17 & spB8) != 0)) {
-                        if (SurfaceType_IsSoftMaterial(&play->colCtx, spF8, bgId, 1)) {
+                    if ((actor->depthInWater < 0.0f) && (bgId == BGCHECK_SCENE) && (actor->shape.unk_17 & spB8)) {
+                        if (SurfaceType_HasMaterialProperty(&play->colCtx, spF8, bgId,
+                                                            MATERIAL_PROPERTY_SOFT_IMPRINT)) {
                             SkinMatrix_MtxFCopy(&sp13C, &spFC);
                             SkinMatrix_MulYRotation(&spFC, actor->shape.rot.y);
                             EffFootmark_Add(play, &spFC, actor, i, feetPosPtr, (actor->shape.shadowScale * 0.3f),

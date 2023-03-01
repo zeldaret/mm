@@ -18,7 +18,7 @@ u32 sWallFlags[WALL_TYPE_MAX] = {
     WALL_FLAG_6,               // WALL_TYPE_7
 };
 
-u16 sSurfaceMaterialToSfxOffset[SURFACE_MATERIAL_MAX] = {
+u16 sSurfaceSfxOffsets[SURFACE_MATERIAL_MAX] = {
     SURFACE_SFX_OFFSET_DIRT,          // SURFACE_MATERIAL_DIRT
     SURFACE_SFX_OFFSET_SAND,          // SURFACE_MATERIAL_SAND
     SURFACE_SFX_OFFSET_STONE,         // SURFACE_MATERIAL_STONE
@@ -36,22 +36,22 @@ u16 sSurfaceMaterialToSfxOffset[SURFACE_MATERIAL_MAX] = {
     SURFACE_SFX_OFFSET_SNOW,          // SURFACE_MATERIAL_SNOW
 };
 
-u8 sSurfaceMaterialIsSoft[SURFACE_MATERIAL_MAX] = {
-    true,  // SURFACE_MATERIAL_DIRT
-    true,  // SURFACE_MATERIAL_SAND
-    false, // SURFACE_MATERIAL_STONE
-    true,  // SURFACE_MATERIAL_DIRT_SHALLOW
-    false, // SURFACE_MATERIAL_WATER_SHALLOW
-    false, // SURFACE_MATERIAL_WATER_DEEP
-    false, // SURFACE_MATERIAL_TALL_GRASS
-    false, // SURFACE_MATERIAL_LAVA
-    false, // SURFACE_MATERIAL_GRASS
-    false, // SURFACE_MATERIAL_BRIDGE
-    false, // SURFACE_MATERIAL_WOOD
-    false, // SURFACE_MATERIAL_DIRT_SOFT
-    false, // SURFACE_MATERIAL_ICE
-    false, // SURFACE_MATERIAL_CARPET
-    true,  // SURFACE_MATERIAL_SNOW
+u8 sSurfaceMaterialProperties[SURFACE_MATERIAL_MAX] = {
+    MATERIAL_PROPERTY_SOFT_IMPRINT, // SURFACE_MATERIAL_DIRT
+    MATERIAL_PROPERTY_SOFT_IMPRINT, // SURFACE_MATERIAL_SAND
+    0,                              // SURFACE_MATERIAL_STONE
+    MATERIAL_PROPERTY_SOFT_IMPRINT, // SURFACE_MATERIAL_DIRT_SHALLOW
+    0,                              // SURFACE_MATERIAL_WATER_SHALLOW
+    0,                              // SURFACE_MATERIAL_WATER_DEEP
+    0,                              // SURFACE_MATERIAL_TALL_GRASS
+    0,                              // SURFACE_MATERIAL_LAVA
+    0,                              // SURFACE_MATERIAL_GRASS
+    0,                              // SURFACE_MATERIAL_BRIDGE
+    0,                              // SURFACE_MATERIAL_WOOD
+    0,                              // SURFACE_MATERIAL_DIRT_SOFT
+    0,                              // SURFACE_MATERIAL_ICE
+    0,                              // SURFACE_MATERIAL_CARPET
+    MATERIAL_PROPERTY_SOFT_IMPRINT, // SURFACE_MATERIAL_SNOW
 };
 
 s16 sSmallMemSceneIds[] = {
@@ -59,9 +59,9 @@ s16 sSmallMemSceneIds[] = {
 };
 
 typedef struct {
-    s16 sceneId;
-    u32 memSize;
-} BgCheckSceneMemEntry;
+    /* 0x0 */ s16 sceneId;
+    /* 0x4 */ u32 memSize;
+} BgCheckSceneMemEntry; // size = 0x8
 
 BgCheckSceneMemEntry sSceneMemList[] = {
     { SCENE_00KEIKOKU, 0xC800 },
@@ -4255,24 +4255,24 @@ SurfaceMaterial SurfaceType_GetMaterial(CollisionContext* colCtx, CollisionPoly*
 u16 SurfaceType_GetSfxOffset(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
     SurfaceMaterial surfaceMaterial = SurfaceType_GetMaterial(colCtx, poly, bgId);
 
-    if ((surfaceMaterial < 0) || (surfaceMaterial >= ARRAY_COUNT(sSurfaceMaterialToSfxOffset))) {
+    if ((surfaceMaterial < 0) || (surfaceMaterial >= ARRAY_COUNT(sSurfaceSfxOffsets))) {
         return SURFACE_SFX_OFFSET_DIRT;
     }
 
-    return sSurfaceMaterialToSfxOffset[surfaceMaterial];
+    return sSurfaceSfxOffsets[surfaceMaterial];
 }
 
 /**
- * SurfaceType Can Leave Imprints in the Material
+ * Checks if the material has the bitwise propertyType
  */
-s32 SurfaceType_IsSoftMaterial(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId, s32 mask) {
+s32 SurfaceType_HasMaterialProperty(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId, s32 propertyType) {
     SurfaceMaterial surfaceMaterial = SurfaceType_GetMaterial(colCtx, poly, bgId);
 
-    if ((surfaceMaterial < 0) || (surfaceMaterial >= ARRAY_COUNT(sSurfaceMaterialIsSoft))) {
-        return false;
+    if ((surfaceMaterial < 0) || (surfaceMaterial >= ARRAY_COUNT(sSurfaceMaterialProperties))) {
+        return 0;
     }
 
-    return sSurfaceMaterialIsSoft[surfaceMaterial] & mask;
+    return sSurfaceMaterialProperties[surfaceMaterial] & propertyType;
 }
 
 FloorEffect SurfaceType_GetFloorEffect(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
