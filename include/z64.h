@@ -34,6 +34,7 @@
 #include "z64curve.h"
 #include "z64cutscene.h"
 #include "z64dma.h"
+#include "z64eff_footmark.h"
 #include "z64effect.h"
 #include "z64interface.h"
 #include "z64item.h"
@@ -683,23 +684,6 @@ typedef struct {
     /* 0x12C */ UNK_TYPE1 pad_12C[0x4];
     /* 0x130 */ OSThread thread;
 } AudioMgr; // size = 0x2E0
-
-typedef struct {
-    /* 0x00 */ MtxF displayMatrix;
-    /* 0x40 */ Actor* actor;
-    /* 0x44 */ Vec3f location;
-    /* 0x50 */ u8 flags; // bit 0 - footmark fades out
-    /* 0x51 */ u8 id;
-    /* 0x52 */ u8 red;
-    /* 0x53 */ u8 blue;
-    /* 0x54 */ u8 green;
-    /* 0x55 */ UNK_TYPE1 pad55[0x1];
-    /* 0x56 */ u16 alpha;
-    /* 0x58 */ u16 alphaChange;
-    /* 0x5A */ u16 size;
-    /* 0x5C */ u16 fadeoutDelay;
-    /* 0x5E */ u16 age;
-} EffFootmark; // size = 0x60
 
 typedef struct {
     /* 0x0 */ u8   seqId;

@@ -463,7 +463,6 @@ beginseg
     include "build/src/code/z_demo.o"
     include "build/src/code/z_draw.o"
     include "build/src/code/z_eff_footmark.o"
-    include "build/data/code/z_eff_footmark.data.o"
     include "build/src/code/z_sound_source.o"
     include "build/src/code/z_elf_message.o"
     include "build/src/code/z_en_hy_code.o"
