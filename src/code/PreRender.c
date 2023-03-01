@@ -120,6 +120,23 @@ void func_80170200(PreRender* this, Gfx** gfxp, void* fbuf, void* fbufSave) {
         gImmp1(pkt, G_RDPHALF_2, (_SHIFTL(dsdx, 16, 16) | _SHIFTL(dtdy, 0, 16)));              \
     }
 
+//! FAKE: Same definition as `gDPLoadTextureTile` but without the `_DW()` wrapper (do-while 0)
+#define gDPLoadTextureTile_Alt(pkt, timg, fmt, siz, width, height, uls, ult, lrs, lrt, pal, cms, cmt, masks, maskt,    \
+                               shifts, shiftt)                                                                         \
+    {                                                                                                                  \
+        gDPSetTextureImage(pkt, fmt, siz, width, timg);                                                                \
+        gDPSetTile(pkt, fmt, siz, (((((lrs) - (uls) + 1) * siz##_TILE_BYTES) + 7) >> 3), 0, G_TX_LOADTILE, 0, cmt,     \
+                   maskt, shiftt, cms, masks, shifts);                                                                 \
+        gDPLoadSync(pkt);                                                                                              \
+        gDPLoadTile(pkt, G_TX_LOADTILE, (uls) << G_TEXTURE_IMAGE_FRAC, (ult) << G_TEXTURE_IMAGE_FRAC,                  \
+                    (lrs) << G_TEXTURE_IMAGE_FRAC, (lrt) << G_TEXTURE_IMAGE_FRAC);                                     \
+        gDPPipeSync(pkt);                                                                                              \
+        gDPSetTile(pkt, fmt, siz, (((((lrs) - (uls) + 1) * siz##_LINE_BYTES) + 7) >> 3), 0, G_TX_RENDERTILE, pal, cmt, \
+                   maskt, shiftt, cms, masks, shifts);                                                                 \
+        gDPSetTileSize(pkt, G_TX_RENDERTILE, (uls) << G_TEXTURE_IMAGE_FRAC, (ult) << G_TEXTURE_IMAGE_FRAC,             \
+                       (lrs) << G_TEXTURE_IMAGE_FRAC, (lrt) << G_TEXTURE_IMAGE_FRAC);                                  \
+    }
+
 /**
  * Reads the coverage values stored in the RGBA16 format `img` with dimensions `this->width`, `this->height` and
  * converts it to an 8-bpp intensity image.
@@ -180,9 +197,9 @@ void PreRender_CoverageRgba16ToI8(PreRender* this, Gfx** gfxp, void* img, void* 
         // Since it is expected that r = g = b = cvg in the source image, this results in
         //  I = (cvg << 3) | (cvg >> 2)
         // This expands the 5-bit coverage into an 8-bit value
-        gDPLoadTextureTile(gfx++, img, G_IM_FMT_IA, G_IM_SIZ_16b, this->width, this->height, uls, ult, lrs, lrt, 0,
-                           G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
-                           G_TX_NOLOD);
+        gDPLoadTextureTile_Alt(gfx++, img, G_IM_FMT_IA, G_IM_SIZ_16b, this->width, this->height, uls, ult, lrs, lrt, 0,
+                               G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
+                               G_TX_NOLOD, G_TX_NOLOD);
 
         if (1) {}
 
