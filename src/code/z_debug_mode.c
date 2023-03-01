@@ -1,4 +1,4 @@
-#include "z64debug.h"
+#include "z64debug_text.h"
 #include "global.h"
 
 typedef struct {
@@ -19,8 +19,8 @@ typedef struct {
 s32 sDebugTextDrawFlags = 0;
 
 DebugTextBufferEntry sDebugTextBuffer[] = {
-    { 0, "          " }, { 0, "          " }, { 0, "          " },
-    { 0, "          " }, { 0, "          " }, { 0, "          " },
+    { DEBUG_TEXT_BLACK, "          " }, { DEBUG_TEXT_BLACK, "          " }, { DEBUG_TEXT_BLACK, "          " },
+    { DEBUG_TEXT_BLACK, "          " }, { DEBUG_TEXT_BLACK, "          " }, { DEBUG_TEXT_BLACK, "          " },
 };
 
 Color_RGBA8 sDebugTextColors[] = {
@@ -54,11 +54,11 @@ void Debug_ClearTextDrawFlags(void) {
 }
 
 void Debug_ScreenText(s32 index, s32 colorIndex, const char* text) {
-    DebugTextBufferEntry* textInfo = &sDebugTextBuffer[index];
-    char* textDest = textInfo->text;
+    DebugTextBufferEntry* entry = &sDebugTextBuffer[index];
+    char* textDest = entry->text;
 
     sDebugTextDrawFlags |= DEBUG_TEXT_DRAW_TEXT;
-    textInfo->colorIndex = colorIndex;
+    entry->colorIndex = colorIndex;
 
     do {
         *textDest++ = *text;

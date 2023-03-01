@@ -1,5 +1,5 @@
-#ifndef Z64DEBUG_H
-#define Z64DEBUG_H
+#ifndef Z64DEBUG_TEXT_H
+#define Z64DEBUG_TEXT_H
 
 #include "ultra64.h"
 

@@ -1,6 +1,6 @@
 #include "global.h"
 #include "system_malloc.h"
-#include "z64debug.h"
+#include "z64debug_text.h"
 #include "z64rumble.h"
 #include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
 
