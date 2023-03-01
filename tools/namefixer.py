@@ -292,6 +292,8 @@ wordReplace = {
     "func_80152498": "Message_GetState",
     "func_800B8898": "Actor_GetScreenPos",
     "Audio_PlayActorSound2": "Actor_PlaySfx",
+    "Actor_PlaySfxAtPos": "Actor_PlaySfx",
+    "func_800B8E58": "Player_PlaySfx",
     "func_800BF7CC": "Actor_SpawnIceEffects",
     "Actor_IsFacingPlayerAndWithinRange": "Actor_IsFacingAndNearPlayer",
     "func_800BC8B8": "Actor_DrawDoorLock",
