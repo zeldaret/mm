@@ -257,6 +257,7 @@ void EnTest_Draw(Actor* thisx, PlayState* play) {
         sp2C = 29;
     }
 
+    //! @bug Checks for non-existent SURFACE_MATERIAL_MAX material
     if ((this->surfaceMaterial == SURFACE_MATERIAL_MAX) || (this->surfaceMaterial == SURFACE_MATERIAL_SNOW)) {
         AnimatedMat_DrawStep(play, Lib_SegmentedToVirtual(gameplay_keep_Matanimheader_06B730), sp2C);
     } else {
