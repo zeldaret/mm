@@ -1,13 +1,39 @@
-#ifndef Z64_TRANSITION_H
-#define Z64_TRANSITION_H
+#ifndef Z64TRANSITION_H
+#define Z64TRANSITION_H
 
 #include "ultra64.h"
-
 #include "overlays/fbdemos/ovl_fbdemo_triforce/z_fbdemo_triforce.h"
 #include "overlays/fbdemos/ovl_fbdemo_wipe1/z_fbdemo_wipe1.h"
 #include "overlays/fbdemos/ovl_fbdemo_wipe3/z_fbdemo_wipe3.h"
 #include "overlays/fbdemos/ovl_fbdemo_wipe4/z_fbdemo_wipe4.h"
 #include "overlays/fbdemos/ovl_fbdemo_wipe5/z_fbdemo_wipe5.h"
+
+typedef enum {
+    /* 0 */ TRANS_TILE_OFF, // Inactive, do nothing
+    /* 1 */ TRANS_TILE_SETUP, // Save the necessary buffers
+    /* 2 */ TRANS_TILE_PROCESS, // Initialize the transition
+    /* 3 */ TRANS_TILE_READY // The transition is ready, so will update and draw each frame
+} TransitionTileState;
+
+typedef struct {
+    /* 0x0 */ f32 x;
+    /* 0x4 */ f32 y;
+} TransitionTileVtxData; // size = 0x8
+
+typedef struct {
+    /* 0x00 */ s32 cols;
+    /* 0x04 */ s32 rows;
+    /* 0x08 */ s32 frame;
+    /* 0x0C */ TransitionTileVtxData* vtxData;
+    /* 0x10 */ Vtx* vtxFrame1;
+    /* 0x14 */ Vtx* vtxFrame2;
+    /* 0x18 */ Mtx projection;
+    /* 0x58 */ Mtx modelView;
+    /* 0x98 */ Mtx unk_98;
+    /* 0xD8 */ Gfx* gfx; // "gfxtbl"
+    /* 0xDC */ u16* zBuffer;
+} TransitionTile; // size = 0xE0
+
 
 #define TC_SET_PARAMS (1 << 7)
 
@@ -39,14 +65,20 @@ typedef struct {
     /* 0x18 */ size_t size;
 } TransitionOverlay;
 
-typedef struct {
-    /* 0x0 */ char unk_0[0xC];
-} TransitionFade; // size = 0xC
-
 typedef enum {
- /* 0 */ TRANSITION_CIRCLE_IN,
- /* 1 */ TRANSITION_CIRCLE_OUT,
-} TransitionCircleDirection;
+    /* 1 */ TRANS_INSTANCE_TYPE_FILL_OUT = 1,
+    /* 2 */ TRANS_INSTANCE_TYPE_FILL_IN,
+} TransitionInstanceType;
+
+#define TRANS_INSTANCE_TYPE_FADE_FLASH 3
+
+typedef struct {
+    /* 0x0 */ u8 type;
+    /* 0x1 */ u8 isDone;
+    /* 0x2 */ u8 direction;
+    /* 0x4 */ Color_RGBA8_u32 color;
+    /* 0x8 */ u16 timer;
+} TransitionFade; // size = 0xC
 
 #define FBDEMO_CIRCLE_GET_MASK_TYPE(type) (type & 1)
 
@@ -121,6 +153,7 @@ typedef enum {
     /* 22 */ TRANS_TYPE_WIPE5,
     // transition types 23 - 31 are unused
     // transition types 32 - 39 are Wipe4 TODO needs macro
+    /* 38 */ TRANS_TYPE_38 = 38,
     // transition types 40 - 63 are unused
     // transition types 64 - 127 are Wipe3 TODO needs macro
     /* 64 */ TRANS_TYPE_64 = 64,

@@ -2,21 +2,21 @@
     <File Name="object_dai" Segment="6">
         <Texture Name="object_dai_Tex_000000" OutName="tex_000000" Format="i4" Width="32" Height="32" Offset="0x0" />
         <DList Name="object_dai_DL_000230" Offset="0x230" />
-        <DList Name="object_dai_DL_0002E8" Offset="0x2E8" />
-        <Animation Name="object_dai_Anim_000CEC" Offset="0xCEC" />
-        <Animation Name="object_dai_Anim_0010F8" Offset="0x10F8" />
-        <Animation Name="object_dai_Anim_0014BC" Offset="0x14BC" />
-        <Animation Name="object_dai_Anim_001E44" Offset="0x1E44" />
-        <Animation Name="object_dai_Anim_002E58" Offset="0x2E58" />
-        <Animation Name="object_dai_Anim_003CAC" Offset="0x3CAC" />
-        <Animation Name="object_dai_Anim_0040E0" Offset="0x40E0" />
-        <Animation Name="object_dai_Anim_0048B4" Offset="0x48B4" />
-        <Animation Name="object_dai_Anim_005100" Offset="0x5100" />
-        <Animation Name="object_dai_Anim_00563C" Offset="0x563C" />
-        <Animation Name="object_dai_Anim_006590" Offset="0x6590" />
-        <Animation Name="object_dai_Anim_0069DC" Offset="0x69DC" />
-        <Animation Name="object_dai_Anim_007354" Offset="0x7354" />
-        <Animation Name="object_dai_Anim_0079E4" Offset="0x79E4" />
+        <DList Name="object_dai_DL_0002E8" Offset="0x2E8" /> <!-- Original name is "dai_ball_modelT" -->
+        <Animation Name="object_dai_Anim_000CEC" Offset="0xCEC" /> <!-- Original name is "dg_haku" ("to breathe out​") -->
+        <Animation Name="object_dai_Anim_0010F8" Offset="0x10F8" /> <!-- Original name is "dg_iare" ("are" = "huh?; eh?"") -->
+        <Animation Name="object_dai_Anim_0014BC" Offset="0x14BC" /> <!-- Original name is "dg_iareend" -->
+        <Animation Name="object_dai_Anim_001E44" Offset="0x1E44" /> <!-- Original name is "dg_iareloop" -->
+        <Animation Name="object_dai_Anim_002E58" Offset="0x2E58" /> <!-- Original name is "dg_inemuri" ("nemuri" = "to fall asleep") -->
+        <Animation Name="object_dai_Anim_003CAC" Offset="0x3CAC" /> <!-- Original name is "dg_isuwaru" ("suwari" = "to sit" )-->
+        <Animation Name="object_dai_Anim_0040E0" Offset="0x40E0" /> <!-- Original name is "dg_isuwaruloop" -->
+        <Animation Name="object_dai_Anim_0048B4" Offset="0x48B4" /> <!-- Original name is "dg_iwait" -->
+        <Animation Name="object_dai_Anim_005100" Offset="0x5100" /> <!-- Original name is "dg_iwalk" -->
+        <Animation Name="object_dai_Anim_00563C" Offset="0x563C" /> <!-- Original name is "dg_korogeoti" ("to fall off; to tumble down​") -->
+        <Animation Name="object_dai_Anim_006590" Offset="0x6590" /> <!-- Original name is "dg_marumari" ("to roll into a ball") -->
+        <Animation Name="object_dai_Anim_0069DC" Offset="0x69DC" /> <!-- Original name is "dg_modoru" ("to return; to go back​") -->
+        <Animation Name="object_dai_Anim_007354" Offset="0x7354" /> <!-- Original name is "dg_tame" ("to amass; to accumulate; to store​") -->
+        <Animation Name="object_dai_Anim_0079E4" Offset="0x79E4" /> <!-- Original name is "dg_wait" -->
         <DList Name="object_dai_DL_008710" Offset="0x8710" />
         <DList Name="object_dai_DL_0087B8" Offset="0x87B8" />
         <DList Name="object_dai_DL_0089D8" Offset="0x89D8" />

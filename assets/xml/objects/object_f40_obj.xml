@@ -11,7 +11,7 @@
         <DList Name="object_f40_obj_DL_004030" Offset="0x4030" />
         <DList Name="object_f40_obj_DL_004038" Offset="0x4038" />
         <Collision Name="object_f40_obj_Colheader_004240" Offset="0x4240" />
-        <DList Name="object_f40_obj_DL_0043D0" Offset="0x43D0" />
-        <Collision Name="object_f40_obj_Colheader_004640" Offset="0x4640" />
+        <DList Name="object_f40_obj_DL_0043D0" Offset="0x43D0" /> <!-- Original name is "z2_f40obj01_model" -->
+        <Collision Name="object_f40_obj_Colheader_004640" Offset="0x4640" /> <!-- Original name is "z2_f40obj01_bgdatainfo" -->
     </File>
 </Root>

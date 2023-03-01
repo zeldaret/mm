@@ -30,7 +30,7 @@ typedef struct {
     /* 0x1A */ s16 rotX;
 } PowderKegFuseSegment; // size = 0x1C
 
-static PowderKegFuseSegment sPowderKegFuseSegments[16];
+PowderKegFuseSegment sPowderKegFuseSegments[16];
 
 ActorInit En_Bom_InitVars = {
     ACTOR_EN_BOM,
