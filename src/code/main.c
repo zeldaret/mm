@@ -49,8 +49,7 @@ void Main(void* arg) {
     AudioMgr_Unlock(&audioContext);
 
     StackCheck_Init(&sGraphStackInfo, sGraphStack, STACK_TOP(sGraphStack), 0, 0x100, "graph");
-    osCreateThread(&sGraphThread, Z_THREAD_ID_GRAPH, Graph_ThreadEntry, arg, STACK_TOP(sGraphStack),
-                   Z_PRIORITY_GRAPH);
+    osCreateThread(&sGraphThread, Z_THREAD_ID_GRAPH, Graph_ThreadEntry, arg, STACK_TOP(sGraphStack), Z_PRIORITY_GRAPH);
     osStartThread(&sGraphThread);
 
     exit = false;

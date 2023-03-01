@@ -109,8 +109,7 @@ void Idle_ThreadEntry(void* arg) {
     Idle_InitVideo();
     osCreatePiManager(150, &gPiMgrCmdQ, sPiMgrCmdBuff, ARRAY_COUNT(sPiMgrCmdBuff));
     StackCheck_Init(&sMainStackInfo, sMainStack, STACK_TOP(sMainStack), 0, 0x400, "main");
-    osCreateThread(&gMainThread, Z_THREAD_ID_MAIN, Main_ThreadEntry, arg, STACK_TOP(sMainStack),
-                   Z_PRIORITY_MAIN);
+    osCreateThread(&gMainThread, Z_THREAD_ID_MAIN, Main_ThreadEntry, arg, STACK_TOP(sMainStack), Z_PRIORITY_MAIN);
     osStartThread(&gMainThread);
     osSetThreadPri(NULL, 0);
 

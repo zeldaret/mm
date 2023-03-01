@@ -298,7 +298,7 @@ extern u16 numDmaEntries;
 extern OSMesgQueue sDmaMgrMsgQueue;
 extern OSMesg sDmaMgrMsgs[32];
 extern OSThread sDmaMgrThread;
-extern u8 sDmaMgrStack[0x500];
+extern STACK(sDmaMgrStack, 0x500);
 extern u8 sYaz0DataBuffer[0x400];
 extern u8* sYaz0CurDataEnd;
 extern u32 sYaz0CurRomStart;
