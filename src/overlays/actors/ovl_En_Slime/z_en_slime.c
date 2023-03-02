@@ -190,7 +190,7 @@ void EnSlime_Init(Actor* thisx, PlayState* play) {
     if (this->actor.shape.rot.x <= 0) {
         this->distLimit = 30000.0f;
     } else {
-        this->distLimit = (f32)this->actor.shape.rot.x * 40.0f;
+        this->distLimit = this->actor.shape.rot.x * 40.0f;
     }
 
     this->actor.shape.rot.x = 0;
@@ -206,7 +206,7 @@ void EnSlime_Init(Actor* thisx, PlayState* play) {
 
     // Update addresses of texture assets (if another instance hasn't already)
     if (!sVirtualAddrInit) {
-        for (i = 0; i < 4; i++) {
+        for (i = 0; i < ARRAY_COUNT(sEyeTextures); i++) {
             sEyeTextures[i] = Lib_SegmentedToVirtual(sEyeTextures[i]);
         }
         sSlimeAnimTex = Lib_SegmentedToVirtual(gChuchuSlimeFlowTexAnim);

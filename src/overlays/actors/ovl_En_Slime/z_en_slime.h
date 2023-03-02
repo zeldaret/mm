@@ -28,7 +28,7 @@ typedef struct EnSlime {
                     Vec3f iceBlockSnapPos;
                     Vec3f wobbleRot;
                 };
-    /* 0x160 */ void* dropObjectTex;
+    /* 0x160 */ TexturePtr dropObjectTex;
     /* 0x164 */ f32 effectAlpha;
     /* 0x168 */ f32 effectScale;
     /* 0x16C */ f32 frozenSteamScale;
