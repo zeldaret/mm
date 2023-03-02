@@ -2130,6 +2130,9 @@ void func_800B8E1C(PlayState* play, Actor* actor, f32 arg2, s16 arg3, f32 arg4) 
     func_800B8DD4(play, actor, arg2, arg3, arg4, 0);
 }
 
+/**
+ * Play a sound effect at the player's position
+ */
 void Player_PlaySfx(Player* player, u16 sfxId) {
     if (player->currentMask == PLAYER_MASK_GIANT) {
         func_8019F170(&player->actor.projectedPos, sfxId);
@@ -2140,7 +2143,7 @@ void Player_PlaySfx(Player* player, u16 sfxId) {
 }
 
 /**
- * Plays the sound effect at the actor's position
+ * Play a sound effect at the actor's position
  */
 void Actor_PlaySfx(Actor* actor, u16 sfxId) {
     Audio_PlaySfxAtPos(&actor->projectedPos, sfxId);
