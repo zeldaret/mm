@@ -5,7 +5,9 @@
  * buffer copies and coverage drawing. Also contains software implementations of the Video Interface anti-aliasing and
  * divot filters.
  */
+
 #include "global.h"
+#include "libc/alloca.h"
 
 /**
  * Assigns the "save" values in PreRender
@@ -608,7 +610,114 @@ u32 func_801716C4(u8* arg0, u8* arg1, u8* arg2) {
     return var_s1;
 }
 
+#if 0
+void func_801717F8(PreRender* this) {
+    u8 **temp_v0;
+    s32 temp_s1;
+
+    u8 **spDC;
+    u8* spD8;
+    u8* spD4;
+    u8 *spD0;
+    u8* spCC;
+    u8* spC8;
+    u8* spC4;
+    u8* spC0;
+    u8* spBC;
+    u8* spB8;
+
+    s32 temp_t1;
+
+    Color_RGBA16 spB0;
+    Color_RGBA16 spAC;
+
+
+    s32 sp80;
+    s32 sp70;
+
+    s32 s0;
+    u16* var_v0;
+    s32 s4; // x
+    u8* var_a2;
+    u8* temp_s5;
+    u8** temp_a0;
+    u8** temp_v1;
+
+    u16 temp_s6 = this->width;
+    u8 *sp10 = alloca(temp_s6 * 10);
+    u16 t0 = this->height;
+
+    spD0 = &sp10[temp_s6 * 0];
+    spD4 = &sp10[temp_s6 * 1];
+    spD8 = &sp10[temp_s6 * 2];
+    spC4 = &sp10[temp_s6 * 3];
+    spC8 = &sp10[temp_s6 * 4];
+    spCC = &sp10[temp_s6 * 5];
+    spB8 = &sp10[temp_s6 * 6];
+    spBC = &sp10[temp_s6 * 7];
+    spC0 = &sp10[temp_s6 * 8];
+    temp_s5 = &sp10[temp_s6 * 9];
+
+    s4 = 0;
+    while (s4 < 2U) {
+        temp_v0 = &(&spD0)[s4];
+        temp_v1 = &(&spC4)[s4];
+        temp_a0 = &(&spB8)[s4];
+
+        for (s0 = 0; s0 < temp_s6; s0++) {
+            spB0.rgba = this->fbufSave[s0 + s4 * this->width];
+
+            (*temp_v0)[s0] = spB0.r;
+            (*temp_v1)[s0] = spB0.g;
+            (*temp_a0)[s0] = spB0.b;
+        }
+
+        s4 += 1;
+    }
+
+    //spDC = &sp10[0];
+
+    for (s4 = 1; s4 < t0 - 1; s4++) {
+        var_a2 = &this->cvgSave[temp_s6 * s4];
+        var_v0 = &this->fbufSave[temp_s6 * s4];
+
+        s0 = 0;
+        while (s0 < temp_s6) {
+            spB0.rgba = var_v0[s0];
+
+            spD8[s0] = spB0.r;
+            spCC[s0] = spB0.g;
+            spC0[s0] = spB0.b;
+
+            temp_s5[s0] = (( var_a2[s0] >> 5) == 7);
+
+            s0 += 1;
+        }
+
+        for (s0 = 1; s0 < temp_s6 - 1; s0++) {
+            temp_s1 = s0 - 1;
+
+            if ((temp_s5[s0 - 1] != 0) && (temp_s5[s0] != 0) && (temp_s5[s0+1] != 0)) {
+                continue;
+            }
+                spAC.r = (func_801716C4(spD0 + temp_s1, spD4 + temp_s1, spD8 + temp_s1));
+                spAC.g = (func_801716C4(spC4 + temp_s1, spC8 + temp_s1, spCC + temp_s1)) ;
+                spAC.b = (func_801716C4(spB8 + temp_s1, spBC + temp_s1, spC0 + temp_s1))    ;
+                spAC.a = 1;
+                this->fbufSave[s0 + s4 * this->width] = spAC.rgba;
+        }
+
+        spD0 = spD4;
+        spC4 = spC8;
+        spB8 = spBC;
+        spD4 = spD8;
+        spC8 = spCC;
+        spBC = spC0;
+    }
+}
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/code/PreRender/func_801717F8.s")
+#endif
 
 /**
  * Applies filters to the framebuffer prerender to make it look smoother
@@ -658,9 +767,6 @@ void func_801720C4(PreRender* this) {
         PreRender_ApplyFilters(this);
     }
 }
-
-// TODO: ucode.h
-#define SP_UCODE_DATA_SIZE 0x800
 
 typedef struct {
     /* 0x00 */ void* timg;
