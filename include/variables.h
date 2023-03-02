@@ -494,7 +494,7 @@ extern PlayState* actorCutscenesPlayState;
 extern s16 actorCutsceneReturnCamera;
 extern s16 D_801BD8C6;
 extern GameStateOverlay gGameStateOverlayTable[];
-extern s32 graphNumGameStates;
+extern s32 gGraphNumGameStates;
 // extern UNK_TYPE2 D_801BDA70;
 // extern UNK_TYPE2 D_801BDA74;
 // extern UNK_TYPE2 D_801BDA78;

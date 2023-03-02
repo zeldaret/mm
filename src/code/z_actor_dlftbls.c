@@ -63,9 +63,9 @@ void ActorOverlayTable_FaultClient(void* arg0, void* arg1) {
 void* ActorOverlayTable_FaultAddrConv(void* address, void* param) {
     uintptr_t addr = address;
     ActorOverlay* actorOvl = &gActorOverlayTable[0];
-    uintptr_t ramConv;
+    size_t ramConv;
     void* ramStart;
-    uintptr_t diff;
+    size_t diff;
     ActorId actorId;
 
     for (actorId = 0; actorId < gMaxActorId; actorId++, actorOvl++) {
@@ -74,7 +74,7 @@ void* ActorOverlayTable_FaultAddrConv(void* address, void* param) {
         ramConv = (uintptr_t)actorOvl->vramStart - (uintptr_t)ramStart;
 
         if (ramStart != NULL) {
-            if (addr >= (uintptr_t)ramStart && addr < (uintptr_t)ramStart + diff) {
+            if ((addr >= (uintptr_t)ramStart) && (addr < (uintptr_t)ramStart + diff)) {
                 return addr + ramConv;
             }
         }
