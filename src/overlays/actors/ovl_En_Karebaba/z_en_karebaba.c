@@ -260,7 +260,7 @@ void EnKarebaba_Idle(EnKarebaba* this, PlayState* play) {
 void EnKarebaba_SetupAwaken(EnKarebaba* this) {
     Animation_Change(&this->skelAnime, &gDekuBabaFastChompAnim, 4.0f, 0.0f,
                      Animation_GetLastFrame(&gDekuBabaFastChompAnim), ANIMMODE_LOOP, -3.0f);
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DEKU_WAKEUP);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_DEKU_WAKEUP);
     this->actionFunc = EnKarebaba_Awaken;
 }
 
@@ -313,7 +313,7 @@ void EnKarebaba_Upright(EnKarebaba* this, PlayState* play) {
     }
 
     if (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 12.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_MIZUBABA1_MOUTH);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_MIZUBABA1_MOUTH);
     }
 
     if (this->hurtCollider.base.acFlags & AC_HIT) {
@@ -347,7 +347,7 @@ void EnKarebaba_Spin(EnKarebaba* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
 
     if (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 12.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_MIZUBABA1_MOUTH);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_MIZUBABA1_MOUTH);
     }
 
     temp = 20 - this->timer;
@@ -380,12 +380,12 @@ void EnKarebaba_SetupDying(EnKarebaba* this) {
         this->actor.gravity = -0.8f;
         this->actor.velocity.y = 4.0f;
         this->actor.world.rot.y = BINANG_ROT180(this->actor.shape.rot.y);
-        this->actor.speedXZ = 3.0f;
+        this->actor.speed = 3.0f;
     } else {
         this->timer = 3;
     }
 
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DEKU_JR_DEAD);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_DEKU_JR_DEAD);
     this->actor.flags |= (ACTOR_FLAG_10 | ACTOR_FLAG_20);
     this->actionFunc = EnKarebaba_Dying;
 }
@@ -401,13 +401,13 @@ void EnKarebaba_Dying(EnKarebaba* this, PlayState* play) {
         this->timer--;
         if (this->timer == 0) {
             this->actor.gravity = -0.8f;
-            this->actor.speedXZ = 3.0f;
+            this->actor.speed = 3.0f;
             this->actor.velocity.y = 4.0f;
             this->actor.world.rot.y = BINANG_ROT180(this->actor.shape.rot.y);
             EnKarebaba_SpawnIceEffects(this, play);
         }
     } else {
-        Math_StepToF(&this->actor.speedXZ, 0.0f, 0.1f);
+        Math_StepToF(&this->actor.speed, 0.0f, 0.1f);
 
         if (this->timer == 0) {
             Math_ScaledStepToS(&this->actor.shape.rot.x, 0x4800, 0x71C);
@@ -417,14 +417,14 @@ void EnKarebaba_Dying(EnKarebaba* this, PlayState* play) {
                 this->actor.scale.z = 0.0f;
                 this->actor.scale.y = 0.0f;
                 this->actor.scale.x = 0.0f;
-                this->actor.speedXZ = 0.0f;
+                this->actor.speed = 0.0f;
                 this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_4);
                 EffectSsHahen_SpawnBurst(play, &this->actor.world.pos, 3.0f, 0, 12, 5, 15, HAHEN_OBJECT_DEFAULT, 10,
                                          NULL);
             }
 
             if (this->actor.bgCheckFlags & 2) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_EYEGOLE_ATTACK);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_EYEGOLE_ATTACK);
                 this->timer = 1;
             }
         } else if (this->timer == 1) {
@@ -448,7 +448,7 @@ void EnKarebaba_Dying(EnKarebaba* this, PlayState* play) {
 }
 
 void EnKarebaba_SetupShrinkDie(EnKarebaba* this) {
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DEKU_JR_DEAD);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_DEKU_JR_DEAD);
     this->actor.flags |= (ACTOR_FLAG_10 | ACTOR_FLAG_20);
     this->actor.flags &= ~ACTOR_FLAG_1;
     if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {

@@ -216,7 +216,7 @@ void EnBb_UpdateStateForFlying(EnBb* this) {
     Math_StepToF(&this->flameScaleY, 0.8f, 0.1f);
     Math_StepToF(&this->flameScaleX, 1.0f, 0.1f);
     EnBb_CheckForWall(this);
-    Math_StepToF(&this->actor.speedXZ, this->maxSpeed, 0.5f);
+    Math_StepToF(&this->actor.speed, this->maxSpeed, 0.5f);
     Math_ApproachS(&this->actor.shape.rot.y, this->targetYRotation, 5, 0x3E8);
     this->actor.world.rot.y = this->actor.shape.rot.y;
 }
@@ -236,10 +236,10 @@ void EnBb_SetupFlyIdle(EnBb* this) {
     this->actor.gravity = 0.0f;
     this->actor.velocity.y = 0.0f;
     this->flyHeightMod = (Math_CosS(this->bobPhase) * 10.0f) + 30.0f;
-    this->targetYRotation = Actor_YawToPoint(&this->actor, &this->actor.home.pos);
+    this->targetYRotation = Actor_WorldYawTowardPoint(&this->actor, &this->actor.home.pos);
 
     if ((this->actor.xzDistToPlayer < (this->attackRange + 120.0f)) ||
-        (Actor_XZDistanceToPoint(&this->actor, &this->actor.home.pos) < 300.0f)) {
+        (Actor_WorldDistXZToPoint(&this->actor, &this->actor.home.pos) < 300.0f)) {
         this->targetYRotation += (s16)((s32)Rand_Next() >> 0x11);
     }
 
@@ -255,9 +255,9 @@ void EnBb_FlyIdle(EnBb* this, PlayState* play) {
     EnBb_UpdateStateForFlying(this);
 
     if (Animation_OnFrame(&this->skelAnime, 5.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BUBLE_WING);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_BUBLE_WING);
     } else if ((Animation_OnFrame(&this->skelAnime, 0.0f)) && (Rand_ZeroOne() < 0.1f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BUBLE_LAUGH);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_BUBLE_LAUGH);
     }
 
     DECR(this->attackWaitTimer);
@@ -288,18 +288,18 @@ void EnBb_Attack(EnBb* this, PlayState* play) {
     EnBb_UpdateStateForFlying(this);
 
     if ((Animation_OnFrame(&this->skelAnime, 0.0f)) || (Animation_OnFrame(&this->skelAnime, 5.0f))) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BUBLE_MOUTH);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_BUBLE_MOUTH);
     } else if ((Animation_OnFrame(&this->skelAnime, 2.0f)) || (Animation_OnFrame(&this->skelAnime, 7.0f))) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BUBLE_WING);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_BUBLE_WING);
     } else if ((Animation_OnFrame(&this->skelAnime, 0.0f)) && (Rand_ZeroOne() < 0.1f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BUBLE_LAUGH);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_BUBLE_LAUGH);
     }
 
     this->timer--;
 
     if (((this->attackRange + 120.0f) < this->actor.xzDistToPlayer) || (this->timer == 0) ||
         (Player_GetMask(play) == PLAYER_MASK_STONE) ||
-        (Actor_XZDistanceToPoint(&this->actor, &this->actor.home.pos) > 400.0f)) {
+        (Actor_WorldDistXZToPoint(&this->actor, &this->actor.home.pos) > 400.0f)) {
         EnBb_SetupFlyIdle(this);
     }
 }
@@ -309,11 +309,11 @@ void EnBb_SetupDown(EnBb* this) {
     this->collider.base.atFlags |= AT_ON;
     this->timer = 140;
     this->collider.base.acFlags |= AC_ON;
-    this->actor.speedXZ = 2.0f;
+    this->actor.speed = 2.0f;
     this->flameScaleY = 0.0f;
     this->flameScaleX = 0.0f;
     this->actor.gravity = -2.0f;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BUBLE_DOWN);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_BUBLE_DOWN);
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->actionFunc = EnBb_Down;
 }
@@ -326,9 +326,9 @@ void EnBb_Down(EnBb* this, PlayState* play) {
     EnBb_CheckForWall(this);
 
     if (this->actor.bgCheckFlags & 1) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_EYEGOLE_ATTACK);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_EYEGOLE_ATTACK);
         if (this->timer == 0) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BUBLE_UP);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_BUBLE_UP);
             EnBb_SetupFlyIdle(this);
             return;
         }
@@ -346,7 +346,7 @@ void EnBb_Down(EnBb* this, PlayState* play) {
 
     this->actor.world.rot.y = this->actor.shape.rot.y;
     if (Animation_OnFrame(&this->skelAnime, 5.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BUBLE_WING);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_BUBLE_WING);
     }
 
     if (this->timer > 0) {
@@ -363,11 +363,11 @@ void EnBb_SetupDead(EnBb* this, PlayState* play) {
     func_800BE568(&this->actor, &this->collider);
     this->timer = 15;
     this->actor.shape.rot.x += 0x4E20;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 40, NA_SE_EN_BUBLE_DEAD);
     Item_DropCollectibleRandom(play, &this->actor, &this->actor.world.pos, 0x70);
     this->actor.velocity.y = 0.0f;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->bodyPartDrawStatus = BB_BODY_PART_DRAW_STATUS_DEAD;
     this->actor.gravity = -1.5f;
 
@@ -412,7 +412,7 @@ void EnBb_Dead(EnBb* this, PlayState* play) {
 
 void EnBb_SetupDamage(EnBb* this) {
     this->collider.base.acFlags &= ~AC_ON;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BUBLE_DAMAGE);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_BUBLE_DAMAGE);
     func_800BE568(&this->actor, &this->collider);
 
     if (this->actor.colChkInfo.damageEffect == EN_BB_DMGEFF_ZORA_MAGIC) {
@@ -422,12 +422,12 @@ void EnBb_SetupDamage(EnBb* this) {
         this->drawDmgEffScale = 0.4f;
     } else if (this->actor.colChkInfo.damageEffect == EN_BB_DMGEFF_STUN) {
         Actor_SetColorFilter(&this->actor, 0, 255, 0, 20);
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
     } else if (this->actor.colChkInfo.damageEffect == EN_BB_DMGEFF_HOOKSHOT) {
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
     } else {
         Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 20);
-        this->actor.speedXZ = 7.0f;
+        this->actor.speed = 7.0f;
     }
 
     this->actor.gravity = -1.0f;
@@ -435,14 +435,14 @@ void EnBb_SetupDamage(EnBb* this) {
 }
 
 void EnBb_Damage(EnBb* this, PlayState* play) {
-    Math_SmoothStepToF(&this->actor.speedXZ, 0.0f, 1.0f, 0.5f, 0.0f);
-    if ((this->actor.bgCheckFlags & 1) && (this->actor.speedXZ < 0.1f)) {
+    Math_SmoothStepToF(&this->actor.speed, 0.0f, 1.0f, 0.5f, 0.0f);
+    if ((this->actor.bgCheckFlags & 1) && (this->actor.speed < 0.1f)) {
         EnBb_SetupDown(this);
     }
 }
 
 void EnBb_SetupFrozen(EnBb* this) {
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     if (this->actor.velocity.y > 0.0f) {
         this->actor.velocity.y = 0.0f;
     }
@@ -472,7 +472,7 @@ void EnBb_SetupWaitForRevive(EnBb* this) {
     this->actor.shape.rot.x = 0;
     this->actor.world.pos.y += 50.0f;
     this->timer = 200;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actor.velocity.y = 0.0f;
     this->actor.gravity = 0.0f;
     this->actionFunc = EnBb_WaitForRevive;
@@ -565,7 +565,7 @@ void EnBb_UpdateDamage(EnBb* this, PlayState* play) {
             this->collider.base.atFlags &= ~AT_HIT;
             this->actor.world.rot.y = this->actor.yawTowardsPlayer + 0x8000;
             this->actor.shape.rot.y = this->actor.world.rot.y;
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BUBLE_BITE);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_BUBLE_BITE);
 
             if (this->flameScaleX > 0.0f) {
                 gSaveContext.jinxTimer = 1200;

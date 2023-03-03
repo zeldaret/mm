@@ -268,7 +268,7 @@ s32 func_80B50854(EnGk* this, PlayState* play) {
 
 void func_80B50954(EnGk* this) {
     if (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 4.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_GOLONKID_WALK);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_GOLONKID_WALK);
     }
 }
 
@@ -511,7 +511,7 @@ void func_80B51410(EnGk* this, PlayState* play) {
         }
 
         if (ActorCutscene_GetCanPlayNext(this->unk_318)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_GOLONKID_SOB_TALK);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_GOLONKID_SOB_TALK);
             ActorCutscene_Start(this->unk_318, &this->actor);
             this->unk_1E4 &= ~0x20;
             return;
@@ -821,7 +821,7 @@ void func_80B51EA4(EnGk* this, PlayState* play) {
         }
 
         if (ABS_ALT(sp36) < 0x2AAA) {
-            Math_ApproachF(&this->actor.speedXZ, 3.0f, 0.2f, 0.5f);
+            Math_ApproachF(&this->actor.speed, 3.0f, 0.2f, 0.5f);
         }
         Actor_MoveWithGravity(&this->actor);
     }
@@ -897,7 +897,7 @@ void func_80B5227C(EnGk* this, PlayState* play) {
         if (!(this->unk_1E4 & 0x80)) {
             SET_WEEKEVENTREG(WEEKEVENTREG_22_04);
         }
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_GOLON_SIT_IMT);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_GOLON_SIT_IMT);
         this->unk_350 = 0x4000;
         this->actionFunc = func_80B52654;
     }
@@ -993,7 +993,7 @@ void func_80B52654(EnGk* this, PlayState* play) {
     this->actor.scale.z = 0.006f - this->unk_354;
     this->actor.scale.x = 0.006f + this->unk_354;
     if (this->unk_350 == 0) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_GOLONKID_SNORE);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_GOLONKID_SNORE);
     }
 }
 
