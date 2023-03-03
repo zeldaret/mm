@@ -313,7 +313,7 @@ extern f32 D_8009BE54;
 extern u32 faultCustomOptions;
 extern u32 faultCopyToLog;
 extern STACK(sFaultStack, 0x600);
-extern StackEntry sFaultThreadInfo;
+extern StackEntry sFaultStackInfo;
 extern FaultThreadStruct gFaultStruct;
 extern FaultDrawer sFaultDrawerStruct;
 // extern UNK_TYPE4 D_8009CD10;
