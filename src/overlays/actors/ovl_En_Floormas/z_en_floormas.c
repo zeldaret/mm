@@ -651,9 +651,9 @@ void func_808D1D6C(EnFloormas* this, PlayState* play) {
             return;
         }
 
-        Math_ScaledStepToS(&this->actor.shape.rot.y, Actor_YawBetweenActors(&this->actor, sp2C), 0x38E);
+        Math_ScaledStepToS(&this->actor.shape.rot.y, Actor_WorldYawTowardActor(&this->actor, sp2C), 0x38E);
 
-        if (Actor_XZDistanceBetweenActors(&this->actor, sp2C) < 80.0f) {
+        if (Actor_WorldDistXZToActor(&this->actor, sp2C) < 80.0f) {
             func_808D2484(this);
         }
     } else {
@@ -794,7 +794,7 @@ void func_808D24F0(EnFloormas* this, PlayState* play) {
         this->actor.speedXZ = 5.0f;
         this->actor.velocity.y = 7.0f;
     } else if (this->skelAnime.curFrame < 20.0f) {
-        Math_ApproachS(&this->actor.shape.rot.y, Actor_YawBetweenActors(&this->actor, phi_s1), 2, 0xE38);
+        Math_ApproachS(&this->actor.shape.rot.y, Actor_WorldYawTowardActor(&this->actor, phi_s1), 2, 0xE38);
     } else if (((phi_s1->world.pos.y - this->actor.world.pos.y) < -10.0f) &&
                (fabsf(this->actor.world.pos.x - phi_s1->world.pos.x) < 10.0f) &&
                (fabsf(this->actor.world.pos.z - phi_s1->world.pos.z) < 10.0f)) {

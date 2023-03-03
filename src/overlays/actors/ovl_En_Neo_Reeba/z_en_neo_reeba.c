@@ -171,7 +171,7 @@ void EnNeoReeba_WaitUnderground(EnNeoReeba* this, PlayState* play) {
     s32 pad;
     Player* player = GET_PLAYER(play);
 
-    if ((Actor_XZDistanceToPoint(&player->actor, &this->actor.home.pos) < 200.0f) &&
+    if ((Actor_WorldDistXZToPoint(&player->actor, &this->actor.home.pos) < 200.0f) &&
         (Player_GetMask(play) != PLAYER_MASK_STONE) && (fabsf(this->actor.playerHeightRel) < 100.0f)) {
         EnNeoReeba_SetupRise(this);
     }
@@ -199,7 +199,7 @@ void EnNeoReeba_SetupChooseAction(EnNeoReeba* this) {
 
 void EnNeoReeba_ChooseAction(EnNeoReeba* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    f32 distToPlayer = Actor_XZDistanceToPoint(&player->actor, &this->actor.home.pos);
+    f32 distToPlayer = Actor_WorldDistXZToPoint(&player->actor, &this->actor.home.pos);
 
     if ((distToPlayer > 200.0f) || (fabsf(this->actor.playerHeightRel) > 100.0f)) {
         EnNeoReeba_SetupSink(this);
@@ -318,7 +318,7 @@ void EnNeoReeba_ReturnHome(EnNeoReeba* this, PlayState* play) {
         this->actor.speedXZ -= 1.0f;
     }
 
-    if (Actor_XZDistanceToPoint(&player->actor, &this->actor.home.pos) > 200.0f ||
+    if (Actor_WorldDistXZToPoint(&player->actor, &this->actor.home.pos) > 200.0f ||
         fabsf(this->actor.playerHeightRel) > 100.0f) {
         EnNeoReeba_SetupSink(this);
     }

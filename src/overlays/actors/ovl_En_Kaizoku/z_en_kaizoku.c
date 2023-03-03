@@ -395,7 +395,7 @@ s32 func_80B85A00(EnKaizoku* this, PlayState* play, s16 arg2) {
 
         if (((this->picto.actor.bgCheckFlags & 8) && (sp32 < 0x2EE0)) || (explosiveActor->id == ACTOR_EN_BOM_CHU)) {
             if ((explosiveActor->id == ACTOR_EN_BOM_CHU) &&
-                (Actor_DistanceBetweenActors(&this->picto.actor, explosiveActor) < 80.0f) &&
+                (Actor_WorldDistXYZToActor(&this->picto.actor, explosiveActor) < 80.0f) &&
                 (BINANG_ADD(this->picto.actor.shape.rot.y - explosiveActor->world.rot.y, 0x8000) < 0x4000)) {
                 if (this->action != KAIZOKU_ACTION_6) {
                     func_80B87C7C(this);

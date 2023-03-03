@@ -1254,7 +1254,7 @@ void DmStk_ClockTower_AdjustHeightAndRotation(DmStk* this, PlayState* play) {
     sin = Math_SinS(this->bobPhase) * 10.0f;
     Math_SmoothStepToF(&this->actor.world.pos.y, 160.0f + sin, 0.2f, 1.0f, 0.0001f);
 
-    this->actor.world.rot.y = Actor_YawBetweenActors(&this->actor, &player->actor);
+    this->actor.world.rot.y = Actor_WorldYawTowardActor(&this->actor, &player->actor);
     this->actor.shape.rot.y = this->actor.world.rot.y;
 
     this->actor.world.rot.x = 0x1B58;

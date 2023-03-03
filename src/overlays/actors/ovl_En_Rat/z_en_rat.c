@@ -293,7 +293,7 @@ void EnRat_ChooseDirection(EnRat* this) {
             angle -= 0x8000;
         }
     } else {
-        if (Actor_DistanceToPoint(&this->actor, &this->actor.home.pos) > 50.0f) {
+        if (Actor_WorldDistXYZToPoint(&this->actor, &this->actor.home.pos) > 50.0f) {
             Vec3f homeInHome;
             Vec3f worldInHome;
             Vec3f worldPlusForwardInHome;

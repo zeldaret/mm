@@ -252,8 +252,8 @@ void func_80B2CBBC(EnPoh* this, PlayState* play) {
         this->unk_18E--;
     }
 
-    if (Actor_XZDistanceToPoint(&this->actor, &this->actor.home.pos) > 400.0f) {
-        this->unk_192 = Actor_YawToPoint(&this->actor, &this->actor.home.pos);
+    if (Actor_WorldDistXZToPoint(&this->actor, &this->actor.home.pos) > 400.0f) {
+        this->unk_192 = Actor_WorldYawTowardPoint(&this->actor, &this->actor.home.pos);
     }
 
     Math_ScaledStepToS(&this->actor.world.rot.y, this->unk_192, 0x71C);

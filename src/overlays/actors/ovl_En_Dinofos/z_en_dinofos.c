@@ -415,7 +415,7 @@ s32 func_8089AE00(EnDinofos* this, PlayState* play) {
 
     temp_v0 = func_800BC270(play, &this->actor, 80.0f, 0x138B0);
     if (temp_v0 != NULL) {
-        temp_v1 = (Actor_YawBetweenActors(&this->actor, temp_v0) - this->actor.shape.rot.y) - this->unk_28E;
+        temp_v1 = (Actor_WorldYawTowardActor(&this->actor, temp_v0) - this->actor.shape.rot.y) - this->unk_28E;
         if (ABS_ALT(temp_v1) < 0x3000) {
             func_8089D11C(this, temp_v1 + this->unk_28E);
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_RIZA_WARAU);
@@ -425,7 +425,7 @@ s32 func_8089AE00(EnDinofos* this, PlayState* play) {
 
     temp_v0 = func_800BC444(play, &this->actor, 80.0f);
     if ((temp_v0 != NULL) && (temp_v0->id == ACTOR_EN_BOM_CHU)) {
-        temp_v1_2 = (Actor_YawBetweenActors(&this->actor, temp_v0) - this->actor.shape.rot.y) - this->unk_28E;
+        temp_v1_2 = (Actor_WorldYawTowardActor(&this->actor, temp_v0) - this->actor.shape.rot.y) - this->unk_28E;
         if (ABS_ALT(temp_v1_2) < 0x3000) {
             func_8089C024(this, 1);
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_RIZA_WARAU);

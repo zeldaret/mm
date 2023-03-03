@@ -242,8 +242,8 @@ void EnSnowman_Init(Actor* thisx, PlayState* play) {
 
         thisx->flags &= ~ACTOR_FLAG_1;
         Collider_InitAndSetCylinder(play, &this->collider, thisx, &sSnowballCylinderInit);
-        thisx->world.rot.y = Actor_YawBetweenActors(thisx, &player->actor);
-        thisx->velocity.y = (Actor_XZDistanceBetweenActors(thisx, &player->actor) * 0.035f) + -5.0f;
+        thisx->world.rot.y = Actor_WorldYawTowardActor(thisx, &player->actor);
+        thisx->velocity.y = (Actor_WorldDistXZToActor(thisx, &player->actor) * 0.035f) + -5.0f;
         thisx->velocity.y = CLAMP_MAX(thisx->velocity.y, 3.5f);
         if (EN_SNOWMAN_GET_TYPE(thisx) == EN_SNOWMAN_TYPE_SMALL_SNOWBALL) {
             thisx->speedXZ = 15.0f;
@@ -405,8 +405,9 @@ void EnSnowman_MoveSnowPile(EnSnowman* this, PlayState* play) {
         this->actor.world.rot.y = this->actor.shape.rot.y;
     } else if (this->actor.bgCheckFlags & 8) {
         this->snowPileTargetRotY = this->actor.wallYaw;
-    } else if (Actor_XZDistanceToPoint(&this->actor, &this->actor.home.pos) > 200.0f) {
-        this->snowPileTargetRotY = Actor_YawToPoint(&this->actor, &this->actor.home.pos) + ((s32)Rand_Next() >> 0x14);
+    } else if (Actor_WorldDistXZToPoint(&this->actor, &this->actor.home.pos) > 200.0f) {
+        this->snowPileTargetRotY =
+            Actor_WorldYawTowardPoint(&this->actor, &this->actor.home.pos) + ((s32)Rand_Next() >> 0x14);
     } else if (Rand_ZeroOne() < 0.02f) {
         this->snowPileTargetRotY += (s16)(((Rand_Next() >> 0x13) + 0x1000) * ((Rand_ZeroOne() < 0.5f) ? -1 : 1));
     }
@@ -902,7 +903,7 @@ void EnSnowman_Combine(EnSnowman* this, PlayState* play) {
     SkelAnime_Update(&this->snowPileSkelAnime);
     parent = (EnSnowman*)this->actor.parent;
     child = (EnSnowman*)this->actor.child;
-    Math_ScaledStepToS(&this->actor.shape.rot.y, Actor_YawToPoint(&this->actor, &this->combinePos), 0x1000);
+    Math_ScaledStepToS(&this->actor.shape.rot.y, Actor_WorldYawTowardPoint(&this->actor, &this->combinePos), 0x1000);
     this->actor.world.rot.y = this->actor.shape.rot.y;
 
     if (this->combineState == EN_SNOWMAN_COMBINE_STATE_ACTIVE) {
@@ -940,7 +941,7 @@ void EnSnowman_Combine(EnSnowman* this, PlayState* play) {
         this->fwork.targetScaleDuringCombine = 0.0f;
     }
 
-    if (Actor_XZDistanceToPoint(&this->actor, &this->combinePos) < 20.0f) {
+    if (Actor_WorldDistXZToPoint(&this->actor, &this->combinePos) < 20.0f) {
         this->actor.speedXZ = 0.0f;
     }
 

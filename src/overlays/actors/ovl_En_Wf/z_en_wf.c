@@ -299,10 +299,10 @@ void EnWf_Init(Actor* thisx, PlayState* play) {
         if (this->actor.child != NULL) {
             Player* player = GET_PLAYER(play);
 
-            this->actor.child->xzDistToPlayer = Actor_XZDistanceBetweenActors(&this->actor, &player->actor);
+            this->actor.child->xzDistToPlayer = Actor_WorldDistXZToActor(&this->actor, &player->actor);
             this->unk_2A4 = (temp_s0 * 0.5f) + 45.0f;
             this->unk_29C = 0x32000 / this->unk_2A4;
-            this->actor.shape.rot.y = Actor_YawBetweenActors(&this->actor, &player->actor);
+            this->actor.shape.rot.y = Actor_WorldYawTowardActor(&this->actor, &player->actor);
             this->actor.world.pos.x -= this->unk_2A4 * Math_SinS(this->actor.shape.rot.y);
             this->actor.world.pos.z -= this->unk_2A4 * Math_CosS(this->actor.shape.rot.y);
         }
@@ -405,7 +405,7 @@ s32 func_80990948(PlayState* play, EnWf* this, s16 arg2) {
     if (((this->unk_295 == 0) ||
          ((this->unk_295 == 1) && (this->actor.child != NULL) && (this->actor.child->update != NULL))) &&
         (this->actor.xzDistToPlayer > 160.0f) &&
-        (this->unk_2A8 < Actor_XZDistanceToPoint(&this->actor, &this->actor.home.pos))) {
+        (this->unk_2A8 < Actor_WorldDistXZToPoint(&this->actor, &this->actor.home.pos))) {
         func_80993524(this);
         return true;
     }
@@ -1217,7 +1217,7 @@ void func_80993018(EnWf* this, PlayState* play) {
         } else if (this->actor.child->xzDistToPlayer < (80.0f + this->unk_2A4)) {
             func_80993350(this);
         } else {
-            s16 temp_v0 = Actor_YawBetweenActors(this->actor.child, &this->actor);
+            s16 temp_v0 = Actor_WorldYawTowardActor(this->actor.child, &this->actor);
             s16 temp_v1 = BINANG_SUB(temp_v0 - this->actor.child->yawTowardsPlayer, 0x8000);
 
             if (ABS_ALT(temp_v1) > 0x800) {
@@ -1251,7 +1251,7 @@ void func_80993194(EnWf* this, PlayState* play) {
             if (this->actor.child->xzDistToPlayer < (80.0f + this->unk_2A4)) {
                 func_80993350(this);
             } else {
-                sp36 = Actor_YawBetweenActors(this->actor.child, &this->actor);
+                sp36 = Actor_WorldYawTowardActor(this->actor.child, &this->actor);
                 sp34 = Math_SmoothStepToS(&sp36, BINANG_ROT180(this->actor.child->yawTowardsPlayer), 10, this->unk_29C,
                                           16);
                 this->actor.world.pos.x = (Math_SinS(sp36) * this->unk_2A4) + this->actor.child->world.pos.x;
@@ -1293,7 +1293,7 @@ void func_809933A0(EnWf* this, PlayState* play) {
         if (func_80990EAC(this)) {
             func_80990ED4(this);
         } else {
-            sp2E = Actor_YawBetweenActors(this->actor.child, &this->actor);
+            sp2E = Actor_WorldYawTowardActor(this->actor.child, &this->actor);
             Math_ScaledStepToS(&sp2E, this->actor.child->yawTowardsPlayer, this->unk_29C >> 2);
             sp2C = sp2E - this->actor.child->yawTowardsPlayer;
             this->actor.world.pos.x = (Math_SinS(sp2E) * this->unk_2A4) + this->actor.child->world.pos.x;
@@ -1330,7 +1330,7 @@ void func_8099357C(EnWf* this, PlayState* play) {
     func_80990E4C(this, play);
     if (this->unk_295 != 0) {
         if ((this->actor.child != NULL) && (this->actor.child->update != NULL)) {
-            sp2E = Actor_YawBetweenActors(&this->actor, this->actor.child);
+            sp2E = Actor_WorldYawTowardActor(&this->actor, this->actor.child);
             if (func_80990EAC(this)) {
                 this->actor.child = NULL;
                 func_80991738(this);
@@ -1348,7 +1348,7 @@ void func_8099357C(EnWf* this, PlayState* play) {
             Math_SmoothStepToS(&this->actor.shape.rot.y, sp2E, 10, 0x800, 16);
             this->actor.world.rot.y = this->actor.shape.rot.y;
 
-            if (Actor_XZDistanceBetweenActors(&this->actor, this->actor.child) < (this->unk_2A4 + 10.0f)) {
+            if (Actor_WorldDistXZToActor(&this->actor, this->actor.child) < (this->unk_2A4 + 10.0f)) {
                 func_80993148(this);
             }
         } else {
@@ -1356,10 +1356,10 @@ void func_8099357C(EnWf* this, PlayState* play) {
             func_80991738(this);
         }
     } else {
-        Math_SmoothStepToS(&this->actor.shape.rot.y, Actor_YawToPoint(&this->actor, &this->actor.home.pos), 10, 0x800,
-                           16);
+        Math_SmoothStepToS(&this->actor.shape.rot.y, Actor_WorldYawTowardPoint(&this->actor, &this->actor.home.pos), 10,
+                           0x800, 16);
         this->actor.world.rot.y = this->actor.shape.rot.y;
-        if (Actor_XZDistanceToPoint(&this->actor, &this->actor.home.pos) < 40.0f) {
+        if (Actor_WorldDistXZToPoint(&this->actor, &this->actor.home.pos) < 40.0f) {
             func_809910F0(this);
         }
     }
@@ -1590,7 +1590,7 @@ s32 func_8099408C(PlayState* play, EnWf* this) {
     s16 temp_v1;
 
     if (temp_v0 != NULL) {
-        temp_v1 = (Actor_YawBetweenActors(&this->actor, temp_v0) - this->actor.shape.rot.y) - this->unk_29E;
+        temp_v1 = (Actor_WorldYawTowardActor(&this->actor, temp_v0) - this->actor.shape.rot.y) - this->unk_29E;
         if (ABS_ALT(temp_v1) < 0x3000) {
             if (Rand_ZeroOne() < 0.5f) {
                 func_8099223C(this);
