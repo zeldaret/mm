@@ -1520,9 +1520,9 @@ void Player_UpdateBunnyEarsKinematics(Player* player) {
 
     angle = player->actor.world.rot.y - player->actor.shape.rot.y;
     force.x =
-        (s32)(player->actor.speedXZ * -200.0f * Math_CosS(angle) * (randPlusMinusPoint5Scaled(2.0f) + 10.0f)) & 0xFFFF;
+        (s32)(player->actor.speed * -200.0f * Math_CosS(angle) * (randPlusMinusPoint5Scaled(2.0f) + 10.0f)) & 0xFFFF;
     force.y =
-        (s32)(player->actor.speedXZ * 100.0f * Math_SinS(angle) * (randPlusMinusPoint5Scaled(2.0f) + 10.0f)) & 0xFFFF;
+        (s32)(player->actor.speed * 100.0f * Math_SinS(angle) * (randPlusMinusPoint5Scaled(2.0f) + 10.0f)) & 0xFFFF;
 
     sBunnyEarKinematics.angVel.x += force.x >> 2;
     sBunnyEarKinematics.angVel.y += force.y >> 2;
@@ -2183,7 +2183,7 @@ s32 Player_OverrideLimbDrawGameplayDefault(PlayState* play, s32 limbIndex, Gfx**
                        (player->stateFlags1 & PLAYER_STATE1_2000000)) {
                 leftHandDLists = &gPlayerLeftHandOpenDLs[D_801F59E0];
                 sPlayerLeftHandType = PLAYER_MODELTYPE_LH_OPEN;
-            } else if ((player->leftHandType == PLAYER_MODELTYPE_LH_OPEN) && (player->actor.speedXZ > 2.0f) &&
+            } else if ((player->leftHandType == PLAYER_MODELTYPE_LH_OPEN) && (player->actor.speed > 2.0f) &&
                        !(player->stateFlags1 & PLAYER_STATE1_8000000)) {
                 leftHandDLists = &gPlayerLeftHandClosedDLs[D_801F59E0];
                 sPlayerLeftHandType = PLAYER_MODELTYPE_LH_CLOSED;
@@ -2243,7 +2243,7 @@ s32 Player_OverrideLimbDrawGameplayDefault(PlayState* play, s32 limbIndex, Gfx**
                             rightHandDLists = &gPlayerHandHoldingShields[2 * ((player->currentShield - 1) ^ 0)];
                         }
                     }
-                } else if ((player->rightHandType == PLAYER_MODELTYPE_RH_OPEN) && (player->actor.speedXZ > 2.0f) &&
+                } else if ((player->rightHandType == PLAYER_MODELTYPE_RH_OPEN) && (player->actor.speed > 2.0f) &&
                            (!(player->stateFlags1 & PLAYER_STATE1_8000000))) {
                     rightHandDLists = &gPlayerRightHandClosedDLs[D_801F59E0];
                     sPlayerRightHandType = PLAYER_MODELTYPE_RH_CLOSED;
