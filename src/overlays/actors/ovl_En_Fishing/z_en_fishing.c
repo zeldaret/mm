@@ -2789,7 +2789,7 @@ void func_80903C60(EnFishing* this, u8 arg1) {
         }
     }
 
-    Actor_PlaySfxAtPos(&this->actor, sfxId);
+    Actor_PlaySfx(&this->actor, sfxId);
 }
 
 void EnFishing_HandleAquariumDialog(EnFishing* this, PlayState* play) {
@@ -3202,7 +3202,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                         EnFishing_SpawnRipple(&this->actor.projectedPos, play->specialEffects, &spB8, 30.0f, 400.0f,
                                               150, 90);
 
-                        Actor_PlaySfxAtPos(&this->actor, NA_SE_PL_CATCH_BOOMERANG);
+                        Actor_PlaySfx(&this->actor, NA_SE_PL_CATCH_BOOMERANG);
                         break;
                     }
                 }
@@ -3478,7 +3478,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                 this->unk_18C = 2000.0f;
             } else if (sp124 < 10.0f) {
                 if (sLurePos.y > (WATER_SURFACE_Y(play) - 10.0f)) {
-                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_JUMP_OUT_WATER);
+                    Actor_PlaySfx(&this->actor, NA_SE_EV_JUMP_OUT_WATER);
                     play_sound(NA_SE_PL_CATCH_BOOMERANG);
                 }
 
@@ -4114,7 +4114,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                     this->actor.velocity.x = this->actor.world.pos.x * -0.003f;
                     this->actor.velocity.z = this->actor.world.pos.z * -0.003f;
 
-                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_FISH_LEAP);
+                    Actor_PlaySfx(&this->actor, NA_SE_EV_FISH_LEAP);
                     func_809036BC(this, play);
 
                     if (Rand_ZeroOne() < 0.5f) {

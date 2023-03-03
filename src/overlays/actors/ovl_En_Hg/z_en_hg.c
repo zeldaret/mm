@@ -177,7 +177,7 @@ void EnHg_Wait(EnHg* this, PlayState* play) {
         }
         if ((gSaveContext.sceneLayer == 0) && (play->csCtx.currentCsIndex == 0) &&
             ((play->csCtx.frames == 20) || (play->csCtx.frames == 60))) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_HALF_REDEAD_SURPRISE);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_HALF_REDEAD_SURPRISE);
         }
     }
 }

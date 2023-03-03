@@ -847,7 +847,7 @@ void func_80938AD8(ObjBean* this, PlayState* play) {
 
     func_80937160(this);
     if (this->unk_1B2 == 25) {
-        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_PL_PLANT_GROW_BIG);
+        Actor_PlaySfx(&this->dyna.actor, NA_SE_PL_PLANT_GROW_BIG);
     }
 
     if (sp30 != 0) {

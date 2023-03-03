@@ -278,7 +278,7 @@ void ObjKibako_Idle(ObjKibako* this, PlayState* play) {
 
         //! @bug: This function should only pass Player*: it uses *(this + 0x153), which is meant to be
         //! player->currentMask, but in this case is garbage in the collider
-        func_800B8E58((Player*)this, NA_SE_PL_PULL_UP_WOODBOX);
+        Player_PlaySfx((Player*)&this->actor, NA_SE_PL_PULL_UP_WOODBOX);
     } else if ((this->actor.bgCheckFlags & 0x20) && (this->actor.depthInWater > 19.0f)) {
         ObjKibako_WaterBreak(this, play);
         ObjKibako_SpawnCollectible(this, play);
@@ -343,7 +343,7 @@ void ObjKibako_Held(ObjKibako* this, PlayState* play) {
         if (fabsf(this->actor.speed) < 0.1f) {
             ObjKibako_SetupIdle(this);
             this->collider.base.ocFlags1 &= ~OC1_TYPE_PLAYER;
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_PUT_DOWN_WOODBOX);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_PUT_DOWN_WOODBOX);
         } else {
             Actor_MoveWithGravity(&this->actor);
             ObjKibako_SetupThrown(this);

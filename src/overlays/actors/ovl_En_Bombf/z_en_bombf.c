@@ -156,7 +156,7 @@ void func_808AEAE0(EnBombf* this, PlayState* play) {
                 func_800B8C20(&this->actor, &bombf->actor, play);
                 this->timer = 180;
                 this->unk_204 = 0.0f;
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_PL_PULL_UP_ROCK);
+                Actor_PlaySfx(&this->actor, NA_SE_PL_PULL_UP_ROCK);
                 this->actor.flags &= ~ACTOR_FLAG_1;
             } else {
                 player->actor.child = NULL;
@@ -352,7 +352,7 @@ void EnBombf_Update(Actor* thisx, PlayState* play) {
                 this->actor.world.rot.y =
                     BINANG_SUB(this->actor.wallYaw - this->actor.world.rot.y + this->actor.wallYaw, 0x8000);
             }
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BOMB_BOUND);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_BOMB_BOUND);
             Actor_MoveWithGravity(&this->actor);
             DREG(6) = 1;
             Actor_UpdateBgCheckInfo(play, &this->actor, 5.0f, 10.0f, 0.0f, 0x1F);
@@ -378,7 +378,7 @@ void EnBombf_Update(Actor* thisx, PlayState* play) {
                 if ((play->gameplayFrames % 2) == 0) {
                     EffectSsGSpk_SpawnFuse(play, &this->actor, &sp68, &sp8C, &sp74);
                 }
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_BOMB_IGNIT - SFX_FLAG);
+                Actor_PlaySfx(&this->actor, NA_SE_IT_BOMB_IGNIT - SFX_FLAG);
                 sp68.y += 3.0f;
                 func_800B0DE0(play, &sp68, &sp8C, &sp5C, &sp58, &sp58, 0x32, 5);
             }
@@ -407,7 +407,7 @@ void EnBombf_Update(Actor* thisx, PlayState* play) {
 
                 Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, sp68.x, sp68.y, sp68.z, 0, 0, 0,
                             CLEAR_TAG_SMALL_EXPLOSION);
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_BOMB_EXPLOSION);
+                Actor_PlaySfx(&this->actor, NA_SE_IT_BOMB_EXPLOSION);
 
                 play->envCtx.lightSettings.diffuseColor1[0] = play->envCtx.lightSettings.diffuseColor1[1] =
                     play->envCtx.lightSettings.diffuseColor1[2] = 250;
@@ -445,7 +445,7 @@ void EnBombf_Update(Actor* thisx, PlayState* play) {
 
         if (this->actor.bgCheckFlags & 0x40) {
             this->actor.bgCheckFlags &= ~0x40;
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BOMB_DROP_WATER);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_BOMB_DROP_WATER);
         }
     }
 }

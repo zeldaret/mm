@@ -690,7 +690,7 @@ void EnBaba_KnockedOver(EnBaba* this, PlayState* play) {
 
     if (this->animIndex == BOMB_SHOP_LADY_ANIM_KNOCKED_OVER) {
         if (Animation_OnFrame(&this->skelAnime, 0.0f)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_VO_BBVO00);
+            Actor_PlaySfx(&this->actor, NA_SE_VO_BBVO00);
         }
 
         if (curFrame == endFrame) {

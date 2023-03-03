@@ -208,7 +208,7 @@ void func_808DEA54(EnHorseLinkChild* this, s32 arg1) {
 }
 
 void func_808DEB14(EnHorseLinkChild* this, PlayState* play) {
-    f32 sp44 = Actor_XZDistanceBetweenActors(&this->actor, &GET_PLAYER(play)->actor);
+    f32 sp44 = Actor_WorldDistXZToActor(&this->actor, &GET_PLAYER(play)->actor);
     s32 phi_v0;
 
     if (SkelAnime_Update(&this->skin.skelAnime)) {
@@ -248,7 +248,7 @@ void func_808DED40(EnHorseLinkChild* this, PlayState* play) {
     s32 phi_v0;
 
     if ((this->unk_148 == 4) || (this->unk_148 == 3) || (this->unk_148 == 2)) {
-        temp_a0 = Actor_YawBetweenActors(&this->actor, &GET_PLAYER(play)->actor) - this->actor.world.rot.y;
+        temp_a0 = Actor_WorldYawTowardActor(&this->actor, &GET_PLAYER(play)->actor) - this->actor.world.rot.y;
         if (temp_a0 > 0x12C) {
             this->actor.world.rot.y += 0x12C;
         } else if (temp_a0 < -0x12C) {
@@ -260,7 +260,7 @@ void func_808DED40(EnHorseLinkChild* this, PlayState* play) {
     }
 
     if (SkelAnime_Update(&this->skin.skelAnime)) {
-        temp_fv0 = Actor_XZDistanceBetweenActors(&this->actor, &GET_PLAYER(play)->actor);
+        temp_fv0 = Actor_WorldDistXZToActor(&this->actor, &GET_PLAYER(play)->actor);
         if (temp_fv0 > 1000.0f) {
             func_808DEA54(this, 0);
             return;
@@ -309,7 +309,7 @@ void func_808DF088(EnHorseLinkChild* this, PlayState* play) {
 
         if (Math3D_Distance(&player->actor.world.pos, &this->actor.home.pos) < 250.0f) {
             sp32 = player->actor.shape.rot.y;
-            if (Actor_YawBetweenActors(&this->actor, &player->actor) > 0) {
+            if (Actor_WorldYawTowardActor(&this->actor, &player->actor) > 0) {
                 phi_v0 = 1;
             } else {
                 phi_v0 = -1;
@@ -340,7 +340,7 @@ void func_808DF194(EnHorseLinkChild* this, PlayState* play) {
     func_808DF088(this, play);
 
     player = GET_PLAYER(play);
-    sp50 = Actor_XZDistanceBetweenActors(&this->actor, &player->actor);
+    sp50 = Actor_WorldDistXZToActor(&this->actor, &player->actor);
     sp48 = this->unk_148;
     sp4C = SkelAnime_Update(&this->skin.skelAnime);
 
@@ -433,7 +433,7 @@ void func_808DF620(EnHorseLinkChild* this, PlayState* play) {
     }
 
     this->actor.speed = 0.0f;
-    sp36 = Actor_YawBetweenActors(&this->actor, &GET_PLAYER(play)->actor) - this->actor.world.rot.y;
+    sp36 = Actor_WorldYawTowardActor(&this->actor, &GET_PLAYER(play)->actor) - this->actor.world.rot.y;
 
     if ((Math_CosS(sp36) < 0.7071f) && (this->unk_148 == 2)) {
         func_800F415C(&this->actor, &GET_PLAYER(play)->actor.world.pos, 0x12C);
@@ -480,7 +480,7 @@ void func_808DF838(EnHorseLinkChild* this, PlayState* play) {
 
     if (SkelAnime_Update(&this->skin.skelAnime)) {
         if (this->unk_1E0 == 0) {
-            phi_fv0 = Actor_XZDistanceBetweenActors(&this->actor, &GET_PLAYER(play)->actor);
+            phi_fv0 = Actor_WorldDistXZToActor(&this->actor, &GET_PLAYER(play)->actor);
         } else {
             phi_fv0 = Math3D_Distance(&this->actor.world.pos, &this->actor.home.pos);
         }

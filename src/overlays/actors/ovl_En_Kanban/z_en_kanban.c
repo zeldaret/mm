@@ -384,7 +384,7 @@ void EnKanban_Update(Actor* thisx, PlayState* play) {
                         piece->actor.flags &= ~ACTOR_FLAG_1;
                         piece->actor.flags |= ACTOR_FLAG_2000000;
                         this->cutMarkTimer = 5;
-                        Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_SWORD_STRIKE);
+                        Actor_PlaySfx(&this->actor, NA_SE_IT_SWORD_STRIKE);
                     }
                 }
             }
@@ -497,14 +497,14 @@ void EnKanban_Update(Actor* thisx, PlayState* play) {
 
             if (this->actor.bgCheckFlags & 8) {
                 if (!(this->actor.bgCheckFlags & 1)) {
-                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_WOODPLATE_BOUND);
+                    Actor_PlaySfx(&this->actor, NA_SE_EV_WOODPLATE_BOUND);
                 }
                 this->actor.speed *= -0.5f;
             }
 
             if (this->actor.bgCheckFlags & 0x40) {
                 this->actionState = ENKANBAN_WATER;
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BOMB_DROP_WATER);
+                Actor_PlaySfx(&this->actor, NA_SE_EV_BOMB_DROP_WATER);
                 this->bounceX = this->bounceZ = 0;
                 this->actor.world.pos.y += this->actor.depthInWater;
                 EffectSsGSplash_Spawn(play, &this->actor.world.pos, NULL, NULL, 0, (this->partCount * 20) + 300);
@@ -622,9 +622,9 @@ void EnKanban_Update(Actor* thisx, PlayState* play) {
 
             if (bounced) {
                 if (this->unk_197 > 0) {
-                    Actor_PlaySfxAtPos(&this->actor, NA_SE_PL_WALK_SNOW);
+                    Actor_PlaySfx(&this->actor, NA_SE_PL_WALK_SNOW);
                 } else {
-                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_WOODPLATE_BOUND);
+                    Actor_PlaySfx(&this->actor, NA_SE_EV_WOODPLATE_BOUND);
                 }
             }
 

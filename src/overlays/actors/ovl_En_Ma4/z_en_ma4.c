@@ -267,7 +267,7 @@ void EnMa4_RunInCircles(EnMa4* this, PlayState* play) {
     }
 
     if (sAnimIndex == 13 && Animation_OnFrame(&this->skelAnime, 37.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_ROMANI_BOW_FLICK);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_ROMANI_BOW_FLICK);
     }
 
     sp34.x = this->pathPoints[this->pathIndex].x;
@@ -300,7 +300,7 @@ void EnMa4_RunInCircles(EnMa4* this, PlayState* play) {
     Actor_MoveWithGravity(&this->actor);
     if (this->skelAnime.animation == &gRomaniRunAnim) {
         if (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 4.0f)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_ROMANI_WALK);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_ROMANI_WALK);
         }
     }
 }

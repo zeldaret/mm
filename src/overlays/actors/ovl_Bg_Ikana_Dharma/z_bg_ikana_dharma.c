@@ -158,7 +158,7 @@ void BgIkanaDharma_WaitForHit(BgIkanaDharma* this, PlayState* play) {
         tempAngle2 = (BINANG_SUB(player->actor.shape.rot.y, tempAngle1) >> 1);
         this->dyna.actor.world.rot.y = tempAngle1 + tempAngle2 + 0xF000;
         this->dyna.actor.speed = 20.0f;
-        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_DARUMA_VANISH);
+        Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_DARUMA_VANISH);
         BgIkanaDharma_SetupStartCutscene(this);
     } else if ((this->dyna.actor.flags & ACTOR_FLAG_40) == ACTOR_FLAG_40 && sFirstHitBgIkanaDharma == NULL &&
                this->dyna.actor.xzDistToPlayer < 420.0f) {
@@ -234,7 +234,7 @@ void BgIkanaDharma_Update(Actor* thisx, PlayState* play) {
                 Quake_SetQuakeValues(quakeIndex, 4, 0, 0, 0);
                 Quake_SetCountdown(quakeIndex, 12);
 
-                Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
+                Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
             }
         } else {
             if (actorBelow->actor.id == ACTOR_BG_IKANA_DHARMA) {

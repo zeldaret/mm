@@ -229,7 +229,7 @@ void func_80AD36EC(EnTrt2* this, PlayState* play) {
     Actor_MoveWithGravity(&this->actor);
     func_800B9010(&this->actor, NA_SE_EN_KOTAKE_FLY - SFX_FLAG);
     if ((this->actor.shape.rot.y >= 0x2800) && (this->actor.shape.rot.y < 0x3800)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KOTAKE_ROLL);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_KOTAKE_ROLL);
     }
 }
 
@@ -514,7 +514,7 @@ void func_80AD434C(EnTrt2* this, PlayState* play) {
     Actor_MoveWithGravity(&this->actor);
 
     if ((this->actor.shape.rot.y >= 0x2800) && (this->actor.shape.rot.y < 0x3800)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KOTAKE_ROLL);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_KOTAKE_ROLL);
     }
 }
 

@@ -193,7 +193,7 @@ void EnBat_StepAnimation(EnBat* this, s32 frameStep) {
         this->animationFrame -= ARRAY_COUNT(sWingsDLs);
     }
     if ((prevFrame < BAD_BAT_FLAP_FRAME) && (this->animationFrame >= BAD_BAT_FLAP_FRAME)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_FFLY_FLY);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_FFLY_FLY);
     }
 }
 
@@ -230,7 +230,7 @@ void EnBat_FlyIdle(EnBat* this, PlayState* play) {
         this->yawTarget = this->actor.wallYaw;
     } else if (Math3D_XZDistanceSquared(this->actor.world.pos.x, this->actor.world.pos.z, this->actor.home.pos.x,
                                         this->actor.home.pos.z) > SQ(300.0f)) {
-        this->yawTarget = Actor_YawToPoint(&this->actor, &this->actor.home.pos);
+        this->yawTarget = Actor_WorldYawTowardPoint(&this->actor, &this->actor.home.pos);
     } else if (finishedRotStep && (Rand_ZeroOne() < 0.015f)) {
         this->yawTarget =
             this->actor.shape.rot.y + (((s32)(0x1000 * Rand_ZeroOne()) + 0x1000) * ((Rand_ZeroOne() < 0.5f) ? -1 : 1));
@@ -282,7 +282,7 @@ void EnBat_DiveAttack(EnBat* this, PlayState* play) {
         preyPos.y = player->actor.world.pos.y + 20.0f;
         preyPos.z = player->actor.world.pos.z;
 
-        pitchTarget = Actor_PitchToPoint(&this->actor, &preyPos);
+        pitchTarget = Actor_WorldPitchTowardPoint(&this->actor, &preyPos);
         pitchTarget = CLAMP(pitchTarget, -0x3000, 0x3000);
         Math_SmoothStepToS(&this->actor.shape.rot.x, pitchTarget, 2, 0x400, 0x40);
     } else {
@@ -299,7 +299,7 @@ void EnBat_DiveAttack(EnBat* this, PlayState* play) {
         (this->actor.depthInWater > -40.0f)) {
         if (this->collider.base.atFlags & AT_HIT) {
             this->collider.base.atFlags &= ~AT_HIT;
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_FFLY_ATTACK);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_FFLY_ATTACK);
         }
         this->collider.base.atFlags &= ~AT_ON;
         sNumberAttacking--;
@@ -320,7 +320,7 @@ void EnBat_SetupDie(EnBat* this, PlayState* play) {
     this->actor.speed *= Math_CosS(this->actor.world.rot.x);
     this->actor.bgCheckFlags &= ~1;
     this->actor.velocity.y = 0.0f;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_FFLY_DEAD);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_FFLY_DEAD);
 
     if (this->actor.colChkInfo.damageEffect == BAD_BAT_DMGEFF_ICE) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX;
@@ -400,7 +400,7 @@ void EnBat_SetupStunned(EnBat* this) {
         this->actor.speed = 0.0f;
         this->actor.world.pos.y += 13.0f;
     }
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_FREEZE);
     Actor_SetColorFilter(&this->actor, 0, 255, 0, this->timer);
     this->actionFunc = EnBat_Stunned;
 }

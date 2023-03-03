@@ -226,7 +226,7 @@ void func_80C16A74(DemoSyoten* this, PlayState* play) {
         if ((play->csCtx.frames >= 160) && (play->csCtx.frames < 322)) {
             func_800B9010(&this->actor, NA_SE_EV_IKANA_SOUL_LV - SFX_FLAG);
         } else if (play->csCtx.frames == 322) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_IKANA_SOUL_TRANSFORM);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_IKANA_SOUL_TRANSFORM);
         }
 
         temp_a0 = play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->unk_3F0)]->action;
@@ -344,7 +344,7 @@ void func_80C16DD4(DemoSyoten* this, PlayState* play) {
                 case 2:
                     this->actor.draw = DemoSyoten_Draw;
                     this->unk_3E6 = -6;
-                    Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_DM_FLYING_GOD_DASH);
+                    Actor_PlaySfx(&this->actor, NA_SE_IT_DM_FLYING_GOD_DASH);
                     break;
             }
         }

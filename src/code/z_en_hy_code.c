@@ -69,7 +69,7 @@ EnDoor* EnHy_FindNearestDoor(Actor* actor, PlayState* play) {
     do {
         doorIter = SubS_FindActor(play, doorIter, ACTORCAT_DOOR, ACTOR_EN_DOOR);
         door = (EnDoor*)doorIter;
-        dist = Actor_DistanceBetweenActors(actor, &door->dyna.actor);
+        dist = Actor_WorldDistXYZToActor(actor, &door->dyna.actor);
         if (!isSetup || (dist < minDist)) {
             nearestDoor = door;
             minDist = dist;
@@ -267,12 +267,12 @@ s32 EnHy_PlayWalkingSound(EnHy* enHy, PlayState* play, f32 distAboveThreshold) {
 
     enHy->isLeftFootOnGround = isFootOnGround = SubS_IsFloorAbove(play, &enHy->leftFootPos, distAboveThreshold);
     if (enHy->isLeftFootOnGround && !wasLeftFootOnGround && isFootOnGround) {
-        Actor_PlaySfxAtPos(&enHy->actor, sfxId);
+        Actor_PlaySfx(&enHy->actor, sfxId);
     }
 
     enHy->isRightFootOnGround = isFootOnGround = SubS_IsFloorAbove(play, &enHy->rightFootPos, distAboveThreshold);
     if (enHy->isRightFootOnGround && !wasRightFootOnGround && isFootOnGround) {
-        Actor_PlaySfxAtPos(&enHy->actor, sfxId);
+        Actor_PlaySfx(&enHy->actor, sfxId);
     }
 
     return false;

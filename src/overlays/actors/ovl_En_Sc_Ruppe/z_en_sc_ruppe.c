@@ -116,7 +116,7 @@ void func_80BD6A8C(EnScRuppe* this, PlayState* play) {
     if (this->collider.base.ocFlags1 & OC1_HIT) {
         this->ruppeDisplayTime = 0;
         this->actor.gravity = 0.0f;
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_GET_RUPY);
+        Actor_PlaySfx(&this->actor, NA_SE_SY_GET_RUPY);
         Rupees_ChangeBy(sRupeeInfo[this->ruppeIndex].amount);
         this->actionFunc = func_80BD6B18;
     }

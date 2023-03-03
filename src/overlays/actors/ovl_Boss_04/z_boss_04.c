@@ -289,7 +289,7 @@ void func_809EC568(Boss04* this, PlayState* play) {
 
         case 10:
             if (this->unk_704 == 3) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_EYEGOLE_DEMO_EYE);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_EYEGOLE_DEMO_EYE);
                 this->unk_74A = 1;
             }
             this->unk_2D0 = 10000.0f;
@@ -319,7 +319,7 @@ void func_809EC568(Boss04* this, PlayState* play) {
             }
 
         case 12:
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_ME_ATTACK - SFX_FLAG);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_ME_ATTACK - SFX_FLAG);
             Math_ApproachF(&this->subCamAt.x, this->actor.world.pos.x, 0.5f, 1000.0f);
             Math_ApproachF(&this->subCamAt.y, this->actor.world.pos.y, 0.5f, 1000.0f);
             Math_ApproachF(&this->subCamAt.z, this->actor.world.pos.z, 0.5f, 1000.0f);
@@ -331,7 +331,7 @@ void func_809EC568(Boss04* this, PlayState* play) {
                 this->unk_2DA = 10;
                 Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->actor.world.pos.x, this->actor.world.pos.y,
                             this->actor.world.pos.z, 0, 0, 0, CLEAR_TAG_SPLASH);
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KONB_JUMP_LEV_OLD - SFX_FLAG);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_KONB_JUMP_LEV_OLD - SFX_FLAG);
                 this->subCamAtOscillator = 20;
             }
             break;
@@ -501,7 +501,7 @@ void func_809ECF58(Boss04* this, PlayState* play) {
             sp3C.y = this->actor.floorHeight + 2.0f;
             sp3C.z = this->actor.world.pos.z;
             EffectSsGRipple_Spawn(play, &sp3C, 1400, 500, 0);
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_ME_ATTACK - SFX_FLAG);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_ME_ATTACK - SFX_FLAG);
         }
     }
 
@@ -520,7 +520,7 @@ void func_809ED224(Boss04* this) {
     this->actor.speed = 0.0f;
     this->unk_2D0 = 10000.0f;
     this->unk_2C8 = 200;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_ME_DEAD);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_ME_DEAD);
     this->actor.flags &= ~ACTOR_FLAG_1;
     Audio_RestorePrevBgm();
     this->unk_1F6 = 10;
@@ -569,7 +569,7 @@ void func_809ED45C(Boss04* this, PlayState* play) {
 
     if ((this->unk_1FE == 0) && (this->collider1.elements[0].info.bumperFlags & BUMP_HIT)) {
         this->collider1.elements[0].info.bumperFlags &= ~BUMP_HIT;
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_ME_DAMAGE);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_ME_DAMAGE);
         damage = this->actor.colChkInfo.damage;
         this->actor.colChkInfo.health = this->actor.colChkInfo.health - damage;
         if ((s8)this->actor.colChkInfo.health <= 0) {
@@ -765,7 +765,7 @@ void Boss04_Update(Actor* thisx, PlayState* play2) {
     }
 
     if (this->unk_74A != 0) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_ME_EXIST - SFX_FLAG);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_ME_EXIST - SFX_FLAG);
     }
 }
 

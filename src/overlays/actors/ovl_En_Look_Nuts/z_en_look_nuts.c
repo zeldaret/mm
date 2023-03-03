@@ -157,7 +157,7 @@ void EnLookNuts_Patrol(EnLookNuts* this, PlayState* play) {
 
     this->actor.speed = 2.0f;
     if (Animation_OnFrame(&this->skelAnime, 1.0f) || Animation_OnFrame(&this->skelAnime, 5.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_WALK);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_WALK);
     }
 
     if (D_80A6862C != 0) {
@@ -273,7 +273,7 @@ void EnLookNuts_DetectedPlayer(EnLookNuts* this, PlayState* play) {
 void EnLookNuts_RunToPlayer(EnLookNuts* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     if (Animation_OnFrame(&this->skelAnime, 1.0f) || Animation_OnFrame(&this->skelAnime, 5.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_WALK);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_WALK);
     }
 
     this->actor.speed = 4.0f;

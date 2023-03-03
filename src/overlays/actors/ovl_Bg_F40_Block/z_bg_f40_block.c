@@ -278,14 +278,14 @@ void func_80BC4228(BgF40Block* this, PlayState* play) {
         } else {
             this->actionFunc = func_80BC4530;
             ActorCutscene_Stop(this->dyna.actor.cutscene);
-            Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_IKANA_BLOCK_STOP_C);
+            Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_IKANA_BLOCK_STOP_C);
         }
     }
 
     if (func_80BC3D08(this, play, 0)) {
         ActorCutscene_Stop(this->dyna.actor.cutscene);
         this->actionFunc = func_80BC41AC;
-        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_IKANA_BLOCK_STOP_F);
+        Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_IKANA_BLOCK_STOP_F);
         return;
     }
 
@@ -338,14 +338,14 @@ void func_80BC4448(BgF40Block* this, PlayState* play) {
         } else {
             this->actionFunc = func_80BC4380;
             ActorCutscene_Stop(this->dyna.actor.cutscene);
-            Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_IKANA_BLOCK_STOP_C);
+            Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_IKANA_BLOCK_STOP_C);
         }
     }
 
     if (func_80BC3D08(this, play, 0)) {
         ActorCutscene_Stop(this->dyna.actor.cutscene);
         this->actionFunc = func_80BC43CC;
-        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_IKANA_BLOCK_STOP_F);
+        Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_IKANA_BLOCK_STOP_F);
     }
 }
 

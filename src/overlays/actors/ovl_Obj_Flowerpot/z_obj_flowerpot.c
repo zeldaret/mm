@@ -454,7 +454,7 @@ void func_80A1C838(ObjFlowerpot* this, PlayState* play) {
 
         //! @bug: This function should only pass Player*: it uses *(this + 0x153), which is meant to be
         //! player->currentMask, but in this case is garbage in the collider
-        func_800B8E58((Player*)this, NA_SE_PL_PULL_UP_POT);
+        Player_PlaySfx((Player*)&this->actor, NA_SE_PL_PULL_UP_POT);
     } else if ((this->actor.bgCheckFlags & 0x20) && (this->actor.depthInWater > 19.0f)) {
         if (!(this->unk_1EA & 2)) {
             func_80A1B914(this, play);
@@ -539,7 +539,7 @@ void func_80A1CC0C(ObjFlowerpot* this, PlayState* play) {
         this->actor.room = play->roomCtx.curRoom.num;
         if (fabsf(this->actor.speed) < 0.1f) {
             func_80A1C818(this);
-            func_800B8E58(GET_PLAYER(play), NA_SE_PL_PUT_DOWN_POT);
+            Player_PlaySfx(GET_PLAYER(play), NA_SE_PL_PUT_DOWN_POT);
             this->collider.base.ocFlags1 &= ~OC1_TYPE_PLAYER;
         } else {
             Actor_MoveWithGravity(&this->actor);

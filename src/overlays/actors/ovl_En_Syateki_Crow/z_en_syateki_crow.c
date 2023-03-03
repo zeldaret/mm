@@ -169,7 +169,7 @@ void EnSyatekiCrow_SetupWaitToMove(EnSyatekiCrow* this) {
  */
 void EnSyatekiCrow_WaitToMove(EnSyatekiCrow* this, PlayState* play) {
     if (((EN_SYATEKI_CROW_GET_WAIT_MOD(&this->actor) * 20) + 20) < this->waitTimer) {
-        Actor_PlaySfxAtPos(this->actor.parent, NA_SE_EN_KAICHO_CRY);
+        Actor_PlaySfx(this->actor.parent, NA_SE_EN_KAICHO_CRY);
         this->waitTimer = 0;
         this->actor.speed = EN_SYATEKI_CROW_GET_SPEED_MOD(&this->actor) + 6.0f;
         this->actor.gravity = -0.5f;
@@ -213,7 +213,7 @@ void EnSyatekiCrow_Fly(EnSyatekiCrow* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     this->actor.shape.yOffset = (fabsf(this->skelAnime.curFrame - 3.0f) * 150.0f) + 1700.0f;
     if ((syatekiMan->perGameVar1.guaySpawnTimer % 90) == 0) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KAICHO_CRY);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_KAICHO_CRY);
     }
 }
 
@@ -226,7 +226,7 @@ void EnSyatekiCrow_SetupDead(EnSyatekiCrow* this) {
     this->actor.velocity.y = 0.0f;
     Animation_Change(&this->skelAnime, &gGuayFlyAnim, 0.4f, 0.0f, 0.0f, ANIMMODE_LOOP_INTERP, -3.0f);
     this->actor.bgCheckFlags &= ~1;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KAICHO_DEAD);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_KAICHO_DEAD);
     Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 40);
     this->actionFunc = EnSyatekiCrow_Dead;
 }

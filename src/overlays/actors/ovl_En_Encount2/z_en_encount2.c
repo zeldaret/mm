@@ -171,7 +171,7 @@ void EnEncount2_Popped(EnEncount2* this, PlayState* play) {
         EnEncount2_InitEffects(this, &curPos, 10);
     }
 
-    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_MUJURA_BALLOON_BROKEN);
+    Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_MUJURA_BALLOON_BROKEN);
     this->deathTimer = 30;
     this->actionFunc = EnEncount2_Die;
 }

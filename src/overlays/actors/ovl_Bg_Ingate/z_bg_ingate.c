@@ -207,7 +207,7 @@ void func_80953F9C(BgIngate* this, PlayState* play) {
                 this->actionFunc = func_809542A0;
             }
         } else if ((ActorCutscene_GetCurrentIndex() == -1) && (this->timePath != NULL)) {
-            Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_CRUISER - SFX_FLAG);
+            Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_CRUISER - SFX_FLAG);
             func_80953BEC(this);
         }
     }

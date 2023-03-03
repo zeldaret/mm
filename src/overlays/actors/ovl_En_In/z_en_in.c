@@ -170,11 +170,11 @@ s32 func_808F3178(EnIn* this, PlayState* play) {
 
     this->unk260 = tmp = SubS_IsFloorAbove(play, &this->unk248, -6.0f);
     if (this->unk260 != 0 && prevUnk260 == 0 && tmp) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_PL_WALK_CONCRETE);
+        Actor_PlaySfx(&this->actor, NA_SE_PL_WALK_CONCRETE);
     }
     this->unk261 = tmp = SubS_IsFloorAbove(play, &this->unk254, -6.0f);
     if (this->unk261 != 0 && prevUnk261 == 0 && tmp) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_PL_WALK_CONCRETE);
+        Actor_PlaySfx(&this->actor, NA_SE_PL_WALK_CONCRETE);
     }
 
     return 0;
@@ -214,7 +214,7 @@ s32 func_808F3334(EnIn* this, PlayState* play) {
         if (this->colliderJntSph.base.atFlags & AT_BOUNCED) {
             return 0;
         }
-        Actor_PlaySfxAtPos(&player->actor, NA_SE_PL_BODY_HIT);
+        Actor_PlaySfx(&player->actor, NA_SE_PL_BODY_HIT);
         func_800B8D98(play, &this->actor, 3.0f, this->actor.yawTowardsPlayer, 6.0f);
     }
     return 1;
@@ -313,7 +313,7 @@ void func_808F374C(EnIn* this, PlayState* play) {
         }
     }
     if (this->skelAnime.animation == &object_in_Anim_0198A8 && Animation_OnFrame(&this->skelAnime, 20.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_VO_IN_CRY_0);
+        Actor_PlaySfx(&this->actor, NA_SE_VO_IN_CRY_0);
     }
     if (SkelAnime_Update(&this->skelAnime)) {
         this->unk488 %= ARRAY_COUNT(sAnimations);
@@ -376,9 +376,9 @@ void func_808F39DC(EnIn* this, PlayState* play) {
     this->actor.textId = textId;
     this->actionFunc = func_808F395C;
     if (this->unk4B0 == WEEKEVENTREG_RACE_FLAG_2) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_VO_IN_LOST);
+        Actor_PlaySfx(&this->actor, NA_SE_VO_IN_LOST);
     } else {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_VO_IN_JOY0);
+        Actor_PlaySfx(&this->actor, NA_SE_VO_IN_JOY0);
     }
 }
 
@@ -1335,9 +1335,9 @@ void func_808F5C98(EnIn* this, PlayState* play) {
     }
     if (this->unk4A8 == 2) {
         if (this->unk4B0 == WEEKEVENTREG_RACE_FLAG_2) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_VO_IN_LOST);
+            Actor_PlaySfx(&this->actor, NA_SE_VO_IN_LOST);
         } else {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_VO_IN_JOY0);
+            Actor_PlaySfx(&this->actor, NA_SE_VO_IN_JOY0);
         }
         this->unk4A8 = 3;
     } else if (this->unk4A8 < 3) {

@@ -1096,13 +1096,13 @@ void func_80A25BBC(ObjIceblock* this, PlayState* play) {
     func_80A23690(this);
 
     if (func_80A23F90(this, play)) {
-        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
+        Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
     }
 
     if (func_80A24954(this, play)) {
         func_80A2491C(this);
         if (this->unk_2B0 == 3) {
-            Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_DIVE_INTO_WATER_L);
+            Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_DIVE_INTO_WATER_L);
         }
     }
 }
@@ -1175,7 +1175,7 @@ void func_80A25E50(ObjIceblock* this, PlayState* play) {
         func_80A25BA0(this);
     } else if (sp38) {
         if (func_80A24118(this, play, 59.9f, &sp28)) {
-            Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
+            Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
         }
         func_80A2541C(this, play);
         func_80A25CF4(this);
@@ -1262,7 +1262,7 @@ void func_80A26144(ObjIceblock* this, PlayState* play) {
         func_80A23B88(this);
         func_80A25BA0(this);
     } else if (sp28) {
-        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
+        Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
         func_80A23B88(this);
         func_80A25FA0(this);
     } else {

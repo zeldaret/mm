@@ -732,7 +732,7 @@ void func_809DAB78(Boss02* this, PlayState* play) {
             this->unk_0170 = this->unk_017C;
             this->unk_0170.y = temp_f0;
             this->unk_016C = 120;
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_INBOSS_ROAR_OLD);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_INBOSS_ROAR_OLD);
         }
 
         this->actor.flags &= ~ACTOR_FLAG_1;
@@ -941,7 +941,7 @@ void func_809DAB78(Boss02* this, PlayState* play) {
                 sTwinmoldStatic->subCamAtVel = 0.0f;
                 play_sound(NA_SE_EN_INBOSS_DEAD_PRE2_OLD);
             } else if (!(this->unk_0146[1] & 0xF) && (Rand_ZeroOne() < 0.5f)) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_INBOSS_DAMAGE_OLD);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_INBOSS_DAMAGE_OLD);
             }
             return;
 
@@ -982,7 +982,7 @@ void func_809DAB78(Boss02* this, PlayState* play) {
                         Audio_QueueSeqCmd(NA_BGM_CLEAR_BOSS | 0x8000);
                     }
 
-                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_INBOSS_DEAD_OLD);
+                    Actor_PlaySfx(&this->actor, NA_SE_EN_INBOSS_DEAD_OLD);
                 }
             }
             return;
@@ -1075,7 +1075,7 @@ void func_809DBFB4(Boss02* this, PlayState* play) {
                 this->unk_0156 = 15;
 
                 if (i == 0) {
-                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_INBOSS_DAMAGE_OLD);
+                    Actor_PlaySfx(&this->actor, NA_SE_EN_INBOSS_DAMAGE_OLD);
                     this->unk_015C = 1;
                 } else {
                     Audio_PlaySfxAtPos(&this->unk_167C, NA_SE_EN_INBOSS_DAMAGE_OLD);
@@ -1201,9 +1201,9 @@ void Boss02_Twinmold_Update(Actor* thisx, PlayState* play) {
 
         if (this->unk_016C != 0) {
             if ((this->unk_016C == 60) && (this->unk_0144 < 20)) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_INBOSS_ROAR_OLD);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_INBOSS_ROAR_OLD);
             }
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_INBOSS_SAND_OLD - SFX_FLAG);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_INBOSS_SAND_OLD - SFX_FLAG);
 
             if (this->unk_0144 > 20) {
                 sp3C.x = randPlusMinusPoint5Scaled(100.0f * D_809DF5B0) + this->unk_0170.x;

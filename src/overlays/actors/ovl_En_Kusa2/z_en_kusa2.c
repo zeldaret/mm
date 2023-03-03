@@ -701,7 +701,7 @@ void func_80A5CB74(EnKusa2* this) {
     sp3E = Rand_S16Offset(-10000, 20000) + this->actor.world.rot.y;
 
     if (this->unk_1C0 != NULL) {
-        sp36 = Actor_YawBetweenActors(&this->actor, &this->unk_1C0->actor);
+        sp36 = Actor_WorldYawTowardActor(&this->actor, &this->unk_1C0->actor);
         sp3C = Rand_S16Offset(-4000, 8000) + sp36;
     } else {
         sp3C = 0;
@@ -976,12 +976,12 @@ void func_80A5D7C4(EnKusa2* this, PlayState* play) {
         if ((this->unk_1C0 != NULL) && (this->unk_1C0->unk_1BE != 0)) {
             this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
             if (this2->unk_1C0 != NULL) {
-                sp2A = Actor_YawBetweenActors(&this->unk_1C0->actor, &this->actor);
+                sp2A = Actor_WorldYawTowardActor(&this->unk_1C0->actor, &this->actor);
                 this->actor.home.rot.y = Rand_S16Offset(-1500, 3000) + sp2A;
             }
             this->unk_1C8 = Rand_S16Offset(72, 16);
             this->actor.velocity.y = 8.8f;
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_WALK);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_WALK);
             func_80A5DC70(this);
         }
 
@@ -1055,7 +1055,7 @@ void func_80A5D9C8(EnKusa2* this, PlayState* play) {
 
         this->unk_1D0--;
         if (this->unk_1D0 <= 0) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KUSAMUSHI_VIBE);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_KUSAMUSHI_VIBE);
             this->unk_1D0 = (Rand_Next() >> 0x1D) + 14;
         }
 
@@ -1090,7 +1090,7 @@ void func_80A5DC98(EnKusa2* this, PlayState* play) {
         if (this->actor.bgCheckFlags & 1) {
             func_80A5CD0C(this);
             func_80A5BB40(this, play, 1);
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_WALK);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_WALK);
             func_80A5DE18(this);
         } else if (this->actor.bgCheckFlags & 0x20) {
             func_80A5BDB0(this, play);
@@ -1122,14 +1122,14 @@ void func_80A5DEB4(EnKusa2* this, PlayState* play) {
         if (this->unk_1D0 > 0) {
             this->unk_1D0--;
             if (this->unk_1D0 == 0) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KUSAMUSHI_VIBE);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_KUSAMUSHI_VIBE);
             }
         }
 
         if (this->unk_1D1 > 0) {
             this->unk_1D1--;
             if (this->unk_1D1 == 0) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KUSAMUSHI_VIBE);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_KUSAMUSHI_VIBE);
             }
         }
 

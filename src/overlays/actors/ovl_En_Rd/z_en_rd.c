@@ -410,7 +410,7 @@ void EnRd_Idle(EnRd* this, PlayState* play) {
     }
 
     if ((play->gameplayFrames & 0x5F) == 0) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_CRY);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_REDEAD_CRY);
     }
 }
 
@@ -454,7 +454,7 @@ void EnRd_SquattingDance(EnRd* this, PlayState* play) {
     }
 
     if ((play->gameplayFrames & 0x5F) == 0) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_CRY);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_REDEAD_CRY);
     }
 }
 
@@ -498,14 +498,14 @@ void EnRd_ClappingDance(EnRd* this, PlayState* play) {
     }
 
     if ((play->gameplayFrames & 0x5F) == 0) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_CRY);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_REDEAD_CRY);
     }
 }
 
 void EnRd_EndClappingOrSquattingDanceWhenPlayerIsClose(EnRd* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     if ((play->gameplayFrames & 0x5F) == 0) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_CRY);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_REDEAD_CRY);
     }
 
     this->danceEndTimer++;
@@ -558,7 +558,7 @@ void EnRd_Pirouette(EnRd* this, PlayState* play) {
     }
 
     if ((play->gameplayFrames & 0x5F) == 0) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_CRY);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_REDEAD_CRY);
     }
 
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
@@ -574,7 +574,7 @@ void EnRd_Pirouette(EnRd* this, PlayState* play) {
 void EnRd_EndPirouetteWhenPlayerIsClose(EnRd* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     if ((play->gameplayFrames & 0x5F) == 0) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_CRY);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_REDEAD_CRY);
     }
 
     this->actor.world.rot.y -= this->pirouetteRotationalVelocity;
@@ -613,7 +613,7 @@ void EnRd_RiseFromCoffin(EnRd* this, PlayState* play) {
         }
     } else {
         if (this->actor.world.pos.y == this->actor.home.pos.y) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_CRY);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_REDEAD_CRY);
         }
 
         if (Math_SmoothStepToF(&this->actor.world.pos.y, this->actor.home.pos.y + 50.0f, 0.3f, 2.0f, 0.3f) == 0.0f) {
@@ -649,11 +649,11 @@ void EnRd_WalkToPlayer(EnRd* this, PlayState* play) {
     this->actor.world.rot.y = this->actor.shape.rot.y;
     SkelAnime_Update(&this->skelAnime);
 
-    if (Actor_DistanceToPoint(&player->actor, &this->actor.home.pos) >= 150.0f) {
+    if (Actor_WorldDistXYZToPoint(&player->actor, &this->actor.home.pos) >= 150.0f) {
         EnRd_SetupWalkToHome(this, play);
     }
 
-    if ((ABS_ALT(yaw) < 0x1554) && (Actor_DistanceBetweenActors(&this->actor, &player->actor) <= 150.0f)) {
+    if ((ABS_ALT(yaw) < 0x1554) && (Actor_WorldDistXYZToActor(&this->actor, &player->actor) <= 150.0f)) {
         if (!(player->stateFlags1 & (PLAYER_STATE1_80 | PLAYER_STATE1_2000 | PLAYER_STATE1_4000 | PLAYER_STATE1_40000 |
                                      PLAYER_STATE1_80000 | PLAYER_STATE1_200000)) &&
             !(player->stateFlags2 & (PLAYER_STATE2_80 | PLAYER_STATE2_4000))) {
@@ -665,7 +665,7 @@ void EnRd_WalkToPlayer(EnRd* this, PlayState* play) {
                     Rumble_Request(this->actor.xzDistToPlayer, 255, 20, 150);
                 }
                 this->playerStunWaitTimer = 60;
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_AIM);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_REDEAD_AIM);
             }
         } else {
             EnRd_SetupWalkToHome(this, play);
@@ -676,11 +676,11 @@ void EnRd_WalkToPlayer(EnRd* this, PlayState* play) {
         this->grabWaitTimer--;
     }
 
-    if (!this->grabWaitTimer && (Actor_DistanceBetweenActors(&this->actor, &player->actor) <= 45.0f) &&
+    if (!this->grabWaitTimer && (Actor_WorldDistXYZToActor(&this->actor, &player->actor) <= 45.0f) &&
         Actor_IsFacingPlayer(&this->actor, 0x38E3)) {
         player->actor.freezeTimer = 0;
         if ((player->transformation == PLAYER_FORM_GORON) || (player->transformation == PLAYER_FORM_DEKU)) {
-            if (Actor_DistanceToPoint(&this->actor, &this->actor.home.pos) < 150.0f) {
+            if (Actor_WorldDistXYZToPoint(&this->actor, &this->actor.home.pos) < 150.0f) {
                 // If the Gibdo/Redead tries to grab Goron or Deku Link, it will fail to
                 // do so. It will appear to take damage and shake its head side-to-side.
                 EnRd_SetupGrabFail(this);
@@ -700,9 +700,9 @@ void EnRd_WalkToPlayer(EnRd* this, PlayState* play) {
     }
 
     if (Animation_OnFrame(&this->skelAnime, 10.0f) || Animation_OnFrame(&this->skelAnime, 22.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_RIZA_WALK);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_RIZA_WALK);
     } else if ((play->gameplayFrames & 0x5F) == 0) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_CRY);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_REDEAD_CRY);
     }
 }
 
@@ -716,9 +716,9 @@ void EnRd_SetupWalkToHome(EnRd* this, PlayState* play) {
 void EnRd_WalkToHome(EnRd* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     s32 pad;
-    s16 sp36 = Actor_YawToPoint(&this->actor, &this->actor.home.pos);
+    s16 sp36 = Actor_WorldYawTowardPoint(&this->actor, &this->actor.home.pos);
 
-    if (Actor_DistanceToPoint(&this->actor, &this->actor.home.pos) >= 5.0f) {
+    if (Actor_WorldDistXYZToPoint(&this->actor, &this->actor.home.pos) >= 5.0f) {
         Math_SmoothStepToS(&this->actor.shape.rot.y, sp36, 1, 450, 0);
     } else {
         this->actor.speed = 0.0f;
@@ -739,7 +739,7 @@ void EnRd_WalkToHome(EnRd* this, PlayState* play) {
     if (!(player->stateFlags1 & (0x200000 | 0x80000 | 0x40000 | 0x4000 | 0x2000 | 0x80)) &&
         !(player->stateFlags2 & (0x4000 | 0x80)) && (player->transformation != PLAYER_FORM_GORON) &&
         (player->transformation != PLAYER_FORM_DEKU) &&
-        (Actor_DistanceToPoint(&player->actor, &this->actor.home.pos) < 150.0f)) {
+        (Actor_WorldDistXYZToPoint(&player->actor, &this->actor.home.pos) < 150.0f)) {
         this->actor.targetMode = 0;
         EnRd_SetupWalkToPlayer(this, play);
     } else if (EN_RD_GET_TYPE(&this->actor) > EN_RD_TYPE_DOES_NOT_MOURN_IF_WALKING) {
@@ -751,9 +751,9 @@ void EnRd_WalkToHome(EnRd* this, PlayState* play) {
     }
 
     if (Animation_OnFrame(&this->skelAnime, 10.0f) || Animation_OnFrame(&this->skelAnime, 22.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_RIZA_WALK);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_RIZA_WALK);
     } else if ((play->gameplayFrames & 0x5F) == 0) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_CRY);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_REDEAD_CRY);
     }
 }
 
@@ -779,10 +779,10 @@ void EnRd_WalkToParent(EnRd* this, PlayState* play) {
 
     if (this->actor.parent != NULL) {
         parentPos = this->actor.parent->world.pos;
-        yaw = Actor_YawToPoint(&this->actor, &parentPos);
+        yaw = Actor_WorldYawTowardPoint(&this->actor, &parentPos);
 
         Math_SmoothStepToS(&this->actor.shape.rot.y, yaw, 1, 250, 0);
-        if (Actor_DistanceToPoint(&this->actor, &parentPos) >= 45.0f) {
+        if (Actor_WorldDistXYZToPoint(&this->actor, &parentPos) >= 45.0f) {
             this->actor.speed = 0.4f;
         } else {
             this->actor.speed = 0.0f;
@@ -802,9 +802,9 @@ void EnRd_WalkToParent(EnRd* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
 
     if (Animation_OnFrame(&this->skelAnime, 10.0f) || Animation_OnFrame(&this->skelAnime, 22.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_RIZA_WALK);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_RIZA_WALK);
     } else if ((play->gameplayFrames & 0x5F) == 0) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_CRY);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_REDEAD_CRY);
     }
 }
 
@@ -873,7 +873,7 @@ void EnRd_Grab(EnRd* this, PlayState* play) {
             Math_SmoothStepToS(&this->actor.shape.rot.y, player->actor.shape.rot.y, 1, 6000, 0);
 
             if (Animation_OnFrame(&this->skelAnime, 0.0f)) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_ATTACK);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_REDEAD_ATTACK);
             }
 
             this->grabDamageTimer--;
@@ -881,7 +881,7 @@ void EnRd_Grab(EnRd* this, PlayState* play) {
                 play->damagePlayer(play, -8);
                 Rumble_Request(this->actor.xzDistToPlayer, 240, 1, 12);
                 this->grabDamageTimer = 20;
-                func_800B8E58(player, player->ageProperties->voiceSfxIdOffset + NA_SE_VO_LI_DAMAGE_S);
+                Player_PlaySfx(player, player->ageProperties->voiceSfxIdOffset + NA_SE_VO_LI_DAMAGE_S);
             }
             break;
 
@@ -922,7 +922,7 @@ void EnRd_AttemptPlayerFreeze(EnRd* this, PlayState* play) {
             Rumble_Request(this->actor.xzDistToPlayer, 255, 20, 150);
             func_80123E90(play, &this->actor);
         }
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_AIM);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_REDEAD_AIM);
         EnRd_SetupWalkToPlayer(this, play);
     }
 }
@@ -931,7 +931,7 @@ void EnRd_SetupGrabFail(EnRd* this) {
     this->action = EN_RD_ACTION_FAILING_GRAB;
     Animation_MorphToPlayOnce(&this->skelAnime, &gGibdoRedeadDamageAnim, -6.0f);
     this->actor.speed = -2.0f;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_DAMAGE);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_REDEAD_DAMAGE);
     this->action = EN_RD_ACTION_FAILING_GRAB;
     this->actionFunc = EnRd_GrabFail;
 }
@@ -1009,7 +1009,7 @@ void EnRd_SetupDamage(EnRd* this) {
     }
 
     this->actor.flags |= ACTOR_FLAG_1;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_DAMAGE);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_REDEAD_DAMAGE);
     this->action = EN_RD_ACTION_DAMAGE;
     this->actionFunc = EnRd_Damage;
 }
@@ -1029,7 +1029,7 @@ void EnRd_Damage(EnRd* this, PlayState* play) {
         this->actor.world.rot.y = this->actor.shape.rot.y;
         if (this->actor.parent != NULL) {
             EnRd_SetupWalkToParent(this);
-        } else if (Actor_DistanceToPoint(&player->actor, &this->actor.home.pos) >= 150.0f) {
+        } else if (Actor_WorldDistXYZToPoint(&player->actor, &this->actor.home.pos) >= 150.0f) {
             EnRd_SetupWalkToHome(this, play);
         } else {
             EnRd_SetupWalkToPlayer(this, play);
@@ -1044,7 +1044,7 @@ void EnRd_SetupDead(EnRd* this) {
     this->deathTimer = 300;
     this->actor.flags &= ~ACTOR_FLAG_1;
     this->actor.speed = 0.0f;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_DEAD);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_REDEAD_DEAD);
     this->actionFunc = EnRd_Dead;
 }
 
@@ -1075,7 +1075,7 @@ void EnRd_Dead(EnRd* this, PlayState* play) {
             this->deathTimer--;
         }
     } else if (Animation_OnFrame(&this->skelAnime, 33.0f) || Animation_OnFrame(&this->skelAnime, 40.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_GERUDOFT_DOWN);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_GERUDOFT_DOWN);
     }
 }
 
@@ -1087,7 +1087,7 @@ void EnRd_SetupStunned(EnRd* this) {
     if (gSaveContext.sunsSongState != SUNSSONG_INACTIVE) {
         this->stunnedBySunsSong = true;
         this->sunsSongStunTimer = 600;
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_LIGHT_ARROW_HIT);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_LIGHT_ARROW_HIT);
         Actor_SetColorFilter(&this->actor, 0x8000, 0x80C8, 0, 255);
     } else if (this->damageEffect == EN_RD_DMGEFF_STUN) {
         Actor_SetColorFilter(&this->actor, 0, 0xC8, 0, 40);

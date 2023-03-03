@@ -198,7 +198,7 @@ void EnAm_SpawnEffects(EnAm* this, PlayState* play) {
         effectPos.z = randPlusMinusPoint5Scaled(65.0f) + this->actor.world.pos.z;
         EffectSsKirakira_SpawnSmall(play, &effectPos, &sVelocity, &sAccel, &D_808B1118, &D_808B111C);
     }
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_AMOS_WALK);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_AMOS_WALK);
     Actor_SpawnFloorDustRing(play, &this->actor, &this->actor.world.pos, 4.0f, 3, 8.0f, 300, 15, 0);
 }
 
@@ -231,8 +231,8 @@ void EnAm_RemoveEnemyTexture(EnAm* this, PlayState* play) {
 }
 
 void EnAm_WakeUp(EnAm* this) {
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_AMOS_WAVE);
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_AMOS_VOICE);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_AMOS_WAVE);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_AMOS_VOICE);
     this->returnHomeTimer = 300;
     this->actionFunc = EnAm_ApplyEnemyTexture;
 }
@@ -307,7 +307,7 @@ void func_808B03C0(EnAm* this, PlayState* play) {
     }
     if (this->explodeTimer == 0) {
         func_808B0640(this);
-    } else if ((this->returnHomeTimer == 0) || Actor_XZDistanceToPoint(&this->actor, &this->actor.home.pos) > 240.0f) {
+    } else if ((this->returnHomeTimer == 0) || Actor_WorldDistXZToPoint(&this->actor, &this->actor.home.pos) > 240.0f) {
         func_808B0460(this);
     }
 }
@@ -315,7 +315,7 @@ void func_808B03C0(EnAm* this, PlayState* play) {
 void func_808B0460(EnAm* this) {
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->speed = 0.0f;
-    this->armosYaw = Actor_YawToPoint(&this->actor, &this->actor.home.pos);
+    this->armosYaw = Actor_WorldYawTowardPoint(&this->actor, &this->actor.home.pos);
     this->actionFunc = func_808B04A8;
 }
 
@@ -345,15 +345,15 @@ void func_808B0508(EnAm* this, PlayState* play) {
 
 void func_808B057C(EnAm* this) {
     this->speed = 6.0f;
-    this->armosYaw = Actor_YawToPoint(&this->actor, &this->actor.home.pos);
+    this->armosYaw = Actor_WorldYawTowardPoint(&this->actor, &this->actor.home.pos);
     this->explodeTimer = 1;
     this->actionFunc = func_808B05C8;
 }
 
 void func_808B05C8(EnAm* this, PlayState* play) {
-    this->armosYaw = Actor_YawToPoint(&this->actor, &this->actor.home.pos);
+    this->armosYaw = Actor_WorldYawTowardPoint(&this->actor, &this->actor.home.pos);
     func_808B0208(this, play);
-    if (Actor_XZDistanceToPoint(&this->actor, &this->actor.home.pos) < 8.0f) {
+    if (Actor_WorldDistXZToPoint(&this->actor, &this->actor.home.pos) < 8.0f) {
         func_808B04E4(this);
     }
 }
@@ -372,7 +372,7 @@ void func_808B066C(EnAm* this, PlayState* play) {
         this->armosYaw = this->actor.yawTowardsPlayer;
         func_808B0208(this, play);
         if (this->armosYaw == this->actor.shape.rot.y) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_AMOS_VOICE);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_AMOS_VOICE);
             func_808B0358(this);
         }
     }
@@ -384,7 +384,7 @@ void EnAm_TakeDamage(EnAm* this, PlayState* play) {
     func_800BE504(&this->actor, &this->enemyCollider);
     this->actor.speed = 6.0f;
     Actor_SetColorFilter(&this->actor, 0x4000, 0xFF, 0, Animation_GetLastFrame(&gArmosTakeDamageAnim) - 10);
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_EYEGOLE_DAMAGE);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_EYEGOLE_DAMAGE);
     this->enemyCollider.base.acFlags &= ~AC_ON;
     this->textureBlend = 255;
     this->actionFunc = func_808B07A8;
@@ -426,7 +426,7 @@ void func_808B0894(EnAm* this, PlayState* play) {
         if (bomb != NULL) {
             bomb->timer = 0;
         }
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_EYEGOLE_DEAD);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_EYEGOLE_DEAD);
         Item_DropCollectibleRandom(play, &this->actor, &this->actor.world.pos, 0xB0);
 
         for (i = 0; i < 8; i++) {

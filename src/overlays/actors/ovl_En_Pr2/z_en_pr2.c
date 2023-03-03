@@ -267,7 +267,7 @@ void func_80A745FC(EnPr2* this, PlayState* play) {
         SkelAnime_Update(&this->skelAnime);
     }
 
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PIRANHA_EXIST - SFX_FLAG);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_PIRANHA_EXIST - SFX_FLAG);
     Math_ApproachF(&this->unk_204, 0.02f, 0.1f, 0.005f);
 
     if (this->path->unk2 < this->unk_1D0) {
@@ -326,7 +326,7 @@ void func_80A748E8(EnPr2* this, PlayState* play) {
     Vec3f sp3C;
 
     Math_ApproachF(&this->unk_204, 0.02f, 0.1f, 0.005f);
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PIRANHA_EXIST - SFX_FLAG);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_PIRANHA_EXIST - SFX_FLAG);
 
     if (fabsf(this->actor.world.rot.y - this->unk_1EE) < 200.0f) {
         sp48 = true;
@@ -430,7 +430,7 @@ void func_80A74DEC(EnPr2* this, PlayState* play) {
 
     this->unk_1F0 = 0;
     func_80A74510(this, 1);
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PIRANHA_ATTACK);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_PIRANHA_ATTACK);
     Math_Vec3f_Copy(&this->unk_21C, &player->actor.world.pos);
 
     this->unk_1EE = Math_Vec3f_Yaw(&this->actor.world.pos, &this->unk_21C);
@@ -615,7 +615,7 @@ void func_80A755D8(EnPr2* this, PlayState* play) {
         if ((this->actor.colChkInfo.health <= 0) && (this->unk_1D4 != 3)) {
             Enemy_StartFinishingBlow(play, &this->actor);
             this->actor.speed = 0.0f;
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PIRANHA_DEAD);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_PIRANHA_DEAD);
 
             if (this->unk_218 >= 0) {
                 Item_DropCollectibleRandom(play, NULL, &this->actor.world.pos, D_80A75C3C[this->unk_218]);

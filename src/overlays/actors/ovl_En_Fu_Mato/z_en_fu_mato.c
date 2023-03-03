@@ -174,7 +174,7 @@ void func_80ACE680(EnFuMato* this) {
     this->unk_2FC.y = Rand_Next() & 0xFFF;
     this->unk_2FC.z = Rand_Next() & 0xFFF;
     this->unk_302 = 3;
-    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_WOODPLATE_BOUND);
+    Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_WOODPLATE_BOUND);
     this->actionFunc = func_80ACE718;
 }
 
@@ -241,7 +241,7 @@ void func_80ACE850(EnFuMato* this, PlayState* play) {
 
     this->dyna.actor.freezeTimer = 2;
     EffectSsHahen_SpawnBurst(play, &this->dyna.actor.world.pos, 13.0f, 0, 7, 8, 20, HAHEN_OBJECT_DEFAULT, 10, NULL);
-    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_WOODPLATE_BROKEN);
+    Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_WOODPLATE_BROKEN);
     this->actionFunc = func_80ACECFC;
 }
 
@@ -368,7 +368,7 @@ s32 func_80ACF04C(EnFuMato* this, PlayState* play) {
         this->collider.base.acFlags &= ~AC_HIT;
         this->collider.base.ocFlags1 &= ~OC1_HIT;
 
-        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_SY_TRE_BOX_APPEAR);
+        Actor_PlaySfx(&this->dyna.actor, NA_SE_SY_TRE_BOX_APPEAR);
 
         fu->unk_548++;
         if ((fu->unk_542 == 2) || (gSaveContext.save.playerForm == PLAYER_FORM_DEKU)) {
