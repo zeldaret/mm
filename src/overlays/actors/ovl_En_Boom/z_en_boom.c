@@ -177,9 +177,9 @@ void func_808A2918(EnBoom* this, PlayState* play) {
     sp7C = this->player;
 
     if (sp7C != NULL) {
-        sp72 = Actor_YawToPoint(&this->actor, &sp7C->focus.pos);
+        sp72 = Actor_WorldYawTowardPoint(&this->actor, &sp7C->focus.pos);
         sp70 = this->actor.world.rot.y - sp72;
-        sp6E = Actor_PitchToPoint(&this->actor, &sp7C->focus.pos);
+        sp6E = Actor_WorldPitchTowardPoint(&this->actor, &sp7C->focus.pos);
         sp6C = this->actor.world.rot.x - sp6E;
 
         sp64 = (200.0f - Math_Vec3f_DistXYZ(&this->actor.world.pos, &sp7C->focus.pos)) * 0.005f;

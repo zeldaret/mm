@@ -311,7 +311,7 @@ void func_80A71B68(EnDno* this, PlayState* play) {
             if (!(this->unk_3B0 & 0x20)) {
                 SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, EN_DNO_ANIM_PRAYER_LOOP,
                                                 &this->animIndex);
-                this->actor.shape.rot.y = Actor_YawBetweenActors(&this->actor, this->unk_460);
+                this->actor.shape.rot.y = Actor_WorldYawTowardActor(&this->actor, this->unk_460);
             }
         } else {
             SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, EN_DNO_ANIM_IDLE, &this->animIndex);
@@ -347,8 +347,8 @@ void func_80A71C3C(EnDno* this, PlayState* play) {
             }
 
         case EN_DNO_ANIM_PRAYER_LOOP:
-            Math_SmoothStepToS(&this->actor.shape.rot.y, Actor_YawBetweenActors(&this->actor, this->unk_460), 2, 0xE38,
-                               0x222);
+            Math_SmoothStepToS(&this->actor.shape.rot.y, Actor_WorldYawTowardActor(&this->actor, this->unk_460), 2,
+                               0xE38, 0x222);
             break;
     }
 
@@ -436,7 +436,7 @@ void func_80A71F18(EnDno* this, PlayState* play) {
                                                             &this->animIndex);
                         }
                         Math_ScaledStepToS(&this->actor.shape.rot.y,
-                                           Actor_YawBetweenActors(&this->actor, this->unk_460), 0x71C);
+                                           Actor_WorldYawTowardActor(&this->actor, this->unk_460), 0x71C);
                         break;
 
                     case EN_DNO_ANIM_IMPLORE_END:

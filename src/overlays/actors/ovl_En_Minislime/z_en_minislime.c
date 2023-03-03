@@ -246,8 +246,8 @@ void EnMinislime_SetupFall(EnMinislime* this, PlayState* play) {
         this->actor.scale.x = 0.095f;
         this->actor.scale.z = 0.095f;
         this->actor.scale.y = 0.10700001f;
-        if (Actor_XZDistanceBetweenActors(&this->actor, &player->actor) < 225.0f) {
-            yaw = Actor_YawBetweenActors(&player->actor, &this->actor);
+        if (Actor_WorldDistXZToActor(&this->actor, &player->actor) < 225.0f) {
+            yaw = Actor_WorldYawTowardActor(&player->actor, &this->actor);
             this->actor.world.pos.x = Math_SinS(yaw) * 225.0f + player->actor.world.pos.x;
             this->actor.world.pos.z = Math_CosS(yaw) * 225.0f + player->actor.world.pos.z;
         }
@@ -267,7 +267,7 @@ void EnMinislime_Fall(EnMinislime* this, PlayState* play) {
 void EnMinislime_SetupBreakFromBigslime(EnMinislime* this) {
     f32 velY;
 
-    this->actor.world.rot.y = Actor_YawBetweenActors(this->actor.parent, &this->actor);
+    this->actor.world.rot.y = Actor_WorldYawTowardActor(this->actor.parent, &this->actor);
     this->actor.shape.rot.y = this->actor.world.rot.y;
     this->actor.speedXZ = Math_CosS(this->actor.world.rot.x) * 15.0f;
     velY = Math_SinS(this->actor.world.rot.x) * 15.0f;
@@ -434,8 +434,8 @@ void EnMinislime_Idle(EnMinislime* this, PlayState* play) {
         if (this->actor.xzDistToPlayer < 300.0f) {
             this->actor.world.rot.y = this->actor.yawTowardsPlayer;
         } else {
-            if (Actor_XZDistanceToPoint(&this->actor, &this->actor.home.pos) < 200.0f) {
-                this->actor.world.rot.y = Actor_YawToPoint(&this->actor, &this->actor.home.pos);
+            if (Actor_WorldDistXZToPoint(&this->actor, &this->actor.home.pos) < 200.0f) {
+                this->actor.world.rot.y = Actor_WorldYawTowardPoint(&this->actor, &this->actor.home.pos);
             } else {
                 this->actor.world.rot.y += (s16)((s32)Rand_Next() >> 0x13);
             }
@@ -491,8 +491,8 @@ void EnMinislime_Bounce(EnMinislime* this, PlayState* play) {
 void EnMinislime_SetupMoveToBigslime(EnMinislime* this) {
     this->actor.gravity = 0.0f;
     this->actor.speedXZ = 15.0f;
-    this->actor.shape.rot.x = Actor_PitchToPoint(&this->actor, &this->actor.parent->home.pos);
-    this->actor.shape.rot.y = Actor_YawToPoint(&this->actor, &this->actor.parent->home.pos);
+    this->actor.shape.rot.x = Actor_WorldPitchTowardPoint(&this->actor, &this->actor.parent->home.pos);
+    this->actor.shape.rot.y = Actor_WorldYawTowardPoint(&this->actor, &this->actor.parent->home.pos);
     this->actor.world.rot.x = -this->actor.shape.rot.x;
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->collider.base.atFlags &= ~AT_ON;

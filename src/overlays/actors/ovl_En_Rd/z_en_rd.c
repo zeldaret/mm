@@ -649,11 +649,11 @@ void EnRd_WalkToPlayer(EnRd* this, PlayState* play) {
     this->actor.world.rot.y = this->actor.shape.rot.y;
     SkelAnime_Update(&this->skelAnime);
 
-    if (Actor_DistanceToPoint(&player->actor, &this->actor.home.pos) >= 150.0f) {
+    if (Actor_WorldDistXYZToPoint(&player->actor, &this->actor.home.pos) >= 150.0f) {
         EnRd_SetupWalkToHome(this, play);
     }
 
-    if ((ABS_ALT(yaw) < 0x1554) && (Actor_DistanceBetweenActors(&this->actor, &player->actor) <= 150.0f)) {
+    if ((ABS_ALT(yaw) < 0x1554) && (Actor_WorldDistXYZToActor(&this->actor, &player->actor) <= 150.0f)) {
         if (!(player->stateFlags1 & (PLAYER_STATE1_80 | PLAYER_STATE1_2000 | PLAYER_STATE1_4000 | PLAYER_STATE1_40000 |
                                      PLAYER_STATE1_80000 | PLAYER_STATE1_200000)) &&
             !(player->stateFlags2 & (PLAYER_STATE2_80 | PLAYER_STATE2_4000))) {
@@ -676,11 +676,11 @@ void EnRd_WalkToPlayer(EnRd* this, PlayState* play) {
         this->grabWaitTimer--;
     }
 
-    if (!this->grabWaitTimer && (Actor_DistanceBetweenActors(&this->actor, &player->actor) <= 45.0f) &&
+    if (!this->grabWaitTimer && (Actor_WorldDistXYZToActor(&this->actor, &player->actor) <= 45.0f) &&
         Actor_IsFacingPlayer(&this->actor, 0x38E3)) {
         player->actor.freezeTimer = 0;
         if ((player->transformation == PLAYER_FORM_GORON) || (player->transformation == PLAYER_FORM_DEKU)) {
-            if (Actor_DistanceToPoint(&this->actor, &this->actor.home.pos) < 150.0f) {
+            if (Actor_WorldDistXYZToPoint(&this->actor, &this->actor.home.pos) < 150.0f) {
                 // If the Gibdo/Redead tries to grab Goron or Deku Link, it will fail to
                 // do so. It will appear to take damage and shake its head side-to-side.
                 EnRd_SetupGrabFail(this);
@@ -716,9 +716,9 @@ void EnRd_SetupWalkToHome(EnRd* this, PlayState* play) {
 void EnRd_WalkToHome(EnRd* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     s32 pad;
-    s16 sp36 = Actor_YawToPoint(&this->actor, &this->actor.home.pos);
+    s16 sp36 = Actor_WorldYawTowardPoint(&this->actor, &this->actor.home.pos);
 
-    if (Actor_DistanceToPoint(&this->actor, &this->actor.home.pos) >= 5.0f) {
+    if (Actor_WorldDistXYZToPoint(&this->actor, &this->actor.home.pos) >= 5.0f) {
         Math_SmoothStepToS(&this->actor.shape.rot.y, sp36, 1, 450, 0);
     } else {
         this->actor.speedXZ = 0.0f;
@@ -739,7 +739,7 @@ void EnRd_WalkToHome(EnRd* this, PlayState* play) {
     if (!(player->stateFlags1 & (0x200000 | 0x80000 | 0x40000 | 0x4000 | 0x2000 | 0x80)) &&
         !(player->stateFlags2 & (0x4000 | 0x80)) && (player->transformation != PLAYER_FORM_GORON) &&
         (player->transformation != PLAYER_FORM_DEKU) &&
-        (Actor_DistanceToPoint(&player->actor, &this->actor.home.pos) < 150.0f)) {
+        (Actor_WorldDistXYZToPoint(&player->actor, &this->actor.home.pos) < 150.0f)) {
         this->actor.targetMode = 0;
         EnRd_SetupWalkToPlayer(this, play);
     } else if (EN_RD_GET_TYPE(&this->actor) > EN_RD_TYPE_DOES_NOT_MOURN_IF_WALKING) {
@@ -779,10 +779,10 @@ void EnRd_WalkToParent(EnRd* this, PlayState* play) {
 
     if (this->actor.parent != NULL) {
         parentPos = this->actor.parent->world.pos;
-        yaw = Actor_YawToPoint(&this->actor, &parentPos);
+        yaw = Actor_WorldYawTowardPoint(&this->actor, &parentPos);
 
         Math_SmoothStepToS(&this->actor.shape.rot.y, yaw, 1, 250, 0);
-        if (Actor_DistanceToPoint(&this->actor, &parentPos) >= 45.0f) {
+        if (Actor_WorldDistXYZToPoint(&this->actor, &parentPos) >= 45.0f) {
             this->actor.speedXZ = 0.4f;
         } else {
             this->actor.speedXZ = 0.0f;
@@ -1029,7 +1029,7 @@ void EnRd_Damage(EnRd* this, PlayState* play) {
         this->actor.world.rot.y = this->actor.shape.rot.y;
         if (this->actor.parent != NULL) {
             EnRd_SetupWalkToParent(this);
-        } else if (Actor_DistanceToPoint(&player->actor, &this->actor.home.pos) >= 150.0f) {
+        } else if (Actor_WorldDistXYZToPoint(&player->actor, &this->actor.home.pos) >= 150.0f) {
             EnRd_SetupWalkToHome(this, play);
         } else {
             EnRd_SetupWalkToPlayer(this, play);

@@ -168,7 +168,7 @@ void ArmsHook_Shoot(ArmsHook* this, PlayState* play) {
                 grabbed = NULL;
                 this->grabbed = NULL;
             } else if (this->actor.child != NULL) {
-                f32 sp94 = Actor_DistanceBetweenActors(&this->actor, grabbed);
+                f32 sp94 = Actor_WorldDistXYZToActor(&this->actor, grabbed);
                 f32 sp90 = sqrtf(SQXYZ(this->unk1FC));
 
                 Math_Vec3f_Diff(&grabbed->world.pos, &this->unk1FC, &this->actor.world.pos);

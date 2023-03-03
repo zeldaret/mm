@@ -374,9 +374,11 @@ void EnPoSisters_AimlessIdleFlying(EnPoSisters* this, PlayState* play) {
     }
 
     if (this->actor.bgCheckFlags & 8) { // touching a wall
-        Math_ScaledStepToS(&this->actor.world.rot.y, Actor_YawToPoint(&this->actor, &this->actor.home.pos), 0x71C);
-    } else if (Actor_XZDistanceToPoint(&this->actor, &this->actor.home.pos) > 600.0f) {
-        Math_ScaledStepToS(&this->actor.world.rot.y, Actor_YawToPoint(&this->actor, &this->actor.home.pos), 0x71C);
+        Math_ScaledStepToS(&this->actor.world.rot.y, Actor_WorldYawTowardPoint(&this->actor, &this->actor.home.pos),
+                           0x71C);
+    } else if (Actor_WorldDistXZToPoint(&this->actor, &this->actor.home.pos) > 600.0f) {
+        Math_ScaledStepToS(&this->actor.world.rot.y, Actor_WorldYawTowardPoint(&this->actor, &this->actor.home.pos),
+                           0x71C);
     }
 }
 

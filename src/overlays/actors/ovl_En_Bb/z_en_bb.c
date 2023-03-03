@@ -236,10 +236,10 @@ void EnBb_SetupFlyIdle(EnBb* this) {
     this->actor.gravity = 0.0f;
     this->actor.velocity.y = 0.0f;
     this->flyHeightMod = (Math_CosS(this->bobPhase) * 10.0f) + 30.0f;
-    this->targetYRotation = Actor_YawToPoint(&this->actor, &this->actor.home.pos);
+    this->targetYRotation = Actor_WorldYawTowardPoint(&this->actor, &this->actor.home.pos);
 
     if ((this->actor.xzDistToPlayer < (this->attackRange + 120.0f)) ||
-        (Actor_XZDistanceToPoint(&this->actor, &this->actor.home.pos) < 300.0f)) {
+        (Actor_WorldDistXZToPoint(&this->actor, &this->actor.home.pos) < 300.0f)) {
         this->targetYRotation += (s16)((s32)Rand_Next() >> 0x11);
     }
 
@@ -299,7 +299,7 @@ void EnBb_Attack(EnBb* this, PlayState* play) {
 
     if (((this->attackRange + 120.0f) < this->actor.xzDistToPlayer) || (this->timer == 0) ||
         (Player_GetMask(play) == PLAYER_MASK_STONE) ||
-        (Actor_XZDistanceToPoint(&this->actor, &this->actor.home.pos) > 400.0f)) {
+        (Actor_WorldDistXZToPoint(&this->actor, &this->actor.home.pos) > 400.0f)) {
         EnBb_SetupFlyIdle(this);
     }
 }

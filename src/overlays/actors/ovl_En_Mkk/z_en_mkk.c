@@ -267,7 +267,7 @@ void func_80A4E2E8(EnMkk* this, PlayState* play) {
         sp20 = Math_StepToF(&this->actor.speedXZ, 0.0f, 0.7f);
     }
     if ((player->stateFlags3 & 0x100) || (Player_GetMask(play) == PLAYER_MASK_STONE)) {
-        Math_ScaledStepToS(&this->unk_150, Actor_YawToPoint(&this->actor, &this->actor.home.pos), 0x400);
+        Math_ScaledStepToS(&this->unk_150, Actor_WorldYawTowardPoint(&this->actor, &this->actor.home.pos), 0x400);
     } else if ((player->stateFlags2 & 0x80) || (player->actor.freezeTimer > 0)) {
         Math_ScaledStepToS(&this->unk_150, this->actor.yawTowardsPlayer + 0x8000, 0x400);
     } else {
@@ -421,7 +421,7 @@ void EnMkk_Update(Actor* thisx, PlayState* play) {
     }
     if (Actor_IsFacingPlayer(&this->actor, 0x3000)) {
         player = GET_PLAYER(play);
-        this->actor.shape.rot.x = Actor_PitchToPoint(&this->actor, &player->actor.focus.pos);
+        this->actor.shape.rot.x = Actor_WorldPitchTowardPoint(&this->actor, &player->actor.focus.pos);
         this->actor.shape.rot.x = CLAMP(this->actor.shape.rot.x, -0x1800, 0x1800);
     }
     Actor_SetFocus(&this->actor, 10.0f);
