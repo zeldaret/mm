@@ -336,8 +336,8 @@ void func_80B7F398(BgIkanaBlock* this, PlayState* play) {
     if (func_80B7EE70(this, play)) {
         Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
         Actor_PlaySfx(&this->dyna.actor,
-                           NA_SE_PL_WALK_GROUND + SurfaceType_GetSfxOffset(&play->colCtx, this->dyna.actor.floorPoly,
-                                                                           this->dyna.actor.floorBgId));
+                      NA_SE_PL_WALK_GROUND + SurfaceType_GetSfxOffset(&play->colCtx, this->dyna.actor.floorPoly,
+                                                                      this->dyna.actor.floorBgId));
         func_80B7F0A4(this);
     }
 }

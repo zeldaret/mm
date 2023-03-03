@@ -554,10 +554,9 @@ void ObjOshihiki_Fall(ObjOshihiki* this, PlayState* play) {
             ObjOshihiki_SetupOnActor(this, play);
         }
         Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
-        Actor_PlaySfx(&this->dyna.actor,
-                           NA_SE_PL_WALK_GROUND + SurfaceType_GetSfxOffset(&play->colCtx,
-                                                                           this->floorPolys[this->highestFloor],
-                                                                           this->floorBgIds[this->highestFloor]));
+        Actor_PlaySfx(&this->dyna.actor, NA_SE_PL_WALK_GROUND + SurfaceType_GetSfxOffset(
+                                                                    &play->colCtx, this->floorPolys[this->highestFloor],
+                                                                    this->floorBgIds[this->highestFloor]));
     }
 }
 
