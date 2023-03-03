@@ -45,7 +45,7 @@ typedef enum {
 #define STH_FLAG_CLEAR                          (0)
 #define STH_FLAG_DRAW_TRUTH_MASK                (1 << 0)
 #define STH_FLAG_OCEANSIDE_SPIDER_HOUSE_GREET   (1 << 1)
-#define STH_FLAG_SAVED                          (1 << 2) // set, but not read 
+#define STH_FLAG_SWAMP_SPIDER_HOUSE_SAVED       (1 << 2) // set, but not read 
 #define STH_FLAG_DISABLE_HEAD_TRACK             (1 << 3)
 
 #define STH_SWAMP_SPIDER_TOKENS_REQUIRED     30

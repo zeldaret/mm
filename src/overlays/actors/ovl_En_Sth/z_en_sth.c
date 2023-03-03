@@ -480,7 +480,7 @@ void EnSth_GetInitialSwampSpiderHouseText(EnSth* this, PlayState* play) {
         EnSth_SwitchAnimation(this, STH_ANIM_TALK);
     } else if (Inventory_GetSkullTokenCount(play->sceneId) >= STH_SWAMP_SPIDER_TOKENS_REQUIRED) {
         if (INV_CONTENT(ITEM_MASK_TRUTH) == ITEM_MASK_TRUTH) {
-            this->sthFlags |= STH_FLAG_SAVED;
+            this->sthFlags |= STH_FLAG_SWAMP_SPIDER_HOUSE_SAVED;
             nextTextId = 0x919; // I've been saved!
         } else {
             nextTextId = 0x916; // I've been saved! (Duplicate)
