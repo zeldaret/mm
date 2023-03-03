@@ -4065,7 +4065,7 @@
     0x801F6DFD:("sMotionBlurStatus","UNK_TYPE1","",0x1),
     0x801F6E00:("D_801F6E00","SlowlyTask","",0x1c0),
     0x801F6FC0:("D_801F6FC0","UNK_TYPE1","",0x1),
-    0x801F6FC8:("sSlowlyThreadInfo","StackEntry","",0x1c),
+    0x801F6FC8:("sSlowlyStackInfo","StackEntry","",0x1c),
     0x801F6FE8:("sSlowlyStack","u8","[4096]",0x1000),
     0x801F7FF0:("D_801F7FF0","UNK_TYPE1","",0x1),
     0x801F8010:("D_801F8010","struct_801F8010","",0x10),

@@ -2485,7 +2485,7 @@ extern u8 sMotionBlurStatus;
 
 extern SlowlyTask D_801F6E00;
 extern s32 D_801F6FC0;
-extern StackEntry sSlowlyThreadInfo;
+extern StackEntry sSlowlyStackInfo;
 extern STACK(sSlowlyStack, 0x1000);
 
 extern UNK_TYPE1 D_801F7FF0;
