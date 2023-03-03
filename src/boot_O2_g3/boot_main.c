@@ -14,7 +14,7 @@ void bootproc(void) {
     osInitialize();
     osUnmapTLBAll();
     gCartHandle = osCartRomInit();
-    StackCheck_Init(&sIdleThreadInfo, sIdleThreadStack, STACK_TOP(sIdleThreadStack), 0, 256, "idle");
+    StackCheck_Init(&sIdleThreadInfo, sIdleThreadStack, STACK_TOP(sIdleThreadStack), 0, 0x100, "idle");
     osCreateThread(&sIdleThread, Z_THREAD_ID_IDLE, Idle_ThreadEntry, NULL, STACK_TOP(sIdleThreadStack),
                    Z_PRIORITY_IDLE);
     osStartThread(&sIdleThread);
