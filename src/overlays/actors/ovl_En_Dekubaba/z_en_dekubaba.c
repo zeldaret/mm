@@ -363,7 +363,7 @@ void EnDekubaba_SetupGrow(EnDekubaba* this) {
 
     this->collider.base.colType = COLTYPE_HIT6;
     this->collider.base.acFlags &= ~AC_HARD;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DEKU_WAKEUP);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_DEKU_WAKEUP);
     this->actionFunc = EnDekubaba_Grow;
 }
 
@@ -520,9 +520,9 @@ void EnDekubaba_DecideLunge(EnDekubaba* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     if (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 12.0f)) {
         if (this->actor.params == DEKUBABA_BIG) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DEKU_MOUTH);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_DEKU_MOUTH);
         } else {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_MIZUBABA1_MOUTH);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_MIZUBABA1_MOUTH);
         }
     }
 
@@ -604,9 +604,9 @@ void EnDekubaba_Lunge(EnDekubaba* this, PlayState* play) {
     if (this->timer == 0) {
         if (Animation_OnFrame(&this->skelAnime, 1.0f)) {
             if (this->actor.params == DEKUBABA_BIG) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DEKU_ATTACK);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_DEKU_ATTACK);
             } else {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_MIZUBABA1_ATTACK);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_MIZUBABA1_ATTACK);
             }
         }
 
@@ -638,9 +638,9 @@ void EnDekubaba_Lunge(EnDekubaba* this, PlayState* play) {
 
         if (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 12.0f)) {
             if (this->actor.params == DEKUBABA_BIG) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DEKU_MOUTH);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_DEKU_MOUTH);
             } else {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_MIZUBABA1_MOUTH);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_MIZUBABA1_MOUTH);
             }
         }
     }
@@ -729,7 +729,7 @@ void EnDekubaba_PullBack(EnDekubaba* this, PlayState* play) {
     } else {
         this->timer++;
         if (this->timer == 10) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DEKU_SCRAPE);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_DEKU_SCRAPE);
         }
 
         if (this->timer >= 12) {
@@ -872,7 +872,7 @@ void EnDekubaba_PrunedSomersaultDie(EnDekubaba* this, PlayState* play) {
         }
 
         if (this->actor.bgCheckFlags & 2) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_EYEGOLE_ATTACK);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_EYEGOLE_ATTACK);
             this->timer = 1;
         }
     } else if (this->timer == 1) {
@@ -1149,9 +1149,9 @@ void EnDekubaba_UpdateDamage(EnDekubaba* this, PlayState* play) {
 
     if (this->actor.colChkInfo.health != 0) {
         if ((this->timer == 2) || (this->timer == 3)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_FREEZE);
         } else {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DEKU_DAMAGE);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_DEKU_DAMAGE);
         }
     } else {
         Enemy_StartFinishingBlow(play, &this->actor);
@@ -1164,9 +1164,9 @@ void EnDekubaba_UpdateDamage(EnDekubaba* this, PlayState* play) {
         }
 
         if (this->actor.params == DEKUBABA_BIG) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DEKU_DEAD);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_DEKU_DEAD);
         } else {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DEKU_JR_DEAD);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_DEKU_JR_DEAD);
         }
     }
 }

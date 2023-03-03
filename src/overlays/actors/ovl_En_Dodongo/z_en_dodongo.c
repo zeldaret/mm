@@ -568,13 +568,13 @@ void func_80877500(EnDodongo* this, PlayState* play) {
 
     SkelAnime_Update(&this->skelAnime);
     if (Animation_OnFrame(&this->skelAnime, 19.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DODO_J_WALK);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_DODO_J_WALK);
         sp30.x = this->collider1Elements[2].dim.worldSphere.center.x;
         sp30.y = this->collider1Elements[2].dim.worldSphere.center.y;
         sp30.z = this->collider1Elements[2].dim.worldSphere.center.z;
         func_80876930(this, play, &sp30);
     } else if (Animation_OnFrame(&this->skelAnime, 39.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DODO_J_WALK);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_DODO_J_WALK);
         sp30.x = this->collider1Elements[1].dim.worldSphere.center.x;
         sp30.y = this->collider1Elements[1].dim.worldSphere.center.y;
         sp30.z = this->collider1Elements[1].dim.worldSphere.center.z;
@@ -641,7 +641,7 @@ void func_8087784C(EnDodongo* this, PlayState* play) {
     f32 temp_f12;
 
     if (Animation_OnFrame(&this->skelAnime, 24.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DODO_J_CRY);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_DODO_J_CRY);
     }
 
     if (func_8087721C(this)) {
@@ -728,7 +728,7 @@ void func_80877E60(EnDodongo* this, PlayState* play) {
     }
 
     if (Animation_OnFrame(&this->skelAnime, 28.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DODO_J_EAT);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_DODO_J_EAT);
         if (this->actor.child != NULL) {
             Actor_Kill(this->actor.child);
             this->actor.child = NULL;
@@ -751,7 +751,7 @@ void func_80877E60(EnDodongo* this, PlayState* play) {
                               this->unk_334 * 10.0f, 10);
             }
 
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_BOMB_EXPLOSION);
+            Actor_PlaySfx(&this->actor, NA_SE_IT_BOMB_EXPLOSION);
             if (this->actor.colChkInfo.health <= 4) {
                 this->actor.colChkInfo.health = 0;
                 Enemy_StartFinishingBlow(play, &this->actor);
@@ -810,7 +810,7 @@ void func_80878354(EnDodongo* this) {
         sp18 = &object_dodongo_Anim_003B14;
     }
 
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DODO_J_TAIL);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_DODO_J_TAIL);
     Animation_PlayOnceSetSpeed(&this->skelAnime, sp18, 2.0f);
     this->timer = 0;
     this->collider1.base.atFlags |= AT_ON;
@@ -871,7 +871,7 @@ void func_808785B0(EnDodongo* this, PlayState* play) {
 
 void func_8087864C(EnDodongo* this) {
     Animation_MorphToPlayOnce(&this->skelAnime, &object_dodongo_Anim_001A44, -4.0f);
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DODO_J_DAMAGE);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_DODO_J_DAMAGE);
     this->timer = 0;
     this->unk_304 = 0;
     this->actor.speedXZ = 0.0f;
@@ -893,7 +893,7 @@ void func_80878724(EnDodongo* this) {
     Animation_MorphToPlayOnce(&this->skelAnime, &object_dodongo_Anim_0013C4, -8.0f);
     this->timer = 0;
     this->unk_304 = 0;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DODO_J_DEAD);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_DODO_J_DEAD);
     this->actor.flags &= ~ACTOR_FLAG_1;
     this->actor.speedXZ = 0.0f;
     Actor_SetColorFilter(&this->actor, 0x4000, 0xFF, 0, 8);
@@ -921,7 +921,7 @@ void func_808787B0(EnDodongo* this, PlayState* play) {
             this->timer = 8;
         }
     } else if (Animation_OnFrame(&this->skelAnime, 52.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_GERUDOFT_DOWN);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_GERUDOFT_DOWN);
     }
 
     if (this->timer != 0) {
@@ -995,12 +995,12 @@ void EnDodongo_UpdateDamage(EnDodongo* this, PlayState* play) {
                 } else if (this->actor.colChkInfo.damageEffect == 1) {
                     this->timer = 40;
                     Actor_SetColorFilter(&this->actor, 0, 0xFF, 0, 40);
-                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
+                    Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_FREEZE);
                     func_80878594(this);
                 } else if (this->actor.colChkInfo.damageEffect == 5) {
                     this->timer = 40;
                     Actor_SetColorFilter(&this->actor, 0, 0xFF, 0, 40);
-                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
+                    Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_FREEZE);
                     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_SMALL;
                     this->drawDmgEffScale = 0.75f;
                     this->drawDmgEffAlpha = 2.0f;
@@ -1026,7 +1026,7 @@ void EnDodongo_Update(Actor* thisx, PlayState* play2) {
     Actor_MoveWithGravity(&this->actor);
     Actor_UpdateBgCheckInfo(play, &this->actor, 75.0f, 60.0f, 70.0f, 0x1D);
     if (this->actor.bgCheckFlags & 2) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_GERUDOFT_DOWN);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_GERUDOFT_DOWN);
     }
 
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider1.base);

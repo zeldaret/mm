@@ -501,11 +501,11 @@ void func_80BD93F4(EnPamera* this, PlayState* play) {
         (this->actionFunc == func_80BD8964) || (this->actionFunc == func_80BD8A7C)) {
         if (this->skelAnime.animation == &object_pamera_Anim_008AE0) {
             if (Animation_OnFrame(&this->skelAnime, 9.0f) || Animation_OnFrame(&this->skelAnime, 18.0f)) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_PAMERA_WALK);
+                Actor_PlaySfx(&this->actor, NA_SE_EV_PAMERA_WALK);
             }
         } else if ((this->skelAnime.animation == &object_pamera_Anim_008E38) &&
                    (Animation_OnFrame(&this->skelAnime, 2.0f) || Animation_OnFrame(&this->skelAnime, 6.0f))) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_PAMERA_WALK);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_PAMERA_WALK);
         }
     }
 }
@@ -772,7 +772,7 @@ void func_80BD9F3C(EnPamera* this, PlayState* play) {
             Animation_OnFrame(&this->skelAnime, 10.0f) || Animation_OnFrame(&this->skelAnime, 14.0f) ||
             Animation_OnFrame(&this->skelAnime, 18.0f) || Animation_OnFrame(&this->skelAnime, 22.0f) ||
             Animation_OnFrame(&this->skelAnime, 25.0f)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_PAMERA_WALK);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_PAMERA_WALK);
         }
         if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
             this->unk_31E = 0;
@@ -820,7 +820,7 @@ void func_80BDA1C8(EnPamera* this, PlayState* play) {
     if (this->unk_31E == 1) {
         if (Animation_OnFrame(&this->skelAnime, 2.0f) || Animation_OnFrame(&this->skelAnime, 6.0f) ||
             Animation_OnFrame(&this->skelAnime, 10.0f) || Animation_OnFrame(&this->skelAnime, 14.0f)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_PAMERA_WALK);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_PAMERA_WALK);
         }
         if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
             this->unk_31E = 0;

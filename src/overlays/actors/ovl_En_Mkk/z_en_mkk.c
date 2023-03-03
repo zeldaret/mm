@@ -291,7 +291,7 @@ void func_80A4E58C(EnMkk* this) {
     this->unk_14B |= 1;
     this->actor.speedXZ = 3.0f;
     this->actor.velocity.y = 5.0f;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KUROSUKE_ATTACK);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_KUROSUKE_ATTACK);
     this->collider.base.atFlags |= AT_ON;
     Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0x800);
     this->actionFunc = func_80A4E60C;
@@ -313,7 +313,7 @@ void func_80A4E67C(EnMkk* this) {
     this->actor.flags &= ~ACTOR_FLAG_1;
     this->collider.base.acFlags &= ~AC_ON;
     this->actor.flags |= ACTOR_FLAG_10;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PO_DEAD);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_PO_DEAD);
     this->alpha = 254;
     func_800BE568(&this->actor, &this->collider);
     this->actor.speedXZ = 7.0f;
@@ -334,7 +334,7 @@ void func_80A4E72C(EnMkk* this, PlayState* play) {
             temp.z = this->actor.world.pos.z;
             EffectSsDeadDb_Spawn(play, &temp, &gZeroVec3f, &gZeroVec3f, &sEffPrimColors[this->actor.params],
                                  &sEffEnvColors[this->actor.params], 0x46, 4, 0xC);
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_EXTINCT);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_EXTINCT);
             if (this->unk_14C != 0) {
                 Item_DropCollectibleRandom(play, &this->actor, &this->actor.world.pos, this->unk_14C * 0x10);
             }

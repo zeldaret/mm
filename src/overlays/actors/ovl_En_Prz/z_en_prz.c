@@ -363,7 +363,7 @@ void func_80A76A1C(EnPrz* this) {
     this->actor.flags |= ACTOR_FLAG_8000000;
     this->actor.flags &= ~ACTOR_FLAG_1;
 
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BUBLEWALK_DEAD);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_BUBLEWALK_DEAD);
 
     this->unk_1EE = Rand_S16Offset(100, 30);
     this->unk_1FC = 0x4000;

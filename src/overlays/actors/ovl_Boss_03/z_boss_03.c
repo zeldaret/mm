@@ -1190,7 +1190,7 @@ void Boss03_IntroCutscene(Boss03* this, PlayState* play) {
                         this->subCamFov = 80.0f;
 
                         case 2:
-                            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KONB_DEMO_MOVE_OLD - SFX_FLAG);
+                            Actor_PlaySfx(&this->actor, NA_SE_EN_KONB_DEMO_MOVE_OLD - SFX_FLAG);
 
                             xDiff = D_809E9104[this->unk_242].x - this->actor.world.pos.x;
                             yDiff = D_809E9104[this->unk_242].y - this->actor.world.pos.y;
@@ -1206,7 +1206,7 @@ void Boss03_IntroCutscene(Boss03* this, PlayState* play) {
                             }
 
                             if ((this->csTimer == 40) || (this->csTimer == (u32)(KREG(91) + 270))) {
-                                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_WATER_DEEP);
+                                Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_WATER_DEEP);
                             }
 
                             if (this->csTimer > 50) {
@@ -1230,10 +1230,10 @@ void Boss03_IntroCutscene(Boss03* this, PlayState* play) {
                                     this->csTimer = 0;
                                 }
                                 if (this->csTimer == 165) {
-                                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_WATER_MID);
+                                    Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_WATER_MID);
                                 }
                                 if (this->csTimer == 180) {
-                                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_WATER_DEEP);
+                                    Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_WATER_DEEP);
                                 }
                             }
                     }
@@ -1304,14 +1304,14 @@ void Boss03_IntroCutscene(Boss03* this, PlayState* play) {
                         this->actor.speedXZ = 20.0f;
 
                         Audio_QueueSeqCmd(NA_BGM_BOSS | 0x8000);
-                        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KONB_JUMP_OLD);
+                        Actor_PlaySfx(&this->actor, NA_SE_EN_KONB_JUMP_OLD);
                         this->skelAnime.playSpeed = 1.0f;
                     }
             }
             break;
 
         case 6:
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KONB_JUMP_LEV_OLD - SFX_FLAG);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_KONB_JUMP_LEV_OLD - SFX_FLAG);
 
             if (this->csTimer == 30) {
                 TitleCard_InitBossName(&play->state, &play->actorCtx.titleCtxt,
@@ -1514,10 +1514,10 @@ void Boss03_DeathCutscene(Boss03* this, PlayState* play) {
             Math_ApproachF(&this->actor.world.pos.z, sp84.z, 0.1f, 5.0f);
 
             if (Animation_OnFrame(&this->skelAnime, this->floppingAnimLastFrame)) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KONB_DEAD_JUMP2_OLD);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_KONB_DEAD_JUMP2_OLD);
             }
             if (Animation_OnFrame(&this->skelAnime, this->floppingAnimLastFrame * 0.5f)) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KONB_DEAD_JUMP_OLD);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_KONB_DEAD_JUMP_OLD);
             }
 
             if ((this->workTimer[WORK_TIMER_UNK0_C] == 0) && ((this->waterHeight - 100.0f) < this->actor.world.pos.y)) {
@@ -1547,7 +1547,7 @@ void Boss03_DeathCutscene(Boss03* this, PlayState* play) {
                     this->actor.speedXZ = 10.0f;
                     this->actor.world.rot.y = this->unk_2BE + 0x8000;
                     this->unk_240 = 0;
-                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KONB_DEAD_JUMP2_OLD);
+                    Actor_PlaySfx(&this->actor, NA_SE_EN_KONB_DEAD_JUMP2_OLD);
                 }
             }
             Math_ApproachF(&this->unk_56C, 0.01f, 1.0f, 0.0005f);
@@ -1704,7 +1704,7 @@ void Boss03_SpawnSmallFishesCutscene(Boss03* this, PlayState* play) {
                                 this->numSpawnedSmallFish++;
                             }
                             if ((this->csTimer % 8) == 0) {
-                                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KONB_MINI_APPEAR);
+                                Actor_PlaySfx(&this->actor, NA_SE_EN_KONB_MINI_APPEAR);
                             }
                         }
                     }
@@ -2003,7 +2003,7 @@ void Boss03_Update(Actor* thisx, PlayState* play2) {
             ((this->waterHeight - 50.0f < this->actor.world.pos.y) &&
              (this->actor.prevPos.y <= this->waterHeight - 50.0f))) {
             if ((this->actor.velocity.y < 0.0f) && (this->actionFunc != Boss03_DeathCutscene)) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KONB_SINK_OLD);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_KONB_SINK_OLD);
             }
 
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_WATER_EFFECT, this->actor.world.pos.x, this->waterHeight,

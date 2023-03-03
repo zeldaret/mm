@@ -675,7 +675,7 @@ void EnRacedog_PlaySfxWalk(EnRacedog* this) {
     s16 curFrame = this->skelAnime.curFrame;
 
     if ((curFrame == 1) || (curFrame == 7)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_MONKEY_WALK);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_MONKEY_WALK);
     }
 }
 

@@ -266,7 +266,7 @@ void func_80ACA724(EnTimeTag* this, PlayState* play) {
         play->nextEntrance = play->setupExitList[ENTIMETAG_GET_1F(&this->actor)];
         play->transitionTrigger = TRANS_TRIGGER_START;
         if (!ENTIMETAG_GET_E000(&this->actor)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_OC_DOOR_OPEN);
+            Actor_PlaySfx(&this->actor, NA_SE_OC_DOOR_OPEN);
         }
         this->actionFunc = func_80ACA714;
     }

@@ -593,7 +593,7 @@ void func_80A95CEC(EnAz* this, PlayState* play) {
             func_800B9010(&this->actor, NA_SE_EV_HONEYCOMB_FALL - SFX_FLAG);
         } else {
             if (this->actor.bgCheckFlags & 2) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_GERUDOFT_DOWN);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_GERUDOFT_DOWN);
             }
             if (SubS_StartActorCutscene(&this->actor, 0x7C, this->unk_3D0[0], SUBS_CUTSCENE_NORMAL)) {
                 func_80A97C0C(this, play);
@@ -625,7 +625,7 @@ void func_80A95E88(EnAz* this, PlayState* play) {
     if (this->actor.depthInWater > 8.0f) {
         if (this->unk_374 & 2) {
             if ((this->skelAnime.curFrame < this->skelAnime.playSpeed) && (this->skelAnime.curFrame >= 0.0f)) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BEAVER_SWIM_HAND);
+                Actor_PlaySfx(&this->actor, NA_SE_EV_BEAVER_SWIM_HAND);
             }
         } else {
             func_800B9010(&this->actor, NA_SE_EV_BEAVER_SWIM_MOTOR - SFX_FLAG);
@@ -1574,7 +1574,7 @@ void func_80A97F9C(EnAz* this, PlayState* play) {
         if (this->actor.depthInWater > 8.0f) {
             if (this->unk_374 & 2) {
                 if ((this->skelAnime.curFrame < this->skelAnime.playSpeed) && (this->skelAnime.curFrame >= 0.0f)) {
-                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BEAVER_SWIM_HAND);
+                    Actor_PlaySfx(&this->actor, NA_SE_EV_BEAVER_SWIM_HAND);
                 }
             } else {
                 func_800B9010(&this->actor, NA_SE_EV_BEAVER_SWIM_MOTOR - SFX_FLAG);
@@ -1638,10 +1638,10 @@ void EnAz_Update(Actor* thisx, PlayState* play2) {
     this->actionFunc(this, play);
     Actor_SetFocus(&this->actor, 40.0f);
     if (this->unk_374 & 0x200) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_DIVE_INTO_WATER);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_DIVE_INTO_WATER);
     }
     if (this->unk_374 & 0x400) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_JUMP_OUT_WATER);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_JUMP_OUT_WATER);
     }
     this->unk_37E++;
     if (this->unk_37E >= 4) {

@@ -408,7 +408,7 @@ void func_8087B7C0(EnHorse* this, PlayState* play, Path* path) {
     } else if (this->unk_590 > 0) {
         if (this->unk_590 == 0x1F4) {
             if (this->rider != NULL) {
-                Actor_PlaySfxAtPos(&this->rider->actor, NA_SE_VO_IN_CRY_0);
+                Actor_PlaySfx(&this->rider->actor, NA_SE_VO_IN_CRY_0);
             }
         }
         this->unk_590--;
@@ -3383,12 +3383,12 @@ void func_80884A40(EnHorse* this, PlayState* play) {
         }
 
         if ((this->unk_538 == OBJ_UM_ANIM_TROT) || (this->unk_538 == OBJ_UM_ANIM_GALLOP)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_HORSE_RUN);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_HORSE_RUN);
         } else if (this->unk_538 == OBJ_UM_ANIM_IDLE) {
             if (this->animIndex == ENHORSE_ANIM_IDLE) {
                 EnHorse_IdleAnimSounds(this, play);
             } else if (this->animIndex == ENHORSE_ANIM_WHINNY) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_HORSE_GROAN);
+                Actor_PlaySfx(&this->actor, NA_SE_EV_HORSE_GROAN);
             }
         }
     }
@@ -3400,7 +3400,7 @@ void func_80884D04(EnHorse* this, PlayState* play) {
     this->actor.speedXZ = 10.0f;
     this->action = ENHORSE_ACTION_25;
     this->unk_540 = this->actor.world.pos;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_INGO_HORSE_NEIGH);
+    Actor_PlaySfx(&this->actor, NA_SE_IT_INGO_HORSE_NEIGH);
     this->animIndex = ENHORSE_ANIM_GALLOP;
     playSpeed = this->actor.speedXZ * 0.2f;
     Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animIndex],

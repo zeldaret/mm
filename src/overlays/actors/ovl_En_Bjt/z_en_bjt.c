@@ -182,7 +182,7 @@ s32 EnBjt_Appear(EnBjt* this) {
     s32 finished = false;
 
     if (!this->playedSfx) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_TOILET_HAND_APPEAR);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_TOILET_HAND_APPEAR);
         this->playedSfx = true;
     }
 
@@ -207,7 +207,7 @@ s32 EnBjt_Vanish(EnBjt* this) {
     s32 finished = false;
 
     if (!this->playedSfx) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_TOILET_HAND_VANISH);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_TOILET_HAND_VANISH);
         this->playedSfx = true;
     }
 
@@ -292,7 +292,7 @@ s32 EnBjt_ChooseBehaviour(Actor* thisx, PlayState* play) {
                 this->playedSfx = false;
                 this->behaviour++;
             } else if (this->timer == 10) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_TOILET_WATER);
+                Actor_PlaySfx(&this->actor, NA_SE_EV_TOILET_WATER);
             }
             break;
 

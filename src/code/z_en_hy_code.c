@@ -267,12 +267,12 @@ s32 EnHy_PlayWalkingSound(EnHy* enHy, PlayState* play, f32 distAboveThreshold) {
 
     enHy->isLeftFootOnGround = isFootOnGround = SubS_IsFloorAbove(play, &enHy->leftFootPos, distAboveThreshold);
     if (enHy->isLeftFootOnGround && !wasLeftFootOnGround && isFootOnGround) {
-        Actor_PlaySfxAtPos(&enHy->actor, sfxId);
+        Actor_PlaySfx(&enHy->actor, sfxId);
     }
 
     enHy->isRightFootOnGround = isFootOnGround = SubS_IsFloorAbove(play, &enHy->rightFootPos, distAboveThreshold);
     if (enHy->isRightFootOnGround && !wasRightFootOnGround && isFootOnGround) {
-        Actor_PlaySfxAtPos(&enHy->actor, sfxId);
+        Actor_PlaySfx(&enHy->actor, sfxId);
     }
 
     return false;

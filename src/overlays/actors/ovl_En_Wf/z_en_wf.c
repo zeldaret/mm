@@ -501,7 +501,7 @@ void func_80990C6C(EnWf* this, PlayState* play, s32 arg2) {
 void func_80990E4C(EnWf* this, PlayState* play) {
     if (Animation_OnFrame(&this->skelAnime, 1.0f) && (this->actor.bgCheckFlags & 1)) {
         func_80990C6C(this, play, 2);
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_WOLFOS_WALK);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_WOLFOS_WALK);
     }
 }
 
@@ -517,7 +517,7 @@ s32 func_80990EAC(EnWf* this) {
 void func_80990ED4(EnWf* this) {
     this->actor.child = NULL;
     this->actor.shape.rot.y = this->actor.yawTowardsPlayer;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_WOLFOS_APPEAR);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_WOLFOS_APPEAR);
     func_80991438(this);
 }
 
@@ -561,7 +561,7 @@ void func_80991040(EnWf* this, PlayState* play) {
         Math_StepToF(&this->actor.shape.shadowScale, 70.0f, 14.0f);
         this->unk_2A0--;
         if (this->unk_2A0 == 0) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_WOLFOS_APPEAR);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_WOLFOS_APPEAR);
         }
     } else if (SkelAnime_Update(&this->skelAnime)) {
         this->actor.scale.y = this->actor.scale.x;
@@ -633,7 +633,7 @@ void func_80991280(EnWf* this, PlayState* play) {
                 }
 
                 if (this->unk_2A2 == 0) {
-                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_WOLFOS_CRY);
+                    Actor_PlaySfx(&this->actor, NA_SE_EN_WOLFOS_CRY);
                 }
             }
         }
@@ -694,7 +694,7 @@ void func_8099149C(EnWf* this, PlayState* play) {
             }
 
             if (this->unk_2A2 == 0) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_WOLFOS_CRY);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_WOLFOS_CRY);
             }
 
             func_80990E4C(this, play);
@@ -748,7 +748,7 @@ void func_8099177C(EnWf* this, PlayState* play) {
             }
         }
         if (this->unk_2A2 == 0) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_WOLFOS_CRY);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_WOLFOS_CRY);
         }
     }
 }
@@ -787,7 +787,7 @@ void func_809919F4(EnWf* this, PlayState* play) {
         func_80990E4C(this, play);
 
         if (this->unk_2A2 == 0) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_WOLFOS_CRY);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_WOLFOS_CRY);
         }
 
         if ((Math_CosS(sp26 - this->actor.shape.rot.y) < -0.85f) && !Actor_OtherIsTargeted(play, &this->actor) &&
@@ -831,7 +831,7 @@ void func_80991C80(EnWf* this, PlayState* play) {
     if (((this->skelAnime.curFrame >= 9.0f) && (this->skelAnime.curFrame < 13.0f)) ||
         ((this->skelAnime.curFrame >= 17.0f) && (this->skelAnime.curFrame < 20.0f))) {
         if (!(this->collider1.base.atFlags & AT_ON)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_WOLFOS_ATTACK);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_WOLFOS_ATTACK);
         }
         this->collider1.base.atFlags |= AT_ON;
     } else {
@@ -928,7 +928,7 @@ void func_8099223C(EnWf* this) {
     this->actor.speedXZ = -6.0f;
     this->actor.shape.rot.y = this->actor.yawTowardsPlayer;
     this->actor.world.rot.y = this->actor.yawTowardsPlayer;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_TEKU_JUMP);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_TEKU_JUMP);
     this->actionFunc = func_809922B4;
 }
 
@@ -944,7 +944,7 @@ void func_809922B4(EnWf* this, PlayState* play) {
         }
     }
     if (this->unk_2A2 == 0) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_WOLFOS_CRY);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_WOLFOS_CRY);
     }
 }
 
@@ -979,7 +979,7 @@ void func_8099245C(EnWf* this) {
     }
     this->unk_298 = 0;
     this->actor.world.rot.y = this->actor.yawTowardsPlayer;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_WOLFOS_DAMAGE);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_WOLFOS_DAMAGE);
     this->actionFunc = func_809924EC;
 }
 
@@ -1026,7 +1026,7 @@ void func_809926D0(EnWf* this) {
     this->unk_2A0 = 0;
     this->actor.speedXZ = 6.5f;
     this->actor.velocity.y = 15.0f;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_TEKU_JUMP);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_TEKU_JUMP);
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->actionFunc = func_80992784;
 }
@@ -1146,7 +1146,7 @@ void func_80992B8C(EnWf* this, PlayState* play) {
         func_80990E4C(this, play);
 
         if (this->unk_2A2 == 0) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_WOLFOS_CRY);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_WOLFOS_CRY);
         }
     }
 }
@@ -1160,7 +1160,7 @@ void func_80992D6C(EnWf* this) {
     }
     this->actor.flags &= ~ACTOR_FLAG_1;
     this->unk_2A0 = 25;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_WOLFOS_DEAD);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_WOLFOS_DEAD);
     this->actionFunc = func_80992E0C;
 }
 
@@ -1272,13 +1272,13 @@ void func_80993194(EnWf* this, PlayState* play) {
     }
 
     if (this->unk_2A2 == 0) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_WOLFOS_CRY);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_WOLFOS_CRY);
     }
 }
 
 void func_80993350(EnWf* this) {
     Animation_MorphToLoop(&this->skelAnime, &gWolfosRunAnim, -4.0f);
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_WOLFOS_APPEAR);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_WOLFOS_APPEAR);
     this->actionFunc = func_809933A0;
 }
 
@@ -1312,7 +1312,7 @@ void func_809933A0(EnWf* this, PlayState* play) {
         func_80990ED4(this);
     }
     if (this->unk_2A2 == 0) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_WOLFOS_CRY);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_WOLFOS_CRY);
     }
 }
 
@@ -1365,7 +1365,7 @@ void func_8099357C(EnWf* this, PlayState* play) {
     }
 
     if (this->unk_2A2 == 0) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_WOLFOS_CRY);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_WOLFOS_CRY);
     }
 }
 
@@ -1423,7 +1423,7 @@ void func_8099386C(EnWf* this, PlayState* play) {
             if (this->actor.colChkInfo.damageEffect == 1) {
                 this->unk_2A0 = 40;
                 Actor_SetColorFilter(&this->actor, 0, 0x78, 0, 40);
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_FREEZE);
                 func_809923B0(this);
             } else if (this->actor.colChkInfo.damageEffect == 5) {
                 this->unk_2A0 = 40;
@@ -1431,7 +1431,7 @@ void func_8099386C(EnWf* this, PlayState* play) {
                 this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_SMALL;
                 this->drawDmgEffScale = 0.75f;
                 this->drawDmgEffAlpha = 2.0f;
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_FREEZE);
                 func_809923B0(this);
             } else if (this->actor.colChkInfo.damageEffect == 3) {
                 func_809907D4(this);

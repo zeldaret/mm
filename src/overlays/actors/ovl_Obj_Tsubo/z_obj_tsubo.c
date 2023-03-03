@@ -467,7 +467,7 @@ void func_809289E4(ObjTsubo* this, PlayState* play) {
         func_80927818(this, play, 0);
         //! @bug: This function should only pass Player*: it uses *(this + 0x153), which is meant to be
         //! player->currentMask, but in this case is garbage in the collider
-        func_800B8E58((Player*)&this->actor, NA_SE_PL_PULL_UP_POT);
+        Player_PlaySfx((Player*)&this->actor, NA_SE_PL_PULL_UP_POT);
         func_80928D6C(this);
     } else if ((this->unk_19B != 0) ||
                (acHit && (this->cylinderCollider.info.acHitInfo->toucher.dmgFlags & 0x058BFFBC))) {
@@ -673,7 +673,7 @@ void ObjTsubo_Update(Actor* thisx, PlayState* play) {
         }
         if (this->unk_19A >= 0) {
             if (this->unk_19A == 0) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALGOLD_ROLL);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_STALGOLD_ROLL);
                 if (Rand_ZeroOne() < 0.1f) {
                     this->unk_19A = Rand_S16Offset(40, 80);
                 } else {

@@ -224,7 +224,7 @@ void EnNeoReeba_ChooseAction(EnNeoReeba* this, PlayState* play) {
 void EnNeoReeba_SetupSink(EnNeoReeba* this) {
     this->sinkRiseRate = 0.0f;
     this->skelAnime.playSpeed = 2.0f;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_AKINDONUTS_HIDE);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_AKINDONUTS_HIDE);
     this->actionFunc = EnNeoReeba_Sink;
 }
 
@@ -247,7 +247,7 @@ void EnNeoReeba_SetupRise(EnNeoReeba* this) {
     this->actor.draw = EnNeoReeba_Draw;
     this->sinkRiseRate = 300.0f;
     this->skelAnime.playSpeed = 2.0f;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKID_APPEAR);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_STALKID_APPEAR);
     this->actor.flags |= ACTOR_FLAG_1;
     this->actionFunc = EnNeoReeba_RiseOutOfGround;
 }
@@ -268,7 +268,7 @@ void EnNeoReeba_RiseOutOfGround(EnNeoReeba* this, PlayState* play) {
 }
 
 void EnNeoReeba_SetupMove(EnNeoReeba* this) {
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_RIVA_MOVE);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_RIVA_MOVE);
     this->sfxTimer = 10;
     this->actionTimer = 60;
     this->actionFunc = EnNeoReeba_Move;
@@ -289,7 +289,7 @@ void EnNeoReeba_Move(EnNeoReeba* this, PlayState* play) {
     }
 
     if (this->sfxTimer == 0) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_RIVA_MOVE);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_RIVA_MOVE);
         this->sfxTimer = 10;
     } else {
         this->sfxTimer--;
@@ -345,7 +345,7 @@ void EnNeoReeba_Bounce(EnNeoReeba* this, PlayState* play) {
 }
 
 void EnNeoReeba_SetupStun(EnNeoReeba* this) {
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_FREEZE);
     this->actionFunc = EnNeoReeba_Stunned;
 }
 
@@ -378,7 +378,7 @@ void EnNeoReeba_SetupFrozen(EnNeoReeba* this) {
         this->stunTimer = 12;
     }
 
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_FREEZE);
     this->actionFunc = EnNeoReeba_Frozen;
 }
 
@@ -408,7 +408,7 @@ void EnNeoReeba_SetupDamageAnim(EnNeoReeba* this) {
     this->velToTarget.z = Math_CosS(this->actor.yawTowardsPlayer) * -12.0f;
     this->rotationSpeed = 4551.0f;
     Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 25);
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_RIVA_DAMAGE);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_RIVA_DAMAGE);
     this->actionFunc = EnNeoReeba_DamageAnim;
 }
 
@@ -448,7 +448,7 @@ void EnNeoReeba_SetupDeathEffects(EnNeoReeba* this) {
     this->actor.flags |= ACTOR_FLAG_8000000;
     this->actor.flags &= ~ACTOR_FLAG_1;
 
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_RIVA_DEAD);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_RIVA_DEAD);
     this->actionFunc = EnNeoReeba_PlayDeathEffects;
 }
 

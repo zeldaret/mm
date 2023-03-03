@@ -362,7 +362,7 @@ void EnDragon_RetreatOrIdle(EnDragon* this, PlayState* play) {
 void EnDragon_SetupExtend(EnDragon* this) {
     this->state = 0;
     this->behindJawRetreatTimer = this->state;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_UTSUBO_APPEAR_TRG);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_UTSUBO_APPEAR_TRG);
     this->retreatTimer = 250;
     this->actionFunc = EnDragon_Extend;
 }
@@ -375,17 +375,17 @@ void EnDragon_Extend(EnDragon* this, PlayState* play) {
     EnDragon_SpawnBubbles(this, play, this->jawPos);
 
     if (this->action >= DEEP_PYTHON_ACTION_DAMAGE) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_UTSUBO_BACK);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_UTSUBO_BACK);
         EnDragon_SetupRetreatOrIdle(this);
     } else if (this->retreatTimer == 0) {
         this->action = DEEP_PYTHON_ACTION_RETREAT;
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_UTSUBO_BACK);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_UTSUBO_BACK);
         EnDragon_SetupRetreatOrIdle(this);
     } else if (this->state == DEEP_PYTHON_EXTEND_STATE_NOT_FULLY_EXTENDED) {
         Vec3f extendedPos;
 
         Math_Vec3f_Copy(&extendedPos, &this->burrowEntrancePos);
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_UTSUBO_APPEAR - SFX_FLAG);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_UTSUBO_APPEAR - SFX_FLAG);
         extendedPos.x += Math_SinS(this->actor.world.rot.y) * -530.0f;
         extendedPos.z += Math_CosS(this->actor.world.rot.y) * -530.0f;
         this->actor.speedXZ = 40.0f;
@@ -439,7 +439,7 @@ void EnDragon_Extend(EnDragon* this, PlayState* play) {
             this->behindJawRetreatTimer++;
             if (this->behindJawRetreatTimer > 60) {
                 this->action = DEEP_PYTHON_ACTION_RETREAT;
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_UTSUBO_BACK);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_UTSUBO_BACK);
                 EnDragon_SetupRetreatOrIdle(this);
             }
         }
@@ -543,7 +543,7 @@ void EnDragon_Grab(EnDragon* this, PlayState* play) {
         player->actor.parent = &this->actor;
         player->unk_AE8 = 50;
         this->action = DEEP_PYTHON_ACTION_GRAB;
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_UTSUBO_EAT);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_UTSUBO_EAT);
         EnDragon_SetupAttack(this);
     }
 }
@@ -572,8 +572,8 @@ void EnDragon_Attack(EnDragon* this, PlayState* play) {
 
         //! @bug: This function should only pass Player*: it uses *(this + 0x153), which is meant to be
         //! player->currentMask, but in this case is garbage in the skelAnime
-        func_800B8E58((Player*)this, player->ageProperties->voiceSfxIdOffset + NA_SE_VO_LI_DAMAGE_S);
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_UTSUBO_BITE);
+        Player_PlaySfx((Player*)&this->actor, player->ageProperties->voiceSfxIdOffset + NA_SE_VO_LI_DAMAGE_S);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_UTSUBO_BITE);
         CollisionCheck_GreenBlood(play, NULL, &player->actor.world.pos);
     }
 
@@ -603,7 +603,7 @@ void EnDragon_Attack(EnDragon* this, PlayState* play) {
     Math_ApproachF(&this->actor.world.pos.z, pos.z, 0.3f, 200.0f);
 
     if ((this->state <= DEEP_PYTHON_ATTACK_STATE_START) && (this->endFrame <= currentFrame)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_UTSUBO_BITE);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_UTSUBO_BITE);
         if (this->animIndex != DEEP_PYTHON_ANIM_LARGE_SIDE_SWAY) {
             EnDragon_ChangeAnim(this, DEEP_PYTHON_ANIM_LARGE_SIDE_SWAY);
         }
@@ -737,11 +737,11 @@ void EnDragon_UpdateDamage(EnDragon* this, PlayState* play) {
             Actor_ApplyDamage(&this->actor);
             Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 25);
             if (this->actor.colChkInfo.health > 0) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_UTSUBO_DAMAGE);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_UTSUBO_DAMAGE);
                 this->action = DEEP_PYTHON_ACTION_DAMAGE;
             } else {
                 Enemy_StartFinishingBlow(play, &this->actor);
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_UTSUBO_DEAD);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_UTSUBO_DEAD);
                 this->actor.flags |= ACTOR_FLAG_8000000;
                 this->actor.flags &= ~ACTOR_FLAG_1;
                 this->actor.flags |= ACTOR_FLAG_100000;
