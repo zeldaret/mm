@@ -734,6 +734,11 @@ void PreRender_ApplyFilters(PreRender* this) {
     }
 }
 
+SlowlyTask D_801F6E00;
+s32 D_801F6FC0;
+StackEntry slowlyStackEntry;
+u8 slowlyStack[0x1000];
+
 /**
  * Initializes `PreRender_ApplyFilters` onto a new "slowly" thread
  */
@@ -745,8 +750,8 @@ void PreRender_ApplyFiltersSlowlyInit(PreRender* this) {
         }
 
         this->unk_4D = 1;
-        StackCheck_Init(&slowlyStackEntry, slowlyStack, &slowlyStack[4096], 0, 0x100, "slowly");
-        Slowly_Start(&D_801F6E00, &D_801F7FE8, PreRender_ApplyFilters, this, NULL);
+        StackCheck_Init(&slowlyStackEntry, slowlyStack, slowlyStack + sizeof(slowlyStack), 0, 0x100, "slowly");
+        Slowly_Start(&D_801F6E00, slowlyStack + sizeof(slowlyStack), PreRender_ApplyFilters, this, NULL);
         D_801F6FC0 = true;
     }
 }

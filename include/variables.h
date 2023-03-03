@@ -2489,11 +2489,7 @@ extern Struct_80140E80* D_801F6D4C;
 extern BombersNotebook sBombersNotebook;
 extern u8 sBombersNotebookOpen;
 extern u8 sMotionBlurStatus;
-extern SlowlyTask D_801F6E00;
-extern s32 D_801F6FC0;
-extern StackEntry slowlyStackEntry;
-extern u8 slowlyStack[0x1000];
-extern UNK_TYPE1 D_801F7FE8;
+
 extern UNK_TYPE1 D_801F7FF0;
 extern struct_801F8010 D_801F8010;
 extern struct_801F8020 D_801F8020;
