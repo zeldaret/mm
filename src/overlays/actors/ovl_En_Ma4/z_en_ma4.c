@@ -260,7 +260,7 @@ void EnMa4_RunInCircles(EnMa4* this, PlayState* play) {
                 sAnimIndex = 13;
             }
         } else {
-            this->actor.speedXZ = 2.7f;
+            this->actor.speed = 2.7f;
             EnMa4_ChangeAnim(this, 9);
             sAnimIndex = 9;
         }
@@ -279,7 +279,7 @@ void EnMa4_RunInCircles(EnMa4* this, PlayState* play) {
         Math_SmoothStepToS(&this->actor.shape.rot.y, sp2E, 5, 0x3000, 0x100);
     } else {
         if ((D_80AC0254 == 0) && ((Rand_Next() % 4) == 0)) {
-            this->actor.speedXZ = 0.0f;
+            this->actor.speed = 0.0f;
             D_80AC0254 = 2;
             EnMa4_ChangeAnim(this, 3);
             sAnimIndex = 3;
@@ -309,14 +309,14 @@ void EnMa4_SetupWait(EnMa4* this) {
     if ((this->state != MA4_STATE_AFTERHORSEBACKGAME) && (this->state != MA4_STATE_AFTERDESCRIBETHEMCS)) {
         if (this->type != MA4_TYPE_ALIENS_WON) {
             EnMa4_ChangeAnim(this, 9);
-            this->actor.speedXZ = 2.7f;
+            this->actor.speed = 2.7f;
         } else {
             EnMa4_ChangeAnim(this, 15);
-            this->actor.speedXZ = 0.0f;
+            this->actor.speed = 0.0f;
         }
     } else {
         EnMa4_ChangeAnim(this, 1);
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
     }
 
     this->actor.gravity = -0.2f;

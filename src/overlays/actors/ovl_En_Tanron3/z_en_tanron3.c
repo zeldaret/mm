@@ -153,7 +153,7 @@ void EnTanron3_SetupLive(EnTanron3* this, PlayState* play) {
     this->rotationStep = 0;
     this->rotationScale = 5;
     this->workTimer[WORK_TIMER_PICK_NEW_DEVIATION] = 50;
-    this->actor.speedXZ = 5.0f;
+    this->actor.speed = 5.0f;
     this->speedMaxStep = 0.5f;
     this->deviation.x = randPlusMinusPoint5Scaled(500.0f);
     this->deviation.y = randPlusMinusPoint5Scaled(100.0f);
@@ -219,7 +219,7 @@ void EnTanron3_Live(EnTanron3* this, PlayState* play) {
             case true:
                 if (sGyorg->unk_324 != 0 && !(this->timer & 0x7)) {
                     this->nextRotationAngle = 0x4E20;
-                    this->actor.speedXZ = 6.0f;
+                    this->actor.speed = 6.0f;
                 } else {
                     this->nextRotationAngle = 0x1F40;
                 }
@@ -242,7 +242,7 @@ void EnTanron3_Live(EnTanron3* this, PlayState* play) {
         }
 
         if (this->workTimer[WORK_TIMER_OUT_OF_WATER] == 0) {
-            if (this->workTimer[WORK_TIMER_PICK_NEW_DEVIATION] == 0 && this->actor.speedXZ > 1.0f) {
+            if (this->workTimer[WORK_TIMER_PICK_NEW_DEVIATION] == 0 && this->actor.speed > 1.0f) {
                 this->workTimer[WORK_TIMER_PICK_NEW_DEVIATION] = Rand_ZeroFloat(20.0f);
                 this->deviation.x = randPlusMinusPoint5Scaled(100.0f);
                 this->deviation.y = randPlusMinusPoint5Scaled(50.0f + extraScaleY);
@@ -265,7 +265,7 @@ void EnTanron3_Live(EnTanron3* this, PlayState* play) {
         Math_SmoothStepToS(&this->actor.world.rot.y, atanTemp, this->rotationScale, this->rotationStep, 0);
         Math_ApproachS(&this->rotationStep, this->targetRotationStep, 1, 0x100);
 
-        Math_ApproachF(&this->actor.speedXZ, this->targetSpeedXZ, 1.0f, this->speedMaxStep);
+        Math_ApproachF(&this->actor.speed, this->targetSpeedXZ, 1.0f, this->speedMaxStep);
         Actor_MoveWithoutGravityReverse(&this->actor);
     } else {
         switch (this->isBeached) {
@@ -276,7 +276,7 @@ void EnTanron3_Live(EnTanron3* this, PlayState* play) {
                 this->workTimer[WORK_TIMER_OUT_OF_WATER] = 25;
                 Math_ApproachS(&this->actor.world.rot.x, 0x3000, 5, 0xBD0);
                 if (this->actor.bgCheckFlags & 8) {
-                    this->actor.speedXZ = 0.0f;
+                    this->actor.speed = 0.0f;
                     if (this->actor.velocity.y > 0.0f) {
                         this->actor.velocity.y = -1.0f;
                     }
@@ -292,7 +292,7 @@ void EnTanron3_Live(EnTanron3* this, PlayState* play) {
                 if (this->actor.bgCheckFlags & 1) {
                     // Fish is still touching land, so it's still beached. Randomly flop around
                     this->actor.velocity.y = Rand_ZeroFloat(5.0f) + 5.0f;
-                    this->actor.speedXZ = Rand_ZeroFloat(2.0f) + 2.0f;
+                    this->actor.speed = Rand_ZeroFloat(2.0f) + 2.0f;
                     if (Rand_ZeroOne() < 0.5f) {
                         this->targetShapeRotation.x =
                             (s16)randPlusMinusPoint5Scaled(500.0f) + this->targetShapeRotation.x + 0x8000;
@@ -346,7 +346,7 @@ void EnTanron3_SetupDie(EnTanron3* this, PlayState* play) {
     this->actor.world.rot.x = Math_Atan2S_XY(sqrtf(SQ(xDistance) + SQ(zDistance)), -yDistance);
     this->actor.world.rot.y = Math_Atan2S_XY(zDistance, xDistance);
     this->workTimer[WORK_TIMER_DIE] = 6;
-    this->actor.speedXZ = 10.0f;
+    this->actor.speed = 10.0f;
     Actor_PlaySfx(&this->actor, NA_SE_EN_KONB_MINI_DEAD);
 }
 

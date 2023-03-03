@@ -378,8 +378,8 @@ void func_808D94D0(EnSw* this, PlayState* play, s32 arg2, s32 arg3, s16 arg4) {
     sp68 = BGCHECK_SCENE;
     sp64 = BGCHECK_SCENE;
     func_808D90F0(this, arg3, arg4);
-    this->actor.speedXZ = this->unk_44C;
-    temp_f20 = thisx->speedXZ * 2.0f;
+    this->actor.speed = this->unk_44C;
+    temp_f20 = thisx->speed * 2.0f;
 
     sp90.x = this->actor.world.pos.x + (this->unk_368.x * 2.0f);
     sp90.y = this->actor.world.pos.y + (this->unk_368.y * 2.0f);
@@ -397,7 +397,7 @@ void func_808D94D0(EnSw* this, PlayState* play, s32 arg2, s32 arg3, s16 arg4) {
             func_808D91C4(this, spA4);
             Math_Vec3f_Copy(&this->actor.world.pos, &sp78);
             this->actor.floorBgId = sp64;
-            this->actor.speedXZ = 0.0f;
+            this->actor.speed = 0.0f;
         } else {
             if (spA0 != this->actor.floorPoly) {
                 func_808D91C4(this, spA0);
@@ -406,7 +406,7 @@ void func_808D94D0(EnSw* this, PlayState* play, s32 arg2, s32 arg3, s16 arg4) {
             this->actor.floorBgId = sp68;
         }
     } else {
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
         temp_f20 *= 3.0f;
         Math_Vec3f_Copy(&sp90, &sp84);
 
@@ -440,8 +440,8 @@ void func_808D94D0(EnSw* this, PlayState* play, s32 arg2, s32 arg3, s16 arg4) {
     this->actor.shape.rot.y = this->actor.world.rot.y;
     this->actor.shape.rot.z = this->actor.world.rot.z;
 
-    if (this->actor.speedXZ != 0.0f) {
-        this->unk_44C = this->actor.speedXZ;
+    if (this->actor.speed != 0.0f) {
+        this->unk_44C = this->actor.speed;
     }
 
     if (arg2 == 1) {
@@ -555,15 +555,15 @@ s32 func_808D9C18(EnSw* this) {
     f32 new_var;
 
     if ((this->unk_498 == 0xF9) || (this->unk_498 == 0x82) || (this->unk_498 == 0xE4) || (this->unk_498 == 0xE5)) {
-        this->actor.velocity.x = this->actor.speedXZ;
-        this->actor.velocity.z = this->actor.speedXZ;
+        this->actor.velocity.x = this->actor.speed;
+        this->actor.velocity.z = this->actor.speed;
         this->actor.velocity.x *= Math_SinS(this->actor.world.rot.y);
         this->actor.velocity.z *= Math_CosS(this->actor.world.rot.y);
     } else {
-        new_var = this->actor.speedXZ * this->unk_350.x;
-        this->actor.velocity.x = new_var + (this->actor.speedXZ * this->unk_368.x);
-        new_var = this->actor.speedXZ * this->unk_350.z;
-        this->actor.velocity.z = new_var + this->actor.speedXZ * this->unk_368.z;
+        new_var = this->actor.speed * this->unk_350.x;
+        this->actor.velocity.x = new_var + (this->actor.speed * this->unk_368.x);
+        new_var = this->actor.speed * this->unk_350.z;
+        this->actor.velocity.z = new_var + this->actor.speed * this->unk_368.z;
         this->actor.velocity.y = 14.0f;
         Math_Vec3f_Copy(&sp3C, &this->actor.world.pos);
         Math_Vec3f_Copy(&sp30, &this->actor.world.pos);
@@ -635,10 +635,10 @@ void func_808D9F78(EnSw* this, PlayState* play, s32 arg2) {
     }
     Actor_SetScale(&this->actor, 0.02f);
     func_808D9DA0(this);
-    this->actor.speedXZ = 10.0f;
+    this->actor.speed = 10.0f;
     this->unk_44C = 10.0f;
     func_808D94D0(this, play, 0, 0, 0);
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->unk_44C = 0.0f;
     this->unk_450 = 1.0f;
     Math_Vec3f_Copy(&this->actor.home.pos, &this->actor.world.pos);
@@ -647,10 +647,10 @@ void func_808D9F78(EnSw* this, PlayState* play, s32 arg2) {
 
 void func_808DA024(EnSw* this, PlayState* play) {
     func_808D9DA0(this);
-    this->actor.speedXZ = 10.0f;
+    this->actor.speed = 10.0f;
     this->unk_44C = 10.0f;
     func_808D94D0(this, play, 0, 0, 0);
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->unk_44C = 0.0f;
     this->unk_450 = 1.0f;
 }
@@ -791,7 +791,7 @@ void func_808DA578(EnSw* this, PlayState* play) {
         temp_f0 = this->skelAnime.endFrame - this->skelAnime.curFrame;
         this->unk_44C = 0.3f * temp_f0;
         func_808D94D0(this, play, 1, 0, 0);
-        if ((this->actor.speedXZ == 0.0f) && (this->unk_44C != 0.0f)) {
+        if ((this->actor.speed == 0.0f) && (this->unk_44C != 0.0f)) {
             Math_Vec3f_Copy(&sp30, &this->unk_374);
             func_808D9894(this, &sp30);
             temp2 = Math_Atan2S_XY(sp30.z, sp30.x);
@@ -822,7 +822,7 @@ void func_808DA6FC(EnSw* this, PlayState* play) {
         temp_f0 = this->skelAnime.endFrame - this->skelAnime.curFrame;
         this->unk_44C = 0.14f * temp_f0;
         func_808D94D0(this, play, 1, 0, 0);
-        if ((this->actor.speedXZ == 0.0f) && (this->unk_44C != 0.0f)) {
+        if ((this->actor.speed == 0.0f) && (this->unk_44C != 0.0f)) {
             Math_Vec3f_Copy(&sp38, &this->unk_374);
             func_808D9894(this, &sp38);
             temp2 = Math_Atan2S_XY(sp38.z, sp38.x);
@@ -880,7 +880,7 @@ void func_808DA89C(EnSw* this, PlayState* play) {
             temp_f2 = fabsf(this->actor.velocity.y) * 0.6f;
             this->actor.velocity.y = temp_f2;
             this->unk_448 = temp_f2;
-            this->actor.speedXZ = 0.0f;
+            this->actor.speed = 0.0f;
             if ((s32)temp_f2 != 0) {
                 Actor_PlaySfx(&this->actor, NA_SE_EN_STALTURA_BOUND);
             } else {
@@ -963,7 +963,7 @@ void func_808DACF4(EnSw* this, PlayState* play) {
         temp = this->skelAnime.endFrame - this->skelAnime.curFrame;
         this->unk_44C = 0.1f * temp;
         func_808D94D0(this, play, 1, 0, 0);
-        if ((this->actor.speedXZ == 0.0f) && (this->unk_44C != 0.0f)) {
+        if ((this->actor.speed == 0.0f) && (this->unk_44C != 0.0f)) {
 
             Math_Vec3f_Copy(&sp38, &this->unk_374);
             func_808D9894(this, &sp38);

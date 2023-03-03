@@ -156,7 +156,7 @@ void func_80ACE51C(EnFuMato* this, PlayState* play) {
         }
     }
 
-    this->dyna.actor.speedXZ = 2.0f;
+    this->dyna.actor.speed = 2.0f;
     this->dyna.actor.shape.rot.y = Math_Vec3f_Yaw(&this->dyna.actor.world.pos, &this->dyna.actor.parent->world.pos);
     Actor_MoveWithGravity(&this->dyna.actor);
 

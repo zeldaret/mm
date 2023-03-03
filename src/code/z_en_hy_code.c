@@ -207,8 +207,8 @@ s32 EnHy_MoveForwards(EnHy* enHy, f32 speedTarget) {
     s32 reachedEnd = false;
     Vec3f curPointPos;
 
-    Math_SmoothStepToF(&enHy->actor.speedXZ, speedTarget, 0.4f, 1000.0f, 0.0f);
-    rotStep = enHy->actor.speedXZ * 400.0f;
+    Math_SmoothStepToF(&enHy->actor.speed, speedTarget, 0.4f, 1000.0f, 0.0f);
+    rotStep = enHy->actor.speed * 400.0f;
     if (SubS_CopyPointFromPath(enHy->path, enHy->curPoint, &curPointPos) &&
         SubS_MoveActorToPoint(&enHy->actor, &curPointPos, rotStep)) {
         enHy->curPoint++;
@@ -225,8 +225,8 @@ s32 EnHy_MoveBackwards(EnHy* enHy, f32 speedTarget) {
     s32 reachedEnd = false;
     Vec3f curPointPos;
 
-    Math_SmoothStepToF(&enHy->actor.speedXZ, speedTarget, 0.4f, 1000.0f, 0.0f);
-    rotStep = enHy->actor.speedXZ * 400.0f;
+    Math_SmoothStepToF(&enHy->actor.speed, speedTarget, 0.4f, 1000.0f, 0.0f);
+    rotStep = enHy->actor.speed * 400.0f;
     if (SubS_CopyPointFromPath(enHy->path, enHy->curPoint, &curPointPos) &&
         SubS_MoveActorToPoint(&enHy->actor, &curPointPos, rotStep)) {
         enHy->curPoint--;

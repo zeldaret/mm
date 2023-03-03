@@ -71,12 +71,12 @@ void EnEstone_Init(Actor* thisx, PlayState* play) {
     this->actor.shape.rot.y = this->actor.world.rot.y;
 
     if (this->actor.params == ENESTONE_TYPE_LARGE) {
-        this->actor.speedXZ = Rand_ZeroFloat(5.0f) + 2.0f;
+        this->actor.speed = Rand_ZeroFloat(5.0f) + 2.0f;
         this->scale = (Rand_ZeroFloat(1.0f) * 0.005f) + 0.005f;
         this->actor.velocity.y = Rand_ZeroFloat(10.0f) + 15.0f;
         this->actor.gravity = -2.0f;
     } else {
-        this->actor.speedXZ = Rand_ZeroFloat(3.0f) + 1.0f;
+        this->actor.speed = Rand_ZeroFloat(3.0f) + 1.0f;
         this->scale = (Rand_ZeroFloat(1.0f) * 0.003f) + 0.003f;
         this->actor.velocity.y = Rand_ZeroFloat(5.0f) + 7.0f;
         this->actor.gravity = -1.0f;
@@ -139,7 +139,7 @@ void EnEstone_Active(EnEstone* this, PlayState* play) {
         velocity.y = this->actor.floorHeight;
         Actor_SpawnFloorDustRing(play, &this->actor, &velocity, 0.0f, 10, 6.0f, 50, 30, true);
         this->actor.velocity.y = this->actor.gravity = 0.0f;
-        this->actor.speedXZ *= 0.3f;
+        this->actor.speed *= 0.3f;
         this->actor.shape.shadowScale = 0.0f;
         this->inactive = true;
         this->timer = 50;

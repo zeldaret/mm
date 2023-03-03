@@ -238,7 +238,7 @@ void ArmsHook_Shoot(ArmsHook* this, PlayState* play) {
         Actor_MoveWithGravity(&this->actor);
         Math_Vec3f_Diff(&this->actor.world.pos, &this->actor.prevPos, &prevFrameDiff);
         Math_Vec3f_Sum(&this->unk1E0, &prevFrameDiff, &this->unk1E0);
-        this->actor.shape.rot.x = Math_Atan2S_XY(this->actor.speedXZ, -this->actor.velocity.y);
+        this->actor.shape.rot.x = Math_Atan2S_XY(this->actor.speed, -this->actor.velocity.y);
         sp60.x = this->unk1EC.x - (this->unk1E0.x - this->unk1EC.x);
         sp60.y = this->unk1EC.y - (this->unk1E0.y - this->unk1EC.y);
         sp60.z = this->unk1EC.z - (this->unk1E0.z - this->unk1EC.z);

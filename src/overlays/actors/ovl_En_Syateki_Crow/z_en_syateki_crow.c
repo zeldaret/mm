@@ -116,7 +116,7 @@ void EnSyatekiCrow_Destroy(Actor* thisx, PlayState* play) {
 
 void EnSyatekiCrow_SetupWaitForSignal(EnSyatekiCrow* this) {
     Actor_SetScale(&this->actor, 0.03f);
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actor.gravity = 0.0f;
     this->actor.world = this->actor.home;
     this->actor.prevPos = this->actor.home.pos;
@@ -171,7 +171,7 @@ void EnSyatekiCrow_WaitToMove(EnSyatekiCrow* this, PlayState* play) {
     if (((EN_SYATEKI_CROW_GET_WAIT_MOD(&this->actor) * 20) + 20) < this->waitTimer) {
         Actor_PlaySfx(this->actor.parent, NA_SE_EN_KAICHO_CRY);
         this->waitTimer = 0;
-        this->actor.speedXZ = EN_SYATEKI_CROW_GET_SPEED_MOD(&this->actor) + 6.0f;
+        this->actor.speed = EN_SYATEKI_CROW_GET_SPEED_MOD(&this->actor) + 6.0f;
         this->actor.gravity = -0.5f;
         this->actionFunc = EnSyatekiCrow_Fly;
     } else {
@@ -222,7 +222,7 @@ void EnSyatekiCrow_SetupDead(EnSyatekiCrow* this) {
 
     syatekiMan->score += 60;
     this->isActive = false;
-    this->actor.speedXZ *= Math_CosS(this->actor.world.rot.x);
+    this->actor.speed *= Math_CosS(this->actor.world.rot.x);
     this->actor.velocity.y = 0.0f;
     Animation_Change(&this->skelAnime, &gGuayFlyAnim, 0.4f, 0.0f, 0.0f, ANIMMODE_LOOP_INTERP, -3.0f);
     this->actor.bgCheckFlags &= ~1;
@@ -234,7 +234,7 @@ void EnSyatekiCrow_SetupDead(EnSyatekiCrow* this) {
 void EnSyatekiCrow_Dead(EnSyatekiCrow* this, PlayState* play) {
     EnSyatekiMan* syatekiMan = (EnSyatekiMan*)this->actor.parent;
 
-    Math_StepToF(&this->actor.speedXZ, 0.0f, 0.5f);
+    Math_StepToF(&this->actor.speed, 0.0f, 0.5f);
     this->actor.colorFilterTimer = 40;
 
     if (this->actor.colorFilterParams & 0x4000) {

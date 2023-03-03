@@ -332,7 +332,7 @@ void ObjTokeidai_ExteriorGear_OpenedIdle(ObjTokeidai* this, PlayState* play) {
     if (Cutscene_CheckActorAction(play, 132) &&
         play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 132)]->action == 2) {
         this->actionFunc = ObjTokeidai_ExteriorGear_Collapse;
-        this->actor.speedXZ = this->actor.scale.y * 5.0f;
+        this->actor.speed = this->actor.scale.y * 5.0f;
         this->actor.velocity.y = 0.0f;
         this->actor.terminalVelocity = this->actor.scale.y * -50.0f;
         this->actor.gravity = this->actor.scale.y * -5.0f;

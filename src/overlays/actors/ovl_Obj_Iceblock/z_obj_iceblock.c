@@ -206,10 +206,10 @@ s32 func_80A236D4(ObjIceblock* this, Vec3f* arg1) {
     s32 sp20;
 
     sp26 = Math_Vec3f_Yaw(&this->dyna.actor.world.pos, arg1);
-    sp2C = Math_SinS(sp26) * this->dyna.actor.speedXZ;
+    sp2C = Math_SinS(sp26) * this->dyna.actor.speed;
     sp2C = fabsf(sp2C) + 0.01f;
 
-    sp28 = Math_CosS(sp26) * this->dyna.actor.speedXZ;
+    sp28 = Math_CosS(sp26) * this->dyna.actor.speed;
     sp28 = fabsf(sp28) + 0.01f;
 
     sp20 = Math_StepToF(&this->dyna.actor.world.pos.x, arg1->x, sp2C);
@@ -892,7 +892,7 @@ void func_80A25440(ObjIceblock* this) {
 }
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32_DIV1000(speedXZ, 16000, ICHAIN_CONTINUE),
+    ICHAIN_F32_DIV1000(speed, 16000, ICHAIN_CONTINUE),
     ICHAIN_F32_DIV1000(gravity, -1800, ICHAIN_CONTINUE),
     ICHAIN_F32_DIV1000(terminalVelocity, -26000, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_CONTINUE),

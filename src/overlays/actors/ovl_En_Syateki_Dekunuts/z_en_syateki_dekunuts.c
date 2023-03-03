@@ -164,7 +164,7 @@ void EnSyatekiDekunuts_Destroy(Actor* thisx, PlayState* play) {
 void EnSyatekiDekunuts_SetupWaitForSignal(EnSyatekiDekunuts* this) {
     Animation_PlayOnceSetSpeed(&this->skelAnime, &gDekuScrubUpAnim, 0.0f);
 
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actor.world = this->actor.home;
     this->actor.prevPos = this->actor.home.pos;
     this->actor.shape.rot = this->actor.world.rot;
