@@ -154,13 +154,13 @@ void EnNiw_Init(Actor* thisx, PlayState* play) {
     }
 
     if (this->niwType == NIW_TYPE_HELD) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CHICKEN_CRY_M);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_CHICKEN_CRY_M);
         this->sfxTimer1 = 30;
         this->heldTimer = 30;
         this->actor.flags &= ~ACTOR_FLAG_1; // targetable OFF
         this->niwState = NIW_STATE_HELD;
         this->actionFunc = EnNiw_Held;
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
         this->unk2BC.z = 0.0f;
         this->actor.velocity.y = 0.0f;
         this->actor.gravity = 0.0f;
@@ -366,13 +366,13 @@ void EnNiw_Idle(EnNiw* this, PlayState* play) {
     s16 nextAnimIndex;
 
     if (this->niwType == NIW_TYPE_REGULAR) {
-        if (Actor_HasParent(&this->actor, play)) {                    // picked up
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CHICKEN_CRY_M); // crow
+        if (Actor_HasParent(&this->actor, play)) {               // picked up
+            Actor_PlaySfx(&this->actor, NA_SE_EV_CHICKEN_CRY_M); // crow
             this->sfxTimer1 = 30;
             this->heldTimer = 30;
             this->actor.flags &= ~ACTOR_FLAG_1; // targetable OFF
             this->niwState = NIW_STATE_HELD;
-            this->actor.speedXZ = 0.0f;
+            this->actor.speed = 0.0f;
             this->actionFunc = EnNiw_Held;
             return;
         } else {
@@ -415,7 +415,7 @@ void EnNiw_Idle(EnNiw* this, PlayState* play) {
         } else {
             this->unkIdleTimer = 4;
             if (this->actor.bgCheckFlags & 1) { // hit floor
-                this->actor.speedXZ = 0.0f;
+                this->actor.speed = 0.0f;
                 this->actor.velocity.y = 3.5f; // hopping up and down
             }
         }
@@ -476,7 +476,7 @@ void EnNiw_Held(EnNiw* this, PlayState* play) {
         this->actor.shape.rot.z = 0;
         rotZ = this->actor.shape.rot.z;
         this->actor.velocity.y = 8.0f;
-        this->actor.speedXZ = 4.0f;
+        this->actor.speed = 4.0f;
         this->actor.gravity = -2.0f;
         this->niwState = NIW_STATE_FALLING;
         this->unk2EC = 0;
@@ -497,7 +497,7 @@ void EnNiw_Thrown(EnNiw* this, PlayState* play) {
         if (this->actor.bgCheckFlags & 1) { // hit floor
             this->unk2EC = 1;
             this->hoppingTimer = 80; // hop timer
-            this->actor.speedXZ = 0.0f;
+            this->actor.speed = 0.0f;
             this->actor.velocity.y = 4.0f;
         } else {
             return; // wait until back on floor
@@ -519,14 +519,14 @@ void EnNiw_Thrown(EnNiw* this, PlayState* play) {
 
     if (Actor_HasParent(&this->actor, play)) {
         // picked up again before could run off
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CHICKEN_CRY_M); // crow
+        Actor_PlaySfx(&this->actor, NA_SE_EV_CHICKEN_CRY_M); // crow
         this->sfxTimer1 = 30;
         this->unk2EC = 0;
         this->heldTimer = 30;
         this->actor.flags &= ~ACTOR_FLAG_1; // targetable OFF
         this->niwState = NIW_STATE_HELD;
         this->actionFunc = EnNiw_Held;
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
     } else {
         if (this->hoppingTimer > 5) {
             Actor_LiftActor(&this->actor, play);
@@ -544,7 +544,7 @@ void EnNiw_Swimming(EnNiw* this, PlayState* play) {
         EnNiw_SpawnAttackNiw(this, play); // spawn attack niw
     }
 
-    this->actor.speedXZ = 2.0f;
+    this->actor.speed = 2.0f;
     if (this->actor.bgCheckFlags & 0x20) { // touching water
         this->actor.gravity = 0.0f;
         if (this->actor.depthInWater > 15.0f) {
@@ -559,16 +559,16 @@ void EnNiw_Swimming(EnNiw* this, PlayState* play) {
         }
         if (this->actor.bgCheckFlags & 8) { // hit a wall
             this->actor.velocity.y = 10.0f; // fly up in straight line
-            this->actor.speedXZ = 1.0f;
+            this->actor.speed = 1.0f;
         }
     } else {
         this->actor.gravity = -2.0f;
         if (this->actor.bgCheckFlags & 8) { // hit a wall
             this->actor.velocity.y = 10.0f; // fly up in straight line
-            this->actor.speedXZ = 1.0f;
+            this->actor.speed = 1.0f;
             this->actor.gravity = 0.0f;
         } else {
-            this->actor.speedXZ = 4.0f;
+            this->actor.speed = 4.0f;
         }
 
         if (this->actor.bgCheckFlags & 1) { // hit floor
@@ -629,7 +629,7 @@ void EnNiw_SetupCuccoStorm(EnNiw* this, PlayState* play) {
         this->targetLimbRots[1] = 0.0f;
         this->targetLimbRots[2] = 0.0f;
         this->unkTimer24C = 10;
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CHICKEN_CRY_M);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_CHICKEN_CRY_M);
     }
 
     if (this->cuccoStormTimer == 0) {
@@ -646,7 +646,7 @@ void EnNiw_SetupCuccoStorm(EnNiw* this, PlayState* play) {
 void EnNiw_CuccoStorm(EnNiw* this, PlayState* play) {
     EnNiw_SpawnAttackNiw(this, play);
     if (this->cuccoStormTimer == 1) { // not countdown to 0? mistype?
-        this->actor.speedXZ = 3.0f;
+        this->actor.speed = 3.0f;
         this->isRunningRight = Rand_ZeroFloat(1.99f);
         this->generalTimer1 = 0;
         this->unkTimer24E = this->generalTimer1;
@@ -662,7 +662,7 @@ void EnNiw_SetupRunAway(EnNiw* this) {
     this->isRunningRight = Rand_ZeroFloat(1.99f);
     this->niwState = NIW_STATE_RUNNING;
     this->actionFunc = EnNiw_RunAway;
-    this->actor.speedXZ = 4.0f;
+    this->actor.speed = 4.0f;
 }
 
 void EnNiw_RunAway(EnNiw* this, PlayState* play) {
@@ -678,7 +678,7 @@ void EnNiw_RunAway(EnNiw* this, PlayState* play) {
         this->unk2A4.z = this->unk2B0.z = this->actor.world.pos.z;
         this->generalTimer2 = this->generalTimer1 = this->unk298 = 0;
         this->unk300 = this->unk304 = 0;
-        this->actor.speedXZ = 0;
+        this->actor.speed = 0;
         this->targetLimbRots[8] = 0;
         this->targetLimbRots[6] = 0;
         this->targetLimbRots[5] = 0;
@@ -715,7 +715,7 @@ void EnNiw_CheckRage(EnNiw* this, PlayState* play) {
             this->iframeTimer = 10;
             this->sfxTimer1 = 30;
             this->unk29E = 1;
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CHICKEN_CRY_M); // crow
+            Actor_PlaySfx(&this->actor, NA_SE_EV_CHICKEN_CRY_M); // crow
             this->runAwayTimer = 100;
             this->unk2EC = 0;
             EnNiw_SetupRunAway(this);
@@ -746,13 +746,13 @@ void EnNiw_CheckRage(EnNiw* this, PlayState* play) {
                 this->actionFunc = EnNiw_Trigger;
                 this->unk304 = 0.0f;
                 this->unk300 = 0.0f;
-                this->actor.speedXZ = 0.0f;
+                this->actor.speed = 0.0f;
 
             } else {
                 this->iframeTimer = 10;
                 this->sfxTimer1 = 30;
                 this->unk29E = 1;
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CHICKEN_CRY_M); // crow
+                Actor_PlaySfx(&this->actor, NA_SE_EV_CHICKEN_CRY_M); // crow
                 this->runAwayTimer = 100;
                 this->unk2EC = 0;
                 EnNiw_SetupRunAway(this);
@@ -857,7 +857,7 @@ void EnNiw_Update(Actor* thisx, PlayState* play) {
             this->actor.world.pos.y = this->actor.home.pos.y + 300.0f;
         }
 
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
         this->actor.gravity = -2.0f;
         Math_Vec3f_Copy(&this->unk2A4, &this->actor.home.pos);
         Math_Vec3f_Copy(&this->unk2B0, &this->actor.home.pos);
@@ -911,16 +911,16 @@ void EnNiw_Update(Actor* thisx, PlayState* play) {
     EnNiw_CheckRage(this, play);
     if (this->flutterSfxTimer == 0 && this->niwState == NIW_STATE_HELD) {
         this->flutterSfxTimer = 7;
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_CHICKEN_FLUTTER);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_CHICKEN_FLUTTER);
     }
 
     if (this->sfxTimer1 == 0) {
         if (this->niwState != NIW_STATE_IDLE) {
             this->sfxTimer1 = 30;
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CHICKEN_CRY_A);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_CHICKEN_CRY_A);
         } else {
             this->sfxTimer1 = 300;
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CHICKEN_CRY_N);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_CHICKEN_CRY_N);
         }
     }
 
