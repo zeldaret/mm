@@ -3,6 +3,7 @@
  * Overlay: ovl_En_Sth
  * Description: Guy looking at moon in South Clock Town,
  *              And the Cured Swamp Spider House man who gives you Mask of Truth
+ *                (the cursed version is EnSsh)
  *              And the man who wants to buy Oceanside Spider House from you with rupees or Wallet
  */
 
