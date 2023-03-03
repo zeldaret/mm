@@ -61,7 +61,7 @@ void BgLotus_SetScaleXZ(BgLotus* this) {
     f32 scale;
 
     if (this->dyna.actor.params == 0) {
-        scale = sin_rad(this->timer * 0.7853982f) * ((0.014f * ((f32)this->timer / 8)) + 0.01f);
+        scale = sin_rad(this->timer * (M_PI / 4)) * ((0.014f * ((f32)this->timer / 8)) + 0.01f);
         this->dyna.actor.scale.x = (1.0f + scale) * 0.1f;
         this->dyna.actor.scale.z = (1.0f - scale) * 0.1f;
     }
@@ -72,7 +72,7 @@ void BgLotus_Wait(BgLotus* this, PlayState* play) {
 
     this->timer2--;
 
-    moveDist = sin_rad(this->timer2 * 0.06544985f) * 6.0f;
+    moveDist = sin_rad(this->timer2 * (M_PI / 48)) * 6.0f;
 
     if (this->dyna.actor.params == 0) {
         this->dyna.actor.world.pos.x =
@@ -133,7 +133,7 @@ void BgLotus_Sink(BgLotus* this, PlayState* play) {
         this->timer--;
         BgLotus_SetScaleXZ(this);
     } else {
-        if (Math_StepToF(&this->dyna.actor.scale.x, 0, 0.0050000003539f)) {
+        if (Math_StepToF(&this->dyna.actor.scale.x, 0, 5.0f * 0.001f)) {
             this->dyna.actor.draw = NULL;
             this->timer = 100;
             DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);

@@ -169,12 +169,17 @@ void BgCtowerGear_UpdateOrgan(Actor* thisx, PlayState* play) {
                 this->dyna.actor.draw = NULL;
                 DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
                 break;
+
             case 2:
                 this->dyna.actor.draw = BgCtowerGear_DrawOrgan;
                 DynaPoly_EnableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
                 break;
+
             case 3:
                 Actor_Kill(&this->dyna.actor);
+                break;
+
+            default:
                 break;
         }
     }

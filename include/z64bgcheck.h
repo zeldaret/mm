@@ -205,8 +205,8 @@ typedef struct {
 #define BGACTOR_IN_USE (1 << 0) // The bgActor entry is in use
 #define BGACTOR_1 (1 << 1)
 #define BGACTOR_COLLISION_DISABLED (1 << 2) // The collision of the bgActor is disabled
-#define BGACTOR_CEILING_COLLISION_DISABLED (1 << 3) // The ceilings in the collision of the bgActor are ignored
-#define BGACTOR_FLOOR_COLLISION_DISABLED (1 << 5) // The ground in the collision of the bgActor are ignored
+#define BGACTOR_CEILING_COLLISION_DISABLED (1 << 3) // The ceiling collision of the bgActor is ignored
+#define BGACTOR_FLOOR_COLLISION_DISABLED (1 << 5) // The floor collision of the bgActor is ignored
 
 typedef struct {
     /* 0x0000 */ u8 bitFlag;

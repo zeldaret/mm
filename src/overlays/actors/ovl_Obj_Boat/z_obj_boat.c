@@ -100,7 +100,7 @@ void ObjBoat_Update(Actor* thisx, PlayState* play) {
     s16 yawTarget = this->dyna.actor.shape.rot.y;
     Vec3f nextPoint;
 
-    if (isPlayerOnTop || ((DynaPolyActor_IsActorOnTop(&this->dyna)))) {
+    if (isPlayerOnTop || DynaPolyActor_IsActorOnTop(&this->dyna)) {
         if ((this->timer == 0) &&
             (OBJBOAT_GET_4000(thisx) || (isPlayerOnTop && (this->curPointIndex == this->lastPointIndex)))) {
             this->direction = -this->direction;

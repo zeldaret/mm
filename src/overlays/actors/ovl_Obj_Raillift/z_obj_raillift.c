@@ -226,24 +226,20 @@ void ObjRaillift_Update(Actor* thisx, PlayState* play) {
             ActorCutscene_Stop(this->dyna.actor.cutscene);
         }
     }
-    if (OBJRAILLIFT_SHOULD_REACT_TO_WEIGHT(thisx)) {
+    if (OBJRAILLIFT_REACT_TO_PLAYER_ON_TOP(thisx)) {
         s32 requiredScopeTemp;
 
-        this->isWeightOnPrev = this->isWeightOn;
-        if (DynaPolyActor_IsPlayerOnTop(&this->dyna)) {
-            this->isWeightOn = true;
-        } else {
-            this->isWeightOn = false;
-        }
-        if ((this->isWeightOn != this->isWeightOnPrev) && (this->maxHeight < 1.0f)) {
+        this->isPlayerOnTopPrev = this->isPlayerOnTop;
+        this->isPlayerOnTop = DynaPolyActor_IsPlayerOnTop(&this->dyna) ? true : false;
+        if ((this->isPlayerOnTop != this->isPlayerOnTopPrev) && (this->maxHeight < 1.0f)) {
             this->cycle = -0x8000;
             this->maxHeight = 6.0f;
         }
         this->cycle += 0xCE4;
         Math_StepToF(&this->maxHeight, 0.0f, 0.12f);
-        step = this->isWeightOn ? Math_CosS(fabsf(this->cycleSpeed) * 2048.0f) + 0.02f
-                                : Math_SinS(fabsf(this->cycleSpeed) * 2048.0f) + 0.02f;
-        target = this->isWeightOn ? -8.0f : 0.0f;
+        step = this->isPlayerOnTop ? Math_CosS(fabsf(this->cycleSpeed) * 2048.0f) + 0.02f
+                                   : Math_SinS(fabsf(this->cycleSpeed) * 2048.0f) + 0.02f;
+        target = this->isPlayerOnTop ? -8.0f : 0.0f;
         Math_StepToF(&this->cycleSpeed, target, step);
         this->dyna.actor.shape.yOffset = ((Math_SinS(this->cycle) * this->maxHeight) + this->cycleSpeed) * 10.0f;
     }

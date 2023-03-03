@@ -327,7 +327,7 @@ void func_809CE4C8(BgSpdweb* this, PlayState* play) {
     Math_ApproachZeroF(&this->unk_164, 1.0f, 0.8f);
 
     if (this->unk_162 == 4) {
-        if ((this->unk_161 != 0) || ((DynaPolyActor_IsPlayerOnTop(&this->dyna) != 0) && (this->unk_164 > 2.0f))) {
+        if ((this->unk_161 != 0) || (DynaPolyActor_IsPlayerOnTop(&this->dyna) && (this->unk_164 > 2.0f))) {
             player->actor.velocity.y = this->unk_164 * 0.7f;
             player->fallStartHeight = (SQ(this->unk_164) * 0.15f) + this->dyna.actor.world.pos.y;
             this->unk_161 = 0;

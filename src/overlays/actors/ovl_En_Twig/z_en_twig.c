@@ -72,6 +72,7 @@ void EnTwig_Init(Actor* thisx, PlayState* play2) {
         case 0:
             Actor_Kill(&this->dyna.actor);
             break;
+
         case 1:
             if (!sRingsHaveSpawned) {
                 sRingCount = CHECK_WEEKEVENTREG(WEEKEVENTREG_24_04) ? 25 : 20;
@@ -94,10 +95,14 @@ void EnTwig_Init(Actor* thisx, PlayState* play2) {
             DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
             func_80AC0A7C(this, play);
             break;
+
         case 2:
             Actor_SetScale(&this->dyna.actor, 1.0f);
             this->dyna.actor.uncullZoneScale = this->dyna.actor.uncullZoneDownward = this->dyna.actor.scale.x * 880.0f;
             func_80AC0A54(this, play);
+            break;
+
+        default:
             break;
     }
 }
