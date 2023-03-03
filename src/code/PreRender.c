@@ -6,6 +6,7 @@
  * divot filters.
  */
 
+#include "z64prerender.h"
 #include "global.h"
 #include "libc/alloca.h"
 
