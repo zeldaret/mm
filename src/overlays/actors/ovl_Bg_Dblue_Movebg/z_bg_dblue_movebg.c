@@ -422,7 +422,7 @@ void func_80A2A444(BgDblueMovebg* this, PlayState* play) {
         player->stateFlags2 &= ~PLAYER_STATE2_10;
         this->dyna.pushForce = 0.0f;
         Flags_SetSwitch(play, this->unk_1C0);
-        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_STONEDOOR_STOP);
+        Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_STONEDOOR_STOP);
 
         if (func_80A29A80(play, this->unk_1C8, this->unk_1C4)) {
             this->unk_172 |= 1;
@@ -524,7 +524,7 @@ void func_80A2A7F8(BgDblueMovebg* this, PlayState* play) {
         this->unk_18A = 0;
         this->unk_17E = 0;
 
-        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_STONEDOOR_STOP);
+        Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_STONEDOOR_STOP);
 
         if (func_80A29A80(play, this->unk_1C8, this->unk_1C4)) {
             this->unk_172 |= 1;

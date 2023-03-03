@@ -189,7 +189,7 @@ void EnMinifrog_Jump(EnMinifrog* this) {
             if (Animation_OnFrame(&this->skelAnime, 4.0f)) {
                 this->actor.bgCheckFlags &= ~1;
                 this->actor.velocity.y = 6.0f;
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_FROG_JUMP);
+                Actor_PlaySfx(&this->actor, NA_SE_EV_FROG_JUMP);
                 this->jumpState = MINIFROG_STATE_AIR;
             }
             break;

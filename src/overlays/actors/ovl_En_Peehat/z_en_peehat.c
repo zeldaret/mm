@@ -283,7 +283,7 @@ void func_80897390(EnPeehat* this, PlayState* play) {
     }
 
     this->unk_2B0 = 8;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PIHAT_DAMAGE);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_PIHAT_DAMAGE);
 }
 
 void func_80897498(EnPeehat* this) {
@@ -327,7 +327,7 @@ void func_80897648(EnPeehat* this) {
                          Animation_GetLastFrame(&object_ph_Anim_0009C4), ANIMMODE_ONCE, 0.0f);
     }
     this->unk_2B0 = 16;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PIHAT_UP);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_PIHAT_UP);
     this->actionFunc = func_808976DC;
 }
 
@@ -474,7 +474,7 @@ void func_80897D48(EnPeehat* this, PlayState* play) {
     if (SkelAnime_Update(&this->skelAnime)) {
         func_80897498(this);
         this->actor.world.pos.y = this->actor.floorHeight;
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PIHAT_LAND);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_PIHAT_LAND);
     } else if (this->actor.floorHeight < this->actor.world.pos.y) {
         Math_SmoothStepToF(&this->actor.world.pos.y, this->actor.floorHeight, 0.3f, 3.5f, 0.25f);
         if ((this->actor.world.pos.y - this->actor.floorHeight) < 60.0f) {
@@ -622,7 +622,7 @@ void func_80898454(EnPeehat* this, PlayState* play) {
 
 void func_808984E0(EnPeehat* this) {
     Animation_MorphToPlayOnce(&this->skelAnime, &object_ph_Anim_000844, -4.0f);
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PIHAT_DAMAGE);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_PIHAT_DAMAGE);
     this->unk_2B2 = 4000;
     this->unk_2B0 = 14;
     this->actor.speedXZ = 10.0f;
@@ -698,7 +698,7 @@ void func_8089874C(EnPeehat* this, PlayState* play) {
             if (this->actor.colChkInfo.damageEffect == 5) {
                 this->unk_2B0 = 40;
                 Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 255, COLORFILTER_BUFFLAG_OPA, 40);
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_FREEZE);
                 this->drawDmgEffScale = 1.1f;
                 this->drawDmgEffAlpha = 2.0f;
                 this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_LARGE;
@@ -706,7 +706,7 @@ void func_8089874C(EnPeehat* this, PlayState* play) {
             } else if (this->actor.colChkInfo.damageEffect == 1) {
                 this->unk_2B0 = 40;
                 Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 200, COLORFILTER_BUFFLAG_OPA, 40);
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_FREEZE);
                 func_80898414(this);
             } else if (this->actor.colChkInfo.damageEffect == 3) {
                 func_80897170(this);

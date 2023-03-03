@@ -278,8 +278,8 @@ void EnGuardNuts_Burrow(EnGuardNuts* this, PlayState* play) {
     this->targetHeadPos.y = 0;
     this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
     this->targetHeadPos.x = this->targetHeadPos.y;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_DOWN);
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_UP);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_DOWN);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_UP);
     this->actionFunc = EnGuardNuts_SetupUnburrow;
 }
 
@@ -306,7 +306,7 @@ void EnGuardNuts_Unburrow(EnGuardNuts* this, PlayState* play) {
             Math_Vec3f_Copy(&digPos, &this->actor.world.pos);
             digPos.y = this->actor.floorHeight;
             EffectSsHahen_SpawnBurst(play, &digPos, 4.0f, 0, 10, 3, 15, HAHEN_OBJECT_DEFAULT, 10, NULL);
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_UP);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_UP);
             D_80ABBE20 = 0;
             if (this->guardTextIndex == 9) {
                 this->hasCompletedConversation = true;
@@ -329,7 +329,7 @@ void EnGuardNuts_Update(Actor* thisx, PlayState* play) {
     }
     if ((this->animIndex == WALK_ANIM) &&
         ((Animation_OnFrame(&this->skelAnime, 1.0f)) || (Animation_OnFrame(&this->skelAnime, 5.0f)))) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_WALK);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_WALK);
     }
 
     this->actionFunc(this, play);

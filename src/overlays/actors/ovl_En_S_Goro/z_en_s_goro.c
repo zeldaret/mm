@@ -765,10 +765,10 @@ void EnSGoro_UpdateSleeping(EnSGoro* this, PlayState* play) {
         if (this->snorePhase == 0) {
             if (this->actionFlags & EN_S_GORO_ACTIONFLAG_SNOREPHASE) {
                 this->actionFlags &= ~EN_S_GORO_ACTIONFLAG_SNOREPHASE;
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_GOLON_SNORE2);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_GOLON_SNORE2);
             } else {
                 this->actionFlags |= EN_S_GORO_ACTIONFLAG_SNOREPHASE;
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_GOLON_SNORE1);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_GOLON_SNORE1);
             }
         }
     } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_22_04)) {

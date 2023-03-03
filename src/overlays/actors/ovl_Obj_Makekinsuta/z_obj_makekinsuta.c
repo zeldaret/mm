@@ -113,7 +113,7 @@ void ObjMakekinsuta_Update(Actor* thisx, PlayState* play) {
     } else {
         if (this->unk144 >= 0) {
             if (this->unk144 == 0) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALGOLD_ROLL);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_STALGOLD_ROLL);
                 if (Rand_ZeroOne() < 0.1f) {
                     this->unk144 = Rand_S16Offset(0x28, 0x50);
                 } else {

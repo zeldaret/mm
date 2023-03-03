@@ -189,7 +189,7 @@ void EnCrow_FlyIdle(EnCrow* this, PlayState* play) {
         } else {
             this->yawTarget -= Rand_S16Offset(0x1000, 0x1000);
         }
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KAICHO_CRY);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_KAICHO_CRY);
     }
 
     if ((this->actor.depthInWater > -40.0f) || (this->actor.bgCheckFlags & 1)) {
@@ -278,7 +278,7 @@ void EnCrow_DiveAttack(EnCrow* this, PlayState* play) {
 
         if (this->collider.base.atFlags & AT_HIT) {
             this->collider.base.atFlags &= ~AT_HIT;
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KAICHO_ATTACK);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_KAICHO_ATTACK);
         }
         EnCrow_SetupFlyIdle(this);
     }
@@ -303,7 +303,7 @@ void EnCrow_SetupDamaged(EnCrow* this, PlayState* play) {
     this->actor.bgCheckFlags &= ~1;
     scale = (this->actor.scale.x * 100.0f);
     this->actor.world.pos.y += 20.0f * scale;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KAICHO_DEAD);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_KAICHO_DEAD);
 
     if (this->actor.colChkInfo.damageEffect == GUAY_DMGEFF_ICE) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX;
@@ -393,7 +393,7 @@ void EnCrow_SetupTurnAway(EnCrow* this) {
     } else {
         Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 255, COLORFILTER_BUFFLAG_OPA, 40);
     }
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_FREEZE);
     this->actionFunc = EnCrow_TurnAway;
 }
 
@@ -528,7 +528,7 @@ void EnCrow_Update(Actor* thisx, PlayState* play) {
     Actor_SetFocus(&this->actor, height);
 
     if ((this->actor.colChkInfo.health != 0) && (Animation_OnFrame(&this->skelAnime, 3.0f))) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KAICHO_FLUTTER);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_KAICHO_FLUTTER);
     }
     if (this->drawDmgEffAlpha > 0.0f) {
         if (this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {

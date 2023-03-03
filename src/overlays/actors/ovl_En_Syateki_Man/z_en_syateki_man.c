@@ -1012,7 +1012,7 @@ void EnSyatekiMan_Swamp_StartGame(EnSyatekiMan* this, PlayState* play) {
         this->flagsIndex = 0;
         this->score = 0;
         player->stateFlags1 &= ~PLAYER_STATE1_20;
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_FOUND);
+        Actor_PlaySfx(&this->actor, NA_SE_SY_FOUND);
         this->dekuScrubFlags = (1 << 4) | (1 << 3) | (1 << 2) | (1 << 1) | (1 << 0);
         this->guayFlags = 0;
         this->wolfosFlags = 0;
@@ -1036,7 +1036,7 @@ void EnSyatekiMan_Swamp_RunGame(EnSyatekiMan* this, PlayState* play) {
         // Spawn three guays after the player has killed all Deku Scrubs, or after 140 frames.
         sHasSpawnedGuaysForThisWave = true;
         this->perGameVar1.guaySpawnTimer = 0;
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_FOUND);
+        Actor_PlaySfx(&this->actor, NA_SE_SY_FOUND);
         this->guayFlags = sGuayFlagsPerWave[this->flagsIndex];
         if (this->flagsIndex == 3) {
             this->flagsIndex = 0;
@@ -1168,7 +1168,7 @@ void EnSyatekiMan_Swamp_AddBonusPoints(EnSyatekiMan* this, PlayState* play) {
             gSaveContext.timerStopTimes[TIMER_ID_MINIGAME_1] += SECONDS_TO_TIMER(1);
             play->interfaceCtx.minigamePoints += 10;
             this->score += 10;
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_TRE_BOX_APPEAR);
+            Actor_PlaySfx(&this->actor, NA_SE_SY_TRE_BOX_APPEAR);
             sBonusTimer = 0;
         } else {
             sBonusTimer++;
@@ -1342,7 +1342,7 @@ void EnSyatekiMan_Town_RunGame(EnSyatekiMan* this, PlayState* play) {
         if ((sModFromLosingTime == (timer % 50)) && (this->perGameVar1.octorokState >= SG_OCTO_STATE_INITIAL)) {
             if (this->flagsIndex < 15) {
                 this->octorokFlags = sOctorokFlagsPerWave[this->flagsIndex++];
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_FOUND);
+                Actor_PlaySfx(&this->actor, NA_SE_SY_FOUND);
                 this->perGameVar1.octorokState = SG_OCTO_STATE_SPAWNING;
             }
         }

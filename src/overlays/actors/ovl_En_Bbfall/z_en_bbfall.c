@@ -223,7 +223,7 @@ s32 EnBbfall_IsTouchingLava(EnBbfall* this, PlayState* play) {
 
 void EnBbfall_PlaySfx(EnBbfall* this) {
     if (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 5.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BUBLE_MOUTH);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_BUBLE_MOUTH);
     }
 
     func_800B9010(&this->actor, NA_SE_EN_BUBLEFALL_FIRE - SFX_FLAG);
@@ -306,7 +306,7 @@ void EnBbfall_SetupEmerge(EnBbfall* this) {
     this->actor.velocity.y = 17.0f;
     EnBbfall_EnableColliders(this);
     this->actor.flags |= ACTOR_FLAG_1;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BUBLEFALL_APPEAR);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_BUBLEFALL_APPEAR);
     this->actionFunc = EnBbfall_Emerge;
 }
 
@@ -376,7 +376,7 @@ void EnBbfall_SetupDown(EnBbfall* this) {
     this->flameScaleY = 0.0f;
     this->flameScaleX = 0.0f;
     this->actor.gravity = -2.0f;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BUBLE_DOWN);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_BUBLE_DOWN);
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->actionFunc = EnBbfall_Down;
 }
@@ -391,9 +391,9 @@ void EnBbfall_Down(EnBbfall* this, PlayState* play) {
             return;
         }
 
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_EYEGOLE_ATTACK);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_EYEGOLE_ATTACK);
         if (this->timer == 0) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BUBLE_UP);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_BUBLE_UP);
             EnBbfall_EnableColliders(this);
             this->actor.velocity.y = 8.0f;
             EnBbfall_SetupFly(this);
@@ -413,7 +413,7 @@ void EnBbfall_Down(EnBbfall* this, PlayState* play) {
 
     this->actor.world.rot.y = this->actor.shape.rot.y;
     if (Animation_OnFrame(&this->skelAnime, 5.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BUBLE_WING);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_BUBLE_WING);
     }
 
     if (this->timer > 0) {
@@ -478,7 +478,7 @@ void EnBbfall_Dead(EnBbfall* this, PlayState* play) {
 
 void EnBbfall_SetupDamage(EnBbfall* this) {
     this->collider.base.acFlags &= ~AC_ON;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BUBLE_DAMAGE);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_BUBLE_DAMAGE);
     func_800BE5CC(&this->actor, &this->collider, 0);
 
     if (this->actor.colChkInfo.damageEffect == EN_BBFALL_DMGEFF_ZORA_MAGIC) {

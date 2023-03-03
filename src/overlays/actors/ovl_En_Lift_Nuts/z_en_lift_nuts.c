@@ -284,7 +284,7 @@ void func_80AE9FC8(EnLiftNuts* this) {
         Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 3);
     }
 
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_AKINDONUTS_HIDE);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_AKINDONUTS_HIDE);
     this->actionFunc = func_80AEA044;
 }
 
@@ -301,7 +301,7 @@ void func_80AEA0B4(EnLiftNuts* this) {
         this->actionFunc = func_80AEA1A0;
     } else {
         Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 2);
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_AKINDONUTS_HIDE);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_AKINDONUTS_HIDE);
         this->actionFunc = func_80AEA128;
     }
 }
@@ -598,7 +598,7 @@ void func_80AEABF0(EnLiftNuts* this) {
 
     if (this->actionFunc != func_80AEB698) {
         if (func_80AE9B4C(0, 0)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_AKINDONUTS_HIDE);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_AKINDONUTS_HIDE);
         }
         Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 16);
     }
@@ -743,7 +743,7 @@ void func_80AEB148(EnLiftNuts* this, PlayState* play) {
         SET_EVENTINF(EVENTINF_34);
         Interface_StartTimer(4, 0);
         func_80AE9B4C(1, 2);
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_FOUND);
+        Actor_PlaySfx(&this->actor, NA_SE_SY_FOUND);
         func_80AEB280(this);
     }
 }

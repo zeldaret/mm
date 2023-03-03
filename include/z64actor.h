@@ -218,7 +218,6 @@ typedef struct {
     /* 0x148 */ f32 pushForce;
     /* 0x14C */ f32 unk14C;
     /* 0x150 */ s16 yRotation;
-    /* 0x152 */ u16 unk152;
     /* 0x154 */ u32 flags;
     /* 0x158 */ u8 stateFlags;
     /* 0x15A */ s16 pad15A;

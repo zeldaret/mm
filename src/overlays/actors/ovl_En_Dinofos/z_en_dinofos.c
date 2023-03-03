@@ -418,7 +418,7 @@ s32 func_8089AE00(EnDinofos* this, PlayState* play) {
         temp_v1 = (Actor_WorldYawTowardActor(&this->actor, temp_v0) - this->actor.shape.rot.y) - this->unk_28E;
         if (ABS_ALT(temp_v1) < 0x3000) {
             func_8089D11C(this, temp_v1 + this->unk_28E);
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_RIZA_WARAU);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_RIZA_WARAU);
             return true;
         }
     }
@@ -428,7 +428,7 @@ s32 func_8089AE00(EnDinofos* this, PlayState* play) {
         temp_v1_2 = (Actor_WorldYawTowardActor(&this->actor, temp_v0) - this->actor.shape.rot.y) - this->unk_28E;
         if (ABS_ALT(temp_v1_2) < 0x3000) {
             func_8089C024(this, 1);
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_RIZA_WARAU);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_RIZA_WARAU);
             return true;
         }
     }
@@ -445,7 +445,7 @@ s32 func_8089AE00(EnDinofos* this, PlayState* play) {
         } else {
             func_8089C024(this, 3);
         }
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_RIZA_WARAU);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_RIZA_WARAU);
         return true;
     }
 
@@ -496,7 +496,7 @@ void func_8089B288(EnDinofos* this, PlayState* play) {
 
 void func_8089B320(EnDinofos* this) {
     this->actor.gravity = -2.0f;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_RIZA_CRY);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_RIZA_CRY);
     this->unk_2BC.x = (Math_SinS(this->actor.shape.rot.y - 0x0E00) * 86.0f) + this->actor.world.pos.x;
     this->unk_2BC.y = this->actor.floorHeight + 6.0f;
     this->unk_2BC.z = (Math_CosS(this->actor.shape.rot.y - 0x0E00) * 86.0f) + this->actor.world.pos.z;
@@ -536,7 +536,7 @@ void func_8089B4A4(EnDinofos* this) {
     this->unk_2BC.x = (Math_SinS(this->actor.shape.rot.y + 0x200) * 123.0f) + this->actor.world.pos.x;
     this->unk_2BC.y = this->actor.floorHeight + 11.0f;
     this->unk_2BC.z = (Math_CosS(this->actor.shape.rot.y + 0x200) * 123.0f) + this->actor.world.pos.z;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BOMCHU_WALK);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_BOMCHU_WALK);
     this->unk_290 = 0;
     this->unk_292 = -1;
     this->actionFunc = func_8089B580;
@@ -578,7 +578,7 @@ void func_8089B6E8(EnDinofos* this) {
 
 void func_8089B72C(EnDinofos* this, PlayState* play) {
     if (Animation_OnFrame(&this->skelAnime, 2.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_RIZA_ATTACK);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_RIZA_ATTACK);
     }
 
     if (SkelAnime_Update(&this->skelAnime)) {
@@ -666,7 +666,7 @@ void func_8089B98C(EnDinofos* this, PlayState* play) {
         }
 
         if (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 6.0f)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_RIZA_WALK);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_RIZA_WALK);
         }
     }
 }
@@ -787,7 +787,7 @@ void func_8089BD28(EnDinofos* this, PlayState* play) {
         }
 
         if (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 5.0f)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_RIZA_WALK);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_RIZA_WALK);
         }
     }
 }
@@ -836,7 +836,7 @@ void func_8089C164(EnDinofos* this) {
     }
 
     this->actor.bgCheckFlags &= ~1;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_RIZA_JUMP);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_RIZA_JUMP);
     this->actionFunc = func_8089C1F8;
 }
 
@@ -851,7 +851,7 @@ void func_8089C244(EnDinofos* this) {
     this->actor.bgCheckFlags &= ~1;
     this->actor.speedXZ = 8.0f;
     this->actor.velocity.y = 16.0f;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_RIZA_JUMP);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_RIZA_JUMP);
     this->unk_290 = 0;
     this->unk_292 = -1;
     this->actionFunc = func_8089C2A8;
@@ -888,7 +888,7 @@ void func_8089C398(EnDinofos* this) {
 
     this->actor.speedXZ = 0.0f;
     func_8089AD70(this);
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BOMCHU_WALK);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_BOMCHU_WALK);
     this->actionFunc = func_8089C44C;
 }
 
@@ -906,7 +906,7 @@ void func_8089C44C(EnDinofos* this, PlayState* play) {
 void func_8089C4F8(EnDinofos* this) {
     Animation_PlayOnce(&this->skelAnime, &object_dinofos_Anim_0025B4);
     this->colliderQuad.base.atFlags &= ~AT_BOUNCED;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_RIZA_CRY);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_RIZA_CRY);
     this->unk_290 = 0;
     this->unk_292 = -1;
     this->actor.speedXZ = 0.0f;
@@ -928,7 +928,7 @@ void func_8089C56C(EnDinofos* this, PlayState* play) {
     } else if (Animation_OnFrame(&this->skelAnime, 13.0f)) {
         this->colliderQuad.base.atFlags &= ~AT_ON;
     } else if (Animation_OnFrame(&this->skelAnime, 11.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_RIZA_ATTACK);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_RIZA_ATTACK);
     } else if (this->skelAnime.curFrame < 7.0f) {
         func_8089AE00(this, play);
     }
@@ -994,7 +994,7 @@ void func_8089C87C(EnDinofos* this, s32 arg1) {
         this->actor.velocity.y = 0.0f;
     }
     this->unk_28E = 0;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_RIZA_DAMAGE);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_RIZA_DAMAGE);
     this->colliderJntSph.base.acFlags &= ~AC_ON;
     Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 18);
     this->actionFunc = func_8089C938;
@@ -1129,7 +1129,7 @@ void func_8089CF70(EnDinofos* this, PlayState* play) {
 void func_8089CFAC(EnDinofos* this) {
     Animation_PlayOnce(&this->skelAnime, &object_dinofos_Anim_00ABD0);
     this->actor.flags &= ~ACTOR_FLAG_1;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_RIZA_DEAD);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_RIZA_DEAD);
     this->actor.speedXZ = 0.0f;
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->actionFunc = func_8089D018;
@@ -1157,7 +1157,7 @@ void func_8089D018(EnDinofos* this, PlayState* play) {
 
         this->actor.shape.shadowAlpha = this->unk_288;
     } else if (Animation_OnFrame(&this->skelAnime, 26.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_GERUDOFT_DOWN);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_GERUDOFT_DOWN);
     }
 }
 
@@ -1191,7 +1191,7 @@ void func_8089D1E0(EnDinofos* this, PlayState* play) {
     }
 
     if (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 5.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_RIZA_WALK);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_RIZA_WALK);
     }
 }
 
@@ -1304,7 +1304,7 @@ s32 func_8089D60C(EnDinofos* this, PlayState* play) {
         if (this->actor.colChkInfo.damageEffect == 1) {
             this->unk_290 = 40;
             Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 255, COLORFILTER_BUFFLAG_OPA, 40);
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_FREEZE);
             func_8089C784(this);
             return true;
         }
@@ -1315,7 +1315,7 @@ s32 func_8089D60C(EnDinofos* this, PlayState* play) {
             this->drawDmgEffScale = 0.55f;
             this->drawDmgEffAlpha = 2.0f;
             this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_MEDIUM;
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_FREEZE);
             func_8089C784(this);
             return true;
         }

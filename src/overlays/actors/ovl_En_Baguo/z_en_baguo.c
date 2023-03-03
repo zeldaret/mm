@@ -160,7 +160,7 @@ void EnBaguo_UndergroundIdle(EnBaguo* this, PlayState* play) {
     this->action = NEJIRON_ACTION_INACTIVE;
     if (this->actor.xzDistToPlayer < 200.0f && Player_GetMask(play) != PLAYER_MASK_STONE) {
         this->actor.draw = EnBaguo_DrawBody;
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BAKUO_APPEAR);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_BAKUO_APPEAR);
         this->actor.world.rot.z = 0;
         this->actor.world.rot.x = this->actor.world.rot.z;
         this->actor.flags &= ~ACTOR_FLAG_CANT_LOCK_ON;
@@ -205,7 +205,7 @@ void EnBaguo_Idle(EnBaguo* this, PlayState* play) {
                 if ((play->gameplayFrames % 8) == 0) {
                     Actor_SpawnFloorDustRing(play, &this->actor, &this->actor.world.pos,
                                              this->actor.shape.shadowScale - 20.0f, 10, 8.0f, 500, 10, 1);
-                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BAKUO_VOICE);
+                    Actor_PlaySfx(&this->actor, NA_SE_EN_BAKUO_VOICE);
                 }
             }
         }
@@ -265,7 +265,7 @@ void EnBaguo_Roll(EnBaguo* this, PlayState* play) {
             }
         }
 
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BAKUO_ROLL - SFX_FLAG);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_BAKUO_ROLL - SFX_FLAG);
     }
 }
 
@@ -290,7 +290,7 @@ void EnBaguo_RetreatUnderground(EnBaguo* this, PlayState* play) {
         this->actor.shape.yOffset = -3000.0f;
         this->actor.draw = EnBaguo_DrawBody;
         Math_Vec3f_Copy(&this->actor.world.pos, &this->actor.home.pos);
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BAKUO_APPEAR);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_BAKUO_APPEAR);
         this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
         this->actor.flags &= ~ACTOR_FLAG_1;
         this->actionFunc = EnBaguo_UndergroundIdle;
@@ -346,8 +346,8 @@ void EnBaguo_CheckForDetonation(EnBaguo* this, PlayState* play) {
 
                 Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->actor.world.pos.x, this->actor.world.pos.y,
                             this->actor.world.pos.z, 0, 0, 0, CLEAR_TAG_POP);
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_BOMB_EXPLOSION);
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BAKUO_DEAD);
+                Actor_PlaySfx(&this->actor, NA_SE_IT_BOMB_EXPLOSION);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_BAKUO_DEAD);
 
                 this->timer = 30;
                 this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;

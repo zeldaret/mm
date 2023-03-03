@@ -219,7 +219,7 @@ void func_80A2778C(EnBigpamet* this) {
         ptr->unk_20 = Rand_ZeroFloat(0.0025000002f) + 0.002f;
     }
 
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_B_PAMET_BREAK);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_B_PAMET_BREAK);
 }
 
 void func_80A27970(EnBigpamet* this, PlayState* play2) {
@@ -295,7 +295,7 @@ void func_80A27B58(EnBigpamet* this) {
         ptr->unk_20 = Rand_ZeroFloat(0.0025000002f) + 0.002f;
     }
 
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_B_PAMET_BREAK);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_B_PAMET_BREAK);
 }
 
 void func_80A27DD8(EnBigpamet* this, PlayState* play) {
@@ -447,8 +447,8 @@ void func_80A284E4(EnBigpamet* this) {
     this->unk_2A8 = 1.0f;
     this->unk_2A4 = 1.0f;
     this->actor.speedXZ = 0.0f;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_B_PAMET_VOICE);
-    Actor_PlaySfxAtPos(this->actor.parent, NA_SE_EN_FROG_VOICE1);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_B_PAMET_VOICE);
+    Actor_PlaySfx(this->actor.parent, NA_SE_EN_FROG_VOICE1);
     this->actionFunc = func_80A2855C;
 }
 
@@ -469,7 +469,7 @@ void func_80A28618(EnBigpamet* this) {
     this->actor.draw = func_80A2966C;
     this->unk_2A8 = 0.5f;
     this->actor.speedXZ = 0.0f;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PAMET_CUTTER_ON);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_PAMET_CUTTER_ON);
     this->actionFunc = func_80A2866C;
 }
 
@@ -557,7 +557,7 @@ void func_80A287E8(EnBigpamet* this, PlayState* play) {
 }
 
 void func_80A28970(EnBigpamet* this) {
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PAMET_CUTTER_OFF);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_PAMET_CUTTER_OFF);
     this->actor.shape.rot.z = 0;
     this->collider.base.atFlags &= ~AT_ON;
     this->collider.info.bumper.dmgFlags = 0xF7CFFFFF;
@@ -642,14 +642,14 @@ void func_80A28B98(EnBigpamet* this, PlayState* play) {
         collectible->world.rot.y = Actor_WorldYawTowardPoint(&this->actor, &this->actor.home.pos);
     }
 
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_B_PAMET_REVERSE);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_B_PAMET_REVERSE);
     this->actionFunc = func_80A28D0C;
 }
 
 void func_80A28D0C(EnBigpamet* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime2);
     if (this->actor.bgCheckFlags & 1) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_HIPLOOP_LAND);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_HIPLOOP_LAND);
         func_80A27FE8(this, play);
         func_80A28D80(this);
     }

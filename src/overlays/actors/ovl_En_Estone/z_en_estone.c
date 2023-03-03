@@ -143,7 +143,7 @@ void EnEstone_Active(EnEstone* this, PlayState* play) {
         this->actor.shape.shadowScale = 0.0f;
         this->inactive = true;
         this->timer = 50;
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_WALL_BROKEN);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_WALL_BROKEN);
         this->actionFunc = EnEstone_Inactive;
     } else {
         //! FAKE: https://decomp.me/scratch/YiPVN

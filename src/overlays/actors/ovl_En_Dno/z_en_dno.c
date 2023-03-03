@@ -637,7 +637,7 @@ void func_80A725F8(EnDno* this, PlayState* play) {
                 if (this->skelAnime.curFrame <= 23.0f) {
                     this->unk_452 = 3;
                     if (Animation_OnFrame(&this->skelAnime, 23.0f)) {
-                        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_OPEN_AMBRELLA);
+                        Actor_PlaySfx(&this->actor, NA_SE_EV_OPEN_AMBRELLA);
                     }
                 } else if (this->skelAnime.curFrame <= 24.0f) {
                     this->unk_452 = 4;
@@ -903,7 +903,7 @@ void func_80A732C8(EnDno* this, PlayState* play) {
             }
 
             if (Animation_OnFrame(&this->skelAnime, 4.0f)) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CLOSE_AMBRELLA);
+                Actor_PlaySfx(&this->actor, NA_SE_EV_CLOSE_AMBRELLA);
                 this->unk_452 = 4;
             } else if (Animation_OnFrame(&this->skelAnime, 5.0f)) {
                 this->unk_452 = 3;

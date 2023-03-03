@@ -293,7 +293,7 @@ void EnNwc_Follow(EnNwc* this, PlayState* play) {
             this->actor.velocity.y = 2.0f; // hop up and down
         }
         if ((this->stateTimer & 0x1B) == 24) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CHICK_SONG);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_CHICK_SONG);
         }
     }
 
@@ -306,7 +306,7 @@ void EnNwc_Follow(EnNwc* this, PlayState* play) {
             this->grog->actor.home.rot.x += 2; // increment grog's adult tranformation counter
             EnNwc_SpawnDust(this, play);
             Actor_SetScale(&this->actor, 0.002f);
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CHICK_TO_CHICKEN);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_CHICK_TO_CHICKEN);
         }
     }
 
@@ -356,7 +356,7 @@ void EnNwc_Follow(EnNwc* this, PlayState* play) {
     }
 
     if (this->grog->actor.home.rot.x >= 20) { // all chicks have turned into adult cucco, stop and crow
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CHICKEN_CRY_M);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_CHICKEN_CRY_M);
         this->actionFunc = EnNwc_CrowAtTheEnd;
         this->actor.speedXZ = 0.0f;
         Actor_SetScale(&this->actor, 0.01f);
@@ -378,7 +378,7 @@ void EnNwc_HopForward(EnNwc* this, PlayState* play) {
         this->actor.velocity.y = 2.0f; // hop up and down
     }
     if ((this->stateTimer & 0xB) == 8) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CHICK_SONG);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_CHICK_SONG);
     }
 
     // they only move forward while off the ground, which gives the visual of them hopping to move
@@ -404,7 +404,7 @@ void EnNwc_RunAway(EnNwc* this, PlayState* play) {
         this->actor.velocity.y = 2.0f; // hop up and down
     }
     if ((this->stateTimer & 0xB) == 8) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CHICK_SONG);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_CHICK_SONG);
     }
 
     this->actor.speedXZ = 2.0f;
@@ -429,7 +429,7 @@ void EnNwc_Turn(EnNwc* this, PlayState* play) {
     }
 
     if ((this->stateTimer & 0xB) == 8) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CHICK_SONG);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_CHICK_SONG);
     }
 
     // they only rotate when off the ground, giving the visual that they turn by hopping

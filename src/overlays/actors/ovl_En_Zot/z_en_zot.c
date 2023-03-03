@@ -744,7 +744,7 @@ void func_80B97D6C(EnZot* this, PlayState* play) {
     }
 
     if (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 5.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_ZORA_WALK);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_ZORA_WALK);
     }
 }
 

@@ -446,27 +446,27 @@ void EnPp_PlaySfxForAnimation(EnPp* this) {
             case EN_PP_ANIM_WALK:
             case EN_PP_ANIM_TURN_TO_FACE_PLAYER:
                 if (Animation_OnFrame(&this->skelAnime, 0.0f)) {
-                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_HIPLOOP_FOOTSTEP);
+                    Actor_PlaySfx(&this->actor, NA_SE_EN_HIPLOOP_FOOTSTEP);
                 }
                 break;
 
             case EN_PP_ANIM_WIND_UP:
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_HIPLOOP_FOOT - SFX_FLAG);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_HIPLOOP_FOOT - SFX_FLAG);
                 break;
 
             case EN_PP_ANIM_CHARGE:
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_HIPLOOP_RUN - SFX_FLAG);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_HIPLOOP_RUN - SFX_FLAG);
                 break;
 
             case EN_PP_ANIM_ATTACK:
                 if (Animation_OnFrame(&this->skelAnime, 0.0f)) {
-                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_HIPLOOP_PAUSE);
+                    Actor_PlaySfx(&this->actor, NA_SE_EN_HIPLOOP_PAUSE);
                 }
                 break;
 
             case EN_PP_ANIM_ROAR:
                 if (Animation_OnFrame(&this->skelAnime, 6.0f)) {
-                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_HIPLOOP_PAUSE);
+                    Actor_PlaySfx(&this->actor, NA_SE_EN_HIPLOOP_PAUSE);
                 }
                 break;
 
@@ -925,7 +925,7 @@ void EnPp_SetupDamaged(EnPp* this, PlayState* play) {
         this->actor.speedXZ = 0.0f;
     }
 
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_HIPLOOP_DAMAGE);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_HIPLOOP_DAMAGE);
     this->actionFunc = EnPp_Damaged;
 }
 
@@ -1117,7 +1117,7 @@ void EnPp_Mask_Detach(EnPp* this, PlayState* play) {
                 this->maskAccelY = 50.0f;
                 this->maskVelocity.y = -230.0f;
                 this->maskVelocity.x = -150.0f;
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_HIPLOOP_MASC_OFF);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_HIPLOOP_MASC_OFF);
                 this->actionVar.maskDetachState = EN_PP_MASK_DETACH_STATE_FALL;
                 break;
 
@@ -1276,7 +1276,7 @@ void EnPp_UpdateDamage(EnPp* this, PlayState* play) {
                         (this->drawDmgEffTimer == 0)) {
                         this->drawDmgEffTimer = 40;
                         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_SMALL;
-                        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
+                        Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_FREEZE);
                         Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 255, COLORFILTER_BUFFLAG_OPA,
                                              40);
                         EnPp_SetupStunnedOrFrozen(this);
@@ -1286,7 +1286,7 @@ void EnPp_UpdateDamage(EnPp* this, PlayState* play) {
                     if (((this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_SFX) &&
                          (this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX)) ||
                         (this->drawDmgEffTimer == 0)) {
-                        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
+                        Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_FREEZE);
                         Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 255, COLORFILTER_BUFFLAG_OPA,
                                              40);
                         this->secondaryTimer = 40;
@@ -1362,7 +1362,7 @@ void EnPp_UpdateDamage(EnPp* this, PlayState* play) {
 
         this->targetRotY = this->actor.yawTowardsPlayer;
         if (EN_PP_GET_TYPE(&this->actor) == EN_PP_TYPE_MASKED) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_SHIELD_BOUND);
+            Actor_PlaySfx(&this->actor, NA_SE_IT_SHIELD_BOUND);
         }
     }
 }

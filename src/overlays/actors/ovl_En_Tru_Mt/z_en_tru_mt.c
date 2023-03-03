@@ -180,10 +180,10 @@ s32 func_80B761FC(EnTruMt* this, PlayState* play) {
             this->collider.base.acFlags &= ~AC_HIT;
             if (this->unk_3A4 == 0) {
                 this->unk_3A4 = 1;
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KOUME_DAMAGE);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_KOUME_DAMAGE);
             } else {
                 this->unk_3A4 = 0;
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KOUME_DAMAGE2);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_KOUME_DAMAGE2);
             }
             play->interfaceCtx.minigameHiddenPoints = 1;
             Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 25);

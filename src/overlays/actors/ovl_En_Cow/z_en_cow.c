@@ -344,7 +344,7 @@ void EnCow_Update(Actor* thisx, PlayState* play2) {
 
     if (SkelAnime_Update(&this->skelAnime)) {
         if (this->skelAnime.animation == &gCowChewAnim) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_COW_CRY);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_COW_CRY);
             Animation_Change(&this->skelAnime, &gCowMooAnim, 1.0f, 0.0f, Animation_GetLastFrame(&gCowMooAnim),
                              ANIMMODE_ONCE, 1.0f);
         } else {

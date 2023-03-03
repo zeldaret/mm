@@ -2162,7 +2162,10 @@ void func_800B8E1C(PlayState* play, Actor* actor, f32 arg2, s16 arg3, f32 arg4) 
     func_800B8DD4(play, actor, arg2, arg3, arg4, 0);
 }
 
-void func_800B8E58(Player* player, u16 sfxId) {
+/**
+ * Play a sound effect at the player's position
+ */
+void Player_PlaySfx(Player* player, u16 sfxId) {
     if (player->currentMask == PLAYER_MASK_GIANT) {
         func_8019F170(&player->actor.projectedPos, sfxId);
     } else {
@@ -2172,9 +2175,9 @@ void func_800B8E58(Player* player, u16 sfxId) {
 }
 
 /**
- * Plays the sound effect at the actor's position
+ * Play a sound effect at the actor's position
  */
-void Actor_PlaySfxAtPos(Actor* actor, u16 sfxId) {
+void Actor_PlaySfx(Actor* actor, u16 sfxId) {
     Audio_PlaySfxAtPos(&actor->projectedPos, sfxId);
 }
 
@@ -3888,7 +3891,7 @@ void Actor_SpawnShieldParticlesMetal(PlayState* play, Vec3f* pos) {
 
 void Actor_SetColorFilter(Actor* actor, u16 colorFlag, u16 colorIntensityMax, u16 bufFlag, u16 duration) {
     if ((colorFlag == COLORFILTER_COLORFLAG_GRAY) && !(colorIntensityMax & COLORFILTER_INTENSITY_FLAG)) {
-        Actor_PlaySfxAtPos(actor, NA_SE_EN_LIGHT_ARROW_HIT);
+        Actor_PlaySfx(actor, NA_SE_EN_LIGHT_ARROW_HIT);
     }
 
     actor->colorFilterParams = colorFlag | bufFlag | ((colorIntensityMax & 0xF8) << 5) | duration;
@@ -4525,13 +4528,13 @@ void Actor_DrawDamageEffects(PlayState* play, Actor* actor, Vec3f limbPos[], s16
         // Apply sfx along with damage effect
         if ((actor != NULL) && (effectAlpha > 0.05f) && (play->gameOverCtx.state == GAMEOVER_INACTIVE)) {
             if (type == ACTOR_DRAW_DMGEFF_FIRE) {
-                Actor_PlaySfxAtPos(actor, NA_SE_EV_BURN_OUT - SFX_FLAG);
+                Actor_PlaySfx(actor, NA_SE_EV_BURN_OUT - SFX_FLAG);
             } else if (type == ACTOR_DRAW_DMGEFF_BLUE_FIRE) {
-                Actor_PlaySfxAtPos(actor, NA_SE_EN_COMMON_EXTINCT_LEV - SFX_FLAG);
+                Actor_PlaySfx(actor, NA_SE_EN_COMMON_EXTINCT_LEV - SFX_FLAG);
             } else if (type == ACTOR_DRAW_DMGEFF_FROZEN_SFX) {
-                Actor_PlaySfxAtPos(actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
+                Actor_PlaySfx(actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
             } else if ((type == ACTOR_DRAW_DMGEFF_LIGHT_ORBS) || (type == ACTOR_DRAW_DMGEFF_BLUE_LIGHT_ORBS)) {
-                Actor_PlaySfxAtPos(actor, NA_SE_EN_COMMON_DEADLIGHT - SFX_FLAG);
+                Actor_PlaySfx(actor, NA_SE_EN_COMMON_DEADLIGHT - SFX_FLAG);
             }
         }
 

@@ -154,7 +154,7 @@ void EnNiw_Init(Actor* thisx, PlayState* play) {
     }
 
     if (this->niwType == NIW_TYPE_HELD) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CHICKEN_CRY_M);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_CHICKEN_CRY_M);
         this->sfxTimer1 = 30;
         this->heldTimer = 30;
         this->actor.flags &= ~ACTOR_FLAG_1; // targetable OFF
@@ -366,8 +366,8 @@ void EnNiw_Idle(EnNiw* this, PlayState* play) {
     s16 nextAnimIndex;
 
     if (this->niwType == NIW_TYPE_REGULAR) {
-        if (Actor_HasParent(&this->actor, play)) {                    // picked up
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CHICKEN_CRY_M); // crow
+        if (Actor_HasParent(&this->actor, play)) {               // picked up
+            Actor_PlaySfx(&this->actor, NA_SE_EV_CHICKEN_CRY_M); // crow
             this->sfxTimer1 = 30;
             this->heldTimer = 30;
             this->actor.flags &= ~ACTOR_FLAG_1; // targetable OFF
@@ -519,7 +519,7 @@ void EnNiw_Thrown(EnNiw* this, PlayState* play) {
 
     if (Actor_HasParent(&this->actor, play)) {
         // picked up again before could run off
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CHICKEN_CRY_M); // crow
+        Actor_PlaySfx(&this->actor, NA_SE_EV_CHICKEN_CRY_M); // crow
         this->sfxTimer1 = 30;
         this->unk2EC = 0;
         this->heldTimer = 30;
@@ -629,7 +629,7 @@ void EnNiw_SetupCuccoStorm(EnNiw* this, PlayState* play) {
         this->targetLimbRots[1] = 0.0f;
         this->targetLimbRots[2] = 0.0f;
         this->unkTimer24C = 10;
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CHICKEN_CRY_M);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_CHICKEN_CRY_M);
     }
 
     if (this->cuccoStormTimer == 0) {
@@ -715,7 +715,7 @@ void EnNiw_CheckRage(EnNiw* this, PlayState* play) {
             this->iframeTimer = 10;
             this->sfxTimer1 = 30;
             this->unk29E = 1;
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CHICKEN_CRY_M); // crow
+            Actor_PlaySfx(&this->actor, NA_SE_EV_CHICKEN_CRY_M); // crow
             this->runAwayTimer = 100;
             this->unk2EC = 0;
             EnNiw_SetupRunAway(this);
@@ -752,7 +752,7 @@ void EnNiw_CheckRage(EnNiw* this, PlayState* play) {
                 this->iframeTimer = 10;
                 this->sfxTimer1 = 30;
                 this->unk29E = 1;
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CHICKEN_CRY_M); // crow
+                Actor_PlaySfx(&this->actor, NA_SE_EV_CHICKEN_CRY_M); // crow
                 this->runAwayTimer = 100;
                 this->unk2EC = 0;
                 EnNiw_SetupRunAway(this);
@@ -911,16 +911,16 @@ void EnNiw_Update(Actor* thisx, PlayState* play) {
     EnNiw_CheckRage(this, play);
     if (this->flutterSfxTimer == 0 && this->niwState == NIW_STATE_HELD) {
         this->flutterSfxTimer = 7;
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_CHICKEN_FLUTTER);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_CHICKEN_FLUTTER);
     }
 
     if (this->sfxTimer1 == 0) {
         if (this->niwState != NIW_STATE_IDLE) {
             this->sfxTimer1 = 30;
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CHICKEN_CRY_A);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_CHICKEN_CRY_A);
         } else {
             this->sfxTimer1 = 300;
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CHICKEN_CRY_N);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_CHICKEN_CRY_N);
         }
     }
 

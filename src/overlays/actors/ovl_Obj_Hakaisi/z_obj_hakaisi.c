@@ -209,7 +209,7 @@ void func_80B145F4(ObjHakaisi* this) {
     this->unk_19A = 0;
     this->dyna.actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
     this->dyna.actor.flags &= ~ACTOR_FLAG_1;
-    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_WALL_BROKEN);
+    Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_WALL_BROKEN);
     this->actionFunc = func_80B14648;
 }
 
@@ -281,7 +281,7 @@ void func_80B14B6C(ObjHakaisi* this, PlayState* play, Vec3f vec, s16 arg3) {
     s16 temp_s1;
     Vec3f sp6C;
 
-    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_WALL_BROKEN);
+    Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_WALL_BROKEN);
 
     for (i = 0; i < 5; i++) {
         temp_s1 = Rand_Next();

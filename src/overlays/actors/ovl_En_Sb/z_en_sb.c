@@ -155,7 +155,7 @@ void EnSb_SetupOpen(EnSb* this) {
                      ANIMMODE_ONCE, 0.0f);
     this->state = SHELLBLADE_OPEN;
     this->actionFunc = EnSb_Open;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KUSAMUSHI_VIBE);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_KUSAMUSHI_VIBE);
 }
 
 void EnSb_SetupWaitOpen(EnSb* this) {
@@ -172,7 +172,7 @@ void EnSb_SetupLunge(EnSb* this) {
     Animation_Change(&this->skelAnime, &object_sb_Anim_000124, playbackSpeed, 0.0f, frameCount, ANIMMODE_ONCE, 0);
     this->state = SHELLBLADE_LUNGE;
     this->actionFunc = EnSb_Lunge;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KUSAMUSHI_VIBE);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_KUSAMUSHI_VIBE);
 }
 
 void EnSb_SetupBounce(EnSb* this) {
@@ -270,7 +270,7 @@ void EnSb_Lunge(EnSb* this, PlayState* play) {
     Math_StepToF(&this->actor.speedXZ, 0.0f, 0.2f);
     if (this->actor.velocity.y <= -0.1f || this->actor.bgCheckFlags & 2) {
         if (!(this->actor.depthInWater > 0.0f)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_EYEGOLE_ATTACK);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_EYEGOLE_ATTACK);
         }
         this->actor.bgCheckFlags &= ~2;
         EnSb_SetupBounce(this);

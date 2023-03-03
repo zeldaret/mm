@@ -410,7 +410,7 @@ void EnRd_Idle(EnRd* this, PlayState* play) {
     }
 
     if ((play->gameplayFrames & 0x5F) == 0) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_CRY);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_REDEAD_CRY);
     }
 }
 
@@ -454,7 +454,7 @@ void EnRd_SquattingDance(EnRd* this, PlayState* play) {
     }
 
     if ((play->gameplayFrames & 0x5F) == 0) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_CRY);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_REDEAD_CRY);
     }
 }
 
@@ -498,14 +498,14 @@ void EnRd_ClappingDance(EnRd* this, PlayState* play) {
     }
 
     if ((play->gameplayFrames & 0x5F) == 0) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_CRY);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_REDEAD_CRY);
     }
 }
 
 void EnRd_EndClappingOrSquattingDanceWhenPlayerIsClose(EnRd* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     if ((play->gameplayFrames & 0x5F) == 0) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_CRY);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_REDEAD_CRY);
     }
 
     this->danceEndTimer++;
@@ -558,7 +558,7 @@ void EnRd_Pirouette(EnRd* this, PlayState* play) {
     }
 
     if ((play->gameplayFrames & 0x5F) == 0) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_CRY);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_REDEAD_CRY);
     }
 
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
@@ -574,7 +574,7 @@ void EnRd_Pirouette(EnRd* this, PlayState* play) {
 void EnRd_EndPirouetteWhenPlayerIsClose(EnRd* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     if ((play->gameplayFrames & 0x5F) == 0) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_CRY);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_REDEAD_CRY);
     }
 
     this->actor.world.rot.y -= this->pirouetteRotationalVelocity;
@@ -613,7 +613,7 @@ void EnRd_RiseFromCoffin(EnRd* this, PlayState* play) {
         }
     } else {
         if (this->actor.world.pos.y == this->actor.home.pos.y) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_CRY);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_REDEAD_CRY);
         }
 
         if (Math_SmoothStepToF(&this->actor.world.pos.y, this->actor.home.pos.y + 50.0f, 0.3f, 2.0f, 0.3f) == 0.0f) {
@@ -665,7 +665,7 @@ void EnRd_WalkToPlayer(EnRd* this, PlayState* play) {
                     Rumble_Request(this->actor.xzDistToPlayer, 255, 20, 150);
                 }
                 this->playerStunWaitTimer = 60;
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_AIM);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_REDEAD_AIM);
             }
         } else {
             EnRd_SetupWalkToHome(this, play);
@@ -700,9 +700,9 @@ void EnRd_WalkToPlayer(EnRd* this, PlayState* play) {
     }
 
     if (Animation_OnFrame(&this->skelAnime, 10.0f) || Animation_OnFrame(&this->skelAnime, 22.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_RIZA_WALK);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_RIZA_WALK);
     } else if ((play->gameplayFrames & 0x5F) == 0) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_CRY);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_REDEAD_CRY);
     }
 }
 
@@ -751,9 +751,9 @@ void EnRd_WalkToHome(EnRd* this, PlayState* play) {
     }
 
     if (Animation_OnFrame(&this->skelAnime, 10.0f) || Animation_OnFrame(&this->skelAnime, 22.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_RIZA_WALK);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_RIZA_WALK);
     } else if ((play->gameplayFrames & 0x5F) == 0) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_CRY);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_REDEAD_CRY);
     }
 }
 
@@ -802,9 +802,9 @@ void EnRd_WalkToParent(EnRd* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
 
     if (Animation_OnFrame(&this->skelAnime, 10.0f) || Animation_OnFrame(&this->skelAnime, 22.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_RIZA_WALK);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_RIZA_WALK);
     } else if ((play->gameplayFrames & 0x5F) == 0) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_CRY);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_REDEAD_CRY);
     }
 }
 
@@ -873,7 +873,7 @@ void EnRd_Grab(EnRd* this, PlayState* play) {
             Math_SmoothStepToS(&this->actor.shape.rot.y, player->actor.shape.rot.y, 1, 6000, 0);
 
             if (Animation_OnFrame(&this->skelAnime, 0.0f)) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_ATTACK);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_REDEAD_ATTACK);
             }
 
             this->grabDamageTimer--;
@@ -881,7 +881,7 @@ void EnRd_Grab(EnRd* this, PlayState* play) {
                 play->damagePlayer(play, -8);
                 Rumble_Request(this->actor.xzDistToPlayer, 240, 1, 12);
                 this->grabDamageTimer = 20;
-                func_800B8E58(player, player->ageProperties->voiceSfxIdOffset + NA_SE_VO_LI_DAMAGE_S);
+                Player_PlaySfx(player, player->ageProperties->voiceSfxIdOffset + NA_SE_VO_LI_DAMAGE_S);
             }
             break;
 
@@ -922,7 +922,7 @@ void EnRd_AttemptPlayerFreeze(EnRd* this, PlayState* play) {
             Rumble_Request(this->actor.xzDistToPlayer, 255, 20, 150);
             func_80123E90(play, &this->actor);
         }
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_AIM);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_REDEAD_AIM);
         EnRd_SetupWalkToPlayer(this, play);
     }
 }
@@ -931,7 +931,7 @@ void EnRd_SetupGrabFail(EnRd* this) {
     this->action = EN_RD_ACTION_FAILING_GRAB;
     Animation_MorphToPlayOnce(&this->skelAnime, &gGibdoRedeadDamageAnim, -6.0f);
     this->actor.speedXZ = -2.0f;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_DAMAGE);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_REDEAD_DAMAGE);
     this->action = EN_RD_ACTION_FAILING_GRAB;
     this->actionFunc = EnRd_GrabFail;
 }
@@ -1009,7 +1009,7 @@ void EnRd_SetupDamage(EnRd* this) {
     }
 
     this->actor.flags |= ACTOR_FLAG_1;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_DAMAGE);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_REDEAD_DAMAGE);
     this->action = EN_RD_ACTION_DAMAGE;
     this->actionFunc = EnRd_Damage;
 }
@@ -1044,7 +1044,7 @@ void EnRd_SetupDead(EnRd* this) {
     this->deathTimer = 300;
     this->actor.flags &= ~ACTOR_FLAG_1;
     this->actor.speedXZ = 0.0f;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_DEAD);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_REDEAD_DEAD);
     this->actionFunc = EnRd_Dead;
 }
 
@@ -1075,7 +1075,7 @@ void EnRd_Dead(EnRd* this, PlayState* play) {
             this->deathTimer--;
         }
     } else if (Animation_OnFrame(&this->skelAnime, 33.0f) || Animation_OnFrame(&this->skelAnime, 40.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_GERUDOFT_DOWN);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_GERUDOFT_DOWN);
     }
 }
 
@@ -1087,7 +1087,7 @@ void EnRd_SetupStunned(EnRd* this) {
     if (gSaveContext.sunsSongState != SUNSSONG_INACTIVE) {
         this->stunnedBySunsSong = true;
         this->sunsSongStunTimer = 600;
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_LIGHT_ARROW_HIT);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_LIGHT_ARROW_HIT);
         Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_GRAY, COLORFILTER_INTENSITY_FLAG | 200,
                              COLORFILTER_BUFFLAG_OPA, 255);
     } else if (this->damageEffect == EN_RD_DMGEFF_STUN) {

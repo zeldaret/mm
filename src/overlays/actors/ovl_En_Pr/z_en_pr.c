@@ -410,7 +410,7 @@ void func_80A32EA4(EnPr* this, PlayState* play) {
             this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
             this->unk_2C4 = 0.0f;
             Enemy_StartFinishingBlow(play, &this->actor);
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BUBLEWALK_DEAD);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_BUBLEWALK_DEAD);
             this->unk_216 = 0;
             this->actionFunc = func_80A32F48;
         } else {
@@ -471,7 +471,7 @@ void func_80A33098(EnPr* this, PlayState* play) {
             if ((this->unk_206 != 6) && (this->unk_206 != 7)) {
                 Actor_ApplyDamage(&this->actor);
                 Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 8);
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BUBLEWALK_DAMAGE);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_BUBLEWALK_DAMAGE);
                 func_80A32E60(this);
             }
         }

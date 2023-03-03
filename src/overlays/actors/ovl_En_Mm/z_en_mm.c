@@ -124,7 +124,7 @@ void func_80965DB4(EnMm* this, PlayState* play) {
 
     if (Actor_HasParent(&this->actor, play)) {
         func_80965BBC(this);
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_PL_PULL_UP_ROCK);
+        Actor_PlaySfx(&this->actor, NA_SE_PL_PULL_UP_ROCK);
     } else {
         if ((this->actor.velocity.y > 0.0f) && (this->actor.bgCheckFlags & 0x10)) {
             this->actor.velocity.y = 0.0f;
@@ -135,7 +135,7 @@ void func_80965DB4(EnMm* this, PlayState* play) {
             this->actor.world.rot.y += BINANG_SUB(0x8000, (s16)(angle * 2));
             this->actor.speedXZ *= 0.5f;
             CollisionCheck_SpawnShieldParticles(play, &this->actor.world.pos);
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_HUMAN_BOUND);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_HUMAN_BOUND);
         }
 
         if (!(this->actor.bgCheckFlags & 1)) {
@@ -169,7 +169,7 @@ void func_80965DB4(EnMm* this, PlayState* play) {
                     this->actor.bgCheckFlags &= ~1;
                 }
 
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_HUMAN_BOUND);
+                Actor_PlaySfx(&this->actor, NA_SE_EV_HUMAN_BOUND);
             } else {
                 Actor_OfferGetItem(&this->actor, play, GI_NONE, 50.0f, 30.0f);
             }
