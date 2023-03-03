@@ -376,7 +376,7 @@ void func_808CCBE4(EnVm* this, PlayState* play) {
     this->actor.world.pos.y = this->actor.focus.pos.y;
     this->actor.velocity.y = 8.0f;
     this->actor.gravity = -0.5f;
-    this->actor.speedXZ = Rand_ZeroOne() + 1.0f;
+    this->actor.speed = Rand_ZeroOne() + 1.0f;
     this->unk_210 = 0;
     this->actor.flags |= ACTOR_FLAG_10;
     this->actionFunc = func_808CCCF0;

@@ -259,7 +259,7 @@ void func_808D0A48(EnFloormas* this, PlayState* play) {
 
 void func_808D0B08(EnFloormas* this) {
     Animation_PlayOnce(&this->skelAnime, &gWallmasterIdleAnim);
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actionFunc = func_808D0B50;
 }
 
@@ -301,7 +301,7 @@ void func_808D0CE4(EnFloormas* this) {
     }
 
     this->unk_18E = Rand_S16Offset(2, 4);
-    this->actor.speedXZ = 1.5f;
+    this->actor.speed = 1.5f;
     this->actionFunc = func_808D0D70;
 }
 
@@ -334,7 +334,7 @@ void func_808D0D70(EnFloormas* this, PlayState* play) {
 
 void func_808D0ECC(EnFloormas* this) {
     Animation_PlayOnce(&this->skelAnime, &gWallmasterStopWalkAnim);
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actionFunc = func_808D0F14;
 }
 
@@ -346,7 +346,7 @@ void func_808D0F14(EnFloormas* this, PlayState* play) {
 
 void func_808D0F50(EnFloormas* this) {
     this->unk_18E = 0;
-    this->actor.speedXZ = 5.0f;
+    this->actor.speed = 5.0f;
     this->skelAnime.playSpeed = 3.0f;
     this->actionFunc = func_808D0F80;
 }
@@ -370,7 +370,7 @@ void func_808D0F80(EnFloormas* this, PlayState* play) {
 void func_808D108C(EnFloormas* this) {
     s16 sp36 = this->unk_190 - this->actor.shape.rot.y;
 
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     if (sp36 > 0) {
         Animation_MorphToPlayOnce(&this->skelAnime, &gFloormasterTurnAnim, -3.0f);
     } else {
@@ -419,7 +419,7 @@ void func_808D11BC(EnFloormas* this, PlayState* play) {
 void func_808D1380(EnFloormas* this, PlayState* play) {
     Animation_Change(&this->skelAnime, &gWallmasterHoverAnim, 3.0f, 0.0f, Animation_GetLastFrame(&gWallmasterHoverAnim),
                      ANIMMODE_ONCE, -3.0f);
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actor.gravity = 0.0f;
     func_808D08D0(this);
     Actor_SpawnFloorDustRing(play, &this->actor, &this->actor.world.pos, 15.0f, 6, 20.0f, 300, 100, 1);
@@ -460,7 +460,7 @@ void func_808D14DC(EnFloormas* this, PlayState* play) {
 void func_808D161C(EnFloormas* this) {
     this->unk_18E = 25;
     this->actor.gravity = -0.15f;
-    this->actor.speedXZ = 0.5f;
+    this->actor.speed = 0.5f;
     this->actionFunc = func_808D1650;
 }
 
@@ -471,7 +471,7 @@ void func_808D1650(EnFloormas* this, PlayState* play) {
         this->unk_18E--;
     }
 
-    Math_StepToF(&this->actor.speedXZ, 15.0f, SQ(this->actor.speedXZ) * (1.0f / 3.0f));
+    Math_StepToF(&this->actor.speed, 15.0f, SQ(this->actor.speed) * (1.0f / 3.0f));
     Math_ScaledStepToS(&this->actor.shape.rot.x, -0x1680, 0x140);
 
     temp_f0_2 = this->actor.world.pos.y - this->actor.floorHeight;
@@ -492,7 +492,7 @@ void func_808D1650(EnFloormas* this, PlayState* play) {
 
 void func_808D1740(EnFloormas* this) {
     Animation_Change(&this->skelAnime, &gWallmasterJumpAnim, 1.0f, 41.0f, 42.0f, ANIMMODE_ONCE, 5.0f);
-    if ((this->actor.speedXZ < 0.0f) || (this->actionFunc != func_808D1650)) {
+    if ((this->actor.speed < 0.0f) || (this->actionFunc != func_808D1650)) {
         this->unk_18E = 30;
     } else {
         this->unk_18E = 45;
@@ -519,14 +519,14 @@ void func_808D17EC(EnFloormas* this, PlayState* play) {
     }
 
     if (this->actor.bgCheckFlags & 8) {
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
     }
 
     if (sp24 != 0) {
-        Math_StepToF(&this->actor.speedXZ, 0.0f, 2.0f);
+        Math_StepToF(&this->actor.speed, 0.0f, 2.0f);
     }
 
-    if ((this->actor.speedXZ > 0.0f) && ((this->actor.world.pos.y - this->actor.floorHeight) < 12.0f)) {
+    if ((this->actor.speed > 0.0f) && ((this->actor.world.pos.y - this->actor.floorHeight) < 12.0f)) {
         func_808D14DC(this, play);
     }
 
@@ -575,7 +575,7 @@ void func_808D19D4(EnFloormas* this) {
     this->actor.flags &= ~ACTOR_FLAG_400;
     this->actor.flags |= ACTOR_FLAG_200;
     this->actor.colChkInfo.health = 1;
-    this->actor.speedXZ = 4.0f;
+    this->actor.speed = 4.0f;
     this->actor.velocity.y = 7.0f;
     this->actionFunc = func_808D1B44;
 }
@@ -587,7 +587,7 @@ void func_808D1B44(EnFloormas* this, PlayState* play) {
             this->unk_194 = 50;
             func_808D0C14(this);
         }
-        Math_StepToF(&this->actor.speedXZ, 0.0f, 1.0f);
+        Math_StepToF(&this->actor.speed, 0.0f, 1.0f);
     }
     if (this->actor.bgCheckFlags & 2) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_FLOORMASTER_SM_LAND);
@@ -596,7 +596,7 @@ void func_808D1B44(EnFloormas* this, PlayState* play) {
 
 void func_808D1BCC(EnFloormas* this) {
     Animation_PlayLoopSetSpeed(&this->skelAnime, &gWallmasterWalkAnim, 4.5f);
-    this->actor.speedXZ = 5.0f;
+    this->actor.speed = 5.0f;
     this->actionFunc = func_808D1C1C;
 }
 
@@ -624,7 +624,7 @@ void func_808D1D0C(EnFloormas* this) {
     if (this->actionFunc != func_808D1C1C) {
         Animation_PlayLoopSetSpeed(&this->skelAnime, &gWallmasterWalkAnim, 4.5f);
     }
-    this->actor.speedXZ = 5.0f;
+    this->actor.speed = 5.0f;
     this->actionFunc = func_808D1D6C;
 }
 
@@ -667,7 +667,7 @@ void func_808D1D6C(EnFloormas* this, PlayState* play) {
 void func_808D1ED4(EnFloormas* this, PlayState* play) {
     Vec3f sp34;
 
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actor.velocity.y = 0.0f;
     sp34.x = this->actor.world.pos.x;
     sp34.y = this->actor.world.pos.y + 15.0f;
@@ -686,7 +686,7 @@ void func_808D1F7C(EnFloormas* this, PlayState* play) {
 
 void func_808D1FD4(EnFloormas* this) {
     Animation_Change(&this->skelAnime, &gWallmasterJumpAnim, 2.0f, 0.0f, 41.0f, ANIMMODE_ONCE, 0.0f);
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actionFunc = func_808D2040;
 }
 
@@ -697,11 +697,11 @@ void func_808D2040(EnFloormas* this, PlayState* play) {
     if (this->skelAnime.curFrame < 20.0f) {
         Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 2, 0xE38);
     } else if (Animation_OnFrame(&this->skelAnime, 20.0f)) {
-        this->actor.speedXZ = 5.0f;
+        this->actor.speed = 5.0f;
         this->actor.velocity.y = 7.0f;
     } else if (this->actor.bgCheckFlags & 2) {
         this->unk_18E = 50;
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
         Actor_PlaySfx(&this->actor, NA_SE_EN_FLOORMASTER_SM_LAND);
         func_808D1740(this);
     } else if ((this->actor.playerHeightRel < -10.0f) && (this->collider.base.ocFlags1 & OC1_HIT) &&
@@ -716,7 +716,7 @@ void func_808D217C(EnFloormas* this, Player* player) {
 
     Animation_Change(&this->skelAnime, &gWallmasterJumpAnim, 1.0f, 36.0f, 45.0f, ANIMMODE_ONCE, -3.0f);
     this->actor.flags &= ~ACTOR_FLAG_1;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actor.velocity.y = 0.0f;
     func_808D08D0(this);
     ptr = &D_808D3900[GET_PLAYER_FORM];
@@ -759,7 +759,7 @@ void func_808D22C8(EnFloormas* this, PlayState* play) {
         this->actor.shape.rot.x = 0;
         this->actor.velocity.y = 6.0f;
         this->actor.flags |= ACTOR_FLAG_1;
-        this->actor.speedXZ = -3.0f;
+        this->actor.speed = -3.0f;
         func_808D1740(this);
     } else if ((this->unk_190 % 20) == 0) {
         Player_PlaySfx(player, NA_SE_VO_LI_DAMAGE_S + player->ageProperties->voiceSfxIdOffset);
@@ -770,7 +770,7 @@ void func_808D22C8(EnFloormas* this, PlayState* play) {
 
 void func_808D2484(EnFloormas* this) {
     Animation_Change(&this->skelAnime, &gWallmasterJumpAnim, 2.0f, 0.0f, 41.0f, ANIMMODE_ONCE, 0.0f);
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actionFunc = func_808D24F0;
 }
 
@@ -791,7 +791,7 @@ void func_808D24F0(EnFloormas* this, PlayState* play) {
     }
 
     if (Animation_OnFrame(&this->skelAnime, 20.0f)) {
-        this->actor.speedXZ = 5.0f;
+        this->actor.speed = 5.0f;
         this->actor.velocity.y = 7.0f;
     } else if (this->skelAnime.curFrame < 20.0f) {
         Math_ApproachS(&this->actor.shape.rot.y, Actor_WorldYawTowardActor(&this->actor, phi_s1), 2, 0xE38);
@@ -801,14 +801,14 @@ void func_808D24F0(EnFloormas* this, PlayState* play) {
         func_808D2A20(this);
         this->collider.base.ocFlags1 |= OC1_ON;
     } else if (this->actor.bgCheckFlags & 2) {
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
         Actor_PlaySfx(&this->actor, NA_SE_EN_FLOORMASTER_SM_LAND);
         func_808D1740(this);
     }
 
     if ((fabsf(this->actor.world.pos.x - phi_s1->world.pos.x) < 5.0f) &&
         (fabsf(this->actor.world.pos.z - phi_s1->world.pos.z) < 5.0f)) {
-        Math_StepToF(&this->actor.speedXZ, 0.0f, 2.0f);
+        Math_StepToF(&this->actor.speed, 0.0f, 2.0f);
     }
 }
 
@@ -817,7 +817,7 @@ void func_808D2700(EnFloormas* this) {
     this->unk_18E = 0;
     this->unk_194 = 1500;
     this->actor.params = ENFLOORMAS_GET_7FFF_40;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     func_808D08D0(this);
     this->actionFunc = func_808D2764;
 }
@@ -924,7 +924,7 @@ void func_808D2B18(EnFloormas* this) {
     Animation_MorphToPlayOnce(&this->skelAnime, &gWallmasterDamageAnim, -3.0f);
     func_800BE504(&this->actor, &this->collider);
     Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 20);
-    this->actor.speedXZ = 5.0f;
+    this->actor.speed = 5.0f;
     this->actor.velocity.y = 5.5f;
     if (this->actor.params == ENFLOORMAS_GET_7FFF_40) {
         EnFloormas* parent = (EnFloormas*)this->actor.parent;
@@ -960,12 +960,12 @@ void func_808D2C08(EnFloormas* this, PlayState* play) {
         }
     }
 
-    Math_StepToF(&this->actor.speedXZ, 0.0f, 0.2f);
+    Math_StepToF(&this->actor.speed, 0.0f, 0.2f);
 }
 
 void func_808D2CDC(EnFloormas* this) {
     Animation_PlayOnce(&this->skelAnime, &gWallmasterRecoverFromDamageAnim);
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actor.velocity.y = 0.0f;
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->actionFunc = func_808D2D30;
@@ -978,7 +978,7 @@ void func_808D2D30(EnFloormas* this, PlayState* play) {
 }
 
 void func_808D2D6C(EnFloormas* this) {
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     if (this->actor.velocity.y > 0.0f) {
         this->actor.velocity.y = 0.0f;
     }
@@ -1085,8 +1085,8 @@ void EnFloormas_Update(Actor* thisx, PlayState* play) {
     if (this->actionFunc != func_808D2AA8) {
         if (this->collider.base.atFlags & AT_HIT) {
             this->collider.base.atFlags &= ~AT_HIT;
-            this->actor.speedXZ *= -0.5f;
-            this->actor.speedXZ = CLAMP_MAX(this->actor.speedXZ, -5.0f);
+            this->actor.speed *= -0.5f;
+            this->actor.speed = CLAMP_MAX(this->actor.speed, -5.0f);
             this->actor.velocity.y = 5.0f;
             func_808D1740(this);
         }

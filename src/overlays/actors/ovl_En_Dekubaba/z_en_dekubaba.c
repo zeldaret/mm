@@ -838,7 +838,7 @@ void EnDekubaba_SetupPrunedSomersaultDie(EnDekubaba* this) {
     this->actor.gravity = -0.8f;
     this->actor.velocity.y = 4.0f;
     this->actor.world.rot.y = this->actor.shape.rot.y + 0x8000;
-    this->actor.speedXZ = this->size * 3.0f;
+    this->actor.speed = this->size * 3.0f;
     this->collider.base.acFlags &= ~AC_ON;
     this->actor.flags |= ACTOR_FLAG_10 | ACTOR_FLAG_20;
     this->actionFunc = EnDekubaba_PrunedSomersaultDie;
@@ -851,7 +851,7 @@ void EnDekubaba_PrunedSomersaultDie(EnDekubaba* this, PlayState* play) {
     f32 deltaY;
     f32 deltaZ;
 
-    Math_StepToF(&this->actor.speedXZ, 0.0f, this->size * 0.1f);
+    Math_StepToF(&this->actor.speed, 0.0f, this->size * 0.1f);
 
     if (this->timer == 0) {
         Math_ScaledStepToS(&this->actor.shape.rot.x, 0x4800, 0x71C);
@@ -865,7 +865,7 @@ void EnDekubaba_PrunedSomersaultDie(EnDekubaba* this, PlayState* play) {
             this->actor.scale.z = 0.0f;
             this->actor.scale.y = 0.0f;
             this->actor.scale.x = 0.0f;
-            this->actor.speedXZ = 0.0f;
+            this->actor.speed = 0.0f;
             this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_4);
             EffectSsHahen_SpawnBurst(play, &this->actor.world.pos, this->size * 3.0f, 0, (s32)(this->size * 12.0f),
                                      (s32)(this->size * 5.0f), 15, HAHEN_OBJECT_DEFAULT, 10, NULL);

@@ -313,7 +313,7 @@ void func_80C16BD4(DemoSyoten* this, PlayState* play) {
                 break;
 
             case 4:
-                this->actor.speedXZ =
+                this->actor.speed =
                     play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->unk_3F0)]->urot.z * 0.005493164f;
                 if (this->unk_3EC < this->unk_3E8->count) {
                     if (func_80C16818(this)) {

@@ -246,15 +246,15 @@ void EnSnowman_Init(Actor* thisx, PlayState* play) {
         thisx->velocity.y = (Actor_WorldDistXZToActor(thisx, &player->actor) * 0.035f) + -5.0f;
         thisx->velocity.y = CLAMP_MAX(thisx->velocity.y, 3.5f);
         if (EN_SNOWMAN_GET_TYPE(thisx) == EN_SNOWMAN_TYPE_SMALL_SNOWBALL) {
-            thisx->speedXZ = 15.0f;
+            thisx->speed = 15.0f;
         } else {
-            thisx->speedXZ = 22.5f;
+            thisx->speed = 22.5f;
             thisx->velocity.y *= 1.5f;
         }
 
-        thisx->world.pos.x += thisx->speedXZ * Math_SinS(thisx->world.rot.y);
+        thisx->world.pos.x += thisx->speed * Math_SinS(thisx->world.rot.y);
         thisx->world.pos.y += thisx->velocity.y;
-        thisx->world.pos.z += thisx->speedXZ * Math_CosS(thisx->world.rot.y);
+        thisx->world.pos.z += thisx->speed * Math_CosS(thisx->world.rot.y);
 
         if (EN_SNOWMAN_GET_TYPE(thisx) == EN_SNOWMAN_TYPE_SMALL_SNOWBALL) {
             this->collider.dim.radius = 8;
@@ -338,7 +338,7 @@ void EnSnowman_SpawnBigSnowballFragmentEffects(EnSnowman* this, PlayState* play)
 void EnSnowman_SetupMoveSnowPile(EnSnowman* this) {
     Animation_PlayLoop(&this->snowPileSkelAnime, &gEenoSnowPileMoveAnim);
     this->actor.scale.y = this->actor.scale.x;
-    this->actor.speedXZ = 2.0f;
+    this->actor.speed = 2.0f;
     this->actor.draw = EnSnowman_DrawSnowPile;
     this->work.timer = 40;
     this->turningOnSteepSlope = false;
@@ -420,7 +420,7 @@ void EnSnowman_SetupEmerge(EnSnowman* this, PlayState* play) {
     this->collider.dim.height = this->eenoScale * 25.0f;
     this->actor.draw = EnSnowman_Draw;
     this->actor.scale.y = this->actor.scale.x * 0.4f;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actor.shape.rot.y = this->actor.yawTowardsPlayer;
     EnSnowman_SpawnCircularDustEffect(this, play);
     this->collider.base.acFlags &= ~AC_ON;
@@ -605,7 +605,7 @@ void EnSnowman_SetupMelt(EnSnowman* this) {
     this->actor.flags &= ~ACTOR_FLAG_1;
     this->actor.flags |= ACTOR_FLAG_10;
     this->actor.scale.y = this->actor.scale.x;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actionFunc = EnSnowman_Melt;
 }
 
@@ -673,7 +673,7 @@ void EnSnowman_SetupDamaged(EnSnowman* this) {
     this->work.timer = 20;
     this->actor.draw = EnSnowman_Draw;
     this->actor.scale.y = this->actor.scale.x;
-    this->actor.speedXZ = 10.0f;
+    this->actor.speed = 10.0f;
     func_800BE504(&this->actor, &this->collider);
 
     if (EN_SNOWMAN_GET_TYPE(&this->actor) == EN_SNOWMAN_TYPE_LARGE) {
@@ -696,7 +696,7 @@ void EnSnowman_Damaged(EnSnowman* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     rotationalVelocityScale = CLAMP_MAX(this->work.timer, 10);
     this->actor.shape.rot.y += rotationalVelocityScale * 0x300;
-    Math_StepToF(&this->actor.speedXZ, 0.0f, 0.5f);
+    Math_StepToF(&this->actor.speed, 0.0f, 0.5f);
 
     if (EN_SNOWMAN_GET_TYPE(&this->actor) == EN_SNOWMAN_TYPE_LARGE) {
         Math_StepToF(&this->actor.scale.y, 1.3f * 0.01f, 0.7f * 0.001f);
@@ -878,11 +878,11 @@ void EnSnowman_SetupCombine(EnSnowman* this, PlayState* play, Vec3f* combinePos)
         //! @bug: If an Eeno is in the middle of submerging, its draw function will still be EnSnowman_Draw.
         //! It will call EnSnowman_SetupSubmerge again, resulting in the submerge animation playing twice.
         if (this->actor.draw == EnSnowman_DrawSnowPile) {
-            this->actor.speedXZ = 3.0f;
+            this->actor.speed = 3.0f;
             this->actionFunc = EnSnowman_Combine;
         } else {
             this->isHoldingSnowball = false;
-            this->actor.speedXZ = 0.0f;
+            this->actor.speed = 0.0f;
 
             // At this point, the combineState is EN_SNOWMAN_COMBINE_STATE_ACTIVE, and the actionFunc
             // will be set to EnSnowman_Submerge. When the submerging animation is complete with this
@@ -942,7 +942,7 @@ void EnSnowman_Combine(EnSnowman* this, PlayState* play) {
     }
 
     if (Actor_WorldDistXZToPoint(&this->actor, &this->combinePos) < 20.0f) {
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
     }
 
     if (Math_StepToF(&this->actor.scale.x, this->fwork.targetScaleDuringCombine, 0.0005f)) {

@@ -231,7 +231,7 @@ void func_80BF3DC4(EnRg* this, PlayState* play) {
     this->collider2.dim.worldSphere.center.y = this->actor.world.pos.y + this->actor.shape.yOffset;
     this->collider2.dim.worldSphere.center.z = this->actor.world.pos.z;
 
-    if (this->actor.speedXZ >= 10.0f) {
+    if (this->actor.speed >= 10.0f) {
         CollisionCheck_SetAT(play, &play->colChkCtx, &this->collider2.base);
     }
     CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider2.base);
@@ -318,7 +318,7 @@ void func_80BF40F4(EnRg* this) {
 }
 
 s32 func_80BF416C(EnRg* this, PlayState* play) {
-    if ((this->actor.bgCheckFlags & 1) && (this->actor.speedXZ >= 0.01f)) {
+    if ((this->actor.bgCheckFlags & 1) && (this->actor.speed >= 0.01f)) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_GOLON_ROLLING - SFX_FLAG);
         func_800AE930(&play->colCtx, Effect_GetByIndex(this->unk_340), &this->actor.world.pos, 18.0f,
                       this->actor.shape.rot.y, this->actor.floorPoly, this->actor.floorBgId);
@@ -345,9 +345,9 @@ s32 func_80BF42BC(EnRg* this, f32 arg1) {
     f32 sp2C;
     s32 sp24;
 
-    Math_ApproachF(&this->actor.speedXZ, arg1, 0.3f, 0.5f);
+    Math_ApproachF(&this->actor.speed, arg1, 0.3f, 0.5f);
 
-    sp2C = this->actor.speedXZ * (1.0f / 26);
+    sp2C = this->actor.speed * (1.0f / 26);
     if (sp2C > 1.0f) {
         sp2C = 1.0f;
     }
@@ -410,7 +410,7 @@ s32 func_80BF45B4(EnRg* this) {
     s16 temp_v0;
     s16 temp_v1;
 
-    if ((this->actor.bgCheckFlags & 8) && (this->actor.speedXZ >= 5.0f)) {
+    if ((this->actor.bgCheckFlags & 8) && (this->actor.speed >= 5.0f)) {
         temp_v1 = this->actor.world.rot.y;
         temp_v0 = temp_v1 - BINANG_ROT180(this->actor.wallYaw);
 
@@ -419,12 +419,12 @@ s32 func_80BF45B4(EnRg* this) {
             this->unk_322 = 0xA;
         } else if (ABS_ALT(temp_v0) >= 0x1000) {
             this->actor.world.rot.y = BINANG_ROT180(BINANG_ROT180(this->actor.wallYaw) - temp_v0);
-            this->actor.speedXZ *= 0.75f;
+            this->actor.speed *= 0.75f;
             this->unk_322 = 0xA;
         } else {
             this->actor.world.rot.y = BINANG_ROT180(temp_v1);
             ret = 1;
-            this->actor.speedXZ *= 0.25f;
+            this->actor.speed *= 0.25f;
         }
         sp24 = 1;
     } else if (this->unk_310 & 0x40) {
@@ -432,7 +432,7 @@ s32 func_80BF45B4(EnRg* this) {
 
         sp24 = 2;
         if (this->actor.colorFilterTimer == 0) {
-            this->actor.speedXZ *= 0.5f;
+            this->actor.speed *= 0.5f;
             if ((s16)(yaw - this->actor.world.rot.y) > 0) {
                 this->actor.world.rot.y -= 0x2000;
             } else {
@@ -679,7 +679,7 @@ void func_80BF4FC4(EnRg* this, PlayState* play) {
         if (this->actor.bgCheckFlags & 2) {
             if (this->unk_310 & 0x400) {
                 this->unk_310 &= ~0x400;
-                this->actor.speedXZ = 0.0f;
+                this->actor.speed = 0.0f;
             }
 
             if (this->unk_344 != -1) {

@@ -281,7 +281,7 @@ void EnRailSkb_Init(Actor* thisx, PlayState* play) {
     }
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    this->actor.speedXZ = 1.6f;
+    this->actor.speed = 1.6f;
     this->actor.hintId = TATL_HINT_ID_STALCHILD;
     this->unk_3F2 = 0;
     this->unk_2E4 = -1;

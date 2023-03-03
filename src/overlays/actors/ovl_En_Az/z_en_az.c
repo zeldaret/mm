@@ -437,9 +437,9 @@ s32 func_80A95534(PlayState* play, ActorPathing* actorPathing) {
             this->unk_36C = actorPathing->distSqToCurPointXZ;
         }
     }
-    Math_SmoothStepToF(&this->actor.speedXZ, this->unk_36C, 0.8f, 2.0f, 0.0f);
+    Math_SmoothStepToF(&this->actor.speed, this->unk_36C, 0.8f, 2.0f, 0.0f);
     actorPathing->moveFunc = SubS_ActorPathing_MoveWithGravity;
-    if (actorPathing->distSqToCurPointXZ <= this->actor.speedXZ) {
+    if (actorPathing->distSqToCurPointXZ <= this->actor.speed) {
         ret = true;
     }
     return ret;
@@ -454,11 +454,11 @@ s32 func_80A9565C(PlayState* play, ActorPathing* actorPathing) {
     actorPathing->moveFunc = func_80A94A90;
     this->unk_374 |= 0x2000;
     temp_f0 = func_80A954AC(this);
-    if ((actorPathing->distSqToCurPointXZ < SQ(this->actor.speedXZ)) || (temp_f0 <= 0.0f)) {
+    if ((actorPathing->distSqToCurPointXZ < SQ(this->actor.speed)) || (temp_f0 <= 0.0f)) {
         ret = true;
     } else {
         this->unk_39E = this->actor.world.rot.x =
-            Math_Atan2S(-this->actor.velocity.y, Math_CosS(-this->actor.world.rot.x) * this->actor.speedXZ);
+            Math_Atan2S(-this->actor.velocity.y, Math_CosS(-this->actor.world.rot.x) * this->actor.speed);
     }
     return ret;
 }
@@ -474,10 +474,10 @@ s32 func_80A95730(PlayState* play, ActorPathing* actorPathing) {
 
     this->actor.gravity = 0.0f;
     temp_f0 = func_80A954AC(this);
-    if ((actorPathing->distSqToCurPointXZ < SQ(this->actor.speedXZ)) || (temp_f0 <= 0.0f)) {
+    if ((actorPathing->distSqToCurPointXZ < SQ(this->actor.speed)) || (temp_f0 <= 0.0f)) {
         ret = true;
     } else {
-        sp40 = SQ(this->actor.speedXZ) / actorPathing->distSqToCurPoint;
+        sp40 = SQ(this->actor.speed) / actorPathing->distSqToCurPoint;
         sp34 = ABS(actorPathing->rotToCurPoint.x - this->actor.world.rot.x);
 
         sp3C = (s32)(sp34 * sp40) + 0xAAA;
@@ -521,12 +521,12 @@ s32 func_80A958B0(PlayState* play, ActorPathing* actorPathing) {
     } else {
         Math_SmoothStepToF(&this->unk_36C, 26.0f, 0.5f, 1.0f, 0.01f);
     }
-    Math_SmoothStepToF(&this->actor.speedXZ, this->unk_36C, 0.8f, 2.0f, 0.0f);
+    Math_SmoothStepToF(&this->actor.speed, this->unk_36C, 0.8f, 2.0f, 0.0f);
     temp1 = func_80A954AC(this);
-    if ((actorPathing->distSqToCurPointXZ < SQ(this->actor.speedXZ)) || (temp1 <= 0.0f)) {
+    if ((actorPathing->distSqToCurPointXZ < SQ(this->actor.speed)) || (temp1 <= 0.0f)) {
         ret = true;
     } else {
-        sp3C = SQ(this->actor.speedXZ) / actorPathing->distSqToCurPoint;
+        sp3C = SQ(this->actor.speed) / actorPathing->distSqToCurPoint;
         sp30 = ABS(actorPathing->rotToCurPoint.x - this->actor.world.rot.x);
         sp2C = (s32)(sp30 * sp3C) + 0xAAA;
         sp30 = ABS(actorPathing->rotToCurPoint.y - this->actor.world.rot.y);
@@ -608,7 +608,7 @@ void func_80A95DA0(EnAz* this, PlayState* play) {
     SubS_ActorPathing_Init(play, &this->actor.world.pos, &this->actor, sp40, play->setupPathList,
                            BEAVER_GET_PARAM_FF(&this->actor), 0, 0, 1, 1);
     this->unk_36C = 4.0f;
-    this->actor.speedXZ = 4.0f;
+    this->actor.speed = 4.0f;
     this->actor.gravity = 0.0f;
     SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo, BEAVER_ANIM_SWIM_WITH_SPINNING_TAIL,
                                     &this->animIndex);
@@ -665,7 +665,7 @@ void func_80A95FE8(EnAz* this, PlayState* play) {
         SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo, BEAVER_ANIM_IDLE, &this->animIndex);
         this->unk_374 &= ~0x1000;
         this->actor.gravity = -1.0f;
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
         Math_SmoothStepToS(&this->actor.shape.rot.x, 0, 3, 0x1000, 0x100);
         Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.world.rot.y, 3, 0x1038, 0x100);
         if (this->actor.bgCheckFlags & 1) {
@@ -1510,7 +1510,7 @@ void func_80A97EAC(EnAz* this, PlayState* play) {
     SubS_ActorPathing_Init(play, &this->actor.world.pos, &this->actor, &this->unk_300, play->setupPathList,
                            BEAVER_GET_PARAM_FF(&this->actor), 0, 0, 1, 0);
     this->unk_36C = 8.0f;
-    this->actor.speedXZ = 8.0f;
+    this->actor.speed = 8.0f;
     this->actor.gravity = 0.0f;
     this->actor.velocity.y = 6.0f;
     SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo, BEAVER_ANIM_SWIM_WITH_SPINNING_TAIL,
@@ -1554,7 +1554,7 @@ void func_80A97F9C(EnAz* this, PlayState* play) {
         play->transitionTrigger = TRANS_TRIGGER_START;
         play->transitionType = TRANS_TYPE_FADE_WHITE;
         gSaveContext.nextTransitionType = TRANS_TYPE_FADE_WHITE;
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
         func_80A979DC(this, play);
     } else {
         if (gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2] == SECONDS_TO_TIMER(0)) {
@@ -1798,7 +1798,7 @@ void EnAz_Draw(Actor* thisx, PlayState* play2) {
         CLOSE_DISPS(play->state.gfxCtx);
     }
     OPEN_DISPS(play->state.gfxCtx);
-    if ((this->actor.depthInWater >= 28.0f) && (this->actor.speedXZ > 0.5f)) {
+    if ((this->actor.depthInWater >= 28.0f) && (this->actor.speed > 0.5f)) {
         Matrix_Translate(this->unk_3B4.x, this->unk_3B4.y, this->unk_3B4.z, MTXMODE_NEW);
         Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_APPLY);
         Matrix_RotateXS(this->actor.shape.rot.x, MTXMODE_APPLY);

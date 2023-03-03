@@ -821,7 +821,7 @@ void func_80B51EA4(EnGk* this, PlayState* play) {
         }
 
         if (ABS_ALT(sp36) < 0x2AAA) {
-            Math_ApproachF(&this->actor.speedXZ, 3.0f, 0.2f, 0.5f);
+            Math_ApproachF(&this->actor.speed, 3.0f, 0.2f, 0.5f);
         }
         Actor_MoveWithGravity(&this->actor);
     }

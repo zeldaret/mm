@@ -225,7 +225,7 @@ void func_8088A7D8(PlayState* play, EnArrow* this) {
     this->actionFunc = func_8088B6B0;
     Animation_PlayOnce(&this->arrow.skelAnime, &gameplay_keep_Anim_012860);
     this->actor.world.rot.y += (s32)(0x6000 * (Rand_ZeroOne() - 0.5f)) + 0x8000;
-    this->actor.speedXZ *= 0.02f + (0.02f * Rand_ZeroOne());
+    this->actor.speed *= 0.02f + (0.02f * Rand_ZeroOne());
     this->actor.gravity = -1.5f;
     this->unk_260 = 50;
     this->unk_263 = 1;
@@ -375,7 +375,7 @@ void func_8088ACE0(EnArrow* this, PlayState* play) {
             if (this->actor.params == ENARROW_8) {
                 R_TRANS_FADE_FLASH_ALPHA_STEP = -1;
                 Actor_Spawn(&play->actorCtx, play, ACTOR_EN_M_FIRE1, this->actor.world.pos.x, this->actor.world.pos.y,
-                            this->actor.world.pos.z, 0, 0, 0, this->actor.speedXZ == 0.0f);
+                            this->actor.world.pos.z, 0, 0, 0, this->actor.speed == 0.0f);
                 sp82 = NA_SE_IT_DEKU;
             } else {
                 sp82 = NA_SE_IT_SLING_REFLECT;
@@ -396,7 +396,7 @@ void func_8088ACE0(EnArrow* this, PlayState* play) {
                     Math_Vec3f_Diff(&sp7C->world.pos, &this->actor.world.pos, &this->unk_268);
                     sp7C->flags |= ACTOR_FLAG_8000;
                     this->collider.base.atFlags &= ~AT_HIT;
-                    this->actor.speedXZ *= 0.5f;
+                    this->actor.speed *= 0.5f;
                     this->actor.velocity.y *= 0.5f;
                 } else {
                     this->unk_261 |= 1;
@@ -424,9 +424,9 @@ void func_8088ACE0(EnArrow* this, PlayState* play) {
         func_8088AA98(this, play);
         if (this->actor.params == ENARROW_7) {
             if (this->bubble.unk_149 == 0) {
-                sp78 = sqrtf(SQ(this->actor.speedXZ) + SQ(this->actor.velocity.y));
-                sp74 = Math_SinS(this->actor.world.rot.y) * this->actor.speedXZ;
-                temp_f12_2 = Math_CosS(this->actor.world.rot.y) * this->actor.speedXZ;
+                sp78 = sqrtf(SQ(this->actor.speed) + SQ(this->actor.velocity.y));
+                sp74 = Math_SinS(this->actor.world.rot.y) * this->actor.speed;
+                temp_f12_2 = Math_CosS(this->actor.world.rot.y) * this->actor.speed;
 
                 this->actor.prevPos.x = this->actor.world.pos.x - (sp74 * (10.0f / sp78));
                 this->actor.prevPos.y = this->actor.world.pos.y - (this->actor.velocity.y * (10.0f / sp78));
@@ -456,7 +456,7 @@ void func_8088ACE0(EnArrow* this, PlayState* play) {
 
         Math_Vec3f_Copy(&this->unk_228, &this->actor.world.pos);
 
-        if (this->actor.speedXZ == 0.0f) {
+        if (this->actor.speed == 0.0f) {
             this->actor.velocity.y -= 1.0f;
             if (this->actor.velocity.y < this->actor.terminalVelocity) {
                 this->actor.velocity.y = this->actor.terminalVelocity;
@@ -474,7 +474,7 @@ void func_8088ACE0(EnArrow* this, PlayState* play) {
         }
 
         if (this->actor.params < ENARROW_6) {
-            this->actor.shape.rot.x = Math_Atan2S_XY(this->actor.speedXZ, -this->actor.velocity.y);
+            this->actor.shape.rot.x = Math_Atan2S_XY(this->actor.speed, -this->actor.velocity.y);
         }
     }
 
@@ -641,7 +641,7 @@ void EnArrow_Draw(Actor* thisx, PlayState* play) {
                           &this->actor, this->actor.projectedPos.z < 160.0f ? 0 : 1);
     } else if (this->actor.params == ENARROW_7) {
         s32 spA4 = 255 - (s32)(this->bubble.unk_144 * 4.0f);
-        f32 spA0 = (this->actor.speedXZ * 0.1f) + 1.0f;
+        f32 spA0 = (this->actor.speed * 0.1f) + 1.0f;
         f32 sp9C = (1.0f / spA0);
 
         OPEN_DISPS(play->state.gfxCtx);
@@ -659,7 +659,7 @@ void EnArrow_Draw(Actor* thisx, PlayState* play) {
                      MTXMODE_APPLY);
         Matrix_Translate(0.0f, 0.0f, 460.0f, MTXMODE_APPLY);
 
-        if (this->actor.speedXZ == 0.0f) {
+        if (this->actor.speed == 0.0f) {
             func_800B8118(&this->actor, play, MTXMODE_NEW);
 
             gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_06F380);
@@ -687,7 +687,7 @@ void EnArrow_Draw(Actor* thisx, PlayState* play) {
         CLOSE_DISPS(play->state.gfxCtx);
 
         return;
-    } else if (this->actor.speedXZ != 0.0f) {
+    } else if (this->actor.speed != 0.0f) {
         u8 sp63 = (Math_CosS(this->unk_260 * 5000) * 127.5f) + 127.5f;
         f32 sp5C;
 
@@ -710,7 +710,7 @@ void EnArrow_Draw(Actor* thisx, PlayState* play) {
         Matrix_Push();
         Matrix_Mult(&play->billboardMtxF, MTXMODE_APPLY);
 
-        if (this->actor.speedXZ == 0.0f) {
+        if (this->actor.speed == 0.0f) {
             phi_v0 = 0;
         } else {
             phi_v0 = (play->gameplayFrames % 256) * 4000;

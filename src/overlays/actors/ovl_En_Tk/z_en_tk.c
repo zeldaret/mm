@@ -299,7 +299,7 @@ void func_80AECA90(EnTk* this, PlayState* play) {
 }
 
 void func_80AECB0C(EnTk* this, PlayState* play) {
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->unk_3CC = 0xFF;
     this->unk_2DC = 0.0f;
     SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, D_80AEF868, 0, &this->unk_2D4);
@@ -631,7 +631,7 @@ void func_80AED610(EnTk* this, PlayState* play) {
 
 void func_80AED898(EnTk* this, PlayState* play) {
     this->unk_316 = 0;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     if (this->unk_2CA & 0x1000) {
         if ((this->unk_2D4 == 4) && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
             SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, D_80AEF868, 7, &this->unk_2D4);
@@ -706,7 +706,7 @@ void func_80AED940(EnTk* this, PlayState* play) {
 void func_80AEDBEC(EnTk* this, PlayState* play) {
     this->actor.params = -1;
     this->unk_2E8 = 0;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, D_80AEF868, 2, &this->unk_2D4);
     this->actionFunc = func_80AEDC4C;
 }
@@ -721,7 +721,7 @@ void func_80AEDC4C(EnTk* this, PlayState* play) {
 }
 
 void func_80AEDCBC(EnTk* this, PlayState* play) {
-    this->actor.speedXZ = 10.0f;
+    this->actor.speed = 10.0f;
     SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, D_80AEF868, 5, &this->unk_2D4);
     Math_Vec3f_Copy(&this->actor.world.pos, &this->unk_2EC);
     Math_Vec3f_Copy(&this->actor.prevPos, &this->unk_2EC);
@@ -740,7 +740,7 @@ void func_80AEDD4C(EnTk* this, PlayState* play) {
 }
 
 void func_80AEDDA0(EnTk* this, PlayState* play) {
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, D_80AEF868, 2, &this->unk_2D4);
     this->actor.flags |= ACTOR_FLAG_10000;
     this->unk_2CA |= 0x80;
@@ -1183,10 +1183,10 @@ void func_80AEED38(EnTk* this, PlayState* play) {
         SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, D_80AEF868, 2, &this->unk_2D4);
     } else {
         SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, D_80AEF868, 1, &this->unk_2D4);
-        func_80AEC658(&this->skelAnime, this->unk_320, 1.0f, &this->actor.speedXZ, &sp64);
+        func_80AEC658(&this->skelAnime, this->unk_320, 1.0f, &this->actor.speed, &sp64);
     }
 
-    if (this->actor.speedXZ > 0.5f) {
+    if (this->actor.speed > 0.5f) {
         Math_SmoothStepToS(&this->actor.world.rot.y, this->unk_2CC, 2, 0xAAA, 1);
         this->actor.shape.rot.y = this->actor.world.rot.y;
     }
@@ -1210,17 +1210,17 @@ void func_80AEF094(EnTk* this, PlayState* play) {
         SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, D_80AEF868, 2, &this->unk_2D4);
     } else {
         SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, D_80AEF868, 1, &this->unk_2D4);
-        func_80AEC658(&this->skelAnime, this->unk_320, 1.0f, &this->actor.speedXZ, &sp2C);
+        func_80AEC658(&this->skelAnime, this->unk_320, 1.0f, &this->actor.speed, &sp2C);
     }
 
-    if (this->actor.speedXZ >= 0.5f) {
+    if (this->actor.speed >= 0.5f) {
         Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 2, 0x38E, 1);
         this->actor.shape.rot.y = this->actor.world.rot.y;
     }
 }
 
 void func_80AEF15C(EnTk* this, PlayState* play) {
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, D_80AEF868, 2, &this->unk_2D4);
     this->unk_30C = func_80AEF1B4;
 }
@@ -1237,7 +1237,7 @@ void func_80AEF210(EnTk* this, PlayState* play) {
 }
 
 void func_80AEF220(EnTk* this, PlayState* play) {
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, D_80AEF868, 2, &this->unk_2D4);
     this->unk_30C = func_80AEF278;
 }

@@ -1125,8 +1125,8 @@ void Actor_UpdatePos(Actor* actor) {
  * It is recommended to not call this function directly and use `Actor_MoveWithGravity` instead
  */
 void Actor_UpdateVelocityWithGravity(Actor* actor) {
-    actor->velocity.x = actor->speedXZ * Math_SinS(actor->world.rot.y);
-    actor->velocity.z = actor->speedXZ * Math_CosS(actor->world.rot.y);
+    actor->velocity.x = actor->speed * Math_SinS(actor->world.rot.y);
+    actor->velocity.z = actor->speed * Math_CosS(actor->world.rot.y);
 
     actor->velocity.y += actor->gravity;
     if (actor->velocity.y < actor->terminalVelocity) {
@@ -1150,11 +1150,11 @@ void Actor_MoveWithGravity(Actor* actor) {
  * It is recommended to not call this function directly and use `Actor_MoveWithoutGravity` instead
  */
 void Actor_UpdateVelocityWithoutGravity(Actor* actor) {
-    f32 horizontalSpeed = Math_CosS(actor->world.rot.x) * actor->speedXZ;
+    f32 speedXZ = Math_CosS(actor->world.rot.x) * actor->speed;
 
-    actor->velocity.x = Math_SinS(actor->world.rot.y) * horizontalSpeed;
-    actor->velocity.y = Math_SinS(actor->world.rot.x) * actor->speedXZ;
-    actor->velocity.z = Math_CosS(actor->world.rot.y) * horizontalSpeed;
+    actor->velocity.x = Math_SinS(actor->world.rot.y) * speedXZ;
+    actor->velocity.y = Math_SinS(actor->world.rot.x) * actor->speed;
+    actor->velocity.z = Math_CosS(actor->world.rot.y) * speedXZ;
 }
 
 /**
@@ -1174,11 +1174,11 @@ void Actor_MoveWithoutGravity(Actor* actor) {
  * It is recommended to not call this function directly and use `Actor_MoveWithoutGravityReverse` instead
  */
 void Actor_UpdateVelocityWithoutGravityReverse(Actor* actor) {
-    f32 horizontalSpeed = Math_CosS(-actor->world.rot.x) * actor->speedXZ;
+    f32 speedXZ = Math_CosS(-actor->world.rot.x) * actor->speed;
 
-    actor->velocity.x = Math_SinS(actor->world.rot.y) * horizontalSpeed;
-    actor->velocity.y = Math_SinS(-actor->world.rot.x) * actor->speedXZ;
-    actor->velocity.z = Math_CosS(actor->world.rot.y) * horizontalSpeed;
+    actor->velocity.x = Math_SinS(actor->world.rot.y) * speedXZ;
+    actor->velocity.y = Math_SinS(-actor->world.rot.x) * actor->speed;
+    actor->velocity.z = Math_CosS(actor->world.rot.y) * speedXZ;
 }
 
 /**
@@ -1193,7 +1193,7 @@ void Actor_MoveWithoutGravityReverse(Actor* actor) {
  * Sets horizontal speed and Y velocity using the `speed` argument and current pitch
  */
 void Actor_SetSpeeds(Actor* actor, f32 speed) {
-    actor->speedXZ = Math_CosS(actor->world.rot.x) * speed;
+    actor->speed = Math_CosS(actor->world.rot.x) * speed;
     actor->velocity.y = -Math_SinS(actor->world.rot.x) * speed;
 }
 
@@ -3607,7 +3607,7 @@ Actor* func_800BC270(PlayState* play, Actor* actor, f32 arg2, s32 arg3) {
             ((itemAction->id == ACTOR_EN_ARROW) && (func_800BC188(itemAction->params) & arg3))) {
             f32 speedXZ;
 
-            if ((itemAction->speedXZ <= 0.0f) && (GET_PLAYER(play)->unk_D57 != 0)) {
+            if ((itemAction->speed <= 0.0f) && (GET_PLAYER(play)->unk_D57 != 0)) {
                 if (itemAction->id == ACTOR_ARMS_HOOK) {
                     speedXZ = 20.0f;
                 } else if (itemAction->id == ACTOR_EN_BOOM) {
@@ -3624,7 +3624,7 @@ Actor* func_800BC270(PlayState* play, Actor* actor, f32 arg2, s32 arg3) {
                     }
                 }
             } else {
-                speedXZ = itemAction->speedXZ;
+                speedXZ = itemAction->speed;
             }
 
             if (func_800BC1B4(actor, itemAction, arg2, speedXZ)) {
@@ -3644,7 +3644,7 @@ Actor* func_800BC444(PlayState* play, Actor* actor, f32 arg2) {
     while (explosive != NULL) {
         if (((explosive->id == ACTOR_EN_BOM) || (explosive->id == ACTOR_EN_BOM_CHU) ||
              (explosive->id == ACTOR_EN_BOMBF))) {
-            if (func_800BC1B4(actor, explosive, arg2, explosive->speedXZ)) {
+            if (func_800BC1B4(actor, explosive, arg2, explosive->speed)) {
                 break;
             }
         }

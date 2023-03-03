@@ -181,7 +181,7 @@ void func_80B9BCBC(ObjTaru* this, PlayState* play) {
         if (spawnedActor != NULL) {
             spawnedActor->parent = &this->dyna.actor;
             spawnedActor->velocity.y = 12.0f;
-            spawnedActor->speedXZ = 2.0f;
+            spawnedActor->speed = 2.0f;
         }
     }
 }
