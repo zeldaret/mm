@@ -21,7 +21,7 @@ void func_80B23910(EnHanabi* this, PlayState* play);
 void func_80B23934(EnHanabi* this, PlayState* play);
 void EnHanabi_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit En_Hanabi_InitVars = {
+ActorInit En_Hanabi_InitVars = {
     ACTOR_EN_HANABI,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -297,7 +297,7 @@ void func_80B236C8(EnHanabi* this, PlayState* play) {
 
         this->actor.home.rot.y += (s16)((Rand_ZeroFloat(40.0f) + 80.0f) * 256.0f);
         this->unk_144 = (s32)Rand_ZeroFloat(5.0f) + 20;
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_OC_FIREWORKS);
+        Actor_PlaySfx(&this->actor, NA_SE_OC_FIREWORKS);
         func_80B235CC(this, &sp34, sp28);
     }
 }
@@ -332,7 +332,7 @@ void func_80B23934(EnHanabi* this, PlayState* play) {
 
     if ((play->sceneId == SCENE_00KEIKOKU) && (gSaveContext.sceneLayer == 7) && (play->csCtx.currentCsIndex == 0) &&
         (play->csCtx.frames == 610)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_KYOJIN_GROAN);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_KYOJIN_GROAN);
     }
 }
 

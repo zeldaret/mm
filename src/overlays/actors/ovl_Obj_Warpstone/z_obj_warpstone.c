@@ -22,7 +22,7 @@ s32 ObjWarpstone_BeginOpeningCutscene(ObjWarpstone* this, PlayState* play);
 s32 ObjWarpstone_PlayOpeningCutscene(ObjWarpstone* this, PlayState* play);
 s32 ObjWarpstone_OpenedIdle(ObjWarpstone* this, PlayState* play);
 
-const ActorInit Obj_Warpstone_InitVars = {
+ActorInit Obj_Warpstone_InitVars = {
     ACTOR_OBJ_WARPSTONE,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -100,7 +100,7 @@ s32 ObjWarpstone_BeginOpeningCutscene(ObjWarpstone* this, PlayState* play) {
     if (this->dyna.actor.cutscene < 0 || ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
         ObjWarpstone_SetupAction(this, ObjWarpstone_PlayOpeningCutscene);
-        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_OWL_WARP_SWITCH_ON);
+        Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_OWL_WARP_SWITCH_ON);
     } else {
         ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
     }
@@ -181,11 +181,11 @@ void ObjWarpstone_Draw(Actor* thisx, PlayState* play2) {
         gDPSetEnvColor(POLY_XLU_DISP++, 100, 200, 0, 255);
         Matrix_RotateZF((((play->gameplayFrames * 1500) & 0xFFFF) * M_PI) / 0x8000, MTXMODE_APPLY);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_XLU_DISP++, gOwlStatueWhiteFlashDL);
+        gSPDisplayList(POLY_XLU_DISP++, gEffFlash1DL);
         Matrix_Pop();
         Matrix_RotateZF((~((play->gameplayFrames * 1200) & 0xFFFF) * M_PI) / 0x8000, MTXMODE_APPLY);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_XLU_DISP++, gOwlStatueWhiteFlashDL);
+        gSPDisplayList(POLY_XLU_DISP++, gEffFlash1DL);
         CLOSE_DISPS(play->state.gfxCtx);
     }
 }

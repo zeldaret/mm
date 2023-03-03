@@ -38,7 +38,7 @@ void func_80B165E0(BgHakuginSwitch* this, PlayState* play);
 
 u32 D_80B16AF0;
 
-const ActorInit Bg_Hakugin_Switch_InitVars = {
+ActorInit Bg_Hakugin_Switch_InitVars = {
     ACTOR_BG_HAKUGIN_SWITCH,
     ACTORCAT_SWITCH,
     FLAGS,
@@ -102,7 +102,7 @@ static InitChainEntry sInitChain2[] = {
 
 void func_80B15790(BgHakuginSwitch* this, u16 sfxId) {
     if (this->unk_1B2 <= 0) {
-        Actor_PlaySfxAtPos(&this->dyna.actor, sfxId);
+        Actor_PlaySfx(&this->dyna.actor, sfxId);
     }
 }
 

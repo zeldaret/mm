@@ -69,7 +69,7 @@ EnDoor* EnHy_FindNearestDoor(Actor* actor, PlayState* play) {
     do {
         doorIter = SubS_FindActor(play, doorIter, ACTORCAT_DOOR, ACTOR_EN_DOOR);
         door = (EnDoor*)doorIter;
-        dist = Actor_DistanceBetweenActors(actor, &door->dyna.actor);
+        dist = Actor_WorldDistXYZToActor(actor, &door->dyna.actor);
         if (!isSetup || (dist < minDist)) {
             nearestDoor = door;
             minDist = dist;
@@ -140,7 +140,7 @@ void func_800F0BB4(EnHy* enHy, PlayState* play, EnDoor* door, s16 arg3, s16 arg4
     EnHy_ChangeObjectAndAnim(enHy, play, (animIndex == 0) ? arg3 : arg4);
     enHy->skelAnime.baseTransl = *enHy->skelAnime.jointTable;
     enHy->skelAnime.prevTransl = *enHy->skelAnime.jointTable;
-    enHy->skelAnime.moveFlags |= 3;
+    enHy->skelAnime.moveFlags |= (ANIM_FLAG_UPDATEY | ANIM_FLAG_1);
     AnimationContext_SetMoveActor(play, &enHy->actor, &enHy->skelAnime, 1.0f);
     door->unk_1A1 = 1;
     door->animIndex = animIndex;
@@ -267,12 +267,12 @@ s32 EnHy_PlayWalkingSound(EnHy* enHy, PlayState* play, f32 distAboveThreshold) {
 
     enHy->isLeftFootOnGround = isFootOnGround = SubS_IsFloorAbove(play, &enHy->leftFootPos, distAboveThreshold);
     if (enHy->isLeftFootOnGround && !wasLeftFootOnGround && isFootOnGround) {
-        Actor_PlaySfxAtPos(&enHy->actor, sfxId);
+        Actor_PlaySfx(&enHy->actor, sfxId);
     }
 
     enHy->isRightFootOnGround = isFootOnGround = SubS_IsFloorAbove(play, &enHy->rightFootPos, distAboveThreshold);
     if (enHy->isRightFootOnGround && !wasRightFootOnGround && isFootOnGround) {
-        Actor_PlaySfxAtPos(&enHy->actor, sfxId);
+        Actor_PlaySfx(&enHy->actor, sfxId);
     }
 
     return false;

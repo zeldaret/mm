@@ -16,7 +16,7 @@ void BgFuKaiten_Destroy(Actor* thisx, PlayState* play);
 void BgFuKaiten_Update(Actor* thisx, PlayState* play);
 void BgFuKaiten_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit Bg_Fu_Kaiten_InitVars = {
+ActorInit Bg_Fu_Kaiten_InitVars = {
     ACTOR_BG_FU_KAITEN,
     ACTORCAT_BG,
     FLAGS,

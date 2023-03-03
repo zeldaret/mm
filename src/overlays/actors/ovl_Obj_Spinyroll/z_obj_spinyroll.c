@@ -28,7 +28,7 @@ void func_80A1EC38(ObjSpinyroll* this, PlayState* play);
 void func_80A1ECC0(ObjSpinyroll* this);
 void func_80A1ECD4(ObjSpinyroll* this, PlayState* play);
 
-const ActorInit Obj_Spinyroll_InitVars = {
+ActorInit Obj_Spinyroll_InitVars = {
     ACTOR_OBJ_SPINYROLL,
     ACTORCAT_PROP,
     FLAGS,
@@ -149,7 +149,7 @@ void func_80A1DA50(PlayState* play, ObjSpinyroll* this, Vec3f* arg2, Vec3f* arg3
     Math_Vec3f_Sum(arg2, arg3, &sp1C);
     Math_Vec3f_Scale(&sp1C, 0.5f);
     EffectSsHitmark_SpawnFixedScale(play, 3, &sp1C);
-    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_IT_SHIELD_REFLECT_SW);
+    Actor_PlaySfx(&this->dyna.actor, NA_SE_IT_SHIELD_REFLECT_SW);
 }
 
 void func_80A1DAAC(Vec3f* arg0, Vec3f* arg1, s16 arg2) {

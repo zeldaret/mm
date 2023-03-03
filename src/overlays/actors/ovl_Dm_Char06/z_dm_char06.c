@@ -18,7 +18,7 @@ void DmChar06_Draw(Actor* thisx, PlayState* play);
 void DmChar06_SetupAction(DmChar06* this, DmChar06ActionFunc actionFunc);
 void func_80AAE6F0(DmChar06* this, PlayState* play);
 
-const ActorInit Dm_Char06_InitVars = {
+ActorInit Dm_Char06_InitVars = {
     ACTOR_DM_CHAR06,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -37,7 +37,7 @@ void DmChar06_SetupAction(DmChar06* this, DmChar06ActionFunc actionFunc) {
 void DmChar06_Init(Actor* thisx, PlayState* play) {
     DmChar06* this = THIS;
 
-    gSaveContext.save.weekEventReg[33] |= 0x80;
+    SET_WEEKEVENTREG(WEEKEVENTREG_33_80);
     Actor_SetScale(&this->actor, 1.0f);
     this->alpha = 255;
     DmChar06_SetupAction(this, func_80AAE6F0);

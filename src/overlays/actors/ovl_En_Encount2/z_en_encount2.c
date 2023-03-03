@@ -25,7 +25,7 @@ void EnEncount2_InitEffects(EnEncount2* this, Vec3f* pos, s16 fadeDelay);
 void EnEncount2_UpdateEffects(EnEncount2* this, PlayState* play);
 void EnEncount2_DrawEffects(EnEncount2* this, PlayState* play);
 
-const ActorInit En_Encount2_InitVars = {
+ActorInit En_Encount2_InitVars = {
     ACTOR_EN_ENCOUNT2,
     ACTORCAT_PROP,
     FLAGS,
@@ -171,7 +171,7 @@ void EnEncount2_Popped(EnEncount2* this, PlayState* play) {
         EnEncount2_InitEffects(this, &curPos, 10);
     }
 
-    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_MUJURA_BALLOON_BROKEN);
+    Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_MUJURA_BALLOON_BROKEN);
     this->deathTimer = 30;
     this->actionFunc = EnEncount2_Die;
 }

@@ -24,7 +24,7 @@ void func_808AEE3C(EnBombf* this, PlayState* play);
 void func_808AEF68(EnBombf* this, PlayState* play);
 void func_808AEFD4(EnBombf* this, PlayState* play);
 
-const ActorInit En_Bombf_InitVars = {
+ActorInit En_Bombf_InitVars = {
     ACTOR_EN_BOMBF,
     ACTORCAT_PROP,
     FLAGS,
@@ -156,14 +156,14 @@ void func_808AEAE0(EnBombf* this, PlayState* play) {
                 func_800B8C20(&this->actor, &bombf->actor, play);
                 this->timer = 180;
                 this->unk_204 = 0.0f;
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_PL_PULL_UP_ROCK);
+                Actor_PlaySfx(&this->actor, NA_SE_PL_PULL_UP_ROCK);
                 this->actor.flags &= ~ACTOR_FLAG_1;
             } else {
                 player->actor.child = NULL;
                 player->heldActor = NULL;
                 player->interactRangeActor = NULL;
                 this->actor.parent = NULL;
-                player->stateFlags1 &= ~0x800;
+                player->stateFlags1 &= ~PLAYER_STATE1_800;
             }
         } else if ((this->colliderCylinder.base.acFlags & AC_HIT) &&
                    ((this->colliderCylinder.info.acHitInfo->toucher.dmgFlags & 0x13828) ||
@@ -200,7 +200,7 @@ void func_808AEAE0(EnBombf* this, PlayState* play) {
                 player->heldActor = NULL;
                 player->interactRangeActor = NULL;
                 this->actor.parent = NULL;
-                player->stateFlags1 &= ~0x800;
+                player->stateFlags1 &= ~PLAYER_STATE1_800;
                 this->actor.world.pos = this->actor.home.pos;
             }
         }
@@ -217,7 +217,7 @@ void func_808AEAE0(EnBombf* this, PlayState* play) {
             player->heldActor = NULL;
             player->interactRangeActor = NULL;
             this->actor.parent = NULL;
-            player->stateFlags1 &= ~0x800;
+            player->stateFlags1 &= ~PLAYER_STATE1_800;
             this->actor.world.pos = this->actor.home.pos;
         }
     }
@@ -299,11 +299,11 @@ void func_808AEFD4(EnBombf* this, PlayState* play) {
     if (this->timer == 0) {
         Player* player = GET_PLAYER(play);
 
-        if ((player->stateFlags1 & 0x800) && (&this->actor == player->heldActor)) {
+        if ((player->stateFlags1 & PLAYER_STATE1_800) && (&this->actor == player->heldActor)) {
             player->actor.child = NULL;
             player->heldActor = NULL;
             player->interactRangeActor = NULL;
-            player->stateFlags1 &= ~0x800;
+            player->stateFlags1 &= ~PLAYER_STATE1_800;
         }
         Actor_Kill(&this->actor);
     }
@@ -352,7 +352,7 @@ void EnBombf_Update(Actor* thisx, PlayState* play) {
                 this->actor.world.rot.y =
                     BINANG_SUB(this->actor.wallYaw - this->actor.world.rot.y + this->actor.wallYaw, 0x8000);
             }
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BOMB_BOUND);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_BOMB_BOUND);
             Actor_MoveWithGravity(&this->actor);
             DREG(6) = 1;
             Actor_UpdateBgCheckInfo(play, &this->actor, 5.0f, 10.0f, 0.0f, 0x1F);
@@ -378,7 +378,7 @@ void EnBombf_Update(Actor* thisx, PlayState* play) {
                 if ((play->gameplayFrames % 2) == 0) {
                     EffectSsGSpk_SpawnFuse(play, &this->actor, &sp68, &sp8C, &sp74);
                 }
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_BOMB_IGNIT - SFX_FLAG);
+                Actor_PlaySfx(&this->actor, NA_SE_IT_BOMB_IGNIT - SFX_FLAG);
                 sp68.y += 3.0f;
                 func_800B0DE0(play, &sp68, &sp8C, &sp5C, &sp58, &sp58, 0x32, 5);
             }
@@ -407,7 +407,7 @@ void EnBombf_Update(Actor* thisx, PlayState* play) {
 
                 Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, sp68.x, sp68.y, sp68.z, 0, 0, 0,
                             CLEAR_TAG_SMALL_EXPLOSION);
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_BOMB_EXPLOSION);
+                Actor_PlaySfx(&this->actor, NA_SE_IT_BOMB_EXPLOSION);
 
                 play->envCtx.lightSettings.diffuseColor1[0] = play->envCtx.lightSettings.diffuseColor1[1] =
                     play->envCtx.lightSettings.diffuseColor1[2] = 250;
@@ -445,21 +445,21 @@ void EnBombf_Update(Actor* thisx, PlayState* play) {
 
         if (this->actor.bgCheckFlags & 0x40) {
             this->actor.bgCheckFlags &= ~0x40;
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BOMB_DROP_WATER);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_BOMB_DROP_WATER);
         }
     }
 }
 
 Gfx* func_808AF86C(GraphicsContext* gfxCtx, PlayState* play) {
-    Gfx* head = GRAPH_ALLOC(gfxCtx, sizeof(Gfx) * 6);
-    Gfx* gfx = head;
+    Gfx* gfxHead = GRAPH_ALLOC(gfxCtx, 5 * sizeof(Gfx));
+    Gfx* gfx = gfxHead;
 
     Matrix_ReplaceRotation(&play->billboardMtxF);
 
     gSPMatrix(gfx++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPEndDisplayList(gfx++);
 
-    return head;
+    return gfxHead;
 }
 
 void EnBombf_Draw(Actor* thisx, PlayState* play) {

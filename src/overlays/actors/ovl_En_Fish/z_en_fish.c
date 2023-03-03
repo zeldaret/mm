@@ -68,7 +68,7 @@ static Color_RGB8 D_8091FA94[] = {
     { 215, 97, 7 },
 };
 
-const ActorInit En_Fish_InitVars = {
+ActorInit En_Fish_InitVars = {
     ACTOR_EN_FISH,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -511,7 +511,7 @@ void func_8091E880(Actor* thisx, PlayState* play) {
         this->unk_240 = 400;
         func_8091E9A4(this);
     } else if (this->actor.bgCheckFlags & 0x20) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_DIVE_INTO_WATER_L);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_DIVE_INTO_WATER_L);
         func_8091D840(thisx, play, 10, 15.0f);
         if (func_8091DA14(this, play)) {
             func_8091EF30(this);
@@ -554,7 +554,7 @@ void func_8091E9A4(EnFish* this) {
     this->unk_248 = 5;
     this->unk_24C = 0.0f;
     if (sp24 && (this->actor.draw != NULL)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_FISH_LEAP);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_FISH_LEAP);
     }
 }
 

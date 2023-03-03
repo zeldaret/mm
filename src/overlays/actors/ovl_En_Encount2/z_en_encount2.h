@@ -35,6 +35,4 @@ typedef struct EnEncount2 {
 
 #define ENCOUNT2_GET_SWITCH_FLAG(thisx) ((thisx)->params & 0x7F)
 
-extern const ActorInit En_Encount2_InitVars;
-
 #endif // Z_EN_ENCOUNT2_H

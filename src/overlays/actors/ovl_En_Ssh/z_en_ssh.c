@@ -25,7 +25,7 @@ void EnSsh_Start(EnSsh* this, PlayState* play);
 
 extern AnimationHeader D_06000304;
 
-const ActorInit En_Ssh_InitVars = {
+ActorInit En_Ssh_InitVars = {
     ACTOR_EN_SSH,
     ACTORCAT_NPC,
     FLAGS,
@@ -228,7 +228,7 @@ void EnSsh_SetWaitAnimation(EnSsh* this) {
 }
 
 void EnSsh_SetReturnAnimation(EnSsh* this) {
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALTU_UP);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_STALTU_UP);
     EnSsh_ChangeAnim(this, SSH_ANIM_UP);
 }
 
@@ -297,8 +297,8 @@ s32 EnSsh_Damaged(EnSsh* this) {
         this->spinTimer = 30;
     }
 
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALTU_ROLL);
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_VO_ST_ATTACK);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_STALTU_ROLL);
+    Actor_PlaySfx(&this->actor, NA_SE_VO_ST_ATTACK);
 
     return true;
 }
@@ -477,8 +477,8 @@ s32 EnSsh_CheckHitPlayer(EnSsh* this, PlayState* play) {
         this->spinTimer = this->hitTimer;
     }
 
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALTU_ROLL);
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_VO_ST_ATTACK);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_STALTU_ROLL);
+    Actor_PlaySfx(&this->actor, NA_SE_VO_ST_ATTACK);
 
     play->damagePlayer(play, -8);
 
@@ -532,8 +532,8 @@ s32 EnSsh_CheckHitBack(EnSsh* this, PlayState* play) {
     }
 
     if (this->stunTimer == 0) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_VO_ST_DAMAGE);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_FREEZE);
+        Actor_PlaySfx(&this->actor, NA_SE_VO_ST_DAMAGE);
     }
 
     EnSsh_SetStunned(this);
@@ -553,8 +553,8 @@ s32 EnSsh_CollisionCheck(EnSsh* this, PlayState* play) {
     if (play->actorCtx.unk2 != 0) {
         this->invincibilityTimer = 8;
         if (this->stunTimer == 0) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_VO_ST_DAMAGE);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_FREEZE);
+            Actor_PlaySfx(&this->actor, NA_SE_VO_ST_DAMAGE);
         }
         EnSsh_SetStunned(this);
         this->stateFlags |= SSH_STATE_STUNNED;
@@ -595,7 +595,7 @@ s32 EnSsh_SetCylinderOC(EnSsh* this, PlayState* play) {
 
         Matrix_Push();
         Matrix_Translate(colliderPos.x, colliderPos.y, colliderPos.z, MTXMODE_NEW);
-        Matrix_RotateYF(BINANG_TO_RAD(this->initialYaw), MTXMODE_APPLY);
+        Matrix_RotateYF(BINANG_TO_RAD_ALT(this->initialYaw), MTXMODE_APPLY);
         Matrix_MultVec3f(&colliderOffsets[i], &colliderPos);
         Matrix_Pop();
 
@@ -708,11 +708,11 @@ void EnSsh_Talk(EnSsh* this, PlayState* play) {
 void func_809756D0(EnSsh* this, PlayState* play) {
     u16 phi_a1;
 
-    if (gSaveContext.save.weekEventReg[34] & 8) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_34_08)) {
         phi_a1 = 0x914;
     } else {
         phi_a1 = 0x910;
-        gSaveContext.save.weekEventReg[34] |= 8;
+        SET_WEEKEVENTREG(WEEKEVENTREG_34_08);
     }
     Message_StartTextbox(play, phi_a1, &this->actor);
 }
@@ -739,7 +739,7 @@ void EnSsh_Idle(EnSsh* this, PlayState* play) {
     }
 
     if (DECR(this->sfxTimer) == 0) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALTU_LAUGH);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_STALTU_LAUGH);
         this->sfxTimer = 64;
     }
 
@@ -780,7 +780,7 @@ void EnSsh_Drop(EnSsh* this, PlayState* play) {
         EnSsh_SetLandAnimation(this);
         EnSsh_SetupAction(this, EnSsh_Land);
     } else if (DECR(this->sfxTimer) == 0) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALTU_DOWN);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_STALTU_DOWN);
         this->sfxTimer = 3;
     }
 }

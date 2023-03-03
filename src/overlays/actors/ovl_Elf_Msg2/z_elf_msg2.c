@@ -18,7 +18,7 @@ s32 func_8096EE50(ElfMsg2* this);
 void func_8096EF98(ElfMsg2* this, PlayState* play);
 void func_8096EFD0(ElfMsg2* this, PlayState* play);
 
-const ActorInit Elf_Msg2_InitVars = {
+ActorInit Elf_Msg2_InitVars = {
     ACTOR_ELF_MSG2,
     ACTORCAT_BG,
     FLAGS,

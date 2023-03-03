@@ -26,7 +26,7 @@ void func_80ABCCE4(BgHakuginBombwall* this, PlayState* play);
 void func_80ABCD98(BgHakuginBombwall* this, PlayState* play);
 void func_80ABCE60(BgHakuginBombwall* this, PlayState* play);
 
-const ActorInit Bg_Hakugin_Bombwall_InitVars = {
+ActorInit Bg_Hakugin_Bombwall_InitVars = {
     ACTOR_BG_HAKUGIN_BOMBWALL,
     ACTORCAT_BG,
     FLAGS,

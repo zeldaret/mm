@@ -22,7 +22,7 @@ void EnBee_Attack(EnBee* this, PlayState* play);
 
 s32 sNumLoadedBees = 0;
 
-const ActorInit En_Bee_InitVars = {
+ActorInit En_Bee_InitVars = {
     ACTOR_EN_BEE,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -262,7 +262,7 @@ void EnBee_Update(Actor* thisx, PlayState* play) {
         }
     }
 
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BEE_FLY - SFX_FLAG);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_BEE_FLY - SFX_FLAG);
     EnBee_UpdateDamage(this, play);
     Math_Vec3s_Copy(&this->actor.shape.rot, &this->actor.world.rot);
     Actor_SetFocus(&this->actor, 0.0f);

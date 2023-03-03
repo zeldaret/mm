@@ -25,7 +25,7 @@ void func_80AC0AC8(EnTwig* this, PlayState* play);
 void func_80AC0CC4(EnTwig* this, PlayState* play);
 void func_80AC0D2C(EnTwig* this, PlayState* play);
 
-const ActorInit En_Twig_InitVars = {
+ActorInit En_Twig_InitVars = {
     ACTOR_EN_TWIG,
     ACTORCAT_MISC,
     FLAGS,
@@ -74,18 +74,18 @@ void EnTwig_Init(Actor* thisx, PlayState* play2) {
             break;
         case 1:
             if (!sRingsHaveSpawned) {
-                sRingCount = (gSaveContext.save.weekEventReg[24] & 4) ? 25 : 20;
+                sRingCount = CHECK_WEEKEVENTREG(WEEKEVENTREG_24_04) ? 25 : 20;
                 for (i = 0; i < sRingCount; i++) {
                     sRingNotCollected[i] = false;
                 }
                 sRingsHaveSpawned = true;
             }
             if (RACERING_GET_PARAM_1F0(&this->dyna.actor) != 0) {
-                if (!(gSaveContext.save.weekEventReg[24] & 4)) {
+                if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_24_04)) {
                     Actor_Kill(&this->dyna.actor);
                     return;
                 }
-            } else if (gSaveContext.save.weekEventReg[24] & 4) {
+            } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_24_04)) {
                 Actor_Kill(&this->dyna.actor);
                 return;
             }
@@ -198,7 +198,7 @@ void func_80AC0D2C(EnTwig* this, PlayState* play) {
                                             (s32)(Rand_ZeroOne() * 10.0f) + 20);
         }
         play_sound(NA_SE_SY_GET_ITEM);
-        play->interfaceCtx.unk_25C--;
+        play->interfaceCtx.minigamePoints--;
         sRingNotCollected[RACERING_GET_PARAM_FE0(&this->dyna.actor)] = true;
         if (sCurrentRing == RACERING_GET_PARAM_FE0(&this->dyna.actor)) {
             s32 i;

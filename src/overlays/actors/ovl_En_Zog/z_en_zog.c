@@ -33,7 +33,7 @@ void func_80B95240(EnZog* this, PlayState* play);
 
 static u8 D_80B95E10;
 
-const ActorInit En_Zog_InitVars = {
+ActorInit En_Zog_InitVars = {
     ACTOR_EN_ZOG,
     ACTORCAT_NPC,
     FLAGS,
@@ -264,7 +264,7 @@ void EnZog_Init(Actor* thisx, PlayState* play) {
         }
     }
 
-    if ((ENZOG_GET_F(&this->actor) != ENZOG_F_2) && (gSaveContext.save.weekEventReg[88] & 0x10)) {
+    if ((ENZOG_GET_F(&this->actor) != ENZOG_F_2) && CHECK_WEEKEVENTREG(WEEKEVENTREG_88_10)) {
         this->unk_302 = this->unk_300 = 0;
         this->unk_2FC = this->unk_2FE = 3;
         this->actor.flags |= ACTOR_FLAG_2000000;
@@ -274,7 +274,7 @@ void EnZog_Init(Actor* thisx, PlayState* play) {
 
         Animation_PlayLoop(&this->skelAnime, D_80B958DC[0]);
         this->actor.textId = 0x1009;
-        if (gSaveContext.save.weekEventReg[91] & 2) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_91_02)) {
             this->actor.textId = 0x103C;
             this->actionFunc = func_80B9451C;
         } else {
@@ -465,7 +465,7 @@ s32 func_80B93EA0(EnZog* this, PlayState* play) {
         switch (this->unk_306) {
             case 2:
                 if (play->csCtx.frames == 60) {
-                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_JUMP_SAND);
+                    Actor_PlaySfx(&this->actor, NA_SE_EV_JUMP_SAND);
                 }
                 break;
 
@@ -601,12 +601,12 @@ void func_80B943EC(EnZog* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (this->unk_30A & 0x10) {
-        if (!(player->stateFlags2 & 0x8000000)) {
+        if (!(player->stateFlags2 & PLAYER_STATE2_8000000)) {
             this->unk_30A &= ~0x10;
         }
-    } else if ((player->stateFlags2 & 0x8000000) && (this->actor.xzDistToPlayer < 120.0f)) {
+    } else if ((player->stateFlags2 & PLAYER_STATE2_8000000) && (this->actor.xzDistToPlayer < 120.0f)) {
         this->unk_30A |= 0x10;
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_TRE_BOX_APPEAR);
+        Actor_PlaySfx(&this->actor, NA_SE_SY_TRE_BOX_APPEAR);
     }
 }
 
@@ -645,7 +645,7 @@ void func_80B9461C(EnZog* this, PlayState* play) {
         this->actor.textId = 0x103C;
         this->actionFunc = func_80B9451C;
         this->actor.flags |= ACTOR_FLAG_2000000;
-        gSaveContext.save.weekEventReg[91] |= 2;
+        SET_WEEKEVENTREG(WEEKEVENTREG_91_02);
     }
 
     if ((this->unk_304 == 11) && ((s32)this->skelAnime.curFrame >= 55)) {
@@ -748,11 +748,11 @@ void func_80B94A00(EnZog* this, PlayState* play) {
     if (func_80B93BE0(this, play)) {
         this->actionFunc = func_80B948A8;
         this->actor.flags |= ACTOR_FLAG_2000000;
-        if (gSaveContext.save.weekEventReg[29] & 0x20) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_29_20)) {
             this->actor.textId = 0x1009;
         } else {
             this->actor.textId = 0x1008;
-            gSaveContext.save.weekEventReg[29] |= 0x20;
+            SET_WEEKEVENTREG(WEEKEVENTREG_29_20);
         }
         this->unk_300 = 2;
         this->unk_31C = 2;
@@ -781,15 +781,15 @@ void func_80B94A00(EnZog* this, PlayState* play) {
 
     if ((this->unk_304 == 4) &&
         (Animation_OnFrame(&this->skelAnime, 136.0f) || Animation_OnFrame(&this->skelAnime, 155.0f))) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_PL_WALK_WATER0);
+        Actor_PlaySfx(&this->actor, NA_SE_PL_WALK_WATER0);
     }
 
     if ((this->unk_304 == 5) &&
         (Animation_OnFrame(&this->skelAnime, 12.0f) || Animation_OnFrame(&this->skelAnime, 37.0f))) {
         if (this->actor.depthInWater > 0.0f) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_PL_WALK_WATER0);
+            Actor_PlaySfx(&this->actor, NA_SE_PL_WALK_WATER0);
         } else {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_PL_WALK_SAND);
+            Actor_PlaySfx(&this->actor, NA_SE_PL_WALK_SAND);
         }
     }
 }
@@ -876,7 +876,7 @@ void func_80B94E34(EnZog* this, PlayState* play) {
 
             if ((player->actor.speedXZ > 3.0f) && (this->unk_324 == 0)) {
                 this->unk_324 = 25;
-                func_800B8E58(player, player->ageProperties->unk_92 + NA_SE_VO_LI_PUSH);
+                Player_PlaySfx(player, player->ageProperties->voiceSfxIdOffset + NA_SE_VO_LI_PUSH);
             }
         }
         this->actor.speedXZ *= 0.3f;
@@ -905,7 +905,7 @@ void func_80B94E34(EnZog* this, PlayState* play) {
         this->unk_31C = 1;
         this->unk_31E = 0;
         func_80B93BA8(this, 0);
-        gSaveContext.save.weekEventReg[88] |= 0x10;
+        SET_WEEKEVENTREG(WEEKEVENTREG_88_10);
     } else if ((this->actor.yawTowardsPlayer > 16000) && (this->actor.yawTowardsPlayer < 32000) &&
                (this->unk_302 == 0)) {
         func_800B8614(&this->actor, play, 150.0f);
@@ -939,7 +939,7 @@ void func_80B95128(EnZog* this, PlayState* play) {
         }
 
         this->actor.flags &= ~ACTOR_FLAG_10000;
-        gSaveContext.save.weekEventReg[91] |= 1;
+        SET_WEEKEVENTREG(WEEKEVENTREG_91_01);
     } else {
         func_800B8614(&this->actor, play, 150.0f);
     }
@@ -966,7 +966,7 @@ void EnZog_Update(Actor* thisx, PlayState* play) {
 
     if (((this->unk_304 == 6) && Animation_OnFrame(&this->skelAnime, 43.0f)) ||
         ((this->unk_304 == 17) && Animation_OnFrame(&this->skelAnime, 14.0f))) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_LAND_SAND);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_LAND_SAND);
     }
 
     if (this->unk_30A & 1) {

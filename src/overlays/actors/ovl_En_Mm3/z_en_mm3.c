@@ -29,7 +29,7 @@ void func_80A6FEEC(EnMm3* this, PlayState* play);
 s32 func_80A6FFAC(EnMm3* this, PlayState* play);
 void func_80A70084(EnMm3* this, PlayState* play);
 
-const ActorInit En_Mm3_InitVars = {
+ActorInit En_Mm3_InitVars = {
     ACTOR_EN_MM3,
     ACTORCAT_NPC,
     FLAGS,
@@ -106,7 +106,7 @@ void EnMm3_Init(Actor* thisx, PlayState* play) {
 void EnMm3_Destroy(Actor* thisx, PlayState* play) {
     EnMm3* this = THIS;
 
-    gSaveContext.save.weekEventReg[63] &= (u8)~1;
+    CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_01);
     Collider_DestroyCylinder(play, &this->collider);
 }
 
@@ -279,7 +279,7 @@ void func_80A6F5E4(EnMm3* this, PlayState* play) {
             case 0x2795:
             case 0x2796:
             case 0x2797:
-                if (gSaveContext.save.weekEventReg[63] & 2) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_63_02)) {
                     Message_StartTextbox(play, 0x279B, &this->actor);
                     this->unk_2B4 = 0x279B;
                     func_80151BB4(play, 0xB);
@@ -341,7 +341,7 @@ void func_80A6F9DC(EnMm3* this, PlayState* play) {
                 if (this->unk_2B4 == 0x2790) {
                     Player* player = GET_PLAYER(play);
 
-                    player->stateFlags1 |= 0x20;
+                    player->stateFlags1 |= PLAYER_STATE1_20;
                     if (Player_GetMask(play) == PLAYER_MASK_BUNNY) {
                         Interface_StartPostmanTimer(0, POSTMAN_MINIGAME_BUNNY_HOOD_ON);
                     } else {
@@ -351,8 +351,8 @@ void func_80A6F9DC(EnMm3* this, PlayState* play) {
                     play_sound(NA_SE_SY_START_SHOT);
                     func_80A6FBA0(this);
                 } else {
-                    gSaveContext.save.weekEventReg[63] &= (u8)~1;
-                    gSaveContext.save.weekEventReg[63] &= (u8)~2;
+                    CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_01);
+                    CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_02);
                     func_80A6F270(this);
                 }
             }
@@ -365,7 +365,7 @@ void func_80A6F9DC(EnMm3* this, PlayState* play) {
 
     if (((this->unk_2B4 == 0x279D) || (this->unk_2B4 == 0x27A0) || (this->unk_2B4 == 0x278B)) &&
         Animation_OnFrame(&this->skelAnime, 8.0f) && (this->unk_2AE == 0)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_LIE_DOWN_ON_BED);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_LIE_DOWN_ON_BED);
         this->unk_2AE = 1;
     }
 }
@@ -374,8 +374,8 @@ void func_80A6FBA0(EnMm3* this) {
     AudioSfx_MuteBanks((1 << BANK_PLAYER) | (1 << BANK_ITEM) | (1 << BANK_ENV) | (1 << BANK_ENEMY) |
                        (1 << BANK_OCARINA) | (1 << BANK_VOICE));
     func_801A0238(0, 5);
-    gSaveContext.save.weekEventReg[63] |= 1;
-    gSaveContext.save.weekEventReg[63] &= (u8)~2;
+    SET_WEEKEVENTREG(WEEKEVENTREG_63_01);
+    CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_02);
     this->actionFunc = func_80A6FBFC;
 }
 
@@ -383,7 +383,7 @@ void func_80A6FBFC(EnMm3* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (gSaveContext.timerStates[TIMER_ID_POSTMAN] == TIMER_STATE_POSTMAN_END) {
-        player->stateFlags1 &= ~0x20;
+        player->stateFlags1 &= ~PLAYER_STATE1_20;
         this->actor.flags |= ACTOR_FLAG_10000;
         if (gSaveContext.timerCurTimes[TIMER_ID_POSTMAN] > SECONDS_TO_TIMER(15)) {
             gSaveContext.timerCurTimes[TIMER_ID_POSTMAN] = SECONDS_TO_TIMER(15);
@@ -425,12 +425,12 @@ void func_80A6FE1C(EnMm3* this) {
 
 void func_80A6FE30(EnMm3* this, PlayState* play) {
     if (Actor_HasParent(&this->actor, play)) {
-        if (!(gSaveContext.save.weekEventReg[77] & 1)) {
-            gSaveContext.save.weekEventReg[77] |= 1;
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_77_01)) {
+            SET_WEEKEVENTREG(WEEKEVENTREG_77_01);
         }
         this->actor.parent = NULL;
         func_80A6FED8(this);
-    } else if (gSaveContext.save.weekEventReg[77] & 1) {
+    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_77_01)) {
         Actor_PickUp(&this->actor, play, GI_RUPEE_PURPLE, 500.0f, 100.0f);
     } else {
         Actor_PickUp(&this->actor, play, GI_HEART_PIECE, 500.0f, 100.0f);
@@ -445,7 +445,7 @@ void func_80A6FEEC(EnMm3* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-        player->stateFlags1 &= ~0x20;
+        player->stateFlags1 &= ~PLAYER_STATE1_20;
         Message_StartTextbox(play, 0x2794, &this->actor);
         this->unk_2B4 = 0x2794;
         func_80151BB4(play, 0xB);

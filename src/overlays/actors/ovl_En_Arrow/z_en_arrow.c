@@ -22,7 +22,7 @@ void func_8088ACE0(EnArrow* this, PlayState* play);
 void func_8088B630(EnArrow* this, PlayState* play);
 void func_8088B6B0(EnArrow* this, PlayState* play);
 
-const ActorInit En_Arrow_InitVars = {
+ActorInit En_Arrow_InitVars = {
     ACTOR_EN_ARROW,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -176,22 +176,22 @@ void func_8088A594(EnArrow* this, PlayState* play) {
 
         switch (this->actor.params) {
             case ENARROW_6:
-                func_800B8E58(player, NA_SE_IT_SLING_SHOT);
+                Player_PlaySfx(player, NA_SE_IT_SLING_SHOT);
                 break;
 
             case ENARROW_0:
             case ENARROW_1:
             case ENARROW_2:
-                func_800B8E58(player, NA_SE_IT_ARROW_SHOT);
+                Player_PlaySfx(player, NA_SE_IT_ARROW_SHOT);
                 break;
 
             case ENARROW_3:
             case ENARROW_4:
             case ENARROW_5:
-                func_800B8E58(player, NA_SE_IT_MAGIC_ARROW_SHOT);
+                Player_PlaySfx(player, NA_SE_IT_MAGIC_ARROW_SHOT);
 
             case ENARROW_7:
-                func_800B8E58(player, NA_SE_PL_DEKUNUTS_FIRE);
+                Player_PlaySfx(player, NA_SE_PL_DEKUNUTS_FIRE);
                 break;
         }
 
@@ -289,7 +289,7 @@ void func_8088AA98(EnArrow* this, PlayState* play) {
             EffectSsGSplash_Spawn(play, &sp44, NULL, NULL, 0, 300);
         }
 
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_DIVE_INTO_WATER_L);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_DIVE_INTO_WATER_L);
 
         EffectSsGRipple_Spawn(play, &sp44, 100, 500, 0);
         EffectSsGRipple_Spawn(play, &sp44, 100, 500, 4);
@@ -373,7 +373,7 @@ void func_8088ACE0(EnArrow* this, PlayState* play) {
             }
 
             if (this->actor.params == ENARROW_8) {
-                iREG(50) = -1;
+                R_TRANS_FADE_FLASH_ALPHA_STEP = -1;
                 Actor_Spawn(&play->actorCtx, play, ACTOR_EN_M_FIRE1, this->actor.world.pos.x, this->actor.world.pos.y,
                             this->actor.world.pos.z, 0, 0, 0, this->actor.speedXZ == 0.0f);
                 sp82 = NA_SE_IT_DEKU;
@@ -403,7 +403,7 @@ void func_8088ACE0(EnArrow* this, PlayState* play) {
                     this->unk_261 |= 2;
                     Math_Vec3f_Copy(&this->actor.world.pos, &this->actor.prevPos);
                     func_8088A7D8(play, this);
-                    Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_HOOKSHOT_STICK_CRE);
+                    Actor_PlaySfx(&this->actor, NA_SE_IT_HOOKSHOT_STICK_CRE);
                 }
             } else if (this->unk_262 != 0) {
                 this->actionFunc = func_8088B630;
@@ -416,7 +416,7 @@ void func_8088ACE0(EnArrow* this, PlayState* play) {
                 if ((this->actor.params >= ENARROW_3) && (this->actor.params < ENARROW_6)) {
                     this->actor.draw = NULL;
                 }
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_ARROW_STICK_OBJ);
+                Actor_PlaySfx(&this->actor, NA_SE_IT_ARROW_STICK_OBJ);
                 this->unk_261 |= 1;
             }
         }
@@ -474,7 +474,7 @@ void func_8088ACE0(EnArrow* this, PlayState* play) {
         }
 
         if (this->actor.params < ENARROW_6) {
-            this->actor.shape.rot.x = Math_FAtan2F(this->actor.speedXZ, -this->actor.velocity.y);
+            this->actor.shape.rot.x = Math_Atan2S_XY(this->actor.speedXZ, -this->actor.velocity.y);
         }
     }
 
@@ -674,7 +674,7 @@ void EnArrow_Draw(Actor* thisx, PlayState* play) {
             gSPMatrix(POLY_XLU_DISP++, &D_01000000, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_06F9F0);
         } else {
-            func_800B8050(&this->actor, play, MTXMODE_NEW);
+            func_800B8050(&this->actor, play, 0);
 
             gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_06F380);
             gDPSetCombineLERP(POLY_OPA_DISP++, TEXEL1, 0, PRIM_LOD_FRAC, TEXEL0, TEXEL1, TEXEL0, PRIM_LOD_FRAC, TEXEL0,

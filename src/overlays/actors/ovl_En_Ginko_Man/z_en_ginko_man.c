@@ -30,7 +30,7 @@ void EnGinkoMan_Stamp(EnGinkoMan* this, PlayState* play);
 void EnGinkoMan_Dialogue(EnGinkoMan* this, PlayState* play);
 void EnGinkoMan_SwitchAnimation(EnGinkoMan* this, PlayState* play);
 
-const ActorInit En_Ginko_Man_InitVars = {
+ActorInit En_Ginko_Man_InitVars = {
     ACTOR_EN_GINKO_MAN,
     ACTORCAT_NPC,
     FLAGS,
@@ -118,7 +118,7 @@ void EnGinkoMan_DepositDialogue(EnGinkoMan* this, PlayState* play) {
     switch (this->curTextId) {
         case 0x44C: // "Hey there, little guy!  Won't you deposit some Rupees? (first dialogue)
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, GINKO_ANIM_SITTING);
-            if (gSaveContext.save.weekEventReg[10] & 8) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_10_08)) {
                 Message_StartTextbox(play, 0x44E, &this->actor);
                 this->curTextId = 0x44E; //" ...So, what'll it be?  Deposit Rupees Don't deposit Rupees"
             } else {
@@ -165,18 +165,18 @@ void EnGinkoMan_DepositDialogue(EnGinkoMan* this, PlayState* play) {
             break;
         case 0x45A: // "All right, little guy, now I've got a total of [rupees] from you!"
             if (((gSaveContext.save.bankRupees & 0xFFFF) >= 200) && (this->previousBankValue < 200) &&
-                !(gSaveContext.save.weekEventReg[59] & 0x40)) {
-                gSaveContext.save.weekEventReg[59] |= 0x40;
+                !CHECK_WEEKEVENTREG(WEEKEVENTREG_59_40)) {
+                SET_WEEKEVENTREG(WEEKEVENTREG_59_40);
                 Message_StartTextbox(play, 0x45B, &this->actor);
                 this->curTextId = 0x45B; // "What's this? You've already saved up 200 Rupees!?!
             } else if (((gSaveContext.save.bankRupees & 0xFFFF) >= 1000) && ((this->previousBankValue) < 1000) &&
-                       !(gSaveContext.save.weekEventReg[59] & 0x80)) {
-                gSaveContext.save.weekEventReg[59] |= 0x80;
+                       !CHECK_WEEKEVENTREG(WEEKEVENTREG_59_80)) {
+                SET_WEEKEVENTREG(WEEKEVENTREG_59_80);
                 Message_StartTextbox(play, 0x45C, &this->actor);
                 this->curTextId = 0x45C; // "What's this? You've already saved up 1000 Rupees!?!
             } else if ((gSaveContext.save.bankRupees & 0xFFFF) >= 5000) {
-                if ((this->previousBankValue < 5000) && !(gSaveContext.save.weekEventReg[60] & 1)) {
-                    gSaveContext.save.weekEventReg[60] |= 1;
+                if ((this->previousBankValue < 5000) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_60_01)) {
+                    SET_WEEKEVENTREG(WEEKEVENTREG_60_01);
                     Message_StartTextbox(play, 0x45D, &this->actor);
                     this->curTextId = 0x45D; // "What's this? You've already saved up 5000 Rupees?!
                 } else if (this->previousBankValue < (s16)(gSaveContext.save.bankRupees & 0xFFFF)) {
@@ -510,7 +510,7 @@ void EnGinkoMan_Dialogue(EnGinkoMan* this, PlayState* play) {
 
     if ((this->skelAnime.animation == &object_boj_Anim_0008C0) &&
         Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BANK_MAN_HAND_HIT);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_BANK_MAN_HAND_HIT);
     }
 }
 
@@ -524,14 +524,14 @@ void EnGinkoMan_BankAward(EnGinkoMan* this, PlayState* play) {
         this->actor.parent = NULL;
         EnGinkoMan_SetupBankAward2(this);
     } else if (this->curTextId == 0x45B) { // "Whats this, you already saved up 200?"
-        if (!(gSaveContext.save.weekEventReg[10] & 8)) {
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_10_08)) {
             Actor_PickUp(&this->actor, play, GI_WALLET_ADULT + CUR_UPG_VALUE(UPG_WALLET), 500.0f, 100.0f);
         } else {
             Actor_PickUp(&this->actor, play, GI_RUPEE_BLUE, 500.0f, 100.0f);
         }
     } else if (this->curTextId == 0x45C) { // "Whats this, you already saved up 5000?"
         Actor_PickUp(&this->actor, play, GI_RUPEE_BLUE, 500.0f, 100.0f);
-    } else if (!(gSaveContext.save.weekEventReg[59] & 8)) {
+    } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_59_08)) {
         Actor_PickUp(&this->actor, play, GI_HEART_PIECE, 500.0f, 100.0f);
     } else {
         Actor_PickUp(&this->actor, play, GI_RUPEE_BLUE, 500.0f, 100.0f);
@@ -546,10 +546,10 @@ void EnGinkoMan_SetupBankAward2(EnGinkoMan* this) {
 // separate function to handle bank rewards... called while the player is receiving the award
 void EnGinkoMan_BankAward2(EnGinkoMan* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-        if (!(gSaveContext.save.weekEventReg[10] & 8) && (this->curTextId == 0x45B)) {
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_10_08) && (this->curTextId == 0x45B)) {
             // "What's this? You've already saved up 200 Rupees!?!  Well, little guy, here's your special gift. Take
             // it!"
-            gSaveContext.save.weekEventReg[10] |= 8;
+            SET_WEEKEVENTREG(WEEKEVENTREG_10_08);
             Message_StartTextbox(play, 0x47A, &this->actor);
             this->curTextId = 0x47A; // Message after receiving reward for depositing 200 rupees.
         } else {
@@ -561,13 +561,13 @@ void EnGinkoMan_BankAward2(EnGinkoMan* this, PlayState* play) {
         EnGinkoMan_SetupDialogue(this);
     } else if (this->curTextId == 0x45D) { // saved up 5000 rupees for HP
         if ((Message_GetState(&play->msgCtx) == TEXT_STATE_DONE) && Message_ShouldAdvance(play)) {
-            if (!(gSaveContext.save.weekEventReg[59] & 8)) {
-                gSaveContext.save.weekEventReg[59] |= 8;
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_59_08)) {
+                SET_WEEKEVENTREG(WEEKEVENTREG_59_08);
             }
             EnGinkoMan_SetupIdle(this);
         }
     } else {
-        func_800B85E0(&this->actor, play, 500.0f, PLAYER_AP_MINUS1);
+        func_800B85E0(&this->actor, play, 500.0f, PLAYER_IA_MINUS1);
     }
 }
 
@@ -579,7 +579,7 @@ void EnGinkoMan_SetupStamp(EnGinkoMan* this) {
 void EnGinkoMan_Stamp(EnGinkoMan* this, PlayState* play) {
     if ((this->curTextId == 0x464) // "Hey, relax! It doesn't leave any marks, and it's not gonna hurt."
         && (Animation_OnFrame(&this->skelAnime, 10.0f))) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_HANKO); // "stamp"
+        Actor_PlaySfx(&this->actor, NA_SE_EV_HANKO); // "stamp"
     }
 
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {

@@ -19,7 +19,7 @@ void ObjKibako2_Draw(Actor* thisx, PlayState* play);
 void ObjKibako2_Idle(ObjKibako2* this, PlayState* play);
 void ObjKibako2_Kill(ObjKibako2* this, PlayState* play);
 
-const ActorInit Obj_Kibako2_InitVars = {
+ActorInit Obj_Kibako2_InitVars = {
     ACTOR_OBJ_KIBAKO2,
     ACTORCAT_BG,
     FLAGS,
@@ -233,7 +233,7 @@ void ObjKibako2_Update(Actor* thisx, PlayState* play) {
 
     if (this->skulltulaNoiseTimer >= 0) {
         if (this->skulltulaNoiseTimer == 0) {
-            Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EN_STALGOLD_ROLL);
+            Actor_PlaySfx(&this->dyna.actor, NA_SE_EN_STALGOLD_ROLL);
             if (Rand_ZeroOne() < 0.1f) {
                 this->skulltulaNoiseTimer = Rand_S16Offset(40, 80);
             } else {

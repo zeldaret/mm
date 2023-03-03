@@ -21,7 +21,7 @@ void func_80965DB4(EnMm* this, PlayState* play);
 void func_8096611C(EnMm* this, PlayState* play);
 void EnMm_SetupAction(EnMm* this, EnMmActionFunc actionFunc);
 
-const ActorInit En_Mm_InitVars = {
+ActorInit En_Mm_InitVars = {
     ACTOR_EN_MM,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -74,8 +74,8 @@ void EnMm_Init(Actor* thisx, PlayState* play) {
     EnMm* this = THIS;
     EnMmActionFunc action;
 
-    if ((this->actor.params >= 0) && ((!(gSaveContext.save.weekEventReg[37] & 0x10)) ||
-                                      (gSaveContext.save.weekEventReg[37] & 8) || (gSaveContext.unk_1014 != 0))) {
+    if ((this->actor.params >= 0) && (!CHECK_WEEKEVENTREG(WEEKEVENTREG_37_10) ||
+                                      CHECK_WEEKEVENTREG(WEEKEVENTREG_37_08) || (gSaveContext.unk_1014 != 0))) {
         Actor_Kill(&this->actor);
         return;
     }
@@ -114,8 +114,8 @@ void func_80965D3C(EnMm* this, PlayState* play) {
 
 void func_80965DB4(EnMm* this, PlayState* play) {
     s16 direction;
-    Vec3f sp50;
-    s16 unused;
+    Vec3f slopeNormal;
+    s16 downwardSlopeYaw;
     f32 temp_f14;
     f32 temp_f12;
     f32 temp_f2;
@@ -124,7 +124,7 @@ void func_80965DB4(EnMm* this, PlayState* play) {
 
     if (Actor_HasParent(&this->actor, play)) {
         func_80965BBC(this);
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_PL_PULL_UP_ROCK);
+        Actor_PlaySfx(&this->actor, NA_SE_PL_PULL_UP_ROCK);
     } else {
         if ((this->actor.velocity.y > 0.0f) && (this->actor.bgCheckFlags & 0x10)) {
             this->actor.velocity.y = 0.0f;
@@ -135,7 +135,7 @@ void func_80965DB4(EnMm* this, PlayState* play) {
             this->actor.world.rot.y += BINANG_SUB(0x8000, (s16)(angle * 2));
             this->actor.speedXZ *= 0.5f;
             CollisionCheck_SpawnShieldParticles(play, &this->actor.world.pos);
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_HUMAN_BOUND);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_HUMAN_BOUND);
         }
 
         if (!(this->actor.bgCheckFlags & 1)) {
@@ -143,15 +143,15 @@ void func_80965DB4(EnMm* this, PlayState* play) {
         } else {
             temp_f14 = Math_SinS(this->actor.world.rot.y) * this->actor.speedXZ;
             temp_f12 = Math_CosS(this->actor.world.rot.y) * this->actor.speedXZ;
-            func_800B75A0(this->actor.floorPoly, &sp50, &unused);
-            temp_f14 += 3.0f * sp50.x;
-            temp_f12 += 3.0f * sp50.z;
+            Actor_GetSlopeDirection(this->actor.floorPoly, &slopeNormal, &downwardSlopeYaw);
+            temp_f14 += 3.0f * slopeNormal.x;
+            temp_f12 += 3.0f * slopeNormal.z;
             temp_f2 = sqrtf(SQ(temp_f14) + SQ(temp_f12));
 
             if ((temp_f2 < this->actor.speedXZ) ||
                 (SurfaceType_GetSlope(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId) == 1)) {
                 this->actor.speedXZ = CLAMP_MAX(temp_f2, 16.0f);
-                this->actor.world.rot.y = Math_FAtan2F(temp_f12, temp_f14);
+                this->actor.world.rot.y = Math_Atan2S_XY(temp_f12, temp_f14);
             }
 
             if (!Math_StepToF(&this->actor.speedXZ, 0.0f, 1.0f)) {
@@ -169,7 +169,7 @@ void func_80965DB4(EnMm* this, PlayState* play) {
                     this->actor.bgCheckFlags &= ~1;
                 }
 
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_HUMAN_BOUND);
+                Actor_PlaySfx(&this->actor, NA_SE_EV_HUMAN_BOUND);
             } else {
                 Actor_PickUp(&this->actor, play, GI_NONE, 50.0f, 30.0f);
             }

@@ -18,7 +18,7 @@ void DmChar02_Draw(Actor* thisx, PlayState* play);
 
 void DmChar02_PerformCutsceneActions(DmChar02* this, PlayState* play);
 
-const ActorInit Dm_Char02_InitVars = {
+ActorInit Dm_Char02_InitVars = {
     ACTOR_DM_CHAR02,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -63,13 +63,13 @@ void DmChar02_ChangeAnim(SkelAnime* skelAnime, AnimationInfo* animationInfo, u16
 void DmChar02_PlaySfxForDroppingOcarinaCutscene(DmChar02* this, PlayState* play) {
     switch (play->csCtx.frames) {
         case 95:
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_OCARINA_BOUND_0);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_OCARINA_BOUND_0);
             break;
 
         case 101:
         case 105:
         case 112:
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_OCARINA_BOUND_1);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_OCARINA_BOUND_1);
             break;
     }
 }

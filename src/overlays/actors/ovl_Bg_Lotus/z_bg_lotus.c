@@ -20,7 +20,7 @@ void BgLotus_Wait(BgLotus* this, PlayState* play);
 void BgLotus_Sink(BgLotus* this, PlayState* play);
 void BgLotus_WaitToAppear(BgLotus* this, PlayState* play);
 
-const ActorInit Bg_Lotus_InitVars = {
+ActorInit Bg_Lotus_InitVars = {
     ACTOR_BG_LOTUS,
     ACTORCAT_BG,
     FLAGS,

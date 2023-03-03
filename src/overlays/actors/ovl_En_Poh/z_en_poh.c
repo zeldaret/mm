@@ -46,7 +46,7 @@ void func_80B2E3F8(EnPoh* this, PlayState* play);
 void func_80B2F328(Actor* thisx, PlayState* play);
 void func_80B2F37C(Actor* thisx, PlayState* play);
 
-const ActorInit En_Poh_InitVars = {
+ActorInit En_Poh_InitVars = {
     ACTOR_EN_POH,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -252,8 +252,8 @@ void func_80B2CBBC(EnPoh* this, PlayState* play) {
         this->unk_18E--;
     }
 
-    if (Actor_XZDistanceToPoint(&this->actor, &this->actor.home.pos) > 400.0f) {
-        this->unk_192 = Actor_YawToPoint(&this->actor, &this->actor.home.pos);
+    if (Actor_WorldDistXZToPoint(&this->actor, &this->actor.home.pos) > 400.0f) {
+        this->unk_192 = Actor_WorldYawTowardPoint(&this->actor, &this->actor.home.pos);
     }
 
     Math_ScaledStepToS(&this->actor.world.rot.y, this->unk_192, 0x71C);
@@ -316,14 +316,14 @@ void func_80B2CEC8(EnPoh* this) {
     Animation_MorphToLoop(&this->skelAnime, &object_po_Anim_0001A8, -6.0f);
     this->unk_18E = 12;
     this->actor.speedXZ = 0.0f;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PO_LAUGH);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_PO_LAUGH);
     this->actionFunc = func_80B2CF28;
 }
 
 void func_80B2CF28(EnPoh* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     if (Animation_OnFrame(&this->skelAnime, 0.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PO_KANTERA);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_PO_KANTERA);
         if (this->unk_18E != 0) {
             this->unk_18E--;
         }
@@ -379,7 +379,7 @@ void func_80B2D140(EnPoh* this, PlayState* play) {
     }
 
     if ((this->skelAnime.playSpeed < 0.5f) && (this->actor.xzDistToPlayer < 280.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_APPEAR);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_STALKIDS_APPEAR);
         this->skelAnime.playSpeed = 1.0f;
     }
 }
@@ -438,7 +438,7 @@ void func_80B2D300(EnPoh* this, PlayState* play) {
     }
 
     if (this->unk_18E == 18) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_WIZ_DISAPPEAR);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_WIZ_DISAPPEAR);
     }
 }
 
@@ -484,8 +484,8 @@ void func_80B2D76C(EnPoh* this) {
     this->unk_192 = 0x2000;
     this->actor.speedXZ = 0.0f;
     this->actor.world.rot.y = this->actor.shape.rot.y;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PO_DISAPPEAR);
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PO_LAUGH);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_PO_DISAPPEAR);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_PO_LAUGH);
     this->colliderCylinder.base.acFlags &= ~AC_ON;
     this->actionFunc = func_80B2D7D4;
 }
@@ -514,8 +514,8 @@ void func_80B2D924(EnPoh* this) {
     this->unk_18C = 0;
     this->unk_192 = 0x2000;
     this->actor.speedXZ = 0.0f;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_APPEAR);
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PO_LAUGH);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_STALKIDS_APPEAR);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_PO_LAUGH);
     this->colliderCylinder.base.acFlags &= ~AC_ON;
     this->actionFunc = func_80B2D980;
 }
@@ -629,7 +629,7 @@ void func_80B2E0B0(EnPoh* this) {
     this->actor.home.pos.y = this->actor.world.pos.y;
     this->actor.scale.x = 0.0f;
     this->actor.scale.y = 0.0f;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_METAL_BOX_BOUND);
+    Actor_PlaySfx(&this->actor, NA_SE_EV_METAL_BOX_BOUND);
     this->actionFunc = func_80B2E180;
 }
 
@@ -680,7 +680,7 @@ void func_80B2E230(EnPoh* this, PlayState* play) {
 
 void func_80B2E3B0(EnPoh* this) {
     AudioSfx_StopByPosAndId(&this->actor.projectedPos, NA_SE_EN_PO_BIG_CRY - SFX_FLAG);
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PO_LAUGH);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_PO_LAUGH);
     this->actionFunc = func_80B2E3F8;
 }
 
@@ -696,9 +696,9 @@ void func_80B2E438(EnPoh* this, PlayState* play) {
         this->colliderCylinder.base.acFlags &= ~AC_HIT;
         if (!Actor_ApplyDamage(&this->actor)) {
             Enemy_StartFinishingBlow(play, &this->actor);
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PO_DEAD);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_PO_DEAD);
         } else if (this->actor.colChkInfo.damage != 0) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PO_DAMAGE);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_PO_DAMAGE);
         }
 
         if (this->actor.colChkInfo.damageEffect != 14) {

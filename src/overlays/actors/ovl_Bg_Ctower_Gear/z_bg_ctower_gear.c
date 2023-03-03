@@ -19,7 +19,7 @@ void BgCtowerGear_Draw(Actor* thisx, PlayState* play);
 void BgCtowerGear_UpdateOrgan(Actor* thisx, PlayState* play);
 void BgCtowerGear_DrawOrgan(Actor* thisx, PlayState* play);
 
-const ActorInit Bg_Ctower_Gear_InitVars = {
+ActorInit Bg_Ctower_Gear_InitVars = {
     ACTOR_BG_CTOWER_GEAR,
     ACTORCAT_PROP,
     FLAGS,
@@ -108,7 +108,7 @@ void BgCtowerGear_Splash(BgCtowerGear* this, PlayState* play) {
                 }
             }
         }
-        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_WATERWHEEL_LEVEL);
+        Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_WATERWHEEL_LEVEL);
     }
 }
 

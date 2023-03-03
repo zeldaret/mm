@@ -32,7 +32,7 @@ void func_80A6AE7C(EnMushi2* this, PlayState* play);
 void func_80A6B078(EnMushi2* this);
 void func_80A6B0D8(EnMushi2* this, PlayState* play);
 
-const ActorInit En_Mushi2_InitVars = {
+ActorInit En_Mushi2_InitVars = {
     ACTOR_EN_MUSHI2,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -204,7 +204,7 @@ void func_80A68BC8(EnMushi2* this) {
     if (this->unk_36C > 0) {
         this->unk_36C--;
     } else {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_MUSI_WALK);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_MUSI_WALK);
 
         this->unk_36C = 3.0f / CLAMP_MIN(this->skelAnime.playSpeed, 0.12f);
         if (this->unk_36C < 2) {
@@ -658,7 +658,7 @@ void func_80A69D3C(EnMushi2* this) {
         sp38 = Math3D_XZLengthSquared(sp40, sp3C);
 
         if (fabsf(sp38) > 0.010000001f) {
-            s16 temp_v0 = Math_FAtan2F(sp3C, sp40);
+            s16 temp_v0 = Math_Atan2S_XY(sp3C, sp40);
             temp_v0 = CLAMP(temp_v0, -3000, 3000);
             func_80A68F9C(this, temp_v0);
         }
@@ -823,7 +823,7 @@ void func_80A6A36C(EnMushi2* this, PlayState* play) {
     if (this->actor.bgCheckFlags & 0x20) {
         func_80A6AAA4(this);
     } else if (this->actor.bgCheckFlags & 1) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_GERUDOFT_WALK);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_GERUDOFT_WALK);
         func_80A68F24(this);
         func_80A691EC(this, this->actor.floorPoly, -1.0f);
         func_80A69388(this);
@@ -1049,7 +1049,7 @@ void func_80A6B078(EnMushi2* this) {
     this->unk_30C &= ~1;
     this->unk_368 = 50;
     this->skelAnime.playSpeed = 1.9f;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALTURA_BOUND);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_STALTURA_BOUND);
     func_80A68B6C(this);
     this->actionFunc = func_80A6B0D8;
 }

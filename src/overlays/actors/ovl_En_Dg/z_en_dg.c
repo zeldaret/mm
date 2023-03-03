@@ -10,6 +10,8 @@
 
 #define THIS ((EnDg*)thisx)
 
+//! TODO: this file require macros for its uses of weekEventReg
+
 void EnDg_Init(Actor* thisx, PlayState* play);
 void EnDg_Destroy(Actor* thisx, PlayState* play);
 void EnDg_Update(Actor* thisx, PlayState* play);
@@ -36,7 +38,7 @@ void EnDg_Thrown(EnDg* this, PlayState* play);
 void EnDg_SetupTalk(EnDg* this, PlayState* play);
 void EnDg_Talk(EnDg* this, PlayState* play);
 
-const ActorInit En_Dg_InitVars = {
+ActorInit En_Dg_InitVars = {
     ACTOR_EN_DG,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -250,8 +252,8 @@ void EnDg_GetFloorRot(EnDg* this, Vec3f* floorRot) {
 
         sinf(0.0f);
         cosf(0.0f);
-        floorRot->x = -Math_Acot2F(1.0f, -nz * ny);
-        floorRot->z = Math_Acot2F(1.0f, -nx * ny);
+        floorRot->x = -Math_Atan2F_XY(1.0f, -nz * ny);
+        floorRot->z = Math_Atan2F_XY(1.0f, -nx * ny);
     }
 }
 
@@ -308,7 +310,7 @@ s16 EnDg_GetYRotation(Path* path, s32 index, Vec3f* pos, f32* distSq) {
 
     *distSq = SQ(diffX) + SQ(diffZ);
 
-    return RADF_TO_BINANG(Math_Acot2F(diffZ, diffX));
+    return RADF_TO_BINANG(Math_Atan2F_XY(diffZ, diffX));
 }
 
 /**
@@ -366,31 +368,31 @@ void EnDg_SpawnFloorDustRing(EnDg* this, PlayState* play) {
 
 void EnDg_PlaySfxWalk(EnDg* this) {
     if (Animation_OnFrame(&this->skelAnime, 1.0f) || Animation_OnFrame(&this->skelAnime, 7.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_MONKEY_WALK);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_MONKEY_WALK);
     }
 }
 
 void EnDg_PlaySfxBark(EnDg* this, f32 frame) {
     if (Animation_OnFrame(&this->skelAnime, frame)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SMALL_DOG_BARK);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_SMALL_DOG_BARK);
     }
 }
 
 void EnDg_PlaySfxAngryBark(EnDg* this, f32 frame) {
     if (Animation_OnFrame(&this->skelAnime, frame)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SMALL_DOG_ANG_BARK);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_SMALL_DOG_ANG_BARK);
     }
 }
 
 void EnDg_PlaySfxWhine(EnDg* this) {
     if (Animation_OnFrame(&this->skelAnime, 23.0f) || Animation_OnFrame(&this->skelAnime, 28.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SMALL_DOG_WHINE);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_SMALL_DOG_WHINE);
     }
 }
 
 void EnDg_PlaySfxGrowl(EnDg* this, f32 frame) {
     if (Animation_OnFrame(&this->skelAnime, frame)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SMALL_DOG_GROAN);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_SMALL_DOG_GROAN);
     }
 }
 
@@ -479,7 +481,7 @@ void EnDg_TryPickUp(EnDg* this, PlayState* play) {
     }
 
     if (Actor_HasParent(&this->actor, play)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SMALL_DOG_BARK);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_SMALL_DOG_BARK);
         this->grabState = DOG_GRAB_STATE_HELD;
         sSelectedRacetrackDogInfo = sRacetrackDogInfo[this->index];
         if (!sIsAnyDogHeld) {
@@ -547,7 +549,7 @@ s32 EnDg_FindFollowerForBremenMask(PlayState* play) {
 void EnDg_CheckForBremenMaskMarch(EnDg* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (player->stateFlags3 & 0x20000000) { // bremen mask march
+    if (player->stateFlags3 & PLAYER_STATE3_20000000) {
         if (sBremenMaskFollowerIndex == ENDG_INDEX_NO_BREMEN_MASK_FOLLOWER) {
             EnDg_FindFollowerForBremenMask(play);
         }
@@ -560,7 +562,7 @@ void EnDg_CheckForBremenMaskMarch(EnDg* this, PlayState* play) {
             } else if ((this->actionFunc == EnDg_ApproachPlayer) || (this->actionFunc == EnDg_SitNextToPlayer)) {
                 if (DECR(this->bremenBarkTimer) == 0) {
                     this->bremenBarkTimer = 10;
-                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SMALL_DOG_BARK);
+                    Actor_PlaySfx(&this->actor, NA_SE_EV_SMALL_DOG_BARK);
                 }
             }
         }
@@ -776,9 +778,9 @@ void EnDg_RunAwayFromGoron(EnDg* this, PlayState* play) {
     EnDg_PlaySfxWalk(this);
 
     if (Animation_OnFrame(&this->skelAnime, 3.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SMALL_DOG_CRY);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_SMALL_DOG_CRY);
     } else if (Animation_OnFrame(&this->skelAnime, 6.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_MONKEY_WALK);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_MONKEY_WALK);
     }
 }
 
@@ -865,7 +867,7 @@ void EnDg_SitNextToPlayer(EnDg* this, PlayState* play) {
         Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 4, 0xC00);
         this->actor.world.rot.y = this->actor.shape.rot.y;
     } else {
-        if (player->stateFlags3 & 0x20000000) { // bremen mask march
+        if (player->stateFlags3 & PLAYER_STATE3_20000000) {
             EnDg_ChangeAnim(&this->skelAnime, sAnimationInfo, DOG_ANIM_WALK);
         } else {
             EnDg_ChangeAnim(&this->skelAnime, sAnimationInfo, DOG_ANIM_RUN);
@@ -958,7 +960,7 @@ void EnDg_WalkToPlayer(EnDg* this, PlayState* play) {
 void EnDg_SetupBremenMaskApproachPlayer(EnDg* this, PlayState* play) {
     if (func_801A46F8() == 1) {
         this->bremenBarkTimer = 10;
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SMALL_DOG_BARK);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_SMALL_DOG_BARK);
         this->actionFunc = EnDg_ApproachPlayer;
     }
 }
@@ -992,7 +994,7 @@ void EnDg_ApproachPlayer(EnDg* this, PlayState* play) {
     if (this->actor.xzDistToPlayer < 40.0f) {
         EnDg_ChangeAnim(&this->skelAnime, sAnimationInfo, DOG_ANIM_SIT_DOWN);
         this->actionFunc = EnDg_SitNextToPlayer;
-    } else if (player->stateFlags3 & 0x20000000) { // bremen mask march
+    } else if (player->stateFlags3 & PLAYER_STATE3_20000000) {
         if ((this->actor.xzDistToPlayer > 40.0f) && (player->linearVelocity == 0.0f)) {
             Math_ApproachF(&this->actor.speedXZ, 1.5f, 0.2f, 1.0f);
         } else {
@@ -1062,7 +1064,7 @@ void EnDg_BackAwayFromPlayer(EnDg* this, PlayState* play) {
     }
 
     EnDg_PlaySfxWalk(this);
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SMALL_DOG_GROAN);
+    Actor_PlaySfx(&this->actor, NA_SE_EV_SMALL_DOG_GROAN);
 }
 
 /**
@@ -1104,7 +1106,7 @@ void EnDg_SetupSwim(EnDg* this, PlayState* play) {
         this->actor.gravity = 0.0f;
         this->actor.velocity.y = -3.0f;
         this->swimTimer = 10;
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BOMB_DROP_WATER);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_BOMB_DROP_WATER);
         this->actionFunc = EnDg_Swim;
     }
 
@@ -1136,7 +1138,7 @@ void EnDg_Swim(EnDg* this, PlayState* play) {
     if (DECR(this->swimTimer) == 0) {
         if (!(this->dogFlags & DOG_FLAG_SWIMMING)) {
             this->dogFlags |= DOG_FLAG_SWIMMING;
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_OUT_OF_WATER);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_OUT_OF_WATER);
         }
 
         this->swimTimer = 5;
@@ -1179,7 +1181,7 @@ void EnDg_Swim(EnDg* this, PlayState* play) {
         this->dogFlags &= ~DOG_FLAG_SWIMMING;
         this->behavior = DOG_BEHAVIOR_DEFAULT;
         this->timer = Rand_S16Offset(60, 60);
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_OUT_OF_WATER);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_OUT_OF_WATER);
         EnDg_ChangeAnim(&this->skelAnime, sAnimationInfo, DOG_ANIM_RUN);
         Math_ApproachF(&this->actor.speedXZ, 3.5f, 0.2f, 1.0f);
         this->actionFunc = EnDg_IdleMove;
@@ -1225,7 +1227,7 @@ void EnDg_JumpOutOfWater(EnDg* this, PlayState* play) {
         this->actor.velocity.y = 10.0f;
         this->actor.gravity = -3.0f;
         this->timer = Rand_S16Offset(60, 60);
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_OUT_OF_WATER);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_OUT_OF_WATER);
         EnDg_ChangeAnim(&this->skelAnime, sAnimationInfo, DOG_ANIM_RUN);
         this->actionFunc = EnDg_IdleMove;
         Math_ApproachF(&this->actor.speedXZ, 3.5f, 0.2f, 1.0f);
@@ -1261,7 +1263,7 @@ void EnDg_Thrown(EnDg* this, PlayState* play) {
     if (this->actor.bgCheckFlags & 1) {
         if (this->dogFlags & DOG_FLAG_THROWN) {
             this->dogFlags &= ~DOG_FLAG_THROWN;
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_MONKEY_WALK);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_MONKEY_WALK);
         }
 
         this->actor.speedXZ = 0.0f;
@@ -1340,7 +1342,7 @@ void EnDg_Update(Actor* thisx, PlayState* play) {
     Vec3f floorRot = { 0.0f, 0.0f, 0.0f };
 
     this->selectedDogIndex = sSelectedRacetrackDogInfo.index;
-    if (!(player->stateFlags1 & 0x20) || (play->sceneId != SCENE_CLOCKTOWER)) {
+    if (!(player->stateFlags1 & PLAYER_STATE1_20) || (play->sceneId != SCENE_CLOCKTOWER)) {
         if (EnDg_ShouldReactToNonHumanPlayer(this, play)) {
             EnDg_ChooseActionForForm(this, play);
         } else if (this->behavior != DOG_BEHAVIOR_DEFAULT) {

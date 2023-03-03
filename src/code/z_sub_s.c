@@ -112,7 +112,7 @@ Gfx* SubS_DrawTransformFlex(PlayState* play, void** skeleton, Vec3s* jointTable,
     Gfx* limbDList;
     Vec3f pos;
     Vec3s rot;
-    Mtx* mtx = GRAPH_ALLOC(play->state.gfxCtx, ALIGN16(dListCount * sizeof(Mtx)));
+    Mtx* mtx = GRAPH_ALLOC(play->state.gfxCtx, dListCount * sizeof(Mtx));
 
     if (skeleton == NULL) {
         return NULL;
@@ -517,7 +517,7 @@ Actor* SubS_FindNearestActor(Actor* actor, PlayState* play, u8 actorCategory, s1
         actorIter = actorTmp;
 
         if (actorIter != actor) {
-            dist = Actor_DistanceBetweenActors(actor, actorIter);
+            dist = Actor_WorldDistXYZToActor(actor, actorIter);
             if (!isSetup || dist < minDist) {
                 closestActor = actorIter;
                 minDist = dist;
@@ -1072,8 +1072,8 @@ s32 SubS_TrackPoint(Vec3f* target, Vec3f* focusPos, Vec3s* shapeRot, Vec3s* trac
     s16 targetX;
     f32 diffZ = target->z - focusPos->z;
 
-    yaw = Math_FAtan2F(diffZ, diffX);
-    pitch = Math_FAtan2F(sqrtf(SQ(diffX) + SQ(diffZ)), target->y - focusPos->y);
+    yaw = Math_Atan2S_XY(diffZ, diffX);
+    pitch = Math_Atan2S_XY(sqrtf(SQ(diffX) + SQ(diffZ)), target->y - focusPos->y);
     Math_SmoothStepToS(&trackTarget->x, pitch, 4, 0x2710, 0);
     Math_SmoothStepToS(&trackTarget->y, yaw, 4, 0x2710, 0);
 
@@ -1306,8 +1306,8 @@ void SubS_ActorPathing_ComputePointInfo(PlayState* play, ActorPathing* actorPath
     diff.z = actorPath->curPoint.z - actorPath->worldPos->z;
     actorPath->distSqToCurPointXZ = Math3D_XZLengthSquared(diff.x, diff.z);
     actorPath->distSqToCurPoint = Math3D_LengthSquared(&diff);
-    actorPath->rotToCurPoint.y = Math_FAtan2F(diff.z, diff.x);
-    actorPath->rotToCurPoint.x = Math_FAtan2F(sqrtf(actorPath->distSqToCurPointXZ), -diff.y);
+    actorPath->rotToCurPoint.y = Math_Atan2S_XY(diff.z, diff.x);
+    actorPath->rotToCurPoint.x = Math_Atan2S_XY(sqrtf(actorPath->distSqToCurPointXZ), -diff.y);
     actorPath->rotToCurPoint.z = 0;
 }
 
@@ -1522,7 +1522,7 @@ s32 func_8013E748(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, s32 ex
 s32 SubS_ActorAndPlayerFaceEachOther(PlayState* play, Actor* actor, void* data) {
     Player* player = GET_PLAYER(play);
     Vec3s* yawTols = (Vec3s*)data;
-    s16 playerYaw = ABS(BINANG_SUB(Actor_YawBetweenActors(&player->actor, actor), player->actor.shape.rot.y));
+    s16 playerYaw = ABS(BINANG_SUB(Actor_WorldYawTowardActor(&player->actor, actor), player->actor.shape.rot.y));
     s16 actorYaw = ABS(BINANG_SUB(actor->yawTowardsPlayer, actor->shape.rot.y));
     s32 areFacing = false;
     s32 actorYawTol = ABS(yawTols->y);

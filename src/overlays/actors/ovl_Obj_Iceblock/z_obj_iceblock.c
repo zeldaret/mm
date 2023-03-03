@@ -45,7 +45,7 @@ void func_80A26B64(ObjIceblock* this, PlayState* play);
 void func_80A26B74(ObjIceblock* this, PlayState* play);
 void func_80A26BF8(ObjIceblock* this, PlayState* play);
 
-const ActorInit Obj_Iceblock_InitVars = {
+ActorInit Obj_Iceblock_InitVars = {
     ACTOR_OBJ_ICEBLOCK,
     ACTORCAT_BG,
     FLAGS,
@@ -849,7 +849,7 @@ void func_80A25404(ObjIceblock* this) {
 void func_80A2541C(ObjIceblock* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    player->stateFlags2 &= ~0x10;
+    player->stateFlags2 &= ~PLAYER_STATE2_10;
     this->dyna.pushForce = 0.0f;
 }
 
@@ -921,7 +921,7 @@ void ObjIceblock_Init(Actor* thisx, PlayState* play) {
     }
 
     DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
-    DynaPolyActor_LoadMesh(play, &this->dyna, &gIceBlockDynaColHeader);
+    DynaPolyActor_LoadMesh(play, &this->dyna, &gIceBlockCol);
     func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->dyna.actor, &sCylinderInit);
@@ -1096,13 +1096,13 @@ void func_80A25BBC(ObjIceblock* this, PlayState* play) {
     func_80A23690(this);
 
     if (func_80A23F90(this, play)) {
-        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
+        Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
     }
 
     if (func_80A24954(this, play)) {
         func_80A2491C(this);
         if (this->unk_2B0 == 3) {
-            Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_DIVE_INTO_WATER_L);
+            Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_DIVE_INTO_WATER_L);
         }
     }
 }
@@ -1175,7 +1175,7 @@ void func_80A25E50(ObjIceblock* this, PlayState* play) {
         func_80A25BA0(this);
     } else if (sp38) {
         if (func_80A24118(this, play, 59.9f, &sp28)) {
-            Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
+            Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
         }
         func_80A2541C(this, play);
         func_80A25CF4(this);
@@ -1208,7 +1208,7 @@ void func_80A25FD4(ObjIceblock* this, PlayState* play) {
         func_80A23370(this, sp2C);
         func_80A260E8(this);
         sp30 = false;
-        func_800B7298(play, &this->dyna.actor, 7);
+        func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_7);
         this->unk_1B0 |= 1;
     }
 
@@ -1254,7 +1254,7 @@ void func_80A26144(ObjIceblock* this, PlayState* play) {
 
     if ((this->unk_1B0 & 1) && (isBool || sp28 || (this->dyna.actor.xzDistToPlayer > 400.0f))) {
         this->unk_1B0 &= ~1;
-        func_800B7298(play, &this->dyna.actor, 6);
+        func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_6);
     }
 
     if (isBool) {
@@ -1262,7 +1262,7 @@ void func_80A26144(ObjIceblock* this, PlayState* play) {
         func_80A23B88(this);
         func_80A25BA0(this);
     } else if (sp28) {
-        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
+        Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
         func_80A23B88(this);
         func_80A25FA0(this);
     } else {
@@ -1453,7 +1453,7 @@ void ObjIceblock_Update(Actor* thisx, PlayState* play) {
         this->unk_1B0 &= ~0x100;
         if (this->unk_1B0 & 1) {
             this->unk_1B0 &= ~1;
-            func_800B7298(play, &this->dyna.actor, 6);
+            func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_6);
         }
         func_80A266C4(this);
     }

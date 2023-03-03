@@ -33,7 +33,7 @@ void func_80B04B48(ObjSnowball* this, PlayState* play);
 void func_80B04B60(ObjSnowball* this, PlayState* play);
 void func_80B04D34(Actor* thisx, PlayState* play);
 
-const ActorInit Obj_Snowball_InitVars = {
+ActorInit Obj_Snowball_InitVars = {
     ACTOR_OBJ_SNOWBALL,
     ACTORCAT_PROP,
     FLAGS,
@@ -440,7 +440,7 @@ void func_80B03FF8(ObjSnowball* this, PlayState* play) {
         sp18->unk_04(this, play);
     }
 
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SNOWBALL_BROKEN);
+    Actor_PlaySfx(&this->actor, NA_SE_EV_SNOWBALL_BROKEN);
 
     if (rotY == 5) {
         Flags_SetSwitch(play, OBJSNOWBALL_GET_3F(&this->actor));
@@ -571,7 +571,7 @@ void func_80B04350(ObjSnowball* this, PlayState* play) {
             } else {
                 this->unk_209 = 10;
             }
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_REFLECTION_SNOW);
+            Actor_PlaySfx(&this->actor, NA_SE_IT_REFLECTION_SNOW);
         }
     }
 

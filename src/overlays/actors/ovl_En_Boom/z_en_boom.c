@@ -19,7 +19,7 @@ void EnBoom_Draw(Actor* thisx, PlayState* play);
 void EnBoom_SetupAction(EnBoom* this, EnBoomActionFunc actionFunc);
 void func_808A2918(EnBoom* this, PlayState* play);
 
-const ActorInit En_Boom_InitVars = {
+ActorInit En_Boom_InitVars = {
     ACTOR_EN_BOOM,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -95,7 +95,7 @@ void func_808A24DC(EnBoom* this, PlayState* play) {
             EffectSsGSplash_Spawn(play, &sp34, NULL, NULL, 0, 300);
         }
 
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_DIVE_INTO_WATER_L);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_DIVE_INTO_WATER_L);
 
         EffectSsGRipple_Spawn(play, &sp34, 100, 500, 0);
         EffectSsGRipple_Spawn(play, &sp34, 100, 500, 4);
@@ -155,10 +155,10 @@ void EnBoom_Destroy(Actor* thisx, PlayState* play) {
                 temp->child = NULL;
             } else {
                 player->boomerangActor = NULL;
-                player->stateFlags1 &= ~0x2000000;
+                player->stateFlags1 &= ~PLAYER_STATE1_2000000;
             }
         }
-        player->stateFlags3 |= 0x800000;
+        player->stateFlags3 |= PLAYER_STATE3_800000;
     }
 }
 
@@ -177,9 +177,9 @@ void func_808A2918(EnBoom* this, PlayState* play) {
     sp7C = this->player;
 
     if (sp7C != NULL) {
-        sp72 = Actor_YawToPoint(&this->actor, &sp7C->focus.pos);
+        sp72 = Actor_WorldYawTowardPoint(&this->actor, &sp7C->focus.pos);
         sp70 = this->actor.world.rot.y - sp72;
-        sp6E = Actor_PitchToPoint(&this->actor, &sp7C->focus.pos);
+        sp6E = Actor_WorldPitchTowardPoint(&this->actor, &sp7C->focus.pos);
         sp6C = this->actor.world.rot.x - sp6E;
 
         sp64 = (200.0f - Math_Vec3f_DistXYZ(&this->actor.world.pos, &sp7C->focus.pos)) * 0.005f;
@@ -286,7 +286,7 @@ void EnBoom_Update(Actor* thisx, PlayState* play) {
     Player* player = GET_PLAYER(play);
     Actor* actor;
 
-    if (!(player->stateFlags1 & 0x20000000)) {
+    if (!(player->stateFlags1 & PLAYER_STATE1_20000000)) {
         this->actionFunc(this, play);
 
         if (((actor = this->actor.child) != NULL) || ((actor = this->actor.parent) != NULL)) {

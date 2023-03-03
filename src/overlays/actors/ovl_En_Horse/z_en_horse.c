@@ -144,7 +144,7 @@ static SkeletonHeader* sSkeletonHeaders[] = {
     NULL, NULL, &object_horse_link_child_Skel_00A480, NULL, NULL,
 };
 
-const ActorInit En_Horse_InitVars = {
+ActorInit En_Horse_InitVars = {
     ACTOR_EN_HORSE,
     ACTORCAT_BG,
     FLAGS,
@@ -408,7 +408,7 @@ void func_8087B7C0(EnHorse* this, PlayState* play, Path* path) {
     } else if (this->unk_590 > 0) {
         if (this->unk_590 == 0x1F4) {
             if (this->rider != NULL) {
-                Actor_PlaySfxAtPos(&this->rider->actor, NA_SE_VO_IN_CRY_0);
+                Actor_PlaySfx(&this->rider->actor, NA_SE_VO_IN_CRY_0);
             }
         }
         this->unk_590--;
@@ -430,7 +430,7 @@ void func_8087B7C0(EnHorse* this, PlayState* play, Path* path) {
             return;
         }
 
-        sp4A = Actor_YawBetweenActors(&this->actor, &GET_PLAYER(play)->actor) - this->actor.world.rot.y;
+        sp4A = Actor_WorldYawTowardActor(&this->actor, &GET_PLAYER(play)->actor) - this->actor.world.rot.y;
 
         if ((fabsf(Math_SinS(sp4A)) < 0.9f) && (Math_CosS(sp4A) > 0.0f)) {
             if (this->actor.speedXZ < this->unk_398) {
@@ -455,7 +455,7 @@ void func_8087B7C0(EnHorse* this, PlayState* play, Path* path) {
         }
         this->unk_394 |= 1;
     } else if ((sp68 + 1) == this->curRaceWaypoint) {
-        s16 sp48 = Actor_YawBetweenActors(&this->actor, &GET_PLAYER(play)->actor) - this->actor.world.rot.y;
+        s16 sp48 = Actor_WorldYawTowardActor(&this->actor, &GET_PLAYER(play)->actor) - this->actor.world.rot.y;
 
         if ((fabsf(Math_SinS(sp48)) < 0.9f) && (Math_CosS(sp48) > 0.0f)) {
             if (this->actor.speedXZ < this->unk_398) {
@@ -622,7 +622,7 @@ s32 EnHorse_Spawn(EnHorse* this, PlayState* play) {
         this->actor.world.pos.z = spawnPos.z;
         this->actor.prevPos = this->actor.world.pos;
         this->actor.world.rot.y = 0;
-        this->actor.shape.rot.y = Actor_YawBetweenActors(&this->actor, &GET_PLAYER(play)->actor);
+        this->actor.shape.rot.y = Actor_WorldYawTowardActor(&this->actor, &GET_PLAYER(play)->actor);
         spawn = true;
         SkinMatrix_Vec3fMtxFMultXYZW(&play->viewProjectionMtxF, &this->actor.world.pos, &this->actor.projectedPos,
                                      &this->actor.projectedW);
@@ -648,7 +648,7 @@ s32 EnHorse_Spawn(EnHorse* this, PlayState* play) {
         this->actor.world.pos.z = spawnPos.z;
         this->actor.prevPos = this->actor.world.pos;
         this->actor.world.rot.y = 0;
-        this->actor.shape.rot.y = Actor_YawBetweenActors(&this->actor, &GET_PLAYER(play)->actor);
+        this->actor.shape.rot.y = Actor_WorldYawTowardActor(&this->actor, &GET_PLAYER(play)->actor);
         spawn = true;
         SkinMatrix_Vec3fMtxFMultXYZW(&play->viewProjectionMtxF, &this->actor.world.pos, &this->actor.projectedPos,
                                      &this->actor.projectedW);
@@ -674,7 +674,7 @@ s32 EnHorse_PlayerCanMove(EnHorse* this, PlayState* play) {
         (((this->stateFlags & ENHORSE_FLAG_19) || (this->stateFlags & ENHORSE_FLAG_29)) && !this->inRace) ||
         (this->action == ENHORSE_ACTION_HBA) || (player->actor.flags & ACTOR_FLAG_100) ||
         (play->csCtx.state != CS_STATE_0) || (ActorCutscene_GetCurrentIndex() != -1) ||
-        (player->stateFlags1 & PLAYER_STATE1_20) || (player->csMode != 0)) {
+        (player->stateFlags1 & PLAYER_STATE1_20) || (player->csMode != PLAYER_CSMODE_0)) {
         return false;
     }
     return true;
@@ -792,8 +792,8 @@ void EnHorse_Init(Actor* thisx, PlayState* play2) {
         this->stateFlags = 0;
     }
 
-    if (((play->sceneId == SCENE_KOEPONARACE) && (GET_RACE_FLAGS == 1)) ||
-        ((gSaveContext.save.entrance == ENTRANCE(ROMANI_RANCH, 0)) && Cutscene_GetSceneLayer(play))) {
+    if (((play->sceneId == SCENE_KOEPONARACE) && (GET_WEEKEVENTREG_RACE_FLAGS == WEEKEVENTREG_RACE_FLAG_START)) ||
+        ((gSaveContext.save.entrance == ENTRANCE(ROMANI_RANCH, 0)) && (Cutscene_GetSceneLayer(play) != 0))) {
         this->stateFlags |= ENHORSE_FLAG_25;
     }
 
@@ -875,7 +875,7 @@ void EnHorse_Init(Actor* thisx, PlayState* play2) {
         EnHorse_InitCutscene(this, play);
     } else if (thisx->params == ENHORSE_10) {
         EnHorse_InitHorsebackArchery(this);
-        func_80112AFC(play);
+        Interface_InitMinigame(play);
     } else if (thisx->params == ENHORSE_14) {
         func_808846F0(this, play);
         if ((play->sceneId == SCENE_LOST_WOODS) && !Cutscene_IsPlaying(play)) {
@@ -1131,6 +1131,7 @@ void EnHorse_StartMountedIdle(EnHorse* this) {
             }
         }
     }
+
     curFrame = this->skin.skelAnime.curFrame;
     Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animIndex], 1.0f, curFrame,
                      Animation_GetLastFrame(sAnimationHeaders[this->type][this->animIndex]), ANIMMODE_ONCE, -3.0f);
@@ -1569,7 +1570,7 @@ void EnHorse_Stopping(EnHorse* this, PlayState* play) {
     if ((this->stateFlags & ENHORSE_STOPPING_NEIGH_SOUND) && (this->skin.skelAnime.curFrame > 29.0f)) {
         this->actor.speedXZ = 0.0f;
         if ((Rand_ZeroOne() > 0.5f) &&
-            ((gSaveContext.save.entrance != ENTRANCE(ROMANI_RANCH, 0)) || !Cutscene_GetSceneLayer(play))) {
+            ((gSaveContext.save.entrance != ENTRANCE(ROMANI_RANCH, 0)) || (Cutscene_GetSceneLayer(play) == 0))) {
             if (this->stateFlags & ENHORSE_DRAW) {
                 if (this->type == HORSE_TYPE_2) {
                     Audio_PlaySfxAtPos(&this->unk_218, NA_SE_EV_KID_HORSE_NEIGH);
@@ -2025,7 +2026,7 @@ void EnHorse_StartMovingAnimation(EnHorse* this, s32 anim, f32 morphFrames, f32 
 
 void EnHorse_SetFollowAnimation(EnHorse* this, PlayState* play) {
     s32 anim = ENHORSE_ANIM_WALK;
-    f32 distToPlayer = Actor_XZDistanceBetweenActors(&this->actor, &GET_PLAYER(play)->actor);
+    f32 distToPlayer = Actor_WorldDistXZToActor(&this->actor, &GET_PLAYER(play)->actor);
 
     if (distToPlayer > 400.0f) {
         anim = ENHORSE_ANIM_GALLOP;
@@ -2062,7 +2063,7 @@ void EnHorse_FollowPlayer(EnHorse* this, PlayState* play) {
     f32 distToPlayer;
 
     D_801BDAA4 = 0;
-    distToPlayer = Actor_XZDistanceBetweenActors(&this->actor, &GET_PLAYER(play)->actor);
+    distToPlayer = Actor_WorldDistXZToActor(&this->actor, &GET_PLAYER(play)->actor);
 
     if (((this->playerDir == PLAYER_DIR_BACK_R) || (this->playerDir == PLAYER_DIR_BACK_L)) && (distToPlayer > 300.0f) &&
         !(this->stateFlags & ENHORSE_TURNING_TO_PLAYER)) {
@@ -2070,7 +2071,7 @@ void EnHorse_FollowPlayer(EnHorse* this, PlayState* play) {
 
         this->animIndex = ENHORSE_ANIM_REARING;
         this->stateFlags |= ENHORSE_TURNING_TO_PLAYER;
-        this->angleToPlayer = Actor_YawBetweenActors(&this->actor, &GET_PLAYER(play)->actor);
+        this->angleToPlayer = Actor_WorldYawTowardActor(&this->actor, &GET_PLAYER(play)->actor);
 
         angleDiff = (f32)this->angleToPlayer - this->actor.world.rot.y;
         if (angleDiff > 0x7FFF) {
@@ -2471,7 +2472,7 @@ void func_808819D8(EnHorse* this, PlayState* play) {
         func_8088168C(this);
     }
 
-    if (GET_RACE_FLAGS == 3) {
+    if (GET_WEEKEVENTREG_RACE_FLAGS == WEEKEVENTREG_RACE_FLAG_3) {
         this->rider->unk488 = 7;
     } else {
         EnHorse_SetIngoAnimation(this->animIndex, this->skin.skelAnime.curFrame, this->unk_394 & 1,
@@ -2916,22 +2917,23 @@ void EnHorse_UpdateHorsebackArchery(EnHorse* this, PlayState* play) {
         EnHorse_PlayWalkingSound(this);
     }
 
-    if (play->interfaceCtx.hbaAmmo == 0) {
+    if (play->interfaceCtx.minigameAmmo == 0) {
         this->hbaTimer++;
     }
 
-    sp28 = Audio_IsSequencePlaying(0x41);
+    sp28 = Audio_IsSequencePlaying(NA_BGM_HORSE_GOAL);
     EnHorse_UpdateHbaRaceInfo(this, play, &sHbaInfo);
 
-    if (((this->hbaFlags & 1) || (this->hbaTimer > 45)) && (sp28 != 1) && (gSaveContext.minigameState != 3)) {
+    if (((this->hbaFlags & 1) || (this->hbaTimer > 45)) && (sp28 != 1) &&
+        (gSaveContext.minigameStatus != MINIGAME_STATUS_END)) {
         gSaveContext.save.cutscene = 0;
         play->transitionTrigger = TRANS_TRIGGER_START;
         play->transitionType = TRANS_TYPE_64;
     }
 
-    if (play->interfaceCtx.hbaAmmo) {}
+    if (play->interfaceCtx.minigameAmmo) {}
 
-    if (((play->interfaceCtx.hbaAmmo == 0) || (this->hbaFlags & 2)) && (this->hbaFlags & 4)) {
+    if (((play->interfaceCtx.minigameAmmo == 0) || (this->hbaFlags & 2)) && (this->hbaFlags & 4)) {
         this->hbaFlags &= ~4;
         Audio_QueueSeqCmd(0x8041);
     }
@@ -3030,7 +3032,7 @@ void EnHorse_FleePlayer(EnHorse* this, PlayState* play) {
         (nextAnimIndex == ENHORSE_ANIM_WALK)) {
         if (playerDistToHome < 300.0f) {
             yaw = player->actor.shape.rot.y;
-            yaw += ((Actor_YawBetweenActors(&this->actor, &player->actor) > 0) ? 1 : -1) * 0x3FFF;
+            yaw += ((Actor_WorldYawTowardActor(&this->actor, &player->actor) > 0) ? 1 : -1) * 0x3FFF;
         } else {
             yaw = Math_Vec3f_Yaw(&this->actor.world.pos, &this->actor.home.pos) - this->actor.world.rot.y;
         }
@@ -3381,12 +3383,12 @@ void func_80884A40(EnHorse* this, PlayState* play) {
         }
 
         if ((this->unk_538 == OBJ_UM_ANIM_TROT) || (this->unk_538 == OBJ_UM_ANIM_GALLOP)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_HORSE_RUN);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_HORSE_RUN);
         } else if (this->unk_538 == OBJ_UM_ANIM_IDLE) {
             if (this->animIndex == ENHORSE_ANIM_IDLE) {
                 EnHorse_IdleAnimSounds(this, play);
             } else if (this->animIndex == ENHORSE_ANIM_WHINNY) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_HORSE_GROAN);
+                Actor_PlaySfx(&this->actor, NA_SE_EV_HORSE_GROAN);
             }
         }
     }
@@ -3398,7 +3400,7 @@ void func_80884D04(EnHorse* this, PlayState* play) {
     this->actor.speedXZ = 10.0f;
     this->action = ENHORSE_ACTION_25;
     this->unk_540 = this->actor.world.pos;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_INGO_HORSE_NEIGH);
+    Actor_PlaySfx(&this->actor, NA_SE_IT_INGO_HORSE_NEIGH);
     this->animIndex = ENHORSE_ANIM_GALLOP;
     playSpeed = this->actor.speedXZ * 0.2f;
     Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animIndex],
@@ -4067,7 +4069,7 @@ void EnHorse_RegenBoost(EnHorse* this, PlayState* play) {
 
 void EnHorse_UpdatePlayerDir(EnHorse* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    s16 angle = Actor_YawBetweenActors(&this->actor, &player->actor) - this->actor.world.rot.y;
+    s16 angle = Actor_WorldYawTowardActor(&this->actor, &player->actor) - this->actor.world.rot.y;
     f32 s = Math_SinS(angle);
     f32 c = Math_CosS(angle);
 
@@ -4397,7 +4399,7 @@ s32 EnHorse_PlayerDirToMountSide(EnHorse* this, PlayState* play, Player* player)
 s32 EnHorse_MountSideCheck(EnHorse* this, PlayState* play, Player* player) {
     s32 mountSide;
 
-    if (Actor_XZDistanceBetweenActors(&this->actor, &player->actor) > 75.0f) {
+    if (Actor_WorldDistXZToActor(&this->actor, &player->actor) > 75.0f) {
         return 0;
     }
 
@@ -4405,7 +4407,7 @@ s32 EnHorse_MountSideCheck(EnHorse* this, PlayState* play, Player* player) {
         return 0;
     }
 
-    if (Math_CosS(Actor_YawBetweenActors(&player->actor, &this->actor) - player->actor.world.rot.y) <
+    if (Math_CosS(Actor_WorldYawTowardActor(&player->actor, &this->actor) - player->actor.world.rot.y) <
         0.17364818f) { // cos(80 degrees)
         return 0;
     }

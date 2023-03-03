@@ -92,7 +92,7 @@ static AnimationSpeedInfo sAnimationInfo[] = {
     { &gBeaverIdleFaceRightAnim, 1.0f, ANIMMODE_LOOP, -5.0f },
 };
 
-const ActorInit En_Az_InitVars = {
+ActorInit En_Az_InitVars = {
     ACTOR_EN_AZ,
     ACTORCAT_NPC,
     FLAGS,
@@ -151,8 +151,8 @@ void func_80A94AB8(EnAz* this, PlayState* play, s32 spawnIndex) {
     play->nextEntrance = Entrance_CreateFromSpawn(spawnIndex);
     gSaveContext.nextCutsceneIndex = 0;
     play->transitionTrigger = TRANS_TRIGGER_START;
-    play->transitionType = TRANS_TYPE_03;
-    gSaveContext.nextTransitionType = TRANS_TYPE_03;
+    play->transitionType = TRANS_TYPE_FADE_WHITE;
+    gSaveContext.nextTransitionType = TRANS_TYPE_FADE_WHITE;
 }
 
 void func_80A94B20(PlayState* play) {
@@ -207,32 +207,32 @@ void EnAz_Init(Actor* thisx, PlayState* play2) {
     this->actor.targetMode = 1;
     switch (BEAVER_GET_PARAM_F00(thisx)) {
         case 0:
-            phi_v1 = (gSaveContext.save.entrance == ENTRANCE(WATERFALL_RAPIDS, 0)) &&
-                     (gSaveContext.save.weekEventReg[93] & 1);
+            phi_v1 =
+                (gSaveContext.save.entrance == ENTRANCE(WATERFALL_RAPIDS, 0)) && CHECK_WEEKEVENTREG(WEEKEVENTREG_93_01);
             phi_v1 = !phi_v1;
             break;
         case 2:
             phi_v1 = (gSaveContext.save.entrance != ENTRANCE(WATERFALL_RAPIDS, 1)) ||
-                     !(gSaveContext.save.weekEventReg[24] & 4);
+                     !CHECK_WEEKEVENTREG(WEEKEVENTREG_24_04);
             break;
         case 4:
             phi_v1 = gSaveContext.save.entrance != ENTRANCE(WATERFALL_RAPIDS, 2);
             break;
         case 1:
-            phi_v1 = (gSaveContext.save.entrance == ENTRANCE(WATERFALL_RAPIDS, 0)) &&
-                     (gSaveContext.save.weekEventReg[93] & 1);
+            phi_v1 =
+                (gSaveContext.save.entrance == ENTRANCE(WATERFALL_RAPIDS, 0)) && CHECK_WEEKEVENTREG(WEEKEVENTREG_93_01);
             phi_v1 = !phi_v1;
             break;
         case 3:
-            phi_v1 = (gSaveContext.save.entrance != ENTRANCE(WATERFALL_RAPIDS, 1)) ||
-                     (gSaveContext.save.weekEventReg[24] & 4);
+            phi_v1 =
+                (gSaveContext.save.entrance != ENTRANCE(WATERFALL_RAPIDS, 1)) || CHECK_WEEKEVENTREG(WEEKEVENTREG_24_04);
             break;
         case 5:
             phi_v1 = gSaveContext.save.entrance != ENTRANCE(WATERFALL_RAPIDS, 2);
             break;
         case 6:
             phi_v1 = (gSaveContext.save.entrance == ENTRANCE(WATERFALL_RAPIDS, 0)) &&
-                     !(gSaveContext.save.weekEventReg[93] & 1);
+                     !CHECK_WEEKEVENTREG(WEEKEVENTREG_93_01);
             phi_v1 = !phi_v1;
             break;
         default:
@@ -292,7 +292,7 @@ void EnAz_Init(Actor* thisx, PlayState* play2) {
 
     switch (gSaveContext.save.entrance) {
         case ENTRANCE(WATERFALL_RAPIDS, 0):
-            if (gSaveContext.save.weekEventReg[93] & 1) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_93_01)) {
                 this->unk_2FA = 5;
                 if (this->unk_374 & 2) {
                     this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8);
@@ -321,14 +321,14 @@ void EnAz_Init(Actor* thisx, PlayState* play2) {
             func_80A97C0C(this, play);
             break;
         case ENTRANCE(WATERFALL_RAPIDS, 1):
-            if (gSaveContext.save.weekEventReg[93] & 1) {
-                if (gSaveContext.save.weekEventReg[24] & 4) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_93_01)) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_24_04)) {
                     this->unk_2FA = 8;
                 } else {
                     this->unk_2FA = 6;
                 }
             } else {
-                if (gSaveContext.save.weekEventReg[24] & 4) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_24_04)) {
                     this->unk_2FA = 3;
                 } else {
                     this->unk_2FA = 1;
@@ -338,7 +338,7 @@ void EnAz_Init(Actor* thisx, PlayState* play2) {
                 SubS_CopyPointFromPathList(play->setupPathList, BEAVER_GET_PARAM_FF(thisx),
                                            play->setupPathList[BEAVER_GET_PARAM_FF(thisx)].count - 1, &D_80A99E80);
             }
-            if (gSaveContext.save.weekEventReg[24] & 4) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_24_04)) {
                 if (this->unk_374 & 2) {
                     func_80A97D5C(this, play);
                 } else {
@@ -351,14 +351,14 @@ void EnAz_Init(Actor* thisx, PlayState* play2) {
             }
             break;
         case ENTRANCE(WATERFALL_RAPIDS, 2):
-            if (gSaveContext.save.weekEventReg[93] & 1) {
-                if (gSaveContext.save.weekEventReg[24] & 4) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_93_01)) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_24_04)) {
                     this->unk_2FA = 9;
                 } else {
                     this->unk_2FA = 7;
                 }
             } else {
-                if (gSaveContext.save.weekEventReg[24] & 4) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_24_04)) {
                     this->unk_2FA = 4;
                 } else {
                     this->unk_2FA = 2;
@@ -593,7 +593,7 @@ void func_80A95CEC(EnAz* this, PlayState* play) {
             func_800B9010(&this->actor, NA_SE_EV_HONEYCOMB_FALL - SFX_FLAG);
         } else {
             if (this->actor.bgCheckFlags & 2) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_GERUDOFT_DOWN);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_GERUDOFT_DOWN);
             }
             if (SubS_StartActorCutscene(&this->actor, 0x7C, this->unk_3D0[0], SUBS_CUTSCENE_NORMAL)) {
                 func_80A97C0C(this, play);
@@ -625,7 +625,7 @@ void func_80A95E88(EnAz* this, PlayState* play) {
     if (this->actor.depthInWater > 8.0f) {
         if (this->unk_374 & 2) {
             if ((this->skelAnime.curFrame < this->skelAnime.playSpeed) && (this->skelAnime.curFrame >= 0.0f)) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BEAVER_SWIM_HAND);
+                Actor_PlaySfx(&this->actor, NA_SE_EV_BEAVER_SWIM_HAND);
             }
         } else {
             func_800B9010(&this->actor, NA_SE_EV_BEAVER_SWIM_MOTOR - SFX_FLAG);
@@ -654,7 +654,7 @@ void func_80A95FE8(EnAz* this, PlayState* play) {
     } else {
         ActorCutscene_SetIntentToPlay(this->unk_3D0[0]);
     }
-    if (Actor_DistanceToPoint(&this->actor, &this->actor.home.pos) > 20.0f) {
+    if (Actor_WorldDistXYZToPoint(&this->actor, &this->actor.home.pos) > 20.0f) {
         func_800B9010(&this->actor, NA_SE_EV_BEAVER_SWIM_MOTOR - SFX_FLAG);
         func_800BE33C(&this->actor.world.pos, &this->actor.home.pos, &this->actor.world.rot, 0);
         Math_SmoothStepToS(&this->actor.shape.rot.x, this->actor.world.rot.x, 3, 0xE38, 0x38E);
@@ -698,7 +698,7 @@ s32 func_80A9617C(EnAz* this, PlayState* play) {
                 switch (play->msgCtx.currentTextId) {
                     case 0x70:
                     case 0xCD:
-                        gSaveContext.save.weekEventReg[24] &= (u8)~1;
+                        CLEAR_WEEKEVENTREG(WEEKEVENTREG_24_01);
                         this->actor.textId = 0x10F2;
                         SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo, BEAVER_ANIM_BOW,
                                                         &this->animIndex);
@@ -707,7 +707,7 @@ s32 func_80A9617C(EnAz* this, PlayState* play) {
                         break;
                     case 0x10CE:
                         this->actor.textId = 0x10CF;
-                        gSaveContext.save.weekEventReg[16] |= 0x40;
+                        SET_WEEKEVENTREG(WEEKEVENTREG_16_40);
                         break;
                     case 0x10CF:
                         this->actor.textId = 0x10D0;
@@ -782,7 +782,7 @@ s32 func_80A9617C(EnAz* this, PlayState* play) {
                         break;
                     case 0x10D9:
                         if ((this->unk_2FA == 3) || (this->unk_2FA == 8)) {
-                            gSaveContext.save.weekEventReg[24] &= (u8)~4;
+                            CLEAR_WEEKEVENTREG(WEEKEVENTREG_24_04);
                         }
                         func_80A94AB8(this, play, 0);
                         func_80A979DC(this, play);
@@ -866,7 +866,7 @@ s32 func_80A9617C(EnAz* this, PlayState* play) {
                         ret = 0;
                         break;
                     case 0x10E7:
-                        gSaveContext.save.weekEventReg[24] &= (u8)~4;
+                        CLEAR_WEEKEVENTREG(WEEKEVENTREG_24_04);
                         func_80A94AB8(this, play, 0);
                         SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo, BEAVER_ANIM_IDLE,
                                                         &this->animIndex);
@@ -924,7 +924,7 @@ s32 func_80A9617C(EnAz* this, PlayState* play) {
                         break;
                     case 0x10ED:
                         if ((this->unk_2FA == 4) || (this->unk_2FA == 9)) {
-                            gSaveContext.save.weekEventReg[24] &= (u8)~4;
+                            CLEAR_WEEKEVENTREG(WEEKEVENTREG_24_04);
                         }
                         func_80A94AB8(this, play, 0);
                         func_80A979DC(this, play);
@@ -943,12 +943,12 @@ s32 func_80A9617C(EnAz* this, PlayState* play) {
                         ret = 0;
                         break;
                     case 0x10F1:
-                        gSaveContext.save.weekEventReg[93] |= 1;
-                        if (gSaveContext.save.weekEventReg[23] & 0x80) {
+                        SET_WEEKEVENTREG(WEEKEVENTREG_93_01);
+                        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_23_80)) {
                             this->getItemId = GI_RUPEE_RED;
                         } else {
                             this->getItemId = GI_BOTTLE;
-                            gSaveContext.save.weekEventReg[23] |= 0x80;
+                            SET_WEEKEVENTREG(WEEKEVENTREG_23_80);
                         }
                         SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo, BEAVER_ANIM_IDLE,
                                                         &this->animIndex);
@@ -958,7 +958,7 @@ s32 func_80A9617C(EnAz* this, PlayState* play) {
                         break;
                     case 0x10F2:
                     case 0x1109:
-                        gSaveContext.save.weekEventReg[24] &= (u8)~4;
+                        CLEAR_WEEKEVENTREG(WEEKEVENTREG_24_04);
                         SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo, BEAVER_ANIM_IDLE,
                                                         &this->animIndex);
                         SubS_ChangeAnimationBySpeedInfo(&brother->skelAnime, sAnimationInfo, BEAVER_ANIM_IDLE,
@@ -992,7 +992,7 @@ s32 func_80A9617C(EnAz* this, PlayState* play) {
                     case 0x10F8:
                         if (play->msgCtx.choiceIndex == 0) {
                             func_8019F208();
-                            if (gSaveContext.save.weekEventReg[25] & 1) {
+                            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_25_01)) {
                                 this->actor.textId = 0x1107;
                             } else {
                                 this->actor.textId = 0x10FA;
@@ -1044,7 +1044,7 @@ s32 func_80A9617C(EnAz* this, PlayState* play) {
                     case 0x10FE:
                         if (play->msgCtx.choiceIndex == 0) {
                             func_8019F208();
-                            if (gSaveContext.save.weekEventReg[25] & 1) {
+                            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_25_01)) {
                                 this->actor.textId = 0x1108;
                             } else {
                                 this->actor.textId = 0x1101;
@@ -1065,7 +1065,7 @@ s32 func_80A9617C(EnAz* this, PlayState* play) {
                         ret = 0;
                         break;
                     case 0x1100:
-                        gSaveContext.save.weekEventReg[24] &= (u8)~4;
+                        CLEAR_WEEKEVENTREG(WEEKEVENTREG_24_04);
                         SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo, BEAVER_ANIM_IDLE,
                                                         &this->animIndex);
                         SubS_ChangeAnimationBySpeedInfo(&brother->skelAnime, sAnimationInfo, BEAVER_ANIM_IDLE,
@@ -1096,11 +1096,11 @@ s32 func_80A9617C(EnAz* this, PlayState* play) {
                         ret = 0;
                         break;
                     case 0x1105:
-                        if (gSaveContext.save.weekEventReg[25] & 1) {
+                        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_25_01)) {
                             this->getItemId = GI_RUPEE_PURPLE;
                         } else {
                             this->getItemId = GI_HEART_PIECE;
-                            gSaveContext.save.weekEventReg[25] |= 1;
+                            SET_WEEKEVENTREG(WEEKEVENTREG_25_01);
                         }
                         SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo, BEAVER_ANIM_IDLE,
                                                         &this->animIndex);
@@ -1109,7 +1109,7 @@ s32 func_80A9617C(EnAz* this, PlayState* play) {
                         ret = 7;
                         break;
                     case 0x1106:
-                        gSaveContext.save.weekEventReg[24] &= (u8)~4;
+                        CLEAR_WEEKEVENTREG(WEEKEVENTREG_24_04);
                         SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo, BEAVER_ANIM_IDLE,
                                                         &this->animIndex);
                         SubS_ChangeAnimationBySpeedInfo(&brother->skelAnime, sAnimationInfo, BEAVER_ANIM_IDLE,
@@ -1188,16 +1188,16 @@ s32 func_80A97274(EnAz* this, PlayState* play) {
     switch (this->unk_2FA) {
         case 0:
         default:
-            gSaveContext.save.weekEventReg[24] &= (u8)~4;
-            if (!(gSaveContext.save.weekEventReg[16] & 0x40)) {
+            CLEAR_WEEKEVENTREG(WEEKEVENTREG_24_04);
+            if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_16_40))) {
                 textId = 0x10CE;
             } else {
                 textId = 0x10D4;
             }
             break;
         case 2:
-            if (gSaveContext.save.weekEventReg[24] & 1) {
-                gSaveContext.save.weekEventReg[24] |= 4;
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_24_01)) {
+                SET_WEEKEVENTREG(WEEKEVENTREG_24_04);
                 this->unk_3C0 = 0;
                 textId = 0x10DD;
             } else {
@@ -1205,26 +1205,26 @@ s32 func_80A97274(EnAz* this, PlayState* play) {
             }
             break;
         case 4:
-            if (gSaveContext.save.weekEventReg[24] & 1) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_24_01)) {
                 textId = 0x10EE;
             } else {
                 textId = 0x10E9;
             }
             break;
         case 5:
-            gSaveContext.save.weekEventReg[24] &= (u8)~4;
+            CLEAR_WEEKEVENTREG(WEEKEVENTREG_24_04);
             textId = 0x10F3;
             break;
         case 7:
-            if (gSaveContext.save.weekEventReg[24] & 1) {
-                gSaveContext.save.weekEventReg[24] |= 4;
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_24_01)) {
+                SET_WEEKEVENTREG(WEEKEVENTREG_24_04);
                 textId = 0x10FB;
             } else {
                 textId = 0x10E9;
             }
             break;
         case 9:
-            if (gSaveContext.save.weekEventReg[24] & 1) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_24_01)) {
                 textId = 0x1102;
             } else {
                 textId = 0x10E9;
@@ -1337,7 +1337,7 @@ void func_80A97410(EnAz* this, PlayState* play) {
                     func_80A97114(this, play);
                     this->unk_378 = 2;
                 } else if (func_800B8500(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel,
-                                         PLAYER_AP_MINUS1)) {
+                                         PLAYER_IA_MINUS1)) {
                     this->actor.textId = func_80A973B4(this, play);
                 }
             } else {
@@ -1431,8 +1431,8 @@ void func_80A97AB4(EnAz* this, PlayState* play) {
                             func_80A979DC(this, play);
                         } else {
                             func_8019F230();
-                            if (gSaveContext.save.weekEventReg[24] & 4) {
-                                gSaveContext.save.weekEventReg[24] &= (u8)~4;
+                            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_24_04)) {
+                                CLEAR_WEEKEVENTREG(WEEKEVENTREG_24_04);
                             }
                             func_80151938(play, 0x10D9);
                         }
@@ -1465,13 +1465,13 @@ void func_80A97C4C(EnAz* this, PlayState* play) {
     }
     func_80A97410(this, play);
     if ((this->unk_2FA == 1) || (this->unk_2FA == 3) || (this->unk_2FA == 6) || (this->unk_2FA == 8)) {
-        gSaveContext.save.weekEventReg[24] &= (u8)~1;
+        CLEAR_WEEKEVENTREG(WEEKEVENTREG_24_01);
         func_800FD750(NA_BGM_TIMED_MINI_GAME);
         play->nextEntrance = Entrance_CreateFromSpawn(1);
         gSaveContext.nextCutsceneIndex = 0;
         play->transitionTrigger = TRANS_TRIGGER_START;
         play->transitionType = TRANS_TYPE_80;
-        gSaveContext.nextTransitionType = TRANS_TYPE_03;
+        gSaveContext.nextTransitionType = TRANS_TYPE_FADE_WHITE;
         func_80A979DC(this, play);
     } else {
         Actor_MoveWithGravity(&this->actor);
@@ -1482,12 +1482,12 @@ void func_80A97D5C(EnAz* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     player->stateFlags1 |= PLAYER_STATE1_20;
-    func_80112AFC(play);
+    Interface_InitMinigame(play);
     gSaveContext.minigameScore = (this->unk_374 & 2) ? 25 : 20;
-    play->interfaceCtx.unk_280 = 1;
+    play->interfaceCtx.minigameState = MINIGAME_STATE_COUNTDOWN_SETUP_3;
     if ((this->unk_2FA == 1) || (this->unk_2FA == 3)) {
         Interface_StartTimer(TIMER_ID_MINIGAME_2, 120);
-    } else if (gSaveContext.save.weekEventReg[25] & 1) {
+    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_25_01)) {
         Interface_StartTimer(TIMER_ID_MINIGAME_2, 100);
     } else {
         Interface_StartTimer(TIMER_ID_MINIGAME_2, 110);
@@ -1498,7 +1498,7 @@ void func_80A97D5C(EnAz* this, PlayState* play) {
 void func_80A97E48(EnAz* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (play->interfaceCtx.unk_280 >= 8) {
+    if (play->interfaceCtx.minigameState >= MINIGAME_STATE_COUNTDOWN_GO) {
         player->stateFlags1 &= ~PLAYER_STATE1_20;
         func_80A97EAC(this, play);
     }
@@ -1543,17 +1543,17 @@ void func_80A97F9C(EnAz* this, PlayState* play) {
     }
     if (SurfaceType_IsHorseBlocked(&play->colCtx, player->actor.floorPoly, player->actor.floorBgId)) {
         if (func_80A94B98(this, play)) {
-            gSaveContext.save.weekEventReg[24] &= (u8)~1;
+            CLEAR_WEEKEVENTREG(WEEKEVENTREG_24_01);
         } else {
-            gSaveContext.save.weekEventReg[24] |= 1;
+            SET_WEEKEVENTREG(WEEKEVENTREG_24_01);
         }
         gSaveContext.timerStates[TIMER_ID_MINIGAME_2] = TIMER_STATE_STOP;
         this->unk_374 &= ~0x10;
         play->nextEntrance = Entrance_CreateFromSpawn(2);
         gSaveContext.nextCutsceneIndex = 0;
         play->transitionTrigger = TRANS_TRIGGER_START;
-        play->transitionType = TRANS_TYPE_03;
-        gSaveContext.nextTransitionType = TRANS_TYPE_03;
+        play->transitionType = TRANS_TYPE_FADE_WHITE;
+        gSaveContext.nextTransitionType = TRANS_TYPE_FADE_WHITE;
         this->actor.speedXZ = 0.0f;
         func_80A979DC(this, play);
     } else {
@@ -1574,7 +1574,7 @@ void func_80A97F9C(EnAz* this, PlayState* play) {
         if (this->actor.depthInWater > 8.0f) {
             if (this->unk_374 & 2) {
                 if ((this->skelAnime.curFrame < this->skelAnime.playSpeed) && (this->skelAnime.curFrame >= 0.0f)) {
-                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BEAVER_SWIM_HAND);
+                    Actor_PlaySfx(&this->actor, NA_SE_EV_BEAVER_SWIM_HAND);
                 }
             } else {
                 func_800B9010(&this->actor, NA_SE_EV_BEAVER_SWIM_MOTOR - SFX_FLAG);
@@ -1600,8 +1600,8 @@ void func_80A982E0(PlayState* play, ActorPathing* actorPathing) {
     sp28.z = actorPathing->curPoint.z - actorPathing->worldPos->z;
     actorPathing->distSqToCurPointXZ = Math3D_XZLengthSquared(sp28.x, sp28.z);
     actorPathing->distSqToCurPoint = Math3D_LengthSquared(&sp28);
-    actorPathing->rotToCurPoint.y = Math_FAtan2F(sp28.z, sp28.x);
-    actorPathing->rotToCurPoint.x = Math_FAtan2F(sqrtf(actorPathing->distSqToCurPointXZ), -sp28.y);
+    actorPathing->rotToCurPoint.y = Math_Atan2S_XY(sp28.z, sp28.x);
+    actorPathing->rotToCurPoint.x = Math_Atan2S_XY(sqrtf(actorPathing->distSqToCurPointXZ), -sp28.y);
     actorPathing->rotToCurPoint.z = 0;
 }
 
@@ -1615,7 +1615,7 @@ void func_80A98414(EnAz* this, PlayState* play) {
             if ((fish->actor.params < 0) && (fish->actor.room == this->actor.room) &&
                 (Math3D_Vec3fDistSq(&this->actor.world.pos, &fish->actor.world.pos) < SQ(200.0f))) {
                 fish->unk_276 = 0x14;
-                fish->unk_274 = Actor_YawBetweenActors(&fish->actor, &this->actor);
+                fish->unk_274 = Actor_WorldYawTowardActor(&fish->actor, &this->actor);
             }
         }
         itemAction = itemAction->next;
@@ -1638,10 +1638,10 @@ void EnAz_Update(Actor* thisx, PlayState* play2) {
     this->actionFunc(this, play);
     Actor_SetFocus(&this->actor, 40.0f);
     if (this->unk_374 & 0x200) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_DIVE_INTO_WATER);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_DIVE_INTO_WATER);
     }
     if (this->unk_374 & 0x400) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_JUMP_OUT_WATER);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_JUMP_OUT_WATER);
     }
     this->unk_37E++;
     if (this->unk_37E >= 4) {

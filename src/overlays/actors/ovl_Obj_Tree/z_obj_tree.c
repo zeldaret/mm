@@ -20,7 +20,7 @@ void ObjTree_DoNothing(ObjTree* this, PlayState* play);
 void ObjTree_SetupDoNothing(ObjTree* this);
 void ObjTree_Sway(ObjTree* this, PlayState* play);
 
-const ActorInit Obj_Tree_InitVars = {
+ActorInit Obj_Tree_InitVars = {
     ACTOR_OBJ_TREE,
     ACTORCAT_PROP,
     FLAGS,
@@ -141,7 +141,7 @@ void ObjTree_SetupSway(ObjTree* this) {
     this->timer = 0;
     this->swayAmplitude = 546.0f;
     this->swayVelocity = 35 * 0x10000 / 360;
-    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_TREE_SWING);
+    Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_TREE_SWING);
     this->actionFunc = ObjTree_Sway;
 }
 

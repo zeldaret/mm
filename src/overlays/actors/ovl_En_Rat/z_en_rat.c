@@ -35,7 +35,7 @@ typedef enum {
     /* -1 */ EN_RAT_HOOKED,
 } EnRatHookedState;
 
-const ActorInit En_Rat_InitVars = {
+ActorInit En_Rat_InitVars = {
     ACTOR_EN_RAT,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -293,7 +293,7 @@ void EnRat_ChooseDirection(EnRat* this) {
             angle -= 0x8000;
         }
     } else {
-        if (Actor_DistanceToPoint(&this->actor, &this->actor.home.pos) > 50.0f) {
+        if (Actor_WorldDistXYZToPoint(&this->actor, &this->actor.home.pos) > 50.0f) {
             Vec3f homeInHome;
             Vec3f worldInHome;
             Vec3f worldPlusForwardInHome;
@@ -585,14 +585,14 @@ void EnRat_Idle(EnRat* this, PlayState* play) {
 
     this->actor.speedXZ = 2.0f;
     if (Animation_OnFrame(&this->skelAnime, 0.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BOMCHU_WALK);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_BOMCHU_WALK);
         if (this->animLoopCounter != 0) {
             this->animLoopCounter--;
         }
     }
 
     if ((this->animLoopCounter == 0) && (Rand_ZeroOne() < 0.05f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BOMCHU_VOICE);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_BOMCHU_VOICE);
         this->animLoopCounter = 5;
     }
 
@@ -615,7 +615,7 @@ void EnRat_SetupSpottedPlayer(EnRat* this) {
  */
 void EnRat_SpottedPlayer(EnRat* this, PlayState* play) {
     if ((this->animLoopCounter == 3) && Animation_OnFrame(&this->skelAnime, 5.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BOMCHU_AIM);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_BOMCHU_AIM);
     }
 
     if (Animation_OnFrame(&this->skelAnime, 0.0f)) {
@@ -674,7 +674,7 @@ void EnRat_ChasePlayer(EnRat* this, PlayState* play) {
             this->animLoopCounter--;
         }
 
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BOMCHU_WALK);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_BOMCHU_WALK);
     }
 
     DECR(this->timer);
@@ -704,7 +704,7 @@ void EnRat_ChasePlayer(EnRat* this, PlayState* play) {
     }
 
     if ((this->animLoopCounter == 0) && (Rand_ZeroOne() < 0.05f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BOMCHU_AIM);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_BOMCHU_AIM);
         this->animLoopCounter = 5;
     }
 
@@ -790,7 +790,7 @@ void EnRat_Update(Actor* thisx, PlayState* play) {
         if (this->actor.colChkInfo.damageEffect == EN_RAT_DMGEFF_HOOKSHOT) {
             this->damageReaction.hookedState = EN_RAT_HOOK_STARTED;
         } else if (this->actor.colChkInfo.damageEffect == EN_RAT_DMGEFF_STUN) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_FREEZE);
             Actor_SetColorFilter(&this->actor, 0, 120, 0, 40);
             if (this->actionFunc == EnRat_Bounced) {
                 this->actor.speedXZ = 0.0f;

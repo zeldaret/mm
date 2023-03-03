@@ -17,7 +17,7 @@ void EnRu_Draw(Actor* thisx, PlayState* play);
 
 void EnRu_DoNothing(EnRu* this, PlayState* play);
 
-const ActorInit En_Ru_InitVars = {
+ActorInit En_Ru_InitVars = {
     ACTOR_EN_RU,
     ACTORCAT_NPC,
     FLAGS,
@@ -161,12 +161,12 @@ s32 EnRu_PlayWalkingSound(EnRu* this, PlayState* play) {
     this->isLeftFootGrounded = isFootGrounded = SubS_IsFloorAbove(play, &this->leftFootPos, -6.0f);
 
     if (this->isLeftFootGrounded && !leftWasGrounded && isFootGrounded) {
-        Actor_PlaySfxAtPos(&this->actor, sfxId);
+        Actor_PlaySfx(&this->actor, sfxId);
     }
 
     this->isRightFootGrounded = isFootGrounded = SubS_IsFloorAbove(play, &this->rightFootPos, -6.0f);
     if (this->isRightFootGrounded && !rightWasGrounded && isFootGrounded) {
-        Actor_PlaySfxAtPos(&this->actor, sfxId);
+        Actor_PlaySfx(&this->actor, sfxId);
     }
 
     return false;

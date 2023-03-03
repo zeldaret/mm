@@ -40,7 +40,7 @@ void EnAni_IdleInPain(EnAni* this, PlayState* play);
 void EnAni_Talk(EnAni* this, PlayState* play);
 void EnAni_IdleStanding(EnAni* this, PlayState* play);
 
-const ActorInit En_Ani_InitVars = {
+ActorInit En_Ani_InitVars = {
     ACTOR_EN_ANI,
     ACTORCAT_NPC,
     FLAGS,
@@ -138,8 +138,7 @@ void EnAni_Init(Actor* thisx, PlayState* play) {
         this->actor.gravity = 0.0f;
         this->actor.flags |= ACTOR_FLAG_10;
         this->stateFlags |= ANI_STATE_CLIMBING;
-        gSaveContext.eventInf[1] &= (u8)~0x10;
-
+        CLEAR_EVENTINF(EVENTINF_14);
     } else { // ANI_TYPE_STANDING
         // ( unused code )
         // for some reason standing he has a large collider
@@ -226,7 +225,7 @@ void EnAni_FallToGround(EnAni* this, PlayState* play) {
         Quake_SetQuakeValues(quakeIndex, 7, 0, 0, 0);
         Quake_SetCountdown(quakeIndex, 20);
 
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_HAMMER_HIT);
+        Actor_PlaySfx(&this->actor, NA_SE_IT_HAMMER_HIT);
     }
 
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0x2, 0x7D0, 0x100);
@@ -244,7 +243,7 @@ void EnAni_LoseBalance(EnAni* this, PlayState* play) {
         // frame count : 0.0f, only first frame, rest is handled in next action func
         Animation_Change(&this->skelAnime, &gAniLandingThenStandingUpAnim, 0.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 5.0f);
         this->actionFunc = EnAni_FallToGround;
-        gSaveContext.eventInf[1] |= 0x10;
+        SET_EVENTINF(EVENTINF_14);
     }
 }
 

@@ -67,7 +67,7 @@ typedef enum {
     /* 3 */ EN_RAF_PETAL_SCALE_TYPE_IDLE_OR_THROW
 } EnRafPetalScaleType;
 
-const ActorInit En_Raf_InitVars = {
+ActorInit En_Raf_InitVars = {
     ACTOR_EN_RAF,
     ACTORCAT_PROP,
     FLAGS,
@@ -235,8 +235,8 @@ void EnRaf_Init(Actor* thisx, PlayState* play) {
     }
 
     if (((this->switchFlag >= 0) || (this->mainType == EN_RAF_TYPE_DORMANT) ||
-         (gSaveContext.save.weekEventReg[12] & 1)) &&
-        ((Flags_GetSwitch(play, this->switchFlag)) || (this->mainType == EN_RAF_TYPE_DORMANT))) {
+         CHECK_WEEKEVENTREG(WEEKEVENTREG_12_01)) &&
+        (Flags_GetSwitch(play, this->switchFlag) || (this->mainType == EN_RAF_TYPE_DORMANT))) {
         s32 i;
 
         for (i = CARNIVOROUS_LILY_PAD_LIMB_TRAP_1_LOWER_SEGMENT; i <= CARNIVOROUS_LILY_PAD_LIMB_TRAP_3_UPPER_SEGMENT;
@@ -310,7 +310,7 @@ void EnRaf_Idle(EnRaf* this, PlayState* play) {
     if (this->timer == 0) {
         if ((player->transformation != PLAYER_FORM_DEKU) &&
             (this->dyna.actor.xzDistToPlayer < (BREG(48) + 80.0f) && (player->invincibilityTimer == 0) &&
-             DynaPolyActor_IsPlayerOnTop(&this->dyna) && !(player->stateFlags1 & 0x8000000) &&
+             DynaPolyActor_IsPlayerOnTop(&this->dyna) && !(player->stateFlags1 & PLAYER_STATE1_8000000) &&
              play->grabPlayer(play, player))) {
             player->actor.parent = &this->dyna.actor;
             this->grabTarget = EN_RAF_GRAB_TARGET_PLAYER;
@@ -360,7 +360,7 @@ void EnRaf_Idle(EnRaf* this, PlayState* play) {
 void EnRaf_SetupGrab(EnRaf* this) {
     EnRaf_ChangeAnim(this, EN_RAF_ANIM_CLOSE);
     this->petalScaleType = EN_RAF_PETAL_SCALE_TYPE_GRAB;
-    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EN_SUISEN_DRINK);
+    Actor_PlaySfx(&this->dyna.actor, NA_SE_EN_SUISEN_DRINK);
     this->action = EN_RAF_ACTION_GRAB;
     this->actionFunc = EnRaf_Grab;
 }
@@ -372,7 +372,7 @@ void EnRaf_Grab(EnRaf* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     f32 curFrame = this->skelAnime.curFrame;
 
-    if ((this->grabTarget != EN_RAF_GRAB_TARGET_EXPLOSIVE) && (player->stateFlags2 & 0x80) &&
+    if ((this->grabTarget != EN_RAF_GRAB_TARGET_EXPLOSIVE) && (player->stateFlags2 & PLAYER_STATE2_80) &&
         (&this->dyna.actor == player->actor.parent)) {
         Math_ApproachF(&player->actor.world.pos.x, this->dyna.actor.world.pos.x, 0.3f, 10.0f);
         Math_ApproachF(&player->actor.world.pos.y, this->dyna.actor.world.pos.y, 0.3f, 10.0f);
@@ -414,7 +414,7 @@ void EnRaf_Chew(EnRaf* this, PlayState* play) {
     targetChewScale = (BREG(51) / 100.0f) + 0.2f;
     Math_ApproachF(&this->chewScale, targetChewScale, 0.2f, 0.03f);
 
-    if ((player->stateFlags2 & 0x80) && (this->grabTarget != EN_RAF_GRAB_TARGET_EXPLOSIVE) &&
+    if ((player->stateFlags2 & PLAYER_STATE2_80) && (this->grabTarget != EN_RAF_GRAB_TARGET_EXPLOSIVE) &&
         (&this->dyna.actor == player->actor.parent)) {
         Math_ApproachF(&player->actor.world.pos.x, this->dyna.actor.world.pos.x, 0.3f, 10.0f);
         Math_ApproachF(&player->actor.world.pos.y, this->dyna.actor.world.pos.y, 0.3f, 10.0f);
@@ -426,13 +426,17 @@ void EnRaf_Chew(EnRaf* this, PlayState* play) {
             this->chewCount++;
         }
 
-        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EN_SUISEN_EAT);
+        Actor_PlaySfx(&this->dyna.actor, NA_SE_EN_SUISEN_EAT);
         switch (this->grabTarget) {
             case EN_RAF_GRAB_TARGET_PLAYER:
                 play->damagePlayer(play, -2);
-                func_800B8E58((Player*)this, player->ageProperties->unk_92 + NA_SE_VO_LI_DAMAGE_S);
+
+                //! @bug: This function should only pass Player*: it uses *(this + 0x153), which is meant to be
+                //! player->currentMask, but in this case is padding in `DynaPolyActor`
+                Player_PlaySfx((Player*)&this->dyna.actor,
+                               player->ageProperties->voiceSfxIdOffset + NA_SE_VO_LI_DAMAGE_S);
                 CollisionCheck_GreenBlood(play, NULL, &player->actor.world.pos);
-                if ((this->chewCount > (BREG(53) + 5)) || !(player->stateFlags2 & 0x80)) {
+                if ((this->chewCount > (BREG(53) + 5)) || !(player->stateFlags2 & PLAYER_STATE2_80)) {
                     player->actor.freezeTimer = 10;
                     EnRaf_SetupThrow(this, play);
                     return;
@@ -478,7 +482,7 @@ void EnRaf_Throw(EnRaf* this, PlayState* play) {
     if (Animation_OnFrame(&this->skelAnime, 10.0f)) {
         player->actor.freezeTimer = 0;
         player->actor.parent = NULL;
-        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EN_SUISEN_THROW);
+        Actor_PlaySfx(&this->dyna.actor, NA_SE_EN_SUISEN_THROW);
         func_800B8D50(play, &this->dyna.actor, BREG(55) + 3.0f, this->playerRotYWhenGrabbed + 0x8000, BREG(56) + 10.0f,
                       0);
     } else if (curFrame < 10.0f) {
@@ -508,8 +512,8 @@ void EnRaf_Explode(EnRaf* this, PlayState* play) {
     explosionPos.y += 10.0f;
     Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, explosionPos.x, explosionPos.y, explosionPos.z, 0, 0, 0,
                 CLEAR_TAG_SMALL_EXPLOSION);
-    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_IT_BOMB_EXPLOSION);
-    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EN_SUISEN_DEAD);
+    Actor_PlaySfx(&this->dyna.actor, NA_SE_IT_BOMB_EXPLOSION);
+    Actor_PlaySfx(&this->dyna.actor, NA_SE_EN_SUISEN_DEAD);
     if (this->switchFlag >= 0) {
         Flags_SetSwitch(play, this->switchFlag);
     }
@@ -700,7 +704,7 @@ void EnRaf_Update(Actor* thisx, PlayState* play) {
     DECR(this->timer);
     this->actionFunc(this, play);
 
-    if ((this->action == EN_RAF_ACTION_IDLE) && (gSaveContext.save.weekEventReg[12] & 1)) {
+    if ((this->action == EN_RAF_ACTION_IDLE) && CHECK_WEEKEVENTREG(WEEKEVENTREG_12_01)) {
         this->petalScaleType = EN_RAF_PETAL_SCALE_TYPE_DEAD;
         EnRaf_SetupConvulse(this);
         return;
@@ -710,7 +714,7 @@ void EnRaf_Update(Actor* thisx, PlayState* play) {
         if ((this->heightDiffFromPlayer > -0.1f) && !this->isCurrentlyInRidingMovingState) {
             this->heightDiffFromPlayer = -20.0f;
             this->isCurrentlyInRidingMovingState = true;
-            Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EN_COMMON_WATER_MID);
+            Actor_PlaySfx(&this->dyna.actor, NA_SE_EN_COMMON_WATER_MID);
         }
     } else {
         this->isCurrentlyInRidingMovingState = false;

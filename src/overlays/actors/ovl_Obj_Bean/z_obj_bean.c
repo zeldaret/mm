@@ -60,7 +60,7 @@ void func_80938C1C(Actor* thisx, PlayState* play);
 void func_80938E00(Actor* thisx, PlayState* play);
 void func_80938F50(Actor* thisx, PlayState* play);
 
-const ActorInit Obj_Bean_InitVars = {
+ActorInit Obj_Bean_InitVars = {
     ACTOR_OBJ_BEAN,
     ACTORCAT_BG,
     FLAGS,
@@ -546,7 +546,7 @@ void func_80937FC8(ObjBean* this, PlayState* play) {
     this->unk_1E8(this);
 
     if (Actor_ProcessTalkRequest(&this->dyna.actor, &play->state)) {
-        if (Player_GetExchangeItemId(play) == PLAYER_AP_MAGIC_BEANS) {
+        if (Player_GetExchangeItemId(play) == PLAYER_IA_MAGIC_BEANS) {
             func_809383B4(this);
             Flags_SetSwitch(play, OBJBEAN_GET_3F80(&this->dyna.actor, 0));
         }
@@ -591,7 +591,7 @@ void func_809381C4(ObjBean* this, PlayState* play) {
     if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
         if (this->dyna.actor.cutscene >= 0) {
-            func_800B7298(play, &this->dyna.actor, 1);
+            func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_1);
         }
         this->unk_1E4 = 2;
         func_80938284(this);
@@ -748,7 +748,7 @@ void func_80938780(ObjBean* this, PlayState* play) {
     if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
         if (this->dyna.actor.cutscene >= 0) {
-            func_800B7298(play, &this->dyna.actor, 1);
+            func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_1);
         }
         this->unk_1B4 = 36;
         func_80937130(this);
@@ -847,7 +847,7 @@ void func_80938AD8(ObjBean* this, PlayState* play) {
 
     func_80937160(this);
     if (this->unk_1B2 == 25) {
-        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_PL_PLANT_GROW_BIG);
+        Actor_PlaySfx(&this->dyna.actor, NA_SE_PL_PLANT_GROW_BIG);
     }
 
     if (sp30 != 0) {

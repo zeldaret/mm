@@ -20,7 +20,7 @@ void DmChar00_Draw(Actor* thisx, PlayState* play2);
 void func_80AA67F8(DmChar00* this, PlayState* play);
 void func_80AA695C(DmChar00* this, PlayState* play);
 
-const ActorInit Dm_Char00_InitVars = {
+ActorInit Dm_Char00_InitVars = {
     ACTOR_DM_CHAR00,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -157,15 +157,15 @@ void func_80AA561C(DmChar00* this, PlayState* play) {
             case 1222:
             case 1682:
             case 2194:
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_WHITE_FAIRY_DASH);
+                Actor_PlaySfx(&this->actor, NA_SE_EV_WHITE_FAIRY_DASH);
                 break;
 
             case 1858:
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_FAIRY_ATTACK);
+                Actor_PlaySfx(&this->actor, NA_SE_EV_FAIRY_ATTACK);
                 break;
 
             case 2043:
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_FAIRY_SURPRISE);
+                Actor_PlaySfx(&this->actor, NA_SE_EV_FAIRY_SURPRISE);
                 break;
         }
     } else {
@@ -177,11 +177,11 @@ void func_80AA561C(DmChar00* this, PlayState* play) {
             case 1687:
             case 2194:
             case 2210:
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BLACK_FAIRY_DASH);
+                Actor_PlaySfx(&this->actor, NA_SE_EV_BLACK_FAIRY_DASH);
                 break;
 
             case 2043:
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_MONDO_SURPRISE);
+                Actor_PlaySfx(&this->actor, NA_SE_EV_MONDO_SURPRISE);
                 break;
         }
     }
@@ -189,7 +189,7 @@ void func_80AA561C(DmChar00* this, PlayState* play) {
 
 void func_80AA5720(DmChar00* this, PlayState* play) {
     if ((DMCHAR00_GET(&this->actor) == DMCHAR00_0) && (play->csCtx.frames == 505)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SPOT_LIGHT_OPEN);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_SPOT_LIGHT_OPEN);
     }
 }
 
@@ -207,51 +207,51 @@ void func_80AA575C(DmChar00* this, PlayState* play) {
             case 877:
             case 882:
             case 887:
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_FAIRY_ATTACK);
+                Actor_PlaySfx(&this->actor, NA_SE_EV_FAIRY_ATTACK);
                 break;
 
             case 520:
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BELL_SPIT);
+                Actor_PlaySfx(&this->actor, NA_SE_EV_BELL_SPIT);
                 break;
 
             case 774:
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_FAIRY_SURPRISE);
+                Actor_PlaySfx(&this->actor, NA_SE_EV_FAIRY_SURPRISE);
                 break;
 
             case 904:
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BELL_SIGH);
+                Actor_PlaySfx(&this->actor, NA_SE_EV_BELL_SIGH);
                 break;
 
             case 813:
             case 972:
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BELL_BRAKE);
+                Actor_PlaySfx(&this->actor, NA_SE_EV_BELL_BRAKE);
                 break;
         }
     } else if (play->csCtx.frames == 660) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_MONDO_SURPRISE);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_MONDO_SURPRISE);
     }
 }
 
 void func_80AA5890(DmChar00* this, PlayState* play) {
     if ((DMCHAR00_GET(&this->actor) == DMCHAR00_0) && (play->csCtx.frames == 20)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_WHITE_FAIRY_DASH);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_WHITE_FAIRY_DASH);
     }
 }
 
 void func_80AA58CC(DmChar00* this, PlayState* play) {
     if (DMCHAR00_GET(&this->actor) == DMCHAR00_0) {
         if (play->csCtx.frames == 568) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_FAIRY_SURPRISE);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_FAIRY_SURPRISE);
         }
     } else {
         switch (play->csCtx.frames) {
             case 375:
             case 479:
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BLACK_FAIRY_DASH);
+                Actor_PlaySfx(&this->actor, NA_SE_EV_BLACK_FAIRY_DASH);
                 break;
 
             case 534:
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_FAIRY_ATTACK);
+                Actor_PlaySfx(&this->actor, NA_SE_EV_FAIRY_ATTACK);
                 break;
         }
     }
@@ -263,17 +263,17 @@ void func_80AA5950(DmChar00* this, PlayState* play) {
 void func_80AA5960(DmChar00* this, PlayState* play) {
     if (DMCHAR00_GET(&this->actor) == DMCHAR00_0) {
         if (play->csCtx.frames == 280) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_FAIRY_SURPRISE);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_FAIRY_SURPRISE);
         }
     } else {
         switch (play->csCtx.frames) {
             case 87:
             case 190:
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BLACK_FAIRY_DASH);
+                Actor_PlaySfx(&this->actor, NA_SE_EV_BLACK_FAIRY_DASH);
                 break;
 
             case 244:
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_FAIRY_ATTACK);
+                Actor_PlaySfx(&this->actor, NA_SE_EV_FAIRY_ATTACK);
                 break;
         }
     }
@@ -283,16 +283,16 @@ void func_80AA59E4(DmChar00* this, PlayState* play) {
     if (DMCHAR00_GET(&this->actor) == DMCHAR00_0) {
         switch (play->csCtx.frames) {
             case 125:
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_WHITE_FAIRY_DASH);
+                Actor_PlaySfx(&this->actor, NA_SE_EV_WHITE_FAIRY_DASH);
                 break;
 
             case 1832:
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_WHITE_FAIRY_DASH);
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_WHITE_OUT_INTO_MOON);
+                Actor_PlaySfx(&this->actor, NA_SE_EV_WHITE_FAIRY_DASH);
+                Actor_PlaySfx(&this->actor, NA_SE_SY_WHITE_OUT_INTO_MOON);
                 break;
         }
     } else if (play->csCtx.frames == 125) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BLACK_FAIRY_DASH);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_BLACK_FAIRY_DASH);
     }
 }
 
@@ -300,16 +300,16 @@ void func_80AA5A6C(DmChar00* this, PlayState* play) {
     if (DMCHAR00_GET(&this->actor) == DMCHAR00_0) {
         switch (play->csCtx.frames) {
             case 44:
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_WHITE_FAIRY_DASH);
+                Actor_PlaySfx(&this->actor, NA_SE_EV_WHITE_FAIRY_DASH);
                 break;
 
             case 891:
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_WHITE_FAIRY_DASH);
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_WHITE_OUT_INTO_MOON);
+                Actor_PlaySfx(&this->actor, NA_SE_EV_WHITE_FAIRY_DASH);
+                Actor_PlaySfx(&this->actor, NA_SE_SY_WHITE_OUT_INTO_MOON);
                 break;
         }
     } else if (play->csCtx.frames == 44) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BLACK_FAIRY_DASH);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_BLACK_FAIRY_DASH);
     }
 }
 
@@ -318,31 +318,31 @@ void func_80AA5AF4(DmChar00* this, PlayState* play) {
         switch (play->csCtx.frames) {
             case 352:
             case 401:
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_WHITE_FAIRY_DASH);
+                Actor_PlaySfx(&this->actor, NA_SE_EV_WHITE_FAIRY_DASH);
                 break;
 
             case 440:
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_WHITE_FAIRY_DASH);
+                Actor_PlaySfx(&this->actor, NA_SE_EV_WHITE_FAIRY_DASH);
                 break;
 
             case 550:
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BELL_BRAKE);
+                Actor_PlaySfx(&this->actor, NA_SE_EV_BELL_BRAKE);
                 break;
         }
     } else {
         switch (play->csCtx.frames) {
             case 362:
             case 401:
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BLACK_FAIRY_DASH);
+                Actor_PlaySfx(&this->actor, NA_SE_EV_BLACK_FAIRY_DASH);
                 break;
 
             case 454:
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BLACK_FAIRY_DASH);
+                Actor_PlaySfx(&this->actor, NA_SE_EV_BLACK_FAIRY_DASH);
                 break;
         }
 
         if ((play->csCtx.frames >= 500) && (play->csCtx.frames < 602)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_FAIRY_SHIVER - SFX_FLAG);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_FAIRY_SHIVER - SFX_FLAG);
         }
     }
 }
@@ -351,32 +351,32 @@ void func_80AA5BF8(DmChar00* this, PlayState* play) {
     if (DMCHAR00_GET(&this->actor) == DMCHAR00_0) {
         switch (play->csCtx.frames) {
             case 762:
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_WHITE_FAIRY_SHOT_DASH);
+                Actor_PlaySfx(&this->actor, NA_SE_EV_WHITE_FAIRY_SHOT_DASH);
                 break;
             case 797:
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_WHITE_FAIRY_DASH);
+                Actor_PlaySfx(&this->actor, NA_SE_EV_WHITE_FAIRY_DASH);
                 break;
         }
     } else {
         switch (play->csCtx.frames) {
             case 762:
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BLACK_FAIRY_SHOT_DASH);
+                Actor_PlaySfx(&this->actor, NA_SE_EV_BLACK_FAIRY_SHOT_DASH);
                 break;
 
             case 797:
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BLACK_FAIRY_DASH);
+                Actor_PlaySfx(&this->actor, NA_SE_EV_BLACK_FAIRY_DASH);
                 break;
         }
     }
 
     if ((this->unk_261 == 53) && Animation_OnFrame(&this->skelAnime, 16.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BLACK_FAIRY_DASH);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_BLACK_FAIRY_DASH);
     }
 }
 
 void func_80AA5CD4(DmChar00* this, PlayState* play) {
     if ((DMCHAR00_GET(&this->actor) != DMCHAR00_0) && (play->csCtx.frames == 467)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BLACK_FAIRY_DASH);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_BLACK_FAIRY_DASH);
     }
 }
 
@@ -384,11 +384,11 @@ void func_80AA5D10(DmChar00* this, PlayState* play) {
     if (DMCHAR00_GET(&this->actor) == DMCHAR00_0) {
         switch (play->csCtx.frames) {
             case 8:
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_FAIRY_SURPRISE);
+                Actor_PlaySfx(&this->actor, NA_SE_EV_FAIRY_SURPRISE);
                 break;
 
             case 130:
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_NAVY_VANISH);
+                Actor_PlaySfx(&this->actor, NA_SE_EV_NAVY_VANISH);
                 break;
         }
     }
@@ -399,11 +399,11 @@ void func_80AA5D6C(DmChar00* this, PlayState* play) {
         switch (play->csCtx.frames) {
             case 2:
             case 166:
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_WHITE_FAIRY_DASH);
+                Actor_PlaySfx(&this->actor, NA_SE_EV_WHITE_FAIRY_DASH);
                 break;
 
             case 31:
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_FAIRY_SURPRISE);
+                Actor_PlaySfx(&this->actor, NA_SE_EV_FAIRY_SURPRISE);
                 break;
         }
     }
@@ -415,11 +415,11 @@ void func_80AA5DC8(DmChar00* this, PlayState* play) {
             case 233:
             case 415:
             case 593:
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_WHITE_FAIRY_DASH);
+                Actor_PlaySfx(&this->actor, NA_SE_EV_WHITE_FAIRY_DASH);
                 break;
 
             case 130:
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_NAVY_VANISH);
+                Actor_PlaySfx(&this->actor, NA_SE_EV_NAVY_VANISH);
                 break;
         }
     }
@@ -429,19 +429,19 @@ void func_80AA5E2C(DmChar00* this, PlayState* play) {
     if (DMCHAR00_GET(&this->actor) == DMCHAR00_1) {
         switch (play->csCtx.frames) {
             case 32:
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_WHITE_FAIRY_DASH);
+                Actor_PlaySfx(&this->actor, NA_SE_EV_WHITE_FAIRY_DASH);
                 break;
 
             case 42:
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BLACK_FAIRY_DASH);
+                Actor_PlaySfx(&this->actor, NA_SE_EV_BLACK_FAIRY_DASH);
                 break;
 
             case 192:
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BELL_BRAKE);
+                Actor_PlaySfx(&this->actor, NA_SE_EV_BELL_BRAKE);
                 break;
 
             case 215:
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_DIVE_INTO_WEED);
+                Actor_PlaySfx(&this->actor, NA_SE_EV_DIVE_INTO_WEED);
                 break;
         }
     }
@@ -912,7 +912,7 @@ void DmChar00_Draw(Actor* thisx, PlayState* play2) {
     DmChar00* this = THIS;
     s32 phi_a0;
     s32 pad;
-    Gfx* gfx = GRAPH_ALLOC(play->state.gfxCtx, sizeof(Gfx) * 4);
+    Gfx* gfx = GRAPH_ALLOC(play->state.gfxCtx, 4 * sizeof(Gfx));
 
     if ((play->csCtx.state == 0) &&
         ((play->sceneId != SCENE_OPENINGDAN) || (gSaveContext.sceneLayer != 0) || (play->roomCtx.curRoom.num != 0) ||

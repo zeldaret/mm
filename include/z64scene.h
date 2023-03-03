@@ -67,7 +67,7 @@ typedef struct {
 
 typedef struct {
     /* 0x0 */ u8  code;
-    /* 0x1 */ u8  cUpElfMsgNum;
+    /* 0x1 */ u8  naviQuestHintFileId;
     /* 0x4 */ u32 subKeepIndex;
 } SCmdSpecialFiles; // size = 0x8
 
@@ -119,7 +119,7 @@ typedef struct {
     /* 0x2 */ UNK_TYPE1 pad2[2];
     /* 0x4 */ u8  hour;
     /* 0x5 */ u8  min;
-    /* 0x6 */ u8  unk6;
+    /* 0x6 */ u8  timeSpeed;
 } SCmdTimeSettings; // size = 0x7
 
 typedef struct {
@@ -261,7 +261,7 @@ typedef struct {
     /* 0x02 */ u8 unk2; // 3: Room is hot
     /* 0x03 */ u8 unk3;
     /* 0x04 */ s8 echo;
-    /* 0x05 */ u8 unk5;
+    /* 0x05 */ u8 lensMode;
     /* 0x06 */ u8 enablePosLights;
     /* 0x07 */ UNK_TYPE1 pad7[0x1];
     /* 0x08 */ RoomMesh* mesh;
@@ -341,6 +341,7 @@ typedef struct {
     /* 0xA */ u8 unk_A;
     /* 0xB */ u8 drawConfig;
     /* 0xC */ u8 unk_C;
+    /* 0xD */ u8 unk_D;
 } SceneTableEntry; // size = 0x10
 
 typedef struct {
@@ -477,7 +478,7 @@ typedef struct {
 
 typedef struct {
     /* 0x0 */ MinimapEntry* entry;
-    /* 0x4 */ UNK_TYPE unk4;
+    /* 0x4 */ s16 unk4;
 } MinimapList; // size  = 0x8
 
 typedef struct {
@@ -825,6 +826,14 @@ typedef enum {
     /* 7 */ SCENE_DRAW_CFG_MAT_ANIM_MANUAL_STEP
 } SceneDrawConfigIds;
 
+// TODO: make ZAPD use this enum for `SCENE_CMD_SPECIAL_FILES`
+// Leftover from OoT
+typedef enum {
+    /* 0 */ NAVI_QUEST_HINTS_NONE,
+    /* 1 */ NAVI_QUEST_HINTS_OVERWORLD,
+    /* 2 */ NAVI_QUEST_HINTS_DUNGEON
+} NaviQuestHintFileId;
+
 // SceneTableEntry commands
 typedef enum {
     /* 0x00 */ SCENE_CMD_ID_SPAWN_LIST,
@@ -882,8 +891,8 @@ typedef enum {
 #define SCENE_CMD_ENTRANCE_LIST(entranceList) \
     { SCENE_CMD_ID_ENTRANCE_LIST, 0, CMD_PTR(entranceList) }
 
-#define SCENE_CMD_SPECIAL_FILES(elfMessageFile, keepObjectId) \
-    { SCENE_CMD_ID_SPECIAL_FILES, elfMessageFile, CMD_W(keepObjectId) }
+#define SCENE_CMD_SPECIAL_FILES(naviQuestHintFileId, keepObjectId) \
+    { SCENE_CMD_ID_SPECIAL_FILES, naviQuestHintFileId, CMD_W(keepObjectId) }
 
 #define SCENE_CMD_ROOM_BEHAVIOR(curRoomUnk3, curRoomUnk2, curRoomUnk5, msgCtxunk12044, enablePosLights,  \
                                 kankyoContextUnkE2)                                                         \

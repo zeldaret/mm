@@ -39,7 +39,7 @@ void func_80A9D61C(Actor* thisx, PlayState* play);
 BgHakuginPostColliders D_80A9DDC0;
 BgHakuginPostUnkStruct D_80A9E028;
 
-const ActorInit Bg_Hakugin_Post_InitVars = {
+ActorInit Bg_Hakugin_Post_InitVars = {
     ACTOR_BG_HAKUGIN_POST,
     ACTORCAT_BG,
     FLAGS,
@@ -839,7 +839,7 @@ void func_80A9CE1C(BgHakuginPost* this, PlayState* play) {
                 temp = (s16)(this->dyna.actor.yawTowardsPlayer + 0x58F0);
                 D_80A9E028.unk_0000[i].unk_28 = ((s16)(player->actor.shape.rot.y - temp) / 3) + temp;
                 D_80A9E028.unk_0000[i].unk_34 = 2;
-                func_800B8E58(player, NA_SE_IT_HAMMER_HIT);
+                Player_PlaySfx(player, NA_SE_IT_HAMMER_HIT);
                 func_8019F128(NA_SE_EV_SLIDE_DOOR_OPEN);
                 Flags_SetSwitch(play, D_80A9E028.unk_0000[i].unk_2E);
                 this->unk_178 = 20;

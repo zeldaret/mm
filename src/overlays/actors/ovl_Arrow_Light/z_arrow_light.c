@@ -21,7 +21,7 @@ void ArrowLight_Fly(ArrowLight* this, PlayState* play);
 
 #include "overlays/ovl_Arrow_Light/ovl_Arrow_Light.c"
 
-const ActorInit Arrow_Light_InitVars = {
+ActorInit Arrow_Light_InitVars = {
     ACTOR_ARROW_LIGHT,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -154,7 +154,7 @@ void ArrowLight_Fly(ArrowLight* this, PlayState* play) {
     ArrowLight_Lerp(&this->firedPos, &this->actor.world.pos, 0.05f);
 
     if (arrow->unk_261 & 1) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_EXPLOSION_LIGHT);
+        Actor_PlaySfx(&this->actor, NA_SE_IT_EXPLOSION_LIGHT);
         ArrowLight_SetupAction(this, ArrowLight_Hit);
         this->timer = 32;
         this->alpha = 255;

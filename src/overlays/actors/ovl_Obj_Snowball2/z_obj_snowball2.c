@@ -26,7 +26,7 @@ void func_80B3A13C(ObjSnowball2* this, PlayState* play);
 void func_80B3A498(ObjSnowball2* this);
 void func_80B3A500(ObjSnowball2* this, PlayState* play);
 
-const ActorInit Obj_Snowball2_InitVars = {
+ActorInit Obj_Snowball2_InitVars = {
     ACTOR_OBJ_SNOWBALL2,
     ACTORCAT_PROP,
     FLAGS,
@@ -356,7 +356,7 @@ void func_80B39C9C(ObjSnowball2* this, PlayState* play) {
             func_80B38E88(this, play);
         }
         func_80B38EFC(this, play);
-        func_800B8E58(GET_PLAYER(play), NA_SE_PL_PULL_UP_SNOWBALL);
+        Player_PlaySfx(GET_PLAYER(play), NA_SE_PL_PULL_UP_SNOWBALL);
         func_80B39F60(this);
     } else if ((this->actor.bgCheckFlags & 0x20) &&
                ((this->actor.shape.yOffset * this->actor.scale.y) < this->actor.depthInWater)) {
@@ -476,7 +476,7 @@ void func_80B3A13C(ObjSnowball2* this, PlayState* play) {
                 func_80B395EC(&this->actor, play);
             }
             if (this->actor.bgCheckFlags & 0x40) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BOMB_DROP_WATER);
+                Actor_PlaySfx(&this->actor, NA_SE_EV_BOMB_DROP_WATER);
             }
         } else if ((((play->gameplayFrames % 16) == 0) || ((Rand_Next() >> 0x10) == 0)) &&
                    (this->actor.depthInWater < (1200.0f * this->actor.scale.y))) {

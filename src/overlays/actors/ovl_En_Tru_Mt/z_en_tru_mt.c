@@ -40,7 +40,7 @@ typedef enum {
     /* 0x10 */ KOUME_MT_ANIM_MAX
 } KoumeMtAnimation;
 
-const ActorInit En_Tru_Mt_InitVars = {
+ActorInit En_Tru_Mt_InitVars = {
     ACTOR_EN_TRU_MT,
     ACTORCAT_NPC,
     FLAGS,
@@ -180,12 +180,12 @@ s32 func_80B761FC(EnTruMt* this, PlayState* play) {
             this->collider.base.acFlags &= ~AC_HIT;
             if (this->unk_3A4 == 0) {
                 this->unk_3A4 = 1;
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KOUME_DAMAGE);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_KOUME_DAMAGE);
             } else {
                 this->unk_3A4 = 0;
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KOUME_DAMAGE2);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_KOUME_DAMAGE2);
             }
-            play->interfaceCtx.unk_25E = 1;
+            play->interfaceCtx.minigameHiddenPoints = 1;
             Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 25);
             return true;
         }
@@ -318,7 +318,7 @@ void func_80B7679C(EnTruMt* this, PlayState* play) {
     this->unk_34A = CLAMP(this->unk_34A, -0x38E0, 0x38E0);
 
     sp40 = player->actor.world.pos;
-    sp40.y = player->bodyPartsPos[7].y + 3.0f;
+    sp40.y = player->bodyPartsPos[PLAYER_BODYPART_HEAD].y + 3.0f;
 
     sp34 = this->actor.world.pos;
     sp34.y += 30.0f;
@@ -342,20 +342,20 @@ void func_80B76924(EnTruMt* this) {
 void func_80B76980(EnTruMt* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (gSaveContext.unk_3F3C >= 10) {
+    if (gSaveContext.minigameHiddenScore >= 10) {
         Message_StartTextbox(play, 0x87F, &this->actor);
-        gSaveContext.eventInf[3] |= 0x40;
-        gSaveContext.eventInf[4] |= 1;
-        player->stateFlags3 &= ~0x400;
+        SET_EVENTINF(EVENTINF_36);
+        SET_EVENTINF(EVENTINF_40);
+        player->stateFlags3 &= ~PLAYER_STATE3_400;
         this->actor.speedXZ = 0.0f;
         this->actionFunc = func_80B76BB8;
-    } else if (gSaveContext.eventInf[4] & 1) {
+    } else if (CHECK_EVENTINF(EVENTINF_40)) {
         u32 score = gSaveContext.minigameScore;
 
         if (((gSaveContext.save.unk_EE8 & 0xFFFF0000) >> 0x10) < score) {
             gSaveContext.save.unk_EE8 =
                 ((gSaveContext.minigameScore & 0xFFFF) << 0x10) | (gSaveContext.save.unk_EE8 & 0xFFFF);
-            gSaveContext.eventInf[3] |= 0x80;
+            SET_EVENTINF(EVENTINF_37);
         }
     }
 }
@@ -366,7 +366,7 @@ void func_80B76A64(EnTruMt* this, PlayState* play) {
 
     func_80B76924(this);
     func_80B76980(this, play);
-    player->stateFlags3 |= 0x400;
+    player->stateFlags3 |= PLAYER_STATE3_400;
 
     if (this->path != NULL) {
         func_80B76540(this->path, this->unk_36C, &this->actor.world.pos, &sp34);
@@ -394,8 +394,8 @@ void func_80B76BB8(EnTruMt* this, PlayState* play) {
     if (Message_GetState(&play->msgCtx) == TEXT_STATE_5) {
         if (Message_ShouldAdvance(play)) {
             play->nextEntrance = ENTRANCE(TOURIST_INFORMATION, 1);
-            play->transitionType = TRANS_TYPE_03;
-            gSaveContext.nextTransitionType = TRANS_TYPE_03;
+            play->transitionType = TRANS_TYPE_FADE_WHITE;
+            gSaveContext.nextTransitionType = TRANS_TYPE_FADE_WHITE;
             play->transitionTrigger = TRANS_TRIGGER_START;
         }
     }
@@ -406,14 +406,14 @@ void func_80B76C38(EnTruMt* this, PlayState* play) {
 
     func_80B76924(this);
     func_80B76980(this, play);
-    player->stateFlags3 |= 0x400;
+    player->stateFlags3 |= PLAYER_STATE3_400;
 }
 
 void EnTruMt_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     EnTruMt* this = THIS;
 
-    if (!(gSaveContext.eventInf[3] & 0x20)) {
+    if (!CHECK_EVENTINF(EVENTINF_35)) {
         Actor_Kill(&this->actor);
         return;
     }
@@ -461,7 +461,7 @@ void EnTruMt_Update(Actor* thisx, PlayState* play) {
     func_80B76110(this);
     Actor_SetFocus(&this->actor, 34.0f);
 
-    if (!(gSaveContext.eventInf[4] & 1)) {
+    if (!CHECK_EVENTINF(EVENTINF_40)) {
         func_80B761FC(this, play);
     }
 

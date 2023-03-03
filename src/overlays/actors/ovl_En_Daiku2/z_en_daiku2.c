@@ -32,7 +32,7 @@ void func_80BE71D8(EnDaiku2* this, PlayState* play);
 void func_80BE7504(EnDaiku2* this, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3, f32 arg4, s16 arg5);
 void func_80BE7718(EnDaiku2* this, PlayState* play);
 
-const ActorInit En_Daiku2_InitVars = {
+ActorInit En_Daiku2_InitVars = {
     ACTOR_EN_DAIKU2,
     ACTORCAT_NPC,
     FLAGS,
@@ -167,7 +167,7 @@ void func_80BE65B4(EnDaiku2* this, PlayState* play) {
     switch (gSaveContext.save.day - 1) {
         case 0:
             this->unk_28A = 0;
-            if (gSaveContext.save.weekEventReg[64] & 2) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_64_02)) {
                 this->unk_28A = 6;
             }
             func_80BE6408(this, 8);
@@ -175,7 +175,7 @@ void func_80BE65B4(EnDaiku2* this, PlayState* play) {
 
         case 1:
             this->unk_28A = 2;
-            if (gSaveContext.save.weekEventReg[64] & 4) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_64_04)) {
                 this->unk_28A = 7;
             }
             func_80BE6408(this, 8);
@@ -234,7 +234,7 @@ void func_80BE66E4(EnDaiku2* this, PlayState* play) {
 
     func_800B8614(&this->actor, play, 80.0f);
     if ((this->unk_276 == 8) && Animation_OnFrame(&this->skelAnime, 6.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_ROCK_BROKEN);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_ROCK_BROKEN);
 
         for (i = 0; i < 10; i++) {
             Math_Vec3f_Copy(&sp70, &this->actor.world.pos);
@@ -309,11 +309,11 @@ void func_80BE6BC0(EnDaiku2* this, PlayState* play) {
         } else {
             switch (day) {
                 case 0:
-                    gSaveContext.save.weekEventReg[64] |= 2;
+                    SET_WEEKEVENTREG(WEEKEVENTREG_64_02);
                     break;
 
                 case 1:
-                    gSaveContext.save.weekEventReg[64] |= 4;
+                    SET_WEEKEVENTREG(WEEKEVENTREG_64_04);
                     break;
             }
             func_80BE65B4(this, play);

@@ -4,7 +4,6 @@
  * Description: Great Bay Temple - Waterwheels, push switches, gear shafts, and whirlpools
  */
 
-#include "prevent_bss_reordering.h"
 #include "z_bg_dblue_movebg.h"
 #include "objects/object_dblue_object/object_dblue_object.h"
 #include "overlays/actors/ovl_Obj_Hunsui/z_obj_hunsui.h"
@@ -45,7 +44,7 @@ u8 D_80A2B870[][2] = {
     { 0x03, 0x03 }, { 0x03, 0x05 }, { 0x03, 0x01 }, { 0x03, 0x06 }, { 0x03, 0x02 }, { 0x03, 0x04 }, { 0x03, 0x00 },
 };
 
-const ActorInit Bg_Dblue_Movebg_InitVars = {
+ActorInit Bg_Dblue_Movebg_InitVars = {
     ACTOR_BG_DBLUE_MOVEBG,
     ACTORCAT_BG,
     FLAGS,
@@ -390,7 +389,7 @@ void func_80A2A32C(BgDblueMovebg* this, PlayState* play) {
             this->unk_172 |= 8;
             this->actionFunc = func_80A2A444;
         } else {
-            player->stateFlags2 &= ~0x10;
+            player->stateFlags2 &= ~PLAYER_STATE2_10;
             this->dyna.pushForce = 0.0f;
         }
     }
@@ -410,7 +409,7 @@ void func_80A2A444(BgDblueMovebg* this, PlayState* play) {
     this->dyna.actor.shape.rot.y =
         (s32)((this->unk_18C + temp_v0) * 0.1f * (0x10000 / 360.0f)) + this->dyna.actor.home.rot.y;
 
-    if ((player->stateFlags2 & 0x10) && (this->unk_184 > 0.0f)) {
+    if ((player->stateFlags2 & PLAYER_STATE2_10) && (this->unk_184 > 0.0f)) {
         player->actor.world.pos.x =
             (Math_SinS(this->dyna.actor.shape.rot.y - this->unk_18E) * this->unk_184) + this->dyna.actor.home.pos.x;
         player->actor.world.pos.z =
@@ -420,10 +419,10 @@ void func_80A2A444(BgDblueMovebg* this, PlayState* play) {
     }
 
     if (sp20) {
-        player->stateFlags2 &= ~0x10;
+        player->stateFlags2 &= ~PLAYER_STATE2_10;
         this->dyna.pushForce = 0.0f;
         Flags_SetSwitch(play, this->unk_1C0);
-        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_STONEDOOR_STOP);
+        Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_STONEDOOR_STOP);
 
         if (func_80A29A80(play, this->unk_1C8, this->unk_1C4)) {
             this->unk_172 |= 1;
@@ -498,7 +497,7 @@ void func_80A2A7F8(BgDblueMovebg* this, PlayState* play) {
     this->dyna.actor.shape.rot.y =
         (s32)((this->unk_18C + sp26) * 0.1f * (0x10000 / 360.0f)) + this->dyna.actor.home.rot.y;
 
-    if ((player->stateFlags2 & 0x10) && (this->unk_184 > 0.0f)) {
+    if ((player->stateFlags2 & PLAYER_STATE2_10) && (this->unk_184 > 0.0f)) {
         player->actor.world.pos.x =
             (Math_SinS(this->dyna.actor.shape.rot.y - this->unk_18E) * this->unk_184) + this->dyna.actor.home.pos.x;
         player->actor.world.pos.z =
@@ -516,8 +515,8 @@ void func_80A2A7F8(BgDblueMovebg* this, PlayState* play) {
             Flags_UnsetSwitch(play, this->unk_1C0);
         }
 
-        player->stateFlags1 |= 0x20;
-        player->stateFlags2 &= ~0x10;
+        player->stateFlags1 |= PLAYER_STATE1_20;
+        player->stateFlags2 &= ~PLAYER_STATE2_10;
         this->dyna.pushForce = 0.0f;
 
         this->unk_18C = (this->unk_18C + sp26 + 3600) % 3600;
@@ -525,7 +524,7 @@ void func_80A2A7F8(BgDblueMovebg* this, PlayState* play) {
         this->unk_18A = 0;
         this->unk_17E = 0;
 
-        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_STONEDOOR_STOP);
+        Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_STONEDOOR_STOP);
 
         if (func_80A29A80(play, this->unk_1C8, this->unk_1C4)) {
             this->unk_172 |= 1;
@@ -565,12 +564,12 @@ void func_80A2AAB8(BgDblueMovebg* this, PlayState* play) {
 
         if (this->unk_1D0 == 1) {
             this->dyna.pushForce = 0.0f;
-            player->stateFlags1 |= 0x20;
-            player->stateFlags2 &= ~0x10;
+            player->stateFlags1 |= PLAYER_STATE1_20;
+            player->stateFlags2 &= ~PLAYER_STATE2_10;
         }
 
         if (this->unk_1D0 <= 0) {
-            player->stateFlags1 &= ~0x20;
+            player->stateFlags1 &= ~PLAYER_STATE1_20;
             this->actionFunc = func_80A2A714;
         }
     }
@@ -812,7 +811,7 @@ void BgDblueMovebg_Draw(Actor* thisx, PlayState* play2) {
     CLOSE_DISPS(play->state.gfxCtx);
 
     if ((this->unk_160 == 8) && (this->unk_172 & 0x20)) {
-        AnimatedMat_Draw(play, Lib_SegmentedToVirtual(&gGreatBayTempleObjectWaterwheelSplashTexAnim));
+        AnimatedMat_Draw(play, Lib_SegmentedToVirtual(gGreatBayTempleObjectWaterwheelSplashTexAnim));
 
         OPEN_DISPS(play->state.gfxCtx);
 

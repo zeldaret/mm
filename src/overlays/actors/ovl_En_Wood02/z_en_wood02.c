@@ -38,7 +38,7 @@ typedef enum {
 static f32 sSpawnCos;
 static f32 sSpawnSin;
 
-const ActorInit En_Wood02_InitVars = {
+ActorInit En_Wood02_InitVars = {
     ACTOR_EN_WOOD02,
     ACTORCAT_PROP,
     FLAGS,
@@ -385,7 +385,7 @@ void EnWood02_Update(Actor* thisx, PlayState* play2) {
     if ((thisx->params < WOOD_BUSH_GREEN_SMALL) || (thisx->params == WOOD_TREE_SPECIAL)) {
         if (this->collider.base.acFlags & AC_HIT) {
             this->collider.base.acFlags &= ~AC_HIT;
-            Actor_PlaySfxAtPos(thisx, NA_SE_IT_REFLECTION_WOOD);
+            Actor_PlaySfx(thisx, NA_SE_IT_REFLECTION_WOOD);
         }
 
         if (thisx->home.rot.y != 0) {
@@ -404,7 +404,7 @@ void EnWood02_Update(Actor* thisx, PlayState* play2) {
                     (thisx->params == WOOD_TREE_OVAL_YELLOW_SPAWNED)) {
                     leavesParams = WOOD_LEAF_YELLOW;
                 }
-                Actor_PlaySfxAtPos(thisx, NA_SE_EV_TREE_SWING);
+                Actor_PlaySfx(thisx, NA_SE_EV_TREE_SWING);
 
                 for (i = 3; i >= 0; i--) {
                     Actor_Spawn(&play->actorCtx, play, ACTOR_EN_WOOD02, dropsSpawnPt.x, dropsSpawnPt.y, dropsSpawnPt.z,
@@ -439,7 +439,7 @@ void EnWood02_Update(Actor* thisx, PlayState* play2) {
                                        (player->rideActor->speedXZ != 0.0f)))) {
             func_808C4458(this, play, &thisx->world.pos, 1);
             this->unk_146 = -0x15;
-            Actor_PlaySfxAtPos(thisx, NA_SE_EV_TREE_SWING);
+            Actor_PlaySfx(thisx, NA_SE_EV_TREE_SWING);
         }
     } else { // Leaves
         this->unk_146++;

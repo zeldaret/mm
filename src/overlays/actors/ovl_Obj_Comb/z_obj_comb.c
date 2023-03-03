@@ -22,7 +22,7 @@ void func_8098DEA0(ObjComb* this, PlayState* play);
 void func_8098E098(ObjComb* this);
 void func_8098E0B8(ObjComb* this, PlayState* play);
 
-const ActorInit Obj_Comb_InitVars = {
+ActorInit Obj_Comb_InitVars = {
     ACTOR_OBJ_COMB,
     ACTORCAT_PROP,
     FLAGS,
@@ -334,7 +334,7 @@ void ObjComb_Init(Actor* thisx, PlayState* play) {
     Actor_ProcessInitChain(&this->actor, sInitChain);
     Collider_InitJntSph(play, &this->collider);
 
-    if ((sp2C == 1) && OBJCOMB_GET_10(&this->actor) && (gSaveContext.save.weekEventReg[83] & 2)) {
+    if ((sp2C == 1) && OBJCOMB_GET_10(&this->actor) && CHECK_WEEKEVENTREG(WEEKEVENTREG_83_02)) {
         Actor_Kill(&this->actor);
         return;
     }
@@ -406,7 +406,7 @@ void func_8098DC60(ObjComb* this, PlayState* play) {
     } else {
         if (this->unk_1B8 >= 0) {
             if (this->unk_1B8 == 0) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALGOLD_ROLL);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_STALGOLD_ROLL);
                 if (Rand_ZeroOne() < 0.1f) {
                     this->unk_1B8 = Rand_S16Offset(40, 80);
                 } else {
@@ -495,7 +495,7 @@ void func_8098E0B8(ObjComb* this, PlayState* play) {
 
     if ((this->unk_1B4 == 10) && (this->unk_1B6 != 0) && (this->unk_1B5 == 2) && (this->actor.cutscene >= 0)) {
         if (ActorCutscene_GetCurrentIndex() == this->actor.cutscene) {
-            func_800B7298(play, &this->actor, 4);
+            func_800B7298(play, &this->actor, PLAYER_CSMODE_4);
         }
     }
 }
@@ -529,12 +529,12 @@ void ObjComb_Update(Actor* thisx, PlayState* play) {
                 if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
                     ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
                     if (this->actor.cutscene >= 0) {
-                        func_800B7298(play, &this->actor, 1);
+                        func_800B7298(play, &this->actor, PLAYER_CSMODE_1);
                     }
 
                     if (((OBJCOMB_GET_8000(&this->actor) | OBJCOMB_GET_80(&this->actor)) == 1) &&
                         OBJCOMB_GET_10(&this->actor)) {
-                        gSaveContext.save.weekEventReg[83] |= 2;
+                        SET_WEEKEVENTREG(WEEKEVENTREG_83_02);
                     }
 
                     this->unk_1B5 = 2;

@@ -19,7 +19,7 @@ void EnBubble_Wait(EnBubble* this, PlayState* play);
 void EnBubble_Pop(EnBubble* this, PlayState* play);
 void EnBubble_Regrow(EnBubble* this, PlayState* play);
 
-const ActorInit En_Bubble_InitVars = {
+ActorInit En_Bubble_InitVars = {
     ACTOR_EN_BUBBLE,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -247,7 +247,7 @@ void EnBubble_Fly(EnBubble* this, PlayState* play) {
         this->velocityFromBounce.y = this->bounceDirection.y * bounceSpeed;
         this->velocityFromBounce.z = this->bounceDirection.z * bounceSpeed;
         this->yVelocity = 0.0f;
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_AWA_BOUND);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_AWA_BOUND);
         this->modelRotSpeed = 128.0f;
         this->modelEllipticity = 0.48f;
     } else if ((this->actor.bgCheckFlags & 0x20) && (bounceDirection.y < 0.0f)) {
@@ -266,7 +266,7 @@ void EnBubble_Fly(EnBubble* this, PlayState* play) {
         this->velocityFromBounce.y = (this->bounceDirection.y * bounceSpeed);
         this->velocityFromBounce.z = (this->bounceDirection.z * bounceSpeed);
         this->yVelocity = 0.0f;
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_AWA_BOUND);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_AWA_BOUND);
         this->modelRotSpeed = 128.0f;
         this->modelEllipticity = 0.48f;
     }

@@ -27,7 +27,7 @@ void BgKin2Picture_Fall(BgKin2Picture* this, PlayState* play);
 void BgKin2Picture_SetupDoNothing(BgKin2Picture* this);
 void BgKin2Picture_DoNothing(BgKin2Picture* this, PlayState* play);
 
-const ActorInit Bg_Kin2_Picture_InitVars = {
+ActorInit Bg_Kin2_Picture_InitVars = {
     ACTOR_BG_KIN2_PICTURE,
     ACTORCAT_PROP,
     FLAGS,
@@ -207,7 +207,7 @@ void BgKin2Picture_Wait(BgKin2Picture* this, PlayState* play) {
     } else { // Gold Skulltula can be heard behind Skullkid's painting.
         if (this->skulltulaNoiseTimer >= 0) {
             if (this->skulltulaNoiseTimer == 0) {
-                Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EN_STALGOLD_ROLL);
+                Actor_PlaySfx(&this->dyna.actor, NA_SE_EN_STALGOLD_ROLL);
 
                 if (Rand_ZeroOne() < 0.1f) {
                     this->skulltulaNoiseTimer = Rand_S16Offset(40, 80);
@@ -297,7 +297,7 @@ void BgKin2Picture_Fall(BgKin2Picture* this, PlayState* play) {
                 }
 
                 if (this->landTimer < 3) {
-                    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_SMALL_WOODPLATE_BOUND_0);
+                    Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_SMALL_WOODPLATE_BOUND_0);
                 }
             }
         }
@@ -318,7 +318,7 @@ void BgKin2Picture_Fall(BgKin2Picture* this, PlayState* play) {
         }
 
         func_800C6314(play, &play->colCtx.dyna, this->dyna.bgId);
-        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_WOODPLATE_BROKEN);
+        Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_WOODPLATE_BROKEN);
         BgKin2Picture_SetupDoNothing(this);
     } else {
         this->dyna.actor.shape.yOffset = Math_SinS(this->dyna.actor.shape.rot.x) * 40.0f;

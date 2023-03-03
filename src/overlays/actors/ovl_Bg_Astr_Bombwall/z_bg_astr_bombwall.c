@@ -23,7 +23,7 @@ void func_80C0A418(BgAstrBombwall* this, PlayState* play);
 void func_80C0A458(BgAstrBombwall* this, PlayState* play);
 void func_80C0A4BC(BgAstrBombwall* this, PlayState* play);
 
-const ActorInit Bg_Astr_Bombwall_InitVars = {
+ActorInit Bg_Astr_Bombwall_InitVars = {
     ACTOR_BG_ASTR_BOMBWALL,
     ACTORCAT_BG,
     FLAGS,
@@ -184,7 +184,7 @@ void func_80C0A458(BgAstrBombwall* this, PlayState* play) {
     func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
     this->dyna.actor.draw = NULL;
     func_80C0A120(this, play);
-    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_WALL_BROKEN);
+    Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_WALL_BROKEN);
     this->actionFunc = func_80C0A4BC;
 }
 

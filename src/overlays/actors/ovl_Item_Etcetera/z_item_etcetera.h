@@ -37,6 +37,4 @@ typedef struct ItemEtcetera {
     /* 0x154 */ ItemEtceteraActionFunc actionFunc;
 } ItemEtcetera; // size = 0x158
 
-extern const ActorInit Item_Etcetera_InitVars;
-
 #endif // Z_ITEM_ETCETERA_H

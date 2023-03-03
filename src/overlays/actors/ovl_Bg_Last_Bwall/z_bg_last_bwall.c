@@ -37,7 +37,7 @@ void func_80C18884(BgLastBwall* this, PlayState* play);
 void func_80C188C4(BgLastBwall* this, PlayState* play);
 void BgLastBwall_DoNothing(BgLastBwall* this, PlayState* play);
 
-const ActorInit Bg_Last_Bwall_InitVars = {
+ActorInit Bg_Last_Bwall_InitVars = {
     ACTOR_BG_LAST_BWALL,
     ACTORCAT_BG,
     FLAGS,
@@ -248,7 +248,7 @@ void func_80C188C4(BgLastBwall* this, PlayState* play) {
     func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
     this->dyna.actor.draw = NULL;
     func_80C184EC(this, play);
-    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_WALL_BROKEN);
+    Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_WALL_BROKEN);
     this->actionFunc = BgLastBwall_DoNothing;
 }
 

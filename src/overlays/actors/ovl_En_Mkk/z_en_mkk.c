@@ -35,7 +35,7 @@ void func_80A4E67C(EnMkk* this);
 void func_80A4E84C(EnMkk* this);
 void func_80A4EBBC(EnMkk* this, PlayState* play);
 
-const ActorInit En_Mkk_InitVars = {
+ActorInit En_Mkk_InitVars = {
     ACTOR_EN_MKK,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -267,7 +267,7 @@ void func_80A4E2E8(EnMkk* this, PlayState* play) {
         sp20 = Math_StepToF(&this->actor.speedXZ, 0.0f, 0.7f);
     }
     if ((player->stateFlags3 & 0x100) || (Player_GetMask(play) == PLAYER_MASK_STONE)) {
-        Math_ScaledStepToS(&this->unk_150, Actor_YawToPoint(&this->actor, &this->actor.home.pos), 0x400);
+        Math_ScaledStepToS(&this->unk_150, Actor_WorldYawTowardPoint(&this->actor, &this->actor.home.pos), 0x400);
     } else if ((player->stateFlags2 & 0x80) || (player->actor.freezeTimer > 0)) {
         Math_ScaledStepToS(&this->unk_150, this->actor.yawTowardsPlayer + 0x8000, 0x400);
     } else {
@@ -291,7 +291,7 @@ void func_80A4E58C(EnMkk* this) {
     this->unk_14B |= 1;
     this->actor.speedXZ = 3.0f;
     this->actor.velocity.y = 5.0f;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KUROSUKE_ATTACK);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_KUROSUKE_ATTACK);
     this->collider.base.atFlags |= AT_ON;
     Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0x800);
     this->actionFunc = func_80A4E60C;
@@ -313,7 +313,7 @@ void func_80A4E67C(EnMkk* this) {
     this->actor.flags &= ~ACTOR_FLAG_1;
     this->collider.base.acFlags &= ~AC_ON;
     this->actor.flags |= ACTOR_FLAG_10;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PO_DEAD);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_PO_DEAD);
     this->alpha = 254;
     func_800BE568(&this->actor, &this->collider);
     this->actor.speedXZ = 7.0f;
@@ -334,7 +334,7 @@ void func_80A4E72C(EnMkk* this, PlayState* play) {
             temp.z = this->actor.world.pos.z;
             EffectSsDeadDb_Spawn(play, &temp, &gZeroVec3f, &gZeroVec3f, &sEffPrimColors[this->actor.params],
                                  &sEffEnvColors[this->actor.params], 0x46, 4, 0xC);
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_EXTINCT);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_EXTINCT);
             if (this->unk_14C != 0) {
                 Item_DropCollectibleRandom(play, &this->actor, &this->actor.world.pos, this->unk_14C * 0x10);
             }
@@ -421,7 +421,7 @@ void EnMkk_Update(Actor* thisx, PlayState* play) {
     }
     if (Actor_IsFacingPlayer(&this->actor, 0x3000)) {
         player = GET_PLAYER(play);
-        this->actor.shape.rot.x = Actor_PitchToPoint(&this->actor, &player->actor.focus.pos);
+        this->actor.shape.rot.x = Actor_WorldPitchTowardPoint(&this->actor, &player->actor.focus.pos);
         this->actor.shape.rot.x = CLAMP(this->actor.shape.rot.x, -0x1800, 0x1800);
     }
     Actor_SetFocus(&this->actor, 10.0f);

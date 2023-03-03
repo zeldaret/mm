@@ -28,6 +28,4 @@ typedef struct EnTanron2 {
     /* 0x1B0 */ ColliderCylinder collider2;
 } EnTanron2; // size = 0x1FC
 
-extern const ActorInit En_Tanron2_InitVars;
-
 #endif // Z_EN_TANRON2_H

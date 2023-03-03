@@ -8,7 +8,6 @@
  */
 
 #include "z_en_dnq.h"
-#include "objects/object_dno/object_dno.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
 
@@ -26,7 +25,7 @@ static s32 D_80A53400[] = {
     0x0C0E089D, 0x0C0F089E, 0x0C111202, 0x100E089F, 0x0C100000, 0x0E08A10C, 0x0F08A20C, 0x10000000,
 };
 
-const ActorInit En_Dnq_InitVars = {
+ActorInit En_Dnq_InitVars = {
     ACTOR_EN_DNQ,
     ACTORCAT_NPC,
     FLAGS,
@@ -61,30 +60,30 @@ static ColliderCylinderInit sCylinderInit = {
 static CollisionCheckInfoInit2 sColChkInfoInit = { 1, 0, 0, 0, MASS_IMMOVABLE };
 
 static AnimationInfoS sAnimationInfo[] = {
-    { &object_dno_Anim_008328, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_dno_Anim_008328, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_dno_Anim_007528, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &object_dno_Anim_0006F0, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_dno_Anim_000BF8, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_dno_Anim_002690, 0.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_dno_Anim_002690, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &object_dno_Anim_003408, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_dno_Anim_006984, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &object_dno_Anim_005E18, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &object_dno_Anim_005A14, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &object_dno_Anim_005284, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &object_dno_Anim_001AEC, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_dno_Anim_001100, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_dno_Anim_004EA0, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_dno_Anim_00F504, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_dno_Anim_0047B8, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_dno_Anim_003DBC, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &object_dno_Anim_005A14, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_dno_Anim_003DBC, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &gDekuKingIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gDekuKingIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &gDekuKingSurpriseAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &gDekuKingJumpedOnStartAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &gDekuKingJumpedOnLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &gDekuKingJumpedOnEndAnim, 0.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &gDekuKingJumpedOnEndAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &gDekuKingLyingDownTwitchAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &gDekuKingWailLoopAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &gDekuKingFootStampStartAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &gDekuKingFootStampLoopAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &gDekuKingWailStartAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &gDekuKingMarchAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &gDekuKingSpinScepterAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &gDekuKingIntimidateAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &gDekuKingPointScepterAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &gDekuKingJumpAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &gDekuKingLaughAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &gDekuKingFootStampLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &gDekuKingLaughAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
 };
 
 s32 EnDnq_ValidatePictograph(PlayState* play, Actor* thisx) {
-    return Snap_ValidatePictograph(play, thisx, PICTOGRAPH_DEKU_KING, &thisx->focus.pos, &thisx->world.rot, 120.0f,
+    return Snap_ValidatePictograph(play, thisx, PICTO_VALID_DEKU_KING, &thisx->focus.pos, &thisx->world.rot, 120.0f,
                                    480.0f, 0x38E3);
 }
 
@@ -260,7 +259,7 @@ s32 func_80A52B68(EnDnq* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     u16 temp = play->msgCtx.currentTextId;
 
-    if ((player->stateFlags1 & 0x40) && (player->targetActor == &this->picto.actor)) {
+    if ((player->stateFlags1 & PLAYER_STATE1_40) && (player->talkActor == &this->picto.actor)) {
         switch (temp) {
             case 0x89B:
                 func_80A5257C(this, 18);
@@ -310,7 +309,7 @@ void func_80A52C6C(EnDnq* this, PlayState* play) {
 }
 
 s32* func_80A52CF8(EnDnq* this, PlayState* play) {
-    if (gSaveContext.save.weekEventReg[23] & 0x20) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_23_20)) {
         return &D_80A53400[14];
     }
 
@@ -344,11 +343,11 @@ void func_80A52DC8(EnDnq* this, PlayState* play) {
         SubS_UpdateFlags(&this->unk_37C, 0, 7);
     }
 
-    if (!(gSaveContext.save.weekEventReg[23] & 0x20)) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_23_20)) {
         this->unk_390 = 70.0f;
         if (Inventory_HasItemInBottle(ITEM_DEKU_PRINCESS) && !Play_InCsMode(play) &&
             (Message_GetState(&play->msgCtx) == TEXT_STATE_NONE) && (ActorCutscene_GetCurrentIndex() == -1)) {
-            if ((DECR(this->unk_384) == 0) && (gSaveContext.save.weekEventReg[29] & 0x40)) {
+            if ((DECR(this->unk_384) == 0) && CHECK_WEEKEVENTREG(WEEKEVENTREG_29_40)) {
                 Message_StartTextbox(play, 0x969, NULL);
                 this->unk_384 = 200;
             }
@@ -362,7 +361,7 @@ void func_80A52DC8(EnDnq* this, PlayState* play) {
 
         this->picto.actor.xzDistToPlayer = this->unk_394;
 
-        if (gSaveContext.save.weekEventReg[83] & 8) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_83_08)) {
             func_80A52A78(this, play);
         } else if (this->unk_3A4 == 0) {
             Math_ApproachS(&this->picto.actor.shape.rot.y, this->picto.actor.world.rot.y, 3, 0x2AA8);
@@ -404,7 +403,7 @@ void func_80A53038(EnDnq* this, PlayState* play) {
         }
 
         if ((this->unk_398 == 4) && Animation_OnFrame(&this->skelAnime, 2.0f)) {
-            Actor_PlaySfxAtPos(&this->picto.actor, NA_SE_EN_KINGNUTS_DAMAGE);
+            Actor_PlaySfx(&this->picto.actor, NA_SE_EN_KINGNUTS_DAMAGE);
         }
 
         if (((this->unk_398 == 3) || (this->unk_398 == 6)) &&
@@ -420,7 +419,8 @@ void EnDnq_Init(Actor* thisx, PlayState* play) {
     EnDnq* this = THIS;
 
     ActorShape_Init(&this->picto.actor.shape, 0.0f, NULL, 14.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_dno_Skel_00EB48, NULL, this->jointTable, this->morphTable, 33);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gDekuKingSkel, NULL, this->jointTable, this->morphTable,
+                       DEKU_KING_LIMB_MAX);
     this->unk_398 = -1;
     func_80A5257C(this, 0);
     Collider_InitAndSetCylinder(play, &this->collider, &this->picto.actor, &sCylinderInit);
@@ -430,7 +430,7 @@ void EnDnq_Init(Actor* thisx, PlayState* play) {
     this->unk_386 = 0;
     this->unk_37C = 0;
     SubS_UpdateFlags(&this->unk_37C, 3, 7);
-    if (gSaveContext.save.weekEventReg[9] & 0x80) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_09_80)) {
         this->unk_3A4 = 1;
     } else {
         this->unk_3A4 = 0;
@@ -459,7 +459,7 @@ void EnDnq_Update(Actor* thisx, PlayState* play) {
         this->unk_394 = this->picto.actor.xzDistToPlayer;
         func_80A52C6C(this, play);
         func_8013C964(&this->picto.actor, play, this->unk_390, fabsf(this->picto.actor.playerHeightRel) + 1.0f,
-                      PLAYER_AP_NONE, this->unk_37C & 7);
+                      PLAYER_IA_NONE, this->unk_37C & 7);
         this->picto.actor.xzDistToPlayer = this->unk_394;
         Actor_SetFocus(&this->picto.actor, 46.0f);
         func_80A52604(this, play);

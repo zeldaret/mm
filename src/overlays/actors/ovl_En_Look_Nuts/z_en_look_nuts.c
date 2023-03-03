@@ -24,7 +24,7 @@ void EnLookNuts_RunToPlayer(EnLookNuts* this, PlayState* play);
 void EnLookNuts_SetupSendPlayerToSpawn(EnLookNuts* this);
 void EnLookNuts_SendPlayerToSpawn(EnLookNuts* this, PlayState* play);
 
-const ActorInit En_Look_Nuts_InitVars = {
+ActorInit En_Look_Nuts_InitVars = {
     ACTOR_EN_LOOK_NUTS,
     ACTORCAT_NPC,
     FLAGS,
@@ -157,7 +157,7 @@ void EnLookNuts_Patrol(EnLookNuts* this, PlayState* play) {
 
     this->actor.speedXZ = 2.0f;
     if (Animation_OnFrame(&this->skelAnime, 1.0f) || Animation_OnFrame(&this->skelAnime, 5.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_WALK);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_WALK);
     }
 
     if (D_80A6862C != 0) {
@@ -273,7 +273,7 @@ void EnLookNuts_DetectedPlayer(EnLookNuts* this, PlayState* play) {
 void EnLookNuts_RunToPlayer(EnLookNuts* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     if (Animation_OnFrame(&this->skelAnime, 1.0f) || Animation_OnFrame(&this->skelAnime, 5.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_WALK);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_WALK);
     }
 
     this->actor.speedXZ = 4.0f;
@@ -300,7 +300,7 @@ void EnLookNuts_SendPlayerToSpawn(EnLookNuts* this, PlayState* play) {
         gSaveContext.nextCutsceneIndex = 0;
         Scene_SetExitFade(play);
         play->transitionTrigger = TRANS_TRIGGER_START;
-        gSaveContext.save.weekEventReg[17] |= 4;
+        SET_WEEKEVENTREG(WEEKEVENTREG_17_04);
     }
 }
 
@@ -355,11 +355,11 @@ void EnLookNuts_Update(Actor* thisx, PlayState* play) {
             if ((this->isPlayerDetected == true) || (this->actor.xzDistToPlayer < 20.0f)) {
                 Player* player = GET_PLAYER(play);
 
-                if (!(player->stateFlags3 & 0x100) && !Play_InCsMode(play)) {
+                if (!(player->stateFlags3 & PLAYER_STATE3_100) && !Play_InCsMode(play)) {
                     Math_Vec3f_Copy(&this->headRotTarget, &gZeroVec3f);
                     this->state = PALACE_GUARD_RUNNING_TO_PLAYER;
                     play_sound(NA_SE_SY_FOUND);
-                    func_800B7298(play, &this->actor, 0x1A);
+                    func_800B7298(play, &this->actor, PLAYER_CSMODE_26);
                     D_80A6862C = 1;
                     this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_10);
                     this->actor.gravity = 0.0f;

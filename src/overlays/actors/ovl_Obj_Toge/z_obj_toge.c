@@ -23,7 +23,7 @@ void func_809A481C(ObjToge* this, PlayState* play);
 void func_809A488C(ObjToge* this);
 void func_809A48AC(ObjToge* this, PlayState* play);
 
-const ActorInit Obj_Toge_InitVars = {
+ActorInit Obj_Toge_InitVars = {
     ACTOR_OBJ_TOGE,
     ACTORCAT_PROP,
     FLAGS,
@@ -254,7 +254,7 @@ void func_809A48AC(ObjToge* this, PlayState* play) {
         } else {
             func_809A4744(this);
         }
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SPINE_TRAP_MOVE);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_SPINE_TRAP_MOVE);
     } else {
         s16 yaw = Math_Vec3f_Yaw(&this->actor.world.pos, &this->unk_198[sp30]) - this->actor.world.rot.y;
 
@@ -267,7 +267,7 @@ void func_809A48AC(ObjToge* this, PlayState* play) {
             } else {
                 func_809A4744(this);
             }
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SPINE_TRAP_MOVE);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_SPINE_TRAP_MOVE);
         }
     }
 }

@@ -18,7 +18,7 @@ void EnLight_Draw(Actor* thisx, PlayState* play);
 
 void func_80865F38(Actor* thisx, PlayState* play);
 
-const ActorInit En_Light_InitVars = {
+ActorInit En_Light_InitVars = {
     ACTOR_EN_LIGHT,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -112,7 +112,7 @@ void EnLight_Update(Actor* thisx, PlayState* play) {
     func_80865BF8(this, play);
 
     if ((this->actor.params >= 0) && !ENLIGHT_GET_4000(&this->actor)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_TORCH - SFX_FLAG);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_TORCH - SFX_FLAG);
     }
 }
 
@@ -156,7 +156,7 @@ void func_80865F38(Actor* thisx, PlayState* play) {
     func_80865BF8(this, play);
 
     if ((this->actor.params >= 0) && (sp2C == true)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_TORCH - SFX_FLAG);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_TORCH - SFX_FLAG);
     }
 }
 

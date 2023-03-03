@@ -53,7 +53,7 @@ typedef enum EN_BOMJIMA_ACTION {
 static s32 D_80C009F0 = 0;
 static s32 D_80C009F4 = 0;
 
-const ActorInit En_Bomjima_InitVars = {
+ActorInit En_Bomjima_InitVars = {
     ACTOR_EN_BOMJIMA,
     ACTORCAT_NPC,
     FLAGS,
@@ -128,7 +128,7 @@ void EnBomjima_Init(Actor* thisx, PlayState* play) {
     SkelAnime_InitFlex(play, &this->skelAnime, &object_cs_Skel_00F82C, &gBomberIdleAnim, this->jointTable,
                        this->morphTable, OBJECT_CS_LIMB_MAX);
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
-    gSaveContext.save.weekEventReg[83] &= (u8)~4;
+    CLEAR_WEEKEVENTREG(WEEKEVENTREG_83_04);
     this->actor.targetMode = 0;
     this->unk_2E6 = ENBOMJIMA_GET_F0(&this->actor);
     this->unk_2E4 = ENBOMJIMA_GET_F(&this->actor);
@@ -150,8 +150,8 @@ void EnBomjima_Init(Actor* thisx, PlayState* play) {
         func_80BFFCFC(this);
     }
 
-    if ((gSaveContext.save.weekEventReg[75] & 0x40) || (gSaveContext.save.weekEventReg[73] & 0x10) ||
-        (gSaveContext.save.weekEventReg[85] & 2)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_75_40) || CHECK_WEEKEVENTREG(WEEKEVENTREG_73_10) ||
+        CHECK_WEEKEVENTREG(WEEKEVENTREG_85_02)) {
         Actor_Kill(&this->actor);
     }
 }
@@ -177,12 +177,12 @@ void func_80BFE32C(EnBomjima* this, PlayState* play, s32 arg2) {
         case 0:
             if (player->transformation == PLAYER_FORM_DEKU) {
                 this->actor.textId = 0x759;
-                if (!(gSaveContext.save.weekEventReg[73] & 0x20)) {
+                if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_73_20)) {
                     this->actor.textId = 0x708;
                 }
             } else if (player->transformation == PLAYER_FORM_HUMAN) {
                 this->actor.textId = 0x75A;
-                if (!(gSaveContext.save.weekEventReg[84] & 0x80)) {
+                if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_84_80)) {
                     this->actor.textId = 0x719;
                 }
             } else if ((this->unk_2C8 == 1) || (this->unk_2C8 == 2)) {
@@ -219,21 +219,21 @@ void func_80BFE524(EnBomjima* this) {
     if ((this->animIndex == 5) &&
         (Animation_OnFrame(&this->skelAnime, 9.0f) || Animation_OnFrame(&this->skelAnime, 10.0f) ||
          Animation_OnFrame(&this->skelAnime, 17.0f) || Animation_OnFrame(&this->skelAnime, 18.0f))) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BOMBERS_WALK);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_BOMBERS_WALK);
     }
 
     if ((this->animIndex == 18) &&
         (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 2.0f) ||
          Animation_OnFrame(&this->skelAnime, 4.0f) || Animation_OnFrame(&this->skelAnime, 6.0f))) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BOMBERS_WALK);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_BOMBERS_WALK);
     }
 
     if ((this->animIndex == 15) && Animation_OnFrame(&this->skelAnime, 15.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BOMBERS_LAND);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_BOMBERS_LAND);
     }
 
     if ((this->animIndex == 6) && Animation_OnFrame(&this->skelAnime, 8.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BOMBERS_LAND);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_BOMBERS_LAND);
     }
 }
 
@@ -362,18 +362,18 @@ void func_80BFEB64(EnBomjima* this, PlayState* play) {
 
     func_80BFE32C(this, play, 0);
     if (player->transformation == PLAYER_FORM_DEKU) {
-        if (gSaveContext.save.weekEventReg[73] & 0x20) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_73_20)) {
             this->unk_2C8 = 3;
             func_80BFE32C(this, play, 3);
-        } else if (gSaveContext.save.weekEventReg[77] & 2) {
+        } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_77_02)) {
             this->unk_2C8 = 11;
             func_80BFE32C(this, play, 2);
         }
     } else if (player->transformation == PLAYER_FORM_HUMAN) {
-        if (gSaveContext.save.weekEventReg[84] & 0x80) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_84_80)) {
             this->unk_2C8 = 0;
             func_80BFE32C(this, play, 3);
-        } else if (gSaveContext.save.weekEventReg[85] & 1) {
+        } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_85_01)) {
             this->unk_2C8 = 11;
             func_80BFE32C(this, play, 2);
         }
@@ -409,7 +409,7 @@ void func_80BFEB64(EnBomjima* this, PlayState* play) {
             this->unk_2DC = Math_Vec3f_Yaw(&this->actor.world.pos, &this->bombal->actor.world.pos);
             if (Animation_OnFrame(&this->skelAnime, 19.0f)) {
                 this->unk_2C0 = 5;
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BOMBERS_SHOT_BREATH);
+                Actor_PlaySfx(&this->actor, NA_SE_EV_BOMBERS_SHOT_BREATH);
             }
 
             if (this->unk_2C0 == 1) {
@@ -471,8 +471,8 @@ void func_80BFF03C(EnBomjima* this, PlayState* play) {
     } else if (!ActorCutscene_GetCanPlayNext(this->cutscenes[0])) {
         ActorCutscene_SetIntentToPlay(this->cutscenes[0]);
     } else {
-        player->stateFlags1 &= ~0x20;
-        gSaveContext.save.weekEventReg[83] &= (u8)~4;
+        player->stateFlags1 &= ~PLAYER_STATE1_20;
+        CLEAR_WEEKEVENTREG(WEEKEVENTREG_83_04);
         this->actor.world.rot.y = Camera_GetCamDirYaw(GET_ACTIVE_CAM(play));
         this->unk_2DC = Camera_GetCamDirYaw(GET_ACTIVE_CAM(play));
         ActorCutscene_StartAndSetUnkLinkFields(this->cutscenes[0], &this->actor);
@@ -518,11 +518,11 @@ void func_80BFF174(EnBomjima* this, PlayState* play) {
     }
 
     if (player->transformation == PLAYER_FORM_DEKU) {
-        if (gSaveContext.save.weekEventReg[73] & 0x20) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_73_20)) {
             this->unk_2C8 = 3;
             func_80BFE32C(this, play, 3);
         } else {
-            if (!(gSaveContext.save.weekEventReg[77] & 2)) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_77_02)) {
                 if (this->unk_2E8 == 0) {
                     this->unk_2C8 = 4;
                 } else {
@@ -534,11 +534,11 @@ void func_80BFF174(EnBomjima* this, PlayState* play) {
             func_80BFE32C(this, play, 2);
         }
     } else if (player->transformation == PLAYER_FORM_HUMAN) {
-        if (gSaveContext.save.weekEventReg[84] & 0x80) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_84_80)) {
             this->unk_2C8 = 0;
             func_80BFE32C(this, play, 3);
         } else {
-            if (!(gSaveContext.save.weekEventReg[85] & 1)) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_85_01)) {
                 if (this->unk_2EA == 0) {
                     this->unk_2C8 = 4;
                 } else {
@@ -578,7 +578,7 @@ void func_80BFF430(EnBomjima* this, PlayState* play) {
             bombal->scale = 0.0f;
             bombal->cutscene = this->bombalCutscene;
             Actor_ChangeFocus(&this->actor, play, &bombal->actor);
-            gSaveContext.save.weekEventReg[83] &= (u8)~4;
+            CLEAR_WEEKEVENTREG(WEEKEVENTREG_83_04);
             func_80BFE65C(this);
             func_801477B4(play);
             this->actionFunc = func_80BFEA94;
@@ -701,24 +701,24 @@ void func_80BFF9B0(EnBomjima* this, PlayState* play) {
         D_80C009F0 = 0;
         this->unk_2C8 = 9;
         if (player->transformation == PLAYER_FORM_DEKU) {
-            gSaveContext.save.weekEventReg[73] |= 0x10;
-            gSaveContext.save.weekEventReg[77] |= 2;
+            SET_WEEKEVENTREG(WEEKEVENTREG_73_10);
+            SET_WEEKEVENTREG(WEEKEVENTREG_77_02);
         } else {
-            gSaveContext.save.weekEventReg[85] |= 2;
-            gSaveContext.save.weekEventReg[85] |= 1;
+            SET_WEEKEVENTREG(WEEKEVENTREG_85_02);
+            SET_WEEKEVENTREG(WEEKEVENTREG_85_01);
         }
 
-        gSaveContext.save.weekEventReg[11] &= (u8)~1;
-        gSaveContext.save.weekEventReg[11] &= (u8)~2;
-        gSaveContext.save.weekEventReg[11] &= (u8)~4;
-        gSaveContext.save.weekEventReg[11] &= (u8)~8;
-        gSaveContext.save.weekEventReg[11] &= (u8)~0x10;
+        CLEAR_WEEKEVENTREG(WEEKEVENTREG_11_01);
+        CLEAR_WEEKEVENTREG(WEEKEVENTREG_11_02);
+        CLEAR_WEEKEVENTREG(WEEKEVENTREG_11_04);
+        CLEAR_WEEKEVENTREG(WEEKEVENTREG_11_08);
+        CLEAR_WEEKEVENTREG(WEEKEVENTREG_11_10);
 
-        gSaveContext.save.weekEventReg[76] &= (u8)~1;
-        gSaveContext.save.weekEventReg[76] &= (u8)~2;
-        gSaveContext.save.weekEventReg[76] &= (u8)~4;
-        gSaveContext.save.weekEventReg[76] &= (u8)~8;
-        gSaveContext.save.weekEventReg[76] &= (u8)~0x10;
+        CLEAR_WEEKEVENTREG(WEEKEVENTREG_76_01);
+        CLEAR_WEEKEVENTREG(WEEKEVENTREG_76_02);
+        CLEAR_WEEKEVENTREG(WEEKEVENTREG_76_04);
+        CLEAR_WEEKEVENTREG(WEEKEVENTREG_76_08);
+        CLEAR_WEEKEVENTREG(WEEKEVENTREG_76_10);
 
         gSaveContext.save.bombersCaughtNum = 0;
         gSaveContext.save.bombersCaughtOrder[0] = 0;
@@ -773,7 +773,7 @@ void func_80BFFBC4(EnBomjima* this, PlayState* play) {
         gSaveContext.nextCutsceneIndex = 0;
         play->transitionTrigger = TRANS_TRIGGER_START;
         play->transitionType = TRANS_TYPE_86;
-        gSaveContext.nextTransitionType = TRANS_TYPE_03;
+        gSaveContext.nextTransitionType = TRANS_TYPE_FADE_WHITE;
         ActorCutscene_Stop(this->cutscenes[1]);
     }
 }
@@ -848,7 +848,7 @@ void func_80BFFF54(EnBomjima* this, PlayState* play) {
 
     if (this->animIndex == 8) {
         if ((D_80C009F4 == 1) && Animation_OnFrame(&this->skelAnime, 7.0f)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_HUMAN_BOUND);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_HUMAN_BOUND);
             D_80C009F4 = 2;
         }
 
@@ -935,8 +935,8 @@ void func_80C00284(EnBomjima* this, PlayState* play) {
         if ((this->action == EN_BOMJIMA_ACTION_4) || (this->unk_2CA == 1) ||
             ((this->unk_2CA == 3) && (this->unk_2C8 >= 2))) {
             this->unk_28E = 0;
-            if (player->stateFlags1 & 0x20) {
-                player->stateFlags1 &= ~0x20;
+            if (player->stateFlags1 & PLAYER_STATE1_20) {
+                player->stateFlags1 &= ~PLAYER_STATE1_20;
             }
 
             if ((this->bombal == 0) || (this->bombal->actor.update == NULL) ||

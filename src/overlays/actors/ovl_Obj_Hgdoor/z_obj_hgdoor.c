@@ -26,7 +26,7 @@ void ObjHgdoor_SetupStopCs(ObjHgdoor* this);
 void ObjHgdoor_StopCs(ObjHgdoor* this, PlayState* play);
 s32 ObjHgdoor_Rotate(ObjHgdoor* this, PlayState* play);
 
-const ActorInit Obj_Hgdoor_InitVars = {
+ActorInit Obj_Hgdoor_InitVars = {
     ACTOR_OBJ_HGDOOR,
     ACTORCAT_PROP,
     FLAGS,
@@ -94,7 +94,7 @@ void ObjHgdoor_SetupIdle(ObjHgdoor* this) {
 }
 
 void ObjHgdoor_Idle(ObjHgdoor* this, PlayState* play) {
-    if (!(gSaveContext.save.weekEventReg[75] & 0x20) && !(gSaveContext.save.weekEventReg[52] & 0x20) &&
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_75_20) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_52_20) &&
         (this->dyna.actor.xzDistToPlayer < 100.0f) && (this->dyna.actor.playerHeightRel < 40.0f) &&
         OBJHGDOOR_IS_RIGHT_DOOR(&this->dyna.actor)) {
         ObjHgdoor_SetChild(this, play);
@@ -134,7 +134,7 @@ void ObjHgdoor_HandleCsAction(ObjHgdoor* this, PlayState* play) {
             this->csAction = play->csCtx.actorActions[actionIndex]->action;
             switch (play->csCtx.actorActions[actionIndex]->action) {
                 case 1:
-                    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_WOOD_DOOR_OPEN_SPEEDY);
+                    Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_WOOD_DOOR_OPEN_SPEEDY);
                     if ((this->dyna.actor.parent != NULL) && (this->dyna.actor.parent->id == ACTOR_EN_HG)) {
                         this->dyna.actor.parent->colChkInfo.health = 1;
                     }

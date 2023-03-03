@@ -17,7 +17,7 @@ void EnDrs_Draw(Actor* thisx, PlayState* play);
 
 void EnDrs_Idle(EnDrs* this, PlayState* play);
 
-const ActorInit En_Drs_InitVars = {
+ActorInit En_Drs_InitVars = {
     ACTOR_EN_DRS,
     ACTORCAT_PROP,
     FLAGS,
@@ -108,7 +108,7 @@ void EnDrs_PostLimbDraw(PlayState* play2, s32 limbIndex, Gfx** dList, Vec3s* rot
 
     // Anju removes the Moon Mask at the start of the Couple's Mask cutscene
     // after that it will no longer be rendered.
-    if (!(gSaveContext.save.weekEventReg[87] & 2) && (limbIndex == WEDDING_DRESS_MANNEQUIN_LIMB_MASK)) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_87_02) && (limbIndex == WEDDING_DRESS_MANNEQUIN_LIMB_MASK)) {
         OPEN_DISPS(play->state.gfxCtx);
         gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.status[temp].segment);
         gSPDisplayList(POLY_OPA_DISP++, &gMoonMaskDL);

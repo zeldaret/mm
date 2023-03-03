@@ -23,7 +23,7 @@ void func_80AC4D2C(BgIcefloe* this, PlayState* play);
 void func_80AC4C34(BgIcefloe* this, PlayState* play);
 void func_80AC4CF0(BgIcefloe* this);
 
-const ActorInit Bg_Icefloe_InitVars = {
+ActorInit Bg_Icefloe_InitVars = {
     ACTOR_BG_ICEFLOE,
     ACTORCAT_BG,
     FLAGS,
@@ -86,7 +86,7 @@ void func_80AC4A80(BgIcefloe* this, PlayState* play) {
     this->timer = 20;
     SkinMatrix_Vec3fMtxFMultXYZW(&play->viewProjectionMtxF, &this->dyna.actor.world.pos, &this->dyna.actor.projectedPos,
                                  &this->dyna.actor.projectedW);
-    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_ICE_STAND_APPEAR);
+    Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_ICE_STAND_APPEAR);
     this->actionFunc = BgIcefloe_Grow;
 }
 
@@ -133,7 +133,7 @@ void func_80AC4C34(BgIcefloe* this, PlayState* play) {
 
 void func_80AC4CF0(BgIcefloe* this) {
     this->timer = 50;
-    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_ICE_MELT_LEVEL);
+    Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_ICE_MELT_LEVEL);
     this->actionFunc = func_80AC4D2C;
 }
 

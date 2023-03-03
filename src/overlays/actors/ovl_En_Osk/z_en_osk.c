@@ -22,7 +22,7 @@ void func_80BF61EC(EnOsk* this, PlayState* play);
 void func_80BF656C(EnOsk* this, PlayState* play);
 void func_80BF6A20(EnOsk* this, PlayState* play);
 
-const ActorInit En_Osk_InitVars = {
+ActorInit En_Osk_InitVars = {
     ACTOR_EN_OSK,
     ACTORCAT_NPC,
     FLAGS,
@@ -181,20 +181,20 @@ void func_80BF609C(EnOsk* this, PlayState* play) {
                 case 0:
                     if (Animation_OnFrame(&this->skelAnime, this->unk_25C) ||
                         Animation_OnFrame(&this->skelAnime, this->unk_25C + 8.0f)) {
-                        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BOSU_TALK);
+                        Actor_PlaySfx(&this->actor, NA_SE_EN_BOSU_TALK);
                     }
                     break;
 
                 case 1:
                     if (Animation_OnFrame(&this->skelAnime, this->unk_25C)) {
-                        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BOSU_TALK);
+                        Actor_PlaySfx(&this->actor, NA_SE_EN_BOSU_TALK);
                     }
                     break;
 
                 case 2:
                     if (Animation_OnFrame(&this->skelAnime, this->unk_25C) ||
                         Animation_OnFrame(&this->skelAnime, this->unk_25C + 6.0f)) {
-                        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BOSU_TALK);
+                        Actor_PlaySfx(&this->actor, NA_SE_EN_BOSU_TALK);
                     }
                     break;
             }
@@ -280,19 +280,19 @@ void func_80BF6478(EnOsk* this) {
             case 1:
                 if (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 6.0f) ||
                     Animation_OnFrame(&this->skelAnime, 11.0f)) {
-                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DEBU_HEAD_UP);
+                    Actor_PlaySfx(&this->actor, NA_SE_EN_DEBU_HEAD_UP);
                 }
                 break;
 
             case 3:
                 if (Animation_OnFrame(&this->skelAnime, 11.0f)) {
-                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DEBU_HEAD_UP);
+                    Actor_PlaySfx(&this->actor, NA_SE_EN_DEBU_HEAD_UP);
                 }
                 break;
 
             case 4:
                 if (Animation_OnFrame(&this->skelAnime, 5.0f)) {
-                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DEBU_HEAD_UP);
+                    Actor_PlaySfx(&this->actor, NA_SE_EN_DEBU_HEAD_UP);
                 }
                 break;
 
@@ -406,31 +406,31 @@ void func_80BF68E0(EnOsk* this) {
             case 7:
                 if (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 6.0f) ||
                     Animation_OnFrame(&this->skelAnime, 11.0f)) {
-                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DEBU_HEAD_UP);
+                    Actor_PlaySfx(&this->actor, NA_SE_EN_DEBU_HEAD_UP);
                 }
                 break;
 
             case 2:
                 if (Animation_OnFrame(&this->skelAnime, 4.0f)) {
-                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DEBU_HEAD_UP);
+                    Actor_PlaySfx(&this->actor, NA_SE_EN_DEBU_HEAD_UP);
                 }
                 break;
 
             case 4:
                 if (Animation_OnFrame(&this->skelAnime, 5.0f)) {
-                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DEBU_HEAD_UP);
+                    Actor_PlaySfx(&this->actor, NA_SE_EN_DEBU_HEAD_UP);
                 }
                 break;
 
             case 5:
                 if ((Animation_OnFrame(&this->skelAnime, 6.0f)) || Animation_OnFrame(&this->skelAnime, 11.0f)) {
-                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DEBU_HEAD_UP);
+                    Actor_PlaySfx(&this->actor, NA_SE_EN_DEBU_HEAD_UP);
                 }
                 break;
 
             case 8:
                 if (Animation_OnFrame(&this->skelAnime, 13.0f)) {
-                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DEBU_HEAD_UP);
+                    Actor_PlaySfx(&this->actor, NA_SE_EN_DEBU_HEAD_UP);
                 }
                 break;
         }

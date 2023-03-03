@@ -28,7 +28,7 @@ void ObjTokeiStep_SetupDoNothingOpen(ObjTokeiStep* this);
 void ObjTokeiStep_DoNothingOpen(ObjTokeiStep* this, PlayState* play);
 void ObjTokeiStep_DrawOpen(Actor* thisx, PlayState* play);
 
-const ActorInit Obj_Tokei_Step_InitVars = {
+ActorInit Obj_Tokei_Step_InitVars = {
     ACTOR_OBJ_TOKEI_STEP,
     ACTORCAT_BG,
     FLAGS,
@@ -156,7 +156,7 @@ s32 ObjTokeiStep_OpenProcess(ObjTokeiStep* this, PlayState* play) {
         if (hasPrevBounced && (panel->numBounces < 3) && (panel->startFallingTimer <= 0)) {
             finalPosY = sPanelXOffsets[i] + this->dyna.actor.world.pos.y;
             if (!panel->hasSoundPlayed) {
-                Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_CLOCK_TOWER_STAIR_MOVE);
+                Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_CLOCK_TOWER_STAIR_MOVE);
                 panel->hasSoundPlayed = true;
             }
             panel->posChangeY += -2.5f;

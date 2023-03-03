@@ -71,7 +71,7 @@ static TexturePtr sEyeSwitchTextures[][4] = {
 
 static s32 sIsSegmentTableInit = false;
 
-const ActorInit Obj_Switch_InitVars = {
+ActorInit Obj_Switch_InitVars = {
     ACTOR_OBJ_SWITCH,
     ACTORCAT_SWITCH,
     FLAGS,
@@ -273,13 +273,13 @@ void ObjSwitch_StopCutscene(ObjSwitch* this) {
 
 void ObjSwitch_PlayFootSwitchSfx(ObjSwitch* this) {
     if (this->sfxTimer <= 0) {
-        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_FOOT_SWITCH);
+        Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_FOOT_SWITCH);
     }
 }
 
 void ObjSwitch_PlayDiamondSwitchSfx(ObjSwitch* this) {
     if (this->sfxTimer <= 0) {
-        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_DIAMOND_SWITCH);
+        Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_DIAMOND_SWITCH);
     }
 }
 
@@ -411,7 +411,7 @@ void ObjSwitch_Init(Actor* thisx, PlayState* play) {
         }
     }
     if (type == OBJSWITCH_TYPE_CRYSTAL) {
-        sCrystalSwitchAnimatedMat = Lib_SegmentedToVirtual(&gCrystalSwitchTexAnim);
+        sCrystalSwitchAnimatedMat = Lib_SegmentedToVirtual(gCrystalSwitchTexAnim);
     }
     if (OBJ_SWITCH_IS_FROZEN(&this->dyna.actor)) {
         ObjSwitch_EyeSwitchFrozenInit(this);

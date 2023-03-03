@@ -10,6 +10,4 @@ typedef struct ObjKepnKoya {
     /* 0x15C */ UNK_TYPE1 unk15C[0x4];
 } ObjKepnKoya; // size = 0x160
 
-extern const ActorInit Obj_Kepn_Koya_InitVars;
-
 #endif // Z_OBJ_KEPN_KOYA_H

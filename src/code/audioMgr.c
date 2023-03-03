@@ -39,7 +39,7 @@ void AudioMgr_HandleRetrace(AudioMgr* audioMgr) {
     if (SREG(20) >= 2) {
         rspTask = NULL;
     } else {
-        rspTask = func_80192BE0();
+        rspTask = AudioThread_Update();
     }
 
     if (audioMgr->rspTask != NULL) {

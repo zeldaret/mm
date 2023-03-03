@@ -20,7 +20,7 @@ void EnAttackNiw_EnterViewFromOffscreen(EnAttackNiw* this, PlayState* play);
 void EnAttackNiw_AimAtPlayer(EnAttackNiw* this, PlayState* play);
 void EnAttackNiw_FlyAway(EnAttackNiw* this, PlayState* play);
 
-const ActorInit En_Attack_Niw_InitVars = {
+ActorInit En_Attack_Niw_InitVars = {
     ACTOR_EN_ATTACK_NIW,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -408,12 +408,12 @@ void EnAttackNiw_Update(Actor* thisx, PlayState* play) {
 
         if (this->crySfxTimer == 0) {
             this->crySfxTimer = 30;
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CHICKEN_CRY_A);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_CHICKEN_CRY_A);
         }
 
         if (this->flutterSfxTimer == 0) {
             this->flutterSfxTimer = 7;
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_CHICKEN_FLUTTER);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_CHICKEN_FLUTTER);
         }
     }
 }

@@ -27,7 +27,7 @@ void func_80BD7820(Actor* thisx, PlayState* play);
 void func_80BD78C4(Actor* thisx, PlayState* play);
 void func_80BD7538(Actor* thisx, PlayState* play);
 
-const ActorInit Bg_Iknv_Doukutu_InitVars = {
+ActorInit Bg_Iknv_Doukutu_InitVars = {
     ACTOR_BG_IKNV_DOUKUTU,
     ACTORCAT_BG,
     FLAGS,
@@ -53,7 +53,7 @@ void BgIknvDoukutu_Init(Actor* thisx, PlayState* play) {
             this->actionFunc = func_80BD71BC;
             this->csAction = 0x204;
             this->unk_160 = 1.0f;
-            if ((gSaveContext.save.weekEventReg[14] & 4) || (gSaveContext.save.weekEventReg[52] & 0x20)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_14_04) || CHECK_WEEKEVENTREG(WEEKEVENTREG_52_20)) {
                 this->dyna.actor.draw = func_80BD7768;
                 this->actionFunc = func_80BD73D0;
                 play->envCtx.lightSettingOverride = 25;
@@ -69,7 +69,7 @@ void BgIknvDoukutu_Init(Actor* thisx, PlayState* play) {
             DynaPolyActor_Init(&this->dyna, 0);
             CollisionHeader_GetVirtual(&object_iknv_obj_Colheader_012788, &colHeader);
             this->dyna.bgId = DynaPoly_SetBgActor(play, &play->colCtx.dyna, &this->dyna.actor, colHeader);
-            if (!(gSaveContext.save.weekEventReg[14] & 4)) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_14_04)) {
                 Actor_Kill(&this->dyna.actor);
             }
             break;
@@ -80,7 +80,7 @@ void BgIknvDoukutu_Init(Actor* thisx, PlayState* play) {
             DynaPolyActor_Init(&this->dyna, 0);
             CollisionHeader_GetVirtual(&object_iknv_obj_Colheader_0117C8, &colHeader);
             this->dyna.bgId = DynaPoly_SetBgActor(play, &play->colCtx.dyna, &this->dyna.actor, colHeader);
-            if (gSaveContext.save.weekEventReg[14] & 4) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_14_04)) {
                 this->unk_160 = 1.0f;
                 this->dyna.actor.world.pos.y += 68.0f;
             } else {

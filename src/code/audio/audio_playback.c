@@ -309,7 +309,7 @@ void AudioPlayback_ProcessNotes(void) {
                 subAttrs.combFilterGain = channel->combFilterGain;
                 bookOffset = channel->bookOffset & 0x7;
 
-                if (channel->seqPlayer->muted && (channel->muteFlags & MUTE_FLAGS_3)) {
+                if (channel->seqPlayer->muted && (channel->muteFlags & MUTE_FLAGS_STOP_SAMPLES)) {
                     subAttrs.frequency = 0.0f;
                     subAttrs.velocity = 0.0f;
                 }
@@ -531,7 +531,7 @@ void AudioPlayback_SeqLayerDecayRelease(SequenceLayer* layer, s32 target) {
 
             attrs->combFilterGain = channel->combFilterGain;
             attrs->combFilterSize = channel->combFilterSize;
-            if (channel->seqPlayer->muted && (channel->muteFlags & MUTE_FLAGS_3)) {
+            if (channel->seqPlayer->muted && (channel->muteFlags & MUTE_FLAGS_STOP_SAMPLES)) {
                 note->sampleState.bitField0.finished = true;
             }
 

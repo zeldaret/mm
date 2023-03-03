@@ -25,7 +25,7 @@ void func_80B7F360(BgIkanaBlock* this);
 void func_80B7F398(BgIkanaBlock* this, PlayState* play);
 void func_80B7F564(Actor* thisx, PlayState* play);
 
-const ActorInit Bg_Ikana_Block_InitVars = {
+ActorInit Bg_Ikana_Block_InitVars = {
     ACTOR_BG_IKANA_BLOCK,
     ACTORCAT_BG,
     FLAGS,
@@ -240,7 +240,7 @@ void func_80B7F0D0(BgIkanaBlock* this, PlayState* play) {
     if ((sp24 != 2) && (this->unk_17A & (0x8 | 0x4 | 0x2 | 0x1))) {
         Player* player = GET_PLAYER(play);
 
-        player->stateFlags2 &= ~0x10;
+        player->stateFlags2 &= ~PLAYER_STATE2_10;
         this->dyna.pushForce = 0.0f;
     }
 
@@ -294,10 +294,10 @@ void func_80B7F290(BgIkanaBlock* this, PlayState* play) {
         Player* player = GET_PLAYER(play);
 
         if (!func_80B7EB94(this, play)) {
-            Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
+            Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
         }
 
-        player->stateFlags2 &= ~0x10;
+        player->stateFlags2 &= ~PLAYER_STATE2_10;
         this->dyna.pushForce = 0.0f;
 
         if (func_80B7EDC4(this, play)) {
@@ -334,10 +334,10 @@ void func_80B7F398(BgIkanaBlock* this, PlayState* play) {
     this->dyna.actor.world.pos.y += this->dyna.actor.velocity.y;
 
     if (func_80B7EE70(this, play)) {
-        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
-        Actor_PlaySfxAtPos(&this->dyna.actor,
-                           SurfaceType_GetSfx(&play->colCtx, this->dyna.actor.floorPoly, this->dyna.actor.floorBgId) +
-                               SFX_FLAG);
+        Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
+        Actor_PlaySfx(&this->dyna.actor,
+                      SurfaceType_GetSfx(&play->colCtx, this->dyna.actor.floorPoly, this->dyna.actor.floorBgId) +
+                          SFX_FLAG);
         func_80B7F0A4(this);
     }
 }

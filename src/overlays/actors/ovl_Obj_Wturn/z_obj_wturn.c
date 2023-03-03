@@ -22,7 +22,7 @@ void func_808A7BA0(ObjWturn* this, PlayState* play);
 void func_808A7C04(ObjWturn* this, PlayState* play);
 void func_808A7C78(ObjWturn* this, PlayState* play);
 
-const ActorInit Obj_Wturn_InitVars = {
+ActorInit Obj_Wturn_InitVars = {
     ACTOR_OBJ_WTURN,       ACTORCAT_ITEMACTION,        FLAGS,
     GAMEPLAY_KEEP,         sizeof(ObjWturn),           (ActorFunc)ObjWturn_Init,
     (ActorFunc)Actor_Noop, (ActorFunc)ObjWturn_Update, (ActorFunc)NULL,
@@ -70,9 +70,9 @@ void func_808A7AAC(ObjWturn* this, PlayState* play) {
     Vec3f subCamAt;
 
     ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
-    func_8016566C(140);
+    Play_EnableMotionBlur(140);
     this->subCamId = ActorCutscene_GetCurrentSubCamId(this->actor.cutscene);
-    func_800B7298(play, &this->actor, 21);
+    func_800B7298(play, &this->actor, PLAYER_CSMODE_21);
     subCamAt.x = player->actor.focus.pos.x;
     subCamAt.z = player->actor.focus.pos.z;
     subCamAt.y = player->actor.focus.pos.y;
@@ -96,10 +96,10 @@ void func_808A7C04(ObjWturn* this, PlayState* play) {
 
     this->actor.world.pos.y += this->actor.playerHeightRel;
     player->actor.shape.shadowAlpha = 0;
-    func_800B7298(play, &this->actor, 0x54);
-    func_800B8E58(player, NA_SE_VO_NAVY_ENEMY);
+    func_800B7298(play, &this->actor, PLAYER_CSMODE_84);
+    Player_PlaySfx(player, NA_SE_VO_NAVY_ENEMY);
     this->unk_14A = 0;
-    func_80165690();
+    Play_DisableMotionBlur();
     this->actionFunc = func_808A7C78;
 }
 
@@ -113,7 +113,7 @@ void func_808A7C78(ObjWturn* this, PlayState* play) {
     Play_SetCameraAtEyeUp(play, this->subCamId, &player->actor.focus.pos, &subCam->eye, &sSubCamUp);
     if (this->unk_14A == 1) {
         play->transitionType = TRANS_TYPE_64;
-        gSaveContext.nextTransitionType = TRANS_TYPE_03;
+        gSaveContext.nextTransitionType = TRANS_TYPE_FADE_WHITE;
         gSaveContext.nextCutsceneIndex = 0;
         if (play->sceneId == SCENE_F40) {
             play->nextEntrance = ENTRANCE(STONE_TOWER_INVERTED, 0);

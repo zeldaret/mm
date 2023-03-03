@@ -24,7 +24,7 @@ void func_80AE9180(ObjBigicicle* this, PlayState* play);
 void func_80AE9258(ObjBigicicle* this, PlayState* play);
 void func_80AE939C(ObjBigicicle* this, PlayState* play);
 
-const ActorInit Obj_Bigicicle_InitVars = {
+ActorInit Obj_Bigicicle_InitVars = {
     ACTOR_OBJ_BIGICICLE,
     ACTORCAT_PROP,
     FLAGS,
@@ -247,7 +247,7 @@ void func_80AE9258(ObjBigicicle* this, PlayState* play) {
             icePoly = (ObjIcePoly*)itemAction;
             temp_f0 = this->actor.world.pos.y - icePoly->actor.world.pos.y;
             if ((temp_f0 < icePoly->colliders1[0].dim.height) && (temp_f0 > 0.0f) &&
-                (Actor_XZDistanceBetweenActors(&this->actor, &icePoly->actor) < icePoly->colliders1[0].dim.radius)) {
+                (Actor_WorldDistXZToActor(&this->actor, &icePoly->actor) < icePoly->colliders1[0].dim.radius)) {
                 Flags_SetSwitch(play, this->actor.params);
                 this->actionFunc = func_80AE939C;
                 return;

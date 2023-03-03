@@ -25,7 +25,7 @@ void EnSb_Lunge(EnSb* this, PlayState* play);
 void EnSb_Bounce(EnSb* this, PlayState* play);
 void EnSb_ReturnToIdle(EnSb* this, PlayState* play);
 
-const ActorInit En_Sb_InitVars = {
+ActorInit En_Sb_InitVars = {
     ACTOR_EN_SB,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -155,7 +155,7 @@ void EnSb_SetupOpen(EnSb* this) {
                      ANIMMODE_ONCE, 0.0f);
     this->state = SHELLBLADE_OPEN;
     this->actionFunc = EnSb_Open;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KUSAMUSHI_VIBE);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_KUSAMUSHI_VIBE);
 }
 
 void EnSb_SetupWaitOpen(EnSb* this) {
@@ -172,7 +172,7 @@ void EnSb_SetupLunge(EnSb* this) {
     Animation_Change(&this->skelAnime, &object_sb_Anim_000124, playbackSpeed, 0.0f, frameCount, ANIMMODE_ONCE, 0);
     this->state = SHELLBLADE_LUNGE;
     this->actionFunc = EnSb_Lunge;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KUSAMUSHI_VIBE);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_KUSAMUSHI_VIBE);
 }
 
 void EnSb_SetupBounce(EnSb* this) {
@@ -270,7 +270,7 @@ void EnSb_Lunge(EnSb* this, PlayState* play) {
     Math_StepToF(&this->actor.speedXZ, 0.0f, 0.2f);
     if (this->actor.velocity.y <= -0.1f || this->actor.bgCheckFlags & 2) {
         if (!(this->actor.depthInWater > 0.0f)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_EYEGOLE_ATTACK);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_EYEGOLE_ATTACK);
         }
         this->actor.bgCheckFlags &= ~2;
         EnSb_SetupBounce(this);
@@ -377,7 +377,7 @@ void EnSb_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
     Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 25.0f, 20.0f, 5);
     EnSb_UpdateDamage(this, play);
-    if (player->stateFlags1 & 0x8000000) {
+    if (player->stateFlags1 & PLAYER_STATE1_8000000) {
         Collider_UpdateCylinder(&this->actor, &this->collider);
         if (this->vulnerableTimer == 0) {
             CollisionCheck_SetAT(play, &play->colChkCtx, &this->collider.base);

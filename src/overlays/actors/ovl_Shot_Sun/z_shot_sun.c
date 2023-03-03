@@ -19,7 +19,7 @@ void ShotSun_Update(Actor* thisx, PlayState* play);
 void ShotSun_UpdateForOcarina(ShotSun* this, PlayState* play);
 void ShotSun_UpdateHyliaSun(ShotSun* this, PlayState* play);
 
-const ActorInit Shot_Sun_InitVars = {
+ActorInit Shot_Sun_InitVars = {
     ACTOR_SHOT_SUN,
     ACTORCAT_PROP,
     FLAGS,
@@ -170,9 +170,10 @@ void ShotSun_UpdateHyliaSun(ShotSun* this, PlayState* play) {
 
     if (!(this->actor.xzDistToPlayer > 120.0f)) {
         if ((gSaveContext.save.time >= CLOCK_TIME(6, 30)) && (gSaveContext.save.time < CLOCK_TIME(7, 30))) {
-            cylinderPos.x = player->bodyPartsPos[7].x + (play->envCtx.unk_4 * (1.0f / 6.0f));
-            cylinderPos.y = (player->bodyPartsPos[7].y - 30.0f) + (play->envCtx.unk_8 * (1.0f / 6.0f));
-            cylinderPos.z = player->bodyPartsPos[7].z + (play->envCtx.unk_C * (1.0f / 6.0f));
+            cylinderPos.x = player->bodyPartsPos[PLAYER_BODYPART_HEAD].x + (play->envCtx.sunPos.x * (1.0f / 6.0f));
+            cylinderPos.y =
+                (player->bodyPartsPos[PLAYER_BODYPART_HEAD].y - 30.0f) + (play->envCtx.sunPos.y * (1.0f / 6.0f));
+            cylinderPos.z = player->bodyPartsPos[PLAYER_BODYPART_HEAD].z + (play->envCtx.sunPos.z * (1.0f / 6.0f));
 
             this->hitboxPos = cylinderPos;
 

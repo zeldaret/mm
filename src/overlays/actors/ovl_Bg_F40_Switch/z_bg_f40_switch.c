@@ -24,7 +24,7 @@ void BgF40Switch_Press(BgF40Switch* this, PlayState* play);
 void BgF40Switch_WaitToPress(BgF40Switch* this, PlayState* play);
 void BgF40Switch_IdleUnpressed(BgF40Switch* this, PlayState* play);
 
-const ActorInit Bg_F40_Switch_InitVars = {
+ActorInit Bg_F40_Switch_InitVars = {
     ACTOR_BG_F40_SWITCH,
     ACTORCAT_SWITCH,
     FLAGS,
@@ -129,7 +129,7 @@ void BgF40Switch_Destroy(Actor* thisx, PlayState* play) {
 void BgF40Switch_Unpress(BgF40Switch* this, PlayState* play) {
     this->dyna.actor.scale.y += 0.0495f;
     if (this->dyna.actor.scale.y >= 0.165f) {
-        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_IKANA_BLOCK_SWITCH);
+        Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_IKANA_BLOCK_SWITCH);
         this->actionFunc = BgF40Switch_IdleUnpressed;
         this->dyna.actor.scale.y = 0.165f;
     }
@@ -144,7 +144,7 @@ void BgF40Switch_IdlePressed(BgF40Switch* this, PlayState* play) {
 void BgF40Switch_Press(BgF40Switch* this, PlayState* play) {
     this->dyna.actor.scale.y -= 0.0495f;
     if (this->dyna.actor.scale.y <= 0.0165f) {
-        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_IKANA_BLOCK_SWITCH);
+        Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_IKANA_BLOCK_SWITCH);
         Rumble_Request(this->dyna.actor.xyzDistToPlayerSq, 120, 20, 10);
         if (this->isInitiator) {
             ActorCutscene_Stop(this->dyna.actor.cutscene);

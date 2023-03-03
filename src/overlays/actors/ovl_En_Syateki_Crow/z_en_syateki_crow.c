@@ -16,8 +16,8 @@ void EnSyatekiCrow_Destroy(Actor* thisx, PlayState* play);
 void EnSyatekiCrow_Update(Actor* thisx, PlayState* play);
 void EnSyatekiCrow_Draw(Actor* thisx, PlayState* play);
 
-void EnSyatekiCrow_SetupWaitForSpawn(EnSyatekiCrow* this);
-void EnSyatekiCrow_WaitForSpawn(EnSyatekiCrow* this, PlayState* play);
+void EnSyatekiCrow_SetupWaitForSignal(EnSyatekiCrow* this);
+void EnSyatekiCrow_WaitForSignal(EnSyatekiCrow* this, PlayState* play);
 void EnSyatekiCrow_SetupWaitToMove(EnSyatekiCrow* this);
 void EnSyatekiCrow_WaitToMove(EnSyatekiCrow* this, PlayState* play);
 void EnSyatekiCrow_Fly(EnSyatekiCrow* this, PlayState* play);
@@ -25,7 +25,7 @@ void EnSyatekiCrow_Dead(EnSyatekiCrow* this, PlayState* play);
 
 static Vec3f sZeroVec = { 0.0f, 0.0f, 0.0f };
 
-const ActorInit En_Syateki_Crow_InitVars = {
+ActorInit En_Syateki_Crow_InitVars = {
     ACTOR_EN_SYATEKI_CROW,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -105,7 +105,7 @@ void EnSyatekiCrow_Init(Actor* thisx, PlayState* play2) {
     this->maxPointIndex = path->count;
     this->deathTimer = 20;
     this->waitTimer = 0;
-    EnSyatekiCrow_SetupWaitForSpawn(this);
+    EnSyatekiCrow_SetupWaitForSignal(this);
 }
 
 void EnSyatekiCrow_Destroy(Actor* thisx, PlayState* play) {
@@ -114,7 +114,7 @@ void EnSyatekiCrow_Destroy(Actor* thisx, PlayState* play) {
     Collider_DestroyJntSph(play, &this->collider);
 }
 
-void EnSyatekiCrow_SetupWaitForSpawn(EnSyatekiCrow* this) {
+void EnSyatekiCrow_SetupWaitForSignal(EnSyatekiCrow* this) {
     Actor_SetScale(&this->actor, 0.03f);
     this->actor.speedXZ = 0.0f;
     this->actor.gravity = 0.0f;
@@ -123,13 +123,13 @@ void EnSyatekiCrow_SetupWaitForSpawn(EnSyatekiCrow* this) {
     this->actor.shape.rot = this->actor.world.rot;
     this->currentPointIndex = 1;
     this->actor.draw = NULL;
-    this->actionFunc = EnSyatekiCrow_WaitForSpawn;
+    this->actionFunc = EnSyatekiCrow_WaitForSignal;
 }
 
 /**
- * Waits until the shooting gallery man sets the appropriate Guay flag to spawn.
+ * Waits until the shooting gallery man sets the appropriate Guay flag.
  */
-void EnSyatekiCrow_WaitForSpawn(EnSyatekiCrow* this, PlayState* play) {
+void EnSyatekiCrow_WaitForSignal(EnSyatekiCrow* this, PlayState* play) {
     EnSyatekiMan* syatekiMan = (EnSyatekiMan*)this->actor.parent;
 
     if ((syatekiMan->shootingGameState == SG_GAME_STATE_RUNNING) && (this->isActive == true) &&
@@ -144,6 +144,10 @@ void EnSyatekiCrow_WaitForSpawn(EnSyatekiCrow* this, PlayState* play) {
     }
 }
 
+/**
+ * Positions the Guay at the start of its assigned path and rotates it to face the
+ * next point on the path, then sets it up to start waiting.
+ */
 void EnSyatekiCrow_SetupWaitToMove(EnSyatekiCrow* this) {
     Vec3f targetPos;
 
@@ -165,7 +169,7 @@ void EnSyatekiCrow_SetupWaitToMove(EnSyatekiCrow* this) {
  */
 void EnSyatekiCrow_WaitToMove(EnSyatekiCrow* this, PlayState* play) {
     if (((EN_SYATEKI_CROW_GET_WAIT_MOD(&this->actor) * 20) + 20) < this->waitTimer) {
-        Actor_PlaySfxAtPos(this->actor.parent, NA_SE_EN_KAICHO_CRY);
+        Actor_PlaySfx(this->actor.parent, NA_SE_EN_KAICHO_CRY);
         this->waitTimer = 0;
         this->actor.speedXZ = EN_SYATEKI_CROW_GET_SPEED_MOD(&this->actor) + 6.0f;
         this->actor.gravity = -0.5f;
@@ -181,7 +185,7 @@ void EnSyatekiCrow_Fly(EnSyatekiCrow* this, PlayState* play) {
     EnSyatekiMan* syatekiMan = (EnSyatekiMan*)this->actor.parent;
 
     if (syatekiMan->shootingGameState != SG_GAME_STATE_RUNNING) {
-        EnSyatekiCrow_SetupWaitForSpawn(this);
+        EnSyatekiCrow_SetupWaitForSignal(this);
         return;
     }
 
@@ -203,13 +207,13 @@ void EnSyatekiCrow_Fly(EnSyatekiCrow* this, PlayState* play) {
     } else {
         this->isActive = false;
         syatekiMan->guayFlags &= ~(1 << EN_SYATEKI_CROW_GET_INDEX(&this->actor));
-        EnSyatekiCrow_SetupWaitForSpawn(this);
+        EnSyatekiCrow_SetupWaitForSignal(this);
     }
 
     SkelAnime_Update(&this->skelAnime);
     this->actor.shape.yOffset = (fabsf(this->skelAnime.curFrame - 3.0f) * 150.0f) + 1700.0f;
     if ((syatekiMan->perGameVar1.guaySpawnTimer % 90) == 0) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KAICHO_CRY);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_KAICHO_CRY);
     }
 }
 
@@ -222,7 +226,7 @@ void EnSyatekiCrow_SetupDead(EnSyatekiCrow* this) {
     this->actor.velocity.y = 0.0f;
     Animation_Change(&this->skelAnime, &gGuayFlyAnim, 0.4f, 0.0f, 0.0f, ANIMMODE_LOOP_INTERP, -3.0f);
     this->actor.bgCheckFlags &= ~1;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KAICHO_DEAD);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_KAICHO_DEAD);
     Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 40);
     this->actionFunc = EnSyatekiCrow_Dead;
 }
@@ -242,7 +246,7 @@ void EnSyatekiCrow_Dead(EnSyatekiCrow* this, PlayState* play) {
         func_800B3030(play, &this->actor.world.pos, &sZeroVec, &sZeroVec, this->actor.scale.x * 10000.0f, 0, 0);
         syatekiMan->guayHitCounter++;
         syatekiMan->guayFlags &= ~(1 << EN_SYATEKI_CROW_GET_INDEX(&this->actor));
-        EnSyatekiCrow_SetupWaitForSpawn(this);
+        EnSyatekiCrow_SetupWaitForSignal(this);
     }
 
     this->deathTimer++;

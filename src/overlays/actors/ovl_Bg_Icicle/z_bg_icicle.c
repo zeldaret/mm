@@ -42,7 +42,7 @@ static ColliderCylinderInit sCylinderInit = {
     { 13, 120, 0, { 0, 0, 0 } },
 };
 
-const ActorInit Bg_Icicle_InitVars = {
+ActorInit Bg_Icicle_InitVars = {
     ACTOR_BG_ICICLE,
     ACTORCAT_PROP,
     FLAGS,
@@ -142,7 +142,7 @@ void BgIcicle_Shiver(BgIcicle* this, PlayState* play) {
     }
 
     if (!(this->shiverTimer % 4)) {
-        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_ICE_SWING);
+        Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_ICE_SWING);
     }
 
     if (this->shiverTimer == 0) {

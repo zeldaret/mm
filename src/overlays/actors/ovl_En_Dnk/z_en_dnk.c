@@ -24,7 +24,7 @@ void func_80A52134(EnDnk* this, PlayState* play);
 
 static s16 D_80A521A0 = 0;
 
-const ActorInit En_Dnk_InitVars = {
+ActorInit En_Dnk_InitVars = {
     ACTOR_EN_DNK,
     ACTORCAT_NPC,
     FLAGS,
@@ -433,11 +433,11 @@ void func_80A52074(EnDnk* this, PlayState* play) {
             break;
 
         case 438:
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DEKNUTS_DANCE_BIG);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_DEKNUTS_DANCE_BIG);
             break;
 
         case 493:
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_APPEAR);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_STALKIDS_APPEAR);
             break;
     }
 

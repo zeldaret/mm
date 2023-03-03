@@ -21,7 +21,7 @@ void OceffSpot_End(OceffSpot* this, PlayState* play);
 
 void OceffSpot_SetupAction(OceffSpot* this, OceffSpotActionFunc actionFunc);
 
-const ActorInit Oceff_Spot_InitVars = {
+ActorInit Oceff_Spot_InitVars = {
     ACTOR_OCEFF_SPOT,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -80,7 +80,7 @@ void OceffSpot_End(OceffSpot* this, PlayState* play) {
         this->unk16C -= 0.05f;
     } else {
         Actor_Kill(&this->actor);
-        if ((REG(15) != 0x190) && (play->msgCtx.unk12046 == 0)) {
+        if ((R_TIME_SPEED != 400) && (play->msgCtx.unk12046 == 0)) {
             if ((play->msgCtx.ocarinaAction != 0x39) || (play->msgCtx.ocarinaMode != 0xA)) {
                 gSaveContext.sunsSongState = SUNSSONG_START;
             }

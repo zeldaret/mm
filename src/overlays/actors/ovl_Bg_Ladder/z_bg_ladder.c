@@ -20,7 +20,7 @@ void BgLadder_StartCutscene(BgLadder* this, PlayState* play);
 void BgLadder_FadeIn(BgLadder* this, PlayState* play);
 void BgLadder_DoNothing(BgLadder* this, PlayState* play);
 
-const ActorInit Bg_Ladder_InitVars = {
+ActorInit Bg_Ladder_InitVars = {
     ACTOR_BG_LADDER,
     ACTORCAT_PROP,
     FLAGS,
@@ -100,7 +100,7 @@ void BgLadder_StartCutscene(BgLadder* this, PlayState* play) {
     if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
         this->dyna.actor.draw = BgLadder_Draw;
-        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_SECRET_LADDER_APPEAR);
+        Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_SECRET_LADDER_APPEAR);
         this->action = BgLadder_FadeIn;
     } else {
         ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);

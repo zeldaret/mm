@@ -29,7 +29,7 @@ void func_808CCB08(EnVm* this);
 void func_808CCB50(EnVm* this, PlayState* play);
 void func_808CCCF0(EnVm* this, PlayState* play);
 
-const ActorInit En_Vm_InitVars = {
+ActorInit En_Vm_InitVars = {
     ACTOR_EN_VM,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -265,7 +265,7 @@ void func_808CC610(EnVm* this, PlayState* play) {
 }
 
 void func_808CC788(EnVm* this) {
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BIMOS_AIM);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_BIMOS_AIM);
     Animation_Change(&this->skelAnime, &object_vm_Anim_000068, 3.0f, 3.0f, 7.0f, ANIMMODE_ONCE, 0.0f);
     this->unk_214 = 305;
     this->unk_220 = 0.06f;
@@ -328,7 +328,7 @@ void func_808CCA10(EnVm* this) {
     this->unk_210 = 0;
     this->unk_224 = 0.0f;
     this->unk_220 = 0.0f;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_FREEZE);
     this->actionFunc = func_808CCAA4;
 }
 
@@ -440,7 +440,7 @@ void EnVm_Update(Actor* thisx, PlayState* play) {
         if ((play->gameplayFrames % 2) != 0) {
             func_800BBFB0(play, &this->unk_234, 6.0f, 1, 120, 20, 1);
         }
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BIMOS_LAZER_GND - SFX_FLAG);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_BIMOS_LAZER_GND - SFX_FLAG);
     }
 
     if (this->unk_224 > 0.0f) {

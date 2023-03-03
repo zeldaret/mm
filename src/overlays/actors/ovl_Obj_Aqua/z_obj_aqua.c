@@ -24,7 +24,7 @@ void func_80ACBDFC(ObjAqua* this, PlayState* play);
 
 void func_80ACBD34(ObjAqua* this);
 
-const ActorInit Obj_Aqua_InitVars = {
+ActorInit Obj_Aqua_InitVars = {
     ACTOR_OBJ_AQUA,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -179,7 +179,7 @@ void func_80ACBC8C(ObjAqua* this, PlayState* play) {
         if (this->actor.bgCheckFlags & 1) {
             func_80ACB7F4(this, play);
             func_80ACBA10(this);
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BOTTLE_WATERING);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_BOTTLE_WATERING);
             func_80ACBD34(this);
         } else {
             func_80ACB6A0(this, play);

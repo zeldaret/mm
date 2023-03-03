@@ -28,7 +28,7 @@ typedef enum EffLastDayAction {
     /* 0x3 */ EFFLASTDAY_ACTION_3
 } EffLastDayAction;
 
-const ActorInit Eff_Lastday_InitVars = {
+ActorInit Eff_Lastday_InitVars = {
     ACTOR_EFF_LASTDAY,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -195,7 +195,7 @@ void func_80BEBF78(EffLastday* this, PlayState* play) {
             case EFFLASTDAY_ACTION_2:
                 if (!this->actor.home.rot.z) {
                     this->actor.home.rot.z = true;
-                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_COMING_FIRE);
+                    Actor_PlaySfx(&this->actor, NA_SE_EV_COMING_FIRE);
                 }
                 this->actor.draw = EffLastday_Draw;
                 if (this->alpha < 255) {

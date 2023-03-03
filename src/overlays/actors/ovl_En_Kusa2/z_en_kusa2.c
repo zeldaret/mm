@@ -4,6 +4,7 @@
  * Description: Keaton grass
  */
 
+#include "prevent_bss_reordering.h"
 #include "z_en_kusa2.h"
 #include "objects/gameplay_field_keep/gameplay_field_keep.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
@@ -44,16 +45,16 @@ void func_80A5E6F0(Actor* thisx, PlayState* play);
 void func_80A5E9B4(Actor* thisx, PlayState* play);
 void func_80A5EA48(Actor* thisx, PlayState* play);
 
-static EnKusa2UnkBssStruct D_80A5F1C0;
-static u32 D_80A60900;
-static MtxF D_80A60908[8];
-static s16 D_80A60B08;
-static s16 D_80A60B0A;
-static s16 D_80A60B0C;
-static s16 D_80A60B0E;
-static s16 D_80A60B10;
+EnKusa2UnkBssStruct D_80A5F1C0;
+u32 D_80A60900;
+MtxF D_80A60908[8];
+s16 D_80A60B08;
+s16 D_80A60B0A;
+s16 D_80A60B0C;
+s16 D_80A60B0E;
+s16 D_80A60B10;
 
-const ActorInit En_Kusa2_InitVars = {
+ActorInit En_Kusa2_InitVars = {
     ACTOR_EN_KUSA2,
     ACTORCAT_PROP,
     FLAGS,
@@ -85,11 +86,11 @@ static ColliderCylinderInit sCylinderInit = {
     { 6, 44, 0, { 0, 0, 0 } },
 };
 
-static u8 D_80A5EAEC = 1;
-static s16 D_80A5EAF0 = 0;
-static Vec3s D_80A5EAF4 = { 0, 0, 0 };
-static Vec3s D_80A5EAFC = { 0, 0, 0 };
-static Vec3s D_80A5EB04 = { 0, 0, 0 };
+u8 D_80A5EAEC = 1;
+s16 D_80A5EAF0 = 0;
+Vec3s D_80A5EAF4 = { 0, 0, 0 };
+Vec3s D_80A5EAFC = { 0, 0, 0 };
+Vec3s D_80A5EB04 = { 0, 0, 0 };
 
 void func_80A5B160(EnKusa2* this, PlayState* play) {
     s32 i;
@@ -700,7 +701,7 @@ void func_80A5CB74(EnKusa2* this) {
     sp3E = Rand_S16Offset(-10000, 20000) + this->actor.world.rot.y;
 
     if (this->unk_1C0 != NULL) {
-        sp36 = Actor_YawBetweenActors(&this->actor, &this->unk_1C0->actor);
+        sp36 = Actor_WorldYawTowardActor(&this->actor, &this->unk_1C0->actor);
         sp3C = Rand_S16Offset(-4000, 8000) + sp36;
     } else {
         sp3C = 0;
@@ -975,12 +976,12 @@ void func_80A5D7C4(EnKusa2* this, PlayState* play) {
         if ((this->unk_1C0 != NULL) && (this->unk_1C0->unk_1BE != 0)) {
             this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
             if (this2->unk_1C0 != NULL) {
-                sp2A = Actor_YawBetweenActors(&this->unk_1C0->actor, &this->actor);
+                sp2A = Actor_WorldYawTowardActor(&this->unk_1C0->actor, &this->actor);
                 this->actor.home.rot.y = Rand_S16Offset(-1500, 3000) + sp2A;
             }
             this->unk_1C8 = Rand_S16Offset(72, 16);
             this->actor.velocity.y = 8.8f;
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_WALK);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_WALK);
             func_80A5DC70(this);
         }
 
@@ -1054,7 +1055,7 @@ void func_80A5D9C8(EnKusa2* this, PlayState* play) {
 
         this->unk_1D0--;
         if (this->unk_1D0 <= 0) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KUSAMUSHI_VIBE);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_KUSAMUSHI_VIBE);
             this->unk_1D0 = (Rand_Next() >> 0x1D) + 14;
         }
 
@@ -1089,7 +1090,7 @@ void func_80A5DC98(EnKusa2* this, PlayState* play) {
         if (this->actor.bgCheckFlags & 1) {
             func_80A5CD0C(this);
             func_80A5BB40(this, play, 1);
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_WALK);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_WALK);
             func_80A5DE18(this);
         } else if (this->actor.bgCheckFlags & 0x20) {
             func_80A5BDB0(this, play);
@@ -1121,14 +1122,14 @@ void func_80A5DEB4(EnKusa2* this, PlayState* play) {
         if (this->unk_1D0 > 0) {
             this->unk_1D0--;
             if (this->unk_1D0 == 0) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KUSAMUSHI_VIBE);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_KUSAMUSHI_VIBE);
             }
         }
 
         if (this->unk_1D1 > 0) {
             this->unk_1D1--;
             if (this->unk_1D1 == 0) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KUSAMUSHI_VIBE);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_KUSAMUSHI_VIBE);
             }
         }
 
@@ -1343,7 +1344,7 @@ void func_80A5E80C(PlayState* play, s32 arg1) {
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, arg1);
-    gSPDisplayList(POLY_XLU_DISP++, gKusaBushType2);
+    gSPDisplayList(POLY_XLU_DISP++, gKusaBushType2DL);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
@@ -1356,7 +1357,7 @@ void EnKusa2_Draw(Actor* thisx, PlayState* play) {
             (this->actor.projectedPos.z < 400.0f)) {
             func_80A5B954(&D_80A60908[this->unk_1CE], 0.0015f);
         }
-        Gfx_DrawDListOpa(play, gKusaBushType1);
+        Gfx_DrawDListOpa(play, gKusaBushType1DL);
     } else if (this->actor.projectedPos.z < 1300.0f) {
         func_80A5E80C(play, (1300.0f - this->actor.projectedPos.z) * 2.55f);
     }
@@ -1370,14 +1371,14 @@ void func_80A5E9B4(Actor* thisx, PlayState* play) {
     sp18.z = thisx->shape.rot.z + D_80A5EAFC.z;
     Matrix_SetTranslateRotateYXZ(thisx->world.pos.x, thisx->world.pos.y, thisx->world.pos.z, &sp18);
     Matrix_Scale(thisx->scale.x, thisx->scale.y, thisx->scale.z, MTXMODE_APPLY);
-    Gfx_DrawDListOpa(play, gKusaBushType1);
+    Gfx_DrawDListOpa(play, gKusaBushType1DL);
 }
 
 void func_80A5EA48(Actor* thisx, PlayState* play) {
     EnKusa2* this = THIS;
 
     if (this->unk_1CF == 0xFF) {
-        Gfx_DrawDListOpa(play, gKusaBushType1);
+        Gfx_DrawDListOpa(play, gKusaBushType1DL);
     } else {
         func_80A5E80C(play, this->unk_1CF);
     }

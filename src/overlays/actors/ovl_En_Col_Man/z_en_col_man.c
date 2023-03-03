@@ -47,7 +47,7 @@ static ColliderCylinderInit sCylinderInit = {
     { 10, 11, 1, { 0, 0, 0 } },
 };
 
-const ActorInit En_Col_Man_InitVars = {
+ActorInit En_Col_Man_InitVars = {
     ACTOR_EN_COL_MAN,
     ACTORCAT_MISC,
     FLAGS,
@@ -94,7 +94,7 @@ void EnColMan_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void func_80AFDD60(EnColMan* this) {
-    if (!(gSaveContext.save.weekEventReg[56] & 2)) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_56_02)) {
         this->actor.draw = func_80AFE414;
         this->actor.shape.yOffset = 700.0f;
         if (this->actor.params == EN_COL_MAN_HEART_PIECE) {
@@ -123,14 +123,14 @@ void func_80AFDE00(EnColMan* this, PlayState* play) {
             this->actor.speedXZ = 0.0f;
         }
     }
-    if (!(gSaveContext.save.weekEventReg[56] & 2)) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_56_02)) {
         this->actor.shape.rot.y += 0x3E8;
     }
     if (Actor_HasParent(&this->actor, play)) {
         this->actor.parent = NULL;
         this->actor.draw = NULL;
         this->actionFunc = EnColMan_SetHeartPieceCollectedAndKill;
-    } else if (!(gSaveContext.save.weekEventReg[56] & 2)) {
+    } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_56_02)) {
         Actor_PickUp(&this->actor, play, GI_HEART_PIECE, 40.0f, 40.0f);
     } else {
         Actor_PickUp(&this->actor, play, GI_RECOVERY_HEART, 40.0f, 40.0f);
@@ -139,7 +139,7 @@ void func_80AFDE00(EnColMan* this, PlayState* play) {
 
 void EnColMan_SetHeartPieceCollectedAndKill(EnColMan* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_DONE) && Message_ShouldAdvance(play)) {
-        gSaveContext.save.weekEventReg[56] |= 2;
+        SET_WEEKEVENTREG(WEEKEVENTREG_56_02);
         Actor_Kill(&this->actor);
     }
 }
@@ -167,7 +167,7 @@ void func_80AFDFB4(EnColMan* this, PlayState* play) {
             this->actor.speedXZ = 2.0f + BREG(56) + Rand_ZeroFloat(2.0f);
             this->actor.velocity.y = 12.0f + BREG(57) + Rand_ZeroFloat(5.0f);
             this->hasSetRandomValues = true;
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_ANSATSUSYA_ROCK);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_ANSATSUSYA_ROCK);
             return;
         }
 
@@ -210,7 +210,7 @@ void func_80AFE25C(EnColMan* this, PlayState* play) {
             }
         }
 
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_BOMB_EXPLOSION);
+        Actor_PlaySfx(&this->actor, NA_SE_IT_BOMB_EXPLOSION);
         Actor_Kill(&this->actor);
     }
 }
@@ -244,7 +244,7 @@ void func_80AFE4AC(Actor* thisx, PlayState* play) {
     func_8012C2DC(play->state.gfxCtx);
     func_8012C28C(play->state.gfxCtx);
     OPEN_DISPS(play->state.gfxCtx);
-    POLY_OPA_DISP = func_801660B8(play, POLY_OPA_DISP);
+    POLY_OPA_DISP = Play_SetFog(play, POLY_OPA_DISP);
     POLY_OPA_DISP = func_8012C724(POLY_OPA_DISP);
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(gDropRecoveryHeartTex));
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -266,7 +266,7 @@ void func_80AFE584(Actor* thisx, PlayState* play) {
 void func_80AFE650(Actor* thisx, PlayState* play) {
     func_8012C28C(play->state.gfxCtx);
     OPEN_DISPS(play->state.gfxCtx);
-    POLY_OPA_DISP = func_801660B8(play, POLY_OPA_DISP);
+    POLY_OPA_DISP = Play_SetFog(play, POLY_OPA_DISP);
     POLY_OPA_DISP = func_8012C724(POLY_OPA_DISP);
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(gDropBombTex));
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

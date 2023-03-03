@@ -23,7 +23,7 @@ void EnBombers2_ChangeAnim(EnBombers2* this, s32 animIndex, f32 playSpeed);
 void func_80C04D00(EnBombers2* this);
 void func_80C050B8(EnBombers2* this, PlayState* play);
 
-const ActorInit En_Bombers2_InitVars = {
+ActorInit En_Bombers2_InitVars = {
     ACTOR_EN_BOMBERS2,
     ACTORCAT_NPC,
     FLAGS,
@@ -94,7 +94,8 @@ void EnBombers2_Init(Actor* thisx, PlayState* play) {
                        this->jointTable, OBJECT_CS_LIMB_MAX);
     this->actor.targetMode = 6;
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
-    if ((gSaveContext.save.weekEventReg[73] & 0x80) || (gSaveContext.save.entrance == ENTRANCE(EAST_CLOCK_TOWN, 2))) {
+
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_73_80) || (gSaveContext.save.entrance == ENTRANCE(EAST_CLOCK_TOWN, 2))) {
         this->actor.world.pos.x += Math_SinS(this->actor.home.rot.y + 0xC100) * 50.0f;
         cos = Math_CosS(this->actor.home.rot.y + 0xC100) * 50.0f;
         this->unk_2AC = 1;
@@ -165,7 +166,7 @@ void func_80C04BA0(EnBombers2* this, PlayState* play) {
 
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->unk_2B6 = this->actor.world.rot.y;
-        gSaveContext.save.weekEventReg[86] |= 2;
+        SET_WEEKEVENTREG(WEEKEVENTREG_86_02);
         func_80C04D00(this);
         return;
     }
@@ -233,7 +234,7 @@ void func_80C04D8C(EnBombers2* this, PlayState* play) {
                 this->textIdIndex = 6;
                 this->actor.textId = sTextIds[this->textIdIndex];
                 func_80151938(play, this->actor.textId);
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_PIECE_OF_HEART);
+                Actor_PlaySfx(&this->actor, NA_SE_SY_PIECE_OF_HEART);
                 this->talkState = TEXT_STATE_5;
                 return;
             }
@@ -265,7 +266,7 @@ void func_80C04D8C(EnBombers2* this, PlayState* play) {
                         this->correctDigitSlots[j] = false;
                     }
                     this->textIdIndex = 4;
-                    Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_ERROR);
+                    Actor_PlaySfx(&this->actor, NA_SE_SY_ERROR);
                     this->actor.textId = sTextIds[this->textIdIndex];
                     func_80151938(play, this->actor.textId);
                     this->talkState = TEXT_STATE_5;
@@ -329,7 +330,7 @@ void func_80C0520C(EnBombers2* this, PlayState* play) {
                 EnBombers2_ChangeAnim(this, 6, 1.0f);
                 this->unk_2A8 = 0;
                 this->unk_2C0 = 1;
-                gSaveContext.save.weekEventReg[73] |= 0x80;
+                SET_WEEKEVENTREG(WEEKEVENTREG_73_80);
                 ActorCutscene_Stop(this->cutscene);
                 this->unk_2AC = 1;
                 this->actor.textId = sTextIds[this->textIdIndex];
@@ -356,7 +357,7 @@ void EnBombers2_Update(Actor* thisx, PlayState* play) {
     if ((this->animIndex == 2) &&
         (Animation_OnFrame(&this->skelAnime, 9.0f) || Animation_OnFrame(&this->skelAnime, 10.0f) ||
          Animation_OnFrame(&this->skelAnime, 17.0f) || Animation_OnFrame(&this->skelAnime, 18.0f))) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BOMBERS_WALK);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_BOMBERS_WALK);
     }
     this->actor.shape.rot.y = this->actor.world.rot.y;
     if (this->unk_2C0 != 2) {

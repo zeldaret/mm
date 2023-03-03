@@ -25,7 +25,7 @@ void func_809A3D38(ObjPzlblock* this, PlayState* play);
 void func_809A3E58(Actor* thisx, PlayState* play);
 void func_809A3F0C(Actor* thisx, PlayState* play);
 
-const ActorInit Obj_Pzlblock_InitVars = {
+ActorInit Obj_Pzlblock_InitVars = {
     ACTOR_OBJ_PZLBLOCK,
     ACTORCAT_PROP,
     FLAGS,
@@ -268,7 +268,7 @@ void func_809A3A74(ObjPzlblock* this, PlayState* play) {
             }
         }
 
-        GET_PLAYER(play)->stateFlags2 &= ~0x10;
+        GET_PLAYER(play)->stateFlags2 &= ~PLAYER_STATE2_10;
         this->dyna.pushForce = 0.0f;
     }
 }
@@ -287,19 +287,19 @@ void func_809A3BC0(ObjPzlblock* this, PlayState* play) {
 
         if ((params == 4) || (params == 5) || (params == 6)) {
             if (!func_809A35EC(this, this->unk_16C) || func_809A33E0(this, play, 0x5A)) {
-                Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
+                Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
             }
         } else if (func_809A35EC(this, this->unk_16C)) {
             if (func_809A33E0(this, play, 0x5A)) {
-                Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
+                Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
             }
         } else {
-            Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
+            Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
             Flags_SetSwitch(play, OBJPZLBLOCK_GET_7F(&this->dyna.actor));
             sp20 = 1;
         }
 
-        player->stateFlags2 &= ~0x10;
+        player->stateFlags2 &= ~PLAYER_STATE2_10;
         this->dyna.pushForce = 0.0f;
         if (sp20 == 0) {
             func_809A3A48(this);
@@ -318,7 +318,7 @@ void func_809A3D1C(ObjPzlblock* this) {
 
 void func_809A3D38(ObjPzlblock* this, PlayState* play) {
     if (fabsf(this->dyna.pushForce) > 0.1f) {
-        GET_PLAYER(play)->stateFlags2 &= ~0x10;
+        GET_PLAYER(play)->stateFlags2 &= ~PLAYER_STATE2_10;
         this->dyna.pushForce = 0.0f;
     }
 }

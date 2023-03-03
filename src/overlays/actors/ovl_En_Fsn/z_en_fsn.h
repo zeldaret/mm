@@ -68,6 +68,4 @@ typedef struct EnFsn {
     /* 0x44E */ u16 flags;
 } EnFsn; // size = 0x450
 
-extern const ActorInit En_Fsn_InitVars;
-
 #endif // Z_EN_FSN_H

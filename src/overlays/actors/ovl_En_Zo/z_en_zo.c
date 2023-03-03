@@ -19,7 +19,7 @@ void EnZo_FollowPath(EnZo* this, PlayState* play);
 void EnZo_TreadWater(EnZo* this, PlayState* play);
 void EnZo_DoNothing(EnZo* this, PlayState* play);
 
-const ActorInit En_Zo_InitVars = {
+ActorInit En_Zo_InitVars = {
     ACTOR_EN_ZO,
     ACTORCAT_NPC,
     FLAGS,
@@ -142,12 +142,12 @@ s32 EnZo_PlayWalkingSound(EnZo* this, PlayState* play) {
 
     this->isLeftFootGrounded = isFootGrounded = SubS_IsFloorAbove(play, &this->leftFootPos, -6.0f);
     if ((this->isLeftFootGrounded) && (!leftWasGrounded) && (isFootGrounded)) {
-        Actor_PlaySfxAtPos(&this->actor, sfxId);
+        Actor_PlaySfx(&this->actor, sfxId);
     }
 
     this->isRightFootGrounded = isFootGrounded = SubS_IsFloorAbove(play, &this->rightFootPos, -6.0f);
     if ((this->isRightFootGrounded) && (!rightWasGrounded) && (isFootGrounded)) {
-        Actor_PlaySfxAtPos(&this->actor, sfxId);
+        Actor_PlaySfx(&this->actor, sfxId);
     }
 
     return 0;
@@ -185,7 +185,7 @@ void EnZo_LookAtPlayer(EnZo* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     if (SubS_AngleDiffLessEqual(this->actor.shape.rot.y, 0x2710, this->actor.yawTowardsPlayer)) {
         point.x = player->actor.world.pos.x;
-        point.y = player->bodyPartsPos[7].y + 3.0f;
+        point.y = player->bodyPartsPos[PLAYER_BODYPART_HEAD].y + 3.0f;
         point.z = player->actor.world.pos.z;
         SubS_TrackPoint(&point, &this->actor.focus.pos, &this->actor.shape.rot, &this->trackTarget, &this->headRot,
                         &this->upperBodyRot, &sTrackOptions);

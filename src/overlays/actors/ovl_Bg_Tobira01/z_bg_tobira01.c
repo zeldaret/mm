@@ -16,7 +16,7 @@ void BgTobira01_Destroy(Actor* thisx, PlayState* play);
 void BgTobira01_Update(Actor* thisx, PlayState* play);
 void BgTobira01_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit Bg_Tobira01_InitVars = {
+ActorInit Bg_Tobira01_InitVars = {
     ACTOR_BG_TOBIRA01,
     ACTORCAT_PROP,
     FLAGS,
@@ -38,12 +38,12 @@ void BgTobira01_Open(BgTobira01* this, PlayState* play) {
             ActorCutscene_Stop(0x7C);
         } else if (ActorCutscene_GetCanPlayNext(cutsceneId)) {
             ActorCutscene_StartAndSetUnkLinkFields(cutsceneId, &this->dyna.actor);
-            gSaveContext.save.weekEventReg[88] |= 0x40;
+            SET_WEEKEVENTREG(WEEKEVENTREG_88_40);
             this->playCutscene = false;
         } else {
             ActorCutscene_SetIntentToPlay(cutsceneId);
         }
-    } else if (!(gSaveContext.save.weekEventReg[88] & 0x40) && (this->timer == 0) && (play->actorCtx.unk1F5 != 0) &&
+    } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_88_40) && (this->timer == 0) && (play->actorCtx.unk1F5 != 0) &&
                (play->actorCtx.unk1F4 == 0) &&
                (SurfaceType_GetSceneExitIndex(&play->colCtx, player->actor.floorPoly, player->actor.floorBgId) == 6)) {
         this->playCutscene = true;
@@ -52,7 +52,7 @@ void BgTobira01_Open(BgTobira01* this, PlayState* play) {
 
     prevTimer = this->timer;
 
-    if (gSaveContext.save.weekEventReg[88] & 0x40) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_88_40)) {
         this->timer++;
     } else {
         this->timer--;
@@ -62,13 +62,14 @@ void BgTobira01_Open(BgTobira01* this, PlayState* play) {
 
     if (this->timer != prevTimer) {
         if (1) {}
-        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_STONEDOOR_OPEN_S - SFX_FLAG);
+        Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_STONEDOOR_OPEN_S - SFX_FLAG);
         this->dyna.actor.world.pos.y = (this->yOffset = (this->timer * (5.0f / 3.0f)) + this->dyna.actor.home.pos.y);
         this->timer2 = 180;
     }
 
-    if (!(player->stateFlags1 & 0x40) && (gSaveContext.save.weekEventReg[88] & 0x40) && (DECR(this->timer2) == 0)) {
-        gSaveContext.save.weekEventReg[88] &= (u8)~0x40;
+    if (!(player->stateFlags1 & PLAYER_STATE1_40) && CHECK_WEEKEVENTREG(WEEKEVENTREG_88_40) &&
+        (DECR(this->timer2) == 0)) {
+        CLEAR_WEEKEVENTREG(WEEKEVENTREG_88_40);
     }
 }
 
@@ -78,7 +79,7 @@ void BgTobira01_Init(Actor* thisx, PlayState* play) {
 
     DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
     DynaPolyActor_LoadMesh(play, &this->dyna, &object_spot11_obj_Colheader_0011C0);
-    gSaveContext.save.weekEventReg[88] &= (u8)~0x40;
+    CLEAR_WEEKEVENTREG(WEEKEVENTREG_88_40);
     Actor_SetScale(&this->dyna.actor, 1.0f);
     this->timer2 = gSaveContext.save.isNight;
     this->timer = 0;

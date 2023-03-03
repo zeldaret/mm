@@ -28,7 +28,7 @@ void func_808DB100(EnSw* this, PlayState* play);
 void func_808DB25C(EnSw* this, PlayState* play);
 void func_808DB2E0(EnSw* this, PlayState* play);
 
-const ActorInit En_Sw_InitVars = {
+ActorInit En_Sw_InitVars = {
     ACTOR_EN_SW,
     ACTORCAT_NPC,
     FLAGS,
@@ -277,7 +277,7 @@ void func_808D90F0(EnSw* this, s32 arg1, s16 arg2) {
         temp = arg2;
     }
 
-    Matrix_RotateAxisF(BINANG_TO_RAD(temp), &this->unk_368, MTXMODE_NEW);
+    Matrix_RotateAxisF(BINANG_TO_RAD_ALT(temp), &this->unk_368, MTXMODE_NEW);
     Matrix_MultVec3f(&this->unk_350, &sp2C);
     Math_Vec3f_Copy(&this->unk_350, &sp2C);
     Math3D_CrossProduct(&this->unk_368, &this->unk_350, &this->unk_35C);
@@ -524,9 +524,9 @@ s32 func_808D9A70(EnSw* this, PlayState* play) {
         } else {
             if (this->unk_456 != 0) {
                 if (!ENSW_GET_3(&this->actor)) {
-                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALWALL_ROLL);
+                    Actor_PlaySfx(&this->actor, NA_SE_EN_STALWALL_ROLL);
                 } else {
-                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALGOLD_ROLL);
+                    Actor_PlaySfx(&this->actor, NA_SE_EN_STALGOLD_ROLL);
                 }
                 this->unk_456--;
                 this->skelAnime.curFrame = 0.0f;
@@ -575,7 +575,7 @@ s32 func_808D9C18(EnSw* this) {
         this->actor.world.rot.y = Math_Vec3f_Yaw(&sp3C, &sp30);
     }
 
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALTURA_APPEAR);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_STALTURA_APPEAR);
 
     if (ENSW_GET_3(&this->actor) == 1) {
         Actor_SetScale(&this->actor, 0.0f);
@@ -721,12 +721,12 @@ s32 func_808DA08C(EnSw* this, PlayState* play) {
             ret = true;
         } else if (this->actor.colChkInfo.damageEffect == 1) {
             if (this->unk_45A == 0) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_FREEZE);
                 this->unk_45A = 40;
                 Actor_SetColorFilter(&this->actor, 0, 200, 0, this->unk_45A);
             }
         } else {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALTU_DAMAGE);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_STALTU_DAMAGE);
             this->unk_458 = 20;
             this->unk_45A = 0;
             Actor_SetColorFilter(&this->actor, 0x4000, 200, 0, this->unk_458);
@@ -738,8 +738,8 @@ s32 func_808DA08C(EnSw* this, PlayState* play) {
 void func_808DA350(EnSw* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if ((player->stateFlags1 & 0x200000) && (this->actor.xyzDistToPlayerSq < 8000.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALWALL_LAUGH);
+    if ((player->stateFlags1 & PLAYER_STATE1_200000) && (this->actor.xyzDistToPlayerSq < 8000.0f)) {
+        Actor_PlaySfx(&this->actor, NA_SE_EN_STALWALL_LAUGH);
         Math_Vec3f_Copy(&this->unk_374, &player->actor.world.pos);
         this->unk_410 &= ~0x20;
         this->unk_414 = 0.0f;
@@ -761,10 +761,10 @@ void func_808DA3F4(EnSw* this, PlayState* play) {
         Math_Vec3f_Copy(&sp38, &this->unk_374);
         func_808D9894(this, &sp38);
 
-        temp_v0 = Math_FAtan2F(sp38.z, sp38.x);
+        temp_v0 = Math_Atan2S_XY(sp38.z, sp38.x);
         if (ABS_ALT(temp_v0) < temp_s1) {
             this->skelAnime.curFrame = 0.0f;
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALWALL_DASH);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_STALWALL_DASH);
             this->unk_414 = 0.0f;
             if (this->unk_410 & 0x20) {
                 this->actionFunc = func_808DA6FC;
@@ -775,7 +775,7 @@ void func_808DA3F4(EnSw* this, PlayState* play) {
         }
         temp_s1 *= (temp_v0 < 0) ? -1 : 1;
     } else {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALWALL_ROLL);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_STALWALL_ROLL);
         this->skelAnime.curFrame = 0.0f;
     }
     func_808D94D0(this, play, 0, 0, temp_s1);
@@ -794,14 +794,14 @@ void func_808DA578(EnSw* this, PlayState* play) {
         if ((this->actor.speedXZ == 0.0f) && (this->unk_44C != 0.0f)) {
             Math_Vec3f_Copy(&sp30, &this->unk_374);
             func_808D9894(this, &sp30);
-            temp2 = Math_FAtan2F(sp30.z, sp30.x);
+            temp2 = Math_Atan2S_XY(sp30.z, sp30.x);
             func_808D94D0(this, play, 0, 0, temp2);
         }
     } else if (this->unk_410 & 0x20) {
         Math_Vec3f_Copy(&this->unk_374, &this->actor.home.pos);
         this->actionFunc = func_808DA3F4;
     } else {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALWALL_DASH);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_STALWALL_DASH);
         this->skelAnime.curFrame = 0.0f;
     }
 
@@ -825,11 +825,11 @@ void func_808DA6FC(EnSw* this, PlayState* play) {
         if ((this->actor.speedXZ == 0.0f) && (this->unk_44C != 0.0f)) {
             Math_Vec3f_Copy(&sp38, &this->unk_374);
             func_808D9894(this, &sp38);
-            temp2 = Math_FAtan2F(sp38.z, sp38.x);
+            temp2 = Math_Atan2S_XY(sp38.z, sp38.x);
             func_808D94D0(this, play, 0, 0, temp2);
         }
     } else {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALWALL_DASH);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_STALWALL_DASH);
         this->skelAnime.curFrame = 0.0f;
     }
 
@@ -882,7 +882,7 @@ void func_808DA89C(EnSw* this, PlayState* play) {
             this->unk_448 = temp_f2;
             this->actor.speedXZ = 0.0f;
             if ((s32)temp_f2 != 0) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALTURA_BOUND);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_STALTURA_BOUND);
             } else {
                 this->actionFunc = func_808DAEB4;
                 this->actor.velocity.y = 0.0f;
@@ -916,10 +916,10 @@ void func_808DAA60(EnSw* this, PlayState* play) {
             if (this->unk_45E == 0) {
                 Math_Vec3s_ToVec3f(&sp34, &sp44[this->unk_4A0]);
                 func_808D9894(this, &sp34);
-                temp_v0 = Math_FAtan2F(sp34.z, sp34.x);
+                temp_v0 = Math_Atan2S_XY(sp34.z, sp34.x);
                 if (ABS_ALT(temp_v0) < sp40) {
                     this->skelAnime.curFrame = 0.0f;
-                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALWALL_DASH);
+                    Actor_PlaySfx(&this->actor, NA_SE_EN_STALWALL_DASH);
                     Math_Vec3s_ToVec3f(&this->unk_374, &sp44[this->unk_4A0]);
                     this->actionFunc = func_808DACF4;
                     this->unk_414 = 0.0f;
@@ -929,7 +929,7 @@ void func_808DAA60(EnSw* this, PlayState* play) {
             }
         } else {
             if (this->unk_456 != 0) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALGOLD_ROLL);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_STALGOLD_ROLL);
                 this->unk_456--;
                 this->skelAnime.curFrame = 0.0f;
             } else {
@@ -967,11 +967,11 @@ void func_808DACF4(EnSw* this, PlayState* play) {
 
             Math_Vec3f_Copy(&sp38, &this->unk_374);
             func_808D9894(this, &sp38);
-            temp_f6 = Math_FAtan2F(sp38.z, sp38.x);
+            temp_f6 = Math_Atan2S_XY(sp38.z, sp38.x);
             func_808D94D0(this, play, 0, 0, temp_f6);
         }
     } else {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALWALL_DASH);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_STALWALL_DASH);
         this->skelAnime.curFrame = 0.0f;
     }
 
@@ -1075,9 +1075,9 @@ void func_808DB100(EnSw* this, PlayState* play) {
     if ((DECR(this->unk_454) == 0) && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         if (this->unk_456 != 0) {
             if (!ENSW_GET_3(&this->actor)) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALWALL_ROLL);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_STALWALL_ROLL);
             } else {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALGOLD_ROLL);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_STALGOLD_ROLL);
             }
             this->unk_456--;
             this->skelAnime.curFrame = 0.0f;
@@ -1112,7 +1112,7 @@ void func_808DB2E0(EnSw* this, PlayState* play) {
         this->actor.velocity.z *= 0.5f;
 
         if ((s32)temp_f2 != 0) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALTURA_BOUND);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_STALTURA_BOUND);
         } else {
             func_800BC154(play, &play->actorCtx, &this->actor, 5);
             Math_Vec3f_Copy(&this->actor.velocity, &gZeroVec3f);

@@ -29,7 +29,7 @@ typedef struct ShutterInfo {
     /* 0x1E */ u8 openTimer;
 } ShutterInfo; // size = 0x20
 
-const ActorInit Obj_Y2shutter_InitVars = {
+ActorInit Obj_Y2shutter_InitVars = {
     ACTOR_OBJ_Y2SHUTTER,
     ACTORCAT_BG,
     FLAGS,
@@ -73,7 +73,7 @@ void ObjY2shutter_SetupOpen(ObjY2shutter* this, ShutterInfo* info, ShutterType s
     this->openTimer = info->openTimer;
     this->settleTimer = info->openStartSettleTimer;
     if (shutterType == SHUTTER_BARRED) {
-        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_METALDOOR_OPEN);
+        Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_METALDOOR_OPEN);
     }
 }
 
@@ -134,7 +134,7 @@ void ObjY2shutter_Update(Actor* thisx, PlayState* play) {
             this->openTimer = 0;
             this->settleTimer = info->openStartSettleTimer;
             if (shutterType == SHUTTER_BARRED) {
-                Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_METALDOOR_CLOSE);
+                Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_METALDOOR_CLOSE);
             }
         } else {
             targetPosY = this->dyna.actor.home.pos.y;
@@ -153,7 +153,7 @@ void ObjY2shutter_Update(Actor* thisx, PlayState* play) {
             this->isStationary = true;
             this->settleTimer = info->openEndAndCloseSettleTimer;
             if (shutterType != SHUTTER_BARRED) {
-                Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_METALDOOR_STOP);
+                Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_METALDOOR_STOP);
             }
         }
     } else {

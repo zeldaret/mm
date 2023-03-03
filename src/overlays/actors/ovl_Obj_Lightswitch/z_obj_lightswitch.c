@@ -27,7 +27,7 @@ void ObjLightSwitch_SetupDisabled(ObjLightswitch* this);
 void ObjLightSwitch_Disabled(ObjLightswitch* this, PlayState* play);
 void ObjLightswitch_Idle(ObjLightswitch* this, PlayState* play);
 
-const ActorInit Obj_Lightswitch_InitVars = {
+ActorInit Obj_Lightswitch_InitVars = {
     ACTOR_OBJ_LIGHTSWITCH,
     ACTORCAT_SWITCH,
     FLAGS,
@@ -231,7 +231,7 @@ void ObjLightSwitch_SetupAsleep(ObjLightswitch* this) {
 
 void ObjLightSwitch_Asleep(ObjLightswitch* this, PlayState* play) {
     if (this->colorShiftTimer == 0) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SUN_MARK_FLASH);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_SUN_MARK_FLASH);
     }
     this->colorShiftTimer++;
 
@@ -244,7 +244,7 @@ void ObjLightSwitch_Asleep(ObjLightswitch* this, PlayState* play) {
         ObjLightSwitch_SetupEnabled(this);
     } else if (this->colorShiftTimer == 15) {
         this->faceState = LIGHTSWITCH_FACE_WAKING;
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_FOOT_SWITCH);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_FOOT_SWITCH);
     }
 }
 
@@ -302,7 +302,7 @@ void ObjLightSwitch_Disabled(ObjLightswitch* this, PlayState* play) {
         ObjLightswitch_SetupIdle(this);
     } else if (this->colorShiftTimer == 15) {
         this->faceState = LIGHTSWITCH_FACE_ASLEEP;
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_FOOT_SWITCH);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_FOOT_SWITCH);
     }
 }
 

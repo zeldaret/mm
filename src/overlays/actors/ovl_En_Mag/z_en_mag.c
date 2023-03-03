@@ -85,7 +85,7 @@ static s16 sZeldaEffectColorTargetIndex = 0;
 static s16 sTextAlphaTargetIndex = 0;
 static s16 sTextAlphaTimer = 20;
 
-const ActorInit En_Mag_InitVars = {
+ActorInit En_Mag_InitVars = {
     ACTOR_EN_MAG,
     ACTORCAT_PROP,
     FLAGS,
@@ -390,7 +390,7 @@ void EnMag_Update(Actor* thisx, PlayState* play) {
                                 play_sound(NA_SE_SY_PIECE_OF_HEART);
                                 gSaveContext.gameMode = 2; // Go to FileChoose
                                 play->transitionTrigger = TRANS_TRIGGER_START;
-                                play->transitionType = TRANS_TYPE_02;
+                                play->transitionType = TRANS_TYPE_FADE_BLACK;
                                 play->nextEntrance = ENTRANCE(CUTSCENE, 0);
                                 gSaveContext.save.cutscene = 0;
                                 gSaveContext.sceneLayer = 0;

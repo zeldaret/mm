@@ -18,7 +18,7 @@ void DmChar09_Draw(Actor* thisx, PlayState* play);
 void DmChar09_DoNothing(DmChar09* this, PlayState* play);
 void func_80AB2268(DmChar09* this, PlayState* play);
 
-const ActorInit Dm_Char09_InitVars = {
+ActorInit Dm_Char09_InitVars = {
     ACTOR_DM_CHAR09,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -203,7 +203,7 @@ void DmChar09_Update(Actor* thisx, PlayState* play) {
     func_80AB2268(this, play);
     func_80AB24BC(this, play);
     if ((play->csCtx.state != 0) && this->unk_22E && DMCHAR09_GET_100(thisx)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_POSTMAN_WALK + SFX_FLAG);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_POSTMAN_WALK + SFX_FLAG);
     }
 }
 

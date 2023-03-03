@@ -46,7 +46,7 @@ void func_80895CB0(EnTite* this);
 void func_80895D08(EnTite* this, PlayState* play);
 void func_80895E28(EnTite* this, PlayState* play);
 
-const ActorInit En_Tite_InitVars = {
+ActorInit En_Tite_InitVars = {
     ACTOR_EN_TITE,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -259,7 +259,7 @@ void func_80893BCC(EnTite* this, PlayState* play) {
                 }
             }
         }
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_EYEGOLE_ATTACK);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_EYEGOLE_ATTACK);
     }
 }
 
@@ -323,10 +323,10 @@ void func_80894024(EnTite* this, PlayState* play) {
 void func_8089408C(EnTite* this, PlayState* play) {
     Animation_PlayOnce(&this->skelAnime, &object_tite_Anim_0004F8);
     if (!func_80893ADC(this)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_TEKU_JUMP);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_TEKU_JUMP);
     } else {
         this->actor.world.pos.y += this->actor.depthInWater;
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_TEKU_JUMP_WATER);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_TEKU_JUMP_WATER);
     }
 
     if (this->actor.shape.yOffset < 0.0f) {
@@ -377,7 +377,7 @@ void func_808942B4(EnTite* this, PlayState* play) {
                 func_8089452C(this, play);
             } else {
                 this->actor.velocity.y = 0.0f;
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_TEKU_LAND_WATER2);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_TEKU_LAND_WATER2);
                 func_80894414(this);
             }
         }
@@ -418,7 +418,7 @@ void func_8089452C(EnTite* this, PlayState* play) {
     sp2C.y += this->actor.depthInWater;
     this->actor.velocity.y *= 0.75f;
     EffectSsGRipple_Spawn(play, &sp2C, 0, 500, 0);
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_TEKU_LAND_WATER);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_TEKU_LAND_WATER);
     this->actionFunc = func_808945B4;
 }
 
@@ -454,9 +454,9 @@ void func_80894638(EnTite* this, PlayState* play) {
 
     if (Animation_OnFrame(&this->skelAnime, 7.0f)) {
         if (func_80893ADC(this)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_TEKU_WALK_WATER);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_TEKU_WALK_WATER);
         } else {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_TEKU_WALK);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_TEKU_WALK);
         }
     }
 
@@ -483,9 +483,9 @@ void func_8089484C(EnTite* this) {
     this->actor.speedXZ = 4.0f;
     if (func_80893ADC(this)) {
         this->actor.world.pos.y += this->actor.depthInWater;
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_TEKU_JUMP_WATER);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_TEKU_JUMP_WATER);
     } else {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_TEKU_JUMP);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_TEKU_JUMP);
     }
     this->actionFunc = func_80894910;
 }
@@ -496,7 +496,7 @@ void func_80894910(EnTite* this, PlayState* play) {
     Math_SmoothStepToF(&this->actor.speedXZ, 0.0f, 0.1f, 1.0f, 0.0f);
     SkelAnime_Update(&this->skelAnime);
     if (this->actor.bgCheckFlags & 0x40) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_TEKU_LAND_WATER);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_TEKU_LAND_WATER);
 
         if (func_80893ADC(this)) {
             Math_Vec3f_Copy(&sp34, &this->actor.world.pos);
@@ -557,7 +557,7 @@ void func_80894BC8(EnTite* this, PlayState* play) {
     }
 
     if (this->actor.bgCheckFlags & 0x40) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_TEKU_LAND_WATER2);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_TEKU_LAND_WATER2);
     } else {
         func_80893BCC(this, play);
     }
@@ -599,7 +599,7 @@ void func_80894E0C(EnTite* this, PlayState* play) {
     }
 
     if (this->actor.bgCheckFlags & 0x40) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_TEKU_LAND_WATER2);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_TEKU_LAND_WATER2);
     } else {
         func_80893BCC(this, play);
     }
@@ -680,7 +680,7 @@ void func_808951B8(EnTite* this, PlayState* play) {
 
 void func_808952EC(EnTite* this) {
     Animation_PlayLoopSetSpeed(&this->skelAnime, &object_tite_Anim_000A14, 1.5f);
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_LAST1_GROW_HEAD);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_LAST1_GROW_HEAD);
     this->collider.base.acFlags &= ~AC_ON;
     func_80893A18(this);
     this->unk_2B9 = 1;
@@ -708,7 +708,7 @@ void func_80895424(EnTite* this, PlayState* play) {
         this->collider.base.acFlags |= AC_ON;
         if (this->actor.bgCheckFlags & 2) {
             Actor_SpawnFloorDustRing(play, &this->actor, &this->actor.world.pos, 20.0f, 11, 4.0f, 0, 0, 0);
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_EYEGOLE_ATTACK);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_EYEGOLE_ATTACK);
         }
 
         if (this->unk_2BC == 0) {
@@ -724,7 +724,7 @@ void func_80895424(EnTite* this, PlayState* play) {
 void func_808955E4(EnTite* this) {
     this->unk_2B9 = 0;
     this->actor.velocity.y = 13.0f;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_LAST1_GROW_HEAD);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_LAST1_GROW_HEAD);
     this->actor.bgCheckFlags &= ~1;
     this->collider.base.acFlags &= ~AC_ON;
     this->actionFunc = func_80895640;
@@ -828,7 +828,7 @@ void func_80895AC0(EnTite* this, PlayState* play) {
         if (Rand_ZeroOne() < 0.25f) {
             func_8089595C(this, play);
         }
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_TEKU_WALK);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_TEKU_WALK);
     }
 
     if ((this->unk_2BC == 1) || (this->unk_2BC == -1)) {
@@ -838,8 +838,8 @@ void func_80895AC0(EnTite* this, PlayState* play) {
             if (temp_v0 > 0x3000) {
                 this->unk_2BC = (temp_v0 >> 9) * this->unk_2BC;
             }
-        } else if (Actor_XZDistanceToPoint(&this->actor, &this->actor.home.pos) < 200.0f) {
-            temp_v1 = this->actor.shape.rot.y - Actor_YawToPoint(&this->actor, &this->actor.home.pos);
+        } else if (Actor_WorldDistXZToPoint(&this->actor, &this->actor.home.pos) < 200.0f) {
+            temp_v1 = this->actor.shape.rot.y - Actor_WorldYawTowardPoint(&this->actor, &this->actor.home.pos);
             temp_v0 = ABS_ALT(temp_v1);
             if (temp_v0 > 0x2000) {
                 this->unk_2BC = (temp_v0 >> 9) * this->unk_2BC;
@@ -874,7 +874,7 @@ void func_80895D08(EnTite* this, PlayState* play) {
         if (Rand_ZeroOne() < 0.5f) {
             func_8089595C(this, play);
         }
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_TEKU_WALK);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_TEKU_WALK);
     }
     if ((this->actor.xzDistToPlayer < 240.0f) && (Player_GetMask(play) != PLAYER_MASK_STONE)) {
         func_8089408C(this, play);
@@ -957,7 +957,7 @@ void func_80895FF8(EnTite* this, PlayState* play) {
                 if (this->actor.colChkInfo.damageEffect == 5) {
                     this->unk_2BC = 40;
                     Actor_SetColorFilter(&this->actor, 0, 200, 0, 40);
-                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
+                    Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_FREEZE);
                     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_LARGE;
                     this->drawDmgEffScale = 0.5f;
                     this->drawDmgEffAlpha = 2.0f;
@@ -968,7 +968,7 @@ void func_80895FF8(EnTite* this, PlayState* play) {
                 if (this->actor.colChkInfo.damageEffect == 1) {
                     this->unk_2BC = 40;
                     Actor_SetColorFilter(&this->actor, 0, 200, 0, 40);
-                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
+                    Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_FREEZE);
                     func_80894DD0(this);
                     return;
                 }
@@ -1001,7 +1001,7 @@ void func_80895FF8(EnTite* this, PlayState* play) {
                 if (this->actor.colChkInfo.health == 0) {
                     func_80895020(this, play);
                 } else {
-                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_TEKU_DAMAGE);
+                    Actor_PlaySfx(&this->actor, NA_SE_EN_TEKU_DAMAGE);
 
                     if (this->unk_2B9 == 0) {
                         func_80894B2C(this);
