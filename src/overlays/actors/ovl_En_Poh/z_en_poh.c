@@ -216,7 +216,7 @@ void func_80B2CA4C(EnPoh* this) {
     Animation_PlayLoop(&this->skelAnime, &object_po_Anim_0015B0);
     this->unk_18E = Rand_S16Offset(2, 3);
     this->actionFunc = func_80B2CAA4;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
 }
 
 void func_80B2CAA4(EnPoh* this, PlayState* play) {
@@ -247,7 +247,7 @@ void func_80B2CB60(EnPoh* this) {
 
 void func_80B2CBBC(EnPoh* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
-    Math_StepToF(&this->actor.speedXZ, 1.0f, 0.2f);
+    Math_StepToF(&this->actor.speed, 1.0f, 0.2f);
     if (Animation_OnFrame(&this->skelAnime, 0.0f) && (this->unk_18E != 0)) {
         this->unk_18E--;
     }
@@ -277,7 +277,7 @@ void func_80B2CD14(EnPoh* this) {
     Animation_PlayLoop(&this->skelAnime, &object_po_Anim_000A60);
     this->actionFunc = func_80B2CD64;
     this->unk_18E = 0;
-    this->actor.speedXZ = 2.0f;
+    this->actor.speed = 2.0f;
 }
 
 void func_80B2CD64(EnPoh* this, PlayState* play) {
@@ -315,7 +315,7 @@ void func_80B2CD64(EnPoh* this, PlayState* play) {
 void func_80B2CEC8(EnPoh* this) {
     Animation_MorphToLoop(&this->skelAnime, &object_po_Anim_0001A8, -6.0f);
     this->unk_18E = 12;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     Actor_PlaySfx(&this->actor, NA_SE_EN_PO_LAUGH);
     this->actionFunc = func_80B2CF28;
 }
@@ -333,7 +333,7 @@ void func_80B2CF28(EnPoh* this, PlayState* play) {
     if (this->unk_18E >= 10) {
         Math_ScaledStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 0xAAA);
     } else if (this->unk_18E == 9) {
-        this->actor.speedXZ = 5.0f;
+        this->actor.speed = 5.0f;
         this->skelAnime.playSpeed = 2.0f;
     } else if (this->unk_18E == 0) {
         func_80B2CB60(this);
@@ -345,13 +345,13 @@ void func_80B2CFF8(EnPoh* this) {
     Animation_MorphToPlayOnce(&this->skelAnime, &object_po_Anim_0004EC, -6.0f);
     func_800BE504(&this->actor, &this->colliderCylinder);
     this->colliderCylinder.base.acFlags &= ~AC_ON;
-    this->actor.speedXZ = 5.0f;
+    this->actor.speed = 5.0f;
     Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 16);
     this->actionFunc = func_80B2D07C;
 }
 
 void func_80B2D07C(EnPoh* this, PlayState* play) {
-    Math_StepToF(&this->actor.speedXZ, 0.0f, 0.5f);
+    Math_StepToF(&this->actor.speed, 0.0f, 0.5f);
     if (SkelAnime_Update(&this->skelAnime)) {
         if (this->actor.colChkInfo.health != 0) {
             func_80B2DAD0(this);
@@ -385,7 +385,7 @@ void func_80B2D140(EnPoh* this, PlayState* play) {
 }
 
 void func_80B2D2C0(EnPoh* this) {
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->unk_18E = 0;
     this->actor.hintId = TATL_HINT_ID_NONE;
@@ -445,7 +445,7 @@ void func_80B2D300(EnPoh* this, PlayState* play) {
 void func_80B2D5DC(EnPoh* this) {
     Animation_PlayOnce(&this->skelAnime, &object_po_Anim_000A60);
     this->actionFunc = func_80B2D628;
-    this->actor.speedXZ = -5.0f;
+    this->actor.speed = -5.0f;
 }
 
 void func_80B2D628(EnPoh* this, PlayState* play) {
@@ -454,7 +454,7 @@ void func_80B2D628(EnPoh* this, PlayState* play) {
         func_80B2CB60(this);
         this->unk_18E = 23;
     } else {
-        Math_StepToF(&this->actor.speedXZ, 0.0f, 0.5f);
+        Math_StepToF(&this->actor.speed, 0.0f, 0.5f);
         this->actor.shape.rot.y += 0x1000;
     }
 }
@@ -463,7 +463,7 @@ void func_80B2D694(EnPoh* this) {
     Animation_PlayLoop(&this->skelAnime, &object_po_Anim_0015B0);
     this->unk_192 = BINANG_ROT180(this->actor.world.rot.y);
     this->actionFunc = func_80B2D6EC;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
 }
 
 void func_80B2D6EC(EnPoh* this, PlayState* play) {
@@ -482,7 +482,7 @@ void func_80B2D6EC(EnPoh* this, PlayState* play) {
 void func_80B2D76C(EnPoh* this) {
     this->unk_18C = 32;
     this->unk_192 = 0x2000;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actor.world.rot.y = this->actor.shape.rot.y;
     Actor_PlaySfx(&this->actor, NA_SE_EN_PO_DISAPPEAR);
     Actor_PlaySfx(&this->actor, NA_SE_EN_PO_LAUGH);
@@ -513,7 +513,7 @@ void func_80B2D7D4(EnPoh* this, PlayState* play) {
 void func_80B2D924(EnPoh* this) {
     this->unk_18C = 0;
     this->unk_192 = 0x2000;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     Actor_PlaySfx(&this->actor, NA_SE_EN_STALKIDS_APPEAR);
     Actor_PlaySfx(&this->actor, NA_SE_EN_PO_LAUGH);
     this->colliderCylinder.base.acFlags &= ~AC_ON;
@@ -539,7 +539,7 @@ void func_80B2D980(EnPoh* this, PlayState* play) {
 
 void func_80B2DAD0(EnPoh* this) {
     Animation_MorphToLoop(&this->skelAnime, &object_po_Anim_0006E0, -5.0f);
-    this->actor.speedXZ = 5.0f;
+    this->actor.speed = 5.0f;
     this->actor.world.rot.y = BINANG_ROT180(this->actor.shape.rot.y);
     this->colliderCylinder.base.acFlags |= AC_ON;
     this->unk_18E = 200;

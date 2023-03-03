@@ -201,7 +201,7 @@ void func_80BB69FC(EnTanron2* this, PlayState* play) {
 
 void func_80BB6B80(EnTanron2* this) {
     this->actionFunc = func_80BB6BD8;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actor.velocity.z = 0.0f;
     this->actor.velocity.y = 0.0f;
     this->actor.velocity.x = 0.0f;
@@ -240,14 +240,14 @@ void func_80BB6BD8(EnTanron2* this, PlayState* play) {
                     } else {
                         sp32 = Math_Atan2S(sp2C, sp28);
                     }
-                    this->actor.speedXZ = Rand_ZeroFloat(5.0f) + 5.0f;
+                    this->actor.speed = Rand_ZeroFloat(5.0f) + 5.0f;
                     break;
 
                 case 1:
                     sp32 = Math_Atan2S(sp2C, sp28);
-                    this->actor.speedXZ += 2.0f;
-                    if (this->actor.speedXZ > 10.0f) {
-                        this->actor.speedXZ = 10.0f;
+                    this->actor.speed += 2.0f;
+                    if (this->actor.speed > 10.0f) {
+                        this->actor.speed = 10.0f;
                     }
                     break;
 
@@ -255,14 +255,14 @@ void func_80BB6BD8(EnTanron2* this, PlayState* play) {
                     sp32 = Math_Atan2S(player->actor.world.pos.x - this->actor.world.pos.x,
                                        player->actor.world.pos.z - this->actor.world.pos.z) +
                            (s16)Rand_ZeroFloat(20000.0f);
-                    this->actor.speedXZ = Rand_ZeroFloat(7.0f) + 7.0f;
+                    this->actor.speed = Rand_ZeroFloat(7.0f) + 7.0f;
                     if ((this->unk_152 == 0) && (D_80BB8450->unk_1F6 == 0)) {
                         this->unk_158 = 1;
                     }
                     break;
             }
             Matrix_RotateYS(sp32, MTXMODE_NEW);
-            Matrix_MultVecZ(this->actor.speedXZ, &this->actor.velocity);
+            Matrix_MultVecZ(this->actor.speed, &this->actor.velocity);
             this->actor.velocity.y = Rand_ZeroFloat(5.0f) + 12.0f;
             this->unk_14E = 5;
         }

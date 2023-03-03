@@ -314,7 +314,7 @@ void func_809CE4C8(BgSpdweb* this, PlayState* play) {
                 player->stateFlags1 |= PLAYER_STATE1_20;
                 this->unk_161 = 1;
             }
-        } else if (player->actor.speedXZ != 0.0f) {
+        } else if (player->actor.speed != 0.0f) {
             this->unk_164 = CLAMP_MIN(this->unk_164, 2.0f);
         }
     }

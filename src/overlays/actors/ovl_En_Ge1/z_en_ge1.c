@@ -202,7 +202,7 @@ void EnGe1_SetupPath(EnGe1* this, PlayState* play) {
 
             this->picto.actor.world.rot.y = Math_Vec3f_Yaw(&this->picto.actor.world.pos, &nextPoint);
             this->picto.actor.world.rot.x = Math_Vec3f_Pitch(&this->picto.actor.world.pos, &nextPoint);
-            this->picto.actor.speedXZ = 15.0f;
+            this->picto.actor.speed = 15.0f;
         }
     } else {
         this->path = NULL;

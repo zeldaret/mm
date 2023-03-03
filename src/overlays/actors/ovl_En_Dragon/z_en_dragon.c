@@ -345,9 +345,9 @@ void EnDragon_RetreatOrIdle(EnDragon* this, PlayState* play) {
         EnDragon_SetupExtend(this);
     } else if ((this->timer != 0) && (fabsf(this->actor.world.pos.x - this->actor.home.pos.x) > 101.0f) &&
                (fabsf(this->actor.world.pos.z - this->actor.home.pos.z) > 101.0f)) {
-        this->actor.speedXZ = -100.0f;
+        this->actor.speed = -100.0f;
     } else {
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
 
         if ((fabsf(this->actor.world.pos.x - this->actor.home.pos.x) > 4.0f) &&
             (fabsf(this->actor.world.pos.z - this->actor.home.pos.z) > 4.0f)) {
@@ -388,12 +388,12 @@ void EnDragon_Extend(EnDragon* this, PlayState* play) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_UTSUBO_APPEAR - SFX_FLAG);
         extendedPos.x += Math_SinS(this->actor.world.rot.y) * -530.0f;
         extendedPos.z += Math_CosS(this->actor.world.rot.y) * -530.0f;
-        this->actor.speedXZ = 40.0f;
+        this->actor.speed = 40.0f;
         Math_SmoothStepToS(&this->jawZRotation, 0xFA0, 5, 0xBB8, 0x14);
 
         if ((fabsf(this->actor.world.pos.x - extendedPos.x) < 51.0f) &&
             (fabsf(this->actor.world.pos.z - extendedPos.z) < 51.0f)) {
-            this->actor.speedXZ = 0.0f;
+            this->actor.speed = 0.0f;
             Math_ApproachF(&this->actor.world.pos.x, extendedPos.x, 0.3f, 50.0f);
             Math_ApproachF(&this->actor.world.pos.z, extendedPos.z, 0.3f, 50.0f);
             if ((fabsf(this->actor.world.pos.x - extendedPos.x) < 4.0f) &&
@@ -513,7 +513,7 @@ void EnDragon_Grab(EnDragon* this, PlayState* play) {
         pos.z += Math_CosS(this->actor.world.rot.y) * -930.0f;
         Math_Vec3f_Copy(&this->actor.world.pos, &pos);
         this->jawZRotation = 0x1450;
-        this->actor.speedXZ = 60.0f;
+        this->actor.speed = 60.0f;
     }
 
     this->grabTimer++;
@@ -655,7 +655,7 @@ void EnDragon_Dead(EnDragon* this, PlayState* play) {
 
     if ((this->timer != 0) && (fabsf(this->actor.world.pos.x - this->actor.home.pos.x) > 121.0f) &&
         (fabsf(this->actor.world.pos.z - this->actor.home.pos.z) > 121.0f)) {
-        this->actor.speedXZ = -120.0f;
+        this->actor.speed = -120.0f;
         if (((this->pythonIndex & 1) == 0) && (Rand_ZeroOne() < 0.5f)) {
             //! @bug: !play->gameplayFrames is 0 essentially all the time, so this code never runs.
             if (((!play->gameplayFrames) & 0x1F)) {
@@ -667,7 +667,7 @@ void EnDragon_Dead(EnDragon* this, PlayState* play) {
         return;
     }
 
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     if ((fabsf(this->actor.world.pos.x - this->actor.home.pos.x) > 20.0f) &&
         (fabsf(this->actor.world.pos.z - this->actor.home.pos.z) > 20.0f)) {
         Math_ApproachF(&this->actor.world.pos.x, this->actor.home.pos.x, 0.3f, 300.0f);
@@ -754,7 +754,7 @@ void EnDragon_UpdateDamage(EnDragon* this, PlayState* play) {
     if ((this->action == DEEP_PYTHON_ACTION_EXTEND) && (this->grabWaitTimer == 0) &&
         (player->invincibilityTimer == 0) && (this->collider.elements[0].info.ocElemFlags & OCELEM_HIT) &&
         (!(func_800B64FC(play, 1000.0f, &this->actor.world.pos, &sp30) >= 0.0f) || (sp30 != 1))) {
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
         this->action = DEEP_PYTHON_ACTION_GRAB;
         this->actor.flags |= ACTOR_FLAG_100000;
         this->actionFunc = EnDragon_SetupGrab;

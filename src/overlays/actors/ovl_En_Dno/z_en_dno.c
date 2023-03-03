@@ -779,21 +779,21 @@ s32 EnDno_ActorPathing_UpdateActorInfo(PlayState* play, ActorPathing* actorPath)
     thisx->gravity = 0.0f;
     temp_v0 = thisx->yawTowardsPlayer - thisx->world.rot.y;
     if ((temp_v0 <= 0x4000) && (temp_v0 >= -0x4000)) {
-        Math_SmoothStepToF(&thisx->speedXZ, 15.0f, 0.8f, 1.0f, 0.01f);
+        Math_SmoothStepToF(&thisx->speed, 15.0f, 0.8f, 1.0f, 0.01f);
     } else {
         if (thisx->xzDistToPlayer <= 80.0f) {
-            Math_SmoothStepToF(&thisx->speedXZ, 8.0f, 0.5f, 0.5f, 0.01f);
+            Math_SmoothStepToF(&thisx->speed, 8.0f, 0.5f, 0.5f, 0.01f);
         } else if (thisx->xzDistToPlayer <= 360.0f) {
-            Math_SmoothStepToF(&thisx->speedXZ, 7.0f, 0.5f, 0.5f, 0.01f);
+            Math_SmoothStepToF(&thisx->speed, 7.0f, 0.5f, 0.5f, 0.01f);
         } else {
-            Math_SmoothStepToF(&thisx->speedXZ, 3.5f, 0.5f, 0.5f, 0.01f);
+            Math_SmoothStepToF(&thisx->speed, 3.5f, 0.5f, 0.5f, 0.01f);
         }
     }
 
-    if (actorPath->distSqToCurPoint < SQ(thisx->speedXZ)) {
+    if (actorPath->distSqToCurPoint < SQ(thisx->speed)) {
         ret = true;
     } else {
-        sp38 = thisx->speedXZ / sqrtf(actorPath->distSqToCurPointXZ);
+        sp38 = thisx->speed / sqrtf(actorPath->distSqToCurPointXZ);
         sp2C = ABS(actorPath->rotToCurPoint.x - thisx->world.rot.x);
         temp_v0_2 = sp2C;
         temp_v0_2 *= sp38;
@@ -810,11 +810,11 @@ s32 EnDno_ActorPathing_UpdateActorInfo(PlayState* play, ActorPathing* actorPath)
 s32 EnDno_ActorPathing_Move(PlayState* play, ActorPathing* actorPath) {
     Actor* thisx = actorPath->actor;
     EnDno* this = (EnDno*)thisx;
-    f32 sp24 = Math_CosS(-thisx->world.rot.x) * thisx->speedXZ;
+    f32 sp24 = Math_CosS(-thisx->world.rot.x) * thisx->speed;
     f32 sp20 = gFramerateDivisorHalf;
 
     thisx->velocity.x = Math_SinS(thisx->world.rot.y) * sp24;
-    thisx->velocity.y = Math_SinS(-thisx->world.rot.x) * thisx->speedXZ;
+    thisx->velocity.y = Math_SinS(-thisx->world.rot.x) * thisx->speed;
     thisx->velocity.z = Math_CosS(thisx->world.rot.y) * sp24;
 
     this->unk_334.x += (this->actor.velocity.x * sp20) + this->actor.colChkInfo.displacement.x;
@@ -864,7 +864,7 @@ void func_80A730A0(EnDno* this, PlayState* play) {
     func_800B9010(&this->actor, NA_SE_EV_BUTLER_FRY - SFX_FLAG);
     if (this->actorPath.flags & ACTOR_PATHING_REACHED_END_PERMANENT) {
         Math_Vec3f_Copy(&this->actor.world.pos, &this->actorPath.curPoint);
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
         this->actor.velocity.x = 0.0f;
         this->actor.velocity.y = 0.0f;
         this->actor.velocity.z = 0.0f;
@@ -876,7 +876,7 @@ void func_80A73244(EnDno* this, PlayState* play) {
     this->actor.flags &= ~ACTOR_FLAG_CANT_LOCK_ON;
     this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8);
     this->unk_328 = 2;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     Flags_UnsetSwitch(play, EN_DNO_GET_RACE_STARTED_SWITCH_FLAG(&this->actor));
     gSaveContext.timerStates[TIMER_ID_MINIGAME_1] = TIMER_STATE_STOP;
     this->unk_44E = 0;

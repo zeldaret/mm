@@ -99,7 +99,7 @@ void EnMinifrog_Init(Actor* thisx, PlayState* play) {
         this->frogIndex = MINIFROG_YELLOW;
     }
 
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actionFunc = EnMinifrog_Idle;
     this->jumpState = MINIFROG_STATE_GROUND;
     this->flags = 0;

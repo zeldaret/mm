@@ -148,7 +148,7 @@ void ObjTsubo_SpawnGoldSkulltula(ObjTsubo* this, PlayState* play, s32 arg2) {
         if (child != NULL) {
             child->parent = &this->actor;
             child->velocity.y = 0.0f;
-            child->speedXZ = 0.0f;
+            child->speed = 0.0f;
         }
     }
 }
@@ -621,7 +621,7 @@ void func_809291DC(ObjTsubo* this) {
     this->actor.shape.rot.x = this->actor.home.rot.x;
     this->actor.world.rot.x = this->actor.home.rot.x;
     this->actor.velocity.y = 0.0f;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actor.shape.rot.y = this->actor.home.rot.y;
     this->actor.world.rot.y = this->actor.home.rot.y;
     Actor_SetScale(&this->actor, 0.0f);

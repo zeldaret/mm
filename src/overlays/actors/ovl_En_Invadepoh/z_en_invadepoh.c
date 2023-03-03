@@ -1078,13 +1078,13 @@ void func_80B447C0(EnInvadepoh* this, PlayState* play) {
 void func_80B44A90(EnInvadepoh* this, PlayState* play) {
     if (this->actor.bgCheckFlags & 1) {
         this->actor.velocity.y *= 0.3f;
-        this->actor.speedXZ *= 0.8f;
+        this->actor.speed *= 0.8f;
     } else if (this->actor.bgCheckFlags & 8) {
         this->actor.velocity.y *= 0.8f;
-        this->actor.speedXZ *= 0.3f;
+        this->actor.speed *= 0.3f;
     } else {
         this->actor.velocity.y *= 0.8f;
-        this->actor.speedXZ *= 0.8f;
+        this->actor.speed *= 0.8f;
     }
     Actor_MoveWithGravity(&this->actor);
     Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 40.0f, 0.0f, 5);
@@ -1151,7 +1151,7 @@ s32 func_80B44C80(EnInvadepoh* this, PlayState* play) {
     temp_f0_3 = temp_f0 - this->actor.world.pos.x;
     temp_f0_2 = temp_f2 - this->actor.world.pos.z;
 
-    if (this->actor.speedXZ > 0.0f) {
+    if (this->actor.speed > 0.0f) {
         if (Math3D_AngleBetweenVectors(&sp6C, &sp60, &sp44) != 0) {
             sp40 = 1;
         } else if (sp44 <= 0.0f) {
@@ -2309,7 +2309,7 @@ void func_80B47D30(Actor* thisx, PlayState* play) {
 
     if (D_80B4E940 == 3) {
         if ((this->actionFunc == func_80B477B4) || (this->actionFunc == func_80B47600)) {
-            thisx->speedXZ = 0.0f;
+            thisx->speed = 0.0f;
             thisx->velocity.y = 0.0f;
             thisx->gravity = 0.0f;
             func_80B47830(this);
@@ -2320,8 +2320,8 @@ void func_80B47D30(Actor* thisx, PlayState* play) {
     } else if (this->collider.base.acFlags & AC_HIT) {
         Actor* acAttached = this->collider.base.ac;
 
-        thisx->speedXZ = acAttached->speedXZ * 0.5f;
-        thisx->speedXZ = CLAMP(thisx->speedXZ, -60.0f, 60.0f);
+        thisx->speed = acAttached->speed * 0.5f;
+        thisx->speed = CLAMP(thisx->speed, -60.0f, 60.0f);
         thisx->world.rot.y = acAttached->world.rot.y;
         thisx->gravity = 0.0f;
         thisx->velocity.y = acAttached->velocity.y * 0.5f;
@@ -2564,11 +2564,11 @@ void func_80B487B4(EnInvadepoh* this) {
 void func_80B48848(EnInvadepoh* this, PlayState* play) {
     s32 pad;
 
-    Math_StepToF(&this->actor.speedXZ, 1.6f, 0.1f);
-    if (func_80B44B84(this, play, this->actor.speedXZ, 50.0f)) {
+    Math_StepToF(&this->actor.speed, 1.6f, 0.1f);
+    if (func_80B44B84(this, play, this->actor.speed, 50.0f)) {
         func_80B44514(this);
         this->behaviorInfo.unk4C = 0xC8;
-        this->actor.speedXZ *= 0.25f;
+        this->actor.speed *= 0.25f;
     } else {
         Math_StepToS(&this->behaviorInfo.unk4C, 0x7D0, 0x46);
     }
@@ -2628,8 +2628,8 @@ void func_80B48AD4(EnInvadepoh* this, PlayState* play) {
     s16 temp_v1;
     s32 temp_v1_3;
 
-    Math_StepToF(&this->actor.speedXZ, 0.0f, 0.2f);
-    if (func_80B44B84(this, play, this->actor.speedXZ, 50.0f)) {
+    Math_StepToF(&this->actor.speed, 0.0f, 0.2f);
+    if (func_80B44B84(this, play, this->actor.speed, 50.0f)) {
         func_80B44514(this);
     }
 
@@ -2687,7 +2687,7 @@ void func_80B48AD4(EnInvadepoh* this, PlayState* play) {
 void func_80B48DE4(EnInvadepoh* this) {
     AlienBehaviorInfo* substruct = &this->behaviorInfo;
 
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     Animation_MorphToLoop(&this->skelAnime, &gRomaniIdleAnim, -10.0f);
     this->behaviorInfo.unk4C = 0;
     substruct->unk30 = 0.05f;
@@ -2836,13 +2836,13 @@ void func_80B49454(EnInvadepoh* this, PlayState* play) {
 
     Math_Vec3f_Sum(&D_80B4EDD0[this->unk3AC], &this->actor.home.pos, &sp30);
     if (Math3D_Vec3fDistSq(&this->actor.world.pos, &sp30) < SQ(400.0f)) {
-        this->actor.speedXZ *= 0.8f;
+        this->actor.speed *= 0.8f;
     } else {
-        Math_StepToF(&this->actor.speedXZ, 170.0f, 21.0f);
-        this->actor.speedXZ *= 0.98f;
+        Math_StepToF(&this->actor.speed, 170.0f, 21.0f);
+        this->actor.speed *= 0.98f;
     }
-    if (func_80B450C0(&this->actor.world.pos.x, &this->actor.world.pos.z, sp30.x, sp30.z, this->actor.speedXZ)) {
-        this->actor.speedXZ = 0.0f;
+    if (func_80B450C0(&this->actor.world.pos.x, &this->actor.world.pos.z, sp30.x, sp30.z, this->actor.speed)) {
+        this->actor.speed = 0.0f;
     }
     if (sp30.y < this->actor.world.pos.y) {
         Math_StepToF(&this->actor.gravity, -12.0f, 7.0f);
@@ -2877,9 +2877,9 @@ void func_80B49670(EnInvadepoh* this, PlayState* play) {
     sp30.z = this->actor.home.pos.z;
     Math_SmoothStepToS(&this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &sp30), 0xA, 0xBB8, 0x64);
     if ((play->gameplayFrames % 64) < 14) {
-        Math_StepToF(&this->actor.speedXZ, 5.0f, 1.0f);
+        Math_StepToF(&this->actor.speed, 5.0f, 1.0f);
     } else {
-        this->actor.speedXZ *= 0.97f;
+        this->actor.speed *= 0.97f;
     }
     if (sp30.y < this->actor.world.pos.y) {
         this->actor.gravity = -0.5f;
@@ -2910,7 +2910,7 @@ void func_80B497EC(EnInvadepoh* this, PlayState* play) {
     sp30.y = this->actor.home.pos.y + D_80B4E934.y + 400.0f;
     sp30.z = this->actor.home.pos.z + D_80B4E934.z;
     Math_SmoothStepToS(&this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &sp30), 4, 0x1F40, 0x64);
-    Math_StepToF(&this->actor.speedXZ, 70.0f, 3.0f);
+    Math_StepToF(&this->actor.speed, 70.0f, 3.0f);
     if (sp30.y < this->actor.world.pos.y) {
         this->actor.gravity = -2.0f;
     } else {
@@ -2935,7 +2935,7 @@ void func_80B49904(EnInvadepoh* this) {
 }
 
 void func_80B4994C(EnInvadepoh* this, PlayState* play) {
-    Math_StepToF(&this->actor.speedXZ, 150.0f, 4.0f);
+    Math_StepToF(&this->actor.speed, 150.0f, 4.0f);
     this->actor.velocity.y *= 0.95f;
     Actor_MoveWithGravity(&this->actor);
     if (this->actionTimer > 0) {
@@ -2950,7 +2950,7 @@ void func_80B499BC(EnInvadepoh* this) {
     this->scaleTarget = 0.2f;
     this->scaleStep = 0.01f;
     this->unk3AA = 3000;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actionFunc = func_80B49A00;
 }
 
@@ -2962,7 +2962,7 @@ void func_80B49A00(EnInvadepoh* this, PlayState* play) {
     sp30.y = this->actor.home.pos.y + 800.0f;
     sp30.z = this->actor.home.pos.z;
     Math_SmoothStepToS(&this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &sp30), 4, 0x1F40, 0x64);
-    Math_StepToF(&this->actor.speedXZ, 30.0f, 3.0f);
+    Math_StepToF(&this->actor.speed, 30.0f, 3.0f);
     this->actor.velocity.y *= 0.98f;
     if (sp30.y < this->actor.world.pos.y) {
         this->actor.gravity = -0.5f;
@@ -3234,11 +3234,11 @@ void func_80B4A614(EnInvadepoh* this) {
 void func_80B4A67C(EnInvadepoh* this, PlayState* play) {
     s32 pad;
 
-    Math_StepToF(&this->actor.speedXZ, 5.0f, 1.0f);
-    if (func_80B44B84(this, play, this->actor.speedXZ, 50.0f)) {
+    Math_StepToF(&this->actor.speed, 5.0f, 1.0f);
+    if (func_80B44B84(this, play, this->actor.speed, 50.0f)) {
         func_80B44640(this);
         this->behaviorInfo.unk4C = 0x5DC;
-        this->actor.speedXZ *= 0.5f;
+        this->actor.speed *= 0.5f;
     } else {
         Math_StepToS(&this->behaviorInfo.unk4C, 0x190, 0x32);
     }
@@ -3539,7 +3539,7 @@ void func_80B4B430(EnInvadepoh* this) {
 }
 
 void func_80B4B484(EnInvadepoh* this, PlayState* play) {
-    Math_StepToF(&this->actor.speedXZ, 1.1f, 0.5f);
+    Math_StepToF(&this->actor.speed, 1.1f, 0.5f);
     if (func_80B44C80(this, play)) {
         func_80B44690(this);
     }
@@ -3566,17 +3566,17 @@ void func_80B4B564(EnInvadepoh* this, PlayState* play) {
     Vec3f sp28;
     f32 temp_f0;
 
-    Math_StepToF(&this->actor.speedXZ, 3.8f, 0.45f);
+    Math_StepToF(&this->actor.speed, 3.8f, 0.45f);
 
     if (this->unk3BC >= 0) {
         Math_Vec3s_ToVec3f(&sp28, &this->pathPoints[this->unk3BC]);
         temp_f0 = Math3D_Vec3fDistSq(&this->actor.world.pos, &sp28);
         if (temp_f0 < SQ(80.0f)) {
-            this->actor.speedXZ *= 0.85f;
+            this->actor.speed *= 0.85f;
         } else if (temp_f0 < SQ(150.0f)) {
-            this->actor.speedXZ *= 0.93f;
+            this->actor.speed *= 0.93f;
         } else if (temp_f0 < SQ(250.0f)) {
-            this->actor.speedXZ *= 0.96f;
+            this->actor.speed *= 0.96f;
         }
         if (this->pathIndex == this->unk3BC || temp_f0 < SQ(50.0f)) {
             this->actionTimer = 0;
@@ -3607,7 +3607,7 @@ void func_80B4B724(EnInvadepoh* this) {
 void func_80B4B768(EnInvadepoh* this, PlayState* play) {
     s32 pad;
 
-    Math_StepToF(&this->actor.speedXZ, 0.0f, 1.0f);
+    Math_StepToF(&this->actor.speed, 0.0f, 1.0f);
     Math_SmoothStepToS(&this->actor.world.rot.y, Actor_WorldYawTowardActor(&this->actor, &D_80B5040C->actor), 5, 0x1388,
                        0x64);
     func_80B44E90(this, play);
@@ -3625,7 +3625,7 @@ void func_80B4B820(EnInvadepoh* this) {
 }
 
 void func_80B4B864(EnInvadepoh* this, PlayState* play) {
-    Math_StepToF(&this->actor.speedXZ, 0.5f, 1.0f);
+    Math_StepToF(&this->actor.speed, 0.5f, 1.0f);
     func_80B44E90(this, play);
     if (this->animPlayFlag) {
         func_80B4B510(this);

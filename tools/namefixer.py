@@ -700,6 +700,8 @@ wordReplace = {
     "actor.minVelocityY": "actor.terminalVelocity",
     "actor.yDistToWater": "actor.depthInWater",
     "actor.yDistToPlayer": "actor.playerHeightRel",
+    "actor.speedXZ": "actor.speed",
+    "thisx->speedXZ": "thisx->speed",
 
     "gSaveContext.unk_3F1E": "gSaveContext.hudVisibilityForceButtonAlphasByStatus",
     "gSaveContext.unk_3F20": "gSaveContext.nextHudVisibility",

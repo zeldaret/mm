@@ -209,7 +209,7 @@ void func_80871058(EnBom* this, PlayState* play) {
         this->actor.velocity.y = -this->actor.velocity.y;
     }
 
-    if ((this->actor.speedXZ != 0.0f) && (this->actor.bgCheckFlags & 8)) {
+    if ((this->actor.speed != 0.0f) && (this->actor.bgCheckFlags & 8)) {
         s16 yDiff = BINANG_SUB(this->actor.wallYaw, this->actor.world.rot.y);
 
         if (ABS_ALT(yDiff) > 0x4000) {
@@ -219,12 +219,12 @@ void func_80871058(EnBom* this, PlayState* play) {
 
         Actor_PlaySfx(&this->actor, this->isPowderKeg ? NA_SE_EV_PUT_DOWN_WOODBOX : NA_SE_EV_BOMB_BOUND);
         Actor_MoveWithGravity(&this->actor);
-        this->actor.speedXZ *= 0.7f;
+        this->actor.speed *= 0.7f;
         this->actor.bgCheckFlags &= ~8;
     }
 
     if (!(this->actor.bgCheckFlags & 1)) {
-        Math_StepToF(&this->actor.speedXZ, 0.0f, 0.08f);
+        Math_StepToF(&this->actor.speed, 0.0f, 0.08f);
     } else {
         Vec3f* sp58;
         u32 sp54 = func_800C99D4(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
@@ -251,33 +251,33 @@ void func_80871058(EnBom* this, PlayState* play) {
             Math_ApproachF(&this->actor.shape.yOffset, 700.0f, 1.0f, 700.0f);
         }
 
-        sp40 = Math_SinS(this->actor.world.rot.y) * this->actor.speedXZ;
-        sp3C = Math_CosS(this->actor.world.rot.y) * this->actor.speedXZ;
+        sp40 = Math_SinS(this->actor.world.rot.y) * this->actor.speed;
+        sp3C = Math_CosS(this->actor.world.rot.y) * this->actor.speed;
         Actor_GetSlopeDirection(this->actor.floorPoly, &slopeNormal, &downwardSlopeYaw);
 
         sp40 += 3.0f * slopeNormal.x;
         sp3C += 3.0f * slopeNormal.z;
         sp38 = sqrtf(SQ(sp40) + SQ(sp3C));
 
-        if ((sp38 < this->actor.speedXZ) ||
+        if ((sp38 < this->actor.speed) ||
             (SurfaceType_GetSlope(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId) == 1)) {
             if (sp38 > 16.0f) {
-                this->actor.speedXZ = 16.0f;
+                this->actor.speed = 16.0f;
             } else {
-                this->actor.speedXZ = sp38;
+                this->actor.speed = sp38;
             }
             this->actor.world.rot.y = Math_Atan2S_XY(sp3C, sp40);
         }
 
-        if (!Math_StepToF(&this->actor.speedXZ, 0.0f, sp58->x)) {
+        if (!Math_StepToF(&this->actor.speed, 0.0f, sp58->x)) {
             s16 temp = this->actor.world.rot.y;
             s32 pad;
 
             if (ABS_ALT(BINANG_SUB(this->actor.world.rot.y, this->actor.shape.rot.y)) > 0x4000) {
                 temp = BINANG_ROT180(temp);
             }
-            Math_ScaledStepToS(&this->actor.shape.rot.y, temp, this->actor.speedXZ * 100.0f);
-            this->unk_1FA += (s16)(this->actor.speedXZ * 800.0f);
+            Math_ScaledStepToS(&this->actor.shape.rot.y, temp, this->actor.speed * 100.0f);
+            this->unk_1FA += (s16)(this->actor.speed * 800.0f);
         }
 
         if (this->actor.bgCheckFlags & 2) {
@@ -444,7 +444,7 @@ void EnBom_Update(Actor* thisx, PlayState* play) {
 
     if (this->unk_1FC != 0) {
         this->unk_1FC--;
-        Math_ApproachZeroF(&thisx->speedXZ, 1.0f, 1.0f);
+        Math_ApproachZeroF(&thisx->speed, 1.0f, 1.0f);
         Actor_MoveWithGravity(thisx);
         Actor_UpdateBgCheckInfo(play, thisx, 35.0f, 10.0f, 36.0f, 4);
         if (this->unk_1FC == 0) {

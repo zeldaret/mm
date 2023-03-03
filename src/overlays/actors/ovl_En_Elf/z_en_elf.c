@@ -233,7 +233,7 @@ void func_8088C9CC(EnElf* this, PlayState* play) {
                 this->unk_244 = 2;
                 this->unk_248 = 0x400;
                 this->unk_254 = 2.0f;
-                this->actor.speedXZ = 1.5f;
+                this->actor.speed = 1.5f;
                 this->unk_26C = func_8088C920;
                 this->unk_25C = (s32)Rand_ZeroFloat(8.0f) + 4;
             } else {
@@ -558,9 +558,9 @@ void func_8088D9BC(EnElf* this, PlayState* play) {
     Vec3f* vec = &this->unk_224;
 
     if (this->fairyFlags & 0x4000) {
-        Math_SmoothStepToF(&this->actor.speedXZ, 5.0f, 0.5f, 1.0f, 0.01f);
+        Math_SmoothStepToF(&this->actor.speed, 5.0f, 0.5f, 1.0f, 0.01f);
     } else {
-        Math_SmoothStepToF(&this->actor.speedXZ, this->unk_254, 0.2f, 0.5f, 0.01f);
+        Math_SmoothStepToF(&this->actor.speed, this->unk_254, 0.2f, 0.5f, 0.01f);
     }
 
     switch (this->unk_244) {
@@ -606,7 +606,7 @@ void func_8088DB4C(EnElf* this, Vec3f* arg1, f32 arg2, f32 arg3, f32 arg4) {
 
     xzVelocity = sqrtf(SQ(xVelTarget) + SQ(zVelTarget));
     clampedXZ = CLAMP(xzVelocity, arg2, arg3);
-    this->actor.speedXZ = clampedXZ;
+    this->actor.speed = clampedXZ;
 
     if ((xzVelocity != clampedXZ) && (xzVelocity != 0.0f)) {
         xzVelocity = clampedXZ / xzVelocity;
@@ -976,7 +976,7 @@ void func_8088E850(EnElf* this, PlayState* play) {
 
                 if (arrowPointedActor != NULL) {
                     func_8088DB4C(this, &nextPos, 0.0f, 30.0f, 0.2f);
-                    if (this->actor.speedXZ >= 5.0f) {
+                    if (this->actor.speed >= 5.0f) {
                         func_8088F5F4(this, play, 0x10);
                     }
                 } else {
@@ -1299,7 +1299,7 @@ void func_8088FA38(EnElf* this, PlayState* play) {
     refPos = this->actor.focus.pos;
     func_8088DB4C(this, &refPos, 0, 30.0f, 0.2f);
 
-    if (this->actor.speedXZ >= 5.0f) {
+    if (this->actor.speed >= 5.0f) {
         func_8088F5F4(this, play, 0x10);
     }
 

@@ -213,7 +213,7 @@ void EnAttackNiw_EnterViewFromOffscreen(EnAttackNiw* this, PlayState* play) {
     Vec3f flightTarget;
     s32 pad;
 
-    this->actor.speedXZ = 10.0f;
+    this->actor.speed = 10.0f;
 
     // randomTargetCenterOffset is set in _Init, only needs to be set once
     // but the view is moving, so now we need to re-calculate the spot in space
@@ -314,7 +314,7 @@ void EnAttackNiw_AimAtPlayer(EnAttackNiw* this, PlayState* play) {
     Math_SmoothStepToS(&this->actor.world.rot.y, this->targetRotY, 2, this->rotStep, 0);
     Math_SmoothStepToS(&this->actor.world.rot.x, this->targetRotX, 2, this->rotStep, 0);
     Math_ApproachF(&this->rotStep, 10000.0f, 1.0f, 1000.0f);
-    Math_ApproachF(&this->actor.speedXZ, this->targetXZSpeed, 0.9f, 1.0f);
+    Math_ApproachF(&this->actor.speed, this->targetXZSpeed, 0.9f, 1.0f);
 
     if (this->actor.gravity == -2.0f && this->unkTimer25A == 0 &&
         (this->actor.bgCheckFlags & 8 || this->randomAngleChangeTimer == 0)) {

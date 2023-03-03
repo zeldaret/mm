@@ -424,8 +424,8 @@ void func_8095B158(EnOwl* this) {
 }
 
 void func_8095B1E4(EnOwl* this, PlayState* play) {
-    if (this->actor.speedXZ < 6.0f) {
-        this->actor.speedXZ += 1.0f;
+    if (this->actor.speed < 6.0f) {
+        this->actor.speed += 1.0f;
     }
 
     if (this->actor.xzDistToPlayer > 6000.0f) {
@@ -434,8 +434,8 @@ void func_8095B1E4(EnOwl* this, PlayState* play) {
 }
 
 void func_8095B254(EnOwl* this, PlayState* play) {
-    if (this->actor.speedXZ < 6.0f) {
-        this->actor.speedXZ += 1.0f;
+    if (this->actor.speed < 6.0f) {
+        this->actor.speed += 1.0f;
     }
 
     if (this->actionFlags & 1) {
@@ -491,7 +491,7 @@ void func_8095B480(EnOwl* this, PlayState* play) {
         this->unk_3EC = this->actor.home.rot.y;
         this->actor.world.pos = this->actor.home.pos;
         func_8095A510(this, play);
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
         this->actionFunc = func_8095BE0C;
     }
 }
@@ -540,8 +540,8 @@ void func_8095B76C(EnOwl* this, PlayState* play) {
 
     Math_SmoothStepToS(&this->actor.world.rot.y, sp4A, 6, 0x800, 0x200);
     this->actor.shape.rot.y = this->actor.world.rot.y;
-    if (sp44 < SQ(this->actor.speedXZ)) {
-        this->actor.speedXZ = 0.0f;
+    if (sp44 < SQ(this->actor.speed)) {
+        this->actor.speed = 0.0f;
         points = Lib_SegmentedToVirtual(this->path->points);
         points += this->unk_3F8;
 
@@ -564,13 +564,13 @@ void func_8095B76C(EnOwl* this, PlayState* play) {
         }
         func_8095B0C8(this);
     } else if (sp44 < SQ(21.0f)) {
-        if (this->actor.speedXZ > 1.0f) {
-            this->actor.speedXZ -= 1.0f;
+        if (this->actor.speed > 1.0f) {
+            this->actor.speed -= 1.0f;
         } else {
-            this->actor.speedXZ = 1.0f;
+            this->actor.speed = 1.0f;
         }
-    } else if (this->actor.speedXZ < 6.0f) {
-        this->actor.speedXZ += 1.0f;
+    } else if (this->actor.speed < 6.0f) {
+        this->actor.speed += 1.0f;
     }
 
     func_8095B06C(this);
@@ -745,8 +745,8 @@ void func_8095BF78(EnOwl* this, PlayState* play) {
 
     Math_SmoothStepToS(&this->actor.world.rot.y, this->unk_3EC, 2, 0x80, 0x40);
     this->actor.shape.rot.y = this->actor.world.rot.y;
-    if (this->actor.speedXZ < 16.0f) {
-        this->actor.speedXZ += 0.5f;
+    if (this->actor.speed < 16.0f) {
+        this->actor.speed += 0.5f;
     }
 
     if ((this->unk_3E4 + 1000.0f) < this->actor.world.pos.y) {
@@ -767,11 +767,11 @@ void func_8095C09C(EnOwl* this, PlayState* play) {
     if (this->skelAnime1.curFrame > 45.0f) {
         this->actor.velocity.y = 2.0f;
         this->actor.gravity = 0.0f;
-        this->actor.speedXZ = 8.0f;
+        this->actor.speed = 8.0f;
     } else if (this->skelAnime1.curFrame > 17.0f) {
         this->actor.velocity.y = 6.0f;
         this->actor.gravity = 0.0f;
-        this->actor.speedXZ = 4.0f;
+        this->actor.speed = 4.0f;
     }
 
     if (this->actionFlags & 1) {

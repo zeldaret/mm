@@ -438,7 +438,7 @@ void EnRuppecrow_UpdateSpeed(EnRuppecrow* this, PlayState* play) {
 void EnRuppecrow_HandleDeath(EnRuppecrow* this) {
     f32 scale;
 
-    this->actor.speedXZ *= Math_CosS(this->actor.world.rot.x);
+    this->actor.speed *= Math_CosS(this->actor.world.rot.x);
     this->actor.velocity.y = 0.0f;
     Animation_Change(&this->skelAnime, &gGuayFlyAnim, 0.4f, 0.0f, 0.0f, ANIMMODE_LOOP_INTERP, -3.0f);
 
@@ -466,7 +466,7 @@ void EnRuppecrow_HandleDeath(EnRuppecrow* this) {
 
     Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 40);
     if (this->actor.flags & ACTOR_FLAG_8000) {
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
     }
 
     this->collider.base.acFlags &= ~AC_ON;
@@ -508,9 +508,9 @@ void EnRuppecrow_HandleSong(EnRuppecrow* this, PlayState* play) {
     }
 
     if (player->stateFlags2 & PLAYER_STATE2_8000000) {
-        Math_ApproachF(&this->actor.speedXZ, 0.0f, 0.1f, 1.0f);
+        Math_ApproachF(&this->actor.speed, 0.0f, 0.1f, 1.0f);
     } else {
-        Math_ApproachF(&this->actor.speedXZ, 6.0f, 0.1f, 0.1f);
+        Math_ApproachF(&this->actor.speed, 6.0f, 0.1f, 0.1f);
     }
 
     Actor_MoveWithoutGravity(&this->actor);
@@ -546,7 +546,7 @@ void EnRuppecrow_FlyWhileDroppingRupees(EnRuppecrow* this, PlayState* play) {
         //! @bug: Source of the "Termina Field Guay Glitch"; guay will no longer fall if killed after this point
         this->actor.gravity = 0.0f;
 
-        Math_ApproachF(&this->actor.speedXZ, 6.0f, 0.2f, 0.5f);
+        Math_ApproachF(&this->actor.speed, 6.0f, 0.2f, 0.5f);
         Math_ApproachF(&this->actor.velocity.y, 3.0f, 0.2f, 0.5f);
 
         this->actionFunc = EnRuppecrow_FlyToDespawn;
@@ -555,7 +555,7 @@ void EnRuppecrow_FlyWhileDroppingRupees(EnRuppecrow* this, PlayState* play) {
     } else {
         if (ActorCutscene_GetCurrentIndex() != this->actor.cutscene) {
             EnRuppecrow_UpdateSpeed(this, play);
-            Math_ApproachF(&this->actor.speedXZ, this->speedModifier, 0.2f, 0.5f);
+            Math_ApproachF(&this->actor.speed, this->speedModifier, 0.2f, 0.5f);
         }
 
         Actor_MoveWithoutGravity(&this->actor);
@@ -573,7 +573,7 @@ void EnRuppecrow_FlyToDespawn(EnRuppecrow* this, PlayState* play) {
         this->actor.world.rot.y *= -0x1;
     }
 
-    Math_ApproachF(&this->actor.speedXZ, this->speedModifier, 0.1f, 0.1f);
+    Math_ApproachF(&this->actor.speed, this->speedModifier, 0.1f, 0.1f);
     Math_ApproachF(&this->actor.velocity.y, 3.0f, 0.2f, 0.5f);
 
     if (this->actor.world.pos.y > 1000.0f || this->actor.xzDistToPlayer > 2000.0f) {
@@ -591,7 +591,7 @@ void EnRuppecrow_FlyToDespawn(EnRuppecrow* this, PlayState* play) {
 }
 
 void EnRuppecrow_FallToDespawn(EnRuppecrow* this, PlayState* play) {
-    Math_StepToF(&this->actor.speedXZ, 0.0f, 0.5f);
+    Math_StepToF(&this->actor.speed, 0.0f, 0.5f);
 
     if (this->currentEffect != ENRUPPECROW_EFFECT_ICE) {
         Math_StepToF(&this->unk_2C8, 0.0f, 0.05f);

@@ -228,7 +228,7 @@ s32 func_80BB18FC(EnGeg* this, Actor* actor) {
 
         if ((sp24 < 150.0f) && (fabsf(sp20) < 5.0f)) {
             this->unk_230 |= 0x20;
-            actor->speedXZ = 0.0f;
+            actor->speed = 0.0f;
             actor->velocity.y = 0.0f;
             this->actor.child = actor;
             actor->parent = &this->actor;
@@ -741,13 +741,13 @@ void func_80BB2F7C(EnGeg* this, PlayState* play) {
     if ((this->actor.xzDistToPlayer < 150.0f) && (fabsf(this->actor.playerHeightRel) < 10.0f) &&
         (this->actor.bgCheckFlags & 1)) {
         this->unk_4AC = 2;
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
         this->unk_230 &= ~1;
         this->actor.shape.yOffset = 0.0f;
         func_80BB2020(this, play);
         this->actionFunc = func_80BB2E00;
     } else {
-        this->actor.speedXZ = 5.0f;
+        this->actor.speed = 5.0f;
         Actor_MoveWithGravity(&this->actor);
     }
 
@@ -841,7 +841,7 @@ void func_80BB3318(EnGeg* this, PlayState* play) {
         func_800AEF44(Effect_GetByIndex(this->unk_4DC));
         Actor_Kill(&this->actor);
     } else {
-        Math_ApproachF(&this->actor.speedXZ, 10.0f, 0.2f, 1.0f);
+        Math_ApproachF(&this->actor.speed, 10.0f, 0.2f, 1.0f);
         Actor_MoveWithGravity(&this->actor);
     }
 
@@ -1058,7 +1058,7 @@ void func_80BB3BE0(EnGeg* this, PlayState* play) {
 }
 
 void func_80BB3CB4(EnGeg* this, PlayState* play) {
-    f32 sp24 = play->state.frames * this->actor.speedXZ * 1400.0f;
+    f32 sp24 = play->state.frames * this->actor.speed * 1400.0f;
 
     OPEN_DISPS(play->state.gfxCtx);
 

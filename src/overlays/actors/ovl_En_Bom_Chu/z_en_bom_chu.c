@@ -184,7 +184,7 @@ void EnBomChu_WaitForRelease(EnBomChu* this, PlayState* play) {
         func_800B8EF4(play, &this->actor);
 
         this->isMoving = true;
-        this->actor.speedXZ = 8.0f;
+        this->actor.speed = 8.0f;
         this->movingSpeed = 8.0f;
         EnBomChu_SetupMove(this);
     }
@@ -233,7 +233,7 @@ void EnBomChu_Move(EnBomChu* this, PlayState* play) {
     bgIdUpDown = bgIdSide = BGCHECK_SCENE;
     isFloorPolyValid = false;
 
-    this->actor.speedXZ = this->movingSpeed;
+    this->actor.speed = this->movingSpeed;
     lineLength = 2.0f * this->movingSpeed;
 
     if ((this->timer == 0) || (this->collider.base.acFlags & AC_HIT) || (this->collider.base.ocFlags1 & OC1_HIT)) {
@@ -259,7 +259,7 @@ void EnBomChu_Move(EnBomChu* this, PlayState* play) {
             isFloorPolyValid = EnBomChu_UpdateFloorPoly(this, polySide, play);
             Math_Vec3f_Copy(&this->actor.world.pos, &posSide);
             this->actor.floorBgId = bgIdSide;
-            this->actor.speedXZ = 0.0f;
+            this->actor.speed = 0.0f;
         } else {
             if (this->actor.floorPoly != polyUpDown) {
                 isFloorPolyValid = EnBomChu_UpdateFloorPoly(this, polyUpDown, play);
@@ -269,7 +269,7 @@ void EnBomChu_Move(EnBomChu* this, PlayState* play) {
             this->actor.floorBgId = bgIdUpDown;
         }
     } else {
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
         lineLength *= 3.0f;
         Math_Vec3f_Copy(&posA, &posB);
 
@@ -316,8 +316,8 @@ void EnBomChu_Move(EnBomChu* this, PlayState* play) {
         func_800B8F98(&this->actor, NA_SE_IT_BOMBCHU_MOVE - SFX_FLAG);
     }
 
-    if (this->actor.speedXZ != 0.0f) {
-        this->movingSpeed = this->actor.speedXZ;
+    if (this->actor.speed != 0.0f) {
+        this->movingSpeed = this->actor.speed;
     }
 }
 
@@ -336,7 +336,7 @@ void EnBomChu_Explode(EnBomChu* this, PlayState* play) {
     }
 
     this->timer = 1;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
 
     if (this->actor.depthInWater > 0.0f) {
         for (i = 0; i < 40; i++) {
@@ -441,7 +441,7 @@ void EnBomChu_HandleNonSceneCollision(EnBomChu* this, PlayState* play) {
         isFloorPolyValid = EnBomChu_UpdateFloorPoly(this, poly, play);
         Math_Vec3f_Copy(&this->actor.world.pos, &originalWorldPos);
         this->actor.floorBgId = bgId;
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
 
         if (isFloorPolyValid) {
             EnBomChu_UpdateRotation(this);

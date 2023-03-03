@@ -320,8 +320,8 @@ s32 EnBaba_MoveForward(EnBaba* this, f32 speedTarget) {
     s32 reachedEnd = false;
     Vec3f point;
 
-    Math_SmoothStepToF(&this->actor.speedXZ, speedTarget, 0.4f, 1000.0f, 0.0f);
-    rotStep = this->actor.speedXZ * 400.0f;
+    Math_SmoothStepToF(&this->actor.speed, speedTarget, 0.4f, 1000.0f, 0.0f);
+    rotStep = this->actor.speed * 400.0f;
     if (SubS_CopyPointFromPath(this->path, this->waypoint, &point) &&
         SubS_MoveActorToPoint(&this->actor, &point, rotStep)) {
         this->waypoint++;
@@ -485,7 +485,7 @@ void EnBaba_HandleSchedule(EnBaba* this, PlayState* play) {
             this->animIndex = BOMB_SHOP_LADY_ANIM_KNOCKED_OVER;
             // Ouch
             this->textId = 0x2A30;
-            this->actor.speedXZ = 0.0f;
+            this->actor.speed = 0.0f;
             Enemy_StartFinishingBlow(play, &this->actor);
             this->stateFlags |= BOMB_SHOP_LADY_STATE_KNOCKED_OVER;
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, this->animIndex);

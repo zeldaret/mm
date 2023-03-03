@@ -128,7 +128,7 @@ void ObjKibako2_SpawnSkulltula(ObjKibako2* this, PlayState* play) {
         if (skulltula != NULL) {
             skulltula->parent = &this->dyna.actor;
             skulltula->velocity.y = 13.0f;
-            skulltula->speedXZ = 0.0f;
+            skulltula->speed = 0.0f;
         }
     }
 }

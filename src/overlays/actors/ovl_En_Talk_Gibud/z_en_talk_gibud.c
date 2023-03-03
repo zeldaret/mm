@@ -322,7 +322,7 @@ void EnTalkGibud_AttemptPlayerFreeze(EnTalkGibud* this, PlayState* play) {
 
 void EnTalkGibud_SetupWalkToPlayer(EnTalkGibud* this) {
     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_TALK_GIBUD_ANIM_WALK);
-    this->actor.speedXZ = 0.4f;
+    this->actor.speed = 0.4f;
 
     if (this->actionFunc == EnTalkGibud_AttemptPlayerFreeze) {
         this->playerStunWaitTimer = 80;
@@ -448,13 +448,13 @@ void EnTalkGibud_Grab(EnTalkGibud* this, PlayState* play) {
 void EnTalkGibud_SetupGrabFail(EnTalkGibud* this) {
     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_TALK_GIBUD_ANIM_DAMAGE);
     Actor_PlaySfx(&this->actor, NA_SE_EN_REDEAD_DAMAGE);
-    this->actor.speedXZ = -2.0f;
+    this->actor.speed = -2.0f;
     this->actionFunc = EnTalkGibud_GrabFail;
 }
 
 void EnTalkGibud_GrabFail(EnTalkGibud* this, PlayState* play) {
-    if (this->actor.speedXZ < 0.0f) {
-        this->actor.speedXZ += 0.15f;
+    if (this->actor.speed < 0.0f) {
+        this->actor.speed += 0.15f;
     }
 
     this->actor.world.rot.y = this->actor.yawTowardsPlayer;
@@ -487,7 +487,7 @@ void EnTalkGibud_TurnAwayAndShakeHead(EnTalkGibud* this, PlayState* play) {
 
 void EnTalkGibud_SetupWalkToHome(EnTalkGibud* this) {
     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_TALK_GIBUD_ANIM_WALK);
-    this->actor.speedXZ = 0.4f;
+    this->actor.speed = 0.4f;
     this->actionFunc = EnTalkGibud_WalkToHome;
 }
 
@@ -495,10 +495,10 @@ void EnTalkGibud_WalkToHome(EnTalkGibud* this, PlayState* play) {
     Math_SmoothStepToS(&this->headRotation.y, 0, 1, 100, 0);
     Math_SmoothStepToS(&this->upperBodyRotation.y, 0, 1, 100, 0);
     if (Actor_WorldDistXZToPoint(&this->actor, &this->actor.home.pos) < 5.0f) {
-        if (this->actor.speedXZ > 0.2f) {
-            this->actor.speedXZ -= 0.2f;
+        if (this->actor.speed > 0.2f) {
+            this->actor.speed -= 0.2f;
         } else {
-            this->actor.speedXZ = 0.0f;
+            this->actor.speed = 0.0f;
         }
 
         Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.home.rot.y, 1, 200, 10);
@@ -521,7 +521,7 @@ void EnTalkGibud_WalkToHome(EnTalkGibud* this, PlayState* play) {
 
 void EnTalkGibud_SetupStunned(EnTalkGibud* this) {
     this->stunTimer = 10;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actor.world.rot.y = this->actor.shape.rot.y;
 
     if (this->drawDmgEffTimer != 0) {
@@ -553,13 +553,13 @@ void EnTalkGibud_SetupDamage(EnTalkGibud* this) {
     this->stunTimer = 0;
     this->grabWaitTimer = 0;
     this->actor.world.rot.y = this->actor.yawTowardsPlayer;
-    this->actor.speedXZ = -2.0f;
+    this->actor.speed = -2.0f;
     this->actionFunc = EnTalkGibud_Damage;
 }
 
 void EnTalkGibud_Damage(EnTalkGibud* this, PlayState* play) {
-    if (this->actor.speedXZ < 0.0f) {
-        this->actor.speedXZ += 0.15f;
+    if (this->actor.speed < 0.0f) {
+        this->actor.speed += 0.15f;
     }
 
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {

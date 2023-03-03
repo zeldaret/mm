@@ -356,7 +356,7 @@ void EnRd_SetupIdle(EnRd* this) {
 
     this->action = EN_RD_ACTION_IDLE;
     this->animationJudderTimer = (Rand_ZeroOne() * 10.0f) + 5.0f;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->actionFunc = EnRd_Idle;
 }
@@ -419,7 +419,7 @@ void EnRd_SetupSquattingDance(EnRd* this) {
     this->action = EN_RD_ACTION_SQUATTING_DANCE;
     this->animationJudderTimer = (Rand_ZeroOne() * 10.0f) + 5.0f;
     this->danceEndTimer = 0;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->actionFunc = EnRd_SquattingDance;
 }
@@ -463,7 +463,7 @@ void EnRd_SetupClappingDance(EnRd* this) {
     this->action = EN_RD_ACTION_CLAPPING_DANCE;
     this->animationJudderTimer = (Rand_ZeroOne() * 10.0f) + 5.0f;
     this->danceEndTimer = 0;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->actionFunc = EnRd_ClappingDance;
 }
@@ -524,7 +524,7 @@ void EnRd_SetupPirouette(EnRd* this) {
     this->action = EN_RD_ACTION_PIROUETTE;
     this->animationJudderTimer = (Rand_ZeroOne() * 10.0f) + 5.0f;
     this->pirouetteRotationalVelocity = 0x1112;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->actionFunc = EnRd_Pirouette;
 }
@@ -600,7 +600,7 @@ void EnRd_SetupRiseFromCoffin(EnRd* this) {
     this->actor.shape.rot.x = -0x4000;
     this->actor.gravity = 0.0f;
     this->actor.shape.yOffset = 0.0f;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actionFunc = EnRd_RiseFromCoffin;
 }
 
@@ -619,8 +619,8 @@ void EnRd_RiseFromCoffin(EnRd* this, PlayState* play) {
         if (Math_SmoothStepToF(&this->actor.world.pos.y, this->actor.home.pos.y + 50.0f, 0.3f, 2.0f, 0.3f) == 0.0f) {
             if (this->coffinRiseForwardAccelTimer != 0) {
                 this->coffinRiseForwardAccelTimer--;
-                Math_SmoothStepToF(&this->actor.speedXZ, 6.0f, 0.3f, 1.0f, 0.3f);
-            } else if (Math_SmoothStepToF(&this->actor.speedXZ, 0.0f, 0.3f, 1.0f, 0.3f) == 0.0f) {
+                Math_SmoothStepToF(&this->actor.speed, 6.0f, 0.3f, 1.0f, 0.3f);
+            } else if (Math_SmoothStepToF(&this->actor.speed, 0.0f, 0.3f, 1.0f, 0.3f) == 0.0f) {
                 Math_SmoothStepToS(&this->actor.shape.rot.x, 0, 1, 0x7D0, 0);
             }
         }
@@ -631,7 +631,7 @@ void EnRd_SetupWalkToPlayer(EnRd* this, PlayState* play) {
     f32 frameCount = Animation_GetLastFrame(&gGibdoRedeadWalkAnim);
 
     Animation_Change(&this->skelAnime, &gGibdoRedeadWalkAnim, 1.0f, 4.0f, frameCount, ANIMMODE_LOOP_INTERP, -4.0f);
-    this->actor.speedXZ = 0.4f;
+    this->actor.speed = 0.4f;
     this->action = EN_RD_ACTION_WALKING_TO_PLAYER_OR_RELEASING_GRAB;
     this->actionFunc = EnRd_WalkToPlayer;
 }
@@ -642,7 +642,7 @@ void EnRd_WalkToPlayer(EnRd* this, PlayState* play) {
     s16 yaw =
         ((this->actor.yawTowardsPlayer - this->actor.shape.rot.y) - this->headYRotation) - this->upperBodyYRotation;
 
-    this->skelAnime.playSpeed = this->actor.speedXZ;
+    this->skelAnime.playSpeed = this->actor.speed;
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 1, 250, 0);
     Math_SmoothStepToS(&this->headYRotation, 0, 1, 100, 0);
     Math_SmoothStepToS(&this->upperBodyYRotation, 0, 1, 100, 0);
@@ -721,7 +721,7 @@ void EnRd_WalkToHome(EnRd* this, PlayState* play) {
     if (Actor_WorldDistXYZToPoint(&this->actor, &this->actor.home.pos) >= 5.0f) {
         Math_SmoothStepToS(&this->actor.shape.rot.y, sp36, 1, 450, 0);
     } else {
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
         if (!Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.home.rot.y, 1, 450, 0)) {
             if (EN_RD_GET_TYPE(&this->actor) != EN_RD_TYPE_CRYING) {
                 EnRd_SetupIdle(this);
@@ -783,9 +783,9 @@ void EnRd_WalkToParent(EnRd* this, PlayState* play) {
 
         Math_SmoothStepToS(&this->actor.shape.rot.y, yaw, 1, 250, 0);
         if (Actor_WorldDistXYZToPoint(&this->actor, &parentPos) >= 45.0f) {
-            this->actor.speedXZ = 0.4f;
+            this->actor.speed = 0.4f;
         } else {
-            this->actor.speedXZ = 0.0f;
+            this->actor.speed = 0.0f;
             if (EN_RD_GET_TYPE(&this->actor) != EN_RD_TYPE_CRYING) {
                 EnRd_SetupIdle(this);
             } else {
@@ -814,7 +814,7 @@ void EnRd_SetupGrab(EnRd* this) {
     this->grabState = 0;
     this->grabDamageTimer = 200;
     this->action = EN_RD_ACTION_GRABBING;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actionFunc = EnRd_Grab;
 }
 
@@ -930,15 +930,15 @@ void EnRd_AttemptPlayerFreeze(EnRd* this, PlayState* play) {
 void EnRd_SetupGrabFail(EnRd* this) {
     this->action = EN_RD_ACTION_FAILING_GRAB;
     Animation_MorphToPlayOnce(&this->skelAnime, &gGibdoRedeadDamageAnim, -6.0f);
-    this->actor.speedXZ = -2.0f;
+    this->actor.speed = -2.0f;
     Actor_PlaySfx(&this->actor, NA_SE_EN_REDEAD_DAMAGE);
     this->action = EN_RD_ACTION_FAILING_GRAB;
     this->actionFunc = EnRd_GrabFail;
 }
 
 void EnRd_GrabFail(EnRd* this, PlayState* play) {
-    if (this->actor.speedXZ < 0.0f) {
-        this->actor.speedXZ += 0.15f;
+    if (this->actor.speed < 0.0f) {
+        this->actor.speed += 0.15f;
     }
 
     this->actor.world.rot.y = this->actor.yawTowardsPlayer;
@@ -1005,7 +1005,7 @@ void EnRd_SetupDamage(EnRd* this) {
     this->actor.shape.yOffset = 0.0f;
     Animation_MorphToPlayOnce(&this->skelAnime, &gGibdoRedeadDamageAnim, -6.0f);
     if (this->actor.bgCheckFlags & 1) {
-        this->actor.speedXZ = -2.0f;
+        this->actor.speed = -2.0f;
     }
 
     this->actor.flags |= ACTOR_FLAG_1;
@@ -1017,8 +1017,8 @@ void EnRd_SetupDamage(EnRd* this) {
 void EnRd_Damage(EnRd* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (this->actor.speedXZ < 0.0f) {
-        this->actor.speedXZ += 0.15f;
+    if (this->actor.speed < 0.0f) {
+        this->actor.speed += 0.15f;
     }
 
     this->actor.world.rot.y = this->actor.yawTowardsPlayer;
@@ -1043,7 +1043,7 @@ void EnRd_SetupDead(EnRd* this) {
     this->action = EN_RD_ACTION_DEAD;
     this->deathTimer = 300;
     this->actor.flags &= ~ACTOR_FLAG_1;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     Actor_PlaySfx(&this->actor, NA_SE_EN_REDEAD_DEAD);
     this->actionFunc = EnRd_Dead;
 }
@@ -1082,7 +1082,7 @@ void EnRd_Dead(EnRd* this, PlayState* play) {
 void EnRd_SetupStunned(EnRd* this) {
     this->action = EN_RD_ACTION_STUNNED;
     this->stunTimer = 10;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actor.world.rot.y = this->actor.shape.rot.y;
     if (gSaveContext.sunsSongState != SUNSSONG_INACTIVE) {
         this->stunnedBySunsSong = true;
@@ -1275,12 +1275,11 @@ void EnRd_Update(Actor* thisx, PlayState* play) {
 
         this->actionFunc(this, play);
 
-        if ((this->action != EN_RD_ACTION_GRABBING) && (this->actor.speedXZ != 0.0f)) {
+        if ((this->action != EN_RD_ACTION_GRABBING) && (this->actor.speed != 0.0f)) {
             Actor_MoveWithGravity(&this->actor);
         }
 
-        if ((this->actor.shape.rot.x == 0) && (this->action != EN_RD_ACTION_GRABBING) &&
-            (this->actor.speedXZ != 0.0f)) {
+        if ((this->actor.shape.rot.x == 0) && (this->action != EN_RD_ACTION_GRABBING) && (this->actor.speed != 0.0f)) {
             Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 20.0f, 35.0f, 0x1D);
         }
 

@@ -537,7 +537,7 @@ void func_80A1CC0C(ObjFlowerpot* this, PlayState* play) {
 
     if (Actor_HasNoParent(&this->actor, play)) {
         this->actor.room = play->roomCtx.curRoom.num;
-        if (fabsf(this->actor.speedXZ) < 0.1f) {
+        if (fabsf(this->actor.speed) < 0.1f) {
             func_80A1C818(this);
             Player_PlaySfx(GET_PLAYER(play), NA_SE_PL_PUT_DOWN_POT);
             this->collider.base.ocFlags1 &= ~OC1_TYPE_PLAYER;

@@ -130,37 +130,37 @@ void func_80965DB4(EnMm* this, PlayState* play) {
             this->actor.velocity.y = 0.0f;
         }
 
-        if ((this->actor.speedXZ != 0.0f) && (this->actor.bgCheckFlags & 8)) {
+        if ((this->actor.speed != 0.0f) && (this->actor.bgCheckFlags & 8)) {
             angle = BINANG_SUB(this->actor.world.rot.y, BINANG_ROT180(this->actor.wallYaw));
             this->actor.world.rot.y += BINANG_SUB(0x8000, (s16)(angle * 2));
-            this->actor.speedXZ *= 0.5f;
+            this->actor.speed *= 0.5f;
             CollisionCheck_SpawnShieldParticles(play, &this->actor.world.pos);
             Actor_PlaySfx(&this->actor, NA_SE_EV_HUMAN_BOUND);
         }
 
         if (!(this->actor.bgCheckFlags & 1)) {
-            Math_StepToF(&this->actor.speedXZ, 0.0f, 0.08f);
+            Math_StepToF(&this->actor.speed, 0.0f, 0.08f);
         } else {
-            temp_f14 = Math_SinS(this->actor.world.rot.y) * this->actor.speedXZ;
-            temp_f12 = Math_CosS(this->actor.world.rot.y) * this->actor.speedXZ;
+            temp_f14 = Math_SinS(this->actor.world.rot.y) * this->actor.speed;
+            temp_f12 = Math_CosS(this->actor.world.rot.y) * this->actor.speed;
             Actor_GetSlopeDirection(this->actor.floorPoly, &slopeNormal, &downwardSlopeYaw);
             temp_f14 += 3.0f * slopeNormal.x;
             temp_f12 += 3.0f * slopeNormal.z;
             temp_f2 = sqrtf(SQ(temp_f14) + SQ(temp_f12));
 
-            if ((temp_f2 < this->actor.speedXZ) ||
+            if ((temp_f2 < this->actor.speed) ||
                 (SurfaceType_GetSlope(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId) == 1)) {
-                this->actor.speedXZ = CLAMP_MAX(temp_f2, 16.0f);
+                this->actor.speed = CLAMP_MAX(temp_f2, 16.0f);
                 this->actor.world.rot.y = Math_Atan2S_XY(temp_f12, temp_f14);
             }
 
-            if (!Math_StepToF(&this->actor.speedXZ, 0.0f, 1.0f)) {
+            if (!Math_StepToF(&this->actor.speed, 0.0f, 1.0f)) {
                 direction = this->actor.world.rot.y;
                 if (ABS_ALT(BINANG_SUB(this->actor.world.rot.y, this->actor.shape.rot.y)) > 0x4000) {
                     direction = BINANG_ROT180(direction);
                 }
-                Math_ScaledStepToS(&this->actor.shape.rot.y, direction, this->actor.speedXZ * 100.0f);
-                this->unk_190 += (s16)(this->actor.speedXZ * 800.0f);
+                Math_ScaledStepToS(&this->actor.shape.rot.y, direction, this->actor.speed * 100.0f);
+                this->unk_190 += (s16)(this->actor.speed * 800.0f);
             }
 
             if (this->actor.bgCheckFlags & 2) {

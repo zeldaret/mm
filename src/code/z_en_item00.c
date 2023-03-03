@@ -219,7 +219,7 @@ void EnItem00_Init(Actor* thisx, PlayState* play) {
     this->unk152 = 15;
     this->unk14C = 35;
 
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actor.velocity.y = 0.0f;
     this->actor.gravity = 0.0f;
 
@@ -346,7 +346,7 @@ void func_800A640C(EnItem00* this, PlayState* play) {
         this->actor.shape.yOffset = (Math_SinS(this->actor.shape.rot.y) * 150.0f) + 850.0f;
     }
 
-    Math_SmoothStepToF(&this->actor.speedXZ, 0.0f, 1.0f, 0.5f, 0.0f);
+    Math_SmoothStepToF(&this->actor.speed, 0.0f, 1.0f, 0.5f, 0.0f);
 
     if (this->unk14C == 0) {
         if ((this->actor.params != ITEM00_SMALL_KEY) && (this->actor.params != ITEM00_HEART_PIECE) &&
@@ -406,7 +406,7 @@ void func_800A6780(EnItem00* this, PlayState* play) {
 
     if (this->actor.params == ITEM00_RECOVERY_HEART) {
         if (this->actor.velocity.y < 0.0f) {
-            this->actor.speedXZ = 0.0f;
+            this->actor.speed = 0.0f;
             this->actor.gravity = -0.4f;
             if (this->actor.velocity.y < -1.5f) {
                 this->actor.velocity.y = -1.5f;
@@ -447,7 +447,7 @@ void func_800A6780(EnItem00* this, PlayState* play) {
     if (this->actor.bgCheckFlags & 3) {
         this->actionFunc = func_800A640C;
         this->actor.shape.rot.z = 0;
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
     }
 }
 
@@ -684,7 +684,7 @@ void EnItem00_Update(Actor* thisx, PlayState* play) {
     this->unk152 = 15;
     this->unk14C = 35;
     this->actor.shape.rot.z = 0;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actor.velocity.y = 0.0f;
     this->actor.gravity = 0.0f;
 
@@ -951,7 +951,7 @@ Actor* Item_DropCollectible(PlayState* play, Vec3f* spawnPos, u32 params) {
                 } else {
                     spawnedActor->velocity.y = -2.0f;
                 }
-                spawnedActor->speedXZ = 2.0f;
+                spawnedActor->speed = 2.0f;
                 spawnedActor->gravity = -0.9f;
                 spawnedActor->world.rot.y = randPlusMinusPoint5Scaled(0x10000);
                 Actor_SetScale(spawnedActor, 0.0f);
@@ -1002,7 +1002,7 @@ Actor* Item_DropCollectible2(PlayState* play, Vec3f* spawnPos, s32 params) {
             if (spawnedActor != NULL) {
                 if (param8000 == 0) {
                     spawnedActor->velocity.y = 0.0f;
-                    spawnedActor->speedXZ = 0.0f;
+                    spawnedActor->speed = 0.0f;
                     if (param10000 != 0) {
                         spawnedActor->gravity = 0.0f;
                     } else {
@@ -1196,7 +1196,7 @@ void Item_DropCollectibleRandom(PlayState* play, Actor* fromActor, Vec3f* spawnP
                                                               spawnPos->y, spawnPos->z, 0, 0, 0, dropId);
                         if ((spawnedActor != 0) && (dropId != (u8)ITEM00_NO_DROP)) {
                             spawnedActor->actor.velocity.y = 8.0f;
-                            spawnedActor->actor.speedXZ = 2.0f;
+                            spawnedActor->actor.speed = 2.0f;
                             spawnedActor->actor.gravity = -0.9f;
                             spawnedActor->actor.world.rot.y = Rand_ZeroOne() * 40000.0f;
                             Actor_SetScale(&spawnedActor->actor, 0.0f);

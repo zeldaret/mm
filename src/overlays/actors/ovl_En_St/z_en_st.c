@@ -784,7 +784,7 @@ void func_808A6E24(EnSt* this, PlayState* play) {
             this->actor.world.rot.x = 0x4000;
             this->actor.shape.rot.x = this->actor.world.rot.x;
             this->unk_2D0 = this->actor.velocity.y = fabsf(this->actor.velocity.y) * 0.6f;
-            this->actor.speedXZ = 0.0f;
+            this->actor.speed = 0.0f;
 
             if ((s32)this->unk_2D0 != 0) {
                 Actor_PlaySfx(&this->actor, NA_SE_EN_EYEGOLE_ATTACK);

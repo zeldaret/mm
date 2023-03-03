@@ -241,7 +241,7 @@ void func_80A326F0(EnPr* this) {
         func_80A3242C(this, 0);
     }
     this->unk_206 = 0;
-    this->actor.speedXZ = 1.0f;
+    this->actor.speed = 1.0f;
     this->actionFunc = func_80A32740;
 }
 
@@ -343,19 +343,19 @@ void func_80A32AF8(EnPr* this) {
 void func_80A32B20(EnPr* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    this->actor.speedXZ = BREG(57) + 3.0f;
+    this->actor.speed = BREG(57) + 3.0f;
     Math_SmoothStepToS(&this->unk_22C, this->actor.yawTowardsPlayer, BREG(49) + 1, BREG(50) + 1000, BREG(51));
     this->unk_2B8 = D_80A338C0[GET_PLAYER_FORM] + player->actor.world.pos.y;
     func_80A324E0(this, play);
 
     if (!(player->stateFlags1 & PLAYER_STATE1_8000000)) {
         this->skelAnime.playSpeed = 1.0f;
-        this->actor.speedXZ = 1.0f;
+        this->actor.speed = 1.0f;
         func_80A32854(this);
     } else if (this->unk_2C8 < sqrtf(SQ(player->actor.world.pos.x - this->actor.home.pos.x) +
                                      SQ(player->actor.world.pos.z - this->actor.home.pos.z))) {
         this->skelAnime.playSpeed = 1.0f;
-        this->actor.speedXZ = 1.0f;
+        this->actor.speed = 1.0f;
         func_80A32854(this);
     } else if (!func_80A325E4(this) && (this->actor.xzDistToPlayer < 200.0f) &&
                (fabsf(player->actor.world.pos.y - this->actor.world.pos.y) < 80.0f)) {
@@ -377,7 +377,7 @@ void func_80A32D28(EnPr* this, PlayState* play) {
 
     if (!(player->stateFlags1 & PLAYER_STATE1_8000000)) {
         this->skelAnime.playSpeed = 1.0f;
-        this->actor.speedXZ = 1.0f;
+        this->actor.speed = 1.0f;
         func_80A32854(this);
     } else {
         Math_SmoothStepToS(&this->unk_22C, this->actor.yawTowardsPlayer, BREG(49) + 1, BREG(50) + 1000, BREG(51));
@@ -387,7 +387,7 @@ void func_80A32D28(EnPr* this, PlayState* play) {
         if (this->unk_2C8 < sqrtf(SQ(player->actor.world.pos.x - this->actor.home.pos.x) +
                                   SQ(player->actor.world.pos.z - this->actor.home.pos.z))) {
             this->skelAnime.playSpeed = 1.0f;
-            this->actor.speedXZ = 1.0f;
+            this->actor.speed = 1.0f;
             func_80A32854(this);
         }
     }
@@ -396,7 +396,7 @@ void func_80A32D28(EnPr* this, PlayState* play) {
 void func_80A32E60(EnPr* this) {
     func_80A3242C(this, 4);
     this->unk_206 = 6;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actionFunc = func_80A32EA4;
 }
 

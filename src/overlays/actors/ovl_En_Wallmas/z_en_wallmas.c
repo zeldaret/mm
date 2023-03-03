@@ -324,7 +324,7 @@ void EnWallmas_Stand(EnWallmas* this, PlayState* play) {
 
 void EnWallmas_SetupWalk(EnWallmas* this) {
     Animation_PlayOnceSetSpeed(&this->skelAnime, &gWallmasterWalkAnim, 3.0f);
-    this->actor.speedXZ = 3.0f;
+    this->actor.speed = 3.0f;
     this->actionFunc = EnWallmas_Walk;
 }
 
@@ -343,7 +343,7 @@ void EnWallmas_Walk(EnWallmas* this, PlayState* play) {
 
 void EnWallmas_SetupJumpToCeiling(EnWallmas* this) {
     Animation_PlayOnce(&this->skelAnime, &gWallmasterStopWalkAnim);
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actionFunc = EnWallmas_JumpToCeiling;
 }
 
@@ -355,7 +355,7 @@ void EnWallmas_JumpToCeiling(EnWallmas* this, PlayState* play) {
 
 void EnWallmas_SetupReturnToCeiling(EnWallmas* this) {
     this->timer = 0;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     Animation_Change(&this->skelAnime, &gWallmasterJumpAnim, 3.0f, 0.0f, Animation_GetLastFrame(&gWallmasterJumpAnim),
                      ANIMMODE_ONCE, -3.0f);
     this->actionFunc = EnWallmas_ReturnToCeiling;
@@ -398,7 +398,7 @@ void EnWallmas_SetupDamage(EnWallmas* this, s32 arg1) {
     }
 
     Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 20);
-    this->actor.speedXZ = 5.0f;
+    this->actor.speed = 5.0f;
     this->actor.velocity.y = 10.0f;
     this->actionFunc = EnWallmas_Damage;
 }
@@ -416,12 +416,12 @@ void EnWallmas_Damage(EnWallmas* this, PlayState* play) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_EYEGOLE_ATTACK);
     }
 
-    Math_StepToF(&this->actor.speedXZ, 0.0f, 0.2f);
+    Math_StepToF(&this->actor.speed, 0.0f, 0.2f);
 }
 
 void EnWallmas_SetupCooldown(EnWallmas* this) {
     Animation_PlayOnce(&this->skelAnime, &gWallmasterRecoverFromDamageAnim);
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actor.velocity.y = 0.0f;
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->actionFunc = EnWallmas_Cooldown;
@@ -434,7 +434,7 @@ void EnWallmas_Cooldown(EnWallmas* this, PlayState* play) {
 }
 
 void EnWallmas_SetupDie(EnWallmas* this, PlayState* play) {
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actor.velocity.y = 0.0f;
     func_800B3030(play, &this->actor.world.pos, &gZeroVec3f, &gZeroVec3f, 250, -10, 2);
     SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 11, NA_SE_EN_EXTINCT);
@@ -456,7 +456,7 @@ void EnWallmas_SetupTakePlayer(EnWallmas* this, PlayState* play) {
     Animation_MorphToPlayOnce(&this->skelAnime, &gWallmasterHoverAnim, -5.0f);
     this->timer = -30;
     this->actionFunc = EnWallmas_TakePlayer;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actor.velocity.y = 0.0f;
     this->yTarget = this->actor.playerHeightRel;
     func_800B724C(play, &this->actor, PLAYER_CSMODE_18);
@@ -530,7 +530,7 @@ void EnWallmas_WaitForSwitchFlag(EnWallmas* this, PlayState* play) {
 }
 
 void EnWallmas_SetupStun(EnWallmas* this) {
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     if (this->actor.velocity.y > 0.0f) {
         this->actor.velocity.y = 0.0f;
     }

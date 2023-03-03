@@ -316,7 +316,7 @@ void func_80BDBA28(EnHiddenNuts* this, PlayState* play) {
         Actor_Kill(&this->actor);
     }
 
-    this->actor.speedXZ = 2.0f;
+    this->actor.speed = 2.0f;
     this->actor.gravity = -2.0f;
     this->actor.velocity.y = 4.0f;
     this->actor.world.rot.y = Math_Vec3f_Yaw(&this->actor.world.pos, &this->unk_20C);
@@ -360,7 +360,7 @@ void func_80BDBB48(EnHiddenNuts* this, PlayState* play) {
 
     if (this->unk_220 == 2) {
         if (this->unk_22C <= sp58) {
-            this->actor.speedXZ = 0.0f;
+            this->actor.speed = 0.0f;
             this->actor.velocity.y = 0.0f;
             func_80BDB1B4(this, 6);
         }

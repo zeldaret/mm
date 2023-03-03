@@ -375,7 +375,7 @@ void EnIk_SetupIdle(EnIk* this) {
     Animation_Change(&this->skelAnime, &gIronKnuckleEndHorizontalAttackAnim, 1.0f, frameCount, frameCount,
                      ANIMMODE_ONCE, this->timer);
     this->actionFunc = EnIk_Idle;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
 }
 
 void EnIk_Idle(EnIk* this, PlayState* play) {
@@ -397,7 +397,7 @@ void EnIk_Idle(EnIk* this, PlayState* play) {
 
 void EnIk_SetupWalk(EnIk* this) {
     Animation_MorphToLoop(&this->skelAnime, &gIronKnuckleWalkAnim, -4.0f);
-    this->actor.speedXZ = 0.9f;
+    this->actor.speed = 0.9f;
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->actionFunc = EnIk_WalkTowardsPlayer;
 }
@@ -425,7 +425,7 @@ void EnIk_WalkTowardsPlayer(EnIk* this, PlayState* play) {
 void EnIk_SetupRun(EnIk* this) {
     Animation_MorphToLoop(&this->skelAnime, &gIronKnuckleRunAnim, -4.0f);
     Actor_PlaySfx(&this->actor, NA_SE_EN_TWINROBA_SHOOT_VOICE);
-    this->actor.speedXZ = 2.5f;
+    this->actor.speed = 2.5f;
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->actionFunc = EnIk_RunTowardsPlayer;
 }
@@ -454,7 +454,7 @@ void EnIk_SetupVerticalAttack(EnIk* this) {
     s32 pad;
     f32 playbackSpeed;
 
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     if (this->drawArmorFlags) {
         playbackSpeed = 1.5f;
     } else {
@@ -488,11 +488,11 @@ void EnIk_VerticalAttack(EnIk* this, PlayState* play) {
         if ((this->skelAnime.curFrame > 13.0f) && (this->skelAnime.curFrame < 23.0f)) {
             this->colliderQuad.base.atFlags |= AT_ON;
             if (this->drawArmorFlags) {
-                this->actor.speedXZ = sin_rad((this->skelAnime.curFrame - 13.0f) * (M_PI / 20)) * 10.0f;
+                this->actor.speed = sin_rad((this->skelAnime.curFrame - 13.0f) * (M_PI / 20)) * 10.0f;
             }
         } else {
             this->colliderQuad.base.atFlags &= ~AT_ON;
-            this->actor.speedXZ = 0.0f;
+            this->actor.speed = 0.0f;
         }
 
         if ((this->drawArmorFlags) && (this->skelAnime.curFrame < 13.0f)) {
@@ -525,7 +525,7 @@ void EnIk_TakeOutAxe(EnIk* this, PlayState* play) {
 }
 
 void EnIk_SetupHorizontalDoubleAttack(EnIk* this) {
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     Animation_Change(&this->skelAnime, &gIronKnuckleHorizontalAttackAnim, (this->drawArmorFlags) ? 1.3f : 1.0f, 0.0f,
                      Animation_GetLastFrame(&gIronKnuckleHorizontalAttackAnim.common), ANIMMODE_ONCE_INTERP,
                      (this->drawArmorFlags) ? 4.0f : 10.0f);
@@ -551,12 +551,12 @@ void EnIk_HorizontalDoubleAttack(EnIk* this, PlayState* play) {
             } else {
                 phi_f2 = this->skelAnime.curFrame - 1.0f;
             }
-            this->actor.speedXZ = sin_rad((M_PI / 8) * phi_f2) * 4.5f;
+            this->actor.speed = sin_rad((M_PI / 8) * phi_f2) * 4.5f;
         }
         this->colliderQuad.base.atFlags |= AT_ON;
     } else {
         this->colliderQuad.base.atFlags &= ~AT_ON;
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
     }
     if (SkelAnime_Update(&this->skelAnime)) {
         EnIk_SetupEndHorizontalAttack(this);
@@ -566,7 +566,7 @@ void EnIk_HorizontalDoubleAttack(EnIk* this, PlayState* play) {
 void EnIk_SetupSingleHorizontalAttack(EnIk* this) {
     f32 playSpeed;
 
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     if (this->drawArmorFlags) {
         this->actor.world.rot.z = 0x1000;
         playSpeed = 1.3f;
@@ -611,7 +611,7 @@ void EnIk_EndHorizontalAttack(EnIk* this, PlayState* play) {
 }
 
 void EnIk_SetupBlock(EnIk* this) {
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     Animation_Change(&this->skelAnime, &gIronKnuckleBlockAnim, 2.0f, 0.0f,
                      Animation_GetLastFrame(&gIronKnuckleBlockAnim), ANIMMODE_ONCE, -2.0f);
     this->timer = 20;
@@ -634,7 +634,7 @@ void EnIk_SetupReactToAttack(EnIk* this, s32 arg1) {
     if (arg1) {
         func_800BE504(&this->actor, &this->colliderCylinder);
     }
-    this->actor.speedXZ = 6.0f;
+    this->actor.speed = 6.0f;
     temp_v0 = (this->actor.world.rot.y - this->actor.shape.rot.y) + 0x8000;
     if (ABS_ALT(temp_v0) <= 0x4000) {
         Animation_MorphToPlayOnce(&this->skelAnime, &gIronKnuckleFrontHitAnim, -4.0f);
@@ -645,7 +645,7 @@ void EnIk_SetupReactToAttack(EnIk* this, s32 arg1) {
 }
 
 void EnIk_ReactToAttack(EnIk* this, PlayState* play) {
-    Math_StepToF(&this->actor.speedXZ, 0.0f, 1.0f);
+    Math_StepToF(&this->actor.speed, 0.0f, 1.0f);
     if (this->subCamId != SUB_CAM_ID_DONE) {
         Play_SetCameraAtEye(play, this->subCamId, &this->actor.focus.pos, &Play_GetCamera(play, this->subCamId)->eye);
     }
@@ -664,7 +664,7 @@ void EnIk_ReactToAttack(EnIk* this, PlayState* play) {
 }
 
 void EnIk_SetupDie(EnIk* this) {
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     Animation_MorphToPlayOnce(&this->skelAnime, &gIronKnuckleDeathAnim, -4.0f);
     this->timer = 24;
     Actor_PlaySfx(&this->actor, NA_SE_EN_IRONNACK_DEAD);
@@ -705,7 +705,7 @@ void EnIk_Die(EnIk* this, PlayState* play) {
 void EnIk_SetupFrozen(EnIk* this) {
     this->invincibilityFrames = 0;
     this->actionFunc = EnIk_Frozen;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
 }
 
 void EnIk_Frozen(EnIk* this, PlayState* play) {
@@ -724,7 +724,7 @@ void EnIk_Frozen(EnIk* this, PlayState* play) {
 
 void EnIk_SetupCutscene(EnIk* this) {
     ActorCutscene_SetIntentToPlay(this->actor.cutscene);
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     if (this->actor.colChkInfo.health != 0) {
         func_800BE504(&this->actor, &this->colliderCylinder);
     }
