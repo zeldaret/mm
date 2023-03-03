@@ -772,7 +772,7 @@ void ObjUm_Init(Actor* thisx, PlayState* play) {
         return;
     }
 
-    func_800C636C(play, &play->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DisableCeilingCollision(play, &play->colCtx.dyna, this->dyna.bgId);
 
     this->donkey =
         (EnHorse*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_HORSE, this->dyna.actor.world.pos.x,

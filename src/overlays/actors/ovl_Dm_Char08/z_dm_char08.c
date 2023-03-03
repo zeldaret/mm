@@ -960,7 +960,7 @@ void DmChar08_UpdateCollision(DmChar08* this, PlayState* play) {
         sTurtleGreatBayTempleColVertices[5].y = 0x4B0;
         sTurtleGreatBayTempleColVertices[9].y = 0x6A4;
     }
-    func_800C6554(play, &play->colCtx.dyna);
+    DynaPoly_InvalidateLookup(play, &play->colCtx.dyna);
 }
 
 void DmChar08_Update(Actor* thisx, PlayState* play) {
@@ -988,9 +988,9 @@ void DmChar08_Update(Actor* thisx, PlayState* play) {
     this->dyna.actor.world.pos.y = this->targetYPos;
     if (play->sceneId == SCENE_31MISAKI) {
         if (this->dyna.actor.xzDistToPlayer > 1300.0f) {
-            func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+            DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
         } else {
-            func_800C6314(play, &play->colCtx.dyna, this->dyna.bgId);
+            DynaPoly_EnableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
         }
     }
     if (this->unk_1FF != 0) {

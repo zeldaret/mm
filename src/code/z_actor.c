@@ -2390,7 +2390,7 @@ Actor* Actor_UpdateActor(UpdateActor_Params* params) {
                     }
 
                     actor->update(actor, play);
-                    BgCheck_ResetFlagsIfLoadedActor(play, &play->colCtx.dyna, actor);
+                    DynaPoly_UnsetAllInteractFlags(play, &play->colCtx.dyna, actor);
                 }
 
                 CollisionCheck_ResetDamage(&actor->colChkInfo);
@@ -2480,7 +2480,7 @@ void Actor_UpdateAll(PlayState* play, ActorContext* actorCtx) {
         }
 
         if (i == ACTORCAT_BG) {
-            DynaPoly_Setup(play, &play->colCtx.dyna);
+            DynaPoly_UpdateContext(play, &play->colCtx.dyna);
         }
     }
 

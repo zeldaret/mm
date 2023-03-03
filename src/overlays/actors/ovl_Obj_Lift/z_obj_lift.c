@@ -194,7 +194,7 @@ void func_8093DA48(ObjLift* this, PlayState* play) {
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->dyna.actor.world.pos, 20, NA_SE_EV_BOX_BREAK);
         if (this->unk_178 > 0) {
             func_8093DB70(this);
-            func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+            DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
         } else {
             Flags_SetSwitch(play, OBJLIFT_GET_7F(&this->dyna.actor));
             Actor_Kill(&this->dyna.actor);
@@ -212,7 +212,7 @@ void func_8093DB90(ObjLift* this, PlayState* play) {
     if (this->timer <= 0) {
         Math_Vec3f_Copy(&this->dyna.actor.world.pos, &this->dyna.actor.home.pos);
         this->dyna.actor.world.rot = this->dyna.actor.shape.rot = this->dyna.actor.home.rot;
-        func_800C6314(play, &play->colCtx.dyna, this->dyna.bgId);
+        DynaPoly_EnableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
         func_8093D760(this);
     }
 }

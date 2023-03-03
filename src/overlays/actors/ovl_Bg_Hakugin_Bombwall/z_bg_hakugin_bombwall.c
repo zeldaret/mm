@@ -401,7 +401,7 @@ void func_80ABCD98(BgHakuginBombwall* this, PlayState* play) {
         this->dyna.actor.draw = NULL;
         this->unk_1AC = 20;
         Flags_SetSwitch(play, BGHAKUGIN_BOMBWALL_SWITCHFLAG(&this->dyna.actor));
-        func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+        DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
         this->actionFunc = func_80ABCE60;
     } else {
         ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);

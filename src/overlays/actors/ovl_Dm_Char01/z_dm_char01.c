@@ -373,17 +373,17 @@ void DmChar01_Update(Actor* thisx, PlayState* play2) {
             Player* player = GET_PLAYER(play);
 
             if (player->actor.world.pos.y > 5.0f) {
-                func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+                DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
             } else {
-                func_800C6314(play, &play->colCtx.dyna, this->dyna.bgId);
+                DynaPoly_EnableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
             }
         }
 
         if (DMCHAR01_GET(&this->dyna.actor) == DMCHAR01_2) {
             if (this->dyna.actor.xzDistToPlayer > 600.0f) {
-                func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+                DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
             } else {
-                func_800C6314(play, &play->colCtx.dyna, this->dyna.bgId);
+                DynaPoly_EnableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
             }
         }
     }

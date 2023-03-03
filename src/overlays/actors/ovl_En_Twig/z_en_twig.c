@@ -91,7 +91,7 @@ void EnTwig_Init(Actor* thisx, PlayState* play2) {
             }
             Actor_SetScale(&this->dyna.actor, 4.2f);
             this->dyna.actor.uncullZoneScale = this->dyna.actor.uncullZoneDownward = this->dyna.actor.scale.x * 60.0f;
-            func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+            DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
             func_80AC0A7C(this, play);
             break;
         case 2:
@@ -149,9 +149,9 @@ void func_80AC0AC8(EnTwig* this, PlayState* play) {
         }
     } else {
         if (this->dyna.actor.xyzDistToPlayerSq <= SQ((this->dyna.actor.scale.x * 40.0f) + 40)) {
-            func_800C6314(play, &play->colCtx.dyna, this->dyna.bgId);
+            DynaPoly_EnableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
         } else {
-            func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+            DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
         }
         if (this->dyna.actor.xyzDistToPlayerSq >= (this->dyna.actor.scale.x * 10.0f * 40.0f * 40.0f)) {
             this->dyna.actor.shape.rot.y = this->dyna.actor.yawTowardsPlayer;
@@ -165,7 +165,7 @@ void func_80AC0CC4(EnTwig* this, PlayState* play) {
     this->unk_170 = 3458.0f;
     this->unk_174 = 0.2f;
     this->unk_16C |= 1;
-    func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
     this->actionFunc = func_80AC0D2C;
 }
 

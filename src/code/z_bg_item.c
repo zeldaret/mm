@@ -1,5 +1,9 @@
 #include "global.h"
 
+/**
+ * @param transformFlags How other actors standing on the dynapoly actor's collision move when the dynapoly actor moves.
+ *   See `DYNA_TRANSFORM_POS`, `DYNA_TRANSFORM_ROT_Y`.
+ */
 void DynaPolyActor_Init(DynaPolyActor* dynaActor, s32 transformFlags) {
     dynaActor->bgId = -1;
     dynaActor->pushForce = 0.0f;
@@ -47,12 +51,12 @@ void DynaPoly_SetPlayerAbove(CollisionContext* colCtx, s32 bgId) {
     }
 }
 
-void DynaPolyActor_SetSwitchPressed(DynaPolyActor* dynaActor) {
-    dynaActor->interactFlags |= DYNA_INTERACT_SWITCH_PRESS;
+void DynaPolyActor_SetActorOnSwitch(DynaPolyActor* dynaActor) {
+    dynaActor->interactFlags |= DYNA_INTERACT_ACTOR_ON_SWITCH;
 }
 
-void DynaPolyActor_SetHeavySwitchPressed(DynaPolyActor* dynaActor) {
-    dynaActor->interactFlags |= DYNA_INTERACT_HEAVY_SWITCH_PRESSED;
+void DynaPolyActor_SetActorOnHeavySwitch(DynaPolyActor* dynaActor) {
+    dynaActor->interactFlags |= DYNA_INTERACT_ACTOR_ON_HEAVY_SWITCH;
 }
 
 s32 DynaPolyActor_IsActorOnTop(DynaPolyActor* dynaActor) {
@@ -80,7 +84,7 @@ s32 DynaPolyActor_IsPlayerAbove(DynaPolyActor* dynaActor) {
 }
 
 s32 DynaPolyActor_IsSwitchPressed(DynaPolyActor* dynaActor) {
-    if (dynaActor->interactFlags & DYNA_INTERACT_SWITCH_PRESS) {
+    if (dynaActor->interactFlags & DYNA_INTERACT_ACTOR_ON_SWITCH) {
         return true;
     } else {
         return false;
@@ -88,7 +92,7 @@ s32 DynaPolyActor_IsSwitchPressed(DynaPolyActor* dynaActor) {
 }
 
 s32 DynaPolyActor_IsHeavySwitchPressed(DynaPolyActor* dynaActor) {
-    if (dynaActor->interactFlags & DYNA_INTERACT_HEAVY_SWITCH_PRESSED) {
+    if (dynaActor->interactFlags & DYNA_INTERACT_ACTOR_ON_HEAVY_SWITCH) {
         return true;
     } else {
         return false;

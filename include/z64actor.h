@@ -218,8 +218,8 @@ typedef enum {
 #define DYNA_INTERACT_ACTOR_ON_TOP (1 << 0) // There is an actor standing on the collision of the dynapoly actor
 #define DYNA_INTERACT_PLAYER_ON_TOP (1 << 1) // The player actor is standing on the collision of the dynapoly actor
 #define DYNA_INTERACT_PLAYER_ABOVE (1 << 2) // The player is directly above the collision of the dynapoly actor (any distance above)
-#define DYNA_INTERACT_SWITCH_PRESS (1 << 3) // Like the ACTOR_ON_TOP flag but only actors with ACTOR_FLAG_CAN_HOLD_SWITCH
-#define DYNA_INTERACT_HEAVY_SWITCH_PRESSED (1 << 4)
+#define DYNA_INTERACT_ACTOR_ON_SWITCH (1 << 3) // Like the ACTOR_ON_TOP flag but only actors with ACTOR_FLAG_CAN_HOLD_SWITCH
+#define DYNA_INTERACT_ACTOR_ON_HEAVY_SWITCH (1 << 4) // Like the ACTOR_ON_TOP flag but only actors with ACTOR_FLAG_CAN_HOLD_HEAVY_SWITCH
 
 typedef struct {
     /* 0x000 */ Actor actor;

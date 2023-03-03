@@ -642,7 +642,7 @@ s32 func_80A24954(ObjIceblock* this, PlayState* play) {
 
 void func_80A24A48(ObjIceblock* this, PlayState* play) {
     if (!(this->unk_1B0 & 0x10) && !(this->collider.base.ocFlags1 & OC1_HIT)) {
-        func_800C6314(play, &play->colCtx.dyna, this->dyna.bgId);
+        DynaPoly_EnableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
         this->unk_1B0 |= 0x10;
     }
 }
@@ -922,7 +922,7 @@ void ObjIceblock_Init(Actor* thisx, PlayState* play) {
 
     DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
     DynaPolyActor_LoadMesh(play, &this->dyna, &gIceBlockCol);
-    func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->dyna.actor, &sCylinderInit);
 

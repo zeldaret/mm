@@ -130,7 +130,7 @@ void ObjDanpeilift_Move(ObjDanpeilift* this, PlayState* play) {
                 if ((this->points[0].x != endPoint->x) || (this->points[0].y != endPoint->y) ||
                     (this->points[0].z != endPoint->z)) {
                     this->actionFunc = ObjDanpeilift_Teleport;
-                    func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+                    DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
                     isPosUpdated = false;
                 }
             }
@@ -145,7 +145,7 @@ void ObjDanpeilift_Move(ObjDanpeilift* this, PlayState* play) {
 void ObjDanpeilift_Teleport(ObjDanpeilift* this, PlayState* play) {
     if (!DynaPolyActor_IsPlayerOnTop(&this->dyna)) {
         ObjDanpeilift_UpdatePosition(this, this->curPoint);
-        func_800C6314(play, &play->colCtx.dyna, this->dyna.bgId);
+        DynaPoly_EnableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
         this->actionFunc = ObjDanpeilift_Move;
     }
 }

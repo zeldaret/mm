@@ -228,7 +228,7 @@ void func_80ACFA78(EnFuKago* this, PlayState* play) {
     this->unk_33A = 1;
 
     Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_WOODBOX_BREAK);
-    func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
     this->actionFunc = func_80AD0028;
 }
 

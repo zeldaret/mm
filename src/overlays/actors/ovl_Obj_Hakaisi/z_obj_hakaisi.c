@@ -201,7 +201,7 @@ void func_80B1456C(ObjHakaisi* this, PlayState* play) {
     }
     if (this->dyna.actor.colChkInfo.health < 30) {
         func_80B145F4(this);
-        func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+        DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
     }
 }
 

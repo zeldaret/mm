@@ -136,7 +136,7 @@ void BgLotus_Sink(BgLotus* this, PlayState* play) {
         if (Math_StepToF(&this->dyna.actor.scale.x, 0, 0.0050000003539f)) {
             this->dyna.actor.draw = NULL;
             this->timer = 100;
-            func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+            DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
             this->actionFunc = BgLotus_WaitToAppear;
         }
 
@@ -149,7 +149,7 @@ void BgLotus_WaitToAppear(BgLotus* this, PlayState* play) {
         this->timer--;
     } else if ((this->dyna.actor.xzDistToPlayer > 100.0f) && (this->dyna.actor.projectedPos.z < 0.0f)) {
         this->dyna.actor.draw = BgLotus_Draw;
-        func_800C6314(play, &play->colCtx.dyna, this->dyna.bgId);
+        DynaPoly_EnableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
         Actor_SetScale(&this->dyna.actor, 0.1f);
         this->dyna.actor.world.pos.y = CLAMP_MIN(this->height, this->dyna.actor.floorHeight);
         this->dyna.actor.flags &= ~ACTOR_FLAG_10;

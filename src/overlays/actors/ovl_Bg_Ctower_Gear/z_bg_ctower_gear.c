@@ -132,7 +132,7 @@ void BgCtowerGear_Init(Actor* thisx, PlayState* play) {
     } else if (type == BGCTOWERGEAR_ORGAN) {
         DynaPolyActor_Init(&this->dyna, 0);
         DynaPolyActor_LoadMesh(play, &this->dyna, &gClockTowerOrganCol);
-        func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+        DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
     }
 }
 
@@ -167,11 +167,11 @@ void BgCtowerGear_UpdateOrgan(Actor* thisx, PlayState* play) {
         switch (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 104)]->action) {
             case 1:
                 this->dyna.actor.draw = NULL;
-                func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+                DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
                 break;
             case 2:
                 this->dyna.actor.draw = BgCtowerGear_DrawOrgan;
-                func_800C6314(play, &play->colCtx.dyna, this->dyna.bgId);
+                DynaPoly_EnableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
                 break;
             case 3:
                 Actor_Kill(&this->dyna.actor);

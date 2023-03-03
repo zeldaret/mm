@@ -71,9 +71,9 @@ void EnTorch2_Init(Actor* thisx, PlayState* play) {
     // params: which form Link is in (e.g. human, deku, etc.)
     params = this->actor.params;
     if (params != TORCH2_PARAM_DEKU) {
-        this->actor.flags |= ACTOR_FLAG_CAN_HOLD_SWITCH; // Can press switch
+        this->actor.flags |= ACTOR_FLAG_CAN_HOLD_SWITCH;
         if (params == TORCH2_PARAM_GORON) {
-            this->actor.flags |= ACTOR_FLAG_CAN_HOLD_HEAVY_SWITCH; // Can press heavy switches
+            this->actor.flags |= ACTOR_FLAG_CAN_HOLD_HEAVY_SWITCH;
         }
     }
     this->framesUntilNextState = 20;

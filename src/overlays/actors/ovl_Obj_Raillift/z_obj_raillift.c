@@ -164,7 +164,7 @@ void ObjRaillift_Move(ObjRaillift* this, PlayState* play) {
                 if ((this->points[0].x != endPoint->x) || (this->points[0].y != endPoint->y) ||
                     (this->points[0].z != endPoint->z)) {
                     this->actionFunc = ObjRaillift_Teleport;
-                    func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+                    DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
                     isPosUpdated = false;
                 }
             }
@@ -182,7 +182,7 @@ Will teleport to what ever curpoint is set to
 void ObjRaillift_Teleport(ObjRaillift* this, PlayState* play) {
     if (!DynaPolyActor_IsPlayerOnTop(&this->dyna)) {
         ObjRaillift_UpdatePosition(this, this->curPoint);
-        func_800C6314(play, &play->colCtx.dyna, this->dyna.bgId);
+        DynaPoly_EnableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
         this->actionFunc = ObjRaillift_Move;
     }
 }

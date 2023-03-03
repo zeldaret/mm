@@ -150,7 +150,7 @@ void BgIcicle_Shiver(BgIcicle* this, PlayState* play) {
         this->dyna.actor.world.pos.z = this->dyna.actor.home.pos.z;
 
         CollisionCheck_SetAT(play, &play->colChkCtx, &this->collider.base);
-        func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+        DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
         this->actionFunc = BgIcicle_Fall;
     } else {
         rand = Rand_ZeroOne();
@@ -175,7 +175,7 @@ void BgIcicle_Fall(BgIcicle* this, PlayState* play) {
 
         if (this->dyna.actor.params == ICICLE_STALACTITE_REGROW) {
             this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y + 120.0f;
-            func_800C6314(play, &play->colCtx.dyna, this->dyna.bgId);
+            DynaPoly_EnableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
             this->actionFunc = BgIcicle_Regrow;
         } else {
             Actor_Kill(&this->dyna.actor);
@@ -216,7 +216,7 @@ void BgIcicle_UpdateAttacked(BgIcicle* this, PlayState* play) {
             if (this->dyna.actor.params == ICICLE_STALACTITE_REGROW) {
                 BgIcicle_Break(this, play, 40.0f);
                 this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y + 120.0f;
-                func_800C6314(play, &play->colCtx.dyna, this->dyna.bgId);
+                DynaPoly_EnableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
                 this->actionFunc = BgIcicle_Regrow;
                 return;
             }

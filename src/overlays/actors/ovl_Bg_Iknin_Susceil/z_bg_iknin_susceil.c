@@ -62,11 +62,11 @@ s32 func_80C0A740(BgIkninSusceil* this, PlayState* play) {
 }
 
 void func_80C0A804(BgIkninSusceil* this, PlayState* play) {
-    func_800C6314(play, &play->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_EnableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
 }
 
 void func_80C0A838(BgIkninSusceil* this, PlayState* play) {
-    func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
 }
 
 void func_80C0A86C(BgIkninSusceil* this, PlayState* play, s16 verticalMag, s16 countdown, s32 arg4) {

@@ -245,7 +245,7 @@ void func_80C18884(BgLastBwall* this, PlayState* play) {
 }
 
 void func_80C188C4(BgLastBwall* this, PlayState* play) {
-    func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
     this->dyna.actor.draw = NULL;
     func_80C184EC(this, play);
     Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_WALL_BROKEN);

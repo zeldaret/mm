@@ -162,7 +162,7 @@ void BgNumaHana_Init(Actor* thisx, PlayState* play) {
         }
 
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_12_01)) {
-            func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+            DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
 
             this->petalZRotation = 0x2000;
             this->innerPetalZRotation = 0x2000;
@@ -180,7 +180,7 @@ void BgNumaHana_Init(Actor* thisx, PlayState* play) {
             BgNumaHana_SetupOpenedIdle(this);
         } else {
             child = (DynaPolyActor*)this->dyna.actor.child;
-            func_800C62BC(play, &play->colCtx.dyna, child->bgId);
+            DynaPoly_DisableCollision(play, &play->colCtx.dyna, child->bgId);
             Flags_UnsetSwitch(play, BG_NUMA_HANA_SWITCH_FLAG(&this->dyna.actor));
             BgNumaHana_SetupClosedIdle(this);
         }
@@ -314,8 +314,8 @@ void BgNumaHana_RaiseFlower(BgNumaHana* this, PlayState* play) {
         child = (DynaPolyActor*)this->dyna.actor.child;
 
         // Swaps out the "closed" flower collision for the "opened" collision.
-        func_800C6314(play, &play->colCtx.dyna, child->bgId);
-        func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+        DynaPoly_EnableCollision(play, &play->colCtx.dyna, child->bgId);
+        DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
 
         this->petalZRotation = 0x2000;
         this->innerPetalZRotation = 0x2000;

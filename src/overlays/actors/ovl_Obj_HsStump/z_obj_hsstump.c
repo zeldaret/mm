@@ -54,7 +54,7 @@ void ObjHsStump_Init(Actor* thisx, PlayState* play) {
             } else {
                 this->dyna.actor.draw = NULL;
                 Actor_SetScale(&this->dyna.actor, 0.0f);
-                func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+                DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
             }
         case false:
             ObjHsStump_SetupIdle(this, play);
@@ -125,7 +125,7 @@ void ObjHsStump_Appear(ObjHsStump* this, PlayState* play) {
     }
     if (this->dyna.actor.scale.x == 18.0f * 0.01f) {
         this->isHidden = false;
-        func_800C6314(play, &play->colCtx.dyna, this->dyna.bgId);
+        DynaPoly_EnableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
         ObjHsStump_SetupIdle(this, play);
     }
     this->framesAppeared++;

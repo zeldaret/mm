@@ -72,11 +72,11 @@ void DynaPolyActor_AttachCarriedActor(CollisionContext* colCtx, Actor* carriedAc
     if (dynaActor != NULL) {
         DynaPolyActor_SetActorOnTop(dynaActor);
 
-        if ((carriedActor->flags & ACTOR_FLAG_CAN_HOLD_SWITCH) == ACTOR_FLAG_CAN_HOLD_SWITCH) {
-            DynaPolyActor_SetSwitchPressed(dynaActor);
+        if (CHECK_FLAG_ALL(carriedActor->flags, ACTOR_FLAG_CAN_HOLD_SWITCH)) {
+            DynaPolyActor_SetActorOnSwitch(dynaActor);
         }
-        if ((carriedActor->flags & ACTOR_FLAG_CAN_HOLD_HEAVY_SWITCH) == ACTOR_FLAG_CAN_HOLD_HEAVY_SWITCH) {
-            DynaPolyActor_SetHeavySwitchPressed(dynaActor);
+        if (CHECK_FLAG_ALL(carriedActor->flags, ACTOR_FLAG_CAN_HOLD_HEAVY_SWITCH)) {
+            DynaPolyActor_SetActorOnHeavySwitch(dynaActor);
         }
     }
 }
@@ -93,7 +93,7 @@ u32 DynaPolyActor_TransformCarriedActor(CollisionContext* colCtx, s32 bgId, Acto
         return false;
     }
 
-    if ((colCtx->dyna.bgActorFlags[bgId] & 2) || !(colCtx->dyna.bgActorFlags[bgId] & 1)) {
+    if ((colCtx->dyna.bgActorFlags[bgId] & BGACTOR_1) || !(colCtx->dyna.bgActorFlags[bgId] & BGACTOR_IN_USE)) {
         return false;
     }
 
