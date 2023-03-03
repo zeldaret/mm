@@ -403,7 +403,7 @@ void ObjKendoKanban_HandlePhysics(ObjKendoKanban* this, PlayState* play) {
 
         if (this->actor.bgCheckFlags & 2) {
             // Upon touching the ground...
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_WOODPLATE_BOUND);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_WOODPLATE_BOUND);
             this->hasNewRootCornerPos = false;
             this->actor.velocity.y *= 0.5f;
         } else if (this->actor.bgCheckFlags & 1) {
@@ -412,7 +412,7 @@ void ObjKendoKanban_HandlePhysics(ObjKendoKanban* this, PlayState* play) {
             this->hasNewRootCornerPos = false;
             this->actor.velocity.x *= 0.3f;
             this->actor.velocity.z *= 0.3f;
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_WOODPLATE_BOUND);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_WOODPLATE_BOUND);
 
             // Adjust and (potentially) reverse rotation depending on the current
             // facing of the board and the direction in which it is rotating.

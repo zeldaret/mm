@@ -216,7 +216,7 @@ void BgNumaHana_SetupClosedIdle(BgNumaHana* this) {
  */
 void BgNumaHana_ClosedIdle(BgNumaHana* this, PlayState* play) {
     if (this->fire.state != FIRE_STATE_NOT_LIT) {
-        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_FLAME_IGNITION);
+        Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_FLAME_IGNITION);
         if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
             ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
             SET_WEEKEVENTREG(WEEKEVENTREG_12_01);
@@ -247,7 +247,7 @@ void BgNumaHana_UnfoldInnerPetals(BgNumaHana* this, PlayState* play) {
                 this->settleZRotation = 0;
                 this->settleAngle = 0;
                 this->settleScale = 420.0f;
-                Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_FLOWERPETAL_STOP);
+                Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_FLOWERPETAL_STOP);
             }
             this->transitionTimer++;
         }
@@ -279,7 +279,7 @@ void BgNumaHana_UnfoldOuterPetals(BgNumaHana* this, PlayState* play) {
                 this->settleZRotation = 0;
                 this->settleAngle = 0x5120;
                 this->settleScale = 130.0f;
-                Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_FLOWERPETAL_STOP);
+                Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_FLOWERPETAL_STOP);
             }
             this->transitionTimer++;
         }
