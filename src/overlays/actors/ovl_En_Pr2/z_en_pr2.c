@@ -267,13 +267,13 @@ void func_80A745FC(EnPr2* this, PlayState* play) {
         SkelAnime_Update(&this->skelAnime);
     }
 
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PIRANHA_EXIST - SFX_FLAG);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_PIRANHA_EXIST - SFX_FLAG);
     Math_ApproachF(&this->unk_204, 0.02f, 0.1f, 0.005f);
 
     if (this->path->unk2 < this->unk_1D0) {
-        Math_ApproachF(&this->actor.speedXZ, 5.0f, 0.3f, 1.0f);
+        Math_ApproachF(&this->actor.speed, 5.0f, 0.3f, 1.0f);
     } else {
-        Math_ApproachF(&this->actor.speedXZ, 10.0f, 0.3f, 1.0f);
+        Math_ApproachF(&this->actor.speed, 10.0f, 0.3f, 1.0f);
     }
 
     if ((this->path != NULL) && !SubS_CopyPointFromPath(this->path, this->unk_1D0, &this->unk_21C)) {
@@ -326,7 +326,7 @@ void func_80A748E8(EnPr2* this, PlayState* play) {
     Vec3f sp3C;
 
     Math_ApproachF(&this->unk_204, 0.02f, 0.1f, 0.005f);
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PIRANHA_EXIST - SFX_FLAG);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_PIRANHA_EXIST - SFX_FLAG);
 
     if (fabsf(this->actor.world.rot.y - this->unk_1EE) < 200.0f) {
         sp48 = true;
@@ -334,7 +334,7 @@ void func_80A748E8(EnPr2* this, PlayState* play) {
     }
 
     if (this->unk_1F4 != 255) {
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
         Math_SmoothStepToS(&this->unk_1F4, 0, 1, 30, 100);
         if (this->unk_1F4 < 2) {
             Actor_Kill(&this->actor);
@@ -370,7 +370,7 @@ void func_80A748E8(EnPr2* this, PlayState* play) {
                         sp4C = true;
                         this->unk_1DC = 0;
                         Math_Vec3f_Copy(&this->unk_21C, &this->unk_228);
-                        Math_ApproachF(&this->actor.speedXZ, 3.0f, 0.3f, 0.2f);
+                        Math_ApproachF(&this->actor.speed, 3.0f, 0.3f, 0.2f);
                     }
                 }
                 break;
@@ -383,7 +383,7 @@ void func_80A748E8(EnPr2* this, PlayState* play) {
                     this->unk_1D6 = true;
                 }
 
-                Math_ApproachZeroF(&this->actor.speedXZ, 0.1f, 0.2f);
+                Math_ApproachZeroF(&this->actor.speed, 0.1f, 0.2f);
 
                 if (this->unk_1DA == 1) {
                     this->unk_1D8 = Rand_S16Offset(100, 100);
@@ -393,7 +393,7 @@ void func_80A748E8(EnPr2* this, PlayState* play) {
                     Math_Vec3f_Copy(&this->unk_21C, &sp3C);
                 }
             } else {
-                Math_ApproachF(&this->actor.speedXZ, 2.0f, 0.3f, 0.2f);
+                Math_ApproachF(&this->actor.speed, 2.0f, 0.3f, 0.2f);
                 Math_Vec3f_Copy(&sp3C, &this->actor.world.pos);
                 sp3C.x += Math_SinS(this->actor.world.rot.y) * 20.0f;
                 sp3C.z += Math_CosS(this->actor.world.rot.y) * 20.0f;
@@ -430,7 +430,7 @@ void func_80A74DEC(EnPr2* this, PlayState* play) {
 
     this->unk_1F0 = 0;
     func_80A74510(this, 1);
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PIRANHA_ATTACK);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_PIRANHA_ATTACK);
     Math_Vec3f_Copy(&this->unk_21C, &player->actor.world.pos);
 
     this->unk_1EE = Math_Vec3f_Yaw(&this->actor.world.pos, &this->unk_21C);
@@ -452,7 +452,7 @@ void func_80A74E90(EnPr2* this, PlayState* play) {
     }
 
     if (this->unk_1F4 != 255) {
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
         Math_SmoothStepToS(&this->unk_1F4, 0, 1, 30, 100);
         if (this->unk_1F4 < 2) {
             Actor_Kill(&this->actor);
@@ -470,7 +470,7 @@ void func_80A74E90(EnPr2* this, PlayState* play) {
         }
 
         this->unk_21C.y = player->actor.world.pos.y + 30.0f + this->unk_20C;
-        Math_ApproachF(&this->actor.speedXZ, 5.0f, 0.3f, 1.0f);
+        Math_ApproachF(&this->actor.speed, 5.0f, 0.3f, 1.0f);
         this->unk_1F0 = 0;
 
         if (this->unk_1E0 == 2) {
@@ -532,7 +532,7 @@ void func_80A751B4(EnPr2* this) {
         this->actor.shape.rot.y = this->actor.world.rot.y;
         this->actor.shape.rot.z = this->actor.world.rot.z;
         this->unk_1D8 = 30;
-        this->actor.speedXZ = Rand_ZeroFloat(0.5f);
+        this->actor.speed = Rand_ZeroFloat(0.5f);
         this->actor.world.rot.y = randPlusMinusPoint5Scaled(0x8000);
     }
     Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 10);
@@ -614,8 +614,8 @@ void func_80A755D8(EnPr2* this, PlayState* play) {
         Actor_ApplyDamage(&this->actor);
         if ((this->actor.colChkInfo.health <= 0) && (this->unk_1D4 != 3)) {
             Enemy_StartFinishingBlow(play, &this->actor);
-            this->actor.speedXZ = 0.0f;
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PIRANHA_DEAD);
+            this->actor.speed = 0.0f;
+            Actor_PlaySfx(&this->actor, NA_SE_EN_PIRANHA_DEAD);
 
             if (this->unk_218 >= 0) {
                 Item_DropCollectibleRandom(play, NULL, &this->actor.world.pos, D_80A75C3C[this->unk_218]);
@@ -627,7 +627,7 @@ void func_80A755D8(EnPr2* this, PlayState* play) {
     }
 
     if (this->collider.base.atFlags & AT_BOUNCED) {
-        this->actor.speedXZ = -10.0f;
+        this->actor.speed = -10.0f;
     }
 }
 

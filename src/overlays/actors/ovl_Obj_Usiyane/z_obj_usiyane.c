@@ -139,7 +139,7 @@ void func_80C07F30(ObjUsiyane* this, PlayState* play) {
         }
     }
 
-    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_HOUSE_BROKEN);
+    Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_HOUSE_BROKEN);
     this->unk_740 = 0;
     this->unk_744 |= 4;
 }

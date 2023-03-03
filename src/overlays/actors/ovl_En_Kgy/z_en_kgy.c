@@ -443,7 +443,7 @@ void func_80B4163C(EnKgy* this, PlayState* play) {
             this->lightInfo.params.point.y = this->unk_2C0.y;
             this->lightInfo.params.point.z = this->unk_2C0.z;
             this->unk_300 = 200;
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SWORD_FORGE);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_SWORD_FORGE);
             break;
     }
 

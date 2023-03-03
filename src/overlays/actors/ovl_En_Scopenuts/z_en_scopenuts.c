@@ -126,19 +126,19 @@ void func_80BCAC40(EnScopenuts* this, PlayState* play) {
 }
 
 void func_80BCAD64(EnScopenuts* this, s16 arg1) {
-    f32 sp24 = Math_CosS(this->actor.world.rot.x) * this->actor.speedXZ;
+    f32 sp24 = Math_CosS(this->actor.world.rot.x) * this->actor.speed;
 
     switch (arg1) {
         case 1:
-            this->actor.velocity.y = this->actor.speedXZ;
+            this->actor.velocity.y = this->actor.speed;
             this->actor.velocity.x = 0.0f;
             this->actor.velocity.z = 0.0f;
             break;
 
         case 2:
-            this->actor.velocity.x = Math_SinS(this->actor.world.rot.y) * this->actor.speedXZ;
+            this->actor.velocity.x = Math_SinS(this->actor.world.rot.y) * this->actor.speed;
             this->actor.velocity.y = 0.0f;
-            this->actor.velocity.z = Math_CosS(this->actor.world.rot.y) * this->actor.speedXZ;
+            this->actor.velocity.z = Math_CosS(this->actor.world.rot.y) * this->actor.speed;
             break;
 
         case 3:
@@ -149,7 +149,7 @@ void func_80BCAD64(EnScopenuts* this, s16 arg1) {
 
         default:
             this->actor.velocity.x = Math_SinS(this->actor.world.rot.y) * sp24;
-            this->actor.velocity.y = Math_SinS(this->actor.world.rot.x) * this->actor.speedXZ;
+            this->actor.velocity.y = Math_SinS(this->actor.world.rot.x) * this->actor.speed;
             this->actor.velocity.z = Math_CosS(this->actor.world.rot.y) * sp24;
             break;
     }
@@ -219,7 +219,7 @@ void func_80BCB078(EnScopenuts* this, PlayState* play) {
         if (func_80BCC2AC(this, this->path, this->unk_334)) {
             if (this->unk_334 >= (this->path->count - 1)) {
                 this->actionFunc = func_80BCB1C8;
-                this->actor.speedXZ = 0.0f;
+                this->actor.speed = 0.0f;
                 this->actor.gravity = -1.0f;
                 return;
             }
@@ -228,9 +228,9 @@ void func_80BCB078(EnScopenuts* this, PlayState* play) {
     }
 
     if (this->unk_334 >= (this->path->count - 2)) {
-        Math_ApproachF(&this->actor.speedXZ, 1.5f, 0.2f, 1.0f);
+        Math_ApproachF(&this->actor.speed, 1.5f, 0.2f, 1.0f);
     } else {
-        Math_ApproachF(&this->actor.speedXZ, 5.0f, 0.2f, 1.0f);
+        Math_ApproachF(&this->actor.speed, 5.0f, 0.2f, 1.0f);
     }
     Actor_MoveWithoutGravity(&this->actor);
 }
@@ -252,7 +252,7 @@ void func_80BCB230(EnScopenuts* this, PlayState* play) {
 
     if ((((this->actor.playerHeightRel < 50.0f) && (this->actor.playerHeightRel > -50.0f)) ? true : false) &&
         ((this->actor.xzDistToPlayer < 200.0f) ? true : false)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_AKINDONUTS_HIDE);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_AKINDONUTS_HIDE);
         this->actionFunc = func_80BCB4DC;
         this->unk_348 = 3;
         this->collider.dim.height = 64;
@@ -262,12 +262,12 @@ void func_80BCB230(EnScopenuts* this, PlayState* play) {
         if ((this->unk_348 == 4) || (this->unk_348 == 18)) {
             this->unk_348 = 17;
             this->collider.dim.height = 0;
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_DOWN);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_DOWN);
             SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 17);
         } else if (this->unk_348 == 2) {
             this->unk_348 = 16;
             this->collider.dim.height = 32;
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_UP);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_UP);
             SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 16);
         } else if (this->unk_348 == 17) {
             if (DECR(this->unk_34E) == 0) {
@@ -464,7 +464,7 @@ void func_80BCBA00(EnScopenuts* this, PlayState* play) {
         this->unk_35A = 3;
         this->unk_348 = 19;
         SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 19);
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_DOWN);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_DOWN);
         this->unk_328 &= ~2;
         this->unk_34E = 50;
         this->unk_328 |= 8;
@@ -528,7 +528,7 @@ void func_80BCBD28(EnScopenuts* this, PlayState* play) {
         this->unk_368 = 0.3f;
         this->unk_348 = 9;
         SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 9);
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_AKINDONUTS_HIDE);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_AKINDONUTS_HIDE);
         func_80BCAC40(this, play);
         this->actionFunc = func_80BCBF0C;
     }
@@ -605,7 +605,7 @@ void func_80BCBFFC(EnScopenuts* this, PlayState* play) {
         this->actionFunc = func_80BCC288;
     }
 
-    Math_ApproachF(&this->actor.speedXZ, 1.0f, 0.2f, 1.0f);
+    Math_ApproachF(&this->actor.speed, 1.0f, 0.2f, 1.0f);
     func_80BCAD64(this, sp32);
 
     if (this->unk_36C == 2) {
@@ -702,7 +702,7 @@ void EnScopenuts_Init(Actor* thisx, PlayState* play) {
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->unk_328 |= 2;
     this->unk_328 |= 4;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
 
     if (ENSCOPENUTS_GET_3E0(&this->actor) == ENSCOPENUTS_3E0_0) {
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_52_40)) {

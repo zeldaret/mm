@@ -188,7 +188,7 @@ void func_80BB69FC(EnTanron2* this, PlayState* play) {
 
         if ((this->unk_158 == 0) && ((sp34 + sp30 + sp2C) < 2.0f)) {
             this->unk_158 = 1;
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_B_SLIME_EAT);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_B_SLIME_EAT);
         }
 
         Math_ApproachF(&this->unk_15C, 1.0f, 1.0f, 0.02f);
@@ -201,7 +201,7 @@ void func_80BB69FC(EnTanron2* this, PlayState* play) {
 
 void func_80BB6B80(EnTanron2* this) {
     this->actionFunc = func_80BB6BD8;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actor.velocity.z = 0.0f;
     this->actor.velocity.y = 0.0f;
     this->actor.velocity.x = 0.0f;
@@ -228,7 +228,7 @@ void func_80BB6BD8(EnTanron2* this, PlayState* play) {
         if (this->actor.world.pos.y <= this->actor.floorHeight) {
             this->actor.world.pos.y = this->actor.floorHeight;
 
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_IKURA_JUMP2);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_IKURA_JUMP2);
 
             sp2C = D_80BB8450->unk_6BC.x - this->actor.world.pos.x;
             sp28 = D_80BB8450->unk_6BC.z - this->actor.world.pos.z;
@@ -240,14 +240,14 @@ void func_80BB6BD8(EnTanron2* this, PlayState* play) {
                     } else {
                         sp32 = Math_Atan2S(sp2C, sp28);
                     }
-                    this->actor.speedXZ = Rand_ZeroFloat(5.0f) + 5.0f;
+                    this->actor.speed = Rand_ZeroFloat(5.0f) + 5.0f;
                     break;
 
                 case 1:
                     sp32 = Math_Atan2S(sp2C, sp28);
-                    this->actor.speedXZ += 2.0f;
-                    if (this->actor.speedXZ > 10.0f) {
-                        this->actor.speedXZ = 10.0f;
+                    this->actor.speed += 2.0f;
+                    if (this->actor.speed > 10.0f) {
+                        this->actor.speed = 10.0f;
                     }
                     break;
 
@@ -255,14 +255,14 @@ void func_80BB6BD8(EnTanron2* this, PlayState* play) {
                     sp32 = Math_Atan2S(player->actor.world.pos.x - this->actor.world.pos.x,
                                        player->actor.world.pos.z - this->actor.world.pos.z) +
                            (s16)Rand_ZeroFloat(20000.0f);
-                    this->actor.speedXZ = Rand_ZeroFloat(7.0f) + 7.0f;
+                    this->actor.speed = Rand_ZeroFloat(7.0f) + 7.0f;
                     if ((this->unk_152 == 0) && (D_80BB8450->unk_1F6 == 0)) {
                         this->unk_158 = 1;
                     }
                     break;
             }
             Matrix_RotateYS(sp32, MTXMODE_NEW);
-            Matrix_MultVecZ(this->actor.speedXZ, &this->actor.velocity);
+            Matrix_MultVecZ(this->actor.speed, &this->actor.velocity);
             this->actor.velocity.y = Rand_ZeroFloat(5.0f) + 12.0f;
             this->unk_14E = 5;
         }
@@ -285,7 +285,7 @@ void func_80BB6BD8(EnTanron2* this, PlayState* play) {
                 func_80BB69C0(this);
             } else {
                 this->unk_150 = 10;
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_IKURA_JUMP1);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_IKURA_JUMP1);
             }
         }
     }
@@ -318,9 +318,9 @@ void func_80BB6F78(EnTanron2* this, PlayState* play) {
 
                 if (this->actor.world.pos.y <= this->actor.floorHeight) {
                     this->actor.world.pos.y = this->actor.floorHeight;
-                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_IKURA_JUMP2);
+                    Actor_PlaySfx(&this->actor, NA_SE_EN_IKURA_JUMP2);
                     if (D_80BB8450->unk_6F8 > 0.1f) {
-                        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_OUT_OF_WATER_L);
+                        Actor_PlaySfx(&this->actor, NA_SE_EV_OUT_OF_WATER_L);
                     }
                     this->actor.velocity.y = Rand_ZeroFloat(5.0f) + 12.0f;
                     this->unk_14E = 5;
@@ -344,7 +344,7 @@ void func_80BB6F78(EnTanron2* this, PlayState* play) {
                         this->unk_159 = 0;
                     } else {
                         this->unk_150 = 0xA;
-                        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_IKURA_JUMP1);
+                        Actor_PlaySfx(&this->actor, NA_SE_EN_IKURA_JUMP1);
                     }
                 }
             }
@@ -381,7 +381,7 @@ void func_80BB7398(EnTanron2* this, PlayState* play) {
         Enemy_StartFinishingBlow(play, &this->actor);
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 30, NA_SE_EN_IKURA_DEAD);
     } else {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_IKURA_DAMAGE);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_IKURA_DAMAGE);
     }
 }
 
@@ -427,7 +427,7 @@ void func_80BB7578(EnTanron2* this, PlayState* play) {
             if (acHitInfo->toucher.dmgFlags & 0x80) {
                 func_80BB6B80(this);
                 this->unk_158 = 1;
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_IKURA_DAMAGE);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_IKURA_DAMAGE);
                 if ((player->targetedActor != NULL) && (&this->actor != player->targetedActor)) {
                     player->targetedActor = &this->actor;
                     play->actorCtx.targetContext.arrowPointedActor = &this->actor;
@@ -448,7 +448,7 @@ void func_80BB7578(EnTanron2* this, PlayState* play) {
                         func_80BB7398(this, play);
                     }
                 } else {
-                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_IKURA_DAMAGE);
+                    Actor_PlaySfx(&this->actor, NA_SE_EN_IKURA_DAMAGE);
                     goto block_18;
                 }
             }

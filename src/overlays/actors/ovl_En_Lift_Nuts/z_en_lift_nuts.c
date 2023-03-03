@@ -284,7 +284,7 @@ void func_80AE9FC8(EnLiftNuts* this) {
         Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 3);
     }
 
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_AKINDONUTS_HIDE);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_AKINDONUTS_HIDE);
     this->actionFunc = func_80AEA044;
 }
 
@@ -301,7 +301,7 @@ void func_80AEA0B4(EnLiftNuts* this) {
         this->actionFunc = func_80AEA1A0;
     } else {
         Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 2);
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_AKINDONUTS_HIDE);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_AKINDONUTS_HIDE);
         this->actionFunc = func_80AEA128;
     }
 }
@@ -598,7 +598,7 @@ void func_80AEABF0(EnLiftNuts* this) {
 
     if (this->actionFunc != func_80AEB698) {
         if (func_80AE9B4C(0, 0)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_AKINDONUTS_HIDE);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_AKINDONUTS_HIDE);
         }
         Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 16);
     }
@@ -674,7 +674,7 @@ void func_80AEACF8(EnLiftNuts* this, PlayState* play) {
 }
 
 void func_80AEAEAC(EnLiftNuts* this) {
-    this->actor.speedXZ = 2.0f;
+    this->actor.speed = 2.0f;
     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 1);
     func_80AE9AC4(this, 1);
     func_80AE9B4C(1, 1);
@@ -685,7 +685,7 @@ void func_80AEAF14(EnLiftNuts* this, PlayState* play) {
     f32 dist;
 
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.home.rot.y, 10, 0x1000, 0x500);
-    dist = Math_Vec3f_StepTo(&this->actor.world.pos, &this->vec_1D8, this->actor.speedXZ);
+    dist = Math_Vec3f_StepTo(&this->actor.world.pos, &this->vec_1D8, this->actor.speed);
     this->actor.world.pos.y += this->actor.gravity;
 
     if (dist == 0.0f) {
@@ -739,17 +739,17 @@ void func_80AEB148(EnLiftNuts* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (player->stateFlags3 & PLAYER_STATE3_200) {
-        this->actor.speedXZ = 2.0f;
+        this->actor.speed = 2.0f;
         SET_EVENTINF(EVENTINF_34);
         Interface_StartTimer(4, 0);
         func_80AE9B4C(1, 2);
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_FOUND);
+        Actor_PlaySfx(&this->actor, NA_SE_SY_FOUND);
         func_80AEB280(this);
     }
 }
 
 void func_80AEB1C8(EnLiftNuts* this) {
-    this->actor.speedXZ = 2.0f;
+    this->actor.speed = 2.0f;
     SET_EVENTINF(EVENTINF_34);
     Interface_StartTimer(4, 0);
     func_80AE9B4C(1, 2);

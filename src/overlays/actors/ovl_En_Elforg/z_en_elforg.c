@@ -55,7 +55,7 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 void EnElforg_InitializeParams(EnElforg* this) {
-    this->actor.speedXZ = 1.0f;
+    this->actor.speed = 1.0f;
     this->targetSpeedXZ = 1.0f;
     this->actor.velocity.y = 0.0f;
     this->actor.world.rot.y = randPlusMinusPoint5Scaled(0x10000);
@@ -189,22 +189,22 @@ void EnElforg_SpawnSparkles(EnElforg* this, PlayState* play, s32 life) {
 void EnElforg_ApproachTargetYPosition(EnElforg* this, Vec3f* targetPos) {
     f32 yDifference = targetPos->y - this->actor.world.pos.y;
 
-    if (fabsf(yDifference) < this->actor.speedXZ) {
+    if (fabsf(yDifference) < this->actor.speed) {
         this->actor.world.pos.y = targetPos->y;
     } else if (yDifference > 0.0f) {
-        this->actor.world.pos.y += this->actor.speedXZ;
+        this->actor.world.pos.y += this->actor.speed;
     } else {
-        this->actor.world.pos.y -= this->actor.speedXZ;
+        this->actor.world.pos.y -= this->actor.speed;
     }
 }
 
 void EnElforg_ApproachTargetSpeedXZ(EnElforg* this) {
-    if (this->actor.speedXZ > this->targetSpeedXZ) {
-        this->actor.speedXZ *= 0.9f;
-    } else if (this->actor.speedXZ < (this->targetSpeedXZ - 0.1f)) {
-        this->actor.speedXZ += 0.1f;
+    if (this->actor.speed > this->targetSpeedXZ) {
+        this->actor.speed *= 0.9f;
+    } else if (this->actor.speed < (this->targetSpeedXZ - 0.1f)) {
+        this->actor.speed += 0.1f;
     } else {
-        this->actor.speedXZ = this->targetSpeedXZ;
+        this->actor.speed = this->targetSpeedXZ;
     }
 }
 
@@ -292,7 +292,7 @@ void EnElforg_TurnInFairy(EnElforg* this, PlayState* play) {
     // flying towards the fountain's center.
     SkelAnime_Update(&this->skelAnime);
     this->actor.shape.yOffset *= 0.9f;
-    this->actor.speedXZ = 5.0f;
+    this->actor.speed = 5.0f;
     EnElforg_ApproachTargetYPosition(this, &player->bodyPartsPos[PLAYER_BODYPART_WAIST]);
 
     xzDistToPlayer = this->actor.xzDistToPlayer;
@@ -539,7 +539,7 @@ void EnElforg_TrappedByEnemy(EnElforg* this, PlayState* play) {
         EnElforg_InitializeParams(this);
         this->actionFunc = EnElforg_FreeFloating;
         this->actor.draw = EnElforg_Draw;
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CHIBI_FAIRY_SAVED);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_CHIBI_FAIRY_SAVED);
     } else {
         // The enemy is still alive, so have the Stray Fairy
         // track the enemy in case it's moving around.
@@ -573,7 +573,7 @@ void EnElforg_HiddenByCollider(EnElforg* this, PlayState* play) {
         this->actor.draw = EnElforg_Draw;
         this->actor.world.pos.y += 40.0f;
         this->actor.home.pos.y += 40.0f;
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CHIBI_FAIRY_SAVED);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_CHIBI_FAIRY_SAVED);
     } else {
         CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
     }

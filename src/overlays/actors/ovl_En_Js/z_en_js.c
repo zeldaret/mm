@@ -254,7 +254,7 @@ s32 func_80968CB8(EnJs* this) {
         return true;
     }
 
-    Math_StepToF(&this->actor.speedXZ, this->unk_2B4, 0.5f);
+    Math_StepToF(&this->actor.speed, this->unk_2B4, 0.5f);
 
     return false;
 }
@@ -667,7 +667,7 @@ void func_80969B5C(EnJs* this, PlayState* play) {
     }
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->actionFunc = func_80969898;
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
         this->unk_2B4 = 0.0f;
         func_80969AA0(this, play);
     } else if ((this->actor.xzDistToPlayer < 100.0f) && Player_IsFacingActor(&this->actor, 0x3000, play)) {
