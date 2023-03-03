@@ -2175,7 +2175,7 @@ void Player_DrawBlastMask(PlayState* play, Player* player) {
 
         AnimatedMat_DrawOpa(play, Lib_SegmentedToVirtual(&object_mask_bakuretu_Matanimheader_0011F8));
 
-        if (player->blastMaskTimer < 11) {
+        if (player->blastMaskTimer <= 10) {
             alpha = (player->blastMaskTimer / 10.0f) * 255;
         } else {
             alpha = 255;
