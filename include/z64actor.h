@@ -150,7 +150,7 @@ typedef struct Actor {
     /* 0x054 */ f32 targetArrowOffset; // Height offset of the target arrow relative to `focus` position
     /* 0x058 */ Vec3f scale; // Scale of the actor in each axis
     /* 0x064 */ Vec3f velocity; // Velocity of the actor in each axis
-    /* 0x070 */ f32 speedXZ; // How fast the actor is traveling along the XZ plane
+    /* 0x070 */ f32 speed; // Context dependent speed value. Can be used for XZ or XYZ depending on which move function is used
     /* 0x074 */ f32 gravity; // Acceleration due to gravity. Value is added to Y velocity every frame
     /* 0x078 */ f32 terminalVelocity; // Sets the lower bounds cap on velocity along the Y axis
     /* 0x07C */ struct CollisionPoly* wallPoly; // Wall polygon the actor is touching
@@ -218,7 +218,6 @@ typedef struct {
     /* 0x148 */ f32 pushForce;
     /* 0x14C */ f32 unk14C;
     /* 0x150 */ s16 yRotation;
-    /* 0x152 */ u16 unk152;
     /* 0x154 */ u32 flags;
     /* 0x158 */ u8 stateFlags;
     /* 0x15A */ s16 pad15A;

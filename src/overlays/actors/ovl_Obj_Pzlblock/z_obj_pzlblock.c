@@ -287,14 +287,14 @@ void func_809A3BC0(ObjPzlblock* this, PlayState* play) {
 
         if ((params == 4) || (params == 5) || (params == 6)) {
             if (!func_809A35EC(this, this->unk_16C) || func_809A33E0(this, play, 0x5A)) {
-                Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
+                Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
             }
         } else if (func_809A35EC(this, this->unk_16C)) {
             if (func_809A33E0(this, play, 0x5A)) {
-                Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
+                Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
             }
         } else {
-            Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
+            Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
             Flags_SetSwitch(play, OBJPZLBLOCK_GET_7F(&this->dyna.actor));
             sp20 = 1;
         }

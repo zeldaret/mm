@@ -463,7 +463,6 @@ beginseg
     include "build/src/code/z_demo.o"
     include "build/src/code/z_draw.o"
     include "build/src/code/z_eff_footmark.o"
-    include "build/data/code/z_eff_footmark.data.o"
     include "build/src/code/z_sound_source.o"
     include "build/src/code/z_elf_message.o"
     include "build/src/code/z_en_hy_code.o"
@@ -1975,8 +1974,7 @@ beginseg
     name "ovl_En_Si"
     compress
     include "build/src/overlays/actors/ovl_En_Si/z_en_si.o"
-    include "build/data/ovl_En_Si/ovl_En_Si.data.o"
-    include "build/data/ovl_En_Si/ovl_En_Si.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Si/ovl_En_Si_reloc.o"
 endseg
 
 beginseg

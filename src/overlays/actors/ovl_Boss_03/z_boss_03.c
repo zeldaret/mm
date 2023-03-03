@@ -582,7 +582,7 @@ void func_809E34B8(Boss03* this, PlayState* play) {
     Math_ApproachS(&this->bodyYRot, bodyYRotTarget, 5, 0x100);
 
     Math_ApproachS(&this->unk_274, this->unk_276, 1, 0x100);
-    Math_ApproachF(&this->actor.speedXZ, this->unk_278, 1.0f, this->unk_27C);
+    Math_ApproachF(&this->actor.speed, this->unk_278, 1.0f, this->unk_27C);
     Math_ApproachF(&this->unk_260, sinf(this->skelAnime.curFrame * (M_PI / 5.0f)) * 10.0f * 0.01f, 0.5f, 1.0f);
 
     if ((this->workTimer[WORK_TIMER_UNK2_A] == 0) && (this->actor.bgCheckFlags & 8)) {
@@ -670,7 +670,7 @@ void Boss03_ChasePlayer(Boss03* this, PlayState* play) {
     Math_ApproachS(&this->bodyYRot, bodyYRotTarget, 5, 0x100);
 
     Math_ApproachS(&this->unk_274, this->unk_276, 1, 0x100);
-    Math_ApproachF(&this->actor.speedXZ, this->unk_278, 1.0f, this->unk_27C);
+    Math_ApproachF(&this->actor.speed, this->unk_278, 1.0f, this->unk_27C);
     Math_ApproachF(&this->unk_260, sinf(this->skelAnime.curFrame * (M_PI / 5.0f)) * 10.0f * 0.01f, 0.5f, 1.0f);
     Actor_MoveWithoutGravityReverse(&this->actor);
 
@@ -766,7 +766,7 @@ void Boss03_CatchPlayer(Boss03* this, PlayState* play) {
                        -0.5f,
                    5, 0x100);
     Math_ApproachS(&this->unk_274, this->unk_276, 1, 0x100);
-    Math_ApproachF(&this->actor.speedXZ, this->unk_278, 1.0f, this->unk_27C);
+    Math_ApproachF(&this->actor.speed, this->unk_278, 1.0f, this->unk_27C);
     Math_ApproachF(&this->unk_260, sinf(this->skelAnime.curFrame * (M_PI / 5.0f)) * 10.0f * 0.01f, 0.5f, 1.0f);
     Actor_MoveWithoutGravityReverse(&this->actor);
     Math_ApproachS(&this->actor.shape.rot.x, this->actor.world.rot.x, 2, this->unk_274 * 2);
@@ -874,7 +874,7 @@ void Boss03_ChewPlayer(Boss03* this, PlayState* play) {
 
     switch (this->unk_242) {
         case 0:
-            Math_ApproachF(&this->actor.speedXZ, 10.0f, 1.0f, 1.0f);
+            Math_ApproachF(&this->actor.speed, 10.0f, 1.0f, 1.0f);
             if (sqrtf(SQ(xDiff) + SQ(zDiff)) < 100.0f) {
                 this->unk_242 = 1;
                 Animation_MorphToLoop(&this->skelAnime, &gGyorgBackingUpAnim, -15.0f);
@@ -882,7 +882,7 @@ void Boss03_ChewPlayer(Boss03* this, PlayState* play) {
             break;
 
         case 1:
-            Math_ApproachF(&this->actor.speedXZ, 0.0f, 1.0f, 0.5f);
+            Math_ApproachF(&this->actor.speed, 0.0f, 1.0f, 0.5f);
             Math_ApproachF(&this->actor.world.pos.y, 200.0f, 0.05f, 5.0f);
             break;
     }
@@ -996,7 +996,7 @@ void Boss03_PrepareCharge(Boss03* this, PlayState* play) {
     }
 
     // Turns back slowly
-    Math_ApproachF(&this->actor.speedXZ, -3.0f, 1.0f, 0.5f);
+    Math_ApproachF(&this->actor.speed, -3.0f, 1.0f, 0.5f);
     Actor_MoveWithoutGravityReverse(&this->actor);
 }
 
@@ -1033,11 +1033,11 @@ void Boss03_Charge(Boss03* this, PlayState* play) {
 
     this->actor.shape.rot = this->actor.world.rot;
 
-    Math_ApproachF(&this->actor.speedXZ, 25.0f, 1.0f, 3.0f);
+    Math_ApproachF(&this->actor.speed, 25.0f, 1.0f, 3.0f);
     Math_ApproachF(&this->unk_260, sinf(this->skelAnime.curFrame * (M_PI / 5.0f)) * 10.0f * 0.01f, 0.5f, 1.0f);
     Actor_MoveWithoutGravityReverse(&this->actor);
 
-    if (this->actor.speedXZ >= 20.0f) {
+    if (this->actor.speed >= 20.0f) {
         // Jump over platform
         if (this->unk_242 == 1) {
             if (sqrtf(SQXZ(this->actor.world.pos)) < 700.0f) {
@@ -1069,7 +1069,7 @@ void Boss03_SetupJumpOverPlatform(Boss03* this, PlayState* play) {
     this->actionFunc = Boss03_JumpOverPlatform;
     this->actor.gravity = -2.0f;
     this->actor.velocity.y = 30.0f;
-    this->actor.speedXZ = 25.0f;
+    this->actor.speed = 25.0f;
     Boss03_PlayUnderwaterSfx(&this->actor.projectedPos, NA_SE_EN_KONB_JUMP_OLD);
 }
 
@@ -1172,7 +1172,7 @@ void Boss03_IntroCutscene(Boss03* this, PlayState* play) {
                 case 1:
                     player->actor.world.pos.z = 0.0f;
                     player->actor.world.pos.x = 0.0f;
-                    player->actor.speedXZ = 0.0f;
+                    player->actor.speed = 0.0f;
 
                     this->subCamEye.x = 100.0f;
                     this->subCamEye.y = 540.0f;
@@ -1191,7 +1191,7 @@ void Boss03_IntroCutscene(Boss03* this, PlayState* play) {
                         this->subCamFov = 80.0f;
 
                         case 2:
-                            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KONB_DEMO_MOVE_OLD - SFX_FLAG);
+                            Actor_PlaySfx(&this->actor, NA_SE_EN_KONB_DEMO_MOVE_OLD - SFX_FLAG);
 
                             xDiff = D_809E9104[this->unk_242].x - this->actor.world.pos.x;
                             yDiff = D_809E9104[this->unk_242].y - this->actor.world.pos.y;
@@ -1207,11 +1207,11 @@ void Boss03_IntroCutscene(Boss03* this, PlayState* play) {
                             }
 
                             if ((this->csTimer == 40) || (this->csTimer == (u32)(KREG(91) + 270))) {
-                                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_WATER_DEEP);
+                                Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_WATER_DEEP);
                             }
 
                             if (this->csTimer > 50) {
-                                Math_ApproachF(&this->actor.speedXZ, this->unk_278, 1.0f, 0.1f);
+                                Math_ApproachF(&this->actor.speed, this->unk_278, 1.0f, 0.1f);
                             }
 
                             if (this->unk_242 < 2) {
@@ -1226,15 +1226,15 @@ void Boss03_IntroCutscene(Boss03* this, PlayState* play) {
                             } else {
                                 this->unk_278 = 0.0f;
                                 bubblesToSpawnNum = 1;
-                                if ((this->actor.speedXZ == 0.0f) && (this->csTimer > 230)) {
+                                if ((this->actor.speed == 0.0f) && (this->csTimer > 230)) {
                                     this->csState = 3;
                                     this->csTimer = 0;
                                 }
                                 if (this->csTimer == 165) {
-                                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_WATER_MID);
+                                    Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_WATER_MID);
                                 }
                                 if (this->csTimer == 180) {
-                                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_WATER_DEEP);
+                                    Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_WATER_DEEP);
                                 }
                             }
                     }
@@ -1244,7 +1244,7 @@ void Boss03_IntroCutscene(Boss03* this, PlayState* play) {
         case 3:
             Boss03_PlayUnderwaterSfx(&this->actor.projectedPos, NA_SE_EN_KONB_PREATTACK_OLD - SFX_FLAG);
             sp5A = 0x1970;
-            Math_ApproachF(&this->actor.speedXZ, 15.0f, 1.0f, 2.0f);
+            Math_ApproachF(&this->actor.speed, 15.0f, 1.0f, 2.0f);
             if (this->csTimer > 20) {
                 this->csState = 4;
                 this->csTimer = 0;
@@ -1277,14 +1277,14 @@ void Boss03_IntroCutscene(Boss03* this, PlayState* play) {
                 this->csState = 5;
                 this->csTimer = 0;
                 this->unk_2D5 = false;
-                this->actor.speedXZ = -200.0f;
+                this->actor.speed = -200.0f;
                 Actor_MoveWithoutGravityReverse(&this->actor);
                 this->actor.world.pos.y = this->waterHeight - 150.0f;
                 Play_DisableMotionBlur();
 
                 case 5:
                     SkelAnime_Update(&this->skelAnime);
-                    this->actor.speedXZ = 20.0f;
+                    this->actor.speed = 20.0f;
                     Actor_MoveWithoutGravityReverse(&this->actor);
                     player->actor.shape.rot.y = -0x1470;
                     player->actor.world.rot.y = player->actor.shape.rot.y;
@@ -1302,17 +1302,17 @@ void Boss03_IntroCutscene(Boss03* this, PlayState* play) {
                         this->csState = 6;
                         this->csTimer = 0;
                         this->actor.gravity = -1.5f;
-                        this->actor.speedXZ = 20.0f;
+                        this->actor.speed = 20.0f;
 
                         Audio_QueueSeqCmd(NA_BGM_BOSS | 0x8000);
-                        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KONB_JUMP_OLD);
+                        Actor_PlaySfx(&this->actor, NA_SE_EN_KONB_JUMP_OLD);
                         this->skelAnime.playSpeed = 1.0f;
                     }
             }
             break;
 
         case 6:
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KONB_JUMP_LEV_OLD - SFX_FLAG);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_KONB_JUMP_LEV_OLD - SFX_FLAG);
 
             if (this->csTimer == 30) {
                 TitleCard_InitBossName(&play->state, &play->actorCtx.titleCtxt,
@@ -1327,7 +1327,7 @@ void Boss03_IntroCutscene(Boss03* this, PlayState* play) {
                     this->bubbleEffectSpawnCount = 2;
                     this->actor.gravity = 0.0f;
                     Math_ApproachZeroF(&this->actor.velocity.y, 1.0f, 1.0f);
-                    Math_ApproachZeroF(&this->actor.speedXZ, 1.0f, 0.5f);
+                    Math_ApproachZeroF(&this->actor.speed, 1.0f, 0.5f);
                 } else {
                     if (1) {}
                     if (1) {}
@@ -1383,7 +1383,7 @@ void Boss03_IntroCutscene(Boss03* this, PlayState* play) {
     if ((this->csState == 2) || (this->csState == 3)) {
         Actor_MoveWithoutGravityReverse(&this->actor);
 
-        phi_f2 = this->actor.speedXZ * 0.02f;
+        phi_f2 = this->actor.speed * 0.02f;
         phi_f2 = CLAMP_MAX(phi_f2, 0.12f);
 
         sp5C = Math_SinS(this->unk_240 * sp5A) * phi_f2;
@@ -1515,10 +1515,10 @@ void Boss03_DeathCutscene(Boss03* this, PlayState* play) {
             Math_ApproachF(&this->actor.world.pos.z, sp84.z, 0.1f, 5.0f);
 
             if (Animation_OnFrame(&this->skelAnime, this->floppingAnimLastFrame)) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KONB_DEAD_JUMP2_OLD);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_KONB_DEAD_JUMP2_OLD);
             }
             if (Animation_OnFrame(&this->skelAnime, this->floppingAnimLastFrame * 0.5f)) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KONB_DEAD_JUMP_OLD);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_KONB_DEAD_JUMP_OLD);
             }
 
             if ((this->workTimer[WORK_TIMER_UNK0_C] == 0) && ((this->waterHeight - 100.0f) < this->actor.world.pos.y)) {
@@ -1545,10 +1545,10 @@ void Boss03_DeathCutscene(Boss03* this, PlayState* play) {
                     this->unk_242 = 1;
                     this->actor.gravity = -2.0f;
                     this->actor.velocity.y = 25.0f;
-                    this->actor.speedXZ = 10.0f;
+                    this->actor.speed = 10.0f;
                     this->actor.world.rot.y = this->unk_2BE + 0x8000;
                     this->unk_240 = 0;
-                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KONB_DEAD_JUMP2_OLD);
+                    Actor_PlaySfx(&this->actor, NA_SE_EN_KONB_DEAD_JUMP2_OLD);
                 }
             }
             Math_ApproachF(&this->unk_56C, 0.01f, 1.0f, 0.0005f);
@@ -1566,7 +1566,7 @@ void Boss03_DeathCutscene(Boss03* this, PlayState* play) {
                 if (this->actor.world.pos.y < PLATFORM_HEIGHT + (100.0f * sp64)) {
                     this->actor.world.pos.y = PLATFORM_HEIGHT + (100.0f * sp64);
                     this->actor.velocity.y = ((Rand_ZeroFloat(10.0f) + 7.5f) * sp64) + 7.5f;
-                    this->actor.speedXZ = ((Rand_ZeroFloat(5.0f) + 2.5f) * sp64) + 2.5f;
+                    this->actor.speed = ((Rand_ZeroFloat(5.0f) + 2.5f) * sp64) + 2.5f;
 
                     if (Rand_ZeroOne() < 0.5f) {
                         this->shapeRotTargetX =
@@ -1705,7 +1705,7 @@ void Boss03_SpawnSmallFishesCutscene(Boss03* this, PlayState* play) {
                                 this->numSpawnedSmallFish++;
                             }
                             if ((this->csTimer % 8) == 0) {
-                                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KONB_MINI_APPEAR);
+                                Actor_PlaySfx(&this->actor, NA_SE_EN_KONB_MINI_APPEAR);
                             }
                         }
                     }
@@ -1779,7 +1779,7 @@ void Boss03_Stunned(Boss03* this, PlayState* play) {
         this->actor.shape.rot.x = this->actor.world.rot.x;
 
         Math_ApproachF(&this->actor.world.pos.y, 100.0f, 0.05f, 5.0f);
-        Math_ApproachF(&this->actor.speedXZ, 0.0f, 1.0f, 1.5f);
+        Math_ApproachF(&this->actor.speed, 0.0f, 1.0f, 1.5f);
         Actor_MoveWithoutGravityReverse(&this->actor);
     }
 
@@ -2004,7 +2004,7 @@ void Boss03_Update(Actor* thisx, PlayState* play2) {
             ((this->waterHeight - 50.0f < this->actor.world.pos.y) &&
              (this->actor.prevPos.y <= this->waterHeight - 50.0f))) {
             if ((this->actor.velocity.y < 0.0f) && (this->actionFunc != Boss03_DeathCutscene)) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KONB_SINK_OLD);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_KONB_SINK_OLD);
             }
 
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_WATER_EFFECT, this->actor.world.pos.x, this->waterHeight,
@@ -2512,13 +2512,13 @@ void Boss03_SeaweedUpdate(Actor* thisx, PlayState* play) {
         yDiff = player->actor.world.pos.y - this->seaweedSegmentPositions[i].y;
         zDiff = player->actor.world.pos.z - this->seaweedSegmentPositions[i].z;
         distanceBetweenSeaweedAndDisturbance = sqrtf(SQ(xDiff) + SQ(yDiff) + SQ(zDiff));
-        disturbanceFactor = player->actor.speedXZ * 3.0f + 70.0f;
+        disturbanceFactor = player->actor.speed * 3.0f + 70.0f;
 
         // Player is standing on ground
         if (player->actor.bgCheckFlags & 1) {
             maxBendSpeed = 0;
         } else {
-            maxBendSpeed = player->actor.speedXZ * 16.0f;
+            maxBendSpeed = player->actor.speed * 16.0f;
             if (maxBendSpeed > 0x1000) {
                 maxBendSpeed = 0x1000;
             } else if (maxBendSpeed < 0x100) {
@@ -2551,8 +2551,8 @@ void Boss03_SeaweedUpdate(Actor* thisx, PlayState* play) {
                 break;
             }
 
-            maxBendSpeed = sGyorgBossInstance->actor.speedXZ * 16.0f;
-            disturbanceFactor = sGyorgBossInstance->actor.speedXZ * 5.0f + 150.0f;
+            maxBendSpeed = sGyorgBossInstance->actor.speed * 16.0f;
+            disturbanceFactor = sGyorgBossInstance->actor.speed * 5.0f + 150.0f;
             if (maxBendSpeed > 0x1000) {
                 maxBendSpeed = 0x1000;
             } else if (maxBendSpeed < 0x100) {
