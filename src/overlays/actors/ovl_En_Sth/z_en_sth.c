@@ -74,8 +74,8 @@ typedef enum {
 } EnSthAnimationIndexes;
 
 static AnimationHeader* sAnimationInfo[] = {
-    &gEnSthSignalAnim, &gEnSthBendingDownAnim, &gEnSthTalkWithHandUpAnim, &gEnSthWaitAnim,
-    &gEnSthLookUpAnim, &gEnSthLookAroundAnim,  &gEnSthPleadAnim,          &gEnSthPanicAnim,
+    &gEnSthSignalAnim, &gEnSthBendDownAnim,   &gEnSthTalkWithHandUpAnim, &gEnSthWaitAnim,
+    &gEnSthLookUpAnim, &gEnSthLookAroundAnim, &gEnSthPleadAnim,          &gEnSthPanicAnim,
 };
 
 // three slightly different variants of "Only a little time left, oh goddess please save me"
@@ -613,9 +613,9 @@ void EnSth_WaitForObject(Actor* thisx, PlayState* play) {
         Actor_SetObjectDependency(play, &this->actor);
 
         if (STH_GET_SWAMP_BODY(&this->actor)) {
-            SkelAnime_InitFlex(play, &this->skelAnime, &gAhgSkel, &gEnSthBendingDownAnim, this->jointTable,
+            SkelAnime_InitFlex(play, &this->skelAnime, &gAhgSkel, &gEnSthBendDownAnim, this->jointTable,
                                this->morphTable, AHG_LIMB_MAX);
-            Animation_PlayLoop(&this->skelAnime, &gEnSthBendingDownAnim);
+            Animation_PlayLoop(&this->skelAnime, &gEnSthBendDownAnim);
             this->curAnimIndex = STH_ANIM_BENDING_DOWN;
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_34_10) || CHECK_WEEKEVENTREG(WEEKEVENTREG_34_20) ||
                 CHECK_WEEKEVENTREG(WEEKEVENTREG_34_40) ||
