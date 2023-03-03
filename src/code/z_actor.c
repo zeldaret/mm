@@ -3634,8 +3634,8 @@ u32 Actor_GetArrowDmgFlags(s32 params) {
     return sArrowDmgFlags[params];
 }
 
-s32 func_800BC1B4(Actor* actor, Actor* projectile, f32 distance, f32 speedXZ) {
-    if ((speedXZ > 0.0f) && (Actor_WorldDistXYZToActor(projectile, actor) < ((speedXZ * 2.5f) + distance))) {
+s32 func_800BC1B4(Actor* actor, Actor* projectile, f32 distance, f32 speed) {
+    if ((speed > 0.0f) && (Actor_WorldDistXYZToActor(projectile, actor) < ((speed * 2.5f) + distance))) {
         s16 temp_v1 = BINANG_SUB(Actor_WorldYawTowardActor(projectile, actor), projectile->world.rot.y);
 
         if (ABS_ALT(temp_v1) < 0x1400) {
@@ -3653,29 +3653,29 @@ Actor* func_800BC270(PlayState* play, Actor* actor, f32 distance, u32 dmgFlags) 
         if (((itemAction->id == ACTOR_ARMS_HOOK) && (dmgFlags & DMG_HOOKSHOT)) ||
             ((itemAction->id == ACTOR_EN_BOOM) && (dmgFlags & DMG_ZORA_BOOMERANG)) ||
             ((itemAction->id == ACTOR_EN_ARROW) && (Actor_GetArrowDmgFlags(itemAction->params) & dmgFlags))) {
-            f32 speedXZ;
+            f32 speed;
 
             if ((itemAction->speed <= 0.0f) && (GET_PLAYER(play)->unk_D57 != 0)) {
                 if (itemAction->id == ACTOR_ARMS_HOOK) {
-                    speedXZ = 20.0f;
+                    speed = 20.0f;
                 } else if (itemAction->id == ACTOR_EN_BOOM) {
-                    speedXZ = 12.0f;
+                    speed = 12.0f;
                 } else {
                     u32 arrowDmgFlags = Actor_GetArrowDmgFlags(itemAction->params);
 
                     if (arrowDmgFlags == DMG_DEKU_NUT) {
-                        speedXZ = 80.0f;
+                        speed = 80.0f;
                     } else if (arrowDmgFlags == DMG_DEKU_BUBBLE) {
-                        speedXZ = 60.0f;
+                        speed = 60.0f;
                     } else {
-                        speedXZ = 150.0f;
+                        speed = 150.0f;
                     }
                 }
             } else {
-                speedXZ = itemAction->speed;
+                speed = itemAction->speed;
             }
 
-            if (func_800BC1B4(actor, itemAction, distance, speedXZ)) {
+            if (func_800BC1B4(actor, itemAction, distance, speed)) {
                 break;
             }
         }
