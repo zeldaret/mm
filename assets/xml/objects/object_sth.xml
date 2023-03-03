@@ -3,8 +3,8 @@
     <!-- This object is almost a copy of object_boj, with the animations removed -->
     <File Name="object_sth" Segment="6">
 
-        <!-- Unused copy of head from object_boj (Jugler). -->
-        <Array Name="gSthUnusedVtx" Count="83" Offset="0x0">
+        <!-- Unused copy of head from object_boj (Juggler). -->
+        <Array Name="gSthUnusedHeadVtx" Count="83" Offset="0x0">
             <Vtx/>
         </Array>
 
@@ -19,7 +19,7 @@
         <DList Name="gSthRightFootDL" Offset="0x24C0" />
         <DList Name="gSthRightShinDL" Offset="0x25D8" />
         <DList Name="gSthRightThighDL" Offset="0x26E8" />
-        <DList Name="gSthLeftFoorDL" Offset="0x27F0" />
+        <DList Name="gSthLeftFootDL" Offset="0x27F0" />
         <DList Name="gSthLeftShinDL" Offset="0x2908" />
         <DList Name="gSthLeftThighDL" Offset="0x2A18" />
         <DList Name="gSthPelvisDL" Offset="0x2B20" />

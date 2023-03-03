@@ -1,5 +1,5 @@
 ﻿<Root>
-    <!-- Assets for the Bearded man from OOT, body is reused in MM for Cured Swamp Spiderhouse Man (head substituted from overlay data). -->
+    <!-- Assets for the bearded man from OOT, body is reused in MM for Cured Swamp Spider House Man (head substituted from overlay data). -->
     <File Name="object_ahg" Segment="6">
         <Texture Name="gAhgTLUT" OutName="tlut" Format="rgba16" Width="16" Height="16" Offset="0x0" />
         <Texture Name="gAhgHairLineTex" OutName="hair_line" Format="ci8" Width="16" Height="16" Offset="0x200" />

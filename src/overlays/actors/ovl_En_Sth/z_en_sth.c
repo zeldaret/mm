@@ -2,8 +2,8 @@
  * File: z_en_sth.c
  * Overlay: ovl_En_Sth
  * Description: Guy looking at moon in South Clock Town,
- *              And the Cured Swamp spiderhouse man who gives you Mask of Truth
- *              And the man who wants to buy Ocean Spiderhouse from you with rupees or Wallet
+ *              And the Cured Swamp Spider House man who gives you Mask of Truth
+ *              And the man who wants to buy Oceanside Spider House from you with rupees or Wallet
  */
 
 #include "z_en_sth.h"
@@ -62,13 +62,13 @@ static ColliderCylinderInit sCylinderInit = {
 
 typedef enum {
     /* 0x0 */ STH_ANIM_SIGNALLING,   // default, waving arms at you from telescope, OOT: cured happy animation
-    /* 0x1 */ STH_ANIM_BENDING_DOWN, // default anim of cured spiderhouse, but never seen before wait overrides it
+    /* 0x1 */ STH_ANIM_BENDING_DOWN, // default anim of cured spider house, but never seen before wait overrides it
     /* 0x2 */ STH_ANIM_TALK,
     /* 0x3 */ STH_ANIM_WAIT,
-    /* 0x4 */ STH_ANIM_LOOK_UP,     // southclocktown, looking at moon
-    /* 0x5 */ STH_ANIM_LOOK_AROUND, // checking out ocean spiderhouse
-    /* 0x6 */ STH_ANIM_PLEAD,       // wants to buy ocean house
-    /* 0x7 */ STH_ANIM_PANIC,       // after buying ocean house, can be found at bottom of slide,
+    /* 0x4 */ STH_ANIM_LOOK_UP,     // South Clock Town, looking at moon
+    /* 0x5 */ STH_ANIM_LOOK_AROUND, // checking out Oceanside Spider House
+    /* 0x6 */ STH_ANIM_PLEAD,       // wants to buy Oceanside Spider House
+    /* 0x7 */ STH_ANIM_PANIC,       // after buying Oceanside Spider House, can be found at bottom of slide,
     /* 0x8 */ STH_ANIM_START,       // set in init, not an actual index to the array
 } EnSthAnimationIndexes;
 
@@ -151,7 +151,7 @@ void EnSth_Init(Actor* thisx, PlayState* play) {
             }
             break;
 
-        case STH_TYPE_MOON_LOOKING: // south clock town
+        case STH_TYPE_MOON_LOOKING: // South Clock Town
             if ((gSaveContext.save.skullTokenCount & 0xFFFF) >= STH_OCEAN_SPIDER_TOKENS_REQUIRED) {
                 Actor_Kill(&this->actor);
                 return;
