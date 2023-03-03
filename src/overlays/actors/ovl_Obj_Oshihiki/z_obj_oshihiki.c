@@ -503,7 +503,7 @@ void ObjOshihiki_Push(ObjOshihiki* this, PlayState* play) {
         player = GET_PLAYER(play);
 
         if (ObjOshihiki_CheckWall(play, this->dyna.yRotation, this->dyna.pushForce, this)) {
-            Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
+            Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
         }
 
         this->dyna.actor.home.pos.x = this->dyna.actor.world.pos.x;
@@ -521,7 +521,7 @@ void ObjOshihiki_Push(ObjOshihiki* this, PlayState* play) {
         }
     }
 
-    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_ROCK_SLIDE - SFX_FLAG);
+    Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_ROCK_SLIDE - SFX_FLAG);
 }
 
 void ObjOshihiki_SetupFall(ObjOshihiki* this, PlayState* play) {
@@ -553,8 +553,8 @@ void ObjOshihiki_Fall(ObjOshihiki* this, PlayState* play) {
         } else {
             ObjOshihiki_SetupOnActor(this, play);
         }
-        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
-        Actor_PlaySfxAtPos(&this->dyna.actor,
+        Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
+        Actor_PlaySfx(&this->dyna.actor,
                            NA_SE_PL_WALK_GROUND + SurfaceType_GetSfxOffset(&play->colCtx,
                                                                            this->floorPolys[this->highestFloor],
                                                                            this->floorBgIds[this->highestFloor]));

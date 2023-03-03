@@ -1,10 +1,10 @@
 ﻿<Root>
     <File Name="object_dt" Segment="6">
-        <Animation Name="object_dt_Anim_0005A4" Offset="0x5A4" />
-        <Animation Name="object_dt_Anim_000854" Offset="0x854" />
-        <Animation Name="object_dt_Anim_000BE0" Offset="0xBE0" />
-        <Animation Name="object_dt_Anim_000DA8" Offset="0xDA8" />
-        <Animation Name="object_dt_Anim_00112C" Offset="0x112C" />
+        <Animation Name="object_dt_Anim_0005A4" Offset="0x5A4" /> <!-- Original name is "dt_aiya" -->
+        <Animation Name="object_dt_Anim_000854" Offset="0x854" /> <!-- Original name is "dt_aiya2yomesan" -->
+        <Animation Name="object_dt_Anim_000BE0" Offset="0xBE0" /> <!-- Original name is "dt_arigato" -->
+        <Animation Name="object_dt_Anim_000DA8" Offset="0xDA8" /> <!-- Original name is "dt_mojimoji" -->
+        <Animation Name="object_dt_Anim_00112C" Offset="0x112C" /> <!-- Original name is "dt_wait" -->
         <DList Name="object_dt_DL_004DB0" Offset="0x4DB0" />
         <DList Name="object_dt_DL_005130" Offset="0x5130" />
         <DList Name="object_dt_DL_0054C8" Offset="0x54C8" />
@@ -62,6 +62,6 @@
         <Limb Name="object_dt_Standardlimb_00B07C" Type="Standard" EnumName="OBJECT_DT_LIMB_0D" Offset="0xB07C" />
         <Limb Name="object_dt_Standardlimb_00B088" Type="Standard" EnumName="OBJECT_DT_LIMB_0E" Offset="0xB088" />
         <Skeleton Name="object_dt_Skel_00B0CC" Type="Flex" LimbType="Standard" LimbNone="OBJECT_DT_LIMB_NONE" LimbMax="OBJECT_DT_LIMB_MAX" EnumName="ObjectDtLimb" Offset="0xB0CC" />
-        <Animation Name="object_dt_Anim_00B500" Offset="0xB500" />
+        <Animation Name="object_dt_Anim_00B500" Offset="0xB500" /> <!-- Original name is "dt_yome2arigato" -->
     </File>
 </Root>

@@ -90,15 +90,15 @@ void func_80AB1FDC(DmChar09* this, PlayState* play) {
         phi_fv0 = this->speed;
         phi_fa0 = this->speed * 0.16f;
     }
-    Math_StepToF(&thisx->speedXZ, phi_fv0, phi_fa0);
-    if ((thisx->speedXZ + 0.05f) < sp54) {
-        Math_Vec3f_Scale(&thisx->velocity, thisx->speedXZ / sp54);
+    Math_StepToF(&thisx->speed, phi_fv0, phi_fa0);
+    if ((thisx->speed + 0.05f) < sp54) {
+        Math_Vec3f_Scale(&thisx->velocity, thisx->speed / sp54);
         thisx->world.pos.x += thisx->velocity.x;
         thisx->world.pos.y += thisx->velocity.y;
         thisx->world.pos.z += thisx->velocity.z;
     } else {
         this->unk_21C += this->unk_220;
-        thisx->speedXZ *= 0.4f;
+        thisx->speed *= 0.4f;
         phi_a1 = true;
         if (((this->unk_21C >= this->unk_218) && (this->unk_220 > 0)) ||
             ((this->unk_21C <= 0) && (this->unk_220 < 0))) {
@@ -203,7 +203,7 @@ void DmChar09_Update(Actor* thisx, PlayState* play) {
     func_80AB2268(this, play);
     func_80AB24BC(this, play);
     if ((play->csCtx.state != 0) && this->unk_22E && DMCHAR09_GET_100(thisx)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BEE_FLY - SFX_FLAG);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_POSTMAN_WALK + SFX_FLAG);
     }
 }
 

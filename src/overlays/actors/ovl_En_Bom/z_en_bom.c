@@ -30,7 +30,7 @@ typedef struct {
     /* 0x1A */ s16 rotX;
 } PowderKegFuseSegment; // size = 0x1C
 
-static PowderKegFuseSegment sPowderKegFuseSegments[16];
+PowderKegFuseSegment sPowderKegFuseSegments[16];
 
 ActorInit En_Bom_InitVars = {
     ACTOR_EN_BOM,
@@ -209,7 +209,7 @@ void func_80871058(EnBom* this, PlayState* play) {
         this->actor.velocity.y = -this->actor.velocity.y;
     }
 
-    if ((this->actor.speedXZ != 0.0f) && (this->actor.bgCheckFlags & 8)) {
+    if ((this->actor.speed != 0.0f) && (this->actor.bgCheckFlags & 8)) {
         s16 yDiff = BINANG_SUB(this->actor.wallYaw, this->actor.world.rot.y);
 
         if (ABS_ALT(yDiff) > 0x4000) {
@@ -217,14 +217,14 @@ void func_80871058(EnBom* this, PlayState* play) {
                 BINANG_SUB(this->actor.wallYaw - this->actor.world.rot.y + this->actor.wallYaw, 0x8000);
         }
 
-        Actor_PlaySfxAtPos(&this->actor, this->isPowderKeg ? NA_SE_EV_PUT_DOWN_WOODBOX : NA_SE_EV_BOMB_BOUND);
+        Actor_PlaySfx(&this->actor, this->isPowderKeg ? NA_SE_EV_PUT_DOWN_WOODBOX : NA_SE_EV_BOMB_BOUND);
         Actor_MoveWithGravity(&this->actor);
-        this->actor.speedXZ *= 0.7f;
+        this->actor.speed *= 0.7f;
         this->actor.bgCheckFlags &= ~8;
     }
 
     if (!(this->actor.bgCheckFlags & 1)) {
-        Math_StepToF(&this->actor.speedXZ, 0.0f, 0.08f);
+        Math_StepToF(&this->actor.speed, 0.0f, 0.08f);
     } else {
         Vec3f* sp58;
         FloorType floorType = SurfaceType_GetFloorType(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
@@ -251,37 +251,37 @@ void func_80871058(EnBom* this, PlayState* play) {
             Math_ApproachF(&this->actor.shape.yOffset, 700.0f, 1.0f, 700.0f);
         }
 
-        sp40 = Math_SinS(this->actor.world.rot.y) * this->actor.speedXZ;
-        sp3C = Math_CosS(this->actor.world.rot.y) * this->actor.speedXZ;
+        sp40 = Math_SinS(this->actor.world.rot.y) * this->actor.speed;
+        sp3C = Math_CosS(this->actor.world.rot.y) * this->actor.speed;
         Actor_GetSlopeDirection(this->actor.floorPoly, &slopeNormal, &downwardSlopeYaw);
 
         sp40 += 3.0f * slopeNormal.x;
         sp3C += 3.0f * slopeNormal.z;
         sp38 = sqrtf(SQ(sp40) + SQ(sp3C));
 
-        if ((sp38 < this->actor.speedXZ) || (SurfaceType_GetFloorEffect(&play->colCtx, this->actor.floorPoly,
+        if ((sp38 < this->actor.speed) || (SurfaceType_GetFloorEffect(&play->colCtx, this->actor.floorPoly,
                                                                         this->actor.floorBgId) == FLOOR_EFFECT_1)) {
             if (sp38 > 16.0f) {
-                this->actor.speedXZ = 16.0f;
+                this->actor.speed = 16.0f;
             } else {
-                this->actor.speedXZ = sp38;
+                this->actor.speed = sp38;
             }
             this->actor.world.rot.y = Math_Atan2S_XY(sp3C, sp40);
         }
 
-        if (!Math_StepToF(&this->actor.speedXZ, 0.0f, sp58->x)) {
+        if (!Math_StepToF(&this->actor.speed, 0.0f, sp58->x)) {
             s16 temp = this->actor.world.rot.y;
             s32 pad;
 
             if (ABS_ALT(BINANG_SUB(this->actor.world.rot.y, this->actor.shape.rot.y)) > 0x4000) {
                 temp = BINANG_ROT180(temp);
             }
-            Math_ScaledStepToS(&this->actor.shape.rot.y, temp, this->actor.speedXZ * 100.0f);
-            this->unk_1FA += (s16)(this->actor.speedXZ * 800.0f);
+            Math_ScaledStepToS(&this->actor.shape.rot.y, temp, this->actor.speed * 100.0f);
+            this->unk_1FA += (s16)(this->actor.speed * 800.0f);
         }
 
         if (this->actor.bgCheckFlags & 2) {
-            Actor_PlaySfxAtPos(&this->actor, this->isPowderKeg ? NA_SE_EV_TRE_BOX_BOUND : NA_SE_EV_BOMB_BOUND);
+            Actor_PlaySfx(&this->actor, this->isPowderKeg ? NA_SE_EV_TRE_BOX_BOUND : NA_SE_EV_BOMB_BOUND);
             if (this->actor.velocity.y < sp58->y) {
                 if ((floorType == FLOOR_TYPE_4) || (floorType == FLOOR_TYPE_14) || (floorType == FLOOR_TYPE_15)) {
                     this->actor.velocity.y = 0.0f;
@@ -444,7 +444,7 @@ void EnBom_Update(Actor* thisx, PlayState* play) {
 
     if (this->unk_1FC != 0) {
         this->unk_1FC--;
-        Math_ApproachZeroF(&thisx->speedXZ, 1.0f, 1.0f);
+        Math_ApproachZeroF(&thisx->speed, 1.0f, 1.0f);
         Actor_MoveWithGravity(thisx);
         Actor_UpdateBgCheckInfo(play, thisx, 35.0f, 10.0f, 36.0f, 4);
         if (this->unk_1FC == 0) {
@@ -462,7 +462,7 @@ void EnBom_Update(Actor* thisx, PlayState* play) {
         }
 
         if ((!this->isPowderKeg && (this->timer == 67)) || (this->isPowderKeg && (this->timer <= 2400))) {
-            Actor_PlaySfxAtPos(thisx, NA_SE_PL_TAKE_OUT_SHIELD);
+            Actor_PlaySfx(thisx, NA_SE_PL_TAKE_OUT_SHIELD);
             Actor_SetScale(thisx, enBomScales[this->isPowderKeg]);
         }
 
@@ -491,7 +491,7 @@ void EnBom_Update(Actor* thisx, PlayState* play) {
                               : (this->flashSpeedScale == 3) ? 1
                                                              : 2);
             } else {
-                Actor_PlaySfxAtPos(thisx, NA_SE_IT_BOMB_IGNIT - SFX_FLAG);
+                Actor_PlaySfx(thisx, NA_SE_IT_BOMB_IGNIT - SFX_FLAG);
             }
 
             sp80.y += 3.0f;
@@ -545,9 +545,9 @@ void EnBom_Update(Actor* thisx, PlayState* play) {
                 this->actionFunc = func_808715B8;
                 if (this->isPowderKeg) {
                     gSaveContext.powderKegTimer = 0;
-                    Actor_PlaySfxAtPos(thisx, NA_SE_IT_BIG_BOMB_EXPLOSION);
+                    Actor_PlaySfx(thisx, NA_SE_IT_BIG_BOMB_EXPLOSION);
                 } else {
-                    Actor_PlaySfxAtPos(thisx, NA_SE_IT_BOMB_EXPLOSION);
+                    Actor_PlaySfx(thisx, NA_SE_IT_BOMB_EXPLOSION);
                 }
             }
         }
@@ -581,7 +581,7 @@ void EnBom_Update(Actor* thisx, PlayState* play) {
                 this->unk_1FC = KREG(81) + 10;
             } else if (thisx->bgCheckFlags & 0x40) {
                 thisx->bgCheckFlags &= ~0x40;
-                Actor_PlaySfxAtPos(thisx, NA_SE_EV_BOMB_DROP_WATER);
+                Actor_PlaySfx(thisx, NA_SE_EV_BOMB_DROP_WATER);
             }
         }
     }

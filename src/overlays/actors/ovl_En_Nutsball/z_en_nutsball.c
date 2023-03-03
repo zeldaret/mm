@@ -57,7 +57,7 @@ void EnNutsball_Init(Actor* thisx, PlayState* play) {
     ActorShape_Init(&this->actor.shape, 400.0f, ActorShadow_DrawCircle, 13.0f);
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     this->actor.shape.rot.y = 0;
-    this->actor.speedXZ = 10.0f;
+    this->actor.speed = 10.0f;
     if (this->actor.params == 2) {
         this->timer = 1;
         this->timerThreshold = 0;

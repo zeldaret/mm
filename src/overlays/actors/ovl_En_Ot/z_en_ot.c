@@ -5,7 +5,6 @@
  */
 
 #include "z_en_ot.h"
-#include "prevent_bss_reordering.h"
 #include "objects/object_ot/object_ot.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
@@ -328,9 +327,9 @@ void func_80B5BE88(EnOt* this, PlayState* play) {
 
 void func_80B5BED4(EnOt* this, PlayState* play) {
     func_800BE33C(&this->actor.world.pos, &this->unk_360->actor.world.pos, &this->actor.world.rot, 0);
-    Math_SmoothStepToS(&this->actor.shape.rot.y, Actor_YawBetweenActors(&this->actor, &this->unk_360->actor), 3, 0xE38,
-                       0x38E);
-    this->actor.speedXZ = 3.5f;
+    Math_SmoothStepToS(&this->actor.shape.rot.y, Actor_WorldYawTowardActor(&this->actor, &this->unk_360->actor), 3,
+                       0xE38, 0x38E);
+    this->actor.speed = 3.5f;
     this->actor.world.pos.y = this->unk_360->actor.world.pos.y;
     Actor_MoveWithoutGravityReverse(&this->actor);
 }
@@ -349,10 +348,10 @@ void func_80B5BFB8(EnOt* this, PlayState* play) {
         Math_StepToF(&this->actor.world.pos.y, temp_f0, 2.0f);
     }
 
-    Math_SmoothStepToS(&this->actor.shape.rot.y, Actor_YawBetweenActors(&this->actor, &this->unk_360->actor), 3, 0xE38,
-                       0x38E);
+    Math_SmoothStepToS(&this->actor.shape.rot.y, Actor_WorldYawTowardActor(&this->actor, &this->unk_360->actor), 3,
+                       0xE38, 0x38E);
 
-    if (Actor_DistanceBetweenActors(&this->actor, &this->unk_360->actor) <= 52.519997f) {
+    if (Actor_WorldDistXYZToActor(&this->actor, &this->unk_360->actor) <= 52.519997f) {
         this->unk_73C = 50;
         Matrix_RotateYS(this->actor.world.rot.y, MTXMODE_NEW);
         Matrix_MultVecZ(52.519997f, &sp34);
@@ -401,7 +400,7 @@ void func_80B5C244(EnOt* this, PlayState* play) {
 }
 
 void func_80B5C25C(EnOt* this, PlayState* play) {
-    this->unk_390 = Actor_YawBetweenActors(&this->actor, &this->unk_360->actor);
+    this->unk_390 = Actor_WorldYawTowardActor(&this->actor, &this->unk_360->actor);
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->unk_390, 3, 0xE38, 0x38E);
     if (BINANG_SUB(BINANG_ROT180(this->unk_360->actor.shape.rot.y), this->actor.shape.rot.y) < 0x38E) {
         this->unk_32C |= 0x80;
@@ -450,7 +449,7 @@ void func_80B5C3D8(EnOt* this, PlayState* play) {
 
     Math_Vec3f_Copy(&this->actor.world.pos, &this->unk_348);
     Math_Vec3f_Copy(&this->unk_360->actor.world.pos, &this->unk_360->unk_348);
-    temp = Actor_YawBetweenActors(&this->actor, &this->unk_360->actor);
+    temp = Actor_WorldYawTowardActor(&this->actor, &this->unk_360->actor);
     this->actor.shape.rot.y = temp;
     this->unk_360->actor.shape.rot.y = BINANG_ROT180(temp);
 
@@ -488,7 +487,7 @@ void func_80B5C64C(EnOt* this, PlayState* play) {
 }
 
 void func_80B5C684(EnOt* this, PlayState* play) {
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 0, &this->animIndex);
     this->actionFunc = func_80B5C6DC;
 }
@@ -499,7 +498,7 @@ void func_80B5C6DC(EnOt* this, PlayState* play) {
     s16 sp3E;
     Vec3f sp30;
 
-    sp3E = Actor_YawToPoint(&player->actor, &this->unk_394);
+    sp3E = Actor_WorldYawTowardPoint(&player->actor, &this->unk_394);
     Matrix_RotateYS(BINANG_ADD(sp3E, 0x4000), MTXMODE_NEW);
     if (this->unk_33C == 2) {
         Matrix_MultVecZ(26.259998f, &sp30);
@@ -555,7 +554,7 @@ void func_80B5C910(EnOt* this, PlayState* play) {
 
 void func_80B5C950(EnOt* this, PlayState* play) {
     if (this->unk_32C & 8) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SEAHORSE_OUT_BOTTLE);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_SEAHORSE_OUT_BOTTLE);
         SET_WEEKEVENTREG(WEEKEVENTREG_25_04);
         func_80B5CAD0(this, play);
     }
@@ -576,7 +575,7 @@ void func_80B5C9D0(EnOt* this, PlayState* play) {
     this->actor.world.rot.x = this->actor.world.rot.x;
     this->actor.world.rot.y = this->actor.world.rot.y;
     this->actor.world.rot.z = this->actor.world.rot.z;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SEAHORSE_OUT_BOTTLE);
+    Actor_PlaySfx(&this->actor, NA_SE_EV_SEAHORSE_OUT_BOTTLE);
     this->actionFunc = func_80B5CA30;
 }
 
@@ -820,11 +819,11 @@ void func_80B5D160(EnOt* this, PlayState* play) {
 s32 EnOt_ActorPathing_Move(PlayState* play, ActorPathing* actorPath) {
     Actor* thisx = actorPath->actor;
     EnOt* this = (EnOt*)thisx;
-    f32 sp24 = Math_CosS(-thisx->world.rot.x) * thisx->speedXZ;
+    f32 sp24 = Math_CosS(-thisx->world.rot.x) * thisx->speed;
     f32 sp20 = gFramerateDivisorHalf;
 
     thisx->velocity.x = Math_SinS(thisx->world.rot.y) * sp24;
-    thisx->velocity.y = Math_SinS(-thisx->world.rot.x) * thisx->speedXZ;
+    thisx->velocity.y = Math_SinS(-thisx->world.rot.x) * thisx->speed;
     thisx->velocity.z = Math_CosS(thisx->world.rot.y) * sp24;
 
     this->unk_330.x += (thisx->velocity.x * sp20) + thisx->colChkInfo.displacement.x;
@@ -846,7 +845,7 @@ s32 EnOt_ActorPathing_UpdateActorInfo(PlayState* play, ActorPathing* actorPath) 
     s32 sp34;
 
     thisx->gravity = 0.0f;
-    Math_SmoothStepToF(&thisx->speedXZ, 10.0f, 0.8f, 2.0f, 0.0f);
+    Math_SmoothStepToF(&thisx->speed, 10.0f, 0.8f, 2.0f, 0.0f);
 
     sp50.x = actorPath->curPoint.x - thisx->world.pos.x;
     sp50.y = actorPath->curPoint.y - thisx->world.pos.y;
@@ -857,10 +856,10 @@ s32 EnOt_ActorPathing_UpdateActorInfo(PlayState* play, ActorPathing* actorPath) 
     sp44.z = actorPath->curPoint.z - actorPath->prevPoint.z;
 
     temp = Math3D_Parallel(&sp50, &sp44);
-    if ((actorPath->distSqToCurPointXZ < SQ(thisx->speedXZ)) || (temp <= 0.0f)) {
+    if ((actorPath->distSqToCurPointXZ < SQ(thisx->speed)) || (temp <= 0.0f)) {
         ret = true;
     } else {
-        temp = SQ(thisx->speedXZ) / actorPath->distSqToCurPoint;
+        temp = SQ(thisx->speed) / actorPath->distSqToCurPoint;
         sp34 = ABS(actorPath->rotToCurPoint.x - thisx->world.rot.x);
         sp2C = (s32)(sp34 * temp) + 0xAAA;
 
@@ -885,7 +884,7 @@ void func_80B5D648(EnOt* this, PlayState* play) {
     this->actorPath.pointOffset.y = 0.0f;
     this->actorPath.pointOffset.z = 0.0f;
     this->actor.gravity = 0.0f;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 1, &this->animIndex);
     this->actor.flags |= ACTOR_FLAG_8000000;
     this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_8);
@@ -930,7 +929,7 @@ void EnOt_Update(Actor* thisx, PlayState* play) {
     EnOt* this = THIS;
 
     if ((this->animIndex == 1) && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SEAHORSE_SWIM);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_SEAHORSE_SWIM);
     }
 
     this->actionFunc(this, play);

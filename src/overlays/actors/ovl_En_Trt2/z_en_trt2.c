@@ -176,7 +176,7 @@ void func_80AD3530(EnTrt2* this, PlayState* play) {
                 this->unk_1E4++;
             }
         }
-        Math_ApproachF(&this->actor.speedXZ, 1.5f, 0.2f, 1.0f);
+        Math_ApproachF(&this->actor.speed, 1.5f, 0.2f, 1.0f);
     }
 
     Actor_MoveWithGravity(&this->actor);
@@ -229,7 +229,7 @@ void func_80AD36EC(EnTrt2* this, PlayState* play) {
     Actor_MoveWithGravity(&this->actor);
     func_800B9010(&this->actor, NA_SE_EN_KOTAKE_FLY - SFX_FLAG);
     if ((this->actor.shape.rot.y >= 0x2800) && (this->actor.shape.rot.y < 0x3800)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KOTAKE_ROLL);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_KOTAKE_ROLL);
     }
 }
 
@@ -277,7 +277,7 @@ void func_80AD38B8(EnTrt2* this, PlayState* play) {
                 sp30.y = this->actor.wallYaw;
             }
         }
-        Math_ApproachF(&this->actor.speedXZ, 5.0f, 0.2f, 1.0f);
+        Math_ApproachF(&this->actor.speed, 5.0f, 0.2f, 1.0f);
     }
 
     Actor_MoveWithoutGravity(&this->actor);
@@ -286,8 +286,8 @@ void func_80AD38B8(EnTrt2* this, PlayState* play) {
 
 void func_80AD3A24(EnTrt2* this, PlayState* play) {
     func_80AD46F8(this);
-    if (this->actor.speedXZ > 0.05f) {
-        Math_ApproachF(&this->actor.speedXZ, 0.0f, 0.2f, 1.0f);
+    if (this->actor.speed > 0.05f) {
+        Math_ApproachF(&this->actor.speed, 0.0f, 0.2f, 1.0f);
     } else if (DECR(this->unk_3AE) == 0) {
         this->unk_3AE = Rand_S16Offset(100, 50);
         EnTrt2_ChangeAnim(&this->skelAnime, sAnimationInfo, TRT2_ANIM_HOVER);
@@ -514,7 +514,7 @@ void func_80AD434C(EnTrt2* this, PlayState* play) {
     Actor_MoveWithGravity(&this->actor);
 
     if ((this->actor.shape.rot.y >= 0x2800) && (this->actor.shape.rot.y < 0x3800)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KOTAKE_ROLL);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_KOTAKE_ROLL);
     }
 }
 
@@ -663,7 +663,7 @@ s32 func_80AD4B4C(EnTrt2* this, PlayState* play) {
 
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         sp24 = true;
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
         func_80AD349C(this);
         this->unk_3B4 = this->unk_3B2;
         if (this->actor.bgCheckFlags & 1) {
@@ -702,7 +702,7 @@ s32 func_80AD4CCC(EnTrt2* this, PlayState* play) {
 
     if (((this->unk_3B2 == 4) || (this->unk_3B2 == 5)) && this->actor.isTargeted && !(this->actor.bgCheckFlags & 1) &&
         ((player->transformation == PLAYER_FORM_HUMAN) || (player->transformation == PLAYER_FORM_FIERCE_DEITY))) {
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
         this->actor.velocity.y = 1.5f;
         this->unk_3B2 = 16;
         return true;

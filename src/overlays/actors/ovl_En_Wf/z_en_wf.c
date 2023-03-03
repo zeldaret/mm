@@ -299,10 +299,10 @@ void EnWf_Init(Actor* thisx, PlayState* play) {
         if (this->actor.child != NULL) {
             Player* player = GET_PLAYER(play);
 
-            this->actor.child->xzDistToPlayer = Actor_XZDistanceBetweenActors(&this->actor, &player->actor);
+            this->actor.child->xzDistToPlayer = Actor_WorldDistXZToActor(&this->actor, &player->actor);
             this->unk_2A4 = (temp_s0 * 0.5f) + 45.0f;
             this->unk_29C = 0x32000 / this->unk_2A4;
-            this->actor.shape.rot.y = Actor_YawBetweenActors(&this->actor, &player->actor);
+            this->actor.shape.rot.y = Actor_WorldYawTowardActor(&this->actor, &player->actor);
             this->actor.world.pos.x -= this->unk_2A4 * Math_SinS(this->actor.shape.rot.y);
             this->actor.world.pos.z -= this->unk_2A4 * Math_CosS(this->actor.shape.rot.y);
         }
@@ -317,7 +317,7 @@ void EnWf_Init(Actor* thisx, PlayState* play) {
     Actor_SetScale(&this->actor, 0.0075f);
 
     if (this->actor.params == 0) {
-        SkelAnime_InitFlex(play, &this->skelAnime, &gWolfosNormalSkel, &gWolfosWaitingAnim, this->jointTable,
+        SkelAnime_InitFlex(play, &this->skelAnime, &gWolfosNormalSkel, &gWolfosWaitAnim, this->jointTable,
                            this->morphTable, WOLFOS_NORMAL_LIMB_MAX);
         this->actor.hintId = TATL_HINT_ID_WOLFOS;
         CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable2, &sColChkInfoInit);
@@ -325,7 +325,7 @@ void EnWf_Init(Actor* thisx, PlayState* play) {
         this->collider1.elements[1].info.toucher.damage = 8;
         this->actor.colChkInfo.health = 6;
     } else {
-        SkelAnime_InitFlex(play, &this->skelAnime, &gWolfosWhiteSkel, &gWolfosWaitingAnim, this->jointTable,
+        SkelAnime_InitFlex(play, &this->skelAnime, &gWolfosWhiteSkel, &gWolfosWaitAnim, this->jointTable,
                            this->morphTable, WOLFOS_WHITE_LIMB_MAX);
         this->actor.hintId = TATL_HINT_ID_WHITE_WOLFOS;
         CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable1, &sColChkInfoInit);
@@ -405,7 +405,7 @@ s32 func_80990948(PlayState* play, EnWf* this, s16 arg2) {
     if (((this->unk_295 == 0) ||
          ((this->unk_295 == 1) && (this->actor.child != NULL) && (this->actor.child->update != NULL))) &&
         (this->actor.xzDistToPlayer > 160.0f) &&
-        (this->unk_2A8 < Actor_XZDistanceToPoint(&this->actor, &this->actor.home.pos))) {
+        (this->unk_2A8 < Actor_WorldDistXZToPoint(&this->actor, &this->actor.home.pos))) {
         func_80993524(this);
         return true;
     }
@@ -502,7 +502,7 @@ void func_80990C6C(EnWf* this, PlayState* play, s32 arg2) {
 void func_80990E4C(EnWf* this, PlayState* play) {
     if (Animation_OnFrame(&this->skelAnime, 1.0f) && (this->actor.bgCheckFlags & 1)) {
         func_80990C6C(this, play, 2);
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_WOLFOS_WALK);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_WOLFOS_WALK);
     }
 }
 
@@ -518,7 +518,7 @@ s32 func_80990EAC(EnWf* this) {
 void func_80990ED4(EnWf* this) {
     this->actor.child = NULL;
     this->actor.shape.rot.y = this->actor.yawTowardsPlayer;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_WOLFOS_APPEAR);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_WOLFOS_APPEAR);
     func_80991438(this);
 }
 
@@ -550,7 +550,7 @@ void func_80990F50(EnWf* this, PlayState* play) {
 }
 
 void func_80990FC8(EnWf* this) {
-    Animation_Change(&this->skelAnime, &gWolfosRearingUpFallingOverAnim, 0.5f, 0.0f, 7.0f, ANIMMODE_ONCE_INTERP, 0.0f);
+    Animation_Change(&this->skelAnime, &gWolfosRearUpFallOverAnim, 0.5f, 0.0f, 7.0f, ANIMMODE_ONCE_INTERP, 0.0f);
     this->unk_2A0 = 5;
     this->actor.flags |= ACTOR_FLAG_1;
     this->actionFunc = func_80991040;
@@ -562,7 +562,7 @@ void func_80991040(EnWf* this, PlayState* play) {
         Math_StepToF(&this->actor.shape.shadowScale, 70.0f, 14.0f);
         this->unk_2A0--;
         if (this->unk_2A0 == 0) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_WOLFOS_APPEAR);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_WOLFOS_APPEAR);
         }
     } else if (SkelAnime_Update(&this->skelAnime)) {
         this->actor.scale.y = this->actor.scale.x;
@@ -572,8 +572,8 @@ void func_80991040(EnWf* this, PlayState* play) {
 
 void func_809910F0(EnWf* this) {
     this->collider2.base.acFlags &= ~AC_ON;
-    this->actor.speedXZ = 0.0f;
-    Animation_Change(&this->skelAnime, &gWolfosRearingUpFallingOverAnim, 0.5f, 0.0f, 7.0f, ANIMMODE_ONCE_INTERP, -5.0f);
+    this->actor.speed = 0.0f;
+    Animation_Change(&this->skelAnime, &gWolfosRearUpFallOverAnim, 0.5f, 0.0f, 7.0f, ANIMMODE_ONCE_INTERP, -5.0f);
     this->unk_2A0 = 5;
     this->actionFunc = func_80991174;
 }
@@ -592,11 +592,11 @@ void func_80991174(EnWf* this, PlayState* play) {
 
 void func_80991200(EnWf* this) {
     this->collider2.base.acFlags |= AC_ON;
-    Animation_MorphToLoop(&this->skelAnime, &gWolfosWaitingAnim, -4.0f);
+    Animation_MorphToLoop(&this->skelAnime, &gWolfosWaitAnim, -4.0f);
     this->unk_2A0 = (s32)Rand_ZeroFloat(10.0f) + 2;
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->actionFunc = func_80991280;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
 }
 
 void func_80991280(EnWf* this, PlayState* play) {
@@ -634,7 +634,7 @@ void func_80991280(EnWf* this, PlayState* play) {
                 }
 
                 if (this->unk_2A2 == 0) {
-                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_WOLFOS_CRY);
+                    Actor_PlaySfx(&this->actor, NA_SE_EN_WOLFOS_CRY);
                 }
             }
         }
@@ -643,9 +643,9 @@ void func_80991280(EnWf* this, PlayState* play) {
 
 void func_80991438(EnWf* this) {
     this->collider2.base.acFlags |= AC_ON;
-    Animation_MorphToLoop(&this->skelAnime, &gWolfosRunningAnim, -4.0f);
+    Animation_MorphToLoop(&this->skelAnime, &gWolfosRunAnim, -4.0f);
     this->actor.world.rot.y = this->actor.shape.rot.y;
-    this->actor.speedXZ = 8.0f;
+    this->actor.speed = 8.0f;
     this->actionFunc = func_8099149C;
 }
 
@@ -695,7 +695,7 @@ void func_8099149C(EnWf* this, PlayState* play) {
             }
 
             if (this->unk_2A2 == 0) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_WOLFOS_CRY);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_WOLFOS_CRY);
             }
 
             func_80990E4C(this, play);
@@ -704,7 +704,7 @@ void func_8099149C(EnWf* this, PlayState* play) {
 }
 
 void func_80991738(EnWf* this) {
-    Animation_MorphToLoop(&this->skelAnime, &gWolfosSidesteppingAnim, -4.0f);
+    Animation_MorphToLoop(&this->skelAnime, &gWolfosSidestepAnim, -4.0f);
     this->actionFunc = func_8099177C;
 }
 
@@ -749,20 +749,20 @@ void func_8099177C(EnWf* this, PlayState* play) {
             }
         }
         if (this->unk_2A2 == 0) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_WOLFOS_CRY);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_WOLFOS_CRY);
         }
     }
 }
 
 void func_80991948(EnWf* this) {
     this->collider2.base.acFlags |= AC_ON;
-    Animation_MorphToLoop(&this->skelAnime, &gWolfosRunningAnim, -4.0f);
+    Animation_MorphToLoop(&this->skelAnime, &gWolfosRunAnim, -4.0f);
     if (Rand_ZeroOne() > 0.5f) {
         this->unk_29A = 16000;
     } else {
         this->unk_29A = -16000;
     }
-    this->actor.speedXZ = 6.0f;
+    this->actor.speed = 6.0f;
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->unk_2A0 = (s32)Rand_ZeroFloat(30.0f) + 30;
     this->actionFunc = func_809919F4;
@@ -788,7 +788,7 @@ void func_809919F4(EnWf* this, PlayState* play) {
         func_80990E4C(this, play);
 
         if (this->unk_2A2 == 0) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_WOLFOS_CRY);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_WOLFOS_CRY);
         }
 
         if ((Math_CosS(sp26 - this->actor.shape.rot.y) < -0.85f) && !Actor_OtherIsTargeted(play, &this->actor) &&
@@ -810,12 +810,12 @@ void func_809919F4(EnWf* this, PlayState* play) {
 
 void func_80991C04(EnWf* this) {
     this->collider2.base.acFlags |= AC_ON;
-    Animation_PlayOnce(&this->skelAnime, &gWolfosSlashingAnim);
+    Animation_PlayOnce(&this->skelAnime, &gWolfosSlashAnim);
     this->collider1.base.atFlags &= ~AT_BOUNCED;
     this->actor.shape.rot.y = this->actor.yawTowardsPlayer;
     this->unk_2A0 = 7;
     this->skelAnime.endFrame = 20.0f;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actionFunc = func_80991C80;
 }
 
@@ -828,11 +828,11 @@ void func_80991C80(EnWf* this, PlayState* play) {
     sp2A = BINANG_SUB(player->actor.shape.rot.y, this->actor.shape.rot.y);
     sp30 = ABS_ALT(BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.shape.rot.y));
 
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     if (((this->skelAnime.curFrame >= 9.0f) && (this->skelAnime.curFrame < 13.0f)) ||
         ((this->skelAnime.curFrame >= 17.0f) && (this->skelAnime.curFrame < 20.0f))) {
         if (!(this->collider1.base.atFlags & AT_ON)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_WOLFOS_ATTACK);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_WOLFOS_ATTACK);
         }
         this->collider1.base.atFlags |= AT_ON;
     } else {
@@ -880,7 +880,7 @@ void func_80991FD8(EnWf* this) {
     if (this->skelAnime.curFrame > 15.0f) {
         phi_f0 = 15.0f;
     }
-    Animation_Change(&this->skelAnime, &gWolfosSlashingAnim, -0.5f, this->skelAnime.curFrame - 1.0f, phi_f0,
+    Animation_Change(&this->skelAnime, &gWolfosSlashAnim, -0.5f, this->skelAnime.curFrame - 1.0f, phi_f0,
                      ANIMMODE_ONCE_INTERP, 0.0f);
     this->collider1.base.atFlags &= ~AT_ON;
     this->actionFunc = func_80992068;
@@ -924,12 +924,12 @@ void func_80992068(EnWf* this, PlayState* play) {
 
 void func_8099223C(EnWf* this) {
     this->collider2.base.acFlags &= ~AC_ON;
-    Animation_MorphToPlayOnce(&this->skelAnime, &gWolfosBackflippingAnim, -3.0f);
+    Animation_MorphToPlayOnce(&this->skelAnime, &gWolfosBackflipAnim, -3.0f);
     this->unk_2A0 = 0;
-    this->actor.speedXZ = -6.0f;
+    this->actor.speed = -6.0f;
     this->actor.shape.rot.y = this->actor.yawTowardsPlayer;
     this->actor.world.rot.y = this->actor.yawTowardsPlayer;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_TEKU_JUMP);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_TEKU_JUMP);
     this->actionFunc = func_809922B4;
 }
 
@@ -945,12 +945,12 @@ void func_809922B4(EnWf* this, PlayState* play) {
         }
     }
     if (this->unk_2A2 == 0) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_WOLFOS_CRY);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_WOLFOS_CRY);
     }
 }
 
 void func_809923B0(EnWf* this) {
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     if (this->actor.velocity.y > 0.0f) {
         this->actor.velocity.y = 0.0f;
     }
@@ -976,11 +976,11 @@ void func_8099245C(EnWf* this) {
     this->collider2.base.acFlags &= ~AC_ON;
     Animation_MorphToPlayOnce(&this->skelAnime, &gWolfosDamagedAnim, -4.0f);
     if (this->actor.bgCheckFlags & 1) {
-        this->actor.speedXZ = -4.0f;
+        this->actor.speed = -4.0f;
     }
     this->unk_298 = 0;
     this->actor.world.rot.y = this->actor.yawTowardsPlayer;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_WOLFOS_DAMAGE);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_WOLFOS_DAMAGE);
     this->actionFunc = func_809924EC;
 }
 
@@ -988,11 +988,11 @@ void func_809924EC(EnWf* this, PlayState* play) {
     s16 sp26;
 
     if (this->actor.bgCheckFlags & 2) {
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
     }
 
-    if ((this->actor.bgCheckFlags & 1) && (this->actor.speedXZ < 0.0f)) {
-        this->actor.speedXZ += 0.05f;
+    if ((this->actor.bgCheckFlags & 1) && (this->actor.speed < 0.0f)) {
+        this->actor.speed += 0.05f;
     }
 
     Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 3000);
@@ -1022,12 +1022,12 @@ void func_809924EC(EnWf* this, PlayState* play) {
 
 void func_809926D0(EnWf* this) {
     this->collider2.base.acFlags &= ~AC_ON;
-    Animation_Change(&this->skelAnime, &gWolfosBackflippingAnim, -1.0f,
-                     Animation_GetLastFrame(&gWolfosBackflippingAnim.common), 0.0f, ANIMMODE_ONCE, -3.0f);
+    Animation_Change(&this->skelAnime, &gWolfosBackflipAnim, -1.0f, Animation_GetLastFrame(&gWolfosBackflipAnim.common),
+                     0.0f, ANIMMODE_ONCE, -3.0f);
     this->unk_2A0 = 0;
-    this->actor.speedXZ = 6.5f;
+    this->actor.speed = 6.5f;
     this->actor.velocity.y = 15.0f;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_TEKU_JUMP);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_TEKU_JUMP);
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->actionFunc = func_80992784;
 }
@@ -1039,7 +1039,7 @@ void func_80992784(EnWf* this, PlayState* play) {
         this->actor.world.rot.y = this->actor.yawTowardsPlayer;
         this->actor.shape.rot.y = this->actor.yawTowardsPlayer;
         this->actor.velocity.y = 0.0f;
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
         this->actor.world.pos.y = this->actor.floorHeight;
         if (!Actor_OtherIsTargeted(play, &this->actor)) {
             func_80991C04(this);
@@ -1053,9 +1053,9 @@ void func_8099282C(EnWf* this) {
     this->collider2.base.acFlags |= AC_ON;
     this->collider1.base.atFlags &= ~AT_ON;
     this->unk_2A0 = 10;
-    this->actor.speedXZ = 0.0f;
-    Animation_Change(&this->skelAnime, &gWolfosBlockingAnim, -1.0f, Animation_GetLastFrame(&gWolfosBlockingAnim.common),
-                     0.0f, ANIMMODE_ONCE, -2.0f);
+    this->actor.speed = 0.0f;
+    Animation_Change(&this->skelAnime, &gWolfosBlockAnim, -1.0f, Animation_GetLastFrame(&gWolfosBlockAnim.common), 0.0f,
+                     ANIMMODE_ONCE, -2.0f);
     this->actionFunc = func_809928CC;
 }
 
@@ -1092,7 +1092,7 @@ void func_80992A74(EnWf* this, PlayState* play) {
     f32 temp_f0;
 
     this->collider2.base.acFlags |= AC_ON;
-    Animation_MorphToLoop(&this->skelAnime, &gWolfosRunningAnim, -4.0f);
+    Animation_MorphToLoop(&this->skelAnime, &gWolfosRunAnim, -4.0f);
     player = GET_PLAYER(play);
     temp_f0 = Math_SinS((player->actor.shape.rot.y + this->unk_29A) - this->actor.yawTowardsPlayer);
     if (temp_f0 > 0.0f) {
@@ -1104,7 +1104,7 @@ void func_80992A74(EnWf* this, PlayState* play) {
     } else {
         this->unk_29A = -16000;
     }
-    this->actor.speedXZ = 6.0f;
+    this->actor.speed = 6.0f;
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->unk_2A0 = (s32)Rand_ZeroFloat(10.0f) + 5;
     this->actionFunc = func_80992B8C;
@@ -1147,21 +1147,21 @@ void func_80992B8C(EnWf* this, PlayState* play) {
         func_80990E4C(this, play);
 
         if (this->unk_2A2 == 0) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_WOLFOS_CRY);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_WOLFOS_CRY);
         }
     }
 }
 
 void func_80992D6C(EnWf* this) {
     this->collider2.base.acFlags &= ~AC_ON;
-    Animation_MorphToPlayOnce(&this->skelAnime, &gWolfosRearingUpFallingOverAnim, -4.0f);
+    Animation_MorphToPlayOnce(&this->skelAnime, &gWolfosRearUpFallOverAnim, -4.0f);
     this->actor.world.rot.y = this->actor.yawTowardsPlayer;
     if (this->actor.bgCheckFlags & 1) {
-        this->actor.speedXZ = -6.0f;
+        this->actor.speed = -6.0f;
     }
     this->actor.flags &= ~ACTOR_FLAG_1;
     this->unk_2A0 = 25;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_WOLFOS_DEAD);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_WOLFOS_DEAD);
     this->actionFunc = func_80992E0C;
 }
 
@@ -1169,11 +1169,11 @@ void func_80992E0C(EnWf* this, PlayState* play) {
     static Vec3f D_809942F0 = { 0.0f, 0.5f, 0.0f };
 
     if (this->actor.bgCheckFlags & 2) {
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
     }
 
     if (this->actor.bgCheckFlags & 1) {
-        Math_StepToF(&this->actor.speedXZ, 0.0f, 0.5f);
+        Math_StepToF(&this->actor.speed, 0.0f, 0.5f);
     }
 
     if (SkelAnime_Update(&this->skelAnime)) {
@@ -1206,7 +1206,7 @@ void func_80992E0C(EnWf* this, PlayState* play) {
 }
 
 void func_80992FD4(EnWf* this) {
-    Animation_MorphToLoop(&this->skelAnime, &gWolfosWaitingAnim, -4.0f);
+    Animation_MorphToLoop(&this->skelAnime, &gWolfosWaitAnim, -4.0f);
     this->actionFunc = func_80993018;
 }
 
@@ -1218,7 +1218,7 @@ void func_80993018(EnWf* this, PlayState* play) {
         } else if (this->actor.child->xzDistToPlayer < (80.0f + this->unk_2A4)) {
             func_80993350(this);
         } else {
-            s16 temp_v0 = Actor_YawBetweenActors(this->actor.child, &this->actor);
+            s16 temp_v0 = Actor_WorldYawTowardActor(this->actor.child, &this->actor);
             s16 temp_v1 = BINANG_SUB(temp_v0 - this->actor.child->yawTowardsPlayer, 0x8000);
 
             if (ABS_ALT(temp_v1) > 0x800) {
@@ -1233,8 +1233,8 @@ void func_80993018(EnWf* this, PlayState* play) {
 }
 
 void func_80993148(EnWf* this) {
-    Animation_MorphToLoop(&this->skelAnime, &gWolfosRunningAnim, -4.0f);
-    this->actor.speedXZ = 0.0f;
+    Animation_MorphToLoop(&this->skelAnime, &gWolfosRunAnim, -4.0f);
+    this->actor.speed = 0.0f;
     this->actionFunc = func_80993194;
 }
 
@@ -1252,7 +1252,7 @@ void func_80993194(EnWf* this, PlayState* play) {
             if (this->actor.child->xzDistToPlayer < (80.0f + this->unk_2A4)) {
                 func_80993350(this);
             } else {
-                sp36 = Actor_YawBetweenActors(this->actor.child, &this->actor);
+                sp36 = Actor_WorldYawTowardActor(this->actor.child, &this->actor);
                 sp34 = Math_SmoothStepToS(&sp36, BINANG_ROT180(this->actor.child->yawTowardsPlayer), 10, this->unk_29C,
                                           16);
                 this->actor.world.pos.x = (Math_SinS(sp36) * this->unk_2A4) + this->actor.child->world.pos.x;
@@ -1273,13 +1273,13 @@ void func_80993194(EnWf* this, PlayState* play) {
     }
 
     if (this->unk_2A2 == 0) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_WOLFOS_CRY);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_WOLFOS_CRY);
     }
 }
 
 void func_80993350(EnWf* this) {
-    Animation_MorphToLoop(&this->skelAnime, &gWolfosRunningAnim, -4.0f);
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_WOLFOS_APPEAR);
+    Animation_MorphToLoop(&this->skelAnime, &gWolfosRunAnim, -4.0f);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_WOLFOS_APPEAR);
     this->actionFunc = func_809933A0;
 }
 
@@ -1294,7 +1294,7 @@ void func_809933A0(EnWf* this, PlayState* play) {
         if (func_80990EAC(this)) {
             func_80990ED4(this);
         } else {
-            sp2E = Actor_YawBetweenActors(this->actor.child, &this->actor);
+            sp2E = Actor_WorldYawTowardActor(this->actor.child, &this->actor);
             Math_ScaledStepToS(&sp2E, this->actor.child->yawTowardsPlayer, this->unk_29C >> 2);
             sp2C = sp2E - this->actor.child->yawTowardsPlayer;
             this->actor.world.pos.x = (Math_SinS(sp2E) * this->unk_2A4) + this->actor.child->world.pos.x;
@@ -1313,13 +1313,13 @@ void func_809933A0(EnWf* this, PlayState* play) {
         func_80990ED4(this);
     }
     if (this->unk_2A2 == 0) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_WOLFOS_CRY);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_WOLFOS_CRY);
     }
 }
 
 void func_80993524(EnWf* this) {
-    Animation_MorphToLoop(&this->skelAnime, &gWolfosRunningAnim, -4.0f);
-    this->actor.speedXZ = 6.0f;
+    Animation_MorphToLoop(&this->skelAnime, &gWolfosRunAnim, -4.0f);
+    this->actor.speed = 6.0f;
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->actionFunc = func_8099357C;
 }
@@ -1331,7 +1331,7 @@ void func_8099357C(EnWf* this, PlayState* play) {
     func_80990E4C(this, play);
     if (this->unk_295 != 0) {
         if ((this->actor.child != NULL) && (this->actor.child->update != NULL)) {
-            sp2E = Actor_YawBetweenActors(&this->actor, this->actor.child);
+            sp2E = Actor_WorldYawTowardActor(&this->actor, this->actor.child);
             if (func_80990EAC(this)) {
                 this->actor.child = NULL;
                 func_80991738(this);
@@ -1349,7 +1349,7 @@ void func_8099357C(EnWf* this, PlayState* play) {
             Math_SmoothStepToS(&this->actor.shape.rot.y, sp2E, 10, 0x800, 16);
             this->actor.world.rot.y = this->actor.shape.rot.y;
 
-            if (Actor_XZDistanceBetweenActors(&this->actor, this->actor.child) < (this->unk_2A4 + 10.0f)) {
+            if (Actor_WorldDistXZToActor(&this->actor, this->actor.child) < (this->unk_2A4 + 10.0f)) {
                 func_80993148(this);
             }
         } else {
@@ -1357,16 +1357,16 @@ void func_8099357C(EnWf* this, PlayState* play) {
             func_80991738(this);
         }
     } else {
-        Math_SmoothStepToS(&this->actor.shape.rot.y, Actor_YawToPoint(&this->actor, &this->actor.home.pos), 10, 0x800,
-                           16);
+        Math_SmoothStepToS(&this->actor.shape.rot.y, Actor_WorldYawTowardPoint(&this->actor, &this->actor.home.pos), 10,
+                           0x800, 16);
         this->actor.world.rot.y = this->actor.shape.rot.y;
-        if (Actor_XZDistanceToPoint(&this->actor, &this->actor.home.pos) < 40.0f) {
+        if (Actor_WorldDistXZToPoint(&this->actor, &this->actor.home.pos) < 40.0f) {
             func_809910F0(this);
         }
     }
 
     if (this->unk_2A2 == 0) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_WOLFOS_CRY);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_WOLFOS_CRY);
     }
 }
 
@@ -1424,7 +1424,7 @@ void func_8099386C(EnWf* this, PlayState* play) {
             if (this->actor.colChkInfo.damageEffect == 1) {
                 this->unk_2A0 = 40;
                 Actor_SetColorFilter(&this->actor, 0, 0x78, 0, 40);
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_FREEZE);
                 func_809923B0(this);
             } else if (this->actor.colChkInfo.damageEffect == 5) {
                 this->unk_2A0 = 40;
@@ -1432,7 +1432,7 @@ void func_8099386C(EnWf* this, PlayState* play) {
                 this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_SMALL;
                 this->drawDmgEffScale = 0.75f;
                 this->drawDmgEffAlpha = 2.0f;
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_FREEZE);
                 func_809923B0(this);
             } else if (this->actor.colChkInfo.damageEffect == 3) {
                 func_809907D4(this);
@@ -1591,7 +1591,7 @@ s32 func_8099408C(PlayState* play, EnWf* this) {
     s16 temp_v1;
 
     if (temp_v0 != NULL) {
-        temp_v1 = (Actor_YawBetweenActors(&this->actor, temp_v0) - this->actor.shape.rot.y) - this->unk_29E;
+        temp_v1 = (Actor_WorldYawTowardActor(&this->actor, temp_v0) - this->actor.shape.rot.y) - this->unk_29E;
         if (ABS_ALT(temp_v1) < 0x3000) {
             if (Rand_ZeroOne() < 0.5f) {
                 func_8099223C(this);
