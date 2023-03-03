@@ -267,7 +267,7 @@ void EnMa4_RunInCircles(EnMa4* this, PlayState* play) {
     }
 
     if (sAnimIndex == 13 && Animation_OnFrame(&this->skelAnime, 37.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_ROMANI_BOW_FLICK);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_ROMANI_BOW_FLICK);
     }
 
     sp34.x = this->pathPoints[this->pathIndex].x;
@@ -300,7 +300,7 @@ void EnMa4_RunInCircles(EnMa4* this, PlayState* play) {
     Actor_MoveWithGravity(&this->actor);
     if (this->skelAnime.animation == &gRomaniRunAnim) {
         if (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 4.0f)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_ROMANI_WALK);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_ROMANI_WALK);
         }
     }
 }
@@ -666,7 +666,7 @@ void EnMa4_BeginHorsebackGame(EnMa4* this, PlayState* play) {
     gSaveContext.nextCutsceneIndex = 0xFFF0;
     play->transitionTrigger = TRANS_TRIGGER_START;
     play->transitionType = TRANS_TYPE_80;
-    gSaveContext.nextTransitionType = TRANS_TYPE_03;
+    gSaveContext.nextTransitionType = TRANS_TYPE_FADE_WHITE;
 }
 
 void EnMa4_HorsebackGameCheckPlayerInteractions(EnMa4* this, PlayState* play) {
@@ -760,10 +760,10 @@ void EnMa4_HorsebackGameEnd(EnMa4* this, PlayState* play) {
 
         if (this->poppedBalloonCounter == 10) {
             play->transitionType = TRANS_TYPE_80;
-            gSaveContext.nextTransitionType = TRANS_TYPE_03;
+            gSaveContext.nextTransitionType = TRANS_TYPE_FADE_WHITE;
         } else {
             play->transitionType = TRANS_TYPE_64;
-            gSaveContext.nextTransitionType = TRANS_TYPE_02;
+            gSaveContext.nextTransitionType = TRANS_TYPE_FADE_BLACK;
         }
 
         this->poppedBalloonCounter = 0;
@@ -863,7 +863,7 @@ void EnMa4_BeginDescribeThemCs(EnMa4* this, PlayState* play) {
     gSaveContext.nextCutsceneIndex = 0xFFF5;
     play->transitionTrigger = TRANS_TRIGGER_START;
     play->transitionType = TRANS_TYPE_64;
-    gSaveContext.nextTransitionType = TRANS_TYPE_02;
+    gSaveContext.nextTransitionType = TRANS_TYPE_FADE_BLACK;
 }
 
 void EnMa4_StartDialogue(EnMa4* this, PlayState* play) {

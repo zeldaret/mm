@@ -207,7 +207,7 @@ void func_80953F9C(BgIngate* this, PlayState* play) {
                 this->actionFunc = func_809542A0;
             }
         } else if ((ActorCutscene_GetCurrentIndex() == -1) && (this->timePath != NULL)) {
-            Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_CRUISER - SFX_FLAG);
+            Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_CRUISER - SFX_FLAG);
             func_80953BEC(this);
         }
     }
@@ -251,8 +251,8 @@ void func_809542A0(BgIngate* this, PlayState* play) {
     }
     gSaveContext.nextCutsceneIndex = 0;
     play->transitionTrigger = TRANS_TRIGGER_START;
-    play->transitionType = TRANS_TYPE_03;
-    gSaveContext.nextTransitionType = TRANS_TYPE_03;
+    play->transitionType = TRANS_TYPE_FADE_WHITE;
+    gSaveContext.nextTransitionType = TRANS_TYPE_FADE_WHITE;
     this->actionFunc = func_80953F8C;
     CLEAR_WEEKEVENTREG(WEEKEVENTREG_90_40);
     Environment_StartTime();

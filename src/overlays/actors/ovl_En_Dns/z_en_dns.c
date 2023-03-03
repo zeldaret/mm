@@ -92,7 +92,7 @@ void func_8092C5C0(EnDns* this) {
     if (((this->animIndex == EN_DNS_ANIM_WALK_1) || (this->animIndex == EN_DNS_ANIM_WALK_2) ||
          (this->animIndex == EN_DNS_ANIM_RUN_START) || (this->animIndex == EN_DNS_ANIM_RUN_LOOP)) &&
         (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 3.0f))) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_WALK);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_WALK);
     }
 }
 
@@ -315,7 +315,7 @@ s32 func_8092CE38(EnDns* this) {
         this->unk_2C6 &= ~0x200;
         this->skelAnime.curFrame = 0.0f;
         if (this->unk_2D2 == 2) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_JUMP);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_JUMP);
         }
         this->unk_2D2++;
         if (this->unk_2D2 >= 3) {
@@ -328,7 +328,7 @@ s32 func_8092CE38(EnDns* this) {
                 this->actor.world.rot.y = BINANG_ROT180(this->actor.world.rot.y);
                 this->unk_2E4 = 0.0f;
                 this->actor.shape.rot.y = this->actor.world.rot.y;
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_JUMP);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_JUMP);
             } else if (this->skelAnime.curFrame < 13.0f) {
                 frame = this->skelAnime.curFrame;
                 this->actor.shape.rot.y = this->actor.world.rot.y;
@@ -339,7 +339,7 @@ s32 func_8092CE38(EnDns* this) {
         } else {
             if (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 6.0f) ||
                 Animation_OnFrame(&this->skelAnime, 13.0f)) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_WALK);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_WALK);
             }
 
             if (this->skelAnime.curFrame > 7.0f) {
@@ -440,8 +440,8 @@ void func_8092D330(EnDns* this, PlayState* play) {
         play->nextEntrance = ENTRANCE(DEKU_PALACE, 1);
         gSaveContext.nextCutsceneIndex = 0;
         play->transitionTrigger = TRANS_TRIGGER_START;
-        play->transitionType = TRANS_TYPE_03;
-        gSaveContext.nextTransitionType = TRANS_TYPE_03;
+        play->transitionType = TRANS_TYPE_FADE_WHITE;
+        gSaveContext.nextTransitionType = TRANS_TYPE_FADE_WHITE;
     }
 }
 

@@ -83,7 +83,7 @@ static AnimationInfoS sAnimationInfo[] = {
 };
 
 s32 EnDnq_ValidatePictograph(PlayState* play, Actor* thisx) {
-    return Snap_ValidatePictograph(play, thisx, PICTOGRAPH_DEKU_KING, &thisx->focus.pos, &thisx->world.rot, 120.0f,
+    return Snap_ValidatePictograph(play, thisx, PICTO_VALID_DEKU_KING, &thisx->focus.pos, &thisx->world.rot, 120.0f,
                                    480.0f, 0x38E3);
 }
 
@@ -403,7 +403,7 @@ void func_80A53038(EnDnq* this, PlayState* play) {
         }
 
         if ((this->unk_398 == 4) && Animation_OnFrame(&this->skelAnime, 2.0f)) {
-            Actor_PlaySfxAtPos(&this->picto.actor, NA_SE_EN_KINGNUTS_DAMAGE);
+            Actor_PlaySfx(&this->picto.actor, NA_SE_EN_KINGNUTS_DAMAGE);
         }
 
         if (((this->unk_398 == 3) || (this->unk_398 == 6)) &&

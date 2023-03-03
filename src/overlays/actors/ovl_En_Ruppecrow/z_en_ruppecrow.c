@@ -282,7 +282,7 @@ void EnRuppecrow_SpawnRupee(EnRuppecrow* this, PlayState* play) {
             this->rupees[rupeeIndex] = rupee;
             this->rupees[rupeeIndex]->actor.gravity = -5.0f;
             this->rupees[rupeeIndex]->actor.velocity.y = 0.0f;
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_RUPY_FALL);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_RUPY_FALL);
             rupee = this->rupees[rupeeIndex];
             rupee->unk152 = 60;
             this->rupees[rupeeIndex]->actor.flags |= ACTOR_FLAG_10;
@@ -293,7 +293,7 @@ void EnRuppecrow_SpawnRupee(EnRuppecrow* this, PlayState* play) {
             this->rupees[rupeeIndex] = rupee;
             this->rupees[rupeeIndex]->actor.gravity = -5.0f;
             this->rupees[rupeeIndex]->actor.velocity.y = 0.0f;
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_RUPY_FALL);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_RUPY_FALL);
             rupee = this->rupees[rupeeIndex];
             rupee->unk152 = 60;
             this->rupees[rupeeIndex]->actor.flags |= ACTOR_FLAG_10;
@@ -305,7 +305,7 @@ void EnRuppecrow_SpawnRupee(EnRuppecrow* this, PlayState* play) {
         this->rupees[rupeeIndex] = rupee;
         this->rupees[rupeeIndex]->actor.gravity = -5.0f;
         this->rupees[rupeeIndex]->actor.velocity.y = 0.0f;
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_RUPY_FALL);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_RUPY_FALL);
         rupee = this->rupees[rupeeIndex];
         rupee->unk152 = 60;
         this->rupees[rupeeIndex]->actor.flags |= ACTOR_FLAG_10;
@@ -316,7 +316,7 @@ void EnRuppecrow_SpawnRupee(EnRuppecrow* this, PlayState* play) {
         this->rupees[rupeeIndex] = rupee;
         this->rupees[rupeeIndex]->actor.gravity = -5.0f;
         this->rupees[rupeeIndex]->actor.velocity.y = 0.0f;
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_RUPY_FALL);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_RUPY_FALL);
         rupee = this->rupees[rupeeIndex];
         rupee->unk152 = 60;
         this->rupees[rupeeIndex]->actor.flags |= ACTOR_FLAG_10;
@@ -449,7 +449,7 @@ void EnRuppecrow_HandleDeath(EnRuppecrow* this) {
     scale = this->actor.scale.x * 100.0f;
     this->actor.world.pos.y += 20.0f * scale;
 
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KAICHO_DEAD);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_KAICHO_DEAD);
 
     this->unk_2CC = 0.5f;
     if (this->actor.colChkInfo.damageEffect == 0x3) {
@@ -518,7 +518,7 @@ void EnRuppecrow_HandleSong(EnRuppecrow* this, PlayState* play) {
     this->actor.shape.yOffset = Math_SinS(this->yOffset) * 500.0f;
 
     if ((play->state.frames % 43) == 0) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KAICHO_CRY);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_KAICHO_CRY);
     }
 }
 
@@ -563,7 +563,7 @@ void EnRuppecrow_FlyWhileDroppingRupees(EnRuppecrow* this, PlayState* play) {
         this->actor.shape.yOffset = Math_SinS(this->yOffset) * 500.0f;
 
         if ((play->state.frames % 43) == 0) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KAICHO_CRY);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_KAICHO_CRY);
         }
     }
 }
@@ -585,7 +585,7 @@ void EnRuppecrow_FlyToDespawn(EnRuppecrow* this, PlayState* play) {
         Actor_MoveWithGravity(&this->actor);
 
         if ((play->state.frames % 43) == 0) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KAICHO_CRY);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_KAICHO_CRY);
         }
     }
 }

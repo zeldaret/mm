@@ -576,7 +576,7 @@ Actor* func_80A3F2BC(PlayState* play, EnTest3* this, s32 actorId, s32 category, 
         if (actorId == actor->id) {
             f32 dy = this->player.actor.world.pos.y - actor->world.pos.y;
 
-            if ((fabsf(dy) < arg5) && (Actor_XZDistanceBetweenActors(&this->player.actor, actor) < arg4)) {
+            if ((fabsf(dy) < arg5) && (Actor_WorldDistXZToActor(&this->player.actor, actor) < arg4)) {
                 return actor;
             }
         }
@@ -688,7 +688,7 @@ s32 func_80A3F8D4(EnTest3* this, PlayState* play, struct_80A41828* arg2, Schedul
     func_80A3F15C(this, play, arg2);
     if (((postActor = func_80A3F2BC(play, this, ACTOR_EN_PST, ACTORCAT_PROP, 100.0f, 20.0f)) != NULL) ||
         ((postActor = func_80A3F2BC(play, this, ACTOR_EN_PM, ACTORCAT_NPC, 100.0f, 20.0f)) != NULL)) {
-        this->player.actor.home.rot.y = Actor_YawBetweenActors(&this->player.actor, postActor);
+        this->player.actor.home.rot.y = Actor_WorldYawTowardActor(&this->player.actor, postActor);
     }
     play->startPlayerCutscene(play, &this->player, 0x61);
     return true;
@@ -1294,7 +1294,7 @@ void EnTest3_Draw(Actor* thisx, PlayState* play2) {
                           this->player.skelAnime.dListCount, EnTest3_OverrideLimbDraw, EnTest3_PostLimbDraw,
                           &this->player.actor, 0);
     if (this->player.invincibilityTimer > 0) {
-        POLY_OPA_DISP = func_801660B8(play, POLY_OPA_DISP);
+        POLY_OPA_DISP = Play_SetFog(play, POLY_OPA_DISP);
     }
     if ((this->player.getItemDrawId - 1) != GID_NONE) {
         Player_DrawGetItem(play, &this->player);

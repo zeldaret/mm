@@ -30,7 +30,7 @@ typedef struct {
     /* 0x1A */ s16 rotX;
 } PowderKegFuseSegment; // size = 0x1C
 
-static PowderKegFuseSegment sPowderKegFuseSegments[16];
+PowderKegFuseSegment sPowderKegFuseSegments[16];
 
 ActorInit En_Bom_InitVars = {
     ACTOR_EN_BOM,
@@ -217,7 +217,7 @@ void func_80871058(EnBom* this, PlayState* play) {
                 BINANG_SUB(this->actor.wallYaw - this->actor.world.rot.y + this->actor.wallYaw, 0x8000);
         }
 
-        Actor_PlaySfxAtPos(&this->actor, this->isPowderKeg ? NA_SE_EV_PUT_DOWN_WOODBOX : NA_SE_EV_BOMB_BOUND);
+        Actor_PlaySfx(&this->actor, this->isPowderKeg ? NA_SE_EV_PUT_DOWN_WOODBOX : NA_SE_EV_BOMB_BOUND);
         Actor_MoveWithGravity(&this->actor);
         this->actor.speedXZ *= 0.7f;
         this->actor.bgCheckFlags &= ~8;
@@ -281,7 +281,7 @@ void func_80871058(EnBom* this, PlayState* play) {
         }
 
         if (this->actor.bgCheckFlags & 2) {
-            Actor_PlaySfxAtPos(&this->actor, this->isPowderKeg ? NA_SE_EV_TRE_BOX_BOUND : NA_SE_EV_BOMB_BOUND);
+            Actor_PlaySfx(&this->actor, this->isPowderKeg ? NA_SE_EV_TRE_BOX_BOUND : NA_SE_EV_BOMB_BOUND);
             if (this->actor.velocity.y < sp58->y) {
                 if ((sp54 == 4) || (sp54 == 14) || (sp54 == 15)) {
                     this->actor.velocity.y = 0.0f;
@@ -462,7 +462,7 @@ void EnBom_Update(Actor* thisx, PlayState* play) {
         }
 
         if ((!this->isPowderKeg && (this->timer == 67)) || (this->isPowderKeg && (this->timer <= 2400))) {
-            Actor_PlaySfxAtPos(thisx, NA_SE_PL_TAKE_OUT_SHIELD);
+            Actor_PlaySfx(thisx, NA_SE_PL_TAKE_OUT_SHIELD);
             Actor_SetScale(thisx, enBomScales[this->isPowderKeg]);
         }
 
@@ -491,7 +491,7 @@ void EnBom_Update(Actor* thisx, PlayState* play) {
                               : (this->flashSpeedScale == 3) ? 1
                                                              : 2);
             } else {
-                Actor_PlaySfxAtPos(thisx, NA_SE_IT_BOMB_IGNIT - SFX_FLAG);
+                Actor_PlaySfx(thisx, NA_SE_IT_BOMB_IGNIT - SFX_FLAG);
             }
 
             sp80.y += 3.0f;
@@ -545,9 +545,9 @@ void EnBom_Update(Actor* thisx, PlayState* play) {
                 this->actionFunc = func_808715B8;
                 if (this->isPowderKeg) {
                     gSaveContext.powderKegTimer = 0;
-                    Actor_PlaySfxAtPos(thisx, NA_SE_IT_BIG_BOMB_EXPLOSION);
+                    Actor_PlaySfx(thisx, NA_SE_IT_BIG_BOMB_EXPLOSION);
                 } else {
-                    Actor_PlaySfxAtPos(thisx, NA_SE_IT_BOMB_EXPLOSION);
+                    Actor_PlaySfx(thisx, NA_SE_IT_BOMB_EXPLOSION);
                 }
             }
         }
@@ -581,7 +581,7 @@ void EnBom_Update(Actor* thisx, PlayState* play) {
                 this->unk_1FC = KREG(81) + 10;
             } else if (thisx->bgCheckFlags & 0x40) {
                 thisx->bgCheckFlags &= ~0x40;
-                Actor_PlaySfxAtPos(thisx, NA_SE_EV_BOMB_DROP_WATER);
+                Actor_PlaySfx(thisx, NA_SE_EV_BOMB_DROP_WATER);
             }
         }
     }

@@ -145,7 +145,7 @@ void func_80BDB2B8(EnHiddenNuts* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     s32 i;
 
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NEMURI_SLEEP - SFX_FLAG);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_NEMURI_SLEEP - SFX_FLAG);
 
     if (player->stateFlags2 & PLAYER_STATE2_8000000) {
         if (this->unk_20A == 0) {
@@ -202,7 +202,7 @@ void func_80BDB580(EnHiddenNuts* this) {
 void func_80BDB59C(EnHiddenNuts* this, PlayState* play) {
     s32 i;
 
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NEMURI_SLEEP - SFX_FLAG);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_NEMURI_SLEEP - SFX_FLAG);
 
     if (this->unk_218 == 0) {
         Vec3f sp98 = { 0.0f, 0.0f, 0.0f };
@@ -234,8 +234,8 @@ void func_80BDB59C(EnHiddenNuts* this, PlayState* play) {
 void func_80BDB788(EnHiddenNuts* this) {
     this->actor.flags |= ACTOR_FLAG_10;
     this->actor.flags |= ACTOR_FLAG_8000000;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_UP);
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_DEAD);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_UP);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_DEAD);
     this->unk_21A = 2;
     this->actionFunc = func_80BDB7E8;
 }
@@ -262,7 +262,7 @@ void func_80BDB7E8(EnHiddenNuts* this, PlayState* play) {
 
     EffectSsHahen_SpawnBurst(play, &sp3C, 4.0f, 0, 10, 3, 15, HAHEN_OBJECT_DEFAULT, 10, NULL);
 
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_UP);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_UP);
     func_80BDB1B4(this, 7);
     this->actionFunc = func_80BDB8F4;
 }
@@ -287,7 +287,7 @@ void func_80BDB978(EnHiddenNuts* this, PlayState* play) {
 
     if (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 8.0f) ||
         Animation_OnFrame(&this->skelAnime, 18.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUT_FAINT);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_NUT_FAINT);
     }
 
     if (this->unk_22C <= curFrame) {
@@ -309,7 +309,7 @@ void func_80BDBA28(EnHiddenNuts* this, PlayState* play) {
 
     EffectSsHahen_SpawnBurst(play, &sp44, 4.0f, 0, 10, 3, 15, HAHEN_OBJECT_DEFAULT, 10, NULL);
 
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_UP);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_UP);
     this->unk_208 = 1;
 
     if ((this->path != NULL) && !SubS_CopyPointFromPath(this->path, this->unk_208, &this->unk_20C)) {
@@ -345,14 +345,14 @@ void func_80BDBB48(EnHiddenNuts* this, PlayState* play) {
 
         if (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 5.0f) ||
             Animation_OnFrame(&this->skelAnime, 10.0f)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_WALK_WATER);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_WALK_WATER);
             sp4E = 1;
         }
     }
 
     if ((sp4E != 0) && (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 5.0f) ||
                         Animation_OnFrame(&this->skelAnime, 10.0f))) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_WALK);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_WALK);
     }
 
     Math_SmoothStepToS(&this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &this->unk_20C), 1, 0x1388, 0);
@@ -400,7 +400,7 @@ void func_80BDBED4(EnHiddenNuts* this, PlayState* play) {
         Math_Vec3f_Copy(&sp38, &this->actor.world.pos);
         sp38.y = this->actor.floorHeight;
 
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_DOWN);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_DOWN);
         EffectSsHahen_SpawnBurst(play, &sp38, 4.0f, 0, 10, 3, 15, HAHEN_OBJECT_DEFAULT, 10, NULL);
         Actor_Kill(&this->actor);
     }

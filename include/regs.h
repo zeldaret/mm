@@ -52,6 +52,11 @@
 #define R_FB_FILTER_PRIM_COLOR(c)         SREG(81 + c)
 #define R_FB_FILTER_A                     SREG(84)
 #define R_FB_FILTER_ENV_COLOR(c)          SREG(85 + c)
+#define R_PICTO_PHOTO_STATE               SREG(89)
+#define R_MOTION_BLUR_ALPHA               SREG(90)
+#define R_MOTION_BLUR_ENABLED             SREG(91)
+#define R_MOTION_BLUR_PRIORITY_ALPHA      SREG(92)
+#define R_MOTION_BLUR_PRIORITY_ENABLED    SREG(93)
 #define R_PAUSE_BG_PRERENDER_STATE        SREG(94)
 
 #define R_PLAY_FILL_SCREEN_ON             MREG(64)
@@ -116,6 +121,8 @@
 #define R_STORY_FILL_SCREEN_ALPHA           XREG(91)
 #define R_REVERSE_FLOOR_INDEX               XREG(94)
 #define R_MINIMAP_DISABLED                  XREG(95)
+
+#define R_TRANS_FADE_FLASH_ALPHA_STEP     iREG(50) // Set to a negative number to start the flash
 
 #define R_B_LABEL_DD                      WREG(0)
 #define R_OW_MINIMAP_X                    WREG(29)

@@ -338,7 +338,7 @@ void DmStk_ChangeAnim(DmStk* this, PlayState* play, SkelAnime* skelAnime, Animat
 void DmStk_PlaySfxForIntroCutsceneFirstPart(DmStk* this, PlayState* play) {
     switch (play->csCtx.frames + 20) {
         case 1195:
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_APPEAR);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_STALKIDS_APPEAR);
             break;
 
         case 1232:
@@ -346,48 +346,48 @@ void DmStk_PlaySfxForIntroCutsceneFirstPart(DmStk* this, PlayState* play) {
         case 1252:
         case 1255:
         case 1257:
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_SHAKEHEAD);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_STALKIDS_SHAKEHEAD);
             break;
 
         case 1285:
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STAL03_LAUGH_BIG);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_STAL03_LAUGH_BIG);
             break;
 
         case 1343:
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_MASK_OFF);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_STALKIDS_MASK_OFF);
             break;
 
         case 1410:
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_MASK_ON);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_STALKIDS_MASK_ON);
             break;
 
         case 1603:
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_WALK);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_STALKIDS_WALK);
             break;
 
         case 1610:
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_REVERSE);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_STALKIDS_REVERSE);
             break;
 
         case 2095:
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_SURPRISED);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_STALKIDS_SURPRISED);
             break;
 
         case 2190:
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_JUMP);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_STALKIDS_JUMP);
             break;
 
         case 2212:
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_ONGND);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_STALKIDS_ONGND);
             break;
 
         case 2214:
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STAL02_LAUGH_SHORT);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_STAL02_LAUGH_SHORT);
             break;
 
         case 2250:
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STAL06_SURPRISED);
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_DOWN_K);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_STAL06_SURPRISED);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_STALKIDS_DOWN_K);
             break;
 
         case 2255:
@@ -416,7 +416,7 @@ void DmStk_PlaySfxForIntroCutsceneFirstPart(DmStk* this, PlayState* play) {
         case 2508:
         case 2519:
         case 2530:
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_RIDE);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_STALKIDS_RIDE);
             break;
     }
 }
@@ -455,11 +455,11 @@ void DmStk_PlaySfxForIntroCutsceneSecondPart(DmStk* this, PlayState* play) {
         case 232:
         case 243:
         case 254:
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_RIDE);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_STALKIDS_RIDE);
             break;
 
         case 173:
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STAL03_LAUGH_BIG);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_STAL03_LAUGH_BIG);
             break;
     }
 }
@@ -471,15 +471,15 @@ void DmStk_PlaySfxForIntroCutsceneSecondPart(DmStk* this, PlayState* play) {
 void DmStk_PlaySfxForObtainingMajorasMaskCutscene(DmStk* this, PlayState* play) {
     switch (play->csCtx.frames) {
         case 18:
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_GASAGOSO);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_STALKIDS_GASAGOSO);
             break;
 
         case 90:
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_MASK_ON);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_STALKIDS_MASK_ON);
             break;
 
         case 142:
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_EVIL_POWER);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_EVIL_POWER);
             break;
     }
 }
@@ -501,11 +501,11 @@ void DmStk_PlaySfxForCurseCutsceneFirstPart(DmStk* this, PlayState* play) {
             break;
 
         case 560:
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STAL02_LAUGH_SHORT);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_STAL02_LAUGH_SHORT);
             break;
 
         case 890:
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STAL21_PSYCHO_VOICE);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_STAL21_PSYCHO_VOICE);
             break;
     }
 }
@@ -524,7 +524,7 @@ void DmStk_PlaySfxForCurseCutsceneSecondPart(DmStk* this, PlayState* play) {
             break;
 
         case 71:
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_BODY);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_STALKIDS_BODY);
             break;
 
         case 365:
@@ -536,30 +536,30 @@ void DmStk_PlaySfxForCurseCutsceneSecondPart(DmStk* this, PlayState* play) {
             break;
 
         case 265:
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STAL03_LAUGH_BIG);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_STAL03_LAUGH_BIG);
             break;
 
         case 126:
-            Actor_PlaySfxAtPos(&player->actor, NA_SE_VO_DUMMY_150);
+            Actor_PlaySfx(&player->actor, NA_SE_VO_DUMMY_150);
             break;
 
         case 197:
-            Actor_PlaySfxAtPos(&player->actor, NA_SE_VO_DUMMY_134);
+            Actor_PlaySfx(&player->actor, NA_SE_VO_DUMMY_134);
             break;
 
         case 207:
-            Actor_PlaySfxAtPos(&player->actor, NA_SE_VO_DUMMY_135);
+            Actor_PlaySfx(&player->actor, NA_SE_VO_DUMMY_135);
             break;
 
         case 217:
-            Actor_PlaySfxAtPos(&player->actor, NA_SE_VO_DUMMY_136);
+            Actor_PlaySfx(&player->actor, NA_SE_VO_DUMMY_136);
             break;
     }
 
     if (player) {}
 
     if ((play->csCtx.frames >= 263) && (play->csCtx.frames < 698)) {
-        Actor_PlaySfxAtPos(&player->actor, NA_SE_EN_STALKIDS_BODY_LEV - SFX_FLAG);
+        Actor_PlaySfx(&player->actor, NA_SE_EN_STALKIDS_BODY_LEV - SFX_FLAG);
     }
 }
 
@@ -577,37 +577,37 @@ void DmStk_PlaySfxForClockTowerIntroCutsceneVersion1(DmStk* this, PlayState* pla
             break;
 
         case 258:
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_TURN);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_STALKIDS_TURN);
             break;
 
         case 524:
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_TURN);
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STAL04_ANGER);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_STALKIDS_TURN);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_STAL04_ANGER);
             break;
 
         case 534:
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PO_ROLL);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_PO_ROLL);
             break;
 
         case 678:
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_STRETCH);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_STALKIDS_STRETCH);
             break;
     }
 
     if ((this->animIndex == SK_ANIM_OCARINA_JUGGLE) && (play->csCtx.frames < 700)) {
         if (Animation_OnFrame(&this->skelAnime, 5.0f) || Animation_OnFrame(&this->skelAnime, 25.0f)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_OTEDAMA1);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_STALKIDS_OTEDAMA1);
         } else if (Animation_OnFrame(&this->skelAnime, 17.0f) || Animation_OnFrame(&this->skelAnime, 40.0f)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_OTEDAMA2);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_STALKIDS_OTEDAMA2);
         }
     }
 
     if (play->csCtx.frames >= 700) {
         if (sMoonCallTimer < 128) {
             if ((sMoonCallTimer & 0x1F) == 0) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STAL20_CALL_MOON);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_STAL20_CALL_MOON);
             } else if ((sMoonCallTimer & 0x1F) == 16) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STAL20_CALL_MOON2);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_STAL20_CALL_MOON2);
             }
 
             sMoonCallTimer++;
@@ -622,8 +622,8 @@ void DmStk_PlaySfxForClockTowerIntroCutsceneVersion1(DmStk* this, PlayState* pla
  */
 void DmStk_PlaySfxForDroppingOcarinaCutscene(DmStk* this, PlayState* play) {
     if (play->csCtx.frames == 3) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STAL06_SURPRISED);
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_DOWN_K);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_STAL06_SURPRISED);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_STALKIDS_DOWN_K);
     }
 }
 
@@ -632,7 +632,7 @@ void DmStk_PlaySfxForDroppingOcarinaCutscene(DmStk* this, PlayState* play) {
  */
 void DmStk_PlaySfxForShiveringInRainCutscene(DmStk* this, PlayState* play) {
     if ((play->csCtx.frames >= 642) && (play->csCtx.frames < 845)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_NE_STAL23_COLD - SFX_FLAG);
+        Actor_PlaySfx(&this->actor, NA_SE_NE_STAL23_COLD - SFX_FLAG);
     }
 }
 
@@ -648,16 +648,16 @@ void DmStk_PlaySfxForPlayingWithFairiesCutscene(DmStk* this, PlayState* play) {
         case 72:
         case 77:
         case 79:
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_PL_WALK_WATER2);
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_WALK);
+            Actor_PlaySfx(&this->actor, NA_SE_PL_WALK_WATER2);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_STALKIDS_WALK);
             break;
 
         case 186:
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_UP);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_UP);
             break;
 
         case 230:
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STAL22_LAUGH_KID_L);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_STAL22_LAUGH_KID_L);
             break;
     }
 }
@@ -674,7 +674,7 @@ void DmStk_PlaySfxForEndingCutsceneFirstPart(DmStk* this, PlayState* play) {
             break;
 
         case 660:
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_SHAKEHEAD);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_STALKIDS_SHAKEHEAD);
             break;
     }
 }
@@ -692,27 +692,27 @@ void DmStk_PlaySfxForEndingCutsceneSecondPart(DmStk* this, PlayState* play) {
             break;
 
         case 45:
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_RIDE);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_STALKIDS_RIDE);
             break;
 
         case 93:
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_MASK_OFF);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_STALKIDS_MASK_OFF);
             break;
 
         case 245:
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_RIDE);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_STALKIDS_RIDE);
             break;
 
         case 269:
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STAL11_LAUGH_SHY2);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_STAL11_LAUGH_SHY2);
             break;
 
         case 327:
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_SHAKEHEAD);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_STALKIDS_SHAKEHEAD);
             break;
 
         case 455:
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_RIDE);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_STALKIDS_RIDE);
             break;
 
         case 1730:
@@ -720,7 +720,7 @@ void DmStk_PlaySfxForEndingCutsceneSecondPart(DmStk* this, PlayState* play) {
             break;
 
         case 1395:
-            func_800B8E58(player, NA_SE_VO_DUMMY_34);
+            Player_PlaySfx(player, NA_SE_VO_DUMMY_34);
             break;
 
         case 1850:
@@ -735,20 +735,20 @@ void DmStk_PlaySfxForEndingCutsceneSecondPart(DmStk* this, PlayState* play) {
 
     if (this->animIndex == SK_ANIM_SHAKE_HEAD) {
         if (Animation_OnFrame(&this->skelAnime, 8.0f) || Animation_OnFrame(&this->skelAnime, 17.0f)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_MASK_OFF);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_STALKIDS_MASK_OFF);
         }
 
         if (Animation_OnFrame(&this->skelAnime, 28.0f)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_RIDE);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_STALKIDS_RIDE);
         }
     } else if (this->animIndex == SK_ANIM_LAUGH_AFTER_SNIFF) {
         if (Animation_OnFrame(&this->skelAnime, 2.0f) || Animation_OnFrame(&this->skelAnime, 6.0f) ||
             Animation_OnFrame(&this->skelAnime, 12.0f) || Animation_OnFrame(&this->skelAnime, 18.0f)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_MASK_OFF);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_STALKIDS_MASK_OFF);
         }
     } else if ((this->animIndex == SK_ANIM_SNIFF) &&
                (Animation_OnFrame(&this->skelAnime, 16.0f) || Animation_OnFrame(&this->skelAnime, 23.0f))) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_NOSE);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_STALKIDS_NOSE);
     }
 }
 
@@ -766,25 +766,25 @@ void DmStk_PlaySfxForClockTowerIntroCutsceneVersion2(DmStk* this, PlayState* pla
             break;
 
         case 234:
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_TURN);
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STAL04_ANGER);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_STALKIDS_TURN);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_STAL04_ANGER);
             break;
 
         case 244:
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PO_ROLL);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_PO_ROLL);
             break;
 
         case 388:
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_STRETCH);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_STALKIDS_STRETCH);
             break;
     }
 
     if (play->csCtx.frames >= 408) {
         if (sMoonCallTimer < 128) {
             if ((sMoonCallTimer & 0x1F) == 0) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STAL20_CALL_MOON);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_STAL20_CALL_MOON);
             } else if ((sMoonCallTimer & 0x1F) == 16) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STAL20_CALL_MOON2);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_STAL20_CALL_MOON2);
             }
 
             sMoonCallTimer++;
@@ -812,19 +812,19 @@ void DmStk_PlaySfxForCutsceneAfterPlayingOathToOrder(DmStk* this, PlayState* pla
         case 332:
         case 335:
         case 344:
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_MASK_OFF);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_STALKIDS_MASK_OFF);
             break;
 
         case 367:
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_BODY_LEV);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_STALKIDS_BODY_LEV);
             break;
 
         case 470:
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_HEADACHE);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_STALKIDS_HEADACHE);
             break;
 
         case 486:
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_MASK_OFF);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_STALKIDS_MASK_OFF);
             Audio_PlaySfxAtPos(&this->oathToOrderCutsceneVoicePos, NA_SE_EN_STAL08_CRY_BIG);
             break;
 
@@ -833,11 +833,11 @@ void DmStk_PlaySfxForCutsceneAfterPlayingOathToOrder(DmStk* this, PlayState* pla
             break;
 
         case 590:
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_MASK_OFF);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_STALKIDS_MASK_OFF);
             break;
 
         case 592:
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_RIDE);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_STALKIDS_RIDE);
             break;
 
         case 594:
@@ -849,16 +849,16 @@ void DmStk_PlaySfxForCutsceneAfterPlayingOathToOrder(DmStk* this, PlayState* pla
 
     if ((play->csCtx.frames >= 62) && (play->csCtx.frames < 273)) {
         if ((Rand_ZeroOne() < 0.75f) && ((play->state.frames % 2) != 0)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_EARTHQUAKE);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_STALKIDS_EARTHQUAKE);
         }
     }
 
     if ((play->csCtx.frames >= 498) && (play->csCtx.frames < 577)) {
         if ((play->state.frames % 4) == 0) {
             if ((play->state.frames & 4) != 0) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_BODY_LEV);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_STALKIDS_BODY_LEV);
             } else {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_MASK_OFF);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_STALKIDS_MASK_OFF);
             }
         }
     }
@@ -876,16 +876,16 @@ void DmStk_PlaySfxForCutsceneAfterPlayingOathToOrder(DmStk* this, PlayState* pla
 void DmStk_PlaySfxForMoonWarpCutsceneVersion1(DmStk* this, PlayState* play) {
     switch (play->csCtx.frames) {
         case 551:
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_PULLED);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_STALKIDS_PULLED);
             break;
 
         case 711:
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_MASK_OFF);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_STALKIDS_MASK_OFF);
             break;
 
         case 716:
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_MASK_ON);
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_ONGND);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_STALKIDS_MASK_ON);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_STALKIDS_ONGND);
             break;
     }
 }
@@ -898,16 +898,16 @@ void DmStk_PlaySfxForMoonWarpCutsceneVersion1(DmStk* this, PlayState* play) {
 void DmStk_PlaySfxForMoonWarpCutsceneVersion2(DmStk* this, PlayState* play) {
     switch (play->csCtx.frames) {
         case 311:
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_PULLED);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_STALKIDS_PULLED);
             break;
 
         case 365:
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_MASK_OFF);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_STALKIDS_MASK_OFF);
             break;
 
         case 372:
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_MASK_ON);
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_ONGND);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_STALKIDS_MASK_ON);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_STALKIDS_ONGND);
             break;
     }
 }
@@ -984,24 +984,24 @@ void DmStk_PlaySfxForCutscenes(DmStk* this, PlayState* play) {
 
     if (this->animIndex == SK_ANIM_WALK) {
         if (Animation_OnFrame(&this->skelAnime, 2.0f) || Animation_OnFrame(&this->skelAnime, 6.0f)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_WALK);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_STALKIDS_WALK);
         }
     } else if (this->animIndex == SK_ANIM_SEARCH_LINK) {
         if (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 13.0f) ||
             Animation_OnFrame(&this->skelAnime, 20.0f) || Animation_OnFrame(&this->skelAnime, 27.0f)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_PL_CALM_HIT);
+            Actor_PlaySfx(&this->actor, NA_SE_PL_CALM_HIT);
         }
     } else if (this->animIndex == SK_ANIM_PICK_UP_OCARINA_AND_START_PLAYING) {
         if (Animation_OnFrame(&this->skelAnime, 3.0f)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_PL_PUT_OUT_ITEM);
+            Actor_PlaySfx(&this->actor, NA_SE_PL_PUT_OUT_ITEM);
         }
     } else if (this->animIndex == SK_ANIM_PLAY_OCARINA_AND_LAUGH) {
         if (Animation_OnFrame(&this->skelAnime, 14.0f)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_UNSKILLFUL_OCARINA);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_UNSKILLFUL_OCARINA);
         }
 
         if (Animation_OnFrame(&this->skelAnime, 45.0f)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STAL01_LAUGH);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_STAL01_LAUGH);
         }
     }
 }
@@ -1024,9 +1024,9 @@ void DmStk_Init(Actor* thisx, PlayState* play) {
         this->deflectCount = 0;
         this->maskType = SK_MASK_TYPE_NORMAL;
         this->animIndex = SK_ANIM_IDLE;
-        this->fogR = play->lightCtx.unk7;
-        this->fogG = play->lightCtx.unk8;
-        this->fogB = play->lightCtx.unk9;
+        this->fogR = play->lightCtx.fogColor.r;
+        this->fogG = play->lightCtx.fogColor.g;
+        this->fogB = play->lightCtx.fogColor.b;
 
         if ((play->sceneId == SCENE_LOST_WOODS) && (gSaveContext.sceneLayer == 1)) {
             this->alpha = 0;
@@ -1225,7 +1225,7 @@ void DmStk_ClockTower_WaitForIntroCutsceneVersion2ToEnd(DmStk* this, PlayState* 
 
 void DmStk_ClockTower_StartDropOcarinaCutscene(DmStk* this, PlayState* play) {
     if (ActorCutscene_GetCanPlayNext(10)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_DAMAGE);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_STALKIDS_DAMAGE);
         ActorCutscene_Start(10, &this->actor);
         this->actor.shape.rot.x = 0;
         this->actor.world.rot.x = this->actor.shape.rot.x;
@@ -1254,7 +1254,7 @@ void DmStk_ClockTower_AdjustHeightAndRotation(DmStk* this, PlayState* play) {
     sin = Math_SinS(this->bobPhase) * 10.0f;
     Math_SmoothStepToF(&this->actor.world.pos.y, 160.0f + sin, 0.2f, 1.0f, 0.0001f);
 
-    this->actor.world.rot.y = Actor_YawBetweenActors(&this->actor, &player->actor);
+    this->actor.world.rot.y = Actor_WorldYawTowardActor(&this->actor, &player->actor);
     this->actor.shape.rot.y = this->actor.world.rot.y;
 
     this->actor.world.rot.x = 0x1B58;
@@ -1280,7 +1280,7 @@ void DmStk_ClockTower_DeflectHit(DmStk* this, PlayState* play) {
 
     this->animIndex = SK_ANIM_DEFLECT_ATTACK;
     DmStk_ChangeAnim(this, play, &this->skelAnime, &sAnimationInfo[this->animIndex], 0);
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_DOWN_K);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_STALKIDS_DOWN_K);
     this->actionFunc = DmStk_ClockTower_WaitForDeflectionToEnd;
 }
 
@@ -1594,9 +1594,9 @@ void DmStk_UpdateCutscenes(DmStk* this, PlayState* play) {
             this->fadeInState++;
         }
 
-        this->fogR = play->lightCtx.unk7 * this->fogScale;
-        this->fogG = play->lightCtx.unk8 * this->fogScale;
-        this->fogB = play->lightCtx.unk9 * this->fogScale;
+        this->fogR = play->lightCtx.fogColor.r * this->fogScale;
+        this->fogG = play->lightCtx.fogColor.g * this->fogScale;
+        this->fogB = play->lightCtx.fogColor.b * this->fogScale;
     } else if (this->fadeInState == SK_FADE_IN_STATE_INCREASE_FOG) {
         if (this->fogN < 996) {
             this->fogN += 10;
@@ -1895,7 +1895,7 @@ void DmStk_PostLimbDraw2(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot
                     POLY_OPA_DISP = Gfx_SetFog(POLY_OPA_DISP, this->fogR, this->fogG, this->fogB, this->fogA,
                                                this->fogN, this->fogF);
                     gSPDisplayList(POLY_OPA_DISP++, gSkullKidMajorasMask1DL);
-                    POLY_OPA_DISP = func_801660B8(play, POLY_OPA_DISP);
+                    POLY_OPA_DISP = Play_SetFog(play, POLY_OPA_DISP);
                 } else {
                     gSPDisplayList(POLY_OPA_DISP++, gSkullKidMajorasMask1DL);
                 }

@@ -1144,7 +1144,7 @@ void KaleidoScope_Update(PlayState* play) {
                     if (pauseCtx->promptChoice == PAUSE_PROMPT_YES) {
                         func_80169FDC(&play->state);
                         gSaveContext.respawnFlag = -2;
-                        gSaveContext.nextTransitionType = TRANS_TYPE_02;
+                        gSaveContext.nextTransitionType = TRANS_TYPE_FADE_BLACK;
                         gSaveContext.save.playerData.health = 0x30;
                         Audio_SetSpec(0xA);
                         gSaveContext.healthAccumulator = 0;
@@ -1432,7 +1432,7 @@ void KaleidoScope_Update(PlayState* play) {
     }
 
     // Process the Cursor input
-    if ((R_PAUSE_BG_PRERENDER_STATE == PAUSE_BG_PRERENDER_DONE) && (pauseCtx->debugEditor == DEBUG_EDITOR_NONE) &&
+    if ((R_PAUSE_BG_PRERENDER_STATE == PAUSE_BG_PRERENDER_READY) && (pauseCtx->debugEditor == DEBUG_EDITOR_NONE) &&
         !IS_PAUSE_STATE_OWLWARP &&
         (((pauseCtx->state >= PAUSE_STATE_OPENING_3) && (pauseCtx->state <= PAUSE_STATE_SAVEPROMPT)) ||
          ((pauseCtx->state >= PAUSE_STATE_GAMEOVER_2) && (pauseCtx->state <= PAUSE_STATE_UNPAUSE_SETUP)))) {

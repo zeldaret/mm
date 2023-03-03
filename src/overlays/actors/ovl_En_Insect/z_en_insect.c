@@ -112,7 +112,7 @@ void func_8091A9E4(EnInsect* this) {
         return;
     }
 
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_MUSI_WALK);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_MUSI_WALK);
 
     this->unk_316 = 3.0f / CLAMP_MIN(this->skelAnime.playSpeed, 0.1f);
     if (this->unk_316 < 2) {
@@ -325,7 +325,7 @@ void func_8091B2D8(EnInsect* this, PlayState* play) {
 void func_8091B3D0(EnInsect* this) {
     this->unk_312 = 60;
     this->skelAnime.playSpeed = 1.9f;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALTURA_BOUND);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_STALTURA_BOUND);
     Math_Vec3f_Copy(&this->actor.home.pos, &this->actor.world.pos);
     this->actionFunc = func_8091B440;
     this->unk_30C &= ~0x100;

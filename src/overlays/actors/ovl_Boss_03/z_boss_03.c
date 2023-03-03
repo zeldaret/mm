@@ -48,7 +48,6 @@
  * - Effect Update/Draw
  * - Seaweed
  */
-#include "prevent_bss_reordering.h"
 #include "z_boss_03.h"
 #include "overlays/actors/ovl_Door_Warp1/z_door_warp1.h"
 #include "overlays/actors/ovl_En_Water_Effect/z_en_water_effect.h"
@@ -780,7 +779,7 @@ void Boss03_CatchPlayer(Boss03* this, PlayState* play) {
             player->unk_AE8 = 101;
             player->actor.parent = NULL;
             player->csMode = PLAYER_CSMODE_0;
-            func_80165690();
+            Play_DisableMotionBlur();
         }
 
         func_809E344C(this, play);
@@ -852,7 +851,7 @@ void Boss03_ChewPlayer(Boss03* this, PlayState* play) {
     this->unk_25C = 15;
 
     if (this->workTimer[WORK_TIMER_CURRENT_ACTION] == 90) {
-        func_8016566C(0x96);
+        Play_EnableMotionBlur(150);
     }
 
     SkelAnime_Update(&this->skelAnime);
@@ -908,7 +907,7 @@ void Boss03_ChewPlayer(Boss03* this, PlayState* play) {
             player->unk_AE8 = 101;
             player->actor.parent = NULL;
             player->csMode = PLAYER_CSMODE_0;
-            func_80165690();
+            Play_DisableMotionBlur();
             func_800B8D50(play, NULL, 10.0f, this->actor.shape.rot.y, 0.0f, 0x20);
         }
 
@@ -1187,11 +1186,11 @@ void Boss03_IntroCutscene(Boss03* this, PlayState* play) {
                         this->csState = 2;
                         this->csTimer = 0;
                         this->unk_240 = 0;
-                        func_8016566C(0x96);
+                        Play_EnableMotionBlur(150);
                         this->subCamFov = 80.0f;
 
                         case 2:
-                            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KONB_DEMO_MOVE_OLD - SFX_FLAG);
+                            Actor_PlaySfx(&this->actor, NA_SE_EN_KONB_DEMO_MOVE_OLD - SFX_FLAG);
 
                             xDiff = D_809E9104[this->unk_242].x - this->actor.world.pos.x;
                             yDiff = D_809E9104[this->unk_242].y - this->actor.world.pos.y;
@@ -1207,7 +1206,7 @@ void Boss03_IntroCutscene(Boss03* this, PlayState* play) {
                             }
 
                             if ((this->csTimer == 40) || (this->csTimer == (u32)(KREG(91) + 270))) {
-                                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_WATER_DEEP);
+                                Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_WATER_DEEP);
                             }
 
                             if (this->csTimer > 50) {
@@ -1231,10 +1230,10 @@ void Boss03_IntroCutscene(Boss03* this, PlayState* play) {
                                     this->csTimer = 0;
                                 }
                                 if (this->csTimer == 165) {
-                                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_WATER_MID);
+                                    Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_WATER_MID);
                                 }
                                 if (this->csTimer == 180) {
-                                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_WATER_DEEP);
+                                    Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_WATER_DEEP);
                                 }
                             }
                     }
@@ -1280,7 +1279,7 @@ void Boss03_IntroCutscene(Boss03* this, PlayState* play) {
                 this->actor.speedXZ = -200.0f;
                 Actor_MoveWithoutGravityReverse(&this->actor);
                 this->actor.world.pos.y = this->waterHeight - 150.0f;
-                func_80165690();
+                Play_DisableMotionBlur();
 
                 case 5:
                     SkelAnime_Update(&this->skelAnime);
@@ -1305,14 +1304,14 @@ void Boss03_IntroCutscene(Boss03* this, PlayState* play) {
                         this->actor.speedXZ = 20.0f;
 
                         Audio_QueueSeqCmd(NA_BGM_BOSS | 0x8000);
-                        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KONB_JUMP_OLD);
+                        Actor_PlaySfx(&this->actor, NA_SE_EN_KONB_JUMP_OLD);
                         this->skelAnime.playSpeed = 1.0f;
                     }
             }
             break;
 
         case 6:
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KONB_JUMP_LEV_OLD - SFX_FLAG);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_KONB_JUMP_LEV_OLD - SFX_FLAG);
 
             if (this->csTimer == 30) {
                 TitleCard_InitBossName(&play->state, &play->actorCtx.titleCtxt,
@@ -1515,10 +1514,10 @@ void Boss03_DeathCutscene(Boss03* this, PlayState* play) {
             Math_ApproachF(&this->actor.world.pos.z, sp84.z, 0.1f, 5.0f);
 
             if (Animation_OnFrame(&this->skelAnime, this->floppingAnimLastFrame)) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KONB_DEAD_JUMP2_OLD);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_KONB_DEAD_JUMP2_OLD);
             }
             if (Animation_OnFrame(&this->skelAnime, this->floppingAnimLastFrame * 0.5f)) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KONB_DEAD_JUMP_OLD);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_KONB_DEAD_JUMP_OLD);
             }
 
             if ((this->workTimer[WORK_TIMER_UNK0_C] == 0) && ((this->waterHeight - 100.0f) < this->actor.world.pos.y)) {
@@ -1548,7 +1547,7 @@ void Boss03_DeathCutscene(Boss03* this, PlayState* play) {
                     this->actor.speedXZ = 10.0f;
                     this->actor.world.rot.y = this->unk_2BE + 0x8000;
                     this->unk_240 = 0;
-                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KONB_DEAD_JUMP2_OLD);
+                    Actor_PlaySfx(&this->actor, NA_SE_EN_KONB_DEAD_JUMP2_OLD);
                 }
             }
             Math_ApproachF(&this->unk_56C, 0.01f, 1.0f, 0.0005f);
@@ -1627,7 +1626,7 @@ void Boss03_DeathCutscene(Boss03* this, PlayState* play) {
                 Cutscene_End(play, &play->csCtx);
                 func_800B7298(play, &this->actor, PLAYER_CSMODE_6);
                 this->csState = 3;
-                func_80165690();
+                Play_DisableMotionBlur();
                 Boss03_PlayUnderwaterSfx(&this->actor.projectedPos, NA_SE_EN_KONB_INIT_OLD);
                 Boss03_PlayUnderwaterSfx(&D_809E9848, NA_SE_EN_KONB_INIT_OLD);
             }
@@ -1705,7 +1704,7 @@ void Boss03_SpawnSmallFishesCutscene(Boss03* this, PlayState* play) {
                                 this->numSpawnedSmallFish++;
                             }
                             if ((this->csTimer % 8) == 0) {
-                                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KONB_MINI_APPEAR);
+                                Actor_PlaySfx(&this->actor, NA_SE_EN_KONB_MINI_APPEAR);
                             }
                         }
                     }
@@ -1751,7 +1750,7 @@ void Boss03_SetupStunned(Boss03* this, PlayState* play) {
         player->unk_AE8 = 101;
         player->actor.parent = NULL;
         player->csMode = PLAYER_CSMODE_0;
-        func_80165690();
+        Play_DisableMotionBlur();
     }
 
     this->unk_240 = 0;
@@ -1903,7 +1902,7 @@ void Boss03_UpdateCollision(Boss03* this, PlayState* play) {
                         player->unk_AE8 = 101;
                         player->actor.parent = NULL;
                         player->csMode = PLAYER_CSMODE_0;
-                        func_80165690();
+                        Play_DisableMotionBlur();
                     }
 
                     continue;
@@ -2004,7 +2003,7 @@ void Boss03_Update(Actor* thisx, PlayState* play2) {
             ((this->waterHeight - 50.0f < this->actor.world.pos.y) &&
              (this->actor.prevPos.y <= this->waterHeight - 50.0f))) {
             if ((this->actor.velocity.y < 0.0f) && (this->actionFunc != Boss03_DeathCutscene)) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KONB_SINK_OLD);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_KONB_SINK_OLD);
             }
 
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_WATER_EFFECT, this->actor.world.pos.x, this->waterHeight,
@@ -2270,7 +2269,7 @@ void Boss03_Draw(Actor* thisx, PlayState* play) {
         Matrix_Translate(0.0f, -600.0f, 0.0f, MTXMODE_APPLY);
         SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                               Boss03_OverrideLimbDraw, Boss03_PostLimbDraw, &this->actor);
-        POLY_OPA_DISP = func_801660B8(play, POLY_OPA_DISP);
+        POLY_OPA_DISP = Play_SetFog(play, POLY_OPA_DISP);
     }
 
     this->unk_2BC = 0;

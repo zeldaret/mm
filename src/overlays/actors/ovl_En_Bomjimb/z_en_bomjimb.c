@@ -185,20 +185,20 @@ void func_80C011CC(EnBomjimb* this) {
     if ((this->unk_2DC == 5) &&
         (Animation_OnFrame(&this->skelAnime, 9.0f) || Animation_OnFrame(&this->skelAnime, 10.0f) ||
          Animation_OnFrame(&this->skelAnime, 17.0f) || Animation_OnFrame(&this->skelAnime, 18.0f))) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BOMBERS_WALK);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_BOMBERS_WALK);
     }
 
     if ((this->unk_2DC == 19) &&
         (Animation_OnFrame(&this->skelAnime, 2.0f) || Animation_OnFrame(&this->skelAnime, 6.0f))) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BOMBERS_WALK);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_BOMBERS_WALK);
     }
 
     if ((this->unk_2DC == 18) && Animation_OnFrame(&this->skelAnime, 15.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BOMBERS_LAND);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_BOMBERS_LAND);
     }
 
     if ((this->unk_2DC == 7) && Animation_OnFrame(&this->skelAnime, 8.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BOMBERS_LAND);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_BOMBERS_LAND);
     }
 }
 
@@ -451,7 +451,7 @@ void func_80C01CD0(EnBomjimb* this, PlayState* play) {
     }
 
     if ((this->unk_2C0 == 0) && (this->unk_2E4->bgCheckFlags & 1)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_PUT_DOWN_WOODBOX);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_PUT_DOWN_WOODBOX);
         this->unk_2C0 = 1;
     }
 
@@ -693,7 +693,7 @@ void func_80C02740(EnBomjimb* this, PlayState* play) {
     if (gSaveContext.save.bombersCaughtNum > 4) {
         Audio_PlayFanfare(NA_BGM_GET_ITEM | 0x900);
     } else {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_PIECE_OF_HEART);
+        Actor_PlaySfx(&this->actor, NA_SE_SY_PIECE_OF_HEART);
     }
 
     switch (this->unk_2C8) {
@@ -749,7 +749,7 @@ void func_80C02A14(EnBomjimb* this, PlayState* play) {
         player->actor.freezeTimer = 3;
         if (this->unk_2E0 == 0) {
             if (Animation_OnFrame(&this->skelAnime, 7.0f)) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_HUMAN_BOUND);
+                Actor_PlaySfx(&this->actor, NA_SE_EV_HUMAN_BOUND);
                 this->unk_2E0 = 1;
             }
         }
@@ -799,7 +799,7 @@ void func_80C02CA4(EnBomjimb* this, PlayState* play) {
         gSaveContext.nextCutsceneIndex = 0;
         play->transitionTrigger = TRANS_TRIGGER_START;
         play->transitionType = TRANS_TYPE_86;
-        gSaveContext.nextTransitionType = TRANS_TYPE_03;
+        gSaveContext.nextTransitionType = TRANS_TYPE_FADE_WHITE;
     }
     SET_WEEKEVENTREG(WEEKEVENTREG_75_40);
     SET_WEEKEVENTREG(WEEKEVENTREG_83_04);

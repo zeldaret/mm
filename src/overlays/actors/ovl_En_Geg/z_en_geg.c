@@ -716,7 +716,7 @@ void func_80BB2E00(EnGeg* this, PlayState* play) {
             func_80BB2020(this, play);
             this->actionFunc = func_80BB30B4;
         } else if (Animation_OnFrame(&this->skelAnime, 24.0f)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_GOLON_STAND_IMT);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_GOLON_STAND_IMT);
         }
     } else if (this->unk_4AC == 4) {
         if (Animation_OnFrame(&this->skelAnime, 0.0f)) {
@@ -729,7 +729,7 @@ void func_80BB2E00(EnGeg* this, PlayState* play) {
                 this->actionFunc = func_80BB3318;
             }
         } else if (Animation_OnFrame(&this->skelAnime, 24.0f)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_GOLON_SIT_IMT);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_GOLON_SIT_IMT);
         }
     }
 }
@@ -756,7 +756,7 @@ void func_80BB2F7C(EnGeg* this, PlayState* play) {
             func_800B9010(&this->actor, NA_SE_EN_GOLON_SIRLOIN_ROLL - SFX_FLAG);
         } else {
             this->unk_230 |= 0x80;
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_EYEGOLE_ATTACK);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_EYEGOLE_ATTACK);
         }
     }
 }
