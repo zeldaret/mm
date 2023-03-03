@@ -428,7 +428,7 @@ s32 func_80BF45B4(EnRg* this) {
         }
         sp24 = 1;
     } else if (this->unk_310 & 0x40) {
-        s16 yaw = Actor_YawBetweenActors(&this->actor, ((void)0, this->collider2.base.ac));
+        s16 yaw = Actor_WorldYawTowardActor(&this->actor, ((void)0, this->collider2.base.ac));
 
         sp24 = 2;
         if (this->actor.colorFilterTimer == 0) {
@@ -625,8 +625,8 @@ s32 func_80BF4DA8(EnRg* this) {
     s32 i;
 
     for (i = 0; i < ARRAY_COUNT(D_80BF596C); i++) {
-        temp_f20 = Actor_XZDistanceToPoint(&this->actor, &D_80BF596C[i]);
-        temp_v1 = Actor_YawToPoint(&this->actor, &D_80BF596C[i]) - this->actor.world.rot.y;
+        temp_f20 = Actor_WorldDistXZToPoint(&this->actor, &D_80BF596C[i]);
+        temp_v1 = Actor_WorldYawTowardPoint(&this->actor, &D_80BF596C[i]) - this->actor.world.rot.y;
 
         if ((temp_f20 < 100.0f) && (ABS_ALT(temp_v1) < 0xC00)) {
             if (temp_v1 > 0) {

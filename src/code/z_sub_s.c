@@ -517,7 +517,7 @@ Actor* SubS_FindNearestActor(Actor* actor, PlayState* play, u8 actorCategory, s1
         actorIter = actorTmp;
 
         if (actorIter != actor) {
-            dist = Actor_DistanceBetweenActors(actor, actorIter);
+            dist = Actor_WorldDistXYZToActor(actor, actorIter);
             if (!isSetup || dist < minDist) {
                 closestActor = actorIter;
                 minDist = dist;
@@ -1522,7 +1522,7 @@ s32 func_8013E748(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, s32 ex
 s32 SubS_ActorAndPlayerFaceEachOther(PlayState* play, Actor* actor, void* data) {
     Player* player = GET_PLAYER(play);
     Vec3s* yawTols = (Vec3s*)data;
-    s16 playerYaw = ABS(BINANG_SUB(Actor_YawBetweenActors(&player->actor, actor), player->actor.shape.rot.y));
+    s16 playerYaw = ABS(BINANG_SUB(Actor_WorldYawTowardActor(&player->actor, actor), player->actor.shape.rot.y));
     s16 actorYaw = ABS(BINANG_SUB(actor->yawTowardsPlayer, actor->shape.rot.y));
     s32 areFacing = false;
     s32 actorYawTol = ABS(yawTols->y);

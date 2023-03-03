@@ -299,7 +299,7 @@ void func_808BDA4C(EnDekunuts* this, PlayState* play) {
         sp58.x = player->actor.world.pos.x;
         sp58.z = player->actor.world.pos.z;
         sp58.y = player->actor.world.pos.y + 40.0f;
-        pitch = Actor_PitchToPoint(&this->actor, &sp58);
+        pitch = Actor_WorldPitchTowardPoint(&this->actor, &sp58);
         pitch = CLAMP(pitch, -0x3800, -0x2000);
         if (this->skelAnime.curFrame < 7.0f) {
             Math_ScaledStepToS(&this->actor.world.rot.x, pitch, 0x800);
@@ -414,11 +414,11 @@ void func_808BDFB8(EnDekunuts* this, PlayState* play) {
     Math_StepToF(&this->actor.speedXZ, 7.5f, 1.0f);
     if (!Math_SmoothStepToS(&this->actor.world.rot.y, this->unk_192, 1, 0xE38, 0xB6)) {
         if (this->actor.bgCheckFlags & 0x20) {
-            this->unk_192 = Actor_YawToPoint(&this->actor, &this->actor.home.pos);
+            this->unk_192 = Actor_WorldYawTowardPoint(&this->actor, &this->actor.home.pos);
         } else if (this->actor.bgCheckFlags & 8) {
             this->unk_192 = this->actor.wallYaw;
         } else if (this->unk_18D == 0) {
-            yaw = Actor_YawToPoint(&this->actor, &this->actor.home.pos);
+            yaw = Actor_WorldYawTowardPoint(&this->actor, &this->actor.home.pos);
             yaw2 = yaw - this->actor.yawTowardsPlayer;
             if (ABS_ALT(yaw2) > 0x2000) {
                 this->unk_192 = yaw;
@@ -431,7 +431,7 @@ void func_808BDFB8(EnDekunuts* this, PlayState* play) {
     }
 
     this->actor.shape.rot.y = BINANG_ROT180(this->actor.world.rot.y);
-    if ((this->unk_18D == 0) && (Actor_XZDistanceToPoint(&this->actor, &this->actor.home.pos) < 20.0f) &&
+    if ((this->unk_18D == 0) && (Actor_WorldDistXZToPoint(&this->actor, &this->actor.home.pos) < 20.0f) &&
         (fabsf(this->actor.world.pos.y - this->actor.home.pos.y) < 2.0f)) {
         this->actor.colChkInfo.mass = MASS_IMMOVABLE;
         this->actor.flags &= ~ACTOR_FLAG_20;

@@ -229,8 +229,8 @@ void func_80AD7254(EnKame* this, PlayState* play) {
     if (this->unk_2A4 != this->actor.shape.rot.y) {
         Math_ScaledStepToS(&this->actor.shape.rot.y, this->unk_2A4, 0x100);
         this->actor.world.rot.y = this->actor.shape.rot.y;
-    } else if (Actor_XZDistanceToPoint(&this->actor, &this->actor.home.pos) > 40.0f) {
-        this->unk_2A4 = Actor_YawToPoint(&this->actor, &this->actor.home.pos) + ((s32)Rand_Next() >> 0x14);
+    } else if (Actor_WorldDistXZToPoint(&this->actor, &this->actor.home.pos) > 40.0f) {
+        this->unk_2A4 = Actor_WorldYawTowardPoint(&this->actor, &this->actor.home.pos) + ((s32)Rand_Next() >> 0x14);
     }
 
     this->unk_29E--;
@@ -316,7 +316,7 @@ void func_80AD76CC(EnKame* this) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PAMET_CUTTER_ON);
         this->unk_2BC.y = this->actor.home.pos.y - 100.0f;
     } else {
-        this->actor.world.rot.y = Actor_YawToPoint(&this->actor, &this->actor.home.pos);
+        this->actor.world.rot.y = Actor_WorldYawTowardPoint(&this->actor, &this->actor.home.pos);
         Math_Vec3f_Copy(&this->unk_2BC, &this->actor.home.pos);
         this->unk_29E = 0;
     }
@@ -363,12 +363,12 @@ void func_80AD7948(EnKame* this, PlayState* play) {
     func_80AD75A8(this, play);
 
     if (this->unk_29E == -1) {
-        s16 temp_v0 = Actor_YawToPoint(&this->actor, &this->unk_2BC) - this->actor.world.rot.y;
+        s16 temp_v0 = Actor_WorldYawTowardPoint(&this->actor, &this->unk_2BC) - this->actor.world.rot.y;
 
         temp_v1 = ABS_ALT(temp_v0);
 
         if ((this->actor.bgCheckFlags & 8) || (temp_v1 > 0x3000) ||
-            (Actor_XZDistanceToPoint(&this->actor, &this->unk_2BC) < 50.0f)) {
+            (Actor_WorldDistXZToPoint(&this->actor, &this->unk_2BC) < 50.0f)) {
             s8 pad;
 
             if (this->unk_2BC.y < this->actor.home.pos.y) {
@@ -706,7 +706,7 @@ void EnKame_Update(Actor* thisx, PlayState* play) {
     if ((this->collider.base.atFlags & AT_HIT) && (this->collider.base.atFlags & AT_BOUNCED)) {
         this->collider.base.atFlags &= ~(AT_BOUNCED | AT_HIT);
         func_80AD76CC(this);
-        if (Actor_XZDistanceToPoint(&this->actor, &this->unk_2BC) < 50.0f) {
+        if (Actor_WorldDistXZToPoint(&this->actor, &this->unk_2BC) < 50.0f) {
             this->collider.base.atFlags &= ~AT_ON;
         }
         this->unk_2A6 = 0x3B00;

@@ -457,7 +457,7 @@ void func_80866A5C(EnDoor* this, PlayState* play) {
                 this->unk_1A6 = 10;
             }
         } else if ((this->unk_1A4 == 4) &&
-                   (Actor_XZDistanceBetweenActors(&this->dyna.actor, &GET_PLAYER(play)->actor) > 120.0f)) {
+                   (Actor_WorldDistXZToActor(&this->dyna.actor, &GET_PLAYER(play)->actor) > 120.0f)) {
             this->actionFunc = func_8086704C;
             this->dyna.actor.world.rot.y = -0x1800;
         }

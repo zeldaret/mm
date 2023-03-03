@@ -430,7 +430,7 @@ void func_80C11338(EnThiefbird* this, PlayState* play) {
         item = (EnItem00*)SubS_FindActor(play, &item->actor, ACTORCAT_MISC, ACTOR_EN_ITEM00);
         if (item != NULL) {
             if (item->unk152 > 0) {
-                if (Actor_XZDistanceBetweenActors(&player->actor, &item->actor) > 10.0f) {
+                if (Actor_WorldDistXZToActor(&player->actor, &item->actor) > 10.0f) {
                     for (i = 0; i < ARRAY_COUNT(D_80C13664); i++) {
                         if (item->actor.params == D_80C13664[i]) {
                             break;
@@ -438,7 +438,7 @@ void func_80C11338(EnThiefbird* this, PlayState* play) {
                     }
 
                     if (i != ARRAY_COUNT(D_80C13664)) {
-                        temp_f0 = Actor_DistanceBetweenActors(&this->actor, &item->actor);
+                        temp_f0 = Actor_WorldDistXYZToActor(&this->actor, &item->actor);
                         if (temp_f0 < phi_f20) {
                             this->unk_3EC = item;
                             phi_f20 = temp_f0;
@@ -487,14 +487,14 @@ void func_80C11590(EnThiefbird* this, PlayState* play) {
     if (this->actor.bgCheckFlags & 8) {
         this->unk_192 = this->actor.wallYaw;
     } else {
-        if (Actor_XZDistanceToPoint(&this->actor, &this->actor.home.pos) > 300.0f) {
-            this->unk_192 = Actor_YawToPoint(&this->actor, &this->actor.home.pos);
+        if (Actor_WorldDistXZToPoint(&this->actor, &this->actor.home.pos) > 300.0f) {
+            this->unk_192 = Actor_WorldYawTowardPoint(&this->actor, &this->actor.home.pos);
         }
     }
 
     if (!Math_SmoothStepToS(&this->actor.shape.rot.y, this->unk_192, 5, 0x300, 0x10) && (sp38 != 0) &&
         (Rand_ZeroOne() < 0.1f)) {
-        s16 yaw = Actor_YawToPoint(&this->actor, &this->actor.home.pos) - this->actor.shape.rot.y;
+        s16 yaw = Actor_WorldYawTowardPoint(&this->actor, &this->actor.home.pos) - this->actor.shape.rot.y;
 
         if (yaw > 0) {
             this->unk_192 += Rand_S16Offset(4096, 4096);
@@ -554,7 +554,7 @@ void func_80C1193C(EnThiefbird* this, PlayState* play) {
         this->unk_18E--;
     }
 
-    pitch = Actor_PitchBetweenActors(&this->actor, &player->actor);
+    pitch = Actor_WorldPitchTowardActor(&this->actor, &player->actor);
     pitch = CLAMP(pitch, -0x2800, 0x2800);
     Math_SmoothStepToS(&this->actor.shape.rot.x, pitch, 4, 0x800, 0x80);
     if (this->actor.bgCheckFlags & 8) {
@@ -697,7 +697,7 @@ void func_80C11F6C(EnThiefbird* this, PlayState* play) {
         this->unk_190 = -0x1000;
         this->unk_192 = BINANG_ROT180(this->actor.yawTowardsPlayer);
     } else {
-        this->unk_190 = Actor_PitchToPoint(&this->actor, &D_80C13920);
+        this->unk_190 = Actor_WorldPitchTowardPoint(&this->actor, &D_80C13920);
     }
 
     this->unk_18E = 40;
@@ -737,8 +737,8 @@ void func_80C1215C(EnThiefbird* this, PlayState* play) {
     } else if (this->unk_3E8 == 0) {
         this->unk_192 = BINANG_ROT180(this->actor.yawTowardsPlayer);
     } else {
-        this->unk_192 = Actor_YawToPoint(&this->actor, &D_80C13920);
-        this->unk_190 = Actor_PitchToPoint(&this->actor, &D_80C13920);
+        this->unk_192 = Actor_WorldYawTowardPoint(&this->actor, &D_80C13920);
+        this->unk_190 = Actor_WorldPitchTowardPoint(&this->actor, &D_80C13920);
     }
 
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->unk_192, 6, 0x1000, 0x100);
@@ -801,14 +801,15 @@ void func_80C124B0(EnThiefbird* this, PlayState* play) {
     if (this->actor.bgCheckFlags & 8) {
         this->unk_192 = this->actor.wallYaw;
     } else {
-        this->unk_192 = Actor_YawToPoint(&this->actor, &D_80C13920);
+        this->unk_192 = Actor_WorldYawTowardPoint(&this->actor, &D_80C13920);
     }
 
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->unk_192, 6, 0x1000, 0x100);
-    Math_SmoothStepToS(&this->actor.shape.rot.x, Actor_PitchToPoint(&this->actor, &D_80C13920), 6, 0x1000, 0x100);
+    Math_SmoothStepToS(&this->actor.shape.rot.x, Actor_WorldPitchTowardPoint(&this->actor, &D_80C13920), 6, 0x1000,
+                       0x100);
     temp_v0 = func_800BC270(play, &this->actor, 80.0f, 0x138B0);
     if (temp_v0 != NULL) {
-        temp_v1 = temp_v0->world.rot.x - Actor_PitchToPoint(temp_v0, &this->actor.focus.pos);
+        temp_v1 = temp_v0->world.rot.x - Actor_WorldPitchTowardPoint(temp_v0, &this->actor.focus.pos);
         if (ABS_ALT(temp_v1) < 0x1800) {
             if (temp_v1 > 0) {
                 this->unk_3E0 = 25.0f;
@@ -826,7 +827,7 @@ void func_80C124B0(EnThiefbird* this, PlayState* play) {
             this->unk_3E0 * Math_SinS(this->actor.shape.rot.x) * Math_CosS(this->actor.shape.rot.y);
     }
 
-    if (Actor_DistanceToPoint(&this->actor, &D_80C13920) < 1000.0f) {
+    if (Actor_WorldDistXYZToPoint(&this->actor, &D_80C13920) < 1000.0f) {
         func_80C126A8(this);
     }
 }
@@ -863,7 +864,7 @@ void func_80C127F4(EnThiefbird* this, PlayState* play) {
 
     SkelAnime_Update(&this->skelAnime);
     if ((this->unk_3EC != NULL) && ((this->unk_3EC->actor.update == NULL) || (this->unk_3EC->unk152 == 0) ||
-                                    (Actor_XZDistanceBetweenActors(&player->actor, &this->unk_3EC->actor) <= 10.0f))) {
+                                    (Actor_WorldDistXZToActor(&player->actor, &this->unk_3EC->actor) <= 10.0f))) {
         this->unk_3EC = NULL;
     }
 
@@ -883,13 +884,13 @@ void func_80C127F4(EnThiefbird* this, PlayState* play) {
         if (this->actor.bgCheckFlags & 8) {
             Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.wallYaw, 3, 0x2000, 0x100);
         } else {
-            Math_SmoothStepToS(&this->actor.shape.rot.y, Actor_YawBetweenActors(&this->actor, &this->unk_3EC->actor), 3,
-                               0x2000, 0x100);
+            Math_SmoothStepToS(&this->actor.shape.rot.y, Actor_WorldYawTowardActor(&this->actor, &this->unk_3EC->actor),
+                               3, 0x2000, 0x100);
         }
         temp_v0 = Math_Vec3f_Pitch(&this->limbPos[9], &this->unk_3EC->actor.world.pos);
         temp_v0 = CLAMP(temp_v0, -0x3000, 0x3000);
         Math_SmoothStepToS(&this->actor.shape.rot.x, temp_v0, 4, 0x800, 0x80);
-        temp_f0 = Actor_DistanceToPoint(&this->unk_3EC->actor, &this->limbPos[9]);
+        temp_f0 = Actor_WorldDistXYZToPoint(&this->unk_3EC->actor, &this->limbPos[9]);
         this->actor.speedXZ = (0.02f * temp_f0) + 2.0f;
         this->actor.speedXZ = CLAMP_MAX(this->actor.speedXZ, 4.0f);
         if ((this->unk_3EC->actor.speedXZ <= 0.0f) && (temp_f0 < 40.0f)) {

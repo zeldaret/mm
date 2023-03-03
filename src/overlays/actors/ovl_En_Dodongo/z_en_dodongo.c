@@ -592,9 +592,10 @@ void func_80877500(EnDodongo* this, PlayState* play) {
             }
         }
     } else {
-        if ((Actor_XZDistanceToPoint(&this->actor, &this->actor.home.pos) > 150.0f) ||
+        if ((Actor_WorldDistXZToPoint(&this->actor, &this->actor.home.pos) > 150.0f) ||
             (Player_GetMask(play) == PLAYER_MASK_STONE)) {
-            Math_ScaledStepToS(&this->actor.world.rot.y, Actor_YawToPoint(&this->actor, &this->actor.home.pos), 0x1F4);
+            Math_ScaledStepToS(&this->actor.world.rot.y, Actor_WorldYawTowardPoint(&this->actor, &this->actor.home.pos),
+                               0x1F4);
         }
 
         this->timer--;

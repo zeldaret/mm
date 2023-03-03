@@ -307,7 +307,7 @@ void func_808B03C0(EnAm* this, PlayState* play) {
     }
     if (this->explodeTimer == 0) {
         func_808B0640(this);
-    } else if ((this->returnHomeTimer == 0) || Actor_XZDistanceToPoint(&this->actor, &this->actor.home.pos) > 240.0f) {
+    } else if ((this->returnHomeTimer == 0) || Actor_WorldDistXZToPoint(&this->actor, &this->actor.home.pos) > 240.0f) {
         func_808B0460(this);
     }
 }
@@ -315,7 +315,7 @@ void func_808B03C0(EnAm* this, PlayState* play) {
 void func_808B0460(EnAm* this) {
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->speed = 0.0f;
-    this->armosYaw = Actor_YawToPoint(&this->actor, &this->actor.home.pos);
+    this->armosYaw = Actor_WorldYawTowardPoint(&this->actor, &this->actor.home.pos);
     this->actionFunc = func_808B04A8;
 }
 
@@ -345,15 +345,15 @@ void func_808B0508(EnAm* this, PlayState* play) {
 
 void func_808B057C(EnAm* this) {
     this->speed = 6.0f;
-    this->armosYaw = Actor_YawToPoint(&this->actor, &this->actor.home.pos);
+    this->armosYaw = Actor_WorldYawTowardPoint(&this->actor, &this->actor.home.pos);
     this->explodeTimer = 1;
     this->actionFunc = func_808B05C8;
 }
 
 void func_808B05C8(EnAm* this, PlayState* play) {
-    this->armosYaw = Actor_YawToPoint(&this->actor, &this->actor.home.pos);
+    this->armosYaw = Actor_WorldYawTowardPoint(&this->actor, &this->actor.home.pos);
     func_808B0208(this, play);
-    if (Actor_XZDistanceToPoint(&this->actor, &this->actor.home.pos) < 8.0f) {
+    if (Actor_WorldDistXZToPoint(&this->actor, &this->actor.home.pos) < 8.0f) {
         func_808B04E4(this);
     }
 }

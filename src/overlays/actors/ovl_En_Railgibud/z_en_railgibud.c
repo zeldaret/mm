@@ -537,7 +537,7 @@ void EnRailgibud_SetupWalkToHome(EnRailgibud* this) {
 void EnRailgibud_WalkToHome(EnRailgibud* this, PlayState* play) {
     Math_SmoothStepToS(&this->headRotation.y, 0, 1, 100, 0);
     Math_SmoothStepToS(&this->upperBodyRotation.y, 0, 1, 100, 0);
-    if (Actor_XZDistanceToPoint(&this->actor, &this->actor.home.pos) < 5.0f) {
+    if (Actor_WorldDistXZToPoint(&this->actor, &this->actor.home.pos) < 5.0f) {
         if (this->actor.speedXZ > 0.2f) {
             this->actor.speedXZ -= 0.2f;
         } else {
@@ -550,7 +550,8 @@ void EnRailgibud_WalkToHome(EnRailgibud* this, PlayState* play) {
             EnRailgibud_SetupWalkInCircles(this);
         }
     } else {
-        Math_ScaledStepToS(&this->actor.shape.rot.y, Actor_YawToPoint(&this->actor, &this->actor.home.pos), 450);
+        Math_ScaledStepToS(&this->actor.shape.rot.y, Actor_WorldYawTowardPoint(&this->actor, &this->actor.home.pos),
+                           450);
         this->actor.world.rot = this->actor.shape.rot;
     }
     if (EnRailgibud_PlayerInRangeWithCorrectState(this, play)) {
@@ -750,7 +751,7 @@ s32 EnRailgibud_PlayerInRangeWithCorrectState(EnRailgibud* this, PlayState* play
         return false;
     }
 
-    if (Actor_DistanceToPoint(&player->actor, &this->actor.home.pos) < 100.0f &&
+    if (Actor_WorldDistXYZToPoint(&player->actor, &this->actor.home.pos) < 100.0f &&
         !(player->stateFlags1 & (PLAYER_STATE1_80 | PLAYER_STATE1_2000 | PLAYER_STATE1_4000 | PLAYER_STATE1_40000 |
                                  PLAYER_STATE1_80000 | PLAYER_STATE1_200000)) &&
         !(player->stateFlags2 & (PLAYER_STATE2_80 | PLAYER_STATE2_4000))) {
@@ -768,7 +769,7 @@ s32 EnRailgibud_PlayerInRangeWithCorrectState(EnRailgibud* this, PlayState* play
 s32 EnRailgibud_PlayerOutOfRange(EnRailgibud* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (Actor_DistanceToPoint(&player->actor, &this->actor.home.pos) >= 100.0f) {
+    if (Actor_WorldDistXYZToPoint(&player->actor, &this->actor.home.pos) >= 100.0f) {
         return true;
     }
 

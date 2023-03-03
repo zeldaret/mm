@@ -133,7 +133,7 @@ void EnBigokuta_SetupCutsceneCamera(EnBigokuta* this, PlayState* play, Vec3f* su
     this->subCamId = ActorCutscene_GetCurrentSubCamId(this->picto.actor.cutscene);
     Play_SetCameraAtEye(play, this->subCamId, subCamAt, subCamEye);
 
-    angle = BINANG_SUB(Actor_YawToPoint(&this->picto.actor, subCamEye), this->picto.actor.home.rot.y);
+    angle = BINANG_SUB(Actor_WorldYawTowardPoint(&this->picto.actor, subCamEye), this->picto.actor.home.rot.y);
     if (angle > 0) {
         angle = BINANG_ADD(this->picto.actor.home.rot.y, 0x1800);
     } else {
@@ -475,7 +475,7 @@ s32 EnBigokuta_IsNearSwampBoat(EnBigokuta* this, PlayState* play) {
     this->picto.actor.child = SubS_FindActor(play, NULL, ACTORCAT_BG, ACTOR_BG_INGATE);
 
     if ((this->picto.actor.child != NULL) &&
-        (Actor_XZDistanceBetweenActors(&this->picto.actor, this->picto.actor.child) < 250.0f)) {
+        (Actor_WorldDistXZToActor(&this->picto.actor, this->picto.actor.child) < 250.0f)) {
         return true;
     } else {
         return false;

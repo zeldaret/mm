@@ -338,7 +338,7 @@ void EnMinifrog_SetupNextFrogInit(EnMinifrog* this, PlayState* play) {
         missingFrog = nextFrog->frog;
         if (nextFrog->frog != NULL) {
             this->actor.home.rot.y =
-                (s16)Actor_YawBetweenActors(&this->actor, &missingFrog->actor); // Set home to missing frog
+                (s16)Actor_WorldYawTowardActor(&this->actor, &missingFrog->actor); // Set home to missing frog
             EnMinifrog_TurnToMissingFrog(this);
         } else {
             EnMinifrog_TurnToPlayer(this);
@@ -427,7 +427,7 @@ void EnMinifrog_SetupNextFrogChoir(EnMinifrog* this, PlayState* play) {
         this->actor.home.rot.z = 0;
         this->actionFunc = EnMinifrog_NextFrogMissing;
         this->timer = 60;
-        this->actor.home.rot.y = Actor_YawBetweenActors(&this->actor, &this->frog->actor);
+        this->actor.home.rot.y = Actor_WorldYawTowardActor(&this->actor, &this->frog->actor);
         func_801A1F88();
         this->flags &= ~0x100;
         this->flags &= ~(0x2 << MINIFROG_YELLOW | 0x2 << MINIFROG_CYAN | 0x2 << MINIFROG_PINK | 0x2 << MINIFROG_BLUE |

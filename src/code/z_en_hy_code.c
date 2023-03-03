@@ -69,7 +69,7 @@ EnDoor* EnHy_FindNearestDoor(Actor* actor, PlayState* play) {
     do {
         doorIter = SubS_FindActor(play, doorIter, ACTORCAT_DOOR, ACTOR_EN_DOOR);
         door = (EnDoor*)doorIter;
-        dist = Actor_DistanceBetweenActors(actor, &door->dyna.actor);
+        dist = Actor_WorldDistXYZToActor(actor, &door->dyna.actor);
         if (!isSetup || (dist < minDist)) {
             nearestDoor = door;
             minDist = dist;

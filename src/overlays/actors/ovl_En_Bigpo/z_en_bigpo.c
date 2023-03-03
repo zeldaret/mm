@@ -558,8 +558,8 @@ void EnBigpo_IdleFlying(EnBigpo* this, PlayState* play) {
     this->actor.world.pos.y = (sin_rad(this->hoverHeightCycleTimer * (M_PI / 20)) * 10.0f) + this->savedHeight;
     Math_StepToF(&this->actor.speedXZ, 3.0f, 0.2f);
     func_800B9010(&this->actor, NA_SE_EN_PO_FLY - SFX_FLAG);
-    if (Actor_XZDistanceToPoint(&this->actor, &this->actor.home.pos) > 300.0f) {
-        this->unk208 = Actor_YawToPoint(&this->actor, &this->actor.home.pos);
+    if (Actor_WorldDistXZToPoint(&this->actor, &this->actor.home.pos) > 300.0f) {
+        this->unk208 = Actor_WorldYawTowardPoint(&this->actor, &this->actor.home.pos);
     }
 
     if (Math_ScaledStepToS(&this->actor.shape.rot.y, this->unk208, 0x200) && (Rand_ZeroOne() < 0.075f)) {

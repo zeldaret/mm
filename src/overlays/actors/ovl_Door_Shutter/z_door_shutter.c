@@ -652,7 +652,7 @@ s32 func_808A1D68(DoorShutter* this, PlayState* play) {
         return true;
     }
 
-    temp_a0 = BINANG_SUB(Actor_YawToPoint(&this->actor, &play->view.eye), this->actor.shape.rot.y);
+    temp_a0 = BINANG_SUB(Actor_WorldYawTowardPoint(&this->actor, &play->view.eye), this->actor.shape.rot.y);
     temp_a1 = BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.shape.rot.y);
 
     temp_a0 = ABS_ALT(temp_a0);

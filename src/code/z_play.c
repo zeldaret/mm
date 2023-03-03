@@ -668,7 +668,8 @@ void Play_UpdateTransition(PlayState* this) {
             }
 
             this->transitionCtx.setType(&this->transitionCtx.instanceData,
-                                        (this->transitionTrigger == TRANS_TRIGGER_END) ? 1 : 2);
+                                        (this->transitionTrigger == TRANS_TRIGGER_END) ? TRANS_INSTANCE_TYPE_FILL_OUT
+                                                                                       : TRANS_INSTANCE_TYPE_FILL_IN);
             this->transitionCtx.start(&this->transitionCtx.instanceData);
 
             if (this->transitionCtx.transitionType == TRANS_TYPE_FADE_WHITE_CS_DELAYED) {

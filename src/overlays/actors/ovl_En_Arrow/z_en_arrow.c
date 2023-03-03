@@ -373,7 +373,7 @@ void func_8088ACE0(EnArrow* this, PlayState* play) {
             }
 
             if (this->actor.params == ENARROW_8) {
-                iREG(50) = -1;
+                R_TRANS_FADE_FLASH_ALPHA_STEP = -1;
                 Actor_Spawn(&play->actorCtx, play, ACTOR_EN_M_FIRE1, this->actor.world.pos.x, this->actor.world.pos.y,
                             this->actor.world.pos.z, 0, 0, 0, this->actor.speedXZ == 0.0f);
                 sp82 = NA_SE_IT_DEKU;
@@ -674,7 +674,7 @@ void EnArrow_Draw(Actor* thisx, PlayState* play) {
             gSPMatrix(POLY_XLU_DISP++, &D_01000000, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_06F9F0);
         } else {
-            func_800B8050(&this->actor, play, MTXMODE_NEW);
+            func_800B8050(&this->actor, play, 0);
 
             gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_06F380);
             gDPSetCombineLERP(POLY_OPA_DISP++, TEXEL1, 0, PRIM_LOD_FRAC, TEXEL0, TEXEL1, TEXEL0, PRIM_LOD_FRAC, TEXEL0,

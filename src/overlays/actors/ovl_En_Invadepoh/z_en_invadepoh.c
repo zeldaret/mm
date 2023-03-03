@@ -3608,7 +3608,7 @@ void func_80B4B768(EnInvadepoh* this, PlayState* play) {
     s32 pad;
 
     Math_StepToF(&this->actor.speedXZ, 0.0f, 1.0f);
-    Math_SmoothStepToS(&this->actor.world.rot.y, Actor_YawBetweenActors(&this->actor, &D_80B5040C->actor), 5, 0x1388,
+    Math_SmoothStepToS(&this->actor.world.rot.y, Actor_WorldYawTowardActor(&this->actor, &D_80B5040C->actor), 5, 0x1388,
                        0x64);
     func_80B44E90(this, play);
     if (Animation_OnFrame(&this->skelAnime, 13.0f) || Animation_OnFrame(&this->skelAnime, 19.0f)) {

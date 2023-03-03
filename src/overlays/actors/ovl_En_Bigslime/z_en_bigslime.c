@@ -1500,7 +1500,7 @@ void EnBigslime_SetupCutsceneGrabPlayer(EnBigslime* this, PlayState* play) {
     this->grabPlayerTimer = 15;
     this->wavySurfaceTimer = 0;
     this->bigslimeCollider[0].base.atFlags &= ~AT_ON;
-    this->actor.world.rot.y = Actor_YawToPoint(&this->actor, &this->actor.home.pos);
+    this->actor.world.rot.y = Actor_WorldYawTowardPoint(&this->actor, &this->actor.home.pos);
     yaw = Camera_GetCamDirYaw(GET_ACTIVE_CAM(play)) - this->actor.world.rot.y;
 
     if (yaw > 0x4000) {
@@ -2056,8 +2056,8 @@ void EnBigslime_JumpGekko(EnBigslime* this, PlayState* play) {
     }
 
     if (Math_SmoothStepToS(&this->actor.world.rot.y, this->gekkoYaw, 5, 0x1000, 0x80) == 0) {
-        if (Actor_XZDistanceToPoint(&this->actor, &this->actor.home.pos) > 240.0f) {
-            yaw = Actor_YawToPoint(&this->actor, &this->actor.home.pos);
+        if (Actor_WorldDistXZToPoint(&this->actor, &this->actor.home.pos) > 240.0f) {
+            yaw = Actor_WorldYawTowardPoint(&this->actor, &this->actor.home.pos);
             yawDiff = yaw - (s16)(this->actor.yawTowardsPlayer + 0x8000);
             this->gekkoYaw =
                 ABS_ALT(yawDiff) < 0x3000 ? yaw : (yawDiff / 2) + (s16)(this->actor.yawTowardsPlayer + 0x8000);
@@ -2088,7 +2088,7 @@ void EnBigslime_SetupIdleLookAround(EnBigslime* this) {
     Animation_PlayOnce(&this->skelAnime, &gGekkoNervousIdleAnim);
     this->idleTimer = 60;
     this->actor.speedXZ = 0.0f;
-    if (BINANG_SUB(Actor_YawToPoint(&this->actor, &this->actor.home.pos), this->gekkoRot.y) > 0) {
+    if (BINANG_SUB(Actor_WorldYawTowardPoint(&this->actor, &this->actor.home.pos), this->gekkoRot.y) > 0) {
         this->gekkoYaw = this->gekkoRot.y + (Rand_Next() >> 20) + 0x2000;
     } else {
         this->gekkoYaw = this->gekkoRot.y - (Rand_Next() >> 20) - 0x2000;
@@ -2110,7 +2110,7 @@ void EnBigslime_IdleLookAround(EnBigslime* this, PlayState* play) {
 
     if ((this->skelAnime.animation == &gGekkoNervousIdleAnim) &&
         Math_ScaledStepToS(&this->gekkoRot.y, this->gekkoYaw, 0x400)) {
-        if (BINANG_SUB(Actor_YawToPoint(&this->actor, &this->actor.home.pos), this->gekkoRot.y) > 0) {
+        if (BINANG_SUB(Actor_WorldYawTowardPoint(&this->actor, &this->actor.home.pos), this->gekkoRot.y) > 0) {
             this->gekkoYaw = this->gekkoRot.y + (Rand_Next() >> 20) + 0x2000;
         } else {
             this->gekkoYaw = this->gekkoRot.y - (Rand_Next() >> 20) - 0x2000;
@@ -2224,8 +2224,8 @@ void EnBigslime_StunGekko(EnBigslime* this, PlayState* play) {
 void EnBigslime_SetupCutsceneFormBigslime(EnBigslime* this) {
     Animation_PlayOnce(&this->skelAnime, &gGekkoJumpUpAnim);
     this->gekkoCollider.base.acFlags &= ~AC_ON;
-    this->actor.world.rot.x = -Actor_PitchToPoint(&this->actor, &this->actor.home.pos);
-    this->actor.world.rot.y = Actor_YawToPoint(&this->actor, &this->actor.home.pos);
+    this->actor.world.rot.x = -Actor_WorldPitchTowardPoint(&this->actor, &this->actor.home.pos);
+    this->actor.world.rot.y = Actor_WorldYawTowardPoint(&this->actor, &this->actor.home.pos);
     this->actionFunc = EnBigslime_CutsceneFormBigslime;
     this->actor.speedXZ = 0.0f;
 }
@@ -2334,7 +2334,7 @@ void EnBigslime_SetupCutsceneDefeat(EnBigslime* this, PlayState* play) {
     subCamAt.y = this->actor.world.pos.y + 40.0f;
     subCamAt.z = this->actor.world.pos.z;
 
-    if (BINANG_SUB(Actor_YawToPoint(&this->actor, &this->actor.home.pos), this->actor.world.rot.y) > 0) {
+    if (BINANG_SUB(Actor_WorldYawTowardPoint(&this->actor, &this->actor.home.pos), this->actor.world.rot.y) > 0) {
         yawOffset = this->actor.world.rot.y + 0x4000;
     } else {
         yawOffset = this->actor.world.rot.y - 0x4000;

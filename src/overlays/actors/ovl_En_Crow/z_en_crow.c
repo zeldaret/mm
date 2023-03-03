@@ -168,7 +168,7 @@ void EnCrow_FlyIdle(EnCrow* this, PlayState* play) {
     if ((this->actor.parent != NULL) && (this->actor.parent->home.rot.z == 0)) {
         this->actor.home.pos.x = this->actor.parent->world.pos.x;
         this->actor.home.pos.z = this->actor.parent->world.pos.z;
-        dist = Actor_XZDistanceToPoint(&this->actor, &this->actor.parent->world.pos);
+        dist = Actor_WorldDistXZToPoint(&this->actor, &this->actor.parent->world.pos);
     } else {
         dist = 450.0f;
         this->actor.flags |= ACTOR_FLAG_1;
@@ -176,14 +176,14 @@ void EnCrow_FlyIdle(EnCrow* this, PlayState* play) {
 
     if (this->actor.bgCheckFlags & 8) {
         this->yawTarget = this->actor.wallYaw;
-    } else if (Actor_XZDistanceToPoint(&this->actor, &this->actor.home.pos) > 300.0f) {
-        this->yawTarget = Actor_YawToPoint(&this->actor, &this->actor.home.pos);
+    } else if (Actor_WorldDistXZToPoint(&this->actor, &this->actor.home.pos) > 300.0f) {
+        this->yawTarget = Actor_WorldYawTowardPoint(&this->actor, &this->actor.home.pos);
     }
 
     if ((Math_SmoothStepToS(&this->actor.shape.rot.y, this->yawTarget, 5, 0x300, 0x10) == 0) && onInitialAnimFrame &&
         (Rand_ZeroOne() < 0.1f)) {
 
-        yaw = (Actor_YawToPoint(&this->actor, &this->actor.home.pos) - this->actor.shape.rot.y);
+        yaw = (Actor_WorldYawTowardPoint(&this->actor, &this->actor.home.pos) - this->actor.shape.rot.y);
         if (yaw > 0) {
             this->yawTarget += Rand_S16Offset(0x1000, 0x1000);
         } else {
@@ -258,16 +258,16 @@ void EnCrow_DiveAttack(EnCrow* this, PlayState* play) {
         }
         targetPos.x = this->actor.child->world.pos.x;
         targetPos.z = this->actor.child->world.pos.z;
-        pitchTarget = Actor_PitchToPoint(&this->actor, &targetPos);
+        pitchTarget = Actor_WorldPitchTowardPoint(&this->actor, &targetPos);
         pitchTarget = CLAMP(pitchTarget, -0x3000, 0x3000);
         Math_SmoothStepToS(&this->actor.shape.rot.x, pitchTarget, 2, 0x400, 0x40);
     } else {
         Math_SmoothStepToS(&this->actor.shape.rot.x, -0x800, 2, 0x100, 0x10);
     }
 
-    if (isFacingActor || (Actor_XZDistanceBetweenActors(&this->actor, this->actor.child) > 80.0f)) {
-        Math_SmoothStepToS(&this->actor.shape.rot.y, Actor_YawBetweenActors(&this->actor, this->actor.child), 4, 0xC00,
-                           0xC0);
+    if (isFacingActor || (Actor_WorldDistXZToActor(&this->actor, this->actor.child) > 80.0f)) {
+        Math_SmoothStepToS(&this->actor.shape.rot.y, Actor_WorldYawTowardActor(&this->actor, this->actor.child), 4,
+                           0xC00, 0xC0);
     }
 
     if (((this->timer == 0) || ((&player->actor != this->actor.child) && (this->actor.child->home.rot.z != 0)) ||

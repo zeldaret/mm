@@ -230,7 +230,7 @@ void EnBat_FlyIdle(EnBat* this, PlayState* play) {
         this->yawTarget = this->actor.wallYaw;
     } else if (Math3D_XZDistanceSquared(this->actor.world.pos.x, this->actor.world.pos.z, this->actor.home.pos.x,
                                         this->actor.home.pos.z) > SQ(300.0f)) {
-        this->yawTarget = Actor_YawToPoint(&this->actor, &this->actor.home.pos);
+        this->yawTarget = Actor_WorldYawTowardPoint(&this->actor, &this->actor.home.pos);
     } else if (finishedRotStep && (Rand_ZeroOne() < 0.015f)) {
         this->yawTarget =
             this->actor.shape.rot.y + (((s32)(0x1000 * Rand_ZeroOne()) + 0x1000) * ((Rand_ZeroOne() < 0.5f) ? -1 : 1));
@@ -282,7 +282,7 @@ void EnBat_DiveAttack(EnBat* this, PlayState* play) {
         preyPos.y = player->actor.world.pos.y + 20.0f;
         preyPos.z = player->actor.world.pos.z;
 
-        pitchTarget = Actor_PitchToPoint(&this->actor, &preyPos);
+        pitchTarget = Actor_WorldPitchTowardPoint(&this->actor, &preyPos);
         pitchTarget = CLAMP(pitchTarget, -0x3000, 0x3000);
         Math_SmoothStepToS(&this->actor.shape.rot.x, pitchTarget, 2, 0x400, 0x40);
     } else {

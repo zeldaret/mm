@@ -654,7 +654,7 @@ void func_80A95FE8(EnAz* this, PlayState* play) {
     } else {
         ActorCutscene_SetIntentToPlay(this->unk_3D0[0]);
     }
-    if (Actor_DistanceToPoint(&this->actor, &this->actor.home.pos) > 20.0f) {
+    if (Actor_WorldDistXYZToPoint(&this->actor, &this->actor.home.pos) > 20.0f) {
         func_800B9010(&this->actor, NA_SE_EV_BEAVER_SWIM_MOTOR - SFX_FLAG);
         func_800BE33C(&this->actor.world.pos, &this->actor.home.pos, &this->actor.world.rot, false);
         Math_SmoothStepToS(&this->actor.shape.rot.x, this->actor.world.rot.x, 3, 0xE38, 0x38E);
@@ -1615,7 +1615,7 @@ void func_80A98414(EnAz* this, PlayState* play) {
             if ((fish->actor.params < 0) && (fish->actor.room == this->actor.room) &&
                 (Math3D_Vec3fDistSq(&this->actor.world.pos, &fish->actor.world.pos) < SQ(200.0f))) {
                 fish->unk_276 = 0x14;
-                fish->unk_274 = Actor_YawBetweenActors(&fish->actor, &this->actor);
+                fish->unk_274 = Actor_WorldYawTowardActor(&fish->actor, &this->actor);
             }
         }
         itemAction = itemAction->next;

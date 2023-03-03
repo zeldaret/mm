@@ -703,7 +703,7 @@ void func_80A5CB74(EnKusa2* this) {
     sp3E = Rand_S16Offset(-10000, 20000) + this->actor.world.rot.y;
 
     if (this->unk_1C0 != NULL) {
-        sp36 = Actor_YawBetweenActors(&this->actor, &this->unk_1C0->actor);
+        sp36 = Actor_WorldYawTowardActor(&this->actor, &this->unk_1C0->actor);
         sp3C = Rand_S16Offset(-4000, 8000) + sp36;
     } else {
         sp3C = 0;
@@ -978,7 +978,7 @@ void func_80A5D7C4(EnKusa2* this, PlayState* play) {
         if ((this->unk_1C0 != NULL) && (this->unk_1C0->unk_1BE != 0)) {
             this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
             if (this2->unk_1C0 != NULL) {
-                sp2A = Actor_YawBetweenActors(&this->unk_1C0->actor, &this->actor);
+                sp2A = Actor_WorldYawTowardActor(&this->unk_1C0->actor, &this->actor);
                 this->actor.home.rot.y = Rand_S16Offset(-1500, 3000) + sp2A;
             }
             this->unk_1C8 = Rand_S16Offset(72, 16);

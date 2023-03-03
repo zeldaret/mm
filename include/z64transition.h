@@ -65,14 +65,20 @@ typedef struct {
     /* 0x18 */ size_t size;
 } TransitionOverlay;
 
-typedef struct {
-    /* 0x0 */ char unk_0[0xC];
-} TransitionFade; // size = 0xC
-
 typedef enum {
- /* 0 */ TRANSITION_CIRCLE_IN,
- /* 1 */ TRANSITION_CIRCLE_OUT,
-} TransitionCircleDirection;
+    /* 1 */ TRANS_INSTANCE_TYPE_FILL_OUT = 1,
+    /* 2 */ TRANS_INSTANCE_TYPE_FILL_IN,
+} TransitionInstanceType;
+
+#define TRANS_INSTANCE_TYPE_FADE_FLASH 3
+
+typedef struct {
+    /* 0x0 */ u8 type;
+    /* 0x1 */ u8 isDone;
+    /* 0x2 */ u8 direction;
+    /* 0x4 */ Color_RGBA8_u32 color;
+    /* 0x8 */ u16 timer;
+} TransitionFade; // size = 0xC
 
 #define FBDEMO_CIRCLE_GET_MASK_TYPE(type) (type & 1)
 
@@ -147,6 +153,7 @@ typedef enum {
     /* 22 */ TRANS_TYPE_WIPE5,
     // transition types 23 - 31 are unused
     // transition types 32 - 39 are Wipe4 TODO needs macro
+    /* 38 */ TRANS_TYPE_38 = 38,
     // transition types 40 - 63 are unused
     // transition types 64 - 127 are Wipe3 TODO needs macro
     /* 64 */ TRANS_TYPE_64 = 64,
