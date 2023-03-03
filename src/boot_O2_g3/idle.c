@@ -11,7 +11,7 @@ f32 gViConfigYScale = 1.0f;
 IrqMgr gIrqMgr;
 STACK(sIrqMgrStack, 0x500);
 StackEntry sIrqMgrStackInfo;
-OSThread gMainThread;
+OSThread sMainThread;
 STACK(sMainStack, 0x900);
 StackEntry sMainStackInfo;
 OSMesg sPiMgrCmdBuff[50];
@@ -109,8 +109,8 @@ void Idle_ThreadEntry(void* arg) {
     Idle_InitVideo();
     osCreatePiManager(150, &gPiMgrCmdQ, sPiMgrCmdBuff, ARRAY_COUNT(sPiMgrCmdBuff));
     StackCheck_Init(&sMainStackInfo, sMainStack, STACK_TOP(sMainStack), 0, 0x400, "main");
-    osCreateThread(&gMainThread, Z_THREAD_ID_MAIN, Main_ThreadEntry, arg, STACK_TOP(sMainStack), Z_PRIORITY_MAIN);
-    osStartThread(&gMainThread);
+    osCreateThread(&sMainThread, Z_THREAD_ID_MAIN, Main_ThreadEntry, arg, STACK_TOP(sMainStack), Z_PRIORITY_MAIN);
+    osStartThread(&sMainThread);
     osSetThreadPri(NULL, 0);
 
     do { } while (true); }

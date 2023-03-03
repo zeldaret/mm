@@ -41,12 +41,12 @@ void Main(void* arg) {
     IrqMgr_AddClient(&gIrqMgr, &irqClient, &irqMgrMsgQ);
 
     StackCheck_Init(&sAudioInfo, sAudioStack, STACK_TOP(sAudioStack), 0, 0x100, "audio");
-    AudioMgr_Init(&audioContext, STACK_TOP(sAudioStack), Z_PRIORITY_AUDIOMGR, 0xA, &gSchedContext, &gIrqMgr);
+    AudioMgr_Init(&sAudioMgr, STACK_TOP(sAudioStack), Z_PRIORITY_AUDIOMGR, 0xA, &gSchedContext, &gIrqMgr);
 
     StackCheck_Init(&sPadMgrInfo, sPadMgrStack, STACK_TOP(sPadMgrStack), 0, 0x100, "padmgr");
     PadMgr_Init(&sSiIntMsgQ, &gIrqMgr, 7, Z_PRIORITY_PADMGR, STACK_TOP(sPadMgrStack));
 
-    AudioMgr_Unlock(&audioContext);
+    AudioMgr_Unlock(&sAudioMgr);
 
     StackCheck_Init(&sGraphStackInfo, sGraphStack, STACK_TOP(sGraphStack), 0, 0x100, "graph");
     osCreateThread(&sGraphThread, Z_THREAD_ID_GRAPH, Graph_ThreadEntry, arg, STACK_TOP(sGraphStack), Z_PRIORITY_GRAPH);
