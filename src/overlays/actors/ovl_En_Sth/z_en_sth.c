@@ -17,12 +17,12 @@ void EnSth_Destroy(Actor* thisx, PlayState* play);
 void EnSth_WaitForObject(Actor* thisx, PlayState* play);
 
 void EnSth_PanicIdle(EnSth* this, PlayState* play);
-void EnSth_HandleOceanSpiderhouseConversation(EnSth* this, PlayState* play);
-void EnSth_OceanSpiderhouseIdle(EnSth* this, PlayState* play);
+void EnSth_HandleOceansideSpiderHouseConversation(EnSth* this, PlayState* play);
+void EnSth_OceansideSpiderHouseIdle(EnSth* this, PlayState* play);
 void EnSth_MoonLookingIdle(EnSth* this, PlayState* play);
 void EnSth_DefaultIdle(EnSth* this, PlayState* play);
-void EnSth_HandleSwampSpiderhouseConversation(EnSth* this, PlayState* play);
-void EnSth_SwampSpiderhouseCuredIdle(EnSth* this, PlayState* play);
+void EnSth_HandleSwampSpiderHouseConversation(EnSth* this, PlayState* play);
+void EnSth_SwampSpiderHouseIdle(EnSth* this, PlayState* play);
 void EnSth_Update(Actor* thisx, PlayState* play);
 void EnSth_Draw(Actor* thisx, PlayState* play);
 
@@ -80,13 +80,13 @@ static AnimationHeader* sAnimationInfo[] = {
 // three slightly different variants of "Only a little time left, oh goddess please save me"
 static u16 sSthOceanspiderhousePanicText[] = { 0x1144, 0x1145, 0x1146 };
 
-static u16 sSthFirstOceanSpiderHouseGreetDialogue2[] = {
+static u16 sSthFirstOceansideSpiderHouseGreetDialogue2[] = {
     0x1139, // I thought I heard noises... I'm glad I found it early
     0x113E, // I had no idea this place was here, perhaps it can keep me safe
     0x1143  // There's no time we have to hide!
 };
 
-static u16 sSthFirstOceanSpiderHouseGreetDialogue1[] = {
+static u16 sSthFirstOceansideSpiderHouseGreetDialogue1[] = {
     0x1132, // I thought I heard some noise.. is this some sort of underground shelter?
     0x113A, // I had no idea there was a basement here..
     0x113F  // I heard loud noises.. I never thought I'd find a place like this..
@@ -139,9 +139,9 @@ void EnSth_Init(Actor* thisx, PlayState* play) {
             }
             break;
 
-        case STH_TYPE_SWAMP_SPIDERHOUSE_CURED:
+        case STH_TYPE_SWAMP_SPIDER_HOUSE_CURED:
             if (Inventory_GetSkullTokenCount(play->sceneId) >= STH_SWAMP_SPIDER_TOKENS_REQUIRED) {
-                this->actionFunc = EnSth_SwampSpiderhouseCuredIdle;
+                this->actionFunc = EnSth_SwampSpiderHouseIdle;
             } else {
                 Actor_Kill(&this->actor);
             }
@@ -152,7 +152,7 @@ void EnSth_Init(Actor* thisx, PlayState* play) {
             break;
 
         case STH_TYPE_MOON_LOOKING: // South Clock Town
-            if ((gSaveContext.save.skullTokenCount & 0xFFFF) >= STH_OCEAN_SPIDER_TOKENS_REQUIRED) {
+            if ((gSaveContext.save.skullTokenCount & 0xFFFF) >= STH_OCEANSIDE_SPIDER_TOKENS_REQUIRED) {
                 Actor_Kill(&this->actor);
                 return;
             }
@@ -163,20 +163,20 @@ void EnSth_Init(Actor* thisx, PlayState* play) {
             this->actor.uncullZoneForward = 800.0f;
             break;
 
-        case STH_TYPE_OCEAN_SPIDERHOUSE_GREET:
+        case STH_TYPE_OCEANSIDE_SPIDER_HOUSE_GREET:
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_13_20)) {
                 Actor_Kill(&this->actor);
                 return;
             }
             this->actor.textId = 0;
-            this->actionFunc = EnSth_OceanSpiderhouseIdle;
+            this->actionFunc = EnSth_OceansideSpiderHouseIdle;
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_13_80)) {
-                this->sthFlags |= STH_FLAG_OCEAN_SPIDERHOUSE_GREET;
+                this->sthFlags |= STH_FLAG_OCEANSIDE_SPIDER_HOUSE_GREET;
             }
             break;
-        case STH_TYPE_OCEAN_SPIDERHOUSE_PANIC:
+        case STH_TYPE_OCEANSIDE_SPIDER_HOUSE_PANIC:
             if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_13_20) ||
-                (Inventory_GetSkullTokenCount(play->sceneId) < STH_OCEAN_SPIDER_TOKENS_REQUIRED)) {
+                (Inventory_GetSkullTokenCount(play->sceneId) < STH_OCEANSIDE_SPIDER_TOKENS_REQUIRED)) {
                 Actor_Kill(&this->actor);
                 return;
             }
@@ -246,7 +246,7 @@ void EnSth_PanicIdle(EnSth* this, PlayState* play) {
     }
 }
 
-void EnSth_GetInitialOceanSpiderhouseText(EnSth* this, PlayState* play) {
+void EnSth_GetInitialOceansideSpiderHouseText(EnSth* this, PlayState* play) {
     u16 nextTextId;
     s32 day = CURRENT_DAY - 1;
 
@@ -254,15 +254,15 @@ void EnSth_GetInitialOceanSpiderhouseText(EnSth* this, PlayState* play) {
         day = 0;
     }
 
-    if (this->sthFlags & STH_FLAG_OCEAN_SPIDERHOUSE_GREET) {
+    if (this->sthFlags & STH_FLAG_OCEANSIDE_SPIDER_HOUSE_GREET) {
         s32 pad;
 
-        nextTextId = sSthFirstOceanSpiderHouseGreetDialogue2[day];
+        nextTextId = sSthFirstOceansideSpiderHouseGreetDialogue2[day];
         if (day == 2) {
             EnSth_SwitchAnimation(this, STH_ANIM_LOOK_AROUND);
         }
     } else {
-        nextTextId = sSthFirstOceanSpiderHouseGreetDialogue1[day];
+        nextTextId = sSthFirstOceansideSpiderHouseGreetDialogue1[day];
     }
     Message_StartTextbox(play, nextTextId, &this->actor);
 }
@@ -274,7 +274,7 @@ void EnSth_PostOceanspiderhouseReward(EnSth* this, PlayState* play) {
 
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->actor.flags &= ~ACTOR_FLAG_10000;
-        this->actionFunc = EnSth_HandleOceanSpiderhouseConversation;
+        this->actionFunc = EnSth_HandleOceansideSpiderHouseConversation;
 
         switch (STH_GI_ID(&this->actor)) {
             case GI_WALLET_ADULT:
@@ -327,7 +327,7 @@ void EnSth_GiveOceanspiderhouseReward(EnSth* this, PlayState* play) {
     }
 }
 
-void EnSth_HandleOceanSpiderhouseConversation(EnSth* this, PlayState* play) {
+void EnSth_HandleOceansideSpiderHouseConversation(EnSth* this, PlayState* play) {
     s32 day = CURRENT_DAY - 1;
 
     if (day < 0) {
@@ -404,27 +404,27 @@ void EnSth_HandleOceanSpiderhouseConversation(EnSth* this, PlayState* play) {
                         break;
 
                     default:
-                        this->actionFunc = EnSth_OceanSpiderhouseIdle;
+                        this->actionFunc = EnSth_OceansideSpiderHouseIdle;
                         func_801477B4(play);
-                        this->sthFlags |= STH_FLAG_OCEAN_SPIDERHOUSE_GREET;
+                        this->sthFlags |= STH_FLAG_OCEANSIDE_SPIDER_HOUSE_GREET;
                         break;
                 }
             }
             break;
 
         case TEXT_STATE_CLOSING:
-            this->actionFunc = EnSth_OceanSpiderhouseIdle;
-            this->sthFlags |= STH_FLAG_OCEAN_SPIDERHOUSE_GREET;
+            this->actionFunc = EnSth_OceansideSpiderHouseIdle;
+            this->sthFlags |= STH_FLAG_OCEANSIDE_SPIDER_HOUSE_GREET;
             break;
     }
 }
 
-void EnSth_OceanSpiderhouseIdle(EnSth* this, PlayState* play) {
+void EnSth_OceansideSpiderHouseIdle(EnSth* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
 
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-        EnSth_GetInitialOceanSpiderhouseText(this, play);
-        this->actionFunc = EnSth_HandleOceanSpiderhouseConversation;
+        EnSth_GetInitialOceansideSpiderHouseText(this, play);
+        this->actionFunc = EnSth_HandleOceansideSpiderHouseConversation;
     } else if (EnSth_CanSpeakToPlayer(this, play)) {
         func_800B8614(&this->actor, play, 110.0f);
     }
@@ -461,7 +461,7 @@ void EnSth_DefaultIdle(EnSth* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
 }
 
-void EnSth_GetInitialSwampSpiderhouseText(EnSth* this, PlayState* play) {
+void EnSth_GetInitialSwampSpiderHouseText(EnSth* this, PlayState* play) {
     u16 nextTextId;
 
     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_34_10)) {
@@ -494,11 +494,11 @@ void EnSth_GetInitialSwampSpiderhouseText(EnSth* this, PlayState* play) {
     Message_StartTextbox(play, nextTextId, &this->actor);
 }
 
-void EnSth_PostSwampSpiderhouseGiveMask(EnSth* this, PlayState* play) {
+void EnSth_PostSwampSpiderHouseGiveMask(EnSth* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
 
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-        this->actionFunc = EnSth_HandleSwampSpiderhouseConversation;
+        this->actionFunc = EnSth_HandleSwampSpiderHouseConversation;
         SET_WEEKEVENTREG(WEEKEVENTREG_34_40);
         Message_StartTextbox(play, 0x918, &this->actor); // I've had enough of this, going home
     } else {
@@ -506,12 +506,12 @@ void EnSth_PostSwampSpiderhouseGiveMask(EnSth* this, PlayState* play) {
     }
 }
 
-void EnSth_SwampSpiderhouseGiveMask(EnSth* this, PlayState* play) {
+void EnSth_SwampSpiderHouseGiveMask(EnSth* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
 
     if (Actor_HasParent(&this->actor, play)) {
         this->actor.parent = NULL;
-        this->actionFunc = EnSth_PostSwampSpiderhouseGiveMask;
+        this->actionFunc = EnSth_PostSwampSpiderHouseGiveMask;
         this->actor.flags |= ACTOR_FLAG_10000;
         func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
     } else {
@@ -521,7 +521,7 @@ void EnSth_SwampSpiderhouseGiveMask(EnSth* this, PlayState* play) {
     }
 }
 
-void EnSth_HandleSwampSpiderhouseConversation(EnSth* this, PlayState* play) {
+void EnSth_HandleSwampSpiderHouseConversation(EnSth* this, PlayState* play) {
     s32 pad;
 
     SkelAnime_Update(&this->skelAnime);
@@ -551,8 +551,8 @@ void EnSth_HandleSwampSpiderhouseConversation(EnSth* this, PlayState* play) {
             case 0x90B: // (does not exist)
             case 0x917: // Someone gave me this mask and said it would make me rich, Take it
                 func_801477B4(play);
-                this->actionFunc = EnSth_SwampSpiderhouseGiveMask;
-                EnSth_SwampSpiderhouseGiveMask(this, play);
+                this->actionFunc = EnSth_SwampSpiderHouseGiveMask;
+                EnSth_SwampSpiderHouseGiveMask(this, play);
                 break;
 
             case 0x91A: // Someone gave me this mask and said it would make me rich, getting rid of it
@@ -571,28 +571,28 @@ void EnSth_HandleSwampSpiderhouseConversation(EnSth* this, PlayState* play) {
             default:
                 this->actor.flags &= ~ACTOR_FLAG_10000;
                 func_801477B4(play);
-                this->actionFunc = EnSth_SwampSpiderhouseCuredIdle;
+                this->actionFunc = EnSth_SwampSpiderHouseIdle;
                 break;
         }
     }
 }
 
-void EnSth_SwampSpiderhouseCuredIdle(EnSth* this, PlayState* play) {
+void EnSth_SwampSpiderHouseIdle(EnSth* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
 
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-        EnSth_GetInitialSwampSpiderhouseText(this, play);
-        this->actionFunc = EnSth_HandleSwampSpiderhouseConversation;
+        EnSth_GetInitialSwampSpiderHouseText(this, play);
+        this->actionFunc = EnSth_HandleSwampSpiderHouseConversation;
     } else if (EnSth_CanSpeakToPlayer(this, play)) {
         this->actor.textId = 0;
         func_800B8614(&this->actor, play, 110.0f);
     }
 }
 
-void EnSth_OceanSpiderhouseWaitForTokens(Actor* thisx, PlayState* play) {
+void EnSth_OceansideSpiderHouseWaitForTokens(Actor* thisx, PlayState* play) {
     EnSth* this = THIS;
 
-    if (Inventory_GetSkullTokenCount(play->sceneId) >= STH_OCEAN_SPIDER_TOKENS_REQUIRED) {
+    if (Inventory_GetSkullTokenCount(play->sceneId) >= STH_OCEANSIDE_SPIDER_TOKENS_REQUIRED) {
         this->actor.update = EnSth_Update;
         this->actor.draw = EnSth_Draw;
         this->actor.flags |= ACTOR_FLAG_1;
@@ -612,8 +612,6 @@ void EnSth_WaitForObject(Actor* thisx, PlayState* play) {
         Actor_SetObjectDependency(play, &this->actor);
 
         if (STH_GET_SWAMP_BODY(&this->actor)) {
-            // as this version is unused, we don't know what scene they were meant for
-            // except: WEEKEVENTREG_34_40 is used in swamp spiderhouse
             SkelAnime_InitFlex(play, &this->skelAnime, &gAhgSkel, &gEnSthBendingDownAnim, this->jointTable,
                                this->morphTable, AHG_LIMB_MAX);
             Animation_PlayLoop(&this->skelAnime, &gEnSthBendingDownAnim);
@@ -637,7 +635,7 @@ void EnSth_WaitForObject(Actor* thisx, PlayState* play) {
                 EnSth_SwitchAnimation(this, STH_ANIM_LOOK_UP);
                 break;
 
-            case STH_TYPE_OCEAN_SPIDERHOUSE_GREET:
+            case STH_TYPE_OCEANSIDE_SPIDER_HOUSE_GREET:
                 if (CHECK_WEEKEVENTREG(WEEKEVENTREG_13_80)) {
                     EnSth_SwitchAnimation(this, STH_ANIM_LOOK_AROUND);
                 } else {
@@ -645,15 +643,15 @@ void EnSth_WaitForObject(Actor* thisx, PlayState* play) {
                 }
                 break;
 
-            case STH_TYPE_OCEAN_SPIDERHOUSE_PANIC:
+            case STH_TYPE_OCEANSIDE_SPIDER_HOUSE_PANIC:
                 EnSth_SwitchAnimation(this, STH_ANIM_PANIC);
                 break;
         }
 
         // not ready to appear yet
-        if ((STH_GET_TYPE(&this->actor) == STH_TYPE_OCEAN_SPIDERHOUSE_GREET) &&
-            (Inventory_GetSkullTokenCount(play->sceneId) < STH_OCEAN_SPIDER_TOKENS_REQUIRED)) {
-            this->actor.update = EnSth_OceanSpiderhouseWaitForTokens;
+        if ((STH_GET_TYPE(&this->actor) == STH_TYPE_OCEANSIDE_SPIDER_HOUSE_GREET) &&
+            (Inventory_GetSkullTokenCount(play->sceneId) < STH_OCEANSIDE_SPIDER_TOKENS_REQUIRED)) {
+            this->actor.update = EnSth_OceansideSpiderHouseWaitForTokens;
             this->actor.draw = NULL;
             this->actor.flags &= ~ACTOR_FLAG_1;
         }
