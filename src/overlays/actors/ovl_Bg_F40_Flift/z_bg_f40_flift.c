@@ -54,8 +54,8 @@ void BgF40Flift_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void func_808D75F0(BgF40Flift* this, PlayState* play) {
-    if (((this->dyna.actor.params == 1) && (DynaPolyActor_IsPlayerOnTop(&this->dyna))) ||
-        ((this->dyna.actor.params == -1) && (!DynaPolyActor_IsPlayerOnTop(&this->dyna)))) {
+    if (((this->dyna.actor.params == 1) && DynaPolyActor_IsPlayerOnTop(&this->dyna)) ||
+        ((this->dyna.actor.params == -1) && !DynaPolyActor_IsPlayerOnTop(&this->dyna))) {
         this->timer = 96;
         this->actionFunc = func_808D7714;
     } else {
