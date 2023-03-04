@@ -7,7 +7,7 @@
 
 UNK_TYPE4 D_8009BE30;
 UNK_TYPE4 D_8009BE34;
-FaultClient romInfoFaultClient;
+FaultClient sRomInfoFaultClient;
 
 void CIC6105_Nop80081820(void) {
 }
@@ -22,11 +22,11 @@ void CIC6105_PrintRomInfo(void) {
 }
 
 void CIC6105_AddRomInfoFaultPage(void) {
-    Fault_AddClient(&romInfoFaultClient, CIC6105_PrintRomInfo, 0, 0);
+    Fault_AddClient(&sRomInfoFaultClient, CIC6105_PrintRomInfo, 0, 0);
 }
 
 void CIC6105_RemoveRomInfoFaultPage(void) {
-    Fault_RemoveClient(&romInfoFaultClient);
+    Fault_RemoveClient(&sRomInfoFaultClient);
 }
 
 void func_800818F4(void) {
