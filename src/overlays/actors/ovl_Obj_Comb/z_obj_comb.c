@@ -303,10 +303,10 @@ void func_8098D99C(ObjComb* this, PlayState* play) {
             temp_v0->parent = &this->actor;
             if (this->actionFunc == func_8098DC60) {
                 temp_v0->velocity.y = 8.0f;
-                temp_v0->speedXZ = 2.0f;
+                temp_v0->speed = 2.0f;
             } else {
                 temp_v0->velocity.y = 10.0f;
-                temp_v0->speedXZ = 2.0f;
+                temp_v0->speed = 2.0f;
             }
             this->unk_1B6 = 1;
             play_sound(NA_SE_SY_TRE_BOX_APPEAR);
@@ -406,7 +406,7 @@ void func_8098DC60(ObjComb* this, PlayState* play) {
     } else {
         if (this->unk_1B8 >= 0) {
             if (this->unk_1B8 == 0) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALGOLD_ROLL);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_STALGOLD_ROLL);
                 if (Rand_ZeroOne() < 0.1f) {
                     this->unk_1B8 = Rand_S16Offset(40, 80);
                 } else {
@@ -431,7 +431,7 @@ void func_8098DE58(ObjComb* this) {
     this->unk_1B4 = 100;
     this->actor.terminalVelocity = -20.0f;
     this->actor.gravity = -1.5f;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actionFunc = func_8098DEA0;
 }
 

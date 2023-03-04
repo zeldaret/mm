@@ -225,7 +225,7 @@ void EnAni_FallToGround(EnAni* this, PlayState* play) {
         Quake_SetPerturbations(quakeIndex, 7, 0, 0, 0);
         Quake_SetDuration(quakeIndex, 20);
 
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_HAMMER_HIT);
+        Actor_PlaySfx(&this->actor, NA_SE_IT_HAMMER_HIT);
     }
 
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0x2, 0x7D0, 0x100);

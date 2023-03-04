@@ -346,7 +346,7 @@ void EnStoneheishi_DrinkBottleProcess(EnStoneheishi* this, PlayState* play) {
             if (this->timer != 0) {
                 if ((this->timer < 10) && (this->bottleDisplay != EN_STONE_BOTTLE_EMPTY)) {
                     this->bottleDisplay = EN_STONE_BOTTLE_EMPTY;
-                    Actor_PlaySfxAtPos(&this->actor, NA_SE_VO_NP_DRINK);
+                    Actor_PlaySfx(&this->actor, NA_SE_VO_NP_DRINK);
                     Player_UpdateBottleHeld(play, GET_PLAYER(play), ITEM_BOTTLE, PLAYER_IA_BOTTLE);
                 }
             } else {

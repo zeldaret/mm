@@ -192,17 +192,17 @@ void func_80B3B120(EnGg2* this, PlayState* play) {
         if (func_80B3B648(this, this->unk_1D8, this->unk_1DC) != 0) {
             if (this->unk_1DC >= (this->unk_1D8->count - 2)) {
                 this->actionFunc = func_80B3AE60;
-                this->actor.speedXZ = 0.0f;
+                this->actor.speed = 0.0f;
             } else {
                 this->unk_1DC++;
             }
         }
-        Math_ApproachF(&this->actor.speedXZ, 5.0f, 0.2f, 1.0f);
+        Math_ApproachF(&this->actor.speed, 5.0f, 0.2f, 1.0f);
     }
 }
 
 void func_80B3B21C(EnGg2* this, PlayState* play) {
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     if ((this->actor.xzDistToPlayer < 100.0f) && CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_REACT_TO_LENS)) {
         this->unk_2E4 = ActorCutscene_GetAdditionalCutscene(this->unk_2E4);
         this->actionFunc = func_80B3B5D4;
@@ -256,7 +256,7 @@ void func_80B3B294(EnGg2* this, PlayState* play) {
             }
         }
     }
-    Math_ApproachF(&this->actor.speedXZ, 5.0f, 0.2f, 1.0f);
+    Math_ApproachF(&this->actor.speed, 5.0f, 0.2f, 1.0f);
 }
 
 void func_80B3B4B0(EnGg2* this, PlayState* play) {

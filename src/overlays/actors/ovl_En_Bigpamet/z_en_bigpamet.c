@@ -219,7 +219,7 @@ void func_80A2778C(EnBigpamet* this) {
         ptr->unk_20 = Rand_ZeroFloat(0.0025000002f) + 0.002f;
     }
 
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_B_PAMET_BREAK);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_B_PAMET_BREAK);
 }
 
 void func_80A27970(EnBigpamet* this, PlayState* play2) {
@@ -295,7 +295,7 @@ void func_80A27B58(EnBigpamet* this) {
         ptr->unk_20 = Rand_ZeroFloat(0.0025000002f) + 0.002f;
     }
 
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_B_PAMET_BREAK);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_B_PAMET_BREAK);
 }
 
 void func_80A27DD8(EnBigpamet* this, PlayState* play) {
@@ -408,7 +408,7 @@ void func_80A282C8(EnBigpamet* this, PlayState* play) {
 
 void func_80A28378(EnBigpamet* this) {
     this->actor.parent->params = GEKKO_INIT_SNAPPER;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actionFunc = func_80A283A0;
 }
 
@@ -421,7 +421,7 @@ void func_80A283A0(EnBigpamet* this, PlayState* play) {
 
 void func_80A283F0(EnBigpamet* this) {
     Animation_PlayLoop(&this->skelAnime2, &object_tl_Anim_00823C);
-    this->actor.speedXZ = 1.0f;
+    this->actor.speed = 1.0f;
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->actor.params = ENBIGPAMET_1;
     this->actionFunc = func_80A2844C;
@@ -431,10 +431,11 @@ void func_80A2844C(EnBigpamet* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime2);
 
     if (this->actor.parent->params == GEKKO_RETURN_TO_SNAPPER) {
-        Math_ScaledStepToS(&this->actor.shape.rot.y, Actor_YawBetweenActors(&this->actor, this->actor.parent), 0x400);
+        Math_ScaledStepToS(&this->actor.shape.rot.y, Actor_WorldYawTowardActor(&this->actor, this->actor.parent),
+                           0x400);
         this->actor.world.rot.y = this->actor.shape.rot.y;
     } else if (this->actor.parent->params == GEKKO_JUMP_ON_SNAPPER) {
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
     } else if (this->actor.parent->params == GEKKO_ON_SNAPPER) {
         func_80A28E40(this);
     }
@@ -445,9 +446,9 @@ void func_80A284E4(EnBigpamet* this) {
     this->unk_29E = 0;
     this->unk_2A8 = 1.0f;
     this->unk_2A4 = 1.0f;
-    this->actor.speedXZ = 0.0f;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_B_PAMET_VOICE);
-    Actor_PlaySfxAtPos(this->actor.parent, NA_SE_EN_FROG_VOICE1);
+    this->actor.speed = 0.0f;
+    Actor_PlaySfx(&this->actor, NA_SE_EN_B_PAMET_VOICE);
+    Actor_PlaySfx(this->actor.parent, NA_SE_EN_FROG_VOICE1);
     this->actionFunc = func_80A2855C;
 }
 
@@ -467,8 +468,8 @@ void func_80A2855C(EnBigpamet* this, PlayState* play) {
 void func_80A28618(EnBigpamet* this) {
     this->actor.draw = func_80A2966C;
     this->unk_2A8 = 0.5f;
-    this->actor.speedXZ = 0.0f;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PAMET_CUTTER_ON);
+    this->actor.speed = 0.0f;
+    Actor_PlaySfx(&this->actor, NA_SE_EN_PAMET_CUTTER_ON);
     this->actionFunc = func_80A2866C;
 }
 
@@ -498,7 +499,7 @@ void func_80A28708(EnBigpamet* this, PlayState* play) {
 }
 
 void func_80A28760(EnBigpamet* this) {
-    this->actor.speedXZ = 15.0f;
+    this->actor.speed = 15.0f;
     if (this->actor.bgCheckFlags & 8) {
         s16 temp_v1 = this->actor.yawTowardsPlayer - this->actor.wallYaw;
 
@@ -556,11 +557,11 @@ void func_80A287E8(EnBigpamet* this, PlayState* play) {
 }
 
 void func_80A28970(EnBigpamet* this) {
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PAMET_CUTTER_OFF);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_PAMET_CUTTER_OFF);
     this->actor.shape.rot.z = 0;
     this->collider.base.atFlags &= ~AT_ON;
     this->collider.info.bumper.dmgFlags = 0xF7CFFFFF;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actionFunc = func_80A289C8;
 }
 
@@ -617,12 +618,12 @@ void func_80A28B98(EnBigpamet* this, PlayState* play) {
     this->collider.base.acFlags &= ~AC_ON;
 
     this->actor.velocity.y = 22.0f;
-    this->actor.speedXZ = 5.0f;
+    this->actor.speed = 5.0f;
 
     if ((this->actor.draw == func_80A2966C) && (this->actionFunc != func_80A28DC0)) {
         this->actor.draw = EnBigpamet_Draw;
     } else if (this->collider.base.ac != NULL) {
-        this->actor.world.rot.y = BINANG_ROT180(Actor_YawBetweenActors(&this->actor, this->collider.base.ac));
+        this->actor.world.rot.y = BINANG_ROT180(Actor_WorldYawTowardActor(&this->actor, this->collider.base.ac));
     }
 
     this->actor.shape.rot.y = this->actor.world.rot.y;
@@ -638,17 +639,17 @@ void func_80A28B98(EnBigpamet* this, PlayState* play) {
     collectible = Item_DropCollectible(play, &this->actor.world.pos, ITEM00_ARROWS_10);
     if (collectible != NULL) {
         collectible->velocity.y = 15.0f;
-        collectible->world.rot.y = Actor_YawToPoint(&this->actor, &this->actor.home.pos);
+        collectible->world.rot.y = Actor_WorldYawTowardPoint(&this->actor, &this->actor.home.pos);
     }
 
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_B_PAMET_REVERSE);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_B_PAMET_REVERSE);
     this->actionFunc = func_80A28D0C;
 }
 
 void func_80A28D0C(EnBigpamet* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime2);
     if (this->actor.bgCheckFlags & 1) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_HIPLOOP_LAND);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_HIPLOOP_LAND);
         func_80A27FE8(this, play);
         func_80A28D80(this);
     }
@@ -658,7 +659,7 @@ void func_80A28D0C(EnBigpamet* this, PlayState* play) {
 
 void func_80A28D80(EnBigpamet* this) {
     this->actor.draw = func_80A2966C;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actor.shape.rot.x = 0;
     this->actor.shape.rot.z = 0;
     this->unk_2A8 = 0.0f;
@@ -680,7 +681,7 @@ void func_80A28DC0(EnBigpamet* this, PlayState* play) {
 void func_80A28E40(EnBigpamet* this) {
     Animation_MorphToPlayOnce(&this->skelAnime2, &object_tl_Anim_000440, -2.0f);
     this->actor.flags |= ACTOR_FLAG_1;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actionFunc = func_80A28E98;
 }
 

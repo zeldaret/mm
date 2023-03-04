@@ -405,7 +405,7 @@ void func_80BDD1E0(EnZow* this, PlayState* play) {
 
 void func_80BDD350(EnZow* this, PlayState* play) {
     if (this->unk_2CA & 2) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_DIVE_WATER);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_DIVE_WATER);
         func_80BDCDA8(this, this->unk_2D0);
         this->actor.flags &= ~ACTOR_FLAG_1;
         this->skelAnime.playSpeed = 0.0f;
@@ -511,7 +511,7 @@ void func_80BDD6BC(EnZow* this, PlayState* play) {
     }
 
     if (this->actor.depthInWater < 54.0f) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_OUT_OF_WATER);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_OUT_OF_WATER);
         func_80BDCDA8(this, this->unk_2D0);
         func_80BDD04C(this, 1, ANIMMODE_ONCE);
         this->actor.flags |= ACTOR_FLAG_1;
