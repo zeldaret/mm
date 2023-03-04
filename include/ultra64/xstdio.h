@@ -1,6 +1,7 @@
-#ifndef _XSTDIO_H_
-#define _XSTDIO_H_
+#ifndef ULTRA64_XSTDIO_H
+#define ULTRA64_XSTDIO_H
 
+#include "ultratypes.h"
 #include "libc/stdarg.h"
 
 typedef struct {
@@ -29,5 +30,9 @@ typedef void* (*PrintCallback)(void*, const char*, size_t);
 #define FLAGS_MINUS 4
 #define FLAGS_HASH 8
 #define FLAGS_ZERO 16
+
+s32 _Printf(PrintCallback pfn, void* arg, const char* fmt, va_list ap);
+void _Litob(_Pft* args, u8 type);
+void _Ldtob(_Pft* args, u8 type);
 
 #endif

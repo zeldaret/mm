@@ -1,8 +1,6 @@
 #ifndef STDARG_H
 #define STDARG_H
 
-#include "ultra64.h"
-
 // When building with GCC, use the official vaarg macros to avoid warnings
 // and possibly bad codegen.
 #ifdef __GNUC__

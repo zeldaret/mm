@@ -12,7 +12,6 @@
 
 #include "irqmgr.h"
 #include "scheduler.h"
-#include "xstdio.h"
 
 #include "color.h"
 #include "ichain.h"

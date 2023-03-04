@@ -1,4 +1,5 @@
 #include "global.h"
+#include "libc/string.h"
 
 #define BUFF_LEN 0x20
 

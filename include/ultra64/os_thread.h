@@ -77,5 +77,7 @@ OSId osGetThreadId(OSThread* t);
 void osSetThreadPri(OSThread* t, OSPri p);
 OSPri osGetThreadPri(OSThread* t);
 
+// internal
+OSThread* __osGetActiveQueue(void);
 
 #endif

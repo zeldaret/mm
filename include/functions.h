@@ -179,8 +179,6 @@ u32 Rand_Next_Variable(u32* rndNum);
 f32 Rand_ZeroOne_Variable(u32* rndNum);
 f32 Rand_Centered_Variable(u32* rndNum);
 
-void* proutSprintf(void* dst, const char* fmt, size_t size);
-s32 vsprintf(char* dst, char* fmt, va_list args);
 s32 PrintUtils_VPrintf(PrintCallback* pfn, const char* fmt, va_list args);
 s32 PrintUtils_Printf(PrintCallback* pfn, const char* fmt, ...);
 void Sleep_Cycles(OSTime time);
@@ -189,55 +187,6 @@ void Sleep_Usec(u32 usec);
 void Sleep_Msec(u32 ms);
 void Sleep_Sec(u32 sec);
 
-s32 __osPfsGetNextPage(OSPfs* pfs, u8* bank, __OSInode* inode, __OSInodeUnit* page);
-// void __osPfsRequestOneChannel(void);
-// void __osPfsGetOneChannelData(void);
-
-void __osPiCreateAccessQueue(void);
-void __osPiGetAccess(void);
-void __osPiRelAccess(void);
-void __osDevMgrMain(void* arg);
-// void func_8008C640(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE1 param_6, UNK_TYPE1 param_7, UNK_TYPE1 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10, UNK_TYPE4 param_11, UNK_TYPE4 param_12, UNK_TYPE4 param_13, UNK_TYPE4 param_14, UNK_TYPE4 param_15, UNK_TYPE4 param_16, UNK_TYPE4 param_17, UNK_TYPE4 param_18);
-s32 __osPiRawStartDma(s32 direction, uintptr_t devAddr, void* dramAddr, size_t size);
-u32 osGetMemSize(void);
-s32 osAfterPreNMI(void);
-s32 _Printf(PrintCallback pfn, void* arg, const char* fmt, va_list ap);
-void _Putfld(_Pft* px, va_list* pap, u8 code, u8* ac);
-
-void osUnmapTLBAll(void);
-const char* strchr(const char* s, s32 c);
-size_t strlen(const char* s);
-void* memcpy(void* s1, const void* s2, size_t n);
-s32 __osEPiRawReadIo(OSPiHandle* handle, uintptr_t devAddr, u32* data);
-
-s32 __osEPiRawStartDma(OSPiHandle* handle, s32 direction, uintptr_t cartAddr, void* dramAddr, size_t size);
-
-void __osSetGlobalIntMask(u32 mask);
-
-s32 __osContChannelReset(OSMesgQueue* mq, s32 channel);
-s32 osAiSetFrequency(u32 frequency);
-OSThread* __osGetActiveQueue(void);
-u32 osDpGetStatus(void);
-void osDpSetStatus(u32 data);
-void __osResetGlobalIntMask(u32 mask);
-OSMesgQueue* osPiGetCmdQueue(void);
-
-// void guS2DInitBg(void);
-// void __osPfsCheckRamArea(void);
-u32 osAiGetLength(void);
-void osMapTLBRdb(void);
-s32 __osEPiRawWriteIo(OSPiHandle* handle, uintptr_t devAddr, u32 data);
-void _Ldtob(_Pft* args, u8 type);
-// void _Ldunscale(void);
-void _Genld(_Pft* px, u8 code, u8* p, s16 nsig, s16 xexp);
-ldiv_t ldiv(long numer, long denom);
-lldiv_t lldiv(long long numer, long long denom);
-void _Litob(_Pft* args, u8 type);
-// void viMgrMain(OSDevMgr* iParm1);
-OSThread* __osGetCurrFaultedThread(void);
-
-void __osGetHWIntrRoutine(s32 idx, OSMesgQueue** outQueue, OSMesg* outMsg);
-void __osSetHWIntrRoutine(s32 idx, OSMesgQueue* queue, OSMesg msg);
 f32 fmodf(f32 dividend, f32 divisor);
 void* __osMemset(void* ptr, s32 val, size_t size);
 s32 __osStrcmp(const char* str1, const char* str2);
@@ -2599,8 +2548,6 @@ void AudioThread_InitMesgQueues(void);
 
 void Audio_InvalDCache(void* buf, size_t size);
 void Audio_WritebackDCache(void* buf, size_t size);
-
-s32 osAiSetNextBuffer(void* buf, u32 size);
 
 void AudioPlayback_NoteDisable(Note* note);
 void AudioPlayback_ProcessNotes(void);
