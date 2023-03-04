@@ -11,4 +11,7 @@
 #define DEVICE_TYPE_SRAM    3   /* SRAM */
 #define DEVICE_TYPE_INIT    7   /* initial value */
 
+#define IO_READ(addr)       (*(vu32*)PHYS_TO_K1(addr))
+#define IO_WRITE(addr,data) (*(vu32*)PHYS_TO_K1(addr)=(u32)(data))
+
 #endif
