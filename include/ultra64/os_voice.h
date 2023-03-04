@@ -35,7 +35,7 @@ s32 osVoiceMaskDictionary(OSVoiceHandle *, u8 *, int);
 void osVoiceCountSyllables(u8 *, u32 *);
 
 // internal
-u8 __osVoiceContDataCrc(u8* data, u32 length);
+u8 __osVoiceContDataCrc(u8* data, u32 numBytes);
 s32 __osVoiceCheckResult(OSVoiceHandle* hd, u8* stat);
 s32 __osVoiceContRead2(OSMesgQueue* mq, int channel, u16 address, u8* buffer);
 s32 __osVoiceContRead36(OSMesgQueue* mq, s32 channel, u16 address, u8* buffer);
