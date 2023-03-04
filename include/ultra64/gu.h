@@ -1,6 +1,10 @@
 #ifndef ULTRA64_GU_H
 #define ULTRA64_GU_H
 
+#include "ultratypes.h"
+#include "gbi.h"
+
+
 #ifndef MAX
 #define MAX(a,b) (((a)>(b))?(a):(b))
 #endif
@@ -40,7 +44,7 @@ void guPosition(Mtx* m, f32 rot, f32 pitch, f32 yaw, f32 scale, f32 x, f32 y, f3
 void guPositionF(float mf[4][4], f32 rot, f32 pitch, f32 yaw, f32 scale, f32 x, f32 y, f32 z);
 
 void guMtxF2L(float mf[4][4], Mtx* m);
-void guMtxL2F(MtxF* m1, Mtx* m2);
+void guMtxL2F(float m1[4][4], Mtx* m2);
 
 void guNormalize(float* x, float* y, float* z);
 
