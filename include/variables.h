@@ -294,9 +294,6 @@ extern u32 sYaz0CurRomStart;
 extern u32 sYaz0CurSize;
 extern u8* sYaz0MaxPtr;
 extern void* gYaz0DecompressDstEnd;
-// extern UNK_TYPE4 D_8009BE30;
-// extern UNK_TYPE4 D_8009BE34;
-// extern FaultClient romInfoFaultClient;
 
 extern FaultThreadStruct gFaultStruct;
 

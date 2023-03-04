@@ -7,6 +7,7 @@
 #include "z_title.h"
 #include "z64shrink_window.h"
 #include "z64view.h"
+#include "CIC6105.h"
 #include "overlays/gamestates/ovl_opening/z_opening.h"
 #include "misc/nintendo_rogo_static/nintendo_rogo_static.h"
 

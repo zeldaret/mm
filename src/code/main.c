@@ -6,6 +6,7 @@
 
 #include "global.h"
 #include "buffers.h"
+#include "CIC6105.h"
 #include "stack.h"
 
 extern OSMesgQueue sSiIntMsgQ;

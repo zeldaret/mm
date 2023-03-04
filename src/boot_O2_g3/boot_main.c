@@ -1,6 +1,7 @@
 #include "prevent_bss_reordering.h"
 #include "global.h"
 #include "stack.h"
+#include "CIC6105.h"
 
 StackEntry sBootStackInfo;
 OSThread sIdleThread;
