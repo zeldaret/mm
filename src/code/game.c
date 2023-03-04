@@ -2,6 +2,7 @@
 #include "system_malloc.h"
 #include "z64rumble.h"
 #include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
+#include "libc/assert.h"
 
 s32 gFramerateDivisor = 1;
 f32 gFramerateDivisorF = 1.0f;

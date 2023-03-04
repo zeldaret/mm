@@ -1,29 +1,8 @@
-#ifndef _ULTRA64_THREAD_H_
-#define _ULTRA64_THREAD_H_
+#ifndef ULTRA64_OS_THREAD_H
+#define ULTRA64_OS_THREAD_H
 
-#include "ultra64/ultratypes.h"
+#include "ultratypes.h"
 
-#define OS_PRIORITY_IDLE         10
-#define OS_PRIORITY_MAIN         10
-#define OS_PRIORITY_GRAPH        11
-#define OS_PRIORITY_AUDIOMGR     12
-#define OS_PRIORITY_PADMGR       14
-#define OS_PRIORITY_SCHED        15
-#define OS_PRIORITY_DMAMGR       16
-#define OS_PRIORITY_IRQMGR       17
-#define OS_PRIORITY_PIMGR        150
-#define OS_PRIORITY_FAULTCLIENT  126
-#define OS_PRIORITY_FAULT        127
-#define OS_PRIORITY_APPMAX       127
-#define OS_PRIORITY_RMONSPIN     200
-#define OS_PRIORITY_RMON         250
-#define OS_PRIORITY_VIMGR        254
-#define OS_PRIORITY_MAX          255
-
-#define OS_STATE_STOPPED    (1 << 0)
-#define OS_STATE_RUNNABLE   (1 << 1)
-#define OS_STATE_RUNNING    (1 << 2)
-#define OS_STATE_WAITING    (1 << 3)
 
 typedef s32 OSPri;
 typedef s32 OSId;
@@ -65,5 +44,38 @@ typedef struct OSThread {
     /*0x1C*/ __OSThreadprofile* thprof;
     /*0x20*/ __OSThreadContext context;
 } OSThread; // size = 0x1B0
+
+#define OS_STATE_STOPPED    (1 << 0)
+#define OS_STATE_RUNNABLE   (1 << 1)
+#define OS_STATE_RUNNING    (1 << 2)
+#define OS_STATE_WAITING    (1 << 3)
+
+#define OS_PRIORITY_IDLE         10
+#define OS_PRIORITY_MAIN         10
+#define OS_PRIORITY_GRAPH        11
+#define OS_PRIORITY_AUDIOMGR     12
+#define OS_PRIORITY_PADMGR       14
+#define OS_PRIORITY_SCHED        15
+#define OS_PRIORITY_DMAMGR       16
+#define OS_PRIORITY_IRQMGR       17
+#define OS_PRIORITY_PIMGR        150
+#define OS_PRIORITY_FAULTCLIENT  126
+#define OS_PRIORITY_FAULT        127
+#define OS_PRIORITY_APPMAX       127
+#define OS_PRIORITY_RMONSPIN     200
+#define OS_PRIORITY_RMON         250
+#define OS_PRIORITY_VIMGR        254
+#define OS_PRIORITY_MAX          255
+
+
+void osCreateThread(OSThread* t, OSId id, void* entry, void* arg, void* sp, OSPri p);
+void osDestroyThread(OSThread* t);
+void osYieldThread(void);
+void osStartThread(OSThread* t);
+void osStopThread(OSThread* t);
+OSId osGetThreadId(OSThread* t);
+void osSetThreadPri(OSThread* t, OSPri p);
+OSPri osGetThreadPri(OSThread* t);
+
 
 #endif

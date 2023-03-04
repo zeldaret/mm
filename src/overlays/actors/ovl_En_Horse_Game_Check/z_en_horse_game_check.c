@@ -6,6 +6,7 @@
 
 #include "z_en_horse_game_check.h"
 #include "objects/object_horse_game_check/object_horse_game_check.h"
+#include "libc/assert.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 

@@ -1,7 +1,9 @@
 #include "mbi.h"
 
-#ifndef _ULTRA64_GBI_H_
-#define _ULTRA64_GBI_H_
+#ifndef ULTRA64_GBI_H
+#define ULTRA64_GBI_H
+
+#include "ultratypes.h"
 
 /* To enable Fast3DEX grucode support, define F3DEX_GBI. */
 
@@ -1053,6 +1055,27 @@ typedef struct {
 	unsigned char	flag;
 	unsigned char	v[3];
 } Tri;
+
+typedef long int Mtx_t[4][4];
+typedef union {
+    Mtx_t m;
+    struct {
+        u16 intPart[4][4];
+        u16 fracPart[4][4];
+    };
+    long long int force_structure_alignment;
+} Mtx; // size = 0x40
+
+typedef float MtxF_t[4][4];
+typedef union {
+    MtxF_t mf;
+    struct {
+        float xx, yx, zx, wx,
+              xy, yy, zy, wy,
+              xz, yz, zz, wz,
+              xw, yw, zw, ww;
+    };
+} MtxF; // size = 0x40
 
 /*
  * Viewport

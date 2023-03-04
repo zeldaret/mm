@@ -5,6 +5,7 @@
  */
 
 #include "z_eff_ss_kakera.h"
+#include "libc/assert.h"
 
 #define rReg0 regs[0]
 #define rGravity regs[1]

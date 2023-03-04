@@ -3,7 +3,7 @@
 
 #include "ultra64/ultratypes.h"
 #include "ultra64/sched.h"
-#include "ultra64/message.h"
+#include "ultra64/os_message.h"
 
 typedef struct IrqMgrClient {
     /* 0x0 */ struct IrqMgrClient* next;

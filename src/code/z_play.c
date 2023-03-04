@@ -7,6 +7,7 @@
 #include "overlays/gamestates/ovl_opening/z_opening.h"
 #include "overlays/gamestates/ovl_file_choose/z_file_choose.h"
 #include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
+#include "libc/assert.h"
 
 s32 gDbgCamEnabled = false;
 u8 D_801D0D54 = false;

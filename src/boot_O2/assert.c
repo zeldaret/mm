@@ -1,6 +1,6 @@
 #include "global.h"
 
-void __assert(const char* file, u32 lineNum) {
+void __assert(const char* file, int lineNum) {
     osGetThreadId(NULL);
     Fault_AddHungupAndCrash(file, lineNum);
 }

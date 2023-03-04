@@ -9,6 +9,7 @@
  *  The main difference between them seems to be the lack of vRamEnd arguments here.
  *  Instead they are calculated on the fly.
  */
+
 #include "global.h"
 #include "system_malloc.h"
 #include "z64load.h"

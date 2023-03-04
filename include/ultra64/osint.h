@@ -1,8 +1,7 @@
-#ifndef _OSINT_H_
-#define _OSINT_H_
+#ifndef ULTRA64_OSINT_H
+#define ULTRA64_OSINT_H
 
-// TODO should be in libultra/os
-
+#include "os_message.h"
 #include "os.h"
 #include "os_internal.h"
 
@@ -18,6 +17,6 @@ typedef struct {
 } __OSThreadTail;
 
 extern __osHwInt __osHwIntTable[];
-extern __OSEventState __osEventStateTab[];
+extern __OSEventState __osEventStateTab[OS_NUM_EVENTS];
 
 #endif

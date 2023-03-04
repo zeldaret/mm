@@ -1,4 +1,5 @@
 #include "global.h"
+#include "libc/assert.h"
 
 void Room_nop8012D510(PlayState* play, Room* room, UNK_PTR param_3, UNK_TYPE1 param_4) {
 }

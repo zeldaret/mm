@@ -1,5 +1,10 @@
-#ifndef _OS_INTERNAL_H_
-#define _OS_INTERNAL_H_
+#ifndef ULTRA64_OS_INTERNAL_H
+#define ULTRA64_OS_INTERNAL_H
+
+#include "ultratypes.h"
+#include "os_message.h"
+#include "os_pi.h"
+
 
 typedef struct {
     /* 0x00 */ OSMesgQueue* queue;

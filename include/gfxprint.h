@@ -4,6 +4,7 @@
 #include "color.h"
 #include "ultra64/gbi.h"
 #include "ultra64/ultratypes.h"
+#include "unk.h"
 #include "xstdio.h"
 
 #define GFXP_UNUSED "\x8E"

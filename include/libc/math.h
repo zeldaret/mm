@@ -27,8 +27,6 @@ extern f32 __libm_qnan_f;
 
 float fabsf(float f);
 #pragma intrinsic(fabsf)
-float sqrtf(float f);
-#pragma intrinsic(sqrtf)
 double sqrt(double d);
 #pragma intrinsic(sqrt)
 

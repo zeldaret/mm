@@ -2,7 +2,7 @@
 #define _ULTRA64_VI_H_
 
 #include "ultra64/ultratypes.h"
-#include "ultra64/message.h"
+#include "ultra64/os_message.h"
 
 /* Special Features */
 #define OS_VI_GAMMA_ON          (1 << 0)

@@ -1,7 +1,19 @@
-#ifndef _ULTRA64_MESSAGE_H_
-#define _ULTRA64_MESSAGE_H_
+#ifndef ULTRA64_OS_MESSAGE_H
+#define ULTRA64_OS_MESSAGE_H
 
-#include "ultra64/thread.h"
+#include "os_thread.h"
+
+typedef void* OSMesg;
+typedef u32 OSEvent;
+
+typedef struct OSMesgQueue {
+    /* 0x00 */ OSThread* mtQueue;
+    /* 0x04 */ OSThread* fullQueue;
+    /* 0x08 */ s32 validCount;
+    /* 0x0C */ s32 first;
+    /* 0x10 */ s32 msgCount;
+    /* 0x14 */ OSMesg* msg;
+} OSMesgQueue; // size = 0x18
 
 #define OS_NUM_EVENTS               15
 
@@ -30,24 +42,20 @@
 #define OS_EVENT_RDB_FLUSH_PROF     21
 #define OS_EVENT_RDB_ACK_PROF       22
 
-typedef void* OSMesg;
-typedef u32 OSEvent;
-
 #define OS_MESG_NOBLOCK  0
 #define OS_MESG_BLOCK    1
 
-typedef struct OSMesgQueue {
-    /* 0x00 */ OSThread* mtQueue;
-    /* 0x04 */ OSThread* fullQueue;
-    /* 0x08 */ s32 validCount;
-    /* 0x0C */ s32 first;
-    /* 0x10 */ s32 msgCount;
-    /* 0x14 */ OSMesg* msg;
-} OSMesgQueue; // size = 0x18
+#define MQ_GET_COUNT(mq)    ((mq)->validCount)
 
-#define MQ_COUNT(mq)    ((mq)->validCount)
+#define MQ_IS_EMPTY(mq) (MQ_GET_COUNT(mq) == 0)
+#define MQ_IS_FULL(mq)  (MQ_GET_COUNT(mq) >= (mq)->msgCount)
 
-#define MQ_IS_EMPTY(mq) (MQ_COUNT(mq) == 0)
-#define MQ_IS_FULL(mq)  (MQ_COUNT(mq) >= (mq)->msgCount)
+void osCreateMesgQueue(OSMesgQueue* mq, OSMesg* msq, s32 count);
+s32 osSendMesg(OSMesgQueue* mq, OSMesg msg, s32 flags);
+s32 osJamMesg(OSMesgQueue* mq, OSMesg msg, s32 flag);
+s32 osRecvMesg(OSMesgQueue* mq, OSMesg* msg, s32 flags);
+
+void osSetEventMesg(OSEvent e, OSMesgQueue* mq, OSMesg m);
+
 
 #endif

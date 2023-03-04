@@ -1,4 +1,5 @@
 #include "global.h"
+#include "libc/assert.h"
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_vimode/func_80140260.s")
 
