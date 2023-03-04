@@ -1,4 +1,5 @@
 #include "global.h"
+#include "fault.h"
 
 // Init Vars declarations (also used in the table below)
 #define DEFINE_ACTOR(name, _enumValue, _allocType, _debugName) extern ActorInit name##_InitVars;

@@ -1,11 +1,36 @@
+#include "fault.h"
 #include "global.h"
 #include "vt.h"
+
+typedef struct {
+    /* 0x00 */ u16* fb;
+    /* 0x04 */ u16 w;
+    /* 0x06 */ u16 h;
+    /* 0x08 */ u16 yStart;
+    /* 0x0A */ u16 yEnd;
+    /* 0x0C */ u16 xStart;
+    /* 0x0E */ u16 xEnd;
+    /* 0x10 */ u16 foreColor;
+    /* 0x12 */ u16 backColor;
+    /* 0x14 */ u16 cursorX;
+    /* 0x16 */ u16 cursorY;
+    /* 0x18 */ const u32* font;
+    /* 0x1C */ u8 charW;
+    /* 0x1D */ u8 charH;
+    /* 0x1E */ s8 charWPad;
+    /* 0x1F */ s8 charHPad;
+    /* 0x20 */ u16 printColors[10];
+    /* 0x34 */ u8 escCode;
+    /* 0x35 */ u8 osSyncPrintfEnabled;
+    /* 0x38 */ FaultDrawerCallback inputCallback;
+} FaultDrawer; // size = 0x3C
 
 extern const u32 sFaultDrawerFont[];
 
 FaultDrawer sFaultDrawerStruct;
 
 FaultDrawer* sFaultDrawContext = &sFaultDrawerStruct;
+
 FaultDrawer sFaultDrawerDefault = {
     FAULT_FB_ADDRESS,                   // fb
     SCREEN_WIDTH,                       // w

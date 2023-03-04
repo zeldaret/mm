@@ -1,6 +1,15 @@
+#include "fault.h"
 #include "ultra64.h"
 #include "global.h"
 #include "vt.h"
+
+extern FaultMgr* sFaultContext;
+extern f32 D_8009BE54;
+extern u32 faultCustomOptions;
+extern u32 faultCopyToLog;
+extern u8 sFaultStack[0x600];
+extern StackEntry sFaultThreadInfo;
+extern FaultMgr gFaultMgr;
 
 // data
 const char* sCpuExceptions[] = {
@@ -876,8 +885,8 @@ void Fault_SetFB(void* fb, u16 w, u16 h) {
 }
 
 void Fault_Start(void) {
-    sFaultContext = &gFaultStruct;
-    bzero(sFaultContext, sizeof(FaultThreadStruct));
+    sFaultContext = &gFaultMgr;
+    bzero(sFaultContext, sizeof(FaultMgr));
     FaultDrawer_Init();
     FaultDrawer_SetInputCallback(Fault_WaitForInput);
     sFaultContext->exitDebugger = 0;
@@ -887,7 +896,7 @@ void Fault_Start(void) {
     sFaultContext->padCallback = &Fault_PadCallback;
     sFaultContext->clients = NULL;
     sFaultContext->faultActive = 0;
-    gFaultStruct.faultHandlerEnabled = 1;
+    gFaultMgr.faultHandlerEnabled = 1;
     osCreateMesgQueue(&sFaultContext->queue, sFaultContext->msg, ARRAY_COUNT(sFaultContext->msg));
     StackCheck_Init(&sFaultThreadInfo, sFaultStack, sFaultStack + sizeof(sFaultStack), 0, 0x100, "fault");
     osCreateThread(&sFaultContext->thread, 2, Fault_ThreadEntry, NULL, sFaultStack + sizeof(sFaultStack), 0x7F);

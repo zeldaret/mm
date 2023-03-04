@@ -3,7 +3,9 @@
  * reordering than just prevent_bss_reordering.h: there is too much of it to control, and it cannot be split into
  * separate files since most of it is at addresses ending in 8.
  */
+
 #include "global.h"
+#include "fault.h"
 
 void Main(void* arg) {
     intptr_t fb;

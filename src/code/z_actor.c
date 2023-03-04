@@ -4,6 +4,7 @@
  */
 
 #include "global.h"
+#include "fault.h"
 #include "z64load.h"
 #include "z64quake.h"
 #include "z64rumble.h"

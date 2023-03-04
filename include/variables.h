@@ -33,8 +33,7 @@ extern volatile OSTime sIrqMgrRetraceTime;
 extern s32 sIrqMgrRetraceCount;
 extern const char* sCpuExceptions[18];
 extern const char* sFpuExceptions[6];
-extern FaultDrawer* sFaultDrawContext;
-extern FaultDrawer sFaultDrawerDefault;
+
 extern s32 gLoadLogSeverity;
 extern s32 gLoad2LogSeverity;
 extern StackEntry* sStackInfoListStart;
@@ -312,14 +311,7 @@ extern void* gYaz0DecompressDstEnd;
 // extern UNK_TYPE4 D_8009BE30;
 // extern UNK_TYPE4 D_8009BE34;
 // extern FaultClient romInfoFaultClient;
-extern FaultThreadStruct* sFaultContext;
-extern f32 D_8009BE54;
-extern u32 faultCustomOptions;
-extern u32 faultCopyToLog;
-extern u8 sFaultStack[0x600];
-extern StackEntry sFaultThreadInfo;
-extern FaultThreadStruct gFaultStruct;
-extern FaultDrawer sFaultDrawerStruct;
+
 // extern UNK_TYPE4 D_8009CD10;
 extern u32 sRandFloat;
 // extern UNK_TYPE4 sArenaLockMsg;
@@ -2305,8 +2297,7 @@ extern f32 D_801ED8D0;
 // extern UNK_TYPE1 D_801ED8DC;
 extern Mtx D_801ED8E0;
 // extern UNK_TYPE1 D_801ED920;
-extern FaultClient D_801ED930;
-extern FaultAddrConvClient D_801ED940;
+
 extern char D_801ED950[80];
 extern char D_801ED9A0[80];
 extern Vec3f D_801ED9F0[3];
@@ -2477,7 +2468,7 @@ extern s16 D_801F4E7A;
 // extern UNK_TYPE1 D_801F6B58;
 extern void (*sKaleidoScopeUpdateFunc)(PlayState* play);
 extern void (*sKaleidoScopeDrawFunc)(PlayState* play);
-extern FaultAddrConvClient sKaleidoAreaFaultClient;
+
 extern s16 sTransitionFillTimer;
 extern Input D_801F6C18;
 extern TransitionTile sTransitionTile;
@@ -2499,11 +2490,9 @@ extern struct_801F8010 D_801F8010;
 extern struct_801F8020 D_801F8020;
 extern VisMono sMonoColors;
 extern UNK_TYPE1 D_801F8048;
-extern FaultAddrConvClient sGraphFaultAddrConvClient;
-extern FaultClient sGraphFaultClient;
+
 extern GfxMasterList* gGfxMasterDL;
-extern CfbInfo sGraphCfbInfos[3];
-extern OSTime sGraphTaskStartTime;
+
 extern OSMesgQueue sSiIntMsgQ;
 extern OSMesg sSiIntMsgBuf[1];
 extern u32 gSegments[NUM_SEGMENTS];
@@ -2522,11 +2511,7 @@ extern StackEntry audioStackEntry;
 extern StackEntry padmgrStackEntry;
 extern AudioMgr audioContext;
 extern PadMgr D_801FB620;
-extern FaultClient sSchedFaultClient;
-extern OSTime sRSPGFXStartTime;
-extern OSTime sRSPAudioStartTime;
-extern OSTime sRSPOtherStartTime;
-extern OSTime sRDPStartTime;
+
 extern u64* gAudioSPDataPtr;
 extern u32 gAudioSPDataSize;
 extern volatile OSTime D_801FBAE0;

@@ -1,5 +1,6 @@
 #include "prevent_bss_reordering.h"
 #include "global.h"
+#include "fault.h"
 
 UNK_TYPE4 D_8009BE30;
 UNK_TYPE4 D_8009BE34;

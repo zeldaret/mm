@@ -1,4 +1,18 @@
-#include "global.h"
+#include "z64.h"
+#include "regs.h"
+#include "functions.h"
+#include "fault.h"
+
+// Variables are put before most headers as a hacky way to bypass bss reordering
+FaultAddrConvClient sGraphFaultAddrConvClient;
+FaultClient sGraphFaultClient;
+GfxMasterList* gGfxMasterDL;
+CfbInfo sGraphCfbInfos[3];
+OSTime sGraphTaskStartTime;
+
+#include "variables.h"
+
+#include "macros.h"
 #include "system_malloc.h"
 #include "overlays/gamestates/ovl_daytelop/z_daytelop.h"
 #include "overlays/gamestates/ovl_file_choose/z_file_choose.h"
@@ -6,12 +20,6 @@
 #include "overlays/gamestates/ovl_select/z_select.h"
 #include "overlays/gamestates/ovl_title/z_title.h"
 #include "z_title_setup.h"
-
-FaultAddrConvClient sGraphFaultAddrConvClient;
-FaultClient sGraphFaultClient;
-GfxMasterList* gGfxMasterDL;
-CfbInfo sGraphCfbInfos[3];
-OSTime sGraphTaskStartTime;
 
 void Graph_FaultClient(void) {
     FaultDrawer_DrawText(30, 100, "ShowFrameBuffer PAGE 0/1");

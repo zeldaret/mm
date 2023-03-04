@@ -1,4 +1,5 @@
 #include "global.h"
+#include "fault.h"
 #include "z64load.h"
 
 #define KALEIDO_OVERLAY(name)                                                                        \
