@@ -235,7 +235,7 @@ void func_80B287F4(EnFish2* this, s32 arg1) {
         if (arg1 == 0) {
             this->unk_338 = 410.0f - this->unk_2C4;
         }
-        Math_ApproachF(&this->unk_350->speedXZ, (D_80B2B380[0] - this->unk_330) * this->unk_338, 0.1f, 0.4f);
+        Math_ApproachF(&this->unk_350->speed, (D_80B2B380[0] - this->unk_330) * this->unk_338, 0.1f, 0.4f);
     }
     Math_Vec3f_Copy(&sp2C, &this->unk_350->world.pos);
     this->unk_34A = Math_Vec3f_Yaw(&this->actor.world.pos, &sp2C);
@@ -377,14 +377,14 @@ void func_80B28C14(EnFish2* this, PlayState* play) {
     }
 
     if (this->unk_2B4 == 0) {
-        Math_ApproachF(&this->actor.speedXZ, (D_80B2B380[0] - this->unk_330) * 400.0f, 0.3f, 0.3f);
-        if (this->actor.speedXZ > 3.0f) {
-            this->actor.speedXZ = 3.0f;
-        } else if (this->actor.speedXZ < 1.5f) {
-            this->actor.speedXZ = 1.5f;
+        Math_ApproachF(&this->actor.speed, (D_80B2B380[0] - this->unk_330) * 400.0f, 0.3f, 0.3f);
+        if (this->actor.speed > 3.0f) {
+            this->actor.speed = 3.0f;
+        } else if (this->actor.speed < 1.5f) {
+            this->actor.speed = 1.5f;
         }
     } else {
-        Math_ApproachZeroF(&this->actor.speedXZ, 0.3f, 0.3f);
+        Math_ApproachZeroF(&this->actor.speed, 0.3f, 0.3f);
     }
 
     if ((D_80B2B2E8 == 0) && (D_80B2B2E0 != 2)) {
@@ -448,7 +448,7 @@ void func_80B29194(EnFish2* this) {
     }
 
     this->unk_2C4 = 0;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     if (this->unk_2C8 == 0) {
         this->unk_34C = 400;
         Math_Vec3f_Copy(&this->actor.world.pos, &this->unk_324);
@@ -463,12 +463,12 @@ void func_80B29194(EnFish2* this) {
 
 void func_80B29250(EnFish2* this, PlayState* play) {
     if (!func_80B28478(this)) {
-        Math_ApproachF(&this->actor.speedXZ, (D_80B2B380[0] - this->unk_330) * 1000.0f, 0.3f, 0.3f);
+        Math_ApproachF(&this->actor.speed, (D_80B2B380[0] - this->unk_330) * 1000.0f, 0.3f, 0.3f);
 
-        if (this->actor.speedXZ > 4.0f) {
-            this->actor.speedXZ = 4.0f;
-        } else if (this->actor.speedXZ < 2.0f) {
-            this->actor.speedXZ = 2.0f;
+        if (this->actor.speed > 4.0f) {
+            this->actor.speed = 4.0f;
+        } else if (this->actor.speed < 2.0f) {
+            this->actor.speed = 2.0f;
         }
 
         func_80B287F4(this, 0);
@@ -492,12 +492,12 @@ void func_80B293C4(EnFish2* this, PlayState* play) {
 
     if (func_80B28478(this) == 0) {
         func_80B287F4(this, 1);
-        Math_ApproachF(&this->actor.speedXZ, (*D_80B2B380 - this->unk_330) * 1000.0f, 0.3f, 0.3f);
+        Math_ApproachF(&this->actor.speed, (*D_80B2B380 - this->unk_330) * 1000.0f, 0.3f, 0.3f);
 
-        if (this->actor.speedXZ > 3.0f) {
-            this->actor.speedXZ = 3.0f;
-        } else if (this->actor.speedXZ < 1.0f) {
-            this->actor.speedXZ = 1.0f;
+        if (this->actor.speed > 3.0f) {
+            this->actor.speed = 3.0f;
+        } else if (this->actor.speed < 1.0f) {
+            this->actor.speed = 1.0f;
         }
 
         if (this->unk_2CC <= currentFrame) {
@@ -526,11 +526,11 @@ void func_80B2951C(EnFish2* this) {
     }
 
     this->unk_2B4 = 10;
-    this->actor.speedXZ = 3.0f;
+    this->actor.speed = 3.0f;
     Actor_Kill(this->unk_350);
     this->unk_350 = NULL;
     D_80B2B2F4 = &this->actor;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DODO_M_EAT);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_DODO_M_EAT);
     this->actionFunc = func_80B295A4;
 }
 
@@ -542,7 +542,7 @@ void func_80B295A4(EnFish2* this, PlayState* play) {
 
     SkelAnime_Update(&this->skelAnime);
     Math_SmoothStepToS(&this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &play->view.eye), 1, 0x1388, 0);
-    Math_ApproachZeroF(&this->actor.speedXZ, 0.3f, 0.3f);
+    Math_ApproachZeroF(&this->actor.speed, 0.3f, 0.3f);
     if (this->unk_2B4 != 0) {
         Math_Vec3f_Copy(&sp60, &this->unk_318);
         sp60.x += randPlusMinusPoint5Scaled(100.0f);
@@ -576,7 +576,7 @@ void func_80B29778(EnFish2* this) {
     }
     this->actionFunc = func_80B297FC;
     this->unk_324.y = this->unk_2D4;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
 }
 
 void func_80B297FC(EnFish2* this, PlayState* play) {
@@ -605,7 +605,7 @@ void func_80B297FC(EnFish2* this, PlayState* play) {
             if ((fabsf(this->actor.world.pos.x - this->unk_324.x) < 2.0f) &&
                 (this->actor.world.pos.y < (this->unk_2D4 + 3.0f)) &&
                 (fabsf(this->actor.world.pos.z - this->unk_324.z) < 2.0f)) {
-                this->actor.speedXZ = 0.0f;
+                this->actor.speed = 0.0f;
                 this->unk_34A = BINANG_ROT180(this->actor.home.rot.y);
                 this->unk_2C4++;
                 this->actor.velocity.y = 0.0f;
@@ -638,7 +638,7 @@ void func_80B297FC(EnFish2* this, PlayState* play) {
                 }
 
                 this->unk_2B6 = 4;
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_FISH_GROW_UP);
+                Actor_PlaySfx(&this->actor, NA_SE_EV_FISH_GROW_UP);
                 this->unk_2C4++;
             }
             break;
@@ -770,8 +770,8 @@ void func_80B29EE4(EnFish2* this, PlayState* play) {
         this->unk_2C4++;
     }
     this->unk_338 = 410.0f - this->unk_2C4;
-    Math_ApproachF(&this->actor.speedXZ, 2.0f, 0.3f, 0.3f);
-    Math_ApproachF(&this->unk_350->speedXZ, (D_80B2B380[0] - this->unk_330) * this->unk_338, 0.1f, 0.4f);
+    Math_ApproachF(&this->actor.speed, 2.0f, 0.3f, 0.3f);
+    Math_ApproachF(&this->unk_350->speed, (D_80B2B380[0] - this->unk_330) * this->unk_338, 0.1f, 0.4f);
     func_80B289DC(this, play);
     Math_Vec3f_Copy(&sp2C, &this->unk_350->world.pos);
     this->unk_34A = Math_Vec3f_Yaw(&this->actor.world.pos, &sp2C);
@@ -887,9 +887,9 @@ void func_80B2A498(EnFish2* this, PlayState* play) {
         temp_v0 = Actor_Spawn(&play->actorCtx, play, ACTOR_EN_COL_MAN, sp80.x, sp80.y, sp80.z, 0,
                               this->actor.world.rot.y, 0, 0);
         if (temp_v0 != NULL) {
-            temp_v0->speedXZ = 4.0f;
+            temp_v0->speed = 4.0f;
             temp_v0->velocity.y = 15.0f;
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_PIECE_OF_HEART);
+            Actor_PlaySfx(&this->actor, NA_SE_SY_PIECE_OF_HEART);
             CLEAR_WEEKEVENTREG(WEEKEVENTREG_81_10);
             CLEAR_WEEKEVENTREG(WEEKEVENTREG_81_20);
             CLEAR_WEEKEVENTREG(WEEKEVENTREG_81_40);

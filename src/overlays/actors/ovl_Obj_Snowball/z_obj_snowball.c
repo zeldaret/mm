@@ -440,7 +440,7 @@ void func_80B03FF8(ObjSnowball* this, PlayState* play) {
         sp18->unk_04(this, play);
     }
 
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SNOWBALL_BROKEN);
+    Actor_PlaySfx(&this->actor, NA_SE_EV_SNOWBALL_BROKEN);
 
     if (rotY == 5) {
         Flags_SetSwitch(play, OBJSNOWBALL_GET_3F(&this->actor));
@@ -571,7 +571,7 @@ void func_80B04350(ObjSnowball* this, PlayState* play) {
             } else {
                 this->unk_209 = 10;
             }
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_REFLECTION_SNOW);
+            Actor_PlaySfx(&this->actor, NA_SE_IT_REFLECTION_SNOW);
         }
     }
 

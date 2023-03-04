@@ -227,10 +227,10 @@ void func_809AB4A8(ObjGrassCarry* this, PlayState* play) {
         Math_Vec3f_Copy(&this->actor.world.pos, &this->unk_194->unk_00);
         this->actor.shape.rot.y = this->actor.world.rot.y = this->unk_194->unk_0C;
         this->unk_198 = this2->unk_194->unk_0E;
-        this->actor.xzDistToPlayer = Actor_XZDistanceBetweenActors(&this->actor, &player->actor);
+        this->actor.xzDistToPlayer = Actor_WorldDistXZToActor(&this->actor, &player->actor);
         this->actor.playerHeightRel = Actor_HeightDiff(&this->actor, &player->actor);
         this->actor.xyzDistToPlayerSq = SQ(this->actor.xzDistToPlayer) + SQ(this->actor.playerHeightRel);
-        this->actor.yawTowardsPlayer = Actor_YawBetweenActors(&this->actor, &player->actor);
+        this->actor.yawTowardsPlayer = Actor_WorldYawTowardActor(&this->actor, &player->actor);
         Actor_LiftActor(&this->actor, play);
     }
 }
@@ -246,8 +246,8 @@ void func_809AB610(ObjGrassCarry* this, PlayState* play) {
 
     if (Actor_HasNoParent(&this->actor, play)) {
         func_809AB6FC(this);
-        this->actor.velocity.x = Math_SinS(this->actor.world.rot.y) * this->actor.speedXZ;
-        this->actor.velocity.z = Math_CosS(this->actor.world.rot.y) * this->actor.speedXZ;
+        this->actor.velocity.x = Math_SinS(this->actor.world.rot.y) * this->actor.speed;
+        this->actor.velocity.z = Math_CosS(this->actor.world.rot.y) * this->actor.speed;
         this->actor.gravity = -0.1f;
         this->actor.terminalVelocity = -17.0f;
         func_809AAF18(this);
