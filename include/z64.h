@@ -10,7 +10,7 @@
 
 #include "ultra64.h"
 #include "ultra64/gs2dex.h"
-#include "io/controller.h"
+#include "ultra64/controller.h"
 #include "osint.h"
 #include "os.h"
 #include "irqmgr.h"

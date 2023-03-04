@@ -1,7 +1,7 @@
 #ifndef MESSAGE_DATA_STATIC_H
 #define MESSAGE_DATA_STATIC_H
 
-#include "PR/ultratypes.h"
+#include "ultra64/ultratypes.h"
 
 typedef struct MessageTableEntry {
     /* 0x0 */ u16 textId;

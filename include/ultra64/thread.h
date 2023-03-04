@@ -1,7 +1,7 @@
 #ifndef _ULTRA64_THREAD_H_
 #define _ULTRA64_THREAD_H_
 
-#include "PR/ultratypes.h"
+#include "ultra64/ultratypes.h"
 
 #define OS_PRIORITY_IDLE         10
 #define OS_PRIORITY_MAIN         10

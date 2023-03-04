@@ -1,4 +1,4 @@
-#include "PR/ultratypes.h"
+#include "ultra64/ultratypes.h"
 #include "osint.h"
 #include "libc/stdint.h"
 #include "global.h"

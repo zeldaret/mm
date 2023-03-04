@@ -1,8 +1,8 @@
 #ifndef ULTRA64_MOTOR_H
 #define ULTRA64_MOTOR_H
 
-#include "PR/ultratypes.h"
-#include "PR/pfs.h"
+#include "ultra64/ultratypes.h"
+#include "ultra64/pfs.h"
 #include "ultra64/message.h"
 
 #define MOTOR_START             1

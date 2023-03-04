@@ -1,7 +1,7 @@
 #ifndef SCHED_H
 #define SCHED_H
 
-#include "PR/ultratypes.h"
+#include "ultra64/ultratypes.h"
 #include "ultra64/vi.h"
 #include "ultra64/sptask.h"
 

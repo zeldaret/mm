@@ -1,8 +1,8 @@
 #ifndef Z64_ANIMATION_H
 #define Z64_ANIMATION_H
 
-#include "PR/ultratypes.h"
-#include "PR/gbi.h"
+#include "ultra64/ultratypes.h"
+#include "ultra64/gbi.h"
 #include "z64dma.h"
 #include "z64math.h"
 

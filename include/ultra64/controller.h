@@ -1,8 +1,8 @@
 #ifndef _CONTROLLER_H_
 #define _CONTROLLER_H_
 
-#include "PR/ultratypes.h"
-#include "PR/pfs.h"
+#include "ultra64/ultratypes.h"
+#include "ultra64/pfs.h"
 
 #define SIAccessQueueSize 2
 #define BLOCKSIZE 32

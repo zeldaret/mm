@@ -1,7 +1,7 @@
 #ifndef STDDEF_H
 #define STDDEF_H
 
-#include "PR/ultratypes.h"
+#include "ultra64/ultratypes.h"
 
 typedef u32 size_t;
 

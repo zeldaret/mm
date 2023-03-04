@@ -1,8 +1,8 @@
 #ifndef SCHEDULER_H
 #define SCHEDULER_H
 
-#include "PR/ultratypes.h"
-#include "PR/sched.h"
+#include "ultra64/ultratypes.h"
+#include "ultra64/sched.h"
 #include "ultra64/vi.h"
 #include "ultra64/sptask.h"
 #include "irqmgr.h"

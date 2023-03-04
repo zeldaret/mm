@@ -1,4 +1,4 @@
-#include "PR/pfs.h"
+#include "ultra64/pfs.h"
 #include "global.h"
 
 s32 __osPfsReleasePages(OSPfs* pfs, __OSInode* inode, u8 initialPage, u8 bank, __OSInodeUnit* finalPage);

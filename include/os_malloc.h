@@ -1,7 +1,7 @@
 #ifndef OS_MALLOC
 #define OS_MALLOC
 
-#include "PR/ultratypes.h"
+#include "ultra64/ultratypes.h"
 #include "ultra64/message.h"
 #include "libc/stddef.h"
 

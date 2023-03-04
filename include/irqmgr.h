@@ -1,8 +1,8 @@
 #ifndef IRQMGR_H
 #define IRQMGR_H
 
-#include "PR/ultratypes.h"
-#include "PR/sched.h"
+#include "ultra64/ultratypes.h"
+#include "ultra64/sched.h"
 #include "ultra64/message.h"
 
 typedef struct IrqMgrClient {

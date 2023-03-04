@@ -3,7 +3,7 @@
 
 // TODO should be in libultra/io
 
-#include "PR/ultratypes.h"
+#include "ultra64/ultratypes.h"
 #include "os.h"
 
 // typedef struct {

@@ -1,7 +1,7 @@
 #ifndef Z64ACTOR_H
 #define Z64ACTOR_H
 
-#include "PR/ultratypes.h"
+#include "ultra64/ultratypes.h"
 #include "z64math.h"
 #include "z64animation.h"
 #include "z64collision_check.h"

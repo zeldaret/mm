@@ -1,7 +1,7 @@
 #ifndef Z64LOAD_H
 #define Z64LOAD_H
 
-#include "PR/ultratypes.h"
+#include "ultra64/ultratypes.h"
 
 #define RELOCATE_ADDR(addr, vRamStart, allocu32) ((addr) - (vRamStart) + (allocu32))
 

@@ -2,7 +2,7 @@
 #define Z64LIGHT_H
 
 #include "ultra64.h"
-#include "PR/gbi.h"
+#include "ultra64/gbi.h"
 #include "color.h"
 
 struct PlayState;

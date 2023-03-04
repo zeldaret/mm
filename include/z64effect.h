@@ -1,7 +1,7 @@
 #ifndef _Z64EFFECT_H_
 #define _Z64EFFECT_H_
 
-#include "PR/ultratypes.h"
+#include "ultra64/ultratypes.h"
 #include "color.h"
 #include "z64light.h"
 #include "z64math.h"

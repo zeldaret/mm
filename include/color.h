@@ -1,7 +1,7 @@
 #ifndef _COLOR_H_
 #define _COLOR_H_
 
-#include "PR/ultratypes.h"
+#include "ultra64/ultratypes.h"
 
 // For checking the alpha bit in an RGBA16 pixel
 #define RGBA16_PIXEL_OPAQUE 1
