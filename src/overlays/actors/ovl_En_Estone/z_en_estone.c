@@ -121,7 +121,8 @@ void EnEstone_Active(EnEstone* this, PlayState* play) {
         Actor_Kill(&this->actor);
         return;
     }
-    if (((this->actor.bgCheckFlags & 1) && (this->actor.velocity.y < 0.0f)) || (this->collider.base.atFlags & 4)) {
+    if (((this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) && (this->actor.velocity.y < 0.0f)) ||
+        (this->collider.base.atFlags & 4)) {
         this->collider.base.atFlags &= ~4;
         if (this->actor.params == ENESTONE_TYPE_LARGE) {
             for (i = 0; i < 2; i++) {

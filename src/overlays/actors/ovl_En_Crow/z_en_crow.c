@@ -174,7 +174,7 @@ void EnCrow_FlyIdle(EnCrow* this, PlayState* play) {
         this->actor.flags |= ACTOR_FLAG_1;
     }
 
-    if (this->actor.bgCheckFlags & 8) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
         this->yawTarget = this->actor.wallYaw;
     } else if (Actor_WorldDistXZToPoint(&this->actor, &this->actor.home.pos) > 300.0f) {
         this->yawTarget = Actor_WorldYawTowardPoint(&this->actor, &this->actor.home.pos);
@@ -192,7 +192,7 @@ void EnCrow_FlyIdle(EnCrow* this, PlayState* play) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_KAICHO_CRY);
     }
 
-    if ((this->actor.depthInWater > -40.0f) || (this->actor.bgCheckFlags & 1)) {
+    if ((this->actor.depthInWater > -40.0f) || (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
         this->pitchTarget = -0x1000;
     } else if (this->actor.world.pos.y < (this->actor.home.pos.y - 50.0f)) {
         this->pitchTarget = -Rand_S16Offset(0x800, 0x800);
@@ -211,7 +211,7 @@ void EnCrow_FlyIdle(EnCrow* this, PlayState* play) {
         this->pitchTarget = CLAMP(this->pitchTarget, -0x1000, 0x1000);
     }
 
-    if (this->actor.bgCheckFlags & 1) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         Math_ScaledStepToS(&this->actor.shape.rot.x, -0x100, 0x400);
     }
 
@@ -273,7 +273,8 @@ void EnCrow_DiveAttack(EnCrow* this, PlayState* play) {
     if (((this->timer == 0) || ((&player->actor != this->actor.child) && (this->actor.child->home.rot.z != 0)) ||
          ((&player->actor == this->actor.child) &&
           ((Player_GetMask(play) == PLAYER_MASK_STONE) || (player->stateFlags1 & PLAYER_STATE1_800000))) ||
-         ((this->collider.base.atFlags & AT_HIT) || (this->actor.bgCheckFlags & 9))) ||
+         ((this->collider.base.atFlags & AT_HIT) ||
+          (this->actor.bgCheckFlags & (BGCHECKFLAG_GROUND | BGCHECKFLAG_WALL)))) ||
         (this->actor.depthInWater > -40.0f)) {
 
         if (this->collider.base.atFlags & AT_HIT) {
@@ -300,7 +301,7 @@ void EnCrow_SetupDamaged(EnCrow* this, PlayState* play) {
     Animation_Change(&this->skelAnime, &gGuayFlyAnim, 0.4f, 0.0f, 0.0f, ANIMMODE_LOOP_INTERP, -3.0f);
     this->actor.shape.yOffset = 0.0f;
     this->actor.targetArrowOffset = 0.0f;
-    this->actor.bgCheckFlags &= ~1;
+    this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND;
     scale = (this->actor.scale.x * 100.0f);
     this->actor.world.pos.y += 20.0f * scale;
     Actor_PlaySfx(&this->actor, NA_SE_EN_KAICHO_DEAD);
@@ -343,7 +344,7 @@ void EnCrow_Damaged(EnCrow* this, PlayState* play) {
             Math_ScaledStepToS(&this->actor.shape.rot.x, 0x4000, 0x200);
             this->actor.shape.rot.z += 0x1780;
         }
-        if ((this->actor.bgCheckFlags & 1) || (this->actor.floorHeight == BGCHECK_Y_MIN)) {
+        if ((this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) || (this->actor.floorHeight == BGCHECK_Y_MIN)) {
             EnCrow_CheckIfFrozen(this, play);
             func_800B3030(play, &this->actor.world.pos, &gZeroVec3f, &gZeroVec3f, this->actor.scale.x * 10000.0f, 0, 0);
             SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 11, NA_SE_EN_EXTINCT);
@@ -400,7 +401,7 @@ void EnCrow_SetupTurnAway(EnCrow* this) {
 void EnCrow_TurnAway(EnCrow* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
 
-    if (this->actor.bgCheckFlags & 8) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
         this->yawTarget = this->actor.wallYaw;
     } else {
         this->yawTarget = this->actor.yawTowardsPlayer + 0x8000;

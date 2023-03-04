@@ -455,7 +455,7 @@ void func_80A1C838(ObjFlowerpot* this, PlayState* play) {
         //! @bug: This function should only pass Player*: it uses *(this + 0x153), which is meant to be
         //! player->currentMask, but in this case is garbage in the collider
         Player_PlaySfx((Player*)&this->actor, NA_SE_PL_PULL_UP_POT);
-    } else if ((this->actor.bgCheckFlags & 0x20) && (this->actor.depthInWater > 19.0f)) {
+    } else if ((this->actor.bgCheckFlags & BGCHECKFLAG_WATER) && (this->actor.depthInWater > 19.0f)) {
         if (!(this->unk_1EA & 2)) {
             func_80A1B914(this, play);
             func_80A1C328(this, play);
@@ -490,7 +490,7 @@ void func_80A1C838(ObjFlowerpot* this, PlayState* play) {
         if (this->unk_1EA & 1) {
             Actor_MoveWithGravity(&this->actor);
             func_80A1C5E8(this, play);
-            if (this->actor.bgCheckFlags & 1) {
+            if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
                 if (this->actor.colChkInfo.mass == MASS_IMMOVABLE) {
                     if (DynaPoly_GetActor(&play->colCtx, this->actor.floorBgId) == NULL) {
                         this->actor.flags &= ~ACTOR_FLAG_10;
@@ -601,7 +601,8 @@ void func_80A1CEF4(ObjFlowerpot* this2, PlayState* play) {
 
     func_80A1C62C(this, play);
 
-    if ((this->actor.bgCheckFlags & (0x8 | 0x2 | 0x1)) || sp28 || (this->unk_1E8 <= 0)) {
+    if ((this->actor.bgCheckFlags & (BGCHECKFLAG_GROUND | BGCHECKFLAG_GROUND_TOUCH | BGCHECKFLAG_WALL)) || sp28 ||
+        (this->unk_1E8 <= 0)) {
         if (!(this->unk_1EA & 2)) {
             func_80A1B914(this, play);
             func_80A1C0FC(this, play);
@@ -614,7 +615,7 @@ void func_80A1CEF4(ObjFlowerpot* this2, PlayState* play) {
         return;
     }
 
-    if (this->actor.bgCheckFlags & 0x40) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_WATER_TOUCH) {
         if (!(this->unk_1EA & 2)) {
             func_80A1B914(this, play);
             func_80A1C328(this, play);

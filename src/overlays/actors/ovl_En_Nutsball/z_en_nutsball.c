@@ -107,9 +107,9 @@ void EnNutsball_Update(Actor* thisx, PlayState* play2) {
             this->actor.world.rot.x = Math_Atan2S_XY(spdXZ, this->actor.velocity.y);
         }
         this->actor.home.rot.z += 0x2AA8;
-        if ((this->actor.bgCheckFlags & 8) || (this->actor.bgCheckFlags & 1) || (this->actor.bgCheckFlags & 16) ||
-            (this->collider.base.atFlags & AT_HIT) || (this->collider.base.acFlags & AC_HIT) ||
-            (this->collider.base.ocFlags1 & OC1_HIT)) {
+        if ((this->actor.bgCheckFlags & BGCHECKFLAG_WALL) || (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) ||
+            (this->actor.bgCheckFlags & BGCHECKFLAG_CEILING) || (this->collider.base.atFlags & AT_HIT) ||
+            (this->collider.base.acFlags & AC_HIT) || (this->collider.base.ocFlags1 & OC1_HIT)) {
             if ((player->currentShield == PLAYER_SHIELD_HEROS_SHIELD) && (this->collider.base.atFlags & AT_HIT) &&
                 (this->collider.base.atFlags & AT_TYPE_ENEMY) && (this->collider.base.atFlags & AT_BOUNCED)) {
                 EnNutsball_InitColliderParams(this);
@@ -138,16 +138,16 @@ void EnNutsball_Update(Actor* thisx, PlayState* play2) {
         Math_Vec3f_Copy(&worldPos, &this->actor.world.pos);
         Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 5.0f, 10.0f, 0x7);
 
-        if (this->actor.bgCheckFlags & 8) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
             if (func_800C9A4C(&play->colCtx, this->actor.wallPoly, this->actor.wallBgId) & 0x30) {
-                this->actor.bgCheckFlags &= ~8;
+                this->actor.bgCheckFlags &= ~BGCHECKFLAG_WALL;
                 if (BgCheck_EntityLineTest1(&play->colCtx, &this->actor.prevPos, &worldPos, &this->actor.world.pos,
                                             &poly, true, false, false, true, &bgId)) {
                     if (func_800C9A4C(&play->colCtx, poly, bgId) & 0x30) {
                         this->actor.world.pos.x += this->actor.velocity.x * 0.01f;
                         this->actor.world.pos.z += this->actor.velocity.z * 0.01f;
                     } else {
-                        this->actor.bgCheckFlags |= 8;
+                        this->actor.bgCheckFlags |= BGCHECKFLAG_WALL;
                     }
                 } else {
                     Math_Vec3f_Copy(&this->actor.world.pos, &worldPos);

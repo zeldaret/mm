@@ -423,7 +423,7 @@ void EnKanban_Update(Actor* thisx, PlayState* play) {
             f32 tempY;
             f32 tempZ;
             f32 tempWaterDepth;
-            u16 tempBgFlags;
+            u16 bgCheckFlags;
             u8 onGround;
 
             if (this->unk_198 != 0) {
@@ -438,7 +438,7 @@ void EnKanban_Update(Actor* thisx, PlayState* play) {
             tempX = this->actor.world.pos.x;
             tempY = this->actor.world.pos.y;
             tempZ = this->actor.world.pos.z;
-            tempBgFlags = this->actor.bgCheckFlags;
+            bgCheckFlags = this->actor.bgCheckFlags;
             tempWaterDepth = this->actor.depthInWater;
             this->actor.world.pos.z += ((this->actor.world.pos.y - this->actor.floorHeight) * -50.0f) / 100.0f;
 
@@ -448,12 +448,12 @@ void EnKanban_Update(Actor* thisx, PlayState* play) {
             this->actor.world.pos.x = tempX;
             this->actor.world.pos.y = tempY;
             this->actor.world.pos.z = tempZ;
-            this->actor.bgCheckFlags = tempBgFlags;
+            this->actor.bgCheckFlags = bgCheckFlags;
             this->actor.depthInWater = tempWaterDepth;
 
             if (1) {}
 
-            onGround = (this->actor.bgCheckFlags & 1);
+            onGround = (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND);
 
             if (this->spinXFlag != 0) {
                 this->spinRot.x += this->spinVel.x;
@@ -495,14 +495,14 @@ void EnKanban_Update(Actor* thisx, PlayState* play) {
                 this->spinVel.z = -0xC00;
             }
 
-            if (this->actor.bgCheckFlags & 8) {
-                if (!(this->actor.bgCheckFlags & 1)) {
+            if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
+                if (!(this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
                     Actor_PlaySfx(&this->actor, NA_SE_EV_WOODPLATE_BOUND);
                 }
                 this->actor.speed *= -0.5f;
             }
 
-            if (this->actor.bgCheckFlags & 0x40) {
+            if (this->actor.bgCheckFlags & BGCHECKFLAG_WATER_TOUCH) {
                 this->actionState = ENKANBAN_WATER;
                 Actor_PlaySfx(&this->actor, NA_SE_EV_BOMB_DROP_WATER);
                 this->bounceX = this->bounceZ = 0;
@@ -542,7 +542,7 @@ void EnKanban_Update(Actor* thisx, PlayState* play) {
                         this->actor.speed = 0.0f;
                     } else if ((this->floorRot.x > 0.1f) || (this->floorRot.z > 0.1f)) {
                         this->airTimer = 10;
-                        if (this->actor.bgCheckFlags & 8) {
+                        if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
                             this->actionState = ENKANBAN_GROUND;
                             this->actor.speed = 0.0f;
                             goto nextCase;
@@ -702,7 +702,7 @@ void EnKanban_Update(Actor* thisx, PlayState* play) {
                     }
                 }
 
-                if (this->actor.bgCheckFlags & 1) {
+                if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
                     this->actor.speed = 0.0f;
                 }
 
@@ -710,7 +710,7 @@ void EnKanban_Update(Actor* thisx, PlayState* play) {
 
                 if (this->actor.speed != 0.0f) {
                     Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 10.0f, 50.0f, 5);
-                    if (this->actor.bgCheckFlags & 8) {
+                    if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
                         this->actor.speed *= -0.5f;
                         if (this->spinVel.y > 0) {
                             this->spinVel.y = -2000;
