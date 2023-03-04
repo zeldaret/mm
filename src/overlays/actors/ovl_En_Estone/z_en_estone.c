@@ -122,8 +122,8 @@ void EnEstone_Active(EnEstone* this, PlayState* play) {
         return;
     }
     if (((this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) && (this->actor.velocity.y < 0.0f)) ||
-        (this->collider.base.atFlags & 4)) {
-        this->collider.base.atFlags &= ~4;
+        (this->collider.base.atFlags & AT_BOUNCED)) {
+        this->collider.base.atFlags &= ~AT_BOUNCED;
         if (this->actor.params == ENESTONE_TYPE_LARGE) {
             for (i = 0; i < 2; i++) {
                 accel.x = 2.0f * (Rand_ZeroOne() - 0.5f);

@@ -268,7 +268,7 @@ void EnSb_TurnAround(EnSb* this, PlayState* play) {
 
 void EnSb_Lunge(EnSb* this, PlayState* play) {
     Math_StepToF(&this->actor.speed, 0.0f, 0.2f);
-    if (this->actor.velocity.y <= -0.1f || this->actor.bgCheckFlags & BGCHECKFLAG_GROUND_TOUCH) {
+    if ((this->actor.velocity.y <= -0.1f) || (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND_TOUCH)) {
         if (!(this->actor.depthInWater > 0.0f)) {
             Actor_PlaySfx(&this->actor, NA_SE_EN_EYEGOLE_ATTACK);
         }

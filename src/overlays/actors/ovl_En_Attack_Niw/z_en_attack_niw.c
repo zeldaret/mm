@@ -316,8 +316,8 @@ void EnAttackNiw_AimAtPlayer(EnAttackNiw* this, PlayState* play) {
     Math_ApproachF(&this->rotStep, 10000.0f, 1.0f, 1000.0f);
     Math_ApproachF(&this->actor.speed, this->targetXZSpeed, 0.9f, 1.0f);
 
-    if (this->actor.gravity == -2.0f && this->unkTimer25A == 0 &&
-        (this->actor.bgCheckFlags & BGCHECKFLAG_WALL || this->randomAngleChangeTimer == 0)) {
+    if ((this->actor.gravity == -2.0f) && (this->unkTimer25A == 0) &&
+        ((this->actor.bgCheckFlags & BGCHECKFLAG_WALL) || (this->randomAngleChangeTimer == 0))) {
         this->targetXZSpeed = 0.0f;
         this->actor.gravity = 0.0f;
         this->rotStep = 0.0f;
@@ -326,7 +326,6 @@ void EnAttackNiw_AimAtPlayer(EnAttackNiw* this, PlayState* play) {
 
     } else if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         EnAttackNiw_AnimateWingHead(this, play, NIW_ANIM_PECKING_SLOW_FORFLAPPING);
-
     } else {
         EnAttackNiw_AnimateWingHead(this, play, NIW_ANIM_PECKING_AND_WAVING);
     }
