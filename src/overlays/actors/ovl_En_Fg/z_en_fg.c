@@ -178,7 +178,7 @@ void EnFg_Idle(EnFg* this, PlayState* play) {
     switch (EnFg_GetDamageEffect(this)) {
         case FG_DMGEFFECT_DEKUSTICK:
             this->actor.flags &= ~ACTOR_FLAG_1;
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_FROG_CRY_1);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_FROG_CRY_1);
             this->skelAnime.playSpeed = 0.0f;
             this->actor.shape.shadowDraw = NULL;
             this->actor.scale.x *= 1.5f;
@@ -204,7 +204,7 @@ void EnFg_Idle(EnFg* this, PlayState* play) {
             break;
         case FG_DMGEFFECT_EXPLOSION:
             this->actor.flags &= ~ACTOR_FLAG_1;
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_FROG_CRY_0);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_FROG_CRY_0);
             if (1) {}
             this->actor.params = FG_BLACK;
             this->skelAnime.playSpeed = 0.0f;
@@ -212,7 +212,7 @@ void EnFg_Idle(EnFg* this, PlayState* play) {
             this->actor.world.rot.y = Math_Vec3f_Yaw(&ac->world.pos, &this->actor.world.pos);
             this->actor.shape.rot = this->actor.world.rot;
             this->actor.velocity.y = 10.0f;
-            this->actor.speedXZ = 3.0f;
+            this->actor.speed = 3.0f;
             this->actor.gravity = -0.8f;
             this->bounceCounter = 1;
             this->timer = 0;
@@ -220,7 +220,7 @@ void EnFg_Idle(EnFg* this, PlayState* play) {
             break;
         default:
             if (DECR(this->timer) == 0) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_FROG_JUMP);
+                Actor_PlaySfx(&this->actor, NA_SE_EV_FROG_JUMP);
                 EnFg_ChangeAnim(&this->skelAnime, 3);
                 this->actor.velocity.y = 10.0f;
                 this->timer = Rand_S16Offset(30, 30);
@@ -255,7 +255,7 @@ void EnFg_Jump(EnFg* this, PlayState* play) {
             break;
         case FG_DMGEFFECT_EXPLOSION:
             this->actor.flags &= ~ACTOR_FLAG_1;
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_FROG_CRY_0);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_FROG_CRY_0);
             EnFg_ChangeAnim(&this->skelAnime, 0);
             this->actor.params = FG_BLACK;
             this->skelAnime.playSpeed = 0.0f;
@@ -263,7 +263,7 @@ void EnFg_Jump(EnFg* this, PlayState* play) {
             this->actor.world.rot.y = Math_Vec3f_Yaw(&ac->world.pos, &this->actor.world.pos);
             this->actor.shape.rot = this->actor.world.rot;
             this->actor.velocity.y = 10.0f;
-            this->actor.speedXZ = 3.0f;
+            this->actor.speed = 3.0f;
             this->actor.gravity = -0.8f;
             this->bounceCounter = 1;
             this->timer = 0;

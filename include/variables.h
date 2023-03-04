@@ -479,9 +479,6 @@ extern EffectShieldParticleInit shieldParticleInitWood;
 
 extern u8 D_801BB12C;
 
-// extern UNK_TYPE1 D_801BC210;
-extern Gfx D_801BC240[9];
-extern Gfx D_801BC288[3];
 // extern UNK_TYPE1 D_801BC41E;
 extern ActorCutscene actorCutscenesGlobalCutscenes[8];
 extern s16 actorCutsceneCurrent;
