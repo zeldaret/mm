@@ -289,7 +289,7 @@ void EnSth_PostOceanspiderhouseReward(EnSth* this, PlayState* play) {
                 break;
 
             case GI_RUPEE_PURPLE:
-                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_GIANTS_WALLET)) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_OCEANSIDE_WALLET_UPGRADE)) {
                     nextTextId = 0x113D; // That's my life's savings
                 } else {
                     nextTextId = 0x113C; // That's my life's savings (2)
@@ -297,7 +297,7 @@ void EnSth_PostOceanspiderhouseReward(EnSth* this, PlayState* play) {
                 break;
 
             default:
-                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_GIANTS_WALLET)) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_OCEANSIDE_WALLET_UPGRADE)) {
                     nextTextId = 0x1142; // Well, thats all I have on me
                 } else {
                     nextTextId = 0x1141; // Well, thats all I have on me
@@ -366,10 +366,10 @@ void EnSth_HandleOceansideSpiderHouseConversation(EnSth* this, PlayState* play) 
 
                         switch (day) {
                             case 0: // first day
-                                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_GIANTS_WALLET)) {
+                                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_OCEANSIDE_WALLET_UPGRADE)) {
                                     STH_GI_ID(&this->actor) = GI_RUPEE_SILVER;
                                 } else {
-                                    SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_GIANTS_WALLET);
+                                    SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_OCEANSIDE_WALLET_UPGRADE);
                                     switch (CUR_UPG_VALUE(UPG_WALLET)) {
                                         case 0:
                                             STH_GI_ID(&this->actor) = GI_WALLET_ADULT;
