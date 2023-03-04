@@ -69,7 +69,7 @@ void EnMs_Init(Actor* thisx, PlayState* play) {
     Actor_SetScale(&this->actor, 0.015f);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE; // Eating Magic Beans all day will do that to you
     this->actionFunc = EnMs_Wait;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actor.velocity.y = 0.0f;
     this->actor.gravity = -1.0f;
 }

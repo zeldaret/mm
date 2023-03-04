@@ -163,7 +163,7 @@ void EnCrow_FlyIdle(EnCrow* this, PlayState* play) {
 
     SkelAnime_Update(&this->skelAnime);
     onInitialAnimFrame = Animation_OnFrame(&this->skelAnime, 0.0f);
-    this->actor.speedXZ = (Rand_ZeroOne() * 1.5f) + 3.0f;
+    this->actor.speed = (Rand_ZeroOne() * 1.5f) + 3.0f;
 
     if ((this->actor.parent != NULL) && (this->actor.parent->home.rot.z == 0)) {
         this->actor.home.pos.x = this->actor.parent->world.pos.x;
@@ -189,7 +189,7 @@ void EnCrow_FlyIdle(EnCrow* this, PlayState* play) {
         } else {
             this->yawTarget -= Rand_S16Offset(0x1000, 0x1000);
         }
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KAICHO_CRY);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_KAICHO_CRY);
     }
 
     if ((this->actor.depthInWater > -40.0f) || (this->actor.bgCheckFlags & 1)) {
@@ -233,7 +233,7 @@ void EnCrow_FlyIdle(EnCrow* this, PlayState* play) {
 void EnCrow_SetupDiveAttack(EnCrow* this) {
     this->timer = 300;
     this->actionFunc = EnCrow_DiveAttack;
-    this->actor.speedXZ = 4.0f;
+    this->actor.speed = 4.0f;
     this->skelAnime.playSpeed = 2.0f;
 }
 
@@ -278,7 +278,7 @@ void EnCrow_DiveAttack(EnCrow* this, PlayState* play) {
 
         if (this->collider.base.atFlags & AT_HIT) {
             this->collider.base.atFlags &= ~AT_HIT;
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KAICHO_ATTACK);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_KAICHO_ATTACK);
         }
         EnCrow_SetupFlyIdle(this);
     }
@@ -295,7 +295,7 @@ void EnCrow_CheckIfFrozen(EnCrow* this, PlayState* play) {
 void EnCrow_SetupDamaged(EnCrow* this, PlayState* play) {
     f32 scale;
 
-    this->actor.speedXZ *= Math_CosS(this->actor.world.rot.x);
+    this->actor.speed *= Math_CosS(this->actor.world.rot.x);
     this->actor.velocity.y = 0.0f;
     Animation_Change(&this->skelAnime, &gGuayFlyAnim, 0.4f, 0.0f, 0.0f, ANIMMODE_LOOP_INTERP, -3.0f);
     this->actor.shape.yOffset = 0.0f;
@@ -303,7 +303,7 @@ void EnCrow_SetupDamaged(EnCrow* this, PlayState* play) {
     this->actor.bgCheckFlags &= ~1;
     scale = (this->actor.scale.x * 100.0f);
     this->actor.world.pos.y += 20.0f * scale;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KAICHO_DEAD);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_KAICHO_DEAD);
 
     if (this->actor.colChkInfo.damageEffect == GUAY_DMGEFF_ICE) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX;
@@ -325,7 +325,7 @@ void EnCrow_SetupDamaged(EnCrow* this, PlayState* play) {
 
     Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 40);
     if (this->actor.flags & ACTOR_FLAG_8000) {
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
     }
 
     this->collider.base.acFlags &= ~AC_ON;
@@ -335,7 +335,7 @@ void EnCrow_SetupDamaged(EnCrow* this, PlayState* play) {
 }
 
 void EnCrow_Damaged(EnCrow* this, PlayState* play) {
-    Math_StepToF(&this->actor.speedXZ, 0.0f, 0.5f);
+    Math_StepToF(&this->actor.speed, 0.0f, 0.5f);
     this->actor.colorFilterTimer = 40;
 
     if (!(this->actor.flags & ACTOR_FLAG_8000)) {
@@ -385,7 +385,7 @@ void EnCrow_Die(EnCrow* this, PlayState* play) {
 void EnCrow_SetupTurnAway(EnCrow* this) {
     this->timer = 100;
     this->pitchTarget = -0x1000;
-    this->actor.speedXZ = 3.5f;
+    this->actor.speed = 3.5f;
     this->yawTarget = this->actor.yawTowardsPlayer + 0x8000;
     this->skelAnime.playSpeed = 2.0f;
     if (this->actor.colChkInfo.damageEffect == GUAY_DMGEFF_STUN) {
@@ -393,7 +393,7 @@ void EnCrow_SetupTurnAway(EnCrow* this) {
     } else {
         Actor_SetColorFilter(&this->actor, 0, 255, 0, 40);
     }
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_FREEZE);
     this->actionFunc = EnCrow_TurnAway;
 }
 
@@ -528,7 +528,7 @@ void EnCrow_Update(Actor* thisx, PlayState* play) {
     Actor_SetFocus(&this->actor, height);
 
     if ((this->actor.colChkInfo.health != 0) && (Animation_OnFrame(&this->skelAnime, 3.0f))) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KAICHO_FLUTTER);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_KAICHO_FLUTTER);
     }
     if (this->drawDmgEffAlpha > 0.0f) {
         if (this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {

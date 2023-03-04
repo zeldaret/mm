@@ -351,7 +351,7 @@ void func_80AE7E9C(EnStopheishi* this) {
     this->unk_274 = 0;
     this->disableCollider = false;
     this->actionFunc = func_80AE7F34;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
 }
 
 void func_80AE7F34(EnStopheishi* this, PlayState* play) {
@@ -365,7 +365,7 @@ void func_80AE7F34(EnStopheishi* this, PlayState* play) {
 
     SkelAnime_Update(&this->skelAnime);
     if ((this->currentAnim == SOLDIER_ANIM_5) && (((s16)this->skelAnime.curFrame % 2) != 0)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SOLDIER_WALK);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_SOLDIER_WALK);
     }
     if (gSaveContext.save.day != 3) {
         EnStopheishi_UpdateHeadNormal(this, play);

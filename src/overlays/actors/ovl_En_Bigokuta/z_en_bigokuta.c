@@ -237,7 +237,7 @@ void EnBigokuta_SetupRise(EnBigokuta* this, PlayState* play) {
         EffectSsGSplash_Spawn(play, &splashPos, NULL, NULL, 0, Rand_S16Offset(1000, 200));
         angle = BINANG_ADD(angle, 0x2000);
     }
-    Actor_PlaySfxAtPos(&this->picto.actor, NA_SE_EN_DAIOCTA_LAND);
+    Actor_PlaySfx(&this->picto.actor, NA_SE_EN_DAIOCTA_LAND);
     this->actionFunc = EnBigokuta_RiseOutOfWater;
 }
 
@@ -259,7 +259,7 @@ void EnBigokuta_IdleAboveWater(EnBigokuta* this, PlayState* play) {
     Math_ApproachS(&this->picto.actor.shape.rot.y, this->picto.actor.yawTowardsPlayer, 5, 0x1000);
 
     if ((this->picto.actor.xzDistToPlayer > 400.0f) || (this->picto.actor.playerHeightRel > 200.0f)) {
-        Actor_PlaySfxAtPos(&this->picto.actor, NA_SE_EN_DAIOCTA_SINK);
+        Actor_PlaySfx(&this->picto.actor, NA_SE_EN_DAIOCTA_SINK);
         EnBigokuta_SetupIdle(this);
     } else if ((this->picto.actor.xzDistToPlayer < 200.0f) && play->grabPlayer(play, GET_PLAYER(play))) {
         EnBigokuta_SetupSuckInPlayer(this, play);
@@ -295,7 +295,7 @@ void EnBigokuta_SetupSuckInPlayer(EnBigokuta* this, PlayState* play) {
     this->playerHoldPos.y = (this->picto.actor.home.pos.y - 49.5f) + 42.899998f;
     this->playerHoldPos.z = (Math_CosS(this->picto.actor.shape.rot.y) * 66.0f) + this->picto.actor.world.pos.z;
 
-    Actor_PlaySfxAtPos(&this->picto.actor, NA_SE_EN_SLIME_DEAD);
+    Actor_PlaySfx(&this->picto.actor, NA_SE_EN_SLIME_DEAD);
     this->actionFunc = EnBigokuta_SuckInPlayer;
 }
 
@@ -347,7 +347,7 @@ void EnBigokuta_HoldPlayer(EnBigokuta* this, PlayState* play) {
 
         if (this->timer == 0) {
             EnBigokuta_ShootPlayer(this, play);
-            Actor_PlaySfxAtPos(&this->picto.actor, NA_SE_EN_DAIOCTA_REVERSE);
+            Actor_PlaySfx(&this->picto.actor, NA_SE_EN_DAIOCTA_REVERSE);
         }
     } else if (this->timer == -24) {
         EnBigokuta_SetupIdleAboveWater(this);
@@ -396,7 +396,7 @@ void EnBigokuta_PlayDeathCutscene(EnBigokuta* this, PlayState* play) {
 
 void EnBigokuta_SetupDeathEffects(EnBigokuta* this) {
     Animation_MorphToPlayOnce(&this->skelAnime, &gBigOctoDeathAnim, -5.0f);
-    Actor_PlaySfxAtPos(&this->picto.actor, NA_SE_EN_DAIOCTA_DEAD2);
+    Actor_PlaySfx(&this->picto.actor, NA_SE_EN_DAIOCTA_DEAD2);
     this->picto.actor.flags &= ~1;
     this->timer = 10;
     this->actionFunc = EnBigokuta_PlayDeathEffects;
@@ -422,7 +422,7 @@ void EnBigokuta_PlayDeathEffects(EnBigokuta* this, PlayState* play) {
                 dustPos.z = this->picto.actor.world.pos.z;
 
                 func_800B0DE0(play, &dustPos, &gZeroVec3f, &gZeroVec3f, &D_80AC45B0, &D_80AC45B4, 1200, 20);
-                Actor_PlaySfxAtPos(&this->picto.actor, NA_SE_EN_OCTAROCK_DEAD2);
+                Actor_PlaySfx(&this->picto.actor, NA_SE_EN_OCTAROCK_DEAD2);
             }
         } else {
             this->picto.actor.world.pos.y -= 0.2f;

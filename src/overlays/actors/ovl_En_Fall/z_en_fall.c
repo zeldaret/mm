@@ -380,7 +380,7 @@ void EnFall_StoppedOpenMouthMoon_PerformCutsceneActions(EnFall* this, PlayState*
         switch (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 133)]->action) {
             case 3:
                 if (this->eyeGlowIntensity == 0.0f) {
-                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_MOON_EYE_FLASH);
+                    Actor_PlaySfx(&this->actor, NA_SE_EV_MOON_EYE_FLASH);
                 }
                 this->eyeGlowIntensity += 1 / 30.0f;
                 if (this->eyeGlowIntensity > 1.0f) {
@@ -413,15 +413,15 @@ void EnFall_StoppedClosedMouthMoon_PerformCutsceneActions(EnFall* this, PlayStat
             case 0:
                 switch (play->csCtx.frames) {
                     case 1060:
-                        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_MOON_SCREAM1);
+                        Actor_PlaySfx(&this->actor, NA_SE_EN_MOON_SCREAM1);
                         break;
 
                     case 1089:
-                        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_MOON_CRY);
+                        Actor_PlaySfx(&this->actor, NA_SE_EV_MOON_CRY);
                         break;
 
                     case 1303:
-                        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SLIP_MOON);
+                        Actor_PlaySfx(&this->actor, NA_SE_EV_SLIP_MOON);
                         break;
                 }
                 if (play->csCtx.frames >= 1145) {
@@ -432,15 +432,15 @@ void EnFall_StoppedClosedMouthMoon_PerformCutsceneActions(EnFall* this, PlayStat
             case 1:
                 switch (play->csCtx.frames) {
                     case 561:
-                        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_MOON_SCREAM1);
+                        Actor_PlaySfx(&this->actor, NA_SE_EN_MOON_SCREAM1);
                         break;
 
                     case 590:
-                        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_MOON_CRY);
+                        Actor_PlaySfx(&this->actor, NA_SE_EV_MOON_CRY);
                         break;
 
                     case 737:
-                        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SLIP_MOON);
+                        Actor_PlaySfx(&this->actor, NA_SE_EV_SLIP_MOON);
                         break;
                 }
                 if (play->csCtx.frames >= 650) {
@@ -499,7 +499,7 @@ void EnFall_MoonsTear_Initialize(EnFall* this) {
     }
     this->actor.world.rot.y = Math_Vec3f_Yaw(&this->actor.world.pos, &this->actor.home.pos);
     this->actor.world.rot.x = Math_Vec3f_Pitch(&this->actor.world.pos, &this->actor.home.pos);
-    this->actor.speedXZ = Math_Vec3f_DistXYZ(&this->actor.world.pos, &this->actor.home.pos) / 82.0f;
+    this->actor.speed = Math_Vec3f_DistXYZ(&this->actor.world.pos, &this->actor.home.pos) / 82.0f;
     this->actor.shape.rot.x = this->actor.world.rot.x;
     this->actor.shape.rot.y = this->actor.world.rot.y;
 }
@@ -516,8 +516,8 @@ void EnFall_MoonsTear_Fall(EnFall* this, PlayState* play) {
     }
 
     if (this->actor.draw != NULL) {
-        if (Math_Vec3f_StepTo(&this->actor.world.pos, &this->actor.home.pos, this->actor.speedXZ) <= 0.0f) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_GORON_BOUND_1);
+        if (Math_Vec3f_StepTo(&this->actor.world.pos, &this->actor.home.pos, this->actor.speed) <= 0.0f) {
+            Actor_PlaySfx(&this->actor, NA_SE_EV_GORON_BOUND_1);
             SET_WEEKEVENTREG(WEEKEVENTREG_74_80);
             SET_WEEKEVENTREG(WEEKEVENTREG_74_20);
             Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_TEST, this->actor.world.pos.x,
@@ -702,7 +702,7 @@ void EnFall_FireRing_Update(Actor* thisx, PlayState* play) {
     if (Cutscene_CheckActorAction(play, 450) &&
         play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 450)]->action == 5) {
         if (!(this->flags & FLAG_FIRE_RING_APPEARS)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_DM_RING_EXPLOSION);
+            Actor_PlaySfx(&this->actor, NA_SE_IT_DM_RING_EXPLOSION);
         }
         this->flags |= FLAG_FIRE_RING_APPEARS;
     }

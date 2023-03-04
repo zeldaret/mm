@@ -981,7 +981,7 @@ void func_80A5D7C4(EnKusa2* this, PlayState* play) {
             }
             this->unk_1C8 = Rand_S16Offset(72, 16);
             this->actor.velocity.y = 8.8f;
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_WALK);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_WALK);
             func_80A5DC70(this);
         }
 
@@ -1038,7 +1038,7 @@ void func_80A5D9C8(EnKusa2* this, PlayState* play) {
         this->actor.colChkInfo.mass = 80;
         this->actor.home.rot.y = this->actor.world.rot.y;
         this->actor.velocity.y = 12.5f;
-        this->actor.speedXZ += 3.0f;
+        this->actor.speed += 3.0f;
         Actor_MoveWithGravity(&this->actor);
         func_80A5BAFC(this, play);
         func_80A5CD0C(this);
@@ -1055,7 +1055,7 @@ void func_80A5D9C8(EnKusa2* this, PlayState* play) {
 
         this->unk_1D0--;
         if (this->unk_1D0 <= 0) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KUSAMUSHI_VIBE);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_KUSAMUSHI_VIBE);
             this->unk_1D0 = (Rand_Next() >> 0x1D) + 14;
         }
 
@@ -1090,7 +1090,7 @@ void func_80A5DC98(EnKusa2* this, PlayState* play) {
         if (this->actor.bgCheckFlags & 1) {
             func_80A5CD0C(this);
             func_80A5BB40(this, play, 1);
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_WALK);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_WALK);
             func_80A5DE18(this);
         } else if (this->actor.bgCheckFlags & 0x20) {
             func_80A5BDB0(this, play);
@@ -1122,14 +1122,14 @@ void func_80A5DEB4(EnKusa2* this, PlayState* play) {
         if (this->unk_1D0 > 0) {
             this->unk_1D0--;
             if (this->unk_1D0 == 0) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KUSAMUSHI_VIBE);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_KUSAMUSHI_VIBE);
             }
         }
 
         if (this->unk_1D1 > 0) {
             this->unk_1D1--;
             if (this->unk_1D1 == 0) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KUSAMUSHI_VIBE);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_KUSAMUSHI_VIBE);
             }
         }
 
@@ -1137,10 +1137,10 @@ void func_80A5DEB4(EnKusa2* this, PlayState* play) {
         Math_StepToF(&this->actor.scale.x, 0.4f, 0.032f);
         this->unk_1C4 += 0x4650;
         this->actor.scale.z = this->actor.scale.x;
-        this->actor.speedXZ = fabsf(Math_CosS(this->unk_1C4) + 0.5f) * 1.5f;
+        this->actor.speed = fabsf(Math_CosS(this->unk_1C4) + 0.5f) * 1.5f;
 
-        if (this->actor.speedXZ < 0.0f) {
-            this->actor.speedXZ = 0.0f;
+        if (this->actor.speed < 0.0f) {
+            this->actor.speed = 0.0f;
         }
 
         Actor_MoveWithGravity(&this->actor);
@@ -1165,7 +1165,7 @@ void func_80A5DEB4(EnKusa2* this, PlayState* play) {
             if (this->unk_1C8 <= 0) {
                 func_80A5CD0C(this);
                 func_80A5BB40(this, play, 4);
-                this->actor.speedXZ += 4.0f;
+                this->actor.speed += 4.0f;
                 this->actor.velocity.y = (Rand_ZeroOne() * 4.0f) + 15.0f;
                 func_80A5E1D8(this);
             } else if (this->actor.bgCheckFlags & 1) {
@@ -1174,7 +1174,7 @@ void func_80A5DEB4(EnKusa2* this, PlayState* play) {
                     func_80A5CD0C(this);
                     func_80A5BB40(this, play, 2);
                     this->actor.velocity.y = (Rand_ZeroOne() * 6.0f) + 7.0f;
-                    this->actor.speedXZ += 2.0f;
+                    this->actor.speed += 2.0f;
                     if (this->actor.yawTowardsPlayer < this->actor.world.rot.y) {
                         sp20 = 10000;
                     } else {
@@ -1201,7 +1201,7 @@ void func_80A5E210(EnKusa2* this, PlayState* play) {
     Math_StepToF(&this->actor.gravity, -4.0f, 0.5f);
 
     if (this->actor.bgCheckFlags & 1) {
-        this->actor.speedXZ *= 0.4f;
+        this->actor.speed *= 0.4f;
         if (this->actor.bgCheckFlags & 2) {
             func_80A5D178(this);
             SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 40, NA_SE_EN_KUSAMUSHI_HIDE);
@@ -1253,7 +1253,7 @@ void func_80A5E418(EnKusa2* this) {
     this->actor.velocity.y *= 0.25f;
     this->actor.velocity.z *= 0.1f;
     this->actor.draw = func_80A5EA48;
-    this->actor.speedXZ *= 0.1f;
+    this->actor.speed *= 0.1f;
     this->actor.gravity *= 0.25f;
     this->unk_1CC = Rand_S16Offset(-800, 1600);
     this->actionFunc = func_80A5E4BC;
