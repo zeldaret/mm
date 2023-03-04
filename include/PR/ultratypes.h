@@ -31,7 +31,7 @@ typedef union {
         u16 intPart[4][4];
         u16 fracPart[4][4];
     };
-    long long int forc_structure_alignment;
+    long long int force_structure_alignment;
 } Mtx; // size = 0x40
 
 typedef float MtxF_t[4][4];
