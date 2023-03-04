@@ -393,7 +393,7 @@ void EnRacedog_Race(EnRacedog* this, PlayState* play) {
     this->collider.dim.radius = 15;
     if (this->path != NULL) {
         yRotation = EnRacedog_GetYRotation(this->path, this->currentPoint, &this->actor.world.pos, &distSq);
-        if (this->actor.bgCheckFlags & 8) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
             yRotation = this->actor.wallYaw;
         }
 
@@ -701,7 +701,7 @@ void EnRacedog_Update(Actor* thisx, PlayState* play) {
         }
     }
 
-    if (!(this->actor.bgCheckFlags & 1)) {
+    if (!(this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
         this->skelAnime.curFrame = 0.0f;
     }
 

@@ -126,11 +126,11 @@ void func_80965DB4(EnMm* this, PlayState* play) {
         func_80965BBC(this);
         Actor_PlaySfx(&this->actor, NA_SE_PL_PULL_UP_ROCK);
     } else {
-        if ((this->actor.velocity.y > 0.0f) && (this->actor.bgCheckFlags & 0x10)) {
+        if ((this->actor.velocity.y > 0.0f) && (this->actor.bgCheckFlags & BGCHECKFLAG_CEILING)) {
             this->actor.velocity.y = 0.0f;
         }
 
-        if ((this->actor.speed != 0.0f) && (this->actor.bgCheckFlags & 8)) {
+        if ((this->actor.speed != 0.0f) && (this->actor.bgCheckFlags & BGCHECKFLAG_WALL)) {
             angle = BINANG_SUB(this->actor.world.rot.y, BINANG_ROT180(this->actor.wallYaw));
             this->actor.world.rot.y += BINANG_SUB(0x8000, (s16)(angle * 2));
             this->actor.speed *= 0.5f;
@@ -138,7 +138,7 @@ void func_80965DB4(EnMm* this, PlayState* play) {
             Actor_PlaySfx(&this->actor, NA_SE_EV_HUMAN_BOUND);
         }
 
-        if (!(this->actor.bgCheckFlags & 1)) {
+        if (!(this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
             Math_StepToF(&this->actor.speed, 0.0f, 0.08f);
         } else {
             temp_f14 = Math_SinS(this->actor.world.rot.y) * this->actor.speed;
@@ -164,10 +164,10 @@ void func_80965DB4(EnMm* this, PlayState* play) {
                 this->unk_190 += (s16)(this->actor.speed * 800.0f);
             }
 
-            if (this->actor.bgCheckFlags & 2) {
+            if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND_TOUCH) {
                 if (this->actor.velocity.y < -6.0f) {
                     this->actor.velocity.y *= -0.3f;
-                    this->actor.bgCheckFlags &= ~1;
+                    this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND;
                 }
 
                 Actor_PlaySfx(&this->actor, NA_SE_EV_HUMAN_BOUND);
@@ -187,7 +187,7 @@ void func_8096611C(EnMm* this, PlayState* play) {
     if (Actor_HasNoParent(&this->actor, play)) {
         EnMm_SetupAction(this, func_80965DB4);
         this->actor.room = play->roomCtx.curRoom.num;
-        this->actor.bgCheckFlags &= ~1;
+        this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND;
         Math_Vec3s_ToVec3f(&this->actor.prevPos, &this->actor.home.rot);
         gSaveContext.unk_1014 = 0;
     } else {

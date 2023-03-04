@@ -1207,7 +1207,7 @@ void func_80941A10(EnGoroiwa* this, PlayState* play) {
             }
         }
 
-        if (this->actor.bgCheckFlags & 1) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
             Actor_PlaySfx(&this->actor, D_80942E9C[this->unk_1E4][this->actor.home.rot.x & 1]);
         }
     }
@@ -1225,7 +1225,7 @@ void func_80941DB4(EnGoroiwa* this) {
 
 void func_80941E28(EnGoroiwa* this, PlayState* play) {
     func_8093F34C(this);
-    if ((this->actor.bgCheckFlags & 1) && (this->actor.velocity.y < 0.0f)) {
+    if ((this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) && (this->actor.velocity.y < 0.0f)) {
         if ((this->unk_1E5 & 8) && ((this->actor.home.rot.z & 3) == 1)) {
             func_8093EDB0(this);
         }
@@ -1440,7 +1440,7 @@ void EnGoroiwa_Update(Actor* thisx, PlayState* play) {
             this->unk_1CC--;
         }
 
-        if ((ENGOROIWA_GET_3000(&this->actor) == ENGOROIWA_3000_2) && (this->actor.bgCheckFlags & 1) &&
+        if ((ENGOROIWA_GET_3000(&this->actor) == ENGOROIWA_3000_2) && (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) &&
             (this->actionFunc == func_80941A10) && (this->actor.speed > 2.0f)) {
             Math_StepToF(&this->actor.scale.x, 0.16f,
                          (this->actor.xzDistToPlayer < 400.0f) ? this->unk_1E0 * 1.4f : this->unk_1E0);
@@ -1497,12 +1497,12 @@ void EnGoroiwa_Update(Actor* thisx, PlayState* play) {
                     if (this->actor.floorHeight > BGCHECK_Y_MIN) {
                         this->actor.floorBgId = bgId;
                         if (this->actor.world.pos.y <= (this->actor.floorHeight + 2.0f)) {
-                            this->actor.bgCheckFlags |= 1;
+                            this->actor.bgCheckFlags |= BGCHECKFLAG_GROUND;
                         } else {
-                            this->actor.bgCheckFlags &= ~1;
+                            this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND;
                         }
                     } else {
-                        this->actor.bgCheckFlags &= ~1;
+                        this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND;
                         this->actor.floorBgId = 50;
                     }
                     break;

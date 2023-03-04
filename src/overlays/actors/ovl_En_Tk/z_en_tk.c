@@ -1322,9 +1322,9 @@ void EnTk_Update(Actor* thisx, PlayState* play) {
     }
 
     if (!(this->unk_2CA & 0x200)) {
-        if (!(this->actor.bgCheckFlags & 1)) {
+        if (!(this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
             func_800B9010(&this->actor, NA_SE_EV_HONEYCOMB_FALL - SFX_FLAG);
-        } else if (this->actor.bgCheckFlags & 2) {
+        } else if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND_TOUCH) {
             Actor_PlaySfx(&this->actor, NA_SE_EV_HUMAN_BOUND);
         }
     }

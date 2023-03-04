@@ -250,7 +250,7 @@ void EnBubble_Fly(EnBubble* this, PlayState* play) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_AWA_BOUND);
         this->modelRotSpeed = 128.0f;
         this->modelEllipticity = 0.48f;
-    } else if ((this->actor.bgCheckFlags & 0x20) && (bounceDirection.y < 0.0f)) {
+    } else if ((this->actor.bgCheckFlags & BGCHECKFLAG_WATER) && (bounceDirection.y < 0.0f)) {
         normal.x = normal.z = 0.0f;
         normal.y = 1.0f;
         EnBubble_Vec3fNormalizedReflect(&bounceDirection, &normal, &bounceDirection);

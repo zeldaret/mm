@@ -894,7 +894,7 @@ void func_80B94E34(EnZog* this, PlayState* play) {
         this->actionFunc = func_80B94D0C;
         this->actor.speed = 0.0f;
         this->unk_300 = 2;
-    } else if (this->actor.bgCheckFlags & 1) {
+    } else if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         this->actor.home.rot.z = 1;
         this->actionFunc = func_80B94C5C;
         this->actor.speed = 0.0f;

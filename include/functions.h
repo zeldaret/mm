@@ -1134,12 +1134,7 @@ s16 ActorCutscene_GetCurrentSubCamId(s16 index);
 s16 func_800F21CC(void);
 s32 func_800F22C4(s16 param_1, Actor* actor);
 void ActorCutscene_SetReturnCamera(s16 index);
-void FireObj_SetPosition(FireObj* fire, Vec3f* pos);
-void FireObj_Draw(PlayState* play, FireObj* fire);
-void FireObj_Init(PlayState* play, FireObj* fire, FireObjInitParams* init, Actor* actor);
-void FireObj_Destroy(PlayState* play, FireObj* fire);
-void FireObj_SetState2(FireObj* fire, f32 dynamicSizeStep, u8 newState);
-void FireObj_Update(PlayState* play, FireObj* fire, Actor* actor);
+
 s32 func_800F3940(PlayState* play);
 // void func_800F39B4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
 // void func_800F3A64(void);

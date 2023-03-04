@@ -820,9 +820,9 @@ void func_80A6A36C(EnMushi2* this, PlayState* play) {
         return;
     }
 
-    if (this->actor.bgCheckFlags & 0x20) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_WATER) {
         func_80A6AAA4(this);
-    } else if (this->actor.bgCheckFlags & 1) {
+    } else if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_GERUDOFT_WALK);
         func_80A68F24(this);
         func_80A691EC(this, this->actor.floorPoly, -1.0f);
@@ -1005,7 +1005,7 @@ void func_80A6AB08(EnMushi2* this, PlayState* play) {
         func_80A6A094(this);
         func_80A6A0D8(this);
         func_80A6AE14(this);
-    } else if (!(this->actor.bgCheckFlags & 0x20)) {
+    } else if (!(this->actor.bgCheckFlags & BGCHECKFLAG_WATER)) {
         func_80A6A794(this);
     }
 }

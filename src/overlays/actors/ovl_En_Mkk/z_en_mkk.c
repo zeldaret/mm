@@ -256,7 +256,7 @@ void func_80A4E2E8(EnMkk* this, PlayState* play) {
     s32 sp20;
 
     this->unk_14E--;
-    if ((this->actor.params == 1) && (this->actor.bgCheckFlags & 1) && (this->actor.speed > 2.5f) &&
+    if ((this->actor.params == 1) && (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) && (this->actor.speed > 2.5f) &&
         ((play->gameplayFrames % 3) == 0)) {
         func_80A4E22C(this, play);
     }
@@ -280,7 +280,7 @@ void func_80A4E2E8(EnMkk* this, PlayState* play) {
         this->unk_14B &= ~2;
         func_80A4E190(this);
     } else if ((this->unk_149 == 0) && (!(player->stateFlags3 & 0x100)) &&
-               (Player_GetMask(play) != PLAYER_MASK_STONE) && (this->actor.bgCheckFlags & 1) &&
+               (Player_GetMask(play) != PLAYER_MASK_STONE) && (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) &&
                (Actor_IsFacingPlayer(&this->actor, 0x1800)) && (this->actor.xzDistToPlayer < 120.0f) &&
                (fabsf(this->actor.playerHeightRel) < 100.0f)) {
         func_80A4E58C(this);
@@ -301,7 +301,7 @@ void func_80A4E60C(EnMkk* this, PlayState* play) {
     if (this->collider.base.atFlags & AT_HIT) {
         this->collider.base.atFlags &= ~(AT_ON | AT_HIT);
     }
-    if ((this->actor.velocity.y < 0.0f) && (this->actor.bgCheckFlags & 1)) {
+    if ((this->actor.velocity.y < 0.0f) && (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
         this->unk_149 = 2;
         this->collider.base.atFlags &= ~AT_ON;
         func_80A4E2B8(this);
@@ -320,14 +320,14 @@ void func_80A4E67C(EnMkk* this) {
     this->actor.shape.rot.y = this->actor.world.rot.y;
     this->actor.velocity.y = 5.0f;
     this->actor.gravity = -1.3f;
-    this->actor.bgCheckFlags &= ~1;
+    this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND;
     this->actionFunc = func_80A4E72C;
 }
 
 void func_80A4E72C(EnMkk* this, PlayState* play) {
     Vec3f temp;
 
-    if (this->actor.bgCheckFlags & 1) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         if (this->actor.velocity.y > -1.0f) {
             temp.x = this->actor.world.pos.x;
             temp.y = this->actor.world.pos.y + 15.0f;
@@ -341,7 +341,7 @@ void func_80A4E72C(EnMkk* this, PlayState* play) {
             func_80A4EEF4(this);
         } else {
             this->actor.velocity.y *= -0.8f;
-            this->actor.bgCheckFlags &= ~1;
+            this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND;
         }
     }
 }

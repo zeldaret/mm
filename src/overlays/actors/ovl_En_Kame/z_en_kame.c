@@ -287,7 +287,7 @@ void func_80AD75A8(EnKame* this, PlayState* play) {
     static Color_RGBA8 D_80AD8E58 = { 180, 180, 180, 255 };
     static Vec3f D_80AD8E5C = { 0.0f, 0.75f, 0.0f };
 
-    if ((this->actor.bgCheckFlags & 1) && (this->actor.speed >= 3.0f)) {
+    if ((this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) && (this->actor.speed >= 3.0f)) {
         if ((play->gameplayFrames % 2) == 0) {
             SurfaceMaterial surfaceMaterial =
                 SurfaceType_GetMaterial(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
@@ -368,7 +368,7 @@ void func_80AD7948(EnKame* this, PlayState* play) {
 
         temp_v1 = ABS_ALT(temp_v0);
 
-        if ((this->actor.bgCheckFlags & 8) || (temp_v1 > 0x3000) ||
+        if ((this->actor.bgCheckFlags & BGCHECKFLAG_WALL) || (temp_v1 > 0x3000) ||
             (Actor_WorldDistXZToPoint(&this->actor, &this->unk_2BC) < 50.0f)) {
             s8 pad;
 
@@ -555,7 +555,7 @@ void func_80AD8148(EnKame* this, PlayState* play) {
             func_800BE504(&this->actor, &this->collider);
         }
     }
-    this->actor.bgCheckFlags &= ~0x1;
+    this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND;
     this->actor.flags &= ~ACTOR_FLAG_1;
     this->actor.flags |= ACTOR_FLAG_10;
     Actor_PlaySfx(&this->actor, NA_SE_EN_PAMET_DEAD);
@@ -565,7 +565,7 @@ void func_80AD8148(EnKame* this, PlayState* play) {
 
 void func_80AD825C(EnKame* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime1);
-    if ((this->actor.bgCheckFlags & 1) && (this->actor.velocity.y < 0.0f)) {
+    if ((this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) && (this->actor.velocity.y < 0.0f)) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_HIPLOOP_LAND);
         func_80AD8364(this);
     } else {

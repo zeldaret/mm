@@ -345,7 +345,7 @@ void func_8087B7C0(EnHorse* this, PlayState* play, Path* path) {
 
     func_8017D7C0(this->actor.world.pos.x, this->actor.world.pos.z, sp80.x, sp80.z, sp8C.x, sp8C.z, &sp70);
 
-    if ((this->actor.bgCheckFlags & 8) || (this->unk_1EC & 4)) {
+    if ((this->actor.bgCheckFlags & BGCHECKFLAG_WALL) || (this->unk_1EC & 4)) {
         EnHorse_RotateToPoint(this, play, &sp8C, 0xC80);
         if (this->unk_1EC & 4) {
             this->unk_1EC &= ~4;
@@ -3744,7 +3744,8 @@ void EnHorse_UpdateBgCheckInfo(EnHorse* this, PlayState* play) {
         Actor_UpdateBgCheckInfo(play, &this->actor, 40.0f, 35.0f, 100.0f, 0x1C);
     }
 
-    if ((this->actor.bgCheckFlags & 8) && (Math_CosS(this->actor.wallYaw - this->actor.world.rot.y) < -0.3f)) {
+    if ((this->actor.bgCheckFlags & BGCHECKFLAG_WALL) &&
+        (Math_CosS(this->actor.wallYaw - this->actor.world.rot.y) < -0.3f)) {
         if (this->actor.speed > 4.0f) {
             this->actor.speed -= 1.0f;
             if (this->type == HORSE_TYPE_2) {

@@ -195,7 +195,7 @@ void func_80893A18(EnTite* this) {
 }
 
 s32 func_80893A34(EnTite* this, PlayState* play) {
-    if ((this->actor.params == ENTITE_MINUS_2) && (this->actor.bgCheckFlags & 1) &&
+    if ((this->actor.params == ENTITE_MINUS_2) && (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) &&
         (SurfaceType_GetFloorType(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId) == FLOOR_TYPE_5)) {
         return true;
     }
@@ -211,7 +211,7 @@ void func_80893A9C(EnTite* this, PlayState* play) {
 }
 
 s32 func_80893ADC(EnTite* this) {
-    if ((this->actor.params == ENTITE_MINUS_2) && (this->actor.bgCheckFlags & 0x20)) {
+    if ((this->actor.params == ENTITE_MINUS_2) && (this->actor.bgCheckFlags & BGCHECKFLAG_WATER)) {
         return true;
     }
     return false;
@@ -224,7 +224,7 @@ s32 func_80893B10(EnTite* this) {
 
 void func_80893B70(EnTite* this) {
     if (this->actor.params == ENTITE_MINUS_2) {
-        if (this->actor.bgCheckFlags & 0x20) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_WATER) {
             this->actor.gravity = 0.0f;
             func_80893B10(this);
         } else {
@@ -238,7 +238,7 @@ void func_80893BCC(EnTite* this, PlayState* play) {
     s32 i;
     s32 j;
 
-    if (this->actor.bgCheckFlags & 2) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND_TOUCH) {
         SurfaceMaterial surfaceMaterial =
             SurfaceType_GetMaterial(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
 
@@ -357,7 +357,8 @@ void func_8089408C(EnTite* this, PlayState* play) {
         this->actor.velocity.y = 8.0f;
     }
 
-    this->actor.bgCheckFlags &= ~(0x40 | 0x20 | 0x2 | 0x1);
+    this->actor.bgCheckFlags &=
+        ~(BGCHECKFLAG_GROUND | BGCHECKFLAG_GROUND_TOUCH | BGCHECKFLAG_WATER | BGCHECKFLAG_WATER_TOUCH);
     this->actor.gravity = -1.0f;
     this->actor.speed = 4.0f;
     this->actionFunc = func_808942B4;
@@ -365,7 +366,8 @@ void func_8089408C(EnTite* this, PlayState* play) {
 
 void func_808942B4(EnTite* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
-    if (((this->actor.bgCheckFlags & 1) || (func_80893ADC(this) && (this->actor.depthInWater > 0.0f))) &&
+    if (((this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) ||
+         (func_80893ADC(this) && (this->actor.depthInWater > 0.0f))) &&
         (this->actor.velocity.y <= 0.0f)) {
         this->actor.speed = 0.0f;
         this->collider.base.atFlags &= ~AT_HIT;
@@ -464,7 +466,8 @@ void func_80894638(EnTite* this, PlayState* play) {
     if ((Player_GetMask(play) == PLAYER_MASK_STONE) || (this->actor.xzDistToPlayer > 450.0f) ||
         (this->actor.playerHeightRel > 80.0f)) {
         func_80893ED4(this);
-    } else if (((this->actor.bgCheckFlags & 1) || (func_80893ADC(this) && (this->actor.depthInWater < 10.0f))) &&
+    } else if (((this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) ||
+                (func_80893ADC(this) && (this->actor.depthInWater < 10.0f))) &&
                Actor_IsFacingPlayer(&this->actor, 0xE38)) {
         if ((this->actor.xzDistToPlayer <= 180.0f) && (this->actor.playerHeightRel <= 80.0f)) {
             func_80893A9C(this, play);
@@ -496,7 +499,7 @@ void func_80894910(EnTite* this, PlayState* play) {
 
     Math_SmoothStepToF(&this->actor.speed, 0.0f, 0.1f, 1.0f, 0.0f);
     SkelAnime_Update(&this->skelAnime);
-    if (this->actor.bgCheckFlags & 0x40) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_WATER_TOUCH) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_TEKU_LAND_WATER);
 
         if (func_80893ADC(this)) {
@@ -509,7 +512,8 @@ void func_80894910(EnTite* this, PlayState* play) {
         func_80893BCC(this, play);
     }
 
-    if (((this->actor.bgCheckFlags & 1) || (func_80893ADC(this) && (this->actor.depthInWater > 0.0f))) &&
+    if (((this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) ||
+         (func_80893ADC(this) && (this->actor.depthInWater > 0.0f))) &&
         (this->actor.velocity.y <= 0.0f)) {
         this->actor.speed = 0.0f;
         Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 4000);
@@ -557,13 +561,13 @@ void func_80894BC8(EnTite* this, PlayState* play) {
         this->actor.world.pos.y += this->actor.depthInWater - 1.0f;
     }
 
-    if (this->actor.bgCheckFlags & 0x40) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_WATER_TOUCH) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_TEKU_LAND_WATER2);
     } else {
         func_80893BCC(this, play);
     }
 
-    if ((this->actor.speed == 0.0f) && ((this->actor.bgCheckFlags & 1) || func_80893ADC(this))) {
+    if ((this->actor.speed == 0.0f) && ((this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) || func_80893ADC(this))) {
         this->actor.world.rot.y = this->actor.shape.rot.y;
         this->collider.base.acFlags |= AC_ON;
         if ((Player_GetMask(play) == PLAYER_MASK_STONE) ||
@@ -599,7 +603,7 @@ void func_80894E0C(EnTite* this, PlayState* play) {
         this->actor.world.pos.y += this->actor.depthInWater;
     }
 
-    if (this->actor.bgCheckFlags & 0x40) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_WATER_TOUCH) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_TEKU_LAND_WATER2);
     } else {
         func_80893BCC(this, play);
@@ -689,7 +693,7 @@ void func_808952EC(EnTite* this) {
     this->actor.speed = 0.0f;
     this->actor.gravity = -1.0f;
     this->unk_2B8 = Rand_ZeroOne() * 50.0f;
-    this->actor.bgCheckFlags &= ~1;
+    this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND;
     this->actor.velocity.y = 11.0f;
     this->actionFunc = func_80895424;
 }
@@ -705,9 +709,9 @@ void func_80895424(EnTite* this, PlayState* play) {
 
     SkelAnime_Update(&this->skelAnime);
 
-    if (this->actor.bgCheckFlags & 1) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         this->collider.base.acFlags |= AC_ON;
-        if (this->actor.bgCheckFlags & 2) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND_TOUCH) {
             Actor_SpawnFloorDustRing(play, &this->actor, &this->actor.world.pos, 20.0f, 11, 4.0f, 0, 0, 0);
             Actor_PlaySfx(&this->actor, NA_SE_EN_EYEGOLE_ATTACK);
         }
@@ -726,7 +730,7 @@ void func_808955E4(EnTite* this) {
     this->unk_2B9 = 0;
     this->actor.velocity.y = 13.0f;
     Actor_PlaySfx(&this->actor, NA_SE_EN_LAST1_GROW_HEAD);
-    this->actor.bgCheckFlags &= ~1;
+    this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND;
     this->collider.base.acFlags &= ~AC_ON;
     this->actionFunc = func_80895640;
 }
@@ -734,7 +738,7 @@ void func_808955E4(EnTite* this) {
 void func_80895640(EnTite* this, PlayState* play) {
     Math_ScaledStepToS(&this->actor.shape.rot.z, 0, 4000);
     SkelAnime_Update(&this->skelAnime);
-    if (this->actor.bgCheckFlags & 1) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         this->collider.base.acFlags |= AC_ON;
         this->actor.shape.yOffset = 0.0f;
         func_80893BCC(this, play);
@@ -753,7 +757,7 @@ void func_808956B8(EnTite* this) {
 
 void func_808956FC(EnTite* this) {
     this->unk_2BC = -1;
-    this->actor.bgCheckFlags &= ~1;
+    this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND;
     this->actor.velocity.y = 7.5f;
     func_80893A18(this);
 }
@@ -766,13 +770,13 @@ void func_80895738(EnTite* this, PlayState* play) {
         if (this->collider.base.atFlags & AT_BOUNCED) {
             func_808956FC(this);
         }
-    } else if (this->actor.bgCheckFlags & 8) {
+    } else if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
         this->actor.world.rot.y = BINANG_SUB((this->actor.wallYaw * 2) - this->actor.world.rot.y, 0x8000);
     }
 
     if (this->unk_2BC == -1) {
         Math_StepToF(&this->actor.speed, 0.0f, 0.3f);
-        if (this->actor.bgCheckFlags & 1) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
             this->actor.world.rot.y = this->actor.shape.rot.y;
             func_80893ED4(this);
             this->unk_2BC = 100;
@@ -833,7 +837,7 @@ void func_80895AC0(EnTite* this, PlayState* play) {
     }
 
     if ((this->unk_2BC == 1) || (this->unk_2BC == -1)) {
-        if (this->actor.bgCheckFlags & 8) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
             temp_v1 = this->actor.shape.rot.y - this->actor.wallYaw;
             temp_v0 = ABS_ALT(temp_v1);
             if (temp_v0 > 0x3000) {
@@ -1013,7 +1017,7 @@ void func_80895FF8(EnTite* this, PlayState* play) {
                 }
             }
         }
-    } else if ((this->actor.bgCheckFlags & 1) && (this->collider.base.acFlags & AC_ON) &&
+    } else if ((this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) && (this->collider.base.acFlags & AC_ON) &&
                (this->actor.colChkInfo.health != 0) && (play->actorCtx.unk2 != 0) &&
                (this->actor.xyzDistToPlayerSq < SQ(200.0f))) {
         this->actor.flags |= ACTOR_FLAG_1;
@@ -1033,13 +1037,13 @@ void func_808963B4(EnTite* this, PlayState* play) {
     s32 i;
     Vec3f sp48;
 
-    if (this->actor.bgCheckFlags & 0x40) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_WATER_TOUCH) {
         for (i = 5; i < ARRAY_COUNT(this->limbPos); i++) {
             Math_Vec3f_Copy(&sp48, &this->limbPos[i]);
             sp48.y = this->actor.world.pos.y + this->actor.depthInWater;
             EffectSsGRipple_Spawn(play, &sp48, 0, 220, 0);
         }
-    } else if (this->actor.bgCheckFlags & 0x20) {
+    } else if (this->actor.bgCheckFlags & BGCHECKFLAG_WATER) {
         s32 temp = play->gameplayFrames & 7;
 
         if (!(temp & 1) && (this->actor.depthInWater < 10.0f)) {
@@ -1061,7 +1065,7 @@ void EnTite_Update(Actor* thisx, PlayState* play) {
         Actor_MoveWithGravity(&this->actor);
         Actor_UpdateBgCheckInfo(play, &this->actor, 25.0f, 40.0f, 20.0f, this->unk_2C0);
         func_808963B4(this, play);
-        if (this->actor.bgCheckFlags & 1) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
             func_800BE3D0(&this->actor, this->actor.shape.rot.y, &this->actor.shape.rot);
             if (this->unk_2B9 != 0) {
                 this->actor.shape.rot.z = BINANG_ROT180(this->actor.shape.rot.z);

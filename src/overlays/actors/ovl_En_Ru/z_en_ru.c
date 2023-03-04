@@ -145,7 +145,7 @@ s32 EnRu_PlayWalkingSound(EnRu* this, PlayState* play) {
     leftWasGrounded = this->isLeftFootGrounded;
     rightWasGrounded = this->isRightFootGrounded;
 
-    if (this->actor.bgCheckFlags & 0x20) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_WATER) {
         if (this->actor.depthInWater < 20.0f) {
             surfaceSfxOffset = SURFACE_SFX_OFFSET_WATER_SHALLOW;
         } else {

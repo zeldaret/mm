@@ -544,7 +544,7 @@ void EnFamos_Attack(EnFamos* this, PlayState* play) {
     }
 
     surfaceType = SurfaceType_GetFloorProperty2(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
-    hitFloor = this->actor.bgCheckFlags & 1;
+    hitFloor = this->actor.bgCheckFlags & BGCHECKFLAG_GROUND;
     if (hitFloor || (this->actor.floorHeight == BGCHECK_Y_MIN) || (surfaceType == 0xC) || (surfaceType == 0xD)) {
         this->collider1.base.atFlags &= ~AT_ON;
         this->collider2.base.atFlags |= AT_ON;
@@ -617,7 +617,7 @@ void EnFamos_AttackRebound(EnFamos* this, PlayState* play) {
         }
     }
 
-    if ((this->baseHeight < this->actor.world.pos.y) || (this->actor.bgCheckFlags & 0x10)) { // touching ceiling
+    if ((this->baseHeight < this->actor.world.pos.y) || (this->actor.bgCheckFlags & BGCHECKFLAG_CEILING)) {
         this->actor.speed = 0.0f;
         EnFamos_SetupChase(this);
     }
@@ -768,7 +768,7 @@ void EnFamos_Update(Actor* thisx, PlayState* play) {
         if (this->flippedTimer >= 0) {
             Actor_UpdateBgCheckInfo(play, &this->actor, 35.0f, 30.0f, 80.0f, 0x1F);
             if ((this->actionFunc == EnFamos_Attack) && (this->animatedMaterialIndex != FAMOS_ANIMATED_MAT_NORMAL) &&
-                (this->actor.bgCheckFlags & 1)) { // touch floor
+                (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
                 this->actor.world.pos.y -= 60.0f;
             }
         }
