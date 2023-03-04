@@ -23,7 +23,4 @@
 #include "os_tlb.h"
 #include "os_voice.h"
 
-// TODO: figure out proper header to put this
-s32 __osContChannelReset(OSMesgQueue* mq, s32 channel);
-
 #endif

@@ -1066,17 +1066,6 @@ typedef union {
     long long int force_structure_alignment;
 } Mtx; // size = 0x40
 
-typedef float MtxF_t[4][4];
-typedef union {
-    MtxF_t mf;
-    struct {
-        float xx, yx, zx, wx,
-              xy, yy, zy, wy,
-              xz, yz, zz, wz,
-              xw, yw, zw, ww;
-    };
-} MtxF; // size = 0x40
-
 /*
  * Viewport
  */

@@ -20,6 +20,7 @@
 #include "message_data_static.h"
 
 #include "gfxprint.h"
+#include "padmgr.h"
 #include "sys_matrix.h"
 #include "z64actor.h"
 #include "z64animation.h"
@@ -40,7 +41,6 @@
 #include "z64message.h"
 #include "z64object.h"
 #include "z64ocarina.h"
-#include "z64pad.h"
 #include "z64player.h"
 #include "z64save.h"
 #include "z64scene.h"

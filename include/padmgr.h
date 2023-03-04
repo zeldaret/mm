@@ -1,5 +1,5 @@
-#ifndef Z64PAD_H
-#define Z64PAD_H
+#ifndef PADMGR_H
+#define PADMGR_H
 
 #include "ultra64/controller.h"
 

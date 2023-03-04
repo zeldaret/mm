@@ -121,7 +121,7 @@ void __osPfsGetInitData(u8* pattern, OSContStatus* contData);
 u8 __osContAddressCrc(u16 addr);
 u8 __osContDataCrc(u8* data);
 s32 __osPfsGetStatus(OSMesgQueue* queue, s32 channel);
-
+s32 __osContChannelReset(OSMesgQueue* mq, s32 channel);
 
 extern OSPifRam __osContPifRam;
 // extern UNK_TYPE1 D_8009CF0C;
