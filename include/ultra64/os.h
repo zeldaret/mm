@@ -1,5 +1,5 @@
-#ifndef OS_H
-#define OS_H
+#ifndef ULTRA64_OS_H
+#define ULTRA64_OS_H
 
 #include "os_ai.h"
 #include "os_cache.h"

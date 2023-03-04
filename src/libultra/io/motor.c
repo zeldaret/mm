@@ -1,4 +1,4 @@
-#include "ultra64/motor.h"
+#include "ultra64/os_motor.h"
 
 #include "ultra64/controller.h"
 #include "functions.h"

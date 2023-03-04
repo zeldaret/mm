@@ -1,5 +1,5 @@
-#ifndef _ULTRATYPES_H_
-#define _ULTRATYPES_H_
+#ifndef ULTRA64_ULTRATYPES_H
+#define ULTRA64_ULTRATYPES_H
 
 typedef signed char            s8;
 typedef unsigned char          u8;
@@ -22,6 +22,7 @@ typedef volatile s64 vs64;
 typedef float  f32;
 typedef double f64;
 
+// TODO: move this somewhere else
 typedef void* TexturePtr;
 
 #endif

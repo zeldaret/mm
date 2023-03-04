@@ -1,5 +1,5 @@
-#ifndef _ULTRA64_VI_H_
-#define _ULTRA64_VI_H_
+#ifndef ULTRA64_VI_H
+#define ULTRA64_VI_H
 
 #include "ultra64/ultratypes.h"
 #include "ultra64/os_message.h"

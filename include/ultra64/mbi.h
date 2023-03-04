@@ -1,5 +1,5 @@
-#ifndef _MBI_H_
-#define	_MBI_H_
+#ifndef ULTRA64_MBI_H
+#define	ULTRA64_MBI_H
 
 /**************************************************************************
  *									  *

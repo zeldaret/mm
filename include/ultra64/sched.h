@@ -1,5 +1,5 @@
-#ifndef SCHED_H
-#define SCHED_H
+#ifndef ULTRA64_SCHED_H
+#define ULTRA64_SCHED_H
 
 #include "ultra64/ultratypes.h"
 #include "ultra64/vi.h"

@@ -1,5 +1,5 @@
-#ifndef _SPTASK_H_
-#define _SPTASK_H_
+#ifndef ULTRA64_SPTASK_H
+#define ULTRA64_SPTASK_H
 
 #include "ultra64/ultratypes.h"
 #include "libc/stddef.h"
