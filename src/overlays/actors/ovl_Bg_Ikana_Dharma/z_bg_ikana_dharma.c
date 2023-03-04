@@ -119,7 +119,7 @@ void BgIkanaDharma_Init(Actor* thisx, PlayState* play2) {
                                           this->dyna.actor.unk20, NULL);
         }
 
-        this->dyna.actor.bgCheckFlags |= 1;
+        this->dyna.actor.bgCheckFlags |= BGCHECKFLAG_GROUND;
     }
 
     BgIkanaDharma_SetupWaitForHit(this);
@@ -227,7 +227,7 @@ void BgIkanaDharma_Update(Actor* thisx, PlayState* play) {
         if (actorBelow == NULL) {
             Actor_MoveWithGravity(&this->dyna.actor);
             Actor_UpdateBgCheckInfo(play, &this->dyna.actor, 0.0f, 0.0f, 0.0f, 4);
-            if (this->dyna.actor.bgCheckFlags & 2) {
+            if (this->dyna.actor.bgCheckFlags & BGCHECKFLAG_GROUND_TOUCH) {
                 s16 quakeIndex = Quake_Add(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
 
                 Quake_SetSpeed(quakeIndex, 21536);

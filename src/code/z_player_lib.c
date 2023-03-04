@@ -495,7 +495,8 @@ s32 func_801234D4(PlayState* play) {
     return (player->stateFlags2 & PLAYER_STATE2_8) || (player->actor.speed != 0.0f) ||
            ((player->transformation != PLAYER_FORM_ZORA) && (player->stateFlags1 & PLAYER_STATE1_8000000)) ||
            ((player->transformation == PLAYER_FORM_ZORA) && (player->stateFlags1 & PLAYER_STATE1_8000000) &&
-            (!(player->actor.bgCheckFlags & 1) || (player->currentBoots < PLAYER_BOOTS_ZORA_UNDERWATER)));
+            (!(player->actor.bgCheckFlags & BGCHECKFLAG_GROUND) ||
+             (player->currentBoots < PLAYER_BOOTS_ZORA_UNDERWATER)));
 }
 
 s32 func_80123590(PlayState* play, Actor* actor) {
@@ -1274,7 +1275,7 @@ void func_80123DA4(Player* player) {
 }
 
 void func_80123DC0(Player* player) {
-    if ((player->actor.bgCheckFlags & 1) ||
+    if ((player->actor.bgCheckFlags & BGCHECKFLAG_GROUND) ||
         (player->stateFlags1 & (PLAYER_STATE1_200000 | PLAYER_STATE1_800000 | PLAYER_STATE1_8000000)) ||
         (!(player->stateFlags1 & (PLAYER_STATE1_40000 | PLAYER_STATE1_80000)) &&
          ((player->actor.world.pos.y - player->actor.floorHeight) < 100.0f))) {
@@ -1461,7 +1462,7 @@ s32 Player_GetEnvironmentalHazard(PlayState* play) {
         envHazard = PLAYER_ENV_HAZARD_UNDERWATER_FREE - 1;
     } else if (player->stateFlags1 & PLAYER_STATE1_8000000) {
         if ((player->transformation == PLAYER_FORM_ZORA) && (player->currentBoots >= PLAYER_BOOTS_ZORA_UNDERWATER) &&
-            (player->actor.bgCheckFlags & 1)) {
+            (player->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
             envHazard = PLAYER_ENV_HAZARD_UNDERWATER_FLOOR - 1;
         } else {
             envHazard = PLAYER_ENV_HAZARD_SWIMMING - 1;

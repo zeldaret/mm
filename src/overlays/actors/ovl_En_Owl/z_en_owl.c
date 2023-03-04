@@ -1078,7 +1078,7 @@ void func_8095CCF4(Actor* thisx, PlayState* play) {
 
     this->actor.world.pos.y -= 1.0f;
     Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 10.0f, 10.0f, 4);
-    if (this->actor.bgCheckFlags & 1) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         this->unk_3DA = (this->unk_3DA >> 3) * 7;
         if (this->unk_3DC > 0) {
             this->unk_3DC--;

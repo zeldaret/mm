@@ -552,8 +552,9 @@ void EnKusa_Fall(EnKusa* this, PlayState* play) {
         this->collider.base.atFlags &= ~AT_HIT;
     }
     this->timer++;
-    if ((this->actor.bgCheckFlags & 0xB) || wasHit || (this->timer >= 100)) {
-        if (!(this->actor.bgCheckFlags & 0x20)) {
+    if ((this->actor.bgCheckFlags & (BGCHECKFLAG_GROUND | BGCHECKFLAG_GROUND_TOUCH | BGCHECKFLAG_WALL)) || wasHit ||
+        (this->timer >= 100)) {
+        if (!(this->actor.bgCheckFlags & BGCHECKFLAG_WATER)) {
             SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 20, NA_SE_EV_PLANT_BROKEN);
         }
         EnKusa_SpawnFragments(this, play);
@@ -571,7 +572,7 @@ void EnKusa_Fall(EnKusa* this, PlayState* play) {
         }
 
     } else {
-        if (this->actor.bgCheckFlags & 0x40) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_WATER_TOUCH) {
             contactPos.y = this->actor.world.pos.y + this->actor.depthInWater;
             for (angleOffset = 0, i = 0; i < 4; i++, angleOffset += 0x4000) {
                 contactPos.x =
@@ -593,7 +594,7 @@ void EnKusa_Fall(EnKusa* this, PlayState* play) {
             rotSpeedXtarget >>= 1;
             rotSpeedY >>= 1;
             rotSpeedYtarget >>= 1;
-            this->actor.bgCheckFlags &= ~0x40;
+            this->actor.bgCheckFlags &= ~BGCHECKFLAG_WATER_TOUCH;
             SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 40, NA_SE_EV_DIVE_INTO_WATER_L);
         }
         EnKusa_UpdateVelY(this);

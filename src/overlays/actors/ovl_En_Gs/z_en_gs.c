@@ -843,7 +843,7 @@ s32 func_809995A4(EnGs* this, PlayState* play) {
 
     if (this->unk_19D == 4) {
         Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 60.0f, 3);
-        if (this->actor.bgCheckFlags & (0x10 | 0x8)) {
+        if (this->actor.bgCheckFlags & (BGCHECKFLAG_WALL | BGCHECKFLAG_CEILING)) {
             Vec3f sp54;
 
             sp54.x = this->actor.world.pos.x;
