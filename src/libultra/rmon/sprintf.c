@@ -1,4 +1,5 @@
 #include "global.h"
+#include "libc/string.h"
 
 void* proutSprintf(void* dst, const char* fmt, size_t size) {
     return (void*)((uintptr_t)memcpy(dst, fmt, size) + size);
