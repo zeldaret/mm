@@ -1,5 +1,5 @@
 #include "ultra64/ultratypes.h"
-#include "osint.h"
+#include "ultra64/osint.h"
 #include "libc/stdint.h"
 #include "global.h"
 

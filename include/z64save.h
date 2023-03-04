@@ -2,9 +2,9 @@
 #define Z64SAVE_H
 
 #include "ultra64.h"
+#include "ultra64/os.h"
 #include "z64item.h"
 #include "z64math.h"
-#include "os.h"
 
 struct GameState;
 struct PlayState;

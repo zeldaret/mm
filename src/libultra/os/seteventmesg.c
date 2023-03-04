@@ -1,4 +1,5 @@
 #include "global.h"
+#include "ultra64/osint.h"
 
 UNK_TYPE4 D_80097F10 = 0;
 

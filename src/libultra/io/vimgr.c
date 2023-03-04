@@ -1,5 +1,5 @@
 #include "global.h"
-#include "osint.h"
+#include "ultra64/osint.h"
 
 OSThread viThread;
 u8 viThreadStack[0x1000];
