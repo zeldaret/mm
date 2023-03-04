@@ -762,7 +762,7 @@ void func_80B30AF8(ObjSpidertent* this, PlayState* play) {
         if (this->unk_3C7 > 0) {
             this->unk_3C7--;
         } else if (this->unk_3C1 > 50) {
-            Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EN_EXTINCT);
+            Actor_PlaySfx(&this->dyna.actor, NA_SE_EN_EXTINCT);
             this->unk_3C7 = Rand_S16Offset(2, 2);
         } else {
             SoundSource_PlaySfxAtFixedWorldPos(play, &this->dyna.actor.world.pos, 11, NA_SE_EN_EXTINCT);

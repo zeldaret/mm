@@ -604,7 +604,7 @@ void func_80BFC7E0(EnRz* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->actionFunc = func_80BFC728;
         func_80BFB9E4(play, this, EN_RZ_ANIM_THINKING);
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
         func_80BFBDFC(play);
     } else if (EnRz_CanTalk(this, play)) {
         func_800B8614(&this->actor, play, 120.0f);
@@ -614,13 +614,13 @@ void func_80BFC7E0(EnRz* this, PlayState* play) {
 void EnRz_StopToThink(EnRz* this, PlayState* play) {
     this->timer = 100;
     this->actionFunc = func_80BFC7E0;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     func_80BFB9E4(play, this, EN_RZ_ANIM_THINKING);
 }
 
 void EnRz_Walk(EnRz* this, PlayState* play) {
     EnRz_UpdateSkelAnime(this, play);
-    this->actor.speedXZ = 1.5f;
+    this->actor.speed = 1.5f;
 
     switch (EnRz_GetPathStatus(this)) {
         case EN_RZ_PATHSTATUS_END:
@@ -639,7 +639,7 @@ void EnRz_Walk(EnRz* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->actionFunc = func_80BFC728;
         func_80BFB9E4(play, this, EN_RZ_ANIM_THINKING);
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
         func_80BFBDFC(play);
     } else if (EnRz_CanTalk(this, play)) {
         func_800B8614(&this->actor, play, 120.0f);

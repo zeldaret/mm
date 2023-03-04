@@ -228,7 +228,7 @@ void EnSsh_SetWaitAnimation(EnSsh* this) {
 }
 
 void EnSsh_SetReturnAnimation(EnSsh* this) {
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALTU_UP);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_STALTU_UP);
     EnSsh_ChangeAnim(this, SSH_ANIM_UP);
 }
 
@@ -297,8 +297,8 @@ s32 EnSsh_Damaged(EnSsh* this) {
         this->spinTimer = 30;
     }
 
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALTU_ROLL);
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_VO_ST_ATTACK);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_STALTU_ROLL);
+    Actor_PlaySfx(&this->actor, NA_SE_VO_ST_ATTACK);
 
     return true;
 }
@@ -477,8 +477,8 @@ s32 EnSsh_CheckHitPlayer(EnSsh* this, PlayState* play) {
         this->spinTimer = this->hitTimer;
     }
 
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALTU_ROLL);
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_VO_ST_ATTACK);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_STALTU_ROLL);
+    Actor_PlaySfx(&this->actor, NA_SE_VO_ST_ATTACK);
 
     play->damagePlayer(play, -8);
 
@@ -532,8 +532,8 @@ s32 EnSsh_CheckHitBack(EnSsh* this, PlayState* play) {
     }
 
     if (this->stunTimer == 0) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_VO_ST_DAMAGE);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_FREEZE);
+        Actor_PlaySfx(&this->actor, NA_SE_VO_ST_DAMAGE);
     }
 
     EnSsh_SetStunned(this);
@@ -553,8 +553,8 @@ s32 EnSsh_CollisionCheck(EnSsh* this, PlayState* play) {
     if (play->actorCtx.unk2 != 0) {
         this->invincibilityTimer = 8;
         if (this->stunTimer == 0) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_VO_ST_DAMAGE);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_FREEZE);
+            Actor_PlaySfx(&this->actor, NA_SE_VO_ST_DAMAGE);
         }
         EnSsh_SetStunned(this);
         this->stateFlags |= SSH_STATE_STUNNED;
@@ -739,7 +739,7 @@ void EnSsh_Idle(EnSsh* this, PlayState* play) {
     }
 
     if (DECR(this->sfxTimer) == 0) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALTU_LAUGH);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_STALTU_LAUGH);
         this->sfxTimer = 64;
     }
 
@@ -780,7 +780,7 @@ void EnSsh_Drop(EnSsh* this, PlayState* play) {
         EnSsh_SetLandAnimation(this);
         EnSsh_SetupAction(this, EnSsh_Land);
     } else if (DECR(this->sfxTimer) == 0) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALTU_DOWN);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_STALTU_DOWN);
         this->sfxTimer = 3;
     }
 }

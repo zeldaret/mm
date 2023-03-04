@@ -554,8 +554,8 @@ void func_8095E95C(EnIshi* this, PlayState* play) {
 void func_8095EA70(EnIshi* this) {
     f32 sp24;
 
-    this->actor.velocity.x = Math_SinS(this->actor.world.rot.y) * this->actor.speedXZ;
-    this->actor.velocity.z = Math_CosS(this->actor.world.rot.y) * this->actor.speedXZ;
+    this->actor.velocity.x = Math_SinS(this->actor.world.rot.y) * this->actor.speed;
+    this->actor.velocity.z = Math_CosS(this->actor.world.rot.y) * this->actor.speed;
     if (!ENISHI_GET_1(&this->actor)) {
         sp24 = Rand_ZeroOne() - 0.9f;
         D_8095F690 = sp24 * 11000.0f;

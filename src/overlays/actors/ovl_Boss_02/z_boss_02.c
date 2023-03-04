@@ -710,10 +710,10 @@ void func_809DAB78(Boss02* this, PlayState* play) {
 
         this->unk_0168 = 2000.0f;
         if (this->unk_0195 != 0) {
-            this->actor.speedXZ = this->unk_01A8 * D_809DF5B0 * 1.25f;
+            this->actor.speed = this->unk_01A8 * D_809DF5B0 * 1.25f;
             this->skelAnime.playSpeed = 2.0f;
         } else {
-            this->actor.speedXZ = this->unk_01A8 * D_809DF5B0;
+            this->actor.speed = this->unk_01A8 * D_809DF5B0;
         }
 
         Actor_UpdateVelocityWithoutGravity(&this->actor);
@@ -732,7 +732,7 @@ void func_809DAB78(Boss02* this, PlayState* play) {
             this->unk_0170 = this->unk_017C;
             this->unk_0170.y = temp_f0;
             this->unk_016C = 120;
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_INBOSS_ROAR_OLD);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_INBOSS_ROAR_OLD);
         }
 
         this->actor.flags &= ~ACTOR_FLAG_1;
@@ -941,13 +941,13 @@ void func_809DAB78(Boss02* this, PlayState* play) {
                 sTwinmoldStatic->subCamAtVel = 0.0f;
                 play_sound(NA_SE_EN_INBOSS_DEAD_PRE2_OLD);
             } else if (!(this->unk_0146[1] & 0xF) && (Rand_ZeroOne() < 0.5f)) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_INBOSS_DAMAGE_OLD);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_INBOSS_DAMAGE_OLD);
             }
             return;
 
         case 21:
             this->unk_01A8 = 0.0f;
-            this->actor.speedXZ = 0.0f;
+            this->actor.speed = 0.0f;
             if (this->unk_0146[0] == 0) {
                 this->unk_0146[0] = 3;
 
@@ -969,20 +969,20 @@ void func_809DAB78(Boss02* this, PlayState* play) {
                     spCC = player->actor.world.pos.x - this->actor.world.pos.x;
                     spC4 = player->actor.world.pos.z - this->actor.world.pos.z;
                     if (sqrtf(SQ(spCC) + SQ(spC4)) < (400.0f * D_809DF5B0)) {
-                        this->actor.speedXZ = 15.0f * D_809DF5B0;
+                        this->actor.speed = 15.0f * D_809DF5B0;
                     }
 
                     spCC = this->actor.world.pos.x;
                     spC4 = this->actor.world.pos.z;
                     if (sqrtf(SQ(spCC) + SQ(spC4)) < (400.0f * D_809DF5B0)) {
-                        this->actor.speedXZ = 15.0f * D_809DF5B0;
+                        this->actor.speed = 15.0f * D_809DF5B0;
                     }
 
                     if (otherTwinmold->unk_0144 >= 10) {
                         Audio_QueueSeqCmd(NA_BGM_CLEAR_BOSS | 0x8000);
                     }
 
-                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_INBOSS_DEAD_OLD);
+                    Actor_PlaySfx(&this->actor, NA_SE_EN_INBOSS_DEAD_OLD);
                 }
             }
             return;
@@ -998,7 +998,7 @@ void func_809DAB78(Boss02* this, PlayState* play) {
 
             if (this->actor.bgCheckFlags & 1) {
                 this->unk_0144 = 23;
-                this->actor.speedXZ = 0.0f;
+                this->actor.speed = 0.0f;
                 this->unk_0170 = this->unk_017C;
                 this->unk_016C = 30;
                 this->unk_0170.y = this->actor.floorHeight;
@@ -1075,7 +1075,7 @@ void func_809DBFB4(Boss02* this, PlayState* play) {
                 this->unk_0156 = 15;
 
                 if (i == 0) {
-                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_INBOSS_DAMAGE_OLD);
+                    Actor_PlaySfx(&this->actor, NA_SE_EN_INBOSS_DAMAGE_OLD);
                     this->unk_015C = 1;
                 } else {
                     Audio_PlaySfxAtPos(&this->unk_167C, NA_SE_EN_INBOSS_DAMAGE_OLD);
@@ -1201,9 +1201,9 @@ void Boss02_Twinmold_Update(Actor* thisx, PlayState* play) {
 
         if (this->unk_016C != 0) {
             if ((this->unk_016C == 60) && (this->unk_0144 < 20)) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_INBOSS_ROAR_OLD);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_INBOSS_ROAR_OLD);
             }
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_INBOSS_SAND_OLD - SFX_FLAG);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_INBOSS_SAND_OLD - SFX_FLAG);
 
             if (this->unk_0144 > 20) {
                 sp3C.x = randPlusMinusPoint5Scaled(100.0f * D_809DF5B0) + this->unk_0170.x;
@@ -1958,7 +1958,7 @@ void func_809DD934(Boss02* this, PlayState* play) {
                 temp_a0_5->world.pos.x *= phi_f0_2;
                 temp_a0_5->world.pos.z *= phi_f0_2;
 
-                temp_a0_5->speedXZ *= phi_f0_2;
+                temp_a0_5->speed *= phi_f0_2;
 
                 temp_a0_5->velocity.x *= phi_f0_2;
                 temp_a0_5->velocity.y *= phi_f0_2;

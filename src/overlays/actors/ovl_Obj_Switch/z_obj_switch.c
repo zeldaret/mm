@@ -273,13 +273,13 @@ void ObjSwitch_StopCutscene(ObjSwitch* this) {
 
 void ObjSwitch_PlayFootSwitchSfx(ObjSwitch* this) {
     if (this->sfxTimer <= 0) {
-        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_FOOT_SWITCH);
+        Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_FOOT_SWITCH);
     }
 }
 
 void ObjSwitch_PlayDiamondSwitchSfx(ObjSwitch* this) {
     if (this->sfxTimer <= 0) {
-        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_DIAMOND_SWITCH);
+        Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_DIAMOND_SWITCH);
     }
 }
 
