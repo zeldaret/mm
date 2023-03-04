@@ -108,12 +108,12 @@ void FireObj_UpdateStateTransitions(PlayState* play, FireObj* fire) {
         FireObj_SetState(fire, fire->dynamicSizeStep, nextState);
     }
 
-    if ((fire->flags & FIRE_FLAG_1) && (fire->state != FIRE_STATE_NOT_LIT) &&
+    if ((fire->flags & FIRE_FLAG_WATER_EXTINGUISHABLE) && (fire->state != FIRE_STATE_NOT_LIT) &&
         WaterBox_GetSurface1_2(play, &play->colCtx, fire->position.x, fire->position.z, &waterY, &waterBox) &&
         (waterY - fire->position.y > 6500.0f * fire->yScale)) {
         FireObj_SetState(fire, fire->dynamicSizeStep, FIRE_STATE_NOT_LIT);
     }
-    if ((fire->flags & FIRE_FLAG_2) && (player->heldItemAction == PLAYER_IA_STICK)) {
+    if ((fire->flags & FIRE_FLAG_INTERACT_STICK) && (player->heldItemAction == PLAYER_IA_STICK)) {
         Math_Vec3f_Diff(&player->meleeWeaponInfo[0].tip, &fire->position, &dist);
         if (Math3D_LengthSquared(&dist) < SQ(20.0f)) {
             sp40 = true;

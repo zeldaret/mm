@@ -64,8 +64,8 @@ typedef enum FireState {
     /* 3 */ FIRE_STATE_NOT_LIT,
 } FireState;
 
-#define FIRE_FLAG_1 (1 << 0)
-#define FIRE_FLAG_2 (1 << 1)
+#define FIRE_FLAG_WATER_EXTINGUISHABLE (1 << 0)
+#define FIRE_FLAG_INTERACT_STICK (1 << 1)
 
 void FireObj_SetPosition(FireObj* fire, Vec3f* pos);
 void FireObj_Draw(struct PlayState* play, FireObj* fire);
