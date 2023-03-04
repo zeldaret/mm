@@ -63,16 +63,13 @@ static Gfx* sShellDLists[] = {
 
 void EnTorch2_Init(Actor* thisx, PlayState* play) {
     EnTorch2* this = THIS;
-    s16 params;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
 
-    // params: which form Link is in (e.g. human, deku, etc.)
-    params = this->actor.params;
-    if (params != TORCH2_PARAM_DEKU) {
+    if (this->actor.params != TORCH2_PARAM_DEKU) {
         this->actor.flags |= ACTOR_FLAG_CAN_PRESS_SWITCH;
-        if (params == TORCH2_PARAM_GORON) {
+        if (this->actor.params == TORCH2_PARAM_GORON) {
             this->actor.flags |= ACTOR_FLAG_CAN_PRESS_HEAVY_SWITCH;
         }
     }

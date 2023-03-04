@@ -1551,7 +1551,7 @@ s32 func_800B7678(PlayState* play, Actor* actor, Vec3f* pos, s32 flags) {
             }
 
             actor->bgCheckFlags |= 1;
-            DynaPolyActor_AttachCarriedActor(&play->colCtx, actor, (s32)actor->floorBgId);
+            DynaPolyActor_AttachCarriedActor(&play->colCtx, actor, actor->floorBgId);
         }
     } else {
         return func_800B761C(actor, distToFloor, flags);
