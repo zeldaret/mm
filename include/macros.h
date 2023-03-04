@@ -2,7 +2,7 @@
 #define MACROS_H
 
 #include "libc/stdint.h"
-#include "ultra64/convert.h"
+#include "ultra64/os_convert.h"
 #include "z64.h"
 
 #define SCREEN_WIDTH  320

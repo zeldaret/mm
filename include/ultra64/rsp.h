@@ -1,5 +1,9 @@
-#ifndef _ULTRA64_RSP_H_
-#define _ULTRA64_RSP_H_
+#ifndef ULTRA64_RSP_H
+#define ULTRA64_RSP_H
+
+#include "ultratypes.h"
+#include "libc/stddef.h"
+
 
 /* SP Status Flags */
 #define SP_STATUS_HALT        (1 <<  0)
@@ -43,5 +47,12 @@
 #define SP_SET_SIG6        (1 << 22)
 #define SP_CLR_SIG7        (1 << 23)
 #define SP_SET_SIG7        (1 << 24)
+
+
+u32 __osSpGetStatus(void);
+void __osSpSetStatus(u32 data);
+s32 __osSpSetPc(void* pc);
+s32 __osSpRawStartDma(s32 direction, void* devAddr, void* dramAddr, size_t size);
+
 
 #endif

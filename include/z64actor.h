@@ -5,6 +5,7 @@
 #include "z64math.h"
 #include "z64animation.h"
 #include "z64collision_check.h"
+#include "z64pad.h"
 #include "unk.h"
 
 // This value is hardcoded to be the size of ovl_Arrow_Fire which currently is the biggest actor that uses the AM_FIELD.

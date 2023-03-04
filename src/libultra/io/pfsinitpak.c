@@ -1,4 +1,4 @@
-#include "ultra64/pfs.h"
+#include "ultra64/os_pfs.h"
 #include "global.h"
 
 s32 __osPfsCheckRamArea(OSPfs* pfs);

@@ -1,4 +1,4 @@
-#include "ultra64/pfs.h"
+#include "ultra64/os_pfs.h"
 #include "global.h"
 
 #define CHECK_IPAGE(p)                                                                                      \

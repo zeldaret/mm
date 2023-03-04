@@ -1,9 +1,9 @@
 #ifndef ULTRA64_MOTOR_H
 #define ULTRA64_MOTOR_H
 
-#include "ultra64/ultratypes.h"
-#include "ultra64/pfs.h"
-#include "ultra64/os_message.h"
+#include "ultratypes.h"
+#include "os_pfs.h"
+#include "os_message.h"
 
 #define MOTOR_START             1
 #define MOTOR_STOP              0

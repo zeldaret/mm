@@ -9,10 +9,7 @@
 #include "libc/stdlib.h"
 
 #include "ultra64.h"
-//#include "ultra64/gs2dex.h"
-#include "ultra64/controller.h"
-//#include "osint.h"
-//#include "os.h"
+
 #include "irqmgr.h"
 #include "scheduler.h"
 #include "xstdio.h"
@@ -44,6 +41,7 @@
 #include "z64message.h"
 #include "z64object.h"
 #include "z64ocarina.h"
+#include "z64pad.h"
 #include "z64player.h"
 #include "z64save.h"
 #include "z64scene.h"

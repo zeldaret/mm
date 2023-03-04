@@ -299,7 +299,7 @@
     0x8008A5D0:("__osSetSR",),
     0x8008A5E0:("osWritebackDCache",),
     0x8008A660:("__createSpeedParam",),
-    0x8008A6FC:("osInitialize",),
+    0x8008A6FC:("__osInitialize_common",),
     0x8008A9A8:("__osInitialize_autodetect",),
     0x8008AA10:("osViGetNextFramebuffer",),
     0x8008AA50:("guPerspectiveF",),

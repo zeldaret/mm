@@ -1,5 +1,5 @@
-#ifndef _ULTRA64_PFS_H_
-#define _ULTRA64_PFS_H_
+#ifndef ULTRA64_OS_PFS_H
+#define ULTRA64_OS_PFS_H
 
 #include "os.h"
 
@@ -134,8 +134,16 @@ typedef struct {
     /* 0x101 */ u8 map[PFS_INODE_DIST_MAP];
 } __OSInodeCache; // size = 0x202
 
-s32 __osCheckPackId(OSPfs* pfs, __OSPackId* check);
-s32 __osGetId(OSPfs* pfs);
+
+s32 osPfsInitPak(OSMesgQueue* queue, OSPfs* pfs, s32 channel);
 s32 osPfsChecker(OSPfs* pfs);
+s32 osPfsAllocateFile(OSPfs* pfs, u16 companyCode, u32 gameCode, u8* gameName, u8* extName, s32 fileSize, s32* fileNo);
+s32 osPfsFindFile(OSPfs* pfs, u16 companyCode, u32 gameCode, u8* gameName, u8* extName, s32* fileNo);
+s32 osPfsDeleteFile(OSPfs* pfs, u16 companyCode, u32 gameCode, u8* gameName, u8* extName);
+s32 osPfsReadWriteFile(OSPfs* pfs, s32 fileNo, u8 flag, s32 offset, s32 size, u8* data);
+s32 osPfsFileState(OSPfs* pfs, s32 fileNo, OSPfsState* state);
+s32 osPfsIsPlug(OSMesgQueue* mq, u8* pattern);
+s32 osPfsFreeBlocks(OSPfs* pfs, s32* leftoverBytes);
+
 
 #endif

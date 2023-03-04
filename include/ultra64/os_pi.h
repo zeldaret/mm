@@ -93,4 +93,14 @@ typedef struct {
 #define OS_MESG_PRI_HIGH      1
 
 
+void osCreatePiManager(OSPri pri, OSMesgQueue* cmdQ, OSMesg* cmdBuf, s32 cmdMsgCnt);
+
+OSPiHandle* osCartRomInit(void);
+
+s32 osEPiWriteIo(OSPiHandle* handle, uintptr_t devAddr, u32 data);
+s32 osEPiReadIo(OSPiHandle* handle, uintptr_t devAddr, u32* data);
+s32 osEPiStartDma(OSPiHandle* pihandle, OSIoMesg* mb, s32 direction);
+s32 osEPiLinkHandle(OSPiHandle* handle);
+
+
 #endif

@@ -296,7 +296,7 @@ asm/non_matchings/boot/getsr/__osGetSR.s,__osGetSR,0x8008A5C0,0x4
 asm/non_matchings/boot/setsr/__osSetSR.s,__osSetSR,0x8008A5D0,0x4
 asm/non_matchings/boot/writebackdcache/osWritebackDCache.s,osWritebackDCache,0x8008A5E0,0x20
 asm/non_matchings/boot/initialize/__createSpeedParam.s,__createSpeedParam,0x8008A660,0x27
-asm/non_matchings/boot/initialize/osInitialize.s,osInitialize,0x8008A6FC,0xAB
+asm/non_matchings/boot/initialize/__osInitialize_common.s,__osInitialize_common,0x8008A6FC,0xAB
 asm/non_matchings/boot/initialize/__osInitialize_autodetect.s,__osInitialize_autodetect,0x8008A9A8,0x2
 asm/non_matchings/boot/vigetnextframebuf/osViGetNextFramebuffer.s,osViGetNextFramebuffer,0x8008AA10,0x10
 asm/non_matchings/boot/perspective/guPerspectiveF.s,guPerspectiveF,0x8008AA50,0x8C

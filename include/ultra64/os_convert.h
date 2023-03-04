@@ -21,6 +21,5 @@
 /* Functions */
 
 extern uintptr_t osVirtualToPhysical(void*);
-extern void* osPhysicalToVirtual(uintptr_t);
 
 #endif

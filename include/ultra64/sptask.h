@@ -109,4 +109,10 @@ typedef union {
 
 typedef u32 OSYieldResult;
 
+void osSpTaskLoad(OSTask* intp);
+void osSpTaskStartGo(OSTask* tp);
+
+void osSpTaskYield(void);
+OSYieldResult osSpTaskYielded(OSTask* task);
+
 #endif

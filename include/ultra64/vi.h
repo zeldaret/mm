@@ -52,23 +52,6 @@ typedef struct {
     /* 0x24 */ OSViFieldRegs fldRegs[2];
 } OSViMode; // size = 0x4C
 
-typedef struct {
-    /* 0x0 */ f32 factor;
-    /* 0x4 */ u16 offset;
-    /* 0x8 */ u32 scale;
-} __OSViScale; // size = 0x0C
-
-typedef struct {
-    /* 0x00 */ u16 state;
-    /* 0x02 */ u16 retraceCount;
-    /* 0x04 */ void* buffer;
-    /* 0x08 */ OSViMode* modep;
-    /* 0x0C */ u32 features;
-    /* 0x10 */ OSMesgQueue* mq;
-    /* 0x14 */ OSMesg* msg;
-    /* 0x18 */ __OSViScale x;
-    /* 0x24 */ __OSViScale y;
-} __OSViContext; // size = 0x30
 
 #define OS_VI_NTSC_LPN1     0   /* NTSC */
 #define OS_VI_NTSC_LPF1     1
@@ -134,5 +117,19 @@ typedef struct {
 #define OS_TV_NTSC          1
 #define OS_TV_MPAL          2
 #define OS_VI_UNK28         28
+
+
+void* osViGetCurrentFramebuffer(void);
+void* osViGetNextFramebuffer(void);
+void osViSetXScale(f32 value);
+void osViSetYScale(f32 value);
+void osViExtendVStart(u32 a0);
+void osViSetSpecialFeatures(u32 func);
+void osViSetMode(OSViMode* modep);
+void osViSetEvent(OSMesgQueue* mq, OSMesg m, u32 retraceCount);
+void osViSwapBuffer(void* frameBufPtr);
+void osViBlack(u8 active);
+void osCreateViManager(OSPri pri);
+
 
 #endif

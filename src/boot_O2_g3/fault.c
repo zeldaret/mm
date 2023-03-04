@@ -1,6 +1,7 @@
 #include "ultra64.h"
 #include "global.h"
 #include "vt.h"
+#include "ultra64/osint.h"
 
 // data
 const char* sCpuExceptions[] = {
