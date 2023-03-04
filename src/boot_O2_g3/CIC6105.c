@@ -26,6 +26,6 @@ void CIC6105_RemoveRomInfoFaultPage(void) {
 }
 
 void func_800818F4(void) {
-    D_8009BE30 = *(u32*)0xA02FB1F4;
-    D_8009BE34 = *(u32*)0xA02FE1C0;
+    D_8009BE30 = IO_READ(0x2FB1F4);
+    D_8009BE34 = IO_READ(0x2FE1C0);
 }
