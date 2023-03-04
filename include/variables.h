@@ -279,9 +279,6 @@ extern char D_800994B0[];
 extern f64 D_800994B8;
 extern f64 D_800994C0;
 extern f64 D_800994C8;
-extern char gBuildTeam[];
-extern char gBuildDate[];
-extern char gBuildMakeOption[];
 
 extern IrqMgr gIrqMgr;
 

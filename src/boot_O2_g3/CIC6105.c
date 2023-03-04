@@ -1,4 +1,7 @@
 #include "prevent_bss_reordering.h"
+#include "CIC6105.h"
+#include "ultra64.h"
+#include "build.h"
 #include "global.h"
 #include "unk.h"
 
@@ -27,6 +30,6 @@ void CIC6105_RemoveRomInfoFaultPage(void) {
 }
 
 void func_800818F4(void) {
-    D_8009BE30 = IO_READ(0x2FB1F4);
-    D_8009BE34 = IO_READ(0x2FE1C0);
+    D_8009BE30 = IO_READ(CIC_ADDRESS_1);
+    D_8009BE34 = IO_READ(CIC_ADDRESS_2);
 }
