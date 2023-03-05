@@ -15,7 +15,7 @@ typedef struct DebugDispObject {
     /* 0x20 */ Color_RGBA8 color;
     /* 0x24 */ s16 type;
     /* 0x28 */ struct DebugDispObject* next;
-    /* 0x2C */ s32 pad; //Padding not in the OOT version
+    /* 0x2C */ s32 pad; // Padding is not in the OoT version
 } DebugDispObject; // size = 0x30
 
 DebugDispObject* DebugDisplay_Init(void);
