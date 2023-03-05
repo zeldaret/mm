@@ -85,7 +85,8 @@ typedef enum PlayerItemAction {
     /* 0x00 */ PLAYER_IA_NONE,
     /* 0x01 */ PLAYER_IA_LAST_USED,
     /* 0x02 */ PLAYER_IA_FISHING_ROD,
-    /* 0x03 */ PLAYER_IA_SWORD_KOKIRI,
+    /* 0x03 */ PLAYER_IA_SWORD_MIN,
+    /* 0x03 */ PLAYER_IA_SWORD_KOKIRI = PLAYER_IA_SWORD_MIN,
     /* 0x04 */ PLAYER_IA_SWORD_RAZOR,
     /* 0x05 */ PLAYER_IA_SWORD_GILDED,
     /* 0x06 */ PLAYER_IA_SWORD_GREAT_FAIRY,
@@ -96,14 +97,16 @@ typedef enum PlayerItemAction {
     /* 0x0B */ PLAYER_IA_BOW_ICE,
     /* 0x0C */ PLAYER_IA_BOW_LIGHT,
     /* 0x0D */ PLAYER_IA_HOOKSHOT,
-    /* 0x0E */ PLAYER_IA_BOMB,
+    /* 0x0E */ PLAYER_IA_EXPLOSIVE_MIN,
+    /* 0x0E */ PLAYER_IA_BOMB = PLAYER_IA_EXPLOSIVE_MIN,
     /* 0x0F */ PLAYER_IA_POWDER_KEG,
     /* 0x10 */ PLAYER_IA_BOMBCHU,
     /* 0x11 */ PLAYER_IA_11,
     /* 0x12 */ PLAYER_IA_NUT,
     /* 0x13 */ PLAYER_IA_PICTO_BOX,
     /* 0x14 */ PLAYER_IA_OCARINA,
-    /* 0x15 */ PLAYER_IA_BOTTLE,
+    /* 0x15 */ PLAYER_IA_BOTTLE_MIN,
+    /* 0x15 */ PLAYER_IA_BOTTLE_EMPTY = PLAYER_IA_BOTTLE_MIN,
     /* 0x16 */ PLAYER_IA_BOTTLE_FISH,
     /* 0x17 */ PLAYER_IA_BOTTLE_SPRING_WATER,
     /* 0x18 */ PLAYER_IA_BOTTLE_HOT_SPRING_WATER,
@@ -168,7 +171,7 @@ typedef enum PlayerItemAction {
     /* 0x53 */ PLAYER_IA_MAX
 } PlayerItemAction;
 
-#define GET_BSWORD_FROM_IA(itemAction) ((itemAction) - PLAYER_IA_SWORD_KOKIRI + 1)
+#define GET_BSWORD_FROM_IA(itemAction) ((itemAction) - PLAYER_IA_SWORD_MIN + 1)
 
 typedef enum PlayerBButtonSword {
     /* 0 */ PLAYER_BSWORD_NONE,
@@ -178,7 +181,7 @@ typedef enum PlayerBButtonSword {
     /* 4 */ PLAYER_BSWORD_MAX
 } PlayerBButtonSword;
 
-#define GET_MELEE_WEAPON_FROM_IA(itemAction) ((itemAction) - PLAYER_IA_SWORD_KOKIRI + 1)
+#define GET_MELEE_WEAPON_FROM_IA(itemAction) ((itemAction) - PLAYER_IA_SWORD_MIN + 1)
 
 typedef enum PlayerMeleeWeapon {
     /* 0 */ PLAYER_MELEEWEAPON_NONE,
@@ -191,11 +194,11 @@ typedef enum PlayerMeleeWeapon {
     /* 7 */ PLAYER_MELEEWEAPON_MAX
 } PlayerMeleeWeapon;
 
-#define GET_BOTTLE_FROM_IA(itemAction) ((itemAction) - PLAYER_IA_BOTTLE)
+#define GET_BOTTLE_FROM_IA(itemAction) ((itemAction) - PLAYER_IA_BOTTLE_MIN)
 
 typedef enum PlayerBottle {
     /* -1 */ PLAYER_BOTTLE_NONE = -1,
-    /*  0 */ PLAYER_BOTTLE_EMPTY = GET_BOTTLE_FROM_IA(PLAYER_IA_BOTTLE),
+    /*  0 */ PLAYER_BOTTLE_EMPTY = GET_BOTTLE_FROM_IA(PLAYER_IA_BOTTLE_EMPTY),
     /*  1 */ PLAYER_BOTTLE_FISH = GET_BOTTLE_FROM_IA(PLAYER_IA_BOTTLE_FISH),
     /*  2 */ PLAYER_BOTTLE_SPRING_WATER = GET_BOTTLE_FROM_IA(PLAYER_IA_BOTTLE_SPRING_WATER),
     /*  3 */ PLAYER_BOTTLE_HOT_SPRING_WATER = GET_BOTTLE_FROM_IA(PLAYER_IA_BOTTLE_HOT_SPRING_WATER),
@@ -219,7 +222,7 @@ typedef enum PlayerBottle {
     /* 21 */ PLAYER_BOTTLE_MAX
 } PlayerBottle;
 
-#define GET_EXPLOSIVE_FROM_IA(itemAction) ((itemAction) - PLAYER_IA_BOMB)
+#define GET_EXPLOSIVE_FROM_IA(itemAction) ((itemAction) - PLAYER_IA_EXPLOSIVE_MIN)
 
 typedef enum PlayerExplosive {
     /* -1 */ PLAYER_EXPLOSIVE_NONE = -1,
@@ -229,7 +232,7 @@ typedef enum PlayerExplosive {
     /*  3 */ PLAYER_EXPLOSIVE_MAX
 } PlayerExplosive;
 
-#define GET_SWORD_FROM_IA(itemAction) ((itemAction) - PLAYER_IA_SWORD_KOKIRI)
+#define GET_SWORD_FROM_IA(itemAction) ((itemAction) - PLAYER_IA_SWORD_MIN)
 
 typedef enum PlayerSword {
     /* -1 */ PLAYER_SWORD_NONE = -1,

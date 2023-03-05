@@ -913,7 +913,7 @@ s32 func_80A87880(Actor* thisx, PlayState* play) {
                        Animation_OnFrame(&this->skelAnime, 52.0f)) {
                 if (Animation_OnFrame(&this->skelAnime, 52.0f)) {
                     this->unk_34E &= ~0x400;
-                    Player_UpdateBottleHeld(play, player, ITEM_BOTTLE, PLAYER_IA_BOTTLE);
+                    Player_UpdateBottleHeld(play, player, ITEM_BOTTLE, PLAYER_IA_BOTTLE_EMPTY);
                 }
                 Actor_PlaySfx(&this->actor, NA_SE_EN_KOUME_DRINK);
             } else if (Animation_OnFrame(&this->skelAnime, 90.0f)) {
