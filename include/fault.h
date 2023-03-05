@@ -3,6 +3,7 @@
 
 #include "ultra64.h"
 #include "libc/stdarg.h"
+#include "libc/stdint.h"
 #include "io/controller.h"
 
 // These are the same as the 3-bit ansi color codes
@@ -33,14 +34,14 @@
 typedef struct FaultClient {
     /* 0x0 */ struct FaultClient* next;
     /* 0x4 */ void (*callback)(void*, void*);
-    /* 0x8 */ void* param0;
-    /* 0xC */ void* param1;
+    /* 0x8 */ void* arg0;
+    /* 0xC */ void* arg1;
 } FaultClient; // size = 0x10
 
 typedef struct FaultAddrConvClient {
     /* 0x0 */ struct FaultAddrConvClient* next;
-    /* 0x4 */ void* (*callback)(void*, void*);
-    /* 0x8 */ void* param;
+    /* 0x4 */ uintptr_t (*callback)(uintptr_t, void*);
+    /* 0x8 */ void* arg;
 } FaultAddrConvClient; // size = 0xC
 
 
@@ -65,9 +66,9 @@ void Fault_FillScreenBlack(void);
 void Fault_FillScreenRed(void);
 void Fault_DrawCornerRec(u16 color);
 void Fault_PrintFReg(s32 idx, f32* value);
-void osSyncPrintfFReg(s32 idx, f32* value);
+void Fault_LogFReg(s32 idx, f32* value);
 void Fault_PrintFPCR(u32 value);
-void osSyncPrintfFPCR(u32 value);
+void Fault_LogFPCSR(u32 value);
 void Fault_PrintThreadContext(OSThread* t);
 void osSyncPrintfThreadContext(OSThread* t);
 OSThread* Fault_FindFaultedThread(void);
@@ -119,7 +120,7 @@ typedef struct FaultMgr {
     /* 0x7CC */ u8 exitDebugger;
     /* 0x7CD */ u8 msgId; // 1 - CPU Break; 2 - Fault; 3 - Unknown
     /* 0x7CE */ u8 faultHandlerEnabled;
-    /* 0x7CF */ u8 faultActive;
+    /* 0x7CF */ u8 autoScroll;
     /* 0x7D0 */ OSThread* faultedThread;
     /* 0x7D4 */ FaultPadCallback padCallback;
     /* 0x7D8 */ FaultClient* clients;

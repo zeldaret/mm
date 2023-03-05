@@ -42,19 +42,28 @@ void Fault_SleepImpl(u32 duration) {
     Sleep_Cycles(value);
 }
 
-void Fault_AddClient(FaultClient* client, void* callback, void* param0, void* param1) {
+/**
+ * Registers a fault client.
+ *
+ * Clients contribute at least one page to the crash screen, drawn by `callback`.
+ * Arguments are passed on to the callback through `arg0` and `arg1`.
+ *
+ * The callback is intended to be
+ * `void (*callback)(void* arg0, void* arg1)`
+ */
+void Fault_AddClient(FaultClient* client, void* callback, void* arg0, void* arg1) {
     OSIntMask mask;
-    u32 alreadyExists = 0;
+    u32 alreadyExists = false;
 
     mask = osSetIntMask(1);
 
+    // Ensure the client is not already registered
     {
-
         FaultClient* iter = sFaultContext->clients;
 
-        while (iter) {
+        while (iter != NULL) {
             if (iter == client) {
-                alreadyExists = 1;
+                alreadyExists = true;
                 goto end;
             }
             iter = iter->next;
@@ -62,8 +71,8 @@ void Fault_AddClient(FaultClient* client, void* callback, void* param0, void* pa
     }
 
     client->callback = callback;
-    client->param0 = param0;
-    client->param1 = param1;
+    client->arg0 = arg0;
+    client->arg1 = arg1;
     client->next = sFaultContext->clients;
     sFaultContext->clients = client;
 
@@ -75,21 +84,20 @@ end:
     }
 }
 
+/**
+ * Removes a fault client so that the page is no longer displayed if a crash occurs.
+ */
 void Fault_RemoveClient(FaultClient* client) {
-    FaultClient* iter;
-    FaultClient* lastIter;
+    FaultClient* iter = sFaultContext->clients;
+    FaultClient* lastIter = NULL;
     OSIntMask mask;
-    u32 listIsEmpty;
-
-    iter = sFaultContext->clients;
-    listIsEmpty = 0;
-    lastIter = NULL;
+    u32 listIsEmpty = false;
 
     mask = osSetIntMask(1);
 
     while (iter) {
         if (iter == client) {
-            if (lastIter) {
+            if (lastIter != NULL) {
                 lastIter->next = client->next;
             } else {
                 sFaultContext->clients = client;
@@ -113,25 +121,37 @@ void Fault_RemoveClient(FaultClient* client) {
     }
 }
 
-void Fault_AddAddrConvClient(FaultAddrConvClient* client, void* callback, void* param) {
+/**
+ * Registers an address converter client. This enables the crash screen to look up virtual
+ * addresses of overlays relocated during runtime. Address conversion is carried out by
+ * `callback`, which either returns a virtual address or NULL if the address could not
+ * be converted.
+ *
+ * The callback is intended to be
+ * `uintptr_t (*callback)(uintptr_t addr, void* arg)`
+ * The callback may return 0 if it could not convert the address
+ * The callback may return -1 to be unregistered
+ */
+void Fault_AddAddrConvClient(FaultAddrConvClient* client, void* callback, void* arg) {
     OSIntMask mask;
-    u32 alreadyExists = 0;
+    u32 alreadyExists = false;
 
     mask = osSetIntMask(1);
 
     {
-
         FaultAddrConvClient* iter = sFaultContext->addrConvClients;
-        while (iter) {
+
+        while (iter != NULL) {
             if (iter == client) {
-                alreadyExists = 1;
+                alreadyExists = true;
                 goto end;
             }
             iter = iter->next;
         }
     }
+
     client->callback = callback;
-    client->param = param;
+    client->arg = arg;
     client->next = sFaultContext->addrConvClients;
     sFaultContext->addrConvClients = client;
 
@@ -144,20 +164,16 @@ end:
 }
 
 void Fault_RemoveAddrConvClient(FaultAddrConvClient* client) {
-    FaultAddrConvClient* iter;
-    FaultAddrConvClient* lastIter;
+    FaultAddrConvClient* iter = sFaultContext->addrConvClients;
+    FaultAddrConvClient* lastIter = NULL;
     OSIntMask mask;
-    u32 listIsEmpty;
-
-    iter = sFaultContext->addrConvClients;
-    listIsEmpty = 0;
-    lastIter = NULL;
+    u32 listIsEmpty = false;
 
     mask = osSetIntMask(1);
 
     while (iter) {
         if (iter == client) {
-            if (lastIter) {
+            if (lastIter != NULL) {
                 lastIter->next = client->next;
             } else {
                 sFaultContext->addrConvClients = client;
@@ -182,13 +198,17 @@ void Fault_RemoveAddrConvClient(FaultAddrConvClient* client) {
     }
 }
 
-void* Fault_ConvertAddress(void* addr) {
-    void* ret;
+/**
+ * Converts `addr` to a virtual address via the registered
+ * address converter clients
+ */
+uintptr_t Fault_ConvertAddress(uintptr_t addr) {
+    uintptr_t ret;
     FaultAddrConvClient* iter = sFaultContext->addrConvClients;
 
-    while (iter) {
+    while (iter != NULL) {
         if (iter->callback) {
-            ret = iter->callback(addr, iter->param);
+            ret = iter->callback(addr, iter->arg);
             if (ret != NULL) {
                 return ret;
             }
@@ -196,7 +216,7 @@ void* Fault_ConvertAddress(void* addr) {
         iter = iter->next;
     }
 
-    return NULL;
+    return 0;
 }
 
 void Fault_Sleep(u32 duration) {
@@ -204,47 +224,56 @@ void Fault_Sleep(u32 duration) {
 }
 
 void Fault_PadCallback(Input* input) {
-    Padmgr_GetInput2(input, 0);
+    Padmgr_GetInput2(input, false);
 }
 
 void Fault_UpdatePadImpl() {
     sFaultContext->padCallback(sFaultContext->padInput);
 }
 
+/**
+ * Awaits user input
+ *
+ * L toggles auto-scroll
+ * DPad-Up enables osSyncPrintf output
+ * DPad-Down disables osSyncPrintf output
+ * A and DPad-Right continues and returns true
+ * DPad-Left continues and returns false
+ */
 u32 Fault_WaitForInputImpl() {
     Input* curInput = &sFaultContext->padInput[0];
     s32 count = 600;
-    u32 kDown;
+    u32 pressedBtn;
 
-    while (1) {
-        Fault_Sleep(0x10);
+    while (true) {
+        Fault_Sleep(1000 / 60);
         Fault_UpdatePadImpl();
 
-        kDown = curInput->press.button;
+        pressedBtn = curInput->press.button;
 
-        if (kDown == BTN_L) {
-            sFaultContext->faultActive = !sFaultContext->faultActive;
+        if (pressedBtn == BTN_L) {
+            sFaultContext->autoScroll = !sFaultContext->autoScroll;
         }
 
-        if (sFaultContext->faultActive) {
+        if (sFaultContext->autoScroll) {
             if (count-- < 1) {
-                return 0;
+                return false;
             }
         } else {
-            if (kDown == BTN_A || kDown == BTN_DRIGHT) {
-                return 0;
+            if (pressedBtn == BTN_A || pressedBtn == BTN_DRIGHT) {
+                return false;
             }
 
-            if (kDown == BTN_DLEFT) {
-                return 1;
+            if (pressedBtn == BTN_DLEFT) {
+                return true;
             }
 
-            if (kDown == BTN_DUP) {
-                FaultDrawer_SetOsSyncPrintfEnabled(1);
+            if (pressedBtn == BTN_DUP) {
+                FaultDrawer_SetOsSyncPrintfEnabled(true);
             }
 
-            if (kDown == BTN_DDOWN) {
-                FaultDrawer_SetOsSyncPrintfEnabled(0);
+            if (pressedBtn == BTN_DDOWN) {
+                FaultDrawer_SetOsSyncPrintfEnabled(false);
             }
         }
     }
@@ -259,21 +288,21 @@ void Fault_DrawRec(s32 x, s32 y, s32 w, s32 h, u16 color) {
 }
 
 void Fault_FillScreenBlack() {
-    FaultDrawer_SetForeColor(0xFFFF);
-    FaultDrawer_SetBackColor(1);
+    FaultDrawer_SetForeColor(GPACK_RGBA5551(255, 255, 255, 1));
+    FaultDrawer_SetBackColor(GPACK_RGBA5551(0, 0, 0, 1));
     FaultDrawer_FillScreen();
-    FaultDrawer_SetBackColor(0);
+    FaultDrawer_SetBackColor(GPACK_RGBA5551(0, 0, 0, 0));
 }
 
 void Fault_FillScreenRed() {
-    FaultDrawer_SetForeColor(0xFFFF);
-    FaultDrawer_SetBackColor(0xF001);
+    FaultDrawer_SetForeColor(GPACK_RGBA5551(255, 255, 255, 1));
+    FaultDrawer_SetBackColor(GPACK_RGBA5551(240, 0, 0, 1));
     FaultDrawer_FillScreen();
-    FaultDrawer_SetBackColor(0);
+    FaultDrawer_SetBackColor(GPACK_RGBA5551(0, 0, 0, 0));
 }
 
 void Fault_DrawCornerRec(u16 color) {
-    Fault_DrawRec(0x16, 0x10, 8, 1, color);
+    Fault_DrawRec(22, 16, 8, 1, color);
 }
 
 void Fault_PrintFReg(s32 idx, f32* value) {
@@ -283,11 +312,12 @@ void Fault_PrintFReg(s32 idx, f32* value) {
     if ((v0 >= -0x7E && v0 < 0x80) || raw == 0) {
         FaultDrawer_Printf("F%02d:%14.7e ", idx, *value);
     } else {
+        // Print subnormal floats as their ieee-754 hex representation
         FaultDrawer_Printf("F%02d:  %08x(16) ", idx, raw);
     }
 }
 
-void osSyncPrintfFReg(s32 idx, f32* value) {
+void Fault_LogFReg(s32 idx, f32* value) {
     u32 raw = *(u32*)value;
     s32 v0 = ((raw & 0x7F800000) >> 0x17) - 0x7F;
 
@@ -303,6 +333,9 @@ void Fault_PrintFPCR(u32 value) {
     u32 flag = 0x20000;
 
     FaultDrawer_Printf("FPCSR:%08xH ", value);
+
+    // Go through each of the six causes and print the name of
+    // the first cause that is set
     for (i = 0; i < ARRAY_COUNT(sFpuExceptions); i++) {
         if (value & flag) {
             FaultDrawer_Printf("(%s)", sFpuExceptions[i]);
@@ -313,7 +346,7 @@ void Fault_PrintFPCR(u32 value) {
     FaultDrawer_Printf("\n");
 }
 
-void osSyncPrintfFPCR(u32 value) {
+void Fault_LogFPCSR(u32 value) {
     s32 i;
     u32 flag = 0x20000;
 
@@ -330,16 +363,17 @@ void osSyncPrintfFPCR(u32 value) {
 void Fault_PrintThreadContext(OSThread* t) {
     __OSThreadContext* ctx;
     s32 causeStrIdx = (s32)((((u32)t->context.cause >> 2) & 0x1F) << 0x10) >> 0x10;
-    if (causeStrIdx == 0x17) {
-        causeStrIdx = 0x10;
+
+    if (causeStrIdx == 23) { // Watchpoint
+        causeStrIdx = 16;
     }
-    if (causeStrIdx == 0x1F) {
-        causeStrIdx = 0x11;
+    if (causeStrIdx == 31) { // Virtual coherency on data
+        causeStrIdx = 17;
     }
 
     FaultDrawer_FillScreen();
     FaultDrawer_SetCharPad(-2, 4);
-    FaultDrawer_SetCursor(0x16, 0x14);
+    FaultDrawer_SetCursor(22, 20);
 
     ctx = &t->context;
     FaultDrawer_Printf("THREAD:%d (%d:%s)\n", t->id, causeStrIdx, sCpuExceptions[causeStrIdx]);
@@ -386,18 +420,19 @@ void Fault_PrintThreadContext(OSThread* t) {
     FaultDrawer_SetCharPad(0, 0);
 
     if (D_8009BE54 != 0) {
-        FaultDrawer_DrawText(0xA0, 0xD8, "%5.2f sec\n", D_8009BE54);
+        FaultDrawer_DrawText(160, 216, "%5.2f sec\n", D_8009BE54);
     }
 }
 
 void osSyncPrintfThreadContext(OSThread* t) {
     __OSThreadContext* ctx;
     s32 causeStrIdx = (s32)((((u32)t->context.cause >> 2) & 0x1F) << 0x10) >> 0x10;
-    if (causeStrIdx == 0x17) {
-        causeStrIdx = 0x10;
+
+    if (causeStrIdx == 23) { // Watchpoint
+        causeStrIdx = 16;
     }
-    if (causeStrIdx == 0x1F) {
-        causeStrIdx = 0x11;
+    if (causeStrIdx == 31) { // Virtual coherency on data
+        causeStrIdx = 17;
     }
 
     ctx = &t->context;
@@ -416,93 +451,107 @@ void osSyncPrintfThreadContext(OSThread* t) {
     osSyncPrintf("T9:%08xH   GP:%08xH   SP:%08xH\n", (u32)ctx->t9, (u32)ctx->gp, (u32)ctx->sp);
     osSyncPrintf("S8:%08xH   RA:%08xH   LO:%08xH\n", (u32)ctx->s8, (u32)ctx->ra, (u32)ctx->lo);
     osSyncPrintf("\n");
-    osSyncPrintfFPCR(ctx->fpcsr);
+    Fault_LogFPCSR(ctx->fpcsr);
     osSyncPrintf("\n");
-    osSyncPrintfFReg(0, &ctx->fp0.f.f_even);
-    osSyncPrintfFReg(2, &ctx->fp2.f.f_even);
+    Fault_LogFReg(0, &ctx->fp0.f.f_even);
+    Fault_LogFReg(2, &ctx->fp2.f.f_even);
     osSyncPrintf("\n");
-    osSyncPrintfFReg(4, &ctx->fp4.f.f_even);
-    osSyncPrintfFReg(6, &ctx->fp6.f.f_even);
+    Fault_LogFReg(4, &ctx->fp4.f.f_even);
+    Fault_LogFReg(6, &ctx->fp6.f.f_even);
     osSyncPrintf("\n");
-    osSyncPrintfFReg(8, &ctx->fp8.f.f_even);
-    osSyncPrintfFReg(10, &ctx->fp10.f.f_even);
+    Fault_LogFReg(8, &ctx->fp8.f.f_even);
+    Fault_LogFReg(10, &ctx->fp10.f.f_even);
     osSyncPrintf("\n");
-    osSyncPrintfFReg(12, &ctx->fp12.f.f_even);
-    osSyncPrintfFReg(14, &ctx->fp14.f.f_even);
+    Fault_LogFReg(12, &ctx->fp12.f.f_even);
+    Fault_LogFReg(14, &ctx->fp14.f.f_even);
     osSyncPrintf("\n");
-    osSyncPrintfFReg(16, &ctx->fp16.f.f_even);
-    osSyncPrintfFReg(18, &ctx->fp18.f.f_even);
+    Fault_LogFReg(16, &ctx->fp16.f.f_even);
+    Fault_LogFReg(18, &ctx->fp18.f.f_even);
     osSyncPrintf("\n");
-    osSyncPrintfFReg(20, &ctx->fp20.f.f_even);
-    osSyncPrintfFReg(22, &ctx->fp22.f.f_even);
+    Fault_LogFReg(20, &ctx->fp20.f.f_even);
+    Fault_LogFReg(22, &ctx->fp22.f.f_even);
     osSyncPrintf("\n");
-    osSyncPrintfFReg(24, &ctx->fp24.f.f_even);
-    osSyncPrintfFReg(26, &ctx->fp26.f.f_even);
+    Fault_LogFReg(24, &ctx->fp24.f.f_even);
+    Fault_LogFReg(26, &ctx->fp26.f.f_even);
     osSyncPrintf("\n");
-    osSyncPrintfFReg(28, &ctx->fp28.f.f_even);
-    osSyncPrintfFReg(30, &ctx->fp30.f.f_even);
+    Fault_LogFReg(28, &ctx->fp28.f.f_even);
+    Fault_LogFReg(30, &ctx->fp30.f.f_even);
     osSyncPrintf("\n");
 }
 
+/**
+ * Iterates through the active thread queue for a user thread with either
+ * the CPU break or Fault flag set.
+ */
 OSThread* Fault_FindFaultedThread() {
     OSThread* iter = __osGetActiveQueue();
+
     while (iter->priority != -1) {
         if (iter->priority > 0 && iter->priority < 0x7F && (iter->flags & 3)) {
             return iter;
         }
         iter = iter->tlnext;
     }
+
     return NULL;
 }
 void Fault_Wait5Seconds(void) {
     u32 pad;
-    OSTime start;
-    start = osGetTime();
-    do {
-        Fault_Sleep(0x10);
-    } while ((osGetTime() - start) <= OS_USEC_TO_CYCLES(5000000));
+    OSTime start = osGetTime();
 
-    sFaultContext->faultActive = 1;
+    do {
+        Fault_Sleep(1000 / 60);
+    } while ((osGetTime() - start) < OS_SEC_TO_CYCLES(5) + 1);
+
+    sFaultContext->autoScroll = true;
 }
 
+/**
+ * Waits for the following button combination to be entered before returning:
+ *
+ * (DPad-Left & L & R & C-Right)
+ */
 void Fault_WaitForButtonCombo(void) {
     Input* input = &sFaultContext->padInput[0];
 
-    FaultDrawer_SetForeColor(0xFFFF);
-    FaultDrawer_SetBackColor(1);
+    FaultDrawer_SetForeColor(GPACK_RGBA5551(255, 255, 255, 1));
+    FaultDrawer_SetBackColor(GPACK_RGBA5551(0, 0, 0, 1));
+
     do {
         do {
-            Fault_Sleep(0x10);
+            Fault_Sleep(1000 / 60);
             Fault_UpdatePadImpl();
         } while (!CHECK_BTN_ALL(input->press.button, 0x80));
     } while (!CHECK_BTN_ALL(input->cur.button, BTN_DLEFT | BTN_L | BTN_R | BTN_CRIGHT));
 }
 
-void Fault_DrawMemDumpPage(const char* title, u32* addr, u32 param_3) {
-    u32* alignedAddr;
+void Fault_DrawMemDumpPage(const char* title, uintptr_t addr, u32 param_3) {
+    uintptr_t alignedAddr = addr;
     u32* writeAddr;
     s32 y;
     s32 x;
 
-    alignedAddr = addr;
-
-    if (alignedAddr < (u32*)0x80000000) {
-        alignedAddr = (u32*)0x80000000;
+    // Ensure address is within the bounds of RDRAM (Fault_DrawMemDump has already done this)
+    if (alignedAddr < K0BASE) {
+        alignedAddr = K0BASE;
     }
     if (alignedAddr > (u32*)0x807FFF00) {
         alignedAddr = (u32*)0x807FFF00;
     }
 
-    alignedAddr = (u32*)((u32)alignedAddr & ~3);
-    writeAddr = alignedAddr;
+    // Ensure address is word-aligned
+    alignedAddr &= ~3;
+    writeAddr = (u32*)alignedAddr;
+
     Fault_FillScreenBlack();
     FaultDrawer_SetCharPad(-2, 0);
 
-    FaultDrawer_DrawText(0x24, 0x12, "%s %08x", title ? title : "PrintDump", alignedAddr);
-    if (alignedAddr >= (u32*)0x80000000 && alignedAddr < (u32*)0xC0000000) {
-        for (y = 0x1C; y != 0xE2; y += 9) {
-            FaultDrawer_DrawText(0x18, y, "%06x", writeAddr);
-            for (x = 0x52; x != 0x122; x += 0x34) {
+    FaultDrawer_DrawText(36, 18, "%s %08x", title ? title : "PrintDump", alignedAddr);
+
+    if (alignedAddr >= K0BASE && alignedAddr < K2BASE) {
+        for (y = 28; y != 226; y += 9) {
+            FaultDrawer_DrawText(24, y, "%06x", writeAddr);
+            for (x = 82; x != 290; x += 52) {
                 FaultDrawer_DrawText(x, y, "%08x", *writeAddr++);
             }
         }
@@ -530,22 +579,22 @@ void Fault_DrawMemDump(u32 pc, u32 sp, u32 unk0, u32 unk1) {
         Fault_DrawMemDumpPage("Dump", (u32*)addr, 0);
 
         count = 600;
-        while (sFaultContext->faultActive) {
+        while (sFaultContext->autoScroll) {
             if (count == 0) {
                 return;
             }
 
             count--;
 
-            Fault_Sleep(0x10);
+            Fault_Sleep(1000 / 60);
             Fault_UpdatePadImpl();
 
             if (CHECK_BTN_ALL(input->press.button, BTN_L)) {
-                sFaultContext->faultActive = 0;
+                sFaultContext->autoScroll = false;
             }
         }
         do {
-            Fault_Sleep(0x10);
+            Fault_Sleep(1000 / 60);
             Fault_UpdatePadImpl();
         } while (input->press.button == 0);
 
@@ -581,7 +630,7 @@ void Fault_DrawMemDump(u32 pc, u32 sp, u32 unk0, u32 unk1) {
 
     } while (!CHECK_BTN_ALL(input->press.button, BTN_L));
 
-    sFaultContext->faultActive = 1;
+    sFaultContext->autoScroll = true;
 }
 
 void Fault_FindNextStackCall(uintptr_t* spPtr, uintptr_t* pcPtr, uintptr_t* raPtr) {
@@ -672,14 +721,10 @@ void Fault_DrawStackTrace(OSThread* t, u32 flags) {
 
 void osSyncPrintfStackTrace(OSThread* t, u32 flags) {
     s32 y;
-    u32 sp;
-    u32 ra;
-    u32 pc;
+    u32 sp = t->context.sp;
+    u32 ra = t->context.ra;
+    u32 pc = t->context.pc;
     u32 convertedPc;
-
-    sp = t->context.sp;
-    ra = t->context.ra;
-    pc = t->context.pc;
 
     osSyncPrintf("STACK TRACE");
     osSyncPrintf("SP       PC       (VPC)\n");
@@ -743,9 +788,9 @@ void Fault_ProcessClients(void) {
             FaultDrawer_Printf("\x1A\x38"
                                "CallBack (%d) %08x %08x %08x\n"
                                "\x1A\x37",
-                               idx++, iter, iter->param0, iter->param1);
+                               idx++, iter, iter->arg0, iter->arg1);
             FaultDrawer_SetCharPad(0, 0);
-            iter->callback(iter->param0, iter->param1);
+            iter->callback(iter->arg0, iter->arg1);
             Fault_WaitForInput();
             Fault_CommitFB();
         }
@@ -839,14 +884,14 @@ void Fault_ThreadEntry(void* arg) {
         Fault_Sleep(500);
         Fault_CommitFB();
 
-        if (sFaultContext->faultActive) {
+        if (sFaultContext->autoScroll) {
             Fault_Wait5Seconds();
         } else {
             Fault_DrawCornerRec(0xF801);
             Fault_WaitForButtonCombo();
         }
 
-        sFaultContext->faultActive = 1;
+        sFaultContext->autoScroll = true;
         FaultDrawer_SetForeColor(0xFFFF);
         FaultDrawer_SetBackColor(0);
 
@@ -895,7 +940,7 @@ void Fault_Start(void) {
     sFaultContext->faultedThread = NULL;
     sFaultContext->padCallback = &Fault_PadCallback;
     sFaultContext->clients = NULL;
-    sFaultContext->faultActive = 0;
+    sFaultContext->autoScroll = false;
     gFaultMgr.faultHandlerEnabled = 1;
     osCreateMesgQueue(&sFaultContext->queue, sFaultContext->msg, ARRAY_COUNT(sFaultContext->msg));
     StackCheck_Init(&sFaultThreadInfo, sFaultStack, sFaultStack + sizeof(sFaultStack), 0, 0x100, "fault");
@@ -915,6 +960,7 @@ void Fault_HangupFaultClient(const char* arg0, char* arg1) {
 void Fault_AddHungupAndCrashImpl(const char* arg0, char* arg1) {
     FaultClient client;
     u32 pad;
+
     Fault_AddClient(&client, Fault_HangupFaultClient, (void*)arg0, arg1);
     *(u32*)0x11111111 = 0; // trigger an exception
 }

@@ -62,9 +62,9 @@ asm/non_matchings/boot/fault/Fault_FillScreenBlack.s,Fault_FillScreenBlack,0x800
 asm/non_matchings/boot/fault/Fault_FillScreenRed.s,Fault_FillScreenRed,0x8008212C,0x15
 asm/non_matchings/boot/fault/Fault_DrawCornerRec.s,Fault_DrawCornerRec,0x80082180,0x15
 asm/non_matchings/boot/fault/Fault_PrintFReg.s,Fault_PrintFReg,0x800821D4,0x2B
-asm/non_matchings/boot/fault/osSyncPrintfFReg.s,osSyncPrintfFReg,0x80082280,0x2C
+asm/non_matchings/boot/fault/Fault_LogFReg.s,Fault_LogFReg,0x80082280,0x2C
 asm/non_matchings/boot/fault/Fault_PrintFPCR.s,Fault_PrintFPCR,0x80082330,0x29
-asm/non_matchings/boot/fault/osSyncPrintfFPCR.s,osSyncPrintfFPCR,0x800823D4,0x26
+asm/non_matchings/boot/fault/Fault_LogFPCSR.s,Fault_LogFPCSR,0x800823D4,0x26
 asm/non_matchings/boot/fault/Fault_PrintThreadContext.s,Fault_PrintThreadContext,0x8008246C,0xD4
 asm/non_matchings/boot/fault/osSyncPrintfThreadContext.s,osSyncPrintfThreadContext,0x800827BC,0xBF
 asm/non_matchings/boot/fault/Fault_FindFaultedThread.s,Fault_FindFaultedThread,0x80082AB8,0x22
