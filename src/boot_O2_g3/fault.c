@@ -207,9 +207,9 @@ uintptr_t Fault_ConvertAddress(uintptr_t addr) {
     FaultAddrConvClient* iter = sFaultContext->addrConvClients;
 
     while (iter != NULL) {
-        if (iter->callback) {
+        if (iter->callback != NULL) {
             ret = iter->callback(addr, iter->arg);
-            if (ret != NULL) {
+            if (ret != 0) {
                 return ret;
             }
         }
@@ -535,8 +535,8 @@ void Fault_DrawMemDumpPage(const char* title, uintptr_t addr, u32 param_3) {
     if (alignedAddr < K0BASE) {
         alignedAddr = K0BASE;
     }
-    if (alignedAddr > (u32*)0x807FFF00) {
-        alignedAddr = (u32*)0x807FFF00;
+    if (alignedAddr > 0x807FFF00) {
+        alignedAddr = 0x807FFF00;
     }
 
     // Ensure address is word-aligned
@@ -782,7 +782,7 @@ void Fault_ProcessClients(void) {
     s32 idx = 0;
 
     while (iter != NULL) {
-        if (iter->callback) {
+        if (iter->callback != NULL) {
             Fault_FillScreenBlack();
             FaultDrawer_SetCharPad(-2, 0);
             FaultDrawer_Printf("\x1A\x38"

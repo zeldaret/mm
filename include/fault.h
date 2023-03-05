@@ -55,7 +55,7 @@ void Fault_AddClient(FaultClient* client, void* callback, void* param0, void* pa
 void Fault_RemoveClient(FaultClient* client);
 void Fault_AddAddrConvClient(FaultAddrConvClient* client, void* callback, void* param);
 void Fault_RemoveAddrConvClient(FaultAddrConvClient* client);
-void* Fault_ConvertAddress(void* addr);
+uintptr_t Fault_ConvertAddress(uintptr_t addr);
 void Fault_Sleep(u32 duration);
 void Fault_PadCallback(Input* input);
 void Fault_UpdatePadImpl(void);
@@ -74,7 +74,7 @@ void osSyncPrintfThreadContext(OSThread* t);
 OSThread* Fault_FindFaultedThread(void);
 void Fault_Wait5Seconds(void);
 void Fault_WaitForButtonCombo(void);
-void Fault_DrawMemDumpPage(const char* title, u32* addr, u32 param_3);
+void Fault_DrawMemDumpPage(const char* title, uintptr_t addr, u32 param_3);
 void Fault_DrawMemDump(u32 pc, u32 sp, u32 unk0, u32 unk1);
 void Fault_FindNextStackCall(uintptr_t* spPtr, uintptr_t* pcPtr, uintptr_t* raPtr);
 void Fault_DrawStackTrace(OSThread* t, u32 flags);
