@@ -1,4 +1,5 @@
 #include "global.h"
+#include "stack.h"
 
 OSPiHandle D_8009D130;
 OSPiHandle D_8009D1A8;
