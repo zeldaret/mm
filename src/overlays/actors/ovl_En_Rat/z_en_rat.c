@@ -718,7 +718,7 @@ void EnRat_SetupBounced(EnRat* this) {
     this->actor.world.rot.y = this->actor.yawTowardsPlayer + 0x8000;
     this->actor.gravity = -1.0f;
     EnRat_UpdateSparkOffsets(this);
-    this->actor.bgCheckFlags &= ~(0x10 | 0x8 | 0x1);
+    this->actor.bgCheckFlags &= ~(BGCHECKFLAG_GROUND | BGCHECKFLAG_WALL | BGCHECKFLAG_CEILING);
     this->actionFunc = EnRat_Bounced;
 }
 
@@ -733,7 +733,7 @@ void EnRat_Bounced(EnRat* this, PlayState* play) {
         this->timer = 30;
     }
 
-    if (this->actor.bgCheckFlags & (0x10 | 0x8 | 0x1)) {
+    if (this->actor.bgCheckFlags & (BGCHECKFLAG_GROUND | BGCHECKFLAG_WALL | BGCHECKFLAG_CEILING)) {
         EnRat_Explode(this, play);
     }
 }

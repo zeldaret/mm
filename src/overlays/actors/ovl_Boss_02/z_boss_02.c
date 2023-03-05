@@ -996,7 +996,7 @@ void func_809DAB78(Boss02* this, PlayState* play) {
             Actor_MoveWithGravity(&this->actor);
             Actor_UpdateBgCheckInfo(play, &this->actor, 50.0f, 150.0f, 100.0f, 4);
 
-            if (this->actor.bgCheckFlags & 1) {
+            if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
                 this->unk_0144 = 23;
                 this->actor.speed = 0.0f;
                 this->unk_0170 = this->unk_017C;

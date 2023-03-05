@@ -187,14 +187,14 @@ void EnMinifrog_Jump(EnMinifrog* this) {
     switch (this->jumpState) {
         case MINIFROG_STATE_JUMP:
             if (Animation_OnFrame(&this->skelAnime, 4.0f)) {
-                this->actor.bgCheckFlags &= ~1;
+                this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND;
                 this->actor.velocity.y = 6.0f;
                 Actor_PlaySfx(&this->actor, NA_SE_EV_FROG_JUMP);
                 this->jumpState = MINIFROG_STATE_AIR;
             }
             break;
         case MINIFROG_STATE_AIR:
-            if (this->actor.bgCheckFlags & 1) {
+            if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
                 this->jumpState = MINIFROG_STATE_GROUND;
                 Animation_MorphToLoop(&this->skelAnime, &object_fr_Anim_001534, -2.5f);
                 SkelAnime_Update(&this->skelAnime);
