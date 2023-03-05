@@ -1938,8 +1938,8 @@ void Message_SetupLoadItemIcon(PlayState* play) {
             msgCtx->msgBufPos += 2;
             msgCtx->itemId = font->msgBuf.schar[msgCtx->msgBufPos];
         }
-        msgCtx->unk11F14 = font->msgBuf.schar[++msgCtx->msgBufPos] << 8;
-        msgCtx->unk11F14 |= font->msgBuf.schar[++msgCtx->msgBufPos];
+        msgCtx->nextTextId = font->msgBuf.schar[++msgCtx->msgBufPos] << 8;
+        msgCtx->nextTextId |= font->msgBuf.schar[++msgCtx->msgBufPos];
 
         msgCtx->unk1206C = font->msgBuf.schar[++msgCtx->msgBufPos] << 8;
         msgCtx->unk1206C |= font->msgBuf.schar[++msgCtx->msgBufPos];
@@ -2627,7 +2627,7 @@ u8 Message_GetState(MessageContext* msgCtx) {
     }
 
     if (msgCtx->msgMode == MSGMODE_TEXT_DONE) {
-        if (msgCtx->unk11F14 != 0xFFFF) {
+        if (msgCtx->nextTextId != 0xFFFF) {
             return TEXT_STATE_1;
         }
 
@@ -4399,9 +4399,9 @@ void Message_Update(PlayState* play) {
                 msgCtx->stateTimer--;
                 if ((msgCtx->stateTimer == 0) ||
                     ((msgCtx->textboxEndType == TEXTBOX_ENDTYPE_52) && Message_ShouldAdvance(play))) {
-                    if (msgCtx->unk11F14 != 0xFFFF) {
+                    if (msgCtx->nextTextId != 0xFFFF) {
                         play_sound(NA_SE_SY_MESSAGE_PASS);
-                        Message_ContinueTextbox(play, msgCtx->unk11F14);
+                        Message_ContinueTextbox(play, msgCtx->nextTextId);
                     } else if (msgCtx->bombersNotebookNewEventQueueSize != 0) {
                         if (Message_BombersNotebookProcessEventQueue(play) == 0) {
                             Message_CloseTextbox(play);
@@ -4436,9 +4436,9 @@ void Message_Update(PlayState* play) {
                         msgCtx->textColorAlpha -= 20;
                         if (msgCtx->textColorAlpha <= 0) {
                             msgCtx->textColorAlpha = 0;
-                            if (msgCtx->unk11F14 != 0xFFFF) {
+                            if (msgCtx->nextTextId != 0xFFFF) {
                                 play_sound(NA_SE_SY_MESSAGE_PASS);
-                                Message_ContinueTextbox(play, msgCtx->unk11F14);
+                                Message_ContinueTextbox(play, msgCtx->nextTextId);
                                 return;
                             }
                             if (msgCtx->bombersNotebookNewEventQueueSize != 0) {
@@ -4569,9 +4569,9 @@ void Message_Update(PlayState* play) {
                             play->msgCtx.ocarinaMode = OCARINA_MODE_END;
                         }
                     } else if ((msgCtx->currentTextId != 0x2790) && Message_ShouldAdvanceSilent(play)) {
-                        if (msgCtx->unk11F14 != 0xFFFF) {
+                        if (msgCtx->nextTextId != 0xFFFF) {
                             play_sound(NA_SE_SY_MESSAGE_PASS);
-                            Message_ContinueTextbox(play, msgCtx->unk11F14);
+                            Message_ContinueTextbox(play, msgCtx->nextTextId);
                         } else if ((msgCtx->bombersNotebookNewEventQueueSize == 0) ||
                                    (Message_BombersNotebookProcessEventQueue(play) != 1)) {
                             if (msgCtx->currentTextId == 0x579) {

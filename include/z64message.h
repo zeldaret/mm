@@ -262,7 +262,7 @@ typedef struct MessageContext {
     /* 0x11F0C */ u8 unk11F0C;
     /* 0x11F0B */ UNK_TYPE1 unk11F0D[0x3];
     /* 0x11F10 */ s32 msgLength;
-    /* 0x11F14 */ u16 unk11F14;
+    /* 0x11F14 */ u16 nextTextId;
     /* 0x11F16 */ u16 itemId;
     /* 0x11F18 */ s8 unk11F18;
     /* 0x11F19 */ UNK_TYPE1 unk11F19[0x1];
