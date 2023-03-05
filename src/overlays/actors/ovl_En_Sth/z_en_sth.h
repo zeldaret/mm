@@ -2,6 +2,7 @@
 #define Z_EN_STH_H
 
 #include "global.h"
+#include "overlays/actors/ovl_En_Si/z_en_si.h"
 #include "objects/object_sth/object_sth.h"
 #include "objects/object_ahg/object_ahg.h" 
 #include "objects/object_mask_truth/object_mask_truth.h"
@@ -10,12 +11,28 @@ struct EnSth;
 
 typedef void (*EnSthActionFunc)(struct EnSth*, PlayState*);
 
+typedef enum {
+    /* 1 */ STH_TYPE_UNUSED_1 = 1,
+    /* 2 */ STH_TYPE_SWAMP_SPIDER_HOUSE_CURED, // cursed is EnSsh
+    /* 3 */ STH_TYPE_MOON_LOOKING, // South Clock Town, looking up at the moon
+    /* 4 */ STH_TYPE_OCEANSIDE_SPIDER_HOUSE_GREET, // looking for shelter
+    /* 5 */ STH_TYPE_OCEANSIDE_SPIDER_HOUSE_PANIC, // shelter was not enough
+    // Other values: Actor will spawn and animate with arm waving, no further interaction.
+} EnSthTypes;
+
 // Note: Vanilla types usually have 0xFEXX typing, but this upper section is unused by the code, reason unknown
 #define STH_GET_TYPE(thisx) ((thisx)->params & 0xF)
 #define STH_GET_SWAMP_BODY(thisx) ((thisx)->params & 0x100)
 
 // The get item for the reward for ocean spiderhouse (wallet, or rupees) is set here
 #define STH_GI_ID(thisx) ((thisx)->home.rot.z)
+
+// This actor has its own flags system
+#define STH_FLAG_CLEAR                          (0)
+#define STH_FLAG_DRAW_TRUTH_MASK                (1 << 0)
+#define STH_FLAG_OCEANSIDE_SPIDER_HOUSE_GREET   (1 << 1)
+#define STH_FLAG_SWAMP_SPIDER_HOUSE_SAVED       (1 << 2) // set, but not read 
+#define STH_FLAG_DISABLE_HEAD_TRACK             (1 << 3)
 
 typedef struct EnSth {
     /* 0x000 */ Actor actor;
@@ -30,24 +47,5 @@ typedef struct EnSth {
     /* 0x29F */ u8 maskOfTruthObjectId;
     /* 0x2A0 */ EnSthActionFunc actionFunc;
 } EnSth; // size = 0x2A4
-
-typedef enum {
-    /* 1 */ STH_TYPE_UNUSED_1 = 1,
-    /* 2 */ STH_TYPE_SWAMP_SPIDER_HOUSE_CURED, // cursed is EnSsh
-    /* 3 */ STH_TYPE_MOON_LOOKING, // South Clock Town, looking up at the moon
-    /* 4 */ STH_TYPE_OCEANSIDE_SPIDER_HOUSE_GREET, // looking for shelter
-    /* 5 */ STH_TYPE_OCEANSIDE_SPIDER_HOUSE_PANIC, // shelter was not enough
-    // Other values: Actor will spawn and animate with arm waving, no further interaction.
-} EnSthTypes;
-
-// This actor has its own flags system
-#define STH_FLAG_CLEAR                          (0)
-#define STH_FLAG_DRAW_TRUTH_MASK                (1 << 0)
-#define STH_FLAG_OCEANSIDE_SPIDER_HOUSE_GREET   (1 << 1)
-#define STH_FLAG_SWAMP_SPIDER_HOUSE_SAVED       (1 << 2) // set, but not read 
-#define STH_FLAG_DISABLE_HEAD_TRACK             (1 << 3)
-
-#define STH_SWAMP_SPIDER_TOKENS_REQUIRED     30
-#define STH_OCEANSIDE_SPIDER_TOKENS_REQUIRED 30
 
 #endif // Z_EN_STH_H

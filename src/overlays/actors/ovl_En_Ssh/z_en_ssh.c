@@ -654,7 +654,7 @@ void EnSsh_Init(Actor* thisx, PlayState* play) {
     this->actor.gravity = 0.0f;
     this->initialYaw = this->actor.world.rot.y;
     EnSsh_SetupAction(this, EnSsh_Start);
-    if (Inventory_GetSkullTokenCount(play->sceneId) >= STH_SWAMP_SPIDER_TOKENS_REQUIRED) {
+    if (Inventory_GetSkullTokenCount(play->sceneId) >= SI_SPIDER_HOUSE_TOKENS_REQUIRED) {
         Actor_Kill(&this->actor);
     }
 }
@@ -686,10 +686,10 @@ void EnSsh_Talk(EnSsh* this, PlayState* play) {
 
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         switch (play->msgCtx.currentTextId) {
-            case 0x904: // 4-8 do not exist, left over from previous?
-            case 0x905:
-            case 0x906:
-            case 0x908:
+            case 0x904: // (does not exist)
+            case 0x905: // (does not exist)
+            case 0x906: // (does not exist)
+            case 0x908: // (does not exist)
             case 0x910: // Help me! I am not a monster, I was cursed this way
             case 0x911: // Find all in here and defeat them
             case 0x912: // Don't forget to collect their token
@@ -697,7 +697,7 @@ void EnSsh_Talk(EnSsh* this, PlayState* play) {
                 func_80151938(play, play->msgCtx.currentTextId + 1);
                 break;
 
-            default: // case 0x915 from above (914+1)
+            default: // intended case 0x915 from above (914+1)
                 func_801477B4(play);
                 this->actionFunc = EnSsh_Idle;
                 break;
@@ -706,15 +706,15 @@ void EnSsh_Talk(EnSsh* this, PlayState* play) {
 }
 
 void func_809756D0(EnSsh* this, PlayState* play) {
-    u16 phi_a1;
+    u16 nextTextId;
 
     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_SWAMP_SPIDERHOUSE_TALKED)) {
-        phi_a1 = 0x914; // In here, cursed spiders, defeat them to make me normal
+        nextTextId = 0x914; // In here, cursed spiders, defeat them to make me normal
     } else {
-        phi_a1 = 0x910; // Help me! I am not a monster, I was cursed this way
+        nextTextId = 0x910; // Help me! I am not a monster, I was cursed this way
         SET_WEEKEVENTREG(WEEKEVENTREG_SWAMP_SPIDERHOUSE_TALKED);
     }
-    Message_StartTextbox(play, phi_a1, &this->actor);
+    Message_StartTextbox(play, nextTextId, &this->actor);
 }
 
 void EnSsh_Idle(EnSsh* this, PlayState* play) {
