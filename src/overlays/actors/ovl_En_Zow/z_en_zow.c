@@ -547,7 +547,7 @@ void EnZow_Update(Actor* thisx, PlayState* play) {
     Actor_MoveWithGravity(&this->actor);
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 15.0f, 30.0f, 5);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 15.0f, 30.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
 
     if (this->unk_2CE != 0) {
         this->unk_2CA &= ~2;

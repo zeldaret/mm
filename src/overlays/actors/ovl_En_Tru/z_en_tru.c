@@ -1155,7 +1155,7 @@ void EnTru_Init(Actor* thisx, PlayState* play) {
     }
 
     this->actionFunc = func_80A87FD0;
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
 }
 
 void EnTru_Destroy(Actor* thisx, PlayState* play) {

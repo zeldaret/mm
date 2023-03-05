@@ -183,7 +183,7 @@ void BgIcicle_Fall(BgIcicle* this, PlayState* play) {
     } else {
         Actor_MoveWithGravity(&this->dyna.actor);
         this->dyna.actor.world.pos.y += 40.0f;
-        Actor_UpdateBgCheckInfo(play, &this->dyna.actor, 0.0f, 0.0f, 0.0f, 4);
+        Actor_UpdateBgCheckInfo(play, &this->dyna.actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
         this->dyna.actor.world.pos.y -= 40.0f;
         CollisionCheck_SetAT(play, &play->colChkCtx, &this->collider.base);
     }

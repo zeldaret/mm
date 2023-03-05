@@ -1278,7 +1278,9 @@ void EnRd_Update(Actor* thisx, PlayState* play) {
         }
 
         if ((this->actor.shape.rot.x == 0) && (this->action != EN_RD_ACTION_GRABBING) && (this->actor.speed != 0.0f)) {
-            Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 20.0f, 35.0f, 0x1D);
+            Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 20.0f, 35.0f,
+                                    UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                        UPDBGCHECKINFO_FLAG_10);
         }
 
         if (this->action == EN_RD_ACTION_ATTEMPTING_PLAYER_STUN) {

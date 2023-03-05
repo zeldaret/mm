@@ -567,7 +567,7 @@ void EnTsn_Update(Actor* thisx, PlayState* play) {
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 25.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 25.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
     SkelAnime_Update(&this->skelAnime);
 
     if (this->unk_220 & 1) {

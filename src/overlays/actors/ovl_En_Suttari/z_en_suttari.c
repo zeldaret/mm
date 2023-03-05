@@ -205,9 +205,9 @@ void EnSuttari_UpdateCollider(EnSuttari* this, PlayState* play) {
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
 
     if ((this->flags1 & 1) && (this->actionFunc != func_80BADE14)) {
-        Actor_UpdateBgCheckInfo(play, &this->actor, 35.0f, 30.0f, 30.0f, 5);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 35.0f, 30.0f, 30.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
     } else {
-        Actor_UpdateBgCheckInfo(play, &this->actor, 35.0f, 30.0f, 30.0f, 4);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 35.0f, 30.0f, 30.0f, UPDBGCHECKINFO_FLAG_4);
     }
 }
 

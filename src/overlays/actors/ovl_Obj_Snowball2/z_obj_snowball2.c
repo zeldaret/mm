@@ -374,7 +374,8 @@ void func_80B39C9C(ObjSnowball2* this, PlayState* play) {
 
         if (this->unk_1AD == 0) {
             Actor_MoveWithGravity(&this->actor);
-            Actor_UpdateBgCheckInfo(play, &this->actor, 15.0f, 15.0f, 0.0f, 0x44);
+            Actor_UpdateBgCheckInfo(play, &this->actor, 15.0f, 15.0f, 0.0f,
+                                    UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_40);
             if ((this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) &&
                 (DynaPoly_GetActor(&play->colCtx, this->actor.floorBgId) == NULL)) {
                 this->unk_1AD = 1;
@@ -422,7 +423,8 @@ void func_80B39FA8(ObjSnowball2* this, PlayState* play) {
         this->actor.velocity.y *= 0.4f;
         this->actor.gravity = -2.8f;
         Actor_MoveWithGravity(&this->actor);
-        Actor_UpdateBgCheckInfo(play, &this->actor, 15.0f, 15.0f, 0.0f, 0x45);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 15.0f, 15.0f, 0.0f,
+                                UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_40);
         func_80B3A0D8(this);
     } else {
         sp30.x = this->actor.world.pos.x;
@@ -510,7 +512,8 @@ void func_80B3A13C(ObjSnowball2* this, PlayState* play) {
     }
 
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 15.0f, 15.0f, 0.0f, 0x45);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 15.0f, 15.0f, 0.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_40);
     this->actor.shape.rot.x += this->unk_1A8;
     this->actor.shape.rot.y += this->unk_1AA;
     func_80B38E20(this);

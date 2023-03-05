@@ -766,7 +766,9 @@ void EnFamos_Update(Actor* thisx, PlayState* play) {
         }
 
         if (this->flippedTimer >= 0) {
-            Actor_UpdateBgCheckInfo(play, &this->actor, 35.0f, 30.0f, 80.0f, 0x1F);
+            Actor_UpdateBgCheckInfo(play, &this->actor, 35.0f, 30.0f, 80.0f,
+                                    UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_2 | UPDBGCHECKINFO_FLAG_4 |
+                                        UPDBGCHECKINFO_FLAG_8 | UPDBGCHECKINFO_FLAG_10);
             if ((this->actionFunc == EnFamos_Attack) && (this->animatedMaterialIndex != FAMOS_ANIMATED_MAT_NORMAL) &&
                 (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
                 this->actor.world.pos.y -= 60.0f;

@@ -836,7 +836,9 @@ void EnNiw_Update(Actor* thisx, PlayState* play) {
     Actor_SetFocus(&this->actor, this->unk308);
     Actor_MoveWithGravity(&this->actor);
 
-    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 60.0f, 0x1F);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 60.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_2 | UPDBGCHECKINFO_FLAG_4 |
+                                UPDBGCHECKINFO_FLAG_8 | UPDBGCHECKINFO_FLAG_10);
 
     // if cucco is off the map
     if (this->actor.floorHeight <= BGCHECK_Y_MIN || this->actor.floorHeight >= BGCHECK_Y_MAX) {

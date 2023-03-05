@@ -163,7 +163,7 @@ void func_80BCAE78(EnScopenuts* this, PlayState* play) {
     }
 
     if (this->unk_328 & 2) {
-        Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 20.0f, 5);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 20.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
     }
 }
 

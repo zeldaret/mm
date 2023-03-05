@@ -103,7 +103,9 @@ void func_809AAF18(ObjGrassCarry* this) {
 }
 
 void func_809AAF58(ObjGrassCarry* this, PlayState* play) {
-    Actor_UpdateBgCheckInfo(play, &this->actor, 7.5f, 35.0f, 0.0f, 0xC5);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 7.5f, 35.0f, 0.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_40 |
+                                UPDBGCHECKINFO_FLAG_80);
 }
 
 void func_809AAF9C(Vec3f* arg0, s16 arg1, PlayState* play) {

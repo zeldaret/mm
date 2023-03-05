@@ -748,7 +748,7 @@ void EnBaba_Update(Actor* thisx, PlayState* play) {
 
     this->actionFunc(this, play);
 
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
     EnBaba_UpdateModel(this, play);
 }
 

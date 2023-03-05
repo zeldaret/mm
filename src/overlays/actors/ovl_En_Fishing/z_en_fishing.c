@@ -2231,7 +2231,8 @@ void EnFishing_UpdateLure(EnFishing* this, PlayState* play) {
                     Vec3f sp80 = this->actor.world.pos;
 
                     this->actor.prevPos = this->actor.world.pos = sLurePos;
-                    Actor_UpdateBgCheckInfo(play, &this->actor, 15.0f, 30.0f, 30.0f, 0x43);
+                    Actor_UpdateBgCheckInfo(play, &this->actor, 15.0f, 30.0f, 30.0f,
+                                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_2 | UPDBGCHECKINFO_FLAG_40);
                     this->actor.world.pos = sp80;
 
                     if (this->actor.bgCheckFlags & BGCHECKFLAG_CEILING) {
@@ -2495,7 +2496,8 @@ void EnFishing_UpdateLure(EnFishing* this, PlayState* play) {
 
                     sp58 = this->actor.world.pos;
                     this->actor.prevPos = this->actor.world.pos = sLurePos;
-                    Actor_UpdateBgCheckInfo(play, &this->actor, 15.0f, 30.0f, 30.0f, 0x44);
+                    Actor_UpdateBgCheckInfo(play, &this->actor, 15.0f, 30.0f, 30.0f,
+                                            UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_40);
                     this->actor.world.pos = sp58;
 
                     D_80917278.y += -0.5f;
@@ -4097,7 +4099,8 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
             this->actor.prevPos.y -= spD8;
             this->actor.velocity.y = -1.0f;
             if (KREG(90) == 0) { // Check added in MM
-                Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 30.0f, 100.0f, 0x45);
+                Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 30.0f, 100.0f,
+                                        UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_40);
             }
             this->actor.world.pos.y += spD8;
             this->actor.prevPos.y += spD8;

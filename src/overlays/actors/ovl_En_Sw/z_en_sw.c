@@ -895,7 +895,7 @@ void func_808DA89C(EnSw* this, PlayState* play) {
         }
 
         Actor_MoveWithGravity(&this->actor);
-        Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, 4);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
     }
 }
 
@@ -1129,7 +1129,7 @@ void func_808DB2E0(EnSw* this, PlayState* play) {
     Actor_SetScale(&this->actor, this->actor.scale.x);
     this->actor.velocity.y += this->actor.gravity;
     Actor_UpdatePos(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
 }
 
 void EnSw_Init(Actor* thisx, PlayState* play) {

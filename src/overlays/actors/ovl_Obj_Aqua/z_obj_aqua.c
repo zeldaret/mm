@@ -254,7 +254,7 @@ void ObjAqua_Update(Actor* thisx, PlayState* play) {
         }
         this->actor.velocity.y *= 0.9f;
         Actor_MoveWithGravity(&this->actor);
-        Actor_UpdateBgCheckInfo(play, &this->actor, 12.0f, 4.0f, 0.0f, 5);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 12.0f, 4.0f, 0.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
         if (this->actionFunc != func_80ACBDFC) {
             Collider_UpdateCylinder(&this->actor, &this->collider);
             this->collider.dim.radius = this->actor.scale.x * 3000.0f;

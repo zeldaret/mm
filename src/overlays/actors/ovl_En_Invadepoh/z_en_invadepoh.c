@@ -1087,7 +1087,7 @@ void func_80B44A90(EnInvadepoh* this, PlayState* play) {
         this->actor.speed *= 0.8f;
     }
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 40.0f, 0.0f, 5);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 40.0f, 0.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
 }
 
 void func_80B44B78(EnInvadepoh* this) {
@@ -1128,7 +1128,7 @@ s32 func_80B44C80(EnInvadepoh* this, PlayState* play) {
     f32 sp44;
     s32 sp40 = 0;
     s32 temp_v1 = this->pathIndex + this->direction;
-    s32 phi_v0;
+    s32 updBgCheckInfoFlags;
 
     if (temp_v1 >= this->endPoint) {
         temp_v1 = 0;
@@ -1164,19 +1164,19 @@ s32 func_80B44C80(EnInvadepoh* this, PlayState* play) {
                        4, 0xFA0, 0x64);
     Actor_MoveWithGravity(&this->actor);
     if (func_80B440B8(this, 50.0f, 15.0f)) {
-        phi_v0 = 4;
+        updBgCheckInfoFlags = UPDBGCHECKINFO_FLAG_4;
     } else {
-        phi_v0 = 5;
+        updBgCheckInfoFlags = UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4;
     }
 
-    Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 15.0f, 0.0f, phi_v0);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 15.0f, 0.0f, updBgCheckInfoFlags);
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.world.rot.y, 3, 0x1F40, 0x64);
     return sp40;
 }
 
 void func_80B44E90(EnInvadepoh* this, PlayState* play) {
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 15.0f, 0.0f, 5);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 15.0f, 0.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.world.rot.y, 3, 0x1F40, 0x64);
 }
 
@@ -2970,7 +2970,7 @@ void func_80B49A00(EnInvadepoh* this, PlayState* play) {
         this->actor.gravity = 2.0f;
     }
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
     if (this->actionTimer > 0) {
         this->actionTimer--;
     } else {

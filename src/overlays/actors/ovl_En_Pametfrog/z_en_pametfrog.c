@@ -1343,7 +1343,9 @@ void EnPametfrog_Update(Actor* thisx, PlayState* play) {
         if (this->actor.gravity < -0.1f) {
             Actor_MoveWithGravity(&this->actor);
             arg3 = this->actionFunc == EnPametfrog_FallInAir ? 3.0f : 15.0f;
-            Actor_UpdateBgCheckInfo(play, &this->actor, 25.0f, arg3, 3.0f, 0x1F);
+            Actor_UpdateBgCheckInfo(play, &this->actor, 25.0f, arg3, 3.0f,
+                                    UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_2 | UPDBGCHECKINFO_FLAG_4 |
+                                        UPDBGCHECKINFO_FLAG_8 | UPDBGCHECKINFO_FLAG_10);
         } else if (this->freezeTimer == 0) {
             Actor_MoveWithoutGravity(&this->actor);
             this->actor.floorHeight = this->actor.world.pos.y;

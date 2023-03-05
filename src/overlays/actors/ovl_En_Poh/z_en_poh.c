@@ -588,7 +588,7 @@ void func_80B2DD2C(EnPoh* this, PlayState* play) {
     }
 
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 10.0f, 10.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 10.0f, 10.0f, UPDBGCHECKINFO_FLAG_4);
 }
 
 void func_80B2DDF8(EnPoh* this, s32 arg1) {

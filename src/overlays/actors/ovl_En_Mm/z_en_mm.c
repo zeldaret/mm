@@ -200,7 +200,9 @@ void EnMm_Update(Actor* thisx, PlayState* play) {
 
     Collider_ResetCylinderAC(play, &this->collider.base);
     this->actionFunc(this, play);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 10.0f, 20.0f, 31);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 10.0f, 20.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_2 | UPDBGCHECKINFO_FLAG_4 |
+                                UPDBGCHECKINFO_FLAG_8 | UPDBGCHECKINFO_FLAG_10);
     Actor_SetFocus(&this->actor, 20.0f);
 }
 

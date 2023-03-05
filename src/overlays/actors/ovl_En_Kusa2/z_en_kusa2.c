@@ -269,7 +269,8 @@ s32 func_80A5BA58(EnKusa2* this, PlayState* play) {
 }
 
 void func_80A5BAFC(EnKusa2* this, PlayState* play) {
-    Actor_UpdateBgCheckInfo(play, &this->actor, 15.0f, 35.0f, 0.0f, 0x45);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 15.0f, 35.0f, 0.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_40);
 }
 
 void func_80A5BB40(EnKusa2* this, PlayState* play, s32 arg2) {

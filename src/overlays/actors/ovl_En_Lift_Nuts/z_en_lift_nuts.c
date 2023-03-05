@@ -218,7 +218,7 @@ void EnLiftNuts_Init(Actor* thisx, PlayState* play) {
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &sColChkInfoInit);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
     if (this->actor.floorBgId != BGCHECK_SCENE) {
         DynaPolyActor* bgActor = DynaPoly_GetActor(&play->colCtx, this->actor.floorBgId);
 
@@ -975,7 +975,7 @@ void EnLiftNuts_Update(Actor* thisx, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     this->actionFunc(this, play);
     func_80AEBB30(this, play);
-    Actor_UpdateBgCheckInfo(play, thisx, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, thisx, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
     func_80AE9BCC(this, play);
 
     if (func_80AE9B4C(0, 2)) {

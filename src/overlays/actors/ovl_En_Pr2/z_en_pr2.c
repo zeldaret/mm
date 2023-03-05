@@ -171,7 +171,9 @@ void EnPr2_Init(Actor* thisx, PlayState* play) {
         func_80A751B4(this);
     }
 
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 20.0f, 20.0f, 0x1D);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 20.0f, 20.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                UPDBGCHECKINFO_FLAG_10);
 
     if (!(this->actor.bgCheckFlags & (BGCHECKFLAG_WATER | BGCHECKFLAG_WATER_TOUCH))) {
         Actor_Kill(&this->actor);
@@ -661,7 +663,9 @@ void EnPr2_Update(Actor* thisx, PlayState* play) {
     Actor_SetFocus(&this->actor, 10.0f);
     func_80A755D8(this, play);
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0, 10.0f, 20.0f, 0x1F);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0, 10.0f, 20.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_2 | UPDBGCHECKINFO_FLAG_4 |
+                                UPDBGCHECKINFO_FLAG_8 | UPDBGCHECKINFO_FLAG_10);
 
     if (this->unk_1D6) {
         s32 i;

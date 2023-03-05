@@ -446,7 +446,7 @@ void EnBom_Update(Actor* thisx, PlayState* play) {
         this->unk_1FC--;
         Math_ApproachZeroF(&thisx->speed, 1.0f, 1.0f);
         Actor_MoveWithGravity(thisx);
-        Actor_UpdateBgCheckInfo(play, thisx, 35.0f, 10.0f, 36.0f, 4);
+        Actor_UpdateBgCheckInfo(play, thisx, 35.0f, 10.0f, 36.0f, UPDBGCHECKINFO_FLAG_4);
         if (this->unk_1FC == 0) {
             if (this->isPowderKeg) {
                 gSaveContext.powderKegTimer = 0;
@@ -472,7 +472,9 @@ void EnBom_Update(Actor* thisx, PlayState* play) {
 
         this->actionFunc(this, play);
 
-        Actor_UpdateBgCheckInfo(play, thisx, 35.0f, 10.0f, 36.0f, 0x1F);
+        Actor_UpdateBgCheckInfo(play, thisx, 35.0f, 10.0f, 36.0f,
+                                UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_2 | UPDBGCHECKINFO_FLAG_4 |
+                                    UPDBGCHECKINFO_FLAG_8 | UPDBGCHECKINFO_FLAG_10);
         if (thisx->params == ENBOM_0) {
             static Vec3us D_80872ED4[] = {
                 { 40, 20, 100 },

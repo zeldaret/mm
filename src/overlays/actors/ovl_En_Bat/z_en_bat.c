@@ -478,13 +478,15 @@ void EnBat_Update(Actor* thisx, PlayState* play) {
         }
 
         if (this->actionFunc == EnBat_DiveAttack) {
-            Actor_UpdateBgCheckInfo(play, &this->actor, 12.0f, 15.0f, 50.0f, 5);
+            Actor_UpdateBgCheckInfo(play, &this->actor, 12.0f, 15.0f, 50.0f,
+                                    UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
         } else if ((this->actionFunc != EnBat_FlyIdle) ||
                    ((this->actor.xzDistToPlayer < 400.0f) && (this->actor.projectedPos.z > 0.0f))) {
             if (this->paramFlags & BAD_BAT_PARAMFLAG_0) {
-                Actor_UpdateBgCheckInfo(play, &this->actor, 12.0f, 15.0f, 50.0f, 5);
+                Actor_UpdateBgCheckInfo(play, &this->actor, 12.0f, 15.0f, 50.0f,
+                                        UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
             } else {
-                Actor_UpdateBgCheckInfo(play, &this->actor, 12.0f, 15.0f, 50.0f, 4);
+                Actor_UpdateBgCheckInfo(play, &this->actor, 12.0f, 15.0f, 50.0f, UPDBGCHECKINFO_FLAG_4);
             }
         } else {
             Math_Vec3f_Copy(&this->actor.prevPos, &prevPos);

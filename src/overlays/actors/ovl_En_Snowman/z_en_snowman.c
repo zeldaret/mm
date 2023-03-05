@@ -1037,7 +1037,9 @@ void EnSnowman_Update(Actor* thisx, PlayState* play) {
                 wallCheckRadius = this->collider.dim.radius;
             }
 
-            Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, wallCheckRadius, 0.0f, 0x1D);
+            Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, wallCheckRadius, 0.0f,
+                                    UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                        UPDBGCHECKINFO_FLAG_10);
             if ((this->actor.floorPoly != NULL) && ((this->actor.floorPoly->normal.y * SHT_MINV) < 0.7f)) {
                 Math_Vec3f_Copy(&this->actor.world.pos, &this->actor.prevPos);
                 if (!this->turningOnSteepSlope) {
@@ -1111,7 +1113,9 @@ void EnSnowman_UpdateSnowball(Actor* thisx, PlayState* play) {
     this->actor.shape.rot.x += 0xF00;
     Actor_MoveWithGravity(&this->actor);
     Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, this->collider.dim.radius * 0.6f,
-                            this->collider.dim.height - this->collider.dim.yShift, 0x1F);
+                            this->collider.dim.height - this->collider.dim.yShift,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_2 | UPDBGCHECKINFO_FLAG_4 |
+                                UPDBGCHECKINFO_FLAG_8 | UPDBGCHECKINFO_FLAG_10);
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetAT(play, &play->colChkCtx, &this->collider.base);
     CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);

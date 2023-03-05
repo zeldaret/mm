@@ -875,7 +875,7 @@ void EnSt_Update(Actor* thisx, PlayState* play) {
         if (this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
             SkelAnime_Update(&this->skelAnime);
         }
-        Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, 5);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
     } else if (this->unk_312 < 20) {
         s16 idx = (this->unk_312 % 2) ? -1 : 1;
 

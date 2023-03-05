@@ -578,7 +578,9 @@ void EnMinifrog_Update(Actor* thisx, PlayState* play) {
 
     this->actionFunc(this, play);
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 25.0f, 12.0f, 0.0f, 0x1D);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 25.0f, 12.0f, 0.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                UPDBGCHECKINFO_FLAG_10);
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
     this->actor.focus.rot.y = this->actor.shape.rot.y;

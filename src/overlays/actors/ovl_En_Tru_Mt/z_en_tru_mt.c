@@ -435,7 +435,7 @@ void EnTruMt_Init(Actor* thisx, PlayState* play) {
     this->actor.targetMode = 0;
 
     Actor_SetScale(&this->actor, 0.008f);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
 
     this->unk_328 = 0;
     this->actor.room = -1;

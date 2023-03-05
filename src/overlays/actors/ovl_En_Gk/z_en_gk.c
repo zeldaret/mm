@@ -240,7 +240,8 @@ void func_80B507A0(EnGk* this, PlayState* play) {
 
     CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 30.0f, 30.0f, 7);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 30.0f, 30.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_2 | UPDBGCHECKINFO_FLAG_4);
 }
 
 s32 func_80B50854(EnGk* this, PlayState* play) {

@@ -842,7 +842,7 @@ s32 func_809995A4(EnGs* this, PlayState* play) {
     }
 
     if (this->unk_19D == 4) {
-        Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 60.0f, 3);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 60.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_2);
         if (this->actor.bgCheckFlags & (BGCHECKFLAG_WALL | BGCHECKFLAG_CEILING)) {
             Vec3f sp54;
 

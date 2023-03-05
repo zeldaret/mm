@@ -1468,7 +1468,7 @@ void EnIn_Update(Actor* thisx, PlayState* play) {
         this->unk4AC &= ~0x40;
     }
     this->actionFunc(this, play);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 0x4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
     func_808F3414(this, play);
     func_808F32A0(this, play);
 }

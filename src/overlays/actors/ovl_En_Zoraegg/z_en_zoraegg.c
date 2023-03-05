@@ -244,7 +244,7 @@ void func_80B31C40(EnZoraegg* this, PlayState* play) {
     Actor_MoveWithGravity(&this->actor);
     Math_Vec3f_Copy(&this->actor.focus.pos, &this->actor.world.pos);
     this->actor.focus.pos.y += 10.0f;
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
 }
 
 Actor* func_80B31CB4(PlayState* play) {

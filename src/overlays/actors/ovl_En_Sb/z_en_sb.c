@@ -375,7 +375,7 @@ void EnSb_Update(Actor* thisx, PlayState* play) {
     Actor_SetFocus(&this->actor, 20.0f);
     Actor_MoveWithGravity(&this->actor);
     this->actionFunc(this, play);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 25.0f, 20.0f, 5);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 25.0f, 20.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
     EnSb_UpdateDamage(this, play);
     if (player->stateFlags1 & PLAYER_STATE1_8000000) {
         Collider_UpdateCylinder(&this->actor, &this->collider);

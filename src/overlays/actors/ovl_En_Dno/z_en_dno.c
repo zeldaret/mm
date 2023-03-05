@@ -235,7 +235,7 @@ void EnDno_Init(Actor* thisx, PlayState* play) {
                                this->morphTable, DEKU_BUTLER_LIMB_MAX);
             Collider_InitCylinder(play, &this->collider);
             Collider_SetCylinder(play, &this->collider, thisx, &sCylinderInit);
-            Actor_UpdateBgCheckInfo(play, thisx, 0.0f, 0.0f, 0.0f, 4);
+            Actor_UpdateBgCheckInfo(play, thisx, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
             Animation_Change(&this->skelAnime, sAnimations[EN_DNO_ANIM_IDLE_WITH_CANDLE].animation, 1.0f, 0.0f,
                              Animation_GetLastFrame(sAnimations[EN_DNO_ANIM_IDLE_WITH_CANDLE].animation),
                              sAnimations[EN_DNO_ANIM_IDLE_WITH_CANDLE].mode,
@@ -762,7 +762,7 @@ void func_80A72C04(EnDno* this, PlayState* play) {
 }
 
 void func_80A72CF8(EnDno* this, PlayState* play) {
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
     Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_DOOR_WARP1, this->actor.world.pos.x + 80.0f,
                        this->actor.floorHeight, this->actor.world.pos.z, 0, 0, 0, 0x201);
 }
@@ -958,7 +958,7 @@ void EnDno_Update(Actor* thisx, PlayState* play) {
     func_80A73408(this, play);
     this->actionFunc(this, play);
     if (this->unk_3B0 & 4) {
-        Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
     }
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);

@@ -163,7 +163,7 @@ void EnKanban_Init(Actor* thisx, PlayState* play) {
 
         this->bounceX = 1;
         this->partFlags = 0xFFFF;
-        Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 10.0f, 50.0f, 4);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 10.0f, 50.0f, UPDBGCHECKINFO_FLAG_4);
         func_80954960(this);
     }
 }
@@ -433,7 +433,8 @@ void EnKanban_Update(Actor* thisx, PlayState* play) {
                 Actor_MoveWithGravity(&this->actor);
             }
 
-            Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 10.0f, 50.0f, 5);
+            Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 10.0f, 50.0f,
+                                    UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
 
             tempX = this->actor.world.pos.x;
             tempY = this->actor.world.pos.y;
@@ -442,7 +443,7 @@ void EnKanban_Update(Actor* thisx, PlayState* play) {
             tempWaterDepth = this->actor.depthInWater;
             this->actor.world.pos.z += ((this->actor.world.pos.y - this->actor.floorHeight) * -50.0f) / 100.0f;
 
-            Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 10.0f, 50.0f, 4);
+            Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 10.0f, 50.0f, UPDBGCHECKINFO_FLAG_4);
             func_80954960(this);
 
             this->actor.world.pos.x = tempX;
@@ -709,7 +710,8 @@ void EnKanban_Update(Actor* thisx, PlayState* play) {
                 Actor_MoveWithGravity(&this->actor);
 
                 if (this->actor.speed != 0.0f) {
-                    Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 10.0f, 50.0f, 5);
+                    Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 10.0f, 50.0f,
+                                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
                     if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
                         this->actor.speed *= -0.5f;
                         if (this->spinVel.y > 0) {
