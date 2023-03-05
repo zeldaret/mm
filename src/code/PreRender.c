@@ -1,4 +1,5 @@
 #include "global.h"
+#include "stack.h"
 
 /**
  * Assigns the "save" values in PreRender
@@ -409,6 +410,11 @@ void PreRender_ApplyFilters(PreRender* this) {
         this->unk_4D = 2;
     }
 }
+
+extern SlowlyTask D_801F6E00;
+extern s32 D_801F6FC0;
+extern StackEntry sSlowlyStackInfo;
+extern STACK(sSlowlyStack, 0x1000);
 
 /**
  * Initializes `PreRender_ApplyFilters` onto a new "slowly" thread

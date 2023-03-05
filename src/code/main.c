@@ -3,7 +3,29 @@
  * reordering than just prevent_bss_reordering.h: there is too much of it to control, and it cannot be split into
  * separate files since most of it is at addresses ending in 8.
  */
+
 #include "global.h"
+#include "buffers.h"
+#include "stack.h"
+
+extern OSMesgQueue sSiIntMsgQ;
+extern OSMesg sSiIntMsgBuf[1];
+extern u32 gSegments[NUM_SEGMENTS];
+extern SchedContext gSchedContext;
+extern IrqMgrClient irqClient;
+extern OSMesgQueue irqMgrMsgQ;
+extern OSMesg irqMgrMsgBuf[60];
+extern OSThread sGraphThread;
+extern STACK(sGraphStack, 0x1800);
+extern STACK(sSchedStack, 0x600);
+extern STACK(sAudioStack, 0x800);
+extern STACK(sPadMgrStack, 0x500);
+extern StackEntry sGraphStackInfo;
+extern StackEntry sSchedStackInfo;
+extern StackEntry sAudioStackInfo;
+extern StackEntry sPadMgrStackInfo;
+extern AudioMgr sAudioMgr;
+extern PadMgr gPadMgr;
 
 void Main(void* arg) {
     intptr_t fb;
