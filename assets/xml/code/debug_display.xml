@@ -4,7 +4,7 @@
             <Vtx/>
         </Array>
         <DList Name="sDebugDisplay1DL" Offset="0x114CD0"/>
-        
+
         <Array Name="sDebugDisplay2Vtx" Count="8" Offset="0x114D30">
             <Vtx/>
         </Array>

@@ -132,6 +132,20 @@ typedef struct {
     /* 0x18 */ Vec3f feetPos[2]; // Update by using `Actor_SetFeetPos` in PostLimbDrawOpa
 } ActorShape; // size = 0x30
 
+#define BGCHECKFLAG_GROUND (1 << 0) // Standing on the ground
+#define BGCHECKFLAG_GROUND_TOUCH (1 << 1) // Has touched the ground (only active for 1 frame)
+#define BGCHECKFLAG_GROUND_LEAVE (1 << 2) // Has left the ground (only active for 1 frame)
+#define BGCHECKFLAG_WALL (1 << 3) // Touching a wall
+#define BGCHECKFLAG_CEILING (1 << 4) // Touching a ceiling
+#define BGCHECKFLAG_WATER (1 << 5) // In water
+#define BGCHECKFLAG_WATER_TOUCH (1 << 6) // Has touched water (reset when leaving water)
+#define BGCHECKFLAG_GROUND_STRICT (1 << 7) // Similar to BGCHECKFLAG_GROUND but with no velocity check and is cleared every frame
+#define BGCHECKFLAG_CRUSHED (1 << 8) // Crushed between a floor and ceiling (triggers a void for player)
+#define BGCHECKFLAG_PLAYER_WALL_INTERACT (1 << 9) // Only set/used by player, related to interacting with walls
+#define BGCHECKFLAG_PLAYER_400 (1 << 10) // 
+#define BGCHECKFLAG_PLAYER_800 (1 << 11) // 
+#define BGCHECKFLAG_PLAYER_1000 (1 << 12) // 
+
 typedef struct Actor {
     /* 0x000 */ s16 id; // Actor ID
     /* 0x002 */ u8 category; // Actor category. Refer to the corresponding enum for values
@@ -150,7 +164,7 @@ typedef struct Actor {
     /* 0x054 */ f32 targetArrowOffset; // Height offset of the target arrow relative to `focus` position
     /* 0x058 */ Vec3f scale; // Scale of the actor in each axis
     /* 0x064 */ Vec3f velocity; // Velocity of the actor in each axis
-    /* 0x070 */ f32 speedXZ; // How fast the actor is traveling along the XZ plane
+    /* 0x070 */ f32 speed; // Context dependent speed value. Can be used for XZ or XYZ depending on which move function is used
     /* 0x074 */ f32 gravity; // Acceleration due to gravity. Value is added to Y velocity every frame
     /* 0x078 */ f32 terminalVelocity; // Sets the lower bounds cap on velocity along the Y axis
     /* 0x07C */ struct CollisionPoly* wallPoly; // Wall polygon the actor is touching
@@ -160,7 +174,7 @@ typedef struct Actor {
     /* 0x086 */ s16 wallYaw; // Y rotation of the wall polygon the actor is touching
     /* 0x088 */ f32 floorHeight; // Y position of the floor polygon directly below the actor
     /* 0x08C */ f32 depthInWater; // Directed distance to the surface of active waterbox. Negative value means water is below.
-    /* 0x090 */ u16 bgCheckFlags; // See comments below actor struct for wip docs. TODO: macros for these flags
+    /* 0x090 */ u16 bgCheckFlags; // Flags indicating how the actor is interacting with collision
     /* 0x092 */ s16 yawTowardsPlayer; // Y rotation difference between the actor and the player
     /* 0x094 */ f32 xyzDistToPlayerSq; // Squared distance between the actor and the player in the x,y,z axis
     /* 0x098 */ f32 xzDistToPlayer; // Distance between the actor and the player in the XZ plane
@@ -198,27 +212,12 @@ typedef enum {
     /* 1 */ FOOT_RIGHT
 } ActorFootIndex;
 
-/**
- * BgCheckFlags WIP documentation (logical masks):
- * 0x001 : Standing on the ground
- * 0x002 : Has touched the ground (only active for 1 frame)
- * 0x004 : Has left the ground (only active for 1 frame)
- * 0x008 : Touching a wall
- * 0x010 : Touching a ceiling
- * 0x020 : On or below water surface
- * 0x040 : Has touched water (actor is responsible for unsetting this the frame it touches the water)
- * 0x080 : Similar to & 0x1 but with no velocity check and is cleared every frame
- * 0x100 : Crushed between a floor and ceiling (triggers a void for player)
- * 0x200 : Only set/used by player, related to interacting with walls
- */
-
 typedef struct {
     /* 0x000 */ Actor actor;
     /* 0x144 */ s32 bgId;
     /* 0x148 */ f32 pushForce;
     /* 0x14C */ f32 unk14C;
     /* 0x150 */ s16 yRotation;
-    /* 0x152 */ u16 unk152;
     /* 0x154 */ u32 flags;
     /* 0x158 */ u8 stateFlags;
     /* 0x15A */ s16 pad15A;
@@ -385,6 +384,13 @@ typedef struct ActorListEntry {
     /* 0x8 */ s32 unk_08;
 } ActorListEntry; // size = 0xC
 
+typedef enum {
+    /* 0 */ LENS_MODE_HIDE_ACTORS, // lens actors are visible by default, and hidden by using lens (for example, fake walls)
+    /* 1 */ LENS_MODE_SHOW_ACTORS // lens actors are invisible by default, and shown by using lens (for example, invisible enemies)
+} LensMode;
+
+#define LENS_ACTOR_MAX 32
+
 // Target size when activated
 #define LENS_MASK_ACTIVE_SIZE 100
 
@@ -399,9 +405,9 @@ typedef struct ActorContext {
     /* 0x00B */ s8 lensActorsDrawn;
     /* 0x00C */ s16 unkC;
     /* 0x00E */ u8 totalLoadedActors;
-    /* 0x00F */ u8 undrawnActorCount;
+    /* 0x00F */ u8 numLensActors;
     /* 0x010 */ ActorListEntry actorLists[ACTORCAT_MAX];
-    /* 0x0A0 */ Actor* undrawnActors[32]; // Records the first 32 actors drawn each frame
+    /* 0x0A0 */ Actor* lensActors[LENS_ACTOR_MAX]; // Draws up to LENS_ACTOR_MAX number of invisible actors
     /* 0x120 */ TargetContext targetContext;
     /* 0x1B8 */ ActorContextSceneFlags sceneFlags;
     /* 0x1E4 */ TitleCardContext titleCtxt;
@@ -467,8 +473,8 @@ typedef enum {
 #define ACTOR_FLAG_20            (1 << 5)
 // 
 #define ACTOR_FLAG_40            (1 << 6)
-// Invisible
-#define ACTOR_FLAG_80            (1 << 7)
+// hidden or revealed by Lens of Truth (depending on room lensMode)
+#define ACTOR_FLAG_REACT_TO_LENS (1 << 7)
 // Related to talk
 #define ACTOR_FLAG_100           (1 << 8)
 // 

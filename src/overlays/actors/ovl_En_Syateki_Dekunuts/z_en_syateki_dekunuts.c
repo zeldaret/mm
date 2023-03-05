@@ -17,10 +17,10 @@ void EnSyatekiDekunuts_Destroy(Actor* thisx, PlayState* play);
 void EnSyatekiDekunuts_Update(Actor* thisx, PlayState* play);
 void EnSyatekiDekunuts_Draw(Actor* thisx, PlayState* play);
 
-void EnSyatekiDekunuts_SetupWaitForSpawn(EnSyatekiDekunuts* this);
-void EnSyatekiDekunuts_WaitForSpawn(EnSyatekiDekunuts* this, PlayState* play);
-void EnSyatekiDekunuts_SetupSpawn(EnSyatekiDekunuts* this);
-void EnSyatekiDekunuts_Spawn(EnSyatekiDekunuts* this, PlayState* play);
+void EnSyatekiDekunuts_SetupWaitForSignal(EnSyatekiDekunuts* this);
+void EnSyatekiDekunuts_WaitForSignal(EnSyatekiDekunuts* this, PlayState* play);
+void EnSyatekiDekunuts_SetupWaitToStart(EnSyatekiDekunuts* this);
+void EnSyatekiDekunuts_WaitToStart(EnSyatekiDekunuts* this, PlayState* play);
 void EnSyatekiDekunuts_SetupWaitToEmerge(EnSyatekiDekunuts* this);
 void EnSyatekiDekunuts_WaitToEmerge(EnSyatekiDekunuts* this, PlayState* play);
 void EnSyatekiDekunuts_SetupEmerge(EnSyatekiDekunuts* this);
@@ -152,7 +152,7 @@ void EnSyatekiDekunuts_Init(Actor* thisx, PlayState* play2) {
     this->timer = 0;
     this->unk_1DC = 0;
     this->waitTimer = 0;
-    EnSyatekiDekunuts_SetupWaitForSpawn(this);
+    EnSyatekiDekunuts_SetupWaitForSignal(this);
 }
 
 void EnSyatekiDekunuts_Destroy(Actor* thisx, PlayState* play) {
@@ -161,10 +161,10 @@ void EnSyatekiDekunuts_Destroy(Actor* thisx, PlayState* play) {
     Collider_DestroyCylinder(play, &this->collider);
 }
 
-void EnSyatekiDekunuts_SetupWaitForSpawn(EnSyatekiDekunuts* this) {
+void EnSyatekiDekunuts_SetupWaitForSignal(EnSyatekiDekunuts* this) {
     Animation_PlayOnceSetSpeed(&this->skelAnime, &gDekuScrubUpAnim, 0.0f);
 
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actor.world = this->actor.home;
     this->actor.prevPos = this->actor.home.pos;
     this->actor.shape.rot = this->actor.world.rot;
@@ -176,18 +176,18 @@ void EnSyatekiDekunuts_SetupWaitForSpawn(EnSyatekiDekunuts* this) {
         this->isAlive = true;
     }
 
-    this->actionFunc = EnSyatekiDekunuts_WaitForSpawn;
+    this->actionFunc = EnSyatekiDekunuts_WaitForSignal;
 }
 
 /**
- * Waits until the shooting gallery man sets the appropriate Deku Scrub flag to spawn.
+ * Waits until the shooting gallery man sets the appropriate Deku Scrub flag.
  */
-void EnSyatekiDekunuts_WaitForSpawn(EnSyatekiDekunuts* this, PlayState* play) {
+void EnSyatekiDekunuts_WaitForSignal(EnSyatekiDekunuts* this, PlayState* play) {
     EnSyatekiMan* syatekiMan = (EnSyatekiMan*)this->actor.parent;
 
     if ((syatekiMan->shootingGameState == SG_GAME_STATE_RUNNING) && (this->isAlive == true) &&
         (syatekiMan->dekuScrubFlags & (1 << this->index))) {
-        EnSyatekiDekunuts_SetupSpawn(this);
+        EnSyatekiDekunuts_SetupWaitToStart(this);
     } else if (syatekiMan->shootingGameState != SG_GAME_STATE_RUNNING) {
         this->isAlive = true;
     }
@@ -201,7 +201,7 @@ void EnSyatekiDekunuts_WaitForSpawn(EnSyatekiDekunuts* this, PlayState* play) {
 /**
  * Positions the Deku Scrub to match up with its flower, then sets it up to start waiting.
  */
-void EnSyatekiDekunuts_SetupSpawn(EnSyatekiDekunuts* this) {
+void EnSyatekiDekunuts_SetupWaitToStart(EnSyatekiDekunuts* this) {
     Vec3f pos;
     EnSyatekiMan* syatekiMan = (EnSyatekiMan*)this->actor.parent;
 
@@ -221,18 +221,18 @@ void EnSyatekiDekunuts_SetupSpawn(EnSyatekiDekunuts* this) {
         this->headdressType = EN_SYATEKI_DEKUNUTS_HEADDRESS_TYPE_NORMAL;
     }
 
-    this->actionFunc = EnSyatekiDekunuts_Spawn;
+    this->actionFunc = EnSyatekiDekunuts_WaitToStart;
 }
 
 /**
  * Waits 20 frames, then plays a sound and starts the process of making the Deku Scrubs emerge.
  */
-void EnSyatekiDekunuts_Spawn(EnSyatekiDekunuts* this, PlayState* play) {
+void EnSyatekiDekunuts_WaitToStart(EnSyatekiDekunuts* this, PlayState* play) {
     EnSyatekiMan* syatekiMan;
 
     if (this->waitTimer > 20) {
         syatekiMan = (EnSyatekiMan*)this->actor.parent;
-        Actor_PlaySfxAtPos(&syatekiMan->actor, NA_SE_EN_NUTS_DAMAGE);
+        Actor_PlaySfx(&syatekiMan->actor, NA_SE_EN_NUTS_DAMAGE);
         this->waitTimer = 0;
         EnSyatekiDekunuts_SetupWaitToEmerge(this);
     } else {
@@ -258,7 +258,7 @@ void EnSyatekiDekunuts_WaitToEmerge(EnSyatekiDekunuts* this, PlayState* play) {
 }
 
 void EnSyatekiDekunuts_SetupEmerge(EnSyatekiDekunuts* this) {
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_UP);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_UP);
     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_SYATEKI_DEKUNUTS_ANIM_UP);
     this->actor.shape.rot.y = this->actor.yawTowardsPlayer;
     this->actor.world.rot.y = this->actor.yawTowardsPlayer;
@@ -357,7 +357,7 @@ void EnSyatekiDekunuts_SetupGameEnd(EnSyatekiDekunuts* this) {
  */
 void EnSyatekiDekunuts_GameEnd(EnSyatekiDekunuts* this, PlayState* play) {
     if (this->waitTimer > 20) {
-        EnSyatekiDekunuts_SetupWaitForSpawn(this);
+        EnSyatekiDekunuts_SetupWaitForSignal(this);
         this->waitTimer = 0;
     } else {
         this->waitTimer++;
@@ -379,7 +379,7 @@ void EnSyatekiDekunuts_SetupDead(EnSyatekiDekunuts* this, PlayState* play) {
         syatekiMan->dekuScrubHitCounter++;
     }
 
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_DAMAGE);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_DAMAGE);
     this->isAlive = false;
     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_SYATEKI_DEKUNUTS_ANIM_DAMAGE);
     this->timer = 160;
@@ -394,7 +394,7 @@ void EnSyatekiDekunuts_Dead(EnSyatekiDekunuts* this, PlayState* play) {
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         if (this->timer == 160) {
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_SYATEKI_DEKUNUTS_ANIM_DIE);
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_DEAD);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_DEAD);
             this->timer--;
         } else if (this->timer < 160) {
             Vec3f pos;
@@ -411,7 +411,7 @@ void EnSyatekiDekunuts_Dead(EnSyatekiDekunuts* this, PlayState* play) {
                 syatekiMan->dekuScrubFlags &= ~(1 << this->index);
             }
 
-            EnSyatekiDekunuts_SetupWaitForSpawn(this);
+            EnSyatekiDekunuts_SetupWaitForSignal(this);
         }
     } else if (this->timer < 160) {
         this->timer--;
@@ -424,7 +424,7 @@ void EnSyatekiDekunuts_Update(Actor* thisx, PlayState* play) {
 
     this->actionFunc(this, play);
 
-    if ((this->actionFunc != EnSyatekiDekunuts_WaitForSpawn) && (this->timer < this->timeToBurrow) &&
+    if ((this->actionFunc != EnSyatekiDekunuts_WaitForSignal) && (this->timer < this->timeToBurrow) &&
         (this->timer > 10)) {
         if ((this->collider.base.acFlags & AC_HIT) && (this->isAlive == true)) {
             if (EN_SYATEKI_DEKUNUTS_GET_TYPE(&this->actor) == EN_SYATEKI_DEKUNUTS_TYPE_BONUS) {
@@ -463,7 +463,7 @@ void EnSyatekiDekunuts_Draw(Actor* thisx, PlayState* play) {
     Vec3f flowerPos;
     s32 i;
 
-    if (this->actionFunc != EnSyatekiDekunuts_WaitForSpawn) {
+    if (this->actionFunc != EnSyatekiDekunuts_WaitForSignal) {
         SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
                           EnSyatekiDekunuts_OverrideLimbDraw, NULL, &this->actor);
     }

@@ -158,7 +158,7 @@ void EnWarpTag_RespawnPlayer(EnWarptag* this, PlayState* play) {
 
         } else {
             ActorCutscene_StartAndSetUnkLinkFields(play->playerActorCsIds[4], &this->dyna.actor);
-            func_800B8E58(player, NA_SE_PL_WARP_PLATE);
+            Player_PlaySfx(player, NA_SE_PL_WARP_PLATE);
             Play_EnableMotionBlur(0);
         }
 

@@ -443,7 +443,7 @@ void func_80B4163C(EnKgy* this, PlayState* play) {
             this->lightInfo.params.point.y = this->unk_2C0.y;
             this->lightInfo.params.point.z = this->unk_2C0.z;
             this->unk_300 = 200;
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SWORD_FORGE);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_SWORD_FORGE);
             break;
     }
 
@@ -1134,7 +1134,7 @@ void func_80B43074(EnKgy* this, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     func_8012C28C(play->state.gfxCtx);
-    func_800B8050(&this->actor, play, MTXMODE_NEW);
+    func_800B8050(&this->actor, play, 0);
     Matrix_Push();
     Matrix_Translate(-800.0f, 3100.0f, 8400.0f, MTXMODE_APPLY);
     Matrix_RotateXS(0x4000, MTXMODE_APPLY);

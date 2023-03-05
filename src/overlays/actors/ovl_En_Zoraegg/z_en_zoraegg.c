@@ -318,7 +318,7 @@ void func_80B31E00(EnZoraegg* this) {
     }
 
     if ((this->unk_1E8 == 111) || (this->unk_1E8 == 32)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_ZORA_KIDS_BORN);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_ZORA_KIDS_BORN);
     }
 }
 
@@ -437,7 +437,7 @@ void func_80B324B0(EnZoraegg* this, PlayState* play) {
         Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetActorActionIndex(play, this->actorActionCmd));
 
         if ((this->unk_1EA & 4) && Animation_OnFrame(&this->skelAnime, this->unk_1E4)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_ZORA_KIDS_SWIM_1);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_ZORA_KIDS_SWIM_1);
             this->unk_1E4 = Rand_ZeroFloat(5.0f);
         }
     } else if (this->unk_1EA & 4) {
@@ -478,13 +478,13 @@ void func_80B326F4(EnZoraegg* this, PlayState* play) {
         SET_WEEKEVENTREG(WEEKEVENTREG_19_40);
         this->unk_1EC = 2;
         this->unk_1EE = 100;
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_ZORA_KIDS_SWIM_2);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_ZORA_KIDS_SWIM_2);
     }
 
     Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetActorActionIndex(play, this->actorActionCmd));
 
     if (Animation_OnFrame(&this->skelAnime, 4.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_ZORA_KIDS_SWIM_1);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_ZORA_KIDS_SWIM_1);
     }
 }
 
@@ -507,7 +507,7 @@ void func_80B32820(EnZoraegg* this, PlayState* play) {
     Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetActorActionIndex(play, this->actorActionCmd));
 
     if (Animation_OnFrame(&this->skelAnime, 16.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_ZORA_KIDS_SWIM_0);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_ZORA_KIDS_SWIM_0);
     }
 }
 
@@ -542,7 +542,7 @@ void func_80B32928(EnZoraegg* this, PlayState* play) {
 
     if (Animation_OnFrame(&this->skelAnime, 97.0f) || Animation_OnFrame(&this->skelAnime, 101.0f) ||
         Animation_OnFrame(&this->skelAnime, 105.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_ZORA_KIDS_SWIM_1);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_ZORA_KIDS_SWIM_1);
     }
 }
 
@@ -579,7 +579,7 @@ void func_80B32BB8(EnZoraegg* this, PlayState* play) {
     func_80B31C40(this, play);
     func_80B31D64(this, play, 13, 0.0f);
 
-    if (this->actor.bgCheckFlags & 0x1) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         this->actionFunc = func_80B32B70;
     }
 
@@ -627,7 +627,7 @@ void func_80B32D08(EnZoraegg* this, PlayState* play) {
 
             EffectSsGRipple_Spawn(play, &sp34, 150, 500, 0);
             EffectSsGSplash_Spawn(play, &sp34, NULL, NULL, 0, 200);
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_DIVE_INTO_WATER_L);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_DIVE_INTO_WATER_L);
 
             this->actionFunc = func_80B32C34;
             this->actor.velocity.y = -1.0f;

@@ -328,7 +328,7 @@ void func_808B90CC(DoorWarp1* this, PlayState* play) {
         DoorWarp1_SetupAction(this, func_808B921C);
     }
 
-    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_WARP_HOLE_ENERGY - SFX_FLAG);
+    Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_WARP_HOLE_ENERGY - SFX_FLAG);
 }
 
 void func_808B921C(DoorWarp1* this, PlayState* play) {
@@ -349,7 +349,7 @@ void func_808B921C(DoorWarp1* this, PlayState* play) {
         DoorWarp1_SetupAction(this, func_808B93A0);
     }
 
-    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_BOSS_WARP_HOLE - SFX_FLAG);
+    Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_BOSS_WARP_HOLE - SFX_FLAG);
 }
 
 void func_808B93A0(DoorWarp1* this, PlayState* play) {
@@ -372,7 +372,7 @@ void func_808B93A0(DoorWarp1* this, PlayState* play) {
         }
     }
     func_808BB8D4(this, play, 1);
-    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_BOSS_WARP_HOLE - SFX_FLAG);
+    Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_BOSS_WARP_HOLE - SFX_FLAG);
 }
 
 void func_808B94A4(DoorWarp1* this, PlayState* play) {
@@ -380,7 +380,7 @@ void func_808B94A4(DoorWarp1* this, PlayState* play) {
         DoorWarp1_SetupAction(this, func_808B921C);
     }
     func_808BB8D4(this, play, 1);
-    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_BOSS_WARP_HOLE - SFX_FLAG);
+    Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_BOSS_WARP_HOLE - SFX_FLAG);
 }
 
 void func_808B9524(DoorWarp1* this, PlayState* play) {
@@ -415,14 +415,14 @@ void func_808B958C(DoorWarp1* this, PlayState* play) {
     }
 
     Math_SmoothStepToF(&this->unk_1A8, 6.0f, 0.2f, 0.02f, 0.01f);
-    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_LINK_WARP - SFX_FLAG);
+    Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_LINK_WARP - SFX_FLAG);
 }
 
 void func_808B96A0(DoorWarp1* this, PlayState* play) {
 }
 
 void func_808B96B0(DoorWarp1* this, PlayState* play) {
-    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_WARP_HOLE - SFX_FLAG);
+    Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_WARP_HOLE - SFX_FLAG);
     Math_SmoothStepToF(&this->unk_1B0, 255.0f, 0.4f, 10.0f, 0.01f);
     Math_SmoothStepToF(&this->unk_1B4, 255.0f, 0.4f, 10.0f, 0.01f);
 
@@ -442,7 +442,7 @@ void func_808B96B0(DoorWarp1* this, PlayState* play) {
 }
 
 void func_808B977C(DoorWarp1* this, PlayState* play) {
-    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_WARP_HOLE - SFX_FLAG);
+    Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_WARP_HOLE - SFX_FLAG);
     if (func_808B866C(this, play) && !Play_InCsMode(play)) {
         Player* player = GET_PLAYER(play);
 
@@ -515,7 +515,7 @@ void func_808B9B30(DoorWarp1* this, PlayState* play) {
 }
 
 void func_808B9BE8(DoorWarp1* this, PlayState* play) {
-    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_WARP_HOLE - SFX_FLAG);
+    Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_WARP_HOLE - SFX_FLAG);
     Math_SmoothStepToF(&this->unk_1B0, 255.0f, 0.2f, 2.0f, 0.1f);
     Math_SmoothStepToF(&this->unk_1B4, 255.0f, 0.2f, 2.0f, 0.1f);
     if (this->unk_1C4 < 10) {
@@ -594,7 +594,7 @@ void func_808B9ED8(DoorWarp1* this, PlayState* play) {
 }
 
 void func_808B9F10(DoorWarp1* this, PlayState* play) {
-    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_WARP_HOLE - SFX_FLAG);
+    Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_WARP_HOLE - SFX_FLAG);
     if ((this->unk_203 == 0) && func_808B866C(this, play) && !Play_InCsMode(play) && (this->unk_203 == 0)) {
         Player* player = GET_PLAYER(play);
 
@@ -652,7 +652,7 @@ void func_808BA10C(DoorWarp1* this, PlayState* play) {
 
         if (this->unk_202 != 0) {
             if (phi_v0_2 > 0) {
-                SET_WEEKEVENTREG(WEEKEVENTREG_07_80);
+                SET_WEEKEVENTREG(WEEKEVENTREG_ENTERED_WOODFALL_TEMPLE_PRISON);
             }
 
             switch (phi_v0_2) {
@@ -711,7 +711,8 @@ void func_808BA10C(DoorWarp1* this, PlayState* play) {
             switch (phi_v0_2) {
                 case 0:
                     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_20_02)) {
-                        SET_WEEKEVENTREG(WEEKEVENTREG_07_80);
+                        // Skips the entrance cutscene as this flag is attached to `ENTRANCE(WOODFALL_TEMPLE, 1)`
+                        SET_WEEKEVENTREG(WEEKEVENTREG_ENTERED_WOODFALL_TEMPLE_PRISON);
                         play->nextEntrance = ENTRANCE(WOODFALL_TEMPLE, 1);
                         play->transitionTrigger = TRANS_TRIGGER_START;
                         play->transitionType = TRANS_TYPE_FADE_WHITE;

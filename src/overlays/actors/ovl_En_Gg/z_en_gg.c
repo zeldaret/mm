@@ -8,7 +8,7 @@
 #include "objects/gameplay_keep/gameplay_keep.h"
 #include "objects/object_gg/object_gg.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_80)
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_REACT_TO_LENS)
 
 #define THIS ((EnGg*)thisx)
 
@@ -129,7 +129,7 @@ s32 func_80B34FB4(EnGg* this, PlayState* play) {
     pitch = Math_Vec3f_Pitch(&sp34, &sp40);
 
     if ((this->actor.xzDistToPlayer < 250.0f) && (this->actor.xzDistToPlayer > 50.0f) &&
-        (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_80) || CHECK_WEEKEVENTREG(WEEKEVENTREG_19_80))) {
+        (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_REACT_TO_LENS) || CHECK_WEEKEVENTREG(WEEKEVENTREG_19_80))) {
         Math_SmoothStepToS(&this->unk_2E8, pitch, 4, 0x2AA8, 1);
     } else {
         Math_SmoothStepToS(&this->unk_2E8, 0, 4, 0x2AA8, 1);
@@ -230,7 +230,7 @@ void func_80B35450(EnGg* this, PlayState* play) {
     }
 
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-        if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_80)) {
+        if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_REACT_TO_LENS)) {
             Actor_DeactivateLens(play);
         }
         this->unk_308 = 1;
@@ -239,7 +239,7 @@ void func_80B35450(EnGg* this, PlayState* play) {
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_19_80)) {
             func_800B863C(&this->actor, play);
             this->actor.textId = 0xCEE;
-        } else if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_80)) {
+        } else if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_REACT_TO_LENS)) {
             func_800B863C(&this->actor, play);
             this->actor.textId = 0xCE5;
         }
@@ -252,7 +252,7 @@ void func_80B3556C(EnGg* this, PlayState* play) {
             play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
             play->msgCtx.stateTimer = 4;
             this->unk_308 = 0;
-            this->actor.flags &= ~ACTOR_FLAG_80;
+            this->actor.flags &= ~ACTOR_FLAG_REACT_TO_LENS;
             func_80B35250(this);
         } else {
             this->actor.textId = func_80B357F0(this);
@@ -652,7 +652,7 @@ void EnGg_Init(Actor* thisx, PlayState* play) {
     }
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 30.0f);
-    this->actor.bgCheckFlags |= 0x400;
+    this->actor.bgCheckFlags |= BGCHECKFLAG_PLAYER_400;
     SkelAnime_InitFlex(play, &this->skelAnime, &object_gg_Skel_00F6C0, &object_gg_Anim_00F578, this->jointTable,
                        this->morphTable, 20);
 
@@ -663,7 +663,7 @@ void EnGg_Init(Actor* thisx, PlayState* play) {
     CLEAR_WEEKEVENTREG(WEEKEVENTREG_20_04);
     CLEAR_WEEKEVENTREG(WEEKEVENTREG_20_08);
     CLEAR_WEEKEVENTREG(WEEKEVENTREG_20_10);
-    this->actor.flags &= ~ACTOR_FLAG_80;
+    this->actor.flags &= ~ACTOR_FLAG_REACT_TO_LENS;
     this->unk_310 = this->actor.home.pos.y;
     this->unk_2DC = this->actor.cutscene;
     this->actor.flags |= ACTOR_FLAG_2000000;
@@ -683,10 +683,10 @@ void EnGg_Update(Actor* thisx, PlayState* play) {
     EnGg* this = THIS;
 
     if (play->actorCtx.lensMaskSize == LENS_MASK_ACTIVE_SIZE) {
-        this->actor.flags |= ACTOR_FLAG_80;
+        this->actor.flags |= ACTOR_FLAG_REACT_TO_LENS;
         this->actor.flags |= ACTOR_FLAG_1;
     } else {
-        this->actor.flags &= ~ACTOR_FLAG_80;
+        this->actor.flags &= ~ACTOR_FLAG_REACT_TO_LENS;
         this->actor.flags &= ~ACTOR_FLAG_1;
     }
 
@@ -709,7 +709,7 @@ void EnGg_Update(Actor* thisx, PlayState* play) {
     }
 
     if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_91_10) &&
-        (CHECK_WEEKEVENTREG(WEEKEVENTREG_19_80) || CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_80) ||
+        (CHECK_WEEKEVENTREG(WEEKEVENTREG_19_80) || CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_REACT_TO_LENS) ||
          (this->unk_308 == 1))) {
         SET_WEEKEVENTREG(WEEKEVENTREG_91_10);
     }
@@ -797,7 +797,7 @@ void EnGg_Draw(Actor* thisx, PlayState* play) {
         POLY_OPA_DISP =
             SkelAnime_DrawFlex(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                                EnGg_OverrideLimbDraw, EnGg_PostLimbDraw, &this->actor, POLY_OPA_DISP);
-    } else if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_80) || (this->unk_308 == 1)) {
+    } else if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_REACT_TO_LENS) || (this->unk_308 == 1)) {
         func_8012C2DC(play->state.gfxCtx);
 
         gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(D_80B36DFC[this->unk_2E2]));

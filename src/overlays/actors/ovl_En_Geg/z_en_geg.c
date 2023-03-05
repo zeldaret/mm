@@ -222,13 +222,13 @@ void func_80BB178C(EnGeg* this, PlayState* play) {
 }
 
 s32 func_80BB18FC(EnGeg* this, Actor* actor) {
-    if (actor->bgCheckFlags & 1) {
+    if (actor->bgCheckFlags & BGCHECKFLAG_GROUND) {
         f32 sp24 = Math_Vec3f_DistXZ(&this->actor.world.pos, &actor->world.pos);
         f32 sp20 = Math_Vec3f_DiffY(&this->actor.world.pos, &actor->world.pos);
 
         if ((sp24 < 150.0f) && (fabsf(sp20) < 5.0f)) {
             this->unk_230 |= 0x20;
-            actor->speedXZ = 0.0f;
+            actor->speed = 0.0f;
             actor->velocity.y = 0.0f;
             this->actor.child = actor;
             actor->parent = &this->actor;
@@ -716,7 +716,7 @@ void func_80BB2E00(EnGeg* this, PlayState* play) {
             func_80BB2020(this, play);
             this->actionFunc = func_80BB30B4;
         } else if (Animation_OnFrame(&this->skelAnime, 24.0f)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_GOLON_STAND_IMT);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_GOLON_STAND_IMT);
         }
     } else if (this->unk_4AC == 4) {
         if (Animation_OnFrame(&this->skelAnime, 0.0f)) {
@@ -729,7 +729,7 @@ void func_80BB2E00(EnGeg* this, PlayState* play) {
                 this->actionFunc = func_80BB3318;
             }
         } else if (Animation_OnFrame(&this->skelAnime, 24.0f)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_GOLON_SIT_IMT);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_GOLON_SIT_IMT);
         }
     }
 }
@@ -739,24 +739,24 @@ void func_80BB2F7C(EnGeg* this, PlayState* play) {
     this->actor.shape.rot.y = this->actor.world.rot.y;
 
     if ((this->actor.xzDistToPlayer < 150.0f) && (fabsf(this->actor.playerHeightRel) < 10.0f) &&
-        (this->actor.bgCheckFlags & 1)) {
+        (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
         this->unk_4AC = 2;
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
         this->unk_230 &= ~1;
         this->actor.shape.yOffset = 0.0f;
         func_80BB2020(this, play);
         this->actionFunc = func_80BB2E00;
     } else {
-        this->actor.speedXZ = 5.0f;
+        this->actor.speed = 5.0f;
         Actor_MoveWithGravity(&this->actor);
     }
 
-    if (this->actor.bgCheckFlags & 1) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         if (this->unk_230 & 0x80) {
             func_800B9010(&this->actor, NA_SE_EN_GOLON_SIRLOIN_ROLL - SFX_FLAG);
         } else {
             this->unk_230 |= 0x80;
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_EYEGOLE_ATTACK);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_EYEGOLE_ATTACK);
         }
     }
 }
@@ -841,7 +841,7 @@ void func_80BB3318(EnGeg* this, PlayState* play) {
         func_800AEF44(Effect_GetByIndex(this->unk_4DC));
         Actor_Kill(&this->actor);
     } else {
-        Math_ApproachF(&this->actor.speedXZ, 10.0f, 0.2f, 1.0f);
+        Math_ApproachF(&this->actor.speed, 10.0f, 0.2f, 1.0f);
         Actor_MoveWithGravity(&this->actor);
     }
 
@@ -1058,7 +1058,7 @@ void func_80BB3BE0(EnGeg* this, PlayState* play) {
 }
 
 void func_80BB3CB4(EnGeg* this, PlayState* play) {
-    f32 sp24 = play->state.frames * this->actor.speedXZ * 1400.0f;
+    f32 sp24 = play->state.frames * this->actor.speed * 1400.0f;
 
     OPEN_DISPS(play->state.gfxCtx);
 

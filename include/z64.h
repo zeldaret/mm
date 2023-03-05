@@ -34,6 +34,7 @@
 #include "z64curve.h"
 #include "z64cutscene.h"
 #include "z64dma.h"
+#include "z64eff_footmark.h"
 #include "z64effect.h"
 #include "z64interface.h"
 #include "z64item.h"
@@ -48,6 +49,7 @@
 #include "z64scene.h"
 #include "z64schedule.h"
 #include "z64skin.h"
+#include "z64skybox.h"
 #include "z64subs.h"
 #include "z64transition.h"
 #include "z64view.h"
@@ -137,28 +139,6 @@ typedef struct {
     /* 0xE */ s8 normalZ;
     /* 0xF */ s8 a;
 } F3DVertexNormal; // size = 0x10
-
-typedef struct {
-    /* 0x0 */ f32 size;
-    /* 0x4 */ f32 dynamicSizeStep;
-    /* 0x8 */ u8 state;
-    /* 0x9 */ u8 sizeGrowsCos2;
-    /* 0xA */ u8 colorsIndex;
-    /* 0xB */ u8 flags;
-    /* 0xC */ u8 lightParamsIndex;
-} FireObjInitParams; // size = 0x10
-
-typedef struct FireObjColors {
-    /* 0x0 */ Color_RGBA8 primColor;
-    /* 0x4 */ u8 lod;
-    /* 0x5 */ Color_RGB8 envColor;
-} FireObjColors; // size = 0x8
-
-typedef struct FireObjLightParams {
-    /* 0x0 */ s16 radius;
-    /* 0x2 */ Color_RGB8 color;
-    /* 0x5 */ Color_RGB8 maxColorAdj;
-} FireObjLightParams; // size = 0x8
 
 // Game Info aka. Static Context
 // Data normally accessed through REG macros (see regs.h)
@@ -276,8 +256,6 @@ typedef struct {
     /* 0x10 */ OSTime resetTime;
 } NmiBuff; // size >= 0x18
 
-typedef void(*osCreateThread_func)(void*);
-
 typedef enum {
     SLOWLY_CALLBACK_NO_ARGS,
     SLOWLY_CALLBACK_ONE_ARG,
@@ -305,36 +283,6 @@ typedef struct {
     /* 0x10 */ int unk10;
     /* 0x14 */ OSMesgQueue unk14;
 } s80185D40; // size = 0x2C
-
-typedef struct {
-    /* 0x00 */ u32 unk0;
-    /* 0x04 */ u8 unk4;
-    /* 0x05 */ u8 unk5;
-    /* 0x06 */ u8 unk6;
-    /* 0x07 */ UNK_TYPE1 pad7[0x2];
-    /* 0x09 */ u8 unk9;
-    /* 0x0A */ UNK_TYPE1 padA[0x2];
-    /* 0x0C */ u32 unkC;
-    /* 0x10 */ u16 unk10;
-    /* 0x12 */ u16 unk12;
-    /* 0x14 */ u16 unk14;
-    /* 0x16 */ UNK_TYPE1 pad16[0x2];
-    /* 0x18 */ u32 unk18;
-    /* 0x1C */ u32 unk1C;
-    /* 0x20 */ u32 unk20;
-    /* 0x24 */ u32 unk24;
-    /* 0x28 */ u32 unk28;
-    /* 0x2C */ u32 unk2C;
-    /* 0x30 */ u32 unk30;
-    /* 0x34 */ u32 unk34;
-} s8018CFAC; // size = 0x38
-
-typedef struct {
-    /* 0x00 */ Vec3f unk0;
-    /* 0x0C */ Vec3f unkC;
-    /* 0x18 */ s16 unk18;
-    /* 0x1A */ s16 unk1A;
-} s80874650; // size = 0x1C
 
 typedef union {
     F3DVertexColor color;
@@ -542,36 +490,6 @@ typedef struct {
     /* 0xFA */ u8 unk_FA[4];
 } EnvironmentContext; // size = 0x100
 
-typedef struct {
-    /* 0x000 */ View view;
-    /* 0x168 */ void* staticSegments[4];
-    /* 0x178 */ void* paletteStaticSegment;
-    /* 0x17C */ Gfx (*dListBuf)[150];
-    /* 0x180 */ Gfx* roomDL;
-    /* 0x184 */ Vtx* roomVtx;
-    /* 0x188 */ DmaRequest unk188;
-    /* 0x1A8 */ DmaRequest unk1A8;
-    /* 0x1C8 */ DmaRequest unk1C8;
-    /* 0x1E8 */ OSMesgQueue loadQueue;
-    /* 0x200 */ OSMesg loadMsg;
-    /* 0x204 */ s16 skyboxShouldDraw;
-    /* 0x208 */ f32 rotX;
-    /* 0x20C */ f32 rotY;
-    /* 0x210 */ f32 rotZ;
-    /* 0x214 */ Vec3f eye;
-    /* 0x220 */ s16 angle;
-    /* 0x222 */ u8 primR;
-    /* 0x223 */ u8 primG;
-    /* 0x224 */ u8 primB;
-    /* 0x225 */ u8 envR;
-    /* 0x226 */ u8 envG;
-    /* 0x227 */ u8 envB;
-} SkyboxContext; // size = 0x228
-
-typedef enum {
-    /* 0x05 */ SKYBOX_CUTSCENE_MAP = 5
-} SkyboxId;
-
 typedef struct ListAlloc {
     /* 0x0 */ struct ListAlloc* prev;
     /* 0x4 */ struct ListAlloc* next;
@@ -698,13 +616,7 @@ typedef struct GameState {
     /* 0xA3 */ u8 unk_A3;
 } GameState; // size = 0xA4
 
-typedef struct {
-    /* 0x00 */ u32 resetting;
-    /* 0x04 */ u32 resetCount;
-    /* 0x08 */ OSTime duration;
-    /* 0x10 */ OSTime resetTime;
-} PreNmiBuff; // size = 0x18 (actually osAppNmiBuffer is 0x40 bytes large but the rest is unused)
-
+struct PlayState;
 
 typedef s32 (*ColChkResetFunc)(struct PlayState*, Collider*);
 typedef void (*ColChkBloodFunc)(struct PlayState*, Collider*, Vec3f*);
@@ -753,12 +665,6 @@ typedef enum {
     STACK_STATUS_OVERFLOW = 2
 } StackStatus;
 
-typedef struct FireObjLight {
-    /* 0x00 */ LightNode* light;
-    /* 0x04 */ LightInfo lightInfo;
-    /* 0x12 */ u8 lightParamsIndex;
-} FireObjLight; // size = 0x14
-
 #define OS_SC_RETRACE_MSG       1
 #define OS_SC_DONE_MSG          2
 #define OS_SC_NMI_MSG           3 // name is made up, 3 is OS_SC_RDP_DONE_MSG in the original sched.c
@@ -778,42 +684,6 @@ typedef struct {
     /* 0x12C */ UNK_TYPE1 pad_12C[0x4];
     /* 0x130 */ OSThread thread;
 } AudioMgr; // size = 0x2E0
-
-typedef struct {
-    /* 0x00 */ MtxF displayMatrix;
-    /* 0x40 */ Actor* actor;
-    /* 0x44 */ Vec3f location;
-    /* 0x50 */ u8 flags; // bit 0 - footmark fades out
-    /* 0x51 */ u8 id;
-    /* 0x52 */ u8 red;
-    /* 0x53 */ u8 blue;
-    /* 0x54 */ u8 green;
-    /* 0x55 */ UNK_TYPE1 pad55[0x1];
-    /* 0x56 */ u16 alpha;
-    /* 0x58 */ u16 alphaChange;
-    /* 0x5A */ u16 size;
-    /* 0x5C */ u16 fadeoutDelay;
-    /* 0x5E */ u16 age;
-} EffFootmark; // size = 0x60
-
-typedef struct FireObj {
-    /* 0x00 */ Vec3f position;
-    /* 0x0C */ f32 size;
-    /* 0x10 */ f32 sizeInv;
-    /* 0x14 */ f32 xScale;
-    /* 0x18 */ f32 yScale;
-    /* 0x1C */ f32 dynamicSize;
-    /* 0x20 */ f32 dynamicSizeStep;
-    /* 0x24 */ u8 state; // 0 - growing, 1 - shrinking, 2 - fully lit, 3 - not lit
-    /* 0x25 */ u8 sizeGrowsCos2;
-    /* 0x26 */ u8 unk26;
-    /* 0x27 */ u8 colorsIndex;
-    /* 0x28 */ u8 flags; // bit 0 - ?, bit 1 - ?
-    /* 0x29 */ UNK_TYPE1 pad29[0x1];
-    /* 0x2A */ s16 ignitionDelay;
-    /* 0x2C */ ColliderCylinder collision;
-    /* 0x78 */ FireObjLight light;
-} FireObj; // size = 0x8B
 
 typedef struct {
     /* 0x0 */ u8   seqId;
@@ -906,7 +776,7 @@ typedef struct PlayState {
     /* 0x18868 */ void* naviQuestHints; // leftover from OoT, system which processes this is removed
     /* 0x1886C */ AnimatedMaterial* sceneMaterialAnims;
     /* 0x18870 */ void* specialEffects;
-    /* 0x18874 */ u8 skyboxId;
+    /* 0x18874 */ u8 skyboxId; // @see SkyboxId enum
     /* 0x18875 */ s8 transitionTrigger; // "fade_direction"
     /* 0x18876 */ s16 worldCoverAlpha;
     /* 0x18878 */ s16 bgCoverAlpha;
@@ -930,7 +800,7 @@ typedef struct PlayState {
     /* 0x18E5C */ TexturePtr pictoPhotoI8;
     /* 0x18E60 */ void* unk_18E60;
     /* 0x18E64 */ void* unk_18E64;
-    /* 0x18E68 */ void* unk_18E68;
+    /* 0x18E68 */ void* unk_18E68; // framebuffer related to Lens of Truth
     /* 0x18E6C */ char unk_18E6C[0x3EC];
 } PlayState; // size = 0x19258
 
@@ -961,11 +831,6 @@ typedef enum {
     /* 3 */ PICTO_PHOTO_STATE_READY
 } PictoPhotoState;
 
-// OoT's TransitionUnk
-typedef struct {
-    /* 0x00 */ char unk_00[0xDC];
-} FbDemoStruct; // size = 0xDC
-
 typedef struct {
     /* 0x00 */ u8 mode;
     /* 0x04 */ f32 scale;
@@ -973,14 +838,6 @@ typedef struct {
     /* 0x0C */ Color_RGBA8_u32 primColor;
     /* 0x10 */ Color_RGBA8_u32 envColor;
 } Struct_80140E80; // size = 0x14
-
-typedef struct {
-    /* 0x00 */ s32 unk0;
-    /* 0x04 */ s32 unk4;
-    /* 0x08 */ s32 unk8;
-    /* 0x0C */ s32 unkC;
-    /* 0x10 */ s32 unk10;
-} struct_801C5F44; // size = 0x14
 
 // From OoT's struct_80034A14_arg1
 typedef struct {

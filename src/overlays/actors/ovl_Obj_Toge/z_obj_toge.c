@@ -148,7 +148,7 @@ void ObjToge_Init(Actor* thisx, PlayState* play) {
     Math_Vec3f_Copy(&thisx->world.pos, &this->unk_198[0]);
     thisx->world.rot.y = Math_Vec3f_Yaw(&this->unk_198[0], &this->unk_198[1]);
     this->unk_194 = 0;
-    thisx->speedXZ = 0.0f;
+    thisx->speed = 0.0f;
 
     if (sp3E > 0) {
         s16 sp36;
@@ -228,7 +228,7 @@ void func_809A481C(ObjToge* this, PlayState* play) {
 }
 
 void func_809A488C(ObjToge* this) {
-    this->actor.speedXZ = 1.0f;
+    this->actor.speed = 1.0f;
     this->actionFunc = func_809A48AC;
 }
 
@@ -237,16 +237,16 @@ void func_809A48AC(ObjToge* this, PlayState* play) {
     s32 sp30 = this->unk_194 ^ 1;
 
     if (this->unk_1B4 && (this->unk_194 == 1)) {
-        Math_StepToF(&this->actor.speedXZ, 2.0f, 0.4f);
+        Math_StepToF(&this->actor.speed, 2.0f, 0.4f);
     } else {
-        Math_StepToF(&this->actor.speedXZ, D_809A4CDC[OBJTOGE_GET_700(&this->actor)], 1.5f);
+        Math_StepToF(&this->actor.speed, D_809A4CDC[OBJTOGE_GET_700(&this->actor)], 1.5f);
         this->actor.shape.rot.y += 0x1770;
     }
 
     Actor_MoveWithGravity(&this->actor);
     Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, D_809A4D0C[OBJTOGE_GET_4000(&this->actor)] * 30.0f, 0.0f, 0x81);
 
-    if (this->actor.bgCheckFlags & 8) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
         this->actor.world.rot.y = Math_Vec3f_Yaw(&this->actor.world.pos, &this->unk_198[this->unk_194]);
         this->unk_194 = sp30;
         if (this->unk_1B4 && (this->unk_194 == 0)) {
@@ -254,7 +254,7 @@ void func_809A48AC(ObjToge* this, PlayState* play) {
         } else {
             func_809A4744(this);
         }
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SPINE_TRAP_MOVE);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_SPINE_TRAP_MOVE);
     } else {
         s16 yaw = Math_Vec3f_Yaw(&this->actor.world.pos, &this->unk_198[sp30]) - this->actor.world.rot.y;
 
@@ -267,7 +267,7 @@ void func_809A48AC(ObjToge* this, PlayState* play) {
             } else {
                 func_809A4744(this);
             }
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SPINE_TRAP_MOVE);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_SPINE_TRAP_MOVE);
         }
     }
 }

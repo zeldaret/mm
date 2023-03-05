@@ -880,7 +880,7 @@ void EnTrt_BeginInteraction(EnTrt* this, PlayState* play) {
                 this->blinkFunc = EnTrt_OpenEyesThenSetToBlink;
                 this->timer = 10;
                 this->cutsceneState = ENTRT_CUTSCENESTATE_PLAYING;
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KOTAKE_SURPRISED2);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_KOTAKE_SURPRISED2);
             }
         } else {
             this->blinkFunc = EnTrt_OpenEyesThenSetToBlink;
@@ -934,7 +934,7 @@ void EnTrt_Surprised(EnTrt* this, PlayState* play) {
             EnTrt_ChangeAnim(&this->skelAnime, sAnimationInfo, TRT_ANIM_SURPRISED);
             this->animIndex = TRT_ANIM_SURPRISED;
             this->blinkFunc = EnTrt_OpenEyes2;
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KOTAKE_SURPRISED);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_KOTAKE_SURPRISED);
             this->timer = 30;
             this->cutsceneState = ENTRT_CUTSCENESTATE_PLAYING;
         }

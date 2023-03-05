@@ -365,7 +365,7 @@ void func_80A6F9DC(EnMm3* this, PlayState* play) {
 
     if (((this->unk_2B4 == 0x279D) || (this->unk_2B4 == 0x27A0) || (this->unk_2B4 == 0x278B)) &&
         Animation_OnFrame(&this->skelAnime, 8.0f) && (this->unk_2AE == 0)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_LIE_DOWN_ON_BED);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_LIE_DOWN_ON_BED);
         this->unk_2AE = 1;
     }
 }

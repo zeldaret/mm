@@ -160,7 +160,7 @@ void ArrowIce_Fly(ArrowIce* this, PlayState* play) {
     ArrowIce_LerpFiredPosition(&this->firedPos, &this->actor.world.pos, 0.05f);
 
     if (arrow->unk_261 & 1) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_EXPLOSION_ICE);
+        Actor_PlaySfx(&this->actor, NA_SE_IT_EXPLOSION_ICE);
         ArrowIce_SetupAction(this, ArrowIce_Hit);
         this->timer = 32;
         this->alpha = 255;

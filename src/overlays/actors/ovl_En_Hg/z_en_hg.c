@@ -177,7 +177,7 @@ void EnHg_Wait(EnHg* this, PlayState* play) {
         }
         if ((gSaveContext.sceneLayer == 0) && (play->csCtx.currentCsIndex == 0) &&
             ((play->csCtx.frames == 20) || (play->csCtx.frames == 60))) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_HALF_REDEAD_SURPRISE);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_HALF_REDEAD_SURPRISE);
         }
     }
 }
@@ -191,7 +191,7 @@ void EnHg_ChasePlayer(EnHg* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     s32 pad;
 
-    this->actor.speedXZ = 1.6f;
+    this->actor.speed = 1.6f;
     if (!(player->stateFlags2 & PLAYER_STATE2_8000000) && Message_GetState(&play->msgCtx) == TEXT_STATE_NONE) {
         if (((this->skelAnime.curFrame > 9.0f) && (this->skelAnime.curFrame < 16.0f)) ||
             ((this->skelAnime.curFrame > 44.0f) && (this->skelAnime.curFrame < 51.0f))) {
