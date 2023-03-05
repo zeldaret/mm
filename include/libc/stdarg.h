@@ -1,5 +1,5 @@
-#ifndef STDARG_H
-#define STDARG_H
+#ifndef LIBC_STDARG_H
+#define LIBC_STDARG_H
 
 // When building with GCC, use the official vaarg macros to avoid warnings
 // and possibly bad codegen.
