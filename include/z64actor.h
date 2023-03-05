@@ -155,10 +155,10 @@ typedef struct {
 #define UPDBGCHECKINFO_FLAG_10 (1 << 4)
 #define UPDBGCHECKINFO_FLAG_20 (1 << 5) // unused
 #define UPDBGCHECKINFO_FLAG_40 (1 << 6) // disable water ripples
-#define UPDBGCHECKINFO_FLAG_80 (1 << 7) // alternate wall check?
+#define UPDBGCHECKINFO_FLAG_80 (1 << 7)
 #define UPDBGCHECKINFO_FLAG_100 (1 << 8)
 #define UPDBGCHECKINFO_FLAG_200 (1 << 9)
-#define UPDBGCHECKINFO_FLAG_400 (1 << 10)
+#define UPDBGCHECKINFO_FLAG_400 (1 << 10) // check water
 #define UPDBGCHECKINFO_FLAG_800 (1 << 11)
 
 typedef struct Actor {
