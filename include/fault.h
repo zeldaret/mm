@@ -28,7 +28,7 @@
 
 #define NORMAL_RDRAM_END 0x80400000
 // Address at the end of normal RDRAM after which is room for a screen buffer
-#define FAULT_FB_ADDRESS (NORMAL_RDRAM_END - sizeof(u16[SCREEN_HEIGHT][SCREEN_WIDTH]))
+#define FAULT_FB_ADDRESS (NORMAL_RDRAM_END - SCREEN_HEIGHT * SCREEN_WIDTH * sizeof(u16))
 
 
 typedef struct FaultClient {
@@ -44,77 +44,43 @@ typedef struct FaultAddrConvClient {
     /* 0x8 */ void* arg;
 } FaultAddrConvClient; // size = 0xC
 
-
-typedef void (*FaultDrawerCallback)(void);
-
 typedef void(*FaultPadCallback)(Input* input);
 
+// Initialization
 
-void Fault_SleepImpl(u32 duration);
+void Fault_Init(void);
+
+// Fatal Errors
+
+void Fault_AddHungupAndCrashImpl(const char* arg0, char* arg1);
+void Fault_AddHungupAndCrash(const char* filename, u32 line);
+
+// Client Registration
+
 void Fault_AddClient(FaultClient* client, void* callback, void* param0, void* param1);
 void Fault_RemoveClient(FaultClient* client);
 void Fault_AddAddrConvClient(FaultAddrConvClient* client, void* callback, void* param);
 void Fault_RemoveAddrConvClient(FaultAddrConvClient* client);
-uintptr_t Fault_ConvertAddress(uintptr_t addr);
-void Fault_Sleep(u32 duration);
-void Fault_PadCallback(Input* input);
-void Fault_UpdatePadImpl(void);
-u32 Fault_WaitForInputImpl(void);
+
+// For use in Fault Client callbacks
+
 void Fault_WaitForInput(void);
-void Fault_DrawRec(s32 x, s32 y, s32 w, s32 h, u16 color);
 void Fault_FillScreenBlack(void);
-void Fault_FillScreenRed(void);
-void Fault_DrawCornerRec(u16 color);
-void Fault_PrintFReg(s32 idx, f32* value);
-void Fault_LogFReg(s32 idx, f32* value);
-void Fault_PrintFPCR(u32 value);
-void Fault_LogFPCSR(u32 value);
-void Fault_PrintThreadContext(OSThread* t);
-void osSyncPrintfThreadContext(OSThread* t);
-OSThread* Fault_FindFaultedThread(void);
-void Fault_Wait5Seconds(void);
-void Fault_WaitForButtonCombo(void);
-void Fault_DrawMemDumpPage(const char* title, uintptr_t addr, u32 param_3);
-void Fault_DrawMemDump(u32 pc, u32 sp, u32 unk0, u32 unk1);
-void Fault_FindNextStackCall(uintptr_t* spPtr, uintptr_t* pcPtr, uintptr_t* raPtr);
-void Fault_DrawStackTrace(OSThread* t, u32 flags);
-void osSyncPrintfStackTrace(OSThread* t, u32 flags);
-void Fault_ResumeThread(OSThread* t);
-void Fault_CommitFB(void);
-void Fault_ProcessClients(void);
-void Fault_SetOptionsFromController3(void);
-void Fault_SetOptions(void);
-void Fault_ThreadEntry(void* arg);
-void Fault_SetFB(void* fb, u16 w, u16 h);
-void Fault_Start(void);
-void Fault_HangupFaultClient(const char* arg0, char* arg1);
-void Fault_AddHungupAndCrashImpl(const char* arg0, char* arg1);
-void Fault_AddHungupAndCrash(const char* filename, u32 line);
+void Fault_SetFrameBuffer(void* fb, u16 w, u16 h);
 
-
-void FaultDrawer_SetOsSyncPrintfEnabled(u32 enabled);
-void FaultDrawer_DrawRecImpl(s32 xStart, s32 yStart, s32 xEnd, s32 yEnd, u16 color);
-void FaultDrawer_DrawChar(char c);
-s32 FaultDrawer_ColorToPrintColor(u16 color);
-void FaultDrawer_UpdatePrintColor(void);
 void FaultDrawer_SetForeColor(u16 color);
 void FaultDrawer_SetBackColor(u16 color);
 void FaultDrawer_SetFontColor(u16 color);
 void FaultDrawer_SetCharPad(s8 padW, s8 padH);
 void FaultDrawer_SetCursor(s32 x, s32 y);
-void FaultDrawer_FillScreen(void);
-void* FaultDrawer_FormatStringFunc(void* arg, const char* str, size_t count);
-void FaultDrawer_VPrintf(const char* fmt, va_list ap);
-void FaultDrawer_Printf(const char* fmt, ...);
+s32 FaultDrawer_VPrintf(const char* fmt, va_list ap);
+s32 FaultDrawer_Printf(const char* fmt, ...);
 void FaultDrawer_DrawText(s32 x, s32 y, const char* fmt, ...);
-void FaultDrawer_SetDrawerFB(void* fb, u16 w, u16 h);
-void FaultDrawer_SetInputCallback(FaultDrawerCallback callback);
-void FaultDrawer_Init(void);
 
 
 typedef struct FaultMgr {
     /* 0x000 */ OSThread thread;
-    /* 0x1B0 */ u8 stack[1536]; // Seems leftover from an earlier version. The thread actually uses a stack of this size at 0x8009BE60
+    /* 0x1B0 */ u8 stack[0x600]; // Seems leftover from an earlier version. The thread actually uses a stack of this size at 0x8009BE60
     /* 0x7B0 */ OSMesgQueue queue;
     /* 0x7C8 */ OSMesg msg[1];
     /* 0x7CC */ u8 exitDebugger;

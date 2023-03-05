@@ -1,3 +1,4 @@
+#include "fault_internal.h"
 #include "fault.h"
 #include "ultra64.h"
 #include "global.h"
@@ -924,12 +925,12 @@ void Fault_ThreadEntry(void* arg) {
     }
 }
 
-void Fault_SetFB(void* fb, u16 w, u16 h) {
+void Fault_SetFrameBuffer(void* fb, u16 w, u16 h) {
     sFaultContext->fb = fb;
     FaultDrawer_SetDrawerFB(fb, w, h);
 }
 
-void Fault_Start(void) {
+void Fault_Init(void) {
     sFaultContext = &gFaultMgr;
     bzero(sFaultContext, sizeof(FaultMgr));
     FaultDrawer_Init();

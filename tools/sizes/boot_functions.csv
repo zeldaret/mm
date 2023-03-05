@@ -81,8 +81,8 @@ asm/non_matchings/boot/fault/Fault_ProcessClients.s,Fault_ProcessClients,0x80083
 asm/non_matchings/boot/fault/Fault_SetOptionsFromController3.s,Fault_SetOptionsFromController3,0x80083670,0x5D
 asm/non_matchings/boot/fault/Fault_SetOptions.s,Fault_SetOptions,0x800837E4,0x11
 asm/non_matchings/boot/fault/Fault_ThreadEntry.s,Fault_ThreadEntry,0x80083828,0xD2
-asm/non_matchings/boot/fault/Fault_SetFB.s,Fault_SetFB,0x80083B70,0x15
-asm/non_matchings/boot/fault/Fault_Start.s,Fault_Start,0x80083BC4,0x4D
+asm/non_matchings/boot/fault/Fault_SetFrameBuffer.s,Fault_SetFrameBuffer,0x80083B70,0x15
+asm/non_matchings/boot/fault/Fault_Init.s,Fault_Init,0x80083BC4,0x4D
 asm/non_matchings/boot/fault/Fault_HangupFaultClient.s,Fault_HangupFaultClient,0x80083CF8,0x3F
 asm/non_matchings/boot/fault/Fault_AddHungupAndCrashImpl.s,Fault_AddHungupAndCrashImpl,0x80083DF4,0x16
 asm/non_matchings/boot/fault/Fault_AddHungupAndCrash.s,Fault_AddHungupAndCrash,0x80083E4C,0x19

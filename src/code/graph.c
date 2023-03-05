@@ -358,7 +358,7 @@ void Graph_ThreadEntry(void* arg) {
     gGfxSPTaskOutputBufferEnd2 = (u8*)gGfxSPTaskOutputBuffer2 + sizeof(*gGfxSPTaskOutputBuffer2);
 
     func_80178978();
-    Fault_SetFB(D_801FBB90, SCREEN_WIDTH, SCREEN_HEIGHT);
+    Fault_SetFrameBuffer(D_801FBB90, SCREEN_WIDTH, SCREEN_HEIGHT);
     Graph_Init(&gfxCtx);
 
     while (nextOvl) {

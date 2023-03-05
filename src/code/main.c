@@ -17,7 +17,7 @@ void Main(void* arg) {
     gScreenHeight = SCREEN_HEIGHT;
 
     Nmi_Init();
-    Fault_Start();
+    Fault_Init();
     Check_RegionIsSupported();
     Check_ExpansionPak();
 

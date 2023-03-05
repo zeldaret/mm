@@ -229,14 +229,7 @@ extern char D_80098C2C[];
 extern char D_80098C34[];
 extern char D_80098C38[];
 extern char D_80098C40[];
-extern char D_80099050[];
-extern char D_80099054[];
-extern char D_8009905C[];
-extern char D_80099064[];
-extern char D_80099070[];
-extern const char D_80099078[];
-extern const char D_8009907C[];
-extern const char D_80099080[];
+
 extern char D_800990B0[];
 extern f32 D_800990C0[9];
 extern f32 D_800990E4;
