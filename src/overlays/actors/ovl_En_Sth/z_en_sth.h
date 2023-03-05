@@ -10,6 +10,12 @@ struct EnSth;
 
 typedef void (*EnSthActionFunc)(struct EnSth*, PlayState*);
 
+// Note: Vanilla types usually have 0xFEXX typing, but this upper section is unused by the code, reason unknown
+#define STH_GET_TYPE(thisx) ((thisx)->params & 0xF)
+#define STH_GET_SWAMP_BODY(thisx) ((thisx)->params & 0x100)
+
+// The get item for the reward for ocean spiderhouse (wallet, or rupees) is set here
+#define STH_GI_ID(thisx) ((thisx)->home.rot.z)
 
 typedef struct EnSth {
     /* 0x000 */ Actor actor;
@@ -18,19 +24,12 @@ typedef struct EnSth {
     /* 0x1D4 */ Vec3s jointTable[STH_LIMB_MAX];
     /* 0x234 */ Vec3s morphTable[STH_LIMB_MAX];
     /* 0x294 */ Vec3s headRot;
-    /* 0x29A */ s16 curAnimIndex;
+    /* 0x29A */ s16 animIndex;
     /* 0x29C */ u16 sthFlags;
     /* 0x29E */ u8 mainObjectId;
     /* 0x29F */ u8 maskOfTruthObjectId;
     /* 0x2A0 */ EnSthActionFunc actionFunc;
 } EnSth; // size = 0x2A4
-
-// Note: Vanilla types usually have 0xFEXX typing, but this upper section is unused by the code, reason unknown
-#define STH_GET_TYPE(thisx) ((thisx)->params & 0xF)
-#define STH_GET_SWAMP_BODY(thisx) ((thisx)->params & 0x100)
-
-// The get item for the reward for ocean spiderhouse (wallet, or rupees) is set here
-#define STH_GI_ID(thisx) ((thisx)->home.rot.z)
 
 typedef enum {
     /* 1 */ STH_TYPE_UNUSED_1 = 1,
