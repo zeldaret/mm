@@ -2475,7 +2475,7 @@ extern OSTime sGraphTaskStartTime;
 
 extern u32 gSegments[NUM_SEGMENTS];
 extern SchedContext gSchedContext;
-
+extern OSThread gGraphThread;
 extern PadMgr gPadMgr;
 
 extern FaultClient sSchedFaultClient;

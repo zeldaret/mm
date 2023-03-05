@@ -4084,7 +4084,7 @@
     0x801F84F8:("irqClient","IrqMgrClient","",0x8),
     0x801F8500:("irqMgrMsgQ","OSMesgQueue","",0x18),
     0x801F8518:("irqMgrMsgBuf","OSMesg","[60]",0xf0),
-    0x801F8608:("sGraphThread","OSThread","",0x1b0),
+    0x801F8608:("gGraphThread","OSThread","",0x1b0),
     0x801F87B8:("sGraphStack","u8","[6144]",0x1800),
     0x801F9FB8:("sSchedStack","u8","[1536]",0x600),
     0x801FA5B8:("sAudioStack","u8","[2048]",0x800),

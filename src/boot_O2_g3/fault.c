@@ -767,9 +767,9 @@ void Fault_SetOptionsFromController3(void) {
     }
 
     if (faultCustomOptions) {
-        graphPC = sGraphThread.context.pc;
-        graphRA = sGraphThread.context.ra;
-        graphSP = sGraphThread.context.sp;
+        graphPC = gGraphThread.context.pc;
+        graphRA = gGraphThread.context.ra;
+        graphSP = gGraphThread.context.sp;
         if (CHECK_BTN_ALL(input3->cur.button, BTN_R)) {
             static u32 faultCopyToLog;
 

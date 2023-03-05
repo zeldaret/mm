@@ -15,7 +15,7 @@ extern SchedContext gSchedContext;
 extern IrqMgrClient irqClient;
 extern OSMesgQueue irqMgrMsgQ;
 extern OSMesg irqMgrMsgBuf[60];
-extern OSThread sGraphThread;
+extern OSThread gGraphThread;
 extern STACK(sGraphStack, 0x1800);
 extern STACK(sSchedStack, 0x600);
 extern STACK(sAudioStack, 0x800);
@@ -71,8 +71,8 @@ void Main(void* arg) {
     AudioMgr_Unlock(&sAudioMgr);
 
     StackCheck_Init(&sGraphStackInfo, sGraphStack, STACK_TOP(sGraphStack), 0, 0x100, "graph");
-    osCreateThread(&sGraphThread, Z_THREAD_ID_GRAPH, Graph_ThreadEntry, arg, STACK_TOP(sGraphStack), Z_PRIORITY_GRAPH);
-    osStartThread(&sGraphThread);
+    osCreateThread(&gGraphThread, Z_THREAD_ID_GRAPH, Graph_ThreadEntry, arg, STACK_TOP(sGraphStack), Z_PRIORITY_GRAPH);
+    osStartThread(&gGraphThread);
 
     exit = false;
 
@@ -94,5 +94,5 @@ void Main(void* arg) {
     }
 
     IrqMgr_RemoveClient(&gIrqMgr, &irqClient);
-    osDestroyThread(&sGraphThread);
+    osDestroyThread(&gGraphThread);
 }
