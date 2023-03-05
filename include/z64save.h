@@ -406,6 +406,14 @@ typedef enum SunsSongState {
     /* 3 */ SUNSSONG_SPECIAL // time does not advance, but signals the song was played. used for freezing redeads
 } SunsSongState;
 
+typedef enum {
+    /* 0 */ GAMEMODE_NORMAL,
+    /* 1 */ GAMEMODE_TITLE_SCREEN,
+    /* 2 */ GAMEMODE_FILE_SELECT,
+    /* 3 */ GAMEMODE_END_CREDITS,
+    /* 4 */ GAMEMODE_4,
+} GameMode;
+
 // linkAge still exists in MM, but is always set to 0 (always adult)
 // There are remnants of these macros from OOT, but they are essentially useless
 #define LINK_IS_CHILD (gSaveContext.save.linkAge == 1)

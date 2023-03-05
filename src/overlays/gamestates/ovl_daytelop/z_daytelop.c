@@ -73,7 +73,7 @@ void DayTelop_Update(DayTelopState* this, GameState* thisx) {
     this->transitionCountdown--;
     if (this->transitionCountdown == 0) {
         if (gSaveContext.save.day < 9) {
-            gSaveContext.gameMode = 0;
+            gSaveContext.gameMode = GAMEMODE_NORMAL;
         } else {
             gSaveContext.nextCutsceneIndex = 0xFFF6;
             gSaveContext.save.day = 1;

@@ -315,7 +315,7 @@ void EnTest4_Init(Actor* thisx, PlayState* play) {
         if (CURRENT_DAY == 0) {
             if (gSaveContext.save.time < CLOCK_TIME(6, 1)) {
                 gSaveContext.save.time = CLOCK_TIME(6, 0);
-                gSaveContext.gameMode = 0;
+                gSaveContext.gameMode = GAMEMODE_NORMAL;
                 STOP_GAMESTATE(&play->state);
                 SET_NEXT_GAMESTATE(&play->state, DayTelop_Init, sizeof(DayTelopState));
                 this->unk_144 = 1;
