@@ -411,7 +411,7 @@ typedef enum {
     /* 1 */ GAMEMODE_TITLE_SCREEN,
     /* 2 */ GAMEMODE_FILE_SELECT,
     /* 3 */ GAMEMODE_END_CREDITS,
-    /* 4 */ GAMEMODE_4,
+    /* 4 */ GAMEMODE_OWL_SAVE,
 } GameMode;
 
 // linkAge still exists in MM, but is always set to 0 (always adult)
