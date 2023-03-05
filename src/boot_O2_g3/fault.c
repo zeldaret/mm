@@ -39,7 +39,8 @@ const char* sFpuExceptions[] = {
 };
 
 void Fault_SleepImpl(u32 duration) {
-    u64 value = (duration * OS_CPU_COUNTER) / 1000ULL;
+    OSTime value = (duration * OS_CPU_COUNTER) / 1000ULL;
+
     Sleep_Cycles(value);
 }
 
@@ -220,15 +221,15 @@ uintptr_t Fault_ConvertAddress(uintptr_t addr) {
     return 0;
 }
 
-void Fault_Sleep(u32 duration) {
-    Fault_SleepImpl(duration);
+void Fault_Sleep(u32 msec) {
+    Fault_SleepImpl(msec);
 }
 
 void Fault_PadCallback(Input* input) {
     Padmgr_GetInput2(input, false);
 }
 
-void Fault_UpdatePadImpl() {
+void Fault_UpdatePadImpl(void) {
     sFaultContext->padCallback(sFaultContext->padInput);
 }
 
@@ -241,7 +242,7 @@ void Fault_UpdatePadImpl() {
  * A and DPad-Right continues and returns true
  * DPad-Left continues and returns false
  */
-u32 Fault_WaitForInputImpl() {
+u32 Fault_WaitForInputImpl(void) {
     Input* curInput = &sFaultContext->padInput[0];
     s32 count = 600;
     u32 pressedBtn;
@@ -280,7 +281,7 @@ u32 Fault_WaitForInputImpl() {
     }
 }
 
-void Fault_WaitForInput() {
+void Fault_WaitForInput(void) {
     Fault_WaitForInputImpl();
 }
 
@@ -288,14 +289,14 @@ void Fault_DrawRec(s32 x, s32 y, s32 w, s32 h, u16 color) {
     FaultDrawer_DrawRecImpl(x, y, x + w - 1, y + h - 1, color);
 }
 
-void Fault_FillScreenBlack() {
+void Fault_FillScreenBlack(void) {
     FaultDrawer_SetForeColor(GPACK_RGBA5551(255, 255, 255, 1));
     FaultDrawer_SetBackColor(GPACK_RGBA5551(0, 0, 0, 1));
     FaultDrawer_FillScreen();
     FaultDrawer_SetBackColor(GPACK_RGBA5551(0, 0, 0, 0));
 }
 
-void Fault_FillScreenRed() {
+void Fault_FillScreenRed(void) {
     FaultDrawer_SetForeColor(GPACK_RGBA5551(255, 255, 255, 1));
     FaultDrawer_SetBackColor(GPACK_RGBA5551(240, 0, 0, 1));
     FaultDrawer_FillScreen();
@@ -363,7 +364,7 @@ void Fault_LogFPCSR(u32 value) {
 
 void Fault_PrintThreadContext(OSThread* t) {
     __OSThreadContext* ctx;
-    s32 causeStrIdx = (s32)((((u32)t->context.cause >> 2) & 0x1F) << 0x10) >> 0x10;
+    s16 causeStrIdx =_SHIFTR((u32)t->context.cause, 2, 5);
 
     if (causeStrIdx == 23) { // Watchpoint
         causeStrIdx = 16;
@@ -420,14 +421,14 @@ void Fault_PrintThreadContext(OSThread* t) {
     FaultDrawer_Printf("\n");
     FaultDrawer_SetCharPad(0, 0);
 
-    if (D_8009BE54 != 0) {
+    if (D_8009BE54 != 0.0f) {
         FaultDrawer_DrawText(160, 216, "%5.2f sec\n", D_8009BE54);
     }
 }
 
 void osSyncPrintfThreadContext(OSThread* t) {
     __OSThreadContext* ctx;
-    s32 causeStrIdx = (s32)((((u32)t->context.cause >> 2) & 0x1F) << 0x10) >> 0x10;
+    s16 causeStrIdx = _SHIFTR((u32)t->context.cause, 2, 5);
 
     if (causeStrIdx == 23) { // Watchpoint
         causeStrIdx = 16;
@@ -484,11 +485,11 @@ void osSyncPrintfThreadContext(OSThread* t) {
  * Iterates through the active thread queue for a user thread with either
  * the CPU break or Fault flag set.
  */
-OSThread* Fault_FindFaultedThread() {
+OSThread* Fault_FindFaultedThread(void) {
     OSThread* iter = __osGetActiveQueue();
 
-    while (iter->priority != -1) {
-        if (iter->priority > 0 && iter->priority < 0x7F && (iter->flags & 3)) {
+    while (iter->priority != OS_PRIORITY_THREADTAIL) {
+        if (iter->priority > OS_PRIORITY_IDLE && iter->priority < OS_PRIORITY_APPMAX && (iter->flags & (OS_FLAG_CPU_BREAK | OS_FLAG_FAULT))) {
             return iter;
         }
         iter = iter->tlnext;
@@ -497,7 +498,7 @@ OSThread* Fault_FindFaultedThread() {
     return NULL;
 }
 void Fault_Wait5Seconds(void) {
-    u32 pad;
+    s32 pad;
     OSTime start = osGetTime();
 
     do {
@@ -526,7 +527,7 @@ void Fault_WaitForButtonCombo(void) {
     } while (!CHECK_BTN_ALL(input->cur.button, BTN_DLEFT | BTN_L | BTN_R | BTN_CRIGHT));
 }
 
-void Fault_DrawMemDumpPage(const char* title, uintptr_t addr, u32 param_3) {
+void Fault_DrawMemDumpContents(const char* title, uintptr_t addr, u32 param_3) {
     uintptr_t alignedAddr = addr;
     u32* writeAddr;
     s32 y;
@@ -536,8 +537,12 @@ void Fault_DrawMemDumpPage(const char* title, uintptr_t addr, u32 param_3) {
     if (alignedAddr < K0BASE) {
         alignedAddr = K0BASE;
     }
-    if (alignedAddr > 0x807FFF00) {
-        alignedAddr = 0x807FFF00;
+    // 8MB RAM, leave room to display 0x100 bytes on the final page
+    //! @bug The loop below draws 22 * 4 * 4 = 0x160 bytes per page. Due to this, by scrolling further than
+    //! 0x807FFEA0 some invalid bytes are read from outside of 8MB RDRAM space. This does not cause a crash,
+    //! however the values it displays are meaningless. On N64 hardware these invalid addresses are read as 0.
+    if (alignedAddr > K0BASE + 0x800000 - 0x100) {
+        alignedAddr = K0BASE + 0x800000 - 0x100;
     }
 
     // Ensure address is word-aligned
@@ -550,10 +555,10 @@ void Fault_DrawMemDumpPage(const char* title, uintptr_t addr, u32 param_3) {
     FaultDrawer_DrawText(36, 18, "%s %08x", title ? title : "PrintDump", alignedAddr);
 
     if (alignedAddr >= K0BASE && alignedAddr < K2BASE) {
-        for (y = 28; y != 226; y += 9) {
-            FaultDrawer_DrawText(24, y, "%06x", writeAddr);
-            for (x = 82; x != 290; x += 52) {
-                FaultDrawer_DrawText(x, y, "%08x", *writeAddr++);
+        for (y = 0; y < 22; y++) {
+            FaultDrawer_DrawText(24, 28 + y * 9, "%06x", writeAddr);
+            for (x = 0; x < 4; x++) {
+                FaultDrawer_DrawText(82 + x * 52, 28 + y * 9, "%08x", *writeAddr++);
             }
         }
     }
@@ -561,31 +566,51 @@ void Fault_DrawMemDumpPage(const char* title, uintptr_t addr, u32 param_3) {
     FaultDrawer_SetCharPad(0, 0);
 }
 
-void Fault_DrawMemDump(u32 pc, u32 sp, u32 unk0, u32 unk1) {
-    s32 count;
+/**
+ * Draws the memory dump page.
+ *
+ * DPad-Up scrolls up.
+ * DPad-Down scrolls down.
+ * Holding A while scrolling speeds up scrolling by a factor of 0x10.
+ * Holding B while scrolling speeds up scrolling by a factor of 0x100.
+ *
+ * L toggles auto-scrolling pages.
+ * START and A move on to the next page.
+ *
+ * @param pc Program counter, pressing C-Up jumps to this address
+ * @param sp Stack pointer, pressing C-Down jumps to this address
+ * @param cLeftJump Unused parameter, pressing C-Left jumps to this address
+ * @param cRightJump Unused parameter, pressing C-Right jumps to this address
+ */
+void Fault_DrawMemDump(uintptr_t pc, uintptr_t sp, uintptr_t cLeftJump, uintptr_t cRightJump) {
+    s32 scrollCountdown;
     s32 off;
     Input* input = &sFaultContext->padInput[0];
-    u32 addr = pc;
+    uintptr_t addr = pc;
 
     do {
-        count = 0;
-        if (addr < 0x80000000) {
-            addr = 0x80000000;
+        scrollCountdown = 0;
+        // Ensure address is within the bounds of RDRAM
+        if (addr < K0BASE) {
+            addr = K0BASE;
         }
-        if (addr > 0x807FFF00) {
-            addr = 0x807FFF00;
+        // 8MB RAM, leave room to display 0x100 bytes on the final page
+        if (addr > K0BASE + 0x800000 - 0x100) {
+            addr = K0BASE + 0x800000 - 0x100;
         }
 
+        // Align down the address to 0x10 bytes and draw the page contents
         addr &= ~0xF;
-        Fault_DrawMemDumpPage("Dump", (u32*)addr, 0);
+        Fault_DrawMemDumpContents("Dump", addr, 0);
 
-        count = 600;
+        scrollCountdown = 600;
         while (sFaultContext->autoScroll) {
-            if (count == 0) {
+            // Count down until it's time to move on to the next page
+            if (scrollCountdown == 0) {
                 return;
             }
 
-            count--;
+            scrollCountdown--;
 
             Fault_Sleep(1000 / 60);
             Fault_UpdatePadImpl();
@@ -594,21 +619,26 @@ void Fault_DrawMemDump(u32 pc, u32 sp, u32 unk0, u32 unk1) {
                 sFaultContext->autoScroll = false;
             }
         }
+
+        // Wait for input
         do {
             Fault_Sleep(1000 / 60);
             Fault_UpdatePadImpl();
         } while (input->press.button == 0);
 
+        // Move to next page
         if (CHECK_BTN_ALL(input->press.button, BTN_START)) {
             return;
         }
 
+        // Memory dump controls
+
         off = 0x10;
         if (CHECK_BTN_ALL(input->cur.button, BTN_A)) {
-            off = 0x100;
+            off *= 0x10;
         }
         if (CHECK_BTN_ALL(input->cur.button, BTN_B)) {
-            off <<= 8;
+            off *= 0x100;
         }
         if (CHECK_BTN_ALL(input->press.button, BTN_DUP)) {
             addr -= off;
@@ -623,14 +653,15 @@ void Fault_DrawMemDump(u32 pc, u32 sp, u32 unk0, u32 unk1) {
             addr = sp;
         }
         if (CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
-            addr = unk0;
+            addr = cLeftJump;
         }
         if (CHECK_BTN_ALL(input->press.button, BTN_CRIGHT)) {
-            addr = unk1;
+            addr = cRightJump;
         }
 
     } while (!CHECK_BTN_ALL(input->press.button, BTN_L));
 
+    // Resume auto-scroll and move to next page
     sFaultContext->autoScroll = true;
 }
 
@@ -835,6 +866,7 @@ void Fault_SetOptionsFromController3(void) {
     }
 }
 #else
+void Fault_SetOptionsFromController3(void);
 #pragma GLOBAL_ASM("asm/non_matchings/boot/fault/Fault_SetOptionsFromController3.s")
 #endif
 

@@ -73,7 +73,7 @@
     0x80082AB8:("Fault_FindFaultedThread",),
     0x80082B40:("Fault_Wait5Seconds",),
     0x80082BD0:("Fault_WaitForButtonCombo",),
-    0x80082C6C:("Fault_DrawMemDumpPage",),
+    0x80082C6C:("Fault_DrawMemDumpContents",),
     0x80082DD8:("Fault_DrawMemDump",),
     0x80082FD0:("Fault_FindNextStackCall",),
     0x80083144:("Fault_DrawStackTrace",),

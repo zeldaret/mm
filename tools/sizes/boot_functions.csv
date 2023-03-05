@@ -70,7 +70,7 @@ asm/non_matchings/boot/fault/osSyncPrintfThreadContext.s,osSyncPrintfThreadConte
 asm/non_matchings/boot/fault/Fault_FindFaultedThread.s,Fault_FindFaultedThread,0x80082AB8,0x22
 asm/non_matchings/boot/fault/Fault_Wait5Seconds.s,Fault_Wait5Seconds,0x80082B40,0x24
 asm/non_matchings/boot/fault/Fault_WaitForButtonCombo.s,Fault_WaitForButtonCombo,0x80082BD0,0x27
-asm/non_matchings/boot/fault/Fault_DrawMemDumpPage.s,Fault_DrawMemDumpPage,0x80082C6C,0x5B
+asm/non_matchings/boot/fault/Fault_DrawMemDumpContents.s,Fault_DrawMemDumpContents,0x80082C6C,0x5B
 asm/non_matchings/boot/fault/Fault_DrawMemDump.s,Fault_DrawMemDump,0x80082DD8,0x7E
 asm/non_matchings/boot/fault/Fault_FindNextStackCall.s,Fault_FindNextStackCall,0x80082FD0,0x5D
 asm/non_matchings/boot/fault/Fault_DrawStackTrace.s,Fault_DrawStackTrace,0x80083144,0x64
