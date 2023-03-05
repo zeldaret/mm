@@ -147,7 +147,7 @@ void EnSth_Init(Actor* thisx, PlayState* play) {
                 Actor_Kill(&this->actor);
             }
             this->actor.textId = 0;
-            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_34_40) || !CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_MASK_OF_TRUTH)) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_MASK_OF_TRUTH) || !CHECK_WEEKEVENTREG(WEEKEVENTREG_SWAMP_SPIDERHOUSE_TALKED)) {
                 this->sthFlags |= STH_FLAG_DRAW_TRUTH_MASK;
             }
             break;
@@ -165,18 +165,18 @@ void EnSth_Init(Actor* thisx, PlayState* play) {
             break;
 
         case STH_TYPE_OCEANSIDE_SPIDER_HOUSE_GREET:
-            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_13_20)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_OCEANSIDE_SPIDER_HOUSE_BUYER_MOVED_IN)) {
                 Actor_Kill(&this->actor);
                 return;
             }
             this->actor.textId = 0;
             this->actionFunc = EnSth_OceansideSpiderHouseIdle;
-            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_13_80)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_OCEANSIDE_SPIDER_HOUSE_COMPLETE)) {
                 this->sthFlags |= STH_FLAG_OCEANSIDE_SPIDER_HOUSE_GREET;
             }
             break;
         case STH_TYPE_OCEANSIDE_SPIDER_HOUSE_PANIC:
-            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_13_20) ||
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_OCEANSIDE_SPIDER_HOUSE_BUYER_MOVED_IN) ||
                 (Inventory_GetSkullTokenCount(play->sceneId) < STH_OCEANSIDE_SPIDER_TOKENS_REQUIRED)) {
                 Actor_Kill(&this->actor);
                 return;
@@ -362,7 +362,7 @@ void EnSth_HandleOceansideSpiderHouseConversation(EnSth* this, PlayState* play) 
                         break;
 
                     case 0x1136: // I want to buy this house from you
-                        SET_WEEKEVENTREG(WEEKEVENTREG_13_80);
+                        SET_WEEKEVENTREG(WEEKEVENTREG_OCEANSIDE_SPIDER_HOUSE_COMPLETE);
 
                         switch (day) {
                             case 0: // first day
@@ -471,8 +471,8 @@ void EnSth_GetInitialSwampSpiderHouseText(EnSth* this, PlayState* play) {
     } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_34_20)) {
         nextTextId = 0x90F; // (does not exist)
         EnSth_ChangeAnim(this, STH_ANIM_TALK);
-    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_34_40)) {
-        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_MASK_OF_TRUTH)) {
+    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_MASK_OF_TRUTH)) {
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_SWAMP_SPIDERHOUSE_TALKED)) {
             nextTextId = 0x91B; // As soon as I calm down, getting rid of it
         } else {
             nextTextId = 0x918; // I've had enough of this, going home
@@ -500,7 +500,7 @@ void EnSth_PostSwampSpiderHouseGiveMask(EnSth* this, PlayState* play) {
 
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->actionFunc = EnSth_HandleSwampSpiderHouseConversation;
-        SET_WEEKEVENTREG(WEEKEVENTREG_34_40);
+        SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_MASK_OF_TRUTH);
         Message_StartTextbox(play, 0x918, &this->actor); // I've had enough of this, going home
     } else {
         func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
@@ -517,7 +517,7 @@ void EnSth_SwampSpiderHouseGiveMask(EnSth* this, PlayState* play) {
         func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
     } else {
         this->sthFlags &= ~STH_FLAG_DRAW_TRUTH_MASK;
-        SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_MASK_OF_TRUTH);
+        SET_WEEKEVENTREG(WEEKEVENTREG_SWAMP_SPIDERHOUSE_TALKED);
         Actor_PickUp(&this->actor, play, GI_MASK_TRUTH, 10000.0f, 50.0f);
     }
 }
@@ -558,8 +558,8 @@ void EnSth_HandleSwampSpiderHouseConversation(EnSth* this, PlayState* play) {
 
             case 0x91A: // Someone gave me this mask and said it would make me rich, getting rid of it
                 // TODO: why is this two flags? is it some.. started dialogue, ended dialogue flag?
-                SET_WEEKEVENTREG(WEEKEVENTREG_34_40);
-                CLEAR_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_MASK_OF_TRUTH);
+                SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_MASK_OF_TRUTH);
+                CLEAR_WEEKEVENTREG(WEEKEVENTREG_SWAMP_SPIDERHOUSE_TALKED);
 
             case 0x902: // (does not exist)
             case 0x903: // (does not exist)
@@ -622,7 +622,7 @@ void EnSth_UpdateWaitForObject(Actor* thisx, PlayState* play) {
             Animation_PlayLoop(&this->skelAnime, &gEnSthBendDownAnim);
             this->animIndex = STH_ANIM_BENDING_DOWN;
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_34_10) || CHECK_WEEKEVENTREG(WEEKEVENTREG_34_20) ||
-                CHECK_WEEKEVENTREG(WEEKEVENTREG_34_40) ||
+                CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_MASK_OF_TRUTH) ||
                 (Inventory_GetSkullTokenCount(play->sceneId) >= STH_SWAMP_SPIDER_TOKENS_REQUIRED)) {
                 EnSth_ChangeAnim(this, STH_ANIM_WAIT);
             }
@@ -641,7 +641,7 @@ void EnSth_UpdateWaitForObject(Actor* thisx, PlayState* play) {
                 break;
 
             case STH_TYPE_OCEANSIDE_SPIDER_HOUSE_GREET:
-                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_13_80)) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_OCEANSIDE_SPIDER_HOUSE_COMPLETE)) {
                     EnSth_ChangeAnim(this, STH_ANIM_LOOK_AROUND);
                 } else {
                     EnSth_ChangeAnim(this, STH_ANIM_LOOK_AROUND);

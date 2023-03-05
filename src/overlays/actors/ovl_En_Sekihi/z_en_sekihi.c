@@ -60,7 +60,7 @@ void EnSekihi_Init(Actor* thisx, PlayState* play) {
     }
 
     if ((params == SEKIHI_TYPE_4) && (((gSaveContext.save.skullTokenCount & 0xFFFF)) >= 30)) {
-        SET_WEEKEVENTREG(WEEKEVENTREG_13_20);
+        SET_WEEKEVENTREG(WEEKEVENTREG_OCEANSIDE_SPIDER_HOUSE_BUYER_MOVED_IN);
     }
 
     objectIndex = Object_GetIndex(&play->objectCtx, sObjectIds[params]);

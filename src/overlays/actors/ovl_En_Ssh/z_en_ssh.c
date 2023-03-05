@@ -686,18 +686,18 @@ void EnSsh_Talk(EnSsh* this, PlayState* play) {
 
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         switch (play->msgCtx.currentTextId) {
-            case 0x904:
+            case 0x904: // 4-8 do not exist, left over from previous?
             case 0x905:
             case 0x906:
             case 0x908:
-            case 0x910:
-            case 0x911:
-            case 0x912:
-            case 0x914:
+            case 0x910: // Help me! I am not a monster, I was cursed this way
+            case 0x911: // Find all in here and defeat them
+            case 0x912: // Don't forget to collect their token
+            case 0x914: // In here, cursed spiders, defeat them to make me normal
                 func_80151938(play, play->msgCtx.currentTextId + 1);
                 break;
 
-            default:
+            default: // case 0x915 from above (914+1)
                 func_801477B4(play);
                 this->actionFunc = EnSsh_Idle;
                 break;
@@ -708,11 +708,11 @@ void EnSsh_Talk(EnSsh* this, PlayState* play) {
 void func_809756D0(EnSsh* this, PlayState* play) {
     u16 phi_a1;
 
-    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_MASK_OF_TRUTH)) {
-        phi_a1 = 0x914;
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_SWAMP_SPIDERHOUSE_TALKED)) {
+        phi_a1 = 0x914; // In here, cursed spiders, defeat them to make me normal
     } else {
-        phi_a1 = 0x910;
-        SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_MASK_OF_TRUTH);
+        phi_a1 = 0x910; // Help me! I am not a monster, I was cursed this way
+        SET_WEEKEVENTREG(WEEKEVENTREG_SWAMP_SPIDERHOUSE_TALKED);
     }
     Message_StartTextbox(play, phi_a1, &this->actor);
 }
