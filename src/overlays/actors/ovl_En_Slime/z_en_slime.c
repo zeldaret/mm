@@ -162,12 +162,12 @@ static Color_RGBA8 sEnvColors[] = {
     { 255, 50, 155, 255 },
 };
 
-static Vec3f sLimbPosMultipliers[] = {
+static Vec3f sLimbPosOffsets[EN_SLIME_LIMBPOS_COUNT] = {
     { 2000.0, 2000.0, 0.0 }, { -1500.0, 2500.0, -500.0 }, { -500.0, 1000.0, 2500.0 },
     { 0.0, 4000.0, 0.0 },    { 0.0, 2000.0, -2000.0 },
 };
 
-AnimatedMaterial* sSlimeAnimTex;
+AnimatedMaterial* sSlimeTexAnim;
 
 /**
  * Initialize EnSlime instance.
@@ -209,7 +209,7 @@ void EnSlime_Init(Actor* thisx, PlayState* play) {
         for (i = 0; i < ARRAY_COUNT(sEyeTextures); i++) {
             sEyeTextures[i] = Lib_SegmentedToVirtual(sEyeTextures[i]);
         }
-        sSlimeAnimTex = Lib_SegmentedToVirtual(gChuchuSlimeFlowTexAnim);
+        sSlimeTexAnim = Lib_SegmentedToVirtual(gChuchuSlimeFlowTexAnim);
         sVirtualAddrInit = true;
     }
 
@@ -300,7 +300,7 @@ void EnSlime_InitBehavior(EnSlime* this) {
  * It is not set as the action function again.
  */
 void EnSlime_InitializeIdle(EnSlime* this, PlayState* play) {
-    if (this->actor.bgCheckFlags & 1) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         this->actor.flags &= ~ACTOR_FLAG_10;
         EnSlime_ReturnToIdle(this);
     }
@@ -313,7 +313,7 @@ void EnSlime_InitializeIdle(EnSlime* this, PlayState* play) {
 void EnSlime_ReturnToIdle(EnSlime* this) {
     this->timer = 25;
     this->actionFunc = EnSlime_SitIdle;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
 }
 
 /**
@@ -362,8 +362,8 @@ void EnSlime_ChangeDirectionIdle(EnSlime* this) {
     /*If actor is more than 120 units from its home, set the new direction to be towards its home.
      * Otherwise, the new direction to move is pretty much random.
      */
-    if (Actor_XZDistanceToPoint(&this->actor, &this->actor.home.pos) > 120.0f) {
-        this->idleRotY = Actor_YawToPoint(&this->actor, &this->actor.home.pos);
+    if (Actor_WorldDistXZToPoint(&this->actor, &this->actor.home.pos) > 120.0f) {
+        this->idleRotY = Actor_WorldYawTowardPoint(&this->actor, &this->actor.home.pos);
     } else if (Rand_ZeroOne() < 0.7f) {
         this->idleRotY = (s32)randPlusMinusPoint5Scaled(0x4000) + this->actor.shape.rot.y;
     }
@@ -388,10 +388,10 @@ void EnSlime_MoveInDirectionIdle(EnSlime* this, PlayState* play) {
     /* If actor is touching a wall (bgCheckFlag 8?), set target rotation to match wall where it is touching.
      * If actor is more than 120 units from its home, turn around to face home.
      */
-    if (this->actor.bgCheckFlags & 8) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
         this->idleRotY = this->actor.wallYaw;
-    } else if (Actor_XZDistanceToPoint(&this->actor, &this->actor.home.pos) > 120.0f) {
-        this->idleRotY = Actor_YawToPoint(&this->actor, &this->actor.home.pos);
+    } else if (Actor_WorldDistXZToPoint(&this->actor, &this->actor.home.pos) > 120.0f) {
+        this->idleRotY = Actor_WorldYawTowardPoint(&this->actor, &this->actor.home.pos);
     }
 
     // Update actor scale, xz speed, and rotation to provide amorphous effect
@@ -400,11 +400,11 @@ void EnSlime_MoveInDirectionIdle(EnSlime* this, PlayState* play) {
     Math_StepToF(&this->actor.scale.x, (1.0f - (0.2f * sinFactor)) * 0.01f, 0.0002f);
     Math_StepToF(&this->actor.scale.y, (1.0f - (0.1f * sinFactor)) * 0.01f, 0.0002f);
 
-    this->actor.speedXZ = (0.8f * sinFactor) + 0.2f;
+    this->actor.speed = (0.8f * sinFactor) + 0.2f;
     this->actor.shape.rot.x = 0x800 * sinFactor;
     this->actor.world.rot.y = this->actor.shape.rot.y;
 
-    if (Actor_XZDistanceToPoint(&this->actor, &this->actor.home.pos) > this->distLimit) {
+    if (Actor_WorldDistXZToPoint(&this->actor, &this->actor.home.pos) > this->distLimit) {
         // If actor is too far from home, start return home cycle
         EnSlime_ReturnHome(this);
     } else if ((Player_GetMask(play) != PLAYER_MASK_STONE) && (this->actor.xzDistToPlayer < 280.0f) &&
@@ -424,7 +424,7 @@ void EnSlime_MoveInDirectionIdle(EnSlime* this, PlayState* play) {
  */
 void EnSlime_ReturnHome(EnSlime* this) {
     this->timer = 24;
-    this->idleRotY = Actor_YawToPoint(&this->actor, &this->actor.home.pos);
+    this->idleRotY = Actor_WorldYawTowardPoint(&this->actor, &this->actor.home.pos);
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->actionFunc = EnSlime_MoveToHome;
 }
@@ -446,7 +446,7 @@ void EnSlime_MoveToHome(EnSlime* this, PlayState* play) {
         // If hit wall, turn around.
         this->idleRotY = this->actor.wallYaw;
     } else {
-        this->idleRotY = Actor_YawToPoint(&this->actor, &this->actor.home.pos);
+        this->idleRotY = Actor_WorldYawTowardPoint(&this->actor, &this->actor.home.pos);
     }
 
     sinFactor = fabsf(sin_rad(this->timer * (M_PI / 24)));
@@ -454,7 +454,7 @@ void EnSlime_MoveToHome(EnSlime* this, PlayState* play) {
     Math_StepToF(&this->actor.scale.x, (1.0f - (0.2f * sinFactor)) * 0.01f, 0.0002f);
     Math_StepToF(&this->actor.scale.y, (1.0f - (0.1f * sinFactor)) * 0.01f, 0.0002f);
 
-    this->actor.speedXZ = (0.8f * sinFactor) + 0.2f;
+    this->actor.speed = (0.8f * sinFactor) + 0.2f;
     this->actor.shape.rot.x = 0x800 * sinFactor;
     this->actor.world.rot.y = this->actor.shape.rot.y;
 
@@ -464,7 +464,7 @@ void EnSlime_MoveToHome(EnSlime* this, PlayState* play) {
     }
 
     // Only return to idle once actor is close enough to home point.
-    if (Actor_XZDistanceToPoint(&this->actor, &this->actor.home.pos) < (this->distLimit * 0.8f)) {
+    if (Actor_WorldDistXZToPoint(&this->actor, &this->actor.home.pos) < (this->distLimit * 0.8f)) {
         EnSlime_ReturnToIdle(this);
     }
 }
@@ -477,7 +477,7 @@ void EnSlime_EngagePlayer(EnSlime* this) {
     this->actor.shape.rot.z = 0;
     this->timer = 8;
     this->actionFunc = EnSlime_TurnToPlayer;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
 }
 
 /**
@@ -511,11 +511,11 @@ void EnSlime_TurnToPlayer(EnSlime* this, PlayState* play) {
 void EnSlime_JumpAtPlayer(EnSlime* this) {
     if (this->actor.xzDistToPlayer > 120.0f) {
         this->actor.velocity.y = 11.0f;
-        this->actor.speedXZ = 5.0f;
+        this->actor.speed = 5.0f;
         this->actor.gravity = -2.0f;
     } else {
         this->actor.velocity.y = 18.0f;
-        this->actor.speedXZ = 7.0f;
+        this->actor.speed = 7.0f;
         this->actor.gravity = -3.5f;
     }
     this->actor.world.rot.y = this->actor.shape.rot.y;
@@ -524,7 +524,7 @@ void EnSlime_JumpAtPlayer(EnSlime* this) {
     Math_StepToF(&this->actor.scale.x, 0.008f, 0.0025f);
     Math_StepToF(&this->actor.scale.y, 0.011f, 0.0025f);
     this->actor.scale.z = this->actor.scale.x;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_SLIME_JUMP);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_SLIME_JUMP);
     this->actionFunc = EnSlime_UpdateJump;
 }
 
@@ -537,8 +537,8 @@ void EnSlime_JumpAtPlayer(EnSlime* this) {
 void EnSlime_UpdateJump(EnSlime* this, PlayState* play) {
     this->timer--;
     if (this->collider.base.atFlags & AT_HIT) {
-        if (this->actor.speedXZ > 0.0f) {
-            this->actor.speedXZ *= -1.2f;
+        if (this->actor.speed > 0.0f) {
+            this->actor.speed *= -1.2f;
             this->collider.base.atFlags &= ~AT_HIT;
         }
     }
@@ -561,7 +561,7 @@ void EnSlime_FinishJump(EnSlime* this) {
     this->actor.scale.y = 0.0074399994f;
     this->actor.scale.z = 0.0132f;
     this->actionFunc = EnSlime_UpdateJumpLanding;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
 }
 
 /**
@@ -591,7 +591,7 @@ void EnSlime_UpdateJumpLanding(EnSlime* this, PlayState* play) {
     this->actor.shape.rot.x = randPlusMinusPoint5Scaled(0x200) * factorRotXZ;
     this->actor.shape.rot.z = randPlusMinusPoint5Scaled(0x200) * factorRotXZ;
 
-    if (Actor_XZDistanceToPoint(&this->actor, &this->actor.home.pos) > this->distLimit) {
+    if (Actor_WorldDistXZToPoint(&this->actor, &this->actor.home.pos) > this->distLimit) {
         EnSlime_ReturnHome(this);
     } else if ((Player_GetMask(play) != PLAYER_MASK_STONE) && (this->actor.xzDistToPlayer < 280.0f) &&
                (this->timer < 12)) {
@@ -607,15 +607,15 @@ void EnSlime_UpdateJumpLanding(EnSlime* this, PlayState* play) {
  * Action function set to UpdateBluntHitReaction.
  */
 void EnSlime_ReactToBluntHit(EnSlime* this) {
-    this->actor.speedXZ = 10.0f;
+    this->actor.speed = 10.0f;
     if (this->actor.velocity.y > 0.0f) {
         this->actor.velocity.y = 0.0f;
     }
     this->collider.base.acFlags &= ~AC_ON;
     this->timer = 30;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_SLIME_DEFENCE);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_SLIME_DEFENCE);
     if (this->collider.base.ac != NULL) {
-        this->actor.world.rot.y = Actor_YawBetweenActors(&this->actor, this->collider.base.ac) + 0x8000;
+        this->actor.world.rot.y = Actor_WorldYawTowardActor(&this->actor, this->collider.base.ac) + 0x8000;
     } else {
         this->actor.world.rot.y = this->actor.yawTowardsPlayer + 0x8000;
     }
@@ -636,7 +636,7 @@ void EnSlime_UpdateBluntHitReaction(EnSlime* this, PlayState* play) {
 
     EnSlime_UpdateBlink(this);
     this->timer--;
-    Math_StepToF(&this->actor.speedXZ, 0.0f, 1.0f);
+    Math_StepToF(&this->actor.speed, 0.0f, 1.0f);
     timerFactor = sqrtf(this->timer);
     if (this->timer < 30) {
         scaleFactor = ((cos_rad(this->timer * (2.0f * M_PI / 5.0f)) * (0.08f * timerFactor)) + 1.0f) * 0.01f;
@@ -651,7 +651,7 @@ void EnSlime_UpdateBluntHitReaction(EnSlime* this, PlayState* play) {
     this->actor.shape.rot.z = randPlusMinusPoint5Scaled(0x200) * timerFactor;
 
     if (this->timer == 0) {
-        if (Actor_XZDistanceToPoint(&this->actor, &this->actor.home.pos) > this->distLimit) {
+        if (Actor_WorldDistXZToPoint(&this->actor, &this->actor.home.pos) > this->distLimit) {
             EnSlime_ReturnHome(this);
         } else if ((this->actor.xzDistToPlayer < 280.0f) && (Player_GetMask(play) != PLAYER_MASK_STONE)) {
             EnSlime_EngagePlayer(this);
@@ -681,7 +681,7 @@ void EnSlime_ReactToDamage(EnSlime* this, PlayState* play, s32 faceDamageSource)
     }
     Actor_SetColorFilter(&this->actor, 0x4000, 255, 0x2000, 20);
     this->timer = 20;
-    this->actor.speedXZ = 10.0f;
+    this->actor.speed = 10.0f;
     if (faceDamageSource == true) {
         // This function changes actor's world Y rotation - I think it's maybe to face source of damage?
         func_800BE504(&this->actor, &this->collider);
@@ -713,9 +713,9 @@ void EnSlime_ReactToDamage(EnSlime* this, PlayState* play, s32 faceDamageSource)
     }
 
     if (this->actor.colChkInfo.health == 0) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_SLIME_DEAD);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_SLIME_DEAD);
     } else {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_SLIME_DAMAGE);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_SLIME_DAMAGE);
     }
     this->actionFunc = EnSlime_UpdateDamageReaction;
 }
@@ -727,7 +727,7 @@ void EnSlime_ReactToDamage(EnSlime* this, PlayState* play, s32 faceDamageSource)
  */
 void EnSlime_UpdateDamageReaction(EnSlime* this, PlayState* play) {
     this->timer--;
-    Math_StepToF(&this->actor.speedXZ, 0.0f, 1.0f);
+    Math_StepToF(&this->actor.speed, 0.0f, 1.0f);
     if ((this->timer % 5) == 0) {
         this->wobbleRot.x = Rand_ZeroOne() * (M_PI * 2.0f);
         this->wobbleRot.z = Rand_ZeroOne() * (M_PI * 2.0f);
@@ -759,7 +759,7 @@ void EnSlime_InitializeDeath(EnSlime* this) {
     }
     Actor_SetScale(&this->actor, 0.01f);
     this->actionFunc = EnSlime_Expire;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
 }
 
 /**
@@ -848,7 +848,7 @@ void EnSlime_InitIceBlock(EnSlime* this) {
     this->collider.base.acFlags &= ~AC_ON;
     this->actor.flags &= ~ACTOR_FLAG_1;
     this->effectAlpha = 0.0f;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actor.velocity.y = 0.0f;
     this->actor.gravity = 0.0f;
     this->iceBlockSnapPos.x = EnSlime_SnapIceBlockPosition(this->actor.world.pos.x, this->actor.home.pos.x);
@@ -915,7 +915,7 @@ void EnSlime_UpdateIceBlockedState(EnSlime* this, PlayState* play) {
         }
     } else {
         this->actor.colorFilterTimer = 10;
-        if (this->iceBlockTimer - 5 < 0) {
+        if ((this->iceBlockTimer - 5) < 0) {
             this->iceBlockTimer = 0;
         } else {
             this->iceBlockTimer -= 5;
@@ -928,7 +928,7 @@ void EnSlime_UpdateIceBlockedState(EnSlime* this, PlayState* play) {
  * and set action function to UpdateStunnedState.
  */
 void EnSlime_EnterStunnedState(EnSlime* this) {
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     func_800BE504(&this->actor, &this->collider);
     if (this->actor.velocity.y > 0.0f) {
         this->actor.velocity.y = 0.0f;
@@ -1001,7 +1001,7 @@ void EnSlime_HideDead(EnSlime* this) {
     this->effectAlpha = 0.0f;
     this->actor.gravity = 0.0f;
     this->actor.velocity.y = 0.0f;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->collider.base.ocFlags1 &= ~OC1_ON;
     this->timer = this->respawnTime;
     this->actionFunc = EnSlime_CountdownRespawn;
@@ -1032,7 +1032,7 @@ void EnSlime_BeginRespawn(EnSlime* this) {
     this->timer = 0;
     this->actor.colorFilterTimer = 0;
     this->actor.home.rot.y = this->actor.yawTowardsPlayer;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_SLIME_SURFACE);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_SLIME_SURFACE);
     this->actionFunc = EnSlime_UpdateRespawn;
     this->actor.gravity = -2.0f;
 }
@@ -1045,7 +1045,8 @@ void EnSlime_UpdateRespawn(EnSlime* this, PlayState* play) {
     f32 rescaleFactor1;
     f32 rescaleFactor2;
 
-    if (++this->timer == 28) {
+    this->timer++;
+    if (this->timer == 28) {
         this->actor.flags &= ~ACTOR_FLAG_10;
         this->actor.flags |= ACTOR_FLAG_1;
         this->collider.base.acFlags |= AC_ON;
@@ -1117,7 +1118,7 @@ void EnSlime_CheckACHit(EnSlime* this, PlayState* play) {
             } else if (this->actor.colChkInfo.damageEffect == ENSLIME_DMGTYPE_STUN) {
                 this->timer = 40;
                 Actor_SetColorFilter(&this->actor, 0, 255, 0x2000, 40);
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_FREEZE);
                 EnSlime_EnterStunnedState(this);
             } else if (this->actor.colChkInfo.damageEffect != ENSLIME_DMGTYPE_HOOKSHOT) {
                 if (this->actor.colChkInfo.damageEffect == ENSLIME_DMGTYPE_ICEARROW) {
@@ -1226,7 +1227,7 @@ void EnSlime_Draw(Actor* thisx, PlayState* play) {
     } else {
         primColor = &sPrimColors[this->actor.params];
         envColor = &sEnvColors[this->actor.params];
-        AnimatedMat_Draw(play, sSlimeAnimTex);
+        AnimatedMat_Draw(play, sSlimeTexAnim);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 100, primColor->r, primColor->g, primColor->b, primColor->a);
         gDPSetEnvColor(POLY_XLU_DISP++, envColor->r, envColor->g, envColor->b, 255);
     }
@@ -1262,8 +1263,8 @@ void EnSlime_Draw(Actor* thisx, PlayState* play) {
         gSPDisplayList(POLY_XLU_DISP++, gChuchuEyesDL);
     }
 
-    for (i = 0; i < 5; i++) {
-        Matrix_MultVec3f(&sLimbPosMultipliers[i], &this->limbPos[i]);
+    for (i = 0; i < EN_SLIME_LIMBPOS_COUNT; i++) {
+        Matrix_MultVec3f(&sLimbPosOffsets[i], &this->limbPos[i]);
     }
 
     if (this->actionFunc == EnSlime_UpdateRespawn) {
@@ -1288,7 +1289,7 @@ void EnSlime_Draw(Actor* thisx, PlayState* play) {
         gSPDisplayList(POLY_OPA_DISP++, gItemDropDL);
     }
 
-    Actor_DrawDamageEffects(play, &this->actor, this->limbPos, EN_SLIME_LIMBPOS_COUNT, this->effectScale,
+    Actor_DrawDamageEffects(play, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), this->effectScale,
                             this->frozenSteamScale, this->effectAlpha, this->damageEffectType);
 
     CLOSE_DISPS(play->state.gfxCtx);
