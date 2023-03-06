@@ -39,8 +39,8 @@ ActorOverlay gActorOverlayTable[] = {
 
 ActorId gMaxActorId = 0;
 
-FaultClient D_801ED930;
-FaultAddrConvClient D_801ED940;
+FaultClient sActorTableFaultClient;
+FaultAddrConvClient sActorTableFaultAddrConvClient;
 
 void ActorOverlayTable_FaultPrint(void* arg0, void* arg1) {
     ActorOverlay* overlayEntry;
@@ -86,12 +86,12 @@ void* ActorOverlayTable_FaultAddrConv(void* arg0, void* arg1) {
 
 void ActorOverlayTable_Init(void) {
     gMaxActorId = ACTOR_ID_MAX;
-    Fault_AddClient(&D_801ED930, &ActorOverlayTable_FaultPrint, NULL, NULL);
-    Fault_AddAddrConvClient(&D_801ED940, &ActorOverlayTable_FaultAddrConv, NULL);
+    Fault_AddClient(&sActorTableFaultClient, &ActorOverlayTable_FaultPrint, NULL, NULL);
+    Fault_AddAddrConvClient(&sActorTableFaultAddrConvClient, &ActorOverlayTable_FaultAddrConv, NULL);
 }
 
 void ActorOverlayTable_Cleanup(void) {
-    Fault_RemoveClient(&D_801ED930);
-    Fault_RemoveAddrConvClient(&D_801ED940);
+    Fault_RemoveClient(&sActorTableFaultClient);
+    Fault_RemoveAddrConvClient(&sActorTableFaultAddrConvClient);
     gMaxActorId = 0;
 }

@@ -11,7 +11,6 @@ CfbInfo sGraphCfbInfos[3];
 OSTime sGraphTaskStartTime;
 
 #include "variables.h"
-
 #include "macros.h"
 #include "system_malloc.h"
 #include "overlays/gamestates/ovl_daytelop/z_daytelop.h"

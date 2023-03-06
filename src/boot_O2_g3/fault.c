@@ -1,6 +1,47 @@
+/**
+ * @file fault.c
+ *
+ * This file implements the screen that may be viewed when the game crashes.
+ * This is the second known version of the crash screen, an evolved version from OoT's.
+ *
+ * When the game crashes, a red bar will be drawn to the top-left of the screen, indicating that the
+ * crash screen is available for use. Once this bar appears, it is possible to open the crash screen
+ * with the following button combination:
+ *
+ * (DPad-Left & L & R & C-Right)
+ *
+ * When entering this button combination, buttons that are &'d together must all be pressed together.
+ *
+ * "Clients" may be registered with the crash screen to extend its functionality. There are
+ * two kinds of client, "Client" and "AddressConverterClient". Clients contribute one or
+ * more pages to the crash debugger, while Address Converter Clients allow the crash screen to look up
+ * the virtual addresses of dynamically allocated overlays.
+ *
+ * The crash screen has multiple pages:
+ *  - Thread Context
+ *      This page shows information about the thread on which the program crashed. It displays
+ *      the cause of the crash, state of general-purpose registers, state of floating-point registers
+ *      and the floating-point status register. If a floating-point exception caused the crash, it will
+ *      be displayed next to the floating-point status register.
+ *  - Stack Trace
+ *      This page displays a full backtrace from the crashing function back to the start of the thread. It
+ *      displays the Program Counter for each function and, if applicable, the Virtual Program Counter
+ *      for relocated functions in overlays.
+ *  - Client Pages
+ *      After the stack trace page, currently registered clients are processed and their pages are displayed.
+ *  - Memory Dump
+ *      This page implements a scrollable memory dump.
+ *  - End Screen
+ *      This page informs you that there are no more pages to display.
+ *
+ * To navigate the pages, START and A may be used to advance to the next page, and L toggles whether to
+ * automatically scroll to the next page after some time has passed.
+ * DPad-Up may be pressed to enable sending fault pages over osSyncPrintf as well as displaying them on-screen.
+ * DPad-Down disables sending fault pages over osSyncPrintf.
+ */
+
 #include "fault_internal.h"
 #include "fault.h"
-#include "ultra64.h"
 #include "global.h"
 #include "vt.h"
 

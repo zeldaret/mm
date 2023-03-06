@@ -2278,7 +2278,7 @@ void Actor_InitContext(PlayState* play, ActorContext* actorCtx, ActorEntry* acto
     Actor_SpawnEntry(actorCtx, actorEntry, play);
     Actor_TargetContextInit(&actorCtx->targetContext, actorCtx->actorLists[ACTORCAT_PLAYER].first, play);
     func_800B9120(actorCtx);
-    Fault_AddClient(&sActorFaultClient, (void*)Actor_PrintLists, actorCtx, NULL);
+    Fault_AddClient(&sActorFaultClient, Actor_PrintLists, actorCtx, NULL);
     func_800B722C(&play->state, (Player*)actorCtx->actorLists[ACTORCAT_PLAYER].first);
 }
 
