@@ -815,7 +815,7 @@ void Fault_DrawStackTrace(OSThread* t, u32 flags) {
     uintptr_t sp = t->context.sp;
     uintptr_t ra = t->context.ra;
     uintptr_t pc = t->context.pc;
-    u32 pad;
+    s32 pad;
     uintptr_t addr;
 
     Fault_FillScreenBlack();
