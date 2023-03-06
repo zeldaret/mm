@@ -583,7 +583,7 @@ void Fault_DrawMemDumpContents(const char* title, uintptr_t addr, u32 param_3) {
     //! @bug The loop below draws 22 * 4 * 4 = 0x160 bytes per page. Due to this, by scrolling further than
     //! 0x807FFEA0 some invalid bytes are read from outside of 8MB RDRAM space. This does not cause a crash,
     //! however the values it displays are meaningless. On N64 hardware these invalid addresses are read as 0.
-    if (alignedAddr > K0BASE + 0x800000 - 0x100) {
+    if (alignedAddr > (K0BASE + 0x800000 - 0x100)) {
         alignedAddr = K0BASE + 0x800000 - 0x100;
     }
 
