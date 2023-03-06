@@ -155,7 +155,7 @@ s32 FaultDrawer_ColorToPrintColor(u16 color) {
     return -1;
 }
 
-void FaultDrawer_UpdatePrintColor() {
+void FaultDrawer_UpdatePrintColor(void) {
     s32 idx;
 
     if (sFaultDrawerRef->osSyncPrintfEnabled) {
