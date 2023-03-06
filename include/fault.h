@@ -83,7 +83,7 @@ typedef struct FaultMgr {
     /* 0x1B0 */ u8 stack[0x600]; // Seems leftover from an earlier version. The thread actually uses a stack of this size at 0x8009BE60
     /* 0x7B0 */ OSMesgQueue queue;
     /* 0x7C8 */ OSMesg msg[1];
-    /* 0x7CC */ u8 exitDebugger;
+    /* 0x7CC */ u8 exit;
     /* 0x7CD */ u8 msgId; // 1 - CPU Break; 2 - Fault; 3 - Unknown
     /* 0x7CE */ u8 faultHandlerEnabled;
     /* 0x7CF */ u8 autoScroll;
@@ -91,8 +91,8 @@ typedef struct FaultMgr {
     /* 0x7D4 */ FaultPadCallback padCallback;
     /* 0x7D8 */ FaultClient* clients;
     /* 0x7DC */ FaultAddrConvClient* addrConvClients;
-    /* 0x7E0 */ UNK_TYPE1 pad7E0[0x4];
-    /* 0x7E4 */ Input padInput[4];
+    /* 0x7E0 */ UNK_TYPE1 unk_7E0[0x4];
+    /* 0x7E4 */ Input inputs[MAXCONTROLLERS];
     /* 0x844 */ void* fb;
 } FaultMgr; // size = 0x848
 

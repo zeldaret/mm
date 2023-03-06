@@ -47,7 +47,7 @@
 
 // bss
 extern FaultMgr* sFaultInstance;
-extern f32 D_8009BE54;
+extern f32 sFaultTimeTotal; // read but not set anywhere
 // extern u32 faultCustomOptions;
 // extern u32 faultCopyToLog;
 extern u8 sFaultStack[0x600];
@@ -271,7 +271,7 @@ void Fault_PadCallback(Input* input) {
 }
 
 void Fault_UpdatePadImpl(void) {
-    sFaultInstance->padCallback(sFaultInstance->padInput);
+    sFaultInstance->padCallback(sFaultInstance->inputs);
 }
 
 /**
@@ -284,7 +284,7 @@ void Fault_UpdatePadImpl(void) {
  * DPad-Left continues and returns false
  */
 u32 Fault_WaitForInputImpl(void) {
-    Input* curInput = &sFaultInstance->padInput[0];
+    Input* input = &sFaultInstance->inputs[0];
     s32 count = 600;
     u32 pressedBtn;
 
@@ -292,7 +292,7 @@ u32 Fault_WaitForInputImpl(void) {
         Fault_Sleep(1000 / 60);
         Fault_UpdatePadImpl();
 
-        pressedBtn = curInput->press.button;
+        pressedBtn = input->press.button;
 
         if (pressedBtn == BTN_L) {
             sFaultInstance->autoScroll = !sFaultInstance->autoScroll;
@@ -403,9 +403,9 @@ void Fault_LogFPCSR(u32 value) {
     }
 }
 
-void Fault_PrintThreadContext(OSThread* t) {
+void Fault_PrintThreadContext(OSThread* thread) {
     __OSThreadContext* ctx;
-    s16 causeStrIdx = _SHIFTR((u32)t->context.cause, 2, 5);
+    s16 causeStrIdx = _SHIFTR((u32)thread->context.cause, 2, 5);
 
     if (causeStrIdx == 23) { // Watchpoint
         causeStrIdx = 16;
@@ -418,8 +418,8 @@ void Fault_PrintThreadContext(OSThread* t) {
     FaultDrawer_SetCharPad(-2, 4);
     FaultDrawer_SetCursor(22, 20);
 
-    ctx = &t->context;
-    FaultDrawer_Printf("THREAD:%d (%d:%s)\n", t->id, causeStrIdx, sCpuExceptions[causeStrIdx]);
+    ctx = &thread->context;
+    FaultDrawer_Printf("THREAD:%d (%d:%s)\n", thread->id, causeStrIdx, sCpuExceptions[causeStrIdx]);
     FaultDrawer_SetCharPad(-1, 0);
 
     FaultDrawer_Printf("PC:%08xH SR:%08xH VA:%08xH\n", (u32)ctx->pc, (u32)ctx->sr, (u32)ctx->badvaddr);
@@ -462,14 +462,14 @@ void Fault_PrintThreadContext(OSThread* t) {
     FaultDrawer_Printf("\n");
     FaultDrawer_SetCharPad(0, 0);
 
-    if (D_8009BE54 != 0.0f) {
-        FaultDrawer_DrawText(160, 216, "%5.2f sec\n", D_8009BE54);
+    if (sFaultTimeTotal != 0.0f) {
+        FaultDrawer_DrawText(160, 216, "%5.2f sec\n", sFaultTimeTotal);
     }
 }
 
-void osSyncPrintfThreadContext(OSThread* t) {
+void osSyncPrintfThreadContext(OSThread* thread) {
     __OSThreadContext* ctx;
-    s16 causeStrIdx = _SHIFTR((u32)t->context.cause, 2, 5);
+    s16 causeStrIdx = _SHIFTR((u32)thread->context.cause, 2, 5);
 
     if (causeStrIdx == 23) { // Watchpoint
         causeStrIdx = 16;
@@ -478,9 +478,9 @@ void osSyncPrintfThreadContext(OSThread* t) {
         causeStrIdx = 17;
     }
 
-    ctx = &t->context;
+    ctx = &thread->context;
     osSyncPrintf("\n");
-    osSyncPrintf("THREAD ID:%d (%d:%s)\n", t->id, causeStrIdx, sCpuExceptions[causeStrIdx]);
+    osSyncPrintf("THREAD ID:%d (%d:%s)\n", thread->id, causeStrIdx, sCpuExceptions[causeStrIdx]);
 
     osSyncPrintf("PC:%08xH   SR:%08xH   VA:%08xH\n", (u32)ctx->pc, (u32)ctx->sr, (u32)ctx->badvaddr);
     osSyncPrintf("AT:%08xH   V0:%08xH   V1:%08xH\n", (u32)ctx->at, (u32)ctx->v0, (u32)ctx->v1);
@@ -556,7 +556,7 @@ void Fault_Wait5Seconds(void) {
  * (DPad-Left & L & R & C-Right)
  */
 void Fault_WaitForButtonCombo(void) {
-    Input* input = &sFaultInstance->padInput[0];
+    Input* input = &sFaultInstance->inputs[0];
 
     FaultDrawer_SetForeColor(GPACK_RGBA5551(255, 255, 255, 1));
     FaultDrawer_SetBackColor(GPACK_RGBA5551(0, 0, 0, 1));
@@ -627,7 +627,7 @@ void Fault_DrawMemDumpContents(const char* title, uintptr_t addr, u32 param_3) {
 void Fault_DrawMemDump(uintptr_t pc, uintptr_t sp, uintptr_t cLeftJump, uintptr_t cRightJump) {
     s32 scrollCountdown;
     s32 off;
-    Input* input = &sFaultInstance->padInput[0];
+    Input* input = &sFaultInstance->inputs[0];
     uintptr_t addr = pc;
 
     do {
@@ -810,11 +810,11 @@ done:
 /**
  * Draws the stack trace page contents for the specified thread
  */
-void Fault_DrawStackTrace(OSThread* t, u32 flags) {
+void Fault_DrawStackTrace(OSThread* thread, u32 flags) {
     s32 line;
-    uintptr_t sp = t->context.sp;
-    uintptr_t ra = t->context.ra;
-    uintptr_t pc = t->context.pc;
+    uintptr_t sp = thread->context.sp;
+    uintptr_t ra = thread->context.ra;
+    uintptr_t pc = thread->context.pc;
     s32 pad;
     uintptr_t addr;
 
@@ -838,11 +838,11 @@ void Fault_DrawStackTrace(OSThread* t, u32 flags) {
     }
 }
 
-void Fault_LogStackTrace(OSThread* t, u32 flags) {
+void Fault_LogStackTrace(OSThread* thread, u32 flags) {
     s32 line;
-    uintptr_t sp = t->context.sp;
-    uintptr_t ra = t->context.ra;
-    uintptr_t pc = t->context.pc;
+    uintptr_t sp = thread->context.sp;
+    uintptr_t ra = thread->context.ra;
+    uintptr_t pc = thread->context.pc;
     uintptr_t addr;
 
     osSyncPrintf("STACK TRACE");
@@ -865,14 +865,14 @@ void Fault_LogStackTrace(OSThread* t, u32 flags) {
     }
 }
 
-void Fault_ResumeThread(OSThread* t) {
-    t->context.cause = 0;
-    t->context.fpcsr = 0;
-    t->context.pc += sizeof(u32);
-    *(u32*)t->context.pc = 0x0000000D; // write in a break instruction
-    osWritebackDCache((void*)t->context.pc, 4);
-    osInvalICache((void*)t->context.pc, 4);
-    osStartThread(t);
+void Fault_ResumeThread(OSThread* thread) {
+    thread->context.cause = 0;
+    thread->context.fpcsr = 0;
+    thread->context.pc += sizeof(u32);
+    *(u32*)thread->context.pc = 0x0000000D; // write in a break instruction
+    osWritebackDCache((void*)thread->context.pc, 4);
+    osInvalICache((void*)thread->context.pc, 4);
+    osStartThread(thread);
 }
 
 void Fault_DisplayFrameBuffer(void) {
@@ -923,7 +923,7 @@ void Fault_ProcessClients(void) {
 // needs in-function static bss
 void Fault_SetOptionsFromController3(void) {
     static u32 faultCustomOptions;
-    Input* input3 = &sFaultInstance->padInput[3];
+    Input* input3 = &sFaultInstance->inputs[3];
     u32 pad;
     uintptr_t pc;
     uintptr_t ra;
@@ -1061,9 +1061,9 @@ void Fault_ThreadEntry(void* arg) {
             FaultDrawer_DrawText(64, 100, "       THANK YOU!       ");
             FaultDrawer_DrawText(64, 110, " You are great debugger!");
             Fault_WaitForInput();
-        } while (!sFaultInstance->exitDebugger);
+        } while (!sFaultInstance->exit);
 
-        while (!sFaultInstance->exitDebugger) {
+        while (!sFaultInstance->exit) {
             ;
         }
 
@@ -1081,7 +1081,7 @@ void Fault_Init(void) {
     bzero(sFaultInstance, sizeof(FaultMgr));
     FaultDrawer_Init();
     FaultDrawer_SetInputCallback(Fault_WaitForInput);
-    sFaultInstance->exitDebugger = 0;
+    sFaultInstance->exit = false;
     sFaultInstance->msgId = 0;
     sFaultInstance->faultHandlerEnabled = false;
     sFaultInstance->faultedThread = NULL;

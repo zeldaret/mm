@@ -1,6 +1,6 @@
 #include "global.h"
 
-void osSetThreadPri(OSThread* t, OSPri p) {
+void osSetThreadPri(OSThread* thread, OSPri p) {
     register u32 saveMask;
 
     saveMask = __osDisableInt();
