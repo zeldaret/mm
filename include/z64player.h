@@ -395,13 +395,13 @@ typedef enum PlayerFacialExpression {
     /* 15 */ PLAYER_FACE_15
 } PlayerFacialExpression;
 
-#define GET_GESTURE_FROM_JOINTTABLE(jointTable)           (((PlayerAnimationFrame *)(jointTable))->gestureInfo)
-#define GET_EYE_INDEX_FROM_JOINTTABLE(jointTable)         ((GET_GESTURE_FROM_JOINTTABLE(jointTable) & 0xF) - 1)
-#define GET_MOUTH_INDEX_FROM_JOINTTABLE(jointTable)       (((GET_GESTURE_FROM_JOINTTABLE(jointTable) >> 4) & 0xF) - 1)
+#define GET_GESTURE_FROM_JOINT_TABLE(jointTable)           (((PlayerAnimationFrame *)(jointTable))->gestureInfo)
+#define GET_EYE_INDEX_FROM_JOINT_TABLE(jointTable)         ((GET_GESTURE_FROM_JOINT_TABLE(jointTable) & 0xF) - 1)
+#define GET_MOUTH_INDEX_FROM_JOINT_TABLE(jointTable)       (((GET_GESTURE_FROM_JOINT_TABLE(jointTable) >> 4) & 0xF) - 1)
 
 // Note the returned value from this macro needs to be shifted
-#define GET_LEFT_HAND_INDEX_FROM_JOINTTABLE(jointTable)   (GET_GESTURE_FROM_JOINTTABLE(jointTable) & 0xF000)
-#define GET_RIGHT_HAND_INDEX_FROM_JOINTTABLE(jointTable)  (GET_GESTURE_FROM_JOINTTABLE(jointTable) & 0x0F00)
+#define GET_LEFT_HAND_INDEX_FROM_JOINT_TABLE(jointTable)   (GET_GESTURE_FROM_JOINT_TABLE(jointTable) & 0xF000)
+#define GET_RIGHT_HAND_INDEX_FROM_JOINT_TABLE(jointTable)  (GET_GESTURE_FROM_JOINT_TABLE(jointTable) & 0x0F00)
 
 typedef enum PlayerLimb {
     /* 0x00 */ PLAYER_LIMB_NONE,

@@ -1650,8 +1650,8 @@ PlayerFaceIndices sPlayerFaces[] = {
 void Player_DrawImpl(PlayState* play, void** skeleton, Vec3s* jointTable, s32 dListCount, s32 lod,
                      PlayerTransformation playerForm, s32 boots, s32 face, OverrideLimbDrawFlex overrideLimbDraw,
                      PostLimbDrawFlex postLimbDraw, Actor* actor) {
-    s32 eyeIndex = GET_EYE_INDEX_FROM_JOINTTABLE(jointTable);
-    s32 mouthIndex = GET_MOUTH_INDEX_FROM_JOINTTABLE(jointTable);
+    s32 eyeIndex = GET_EYE_INDEX_FROM_JOINT_TABLE(jointTable);
+    s32 mouthIndex = GET_MOUTH_INDEX_FROM_JOINT_TABLE(jointTable);
     Gfx* gfx;
 
     OPEN_DISPS(play->state.gfxCtx);
@@ -2130,11 +2130,11 @@ s32 Player_OverrideLimbDrawGameplayCommon(PlayState* play, s32 limbIndex, Gfx** 
                 Matrix_Scale(player->unk_AF0[0].x, player->unk_AF0[0].y, player->unk_AF0[0].z, MTXMODE_APPLY);
             }
         } else if (limbIndex == PLAYER_LIMB_UPPER_ROOT) {
-            s16 xRot;
-            s16 zRot = 0x44C;
+            s16 rotX;
+            s16 rotZ = 0x44C;
 
             if (player->unk_AA8 != 0) {
-                Matrix_RotateZS(zRot, MTXMODE_APPLY);
+                Matrix_RotateZS(rotZ, MTXMODE_APPLY);
                 Matrix_RotateYS(player->unk_AA8, MTXMODE_APPLY);
             }
 
@@ -2142,14 +2142,14 @@ s32 Player_OverrideLimbDrawGameplayCommon(PlayState* play, s32 limbIndex, Gfx** 
                 Matrix_RotateYS(player->upperLimbRot.y, MTXMODE_APPLY);
             }
 
-            xRot = player->upperLimbRot.x;
+            rotX = player->upperLimbRot.x;
             if ((player->transformation == PLAYER_FORM_DEKU) && (player->stateFlags3 & PLAYER_STATE3_40)) {
                 if (player->heldActor != NULL) {
-                    xRot += (s16)(((EnArrow*)(player->heldActor))->bubble.unk_144 * -470.0f);
+                    rotX += (s16)(((EnArrow*)(player->heldActor))->bubble.unk_144 * -470.0f);
                 }
             }
 
-            Matrix_RotateXS(xRot, MTXMODE_APPLY);
+            Matrix_RotateXS(rotX, MTXMODE_APPLY);
             if (player->upperLimbRot.z != 0) {
                 Matrix_RotateZS(player->upperLimbRot.z, MTXMODE_APPLY);
             }
@@ -2193,7 +2193,7 @@ s32 Player_OverrideLimbDrawGameplayDefault(PlayState* play, s32 limbIndex, Gfx**
                          swordEquipValue != EQUIP_VALUE_SWORD_NONE))) {
                 leftHandDLists = &D_801C018C[2 * ((swordEquipValue - 1) ^ 0)];
             } else {
-                s32 handIndex = GET_LEFT_HAND_INDEX_FROM_JOINTTABLE(player->skelAnime.jointTable);
+                s32 handIndex = GET_LEFT_HAND_INDEX_FROM_JOINT_TABLE(player->skelAnime.jointTable);
 
                 if (handIndex != 0) {
                     handIndex = (handIndex >> 12) - 1;
@@ -2218,7 +2218,7 @@ s32 Player_OverrideLimbDrawGameplayDefault(PlayState* play, s32 limbIndex, Gfx**
                     s32 phi_a1 = (player->skelAnime.animation == &gPlayerAnim_pz_gakkistart) &&
                                  (player->skelAnime.curFrame >= 6.0f);
 
-                    if ((phi_a1 != 0) || (player->skelAnime.animation == &gPlayerAnim_pz_gakkiplay)) {
+                    if (phi_a1 || (player->skelAnime.animation == &gPlayerAnim_pz_gakkiplay)) {
                         *dList = object_link_zora_DL_00E2A0;
                         func_80125CE0(player, phi_a1 ? D_801C0538 : D_801C0560, pos, rot);
                     }
@@ -2248,7 +2248,7 @@ s32 Player_OverrideLimbDrawGameplayDefault(PlayState* play, s32 limbIndex, Gfx**
                     rightHandDLists = &gPlayerRightHandClosedDLs[D_801F59E0];
                     sPlayerRightHandType = PLAYER_MODELTYPE_RH_CLOSED;
                 } else {
-                    s32 handIndex = GET_RIGHT_HAND_INDEX_FROM_JOINTTABLE(player->skelAnime.jointTable);
+                    s32 handIndex = GET_RIGHT_HAND_INDEX_FROM_JOINT_TABLE(player->skelAnime.jointTable);
 
                     if (handIndex != 0) {
                         handIndex = (handIndex >> 8) - 1;
@@ -3242,7 +3242,7 @@ s32 func_80128640(PlayState* play, Player* player, Gfx* dlist) {
     s32 temp_v1 = player->skelAnime.animation == &gPlayerAnim_cl_maskoff;
     f32 temp_f0;
 
-    if ((temp_v1) ||
+    if (temp_v1 ||
         ((player->currentMask != PLAYER_MASK_NONE) && (player->skelAnime.animation == &gPlayerAnim_cl_setmask) &&
          (temp_f0 = player->skelAnime.curFrame - 8.0f, (temp_f0 >= 0.0f)) && (temp_f0 < 4.0f)) ||
         (player->stateFlags2 & PLAYER_STATE2_1000000)) {
@@ -3417,7 +3417,7 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
             }
         }
     } else if (limbIndex == PLAYER_LIMB_RIGHT_HAND) {
-        Actor* sp224 = player->heldActor;
+        Actor* heldActor = player->heldActor;
         s32 pad;
 
         if (*dList1 != NULL) {
@@ -3484,15 +3484,15 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
 
                 Matrix_MultVec3f(&D_801C0DD8, &player->rightHandWorld.pos);
 
-                if (sp224 != NULL) {
+                if (heldActor != NULL) {
                     static Vec3f D_801C0DE4 = { 50.0f, 850.0f, 0.0f };
                     MtxF sp1BC;
 
-                    Matrix_MultVec3f(&D_801C0DE4, &sp224->world.pos);
+                    Matrix_MultVec3f(&D_801C0DE4, &heldActor->world.pos);
                     Matrix_RotateZYX(0, -0x4000, -0x4000, MTXMODE_APPLY);
                     Matrix_Get(&sp1BC);
-                    Matrix_MtxFToYXZRot(&sp1BC, &sp224->world.rot, false);
-                    sp224->shape.rot = sp224->world.rot;
+                    Matrix_MtxFToYXZRot(&sp1BC, &heldActor->world.rot, false);
+                    heldActor->shape.rot = heldActor->world.rot;
                     if (func_800B7128(player)) {
                         Matrix_Translate(500.0f, 300.0f, 0.0f, MTXMODE_APPLY);
                         Player_DrawHookshotReticle(play, player, 77600.0f);
@@ -3503,7 +3503,8 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
                     func_80126B8C(play, player);
                 }
             }
-            if ((player->getItemDrawIdPlusOne != (GID_NONE + 1)) || ((func_800B7118(player) == 0) && (sp224 != NULL))) {
+            if ((player->getItemDrawIdPlusOne != (GID_NONE + 1)) ||
+                ((func_800B7118(player) == 0) && (heldActor != NULL))) {
                 if (!(player->stateFlags1 & PLAYER_STATE1_400) && (player->getItemDrawIdPlusOne != (GID_NONE + 1)) &&
                     (player->exchangeItemId != PLAYER_IA_NONE)) {
                     Math_Vec3f_Copy(&sPlayerGetItemRefPos, &player->leftHandWorld.pos);
@@ -3517,7 +3518,7 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
                 }
 
                 if (player->getItemDrawIdPlusOne == (GID_NONE + 1)) {
-                    Math_Vec3f_Copy(&sp224->world.pos, &sPlayerGetItemRefPos);
+                    Math_Vec3f_Copy(&heldActor->world.pos, &sPlayerGetItemRefPos);
                 }
             }
         }
@@ -3750,8 +3751,7 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
         }
         if (player->actor.scale.y >= 0.0f) {
             static Vec3f sPlayerFocusHeadLimbModelPos = { 1100.0f, -700.0f, 0.0f };
-            // unused
-            static Vec3f D_801C0E88 = { 1600.0f, -1700.0f, -70.0f };
+            static Vec3f D_801C0E88 = { 1600.0f, -1700.0f, -70.0f }; // unused
             Actor* spA8 = NULL;
 
             if (player->transformation != PLAYER_FORM_DEKU) {
