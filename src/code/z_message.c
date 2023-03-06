@@ -2075,9 +2075,9 @@ u16 D_801D0268[][3] = {
 u16 D_801D027C[] = { 0x2001, 0x2003, 0x2004, 0x2002 };
 u16 D_801D0284[] = { 0x90D4, 0x90C2, 0x89A9, 0x97CE };
 
-#ifdef NON_EQUIVALENT   
+#ifdef NON_EQUIVALENT
 void Message_Decode(PlayState* play) {
-    s32 pad[4];
+    s32 pad1[4];
     MessageContext* msgCtx = &play->msgCtx;
     Font* font = &msgCtx->font; // spF0
     Player* player;             // spEC
@@ -2089,7 +2089,7 @@ void Message_Decode(PlayState* play) {
     f32 spC0;
     f32 timeInSeconds;
     s16 spAC[4];
-    s32 sp7C;
+    s32 pad2;
     f32 var_fs0;
     s16 index;
     s16 value;
@@ -2173,6 +2173,8 @@ void Message_Decode(PlayState* play) {
                     msgCtx->decodedBuffer.wchar[decodedBufPos] = 0x100;
 
                     for (var_v0 = 0; var_v0 < 0x80; var_v0 += 4) {
+                        //! FAKE:
+                        if (1) {}
                         font->charBuf[font->unk_11D88][charTexIdx + var_v0 + 0] =
                             font->iconBuf[(gSaveContext.save.playerData.playerName[i] << 7) + var_v0 + 0];
                         font->charBuf[font->unk_11D88][charTexIdx + var_v0 + 1] =
@@ -2268,7 +2270,7 @@ void Message_Decode(PlayState* play) {
                         msgCtx->decodedBuffer.wchar[decodedBufPos] = 0x8E9E;
                         decodedBufPos++;
                     } else if (i == 3) {
-                        Font_LoadChar(play, 0x95AAU, charTexIdx);
+                        Font_LoadChar(play, 0x95AA, charTexIdx);
                         charTexIdx += FONT_CHAR_TEX_SIZE;
                         msgCtx->decodedBuffer.wchar[decodedBufPos] = 0x95AA;
                     }
@@ -2700,7 +2702,7 @@ void Message_Decode(PlayState* play) {
                 if (curChar == 0x308) {
                     value = gSaveContext.save.unk_EE8;
                 } else {
-                    value = (&gSaveContext.save.bankRupees)[curChar - 0x308];
+                    value = (&gSaveContext.save.bankRupees)[curChar - 0x300];
                 }
                 if (curChar == 0x302) {
                     if (((gSaveContext.save.linkAge != 0) ? 5 : 17) == 5) {
@@ -2777,8 +2779,8 @@ void Message_Decode(PlayState* play) {
                         var_fs0 -= 1.0f;
                     }
                 }
-                decodedBufPos--;
                 spC0 += var_fs0 * (16.0f * msgCtx->textCharScale);
+                decodedBufPos--;
             } else if ((curChar == 0x303) || (curChar == 0x304) || (curChar == 0x305)) {
                 digits[0] = digits[1] = digits[2] = 0;
                 digits[3] = (&gSaveContext.save.unk_EE8)[curChar - 0x303];
@@ -2857,6 +2859,8 @@ void Message_Decode(PlayState* play) {
                     msgCtx->decodedBuffer.wchar[decodedBufPos + i] = 0x30D;
 
                     for (var_v0 = 0; var_v0 < 0x80; var_v0 += 4) {
+                        //! FAKE:
+                        if (1) {}
                         font->charBuf[font->unk_11D88][charTexIdx + var_v0 + 0] =
                             font->fontBuf[gSaveContext.save.inventory.dekuPlaygroundPlayerName[index][i] + var_v0 + 0];
                         font->charBuf[font->unk_11D88][charTexIdx + var_v0 + 1] =
@@ -2934,7 +2938,6 @@ void Message_Decode(PlayState* play) {
             } else if (curChar == 0x128) {
                 msgCtx->decodedBuffer.wchar[++decodedBufPos] = font->msgBuf.wchar[++msgCtx->msgBufPos];
             } else if ((curChar != 0x20) && ((curChar < 0x2000) || (curChar >= 0x2009))) {
-                sp7C = (s32)curChar;
                 Font_LoadChar(play, curChar, charTexIdx);
                 charTexIdx += FONT_CHAR_TEX_SIZE;
                 if ((curChar == 0x8169) || (curChar == 0x8175)) {
@@ -2949,10 +2952,9 @@ void Message_Decode(PlayState* play) {
                     spC0 += 10.0f * msgCtx->textCharScale;
                 } else if ((curChar == 0x8141) || (curChar == 0x8142) || (curChar == 0x8168)) {
                     spC0 += 12.0f * msgCtx->textCharScale;
+                } else if (curChar == 0x8194) {
+                    spC0 += 14.0f * msgCtx->textCharScale;
                 } else {
-                    if (curChar == 0x8194) {
-                        spC0 += (14.0f * msgCtx->textCharScale);
-                    }
                     spC0 += 16.0f * msgCtx->textCharScale;
                 }
 
