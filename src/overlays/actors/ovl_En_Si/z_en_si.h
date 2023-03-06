@@ -5,7 +5,7 @@
 
 #define ENSI_GET_CHEST_FLAG(thisx) (((thisx)->params & 0xFC) >> 2)
 
-#define SI_SPIDER_HOUSE_TOKENS_REQUIRED 30
+#define SPIDER_HOUSE_TOKENS_REQUIRED 30
 
 struct EnSi;
 
