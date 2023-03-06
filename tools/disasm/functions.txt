@@ -14266,7 +14266,7 @@
     0x80B678A8:("EnSth_MoonLookingIdle",),
     0x80B67958:("EnSth_DefaultIdle",),
     0x80B67984:("EnSth_GetInitialSwampSpiderHouseText",),
-    0x80B67AB4:("EnSth_PostSwampSpiderHouseGiveMask",),
+    0x80B67AB4:("EnSth_TalkAfterSwampSpiderHouseGiveMask",),
     0x80B67B50:("EnSth_SwampSpiderHouseGiveMask",),
     0x80B67C1C:("EnSth_HandleSwampSpiderHouseConversation",),
     0x80B67DA0:("EnSth_SwampSpiderHouseIdle",),

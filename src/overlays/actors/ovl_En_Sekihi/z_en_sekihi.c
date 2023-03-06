@@ -59,7 +59,13 @@ void EnSekihi_Init(Actor* thisx, PlayState* play) {
         return;
     }
 
-    if ((params == SEKIHI_TYPE_4) && (((gSaveContext.save.skullTokenCount & 0xFFFF)) >= 30)) {
+    if ((params == SEKIHI_TYPE_4) && (((gSaveContext.save.skullTokenCount & 0xFFFF)) >= SPIDER_HOUSE_TOKENS_REQUIRED)) {
+        // This flag marks that the player has finished the spiderhouse and has exited.
+        // Used to identify if EnSth should be moved deeper into the house.
+        // This does NOT flag:
+        //   A) that the player has completed the house (Inventory_GetSkullTokenCount(play->sceneId))
+        //   B) that the player has collected a reward (WEEKEVENTREG_OCEANSIDE_SPIDER_HOUSE_COLLECTED_REWARD)
+        //   C) that the player has collected the wallet (WEEKEVENTREG_RECEIVED_OCEANSIDE_WALLET_UPGRADE)
         SET_WEEKEVENTREG(WEEKEVENTREG_OCEANSIDE_SPIDER_HOUSE_BUYER_MOVED_IN);
     }
 

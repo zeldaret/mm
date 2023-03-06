@@ -148,7 +148,7 @@ void EnSth_Init(Actor* thisx, PlayState* play) {
             }
             this->actor.textId = 0;
             if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_MASK_OF_TRUTH) ||
-                !CHECK_WEEKEVENTREG(WEEKEVENTREG_SWAMP_SPIDERHOUSE_TALKED)) {
+                !CHECK_WEEKEVENTREG(WEEKEVENTREG_SWAMP_SPIDER_HOUSE_TALKED)) {
                 this->sthFlags |= STH_FLAG_DRAW_TRUTH_MASK;
             }
             break;
@@ -167,18 +167,21 @@ void EnSth_Init(Actor* thisx, PlayState* play) {
 
         case STH_TYPE_OCEANSIDE_SPIDER_HOUSE_GREET:
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_OCEANSIDE_SPIDER_HOUSE_BUYER_MOVED_IN)) {
+                // The player has already exited the house after complete; EnSth has moved deeper into the house.
                 Actor_Kill(&this->actor);
                 return;
             }
             this->actor.textId = 0;
             this->actionFunc = EnSth_OceansideSpiderHouseIdle;
-            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_OCEANSIDE_SPIDER_HOUSE_COMPLETE)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_OCEANSIDE_SPIDER_HOUSE_COLLECTED_REWARD)) {
                 this->sthFlags |= STH_FLAG_OCEANSIDE_SPIDER_HOUSE_GREET;
             }
             break;
+
         case STH_TYPE_OCEANSIDE_SPIDER_HOUSE_PANIC:
             if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_OCEANSIDE_SPIDER_HOUSE_BUYER_MOVED_IN) ||
                 (Inventory_GetSkullTokenCount(play->sceneId) < SPIDER_HOUSE_TOKENS_REQUIRED)) {
+                // Has not moved in, and has not completed the house; do NOT spawn yet.
                 Actor_Kill(&this->actor);
                 return;
             }
@@ -363,13 +366,16 @@ void EnSth_HandleOceansideSpiderHouseConversation(EnSth* this, PlayState* play) 
                         break;
 
                     case 0x1136: // I want to buy this house from you
-                        SET_WEEKEVENTREG(WEEKEVENTREG_OCEANSIDE_SPIDER_HOUSE_COMPLETE);
+                        // This flag prevents multiple rewards, switching to secondary dialogue after
+                        SET_WEEKEVENTREG(WEEKEVENTREG_OCEANSIDE_SPIDER_HOUSE_COLLECTED_REWARD);
 
                         switch (day) {
                             case 0: // first day
                                 if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_OCEANSIDE_WALLET_UPGRADE)) {
                                     STH_GI_ID(&this->actor) = GI_RUPEE_SILVER;
                                 } else {
+                                    // This flag prevents getting two wallets from the same place.
+                                    //   Instead, getting silver rupee above.
                                     SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_OCEANSIDE_WALLET_UPGRADE);
                                     switch (CUR_UPG_VALUE(UPG_WALLET)) {
                                         case 0:
@@ -473,7 +479,7 @@ void EnSth_GetInitialSwampSpiderHouseText(EnSth* this, PlayState* play) {
         nextTextId = 0x90F; // (does not exist)
         EnSth_ChangeAnim(this, STH_ANIM_TALK);
     } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_MASK_OF_TRUTH)) {
-        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_SWAMP_SPIDERHOUSE_TALKED)) {
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_SWAMP_SPIDER_HOUSE_TALKED)) {
             nextTextId = 0x91B; // As soon as I calm down, getting rid of it
         } else {
             nextTextId = 0x918; // I've had enough of this, going home
@@ -496,7 +502,7 @@ void EnSth_GetInitialSwampSpiderHouseText(EnSth* this, PlayState* play) {
     Message_StartTextbox(play, nextTextId, &this->actor);
 }
 
-void EnSth_PostSwampSpiderHouseGiveMask(EnSth* this, PlayState* play) {
+void EnSth_TalkAfterSwampSpiderHouseGiveMask(EnSth* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
 
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
@@ -513,12 +519,13 @@ void EnSth_SwampSpiderHouseGiveMask(EnSth* this, PlayState* play) {
 
     if (Actor_HasParent(&this->actor, play)) {
         this->actor.parent = NULL;
-        this->actionFunc = EnSth_PostSwampSpiderHouseGiveMask;
+        this->actionFunc = EnSth_TalkAfterSwampSpiderHouseGiveMask;
         this->actor.flags |= ACTOR_FLAG_10000;
         func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
     } else {
         this->sthFlags &= ~STH_FLAG_DRAW_TRUTH_MASK;
-        SET_WEEKEVENTREG(WEEKEVENTREG_SWAMP_SPIDERHOUSE_TALKED);
+        // This flag is used to keep track if the player has already spoken to the actor, triggering secondary dialogue.
+        SET_WEEKEVENTREG(WEEKEVENTREG_SWAMP_SPIDER_HOUSE_TALKED);
         Actor_PickUp(&this->actor, play, GI_MASK_TRUTH, 10000.0f, 50.0f);
     }
 }
@@ -560,7 +567,7 @@ void EnSth_HandleSwampSpiderHouseConversation(EnSth* this, PlayState* play) {
             case 0x91A: // Someone gave me this mask and said it would make me rich, getting rid of it
                 // TODO: why is this two flags? is it some.. started dialogue, ended dialogue flag?
                 SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_MASK_OF_TRUTH);
-                CLEAR_WEEKEVENTREG(WEEKEVENTREG_SWAMP_SPIDERHOUSE_TALKED);
+                CLEAR_WEEKEVENTREG(WEEKEVENTREG_SWAMP_SPIDER_HOUSE_TALKED);
 
             case 0x902: // (does not exist)
             case 0x903: // (does not exist)
@@ -642,7 +649,7 @@ void EnSth_UpdateWaitForObject(Actor* thisx, PlayState* play) {
                 break;
 
             case STH_TYPE_OCEANSIDE_SPIDER_HOUSE_GREET:
-                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_OCEANSIDE_SPIDER_HOUSE_COMPLETE)) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_OCEANSIDE_SPIDER_HOUSE_COLLECTED_REWARD)) {
                     EnSth_ChangeAnim(this, STH_ANIM_LOOK_AROUND);
                 } else {
                     EnSth_ChangeAnim(this, STH_ANIM_LOOK_AROUND);
