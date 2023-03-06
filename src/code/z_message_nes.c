@@ -1266,19 +1266,17 @@ void Message_DecodeNES(PlayState* play) {
     s16 decodedBufPos;          // spDA
     s16 var_s0_2;
     f32 var_fs0;
-    s16 var_s0_3;
+    s16 i; // s1
     s16 spD0;
     s16 digits[4]; // spC8/CA/CC/CE
     s16 spC6;
-    s32 loadChar;
+    s16 loadChar;
     s32 charTexIdx; // spBC
     s16 index;
-    s16 value;
     s16 spA8[8];
     f32 spA4;
     f32 timeInSeconds;
     s16 playerNameLen; // s0
-    s16 i;             // s1
     s16 var_v1_3;
     u8 curChar; // sp78
     u8 curChar2;
@@ -1384,10 +1382,12 @@ void Message_DecodeNES(PlayState* play) {
             }
             decodedBufPos--;
         } else if (curChar == 0xC1) {
+            //! TODO: + 0x900 on the first one?
+            DmaMgr_SendRequest0(msgCtx->textboxSegment + 0x1000, SEGMENT_ROM_START(message_texture_static), 0x900);
+            DmaMgr_SendRequest0(msgCtx->textboxSegment + 0x1900, SEGMENT_ROM_START(message_texture_static) + 0x900,
+                                0x900);
             spC6 = 2;
             spD0 = 2;
-            DmaMgr_SendRequest0(msgCtx->textboxSegment + 0x1000, _message_texture_staticSegmentRomStart, 0x900);
-            DmaMgr_SendRequest0(msgCtx->textboxSegment + 0x1900, _message_texture_staticSegmentRomStart + 0x900, 0x900);
             msgCtx->unk12012 = msgCtx->textboxY + 8;
             msgCtx->unk11F18 = 1;
             msgCtx->unk12010 = XREG(47);
@@ -1423,10 +1423,12 @@ void Message_DecodeNES(PlayState* play) {
                     case 5:
                         break;
                     default:
-                        if (spA8[i] != '0') {
-                            case 4:
-                                loadChar = true;
+                        if (spA8[i] == '0') {
+                            break;
                         }
+                        // fallthrough
+                    case 4:
+                        loadChar = true;
                         break;
                 }
                 if (loadChar) {
@@ -1567,7 +1569,7 @@ void Message_DecodeNES(PlayState* play) {
             }
             Message_LoadRupeesNES(play, &decodedBufPos, &charTexIdx, &spA4, msgCtx->bankRupees);
         } else if (curChar == 0xCF) {
-            Message_LoadTimeNES(play, curChar & 0xFF, &charTexIdx, &spA4, &decodedBufPos);
+            Message_LoadTimeNES(play, curChar, &charTexIdx, &spA4, &decodedBufPos);
         } else if (curChar == 0xC) {
             digits[0] = digits[1] = 0;
             digits[2] = gSaveContext.save.inventory.strayFairies[(void)0, gSaveContext.dungeonIndex];
@@ -1760,8 +1762,8 @@ void Message_DecodeNES(PlayState* play) {
                 Font_LoadCharNES(play, '1', charTexIdx);
                 charTexIdx += FONT_CHAR_TEX_SIZE;
                 msgCtx->decodedBuffer.schar[decodedBufPos] = '1';
-                decodedBufPos++;
                 spA4 += 16.0f * msgCtx->textCharScale;
+                decodedBufPos++;
             }
             decodedBufPos--;
         } else if (curChar == 0xD6) {
@@ -1942,21 +1944,21 @@ void Message_DecodeNES(PlayState* play) {
 
         } else if ((curChar == 0xF0) || (curChar == 0xF1) || (curChar == 0xF2) || (curChar == 0xF8)) {
             if (curChar == 0xF8) {
-                value = gSaveContext.save.unk_EE8;
+                index = gSaveContext.save.unk_EE8;
             } else {
-                value = (&gSaveContext.save.bankRupees)[curChar - 0xF0];
+                index = (&gSaveContext.save.bankRupees)[curChar - 0xF0];
             }
             if (curChar == 0xF2) {
                 if (((gSaveContext.save.linkAge != 0) ? 5 : 17) == 5) {
-                    value &= 0x7F;
+                    index &= 0x7F;
                 } else {
-                    value =
+                    index =
                         ((s16)(((&gSaveContext.save.bankRupees)[font->msgBuf.schar[msgCtx->msgBufPos]] & 0xFF000000) >>
                                0x18) &
                          0x7F);
                 }
             }
-            digits[3] = value;
+            digits[3] = index;
             digits[0] = digits[1] = digits[2] = 0;
 
             while (digits[3] >= 1000) {
@@ -2004,10 +2006,12 @@ void Message_DecodeNES(PlayState* play) {
                     case 5:
                         break;
                     default:
-                        if (spA8[i] != '\0') {
-                            case 4:
-                                loadChar = true;
+                        if (spA8[i] == '\0') {
+                            break;
                         }
+                        // fallthrough
+                    case 4:
+                        loadChar = true;
                         break;
                 }
                 if (loadChar) {
@@ -2019,8 +2023,8 @@ void Message_DecodeNES(PlayState* play) {
                     var_fs0 -= 1.0f;
                 }
             }
-            decodedBufPos--;
             spA4 += var_fs0 * (16.0f * msgCtx->textCharScale);
+            decodedBufPos--;
         } else if ((curChar == 0xF3) || (curChar == 0xF4) || (curChar == 0xF5)) {
             digits[0] = digits[1] = digits[2] = 0;
             digits[3] = (&gSaveContext.save.unk_EE8)[curChar - 0xF3];
@@ -2089,29 +2093,30 @@ void Message_DecodeNES(PlayState* play) {
         } else if ((curChar == 0xFD) || (curChar == 0xFE) || (curChar == 0xFF)) {
             index = curChar - 0xFD;
 
-            for (var_s0_3 = 8; var_s0_3 > 0; var_s0_3--) {
-                if (gSaveContext.save.inventory.dekuPlaygroundPlayerName[index][var_s0_3 - 1] == 0x3E) {
+            for (var_s0_2 = 8; var_s0_2 > 0; var_s0_2--) {
+                if (gSaveContext.save.inventory.dekuPlaygroundPlayerName[index][var_s0_2 - 1] != 0x3E) {
                     break;
                 }
             }
 
-            for (i = 0; i < var_s0_3; i++) {
+            for (i = 0; i < var_s0_2; i++) {
                 msgCtx->decodedBuffer.schar[decodedBufPos + i] = 0xFD;
 
-                for (var_v1_3 = 0; var_v1_3 < 0x80; var_v1_3 += 4) {
+                //! TODO: Could be loop-unrolling?
+                for (var_v1_3 = 0; var_v1_3 < 0x80; var_v1_3++) {
                     font->charBuf[font->unk_11D88][charTexIdx + var_v1_3 + 0] =
                         font->fontBuf[gSaveContext.save.inventory.dekuPlaygroundPlayerName[index][i] + var_v1_3 + 0];
-                    font->charBuf[font->unk_11D88][charTexIdx + var_v1_3 + 1] =
-                        font->fontBuf[gSaveContext.save.inventory.dekuPlaygroundPlayerName[index][i] + var_v1_3 + 1];
-                    font->charBuf[font->unk_11D88][charTexIdx + var_v1_3 + 2] =
-                        font->fontBuf[gSaveContext.save.inventory.dekuPlaygroundPlayerName[index][i] + var_v1_3 + 2];
-                    font->charBuf[font->unk_11D88][charTexIdx + var_v1_3 + 3] =
-                        font->fontBuf[gSaveContext.save.inventory.dekuPlaygroundPlayerName[index][i] + var_v1_3 + 3];
+                    // font->charBuf[font->unk_11D88][charTexIdx + var_v1_3 + 1] =
+                    //     font->fontBuf[gSaveContext.save.inventory.dekuPlaygroundPlayerName[index][i] + var_v1_3 + 1];
+                    // font->charBuf[font->unk_11D88][charTexIdx + var_v1_3 + 2] =
+                    //     font->fontBuf[gSaveContext.save.inventory.dekuPlaygroundPlayerName[index][i] + var_v1_3 + 2];
+                    // font->charBuf[font->unk_11D88][charTexIdx + var_v1_3 + 3] =
+                    //     font->fontBuf[gSaveContext.save.inventory.dekuPlaygroundPlayerName[index][i] + var_v1_3 + 3];
                 }
                 charTexIdx += FONT_CHAR_TEX_SIZE;
             }
-            decodedBufPos = (decodedBufPos + var_s0_3) - 1;
-            spA4 += var_s0_3 * (16.0f * msgCtx->textCharScale);
+            decodedBufPos = (decodedBufPos + var_s0_2) - 1;
+            spA4 += var_s0_2 * (16.0f * msgCtx->textCharScale);
         } else if (curChar == 0xB) {
             digits[0] = digits[1] = digits[2] = 0;
             digits[3] = (gSaveContext.save.unk_EE8 & 0xFFFF0000) >> 0x10;
@@ -2183,7 +2188,6 @@ void Message_DecodeNES(PlayState* play) {
         } else if ((curChar != 0x20) && (curChar >= 9)) {
             Font_LoadCharNES(play, curChar, charTexIdx);
             charTexIdx += FONT_CHAR_TEX_SIZE;
-            D_801D0470[curChar - ' '] * msgCtx->textCharScale;
             spA4 += D_801D0470[curChar - ' '] * msgCtx->textCharScale;
         } else if (curChar == 0x20) {
             spA4 += 6.0f;
