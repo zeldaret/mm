@@ -637,7 +637,7 @@ void Fault_DrawMemDump(uintptr_t pc, uintptr_t sp, uintptr_t cLeftJump, uintptr_
             addr = K0BASE;
         }
         // 8MB RAM, leave room to display 0x100 bytes on the final page
-        if (addr > K0BASE + 0x800000 - 0x100) {
+        if (addr > (K0BASE + 0x800000 - 0x100)) {
             addr = K0BASE + 0x800000 - 0x100;
         }
 
