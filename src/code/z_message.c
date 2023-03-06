@@ -2067,16 +2067,931 @@ void func_8014D62C(PlayState* play, s32* offset, f32* arg2, s16* decodedBufPos) 
     *arg2 = sp3C;
 }
 
-s16 D_801D0268[][3] = {
+u16 D_801D0268[][3] = {
     { 0x82CD, 0x82E2, 0x82A2 },
     { 0x82D3, 0x82C2, 0x82A4 },
     { 0x82A8, 0x82BB, 0x82A2 },
 };
-s16 D_801D027C[] = { 0x2001, 0x2003, 0x2004, 0x2002 };
-s16 D_801D0284[] = { 0x90D4, 0x90C2, 0x89A9, 0x97CE };
+u16 D_801D027C[] = { 0x2001, 0x2003, 0x2004, 0x2002 };
+u16 D_801D0284[] = { 0x90D4, 0x90C2, 0x89A9, 0x97CE };
 
-void Message_Decode(PlayState* play);
+#ifdef NON_EQUIVALENT
+void Message_Decode(PlayState* play) {
+    s32 pad[3];
+    MessageContext* msgCtx = &play->msgCtx;
+    Font* font = &msgCtx->font; // spF0
+    Player* player;             // spEC
+    s16 decodedBufPos;          // spEA
+    s16 spE0;
+    s16 digits[4]; // spD4/D6/D8/DA
+    s16 spD2;
+    s32 charTexIdx; // spC8
+    f32 spC0;
+    s16 spAC[4];
+    s32 sp7C;
+    f32 timeInSeconds;
+    f32 var_fs0;
+    s16 index;
+    s16 value;
+    s16 playerNameLen;
+    s16 var_a2_2;
+    s16 i; // s1
+    s16 var_v0;
+    s32 loadChar;
+    u16 curChar;
+    u8 var_s3_8;
+
+    player = GET_PLAYER(play);
+    msgCtx->textDelayTimer = 0;
+    msgCtx->textDelay = msgCtx->textDelayTimer;
+    msgCtx->textFade = 0;
+    spC0 = 0.0f;
+    font->unk_11D88 = (font->unk_11D88 ^ 1) & 1;
+
+    if ((gSaveContext.options.language == 0) && (msgCtx->textIsCredits == 0)) {
+        spD2 = 0;
+        spE0 = 0;
+        decodedBufPos = 0;
+        charTexIdx = 0;
+        Message_SetupLoadItemIcon(play);
+
+        while (true) {
+            curChar = font->msgBuf.wchar[msgCtx->msgBufPos];
+            msgCtx->decodedBuffer.wchar[decodedBufPos] = curChar;
+
+            if ((curChar == 9) || (curChar == 0xB) || (curChar == 0x110) || (curChar == 0x111) || (curChar == 0x112) ||
+                (curChar == 0x103) || (curChar == 0x230) || (curChar == 0x500) || (curChar == 0x240) ||
+                (curChar == 0x104)) {
+
+                msgCtx->msgMode = 6;
+                msgCtx->textDrawPos = 1;
+                msgCtx->unk11FFA = msgCtx->textboxY + 6;
+                msgCtx->unk11F1A[spD2] = 0;
+                if (msgCtx->unk11F18 == 0) {
+                    msgCtx->unk11F1A[spD2] = (s16)((msgCtx->textCharScale * 16.0f * 16.0f) - spC0) / 2;
+                }
+                spC0 = 0.0f;
+                if (curChar == 0xB) {
+                    if ((msgCtx->textBoxType != 3) && (msgCtx->textBoxType != 4)) {
+                        if (spE0 < 2) {
+                            msgCtx->unk11FFA = msgCtx->textboxY + 0x16;
+                        } else if (spE0 == 2) {
+                            msgCtx->unk11FFA = msgCtx->textboxY + 0xE;
+                        }
+                    }
+                } else {
+                    if ((msgCtx->textBoxType != 3) && (msgCtx->textBoxType != 4)) {
+                        if (spE0 == 0) {
+                            msgCtx->unk11FFA = msgCtx->textboxY + 0x16;
+                        } else if (spE0 == 1) {
+                            msgCtx->unk11FFA = msgCtx->textboxY + 0xE;
+                        }
+                    }
+                }
+                if ((curChar == 0x110) || (curChar == 0x111) || (curChar == 0x112)) {
+                    msgCtx->decodedBuffer.wchar[++decodedBufPos] = font->msgBuf.wchar[msgCtx->msgBufPos + 1];
+                    msgCtx->msgBufPos += 2;
+                }
+                msgCtx->decodedTextLen = (u16)decodedBufPos;
+                if (msgCtx->textboxSkipped || (msgCtx->textBoxType == 1) || (msgCtx->textBoxType == 3) ||
+                    (msgCtx->textBoxType == 6) || (msgCtx->textBoxType == 8) || (msgCtx->textBoxType == 9) ||
+                    (msgCtx->textBoxType == (u8)0xBU) || (msgCtx->unk11F0C == 3)) {
+                    msgCtx->textDrawPos = msgCtx->decodedTextLen;
+                }
+                msgCtx->unk120C8 = msgCtx->unk120CE;
+                msgCtx->unk120CA = msgCtx->unk120D0;
+                msgCtx->unk120CC = msgCtx->unk120D2;
+                break;
+
+            } else {
+
+                if (curChar == 0x100) {
+
+                    for (playerNameLen = ARRAY_COUNT(gSaveContext.save.playerData.playerName); playerNameLen > 0;
+                         playerNameLen--) {
+                        if (gSaveContext.save.playerData.playerName[playerNameLen - 1] != 0x3E) {
+                            break;
+                        }
+                    }
+
+                    for (i = 0; i < playerNameLen; i++) {
+                        msgCtx->decodedBuffer.wchar[decodedBufPos] = 0x100;
+
+                        for (var_v0 = 0; var_v0 < 0x80; var_v0 += 4) {
+                            font->charBuf[font->unk_11D88][charTexIdx + var_v0 + 0] =
+                                font->iconBuf[((u8)gSaveContext.save.playerData.playerName[i] << 7) + var_v0 + 0];
+                            font->charBuf[font->unk_11D88][charTexIdx + var_v0 + 1] =
+                                font->iconBuf[((u8)gSaveContext.save.playerData.playerName[i] << 7) + var_v0 + 1];
+                            font->charBuf[font->unk_11D88][charTexIdx + var_v0 + 2] =
+                                font->iconBuf[((u8)gSaveContext.save.playerData.playerName[i] << 7) + var_v0 + 2];
+                            font->charBuf[font->unk_11D88][charTexIdx + var_v0 + 3] =
+                                font->iconBuf[((u8)gSaveContext.save.playerData.playerName[i] << 7) + var_v0 + 3];
+                        }
+                        charTexIdx += FONT_CHAR_TEX_SIZE;
+                    }
+                    decodedBufPos = (decodedBufPos + playerNameLen) - 1;
+                    spC0 += (f32)playerNameLen * (16.0f * msgCtx->textCharScale);
+                } else if (curChar == 0x201) {
+                    spD2 = 2;
+                    spE0 = 2;
+                    DmaMgr_SendRequest0(msgCtx->textboxSegment + 0x1000, (u32)_message_texture_staticSegmentRomStart,
+                                        0x900U);
+                    DmaMgr_SendRequest0(msgCtx->textboxSegment + 0x1900,
+                                        (u32)(_message_texture_staticSegmentRomStart + 0x900), 0x900U);
+                    msgCtx->unk12012 = msgCtx->textboxY + 8;
+                    msgCtx->unk11F18 = 1;
+                    msgCtx->unk12010 = gGameInfo->data[0x56F];
+                } else if (curChar == 0x202) {
+                    msgCtx->unk11F18 = 1;
+                    msgCtx->choiceNum = 2;
+                } else if (curChar == 0x203) {
+                    msgCtx->unk11F18 = 1;
+                    msgCtx->choiceNum = 3;
+                    msgCtx->unk11FF8 = msgCtx->unk11FF8 + 0x16;
+                } else {
+                    if (curChar == 0x204) {
+                        func_8014CDF0(((void)0, gSaveContext.timerCurTimes[curChar - 0x204]), spAC);
+
+                        loadChar = false;
+                        for (i = 0; i < 5; i++) {
+                            if ((i == 1) || (spAC[i + 3] != 0)) {
+                                loadChar = true;
+                            }
+                            if (loadChar) {
+                                Message_LoadChar(play, spAC[i + 3] + 0x824F, &charTexIdx, &spC0, decodedBufPos);
+                                decodedBufPos++;
+                            }
+                        }
+                        decodedBufPos--;
+                    } else if ((curChar == 0x205) || (curChar == 0x206) || (curChar == 0x207) || (curChar == 0x208) ||
+                               (curChar == 0x209)) {
+                        loadChar = false;
+                        func_8014CDF0(((void)0, gSaveContext.timerCurTimes[curChar - 0x204]), spAC);
+                        for (i = 0; i < 8; i++) {
+                            switch (i) {
+                                case 2:
+                                case 5:
+                                    break;
+                                default:
+                                    if (spAC[i] == '\0') {
+                                        break;
+                                    }
+                                    // fallthrough
+                                case 4:
+                                    loadChar = true;
+                                    break;
+                            }
+                            if (loadChar) {
+                                Message_LoadChar(play, spAC[i] + 0x824F, &charTexIdx, &spC0, decodedBufPos);
+                                decodedBufPos++;
+                            }
+                        }
+                        decodedBufPos--;
+                    } else if (curChar == 0x20A) {
+                        digits[0] = 0;
+                        timeInSeconds = TIME_TO_MINUTES_F(gSaveContext.save.time);
+                        digits[1] = timeInSeconds / 60.0f;
+                        while (digits[1] >= 10) {
+                            digits[0]++;
+                            digits[1] -= 10;
+                        }
+
+                        digits[2] = 0;
+                        digits[3] = (s32)timeInSeconds % 60;
+                        while (digits[3] >= 10) {
+                            digits[2]++;
+                            digits[3] -= 10;
+                        }
+
+                        for (i = 0; i < 4; i++) {
+                            Font_LoadChar(play, digits[i] + 0x824F, charTexIdx);
+                            charTexIdx += FONT_CHAR_TEX_SIZE;
+                            msgCtx->decodedBuffer.wchar[decodedBufPos] = digits[i] + 0x824F;
+                            decodedBufPos++;
+                            if (i == 1) {
+                                Font_LoadChar(play, 0x8E9E, charTexIdx);
+                                charTexIdx += FONT_CHAR_TEX_SIZE;
+                                msgCtx->decodedBuffer.wchar[decodedBufPos] = 0x8E9E;
+                                decodedBufPos++;
+                            } else if (i == 3) {
+                                Font_LoadChar(play, 0x95AAU, charTexIdx);
+                                charTexIdx += FONT_CHAR_TEX_SIZE;
+                                msgCtx->decodedBuffer.wchar[decodedBufPos] = 0x95AA;
+                            }
+                        }
+                        spC0 += 6.0f * (16.0f * msgCtx->textCharScale);
+                    } else if (curChar == 0x20B) {
+                        digits[0] = digits[1] = digits[2] = 0;
+                        digits[3] = Flags_GetAllTreasure(play);
+
+                        while (digits[3] >= 1000) {
+                            digits[0]++;
+                            digits[3] -= 1000;
+                        }
+                        while (digits[3] >= 100) {
+                            digits[1]++;
+                            digits[3] -= 100;
+                        }
+                        while (digits[3] >= 10) {
+                            digits[2]++;
+                            digits[3] -= 10;
+                        }
+
+                        loadChar = false;
+                        for (i = 0; i < 4; i++) {
+                            if ((i == 3) || (digits[i] != 0)) {
+                                loadChar = true;
+                            }
+                            if (loadChar) {
+                                Font_LoadChar(play, digits[i] + 0x824F, charTexIdx);
+                                charTexIdx += FONT_CHAR_TEX_SIZE;
+                                msgCtx->decodedBuffer.wchar[decodedBufPos] = digits[i] + 0x824F;
+                                decodedBufPos++;
+                                spC0 += 16.0f * msgCtx->textCharScale;
+                            }
+                        }
+                        Message_LoadChar(play, 0x9543, &charTexIdx, &spC0, decodedBufPos);
+                    } else if (curChar == 0x20C) {
+                        decodedBufPos++;
+                        msgCtx->unk120BE = spD2;
+                        msgCtx->unk120C0 = decodedBufPos;
+                        msgCtx->unk120C2 = 2;
+                        msgCtx->bankRupeesSelected = 0;
+                        msgCtx->unk120C4 = charTexIdx;
+                        digits[0] = digits[1] = digits[2] = 0;
+
+                        for (i = 0; i < 3; i++) {
+                            Message_LoadChar(play, digits[i] + 0x824F, &charTexIdx, &spC0, decodedBufPos);
+                            decodedBufPos++;
+                        }
+                        func_8014CCB4(play, &decodedBufPos, &charTexIdx, &spC0);
+                    } else if (curChar == 0x20D) {
+                        digits[0] = digits[1] = 0;
+                        digits[2] = msgCtx->bankRupeesSelected;
+
+                        while (digits[2] >= 100) {
+                            digits[0]++;
+                            digits[2] -= 100;
+                        }
+
+                        while (digits[2] >= 10) {
+                            digits[1]++;
+                            digits[2] -= 10;
+                        }
+
+                        loadChar = false;
+                        for (i = 0; i < 3; i++) {
+                            if ((i == 2) || (digits[i] != 0)) {
+                                loadChar = true;
+                            }
+                            if (loadChar) {
+                                Message_LoadChar(play, digits[i] + 0x824F, &charTexIdx, &spC0, decodedBufPos);
+                                decodedBufPos++;
+                            }
+                        }
+                        func_8014CCB4(play, &decodedBufPos, &charTexIdx, &spC0);
+                    } else if (curChar == 0x20E) {
+                        digits[0] = digits[1] = digits[2] = 0;
+                        digits[3] = msgCtx->bankRupees;
+
+                        while (digits[3] >= 1000) {
+                            digits[0]++;
+                            digits[3] -= 1000;
+                        }
+                        while (digits[3] >= 100) {
+                            digits[1]++;
+                            digits[3] -= 100;
+                        }
+                        while (digits[3] >= 10) {
+                            digits[2]++;
+                            digits[3] -= 10;
+                        }
+
+                        loadChar = false;
+                        for (i = 0; i < 4; i++) {
+                            if ((i == 3) || (digits[i] != 0)) {
+                                loadChar = true;
+                            }
+                            if (loadChar) {
+                                Message_LoadChar(play, digits[i] + 0x824F, &charTexIdx, &spC0, decodedBufPos);
+                                decodedBufPos++;
+                            }
+                        }
+                        func_8014CCB4(play, &decodedBufPos, &charTexIdx, &spC0);
+                    } else if (curChar == 0x20F) {
+                        func_8014D304(play, curChar, &charTexIdx, &spC0, &decodedBufPos);
+                    } else if (curChar == 0x21C) {
+                        digits[0] = digits[1] = 0;
+                        digits[2] = gSaveContext.save.inventory.strayFairies[(void)0, gSaveContext.dungeonIndex];
+
+                        while (digits[2] >= 100) {
+                            digits[0]++;
+                            digits[2] -= 100;
+                        }
+                        while (digits[2] >= 10) {
+                            digits[1]++;
+                            digits[2] -= 10;
+                        }
+
+                        loadChar = false;
+                        for (i = 0; i < 3; i++) {
+                            if ((i == 2) || (digits[i] != 0)) {
+                                loadChar = true;
+                            }
+                            if (loadChar) {
+                                Message_LoadChar(play, digits[i] + 0x824F, &charTexIdx, &spC0, decodedBufPos);
+                                decodedBufPos++;
+                            }
+                        }
+                        Message_LoadChar(play, 0x906C, &charTexIdx, &spC0, decodedBufPos);
+                        decodedBufPos++;
+                        Message_LoadChar(play, 0x96DA, &charTexIdx, &spC0, decodedBufPos);
+                    } else if (curChar == 0x21D) {
+                        digits[0] = digits[1] = 0;
+                        digits[2] = Inventory_GetSkullTokenCount(play->sceneId);
+
+                        while (digits[2] >= 100) {
+                            digits[0]++;
+                            digits[2] -= 100;
+                        }
+                        while (digits[2] >= 10) {
+                            digits[1]++;
+                            digits[2] -= 10;
+                        }
+
+                        loadChar = false;
+                        for (i = 0; i < 3; i++) {
+                            if ((i == 2) || (digits[i] != 0)) {
+                                loadChar = true;
+                            }
+                            if (loadChar) {
+                                Message_LoadChar(play, digits[i] + 0x824F, &charTexIdx, &spC0, decodedBufPos);
+                                decodedBufPos++;
+                            }
+                        }
+                        Message_LoadChar(play, 0x9543, &charTexIdx, &spC0, decodedBufPos);
+                    } else if (curChar == 0x21E) {
+                        digits[0] = 0;
+                        digits[1] = gSaveContext.minigameScore;
+
+                        while (digits[1] >= 10) {
+                            digits[0]++;
+                            digits[1] -= 10;
+                        }
+
+                        for (i = 0; i < 2; i++) {
+                            if ((i == 1) || (digits[i] != 0)) {
+                                Message_LoadChar(play, digits[i] + 0x824F, &charTexIdx, &spC0, decodedBufPos);
+                                decodedBufPos++;
+                            }
+                        }
+                        decodedBufPos--;
+                    } else if (curChar == 0x21F) {
+                        digits[0] = digits[1] = digits[2] = 0;
+                        digits[3] = gSaveContext.minigameScore;
+
+                        while (digits[3] >= 1000) {
+                            digits[0]++;
+                            digits[3] -= 1000;
+                        }
+                        while (digits[3] >= 100) {
+                            digits[1]++;
+                            digits[3] -= 100;
+                        }
+                        while (digits[3] >= 10) {
+                            digits[2]++;
+                            digits[3] -= 10;
+                        }
+
+                        loadChar = false;
+                        for (i = 0; i < 4; i++) {
+                            if ((i == 3) || (digits[i] != 0)) {
+                                loadChar = true;
+                            }
+                            if (loadChar) {
+                                Message_LoadChar(play, digits[i] + 0x824F, &charTexIdx, &spC0, decodedBufPos);
+                                decodedBufPos++;
+                            }
+                        }
+                        decodedBufPos--;
+                    } else if (curChar == 0x220) {
+                        decodedBufPos++;
+                        msgCtx->unk120BE = spD2;
+                        msgCtx->unk120C0 = decodedBufPos;
+                        msgCtx->unk120C2 = 0;
+                        msgCtx->bankRupeesSelected = 0;
+                        msgCtx->unk120C4 = charTexIdx;
+                        digits[0] = digits[1] = digits[2] = 0;
+                        for (i = 0; i < 2; i++) {
+                            Message_LoadChar(play, digits[i] + 0x824F, &charTexIdx, &spC0, decodedBufPos);
+                            decodedBufPos++;
+                        }
+                        func_8014CCB4(play, &decodedBufPos, &charTexIdx, &spC0);
+                    } else if (curChar == 0x221) {
+                        decodedBufPos++;
+                        msgCtx->unk120BE = spD2;
+                        msgCtx->unk120C0 = decodedBufPos;
+                        msgCtx->unk120C2 = 0;
+                        msgCtx->bankRupeesSelected = 0;
+                        msgCtx->unk120C4 = charTexIdx;
+
+                        for (i = 0; i < 5; i++) {
+                            msgCtx->unk12054[i] = 1;
+                            Message_LoadChar(play, 0x8250, &charTexIdx, &spC0, decodedBufPos);
+                            decodedBufPos++;
+                        }
+                        decodedBufPos--;
+                    } else if (curChar == 0x223) {
+                        if (gSaveContext.save.timeSpeedOffset == 0x12) {
+                            var_s3_8 = 0;
+                        } else if (gSaveContext.save.timeSpeedOffset == 0) {
+                            var_s3_8 = 1;
+                        } else {
+                            var_s3_8 = 2;
+                        }
+
+                        for (i = 0; i < 4; i++) {
+                            msgCtx->decodedBuffer.wchar[decodedBufPos] = D_801D0268[var_s3_8][i];
+                            Font_LoadChar(play, D_801D0268[var_s3_8][i], charTexIdx);
+                            decodedBufPos++;
+                            charTexIdx += FONT_CHAR_TEX_SIZE;
+                        }
+                        decodedBufPos--;
+                        spC0 += 3.0f * (16.0f * msgCtx->textCharScale);
+                        msgCtx->choiceIndex = var_s3_8;
+                    } else if (curChar == 0x224) {
+                        func_8014D62C(play, &charTexIdx, &spC0, &decodedBufPos);
+                    } else if (curChar == 0x225) {
+                        decodedBufPos++;
+                        msgCtx->unk120BE = spD2;
+                        msgCtx->unk120C0 = decodedBufPos;
+                        msgCtx->unk120C2 = 0;
+                        msgCtx->bankRupeesSelected = 0;
+                        msgCtx->unk120C4 = charTexIdx;
+
+                        for (i = 0; i < 3; i++) {
+                            msgCtx->unk12054[i] = 1;
+                            Font_LoadChar(play, 0x8250, charTexIdx);
+                            charTexIdx += FONT_CHAR_TEX_SIZE;
+                            msgCtx->decodedBuffer.wchar[decodedBufPos] = 0x8250;
+                            spC0 += 16.0f * msgCtx->textCharScale;
+                            decodedBufPos++;
+                        }
+                        decodedBufPos--;
+                    } else if (curChar == 0x226) {
+                        for (i = 0; i < 6; i++) {
+                            msgCtx->decodedBuffer.wchar[decodedBufPos] =
+                                D_801D027C[((void)0, gSaveContext.save.spiderHouseMaskOrder[i])];
+                            decodedBufPos++;
+                            Message_LoadChar(play, i + 0x8250, &charTexIdx, &spC0, decodedBufPos);
+                            decodedBufPos++;
+                        }
+                        msgCtx->decodedBuffer.wchar[decodedBufPos] = 0x2000;
+                    } else if ((curChar >= 0x227) && (curChar < 0x22B)) {
+                        digits[0] = digits[1] = 0;
+                        digits[2] = 15 - gSaveContext.save.inventory.strayFairies[curChar - 0x227];
+
+                        while (digits[2] >= 100) {
+                            digits[0]++;
+                            digits[2] -= 100;
+                        }
+                        while (digits[2] >= 10) {
+                            digits[1]++;
+                            digits[2] -= 10;
+                        }
+
+                        loadChar = false;
+                        for (i = 0; i < 3; i++) {
+                            if ((i == 2) || (digits[i] != 0)) {
+                                loadChar = true;
+                            }
+                            if (loadChar) {
+                                Font_LoadChar(play, digits[i] + 0x824F, charTexIdx);
+                                charTexIdx += FONT_CHAR_TEX_SIZE;
+                                msgCtx->decodedBuffer.wchar[decodedBufPos] = digits[i] + 0x824F;
+                                decodedBufPos++;
+                                spC0 += 16.0f * msgCtx->textCharScale;
+                            }
+                        }
+                        Message_LoadChar(play, 0x906C, &charTexIdx, &spC0, decodedBufPos);
+                    } else if (curChar == 0x22B) {
+                        digits[0] = digits[1] = digits[2] = 0;
+                        digits[3] = gSaveContext.minigameScore;
+
+                        while (digits[3] >= 1000) {
+                            digits[0]++;
+                            digits[3] -= 1000;
+                        }
+                        while (digits[3] >= 100) {
+                            digits[1]++;
+                            digits[3] -= 100;
+                        }
+                        while (digits[3] >= 10) {
+                            digits[2]++;
+                            digits[3] -= 10;
+                        }
+
+                        loadChar = false;
+                        for (i = 0; i < 4; i++) {
+                            if ((i == 3) || (digits[i] != 0)) {
+                                loadChar = true;
+                            }
+                            if (loadChar) {
+                                Font_LoadChar(play, digits[i] + 0x824F, charTexIdx);
+                                charTexIdx += FONT_CHAR_TEX_SIZE;
+                                msgCtx->decodedBuffer.wchar[decodedBufPos] = digits[i] + 0x824F;
+                                decodedBufPos++;
+                                spC0 += 16.0f * msgCtx->textCharScale;
+                            }
+                        }
+                        Message_LoadChar(play, 0x94AD, &charTexIdx, &spC0, decodedBufPos);
+                    } else if ((curChar == 0x22C) || (curChar == 0x22D)) {
+                        if (curChar == 0x22C) {
+                            digits[0] = gSaveContext.save.lotteryCodes[CURRENT_DAY - 1][0];
+                            digits[1] = gSaveContext.save.lotteryCodes[CURRENT_DAY - 1][1];
+                            digits[2] = gSaveContext.save.lotteryCodes[CURRENT_DAY - 1][2];
+                        } else {
+                            digits[0] = (((void)0, gSaveContext.save.lotteryCodeGuess) & 0xF00) >> 8;
+                            digits[1] = (((void)0, gSaveContext.save.lotteryCodeGuess) & 0xF0) >> 4;
+                            digits[2] = ((void)0, gSaveContext.save.lotteryCodeGuess) & 0xF;
+                        }
+                        for (i = 0; i < 3; i++) {
+                            Font_LoadChar(play, digits[i] + 0x824F, charTexIdx);
+                            charTexIdx += FONT_CHAR_TEX_SIZE;
+                            msgCtx->decodedBuffer.wchar[decodedBufPos] = digits[i] + 0x824F;
+                            decodedBufPos++;
+                            spC0 += 16.0f * msgCtx->textCharScale;
+                        }
+                        decodedBufPos--;
+                    } else if (curChar == 0x22E) {
+                        digits[0] = digits[1] = digits[2] = 0;
+                        digits[3] = gItemPrices[GET_CUR_FORM_BTN_ITEM(player->heldItemButton)];
+
+                        while (digits[3] >= 1000) {
+                            digits[0]++;
+                            digits[3] -= 1000;
+                        }
+                        while (digits[3] >= 100) {
+                            digits[1]++;
+                            digits[3] -= 100;
+                        }
+                        while (digits[3] >= 10) {
+                            digits[2]++;
+                            digits[3] -= 10;
+                        }
+
+                        loadChar = false;
+                        for (i = 0; i < 4; i++) {
+                            if ((i == 3) || (digits[i] != 0)) {
+                                loadChar = true;
+                            }
+                            if (loadChar) {
+                                Font_LoadChar(play, digits[i] + 0x824F, charTexIdx);
+                                charTexIdx += FONT_CHAR_TEX_SIZE;
+                                msgCtx->decodedBuffer.wchar[decodedBufPos] = digits[i] + 0x824F;
+                                decodedBufPos++;
+                                spC0 += 16.0f * msgCtx->textCharScale;
+                            }
+                        }
+                        func_8014CCB4(play, &decodedBufPos, &charTexIdx, &spC0);
+                    } else if (curChar == 0x22F) {
+                        for (i = 0; i < 5; i++) {
+                            digits[i] = gSaveContext.save.bomberCode[i];
+                            Font_LoadChar(play, digits[i] + 0x824F, charTexIdx);
+                            charTexIdx += FONT_CHAR_TEX_SIZE;
+                            msgCtx->decodedBuffer.wchar[decodedBufPos] = digits[i] + 0x824F;
+                            decodedBufPos++;
+                            spC0 += 16.0f * msgCtx->textCharScale;
+                        }
+                        decodedBufPos--;
+                    } else if ((curChar >= 0x231) && (curChar < 0x237)) {
+                        index = curChar - 0x231;
+                        msgCtx->decodedBuffer.wchar[decodedBufPos] =
+                            (u16)D_801D027C[((void)0, gSaveContext.save.spiderHouseMaskOrder[index])];
+                        decodedBufPos++;
+                        Message_LoadChar(play, D_801D0284[((void)0, gSaveContext.save.spiderHouseMaskOrder[index])],
+                                         &charTexIdx, &spC0, decodedBufPos);
+                        decodedBufPos++;
+                        msgCtx->decodedBuffer.wchar[decodedBufPos] = 0x2000;
+                    } else if (curChar == 0x237) {
+                        digits[0] = 0;
+                        digits[1] = TIME_TO_HOURS_F_ALT(TIME_UNTIL_MOON_CRASH);
+
+                        while (digits[1] >= 10) {
+                            digits[0]++;
+                            digits[1] -= 10;
+                        }
+
+                        loadChar = false;
+                        for (i = 0; i < 2; i++) {
+                            if ((i == 1) || (digits[i] != 0)) {
+                                loadChar = true;
+                            }
+                            if (loadChar) {
+                                Message_LoadChar(play, digits[i] + 0x824F, &charTexIdx, &spC0, decodedBufPos);
+                                decodedBufPos++;
+                            }
+                        }
+                        Font_LoadChar(play, 0x8E9E, charTexIdx);
+                        charTexIdx += FONT_CHAR_TEX_SIZE;
+                        msgCtx->decodedBuffer.wchar[decodedBufPos] = 0x8E9E;
+                        decodedBufPos++;
+                        Font_LoadChar(play, 0x8AD4, charTexIdx);
+                        charTexIdx += FONT_CHAR_TEX_SIZE;
+                        msgCtx->decodedBuffer.wchar[decodedBufPos] = 0x8E9E;
+                        spC0 += 2.0f * (16.0f * msgCtx->textCharScale);
+                    } else if (curChar == 0x238) {
+                        func_8014D304(play, curChar, &charTexIdx, &spC0, &decodedBufPos);
+                    } else if ((curChar == 0x300) || (curChar == 0x301) || (curChar == 0x302) || (curChar == 0x308)) {
+                        if (curChar == 0x308) {
+                            value = gSaveContext.save.unk_EE8;
+                        } else {
+                            value = (&gSaveContext.save.bankRupees)[curChar - 0x308];
+                        }
+                        if (curChar == 0x302) {
+                            if (((gSaveContext.save.linkAge != 0) ? 5 : 17) == 5) {
+                                value = value & 0x7F;
+                            } else {
+                                value =
+                                    (s16)((u32)((&gSaveContext.save.bankRupees)[font->msgBuf.wchar[msgCtx->msgBufPos]] &
+                                                0xFF000000) >>
+                                          0x18) &
+                                    0x7F;
+                            }
+                        }
+                        digits[3] = value;
+                        digits[0] = digits[1] = digits[2] = 0;
+
+                        while (digits[3] >= 1000) {
+                            digits[0]++;
+                            digits[3] -= 1000;
+                        }
+                        while (digits[3] >= 100) {
+                            digits[1]++;
+                            digits[3] -= 100;
+                        }
+                        while (digits[3] >= 10) {
+                            digits[2]++;
+                            digits[3] -= 10;
+                        }
+
+                        loadChar = false;
+                        for (i = 0; i < 4; i++) {
+                            if ((i == 3) || (digits[i] != 0)) {
+                                loadChar = true;
+                            }
+                            if (loadChar) {
+                                Font_LoadChar(play, digits[i] + 0x824F, charTexIdx);
+                                charTexIdx += FONT_CHAR_TEX_SIZE;
+                                msgCtx->decodedBuffer.wchar[decodedBufPos] = digits[i] + 0x824F;
+                                decodedBufPos++;
+                                spC0 += 16.0f * msgCtx->textCharScale;
+                            }
+                        }
+                        decodedBufPos--;
+                    } else if ((curChar == 0x307) || (curChar == 0x309) || (curChar == 0x30A) || (curChar == 0x30B) ||
+                               (curChar == 0x30C)) {
+                        var_fs0 = 8.0f;
+                        if (curChar == 0x307) {
+                            func_8014CDF0(((void)0, gSaveContext.save.unk_EE0), spAC);
+                        } else if (curChar == 0x309) {
+                            func_8014CDF0(((void)0, gSaveContext.save.horseBackBalloonHighScore), spAC);
+                        } else {
+                            func_8014CDF0(((void)0, gSaveContext.save.dekuPlaygroundHighScores[curChar - 0x30A]), spAC);
+                        }
+
+                        loadChar = false;
+                        for (i = 0; i < 8; i++) {
+                            switch (i) {
+                                case 2:
+                                case 5:
+                                    break;
+                                default:
+                                    if (spAC[i] == '0') {
+                                        break;
+                                    }
+                                    // fallthrough
+                                case 4:
+                                    loadChar = true;
+                                    break;
+                            }
+                            if (loadChar) {
+                                Font_LoadChar(play, spAC[i] + 0x824F, charTexIdx);
+                                charTexIdx += FONT_CHAR_TEX_SIZE;
+                                msgCtx->decodedBuffer.wchar[decodedBufPos] = spAC[i] + 0x824F;
+                                decodedBufPos++;
+                            } else {
+                                var_fs0 -= 1.0f;
+                            }
+                        }
+                        decodedBufPos--;
+                        spC0 += var_fs0 * (16.0f * msgCtx->textCharScale);
+                    } else if ((curChar == 0x303) || (curChar == 0x304) || (curChar == 0x305)) {
+                        digits[0] = digits[1] = digits[2] = 0;
+                        digits[3] = (&gSaveContext.save.unk_EE8)[curChar - 0x303];
+
+                        while (digits[3] >= 60) {
+                            digits[1]++;
+                            if (digits[1] >= 10) {
+                                digits[0]++;
+                                digits[1] -= 10;
+                            }
+                            digits[3] -= 60;
+                        }
+                        while (digits[3] >= 10) {
+                            digits[2]++;
+                            digits[3] -= 10;
+                        }
+
+                        for (i = 0; i < 4; i++) {
+                            Font_LoadChar(play, digits[i] + 0x824F, charTexIdx);
+                            charTexIdx += FONT_CHAR_TEX_SIZE;
+                            msgCtx->decodedBuffer.wchar[decodedBufPos] = digits[i] + 0x824F;
+                            decodedBufPos++;
+                            if (i == 1) {
+                                Font_LoadChar(play, 0x95AA, charTexIdx);
+                                charTexIdx += FONT_CHAR_TEX_SIZE;
+                                msgCtx->decodedBuffer.wchar[decodedBufPos] = 0x95AA;
+                                decodedBufPos++;
+                            } else if (i == 3) {
+                                Font_LoadChar(play, 0x9562, charTexIdx);
+                                charTexIdx += FONT_CHAR_TEX_SIZE;
+                                msgCtx->decodedBuffer.wchar[decodedBufPos] = 0x9562;
+                            }
+                        }
+                        spC0 += 4.0f * (16.0f * msgCtx->textCharScale);
+                    } else if (curChar == 0x306) {
+                        digits[0] = digits[1] = digits[2] = 0;
+                        digits[3] = gSaveContext.save.shootingGalleryHighScores;
+
+                        while (digits[3] >= 1000) {
+                            digits[0]++;
+                            digits[3] -= 1000;
+                        }
+                        while (digits[3] >= 100) {
+                            digits[1]++;
+                            digits[3] -= 100;
+                        }
+                        while (digits[3] >= 10) {
+                            digits[2]++;
+                            digits[3] -= 10;
+                        }
+
+                        loadChar = false;
+                        for (i = 0; i < 4; i++) {
+                            if ((i == 3) || (digits[i] != 0)) {
+                                loadChar = true;
+                            }
+                            if (loadChar) {
+                                Font_LoadChar(play, digits[i] + 0x824F, charTexIdx);
+                                charTexIdx += FONT_CHAR_TEX_SIZE;
+                                msgCtx->decodedBuffer.wchar[decodedBufPos] = digits[i] + 0x824F;
+                                decodedBufPos++;
+                                spC0 += 16.0f * msgCtx->textCharScale;
+                            }
+                        }
+                        Message_LoadChar(play, 0x9543, &charTexIdx, &spC0, decodedBufPos);
+                    } else {
+                        if ((curChar == 0x30D) || (curChar == 0x30E) || (curChar == 0x30F)) {
+                            index = curChar - 0x30D;
+
+                            for (var_a2_2 = 8; var_a2_2 > 0; var_a2_2--) {
+                                if (gSaveContext.save.inventory.dekuPlaygroundPlayerName[index][var_a2_2 - 1] != 0x3E) {
+                                    break;
+                                }
+                            }
+
+                            for (i = 0; i < var_a2_2; i++) {
+                                msgCtx->decodedBuffer.wchar[decodedBufPos + i] = 0x30D;
+
+                                for (var_v0 = 0; var_v0 < 0x80; var_v0 += 4) {
+                                    font->charBuf[font->unk_11D88][charTexIdx + var_v0 + 0] =
+                                        font->fontBuf[gSaveContext.save.inventory.dekuPlaygroundPlayerName[index][i] +
+                                                      var_v0 + 0];
+                                    font->charBuf[font->unk_11D88][charTexIdx + var_v0 + 1] =
+                                        font->fontBuf[gSaveContext.save.inventory.dekuPlaygroundPlayerName[index][i] +
+                                                      var_v0 + 1];
+                                    font->charBuf[font->unk_11D88][charTexIdx + var_v0 + 2] =
+                                        font->fontBuf[gSaveContext.save.inventory.dekuPlaygroundPlayerName[index][i] +
+                                                      var_v0 + 2];
+                                    font->charBuf[font->unk_11D88][charTexIdx + var_v0 + 3] =
+                                        font->fontBuf[gSaveContext.save.inventory.dekuPlaygroundPlayerName[index][i] +
+                                                      var_v0 + 3];
+                                }
+                                charTexIdx += FONT_CHAR_TEX_SIZE;
+                            }
+                            decodedBufPos = (decodedBufPos + var_a2_2) - 1;
+                            spC0 = spC0 + ((f32)var_a2_2 * (16.0f * msgCtx->textCharScale));
+                        } else if (curChar == 0x310) {
+                            digits[0] = digits[1] = digits[2] = 0;
+                            digits[3] = (gSaveContext.save.unk_EE8 & 0xFFFF0000) >> 0x10;
+
+                            while (digits[3] >= 1000) {
+                                digits[0]++;
+                                digits[3] -= 1000;
+                            }
+                            while (digits[3] >= 100) {
+                                digits[1]++;
+                                digits[3] -= 100;
+                            }
+                            while (digits[3] >= 10) {
+                                digits[2]++;
+                                digits[3] -= 10;
+                            }
+
+                            loadChar = false;
+                            for (i = 0; i < 4; i++) {
+                                if ((i == 3) || (digits[i] != 0)) {
+                                    loadChar = true;
+                                }
+                                if (loadChar) {
+                                    Font_LoadChar(play, digits[i] + 0x824F, charTexIdx);
+                                    charTexIdx += FONT_CHAR_TEX_SIZE;
+                                    msgCtx->decodedBuffer.wchar[decodedBufPos] = digits[i] + 0x824F;
+                                    decodedBufPos++;
+                                    spC0 += 16.0f * msgCtx->textCharScale;
+                                }
+                            }
+                            Message_LoadChar(play, 0x94AD, &charTexIdx, &spC0, decodedBufPos);
+                        } else if (curChar == 0x1F) {
+                            decodedBufPos--;
+                            for (i = 0; i < font->msgBuf.wchar[msgCtx->msgBufPos + 1]; i++) {
+                                msgCtx->decodedBuffer.wchar[++decodedBufPos] = ' ';
+                                spC0 += 6.0f;
+                            }
+                            msgCtx->msgBufPos++;
+                        } else if ((curChar == 0xC) || (curChar == 0xA)) {
+                            msgCtx->unk11F1A[spD2] = 0;
+                            if (msgCtx->unk11F18 == 0) {
+                                msgCtx->unk11F1A[spD2] =
+                                    (s16)(s32)(((msgCtx->textCharScale * 16.0f * 16.0f) - spC0) * 0.5f);
+                            }
+                            spD2++;
+                            spC0 = 0.0f;
+                            if (curChar == 0xA) {
+                                spE0++;
+                            }
+                        } else if ((curChar == 0x101) || (curChar == 0x102) || (curChar == 0x104) ||
+                                   ((curChar >= 0x130) && (curChar < 0x137))) {
+
+                        } else if (curChar == 0x111) {
+                            msgCtx->textFade = true;
+                            msgCtx->decodedBuffer.wchar[++decodedBufPos] = font->msgBuf.wchar[++msgCtx->msgBufPos];
+                        } else if (curChar == 0x120) {
+                            msgCtx->decodedBuffer.wchar[++decodedBufPos] = font->msgBuf.wchar[++msgCtx->msgBufPos];
+                            if (msgCtx->textboxSkipped || (msgCtx->textBoxType == 1) || (msgCtx->textBoxType == 3) ||
+                                (msgCtx->textBoxType == 6) || (msgCtx->textBoxType == 8) ||
+                                (msgCtx->textBoxType == 9) || (msgCtx->textBoxType == 0xB) || (msgCtx->unk11F0C == 3)) {
+                                play_sound(msgCtx->decodedBuffer.wchar[decodedBufPos]);
+                            }
+                        } else if (curChar == 0x128) {
+                            msgCtx->decodedBuffer.wchar[++decodedBufPos] = font->msgBuf.wchar[++msgCtx->msgBufPos];
+                        } else if ((curChar != 0x20) && ((curChar < 0x2000) || (curChar >= 0x2009))) {
+                            sp7C = (s32)curChar;
+                            Font_LoadChar(play, curChar, charTexIdx);
+                            charTexIdx += FONT_CHAR_TEX_SIZE;
+                            if ((curChar == 0x8169) || (curChar == 0x8175)) {
+                                spC0 += 10.0f * msgCtx->textCharScale;
+                            } else {
+                                if (curChar == 0x8145) {
+                                    spC0 = spC0 + (12.0f * msgCtx->textCharScale);
+                                }
+                                if ((curChar == 0x8148) || (curChar == 0x8149)) {
+                                    spC0 += 14.0f * msgCtx->textCharScale;
+                                } else if (curChar == 0x8144) {
+                                    spC0 += 8.0f * msgCtx->textCharScale;
+                                } else if ((curChar == 0x816A) || (curChar == 0x8176)) {
+                                    spC0 += 10.0f * msgCtx->textCharScale;
+                                } else if ((curChar == 0x8141) || (curChar == 0x8142) || (curChar == 0x8168)) {
+                                    spC0 += 12.0f * msgCtx->textCharScale;
+                                } else {
+                                    if (curChar == 0x8194) {
+                                        spC0 = spC0 + (14.0f * msgCtx->textCharScale);
+                                    }
+                                    spC0 += 16.0f * msgCtx->textCharScale;
+                                }
+                            }
+                        } else {
+                            if (curChar == 0x20) {
+                                spC0 = spC0 + 6.0f;
+                            }
+                        }
+                    }
+                }
+
+                decodedBufPos++;
+                msgCtx->msgBufPos++;
+            }
+        }
+    } else if (play->msgCtx.textIsCredits) {
+        Message_DecodeCredits(play);
+    } else {
+        Message_DecodeNES(play);
+    }
+}
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/Message_Decode.s")
+#endif
 
 void func_80150A84(PlayState* play) {
     MessageContext* msgCtx = &play->msgCtx;

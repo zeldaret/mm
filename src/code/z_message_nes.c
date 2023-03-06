@@ -1510,6 +1510,7 @@ void Message_DecodeNES(PlayState* play) {
             msgCtx->bankRupeesSelected = 0;
             msgCtx->unk120C4 = charTexIdx;
             digits[0] = digits[1] = digits[2] = 0;
+
             for (i = 0; i < 3; i++) {
                 Message_LoadCharNES(play, digits[i] + '0', &charTexIdx, &spA4, decodedBufPos);
                 decodedBufPos++;
@@ -1757,6 +1758,7 @@ void Message_DecodeNES(PlayState* play) {
             msgCtx->unk120C2 = 0;
             msgCtx->bankRupeesSelected = 0;
             msgCtx->unk120C4 = charTexIdx;
+
             for (i = 0; i < 3; i++) {
                 msgCtx->unk12054[i] = 1;
                 Font_LoadCharNES(play, '1', charTexIdx);
