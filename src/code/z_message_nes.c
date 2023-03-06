@@ -261,7 +261,7 @@ void Message_LoadPluralRupeesNES(PlayState* play, s16* decodedBufPos, s32* offse
     s32 o = *offset;
     f32 f = *arg3;
 
-    msgCtx->decodedBuffer.schar[p] = 0x20;
+    msgCtx->decodedBuffer.schar[p] = ' ';
     p++;
     Font_LoadCharNES(play, 'R', o);
     o += FONT_CHAR_TEX_SIZE;
@@ -1408,11 +1408,11 @@ void Message_DecodeNES(PlayState* play) {
 
             loadChar = false;
             for (i = 0; i < 5; i++) {
-                if ((i == 1) || (spA8[i + 3] != 0x30)) {
+                if ((i == 1) || (spA8[i + 3] != '0')) {
                     loadChar = true;
                 }
                 if (loadChar) {
-                    Message_LoadCharNES(play, spA8[i + 4], &charTexIdx, &spA4, decodedBufPos);
+                    Message_LoadCharNES(play, spA8[i + 3], &charTexIdx, &spA4, decodedBufPos);
                     decodedBufPos++;
                 }
             }
@@ -1428,7 +1428,7 @@ void Message_DecodeNES(PlayState* play) {
                     case 5:
                         break;
                     default:
-                        if (spA8[i] != 0x30) {
+                        if (spA8[i] != '0') {
                             case 4:
                                 loadChar = true;
                         }
@@ -1463,7 +1463,7 @@ void Message_DecodeNES(PlayState* play) {
                 msgCtx->decodedBuffer.schar[decodedBufPos] = digits[i] + '0';
                 decodedBufPos++;
                 if (i == 1) {
-                    Font_LoadCharNES(play, 0x22, charTexIdx);
+                    Font_LoadCharNES(play, '"', charTexIdx);
                     charTexIdx += FONT_CHAR_TEX_SIZE;
                     msgCtx->decodedBuffer.schar[decodedBufPos] = 0x22;
                     decodedBufPos++;
@@ -1598,20 +1598,20 @@ void Message_DecodeNES(PlayState* play) {
             }
 
             if ((gSaveContext.save.inventory.strayFairies[(void)0, gSaveContext.dungeonIndex] == 1) ||
-                (gSaveContext.save.inventory.strayFairies[(void)0, gSaveContext.dungeonIndex] == 0x15)) {
-                Message_LoadCharNES(play, 0x73, &charTexIdx, &spA4, decodedBufPos);
-                Message_LoadCharNES(play, 0x74, &charTexIdx, &spA4, ++decodedBufPos);
+                (gSaveContext.save.inventory.strayFairies[(void)0, gSaveContext.dungeonIndex] == 21)) {
+                Message_LoadCharNES(play, 's', &charTexIdx, &spA4, decodedBufPos);
+                Message_LoadCharNES(play, 't', &charTexIdx, &spA4, ++decodedBufPos);
             } else if ((gSaveContext.save.inventory.strayFairies[(void)0, gSaveContext.dungeonIndex] == 2) ||
-                       (gSaveContext.save.inventory.strayFairies[(void)0, gSaveContext.dungeonIndex] == 0x16)) {
-                Message_LoadCharNES(play, 0x6E, &charTexIdx, &spA4, decodedBufPos);
-                Message_LoadCharNES(play, 0x64, &charTexIdx, &spA4, ++decodedBufPos);
+                       (gSaveContext.save.inventory.strayFairies[(void)0, gSaveContext.dungeonIndex] == 22)) {
+                Message_LoadCharNES(play, 'n', &charTexIdx, &spA4, decodedBufPos);
+                Message_LoadCharNES(play, 'd', &charTexIdx, &spA4, ++decodedBufPos);
             } else if ((gSaveContext.save.inventory.strayFairies[(void)0, gSaveContext.dungeonIndex] == 3) ||
-                       (gSaveContext.save.inventory.strayFairies[(void)0, gSaveContext.dungeonIndex] == 0x17)) {
-                Message_LoadCharNES(play, 0x72, &charTexIdx, &spA4, decodedBufPos);
-                Message_LoadCharNES(play, 0x64, &charTexIdx, &spA4, ++decodedBufPos);
+                       (gSaveContext.save.inventory.strayFairies[(void)0, gSaveContext.dungeonIndex] == 23)) {
+                Message_LoadCharNES(play, 'r', &charTexIdx, &spA4, decodedBufPos);
+                Message_LoadCharNES(play, 'd', &charTexIdx, &spA4, ++decodedBufPos);
             } else {
-                Message_LoadCharNES(play, 0x74, &charTexIdx, &spA4, decodedBufPos);
-                Message_LoadCharNES(play, 0x68, &charTexIdx, &spA4, ++decodedBufPos);
+                Message_LoadCharNES(play, 't', &charTexIdx, &spA4, decodedBufPos);
+                Message_LoadCharNES(play, 'h', &charTexIdx, &spA4, ++decodedBufPos);
             }
         } else if (curChar == 0xD) {
             digits[0] = digits[1] = 0;
@@ -1639,19 +1639,19 @@ void Message_DecodeNES(PlayState* play) {
 
             if ((Inventory_GetSkullTokenCount(play->sceneId) == 1) ||
                 (Inventory_GetSkullTokenCount(play->sceneId) == 21)) {
-                Message_LoadCharNES(play, 0x73, &charTexIdx, &spA4, decodedBufPos);
-                Message_LoadCharNES(play, 0x74, &charTexIdx, &spA4, ++decodedBufPos);
+                Message_LoadCharNES(play, 's', &charTexIdx, &spA4, decodedBufPos);
+                Message_LoadCharNES(play, 't', &charTexIdx, &spA4, ++decodedBufPos);
             } else if ((Inventory_GetSkullTokenCount(play->sceneId) == 2) ||
                        (Inventory_GetSkullTokenCount(play->sceneId) == 22)) {
-                Message_LoadCharNES(play, 0x6E, &charTexIdx, &spA4, decodedBufPos);
-                Message_LoadCharNES(play, 0x64, &charTexIdx, &spA4, ++decodedBufPos);
+                Message_LoadCharNES(play, 'n', &charTexIdx, &spA4, decodedBufPos);
+                Message_LoadCharNES(play, 'd', &charTexIdx, &spA4, ++decodedBufPos);
             } else if ((Inventory_GetSkullTokenCount(play->sceneId) == 3) ||
                        (Inventory_GetSkullTokenCount(play->sceneId) == 23)) {
-                Message_LoadCharNES(play, 0x72, &charTexIdx, &spA4, decodedBufPos);
-                Message_LoadCharNES(play, 0x64, &charTexIdx, &spA4, ++decodedBufPos);
+                Message_LoadCharNES(play, 'r', &charTexIdx, &spA4, decodedBufPos);
+                Message_LoadCharNES(play, 'd', &charTexIdx, &spA4, ++decodedBufPos);
             } else {
-                Message_LoadCharNES(play, 0x74, &charTexIdx, &spA4, decodedBufPos);
-                Message_LoadCharNES(play, 0x68, &charTexIdx, &spA4, ++decodedBufPos);
+                Message_LoadCharNES(play, 't', &charTexIdx, &spA4, decodedBufPos);
+                Message_LoadCharNES(play, 'h', &charTexIdx, &spA4, ++decodedBufPos);
             }
         } else if (curChar == 0xE) {
             digits[0] = 0;
@@ -1721,12 +1721,12 @@ void Message_DecodeNES(PlayState* play) {
 
             for (i = 0; i < 5; i++) {
                 msgCtx->unk12054[i] = 1;
-                Message_LoadCharNES(play, 0x31U, &charTexIdx, &spA4, decodedBufPos);
+                Message_LoadCharNES(play, '1', &charTexIdx, &spA4, decodedBufPos);
                 decodedBufPos++;
             }
             decodedBufPos--;
         } else if (curChar == 0xD3) {
-            if (gSaveContext.save.timeSpeedOffset == 0x12) {
+            if (gSaveContext.save.timeSpeedOffset == 18) {
                 var_s2_9 = 0;
             } else if (gSaveContext.save.timeSpeedOffset == 0) {
                 var_s2_9 = 1;
@@ -1754,9 +1754,9 @@ void Message_DecodeNES(PlayState* play) {
             msgCtx->unk120C4 = charTexIdx;
             for (i = 0; i < 3; i++) {
                 msgCtx->unk12054[i] = 1;
-                Font_LoadCharNES(play, 0x31U, charTexIdx);
+                Font_LoadCharNES(play, '1', charTexIdx);
                 charTexIdx += FONT_CHAR_TEX_SIZE;
-                msgCtx->decodedBuffer.schar[decodedBufPos] = 0x31;
+                msgCtx->decodedBuffer.schar[decodedBufPos] = '1';
                 decodedBufPos++;
                 spA4 += 16.0f * msgCtx->textCharScale;
             }
@@ -1764,7 +1764,7 @@ void Message_DecodeNES(PlayState* play) {
         } else if (curChar == 0xD6) {
             for (i = 0; i < 6; i++) {
                 msgCtx->decodedBuffer.schar[decodedBufPos] = (s8)D_801D08E4[gSaveContext.save.spiderHouseMaskOrder[i]];
-                Message_LoadCharNES(play, (i + 0x31) & 0xFF, &charTexIdx, &spA4, ++decodedBufPos);
+                Message_LoadCharNES(play, i + '1', &charTexIdx, &spA4, ++decodedBufPos);
                 decodedBufPos++;
             }
             msgCtx->decodedBuffer.schar[decodedBufPos] = 0;
@@ -1901,12 +1901,7 @@ void Message_DecodeNES(PlayState* play) {
             msgCtx->decodedBuffer.schar[decodedBufPos] = 0;
         } else if (curChar == 0xE7) {
             digits[0] = 0;
-
-            digits[1] = (s32)(
-                ((f32)((-(((s32)gSaveContext.save.day % 5) << 0x10) - ((gSaveContext.save.time - 0x4000) & 0xFFFF)) +
-                       0x40000) *
-                 0.021972656f) /
-                60.0f);
+            digits[1] = TIME_TO_HOURS_F_ALT(TIME_UNTIL_MOON_CRASH);
 
             while (digits[1] >= 10) {
                 digits[0]++;
@@ -1916,23 +1911,23 @@ void Message_DecodeNES(PlayState* play) {
             loadChar = false;
             for (i = 0; i < 2; i++) {
                 if ((i == 1) || (digits[i] != 0)) {
-                    loadChar = 1;
+                    loadChar = true;
                 }
-                if (loadChar != 0) {
+                if (loadChar) {
                     Message_LoadCharNES(play, digits[i] + '0', &charTexIdx, &spA4, decodedBufPos);
                     decodedBufPos++;
                 }
             }
-            msgCtx->decodedBuffer.schar[decodedBufPos] = 0x20;
-            Message_LoadCharNES(play, 0x68, &charTexIdx, &spA4, ++decodedBufPos);
-            Message_LoadCharNES(play, 0x6F, &charTexIdx, &spA4, ++decodedBufPos);
-            Message_LoadCharNES(play, 0x75, &charTexIdx, &spA4, ++decodedBufPos);
-            Message_LoadCharNES(play, 0x72, &charTexIdx, &spA4, ++decodedBufPos);
+            msgCtx->decodedBuffer.schar[decodedBufPos] = ' ';
+            Message_LoadCharNES(play, 'h', &charTexIdx, &spA4, ++decodedBufPos);
+            Message_LoadCharNES(play, 'o', &charTexIdx, &spA4, ++decodedBufPos);
+            Message_LoadCharNES(play, 'u', &charTexIdx, &spA4, ++decodedBufPos);
+            Message_LoadCharNES(play, 'r', &charTexIdx, &spA4, ++decodedBufPos);
             if ((digits[0] != 0) || (digits[1] != 1)) {
-                Message_LoadCharNES(play, 0x73, &charTexIdx, &spA4, ++decodedBufPos);
+                Message_LoadCharNES(play, 's', &charTexIdx, &spA4, ++decodedBufPos);
             }
         } else if (curChar == 0xE8) {
-            Message_LoadTimeNES(play, curChar & 0xFF, &charTexIdx, &spA4, &decodedBufPos);
+            Message_LoadTimeNES(play, curChar, &charTexIdx, &spA4, &decodedBufPos);
 
         } else if ((curChar == 0xF0) || (curChar == 0xF1) || (curChar == 0xF2) || (curChar == 0xF8)) {
             if (curChar == 0xF8) {
@@ -1998,9 +1993,9 @@ void Message_DecodeNES(PlayState* play) {
                     case 5:
                         break;
                     default:
-                        if (spA8[i] != 0) {
+                        if (spA8[i] != '\0') {
                             case 4:
-                                loadChar = 1;
+                                loadChar = true;
                         }
                         break;
                 }
@@ -2108,7 +2103,7 @@ void Message_DecodeNES(PlayState* play) {
             spA4 += (f32)var_s0_3 * (16.0f * msgCtx->textCharScale);
         } else if (curChar == 0xB) {
             digits[0] = digits[1] = digits[2] = 0;
-            digits[3] = (s16)((u32)(gSaveContext.save.unk_EE8 & 0xFFFF0000) >> 0x10);
+            digits[3] = (gSaveContext.save.unk_EE8 & 0xFFFF0000) >> 0x10;
 
             while (digits[3] >= 1000) {
                 digits[0]++;
@@ -2140,14 +2135,14 @@ void Message_DecodeNES(PlayState* play) {
         } else if (curChar == 0x14) {
             decodedBufPos--;
             for (i = 0; i < font->msgBuf.schar[msgCtx->msgBufPos + 1]; i++) {
-                msgCtx->decodedBuffer.schar[++decodedBufPos] = 0x20;
+                msgCtx->decodedBuffer.schar[++decodedBufPos] = ' ';
                 spA4 += 6.0f;
             }
             msgCtx->msgBufPos++;
         } else if ((curChar == 0x13) || (curChar == 0x11)) {
             msgCtx->unk11F1A[spC6] = 0;
             if (msgCtx->unk11F18 != 0) {
-                msgCtx->unk11F1A[spC6] = (s16)(s32)(((msgCtx->textCharScale * 16.0f * 16.0f) - spA4) * 0.5f);
+                msgCtx->unk11F1A[spC6] = ((msgCtx->textCharScale * 16.0f * 16.0f) - spA4) * 0.5f;
             }
             spC6++;
             spA4 = 0.0f;
@@ -2174,7 +2169,7 @@ void Message_DecodeNES(PlayState* play) {
         } else if (curChar == 0x1F) {
             msgCtx->decodedBuffer.schar[++decodedBufPos] = font->msgBuf.schar[++msgCtx->msgBufPos];
             msgCtx->decodedBuffer.schar[++decodedBufPos] = font->msgBuf.schar[++msgCtx->msgBufPos];
-        } else if ((curChar != 0x20) && ((s32)curChar >= 9)) {
+        } else if ((curChar != 0x20) && (curChar >= 9)) {
             Font_LoadCharNES(play, curChar, charTexIdx);
             charTexIdx += FONT_CHAR_TEX_SIZE;
             D_801D0470[curChar - ' '] * msgCtx->textCharScale;
