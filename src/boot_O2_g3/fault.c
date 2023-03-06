@@ -4,15 +4,15 @@
 #include "global.h"
 #include "vt.h"
 
-extern FaultMgr* sFaultContext;
+// bss
+extern FaultMgr* sFaultInstance;
 extern f32 D_8009BE54;
-extern u32 faultCustomOptions;
-extern u32 faultCopyToLog;
+// extern u32 faultCustomOptions;
+// extern u32 faultCopyToLog;
 extern u8 sFaultStack[0x600];
 extern StackEntry sFaultThreadInfo;
 extern FaultMgr gFaultMgr;
 
-// data
 const char* sCpuExceptions[] = {
     "Interrupt",
     "TLB modification",
@@ -61,7 +61,7 @@ void Fault_AddClient(FaultClient* client, void* callback, void* arg0, void* arg1
 
     // Ensure the client is not already registered
     {
-        FaultClient* iter = sFaultContext->clients;
+        FaultClient* iter = sFaultInstance->clients;
 
         while (iter != NULL) {
             if (iter == client) {
@@ -75,8 +75,8 @@ void Fault_AddClient(FaultClient* client, void* callback, void* arg0, void* arg1
     client->callback = callback;
     client->arg0 = arg0;
     client->arg1 = arg1;
-    client->next = sFaultContext->clients;
-    sFaultContext->clients = client;
+    client->next = sFaultInstance->clients;
+    sFaultInstance->clients = client;
 
 end:
     osSetIntMask(mask);
@@ -90,7 +90,7 @@ end:
  * Removes a fault client so that the page is no longer displayed if a crash occurs.
  */
 void Fault_RemoveClient(FaultClient* client) {
-    FaultClient* iter = sFaultContext->clients;
+    FaultClient* iter = sFaultInstance->clients;
     FaultClient* lastIter = NULL;
     OSIntMask mask;
     u32 listIsEmpty = false;
@@ -102,9 +102,9 @@ void Fault_RemoveClient(FaultClient* client) {
             if (lastIter != NULL) {
                 lastIter->next = client->next;
             } else {
-                sFaultContext->clients = client;
-                if (sFaultContext->clients) {
-                    sFaultContext->clients = client->next;
+                sFaultInstance->clients = client;
+                if (sFaultInstance->clients) {
+                    sFaultInstance->clients = client->next;
                 } else {
                     listIsEmpty = 1;
                 }
@@ -141,7 +141,7 @@ void Fault_AddAddrConvClient(FaultAddrConvClient* client, void* callback, void* 
     mask = osSetIntMask(1);
 
     {
-        FaultAddrConvClient* iter = sFaultContext->addrConvClients;
+        FaultAddrConvClient* iter = sFaultInstance->addrConvClients;
 
         while (iter != NULL) {
             if (iter == client) {
@@ -154,8 +154,8 @@ void Fault_AddAddrConvClient(FaultAddrConvClient* client, void* callback, void* 
 
     client->callback = callback;
     client->arg = arg;
-    client->next = sFaultContext->addrConvClients;
-    sFaultContext->addrConvClients = client;
+    client->next = sFaultInstance->addrConvClients;
+    sFaultInstance->addrConvClients = client;
 
 end:
     osSetIntMask(mask);
@@ -166,7 +166,7 @@ end:
 }
 
 void Fault_RemoveAddrConvClient(FaultAddrConvClient* client) {
-    FaultAddrConvClient* iter = sFaultContext->addrConvClients;
+    FaultAddrConvClient* iter = sFaultInstance->addrConvClients;
     FaultAddrConvClient* lastIter = NULL;
     OSIntMask mask;
     u32 listIsEmpty = false;
@@ -178,9 +178,9 @@ void Fault_RemoveAddrConvClient(FaultAddrConvClient* client) {
             if (lastIter != NULL) {
                 lastIter->next = client->next;
             } else {
-                sFaultContext->addrConvClients = client;
-                if (sFaultContext->addrConvClients) {
-                    sFaultContext->addrConvClients = client->next;
+                sFaultInstance->addrConvClients = client;
+                if (sFaultInstance->addrConvClients) {
+                    sFaultInstance->addrConvClients = client->next;
                 } else {
                     listIsEmpty = 1;
                 }
@@ -206,7 +206,7 @@ void Fault_RemoveAddrConvClient(FaultAddrConvClient* client) {
  */
 uintptr_t Fault_ConvertAddress(uintptr_t addr) {
     uintptr_t ret;
-    FaultAddrConvClient* iter = sFaultContext->addrConvClients;
+    FaultAddrConvClient* iter = sFaultInstance->addrConvClients;
 
     while (iter != NULL) {
         if (iter->callback != NULL) {
@@ -230,7 +230,7 @@ void Fault_PadCallback(Input* input) {
 }
 
 void Fault_UpdatePadImpl(void) {
-    sFaultContext->padCallback(sFaultContext->padInput);
+    sFaultInstance->padCallback(sFaultInstance->padInput);
 }
 
 /**
@@ -243,7 +243,7 @@ void Fault_UpdatePadImpl(void) {
  * DPad-Left continues and returns false
  */
 u32 Fault_WaitForInputImpl(void) {
-    Input* curInput = &sFaultContext->padInput[0];
+    Input* curInput = &sFaultInstance->padInput[0];
     s32 count = 600;
     u32 pressedBtn;
 
@@ -254,10 +254,10 @@ u32 Fault_WaitForInputImpl(void) {
         pressedBtn = curInput->press.button;
 
         if (pressedBtn == BTN_L) {
-            sFaultContext->autoScroll = !sFaultContext->autoScroll;
+            sFaultInstance->autoScroll = !sFaultInstance->autoScroll;
         }
 
-        if (sFaultContext->autoScroll) {
+        if (sFaultInstance->autoScroll) {
             if (count-- < 1) {
                 return false;
             }
@@ -505,7 +505,7 @@ void Fault_Wait5Seconds(void) {
         Fault_Sleep(1000 / 60);
     } while ((osGetTime() - start) < OS_SEC_TO_CYCLES(5) + 1);
 
-    sFaultContext->autoScroll = true;
+    sFaultInstance->autoScroll = true;
 }
 
 /**
@@ -514,7 +514,7 @@ void Fault_Wait5Seconds(void) {
  * (DPad-Left & L & R & C-Right)
  */
 void Fault_WaitForButtonCombo(void) {
-    Input* input = &sFaultContext->padInput[0];
+    Input* input = &sFaultInstance->padInput[0];
 
     FaultDrawer_SetForeColor(GPACK_RGBA5551(255, 255, 255, 1));
     FaultDrawer_SetBackColor(GPACK_RGBA5551(0, 0, 0, 1));
@@ -585,7 +585,7 @@ void Fault_DrawMemDumpContents(const char* title, uintptr_t addr, u32 param_3) {
 void Fault_DrawMemDump(uintptr_t pc, uintptr_t sp, uintptr_t cLeftJump, uintptr_t cRightJump) {
     s32 scrollCountdown;
     s32 off;
-    Input* input = &sFaultContext->padInput[0];
+    Input* input = &sFaultInstance->padInput[0];
     uintptr_t addr = pc;
 
     do {
@@ -604,7 +604,7 @@ void Fault_DrawMemDump(uintptr_t pc, uintptr_t sp, uintptr_t cLeftJump, uintptr_
         Fault_DrawMemDumpContents("Dump", addr, 0);
 
         scrollCountdown = 600;
-        while (sFaultContext->autoScroll) {
+        while (sFaultInstance->autoScroll) {
             // Count down until it's time to move on to the next page
             if (scrollCountdown == 0) {
                 return;
@@ -616,7 +616,7 @@ void Fault_DrawMemDump(uintptr_t pc, uintptr_t sp, uintptr_t cLeftJump, uintptr_
             Fault_UpdatePadImpl();
 
             if (CHECK_BTN_ALL(input->press.button, BTN_L)) {
-                sFaultContext->autoScroll = false;
+                sFaultInstance->autoScroll = false;
             }
         }
 
@@ -662,146 +662,191 @@ void Fault_DrawMemDump(uintptr_t pc, uintptr_t sp, uintptr_t cLeftJump, uintptr_
     } while (!CHECK_BTN_ALL(input->press.button, BTN_L));
 
     // Resume auto-scroll and move to next page
-    sFaultContext->autoScroll = true;
+    sFaultInstance->autoScroll = true;
 }
 
-void Fault_FindNextStackCall(uintptr_t* spPtr, uintptr_t* pcPtr, uintptr_t* raPtr) {
+/**
+ * Searches a single function's stack frame for the function it was called from.
+ * There are two cases that must be covered: Leaf and non-leaf functions.
+ *
+ * A leaf function is one that does not call any other function, in this case the
+ * return address need not be saved to the stack. Since a leaf function does not
+ * call other functions, only the function the stack trace begins in could possibly
+ * be a leaf function, in which case the return address is in the thread context's
+ * $ra already, as it never left.
+ *
+ * The procedure is therefore
+ *  - Iterate instructions
+ *  - Once jr $ra is found, set pc to $ra
+ *  - Done after delay slot
+ *
+ * A non-leaf function calls other functions, it is necessary for the return address
+ * to be saved to the stack. In these functions, it is important to keep track of the
+ * stack frame size of each function.
+ *
+ * The procedure is therefore
+ *  - Iterate instructions
+ *  - If lw $ra <imm>($sp) is found, fetch the saved $ra from stack memory
+ *  - If addiu $sp, $sp, <imm> is found, modify $sp by the immediate value
+ *  - If jr $ra is found, set pc to $ra
+ *  - Done after delay slot
+ *
+ * Note that searching for one jr $ra is sufficient, as only leaf functions can have
+ * multiple jr $ra in the same function.
+ *
+ * There is also additional handling for eret and j. Neither of these instructions
+ * appear in IDO compiled C, however do show up in the exception handler. It is not
+ * possible to backtrace through an eret as an interrupt can occur at any time, so
+ * there is no choice but to give up here. For j instructions, they can be followed
+ * and the backtrace may continue as normal.
+ */
+void Fault_WalkStack(uintptr_t* spPtr, uintptr_t* pcPtr, uintptr_t* raPtr) {
     uintptr_t sp = *spPtr;
     uintptr_t pc = *pcPtr;
     uintptr_t ra = *raPtr;
-    u32 lastOpc;
-    u16 opcHi;
-    s16 opcLo;
+    u32 lastInsn;
+    u16 insnHi;
+    s16 insnLo;
     u32 imm;
 
-    if (sp & 3 || sp < 0x80000000 || sp >= 0xC0000000 || ra & 3 || ra < 0x80000000 || ra >= 0xC0000000) {
+    if ((sp % 4 != 0) || (sp < K0BASE) || (sp >= K2BASE) || (ra % 4 != 0) || (ra < K0BASE) || (ra >= K2BASE)) {
         *spPtr = 0;
         *pcPtr = 0;
         *raPtr = 0;
         return;
     }
 
-    if (pc & 3 || pc < 0x80000000 || pc >= 0xC0000000) {
+    if ((pc % 4 != 0) || (pc < K0BASE) || (pc >= K2BASE)) {
         *pcPtr = ra;
         return;
     }
 
-    lastOpc = 0;
+    lastInsn = 0;
     while (true) {
-        opcHi = *(uintptr_t*)pc >> 16;
-        opcLo = *(uintptr_t*)pc & 0xFFFF;
-        imm = opcLo;
+        insnHi = *(uintptr_t*)pc >> 16;
+        insnLo = *(uintptr_t*)pc & 0xFFFF;
+        imm = insnLo;
 
-        if (opcHi == 0x8FBF) {
+        if (insnHi == 0x8FBF) {
+            // lw $ra, <imm>($sp)
+            // read return address saved on the stack
             ra = *(uintptr_t*)(sp + imm);
-        } else if (opcHi == 0x27BD) {
+        } else if (insnHi == 0x27BD) {
+            // addiu $sp, $sp, <imm>
+            // stack pointer increment or decrement
             sp += imm;
         } else if (*(uintptr_t*)pc == 0x42000018) {
+            // eret
+            // cannot backtrace through an eret, give up
             sp = 0;
             pc = 0;
             ra = 0;
-            goto end;
+            goto done;
         }
-        if (lastOpc == 0x3E00008) {
+        if (lastInsn == 0x3E00008) {
+            // jr $ra
+            // return to previous function
             pc = ra;
-            goto end;
-        } else if ((lastOpc >> 26) == 2) {
-            pc = pc >> 28 << 28 | lastOpc << 6 >> 4;
-            goto end;
+            goto done;
+        } else if (lastInsn >> 26 == 2) {
+            // j <target>
+            // extract jump target
+            pc = (pc >> 28 << 28) | (lastInsn << 6 >> 4);
+            goto done;
         }
-        lastOpc = *(uintptr_t*)pc;
-        pc += 4;
+
+        lastInsn = *(uintptr_t*)pc;
+        pc += sizeof(u32);
     }
 
-end:
+done:
     *spPtr = sp;
     *pcPtr = pc;
     *raPtr = ra;
 }
 
+/**
+ * Draws the stack trace page contents for the specified thread
+ */
 void Fault_DrawStackTrace(OSThread* t, u32 flags) {
-    s32 y;
-    u32 sp;
-    u32 ra;
-    u32 pc;
+    s32 line;
+    uintptr_t sp = t->context.sp;
+    uintptr_t ra = t->context.ra;
+    uintptr_t pc = t->context.pc;
     u32 pad;
-    u32 convertedPc;
-
-    sp = t->context.sp;
-    ra = t->context.ra;
-    pc = t->context.pc;
+    uintptr_t addr;
 
     Fault_FillScreenBlack();
-    FaultDrawer_DrawText(0x78, 0x10, "STACK TRACE");
-    FaultDrawer_DrawText(0x24, 0x18, "SP       PC       (VPC)");
+    FaultDrawer_DrawText(120, 16, "STACK TRACE");
+    FaultDrawer_DrawText(36, 24, "SP       PC       (VPC)");
 
-    for (y = 1; (y < 22) && (((ra != 0) || (sp != 0)) && (pc != (u32)__osCleanupThread)); y++) {
-        FaultDrawer_DrawText(0x24, y * 8 + 24, "%08x %08x", sp, pc);
+    for (line = 1; (line < 22) && (((ra != 0) || (sp != 0)) && (pc != (uintptr_t)__osCleanupThread)); line++) {
+        FaultDrawer_DrawText(0x24, line * 8 + 24, "%08x %08x", sp, pc);
 
         if (flags & 1) {
-            convertedPc = (u32)Fault_ConvertAddress((void*)pc);
-            if (convertedPc != 0) {
-                FaultDrawer_Printf(" -> %08x", convertedPc);
+            addr = Fault_ConvertAddress(pc);
+            if (addr != 0) {
+                FaultDrawer_Printf(" -> %08x", addr);
             }
         } else {
             FaultDrawer_Printf(" -> ????????");
         }
 
-        Fault_FindNextStackCall(&sp, &pc, &ra);
+        Fault_WalkStack(&sp, &pc, &ra);
     }
 }
 
-void osSyncPrintfStackTrace(OSThread* t, u32 flags) {
-    s32 y;
-    u32 sp = t->context.sp;
-    u32 ra = t->context.ra;
-    u32 pc = t->context.pc;
-    u32 convertedPc;
+void Fault_LogStackTrace(OSThread* t, u32 flags) {
+    s32 line;
+    uintptr_t sp = t->context.sp;
+    uintptr_t ra = t->context.ra;
+    uintptr_t pc = t->context.pc;
+    uintptr_t addr;
 
     osSyncPrintf("STACK TRACE");
     osSyncPrintf("SP       PC       (VPC)\n");
 
-    for (y = 1; (y < 22) && (((ra != 0) || (sp != 0)) && (pc != (u32)__osCleanupThread)); y++) {
+    for (line = 1; (line < 22) && (((ra != 0) || (sp != 0)) && (pc != (uintptr_t)__osCleanupThread)); line++) {
         osSyncPrintf("%08x %08x", sp, pc);
 
         if (flags & 1) {
-            convertedPc = (u32)Fault_ConvertAddress((void*)pc);
-            if (convertedPc != 0) {
-                osSyncPrintf(" -> %08x", convertedPc);
+            addr = Fault_ConvertAddress(pc);
+            if (addr != 0) {
+                osSyncPrintf(" -> %08x", addr);
             }
         } else {
             osSyncPrintf(" -> ????????");
         }
         osSyncPrintf("\n");
 
-        Fault_FindNextStackCall(&sp, &pc, &ra);
+        Fault_WalkStack(&sp, &pc, &ra);
     }
 }
 
 void Fault_ResumeThread(OSThread* t) {
     t->context.cause = 0;
     t->context.fpcsr = 0;
-    t->context.pc += 4;
+    t->context.pc += sizeof(u32);
     *(u32*)t->context.pc = 0x0000000D; // write in a break instruction
     osWritebackDCache((void*)t->context.pc, 4);
     osInvalICache((void*)t->context.pc, 4);
     osStartThread(t);
 }
 
-void Fault_CommitFB(void) {
-    u16* fb;
+void Fault_DisplayFrameBuffer(void) {
+    void* fb;
 
     osViSetYScale(1.0f);
     osViSetMode(&osViModeNtscLan1);
-    osViSetSpecialFeatures(0x42); // gama_disable|dither_fliter_enable_aa_mode3_disable
+    osViSetSpecialFeatures(OS_VI_GAMMA_OFF | OS_VI_DITHER_FILTER_ON);
     osViBlack(false);
 
-    if (sFaultContext->fb) {
-        fb = sFaultContext->fb;
+    if (sFaultInstance->fb) {
+        fb = sFaultInstance->fb;
     } else {
-        fb = (u16*)osViGetNextFramebuffer();
-        if ((u32)fb == 0x80000000) {
-            fb = (u16*)((osMemSize | 0x80000000) - 0x25800);
+        fb = osViGetNextFramebuffer();
+        if ((uintptr_t)fb == K0BASE) {
+            fb = (void*)(PHYS_TO_K0(osMemSize) - SCREEN_HEIGHT * SCREEN_WIDTH * sizeof(u16));
         }
     }
 
@@ -809,24 +854,28 @@ void Fault_CommitFB(void) {
     FaultDrawer_SetDrawerFB(fb, SCREEN_WIDTH, SCREEN_HEIGHT);
 }
 
+/**
+ * Runs all registered fault clients. Each fault client displays a page
+ * on the crash screen.
+ */
 void Fault_ProcessClients(void) {
-    FaultClient* iter = sFaultContext->clients;
+    FaultClient* client = sFaultInstance->clients;
     s32 idx = 0;
 
-    while (iter != NULL) {
-        if (iter->callback != NULL) {
+    while (client != NULL) {
+        if (client->callback != NULL) {
             Fault_FillScreenBlack();
             FaultDrawer_SetCharPad(-2, 0);
-            FaultDrawer_Printf("\x1A\x38"
+            FaultDrawer_Printf(FAULT_COLOR(DARK_GRAY)
                                "CallBack (%d) %08x %08x %08x\n"
-                               "\x1A\x37",
-                               idx++, iter, iter->arg0, iter->arg1);
+                               FAULT_COLOR(WHITE),
+                               idx++, client, client->arg0, client->arg1);
             FaultDrawer_SetCharPad(0, 0);
-            iter->callback(iter->arg0, iter->arg1);
+            client->callback(client->arg0, client->arg1);
             Fault_WaitForInput();
-            Fault_CommitFB();
+            Fault_DisplayFrameBuffer();
         }
-        iter = iter->next;
+        client = client->next;
     }
 }
 
@@ -834,20 +883,20 @@ void Fault_ProcessClients(void) {
 // needs in-function static bss
 void Fault_SetOptionsFromController3(void) {
     static u32 faultCustomOptions;
-    Input* input3 = &sFaultContext->padInput[3];
+    Input* input3 = &sFaultInstance->padInput[3];
     u32 pad;
-    u32 graphPC;
-    u32 graphRA;
-    u32 graphSP;
+    uintptr_t pc;
+    uintptr_t ra;
+    uintptr_t sp;
 
     if (CHECK_BTN_ALL(input3->press.button, 0x80)) {
         faultCustomOptions = !faultCustomOptions;
     }
 
     if (faultCustomOptions) {
-        graphPC = sGraphThread.context.pc;
-        graphRA = sGraphThread.context.ra;
-        graphSP = sGraphThread.context.sp;
+        pc = sGraphThread.context.pc;
+        ra = sGraphThread.context.ra;
+        sp = sGraphThread.context.sp;
         if (CHECK_BTN_ALL(input3->cur.button, BTN_R)) {
             static u32 faultCopyToLog;
 
@@ -855,13 +904,13 @@ void Fault_SetOptionsFromController3(void) {
             FaultDrawer_SetOsSyncPrintfEnabled(faultCopyToLog);
         }
         if (CHECK_BTN_ALL(input3->cur.button, BTN_A)) {
-            osSyncPrintf("GRAPH PC=%08x RA=%08x STACK=%08x\n", graphPC, graphRA, graphSP);
+            osSyncPrintf("GRAPH PC=%08x RA=%08x STACK=%08x\n", pc, ra, sp);
         }
         if (CHECK_BTN_ALL(input3->cur.button, BTN_B)) {
             FaultDrawer_SetDrawerFB(osViGetNextFramebuffer(), 0x140, 0xF0);
             Fault_DrawRec(0, 0xD7, 0x140, 9, 1);
             FaultDrawer_SetCharPad(-2, 0);
-            FaultDrawer_DrawText(0x20, 0xD8, "GRAPH PC %08x RA %08x SP %08x", graphPC, graphRA, graphSP);
+            FaultDrawer_DrawText(0x20, 0xD8, "GRAPH PC %08x RA %08x SP %08x", pc, ra, sp);
         }
     }
 }
@@ -870,86 +919,111 @@ void Fault_SetOptionsFromController3(void);
 #pragma GLOBAL_ASM("asm/non_matchings/boot/fault/Fault_SetOptionsFromController3.s")
 #endif
 
-void Fault_SetOptions(void) {
+void Fault_UpdatePad(void) {
     Fault_UpdatePadImpl();
     Fault_SetOptionsFromController3();
 }
+
+#define FAULT_MSG_CPU_BREAK ((OSMesg)1)
+#define FAULT_MSG_FAULT ((OSMesg)2)
+#define FAULT_MSG_UNK ((OSMesg)3)
 
 void Fault_ThreadEntry(void* arg) {
     OSMesg msg;
     u32 pad;
     OSThread* faultedThread;
 
-    osSetEventMesg(10, &sFaultContext->queue, (OSMesg)1);
-    osSetEventMesg(12, &sFaultContext->queue, (OSMesg)2);
-    while (1) {
-        do {
-            osRecvMesg(&sFaultContext->queue, &msg, OS_MESG_BLOCK);
+    // Direct OS event messages to the fault event queue
+    osSetEventMesg(OS_EVENT_CPU_BREAK, &sFaultInstance->queue, FAULT_MSG_CPU_BREAK);
+    osSetEventMesg(OS_EVENT_FAULT, &sFaultInstance->queue, FAULT_MSG_FAULT);
 
-            if (msg == (OSMesg)1) {
-                sFaultContext->msgId = 1;
+    while (true) {
+        do {
+            // Wait for a thread to hit a fault
+            osRecvMesg(&sFaultInstance->queue, &msg, OS_MESG_BLOCK);
+
+            if (msg == FAULT_MSG_CPU_BREAK) {
+                sFaultInstance->msgId = (u32)FAULT_MSG_CPU_BREAK;
+                // "Fault manager: OS_EVENT_CPU_BREAK received"
                 osSyncPrintf("フォルトマネージャ:OS_EVENT_CPU_BREAKを受信しました\n");
-            } else if (msg == (OSMesg)2) {
-                sFaultContext->msgId = 2;
+            } else if (msg == FAULT_MSG_FAULT) {
+                sFaultInstance->msgId = (u32)FAULT_MSG_FAULT;
+                // "Fault manager: OS_EVENT_FAULT received"
                 osSyncPrintf("フォルトマネージャ:OS_EVENT_FAULTを受信しました\n");
-            } else if (msg == (OSMesg)3) {
-                Fault_SetOptions();
+            } else if (msg == FAULT_MSG_UNK) {
+                Fault_UpdatePad();
                 faultedThread = NULL;
                 continue;
             } else {
-                sFaultContext->msgId = 3;
+                sFaultInstance->msgId = (u32)FAULT_MSG_UNK;
+                // "Fault manager: received an unknown message"
                 osSyncPrintf("フォルトマネージャ:不明なメッセージを受信しました\n");
             }
 
             faultedThread = __osGetCurrFaultedThread();
             osSyncPrintf("__osGetCurrFaultedThread()=%08x\n", faultedThread);
-            if (!faultedThread) {
+
+            if (faultedThread == NULL) {
                 faultedThread = Fault_FindFaultedThread();
                 osSyncPrintf("FindFaultedThread()=%08x\n", faultedThread);
             }
         } while (faultedThread == NULL);
 
-        __osSetFpcCsr(__osGetFpcCsr() & 0xFFFFF07F);
-        sFaultContext->faultedThread = faultedThread;
-        while (!sFaultContext->faultHandlerEnabled) {
+        __osSetFpcCsr(__osGetFpcCsr() & ~(FPCSR_EV | FPCSR_EZ | FPCSR_EO | FPCSR_EU | FPCSR_EI));
+        sFaultInstance->faultedThread = faultedThread;
+
+        while (!sFaultInstance->faultHandlerEnabled) {
             Fault_Sleep(1000);
         }
-        Fault_Sleep(500);
-        Fault_CommitFB();
+        Fault_Sleep(1000 / 2);
 
-        if (sFaultContext->autoScroll) {
+        // Show fault framebuffer
+        Fault_DisplayFrameBuffer();
+
+        if (sFaultInstance->autoScroll) {
             Fault_Wait5Seconds();
         } else {
-            Fault_DrawCornerRec(0xF801);
+            // Draw error bar signifying the crash screen is available
+            Fault_DrawCornerRec(GPACK_RGBA5551(255, 0, 0, 1));
             Fault_WaitForButtonCombo();
         }
 
-        sFaultContext->autoScroll = true;
-        FaultDrawer_SetForeColor(0xFFFF);
-        FaultDrawer_SetBackColor(0);
+        // Set auto-scrolling and default colors
+        sFaultInstance->autoScroll = true;
+        FaultDrawer_SetForeColor(GPACK_RGBA5551(255, 255, 255, 1));
+        FaultDrawer_SetBackColor(GPACK_RGBA5551(0, 0, 0, 0));
 
+        // Draw pages
         do {
+            // Thread context page
             Fault_PrintThreadContext(faultedThread);
             osSyncPrintfThreadContext(faultedThread);
             Fault_WaitForInput();
+
+            // Stack trace page
             Fault_DrawStackTrace(faultedThread, 0);
-            osSyncPrintfStackTrace(faultedThread, 0);
+            Fault_LogStackTrace(faultedThread, 0);
             Fault_WaitForInput();
+
+            // Client pages
             Fault_ProcessClients();
+
+            // Memory dump page
             Fault_DrawMemDump((u32)(faultedThread->context.pc - 0x100), (u32)faultedThread->context.sp, 0, 0);
             Fault_DrawStackTrace(faultedThread, 1);
-            osSyncPrintfStackTrace(faultedThread, 1);
+            Fault_LogStackTrace(faultedThread, 1);
             Fault_WaitForInput();
+
+            // End page
             Fault_FillScreenRed();
-            FaultDrawer_DrawText(0x40, 0x50, "    CONGRATURATIONS!    ");
-            FaultDrawer_DrawText(0x40, 0x5A, "All Pages are displayed.");
-            FaultDrawer_DrawText(0x40, 0x64, "       THANK YOU!       ");
-            FaultDrawer_DrawText(0x40, 0x6E, " You are great debugger!");
+            FaultDrawer_DrawText(64, 80, "    CONGRATURATIONS!    ");
+            FaultDrawer_DrawText(64, 90, "All Pages are displayed.");
+            FaultDrawer_DrawText(64, 100, "       THANK YOU!       ");
+            FaultDrawer_DrawText(64, 110, " You are great debugger!");
             Fault_WaitForInput();
+        } while (!sFaultInstance->exitDebugger);
 
-        } while (!sFaultContext->exitDebugger);
-
-        while (!sFaultContext->exitDebugger) {
+        while (!sFaultInstance->exitDebugger) {
             ;
         }
 
@@ -958,48 +1032,62 @@ void Fault_ThreadEntry(void* arg) {
 }
 
 void Fault_SetFrameBuffer(void* fb, u16 w, u16 h) {
-    sFaultContext->fb = fb;
+    sFaultInstance->fb = fb;
     FaultDrawer_SetDrawerFB(fb, w, h);
 }
 
 void Fault_Init(void) {
-    sFaultContext = &gFaultMgr;
-    bzero(sFaultContext, sizeof(FaultMgr));
+    sFaultInstance = &gFaultMgr;
+    bzero(sFaultInstance, sizeof(FaultMgr));
     FaultDrawer_Init();
     FaultDrawer_SetInputCallback(Fault_WaitForInput);
-    sFaultContext->exitDebugger = 0;
-    sFaultContext->msgId = 0;
-    sFaultContext->faultHandlerEnabled = 0;
-    sFaultContext->faultedThread = NULL;
-    sFaultContext->padCallback = &Fault_PadCallback;
-    sFaultContext->clients = NULL;
-    sFaultContext->autoScroll = false;
-    gFaultMgr.faultHandlerEnabled = 1;
-    osCreateMesgQueue(&sFaultContext->queue, sFaultContext->msg, ARRAY_COUNT(sFaultContext->msg));
+    sFaultInstance->exitDebugger = 0;
+    sFaultInstance->msgId = 0;
+    sFaultInstance->faultHandlerEnabled = false;
+    sFaultInstance->faultedThread = NULL;
+    sFaultInstance->padCallback = Fault_PadCallback;
+    sFaultInstance->clients = NULL;
+    sFaultInstance->autoScroll = false;
+    gFaultMgr.faultHandlerEnabled = true;
+    osCreateMesgQueue(&sFaultInstance->queue, sFaultInstance->msg, ARRAY_COUNT(sFaultInstance->msg));
     StackCheck_Init(&sFaultThreadInfo, sFaultStack, sFaultStack + sizeof(sFaultStack), 0, 0x100, "fault");
-    osCreateThread(&sFaultContext->thread, 2, Fault_ThreadEntry, NULL, sFaultStack + sizeof(sFaultStack), 0x7F);
-    osStartThread(&sFaultContext->thread);
+    osCreateThread(&sFaultInstance->thread, Z_THREAD_ID_FAULT, Fault_ThreadEntry, NULL, sFaultStack + sizeof(sFaultStack), Z_THREAD_PRI_FAULT);
+    osStartThread(&sFaultInstance->thread);
 }
 
-void Fault_HangupFaultClient(const char* arg0, char* arg1) {
+/**
+ * Fault page for Hungup crashes. Displays the thread id and two messages
+ * specified in arguments to `Fault_AddHungupAndCrashImpl`.
+ */
+void Fault_HangupFaultClient(const char* exp1, char* exp2) {
     osSyncPrintf("HungUp on Thread %d\n", osGetThreadId(NULL));
-    osSyncPrintf("%s\n", arg0 ? arg0 : "(NULL)");
-    osSyncPrintf("%s\n", arg1 ? arg1 : "(NULL)");
+    osSyncPrintf("%s\n", exp1 != NULL ? exp1 : "(NULL)");
+    osSyncPrintf("%s\n", exp2 != NULL ? exp2 : "(NULL)");
     FaultDrawer_Printf("HungUp on Thread %d\n", osGetThreadId(NULL));
-    FaultDrawer_Printf("%s\n", arg0 ? arg0 : "(NULL)");
-    FaultDrawer_Printf("%s\n", arg1 ? arg1 : "(NULL)");
+    FaultDrawer_Printf("%s\n", exp1 != NULL ? exp1 : "(NULL)");
+    FaultDrawer_Printf("%s\n", exp2 != NULL ? exp2 : "(NULL)");
 }
 
-void Fault_AddHungupAndCrashImpl(const char* arg0, char* arg1) {
+/**
+ * Immediately crashes the current thread, for cases where an irrecoverable
+ * error occurs. The parameters specify two messages detailing the error, one
+ * or both may be NULL.
+ */
+void Fault_AddHungupAndCrashImpl(const char* exp1, const char* exp2) {
     FaultClient client;
     u32 pad;
 
-    Fault_AddClient(&client, Fault_HangupFaultClient, (void*)arg0, arg1);
-    *(u32*)0x11111111 = 0; // trigger an exception
+    Fault_AddClient(&client, Fault_HangupFaultClient, (void*)exp1, (void*)exp2);
+    *(u32*)0x11111111 = 0; // trigger an exception via unaligned memory access
 }
 
+/**
+ * Like `Fault_AddHungupAndCrashImpl`, however provides a fixed message containing
+ * filename and line number
+ */
 void Fault_AddHungupAndCrash(const char* filename, u32 line) {
     char msg[256];
+
     sprintf(msg, "HungUp %s:%d", filename, line);
     Fault_AddHungupAndCrashImpl(msg, NULL);
 }

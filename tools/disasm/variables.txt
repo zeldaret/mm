@@ -315,7 +315,7 @@
     0x8009BE30:("D_8009BE30","UNK_TYPE4","",0x4),
     0x8009BE34:("D_8009BE34","UNK_TYPE4","",0x4),
     0x8009BE38:("romInfoFaultClient","FaultClient","",0x10),
-    0x8009BE50:("sFaultContext","FaultMgr*","",0x4),
+    0x8009BE50:("sFaultInstance","FaultMgr*","",0x4),
     0x8009BE54:("D_8009BE54","f32","",0x4),
     0x8009BE58:("faultCustomOptions","u32","",0x4),
     0x8009BE5C:("faultCopyToLog","u32","",0x4),
