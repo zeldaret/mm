@@ -52,14 +52,14 @@ void Fault_Init(void);
 
 // Fatal Errors
 
-void Fault_AddHungupAndCrashImpl(const char* arg0, const char* arg1);
+void Fault_AddHungupAndCrashImpl(const char* exp1, const char* exp2);
 void Fault_AddHungupAndCrash(const char* filename, u32 line);
 
 // Client Registration
 
-void Fault_AddClient(FaultClient* client, void* callback, void* param0, void* param1);
+void Fault_AddClient(FaultClient* client, void* callback, void* arg0, void* arg1);
 void Fault_RemoveClient(FaultClient* client);
-void Fault_AddAddrConvClient(FaultAddrConvClient* client, void* callback, void* param);
+void Fault_AddAddrConvClient(FaultAddrConvClient* client, void* callback, void* arg);
 void Fault_RemoveAddrConvClient(FaultAddrConvClient* client);
 
 // For use in Fault Client callbacks

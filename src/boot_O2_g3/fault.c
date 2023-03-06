@@ -405,7 +405,7 @@ void Fault_LogFPCSR(u32 value) {
 
 void Fault_PrintThreadContext(OSThread* t) {
     __OSThreadContext* ctx;
-    s16 causeStrIdx =_SHIFTR((u32)t->context.cause, 2, 5);
+    s16 causeStrIdx = _SHIFTR((u32)t->context.cause, 2, 5);
 
     if (causeStrIdx == 23) { // Watchpoint
         causeStrIdx = 16;
@@ -530,7 +530,8 @@ OSThread* Fault_FindFaultedThread(void) {
     OSThread* iter = __osGetActiveQueue();
 
     while (iter->priority != OS_PRIORITY_THREADTAIL) {
-        if (iter->priority > OS_PRIORITY_IDLE && iter->priority < OS_PRIORITY_APPMAX && (iter->flags & (OS_FLAG_CPU_BREAK | OS_FLAG_FAULT))) {
+        if (iter->priority > OS_PRIORITY_IDLE && iter->priority < OS_PRIORITY_APPMAX &&
+            (iter->flags & (OS_FLAG_CPU_BREAK | OS_FLAG_FAULT))) {
             return iter;
         }
         iter = iter->tlnext;
@@ -907,10 +908,8 @@ void Fault_ProcessClients(void) {
         if (client->callback != NULL) {
             Fault_FillScreenBlack();
             FaultDrawer_SetCharPad(-2, 0);
-            FaultDrawer_Printf(FAULT_COLOR(DARK_GRAY)
-                               "CallBack (%d) %08x %08x %08x\n"
-                               FAULT_COLOR(WHITE),
-                               idx++, client, client->arg0, client->arg1);
+            FaultDrawer_Printf(FAULT_COLOR(DARK_GRAY) "CallBack (%d) %08x %08x %08x\n" FAULT_COLOR(WHITE), idx++,
+                               client, client->arg0, client->arg1);
             FaultDrawer_SetCharPad(0, 0);
             client->callback(client->arg0, client->arg1);
             Fault_WaitForInput();
@@ -1092,7 +1091,8 @@ void Fault_Init(void) {
     gFaultMgr.faultHandlerEnabled = true;
     osCreateMesgQueue(&sFaultInstance->queue, sFaultInstance->msg, ARRAY_COUNT(sFaultInstance->msg));
     StackCheck_Init(&sFaultThreadInfo, sFaultStack, sFaultStack + sizeof(sFaultStack), 0, 0x100, "fault");
-    osCreateThread(&sFaultInstance->thread, Z_THREAD_ID_FAULT, Fault_ThreadEntry, NULL, sFaultStack + sizeof(sFaultStack), Z_THREAD_PRI_FAULT);
+    osCreateThread(&sFaultInstance->thread, Z_THREAD_ID_FAULT, Fault_ThreadEntry, NULL,
+                   sFaultStack + sizeof(sFaultStack), Z_THREAD_PRI_FAULT);
     osStartThread(&sFaultInstance->thread);
 }
 

@@ -43,22 +43,22 @@ FaultDrawer* sFaultDrawerRef = &sFaultDrawer;
 #define FAULT_DRAWER_CURSOR_Y 16
 
 FaultDrawer sFaultDrawerDefault = {
-    FAULT_FB_ADDRESS,                   // fb
-    SCREEN_WIDTH,                       // w
-    SCREEN_HEIGHT,                      // h
-    FAULT_DRAWER_CURSOR_Y,                                 // yStart
-    SCREEN_HEIGHT - FAULT_DRAWER_CURSOR_Y - 1,                                // yEnd
-    FAULT_DRAWER_CURSOR_X,                                 // xStart
-    SCREEN_WIDTH - FAULT_DRAWER_CURSOR_X - 1,                                // xEnd
-    GPACK_RGBA5551(255, 255, 255, 255), // foreColor
-    GPACK_RGBA5551(0, 0, 0, 0),         // backColor
-    FAULT_DRAWER_CURSOR_X,                                 // cursorX
-    FAULT_DRAWER_CURSOR_Y,                                 // cursorY
-    sFaultDrawerFont,                   // fontData
-    8,                                  // charW
-    8,                                  // charH
-    0,                                  // charWPad
-    0,                                  // charHPad
+    FAULT_FB_ADDRESS,                          // fb
+    SCREEN_WIDTH,                              // w
+    SCREEN_HEIGHT,                             // h
+    FAULT_DRAWER_CURSOR_Y,                     // yStart
+    SCREEN_HEIGHT - FAULT_DRAWER_CURSOR_Y - 1, // yEnd
+    FAULT_DRAWER_CURSOR_X,                     // xStart
+    SCREEN_WIDTH - FAULT_DRAWER_CURSOR_X - 1,  // xEnd
+    GPACK_RGBA5551(255, 255, 255, 255),        // foreColor
+    GPACK_RGBA5551(0, 0, 0, 0),                // backColor
+    FAULT_DRAWER_CURSOR_X,                     // cursorX
+    FAULT_DRAWER_CURSOR_Y,                     // cursorY
+    sFaultDrawerFont,                          // fontData
+    8,                                         // charW
+    8,                                         // charH
+    0,                                         // charWPad
+    0,                                         // charHPad
     {
         // printColors
         GPACK_RGBA5551(0, 0, 0, 1),       // BLACK
@@ -72,9 +72,9 @@ FaultDrawer sFaultDrawerDefault = {
         GPACK_RGBA5551(120, 120, 120, 1), // DARK GRAY
         GPACK_RGBA5551(176, 176, 176, 1), // LIGHT GRAY
     },
-    false,    // escCode
-    false,    // osSyncPrintfEnabled
-    NULL, // inputCallback
+    false, // escCode
+    false, // osSyncPrintfEnabled
+    NULL,  // inputCallback
 };
 
 //! TODO: Needs to be extracted
@@ -124,10 +124,8 @@ void FaultDrawer_DrawChar(char c) {
     const u32* dataPtr = &sFaultDrawerRef->fontData[(((c / 8) * 16) + ((c & 4) >> 2))];
     u16* fb = sFaultDrawerRef->fb + (sFaultDrawerRef->w * cursorY) + cursorX;
 
-    if ((sFaultDrawerRef->xStart <= cursorX) &&
-        ((sFaultDrawerRef->charW + cursorX - 1) <= sFaultDrawerRef->xEnd) &&
-        (sFaultDrawerRef->yStart <= cursorY) &&
-        ((sFaultDrawerRef->charH + cursorY - 1) <= sFaultDrawerRef->yEnd)) {
+    if ((sFaultDrawerRef->xStart <= cursorX) && ((sFaultDrawerRef->charW + cursorX - 1) <= sFaultDrawerRef->xEnd) &&
+        (sFaultDrawerRef->yStart <= cursorY) && ((sFaultDrawerRef->charH + cursorY - 1) <= sFaultDrawerRef->yEnd)) {
         for (y = 0; y < sFaultDrawerRef->charH; y++) {
             u32 mask = 0x10000000 << shift;
 
