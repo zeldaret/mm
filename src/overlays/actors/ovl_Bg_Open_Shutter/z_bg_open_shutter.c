@@ -112,7 +112,8 @@ void func_80ACAD88(BgOpenShutter* this, PlayState* play) {
         Player* player = GET_PLAYER(play);
 
         Actor_PlaySfx(&this->door.dyna.actor, NA_SE_EV_SLIDE_DOOR_OPEN);
-        Camera_ChangeDoorCam(play->cameraPtrs[CAM_ID_MAIN], &this->door.dyna.actor, player->doorBgCamIndex, 0.0f, 12, 15, 10);
+        Camera_ChangeDoorCam(play->cameraPtrs[CAM_ID_MAIN], &this->door.dyna.actor, player->doorBgCamIndex, 0.0f, 12,
+                             15, 10);
         this->unk_164 = 0;
         this->actionFunc = func_80ACAE5C;
         this->door.dyna.actor.velocity.y = 0.0f;
@@ -146,9 +147,11 @@ void func_80ACAEF0(BgOpenShutter* this, PlayState* play) {
     s16 quakeIndex;
 
     Math_StepToF(&this->door.dyna.actor.velocity.y, 20.0f, 8.0f);
-    if (Math_StepToF(&this->door.dyna.actor.world.pos.y, this->door.dyna.actor.home.pos.y, this->door.dyna.actor.velocity.y)) {
+    if (Math_StepToF(&this->door.dyna.actor.world.pos.y, this->door.dyna.actor.home.pos.y,
+                     this->door.dyna.actor.velocity.y)) {
         this->door.dyna.actor.floorHeight = this->door.dyna.actor.home.pos.y;
-        Actor_SpawnFloorDustRing(play, &this->door.dyna.actor, &this->door.dyna.actor.world.pos, 60.0f, 10, 8.0f, 500, 10, true);
+        Actor_SpawnFloorDustRing(play, &this->door.dyna.actor, &this->door.dyna.actor.world.pos, 60.0f, 10, 8.0f, 500,
+                                 10, true);
         Actor_PlaySfx(&this->door.dyna.actor, NA_SE_EV_BIGWALL_BOUND);
 
         quakeIndex = Quake_Add(Play_GetCamera(play, CAM_ID_MAIN), QUAKE_TYPE_3);

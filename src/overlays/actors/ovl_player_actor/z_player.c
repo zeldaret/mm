@@ -5109,7 +5109,7 @@ LinkAnimationHeader* D_8085D0D4[] = {
     &gPlayerAnim_link_anchor_back_hitR,
 };
 
-void func_80833B18(PlayState* play, Player* this, s32 arg2, f32 speedXZ, f32 velocityY, s16 arg5,
+void func_80833B18(PlayState* play, Player* this, s32 arg2, f32 speed, f32 velocityY, s16 arg5,
                    s32 invincibilityTimer) {
     LinkAnimationHeader* anim = NULL;
 
@@ -5163,7 +5163,7 @@ void func_80833B18(PlayState* play, Player* this, s32 arg2, f32 speedXZ, f32 vel
             Player_RequestRumble(play, this, 180, 20, 50, SQ(0));
 
             if (arg2 == 1) {
-                this->linearVelocity = speedXZ * 1.5f;
+                this->linearVelocity = speed * 1.5f;
                 this->actor.velocity.y = velocityY * 0.7f;
             } else {
                 this->linearVelocity = 4.0f;
@@ -5192,8 +5192,8 @@ void func_80833B18(PlayState* play, Player* this, s32 arg2, f32 speedXZ, f32 vel
                 func_8082E5A8(play, this, D_8085BE84[PLAYER_ANIMGROUP_3][this->modelAnimType]);
                 Player_AnimSfx_PlayVoice(this, NA_SE_VO_LI_DAMAGE_S);
             } else {
-                this->actor.speed = speedXZ;
-                this->linearVelocity = speedXZ;
+                this->actor.speed = speed;
+                this->linearVelocity = speed;
                 this->actor.velocity.y = velocityY;
 
                 if (ABS_ALT(arg5) > 0x4000) {
@@ -9871,12 +9871,12 @@ void func_80840980(Player* this, u16 sfxId) {
     Player_AnimSfx_PlayVoice(this, sfxId);
 }
 
-void func_808409A8(PlayState* play, Player* this, f32 speedXZ, f32 yVelocity) {
+void func_808409A8(PlayState* play, Player* this, f32 speed, f32 yVelocity) {
     Actor* heldActor = this->heldActor;
 
     if (!func_808313A8(play, this, heldActor)) {
         heldActor->world.rot.y = this->actor.shape.rot.y;
-        heldActor->speed = speedXZ;
+        heldActor->speed = speed;
         heldActor->velocity.y = yVelocity;
         func_808309CC(play, this);
         Player_PlaySfx(this, NA_SE_PL_THROW);
@@ -10498,7 +10498,7 @@ void Player_Init(Actor* thisx, PlayState* play) {
     Minimap_SavePlayerRoomInitInfo(play);
     func_80841A50(play, this);
     this->unk_3CF = 0;
-    MREG(64) = 0;
+    R_PLAY_FILL_SCREEN_ON = 0;
 }
 
 void func_80842510(s16* arg0) {
@@ -12494,7 +12494,7 @@ void func_808479F4(PlayState* play, Player* this, f32 arg2) {
 
 void func_80847A50(Player* this) {
     Player_PlaySfx(this, ((this->unk_AE7 != 0) ? NA_SE_PL_WALK_METAL1 : NA_SE_PL_WALK_LADDER) +
-                            this->ageProperties->surfaceSfxIdOffset);
+                             this->ageProperties->surfaceSfxIdOffset);
 }
 
 Vec3f D_8085D588[] = {
@@ -13222,20 +13222,20 @@ void func_808497A0(Player* this, PlayState* play) {
     LinkAnimation_Update(play, &this->skelAnime);
     func_8083216C(this, play);
 
-    if (MREG(64) == 0) {
-        MREG(64) = 0x14;
-        MREG(68) = 0;
-        MREG(65) = MREG(66) = MREG(67) = MREG(68);
+    if (R_PLAY_FILL_SCREEN_ON == 0) {
+        R_PLAY_FILL_SCREEN_ON = 0x14;
+        R_PLAY_FILL_SCREEN_ALPHA = 0;
+        R_PLAY_FILL_SCREEN_R = R_PLAY_FILL_SCREEN_G = R_PLAY_FILL_SCREEN_B = R_PLAY_FILL_SCREEN_ALPHA;
         play_sound(NA_SE_SY_DEKUNUTS_JUMP_FAILED);
-    } else if (MREG(64) > 0) {
-        MREG(68) += MREG(64);
-        if (MREG(68) > 0xFF) {
-            MREG(68) = 0xFF;
+    } else if (R_PLAY_FILL_SCREEN_ON > 0) {
+        R_PLAY_FILL_SCREEN_ALPHA += R_PLAY_FILL_SCREEN_ON;
+        if (R_PLAY_FILL_SCREEN_ALPHA > 255) {
+            R_PLAY_FILL_SCREEN_ALPHA = 255;
             if (this->unk_B86[0] == 0) {
                 this->unk_B86[0] = 1;
                 func_8082DE50(play, this);
             } else {
-                MREG(64) = -0x14;
+                R_PLAY_FILL_SCREEN_ON = -0x14;
                 this->stateFlags1 &= ~PLAYER_STATE1_8000000;
                 this->actor.bgCheckFlags &= ~1;
                 Player_SetEquipmentData(play, this);
@@ -13278,10 +13278,10 @@ void func_808497A0(Player* this, PlayState* play) {
     } else if (this->unk_AE8 > 0) {
         this->unk_AE8--;
     } else {
-        MREG(68) += MREG(64);
-        if (MREG(68) < 0) {
-            MREG(68) = 0;
-            MREG(64) = 0;
+        R_PLAY_FILL_SCREEN_ALPHA += R_PLAY_FILL_SCREEN_ON;
+        if (R_PLAY_FILL_SCREEN_ALPHA < 0) {
+            R_PLAY_FILL_SCREEN_ALPHA = 0;
+            R_PLAY_FILL_SCREEN_ON = 0;
             func_808339B4(this, -40);
             func_8085B384(this, play);
             this->actor.bgCheckFlags |= 1;
@@ -14666,17 +14666,17 @@ void func_8084D820(Player* this, PlayState* play) {
             sp6C = 5.0f * D_8085C3E4;
             var_t0 = func_808411D4(play, this, &sp6C, -1);
             if (this->unk_397 == 4) {
-                if (MREG(64) < 0) {
+                if (R_PLAY_FILL_SCREEN_ON < 0) {
                     if (play->roomCtx.unk31 != 1) {
-                        MREG(68) += MREG(64);
-                        if (MREG(68) < 0) {
-                            MREG(68) = 0;
+                        R_PLAY_FILL_SCREEN_ALPHA += R_PLAY_FILL_SCREEN_ON;
+                        if (R_PLAY_FILL_SCREEN_ALPHA < 0) {
+                            R_PLAY_FILL_SCREEN_ALPHA = 0;
                         }
 
                         this->actor.world.pos.y += (this->doorDirection != 0) ? 3.0f : -3.0f;
                         this->actor.prevPos.y = this->actor.world.pos.y;
                     }
-                } else if (MREG(64) == 0) {
+                } else if (R_PLAY_FILL_SCREEN_ON == 0) {
                     CollisionPoly* sp64;
                     s32 sp60;
 
@@ -14712,20 +14712,20 @@ void func_8084D820(Player* this, PlayState* play) {
                     sp5C = gSaveContext.entranceSpeed;
                     sp58 = -1;
                 } else if (this->unk_397 == 4) {
-                    if (MREG(64) == 0) {
-                        MREG(64) = 0x10;
-                        MREG(68) = 0;
+                    if (R_PLAY_FILL_SCREEN_ON == 0) {
+                        R_PLAY_FILL_SCREEN_ON = 0x10;
+                        R_PLAY_FILL_SCREEN_ALPHA = 0;
 
-                        MREG(65) = MREG(66) = MREG(67) = MREG(68);
-                    } else if (MREG(64) >= 0) {
-                        MREG(68) += MREG(64);
-                        if (MREG(68) >= 0x100) {
+                        R_PLAY_FILL_SCREEN_R = R_PLAY_FILL_SCREEN_G = R_PLAY_FILL_SCREEN_B = R_PLAY_FILL_SCREEN_ALPHA;
+                    } else if (R_PLAY_FILL_SCREEN_ON >= 0) {
+                        R_PLAY_FILL_SCREEN_ALPHA += R_PLAY_FILL_SCREEN_ON;
+                        if (R_PLAY_FILL_SCREEN_ALPHA >= 0x100) {
                             TransitionActorEntry* temp_v1_4; // sp50
                             s32 roomNum;
 
                             temp_v1_4 = &play->doorCtx.transitionActorList[this->doorNext];
                             roomNum = temp_v1_4->sides[0].room;
-                            MREG(68) = 0xFF;
+                            R_PLAY_FILL_SCREEN_ALPHA = 0xFF;
 
                             if ((roomNum != play->roomCtx.curRoom.num) && (play->roomCtx.curRoom.num >= 0)) {
                                 play->roomCtx.prevRoom = play->roomCtx.curRoom;
@@ -14738,7 +14738,7 @@ void func_8084D820(Player* this, PlayState* play) {
                                 static Vec3f D_8085D638 = { 0.0f, 0.0f, 0.0f };
                                 static Vec3f D_8085D644 = { 0.0f, 0.0f, 0.0f };
 
-                                MREG(64) = -0x10;
+                                R_PLAY_FILL_SCREEN_ON = -0x10;
                                 if (play->roomCtx.curRoom.num < 0) {
                                     Room_StartRoomTransition(play, &play->roomCtx, temp_v1_4->sides[0].room);
                                     play->roomCtx.prevRoom.num = -1;
@@ -14794,7 +14794,7 @@ void func_8084D820(Player* this, PlayState* play) {
                     Minimap_SavePlayerRoomInitInfo(play);
                 }
 
-                MREG(64) = 0;
+                R_PLAY_FILL_SCREEN_ON = 0;
                 func_800E0238(Play_GetCamera(play, 0));
                 Player_StopCurrentActorCutscene(this);
                 if (!(this->stateFlags3 & PLAYER_STATE3_20000)) {
@@ -16519,8 +16519,10 @@ void func_80852C04(Player* this, PlayState* play) {
             if (func_808482E0(play, this) && (this->unk_AE8 == 1)) {
                 Player_SetModels(this, Player_ActionToModelGroup(this, this->itemAction));
 
-                if ((this->getItemDrawIdPlusOne == GID_REMAINS_ODOLWA+1) || (this->getItemDrawIdPlusOne == GID_REMAINS_GOHT+1) ||
-                    (this->getItemDrawIdPlusOne == GID_REMAINS_GYORG+1) || (this->getItemDrawIdPlusOne == GID_REMAINS_TWINMOLD+1)) {
+                if ((this->getItemDrawIdPlusOne == GID_REMAINS_ODOLWA + 1) ||
+                    (this->getItemDrawIdPlusOne == GID_REMAINS_GOHT + 1) ||
+                    (this->getItemDrawIdPlusOne == GID_REMAINS_GYORG + 1) ||
+                    (this->getItemDrawIdPlusOne == GID_REMAINS_TWINMOLD + 1)) {
                     Player_StopCurrentActorCutscene(this);
                     func_80848250(play, this);
                     this->stateFlags1 &= ~PLAYER_STATE1_20000000;
@@ -16939,7 +16941,7 @@ void func_80853A5C(Player* this, PlayState* play) {
                 this->unk_AE8 = 1;
             } else if (Message_GetState(&play->msgCtx) == TEXT_STATE_CLOSING) {
                 Player_StopCurrentActorCutscene(this);
-                this->getItemDrawIdPlusOne = GID_NONE+1;
+                this->getItemDrawIdPlusOne = GID_NONE + 1;
                 this->actor.flags &= ~ACTOR_FLAG_100;
                 func_80839E74(this, play);
                 this->unk_B5E = 0xA;
@@ -17497,7 +17499,7 @@ void func_80855218(PlayState* play, Player* this, UNK_PTR arg2) {
             Math_StepToF(&this->unk_B10[3], -0.1f, 0.1f);
         }
 
-        if ((MREG(64) == 0) && (this->skelAnime.animation == &gPlayerAnim_cl_setmask)) {
+        if ((R_PLAY_FILL_SCREEN_ON == 0) && (this->skelAnime.animation == &gPlayerAnim_cl_setmask)) {
             Player_PlayAnimSfx(this, D_8085D8F0);
         }
     } else {
@@ -17505,7 +17507,7 @@ void func_80855218(PlayState* play, Player* this, UNK_PTR arg2) {
             Math_StepToS(&this->unk_AE8, 255, 20);
         }
 
-        if (MREG(64) == 0) {
+        if (R_PLAY_FILL_SCREEN_ON == 0) {
             Player_PlayAnimSfx(this, D_8085D904);
             if (this->unk_AE7 == 15) {
                 Player_PlaySfx(this, NA_SE_PL_FACE_CHANGE);
@@ -17543,10 +17545,10 @@ void func_808553F4(Player* this, PlayState* play) {
         Play_EnableMotionBlurPriority(0x64);
     }
 
-    if (MREG(64) != 0) {
-        MREG(68) += MREG(64);
-        if (MREG(68) > 0xFF) {
-            MREG(68) = 0xFF;
+    if (R_PLAY_FILL_SCREEN_ON != 0) {
+        R_PLAY_FILL_SCREEN_ALPHA += R_PLAY_FILL_SCREEN_ON;
+        if (R_PLAY_FILL_SCREEN_ALPHA > 0xFF) {
+            R_PLAY_FILL_SCREEN_ALPHA = 0xFF;
             this->actor.update = func_8012301C;
             this->actor.draw = NULL;
             this->unk_AE7 = 0;
@@ -17559,11 +17561,11 @@ void func_808553F4(Player* this, PlayState* play) {
                          CHECK_WEEKEVENTREG(D_8085D908[gSaveContext.save.playerForm])) &&
                         CHECK_BTN_ANY(sPlayerControlInput->press.button,
                                       BTN_CRIGHT | BTN_CLEFT | BTN_CDOWN | BTN_CUP | BTN_B | BTN_A)))) {
-        MREG(64) = 0x2D;
-        MREG(65) = 0xDC;
-        MREG(66) = 0xDC;
-        MREG(67) = 0xDC;
-        MREG(68) = 0;
+        R_PLAY_FILL_SCREEN_ON = 0x2D;
+        R_PLAY_FILL_SCREEN_R = 0xDC;
+        R_PLAY_FILL_SCREEN_G = 0xDC;
+        R_PLAY_FILL_SCREEN_B = 0xDC;
+        R_PLAY_FILL_SCREEN_ALPHA = 0;
 
         if (sp48) {
             if (ActorCutscene_GetCurrentIndex() == this->currentActorCsIndex) {
@@ -17612,11 +17614,11 @@ void func_80855818(Player* this, PlayState* play) {
     Camera_ChangeMode(play->cameraPtrs[play->activeCamId],
                       (this->prevMask == PLAYER_MASK_NONE) ? CAM_MODE_NORMAL : CAM_MODE_JUMP);
 
-    if (MREG(64) != 0) {
-        MREG(68) -= MREG(64);
-        if (MREG(68) < 0) {
-            MREG(64) = 0;
-            MREG(68) = 0;
+    if (R_PLAY_FILL_SCREEN_ON != 0) {
+        R_PLAY_FILL_SCREEN_ALPHA -= R_PLAY_FILL_SCREEN_ON;
+        if (R_PLAY_FILL_SCREEN_ALPHA < 0) {
+            R_PLAY_FILL_SCREEN_ON = 0;
+            R_PLAY_FILL_SCREEN_ALPHA = 0;
         }
     }
 
@@ -17631,7 +17633,7 @@ void func_80855818(Player* this, PlayState* play) {
 
         func_800FF3A0(&dist, &angle, play->state.input);
         if (LinkAnimation_Update(play, &this->skelAnime) || ((this->unk_AE7 > 10) && (dist != 0.0f))) {
-            if (MREG(64) == 0) {
+            if (R_PLAY_FILL_SCREEN_ON == 0) {
                 this->stateFlags1 &= ~PLAYER_STATE1_2;
                 this->prevMask = this->currentMask;
                 this->currentActorCsIndex = play->playerActorCsIds[5];
@@ -18262,8 +18264,9 @@ void func_808576BC(PlayState* play, Player* this) {
     }
 
     if (func_8083F8A8(play, this, 12.0f, -1 - (var_v0 >> 0xC), (var_v0 >> 0xA) + 1.0f, (var_v0 >> 7) + 160, 20, true)) {
-        Player_PlaySfx(this, (this->floorSfxOffset == NA_SE_PL_WALK_SNOW - SFX_FLAG) ? NA_SE_PL_ROLL_SNOW_DUST - SFX_FLAG
-                                                                                    : NA_SE_PL_ROLL_DUST - SFX_FLAG);
+        Player_PlaySfx(this, (this->floorSfxOffset == NA_SE_PL_WALK_SNOW - SFX_FLAG)
+                                 ? NA_SE_PL_ROLL_SNOW_DUST - SFX_FLAG
+                                 : NA_SE_PL_ROLL_DUST - SFX_FLAG);
     }
 }
 
@@ -19059,7 +19062,7 @@ void func_8085968C(PlayState* play, Player* this, UNK_TYPE arg2) {
 void func_80859708(PlayState* play, Player* this, UNK_TYPE arg2) {
     LinkAnimation_Update(play, &this->skelAnime);
     if ((this->actor.id == ACTOR_EN_TEST3) && Animation_OnFrame(&this->skelAnime, 20.0f)) {
-        this->getItemDrawIdPlusOne = GID_MASK_SUN+1;
+        this->getItemDrawIdPlusOne = GID_MASK_SUN + 1;
         func_80151BB4(play, 0x1B);
         Audio_PlayFanfare(0x37);
     }
@@ -19083,34 +19086,34 @@ void func_8085978C(PlayState* play, Player* this, UNK_TYPE arg2) {
     }
 
     if ((this->transformation != PLAYER_FORM_HUMAN) && (play->roomCtx.curRoom.unk3 == 5)) {
-        MREG(64) = 0x2D;
-        MREG(65) = 0xFF;
-        MREG(66) = 0xFF;
-        MREG(67) = 0xFF;
-        MREG(68) = 0;
+        R_PLAY_FILL_SCREEN_ON = 0x2D;
+        R_PLAY_FILL_SCREEN_R = 0xFF;
+        R_PLAY_FILL_SCREEN_G = 0xFF;
+        R_PLAY_FILL_SCREEN_B = 0xFF;
+        R_PLAY_FILL_SCREEN_ALPHA = 0;
         play_sound(NA_SE_SY_WHITE_OUT_T);
     }
 }
 
 void func_80859890(PlayState* play, Player* this, UNK_TYPE arg2) {
     f32 sp24;
-    s16 temp_v1 = MREG(64);
+    s16 temp_v1 = R_PLAY_FILL_SCREEN_ON;
 
     if (temp_v1 > 0) {
-        MREG(68) += temp_v1;
-        if (MREG(68) >= 0x100) {
-            MREG(64) = -0x40;
-            MREG(68) = 0xFF;
+        R_PLAY_FILL_SCREEN_ALPHA += temp_v1;
+        if (R_PLAY_FILL_SCREEN_ALPHA >= 0x100) {
+            R_PLAY_FILL_SCREEN_ON = -0x40;
+            R_PLAY_FILL_SCREEN_ALPHA = 0xFF;
             gSaveContext.save.playerForm = PLAYER_FORM_HUMAN;
             this->actor.update = func_8012301C;
             this->actor.draw = NULL;
             this->unk_AE7 = 0;
         }
     } else if (temp_v1 < 0) {
-        MREG(68) += temp_v1;
-        if (MREG(68) < 0) {
-            MREG(64) = 0;
-            MREG(68) = 0;
+        R_PLAY_FILL_SCREEN_ALPHA += temp_v1;
+        if (R_PLAY_FILL_SCREEN_ALPHA < 0) {
+            R_PLAY_FILL_SCREEN_ON = 0;
+            R_PLAY_FILL_SCREEN_ALPHA = 0;
         }
     } else {
         sp24 = 2.5f;
@@ -19719,10 +19722,10 @@ void func_8085A7C0(PlayState* play, Player* this, UNK_TYPE arg2) {
         if (this->unk_AE8 == 0) {
             if ((Message_GetState(&play->msgCtx) == TEXT_STATE_CLOSING) ||
                 (Message_GetState(&play->msgCtx) == TEXT_STATE_NONE)) {
-                this->getItemDrawIdPlusOne = GID_NONE+1;
+                this->getItemDrawIdPlusOne = GID_NONE + 1;
                 this->unk_AE8 = -1;
             } else {
-                this->getItemDrawIdPlusOne = GID_PENDANT_OF_MEMORIES+1;
+                this->getItemDrawIdPlusOne = GID_PENDANT_OF_MEMORIES + 1;
             }
         } else if (this->unk_AE8 < 0) {
             if (Actor_HasParent(&this->actor, play)) {
@@ -19739,33 +19742,33 @@ void func_8085A7C0(PlayState* play, Player* this, UNK_TYPE arg2) {
 
 void func_8085A8C4(PlayState* play, Player* this, UNK_TYPE arg2) {
     if ((this->transformation != PLAYER_FORM_HUMAN) && (play->roomCtx.curRoom.unk3 == 5)) {
-        MREG(64) = 0x2D;
-        MREG(65) = 0xFF;
-        MREG(66) = 0xFF;
-        MREG(67) = 0xFF;
-        MREG(68) = 0;
+        R_PLAY_FILL_SCREEN_ON = 0x2D;
+        R_PLAY_FILL_SCREEN_R = 0xFF;
+        R_PLAY_FILL_SCREEN_G = 0xFF;
+        R_PLAY_FILL_SCREEN_B = 0xFF;
+        R_PLAY_FILL_SCREEN_ALPHA = 0;
         play_sound(NA_SE_SY_WHITE_OUT_T);
     }
 }
 
 void func_8085A940(PlayState* play, Player* this, UNK_TYPE arg2) {
-    s16 temp_v1 = MREG(64);
+    s16 temp_v1 = R_PLAY_FILL_SCREEN_ON;
 
     if (temp_v1 > 0) {
-        MREG(68) += temp_v1;
-        if (MREG(68) > 0xFF) {
-            MREG(64) = -0x40;
-            MREG(68) = 0xFF;
+        R_PLAY_FILL_SCREEN_ALPHA += temp_v1;
+        if (R_PLAY_FILL_SCREEN_ALPHA > 0xFF) {
+            R_PLAY_FILL_SCREEN_ON = -0x40;
+            R_PLAY_FILL_SCREEN_ALPHA = 0xFF;
             gSaveContext.save.playerForm = PLAYER_FORM_HUMAN;
             this->actor.update = func_8012301C;
             this->actor.draw = NULL;
             this->unk_AE7 = 0;
         }
     } else if (temp_v1 < 0) {
-        MREG(68) += temp_v1;
-        if (MREG(68) < 0) {
-            MREG(64) = 0;
-            MREG(68) = 0;
+        R_PLAY_FILL_SCREEN_ALPHA += temp_v1;
+        if (R_PLAY_FILL_SCREEN_ALPHA < 0) {
+            R_PLAY_FILL_SCREEN_ON = 0;
+            R_PLAY_FILL_SCREEN_ALPHA = 0;
         }
     } else {
         LinkAnimation_Update(play, &this->skelAnime);
@@ -20137,7 +20140,7 @@ PlayerItemAction func_8085B854(PlayState* play, Player* player, ItemId itemId) {
     player->itemAction = itemAction;
     Player_AnimationPlayOnce(play, player, &gPlayerAnim_link_normal_give_other);
     player->stateFlags1 |= (PLAYER_STATE1_40 | PLAYER_STATE1_20000000);
-    player->getItemDrawIdPlusOne = GID_NONE+1;
+    player->getItemDrawIdPlusOne = GID_NONE + 1;
     player->exchangeItemId = itemAction;
 
     return itemAction;
