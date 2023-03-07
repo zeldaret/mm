@@ -2082,7 +2082,7 @@ void Message_Decode(PlayState* play) {
     Player* player;             // spEC
     s16 decodedBufPos;          // spEA
     u32 timeToMoonCrash;
-    s16 pad3;
+    s16 temp2;
     s16 spE0;
     s32 pad4;
     s16 digits[4]; // spD4/D6/D8/DA
@@ -2110,7 +2110,7 @@ void Message_Decode(PlayState* play) {
     spC0 = 0.0f;
     font->unk_11D88 = (font->unk_11D88 ^ 1) & 1;
 
-    if ((gSaveContext.options.language == 0) && (msgCtx->textIsCredits == 0)) {
+    if ((gSaveContext.options.language == 0) && !msgCtx->textIsCredits) {
         spD2 = 0;
         spE0 = 0;
         decodedBufPos = 0;
@@ -2149,6 +2149,8 @@ void Message_Decode(PlayState* play) {
                         }
                     }
                 }
+            //! FAKE: Perhaps a locally required temp for scoping
+            dummy:;
                 if ((curChar == 0x110) || (curChar == 0x111) || (curChar == 0x112)) {
                     msgCtx->decodedBuffer.wchar[++decodedBufPos] = font->msgBuf.wchar[msgCtx->msgBufPos + 1];
                     msgCtx->msgBufPos += 2;
@@ -2781,9 +2783,9 @@ void Message_Decode(PlayState* play) {
                 spC0 += var_fs0 * (16.0f * msgCtx->textCharScale);
                 decodedBufPos--;
             } else if ((curChar == 0x303) || (curChar == 0x304) || (curChar == 0x305)) {
-                temp = (&gSaveContext.save.unk_EE8)[curChar - 0x303];
+                temp2 = (&gSaveContext.save.unk_EE8)[curChar - 0x303];
                 digits[0] = digits[1] = digits[2] = 0;
-                digits[3] = temp;
+                digits[3] = temp2;
 
                 while (digits[3] >= 60) {
                     digits[1]++;
