@@ -623,7 +623,7 @@ typedef enum SunsSongState {
 #define WEEKEVENTREG_13_08 PACK_WEEKEVENTREG_FLAG(13, 0x08)
 #define WEEKEVENTREG_13_10 PACK_WEEKEVENTREG_FLAG(13, 0x10)
 
-// This flag marks that the player has finished the Oceanside Spider Houseand has exited.
+// This flag marks that the player has finished the Oceanside Spider House and has exited.
 // Used to identify if EnSth should be moved deeper into the house.
 // This does NOT flag:
 //   A) that the player has completed the house (Inventory_GetSkullTokenCount(play->sceneId))
