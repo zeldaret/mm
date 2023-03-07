@@ -410,11 +410,11 @@ s32 func_80B783E0(ObjUm* this, PlayState* play, s32 banditIndex, EnHorse* bandit
     }
 
     bandit->actor.world.rot.y = Math_Vec3f_Yaw(&bandit->actor.world.pos, &sp50);
-    bandit->actor.speedXZ = 45.0f;
+    bandit->actor.speed = 45.0f;
 
-    sp3C = Math_CosS(bandit->actor.world.rot.x) * bandit->actor.speedXZ;
+    sp3C = Math_CosS(bandit->actor.world.rot.x) * bandit->actor.speed;
     bandit->actor.velocity.x = Math_SinS(bandit->actor.world.rot.y) * sp3C;
-    bandit->actor.velocity.y = Math_SinS(bandit->actor.world.rot.x) * bandit->actor.speedXZ;
+    bandit->actor.velocity.y = Math_SinS(bandit->actor.world.rot.x) * bandit->actor.speed;
     bandit->actor.velocity.z = Math_CosS(bandit->actor.world.rot.y) * sp3C;
 
     bandit->banditPosition.x =
@@ -838,7 +838,7 @@ s32 func_80B795A0(PlayState* play, ObjUm* this, s32 arg2) {
                     D_801BDAA0 = 1;
                 }
                 play->transitionType = TRANS_TYPE_64;
-                gSaveContext.nextTransitionType = TRANS_TYPE_03;
+                gSaveContext.nextTransitionType = TRANS_TYPE_FADE_WHITE;
                 play->transitionTrigger = TRANS_TRIGGER_START;
                 phi_v1 = true;
             } else {
@@ -1122,9 +1122,9 @@ ObjUmPathState ObjUm_UpdatePath(ObjUm* this, PlayState* play) {
     }
 
     if (this->animIndex == OBJ_UM_ANIM_TROT) {
-        this->dyna.actor.speedXZ = 4.0f;
+        this->dyna.actor.speed = 4.0f;
     } else if (this->animIndex == OBJ_UM_ANIM_GALLOP) {
-        this->dyna.actor.speedXZ = 8.0f;
+        this->dyna.actor.speed = 8.0f;
     }
 
     return sp3C;
@@ -1142,7 +1142,7 @@ void ObjUm_RanchWaitPathFinished(ObjUm* this, PlayState* play) {
                 ActorCutscene_Stop(this->dyna.actor.cutscene);
                 play->nextEntrance = ENTRANCE(MILK_ROAD, 5);
                 play->transitionType = TRANS_TYPE_64;
-                gSaveContext.nextTransitionType = TRANS_TYPE_03;
+                gSaveContext.nextTransitionType = TRANS_TYPE_FADE_WHITE;
                 play->transitionTrigger = TRANS_TRIGGER_START;
             } else {
                 func_80B79524(this);
@@ -1245,7 +1245,7 @@ void func_80B7A2AC(ObjUm* this, PlayState* play) {
         case OBJUM_PATH_STATE_FINISH:
             play->nextEntrance = ENTRANCE(GORMAN_TRACK, 4);
             play->transitionType = TRANS_TYPE_64;
-            gSaveContext.nextTransitionType = TRANS_TYPE_03;
+            gSaveContext.nextTransitionType = TRANS_TYPE_FADE_WHITE;
             play->transitionTrigger = TRANS_TRIGGER_START;
             break;
 
@@ -1303,14 +1303,14 @@ void ObjUm_RunMinigame(ObjUm* this, PlayState* play) {
                 if (!this->areAllPotsBroken) {
                     play->nextEntrance = ENTRANCE(MILK_ROAD, 6);
                     play->transitionType = TRANS_TYPE_64;
-                    gSaveContext.nextTransitionType = TRANS_TYPE_03;
+                    gSaveContext.nextTransitionType = TRANS_TYPE_FADE_WHITE;
                     play->transitionTrigger = TRANS_TRIGGER_START;
                     SET_WEEKEVENTREG(WEEKEVENTREG_52_01);
                     CLEAR_WEEKEVENTREG(WEEKEVENTREG_52_02);
                 } else {
                     play->nextEntrance = ENTRANCE(ROMANI_RANCH, 8);
                     play->transitionType = TRANS_TYPE_64;
-                    gSaveContext.nextTransitionType = TRANS_TYPE_03;
+                    gSaveContext.nextTransitionType = TRANS_TYPE_FADE_WHITE;
                     play->transitionTrigger = TRANS_TRIGGER_START;
                     SET_WEEKEVENTREG(WEEKEVENTREG_52_02);
                     CLEAR_WEEKEVENTREG(WEEKEVENTREG_52_01);
@@ -1552,7 +1552,7 @@ void ObjUm_PostMilkRunWaitPathFinished(ObjUm* this, PlayState* play) {
         gSaveContext.nextCutsceneIndex = 0xFFF3;
         play->nextEntrance = ENTRANCE(TERMINA_FIELD, 0);
         play->transitionType = TRANS_TYPE_64;
-        gSaveContext.nextTransitionType = TRANS_TYPE_03;
+        gSaveContext.nextTransitionType = TRANS_TYPE_FADE_WHITE;
         play->transitionTrigger = TRANS_TRIGGER_START;
         gSaveContext.save.time += CLOCK_TIME(1, 0) + 2;
     }
@@ -1656,9 +1656,9 @@ void ObjUm_ChangeAnim(ObjUm* this, PlayState* play, ObjUmAnimation animIndex) {
     }
 
     if (animIndex == OBJ_UM_ANIM_TROT) {
-        animPlaybackSpeed = this->dyna.actor.speedXZ * 0.25f;
+        animPlaybackSpeed = this->dyna.actor.speed * 0.25f;
     } else if (animIndex == OBJ_UM_ANIM_GALLOP) {
-        animPlaybackSpeed = this->dyna.actor.speedXZ * 0.2f;
+        animPlaybackSpeed = this->dyna.actor.speed * 0.2f;
     } else if (animIndex == OBJ_UM_ANIM_IDLE) {
         animPlaybackSpeed = 1.0f;
     }
@@ -1704,7 +1704,7 @@ void ObjUm_ChangeAnim(ObjUm* this, PlayState* play, ObjUmAnimation animIndex) {
         this->unk_420 = this->wheelRot / 0x199A;
         //! FAKE
         if (!&sUmAnims[0]) {}
-        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_CART_WHEEL);
+        Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_CART_WHEEL);
     }
 }
 

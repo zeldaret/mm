@@ -458,7 +458,7 @@ void func_80866A5C(EnDoor* this, PlayState* play) {
                 this->unk_1A6 = 10;
             }
         } else if ((this->doorType == ENDOOR_TYPE_4) &&
-                   (Actor_XZDistanceBetweenActors(&this->door.dyna.actor, &GET_PLAYER(play)->actor) > 120.0f)) {
+                   (Actor_WorldDistXZToActor(&this->door.dyna.actor, &GET_PLAYER(play)->actor) > 120.0f)) {
             this->actionFunc = func_8086704C;
             this->door.dyna.actor.world.rot.y = -0x1800;
         }
@@ -485,11 +485,11 @@ void func_80866B20(EnDoor* this, PlayState* play) {
         if (this->unk_1A6 != 0) {
             gSaveContext.save.inventory.dungeonKeys[gSaveContext.mapIndex]--;
             Flags_SetSwitch(play, this->switchFlag);
-            Actor_PlaySfxAtPos(&this->door.dyna.actor, NA_SE_EV_CHAIN_KEY_UNLOCK);
+            Actor_PlaySfx(&this->door.dyna.actor, NA_SE_EV_CHAIN_KEY_UNLOCK);
         }
     } else if (this->unk_1A7 != 0) {
         this->actionFunc = func_80866F94;
-        Actor_PlaySfxAtPos(&this->door.dyna.actor, NA_SE_EV_DOOR_OPEN);
+        Actor_PlaySfx(&this->door.dyna.actor, NA_SE_EV_DOOR_OPEN);
     } else if (!Player_InCsMode(play)) {
         Actor_OffsetOfPointInActorCoords(&this->door.dyna.actor, &playerPosRelToDoor, &player->actor.world.pos);
         if (D_80867BC0 || ((fabsf(playerPosRelToDoor.y) < 20.0f) && (fabsf(playerPosRelToDoor.x) < 20.0f) &&
@@ -547,7 +547,7 @@ void func_80866B20(EnDoor* this, PlayState* play) {
                 func_80122F28(player);
             }
         } else if ((this->doorType == ENDOOR_TYPE_4) && (this->door.dyna.actor.xzDistToPlayer > 240.0f)) {
-            Actor_PlaySfxAtPos(&this->door.dyna.actor, NA_SE_EV_DOOR_OPEN);
+            Actor_PlaySfx(&this->door.dyna.actor, NA_SE_EV_DOOR_OPEN);
             this->actionFunc = func_80867080;
         }
     }
@@ -568,7 +568,7 @@ void func_80866F94(EnDoor* this, PlayState* play) {
     } else {
         if (Math_ScaledStepToS(&this->door.dyna.actor.world.rot.y, 0, 0x7D0)) {
             this->actionFunc = func_80866B20;
-            Actor_PlaySfxAtPos(&this->door.dyna.actor, NA_SE_EV_AUTO_DOOR_CLOSE);
+            Actor_PlaySfx(&this->door.dyna.actor, NA_SE_EV_AUTO_DOOR_CLOSE);
         }
     }
 }
@@ -589,7 +589,7 @@ void func_80867080(EnDoor* this, PlayState* play) {
 
 void func_808670F0(EnDoor* this, PlayState* play) {
     if (Math_ScaledStepToS(&this->door.dyna.actor.world.rot.y, 0, 0x700)) {
-        Actor_PlaySfxAtPos(&this->door.dyna.actor, NA_SE_EV_DOOR_CLOSE);
+        Actor_PlaySfx(&this->door.dyna.actor, NA_SE_EV_DOOR_CLOSE);
         this->actionFunc = func_80866B20;
     }
 }
@@ -603,7 +603,7 @@ void func_80867144(EnDoor* this, PlayState* play) {
             this->actionFunc = func_80866B20;
             this->door.playOpenAnim = false;
         } else if (Animation_OnFrame(&this->door.skelAnime, sAnimOpenFrames[this->door.animIndex])) {
-            Actor_PlaySfxAtPos(&this->door.dyna.actor, NA_SE_OC_DOOR_OPEN);
+            Actor_PlaySfx(&this->door.dyna.actor, NA_SE_OC_DOOR_OPEN);
             if (this->door.skelAnime.playSpeed < 1.5f) {
                 numEffects = (s32)(Rand_ZeroOne() * 30.0f) + 50;
                 for (i = 0; i < numEffects; i++) {
@@ -611,7 +611,7 @@ void func_80867144(EnDoor* this, PlayState* play) {
                 }
             }
         } else if (Animation_OnFrame(&this->door.skelAnime, sAnimCloseFrames[this->door.animIndex])) {
-            Actor_PlaySfxAtPos(&this->door.dyna.actor, NA_SE_EV_DOOR_CLOSE);
+            Actor_PlaySfx(&this->door.dyna.actor, NA_SE_EV_DOOR_CLOSE);
         }
     }
 }

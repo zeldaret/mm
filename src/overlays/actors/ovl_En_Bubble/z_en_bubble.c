@@ -247,10 +247,10 @@ void EnBubble_Fly(EnBubble* this, PlayState* play) {
         this->velocityFromBounce.y = this->bounceDirection.y * bounceSpeed;
         this->velocityFromBounce.z = this->bounceDirection.z * bounceSpeed;
         this->yVelocity = 0.0f;
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_AWA_BOUND);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_AWA_BOUND);
         this->modelRotSpeed = 128.0f;
         this->modelEllipticity = 0.48f;
-    } else if ((this->actor.bgCheckFlags & 0x20) && (bounceDirection.y < 0.0f)) {
+    } else if ((this->actor.bgCheckFlags & BGCHECKFLAG_WATER) && (bounceDirection.y < 0.0f)) {
         normal.x = normal.z = 0.0f;
         normal.y = 1.0f;
         EnBubble_Vec3fNormalizedReflect(&bounceDirection, &normal, &bounceDirection);
@@ -266,7 +266,7 @@ void EnBubble_Fly(EnBubble* this, PlayState* play) {
         this->velocityFromBounce.y = (this->bounceDirection.y * bounceSpeed);
         this->velocityFromBounce.z = (this->bounceDirection.z * bounceSpeed);
         this->yVelocity = 0.0f;
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_AWA_BOUND);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_AWA_BOUND);
         this->modelRotSpeed = 128.0f;
         this->modelEllipticity = 0.48f;
     }

@@ -223,7 +223,7 @@ void func_80B841A0(BgDblueWaterfall* this, PlayState* play) {
             EffectSsGSplash_Spawn(play, &sp94, NULL, NULL, 0, 250);
         }
 
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_REFLECTION_WATER);
+        Actor_PlaySfx(&this->actor, NA_SE_IT_REFLECTION_WATER);
     }
 }
 

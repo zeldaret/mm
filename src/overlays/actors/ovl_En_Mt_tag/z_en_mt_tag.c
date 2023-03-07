@@ -220,7 +220,8 @@ s32 EnMttag_UpdateCheckpoints(EnMttag* this, PlayState* play) {
     }
 
     if ((currentCheckpoints[0] > 0) && (currentCheckpoints[0] < highestCurrentCheckpoint) &&
-        (player->actor.bgCheckFlags & 1) && ((highestCurrentCheckpoint - currentCheckpoints[0]) >= 24)) {
+        (player->actor.bgCheckFlags & BGCHECKFLAG_GROUND) &&
+        ((highestCurrentCheckpoint - currentCheckpoints[0]) >= 24)) {
         playerIsLikelyToLose = true;
     }
 
@@ -398,10 +399,10 @@ void EnMttag_RaceFinish(EnMttag* this, PlayState* play) {
     if (DECR(this->timer) == 0) {
         if (CHECK_EVENTINF(EVENTINF_11)) {
             // Player won
-            EnMttag_ExitRace(play, TRANS_TYPE_03, TRANS_TYPE_03);
+            EnMttag_ExitRace(play, TRANS_TYPE_FADE_WHITE, TRANS_TYPE_FADE_WHITE);
         } else {
             // A non-player Goron won
-            EnMttag_ExitRace(play, TRANS_TYPE_02, TRANS_TYPE_02);
+            EnMttag_ExitRace(play, TRANS_TYPE_FADE_BLACK, TRANS_TYPE_FADE_BLACK);
         }
 
         Actor_Kill(&this->actor);
@@ -429,8 +430,8 @@ void EnMttag_PotentiallyRestartRace(EnMttag* this, PlayState* play) {
             }
 
             play->transitionTrigger = TRANS_TRIGGER_START;
-            play->transitionType = TRANS_TYPE_02;
-            gSaveContext.nextTransitionType = TRANS_TYPE_02;
+            play->transitionType = TRANS_TYPE_FADE_BLACK;
+            gSaveContext.nextTransitionType = TRANS_TYPE_FADE_BLACK;
             func_801477B4(play);
             func_800B7298(play, &this->actor, PLAYER_CSMODE_7);
             Magic_Add(play, MAGIC_FILL_TO_CAPACITY);
@@ -441,7 +442,7 @@ void EnMttag_PotentiallyRestartRace(EnMttag* this, PlayState* play) {
             CLEAR_EVENTINF(EVENTINF_13);
             gSaveContext.eventInf[2] = ((gSaveContext.eventInf[2] & 0xF) + 1) | (gSaveContext.eventInf[2] & 0xF0);
         } else {
-            EnMttag_ExitRace(play, TRANS_TYPE_02, TRANS_TYPE_02);
+            EnMttag_ExitRace(play, TRANS_TYPE_FADE_BLACK, TRANS_TYPE_FADE_BLACK);
         }
         Actor_Kill(&this->actor);
     }
@@ -457,7 +458,7 @@ void EnMttag_HandleCantWinChoice(EnMttag* this, PlayState* play) {
             // Exit the race
             func_8019F230();
             gSaveContext.timerStates[TIMER_ID_MINIGAME_2] = TIMER_STATE_OFF;
-            EnMttag_ExitRace(play, TRANS_TYPE_02, TRANS_TYPE_02);
+            EnMttag_ExitRace(play, TRANS_TYPE_FADE_BLACK, TRANS_TYPE_FADE_BLACK);
             CLEAR_EVENTINF(EVENTINF_13);
             SET_EVENTINF(EVENTINF_12);
             Actor_Kill(&this->actor);

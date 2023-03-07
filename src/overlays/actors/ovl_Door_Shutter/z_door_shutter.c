@@ -347,9 +347,9 @@ void func_808A1090(DoorShutter* this, PlayState* play) {
             Flags_SetSwitch(play, DOORSHUTTER_GET_7F(&this->door.dyna.actor));
             if (this->doorType != 5) {
                 gSaveContext.save.inventory.dungeonKeys[gSaveContext.mapIndex]--;
-                Actor_PlaySfxAtPos(&this->door.dyna.actor, NA_SE_EV_CHAIN_KEY_UNLOCK);
+                Actor_PlaySfx(&this->door.dyna.actor, NA_SE_EV_CHAIN_KEY_UNLOCK);
             } else {
-                Actor_PlaySfxAtPos(&this->door.dyna.actor, NA_SE_EV_CHAIN_KEY_UNLOCK_B);
+                Actor_PlaySfx(&this->door.dyna.actor, NA_SE_EV_CHAIN_KEY_UNLOCK_B);
             }
         }
     } else {
@@ -418,7 +418,7 @@ s32 func_808A1340(DoorShutter* this, PlayState* play) {
     if (this->door.dyna.actor.velocity.y == 0.0f) {
         func_808A1288(this, play);
         if (this->unk_163 != 7) {
-            Actor_PlaySfxAtPos(&this->door.dyna.actor, NA_SE_EV_SLIDE_DOOR_OPEN);
+            Actor_PlaySfx(&this->door.dyna.actor, NA_SE_EV_SLIDE_DOOR_OPEN);
         }
     }
 
@@ -452,9 +452,9 @@ s32 func_808A1478(DoorShutter* this, PlayState* play, f32 arg2) {
 
     if (temp == this->unk_168) {
         if (arg2 == 1.0f) {
-            Actor_PlaySfxAtPos(&this->door.dyna.actor, NA_SE_EV_METALDOOR_CLOSE);
+            Actor_PlaySfx(&this->door.dyna.actor, NA_SE_EV_METALDOOR_CLOSE);
         } else {
-            Actor_PlaySfxAtPos(&this->door.dyna.actor, NA_SE_EV_METALDOOR_OPEN);
+            Actor_PlaySfx(&this->door.dyna.actor, NA_SE_EV_METALDOOR_OPEN);
         }
 
         if ((this->unk_160 != -1) && (ActorCutscene_GetCurrentIndex() == this->unk_160)) {
@@ -515,7 +515,7 @@ void func_808A1684(DoorShutter* this, PlayState* play) {
                 if (DoorShutter_SetupDoor(this, play)) {
                     this->door.dyna.actor.velocity.y = 30.0f;
                 }
-                Actor_PlaySfxAtPos(&this->door.dyna.actor, NA_SE_EV_SLIDE_DOOR_CLOSE);
+                Actor_PlaySfx(&this->door.dyna.actor, NA_SE_EV_SLIDE_DOOR_CLOSE);
             }
             DoorShutter_SetupAction(this, func_808A1B48);
         }
@@ -615,7 +615,7 @@ void func_808A1B48(DoorShutter* this, PlayState* play) {
             Actor_SpawnFloorDustRing(play, &this->door.dyna.actor, &this->door.dyna.actor.world.pos, 45.0f, 10, 8.0f,
                                      500, 10, 0);
         }
-        Actor_PlaySfxAtPos(&this->door.dyna.actor, NA_SE_EV_BIGWALL_BOUND);
+        Actor_PlaySfx(&this->door.dyna.actor, NA_SE_EV_BIGWALL_BOUND);
 
         quakeIndex = Quake_Add(Play_GetCamera(play, CAM_ID_MAIN), QUAKE_TYPE_3);
         Quake_SetSpeed(quakeIndex, -32536);
@@ -660,7 +660,7 @@ s32 func_808A1D68(DoorShutter* this, PlayState* play) {
         return true;
     }
 
-    temp_a0 = BINANG_SUB(Actor_YawToPoint(&this->door.dyna.actor, &play->view.eye), this->door.dyna.actor.shape.rot.y);
+    temp_a0 = BINANG_SUB(Actor_WorldYawTowardPoint(&this->door.dyna.actor, &play->view.eye), this->door.dyna.actor.shape.rot.y);
     temp_a1 = BINANG_SUB(this->door.dyna.actor.yawTowardsPlayer, this->door.dyna.actor.shape.rot.y);
 
     temp_a0 = ABS_ALT(temp_a0);

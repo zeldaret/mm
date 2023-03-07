@@ -299,7 +299,7 @@ s32 func_80B96E5C(EnZot* this) {
     temp_f14 = points->z - this->actor.world.pos.z;
     this->actor.world.rot.y = Math_Atan2S(temp_f12, temp_f14);
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.world.rot.y, 2, 2000, 200);
-    phi_f2 = SQ(this->actor.speedXZ) * SQ(3.0f);
+    phi_f2 = SQ(this->actor.speed) * SQ(3.0f);
 
     if (this->unk_2D4 == 0) {
         phi_f2 = SQ(20.0f);
@@ -652,9 +652,9 @@ void func_80B979DC(EnZot* this, PlayState* play) {
     if (func_80B96E5C(this)) {
         this->actionFunc = func_80B97B5C;
         func_80B96BEC(this, 0, ANIMMODE_LOOP);
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
     } else {
-        this->actor.speedXZ = 1.5f;
+        this->actor.speed = 1.5f;
     }
 }
 
@@ -737,14 +737,14 @@ void func_80B97CC8(EnZot* this, PlayState* play) {
 void func_80B97D6C(EnZot* this, PlayState* play) {
     if (func_80B96E5C(this)) {
         this->actionFunc = func_80B97CC8;
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
         func_80B96BEC(this, 0, ANIMMODE_LOOP);
     } else {
-        this->actor.speedXZ = 8.0f;
+        this->actor.speed = 8.0f;
     }
 
     if (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 5.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_ZORA_WALK);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_ZORA_WALK);
     }
 }
 
@@ -819,9 +819,9 @@ void func_80B980FC(EnZot* this, PlayState* play) {
         this->actor.home.rot.x--;
     } else if (func_80B96E5C(this)) {
         this->actionFunc = func_80B97100;
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
     } else {
-        this->actor.speedXZ = 8.0f;
+        this->actor.speed = 8.0f;
         if (this->unk_2F0 != 3) {
             func_80B96BEC(this, 3, ANIMMODE_LOOP);
         }
@@ -958,8 +958,8 @@ void func_80B985EC(EnZot* this, PlayState* play) {
         if (itemAction > PLAYER_IA_NONE) {
             func_801477B4(play);
             if ((itemAction == PLAYER_IA_PICTO_BOX) && CHECK_QUEST_ITEM(QUEST_PICTOGRAPH) &&
-                Snap_CheckFlag(PICTOGRAPH_LULU_HEAD)) {
-                if (Snap_CheckFlag(PICTOGRAPH_LULU_RIGHT_ARM) && Snap_CheckFlag(PICTOGRAPH_LULU_LEFT_ARM)) {
+                Snap_CheckFlag(PICTO_VALID_LULU_HEAD)) {
+                if (Snap_CheckFlag(PICTO_VALID_LULU_RIGHT_ARM) && Snap_CheckFlag(PICTO_VALID_LULU_LEFT_ARM)) {
                     player->actor.textId = 0x12AE;
                 } else {
                     player->actor.textId = 0x12AC;
@@ -1295,13 +1295,13 @@ void func_80B992C0(EnZot* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->actionFunc = func_80B991E4;
         func_80B99160(this, play);
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
         func_80B96BEC(this, 0, ANIMMODE_LOOP);
     } else {
         if (Player_IsFacingActor(&this->actor, 0x3000, play) && (this->actor.xzDistToPlayer < 100.0f)) {
             func_800B8614(&this->actor, play, 120.0f);
         }
-        this->actor.speedXZ = 1.5f;
+        this->actor.speed = 1.5f;
         func_80B96FB0(this);
     }
 }

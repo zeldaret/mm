@@ -1962,7 +1962,7 @@ s32 BgCheck_CheckWallImpl(CollisionContext* colCtx, u16 xpFlags, Vec3f* posResul
                     }
                     posResult->z = posIntersect.z;
                     if (actor != NULL) {
-                        actor->bgCheckFlags |= 0x1000;
+                        actor->bgCheckFlags |= BGCHECKFLAG_PLAYER_1000;
                     }
                 }
                 // poly is wall
@@ -2008,7 +2008,7 @@ s32 BgCheck_CheckWallImpl(CollisionContext* colCtx, u16 xpFlags, Vec3f* posResul
                     result = true;
                     if (poly->normal.y * COLPOLY_NORMAL_FRAC > 0.5f) {
                         if (actor != NULL) {
-                            actor->bgCheckFlags |= 0x1000;
+                            actor->bgCheckFlags |= BGCHECKFLAG_PLAYER_1000;
                         }
                     }
                 } else {

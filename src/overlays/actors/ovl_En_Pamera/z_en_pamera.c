@@ -246,7 +246,7 @@ void func_80BD8758(EnPamera* this, PlayState* play) {
             ActorCutscene_StartAndSetUnkLinkFields(this->cutscenes[0], &this->actor);
             Camera_SetToTrackActor(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(this->cutscenes[0])),
                                    &this->actor);
-            this->actor.speedXZ = 1.5f;
+            this->actor.speed = 1.5f;
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 1);
             this->actor.shape.rot.y = this->actor.home.rot.y;
             this->actor.world.rot.y = this->actor.home.rot.y;
@@ -255,7 +255,7 @@ void func_80BD8758(EnPamera* this, PlayState* play) {
         } else if ((this->cutscenes[0] != -1) && (this->actor.xzDistToPlayer < 1000.0f)) {
             ActorCutscene_SetIntentToPlay(this->cutscenes[0]);
         } else {
-            this->actor.speedXZ = 1.5f;
+            this->actor.speed = 1.5f;
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 1);
             this->actor.shape.rot.y = this->actor.home.rot.y;
             this->actor.world.rot.y = this->actor.home.rot.y;
@@ -290,7 +290,7 @@ void func_80BD8964(EnPamera* this, PlayState* play) {
     vec.z = this->pathPoints->z;
 
     if (Math_Vec3f_StepTo(&this->actor.world.pos, &vec, 1.0f) < 5.0f) {
-        this->actor.speedXZ = 1.5f;
+        this->actor.speed = 1.5f;
         Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 1);
         SET_WEEKEVENTREG(WEEKEVENTREG_59_01);
         func_80BD8B50(this);
@@ -329,7 +329,7 @@ void func_80BD8B70(EnPamera* this, PlayState* play) {
     vec.y = this->pathPoints[this->pathIndex].y;
     vec.z = this->pathPoints[this->pathIndex].z;
     sp32 = Math_Vec3f_Yaw(&this->actor.world.pos, &vec);
-    if (Math_Vec3f_StepToXZ(&this->actor.world.pos, &vec, this->actor.speedXZ) > 10.0f) {
+    if (Math_Vec3f_StepToXZ(&this->actor.world.pos, &vec, this->actor.speed) > 10.0f) {
         Math_SmoothStepToS(&this->actor.shape.rot.y, sp32, 0xA, 0x3000, 0x100);
         this->actor.world.rot.y = this->actor.shape.rot.y;
     } else if (this->pathIndex < (this->pathPointsCount - 1)) {
@@ -344,14 +344,14 @@ void func_80BD8B70(EnPamera* this, PlayState* play) {
 
 void func_80BD8CCC(EnPamera* this) {
     this->hideInisdeTimer = 0;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 3);
     this->actionFunc = func_80BD8D1C;
 }
 
 void func_80BD8D1C(EnPamera* this, PlayState* play) {
     if (this->hideInisdeTimer++ > 200) {
-        this->actor.speedXZ = 1.5f;
+        this->actor.speed = 1.5f;
         Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 1);
         func_80BD8D80(this);
     }
@@ -373,7 +373,7 @@ void func_80BD8DB0(EnPamera* this, PlayState* play) {
     vec.y = this->pathPoints[this->pathIndex].y;
     vec.z = this->pathPoints[this->pathIndex].z;
     sp32 = Math_Vec3f_Yaw(&this->actor.world.pos, &vec);
-    if (Math_Vec3f_StepToXZ(&this->actor.world.pos, &vec, this->actor.speedXZ) > 10.0f) {
+    if (Math_Vec3f_StepToXZ(&this->actor.world.pos, &vec, this->actor.speed) > 10.0f) {
         Math_SmoothStepToS(&this->actor.shape.rot.y, sp32, 0xA, 0x3000, 0x100);
         this->actor.world.rot.y = this->actor.shape.rot.y;
     } else if (this->pathIndex > 0) {
@@ -396,7 +396,7 @@ void func_80BD8F60(EnPamera* this, PlayState* play) {
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0xA, 0x3000, 0x1000);
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 2);
-        this->actor.speedXZ = 3.0f;
+        this->actor.speed = 3.0f;
         func_80BD93CC(this, 0, 0);
         func_80BD8D80(this);
     }
@@ -425,7 +425,7 @@ void func_80BD90AC(EnPamera* this, PlayState* play) {
     if (Player_GetMask(play) != PLAYER_MASK_STONE && (this->actionFunc != func_80BD8758) &&
         (this->actionFunc != func_80BD8964) && (this->actionFunc != func_80BD8A7C) &&
         (this->actionFunc != func_80BD8F60) && ((this->actionFunc != func_80BD8B70) || (this->pathIndex != 0)) &&
-        ((this->actionFunc != func_80BD8DB0) || (this->actor.speedXZ != 3.0f)) &&
+        ((this->actionFunc != func_80BD8DB0) || (this->actor.speed != 3.0f)) &&
         ((this->actor.xzDistToPlayer < 150.0f) ||
          ((this->actionFunc == func_80BD909C) &&
           (Math_Vec3f_DistXZ(&this->actor.home.pos, &player->actor.world.pos) < 200.0f)))) {
@@ -501,11 +501,11 @@ void func_80BD93F4(EnPamera* this, PlayState* play) {
         (this->actionFunc == func_80BD8964) || (this->actionFunc == func_80BD8A7C)) {
         if (this->skelAnime.animation == &object_pamera_Anim_008AE0) {
             if (Animation_OnFrame(&this->skelAnime, 9.0f) || Animation_OnFrame(&this->skelAnime, 18.0f)) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_PAMERA_WALK);
+                Actor_PlaySfx(&this->actor, NA_SE_EV_PAMERA_WALK);
             }
         } else if ((this->skelAnime.animation == &object_pamera_Anim_008E38) &&
                    (Animation_OnFrame(&this->skelAnime, 2.0f) || Animation_OnFrame(&this->skelAnime, 6.0f))) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_PAMERA_WALK);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_PAMERA_WALK);
         }
     }
 }
@@ -513,7 +513,7 @@ void func_80BD93F4(EnPamera* this, PlayState* play) {
 void func_80BD94E0(EnPamera* this, PlayState* play) {
     if ((this->actionFunc != func_80BD8B70) && (this->actionFunc != func_80BD8964) &&
         (this->actionFunc != func_80BD909C) && (this->actionFunc != func_80BD8D1C) &&
-        ((this->actionFunc != func_80BD8DB0) || (this->actor.speedXZ == 3.0f))) {
+        ((this->actionFunc != func_80BD8DB0) || (this->actor.speed == 3.0f))) {
         Actor_TrackPlayer(play, &this->actor, &this->headRot, &this->torsoRot, this->actor.focus.pos);
     } else {
         Actor_TrackNone(&this->headRot, &this->torsoRot);
@@ -691,7 +691,7 @@ void func_80BD9C70(EnPamera* this, PlayState* play) {
     play->nextEntrance = ENTRANCE(IKANA_CANYON, 2);
     play->transitionTrigger = TRANS_TRIGGER_START;
     play->transitionType = TRANS_TYPE_70;
-    gSaveContext.nextTransitionType = TRANS_TYPE_02;
+    gSaveContext.nextTransitionType = TRANS_TYPE_FADE_BLACK;
 }
 
 s32 func_80BD9CB8(EnPamera* this, PlayState* play) {
@@ -772,7 +772,7 @@ void func_80BD9F3C(EnPamera* this, PlayState* play) {
             Animation_OnFrame(&this->skelAnime, 10.0f) || Animation_OnFrame(&this->skelAnime, 14.0f) ||
             Animation_OnFrame(&this->skelAnime, 18.0f) || Animation_OnFrame(&this->skelAnime, 22.0f) ||
             Animation_OnFrame(&this->skelAnime, 25.0f)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_PAMERA_WALK);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_PAMERA_WALK);
         }
         if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
             this->unk_31E = 0;
@@ -820,7 +820,7 @@ void func_80BDA1C8(EnPamera* this, PlayState* play) {
     if (this->unk_31E == 1) {
         if (Animation_OnFrame(&this->skelAnime, 2.0f) || Animation_OnFrame(&this->skelAnime, 6.0f) ||
             Animation_OnFrame(&this->skelAnime, 10.0f) || Animation_OnFrame(&this->skelAnime, 14.0f)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_PAMERA_WALK);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_PAMERA_WALK);
         }
         if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
             this->unk_31E = 0;

@@ -4,6 +4,7 @@
  * Description:
  */
 
+#include "global.h"
 #include "z_fbdemo_wipe5.h"
 
 #define THIS ((TransitionWipe5*)thisx)
@@ -80,7 +81,7 @@ void TransitionWipe5_Draw(void* thisx, Gfx** gfxP) {
     Gfx* gfx = *gfxP;
     s32 width = gScreenWidth;
     s32 height = gScreenHeight;
-    s32 sp50 = D_801FBB90;
+    void* sp50 = D_801FBB90;
     TransitionWipe5* this = THIS;
     s32 alpha = (1.0f - this->unk_0C) * 255.0f;
 
@@ -126,7 +127,7 @@ void TransitionWipe5_SetType(void* thisx, s32 type) {
     if (type & 0x80) {
         this->unk_11 = 0;
         this->unk_12 = type & 1;
-    } else if (type == 1) {
+    } else if (type == TRANS_INSTANCE_TYPE_FILL_OUT) {
         this->unk_10 = 1;
     } else {
         this->unk_10 = 0;

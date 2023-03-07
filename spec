@@ -424,11 +424,10 @@ beginseg
     name "code"
     compress
     after "dmadata"
-    include "build/src/code/z_en_a_keep.o"
     include "build/data/code/aspMain.data.o"
     include "build/data/code/gspS2DEX2.fifo.data.o"
     include "build/data/code/njpgdspMain.data.o"
-    include "build/data/code/code_801ADE60.data.o"
+    include "build/src/code/z_en_a_keep.o"
     include "build/data/code/code_801E3FA0.bss.o"
     include "build/src/code/z_en_item00.o"
     include "build/src/code/z_eff_blure.o"
@@ -464,7 +463,6 @@ beginseg
     include "build/src/code/z_demo.o"
     include "build/src/code/z_draw.o"
     include "build/src/code/z_eff_footmark.o"
-    include "build/data/code/z_eff_footmark.data.o"
     include "build/src/code/z_sound_source.o"
     include "build/src/code/z_elf_message.o"
     include "build/src/code/z_en_hy_code.o"
@@ -514,7 +512,7 @@ beginseg
     pad_text
     include "build/data/code/code_801C2410.data.o"
     include "build/src/code/z_scene.o"
-    include "build/data/code/code_801C2730.data.o"
+    include "build/src/code/object_table.o"
     include "build/src/code/z_scene_proc.o"
     include "build/src/code/z_scene_table.o"
     include "build/src/code/z_schedule.o"
@@ -528,7 +526,8 @@ beginseg
     include "build/src/code/z_rumble.o"
     include "build/src/code/z_view.o"
     include "build/src/code/z_vimode.o"
-    include "build/data/code/z_vimode.data.o"
+    include "build/src/code/code_80140CE0.o"
+    include "build/data/code/code_80140CE0.data.o"
     include "build/src/code/code_80140E80.o"
     include "build/src/code/z_vismono.o"
     include "build/src/code/code_801420C0.o"
@@ -549,13 +548,10 @@ beginseg
     include "build/src/code/z_kaleido_scope_call.o"
     include "build/src/code/z_fbdemo_dlftbls.o"
     include "build/src/code/z_fbdemo.o"
-    include "build/data/code/z_fbdemo.data.o"
     include "build/src/code/z_fbdemo_fade.o"
     include "build/src/code/z_fbdemo_circle.o"
     include "build/src/code/z_overlay.o"
     include "build/src/code/z_play.o"
-    include "build/data/code/z_play.data.o"
-    include "build/data/code/z_play.bss.o"
     include "build/src/code/z_play_hireso.o"
     include "build/data/code/z_play_hireso.data.o"
     include "build/src/code/PreRender.o"
@@ -580,9 +576,10 @@ beginseg
     include "build/src/code/speed_meter.o"
     include "build/data/code/speed_meter.data.o"
     include "build/data/code/speed_meter.bss.o"
+    include "build/src/code/su_mtx.o"
+    include "build/src/code/sys_cfb.o"
     include "build/data/code/sys_cfb.bss.o"
     include "build/src/code/sys_cmpdma.o"
-    include "build/data/code/sys_cmpdma.bss.o"
     include "build/src/code/sys_initial_check.o"
     include "build/src/code/sys_math.o"
     include "build/src/code/sys_math3d.o"
@@ -608,8 +605,7 @@ beginseg
     include "build/src/code/audio/audio_heap.o"
     include "build/data/code/audio_heap.bss.o"
     include "build/src/code/audio/audio_load.o"
-    include "build/src/code/audio/code_80192BE0.o"
-    include "build/data/code/code_80192BE0.data.o"
+    include "build/src/code/audio/audio_thread.o"
     include "build/src/code/audio/audio_dcache.o"
     include "build/src/code/audio/aisetnextbuf.o"
     include "build/src/code/audio/audio_playback.o"
@@ -963,8 +959,7 @@ beginseg
     name "ovl_En_Dekubaba"
     compress
     include "build/src/overlays/actors/ovl_En_Dekubaba/z_en_dekubaba.o"
-    include "build/data/ovl_En_Dekubaba/ovl_En_Dekubaba.data.o"
-    include "build/data/ovl_En_Dekubaba/ovl_En_Dekubaba.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Dekubaba/ovl_En_Dekubaba_reloc.o"
 endseg
 
 beginseg
@@ -1977,8 +1972,7 @@ beginseg
     name "ovl_En_Si"
     compress
     include "build/src/overlays/actors/ovl_En_Si/z_en_si.o"
-    include "build/data/ovl_En_Si/ovl_En_Si.data.o"
-    include "build/data/ovl_En_Si/ovl_En_Si.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Si/ovl_En_Si_reloc.o"
 endseg
 
 beginseg
@@ -3429,8 +3423,7 @@ beginseg
     name "ovl_En_Stop_heishi"
     compress
     include "build/src/overlays/actors/ovl_En_Stop_heishi/z_en_stop_heishi.o"
-    include "build/data/ovl_En_Stop_heishi/ovl_En_Stop_heishi.data.o"
-    include "build/data/ovl_En_Stop_heishi/ovl_En_Stop_heishi.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Stop_heishi/ovl_En_Stop_heishi_reloc.o"
 endseg
 
 beginseg
@@ -4024,8 +4017,7 @@ beginseg
     name "ovl_En_Ge2"
     compress
     include "build/src/overlays/actors/ovl_En_Ge2/z_en_ge2.o"
-    include "build/data/ovl_En_Ge2/ovl_En_Ge2.data.o"
-    include "build/data/ovl_En_Ge2/ovl_En_Ge2.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Ge2/ovl_En_Ge2_reloc.o"
 endseg
 
 beginseg
@@ -4208,8 +4200,7 @@ beginseg
     name "ovl_En_Zod"
     compress
     include "build/src/overlays/actors/ovl_En_Zod/z_en_zod.o"
-    include "build/data/ovl_En_Zod/ovl_En_Zod.data.o"
-    include "build/data/ovl_En_Zod/ovl_En_Zod.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Zod/ovl_En_Zod_reloc.o"
 endseg
 
 beginseg

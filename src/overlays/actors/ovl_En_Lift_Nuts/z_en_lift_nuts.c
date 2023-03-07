@@ -284,7 +284,7 @@ void func_80AE9FC8(EnLiftNuts* this) {
         Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 3);
     }
 
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_AKINDONUTS_HIDE);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_AKINDONUTS_HIDE);
     this->actionFunc = func_80AEA044;
 }
 
@@ -301,7 +301,7 @@ void func_80AEA0B4(EnLiftNuts* this) {
         this->actionFunc = func_80AEA1A0;
     } else {
         Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 2);
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_AKINDONUTS_HIDE);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_AKINDONUTS_HIDE);
         this->actionFunc = func_80AEA128;
     }
 }
@@ -598,7 +598,7 @@ void func_80AEABF0(EnLiftNuts* this) {
 
     if (this->actionFunc != func_80AEB698) {
         if (func_80AE9B4C(0, 0)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_AKINDONUTS_HIDE);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_AKINDONUTS_HIDE);
         }
         Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 16);
     }
@@ -674,7 +674,7 @@ void func_80AEACF8(EnLiftNuts* this, PlayState* play) {
 }
 
 void func_80AEAEAC(EnLiftNuts* this) {
-    this->actor.speedXZ = 2.0f;
+    this->actor.speed = 2.0f;
     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 1);
     func_80AE9AC4(this, 1);
     func_80AE9B4C(1, 1);
@@ -685,7 +685,7 @@ void func_80AEAF14(EnLiftNuts* this, PlayState* play) {
     f32 dist;
 
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.home.rot.y, 10, 0x1000, 0x500);
-    dist = Math_Vec3f_StepTo(&this->actor.world.pos, &this->vec_1D8, this->actor.speedXZ);
+    dist = Math_Vec3f_StepTo(&this->actor.world.pos, &this->vec_1D8, this->actor.speed);
     this->actor.world.pos.y += this->actor.gravity;
 
     if (dist == 0.0f) {
@@ -739,18 +739,18 @@ void func_80AEB148(EnLiftNuts* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (player->stateFlags3 & PLAYER_STATE3_200) {
-        this->actor.speedXZ = 2.0f;
-        gSaveContext.eventInf[3] |= 0x10;
+        this->actor.speed = 2.0f;
+        SET_EVENTINF(EVENTINF_34);
         Interface_StartTimer(4, 0);
         func_80AE9B4C(1, 2);
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_FOUND);
+        Actor_PlaySfx(&this->actor, NA_SE_SY_FOUND);
         func_80AEB280(this);
     }
 }
 
 void func_80AEB1C8(EnLiftNuts* this) {
-    this->actor.speedXZ = 2.0f;
-    gSaveContext.eventInf[3] |= 0x10;
+    this->actor.speed = 2.0f;
+    SET_EVENTINF(EVENTINF_34);
     Interface_StartTimer(4, 0);
     func_80AE9B4C(1, 2);
     this->actionFunc = func_80AEB230;
@@ -772,7 +772,7 @@ void func_80AEB280(EnLiftNuts* this) {
 void func_80AEB294(EnLiftNuts* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (((player->actor.bgCheckFlags & 1) && (player->actor.floorBgId == BG_ACTOR_MAX) &&
+    if (((player->actor.bgCheckFlags & BGCHECKFLAG_GROUND) && (player->actor.floorBgId == BG_ACTOR_MAX) &&
          player->actor.world.pos.y < 20.0f) ||
         gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2] >= 0x2EE0) {
         player->stateFlags1 |= PLAYER_STATE1_20;
@@ -815,13 +815,13 @@ void func_80AEB428(EnLiftNuts* this, PlayState* play) {
             this->textId = 0x27EC;
         }
     } else if (this->unk_354 == 30) {
-        gSaveContext.eventInf[3] &= (u8)~0x10;
+        CLEAR_EVENTINF(EVENTINF_34);
         gSaveContext.respawn[RESPAWN_MODE_DOWN].entrance = ENTRANCE(DEKU_SCRUB_PLAYGROUND, 1);
         gSaveContext.nextCutsceneIndex = 0;
         func_80169EFC(&play->state);
         gSaveContext.respawnFlag = -2;
         play->transitionType = TRANS_TYPE_64;
-        gSaveContext.nextTransitionType = TRANS_TYPE_02;
+        gSaveContext.nextTransitionType = TRANS_TYPE_FADE_BLACK;
     }
     this->unk_354++;
 }

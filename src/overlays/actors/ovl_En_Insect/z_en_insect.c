@@ -112,7 +112,7 @@ void func_8091A9E4(EnInsect* this) {
         return;
     }
 
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_MUSI_WALK);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_MUSI_WALK);
 
     this->unk_316 = 3.0f / CLAMP_MIN(this->skelAnime.playSpeed, 0.1f);
     if (this->unk_316 < 2) {
@@ -181,9 +181,9 @@ void func_8091AC78(EnInsect* this) {
 void func_8091ACC4(EnInsect* this, PlayState* play) {
     f32 temp_f2;
 
-    Math_SmoothStepToF(&this->actor.speedXZ, 0.0f, 0.1f, 0.5f, 0.0f);
+    Math_SmoothStepToF(&this->actor.speed, 0.0f, 0.1f, 0.5f, 0.0f);
 
-    temp_f2 = (Rand_ZeroOne() * 0.8f) + (this->actor.speedXZ * 1.2f);
+    temp_f2 = (Rand_ZeroOne() * 0.8f) + (this->actor.speed * 1.2f);
     if (temp_f2 < 0.0f) {
         this->skelAnime.playSpeed = 0.0f;
     } else {
@@ -201,7 +201,7 @@ void func_8091ACC4(EnInsect* this, PlayState* play) {
 
     if ((this->unk_30C & 4) && (this->unk_314 <= 0)) {
         func_8091B3D0(this);
-    } else if ((this->unk_30C & 1) && (this->actor.bgCheckFlags & 0x40)) {
+    } else if ((this->unk_30C & 1) && (this->actor.bgCheckFlags & BGCHECKFLAG_WATER_TOUCH)) {
         func_8091B618(this);
     } else if (this->actor.xzDistToPlayer < 40.0f) {
         func_8091B030(this);
@@ -218,7 +218,7 @@ void func_8091AE5C(EnInsect* this, PlayState* play) {
     s32 pad;
     f32 temp_f0;
 
-    Math_SmoothStepToF(&this->actor.speedXZ, 1.5f, 0.1f, 0.5f, 0.0f);
+    Math_SmoothStepToF(&this->actor.speed, 1.5f, 0.1f, 0.5f, 0.0f);
 
     if ((EnInsect_XZDistanceSquared(&this->actor.world.pos, &this->actor.home.pos) > SQ(40.0f)) ||
         (this->unk_312 < 4)) {
@@ -231,7 +231,7 @@ void func_8091AE5C(EnInsect* this, PlayState* play) {
 
     this->actor.shape.rot.y = this->actor.world.rot.y;
 
-    temp_f0 = this->actor.speedXZ * 1.4f;
+    temp_f0 = this->actor.speed * 1.4f;
     this->skelAnime.playSpeed = CLAMP(temp_f0, 0.7f, 1.9f);
     SkelAnime_Update(&this->skelAnime);
 
@@ -241,7 +241,7 @@ void func_8091AE5C(EnInsect* this, PlayState* play) {
 
     if ((this->unk_30C & 4) && (this->unk_314 <= 0)) {
         func_8091B3D0(this);
-    } else if ((this->unk_30C & 1) && (this->actor.bgCheckFlags & 0x40)) {
+    } else if ((this->unk_30C & 1) && (this->actor.bgCheckFlags & BGCHECKFLAG_WATER_TOUCH)) {
         func_8091B618(this);
     } else if (this->actor.xzDistToPlayer < 40.0f) {
         func_8091B030(this);
@@ -261,7 +261,7 @@ void func_8091B07C(EnInsect* this, PlayState* play) {
     s16 yaw;
     s32 sp38 = this->actor.xzDistToPlayer < 40.0f;
 
-    Math_SmoothStepToF(&this->actor.speedXZ, 1.8f, 0.1f, 0.5f, 0.0f);
+    Math_SmoothStepToF(&this->actor.speed, 1.8f, 0.1f, 0.5f, 0.0f);
 
     if ((EnInsect_XZDistanceSquared(&this->actor.world.pos, &this->actor.home.pos) > SQ(160.0f)) ||
         (this->unk_312 < 4)) {
@@ -284,13 +284,13 @@ void func_8091B07C(EnInsect* this, PlayState* play) {
 
     this->actor.shape.rot.y = this->actor.world.rot.y;
 
-    speed = this->actor.speedXZ * 1.6f;
+    speed = this->actor.speed * 1.6f;
     this->skelAnime.playSpeed = CLAMP(speed, 0.8f, 1.9f);
     SkelAnime_Update(&this->skelAnime);
 
     if ((this->unk_312 <= 0) || !sp38) {
         func_8091AC78(this);
-    } else if ((this->unk_30C & 1) && (this->actor.bgCheckFlags & 0x40)) {
+    } else if ((this->unk_30C & 1) && (this->actor.bgCheckFlags & BGCHECKFLAG_WATER_TOUCH)) {
         func_8091B618(this);
     }
 }
@@ -299,7 +299,7 @@ void func_8091B274(EnInsect* this) {
     this->unk_312 = 200;
     Actor_SetScale(&this->actor, 0.001f);
     this->actor.draw = NULL;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->skelAnime.playSpeed = 0.3f;
     this->actionFunc = func_8091B2D8;
     this->unk_30C &= ~0x100;
@@ -325,7 +325,7 @@ void func_8091B2D8(EnInsect* this, PlayState* play) {
 void func_8091B3D0(EnInsect* this) {
     this->unk_312 = 60;
     this->skelAnime.playSpeed = 1.9f;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALTURA_BOUND);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_STALTURA_BOUND);
     Math_Vec3f_Copy(&this->actor.home.pos, &this->actor.world.pos);
     this->actionFunc = func_8091B440;
     this->unk_30C &= ~0x100;
@@ -336,7 +336,7 @@ void func_8091B440(EnInsect* this, PlayState* play) {
     s32 pad[2];
     Vec3f sp34;
 
-    Math_SmoothStepToF(&this->actor.speedXZ, 0.0f, 0.1f, 0.5f, 0.0f);
+    Math_SmoothStepToF(&this->actor.speed, 0.0f, 0.1f, 0.5f, 0.0f);
     Math_StepToS(&this->actor.shape.rot.x, 0x2AAA, 0x160);
     Actor_SetScale(&this->actor, CLAMP_MIN(this->actor.scale.x - 0.0002f, 0.001f));
 
@@ -373,9 +373,9 @@ void func_8091B670(EnInsect* this, PlayState* play) {
     Vec3f sp40;
 
     if (this->unk_312 > 80) {
-        Math_StepToF(&this->actor.speedXZ, 0.6f, 0.08f);
+        Math_StepToF(&this->actor.speed, 0.6f, 0.08f);
     } else {
-        Math_StepToF(&this->actor.speedXZ, 0.0f, 0.02f);
+        Math_StepToF(&this->actor.speed, 0.0f, 0.02f);
     }
 
     this->actor.velocity.y = 0.0f;
@@ -409,7 +409,7 @@ void func_8091B670(EnInsect* this, PlayState* play) {
 
     if ((this->unk_312 <= 0) || ((this->unk_30C & 4) && (this->unk_314 <= 0))) {
         func_8091B928(this);
-    } else if (!(this->actor.bgCheckFlags & 0x40)) {
+    } else if (!(this->actor.bgCheckFlags & BGCHECKFLAG_WATER_TOUCH)) {
         func_8091AC78(this);
     }
 }
@@ -417,7 +417,7 @@ void func_8091B670(EnInsect* this, PlayState* play) {
 void func_8091B928(EnInsect* this) {
     this->unk_312 = 100;
     this->actor.velocity.y = 0.0f;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actor.terminalVelocity = -0.8f;
     this->actor.gravity = -0.04f;
     this->unk_30C &= ~1;
@@ -462,7 +462,7 @@ void EnInsect_Update(Actor* thisx, PlayState* play) {
         Actor_MoveWithGravity(&this->actor);
         if (this->unk_30C & 0x100) {
             if (this->unk_30C & 1) {
-                if (this->actor.bgCheckFlags & 1) {
+                if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
                     func_8091A9E4(this);
                 }
             } else {

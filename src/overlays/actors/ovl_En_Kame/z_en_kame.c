@@ -185,7 +185,7 @@ void func_80AD7018(EnKame* this, PlayState* play) {
 
 void func_80AD70A0(EnKame* this) {
     Animation_MorphToPlayOnce(&this->skelAnime1, &object_tl_Anim_004210, -5.0f);
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actionFunc = func_80AD70EC;
 }
 
@@ -193,7 +193,7 @@ void func_80AD70EC(EnKame* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (Animation_OnFrame(&this->skelAnime1, 10.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PAMET_VOICE);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_PAMET_VOICE);
         this->unk_2A0 = 40;
     }
 
@@ -207,7 +207,7 @@ void func_80AD70EC(EnKame* this, PlayState* play) {
 
 void func_80AD71B4(EnKame* this) {
     Animation_MorphToLoop(&this->skelAnime1, &object_tl_Anim_00823C, -5.0f);
-    this->actor.speedXZ = 0.5f;
+    this->actor.speed = 0.5f;
     this->unk_29E = Animation_GetLastFrame(&object_tl_Anim_00823C) * ((s32)Rand_ZeroFloat(5.0f) + 3);
     this->unk_2A4 = this->actor.shape.rot.y;
     this->collider.base.acFlags |= (AC_HARD | AC_ON);
@@ -229,15 +229,15 @@ void func_80AD7254(EnKame* this, PlayState* play) {
     if (this->unk_2A4 != this->actor.shape.rot.y) {
         Math_ScaledStepToS(&this->actor.shape.rot.y, this->unk_2A4, 0x100);
         this->actor.world.rot.y = this->actor.shape.rot.y;
-    } else if (Actor_XZDistanceToPoint(&this->actor, &this->actor.home.pos) > 40.0f) {
-        this->unk_2A4 = Actor_YawToPoint(&this->actor, &this->actor.home.pos) + ((s32)Rand_Next() >> 0x14);
+    } else if (Actor_WorldDistXZToPoint(&this->actor, &this->actor.home.pos) > 40.0f) {
+        this->unk_2A4 = Actor_WorldYawTowardPoint(&this->actor, &this->actor.home.pos) + ((s32)Rand_Next() >> 0x14);
     }
 
     this->unk_29E--;
     if (this->unk_29E == 0) {
         func_80AD70A0(this);
     } else if (Animation_OnFrame(&this->skelAnime1, 0.0f) || Animation_OnFrame(&this->skelAnime1, 15.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PAMET_WALK);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_PAMET_WALK);
     }
 }
 
@@ -246,9 +246,9 @@ void func_80AD73A8(EnKame* this) {
     this->unk_29E = 0;
     this->unk_2AC = 1.0f;
     this->unk_2A8 = 1.0f;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     if (this->unk_2A0 == 0) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PAMET_VOICE);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_PAMET_VOICE);
     }
     this->actionFunc = func_80AD7424;
 }
@@ -278,7 +278,7 @@ void func_80AD7424(EnKame* this, PlayState* play) {
 }
 
 void func_80AD7568(EnKame* this) {
-    this->actor.speedXZ = this->unk_2A6 * (5.0f / 7552);
+    this->actor.speed = this->unk_2A6 * (5.0f / 7552);
     this->actor.shape.rot.z = this->unk_2A6 * 0.11016949f;
 }
 
@@ -287,7 +287,7 @@ void func_80AD75A8(EnKame* this, PlayState* play) {
     static Color_RGBA8 D_80AD8E58 = { 180, 180, 180, 255 };
     static Vec3f D_80AD8E5C = { 0.0f, 0.75f, 0.0f };
 
-    if ((this->actor.bgCheckFlags & 1) && (this->actor.speedXZ >= 3.0f)) {
+    if ((this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) && (this->actor.speed >= 3.0f)) {
         if ((play->gameplayFrames % 2) == 0) {
             BgSurfaceSfxType sfxType =
                 SurfaceType_GetSfxType(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
@@ -313,11 +313,11 @@ void func_80AD76CC(EnKame* this) {
         this->unk_2AC = 0.5f;
         func_80AD7568(this);
         this->unk_29E = 15;
-        this->actor.speedXZ = 0.0f;
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PAMET_CUTTER_ON);
+        this->actor.speed = 0.0f;
+        Actor_PlaySfx(&this->actor, NA_SE_EN_PAMET_CUTTER_ON);
         this->unk_2BC.y = this->actor.home.pos.y - 100.0f;
     } else {
-        this->actor.world.rot.y = Actor_YawToPoint(&this->actor, &this->actor.home.pos);
+        this->actor.world.rot.y = Actor_WorldYawTowardPoint(&this->actor, &this->actor.home.pos);
         Math_Vec3f_Copy(&this->unk_2BC, &this->actor.home.pos);
         this->unk_29E = 0;
     }
@@ -364,12 +364,12 @@ void func_80AD7948(EnKame* this, PlayState* play) {
     func_80AD75A8(this, play);
 
     if (this->unk_29E == -1) {
-        s16 temp_v0 = Actor_YawToPoint(&this->actor, &this->unk_2BC) - this->actor.world.rot.y;
+        s16 temp_v0 = Actor_WorldYawTowardPoint(&this->actor, &this->unk_2BC) - this->actor.world.rot.y;
 
         temp_v1 = ABS_ALT(temp_v0);
 
-        if ((this->actor.bgCheckFlags & 8) || (temp_v1 > 0x3000) ||
-            (Actor_XZDistanceToPoint(&this->actor, &this->unk_2BC) < 50.0f)) {
+        if ((this->actor.bgCheckFlags & BGCHECKFLAG_WALL) || (temp_v1 > 0x3000) ||
+            (Actor_WorldDistXZToPoint(&this->actor, &this->unk_2BC) < 50.0f)) {
             s8 pad;
 
             if (this->unk_2BC.y < this->actor.home.pos.y) {
@@ -384,7 +384,7 @@ void func_80AD7948(EnKame* this, PlayState* play) {
     if (Math_ScaledStepToS(&this->unk_2A6, this->unk_29E, (s32)(this->unk_2A6 * 0.09f) + 45)) {
         if (this->unk_29E == 0) {
             if (this->unk_2AC >= 1.0f) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PAMET_CUTTER_OFF);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_PAMET_CUTTER_OFF);
             }
             this->unk_2AC -= 0.1f;
             this->collider.base.atFlags &= ~AT_ON;
@@ -402,7 +402,7 @@ void func_80AD7948(EnKame* this, PlayState* play) {
 void func_80AD7B18(EnKame* this) {
     this->actor.draw = EnKame_Draw;
     Animation_MorphToPlayOnce(&this->skelAnime1, &object_tl_Anim_0031DC, -3.0f);
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->unk_2AC = 0.1f;
     this->unk_2A8 = 1.0f;
     this->actor.world.rot.y = this->actor.shape.rot.y;
@@ -435,13 +435,13 @@ void func_80AD7C54(EnKame* this) {
     }
 
     this->actor.draw = EnKame_Draw;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->collider.base.acFlags &= ~AC_ON;
     this->collider.base.atFlags &= ~AT_ON;
     this->collider.base.atFlags &= ~(AT_BOUNCED | AT_HIT);
     this->actor.flags &= ~ACTOR_FLAG_10;
     this->actor.shape.rot.z = 0;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PAMET_REVERSE);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_PAMET_REVERSE);
     this->actionFunc = func_80AD7D40;
 }
 
@@ -461,7 +461,7 @@ void func_80AD7DA4(EnKame* this) {
     this->collider.base.acFlags |= AC_ON;
     this->collider.base.acFlags &= ~AC_HARD;
     this->collider.base.colType = COLTYPE_HIT6;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actionFunc = func_80AD7E0C;
 }
 
@@ -473,7 +473,7 @@ void func_80AD7E0C(EnKame* this, PlayState* play) {
                 Animation_PlayOnce(&this->skelAnime1, &object_tl_Anim_0027D8);
             } else {
                 Animation_PlayOnce(&this->skelAnime1, &object_tl_Anim_002F88);
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PAMET_ROAR);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_PAMET_ROAR);
             }
         }
     } else {
@@ -483,7 +483,7 @@ void func_80AD7E0C(EnKame* this, PlayState* play) {
 
 void func_80AD7EC0(EnKame* this) {
     Animation_MorphToPlayOnce(&this->skelAnime1, &object_tl_Anim_002510, -3.0f);
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PAMET_WAKEUP);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_PAMET_WAKEUP);
     this->actionFunc = func_80AD7F10;
 }
 
@@ -499,7 +499,7 @@ void func_80AD7F10(EnKame* this, PlayState* play) {
 }
 
 void func_80AD7FA4(EnKame* this) {
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     if (this->actor.velocity.y > 0.0f) {
         this->actor.velocity.y = 0.0f;
     }
@@ -528,7 +528,7 @@ void func_80AD8060(EnKame* this) {
 
     Animation_Change(&this->skelAnime1, &object_tl_Anim_0008B4, 1.0f, 0.0f, sp36, ANIMMODE_ONCE, -3.0f);
     Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, sp36);
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PAMET_DAMAGE);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_PAMET_DAMAGE);
     this->collider.base.acFlags &= ~AC_ON;
     this->actionFunc = func_80AD810C;
 }
@@ -546,7 +546,7 @@ void func_80AD8148(EnKame* this, PlayState* play) {
     this->collider.base.atFlags &= ~AT_ON;
     this->collider.base.atFlags &= ~(AC_HARD | AC_HIT);
     this->actor.velocity.y = 15.0f;
-    this->actor.speedXZ = 1.5f;
+    this->actor.speed = 1.5f;
     if (play != NULL) {
         Enemy_StartFinishingBlow(play, &this->actor);
         if (this->actor.draw == func_80AD8D64) {
@@ -555,18 +555,18 @@ void func_80AD8148(EnKame* this, PlayState* play) {
             func_800BE504(&this->actor, &this->collider);
         }
     }
-    this->actor.bgCheckFlags &= ~0x1;
+    this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND;
     this->actor.flags &= ~ACTOR_FLAG_1;
     this->actor.flags |= ACTOR_FLAG_10;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PAMET_DEAD);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_PAMET_DEAD);
     this->unk_29E = 0;
     this->actionFunc = func_80AD825C;
 }
 
 void func_80AD825C(EnKame* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime1);
-    if ((this->actor.bgCheckFlags & 1) && (this->actor.velocity.y < 0.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_HIPLOOP_LAND);
+    if ((this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) && (this->actor.velocity.y < 0.0f)) {
+        Actor_PlaySfx(&this->actor, NA_SE_EN_HIPLOOP_LAND);
         func_80AD8364(this);
     } else {
         if (this->unk_29E == 1) {
@@ -582,7 +582,7 @@ void func_80AD825C(EnKame* this, PlayState* play) {
 
 void func_80AD8364(EnKame* this) {
     this->unk_29E = 20;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actionFunc = func_80AD8388;
 }
 
@@ -645,7 +645,7 @@ void func_80AD84C0(EnKame* this, PlayState* play) {
             if (this->actor.colChkInfo.damageEffect == 5) {
                 this->unk_2A2 = 40;
                 Actor_SetColorFilter(&this->actor, 0, 255, 0, 40);
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_FREEZE);
                 this->drawDmgEffScale = 0.6f;
                 this->drawDmgEffAlpha = 2.0f;
                 this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_SMALL;
@@ -653,7 +653,7 @@ void func_80AD84C0(EnKame* this, PlayState* play) {
             } else if (this->actor.colChkInfo.damageEffect == 1) {
                 this->unk_2A2 = 40;
                 Actor_SetColorFilter(&this->actor, 0, 255, 0, 40);
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_FREEZE);
                 func_80AD7FA4(this);
             } else if (this->actor.colChkInfo.damageEffect == 3) {
                 func_80AD6F9C(this);
@@ -707,7 +707,7 @@ void EnKame_Update(Actor* thisx, PlayState* play) {
     if ((this->collider.base.atFlags & AT_HIT) && (this->collider.base.atFlags & AT_BOUNCED)) {
         this->collider.base.atFlags &= ~(AT_BOUNCED | AT_HIT);
         func_80AD76CC(this);
-        if (Actor_XZDistanceToPoint(&this->actor, &this->unk_2BC) < 50.0f) {
+        if (Actor_WorldDistXZToPoint(&this->actor, &this->unk_2BC) < 50.0f) {
             this->collider.base.atFlags &= ~AT_ON;
         }
         this->unk_2A6 = 0x3B00;

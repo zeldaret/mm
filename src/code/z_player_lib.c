@@ -1,4 +1,3 @@
-#include "prevent_bss_reordering.h"
 #include "global.h"
 
 #include "objects/gameplay_keep/gameplay_keep.h"
@@ -142,7 +141,7 @@ void func_801229A0(PlayState* play, Player* player) {
     OPEN_DISPS(play->state.gfxCtx);
 
     if ((gSaveContext.jinxTimer != 0) || (player->invincibilityTimer > 0)) {
-        POLY_OPA_DISP = func_801660B8(play, POLY_OPA_DISP);
+        POLY_OPA_DISP = Play_SetFog(play, POLY_OPA_DISP);
     }
 
     CLOSE_DISPS(play->state.gfxCtx);
@@ -493,10 +492,11 @@ s32 Player_IsGoronOrDeku(Player* player) {
 s32 func_801234D4(PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    return (player->stateFlags2 & PLAYER_STATE2_8) || player->actor.speedXZ != 0.0f ||
+    return (player->stateFlags2 & PLAYER_STATE2_8) || (player->actor.speed != 0.0f) ||
            ((player->transformation != PLAYER_FORM_ZORA) && (player->stateFlags1 & PLAYER_STATE1_8000000)) ||
            ((player->transformation == PLAYER_FORM_ZORA) && (player->stateFlags1 & PLAYER_STATE1_8000000) &&
-            (!(player->actor.bgCheckFlags & 1) || (player->currentBoots < PLAYER_BOOTS_ZORA_UNDERWATER)));
+            (!(player->actor.bgCheckFlags & BGCHECKFLAG_GROUND) ||
+             (player->currentBoots < PLAYER_BOOTS_ZORA_UNDERWATER)));
 }
 
 s32 func_80123590(PlayState* play, Actor* actor) {
@@ -725,17 +725,17 @@ u8 sPlayerStrengths[PLAYER_FORM_MAX] = {
 };
 
 typedef struct {
-    /* 0x00 */ u8 flag;
-    /* 0x02 */ u16 textId;
-} TextTriggerEntry; // size = 0x04
+    /* 0x0 */ u8 flag;
+    /* 0x2 */ u16 textId;
+} EnvHazardTextTriggerEntry; // size = 0x4
 
 // These textIds are OoT remnants. The corresponding text entries are not present in this game, and so these don't point
 // to anything relevant.
-TextTriggerEntry sEnvironmentTextTriggers[] = {
-    { 1, 0x26FC },
-    { 2, 0x26FD },
-    { 0, 0 },
-    { 2, 0x26FD },
+EnvHazardTextTriggerEntry sEnvHazardTextTriggers[] = {
+    { ENV_HAZARD_TEXT_TRIGGER_HOTROOM, 0x26FC },    // PLAYER_ENV_HAZARD_HOTROOM - 1
+    { ENV_HAZARD_TEXT_TRIGGER_UNDERWATER, 0x26FD }, // PLAYER_ENV_HAZARD_UNDERWATER_FLOOR - 1
+    { 0, 0 },                                       // PLAYER_ENV_HAZARD_SWIMMING - 1
+    { ENV_HAZARD_TEXT_TRIGGER_UNDERWATER, 0x26FD }, // PLAYER_ENV_HAZARD_UNDERWATER_FREE - 1
 };
 
 PlayerModelIndices gPlayerModelTypes[PLAYER_MODELGROUP_MAX] = {
@@ -1276,7 +1276,7 @@ void func_80123DA4(Player* player) {
 }
 
 void func_80123DC0(Player* player) {
-    if ((player->actor.bgCheckFlags & 1) ||
+    if ((player->actor.bgCheckFlags & BGCHECKFLAG_GROUND) ||
         (player->stateFlags1 & (PLAYER_STATE1_200000 | PLAYER_STATE1_800000 | PLAYER_STATE1_8000000)) ||
         (!(player->stateFlags1 & (PLAYER_STATE1_40000 | PLAYER_STATE1_80000)) &&
          ((player->actor.world.pos.y - player->actor.floorHeight) < 100.0f))) {
@@ -1452,37 +1452,36 @@ s32 func_801242B4(Player* player) {
     return (player->stateFlags1 & PLAYER_STATE1_8000000) && (player->currentBoots < PLAYER_BOOTS_ZORA_UNDERWATER);
 }
 
-s32 Player_GetEnvTimerType(PlayState* play) {
+s32 Player_GetEnvironmentalHazard(PlayState* play) {
     Player* player = GET_PLAYER(play);
-    TextTriggerEntry* triggerEntry;
-    s32 envTimerType;
+    EnvHazardTextTriggerEntry* triggerEntry;
+    s32 envHazard;
 
     if (play->roomCtx.curRoom.unk2 == 3) { // Room is hot
-        envTimerType = PLAYER_ENV_TIMER_HOTROOM - 1;
+        envHazard = PLAYER_ENV_HAZARD_HOTROOM - 1;
     } else if ((player->transformation != PLAYER_FORM_ZORA) && (player->underwaterTimer > 80)) {
-        envTimerType = PLAYER_ENV_TIMER_UNDERWATER_FREE - 1;
+        envHazard = PLAYER_ENV_HAZARD_UNDERWATER_FREE - 1;
     } else if (player->stateFlags1 & PLAYER_STATE1_8000000) {
         if ((player->transformation == PLAYER_FORM_ZORA) && (player->currentBoots >= PLAYER_BOOTS_ZORA_UNDERWATER) &&
-            (player->actor.bgCheckFlags & 1)) {
-            envTimerType = PLAYER_ENV_TIMER_UNDERWATER_FLOOR - 1;
+            (player->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
+            envHazard = PLAYER_ENV_HAZARD_UNDERWATER_FLOOR - 1;
         } else {
-            envTimerType = PLAYER_ENV_TIMER_SWIMMING - 1;
+            envHazard = PLAYER_ENV_HAZARD_SWIMMING - 1;
         }
     } else {
-        return PLAYER_ENV_TIMER_NONE;
+        return PLAYER_ENV_HAZARD_NONE;
     }
 
-    // Trigger general textboxes under certain conditions, like "It's so hot in here!". Unused in MM
-    triggerEntry = &sEnvironmentTextTriggers[envTimerType];
+    triggerEntry = &sEnvHazardTextTriggers[envHazard];
     if (!Player_InCsMode(play)) {
-        if ((triggerEntry->flag) && !(gSaveContext.textTriggerFlags & triggerEntry->flag) &&
-            (envTimerType == (PLAYER_ENV_TIMER_HOTROOM - 1))) {
+        if ((triggerEntry->flag) && !(gSaveContext.envHazardTextTriggerFlags & triggerEntry->flag) &&
+            (envHazard == (PLAYER_ENV_HAZARD_HOTROOM - 1))) {
             Message_StartTextbox(play, triggerEntry->textId, NULL);
-            gSaveContext.textTriggerFlags |= triggerEntry->flag;
+            gSaveContext.envHazardTextTriggerFlags |= triggerEntry->flag;
         }
     }
 
-    return envTimerType + 1;
+    return envHazard + 1;
 }
 
 #ifdef NON_MATCHING

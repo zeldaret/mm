@@ -494,7 +494,7 @@ s32 EnSob1_TestCancelOption(EnSob1* this, PlayState* play, Input* input) {
 }
 
 void EnSob1_SetupStartShopping(PlayState* play, EnSob1* this, u8 skipHello) {
-    func_8011552C(play, 16);
+    func_8011552C(play, DO_ACTION_NEXT);
     if (!skipHello) {
         EnSob1_SetupAction(this, EnSob1_Hello);
     } else {
@@ -505,7 +505,7 @@ void EnSob1_SetupStartShopping(PlayState* play, EnSob1* this, u8 skipHello) {
 void EnSob1_StartShopping(PlayState* play, EnSob1* this) {
     EnSob1_SetupAction(this, EnSob1_FaceShopkeeper);
     func_80151938(play, sFacingShopkeeperTextIds[this->shopType]);
-    func_8011552C(play, 6);
+    func_8011552C(play, DO_ACTION_DECIDE);
     this->stickLeftPrompt.isEnabled = false;
     this->stickRightPrompt.isEnabled = true;
 }
@@ -514,7 +514,7 @@ void EnSob1_TalkToShopkeeper(PlayState* play, EnSob1* this) {
     EnSob1_SetupAction(this, EnSob1_TalkingToShopkeeper);
     this->talkOptionTextId = EnSob1_GetTalkOption(this, play);
     func_80151938(play, this->talkOptionTextId);
-    func_8011552C(play, 6);
+    func_8011552C(play, DO_ACTION_DECIDE);
     this->stickLeftPrompt.isEnabled = false;
     this->stickRightPrompt.isEnabled = false;
 }
@@ -680,7 +680,7 @@ void EnSob1_FaceShopkeeper(EnSob1* this, PlayState* play) {
         this->cutsceneState = ENSOB1_CUTSCENESTATE_WAITING;
     } else {
         if (talkState == TEXT_STATE_CHOICE) {
-            func_8011552C(play, 6);
+            func_8011552C(play, DO_ACTION_DECIDE);
             if (!EnSob1_TestEndInteraction(this, play, CONTROLLER1(&play->state))) {
                 if (!Message_ShouldAdvance(play) || !EnSob1_FacingShopkeeperDialogResult(this, play)) {
                     if (this->stickAccumX > 0) {
@@ -688,7 +688,7 @@ void EnSob1_FaceShopkeeper(EnSob1* this, PlayState* play) {
                         if (cursorIndex != CURSOR_INVALID) {
                             this->cursorIndex = cursorIndex;
                             EnSob1_SetupAction(this, EnSob1_LookToShelf);
-                            func_8011552C(play, 6);
+                            func_8011552C(play, DO_ACTION_DECIDE);
                             this->stickRightPrompt.isEnabled = false;
                             play_sound(NA_SE_SY_CURSOR);
                         }
@@ -738,9 +738,9 @@ void EnSob1_EndWalk(EnSob1* this, PlayState* play) {
                        EnSob1_GetDistSqAndOrient(this->path, this->waypoint - 1, &this->actor.world.pos, &distSq), 4,
                        1000, 1);
     this->actor.shape.rot.y = this->actor.world.rot.y;
-    Math_ApproachF(&this->actor.speedXZ, 0.5f, 0.2f, 1.0f);
+    Math_ApproachF(&this->actor.speed, 0.5f, 0.2f, 1.0f);
     if (distSq < 12.0f) {
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
         if (animLastFrame == curFrame) {
             EnSob1_ChangeAnim(&this->skelAnime, sAnimationInfoBombShopkeeper,
                               BOMB_SHOPKEEPER_ANIM_SIT_AT_COUNTER_START);
@@ -777,11 +777,11 @@ void EnSob1_Walk(EnSob1* this, PlayState* play) {
                            EnSob1_GetDistSqAndOrient(this->path, this->waypoint, &this->actor.world.pos, &distSq), 4,
                            1000, 1);
         this->actor.shape.rot.y = this->actor.world.rot.y;
-        this->actor.speedXZ = 2.0f;
+        this->actor.speed = 2.0f;
         if (distSq < SQ(5.0f)) {
             this->waypoint++;
             if ((this->path->count - 1) < this->waypoint) {
-                this->actor.speedXZ = 0.0f;
+                this->actor.speed = 0.0f;
                 EnSob1_SetupAction(this, EnSob1_EndWalk);
             }
         }
@@ -933,7 +933,7 @@ void EnSob1_BrowseShelf(EnSob1* this, PlayState* play) {
         this->stickLeftPrompt.isEnabled = true;
         EnSob1_UpdateCursorPos(play, this);
         if (talkState == TEXT_STATE_5) {
-            func_8011552C(play, 6);
+            func_8011552C(play, DO_ACTION_DECIDE);
             if (!EnSob1_HasPlayerSelectedItem(play, this, CONTROLLER1(&play->state))) {
                 EnSob1_CursorLeftRight(play, this);
                 cursorIndex = this->cursorIndex;
@@ -1041,7 +1041,7 @@ void EnSob1_SelectItem(EnSob1* this, PlayState* play) {
     u8 talkState = Message_GetState(&play->msgCtx);
 
     if (EnSob1_TakeItemOffShelf(this) && (talkState == TEXT_STATE_CHOICE)) {
-        func_8011552C(play, 6);
+        func_8011552C(play, DO_ACTION_DECIDE);
         if (!EnSob1_TestCancelOption(this, play, CONTROLLER1(&play->state)) && Message_ShouldAdvance(play)) {
             switch (play->msgCtx.choiceIndex) {
                 case 0:
