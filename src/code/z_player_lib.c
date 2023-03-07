@@ -1497,8 +1497,8 @@ void func_80124420(Player* player) {
     D_801F59D0.unk_8 += (-D_801F59D0.unk_2) >> 2;
 
     sp26 = BINANG_SUB(player->actor.world.rot.y, player->actor.shape.rot.y);
-    sp28 = (player->actor.speedXZ * -200.0f * Math_CosS(sp26)) * (randPlusMinusPoint5Scaled(2.0f) + 10.0f);
-    sp2C = (player->actor.speedXZ * 100.0f * Math_SinS(sp26)) * (randPlusMinusPoint5Scaled(2.0f) + 10.0f);
+    sp28 = (player->actor.speed * -200.0f * Math_CosS(sp26)) * (randPlusMinusPoint5Scaled(2.0f) + 10.0f);
+    sp2C = (player->actor.speed * 100.0f * Math_SinS(sp26)) * (randPlusMinusPoint5Scaled(2.0f) + 10.0f);
 
     D_801F59D0.unk_6 += sp28 >> 2;
     D_801F59D0.unk_8 += sp2C >> 2;
@@ -2150,7 +2150,7 @@ s32 func_80125D4C(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s
             } else if ((D_801F59F4 == 4) && (player->stateFlags1 & PLAYER_STATE1_2000000)) {
                 phi_a0 = &gPlayerLeftHandOpenDLs[D_801F59E0];
                 D_801F59F4 = 0;
-            } else if ((player->leftHandType == 0) && (player->actor.speedXZ > 2.0f) &&
+            } else if ((player->leftHandType == 0) && (player->actor.speed > 2.0f) &&
                        !(player->stateFlags1 & PLAYER_STATE1_8000000)) {
                 phi_a0 = &gPlayerLeftHandClosedDLs[D_801F59E0];
                 D_801F59F4 = 1;
@@ -2208,7 +2208,7 @@ s32 func_80125D4C(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s
                             phi_v1 = &gPlayerHandHoldingShields[player->currentShield - 1];
                         }
                     }
-                } else if ((player->rightHandType == 6) && (player->actor.speedXZ > 2.0f) &&
+                } else if ((player->rightHandType == 6) && (player->actor.speed > 2.0f) &&
                            (!(player->stateFlags1 & PLAYER_STATE1_8000000))) {
                     phi_v1 = &gPlayerRightHandClosedDLs[D_801F59E0];
                     D_801F59F8 = 7;
