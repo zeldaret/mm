@@ -1260,6 +1260,7 @@ u8 D_801D0900[] = {
 
 #ifdef NON_EQUIVALENT
 void Message_DecodeNES(PlayState* play) {
+    u8* ptr;
     MessageContext* msgCtx = &play->msgCtx;
     Font* font = &msgCtx->font; // spE0
     Player* player;             // spDC
@@ -1271,7 +1272,6 @@ void Message_DecodeNES(PlayState* play) {
     s16 digits[4]; // spC8/CA/CC/CE
     s16 spC6;
     s16 loadChar;
-    u8* ptr;
     s32 charTexIdx; // spBC
     s16 index;
     s16 spA8[8];
@@ -2103,7 +2103,7 @@ void Message_DecodeNES(PlayState* play) {
             }
 
             for (i = 0; i < var_s0_2; i++) {
-                ptr = font->fontBuf[((void)0, gSaveContext.save.inventory.dekuPlaygroundPlayerName[index][i])];
+                ptr = &font->fontBuf[(u8)((void)0, gSaveContext.save.inventory.dekuPlaygroundPlayerName[index][i])];
                 msgCtx->decodedBuffer.schar[decodedBufPos + i] = 0xFD;
 
                 for (var_v1_3 = 0; var_v1_3 < FONT_CHAR_TEX_SIZE; var_v1_3 += 4) {

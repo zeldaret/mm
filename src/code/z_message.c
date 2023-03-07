@@ -2077,29 +2077,30 @@ u16 D_801D0284[] = { 0x90D4, 0x90C2, 0x89A9, 0x97CE };
 
 #ifdef NON_EQUIVALENT
 void Message_Decode(PlayState* play) {
-    s32 pad1[2];
     MessageContext* msgCtx = &play->msgCtx;
     Font* font = &msgCtx->font; // spF0
     Player* player;             // spEC
     s16 decodedBufPos;          // spEA
+    s32 pad1;
+    s16 pad3;
     s16 spE0;
+    s32 pad4;
     s16 digits[4]; // spD4/D6/D8/DA
     s16 spD2;
-    s32 charTexIdx; // spC8
-    f32 spC0;
     f32 timeInSeconds;
-    s16 spAC[4];
-    s32 pad2;
+    s32 charTexIdx; // spC8
+    s16 var_v0;
+    s16 loadChar;
+    f32 spC0;
     f32 var_fs0;
     s16 index;
     s16 value;
     s16 playerNameLen;
     s16 i; // s1
-    s16 var_v0;
-    s16 loadChar;
+    s16 spAC[4];
     u16 curChar;
     u8 var_s3_8;
-    u8* ptr1;
+    s32 pad2;
     u8* ptr2;
 
     player = GET_PLAYER(play);
@@ -2171,7 +2172,7 @@ void Message_Decode(PlayState* play) {
                 }
 
                 for (i = 0; i < playerNameLen; i++) {
-                    ptr2 = font->iconBuf[((void)0, gSaveContext.save.playerData.playerName[i]) << 7];
+                    ptr2 = &font->iconBuf[((void)0, gSaveContext.save.playerData.playerName[i]) << 7];
                     msgCtx->decodedBuffer.wchar[decodedBufPos] = 0x100;
 
                     for (var_v0 = 0; var_v0 < FONT_CHAR_TEX_SIZE; var_v0 += 4) {
@@ -2852,7 +2853,7 @@ void Message_Decode(PlayState* play) {
                 }
 
                 for (i = 0; i < playerNameLen; i++) {
-                    ptr2 = font->fontBuf[((void)0, gSaveContext.save.inventory.dekuPlaygroundPlayerName[index][i])];
+                    ptr2 = &font->fontBuf[((void)0, gSaveContext.save.inventory.dekuPlaygroundPlayerName[index][i])];
                     msgCtx->decodedBuffer.wchar[decodedBufPos + i] = 0x30D;
 
                     for (var_v0 = 0; var_v0 < FONT_CHAR_TEX_SIZE; var_v0 += 4) {
@@ -2918,7 +2919,7 @@ void Message_Decode(PlayState* play) {
                 // pass
             } else if (curChar == 0x111) {
                 msgCtx->textFade = true;
-                msgCtx->decodedBuffer.wchar[++decodedBufPos] = font->msgBuf.wchar[++msgCtx->msgBufPos];
+                msgCtx->decodedBuffer.wchar[++decodedBufPos] = font->msgBuf.wchar[++msgCtx->msgBufPos] & 0xFF;
             } else if (curChar == 0x120) {
                 msgCtx->decodedBuffer.wchar[++decodedBufPos] = font->msgBuf.wchar[++msgCtx->msgBufPos];
                 if (msgCtx->textboxSkipped || (msgCtx->textBoxType == 1) || (msgCtx->textBoxType == 3) ||
