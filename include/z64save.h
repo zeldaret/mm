@@ -623,13 +623,14 @@ typedef enum SunsSongState {
 #define WEEKEVENTREG_13_08 PACK_WEEKEVENTREG_FLAG(13, 0x08)
 #define WEEKEVENTREG_13_10 PACK_WEEKEVENTREG_FLAG(13, 0x10)
 
-// This flag marks that the player has finished the spiderhouse and has exited.
+// This flag marks that the player has finished the Oceanside Spider Houseand has exited.
 // Used to identify if EnSth should be moved deeper into the house.
 // This does NOT flag:
 //   A) that the player has completed the house (Inventory_GetSkullTokenCount(play->sceneId))
 //   B) that the player has collected a reward (WEEKEVENTREG_OCEANSIDE_SPIDER_HOUSE_COLLECTED_REWARD)
 //   C) that the player has collected the wallet (WEEKEVENTREG_RECEIVED_OCEANSIDE_WALLET_UPGRADE)
 #define WEEKEVENTREG_OCEANSIDE_SPIDER_HOUSE_BUYER_MOVED_IN PACK_WEEKEVENTREG_FLAG(13, 0x20)
+
 #define WEEKEVENTREG_RECEIVED_OCEANSIDE_WALLET_UPGRADE PACK_WEEKEVENTREG_FLAG(13, 0x40)
 // You only get a wallet if completed on Day 1: repeat gets silver rupee, other days get less
 #define WEEKEVENTREG_OCEANSIDE_SPIDER_HOUSE_COLLECTED_REWARD PACK_WEEKEVENTREG_FLAG(13, 0x80)

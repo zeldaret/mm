@@ -24,12 +24,12 @@ typedef enum {
 #define STH_GET_TYPE(thisx) ((thisx)->params & 0xF)
 #define STH_GET_SWAMP_BODY(thisx) ((thisx)->params & 0x100)
 
-// The get item for the reward for ocean spiderhouse (wallet, or rupees) is set here
+// The get item ID for the reward for Oceanside Spider House (wallet, or rupees) is set here
 #define STH_GI_ID(thisx) ((thisx)->home.rot.z)
 
 // This actor has its own flags system
 #define STH_FLAG_CLEAR                          (0)
-#define STH_FLAG_DRAW_TRUTH_MASK                (1 << 0)
+#define STH_FLAG_DRAW_MASK_OF_TRUTH                (1 << 0)
 #define STH_FLAG_OCEANSIDE_SPIDER_HOUSE_GREET   (1 << 1)
 #define STH_FLAG_SWAMP_SPIDER_HOUSE_SAVED       (1 << 2) // set, but not read 
 #define STH_FLAG_DISABLE_HEAD_TRACK             (1 << 3)

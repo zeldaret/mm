@@ -149,7 +149,7 @@ void EnSth_Init(Actor* thisx, PlayState* play) {
             this->actor.textId = 0;
             if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_MASK_OF_TRUTH) ||
                 !CHECK_WEEKEVENTREG(WEEKEVENTREG_SWAMP_SPIDER_HOUSE_TALKED)) {
-                this->sthFlags |= STH_FLAG_DRAW_TRUTH_MASK;
+                this->sthFlags |= STH_FLAG_DRAW_MASK_OF_TRUTH;
             }
             break;
 
@@ -523,7 +523,7 @@ void EnSth_SwampSpiderHouseGiveMask(EnSth* this, PlayState* play) {
         this->actor.flags |= ACTOR_FLAG_10000;
         func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
     } else {
-        this->sthFlags &= ~STH_FLAG_DRAW_TRUTH_MASK;
+        this->sthFlags &= ~STH_FLAG_DRAW_MASK_OF_TRUTH;
         // This flag is used to keep track if the player has already spoken to the actor, triggering secondary dialogue.
         SET_WEEKEVENTREG(WEEKEVENTREG_SWAMP_SPIDER_HOUSE_TALKED);
         Actor_PickUp(&this->actor, play, GI_MASK_TRUTH, 10000.0f, 50.0f);
@@ -613,8 +613,8 @@ void EnSth_UpdateOceansideSpiderHouseWaitForTokens(Actor* thisx, PlayState* play
 }
 
 /**
- * Dual object actors have to wait for the object to finish loading,
- * this dev chose to use a temporary update instead of temporary acitonFunc
+ * Dual object actors have to wait for the object to finish loading.
+ * This dev chose to use a temporary update instead of temporary actionFunc.
  */
 void EnSth_UpdateWaitForObject(Actor* thisx, PlayState* play) {
     s32 pad;
@@ -733,7 +733,7 @@ void EnSth_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
         } else {
             OPEN_DISPS(play->state.gfxCtx);
 
-            if (this->sthFlags & STH_FLAG_DRAW_TRUTH_MASK) {
+            if (this->sthFlags & STH_FLAG_DRAW_MASK_OF_TRUTH) {
                 if (Object_IsLoaded(&play->objectCtx, this->maskOfTruthObjectId)) {
                     Matrix_Push();
                     Matrix_RotateZS(0x3A98, MTXMODE_APPLY);
