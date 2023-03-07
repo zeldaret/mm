@@ -28,8 +28,7 @@ typedef enum {
 #define STH_GI_ID(thisx) ((thisx)->home.rot.z)
 
 // This actor has its own flags system
-#define STH_FLAG_CLEAR                          (0)
-#define STH_FLAG_DRAW_MASK_OF_TRUTH                (1 << 0)
+#define STH_FLAG_DRAW_MASK_OF_TRUTH             (1 << 0)
 #define STH_FLAG_OCEANSIDE_SPIDER_HOUSE_GREET   (1 << 1)
 #define STH_FLAG_SWAMP_SPIDER_HOUSE_SAVED       (1 << 2) // set, but not read 
 #define STH_FLAG_DISABLE_HEAD_TRACK             (1 << 3)

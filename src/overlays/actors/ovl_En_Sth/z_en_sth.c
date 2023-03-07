@@ -124,7 +124,7 @@ void EnSth_Init(Actor* thisx, PlayState* play) {
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 36.0f);
 
-    this->sthFlags = STH_FLAG_CLEAR;
+    this->sthFlags = 0; // clear
     this->animIndex = STH_ANIM_START;
     this->actor.terminalVelocity = -9.0f;
     this->actor.gravity = -1.0f;
@@ -565,7 +565,6 @@ void EnSth_HandleSwampSpiderHouseConversation(EnSth* this, PlayState* play) {
                 break;
 
             case 0x91A: // Someone gave me this mask and said it would make me rich, getting rid of it
-                // TODO: why is this two flags? is it some.. started dialogue, ended dialogue flag?
                 SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_MASK_OF_TRUTH);
                 CLEAR_WEEKEVENTREG(WEEKEVENTREG_SWAMP_SPIDER_HOUSE_TALKED);
 
