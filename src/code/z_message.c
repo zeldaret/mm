@@ -2077,7 +2077,7 @@ u16 D_801D0284[] = { 0x90D4, 0x90C2, 0x89A9, 0x97CE };
 
 #ifdef NON_EQUIVALENT
 void Message_Decode(PlayState* play) {
-    s32 pad1[4];
+    s32 pad1[2];
     MessageContext* msgCtx = &play->msgCtx;
     Font* font = &msgCtx->font; // spF0
     Player* player;             // spEC
@@ -2094,12 +2094,13 @@ void Message_Decode(PlayState* play) {
     s16 index;
     s16 value;
     s16 playerNameLen;
-    s16 var_a2_2;
     s16 i; // s1
     s16 var_v0;
     s16 loadChar;
     u16 curChar;
     u8 var_s3_8;
+    u8* ptr1;
+    u8* ptr2;
 
     player = GET_PLAYER(play);
     msgCtx->textDelayTimer = 0;
@@ -2170,19 +2171,14 @@ void Message_Decode(PlayState* play) {
                 }
 
                 for (i = 0; i < playerNameLen; i++) {
+                    ptr2 = font->iconBuf[((void)0, gSaveContext.save.playerData.playerName[i]) << 7];
                     msgCtx->decodedBuffer.wchar[decodedBufPos] = 0x100;
 
-                    for (var_v0 = 0; var_v0 < 0x80; var_v0 += 4) {
-                        //! FAKE:
-                        if (1) {}
-                        font->charBuf[font->unk_11D88][charTexIdx + var_v0 + 0] =
-                            font->iconBuf[(gSaveContext.save.playerData.playerName[i] << 7) + var_v0 + 0];
-                        font->charBuf[font->unk_11D88][charTexIdx + var_v0 + 1] =
-                            font->iconBuf[(gSaveContext.save.playerData.playerName[i] << 7) + var_v0 + 1];
-                        font->charBuf[font->unk_11D88][charTexIdx + var_v0 + 2] =
-                            font->iconBuf[(gSaveContext.save.playerData.playerName[i] << 7) + var_v0 + 2];
-                        font->charBuf[font->unk_11D88][charTexIdx + var_v0 + 3] =
-                            font->iconBuf[(gSaveContext.save.playerData.playerName[i] << 7) + var_v0 + 3];
+                    for (var_v0 = 0; var_v0 < FONT_CHAR_TEX_SIZE; var_v0 += 4) {
+                        font->charBuf[font->unk_11D88][charTexIdx + var_v0 + 0] = ptr2[var_v0 + 0];
+                        font->charBuf[font->unk_11D88][charTexIdx + var_v0 + 1] = ptr2[var_v0 + 1];
+                        font->charBuf[font->unk_11D88][charTexIdx + var_v0 + 2] = ptr2[var_v0 + 2];
+                        font->charBuf[font->unk_11D88][charTexIdx + var_v0 + 3] = ptr2[var_v0 + 3];
                     }
                     charTexIdx += FONT_CHAR_TEX_SIZE;
                 }
@@ -2849,31 +2845,26 @@ void Message_Decode(PlayState* play) {
             } else if ((curChar == 0x30D) || (curChar == 0x30E) || (curChar == 0x30F)) {
                 index = curChar - 0x30D;
 
-                for (var_a2_2 = 8; var_a2_2 > 0; var_a2_2--) {
-                    if (gSaveContext.save.inventory.dekuPlaygroundPlayerName[index][var_a2_2 - 1] != 0x3E) {
+                for (playerNameLen = 8; playerNameLen > 0; playerNameLen--) {
+                    if (gSaveContext.save.inventory.dekuPlaygroundPlayerName[index][playerNameLen - 1] != 0x3E) {
                         break;
                     }
                 }
 
-                for (i = 0; i < var_a2_2; i++) {
+                for (i = 0; i < playerNameLen; i++) {
+                    ptr2 = font->fontBuf[((void)0, gSaveContext.save.inventory.dekuPlaygroundPlayerName[index][i])];
                     msgCtx->decodedBuffer.wchar[decodedBufPos + i] = 0x30D;
 
-                    for (var_v0 = 0; var_v0 < 0x80; var_v0 += 4) {
-                        //! FAKE:
-                        if (1) {}
-                        font->charBuf[font->unk_11D88][charTexIdx + var_v0 + 0] =
-                            font->fontBuf[gSaveContext.save.inventory.dekuPlaygroundPlayerName[index][i] + var_v0 + 0];
-                        font->charBuf[font->unk_11D88][charTexIdx + var_v0 + 1] =
-                            font->fontBuf[gSaveContext.save.inventory.dekuPlaygroundPlayerName[index][i] + var_v0 + 1];
-                        font->charBuf[font->unk_11D88][charTexIdx + var_v0 + 2] =
-                            font->fontBuf[gSaveContext.save.inventory.dekuPlaygroundPlayerName[index][i] + var_v0 + 2];
-                        font->charBuf[font->unk_11D88][charTexIdx + var_v0 + 3] =
-                            font->fontBuf[gSaveContext.save.inventory.dekuPlaygroundPlayerName[index][i] + var_v0 + 3];
+                    for (var_v0 = 0; var_v0 < FONT_CHAR_TEX_SIZE; var_v0 += 4) {
+                        font->charBuf[font->unk_11D88][charTexIdx + var_v0 + 0] = ptr2[var_v0 + 0];
+                        font->charBuf[font->unk_11D88][charTexIdx + var_v0 + 1] = ptr2[var_v0 + 1];
+                        font->charBuf[font->unk_11D88][charTexIdx + var_v0 + 2] = ptr2[var_v0 + 2];
+                        font->charBuf[font->unk_11D88][charTexIdx + var_v0 + 3] = ptr2[var_v0 + 3];
                     }
                     charTexIdx += FONT_CHAR_TEX_SIZE;
                 }
-                decodedBufPos = (decodedBufPos + var_a2_2) - 1;
-                spC0 += var_a2_2 * (16.0f * msgCtx->textCharScale);
+                decodedBufPos = (decodedBufPos + playerNameLen) - 1;
+                spC0 += playerNameLen * (16.0f * msgCtx->textCharScale);
             } else if (curChar == 0x310) {
                 digits[0] = digits[1] = digits[2] = 0;
                 digits[3] = (gSaveContext.save.unk_EE8 & 0xFFFF0000) >> 0x10;

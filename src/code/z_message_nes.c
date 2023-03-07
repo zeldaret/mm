@@ -1271,6 +1271,7 @@ void Message_DecodeNES(PlayState* play) {
     s16 digits[4]; // spC8/CA/CC/CE
     s16 spC6;
     s16 loadChar;
+    u8* ptr;
     s32 charTexIdx; // spBC
     s16 index;
     s16 spA8[8];
@@ -2102,18 +2103,14 @@ void Message_DecodeNES(PlayState* play) {
             }
 
             for (i = 0; i < var_s0_2; i++) {
+                ptr = font->fontBuf[((void)0, gSaveContext.save.inventory.dekuPlaygroundPlayerName[index][i])];
                 msgCtx->decodedBuffer.schar[decodedBufPos + i] = 0xFD;
 
-                //! TODO: Could be loop-unrolling?
-                for (var_v1_3 = 0; var_v1_3 < 0x80; var_v1_3++) {
-                    font->charBuf[font->unk_11D88][charTexIdx + var_v1_3 + 0] =
-                        font->fontBuf[gSaveContext.save.inventory.dekuPlaygroundPlayerName[index][i] + var_v1_3 + 0];
-                    // font->charBuf[font->unk_11D88][charTexIdx + var_v1_3 + 1] =
-                    //     font->fontBuf[gSaveContext.save.inventory.dekuPlaygroundPlayerName[index][i] + var_v1_3 + 1];
-                    // font->charBuf[font->unk_11D88][charTexIdx + var_v1_3 + 2] =
-                    //     font->fontBuf[gSaveContext.save.inventory.dekuPlaygroundPlayerName[index][i] + var_v1_3 + 2];
-                    // font->charBuf[font->unk_11D88][charTexIdx + var_v1_3 + 3] =
-                    //     font->fontBuf[gSaveContext.save.inventory.dekuPlaygroundPlayerName[index][i] + var_v1_3 + 3];
+                for (var_v1_3 = 0; var_v1_3 < FONT_CHAR_TEX_SIZE; var_v1_3 += 4) {
+                    font->charBuf[font->unk_11D88][charTexIdx + var_v1_3 + 0] = ptr[var_v1_3 + 0];
+                    font->charBuf[font->unk_11D88][charTexIdx + var_v1_3 + 1] = ptr[var_v1_3 + 1];
+                    font->charBuf[font->unk_11D88][charTexIdx + var_v1_3 + 2] = ptr[var_v1_3 + 2];
+                    font->charBuf[font->unk_11D88][charTexIdx + var_v1_3 + 3] = ptr[var_v1_3 + 3];
                 }
                 charTexIdx += FONT_CHAR_TEX_SIZE;
             }
