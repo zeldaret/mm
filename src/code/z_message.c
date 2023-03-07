@@ -2081,7 +2081,7 @@ void Message_Decode(PlayState* play) {
     Font* font = &msgCtx->font; // spF0
     Player* player;             // spEC
     s16 decodedBufPos;          // spEA
-    s32 pad1;
+    u32 timeToMoonCrash;
     s16 pad3;
     s16 spE0;
     s32 pad4;
@@ -2100,7 +2100,7 @@ void Message_Decode(PlayState* play) {
     s16 spAC[4];
     u16 curChar;
     u8 var_s3_8;
-    s32 pad2;
+    u32 temp;
     u8* ptr2;
 
     player = GET_PLAYER(play);
@@ -2172,7 +2172,7 @@ void Message_Decode(PlayState* play) {
                 }
 
                 for (i = 0; i < playerNameLen; i++) {
-                    ptr2 = &font->iconBuf[((void)0, gSaveContext.save.playerData.playerName[i]) << 7];
+                    ptr2 = &font->iconBuf[((void)0, gSaveContext.save.playerData.playerName[i]) * FONT_CHAR_TEX_SIZE];
                     msgCtx->decodedBuffer.wchar[decodedBufPos] = 0x100;
 
                     for (var_v0 = 0; var_v0 < FONT_CHAR_TEX_SIZE; var_v0 += 4) {
@@ -2183,14 +2183,14 @@ void Message_Decode(PlayState* play) {
                     }
                     charTexIdx += FONT_CHAR_TEX_SIZE;
                 }
-                decodedBufPos = (decodedBufPos + playerNameLen) - 1;
-                spC0 += (f32)playerNameLen * (16.0f * msgCtx->textCharScale);
+                decodedBufPos = decodedBufPos + playerNameLen - 1;
+                spC0 += playerNameLen * (16.0f * msgCtx->textCharScale);
             } else if (curChar == 0x201) {
                 DmaMgr_SendRequest0(msgCtx->textboxSegment + 0x1000, SEGMENT_ROM_START(message_texture_static), 0x900);
-                DmaMgr_SendRequest0(msgCtx->textboxSegment + 0x1900, SEGMENT_ROM_START(message_texture_static) + 0x900,
-                                    0x900);
-                spD2 = 2;
+                DmaMgr_SendRequest0(msgCtx->textboxSegment + 0x1900,
+                                    (uintptr_t)SEGMENT_ROM_START(message_texture_static) + 0x900, 0x900);
                 spE0 = 2;
+                spD2 = 2;
                 msgCtx->unk12012 = msgCtx->textboxY + 8;
                 msgCtx->unk11F18 = 1;
                 msgCtx->unk12010 = XREG(47);
@@ -2272,7 +2272,7 @@ void Message_Decode(PlayState* play) {
                         msgCtx->decodedBuffer.wchar[decodedBufPos] = 0x95AA;
                     }
                 }
-                spC0 += 6.0f * (16.0f * msgCtx->textCharScale);
+                spC0 += 6 * (16.0f * msgCtx->textCharScale);
             } else if (curChar == 0x20B) {
                 digits[0] = digits[1] = digits[2] = 0;
                 digits[3] = Flags_GetAllTreasure(play);
@@ -2667,8 +2667,9 @@ void Message_Decode(PlayState* play) {
                 decodedBufPos++;
                 msgCtx->decodedBuffer.wchar[decodedBufPos] = 0x2000;
             } else if (curChar == 0x237) {
+                timeToMoonCrash = TIME_UNTIL_MOON_CRASH;
                 digits[0] = 0;
-                digits[1] = TIME_TO_HOURS_F_ALT(TIME_UNTIL_MOON_CRASH);
+                digits[1] = TIME_TO_HOURS_F_ALT(timeToMoonCrash);
 
                 while (digits[1] >= 10) {
                     digits[0]++;
@@ -2697,7 +2698,8 @@ void Message_Decode(PlayState* play) {
                 func_8014D304(play, curChar, &charTexIdx, &spC0, &decodedBufPos);
             } else if ((curChar == 0x300) || (curChar == 0x301) || (curChar == 0x302) || (curChar == 0x308)) {
                 if (curChar == 0x308) {
-                    value = gSaveContext.save.unk_EE8;
+                    temp = gSaveContext.save.unk_EE8;
+                    value = temp;
                 } else {
                     value = (&gSaveContext.save.bankRupees)[curChar - 0x300];
                 }
@@ -2779,8 +2781,9 @@ void Message_Decode(PlayState* play) {
                 spC0 += var_fs0 * (16.0f * msgCtx->textCharScale);
                 decodedBufPos--;
             } else if ((curChar == 0x303) || (curChar == 0x304) || (curChar == 0x305)) {
+                temp = (&gSaveContext.save.unk_EE8)[curChar - 0x303];
                 digits[0] = digits[1] = digits[2] = 0;
-                digits[3] = (&gSaveContext.save.unk_EE8)[curChar - 0x303];
+                digits[3] = temp;
 
                 while (digits[3] >= 60) {
                     digits[1]++;
@@ -2813,8 +2816,9 @@ void Message_Decode(PlayState* play) {
                 }
                 spC0 += 4.0f * (16.0f * msgCtx->textCharScale);
             } else if (curChar == 0x306) {
+                temp = gSaveContext.save.shootingGalleryHighScores;
                 digits[0] = digits[1] = digits[2] = 0;
-                digits[3] = gSaveContext.save.shootingGalleryHighScores;
+                digits[3] = temp;
 
                 while (digits[3] >= 1000) {
                     digits[0]++;
@@ -2853,7 +2857,8 @@ void Message_Decode(PlayState* play) {
                 }
 
                 for (i = 0; i < playerNameLen; i++) {
-                    ptr2 = &font->fontBuf[((void)0, gSaveContext.save.inventory.dekuPlaygroundPlayerName[index][i])];
+                    ptr2 = &font->fontBuf[((void)0, gSaveContext.save.inventory.dekuPlaygroundPlayerName[index][i]) *
+                                          FONT_CHAR_TEX_SIZE];
                     msgCtx->decodedBuffer.wchar[decodedBufPos + i] = 0x30D;
 
                     for (var_v0 = 0; var_v0 < FONT_CHAR_TEX_SIZE; var_v0 += 4) {
@@ -2864,7 +2869,7 @@ void Message_Decode(PlayState* play) {
                     }
                     charTexIdx += FONT_CHAR_TEX_SIZE;
                 }
-                decodedBufPos = (decodedBufPos + playerNameLen) - 1;
+                decodedBufPos = decodedBufPos + playerNameLen - 1;
                 spC0 += playerNameLen * (16.0f * msgCtx->textCharScale);
             } else if (curChar == 0x310) {
                 digits[0] = digits[1] = digits[2] = 0;
@@ -2957,7 +2962,7 @@ void Message_Decode(PlayState* play) {
             decodedBufPos++;
             msgCtx->msgBufPos++;
         }
-    } else if (play->msgCtx.textIsCredits) {
+    } else if (msgCtx->textIsCredits) {
         Message_DecodeCredits(play);
     } else {
         Message_DecodeNES(play);
