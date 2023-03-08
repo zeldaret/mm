@@ -776,8 +776,8 @@ s32 Actor_IsSmallChest(struct EnBox* chest);
 void Actor_DrawDamageEffects(PlayState* play, Actor* actor, Vec3f limbPos[], s16 limbPosCount, f32 effectScale, f32 frozenSteamScale, f32 effectAlpha, u8 type);
 void Actor_SpawnIceEffects(PlayState* play, Actor* actor, Vec3f limbPos[], s32 limbPosCount, s32 effectsPerLimb, f32 scale, f32 scaleRange);
 
-void ActorOverlayTable_FaultPrint(void* arg0, void* arg1);
-void* ActorOverlayTable_FaultAddrConv(void* arg0, void* arg1);
+void ActorOverlayTable_FaultClient(void* arg0, void* arg1);
+void* ActorOverlayTable_FaultAddrConv(void* address, void* param);
 void ActorOverlayTable_Init(void);
 void ActorOverlayTable_Cleanup(void);
 
@@ -2242,7 +2242,7 @@ void func_80161C0C(void);
 // void func_801631DC(void);
 // void func_80163334(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
 // void func_80163660(void);
-void* KaleidoManager_FaultAddrConvFunc(void* address, void* param);
+void* KaleidoManager_FaultAddrConv(void* address, void* param);
 void KaleidoManager_LoadOvl(KaleidoMgrOverlay* ovl);
 void KaleidoManager_ClearOvl(KaleidoMgrOverlay* ovl);
 void KaleidoManager_Init(PlayState* play);
@@ -2443,7 +2443,7 @@ void Graph_FaultClient(void);
 void Graph_InitTHGA(TwoHeadGfxArena* arena, Gfx* buffer, s32 size);
 void Graph_SetNextGfxPool(GraphicsContext* gfxCtx);
 GameStateOverlay* Graph_GetNextGameState(GameState* gameState);
-void* Graph_FaultAddrConvFunc(void* address, void* param);
+void* Graph_FaultAddrConv(void* address, void* param);
 void Graph_Init(GraphicsContext* gfxCtx);
 void Graph_Destroy(GraphicsContext* gfxCtx);
 void Graph_TaskSet00(GraphicsContext* gfxCtx, GameState* gameState);
