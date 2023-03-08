@@ -43,6 +43,7 @@
 #include "fault_internal.h"
 #include "fault.h"
 #include "global.h"
+#include "stack.h"
 #include "vt.h"
 
 // bss
@@ -50,10 +51,11 @@ extern FaultMgr* sFaultInstance;
 extern f32 sFaultTimeTotal; // read but not set anywhere
 // extern u32 faultCustomOptions;
 // extern u32 faultCopyToLog;
-extern u8 sFaultStack[0x600];
-extern StackEntry sFaultThreadInfo;
+extern STACK(sFaultStack, 0x600);
+extern StackEntry sFaultStackInfo;
 extern FaultMgr gFaultMgr;
 
+// data
 const char* sCpuExceptions[] = {
     "Interrupt",
     "TLB modification",
@@ -1090,9 +1092,9 @@ void Fault_Init(void) {
     sFaultInstance->autoScroll = false;
     gFaultMgr.faultHandlerEnabled = true;
     osCreateMesgQueue(&sFaultInstance->queue, sFaultInstance->msg, ARRAY_COUNT(sFaultInstance->msg));
-    StackCheck_Init(&sFaultThreadInfo, sFaultStack, sFaultStack + sizeof(sFaultStack), 0, 0x100, "fault");
+    StackCheck_Init(&sFaultStackInfo, sFaultStack, STACK_TOP(sFaultStack), 0, 0x100, "fault");
     osCreateThread(&sFaultInstance->thread, Z_THREAD_ID_FAULT, Fault_ThreadEntry, NULL,
-                   sFaultStack + sizeof(sFaultStack), Z_THREAD_PRI_FAULT);
+                   STACK_TOP(sFaultStack), Z_THREAD_PRI_FAULT);
     osStartThread(&sFaultInstance->thread);
 }
 

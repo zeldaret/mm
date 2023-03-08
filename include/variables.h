@@ -274,27 +274,12 @@ extern f64 D_800994C8;
 extern char gBuildTeam[];
 extern char gBuildDate[];
 extern char gBuildMakeOption[];
-// extern StackEntry sBootThreadInfo;
-// extern OSThread sIdleThread;
-// extern u8 sIdleThreadStack[0x400];
-// extern StackEntry sIdleThreadInfo;
-// extern u8 sBootThreadStack[0x400];
+
 extern IrqMgr gIrqMgr;
-// extern u8 sIrqMgrStack[0x500];
-// extern StackEntry sIrqMgrStackInfo;
-// extern OSThread gMainThread;
-// extern u8 sMainStack[0x900];
-// extern StackEntry sMainStackInfo;
-// extern OSMesg sPiMgrCmdBuff[50];
-// extern OSMesgQueue gPiMgrCmdQ;
+
 extern OSViMode gViConfigMode;
 extern u8 D_8009B290;
-extern StackEntry sDmaMgrStackInfo;
-extern u16 numDmaEntries;
-extern OSMesgQueue sDmaMgrMsgQueue;
-extern OSMesg sDmaMgrMsgs[32];
-extern OSThread sDmaMgrThread;
-extern u8 sDmaMgrStack[0x500];
+
 extern u8 sYaz0DataBuffer[0x400];
 extern u8* sYaz0CurDataEnd;
 extern u32 sYaz0CurRomStart;
@@ -318,10 +303,7 @@ extern UNK_TYPE1 D_8009CF60;
 extern OSThread __osThreadSave;
 extern OSPiHandle D_8009D130;
 extern OSPiHandle D_8009D1A8;
-// extern OSThread D_8009D220;
-// extern u8 piManagerStack[0x1000];
-// extern OSMesgQueue D_8009E3D0;
-// extern OSMesg D_8009E3E8[1];
+
 extern OSMesg D_8009E3F0[1];
 extern OSMesgQueue __osPiAccessQueue;
 extern __OSInode __osPfsInodeCache;
@@ -333,13 +315,7 @@ extern u32 __osViIntrCount;
 extern u32 __osTimerCounter;
 extern OSPifRam __osPfsPifRam;
 extern OSPiHandle CartRomHandle;
-extern OSThread viThread;
-extern u8 viThreadStack[0x1000];
-extern OSMesgQueue viEventQueue;
-// extern OSMesg viEventBuf[5];
-// extern OSIoMesg viRetraceMsg;
-// extern OSIoMesg viCounterMsg;
-extern u16 viRetrace;
+
 extern DmaEntry dmadata[1568];
 // extern UNK_TYPE1 D_80186028;
 extern u64 aspMainTextStart[];
@@ -2472,11 +2448,7 @@ extern Struct_80140E80* D_801F6D4C;
 extern BombersNotebook sBombersNotebook;
 extern u8 sBombersNotebookOpen;
 extern u8 sMotionBlurStatus;
-extern SlowlyTask D_801F6E00;
-extern s32 D_801F6FC0;
-extern StackEntry slowlyStackEntry;
-extern u8 slowlyStack[0x1000];
-extern UNK_TYPE1 D_801F7FE8;
+
 extern UNK_TYPE1 D_801F7FF0;
 extern struct_801F8010 D_801F8010;
 extern struct_801F8020 D_801F8020;
@@ -2485,24 +2457,8 @@ extern UNK_TYPE1 D_801F8048;
 
 extern GfxMasterList* gGfxMasterDL;
 
-extern OSMesgQueue sSiIntMsgQ;
-extern OSMesg sSiIntMsgBuf[1];
 extern u32 gSegments[NUM_SEGMENTS];
 extern SchedContext gSchedContext;
-extern IrqMgrClient irqClient;
-extern OSMesgQueue irqMgrMsgQ;
-extern OSMesg irqMgrMsgBuf[60];
-extern OSThread sGraphThread;
-extern u8 sGraphStack[6144];
-extern u8 schedStack[1536];
-extern u8 audioStack[2048];
-extern u8 padmgrStack[1280];
-extern StackEntry sGraphStackInfo;
-extern StackEntry schedStackEntry;
-extern StackEntry audioStackEntry;
-extern StackEntry padmgrStackEntry;
-extern AudioMgr audioContext;
-extern PadMgr D_801FB620;
 
 extern u64* gAudioSPDataPtr;
 extern u32 gAudioSPDataSize;
@@ -2614,15 +2570,7 @@ extern Vec3f D_801FBDA4;
 extern Vec3f D_801FBDE8;
 extern MtxF* sMatrixStack;
 extern MtxF* sCurrentMatrix;
-// extern UNK_TYPE1 D_801FBE10;
-// extern UNK_TYPE1 D_801FBE28;
-// extern UNK_TYPE1 D_801FBE2C;
-// extern UNK_TYPE4 D_801FBE30;
-extern u8 sys_flashromStack[0x1000];
-extern StackEntry sys_flashromStackEntry;
-extern OSThread sys_flashromOSThread;
-extern s80185D40 D_801FD008;
-extern OSMesg D_801FD034;
+
 extern s32 D_801FD120;
 // extern UNK_TYPE1 D_801FD140;
 // extern UNK_TYPE1 D_801FD158;
@@ -2754,17 +2702,6 @@ extern AudioCustomUpdateFunction gAudioCustomUpdateFunction;
 extern AudioCustomSeqFunction gAudioCustomSeqFunction;
 extern AudioCustomReverbFunction gAudioCustomReverbFunction;
 extern AudioCustomSynthFunction gAudioCustomSynthFunction;
-
-// post-code buffers
-extern u8 gGfxSPTaskYieldBuffer[OS_YIELD_DATA_SIZE];
-extern u8 gGfxSPTaskStack[0x400];
-extern GfxPool gGfxPools[2];
-extern u8 gAudioHeap[0x138000];
-extern u8 gSystemHeap[UNK_SIZE];
-
-extern u8 gPictoPhotoI8[PICTO_PHOTO_SIZE];
-extern u8 D_80784600[0x56200];
-extern u16 gFramebuffer0[SCREEN_HEIGHT][SCREEN_WIDTH];
 
 // other segments
 extern GfxMasterList D_0E000000;
