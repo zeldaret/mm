@@ -11,6 +11,7 @@
  */
 
 #include "global.h"
+#include "buffers.h"
 
 /**
  * SoundFont Notes:
