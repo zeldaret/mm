@@ -5,6 +5,9 @@
 #include "PR/gbi.h"
 #include "color.h"
 
+struct PlayState;
+
+
 typedef struct {
     /* 0x00 */ u8 ambientColor[3];
     /* 0x03 */ s8 diffuseDir1[3];

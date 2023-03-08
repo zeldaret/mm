@@ -268,7 +268,7 @@ void EnTimeTag_Diary_Wait(EnTimeTag* this, PlayState* play) {
             // unable to read Zora script
             Message_StartTextbox(play, 0x122A, &this->actor);
 
-            //! FAKE:
+            //! FAKE: https://decomp.me/scratch/AHRNe
             if (0) {}
 
             ((EnElf*)GET_PLAYER(play)->tatlActor)->unk_264 |= 4;

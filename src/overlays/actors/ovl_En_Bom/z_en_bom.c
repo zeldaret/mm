@@ -205,11 +205,11 @@ void func_80871058(EnBom* this, PlayState* play) {
         return;
     }
 
-    if ((this->actor.velocity.y > 0.0f) && (this->actor.bgCheckFlags & 0x10)) {
+    if ((this->actor.velocity.y > 0.0f) && (this->actor.bgCheckFlags & BGCHECKFLAG_CEILING)) {
         this->actor.velocity.y = -this->actor.velocity.y;
     }
 
-    if ((this->actor.speed != 0.0f) && (this->actor.bgCheckFlags & 8)) {
+    if ((this->actor.speed != 0.0f) && (this->actor.bgCheckFlags & BGCHECKFLAG_WALL)) {
         s16 yDiff = BINANG_SUB(this->actor.wallYaw, this->actor.world.rot.y);
 
         if (ABS_ALT(yDiff) > 0x4000) {
@@ -220,10 +220,10 @@ void func_80871058(EnBom* this, PlayState* play) {
         Actor_PlaySfx(&this->actor, this->isPowderKeg ? NA_SE_EV_PUT_DOWN_WOODBOX : NA_SE_EV_BOMB_BOUND);
         Actor_MoveWithGravity(&this->actor);
         this->actor.speed *= 0.7f;
-        this->actor.bgCheckFlags &= ~8;
+        this->actor.bgCheckFlags &= ~BGCHECKFLAG_WALL;
     }
 
-    if (!(this->actor.bgCheckFlags & 1)) {
+    if (!(this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
         Math_StepToF(&this->actor.speed, 0.0f, 0.08f);
     } else {
         Vec3f* sp58;
@@ -280,7 +280,7 @@ void func_80871058(EnBom* this, PlayState* play) {
             this->unk_1FA += (s16)(this->actor.speed * 800.0f);
         }
 
-        if (this->actor.bgCheckFlags & 2) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND_TOUCH) {
             Actor_PlaySfx(&this->actor, this->isPowderKeg ? NA_SE_EV_TRE_BOX_BOUND : NA_SE_EV_BOMB_BOUND);
             if (this->actor.velocity.y < sp58->y) {
                 if ((sp54 == 4) || (sp54 == 14) || (sp54 == 15)) {
@@ -288,7 +288,7 @@ void func_80871058(EnBom* this, PlayState* play) {
                 } else {
                     this->actor.velocity.y = this->actor.velocity.y * sp58->z;
                 }
-                this->actor.bgCheckFlags &= ~1;
+                this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND;
             }
         } else if (this->timer >= 4) {
             Actor_LiftActor(&this->actor, play);
@@ -303,7 +303,7 @@ void func_808714D4(EnBom* this, PlayState* play) {
         this->actionFunc = func_80871058;
         this->actor.room = play->roomCtx.curRoom.num;
         this->actor.flags &= ~ACTOR_FLAG_100000;
-        this->actor.bgCheckFlags &= ~1;
+        this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND;
         Math_Vec3s_ToVec3f(&this->actor.prevPos, &this->actor.home.rot);
         if (this->isPowderKeg) {
             gSaveContext.powderKegTimer = 0;
@@ -579,8 +579,8 @@ void EnBom_Update(Actor* thisx, PlayState* play) {
                 thisx->velocity.y = (KREG(83) * 0.1f) + -2.0f;
                 thisx->gravity = (KREG(84) * 0.1f) + -0.5f;
                 this->unk_1FC = KREG(81) + 10;
-            } else if (thisx->bgCheckFlags & 0x40) {
-                thisx->bgCheckFlags &= ~0x40;
+            } else if (thisx->bgCheckFlags & BGCHECKFLAG_WATER_TOUCH) {
+                thisx->bgCheckFlags &= ~BGCHECKFLAG_WATER_TOUCH;
                 Actor_PlaySfx(thisx, NA_SE_EV_BOMB_DROP_WATER);
             }
         }

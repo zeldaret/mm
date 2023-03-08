@@ -222,7 +222,7 @@ void func_80BB178C(EnGeg* this, PlayState* play) {
 }
 
 s32 func_80BB18FC(EnGeg* this, Actor* actor) {
-    if (actor->bgCheckFlags & 1) {
+    if (actor->bgCheckFlags & BGCHECKFLAG_GROUND) {
         f32 sp24 = Math_Vec3f_DistXZ(&this->actor.world.pos, &actor->world.pos);
         f32 sp20 = Math_Vec3f_DiffY(&this->actor.world.pos, &actor->world.pos);
 
@@ -739,7 +739,7 @@ void func_80BB2F7C(EnGeg* this, PlayState* play) {
     this->actor.shape.rot.y = this->actor.world.rot.y;
 
     if ((this->actor.xzDistToPlayer < 150.0f) && (fabsf(this->actor.playerHeightRel) < 10.0f) &&
-        (this->actor.bgCheckFlags & 1)) {
+        (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
         this->unk_4AC = 2;
         this->actor.speed = 0.0f;
         this->unk_230 &= ~1;
@@ -751,7 +751,7 @@ void func_80BB2F7C(EnGeg* this, PlayState* play) {
         Actor_MoveWithGravity(&this->actor);
     }
 
-    if (this->actor.bgCheckFlags & 1) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         if (this->unk_230 & 0x80) {
             func_800B9010(&this->actor, NA_SE_EN_GOLON_SIRLOIN_ROLL - SFX_FLAG);
         } else {

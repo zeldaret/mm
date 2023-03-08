@@ -776,7 +776,7 @@ void func_808A6E24(EnSt* this, PlayState* play) {
         this->unk_2CC = 0.0f;
         this->unk_2D4 = 0.0f;
     } else {
-        if (this->actor.bgCheckFlags & 1) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
             this->actor.shape.yOffset = 400.0f;
             this->actor.world.rot.x = 0x4000;
             this->actor.shape.rot.x = this->actor.world.rot.x;

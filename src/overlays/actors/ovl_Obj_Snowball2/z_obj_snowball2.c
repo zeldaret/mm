@@ -358,7 +358,7 @@ void func_80B39C9C(ObjSnowball2* this, PlayState* play) {
         func_80B38EFC(this, play);
         Player_PlaySfx(GET_PLAYER(play), NA_SE_PL_PULL_UP_SNOWBALL);
         func_80B39F60(this);
-    } else if ((this->actor.bgCheckFlags & 0x20) &&
+    } else if ((this->actor.bgCheckFlags & BGCHECKFLAG_WATER) &&
                ((this->actor.shape.yOffset * this->actor.scale.y) < this->actor.depthInWater)) {
         func_80B3A498(this);
     } else if (sp38 && (this->collider.elements->info.acHitInfo->toucher.dmgFlags & 0x0583FFBC)) {
@@ -375,7 +375,8 @@ void func_80B39C9C(ObjSnowball2* this, PlayState* play) {
         if (this->unk_1AD == 0) {
             Actor_MoveWithGravity(&this->actor);
             Actor_UpdateBgCheckInfo(play, &this->actor, 15.0f, 15.0f, 0.0f, 0x44);
-            if ((this->actor.bgCheckFlags & 1) && (DynaPoly_GetActor(&play->colCtx, this->actor.floorBgId) == NULL)) {
+            if ((this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) &&
+                (DynaPoly_GetActor(&play->colCtx, this->actor.floorBgId) == NULL)) {
                 this->unk_1AD = 1;
                 this->actor.flags &= ~ACTOR_FLAG_10;
             }
@@ -460,7 +461,9 @@ void func_80B3A13C(ObjSnowball2* this, PlayState* play) {
 
     func_80B39B28(this, play);
 
-    if ((((this->actor.bgCheckFlags & 9) || sp38) && !(this->actor.bgCheckFlags & 0x20)) || (this->unk_1AC <= 0)) {
+    if ((((this->actor.bgCheckFlags & (BGCHECKFLAG_GROUND | BGCHECKFLAG_WALL)) || sp38) &&
+         !(this->actor.bgCheckFlags & BGCHECKFLAG_WATER)) ||
+        (this->unk_1AC <= 0)) {
         func_80B38E88(this, play);
         func_80B39108(this, play);
         func_80B39B5C(this, play);
@@ -469,13 +472,13 @@ void func_80B3A13C(ObjSnowball2* this, PlayState* play) {
     }
 
     sp30 = false;
-    if (this->actor.bgCheckFlags & 0x60) {
-        if ((this->actor.bgCheckFlags & 0x40) || (this->actor.speed > 3.0f)) {
+    if (this->actor.bgCheckFlags & (BGCHECKFLAG_WATER | BGCHECKFLAG_WATER_TOUCH)) {
+        if ((this->actor.bgCheckFlags & BGCHECKFLAG_WATER_TOUCH) || (this->actor.speed > 3.0f)) {
             if (this->actor.depthInWater < (1200.0f * this->actor.scale.y)) {
                 func_80B39470(&this->actor, play);
                 func_80B395EC(&this->actor, play);
             }
-            if (this->actor.bgCheckFlags & 0x40) {
+            if (this->actor.bgCheckFlags & BGCHECKFLAG_WATER_TOUCH) {
                 Actor_PlaySfx(&this->actor, NA_SE_EV_BOMB_DROP_WATER);
             }
         } else if ((((play->gameplayFrames % 16) == 0) || ((Rand_Next() >> 0x10) == 0)) &&

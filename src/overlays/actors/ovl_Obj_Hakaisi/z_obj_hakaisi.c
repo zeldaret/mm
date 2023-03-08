@@ -403,7 +403,7 @@ void func_80B15330(ObjHakaisi* this, PlayState* play) {
     this->dyna.actor.velocity.y += this->dyna.actor.gravity;
     Actor_UpdatePos(&this->dyna.actor);
 
-    if (this->dyna.actor.bgCheckFlags & 2) {
+    if (this->dyna.actor.bgCheckFlags & BGCHECKFLAG_GROUND_TOUCH) {
         func_80B14B6C(this, play, this->dyna.actor.world.pos, 40);
         func_80B14CF8(play, this->dyna.actor.world.pos, 100, 30, 10);
         Actor_Kill(&this->dyna.actor);

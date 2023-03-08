@@ -420,7 +420,7 @@ void func_80BDD350(EnZow* this, PlayState* play) {
         }
     }
 
-    if ((this->actor.bgCheckFlags & 1) || (this->actor.depthInWater > 180.0f)) {
+    if ((this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) || (this->actor.depthInWater > 180.0f)) {
         this->actor.velocity.y = 0.0f;
         this->actionFunc = func_80BDD79C;
     }

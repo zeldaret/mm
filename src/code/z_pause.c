@@ -18,7 +18,9 @@
  *
  * Note2: Controllers 2-4's inputs are normally zeroed out, so this would also need to be fixed to use frame advance
  */
-#include "global.h"
+
+#include "z64frameadvance.h"
+#include "macros.h"
 
 void FrameAdvance_Init(FrameAdvanceContext* frameAdvCtx) {
     frameAdvCtx->timer = 0;

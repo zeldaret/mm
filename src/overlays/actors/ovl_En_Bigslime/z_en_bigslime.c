@@ -536,47 +536,47 @@ void EnBigslime_CheckRoomBoundaries(EnBigslime* this, Vec3f* vtxMax, Vec3f* vtxM
     f32 vtxMaxZ;
     f32 vtxMinZ;
 
-    this->actor.bgCheckFlags &= ~(0x2 | 0x8 | 0x10);
+    this->actor.bgCheckFlags &= ~(BGCHECKFLAG_GROUND_TOUCH | BGCHECKFLAG_WALL | BGCHECKFLAG_CEILING);
     if ((this->actor.world.pos.y + vtxMax->y) > GBT_ROOM_5_MAX_Y) {
         this->actor.world.pos.y = GBT_ROOM_5_MAX_Y - vtxMax->y;
-        this->actor.bgCheckFlags |= 0x10;
+        this->actor.bgCheckFlags |= BGCHECKFLAG_CEILING;
     }
 
     if ((this->actor.world.pos.y + vtxMin->y) <= GBT_ROOM_5_MIN_Y) {
         this->actor.world.pos.y = GBT_ROOM_5_MIN_Y - vtxMin->y;
-        if (!(this->actor.bgCheckFlags & 1)) {
-            this->actor.bgCheckFlags |= 2;
+        if (!(this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
+            this->actor.bgCheckFlags |= BGCHECKFLAG_GROUND_TOUCH;
         }
 
-        this->actor.bgCheckFlags |= 1;
+        this->actor.bgCheckFlags |= BGCHECKFLAG_GROUND;
     } else {
-        this->actor.bgCheckFlags &= ~1;
+        this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND;
     }
 
-    if ((this->actionFunc != EnBigslime_Freeze) || !(this->actor.bgCheckFlags & 1)) {
+    if ((this->actionFunc != EnBigslime_Freeze) || !(this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
         worldPosX = this->actor.world.pos.x;
         vtxMaxX = vtxMax->x;
         if (GBT_ROOM_5_MAX_X < (worldPosX + vtxMaxX)) {
-            this->actor.bgCheckFlags |= 8;
+            this->actor.bgCheckFlags |= BGCHECKFLAG_WALL;
             this->actor.world.pos.x = GBT_ROOM_5_MAX_X - vtxMaxX;
         } else {
             vtxMinX = vtxMin->x;
             if ((worldPosX + vtxMinX) < GBT_ROOM_5_MIN_X) {
                 this->actor.world.pos.x = GBT_ROOM_5_MIN_X - vtxMinX;
-                this->actor.bgCheckFlags |= 8;
+                this->actor.bgCheckFlags |= BGCHECKFLAG_WALL;
             }
         }
 
         worldPosZ = this->actor.world.pos.z;
         vtxMaxZ = vtxMax->z;
         if (GBT_ROOM_5_MAX_Z < (worldPosZ + vtxMaxZ)) {
-            this->actor.bgCheckFlags |= 8;
+            this->actor.bgCheckFlags |= BGCHECKFLAG_WALL;
             this->actor.world.pos.z = GBT_ROOM_5_MAX_Z - vtxMaxZ;
         } else {
             vtxMinZ = vtxMin->z;
             if ((worldPosZ + vtxMinZ) < GBT_ROOM_5_MIN_Z) {
                 this->actor.world.pos.z = GBT_ROOM_5_MIN_Z - vtxMinZ;
-                this->actor.bgCheckFlags |= 8;
+                this->actor.bgCheckFlags |= BGCHECKFLAG_WALL;
             }
         }
     }
@@ -769,7 +769,7 @@ void EnBigslime_BreakIntoMinislime(EnBigslime* this, PlayState* play) {
     this->actor.hintId = TATL_HINT_ID_GEKKO_GIANT_SLIME;
     this->gekkoRot.x = 0;
     this->gekkoRot.y = 0;
-    this->actor.bgCheckFlags &= ~1;
+    this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND;
     this->formBigslimeTimer = 2;
     EnBigslime_AddIceShardEffect(this, play);
     Actor_PlaySfx(&this->actor, NA_SE_EN_B_SLIME_BREAK);
@@ -1083,7 +1083,7 @@ void EnBigslime_Drop(EnBigslime* this, PlayState* play) {
             EnBigslime_GekkoSfxOutsideBigslime(this, NA_SE_EN_FROG_DOWN);
             this->rotation = 0;
         }
-    } else if (this->actor.bgCheckFlags & 1) {
+    } else if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         EnBigslime_SetupSquishFlat(this);
     } else {
         Math_StepToF(&this->actor.scale.x, 0.15f, 0.0025f);
@@ -1820,7 +1820,7 @@ void EnBigslime_SetupFreeze(EnBigslime* this) {
 
     this->actor.speed = 0.0f;
     this->freezeTimer = 40;
-    if (this->actor.bgCheckFlags & 1) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         this->actor.velocity.y = 0.0f;
         this->actor.gravity = 0.0f;
     } else if ((this->actionFunc == EnBigslime_Rise) && (this->riseCounter < 2)) {
@@ -1898,7 +1898,7 @@ void EnBigslime_Freeze(EnBigslime* this, PlayState* play) {
     }
 
     func_800B9010(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
-    if (this->actor.bgCheckFlags & 2) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND_TOUCH) {
         if (this->freezeTimer == 0) {
             EnBigslime_BreakIntoMinislime(this, play);
         } else {
@@ -1907,7 +1907,7 @@ void EnBigslime_Freeze(EnBigslime* this, PlayState* play) {
             EnBigslime_SetupSquishFlat(this);
         }
     } else if (this->freezeTimer == 0) {
-        if (!(this->actor.bgCheckFlags & 1)) {
+        if (!(this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
             EnBigslime_SetupFrozenFall(this);
         } else {
             EnBigslime_SetupFrozenGround(this);
@@ -2019,7 +2019,7 @@ void EnBigslime_FrozenFall(EnBigslime* this, PlayState* play) {
         func_800B8D50(play, &this->actor, 7.0f, this->actor.yawTowardsPlayer, 5.0f, 0x10);
     }
 
-    if (this->actor.bgCheckFlags & 1) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         EnBigslime_BreakIntoMinislime(this, play);
     }
 }
@@ -2037,7 +2037,7 @@ void EnBigslime_JumpGekko(EnBigslime* this, PlayState* play) {
     s16 yaw;
     s16 yawDiff;
 
-    if (this->actor.bgCheckFlags & 1) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         this->gekkoCollider.base.acFlags |= AC_ON;
         this->actor.flags |= ACTOR_FLAG_1;
     }
@@ -2049,7 +2049,8 @@ void EnBigslime_JumpGekko(EnBigslime* this, PlayState* play) {
         EnBigslime_GekkoSfxOutsideBigslime(this, NA_SE_EV_WALK_WATER);
     }
 
-    if (!(this->actor.bgCheckFlags & 1) || ((this->skelAnime.curFrame > 1.0f) && (this->skelAnime.curFrame < 12.0f))) {
+    if (!(this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) ||
+        ((this->skelAnime.curFrame > 1.0f) && (this->skelAnime.curFrame < 12.0f))) {
         this->actor.speed = 8.0f;
     } else {
         this->actor.speed = 0.0f;

@@ -220,7 +220,8 @@ s32 EnMttag_UpdateCheckpoints(EnMttag* this, PlayState* play) {
     }
 
     if ((currentCheckpoints[0] > 0) && (currentCheckpoints[0] < highestCurrentCheckpoint) &&
-        (player->actor.bgCheckFlags & 1) && ((highestCurrentCheckpoint - currentCheckpoints[0]) >= 24)) {
+        (player->actor.bgCheckFlags & BGCHECKFLAG_GROUND) &&
+        ((highestCurrentCheckpoint - currentCheckpoints[0]) >= 24)) {
         playerIsLikelyToLose = true;
     }
 

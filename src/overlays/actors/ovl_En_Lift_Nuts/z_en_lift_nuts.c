@@ -772,7 +772,7 @@ void func_80AEB280(EnLiftNuts* this) {
 void func_80AEB294(EnLiftNuts* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (((player->actor.bgCheckFlags & 1) && (player->actor.floorBgId == BG_ACTOR_MAX) &&
+    if (((player->actor.bgCheckFlags & BGCHECKFLAG_GROUND) && (player->actor.floorBgId == BG_ACTOR_MAX) &&
          player->actor.world.pos.y < 20.0f) ||
         gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2] >= 0x2EE0) {
         player->stateFlags1 |= PLAYER_STATE1_20;

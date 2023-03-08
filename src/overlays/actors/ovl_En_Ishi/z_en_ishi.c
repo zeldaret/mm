@@ -191,11 +191,11 @@ void func_8095D804(Actor* thisx, PlayState* play) {
         spB8.z = ((Rand_ZeroOne() - 0.5f) * 8.0f) + this->actor.world.pos.z;
         Math_Vec3f_Copy(&spC4, &this->actor.velocity);
 
-        if (this->actor.bgCheckFlags & 1) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
             spC4.x *= 0.6f;
             spC4.y *= -0.3f;
             spC4.z *= 0.6f;
-        } else if (this->actor.bgCheckFlags & 8) {
+        } else if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
             spC4.x *= -0.5f;
             spC4.y *= 0.5f;
             spC4.z *= -0.5f;
@@ -230,11 +230,11 @@ void func_8095DABC(Actor* thisx, PlayState* play) {
 
         Math_Vec3f_Copy(&spD8, &this->actor.velocity);
 
-        if (this->actor.bgCheckFlags & 1) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
             spD8.x *= 0.9f;
             spD8.y *= -0.8f;
             spD8.z *= 0.9f;
-        } else if (this->actor.bgCheckFlags & 8) {
+        } else if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
             spD8.x *= -0.9f;
             spD8.y *= 0.8f;
             spD8.z *= -0.9f;
@@ -265,11 +265,11 @@ void func_8095DDA8(EnIshi* this, PlayState* play) {
     Vec3f sp2C;
 
     Math_Vec3f_Copy(&sp2C, &this->actor.world.pos);
-    if (this->actor.bgCheckFlags & 1) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         sp2C.x += 2.0f * this->actor.velocity.x;
         sp2C.y -= 2.0f * this->actor.velocity.y;
         sp2C.z += 2.0f * this->actor.velocity.z;
-    } else if (this->actor.bgCheckFlags & 8) {
+    } else if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
         sp2C.x -= 2.0f * this->actor.velocity.x;
         sp2C.y += 2.0f * this->actor.velocity.y;
         sp2C.z -= 2.0f * this->actor.velocity.z;
@@ -281,11 +281,11 @@ void func_8095DE9C(EnIshi* this, PlayState* play) {
     Vec3f sp2C;
 
     Math_Vec3f_Copy(&sp2C, &this->actor.world.pos);
-    if (this->actor.bgCheckFlags & 1) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         sp2C.x += 2.0f * this->actor.velocity.x;
         sp2C.y -= 2.0f * this->actor.velocity.y;
         sp2C.z += 2.0f * this->actor.velocity.z;
-    } else if (this->actor.bgCheckFlags & 8) {
+    } else if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
         sp2C.x -= 2.0f * this->actor.velocity.x;
         sp2C.y += 2.0f * this->actor.velocity.y;
         sp2C.z -= 2.0f * this->actor.velocity.z;
@@ -585,11 +585,11 @@ void func_8095EBDC(EnIshi* this, PlayState* play) {
 
     this->unk_194--;
 
-    if ((this->actor.bgCheckFlags & 9) || temp_v0 || (this->unk_194 <= 0)) {
+    if ((this->actor.bgCheckFlags & (BGCHECKFLAG_GROUND | BGCHECKFLAG_WALL)) || temp_v0 || (this->unk_194 <= 0)) {
         func_8095DF90(this, play);
         D_8095F6D8[sp70](&this->actor, play);
 
-        if (!(this->actor.bgCheckFlags & 0x20)) {
+        if (!(this->actor.bgCheckFlags & BGCHECKFLAG_WATER)) {
             SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, D_8095F6D4[sp70], D_8095F6D0[sp70]);
             D_8095F6E0[sp70](this, play);
         }
@@ -608,7 +608,7 @@ void func_8095EBDC(EnIshi* this, PlayState* play) {
         return;
     }
 
-    if (this->actor.bgCheckFlags & 0x40) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_WATER_TOUCH) {
         if (sp70 == 0) {
             sp58.x = this->actor.world.pos.x;
             sp58.y = this->actor.world.pos.y + this->actor.depthInWater;
@@ -639,7 +639,7 @@ void func_8095EBDC(EnIshi* this, PlayState* play) {
         D_8095F694 >>= 2;
 
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 40, NA_SE_EV_DIVE_INTO_WATER_L);
-        this->actor.bgCheckFlags &= ~0x40;
+        this->actor.bgCheckFlags &= ~BGCHECKFLAG_WATER_TOUCH;
     }
 
     Math_StepToF(&this->actor.shape.yOffset, 0.0f, 2.0f);

@@ -371,7 +371,7 @@ s32 func_80B85A00(EnKaizoku* this, PlayState* play, s16 arg2) {
         }
     } else if (func_800BE184(play, &this->picto.actor, 100.0f, 0x5DC0, 0x2AA8, this->picto.actor.shape.rot.y)) {
         this->picto.actor.shape.rot.y = this->picto.actor.world.rot.y = this->picto.actor.yawTowardsPlayer;
-        if ((this->picto.actor.bgCheckFlags & 8) && (ABS_ALT(sp32) < 0x2EE0) &&
+        if ((this->picto.actor.bgCheckFlags & BGCHECKFLAG_WALL) && (ABS_ALT(sp32) < 0x2EE0) &&
             (this->picto.actor.xzDistToPlayer < 90.0f)) {
             if (this->action != KAIZOKU_ACTION_6) {
                 func_80B87C7C(this);
@@ -393,7 +393,8 @@ s32 func_80B85A00(EnKaizoku* this, PlayState* play, s16 arg2) {
     if (explosiveActor != NULL) {
         this->picto.actor.shape.rot.y = this->picto.actor.world.rot.y = this->picto.actor.yawTowardsPlayer;
 
-        if (((this->picto.actor.bgCheckFlags & 8) && (sp32 < 0x2EE0)) || (explosiveActor->id == ACTOR_EN_BOM_CHU)) {
+        if (((this->picto.actor.bgCheckFlags & BGCHECKFLAG_WALL) && (sp32 < 0x2EE0)) ||
+            (explosiveActor->id == ACTOR_EN_BOM_CHU)) {
             if ((explosiveActor->id == ACTOR_EN_BOM_CHU) &&
                 (Actor_WorldDistXYZToActor(&this->picto.actor, explosiveActor) < 80.0f) &&
                 (BINANG_ADD(this->picto.actor.shape.rot.y - explosiveActor->world.rot.y, 0x8000) < 0x4000)) {
@@ -531,7 +532,7 @@ void func_80B85FA8(EnKaizoku* this, PlayState* play) {
             break;
 
         case 2:
-            if (this->picto.actor.bgCheckFlags & 1) {
+            if (this->picto.actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
                 if (this->unk_2D8 != 0) {
                     this->unk_2D8 = 0;
                     this->picto.actor.world.pos.y = this->picto.actor.floorHeight;
@@ -951,10 +952,10 @@ void func_80B8760C(EnKaizoku* this, PlayState* play) {
     s32 temp_ft1;
 
     this->picto.actor.world.rot.y = this->picto.actor.yawTowardsPlayer + 0x3A98;
-    if ((this->picto.actor.bgCheckFlags & 8) ||
+    if ((this->picto.actor.bgCheckFlags & BGCHECKFLAG_WALL) ||
         !Actor_TestFloorInDirection(&this->picto.actor, play, this->picto.actor.speed,
                                     this->picto.actor.shape.rot.y + 0x4000)) {
-        if (this->picto.actor.bgCheckFlags & 8) {
+        if (this->picto.actor.bgCheckFlags & BGCHECKFLAG_WALL) {
             if (this->picto.actor.speed >= 0.0f) {
                 var_v0 = this->picto.actor.shape.rot.y + 0x4000;
             } else {
@@ -1120,7 +1121,8 @@ void func_80B87D3C(EnKaizoku* this, PlayState* play) {
     }
 
     this->unk_2D8 = 0;
-    if ((this->frameCount <= curFrame) && (this->picto.actor.bgCheckFlags & 3)) {
+    if ((this->frameCount <= curFrame) &&
+        (this->picto.actor.bgCheckFlags & (BGCHECKFLAG_GROUND | BGCHECKFLAG_GROUND_TOUCH))) {
         this->bodyCollider.info.elemType = ELEMTYPE_UNK1;
         this->bodyCollider.base.colType = COLTYPE_HIT3;
         this->swordCollider.info.elemType = ELEMTYPE_UNK2;
@@ -1485,11 +1487,11 @@ void func_80B88D6C(EnKaizoku* this, PlayState* play) {
             }
         }
 
-        if ((this->picto.actor.bgCheckFlags & 8) ||
+        if ((this->picto.actor.bgCheckFlags & BGCHECKFLAG_WALL) ||
             !Actor_TestFloorInDirection(&this->picto.actor, play, this->picto.actor.speed,
                                         this->picto.actor.shape.rot.y + 0x4000)) {
 
-            if (this->picto.actor.bgCheckFlags & 8) {
+            if (this->picto.actor.bgCheckFlags & BGCHECKFLAG_WALL) {
                 if (this->picto.actor.speed >= 0.0f) {
                     yaw = this->picto.actor.shape.rot.y + 0x4000;
                 } else {
@@ -1550,7 +1552,7 @@ void func_80B88D6C(EnKaizoku* this, PlayState* play) {
 
 // EnKaizoku_SetupStunned
 void func_80B891B8(EnKaizoku* this) {
-    if (this->picto.actor.bgCheckFlags & 1) {
+    if (this->picto.actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         this->picto.actor.speed = 0.0f;
     }
 
@@ -1585,18 +1587,18 @@ void func_80B89280(EnKaizoku* this, PlayState* play) {
         }
     }
 
-    if (this->picto.actor.bgCheckFlags & 2) {
+    if (this->picto.actor.bgCheckFlags & BGCHECKFLAG_GROUND_TOUCH) {
         this->picto.actor.speed = 0.0f;
     }
 
-    if (this->picto.actor.bgCheckFlags & 1) {
+    if (this->picto.actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         if (this->picto.actor.speed < 0.0f) {
             this->picto.actor.speed += 0.05f;
         }
     }
 
     if ((this->unk_2B6 == 0) && (this->unk_2B8 == 0) && !CHECK_FLAG_ALL(this->picto.actor.flags, ACTOR_FLAG_2000) &&
-        (this->picto.actor.bgCheckFlags & 1)) {
+        (this->picto.actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
         this->unk_2D8 = 0;
         func_80B85A00(this, play, true);
 
@@ -1644,7 +1646,7 @@ void func_80B894C0(EnKaizoku* this, PlayState* play) {
     if (!func_80B85858(this, play) && !func_80B85A00(this, play, false) && (this->unk_3C4.x < 1.0f) &&
         (this->unk_3C4.z < 1.0f)) {
         temp_v0 = this->picto.actor.wallYaw - this->picto.actor.shape.rot.y;
-        if (this->picto.actor.bgCheckFlags & 8) {
+        if (this->picto.actor.bgCheckFlags & BGCHECKFLAG_WALL) {
             if (ABS_ALT(temp_v0) < 0x3000 && (this->picto.actor.xzDistToPlayer < 90.0f)) {
                 func_80B87C7C(this);
                 return;
@@ -1692,11 +1694,11 @@ void func_80B8971C(EnKaizoku* this, PlayState* play) {
     f32 curFrame = this->skelAnime.curFrame;
     Player* player;
 
-    if (this->picto.actor.bgCheckFlags & 2) {
+    if (this->picto.actor.bgCheckFlags & BGCHECKFLAG_GROUND_TOUCH) {
         this->picto.actor.speed = 0.0f;
     }
 
-    if (this->picto.actor.bgCheckFlags & 1) {
+    if (this->picto.actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         Math_SmoothStepToF(&this->picto.actor.speed, 0.0f, 1.0f, 0.5f, 0.0f);
     }
 
@@ -1809,7 +1811,7 @@ void func_80B89A08(EnKaizoku* this, PlayState* play) {
         }
     }
 
-    if ((this->picto.actor.bgCheckFlags & 8) && (this->picto.actor.wallBgId != BG_ACTOR_MAX) &&
+    if ((this->picto.actor.bgCheckFlags & BGCHECKFLAG_WALL) && (this->picto.actor.wallBgId != BG_ACTOR_MAX) &&
         ((this->action == KAIZOKU_ACTION_2) || (this->action == KAIZOKU_ACTION_3) ||
          (this->action == KAIZOKU_ACTION_4) || (this->action == KAIZOKU_ACTION_1))) {
         func_80B87F70(this);
@@ -2015,7 +2017,7 @@ void EnKaizoku_Update(Actor* thisx, PlayState* play2) {
         }
     }
 
-    if (this->picto.actor.bgCheckFlags & 1) {
+    if (this->picto.actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         Matrix_RotateYS(this->picto.actor.shape.rot.y + this->unk_2F4, 0);
         Matrix_MultVecZ(this->unk_2F0, &sp34);
         this->picto.actor.world.pos.x += this->unk_3C4.x + sp34.x;

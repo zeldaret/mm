@@ -647,7 +647,7 @@ void func_80B814B8(BgIkanaRotaryroom* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (ActorCutscene_GetCurrentIndex() == this->dyna.actor.cutscene) {
-        if (player->actor.bgCheckFlags & 0x100) {
+        if (player->actor.bgCheckFlags & BGCHECKFLAG_CRUSHED) {
             Player_PlaySfx(player, NA_SE_VO_LI_DAMAGE_S + player->ageProperties->voiceSfxIdOffset);
             func_80169EFC(&play->state);
             Player_PlaySfx(player, NA_SE_VO_LI_TAKEN_AWAY + player->ageProperties->voiceSfxIdOffset);
