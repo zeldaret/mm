@@ -1,3 +1,4 @@
+#include "prevent_bss_reordering.h"
 #include "global.h"
 #include "overlays/gamestates/ovl_file_choose/z_file_choose.h"
 
