@@ -1,4 +1,5 @@
 #include "global.h"
+#include "buffers.h"
 
 const s16 gAudioTatumInit[] = {
     0x1C00,          // unused
