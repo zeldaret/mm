@@ -236,7 +236,7 @@ void EnAttackNiw_EnterViewFromOffscreen(EnAttackNiw* this, PlayState* play) {
     Actor_SetFocus(&this->actor, this->targetHeight);
     Actor_GetScreenPos(play, &this->actor, &posX, &posY);
 
-    if (this->actor.bgCheckFlags & 8) { // touching a wall
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
         this->targetRotY = this->actor.yawTowardsPlayer;
         this->targetRotX = this->actor.world.rot.x - 3000.0f;
         this->hopTimer = 0;
@@ -255,7 +255,7 @@ void EnAttackNiw_EnterViewFromOffscreen(EnAttackNiw* this, PlayState* play) {
     } else if (((this->actor.projectedPos.z > 0.0f) && (fabsf(flightTarget.x - this->actor.world.pos.x) < 50.0f) &&
                 (fabsf(flightTarget.y - this->actor.world.pos.y) < 50.0f) &&
                 (fabsf(flightTarget.z - this->actor.world.pos.z) < 50.0f)) ||
-               (this->actor.bgCheckFlags & 1)) { // touching ground or with close distance of target
+               (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
         // reset state
         this->hopTimer = 0;
         this->unkTimer250 = this->hopTimer;
@@ -286,7 +286,7 @@ void EnAttackNiw_AimAtPlayer(EnAttackNiw* this, PlayState* play) {
         return;
     }
 
-    if (this->actor.bgCheckFlags & 1) { // touching floor
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         if (this->hopTimer == 0) {
             this->hopTimer = 3;
             this->actor.velocity.y = 3.5f;
@@ -316,17 +316,16 @@ void EnAttackNiw_AimAtPlayer(EnAttackNiw* this, PlayState* play) {
     Math_ApproachF(&this->rotStep, 10000.0f, 1.0f, 1000.0f);
     Math_ApproachF(&this->actor.speed, this->targetXZSpeed, 0.9f, 1.0f);
 
-    if (this->actor.gravity == -2.0f && this->unkTimer25A == 0 &&
-        (this->actor.bgCheckFlags & 8 || this->randomAngleChangeTimer == 0)) {
+    if ((this->actor.gravity == -2.0f) && (this->unkTimer25A == 0) &&
+        ((this->actor.bgCheckFlags & BGCHECKFLAG_WALL) || (this->randomAngleChangeTimer == 0))) {
         this->targetXZSpeed = 0.0f;
         this->actor.gravity = 0.0f;
         this->rotStep = 0.0f;
         this->targetRotX = this->actor.world.rot.x - 5000.0f;
         this->actionFunc = EnAttackNiw_FlyAway;
 
-    } else if (this->actor.bgCheckFlags & 1) { // touching floor
+    } else if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         EnAttackNiw_AnimateWingHead(this, play, NIW_ANIM_PECKING_SLOW_FORFLAPPING);
-
     } else {
         EnAttackNiw_AnimateWingHead(this, play, NIW_ANIM_PECKING_AND_WAVING);
     }
@@ -380,8 +379,7 @@ void EnAttackNiw_Update(Actor* thisx, PlayState* play) {
         return;
     }
 
-    if ((this->actor.bgCheckFlags & 0x20) && // on or below water
-        (this->actionFunc != EnAttackNiw_FlyAway)) {
+    if ((this->actor.bgCheckFlags & BGCHECKFLAG_WATER) && (this->actionFunc != EnAttackNiw_FlyAway)) {
         Math_Vec3f_Copy(&splashPos, &this->actor.world.pos);
         splashPos.y += this->actor.depthInWater;
         EffectSsGSplash_Spawn(play, &splashPos, NULL, NULL, 0, 400);

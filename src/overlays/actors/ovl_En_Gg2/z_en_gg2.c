@@ -366,7 +366,7 @@ void EnGg2_Init(Actor* thisx, PlayState* play2) {
     }
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 30.0f);
-    this->actor.bgCheckFlags |= 0x400;
+    this->actor.bgCheckFlags |= BGCHECKFLAG_PLAYER_400;
     SkelAnime_InitFlex(play, &this->skelAnime, &object_gg_Skel_00F6C0, &object_gg_Anim_00F578, this->jointTable,
                        this->morphTable, 20);
     this->unk_1D8 = SubS_GetPathByIndex(play, ENGG2_GET_FC00(&this->actor), 0x3F);

@@ -228,7 +228,7 @@ void func_809541B8(BgIngate* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (this->unk160 & 0x4) {
-        if ((player->transformation == PLAYER_FORM_HUMAN) && (player->actor.bgCheckFlags & 1) &&
+        if ((player->transformation == PLAYER_FORM_HUMAN) && (player->actor.bgCheckFlags & BGCHECKFLAG_GROUND) &&
             (this->dyna.actor.xzDistToPlayer < 40.0f)) {
             if (this->dyna.actor.playerHeightRel > 15.0f) {
                 func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_7);
