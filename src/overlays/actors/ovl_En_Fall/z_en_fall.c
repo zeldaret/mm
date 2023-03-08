@@ -575,7 +575,7 @@ void EnFall_Fireball_Update(Actor* thisx, PlayState* play) {
     EnFall* this = THIS;
 
     if ((play->sceneId == SCENE_00KEIKOKU) && (gSaveContext.sceneLayer == 0) && (play->csCtx.currentCsIndex == 2)) {
-        play->skyboxCtx.rotY -= 0.05f;
+        play->skyboxCtx.rot.y -= 0.05f;
     }
 
     if (Cutscene_CheckActorAction(play, 450)) {

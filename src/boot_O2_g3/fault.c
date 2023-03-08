@@ -1,6 +1,14 @@
 #include "ultra64.h"
 #include "global.h"
+#include "stack.h"
 #include "vt.h"
+
+extern FaultThreadStruct* sFaultContext;
+extern f32 D_8009BE54;
+extern u32 faultCustomOptions;
+extern u32 faultCopyToLog;
+extern STACK(sFaultStack, 0x600);
+extern StackEntry sFaultStackInfo;
 
 // data
 const char* sCpuExceptions[] = {
@@ -759,9 +767,9 @@ void Fault_SetOptionsFromController3(void) {
     }
 
     if (faultCustomOptions) {
-        graphPC = sGraphThread.context.pc;
-        graphRA = sGraphThread.context.ra;
-        graphSP = sGraphThread.context.sp;
+        graphPC = gGraphThread.context.pc;
+        graphRA = gGraphThread.context.ra;
+        graphSP = gGraphThread.context.sp;
         if (CHECK_BTN_ALL(input3->cur.button, BTN_R)) {
             static u32 faultCopyToLog;
 
@@ -889,8 +897,8 @@ void Fault_Start(void) {
     sFaultContext->faultActive = 0;
     gFaultStruct.faultHandlerEnabled = 1;
     osCreateMesgQueue(&sFaultContext->queue, sFaultContext->msg, ARRAY_COUNT(sFaultContext->msg));
-    StackCheck_Init(&sFaultThreadInfo, sFaultStack, sFaultStack + sizeof(sFaultStack), 0, 0x100, "fault");
-    osCreateThread(&sFaultContext->thread, 2, Fault_ThreadEntry, NULL, sFaultStack + sizeof(sFaultStack), 0x7F);
+    StackCheck_Init(&sFaultStackInfo, sFaultStack, STACK_TOP(sFaultStack), 0, 0x100, "fault");
+    osCreateThread(&sFaultContext->thread, 2, Fault_ThreadEntry, NULL, STACK_TOP(sFaultStack), 0x7F);
     osStartThread(&sFaultContext->thread);
 }
 
