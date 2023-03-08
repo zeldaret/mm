@@ -382,7 +382,7 @@ void ObjKendoKanban_HandlePhysics(ObjKendoKanban* this, PlayState* play) {
 
     Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
 
-    if (this->actor.bgCheckFlags & 1) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         // When on the ground, apply some friction.
         this->actor.velocity.x *= 0.8f;
         this->actor.velocity.z *= 0.8f;
@@ -401,12 +401,12 @@ void ObjKendoKanban_HandlePhysics(ObjKendoKanban* this, PlayState* play) {
             return;
         }
 
-        if (this->actor.bgCheckFlags & 2) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND_TOUCH) {
             // Upon touching the ground...
             Actor_PlaySfx(&this->actor, NA_SE_EV_WOODPLATE_BOUND);
             this->hasNewRootCornerPos = false;
             this->actor.velocity.y *= 0.5f;
-        } else if (this->actor.bgCheckFlags & 1) {
+        } else if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
             // When on the ground...
             this->numBounces++;
             this->hasNewRootCornerPos = false;

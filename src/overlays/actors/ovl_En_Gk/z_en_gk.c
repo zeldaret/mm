@@ -816,7 +816,7 @@ void func_80B51EA4(EnGk* this, PlayState* play) {
             }
         }
 
-        if (this->actor.bgCheckFlags & 8) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
             sp38.y = this->actor.wallYaw;
         }
 

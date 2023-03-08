@@ -1529,7 +1529,7 @@ void func_80BEFAF0(EnAkindonuts* this, PlayState* play) {
 
     if (this->path != NULL) {
         sp34 = func_80BECEAC(this->path, this->unk_334, &this->actor.world.pos, &sp38);
-        if (this->actor.bgCheckFlags & 0x8) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
             sp38.y = this->actor.wallYaw;
         }
 

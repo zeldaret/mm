@@ -425,7 +425,7 @@ void func_80BE5818(Actor* thisx, PlayState* play2) {
         this->actor.shape.rot.y += this->unk_19A;
         sp6C = 1225.0f;
 
-        if (this->actor.bgCheckFlags & 1) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
             if (ENTANRON5_GET(&this->actor) < ENTANRON5_108) {
                 Math_Vec3f_Copy(&sp5C, &this->actor.world.pos);
                 sp5C.y = this->actor.floorHeight;
@@ -441,7 +441,7 @@ void func_80BE5818(Actor* thisx, PlayState* play2) {
     } else {
         sp6C = 400.0f;
         this->unk_198 += 0x2000;
-        if (this->actor.bgCheckFlags & 1) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
             this->unk_198 = 0;
             this->actor.speed = 0.0f;
         }

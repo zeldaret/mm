@@ -318,7 +318,7 @@ void ObjTokeidai_RotateOnMinuteChange(ObjTokeidai* this, s32 playSfx) {
 }
 
 void ObjTokeidai_ExteriorGear_Collapse(ObjTokeidai* this, PlayState* play) {
-    if ((this->actor.bgCheckFlags & 1) || this->actor.world.pos.y < 0.0f) {
+    if ((this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) || this->actor.world.pos.y < 0.0f) {
         this->actionFunc = ObjTokeidai_DoNothing;
     } else {
         this->actor.shape.rot.x += 0x50;

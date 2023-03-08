@@ -1077,10 +1077,10 @@ void func_80B447C0(EnInvadepoh* this, PlayState* play) {
 }
 
 void func_80B44A90(EnInvadepoh* this, PlayState* play) {
-    if (this->actor.bgCheckFlags & 1) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         this->actor.velocity.y *= 0.3f;
         this->actor.speed *= 0.8f;
-    } else if (this->actor.bgCheckFlags & 8) {
+    } else if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
         this->actor.velocity.y *= 0.8f;
         this->actor.speed *= 0.3f;
     } else {

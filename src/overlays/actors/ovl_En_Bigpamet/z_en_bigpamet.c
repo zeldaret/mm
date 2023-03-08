@@ -500,10 +500,10 @@ void func_80A28708(EnBigpamet* this, PlayState* play) {
 
 void func_80A28760(EnBigpamet* this) {
     this->actor.speed = 15.0f;
-    if (this->actor.bgCheckFlags & 8) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
         s16 temp_v1 = this->actor.yawTowardsPlayer - this->actor.wallYaw;
 
-        this->actor.bgCheckFlags &= ~8;
+        this->actor.bgCheckFlags &= ~BGCHECKFLAG_WALL;
 
         if (temp_v1 > 0x3C00) {
             this->actor.world.rot.y = this->actor.wallYaw + 0x3C00;
@@ -539,7 +539,7 @@ void func_80A287E8(EnBigpamet* this, PlayState* play) {
         func_80A27FE8(this, play);
     }
 
-    if (this->actor.bgCheckFlags & 8) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
         quakeIndex = Quake_Add(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
 
         this->actor.velocity.y = this->unk_29E * 0.375f;
@@ -627,7 +627,7 @@ void func_80A28B98(EnBigpamet* this, PlayState* play) {
     }
 
     this->actor.shape.rot.y = this->actor.world.rot.y;
-    this->actor.bgCheckFlags &= ~1;
+    this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND;
     this->actor.flags &= ~ACTOR_FLAG_1;
     this->actor.params = ENBIGPAMET_0;
 
@@ -648,7 +648,7 @@ void func_80A28B98(EnBigpamet* this, PlayState* play) {
 
 void func_80A28D0C(EnBigpamet* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime2);
-    if (this->actor.bgCheckFlags & 1) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_HIPLOOP_LAND);
         func_80A27FE8(this, play);
         func_80A28D80(this);

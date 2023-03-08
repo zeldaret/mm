@@ -256,7 +256,7 @@ void func_80AE9258(ObjBigicicle* this, PlayState* play) {
         itemAction = itemAction->next;
     }
 
-    if (this->actor.bgCheckFlags & 1) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         this->actionFunc = func_80AE939C;
     } else {
         Collider_UpdateCylinder(&this->actor, &this->collider1);

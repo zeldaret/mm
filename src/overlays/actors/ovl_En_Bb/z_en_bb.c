@@ -171,14 +171,14 @@ void EnBb_Destroy(Actor* thisx, PlayState* play) {
 void EnBb_CheckForWall(EnBb* this) {
     s16 yawDiff;
 
-    if (this->actor.bgCheckFlags & 8) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
         yawDiff = this->actor.shape.rot.y - this->actor.wallYaw;
         if (ABS_ALT(yawDiff) > 0x4000) {
             this->actor.shape.rot.y = ((this->actor.wallYaw * 2) - this->actor.shape.rot.y) - 0x8000;
         }
 
         this->targetYRotation = this->actor.shape.rot.y;
-        this->actor.bgCheckFlags &= ~8;
+        this->actor.bgCheckFlags &= ~BGCHECKFLAG_WALL;
     }
 }
 
@@ -325,7 +325,7 @@ void EnBb_Down(EnBb* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     EnBb_CheckForWall(this);
 
-    if (this->actor.bgCheckFlags & 1) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_EYEGOLE_ATTACK);
         if (this->timer == 0) {
             Actor_PlaySfx(&this->actor, NA_SE_EN_BUBLE_UP);
@@ -339,7 +339,7 @@ void EnBb_Down(EnBb* this, PlayState* play) {
             this->actor.velocity.y = 10.0f;
         }
 
-        this->actor.bgCheckFlags &= ~1;
+        this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND;
         Actor_SpawnFloorDustRing(play, &this->actor, &this->actor.world.pos, 7.0f, 2, 2.0f, 0, 0, 0);
         Math_ScaledStepToS(&this->actor.shape.rot.y, BINANG_ADD(this->actor.yawTowardsPlayer, 0x8000), 0xBB8);
     }
@@ -436,7 +436,7 @@ void EnBb_SetupDamage(EnBb* this) {
 
 void EnBb_Damage(EnBb* this, PlayState* play) {
     Math_SmoothStepToF(&this->actor.speed, 0.0f, 1.0f, 0.5f, 0.0f);
-    if ((this->actor.bgCheckFlags & 1) && (this->actor.speed < 0.1f)) {
+    if ((this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) && (this->actor.speed < 0.1f)) {
         EnBb_SetupDown(this);
     }
 }
