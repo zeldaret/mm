@@ -695,8 +695,8 @@ void Actor_SetColorFilter(Actor* actor, u16 colorFlag, u16 colorIntensityMax, u1
 Hilite* func_800BCBF4(Vec3f* arg0, PlayState* play);
 Hilite* func_800BCC68(Vec3f* arg0, PlayState* play);
 void Actor_GetClosestPosOnPath(Vec3s* points, s32 numPoints, Vec3f* srcPos, Vec3f* dstPos, s32 isPathLoop);
-s32 func_800BD2B4(PlayState* play, Actor* actor, s16* arg2, f32 arg3, u16 (*textIdCallback)(PlayState*, Actor*), s16 (*arg5)(PlayState*, Actor*));
-void func_800BD888(Actor* actor, struct_800BD888_arg1* arg1, s16 arg2, s16 arg3);
+s32 Npc_UpdateTalking(PlayState* play, Actor* actor, s16* talkState, f32 interactRange, NpcGetTextIdFunc getTextId, NpcUpdateTalkStateFunc updateTalkState);
+void Npc_TrackPoint(Actor* actor, NpcInteractInfo* interactInfo, s16 presetIndex, s16 trackingMode);
 void func_800BD9E0(PlayState* play, SkelAnime* skelAnime, OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, Actor* actor, s16 alpha);
 void func_800BDAA0(PlayState* play, SkelAnime* skelAnime, OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, Actor* actor, s16 alpha);
 void Actor_ChangeAnimationByInfo(SkelAnime* skelAnime, AnimationInfo* animationInfo, s32 animIndex);
@@ -719,8 +719,8 @@ s32 Actor_IsSmallChest(struct EnBox* chest);
 void Actor_DrawDamageEffects(PlayState* play, Actor* actor, Vec3f limbPos[], s16 limbPosCount, f32 effectScale, f32 frozenSteamScale, f32 effectAlpha, u8 type);
 void Actor_SpawnIceEffects(PlayState* play, Actor* actor, Vec3f limbPos[], s32 limbPosCount, s32 effectsPerLimb, f32 scale, f32 scaleRange);
 
-void ActorOverlayTable_FaultPrint(void* arg0, void* arg1);
-void* ActorOverlayTable_FaultAddrConv(void* arg0, void* arg1);
+void ActorOverlayTable_FaultClient(void* arg0, void* arg1);
+void* ActorOverlayTable_FaultAddrConv(void* address, void* param);
 void ActorOverlayTable_Init(void);
 void ActorOverlayTable_Cleanup(void);
 
@@ -1170,15 +1170,6 @@ s32 Actor_TrackPlayerSetFocusHeight(PlayState* play, Actor* actor, Vec3s* headRo
 s32 Actor_TrackPlayer(PlayState* play, Actor* actor, Vec3s* headRot, Vec3s* torsoRot, Vec3f focusPos);
 void SaveContext_Init(void);
 void GameInfo_Init(void);
-DebugDispObject* DebugDisplay_Init(void);
-void DebugDisplay_DrawObjects(PlayState* play);
-DebugDispObject* DebugDisplay_AddObject(f32 posX, f32 posY, f32 posZ, s16 rotX, s16 rotY, s16 rotZ, f32 scaleX, f32 scaleY, f32 scaleZ, u8 red, u8 green, u8 blue, u8 alpha, s16 type, GraphicsContext* gfxCtx);
-// void func_800E9C90(void);
-// void func_800E9CA0(s32 param_1, UNK_TYPE1 param_2, s8* param_3);
-// void func_800E9CFC(void);
-// void func_800E9DBC(void);
-// void func_800E9E94(void);
-void func_800E9F78(GraphicsContext* gfxCtx);
 
 void Cutscene_Init(PlayState* play, CutsceneContext* csCtx);
 void Cutscene_Start(PlayState* play, CutsceneContext* csCtx);
@@ -1685,9 +1676,6 @@ Path* Path_GetByIndex(PlayState* play, s16 index, s16 max);
 f32 Path_OrientAndGetDistSq(Actor* actor, Path* path, s16 waypoint, s16* yaw);
 void Path_CopyLastPoint(Path* path, Vec3f* dest);
 
-void FrameAdvance_Init(FrameAdvanceContext* frameAdvCtx);
-s32 FrameAdvance_Update(FrameAdvanceContext* frameAdvCtx, Input* input);
-
 s32 func_801226E0(PlayState* play, s32 arg1);
 s32 func_80122744(PlayState* play, struct_80122744_arg1* arg1, u32 arg2, Vec3s* arg3);
 s32 func_80122760(PlayState* play, struct_80122744_arg1* arg1, f32 arg2);
@@ -2188,7 +2176,7 @@ void func_80161C0C(void);
 // void func_801631DC(void);
 // void func_80163334(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
 // void func_80163660(void);
-void* KaleidoManager_FaultAddrConvFunc(void* address, void* param);
+void* KaleidoManager_FaultAddrConv(void* address, void* param);
 void KaleidoManager_LoadOvl(KaleidoMgrOverlay* ovl);
 void KaleidoManager_ClearOvl(KaleidoMgrOverlay* ovl);
 void KaleidoManager_Init(PlayState* play);
@@ -2389,7 +2377,7 @@ void Graph_FaultClient(void);
 void Graph_InitTHGA(TwoHeadGfxArena* arena, Gfx* buffer, s32 size);
 void Graph_SetNextGfxPool(GraphicsContext* gfxCtx);
 GameStateOverlay* Graph_GetNextGameState(GameState* gameState);
-void* Graph_FaultAddrConvFunc(void* address, void* param);
+void* Graph_FaultAddrConv(void* address, void* param);
 void Graph_Init(GraphicsContext* gfxCtx);
 void Graph_Destroy(GraphicsContext* gfxCtx);
 void Graph_TaskSet00(GraphicsContext* gfxCtx, GameState* gameState);
