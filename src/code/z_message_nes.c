@@ -1422,18 +1422,8 @@ void Message_DecodeNES(PlayState* play) {
 
             loadChar = false;
             for (i = 0; i < 8; i++) {
-                switch (i) {
-                    case 2:
-                    case 5:
-                        break;
-                    default:
-                        if (spA8[i] == '0') {
-                            break;
-                        }
-                        // fallthrough
-                    case 4:
-                        loadChar = true;
-                        break;
+                if ((i == 4) || ((i != 2) && (i != 5) && (spA8[i] != '\0'))) {
+                    loadChar = true;
                 }
                 if (loadChar) {
                     Message_LoadCharNES(play, spA8[i], &charTexIdx, &spA4, decodedBufPos);
@@ -2009,18 +1999,8 @@ void Message_DecodeNES(PlayState* play) {
 
             loadChar = false;
             for (i = 0; i < 8; i++) {
-                switch (i) {
-                    case 2:
-                    case 5:
-                        break;
-                    default:
-                        if (spA8[i] == '\0') {
-                            break;
-                        }
-                        // fallthrough
-                    case 4:
-                        loadChar = true;
-                        break;
+                if ((i == 4) || ((i != 2) && (i != 5) && (spA8[i] != '\0'))) {
+                    loadChar = true;
                 }
                 if (loadChar) {
                     Font_LoadCharNES(play, spA8[i + 1], charTexIdx);
