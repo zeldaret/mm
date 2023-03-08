@@ -37,8 +37,7 @@ extern FaultDrawer* sFaultDrawContext;
 extern FaultDrawer sFaultDrawerDefault;
 extern s32 gLoadLogSeverity;
 extern s32 gLoad2LogSeverity;
-extern StackEntry* sStackInfoListStart;
-extern StackEntry* sStackInfoListEnd;
+
 // extern UNK_TYPE1 sGfxPrintFontTLUT;
 // extern UNK_TYPE1 sGfxPrintRainbowTLUT;
 // extern UNK_TYPE1 sGfxPrintRainbowData;
@@ -2458,6 +2457,7 @@ extern OSTime sGraphTaskStartTime;
 
 extern u32 gSegments[NUM_SEGMENTS];
 extern SchedContext gSchedContext;
+
 extern OSThread gGraphThread;
 extern PadMgr gPadMgr;
 

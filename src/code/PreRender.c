@@ -1,5 +1,6 @@
 #include "global.h"
 #include "stack.h"
+#include "stackcheck.h"
 
 /**
  * Assigns the "save" values in PreRender

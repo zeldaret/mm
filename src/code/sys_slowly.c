@@ -1,4 +1,5 @@
 #include "global.h"
+#include "stackcheck.h"
 
 #define SLOWLY_STATUS_DONE (1 << 0)
 #define SLOWLY_STATUS_STARTED (1 << 1)
