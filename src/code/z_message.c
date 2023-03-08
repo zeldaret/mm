@@ -2174,11 +2174,12 @@ void Message_Decode(PlayState* play) {
                 }
 
                 for (i = 0; i < playerNameLen; i++) {
-                    ptr2 = &font->iconBuf[((void)0, gSaveContext.save.playerData.playerName[i]) * FONT_CHAR_TEX_SIZE];
-                    msgCtx->decodedBuffer.wchar[decodedBufPos] = 0x100;
+                    ptr2 = &font->fontBuf[((void)0, gSaveContext.save.playerData.playerName[i]) * FONT_CHAR_TEX_SIZE];
+                    msgCtx->decodedBuffer.wchar[decodedBufPos + i] = 0x100;
 
                     for (var_v0 = 0; var_v0 < FONT_CHAR_TEX_SIZE; var_v0 += 4) {
-                        font->charBuf[font->unk_11D88][charTexIdx + var_v0 + 0] = ptr2[var_v0 + 0];
+                        font->charBuf[font->unk_11D88][charTexIdx + var_v0 + 0] =
+                            ptr2[var_v0 + 0] & 0xFF; //! FAKE: Fixes later regalloc
                         font->charBuf[font->unk_11D88][charTexIdx + var_v0 + 1] = ptr2[var_v0 + 1];
                         font->charBuf[font->unk_11D88][charTexIdx + var_v0 + 2] = ptr2[var_v0 + 2];
                         font->charBuf[font->unk_11D88][charTexIdx + var_v0 + 3] = ptr2[var_v0 + 3];
@@ -2223,18 +2224,8 @@ void Message_Decode(PlayState* play) {
 
                 loadChar = false;
                 for (i = 0; i < 8; i++) {
-                    switch (i) {
-                        case 2:
-                        case 5:
-                            break;
-                        default:
-                            if (spAC[i] == '\0') {
-                                break;
-                            }
-                            // fallthrough
-                        case 4:
-                            loadChar = true;
-                            break;
+                    if ((i == 4) || ((i != 2) && (i != 5) && (spAC[i] != '\0'))) {
+                        loadChar = true;
                     }
                     if (loadChar) {
                         Message_LoadChar(play, spAC[i] + 0x824F, &charTexIdx, &spC0, decodedBufPos);
@@ -2505,7 +2496,7 @@ void Message_Decode(PlayState* play) {
                     var_s3_8 = 2;
                 }
 
-                for (i = 0; i < 4; i++) {
+                for (i = 0; i < 3; i++) {
                     msgCtx->decodedBuffer.wchar[decodedBufPos] = D_801D0268[var_s3_8][i];
                     Font_LoadChar(play, D_801D0268[var_s3_8][i], charTexIdx);
                     decodedBufPos++;
@@ -2758,18 +2749,8 @@ void Message_Decode(PlayState* play) {
 
                 loadChar = false;
                 for (i = 0; i < 8; i++) {
-                    switch (i) {
-                        case 2:
-                        case 5:
-                            break;
-                        default:
-                            if (spAC[i] == '0') {
-                                break;
-                            }
-                            // fallthrough
-                        case 4:
-                            loadChar = true;
-                            break;
+                    if ((i == 4) || ((i != 2) && (i != 5) && (spAC[i] != '\0'))) {
+                        loadChar = true;
                     }
                     if (loadChar) {
                         Font_LoadChar(play, spAC[i] + 0x824F, charTexIdx);
@@ -2850,16 +2831,19 @@ void Message_Decode(PlayState* play) {
                 }
                 Message_LoadChar(play, 0x9543, &charTexIdx, &spC0, decodedBufPos);
             } else if ((curChar == 0x30D) || (curChar == 0x30E) || (curChar == 0x30F)) {
-                index = curChar - 0x30D;
+                //! Removing index and casting one version causes gSaveContext to be reloaded
+                // index = curChar - 0x30D;
 
                 for (playerNameLen = 8; playerNameLen > 0; playerNameLen--) {
-                    if (gSaveContext.save.inventory.dekuPlaygroundPlayerName[index][playerNameLen - 1] != 0x3E) {
+                    if (gSaveContext.save.inventory
+                            .dekuPlaygroundPlayerName[(s16)(curChar - 0x30D)][playerNameLen - 1] != 0x3E) {
                         break;
                     }
                 }
 
                 for (i = 0; i < playerNameLen; i++) {
-                    ptr2 = &font->fontBuf[((void)0, gSaveContext.save.inventory.dekuPlaygroundPlayerName[index][i]) *
+                    ptr2 = &font->fontBuf[((void)0,
+                                           gSaveContext.save.inventory.dekuPlaygroundPlayerName[curChar - 0x30D][i]) *
                                           FONT_CHAR_TEX_SIZE];
                     msgCtx->decodedBuffer.wchar[decodedBufPos + i] = 0x30D;
 

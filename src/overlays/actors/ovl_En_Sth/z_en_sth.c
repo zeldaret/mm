@@ -354,13 +354,13 @@ void EnSth_HandleOceansideSpiderHouseConversation(EnSth* this, PlayState* play) 
                         Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                         break;
 
-                    case 0x1132:                     // Heard noise, came in to see
-                    case 0x113A:                     // Had no idea there was a basement here
-                    case 0x113F:                     // Heard noise... I never thought I'd find a place like this
+                    case 0x1132: // Heard noise, came in to see
+                    case 0x113A: // Had no idea there was a basement here
+                    case 0x113F: // Heard noise... I never thought I'd find a place like this
                         Message_ContinueTextbox(play, 0x1133); // did you find this place?
                         break;
 
-                    case 0x1133:                     // did you find this place?
+                    case 0x1133:                               // did you find this place?
                         Message_ContinueTextbox(play, 0x1136); // I want to buy this place from you
                         EnSth_ChangeAnim(this, STH_ANIM_PLEAD);
                         break;
@@ -402,11 +402,11 @@ void EnSth_HandleOceansideSpiderHouseConversation(EnSth* this, PlayState* play) 
                         EnSth_GiveOceansideSpiderHouseReward(this, play);
                         break;
 
-                    case 0x113C:                     // (Second day) I am giving you my life savings
+                    case 0x113C:                               // (Second day) I am giving you my life savings
                         Message_ContinueTextbox(play, 0x113B); // If only I had gotten here yesterday...
                         break;
 
-                    case 0x1141:                     // (Final day) This is all I have
+                    case 0x1141:                               // (Final day) This is all I have
                         Message_ContinueTextbox(play, 0x1140); // If only I had gotten here two days ago...
                         EnSth_ChangeAnim(this, STH_ANIM_WAIT);
                         break;
