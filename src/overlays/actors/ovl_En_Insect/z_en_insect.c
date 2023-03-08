@@ -201,7 +201,7 @@ void func_8091ACC4(EnInsect* this, PlayState* play) {
 
     if ((this->unk_30C & 4) && (this->unk_314 <= 0)) {
         func_8091B3D0(this);
-    } else if ((this->unk_30C & 1) && (this->actor.bgCheckFlags & 0x40)) {
+    } else if ((this->unk_30C & 1) && (this->actor.bgCheckFlags & BGCHECKFLAG_WATER_TOUCH)) {
         func_8091B618(this);
     } else if (this->actor.xzDistToPlayer < 40.0f) {
         func_8091B030(this);
@@ -241,7 +241,7 @@ void func_8091AE5C(EnInsect* this, PlayState* play) {
 
     if ((this->unk_30C & 4) && (this->unk_314 <= 0)) {
         func_8091B3D0(this);
-    } else if ((this->unk_30C & 1) && (this->actor.bgCheckFlags & 0x40)) {
+    } else if ((this->unk_30C & 1) && (this->actor.bgCheckFlags & BGCHECKFLAG_WATER_TOUCH)) {
         func_8091B618(this);
     } else if (this->actor.xzDistToPlayer < 40.0f) {
         func_8091B030(this);
@@ -290,7 +290,7 @@ void func_8091B07C(EnInsect* this, PlayState* play) {
 
     if ((this->unk_312 <= 0) || !sp38) {
         func_8091AC78(this);
-    } else if ((this->unk_30C & 1) && (this->actor.bgCheckFlags & 0x40)) {
+    } else if ((this->unk_30C & 1) && (this->actor.bgCheckFlags & BGCHECKFLAG_WATER_TOUCH)) {
         func_8091B618(this);
     }
 }
@@ -409,7 +409,7 @@ void func_8091B670(EnInsect* this, PlayState* play) {
 
     if ((this->unk_312 <= 0) || ((this->unk_30C & 4) && (this->unk_314 <= 0))) {
         func_8091B928(this);
-    } else if (!(this->actor.bgCheckFlags & 0x40)) {
+    } else if (!(this->actor.bgCheckFlags & BGCHECKFLAG_WATER_TOUCH)) {
         func_8091AC78(this);
     }
 }
@@ -462,7 +462,7 @@ void EnInsect_Update(Actor* thisx, PlayState* play) {
         Actor_MoveWithGravity(&this->actor);
         if (this->unk_30C & 0x100) {
             if (this->unk_30C & 1) {
-                if (this->actor.bgCheckFlags & 1) {
+                if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
                     func_8091A9E4(this);
                 }
             } else {

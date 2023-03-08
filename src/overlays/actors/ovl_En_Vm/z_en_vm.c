@@ -180,7 +180,7 @@ void EnVm_Init(Actor* thisx, PlayState* play) {
 
     this->unk_21C = params * 40.0f;
     thisx->params &= 0xFF;
-    this->actor.bgCheckFlags |= 0x400;
+    this->actor.bgCheckFlags |= BGCHECKFLAG_PLAYER_400;
 
     if (!D_808CD5B8) {
         for (i = 0; i < ARRAY_COUNT(D_808CD58C); i++) {

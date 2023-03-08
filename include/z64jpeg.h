@@ -1,5 +1,5 @@
-#ifndef Z64_JPEG_H
-#define Z64_JPEG_H
+#ifndef Z64JPEG_H
+#define Z64JPEG_H
 
 #include "ultra64/ultratypes.h"
 #include "ultra64/os_message.h"

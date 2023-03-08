@@ -404,7 +404,7 @@ void func_80B28C14(EnFish2* this, PlayState* play) {
             } else if ((itemAction->update != NULL) && (itemAction->params == 0) &&
                        (fabsf(itemAction->world.pos.x - this->actor.world.pos.x) < 100.0f) &&
                        (fabsf(itemAction->world.pos.z - this->actor.world.pos.z) < 100.0f) &&
-                       (itemAction->bgCheckFlags & 0x20)) {
+                       (itemAction->bgCheckFlags & BGCHECKFLAG_WATER)) {
                 this->unk_350 = itemAction;
                 if (D_80B2B2E0 == 0) {
                     EnFish2* fish;

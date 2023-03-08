@@ -362,7 +362,7 @@ void func_800A640C(EnItem00* this, PlayState* play) {
         }
     }
 
-    if ((this->actor.gravity != 0.0f) && !(this->actor.bgCheckFlags & 1)) {
+    if ((this->actor.gravity != 0.0f) && !(this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
         this->actionFunc = func_800A6650;
     }
 }
@@ -387,12 +387,12 @@ void func_800A6650(EnItem00* this, PlayState* play) {
         EffectSsKirakira_SpawnSmall(play, &pos, &sEffectVelocity, &sEffectAccel, &sEffectPrimColor, &sEffectEnvColor);
     }
 
-    if (this->actor.bgCheckFlags & 3) {
+    if (this->actor.bgCheckFlags & (BGCHECKFLAG_GROUND | BGCHECKFLAG_GROUND_TOUCH)) {
         if (this->actor.velocity.y > -2.0f) {
             this->actionFunc = func_800A640C;
         } else {
             this->actor.velocity.y = this->actor.velocity.y * -0.8f;
-            this->actor.bgCheckFlags &= ~1;
+            this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND;
         }
     }
 }
@@ -444,7 +444,7 @@ void func_800A6780(EnItem00* this, PlayState* play) {
         EffectSsKirakira_SpawnSmall(play, &pos, &sEffectVelocity, &sEffectAccel, &sEffectPrimColor, &sEffectEnvColor);
     }
 
-    if (this->actor.bgCheckFlags & 3) {
+    if (this->actor.bgCheckFlags & (BGCHECKFLAG_GROUND | BGCHECKFLAG_GROUND_TOUCH)) {
         this->actionFunc = func_800A640C;
         this->actor.shape.rot.z = 0;
         this->actor.speed = 0.0f;

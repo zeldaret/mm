@@ -413,9 +413,9 @@ void func_808BDFB8(EnDekunuts* this, PlayState* play) {
 
     Math_StepToF(&this->actor.speed, 7.5f, 1.0f);
     if (!Math_SmoothStepToS(&this->actor.world.rot.y, this->unk_192, 1, 0xE38, 0xB6)) {
-        if (this->actor.bgCheckFlags & 0x20) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_WATER) {
             this->unk_192 = Actor_WorldYawTowardPoint(&this->actor, &this->actor.home.pos);
-        } else if (this->actor.bgCheckFlags & 8) {
+        } else if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
             this->unk_192 = this->actor.wallYaw;
         } else if (this->unk_18D == 0) {
             yaw = Actor_WorldYawTowardPoint(&this->actor, &this->actor.home.pos);

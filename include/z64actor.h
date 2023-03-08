@@ -23,6 +23,8 @@ struct EnBox;
 struct EnTorch2;
 
 typedef void(*ActorFunc)(struct Actor* this, struct PlayState* play);
+typedef u16 (*NpcGetTextIdFunc)(struct PlayState*, struct Actor*);
+typedef s16 (*NpcUpdateTalkStateFunc)(struct PlayState*, struct Actor*);
 
 typedef struct {
     /* 0x00 */ Vec3f pos;
@@ -133,6 +135,20 @@ typedef struct {
     /* 0x18 */ Vec3f feetPos[2]; // Update by using `Actor_SetFeetPos` in PostLimbDrawOpa
 } ActorShape; // size = 0x30
 
+#define BGCHECKFLAG_GROUND (1 << 0) // Standing on the ground
+#define BGCHECKFLAG_GROUND_TOUCH (1 << 1) // Has touched the ground (only active for 1 frame)
+#define BGCHECKFLAG_GROUND_LEAVE (1 << 2) // Has left the ground (only active for 1 frame)
+#define BGCHECKFLAG_WALL (1 << 3) // Touching a wall
+#define BGCHECKFLAG_CEILING (1 << 4) // Touching a ceiling
+#define BGCHECKFLAG_WATER (1 << 5) // In water
+#define BGCHECKFLAG_WATER_TOUCH (1 << 6) // Has touched water (reset when leaving water)
+#define BGCHECKFLAG_GROUND_STRICT (1 << 7) // Similar to BGCHECKFLAG_GROUND but with no velocity check and is cleared every frame
+#define BGCHECKFLAG_CRUSHED (1 << 8) // Crushed between a floor and ceiling (triggers a void for player)
+#define BGCHECKFLAG_PLAYER_WALL_INTERACT (1 << 9) // Only set/used by player, related to interacting with walls
+#define BGCHECKFLAG_PLAYER_400 (1 << 10) // 
+#define BGCHECKFLAG_PLAYER_800 (1 << 11) // 
+#define BGCHECKFLAG_PLAYER_1000 (1 << 12) // 
+
 typedef struct Actor {
     /* 0x000 */ s16 id; // Actor ID
     /* 0x002 */ u8 category; // Actor category. Refer to the corresponding enum for values
@@ -161,7 +177,7 @@ typedef struct Actor {
     /* 0x086 */ s16 wallYaw; // Y rotation of the wall polygon the actor is touching
     /* 0x088 */ f32 floorHeight; // Y position of the floor polygon directly below the actor
     /* 0x08C */ f32 depthInWater; // Directed distance to the surface of active waterbox. Negative value means water is below.
-    /* 0x090 */ u16 bgCheckFlags; // See comments below actor struct for wip docs. TODO: macros for these flags
+    /* 0x090 */ u16 bgCheckFlags; // Flags indicating how the actor is interacting with collision
     /* 0x092 */ s16 yawTowardsPlayer; // Y rotation difference between the actor and the player
     /* 0x094 */ f32 xyzDistToPlayerSq; // Squared distance between the actor and the player in the x,y,z axis
     /* 0x098 */ f32 xzDistToPlayer; // Distance between the actor and the player in the XZ plane
@@ -198,20 +214,6 @@ typedef enum {
     /* 0 */ FOOT_LEFT,
     /* 1 */ FOOT_RIGHT
 } ActorFootIndex;
-
-/**
- * BgCheckFlags WIP documentation (logical masks):
- * 0x001 : Standing on the ground
- * 0x002 : Has touched the ground (only active for 1 frame)
- * 0x004 : Has left the ground (only active for 1 frame)
- * 0x008 : Touching a wall
- * 0x010 : Touching a ceiling
- * 0x020 : On or below water surface
- * 0x040 : Has touched water (actor is responsible for unsetting this the frame it touches the water)
- * 0x080 : Similar to & 0x1 but with no velocity check and is cleared every frame
- * 0x100 : Crushed between a floor and ceiling (triggers a void for player)
- * 0x200 : Only set/used by player, related to interacting with walls
- */
 
 typedef struct {
     /* 0x000 */ Actor actor;
@@ -639,5 +641,32 @@ typedef enum {
     /* 0x64 */ TATL_HINT_ID_MUSHROOM,
     /* 0xFF */ TATL_HINT_ID_NONE = 0xFF
 } TatlHintId;
+
+typedef enum NpcTalkState {
+    /* 0 */ NPC_TALK_STATE_IDLE, // NPC not currently talking to player
+    /* 1 */ NPC_TALK_STATE_TALKING, // NPC is currently talking to player
+    /* 2 */ NPC_TALK_STATE_ACTION, // An NPC-defined action triggered in the conversation
+    /* 3 */ NPC_TALK_STATE_ITEM_GIVEN // NPC finished giving an item and text box is done
+} NpcTalkState;
+
+typedef enum NpcTrackingMode {
+    /* 0 */ NPC_TRACKING_PLAYER_AUTO_TURN, // Determine tracking mode based on player position, see Npc_UpdateAutoTurn
+    /* 1 */ NPC_TRACKING_NONE, // Don't track the target (usually the player)
+    /* 2 */ NPC_TRACKING_HEAD_AND_TORSO, // Track target by turning the head and the torso
+    /* 3 */ NPC_TRACKING_HEAD, // Track target by turning the head
+    /* 4 */ NPC_TRACKING_FULL_BODY // Track target by turning the body, torso and head
+} NpcTrackingMode;
+
+typedef struct NpcInteractInfo {
+    /* 0x00 */ s16 talkState;
+    /* 0x02 */ s16 trackingMode;
+    /* 0x04 */ s16 autoTurnTimer;
+    /* 0x06 */ s16 autoTurnState;
+    /* 0x08 */ Vec3s headRot;
+    /* 0x0E */ Vec3s torsoRot;
+    /* 0x14 */ f32 yOffset; // Y position offset to add to actor position when calculating angle to target
+    /* 0x18 */ Vec3f trackPos;
+    /* 0x24 */ UNK_TYPE1 unk_24[0x4];
+} NpcInteractInfo; // size = 0x28
 
 #endif

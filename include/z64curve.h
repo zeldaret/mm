@@ -1,5 +1,5 @@
-#ifndef Z64_CURVE_H
-#define Z64_CURVE_H
+#ifndef Z64CURVE_H
+#define Z64CURVE_H
 
 #include "ultra64/ultratypes.h"
 #include "z64math.h"

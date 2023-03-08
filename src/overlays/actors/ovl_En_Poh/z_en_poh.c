@@ -167,7 +167,7 @@ void EnPoh_Init(Actor* thisx, PlayState* play) {
                             255, 255, 255, 0);
     SkelAnime_Init(play, &this->skelAnime, &object_po_Skel_0050D0, &object_po_Anim_000A60, this->jointTable,
                    this->morphTable, 21);
-    this->actor.bgCheckFlags |= 0x400;
+    this->actor.bgCheckFlags |= BGCHECKFLAG_PLAYER_400;
     func_80B2D0E8(this);
 }
 
@@ -582,7 +582,7 @@ void func_80B2DC50(EnPoh* this, PlayState* play) {
 }
 
 void func_80B2DD2C(EnPoh* this, PlayState* play) {
-    if ((this->actor.bgCheckFlags & 1) || (this->actor.floorHeight <= BGCHECK_Y_MIN)) {
+    if ((this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) || (this->actor.floorHeight <= BGCHECK_Y_MIN)) {
         EffectSsHahen_SpawnBurst(play, &this->actor.world.pos, 6.0f, 0, 1, 1, 15, OBJECT_PO, 10, object_po_DL_002D28);
         func_80B2E0B0(this);
     }

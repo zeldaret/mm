@@ -370,7 +370,7 @@ void func_80B3D3F8(EnDnp* this, PlayState* play) {
 }
 
 void func_80B3D47C(EnDnp* this, PlayState* play) {
-    if (this->actor.bgCheckFlags & 1) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         Math_SmoothStepToF(&this->actor.scale.x, 0.0085f, 0.1f, 0.01f, 0.001f);
         if ((s32)(this->actor.scale.x * 10000.0f) >= 85) {
             this->actor.flags |= ACTOR_FLAG_1;
