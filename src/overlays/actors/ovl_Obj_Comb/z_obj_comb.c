@@ -437,9 +437,9 @@ void func_8098DE58(ObjComb* this) {
 
 void func_8098DEA0(ObjComb* this, PlayState* play) {
     this->unk_1B4--;
-    if ((this->actor.bgCheckFlags & 1) || (this->unk_1B4 <= 0)) {
+    if ((this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) || (this->unk_1B4 <= 0)) {
         func_8098DA74(this, play);
-        if ((this->actor.bgCheckFlags & 0x20) && (this->actor.depthInWater > 30.0f)) {
+        if ((this->actor.bgCheckFlags & BGCHECKFLAG_WATER) && (this->actor.depthInWater > 30.0f)) {
             func_8098D47C(this, play);
         } else {
             func_8098D19C(this, play);
@@ -447,11 +447,11 @@ void func_8098DEA0(ObjComb* this, PlayState* play) {
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 40, NA_SE_EV_HONEYCOMB_BROKEN);
         func_8098E098(this);
     } else {
-        if (this->actor.bgCheckFlags & 0x40) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_WATER_TOUCH) {
             func_8098D6E0(this, play);
         }
 
-        if (this->actor.bgCheckFlags & 0x20) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_WATER) {
             this->actor.gravity = -0.5f;
             this->actor.velocity.y *= 0.8f;
             this->unk_1AE >>= 1;

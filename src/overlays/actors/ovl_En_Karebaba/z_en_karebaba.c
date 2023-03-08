@@ -413,7 +413,8 @@ void EnKarebaba_Dying(EnKarebaba* this, PlayState* play) {
             Math_ScaledStepToS(&this->actor.shape.rot.x, 0x4800, 0x71C);
             EffectSsHahen_SpawnBurst(play, &this->actor.world.pos, 3.0f, 0, 12, 5, 1, HAHEN_OBJECT_DEFAULT, 10, NULL);
 
-            if ((this->actor.scale.x > 0.005f) && ((this->actor.bgCheckFlags & 2) || (this->actor.bgCheckFlags & 8))) {
+            if ((this->actor.scale.x > 0.005f) && ((this->actor.bgCheckFlags & BGCHECKFLAG_GROUND_TOUCH) ||
+                                                   (this->actor.bgCheckFlags & BGCHECKFLAG_WALL))) {
                 this->actor.scale.z = 0.0f;
                 this->actor.scale.y = 0.0f;
                 this->actor.scale.x = 0.0f;
@@ -423,7 +424,7 @@ void EnKarebaba_Dying(EnKarebaba* this, PlayState* play) {
                                          NULL);
             }
 
-            if (this->actor.bgCheckFlags & 2) {
+            if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND_TOUCH) {
                 Actor_PlaySfx(&this->actor, NA_SE_EN_EYEGOLE_ATTACK);
                 this->timer = 1;
             }

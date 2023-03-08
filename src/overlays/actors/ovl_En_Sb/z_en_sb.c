@@ -268,11 +268,11 @@ void EnSb_TurnAround(EnSb* this, PlayState* play) {
 
 void EnSb_Lunge(EnSb* this, PlayState* play) {
     Math_StepToF(&this->actor.speed, 0.0f, 0.2f);
-    if (this->actor.velocity.y <= -0.1f || this->actor.bgCheckFlags & 2) {
+    if ((this->actor.velocity.y <= -0.1f) || (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND_TOUCH)) {
         if (!(this->actor.depthInWater > 0.0f)) {
             Actor_PlaySfx(&this->actor, NA_SE_EN_EYEGOLE_ATTACK);
         }
-        this->actor.bgCheckFlags &= ~2;
+        this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND_TOUCH;
         EnSb_SetupBounce(this);
     }
 }
@@ -298,8 +298,8 @@ void EnSb_Bounce(EnSb* this, PlayState* play) {
             }
             EnSb_SpawnBubbles(play, this);
             EnSb_SetupLunge(this);
-        } else if (this->actor.bgCheckFlags & 1) {
-            this->actor.bgCheckFlags &= ~2;
+        } else if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
+            this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND_TOUCH;
             this->actor.speed = 0.0f;
             this->attackTimer = 1;
             EnSb_SetupWaitClosed(this);
@@ -310,12 +310,12 @@ void EnSb_Bounce(EnSb* this, PlayState* play) {
 void EnSb_ReturnToIdle(EnSb* this, PlayState* play) {
     if (this->attackTimer != 0) {
         this->attackTimer--;
-        if (this->actor.bgCheckFlags & 1) {
-            this->actor.bgCheckFlags &= ~1;
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
+            this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND;
             this->actor.speed = 0.0f;
         }
-    } else if (this->actor.bgCheckFlags & 1) {
-        this->actor.bgCheckFlags &= ~1;
+    } else if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
+        this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND;
         this->actionFunc = EnSb_Idle;
         this->actor.speed = 0.0f;
     }

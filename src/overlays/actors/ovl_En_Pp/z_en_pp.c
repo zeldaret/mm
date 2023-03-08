@@ -836,7 +836,7 @@ void EnPp_Jump(EnPp* this, PlayState* play) {
 
     Math_SmoothStepToS(&this->actor.world.rot.y, this->targetRotY, 1, 0x1388, 0);
     if (!this->actionVar.hasLandedFromJump) {
-        if (this->actor.bgCheckFlags & 1) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
             this->actionVar.hasLandedFromJump = true;
             EnPp_ChangeAnim(this, EN_PP_ANIM_LAND);
         }
@@ -1224,7 +1224,7 @@ void EnPp_BodyPart_Move(EnPp* this, PlayState* play) {
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 50, NA_SE_EV_BOMB_DROP_WATER);
     }
 
-    if ((this->timer == 0) || (this->actor.bgCheckFlags & 1)) {
+    if ((this->timer == 0) || (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
         Actor_Kill(&this->actor);
     }
 }
@@ -1416,7 +1416,7 @@ void EnPp_Update(Actor* thisx, PlayState* play) {
     if (this->action != EN_PP_ACTION_BODY_PART_MOVE) {
         EnPp_UpdateDamage(this, play);
         Actor_SetFocus(&this->actor, 40.0f);
-        if ((this->action == EN_PP_ACTION_DEAD) || (this->actor.bgCheckFlags & 1)) {
+        if ((this->action == EN_PP_ACTION_DEAD) || (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
             this->actor.world.pos.x += this->damagedVelocity.x;
             this->actor.world.pos.z += this->damagedVelocity.z;
             Math_ApproachZeroF(&this->damagedVelocity.x, 1.0f, 2.0f);

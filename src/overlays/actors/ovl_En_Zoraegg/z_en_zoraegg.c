@@ -579,7 +579,7 @@ void func_80B32BB8(EnZoraegg* this, PlayState* play) {
     func_80B31C40(this, play);
     func_80B31D64(this, play, 13, 0.0f);
 
-    if (this->actor.bgCheckFlags & 0x1) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         this->actionFunc = func_80B32B70;
     }
 

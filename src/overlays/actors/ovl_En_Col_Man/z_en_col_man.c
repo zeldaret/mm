@@ -114,7 +114,7 @@ void func_80AFDD60(EnColMan* this) {
 }
 
 void func_80AFDE00(EnColMan* this, PlayState* play) {
-    if (this->actor.bgCheckFlags & 1) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         if (this->actor.params == EN_COL_MAN_HEART_PIECE) {
             this->actor.params = EN_COL_MAN_RECOVERY_HEART;
             this->actor.speed = 2.0f;
@@ -161,7 +161,7 @@ void func_80AFDFB4(EnColMan* this, PlayState* play) {
 
     this->scale = (BREG(55) / 10000.0f) + 0.0015f;
 
-    if ((this->actor.bgCheckFlags & 1) && (this->actor.velocity.y < 0.0f)) {
+    if ((this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) && (this->actor.velocity.y < 0.0f)) {
         if (!this->hasSetRandomValues) {
             this->actor.world.rot.y = randPlusMinusPoint5Scaled(30000.0f);
             this->actor.speed = 2.0f + BREG(56) + Rand_ZeroFloat(2.0f);

@@ -232,17 +232,17 @@ void func_808AEE3C(EnBombf* this, PlayState* play) {
     }
 
     this->unk_204 = 1.0f;
-    if (!(this->actor.bgCheckFlags & 1)) {
+    if (!(this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
         Math_SmoothStepToF(&this->actor.speed, 0.0f, 1.0f, 0.025f, 0.0f);
         return;
     }
 
     Math_SmoothStepToF(&this->actor.speed, 0.0f, 1.0f, 1.5f, 0.0f);
-    if (this->actor.bgCheckFlags & 2) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND_TOUCH) {
         func_800B8EF4(play, &this->actor);
         if (this->actor.velocity.y < -6.0f) {
             this->actor.velocity.y *= -0.3f;
-            this->actor.bgCheckFlags &= ~1;
+            this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND;
         }
     } else if (this->timer >= 4) {
         Actor_OfferCarry(&this->actor, play);
@@ -252,7 +252,7 @@ void func_808AEE3C(EnBombf* this, PlayState* play) {
 void func_808AEF68(EnBombf* this, PlayState* play) {
     if (Actor_HasNoParent(&this->actor, play)) {
         EnBombf_SetupAction(this, func_808AEE3C);
-        this->actor.bgCheckFlags &= ~1;
+        this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND;
         func_808AEE3C(this, play);
     } else {
         this->actor.velocity.y = 0.0f;
@@ -341,11 +341,11 @@ void EnBombf_Update(Actor* thisx, PlayState* play) {
     }
 
     if (ENBOMBF_GET(&this->actor) == ENBOMBF_0) {
-        if ((this->actor.velocity.y > 0.0f) && (this->actor.bgCheckFlags & 0x10)) {
+        if ((this->actor.velocity.y > 0.0f) && (this->actor.bgCheckFlags & BGCHECKFLAG_CEILING)) {
             this->actor.velocity.y = -this->actor.velocity.y;
         }
 
-        if ((this->actor.speed != 0.0f) && (this->actor.bgCheckFlags & 8)) {
+        if ((this->actor.speed != 0.0f) && (this->actor.bgCheckFlags & BGCHECKFLAG_WALL)) {
             s16 yDiff = BINANG_SUB(this->actor.wallYaw, this->actor.world.rot.y);
 
             if (ABS_ALT(yDiff) > 0x4000) {
@@ -358,7 +358,7 @@ void EnBombf_Update(Actor* thisx, PlayState* play) {
             Actor_UpdateBgCheckInfo(play, &this->actor, 5.0f, 10.0f, 0.0f, 0x1F);
             DREG(6) = 0;
             this->actor.speed *= 0.7f;
-            this->actor.bgCheckFlags &= ~8;
+            this->actor.bgCheckFlags &= ~BGCHECKFLAG_WALL;
         }
 
         if ((this->colliderCylinder.base.acFlags & AC_HIT) ||
@@ -443,8 +443,8 @@ void EnBombf_Update(Actor* thisx, PlayState* play) {
             return;
         }
 
-        if (this->actor.bgCheckFlags & 0x40) {
-            this->actor.bgCheckFlags &= ~0x40;
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_WATER_TOUCH) {
+            this->actor.bgCheckFlags &= ~BGCHECKFLAG_WATER_TOUCH;
             Actor_PlaySfx(&this->actor, NA_SE_EV_BOMB_DROP_WATER);
         }
     }

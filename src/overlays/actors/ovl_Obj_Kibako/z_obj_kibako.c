@@ -279,7 +279,7 @@ void ObjKibako_Idle(ObjKibako* this, PlayState* play) {
         //! @bug: This function should only pass Player*: it uses *(this + 0x153), which is meant to be
         //! player->currentMask, but in this case is garbage in the collider
         Player_PlaySfx((Player*)&this->actor, NA_SE_PL_PULL_UP_WOODBOX);
-    } else if ((this->actor.bgCheckFlags & 0x20) && (this->actor.depthInWater > 19.0f)) {
+    } else if ((this->actor.bgCheckFlags & BGCHECKFLAG_WATER) && (this->actor.depthInWater > 19.0f)) {
         ObjKibako_WaterBreak(this, play);
         ObjKibako_SpawnCollectible(this, play);
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 20, NA_SE_EV_WOODBOX_BREAK);
@@ -384,13 +384,14 @@ void ObjKibako_Thrown(ObjKibako* this, PlayState* play) {
     if (this->timer > 0) {
         this->timer--;
     }
-    if ((this->actor.bgCheckFlags & 0xB) || (atHit) || (this->timer <= 0)) {
+    if ((this->actor.bgCheckFlags & (BGCHECKFLAG_GROUND | BGCHECKFLAG_GROUND_TOUCH | BGCHECKFLAG_WALL)) || atHit ||
+        (this->timer <= 0)) {
         ObjKibako_AirBreak(this, play);
         ObjKibako_SpawnCollectible(this, play);
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 20, NA_SE_EV_WOODBOX_BREAK);
         Actor_Kill(&this->actor);
     } else {
-        if (this->actor.bgCheckFlags & 0x40) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_WATER_TOUCH) {
             ObjKibako_WaterBreak(this, play);
             ObjKibako_SpawnCollectible(this, play);
             SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 20, NA_SE_EV_WOODBOX_BREAK);

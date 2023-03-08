@@ -649,7 +649,7 @@ void func_80ADC37C(EnSellnuts* this, PlayState* play) {
     this->actor.gravity = 0.0f;
     if (this->path != NULL) {
         sp2C = func_80ADCFE8(this->path, this->unk_334, &this->actor.world.pos, &sp30);
-        if (this->actor.bgCheckFlags & 8) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
             sp30.y = this->actor.wallYaw;
         }
         Math_SmoothStepToS(&this->actor.world.rot.y, sp30.y, 0xA, 0x12C, 0);
@@ -780,7 +780,7 @@ void func_80ADC8C4(EnSellnuts* this, PlayState* play) {
 
     if (this->path != NULL) {
         func_80ADCFE8(this->path, this->unk_334, &this->actor.world.pos, &sp30);
-        if (this->actor.bgCheckFlags & 8) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
             sp30.y = this->actor.wallYaw;
         }
         Math_SmoothStepToS(&this->actor.world.rot.y, sp30.y, 0xA, 0x12C, 0);

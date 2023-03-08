@@ -359,9 +359,9 @@ void func_80932C98(EnFz* this, PlayState* play) {
     Vec3f sp3C;
 
     if (this->unk_BCD != 0) {
-        if ((this->actor.bgCheckFlags & 8) ||
+        if ((this->actor.bgCheckFlags & BGCHECKFLAG_WALL) ||
             !Actor_TestFloorInDirection(&this->actor, play, 60.0f, this->actor.world.rot.y)) {
-            this->actor.bgCheckFlags &= ~0x8;
+            this->actor.bgCheckFlags &= ~BGCHECKFLAG_WALL;
             this->unk_BCD = 0;
             this->unk_BBC = 0.0f;
             this->actor.speed = 0.0f;

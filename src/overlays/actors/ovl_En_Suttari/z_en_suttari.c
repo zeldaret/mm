@@ -632,7 +632,7 @@ void func_80BABA90(EnSuttari* this, s32 arg1, u8 arg2) {
 
     if (this->paths[arg1] != NULL) {
         target = EnSuttari_GetDistSqAndOrient(this->paths[arg1], this->unk1F4[arg1], &this->actor.world.pos, &dist);
-        if (this->actor.bgCheckFlags & 8) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
             if (arg2 == 2) {
                 this->unk1F4[arg1] = -0x63;
             } else {
@@ -661,7 +661,7 @@ void func_80BABB90(EnSuttari* this, s32 arg1) {
 
     if (this->paths[arg1] != NULL) {
         target = EnSuttari_GetDistSqAndOrient(this->paths[arg1], this->unk1F4[arg1], &this->actor.world.pos, &sp30);
-        if (this->actor.bgCheckFlags & 8) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
             target = this->actor.wallYaw;
         }
         Math_SmoothStepToS(&this->actor.world.rot.y, target, 1, 0xBB8, 0);
@@ -1045,7 +1045,7 @@ void func_80BACBB0(EnSuttari* this, PlayState* play) {
         this->actionFunc = func_80BACA14;
     }
     if ((this->actor.playerHeightRel < 60.0f) && (this->actor.xzDistToPlayer < 500.0f)) {
-        if (this->actor.bgCheckFlags & 8) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
             target = this->actor.wallYaw;
         } else if (func_80BAA904(this, play)) {
             target = -this->actor.world.rot.y;
@@ -1060,7 +1060,7 @@ void func_80BACBB0(EnSuttari* this, PlayState* play) {
         this->actor.speed = 0.0f;
     }
     Actor_MoveWithGravity(&this->actor);
-    if (!(this->actor.bgCheckFlags & 1)) {
+    if (!(this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
         this->actor.world.pos = this->actor.prevPos;
         this->actor.world.rot.y = -this->actor.world.rot.y;
         this->actionFunc = func_80BACE4C;
@@ -1082,7 +1082,7 @@ void func_80BACD2C(EnSuttari* this, PlayState* play) {
         this->actor.shape.rot.y = this->actor.world.rot.y;
     }
     Actor_MoveWithGravity(&this->actor);
-    if (!(this->actor.bgCheckFlags & 1)) {
+    if (!(this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
         this->actor.world.pos = this->actor.prevPos;
         this->actor.world.rot.y = -this->actor.world.rot.y;
         this->actionFunc = func_80BACE4C;

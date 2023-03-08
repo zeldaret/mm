@@ -316,12 +316,14 @@ void EnBaguo_CheckForDetonation(EnBaguo* this, PlayState* play) {
     // the Nejiron should forcibly explode and as a loop index.
     i = false;
     if (this->action != NEJIRON_ACTION_EXPLODING && this->action != NEJIRON_ACTION_RETREATING) {
-        if (!(this->actor.bgCheckFlags & 1) && this->actor.world.pos.y < (this->actor.home.pos.y - 100.0f)) {
+        if (!(this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) &&
+            this->actor.world.pos.y < (this->actor.home.pos.y - 100.0f)) {
             // Force a detonation if we're off the ground and have fallen
             // below our home position (e.g., we rolled off a ledge).
             i = true;
         }
-        if (this->actor.bgCheckFlags & 0x60 && this->actor.depthInWater >= 40.0f) {
+        if ((this->actor.bgCheckFlags & (BGCHECKFLAG_WATER | BGCHECKFLAG_WATER_TOUCH)) &&
+            (this->actor.depthInWater >= 40.0f)) {
             // Force a detonation if we're too far below the water's surface.
             i = true;
         }

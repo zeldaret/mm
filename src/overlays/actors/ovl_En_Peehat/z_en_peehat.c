@@ -432,10 +432,10 @@ void func_80897A94(EnPeehat* this, PlayState* play) {
         this->colliderTris.base.atFlags &= ~(AT_BOUNCED | AT_ON);
         this->actor.colChkInfo.health = 0;
         func_808982E0(this);
-    } else if ((this->colliderCylinder.base.acFlags & AC_HIT) || (this->actor.bgCheckFlags & 1)) {
+    } else if ((this->colliderCylinder.base.acFlags & AC_HIT) || (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
         func_800B3030(play, &this->actor.world.pos, &gZeroVec3f, &gZeroVec3f, 40, 7, 0);
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 11, NA_SE_EN_EXTINCT);
-        if (!(this->actor.bgCheckFlags & 1)) {
+        if (!(this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
             SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 40, NA_SE_EN_PIHAT_SM_DEAD);
         }
         Actor_Kill(&this->actor);

@@ -206,15 +206,15 @@ void EnWiz_MoveMagicProjectile(EnWizFire* this, PlayState* play) {
     Math_ApproachF(&this->scale, this->targetScale, 0.2f, 0.01f);
 
     if (this->wallCheckTimer == 0) {
-        if ((this->actor.bgCheckFlags & 8) && (this->type == EN_WIZ_FIRE_TYPE_MAGIC_PROJECTILE) && (this->timer != 0) &&
-            (this->actor.bgCheckFlags & 8)) {
+        if ((this->actor.bgCheckFlags & BGCHECKFLAG_WALL) && (this->type == EN_WIZ_FIRE_TYPE_MAGIC_PROJECTILE) &&
+            (this->timer != 0) && (this->actor.bgCheckFlags & BGCHECKFLAG_WALL)) {
             sPoolHitByIceArrow = false;
             this->timer = 0;
             this->targetScale = 0.0f;
         }
     }
 
-    if ((this->actor.bgCheckFlags & 1) && (this->poolTimer == 0)) {
+    if ((this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) && (this->poolTimer == 0)) {
         s32 i;
         s16 arcingProjectileRotY;
         s32 pad;

@@ -410,7 +410,7 @@ void EnIk_WalkTowardsPlayer(EnIk* this, PlayState* play) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_IRONNACK_WALK);
     }
     yawDiff = this->actor.wallYaw - this->actor.shape.rot.y;
-    if ((this->actor.bgCheckFlags & 8) && (ABS_ALT(yawDiff) >= 0x4000)) {
+    if ((this->actor.bgCheckFlags & BGCHECKFLAG_WALL) && (ABS_ALT(yawDiff) >= 0x4000)) {
         yawDiff = (this->actor.yawTowardsPlayer > 0) ? this->actor.wallYaw - 0x4000 : this->actor.wallYaw + 0x4000;
         Math_ScaledStepToS(&this->actor.shape.rot.y, yawDiff, 0x320);
     } else {
@@ -438,7 +438,7 @@ void EnIk_RunTowardsPlayer(EnIk* this, PlayState* play) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_IRONNACK_WALK);
     }
     yawDiff = this->actor.wallYaw - this->actor.shape.rot.y;
-    if ((this->actor.bgCheckFlags & 8) && (ABS_ALT(yawDiff) >= 0x4000)) {
+    if ((this->actor.bgCheckFlags & BGCHECKFLAG_WALL) && (ABS_ALT(yawDiff) >= 0x4000)) {
         yawDiff = (this->actor.yawTowardsPlayer > 0) ? this->actor.wallYaw - 0x4000 : this->actor.wallYaw + 0x4000;
         Math_ScaledStepToS(&this->actor.shape.rot.y, yawDiff, 0x4B0);
     } else {

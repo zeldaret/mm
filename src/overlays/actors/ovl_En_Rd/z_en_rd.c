@@ -1004,7 +1004,7 @@ void EnRd_Crouch(EnRd* this, PlayState* play) {
 void EnRd_SetupDamage(EnRd* this) {
     this->actor.shape.yOffset = 0.0f;
     Animation_MorphToPlayOnce(&this->skelAnime, &gGibdoRedeadDamageAnim, -6.0f);
-    if (this->actor.bgCheckFlags & 1) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         this->actor.speed = -2.0f;
     }
 

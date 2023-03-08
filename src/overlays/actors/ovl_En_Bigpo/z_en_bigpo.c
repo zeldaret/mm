@@ -206,7 +206,7 @@ void EnBigpo_Init(Actor* thisx, PlayState* play2) {
     }
 
     ActorShape_Init(&thisx->shape, 0.0f, ActorShadow_DrawCircle, 45.0f);
-    thisx->bgCheckFlags |= 0x400;
+    thisx->bgCheckFlags |= BGCHECKFLAG_PLAYER_400;
     this->savedHeight = thisx->home.pos.y + 100.0f;
     this->mainColor.r = 255;
     this->mainColor.g = 255;
@@ -744,12 +744,12 @@ void EnBigpo_SetupLanternDrop(EnBigpo* this, PlayState* play) {
     this->actor.world.pos.y -= 15.0f;
     func_800BC154(play, &play->actorCtx, &this->actor, ACTORCAT_MISC);
     this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_4); // targetable OFF, enemy music OFF
-    this->actor.bgCheckFlags &= ~0x400;
+    this->actor.bgCheckFlags &= ~BGCHECKFLAG_PLAYER_400;
     this->actionFunc = EnBigpo_LanternFalling;
 }
 
 void EnBigpo_LanternFalling(EnBigpo* this, PlayState* play) {
-    if (this->actor.bgCheckFlags & 1 || this->actor.floorHeight == BGCHECK_Y_MIN) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND || this->actor.floorHeight == BGCHECK_Y_MIN) {
         if (this->switchFlags != 0xFF) {
             Flags_SetSwitch(play, this->switchFlags);
         }

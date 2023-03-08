@@ -874,7 +874,7 @@ void func_808DA89C(EnSw* this, PlayState* play) {
     } else if (ENSW_GET_3(&this->actor)) {
         this->actionFunc = func_808DAEB4;
     } else {
-        if (this->actor.bgCheckFlags & 1) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
             f32 temp_f2;
 
             this->actor.shape.yOffset = 400.0f;
@@ -1104,7 +1104,7 @@ void func_808DB25C(EnSw* this, PlayState* play) {
 void func_808DB2E0(EnSw* this, PlayState* play) {
     f32 temp_f2;
 
-    if (this->actor.bgCheckFlags & 1) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         func_808D9F78(this, play, 0);
         temp_f2 = fabsf(this->actor.velocity.y) * 0.6f;
         this->actor.velocity.x *= 0.5f;

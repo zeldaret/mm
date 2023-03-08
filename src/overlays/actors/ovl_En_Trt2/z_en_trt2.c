@@ -164,7 +164,7 @@ void func_80AD3530(EnTrt2* this, PlayState* play) {
     func_80AD46F8(this);
     if (this->path != NULL) {
         phi_a1 = func_80AD48F8(this->path, this->unk_1E4, &this->actor.world.pos, &sp30);
-        if (this->actor.bgCheckFlags & 8) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
             phi_a1 = this->actor.wallYaw;
         }
         Math_SmoothStepToS(&this->actor.world.rot.y, phi_a1, 4, 1000, 1);
@@ -269,7 +269,7 @@ void func_80AD38B8(EnTrt2* this, PlayState* play) {
             }
         }
 
-        if (this->actor.bgCheckFlags & 8) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
             if (this->unk_1E4 >= (this->path->count - 1)) {
                 ActorCutscene_Stop(this->unk_3DA);
                 this->unk_3D9 = 2;
@@ -332,7 +332,7 @@ void func_80AD3BE4(EnTrt2* this, PlayState* play) {
 void func_80AD3C94(EnTrt2* this, PlayState* play) {
     if (this->actor.world.pos.y < 5.0f) {
         func_80AD4A78(this, play);
-        if (this->actor.bgCheckFlags & 1) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
             this->unk_3B2 = 0xF;
         }
     }
@@ -666,7 +666,7 @@ s32 func_80AD4B4C(EnTrt2* this, PlayState* play) {
         this->actor.speed = 0.0f;
         func_80AD349C(this);
         this->unk_3B4 = this->unk_3B2;
-        if (this->actor.bgCheckFlags & 1) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
             if ((player->transformation != PLAYER_FORM_HUMAN) && (player->transformation != PLAYER_FORM_FIERCE_DEITY)) {
                 this->unk_3A8 = 0x84F;
             }
@@ -686,7 +686,7 @@ s32 func_80AD4B4C(EnTrt2* this, PlayState* play) {
 }
 
 s32 func_80AD4C4C(EnTrt2* this) {
-    if (this->actor.bgCheckFlags & 1) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         if (this->actor.xzDistToPlayer < 100.0f) {
             return true;
         }
@@ -700,7 +700,8 @@ s32 func_80AD4CCC(EnTrt2* this, PlayState* play) {
     s16 sp1E = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
     Player* player = GET_PLAYER(play);
 
-    if (((this->unk_3B2 == 4) || (this->unk_3B2 == 5)) && this->actor.isTargeted && !(this->actor.bgCheckFlags & 1) &&
+    if (((this->unk_3B2 == 4) || (this->unk_3B2 == 5)) && this->actor.isTargeted &&
+        !(this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) &&
         ((player->transformation == PLAYER_FORM_HUMAN) || (player->transformation == PLAYER_FORM_FIERCE_DEITY))) {
         this->actor.speed = 0.0f;
         this->actor.velocity.y = 1.5f;

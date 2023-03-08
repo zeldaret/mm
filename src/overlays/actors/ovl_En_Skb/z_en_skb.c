@@ -526,7 +526,7 @@ void func_80995818(EnSkb* this, PlayState* play) {
         func_80995A30(this);
     }
 
-    if (this->actor.bgCheckFlags & 2) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND_TOUCH) {
         this->actor.speed = 0.0f;
         for (i = 0; i < 10; i++) {
             func_809947B0(play, this, &this->actor.world.pos);
@@ -635,7 +635,7 @@ void func_80995DC4(EnSkb* this, PlayState* play) {
 }
 
 void func_80995E08(EnSkb* this) {
-    if (this->actor.bgCheckFlags & 1) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         this->actor.speed = 0.0f;
     }
     Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_FREEZE);
@@ -645,17 +645,17 @@ void func_80995E08(EnSkb* this) {
 }
 
 void func_80995E64(EnSkb* this, PlayState* play) {
-    if (this->actor.bgCheckFlags & 2) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND_TOUCH) {
         this->actor.speed = 0.0f;
     }
 
-    if (this->actor.bgCheckFlags & 1) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         if (this->actor.speed < 0.0f) {
             this->actor.speed += 0.05f;
         }
     }
 
-    if ((this->actor.colorFilterTimer == 0) && (this->actor.bgCheckFlags & 1)) {
+    if ((this->actor.colorFilterTimer == 0) && (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
         if (this->unk_3DC == 0) {
             if (this->actor.colChkInfo.health == 0) {
                 func_809961E4(this, play);
@@ -693,7 +693,7 @@ void func_80995F98(EnSkb* this) {
     } else {
         this->actor.world.rot.y = this->actor.yawTowardsPlayer;
         Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 3);
-        if (this->actor.bgCheckFlags & 1) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
             this->actor.speed = -4.0f;
         }
     }
@@ -703,7 +703,7 @@ void func_80995F98(EnSkb* this) {
 }
 
 void func_809960AC(EnSkb* this, PlayState* play) {
-    if (this->actor.bgCheckFlags & 2) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND_TOUCH) {
         s32 i;
 
         for (i = 0; i < 10; i++) {
@@ -712,7 +712,7 @@ void func_809960AC(EnSkb* this, PlayState* play) {
         this->actor.speed = 0.0f;
     }
 
-    if (this->actor.bgCheckFlags & 1) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         if (this->actor.speed < 0.0f) {
             this->actor.speed += 0.05f;
         }
@@ -720,7 +720,8 @@ void func_809960AC(EnSkb* this, PlayState* play) {
     }
 
     Math_SmoothStepToS(&this->actor.shape.rot.x, 0, 0x10, 0x7D0, 0x64);
-    if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame) && (this->actor.bgCheckFlags & 1)) {
+    if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame) &&
+        (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
         this->actor.shape.rot.x = 0;
         this->actor.world.rot = this->actor.shape.rot;
         func_80994DA8(this, play);
@@ -730,7 +731,7 @@ void func_809960AC(EnSkb* this, PlayState* play) {
 void func_809961E4(EnSkb* this, PlayState* play) {
     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 4);
     this->unk_3D8 |= 0x40;
-    if (this->actor.bgCheckFlags & 1) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         this->actor.speed = -6.0f;
     }
     this->unk_3E4 = 0;
@@ -873,7 +874,8 @@ void func_8099672C(EnSkb* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if ((this->unk_3DE != 6) && (this->unk_3DE != 7)) {
-        if ((this->actor.bgCheckFlags & 0x60) && (this->actor.depthInWater >= 40.0f)) {
+        if ((this->actor.bgCheckFlags & (BGCHECKFLAG_WATER | BGCHECKFLAG_WATER_TOUCH)) &&
+            (this->actor.depthInWater >= 40.0f)) {
             this->actor.colChkInfo.health = 0;
             this->unk_3E4 = 0;
             func_809961E4(this, play);

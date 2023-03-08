@@ -403,7 +403,7 @@ void EnSnowman_MoveSnowPile(EnSnowman* this, PlayState* play) {
         }
 
         this->actor.world.rot.y = this->actor.shape.rot.y;
-    } else if (this->actor.bgCheckFlags & 8) {
+    } else if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
         this->snowPileTargetRotY = this->actor.wallYaw;
     } else if (Actor_WorldDistXZToPoint(&this->actor, &this->actor.home.pos) > 200.0f) {
         this->snowPileTargetRotY =
@@ -1081,9 +1081,9 @@ void EnSnowman_UpdateSnowball(Actor* thisx, PlayState* play) {
         this->collider.base.ocFlags1 |= OC1_ON;
     }
 
-    if ((this->actor.bgCheckFlags & 8) || (this->actor.bgCheckFlags & 1) || (this->actor.bgCheckFlags & 0x10) ||
-        (this->collider.base.atFlags & AT_HIT) || (this->collider.base.acFlags & AC_HIT) ||
-        (this->collider.base.ocFlags1 & OC1_HIT)) {
+    if ((this->actor.bgCheckFlags & BGCHECKFLAG_WALL) || (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) ||
+        (this->actor.bgCheckFlags & BGCHECKFLAG_CEILING) || (this->collider.base.atFlags & AT_HIT) ||
+        (this->collider.base.acFlags & AC_HIT) || (this->collider.base.ocFlags1 & OC1_HIT)) {
         if (EN_SNOWMAN_GET_TYPE(&this->actor) == EN_SNOWMAN_TYPE_SMALL_SNOWBALL) {
             scale = 10;
             for (i = 0; i < 3; i++) {

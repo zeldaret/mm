@@ -291,15 +291,15 @@ void EnSyatekiWf_Run(EnSyatekiWf* this, PlayState* play) {
     targetPoint.z = this->pathPoints[this->currentPointIndex].z;
     wallYawDiff = (this->actor.wallYaw - this->actor.world.rot.y) + 0x8000;
 
-    if (this->actor.bgCheckFlags & 1) {
-        if (this->actor.bgCheckFlags & 8) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
             if ((ABS(wallYawDiff) < 0x1555) && (this->actor.wallPoly != this->actor.floorPoly)) {
                 EnSyatekiWf_SetupJump(this);
                 return;
             }
         }
 
-        if (this->actor.bgCheckFlags & 4) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND_LEAVE) {
             this->actor.velocity.y = 2.0f;
         }
 
@@ -345,7 +345,7 @@ void EnSyatekiWf_SetupJump(EnSyatekiWf* this) {
 }
 
 void EnSyatekiWf_Jump(EnSyatekiWf* this, PlayState* play) {
-    if (this->actor.bgCheckFlags & 2) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND_TOUCH) {
         EnSyatekiWf_SetupLand(this);
     }
 }
@@ -428,7 +428,7 @@ void EnSyatekiWf_Update(Actor* thisx, PlayState* play2) {
     Actor_UpdateBgCheckInfo(play, &this->actor, 32.0f, 30.0f, 60.0f, 5);
     this->actionFunc(this, play);
 
-    if (this->actor.bgCheckFlags & 3) {
+    if (this->actor.bgCheckFlags & (BGCHECKFLAG_GROUND | BGCHECKFLAG_GROUND_TOUCH)) {
         func_800BE3D0(&this->actor, this->actor.shape.rot.y, &this->actor.shape.rot);
     } else {
         Math_SmoothStepToS(&this->actor.shape.rot.x, 0, 1, 0x3E8, 0);

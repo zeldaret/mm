@@ -273,8 +273,8 @@ void func_8088AA98(EnArrow* this, PlayState* play) {
     f32 temp_f0;
 
     if (WaterBox_GetSurface1(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &sp50, &sp54) &&
-        (this->actor.world.pos.y < sp50) && !(this->actor.bgCheckFlags & 0x20)) {
-        this->actor.bgCheckFlags |= 0x20;
+        (this->actor.world.pos.y < sp50) && !(this->actor.bgCheckFlags & BGCHECKFLAG_WATER)) {
+        this->actor.bgCheckFlags |= BGCHECKFLAG_WATER;
 
         Math_Vec3f_Diff(&this->actor.world.pos, &this->actor.home.pos, &sp44);
 

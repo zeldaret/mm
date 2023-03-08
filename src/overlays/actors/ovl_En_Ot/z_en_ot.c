@@ -535,7 +535,7 @@ void func_80B5C6DC(EnOt* this, PlayState* play) {
             this->unk_360->unk_3A0 = this->unk_3A0;
             func_80B5C9A8(this, play);
             func_80B5D114(this, play);
-        } else if ((player->actor.bgCheckFlags & 1) && !func_801242B4(player) &&
+        } else if ((player->actor.bgCheckFlags & BGCHECKFLAG_GROUND) && !func_801242B4(player) &&
                    (this->actor.xzDistToPlayer < 130.0f)) {
             func_800B8614(&this->actor, play, 130.0f);
         }
@@ -696,7 +696,8 @@ void func_80B5CEC8(EnOt* this, PlayState* play) {
         func_800B8500(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel, PLAYER_IA_NONE);
     } else {
         this->actor.flags &= ~ACTOR_FLAG_10000;
-        if ((player->actor.bgCheckFlags & 1) && !func_801242B4(player) && (this->actor.xzDistToPlayer < 130.0f)) {
+        if ((player->actor.bgCheckFlags & BGCHECKFLAG_GROUND) && !func_801242B4(player) &&
+            (this->actor.xzDistToPlayer < 130.0f)) {
             func_800B8614(&this->actor, play, 130.0f);
         }
     }
@@ -934,7 +935,7 @@ void EnOt_Update(Actor* thisx, PlayState* play) {
     }
 
     this->actionFunc(this, play);
-    if (this->actor.bgCheckFlags & 0x20) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_WATER) {
         if (DECR(this->unk_354) == 0) {
             if (this->actor.flags & ACTOR_FLAG_40) {
                 s32 i;

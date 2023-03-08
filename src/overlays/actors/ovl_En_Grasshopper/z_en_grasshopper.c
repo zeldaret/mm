@@ -450,7 +450,8 @@ void EnGrasshopper_RoamInCircles(EnGrasshopper* this, PlayState* play) {
         collisionCheckPos.y = this->actor.world.pos.y;
         collisionCheckPos.z = (Math_CosS(this->actor.shape.rot.y) * 100.0f) + this->actor.world.pos.z;
 
-        if ((this->actor.bgCheckFlags & 8) || BgCheck_SphVsFirstPoly(&play->colCtx, &collisionCheckPos, 10.0f)) {
+        if ((this->actor.bgCheckFlags & BGCHECKFLAG_WALL) ||
+            BgCheck_SphVsFirstPoly(&play->colCtx, &collisionCheckPos, 10.0f)) {
             EnGrasshopper_SetupBank(this);
         } else if (player->stateFlags1 & PLAYER_STATE1_8000000) {
             this->collider.elements[0].info.toucherFlags |= (TOUCH_ON | TOUCH_SFX_WOOD);
