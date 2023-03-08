@@ -190,7 +190,7 @@ void EnToto_Init(Actor* thisx, PlayState* play) {
         return;
     }
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 30.0f);
-    this->actor.bgCheckFlags |= 0x400;
+    this->actor.bgCheckFlags |= BGCHECKFLAG_PLAYER_400;
     SkelAnime_InitFlex(play, &this->skelAnime, &object_zm_Skel_00A978,
                        ((play->sceneId == SCENE_SONCHONOIE) ? &object_zm_Anim_003AA8 : &object_zm_Anim_00C880),
                        this->jointTable, this->morphTable, 18);
@@ -515,7 +515,7 @@ s32 func_80BA4530(EnToto* this, PlayState* play) {
         this->unk2B6 = 1;
         return this->text->unk1;
     }
-    if (player->actor.bgCheckFlags & 1) {
+    if (player->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         temp_s0 = &D_80BA50DC[gSaveContext.save.playerForm - 1];
         if (func_80BA44D4(temp_s0, player)) {
             Math_Vec3s_ToVec3f(&player->actor.world.pos, &temp_s0->unk6);

@@ -752,8 +752,8 @@ void Actor_SetColorFilter(Actor* actor, u16 colorFlag, u16 colorIntensityMax, u1
 Hilite* func_800BCBF4(Vec3f* arg0, PlayState* play);
 Hilite* func_800BCC68(Vec3f* arg0, PlayState* play);
 void Actor_GetClosestPosOnPath(Vec3s* points, s32 numPoints, Vec3f* srcPos, Vec3f* dstPos, s32 isPathLoop);
-s32 func_800BD2B4(PlayState* play, Actor* actor, s16* arg2, f32 arg3, u16 (*textIdCallback)(PlayState*, Actor*), s16 (*arg5)(PlayState*, Actor*));
-void func_800BD888(Actor* actor, struct_800BD888_arg1* arg1, s16 arg2, s16 arg3);
+s32 Npc_UpdateTalking(PlayState* play, Actor* actor, s16* talkState, f32 interactRange, NpcGetTextIdFunc getTextId, NpcUpdateTalkStateFunc updateTalkState);
+void Npc_TrackPoint(Actor* actor, NpcInteractInfo* interactInfo, s16 presetIndex, s16 trackingMode);
 void func_800BD9E0(PlayState* play, SkelAnime* skelAnime, OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, Actor* actor, s16 alpha);
 void func_800BDAA0(PlayState* play, SkelAnime* skelAnime, OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, Actor* actor, s16 alpha);
 void Actor_ChangeAnimationByInfo(SkelAnime* skelAnime, AnimationInfo* animationInfo, s32 animIndex);
@@ -1292,12 +1292,7 @@ s16 ActorCutscene_GetCurrentSubCamId(s16 index);
 s16 func_800F21CC(void);
 s32 func_800F22C4(s16 param_1, Actor* actor);
 void ActorCutscene_SetReturnCamera(s16 index);
-void FireObj_SetPosition(FireObj* fire, Vec3f* pos);
-void FireObj_Draw(PlayState* play, FireObj* fire);
-void FireObj_Init(PlayState* play, FireObj* fire, FireObjInitParams* init, Actor* actor);
-void FireObj_Destroy(PlayState* play, FireObj* fire);
-void FireObj_SetState2(FireObj* fire, f32 dynamicSizeStep, u8 newState);
-void FireObj_Update(PlayState* play, FireObj* fire, Actor* actor);
+
 s32 func_800F3940(PlayState* play);
 // void func_800F39B4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
 // void func_800F3A64(void);

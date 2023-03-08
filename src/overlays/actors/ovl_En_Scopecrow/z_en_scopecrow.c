@@ -236,7 +236,7 @@ void func_80BCD640(EnScopecrow* this, PlayState* play) {
 
     if (this->path != NULL) {
         func_80BCD4D0(this->path, this->unk_1FC, &this->actor.world.pos, &sp30);
-        if (this->actor.bgCheckFlags & 8) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
             sp30.y = this->actor.wallYaw;
         }
 
