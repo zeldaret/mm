@@ -382,11 +382,11 @@ asm/non_matchings/code/z_actor/Actor_SetColorFilter.s,Actor_SetColorFilter,0x800
 asm/non_matchings/code/z_actor/func_800BCBF4.s,func_800BCBF4,0x800BCBF4,0x1D
 asm/non_matchings/code/z_actor/func_800BCC68.s,func_800BCC68,0x800BCC68,0x1D
 asm/non_matchings/code/z_actor/Actor_GetClosestPosOnPath.s,Actor_GetClosestPosOnPath,0x800BCCDC,0x176
-asm/non_matchings/code/z_actor/func_800BD2B4.s,func_800BD2B4,0x800BD2B4,0x34
-asm/non_matchings/code/z_actor/func_800BD384.s,func_800BD384,0x800BD384,0xCD
-asm/non_matchings/code/z_actor/func_800BD6B8.s,func_800BD6B8,0x800BD6B8,0xB
-asm/non_matchings/code/z_actor/func_800BD6E4.s,func_800BD6E4,0x800BD6E4,0x69
-asm/non_matchings/code/z_actor/func_800BD888.s,func_800BD888,0x800BD888,0x46
+asm/non_matchings/code/z_actor/Npc_UpdateTalking.s,Npc_UpdateTalking,0x800BD2B4,0x34
+asm/non_matchings/code/z_actor/Npc_TrackPointWithLimits.s,Npc_TrackPointWithLimits,0x800BD384,0xCD
+asm/non_matchings/code/z_actor/Npc_GetTrackingPresetMaxPlayerYaw.s,Npc_GetTrackingPresetMaxPlayerYaw,0x800BD6B8,0xB
+asm/non_matchings/code/z_actor/Npc_UpdateAutoTurn.s,Npc_UpdateAutoTurn,0x800BD6E4,0x69
+asm/non_matchings/code/z_actor/Npc_TrackPoint.s,Npc_TrackPoint,0x800BD888,0x46
 asm/non_matchings/code/z_actor/func_800BD9A0.s,func_800BD9A0,0x800BD9A0,0x10
 asm/non_matchings/code/z_actor/func_800BD9E0.s,func_800BD9E0,0x800BD9E0,0x30
 asm/non_matchings/code/z_actor/func_800BDAA0.s,func_800BDAA0,0x800BDAA0,0x33

@@ -22,6 +22,8 @@ struct EnBox;
 struct EnTorch2;
 
 typedef void(*ActorFunc)(struct Actor* this, struct PlayState* play);
+typedef u16 (*NpcGetTextIdFunc)(struct PlayState*, struct Actor*);
+typedef s16 (*NpcUpdateTalkStateFunc)(struct PlayState*, struct Actor*);
 
 typedef struct {
     /* 0x00 */ Vec3f pos;
@@ -676,23 +678,37 @@ typedef enum {
     /* 0xFF */ TATL_HINT_ID_NONE = 0xFF
 } TatlHintId;
 
-typedef struct {
+typedef struct TargetRangeParams {
     /* 0x0 */ f32 rangeSq;
     /* 0x4 */ f32 leashScale;
 } TargetRangeParams; // size = 0x8
 
-// From OoT's struct_80034A14_arg1
-typedef struct struct_800BD888_arg1 {
-    /* 0x00 */ s16 unk_00;
-    /* 0x02 */ s16 unk_02;
-    /* 0x04 */ s16 unk_04;
-    /* 0x06 */ s16 unk_06;
-    /* 0x08 */ Vec3s unk_08;
-    /* 0x0E */ Vec3s unk_0E;
-    /* 0x14 */ f32 unk_14;
-    /* 0x18 */ Vec3f unk_18; // Usually setted to Player's position or Player's focus
-    /* 0x24 */ s16 unk_24;
-} struct_800BD888_arg1; // size = 0x28
+typedef enum NpcTalkState {
+    /* 0 */ NPC_TALK_STATE_IDLE, // NPC not currently talking to player
+    /* 1 */ NPC_TALK_STATE_TALKING, // NPC is currently talking to player
+    /* 2 */ NPC_TALK_STATE_ACTION, // An NPC-defined action triggered in the conversation
+    /* 3 */ NPC_TALK_STATE_ITEM_GIVEN // NPC finished giving an item and text box is done
+} NpcTalkState;
+
+typedef enum NpcTrackingMode {
+    /* 0 */ NPC_TRACKING_PLAYER_AUTO_TURN, // Determine tracking mode based on player position, see Npc_UpdateAutoTurn
+    /* 1 */ NPC_TRACKING_NONE, // Don't track the target (usually the player)
+    /* 2 */ NPC_TRACKING_HEAD_AND_TORSO, // Track target by turning the head and the torso
+    /* 3 */ NPC_TRACKING_HEAD, // Track target by turning the head
+    /* 4 */ NPC_TRACKING_FULL_BODY // Track target by turning the body, torso and head
+} NpcTrackingMode;
+
+typedef struct NpcInteractInfo {
+    /* 0x00 */ s16 talkState;
+    /* 0x02 */ s16 trackingMode;
+    /* 0x04 */ s16 autoTurnTimer;
+    /* 0x06 */ s16 autoTurnState;
+    /* 0x08 */ Vec3s headRot;
+    /* 0x0E */ Vec3s torsoRot;
+    /* 0x14 */ f32 yOffset; // Y position offset to add to actor position when calculating angle to target
+    /* 0x18 */ Vec3f trackPos;
+    /* 0x24 */ UNK_TYPE1 unk_24[0x4];
+} NpcInteractInfo; // size = 0x28
 
 extern TargetRangeParams gTargetRanges[];
 extern s16 D_801AED48[8];
