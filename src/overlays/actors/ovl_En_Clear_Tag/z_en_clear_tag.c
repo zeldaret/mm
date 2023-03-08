@@ -468,7 +468,7 @@ void EnClearTag_Init(Actor* thisx, PlayState* play) {
             EnClearTag_CreateFlashEffect(this, &pos, sFlashMaxScale[thisx->params], this->actor.floorHeight);
 
             // Is not underwater
-            if (!(this->actor.bgCheckFlags & 0x20)) {
+            if (!(this->actor.bgCheckFlags & BGCHECKFLAG_WATER)) {
                 if (thisx->params < 10) {
                     pos.y = this->actor.world.pos.y - 40.0f;
 
@@ -549,7 +549,7 @@ void EnClearTag_UpdateCamera(EnClearTag* this, PlayState* play) {
                     player->actor.world.pos.z = -950.0f;
                 }
 
-                player->actor.speedXZ = 0.0f;
+                player->actor.speed = 0.0f;
                 if (this->activeTimer == 0) {
                     this->cameraState = 1;
                 }
@@ -578,7 +578,7 @@ void EnClearTag_UpdateCamera(EnClearTag* this, PlayState* play) {
                 player->actor.world.pos.z = -950.0f;
             }
 
-            player->actor.speedXZ = 0.0f;
+            player->actor.speed = 0.0f;
             if (Message_GetState(&play->msgCtx) == TEXT_STATE_NONE) {
                 mainCam = Play_GetCamera(play, CAM_ID_MAIN);
                 mainCam->eye = this->subCamEye;

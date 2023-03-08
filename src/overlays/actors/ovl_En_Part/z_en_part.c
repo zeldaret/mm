@@ -52,7 +52,7 @@ void func_80865390(EnPart* this, PlayState* play) {
             this->actor.world.rot.y = this->actor.parent->shape.rot.y + 0x8000;
             this->unk146 = 100;
             this->actor.velocity.y = 7.0f;
-            this->actor.speedXZ = 2.0f;
+            this->actor.speed = 2.0f;
             this->actor.gravity = -1.0f;
             break;
     }

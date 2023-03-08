@@ -142,7 +142,7 @@ void BgIcicle_Shiver(BgIcicle* this, PlayState* play) {
     }
 
     if (!(this->shiverTimer % 4)) {
-        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_ICE_SWING);
+        Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_ICE_SWING);
     }
 
     if (this->shiverTimer == 0) {
@@ -163,9 +163,9 @@ void BgIcicle_Shiver(BgIcicle* this, PlayState* play) {
 }
 
 void BgIcicle_Fall(BgIcicle* this, PlayState* play) {
-    if ((this->collider.base.atFlags & AT_HIT) || (this->dyna.actor.bgCheckFlags & 1)) {
+    if ((this->collider.base.atFlags & AT_HIT) || (this->dyna.actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
         this->collider.base.atFlags &= ~AT_HIT;
-        this->dyna.actor.bgCheckFlags &= ~1;
+        this->dyna.actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND;
 
         if (this->dyna.actor.world.pos.y < this->dyna.actor.floorHeight) {
             this->dyna.actor.world.pos.y = this->dyna.actor.floorHeight;

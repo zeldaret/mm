@@ -452,7 +452,7 @@ void func_80BAAFDC(EnSuttari* this, PlayState* play) {
         if (this->playerDetected == true) {
             play_sound(NA_SE_SY_FOUND);
             this->playerDetected = false;
-            this->actor.speedXZ = 0.0f;
+            this->actor.speed = 0.0f;
             if (this->unk1F4[0] != 0) {
                 this->unk1F4[0]--;
             }
@@ -485,7 +485,7 @@ void func_80BAB1A0(EnSuttari* this, PlayState* play) {
         if (this->playerDetected == true) {
             play_sound(NA_SE_SY_FOUND);
             this->playerDetected = false;
-            this->actor.speedXZ = 0.0f;
+            this->actor.speed = 0.0f;
             if (this->unk1F4[0] != 0) {
                 this->unk1F4[0]--;
             }
@@ -632,7 +632,7 @@ void func_80BABA90(EnSuttari* this, s32 arg1, u8 arg2) {
 
     if (this->paths[arg1] != NULL) {
         target = EnSuttari_GetDistSqAndOrient(this->paths[arg1], this->unk1F4[arg1], &this->actor.world.pos, &dist);
-        if (this->actor.bgCheckFlags & 8) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
             if (arg2 == 2) {
                 this->unk1F4[arg1] = -0x63;
             } else {
@@ -661,7 +661,7 @@ void func_80BABB90(EnSuttari* this, s32 arg1) {
 
     if (this->paths[arg1] != NULL) {
         target = EnSuttari_GetDistSqAndOrient(this->paths[arg1], this->unk1F4[arg1], &this->actor.world.pos, &sp30);
-        if (this->actor.bgCheckFlags & 8) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
             target = this->actor.wallYaw;
         }
         Math_SmoothStepToS(&this->actor.world.rot.y, target, 1, 0xBB8, 0);
@@ -1032,7 +1032,7 @@ void func_80BACA14(EnSuttari* this, PlayState* play) {
             func_800B8614(&this->actor, play, 200.0f);
         }
     }
-    Math_ApproachF(&this->actor.speedXZ, 5.0f, 0.2f, 0.1f);
+    Math_ApproachF(&this->actor.speed, 5.0f, 0.2f, 0.1f);
     Actor_MoveWithGravity(&this->actor);
 }
 
@@ -1045,7 +1045,7 @@ void func_80BACBB0(EnSuttari* this, PlayState* play) {
         this->actionFunc = func_80BACA14;
     }
     if ((this->actor.playerHeightRel < 60.0f) && (this->actor.xzDistToPlayer < 500.0f)) {
-        if (this->actor.bgCheckFlags & 8) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
             target = this->actor.wallYaw;
         } else if (func_80BAA904(this, play)) {
             target = -this->actor.world.rot.y;
@@ -1054,13 +1054,13 @@ void func_80BACBB0(EnSuttari* this, PlayState* play) {
         }
         Math_SmoothStepToS(&this->actor.world.rot.y, target, 4, 0x3E8, 1);
         this->actor.shape.rot.y = this->actor.world.rot.y;
-        Math_ApproachF(&this->actor.speedXZ, 5.0f, 0.2f, 0.1f);
+        Math_ApproachF(&this->actor.speed, 5.0f, 0.2f, 0.1f);
     } else {
         this->actionFunc = func_80BACD2C;
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
     }
     Actor_MoveWithGravity(&this->actor);
-    if (!(this->actor.bgCheckFlags & 1)) {
+    if (!(this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
         this->actor.world.pos = this->actor.prevPos;
         this->actor.world.rot.y = -this->actor.world.rot.y;
         this->actionFunc = func_80BACE4C;
@@ -1076,13 +1076,13 @@ void func_80BACD2C(EnSuttari* this, PlayState* play) {
     }
     if ((this->actor.playerHeightRel < 60.0f) && (this->actor.xzDistToPlayer < 500.0f)) {
         this->actionFunc = func_80BACBB0;
-        Math_ApproachF(&this->actor.speedXZ, 5.0f, 0.2f, 0.1f);
+        Math_ApproachF(&this->actor.speed, 5.0f, 0.2f, 0.1f);
     } else {
         Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 4, 0x3E8, 1);
         this->actor.shape.rot.y = this->actor.world.rot.y;
     }
     Actor_MoveWithGravity(&this->actor);
-    if (!(this->actor.bgCheckFlags & 1)) {
+    if (!(this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
         this->actor.world.pos = this->actor.prevPos;
         this->actor.world.rot.y = -this->actor.world.rot.y;
         this->actionFunc = func_80BACE4C;
@@ -1118,7 +1118,7 @@ void func_80BACEE0(EnSuttari* this, PlayState* play) {
     if (this->unk428 == 5) {
         SET_WEEKEVENTREG(WEEKEVENTREG_58_80);
         this->actionFunc = func_80BADDB4;
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
     } else if (Player_GetMask(play) != PLAYER_MASK_STONE) {
         func_80BAB1A0(this, play);
     }
@@ -1203,7 +1203,7 @@ void func_80BAD380(EnSuttari* this, PlayState* play) {
 
     if ((player->stateFlags1 & PLAYER_STATE1_40) && (play->msgCtx.currentTextId != 0x2A31)) {
         this->flags1 |= 0x8000;
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
     } else {
         this->flags1 &= ~0x8000;
         func_80BABA90(this, 1, 1);
@@ -1222,7 +1222,7 @@ void func_80BAD380(EnSuttari* this, PlayState* play) {
         } else if (this->flags1 & 0x200) {
             SET_WEEKEVENTREG(WEEKEVENTREG_79_40);
             this->flags2 |= 4;
-            this->actor.speedXZ = 0.0f;
+            this->actor.speed = 0.0f;
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->actor.world.pos.x, this->actor.world.pos.y,
                         this->actor.world.pos.z, 0, 0, 0, CLEAR_TAG_SMALL_EXPLOSION);
             SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 30, NA_SE_IT_BOMB_EXPLOSION);
@@ -1233,13 +1233,13 @@ void func_80BAD380(EnSuttari* this, PlayState* play) {
             if (this->flags2 & 8) {
                 SET_WEEKEVENTREG(WEEKEVENTREG_33_08);
             }
-            this->actor.speedXZ = 0.0f;
+            this->actor.speed = 0.0f;
             Audio_QueueSeqCmd(0x101400FF);
             this->flags2 |= 4;
             EnSuttari_TriggerTransition(play, ENTRANCE(NORTH_CLOCK_TOWN, 7));
         } else {
             this->unk3F2 = this->headRot.y;
-            Math_ApproachF(&this->actor.speedXZ, 4.0f, 0.2f, 0.5f);
+            Math_ApproachF(&this->actor.speed, 4.0f, 0.2f, 0.5f);
             Actor_MoveWithGravity(&this->actor);
             func_80BAB374(this, play);
         }
@@ -1410,10 +1410,10 @@ void func_80BADDB4(EnSuttari* this, PlayState* play) {
 void func_80BADE14(EnSuttari* this, PlayState* play) {
     func_80BABA90(this, 1, 2);
     if (this->unk1F4[1] == -0x63) {
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
     } else {
         this->unk3F2 = this->headRot.y;
-        Math_ApproachF(&this->actor.speedXZ, 6.0f, 0.2f, 0.5f);
+        Math_ApproachF(&this->actor.speed, 6.0f, 0.2f, 0.5f);
     }
     Actor_MoveWithGravity(&this->actor);
 }
@@ -1438,7 +1438,7 @@ void func_80BADF3C(EnSuttari* this, PlayState* play) {
     }
     this->unk3F2 = this->headRot.y;
     if (DECR(this->unk3F6) == 0) {
-        Math_ApproachF(&this->actor.speedXZ, 6.0f, 0.2f, 0.5f);
+        Math_ApproachF(&this->actor.speed, 6.0f, 0.2f, 0.5f);
     }
     Actor_MoveWithGravity(&this->actor);
 }
@@ -1488,11 +1488,11 @@ void EnSuttari_Update(Actor* thisx, PlayState* play) {
     if (this->unk428 != 0) {
         if (this->animIndex == 2 || this->animIndex == 6) {
             if (Animation_OnFrame(&this->skelAnime, 8.0f) || Animation_OnFrame(&this->skelAnime, 16.0f)) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_PAMERA_WALK);
+                Actor_PlaySfx(&this->actor, NA_SE_EV_PAMERA_WALK);
             }
         } else if (this->animIndex == 0 || this->animIndex == 5) {
             if (Animation_OnFrame(&this->skelAnime, 8.0f) || Animation_OnFrame(&this->skelAnime, 17.0f)) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_PAMERA_WALK);
+                Actor_PlaySfx(&this->actor, NA_SE_EV_PAMERA_WALK);
             }
         }
     }

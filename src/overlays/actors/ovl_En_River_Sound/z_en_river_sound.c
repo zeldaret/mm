@@ -86,7 +86,7 @@ void EnRiverSound_Draw(Actor* thisx, PlayState* play) {
     s16 params = this->actor.params;
 
     if (params < RS_RIVER_DEFAULT_LOW_FREQ) {
-        Actor_PlaySfxAtPos(&this->actor, gAudioEnvironmentalSfx[params]);
+        Actor_PlaySfx(&this->actor, gAudioEnvironmentalSfx[params]);
     } else {
         Audio_PlaySfxForRiver(&this->actor.projectedPos, freqScale[this->soundFreqIndex]);
     }

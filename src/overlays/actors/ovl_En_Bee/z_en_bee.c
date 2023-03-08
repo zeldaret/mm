@@ -173,7 +173,7 @@ void EnBee_FlyIdle(EnBee* this, PlayState* play) {
     }
 
     Math_SmoothStepToS(&this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &nextPos), 1, 0x7D0, 0);
-    Math_ApproachF(&this->actor.speedXZ, 3.0f, 0.3f, 1.0f);
+    Math_ApproachF(&this->actor.speed, 3.0f, 0.3f, 1.0f);
 
     if ((this->attackDelayTimer == 0) && (this->actor.params != BEE_BEHAVIOR_IDLE)) {
         EnBee_SetupAttack(this);
@@ -227,7 +227,7 @@ void EnBee_Attack(EnBee* this, PlayState* play) {
 
     Math_SmoothStepToS(&this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &nextPos), 1, 0x1388, 0);
     Math_ApproachF(&this->actor.world.pos.y, nextPos.y, 0.3f, 3.0f);
-    Math_ApproachF(&this->actor.speedXZ, 5.0f, 0.3f, 1.0f);
+    Math_ApproachF(&this->actor.speed, 5.0f, 0.3f, 1.0f);
 }
 
 void EnBee_UpdateDamage(EnBee* this, PlayState* play) {
@@ -238,7 +238,7 @@ void EnBee_UpdateDamage(EnBee* this, PlayState* play) {
 
     if (this->collider.base.acFlags & AC_HIT) {
         Enemy_StartFinishingBlow(play, &this->actor);
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 10, NA_SE_EN_CUTBODY);
         this->actor.colChkInfo.health = 0;
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 50, NA_SE_EN_EXTINCT);
@@ -262,7 +262,7 @@ void EnBee_Update(Actor* thisx, PlayState* play) {
         }
     }
 
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BEE_FLY - SFX_FLAG);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_BEE_FLY - SFX_FLAG);
     EnBee_UpdateDamage(this, play);
     Math_Vec3s_Copy(&this->actor.shape.rot, &this->actor.world.rot);
     Actor_SetFocus(&this->actor, 0.0f);

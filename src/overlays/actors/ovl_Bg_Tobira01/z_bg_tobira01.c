@@ -62,7 +62,7 @@ void BgTobira01_Open(BgTobira01* this, PlayState* play) {
 
     if (this->timer != prevTimer) {
         if (1) {}
-        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_STONEDOOR_OPEN_S - SFX_FLAG);
+        Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_STONEDOOR_OPEN_S - SFX_FLAG);
         this->dyna.actor.world.pos.y = (this->yOffset = (this->timer * (5.0f / 3.0f)) + this->dyna.actor.home.pos.y);
         this->timer2 = 180;
     }

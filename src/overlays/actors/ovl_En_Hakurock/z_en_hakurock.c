@@ -165,7 +165,7 @@ void func_80B21EA4(EnHakurock* this, s32 arg1) {
 }
 
 void func_80B21FFC(EnHakurock* this) {
-    this->actor.bgCheckFlags &= ~1;
+    this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND;
     this->collider.base.atFlags &= ~AT_HIT;
     this->collider.base.ocFlags1 &= ~OC1_HIT;
     this->actor.draw = NULL;
@@ -186,7 +186,7 @@ void func_80B22040(EnHakurock* this, PlayState* play) {
 void func_80B220A8(EnHakurock* this) {
     this->actor.params = EN_HAKUROCK_TYPE_BOULDER;
     this->actor.draw = func_80B228F4;
-    this->actor.speedXZ = Rand_ZeroFloat(3.5f) + 2.5f;
+    this->actor.speed = Rand_ZeroFloat(3.5f) + 2.5f;
     this->actor.velocity.y = Rand_ZeroFloat(4.5f) + 18.0f;
     Actor_SetScale(&this->actor, (Rand_ZeroFloat(5.0f) + 15.0f) * 0.001f);
     this->actor.world.rot.y = ((s32)Rand_Next() >> 0x12) + this->actor.parent->shape.rot.y + 0x8000;
@@ -210,8 +210,8 @@ void func_80B221E8(EnHakurock* this, PlayState* play) {
     this->actor.shape.rot.z += 0xB00;
 
     if ((this->collider.base.atFlags & AT_HIT) || ((this->counter == 0) && (this->collider.base.ocFlags1 & OC1_HIT)) ||
-        ((this->actor.bgCheckFlags & 1) && (this->actor.velocity.y < 0.0f))) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_ROCK_BROKEN);
+        ((this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) && (this->actor.velocity.y < 0.0f))) {
+        Actor_PlaySfx(&this->actor, NA_SE_EV_ROCK_BROKEN);
         func_80B21EA4(this, 0);
         func_80B21FFC(this);
     }
@@ -244,9 +244,9 @@ void func_80B2242C(EnHakurock* this, PlayState* play) {
     if ((this->collider.base.ocFlags1 & OC1_HIT) && (this->collider.base.oc == this->actor.parent)) {
         func_80B21EA4(this, 1);
         func_80B21FFC(this);
-    } else if ((this->actor.bgCheckFlags & 1)) {
+    } else if ((this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
         func_80B21EA4(this, 2);
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_OBJECT_STICK);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_OBJECT_STICK);
         func_80B224C0(this);
     }
 }

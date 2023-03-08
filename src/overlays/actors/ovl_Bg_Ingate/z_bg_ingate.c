@@ -207,7 +207,7 @@ void func_80953F9C(BgIngate* this, PlayState* play) {
                 this->actionFunc = func_809542A0;
             }
         } else if ((ActorCutscene_GetCurrentIndex() == -1) && (this->timePath != NULL)) {
-            Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_CRUISER - SFX_FLAG);
+            Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_CRUISER - SFX_FLAG);
             func_80953BEC(this);
         }
     }
@@ -228,7 +228,7 @@ void func_809541B8(BgIngate* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (this->unk160 & 0x4) {
-        if ((player->transformation == PLAYER_FORM_HUMAN) && (player->actor.bgCheckFlags & 1) &&
+        if ((player->transformation == PLAYER_FORM_HUMAN) && (player->actor.bgCheckFlags & BGCHECKFLAG_GROUND) &&
             (this->dyna.actor.xzDistToPlayer < 40.0f)) {
             if (this->dyna.actor.playerHeightRel > 15.0f) {
                 func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_7);

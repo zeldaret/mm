@@ -216,7 +216,7 @@ void EnSyatekiWf_InitPathStart(EnSyatekiWf* this) {
 void EnSyatekiWf_SetupWaitForSignal(EnSyatekiWf* this) {
     EnSyatekiMan* syatekiMan = (EnSyatekiMan*)this->actor.parent;
 
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actor.world = this->actor.home;
     this->actor.prevPos = this->actor.home.pos;
     this->actor.shape.rot = this->actor.world.rot;
@@ -254,7 +254,7 @@ void EnSyatekiWf_SetupWaitToMove(EnSyatekiWf* this) {
  */
 void EnSyatekiWf_WaitToMove(EnSyatekiWf* this, PlayState* play) {
     if (this->waitTimer >= 11) {
-        Actor_PlaySfxAtPos(this->actor.parent, NA_SE_EN_WOLFOS_APPEAR);
+        Actor_PlaySfx(this->actor.parent, NA_SE_EN_WOLFOS_APPEAR);
         this->waitTimer = 0;
         EnSyatekiWf_SetupRun(this);
     } else {
@@ -264,7 +264,7 @@ void EnSyatekiWf_WaitToMove(EnSyatekiWf* this, PlayState* play) {
 
 void EnSyatekiWf_SetupRun(EnSyatekiWf* this) {
     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_SYATEKI_WF_ANIM_RUN);
-    this->actor.speedXZ = 10.0f;
+    this->actor.speed = 10.0f;
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->actor.draw = EnSyatekiWf_Draw;
     this->actionFunc = EnSyatekiWf_Run;
@@ -291,15 +291,15 @@ void EnSyatekiWf_Run(EnSyatekiWf* this, PlayState* play) {
     targetPoint.z = this->pathPoints[this->currentPointIndex].z;
     wallYawDiff = (this->actor.wallYaw - this->actor.world.rot.y) + 0x8000;
 
-    if (this->actor.bgCheckFlags & 1) {
-        if (this->actor.bgCheckFlags & 8) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
             if ((ABS(wallYawDiff) < 0x1555) && (this->actor.wallPoly != this->actor.floorPoly)) {
                 EnSyatekiWf_SetupJump(this);
                 return;
             }
         }
 
-        if (this->actor.bgCheckFlags & 4) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND_LEAVE) {
             this->actor.velocity.y = 2.0f;
         }
 
@@ -310,10 +310,10 @@ void EnSyatekiWf_Run(EnSyatekiWf* this, PlayState* play) {
             Math_SmoothStepToS(&this->actor.world.rot.y, this->yawTarget, 5, 0x3000, 0x100);
             this->actor.shape.rot.y = this->actor.world.rot.y;
             if (distToTarget < 50.0f) {
-                if (this->actor.speedXZ > 3.0f) {
-                    this->actor.speedXZ = this->actor.speedXZ - 0.5f;
+                if (this->actor.speed > 3.0f) {
+                    this->actor.speed = this->actor.speed - 0.5f;
                 } else {
-                    this->actor.speedXZ = this->actor.speedXZ;
+                    this->actor.speed = this->actor.speed;
                 }
             }
         } else {
@@ -337,21 +337,21 @@ void EnSyatekiWf_Run(EnSyatekiWf* this, PlayState* play) {
 }
 
 void EnSyatekiWf_SetupJump(EnSyatekiWf* this) {
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_TEKU_JUMP);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_TEKU_JUMP);
     this->actor.velocity.y = 20.0f;
-    this->actor.speedXZ = 5.0f;
+    this->actor.speed = 5.0f;
     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_SYATEKI_WF_ANIM_JUMP);
     this->actionFunc = EnSyatekiWf_Jump;
 }
 
 void EnSyatekiWf_Jump(EnSyatekiWf* this, PlayState* play) {
-    if (this->actor.bgCheckFlags & 2) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND_TOUCH) {
         EnSyatekiWf_SetupLand(this);
     }
 }
 
 void EnSyatekiWf_SetupLand(EnSyatekiWf* this) {
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_SYATEKI_WF_ANIM_LAND);
     this->actionFunc = EnSyatekiWf_Land;
 }
@@ -367,8 +367,8 @@ void EnSyatekiWf_Land(EnSyatekiWf* this, PlayState* play) {
 
 void EnSyatekiWf_SetupHowl(EnSyatekiWf* this) {
     this->timer = 40;
-    this->actor.speedXZ = 0.0f;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_WOLFOS_APPEAR);
+    this->actor.speed = 0.0f;
+    Actor_PlaySfx(&this->actor, NA_SE_EN_WOLFOS_APPEAR);
     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_SYATEKI_WF_ANIM_DAMAGED);
     this->actionFunc = EnSyatekiWf_Howl;
 }
@@ -389,9 +389,9 @@ void EnSyatekiWf_SetupDead(EnSyatekiWf* this, PlayState* play) {
     EnSyatekiMan* syatekiMan = (EnSyatekiMan*)this->actor.parent;
 
     this->isActive = false;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     EffectSsExtra_Spawn(play, &this->actor.world.pos, &sVelocity, &sAccel, 5, 2);
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_WOLFOS_DEAD);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_WOLFOS_DEAD);
     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_SYATEKI_WF_ANIM_REAR_UP_FALL_OVER);
     syatekiMan->score += 100;
     this->actionFunc = EnSyatekiWf_Dead;
@@ -428,7 +428,7 @@ void EnSyatekiWf_Update(Actor* thisx, PlayState* play2) {
     Actor_UpdateBgCheckInfo(play, &this->actor, 32.0f, 30.0f, 60.0f, 5);
     this->actionFunc(this, play);
 
-    if (this->actor.bgCheckFlags & 3) {
+    if (this->actor.bgCheckFlags & (BGCHECKFLAG_GROUND | BGCHECKFLAG_GROUND_TOUCH)) {
         func_800BE3D0(&this->actor, this->actor.shape.rot.y, &this->actor.shape.rot);
     } else {
         Math_SmoothStepToS(&this->actor.shape.rot.x, 0, 1, 0x3E8, 0);

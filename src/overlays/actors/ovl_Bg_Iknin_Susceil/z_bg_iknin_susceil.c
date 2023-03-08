@@ -156,7 +156,7 @@ void func_80C0ABA8(BgIkninSusceil* this, PlayState* play) {
     if (this->dyna.actor.world.pos.y <= this->dyna.actor.home.pos.y) {
         func_80C0A86C(this, play, 4, 14, 1);
         Flags_UnsetSwitch(play, SUSCEIL_GET_SWITCHFLAG(&this->dyna.actor));
-        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_BIGWALL_BOUND);
+        Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_BIGWALL_BOUND);
         func_80C0AC74(this);
     } else {
         func_800B9010(&this->dyna.actor, NA_SE_EV_ICE_PILLAR_FALL - SFX_FLAG);
@@ -230,7 +230,7 @@ void BgIkninSusceil_Update(Actor* thisx, PlayState* play) {
         (player->unk_B48 > 1000.0f)) {
         this->unk168 = 2;
         if ((func_80C0A95C(this, play) != 0) && (this->actionFunc != func_80C0AE5C)) {
-            func_800B8E58(player, NA_SE_PL_BODY_HIT);
+            Player_PlaySfx(player, NA_SE_PL_BODY_HIT);
             func_80C0AE3C(this);
         }
     }

@@ -314,7 +314,7 @@ void func_809CE4C8(BgSpdweb* this, PlayState* play) {
                 player->stateFlags1 |= PLAYER_STATE1_20;
                 this->unk_161 = 1;
             }
-        } else if (player->actor.speedXZ != 0.0f) {
+        } else if (player->actor.speed != 0.0f) {
             this->unk_164 = CLAMP_MIN(this->unk_164, 2.0f);
         }
     }
@@ -336,7 +336,7 @@ void func_809CE4C8(BgSpdweb* this, PlayState* play) {
         }
     } else if (this->unk_162 == 11) {
         if (this->unk_164 > 3.0f) {
-            Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_WEB_VIBRATION);
+            Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_WEB_VIBRATION);
         } else {
             AudioSfx_StopById(NA_SE_EV_WEB_VIBRATION);
         }

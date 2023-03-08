@@ -63,8 +63,8 @@ void EnSth2_Update(Actor* thisx, PlayState* play) {
     if (Object_IsLoaded(&play->objectCtx, this->objIndex)) {
         this->actor.objBankIndex = this->objIndex;
         Actor_SetObjectDependency(play, &this->actor);
-        SkelAnime_InitFlex(play, &this->skelAnime, &object_sth_Skel_0031F8, &gEnSth2WavingHandAnim, this->jointTable,
-                           this->morphTable, OBJECT_STH_LIMB_MAX);
+        SkelAnime_InitFlex(play, &this->skelAnime, &gSthSkel, &gEnSth2WavingHandAnim, this->jointTable,
+                           this->morphTable, STH_LIMB_MAX);
         Animation_PlayLoop(&this->skelAnime, &gEnSth2WavingHandAnim);
         this->actor.update = EnSth2_UpdateActionFunc;
         this->actor.draw = EnSth2_Draw;
@@ -80,10 +80,11 @@ void EnSth2_UpdateActionFunc(Actor* thisx, PlayState* play) {
 s32 EnSth2_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     s32 pad;
 
-    if (limbIndex == OBJECT_STH_LIMB_0F) {
+    if (limbIndex == STH_LIMB_HEAD) {
         *dList = gEnSth2HeadDL;
     }
-    if ((limbIndex == OBJECT_STH_LIMB_08) || (limbIndex == OBJECT_STH_LIMB_0A) || (limbIndex == OBJECT_STH_LIMB_0D)) {
+    if ((limbIndex == STH_LIMB_CHEST) || (limbIndex == STH_LIMB_LEFT_FOREARM) ||
+        (limbIndex == STH_LIMB_RIGHT_FOREARM)) {
         rot->y += (s16)(Math_SinS((play->state.frames * ((limbIndex * 50) + 0x814))) * 200.0f);
         rot->z += (s16)(Math_CosS((play->state.frames * ((limbIndex * 50) + 0x940))) * 200.0f);
     }
@@ -93,7 +94,7 @@ s32 EnSth2_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* 
 void EnSth2_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     static Vec3f focusOffset = { 700.0f, 400.0f, 0.0f };
 
-    if (limbIndex == OBJECT_STH_LIMB_0F) {
+    if (limbIndex == STH_LIMB_HEAD) {
         Matrix_MultVec3f(&focusOffset, &thisx->focus.pos);
 
         OPEN_DISPS(play->state.gfxCtx);

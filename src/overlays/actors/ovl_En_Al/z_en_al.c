@@ -257,7 +257,7 @@ s32 func_80BDE4E0(EnAl* this, s16* arg1, s16 arg2) {
     }
 
     if (arg2 == *arg1) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CHAIR_ROLL);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_CHAIR_ROLL);
         func_80BDE27C(this, 3);
         this->unk_4E8 = 0;
         (*arg1)++;
@@ -292,7 +292,7 @@ s32 func_80BDE678(EnAl* this, s16* arg1, s16 arg2) {
     }
 
     if (arg2 == *arg1) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CHAIR_ROLL);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_CHAIR_ROLL);
         func_80BDE27C(this, 4);
         this->unk_4E8 = 0;
         (*arg1)++;

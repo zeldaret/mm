@@ -175,11 +175,11 @@ void func_80ACBC70(ObjAqua* this) {
 }
 
 void func_80ACBC8C(ObjAqua* this, PlayState* play) {
-    if (this->actor.bgCheckFlags & 0x21) {
-        if (this->actor.bgCheckFlags & 1) {
+    if (this->actor.bgCheckFlags & (BGCHECKFLAG_GROUND | BGCHECKFLAG_WATER)) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
             func_80ACB7F4(this, play);
             func_80ACBA10(this);
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BOTTLE_WATERING);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_BOTTLE_WATERING);
             func_80ACBD34(this);
         } else {
             func_80ACB6A0(this, play);

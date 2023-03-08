@@ -236,7 +236,7 @@ void func_80BCD640(EnScopecrow* this, PlayState* play) {
 
     if (this->path != NULL) {
         func_80BCD4D0(this->path, this->unk_1FC, &this->actor.world.pos, &sp30);
-        if (this->actor.bgCheckFlags & 8) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
             sp30.y = this->actor.wallYaw;
         }
 
@@ -257,7 +257,7 @@ void func_80BCD640(EnScopecrow* this, PlayState* play) {
         }
     }
 
-    Math_ApproachF(&this->actor.speedXZ, 6.0f, 0.2f, 1.0f);
+    Math_ApproachF(&this->actor.speed, 6.0f, 0.2f, 1.0f);
     Actor_MoveWithoutGravity(&this->actor);
     this->unk_264 += 0x1000;
     this->actor.shape.yOffset = Math_SinS(this->unk_264) * 500.0f;

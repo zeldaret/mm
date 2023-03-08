@@ -130,10 +130,10 @@ void func_80AAB710(DmChar03* this, PlayState* play) {
 
 void func_80AAB838(DmChar03* this, PlayState* play) {
     if (Animation_OnFrame(&this->skelAnime, 5.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_MASK_BOUND_0);
+        Actor_PlaySfx(&this->actor, NA_SE_IT_MASK_BOUND_0);
     } else if ((Animation_OnFrame(&this->skelAnime, 10.0f)) || (Animation_OnFrame(&this->skelAnime, 18.0f)) ||
                (Animation_OnFrame(&this->skelAnime, 30.0f)) || (Animation_OnFrame(&this->skelAnime, 38.0f))) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_MASK_BOUND_1);
+        Actor_PlaySfx(&this->actor, NA_SE_IT_MASK_BOUND_1);
     }
 }
 

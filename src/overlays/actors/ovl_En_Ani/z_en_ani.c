@@ -211,7 +211,7 @@ void EnAni_FallToGround(EnAni* this, PlayState* play) {
     s32 pad;
     s16 quakeIndex;
 
-    if (this->actor.bgCheckFlags & 1) { // hit the ground
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         this->actor.flags &= ~ACTOR_FLAG_10;
         this->actionFunc = EnAni_LandOnFoot;
         this->actor.velocity.x = 0.0f;
@@ -225,7 +225,7 @@ void EnAni_FallToGround(EnAni* this, PlayState* play) {
         Quake_SetQuakeValues(quakeIndex, 7, 0, 0, 0);
         Quake_SetCountdown(quakeIndex, 20);
 
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_HAMMER_HIT);
+        Actor_PlaySfx(&this->actor, NA_SE_IT_HAMMER_HIT);
     }
 
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0x2, 0x7D0, 0x100);

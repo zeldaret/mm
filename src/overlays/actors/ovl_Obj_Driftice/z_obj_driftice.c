@@ -358,10 +358,10 @@ void func_80A671E0(ObjDriftice* this, PlayState* play) {
         phi_f12 = this->unk_23C * 0.13f;
     }
 
-    Math_StepToF(&this->dyna.actor.speedXZ, phi_f0, phi_f12);
+    Math_StepToF(&this->dyna.actor.speed, phi_f0, phi_f12);
 
-    if ((this->dyna.actor.speedXZ + 0.05f) < sp3C) {
-        Math_Vec3f_Scale(&this->dyna.actor.velocity, this->dyna.actor.speedXZ / sp3C);
+    if ((this->dyna.actor.speed + 0.05f) < sp3C) {
+        Math_Vec3f_Scale(&this->dyna.actor.velocity, this->dyna.actor.speed / sp3C);
         this->dyna.actor.world.pos.x += this->dyna.actor.velocity.x;
         this->dyna.actor.world.pos.y += this->dyna.actor.velocity.y;
         this->dyna.actor.world.pos.z += this->dyna.actor.velocity.z;
@@ -371,7 +371,7 @@ void func_80A671E0(ObjDriftice* this, PlayState* play) {
 
         if (1) {}
 
-        this->dyna.actor.speedXZ *= 0.5f;
+        this->dyna.actor.speed *= 0.5f;
         if (((this->unk_164 >= this->unk_160) && (this->unk_168 > 0)) ||
             ((this->unk_164 <= 0) && (this->unk_168 < 0))) {
             if (!OBJDRIFTICE_GET_1000(&this->dyna.actor)) {
@@ -421,7 +421,7 @@ void func_80A674A8(ObjDriftice* this) {
 void func_80A674C4(ObjDriftice* this, PlayState* play) {
     this->unk_24C--;
     if (this->unk_24C <= 0) {
-        this->dyna.actor.speedXZ = 0.0f;
+        this->dyna.actor.speed = 0.0f;
         func_80A671CC(this);
     }
 }

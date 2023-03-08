@@ -563,7 +563,7 @@ void func_80A224A4(ObjSkateblock* this, PlayState* play) {
     *this->unk_16C += this->unk_164;
 
     if (func_80A21934(this, play)) {
-        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
+        Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
         func_80A21D1C(this);
         sp28 = true;
     } else {

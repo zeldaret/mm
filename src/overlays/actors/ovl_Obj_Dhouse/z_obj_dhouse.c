@@ -436,7 +436,7 @@ void func_80B13940(ObjDhouse* this, PlayState* play2) {
 
     if (Flags_GetSwitch(play, OBJDHOUSE_GET_7F(&this->dyna.actor))) {
         sp20 = true;
-        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_EXPLSION_LONG);
+        Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_EXPLSION_LONG);
     }
 
     if (sp20) {

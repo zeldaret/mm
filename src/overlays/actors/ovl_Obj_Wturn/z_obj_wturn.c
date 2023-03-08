@@ -96,7 +96,7 @@ void func_808A7C04(ObjWturn* this, PlayState* play) {
     this->actor.world.pos.y += this->actor.playerHeightRel;
     player->actor.shape.shadowAlpha = 0;
     func_800B7298(play, &this->actor, PLAYER_CSMODE_84);
-    func_800B8E58(player, NA_SE_VO_NAVY_ENEMY);
+    Player_PlaySfx(player, NA_SE_VO_NAVY_ENEMY);
     this->unk_14A = 0;
     Play_DisableMotionBlur();
     this->actionFunc = func_808A7C78;

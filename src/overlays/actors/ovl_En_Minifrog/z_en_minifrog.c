@@ -99,7 +99,7 @@ void EnMinifrog_Init(Actor* thisx, PlayState* play) {
         this->frogIndex = MINIFROG_YELLOW;
     }
 
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actionFunc = EnMinifrog_Idle;
     this->jumpState = MINIFROG_STATE_GROUND;
     this->flags = 0;
@@ -187,14 +187,14 @@ void EnMinifrog_Jump(EnMinifrog* this) {
     switch (this->jumpState) {
         case MINIFROG_STATE_JUMP:
             if (Animation_OnFrame(&this->skelAnime, 4.0f)) {
-                this->actor.bgCheckFlags &= ~1;
+                this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND;
                 this->actor.velocity.y = 6.0f;
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_FROG_JUMP);
+                Actor_PlaySfx(&this->actor, NA_SE_EV_FROG_JUMP);
                 this->jumpState = MINIFROG_STATE_AIR;
             }
             break;
         case MINIFROG_STATE_AIR:
-            if (this->actor.bgCheckFlags & 1) {
+            if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
                 this->jumpState = MINIFROG_STATE_GROUND;
                 Animation_MorphToLoop(&this->skelAnime, &object_fr_Anim_001534, -2.5f);
                 SkelAnime_Update(&this->skelAnime);
@@ -338,7 +338,7 @@ void EnMinifrog_SetupNextFrogInit(EnMinifrog* this, PlayState* play) {
         missingFrog = nextFrog->frog;
         if (nextFrog->frog != NULL) {
             this->actor.home.rot.y =
-                (s16)Actor_YawBetweenActors(&this->actor, &missingFrog->actor); // Set home to missing frog
+                (s16)Actor_WorldYawTowardActor(&this->actor, &missingFrog->actor); // Set home to missing frog
             EnMinifrog_TurnToMissingFrog(this);
         } else {
             EnMinifrog_TurnToPlayer(this);
@@ -427,7 +427,7 @@ void EnMinifrog_SetupNextFrogChoir(EnMinifrog* this, PlayState* play) {
         this->actor.home.rot.z = 0;
         this->actionFunc = EnMinifrog_NextFrogMissing;
         this->timer = 60;
-        this->actor.home.rot.y = Actor_YawBetweenActors(&this->actor, &this->frog->actor);
+        this->actor.home.rot.y = Actor_WorldYawTowardActor(&this->actor, &this->frog->actor);
         func_801A1F88();
         this->flags &= ~0x100;
         this->flags &= ~(0x2 << MINIFROG_YELLOW | 0x2 << MINIFROG_CYAN | 0x2 << MINIFROG_PINK | 0x2 << MINIFROG_BLUE |

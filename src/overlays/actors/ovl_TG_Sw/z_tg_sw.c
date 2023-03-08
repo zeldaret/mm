@@ -62,7 +62,7 @@ void TGSw_ActionExecuteOneShot(TGSw* this, PlayState* play) {
         }
         if ((((this->actor.params & 0xFC) >> 2) & 0xFF) == (((actor->params & 0xFC) >> 2) & 0xFF)) {
             actor->parent = &this->actor;
-            actor->speedXZ = ABS_ALT(this->actor.world.rot.x);
+            actor->speed = ABS_ALT(this->actor.world.rot.x);
             break;
         }
         actor = actor->next;
@@ -78,7 +78,7 @@ void TGSw_ActionExecuteOneShot(TGSw* this, PlayState* play) {
         }
         if ((((this->actor.params & 0xFC) >> 2) & 0xFF) == (((actor->params & 0xFC) >> 2) & 0xFF)) {
             actor->parent = &this->actor;
-            actor->speedXZ = ABS_ALT(this->actor.world.rot.x);
+            actor->speed = ABS_ALT(this->actor.world.rot.x);
             break;
         }
         actor = actor->next;

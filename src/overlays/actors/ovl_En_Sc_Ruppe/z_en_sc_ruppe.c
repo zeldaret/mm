@@ -116,7 +116,7 @@ void func_80BD6A8C(EnScRuppe* this, PlayState* play) {
     if (this->collider.base.ocFlags1 & OC1_HIT) {
         this->ruppeDisplayTime = 0;
         this->actor.gravity = 0.0f;
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_GET_RUPY);
+        Actor_PlaySfx(&this->actor, NA_SE_SY_GET_RUPY);
         Rupees_ChangeBy(sRupeeInfo[this->ruppeIndex].amount);
         this->actionFunc = func_80BD6B18;
     }
@@ -156,7 +156,7 @@ void EnScRuppe_Init(Actor* thisx, PlayState* play) {
     if ((this->ruppeIndex < RUPEE_GREEN) || (this->ruppeIndex >= RUPEE_UNUSED)) {
         this->ruppeIndex = RUPEE_GREEN;
     }
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actionFunc = func_80BD6A8C;
     this->actor.gravity = -0.5f;
     this->actor.shape.yOffset = 700.0f;

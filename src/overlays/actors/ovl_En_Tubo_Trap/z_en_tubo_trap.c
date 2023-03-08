@@ -173,7 +173,7 @@ void EnTuboTrap_HandleImpact(EnTuboTrap* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     Player* player2 = GET_PLAYER(play);
 
-    if ((this->actor.bgCheckFlags & 0x20) && (this->actor.depthInWater > 15.0f)) {
+    if ((this->actor.bgCheckFlags & BGCHECKFLAG_WATER) && (this->actor.depthInWater > 15.0f)) {
         EnTuboTrap_SpawnEffectsInWater(this, play);
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 40, NA_SE_EV_BOMB_DROP_WATER);
         EnTuboTrap_DropCollectible(this, play);
@@ -214,7 +214,7 @@ void EnTuboTrap_HandleImpact(EnTuboTrap* this, PlayState* play) {
         }
     }
 
-    if ((this->actor.bgCheckFlags & 8) || (this->actor.bgCheckFlags & 1)) {
+    if ((this->actor.bgCheckFlags & BGCHECKFLAG_WALL) || (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
         EnTuboTrap_SpawnEffectsOnLand(this, play);
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 40, NA_SE_EV_POT_BROKEN);
         EnTuboTrap_DropCollectible(this, play);
@@ -246,7 +246,7 @@ void EnTuboTrap_Idle(EnTuboTrap* this, PlayState* play) {
                 this->targetHeight += transformationHeight;
             }
             this->originPos = this->actor.world.pos;
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_POT_MOVE_START);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_POT_MOVE_START);
             this->actionFunc = EnTuboTrap_Levitate;
         }
     }
@@ -257,7 +257,7 @@ void EnTuboTrap_Levitate(EnTuboTrap* this, PlayState* play) {
     Math_ApproachF(&this->actor.world.pos.y, this->targetHeight, 0.8f, 3.0f);
 
     if (fabsf(this->actor.world.pos.y - this->targetHeight) < 10.0f) {
-        this->actor.speedXZ = 10.0f;
+        this->actor.speed = 10.0f;
         this->actor.world.rot.y = this->actor.yawTowardsPlayer;
         this->actionFunc = EnTuboTrap_FlyAtPlayer;
     }
@@ -273,7 +273,7 @@ void EnTuboTrap_FlyAtPlayer(EnTuboTrap* this, PlayState* play) {
     // But in MM, certain sfxIds got reordered and devs forgot to update:
     // In MM, NA_SE_EN_MIZUBABA2_ATTACK is the old value 0x3837
     // In MM, NA_SE_EN_TUBOOCK_FLY is the new value 0x3AE0
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_MIZUBABA2_ATTACK - SFX_FLAG);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_MIZUBABA2_ATTACK - SFX_FLAG);
 
     if ((SQ(dX) + SQ(dY) + SQ(dZ) > SQ(240.0f))) {
         Math_ApproachF(&this->actor.gravity, -3.0f, 0.2f, 0.5f);

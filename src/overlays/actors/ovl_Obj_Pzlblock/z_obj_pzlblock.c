@@ -287,14 +287,14 @@ void func_809A3BC0(ObjPzlblock* this, PlayState* play) {
 
         if ((params == 4) || (params == 5) || (params == 6)) {
             if (!func_809A35EC(this, this->unk_16C) || func_809A33E0(this, play, 0x5A)) {
-                Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
+                Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
             }
         } else if (func_809A35EC(this, this->unk_16C)) {
             if (func_809A33E0(this, play, 0x5A)) {
-                Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
+                Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
             }
         } else {
-            Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
+            Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
             Flags_SetSwitch(play, OBJPZLBLOCK_GET_7F(&this->dyna.actor));
             sp20 = 1;
         }
@@ -351,7 +351,8 @@ void func_809A3E58(Actor* thisx, PlayState* play) {
     if (this->unk_160 != 0) {
         Actor_UpdateBgCheckInfo(play, &this->dyna.actor, 15.0f, 30.0f, 0.0f, this->unk_160);
         if (((this->actionFunc == func_809A3A74) || (this->actionFunc == func_809A3D38)) &&
-            (this->dyna.actor.bgCheckFlags & 1) && !DynaPoly_GetActor(&play->colCtx, this->dyna.actor.floorBgId)) {
+            (this->dyna.actor.bgCheckFlags & BGCHECKFLAG_GROUND) &&
+            !DynaPoly_GetActor(&play->colCtx, this->dyna.actor.floorBgId)) {
             this->unk_160 = 0;
         }
     }

@@ -164,7 +164,7 @@ void BgDkjailIvy_BeginCutscene(BgDkjailIvy* this, PlayState* play) {
         func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
         Flags_SetSwitch(play, BG_DKJAIL_GET_SWITCH(&this->dyna.actor));
         BgDkjailIvy_IvyCutEffects(this, play);
-        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_GRASS_WALL_BROKEN);
+        Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_GRASS_WALL_BROKEN);
         BgDkjailIvy_SetupFadeOut(this);
     } else {
         ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);

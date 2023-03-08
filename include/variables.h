@@ -479,9 +479,6 @@ extern EffectShieldParticleInit shieldParticleInitWood;
 
 extern u8 D_801BB12C;
 
-// extern UNK_TYPE1 D_801BC210;
-extern Gfx D_801BC240[9];
-extern Gfx D_801BC288[3];
 // extern UNK_TYPE1 D_801BC41E;
 extern ActorCutscene actorCutscenesGlobalCutscenes[8];
 extern s16 actorCutsceneCurrent;
@@ -810,7 +807,6 @@ extern KaleidoMgrOverlay* gKaleidoMgrCurOvl;
 // extern UNK_TYPE4 D_801D0BB0;
 // extern UNK_TYPE1 D_801D0C80;
 // extern UNK_TYPE1 D_801D0CB0;
-extern Gfx D_801D0D00[];
 extern s32 gDbgCamEnabled;
 // extern UNK_TYPE1 D_801D0D54;
 // extern UNK_TYPE2 sQuakeIndex;

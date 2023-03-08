@@ -136,7 +136,7 @@ s32 func_80ACF8B8(EnFuKago* this, PlayState* play) {
             return false;
         }
 
-        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_SY_TRE_BOX_APPEAR);
+        Actor_PlaySfx(&this->dyna.actor, NA_SE_SY_TRE_BOX_APPEAR);
         return true;
     } else {
         CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
@@ -227,7 +227,7 @@ void func_80ACFA78(EnFuKago* this, PlayState* play) {
     this->unk_338 = 60;
     this->unk_33A = 1;
 
-    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_WOODBOX_BREAK);
+    Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_WOODBOX_BREAK);
     func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
     this->actionFunc = func_80AD0028;
 }

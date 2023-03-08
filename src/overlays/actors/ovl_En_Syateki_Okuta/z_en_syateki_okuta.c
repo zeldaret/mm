@@ -195,7 +195,7 @@ void func_80A363B4(EnSyatekiOkuta* this, PlayState* play) {
             return;
         } else {
             func_80A361B0(this, play);
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_OCTAROCK_JUMP);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_OCTAROCK_JUMP);
         }
     }
 
@@ -225,7 +225,7 @@ void func_80A364C0(EnSyatekiOkuta* this) {
 void func_80A36504(EnSyatekiOkuta* this, PlayState* play) {
     if (Animation_OnFrame(&this->skelAnime, 4.0f)) {
         func_80A361B0(this, play);
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DAIOCTA_LAND);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_DAIOCTA_LAND);
     } else if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         func_80A362F8(this);
     }
@@ -235,7 +235,7 @@ void func_80A3657C(EnSyatekiOkuta* this) {
     this->unk_2A4 = 0;
     this->unk_2AA = 300;
     if (this->unk_2A6 == 1) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_OCTAROCK_DEAD1);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_OCTAROCK_DEAD1);
     }
 
     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 1);
@@ -261,7 +261,7 @@ void func_80A365EC(EnSyatekiOkuta* this, PlayState* play) {
             sp84.y = -0.5f;
             sp84.z = 0.0f;
             func_80A36148(&sp78, &sp84, -20, play);
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_OCTAROCK_DEAD2);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_OCTAROCK_DEAD2);
         }
 
         this->unk_2A4++;
@@ -369,12 +369,12 @@ void EnSyatekiOkuta_Update(Actor* thisx, PlayState* play) {
     if (func_80A36A90(this, play)) {
         syatekiMan = (EnSyatekiMan*)this->actor.parent;
         if (this->unk_2A6 == 1) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_TRE_BOX_APPEAR);
+            Actor_PlaySfx(&this->actor, NA_SE_SY_TRE_BOX_APPEAR);
             play->interfaceCtx.minigamePoints++;
             syatekiMan->score++;
             syatekiMan->perGameVar2.octorokHitType = SG_OCTO_HIT_TYPE_RED;
         } else {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_ERROR);
+            Actor_PlaySfx(&this->actor, NA_SE_SY_ERROR);
             syatekiMan->perGameVar2.octorokHitType = SG_OCTO_HIT_TYPE_BLUE;
         }
 
