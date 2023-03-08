@@ -1,5 +1,5 @@
-#ifndef Z_EN_HY_CODE_H
-#define Z_EN_HY_CODE_H
+#ifndef Z64ENHY_CODE_H
+#define Z64ENHY_CODE_H
 
 #include "global.h"
 #include "overlays/actors/ovl_En_Door/z_en_door.h"

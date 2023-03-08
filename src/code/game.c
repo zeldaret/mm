@@ -1,5 +1,6 @@
 #include "global.h"
 #include "system_malloc.h"
+#include "z64debug_text.h"
 #include "z64rumble.h"
 #include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
 
@@ -90,7 +91,7 @@ void GameState_Draw(GameState* gameState, GraphicsContext* gfxCtx) {
     {
         s32 requiredScopeTemp;
 
-        func_800E9F78(gfxCtx);
+        Debug_DrawText(gfxCtx);
     }
 
     if (R_ENABLE_ARENA_DBG != 0) {
