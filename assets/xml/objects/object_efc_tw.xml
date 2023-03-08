@@ -4,7 +4,7 @@
         <Array Name="object_efc_tw_Vtx_000060" Count="21" Offset="0x60" >
             <Vtx/>
         </Array>
-        <DList Name="object_efc_tw_DL_0001B0" Offset="0x1B0" />
+        <DList Name="object_efc_tw_DL_0001B0" Offset="0x1B0" /> <!-- Original name is "top_fc_mdl" -->
         <Texture Name="object_efc_tw_Tex_0002C8" OutName="tex_0002C8" Format="i8" Width="64" Height="64" Offset="0x2C8" />
         <Limb Name="object_efc_tw_Curvelimb_0012C8" Type="Curve" EnumName="OBJECT_EFC_TW_LIMB_01" Offset="0x12C8" />
         <Limb Name="object_efc_tw_Curvelimb_0012D4" Type="Curve" EnumName="OBJECT_EFC_TW_LIMB_02" Offset="0x12D4" />

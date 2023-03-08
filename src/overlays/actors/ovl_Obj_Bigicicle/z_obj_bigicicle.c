@@ -247,7 +247,7 @@ void func_80AE9258(ObjBigicicle* this, PlayState* play) {
             icePoly = (ObjIcePoly*)itemAction;
             temp_f0 = this->actor.world.pos.y - icePoly->actor.world.pos.y;
             if ((temp_f0 < icePoly->colliders1[0].dim.height) && (temp_f0 > 0.0f) &&
-                (Actor_XZDistanceBetweenActors(&this->actor, &icePoly->actor) < icePoly->colliders1[0].dim.radius)) {
+                (Actor_WorldDistXZToActor(&this->actor, &icePoly->actor) < icePoly->colliders1[0].dim.radius)) {
                 Flags_SetSwitch(play, this->actor.params);
                 this->actionFunc = func_80AE939C;
                 return;
@@ -256,7 +256,7 @@ void func_80AE9258(ObjBigicicle* this, PlayState* play) {
         itemAction = itemAction->next;
     }
 
-    if (this->actor.bgCheckFlags & 1) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         this->actionFunc = func_80AE939C;
     } else {
         Collider_UpdateCylinder(&this->actor, &this->collider1);

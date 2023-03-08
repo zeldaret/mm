@@ -1023,14 +1023,14 @@ s32 func_80AF87C4(EnPm* this, PlayState* play) {
             func_80AF7E98(this, 0);
             this->unk_258 = 255;
             this->unk_380 = true;
-            this->actor.speedXZ = 4.0f;
+            this->actor.speed = 4.0f;
             this->actor.gravity = -1.0f;
         }
         ret = true;
     } else if (this->unk_380) {
         this->unk_258 = 0;
         this->unk_380 = false;
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
     }
     return ret;
 }
@@ -1311,7 +1311,7 @@ s32 func_80AF91E8(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
         this->unk_356 &= ~8;
         this->unk_356 &= ~0x10;
         if (this->unk_258 == 27) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_ROOM_CARTAIN);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_ROOM_CARTAIN);
             Flags_UnsetSwitch(play, 0);
         }
 
@@ -1431,7 +1431,7 @@ s32 func_80AF95E8(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
 
         switch (scheduleOutput->result) {
             case 27:
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_ROOM_CARTAIN);
+                Actor_PlaySfx(&this->actor, NA_SE_EV_ROOM_CARTAIN);
                 Flags_SetSwitch(play, 0);
                 this->unk_36C = 20;
                 SubS_UpdateFlags(&this->unk_356, 3, 7);
@@ -1717,7 +1717,7 @@ s32 func_80AF9D04(EnPm* this, PlayState* play) {
         Lib_Vec3f_TranslateAndRotateY(&this->unk_26C, this->actor.world.rot.y, &sp38, &this->actor.world.pos);
         this->unk_36E += this->timePathTimeSpeed;
         if (Animation_OnFrame(&this->skelAnime, 3.0f) || Animation_OnFrame(&this->skelAnime, 8.0f)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_POSTMAN_WALK);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_POSTMAN_WALK);
         }
     }
     return false;
@@ -1774,7 +1774,7 @@ s32 func_80AF9E7C(EnPm* this, PlayState* play) {
         this->timePathTargetPos = timePathTargetPos;
     } else if ((this->unk_258 != 91) &&
                (Animation_OnFrame(&this->skelAnime, 3.0f) || Animation_OnFrame(&this->skelAnime, 8.0f))) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_POSTMAN_WALK);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_POSTMAN_WALK);
     }
 
     if ((this->unk_356 & 0x10) && (this->unk_258 == 90)) {
@@ -1820,7 +1820,7 @@ s32 func_80AFA170(EnPm* this, PlayState* play) {
             }
 
             if ((this->unk_384 == 11) && Animation_OnFrame(&this->skelAnime, 8.0f)) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_POSTMACHINE_HIT_OPEN);
+                Actor_PlaySfx(&this->actor, NA_SE_EV_POSTMACHINE_HIT_OPEN);
             }
 
             if (this->unk_258 == 19) {
@@ -1865,7 +1865,7 @@ s32 func_80AFA334(EnPm* this, PlayState* play) {
         case 21:
         case 22:
             if (Animation_OnFrame(&this->skelAnime, 0.0f)) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_VO_NP_SLEEP_OUT);
+                Actor_PlaySfx(&this->actor, NA_SE_VO_NP_SLEEP_OUT);
             }
             break;
 
@@ -2044,7 +2044,7 @@ void func_80AFA724(EnPm* this, PlayState* play) {
     Actor_MoveWithGravity(&this->actor);
     Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, 4);
     if (Animation_OnFrame(&this->skelAnime, 3.0f) || Animation_OnFrame(&this->skelAnime, 8.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_POSTMAN_WALK);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_POSTMAN_WALK);
     }
 }
 

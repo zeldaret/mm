@@ -113,7 +113,7 @@ void ActorShadow_Draw(Actor* actor, Lights* lights, PlayState* play, Gfx* dlist,
 }
 
 void ActorShadow_DrawCircle(Actor* actor, Lights* lights, PlayState* play) {
-    if (actor->bgCheckFlags & 0x400) {
+    if (actor->bgCheckFlags & BGCHECKFLAG_PLAYER_400) {
         func_800B4AEC(play, actor, 50.0f);
     }
 
@@ -121,7 +121,7 @@ void ActorShadow_DrawCircle(Actor* actor, Lights* lights, PlayState* play) {
 }
 
 void ActorShadow_DrawSquare(Actor* actor, Lights* lights, PlayState* play) {
-    if (actor->bgCheckFlags & 0x400) {
+    if (actor->bgCheckFlags & BGCHECKFLAG_PLAYER_400) {
         func_800B4AEC(play, actor, 50.0f);
     }
 
@@ -285,7 +285,7 @@ void ActorShadow_DrawFeet(Actor* actor, Lights* mapper, PlayState* play) {
             floorHeightPtr++;
         }
 
-        if (!(actor->bgCheckFlags & 1)) {
+        if (!(actor->bgCheckFlags & BGCHECKFLAG_GROUND)) {
             actor->shape.feetFloorFlags = 0;
         } else if (actor->shape.feetFloorFlags == 3) {
             f32 footDistY = actor->shape.feetPos[FOOT_LEFT].y - actor->shape.feetPos[FOOT_RIGHT].y;
@@ -336,7 +336,7 @@ void func_800B4B50(Actor* actor, Lights* mapper, PlayState* play) {
     Light* phi_s0;
     s32 lightNumMax;
 
-    if (actor->bgCheckFlags & 0x400) {
+    if (actor->bgCheckFlags & BGCHECKFLAG_PLAYER_400) {
         func_800B4AEC(play, actor, 50.0f);
     }
 
@@ -1125,8 +1125,8 @@ void Actor_UpdatePos(Actor* actor) {
  * It is recommended to not call this function directly and use `Actor_MoveWithGravity` instead
  */
 void Actor_UpdateVelocityWithGravity(Actor* actor) {
-    actor->velocity.x = actor->speedXZ * Math_SinS(actor->world.rot.y);
-    actor->velocity.z = actor->speedXZ * Math_CosS(actor->world.rot.y);
+    actor->velocity.x = actor->speed * Math_SinS(actor->world.rot.y);
+    actor->velocity.z = actor->speed * Math_CosS(actor->world.rot.y);
 
     actor->velocity.y += actor->gravity;
     if (actor->velocity.y < actor->terminalVelocity) {
@@ -1150,11 +1150,11 @@ void Actor_MoveWithGravity(Actor* actor) {
  * It is recommended to not call this function directly and use `Actor_MoveWithoutGravity` instead
  */
 void Actor_UpdateVelocityWithoutGravity(Actor* actor) {
-    f32 horizontalSpeed = Math_CosS(actor->world.rot.x) * actor->speedXZ;
+    f32 speedXZ = Math_CosS(actor->world.rot.x) * actor->speed;
 
-    actor->velocity.x = Math_SinS(actor->world.rot.y) * horizontalSpeed;
-    actor->velocity.y = Math_SinS(actor->world.rot.x) * actor->speedXZ;
-    actor->velocity.z = Math_CosS(actor->world.rot.y) * horizontalSpeed;
+    actor->velocity.x = Math_SinS(actor->world.rot.y) * speedXZ;
+    actor->velocity.y = Math_SinS(actor->world.rot.x) * actor->speed;
+    actor->velocity.z = Math_CosS(actor->world.rot.y) * speedXZ;
 }
 
 /**
@@ -1174,11 +1174,11 @@ void Actor_MoveWithoutGravity(Actor* actor) {
  * It is recommended to not call this function directly and use `Actor_MoveWithoutGravityReverse` instead
  */
 void Actor_UpdateVelocityWithoutGravityReverse(Actor* actor) {
-    f32 horizontalSpeed = Math_CosS(-actor->world.rot.x) * actor->speedXZ;
+    f32 speedXZ = Math_CosS(-actor->world.rot.x) * actor->speed;
 
-    actor->velocity.x = Math_SinS(actor->world.rot.y) * horizontalSpeed;
-    actor->velocity.y = Math_SinS(-actor->world.rot.x) * actor->speedXZ;
-    actor->velocity.z = Math_CosS(actor->world.rot.y) * horizontalSpeed;
+    actor->velocity.x = Math_SinS(actor->world.rot.y) * speedXZ;
+    actor->velocity.y = Math_SinS(-actor->world.rot.x) * actor->speed;
+    actor->velocity.z = Math_CosS(actor->world.rot.y) * speedXZ;
 }
 
 /**
@@ -1193,7 +1193,7 @@ void Actor_MoveWithoutGravityReverse(Actor* actor) {
  * Sets horizontal speed and Y velocity using the `speed` argument and current pitch
  */
 void Actor_SetSpeeds(Actor* actor, f32 speed) {
-    actor->speedXZ = Math_CosS(actor->world.rot.x) * speed;
+    actor->speed = Math_CosS(actor->world.rot.x) * speed;
     actor->velocity.y = -Math_SinS(actor->world.rot.x) * speed;
 }
 
@@ -1207,44 +1207,44 @@ void Actor_UpdatePosFromSkelAnime(Actor* actor, SkelAnime* skelAnime) {
     actor->world.pos.z += pos.z * actor->scale.z;
 }
 
-s16 Actor_YawBetweenActors(Actor* from, Actor* to) {
-    return Math_Vec3f_Yaw(&from->world.pos, &to->world.pos);
+s16 Actor_WorldYawTowardActor(Actor* actorA, Actor* actorB) {
+    return Math_Vec3f_Yaw(&actorA->world.pos, &actorB->world.pos);
 }
 
-s16 Actor_YawBetweenActorsTop(Actor* from, Actor* to) {
-    return Math_Vec3f_Yaw(&from->focus.pos, &to->focus.pos);
+s16 Actor_FocusYawTowardActor(Actor* actorA, Actor* actorB) {
+    return Math_Vec3f_Yaw(&actorA->focus.pos, &actorB->focus.pos);
 }
 
-s16 Actor_YawToPoint(Actor* actor, Vec3f* point) {
-    return Math_Vec3f_Yaw(&actor->world.pos, point);
+s16 Actor_WorldYawTowardPoint(Actor* actor, Vec3f* refPoint) {
+    return Math_Vec3f_Yaw(&actor->world.pos, refPoint);
 }
 
-s16 Actor_PitchBetweenActors(Actor* from, Actor* to) {
-    return Math_Vec3f_Pitch(&from->world.pos, &to->world.pos);
+s16 Actor_WorldPitchTowardActor(Actor* actorA, Actor* actorB) {
+    return Math_Vec3f_Pitch(&actorA->world.pos, &actorB->world.pos);
 }
 
-s16 Actor_PitchBetweenActorsTop(Actor* from, Actor* to) {
-    return Math_Vec3f_Pitch(&from->focus.pos, &to->focus.pos);
+s16 Actor_FocusPitchTowardActor(Actor* actorA, Actor* actorB) {
+    return Math_Vec3f_Pitch(&actorA->focus.pos, &actorB->focus.pos);
 }
 
-s16 Actor_PitchToPoint(Actor* actor, Vec3f* point) {
-    return Math_Vec3f_Pitch(&actor->world.pos, point);
+s16 Actor_WorldPitchTowardPoint(Actor* actor, Vec3f* refPoint) {
+    return Math_Vec3f_Pitch(&actor->world.pos, refPoint);
 }
 
-f32 Actor_DistanceBetweenActors(Actor* actor1, Actor* actor2) {
-    return Math_Vec3f_DistXYZ(&actor1->world.pos, &actor2->world.pos);
+f32 Actor_WorldDistXYZToActor(Actor* actorA, Actor* actorB) {
+    return Math_Vec3f_DistXYZ(&actorA->world.pos, &actorB->world.pos);
 }
 
-f32 Actor_DistanceToPoint(Actor* actor, Vec3f* point) {
-    return Math_Vec3f_DistXYZ(&actor->world.pos, point);
+f32 Actor_WorldDistXYZToPoint(Actor* actor, Vec3f* refPoint) {
+    return Math_Vec3f_DistXYZ(&actor->world.pos, refPoint);
 }
 
-f32 Actor_XZDistanceBetweenActors(Actor* actor1, Actor* actor2) {
-    return Math_Vec3f_DistXZ(&actor1->world.pos, &actor2->world.pos);
+f32 Actor_WorldDistXZToActor(Actor* actorA, Actor* actorB) {
+    return Math_Vec3f_DistXZ(&actorA->world.pos, &actorB->world.pos);
 }
 
-f32 Actor_XZDistanceToPoint(Actor* actor, Vec3f* point) {
-    return Math_Vec3f_DistXZ(&actor->world.pos, point);
+f32 Actor_WorldDistXZToPoint(Actor* actor, Vec3f* refPoint) {
+    return Math_Vec3f_DistXZ(&actor->world.pos, refPoint);
 }
 
 /**
@@ -1416,7 +1416,7 @@ s32 Player_IsFacingActor(Actor* actor, s16 maxAngleDiff, PlayState* play) {
  * This function is unused in the original game.
  */
 s32 Actor_ActorBIsFacingActorA(Actor* actorA, Actor* actorB, s16 maxAngleDiff) {
-    s16 angle = BINANG_ROT180(Actor_YawBetweenActors(actorA, actorB));
+    s16 angle = BINANG_ROT180(Actor_WorldYawTowardActor(actorA, actorB));
     s16 dist = angle - actorB->shape.rot.y;
 
     if (ABS_ALT(dist) < maxAngleDiff) {
@@ -1444,7 +1444,7 @@ s32 Actor_IsFacingPlayer(Actor* actor, s16 angle) {
  * The maximum angle difference that qualifies as "facing" is specified by `maxAngleDiff`.
  */
 s32 Actor_ActorAIsFacingActorB(Actor* actorA, Actor* actorB, s16 maxAngleDiff) {
-    s16 dist = Actor_YawBetweenActors(actorA, actorB) - actorA->shape.rot.y;
+    s16 dist = Actor_WorldYawTowardActor(actorA, actorB) - actorA->shape.rot.y;
 
     if (ABS_ALT(dist) < maxAngleDiff) {
         return true;
@@ -1477,8 +1477,8 @@ s32 Actor_IsFacingAndNearPlayer(Actor* actor, f32 range, s16 maxAngleDiff) {
  * The maximum distance that qualifies as "nearby" is specified by `range`.
  */
 s32 Actor_ActorAIsFacingAndNearActorB(Actor* actorA, Actor* actorB, f32 range, s16 maxAngleDiff) {
-    if (Actor_DistanceBetweenActors(actorA, actorB) < range) {
-        s16 dist = Actor_YawBetweenActors(actorA, actorB) - actorA->shape.rot.y;
+    if (Actor_WorldDistXYZToActor(actorA, actorB) < range) {
+        s16 dist = Actor_WorldYawTowardActor(actorA, actorB) - actorA->shape.rot.y;
 
         if (ABS_ALT(dist) < maxAngleDiff) {
             return true;
@@ -1497,9 +1497,9 @@ void Actor_GetSlopeDirection(CollisionPoly* floorPoly, Vec3f* slopeNormal, s16* 
 }
 
 s32 func_800B761C(Actor* actor, f32 arg1, s32 arg2) {
-    if (actor->bgCheckFlags & 1) {
-        actor->bgCheckFlags &= ~1;
-        actor->bgCheckFlags |= 4;
+    if (actor->bgCheckFlags & BGCHECKFLAG_GROUND) {
+        actor->bgCheckFlags &= ~BGCHECKFLAG_GROUND;
+        actor->bgCheckFlags |= BGCHECKFLAG_GROUND_LEAVE;
 
         if ((actor->velocity.y < 0.0f) && (arg2 & 0x10)) {
             actor->velocity.y = 0.0f;
@@ -1517,21 +1517,22 @@ s32 func_800B7678(PlayState* play, Actor* actor, Vec3f* pos, s32 flags) {
     pos->y += (flags & 0x800) ? 10.0f : 50.0f;
 
     actor->floorHeight = BgCheck_EntityRaycastFloor5_2(play, &play->colCtx, &actor->floorPoly, &bgId, actor, pos);
-    actor->bgCheckFlags &= ~(0x80 | 0x04 | 0x02);
+    actor->bgCheckFlags &= ~(BGCHECKFLAG_GROUND_TOUCH | BGCHECKFLAG_GROUND_LEAVE | BGCHECKFLAG_GROUND_STRICT);
     if (actor->floorHeight <= BGCHECK_Y_MIN) {
         return func_800B761C(actor, BGCHECK_Y_MIN, flags);
     }
 
     distToFloor = actor->floorHeight - actor->world.pos.y;
     actor->floorBgId = bgId;
-    if ((distToFloor >= 0.0f) || (((actor->bgCheckFlags & 1)) && !(actor->bgCheckFlags & 0x800) &&
-                                  (distToFloor >= -11.0f) && (actor->velocity.y < 0.0f))) {
-        actor->bgCheckFlags |= 0x80;
+    if ((distToFloor >= 0.0f) ||
+        (((actor->bgCheckFlags & BGCHECKFLAG_GROUND)) && !(actor->bgCheckFlags & BGCHECKFLAG_PLAYER_800) &&
+         (distToFloor >= -11.0f) && (actor->velocity.y < 0.0f))) {
+        actor->bgCheckFlags |= BGCHECKFLAG_GROUND_STRICT;
 
-        if (actor->bgCheckFlags & 0x10) {
+        if (actor->bgCheckFlags & BGCHECKFLAG_CEILING) {
             if (bgId != D_801ED8B4) {
                 if (distToFloor > 15.0f) {
-                    actor->bgCheckFlags |= 0x100;
+                    actor->bgCheckFlags |= BGCHECKFLAG_CRUSHED;
                 }
             } else {
                 actor->world.pos.x = actor->prevPos.x;
@@ -1542,15 +1543,15 @@ s32 func_800B7678(PlayState* play, Actor* actor, Vec3f* pos, s32 flags) {
         actor->world.pos.y = actor->floorHeight;
 
         if (actor->velocity.y <= 0.0f) {
-            if (!(actor->bgCheckFlags & 1)) {
-                actor->bgCheckFlags |= 2;
+            if (!(actor->bgCheckFlags & BGCHECKFLAG_GROUND)) {
+                actor->bgCheckFlags |= BGCHECKFLAG_GROUND_TOUCH;
             } else if ((flags & 8) && (actor->gravity < 0.0f)) {
                 actor->velocity.y = -4.0f;
             } else if (!(flags & 0x100)) {
                 actor->velocity.y = 0.0f;
             }
 
-            actor->bgCheckFlags |= 1;
+            actor->bgCheckFlags |= BGCHECKFLAG_GROUND;
             BgCheck2_AttachToMesh(&play->colCtx, actor, (s32)actor->floorBgId);
         }
     } else {
@@ -1566,14 +1567,14 @@ void Actor_UpdateBgCheckInfo(PlayState* play, Actor* actor, f32 wallCheckHeight,
     s32 pad;
     Vec3f pos;
 
-    if ((actor->floorBgId != BGCHECK_SCENE) && (actor->bgCheckFlags & 1)) {
+    if ((actor->floorBgId != BGCHECK_SCENE) && (actor->bgCheckFlags & BGCHECKFLAG_GROUND)) {
         BgCheck2_UpdateActorAttachedToMesh(&play->colCtx, actor->floorBgId, actor);
     }
 
     if (flags & 1) {
         s32 bgId;
 
-        actor->bgCheckFlags &= ~0x1000;
+        actor->bgCheckFlags &= ~BGCHECKFLAG_PLAYER_1000;
         if ((!(flags & 0x80) &&
              (BgCheck_EntitySphVsWall3(&play->colCtx, &pos, &actor->world.pos, &actor->prevPos, wallCheckRadius,
                                        &actor->wallPoly, &bgId, actor, wallCheckHeight))) ||
@@ -1582,18 +1583,18 @@ void Actor_UpdateBgCheckInfo(PlayState* play, Actor* actor, f32 wallCheckHeight,
                                        &actor->wallPoly, &bgId, actor, wallCheckHeight)))) {
             CollisionPoly* sp7C = actor->wallPoly;
 
-            actor->bgCheckFlags |= 8;
-            if ((flags & 0x200) && (actor->bgCheckFlags & 0x1000) && ((s32)sp7C->normal.y > 0) &&
+            actor->bgCheckFlags |= BGCHECKFLAG_WALL;
+            if ((flags & 0x200) && (actor->bgCheckFlags & BGCHECKFLAG_PLAYER_1000) && ((s32)sp7C->normal.y > 0) &&
                 (sqrtf(SQXYZ(actor->colChkInfo.displacement)) < 10.0f)) {
-                actor->bgCheckFlags &= ~8;
-            } else if (actor->bgCheckFlags & 8) {
+                actor->bgCheckFlags &= ~BGCHECKFLAG_WALL;
+            } else if (actor->bgCheckFlags & BGCHECKFLAG_WALL) {
                 Math_Vec3f_Copy(&actor->world.pos, &pos);
             }
 
             actor->wallYaw = Math_Atan2S_XY(sp7C->normal.z, sp7C->normal.x);
             actor->wallBgId = bgId;
         } else {
-            actor->bgCheckFlags &= ~8;
+            actor->bgCheckFlags &= ~BGCHECKFLAG_WALL;
         }
     }
 
@@ -1605,10 +1606,10 @@ void Actor_UpdateBgCheckInfo(PlayState* play, Actor* actor, f32 wallCheckHeight,
         pos.y = actor->prevPos.y + 4.0f;
         if (BgCheck_EntityCheckCeiling(&play->colCtx, &y, &pos, (ceilingCheckHeight + sp94) - 4.0f, &D_801ED8B0,
                                        &D_801ED8B4, actor)) {
-            actor->bgCheckFlags |= 0x10;
+            actor->bgCheckFlags |= BGCHECKFLAG_CEILING;
             actor->world.pos.y = (y + sp94) - 4.0f;
         } else {
-            actor->bgCheckFlags &= ~0x10;
+            actor->bgCheckFlags &= ~BGCHECKFLAG_CEILING;
         }
     }
     if (flags & 4) {
@@ -1622,9 +1623,9 @@ void Actor_UpdateBgCheckInfo(PlayState* play, Actor* actor, f32 wallCheckHeight,
         if (WaterBox_GetSurface1(play, &play->colCtx, actor->world.pos.x, actor->world.pos.z, &y, &waterbox)) {
             actor->depthInWater = y - actor->world.pos.y;
             if (actor->depthInWater <= 0.0f) {
-                actor->bgCheckFlags &= ~(0x40 | 0x20);
-            } else if (!(actor->bgCheckFlags & 0x20)) {
-                actor->bgCheckFlags |= (0x40 | 0x20);
+                actor->bgCheckFlags &= ~(BGCHECKFLAG_WATER | BGCHECKFLAG_WATER_TOUCH);
+            } else if (!(actor->bgCheckFlags & BGCHECKFLAG_WATER)) {
+                actor->bgCheckFlags |= (BGCHECKFLAG_WATER | BGCHECKFLAG_WATER_TOUCH);
                 if (!(flags & 0x40)) {
                     Vec3f sp64;
 
@@ -1637,10 +1638,10 @@ void Actor_UpdateBgCheckInfo(PlayState* play, Actor* actor, f32 wallCheckHeight,
                     EffectSsGRipple_Spawn(play, &sp64, 100, 500, 8);
                 }
             } else {
-                actor->bgCheckFlags &= ~0x40;
+                actor->bgCheckFlags &= ~BGCHECKFLAG_WATER_TOUCH;
             }
         } else {
-            actor->bgCheckFlags &= ~(0x40 | 0x20);
+            actor->bgCheckFlags &= ~(BGCHECKFLAG_WATER | BGCHECKFLAG_WATER_TOUCH);
             actor->depthInWater = BGCHECK_Y_MIN;
         }
     }
@@ -1653,9 +1654,9 @@ void Actor_UpdateBgCheckInfo(PlayState* play, Actor* actor, f32 wallCheckHeight,
             actor->depthInWater = y - actor->world.pos.y;
 
             if (actor->depthInWater < 0.0f) {
-                actor->bgCheckFlags &= ~(0x40 | 0x20);
-            } else if (!(actor->bgCheckFlags & 0x20)) {
-                actor->bgCheckFlags |= (0x40 | 0x20);
+                actor->bgCheckFlags &= ~(BGCHECKFLAG_WATER | BGCHECKFLAG_WATER_TOUCH);
+            } else if (!(actor->bgCheckFlags & BGCHECKFLAG_WATER)) {
+                actor->bgCheckFlags |= (BGCHECKFLAG_WATER | BGCHECKFLAG_WATER_TOUCH);
                 if (!(flags & 0x40)) {
                     Vec3f sp50;
 
@@ -1668,10 +1669,10 @@ void Actor_UpdateBgCheckInfo(PlayState* play, Actor* actor, f32 wallCheckHeight,
                     EffectSsGRipple_Spawn(play, &sp50, 100, 500, 8);
                 }
             } else {
-                actor->bgCheckFlags &= ~0x40;
+                actor->bgCheckFlags &= ~BGCHECKFLAG_WATER_TOUCH;
             }
         } else {
-            actor->bgCheckFlags &= ~(0x40 | 0x20);
+            actor->bgCheckFlags &= ~(BGCHECKFLAG_WATER | BGCHECKFLAG_WATER_TOUCH);
             actor->depthInWater = BGCHECK_Y_MIN;
         }
     }
@@ -2130,7 +2131,10 @@ void func_800B8E1C(PlayState* play, Actor* actor, f32 arg2, s16 arg3, f32 arg4) 
     func_800B8DD4(play, actor, arg2, arg3, arg4, 0);
 }
 
-void func_800B8E58(Player* player, u16 sfxId) {
+/**
+ * Play a sound effect at the player's position
+ */
+void Player_PlaySfx(Player* player, u16 sfxId) {
     if (player->currentMask == PLAYER_MASK_GIANT) {
         func_8019F170(&player->actor.projectedPos, sfxId);
     } else {
@@ -2140,16 +2144,16 @@ void func_800B8E58(Player* player, u16 sfxId) {
 }
 
 /**
- * Plays the sound effect at the actor's position
+ * Play a sound effect at the actor's position
  */
-void Actor_PlaySfxAtPos(Actor* actor, u16 sfxId) {
+void Actor_PlaySfx(Actor* actor, u16 sfxId) {
     Audio_PlaySfxAtPos(&actor->projectedPos, sfxId);
 }
 
 void func_800B8EF4(PlayState* play, Actor* actor) {
     u32 sfxId;
 
-    if (actor->bgCheckFlags & 0x20) {
+    if (actor->bgCheckFlags & BGCHECKFLAG_WATER) {
         if (actor->depthInWater < 20.0f) {
             sfxId = NA_SE_PL_WALK_WATER0 - SFX_FLAG;
         } else {
@@ -2362,11 +2366,11 @@ Actor* Actor_UpdateActor(UpdateActor_Params* params) {
                 CollisionCheck_ResetDamage(&actor->colChkInfo);
             } else {
                 Math_Vec3f_Copy(&actor->prevPos, &actor->world.pos);
-                actor->xzDistToPlayer = Actor_XZDistanceBetweenActors(actor, &params->player->actor);
+                actor->xzDistToPlayer = Actor_WorldDistXZToActor(actor, &params->player->actor);
                 actor->playerHeightRel = Actor_HeightDiff(actor, &params->player->actor);
                 actor->xyzDistToPlayerSq = SQ(actor->xzDistToPlayer) + SQ(actor->playerHeightRel);
 
-                actor->yawTowardsPlayer = Actor_YawBetweenActors(actor, &params->player->actor);
+                actor->yawTowardsPlayer = Actor_WorldYawTowardActor(actor, &params->player->actor);
                 actor->flags &= ~ACTOR_FLAG_1000000;
 
                 if ((DECR(actor->freezeTimer) == 0) && (actor->flags & params->unk_18)) {
@@ -3584,8 +3588,8 @@ s32 func_800BC188(s32 index) {
 }
 
 s32 func_800BC1B4(Actor* actor, Actor* arg1, f32 arg2, f32 arg3) {
-    if ((arg3 > 0.0f) && (Actor_DistanceBetweenActors(arg1, actor) < ((arg3 * 2.5f) + arg2))) {
-        s16 temp_v1 = BINANG_SUB(Actor_YawBetweenActors(arg1, actor), arg1->world.rot.y);
+    if ((arg3 > 0.0f) && (Actor_WorldDistXYZToActor(arg1, actor) < ((arg3 * 2.5f) + arg2))) {
+        s16 temp_v1 = BINANG_SUB(Actor_WorldYawTowardActor(arg1, actor), arg1->world.rot.y);
 
         if (ABS_ALT(temp_v1) < 0x1400) {
             return true;
@@ -3604,7 +3608,7 @@ Actor* func_800BC270(PlayState* play, Actor* actor, f32 arg2, s32 arg3) {
             ((itemAction->id == ACTOR_EN_ARROW) && (func_800BC188(itemAction->params) & arg3))) {
             f32 speedXZ;
 
-            if ((itemAction->speedXZ <= 0.0f) && (GET_PLAYER(play)->unk_D57 != 0)) {
+            if ((itemAction->speed <= 0.0f) && (GET_PLAYER(play)->unk_D57 != 0)) {
                 if (itemAction->id == ACTOR_ARMS_HOOK) {
                     speedXZ = 20.0f;
                 } else if (itemAction->id == ACTOR_EN_BOOM) {
@@ -3621,7 +3625,7 @@ Actor* func_800BC270(PlayState* play, Actor* actor, f32 arg2, s32 arg3) {
                     }
                 }
             } else {
-                speedXZ = itemAction->speedXZ;
+                speedXZ = itemAction->speed;
             }
 
             if (func_800BC1B4(actor, itemAction, arg2, speedXZ)) {
@@ -3641,7 +3645,7 @@ Actor* func_800BC444(PlayState* play, Actor* actor, f32 arg2) {
     while (explosive != NULL) {
         if (((explosive->id == ACTOR_EN_BOM) || (explosive->id == ACTOR_EN_BOM_CHU) ||
              (explosive->id == ACTOR_EN_BOMBF))) {
-            if (func_800BC1B4(actor, explosive, arg2, explosive->speedXZ)) {
+            if (func_800BC1B4(actor, explosive, arg2, explosive->speed)) {
                 break;
             }
         }
@@ -3677,7 +3681,7 @@ s16 Actor_TestFloorInDirection(Actor* actor, PlayState* play, f32 distance, s16 
     Actor_UpdateBgCheckInfo(play, actor, 0.0f, 0.0f, 0.0f, 4);
     Math_Vec3f_Copy(&actor->world.pos, &actorPos);
 
-    ret = actor->bgCheckFlags & 1;
+    ret = actor->bgCheckFlags & BGCHECKFLAG_GROUND;
 
     actor->bgCheckFlags = bgCheckFlags;
 
@@ -3839,7 +3843,7 @@ void Actor_SpawnShieldParticlesMetal(PlayState* play, Vec3f* pos) {
 
 void Actor_SetColorFilter(Actor* actor, u16 colorFlag, u16 colorIntensityMax, u16 xluFlag, u16 duration) {
     if ((colorFlag == 0x8000) && !(colorIntensityMax & 0x8000)) {
-        Actor_PlaySfxAtPos(actor, NA_SE_EN_LIGHT_ARROW_HIT);
+        Actor_PlaySfx(actor, NA_SE_EN_LIGHT_ARROW_HIT);
     }
 
     actor->colorFilterParams = colorFlag | xluFlag | ((colorIntensityMax & 0xF8) << 5) | duration;
@@ -4011,170 +4015,285 @@ void Actor_GetClosestPosOnPath(Vec3s* points, s32 numPoints, Vec3f* srcPos, Vec3
     }
 }
 
-// unused
-s32 func_800BD2B4(PlayState* play, Actor* actor, s16* arg2, f32 arg3, u16 (*textIdCallback)(PlayState*, Actor*),
-                  s16 (*arg5)(PlayState*, Actor*)) {
+/**
+ * Updates NPC talking state. Checks for a talk request and updates
+ * the talkState parameter when a dialog is ongoing. Otherwise checks if
+ * the actor is onscreen, advertises the interaction in a range and sets
+ * the current text id if necessary.
+ *
+ * The talk state values are defined in the NpcTalkState enum.
+ *
+ * @see NpcTalkState
+ *
+ * @param[in,out] talkState Talk state
+ * @param interactRange The interact (talking) range for the actor
+ * @param getTextId Callback for getting the next text id
+ * @param updateTalkState Callback for getting the next talkState value
+ * @return True if a new dialog was started (player talked to the actor). False otherwise.
+ */
+s32 Npc_UpdateTalking(PlayState* play, Actor* actor, s16* talkState, f32 interactRange, NpcGetTextIdFunc getTextId,
+                      NpcUpdateTalkStateFunc updateTalkState) {
     if (Actor_ProcessTalkRequest(actor, &play->state)) {
-        *arg2 = true;
+        *talkState = NPC_TALK_STATE_TALKING;
         return true;
-    } else if (*arg2) {
-        *arg2 = arg5(play, actor);
-        return false;
-    } else if (!Actor_OnScreen(play, actor)) {
-        return false;
-    } else if (!func_800B8614(actor, play, arg3)) {
-        return false;
-    } else {
-        actor->textId = textIdCallback(play, actor);
+    }
+
+    if (*talkState != NPC_TALK_STATE_IDLE) {
+        *talkState = updateTalkState(play, actor);
         return false;
     }
+
+    if (!Actor_OnScreen(play, actor)) {
+        return false;
+    }
+
+    if (!func_800B8614(actor, play, interactRange)) {
+        return false;
+    }
+
+    actor->textId = getTextId(play, actor);
+
+    return false;
 }
 
 typedef struct {
-    /* 0x00 */ s16 unk_00;
-    /* 0x02 */ s16 unk_02;
-    /* 0x04 */ s16 unk_04;
-    /* 0x06 */ s16 unk_06;
-    /* 0x08 */ s16 unk_08;
-    /* 0x0A */ s16 unk_0A;
-    /* 0x0C */ u8 unk_0C;
-} struct_801AEE38_0; // size = 0x10
+    /* 0x0 */ s16 maxHeadYaw;
+    /* 0x2 */ s16 minHeadPitch;
+    /* 0x4 */ s16 maxHeadPitch;
+    /* 0x6 */ s16 maxTorsoYaw;
+    /* 0x8 */ s16 minTorsoPitch;
+    /* 0xA */ s16 maxTorsoPitch;
+    /* 0xC */ u8 rotateYaw;
+} NpcTrackingRotLimits; // size = 0x10
 
 typedef struct {
-    /* 0x00 */ struct_801AEE38_0 sub_00;
-    /* 0x10 */ f32 unk_10;
-    /* 0x14 */ s16 unk_14;
-} struct_801AEE38; // size = 0x18
+    /* 0x00 */ NpcTrackingRotLimits rotLimits;
+    // Fields specific to NPC_TRACKING_PLAYER_AUTO_TURN mode
+    /* 0x10 */ f32 autoTurnDistanceRange;   // Max distance to player to enable tracking and auto-turn
+    /* 0x14 */ s16 maxYawForPlayerTracking; // Player is tracked if within this yaw
+} NpcTrackingParams;                        // size = 0x18
 
-struct_801AEE38 D_801AEE38[] = {
-    { { 0x1C20, 0xE390, 0x1C70, 0x1554, 0x0000, 0x0000, 0x0000 }, 170.0f, 0x3FFC },
-    { { 0x2AA8, 0xEAAC, 0x1554, 0x1554, 0xF8E4, 0x0E38, 0x0001 }, 170.0f, 0x3FFC },
-    { { 0x31C4, 0xE390, 0x0E38, 0x0E38, 0xF1C8, 0x071C, 0x0001 }, 170.0f, 0x3FFC },
-    { { 0x1554, 0xF1C8, 0x0000, 0x071C, 0xF8E4, 0x0000, 0x0001 }, 170.0f, 0x3FFC },
-    { { 0x2AA8, 0xF8E4, 0x071C, 0x0E38, 0xD558, 0x2AA8, 0x0001 }, 170.0f, 0x3FFC },
-    { { 0x0000, 0xE390, 0x2AA8, 0x3FFC, 0xF1C8, 0x0E38, 0x0001 }, 170.0f, 0x3FFC },
-    { { 0x2AA8, 0xF1C8, 0x0E38, 0x0E38, 0x0000, 0x0000, 0x0001 }, 0.0f, 0x0000 },
-    { { 0x2AA8, 0xF1C8, 0x0000, 0x0E38, 0x0000, 0x1C70, 0x0001 }, 0.0f, 0x0000 },
-    { { 0x2AA8, 0xF1C8, 0xF1C8, 0x0000, 0x0000, 0x0000, 0x0001 }, 0.0f, 0x0000 },
-    { { 0x071C, 0xF1C8, 0x0E38, 0x1C70, 0x0000, 0x0000, 0x0001 }, 0.0f, 0x0000 },
-    { { 0x0E38, 0xF1C8, 0x0000, 0x1C70, 0x0000, 0x0E38, 0x0001 }, 0.0f, 0x0000 },
-    { { 0x2AA8, 0xE390, 0x1C70, 0x0E38, 0xF1C8, 0x0E38, 0x0001 }, 0.0f, 0x0000 },
-    { { 0x18E2, 0xF1C8, 0x0E38, 0x0E38, 0x0000, 0x0000, 0x0001 }, 0.0f, 0x0000 },
-    { { 0x2A6C, 0xE390, 0x1C70, 0x1554, 0x0000, 0x0000, 0x0000 }, 170.0f, 0x3FFC },
+/**
+ * Npc tracking angle limit presets to use with Npc_TrackPoint.
+ *
+ * @see Npc_TrackPoint
+ */
+NpcTrackingParams sNpcTrackingPresets[] = {
+    { { 0x1C20, 0xE390, 0x1C70, 0x1554, 0x0000, 0x0000, false }, 170.0f, 0x3FFC },
+    { { 0x2AA8, 0xEAAC, 0x1554, 0x1554, 0xF8E4, 0x0E38, true }, 170.0f, 0x3FFC },
+    { { 0x31C4, 0xE390, 0x0E38, 0x0E38, 0xF1C8, 0x071C, true }, 170.0f, 0x3FFC },
+    { { 0x1554, 0xF1C8, 0x0000, 0x071C, 0xF8E4, 0x0000, true }, 170.0f, 0x3FFC },
+    { { 0x2AA8, 0xF8E4, 0x071C, 0x0E38, 0xD558, 0x2AA8, true }, 170.0f, 0x3FFC },
+    { { 0x0000, 0xE390, 0x2AA8, 0x3FFC, 0xF1C8, 0x0E38, true }, 170.0f, 0x3FFC },
+    { { 0x2AA8, 0xF1C8, 0x0E38, 0x0E38, 0x0000, 0x0000, true }, 0.0f, 0x0000 },
+    { { 0x2AA8, 0xF1C8, 0x0000, 0x0E38, 0x0000, 0x1C70, true }, 0.0f, 0x0000 },
+    { { 0x2AA8, 0xF1C8, 0xF1C8, 0x0000, 0x0000, 0x0000, true }, 0.0f, 0x0000 },
+    { { 0x071C, 0xF1C8, 0x0E38, 0x1C70, 0x0000, 0x0000, true }, 0.0f, 0x0000 },
+    { { 0x0E38, 0xF1C8, 0x0000, 0x1C70, 0x0000, 0x0E38, true }, 0.0f, 0x0000 },
+    { { 0x2AA8, 0xE390, 0x1C70, 0x0E38, 0xF1C8, 0x0E38, true }, 0.0f, 0x0000 },
+    { { 0x18E2, 0xF1C8, 0x0E38, 0x0E38, 0x0000, 0x0000, true }, 0.0f, 0x0000 },
+    { { 0x2A6C, 0xE390, 0x1C70, 0x1554, 0x0000, 0x0000, false }, 170.0f, 0x3FFC },
 };
 
-void func_800BD384(Actor* actor, struct_800BD888_arg1* arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5, s16 arg6, s16 arg7,
-                   u8 arg8) {
-    s16 sp46;
-    s16 sp44;
-    s16 temp2;
-    s16 sp40;
-    s16 temp1;
-    Vec3f sp30;
+/**
+ * Smoothly turns the actor's whole body and updates torso and head rotations in
+ * NpcInteractInfo so that the actor tracks the point specified in NpcInteractInfo.trackPos.
+ * Rotations are limited to specified angles.
+ *
+ * Head and torso rotation angles are determined by calculating the pitch and yaw
+ * from the actor position to the given target position.
+ *
+ * The y position of the actor is offset by NpcInteractInfo.yOffset
+ * before calculating the angles. It can be used to configure the height difference
+ * between the actor and the target.
+ *
+ * @param maxHeadYaw maximum head yaw difference from neutral position
+ * @param maxHeadPitch maximum head pitch angle
+ * @param minHeadPitch minimum head pitch angle
+ * @param maxTorsoYaw maximum torso yaw difference from neutral position
+ * @param maxTorsoPitch maximum torso pitch angle
+ * @param minTorsoPitch minimum torso pitch angle
+ * @param rotateYaw if true, the actor's yaw (shape.rot.y) is updated to turn the actor's whole body
+ */
+void Npc_TrackPointWithLimits(Actor* actor, NpcInteractInfo* interactInfo, s16 maxHeadYaw, s16 maxHeadPitch,
+                              s16 minHeadPitch, s16 maxTorsoYaw, s16 maxTorsoPitch, s16 minTorsoPitch, u8 rotateYaw) {
+    s16 pitchTowardsTarget;
+    s16 yawTowardsTarget;
+    s16 torsoPitch;
+    s16 bodyYawDiff;
+    s16 temp;
+    Vec3f offsetActorPos;
 
-    sp30.x = actor->world.pos.x;
-    sp30.y = actor->world.pos.y + arg1->unk_14;
-    sp30.z = actor->world.pos.z;
+    offsetActorPos.x = actor->world.pos.x;
+    offsetActorPos.y = actor->world.pos.y + interactInfo->yOffset;
+    offsetActorPos.z = actor->world.pos.z;
 
-    sp46 = Math_Vec3f_Pitch(&sp30, &arg1->unk_18);
-    sp44 = Math_Vec3f_Yaw(&sp30, &arg1->unk_18);
-    sp40 = Math_Vec3f_Yaw(&actor->world.pos, &arg1->unk_18) - actor->shape.rot.y;
+    pitchTowardsTarget = Math_Vec3f_Pitch(&offsetActorPos, &interactInfo->trackPos);
+    yawTowardsTarget = Math_Vec3f_Yaw(&offsetActorPos, &interactInfo->trackPos);
+    bodyYawDiff = Math_Vec3f_Yaw(&actor->world.pos, &interactInfo->trackPos) - actor->shape.rot.y;
 
-    temp1 = CLAMP(sp40, -arg2, arg2);
-    Math_SmoothStepToS(&arg1->unk_08.y, temp1, 6, 2000, 1);
+    temp = CLAMP(bodyYawDiff, -maxHeadYaw, maxHeadYaw);
+    Math_SmoothStepToS(&interactInfo->headRot.y, temp, 6, 0x7D0, 1);
 
-    temp1 = (ABS_ALT(sp40) >= 0x8000) ? 0 : ABS_ALT(sp40);
-    arg1->unk_08.y = CLAMP(arg1->unk_08.y, -temp1, temp1);
+    temp = (ABS_ALT(bodyYawDiff) >= 0x8000) ? 0 : ABS_ALT(bodyYawDiff);
+    interactInfo->headRot.y = CLAMP(interactInfo->headRot.y, -temp, temp);
 
-    sp40 -= arg1->unk_08.y;
+    bodyYawDiff -= interactInfo->headRot.y;
 
-    temp1 = CLAMP(sp40, -arg5, arg5);
-    Math_SmoothStepToS(&arg1->unk_0E.y, temp1, 6, 2000, 1);
+    temp = CLAMP(bodyYawDiff, -maxTorsoYaw, maxTorsoYaw);
+    Math_SmoothStepToS(&interactInfo->torsoRot.y, temp, 6, 0x7D0, 1);
 
-    temp1 = (ABS_ALT(sp40) >= 0x8000) ? 0 : ABS_ALT(sp40);
-    arg1->unk_0E.y = CLAMP(arg1->unk_0E.y, -temp1, temp1);
+    temp = (ABS_ALT(bodyYawDiff) >= 0x8000) ? 0 : ABS_ALT(bodyYawDiff);
+    interactInfo->torsoRot.y = CLAMP(interactInfo->torsoRot.y, -temp, temp);
 
-    if (arg8) {
-        Math_SmoothStepToS(&actor->shape.rot.y, sp44, 6, 2000, 1);
+    if (rotateYaw) {
+        Math_SmoothStepToS(&actor->shape.rot.y, yawTowardsTarget, 6, 0x7D0, 1);
     }
 
-    temp1 = CLAMP(sp46, arg4, (s16)(u16)arg3);
-    Math_SmoothStepToS(&arg1->unk_08.x, temp1, 6, 2000, 1);
+    temp = CLAMP(pitchTowardsTarget, minHeadPitch, (s16)(u16)maxHeadPitch);
+    Math_SmoothStepToS(&interactInfo->headRot.x, temp, 6, 0x7D0, 1);
 
-    temp2 = sp46 - arg1->unk_08.x;
+    torsoPitch = pitchTowardsTarget - interactInfo->headRot.x;
 
-    temp1 = CLAMP(temp2, arg7, arg6);
-    Math_SmoothStepToS(&arg1->unk_0E.x, temp1, 6, 2000, 1);
+    temp = CLAMP(torsoPitch, minTorsoPitch, maxTorsoPitch);
+    Math_SmoothStepToS(&interactInfo->torsoRot.x, temp, 6, 0x7D0, 1);
 }
 
 // unused
-s16 func_800BD6B8(s16 arg0) {
-    return D_801AEE38[arg0].unk_14;
+s16 Npc_GetTrackingPresetMaxPlayerYaw(s16 presetIndex) {
+    return sNpcTrackingPresets[presetIndex].maxYawForPlayerTracking;
 }
 
-s16 func_800BD6E4(Actor* actor, struct_800BD888_arg1* arg1, f32 arg2, s16 arg3, s16 flag) {
+/**
+ * Handles NPC tracking modes and auto-turning towards the player when
+ * NPC_TRACKING_PLAYER_AUTO_TURN tracking mode is used.
+ *
+ * Returns a tracking mode that will determine which actor limbs
+ * will be rotated towards the target.
+ *
+ * When the player is behind the actor (i.e. not in the yaw range in front of the actor
+ * defined by maxYawForPlayerTracking), the actor will start an auto-turn sequence:
+ *   - look forward for 30-60 frames
+ *   - turn head to look at the player for 10-20 frames
+ *   - look forward for 30-60 frames
+ *   - turn the entire body to face the player
+ *
+ * @param distanceRange Max distance to player that tracking and auto-turning will be active for
+ * @param maxYawForPlayerTracking Maximum angle for tracking the player.
+ * @param trackingMode The tracking mode selected by the actor. If this is not
+ *        NPC_TRACKING_PLAYER_AUTO_TURN this function does nothing
+ *
+ * @return The tracking mode (NpcTrackingMode) to use for the current frame.
+ */
+s16 Npc_UpdateAutoTurn(Actor* actor, NpcInteractInfo* interactInfo, f32 distanceRange, s16 maxYawForPlayerTracking,
+                       s16 trackingMode) {
     s32 pad;
+    s16 yaw;
+    s16 yawDiff;
 
-    if (flag) {
-        return flag;
-    } else if (arg1->unk_00 != 0) {
-        return 4;
-    } else if (arg2 < Math_Vec3f_DistXYZ(&actor->world.pos, &arg1->unk_18)) {
-        arg1->unk_04 = 0;
-        arg1->unk_06 = 0;
-        return 1;
-    } else {
-        s16 yaw = Math_Vec3f_Yaw(&actor->world.pos, &arg1->unk_18);
-        s16 phi_a0 = ABS_ALT(BINANG_SUB(yaw, actor->shape.rot.y));
+    if (trackingMode != NPC_TRACKING_PLAYER_AUTO_TURN) {
+        return trackingMode;
+    }
 
-        if (arg3 >= phi_a0) {
-            arg1->unk_04 = 0;
-            arg1->unk_06 = 0;
-            return 2;
-        } else if (DECR(arg1->unk_04) != 0) {
-            return arg1->unk_02;
-        } else {
-            switch (arg1->unk_06) {
-                case 0:
-                case 2:
-                    arg1->unk_04 = Rand_S16Offset(30, 30);
-                    arg1->unk_06++;
-                    return 1;
+    if (interactInfo->talkState != NPC_TALK_STATE_IDLE) {
+        // When talking, always fully turn to face the player
+        return NPC_TRACKING_FULL_BODY;
+    }
 
-                case 1:
-                    arg1->unk_04 = Rand_S16Offset(10, 10);
-                    arg1->unk_06++;
-                    return 3;
+    if (distanceRange < Math_Vec3f_DistXYZ(&actor->world.pos, &interactInfo->trackPos)) {
+        // Player is too far away, do not track
+        interactInfo->autoTurnTimer = 0;
+        interactInfo->autoTurnState = 0;
+        return NPC_TRACKING_NONE;
+    }
 
-                default:
-                    return 4;
-            }
-        }
+    yaw = Math_Vec3f_Yaw(&actor->world.pos, &interactInfo->trackPos);
+    yawDiff = ABS_ALT(BINANG_SUB(yaw, actor->shape.rot.y));
+
+    if (maxYawForPlayerTracking >= yawDiff) {
+        // Player is in front of the actor, track with the head and the torso
+        interactInfo->autoTurnTimer = 0;
+        interactInfo->autoTurnState = 0;
+        return NPC_TRACKING_HEAD_AND_TORSO;
+    }
+
+    // Player is behind the actor, run the auto-turn sequence.
+
+    if (DECR(interactInfo->autoTurnTimer) != 0) {
+        // While the timer is still running, return the previous tracking mode
+        return interactInfo->trackingMode;
+    }
+
+    switch (interactInfo->autoTurnState) {
+        case 0:
+        case 2:
+            // Just stand still, not tracking the player
+            interactInfo->autoTurnTimer = Rand_S16Offset(30, 30);
+            interactInfo->autoTurnState++;
+            return NPC_TRACKING_NONE;
+
+        case 1:
+            // Glance at the player by only turning the head
+            interactInfo->autoTurnTimer = Rand_S16Offset(10, 10);
+            interactInfo->autoTurnState++;
+            return NPC_TRACKING_HEAD;
+
+        default:
+            // Auto-turn sequence complete, turn towards the player
+            return NPC_TRACKING_FULL_BODY;
     }
 }
 
-// This function is very similar to OoT's func_80034A14
-void func_800BD888(Actor* actor, struct_800BD888_arg1* arg1, s16 arg2, s16 arg3) {
-    struct_801AEE38_0 sp38;
+/**
+ * Rotates the actor's whole body, torso and head tracking the point specified in NpcInteractInfo.trackPos.
+ * Uses angle limits from a preset selected from from sNpcTrackingPresets.
+ *
+ * The trackingMode parameter controls whether the head and torso are turned towards the target.
+ * If not, they are smoothly turned towards zero. Setting the parameter to NPC_TRACKING_FULL_BODY
+ * causes the actor's whole body to be rotated to face the target.
+ *
+ * If NPC_TRACKING_PLAYER_AUTO_TURN is used, the actor will track the player with its head and torso as long
+ * as the player is in front of the actor (within a yaw angle specified in the option preset).
+ * If the player is outside of this angle, the actor will turn to face the player after a while.
+ *
+ * @see Npc_UpdateAutoTurn
+ * @see sNpcTrackingPresets
+ * @see NpcTrackingMode
+ *
+ * @param presetIndex The index to a preset in sNpcTrackingPresets
+ * @param trackingMode A value from NpcTrackingMode enum
+ */
+void Npc_TrackPoint(Actor* actor, NpcInteractInfo* interactInfo, s16 presetIndex, s16 trackingMode) {
+    NpcTrackingRotLimits rotLimits;
 
-    arg1->unk_02 = func_800BD6E4(actor, arg1, D_801AEE38[arg2].unk_10, D_801AEE38[arg2].unk_14, arg3);
-    sp38 = D_801AEE38[arg2].sub_00;
+    interactInfo->trackingMode =
+        Npc_UpdateAutoTurn(actor, interactInfo, sNpcTrackingPresets[presetIndex].autoTurnDistanceRange,
+                           sNpcTrackingPresets[presetIndex].maxYawForPlayerTracking, trackingMode);
 
-    switch (arg1->unk_02) {
-        case 1:
-            sp38.unk_00 = 0;
-            sp38.unk_04 = 0;
-            sp38.unk_02 = 0;
-        case 3:
-            sp38.unk_06 = 0;
-            sp38.unk_0A = 0;
-            sp38.unk_08 = 0;
-        case 2:
-            sp38.unk_0C = 0;
+    rotLimits = sNpcTrackingPresets[presetIndex].rotLimits;
+
+    switch (interactInfo->trackingMode) {
+        case NPC_TRACKING_NONE:
+            rotLimits.maxHeadYaw = 0;
+            rotLimits.maxHeadPitch = 0;
+            rotLimits.minHeadPitch = 0;
+            // fallthrough
+        case NPC_TRACKING_HEAD:
+            rotLimits.maxTorsoYaw = 0;
+            rotLimits.maxTorsoPitch = 0;
+            rotLimits.minTorsoPitch = 0;
+            // fallthrough
+        case NPC_TRACKING_HEAD_AND_TORSO:
+            rotLimits.rotateYaw = false;
+            break;
+
+        default:
+            break;
     }
 
-    func_800BD384(actor, arg1, sp38.unk_00, sp38.unk_04, sp38.unk_02, sp38.unk_06, sp38.unk_0A, sp38.unk_08,
-                  sp38.unk_0C);
+    Npc_TrackPointWithLimits(actor, interactInfo, rotLimits.maxHeadYaw, rotLimits.maxHeadPitch, rotLimits.minHeadPitch,
+                             rotLimits.maxTorsoYaw, rotLimits.maxTorsoPitch, rotLimits.minTorsoPitch,
+                             rotLimits.rotateYaw);
 }
 
 Gfx D_801AEF88[] = {
@@ -4296,7 +4415,7 @@ Actor* Actor_FindNearby(PlayState* play, Actor* inActor, s16 actorId, u8 actorCa
             continue;
         }
 
-        if (Actor_DistanceBetweenActors(inActor, actor) <= distance) {
+        if (Actor_WorldDistXYZToActor(inActor, actor) <= distance) {
             return actor;
         }
 
@@ -4416,7 +4535,7 @@ void func_800BE504(Actor* actor, ColliderCylinder* collider) {
     if ((collider->info.acHitInfo->toucher.dmgFlags & (0x10000 | 0x2000 | 0x1000 | 0x800 | 0x20))) {
         actor->world.rot.y = collider->base.ac->shape.rot.y;
     } else {
-        actor->world.rot.y = Actor_YawBetweenActors(collider->base.ac, actor);
+        actor->world.rot.y = Actor_WorldYawTowardActor(collider->base.ac, actor);
     }
 }
 
@@ -4424,7 +4543,7 @@ void func_800BE568(Actor* actor, ColliderSphere* collider) {
     if (collider->info.acHitInfo->toucher.dmgFlags & (0x10000 | 0x2000 | 0x1000 | 0x800 | 0x20)) {
         actor->world.rot.y = collider->base.ac->shape.rot.y;
     } else {
-        actor->world.rot.y = Actor_YawBetweenActors(collider->base.ac, actor);
+        actor->world.rot.y = Actor_WorldYawTowardActor(collider->base.ac, actor);
     }
 }
 
@@ -4433,7 +4552,7 @@ void func_800BE5CC(Actor* actor, ColliderJntSph* collider, s32 colliderIndex) {
         (0x10000 | 0x2000 | 0x1000 | 0x800 | 0x20)) {
         actor->world.rot.y = collider->base.ac->shape.rot.y;
     } else {
-        actor->world.rot.y = Actor_YawBetweenActors(collider->base.ac, actor);
+        actor->world.rot.y = Actor_WorldYawTowardActor(collider->base.ac, actor);
     }
 }
 
@@ -4476,13 +4595,13 @@ void Actor_DrawDamageEffects(PlayState* play, Actor* actor, Vec3f limbPos[], s16
         // Apply sfx along with damage effect
         if ((actor != NULL) && (effectAlpha > 0.05f) && (play->gameOverCtx.state == GAMEOVER_INACTIVE)) {
             if (type == ACTOR_DRAW_DMGEFF_FIRE) {
-                Actor_PlaySfxAtPos(actor, NA_SE_EV_BURN_OUT - SFX_FLAG);
+                Actor_PlaySfx(actor, NA_SE_EV_BURN_OUT - SFX_FLAG);
             } else if (type == ACTOR_DRAW_DMGEFF_BLUE_FIRE) {
-                Actor_PlaySfxAtPos(actor, NA_SE_EN_COMMON_EXTINCT_LEV - SFX_FLAG);
+                Actor_PlaySfx(actor, NA_SE_EN_COMMON_EXTINCT_LEV - SFX_FLAG);
             } else if (type == ACTOR_DRAW_DMGEFF_FROZEN_SFX) {
-                Actor_PlaySfxAtPos(actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
+                Actor_PlaySfx(actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
             } else if ((type == ACTOR_DRAW_DMGEFF_LIGHT_ORBS) || (type == ACTOR_DRAW_DMGEFF_BLUE_LIGHT_ORBS)) {
-                Actor_PlaySfxAtPos(actor, NA_SE_EN_COMMON_DEADLIGHT - SFX_FLAG);
+                Actor_PlaySfx(actor, NA_SE_EN_COMMON_DEADLIGHT - SFX_FLAG);
             }
         }
 
@@ -4733,7 +4852,7 @@ void Actor_SpawnIceEffects(PlayState* play, Actor* actor, Vec3f limbPos[], s32 l
     SoundSource_PlaySfxAtFixedWorldPos(play, &actor->world.pos, 30, NA_SE_EV_ICE_BROKEN);
 
     for (i = 0; i < limbPosCount; i++) {
-        yaw = Actor_YawToPoint(actor, limbPos);
+        yaw = Actor_WorldYawTowardPoint(actor, limbPos);
 
         for (j = 0; j < effectsPerLimb; j++) {
             randomYaw = ((s32)Rand_Next() >> 0x13) + yaw;
