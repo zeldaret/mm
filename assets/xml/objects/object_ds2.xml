@@ -1,6 +1,6 @@
 ﻿<Root>
     <File Name="object_ds2" Segment="6">
-        <Animation Name="object_ds2_Anim_0002E4" Offset="0x2E4" />
+        <Animation Name="object_ds2_Anim_0002E4" Offset="0x2E4" /> <!-- Original name is "ds2_matsu" -->
         <DList Name="object_ds2_DL_001990" Offset="0x1990" />
         <DList Name="object_ds2_DL_001C98" Offset="0x1C98" />
         <DList Name="object_ds2_DL_002188" Offset="0x2188" />

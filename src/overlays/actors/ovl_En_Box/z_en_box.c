@@ -265,7 +265,7 @@ void EnBox_Init(Actor* thisx, PlayState* play) {
         this->dyna.actor.flags |= ACTOR_FLAG_10;
     } else {
         if ((this->type == ENBOX_TYPE_BIG_INVISIBLE) || (this->type == ENBOX_TYPE_SMALL_INVISIBLE)) {
-            this->dyna.actor.flags |= ACTOR_FLAG_80;
+            this->dyna.actor.flags |= ACTOR_FLAG_REACT_TO_LENS;
         }
         EnBox_SetupAction(this, EnBox_WaitOpen);
         this->movementFlags |= ENBOX_MOVE_IMMOBILE;
@@ -345,7 +345,7 @@ void EnBox_Fall(EnBox* this, PlayState* play) {
 
     this->alpha = 255;
     this->movementFlags &= ~ENBOX_MOVE_IMMOBILE;
-    if (this->dyna.actor.bgCheckFlags & 1) {
+    if (this->dyna.actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         this->movementFlags |= ENBOX_MOVE_UNUSED;
         if (this->movementFlags & ENBOX_MOVE_FALL_ANGLE_SIDE) {
             this->movementFlags &= ~ENBOX_MOVE_FALL_ANGLE_SIDE;
@@ -519,7 +519,7 @@ void EnBox_WaitOpen(EnBox* this, PlayState* play) {
 void EnBox_Open(EnBox* this, PlayState* play) {
     s32 pad;
 
-    this->dyna.actor.flags &= ~ACTOR_FLAG_80;
+    this->dyna.actor.flags &= ~ACTOR_FLAG_REACT_TO_LENS;
 
     if (SkelAnime_Update(&this->skelAnime)) {
         if (this->unk_1EC > 0) {
@@ -698,7 +698,7 @@ void EnBox_Draw(Actor* thisx, PlayState* play) {
     }
     if (((this->alpha == 255) && (this->type != ENBOX_TYPE_BIG_INVISIBLE) &&
          (this->type != ENBOX_TYPE_SMALL_INVISIBLE)) ||
-        (!CHECK_FLAG_ALL(this->dyna.actor.flags, ACTOR_FLAG_80) &&
+        (!CHECK_FLAG_ALL(this->dyna.actor.flags, ACTOR_FLAG_REACT_TO_LENS) &&
          ((this->type == ENBOX_TYPE_BIG_INVISIBLE) || (this->type == ENBOX_TYPE_SMALL_INVISIBLE)))) {
         gDPPipeSync(POLY_OPA_DISP++);
         gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 255);

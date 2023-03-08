@@ -128,7 +128,7 @@ void ObjKibako2_SpawnSkulltula(ObjKibako2* this, PlayState* play) {
         if (skulltula != NULL) {
             skulltula->parent = &this->dyna.actor;
             skulltula->velocity.y = 13.0f;
-            skulltula->speedXZ = 0.0f;
+            skulltula->speed = 0.0f;
         }
     }
 }
@@ -233,7 +233,7 @@ void ObjKibako2_Update(Actor* thisx, PlayState* play) {
 
     if (this->skulltulaNoiseTimer >= 0) {
         if (this->skulltulaNoiseTimer == 0) {
-            Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EN_STALGOLD_ROLL);
+            Actor_PlaySfx(&this->dyna.actor, NA_SE_EN_STALGOLD_ROLL);
             if (Rand_ZeroOne() < 0.1f) {
                 this->skulltulaNoiseTimer = Rand_S16Offset(40, 80);
             } else {

@@ -3,7 +3,7 @@
  * Overlay: ovl_Dm_Char01
  * Description: Woodfall scene objects (temple, water, walls, etc)
  */
-
+#include "prevent_bss_reordering.h"
 #include "z_dm_char01.h"
 #include "objects/object_mtoride/object_mtoride.h"
 #include "overlays/actors/ovl_Obj_Etcetera/z_obj_etcetera.h"
@@ -201,7 +201,7 @@ void func_80AA88A8(DmChar01* this, PlayState* play) {
     if (Cutscene_CheckActorAction(play, 135)) {
         if (play->csCtx.frames == play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 135)]->startFrame) {
             D_80AAAE24 = 1;
-            Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_FORT_RISING);
+            Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_FORT_RISING);
         }
     } else {
         D_80AAAE24 = 0;
@@ -277,7 +277,7 @@ void func_80AA8C28(DmChar01* this, PlayState* play) {
 
     switch (this->unk_346) {
         case 0:
-            Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_WATER_PURIFICATION);
+            Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_WATER_PURIFICATION);
             D_80AAAE22 = -2200;
             D_80AAAE20 = 100;
             this->unk_346++;

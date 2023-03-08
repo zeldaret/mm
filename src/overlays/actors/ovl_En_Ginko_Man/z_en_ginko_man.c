@@ -510,7 +510,7 @@ void EnGinkoMan_Dialogue(EnGinkoMan* this, PlayState* play) {
 
     if ((this->skelAnime.animation == &object_boj_Anim_0008C0) &&
         Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BANK_MAN_HAND_HIT);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_BANK_MAN_HAND_HIT);
     }
 }
 
@@ -579,7 +579,7 @@ void EnGinkoMan_SetupStamp(EnGinkoMan* this) {
 void EnGinkoMan_Stamp(EnGinkoMan* this, PlayState* play) {
     if ((this->curTextId == 0x464) // "Hey, relax! It doesn't leave any marks, and it's not gonna hurt."
         && (Animation_OnFrame(&this->skelAnime, 10.0f))) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_HANKO); // "stamp"
+        Actor_PlaySfx(&this->actor, NA_SE_EV_HANKO); // "stamp"
     }
 
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {

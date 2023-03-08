@@ -525,7 +525,7 @@ void func_80B37CA0(EnMaruta* this, PlayState* play) {
         ((this->actionFunc == func_80B37428) && !(this->actor.world.pos.y < (this->actor.floorHeight - 20.0f)))) {
         if ((this->collider.base.acFlags & AC_HIT) && (this->actionFunc == func_80B372CC)) {
             this->collider.base.acFlags &= ~AC_HIT;
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_SWORD_STRIKE);
+            Actor_PlaySfx(&this->actor, NA_SE_IT_SWORD_STRIKE);
 
             if (D_80B386CC[player->meleeWeaponAnimation] != 0) {
                 s32 temp = D_80B386CC[player->meleeWeaponAnimation] + 1;
@@ -587,7 +587,7 @@ void func_80B37EC0(EnMaruta* this, PlayState* play) {
 
         if (this->actor.velocity.y < -this->actor.gravity) {
             func_80B382E4(play, sp34);
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_LOG_BOUND);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_LOG_BOUND);
             this->actor.velocity.y *= -0.6f;
             func_80B38060(this, &sp34);
         }

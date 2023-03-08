@@ -188,10 +188,10 @@ void Skybox_Setup(GameState* gameState, SkyboxContext* skyboxCtx, s16 skyboxId) 
     size_t size;
     void* segment;
 
-    skyboxCtx->rotZ = 0.0f;
+    skyboxCtx->rot.z = 0.0f;
 
     switch (skyboxId) {
-        case 1:
+        case SKYBOX_NORMAL_SKY:
             // Send a DMA request for the cloudy sky texture
             skyboxCtx->staticSegments[0] = &D_80025D00;
             size = SEGMENT_ROM_SIZE(d2_cloud_static);
@@ -210,21 +210,21 @@ void Skybox_Setup(GameState* gameState, SkyboxContext* skyboxCtx, s16 skyboxId) 
             segment = (void*)ALIGN8((uintptr_t)segment + size);
             DmaMgr_SendRequest0(skyboxCtx->paletteStaticSegment, SEGMENT_ROM_START(d2_fine_pal_static), size);
 
-            skyboxCtx->primR = 145;
-            skyboxCtx->primG = 120;
-            skyboxCtx->primB = 155;
+            skyboxCtx->prim.r = 145;
+            skyboxCtx->prim.g = 120;
+            skyboxCtx->prim.b = 155;
 
-            skyboxCtx->envR = 40;
-            skyboxCtx->envG = 0;
-            skyboxCtx->envB = 40;
+            skyboxCtx->env.r = 40;
+            skyboxCtx->env.g = 0;
+            skyboxCtx->env.b = 40;
 
             // Inverted Stone Tower Temple and Inverted Stone Tower
             if ((play->sceneId == SCENE_F41) || (play->sceneId == SCENE_INISIE_R)) {
-                skyboxCtx->rotZ = 3.15f;
+                skyboxCtx->rot.z = 3.15f;
             }
             break;
 
-        case 2:
+        case SKYBOX_2:
             break;
 
         default:
@@ -236,7 +236,7 @@ void func_80143324(PlayState* play, SkyboxContext* skyboxCtx, s16 skyboxId) {
     size_t size;
 
     switch (skyboxId) {
-        case 1:
+        case SKYBOX_NORMAL_SKY:
             osCreateMesgQueue(&skyboxCtx->loadQueue, &skyboxCtx->loadMsg, 1);
 
             if (play->envCtx.unk_10 == 0) {
@@ -289,14 +289,14 @@ void func_80143324(PlayState* play, SkyboxContext* skyboxCtx, s16 skyboxId) {
 
 void Skybox_Init(GameState* gameState, SkyboxContext* skyboxCtx, s16 skyboxId) {
     skyboxCtx->skyboxShouldDraw = false;
-    skyboxCtx->rotX = skyboxCtx->rotY = skyboxCtx->rotZ = 0.0f;
+    skyboxCtx->rot.x = skyboxCtx->rot.y = skyboxCtx->rot.z = 0.0f;
 
     Skybox_Setup(gameState, skyboxCtx, skyboxId);
 
-    if (skyboxId != 0) {
+    if (skyboxId != SKYBOX_NONE) {
         skyboxCtx->dListBuf = THA_AllocEndAlign16(&gameState->heap, 0x3840);
 
-        if (skyboxId == 5) {
+        if (skyboxId == SKYBOX_CUTSCENE_MAP) {
             // Allocate enough space for the vertices for a 6 sided skybox (cube)
             skyboxCtx->roomVtx = THA_AllocEndAlign16(&gameState->heap, sizeof(Vtx) * 32 * 6);
             func_80143148(skyboxCtx, 6);

@@ -61,10 +61,10 @@ void func_80A5389C(BgKeikokuSaku* this, PlayState* play) {
 }
 
 void func_80A538E0(BgKeikokuSaku* this, PlayState* play) {
-    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_METALGATE_OPEN - SFX_FLAG);
+    Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_METALGATE_OPEN - SFX_FLAG);
     this->dyna.actor.world.pos.z -= 2.0f + BREG(8);
     if (this->dyna.actor.world.pos.z < (BREG(9) + 2660.0f)) {
-        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_BRIDGE_OPEN_STOP);
+        Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_BRIDGE_OPEN_STOP);
         this->timer = 30;
         this->actionFunc = func_80A53994;
     }
