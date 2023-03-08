@@ -1742,9 +1742,6 @@ Path* Path_GetByIndex(PlayState* play, s16 index, s16 max);
 f32 Path_OrientAndGetDistSq(Actor* actor, Path* path, s16 waypoint, s16* yaw);
 void Path_CopyLastPoint(Path* path, Vec3f* dest);
 
-void FrameAdvance_Init(FrameAdvanceContext* frameAdvCtx);
-s32 FrameAdvance_Update(FrameAdvanceContext* frameAdvCtx, Input* input);
-
 s32 func_801226E0(PlayState* play, s32 arg1);
 s32 func_80122744(PlayState* play, struct_80122744_arg1* arg1, u32 arg2, Vec3s* arg3);
 s32 func_80122760(PlayState* play, struct_80122744_arg1* arg1, f32 arg2);
