@@ -458,8 +458,6 @@ beginseg
     include "build/src/code/z_debug.o"
     include "build/src/code/z_debug_display.o"
     include "build/src/code/z_debug_mode.o"
-    include "build/data/code/z_debug_mode.data.o"
-    include "build/data/code/z_debug_mode.bss.o"
     include "build/src/code/z_demo.o"
     include "build/src/code/z_draw.o"
     include "build/src/code/z_eff_footmark.o"

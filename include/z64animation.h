@@ -1,5 +1,5 @@
-#ifndef Z64_ANIMATION_H
-#define Z64_ANIMATION_H
+#ifndef Z64ANIMATION_H
+#define Z64ANIMATION_H
 
 #include "PR/ultratypes.h"
 #include "PR/gbi.h"

@@ -36,6 +36,7 @@
 #include "z64dma.h"
 #include "z64eff_footmark.h"
 #include "z64effect.h"
+#include "z64frameadvance.h"
 #include "z64interface.h"
 #include "z64item.h"
 #include "z64light.h"
@@ -690,11 +691,6 @@ typedef struct {
     /* 0x1 */ u8   ambienceId;
 } SequenceContext; // size = 0x2
 
-typedef struct {
-    /* 0x0 */ s32 enabled;
-    /* 0x4 */ s32 timer;
-} FrameAdvanceContext; // size = 0x8
-
 typedef enum {
     /*  0 */ GAMEOVER_INACTIVE,
     /*  1 */ GAMEOVER_DEATH_START,
@@ -861,16 +857,6 @@ typedef struct {
     /* 0x10 */ u16* tlut;
     /* 0x14 */ Gfx* dList;
 } VisMono; // size = 0x18
-
-typedef struct DebugDispObject {
-    /* 0x00 */ Vec3f pos;
-    /* 0x0C */ Vec3s rot;
-    /* 0x14 */ Vec3f scale;
-    /* 0x20 */ Color_RGBA8 color;
-    /* 0x24 */ s16   type;
-    /* 0x28 */ struct DebugDispObject* next;
-    /* 0x2C */ s32 pad; //Padding not in the OOT version
-} DebugDispObject; // size = 0x30
 
 typedef struct {
     /* 0x0 */ f32 rangeSq;

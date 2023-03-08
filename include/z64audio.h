@@ -1,5 +1,5 @@
-#ifndef Z64_AUDIO_H
-#define Z64_AUDIO_H
+#ifndef Z64AUDIO_H
+#define Z64AUDIO_H
 
 #include "audiothread_cmd.h"
 

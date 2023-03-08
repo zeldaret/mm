@@ -5,6 +5,7 @@
  */
 
 #include "z_tg_sw.h"
+#include "z64debug_display.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
