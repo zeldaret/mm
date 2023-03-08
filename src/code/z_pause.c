@@ -20,6 +20,7 @@
  */
 
 #include "z64frameadvance.h"
+#include "padmgr.h"
 #include "macros.h"
 
 void FrameAdvance_Init(FrameAdvanceContext* frameAdvCtx) {
