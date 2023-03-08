@@ -14,8 +14,10 @@ src_dir = root_dir / "src"
 # Project-specific
 CPP_FLAGS = [
     "-Iinclude",
-    "-Iassets",
     "-Isrc",
+    "-Iassets",
+    "-Ibuild",
+    "-I.",
 
     "-D__sgi",
     "-D_LANGUAGE_C",
