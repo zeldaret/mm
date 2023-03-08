@@ -1,7 +1,7 @@
 ﻿<Root>
     <File Name="object_fu" Segment="6">
-        <Animation Name="object_fu_Anim_00057C" Offset="0x57C" />
-        <Animation Name="object_fu_Anim_000B04" Offset="0xB04" />
+        <Animation Name="object_fu_Anim_00057C" Offset="0x57C" /> <!-- Original name is "are_are" -->
+        <Animation Name="object_fu_Anim_000B04" Offset="0xB04" /> <!-- Original name is "fu_mawasu" -->
         <DList Name="object_fu_DL_003130" Offset="0x3130" />
         <DList Name="object_fu_DL_003320" Offset="0x3320" />
         <DList Name="object_fu_DL_0036A0" Offset="0x36A0" />

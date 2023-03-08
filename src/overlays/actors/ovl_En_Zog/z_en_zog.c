@@ -173,7 +173,7 @@ void func_80B93468(EnZog* this, PlayState* play) {
         this->actor.world.pos.x = points[-1].x;
         this->actor.world.pos.z = points[-1].z;
         this->actor.world.rot.y = Math_Atan2S(points->x - this->actor.world.pos.x, points->z - this->actor.world.pos.z);
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
     }
 }
 
@@ -465,7 +465,7 @@ s32 func_80B93EA0(EnZog* this, PlayState* play) {
         switch (this->unk_306) {
             case 2:
                 if (play->csCtx.frames == 60) {
-                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_JUMP_SAND);
+                    Actor_PlaySfx(&this->actor, NA_SE_EV_JUMP_SAND);
                 }
                 break;
 
@@ -606,7 +606,7 @@ void func_80B943EC(EnZog* this, PlayState* play) {
         }
     } else if ((player->stateFlags2 & PLAYER_STATE2_8000000) && (this->actor.xzDistToPlayer < 120.0f)) {
         this->unk_30A |= 0x10;
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_TRE_BOX_APPEAR);
+        Actor_PlaySfx(&this->actor, NA_SE_SY_TRE_BOX_APPEAR);
     }
 }
 
@@ -762,9 +762,9 @@ void func_80B94A00(EnZog* this, PlayState* play) {
 
     if ((this->skelAnime.curFrame >= 35.0f) ||
         ((this->skelAnime.curFrame >= 10.0f) && (this->skelAnime.curFrame <= 24.0f))) {
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
     } else {
-        this->actor.speedXZ = 1.5f;
+        this->actor.speed = 1.5f;
     }
 
     if ((this->actor.depthInWater > 0.0f) && ((play->gameplayFrames % 8) == 0)) {
@@ -781,21 +781,21 @@ void func_80B94A00(EnZog* this, PlayState* play) {
 
     if ((this->unk_304 == 4) &&
         (Animation_OnFrame(&this->skelAnime, 136.0f) || Animation_OnFrame(&this->skelAnime, 155.0f))) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_PL_WALK_WATER0);
+        Actor_PlaySfx(&this->actor, NA_SE_PL_WALK_WATER0);
     }
 
     if ((this->unk_304 == 5) &&
         (Animation_OnFrame(&this->skelAnime, 12.0f) || Animation_OnFrame(&this->skelAnime, 37.0f))) {
         if (this->actor.depthInWater > 0.0f) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_PL_WALK_WATER0);
+            Actor_PlaySfx(&this->actor, NA_SE_PL_WALK_WATER0);
         } else {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_PL_WALK_SAND);
+            Actor_PlaySfx(&this->actor, NA_SE_PL_WALK_SAND);
         }
     }
 }
 
 void func_80B94C5C(EnZog* this, PlayState* play) {
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     if (this->unk_304 != 0) {
         if (this->actor.shape.yOffset > 0.0f) {
             this->actor.shape.yOffset -= 20.0f;
@@ -818,7 +818,7 @@ void func_80B94C5C(EnZog* this, PlayState* play) {
 
 void func_80B94D0C(EnZog* this, PlayState* play) {
     func_80B93D2C(this, play);
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     if (this->unk_320 > 0) {
         this->unk_320--;
         this->unk_31C = 1;
@@ -857,10 +857,10 @@ void func_80B94E34(EnZog* this, PlayState* play) {
 
     func_80B93D2C(this, play);
     func_80B93BE0(this, play);
-    if (this->actor.speedXZ < 0.1f) {
-        this->actor.speedXZ = 0.0f;
+    if (this->actor.speed < 0.1f) {
+        this->actor.speed = 0.0f;
     } else {
-        if (this->actor.speedXZ > 0.1f) {
+        if (this->actor.speed > 0.1f) {
             WaterBox* sp44;
             Vec3f sp38;
 
@@ -871,15 +871,15 @@ void func_80B94E34(EnZog* this, PlayState* play) {
             if (WaterBox_GetSurface1(play, &play->colCtx, sp38.x, sp38.z, &sp38.y, &sp44) &&
                 (this->actor.world.pos.y < sp38.y)) {
                 EffectSsGSplash_Spawn(play, &sp38, NULL, NULL, 1,
-                                      Rand_ZeroFloat(this->actor.speedXZ * 40.0f) + (this->actor.speedXZ * 60.0f));
+                                      Rand_ZeroFloat(this->actor.speed * 40.0f) + (this->actor.speed * 60.0f));
             }
 
-            if ((player->actor.speedXZ > 3.0f) && (this->unk_324 == 0)) {
+            if ((player->actor.speed > 3.0f) && (this->unk_324 == 0)) {
                 this->unk_324 = 25;
-                func_800B8E58(player, player->ageProperties->voiceSfxIdOffset + NA_SE_VO_LI_PUSH);
+                Player_PlaySfx(player, player->ageProperties->voiceSfxIdOffset + NA_SE_VO_LI_PUSH);
             }
         }
-        this->actor.speedXZ *= 0.3f;
+        this->actor.speed *= 0.3f;
     }
 
     if (ABS_ALT(this->actor.yawTowardsPlayer - this->actor.world.rot.y) > 0x5000) {
@@ -892,12 +892,12 @@ void func_80B94E34(EnZog* this, PlayState* play) {
 
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->actionFunc = func_80B94D0C;
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
         this->unk_300 = 2;
-    } else if (this->actor.bgCheckFlags & 1) {
+    } else if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         this->actor.home.rot.z = 1;
         this->actionFunc = func_80B94C5C;
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
         this->unk_2FE = 1;
         this->actor.velocity.y = 0.0f;
         this->actor.terminalVelocity = 0.0f;
@@ -922,7 +922,7 @@ void func_80B95128(EnZog* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->actionFunc = func_80B94D0C;
         this->unk_300 = 2;
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
 
         switch (CURRENT_DAY) {
             case 1:
@@ -966,7 +966,7 @@ void EnZog_Update(Actor* thisx, PlayState* play) {
 
     if (((this->unk_304 == 6) && Animation_OnFrame(&this->skelAnime, 43.0f)) ||
         ((this->unk_304 == 17) && Animation_OnFrame(&this->skelAnime, 14.0f))) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_LAND_SAND);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_LAND_SAND);
     }
 
     if (this->unk_30A & 1) {

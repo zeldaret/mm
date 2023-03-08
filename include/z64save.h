@@ -622,9 +622,18 @@ typedef enum SunsSongState {
 #define WEEKEVENTREG_13_04 PACK_WEEKEVENTREG_FLAG(13, 0x04)
 #define WEEKEVENTREG_13_08 PACK_WEEKEVENTREG_FLAG(13, 0x08)
 #define WEEKEVENTREG_13_10 PACK_WEEKEVENTREG_FLAG(13, 0x10)
-#define WEEKEVENTREG_13_20 PACK_WEEKEVENTREG_FLAG(13, 0x20)
-#define WEEKEVENTREG_13_40 PACK_WEEKEVENTREG_FLAG(13, 0x40)
-#define WEEKEVENTREG_13_80 PACK_WEEKEVENTREG_FLAG(13, 0x80)
+
+// This flag marks that the player has finished the Oceanside Spider House and has exited.
+// Used to identify if EnSth should be moved deeper into the house.
+// This does NOT flag:
+//   A) that the player has completed the house (Inventory_GetSkullTokenCount(play->sceneId))
+//   B) that the player has collected a reward (WEEKEVENTREG_OCEANSIDE_SPIDER_HOUSE_COLLECTED_REWARD)
+//   C) that the player has collected the wallet (WEEKEVENTREG_RECEIVED_OCEANSIDE_WALLET_UPGRADE)
+#define WEEKEVENTREG_OCEANSIDE_SPIDER_HOUSE_BUYER_MOVED_IN PACK_WEEKEVENTREG_FLAG(13, 0x20)
+
+#define WEEKEVENTREG_RECEIVED_OCEANSIDE_WALLET_UPGRADE PACK_WEEKEVENTREG_FLAG(13, 0x40)
+// You only get a wallet if completed on Day 1: repeat gets silver rupee, other days get less
+#define WEEKEVENTREG_OCEANSIDE_SPIDER_HOUSE_COLLECTED_REWARD PACK_WEEKEVENTREG_FLAG(13, 0x80)
 
 // PlayedMilkMinigame
 // Attempted Cremia Cart Ride
@@ -830,10 +839,10 @@ typedef enum SunsSongState {
 
 #define WEEKEVENTREG_34_02 PACK_WEEKEVENTREG_FLAG(34, 0x02)
 #define WEEKEVENTREG_34_04 PACK_WEEKEVENTREG_FLAG(34, 0x04)
-#define WEEKEVENTREG_34_08 PACK_WEEKEVENTREG_FLAG(34, 0x08)
+#define WEEKEVENTREG_SWAMP_SPIDER_HOUSE_TALKED PACK_WEEKEVENTREG_FLAG(34, 0x08)
 #define WEEKEVENTREG_34_10 PACK_WEEKEVENTREG_FLAG(34, 0x10)
 #define WEEKEVENTREG_34_20 PACK_WEEKEVENTREG_FLAG(34, 0x20)
-#define WEEKEVENTREG_34_40 PACK_WEEKEVENTREG_FLAG(34, 0x40)
+#define WEEKEVENTREG_RECEIVED_MASK_OF_TRUTH PACK_WEEKEVENTREG_FLAG(34, 0x40)
 
 // Cremia did Milk Run alone. Player didn't interact or didn't accept the ride
 #define WEEKEVENTREG_34_80 PACK_WEEKEVENTREG_FLAG(34, 0x80)

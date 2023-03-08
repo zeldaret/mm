@@ -417,7 +417,6 @@ extern Color_RGBA8 actorDefaultHitColor;
 // extern UNK_TYPE4 D_801AEDD4;
 // extern UNK_TYPE4 D_801AEE28;
 // extern UNK_TYPE4 D_801AEE30;
-// extern UNK_TYPE4 D_801AEE38;
 // extern UNK_TYPE2 D_801AEE4C;
 extern Gfx D_801AEF88[];
 extern Gfx D_801AEFA0[];
@@ -479,9 +478,6 @@ extern EffectShieldParticleInit shieldParticleInitWood;
 
 extern u8 D_801BB12C;
 
-// extern UNK_TYPE1 D_801BC210;
-extern Gfx D_801BC240[9];
-extern Gfx D_801BC288[3];
 // extern UNK_TYPE1 D_801BC41E;
 extern ActorCutscene actorCutscenesGlobalCutscenes[8];
 extern s16 actorCutsceneCurrent;
