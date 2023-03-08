@@ -5,6 +5,7 @@
 #include "libc/stdarg.h"
 #include "libc/stdint.h"
 #include "io/controller.h"
+#include "stack.h"
 
 // These are the same as the 3-bit ansi color codes
 #define FAULT_COLOR_BLACK      0
@@ -80,7 +81,7 @@ void FaultDrawer_DrawText(s32 x, s32 y, const char* fmt, ...);
 
 typedef struct FaultMgr {
     /* 0x000 */ OSThread thread;
-    /* 0x1B0 */ u8 stack[0x600]; // Seems leftover from an earlier version. The thread actually uses a stack of this size at 0x8009BE60
+    /* 0x1B0 */ STACK(stack, 0x600); // Seems leftover from an earlier version. The thread actually uses a stack of this size at 0x8009BE60
     /* 0x7B0 */ OSMesgQueue queue;
     /* 0x7C8 */ OSMesg msg[1];
     /* 0x7CC */ u8 exit;

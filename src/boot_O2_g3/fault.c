@@ -43,7 +43,6 @@
 #include "fault_internal.h"
 #include "fault.h"
 #include "global.h"
-#include "stack.h"
 #include "vt.h"
 
 // bss
