@@ -118,6 +118,7 @@ wordReplace = {
     "func_800B84D0": "Actor_ProcessTalkRequest",
     "func_8017D668": "Math3D_PointDistToLine2D",
 
+    "THGA_GetSize": "THGA_GetRemaining",
     "THGA_AllocStartArray8": "THGA_AllocDisplayList",
     "THGA_AllocStart8": "THGA_AllocGfx",
     "THGA_AllocStart8Wrapper": "THGA_AllocGfx2",
@@ -129,8 +130,9 @@ wordReplace = {
     "THA_AllocStart": "THA_AllocHead",
     "THA_AllocStart1": "THA_AllocHeadByte",
     "THA_AllocEnd": "THA_AllocTail",
-    "THA_AllocEndAlign16": "THA_AllocTailAlign16"
+    "THA_AllocEndAlign16": "THA_AllocTailAlign16",
     "THA_AllocEndAlign": "THA_AllocTailAlign",
+    "THA_GetSize": "THA_GetRemaining",
 
     "func_800BDFC0": "Gfx_DrawDListOpa",
     "func_800BE03C": "Gfx_DrawDListXlu",
