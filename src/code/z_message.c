@@ -2186,7 +2186,7 @@ void Message_Decode(PlayState* play) {
                     }
                     charTexIdx += FONT_CHAR_TEX_SIZE;
                 }
-                decodedBufPos = decodedBufPos + playerNameLen - 1;
+                decodedBufPos += playerNameLen - 1;
                 spC0 += playerNameLen * (16.0f * msgCtx->textCharScale);
             } else if (curChar == 0x201) {
                 DmaMgr_SendRequest0(msgCtx->textboxSegment + 0x1000, SEGMENT_ROM_START(message_texture_static), 0x900);
@@ -2651,11 +2651,12 @@ void Message_Decode(PlayState* play) {
                 }
                 decodedBufPos--;
             } else if ((curChar >= 0x231) && (curChar < 0x237)) {
-                index = curChar - 0x231;
+                // index = curChar - 0x231;
                 msgCtx->decodedBuffer.wchar[decodedBufPos] =
-                    D_801D027C[((void)0, gSaveContext.save.spiderHouseMaskOrder[index])];
+                    D_801D027C[((void)0, gSaveContext.save.spiderHouseMaskOrder[(s16)(curChar - 0x231)])];
                 decodedBufPos++;
-                Message_LoadChar(play, D_801D0284[((void)0, gSaveContext.save.spiderHouseMaskOrder[index])],
+                Message_LoadChar(play,
+                                 D_801D0284[((void)0, gSaveContext.save.spiderHouseMaskOrder[(s16)(curChar - 0x231)])],
                                  &charTexIdx, &spC0, decodedBufPos);
                 decodedBufPos++;
                 msgCtx->decodedBuffer.wchar[decodedBufPos] = 0x2000;
@@ -2855,7 +2856,7 @@ void Message_Decode(PlayState* play) {
                     }
                     charTexIdx += FONT_CHAR_TEX_SIZE;
                 }
-                decodedBufPos = decodedBufPos + playerNameLen - 1;
+                decodedBufPos += playerNameLen - 1;
                 spC0 += playerNameLen * (16.0f * msgCtx->textCharScale);
             } else if (curChar == 0x310) {
                 digits[0] = digits[1] = digits[2] = 0;
