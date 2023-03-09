@@ -189,7 +189,7 @@ void AudioPlayback_ProcessNotes(void) {
                        (playbackState->priority >= 1)) {
                 // do nothing
             } else if (playbackState->parentLayer->channel->seqPlayer == NULL) {
-                AudioSeq_SequenceChannelDisable(playbackState->parentLayer->channel);
+                AudioScript_SequenceChannelDisable(playbackState->parentLayer->channel);
                 playbackState->priority = 1;
                 playbackState->status = PLAYBACK_STATUS_1;
                 continue;
@@ -224,13 +224,13 @@ void AudioPlayback_ProcessNotes(void) {
                             AudioEffects_NoteVibratoInit(note);
                             AudioEffects_NotePortamentoInit(note);
                             AudioPlayback_AudioListRemove(&note->listItem);
-                            AudioSeq_AudioListPushBack(&note->listItem.pool->active, &note->listItem);
+                            AudioScript_AudioListPushBack(&note->listItem.pool->active, &note->listItem);
                             playbackState->wantedParentLayer = NO_LAYER;
                             // don't skip
                         } else {
                             AudioPlayback_NoteDisable(note);
                             AudioPlayback_AudioListRemove(&note->listItem);
-                            AudioSeq_AudioListPushBack(&note->listItem.pool->disabled, &note->listItem);
+                            AudioScript_AudioListPushBack(&note->listItem.pool->disabled, &note->listItem);
                             playbackState->wantedParentLayer = NO_LAYER;
                             goto skip;
                         }
@@ -240,7 +240,7 @@ void AudioPlayback_ProcessNotes(void) {
                         }
                         AudioPlayback_NoteDisable(note);
                         AudioPlayback_AudioListRemove(&note->listItem);
-                        AudioSeq_AudioListPushBack(&note->listItem.pool->disabled, &note->listItem);
+                        AudioScript_AudioListPushBack(&note->listItem.pool->disabled, &note->listItem);
                         continue;
                     }
                 }
@@ -250,7 +250,7 @@ void AudioPlayback_ProcessNotes(void) {
                 }
                 AudioPlayback_NoteDisable(note);
                 AudioPlayback_AudioListRemove(&note->listItem);
-                AudioSeq_AudioListPushBack(&note->listItem.pool->disabled, &note->listItem);
+                AudioScript_AudioListPushBack(&note->listItem.pool->disabled, &note->listItem);
                 continue;
             }
 
@@ -669,7 +669,7 @@ void AudioPlayback_InitNoteFreeList(void) {
     for (i = 0; i < gAudioCtx.numNotes; i++) {
         gAudioCtx.notes[i].listItem.u.value = &gAudioCtx.notes[i];
         gAudioCtx.notes[i].listItem.prev = NULL;
-        AudioSeq_AudioListPushBack(&gAudioCtx.noteFreeLists.disabled, &gAudioCtx.notes[i].listItem);
+        AudioScript_AudioListPushBack(&gAudioCtx.noteFreeLists.disabled, &gAudioCtx.notes[i].listItem);
     }
 }
 
@@ -708,7 +708,7 @@ void AudioPlayback_NotePoolClear(NotePool* pool) {
                 break;
             }
             AudioPlayback_AudioListRemove(cur);
-            AudioSeq_AudioListPushBack(dest, cur);
+            AudioScript_AudioListPushBack(dest, cur);
         }
     }
 }
@@ -750,11 +750,11 @@ void AudioPlayback_NotePoolFill(NotePool* pool, s32 count) {
         }
 
         while (j < count) {
-            note = AudioSeq_AudioListPopBack(source);
+            note = AudioScript_AudioListPopBack(source);
             if (note == NULL) {
                 break;
             }
-            AudioSeq_AudioListPushBack(dest, &note->listItem);
+            AudioScript_AudioListPushBack(dest, &note->listItem);
             j++;
         }
     }
@@ -867,7 +867,7 @@ void AudioPlayback_NoteReleaseAndTakeOwnership(Note* note, SequenceLayer* layer)
 }
 
 Note* AudioPlayback_AllocNoteFromDisabled(NotePool* pool, SequenceLayer* layer) {
-    Note* note = AudioSeq_AudioListPopBack(&pool->disabled);
+    Note* note = AudioScript_AudioListPopBack(&pool->disabled);
     if (note != NULL) {
         AudioPlayback_NoteInitForLayer(note, layer);
         AudioPlayback_AudioListPushFront(&pool->active, &note->listItem);
@@ -881,7 +881,7 @@ Note* AudioPlayback_AllocNoteFromDecaying(NotePool* pool, SequenceLayer* layer) 
     if (note != NULL) {
         AudioPlayback_NoteReleaseAndTakeOwnership(note, layer);
         AudioPlayback_AudioListRemove(&note->listItem);
-        AudioSeq_AudioListPushBack(&pool->releasing, &note->listItem);
+        AudioScript_AudioListPushBack(&pool->releasing, &note->listItem);
     }
     return note;
 }
@@ -912,7 +912,7 @@ Note* AudioPlayback_AllocNoteFromActive(NotePool* pool, SequenceLayer* layer) {
     if (aPriority < rPriority) {
         AudioPlayback_AudioListRemove(&aNote->listItem);
         func_801963E8(aNote, layer);
-        AudioSeq_AudioListPushBack(&pool->releasing, &aNote->listItem);
+        AudioScript_AudioListPushBack(&pool->releasing, &aNote->listItem);
         aNote->playbackState.priority = layer->channel->notePriority;
         return aNote;
     }
@@ -931,7 +931,7 @@ Note* AudioPlayback_AllocNote(SequenceLayer* layer) {
             note->playbackState.wantedParentLayer == NO_LAYER) {
             AudioPlayback_NoteReleaseAndTakeOwnership(note, layer);
             AudioPlayback_AudioListRemove(&note->listItem);
-            AudioSeq_AudioListPushBack(&note->listItem.pool->releasing, &note->listItem);
+            AudioScript_AudioListPushBack(&note->listItem.pool->releasing, &note->listItem);
             return note;
         }
     }
