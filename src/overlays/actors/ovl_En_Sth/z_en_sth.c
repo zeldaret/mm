@@ -328,7 +328,7 @@ void EnSth_GiveOceansideSpiderHouseReward(EnSth* this, PlayState* play) {
             EnSth_ChangeAnim(this, STH_ANIM_WAIT);
         }
     } else {
-        Actor_PickUp(&this->actor, play, STH_GI_ID(&this->actor), 10000.0f, 500.0f);
+        Actor_OfferGetItem(&this->actor, play, STH_GI_ID(&this->actor), 10000.0f, 500.0f);
     }
 }
 
@@ -526,7 +526,7 @@ void EnSth_SwampSpiderHouseGiveMask(EnSth* this, PlayState* play) {
         this->sthFlags &= ~STH_FLAG_DRAW_MASK_OF_TRUTH;
         // This flag is used to keep track if the player has already spoken to the actor, triggering secondary dialogue.
         SET_WEEKEVENTREG(WEEKEVENTREG_SWAMP_SPIDER_HOUSE_TALKED);
-        Actor_PickUp(&this->actor, play, GI_MASK_TRUTH, 10000.0f, 50.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_MASK_TRUTH, 10000.0f, 50.0f);
     }
 }
 

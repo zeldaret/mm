@@ -459,7 +459,7 @@ void EnDnp_Update(Actor* thisx, PlayState* play) {
         sp2C = this->collider.dim.radius + 50;
         sp28 = this->collider.dim.height + 30;
         if ((this->unk_322 & 0x400) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_23_20)) {
-            Actor_PickUp(&this->actor, play, GI_MAX, sp2C, sp28);
+            Actor_OfferGetItem(&this->actor, play, GI_MAX, sp2C, sp28);
         }
         func_8013C964(&this->actor, play, sp2C, sp28, PLAYER_IA_NONE, this->unk_322 & 7);
         Actor_SetFocus(&this->actor, 30.0f);
