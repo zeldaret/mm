@@ -1,8 +1,6 @@
 #ifndef SEQUENCE_H
 #define SEQUENCE_H
 
-#define NA_BGM_STOP 0x100000FF
-
 #define NA_BGM_GENERAL_SFX 0x00             // General Sound Effects
 #define NA_BGM_AMBIENCE 0x01                // Ambient background noises
 #define NA_BGM_TERMINA_FIELD 0x02           // Termina Field
