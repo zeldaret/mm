@@ -299,13 +299,13 @@ asm/non_matchings/code/z_actor/func_800B886C.s,func_800B886C,0x800B886C,0xB
 asm/non_matchings/code/z_actor/Actor_GetScreenPos.s,Actor_GetScreenPos,0x800B8898,0x27
 asm/non_matchings/code/z_actor/Actor_OnScreen.s,Actor_OnScreen,0x800B8934,0x31
 asm/non_matchings/code/z_actor/Actor_HasParent.s,Actor_HasParent,0x800B89F8,0x9
-asm/non_matchings/code/z_actor/Actor_PickUp.s,Actor_PickUp,0x800B8A1C,0x5A
-asm/non_matchings/code/z_actor/Actor_PickUpNearby.s,Actor_PickUpNearby,0x800B8B84,0xB
-asm/non_matchings/code/z_actor/Actor_LiftActor.s,Actor_LiftActor,0x800B8BB0,0x8
-asm/non_matchings/code/z_actor/Actor_PickUpFar.s,Actor_PickUpFar,0x800B8BD0,0xB
+asm/non_matchings/code/z_actor/Actor_OfferGetItem.s,Actor_OfferGetItem,0x800B8A1C,0x5A
+asm/non_matchings/code/z_actor/Actor_OfferGetItemNearby.s,Actor_OfferGetItemNearby,0x800B8B84,0xB
+asm/non_matchings/code/z_actor/Actor_OfferCarry.s,Actor_OfferCarry,0x800B8BB0,0x8
+asm/non_matchings/code/z_actor/Actor_OfferGetItemFar.s,Actor_OfferGetItemFar,0x800B8BD0,0xB
 asm/non_matchings/code/z_actor/Actor_HasNoParent.s,Actor_HasNoParent,0x800B8BFC,0x9
 asm/non_matchings/code/z_actor/func_800B8C20.s,func_800B8C20,0x800B8C20,0xC
-asm/non_matchings/code/z_actor/func_800B8C50.s,func_800B8C50,0x800B8C50,0xA
+asm/non_matchings/code/z_actor/Actor_SetClosestSecretDistance.s,Actor_SetClosestSecretDistance,0x800B8C50,0xA
 asm/non_matchings/code/z_actor/Actor_HasRider.s,Actor_HasRider,0x800B8C78,0x9
 asm/non_matchings/code/z_actor/Actor_SetRideActor.s,Actor_SetRideActor,0x800B8C9C,0x14
 asm/non_matchings/code/z_actor/Actor_HasNoRider.s,Actor_HasNoRider,0x800B8CEC,0x9
@@ -326,7 +326,7 @@ asm/non_matchings/code/z_actor/func_800B9084.s,func_800B9084,0x800B9084,0x5
 asm/non_matchings/code/z_actor/func_800B9098.s,func_800B9098,0x800B9098,0x5
 asm/non_matchings/code/z_actor/func_800B90AC.s,func_800B90AC,0x800B90AC,0x12
 asm/non_matchings/code/z_actor/Actor_DeactivateLens.s,Actor_DeactivateLens,0x800B90F4,0xB
-asm/non_matchings/code/z_actor/func_800B9120.s,func_800B9120,0x800B9120,0x14
+asm/non_matchings/code/z_actor/Actor_InitHalfDaysBit.s,Actor_InitHalfDaysBit,0x800B9120,0x14
 asm/non_matchings/code/z_actor/Actor_InitContext.s,Actor_InitContext,0x800B9170,0x71
 asm/non_matchings/code/z_actor/Actor_SpawnSetupActors.s,Actor_SpawnSetupActors,0x800B9334,0x56
 asm/non_matchings/code/z_actor/Actor_UpdateActor.s,Actor_UpdateActor,0x800B948C,0xBD
@@ -340,9 +340,9 @@ asm/non_matchings/code/z_actor/Actor_DrawLensActors.s,Actor_DrawLensActors,0x800
 asm/non_matchings/code/z_actor/func_800BA2D8.s,func_800BA2D8,0x800BA2D8,0x9
 asm/non_matchings/code/z_actor/func_800BA2FC.s,func_800BA2FC,0x800BA2FC,0x4C
 asm/non_matchings/code/z_actor/Actor_DrawAll.s,Actor_DrawAll,0x800BA42C,0xB4
-asm/non_matchings/code/z_actor/func_800BA6FC.s,func_800BA6FC,0x800BA6FC,0x27
+asm/non_matchings/code/z_actor/Actor_KillAllWithMissingObject.s,Actor_KillAllWithMissingObject,0x800BA6FC,0x27
 asm/non_matchings/code/z_actor/func_800BA798.s,func_800BA798,0x800BA798,0x48
-asm/non_matchings/code/z_actor/func_800BA8B8.s,func_800BA8B8,0x800BA8B8,0x3F
+asm/non_matchings/code/z_actor/Actor_KillAllOnHalfDayChange.s,Actor_KillAllOnHalfDayChange,0x800BA8B8,0x3F
 asm/non_matchings/code/z_actor/Actor_CleanupContext.s,Actor_CleanupContext,0x800BA9B4,0x40
 asm/non_matchings/code/z_actor/Actor_AddToCategory.s,Actor_AddToCategory,0x800BAAB4,0x1C
 asm/non_matchings/code/z_actor/Actor_RemoveFromCategory.s,Actor_RemoveFromCategory,0x800BAB24,0x36
@@ -365,7 +365,7 @@ asm/non_matchings/code/z_actor/Actor_SpawnBodyParts.s,Actor_SpawnBodyParts,0x800
 asm/non_matchings/code/z_actor/Actor_SpawnFloorDustRing.s,Actor_SpawnFloorDustRing,0x800BBDAC,0x81
 asm/non_matchings/code/z_actor/func_800BBFB0.s,func_800BBFB0,0x800BBFB0,0x69
 asm/non_matchings/code/z_actor/func_800BC154.s,func_800BC154,0x800BC154,0xD
-asm/non_matchings/code/z_actor/func_800BC188.s,func_800BC188,0x800BC188,0xB
+asm/non_matchings/code/z_actor/Actor_GetArrowDmgFlags.s,Actor_GetArrowDmgFlags,0x800BC188,0xB
 asm/non_matchings/code/z_actor/func_800BC1B4.s,func_800BC1B4,0x800BC1B4,0x2F
 asm/non_matchings/code/z_actor/func_800BC270.s,func_800BC270,0x800BC270,0x75
 asm/non_matchings/code/z_actor/func_800BC444.s,func_800BC444,0x800BC444,0x2A
@@ -1033,7 +1033,7 @@ asm/non_matchings/code/code_800E8EA0/Actor_TrackPoint.s,Actor_TrackPoint,0x800E8
 asm/non_matchings/code/code_800E8EA0/Actor_TrackPlayerSetFocusHeight.s,Actor_TrackPlayerSetFocusHeight,0x800E9138,0x46
 asm/non_matchings/code/code_800E8EA0/Actor_TrackPlayer.s,Actor_TrackPlayer,0x800E9250,0x44
 asm/non_matchings/code/z_common_data/func_800E9360.s,func_800E9360,0x800E9360,0x20
-asm/non_matchings/code/z_debug/GameInfo_Init.s,GameInfo_Init,0x800E93E0,0x24
+asm/non_matchings/code/z_debug/Regs_Init.s,Regs_Init,0x800E93E0,0x24
 asm/non_matchings/code/z_debug_display/DebugDisplay_Init.s,DebugDisplay_Init,0x800E9470,0x6
 asm/non_matchings/code/z_debug_display/DebugDisplay_AddObject.s,DebugDisplay_AddObject,0x800E9488,0x37
 asm/non_matchings/code/z_debug_display/DebugDisplay_DrawObjects.s,DebugDisplay_DrawObjects,0x800E9564,0x24

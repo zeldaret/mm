@@ -2186,7 +2186,7 @@ void func_80B47830(EnInvadepoh* this) {
     this->collider.base.acFlags &= ~AC_ON;
     this->collider.base.ocFlags1 |= OC1_ON;
     Animation_PlayLoop(&this->skelAnime, &gAlienJerkingAnim);
-    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 16);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 16);
     this->alienAlpha = 255;
     this->actor.draw = func_80B4DB14;
     this->drawAlien = true;
@@ -3438,7 +3438,7 @@ void func_80B4AEDC(EnInvadepoh* this, PlayState* play) {
         SET_WEEKEVENTREG(WEEKEVENTREG_22_02);
         func_80B4AF80(this);
     } else {
-        Actor_PickUp(&this->actor, play, GI_MILK_BOTTLE, 2000.0f, 2000.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_MILK_BOTTLE, 2000.0f, 2000.0f);
     }
 }
 

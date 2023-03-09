@@ -883,7 +883,7 @@ void func_80B94E34(EnZog* this, PlayState* play) {
     }
 
     if (ABS_ALT(this->actor.yawTowardsPlayer - this->actor.world.rot.y) > 0x5000) {
-        Actor_PickUp(&this->actor, play, GI_NONE, 60.0f, 40.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_NONE, 60.0f, 40.0f);
     }
 
     if (this->unk_324 > 0) {

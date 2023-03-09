@@ -172,7 +172,7 @@ void func_80965DB4(EnMm* this, PlayState* play) {
 
                 Actor_PlaySfx(&this->actor, NA_SE_EV_HUMAN_BOUND);
             } else {
-                Actor_PickUp(&this->actor, play, GI_NONE, 50.0f, 30.0f);
+                Actor_OfferGetItem(&this->actor, play, GI_NONE, 50.0f, 30.0f);
             }
         }
 

@@ -178,7 +178,7 @@ void func_80A68A78(EnMushi2* this, PlayState* play) {
         Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ACTOR_EN_MUSHI2, this->actor.world.pos.x,
                                       this->actor.world.pos.y, this->actor.world.pos.z, this->actor.shape.rot.x,
                                       this->actor.shape.rot.y + (D_80A6B998 + i)->unk_02, this->actor.shape.rot.z,
-                                      (D_80A6B998 + i)->unk_00, this->actor.cutscene, this->actor.unk20, NULL);
+                                      (D_80A6B998 + i)->unk_00, this->actor.cutscene, this->actor.halfDaysBits, NULL);
     }
 }
 
@@ -1226,7 +1226,7 @@ void EnMushi2_Update(Actor* thisx, PlayState* play) {
         }
 
         if ((this->unk_30C & 1) && func_80A68DD4(this, play)) {
-            Actor_PickUp(&this->actor, play, GI_MAX, 60.0f, 30.0f);
+            Actor_OfferGetItem(&this->actor, play, GI_MAX, 60.0f, 30.0f);
         }
     }
 }

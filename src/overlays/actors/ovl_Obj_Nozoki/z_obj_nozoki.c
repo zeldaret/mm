@@ -4,6 +4,7 @@
  * Description: Sakon's Hideout Objects (Sun's Mask, doors, etc)
  */
 
+#include "prevent_bss_reordering.h"
 #include "z_obj_nozoki.h"
 #include "objects/object_secom_obj/object_secom_obj.h"
 
