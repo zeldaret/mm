@@ -386,9 +386,9 @@ void func_80C14554(EnJgameTsn* this, PlayState* play) {
         }
         func_80C145FC(this);
     } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_82_10)) {
-        Actor_PickUp(&this->actor, play, GI_RUPEE_PURPLE, 500.0f, 100.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_RUPEE_PURPLE, 500.0f, 100.0f);
     } else {
-        Actor_PickUp(&this->actor, play, GI_HEART_PIECE, 500.0f, 100.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_HEART_PIECE, 500.0f, 100.0f);
     }
 }
 
@@ -402,7 +402,7 @@ void func_80C14610(EnJgameTsn* this, PlayState* play) {
         this->unk_300 = 0x10A4;
         func_80C14030(this);
     } else {
-        func_800B85E0(&this->actor, play, 200.0f, -1);
+        func_800B85E0(&this->actor, play, 200.0f, PLAYER_IA_MINUS1);
     }
 }
 

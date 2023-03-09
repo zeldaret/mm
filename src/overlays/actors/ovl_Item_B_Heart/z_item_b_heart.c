@@ -72,7 +72,7 @@ void ItemBHeart_Update(Actor* thisx, PlayState* play) {
             return;
         }
 
-        Actor_PickUp(&this->actor, play, GI_HEART_CONTAINER, 30.0f, 80.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_HEART_CONTAINER, 30.0f, 80.0f);
     }
 }
 

@@ -363,7 +363,7 @@ void EnBjt_Talk(EnBjt* this, PlayState* play) {
     s16 yaw = this->actor.yawTowardsPlayer;
 
     if (func_8010BF58(&this->actor, play, sMsgEventScript, this->msgEventCallback, &this->msgEventArg4)) {
-        this->actor.flags &= ~ACTOR_FLAG_100;
+        this->actor.flags &= ~ACTOR_FLAG_TALK_REQUESTED;
         SubS_UpdateFlags(&this->stateFlags, 3, 7);
         this->stateFlags &= ~TOILET_HAND_STATE_TALKING;
         this->msgEventArg4 = 0;
@@ -406,7 +406,7 @@ void EnBjt_FollowSchedule(EnBjt* this, PlayState* play) {
         }
         this->scheduleResult = scheduleOutput.result;
     } else {
-        this->actor.flags |= ACTOR_FLAG_8000000;
+        this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
         Actor_SetScale(&this->actor, 0.0f);
         this->stateFlags = 0;
         this->msgEventCallback = NULL;
@@ -426,7 +426,7 @@ void EnBjt_Init(Actor* thisx, PlayState* play) {
 
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &sColChkInfoInit);
-    this->actor.flags |= ACTOR_FLAG_8000000;
+    this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
     Actor_SetScale(&this->actor, 0.0f);
 
     this->scheduleResult = TOILET_HAND_SCH_NONE;

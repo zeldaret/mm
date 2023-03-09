@@ -300,7 +300,7 @@ void func_80AE0460(EnTsn* this, PlayState* play) {
         ENTSN_SET_Z(&this->unk_1D8->actor, false);
         this->actionFunc = func_80AE0418;
     } else {
-        Actor_PickUp(&this->actor, play, GI_SEAHORSE_CAUGHT, 2000.0f, 1000.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_SEAHORSE_CAUGHT, 2000.0f, 1000.0f);
     }
 }
 
@@ -434,7 +434,7 @@ void func_80AE0704(EnTsn* this, PlayState* play) {
                             this->unk_220 &= ~2;
                             this->actor.focus.pos = this->actor.world.pos;
                             ActorCutscene_Stop(this->actor.cutscene);
-                            this->actor.flags &= ~ACTOR_FLAG_100;
+                            this->actor.flags &= ~ACTOR_FLAG_TALK_REQUESTED;
                             REMOVE_QUEST_ITEM(QUEST_PICTOGRAPH);
                         } else {
                             func_80151938(play, 0x10A8);
@@ -458,7 +458,7 @@ void func_80AE0704(EnTsn* this, PlayState* play) {
                     case 0x10A8:
                         Animation_MorphToLoop(&this->unk_1D8->skelAnime, &object_tsn_Anim_0092FC, -10.0f);
                         func_80AE0698(this, play);
-                        this->actor.flags &= ~ACTOR_FLAG_100;
+                        this->actor.flags &= ~ACTOR_FLAG_TALK_REQUESTED;
                         this->actionFunc = func_80AE04C4;
                         break;
 
@@ -498,7 +498,7 @@ void func_80AE0704(EnTsn* this, PlayState* play) {
 
                     case 0x10A9:
                         func_80AE0698(this, play);
-                        this->actor.flags &= ~ACTOR_FLAG_100;
+                        this->actor.flags &= ~ACTOR_FLAG_TALK_REQUESTED;
                         this->actionFunc = func_80AE04C4;
                         break;
                 }

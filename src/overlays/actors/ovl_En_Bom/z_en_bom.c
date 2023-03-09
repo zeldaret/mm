@@ -291,7 +291,7 @@ void func_80871058(EnBom* this, PlayState* play) {
                 this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND;
             }
         } else if (this->timer >= 4) {
-            Actor_LiftActor(&this->actor, play);
+            Actor_OfferCarry(&this->actor, play);
         }
     }
 

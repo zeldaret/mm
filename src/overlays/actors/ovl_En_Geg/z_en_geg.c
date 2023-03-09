@@ -804,7 +804,7 @@ void func_80BB31B8(EnGeg* this, PlayState* play) {
         }
         this->actionFunc = func_80BB32AC;
     } else {
-        Actor_PickUp(&this->actor, play, getItemId, 300.0f, 300.0f);
+        Actor_OfferGetItem(&this->actor, play, getItemId, 300.0f, 300.0f);
     }
 }
 
@@ -813,7 +813,7 @@ void func_80BB32AC(EnGeg* this, PlayState* play) {
         Message_StartTextbox(play, this->unk_496, &this->actor);
         this->actionFunc = func_80BB27D4;
     } else {
-        func_800B85E0(&this->actor, play, 400.0f, -1);
+        func_800B85E0(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
     }
 }
 

@@ -1562,11 +1562,12 @@ void EnSuttari_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
 void EnSuttari_Draw(Actor* thisx, PlayState* play) {
     EnSuttari* this = THIS;
     s32 pad;
-    Vec3f sp5C;
-    Vec3f sp50;
+    Vec3f pos;
+    Vec3f scale;
 
     if (this->flags1 & 0x80) {
         OPEN_DISPS(play->state.gfxCtx);
+
         func_8012C28C(play->state.gfxCtx);
         gSPSegment(POLY_OPA_DISP++, 0x08, Gfx_EnvColor(play->state.gfxCtx, 255, 255, 255, 0));
         gSPSegment(POLY_OPA_DISP++, 0x09, Gfx_EnvColor(play->state.gfxCtx, 55, 55, 255, 0));
@@ -1576,12 +1577,13 @@ void EnSuttari_Draw(Actor* thisx, PlayState* play) {
                                        EnSuttari_TransformLimbDraw, &this->actor);
         if (this->flags1 & 0x80) {
             func_8012C2DC(play->state.gfxCtx);
-            sp5C = this->actor.world.pos;
-            sp50.x = 0.2f;
-            sp50.y = 0.2f;
-            sp50.z = 0.2f;
-            func_800BC620(&sp5C, &sp50, 0xFF, play);
+            pos = this->actor.world.pos;
+            scale.x = 0.2f;
+            scale.y = 0.2f;
+            scale.z = 0.2f;
+            func_800BC620(&pos, &scale, 255, play);
         }
+
         CLOSE_DISPS(play->state.gfxCtx);
     }
 }

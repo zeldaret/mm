@@ -166,9 +166,9 @@ void func_80953098(EnHs* this, PlayState* play) {
     } else {
         this->stateFlags |= 8;
         if (INV_CONTENT(ITEM_MASK_BUNNY) == ITEM_MASK_BUNNY) {
-            Actor_PickUp(&this->actor, play, GI_RUPEE_RED, 10000.0f, 50.0f);
+            Actor_OfferGetItem(&this->actor, play, GI_RUPEE_RED, 10000.0f, 50.0f);
         } else {
-            Actor_PickUp(&this->actor, play, GI_MASK_BUNNY, 10000.0f, 50.0f);
+            Actor_OfferGetItem(&this->actor, play, GI_MASK_BUNNY, 10000.0f, 50.0f);
         }
     }
 }

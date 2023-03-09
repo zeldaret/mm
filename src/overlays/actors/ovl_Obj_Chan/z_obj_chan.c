@@ -176,9 +176,10 @@ void ObjChan_InitChandelier(ObjChan* this2, PlayState* play) {
     for (i = 0; i < 5; i++) {
         ObjChan_CalculatePotPosition(&childPos, &childRot, &this->actor.world.pos, &this->actor.shape.rot,
                                      (s32)(i * 360.0f / 5.0f * (65536.0f / 360.0f)) + this->rotation);
-        temp_v0 = (ObjChan*)Actor_SpawnAsChildAndCutscene(
-            &play->actorCtx, play, ACTOR_OBJ_CHAN, childPos.x, childPos.y, childPos.z, childRot.x, childRot.y,
-            childRot.z, (this->actor.params & 0xFFF) | 0x1000, this->actor.cutscene, this->actor.unk20, &this->actor);
+        temp_v0 = (ObjChan*)Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ACTOR_OBJ_CHAN, childPos.x, childPos.y,
+                                                          childPos.z, childRot.x, childRot.y, childRot.z,
+                                                          (this->actor.params & 0xFFF) | 0x1000, this->actor.cutscene,
+                                                          this->actor.halfDaysBits, &this->actor);
         if (temp_v0 != NULL) {
             this->pots[i] = temp_v0;
             temp_v0->myPotIndex = i;
@@ -314,7 +315,7 @@ void ObjChan_PotAction(ObjChan* this, PlayState* play) {
                 SET_WEEKEVENTREG(WEEKEVENTREG_37_10);
                 Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ACTOR_EN_MM, this->actor.world.pos.x,
                                               this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, 0x8000,
-                                              this->actor.cutscene, this->actor.unk20, NULL);
+                                              this->actor.cutscene, this->actor.halfDaysBits, NULL);
             }
         }
         Actor_Kill(&this->actor);

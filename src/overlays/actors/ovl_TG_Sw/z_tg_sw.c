@@ -5,6 +5,7 @@
  */
 
 #include "z_tg_sw.h"
+#include "z64debug_display.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -36,14 +37,14 @@ void TGSw_ActionDecider(TGSw* this, PlayState* play) {
     u8 unk1F4;
 
     // Maybe actorCtx Debug Flag?
-    if (play->actorCtx.unk1F5 != 0) {
+    if (play->actorCtx.unk_1F4.timer != 0) {
         scaledAbsoluteRotY = ABS_ALT(this->actor.world.rot.y) * 4.0f;
         scaledAbsoluteRotZ = ABS_ALT(this->actor.world.rot.z) * 4.0f;
 
         if ((scaledAbsoluteRotZ < this->actor.xzDistToPlayer) || (scaledAbsoluteRotY < this->actor.playerHeightRel)) {
             return;
         }
-        unk1F4 = play->actorCtx.unk1F4;
+        unk1F4 = play->actorCtx.unk_1F4.unk_00;
         if (unk1F4 == 2 || unk1F4 == 0) {
             this->actionFunc = TGSw_ActionExecuteOneShot;
         }

@@ -331,7 +331,7 @@ void EnSb_UpdateDamage(EnSb* this, PlayState* play) {
             hitPlayer = 0;
             if (this->vulnerableTimer != 0) {
                 Actor_ApplyDamage(&this->actor);
-                Actor_SetColorFilter(&this->actor, 0x4000, 0xFF, 0x2000, 80);
+                Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_XLU, 80);
                 hitPlayer = 1;
             }
         }

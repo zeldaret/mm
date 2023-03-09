@@ -284,7 +284,7 @@ void EnKaizoku_Init(Actor* thisx, PlayState* play) {
     blureInit.calcMode = 2;
     Effect_Add(play, &this->blureIndex, EFFECT_BLURE1, 0, 0, &blureInit);
     Actor_SetScale(&this->picto.actor, 0.0125f);
-    this->picto.actor.flags |= ACTOR_FLAG_8000000;
+    this->picto.actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
     this->picto.actor.flags &= ~ACTOR_FLAG_1;
     if (this->switchFlag == 127) {
         this->switchFlag = -1;
@@ -613,7 +613,7 @@ void func_80B85FA8(EnKaizoku* this, PlayState* play) {
                 this->unk_59C = 0;
                 this->subCamId = 0;
                 this->picto.actor.flags &= ~ACTOR_FLAG_100000;
-                this->picto.actor.flags &= ~ACTOR_FLAG_8000000;
+                this->picto.actor.flags &= ~ACTOR_FLAG_CANT_LOCK_ON;
                 this->picto.actor.flags |= ACTOR_FLAG_1;
                 func_80B872A4(this);
             }
@@ -1681,7 +1681,7 @@ void func_80B8960C(EnKaizoku* this, PlayState* play) {
     func_800B7298(play, &this->picto.actor, 0x7B);
     Enemy_StartFinishingBlow(play, &this->picto.actor);
     Actor_PlaySfx(&this->picto.actor, NA_SE_EN_PIRATE_DEAD);
-    this->picto.actor.flags |= ACTOR_FLAG_8000000;
+    this->picto.actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
     this->picto.actor.flags &= ~ACTOR_FLAG_1;
     this->picto.actor.flags &= ~ACTOR_FLAG_400;
     this->unk_598 = 0;
@@ -1836,7 +1836,8 @@ void func_80B89A08(EnKaizoku* this, PlayState* play) {
                 if (((this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_SFX) &&
                      (this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX)) ||
                     this->unk_2B8 == 0) {
-                    Actor_SetColorFilter(&this->picto.actor, 0, 120, 0, 40);
+                    Actor_SetColorFilter(&this->picto.actor, COLORFILTER_COLORFLAG_BLUE, 120, COLORFILTER_BUFFLAG_OPA,
+                                         40);
                     this->bodyCollider.info.elemType = ELEMTYPE_UNK1;
                     this->bodyCollider.base.colType = COLTYPE_HIT3;
                     this->swordCollider.info.elemType = ELEMTYPE_UNK2;
@@ -1908,7 +1909,7 @@ void func_80B89A08(EnKaizoku* this, PlayState* play) {
         }
 
         if (sp64) {
-            Actor_SetColorFilter(&this->picto.actor, 0x4000, 255, 0, 8);
+            Actor_SetColorFilter(&this->picto.actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 8);
             Actor_ApplyDamage(&this->picto.actor);
             if (this->picto.actor.colChkInfo.health <= 0) {
                 func_80B8960C(this, play);

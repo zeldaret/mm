@@ -700,7 +700,7 @@ void func_8088DD34(EnElf* this, PlayState* play) {
     }
 
     if (this->fairyFlags & 0x2000) {
-        Actor_PickUp(&this->actor, play, GI_MAX, 80.0f, 60.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_MAX, 80.0f, 60.0f);
     }
 }
 
@@ -1482,7 +1482,7 @@ void func_8089010C(Actor* thisx, PlayState* play) {
         thisx->update = func_8088FE64;
         func_8088C51C(this, 3);
         if (this->elfMsg != NULL) {
-            this->elfMsg->flags |= ACTOR_FLAG_100;
+            this->elfMsg->flags |= ACTOR_FLAG_TALK_REQUESTED;
             thisx->cutscene = this->elfMsg->cutscene;
             if (thisx->cutscene != -1) {
                 func_8088FD04(this);

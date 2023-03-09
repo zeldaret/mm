@@ -279,7 +279,7 @@ void ObjToge_Update(Actor* thisx, PlayState* play) {
     if (this->collider.base.acFlags & AC_HIT) {
         if (this->collider.info.acHitInfo->toucher.dmgFlags & 0x1000) {
             func_809A43A8(this, play);
-            Actor_SetColorFilter(&this->actor, 0, 250, 0, 250);
+            Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 250, COLORFILTER_BUFFLAG_OPA, 250);
         }
         collider->base.acFlags &= ~AC_HIT;
     }

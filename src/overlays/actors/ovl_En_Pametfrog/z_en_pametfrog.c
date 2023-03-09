@@ -403,7 +403,7 @@ void EnPametfrog_ApplyMagicArrowEffects(EnPametfrog* this, PlayState* play) {
 void EnPametfrog_ApplyElectricStun(EnPametfrog* this) {
     this->freezeTimer = 40;
     Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_FREEZE);
-    Actor_SetColorFilter(&this->actor, 0, 255, 0, 40);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 255, COLORFILTER_BUFFLAG_OPA, 40);
     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_SMALL;
     this->drawDmgEffScale = 0.75f;
     this->drawDmgEffAlpha = 2.0f;
@@ -412,7 +412,7 @@ void EnPametfrog_ApplyElectricStun(EnPametfrog* this) {
 void EnPametfrog_ApplyStun(EnPametfrog* this) {
     this->freezeTimer = 40;
     Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_FREEZE);
-    Actor_SetColorFilter(&this->actor, 0, 255, 0, 40);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 255, COLORFILTER_BUFFLAG_OPA, 40);
 }
 
 void EnPametfrog_SetupRearOnSnapper(EnPametfrog* this) {
@@ -822,7 +822,7 @@ void EnPametfrog_SetupFallInAir(EnPametfrog* this, PlayState* play) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_FROG_DAMAGE);
     }
 
-    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 16);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 16);
     yaw = Actor_WorldYawTowardPoint(&this->actor, &this->actor.home.pos);
     this->actor.world.pos.x += 30.0f * Math_SinS(yaw);
     this->actor.world.pos.z += 30.0f * Math_CosS(yaw);
@@ -1117,7 +1117,7 @@ void EnPametfrog_SetupDamage(EnPametfrog* this) {
     this->collider.base.acFlags &= ~AC_ON;
     this->actor.speed = 10.0f;
     Actor_PlaySfx(&this->actor, NA_SE_EN_FROG_DAMAGE);
-    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 20);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 20);
     func_800BE5CC(&this->actor, &this->collider, 0);
     this->actor.shape.rot.y = BINANG_ROT180(this->actor.world.rot.y);
     this->actionFunc = EnPametfrog_Damage;
@@ -1287,7 +1287,7 @@ void EnPametfrog_ApplyDamageEffect(EnPametfrog* this, PlayState* play) {
                 } else if (this->actor.colChkInfo.damageEffect == GEKKO_DMGEFF_ICE) {
                     EnPametfrog_Freeze(this);
                     this->freezeTimer = 80;
-                    Actor_SetColorFilter(&this->actor, 0x4000, 0xFF, 0, 0x50);
+                    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 80);
                     EnPametfrog_SetupStun(this);
                 } else {
                     EnPametfrog_Thaw(this, play);

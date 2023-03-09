@@ -4,6 +4,7 @@
  * Description: Trees, shrubs
  */
 
+#include "prevent_bss_reordering.h"
 #include "z_en_wood02.h"
 #include "objects/object_wood02/object_wood02.h"
 
@@ -35,8 +36,8 @@ typedef enum {
     /* 5 */ WOOD_DRAW_LEAF_YELLOW
 } WoodDrawType;
 
-static f32 sSpawnCos;
-static f32 sSpawnSin;
+f32 sWood02SpawnCos;
+f32 sWood02SpawnSin;
 
 ActorInit En_Wood02_InitVars = {
     /**/ ACTOR_EN_WOOD02,
@@ -70,9 +71,9 @@ static ColliderCylinderInit sCylinderInit = {
     { 18, 60, 0, { 0, 0, 0 } },
 };
 
-static f32 sSpawnDistance[] = { 707.0f, 525.0f, 510.0f, 500.0f, 566.0f, 141.0f };
+f32 sWood02SpawnDistance[] = { 707.0f, 525.0f, 510.0f, 500.0f, 566.0f, 141.0f };
 
-static s16 sSpawnAngle[] = { 0x1FFF, 0x4C9E, 0x77F5, 0xA5C9, -0x293D, 0xA000 };
+s16 sWood02SpawnAngle[] = { 0x1FFF, 0x4C9E, 0x77F5, 0xA5C9, -0x293D, 0xA000 };
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_F32(targetArrowOffset, 5600, ICHAIN_STOP),
@@ -136,12 +137,12 @@ void EnWood02_SpawnOffspring(EnWood02* this, PlayState* play) {
                 extraRot = 0x4000;
             }
 
-            sSpawnCos = Math_CosS(sSpawnAngle[i] + this->actor.world.rot.y + extraRot);
-            sSpawnSin = Math_SinS(sSpawnAngle[i] + this->actor.world.rot.y + extraRot);
+            sWood02SpawnCos = Math_CosS(sWood02SpawnAngle[i] + this->actor.world.rot.y + extraRot);
+            sWood02SpawnSin = Math_SinS(sWood02SpawnAngle[i] + this->actor.world.rot.y + extraRot);
 
-            childPos.x = (sSpawnDistance[i] * sSpawnSin) + this->actor.home.pos.x;
+            childPos.x = (sWood02SpawnDistance[i] * sWood02SpawnSin) + this->actor.home.pos.x;
             childPos.y = this->actor.home.pos.y;
-            childPos.z = (sSpawnDistance[i] * sSpawnCos) + this->actor.home.pos.z;
+            childPos.z = (sWood02SpawnDistance[i] * sWood02SpawnCos) + this->actor.home.pos.z;
 
             if (EnWood02_SpawnZoneCheck(this, play, &childPos)) {
                 if (this->unk_14A[i] & 0x80) {
@@ -152,8 +153,8 @@ void EnWood02_SpawnOffspring(EnWood02* this, PlayState* play) {
 
                 childParams = ((this->unk_144 << 8) & 0xFF00) | (this->actor.params + 1);
                 child = (EnWood02*)Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_WOOD02, childPos.x,
-                                                      childPos.y, childPos.z, this->actor.world.rot.x, sSpawnAngle[i],
-                                                      unk, childParams);
+                                                      childPos.y, childPos.z, this->actor.world.rot.x,
+                                                      sWood02SpawnAngle[i], unk, childParams);
                 if (child != NULL) {
                     child->unk_14A[0] = i;
                     this->unk_14A[i] |= 1;
@@ -296,10 +297,10 @@ void EnWood02_Init(Actor* thisx, PlayState* play) {
 
         if (spawnType == WOOD_SPAWN_SPAWNER) {
             EnWood02_SpawnOffspring(this, play);
-            sSpawnCos = Math_CosS(sSpawnAngle[5] + this->actor.world.rot.y + extraRot);
-            sSpawnSin = Math_SinS(sSpawnAngle[5] + this->actor.world.rot.y + extraRot);
-            this->actor.world.pos.x += sSpawnSin * sSpawnDistance[5];
-            this->actor.world.pos.z += sSpawnCos * sSpawnDistance[5];
+            sWood02SpawnCos = Math_CosS(sWood02SpawnAngle[5] + this->actor.world.rot.y + extraRot);
+            sWood02SpawnSin = Math_SinS(sWood02SpawnAngle[5] + this->actor.world.rot.y + extraRot);
+            this->actor.world.pos.x += sWood02SpawnSin * sWood02SpawnDistance[5];
+            this->actor.world.pos.z += sWood02SpawnCos * sWood02SpawnDistance[5];
         } else {
             this->actor.flags |= ACTOR_FLAG_10;
             this->unk_151 = 2;

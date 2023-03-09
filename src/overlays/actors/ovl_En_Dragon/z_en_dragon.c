@@ -244,7 +244,7 @@ void EnDragon_Init(Actor* thisx, PlayState* play) {
     this->action = DEEP_PYTHON_ACTION_IDLE;
     this->actor.hintId = TATL_HINT_ID_DEEP_PYTHON;
     this->scale = 0.5f;
-    this->actor.flags &= ~ACTOR_FLAG_8000000;
+    this->actor.flags &= ~ACTOR_FLAG_CANT_LOCK_ON;
 
     EnDragon_SetupRetreatOrIdle(this);
 }
@@ -683,7 +683,7 @@ void EnDragon_Dead(EnDragon* this, PlayState* play) {
         seahorsePos.z += (Math_CosS((this->actor.parent->world.rot.y + 0x8000)) * (500.0f + BREG(38)));
         if (Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ACTOR_EN_OT, seahorsePos.x, seahorsePos.y,
                                           seahorsePos.z, 0, this->actor.shape.rot.y, 0, 0x4000, this->actor.cutscene,
-                                          this->actor.unk20, NULL)) {
+                                          this->actor.halfDaysBits, NULL)) {
             SET_WEEKEVENTREG(WEEKEVENTREG_13_01);
             switch (this->pythonIndex) {
                 case 0:
@@ -735,14 +735,14 @@ void EnDragon_UpdateDamage(EnDragon* this, PlayState* play) {
             (this->collider.elements[6].info.bumperFlags & BUMP_HIT) ||
             (this->collider.elements[7].info.bumperFlags & BUMP_HIT)) {
             Actor_ApplyDamage(&this->actor);
-            Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 25);
+            Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 25);
             if (this->actor.colChkInfo.health > 0) {
                 Actor_PlaySfx(&this->actor, NA_SE_EN_UTSUBO_DAMAGE);
                 this->action = DEEP_PYTHON_ACTION_DAMAGE;
             } else {
                 Enemy_StartFinishingBlow(play, &this->actor);
                 Actor_PlaySfx(&this->actor, NA_SE_EN_UTSUBO_DEAD);
-                this->actor.flags |= ACTOR_FLAG_8000000;
+                this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
                 this->actor.flags &= ~ACTOR_FLAG_1;
                 this->actor.flags |= ACTOR_FLAG_100000;
                 this->action = DEEP_PYTHON_ACTION_SETUP_DEAD;

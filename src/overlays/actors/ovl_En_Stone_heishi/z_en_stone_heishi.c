@@ -186,13 +186,13 @@ void func_80BC9560(EnStoneheishi* this, PlayState* play) {
     }
 
     if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_41_40) && (play->actorCtx.lensMaskSize != 100)) {
-        this->actor.flags |= ACTOR_FLAG_8000000;
+        this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
         return;
     }
 
     SkelAnime_Update(&this->skelAnime);
 
-    this->actor.flags &= ~ACTOR_FLAG_8000000;
+    this->actor.flags &= ~ACTOR_FLAG_CANT_LOCK_ON;
 
     yawDiff = ABS_ALT((s16)(this->actor.yawTowardsPlayer - this->actor.world.rot.y));
 
@@ -380,9 +380,9 @@ void EnStoneheishi_GiveItemReward(EnStoneheishi* this, PlayState* play) {
     func_801477B4(play);
 
     if (INV_CONTENT(ITEM_MASK_STONE) == ITEM_MASK_STONE) {
-        Actor_PickUp(&this->actor, play, GI_RUPEE_BLUE, 300.0f, 300.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_RUPEE_BLUE, 300.0f, 300.0f);
     } else {
-        Actor_PickUp(&this->actor, play, GI_MASK_STONE, 300.0f, 300.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_MASK_STONE, 300.0f, 300.0f);
     }
 
     this->action = EN_STONE_ACTION_4;
@@ -401,9 +401,9 @@ void func_80BC9D28(EnStoneheishi* this, PlayState* play) {
         func_800B8500(&this->actor, play, 400.0f, 400.0f, PLAYER_IA_MINUS1);
         this->actionFunc = func_80BC9E50;
     } else if (INV_CONTENT(ITEM_MASK_STONE) == ITEM_MASK_STONE) {
-        Actor_PickUp(&this->actor, play, GI_RUPEE_BLUE, 300.0f, 300.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_RUPEE_BLUE, 300.0f, 300.0f);
     } else {
-        Actor_PickUp(&this->actor, play, GI_MASK_STONE, 300.0f, 300.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_MASK_STONE, 300.0f, 300.0f);
     }
 }
 

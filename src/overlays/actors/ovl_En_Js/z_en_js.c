@@ -476,19 +476,19 @@ void func_80969400(s32 arg0) {
 void func_80969494(EnJs* this, PlayState* play) {
     func_80968A5C(this);
     func_801477B4(play);
-    this->actor.flags &= ~ACTOR_FLAG_100;
+    this->actor.flags &= ~ACTOR_FLAG_TALK_REQUESTED;
     this->actionFunc = func_80969B5C;
 }
 
 void func_809694E8(EnJs* this, PlayState* play) {
     func_801477B4(play);
-    this->actor.flags &= ~ACTOR_FLAG_100;
+    this->actor.flags &= ~ACTOR_FLAG_TALK_REQUESTED;
     this->actionFunc = func_8096A104;
 }
 
 void func_80969530(EnJs* this, PlayState* play) {
     func_801477B4(play);
-    this->actor.flags &= ~ACTOR_FLAG_100;
+    this->actor.flags &= ~ACTOR_FLAG_TALK_REQUESTED;
     this->actionFunc = func_8096A6F4;
     if ((this->actor.home.rot.y == this->actor.shape.rot.y) && (this->unk_2B8 & 0x10)) {
         Animation_Change(&this->skelAnime, &gMoonChildGettingUpAnim, -1.0f,
@@ -872,7 +872,7 @@ void func_8096A2C0(EnJs* this, PlayState* play) {
         this->actionFunc = func_8096A1E8;
         func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
     } else {
-        Actor_PickUp(&this->actor, play, GI_MASK_FIERCE_DEITY, 10000.0f, 1000.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_MASK_FIERCE_DEITY, 10000.0f, 1000.0f);
     }
 }
 

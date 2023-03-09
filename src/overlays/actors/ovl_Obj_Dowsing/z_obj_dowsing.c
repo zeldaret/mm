@@ -65,6 +65,6 @@ void ObjDowsing_Update(Actor* thisx, PlayState* play) {
     ObjDowsing* this = THIS;
 
     if (!ObjDowsing_CheckValidSpawn(this, play)) {
-        func_800B8C50(thisx, play);
+        Actor_SetClosestSecretDistance(thisx, play);
     }
 }
