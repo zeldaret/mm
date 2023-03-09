@@ -133,12 +133,15 @@
 #define NA_BGM_END_CREDITS_2 0x82           // The End/Credits II "STAFFROLL2"
 #define NA_BGM_DISABLED 0xFFFF
 
+#define SEQ_FLAG_ASYNC 0x8000
+
 typedef enum {
     /*    0 */ SEQ_PLAYER_BGM_MAIN,
     /*    1 */ SEQ_PLAYER_FANFARE,
     /*    2 */ SEQ_PLAYER_SFX,
     /*    3 */ SEQ_PLAYER_BGM_SUB,
     /*    4 */ SEQ_PLAYER_AMBIENCE,
+    /*    5 */ SEQ_PLAYER_MAX,
     /* 0xFF */ SEQ_PLAYER_INVALID = 0xFF
 } SequencePlayerId;
 
@@ -161,6 +164,14 @@ typedef enum {
 } ChannelIOPort;
 
 typedef enum {
+    /* 0 */ VOL_SCALE_INDEX_BGM_MAIN,
+    /* 1 */ VOL_SCALE_INDEX_FANFARE,
+    /* 2 */ VOL_SCALE_INDEX_SFX,
+    /* 3 */ VOL_SCALE_INDEX_BGM_SUB,
+    /* 4 */ VOL_SCALE_INDEX_MAX
+} VolumeScaleIndex; // May be worth using SequencePlayerId instead
+
+typedef enum {
     /* 0x0 */ AMBIENCE_CHANNEL_STREAM_0,
     /* 0x1 */ AMBIENCE_CHANNEL_CRITTER_0,
     /* 0x2 */ AMBIENCE_CHANNEL_CRITTER_1,
@@ -174,7 +185,7 @@ typedef enum {
     /* 0xD */ AMBIENCE_CHANNEL_SOUND_MODE,
     /* 0xE */ AMBIENCE_CHANNEL_RAIN,
     /* 0xF */ AMBIENCE_CHANNEL_LIGHTNING
-} AmbienceChannelIndex; // playerIndex = SEQ_PLAYER_AMBIENCE
+} AmbienceChannelIndex; // seqPlayerIndex = SEQ_PLAYER_AMBIENCE
 
 typedef enum {
     /* 0x00 */ AMBIENCE_ID_00,
@@ -198,7 +209,7 @@ typedef enum {
     /* 0x12 */ AMBIENCE_ID_12,
     /* 0x13 */ AMBIENCE_ID_13,
     /* 0xFF */ AMBIENCE_ID_DISABLED = 0xFF
-} AmbienceId; // playerIndex = SEQ_PLAYER_AMBIENCE
+} AmbienceId; // seqPlayerIndex = SEQ_PLAYER_AMBIENCE
 
 typedef enum {
     /* 0x00 */ AMBIENCE_STREAM_0,

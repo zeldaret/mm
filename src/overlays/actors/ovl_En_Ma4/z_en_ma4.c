@@ -730,8 +730,8 @@ void EnMa4_HorsebackGameWait(EnMa4* this, PlayState* play) {
 void EnMa4_SetupHorsebackGameEnd(EnMa4* this, PlayState* play) {
     CLEAR_WEEKEVENTREG(WEEKEVENTREG_08_01);
     this->actionFunc = EnMa4_HorsebackGameEnd;
-    Audio_QueueSeqCmd(NA_BGM_STOP);
-    Audio_QueueSeqCmd(NA_BGM_HORSE_GOAL | 0x8000);
+    SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 0);
+    SEQCMD_PLAY_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 0, NA_BGM_HORSE_GOAL | SEQ_FLAG_ASYNC);
 }
 
 void EnMa4_HorsebackGameEnd(EnMa4* this, PlayState* play) {

@@ -623,7 +623,6 @@ beginseg
     include "build/src/audio/sfx_params.o"
     include "build/src/audio/sfx.o"
     include "build/src/audio/sequence.o"
-    include "build/data/code/sequence.data.o"
     include "build/data/code/sequence.bss.o"
     include "build/src/audio/session_config.o"
     include "build/src/code/jpegutils.o"

@@ -538,7 +538,7 @@ void func_80962660(EnFu* this, PlayState* play) {
                 player->stateFlags1 |= PLAYER_STATE1_20;
                 this->unk_53C = 0;
                 Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 3);
-                func_801A2BB8(NA_BGM_TIMED_MINI_GAME);
+                Audio_PlaySubBgm(NA_BGM_TIMED_MINI_GAME);
                 if (this->unk_542 == 0) {
                     if (this->unk_546 == 1) {
                         func_80961EC8(play);
@@ -789,14 +789,14 @@ void func_80962F4C(EnFu* this, PlayState* play) {
                 Message_StartTextbox(play, 0x2888, &this->actor);
                 this->unk_552 = 0x2888;
             }
-            func_801A2C20();
+            Audio_StopSubBgm();
             gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2] = SECONDS_TO_TIMER(0);
             gSaveContext.timerStates[TIMER_ID_MINIGAME_2] = TIMER_STATE_STOP;
             this->unk_548 = 0;
             func_809632D0(this);
         } else {
             this->unk_548 = 0;
-            func_801A2C20();
+            Audio_StopSubBgm();
             gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2] = SECONDS_TO_TIMER(0);
             gSaveContext.timerStates[TIMER_ID_MINIGAME_2] = TIMER_STATE_STOP;
             Audio_PlayFanfare(NA_BGM_GET_ITEM | 0x900);

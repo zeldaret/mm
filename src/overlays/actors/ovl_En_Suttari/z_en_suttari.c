@@ -1173,7 +1173,7 @@ void func_80BAD230(EnSuttari* this, PlayState* play) {
         this->textId = 0x2A31;
         Message_StartTextbox(play, this->textId, &this->actor);
         this->flags1 |= 0x4000;
-        Audio_QueueSeqCmd(NA_BGM_CHASE | 0x8000);
+        SEQCMD_PLAY_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 0, NA_BGM_CHASE | SEQ_FLAG_ASYNC);
         this->actionFunc = func_80BAD380;
     } else {
         ActorCutscene_SetIntentToPlay(this->cutscenes[1]);
@@ -1234,7 +1234,7 @@ void func_80BAD380(EnSuttari* this, PlayState* play) {
                 SET_WEEKEVENTREG(WEEKEVENTREG_33_08);
             }
             this->actor.speed = 0.0f;
-            Audio_QueueSeqCmd(0x101400FF);
+            SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 20);
             this->flags2 |= 4;
             EnSuttari_TriggerTransition(play, ENTRANCE(NORTH_CLOCK_TOWN, 7));
         } else {
@@ -1465,7 +1465,7 @@ void EnSuttari_Destroy(Actor* thisx, PlayState* play) {
     EnSuttari* this = THIS;
 
     if ((play->sceneId == SCENE_BACKTOWN) && !(this->flags2 & 4)) {
-        Audio_QueueSeqCmd(0x101400FF);
+        SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 20);
     }
     Collider_DestroyCylinder(play, &this->collider);
 }

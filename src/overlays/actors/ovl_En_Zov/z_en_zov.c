@@ -429,7 +429,7 @@ void func_80BD1DB8(EnZov* this, PlayState* play) {
                 SET_WEEKEVENTREG(WEEKEVENTREG_78_01);
                 this->actionFunc = func_80BD1D94;
                 play->msgCtx.msgLength = 0;
-                Audio_QueueSeqCmd(0x101400FF);
+                SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 20);
                 break;
 
             default:

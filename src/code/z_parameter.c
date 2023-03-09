@@ -4324,7 +4324,7 @@ void Interface_DrawPerfectLetters(PlayState* play) {
 
 void Interface_StartMoonCrash(PlayState* play) {
     if (play->actorCtx.flags & ACTORCTX_FLAG_1) {
-        Audio_QueueSeqCmd(0xE0000100);
+        SEQCMD_DISABLE_PLAY_SEQUENCES(false);
     }
 
     gSaveContext.save.day = 4;
