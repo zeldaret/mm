@@ -5,6 +5,8 @@
 #define REGS_H
 
 #include "ultra64.h"
+#include "unk.h"
+
 
 #define REG_GROUPS 29 // number of REG groups, i.e. REG, SREG, OREG, etc.
 #define REG_PAGES 6
