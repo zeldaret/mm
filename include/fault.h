@@ -2,6 +2,7 @@
 #define FAULT_H
 
 #include "ultra64.h"
+#include "unk.h"
 #include "libc/stdarg.h"
 #include "libc/stdint.h"
 #include "io/controller.h"
@@ -27,9 +28,8 @@
 #define FAULT_COLOR(n) "\x1A" FAULT_COLOR_EXPAND_AND_STRINGIFY(FAULT_COLOR_ ## n)
 
 
-#define NORMAL_RDRAM_END 0x80400000
-// Address at the end of normal RDRAM after which is room for a screen buffer
-#define FAULT_FB_ADDRESS (NORMAL_RDRAM_END - SCREEN_HEIGHT * SCREEN_WIDTH * sizeof(u16))
+// Address at the end of Jumper Pak
+#define FAULT_FB_ADDRESS (void*)((PHYS_TO_K0(0x400000) - SCREEN_HEIGHT * SCREEN_WIDTH * sizeof(u16)))
 
 
 typedef struct FaultClient {
@@ -46,6 +46,7 @@ typedef struct FaultAddrConvClient {
 } FaultAddrConvClient; // size = 0xC
 
 typedef void(*FaultPadCallback)(Input* input);
+
 
 // Initialization
 
