@@ -127,7 +127,7 @@ Gives the progress output that the website uses. Run for that warm glow.
 
 ### `tools/regconvert.py`
 
-Convert `mips2c`'s `gGameInfo->data[n]` output (or a raw offset) into the appropriate variable in the REG pages. Can also be run on a file to mass-convert them: run with `-h` for details.
+Convert `mips2c`'s `gRegEditor->data[n]` output (or a raw offset) into the appropriate variable in the REG pages. Can also be run on a file to mass-convert them: run with `-h` for details.
 
 ### `tools/rename_global_asm.py`
 

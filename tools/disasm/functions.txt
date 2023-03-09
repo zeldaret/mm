@@ -1519,7 +1519,7 @@
     0x800E9138:("Actor_TrackPlayerSetFocusHeight",),
     0x800E9250:("Actor_TrackPlayer",),
     0x800E9360:("SaveContext_Init",),
-    0x800E93E0:("GameInfo_Init",),
+    0x800E93E0:("Regs_Init",),
     0x800E9470:("DebugDisplay_Init",),
     0x800E9488:("DebugDisplay_AddObject",),
     0x800E9564:("DebugDisplay_DrawObjects",),
