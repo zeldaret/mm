@@ -189,7 +189,7 @@ void EnBb_Freeze(EnBb* this) {
     this->timer = 80;
     this->drawDmgEffAlpha = 1.0f;
     this->actor.flags &= ~ACTOR_FLAG_200;
-    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 80);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 80);
 }
 
 void EnBb_Thaw(EnBb* this, PlayState* play) {
@@ -416,17 +416,17 @@ void EnBb_SetupDamage(EnBb* this) {
     func_800BE568(&this->actor, &this->collider);
 
     if (this->actor.colChkInfo.damageEffect == EN_BB_DMGEFF_ZORA_MAGIC) {
-        Actor_SetColorFilter(&this->actor, 0, 255, 0, 40);
+        Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 255, COLORFILTER_BUFFLAG_OPA, 40);
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_LARGE;
         this->drawDmgEffAlpha = 2.0f;
         this->drawDmgEffScale = 0.4f;
     } else if (this->actor.colChkInfo.damageEffect == EN_BB_DMGEFF_STUN) {
-        Actor_SetColorFilter(&this->actor, 0, 255, 0, 20);
+        Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 255, COLORFILTER_BUFFLAG_OPA, 20);
         this->actor.speed = 0.0f;
     } else if (this->actor.colChkInfo.damageEffect == EN_BB_DMGEFF_HOOKSHOT) {
         this->actor.speed = 0.0f;
     } else {
-        Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 20);
+        Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 20);
         this->actor.speed = 7.0f;
     }
 

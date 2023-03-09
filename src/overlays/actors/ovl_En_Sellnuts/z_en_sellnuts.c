@@ -483,7 +483,7 @@ void func_80ADBBEC(EnSellnuts* this, PlayState* play) {
         SET_WEEKEVENTREG(WEEKEVENTREG_17_80);
         this->actionFunc = func_80ADBCE4;
     } else {
-        Actor_PickUp(&this->actor, play, GI_DEED_LAND, 300.0f, 300.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_DEED_LAND, 300.0f, 300.0f);
     }
 }
 

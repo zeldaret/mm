@@ -1245,7 +1245,7 @@ void EnSGoro_ShopGoron_Talk(EnSGoro* this, PlayState* play) {
         if ((this->textId == 0x675) || (this->textId == 0x676)) {
             play->msgCtx.msgMode = 0x43;
             play->msgCtx.stateTimer = 4;
-            Actor_PickUp(&this->actor, play, GI_POWDER_KEG, 300.0f, 300.0f);
+            Actor_OfferGetItem(&this->actor, play, GI_POWDER_KEG, 300.0f, 300.0f);
             this->actionFunc = EnSGoro_ShopGoron_TakePayment;
         } else {
             Message_StartTextbox(play, this->textId, &this->actor);
@@ -1262,7 +1262,7 @@ void EnSGoro_ShopGoron_TakePayment(EnSGoro* this, PlayState* play) {
         Rupees_ChangeBy(-this->powderKegPrice);
         this->actionFunc = EnSGoro_ShopGoron_FinishTransaction;
     } else {
-        Actor_PickUp(&this->actor, play, GI_POWDER_KEG, 300.0f, 300.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_POWDER_KEG, 300.0f, 300.0f);
     }
 }
 
@@ -1271,7 +1271,7 @@ void EnSGoro_ShopGoron_FinishTransaction(EnSGoro* this, PlayState* play) {
         Message_StartTextbox(play, this->textId, &this->actor);
         this->actionFunc = EnSGoro_ShopGoron_Talk;
     } else {
-        func_800B85E0(&this->actor, play, 400.0f, -1);
+        func_800B85E0(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
     }
 }
 
