@@ -935,9 +935,9 @@ void Fault_SetOptionsFromController3(void) {
     }
 
     if (faultCustomOptions) {
-        pc = sGraphThread.context.pc;
-        ra = sGraphThread.context.ra;
-        sp = sGraphThread.context.sp;
+        pc = gGraphThread.context.pc;
+        ra = gGraphThread.context.ra;
+        sp = gGraphThread.context.sp;
         if (CHECK_BTN_ALL(input3->cur.button, BTN_R)) {
             static u32 faultCopyToLog;
 

@@ -2459,6 +2459,7 @@ extern GfxMasterList* gGfxMasterDL;
 
 extern u32 gSegments[NUM_SEGMENTS];
 extern SchedContext gSchedContext;
+extern OSThread gGraphThread;
 
 extern u64* gAudioSPDataPtr;
 extern u32 gAudioSPDataSize;
