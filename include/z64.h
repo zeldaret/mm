@@ -119,44 +119,6 @@ typedef struct {
 } PolygonType2; // size = 0xC
 
 typedef struct {
-    /* 0x0 */ s16 x;
-    /* 0x2 */ s16 y;
-    /* 0x4 */ s16 z;
-    /* 0x6 */ s16 reserved;
-    /* 0x8 */ s16 s;
-    /* 0xA */ s16 t;
-    /* 0xC */ s8 r;
-    /* 0xD */ s8 g;
-    /* 0xE */ s8 b;
-    /* 0xF */ s8 a;
-} F3DVertexColor; // size = 0x10
-
-typedef struct {
-    /* 0x0 */ s16 x;
-    /* 0x2 */ s16 y;
-    /* 0x4 */ s16 z;
-    /* 0x6 */ s16 reserved;
-    /* 0x8 */ s16 s;
-    /* 0xA */ s16 t;
-    /* 0xC */ s8 normalX;
-    /* 0xD */ s8 normalY;
-    /* 0xE */ s8 normalZ;
-    /* 0xF */ s8 a;
-} F3DVertexNormal; // size = 0x10
-
-// Game Info aka. Static Context
-// Data normally accessed through REG macros (see regs.h)
-typedef struct {
-    /* 0x00 */ u8  unk_00; // regPage;?   // 1 is first page
-    /* 0x01 */ u8  unk_01; // regGroup;?  // "register" group (R, RS, RO, RP etc.)
-    /* 0x02 */ u8  unk_02; // regCur;?    // selected register within page
-    /* 0x03 */ u8  unk_03; // dpadLast;?
-    /* 0x04 */ u32 unk_04; // repeat;?
-    /* 0x08 */ UNK_TYPE1 pad_08[0xC];
-    /* 0x14 */ s16 data[REG_GROUPS * REG_PER_GROUP]; // 0xAE0 entries
-} GameInfo; // size = 0x15D4
-
-typedef struct {
     /* 0x0 */ u32    size;
     /* 0x4 */ void*  bufp;
     /* 0x8 */ void*  head;
@@ -287,11 +249,6 @@ typedef struct {
     /* 0x10 */ int unk10;
     /* 0x14 */ OSMesgQueue unk14;
 } s80185D40; // size = 0x2C
-
-typedef union {
-    F3DVertexColor color;
-    F3DVertexNormal normal;
-} F3DVertex; // size = 0x10
 
 typedef struct {
     /* 0x00 */ u8 countdown;

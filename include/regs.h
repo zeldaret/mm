@@ -4,13 +4,28 @@
 #ifndef REGS_H
 #define REGS_H
 
+#include "ultra64.h"
+
 #define REG_GROUPS 29 // number of REG groups, i.e. REG, SREG, OREG, etc.
 #define REG_PAGES 6
 #define REG_PER_PAGE 16
 #define REG_PER_GROUP REG_PAGES * REG_PER_PAGE
 
-/* We probably want a better name for gGameInfo based on OoT discussions */
-#define BASE_REG(n, r) gGameInfo->data[n * REG_PER_GROUP + r]
+typedef struct RegEditor {
+    /* 0x00 */ u8  regPage; // 0: no page selected (reg editor is not active); 1: first page; `REG_PAGES`: last page
+    /* 0x01 */ u8  regGroup; // Indexed from 0 to `REG_GROUPS`-1. Each group has its own character to identify it.
+    /* 0x02 */ u8  regCur; // Selected reg, indexed from 0 as the page start
+    /* 0x03 */ u8  dPadInputPrev;
+    /* 0x04 */ u32 inputRepeatTimer;
+    /* 0x08 */ UNK_TYPE1 pad_08[0xC];
+    /* 0x14 */ s16 data[REG_GROUPS * REG_PER_GROUP]; // Accessed through *REG macros
+} RegEditor; // size = 0x15D4
+
+void Regs_Init(void);
+
+extern RegEditor* gRegEditor;
+
+#define BASE_REG(n, r) (gRegEditor->data[n * REG_PER_GROUP + r])
 
 #define  REG(r) BASE_REG(0, r)
 #define SREG(r) BASE_REG(1, r)
@@ -42,7 +57,8 @@
 #define kREG(r) BASE_REG(27, r)
 #define bREG(r) BASE_REG(28, r)
 
-/* TODO: Actually confirm these, in case of miss-match it's at least a simple list to `sed` */
+/* TODO: There are still a few OoT defines here that need confirmation */
+
 #define R_TIME_SPEED                      REG(15)
 #define R_RUN_SPEED_LIMIT                 REG(45)
 
