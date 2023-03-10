@@ -814,10 +814,10 @@ wordReplace = {
     "play->pauseCtx.unk_1F0": "play->pauseCtx.bombersNotebookOpen",
 
     "actorCtx.unkC": "actorCtx.halfDaysBit",
-    "actorCtx.unk1F4": "actorCtx.unk_1F4.unk_00",
-    "actorCtx.unk1F5": "actorCtx.unk_1F4.timer",
-    "actorCtx.unk1F8": "actorCtx.unk_1F4.unk_04",
-    "actorCtx.unk1FC": "actorCtx.unk_1F4.unk_08",
+    "actorCtx.unk1F4": "actorCtx.playerImpact.unk_00",
+    "actorCtx.unk1F5": "actorCtx.playerImpact.timer",
+    "actorCtx.unk1F8": "actorCtx.playerImpact.unk_04",
+    "actorCtx.unk1FC": "actorCtx.playerImpact.unk_08",
 
     "gSaveContext.unk_3DC8": "gSaveContext.timerOsTime",
     "gSaveContext.unk_3DD0": "gSaveContext.timerStates",
