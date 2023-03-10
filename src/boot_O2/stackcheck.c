@@ -33,7 +33,7 @@ void StackCheck_Init(StackEntry* entry, void* stackTop, void* stackBottom, u32 i
         }
 
         sStackInfoListEnd = entry;
-        if (sStackInfoListStart == 0) {
+        if (sStackInfoListStart == NULL) {
             sStackInfoListStart = entry;
         }
 
