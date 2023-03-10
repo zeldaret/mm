@@ -97,7 +97,7 @@ StackStatus StackCheck_GetState(StackEntry* entry) {
     return status;
 }
 
-u32 StackCheck_CheckAll() {
+u32 StackCheck_CheckAll(void) {
     u32 ret = 0;
     StackEntry* iter = sStackInfoListStart;
 
