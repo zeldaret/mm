@@ -88,7 +88,7 @@ StackStatus StackCheck_GetState(StackEntry* entry) {
 
     if (free == 0) {
         status = STACK_STATUS_OVERFLOW;
-    } else if (free < (size_t)entry->minSpace && entry->minSpace != -1) {
+    } else if ((free < (size_t)entry->minSpace) && (entry->minSpace != -1)) {
         status = STACK_STATUS_WARNING;
     } else {
         status = STACK_STATUS_OK;
