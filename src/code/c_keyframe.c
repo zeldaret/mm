@@ -460,9 +460,8 @@ void func_8018410C(PlayState* play, SkeletonInfo* skeleton, s32* limbIndex,
 }
 
 // cKF_Si3_draw_R_SV
-void func_8018450C(PlayState* play, SkeletonInfo* skeleton, Mtx* mtx,
-                   OverrideKeyframeDrawScaled overrideKeyframeDraw, PostKeyframeDrawScaled postKeyframeDraw,
-                   void* arg) {
+void func_8018450C(PlayState* play, SkeletonInfo* skeleton, Mtx* mtx, OverrideKeyframeDrawScaled overrideKeyframeDraw,
+                   PostKeyframeDrawScaled postKeyframeDraw, void* arg) {
     s32 limbIndex;
 
     if (mtx == NULL) {
@@ -602,23 +601,22 @@ void func_801849DC(SkeletonInfo2* skeleton) {
     }
 }
 
+#define FMOD(x, mod) ((x) - ((s32)((x) * (1.0f / (mod))) * (f32)(mod)))
+
 #ifdef NON_MATCHING
+// Stack and instruction scheduling only
 s32 func_80184C48(SkeletonInfo2* skeleton) {
     s32 sp84;
+    s16* phi_s1;
+    u32 phi_s2;
+    s32 phi_s3;
+    s32 phi_s4 = 0;
+    s32 phi_s5 = 0;
+    s32 phi_s6 = 0;
     s16* sp68;
     Vec3s* sp64;
     s16* sp60;
-    f32 temp_f0;
-    s32 phi_s6 = 0;
-    s32 phi_s4 = 0;
-    s32 phi_s5 = 0;
-    u32 phi_s2;
-    s32 phi_s3;
-    s16* phi_s1;
-    u8* phi_s7;
     u8* phi_t0;
-    Vec3s* phi_v0;
-    s32 phi_v1;
 
     if (skeleton->unk_20 != 0.0f) {
         phi_s1 = skeleton->unk_28;
@@ -631,33 +629,30 @@ s32 func_80184C48(SkeletonInfo2* skeleton) {
     sp64 = (Vec3s*)Lib_SegmentedToVirtual(skeleton->unk_1C->unk_4);
     phi_t0 = (u8*)Lib_SegmentedToVirtual(skeleton->unk_1C->unk_0);
 
-    for (phi_s2 = 32, phi_s3 = 0; phi_s3 < 3; phi_s3++, phi_s2 >>= 1) {
-        if (*phi_t0 & phi_s2) {
+    for (phi_s2 = 32, phi_s3 = 0; phi_s3 < 3; phi_s3++, phi_s2 >>= 1, phi_s1++) {
+        if (phi_t0[0] & phi_s2) {
             *phi_s1 = func_80183880(phi_s6, sp60[phi_s4], sp64, skeleton->frameCtrl.unk_10);
             phi_s6 += sp60[phi_s4++];
         } else {
             *phi_s1 = sp68[phi_s5++];
         }
-        phi_s1++;
-        if (1) {}
-        if (!phi_v1) {}
     }
-    phi_s7 = phi_t0;
 
-    for (sp84 = 0; sp84 < skeleton->unk_18->limbCount; sp84++, phi_s7++) {
+    for (sp84 = 0; sp84 < skeleton->unk_18->limbCount; sp84++) {
         for (phi_s2 = 4, phi_s3 = 0; phi_s3 < 3; phi_s3++, phi_s2 >>= 1, phi_s1++) {
-            if (*phi_s7 & phi_s2) {
+            if (phi_t0[sp84] & phi_s2) {
                 *phi_s1 = func_80183880(phi_s6, sp60[phi_s4], sp64, skeleton->frameCtrl.unk_10);
                 phi_s6 += sp60[phi_s4++];
             } else {
                 *phi_s1 = sp68[phi_s5++];
             }
-            temp_f0 = *phi_s1 * 0.1f;
-            *phi_s1 = (temp_f0 - ((s32)(temp_f0 * (1.0f / 360)) * 360.0f)) * 182.04445f;
+            *phi_s1 = FMOD(*phi_s1 * 0.1f, 360) * 182.04445f;
         }
     }
 
     if (skeleton->unk_2C != NULL) {
+        Vec3s* phi_v0;
+
         if (skeleton->unk_20 != 0.0f) {
             phi_v0 = (Vec3s*)skeleton->unk_28;
         } else {
@@ -665,10 +660,10 @@ s32 func_80184C48(SkeletonInfo2* skeleton) {
         }
 
         phi_v0++;
-        for (phi_v1 = 0, sp84 = 0; sp84 < skeleton->unk_18->limbCount; sp84++, phi_v1++, phi_v0++) {
-            phi_v0->x = phi_v0->x + skeleton->unk_2C[phi_v1].x;
-            phi_v0->y = phi_v0->y + skeleton->unk_2C[phi_v1].y;
-            phi_v0->z = phi_v0->z + skeleton->unk_2C[phi_v1].z;
+        for (sp84 = 0; sp84 < skeleton->unk_18->limbCount; sp84++, phi_v0++) {
+            phi_v0->x = phi_v0->x + skeleton->unk_2C[sp84].x;
+            phi_v0->y = phi_v0->y + skeleton->unk_2C[sp84].y;
+            phi_v0->z = phi_v0->z + skeleton->unk_2C[sp84].z;
         }
     }
 
@@ -682,20 +677,21 @@ s32 func_80184C48(SkeletonInfo2* skeleton) {
             skeleton->unk_20 = 0.0f;
         }
         return 0;
+    } else {
+        func_801849DC(skeleton);
+        skeleton->unk_20 += 1.0f;
+        if (skeleton->unk_20 >= 0.0f) {
+            skeleton->unk_20 = 0.0f;
+        }
+        return func_8018332C(&skeleton->frameCtrl);
     }
-    func_801849DC(skeleton);
-    skeleton->unk_20 += 1.0f;
-    if (skeleton->unk_20 >= 0.0f) {
-        skeleton->unk_20 = 0.0f;
-    }
-    return func_8018332C(&skeleton->frameCtrl);
 }
 #else
 #pragma GLOBAL_ASM("asm/non_matchings/code/c_keyframe/func_80184C48.s")
 #endif
 
-void func_801850A0(PlayState* play, SkeletonInfo2* skeleton, s32* limbIndex,
-                   OverrideKeyframeDraw overrideKeyframeDraw, PostKeyframeDraw postKeyframeDraw, void* arg, Mtx** mtx) {
+void func_801850A0(PlayState* play, SkeletonInfo2* skeleton, s32* limbIndex, OverrideKeyframeDraw overrideKeyframeDraw,
+                   PostKeyframeDraw postKeyframeDraw, void* arg, Mtx** mtx) {
     Struct_801BFA14_Arg1_Field4* jointData =
         *limbIndex + (Struct_801BFA14_Arg1_Field4*)Lib_SegmentedToVirtual(skeleton->unk_18->unk_4);
     s32 i;
@@ -767,8 +763,8 @@ void func_801850A0(PlayState* play, SkeletonInfo2* skeleton, s32* limbIndex,
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-void func_801853C8(PlayState* play, SkeletonInfo2* skeleton, Mtx* mtx,
-                   OverrideKeyframeDraw overrideKeyframeDraw, PostKeyframeDraw postKeyframeDraw, void* arg) {
+void func_801853C8(PlayState* play, SkeletonInfo2* skeleton, Mtx* mtx, OverrideKeyframeDraw overrideKeyframeDraw,
+                   PostKeyframeDraw postKeyframeDraw, void* arg) {
     s32 limbIndex;
 
     if (mtx == NULL) {
@@ -786,31 +782,31 @@ void func_801853C8(PlayState* play, SkeletonInfo2* skeleton, Mtx* mtx,
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-#ifdef NON_MATCHING
 void func_80185460(SkeletonInfo2* arg0, s32 arg1, s16* arg2) {
-    s32 sp78;
-    s16* sp5C;
-    Vec3s* sp58;
-    s32 sp44;
-    s32 var_s1;
-    u16* var_v1;
-    u32 var_s2;
     s16* temp_fp;
+    s32 sp78;
     s32 var_s3 = 0;
     s32 var_s4 = 0;
     s32 var_s5 = 0;
+    s32 var_s1;
+    u16* var_v1;
     s16* var_s6 = arg2;
+    s16* sp5C;
+    Vec3s* sp58;
+    s32 sp44;
 
     sp5C = (s16*)Lib_SegmentedToVirtual(arg0->unk_1C->unk_C);
     temp_fp = (s16*)Lib_SegmentedToVirtual(arg0->unk_1C->unk_8);
     sp58 = (Vec3s*)Lib_SegmentedToVirtual(arg0->unk_1C->unk_4);
     var_v1 = (u16*)Lib_SegmentedToVirtual(arg0->unk_1C->unk_0);
 
-    for (sp44 = 0; sp44 < arg0->unk_18->limbCount * 2; sp44 += 2, var_v1++) {
-        for (var_s2 = 256, sp78 = 0; sp78 < 3; sp78++) {
-            if ((sp44 == arg1 * 2) && (sp78 == 0)) {
-                for (var_s1 = 0; var_s1 < 3; var_s1++, var_s6++) {
-                    if (*var_v1 & var_s2) {
+    for (sp44 = 0; sp44 < arg0->unk_18->limbCount; sp44++) {
+        u32 var_s2 = 256;
+
+        for (sp78 = 0; sp78 < 3; sp78++) {
+            if ((sp44 == arg1) && (sp78 == 0)) {
+                for (var_s1 = 0; var_s1 < 3; var_s1++) {
+                    if (var_v1[sp44] & var_s2) {
                         *var_s6 = func_80183880(var_s5, temp_fp[var_s3], sp58, arg0->frameCtrl.unk_10);
                         var_s5 += temp_fp[var_s3];
                         var_s3++;
@@ -819,10 +815,11 @@ void func_80185460(SkeletonInfo2* arg0, s32 arg1, s16* arg2) {
                         var_s4++;
                     }
                     var_s2 >>= 1;
+                    var_s6++;
                 }
             } else {
                 for (var_s1 = 0; var_s1 < 3; var_s1++) {
-                    if (*var_v1 & var_s2) {
+                    if (var_v1[sp44] & var_s2) {
                         var_s5 += temp_fp[var_s3];
                         var_s3++;
                     } else {
@@ -834,6 +831,3 @@ void func_80185460(SkeletonInfo2* arg0, s32 arg1, s16* arg2) {
         }
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/c_keyframe/func_80185460.s")
-#endif
