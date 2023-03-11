@@ -812,6 +812,9 @@ wordReplace = {
     "play->nextEntranceIndex": "play->nextEntrance",
     "play->sceneNum": "play->sceneId",
     "play->pauseCtx.unk_1F0": "play->pauseCtx.bombersNotebookOpen",
+    "play->sceneLoadFlag": "play->transitionTrigger",
+    "play->unk_18B4A": "play->transitionMode",
+    "play->unk_1887F": "play->transitionType",
 
     "actorCtx.unkC": "actorCtx.halfDaysBit",
     "actorCtx.unk1F4": "actorCtx.unk_1F4.unk_00",
@@ -827,14 +830,13 @@ wordReplace = {
     "gSaveContext.unk_3E50": "gSaveContext.timerStartOsTimes",
     "gSaveContext.unk_3E88": "gSaveContext.timerStopTimes",
     "gSaveContext.unk_3EC0": "gSaveContext.timerPausedOsTimes",
-
-    "play->sceneLoadFlag": "play->transitionTrigger",
-    "play->unk_18B4A": "play->transitionMode",
-    "play->unk_1887F": "play->transitionType",
     "gSaveContext.nextTransition": "gSaveContext.nextTransitionType",
     "gSaveContext.unk_3F48": "gSaveContext.cutsceneTransitionControl",
     "gSaveContext.fadeDuration": "gSaveContext.transFadeDuration",
     "gSaveContext.fadeSpeed": "gSaveContext.transWipeSpeed",
+
+    "path->unk1": "path->additionalPathIndex",
+    "path->unk2": "path->customValue",
 
     "D_801D15B0": "gZeroVec3f",
     "D_801D15BC": "gZeroVec3s",
