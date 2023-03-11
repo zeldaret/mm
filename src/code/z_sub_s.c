@@ -491,7 +491,7 @@ Path* SubS_GetAdditionalPath(PlayState* play, u8 pathIndex, s32 limit) {
         }
         pathIndex = path->additionalPathIndex;
         i++;
-    } while (pathIndex != 0xFF);
+    } while (pathIndex != PATH_INDEX_END);
 
     return path;
 }
