@@ -26,10 +26,10 @@ typedef struct EnEncount1 {
     /* 0x14E */ s16 unk_14E;
     /* 0x150 */ s16 actorType;
     /* 0x152 */ s16 unk_152;
-    /* 0x154 */ s16 unk_154;
+    /* 0x154 */ s16 pathIndex;
     /* 0x156 */ s16 unk_156;
     /* 0x158 */ s16 unk_158;
-    /* 0x15A */ s16 pathIndex;
+    /* 0x15A */ s16 pathIndexSkullFish2;
     /* 0x15C */ s32 unk_15C;
     /* 0x160 */ f32 unk_160;
 } EnEncount1; // size = 0x164

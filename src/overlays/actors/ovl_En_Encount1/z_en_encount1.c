@@ -46,21 +46,21 @@ void EnEncount1_Init(Actor* thisx, PlayState* play) {
 
     this->actorType = ENENCOUNT1_GET_TYPE(&this->actor);
     this->unk_14C = ENENCOUNT1_GET_7C0(&this->actor);
-    this->unk_154 = ENENCOUNT1_GET_PATH_INDEX(&this->actor);
+    this->pathIndex = ENENCOUNT1_GET_PATH_INDEX(&this->actor);
     this->unk_158 = this->actor.world.rot.x;
     this->unk_15C = this->actor.world.rot.y;
     this->unk_160 = (this->actor.world.rot.z * 40.0f) + 120.0f;
 
-    if (this->unk_154 >= PATH_INDEX_MAX) {
-        this->unk_154 = -1;
+    if (this->pathIndex >= PATH_INDEX_MAX) {
+        this->pathIndex = -1;
     }
     if (this->actor.world.rot.z < 0) {
         this->unk_160 = -1.0f;
     }
     if (this->actorType == EN_ENCOUNT1_SKULLFISH_2) {
-        this->pathIndex = ENENCOUNT1_GET_PATH_INDEX(&this->actor);
-        this->path = SubS_GetPathByIndex(play, this->pathIndex, PATH_INDEX_MAX);
-        this->unk_154 = -1;
+        this->pathIndexSkullFish2 = ENENCOUNT1_GET_PATH_INDEX(&this->actor);
+        this->path = SubS_GetPathByIndex(play, this->pathIndexSkullFish2, PATH_INDEX_MAX);
+        this->pathIndex = -1;
         this->unk_160 = -1.0f;
     }
     this->actor.flags &= ~ACTOR_FLAG_1;
@@ -79,7 +79,7 @@ void func_808E0954(EnEncount1* this, PlayState* play) {
     s32 sp50;
 
     if (((this->unk_14E >= this->unk_14C) || ((this->unk_160 > 0.0f) && (this->unk_160 < this->actor.xzDistToPlayer)) ||
-         ((this->unk_154 > 0) && (this->unk_154 <= this->unk_152)))) {
+         ((this->pathIndex > 0) && (this->pathIndex <= this->unk_152)))) {
         return;
     } else if (this->unk_156 != 0) {
         this->unk_156++;
@@ -138,7 +138,7 @@ void func_808E0954(EnEncount1* this, PlayState* play) {
     if (Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, actorList, spawnPos.x, spawnPos.y, spawnPos.z, 0, 0, 0,
                            actorParams) != NULL) {
         this->unk_14E++;
-        if (this->unk_154 > 0) {
+        if (this->pathIndex > 0) {
             this->unk_152++;
         }
 
