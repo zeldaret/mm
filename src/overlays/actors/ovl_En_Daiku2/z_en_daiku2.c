@@ -69,7 +69,7 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 void func_80BE61D0(EnDaiku2* this) {
-    if ((this->pathIndex != -1) && (this->path != 0)) {
+    if ((this->pathIndex != -1) && (this->path != NULL)) {
         if (!SubS_CopyPointFromPath(this->path, this->unk_25C, &this->unk_268)) {
             Actor_Kill(&this->actor);
         }
@@ -342,7 +342,7 @@ void func_80BE6D40(EnDaiku2* this, PlayState* play) {
     Math_ApproachF(&this->actor.world.pos.z, this->unk_268.z, 0.5f, fabsf(Math_CosS(this->actor.world.rot.y) * 6.0f));
 
     if ((sqrtf(SQ(this->actor.world.pos.x - this->unk_268.x) + SQ(this->actor.world.pos.z - this->unk_268.z)) < 4.0f) &&
-        (this->path != 0)) {
+        (this->path != NULL)) {
         this->unk_25C++;
         if (this->unk_25C >= this->path->count) {
             func_80BE6EB0(this);
@@ -385,7 +385,7 @@ void func_80BE6EF0(EnDaiku2* this, PlayState* play) {
                        fabsf(Math_CosS(this->actor.world.rot.y) * 4.0f));
         if ((sqrtf(SQ(this->actor.world.pos.x - this->unk_268.x) + SQ(this->actor.world.pos.z - this->unk_268.z)) <
              4.0f) &&
-            (this->path != 0)) {
+            (this->path != NULL)) {
             if (!func_80BE64C0(this, play)) {
                 if (this->unk_276 != 3) {
                     func_80BE6408(this, 3);
