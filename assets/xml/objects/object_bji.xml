@@ -1,8 +1,8 @@
 ﻿<Root>
     <File Name="object_bji" Segment="6">
-        <Animation Name="object_bji_Anim_00066C" Offset="0x66C" />
-        <Animation Name="object_bji_Anim_000AB0" Offset="0xAB0" />
-        <Animation Name="object_bji_Anim_000FDC" Offset="0xFDC" />
+        <Animation Name="object_bji_Anim_00066C" Offset="0x66C" /> <!-- Original name is "Bji_fushigigaru" ("to be curious; to wonder; to marvel​") -->
+        <Animation Name="object_bji_Anim_000AB0" Offset="0xAB0" /> <!-- Original name is "Bji_talk" -->
+        <Animation Name="object_bji_Anim_000FDC" Offset="0xFDC" /> <!-- Original name is "Bji_wait01" -->
         
         <DList Name="gShikashiHeadDL" Offset="0x23A0" />
         <DList Name="gShikashiRightHandDL" Offset="0x28D8" />
@@ -59,6 +59,6 @@
         <Limb Name="gShikashiHeadLimb" Type="Standard" EnumName="SHIKASHI_LIMB_HEAD" Offset="0x5744" />
         <Skeleton Name="gShikashiSkel" Type="Flex" LimbType="Standard" LimbNone="SHIKASHI_LIMB_NONE" LimbMax="SHIKASHI_LIMB_MAX" EnumName="ShikashiLimb" Offset="0x578C" />
 
-        <Animation Name="object_bji_Anim_005B58" Offset="0x5B58" />
+        <Animation Name="object_bji_Anim_005B58" Offset="0x5B58" /> <!-- Original name is "Bji_wait02" -->
     </File>
 </Root>

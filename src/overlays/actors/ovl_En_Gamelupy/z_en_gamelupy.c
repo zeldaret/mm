@@ -126,7 +126,7 @@ void func_80AF6994(EnGamelupy* this) {
 
 void func_80AF69A8(EnGamelupy* this, PlayState* play) {
     if (this->collider.base.ocFlags1 & OC1_HIT) {
-        *this->unk_198 += 0x32;
+        *this->unk_198 += 50;
         if (this->rupeeIndex == 1) {
             Rupees_ChangeBy(5);
         } else {
@@ -140,7 +140,7 @@ void func_80AF69A8(EnGamelupy* this, PlayState* play) {
 void func_80AF6A38(EnGamelupy* this) {
     this->unk_19C = 0;
     this->actor.gravity = 0.0f;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_GET_RUPY);
+    Actor_PlaySfx(&this->actor, NA_SE_SY_GET_RUPY);
     this->actionFunc = func_80AF6A78;
 }
 

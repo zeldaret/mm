@@ -61,7 +61,7 @@ void ShotSun_Init(Actor* thisx, PlayState* play) {
         this->actor.flags |= ACTOR_FLAG_10;
         this->actor.flags |= ACTOR_FLAG_2000000;
         this->actionFunc = ShotSun_UpdateForOcarina;
-        this->actor.flags |= ACTOR_FLAG_8000000;
+        this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
     } else {
         Collider_InitCylinder(play, &this->collider);
         Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
@@ -160,7 +160,7 @@ void ShotSun_UpdateHyliaSun(ShotSun* this, PlayState* play) {
             collectible = (EnItem00*)Item_DropCollectible(play, &spawnPos, ITEM00_MAGIC_LARGE);
             if (collectible != NULL) {
                 collectible->unk152 = 0x1770;
-                collectible->actor.speedXZ = 0.0f;
+                collectible->actor.speed = 0.0f;
             }
         }
 
@@ -170,10 +170,10 @@ void ShotSun_UpdateHyliaSun(ShotSun* this, PlayState* play) {
 
     if (!(this->actor.xzDistToPlayer > 120.0f)) {
         if ((gSaveContext.save.time >= CLOCK_TIME(6, 30)) && (gSaveContext.save.time < CLOCK_TIME(7, 30))) {
-            cylinderPos.x = player->bodyPartsPos[PLAYER_BODYPART_HEAD].x + (play->envCtx.unk_4 * (1.0f / 6.0f));
+            cylinderPos.x = player->bodyPartsPos[PLAYER_BODYPART_HEAD].x + (play->envCtx.sunPos.x * (1.0f / 6.0f));
             cylinderPos.y =
-                (player->bodyPartsPos[PLAYER_BODYPART_HEAD].y - 30.0f) + (play->envCtx.unk_8 * (1.0f / 6.0f));
-            cylinderPos.z = player->bodyPartsPos[PLAYER_BODYPART_HEAD].z + (play->envCtx.unk_C * (1.0f / 6.0f));
+                (player->bodyPartsPos[PLAYER_BODYPART_HEAD].y - 30.0f) + (play->envCtx.sunPos.y * (1.0f / 6.0f));
+            cylinderPos.z = player->bodyPartsPos[PLAYER_BODYPART_HEAD].z + (play->envCtx.sunPos.z * (1.0f / 6.0f));
 
             this->hitboxPos = cylinderPos;
 

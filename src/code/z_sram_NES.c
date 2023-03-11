@@ -1,3 +1,4 @@
+#include "prevent_bss_reordering.h"
 #include "global.h"
 #include "overlays/gamestates/ovl_file_choose/z_file_choose.h"
 
@@ -268,17 +269,11 @@ u8 gAmmoItems[] = {
     ITEM_NONE,        // SLOT_BOTTLE_6
 };
 
-s32 D_801C67C8[] = { 0, 0x40, 0x80, 0xC0, 0x100, 0x180, 0x200, 0x280 };
+s32 D_801C67C8[] = { 0, 0x40, 0x80, 0xC0, 0x100, 0x180, 0x200, 0x280, 0x300, 0x380 };
 
-s32 D_801C67E8[] = { 0x300, 0x380 };
+s32 D_801C67F0[] = { 0x40, 0x40, 0x40, 0x40, 0x80, 0x80, 0x80, 0x80, 1, 1 };
 
-s32 D_801C67F0[] = { 0x40, 0x40, 0x40, 0x40, 0x80, 0x80, 0x80, 0x80 };
-
-s32 D_801C6810[] = { 1, 1 };
-
-s32 D_801C6818[] = { 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80 };
-
-s32 D_801C6838[] = { 1, 1 };
+s32 D_801C6818[] = { 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 1, 1 };
 
 s32 D_801C6840[] = { 0x100, 0x180, 0x200, 0x280 };
 
@@ -342,7 +337,7 @@ void Sram_SaveEndOfCycle(PlayState* play) {
     u8 slot;
     u8 item;
 
-    gSaveContext.save.daySpeed = 0;
+    gSaveContext.save.timeSpeedOffset = 0;
     gSaveContext.save.daysElapsed = 0;
     gSaveContext.save.day = 0;
     gSaveContext.save.time = CLOCK_TIME(6, 0) - 1;
@@ -474,10 +469,10 @@ void Sram_SaveEndOfCycle(PlayState* play) {
 
         if (CUR_FORM == 0) {
             if ((STOLEN_ITEM_1 >= ITEM_SWORD_GILDED) || (STOLEN_ITEM_2 >= ITEM_SWORD_GILDED)) {
-                BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) = ITEM_SWORD_GILDED;
+                CUR_FORM_EQUIP(EQUIP_SLOT_B) = ITEM_SWORD_GILDED;
                 SET_EQUIP_VALUE(EQUIP_TYPE_SWORD, EQUIP_VALUE_SWORD_GILDED);
             } else {
-                BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) = ITEM_SWORD_KOKIRI;
+                CUR_FORM_EQUIP(EQUIP_SLOT_B) = ITEM_SWORD_KOKIRI;
             }
         } else {
             if ((STOLEN_ITEM_1 >= ITEM_SWORD_GILDED) || (STOLEN_ITEM_2 >= ITEM_SWORD_GILDED)) {
@@ -593,7 +588,7 @@ void Sram_ResetSave(void) {
     gSaveContext.save.unk_06 = 0;
     gSaveContext.save.linkAge = 0;
     gSaveContext.save.isNight = false;
-    gSaveContext.save.daySpeed = 0;
+    gSaveContext.save.timeSpeedOffset = 0;
     gSaveContext.save.snowheadCleared = 0;
     gSaveContext.save.hasTatl = false;
     gSaveContext.save.isOwlSave = false;

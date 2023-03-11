@@ -12,7 +12,7 @@
 #include "overlays/actors/ovl_En_Syateki_Dekunuts/z_en_syateki_dekunuts.h"
 #include "overlays/actors/ovl_En_Syateki_Wf/z_en_syateki_wf.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_8000000)
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_CANT_LOCK_ON)
 
 #define THIS ((EnSyatekiMan*)thisx)
 
@@ -334,7 +334,7 @@ void EnSyatekiMan_Swamp_HandleChoice(EnSyatekiMan* this, PlayState* play) {
                 Message_StartTextbox(play, 0xA31, &this->actor);
                 this->prevTextId = 0xA31;
                 if (this->shootingGameState == SG_GAME_STATE_ONE_MORE_GAME) {
-                    gSaveContext.minigameState = 3;
+                    gSaveContext.minigameStatus = MINIGAME_STATUS_END;
                 }
 
                 this->shootingGameState = SG_GAME_STATE_NOT_PLAYING;
@@ -373,7 +373,7 @@ void EnSyatekiMan_Swamp_HandleChoice(EnSyatekiMan* this, PlayState* play) {
             }
 
             if (this->shootingGameState == SG_GAME_STATE_ONE_MORE_GAME) {
-                gSaveContext.minigameState = 3;
+                gSaveContext.minigameStatus = MINIGAME_STATUS_END;
             }
 
             this->shootingGameState = SG_GAME_STATE_NOT_PLAYING;
@@ -399,8 +399,8 @@ void EnSyatekiMan_Swamp_HandleNormalMessage(EnSyatekiMan* this, PlayState* play)
                 play->msgCtx.msgMode = 0x43;
                 play->msgCtx.stateTimer = 4;
                 player->actor.freezeTimer = 0;
-                func_80112AFC(play);
-                play->interfaceCtx.hbaAmmo = 80;
+                Interface_InitMinigame(play);
+                play->interfaceCtx.minigameAmmo = 80;
                 func_80123F2C(play, 80);
                 this->shootingGameState = SG_GAME_STATE_RUNNING;
                 this->actionFunc = EnSyatekiMan_Swamp_StartGame;
@@ -414,7 +414,7 @@ void EnSyatekiMan_Swamp_HandleNormalMessage(EnSyatekiMan* this, PlayState* play)
                     CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_01);
                     CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_02);
                     this->actionFunc = EnSyatekiMan_Swamp_Idle;
-                    gSaveContext.minigameState = 3;
+                    gSaveContext.minigameStatus = MINIGAME_STATUS_END;
                     this->shootingGameState = SG_GAME_STATE_NONE;
                 } else {
                     // Wanna play again?
@@ -434,7 +434,7 @@ void EnSyatekiMan_Swamp_HandleNormalMessage(EnSyatekiMan* this, PlayState* play)
                 play->msgCtx.msgMode = 0x43;
                 play->msgCtx.stateTimer = 4;
                 player->actor.freezeTimer = 0;
-                gSaveContext.minigameState = 3;
+                gSaveContext.minigameStatus = MINIGAME_STATUS_END;
                 player->stateFlags1 |= PLAYER_STATE1_20;
                 this->actionFunc = EnSyatekiMan_Swamp_SetupGiveReward;
                 EnSyatekiMan_Swamp_SetupGiveReward(this, play);
@@ -641,7 +641,7 @@ void EnSyatekiMan_Town_HandleChoice(EnSyatekiMan* this, PlayState* play) {
 
                 if (this->shootingGameState == SG_GAME_STATE_ONE_MORE_GAME) {
                     player->stateFlags3 &= ~PLAYER_STATE3_400;
-                    gSaveContext.minigameState = 3;
+                    gSaveContext.minigameStatus = MINIGAME_STATUS_END;
                 }
 
                 this->shootingGameState = SG_GAME_STATE_NOT_PLAYING;
@@ -677,7 +677,7 @@ void EnSyatekiMan_Town_HandleChoice(EnSyatekiMan* this, PlayState* play) {
 
             if (this->shootingGameState == SG_GAME_STATE_ONE_MORE_GAME) {
                 player->stateFlags3 &= ~PLAYER_STATE3_400;
-                gSaveContext.minigameState = 3;
+                gSaveContext.minigameStatus = MINIGAME_STATUS_END;
             }
 
             this->shootingGameState = SG_GAME_STATE_NOT_PLAYING;
@@ -759,7 +759,7 @@ void EnSyatekiMan_Town_HandleNormalMessage(EnSyatekiMan* this, PlayState* play) 
                 play->msgCtx.stateTimer = 4;
                 player->actor.freezeTimer = 0;
                 this->flagsIndex = 0;
-                func_80112AFC(play);
+                Interface_InitMinigame(play);
                 func_80123F2C(play, 0x63);
                 this->shootingGameState = SG_GAME_STATE_RUNNING;
                 func_801A2BB8(NA_BGM_TIMED_MINI_GAME);
@@ -808,7 +808,7 @@ void EnSyatekiMan_Town_HandleNormalMessage(EnSyatekiMan* this, PlayState* play) 
                 play->msgCtx.msgMode = 0x43;
                 play->msgCtx.stateTimer = 4;
                 player->actor.freezeTimer = 0;
-                gSaveContext.minigameState = 3;
+                gSaveContext.minigameStatus = MINIGAME_STATUS_END;
                 this->actionFunc = EnSyatekiMan_Town_SetupGiveReward;
                 EnSyatekiMan_Town_SetupGiveReward(this, play);
                 break;
@@ -872,13 +872,13 @@ void EnSyatekiMan_Swamp_SetupGiveReward(EnSyatekiMan* this, PlayState* play) {
         this->actionFunc = EnSyatekiMan_Swamp_GiveReward;
     } else {
         if ((CUR_UPG_VALUE(UPG_QUIVER) < 3) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_59_10)) {
-            Actor_PickUp(&this->actor, play, GI_QUIVER_30 + CUR_UPG_VALUE(UPG_QUIVER), 500.0f, 100.0f);
+            Actor_OfferGetItem(&this->actor, play, GI_QUIVER_30 + CUR_UPG_VALUE(UPG_QUIVER), 500.0f, 100.0f);
         } else if (this->score < 2180) {
-            Actor_PickUp(&this->actor, play, GI_RUPEE_RED, 500.0f, 100.0f);
+            Actor_OfferGetItem(&this->actor, play, GI_RUPEE_RED, 500.0f, 100.0f);
         } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_32_02)) {
-            Actor_PickUp(&this->actor, play, GI_HEART_PIECE, 500.0f, 100.0f);
+            Actor_OfferGetItem(&this->actor, play, GI_HEART_PIECE, 500.0f, 100.0f);
         } else {
-            Actor_PickUp(&this->actor, play, GI_RUPEE_PURPLE, 500.0f, 100.0f);
+            Actor_OfferGetItem(&this->actor, play, GI_RUPEE_PURPLE, 500.0f, 100.0f);
         }
 
         player->actor.shape.rot.y = -0x8000;
@@ -933,14 +933,14 @@ void EnSyatekiMan_Town_SetupGiveReward(EnSyatekiMan* this, PlayState* play) {
     } else {
         if (this->prevTextId == 0x407) {
             if ((CUR_UPG_VALUE(UPG_QUIVER) < 3) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_59_20)) {
-                Actor_PickUp(&this->actor, play, GI_QUIVER_30 + CUR_UPG_VALUE(UPG_QUIVER), 500.0f, 100.0f);
+                Actor_OfferGetItem(&this->actor, play, GI_QUIVER_30 + CUR_UPG_VALUE(UPG_QUIVER), 500.0f, 100.0f);
             } else {
-                Actor_PickUp(&this->actor, play, GI_RUPEE_PURPLE, 500.0f, 100.0f);
+                Actor_OfferGetItem(&this->actor, play, GI_RUPEE_PURPLE, 500.0f, 100.0f);
             }
         } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_32_04)) {
-            Actor_PickUp(&this->actor, play, GI_HEART_PIECE, 500.0f, 100.0f);
+            Actor_OfferGetItem(&this->actor, play, GI_HEART_PIECE, 500.0f, 100.0f);
         } else {
-            Actor_PickUp(&this->actor, play, GI_RUPEE_HUGE, 500.0f, 100.0f);
+            Actor_OfferGetItem(&this->actor, play, GI_RUPEE_HUGE, 500.0f, 100.0f);
         }
 
         player->actor.shape.rot.y = -0x8000;
@@ -1012,7 +1012,7 @@ void EnSyatekiMan_Swamp_StartGame(EnSyatekiMan* this, PlayState* play) {
         this->flagsIndex = 0;
         this->score = 0;
         player->stateFlags1 &= ~PLAYER_STATE1_20;
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_FOUND);
+        Actor_PlaySfx(&this->actor, NA_SE_SY_FOUND);
         this->dekuScrubFlags = (1 << 4) | (1 << 3) | (1 << 2) | (1 << 1) | (1 << 0);
         this->guayFlags = 0;
         this->wolfosFlags = 0;
@@ -1036,7 +1036,7 @@ void EnSyatekiMan_Swamp_RunGame(EnSyatekiMan* this, PlayState* play) {
         // Spawn three guays after the player has killed all Deku Scrubs, or after 140 frames.
         sHasSpawnedGuaysForThisWave = true;
         this->perGameVar1.guaySpawnTimer = 0;
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_FOUND);
+        Actor_PlaySfx(&this->actor, NA_SE_SY_FOUND);
         this->guayFlags = sGuayFlagsPerWave[this->flagsIndex];
         if (this->flagsIndex == 3) {
             this->flagsIndex = 0;
@@ -1090,7 +1090,7 @@ void EnSyatekiMan_Swamp_RunGame(EnSyatekiMan* this, PlayState* play) {
         func_801A2C20();
         this->shootingGameState = SG_GAME_STATE_GIVING_BONUS;
         if (this->score == 2120) {
-            func_8011B4E0(play, 2);
+            Interface_SetPerfectLetters(play, PERFECT_LETTERS_TYPE_2);
             gSaveContext.timerStates[TIMER_ID_MINIGAME_1] = TIMER_STATE_6;
             this->actionFunc = EnSyatekiMan_Swamp_AddBonusPoints;
         } else {
@@ -1122,7 +1122,7 @@ void EnSyatekiMan_Swamp_EndGame(EnSyatekiMan* this, PlayState* play) {
                     CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_01);
                     CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_02);
                     this->shootingGameState = SG_GAME_STATE_NONE;
-                    gSaveContext.minigameState = 3;
+                    gSaveContext.minigameStatus = MINIGAME_STATUS_END;
                     this->actionFunc = EnSyatekiMan_Swamp_Idle;
                     return;
                 }
@@ -1156,7 +1156,7 @@ void EnSyatekiMan_Swamp_AddBonusPoints(EnSyatekiMan* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     player->stateFlags1 |= PLAYER_STATE1_20;
-    if (play->interfaceCtx.unk_286 == 0) {
+    if (!play->interfaceCtx.perfectLettersOn) {
         if (gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_1] == SECONDS_TO_TIMER(0)) {
             gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_1] = SECONDS_TO_TIMER(0);
             gSaveContext.timerStates[TIMER_ID_MINIGAME_1] = TIMER_STATE_STOP;
@@ -1166,9 +1166,9 @@ void EnSyatekiMan_Swamp_AddBonusPoints(EnSyatekiMan* this, PlayState* play) {
             sBonusTimer = 0;
         } else if (sBonusTimer > 10) {
             gSaveContext.timerStopTimes[TIMER_ID_MINIGAME_1] += SECONDS_TO_TIMER(1);
-            play->interfaceCtx.unk_25C += 10;
+            play->interfaceCtx.minigamePoints += 10;
             this->score += 10;
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_TRE_BOX_APPEAR);
+            Actor_PlaySfx(&this->actor, NA_SE_SY_TRE_BOX_APPEAR);
             sBonusTimer = 0;
         } else {
             sBonusTimer++;
@@ -1342,7 +1342,7 @@ void EnSyatekiMan_Town_RunGame(EnSyatekiMan* this, PlayState* play) {
         if ((sModFromLosingTime == (timer % 50)) && (this->perGameVar1.octorokState >= SG_OCTO_STATE_INITIAL)) {
             if (this->flagsIndex < 15) {
                 this->octorokFlags = sOctorokFlagsPerWave[this->flagsIndex++];
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_FOUND);
+                Actor_PlaySfx(&this->actor, NA_SE_SY_FOUND);
                 this->perGameVar1.octorokState = SG_OCTO_STATE_SPAWNING;
             }
         }
@@ -1359,7 +1359,7 @@ void EnSyatekiMan_Town_RunGame(EnSyatekiMan* this, PlayState* play) {
             this->actionFunc = EnSyatekiMan_Town_EndGame;
             if (this->score == 50) {
                 Audio_PlayFanfare(NA_BGM_GET_ITEM | 0x900);
-                func_8011B4E0(play, 1);
+                Interface_SetPerfectLetters(play, PERFECT_LETTERS_TYPE_1);
             }
         }
     }
@@ -1368,7 +1368,7 @@ void EnSyatekiMan_Town_RunGame(EnSyatekiMan* this, PlayState* play) {
 void EnSyatekiMan_Town_EndGame(EnSyatekiMan* this, PlayState* play) {
     if (this->shootingGameState == SG_GAME_STATE_RUNNING) {
         this->octorokFlags = 0;
-        if ((this->talkWaitTimer <= 0) && (play->interfaceCtx.unk_286 == 0)) {
+        if ((this->talkWaitTimer <= 0) && !play->interfaceCtx.perfectLettersOn) {
             Flags_SetAllTreasure(play, this->score);
             this->talkWaitTimer = 15;
             if ((GET_TOWN_SHOOTING_GALLERY_HIGH_SCORE() < this->score) || (this->score == 50)) {

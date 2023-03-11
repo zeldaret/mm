@@ -5,7 +5,6 @@
  */
 
 #include "z_en_ot.h"
-#include "prevent_bss_reordering.h"
 #include "objects/object_ot/object_ot.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
@@ -59,9 +58,9 @@ EnOtUnkStruct* func_80B5DF58(EnOtUnkStruct* arg0, u8 arg1, Vec3f* arg2, Vec3s* a
 void func_80B5E078(PlayState* play, EnOtUnkStruct* arg1, s32 arg2);
 void func_80B5E1D8(PlayState* play, EnOtUnkStruct* arg1, s32 arg2);
 
-static EnOt* D_80B5E880;
-static EnOt* D_80B5E884;
-static EnOt* D_80B5E888;
+EnOt* D_80B5E880;
+EnOt* D_80B5E884;
+EnOt* D_80B5E888;
 
 ActorInit En_Ot_InitVars = {
     ACTOR_EN_OT,
@@ -141,7 +140,7 @@ void EnOt_Init(Actor* thisx, PlayState* play) {
     this->unk_33C = ENOT_GET_C000(&this->actor);
     if (this->unk_33C == 0) {
         D_80B5E880 = this;
-        this->actor.flags |= ACTOR_FLAG_8000000;
+        this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
         this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_8);
         this->actor.update = func_80B5DB6C;
         this->actor.draw = NULL;
@@ -265,7 +264,7 @@ void EnOt_Init(Actor* thisx, PlayState* play) {
 
         case 3:
             if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_26_08)) {
-                this->actor.flags |= ACTOR_FLAG_8000000;
+                this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
                 this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_8);
                 Actor_SetScale(&this->actor, 0.0064999997f);
                 this->collider.dim.radius *= 0.5f;
@@ -327,10 +326,10 @@ void func_80B5BE88(EnOt* this, PlayState* play) {
 }
 
 void func_80B5BED4(EnOt* this, PlayState* play) {
-    func_800BE33C(&this->actor.world.pos, &this->unk_360->actor.world.pos, &this->actor.world.rot, 0);
-    Math_SmoothStepToS(&this->actor.shape.rot.y, Actor_YawBetweenActors(&this->actor, &this->unk_360->actor), 3, 0xE38,
-                       0x38E);
-    this->actor.speedXZ = 3.5f;
+    func_800BE33C(&this->actor.world.pos, &this->unk_360->actor.world.pos, &this->actor.world.rot, false);
+    Math_SmoothStepToS(&this->actor.shape.rot.y, Actor_WorldYawTowardActor(&this->actor, &this->unk_360->actor), 3,
+                       0xE38, 0x38E);
+    this->actor.speed = 3.5f;
     this->actor.world.pos.y = this->unk_360->actor.world.pos.y;
     Actor_MoveWithoutGravityReverse(&this->actor);
 }
@@ -349,10 +348,10 @@ void func_80B5BFB8(EnOt* this, PlayState* play) {
         Math_StepToF(&this->actor.world.pos.y, temp_f0, 2.0f);
     }
 
-    Math_SmoothStepToS(&this->actor.shape.rot.y, Actor_YawBetweenActors(&this->actor, &this->unk_360->actor), 3, 0xE38,
-                       0x38E);
+    Math_SmoothStepToS(&this->actor.shape.rot.y, Actor_WorldYawTowardActor(&this->actor, &this->unk_360->actor), 3,
+                       0xE38, 0x38E);
 
-    if (Actor_DistanceBetweenActors(&this->actor, &this->unk_360->actor) <= 52.519997f) {
+    if (Actor_WorldDistXYZToActor(&this->actor, &this->unk_360->actor) <= 52.519997f) {
         this->unk_73C = 50;
         Matrix_RotateYS(this->actor.world.rot.y, MTXMODE_NEW);
         Matrix_MultVecZ(52.519997f, &sp34);
@@ -382,7 +381,7 @@ void func_80B5C154(EnOt* this, PlayState* play) {
         this->getItemId = GI_HEART_PIECE;
         SET_WEEKEVENTREG(WEEKEVENTREG_32_01);
     }
-    Actor_PickUp(&this->actor, play, this->getItemId, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
+    Actor_OfferGetItem(&this->actor, play, this->getItemId, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
     this->actionFunc = func_80B5C1CC;
 }
 
@@ -392,7 +391,8 @@ void func_80B5C1CC(EnOt* this, PlayState* play) {
         func_80B5C244(this, play);
         func_80B5C244(this->unk_360, play);
     } else {
-        Actor_PickUp(&this->actor, play, this->getItemId, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
+        Actor_OfferGetItem(&this->actor, play, this->getItemId, this->actor.xzDistToPlayer,
+                           this->actor.playerHeightRel);
     }
 }
 
@@ -401,7 +401,7 @@ void func_80B5C244(EnOt* this, PlayState* play) {
 }
 
 void func_80B5C25C(EnOt* this, PlayState* play) {
-    this->unk_390 = Actor_YawBetweenActors(&this->actor, &this->unk_360->actor);
+    this->unk_390 = Actor_WorldYawTowardActor(&this->actor, &this->unk_360->actor);
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->unk_390, 3, 0xE38, 0x38E);
     if (BINANG_SUB(BINANG_ROT180(this->unk_360->actor.shape.rot.y), this->actor.shape.rot.y) < 0x38E) {
         this->unk_32C |= 0x80;
@@ -412,9 +412,9 @@ void func_80B5C25C(EnOt* this, PlayState* play) {
         this->unk_360->unk_32C |= 0x100;
         SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 2, &this->animIndex);
         SubS_ChangeAnimationBySpeedInfo(&this->unk_360->skelAnime, sAnimations, 2, &this->unk_360->animIndex);
-        this->actor.flags |= ACTOR_FLAG_8000000;
+        this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
         this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_8);
-        this->unk_360->actor.flags |= ACTOR_FLAG_8000000;
+        this->unk_360->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
         this->unk_360->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_8);
         func_80B5C9A8(this->unk_360, play);
         func_80B5C3B8(this, play);
@@ -450,7 +450,7 @@ void func_80B5C3D8(EnOt* this, PlayState* play) {
 
     Math_Vec3f_Copy(&this->actor.world.pos, &this->unk_348);
     Math_Vec3f_Copy(&this->unk_360->actor.world.pos, &this->unk_360->unk_348);
-    temp = Actor_YawBetweenActors(&this->actor, &this->unk_360->actor);
+    temp = Actor_WorldYawTowardActor(&this->actor, &this->unk_360->actor);
     this->actor.shape.rot.y = temp;
     this->unk_360->actor.shape.rot.y = BINANG_ROT180(temp);
 
@@ -488,7 +488,7 @@ void func_80B5C64C(EnOt* this, PlayState* play) {
 }
 
 void func_80B5C684(EnOt* this, PlayState* play) {
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 0, &this->animIndex);
     this->actionFunc = func_80B5C6DC;
 }
@@ -499,7 +499,7 @@ void func_80B5C6DC(EnOt* this, PlayState* play) {
     s16 sp3E;
     Vec3f sp30;
 
-    sp3E = Actor_YawToPoint(&player->actor, &this->unk_394);
+    sp3E = Actor_WorldYawTowardPoint(&player->actor, &this->unk_394);
     Matrix_RotateYS(BINANG_ADD(sp3E, 0x4000), MTXMODE_NEW);
     if (this->unk_33C == 2) {
         Matrix_MultVecZ(26.259998f, &sp30);
@@ -535,7 +535,7 @@ void func_80B5C6DC(EnOt* this, PlayState* play) {
             this->unk_360->unk_3A0 = this->unk_3A0;
             func_80B5C9A8(this, play);
             func_80B5D114(this, play);
-        } else if ((player->actor.bgCheckFlags & 1) && !func_801242B4(player) &&
+        } else if ((player->actor.bgCheckFlags & BGCHECKFLAG_GROUND) && !func_801242B4(player) &&
                    (this->actor.xzDistToPlayer < 130.0f)) {
             func_800B8614(&this->actor, play, 130.0f);
         }
@@ -555,7 +555,7 @@ void func_80B5C910(EnOt* this, PlayState* play) {
 
 void func_80B5C950(EnOt* this, PlayState* play) {
     if (this->unk_32C & 8) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SEAHORSE_OUT_BOTTLE);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_SEAHORSE_OUT_BOTTLE);
         SET_WEEKEVENTREG(WEEKEVENTREG_25_04);
         func_80B5CAD0(this, play);
     }
@@ -576,7 +576,7 @@ void func_80B5C9D0(EnOt* this, PlayState* play) {
     this->actor.world.rot.x = this->actor.world.rot.x;
     this->actor.world.rot.y = this->actor.world.rot.y;
     this->actor.world.rot.z = this->actor.world.rot.z;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SEAHORSE_OUT_BOTTLE);
+    Actor_PlaySfx(&this->actor, NA_SE_EV_SEAHORSE_OUT_BOTTLE);
     this->actionFunc = func_80B5CA30;
 }
 
@@ -696,7 +696,8 @@ void func_80B5CEC8(EnOt* this, PlayState* play) {
         func_800B8500(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel, PLAYER_IA_NONE);
     } else {
         this->actor.flags &= ~ACTOR_FLAG_10000;
-        if ((player->actor.bgCheckFlags & 1) && !func_801242B4(player) && (this->actor.xzDistToPlayer < 130.0f)) {
+        if ((player->actor.bgCheckFlags & BGCHECKFLAG_GROUND) && !func_801242B4(player) &&
+            (this->actor.xzDistToPlayer < 130.0f)) {
             func_800B8614(&this->actor, play, 130.0f);
         }
     }
@@ -820,11 +821,11 @@ void func_80B5D160(EnOt* this, PlayState* play) {
 s32 EnOt_ActorPathing_Move(PlayState* play, ActorPathing* actorPath) {
     Actor* thisx = actorPath->actor;
     EnOt* this = (EnOt*)thisx;
-    f32 sp24 = Math_CosS(-thisx->world.rot.x) * thisx->speedXZ;
+    f32 sp24 = Math_CosS(-thisx->world.rot.x) * thisx->speed;
     f32 sp20 = gFramerateDivisorHalf;
 
     thisx->velocity.x = Math_SinS(thisx->world.rot.y) * sp24;
-    thisx->velocity.y = Math_SinS(-thisx->world.rot.x) * thisx->speedXZ;
+    thisx->velocity.y = Math_SinS(-thisx->world.rot.x) * thisx->speed;
     thisx->velocity.z = Math_CosS(thisx->world.rot.y) * sp24;
 
     this->unk_330.x += (thisx->velocity.x * sp20) + thisx->colChkInfo.displacement.x;
@@ -846,7 +847,7 @@ s32 EnOt_ActorPathing_UpdateActorInfo(PlayState* play, ActorPathing* actorPath) 
     s32 sp34;
 
     thisx->gravity = 0.0f;
-    Math_SmoothStepToF(&thisx->speedXZ, 10.0f, 0.8f, 2.0f, 0.0f);
+    Math_SmoothStepToF(&thisx->speed, 10.0f, 0.8f, 2.0f, 0.0f);
 
     sp50.x = actorPath->curPoint.x - thisx->world.pos.x;
     sp50.y = actorPath->curPoint.y - thisx->world.pos.y;
@@ -857,10 +858,10 @@ s32 EnOt_ActorPathing_UpdateActorInfo(PlayState* play, ActorPathing* actorPath) 
     sp44.z = actorPath->curPoint.z - actorPath->prevPoint.z;
 
     temp = Math3D_Parallel(&sp50, &sp44);
-    if ((actorPath->distSqToCurPointXZ < SQ(thisx->speedXZ)) || (temp <= 0.0f)) {
+    if ((actorPath->distSqToCurPointXZ < SQ(thisx->speed)) || (temp <= 0.0f)) {
         ret = true;
     } else {
-        temp = SQ(thisx->speedXZ) / actorPath->distSqToCurPoint;
+        temp = SQ(thisx->speed) / actorPath->distSqToCurPoint;
         sp34 = ABS(actorPath->rotToCurPoint.x - thisx->world.rot.x);
         sp2C = (s32)(sp34 * temp) + 0xAAA;
 
@@ -885,9 +886,9 @@ void func_80B5D648(EnOt* this, PlayState* play) {
     this->actorPath.pointOffset.y = 0.0f;
     this->actorPath.pointOffset.z = 0.0f;
     this->actor.gravity = 0.0f;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 1, &this->animIndex);
-    this->actor.flags |= ACTOR_FLAG_8000000;
+    this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
     this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_8);
     Flags_SetSwitch(play, ENOT_GET_3F80(&this->actor));
     this->actionFunc = func_80B5D750;
@@ -915,7 +916,7 @@ void func_80B5D750(EnOt* this, PlayState* play) {
     }
 
     if ((this->unk_32C & 1) && (this->actor.xzDistToPlayer <= 180.0f)) {
-        this->actor.flags &= ~ACTOR_FLAG_8000000;
+        this->actor.flags &= ~ACTOR_FLAG_CANT_LOCK_ON;
         this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8);
         if (D_80B5E884 != 0) {
             func_80B5C9A8(this, play);
@@ -930,11 +931,11 @@ void EnOt_Update(Actor* thisx, PlayState* play) {
     EnOt* this = THIS;
 
     if ((this->animIndex == 1) && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SEAHORSE_SWIM);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_SEAHORSE_SWIM);
     }
 
     this->actionFunc(this, play);
-    if (this->actor.bgCheckFlags & 0x20) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_WATER) {
         if (DECR(this->unk_354) == 0) {
             if (this->actor.flags & ACTOR_FLAG_40) {
                 s32 i;
@@ -992,7 +993,7 @@ void func_80B5DB6C(Actor* thisx, PlayState* play) {
             func_80B5B2E0(play, &this->actor.world.pos, ENOT_GET_7F(&this->actor), &sp50, &this->unk_340);
             if (Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ACTOR_EN_OT, sp50.x, sp50.y, sp50.z, 0,
                                               this->actor.shape.rot.y, 1, ENOT_GET_3FFF(&this->actor) | 0x8000,
-                                              this->actor.cutscene, this->actor.unk20, NULL) != NULL) {
+                                              this->actor.cutscene, this->actor.halfDaysBits, NULL) != NULL) {
                 this->unk_32C |= 8;
             }
         } else if (D_80B5E888 != NULL) {
@@ -1137,7 +1138,7 @@ void func_80B5E1D8(PlayState* play, EnOtUnkStruct* arg1, s32 arg2) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    POLY_OPA_DISP = func_801660B8(play, POLY_OPA_DISP);
+    POLY_OPA_DISP = Play_SetFog(play, POLY_OPA_DISP);
     POLY_OPA_DISP = func_8012C724(POLY_OPA_DISP);
 
     for (i = 0; i < arg2; i++, arg1++) {

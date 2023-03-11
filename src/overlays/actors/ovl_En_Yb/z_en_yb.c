@@ -276,7 +276,7 @@ void EnYb_ReceiveMask(EnYb* this, PlayState* play) {
         this->actor.flags |= ACTOR_FLAG_10000;
         func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
     } else {
-        Actor_PickUp(&this->actor, play, GI_MASK_KAMARO, 10000.0f, 100.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_MASK_KAMARO, 10000.0f, 100.0f);
     }
     EnYb_EnableProximityMusic(this);
 }
@@ -377,7 +377,7 @@ void EnYb_Idle(EnYb* this, PlayState* play) {
     } else if ((player->stateFlags2 & PLAYER_STATE2_8000000) && this->actor.xzDistToPlayer < 180.0f &&
                fabsf(this->actor.playerHeightRel) < 50.0f) {
         this->playerOcarinaOut |= 1;
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_TRE_BOX_APPEAR);
+        Actor_PlaySfx(&this->actor, NA_SE_SY_TRE_BOX_APPEAR);
     }
 
     EnYb_EnableProximityMusic(this);

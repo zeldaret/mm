@@ -257,7 +257,7 @@ s32 func_80BDE4E0(EnAl* this, s16* arg1, s16 arg2) {
     }
 
     if (arg2 == *arg1) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CHAIR_ROLL);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_CHAIR_ROLL);
         func_80BDE27C(this, 3);
         this->unk_4E8 = 0;
         (*arg1)++;
@@ -292,7 +292,7 @@ s32 func_80BDE678(EnAl* this, s16* arg1, s16 arg2) {
     }
 
     if (arg2 == *arg1) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CHAIR_ROLL);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_CHAIR_ROLL);
         func_80BDE27C(this, 4);
         this->unk_4E8 = 0;
         (*arg1)++;
@@ -748,7 +748,7 @@ void func_80BDF578(EnAl* this, PlayState* play) {
 void func_80BDF5E8(EnAl* this, PlayState* play) {
     ScheduleOutput sp20;
 
-    this->unk_4E0 = REG(15) + ((void)0, gSaveContext.save.daySpeed);
+    this->unk_4E0 = R_TIME_SPEED + ((void)0, gSaveContext.save.timeSpeedOffset);
     if (!Schedule_RunScript(play, D_80BDFC70, &sp20) ||
         ((this->unk_35C != sp20.result) && !func_80BDF390(this, play, &sp20))) {
         this->actor.shape.shadowDraw = NULL;

@@ -55,6 +55,14 @@ typedef enum {
 #define MAGIC_NORMAL_METER 0x30
 #define MAGIC_DOUBLE_METER (2 * MAGIC_NORMAL_METER)
 
+// See `R_MAGIC_DBG_SET_UPGRADE`
+#define MAGIC_DBG_SET_UPGRADE_NO_ACTION 0
+#define MAGIC_DBG_SET_UPGRADE_NORMAL_METER -1
+#define MAGIC_DBG_SET_UPGRADE_DOUBLE_METER 1
+
+#define ENV_HAZARD_TEXT_TRIGGER_HOTROOM (1 << 0)
+#define ENV_HAZARD_TEXT_TRIGGER_UNDERWATER (1 << 1)
+
 #define SECONDS_TO_TIMER(seconds) ((seconds) * 100)
 
 #define OSTIME_TO_TIMER(osTime) ((osTime) * 64 / 3000 / 10000)
@@ -69,7 +77,7 @@ typedef enum {
     /*  2 */ TIMER_ID_2,
     /*  3 */ TIMER_ID_MOON_CRASH, // timer used for mooncrash on the clocktower roof
     /*  4 */ TIMER_ID_MINIGAME_2, // minigame timer
-    /*  5 */ TIMER_ID_ENV, // environmental timer (underwater or hot room)
+    /*  5 */ TIMER_ID_ENV_HAZARD, // environmental hazard timer (underwater or hot room)
     /*  6 */ TIMER_ID_GORON_RACE_UNUSED,
     /*  7 */ TIMER_ID_MAX,
     /* 99 */ TIMER_ID_NONE = 99,
@@ -89,7 +97,7 @@ typedef enum {
     /*  5 */ TIMER_STATE_STOP,
     /*  6 */ TIMER_STATE_6, // like `TIMER_STATE_STOP` but with extra minigame checks
     /*  7 */ TIMER_STATE_7, // stopped but still update `timerCurTimes`
-    /*  8 */ TIMER_STATE_ENV_START,
+    /*  8 */ TIMER_STATE_ENV_HAZARD_START,
     /*  9 */ TIMER_STATE_ALT_START,
     /* 10 */ TIMER_STATE_10, // precursor to `TIMER_STATE_ALT_COUNTING`
     /* 11 */ TIMER_STATE_ALT_COUNTING,
@@ -104,6 +112,12 @@ typedef enum {
     /* 0 */ BOTTLE_TIMER_STATE_OFF,
     /* 1 */ BOTTLE_TIMER_STATE_COUNTING
 } BottleTimerState;
+
+typedef enum {
+    /* 0 */ MINIGAME_STATUS_INACTIVE,
+    /* 1 */ MINIGAME_STATUS_ACTIVE,
+    /* 3 */ MINIGAME_STATUS_END = 3
+} MinigameStatus;
 
 typedef enum {
     /*  0 */ HUD_VISIBILITY_IDLE,
@@ -132,6 +146,15 @@ typedef enum {
     /* 50 */ HUD_VISIBILITY_ALL = 50,
     /* 52 */ HUD_VISIBILITY_NONE_INSTANT = 52
 } HudVisibility;
+
+#define PICTO_PHOTO_WIDTH 160
+#define PICTO_PHOTO_HEIGHT 112
+
+#define PICTO_PHOTO_TOPLEFT_X ((SCREEN_WIDTH - PICTO_PHOTO_WIDTH) / 2)
+#define PICTO_PHOTO_TOPLEFT_Y ((SCREEN_HEIGHT - PICTO_PHOTO_HEIGHT) / 2)
+
+#define PICTO_PHOTO_SIZE (PICTO_PHOTO_WIDTH * PICTO_PHOTO_HEIGHT)
+#define PICTO_PHOTO_COMPRESSED_SIZE (PICTO_PHOTO_SIZE * 5 / 8)
 
 typedef struct SramContext {
     /* 0x00 */ u8* readBuff;
@@ -230,7 +253,7 @@ typedef struct SavePlayerData {
 } SavePlayerData; // size = 0x28
 
 typedef struct Save {
-    /* 0x0000 */ u32 entrance;                          // "scene_no"
+    /* 0x0000 */ s32 entrance;                          // "scene_no"
     /* 0x0004 */ u8 equippedMask;                       // "player_mask"
     /* 0x0005 */ u8 isFirstCycle;                       // "opening_flag"
     /* 0x0006 */ u8 unk_06;
@@ -239,7 +262,7 @@ typedef struct Save {
     /* 0x000C */ u16 time;                              // "zelda_time"
     /* 0x000E */ u16 owlSaveLocation;
     /* 0x0010 */ s32 isNight;                           // "asahiru_fg"
-    /* 0x0014 */ s32 daySpeed;                          // "change_zelda_time"
+    /* 0x0014 */ s32 timeSpeedOffset;                   // "change_zelda_time"
     /* 0x0018 */ s32 day;                               // "totalday"
     /* 0x001C */ s32 daysElapsed;                       // "eventday"
     /* 0x0020 */ u8 playerForm;                         // "player_character"
@@ -298,7 +321,7 @@ typedef struct SaveContext {
     /* 0x1050 */ u64 bottleTimerTimeLimits[BOTTLE_MAX]; // The original total time given before the timer expires, in centiseconds (1/100th sec). "bottle_sub"
     /* 0x1080 */ u64 bottleTimerCurTimes[BOTTLE_MAX]; // The remaining time left before the timer expires, in centiseconds (1/100th sec). "bottle_time"
     /* 0x10B0 */ OSTime bottleTimerPausedOsTimes[BOTTLE_MAX]; // The cumulative osTime spent with the timer paused. "bottle_stop_time"
-    /* 0x10E0 */ u64 pictoPhoto[1400];                  // buffer containing the pictograph photo
+    /* 0x10E0 */ u8 pictoPhotoI5[PICTO_PHOTO_COMPRESSED_SIZE]; // buffer containing the pictograph photo, compressed to I5 from I8
     /* 0x3CA0 */ s32 fileNum;                           // "file_no"
     /* 0x3CA4 */ s16 powderKegTimer;                    // "big_bom_timer"
     /* 0x3CA6 */ u8 unk_3CA6;
@@ -312,7 +335,7 @@ typedef struct SaveContext {
     /* 0x3DBA */ u8 unk_3DBA;                           // "player_wipe_item"
     /* 0x3DBB */ u8 unk_3DBB;                           // "next_walk"
     /* 0x3DBC */ s16 dogParams;                         // "dog_flag"
-    /* 0x3DBE */ u8 textTriggerFlags;                   // "guide_status"
+    /* 0x3DBE */ u8 envHazardTextTriggerFlags;          // "guide_status"
     /* 0x3DBF */ u8 showTitleCard;                      // "name_display"
     /* 0x3DC0 */ s16 unk_3DC0;                          // "shield_magic_timer"
     /* 0x3DC2 */ u8 unk_3DC2;                           // "pad1"
@@ -343,9 +366,9 @@ typedef struct SaveContext {
     /* 0x3F32 */ s16 magicToConsume; // accumulated magic that is requested to be consumed "magic_used"
     /* 0x3F34 */ s16 magicToAdd; // accumulated magic that is requested to be added "magic_recovery"
     /* 0x3F36 */ u16 mapIndex;                          // "scene_ID"
-    /* 0x3F38 */ u16 minigameState;                     // "yabusame_mode"
+    /* 0x3F38 */ u16 minigameStatus;                    // "yabusame_mode"
     /* 0x3F3A */ u16 minigameScore;                     // "yabusame_total"
-    /* 0x3F3C */ u16 unk_3F3C;                          // "yabusame_out_ct"
+    /* 0x3F3C */ u16 minigameHiddenScore;               // "yabusame_out_ct"
     /* 0x3F3E */ u8 unk_3F3E;                           // "no_save"
     /* 0x3F3F */ u8 unk_3F3F;                           // "flash_flag"
     /* 0x3F40 */ SaveOptions options;
@@ -389,6 +412,11 @@ typedef enum SunsSongState {
 #define LINK_IS_ADULT (gSaveContext.save.linkAge == 0)
 
 #define CURRENT_DAY (((void)0, gSaveContext.save.day) % 5)
+
+// The day begins at CLOCK_TIME(6, 0) so it must be offset.
+#define TIME_UNTIL_MOON_CRASH \
+    ((4 - CURRENT_DAY) * DAY_LENGTH - (u16)(((void)0, gSaveContext.save.time) - CLOCK_TIME(6, 0)));
+#define TIME_UNTIL_NEW_DAY (DAY_LENGTH - (u16)(((void)0, gSaveContext.save.time) - CLOCK_TIME(6, 0)));
 
 #define GET_PLAYER_FORM ((void)0, gSaveContext.save.playerForm)
 
@@ -475,36 +503,43 @@ typedef enum SunsSongState {
 #define PACK_WEEKEVENTREG_FLAG(index, mask) (((index) << 8) | (mask))
 
 #define WEEKEVENTREG_00_01 PACK_WEEKEVENTREG_FLAG(0, 0x01)
-#define WEEKEVENTREG_00_02 PACK_WEEKEVENTREG_FLAG(0, 0x02)
-#define WEEKEVENTREG_00_04 PACK_WEEKEVENTREG_FLAG(0, 0x04)
-#define WEEKEVENTREG_00_08 PACK_WEEKEVENTREG_FLAG(0, 0x08)
-#define WEEKEVENTREG_00_10 PACK_WEEKEVENTREG_FLAG(0, 0x10)
-#define WEEKEVENTREG_00_20 PACK_WEEKEVENTREG_FLAG(0, 0x20)
-#define WEEKEVENTREG_00_40 PACK_WEEKEVENTREG_FLAG(0, 0x40)
-#define WEEKEVENTREG_00_80 PACK_WEEKEVENTREG_FLAG(0, 0x80)
-#define WEEKEVENTREG_01_01 PACK_WEEKEVENTREG_FLAG(1, 0x01)
-#define WEEKEVENTREG_01_02 PACK_WEEKEVENTREG_FLAG(1, 0x02)
-#define WEEKEVENTREG_01_04 PACK_WEEKEVENTREG_FLAG(1, 0x04)
-#define WEEKEVENTREG_01_08 PACK_WEEKEVENTREG_FLAG(1, 0x08)
-#define WEEKEVENTREG_01_10 PACK_WEEKEVENTREG_FLAG(1, 0x10)
-#define WEEKEVENTREG_01_20 PACK_WEEKEVENTREG_FLAG(1, 0x20)
-#define WEEKEVENTREG_01_40 PACK_WEEKEVENTREG_FLAG(1, 0x40)
-#define WEEKEVENTREG_01_80 PACK_WEEKEVENTREG_FLAG(1, 0x80)
-#define WEEKEVENTREG_02_01 PACK_WEEKEVENTREG_FLAG(2, 0x01)
-#define WEEKEVENTREG_02_02 PACK_WEEKEVENTREG_FLAG(2, 0x02)
-#define WEEKEVENTREG_02_04 PACK_WEEKEVENTREG_FLAG(2, 0x04)
-#define WEEKEVENTREG_02_08 PACK_WEEKEVENTREG_FLAG(2, 0x08)
-#define WEEKEVENTREG_02_10 PACK_WEEKEVENTREG_FLAG(2, 0x10)
-#define WEEKEVENTREG_02_20 PACK_WEEKEVENTREG_FLAG(2, 0x20)
-#define WEEKEVENTREG_02_40 PACK_WEEKEVENTREG_FLAG(2, 0x40)
-#define WEEKEVENTREG_02_80 PACK_WEEKEVENTREG_FLAG(2, 0x80)
-#define WEEKEVENTREG_03_01 PACK_WEEKEVENTREG_FLAG(3, 0x01)
-#define WEEKEVENTREG_03_02 PACK_WEEKEVENTREG_FLAG(3, 0x02)
-#define WEEKEVENTREG_03_04 PACK_WEEKEVENTREG_FLAG(3, 0x04)
-#define WEEKEVENTREG_03_08 PACK_WEEKEVENTREG_FLAG(3, 0x08)
-#define WEEKEVENTREG_03_10 PACK_WEEKEVENTREG_FLAG(3, 0x10)
-#define WEEKEVENTREG_03_20 PACK_WEEKEVENTREG_FLAG(3, 0x20)
-#define WEEKEVENTREG_03_40 PACK_WEEKEVENTREG_FLAG(3, 0x40)
+
+/* Entrance cutscenes watched */
+
+#define WEEKEVENTREG_ENTERED_TERMINA_FIELD               PACK_WEEKEVENTREG_FLAG(0, 0x02)
+#define WEEKEVENTREG_ENTERED_IKANA_GRAVEYARD             PACK_WEEKEVENTREG_FLAG(0, 0x04)
+#define WEEKEVENTREG_ENTERED_ROMANI_RANCH                PACK_WEEKEVENTREG_FLAG(0, 0x08)
+#define WEEKEVENTREG_ENTERED_GORMAN_TRACK                PACK_WEEKEVENTREG_FLAG(0, 0x10)
+#define WEEKEVENTREG_ENTERED_MOUNTAIN_VILLAGE_WINTER     PACK_WEEKEVENTREG_FLAG(0, 0x20)
+#define WEEKEVENTREG_ENTERED_GORON_SHRINE                PACK_WEEKEVENTREG_FLAG(0, 0x40)
+#define WEEKEVENTREG_ENTERED_SNOWHEAD                    PACK_WEEKEVENTREG_FLAG(0, 0x80)
+#define WEEKEVENTREG_ENTERED_SOUTHERN_SWAMP_POISONED     PACK_WEEKEVENTREG_FLAG(1, 0x01)
+#define WEEKEVENTREG_ENTERED_WOODFALL                    PACK_WEEKEVENTREG_FLAG(1, 0x02)
+#define WEEKEVENTREG_ENTERED_DEKU_PALACE                 PACK_WEEKEVENTREG_FLAG(1, 0x04)
+#define WEEKEVENTREG_ENTERED_GREAT_BAY_COAST             PACK_WEEKEVENTREG_FLAG(1, 0x08)
+#define WEEKEVENTREG_ENTERED_PIRATES_FORTRESS            PACK_WEEKEVENTREG_FLAG(1, 0x10)
+#define WEEKEVENTREG_ENTERED_ZORA_HALL                   PACK_WEEKEVENTREG_FLAG(1, 0x20)
+#define WEEKEVENTREG_ENTERED_WATERFALL_RAPIDS            PACK_WEEKEVENTREG_FLAG(1, 0x40)
+#define WEEKEVENTREG_ENTERED_IKANA_CANYON                PACK_WEEKEVENTREG_FLAG(1, 0x80)
+// Attached to the scene but unused. Entrance cutscene is instead triggered by `ACTOR_OBJ_DEMO`
+#define WEEKEVENTREG_ENTERED_IKANA_CASTLE                PACK_WEEKEVENTREG_FLAG(2, 0x01)
+#define WEEKEVENTREG_ENTERED_STONE_TOWER                 PACK_WEEKEVENTREG_FLAG(2, 0x02)
+#define WEEKEVENTREG_ENTERED_STONE_TOWER_INVERTED        PACK_WEEKEVENTREG_FLAG(2, 0x04)
+#define WEEKEVENTREG_ENTERED_EAST_CLOCK_TOWN             PACK_WEEKEVENTREG_FLAG(2, 0x08)
+#define WEEKEVENTREG_ENTERED_WEST_CLOCK_TOWN             PACK_WEEKEVENTREG_FLAG(2, 0x10)
+#define WEEKEVENTREG_ENTERED_NORTH_CLOCK_TOWN            PACK_WEEKEVENTREG_FLAG(2, 0x20)
+#define WEEKEVENTREG_ENTERED_WOODFALL_TEMPLE             PACK_WEEKEVENTREG_FLAG(2, 0x40)
+#define WEEKEVENTREG_ENTERED_SNOWHEAD_TEMPLE             PACK_WEEKEVENTREG_FLAG(2, 0x80)
+// Attached to the scene but unused. Entrance cutscene is instead triggered by `ACTOR_OBJ_DEMO`
+#define WEEKEVENTREG_ENTERED_PIRATES_FORTRESS_EXTERIOR   PACK_WEEKEVENTREG_FLAG(3, 0x01)
+#define WEEKEVENTREG_ENTERED_STONE_TOWER_TEMPLE          PACK_WEEKEVENTREG_FLAG(3, 0x02)
+#define WEEKEVENTREG_ENTERED_STONE_TOWER_TEMPLE_INVERTED PACK_WEEKEVENTREG_FLAG(3, 0x04)
+// Unused as no cutscene is attached to this script
+#define WEEKEVENTREG_ENTERED_THE_MOON                    PACK_WEEKEVENTREG_FLAG(3, 0x08)
+#define WEEKEVENTREG_ENTERED_MOON_DEKU_TRIAL             PACK_WEEKEVENTREG_FLAG(3, 0x10)
+#define WEEKEVENTREG_ENTERED_MOON_GORON_TRIAL            PACK_WEEKEVENTREG_FLAG(3, 0x20)
+#define WEEKEVENTREG_ENTERED_MOON_ZORA_TRIAL             PACK_WEEKEVENTREG_FLAG(3, 0x40)
+
 #define WEEKEVENTREG_03_80 PACK_WEEKEVENTREG_FLAG(3, 0x80)
 #define WEEKEVENTREG_04_01 PACK_WEEKEVENTREG_FLAG(4, 0x01)
 #define WEEKEVENTREG_04_02 PACK_WEEKEVENTREG_FLAG(4, 0x02)
@@ -537,7 +572,8 @@ typedef enum SunsSongState {
 #define WEEKEVENTREG_07_10 PACK_WEEKEVENTREG_FLAG(7, 0x10)
 #define WEEKEVENTREG_07_20 PACK_WEEKEVENTREG_FLAG(7, 0x20)
 #define WEEKEVENTREG_07_40 PACK_WEEKEVENTREG_FLAG(7, 0x40)
-#define WEEKEVENTREG_07_80 PACK_WEEKEVENTREG_FLAG(7, 0x80)
+// Entrance cutscene watched to the prison where the deku princess is kept. Also set in door_warp1.c
+#define WEEKEVENTREG_ENTERED_WOODFALL_TEMPLE_PRISON PACK_WEEKEVENTREG_FLAG(7, 0x80)
 #define WEEKEVENTREG_08_01 PACK_WEEKEVENTREG_FLAG(8, 0x01)
 #define WEEKEVENTREG_08_02 PACK_WEEKEVENTREG_FLAG(8, 0x02)
 #define WEEKEVENTREG_08_04 PACK_WEEKEVENTREG_FLAG(8, 0x04)
@@ -586,9 +622,18 @@ typedef enum SunsSongState {
 #define WEEKEVENTREG_13_04 PACK_WEEKEVENTREG_FLAG(13, 0x04)
 #define WEEKEVENTREG_13_08 PACK_WEEKEVENTREG_FLAG(13, 0x08)
 #define WEEKEVENTREG_13_10 PACK_WEEKEVENTREG_FLAG(13, 0x10)
-#define WEEKEVENTREG_13_20 PACK_WEEKEVENTREG_FLAG(13, 0x20)
-#define WEEKEVENTREG_13_40 PACK_WEEKEVENTREG_FLAG(13, 0x40)
-#define WEEKEVENTREG_13_80 PACK_WEEKEVENTREG_FLAG(13, 0x80)
+
+// This flag marks that the player has finished the Oceanside Spider House and has exited.
+// Used to identify if EnSth should be moved deeper into the house.
+// This does NOT flag:
+//   A) that the player has completed the house (Inventory_GetSkullTokenCount(play->sceneId))
+//   B) that the player has collected a reward (WEEKEVENTREG_OCEANSIDE_SPIDER_HOUSE_COLLECTED_REWARD)
+//   C) that the player has collected the wallet (WEEKEVENTREG_RECEIVED_OCEANSIDE_WALLET_UPGRADE)
+#define WEEKEVENTREG_OCEANSIDE_SPIDER_HOUSE_BUYER_MOVED_IN PACK_WEEKEVENTREG_FLAG(13, 0x20)
+
+#define WEEKEVENTREG_RECEIVED_OCEANSIDE_WALLET_UPGRADE PACK_WEEKEVENTREG_FLAG(13, 0x40)
+// You only get a wallet if completed on Day 1: repeat gets silver rupee, other days get less
+#define WEEKEVENTREG_OCEANSIDE_SPIDER_HOUSE_COLLECTED_REWARD PACK_WEEKEVENTREG_FLAG(13, 0x80)
 
 // PlayedMilkMinigame
 // Attempted Cremia Cart Ride
@@ -596,7 +641,7 @@ typedef enum SunsSongState {
 
 #define WEEKEVENTREG_14_02 PACK_WEEKEVENTREG_FLAG(14, 0x02)
 #define WEEKEVENTREG_14_04 PACK_WEEKEVENTREG_FLAG(14, 0x04)
-#define WEEKEVENTREG_14_08 PACK_WEEKEVENTREG_FLAG(14, 0x08)
+#define WEEKEVENTREG_DRANK_CHATEAU_ROMANI PACK_WEEKEVENTREG_FLAG(14, 0x08)
 #define WEEKEVENTREG_14_10 PACK_WEEKEVENTREG_FLAG(14, 0x10)
 #define WEEKEVENTREG_14_20 PACK_WEEKEVENTREG_FLAG(14, 0x20)
 #define WEEKEVENTREG_14_40 PACK_WEEKEVENTREG_FLAG(14, 0x40)
@@ -757,6 +802,9 @@ typedef enum SunsSongState {
 #define WEEKEVENTREG_31_10 PACK_WEEKEVENTREG_FLAG(31, 0x10)
 #define WEEKEVENTREG_31_20 PACK_WEEKEVENTREG_FLAG(31, 0x20)
 
+//! @note: entrance cutscenes defined in `CutsceneEntry` can not use
+//! any of the below weekEventFlags due to bitpacking
+
 // Cremia asked the player to accompany her to town
 #define WEEKEVENTREG_31_40 PACK_WEEKEVENTREG_FLAG(31, 0x40)
 // Player is playing the Milk Run
@@ -791,10 +839,10 @@ typedef enum SunsSongState {
 
 #define WEEKEVENTREG_34_02 PACK_WEEKEVENTREG_FLAG(34, 0x02)
 #define WEEKEVENTREG_34_04 PACK_WEEKEVENTREG_FLAG(34, 0x04)
-#define WEEKEVENTREG_34_08 PACK_WEEKEVENTREG_FLAG(34, 0x08)
+#define WEEKEVENTREG_SWAMP_SPIDER_HOUSE_TALKED PACK_WEEKEVENTREG_FLAG(34, 0x08)
 #define WEEKEVENTREG_34_10 PACK_WEEKEVENTREG_FLAG(34, 0x10)
 #define WEEKEVENTREG_34_20 PACK_WEEKEVENTREG_FLAG(34, 0x20)
-#define WEEKEVENTREG_34_40 PACK_WEEKEVENTREG_FLAG(34, 0x40)
+#define WEEKEVENTREG_RECEIVED_MASK_OF_TRUTH PACK_WEEKEVENTREG_FLAG(34, 0x40)
 
 // Cremia did Milk Run alone. Player didn't interact or didn't accept the ride
 #define WEEKEVENTREG_34_80 PACK_WEEKEVENTREG_FLAG(34, 0x80)
@@ -1190,7 +1238,10 @@ typedef enum SunsSongState {
 #define WEEKEVENTREG_80_01 PACK_WEEKEVENTREG_FLAG(80, 0x01)
 #define WEEKEVENTREG_80_02 PACK_WEEKEVENTREG_FLAG(80, 0x02)
 #define WEEKEVENTREG_80_04 PACK_WEEKEVENTREG_FLAG(80, 0x04)
+
+// Aveil has spotted Player
 #define WEEKEVENTREG_80_08 PACK_WEEKEVENTREG_FLAG(80, 0x08)
+
 #define WEEKEVENTREG_80_10 PACK_WEEKEVENTREG_FLAG(80, 0x10)
 #define WEEKEVENTREG_80_20 PACK_WEEKEVENTREG_FLAG(80, 0x20)
 #define WEEKEVENTREG_80_40 PACK_WEEKEVENTREG_FLAG(80, 0x40)
@@ -1215,7 +1266,10 @@ typedef enum SunsSongState {
 #define WEEKEVENTREG_82_40 PACK_WEEKEVENTREG_FLAG(82, 0x40)
 #define WEEKEVENTREG_82_80 PACK_WEEKEVENTREG_FLAG(82, 0x80)
 #define WEEKEVENTREG_83_01 PACK_WEEKEVENTREG_FLAG(83, 0x01)
+
+// Knocked the Gerudo beehive down
 #define WEEKEVENTREG_83_02 PACK_WEEKEVENTREG_FLAG(83, 0x02)
+
 #define WEEKEVENTREG_83_04 PACK_WEEKEVENTREG_FLAG(83, 0x04)
 #define WEEKEVENTREG_83_08 PACK_WEEKEVENTREG_FLAG(83, 0x08)
 #define WEEKEVENTREG_83_10 PACK_WEEKEVENTREG_FLAG(83, 0x10)
@@ -1511,10 +1565,8 @@ void func_80147198(SramContext* sramCtx);
 extern s32 D_801C6798[];
 extern u8 gAmmoItems[];
 extern s32 D_801C67C8[];
-extern s32 D_801C67E8[];
 extern s32 D_801C67F0[];
 extern s32 D_801C6818[];
-extern s32 D_801C6838[];
 extern s32 D_801C6840[];
 extern s32 D_801C6850[];
 

@@ -219,21 +219,21 @@ void func_80BFE524(EnBomjima* this) {
     if ((this->animIndex == 5) &&
         (Animation_OnFrame(&this->skelAnime, 9.0f) || Animation_OnFrame(&this->skelAnime, 10.0f) ||
          Animation_OnFrame(&this->skelAnime, 17.0f) || Animation_OnFrame(&this->skelAnime, 18.0f))) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BOMBERS_WALK);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_BOMBERS_WALK);
     }
 
     if ((this->animIndex == 18) &&
         (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 2.0f) ||
          Animation_OnFrame(&this->skelAnime, 4.0f) || Animation_OnFrame(&this->skelAnime, 6.0f))) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BOMBERS_WALK);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_BOMBERS_WALK);
     }
 
     if ((this->animIndex == 15) && Animation_OnFrame(&this->skelAnime, 15.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BOMBERS_LAND);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_BOMBERS_LAND);
     }
 
     if ((this->animIndex == 6) && Animation_OnFrame(&this->skelAnime, 8.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BOMBERS_LAND);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_BOMBERS_LAND);
     }
 }
 
@@ -409,7 +409,7 @@ void func_80BFEB64(EnBomjima* this, PlayState* play) {
             this->unk_2DC = Math_Vec3f_Yaw(&this->actor.world.pos, &this->bombal->actor.world.pos);
             if (Animation_OnFrame(&this->skelAnime, 19.0f)) {
                 this->unk_2C0 = 5;
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BOMBERS_SHOT_BREATH);
+                Actor_PlaySfx(&this->actor, NA_SE_EV_BOMBERS_SHOT_BREATH);
             }
 
             if (this->unk_2C0 == 1) {
@@ -773,7 +773,7 @@ void func_80BFFBC4(EnBomjima* this, PlayState* play) {
         gSaveContext.nextCutsceneIndex = 0;
         play->transitionTrigger = TRANS_TRIGGER_START;
         play->transitionType = TRANS_TYPE_86;
-        gSaveContext.nextTransitionType = TRANS_TYPE_03;
+        gSaveContext.nextTransitionType = TRANS_TYPE_FADE_WHITE;
         ActorCutscene_Stop(this->cutscenes[1]);
     }
 }
@@ -848,7 +848,7 @@ void func_80BFFF54(EnBomjima* this, PlayState* play) {
 
     if (this->animIndex == 8) {
         if ((D_80C009F4 == 1) && Animation_OnFrame(&this->skelAnime, 7.0f)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_HUMAN_BOUND);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_HUMAN_BOUND);
             D_80C009F4 = 2;
         }
 

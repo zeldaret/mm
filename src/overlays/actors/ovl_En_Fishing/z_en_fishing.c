@@ -4,6 +4,7 @@
  * Description: Fishing Pond Elements (Owner, Fish, Props, Effects...)
  */
 
+#include "prevent_bss_reordering.h"
 #include "z_en_fishing.h"
 #include "z64rumble.h"
 #include "z64shrink_window.h"
@@ -846,7 +847,7 @@ void EnFishing_Init(Actor* thisx, PlayState* play2) {
 
         D_8090CD04 = 20;
         play->specialEffects = sFishingEffects;
-        REG(15) = 1; // gTimeIncrement in OoT
+        R_TIME_SPEED = 1;
         D_809171FC = 0;
         D_809171F6 = 10;
 
@@ -945,7 +946,7 @@ void EnFishing_Init(Actor* thisx, PlayState* play2) {
         return;
     }
 
-    thisx->bgCheckFlags |= 0x800; // Added in MM
+    thisx->bgCheckFlags |= BGCHECKFLAG_PLAYER_800; // Added in MM
 
     if ((thisx->params < 115) || (thisx->params == 200)) {
         SkelAnime_InitFlex(play, &this->skelAnime, &gFishingFishSkel, &gFishingFishAnim, NULL, NULL, 0);
@@ -1573,7 +1574,7 @@ void EnFishing_DrawLureHook(PlayState* play, Vec3f* pos, Vec3f* refPos, u8 hookI
 
     Matrix_Translate(pos->x, pos->y, pos->z, MTXMODE_NEW);
 
-    if ((player->actor.speedXZ == 0.0f) && (D_809101B4 == 0.0f)) {
+    if ((player->actor.speed == 0.0f) && (D_809101B4 == 0.0f)) {
         Math_ApproachF(&sLureHookRotY[hookIndex], ry, 0.1f, 0.3f);
     } else {
         sLureHookRotY[hookIndex] = ry;
@@ -1784,7 +1785,7 @@ void EnFishing_DrawLureAndLine(PlayState* play, Vec3f* linePos, Vec3f* lineRot) 
         sLurePos = sReelLinePos[LINE_SEG_COUNT - 1];
         sLureRot.x = sReelLineRot[LINE_SEG_COUNT - 2].x + M_PI;
 
-        if ((player->actor.speedXZ == 0.0f) && (D_80917200 == 0)) {
+        if ((player->actor.speed == 0.0f) && (D_80917200 == 0)) {
             Math_ApproachF(&sLureRot.y, sReelLineRot[LINE_SEG_COUNT - 2].y, 0.1f, 0.2f);
         } else {
             sLureRot.y = sReelLineRot[LINE_SEG_COUNT - 2].y;
@@ -2168,7 +2169,7 @@ void EnFishing_UpdateLure(EnFishing* this, PlayState* play) {
                 if (D_80917204 == 18) {
                     D_8090CD14 = 1;
                     sLurePos = sRodTipPos;
-                    Matrix_RotateYF(BINANG_TO_RAD(player->actor.shape.rot.y), MTXMODE_NEW);
+                    Matrix_RotateYF(BINANG_TO_RAD_ALT(player->actor.shape.rot.y), MTXMODE_NEW);
                     sp90.x = 0.0f;
                     sp90.y = 0.0f;
                     sp90.z = 25.0f;
@@ -2233,10 +2234,10 @@ void EnFishing_UpdateLure(EnFishing* this, PlayState* play) {
                     Actor_UpdateBgCheckInfo(play, &this->actor, 15.0f, 30.0f, 30.0f, 0x43);
                     this->actor.world.pos = sp80;
 
-                    if (this->actor.bgCheckFlags & 0x10) {
+                    if (this->actor.bgCheckFlags & BGCHECKFLAG_CEILING) {
                         D_80917238.y = -0.5f;
                     }
-                    if (this->actor.bgCheckFlags & 8) {
+                    if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
                         if (D_80917238.y > 0.0f) {
                             D_80917238.y = 0.0f;
                         }
@@ -2788,7 +2789,7 @@ void func_80903C60(EnFishing* this, u8 arg1) {
         }
     }
 
-    Actor_PlaySfxAtPos(&this->actor, sfxId);
+    Actor_PlaySfx(&this->actor, sfxId);
 }
 
 void EnFishing_HandleAquariumDialog(EnFishing* this, PlayState* play) {
@@ -2870,9 +2871,9 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
     this->actor.uncullZoneScale = 50.0f;
 
     if (this->unk_148 == 0) {
-        sp118 = (player->actor.speedXZ * 0.15f) + 0.25f;
+        sp118 = (player->actor.speed * 0.15f) + 0.25f;
     } else {
-        sp118 = (player->actor.speedXZ * 0.3f) + 0.25f;
+        sp118 = (player->actor.speed * 0.3f) + 0.25f;
     }
 
     if ((D_80917200 != 0) || (sSubCamId != SUB_CAM_ID_DONE) ||
@@ -3017,7 +3018,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
         case 10:
             this->unk_1AC = this->actor.home.pos;
 
-            Math_ApproachF(&this->actor.speedXZ, 2.0f, 1.0f, 0.5f);
+            Math_ApproachF(&this->actor.speed, 2.0f, 1.0f, 0.5f);
             Math_ApproachF(&this->unk_1A8, 4096.0f, 1.0f, 256.0f);
 
             if (sp124 < 40.0f) {
@@ -3039,7 +3040,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
         case 11:
             this->unk_1AC = this->actor.home.pos;
 
-            Math_ApproachF(&this->actor.speedXZ, 0.0f, 1.0f, 0.05f);
+            Math_ApproachF(&this->actor.speed, 0.0f, 1.0f, 0.05f);
             Math_ApproachF(&this->unk_1A8, 0.0f, 1.0f, 256.0f);
 
             if (sp124 >= 40.0f) {
@@ -3069,7 +3070,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
             break;
 
         case 0:
-            Math_ApproachF(&this->actor.speedXZ, 1.0f, 1.0f, 0.05f);
+            Math_ApproachF(&this->actor.speed, 1.0f, 1.0f, 0.05f);
             Math_ApproachF(&this->unk_1A8, 0.0f, 1.0f, 256.0f);
 
             if (this->unk_172[0] == 0) {
@@ -3106,14 +3107,14 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
 
                 if ((this->actor.xzDistToPlayer < (250.0f * sp118)) || (this->unk_172[1] != 0)) {
                     Math_ApproachF(&this->unk_1A8, 8192.0f, 1.0f, 768.0f);
-                    Math_ApproachF(&this->actor.speedXZ, 4.2f, 1.0f, 0.75);
+                    Math_ApproachF(&this->actor.speed, 4.2f, 1.0f, 0.75);
                     this->unk_188 = 1.2f;
                     this->unk_18C = 4000.0f;
                     this->unk_172[0] = 20;
                 } else {
                     this->unk_188 = 1.0f;
                     this->unk_18C = 2000.0f;
-                    Math_ApproachF(&this->actor.speedXZ, 1.5f, 1.0f, 0.1f);
+                    Math_ApproachF(&this->actor.speed, 1.5f, 1.0f, 0.1f);
                 }
 
                 if ((this->unk_172[0] == 0) || (sp124 < 50.0f)) {
@@ -3135,7 +3136,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
             Math_ApproachS(&this->unk_15E, 0, 0x14, 0x20);
 
             if ((this->actor.xzDistToPlayer < (250.0f * sp118)) || (this->unk_172[1] != 0)) {
-                Math_ApproachF(&this->actor.speedXZ, 3.0f, 1.0f, 0.75);
+                Math_ApproachF(&this->actor.speed, 3.0f, 1.0f, 0.75);
                 this->unk_188 = 1.0f;
                 this->unk_172[0] = 20;
                 this->unk_18C = 4000.0f;
@@ -3149,12 +3150,12 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
             } else if (sp124 > 50.0f) {
                 this->unk_188 = 0.8f;
                 this->unk_18C = 1500.0f;
-                Math_ApproachF(&this->actor.speedXZ, 1.0f, 1.0f, 0.1f);
+                Math_ApproachF(&this->actor.speed, 1.0f, 1.0f, 0.1f);
                 Math_ApproachF(&this->unk_1A8, 2048.0f, 1.0f, 128.0f);
             } else {
                 this->unk_188 = 0.4f;
                 this->unk_18C = 500.0f;
-                Math_ApproachZeroF(&this->actor.speedXZ, 1.0f, 0.02f);
+                Math_ApproachZeroF(&this->actor.speed, 1.0f, 0.02f);
                 Math_ApproachF(&this->unk_1A8, 0.0f, 1.0f, 256.0f);
             }
 
@@ -3183,11 +3184,11 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                 Math_ApproachS(&this->unk_15E, -0x1000, 0x14, 0x100);
 
                 if (this->actor.world.pos.y < (WATER_SURFACE_Y(play) - 20.0f)) {
-                    Math_ApproachF(&this->actor.speedXZ, 0.5f, 1.0f, 0.1f);
+                    Math_ApproachF(&this->actor.speed, 0.5f, 1.0f, 0.1f);
                 } else {
-                    Math_ApproachZeroF(&this->actor.speedXZ, 1.0f, 0.01f);
+                    Math_ApproachZeroF(&this->actor.speed, 1.0f, 0.01f);
 
-                    if ((this->actor.speedXZ == 0.0f) || (this->actor.world.pos.y > (WATER_SURFACE_Y(play) - 5.0f))) {
+                    if ((this->actor.speed == 0.0f) || (this->actor.world.pos.y > (WATER_SURFACE_Y(play) - 5.0f))) {
                         this->unk_1AC.x = Rand_ZeroFloat(300.0f);
                         this->unk_1AC.z = Rand_ZeroFloat(300.0f);
                         this->unk_1AC.y = this->actor.floorHeight + 10.0f;
@@ -3201,7 +3202,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                         EnFishing_SpawnRipple(&this->actor.projectedPos, play->specialEffects, &spB8, 30.0f, 400.0f,
                                               150, 90);
 
-                        Actor_PlaySfxAtPos(&this->actor, NA_SE_PL_CATCH_BOOMERANG);
+                        Actor_PlaySfx(&this->actor, NA_SE_PL_CATCH_BOOMERANG);
                         break;
                     }
                 }
@@ -3221,7 +3222,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                 if (sp124 > 40.0f) {
                     this->unk_188 = 0.7f;
                     this->unk_18C = 1200.0f;
-                    Math_ApproachF(&this->actor.speedXZ, 0.5f, 1.0f, 0.01f);
+                    Math_ApproachF(&this->actor.speed, 0.5f, 1.0f, 0.01f);
                     Math_ApproachF(&this->unk_1A8, 2048.0f, 1.0f, 128.0f);
                 } else {
                     this->unk_150 = -1;
@@ -3284,7 +3285,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                     this->unk_18C = 500.0f;
                     this->unk_172[0] = Rand_ZeroFloat(10.0f) + 2.0f;
                 }
-                Math_ApproachF(&this->actor.speedXZ, -0.2f, 1.0f, 0.1f);
+                Math_ApproachF(&this->actor.speed, -0.2f, 1.0f, 0.1f);
                 this->unk_156 = 1;
             } else {
                 if (this->unk_156 != 0) {
@@ -3292,7 +3293,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                     this->unk_1A8 = 0.0f;
                     this->unk_18C = 3000.0f;
                 }
-                Math_ApproachF(&this->actor.speedXZ, 3.0f, 1.0f, 0.15f);
+                Math_ApproachF(&this->actor.speed, 3.0f, 1.0f, 0.15f);
                 this->unk_156 = 0;
             }
 
@@ -3376,7 +3377,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
             this->unk_1AC.z = sLurePos.z + sp100.z;
             this->unk_1AC.y = sLurePos.y - 10.0f;
             this->unk_1A8 = 4096.0f;
-            Math_ApproachF(&this->actor.speedXZ, this->unk_180 * 0.8f, 1.0f, 1.0f);
+            Math_ApproachF(&this->actor.speed, this->unk_180 * 0.8f, 1.0f, 1.0f);
 
             if ((D_8090CD14 != 3) || (sLurePos.y > (WATER_SURFACE_Y(play) + 5.0f)) ||
                 (sqrtf(SQ(sLurePos.x) + SQ(sLurePos.z)) > 800.0f)) {
@@ -3401,7 +3402,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
             this->unk_149 = 50;
             sp134 = 2;
             this->unk_1AC = sLurePos;
-            Math_ApproachF(&this->actor.speedXZ, this->unk_180, 1.0f, 1.0f);
+            Math_ApproachF(&this->actor.speed, this->unk_180, 1.0f, 1.0f);
 
             if ((D_8090CD14 != 3) || (this->unk_172[0] == 0) || (sLurePos.y > (WATER_SURFACE_Y(play) + 5.0f)) ||
                 (sqrtf(SQ(sLurePos.x) + SQ(sLurePos.z)) > 800.0f)) {
@@ -3466,7 +3467,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
         case -3:
             this->unk_149 = 50;
             this->unk_1AC = sLurePos;
-            Math_ApproachF(&this->actor.speedXZ, 2.0f, 1.0f, 1.0f);
+            Math_ApproachF(&this->actor.speed, 2.0f, 1.0f, 1.0f);
 
             if ((D_8090CD14 != 3) || (this->unk_172[0] == 0) || (sLurePos.y > (WATER_SURFACE_Y(play) + 5.0f)) ||
                 (sqrtf(SQ(sLurePos.x) + SQ(sLurePos.z)) > 800.0f)) {
@@ -3477,7 +3478,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                 this->unk_18C = 2000.0f;
             } else if (sp124 < 10.0f) {
                 if (sLurePos.y > (WATER_SURFACE_Y(play) - 10.0f)) {
-                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_JUMP_OUT_WATER);
+                    Actor_PlaySfx(&this->actor, NA_SE_EV_JUMP_OUT_WATER);
                     play_sound(NA_SE_PL_CATCH_BOOMERANG);
                 }
 
@@ -3640,17 +3641,17 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                         D_8091726C = 0.0f;
                         this->unk_188 = 1.6f;
                         this->unk_18C = 6000.0f;
-                        Math_ApproachF(&this->actor.speedXZ, 7.5f, 1.0f, 1.0f);
+                        Math_ApproachF(&this->actor.speed, 7.5f, 1.0f, 1.0f);
                         Math_ApproachS(&this->unk_168, 0x4E20, 2, 0xFA0);
                     } else {
                         if ((D_80917274 == 0) && (D_80917206 == 2)) {
                             this->unk_188 = 1.0f;
                             this->unk_18C = 2000.0f;
-                            Math_ApproachF(&this->actor.speedXZ, 3.0f, 1.0f, 0.2f);
+                            Math_ApproachF(&this->actor.speed, 3.0f, 1.0f, 0.2f);
                         } else {
                             this->unk_188 = 1.4f;
                             this->unk_18C = 5000.0f;
-                            Math_ApproachF(&this->actor.speedXZ, 5.0f, 1.0f, 0.5f);
+                            Math_ApproachF(&this->actor.speed, 5.0f, 1.0f, 0.5f);
                         }
 
                         if (this->unk_148 == 0) {
@@ -3675,7 +3676,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                         D_8091726C = 1.3f - (this->unk_1A4 * 0.00899f * 1.4f);
                     }
 
-                    Math_ApproachF(&this->actor.speedXZ, 2.0f, 1.0f, 0.5f);
+                    Math_ApproachF(&this->actor.speed, 2.0f, 1.0f, 0.5f);
 
                     if (this->unk_172[1] == 0) {
                         this->unk_14A = 0;
@@ -3696,7 +3697,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
             }
 
             if (D_80917274 || (D_80917206 != 2)) {
-                if (this->actor.speedXZ < 3.0f) {
+                if (this->actor.speed < 3.0f) {
                     if (D_809171FE & 8) {
                         sp100.x = -0.8f;
                     } else {
@@ -3719,11 +3720,11 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
 
             if ((SQ(sp10C.x) + SQ(sp10C.y) + SQ(sp10C.z)) > SQ(20.0f)) {
                 Math_ApproachF(&this->actor.world.pos.x, sReelLinePos[LINE_SEG_COUNT - 2].x, 0.2f,
-                               2.0f * (this->actor.speedXZ * 1.5f));
+                               2.0f * (this->actor.speed * 1.5f));
                 Math_ApproachF(&this->actor.world.pos.y, sReelLinePos[LINE_SEG_COUNT - 2].y, 0.2f,
-                               2.0f * (this->actor.speedXZ * 1.5f) * 5.0f * 0.1f);
+                               2.0f * (this->actor.speed * 1.5f) * 5.0f * 0.1f);
                 Math_ApproachF(&this->actor.world.pos.z, sReelLinePos[LINE_SEG_COUNT - 2].z, 0.2f,
-                               2.0f * (this->actor.speedXZ * 1.5f));
+                               2.0f * (this->actor.speed * 1.5f));
             }
 
             if (CHECK_BTN_ALL(input->cur.button, BTN_A) || (input->rel.stick_y < -30)) {
@@ -3954,7 +3955,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                 D_8090CF18 = 3;
             }
 
-            Math_ApproachF(&this->actor.speedXZ, 5.0f, 1.0f, 1.0f);
+            Math_ApproachF(&this->actor.speed, 5.0f, 1.0f, 1.0f);
 
             if (sp124 < 20.0f) {
                 Math_ApproachS(&this->unk_168, 0x4E20, 2, 0xFA0);
@@ -4013,7 +4014,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                 spF6 = -0x1F40;
             }
 
-            if (this->actor.speedXZ >= 3.2f) {
+            if (this->actor.speed >= 3.2f) {
                 Math_ApproachS(&this->unk_166, spF6, 2, 0x4E20);
             } else {
                 Math_ApproachS(&this->unk_166, spF6, 3, 0xBB8);
@@ -4049,7 +4050,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
         Math_ApproachS(&this->unk_15A, this->unk_160, spF0, spEE);
         Math_ApproachS(&this->unk_15C, this->unk_162, spFA, 0x2000);
 
-        if (this->actor.speedXZ <= 0.5f) {
+        if (this->actor.speed <= 0.5f) {
             Math_ApproachS(&this->actor.shape.rot.x, 0, 10, this->unk_170);
             Math_ApproachS(&this->unk_170, 0x500, 1, 0x20);
         } else {
@@ -4080,14 +4081,14 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
 
         if ((this->actor.world.pos.y < WATER_SURFACE_Y(play)) &&
             (this->actor.world.pos.y > (WATER_SURFACE_Y(play) - 10.0f)) && !(this->unk_154 & 1) &&
-            (this->actor.speedXZ > 0.0f)) {
+            (this->actor.speed > 0.0f)) {
             Vec3f pos = this->actor.world.pos;
 
             pos.y = WATER_SURFACE_Y(play);
             EnFishing_SpawnRipple(&this->actor.projectedPos, play->specialEffects, &pos, 80.0f, 500.0f, 150, 90);
         }
 
-        if ((this->actor.speedXZ > 0.0f) || (this->unk_150 == 5)) {
+        if ((this->actor.speed > 0.0f) || (this->unk_150 == 5)) {
             f32 velocityY = this->actor.velocity.y;
 
             spD8 = this->unk_1A4 * 0.1f;
@@ -4103,17 +4104,17 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
 
             this->actor.velocity.y = velocityY;
 
-            if (this->actor.bgCheckFlags & 8) {
+            if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
                 this->unk_198 = 20;
             }
 
-            if (this->actor.bgCheckFlags & 1) {
+            if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
                 if (this->actor.world.pos.y > WATER_SURFACE_Y(play)) {
                     this->unk_17C = Rand_ZeroFloat(3.0f) + 3.0f;
                     this->actor.velocity.x = this->actor.world.pos.x * -0.003f;
                     this->actor.velocity.z = this->actor.world.pos.z * -0.003f;
 
-                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_FISH_LEAP);
+                    Actor_PlaySfx(&this->actor, NA_SE_EV_FISH_LEAP);
                     func_809036BC(this, play);
 
                     if (Rand_ZeroOne() < 0.5f) {
@@ -4952,7 +4953,7 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, PlayState* play) {
                 }
 
                 this->actor.parent = NULL;
-                Actor_PickUp(&this->actor, play, getItemId, 2000.0f, 1000.0f);
+                Actor_OfferGetItem(&this->actor, play, getItemId, 2000.0f, 1000.0f);
                 this->unk_154 = 23;
             }
             break;
@@ -5001,7 +5002,7 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, PlayState* play) {
             if (Actor_HasParent(&this->actor, play)) {
                 this->unk_154 = 24;
             } else {
-                Actor_PickUp(&this->actor, play, GI_SKULL_TOKEN, 2000.0f, 1000.0f);
+                Actor_OfferGetItem(&this->actor, play, GI_SKULL_TOKEN, 2000.0f, 1000.0f);
             }
             break;
 
@@ -5132,7 +5133,7 @@ void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2) {
     if ((D_809171FC != 0) && (D_8090CD4C == 0) && (player->actor.world.pos.z > 1360.0f) &&
         (fabsf(player->actor.world.pos.x) < 25.0f)) {
         player->actor.world.pos.z = 1360.0f;
-        player->actor.speedXZ = 0.0f;
+        player->actor.speed = 0.0f;
 
         if (D_8090CD50 == 0) {
             D_8090CD4C = 10;
@@ -5305,7 +5306,7 @@ void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2) {
             // fallthrough
         case 11:
             player->actor.world.pos.z = 1360.0f;
-            player->actor.speedXZ = 0.0f;
+            player->actor.speed = 0.0f;
 
             if (Message_GetState(&play->msgCtx) == TEXT_STATE_NONE) {
                 Camera* mainCam = Play_GetCamera(play, CAM_ID_MAIN);
@@ -5361,7 +5362,7 @@ void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2) {
             D_8090CD54 = 1;
 
             Math_ApproachF(&D_80911F64, 71.0f, 0.5f, 3.0f);
-            Matrix_RotateYF(BINANG_TO_RAD(player->actor.shape.rot.y), MTXMODE_NEW);
+            Matrix_RotateYF(BINANG_TO_RAD_ALT(player->actor.shape.rot.y), MTXMODE_NEW);
 
             sp114.x = Math_SinS(play->gameplayFrames * 0x1000);
             sp114.y = D_80911F64;
@@ -5454,7 +5455,7 @@ void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2) {
     }
 
     if ((player->actor.floorHeight < (WATER_SURFACE_Y(play) - 3.0f)) &&
-        (player->actor.world.pos.y < (player->actor.floorHeight + 3.0f)) && (player->actor.speedXZ > 1.0f) &&
+        (player->actor.world.pos.y < (player->actor.floorHeight + 3.0f)) && (player->actor.speed > 1.0f) &&
         ((play->gameplayFrames % 2) == 0)) {
         Vec3f pos;
 
@@ -5465,7 +5466,7 @@ void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2) {
     }
 
     if ((player->actor.floorHeight < WATER_SURFACE_Y(play)) &&
-        (player->actor.floorHeight > (WATER_SURFACE_Y(play) - 10.0f)) && (player->actor.speedXZ >= 4.0f) &&
+        (player->actor.floorHeight > (WATER_SURFACE_Y(play) - 10.0f)) && (player->actor.speed >= 4.0f) &&
         ((play->gameplayFrames % 4) == 0)) {
         s16 i;
 

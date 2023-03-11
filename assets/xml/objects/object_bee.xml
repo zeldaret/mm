@@ -2,7 +2,7 @@
     <!-- Object for Bee -->
     <File Name="object_bee" Segment="6">
         <!-- Bee Animations -->
-        <Animation Name="gBeeFlyingAnim" Offset="0x5C" />
+        <Animation Name="gBeeFlyingAnim" Offset="0x5C" /> <!-- Original name is "bee_fyl" [sic] -->
 
         <!-- Bee Limb DisplayLists -->
         <DList Name="gBeeBodyDL" Offset="0x550" />

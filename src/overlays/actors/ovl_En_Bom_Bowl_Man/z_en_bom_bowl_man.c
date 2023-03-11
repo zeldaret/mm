@@ -123,27 +123,27 @@ void func_809C49CC(EnBomBowlMan* this) {
     if ((this->unk_2F8 == 5) &&
         (Animation_OnFrame(&this->skelAnime, 9.0f) || Animation_OnFrame(&this->skelAnime, 10.0f) ||
          Animation_OnFrame(&this->skelAnime, 17.0f) || Animation_OnFrame(&this->skelAnime, 18.0f))) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BOMBERS_WALK);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_BOMBERS_WALK);
     }
 
     if ((this->unk_2F8 == 0xB) &&
         (Animation_OnFrame(&this->skelAnime, 4.0f) || Animation_OnFrame(&this->skelAnime, 8.0f) ||
          Animation_OnFrame(&this->skelAnime, 12.0f))) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BOMBERS_WALK);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_BOMBERS_WALK);
     }
 
     if ((this->unk_2F8 == 0x12) &&
         (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 2.0f) ||
          Animation_OnFrame(&this->skelAnime, 4.0f) || Animation_OnFrame(&this->skelAnime, 6.0f))) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BOMBERS_WALK);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_BOMBERS_WALK);
     }
 
     if ((this->unk_2F8 == 0xF) && Animation_OnFrame(&this->skelAnime, 15.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BOMBERS_LAND);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_BOMBERS_LAND);
     }
 
     if ((this->unk_2F8 == 6) && Animation_OnFrame(&this->skelAnime, 8.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BOMBERS_LAND);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_BOMBERS_LAND);
     }
 }
 
@@ -336,7 +336,7 @@ void func_809C51B4(EnBomBowlMan* this, PlayState* play) {
         gSaveContext.nextCutsceneIndex = 0;
         play->transitionTrigger = TRANS_TRIGGER_START;
         play->transitionType = TRANS_TYPE_86;
-        gSaveContext.nextTransitionType = TRANS_TYPE_03;
+        gSaveContext.nextTransitionType = TRANS_TYPE_FADE_WHITE;
         CLEAR_WEEKEVENTREG(WEEKEVENTREG_75_40);
         if (player->transformation == PLAYER_FORM_HUMAN) {
             SET_WEEKEVENTREG(WEEKEVENTREG_84_80);
@@ -351,7 +351,7 @@ void func_809C51B4(EnBomBowlMan* this, PlayState* play) {
 void func_809C52B4(EnBomBowlMan* this) {
     this->actor.draw = NULL;
     this->actor.flags |= ACTOR_FLAG_10;
-    this->actor.flags |= ACTOR_FLAG_8000000;
+    this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
     this->actor.flags &= ~ACTOR_FLAG_1;
     this->actor.world.pos.x = 1340.0f;
     this->actor.world.pos.z = -1795.0f;
@@ -496,7 +496,7 @@ void func_809C5738(EnBomBowlMan* this, PlayState* play) {
 }
 
 void func_809C59A4(EnBomBowlMan* this, PlayState* play) {
-    Actor_PickUp(&this->actor, play, GI_BOMBERS_NOTEBOOK, 300.0f, 300.0f);
+    Actor_OfferGetItem(&this->actor, play, GI_BOMBERS_NOTEBOOK, 300.0f, 300.0f);
     this->unk_29C = 1;
     this->actionFunc = func_809C59F0;
 }
@@ -513,7 +513,7 @@ void func_809C59F0(EnBomBowlMan* this, PlayState* play) {
         func_800B8500(&this->actor, play, 400.0f, 400.0f, PLAYER_IA_MINUS1);
         this->actionFunc = func_809C5AA4;
     } else {
-        Actor_PickUp(&this->actor, play, GI_BOMBERS_NOTEBOOK, 300.0f, 300.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_BOMBERS_NOTEBOOK, 300.0f, 300.0f);
     }
 }
 
@@ -553,7 +553,7 @@ void func_809C5BA0(EnBomBowlMan* this) {
 
 void func_809C5BF4(EnBomBowlMan* this, PlayState* play) {
     f32 sp2C = this->skelAnime.curFrame;
-    s32 subCam;
+    Camera* subCam;
 
     if ((D_809C6104 != 0) && (this->unk_2F8 != 15)) {
         func_809C493C(this, 15, 1.0f);

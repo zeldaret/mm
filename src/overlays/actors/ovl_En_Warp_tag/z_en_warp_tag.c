@@ -8,7 +8,7 @@
 #include "z_en_warp_tag.h"
 #include "objects/gameplay_dangeon_keep/gameplay_dangeon_keep.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_10 | ACTOR_FLAG_2000000 | ACTOR_FLAG_8000000)
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_10 | ACTOR_FLAG_2000000 | ACTOR_FLAG_CANT_LOCK_ON)
 
 #define THIS ((EnWarptag*)thisx)
 
@@ -156,8 +156,8 @@ void EnWarpTag_RespawnPlayer(EnWarptag* this, PlayState* play) {
 
         } else {
             ActorCutscene_StartAndSetUnkLinkFields(play->playerActorCsIds[4], &this->dyna.actor);
-            func_800B8E58(player, NA_SE_PL_WARP_PLATE);
-            func_8016566C(0);
+            Player_PlaySfx(player, NA_SE_PL_WARP_PLATE);
+            Play_EnableMotionBlur(0);
         }
 
     } else {
@@ -209,13 +209,13 @@ void EnWarpTag_RespawnPlayer(EnWarptag* this, PlayState* play) {
                 // why are we getting player home rotation from the room data? doesnt player have home.rot.y?
                 // especially because we are converting from deg to binang, but isnt home.rot.y already in binang??
                 Play_SetRespawnData(
-                    &play->state, 0, entrance, // parameter 3 is called "sceneSetup"
-                    play->setupEntranceList[playerSpawnIndex].room, playerParams, &newRespawnPos,
+                    &play->state, 0, entrance, play->setupEntranceList[playerSpawnIndex].room, playerParams,
+                    &newRespawnPos,
                     ((((playerActorEntry->rot.y >> 7) & 0x1FF) / 180.0f) * 32768.0f)); // DEG_TO_BINANG ?
 
                 func_80169EFC(&play->state);
-                gSaveContext.respawnFlag = ~0x4;
-                func_80165690();
+                gSaveContext.respawnFlag = -5;
+                Play_DisableMotionBlur();
             }
         }
 
@@ -224,7 +224,7 @@ void EnWarpTag_RespawnPlayer(EnWarptag* this, PlayState* play) {
         if (new15E < 0) {
             new15E = 0;
         }
-        func_80165658(new15E * 0.04f); // unknown Play_ function
+        Play_SetMotionBlurAlpha(new15E * (1 / 25.0f));
     }
 }
 

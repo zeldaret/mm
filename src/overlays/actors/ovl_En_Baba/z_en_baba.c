@@ -320,8 +320,8 @@ s32 EnBaba_MoveForward(EnBaba* this, f32 speedTarget) {
     s32 reachedEnd = false;
     Vec3f point;
 
-    Math_SmoothStepToF(&this->actor.speedXZ, speedTarget, 0.4f, 1000.0f, 0.0f);
-    rotStep = this->actor.speedXZ * 400.0f;
+    Math_SmoothStepToF(&this->actor.speed, speedTarget, 0.4f, 1000.0f, 0.0f);
+    rotStep = this->actor.speed * 400.0f;
     if (SubS_CopyPointFromPath(this->path, this->waypoint, &point) &&
         SubS_MoveActorToPoint(&this->actor, &point, rotStep)) {
         this->waypoint++;
@@ -485,7 +485,7 @@ void EnBaba_HandleSchedule(EnBaba* this, PlayState* play) {
             this->animIndex = BOMB_SHOP_LADY_ANIM_KNOCKED_OVER;
             // Ouch
             this->textId = 0x2A30;
-            this->actor.speedXZ = 0.0f;
+            this->actor.speed = 0.0f;
             Enemy_StartFinishingBlow(play, &this->actor);
             this->stateFlags |= BOMB_SHOP_LADY_STATE_KNOCKED_OVER;
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, this->animIndex);
@@ -638,7 +638,7 @@ void EnBaba_GiveBlastMask(EnBaba* this, PlayState* play) {
         this->stateFlags |= BOMB_SHOP_LADY_STATE_GAVE_BLAST_MASK;
         this->actionFunc = EnBaba_GaveBlastMask;
     } else {
-        Actor_PickUp(&this->actor, play, GI_MASK_BLAST, 300.0f, 300.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_MASK_BLAST, 300.0f, 300.0f);
     }
 }
 
@@ -654,7 +654,7 @@ void EnBaba_GaveBlastMask(EnBaba* this, PlayState* play) {
 void EnBaba_FollowSchedule(EnBaba* this, PlayState* play) {
     ScheduleOutput scheduleOutput;
 
-    this->timePathTimeSpeed = REG(15) + ((void)0, gSaveContext.save.daySpeed);
+    this->timePathTimeSpeed = R_TIME_SPEED + ((void)0, gSaveContext.save.timeSpeedOffset);
 
     if (!Schedule_RunScript(play, sSchedule, &scheduleOutput) ||
         ((this->scheduleResult != scheduleOutput.result) &&
@@ -690,7 +690,7 @@ void EnBaba_KnockedOver(EnBaba* this, PlayState* play) {
 
     if (this->animIndex == BOMB_SHOP_LADY_ANIM_KNOCKED_OVER) {
         if (Animation_OnFrame(&this->skelAnime, 0.0f)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_VO_BBVO00);
+            Actor_PlaySfx(&this->actor, NA_SE_VO_BBVO00);
         }
 
         if (curFrame == endFrame) {

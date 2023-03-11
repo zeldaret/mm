@@ -4,7 +4,7 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800F50D4.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Kankyo_Init.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Environment_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800F5954.s")
 
@@ -12,7 +12,7 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800F5B10.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800F5CD0.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Environment_UpdateSkybox.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800F6834.s")
 
@@ -42,11 +42,11 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800F8A9C.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800F8CD4.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Environment_Update.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800F8D84.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800F9728.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Environment_DrawSunLensFlare.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800F9824.s")
 
@@ -54,7 +54,7 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800FA3C4.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800FA9FC.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Environment_DrawRain.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800FAAB4.s")
 
@@ -72,7 +72,7 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800FB9B4.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800FBCBC.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Environment_DrawCustomLensFlare.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Kankyo_InitGameOverLights.s")
 
@@ -82,9 +82,9 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800FC3DC.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800FC444.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Environment_FillScreen.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800FC64C.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Environment_DrawSandstorm.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800FD2B4.s")
 
@@ -124,11 +124,11 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800FE3E0.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800FE484.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Environment_StopTime.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800FE498.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Environment_StartTime.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800FE4A8.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Environment_IsTimeStopped.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800FE4B8.s")
 

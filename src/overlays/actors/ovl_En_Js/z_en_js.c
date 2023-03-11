@@ -110,7 +110,7 @@ void EnJs_Init(Actor* thisx, PlayState* play) {
             this->actionFunc = func_8096A6F4;
 
             Animation_PlayLoop(&this->skelAnime, &gMoonChildSittingAnim);
-            func_8016566C(0x3C);
+            Play_EnableMotionBlur(60);
 
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_84_20)) {
                 Inventory_DeleteItem(ITEM_MASK_FIERCE_DEITY, SLOT(ITEM_MASK_FIERCE_DEITY));
@@ -151,7 +151,7 @@ void EnJs_Destroy(Actor* thisx, PlayState* play) {
     paramsF = ENJS_GET_TYPE(&this->actor);
     switch (paramsF) {
         case 0:
-            func_80165690();
+            Play_DisableMotionBlur();
             break;
         case 5:
         case 6:
@@ -254,7 +254,7 @@ s32 func_80968CB8(EnJs* this) {
         return true;
     }
 
-    Math_StepToF(&this->actor.speedXZ, this->unk_2B4, 0.5f);
+    Math_StepToF(&this->actor.speed, this->unk_2B4, 0.5f);
 
     return false;
 }
@@ -476,19 +476,19 @@ void func_80969400(s32 arg0) {
 void func_80969494(EnJs* this, PlayState* play) {
     func_80968A5C(this);
     func_801477B4(play);
-    this->actor.flags &= ~ACTOR_FLAG_100;
+    this->actor.flags &= ~ACTOR_FLAG_TALK_REQUESTED;
     this->actionFunc = func_80969B5C;
 }
 
 void func_809694E8(EnJs* this, PlayState* play) {
     func_801477B4(play);
-    this->actor.flags &= ~ACTOR_FLAG_100;
+    this->actor.flags &= ~ACTOR_FLAG_TALK_REQUESTED;
     this->actionFunc = func_8096A104;
 }
 
 void func_80969530(EnJs* this, PlayState* play) {
     func_801477B4(play);
-    this->actor.flags &= ~ACTOR_FLAG_100;
+    this->actor.flags &= ~ACTOR_FLAG_TALK_REQUESTED;
     this->actionFunc = func_8096A6F4;
     if ((this->actor.home.rot.y == this->actor.shape.rot.y) && (this->unk_2B8 & 0x10)) {
         Animation_Change(&this->skelAnime, &gMoonChildGettingUpAnim, -1.0f,
@@ -667,7 +667,7 @@ void func_80969B5C(EnJs* this, PlayState* play) {
     }
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->actionFunc = func_80969898;
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
         this->unk_2B4 = 0.0f;
         func_80969AA0(this, play);
     } else if ((this->actor.xzDistToPlayer < 100.0f) && Player_IsFacingActor(&this->actor, 0x3000, play)) {
@@ -872,7 +872,7 @@ void func_8096A2C0(EnJs* this, PlayState* play) {
         this->actionFunc = func_8096A1E8;
         func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
     } else {
-        Actor_PickUp(&this->actor, play, GI_MASK_FIERCE_DEITY, 10000.0f, 1000.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_MASK_FIERCE_DEITY, 10000.0f, 1000.0f);
     }
 }
 

@@ -67,7 +67,7 @@ void EnTwig_Init(Actor* thisx, PlayState* play2) {
     if (sColHeaders[this->unk_160] != NULL) {
         DynaPolyActor_LoadMesh(play, &this->dyna, sColHeaders[this->unk_160]);
     }
-    this->dyna.actor.bgCheckFlags |= 0x400;
+    this->dyna.actor.bgCheckFlags |= BGCHECKFLAG_PLAYER_400;
     switch (this->unk_160) {
         case 0:
             Actor_Kill(&this->dyna.actor);
@@ -198,7 +198,7 @@ void func_80AC0D2C(EnTwig* this, PlayState* play) {
                                             (s32)(Rand_ZeroOne() * 10.0f) + 20);
         }
         play_sound(NA_SE_SY_GET_ITEM);
-        play->interfaceCtx.unk_25C--;
+        play->interfaceCtx.minigamePoints--;
         sRingNotCollected[RACERING_GET_PARAM_FE0(&this->dyna.actor)] = true;
         if (sCurrentRing == RACERING_GET_PARAM_FE0(&this->dyna.actor)) {
             s32 i;

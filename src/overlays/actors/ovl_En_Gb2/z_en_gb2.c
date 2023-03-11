@@ -488,7 +488,7 @@ void func_80B10344(EnGb2* this, PlayState* play) {
         if (this->unk_280 == 3) {
             this->unk_26C &= ~0x200;
             gSaveContext.timerStates[TIMER_ID_MINIGAME_1] = TIMER_STATE_STOP;
-            func_800FE498();
+            Environment_StartTime();
             SET_EVENTINF(EVENTINF_46);
             func_80B0FE7C(play);
         } else if (this->unk_280 == 2) {
@@ -632,7 +632,7 @@ void func_80B10924(EnGb2* this, PlayState* play) {
         }
         this->actionFunc = func_80B109DC;
     } else {
-        Actor_PickUp(&this->actor, play, sp24, 300.0f, 300.0f);
+        Actor_OfferGetItem(&this->actor, play, sp24, 300.0f, 300.0f);
     }
 }
 
@@ -641,7 +641,7 @@ void func_80B109DC(EnGb2* this, PlayState* play) {
         Message_StartTextbox(play, this->unk_26E, &this->actor);
         this->actionFunc = func_80B10634;
     } else {
-        func_800B85E0(&this->actor, play, 300.0f, -1);
+        func_800B85E0(&this->actor, play, 300.0f, PLAYER_IA_MINUS1);
     }
 }
 
@@ -832,7 +832,7 @@ void func_80B111AC(EnGb2* this, PlayState* play) {
     this->actor.world.pos.x = D_80B11A00[index][0];
     this->actor.world.pos.y = D_80B11A00[index][1];
     this->actor.world.pos.z = D_80B11A00[index][2];
-    this->actor.world.rot.y = D_80B11A00[index][3] * 182.04445f;
+    this->actor.world.rot.y = DEG_TO_BINANG(D_80B11A00[index][3]);
     this->actor.shape.rot.y = this->actor.world.rot.y;
     this->actionFunc = func_80B11268;
 }
@@ -892,7 +892,7 @@ void EnGb2_Init(Actor* thisx, PlayState* play) {
             }
 
             if (gSaveContext.save.entrance == ENTRANCE(GHOST_HUT, 1)) {
-                func_800FE484();
+                Environment_StopTime();
                 this->actionFunc = func_80B10240;
                 break;
             }

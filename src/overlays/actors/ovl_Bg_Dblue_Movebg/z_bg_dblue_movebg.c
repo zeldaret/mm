@@ -4,7 +4,6 @@
  * Description: Great Bay Temple - Waterwheels, push switches, gear shafts, and whirlpools
  */
 
-#include "prevent_bss_reordering.h"
 #include "z_bg_dblue_movebg.h"
 #include "objects/object_dblue_object/object_dblue_object.h"
 #include "overlays/actors/ovl_Obj_Hunsui/z_obj_hunsui.h"
@@ -219,7 +218,7 @@ void BgDblueMovebg_Init(Actor* thisx, PlayState* play) {
             } else {
                 this->unk_18C = 0;
             }
-            this->dyna.actor.shape.rot.y += (s16)((this->unk_18C / 10.0f) * (0x10000 / 360.0f));
+            this->dyna.actor.shape.rot.y += DEG_TO_BINANG(this->unk_18C / 10.0f);
             this->actionFunc = func_80A2A714;
             break;
 
@@ -245,7 +244,7 @@ void BgDblueMovebg_Init(Actor* thisx, PlayState* play) {
             this->dyna.actor.draw = func_80A2B308;
             this->unk_17E = 0;
             this->unk_184 = 0.0f;
-            this->dyna.actor.shape.rot.y += (s16)((this->unk_18C / 10.0f) * (0x10000 / 360.0f));
+            this->dyna.actor.shape.rot.y += DEG_TO_BINANG(this->unk_18C / 10.0f);
             this->actionFunc = func_80A2A32C;
             break;
 
@@ -423,7 +422,7 @@ void func_80A2A444(BgDblueMovebg* this, PlayState* play) {
         player->stateFlags2 &= ~PLAYER_STATE2_10;
         this->dyna.pushForce = 0.0f;
         Flags_SetSwitch(play, this->unk_1C0);
-        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_STONEDOOR_STOP);
+        Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_STONEDOOR_STOP);
 
         if (func_80A29A80(play, this->unk_1C8, this->unk_1C4)) {
             this->unk_172 |= 1;
@@ -525,7 +524,7 @@ void func_80A2A7F8(BgDblueMovebg* this, PlayState* play) {
         this->unk_18A = 0;
         this->unk_17E = 0;
 
-        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_STONEDOOR_STOP);
+        Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_STONEDOOR_STOP);
 
         if (func_80A29A80(play, this->unk_1C8, this->unk_1C4)) {
             this->unk_172 |= 1;

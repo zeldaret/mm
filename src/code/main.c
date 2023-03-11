@@ -3,8 +3,30 @@
  * reordering than just prevent_bss_reordering.h: there is too much of it to control, and it cannot be split into
  * separate files since most of it is at addresses ending in 8.
  */
+
 #include "global.h"
+#include "buffers.h"
+#include "stack.h"
 #include "system_heap.h"
+
+extern OSMesgQueue sSiIntMsgQ;
+extern OSMesg sSiIntMsgBuf[1];
+extern u32 gSegments[NUM_SEGMENTS];
+extern SchedContext gSchedContext;
+extern IrqMgrClient irqClient;
+extern OSMesgQueue irqMgrMsgQ;
+extern OSMesg irqMgrMsgBuf[60];
+extern OSThread gGraphThread;
+extern STACK(sGraphStack, 0x1800);
+extern STACK(sSchedStack, 0x600);
+extern STACK(sAudioStack, 0x800);
+extern STACK(sPadMgrStack, 0x500);
+extern StackEntry sGraphStackInfo;
+extern StackEntry sSchedStackInfo;
+extern StackEntry sAudioStackInfo;
+extern StackEntry sPadMgrStackInfo;
+extern AudioMgr sAudioMgr;
+extern PadMgr gPadMgr;
 
 void Main(void* arg) {
     intptr_t fb;
@@ -25,7 +47,7 @@ void Main(void* arg) {
     startHeapSize = fb - sysHeap;
     SystemHeap_Init(sysHeap, startHeapSize);
 
-    GameInfo_Init();
+    Regs_Init();
 
     R_ENABLE_ARENA_DBG = 0;
 
@@ -34,25 +56,24 @@ void Main(void* arg) {
 
     osCreateMesgQueue(&irqMgrMsgQ, irqMgrMsgBuf, ARRAY_COUNT(irqMgrMsgBuf));
 
-    StackCheck_Init(&schedStackEntry, schedStack, schedStack + sizeof(schedStack), 0, 0x100, "sched");
-    Sched_Init(&gSchedContext, schedStack + sizeof(schedStack), Z_PRIORITY_SCHED, D_8009B290, 1, &gIrqMgr);
+    StackCheck_Init(&sSchedStackInfo, sSchedStack, STACK_TOP(sSchedStack), 0, 0x100, "sched");
+    Sched_Init(&gSchedContext, STACK_TOP(sSchedStack), Z_PRIORITY_SCHED, D_8009B290, 1, &gIrqMgr);
 
     CIC6105_AddRomInfoFaultPage();
 
     IrqMgr_AddClient(&gIrqMgr, &irqClient, &irqMgrMsgQ);
 
-    StackCheck_Init(&audioStackEntry, audioStack, audioStack + sizeof(audioStack), 0, 0x100, "audio");
-    AudioMgr_Init(&audioContext, audioStack + sizeof(audioStack), Z_PRIORITY_AUDIOMGR, 0xA, &gSchedContext, &gIrqMgr);
+    StackCheck_Init(&sAudioStackInfo, sAudioStack, STACK_TOP(sAudioStack), 0, 0x100, "audio");
+    AudioMgr_Init(&sAudioMgr, STACK_TOP(sAudioStack), Z_PRIORITY_AUDIOMGR, 0xA, &gSchedContext, &gIrqMgr);
 
-    StackCheck_Init(&padmgrStackEntry, padmgrStack, padmgrStack + sizeof(padmgrStack), 0, 0x100, "padmgr");
-    PadMgr_Init(&sSiIntMsgQ, &gIrqMgr, 7, Z_PRIORITY_PADMGR, padmgrStack + sizeof(padmgrStack));
+    StackCheck_Init(&sPadMgrStackInfo, sPadMgrStack, STACK_TOP(sPadMgrStack), 0, 0x100, "padmgr");
+    PadMgr_Init(&sSiIntMsgQ, &gIrqMgr, 7, Z_PRIORITY_PADMGR, STACK_TOP(sPadMgrStack));
 
-    AudioMgr_Unlock(&audioContext);
+    AudioMgr_Unlock(&sAudioMgr);
 
-    StackCheck_Init(&sGraphStackInfo, sGraphStack, sGraphStack + sizeof(sGraphStack), 0, 0x100, "graph");
-    osCreateThread(&sGraphThread, Z_THREAD_ID_GRAPH, Graph_ThreadEntry, arg, sGraphStack + sizeof(sGraphStack),
-                   Z_PRIORITY_GRAPH);
-    osStartThread(&sGraphThread);
+    StackCheck_Init(&sGraphStackInfo, sGraphStack, STACK_TOP(sGraphStack), 0, 0x100, "graph");
+    osCreateThread(&gGraphThread, Z_THREAD_ID_GRAPH, Graph_ThreadEntry, arg, STACK_TOP(sGraphStack), Z_PRIORITY_GRAPH);
+    osStartThread(&gGraphThread);
 
     exit = false;
 
@@ -74,5 +95,5 @@ void Main(void* arg) {
     }
 
     IrqMgr_RemoveClient(&gIrqMgr, &irqClient);
-    osDestroyThread(&sGraphThread);
+    osDestroyThread(&gGraphThread);
 }

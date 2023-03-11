@@ -285,7 +285,7 @@ void ObjTokeidai_RotateOnMinuteChange(ObjTokeidai* this, s32 playSfx) {
 
     if (currentClockMinute != this->clockMinute) {
         if (this->minuteRingOrExteriorGearRotationTimer == 8 && playSfx) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CLOCK_TOWER_SECOND_HAND);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_CLOCK_TOWER_SECOND_HAND);
         }
 
         if (this->minuteRingOrExteriorGearRotationTimer > 8) {
@@ -318,7 +318,7 @@ void ObjTokeidai_RotateOnMinuteChange(ObjTokeidai* this, s32 playSfx) {
 }
 
 void ObjTokeidai_ExteriorGear_Collapse(ObjTokeidai* this, PlayState* play) {
-    if ((this->actor.bgCheckFlags & 1) || this->actor.world.pos.y < 0.0f) {
+    if ((this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) || this->actor.world.pos.y < 0.0f) {
         this->actionFunc = ObjTokeidai_DoNothing;
     } else {
         this->actor.shape.rot.x += 0x50;
@@ -332,7 +332,7 @@ void ObjTokeidai_ExteriorGear_OpenedIdle(ObjTokeidai* this, PlayState* play) {
     if (Cutscene_CheckActorAction(play, 132) &&
         play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 132)]->action == 2) {
         this->actionFunc = ObjTokeidai_ExteriorGear_Collapse;
-        this->actor.speedXZ = this->actor.scale.y * 5.0f;
+        this->actor.speed = this->actor.scale.y * 5.0f;
         this->actor.velocity.y = 0.0f;
         this->actor.terminalVelocity = this->actor.scale.y * -50.0f;
         this->actor.gravity = this->actor.scale.y * -5.0f;
@@ -452,12 +452,12 @@ void ObjTokeidai_TowerOpening_EndCutscene(ObjTokeidai* this, PlayState* play) {
             gSaveContext.respawnFlag = 2;
             play->transitionTrigger = TRANS_TRIGGER_START;
             play->nextEntrance = gSaveContext.respawn[RESPAWN_MODE_RETURN].entrance;
-            play->transitionType = TRANS_TYPE_02;
+            play->transitionType = TRANS_TYPE_FADE_BLACK;
             if (gSaveContext.respawn[RESPAWN_MODE_RETURN].playerParams ==
                 PLAYER_PARAMS(0xFF, PLAYER_INITMODE_TELESCOPE)) {
-                gSaveContext.nextTransitionType = TRANS_TYPE_21;
+                gSaveContext.nextTransitionType = TRANS_TYPE_CIRCLE;
             } else {
-                gSaveContext.nextTransitionType = TRANS_TYPE_02;
+                gSaveContext.nextTransitionType = TRANS_TYPE_FADE_BLACK;
             }
         }
         this->actionFunc = ObjTokeidai_DoNothing;
@@ -505,15 +505,15 @@ void ObjTokeidai_TowerOpening_DropCounterweight(ObjTokeidai* this, PlayState* pl
     this->xRotation = 0x4000;
     switch (this->boundCount) {
         case 0:
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CLOCK_TOWER_BOUND_0);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_CLOCK_TOWER_BOUND_0);
             break;
 
         case 1:
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CLOCK_TOWER_BOUND_1);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_CLOCK_TOWER_BOUND_1);
             break;
 
         case 2:
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CLOCK_TOWER_BOUND_2);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_CLOCK_TOWER_BOUND_2);
             break;
     }
     this->boundCount++;
@@ -553,7 +553,7 @@ void ObjTokeidai_TowerOpening_FinishRaise(ObjTokeidai* this, PlayState* play) {
         type = OBJ_TOKEIDAI_TYPE(&this->actor);
         if ((type == OBJ_TOKEIDAI_TYPE_TOWER_CLOCK_CLOCK_TOWN) ||
             (type == OBJ_TOKEIDAI_TYPE_TOWER_CLOCK_TERMINA_FIELD)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CLOCK_TOWER_FALL);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_CLOCK_TOWER_FALL);
         }
         this->yTranslation = 3400;
         this->actionFunc = ObjTokeidai_TowerOpening_DropCounterweight;
@@ -577,7 +577,7 @@ void ObjTokeidai_TowerOpening_RaiseTower(ObjTokeidai* this, PlayState* play) {
         type = OBJ_TOKEIDAI_TYPE(&this->actor);
         if ((type == OBJ_TOKEIDAI_TYPE_TOWER_CLOCK_CLOCK_TOWN) ||
             (type == OBJ_TOKEIDAI_TYPE_TOWER_CLOCK_TERMINA_FIELD)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CLOCK_TOWER_STOP);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_CLOCK_TOWER_STOP);
         }
         this->yTranslation = 3400;
         this->actionFunc = ObjTokeidai_TowerOpening_FinishRaise;

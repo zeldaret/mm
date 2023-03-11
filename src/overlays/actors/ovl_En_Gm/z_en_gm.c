@@ -500,7 +500,7 @@ s32 func_8094E69C(EnGm* this, PlayState* play) {
 
     switch (this->unk_3E0) {
         case 0:
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CHAIR_ROLL);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_CHAIR_ROLL);
             func_8094E054(this, play, 2);
             this->unk_3E2 = 0;
             this->unk_3E0++;
@@ -552,7 +552,7 @@ s32 func_8094E69C(EnGm* this, PlayState* play) {
             break;
 
         case 8:
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CHAIR_ROLL);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_CHAIR_ROLL);
             ActorCutscene_Stop(sp4A);
             this->unk_3E2 = 0;
             this->unk_3E0++;
@@ -637,7 +637,7 @@ s32 func_8094EB1C(EnGm* this, PlayState* play) {
                 ret = true;
                 break;
             }
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CHAIR_ROLL);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_CHAIR_ROLL);
             func_8094E054(this, play, 2);
             this->unk_3E2 = 0;
             this->unk_3E0++;
@@ -657,7 +657,7 @@ s32 func_8094EB1C(EnGm* this, PlayState* play) {
             break;
 
         case 2:
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CHAIR_ROLL);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_CHAIR_ROLL);
             this->unk_3E2 = 0;
             this->unk_3E0++;
 
@@ -965,7 +965,7 @@ s32 func_8094F53C(EnGm* this, PlayState* play) {
 
     if ((this->unk_3E8 == 6) && !(play->actorCtx.flags & ACTORCTX_FLAG_5) &&
         Animation_OnFrame(&this->skelAnime, 20.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_HANKO);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_HANKO);
     }
 
     return false;
@@ -1427,7 +1427,7 @@ s32 func_80950690(EnGm* this, PlayState* play) {
         case 7:
             this->unk_3D0 += 992;
             if (DECR(this->unk_3B8) == 0) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_VO_GO_SLEEP);
+                Actor_PlaySfx(&this->actor, NA_SE_VO_GO_SLEEP);
                 this->unk_3B8 = 30;
             }
             break;
@@ -1465,7 +1465,7 @@ s32 func_80950804(EnGm* this, PlayState* play) {
         Lib_Vec3f_TranslateAndRotateY(&this->unk_278, this->actor.world.rot.y, &sp38, &this->actor.world.pos);
         this->unk_3BA += this->timePathTimeSpeed;
         if (Animation_OnFrame(&this->skelAnime, 3.0f) || Animation_OnFrame(&this->skelAnime, 13.0f)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_PIRATE_WALK);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_PIRATE_WALK);
         }
     }
 
@@ -1521,7 +1521,7 @@ s32 func_8095097C(EnGm* this, PlayState* play) {
         this->timePathWaypoint = sp50;
         this->timePathTargetPos = timePathTargetPos;
     } else if (Animation_OnFrame(&this->skelAnime, 3.0f) || Animation_OnFrame(&this->skelAnime, 13.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_PIRATE_WALK);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_PIRATE_WALK);
     }
     return false;
 }
@@ -1582,7 +1582,7 @@ void func_80950C24(EnGm* this, PlayState* play) {
 void func_80950CDC(EnGm* this, PlayState* play) {
     ScheduleOutput sp20;
 
-    this->timePathTimeSpeed = REG(15) + ((void)0, gSaveContext.save.daySpeed);
+    this->timePathTimeSpeed = R_TIME_SPEED + ((void)0, gSaveContext.save.timeSpeedOffset);
 
     if (!Schedule_RunScript(play, D_80951820, &sp20) ||
         ((this->unk_258 != sp20.result) && !func_80950280(this, play, &sp20))) {
@@ -1641,7 +1641,7 @@ void func_80950F2C(EnGm* this, PlayState* play) {
         sp2C = play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 526)]->action;
         if (this->unk_259 != (sp2C & 0xFF)) {
             if (sp2C == 3) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CHAIR_ROLL);
+                Actor_PlaySfx(&this->actor, NA_SE_EV_CHAIR_ROLL);
             }
             this->unk_259 = sp2C;
             func_8094E054(this, play, sp50[sp2C]);

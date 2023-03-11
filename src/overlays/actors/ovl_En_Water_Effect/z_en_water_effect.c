@@ -482,7 +482,7 @@ void func_80A59C04(Actor* thisx, PlayState* play2) {
                                 player->flameTimers[j] = Rand_S16Offset(0, 200);
                             }
                             player->isBurning = true;
-                            func_800B8E58(player, player->ageProperties->voiceSfxIdOffset + NA_SE_VO_LI_DEMO_DAMAGE);
+                            Player_PlaySfx(player, player->ageProperties->voiceSfxIdOffset + NA_SE_VO_LI_DEMO_DAMAGE);
                         }
                     }
 
@@ -570,7 +570,7 @@ void func_80A5A184(Actor* thisx, PlayState* play2) {
         }
     }
 
-    POLY_OPA_DISP = func_801660B8(play, POLY_OPA_DISP);
+    POLY_OPA_DISP = Play_SetFog(play, POLY_OPA_DISP);
 
     CLOSE_DISPS(gfxCtx);
 }

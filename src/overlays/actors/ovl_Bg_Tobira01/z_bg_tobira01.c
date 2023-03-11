@@ -43,8 +43,8 @@ void BgTobira01_Open(BgTobira01* this, PlayState* play) {
         } else {
             ActorCutscene_SetIntentToPlay(cutsceneId);
         }
-    } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_88_40) && (this->timer == 0) && (play->actorCtx.unk1F5 != 0) &&
-               (play->actorCtx.unk1F4 == 0) &&
+    } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_88_40) && (this->timer == 0) && (play->actorCtx.unk_1F4.timer != 0) &&
+               (play->actorCtx.unk_1F4.unk_00 == 0) &&
                (SurfaceType_GetSceneExitIndex(&play->colCtx, player->actor.floorPoly, player->actor.floorBgId) == 6)) {
         this->playCutscene = true;
         this->unk_16C = 0; // this variable is not used anywhere else
@@ -62,7 +62,7 @@ void BgTobira01_Open(BgTobira01* this, PlayState* play) {
 
     if (this->timer != prevTimer) {
         if (1) {}
-        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_STONEDOOR_OPEN_S - SFX_FLAG);
+        Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_STONEDOOR_OPEN_S - SFX_FLAG);
         this->dyna.actor.world.pos.y = (this->yOffset = (this->timer * (5.0f / 3.0f)) + this->dyna.actor.home.pos.y);
         this->timer2 = 180;
     }

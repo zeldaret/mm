@@ -63,13 +63,13 @@ void DmChar02_ChangeAnim(SkelAnime* skelAnime, AnimationInfo* animationInfo, u16
 void DmChar02_PlaySfxForDroppingOcarinaCutscene(DmChar02* this, PlayState* play) {
     switch (play->csCtx.frames) {
         case 95:
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_OCARINA_BOUND_0);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_OCARINA_BOUND_0);
             break;
 
         case 101:
         case 105:
         case 112:
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_OCARINA_BOUND_1);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_OCARINA_BOUND_1);
             break;
     }
 }
@@ -148,7 +148,7 @@ void DmChar02_Update(Actor* thisx, PlayState* play) {
     this->unk_2F0 = this->unk_2F0;
     this->actionFunc(this, play);
     if (!Actor_HasParent(&this->actor, play)) {
-        Actor_PickUp(&this->actor, play, GI_OCARINA, 30.0f, 80.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_OCARINA, 30.0f, 80.0f);
     } else {
         gSaveContext.save.playerForm = PLAYER_FORM_HUMAN;
         Actor_Kill(&this->actor);

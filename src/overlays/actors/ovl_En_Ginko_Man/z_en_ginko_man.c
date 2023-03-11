@@ -510,7 +510,7 @@ void EnGinkoMan_Dialogue(EnGinkoMan* this, PlayState* play) {
 
     if ((this->skelAnime.animation == &object_boj_Anim_0008C0) &&
         Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BANK_MAN_HAND_HIT);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_BANK_MAN_HAND_HIT);
     }
 }
 
@@ -525,16 +525,16 @@ void EnGinkoMan_BankAward(EnGinkoMan* this, PlayState* play) {
         EnGinkoMan_SetupBankAward2(this);
     } else if (this->curTextId == 0x45B) { // "Whats this, you already saved up 200?"
         if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_10_08)) {
-            Actor_PickUp(&this->actor, play, GI_WALLET_ADULT + CUR_UPG_VALUE(UPG_WALLET), 500.0f, 100.0f);
+            Actor_OfferGetItem(&this->actor, play, GI_WALLET_ADULT + CUR_UPG_VALUE(UPG_WALLET), 500.0f, 100.0f);
         } else {
-            Actor_PickUp(&this->actor, play, GI_RUPEE_BLUE, 500.0f, 100.0f);
+            Actor_OfferGetItem(&this->actor, play, GI_RUPEE_BLUE, 500.0f, 100.0f);
         }
     } else if (this->curTextId == 0x45C) { // "Whats this, you already saved up 5000?"
-        Actor_PickUp(&this->actor, play, GI_RUPEE_BLUE, 500.0f, 100.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_RUPEE_BLUE, 500.0f, 100.0f);
     } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_59_08)) {
-        Actor_PickUp(&this->actor, play, GI_HEART_PIECE, 500.0f, 100.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_HEART_PIECE, 500.0f, 100.0f);
     } else {
-        Actor_PickUp(&this->actor, play, GI_RUPEE_BLUE, 500.0f, 100.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_RUPEE_BLUE, 500.0f, 100.0f);
     }
 }
 
@@ -579,7 +579,7 @@ void EnGinkoMan_SetupStamp(EnGinkoMan* this) {
 void EnGinkoMan_Stamp(EnGinkoMan* this, PlayState* play) {
     if ((this->curTextId == 0x464) // "Hey, relax! It doesn't leave any marks, and it's not gonna hurt."
         && (Animation_OnFrame(&this->skelAnime, 10.0f))) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_HANKO); // "stamp"
+        Actor_PlaySfx(&this->actor, NA_SE_EV_HANKO); // "stamp"
     }
 
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {

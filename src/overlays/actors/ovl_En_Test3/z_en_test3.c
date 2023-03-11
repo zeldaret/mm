@@ -4,6 +4,7 @@
  * Description: Kafei
  */
 
+#include "prevent_bss_reordering.h"
 #include "z_en_test3.h"
 #include "objects/object_test3/object_test3.h"
 #include "overlays/actors/ovl_En_Door/z_en_door.h"
@@ -507,7 +508,7 @@ void EnTest3_Destroy(Actor* thisx, PlayState* play2) {
     Collider_DestroyQuad(play, &this->player.meleeWeaponQuads[1]);
     Collider_DestroyQuad(play, &this->player.shieldQuad);
     ZeldaArena_Free(this->player.maskObjectSegment);
-    func_800FE498();
+    Environment_StartTime();
 }
 
 s32 func_80A3F080(EnTest3* this, PlayState* play, struct_80A41828* arg2, ScheduleOutput* scheduleOutput) {
@@ -575,7 +576,7 @@ Actor* func_80A3F2BC(PlayState* play, EnTest3* this, s32 actorId, s32 category, 
         if (actorId == actor->id) {
             f32 dy = this->player.actor.world.pos.y - actor->world.pos.y;
 
-            if ((fabsf(dy) < arg5) && (Actor_XZDistanceBetweenActors(&this->player.actor, actor) < arg4)) {
+            if ((fabsf(dy) < arg5) && (Actor_WorldDistXZToActor(&this->player.actor, actor) < arg4)) {
                 return actor;
             }
         }
@@ -687,7 +688,7 @@ s32 func_80A3F8D4(EnTest3* this, PlayState* play, struct_80A41828* arg2, Schedul
     func_80A3F15C(this, play, arg2);
     if (((postActor = func_80A3F2BC(play, this, ACTOR_EN_PST, ACTORCAT_PROP, 100.0f, 20.0f)) != NULL) ||
         ((postActor = func_80A3F2BC(play, this, ACTOR_EN_PM, ACTORCAT_NPC, 100.0f, 20.0f)) != NULL)) {
-        this->player.actor.home.rot.y = Actor_YawBetweenActors(&this->player.actor, postActor);
+        this->player.actor.home.rot.y = Actor_WorldYawTowardActor(&this->player.actor, postActor);
     }
     play->startPlayerCutscene(play, &this->player, 0x61);
     return true;
@@ -764,7 +765,7 @@ s32 func_80A3FBE8(EnTest3* this, PlayState* play) {
         if (this->unk_D8D >= 0) {
             if (func_80A3E9DC(this, play)) {
                 this->unk_D8D = -1;
-                func_800FE484();
+                Environment_StopTime();
             }
         } else if ((play->actorCtx.flags & ACTORCTX_FLAG_6) || (play->actorCtx.flags & ACTORCTX_FLAG_5)) {
             this->unk_D8D = ActorCutscene_GetAdditionalCutscene(this->player.actor.cutscene);
@@ -779,9 +780,9 @@ s32 func_80A3FBE8(EnTest3* this, PlayState* play) {
         }
     } else if ((D_80A41D20 == 2) && func_80A3E9DC(this, play)) {
         ActorCutscene_SetReturnCamera(CAM_ID_MAIN);
-        func_800FE498();
-        if (gSaveContext.save.time > CLOCK_TIME(6, 0)) {
-            func_800FE658(TIME_TO_MINUTES_ALT_F(fabsf((s16)-gSaveContext.save.time)));
+        Environment_StartTime();
+        if (((void)0, gSaveContext.save.time) > CLOCK_TIME(6, 0)) {
+            func_800FE658(TIME_TO_MINUTES_ALT_F(fabsf((s16) - ((void)0, gSaveContext.save.time))));
         }
         if (play->actorCtx.flags & ACTORCTX_FLAG_6) {
             SET_WEEKEVENTREG(WEEKEVENTREG_51_20);
@@ -967,7 +968,7 @@ void func_80A40678(EnTest3* this, PlayState* play) {
 
     this->unk_D80 = ((this->unk_D88 == 20) || (this->unk_D88 == 10) || (this->unk_D88 == 9)) ? 3
                     : Play_InCsMode(play)                                                    ? 0
-                                          : REG(15) + ((void)0, gSaveContext.save.daySpeed);
+                                          : R_TIME_SPEED + ((void)0, gSaveContext.save.timeSpeedOffset);
 
     if (Schedule_RunScript(play, sScheduleScript, &scheduleOutput)) {
         if (this->unk_D88 != scheduleOutput.result) {
@@ -1293,7 +1294,7 @@ void EnTest3_Draw(Actor* thisx, PlayState* play2) {
                           this->player.skelAnime.dListCount, EnTest3_OverrideLimbDraw, EnTest3_PostLimbDraw,
                           &this->player.actor, 0);
     if (this->player.invincibilityTimer > 0) {
-        POLY_OPA_DISP = func_801660B8(play, POLY_OPA_DISP);
+        POLY_OPA_DISP = Play_SetFog(play, POLY_OPA_DISP);
     }
     if ((this->player.getItemDrawId - 1) != GID_NONE) {
         Player_DrawGetItem(play, &this->player);

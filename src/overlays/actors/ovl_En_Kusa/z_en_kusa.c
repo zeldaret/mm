@@ -4,6 +4,7 @@
  * Description: Grass / Bush
  */
 
+#include "prevent_bss_reordering.h"
 #include "z_en_kusa.h"
 #include "objects/object_kusa/object_kusa.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
@@ -328,7 +329,7 @@ void EnKusa_SpawnBugs(EnKusa* this, PlayState* play) {
     for (numBugs = 0; numBugs < 3; numBugs++) {
         Actor* bug = Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ACTOR_EN_INSECT, this->actor.world.pos.x,
                                                    this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, 1,
-                                                   this->actor.cutscene, this->actor.unk20, 0);
+                                                   this->actor.cutscene, this->actor.halfDaysBits, 0);
 
         if (bug == NULL) {
             break;
@@ -489,7 +490,7 @@ void EnKusa_WaitForInteract(EnKusa* this, PlayState* play) {
                 CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
                 if (this->actor.xzDistToPlayer < 100.0f) {
                     if (KUSA_GET_TYPE(&this->actor) != ENKUSA_TYPE_GRASS_2) {
-                        Actor_LiftActor(&this->actor, play);
+                        Actor_OfferCarry(&this->actor, play);
                     }
                 }
             }
@@ -511,8 +512,8 @@ void EnKusa_LiftedUp(EnKusa* this, PlayState* play) {
     if (Actor_HasNoParent(&this->actor, play)) {
         this->actor.room = play->roomCtx.curRoom.num;
         EnKusa_SetupFall(this);
-        this->actor.velocity.x = this->actor.speedXZ * Math_SinS(this->actor.world.rot.y);
-        this->actor.velocity.z = this->actor.speedXZ * Math_CosS(this->actor.world.rot.y);
+        this->actor.velocity.x = this->actor.speed * Math_SinS(this->actor.world.rot.y);
+        this->actor.velocity.z = this->actor.speed * Math_CosS(this->actor.world.rot.y);
         this->actor.colChkInfo.mass = 80;
         this->actor.gravity = -0.1f;
         EnKusa_UpdateVelY(this);
@@ -551,8 +552,9 @@ void EnKusa_Fall(EnKusa* this, PlayState* play) {
         this->collider.base.atFlags &= ~AT_HIT;
     }
     this->timer++;
-    if ((this->actor.bgCheckFlags & 0xB) || wasHit || (this->timer >= 100)) {
-        if (!(this->actor.bgCheckFlags & 0x20)) {
+    if ((this->actor.bgCheckFlags & (BGCHECKFLAG_GROUND | BGCHECKFLAG_GROUND_TOUCH | BGCHECKFLAG_WALL)) || wasHit ||
+        (this->timer >= 100)) {
+        if (!(this->actor.bgCheckFlags & BGCHECKFLAG_WATER)) {
             SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 20, NA_SE_EV_PLANT_BROKEN);
         }
         EnKusa_SpawnFragments(this, play);
@@ -570,7 +572,7 @@ void EnKusa_Fall(EnKusa* this, PlayState* play) {
         }
 
     } else {
-        if (this->actor.bgCheckFlags & 0x40) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_WATER_TOUCH) {
             contactPos.y = this->actor.world.pos.y + this->actor.depthInWater;
             for (angleOffset = 0, i = 0; i < 4; i++, angleOffset += 0x4000) {
                 contactPos.x =
@@ -592,7 +594,7 @@ void EnKusa_Fall(EnKusa* this, PlayState* play) {
             rotSpeedXtarget >>= 1;
             rotSpeedY >>= 1;
             rotSpeedYtarget >>= 1;
-            this->actor.bgCheckFlags &= ~0x40;
+            this->actor.bgCheckFlags &= ~BGCHECKFLAG_WATER_TOUCH;
             SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 40, NA_SE_EV_DIVE_INTO_WATER_L);
         }
         EnKusa_UpdateVelY(this);
