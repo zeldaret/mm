@@ -1,5 +1,7 @@
 #include "global.h"
 
+#define FMOD(x, mod) ((x) - ((s32)((x) * (1.0f / (mod))) * (f32)(mod)))
+
 // cKF_FrameControl_zeroClera
 void func_801830A0(FrameControl* frameCtrl) {
     frameCtrl->unk_8 = 0.0f;
@@ -310,8 +312,7 @@ s32 func_80183DE0(SkeletonInfo* skeleton) {
     s16* sp7C;
     Vec3s* sp78;
     s16* sp74;
-    s32 pad1[2];
-    f32 temp_f0;
+    s32 pad1[3];
     u16* phi_v1;
     s32 phi_s1;
     s16* phi_s2;
@@ -345,8 +346,7 @@ s32 func_80183DE0(SkeletonInfo* skeleton) {
                 }
                 phi_s3 >>= 1;
                 if (phi_s7 == 1) {
-                    temp_f0 = *phi_s2 * 0.1f;
-                    *phi_s2 = (temp_f0 - ((s32)(temp_f0 * (1.0f / 360)) * 360.0f)) * 182.04445f;
+                    *phi_s2 = FMOD(*phi_s2 * 0.1f, 360) * 182.04445f;
                 }
             }
         }
@@ -601,14 +601,10 @@ void func_801849DC(SkeletonInfo2* skeleton) {
     }
 }
 
-#define FMOD(x, mod) ((x) - ((s32)((x) * (1.0f / (mod))) * (f32)(mod)))
-
-#ifdef NON_MATCHING
-// Stack and instruction scheduling only
 s32 func_80184C48(SkeletonInfo2* skeleton) {
     s32 sp84;
-    s16* phi_s1;
     u32 phi_s2;
+    u8* phi_t0;
     s32 phi_s3;
     s32 phi_s4 = 0;
     s32 phi_s5 = 0;
@@ -616,7 +612,7 @@ s32 func_80184C48(SkeletonInfo2* skeleton) {
     s16* sp68;
     Vec3s* sp64;
     s16* sp60;
-    u8* phi_t0;
+    s16* phi_s1;
 
     if (skeleton->unk_20 != 0.0f) {
         phi_s1 = skeleton->unk_28;
@@ -629,17 +625,20 @@ s32 func_80184C48(SkeletonInfo2* skeleton) {
     sp64 = (Vec3s*)Lib_SegmentedToVirtual(skeleton->unk_1C->unk_4);
     phi_t0 = (u8*)Lib_SegmentedToVirtual(skeleton->unk_1C->unk_0);
 
-    for (phi_s2 = 32, phi_s3 = 0; phi_s3 < 3; phi_s3++, phi_s2 >>= 1, phi_s1++) {
+    for (phi_s2 = 32, phi_s3 = 0; phi_s3 < 3; phi_s3++, phi_s2 >>= 1) {
         if (phi_t0[0] & phi_s2) {
             *phi_s1 = func_80183880(phi_s6, sp60[phi_s4], sp64, skeleton->frameCtrl.unk_10);
             phi_s6 += sp60[phi_s4++];
         } else {
             *phi_s1 = sp68[phi_s5++];
         }
+        phi_s1++;
     }
 
     for (sp84 = 0; sp84 < skeleton->unk_18->limbCount; sp84++) {
-        for (phi_s2 = 4, phi_s3 = 0; phi_s3 < 3; phi_s3++, phi_s2 >>= 1, phi_s1++) {
+        for (phi_s2 = 4, phi_s3 = 0; phi_s3 < 3; phi_s3++) {
+            s32 pad;
+
             if (phi_t0[sp84] & phi_s2) {
                 *phi_s1 = func_80183880(phi_s6, sp60[phi_s4], sp64, skeleton->frameCtrl.unk_10);
                 phi_s6 += sp60[phi_s4++];
@@ -647,6 +646,8 @@ s32 func_80184C48(SkeletonInfo2* skeleton) {
                 *phi_s1 = sp68[phi_s5++];
             }
             *phi_s1 = FMOD(*phi_s1 * 0.1f, 360) * 182.04445f;
+            phi_s2 >>= 1;
+            phi_s1++;
         }
     }
 
@@ -677,18 +678,14 @@ s32 func_80184C48(SkeletonInfo2* skeleton) {
             skeleton->unk_20 = 0.0f;
         }
         return 0;
-    } else {
-        func_801849DC(skeleton);
-        skeleton->unk_20 += 1.0f;
-        if (skeleton->unk_20 >= 0.0f) {
-            skeleton->unk_20 = 0.0f;
-        }
-        return func_8018332C(&skeleton->frameCtrl);
     }
+    func_801849DC(skeleton);
+    skeleton->unk_20 += 1.0f;
+    if (skeleton->unk_20 >= 0.0f) {
+        skeleton->unk_20 = 0.0f;
+    }
+    return func_8018332C(&skeleton->frameCtrl);
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/c_keyframe/func_80184C48.s")
-#endif
 
 void func_801850A0(PlayState* play, SkeletonInfo2* skeleton, s32* limbIndex, OverrideKeyframeDraw overrideKeyframeDraw,
                    PostKeyframeDraw postKeyframeDraw, void* arg, Mtx** mtx) {
