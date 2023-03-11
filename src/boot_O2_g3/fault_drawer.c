@@ -124,8 +124,10 @@ void FaultDrawer_DrawChar(char c) {
     const u32* dataPtr = &sFaultDrawerInstance->fontData[(((c / 8) * 16) + ((c & 4) >> 2))];
     u16* fb = sFaultDrawerInstance->fb + (sFaultDrawerInstance->w * cursorY) + cursorX;
 
-    if ((sFaultDrawerInstance->xStart <= cursorX) && ((sFaultDrawerInstance->charW + cursorX - 1) <= sFaultDrawerInstance->xEnd) &&
-        (sFaultDrawerInstance->yStart <= cursorY) && ((sFaultDrawerInstance->charH + cursorY - 1) <= sFaultDrawerInstance->yEnd)) {
+    if ((sFaultDrawerInstance->xStart <= cursorX) &&
+        ((sFaultDrawerInstance->charW + cursorX - 1) <= sFaultDrawerInstance->xEnd) &&
+        (sFaultDrawerInstance->yStart <= cursorY) &&
+        ((sFaultDrawerInstance->charH + cursorY - 1) <= sFaultDrawerInstance->yEnd)) {
         for (y = 0; y < sFaultDrawerInstance->charH; y++) {
             u32 mask = 0x10000000 << shift;
 
@@ -194,8 +196,10 @@ void FaultDrawer_SetCharPad(s8 padW, s8 padH) {
 
 void FaultDrawer_SetCursor(s32 x, s32 y) {
     if (sFaultDrawerInstance->osSyncPrintfEnabled) {
-        osSyncPrintf(VT_CUP("%d", "%d"), (y - sFaultDrawerInstance->yStart) / (sFaultDrawerInstance->charH + sFaultDrawerInstance->charHPad),
-                     (x - sFaultDrawerInstance->xStart) / (sFaultDrawerInstance->charW + sFaultDrawerInstance->charWPad));
+        osSyncPrintf(
+            VT_CUP("%d", "%d"),
+            (y - sFaultDrawerInstance->yStart) / (sFaultDrawerInstance->charH + sFaultDrawerInstance->charHPad),
+            (x - sFaultDrawerInstance->xStart) / (sFaultDrawerInstance->charW + sFaultDrawerInstance->charWPad));
     }
     sFaultDrawerInstance->cursorX = x;
     sFaultDrawerInstance->cursorY = y;
@@ -206,8 +210,8 @@ void FaultDrawer_FillScreen() {
         osSyncPrintf(VT_CLS);
     }
 
-    FaultDrawer_DrawRecImpl(sFaultDrawerInstance->xStart, sFaultDrawerInstance->yStart, sFaultDrawerInstance->xEnd, sFaultDrawerInstance->yEnd,
-                            sFaultDrawerInstance->backColor | 1);
+    FaultDrawer_DrawRecImpl(sFaultDrawerInstance->xStart, sFaultDrawerInstance->yStart, sFaultDrawerInstance->xEnd,
+                            sFaultDrawerInstance->yEnd, sFaultDrawerInstance->backColor | 1);
     FaultDrawer_SetCursor(sFaultDrawerInstance->xStart, sFaultDrawerInstance->yStart);
 }
 
