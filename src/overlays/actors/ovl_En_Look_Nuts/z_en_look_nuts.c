@@ -112,7 +112,7 @@ void EnLookNuts_Init(Actor* thisx, PlayState* play) {
     this->actor.targetMode = 1;
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
-    this->pathLocation = LOOKNUTS_GET_PATROL_LOCATION(&this->actor);
+    this->pathIndex = LOOKNUTS_GET_PATH_INDEX(&this->actor);
     this->switchFlag = LOOKNUTS_GET_SCENE_FLAG(&this->actor);
     this->spawnIndex = LOOKNUTS_GET_SPAWN_INDEX(&this->actor);
 
@@ -123,7 +123,7 @@ void EnLookNuts_Init(Actor* thisx, PlayState* play) {
         Actor_Kill(&this->actor);
         return;
     }
-    if (this->pathLocation == PATH_INDEX_MAX_ALT) {
+    if (this->pathIndex == PATH_INDEX_MAX_ALT) {
         Actor_Kill(&this->actor);
         return;
     }
@@ -165,7 +165,7 @@ void EnLookNuts_Patrol(EnLookNuts* this, PlayState* play) {
         return;
     }
 
-    this->path = SubS_GetPathByIndex(play, this->pathLocation, PATH_INDEX_MAX_ALT);
+    this->path = SubS_GetPathByIndex(play, this->pathIndex, PATH_INDEX_MAX_ALT);
     if (this->path != NULL) {
         sp34 = SubS_GetDistSqAndOrientPath(this->path, this->currentPathIndex, &this->actor.world.pos, &sp30);
     }

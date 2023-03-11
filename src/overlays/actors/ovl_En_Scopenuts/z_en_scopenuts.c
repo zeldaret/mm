@@ -707,7 +707,7 @@ void EnScopenuts_Init(Actor* thisx, PlayState* play) {
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_52_40)) {
             Actor_Kill(&this->actor);
         } else if (play->actorCtx.flags & ACTORCTX_FLAG_1) {
-            this->path = SubS_GetPathByIndex(play, ENSCOPENUTS_GET_FC00(&this->actor), PATH_INDEX_MAX);
+            this->path = SubS_GetPathByIndex(play, ENSCOPENUTS_GET_PATH_INDEX(&this->actor), PATH_INDEX_MAX);
             this->actor.draw = NULL;
             this->actionFunc = func_80BCAFA8;
             this->actor.gravity = 0.0f;
@@ -716,7 +716,7 @@ void EnScopenuts_Init(Actor* thisx, PlayState* play) {
         }
     } else if (ENSCOPENUTS_GET_3E0(&this->actor) == ENSCOPENUTS_3E0_1) {
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_52_40)) {
-            this->path = SubS_GetPathByIndex(play, ENSCOPENUTS_GET_FC00(&this->actor), PATH_INDEX_MAX);
+            this->path = SubS_GetPathByIndex(play, ENSCOPENUTS_GET_PATH_INDEX(&this->actor), PATH_INDEX_MAX);
             if (this->path == NULL) {
                 Actor_Kill(&this->actor);
             } else {

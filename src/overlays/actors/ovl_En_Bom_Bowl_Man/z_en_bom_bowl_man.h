@@ -9,12 +9,10 @@ typedef void (*EnBomBowlManActionFunc)(struct EnBomBowlMan*, PlayState*);
 
 #define ENBOMBOWLMAN_GET_F(thisx) ((thisx)->params & 0xF)
 #define ENBOMBOWLMAN_GET_F0(thisx) (((thisx)->params >> 4) & 0xF)
-#define ENBOMBOWLMAN_GET_FF00(thisx) (((thisx)->params >> 8) & 0xFF)
+#define ENBOMBOWLMAN_GET_PATH_INDEX(thisx) (((thisx)->params >> 8) & 0xFF)
 
 #define ENBOMBOWLMAN_F0_0 0
 #define ENBOMBOWLMAN_F0_2 2
-
-#define ENBOMBOWLMAN_FF00_MINUS1 -1
 
 typedef struct EnBomBowlMan {
     /* 0x0000 */ Actor actor;
@@ -30,7 +28,7 @@ typedef struct EnBomBowlMan {
     /* 0x0292 */ UNK_TYPE1 unk292[2];
     /* 0x0294 */ Path* path;
     /* 0x0298 */ s16 unk_298;
-    /* 0x029A */ s16 unk_29A;
+    /* 0x029A */ s16 pathIndex;
     /* 0x029C */ s16 unk_29C;
     /* 0x029E */ s16 unk_29E;
     /* 0x02A0 */ Vec3f unk_2A0;

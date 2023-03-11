@@ -450,7 +450,7 @@ void func_80AD417C(EnTrt2* this, PlayState* play) {
             play->msgCtx.stateTimer = 4;
             if (this->unk_3A8 == 0x84C) {
                 EnTrt2_ChangeAnim(&this->skelAnime, sAnimationInfo, TRT2_ANIM_HOVER);
-                this->path = SubS_GetPathByIndex(play, ENTRT2_GET_FC00(&this->actor), PATH_INDEX_MAX);
+                this->path = SubS_GetPathByIndex(play, ENTRT2_GET_PATH_INDEX(&this->actor), PATH_INDEX_MAX);
                 this->unk_3B2 = 18;
             } else if (this->unk_3A8 == 0x88F) {
                 this->unk_3A8 = 0x88E;
@@ -722,7 +722,7 @@ void func_80AD4DB4(EnTrt2* this, PlayState* play) {
     this->actor.flags &= ~ACTOR_FLAG_10;
     Actor_SetObjectDependency(play, &this->actor);
     Actor_SetScale(&this->actor, 0.008f);
-    this->path = SubS_GetPathByIndex(play, ENTRT2_GET_FC00(&this->actor), PATH_INDEX_MAX);
+    this->path = SubS_GetPathByIndex(play, ENTRT2_GET_PATH_INDEX(&this->actor), PATH_INDEX_MAX);
     this->unk_3AE = Rand_S16Offset(100, 50);
     this->unk_3B0 = 10;
     this->unk_3A8 = 0;

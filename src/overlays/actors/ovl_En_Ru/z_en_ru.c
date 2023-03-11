@@ -234,7 +234,7 @@ void EnRu_Init(Actor* thisx, PlayState* play) {
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
 
-    this->path = SubS_GetPathByIndex(play, RU_GET_PATH(thisx), PATH_INDEX_MAX);
+    this->path = SubS_GetPathByIndex(play, RU_GET_PATH_INDEX(thisx), PATH_INDEX_MAX);
     Actor_SetScale(&this->actor, 0.01f);
     this->actionFunc = EnRu_DoNothing;
     this->actor.gravity = -4.0f;

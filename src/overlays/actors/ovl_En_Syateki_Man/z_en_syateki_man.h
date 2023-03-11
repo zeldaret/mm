@@ -8,7 +8,7 @@ struct EnSyatekiMan;
 
 typedef void (*EnSyatekiManActionFunc)(struct EnSyatekiMan*, PlayState*);
 
-#define EN_SYATEKI_MAN_GET_PATH(thisx) (((thisx)->params & 0xFF00) >> 8)
+#define EN_SYATEKI_MAN_GET_PATH_INDEX(thisx) (((thisx)->params & 0xFF00) >> 8)
 
 typedef enum {
     /* 0 */ SG_GAME_STATE_NONE,             // None of the states below apply.

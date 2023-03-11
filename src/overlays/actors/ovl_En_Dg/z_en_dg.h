@@ -19,7 +19,7 @@ struct EnDg;
 typedef void (*EnDgActionFunc)(struct EnDg*, PlayState*);
 
 #define ENDG_GET_INDEX(thisx) (((thisx)->params & 0x3E0) >> 5)
-#define ENDG_GET_PATH(thisx) (((thisx)->params & 0xFC00) >> 10)
+#define ENDG_GET_PATH_INDEX(thisx) (((thisx)->params & 0xFC00) >> 10)
 #define ENDG_PARAMS(path, index) ((path << 10) | (index << 5))
 
 typedef enum {

@@ -499,7 +499,7 @@ void func_80969530(EnJs* this, PlayState* play) {
 }
 
 s32 func_809695FC(EnJs* this, PlayState* play) {
-    if (ENJS_GET_EXIT_INDEX(&this->actor) == PATH_INDEX_MAX) {
+    if (ENJS_GET_EXIT_INDEX(&this->actor) == 0x3F) {
         return false;
     }
     play->transitionTrigger = TRANS_TRIGGER_START;

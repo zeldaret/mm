@@ -6,7 +6,7 @@
 #include "objects/object_ge1/object_ge1.h"
 
 #define GERUDO_WHITE_GET_TYPE(thisx) (((thisx)->params) & 0xF)
-#define GERUDO_WHITE_GET_PATH(thisx) ((((thisx)->params) & 0xFC00) >> 10)
+#define GERUDO_WHITE_GET_PATH_INDEX(thisx) ((((thisx)->params) & 0xFC00) >> 10)
 
 //! Only the first type is used
 typedef enum {

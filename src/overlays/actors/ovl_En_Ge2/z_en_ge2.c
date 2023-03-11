@@ -200,8 +200,8 @@ s32 EnGe2_LookForPlayer(PlayState* play, Actor* actor, Vec3f* pos, s16 yaw, s16 
  * @return true if path is set up in reverse
  */
 s32 EnGe2_SetupPath(EnGe2* this, PlayState* play) {
-    if (GERUDO_PURPLE_GET_PATH(&this->picto.actor) != GERUDO_PURPLE_PATH_NONE) {
-        this->path = &play->setupPathList[GERUDO_PURPLE_GET_PATH(&this->picto.actor)];
+    if (GERUDO_PURPLE_GET_PATH_INDEX(&this->picto.actor) != PATH_INDEX_MAX) {
+        this->path = &play->setupPathList[GERUDO_PURPLE_GET_PATH_INDEX(&this->picto.actor)];
         if (this->path != NULL) {
             Path* path = this->path;
             Vec3s* points = Lib_SegmentedToVirtual(path->points);
@@ -232,8 +232,8 @@ void EnGe2_GetNextPath(EnGe2* this, PlayState* play) {
 
     this->curPointIndex = 0;
 
-    if (GERUDO_PURPLE_GET_PATH(&this->picto.actor) != GERUDO_PURPLE_PATH_NONE) {
-        curPath = &play->setupPathList[GERUDO_PURPLE_GET_PATH(&this->picto.actor)];
+    if (GERUDO_PURPLE_GET_PATH_INDEX(&this->picto.actor) != PATH_INDEX_MAX) {
+        curPath = &play->setupPathList[GERUDO_PURPLE_GET_PATH_INDEX(&this->picto.actor)];
         nextPathIndex = curPath->additionalPathIndex;
         nextPath = &play->setupPathList[nextPathIndex];
         this->path = nextPath;
@@ -252,8 +252,8 @@ void EnGe2_SetupBlownAwayPath(EnGe2* this, PlayState* play) {
 
     this->curPointIndex = 0;
 
-    if (GERUDO_PURPLE_GET_PATH(&this->picto.actor) != GERUDO_PURPLE_PATH_NONE) {
-        this->path = &play->setupPathList[GERUDO_PURPLE_GET_PATH(&this->picto.actor)];
+    if (GERUDO_PURPLE_GET_PATH_INDEX(&this->picto.actor) != PATH_INDEX_MAX) {
+        this->path = &play->setupPathList[GERUDO_PURPLE_GET_PATH_INDEX(&this->picto.actor)];
         if (this->path != NULL) {
             points = Lib_SegmentedToVirtual(this->path->points);
             Math_Vec3s_ToVec3f(&this->picto.actor.world.pos, points);

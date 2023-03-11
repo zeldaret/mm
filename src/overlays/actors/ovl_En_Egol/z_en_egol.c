@@ -426,7 +426,7 @@ void EnEgol_Init(Actor* thisx, PlayState* play) {
     Collider_InitAndSetJntSph(play, &this->eyeCollider, &this->actor, &sEyeJntSphInit, this->eyeElements);
     Collider_InitAndSetQuad(play, &this->laserCollider, &this->actor, &sLaserQuadInit);
 
-    this->pathIndex = EYEGORE_GET_PATH(&this->actor);
+    this->pathIndex = EYEGORE_GET_PATH_INDEX(&this->actor);
     if (this->pathIndex == PATH_INDEX_MAX) {
         this->pathIndex = -1;
         Actor_Kill(&this->actor);

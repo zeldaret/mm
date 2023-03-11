@@ -10,7 +10,7 @@ typedef void (*EnRailgibudActionFunc)(struct EnRailgibud*, PlayState*);
 
 #define ENRAILGIBUD_GET_CUTSCENE_TYPE(thisx) ((thisx)->params & 0x7F)
 #define ENRAILGIBUD_IS_CUTSCENE_TYPE(thisx) ((thisx)->params & 0x80)
-#define ENRAILGIBUD_GET_PATH(thisx) (((thisx)->params & 0xFF00) >> 8)
+#define ENRAILGIBUD_GET_PATH_INDEX(thisx) (((thisx)->params & 0xFF00) >> 8)
 
 typedef struct EnRailgibud {
     /* 0x000 */ Actor actor;

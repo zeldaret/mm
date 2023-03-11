@@ -93,8 +93,8 @@ void EnBomBowlMan_Init(Actor* thisx, PlayState* play) {
         return;
     }
 
-    this->unk_29A = ENBOMBOWLMAN_GET_FF00(&this->actor);
-    this->path = SubS_GetPathByIndex(play, this->unk_29A, PATH_INDEX_MAX);
+    this->pathIndex = ENBOMBOWLMAN_GET_PATH_INDEX(&this->actor);
+    this->path = SubS_GetPathByIndex(play, this->pathIndex, PATH_INDEX_MAX);
     this->unk_2C8 = 80.0f;
 
     if ((gSaveContext.save.entrance == ENTRANCE(EAST_CLOCK_TOWN, 2)) && CHECK_WEEKEVENTREG(WEEKEVENTREG_73_80) &&
@@ -156,7 +156,7 @@ void func_809C4B50(EnBomBowlMan* this) {
 }
 
 void func_809C4B6C(EnBomBowlMan* this) {
-    if ((this->unk_29A != ENBOMBOWLMAN_FF00_MINUS1) && (this->path != NULL)) {
+    if ((this->pathIndex != -1) && (this->path != NULL)) {
         if (!SubS_CopyPointFromPath(this->path, this->unk_298, &this->unk_2A0)) {
             Actor_Kill(&this->actor);
         }

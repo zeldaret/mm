@@ -5,7 +5,7 @@
 
 #define ENENCOUNT1_GET_TYPE(thisx) (((thisx)->params >> 11) & 0x1F)
 #define ENENCOUNT1_GET_7C0(thisx) (((thisx)->params >> 6) & 0x1F)
-#define ENENCOUNT1_GET_PATH(thisx) ((thisx)->params & 0x3F)
+#define ENENCOUNT1_GET_PATH_INDEX(thisx) ((thisx)->params & 0x3F)
 
 typedef enum EnEncount1Enemy {
     /* 0x0 */ EN_ENCOUNT1_GRASSHOPPER,
@@ -29,7 +29,7 @@ typedef struct EnEncount1 {
     /* 0x154 */ s16 unk_154;
     /* 0x156 */ s16 unk_156;
     /* 0x158 */ s16 unk_158;
-    /* 0x15A */ s16 unk_15A;
+    /* 0x15A */ s16 pathIndex;
     /* 0x15C */ s32 unk_15C;
     /* 0x160 */ f32 unk_160;
 } EnEncount1; // size = 0x164

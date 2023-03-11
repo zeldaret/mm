@@ -87,7 +87,7 @@ void EnHiddenNuts_Init(Actor* thisx, PlayState* play) {
 
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
 
-    this->unk_21E = ENHIDDENNUTS_GET_F80(&this->actor);
+    this->pathIndex = ENHIDDENNUTS_GET_PATH_INDEX(&this->actor);
     this->switchFlag = ENHIDDENNUTS_GET_SWITCHFLAG(&this->actor);
 
     if (this->switchFlag == 0x7F) {
@@ -99,12 +99,12 @@ void EnHiddenNuts_Init(Actor* thisx, PlayState* play) {
         return;
     }
 
-    if (this->unk_21E == PATH_INDEX_MAX_ALT) {
+    if (this->pathIndex == PATH_INDEX_MAX_ALT) {
         Actor_Kill(&this->actor);
         return;
     }
 
-    this->path = SubS_GetPathByIndex(play, this->unk_21E, PATH_INDEX_MAX);
+    this->path = SubS_GetPathByIndex(play, this->pathIndex, PATH_INDEX_MAX);
     this->unk_226 = this->actor.cutscene;
     func_801A5080(2);
     func_80BDB268(this);

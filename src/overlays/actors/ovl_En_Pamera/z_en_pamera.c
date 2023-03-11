@@ -169,7 +169,7 @@ void EnPamera_Init(Actor* thisx, PlayState* play) {
                 }
                 func_80BD8700(this);
             } else {
-                this->pathIndex = this->pathPointsCount - 1;
+                this->pathIndex = this->pathCount - 1;
                 Math_Vec3s_ToVec3f(&this->actor.world.pos, &this->pathPoints[this->pathIndex]);
                 Math_Vec3s_ToVec3f(&sp44, &this->pathPoints[this->pathIndex - 1]);
                 this->actor.world.rot.y = this->actor.shape.rot.y = Math_Vec3f_Yaw(&sp44, &this->actor.world.pos);
@@ -208,8 +208,8 @@ void func_80BD8588(EnPamera* this, PlayState* play) {
     }
     this->pathPoints = Lib_SegmentedToVirtual(path->points);
     this->pathIndex = 0;
-    this->pathPointsCount = path->count;
-    this->pathId = path->additionalPathIndex;
+    this->pathCount = path->count;
+    this->additionalPathIndex = path->additionalPathIndex;
     Math_Vec3s_ToVec3f(&sp28, this->pathPoints);
     this->actor.world.rot.y = this->actor.shape.rot.y = Math_Vec3f_Yaw(&this->actor.world.pos, &sp28);
 }
@@ -332,7 +332,7 @@ void func_80BD8B70(EnPamera* this, PlayState* play) {
     if (Math_Vec3f_StepToXZ(&this->actor.world.pos, &vec, this->actor.speed) > 10.0f) {
         Math_SmoothStepToS(&this->actor.shape.rot.y, sp32, 0xA, 0x3000, 0x100);
         this->actor.world.rot.y = this->actor.shape.rot.y;
-    } else if (this->pathIndex < (this->pathPointsCount - 1)) {
+    } else if (this->pathIndex < (this->pathCount - 1)) {
         this->pathIndex++;
     } else {
         func_80BD8CCC(this);
@@ -406,9 +406,9 @@ void func_80BD8FF0(EnPamera* this) {
     Vec3f pameraPos;
     s16 pameraYaw;
 
-    this->pathIndex = this->pathPointsCount - 1;
-    Math_Vec3s_ToVec3f(&this->actor.world.pos, &this->pathPoints[this->pathPointsCount - 1]);
-    Math_Vec3s_ToVec3f(&pameraPos, &this->pathPoints[this->pathPointsCount - 2]);
+    this->pathIndex = this->pathCount - 1;
+    Math_Vec3s_ToVec3f(&this->actor.world.pos, &this->pathPoints[this->pathCount - 1]);
+    Math_Vec3s_ToVec3f(&pameraPos, &this->pathPoints[this->pathCount - 2]);
     pameraYaw = Math_Vec3f_Yaw(&pameraPos, &this->actor.world.pos);
     this->actor.shape.rot.y = pameraYaw;
     this->actor.world.rot.y = pameraYaw;
@@ -458,14 +458,14 @@ s32 func_80BD9234(EnPamera* this, PlayState* play) {
 
 void func_80BD92D0(EnPamera* this, PlayState* play) {
     Path* path;
-    s32 pathId = this->pathId;
+    s32 pathIndex = this->additionalPathIndex;
 
-    path = &play->setupPathList[pathId];
-    if (pathId >= 0) {
+    path = &play->setupPathList[pathIndex];
+    if (pathIndex >= 0) {
         this->pathPoints = Lib_SegmentedToVirtual(path->points);
         this->pathIndex = 0;
-        this->pathPointsCount = path->count;
-        this->pathId = path->additionalPathIndex;
+        this->pathCount = path->count;
+        this->additionalPathIndex = path->additionalPathIndex;
     }
 }
 

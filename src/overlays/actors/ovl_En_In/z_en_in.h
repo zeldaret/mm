@@ -37,7 +37,7 @@ typedef enum {
 } EnInAnimation;
 
 #define ENIN_GET_TYPE(thisx) ((thisx)->params & 0x1FF)
-#define ENIN_GET_PATH(thisx) (((thisx)->params & 0x7E00) >> 9) // Only used with ENIN_UNK_TYPE
+#define ENIN_GET_PATH_INDEX(thisx) (((thisx)->params & 0x7E00) >> 9) // Only used with ENIN_UNK_TYPE
 
 typedef struct EnIn {
     /* 0x000 */ Actor actor;

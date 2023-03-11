@@ -1396,7 +1396,7 @@ void EnSob1_InitShop(EnSob1* this, PlayState* play) {
         this->waypoint = 0;
 
         if (this->shopType == BOMB_SHOP) {
-            this->path = SubS_GetPathByIndex(play, ENSOB1_GET_PATH(&this->actor), PATH_INDEX_MAX_ALT);
+            this->path = SubS_GetPathByIndex(play, ENSOB1_GET_PATH_INDEX(&this->actor), PATH_INDEX_MAX_ALT);
         }
         if (this->shopType == BOMB_SHOP) {
             EnSob1_SetupAction(this, EnSob1_SetupWalk);

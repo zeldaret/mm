@@ -16,7 +16,7 @@ typedef struct EnPr2 {
     /* 0x188 */ Vec3s jointTable[5];
     /* 0x1A6 */ Vec3s morphtable[5];
     /* 0x1C4 */ EnPr2ActionFunc actionFunc;
-    /* 0x1C8 */ s16 unk_1C8;
+    /* 0x1C8 */ s16 pathIndex;
     /* 0x1CC */ Path* path;
     /* 0x1D0 */ s32 unk_1D0;
     /* 0x1D4 */ s16 unk_1D4;

@@ -8,7 +8,7 @@ struct EnZot;
 typedef void (*EnZotActionFunc)(struct EnZot*, PlayState*);
 
 #define ENZOT_GET_1F(thisx) ((thisx)->params & 0x1F)
-#define ENZOT_GET_FC00(thisx) (((thisx)->params & 0xFC00) >> 0xA)
+#define ENZOT_GET_PATH_INDEX(thisx) (((thisx)->params & 0xFC00) >> 0xA)
 
 typedef struct EnZot {
     /* 0x000 */ Actor actor;

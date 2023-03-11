@@ -65,7 +65,7 @@ void ObjLupygamelift_Init(Actor* thisx, PlayState* play) {
     this->dyna.actor.home.rot.y = 0;
     this->dyna.actor.home.rot.z = 0;
 
-    path = &play->setupPathList[OBJLUPYGAMELIFT_GET_PATH(thisx)];
+    path = &play->setupPathList[OBJLUPYGAMELIFT_GET_PATH_INDEX(thisx)];
     this->pointIndex = OBJLUPYGAMELIFT_GET_7(thisx);
     this->count = path->count;
     if (this->pointIndex >= this->count) {

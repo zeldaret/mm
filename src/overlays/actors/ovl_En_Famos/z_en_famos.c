@@ -166,13 +166,13 @@ void EnFamos_Init(Actor* thisx, PlayState* play) {
     s32 i;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    if (FAMOS_GET_PATH(thisx) != 0xFF) {
-        path = &play->setupPathList[this->actor.params];
+    if (FAMOS_GET_PATH_INDEX(&this->actor) != PATH_INDEX_END) {
+        path = &play->setupPathList[FAMOS_GET_PATH_INDEX(&this->actor)];
         this->pathPoints = Lib_SegmentedToVirtual(path->points);
-        this->pathNodeCount = path->count;
-        if (this->pathNodeCount == 1) {
+        this->pathCount = path->count;
+        if (this->pathCount == 1) {
             this->pathPoints = NULL;
-            this->pathNodeCount = 0;
+            this->pathCount = 0;
         }
     }
 
@@ -366,7 +366,7 @@ void EnFamos_StillIdle(EnFamos* this, PlayState* play) {
 void EnFamos_SetupPathingIdle(EnFamos* this) {
     if (this->isCalm) {
         this->currentPathNode++;
-        if (this->currentPathNode == this->pathNodeCount) {
+        if (this->currentPathNode == this->pathCount) {
             this->currentPathNode = 0;
         }
     } else {

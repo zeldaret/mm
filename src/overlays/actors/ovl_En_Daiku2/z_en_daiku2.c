@@ -69,8 +69,8 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 void func_80BE61D0(EnDaiku2* this) {
-    if ((this->unk_27A != -1) && (this->unk_258 != 0)) {
-        if (!SubS_CopyPointFromPath(this->unk_258, this->unk_25C, &this->unk_268)) {
+    if ((this->pathIndex != -1) && (this->path != 0)) {
+        if (!SubS_CopyPointFromPath(this->path, this->unk_25C, &this->unk_268)) {
             Actor_Kill(&this->actor);
         }
     }
@@ -87,8 +87,8 @@ void EnDaiku2_Init(Actor* thisx, PlayState* play) {
     this->actor.targetMode = 0;
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     this->unk_278 = ENDAIKU2_GET_7F(&this->actor);
-    this->unk_27A = ENDAIKU2_GET_1F80(&this->actor);
-    this->unk_258 = SubS_GetPathByIndex(play, this->unk_27A, PATH_INDEX_MAX);
+    this->pathIndex = ENDAIKU2_GET_PATH_INDEX(&this->actor);
+    this->path = SubS_GetPathByIndex(play, this->pathIndex, PATH_INDEX_MAX);
     this->unk_280 = ENDAIKU2_GET_8000(&this->actor);
     Actor_SetScale(&this->actor, 0.01f);
     if (!this->unk_280) {
@@ -100,7 +100,7 @@ void EnDaiku2_Init(Actor* thisx, PlayState* play) {
         if (this->unk_278 == ENDAIKU2_GET_7F_127) {
             this->unk_278 = ENDAIKU2_GET_7F_MINUS1;
         } else if (Flags_GetSwitch(play, this->unk_278)) {
-            this->unk_25C = this->unk_258->count - 1;
+            this->unk_25C = this->path->count - 1;
             func_80BE61D0(this);
             Math_Vec3f_Copy(&this->actor.world.pos, &this->unk_268);
         }
@@ -342,9 +342,9 @@ void func_80BE6D40(EnDaiku2* this, PlayState* play) {
     Math_ApproachF(&this->actor.world.pos.z, this->unk_268.z, 0.5f, fabsf(Math_CosS(this->actor.world.rot.y) * 6.0f));
 
     if ((sqrtf(SQ(this->actor.world.pos.x - this->unk_268.x) + SQ(this->actor.world.pos.z - this->unk_268.z)) < 4.0f) &&
-        (this->unk_258 != 0)) {
+        (this->path != 0)) {
         this->unk_25C++;
-        if (this->unk_25C >= this->unk_258->count) {
+        if (this->unk_25C >= this->path->count) {
             func_80BE6EB0(this);
             return;
         }
@@ -385,7 +385,7 @@ void func_80BE6EF0(EnDaiku2* this, PlayState* play) {
                        fabsf(Math_CosS(this->actor.world.rot.y) * 4.0f));
         if ((sqrtf(SQ(this->actor.world.pos.x - this->unk_268.x) + SQ(this->actor.world.pos.z - this->unk_268.z)) <
              4.0f) &&
-            (this->unk_258 != 0)) {
+            (this->path != 0)) {
             if (!func_80BE64C0(this, play)) {
                 if (this->unk_276 != 3) {
                     func_80BE6408(this, 3);
@@ -412,7 +412,7 @@ void func_80BE6EF0(EnDaiku2* this, PlayState* play) {
             Math_Vec3f_Copy(&sp40, &this->unk_268);
             var = this->unk_25C;
             this->unk_25C++;
-            if (this->unk_25C < this->unk_258->count) {
+            if (this->unk_25C < this->path->count) {
                 func_80BE61D0(this);
                 func_80BE6CFC(this);
                 return;

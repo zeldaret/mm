@@ -15,7 +15,7 @@ typedef struct EnFamosRock {
     /* 0x20 */ f32   scale;
 } EnFamosRock; // size = 0x24
 
-#define FAMOS_GET_PATH(thisx) ((thisx)->params)
+#define FAMOS_GET_PATH_INDEX(thisx) ((thisx)->params)
 #define FAMOS_GET_AGGRO_DISTANCE(thisx) ((thisx)->shape.rot.x)
 
 // stateTimer gets reused:
@@ -33,7 +33,7 @@ typedef struct EnFamos {
     /* 0x1D0 */ EnFamosActionFunc actionFunc;
     /* 0x1D4 */ u8 animatedMaterialIndex;
     /* 0x1D5 */ u8 hasFinishedRotating; // stable up or down
-    /* 0x1D6 */ u8 pathNodeCount;
+    /* 0x1D6 */ u8 pathCount;
     /* 0x1D7 */ u8 currentPathNode;
     /* 0x1D8 */ u8 isCalm; // is NOT aware of player
     /* 0x1DA */ s16 hoverTimer; // start 30, decr to 0, repeat: for trig height adjustment when hovering

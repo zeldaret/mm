@@ -7,7 +7,7 @@ struct BgF40Block;
 
 typedef void (*BgF40BlockActionFunc)(struct BgF40Block*, PlayState*);
 
-#define BGF40BLOCK_GET_PATH(thisx) (((thisx)->params & 0x1FC) >> 2)
+#define BGF40BLOCK_GET_PATH_INDEX(thisx) (((thisx)->params & 0x1FC) >> 2)
 #define BGF40BLOCK_GET_SWITCHFLAG(thisx) (((thisx)->params & 0xFE00) >> 9)
 
 typedef struct BgF40Block {

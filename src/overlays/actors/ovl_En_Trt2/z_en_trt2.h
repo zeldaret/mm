@@ -9,7 +9,7 @@ typedef void (*EnTrt2ActionFunc)(struct EnTrt2*, PlayState*);
 typedef void (*EnTrt2UnkFunc)(struct EnTrt2*);
 typedef void (*EnTrt2UnkFunc2)(struct EnTrt2*, PlayState*);
 
-#define ENTRT2_GET_FC00(thisx) (((thisx)->params & 0xFC00) >> 0xA)
+#define ENTRT2_GET_PATH_INDEX(thisx) (((thisx)->params & 0xFC00) >> 0xA)
 
 typedef struct EnTrt2 {
     /* 0x000 */ Actor actor;

@@ -10,7 +10,7 @@ typedef void (*EnLookNutsActionFunc)(struct EnLookNuts*, PlayState*);
 
 #define LOOKNUTS_GET_SPAWN_INDEX(thisx) (((thisx)->params >> 0xC) & 0xF)
 #define LOOKNUTS_GET_SCENE_FLAG(thisx) ((thisx)->params & 0x7F)
-#define LOOKNUTS_GET_PATROL_LOCATION(thisx) (((thisx)->params >> 0x7) & 0x1F)
+#define LOOKNUTS_GET_PATH_INDEX(thisx) (((thisx)->params >> 0x7) & 0x1F)
 
 typedef struct EnLookNuts {
     /* 0x000 */ Actor actor;
@@ -25,7 +25,7 @@ typedef struct EnLookNuts {
     /* 0x21A */ s16 eventTimer; // Timer to trigger when another event within the actor will happen
     /* 0x21C */ s16 state;
     /* 0x21E */ s16 switchFlag;
-    /* 0x220 */ s16 pathLocation; // Determines path that a guard will patrol
+    /* 0x220 */ s16 pathIndex; // Determines path that a guard will patrol
     /* 0x222 */ s16 isPlayerDetected;
     /* 0x224 */ s16 waitTimer; // Timer for how long the deku guard will take a break for
     /* 0x226 */ s16 spawnIndex;

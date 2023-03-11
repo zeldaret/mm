@@ -4,7 +4,7 @@
 #include "global.h"
 #include "objects/object_bee/object_bee.h"
 
-#define DMCHAR09_GET_PATH(thisx) (((thisx)->params >> 4) & 0xF)
+#define DMCHAR09_GET_PATH_INDEX(thisx) (((thisx)->params >> 4) & 0xF)
 #define DMCHAR09_GET_100(thisx) ((thisx)->params & 0x100)
 #define DMCHAR09_GET_F(thisx) ((thisx)->params & 0xF)
 

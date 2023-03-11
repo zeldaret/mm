@@ -3,7 +3,7 @@
 
 #include "global.h"
 
-#define OBJBOAT_GET_PATH(thisx) (((thisx)->params >> 7) & 0x1F)
+#define OBJBOAT_GET_PATH_INDEX(thisx) (((thisx)->params >> 7) & 0x1F)
 #define OBJBOAT_GET_4000(thisx) ((thisx)->params & 0x4000)
 
 struct ObjBoat;

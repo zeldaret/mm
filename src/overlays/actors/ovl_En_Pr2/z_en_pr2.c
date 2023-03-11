@@ -151,8 +151,8 @@ void EnPr2_Init(Actor* thisx, PlayState* play) {
                 Actor* parent = this->actor.parent;
 
                 if (parent->update != NULL) {
-                    this->unk_1C8 = ((EnEncount1*)parent)->unk_15A;
-                    this->path = SubS_GetPathByIndex(play, this->unk_1C8, PATH_INDEX_MAX);
+                    this->pathIndex = ((EnEncount1*)parent)->pathIndex;
+                    this->path = SubS_GetPathByIndex(play, this->pathIndex, PATH_INDEX_MAX);
                     this->unk_208 = parent->world.rot.z * 20.0f;
                     if (this->unk_208 < 20.0f) {
                         this->unk_208 = 20.0f;

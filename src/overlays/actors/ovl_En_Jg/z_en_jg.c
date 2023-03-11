@@ -956,7 +956,7 @@ void EnJg_Init(Actor* thisx, PlayState* play) {
             this->actionFunc = EnJg_LullabyIntroCutsceneAction;
         } else {
             // This is the elder that appears in Mountain Village or the Path to Goron Village in winter.
-            this->path = SubS_GetPathByIndex(play, EN_JG_GET_PATH(thisx), PATH_INDEX_MAX);
+            this->path = SubS_GetPathByIndex(play, EN_JG_GET_PATH_INDEX(thisx), PATH_INDEX_MAX);
             this->animIndex = EN_JG_ANIM_SURPRISE_START;
             this->action = EN_JG_ACTION_SPAWNING;
             this->freezeTimer = 1000;
