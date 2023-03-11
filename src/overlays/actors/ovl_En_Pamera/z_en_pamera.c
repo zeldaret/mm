@@ -169,9 +169,9 @@ void EnPamera_Init(Actor* thisx, PlayState* play) {
                 }
                 func_80BD8700(this);
             } else {
-                this->pathIndex = this->pathCount - 1;
-                Math_Vec3s_ToVec3f(&this->actor.world.pos, &this->pathPoints[this->pathIndex]);
-                Math_Vec3s_ToVec3f(&sp44, &this->pathPoints[this->pathIndex - 1]);
+                this->waypointIndex = this->pathCount - 1;
+                Math_Vec3s_ToVec3f(&this->actor.world.pos, &this->pathPoints[this->waypointIndex]);
+                Math_Vec3s_ToVec3f(&sp44, &this->pathPoints[this->waypointIndex - 1]);
                 this->actor.world.rot.y = this->actor.shape.rot.y = Math_Vec3f_Yaw(&sp44, &this->actor.world.pos);
                 func_80BD8CCC(this);
             }
@@ -207,7 +207,7 @@ void func_80BD8588(EnPamera* this, PlayState* play) {
         path = &play->setupPathList[path->additionalPathIndex];
     }
     this->pathPoints = Lib_SegmentedToVirtual(path->points);
-    this->pathIndex = 0;
+    this->waypointIndex = 0;
     this->pathCount = path->count;
     this->additionalPathIndex = path->additionalPathIndex;
     Math_Vec3s_ToVec3f(&sp28, this->pathPoints);
@@ -325,15 +325,15 @@ void func_80BD8B70(EnPamera* this, PlayState* play) {
     Vec3f vec;
     s16 sp32;
 
-    vec.x = this->pathPoints[this->pathIndex].x;
-    vec.y = this->pathPoints[this->pathIndex].y;
-    vec.z = this->pathPoints[this->pathIndex].z;
+    vec.x = this->pathPoints[this->waypointIndex].x;
+    vec.y = this->pathPoints[this->waypointIndex].y;
+    vec.z = this->pathPoints[this->waypointIndex].z;
     sp32 = Math_Vec3f_Yaw(&this->actor.world.pos, &vec);
     if (Math_Vec3f_StepToXZ(&this->actor.world.pos, &vec, this->actor.speed) > 10.0f) {
         Math_SmoothStepToS(&this->actor.shape.rot.y, sp32, 0xA, 0x3000, 0x100);
         this->actor.world.rot.y = this->actor.shape.rot.y;
-    } else if (this->pathIndex < (this->pathCount - 1)) {
-        this->pathIndex++;
+    } else if (this->waypointIndex < (this->pathCount - 1)) {
+        this->waypointIndex++;
     } else {
         func_80BD8CCC(this);
     }
@@ -358,8 +358,8 @@ void func_80BD8D1C(EnPamera* this, PlayState* play) {
 }
 
 void func_80BD8D80(EnPamera* this) {
-    if (this->pathIndex > 0) {
-        this->pathIndex--;
+    if (this->waypointIndex > 0) {
+        this->waypointIndex--;
     }
     this->actor.gravity = -2.0f;
     this->actionFunc = func_80BD8DB0;
@@ -369,15 +369,15 @@ void func_80BD8DB0(EnPamera* this, PlayState* play) {
     Vec3f vec;
     s16 sp32;
 
-    vec.x = this->pathPoints[this->pathIndex].x;
-    vec.y = this->pathPoints[this->pathIndex].y;
-    vec.z = this->pathPoints[this->pathIndex].z;
+    vec.x = this->pathPoints[this->waypointIndex].x;
+    vec.y = this->pathPoints[this->waypointIndex].y;
+    vec.z = this->pathPoints[this->waypointIndex].z;
     sp32 = Math_Vec3f_Yaw(&this->actor.world.pos, &vec);
     if (Math_Vec3f_StepToXZ(&this->actor.world.pos, &vec, this->actor.speed) > 10.0f) {
         Math_SmoothStepToS(&this->actor.shape.rot.y, sp32, 0xA, 0x3000, 0x100);
         this->actor.world.rot.y = this->actor.shape.rot.y;
-    } else if (this->pathIndex > 0) {
-        this->pathIndex--;
+    } else if (this->waypointIndex > 0) {
+        this->waypointIndex--;
     } else {
         func_80BD9338(this, play);
         func_80BD8A38(this);
@@ -406,7 +406,7 @@ void func_80BD8FF0(EnPamera* this) {
     Vec3f pameraPos;
     s16 pameraYaw;
 
-    this->pathIndex = this->pathCount - 1;
+    this->waypointIndex = this->pathCount - 1;
     Math_Vec3s_ToVec3f(&this->actor.world.pos, &this->pathPoints[this->pathCount - 1]);
     Math_Vec3s_ToVec3f(&pameraPos, &this->pathPoints[this->pathCount - 2]);
     pameraYaw = Math_Vec3f_Yaw(&pameraPos, &this->actor.world.pos);
@@ -424,7 +424,7 @@ void func_80BD90AC(EnPamera* this, PlayState* play) {
 
     if (Player_GetMask(play) != PLAYER_MASK_STONE && (this->actionFunc != func_80BD8758) &&
         (this->actionFunc != func_80BD8964) && (this->actionFunc != func_80BD8A7C) &&
-        (this->actionFunc != func_80BD8F60) && ((this->actionFunc != func_80BD8B70) || (this->pathIndex != 0)) &&
+        (this->actionFunc != func_80BD8F60) && ((this->actionFunc != func_80BD8B70) || (this->waypointIndex != 0)) &&
         ((this->actionFunc != func_80BD8DB0) || (this->actor.speed != 3.0f)) &&
         ((this->actor.xzDistToPlayer < 150.0f) ||
          ((this->actionFunc == func_80BD909C) &&
@@ -463,7 +463,7 @@ void func_80BD92D0(EnPamera* this, PlayState* play) {
     path = &play->setupPathList[pathIndex];
     if (pathIndex >= 0) {
         this->pathPoints = Lib_SegmentedToVirtual(path->points);
-        this->pathIndex = 0;
+        this->waypointIndex = 0;
         this->pathCount = path->count;
         this->additionalPathIndex = path->additionalPathIndex;
     }
