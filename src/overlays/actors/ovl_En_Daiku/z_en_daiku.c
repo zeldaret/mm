@@ -208,7 +208,7 @@ void func_809438F8(EnDaiku* this, PlayState* play) {
 
         dist = sqrtf(SQ(this->actor.world.pos.x - this->unk_26C.x) + SQ(this->actor.world.pos.z - this->unk_26C.z));
         yaw = fabsf(this->actor.world.rot.y - this->unk_282);
-        if ((dist < SQ(4.0f)) && (this->path != NULL) && (yaw < 10.0f)) {
+        if ((dist < 4.0f) && (this->path != NULL) && (yaw < 10.0f)) {
             this->unk_25C++;
             if (this->unk_25C >= this->path->count) {
                 this->unk_25C = 0;
