@@ -131,7 +131,7 @@ void ObjToge_Init(Actor* thisx, PlayState* play) {
 
     Collider_InitCylinder(play, &this->collider);
 
-    if (OBJTOGE_GET_PATH(thisx) == 0xFF) {
+    if (OBJTOGE_GET_PATH(thisx) == PATH_INDEX_END) {
         Actor_Kill(thisx);
         return;
     }

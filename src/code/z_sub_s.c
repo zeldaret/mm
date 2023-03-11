@@ -489,7 +489,7 @@ Path* SubS_GetAdditionalPath(PlayState* play, u8 pathIndex, s32 limit) {
         if (i >= limit) {
             break;
         }
-        pathIndex = path->unk1;
+        pathIndex = path->additionalPathIndex;
         i++;
     } while (pathIndex != 0xFF);
 
@@ -597,13 +597,13 @@ Path* SubS_GetDayDependentPath(PlayState* play, u8 pathIndex, u8 max, s32* start
         return NULL;
     }
 
-    while (pathIndex != 0xFF) {
+    while (pathIndex != PATH_INDEX_END) {
         path = &play->setupPathList[pathIndex];
-        if (sPathDayFlags[day] & path->unk2) {
+        if (path->customValue & sPathDayFlags[day]) {
             found = true;
             break;
         }
-        pathIndex = path->unk1;
+        pathIndex = path->additionalPathIndex;
     }
 
     if (found == true) {

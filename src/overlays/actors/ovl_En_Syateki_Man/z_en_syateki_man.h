@@ -34,6 +34,13 @@ typedef enum {
     /* 2 */ SG_OCTO_HIT_TYPE_BLUE,
 } ShootingGalleryoctorokHitType;
 
+typedef enum {
+    /* 0 */ SG_PATH_TYPE_CROW,
+    /* 1 */ SG_PATH_TYPE_SCRUB_NORMAL,
+    /* 2 */ SG_PATH_TYPE_WOLFOS,
+    /* 3 */ SG_PATH_TYPE_SCRUB_BONUS,
+} ShootingGalleryPathType;
+
 typedef struct EnSyatekiMan {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;

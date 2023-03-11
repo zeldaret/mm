@@ -123,7 +123,7 @@ void EnLookNuts_Init(Actor* thisx, PlayState* play) {
         Actor_Kill(&this->actor);
         return;
     }
-    if (this->pathLocation == 0x1F) {
+    if (this->pathLocation == PATH_INDEX_MAX_ALT) {
         Actor_Kill(&this->actor);
         return;
     }
@@ -165,7 +165,7 @@ void EnLookNuts_Patrol(EnLookNuts* this, PlayState* play) {
         return;
     }
 
-    this->path = SubS_GetPathByIndex(play, this->pathLocation, 0x1F);
+    this->path = SubS_GetPathByIndex(play, this->pathLocation, PATH_INDEX_MAX_ALT);
     if (this->path != NULL) {
         sp34 = SubS_GetDistSqAndOrientPath(this->path, this->currentPathIndex, &this->actor.world.pos, &sp30);
     }

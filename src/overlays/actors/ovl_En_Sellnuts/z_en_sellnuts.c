@@ -958,7 +958,7 @@ void EnSellnuts_Init(Actor* thisx, PlayState* play) {
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinderType1(play, &this->collider, &this->actor, &sCylinderInit);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 35.0f);
-    this->path = SubS_GetPathByIndex(play, ENSELLNUTS_GET_FC00(&this->actor), 0x3F);
+    this->path = SubS_GetPathByIndex(play, ENSELLNUTS_GET_FC00(&this->actor), PATH_INDEX_MAX);
     this->cutscene = this->actor.cutscene;
     Actor_SetScale(&this->actor, 0.01f);
     this->actor.colChkInfo.cylRadius = 0;

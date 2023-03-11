@@ -146,12 +146,12 @@ void EnSyatekiWf_Init(Actor* thisx, PlayState* play) {
     s32 i;
 
     path = syatekiMan->path;
-    while (path->unk2 != 2) {
-        path = &play->setupPathList[path->unk1];
+    while (path->customValue != SG_PATH_TYPE_WOLFOS) {
+        path = &play->setupPathList[path->additionalPathIndex];
     }
 
     for (i = 0; i < EN_SYATEKI_WF_GET_INDEX(&this->actor); i++) {
-        path = &play->setupPathList[path->unk1];
+        path = &play->setupPathList[path->additionalPathIndex];
     }
 
     if (path == NULL) {

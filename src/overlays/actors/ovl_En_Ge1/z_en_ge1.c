@@ -191,7 +191,7 @@ void EnGe1_SetupPath(EnGe1* this, PlayState* play) {
 
     this->curPointIndex = 0;
 
-    if (GERUDO_WHITE_GET_PATH(&this->picto.actor) != 0x3F) {
+    if (GERUDO_WHITE_GET_PATH(&this->picto.actor) != PATH_INDEX_MAX) {
         this->path = &play->setupPathList[GERUDO_WHITE_GET_PATH(&this->picto.actor)];
         if (this->path != NULL) {
             point = Lib_SegmentedToVirtual(this->path->points);

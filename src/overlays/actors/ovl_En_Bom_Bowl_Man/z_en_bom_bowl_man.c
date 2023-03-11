@@ -94,7 +94,7 @@ void EnBomBowlMan_Init(Actor* thisx, PlayState* play) {
     }
 
     this->unk_29A = ENBOMBOWLMAN_GET_FF00(&this->actor);
-    this->path = SubS_GetPathByIndex(play, this->unk_29A, 0x3F);
+    this->path = SubS_GetPathByIndex(play, this->unk_29A, PATH_INDEX_MAX);
     this->unk_2C8 = 80.0f;
 
     if ((gSaveContext.save.entrance == ENTRANCE(EAST_CLOCK_TOWN, 2)) && CHECK_WEEKEVENTREG(WEEKEVENTREG_73_80) &&

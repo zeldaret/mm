@@ -369,7 +369,7 @@ void EnGg2_Init(Actor* thisx, PlayState* play2) {
     this->actor.bgCheckFlags |= BGCHECKFLAG_PLAYER_400;
     SkelAnime_InitFlex(play, &this->skelAnime, &object_gg_Skel_00F6C0, &object_gg_Anim_00F578, this->jointTable,
                        this->morphTable, 20);
-    this->unk_1D8 = SubS_GetPathByIndex(play, ENGG2_GET_FC00(&this->actor), 0x3F);
+    this->unk_1D8 = SubS_GetPathByIndex(play, ENGG2_GET_FC00(&this->actor), PATH_INDEX_MAX);
     this->actor.flags &= ~ACTOR_FLAG_REACT_TO_LENS;
     this->unk_2F0 = 0;
     this->unk_2F1 = 0;

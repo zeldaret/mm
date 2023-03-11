@@ -204,12 +204,12 @@ void func_80BD8588(EnPamera* this, PlayState* play) {
         Actor_Kill(&this->actor);
     }
     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_61_04)) {
-        path = &play->setupPathList[path->unk1];
+        path = &play->setupPathList[path->additionalPathIndex];
     }
     this->pathPoints = Lib_SegmentedToVirtual(path->points);
     this->pathIndex = 0;
     this->pathPointsCount = path->count;
-    this->pathId = path->unk1;
+    this->pathId = path->additionalPathIndex;
     Math_Vec3s_ToVec3f(&sp28, this->pathPoints);
     this->actor.world.rot.y = this->actor.shape.rot.y = Math_Vec3f_Yaw(&this->actor.world.pos, &sp28);
 }
@@ -465,7 +465,7 @@ void func_80BD92D0(EnPamera* this, PlayState* play) {
         this->pathPoints = Lib_SegmentedToVirtual(path->points);
         this->pathIndex = 0;
         this->pathPointsCount = path->count;
-        this->pathId = path->unk1;
+        this->pathId = path->additionalPathIndex;
     }
 }
 

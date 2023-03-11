@@ -1310,7 +1310,7 @@ void EnDg_Init(Actor* thisx, PlayState* play) {
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
     Actor_ProcessInitChain(&this->actor, sInitChain);
 
-    this->path = SubS_GetPathByIndex(play, ENDG_GET_PATH(&this->actor), 0x3F);
+    this->path = SubS_GetPathByIndex(play, ENDG_GET_PATH(&this->actor), PATH_INDEX_MAX);
     Actor_SetScale(&this->actor, 0.0075f);
     this->actor.targetMode = 1;
     this->actor.gravity = -3.0f;

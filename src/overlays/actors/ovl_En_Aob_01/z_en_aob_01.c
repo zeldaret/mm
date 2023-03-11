@@ -110,10 +110,10 @@ void func_809C1158(EnAob01* this, PlayState* play) {
     s32 temp_s0 = ENAOB01_GET_7E00_2(&this->actor);
     s16 i = 0;
 
-    if (temp_s0 != 0x3F) {
+    if (temp_s0 != PATH_INDEX_MAX) {
         do {
-            this->unk_1D8[i] = SubS_GetPathByIndex(play, temp_s0, 0x3F);
-            temp_s0 = this->unk_1D8[i]->unk1;
+            this->unk_1D8[i] = SubS_GetPathByIndex(play, temp_s0, PATH_INDEX_MAX);
+            temp_s0 = this->unk_1D8[i]->additionalPathIndex;
             i++;
         } while (temp_s0 != 0xFF);
     }
@@ -126,7 +126,7 @@ void func_809C11EC(EnAob01* this, PlayState* play) {
     func_809C1158(this, play);
 
     for (i = 0; i < ARRAY_COUNT(D_809C384C); i++) {
-        enDgParams = ENDG_PARAMS(this->unk_1D8[D_809C384C[i].unk_06]->unk1, i);
+        enDgParams = ENDG_PARAMS(this->unk_1D8[D_809C384C[i].unk_06]->additionalPathIndex, i);
 
         this->unk_3F8[i] = Actor_SpawnAsChildAndCutscene(
             &play->actorCtx, play, ACTOR_EN_DG, D_809C384C[i].unk_00.x, D_809C384C[i].unk_00.y, D_809C384C[i].unk_00.z,

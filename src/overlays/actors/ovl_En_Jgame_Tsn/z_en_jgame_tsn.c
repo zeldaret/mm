@@ -119,7 +119,7 @@ void func_80C13A2C(EnJgameTsn* this, PlayState* play) {
         this->unk_1D8[i].points = Lib_SegmentedToVirtual(path->points);
         this->unk_1D8[i].count = path->count;
 
-        path = &play->setupPathList[path->unk1];
+        path = &play->setupPathList[path->additionalPathIndex];
         if (path == NULL) {
             Actor_Kill(&this->actor);
         }
@@ -128,7 +128,7 @@ void func_80C13A2C(EnJgameTsn* this, PlayState* play) {
     this->unk_1F8.points = Lib_SegmentedToVirtual(path->points);
     this->unk_1F8.count = path->count;
 
-    path = &play->setupPathList[path->unk1];
+    path = &play->setupPathList[path->additionalPathIndex];
     if (path == NULL) {
         Actor_Kill(&this->actor);
     }

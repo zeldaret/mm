@@ -245,7 +245,7 @@ void func_80BFBA1C(PlayState* play, EnRz* this, s16 animIndex) {
 }
 
 s32 EnRz_SetupPath(EnRz* this, PlayState* play) {
-    if (EN_RZ_GET_PATH(&this->actor) != 0x3F) {
+    if (EN_RZ_GET_PATH(&this->actor) != PATH_INDEX_MAX) {
         this->path = &play->setupPathList[EN_RZ_GET_PATH(&this->actor)];
         if (this->path != NULL) {
             Path* path = this->path;

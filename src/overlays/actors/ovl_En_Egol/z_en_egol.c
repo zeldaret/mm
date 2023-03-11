@@ -427,7 +427,7 @@ void EnEgol_Init(Actor* thisx, PlayState* play) {
     Collider_InitAndSetQuad(play, &this->laserCollider, &this->actor, &sLaserQuadInit);
 
     this->pathIndex = EYEGORE_GET_PATH(&this->actor);
-    if (this->pathIndex == 0x3F) {
+    if (this->pathIndex == PATH_INDEX_MAX) {
         this->pathIndex = -1;
         Actor_Kill(&this->actor);
         return;
@@ -445,7 +445,7 @@ void EnEgol_Init(Actor* thisx, PlayState* play) {
         this->minLaserRange = 200.0f;
     }
 
-    this->path = SubS_GetPathByIndex(play, this->pathIndex, 0x3F);
+    this->path = SubS_GetPathByIndex(play, this->pathIndex, PATH_INDEX_MAX);
 
     EYEGORE_SET_SPH_DIM(this->eyeCollider.elements[0], 500, 0, 0, 26, 1.0f);
 

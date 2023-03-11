@@ -160,7 +160,7 @@ void ObjBoat_UpdateCutscene(Actor* thisx, PlayState* play2) {
                 Path* path = &play->setupPathList[OBJBOAT_GET_PATH(&this->dyna.actor)];
 
                 if (actionIndex->action == 3) {
-                    path = &play->setupPathList[path->unk1];
+                    path = &play->setupPathList[path->additionalPathIndex];
                 }
 
                 this->maxPointIndex = path->count;

@@ -190,7 +190,7 @@ void func_80953F9C(BgIngate* this, PlayState* play) {
 
         if (this->unk160 & 2) {
 
-            if (this->timePath->unk1 != 0xFF) {
+            if (this->timePath->additionalPathIndex != 0xFF) {
                 func_80953E38(play);
                 func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_7);
                 this->dyna.actor.textId = 0x9E4;
@@ -262,7 +262,7 @@ void func_80954340(BgIngate* this, PlayState* play) {
     if (!DECR(this->unk16A)) {
         if (this->timePath != NULL) {
             func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_6);
-            this->timePath = &play->setupPathList[this->timePath->unk1];
+            this->timePath = &play->setupPathList[this->timePath->additionalPathIndex];
             func_80953F14(this, play);
             Environment_StopTime();
         }
@@ -287,7 +287,7 @@ void func_809543D4(BgIngate* this, PlayState* play) {
                     func_8019F208();
                 } else {
                     if (this->timePath != NULL) {
-                        this->timePath = &play->setupPathList[this->timePath->unk1];
+                        this->timePath = &play->setupPathList[this->timePath->additionalPathIndex];
                     }
                     func_80953F14(this, play);
                     CLEAR_WEEKEVENTREG(WEEKEVENTREG_90_40);

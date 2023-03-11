@@ -164,7 +164,7 @@ void func_80AB2268(DmChar09* this, PlayState* play) {
                 path = &play->setupPathList[pathnum];
 
                 for (i = 0; i < max; i++) {
-                    pathnum = path->unk1;
+                    pathnum = path->additionalPathIndex;
                     path = &play->setupPathList[pathnum];
                 }
 

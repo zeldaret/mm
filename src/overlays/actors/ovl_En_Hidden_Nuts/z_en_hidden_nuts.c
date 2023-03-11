@@ -99,12 +99,12 @@ void EnHiddenNuts_Init(Actor* thisx, PlayState* play) {
         return;
     }
 
-    if (this->unk_21E == 0x1F) {
+    if (this->unk_21E == PATH_INDEX_MAX_ALT) {
         Actor_Kill(&this->actor);
         return;
     }
 
-    this->path = SubS_GetPathByIndex(play, this->unk_21E, 0x3F);
+    this->path = SubS_GetPathByIndex(play, this->unk_21E, PATH_INDEX_MAX);
     this->unk_226 = this->actor.cutscene;
     func_801A5080(2);
     func_80BDB268(this);

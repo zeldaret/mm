@@ -194,7 +194,7 @@ s32 func_80968B8C(EnJs* this, PlayState* play) {
     f32 sp18 = 0.0f;
     Vec3s* points;
 
-    if (pathIndex != 0x3F) {
+    if (pathIndex != PATH_INDEX_MAX) {
         this->path = &play->setupPathList[pathIndex];
         if (this->path != NULL) {
             path = this->path;
@@ -499,7 +499,7 @@ void func_80969530(EnJs* this, PlayState* play) {
 }
 
 s32 func_809695FC(EnJs* this, PlayState* play) {
-    if (ENJS_GET_EXIT_INDEX(&this->actor) == 0x3F) {
+    if (ENJS_GET_EXIT_INDEX(&this->actor) == PATH_INDEX_MAX) {
         return false;
     }
     play->transitionTrigger = TRANS_TRIGGER_START;

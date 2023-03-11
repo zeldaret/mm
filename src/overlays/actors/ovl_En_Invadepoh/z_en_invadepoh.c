@@ -1302,7 +1302,7 @@ void func_80B452EC(EnInvadepoh* this, PlayState* play) {
                                                   (i & 7) | ((phi_s2 << 8) & 0x7F00) | 0x10);
         if (phi_s2 != 0xFF) {
             Path* path = &play->setupPathList[phi_s2];
-            phi_s2 = path->unk1;
+            phi_s2 = path->additionalPathIndex;
         }
     }
 }
@@ -1634,7 +1634,7 @@ void func_80B4627C(EnInvadepoh* this, PlayState* play) {
 
     for (i = 1; i < 8; i++) {
         Path* path = &play->setupPathList[invadepohType];
-        invadepohType = path->unk1;
+        invadepohType = path->additionalPathIndex;
         if (invadepohType == 0xFF) {
             break;
         }

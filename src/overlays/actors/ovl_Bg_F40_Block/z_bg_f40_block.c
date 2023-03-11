@@ -56,7 +56,7 @@ s32 func_80BC3980(BgF40Block* this, PlayState* play) {
     this->unk_160 = 0;
     this->unk_164 = 0;
 
-    if (BGF40BLOCK_GET_PATH(&this->dyna.actor) != 0x3F) {
+    if (BGF40BLOCK_GET_PATH(&this->dyna.actor) != PATH_INDEX_MAX) {
         this->path = &play->setupPathList[BGF40BLOCK_GET_PATH(&this->dyna.actor)];
         if (this->path != NULL) {
             points = Lib_SegmentedToVirtual(this->path->points);
@@ -78,7 +78,7 @@ s32 func_80BC3A2C(BgF40Block* this, PlayState* play) {
     this->unk_160 = this->path->count - 1;
     this->unk_164 = this->path->count - 1;
 
-    if (BGF40BLOCK_GET_PATH(&this->dyna.actor) != 0x3F) {
+    if (BGF40BLOCK_GET_PATH(&this->dyna.actor) != PATH_INDEX_MAX) {
         this->path = &play->setupPathList[BGF40BLOCK_GET_PATH(&this->dyna.actor)];
         if (this->path != NULL) {
             points = Lib_SegmentedToVirtual(this->path->points);
@@ -231,7 +231,7 @@ void BgF40Block_Init(Actor* thisx, PlayState* play) {
     DynaPolyActor_Init(&this->dyna, 1);
     DynaPolyActor_LoadMesh(play, &this->dyna, &object_f40_obj_Colheader_004640);
 
-    if (BGF40BLOCK_GET_PATH(&this->dyna.actor) != 0x3F) {
+    if (BGF40BLOCK_GET_PATH(&this->dyna.actor) != PATH_INDEX_MAX) {
         this->path = &play->setupPathList[BGF40BLOCK_GET_PATH(&this->dyna.actor)];
     } else {
         this->path = NULL;
