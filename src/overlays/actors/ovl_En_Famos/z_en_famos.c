@@ -365,15 +365,15 @@ void EnFamos_StillIdle(EnFamos* this, PlayState* play) {
  */
 void EnFamos_SetupPathingIdle(EnFamos* this) {
     if (this->isCalm) {
-        this->currentPathNode++;
-        if (this->currentPathNode == this->pathCount) {
-            this->currentPathNode = 0;
+        this->waypointIndex++;
+        if (this->waypointIndex == this->pathCount) {
+            this->waypointIndex = 0;
         }
     } else {
         this->isCalm = true;
     }
 
-    Math_Vec3s_ToVec3f(&this->targetDest, &this->pathPoints[this->currentPathNode]);
+    Math_Vec3s_ToVec3f(&this->targetDest, &this->pathPoints[this->waypointIndex]);
     this->targetYaw = Actor_WorldYawTowardPoint(&this->actor, &this->targetDest);
     this->actionFunc = EnFamos_PathingIdle;
     this->actor.speed = 0.0f;

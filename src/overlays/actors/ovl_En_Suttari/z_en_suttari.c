@@ -679,11 +679,11 @@ void func_80BABB90(EnSuttari* this, s32 arg1) {
 s32 func_80BABC48(EnSuttari* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     u16 sp26 = SCHEDULE_TIME_NOW;
     u16 phi_a0;
-    u8 sp23 = ENSUTTARI_GET_PATH_INDEX(&this->actor);
+    u8 pathIndex = ENSUTTARI_GET_PATH_INDEX(&this->actor);
     u16 tmp;
 
     if (D_80BAE8F8[scheduleOutput->result] >= 0) {
-        this->timePath = SubS_GetAdditionalPath(play, sp23, D_80BAE8F8[scheduleOutput->result]);
+        this->timePath = SubS_GetAdditionalPath(play, pathIndex, D_80BAE8F8[scheduleOutput->result]);
     }
     if (this->timePath == NULL) {
         return 0;
@@ -710,7 +710,7 @@ s32 func_80BABC48(EnSuttari* this, PlayState* play, ScheduleOutput* scheduleOutp
 s32 func_80BABDD8(EnSuttari* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     s32 pad;
     EnDoor* sp48;
-    u8 sp47 = ENSUTTARI_GET_PATH_INDEX(&this->actor);
+    u8 pathIndex = ENSUTTARI_GET_PATH_INDEX(&this->actor);
     u16 sp44 = SCHEDULE_TIME_NOW;
     Vec3f sp38;
     Vec3f sp2C;
@@ -723,7 +723,7 @@ s32 func_80BABDD8(EnSuttari* this, PlayState* play, ScheduleOutput* scheduleOutp
     sp48 = (EnDoor*)SubS_FindNearestActor(&this->actor, play, ACTORCAT_DOOR, ACTOR_EN_DOOR);
     sp24 = D_80BAE8F8[scheduleOutput->result];
     if ((sp48 != NULL) && (sp24 >= 0)) {
-        this->timePath = SubS_GetAdditionalPath(play, sp47, sp24);
+        this->timePath = SubS_GetAdditionalPath(play, pathIndex, sp24);
     }
     if ((sp48 == NULL) || (this->timePath == NULL)) {
         return 0;

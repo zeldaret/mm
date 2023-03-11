@@ -134,7 +134,7 @@ void func_8094373C(EnDaiku* this, s32 arg1) {
 }
 
 void func_809437C8(EnDaiku* this) {
-    if ((this->pathIndex != -1) && (this->path != 0)) {
+    if ((this->pathIndex != -1) && (this->path != NULL)) {
         if (!SubS_CopyPointFromPath(this->path, this->unk_25C, &this->unk_26C)) {
             Actor_Kill(&this->actor);
         }
@@ -197,7 +197,8 @@ void func_809438F8(EnDaiku* this, PlayState* play) {
     }
 
     if (this->unk_278 == ENDAIKU_PARAMS_FF_3) {
-        f32 sq, abs;
+        f32 dist;
+        f32 yaw;
 
         Math_ApproachF(&this->actor.world.pos.x, this->unk_26C.x, 0.5f,
                        fabsf(2.0f * Math_SinS(this->actor.world.rot.y)));
@@ -205,9 +206,9 @@ void func_809438F8(EnDaiku* this, PlayState* play) {
                        fabsf(2.0f * Math_CosS(this->actor.world.rot.y)));
         Math_SmoothStepToS(&this->actor.world.rot.y, this->unk_282, 1, 0x7D0, 0xA);
 
-        sq = sqrtf(SQ(this->actor.world.pos.x - this->unk_26C.x) + SQ(this->actor.world.pos.z - this->unk_26C.z));
-        abs = fabsf(this->actor.world.rot.y - this->unk_282);
-        if ((sq < SQ(2.0f)) && (this->path != NULL) && (abs < 10.0f)) {
+        dist = sqrtf(SQ(this->actor.world.pos.x - this->unk_26C.x) + SQ(this->actor.world.pos.z - this->unk_26C.z));
+        yaw = fabsf(this->actor.world.rot.y - this->unk_282);
+        if ((dist < SQ(4.0f)) && (this->path != NULL) && (yaw < 10.0f)) {
             this->unk_25C++;
             if (this->unk_25C >= this->path->count) {
                 this->unk_25C = 0;
@@ -220,6 +221,7 @@ void func_809438F8(EnDaiku* this, PlayState* play) {
 
     if (this->unk_278 != ENDAIKU_PARAMS_FF_0) {
         s16 angle = ABS_ALT(BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.world.rot.y));
+
         this->unk_280 = this->actor.yawTowardsPlayer;
         if ((this->unk_278 == ENDAIKU_PARAMS_FF_1) || (this->unk_278 == ENDAIKU_PARAMS_FF_2) || (angle <= 0x2890)) {
             func_800B8614(&this->actor, play, 100.0f);

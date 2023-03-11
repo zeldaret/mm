@@ -34,7 +34,7 @@ typedef struct EnFamos {
     /* 0x1D4 */ u8 animatedMaterialIndex;
     /* 0x1D5 */ u8 hasFinishedRotating; // stable up or down
     /* 0x1D6 */ u8 pathCount;
-    /* 0x1D7 */ u8 currentPathNode;
+    /* 0x1D7 */ u8 waypointIndex;
     /* 0x1D8 */ u8 isCalm; // is NOT aware of player
     /* 0x1DA */ s16 hoverTimer; // start 30, decr to 0, repeat: for trig height adjustment when hovering
     /* 0x1DC */ s16 stateTimer; // reused for different actionFunc
