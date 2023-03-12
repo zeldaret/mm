@@ -18,8 +18,8 @@ uclenc(
 	int level = 10;
 	ucl_uint result_sz;
 	
-	extern int g_hlen; /* header length */
-	memset(dst, 0, g_hlen);
+	int hlen = 8; /* header length; required due to MM's archives */
+	memset(dst, 0, hlen);
 	memcpy(dst, "UCL0", 4);
 	dst[4] = (src_sz >> 24);
 	dst[5] = (src_sz >> 16);
@@ -29,7 +29,7 @@ uclenc(
 	r = ucl_nrv2b_99_compress(
 		src          /* in */
 		, src_sz     /* in size */
-		, dst + g_hlen /* out */
+		, dst + hlen /* out */
 		, &result_sz /* out size */
 		, NULL       /* callback */
 		, level      /* level */
@@ -43,7 +43,7 @@ uclenc(
 		exit(EXIT_FAILURE);
 	}
 	
-	*dst_sz = result_sz + g_hlen;
+	*dst_sz = result_sz + hlen;
 	
 	return 0;
 }

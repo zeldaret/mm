@@ -16,20 +16,20 @@ zx7enc(
 	unsigned char *src = _src;
 	unsigned char *dst = _dst;
 	
-	extern int g_hlen; /* header length */
-	memset(dst, 0, g_hlen);
+	int hlen = 8; /* header length; required due to MM's archives */
+	memset(dst, 0, hlen);
 	memcpy(dst, "ZX70", 4);
 	dst[4] = (src_sz >> 24);
 	dst[5] = (src_sz >> 16);
 	dst[6] = (src_sz >>  8);
 	dst[7] = (src_sz >>  0);
 	
-	*dst_sz = ZX7Compress(src, src_sz, dst + g_hlen);
+	*dst_sz = ZX7Compress(src, src_sz, dst + hlen);
 	
 	if (!*dst_sz)
 		return 1;
 	
-	*dst_sz += g_hlen;
+	*dst_sz += hlen;
 	
 	return 0;
 }

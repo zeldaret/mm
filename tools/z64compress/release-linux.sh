@@ -4,7 +4,7 @@ mkdir -p o
 mv *.o o
 
 # build everything else
-gcc -o z64compress -DNDEBUG src/*.c o/*.o src/enc/libdeflate/lib/deflate_compress.c src/enc/libdeflate/lib/utils.c -Isrc/enc/libdeflate -Wall -Wextra -s -Os -flto -lpthread -lz -march=native -mtune=native
+gcc -o z64compress -DNDEBUG src/*.c o/*.o -Wall -Wextra -s -Os -flto -lpthread -march=native -mtune=native
 
 # move to bin directory
 mkdir -p bin/linux64

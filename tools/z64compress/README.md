@@ -2,7 +2,7 @@
 
 `z64compress` is a program for compressing Zelda 64 roms: be they retail, hacked traditionally, or custom-built from the [`Ocarina of Time`](https://github.com/zeldaret/oot) or [`Majora's Mask`](https://github.com/zeldaret/mm) reverse engineering projects. It is written in highly efficient C and leverages the power of multithreading to make compression as fast as possible. To reduce overhead on subsequent compressions, an optional cache directory can be specified.
 
-In addition to the default `yaz`, it supports some faster and more compact algorithms such as `DEFLATE`, `lzo`, `ucl`, and `aplib`. In order to use these, grab patches or code from my [`z64enc` repository](https://github.com/z64me/z64enc).
+In addition to the default `yaz`, it supports some faster and more compact algorithms such as `lzo`, `ucl`, and `aplib`. In order to use these, grab patches or code from my [`z64enc` repository](https://github.com/z64me/z64enc).
 
 If you add an algorithm, please make sure `valgrind` reports no memory leaks or other errors before making a pull request. Thank you!
 
@@ -59,7 +59,6 @@ This is a command line application. Learn from these common examples and adapt t
                       yaz
                       ucl
                       lzo
-                      zlib
                       aplib
                  * to use non-yaz codecs, find patches
                    and code on my z64enc repo
@@ -90,13 +89,6 @@ This is a command line application. Learn from these common examples and adapt t
 ```
 
 ## Building
-First, clone the repository and initialize its submodules:
-```
-git clone https://github.com/z64me/z64compress.git
-cd z64compress
-git submodule update --init
-```
+I have included shell scripts for building Linux and Windows binaries. Windows binaries are built using a cross compiler ([I recommend `MXE`](https://mxe.cc/)).
 
-A Makefile-based build system is provided. Choose the target platform with `make TARGET=linux64|linux32|win32`, default is linux64. If building for windows with a cross compiler, specify the compiler executable with `make TARGET=win32 CC=/path/to/executable`.
-
-Alternatively, I have included shell scripts for building Linux and Windows binaries. Windows binaries are built using a cross compiler ([I recommend `MXE`](https://mxe.cc/)).
+Alternatively, a Makefile-based build system is provided. Choose the target platform with `make TARGET=linux64|linux32|win32`, default is linux64. If building for windows with a cross compiler, specify the compiler executable with `make TARGET=win32 CC=/path/to/executable`.

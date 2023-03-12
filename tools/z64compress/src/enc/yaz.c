@@ -272,24 +272,16 @@ uint32_t encode(struct yazCtx *ctx, uint8_t *data, uint32_t data_size, uint8_t *
 	// block and stream differentiation
 	// Yay is block, Yaz is stream
 	int mode_block=1, mode_stream=1; // temporary, for testing
-#ifdef YAZ_MAIN_TEST
-	int g_hlen = 8;
-#else
-	extern int g_hlen;
-#endif
 	mode_block=!strcmp(mode,"Yay0");
-	if (g_hlen) {
-		memcpy(output, mode, 4);
-		U32wr(output+4, sz);
-	} else
-		output -= 8; /* headerless */
-	if (mode_block) {
+	if (mode_block ) {
 		uint32_t l = (sb_count(ctx->cmds) << 2) + 16;
 		uint32_t o = (sb_count(ctx->ctrl) << 1) + l;
+		memcpy(output, mode, 4);
+		U32wr(output+4, sz);
 		U32wr(output+8, l);
 		U32wr(output+12, o);
 		
-		uint32_t output_position = g_hlen + 8;
+		uint32_t output_position = 16;
 		uint32_t x;
 		for (x=0; x<sb_count(ctx->cmds); x++) {
 			U32wr(output+output_position, ctx->cmds[x]);
@@ -304,6 +296,8 @@ uint32_t encode(struct yazCtx *ctx, uint8_t *data, uint32_t data_size, uint8_t *
 		}
 		return output_position;
 	} else if(mode_stream) {
+		memcpy(output, mode, 4);
+		U32wr(output+4, sz);
 		U32wr(output+8, 0);
 		U32wr(output+12, 0);
 		
@@ -321,8 +315,8 @@ uint32_t encode(struct yazCtx *ctx, uint8_t *data, uint32_t data_size, uint8_t *
 			sb_push(ctx->back, (ctx->ctrl[x]>>8)&0xFF);
 			sb_push(ctx->back, (ctx->ctrl[x])&0xFF);
 		}
-		output_position = _enc_z_from_tables(ctx, ctx->ctl, ctx->back, ctx->raws, output+g_hlen+8, data_size, mode);
-		return output_position + g_hlen + 8;
+		output_position = _enc_z_from_tables(ctx, ctx->ctl, ctx->back, ctx->raws, output+16, data_size, mode);
+		return 16 + output_position;
 	}
 	return 0;
 }

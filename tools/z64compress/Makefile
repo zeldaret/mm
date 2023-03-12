@@ -24,12 +24,10 @@ endif
 
 OBJ_DIR := o/$(TARGET)
 
-$(OBJ_DIR)/src/enc/%.o: CFLAGS := -DNDEBUG -s -Ofast -flto -Wall -Isrc/enc/libdeflate
+$(OBJ_DIR)/src/enc/%.o: CFLAGS := -DNDEBUG -s -Ofast -flto -Wall
 
 SRC_DIRS := $(shell find src -type d)
-C_DIRS   := $(shell find src -type d -not -path "src/enc/libdeflate/*")
-C_FILES  := $(foreach dir,$(C_DIRS),$(wildcard $(dir)/*.c))
-C_FILES  += src/enc/libdeflate/lib/deflate_compress.c src/enc/libdeflate/lib/utils.c
+C_FILES  := $(foreach dir,$(SRC_DIRS),$(wildcard $(dir)/*.c))
 O_FILES  := $(foreach f,$(C_FILES:.c=.o),$(OBJ_DIR)/$f)
 
 # Make build directories
@@ -40,7 +38,7 @@ $(shell mkdir -p $(foreach dir,$(SRC_DIRS),$(OBJ_DIR)/$(dir)))
 all: z64compress
 
 z64compress: $(O_FILES)
-	$(CC) $(TARGET_CFLAGS) $(CFLAGS) $(O_FILES) -lm -lpthread -lz $(TARGET_LIBS) -o z64compress
+	$(CC) $(TARGET_CFLAGS) $(CFLAGS) $(O_FILES) -lm -lpthread $(TARGET_LIBS) -o z64compress
 
 $(OBJ_DIR)/%.o: %.c
 	$(CC) -c $(TARGET_CFLAGS) $(CFLAGS) $< -o $@

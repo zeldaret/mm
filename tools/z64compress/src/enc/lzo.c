@@ -33,8 +33,8 @@ lzoenc(
 	unsigned char *wrkmem = _ctx;
 	lzo_uint result_sz = 0;
 	
-	extern int g_hlen; /* header length */
-	memset(dst, 0, g_hlen);
+	int hlen = 8; /* header length; required due to MM's archives */
+	memset(dst, 0, hlen);
 	memcpy(dst, "LZO0", 4);
 	dst[4] = (src_sz >> 24);
 	dst[5] = (src_sz >> 16);
@@ -46,9 +46,9 @@ lzoenc(
 	
 	memset(wrkmem, 0, LZO1X_999_MEM_COMPRESS);
 	
-	lzo1x_999_compress(src, src_sz, dst + g_hlen, &result_sz, wrkmem);
+	lzo1x_999_compress(src, src_sz, dst + hlen, &result_sz, wrkmem);
 	
-	*dst_sz = result_sz + g_hlen;
+	*dst_sz = result_sz + hlen;
 	
 	return 0;
 }

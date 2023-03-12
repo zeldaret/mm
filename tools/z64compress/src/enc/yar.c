@@ -1,12 +1,5 @@
 /* <z64.me> yar.c: decode and encode MM yaz archives */
 
-/*
- * this file can also be compiled as a standalone program for
- * decompressing the contents of a MM yaz archive like so:
- *   gcc -o unyar -Wall -Wextra -std=c99 -pedantic -DYAR_MAIN_TEST=1 yar.c
- *
- */
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
@@ -238,7 +231,7 @@ yar_reencode(
 		ss += 4;
 		item += 1;
 	
-	} while ((unsigned)(ss - src) < end);
+	} while (ss - src < end);
 	
 	/* update progress display */
 	if (name)
@@ -284,7 +277,7 @@ yar_reencode(
 
 /* yaz decoder, courtesy of spinout182 */
 static
-int spinout_yaz_dec(void *_src, void *_dst, unsigned dstSz, unsigned *srcSz)
+int spinout_yaz_dec(void *_src, void *_dst, int dstSz)
 {
 	unsigned char *src = _src;
 	unsigned char *dst = _dst;
@@ -335,7 +328,7 @@ int spinout_yaz_dec(void *_src, void *_dst, unsigned dstSz, unsigned *srcSz)
 			}
 
 			/*copy run*/
-			unsigned int i;
+			int i;
 			for(i = 0; i < numBytes; ++i)
 			{
 				dst[dstPlace] = dst[copySource];
@@ -350,14 +343,12 @@ int spinout_yaz_dec(void *_src, void *_dst, unsigned dstSz, unsigned *srcSz)
 	}
 	
 	return 0;
-	
-	(void)srcSz;
 }
 
 
 /* encodes decompressed data, storing result in dst */
 static
-int encode(void *src, unsigned srcSz, void *_dst, unsigned *dstSz, void *ctx)
+int encode(void *src, int srcSz, void *_dst, int *dstSz, void *ctx)
 {
 	unsigned char *dst = _dst;
 	
@@ -377,22 +368,15 @@ int encode(void *src, unsigned srcSz, void *_dst, unsigned *dstSz, void *ctx)
 	*dstSz = srcSz + 0x10;
 	
 	return 0;
-	
-	(void)ctx;
 }
 
 /* checks if data has already been encoded */
 /* if it does, dst is filled with that data and 1 is returned */
 /* 0 is returned otherwise */
 static
-int exist(void *src, unsigned srcSz, void *dst, unsigned *dstSz)
+int exist(void *src, int srcSz, void *dst, int *dstSz)
 {
 	return 0;
-	
-	(void)src;
-	(void)srcSz;
-	(void)dst;
-	(void)dstSz;
 }
 
 /* unsafe but it's a test program so it's fine */
@@ -428,39 +412,17 @@ file_read(char *fn, unsigned *sz)
 	return raw;
 }
 
-/* minimal file writer
- * returns 0 on failure
- * returns non-zero on success
- */
-int savefile(const char *fn, const void *dat, const size_t sz)
-{
-	FILE *fp;
-	
-	/* rudimentary error checking returns 0 on any error */
-	if (
-		!fn
-		|| !sz
-		|| !dat
-		|| !(fp = fopen(fn, "wb"))
-		|| fwrite(dat, 1, sz, fp) != sz
-		|| fclose(fp)
-	)
-		return 0;
-	
-	return 1;
-}
-
 int main(int argc, char *argv[])
 {
-	void *raw;
+	unsigned char *raw;
 	unsigned int raw_sz;
 	
-	void *out;
-	void *imm;
+	unsigned char *out;
+	unsigned char *imm;
 	unsigned int out_sz = 0;
 	
-	if (argc != 3)
-		FERR("args: unyar in.yar out.yar");
+	if (argc != 2)
+		FERR("args: unyar in.yar > out.yar");
 	
 	raw = file_read(argv[1], &raw_sz);
 	fprintf(stderr, "input file %s:\n", argv[1]);
@@ -470,21 +432,18 @@ int main(int argc, char *argv[])
 	imm = malloc(1024 * 1024 * 64);
 	
 	yar_reencode(
-		raw, raw_sz, out, &out_sz, 16, argv[1], "Yaz0", imm, 0
+		raw, raw_sz, out, &out_sz, 12, "Yaz0", imm
 		, spinout_yaz_dec
 		, encode
 		, exist
 	);
 	
-	/* write output file */
-	if (!savefile(argv[2], out, out_sz))
-		FERR("failed to write output file");
-	
+	/* write output to stdout */
+	fwrite(out, 1, out_sz, stdout);
+
 	free(raw);
 	free(out);
 	free(imm);
-	
-	return 0;
 }
 
 #endif /* YAR_MAIN_TEST */
