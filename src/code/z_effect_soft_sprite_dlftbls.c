@@ -2,7 +2,7 @@
 
 // Linker symbol declarations (used in the table below)
 #define DEFINE_EFFECT_SS(name, _enumValue) DECLARE_OVERLAY_SEGMENT(name)
-#define DEFINE_EFFECT_SS_UNSET(_0)
+#define DEFINE_EFFECT_SS_UNSET(_enumValue)
 
 #include "tables/effect_ss_table.h"
 
