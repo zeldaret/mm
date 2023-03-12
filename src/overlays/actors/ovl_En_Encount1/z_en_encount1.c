@@ -125,7 +125,7 @@ void EnEncount1_SpawnActor(EnEncount1* this, PlayState* play) {
         case EN_ENCOUNT1_SKULLFISH:
             scale = randPlusMinusPoint5Scaled(250.0f) + 500.0f;
             rotY = player->actor.shape.rot.y;
-            spawnPos.x = player->actor.world.pos.x + Math_SinS(rotY) * scale + randPlusMinusPoint5Scaled(40.0f);
+            spawnPos.x = player->actor.world.pos.x + (Math_SinS(rotY) * scale) + randPlusMinusPoint5Scaled(40.0f);
             spawnPos.y = player->actor.world.pos.y - Rand_ZeroFloat(20.0f);
             spawnPos.z = player->actor.world.pos.z + (Math_CosS(rotY) * scale) + randPlusMinusPoint5Scaled(40.0f);
             floorHeight = BgCheck_EntityRaycastFloor5(&play->colCtx, &floorPoly, &bgId, &this->actor, &spawnPos);
