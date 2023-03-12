@@ -6504,7 +6504,7 @@
     0x808E06B0:("DoorAna_Update",),
     0x808E0704:("DoorAna_Draw",),
     0x808E0830:("EnEncount1_Init",),
-    0x808E0954:("func_808E0954",),
+    0x808E0954:("EnEncount1_SpawnActor",),
     0x808E0DA8:("EnEncount1_Update",),
     0x808E0E40:("DemoTreLgt_Init",),
     0x808E0EBC:("DemoTreLgt_Destroy",),

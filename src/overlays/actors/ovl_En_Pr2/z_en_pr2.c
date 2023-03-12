@@ -151,7 +151,7 @@ void EnPr2_Init(Actor* thisx, PlayState* play) {
                 Actor* parent = this->actor.parent;
 
                 if (parent->update != NULL) {
-                    this->unk_1C8 = ((EnEncount1*)parent)->unk_15A;
+                    this->unk_1C8 = ((EnEncount1*)parent)->pathIndex;
                     this->path = SubS_GetPathByIndex(play, this->unk_1C8, 0x3F);
                     this->unk_208 = parent->world.rot.z * 20.0f;
                     if (this->unk_208 < 20.0f) {
@@ -188,8 +188,8 @@ void EnPr2_Destroy(Actor* thisx, PlayState* play) {
     if (this->actor.parent != NULL) {
         EnEncount1* encount1 = (EnEncount1*)this->actor.parent;
 
-        if ((encount1->actor.update != NULL) && (encount1->unk_14E > 0)) {
-            encount1->unk_14E--;
+        if ((encount1->actor.update != NULL) && (encount1->curSpawnNum > 0)) {
+            encount1->curSpawnNum--;
         }
     }
 }
