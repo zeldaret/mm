@@ -10,29 +10,33 @@ void func_80147414(SramContext* sramCtx, s32 fileNum, s32 arg2);
     ((newf)[0] != 'Z' || (newf)[1] != 'E' || (newf)[2] != 'L' || (newf)[3] != 'D' || (newf)[4] != 'A' || \
      (newf)[5] != '3')
 
-// default scene flags (?)
-// indices of subarray:
-// - 0: switch0
-// - 1: switch1
-// - 2: chest
-// - 3: collectible
-u32 D_801C5FC0[SCENE_MAX][4] = {
+typedef struct PersistentCycleFlags {
+    /* 0x0 */ u32 switch0;
+    /* 0x4 */ u32 switch1;
+    /* 0x8 */ u32 chest;
+    /* 0xC */ u32 collectible;
+} PersistentCycleFlags; // size = 0x10
+
+/**
+ * Array of bitwise flags which won't be turned off on a cycle reset (will persist between cycles)
+ */
+PersistentCycleFlags sPersistentCycleFlags[SCENE_MAX] = {
     { 0xC00, 0, 0, 0x40000000 },    // SCENE_20SICHITAI2
-    { 0, 0, 0, 0 },                 // SCENE_UNSET_1
-    { 0, 0, 0, 0 },                 // SCENE_UNSET_2
-    { 0, 0, 0, 0 },                 // SCENE_UNSET_3
-    { 0, 0, 0, 0 },                 // SCENE_UNSET_4
-    { 0, 0, 0, 0 },                 // SCENE_UNSET_5
-    { 0, 0, 0, 0 },                 // SCENE_UNSET_6
+    { 0, 0, 0, 0 },                 // SCENE_UNSET_01
+    { 0, 0, 0, 0 },                 // SCENE_UNSET_02
+    { 0, 0, 0, 0 },                 // SCENE_UNSET_03
+    { 0, 0, 0, 0 },                 // SCENE_UNSET_04
+    { 0, 0, 0, 0 },                 // SCENE_UNSET_05
+    { 0, 0, 0, 0 },                 // SCENE_UNSET_06
     { 0, 0, 0, 0xC04 },             // SCENE_KAKUSIANA
     { 0, 0, 0, 0 },                 // SCENE_SPOT00
-    { 0, 0, 0, 0 },                 // SCENE_UNSET_9
+    { 0, 0, 0, 0 },                 // SCENE_UNSET_09
     { 0, 0, 0, 0 },                 // SCENE_WITCH_SHOP
     { 0, 0, 0, 0x80000000 },        // SCENE_LAST_BS
     { 0, 0, 0, 0x80000000 },        // SCENE_HAKASHITA
     { 0, 0, 0, 0 },                 // SCENE_AYASHIISHOP
-    { 0, 0, 0, 0 },                 // SCENE_UNSET_E
-    { 0, 0, 0, 0 },                 // SCENE_UNSET_F
+    { 0, 0, 0, 0 },                 // SCENE_UNSET_0E
+    { 0, 0, 0, 0 },                 // SCENE_UNSET_0F
     { 0, 0, 0, 0 },                 // SCENE_OMOYA
     { 0, 0, 0, 0 },                 // SCENE_BOWLING
     { 0, 0, 0, 0 },                 // SCENE_SONCHONOIE
@@ -350,18 +354,18 @@ void Sram_SaveEndOfCycle(PlayState* play) {
     sceneId = Play_GetOriginalSceneId(play->sceneId);
     Play_SaveCycleSceneFlags(&play->state);
 
-    play->actorCtx.sceneFlags.chest &= D_801C5FC0[sceneId][2];
-    play->actorCtx.sceneFlags.switches[0] &= D_801C5FC0[sceneId][0];
-    play->actorCtx.sceneFlags.switches[1] &= D_801C5FC0[sceneId][1];
-    play->actorCtx.sceneFlags.collectible[0] &= D_801C5FC0[sceneId][3];
+    play->actorCtx.sceneFlags.chest &= sPersistentCycleFlags[sceneId].chest;
+    play->actorCtx.sceneFlags.switches[0] &= sPersistentCycleFlags[sceneId].switch0;
+    play->actorCtx.sceneFlags.switches[1] &= sPersistentCycleFlags[sceneId].switch1;
+    play->actorCtx.sceneFlags.collectible[0] &= sPersistentCycleFlags[sceneId].collectible;
     play->actorCtx.sceneFlags.clearedRoom = 0;
 
     for (i = 0; i < SCENE_MAX; i++) {
-        gSaveContext.cycleSceneFlags[i].switch0 = ((void)0, gSaveContext.cycleSceneFlags[i].switch0) & D_801C5FC0[i][0];
-        gSaveContext.cycleSceneFlags[i].switch1 = ((void)0, gSaveContext.cycleSceneFlags[i].switch1) & D_801C5FC0[i][1];
-        gSaveContext.cycleSceneFlags[i].chest = ((void)0, gSaveContext.cycleSceneFlags[i].chest) & D_801C5FC0[i][2];
+        gSaveContext.cycleSceneFlags[i].switch0 = ((void)0, gSaveContext.cycleSceneFlags[i].switch0) & sPersistentCycleFlags[i].switch0;
+        gSaveContext.cycleSceneFlags[i].switch1 = ((void)0, gSaveContext.cycleSceneFlags[i].switch1) & sPersistentCycleFlags[i].switch1;
+        gSaveContext.cycleSceneFlags[i].chest = ((void)0, gSaveContext.cycleSceneFlags[i].chest) & sPersistentCycleFlags[i].chest;
         gSaveContext.cycleSceneFlags[i].collectible =
-            ((void)0, gSaveContext.cycleSceneFlags[i].collectible) & D_801C5FC0[i][3];
+            ((void)0, gSaveContext.cycleSceneFlags[i].collectible) & sPersistentCycleFlags[i].collectible;
         gSaveContext.cycleSceneFlags[i].clearedRoom = 0;
         gSaveContext.save.permanentSceneFlags[i].unk_14 = 0;
         gSaveContext.save.permanentSceneFlags[i].rooms = 0;
