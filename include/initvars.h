@@ -34,12 +34,4 @@ extern EffectSsInit Effect_Ss_Ice_Smoke_InitVars;
 extern EffectSsInit Effect_En_Ice_Block_InitVars;
 extern EffectSsInit Effect_Ss_Sbn_InitVars;
 
-extern TransitionInit TransitionFade_InitVars;
-extern TransitionInit TransitionTriforce_InitVars;
-extern TransitionInit TransitionWipe1_InitVars;
-extern TransitionInit TransitionWipe3_InitVars;
-extern TransitionInit TransitionWipe4_InitVars;
-extern TransitionInit TransitionCircle_InitVars;
-extern TransitionInit TransitionWipe5_InitVars;
-
 #endif

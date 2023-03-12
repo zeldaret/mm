@@ -164,30 +164,28 @@ typedef enum {
     /* 86 */ TRANS_TYPE_86 = 86
 } TransitionType;
 
-typedef enum {
-    /* 0 */ FBDEMO_FADE,
-    /* 1 */ FBDEMO_TRIFORCE,
-    /* 2 */ FBDEMO_WIPE1,
-    /* 3 */ FBDEMO_WIPE3,
-    /* 4 */ FBDEMO_WIPE4,
-    /* 5 */ FBDEMO_CIRCLE,
-    /* 6 */ FBDEMO_WIPE5
+#define DEFINE_TRANSITION(enumValue, _structName, _instanceName, _name) enumValue,
+#define DEFINE_TRANSITION_INTERNAL(enumValue, _structName, _instanceName) enumValue,
+
+typedef enum FbDemoType {
+    #include "tables/transition_table.h"
+    /* 7 */ FBDEMO_MAX
 } FbDemoType;
 
+#undef DEFINE_TRANSITION
+#undef DEFINE_TRANSITION_INTERNAL
+
 #define TRANS_NEXT_TYPE_DEFAULT 0xFF
+
+#define DEFINE_TRANSITION(_enumValue, structName, instanceName, _name) structName instanceName;
+#define DEFINE_TRANSITION_INTERNAL(_enumValue, structName, instanceName) structName instanceName;
 
 typedef struct {
     /* 0x000 */ s16 transitionType;
     /* 0x002 */ s8 fbdemoType;
     /* 0x003 */ char unk_003[0x5];
     /* 0x008 */ union {
-        TransitionFade fade;
-        TransitionCircle circle;
-        TransitionTriforce triforce;
-        TransitionWipe1 wipe1;
-        TransitionWipe3 wipe3;
-        TransitionWipe4 wipe4;
-        TransitionWipe5 wipe5;
+        #include "tables/transition_table.h"
     } instanceData;
     /* 0x220 */ char unk_220[0x10];
     /* 0x230 */ void* (*init)(void* transition);
@@ -201,5 +199,8 @@ typedef struct {
     /* 0x250 */ s32   (*isDone)(void* transition);
     /* 0x254 */ char unk_254[0x4];
 } TransitionContext; // size = 0x258
+
+#undef DEFINE_TRANSITION
+#undef DEFINE_TRANSITION_INTERNAL
 
 #endif
