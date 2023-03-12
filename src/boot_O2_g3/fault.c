@@ -8,7 +8,7 @@
  * crash screen is available for use. Once this bar appears, it is possible to open the crash screen
  * with the following button combination:
  *
- * (DPad-Left & L & R & C-Right)
+ * (DPad-Left & L & R & C-Right) & Start
  *
  * When entering this button combination, buttons that are &'d together must all be pressed together.
  *
@@ -554,7 +554,7 @@ void Fault_Wait5Seconds(void) {
 /**
  * Waits for the following button combination to be entered before returning:
  *
- * (DPad-Left & L & R & C-Right)
+ * (DPad-Left & L & R & C-Right) & Start
  */
 void Fault_WaitForButtonCombo(void) {
     Input* input = &sFaultInstance->inputs[0];
@@ -930,6 +930,7 @@ void Fault_SetOptionsFromController3(void) {
     uintptr_t ra;
     uintptr_t sp;
 
+    // 0x80 is the "neutral reset". Corresponds to holding L+R and pressing S
     if (CHECK_BTN_ALL(input3->press.button, 0x80)) {
         faultCustomOptions = !faultCustomOptions;
     }
