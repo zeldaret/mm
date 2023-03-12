@@ -462,6 +462,14 @@ static const struct encoder *encoder(const char *name)
 		
 		return &zx7;
 	}*/
+	else if (!strcmp(name, "zlib"))
+	{
+		static const struct encoder zlib = {
+			.encfunc = zlibenc
+		};
+		
+		return &zlib;
+	}
 	else if (!strcmp(name, "aplib"))
 	{
 		static const struct encoder aplib = {
@@ -1112,7 +1120,7 @@ void rom_compress(struct rom *rom, int mb, int numThreads, bool matching)
 		comp_total += sz16;
 		
 		if (mb != 0 && dma->Pend > compsz)
-			die("ran out of compressed rom space");
+			die("ran out of compressed rom space (try increasing --mb)");
 	}
 
 	/* adaptive final size */
@@ -1659,6 +1667,14 @@ struct rom *rom_new(const char *fn)
 	
 	/* propagate rom file */
 	dst->data = file_load(fn, &dst->data_sz);
+	
+	/* double its bounds just in case compressed rom is larger
+	 * (this can happen if, say, a 23mb rom is provided,
+	 * gets compressed to 17mb, and is rounded up to 24mb)
+	 * (retail rom sizes always use increments of 8)
+	 */
+	dst->data_sz *= 2;
+	dst->data = realloc(dst->data, dst->data_sz);
 	
 	/* back up load file name */
 	dst->fn = strdup_safe(fn);

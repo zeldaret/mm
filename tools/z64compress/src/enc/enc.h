@@ -38,6 +38,15 @@ int zx7enc(
 	, void *_ctx
 );
 
+int
+zlibenc(
+	void *_src
+	, unsigned src_sz
+	, void *_dst
+	, unsigned *dst_sz
+	, void *_ctx
+);
+
 int aplenc(
 	void *_src
 	, unsigned src_sz
