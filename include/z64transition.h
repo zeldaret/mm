@@ -2,6 +2,7 @@
 #define Z64TRANSITION_H
 
 #include "ultra64.h"
+#include "libc/stdint.h"
 #include "overlays/fbdemos/ovl_fbdemo_triforce/z_fbdemo_triforce.h"
 #include "overlays/fbdemos/ovl_fbdemo_wipe1/z_fbdemo_wipe1.h"
 #include "overlays/fbdemos/ovl_fbdemo_wipe3/z_fbdemo_wipe3.h"
