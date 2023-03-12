@@ -1,16 +1,11 @@
-#include "global.h"
+#include "z64effect.h"
+#include "segment_symbols.h"
 
-// Linker symbol declarations (used in the table below)
-#define DEFINE_EFFECT_SS(name, _enumValue) DECLARE_OVERLAY_SEGMENT(name)
-#define DEFINE_EFFECT_SS_UNSET(_enumValue)
+// Init Vars and linker symbol declarations (used in the table below)
+#define DEFINE_EFFECT_SS(name, _enumValue) \
+    extern EffectSsInit name##_InitVars; \
+    DECLARE_OVERLAY_SEGMENT(name)
 
-#include "tables/effect_ss_table.h"
-
-#undef DEFINE_EFFECT_SS
-#undef DEFINE_EFFECT_SS_UNSET
-
-// Init Vars declarations (also used in the table below)
-#define DEFINE_EFFECT_SS(name, _enumValue) extern EffectSsInit name##_InitVars;
 #define DEFINE_EFFECT_SS_UNSET(_enumValue)
 
 #include "tables/effect_ss_table.h"

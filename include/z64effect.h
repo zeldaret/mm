@@ -2,6 +2,7 @@
 #define Z64EFFECT_H
 
 #include "PR/ultratypes.h"
+#include "libc/stdint.h"
 #include "color.h"
 #include "z64light.h"
 #include "z64math.h"
@@ -9,6 +10,8 @@
 
 struct GraphicsContext;
 struct PlayState;
+struct Actor;
+struct CollisionPoly;
 
 #define SPARK_COUNT 3
 #define BLURE_COUNT 25
@@ -181,7 +184,7 @@ typedef struct {
     /* 0x08 */ Vec3s p2;
     /* 0x0E */ s16 life;
     /* 0x10 */ UNK_TYPE1 pad10[0x4];
-    /* 0x14 */ CollisionPoly* colPoly;
+    /* 0x14 */ struct CollisionPoly* colPoly;
 } EffectTireMarkElement; // size = 0x18
 
 typedef struct {
@@ -265,7 +268,7 @@ typedef struct EffectSs {
     /* 0x28 */ EffectSsDrawFunc draw;
     /* 0x2C */ Vec3f vec;
     /* 0x38 */ void* gfx;
-    /* 0x3C */ Actor* actor;
+    /* 0x3C */ struct Actor* actor;
     /* 0x40 */ s16 regs[13]; // These are particle-specific
     /* 0x5A */ u16 flags; // bit 0: set if this entry is not considered free on a priority tie bit 1: ? bit 2: ?
     /* 0x5C */ s16 life; // -1 means this entry is free
