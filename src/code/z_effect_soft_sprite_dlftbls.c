@@ -3,7 +3,7 @@
 
 // Init Vars and linker symbol declarations (used in the table below)
 #define DEFINE_EFFECT_SS(name, _enumValue) \
-    extern EffectSsInit name##_InitVars; \
+    extern EffectSsInit name##_InitVars;   \
     DECLARE_OVERLAY_SEGMENT(name)
 
 #define DEFINE_EFFECT_SS_UNSET(_enumValue)
