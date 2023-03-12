@@ -65,11 +65,9 @@ Input sPostmanTimerInput[4];
 #define RESTRICTIONS_MOON RESTRICTIONS_SET(0, 0, 0, 0, 0, 3, 3, 3, 0, 0, 0, 0)
 #define RESTRICTIONS_NO_DOUBLE_TIME RESTRICTIONS_SET(0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0)
 
-#define DEFINE_SCENE(_name, enumValue, _textId, _drawConfig, restrictionFlags) \
-    { enumValue, restrictionFlags },
+#define DEFINE_SCENE(_name, enumValue, _textId, _drawConfig, restrictionFlags) { enumValue, restrictionFlags },
 
-#define DEFINE_SCENE_UNSET(enumValue) \
-    { enumValue, RESTRICTIONS_NONE },
+#define DEFINE_SCENE_UNSET(enumValue) { enumValue, RESTRICTIONS_NONE },
 
 RestrictionFlags sRestrictionFlags[] = {
 #include "tables/scene_table.h"

@@ -1,8 +1,6 @@
 #include "global.h"
 
-
-#define DEFINE_SCENE(name, _enumValue, textId, drawConfig, _restrictionFlags) \
-    DECLARE_ROM_SEGMENT(name)
+#define DEFINE_SCENE(name, _enumValue, textId, drawConfig, _restrictionFlags) DECLARE_ROM_SEGMENT(name)
 
 #define DEFINE_SCENE_UNSET(_enumValue)
 
@@ -11,12 +9,10 @@
 #undef DEFINE_SCENE
 #undef DEFINE_SCENE_UNSET
 
-
 #define DEFINE_SCENE(name, _enumValue, textId, drawConfig, _restrictionFlags) \
     { { SEGMENT_ROM_START(name), SEGMENT_ROM_END(name) }, textId, 0, drawConfig, 0, 0 },
 
-#define DEFINE_SCENE_UNSET(_enumValue) \
-    { { 0, 0 }, 0, 0, 0, 0, 0 },
+#define DEFINE_SCENE_UNSET(_enumValue) { { 0, 0 }, 0, 0, 0, 0, 0 },
 
 SceneTableEntry gSceneTable[] = {
 #include "tables/scene_table.h"

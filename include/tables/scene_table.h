@@ -6,7 +6,7 @@
  *    - Argument 1: Enum value for this scene
  *    - Argument 2: Title card's text id, or zero for no title card
  *    - Argument 3: Scene draw config index
- *    - Argument 4: Restriction flags
+ *    - Argument 4: Restriction flags. See `RESTRICTIONS_SET` on z_parameter.c
  *
  * DEFINE_ACTOR_UNSET is needed to define empty entries from the original game
  *    - Argument 0: Enum value for this scene
