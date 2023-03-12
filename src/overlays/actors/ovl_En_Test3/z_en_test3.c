@@ -4,7 +4,6 @@
  * Description: Kafei
  */
 
-#include "prevent_bss_reordering.h"
 #include "z_en_test3.h"
 #include "objects/object_test3/object_test3.h"
 #include "overlays/actors/ovl_En_Door/z_en_door.h"
