@@ -52,7 +52,7 @@ void EnEncount1_Init(Actor* thisx, PlayState* play) {
     this->unk_160 = (this->actor.world.rot.z * 40.0f) + 120.0f;
 
     if (this->pathIndex >= PATH_INDEX_MAX) {
-        this->pathIndex = -1;
+        this->pathIndex = PATH_INDEX_NONE;
     }
     if (this->actor.world.rot.z < 0) {
         this->unk_160 = -1.0f;
@@ -60,7 +60,7 @@ void EnEncount1_Init(Actor* thisx, PlayState* play) {
     if (this->actorType == EN_ENCOUNT1_SKULLFISH_2) {
         this->pathIndexSkullFish2 = ENENCOUNT1_GET_PATH_INDEX(&this->actor);
         this->path = SubS_GetPathByIndex(play, this->pathIndexSkullFish2, PATH_INDEX_MAX);
-        this->pathIndex = -1;
+        this->pathIndex = PATH_INDEX_NONE;
         this->unk_160 = -1.0f;
     }
     this->actor.flags &= ~ACTOR_FLAG_1;

@@ -167,15 +167,15 @@ void EnLookNuts_Patrol(EnLookNuts* this, PlayState* play) {
 
     this->path = SubS_GetPathByIndex(play, this->pathIndex, PATH_INDEX_MAX_ALT);
     if (this->path != NULL) {
-        sp34 = SubS_GetDistSqAndOrientPath(this->path, this->currentPathIndex, &this->actor.world.pos, &sp30);
+        sp34 = SubS_GetDistSqAndOrientPath(this->path, this->waypointIndex, &this->actor.world.pos, &sp30);
     }
 
     //! @bug sp30 is uninitialised if path == NULL. Fix by enclosing everything in the path NULL check.
     if (sp30 < 10.0f) {
         if (this->path != NULL) {
-            this->currentPathIndex++;
-            if (this->currentPathIndex >= this->path->count) {
-                this->currentPathIndex = 0;
+            this->waypointIndex++;
+            if (this->waypointIndex >= this->path->count) {
+                this->waypointIndex = 0;
             }
             if (Rand_ZeroOne() < 0.6f) {
                 EnLookNuts_SetupStandAndWait(this);

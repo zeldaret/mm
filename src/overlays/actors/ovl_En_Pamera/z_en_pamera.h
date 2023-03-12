@@ -9,6 +9,8 @@ struct EnPamera;
 typedef void (*EnPameraActionFunc)(struct EnPamera*, PlayState*);
 typedef void (*EnPameraSetupFunc)(struct EnPamera*, PlayState*);
 
+#define ENPAMERA_GET_PATH_INDEX(thisx) (((thisx)->params & 0xFF0) >> 4)
+
 typedef struct EnPamera {
     /* 0x000 */ Actor actor;
     /* 0x144 */ ColliderCylinder collider;

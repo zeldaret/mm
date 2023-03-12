@@ -134,7 +134,7 @@ void func_8094373C(EnDaiku* this, s32 arg1) {
 }
 
 void func_809437C8(EnDaiku* this) {
-    if ((this->pathIndex != -1) && (this->path != NULL)) {
+    if ((this->pathIndex != PATH_INDEX_NONE) && (this->path != NULL)) {
         if (!SubS_CopyPointFromPath(this->path, this->unk_25C, &this->unk_26C)) {
             Actor_Kill(&this->actor);
         }

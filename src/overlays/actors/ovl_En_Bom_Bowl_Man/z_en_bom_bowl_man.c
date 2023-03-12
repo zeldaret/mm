@@ -156,7 +156,7 @@ void func_809C4B50(EnBomBowlMan* this) {
 }
 
 void func_809C4B6C(EnBomBowlMan* this) {
-    if ((this->pathIndex != -1) && (this->path != NULL)) {
+    if ((this->pathIndex != PATH_INDEX_NONE) && (this->path != NULL)) {
         if (!SubS_CopyPointFromPath(this->path, this->unk_298, &this->unk_2A0)) {
             Actor_Kill(&this->actor);
         }

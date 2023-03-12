@@ -19,7 +19,7 @@ typedef struct EnLookNuts {
     /* 0x1CA */ Vec3s morphTable[DEKU_PALACE_GUARD_LIMB_MAX];
     /* 0x20C */ EnLookNutsActionFunc actionFunc;
     /* 0x210 */ Path *path;
-    /* 0x214 */ s16 currentPathIndex; // Index for the point where the deku guard is in its path 
+    /* 0x214 */ s16 waypointIndex; // Index for the point where the deku guard is in its path 
     /* 0x216 */ s16 eyeState;
     /* 0x218 */ s16 blinkTimer; 
     /* 0x21A */ s16 eventTimer; // Timer to trigger when another event within the actor will happen

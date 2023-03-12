@@ -197,7 +197,7 @@ s32 func_80BD84F0(EnPamera* this, PlayState* play) {
 }
 
 void func_80BD8588(EnPamera* this, PlayState* play) {
-    Path* path = &play->setupPathList[((this->actor.params & 0xFF0) >> 4)];
+    Path* path = &play->setupPathList[ENPAMERA_GET_PATH_INDEX(&this->actor)];
     Vec3f sp28;
 
     if (path == NULL) {

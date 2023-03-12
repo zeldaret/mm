@@ -216,7 +216,7 @@ void func_80AD36EC(EnTrt2* this, PlayState* play) {
                 this->unk_1E4 = 0;
                 this->unk_3D9 = 1;
                 this->actor.velocity.y = 0.0f;
-                this->path = SubS_GetPathByIndex(play, this->path->additionalPathIndex, -1);
+                this->path = SubS_GetPathByIndex(play, this->path->additionalPathIndex, PATH_INDEX_NONE);
                 ActorCutscene_Stop(this->unk_3DA);
                 this->unk_3DA = ActorCutscene_GetAdditionalCutscene(this->unk_3DA);
                 ActorCutscene_SetIntentToPlay(this->unk_3DA);

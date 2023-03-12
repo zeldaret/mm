@@ -394,7 +394,7 @@ void EnEgol_DestroyBlocks(EnEgol* this, PlayState* play, Vec3f pos1, Vec3f pos2)
 }
 
 void EnEgol_GetWaypoint(EnEgol* this) {
-    if ((this->pathIndex != -1) && (this->path != NULL) &&
+    if ((this->pathIndex != PATH_INDEX_NONE) && (this->path != NULL) &&
         !SubS_CopyPointFromPath(this->path, this->waypoint, &this->waypointPos)) {
         Actor_Kill(&this->actor);
     }
@@ -428,7 +428,7 @@ void EnEgol_Init(Actor* thisx, PlayState* play) {
 
     this->pathIndex = EYEGORE_GET_PATH_INDEX(&this->actor);
     if (this->pathIndex == PATH_INDEX_MAX) {
-        this->pathIndex = -1;
+        this->pathIndex = PATH_INDEX_NONE;
         Actor_Kill(&this->actor);
         return;
     }

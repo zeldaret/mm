@@ -69,7 +69,7 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 void func_80BE61D0(EnDaiku2* this) {
-    if ((this->pathIndex != -1) && (this->path != NULL)) {
+    if ((this->pathIndex != PATH_INDEX_NONE) && (this->path != NULL)) {
         if (!SubS_CopyPointFromPath(this->path, this->unk_25C, &this->unk_268)) {
             Actor_Kill(&this->actor);
         }

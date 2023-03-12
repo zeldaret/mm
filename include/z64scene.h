@@ -464,6 +464,7 @@ typedef struct {
 #define PATH_INDEX_END 0xFF
 #define PATH_INDEX_MAX 0x3F
 #define PATH_INDEX_MAX_ALT 0x1F
+#define PATH_INDEX_NONE -1
 
 typedef struct {
     /* 0x0 */ u8 count; // Number of points in the path
