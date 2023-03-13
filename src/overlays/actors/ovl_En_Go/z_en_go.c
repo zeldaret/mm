@@ -1396,7 +1396,8 @@ void func_80A1449C(EnGo* this, PlayState* play) {
 
 void func_80A144F4(EnGo* this, PlayState* play) {
     if (gSaveContext.save.day >= 2) {
-        this->path = SubS_GetDayDependentPath(play, ENGO_GET_PATH_INDEX(&this->actor), ENGO_PATH_INDEX_NONE, &this->unk_3E4);
+        this->path =
+            SubS_GetDayDependentPath(play, ENGO_GET_PATH_INDEX(&this->actor), ENGO_PATH_INDEX_NONE, &this->unk_3E4);
         if (this->path != NULL) {
             this->unk_3E4 = 1;
         }

@@ -1154,7 +1154,8 @@ void EnSw_Init(Actor* thisx, PlayState* play) {
             this->collider.info.toucher.damage = 16;
         }
 
-        this->path = SubS_GetDayDependentPath(play, ENSW_GET_PATH_INDEX(&this->actor), ENSW_PATH_INDEX_NONE, &this->unk_4A0);
+        this->path =
+            SubS_GetDayDependentPath(play, ENSW_GET_PATH_INDEX(&this->actor), ENSW_PATH_INDEX_NONE, &this->unk_4A0);
         if (this->path != NULL) {
             this->unk_4A0 = 1;
         }

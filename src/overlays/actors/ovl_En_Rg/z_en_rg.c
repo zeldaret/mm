@@ -741,7 +741,8 @@ void EnRg_Init(Actor* thisx, PlayState* play) {
 
         Effect_Add(play, &this->unk_340, EFFECT_TIRE_MARK, 0, 0, &D_80BF59F0);
 
-        this->path = SubS_GetDayDependentPath(play, ENRG_GET_PATH_INDEX(&this->actor), ENRG_PATH_INDEX_NONE, &this->unk_33C);
+        this->path =
+            SubS_GetDayDependentPath(play, ENRG_GET_PATH_INDEX(&this->actor), ENRG_PATH_INDEX_NONE, &this->unk_33C);
         if (this->path != NULL) {
             this->unk_33C = 1;
         }
