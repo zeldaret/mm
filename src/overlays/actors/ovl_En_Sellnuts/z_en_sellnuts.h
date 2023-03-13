@@ -10,6 +10,8 @@ typedef void (*EnSellnutsActionFunc)(struct EnSellnuts*, PlayState*);
 #define ENSELLNUTS_GET_1(thisx) ((thisx)->params & 1)
 #define ENSELLNUTS_GET_PATH_INDEX(thisx) (((thisx)->params & 0xFC00) >> 0xA)
 
+#define ENSELLNUTS_PATH_INDEX_NONE (PATH_INDEX_NONE & 0x3F)
+
 typedef struct EnSellnuts {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;

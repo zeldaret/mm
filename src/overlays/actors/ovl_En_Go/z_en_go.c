@@ -1331,9 +1331,9 @@ void func_80A1428C(EnGo* this, PlayState* play) {
     Vec3f sp24;
 
     Math_Vec3f_Copy(&sp30, &this->actor.world.pos);
-    if (this->unk_284 != NULL) {
+    if (this->path != NULL) {
         this->actor.flags &= ~ACTOR_FLAG_2000000;
-        SubS_CopyPointFromPathCheckBounds(this->unk_284, 0, &sp24);
+        SubS_CopyPointFromPathCheckBounds(this->path, 0, &sp24);
         temp = Math_Vec3f_Yaw(&sp30, &sp24);
         this->actor.shape.rot.y = temp;
         this->actor.world.rot.y = temp;
@@ -1396,8 +1396,8 @@ void func_80A1449C(EnGo* this, PlayState* play) {
 
 void func_80A144F4(EnGo* this, PlayState* play) {
     if (gSaveContext.save.day >= 2) {
-        this->unk_284 = SubS_GetDayDependentPath(play, ENGO_GET_7F80(&this->actor), 0xFF, &this->unk_3E4);
-        if (this->unk_284 != NULL) {
+        this->path = SubS_GetDayDependentPath(play, ENGO_GET_PATH_INDEX(&this->actor), ENGO_PATH_INDEX_NONE, &this->unk_3E4);
+        if (this->path != NULL) {
             this->unk_3E4 = 1;
         }
         func_80A1428C(this, play);
@@ -1781,15 +1781,15 @@ void func_80A153FC(EnGo* this, PlayState* play) {
             func_80A143A8(this, play);
             this->actionFunc = func_80A149B0;
         }
-    } else if (this->unk_284 != NULL) {
+    } else if (this->path != NULL) {
         if (this->unk_390 & 0x800) {
             Player_PlaySfx(GET_PLAYER(play), NA_SE_PL_BODY_HIT);
             func_800B8D50(play, &this->actor, 2.0f, this->actor.yawTowardsPlayer, 0.0f, 0);
         }
 
-        sp5C = Lib_SegmentedToVirtual(this->unk_284->points);
-        if (SubS_HasReachedPoint(&this->actor, this->unk_284, this->unk_3E4)) {
-            if (this->unk_3E4 >= (this->unk_284->count - 1)) {
+        sp5C = Lib_SegmentedToVirtual(this->path->points);
+        if (SubS_HasReachedPoint(&this->actor, this->path, this->unk_3E4)) {
+            if (this->unk_3E4 >= (this->path->count - 1)) {
                 this->unk_3E4 = 0;
             } else {
                 this->unk_3E4++;

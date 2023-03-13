@@ -907,7 +907,7 @@ void func_808DAA60(EnSw* this, PlayState* play) {
     Vec3f sp34;
     f32 temp_f16;
 
-    sp44 = Lib_SegmentedToVirtual(this->unk_1E4->points);
+    sp44 = Lib_SegmentedToVirtual(this->path->points);
     sp40 = 0;
 
     if (DECR(this->unk_454) == 0) {
@@ -981,7 +981,7 @@ void func_808DACF4(EnSw* this, PlayState* play) {
     if (((s32)this->unk_414 != 0) && ((s32)this->unk_414 < (s32)sp4C)) {
         Math_Vec3f_Copy(&this->actor.world.pos, &this->unk_374);
         this->unk_4A0 += this->unk_49C;
-        if ((this->unk_4A0 >= this->unk_1E4->count) || (this->unk_4A0 < 0)) {
+        if ((this->unk_4A0 >= this->path->count) || (this->unk_4A0 < 0)) {
             this->unk_49C = -this->unk_49C;
             this->unk_4A0 += this->unk_49C * 2;
         }
@@ -1154,8 +1154,8 @@ void EnSw_Init(Actor* thisx, PlayState* play) {
             this->collider.info.toucher.damage = 16;
         }
 
-        this->unk_1E4 = SubS_GetDayDependentPath(play, ENSW_GET_FF00(&this->actor), 255, &this->unk_4A0);
-        if (this->unk_1E4 != NULL) {
+        this->path = SubS_GetDayDependentPath(play, ENSW_GET_PATH_INDEX(&this->actor), ENSW_PATH_INDEX_NONE, &this->unk_4A0);
+        if (this->path != NULL) {
             this->unk_4A0 = 1;
         }
 
@@ -1201,7 +1201,7 @@ void EnSw_Init(Actor* thisx, PlayState* play) {
                 }
 
                 func_808D9F78(this, play, 1);
-                if (this->unk_1E4 != NULL) {
+                if (this->path != NULL) {
                     this->unk_49C = 1;
                     func_808D9F08(this);
                     this->actionFunc = func_808DAA60;

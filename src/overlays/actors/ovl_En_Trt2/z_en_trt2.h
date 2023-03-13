@@ -11,6 +11,8 @@ typedef void (*EnTrt2UnkFunc2)(struct EnTrt2*, PlayState*);
 
 #define ENTRT2_GET_PATH_INDEX(thisx) (((thisx)->params & 0xFC00) >> 0xA)
 
+#define ENTRT2_PATH_INDEX_NONE (PATH_INDEX_NONE & 0x3F)
+
 typedef struct EnTrt2 {
     /* 0x000 */ Actor actor;
     /* 0x144 */ EnTrt2ActionFunc actionFunc;

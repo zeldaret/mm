@@ -190,7 +190,7 @@ void func_80953F9C(BgIngate* this, PlayState* play) {
 
         if (this->unk160 & 2) {
 
-            if (this->timePath->additionalPathIndex != PATH_INDEX_END) {
+            if (this->timePath->additionalPathIndex != (u8)PATH_INDEX_NONE) {
                 func_80953E38(play);
                 func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_7);
                 this->dyna.actor.textId = 0x9E4;

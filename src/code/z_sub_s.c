@@ -491,7 +491,7 @@ Path* SubS_GetAdditionalPath(PlayState* play, u8 pathIndex, s32 limit) {
         }
         pathIndex = path->additionalPathIndex;
         i++;
-    } while (pathIndex != PATH_INDEX_END);
+    } while (pathIndex != (u8)PATH_INDEX_NONE);
 
     return path;
 }
@@ -585,7 +585,7 @@ s32 SubS_HasReachedPoint(Actor* actor, Path* path, s32 pointIndex) {
     return reached;
 }
 
-Path* SubS_GetDayDependentPath(PlayState* play, u8 pathIndex, u8 max, s32* startPointIndex) {
+Path* SubS_GetDayDependentPath(PlayState* play, u8 pathIndex, u8 pathIndexNone, s32* startPointIndex) {
     Path* path = NULL;
     s32 found = false;
     s32 time = (((s16)TIME_TO_MINUTES_F(gSaveContext.save.time) % 60) +
@@ -593,11 +593,11 @@ Path* SubS_GetDayDependentPath(PlayState* play, u8 pathIndex, u8 max, s32* start
                30;
     s32 day = CURRENT_DAY;
 
-    if (pathIndex == max) {
+    if (pathIndex == pathIndexNone) {
         return NULL;
     }
 
-    while (pathIndex != PATH_INDEX_END) {
+    while (pathIndex != (u8)PATH_INDEX_NONE) {
         path = &play->setupPathList[pathIndex];
         if (path->customValue & sPathDayFlags[day]) {
             found = true;
@@ -1098,8 +1098,8 @@ s32 SubS_AngleDiffLessEqual(s16 angleA, s16 threshold, s16 angleB) {
     return (ABS_ALT(BINANG_SUB(angleB, angleA)) <= threshold) ? true : false;
 }
 
-Path* SubS_GetPathByIndex(PlayState* play, s16 pathIndex, s16 max) {
-    return (pathIndex != max) ? &play->setupPathList[pathIndex] : NULL;
+Path* SubS_GetPathByIndex(PlayState* play, s16 pathIndex, s16 pathIndexNone) {
+    return (pathIndex != pathIndexNone) ? &play->setupPathList[pathIndex] : NULL;
 }
 
 s32 SubS_CopyPointFromPath(Path* path, s32 pointIndex, Vec3f* dst) {

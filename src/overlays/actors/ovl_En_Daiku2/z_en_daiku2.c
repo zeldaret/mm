@@ -88,7 +88,7 @@ void EnDaiku2_Init(Actor* thisx, PlayState* play) {
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     this->unk_278 = ENDAIKU2_GET_7F(&this->actor);
     this->pathIndex = ENDAIKU2_GET_PATH_INDEX(&this->actor);
-    this->path = SubS_GetPathByIndex(play, this->pathIndex, PATH_INDEX_MAX);
+    this->path = SubS_GetPathByIndex(play, this->pathIndex, ENDAIKU2_PATH_INDEX_NONE);
     this->unk_280 = ENDAIKU2_GET_8000(&this->actor);
     Actor_SetScale(&this->actor, 0.01f);
     if (!this->unk_280) {

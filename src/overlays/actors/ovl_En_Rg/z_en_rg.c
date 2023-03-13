@@ -373,7 +373,7 @@ s32 func_80BF43FC(EnRg* this) {
     f32 sp88;
     f32 sp84;
     f32 phi_f20 = 0.0f;
-    s32 temp_s7 = ENRG_GET_7F80(&this->actor);
+    s32 temp_s7 = ENRG_GET_PATH_INDEX(&this->actor);
     s32 phi_s4 = -1;
     s32 temp_s5 = this->unk_344;
     s16 phi_s6 = 0;
@@ -741,7 +741,7 @@ void EnRg_Init(Actor* thisx, PlayState* play) {
 
         Effect_Add(play, &this->unk_340, EFFECT_TIRE_MARK, 0, 0, &D_80BF59F0);
 
-        this->path = SubS_GetDayDependentPath(play, ENRG_GET_7F80(&this->actor), 255, &this->unk_33C);
+        this->path = SubS_GetDayDependentPath(play, ENRG_GET_PATH_INDEX(&this->actor), ENRG_PATH_INDEX_NONE, &this->unk_33C);
         if (this->path != NULL) {
             this->unk_33C = 1;
         }

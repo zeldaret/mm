@@ -431,7 +431,7 @@ void EnTruMt_Init(Actor* thisx, PlayState* play) {
 
     this->collider.dim.worldSphere.radius = 22;
     this->actor.colChkInfo.damageTable = &sDamageTable;
-    this->path = SubS_GetPathByIndex(play, ENTRUMT_GET_FF(&this->actor), PATH_INDEX_MAX);
+    this->path = SubS_GetPathByIndex(play, ENTRUMT_GET_FF(&this->actor), ENTRUMT_PATH_INDEX_NONE);
     this->actor.targetMode = 0;
 
     Actor_SetScale(&this->actor, 0.008f);
@@ -439,7 +439,7 @@ void EnTruMt_Init(Actor* thisx, PlayState* play) {
 
     this->unk_328 = 0;
     this->actor.room = -1;
-    this->path = SubS_GetPathByIndex(play, ENTRUMT_GET_FC00(&this->actor), PATH_INDEX_MAX);
+    this->path = SubS_GetPathByIndex(play, ENTRUMT_GET_FC00(&this->actor), ENTRUMT_PATH_INDEX_NONE);
     EnTruMt_ChangeAnim(&this->skelAnime, KOUME_MT_ANIM_FLY);
     this->actionFunc = func_80B76A64;
 }

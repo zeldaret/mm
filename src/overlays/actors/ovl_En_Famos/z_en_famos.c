@@ -166,7 +166,7 @@ void EnFamos_Init(Actor* thisx, PlayState* play) {
     s32 i;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    if (FAMOS_GET_PATH_INDEX(&this->actor) != PATH_INDEX_END) {
+    if (FAMOS_GET_PATH_INDEX(&this->actor) != FAMOS_PATH_INDEX_NONE) {
         path = &play->setupPathList[FAMOS_GET_PATH_INDEX(&this->actor)];
         this->pathPoints = Lib_SegmentedToVirtual(path->points);
         this->pathCount = path->count;

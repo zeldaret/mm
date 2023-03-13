@@ -108,7 +108,7 @@ s32 SubS_ChangeAnimationByInfoS(SkelAnime* skelAnime, AnimationInfoS* animationI
 
 s32 SubS_HasReachedPoint(Actor* actor, Path* path, s32 pointIndex);
 
-Path* SubS_GetDayDependentPath(struct PlayState* play, u8 pathIndex, u8 max, s32* startPointIndex);
+Path* SubS_GetDayDependentPath(struct PlayState* play, u8 pathIndex, u8 pathIndexNone, s32* startPointIndex);
 
 s32 SubS_WeightPathing_ComputePoint(Path* path, s32 waypoint, Vec3f* point, f32 progress, s32 direction);
 s32 SubS_WeightPathing_Move(Actor* actor, Path* path, s32* waypoint, f32* progress, s32 direction, s32 returnStart);
@@ -126,7 +126,7 @@ s32 SubS_TrackPoint(Vec3f* target, Vec3f* focusPos, Vec3s* shapeRot, Vec3s* trac
 
 s32 SubS_AngleDiffLessEqual(s16 angleA, s16 threshold, s16 angleB);
 
-Path* SubS_GetPathByIndex(struct PlayState* play, s16 pathIndex, s16 max);
+Path* SubS_GetPathByIndex(struct PlayState* play, s16 pathIndex, s16 pathIndexNone);
 s32 SubS_CopyPointFromPath(Path* path, s32 pointIndex, Vec3f* dst);
 s16 SubS_GetDistSqAndOrientPoints(Vec3f* vecA, Vec3f* vecB, f32* distSq);
 s32 SubS_MoveActorToPoint(Actor* actor, Vec3f* point, s16 rotStep);

@@ -6,6 +6,8 @@
 
 #define RU_GET_PATH_INDEX(thisx) ((thisx->params & 0x7E00) >> 9)
 
+#define RU_PATH_INDEX_NONE (PATH_INDEX_NONE & 0x3F)
+
 struct EnRu;
 
 typedef void (*EnRuActionFunc)(struct EnRu*, PlayState*);

@@ -8,6 +8,8 @@
 #define EN_RZ_GET_TYPE(thisx) ((thisx)->params & 0xF)
 #define EN_RZ_GET_PATH_INDEX(thisx) (((thisx)->params & 0x7E00) >> 9)
 
+#define EN_RZ_PATH_INDEX_NONE (PATH_INDEX_NONE & 0x3F)
+
 typedef enum {
     /* 0 */ EN_RZ_JUDO, // in red
     /* 1 */ EN_RZ_MARILLA // in blue

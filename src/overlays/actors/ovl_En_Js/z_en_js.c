@@ -194,7 +194,7 @@ s32 func_80968B8C(EnJs* this, PlayState* play) {
     f32 sp18 = 0.0f;
     Vec3s* points;
 
-    if (pathIndex != PATH_INDEX_MAX) {
+    if (pathIndex != ENJS_PATH_INDEX_NONE) {
         this->path = &play->setupPathList[pathIndex];
         if (this->path != NULL) {
             path = this->path;

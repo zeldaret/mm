@@ -11,6 +11,8 @@ typedef void (*EnBomBowlManActionFunc)(struct EnBomBowlMan*, PlayState*);
 #define ENBOMBOWLMAN_GET_F0(thisx) (((thisx)->params >> 4) & 0xF)
 #define ENBOMBOWLMAN_GET_PATH_INDEX(thisx) (((thisx)->params >> 8) & 0xFF)
 
+#define ENBOMBOWLMAN_PATH_INDEX_NONE (PATH_INDEX_NONE & 0x3F)
+
 #define ENBOMBOWLMAN_F0_0 0
 #define ENBOMBOWLMAN_F0_2 2
 

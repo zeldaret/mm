@@ -314,7 +314,7 @@ void EnRacedog_Init(Actor* thisx, PlayState* play) {
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    this->path = SubS_GetPathByIndex(play, ENRACEDOG_GET_PATH_INDEX(&this->actor), PATH_INDEX_MAX);
+    this->path = SubS_GetPathByIndex(play, ENRACEDOG_GET_PATH_INDEX(&this->actor), ENRACEDOG_PATH_INDEX_NONE);
     Actor_SetScale(&this->actor, 0.0075f);
     this->actor.gravity = -3.0f;
     if (ENRACEDOG_GET_INDEX(&this->actor) < 14) {

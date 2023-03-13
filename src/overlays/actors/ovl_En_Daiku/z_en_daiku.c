@@ -78,7 +78,7 @@ void EnDaiku_Init(Actor* thisx, PlayState* play) {
     this->unk_278 = ENDAIKU_GET_FF(&this->actor);
     if (this->unk_278 == ENDAIKU_PARAMS_FF_3) {
         this->pathIndex = ENDAIKU_GET_PATH_INDEX(&this->actor);
-        this->path = SubS_GetPathByIndex(play, this->pathIndex, PATH_INDEX_MAX);
+        this->path = SubS_GetPathByIndex(play, this->pathIndex, ENDAIKU_PATH_INDEX_NONE);
     } else if (this->unk_278 == ENDAIKU_PARAMS_FF_2) {
         this->unk_264 = -2000;
     }

@@ -7,6 +7,8 @@
 #define EN_JG_IS_IN_GORON_SHRINE(thisx) ((thisx)->params & 0x1)
 #define EN_JG_GET_PATH_INDEX(thisx) (((thisx)->params & 0xFC00) >> 10)
 
+#define EN_JG_PATH_INDEX_NONE (PATH_INDEX_NONE & 0x3F)
+
 struct EnJg;
 
 typedef void (*EnJgActionFunc)(struct EnJg*, PlayState*);

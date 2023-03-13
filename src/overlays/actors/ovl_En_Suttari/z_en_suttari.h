@@ -10,6 +10,8 @@ typedef void (*EnSuttariActionFunc)(struct EnSuttari*, PlayState*);
 
 #define ENSUTTARI_GET_PATH_INDEX(thisx) (((thisx)->params & 0x7E00) >> 9)
 
+#define ENSUTTARI_PATH_INDEX_NONE (PATH_INDEX_NONE & 0x3F)
+
 typedef struct EnSuttari {
     /* 0x000 */ Actor actor;
     /* 0x144 */ EnFsn* enFsn;

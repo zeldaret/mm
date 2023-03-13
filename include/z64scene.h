@@ -461,9 +461,6 @@ typedef struct {
     /* 0x8 */ u32 dListEnd;
 } MeshHeader2; // size = 0xC 
 
-#define PATH_INDEX_END 0xFF
-#define PATH_INDEX_MAX 0x3F
-#define PATH_INDEX_MAX_ALT 0x1F
 #define PATH_INDEX_NONE -1
 
 typedef struct {

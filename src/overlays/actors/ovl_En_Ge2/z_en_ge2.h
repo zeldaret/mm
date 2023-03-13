@@ -13,9 +13,10 @@ typedef void (*EnGe2ActionFunc)(struct EnGe2*, PlayState*);
 #define GERUDO_PURPLE_GET_TYPE(thisx) (((thisx)->params & 0xE0) >> 5)
 #define GERUDO_PURPLE_GET_PATH_INDEX(thisx) ((((thisx)->params) & 0xFC00) >> 10)
 
-#define GERUDO_PURPLE_PARAMS(pathIndex, type, exit) (((pathIndex) & 0x1F) | (((type) & 7) << 5) | (((exit) & 0x3F) << 10))
+#define GERUDO_PURPLE_PARAMS(exit, type, pathIndex) (((exit) & 0x1F) | (((type) & 7) << 5) | (((pathIndex) & 0x3F) << 10))
 
 #define GERUDO_PURPLE_EXIT_NONE 0x1F
+#define GERUDO_PRUPLE_PATH_INDEX_NONE (PATH_INDEX_NONE & 0x3F)
 
 typedef enum {
     /* 0 */ GERUDO_PURPLE_TYPE_CUTSCENE,

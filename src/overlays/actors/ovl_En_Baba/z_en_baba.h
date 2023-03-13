@@ -12,6 +12,8 @@ typedef void (*EnBabaActionFunc)(struct EnBaba*, PlayState*);
 #define BOMB_SHOP_LADY_GET_PATH_INDEX(thisx) (((thisx)->params & 0x3F00) >> 8)
 #define BOMB_SHOP_LADY_GET_TYPE(thisx) (((thisx)->params & 0xC000) >> 0xE)
 
+#define BOMB_SHOP_LADY_PATH_INDEX_NONE (PATH_INDEX_NONE & 0x3F)
+
 // Types BOMB_SHOP_LADY_TYPE_FOLLOW_SCHEDULE and BOMB_SHOP_LADY_TYPE_IDLE can only be used in SCENE_BACKTOWN
 // Type BOMB_SHOP_LADY_TYPE_SWAY can be used anywhere except SCENE_BACKTOWN and SCENE_BOMYA
 typedef enum {

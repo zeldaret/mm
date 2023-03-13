@@ -10,6 +10,8 @@ typedef void (*EnDaikuActionFunc)(struct EnDaiku*, PlayState*);
 #define ENDAIKU_GET_FF(thisx) ((thisx)->params & 0xFF);
 #define ENDAIKU_GET_PATH_INDEX(thisx) (((thisx)->params >> 8) & 0xFF);
 
+#define ENDAIKU_PATH_INDEX_NONE (PATH_INDEX_NONE & 0x3F)
+
 enum {
     /* 0x0 */ ENDAIKU_PARAMS_FF_0,
     /* 0x1 */ ENDAIKU_PARAMS_FF_1,

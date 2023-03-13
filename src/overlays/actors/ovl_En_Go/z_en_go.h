@@ -9,7 +9,9 @@ typedef void (*EnGoActionFunc)(struct EnGo*, PlayState*);
 
 #define ENGO_GET_F(thisx) (((thisx)->params & 0xF) & 0xFF)
 #define ENGO_GET_70(thisx) ((((thisx)->params & 0x70) >> 4) & 0xFF)
-#define ENGO_GET_7F80(thisx) ((((thisx)->params & 0x7F80) >> 7) & 0xFF)
+#define ENGO_GET_PATH_INDEX(thisx) ((((thisx)->params & 0x7F80) >> 7) & 0xFF)
+
+#define ENGO_PATH_INDEX_NONE (PATH_INDEX_NONE & 0xFF)
 
 enum {
     /* 0 */ ENGO_F_0,
@@ -54,7 +56,7 @@ typedef struct EnGo {
     /* 0x194 */ ColliderCylinder colliderCylinder;
     /* 0x1E0 */ UNK_TYPE1 unk1E0[0x4C];
     /* 0x22C */ ColliderSphere colliderSphere;
-    /* 0x284 */ Path* unk_284;
+    /* 0x284 */ Path* path;
     /* 0x288 */ s8 unk_288;
     /* 0x289 */ s8 unk_289;
     /* 0x28C */ s32 unk_28C;

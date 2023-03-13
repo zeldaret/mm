@@ -7,7 +7,9 @@ struct EnRg;
 
 typedef void (*EnRgActionFunc)(struct EnRg*, PlayState*);
 
-#define ENRG_GET_7F80(thisx) ((((thisx)->params & 0x7F80) >> 7) & 0xFF)
+#define ENRG_GET_PATH_INDEX(thisx) ((((thisx)->params & 0x7F80) >> 7) & 0xFF)
+
+#define ENRG_PATH_INDEX_NONE (PATH_INDEX_NONE & 0xFF)
 
 typedef struct {
     /* 0x00 */ u8 unk_00;
