@@ -1,10 +1,8 @@
 #ifndef Z64_DAYTELOP_H
 #define Z64_DAYTELOP_H
 
-#include "global.h"
-
-void DayTelop_Init(GameState* thisx);
-void DayTelop_Destroy(GameState* thisx);
+#include "z64game.h"
+#include "z64view.h"
 
 typedef struct {
     /* 0x000 */ GameState state;
@@ -23,5 +21,8 @@ typedef enum {
     /* 1 */ DAYTELOP_HOURSTEXT_FADEIN,
     /* 2 */ DAYTELOP_HOURSTEXT_ON
 } DaytelopFadeState;
+
+void DayTelop_Init(GameState* thisx);
+void DayTelop_Destroy(GameState* thisx);
 
 #endif

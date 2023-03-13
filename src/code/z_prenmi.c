@@ -1,4 +1,5 @@
 #include "z_prenmi.h"
+#include "global.h"
 
 void PreNMI_Stop(PreNMIState* this) {
     STOP_GAMESTATE(&this->state);
@@ -9,10 +10,9 @@ void PreNMI_Update(PreNMIState* this) {
     if (this->timer == 0) {
         ViConfig_UpdateVi(1);
         PreNMI_Stop(this);
-        return;
+    } else {
+        this->timer--;
     }
-
-    this->timer--;
 }
 
 void PreNMI_Draw(PreNMIState* this) {

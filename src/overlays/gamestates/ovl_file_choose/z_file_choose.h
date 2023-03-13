@@ -1,10 +1,11 @@
 #ifndef Z64_FILE_CHOOSE_H
 #define Z64_FILE_CHOOSE_H
 
-#include "global.h"
+#include "z64game.h"
+#include "z64message.h"
+#include "z64skybox.h"
+#include "z64view.h"
 
-void FileSelect_Init(GameState* thisx);
-void FileSelect_Destroy(GameState* thisx);
 
 typedef struct FileSelectState {
     /* 0x00000 */ GameState state;
@@ -111,5 +112,8 @@ typedef struct FileSelectState {
     /* 0x2454E */ s16  unk_2454E;
     /* 0x24550 */ s16  unk_24550;
 } FileSelectState; // size = 0x24558
+
+void FileSelect_Init(GameState* thisx);
+void FileSelect_Destroy(GameState* thisx);
 
 #endif
