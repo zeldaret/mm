@@ -13,9 +13,9 @@
  *    - Argument 2: Instance name
  */
 /* 0 */ DEFINE_TRANSITION_INTERNAL(FBDEMO_FADE, TransitionFade, fade)
-/* 1 */ DEFINE_TRANSITION(FBDEMO_TRIFORCE, TransitionTriforce, circle, fbdemo_triforce)
-/* 2 */ DEFINE_TRANSITION(FBDEMO_WIPE1, TransitionWipe1, triforce, fbdemo_wipe1)
-/* 3 */ DEFINE_TRANSITION(FBDEMO_WIPE3, TransitionWipe3, wipe1, fbdemo_wipe3)
-/* 4 */ DEFINE_TRANSITION(FBDEMO_WIPE4, TransitionWipe4, wipe3, fbdemo_wipe4)
-/* 5 */ DEFINE_TRANSITION_INTERNAL(FBDEMO_CIRCLE, TransitionCircle, wipe4)
+/* 1 */ DEFINE_TRANSITION(FBDEMO_TRIFORCE, TransitionTriforce, triforce, fbdemo_triforce)
+/* 2 */ DEFINE_TRANSITION(FBDEMO_WIPE1, TransitionWipe1, wipe1, fbdemo_wipe1)
+/* 3 */ DEFINE_TRANSITION(FBDEMO_WIPE3, TransitionWipe3, wipe3, fbdemo_wipe3)
+/* 4 */ DEFINE_TRANSITION(FBDEMO_WIPE4, TransitionWipe4, wipe4, fbdemo_wipe4)
+/* 5 */ DEFINE_TRANSITION_INTERNAL(FBDEMO_CIRCLE, TransitionCircle, circle)
 /* 6 */ DEFINE_TRANSITION(FBDEMO_WIPE5, TransitionWipe5, wipe5, fbdemo_wipe5)
