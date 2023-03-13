@@ -20,7 +20,7 @@
 #include "message_data_static.h"
 
 #include "gfxprint.h"
-#include "padmgr.h"
+#include "padutils.h"
 #include "sys_matrix.h"
 #include "z64actor.h"
 #include "z64animation.h"

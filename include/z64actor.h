@@ -2,7 +2,7 @@
 #define Z64ACTOR_H
 
 #include "ultra64/ultratypes.h"
-#include "padmgr.h"
+#include "padutils.h"
 #include "z64math.h"
 #include "z64animation.h"
 #include "z64collision_check.h"

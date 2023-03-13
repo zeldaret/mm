@@ -1,4 +1,4 @@
-#include "global.h"
+#include "padutils.h"
 
 void PadUtils_Init(Input* input) {
     bzero(input, sizeof(Input));

@@ -1,5 +1,5 @@
-#ifndef PADMGR_H
-#define PADMGR_H
+#ifndef PADUTILS_H
+#define PADUTILS_H
 
 #include "ultra64/controller.h"
 
