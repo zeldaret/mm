@@ -699,7 +699,7 @@ void func_80BA4CB4(EnToto* this, PlayState* play) {
         }
     }
     if (this->unk2B5 == 4 && !Actor_HasParent(&this->actor, play)) {
-        Actor_PickUp(&this->actor, play, GI_MASK_CIRCUS_LEADER, 9999.9f, 9999.9f);
+        Actor_OfferGetItem(&this->actor, play, GI_MASK_CIRCUS_LEADER, 9999.9f, 9999.9f);
     }
 }
 
