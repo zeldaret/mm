@@ -868,7 +868,7 @@ void AudioPlayback_NoteReleaseAndTakeOwnership(Note* note, SequenceLayer* layer)
 
 Note* AudioPlayback_AllocNoteFromDisabled(NotePool* pool, SequenceLayer* layer) {
     Note* note = AudioScript_AudioListPopBack(&pool->disabled);
-    
+
     if (note != NULL) {
         AudioPlayback_NoteInitForLayer(note, layer);
         AudioPlayback_AudioListPushFront(&pool->active, &note->listItem);
