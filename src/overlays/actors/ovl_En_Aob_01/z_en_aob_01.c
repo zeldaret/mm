@@ -115,7 +115,7 @@ void func_809C1158(EnAob01* this, PlayState* play) {
             this->unk_1D8[i] = SubS_GetPathByIndex(play, temp_s0, ENAOB01_PATH_INDEX_NONE);
             temp_s0 = this->unk_1D8[i]->additionalPathIndex;
             i++;
-        } while (temp_s0 != (u8)PATH_INDEX_NONE);
+        } while (temp_s0 != ADDITIONAL_PATH_INDEX_NONE);
     }
 }
 

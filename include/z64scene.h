@@ -462,6 +462,7 @@ typedef struct {
 } MeshHeader2; // size = 0xC 
 
 #define PATH_INDEX_NONE -1
+#define ADDITIONAL_PATH_INDEX_NONE (u8)PATH_INDEX_NONE
 
 typedef struct {
     /* 0x0 */ u8 count; // Number of points in the path

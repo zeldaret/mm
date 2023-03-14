@@ -517,6 +517,7 @@ void func_80BAB434(EnSuttari* this) {
 
 void EnSuttari_GetPaths(EnSuttari* this, PlayState* play) {
     this->paths[0] = SubS_GetPathByIndex(play, ENSUTTARI_GET_PATH_INDEX(&this->actor), ENSUTTARI_PATH_INDEX_NONE);
+    //! @bug: the additional path shouldn't use `ENSUTTARI_PATH_INDEX_NONE`, but `ADDITIONAL_PATH_INDEX_NONE`
     this->paths[1] = SubS_GetPathByIndex(play, this->paths[0]->additionalPathIndex, ENSUTTARI_PATH_INDEX_NONE);
 }
 
@@ -1265,7 +1266,7 @@ void func_80BAD5F8(EnSuttari* this, PlayState* play) {
     }
     this->unk428 = scheduleOutput.result;
     func_80BAC2FC(this, play);
-    if ((this->unk430 == 1) && (this->timePath->additionalPathIndex == (u8)PATH_INDEX_NONE)) {
+    if ((this->unk430 == 1) && (this->timePath->additionalPathIndex == ADDITIONAL_PATH_INDEX_NONE)) {
         Actor_Kill(&this->actor);
         return;
     }
@@ -1303,7 +1304,7 @@ void func_80BAD7F8(EnSuttari* this, PlayState* play) {
         }
         this->unk428 = scheduleOutput.result;
         func_80BAC2FC(this, play);
-        if ((this->unk430 == 1) && (this->timePath->additionalPathIndex == (u8)PATH_INDEX_NONE)) {
+        if ((this->unk430 == 1) && (this->timePath->additionalPathIndex == ADDITIONAL_PATH_INDEX_NONE)) {
             Actor_Kill(&this->actor);
             return;
         }

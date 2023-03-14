@@ -60,7 +60,7 @@ void EnEncount1_Init(Actor* thisx, PlayState* play) {
     if (this->actorType == EN_ENCOUNT1_SKULLFISH_2) {
         this->unk_15A = ENENCOUNT1_GET_PATH_INDEX(&this->actor);
         this->path = SubS_GetPathByIndex(play, this->unk_15A, ENENCOUNT1_PATH_INDEX_NONE);
-        this->unk_154 = -1;
+        this->unk_154 = PATH_INDEX_NONE;
         this->unk_160 = -1.0f;
     }
     this->actor.flags &= ~ACTOR_FLAG_1;
