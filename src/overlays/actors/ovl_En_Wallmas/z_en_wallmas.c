@@ -191,8 +191,8 @@ void EnWallmas_Destroy(Actor* thisx, PlayState* play) {
     if (this->actor.parent != NULL) {
         EnEncount1* encount1 = (EnEncount1*)this->actor.parent;
 
-        if ((encount1->actor.update != NULL) && (encount1->curSpawnNum > 0)) {
-            encount1->curSpawnNum--;
+        if ((encount1->actor.update != NULL) && (encount1->spawnActive > 0)) {
+            encount1->spawnActive--;
         }
     }
 }

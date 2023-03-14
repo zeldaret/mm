@@ -53,23 +53,23 @@ void EnEncount1_Init(Actor* thisx, PlayState* play) {
     }
 
     this->type = ENENCOUNT1_GET_TYPE(&this->actor);
-    this->maxSpawnsCur = ENENCOUNT1_GET_MAX_SPAWNS_CUR(&this->actor);
-    this->maxSpawnsTotal = ENENCOUNT1_GET_MAX_SPAWNS_TOTAL(&this->actor);
-    this->minSpawnTime = ENENCOUNT1_GET_MIN_SPAWN_TIME(&this->actor);
-    this->spawnUnk = ENENCOUNT1_GET_SPAWN_UNK(&this->actor);
-    this->maxSpawnDistance = (ENENCOUNT1_GET_MAX_SPAWN_DISTANCE(&this->actor) * 40.0f) + 120.0f;
+    this->spawnActiveMax = ENENCOUNT1_GET_SPAWN_ACTIVE_MAX(&this->actor);
+    this->spawnTotalMax = ENENCOUNT1_GET_SPAWN_TOTAL_MAX(&this->actor);
+    this->spawnTimeMin = ENENCOUNT1_GET_SPAWN_TIME_MIN(&this->actor);
+    this->spawnUnusedProp = ENENCOUNT1_GET_SPAWN_UNUSED_PROP(&this->actor);
+    this->spawnDistanceMax = (ENENCOUNT1_GET_SPAWN_DISTANCE_MAX(&this->actor) * 40.0f) + 120.0f;
 
-    if (this->maxSpawnsTotal >= ENENCOUNT1_MAX_SPAWNS_TOTAL_INFINITE) {
-        this->maxSpawnsTotal = -1;
+    if (this->spawnTotalMax >= ENENCOUNT1_SPAWNS_TOTAL_MAX_INFINITE) {
+        this->spawnTotalMax = -1;
     }
-    if (ENENCOUNT1_GET_MAX_SPAWN_DISTANCE(&this->actor) < 0) {
-        this->maxSpawnDistance = -1.0f;
+    if (ENENCOUNT1_GET_SPAWN_DISTANCE_MAX(&this->actor) < 0) {
+        this->spawnDistanceMax = -1.0f;
     }
     if (this->type == EN_ENCOUNT1_SKULLFISH_2) {
         this->pathIndex = ENENCOUNT1_GET_PATH_INDEX(&this->actor);
         this->path = SubS_GetPathByIndex(play, this->pathIndex, 0x3F);
-        this->maxSpawnsTotal = -1;
-        this->maxSpawnDistance = -1.0f;
+        this->spawnTotalMax = -1;
+        this->spawnDistanceMax = -1.0f;
     }
     this->actor.flags &= ~ACTOR_FLAG_1;
     this->actionFunc = EnEncount1_SpawnActor;
@@ -86,13 +86,15 @@ void EnEncount1_SpawnActor(EnEncount1* this, PlayState* play) {
     CollisionPoly* floorPoly;
     s32 bgId;
 
-    if (((this->curSpawnNum >= this->maxSpawnsCur) ||
-         ((this->maxSpawnDistance > 0.0f) && (this->maxSpawnDistance < this->actor.xzDistToPlayer)) ||
-         ((this->maxSpawnsTotal > 0) && (this->maxSpawnsTotal <= this->totalSpawnNum)))) {
+    if (((this->spawnActive >= this->spawnActiveMax) ||
+         ((this->spawnDistanceMax > 0.0f) && (this->spawnDistanceMax < this->actor.xzDistToPlayer)) ||
+         ((this->spawnTotalMax > 0) && (this->spawnTotalMax <= this->spawnTotal)))) {
         return;
-    } else if (this->timer != 0) {
+    }
+
+    if (this->timer != 0) {
         this->timer++;
-        if (this->timer < this->minSpawnTime) {
+        if (this->timer < this->spawnTimeMin) {
             return;
         }
     }
@@ -102,7 +104,7 @@ void EnEncount1_SpawnActor(EnEncount1* this, PlayState* play) {
         case EN_ENCOUNT1_GRASSHOPPER:
             scale = randPlusMinusPoint5Scaled(40.0f) + 200.0f;
             rotY = player->actor.shape.rot.y;
-            if (this->curSpawnNum & 1) {
+            if (this->spawnActive & 1) {
                 rotY = -rotY;
                 scale = randPlusMinusPoint5Scaled(20.0f) + 100.0f;
             }
@@ -129,14 +131,14 @@ void EnEncount1_SpawnActor(EnEncount1* this, PlayState* play) {
             spawnPos.y = player->actor.world.pos.y - Rand_ZeroFloat(20.0f);
             spawnPos.z = player->actor.world.pos.z + (Math_CosS(rotY) * scale) + randPlusMinusPoint5Scaled(40.0f);
             floorHeight = BgCheck_EntityRaycastFloor5(&play->colCtx, &floorPoly, &bgId, &this->actor, &spawnPos);
-            if ((!(player->stateFlags1 & PLAYER_STATE1_8000000) || (floorHeight <= BGCHECK_Y_MIN) ||
-                 (player->actor.depthInWater < floorHeight))) {
+            if (!(player->stateFlags1 & PLAYER_STATE1_8000000) || (floorHeight <= BGCHECK_Y_MIN) ||
+                 (player->actor.depthInWater < floorHeight)) {
                 return;
             }
             break;
 
         case EN_ENCOUNT1_SKULLFISH_2:
-            if ((this->path != NULL) && (!SubS_CopyPointFromPath(this->path, 0, &spawnPos))) {
+            if ((this->path != NULL) && !SubS_CopyPointFromPath(this->path, 0, &spawnPos)) {
                 Actor_Kill(&this->actor);
             }
             break;
@@ -146,12 +148,12 @@ void EnEncount1_SpawnActor(EnEncount1* this, PlayState* play) {
     actorParams = sActorParams[this->type];
     if (Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, actorId, spawnPos.x, spawnPos.y, spawnPos.z, 0, 0, 0,
                            actorParams) != NULL) {
-        this->curSpawnNum++;
-        if (this->maxSpawnsTotal > 0) {
-            this->totalSpawnNum++;
+        this->spawnActive++;
+        if (this->spawnTotalMax > 0) {
+            this->spawnTotal++;
         }
 
-        if ((this->curSpawnNum >= this->maxSpawnsCur) && (this->minSpawnTime != 0)) {
+        if ((this->spawnActive >= this->spawnActiveMax) && (this->spawnTimeMin != 0)) {
             this->timer = 1;
         }
     }
