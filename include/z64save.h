@@ -294,23 +294,23 @@ typedef struct SaveInfo {
 } SaveInfo; // size = 0xFE8
 
 typedef struct Save {
-    /* 0x0000 */ s32 entrance;                          // "scene_no"
-    /* 0x0004 */ u8 equippedMask;                       // "player_mask"
-    /* 0x0005 */ u8 isFirstCycle;                       // "opening_flag"
-    /* 0x0006 */ u8 unk_06;
-    /* 0x0007 */ u8 linkAge;                            // "link_age"
-    /* 0x0008 */ s32 cutscene;                          // "day_time"
-    /* 0x000C */ u16 time;                              // "zelda_time"
-    /* 0x000E */ u16 owlSaveLocation;
-    /* 0x0010 */ s32 isNight;                           // "asahiru_fg"
-    /* 0x0014 */ s32 timeSpeedOffset;                   // "change_zelda_time"
-    /* 0x0018 */ s32 day;                               // "totalday"
-    /* 0x001C */ s32 daysElapsed;                       // "eventday"
-    /* 0x0020 */ u8 playerForm;                         // "player_character"
-    /* 0x0021 */ u8 snowheadCleared;                    // "spring_flag"
-    /* 0x0022 */ u8 hasTatl;                            // "bell_flag"
-    /* 0x0023 */ u8 isOwlSave;
-    /* 0x0024 */ SaveInfo saveInfo;
+    /* 0x00 */ s32 entrance;                            // "scene_no"
+    /* 0x04 */ u8 equippedMask;                         // "player_mask"
+    /* 0x05 */ u8 isFirstCycle;                         // "opening_flag"
+    /* 0x06 */ u8 unk_06;
+    /* 0x07 */ u8 linkAge;                              // "link_age"
+    /* 0x08 */ s32 cutscene;                            // "day_time"
+    /* 0x0C */ u16 time;                                // "zelda_time"
+    /* 0x0E */ u16 owlSaveLocation;
+    /* 0x10 */ s32 isNight;                             // "asahiru_fg"
+    /* 0x14 */ s32 timeSpeedOffset;                     // "change_zelda_time"
+    /* 0x18 */ s32 day;                                 // "totalday"
+    /* 0x1C */ s32 daysElapsed;                         // "eventday"
+    /* 0x20 */ u8 playerForm;                           // "player_character"
+    /* 0x21 */ u8 snowheadCleared;                      // "spring_flag"
+    /* 0x22 */ u8 hasTatl;                              // "bell_flag"
+    /* 0x23 */ u8 isOwlSave;
+    /* 0x24 */ SaveInfo saveInfo;
 } Save; // size = 0x100C
 
 typedef struct SaveContext {
