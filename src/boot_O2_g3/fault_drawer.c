@@ -11,7 +11,7 @@
 #include "vt.h"
 
 typedef struct {
-    /* 0x00 */ u16* fb;
+    /* 0x00 */ u16* frameBuffer;
     /* 0x04 */ u16 w;
     /* 0x06 */ u16 h;
     /* 0x08 */ u16 yStart;
@@ -43,7 +43,7 @@ FaultDrawer* sFaultDrawerInstance = &sFaultDrawer;
 #define FAULT_DRAWER_CURSOR_Y 16
 
 FaultDrawer sFaultDrawerDefault = {
-    FAULT_FB_ADDRESS,                          // fb
+    FAULT_FB_ADDRESS,                          // frameBuffer
     SCREEN_WIDTH,                              // w
     SCREEN_HEIGHT,                             // h
     FAULT_DRAWER_CURSOR_Y,                     // yStart
@@ -85,7 +85,7 @@ void FaultDrawer_SetOsSyncPrintfEnabled(u32 enabled) {
 }
 
 void FaultDrawer_DrawRecImpl(s32 xStart, s32 yStart, s32 xEnd, s32 yEnd, u16 color) {
-    u16* fb;
+    u16* frameBuffer;
     s32 x;
     s32 y;
     s32 xDiff = sFaultDrawerInstance->w - xStart;
@@ -102,12 +102,12 @@ void FaultDrawer_DrawRecImpl(s32 xStart, s32 yStart, s32 xEnd, s32 yEnd, u16 col
             ySize = yDiff;
         }
 
-        fb = sFaultDrawerInstance->fb + sFaultDrawerInstance->w * yStart + xStart;
+        frameBuffer = sFaultDrawerInstance->frameBuffer + sFaultDrawerInstance->w * yStart + xStart;
         for (y = 0; y < ySize; y++) {
             for (x = 0; x < xSize; x++) {
-                *fb++ = color;
+                *frameBuffer++ = color;
             }
-            fb += sFaultDrawerInstance->w - xSize;
+            frameBuffer += sFaultDrawerInstance->w - xSize;
         }
 
         osWritebackDCacheAll();
@@ -122,7 +122,7 @@ void FaultDrawer_DrawChar(char c) {
     s32 cursorY = sFaultDrawerInstance->cursorY;
     s32 shift = c % 4;
     const u32* dataPtr = &sFaultDrawerInstance->fontData[(((c / 8) * 16) + ((c & 4) >> 2))];
-    u16* fb = sFaultDrawerInstance->fb + (sFaultDrawerInstance->w * cursorY) + cursorX;
+    u16* frameBuffer = sFaultDrawerInstance->frameBuffer + (sFaultDrawerInstance->w * cursorY) + cursorX;
 
     if ((sFaultDrawerInstance->xStart <= cursorX) &&
         ((sFaultDrawerInstance->charW + cursorX - 1) <= sFaultDrawerInstance->xEnd) &&
@@ -134,13 +134,13 @@ void FaultDrawer_DrawChar(char c) {
             data = *dataPtr;
             for (x = 0; x < sFaultDrawerInstance->charW; x++) {
                 if (mask & data) {
-                    fb[x] = sFaultDrawerInstance->foreColor;
+                    frameBuffer[x] = sFaultDrawerInstance->foreColor;
                 } else if (sFaultDrawerInstance->backColor & 1) {
-                    fb[x] = sFaultDrawerInstance->backColor;
+                    frameBuffer[x] = sFaultDrawerInstance->backColor;
                 }
                 mask >>= 4;
             }
-            fb += sFaultDrawerInstance->w;
+            frameBuffer += sFaultDrawerInstance->w;
             dataPtr += 2;
         }
     }
@@ -293,8 +293,8 @@ void FaultDrawer_DrawText(s32 x, s32 y, const char* fmt, ...) {
     va_end(args);
 }
 
-void FaultDrawer_SetDrawerFB(void* fb, u16 w, u16 h) {
-    sFaultDrawerInstance->fb = fb;
+void FaultDrawer_SetDrawerFrameBuffer(void* frameBuffer, u16 w, u16 h) {
+    sFaultDrawerInstance->frameBuffer = frameBuffer;
     sFaultDrawerInstance->w = w;
     sFaultDrawerInstance->h = h;
 }
@@ -306,5 +306,5 @@ void FaultDrawer_SetInputCallback(FaultDrawerCallback callback) {
 void FaultDrawer_Init() {
     sFaultDrawerInstance = &sFaultDrawer;
     bcopy(&sFaultDrawerDefault, sFaultDrawerInstance, sizeof(FaultDrawer));
-    sFaultDrawerInstance->fb = (u16*)(PHYS_TO_K0(osMemSize) - SCREEN_HEIGHT * SCREEN_WIDTH * sizeof(u16));
+    sFaultDrawerInstance->frameBuffer = (u16*)(PHYS_TO_K0(osMemSize) - SCREEN_HEIGHT * SCREEN_WIDTH * sizeof(u16));
 }

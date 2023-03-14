@@ -894,7 +894,7 @@ void Fault_DisplayFrameBuffer(void) {
     }
 
     osViSwapBuffer(fb);
-    FaultDrawer_SetDrawerFB(fb, SCREEN_WIDTH, SCREEN_HEIGHT);
+    FaultDrawer_SetDrawerFrameBuffer(fb, SCREEN_WIDTH, SCREEN_HEIGHT);
 }
 
 /**
@@ -949,7 +949,7 @@ void Fault_SetOptionsFromController3(void) {
             osSyncPrintf("GRAPH PC=%08x RA=%08x STACK=%08x\n", pc, ra, sp);
         }
         if (CHECK_BTN_ALL(input3->cur.button, BTN_B)) {
-            FaultDrawer_SetDrawerFB(osViGetNextFramebuffer(), 0x140, 0xF0);
+            FaultDrawer_SetDrawerFrameBuffer(osViGetNextFramebuffer(), 0x140, 0xF0);
             Fault_DrawRec(0, 0xD7, 0x140, 9, 1);
             FaultDrawer_SetCharPad(-2, 0);
             FaultDrawer_DrawText(0x20, 0xD8, "GRAPH PC %08x RA %08x SP %08x", pc, ra, sp);
@@ -1075,7 +1075,7 @@ void Fault_ThreadEntry(void* arg) {
 
 void Fault_SetFrameBuffer(void* fb, u16 w, u16 h) {
     sFaultInstance->fb = fb;
-    FaultDrawer_SetDrawerFB(fb, w, h);
+    FaultDrawer_SetDrawerFrameBuffer(fb, w, h);
 }
 
 void Fault_Init(void) {
