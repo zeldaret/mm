@@ -181,13 +181,18 @@ typedef enum FbDemoType {
 #define DEFINE_TRANSITION(_enumValue, structName, instanceName, _name) structName instanceName;
 #define DEFINE_TRANSITION_INTERNAL(_enumValue, structName, instanceName) structName instanceName;
 
+typedef union TransitionInstance {
+    #include "tables/transition_table.h"
+} TransitionInstance;
+
+#undef DEFINE_TRANSITION
+#undef DEFINE_TRANSITION_INTERNAL
+
 typedef struct {
     /* 0x000 */ s16 transitionType;
     /* 0x002 */ s8 fbdemoType;
     /* 0x003 */ char unk_003[0x5];
-    /* 0x008 */ union {
-        #include "tables/transition_table.h"
-    } instanceData;
+    /* 0x008 */ TransitionInstance instanceData;
     /* 0x220 */ char unk_220[0x10];
     /* 0x230 */ void* (*init)(void* transition);
     /* 0x234 */ void  (*destroy)(void* transition);
@@ -200,8 +205,5 @@ typedef struct {
     /* 0x250 */ s32   (*isDone)(void* transition);
     /* 0x254 */ char unk_254[0x4];
 } TransitionContext; // size = 0x258
-
-#undef DEFINE_TRANSITION
-#undef DEFINE_TRANSITION_INTERNAL
 
 #endif
