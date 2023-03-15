@@ -311,7 +311,7 @@ void func_80A71B68(EnDno* this, PlayState* play) {
             if (!(this->unk_3B0 & 0x20)) {
                 SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, EN_DNO_ANIM_PRAYER_LOOP,
                                                 &this->animIndex);
-                this->actor.shape.rot.y = Actor_YawBetweenActors(&this->actor, this->unk_460);
+                this->actor.shape.rot.y = Actor_WorldYawTowardActor(&this->actor, this->unk_460);
             }
         } else {
             SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, EN_DNO_ANIM_IDLE, &this->animIndex);
@@ -347,8 +347,8 @@ void func_80A71C3C(EnDno* this, PlayState* play) {
             }
 
         case EN_DNO_ANIM_PRAYER_LOOP:
-            Math_SmoothStepToS(&this->actor.shape.rot.y, Actor_YawBetweenActors(&this->actor, this->unk_460), 2, 0xE38,
-                               0x222);
+            Math_SmoothStepToS(&this->actor.shape.rot.y, Actor_WorldYawTowardActor(&this->actor, this->unk_460), 2,
+                               0xE38, 0x222);
             break;
     }
 
@@ -436,7 +436,7 @@ void func_80A71F18(EnDno* this, PlayState* play) {
                                                             &this->animIndex);
                         }
                         Math_ScaledStepToS(&this->actor.shape.rot.y,
-                                           Actor_YawBetweenActors(&this->actor, this->unk_460), 0x71C);
+                                           Actor_WorldYawTowardActor(&this->actor, this->unk_460), 0x71C);
                         break;
 
                     case EN_DNO_ANIM_IMPLORE_END:
@@ -637,7 +637,7 @@ void func_80A725F8(EnDno* this, PlayState* play) {
                 if (this->skelAnime.curFrame <= 23.0f) {
                     this->unk_452 = 3;
                     if (Animation_OnFrame(&this->skelAnime, 23.0f)) {
-                        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_OPEN_AMBRELLA);
+                        Actor_PlaySfx(&this->actor, NA_SE_EV_OPEN_AMBRELLA);
                     }
                 } else if (this->skelAnime.curFrame <= 24.0f) {
                     this->unk_452 = 4;
@@ -675,7 +675,7 @@ void func_80A725F8(EnDno* this, PlayState* play) {
                         } else {
                             this->getItemId = GI_MASK_SCENTS;
                         }
-                        Actor_PickUp(&this->actor, play, this->getItemId, 60.0f, 60.0f);
+                        Actor_OfferGetItem(&this->actor, play, this->getItemId, 60.0f, 60.0f);
                         func_801477B4(play);
                         func_80A72B84(this, play);
                     }
@@ -741,13 +741,13 @@ void func_80A72BA4(EnDno* this, PlayState* play) {
         this->actor.parent = NULL;
         this->actionFunc = func_80A72598;
     } else {
-        Actor_PickUp(&this->actor, play, this->getItemId, 60.0f, 60.0f);
+        Actor_OfferGetItem(&this->actor, play, this->getItemId, 60.0f, 60.0f);
     }
 }
 
 void func_80A72C04(EnDno* this, PlayState* play) {
     SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, EN_DNO_ANIM_START_RACE_START, &this->animIndex);
-    this->actor.flags |= ACTOR_FLAG_8000000;
+    this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
     this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_8);
     Math_Vec3f_Copy(&this->unk_334, &this->actor.world.pos);
     SubS_ActorPathing_Init(play, &this->unk_334, &this->actor, &this->actorPath, play->setupPathList,
@@ -779,21 +779,21 @@ s32 EnDno_ActorPathing_UpdateActorInfo(PlayState* play, ActorPathing* actorPath)
     thisx->gravity = 0.0f;
     temp_v0 = thisx->yawTowardsPlayer - thisx->world.rot.y;
     if ((temp_v0 <= 0x4000) && (temp_v0 >= -0x4000)) {
-        Math_SmoothStepToF(&thisx->speedXZ, 15.0f, 0.8f, 1.0f, 0.01f);
+        Math_SmoothStepToF(&thisx->speed, 15.0f, 0.8f, 1.0f, 0.01f);
     } else {
         if (thisx->xzDistToPlayer <= 80.0f) {
-            Math_SmoothStepToF(&thisx->speedXZ, 8.0f, 0.5f, 0.5f, 0.01f);
+            Math_SmoothStepToF(&thisx->speed, 8.0f, 0.5f, 0.5f, 0.01f);
         } else if (thisx->xzDistToPlayer <= 360.0f) {
-            Math_SmoothStepToF(&thisx->speedXZ, 7.0f, 0.5f, 0.5f, 0.01f);
+            Math_SmoothStepToF(&thisx->speed, 7.0f, 0.5f, 0.5f, 0.01f);
         } else {
-            Math_SmoothStepToF(&thisx->speedXZ, 3.5f, 0.5f, 0.5f, 0.01f);
+            Math_SmoothStepToF(&thisx->speed, 3.5f, 0.5f, 0.5f, 0.01f);
         }
     }
 
-    if (actorPath->distSqToCurPoint < SQ(thisx->speedXZ)) {
+    if (actorPath->distSqToCurPoint < SQ(thisx->speed)) {
         ret = true;
     } else {
-        sp38 = thisx->speedXZ / sqrtf(actorPath->distSqToCurPointXZ);
+        sp38 = thisx->speed / sqrtf(actorPath->distSqToCurPointXZ);
         sp2C = ABS(actorPath->rotToCurPoint.x - thisx->world.rot.x);
         temp_v0_2 = sp2C;
         temp_v0_2 *= sp38;
@@ -810,11 +810,11 @@ s32 EnDno_ActorPathing_UpdateActorInfo(PlayState* play, ActorPathing* actorPath)
 s32 EnDno_ActorPathing_Move(PlayState* play, ActorPathing* actorPath) {
     Actor* thisx = actorPath->actor;
     EnDno* this = (EnDno*)thisx;
-    f32 sp24 = Math_CosS(-thisx->world.rot.x) * thisx->speedXZ;
+    f32 sp24 = Math_CosS(-thisx->world.rot.x) * thisx->speed;
     f32 sp20 = gFramerateDivisorHalf;
 
     thisx->velocity.x = Math_SinS(thisx->world.rot.y) * sp24;
-    thisx->velocity.y = Math_SinS(-thisx->world.rot.x) * thisx->speedXZ;
+    thisx->velocity.y = Math_SinS(-thisx->world.rot.x) * thisx->speed;
     thisx->velocity.z = Math_CosS(thisx->world.rot.y) * sp24;
 
     this->unk_334.x += (this->actor.velocity.x * sp20) + this->actor.colChkInfo.displacement.x;
@@ -864,7 +864,7 @@ void func_80A730A0(EnDno* this, PlayState* play) {
     func_800B9010(&this->actor, NA_SE_EV_BUTLER_FRY - SFX_FLAG);
     if (this->actorPath.flags & ACTOR_PATHING_REACHED_END_PERMANENT) {
         Math_Vec3f_Copy(&this->actor.world.pos, &this->actorPath.curPoint);
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
         this->actor.velocity.x = 0.0f;
         this->actor.velocity.y = 0.0f;
         this->actor.velocity.z = 0.0f;
@@ -873,10 +873,10 @@ void func_80A730A0(EnDno* this, PlayState* play) {
 }
 
 void func_80A73244(EnDno* this, PlayState* play) {
-    this->actor.flags &= ~ACTOR_FLAG_8000000;
+    this->actor.flags &= ~ACTOR_FLAG_CANT_LOCK_ON;
     this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8);
     this->unk_328 = 2;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     Flags_UnsetSwitch(play, EN_DNO_GET_RACE_STARTED_SWITCH_FLAG(&this->actor));
     gSaveContext.timerStates[TIMER_ID_MINIGAME_1] = TIMER_STATE_STOP;
     this->unk_44E = 0;
@@ -903,7 +903,7 @@ void func_80A732C8(EnDno* this, PlayState* play) {
             }
 
             if (Animation_OnFrame(&this->skelAnime, 4.0f)) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CLOSE_AMBRELLA);
+                Actor_PlaySfx(&this->actor, NA_SE_EV_CLOSE_AMBRELLA);
                 this->unk_452 = 4;
             } else if (Animation_OnFrame(&this->skelAnime, 5.0f)) {
                 this->unk_452 = 3;

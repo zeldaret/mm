@@ -189,11 +189,12 @@ void func_80C13BB8(EnJgameTsn* this, PlayState* play) {
         func_800B8614(&this->actor, play, 80.0f);
     }
 
-    if ((player->actor.bgCheckFlags & 1) && !(player->stateFlags1 & PLAYER_STATE1_2000) && (this->unk_2FE == 0) &&
-        (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN) && func_80C149B0(play, &this->unk_1F8)) {
+    if ((player->actor.bgCheckFlags & BGCHECKFLAG_GROUND) && !(player->stateFlags1 & PLAYER_STATE1_2000) &&
+        (this->unk_2FE == 0) && (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN) &&
+        func_80C149B0(play, &this->unk_1F8)) {
         this->unk_2FE = 1;
         func_80C13E6C(this);
-    } else if (!(player->actor.bgCheckFlags & 1)) {
+    } else if (!(player->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
         this->unk_2FE = 0;
     }
 
@@ -334,7 +335,7 @@ void func_80C14230(EnJgameTsn* this, PlayState* play) {
 
     this->unk_2FC++;
 
-    if ((player->actor.bgCheckFlags & 2) && func_80C149B0(play, &this->unk_200)) {
+    if ((player->actor.bgCheckFlags & BGCHECKFLAG_GROUND_TOUCH) && func_80C149B0(play, &this->unk_200)) {
         Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 2);
         Message_StartTextbox(play, 0x109F, &this->actor);
         this->unk_300 = 0x109F;
@@ -342,7 +343,8 @@ void func_80C14230(EnJgameTsn* this, PlayState* play) {
         *this->unk_208[this->unk_218] &= ~OBJLUPYGAMELIFT_IGNITE_FIRE;
         func_801A2C20();
         func_80C14030(this);
-    } else if ((player->actor.bgCheckFlags & 0x40) || (player->actor.bgCheckFlags & 0x20)) {
+    } else if ((player->actor.bgCheckFlags & BGCHECKFLAG_WATER_TOUCH) ||
+               (player->actor.bgCheckFlags & BGCHECKFLAG_WATER)) {
         Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 2);
         Message_StartTextbox(play, 0x10A0, &this->actor);
         this->unk_300 = 0x10A0;
@@ -384,9 +386,9 @@ void func_80C14554(EnJgameTsn* this, PlayState* play) {
         }
         func_80C145FC(this);
     } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_82_10)) {
-        Actor_PickUp(&this->actor, play, GI_RUPEE_PURPLE, 500.0f, 100.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_RUPEE_PURPLE, 500.0f, 100.0f);
     } else {
-        Actor_PickUp(&this->actor, play, GI_HEART_PIECE, 500.0f, 100.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_HEART_PIECE, 500.0f, 100.0f);
     }
 }
 
@@ -400,7 +402,7 @@ void func_80C14610(EnJgameTsn* this, PlayState* play) {
         this->unk_300 = 0x10A4;
         func_80C14030(this);
     } else {
-        func_800B85E0(&this->actor, play, 200.0f, -1);
+        func_800B85E0(&this->actor, play, 200.0f, PLAYER_IA_MINUS1);
     }
 }
 
@@ -549,7 +551,7 @@ s32 func_80C14BCC(EnJgameTsn* this, PlayState* play) {
     s32 i;
     s32 phi_s3 = -1;
 
-    if (player->actor.bgCheckFlags & 2) {
+    if (player->actor.bgCheckFlags & BGCHECKFLAG_GROUND_TOUCH) {
         for (i = 0; i < ARRAY_COUNT(this->unk_1D8); i++) {
             if (func_80C149B0(play, &this->unk_1D8[i])) {
                 phi_s3 = i;
@@ -561,19 +563,19 @@ s32 func_80C14BCC(EnJgameTsn* this, PlayState* play) {
         }
 
         if (phi_s3 == this->unk_218) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_TRE_BOX_APPEAR);
+            Actor_PlaySfx(&this->actor, NA_SE_SY_TRE_BOX_APPEAR);
             *this->unk_208[phi_s3] |= OBJLUPYGAMELIFT_DISPLAY_CORRECT;
             play->interfaceCtx.minigamePoints = 1;
             return true;
         }
 
         if (*this->unk_208[phi_s3] & OBJLUPYGAMELIFT_IGNITE_FIRE) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_TRE_BOX_APPEAR);
+            Actor_PlaySfx(&this->actor, NA_SE_SY_TRE_BOX_APPEAR);
             *this->unk_208[phi_s3] |= OBJLUPYGAMELIFT_DISPLAY_CORRECT;
             play->interfaceCtx.minigamePoints = 1;
         } else {
             *this->unk_208[phi_s3] |= OBJLUPYGAMELIFT_DISPLAY_INCORRECT;
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_ERROR);
+            Actor_PlaySfx(&this->actor, NA_SE_SY_ERROR);
         }
     }
 

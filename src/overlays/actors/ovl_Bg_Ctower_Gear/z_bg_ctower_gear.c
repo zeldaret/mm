@@ -108,7 +108,7 @@ void BgCtowerGear_Splash(BgCtowerGear* this, PlayState* play) {
                 }
             }
         }
-        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_WATERWHEEL_LEVEL);
+        Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_WATERWHEEL_LEVEL);
     }
 }
 

@@ -738,9 +738,9 @@ void EnSob1_EndWalk(EnSob1* this, PlayState* play) {
                        EnSob1_GetDistSqAndOrient(this->path, this->waypoint - 1, &this->actor.world.pos, &distSq), 4,
                        1000, 1);
     this->actor.shape.rot.y = this->actor.world.rot.y;
-    Math_ApproachF(&this->actor.speedXZ, 0.5f, 0.2f, 1.0f);
+    Math_ApproachF(&this->actor.speed, 0.5f, 0.2f, 1.0f);
     if (distSq < 12.0f) {
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
         if (animLastFrame == curFrame) {
             EnSob1_ChangeAnim(&this->skelAnime, sAnimationInfoBombShopkeeper,
                               BOMB_SHOPKEEPER_ANIM_SIT_AT_COUNTER_START);
@@ -777,11 +777,11 @@ void EnSob1_Walk(EnSob1* this, PlayState* play) {
                            EnSob1_GetDistSqAndOrient(this->path, this->waypoint, &this->actor.world.pos, &distSq), 4,
                            1000, 1);
         this->actor.shape.rot.y = this->actor.world.rot.y;
-        this->actor.speedXZ = 2.0f;
+        this->actor.speed = 2.0f;
         if (distSq < SQ(5.0f)) {
             this->waypoint++;
             if ((this->path->count - 1) < this->waypoint) {
-                this->actor.speedXZ = 0.0f;
+                this->actor.speed = 0.0f;
                 EnSob1_SetupAction(this, EnSob1_EndWalk);
             }
         }
@@ -949,7 +949,7 @@ void EnSob1_BrowseShelf(EnSob1* this, PlayState* play) {
 void EnSob1_SetupBuyItemWithFanfare(PlayState* play, EnSob1* this) {
     Player* player = GET_PLAYER(play);
 
-    Actor_PickUp(&this->actor, play, this->items[this->cursorIndex]->getItemId, 300.0f, 300.0f);
+    Actor_OfferGetItem(&this->actor, play, this->items[this->cursorIndex]->getItemId, 300.0f, 300.0f);
     play->msgCtx.msgMode = 0x43;
     play->msgCtx.stateTimer = 4;
     player->stateFlags2 &= ~PLAYER_STATE2_20000000;
@@ -1084,7 +1084,7 @@ void EnSob1_BuyItemWithFanfare(EnSob1* this, PlayState* play) {
         this->actor.parent = NULL;
         EnSob1_SetupAction(this, EnSob1_SetupItemPurchased);
     } else {
-        Actor_PickUp(&this->actor, play, this->items[this->cursorIndex]->getItemId, 300.0f, 300.0f);
+        Actor_OfferGetItem(&this->actor, play, this->items[this->cursorIndex]->getItemId, 300.0f, 300.0f);
     }
 }
 

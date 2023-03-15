@@ -36,6 +36,7 @@
 #include "z64dma.h"
 #include "z64eff_footmark.h"
 #include "z64effect.h"
+#include "z64frameadvance.h"
 #include "z64interface.h"
 #include "z64item.h"
 #include "z64light.h"
@@ -113,66 +114,6 @@ typedef struct {
     /* 0x4 */ void* start;
     /* 0x8 */ void* end;
 } PolygonType2; // size = 0xC
-
-typedef struct {
-    /* 0x0 */ s16 x;
-    /* 0x2 */ s16 y;
-    /* 0x4 */ s16 z;
-    /* 0x6 */ s16 reserved;
-    /* 0x8 */ s16 s;
-    /* 0xA */ s16 t;
-    /* 0xC */ s8 r;
-    /* 0xD */ s8 g;
-    /* 0xE */ s8 b;
-    /* 0xF */ s8 a;
-} F3DVertexColor; // size = 0x10
-
-typedef struct {
-    /* 0x0 */ s16 x;
-    /* 0x2 */ s16 y;
-    /* 0x4 */ s16 z;
-    /* 0x6 */ s16 reserved;
-    /* 0x8 */ s16 s;
-    /* 0xA */ s16 t;
-    /* 0xC */ s8 normalX;
-    /* 0xD */ s8 normalY;
-    /* 0xE */ s8 normalZ;
-    /* 0xF */ s8 a;
-} F3DVertexNormal; // size = 0x10
-
-typedef struct {
-    /* 0x0 */ f32 size;
-    /* 0x4 */ f32 dynamicSizeStep;
-    /* 0x8 */ u8 state;
-    /* 0x9 */ u8 sizeGrowsCos2;
-    /* 0xA */ u8 colorsIndex;
-    /* 0xB */ u8 flags;
-    /* 0xC */ u8 lightParamsIndex;
-} FireObjInitParams; // size = 0x10
-
-typedef struct FireObjColors {
-    /* 0x0 */ Color_RGBA8 primColor;
-    /* 0x4 */ u8 lod;
-    /* 0x5 */ Color_RGB8 envColor;
-} FireObjColors; // size = 0x8
-
-typedef struct FireObjLightParams {
-    /* 0x0 */ s16 radius;
-    /* 0x2 */ Color_RGB8 color;
-    /* 0x5 */ Color_RGB8 maxColorAdj;
-} FireObjLightParams; // size = 0x8
-
-// Game Info aka. Static Context
-// Data normally accessed through REG macros (see regs.h)
-typedef struct {
-    /* 0x00 */ u8  unk_00; // regPage;?   // 1 is first page
-    /* 0x01 */ u8  unk_01; // regGroup;?  // "register" group (R, RS, RO, RP etc.)
-    /* 0x02 */ u8  unk_02; // regCur;?    // selected register within page
-    /* 0x03 */ u8  unk_03; // dpadLast;?
-    /* 0x04 */ u32 unk_04; // repeat;?
-    /* 0x08 */ UNK_TYPE1 pad_08[0xC];
-    /* 0x14 */ s16 data[REG_GROUPS * REG_PER_GROUP]; // 0xAE0 entries
-} GameInfo; // size = 0x15D4
 
 typedef struct {
     /* 0x0 */ u32    size;
@@ -305,11 +246,6 @@ typedef struct {
     /* 0x10 */ int unk10;
     /* 0x14 */ OSMesgQueue unk14;
 } s80185D40; // size = 0x2C
-
-typedef union {
-    F3DVertexColor color;
-    F3DVertexNormal normal;
-} F3DVertex; // size = 0x10
 
 // End of RDRAM without the Expansion Pak installed
 #define NORMAL_RDRAM_END 0x80400000
@@ -687,12 +623,6 @@ typedef enum {
     STACK_STATUS_OVERFLOW = 2
 } StackStatus;
 
-typedef struct FireObjLight {
-    /* 0x00 */ LightNode* light;
-    /* 0x04 */ LightInfo lightInfo;
-    /* 0x12 */ u8 lightParamsIndex;
-} FireObjLight; // size = 0x14
-
 #define OS_SC_RETRACE_MSG       1
 #define OS_SC_DONE_MSG          2
 #define OS_SC_NMI_MSG           3 // name is made up, 3 is OS_SC_RDP_DONE_MSG in the original sched.c
@@ -713,34 +643,10 @@ typedef struct {
     /* 0x130 */ OSThread thread;
 } AudioMgr; // size = 0x2E0
 
-typedef struct FireObj {
-    /* 0x00 */ Vec3f position;
-    /* 0x0C */ f32 size;
-    /* 0x10 */ f32 sizeInv;
-    /* 0x14 */ f32 xScale;
-    /* 0x18 */ f32 yScale;
-    /* 0x1C */ f32 dynamicSize;
-    /* 0x20 */ f32 dynamicSizeStep;
-    /* 0x24 */ u8 state; // 0 - growing, 1 - shrinking, 2 - fully lit, 3 - not lit
-    /* 0x25 */ u8 sizeGrowsCos2;
-    /* 0x26 */ u8 unk26;
-    /* 0x27 */ u8 colorsIndex;
-    /* 0x28 */ u8 flags; // bit 0 - ?, bit 1 - ?
-    /* 0x29 */ UNK_TYPE1 pad29[0x1];
-    /* 0x2A */ s16 ignitionDelay;
-    /* 0x2C */ ColliderCylinder collision;
-    /* 0x78 */ FireObjLight light;
-} FireObj; // size = 0x8B
-
 typedef struct {
     /* 0x0 */ u8   seqId;
     /* 0x1 */ u8   ambienceId;
 } SequenceContext; // size = 0x2
-
-typedef struct {
-    /* 0x0 */ s32 enabled;
-    /* 0x4 */ s32 timer;
-} FrameAdvanceContext; // size = 0x8
 
 typedef enum {
     /*  0 */ GAMEOVER_INACTIVE,
@@ -886,19 +792,6 @@ typedef struct {
     /* 0x10 */ Color_RGBA8_u32 envColor;
 } Struct_80140E80; // size = 0x14
 
-// From OoT's struct_80034A14_arg1
-typedef struct {
-    /* 0x00 */ s16 unk_00;
-    /* 0x02 */ s16 unk_02;
-    /* 0x04 */ s16 unk_04;
-    /* 0x06 */ s16 unk_06;
-    /* 0x08 */ Vec3s unk_08;
-    /* 0x0E */ Vec3s unk_0E;
-    /* 0x14 */ f32 unk_14;
-    /* 0x18 */ Vec3f unk_18; // Usually setted to Player's position or Player's focus
-    /* 0x24 */ s16 unk_24;
-} struct_800BD888_arg1; // size = 0x28
-
 typedef struct {
     /* 0x0 */ u32 type;
     /* 0x4 */ u32 setScissor;
@@ -921,21 +814,6 @@ typedef struct {
     /* 0x10 */ u16* tlut;
     /* 0x14 */ Gfx* dList;
 } VisMono; // size = 0x18
-
-typedef struct DebugDispObject {
-    /* 0x00 */ Vec3f pos;
-    /* 0x0C */ Vec3s rot;
-    /* 0x14 */ Vec3f scale;
-    /* 0x20 */ Color_RGBA8 color;
-    /* 0x24 */ s16   type;
-    /* 0x28 */ struct DebugDispObject* next;
-    /* 0x2C */ s32 pad; //Padding not in the OOT version
-} DebugDispObject; // size = 0x30
-
-typedef struct {
-    /* 0x0 */ f32 rangeSq;
-    /* 0x4 */ f32 leashScale;
-} TargetRangeParams; // size = 0x8
 
 typedef struct {
     /* 0x0 */ u8* value;

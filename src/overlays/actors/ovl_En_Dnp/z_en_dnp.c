@@ -133,37 +133,37 @@ s32 func_80B3CA20(EnDnp* this) {
     if ((this->animIndex == EN_DNP_ANIM_CUTSCENE_HURRY) || (this->animIndex == EN_DNP_ANIM_RUN)) {
         if (Animation_OnFrame(&this->skelAnime, 1.0f) || Animation_OnFrame(&this->skelAnime, 5.0f) ||
             Animation_OnFrame(&this->skelAnime, 9.0f) || Animation_OnFrame(&this->skelAnime, 13.0f)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DEKUHIME_TURN);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_DEKUHIME_TURN);
         }
     } else if ((this->animIndex == EN_DNP_ANIM_GLARE_START) || (this->animIndex == EN_DNP_ANIM_TURN_AROUND)) {
         if (Animation_OnFrame(&this->skelAnime, 1.0f)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DEKUHIME_TURN);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_DEKUHIME_TURN);
         }
     } else if (this->animIndex == EN_DNP_ANIM_GREETING) {
         if (Animation_OnFrame(&this->skelAnime, 7.0f)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DEKUHIME_GREET);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_DEKUHIME_GREET);
         }
         if (Animation_OnFrame(&this->skelAnime, 22.0f)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DEKUHIME_GREET2);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_DEKUHIME_GREET2);
         }
     } else if (this->animIndex == EN_DNP_ANIM_BOW) {
         if (Animation_OnFrame(&this->skelAnime, 9.0f)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DEKUHIME_GREET);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_DEKUHIME_GREET);
         }
         if (Animation_OnFrame(&this->skelAnime, 18.0f)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DEKUHIME_GREET2);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_DEKUHIME_GREET2);
         }
     } else if ((this->animIndex == EN_DNP_ANIM_UNUSED_WALK) && (this->animIndex == EN_DNP_ANIM_WALK)) {
         if (Animation_OnFrame(&this->skelAnime, 7.0f) || Animation_OnFrame(&this->skelAnime, 15.0f)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DEKUHIME_WALK);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_DEKUHIME_WALK);
         }
     } else if (this->animIndex == EN_DNP_ANIM_JUMP) {
         if (Animation_OnFrame(&this->skelAnime, 17.0f)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DEKUHIME_WALK);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_DEKUHIME_WALK);
         }
     } else if (this->animIndex == EN_DNP_ANIM_BOUNCE_LOOP) {
         if (Animation_OnFrame(&this->skelAnime, 3.0f)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DEKUHIME_WALK);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_DEKUHIME_WALK);
         }
     }
 
@@ -311,7 +311,7 @@ void func_80B3D11C(EnDnp* this, PlayState* play) {
             }
 
             if (this->animIndex == EN_DNP_ANIM_ANGRY_START) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_VO_DHVO04);
+                Actor_PlaySfx(&this->actor, NA_SE_VO_DHVO04);
             }
 
             if (this->animIndex == EN_DNP_ANIM_GLARE_START) {
@@ -370,7 +370,7 @@ void func_80B3D3F8(EnDnp* this, PlayState* play) {
 }
 
 void func_80B3D47C(EnDnp* this, PlayState* play) {
-    if (this->actor.bgCheckFlags & 1) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         Math_SmoothStepToF(&this->actor.scale.x, 0.0085f, 0.1f, 0.01f, 0.001f);
         if ((s32)(this->actor.scale.x * 10000.0f) >= 85) {
             this->actor.flags |= ACTOR_FLAG_1;
@@ -459,7 +459,7 @@ void EnDnp_Update(Actor* thisx, PlayState* play) {
         sp2C = this->collider.dim.radius + 50;
         sp28 = this->collider.dim.height + 30;
         if ((this->unk_322 & 0x400) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_23_20)) {
-            Actor_PickUp(&this->actor, play, GI_MAX, sp2C, sp28);
+            Actor_OfferGetItem(&this->actor, play, GI_MAX, sp2C, sp28);
         }
         func_8013C964(&this->actor, play, sp2C, sp28, PLAYER_IA_NONE, this->unk_322 & 7);
         Actor_SetFocus(&this->actor, 30.0f);

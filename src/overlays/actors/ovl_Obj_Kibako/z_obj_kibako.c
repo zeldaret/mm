@@ -121,7 +121,7 @@ void func_80926318(ObjKibako* this, PlayState* play) {
     if (this->actor.xzDistToPlayer < 100.0f) {
         angle = this->actor.yawTowardsPlayer - GET_PLAYER(play)->actor.world.rot.y;
         if (ABS_ALT(angle) > 0x5555) {
-            Actor_PickUp(&this->actor, play, GI_NONE, 36.0f, 30.0f);
+            Actor_OfferGetItem(&this->actor, play, GI_NONE, 36.0f, 30.0f);
         }
     }
 }
@@ -278,8 +278,8 @@ void ObjKibako_Idle(ObjKibako* this, PlayState* play) {
 
         //! @bug: This function should only pass Player*: it uses *(this + 0x153), which is meant to be
         //! player->currentMask, but in this case is garbage in the collider
-        func_800B8E58((Player*)this, NA_SE_PL_PULL_UP_WOODBOX);
-    } else if ((this->actor.bgCheckFlags & 0x20) && (this->actor.depthInWater > 19.0f)) {
+        Player_PlaySfx((Player*)&this->actor, NA_SE_PL_PULL_UP_WOODBOX);
+    } else if ((this->actor.bgCheckFlags & BGCHECKFLAG_WATER) && (this->actor.depthInWater > 19.0f)) {
         ObjKibako_WaterBreak(this, play);
         ObjKibako_SpawnCollectible(this, play);
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 20, NA_SE_EV_WOODBOX_BREAK);
@@ -340,10 +340,10 @@ void ObjKibako_Held(ObjKibako* this, PlayState* play) {
     func_80926394(this, play);
     if (Actor_HasNoParent(&this->actor, play)) {
         this->actor.room = play->roomCtx.curRoom.num;
-        if (fabsf(this->actor.speedXZ) < 0.1f) {
+        if (fabsf(this->actor.speed) < 0.1f) {
             ObjKibako_SetupIdle(this);
             this->collider.base.ocFlags1 &= ~OC1_TYPE_PLAYER;
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_PUT_DOWN_WOODBOX);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_PUT_DOWN_WOODBOX);
         } else {
             Actor_MoveWithGravity(&this->actor);
             ObjKibako_SetupThrown(this);
@@ -384,13 +384,14 @@ void ObjKibako_Thrown(ObjKibako* this, PlayState* play) {
     if (this->timer > 0) {
         this->timer--;
     }
-    if ((this->actor.bgCheckFlags & 0xB) || (atHit) || (this->timer <= 0)) {
+    if ((this->actor.bgCheckFlags & (BGCHECKFLAG_GROUND | BGCHECKFLAG_GROUND_TOUCH | BGCHECKFLAG_WALL)) || atHit ||
+        (this->timer <= 0)) {
         ObjKibako_AirBreak(this, play);
         ObjKibako_SpawnCollectible(this, play);
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 20, NA_SE_EV_WOODBOX_BREAK);
         Actor_Kill(&this->actor);
     } else {
-        if (this->actor.bgCheckFlags & 0x40) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_WATER_TOUCH) {
             ObjKibako_WaterBreak(this, play);
             ObjKibako_SpawnCollectible(this, play);
             SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 20, NA_SE_EV_WOODBOX_BREAK);

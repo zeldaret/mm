@@ -210,24 +210,24 @@ s32 EnKakasi_ValidatePictograph(PlayState* play, Actor* thisx) {
 void EnKakasi_CheckAnimationSfx(EnKakasi* this) {
     if (this->animIndex == ENKAKASI_ANIM_SIDEWAYS_SHAKING || this->animIndex == ENKAKASI_ANIM_ARMS_CROSSED_STILL) {
         if (Animation_OnFrame(&this->skelanime, 1.0f) || Animation_OnFrame(&this->skelanime, 8.0f)) {
-            Actor_PlaySfxAtPos(&this->picto.actor, NA_SE_EV_KAKASHI_SWING);
+            Actor_PlaySfx(&this->picto.actor, NA_SE_EV_KAKASHI_SWING);
         }
     }
     if (this->animIndex == ENKAKASI_ANIM_HOPPING_REGULAR || this->animIndex == ENKAKASI_ANIM_SLOWROLL) {
         if (Animation_OnFrame(&this->skelanime, 4.0f) || Animation_OnFrame(&this->skelanime, 8.0f)) {
-            Actor_PlaySfxAtPos(&this->picto.actor, NA_SE_EV_KAKASHI_SWING);
+            Actor_PlaySfx(&this->picto.actor, NA_SE_EV_KAKASHI_SWING);
         }
         if (Animation_OnFrame(&this->skelanime, 1.0f) || Animation_OnFrame(&this->skelanime, 9.0f) ||
             Animation_OnFrame(&this->skelanime, 16.0f)) {
-            Actor_PlaySfxAtPos(&this->picto.actor, NA_SE_IT_KAKASHI_JUMP);
+            Actor_PlaySfx(&this->picto.actor, NA_SE_IT_KAKASHI_JUMP);
         }
         if (Animation_OnFrame(&this->skelanime, 18.0f)) {
-            Actor_PlaySfxAtPos(&this->picto.actor, NA_SE_EV_KAKASHI_ROLL);
+            Actor_PlaySfx(&this->picto.actor, NA_SE_EV_KAKASHI_ROLL);
         }
     }
     if (this->animIndex == ENKAKASI_ANIM_SPIN_REACH_OFFER || this->animIndex == ENKAKASI_ANIM_TWIRL) {
         if (Animation_OnFrame(&this->skelanime, 1.0f)) {
-            Actor_PlaySfxAtPos(&this->picto.actor, NA_SE_EV_KAKASH_LONGI_ROLL);
+            Actor_PlaySfx(&this->picto.actor, NA_SE_EV_KAKASH_LONGI_ROLL);
         }
     }
 }
@@ -620,7 +620,7 @@ void EnKakasi_TeachingSong(EnKakasi* this, PlayState* play) {
             this->unk190 = 0;
             this->unkCounter1A4 = 0;
             ActorCutscene_Stop(this->actorCutscenes[0]);
-            Actor_PlaySfxAtPos(&this->picto.actor, NA_SE_EN_YASE_DEAD);
+            Actor_PlaySfx(&this->picto.actor, NA_SE_EN_YASE_DEAD);
             if (this) {}
             this->unkState196 = 2;
             this->subCamId = SUB_CAM_ID_DONE;
@@ -1007,7 +1007,7 @@ void EnKakasi_DiggingAway(EnKakasi* this, PlayState* play) {
         } else {
             Actor_SpawnFloorDustRing(play, &this->picto.actor, &this->picto.actor.world.pos,
                                      this->picto.actor.shape.shadowScale - 20.0f, 5, 4.0f, 200, 10, 1);
-            Actor_PlaySfxAtPos(&this->picto.actor, NA_SE_EN_AKINDONUTS_HIDE);
+            Actor_PlaySfx(&this->picto.actor, NA_SE_EN_AKINDONUTS_HIDE);
         }
     }
 
@@ -1025,7 +1025,7 @@ void EnKakasi_DiggingAway(EnKakasi* this, PlayState* play) {
 void EnKakasi_SetupIdleUnderground(EnKakasi* this) {
     this->picto.actor.shape.yOffset = -7000.0;
     this->picto.actor.draw = NULL;
-    this->picto.actor.flags |= ACTOR_FLAG_8000000;
+    this->picto.actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
     this->unkState196 = 5;
     this->actionFunc = EnKakasi_IdleUnderground;
 }
@@ -1033,7 +1033,7 @@ void EnKakasi_SetupIdleUnderground(EnKakasi* this) {
 void EnKakasi_IdleUnderground(EnKakasi* this, PlayState* play) {
     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_79_08) && this->picto.actor.xzDistToPlayer < this->songSummonDist &&
         (BREG(1) != 0 || play->msgCtx.ocarinaMode == 0xD)) {
-        this->picto.actor.flags &= ~ACTOR_FLAG_8000000;
+        this->picto.actor.flags &= ~ACTOR_FLAG_CANT_LOCK_ON;
         play->msgCtx.ocarinaMode = 4;
         this->actionFunc = EnKakasi_SetupRiseOutOfGround;
     }
@@ -1056,7 +1056,7 @@ void EnKakasi_SetupRiseOutOfGround(EnKakasi* this, PlayState* play) {
 
     } else {
         ActorCutscene_StartAndSetUnkLinkFields(this->actorCutscenes[cutsceneIndex], &this->picto.actor);
-        Actor_PlaySfxAtPos(&this->picto.actor, NA_SE_EN_AKINDONUTS_HIDE);
+        Actor_PlaySfx(&this->picto.actor, NA_SE_EN_AKINDONUTS_HIDE);
         this->picto.actor.draw = EnKakasi_Draw;
         this->unkState196 = 6;
         this->actionFunc = EnKakasi_RisingOutOfGround;
@@ -1073,7 +1073,7 @@ void EnKakasi_RisingOutOfGround(EnKakasi* this, PlayState* play) {
         if ((play->gameplayFrames % 8) == 0) {
             Actor_SpawnFloorDustRing(play, &this->picto.actor, &this->picto.actor.world.pos,
                                      this->picto.actor.shape.shadowScale - 20.0f, 10, 8.0f, 500, 10, 1);
-            Actor_PlaySfxAtPos(&this->picto.actor, NA_SE_EN_AKINDONUTS_HIDE);
+            Actor_PlaySfx(&this->picto.actor, NA_SE_EN_AKINDONUTS_HIDE);
         }
         Math_ApproachF(&this->picto.actor.shape.yOffset, 0.0f, 0.5f, 200.0f);
     } else {

@@ -111,7 +111,7 @@ void EnLookNuts_Init(Actor* thisx, PlayState* play) {
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->actor.targetMode = 1;
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
-    this->actor.flags |= ACTOR_FLAG_8000000;
+    this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
     this->pathLocation = LOOKNUTS_GET_PATROL_LOCATION(&this->actor);
     this->switchFlag = LOOKNUTS_GET_SCENE_FLAG(&this->actor);
     this->spawnIndex = LOOKNUTS_GET_SPAWN_INDEX(&this->actor);
@@ -151,17 +151,17 @@ void EnLookNuts_Patrol(EnLookNuts* this, PlayState* play) {
 
     SkelAnime_Update(&this->skelAnime);
     if (Play_InCsMode(play)) {
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
         return;
     }
 
-    this->actor.speedXZ = 2.0f;
+    this->actor.speed = 2.0f;
     if (Animation_OnFrame(&this->skelAnime, 1.0f) || Animation_OnFrame(&this->skelAnime, 5.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_WALK);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_WALK);
     }
 
     if (D_80A6862C != 0) {
-        Math_ApproachZeroF(&this->actor.speedXZ, 0.3f, 1.0f);
+        Math_ApproachZeroF(&this->actor.speed, 0.3f, 1.0f);
         return;
     }
 
@@ -207,7 +207,7 @@ void EnLookNuts_StandAndWait(EnLookNuts* this, PlayState* play) {
     s16 randOffset;
 
     SkelAnime_Update(&this->skelAnime);
-    Math_ApproachZeroF(&this->actor.speedXZ, 0.3f, 1.0f);
+    Math_ApproachZeroF(&this->actor.speed, 0.3f, 1.0f);
     if (!Play_InCsMode(play) && (D_80A6862C == 0) && (this->eventTimer == 0)) {
         this->eventTimer = 10;
         switch (this->waitTimer) {
@@ -273,13 +273,13 @@ void EnLookNuts_DetectedPlayer(EnLookNuts* this, PlayState* play) {
 void EnLookNuts_RunToPlayer(EnLookNuts* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     if (Animation_OnFrame(&this->skelAnime, 1.0f) || Animation_OnFrame(&this->skelAnime, 5.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_WALK);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_WALK);
     }
 
-    this->actor.speedXZ = 4.0f;
+    this->actor.speed = 4.0f;
     Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 1, 0xBB8, 0);
     if ((this->actor.xzDistToPlayer < 70.0f) || (this->eventTimer == 0)) {
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
         EnLookNuts_SetupSendPlayerToSpawn(this);
     }
 }

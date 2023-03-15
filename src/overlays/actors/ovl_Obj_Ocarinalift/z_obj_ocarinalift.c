@@ -99,7 +99,7 @@ void func_80AC96A4(ObjOcarinalift* this, PlayState* play) {
 
 void func_80AC96B4(ObjOcarinalift* this) {
     this->actionFunc = func_80AC96D0;
-    this->dyna.actor.speedXZ = 0.0f;
+    this->dyna.actor.speed = 0.0f;
 }
 
 void func_80AC96D0(ObjOcarinalift* this, PlayState* play) {
@@ -125,9 +125,9 @@ void func_80AC96D0(ObjOcarinalift* this, PlayState* play) {
         phi_fa0 = this->unk160 * 0.16f;
     }
 
-    Math_StepToF(&thisx->speedXZ, phi_fv0, phi_fa0);
-    if ((thisx->speedXZ + 0.05f) < magnitude) {
-        Math_Vec3f_Scale(&thisx->velocity, thisx->speedXZ / magnitude);
+    Math_StepToF(&thisx->speed, phi_fv0, phi_fa0);
+    if ((thisx->speed + 0.05f) < magnitude) {
+        Math_Vec3f_Scale(&thisx->velocity, thisx->speed / magnitude);
         thisx->world.pos.x += thisx->velocity.x;
         thisx->world.pos.y += thisx->velocity.y;
         thisx->world.pos.z += thisx->velocity.z;
@@ -135,7 +135,7 @@ void func_80AC96D0(ObjOcarinalift* this, PlayState* play) {
         paramsC = OBJOCARINALIFT_GET_C(thisx);
         sp34 = true;
         this->unk168 += this->unk16C;
-        thisx->speedXZ *= 0.4f;
+        thisx->speed *= 0.4f;
         if (((this->unk168 >= this->unk164) && (this->unk16C > 0)) || ((this->unk168 <= 0) && (this->unk16C < 0))) {
             if (paramsC == OBJOCARINALIFT_PARAMSC_0) {
                 this->unk16C = -this->unk16C;
@@ -197,7 +197,7 @@ void func_80AC9A7C(ObjOcarinalift* this, PlayState* play) {
 }
 
 void func_80AC9AB8(ObjOcarinalift* this) {
-    this->dyna.actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_2000000 | ACTOR_FLAG_8000000);
+    this->dyna.actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_2000000 | ACTOR_FLAG_CANT_LOCK_ON);
     this->actionFunc = func_80AC9AE0;
 }
 
@@ -234,7 +234,7 @@ void func_80AC9B5C(ObjOcarinalift* this, PlayState* play) {
 }
 
 void func_80AC9C20(ObjOcarinalift* this) {
-    this->dyna.actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_2000000 | ACTOR_FLAG_8000000);
+    this->dyna.actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_2000000 | ACTOR_FLAG_CANT_LOCK_ON);
     this->actionFunc = func_80AC9C48;
 }
 
