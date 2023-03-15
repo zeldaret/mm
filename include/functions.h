@@ -2157,9 +2157,9 @@ void VisMono_Destroy(VisMono* this);
 void VisMono_Draw(VisMono* this, Gfx** gfxp);
 // void VisMono_DrawOld(VisMono* this);}
 
-void func_801420C0(struct_801F8020* this);
-void func_801420F4(struct_801F8020* this);
-void func_80142100(struct_801F8020* this, Gfx** gfxP, s32 arg2);
+void VisZbuf_Init(VisZbuf* this);
+void VisZbuf_Destroy(VisZbuf* this);
+void VisZbuf_Draw(VisZbuf* this, Gfx** gfxP, void* zbuffer);
 
 // void func_80147520(void);
 void func_80147564(PlayState* play);
@@ -2426,7 +2426,7 @@ void AudioMgr_Init(AudioMgr* audioMgr, void* stack, OSPri pri, OSId id, SchedCon
 
 void Game_UpdateFramerateVariables(s32 divisor);
 void Game_SetFramerateDivisor(GameState* gameState, s32 divisor);
-void GameState_SetFBFilter(Gfx** gfx, u32 arg1);
+void GameState_SetFBFilter(Gfx** gfx, void* zbuffer);
 void Game_Nop80173534(GameState* gameState);
 void GameState_Draw(GameState* gameState, GraphicsContext* gfxCtx);
 void GameState_SetFrameBuffer(GraphicsContext* gfxCtx);
