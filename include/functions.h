@@ -2759,16 +2759,16 @@ void AudioEffects_NotePortamentoInit(Note* note);
 void AudioEffects_AdsrInit(AdsrState* adsr, EnvelopePoint* envelope, s16* volOut);
 f32 AudioEffects_AdsrUpdate(AdsrState* adsr);
 
-void AudioSeq_SequenceChannelDisable(SequenceChannel* channel);
-void AudioSeq_SequencePlayerDisableAsFinished(SequencePlayer* seqPlayer);
-void AudioSeq_SequencePlayerDisable(SequencePlayer* seqPlayer);
-void AudioSeq_AudioListPushBack(AudioListItem* list, AudioListItem* item);
-void* AudioSeq_AudioListPopBack(AudioListItem* list);
-void AudioSeq_ProcessSequences(s32 arg0);
-void AudioSeq_SkipForwardSequence(SequencePlayer* seqPlayer);
-void AudioSeq_ResetSequencePlayer(SequencePlayer* seqPlayer);
-void AudioSeq_InitSequencePlayerChannels(s32 seqPlayerIndex);
-void AudioSeq_InitSequencePlayers(void);
+void AudioScript_SequenceChannelDisable(SequenceChannel* channel);
+void AudioScript_SequencePlayerDisableAsFinished(SequencePlayer* seqPlayer);
+void AudioScript_SequencePlayerDisable(SequencePlayer* seqPlayer);
+void AudioScript_AudioListPushBack(AudioListItem* list, AudioListItem* item);
+void* AudioScript_AudioListPopBack(AudioListItem* list);
+void AudioScript_ProcessSequences(s32 arg0);
+void AudioScript_SkipForwardSequence(SequencePlayer* seqPlayer);
+void AudioScript_ResetSequencePlayer(SequencePlayer* seqPlayer);
+void AudioScript_InitSequencePlayerChannels(s32 seqPlayerIndex);
+void AudioScript_InitSequencePlayers(void);
 
 void func_8019AE40(s32 param_1, s32 param_2, u32 param_3, s32 param_4);
 void func_8019AEC0(UNK_PTR param_1, UNK_PTR param_2);
