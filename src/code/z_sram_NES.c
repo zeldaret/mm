@@ -17,10 +17,11 @@ typedef struct PersistentCycleFlags {
     /* 0xC */ u32 collectible;
 } PersistentCycleFlags; // size = 0x10
 
-#define DEFINE_SCENE(_name, _enumValue, _textId, _drawConfig, _restrictionFlags, switch0, switch1, chest, collectible) \
-    { switch0, switch1, chest, collectible },
+#define PERSISTENT_CYCLE_FLAGS_SET(switch0, switch1, chest, collectible) { switch0, switch1, chest, collectible },
 
-#define DEFINE_SCENE_UNSET(_enumValue) { 0, 0, 0, 0 },
+#define DEFINE_SCENE(_name, _enumValue, _textId, _drawConfig, _restrictionFlags, persistentCycleFlags) \
+    persistentCycleFlags
+#define DEFINE_SCENE_UNSET(_enumValue) PERSISTENT_CYCLE_FLAGS_SET(0, 0, 0, 0)
 
 /**
  * Array of bitwise flags which won't be turned off on a cycle reset (will persist between cycles)
