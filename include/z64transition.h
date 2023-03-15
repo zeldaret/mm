@@ -183,7 +183,7 @@ typedef enum FbDemoType {
 
 typedef union TransitionInstance {
     #include "tables/transition_table.h"
-} TransitionInstance;
+} TransitionInstance; // size = 0x218
 
 #undef DEFINE_TRANSITION
 #undef DEFINE_TRANSITION_INTERNAL
