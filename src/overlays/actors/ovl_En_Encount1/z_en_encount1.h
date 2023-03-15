@@ -30,7 +30,7 @@ typedef struct EnEncount1 {
     /* 0x144 */ EnEncount1ActionFunc actionFunc;
     /* 0x148 */ Path* path;
     /* 0x14C */ s16 spawnActiveMax;
-    /* 0x14E */ s16 spawnActive;
+    /* 0x14E */ s16 spawnActiveCount;
     /* 0x150 */ s16 type;
     /* 0x152 */ s16 spawnTotal;
     /* 0x154 */ s16 spawnTotalMax;

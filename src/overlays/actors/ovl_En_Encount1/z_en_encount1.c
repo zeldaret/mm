@@ -86,7 +86,7 @@ void EnEncount1_SpawnActor(EnEncount1* this, PlayState* play) {
     CollisionPoly* floorPoly;
     s32 bgId;
 
-    if (((this->spawnActive >= this->spawnActiveMax) ||
+    if (((this->spawnActiveCount >= this->spawnActiveMax) ||
          ((this->spawnDistanceMax > 0.0f) && (this->spawnDistanceMax < this->actor.xzDistToPlayer)) ||
          ((this->spawnTotalMax > 0) && (this->spawnTotalMax <= this->spawnTotal)))) {
         return;
@@ -104,7 +104,7 @@ void EnEncount1_SpawnActor(EnEncount1* this, PlayState* play) {
         case EN_ENCOUNT1_GRASSHOPPER:
             scale = randPlusMinusPoint5Scaled(40.0f) + 200.0f;
             rotY = player->actor.shape.rot.y;
-            if (this->spawnActive & 1) {
+            if (this->spawnActiveCount & 1) {
                 rotY = -rotY;
                 scale = randPlusMinusPoint5Scaled(20.0f) + 100.0f;
             }
@@ -148,12 +148,12 @@ void EnEncount1_SpawnActor(EnEncount1* this, PlayState* play) {
     actorParams = sActorParams[this->type];
     if (Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, actorId, spawnPos.x, spawnPos.y, spawnPos.z, 0, 0, 0,
                            actorParams) != NULL) {
-        this->spawnActive++;
+        this->spawnActiveCount++;
         if (this->spawnTotalMax > 0) {
             this->spawnTotal++;
         }
 
-        if ((this->spawnActive >= this->spawnActiveMax) && (this->spawnTimeMin != 0)) {
+        if ((this->spawnActiveCount >= this->spawnActiveMax) && (this->spawnTimeMin != 0)) {
             this->timer = 1;
         }
     }
