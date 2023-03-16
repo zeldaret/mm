@@ -107,7 +107,7 @@ void func_809529AC(EnMs* this, PlayState* play) {
         func_800B8500(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel, 0);
         this->actionFunc = func_80952A1C;
     } else {
-        Actor_PickUp(&this->actor, play, 0x35, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
+        Actor_OfferGetItem(&this->actor, play, 0x35, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
     }
 }
 
@@ -168,7 +168,7 @@ void func_809527F8(EnMs* this, PlayState* play) {
         }
         if (Message_ShouldAdvance(play) != 0) {
             Message_CloseTextbox(play);
-            Actor_PickUp((Actor *) this, play, 0x35, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
+            Actor_OfferGetItem((Actor *) this, play, 0x35, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
             this->actionFunc = func_809529AC;
             return;
         }
@@ -198,7 +198,7 @@ void func_809527F8(EnMs* this, PlayState* play) {
             return;
         }
         func_8019F208();
-        Actor_PickUp((Actor *) this, play, 0x35, 90.0f, 10.0f);
+        Actor_OfferGetItem((Actor *) this, play, 0x35, 90.0f, 10.0f);
         Rupees_ChangeBy(-0xA);
         this->actionFunc = func_809529AC;
     }
@@ -257,7 +257,7 @@ block_5:
         goto block_17;
     }
     Message_CloseTextbox(play);
-    Actor_PickUp((Actor *) this, play, 0x35, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
+    Actor_OfferGetItem((Actor *) this, play, 0x35, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
     this->actionFunc = func_809529AC;
     return;
 block_7:
@@ -289,7 +289,7 @@ block_13:
     return;
 block_15:
     func_8019F208();
-    Actor_PickUp((Actor *) this, play, 0x35, 90.0f, 10.0f);
+    Actor_OfferGetItem((Actor *) this, play, 0x35, 90.0f, 10.0f);
     Rupees_ChangeBy(-0xA);
     this->actionFunc = func_809529AC;
     return;
@@ -360,7 +360,7 @@ block_5:
         goto block_17;
     }
     Message_CloseTextbox(play);
-    Actor_PickUp((Actor *) this, play, 0x35, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
+    Actor_OfferGetItem((Actor *) this, play, 0x35, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
     this->actionFunc = func_809529AC;
     return;
 block_7:
@@ -390,7 +390,7 @@ block_11:
     }
 
     func_8019F208();
-    Actor_PickUp((Actor *) this, play, 0x35, 90.0f, 10.0f);
+    Actor_OfferGetItem((Actor *) this, play, 0x35, 90.0f, 10.0f);
     Rupees_ChangeBy(-0xA);
     this->actionFunc = func_809529AC;
     return;
@@ -429,7 +429,7 @@ block_5:
         return;
     }
     Message_CloseTextbox(play);
-    Actor_PickUp((Actor *) this, play, 0x35, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
+    Actor_OfferGetItem((Actor *) this, play, 0x35, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
     this->actionFunc = func_809529AC;
     return;
 block_7:
@@ -459,7 +459,7 @@ block_11:
     }
 
     func_8019F208();
-    Actor_PickUp((Actor *) this, play, 0x35, 90.0f, 10.0f);
+    Actor_OfferGetItem((Actor *) this, play, 0x35, 90.0f, 10.0f);
     Rupees_ChangeBy(-0xA);
     this->actionFunc = func_809529AC;
     return;
@@ -509,7 +509,7 @@ So let us rewrite the entire second half as a switch:
             }
 
             func_8019F208();
-            Actor_PickUp((Actor *) this, play, 0x35, 90.0f, 10.0f);
+            Actor_OfferGetItem((Actor *) this, play, 0x35, 90.0f, 10.0f);
             Rupees_ChangeBy(-0xA);
             this->actionFunc = func_809529AC;
             return;
@@ -541,7 +541,7 @@ There's a couple of other obvious things here:
                 Message_ContinueTextbox(play, 0x937U);
             } else {
                 func_8019F208();
-                Actor_PickUp((Actor *) this, play, 0x35, 90.0f, 10.0f);
+                Actor_OfferGetItem((Actor *) this, play, 0x35, 90.0f, 10.0f);
                 Rupees_ChangeBy(-0xA);
                 this->actionFunc = func_809529AC;
             }
@@ -589,7 +589,7 @@ block_5:
         return;
     }
     Message_CloseTextbox(play);
-    Actor_PickUp((Actor *) this, play, 0x35, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
+    Actor_OfferGetItem((Actor *) this, play, 0x35, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
     this->actionFunc = func_809529AC;
     return;
 block_7:
@@ -606,7 +606,7 @@ block_7:
                     Message_ContinueTextbox(play, 0x937U);
                 } else {
                     func_8019F208();
-                    Actor_PickUp((Actor *) this, play, 0x35, 90.0f, 10.0f);
+                    Actor_OfferGetItem((Actor *) this, play, 0x35, 90.0f, 10.0f);
                     Rupees_ChangeBy(-0xA);
                     this->actionFunc = func_809529AC;
                 }
@@ -653,7 +653,7 @@ void func_809527F8(EnMs* this, PlayState* play) {
                 return;
             }
             Message_CloseTextbox(play);
-            Actor_PickUp((Actor *) this, play, 0x35, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
+            Actor_OfferGetItem((Actor *) this, play, 0x35, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
             this->actionFunc = func_809529AC;
             break;
 
@@ -671,7 +671,7 @@ void func_809527F8(EnMs* this, PlayState* play) {
                             Message_ContinueTextbox(play, 0x937U);
                         } else {
                             func_8019F208();
-                            Actor_PickUp((Actor *) this, play, 0x35, 90.0f, 10.0f);
+                            Actor_OfferGetItem((Actor *) this, play, 0x35, 90.0f, 10.0f);
                             Rupees_ChangeBy(-0xA);
                             this->actionFunc = func_809529AC;
                         }
@@ -704,7 +704,7 @@ void func_809527F8(EnMs* this, PlayState* play) {
         case 5:
             if (Message_ShouldAdvance(play) != 0) {
                 Message_CloseTextbox(play);
-                Actor_PickUp((Actor *) this, play, 0x35, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
+                Actor_OfferGetItem((Actor *) this, play, 0x35, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
                 this->actionFunc = func_809529AC;
             }
             break;
@@ -723,7 +723,7 @@ void func_809527F8(EnMs* this, PlayState* play) {
                             Message_ContinueTextbox(play, 0x937U);
                         } else {
                             func_8019F208();
-                            Actor_PickUp((Actor *) this, play, 0x35, 90.0f, 10.0f);
+                            Actor_OfferGetItem((Actor *) this, play, 0x35, 90.0f, 10.0f);
                             Rupees_ChangeBy(-0xA);
                             this->actionFunc = func_809529AC;
                         }

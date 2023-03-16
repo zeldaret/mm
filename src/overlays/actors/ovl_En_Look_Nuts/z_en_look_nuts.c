@@ -111,7 +111,7 @@ void EnLookNuts_Init(Actor* thisx, PlayState* play) {
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->actor.targetMode = 1;
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
-    this->actor.flags |= ACTOR_FLAG_8000000;
+    this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
     this->pathLocation = LOOKNUTS_GET_PATROL_LOCATION(&this->actor);
     this->switchFlag = LOOKNUTS_GET_SCENE_FLAG(&this->actor);
     this->spawnIndex = LOOKNUTS_GET_SPAWN_INDEX(&this->actor);

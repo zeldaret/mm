@@ -378,7 +378,7 @@ void EnTrt_PayForMushroom(EnTrt* this, PlayState* play) {
         Player_UpdateBottleHeld(play, GET_PLAYER(play), ITEM_BOTTLE, PLAYER_IA_BOTTLE);
         this->actionFunc = EnTrt_SetupItemGiven;
     } else {
-        Actor_PickUp(&this->actor, play, GI_RUPEE_RED, 300.0f, 300.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_RUPEE_RED, 300.0f, 300.0f);
     }
 }
 
@@ -453,9 +453,9 @@ void EnTrt_GiveRedPotionForKoume(EnTrt* this, PlayState* play) {
         player->stateFlags2 &= ~PLAYER_STATE2_20000000;
         this->actionFunc = EnTrt_GivenRedPotionForKoume;
     } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_12_10)) {
-        Actor_PickUp(&this->actor, play, GI_POTION_RED, 300.0f, 300.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_POTION_RED, 300.0f, 300.0f);
     } else {
-        Actor_PickUp(&this->actor, play, GI_POTION_RED_BOTTLE, 300.0f, 300.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_POTION_RED_BOTTLE, 300.0f, 300.0f);
     }
 }
 
@@ -649,7 +649,7 @@ void EnTrt_BrowseShelf(EnTrt* this, PlayState* play) {
 void EnTrt_SetupBuyItemWithFanfare(PlayState* play, EnTrt* this) {
     Player* player = GET_PLAYER(play);
 
-    Actor_PickUp(&this->actor, play, this->items[this->cursorIndex]->getItemId, 300.0f, 300.0f);
+    Actor_OfferGetItem(&this->actor, play, this->items[this->cursorIndex]->getItemId, 300.0f, 300.0f);
     play->msgCtx.msgMode = 0x43;
     play->msgCtx.stateTimer = 4;
     player->stateFlags2 &= ~PLAYER_STATE2_20000000;
@@ -1090,7 +1090,7 @@ void EnTrt_BuyItemWithFanfare(EnTrt* this, PlayState* play) {
         this->actor.parent = NULL;
         this->actionFunc = EnTrt_SetupItemGiven;
     } else {
-        Actor_PickUp(&this->actor, play, this->items[this->cursorIndex]->getItemId, 300.0f, 300.0f);
+        Actor_OfferGetItem(&this->actor, play, this->items[this->cursorIndex]->getItemId, 300.0f, 300.0f);
     }
 }
 

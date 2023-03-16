@@ -473,7 +473,7 @@ void func_80BFC270(EnRz* this, PlayState* play) {
         this->actionFunc = func_80BFC214;
         func_80BFBDFC(play);
     } else {
-        Actor_PickUp(&this->actor, play, GI_HEART_PIECE, 2000.0f, 1000.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_HEART_PIECE, 2000.0f, 1000.0f);
     }
 }
 
@@ -481,7 +481,7 @@ void func_80BFC2F4(EnRz* this, PlayState* play) {
     EnRz_UpdateSkelAnime(this, play);
     if (!func_80BFBE70(this, play)) {
         Message_CloseTextbox(play);
-        Actor_PickUp(&this->actor, play, GI_HEART_PIECE, 2000.0f, 1000.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_HEART_PIECE, 2000.0f, 1000.0f);
         this->actionFunc = func_80BFC270;
     }
 }

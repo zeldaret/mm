@@ -477,7 +477,7 @@ void EnMinifrog_GetFrogHP(EnMinifrog* this, PlayState* play) {
         this->actor.flags |= ACTOR_FLAG_10000;
         func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_NONE);
     } else {
-        Actor_PickUp(&this->actor, play, GI_HEART_PIECE, 10000.0f, 50.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_HEART_PIECE, 10000.0f, 50.0f);
     }
 }
 

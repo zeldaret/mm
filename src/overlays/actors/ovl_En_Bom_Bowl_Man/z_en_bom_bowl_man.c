@@ -351,7 +351,7 @@ void func_809C51B4(EnBomBowlMan* this, PlayState* play) {
 void func_809C52B4(EnBomBowlMan* this) {
     this->actor.draw = NULL;
     this->actor.flags |= ACTOR_FLAG_10;
-    this->actor.flags |= ACTOR_FLAG_8000000;
+    this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
     this->actor.flags &= ~ACTOR_FLAG_1;
     this->actor.world.pos.x = 1340.0f;
     this->actor.world.pos.z = -1795.0f;
@@ -496,7 +496,7 @@ void func_809C5738(EnBomBowlMan* this, PlayState* play) {
 }
 
 void func_809C59A4(EnBomBowlMan* this, PlayState* play) {
-    Actor_PickUp(&this->actor, play, GI_BOMBERS_NOTEBOOK, 300.0f, 300.0f);
+    Actor_OfferGetItem(&this->actor, play, GI_BOMBERS_NOTEBOOK, 300.0f, 300.0f);
     this->unk_29C = 1;
     this->actionFunc = func_809C59F0;
 }
@@ -513,7 +513,7 @@ void func_809C59F0(EnBomBowlMan* this, PlayState* play) {
         func_800B8500(&this->actor, play, 400.0f, 400.0f, PLAYER_IA_MINUS1);
         this->actionFunc = func_809C5AA4;
     } else {
-        Actor_PickUp(&this->actor, play, GI_BOMBERS_NOTEBOOK, 300.0f, 300.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_BOMBERS_NOTEBOOK, 300.0f, 300.0f);
     }
 }
 
