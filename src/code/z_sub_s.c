@@ -1023,13 +1023,13 @@ s16 SubS_ComputeTrackPointRot(s16* rot, s16 rotMax, s16 target, f32 slowness, f3
     f32 step;
     f32 prevRotStep;
 
-    step = (f32)(target - *rot) * (360.0f / (f32)0x10000);
+    step = (f32)(target - *rot) * (360.0f / 0x10000);
     step *= gFramerateDivisorHalf;
     prevRotStep = step;
     if (step >= 0.0f) {
         step /= slowness;
         step = CLAMP(step, stepMin, stepMax);
-        *rot += (s16)((step * (f32)0x10000) / 360.0f);
+        *rot += (s16)((step * 0x10000) / 360.0f);
         if (prevRotStep < stepMin) {
             *rot = target;
         }
@@ -1039,7 +1039,7 @@ s16 SubS_ComputeTrackPointRot(s16* rot, s16 rotMax, s16 target, f32 slowness, f3
     } else {
         step = (step / slowness) * -1.0f;
         step = CLAMP(step, stepMin, stepMax);
-        *rot -= (s16)((step * (f32)0x10000) / 360.0f);
+        *rot -= (s16)((step * 0x10000) / 360.0f);
         if (-stepMin < prevRotStep) {
             *rot = target;
         }
