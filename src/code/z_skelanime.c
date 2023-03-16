@@ -1577,7 +1577,7 @@ void SkelAnime_InitSkin(GameState* gameState, SkelAnime* skelAnime, SkeletonHead
     skelAnime->morphTable = ZeldaArena_Malloc(sizeof(*skelAnime->morphTable) * skelAnime->limbCount);
 
     // Debug prints here, required to match.
-    if (1) {};
+    if (1) {}
 
     if (animation != NULL) {
         Animation_PlayLoop(skelAnime, animation);

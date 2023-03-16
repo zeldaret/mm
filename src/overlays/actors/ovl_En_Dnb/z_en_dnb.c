@@ -275,7 +275,7 @@ s32 func_80A50950(EnDnbUnkStruct* arg0, PlayState* play2) {
             }
             Matrix_Push();
 
-            if (1) {};
+            if (1) {}
             arg0->unk_24 = (arg0->unk_01 / (f32)arg0->unk_02) * 255.0f;
 
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, (u8)arg0->unk_24);

@@ -486,7 +486,7 @@ void func_80BBB8AC(EnZos* this, PlayState* play) {
                 break;
 
             default:
-                if (0) {}
+                if (1) {}
                 func_801477B4(play);
                 this->actionFunc = func_80BBBDE0;
                 this->unk_2B6 |= 1;

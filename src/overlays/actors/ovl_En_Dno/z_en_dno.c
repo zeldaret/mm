@@ -945,7 +945,7 @@ void func_80A73408(EnDno* this, PlayState* play) {
 
     if ((Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) &&
         (this->animIndex == EN_DNO_ANIM_SHOCK_START)) {
-        if (0) {};
+        if (1) {}
         SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, EN_DNO_ANIM_SHOCK_LOOP, &this->animIndex);
     }
 }

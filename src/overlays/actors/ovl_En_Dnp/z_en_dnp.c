@@ -217,7 +217,7 @@ s32 func_80B3CDA4(EnDnp* this, PlayState* play) {
     pitch = Math_Vec3f_Pitch(&sp3C, &sp30);
 
     //! FAKE
-    if (1) {};
+    if (1) {}
     Math_SmoothStepToS(&this->unk_330, pitch, 3, 0x2AA8, 0x1);
 
     return 1;

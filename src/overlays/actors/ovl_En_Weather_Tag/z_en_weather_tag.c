@@ -86,7 +86,7 @@ void EnWeatherTag_Init(Actor* thisx, PlayState* play) {
             EnWeatherTag_SetupAction(this, func_80966E0C);
             break;
         case WEATHERTAG_TYPE_UNK3:
-            if (0) {} // this can move to diff locations and still match
+            if (1) {} // this can move to diff locations and still match
             EnWeatherTag_SetupAction(this, func_80966EF0);
             break;
         case WEATHERTAG_TYPE_UNK4:

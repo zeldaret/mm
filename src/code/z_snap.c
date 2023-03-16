@@ -42,9 +42,7 @@ s32 Snap_RecordPictographedActors(PlayState* play) {
                     break;
             }
 
-            if (actor->id) {
-                ; // Needed to match
-            }
+            if (1) {}
 
             // Actors which may be pictographed anywhere
             switch (actor->id) {
