@@ -138,7 +138,7 @@ void EnNiw_Init(Actor* thisx, PlayState* play) {
     Actor_SetScale(&this->actor, 0.01f);
 
     if (this->niwType == NIW_TYPE_UNK1) {
-        // @Bug this unused variant is broken and crashes on spawn (EnNiw_Update expects a parent, NULL)
+        // @bug this unused variant is broken and crashes on spawn (EnNiw_Update expects a parent, NULL)
         //   if modified to change niwType to TYPE_REGULAR here, new size is smaller than normal
         //   theory: was meant to be a small hand held cucco for grog to show the player
         Actor_SetScale(&this->actor, (BREG(86) / 10000.0f) + 0.004f);
