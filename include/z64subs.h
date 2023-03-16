@@ -16,7 +16,7 @@ typedef enum {
     /* 2 */ SUBS_CUTSCENE_SET_FLAG
 } SubSCutsceneType;
 
-//! @TODO: rename based on func_8013E748 and func_800B8500
+//! TODO: rename based on func_8013E748 and func_800B8500
 typedef s32 (*func_8013E748_VerifyFunc)(struct PlayState*, Actor*, void*);
 
 typedef s32 (*VerifyActor)(struct PlayState*, Actor*, Actor*, void*);
