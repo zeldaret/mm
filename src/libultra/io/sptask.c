@@ -1,9 +1,9 @@
 #include "global.h"
 
-#define _osVirtualToPhysical(ptr)               \
-    if (ptr != NULL) {                          \
-        ptr = (void*)osVirtualToPhysical(ptr);  \
-    }                                           \
+#define _osVirtualToPhysical(ptr)              \
+    if (ptr != NULL) {                         \
+        ptr = (void*)osVirtualToPhysical(ptr); \
+    }                                          \
     (void)0
 
 static OSTask sTmpTask;
