@@ -1118,7 +1118,7 @@ void Fault_HangupFaultClient(const char* exp1, char* exp2) {
  */
 void Fault_AddHungupAndCrashImpl(const char* exp1, const char* exp2) {
     FaultClient client;
-    u32 pad;
+    s32 pad;
 
     Fault_AddClient(&client, Fault_HangupFaultClient, (void*)exp1, (void*)exp2);
     *(u32*)0x11111111 = 0; // trigger an exception via unaligned memory access
