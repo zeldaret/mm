@@ -2137,7 +2137,7 @@ void VisMono_Destroy(VisMono* this);
 // void VisMono_DesaturateTLUT(u16* tlut);
 // void VisMono_DesaturateDList(Gfx* gfx);
 void VisMono_Draw(VisMono* this, Gfx** gfxp);
-// void VisMono_DrawOld(VisMono* this);}
+// void VisMono_DrawOld(VisMono* this);
 
 void VisZbuf_Init(VisZbuf* this);
 void VisZbuf_Destroy(VisZbuf* this);
