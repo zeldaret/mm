@@ -91,11 +91,8 @@ void Fault_SleepImpl(u32 duration) {
  *
  * Clients contribute at least one page to the crash screen, drawn by `callback`.
  * Arguments are passed on to the callback through `arg0` and `arg1`.
- *
- * The callback is intended to be
- * `void (*callback)(void* arg0, void* arg1)`
  */
-void Fault_AddClient(FaultClient* client, void* callback, void* arg0, void* arg1) {
+void Fault_AddClient(FaultClient* client, FaultClientCallback callback, void* arg0, void* arg1) {
     OSIntMask mask;
     u32 alreadyExists = false;
 
@@ -174,11 +171,10 @@ void Fault_RemoveClient(FaultClient* client) {
  * The callback is intended to be
  * `uintptr_t (*callback)(uintptr_t addr, void* arg)`
  * The callback may return 0 if it could not convert the address
- * The callback may return -1 to be unregistered
  */
-void Fault_AddAddrConvClient(FaultAddrConvClient* client, void* callback, void* arg) {
+void Fault_AddAddrConvClient(FaultAddrConvClient* client, FaultAddrConvClientCallback callback, void* arg) {
     OSIntMask mask;
-    u32 alreadyExists = false;
+    bool alreadyExists = false;
 
     mask = osSetIntMask(1);
 
@@ -211,7 +207,7 @@ void Fault_RemoveAddrConvClient(FaultAddrConvClient* client) {
     FaultAddrConvClient* iter = sFaultInstance->addrConvClients;
     FaultAddrConvClient* lastIter = NULL;
     OSIntMask mask;
-    u32 listIsEmpty = false;
+    bool listIsEmpty = false;
 
     mask = osSetIntMask(1);
 
@@ -224,7 +220,7 @@ void Fault_RemoveAddrConvClient(FaultAddrConvClient* client) {
                 if (sFaultInstance->addrConvClients) {
                     sFaultInstance->addrConvClients = client->next;
                 } else {
-                    listIsEmpty = 1;
+                    listIsEmpty = true;
                 }
             }
             break;
@@ -1065,9 +1061,7 @@ void Fault_ThreadEntry(void* arg) {
             Fault_WaitForInput();
         } while (!sFaultInstance->exit);
 
-        while (!sFaultInstance->exit) {
-            ;
-        }
+        while (!sFaultInstance->exit) {}
 
         Fault_ResumeThread(faultedThread);
     }
@@ -1102,7 +1096,7 @@ void Fault_Init(void) {
  * Fault page for Hungup crashes. Displays the thread id and two messages
  * specified in arguments to `Fault_AddHungupAndCrashImpl`.
  */
-void Fault_HangupFaultClient(const char* exp1, char* exp2) {
+void Fault_HangupFaultClient(const char* exp1, const char* exp2) {
     osSyncPrintf("HungUp on Thread %d\n", osGetThreadId(NULL));
     osSyncPrintf("%s\n", exp1 != NULL ? exp1 : "(NULL)");
     osSyncPrintf("%s\n", exp2 != NULL ? exp2 : "(NULL)");
@@ -1120,7 +1114,7 @@ void Fault_AddHungupAndCrashImpl(const char* exp1, const char* exp2) {
     FaultClient client;
     s32 pad;
 
-    Fault_AddClient(&client, Fault_HangupFaultClient, (void*)exp1, (void*)exp2);
+    Fault_AddClient(&client, (void*)Fault_HangupFaultClient, (void*)exp1, (void*)exp2);
     *(u32*)0x11111111 = 0; // trigger an exception via unaligned memory access
 }
 

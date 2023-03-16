@@ -19,7 +19,7 @@ void CIC6105_PrintRomInfo(void) {
 }
 
 void CIC6105_AddRomInfoFaultPage(void) {
-    Fault_AddClient(&romInfoFaultClient, CIC6105_PrintRomInfo, NULL, NULL);
+    Fault_AddClient(&romInfoFaultClient, (void*)CIC6105_PrintRomInfo, NULL, NULL);
 }
 
 void CIC6105_RemoveRomInfoFaultPage(void) {

@@ -31,17 +31,21 @@
 // Address at the end of Jumper Pak
 #define FAULT_FB_ADDRESS (void*)((PHYS_TO_K0(0x400000) - SCREEN_HEIGHT * SCREEN_WIDTH * sizeof(u16)))
 
+typedef void (*FaultClientCallback)(void*, void*);
 
 typedef struct FaultClient {
     /* 0x0 */ struct FaultClient* next;
-    /* 0x4 */ void (*callback)(void*, void*);
+    /* 0x4 */ FaultClientCallback callback;
     /* 0x8 */ void* arg0;
     /* 0xC */ void* arg1;
 } FaultClient; // size = 0x10
 
+
+typedef void* (*FaultAddrConvClientCallback)(void*, void*);
+
 typedef struct FaultAddrConvClient {
     /* 0x0 */ struct FaultAddrConvClient* next;
-    /* 0x4 */ uintptr_t (*callback)(uintptr_t, void*);
+    /* 0x4 */ FaultAddrConvClientCallback callback;
     /* 0x8 */ void* arg;
 } FaultAddrConvClient; // size = 0xC
 
@@ -59,9 +63,9 @@ void Fault_AddHungupAndCrash(const char* filename, u32 line);
 
 // Client Registration
 
-void Fault_AddClient(FaultClient* client, void* callback, void* arg0, void* arg1);
+void Fault_AddClient(FaultClient* client, FaultClientCallback callback, void* arg0, void* arg1);
 void Fault_RemoveClient(FaultClient* client);
-void Fault_AddAddrConvClient(FaultAddrConvClient* client, void* callback, void* arg);
+void Fault_AddAddrConvClient(FaultAddrConvClient* client, FaultAddrConvClientCallback callback, void* arg);
 void Fault_RemoveAddrConvClient(FaultAddrConvClient* client);
 
 // For use in Fault Client callbacks
