@@ -299,7 +299,7 @@ void EnItem00_Init(Actor* thisx, PlayState* play) {
     }
 
     if ((getItemId != GI_NONE) && !Actor_HasParent(&this->actor, play)) {
-        Actor_PickUp(&this->actor, play, getItemId, 50.0f, 20.0f);
+        Actor_OfferGetItem(&this->actor, play, getItemId, 50.0f, 20.0f);
     }
 
     this->actionFunc = func_800A6A40;
@@ -456,7 +456,7 @@ void func_800A6A40(EnItem00* this, PlayState* play) {
 
     if (this->getItemId != GI_NONE) {
         if (!Actor_HasParent(&this->actor, play)) {
-            Actor_PickUp(&this->actor, play, this->getItemId, 50.0f, 80.0f);
+            Actor_OfferGetItem(&this->actor, play, this->getItemId, 50.0f, 80.0f);
             this->unk152++;
         } else {
             this->getItemId = GI_NONE;
@@ -646,7 +646,7 @@ void EnItem00_Update(Actor* thisx, PlayState* play) {
 
     if (getItemId != GI_NONE) {
         if (!Actor_HasParent(&this->actor, play)) {
-            Actor_PickUp(&this->actor, play, getItemId, 50.0f, 20.0f);
+            Actor_OfferGetItem(&this->actor, play, getItemId, 50.0f, 20.0f);
         }
     }
 
@@ -1129,16 +1129,17 @@ void Item_DropCollectibleRandom(PlayState* play, Actor* fromActor, Vec3f* spawnP
 
         if (fromActor != NULL) {
             dropFlag = fromActor->dropFlag;
-            if (dropFlag != 0) {
-                if (fromActor->dropFlag & 1) {
+
+            if (dropFlag != DROPFLAG_NONE) {
+                if (fromActor->dropFlag & DROPFLAG_1) {
                     params = 0x10;
                     dropId = ITEM00_ARROWS_30;
                     dropQuantity = 1;
-                } else if (fromActor->dropFlag & 2) {
+                } else if (fromActor->dropFlag & DROPFLAG_2) {
                     params = 0x10;
                     dropId = ITEM00_RECOVERY_HEART;
                     dropQuantity = 1;
-                } else if (fromActor->dropFlag & 0x20) {
+                } else if (fromActor->dropFlag & DROPFLAG_20) {
                     dropId = ITEM00_RUPEE_PURPLE;
                     dropQuantity = 1;
                 }

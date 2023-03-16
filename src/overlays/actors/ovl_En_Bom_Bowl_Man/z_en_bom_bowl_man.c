@@ -242,7 +242,7 @@ void func_809C4DA4(EnBomBowlMan* this, PlayState* play) {
         s32 pad;
         s32 sp28 = false;
 
-        func_801477B4(play);
+        Message_CloseTextbox(play);
 
         switch (this->unk_2C0) {
             case 0:
@@ -319,9 +319,9 @@ void func_809C4DA4(EnBomBowlMan* this, PlayState* play) {
 
         if (!sp28) {
             if (player->transformation == PLAYER_FORM_HUMAN) {
-                func_80151938(play, D_809C618C[this->unk_2C0]);
+                Message_ContinueTextbox(play, D_809C618C[this->unk_2C0]);
             } else {
-                func_80151938(play, D_809C6198[this->unk_2C0]);
+                Message_ContinueTextbox(play, D_809C6198[this->unk_2C0]);
             }
         }
     }
@@ -351,7 +351,7 @@ void func_809C51B4(EnBomBowlMan* this, PlayState* play) {
 void func_809C52B4(EnBomBowlMan* this) {
     this->actor.draw = NULL;
     this->actor.flags |= ACTOR_FLAG_10;
-    this->actor.flags |= ACTOR_FLAG_8000000;
+    this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
     this->actor.flags &= ~ACTOR_FLAG_1;
     this->actor.world.pos.x = 1340.0f;
     this->actor.world.pos.z = -1795.0f;
@@ -411,7 +411,7 @@ void func_809C5524(EnBomBowlMan* this, PlayState* play) {
 
 void func_809C5598(EnBomBowlMan* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-        func_801477B4(play);
+        Message_CloseTextbox(play);
         if ((this->actor.textId == 0x72F) || (this->actor.textId == 0x730)) {
             this->actor.textId = 0x731;
         } else if (this->actor.textId == 0x731) {
@@ -439,7 +439,7 @@ void func_809C5598(EnBomBowlMan* this, PlayState* play) {
             this->actionFunc = func_809C5738;
             return;
         }
-        func_80151938(play, this->actor.textId);
+        Message_ContinueTextbox(play, this->actor.textId);
     }
 }
 
@@ -496,7 +496,7 @@ void func_809C5738(EnBomBowlMan* this, PlayState* play) {
 }
 
 void func_809C59A4(EnBomBowlMan* this, PlayState* play) {
-    Actor_PickUp(&this->actor, play, GI_BOMBERS_NOTEBOOK, 300.0f, 300.0f);
+    Actor_OfferGetItem(&this->actor, play, GI_BOMBERS_NOTEBOOK, 300.0f, 300.0f);
     this->unk_29C = 1;
     this->actionFunc = func_809C59F0;
 }
@@ -513,7 +513,7 @@ void func_809C59F0(EnBomBowlMan* this, PlayState* play) {
         func_800B8500(&this->actor, play, 400.0f, 400.0f, PLAYER_IA_MINUS1);
         this->actionFunc = func_809C5AA4;
     } else {
-        Actor_PickUp(&this->actor, play, GI_BOMBERS_NOTEBOOK, 300.0f, 300.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_BOMBERS_NOTEBOOK, 300.0f, 300.0f);
     }
 }
 
@@ -579,7 +579,7 @@ void func_809C5BF4(EnBomBowlMan* this, PlayState* play) {
             if (D_809C6100 > 5) {
                 Player* player = GET_PLAYER(play);
 
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 Camera_SetTargetActor(subCam, &this->unk_2D8[0]->actor);
                 func_809C493C(this, 13, 1.0f);
                 D_809C6100 = 0;

@@ -316,12 +316,12 @@ void func_80BAF7CC(EnZod* this, PlayState* play) {
                 switch (play->msgCtx.choiceIndex) {
                     case 0:
                         func_8019F208();
-                        func_80151938(play, 0x1220);
+                        Message_ContinueTextbox(play, 0x1220);
                         break;
 
                     case 1:
                         func_8019F230();
-                        func_80151938(play, 0x1223);
+                        Message_ContinueTextbox(play, 0x1223);
                         break;
                 }
             }
@@ -336,32 +336,32 @@ void func_80BAF7CC(EnZod* this, PlayState* play) {
                     case 0x1220:
                     case 0x1221:
                     case 0x1227:
-                        func_80151938(play, play->msgCtx.currentTextId + 1);
+                        Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                         break;
 
                     case 0x1219:
-                        func_80151938(play, play->msgCtx.currentTextId + 1);
+                        Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                         this->nextAnimIndex = ENZOD_ANIM_ARMS_FOLDED;
                         break;
 
                     case 0x121D:
-                        func_80151938(play, play->msgCtx.currentTextId + 1);
+                        Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                         this->nextAnimIndex = ENZOD_ANIM_READY_TO_PLAY;
                         break;
 
                     case 0x1223:
-                        func_80151938(play, play->msgCtx.currentTextId + 1);
+                        Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                         this->nextAnimIndex = ENZOD_ANIM_PLAYING_VIVACE;
                         break;
 
                     case 0x121E:
                     case 0x1226:
-                        func_80151938(play, 0x121F);
+                        Message_ContinueTextbox(play, 0x121F);
                         this->nextAnimIndex = ENZOD_ANIM_READY_TO_PLAY;
                         break;
 
                     default:
-                        func_801477B4(play);
+                        Message_CloseTextbox(play);
                         this->actionFunc = EnZod_PlayDrumsSequence;
                         EnZod_ChangeAnim(this, ENZOD_ANIM_PLAYING_LENTO, ANIMMODE_ONCE);
                         break;
@@ -419,7 +419,7 @@ void func_80BAFADC(EnZod* this, PlayState* play) {
     talkState = Message_GetState(&play->msgCtx);
     if (talkState != TEXT_STATE_CLOSING) {
         if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-            func_801477B4(play);
+            Message_CloseTextbox(play);
             this->actionFunc = func_80BAFB84;
             EnZod_ChangeAnim(this, ENZOD_ANIM_PLAYING_LENTO, ANIMMODE_ONCE);
         }
@@ -465,7 +465,7 @@ void EnZod_Rehearse(EnZod* this, PlayState* play) {
 void EnZod_SetupRehearse(EnZod* this, PlayState* play) {
     EnZod_UpdateAnimation(this);
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-        func_801477B4(play);
+        Message_CloseTextbox(play);
         EnZod_ChangeAnim(this, ENZOD_ANIM_PLAYING_LENTO, ANIMMODE_ONCE);
         this->actionFunc = EnZod_Rehearse;
         ActorCutscene_Stop(this->actor.cutscene);

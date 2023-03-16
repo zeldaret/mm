@@ -8,7 +8,7 @@
 #include "overlays/actors/ovl_En_Maruta/z_en_maruta.h"
 #include "objects/object_js/object_js.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_2000000 | ACTOR_FLAG_8000000)
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_2000000 | ACTOR_FLAG_CANT_LOCK_ON)
 
 #define THIS ((EnKendoJs*)thisx)
 
@@ -280,13 +280,13 @@ void func_80B269A4(EnKendoJs* this, PlayState* play) {
             break;
 
         case 0x2719:
-            func_801477B4(play);
+            Message_CloseTextbox(play);
             player->stateFlags1 |= PLAYER_STATE1_20;
             func_80B2701C(this);
             break;
 
         case 0x271A:
-            func_801477B4(play);
+            Message_CloseTextbox(play);
             func_80B2714C(this);
             break;
 
@@ -296,14 +296,14 @@ void func_80B269A4(EnKendoJs* this, PlayState* play) {
             break;
 
         case 0x273B:
-            func_801477B4(play);
+            Message_CloseTextbox(play);
             Interface_InitMinigame(play);
             player->stateFlags1 |= PLAYER_STATE1_20;
             func_80B273D0(this);
             break;
 
         case 0x272D:
-            func_801477B4(play);
+            Message_CloseTextbox(play);
             gSaveContext.minigameStatus = MINIGAME_STATUS_END;
             func_80B276C4(this);
             func_80B276D8(this, play);
@@ -523,7 +523,7 @@ void func_80B27188(EnKendoJs* this, PlayState* play) {
                 Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 3);
             }
             this->unk_286 = 2;
-            func_801477B4(play);
+            Message_CloseTextbox(play);
             player->stateFlags1 &= ~PLAYER_STATE1_20;
         }
     } else if (this->unk_286 == 2) {
@@ -649,9 +649,9 @@ void func_80B276D8(EnKendoJs* this, PlayState* play) {
         this->actor.parent = NULL;
         func_80B27760(this);
     } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_63_20)) {
-        Actor_PickUp(&this->actor, play, GI_HEART_PIECE, 800.0f, 100.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_HEART_PIECE, 800.0f, 100.0f);
     } else {
-        Actor_PickUp(&this->actor, play, GI_RUPEE_RED, 800.0f, 100.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_RUPEE_RED, 800.0f, 100.0f);
     }
 }
 
@@ -674,7 +674,7 @@ void func_80B27774(EnKendoJs* this, PlayState* play) {
         func_80B26AE8(this);
         player->stateFlags1 &= ~PLAYER_STATE1_20;
     } else {
-        func_800B85E0(&this->actor, play, 1000.0f, -1);
+        func_800B85E0(&this->actor, play, 1000.0f, PLAYER_IA_MINUS1);
     }
 }
 

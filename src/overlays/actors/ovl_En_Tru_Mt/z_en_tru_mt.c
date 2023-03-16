@@ -186,7 +186,7 @@ s32 func_80B761FC(EnTruMt* this, PlayState* play) {
                 Actor_PlaySfx(&this->actor, NA_SE_EN_KOUME_DAMAGE2);
             }
             play->interfaceCtx.minigameHiddenPoints = 1;
-            Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 25);
+            Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 25);
             return true;
         }
     }
@@ -335,7 +335,7 @@ s32 func_80B768F0(EnTruMt* this, PlayState* play) {
 }
 
 void func_80B76924(EnTruMt* this) {
-    this->unk_38E.z = Math_SinS(this->unk_388) * 30.0f * (0x10000 / 360.0f);
+    this->unk_38E.z = DEG_TO_BINANG(Math_SinS(this->unk_388) * 30.0f);
     this->unk_388 += 0x400;
 }
 

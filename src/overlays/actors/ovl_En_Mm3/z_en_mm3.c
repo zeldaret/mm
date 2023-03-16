@@ -106,7 +106,7 @@ void EnMm3_Init(Actor* thisx, PlayState* play) {
 void EnMm3_Destroy(Actor* thisx, PlayState* play) {
     EnMm3* this = THIS;
 
-    CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_01);
+    CLEAR_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_WAIT);
     Collider_DestroyCylinder(play, &this->collider);
 }
 
@@ -271,7 +271,7 @@ void func_80A6F5E4(EnMm3* this, PlayState* play) {
                 break;
 
             case 0x2793:
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 func_80A6FE1C(this);
                 func_80A6FE30(this, play);
                 break;
@@ -279,7 +279,7 @@ void func_80A6F5E4(EnMm3* this, PlayState* play) {
             case 0x2795:
             case 0x2796:
             case 0x2797:
-                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_63_02)) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_TIME_PASSED)) {
                     Message_StartTextbox(play, 0x279B, &this->actor);
                     this->unk_2B4 = 0x279B;
                     func_80151BB4(play, 0xB);
@@ -347,12 +347,12 @@ void func_80A6F9DC(EnMm3* this, PlayState* play) {
                     } else {
                         Interface_StartPostmanTimer(0, POSTMAN_MINIGAME_BUNNY_HOOD_OFF);
                     }
-                    func_801477B4(play);
+                    Message_CloseTextbox(play);
                     play_sound(NA_SE_SY_START_SHOT);
                     func_80A6FBA0(this);
                 } else {
-                    CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_01);
-                    CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_02);
+                    CLEAR_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_WAIT);
+                    CLEAR_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_TIME_PASSED);
                     func_80A6F270(this);
                 }
             }
@@ -374,8 +374,8 @@ void func_80A6FBA0(EnMm3* this) {
     AudioSfx_MuteBanks((1 << BANK_PLAYER) | (1 << BANK_ITEM) | (1 << BANK_ENV) | (1 << BANK_ENEMY) |
                        (1 << BANK_OCARINA) | (1 << BANK_VOICE));
     func_801A0238(0, 5);
-    SET_WEEKEVENTREG(WEEKEVENTREG_63_01);
-    CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_02);
+    SET_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_WAIT);
+    CLEAR_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_TIME_PASSED);
     this->actionFunc = func_80A6FBFC;
 }
 
@@ -431,9 +431,9 @@ void func_80A6FE30(EnMm3* this, PlayState* play) {
         this->actor.parent = NULL;
         func_80A6FED8(this);
     } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_77_01)) {
-        Actor_PickUp(&this->actor, play, GI_RUPEE_PURPLE, 500.0f, 100.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_RUPEE_PURPLE, 500.0f, 100.0f);
     } else {
-        Actor_PickUp(&this->actor, play, GI_HEART_PIECE, 500.0f, 100.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_HEART_PIECE, 500.0f, 100.0f);
     }
 }
 
@@ -453,7 +453,7 @@ void func_80A6FEEC(EnMm3* this, PlayState* play) {
         this->actor.flags &= ~ACTOR_FLAG_10000;
         func_80A6F9C8(this);
     } else {
-        func_800B85E0(&this->actor, play, 200.0f, -1);
+        func_800B85E0(&this->actor, play, 200.0f, PLAYER_IA_MINUS1);
     }
 }
 

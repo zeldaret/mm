@@ -171,7 +171,7 @@ void Scene_HeaderCmdSpawnList(PlayState* play, SceneCmd* cmd) {
 void Scene_HeaderCmdActorList(PlayState* play, SceneCmd* cmd) {
     play->numSetupActors = cmd->actorList.num;
     play->setupActorList = Lib_SegmentedToVirtual(cmd->actorList.segment);
-    play->actorCtx.unkC = 0;
+    play->actorCtx.halfDaysBit = 0;
 }
 
 // SceneTableEntry Header Command 0x02: List of camera data for actor cutscenes
@@ -277,7 +277,7 @@ void Scene_HeaderCmdObjectList(PlayState* play, SceneCmd* cmd) {
             }
 
             play->objectCtx.num = i;
-            func_800BA6FC(play, &play->actorCtx);
+            Actor_KillAllWithMissingObject(play, &play->actorCtx);
 
             continue;
         }

@@ -199,7 +199,7 @@ void EnGinkoMan_DepositDialogue(EnGinkoMan* this, PlayState* play) {
         case 0x45C: // given 1000 reward
         case 0x45D: // given 5000 reward
             this->isStampChecked = false;
-            func_801477B4(play);
+            Message_CloseTextbox(play);
             EnGinkoMan_SetupBankAward(this);
             EnGinkoMan_BankAward(this, play);
             break;
@@ -270,7 +270,7 @@ void EnGinkoMan_DepositDialogue(EnGinkoMan* this, PlayState* play) {
             break;
         case 0x470: // "Is that so?  Come back and deposit some after saving up a bunch!"
             if (Message_ShouldAdvance(play)) {
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 this->isStampChecked = false;
                 EnGinkoMan_SetupIdle(this); // change to waiting for approach
             }
@@ -525,16 +525,16 @@ void EnGinkoMan_BankAward(EnGinkoMan* this, PlayState* play) {
         EnGinkoMan_SetupBankAward2(this);
     } else if (this->curTextId == 0x45B) { // "Whats this, you already saved up 200?"
         if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_10_08)) {
-            Actor_PickUp(&this->actor, play, GI_WALLET_ADULT + CUR_UPG_VALUE(UPG_WALLET), 500.0f, 100.0f);
+            Actor_OfferGetItem(&this->actor, play, GI_WALLET_ADULT + CUR_UPG_VALUE(UPG_WALLET), 500.0f, 100.0f);
         } else {
-            Actor_PickUp(&this->actor, play, GI_RUPEE_BLUE, 500.0f, 100.0f);
+            Actor_OfferGetItem(&this->actor, play, GI_RUPEE_BLUE, 500.0f, 100.0f);
         }
     } else if (this->curTextId == 0x45C) { // "Whats this, you already saved up 5000?"
-        Actor_PickUp(&this->actor, play, GI_RUPEE_BLUE, 500.0f, 100.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_RUPEE_BLUE, 500.0f, 100.0f);
     } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_59_08)) {
-        Actor_PickUp(&this->actor, play, GI_HEART_PIECE, 500.0f, 100.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_HEART_PIECE, 500.0f, 100.0f);
     } else {
-        Actor_PickUp(&this->actor, play, GI_RUPEE_BLUE, 500.0f, 100.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_RUPEE_BLUE, 500.0f, 100.0f);
     }
 }
 

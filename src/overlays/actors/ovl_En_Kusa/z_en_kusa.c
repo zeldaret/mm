@@ -329,7 +329,7 @@ void EnKusa_SpawnBugs(EnKusa* this, PlayState* play) {
     for (numBugs = 0; numBugs < 3; numBugs++) {
         Actor* bug = Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ACTOR_EN_INSECT, this->actor.world.pos.x,
                                                    this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, 1,
-                                                   this->actor.cutscene, this->actor.unk20, 0);
+                                                   this->actor.cutscene, this->actor.halfDaysBits, 0);
 
         if (bug == NULL) {
             break;
@@ -490,7 +490,7 @@ void EnKusa_WaitForInteract(EnKusa* this, PlayState* play) {
                 CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
                 if (this->actor.xzDistToPlayer < 100.0f) {
                     if (KUSA_GET_TYPE(&this->actor) != ENKUSA_TYPE_GRASS_2) {
-                        Actor_LiftActor(&this->actor, play);
+                        Actor_OfferCarry(&this->actor, play);
                     }
                 }
             }
