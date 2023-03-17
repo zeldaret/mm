@@ -174,7 +174,7 @@ void Fault_RemoveClient(FaultClient* client) {
  */
 void Fault_AddAddrConvClient(FaultAddrConvClient* client, FaultAddrConvClientCallback callback, void* arg) {
     OSIntMask mask;
-    bool alreadyExists = false;
+    s32 alreadyExists = false;
 
     mask = osSetIntMask(1);
 
