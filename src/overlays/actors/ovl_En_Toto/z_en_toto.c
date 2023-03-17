@@ -364,9 +364,9 @@ s32 func_80BA3EE8(EnToto* this, PlayState* play) {
 
 s32 func_80BA3F2C(EnToto* this, PlayState* play) {
     if (this->text->textId != 0) {
-        func_80151938(play, this->text->textId);
+        Message_ContinueTextbox(play, this->text->textId);
     } else {
-        func_801477B4(play);
+        Message_CloseTextbox(play);
         func_80BA3EE8(this, play);
     }
     if (this->text->unk0 == 4) {

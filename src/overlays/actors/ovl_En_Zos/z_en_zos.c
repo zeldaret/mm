@@ -324,7 +324,7 @@ void func_80BBB574(EnZos* this, PlayState* play) {
     if (func_80BBAFFC(this, play)) {
         if (this->unk_2B6 & 0x20) {
             this->unk_2B6 &= ~0x20;
-            func_80151938(play, 0x124C);
+            Message_ContinueTextbox(play, 0x124C);
         }
     }
 
@@ -335,7 +335,7 @@ void func_80BBB574(EnZos* this, PlayState* play) {
                     play->msgCtx.msgLength = 0;
                     this->unk_2B6 |= 0x20;
                 } else {
-                    func_80151938(play, 0x124C);
+                    Message_ContinueTextbox(play, 0x124C);
                 }
                 break;
 
@@ -348,11 +348,11 @@ void func_80BBB574(EnZos* this, PlayState* play) {
             case 0x124D:
                 this->unk_2B6 &= ~0x10;
                 EnZos_ChangeAnim(this, EN_ZOS_ANIM_TALK_HANDS_ON_HIPS, ANIMMODE_LOOP);
-                func_80151938(play, 0x124E);
+                Message_ContinueTextbox(play, 0x124E);
                 break;
 
             case 0x124E:
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 this->actionFunc = func_80BBB354;
                 func_80BBB354(this, play);
                 break;
@@ -370,7 +370,7 @@ void func_80BBB718(EnZos* this, PlayState* play) {
         itemAction = func_80123810(play);
 
         if (itemAction > PLAYER_IA_NONE) {
-            func_801477B4(play);
+            Message_CloseTextbox(play);
 
             if (itemAction == PLAYER_IA_BOTTLE_ZORA_EGG) {
                 player->actor.textId = 0x1232;
@@ -388,9 +388,9 @@ void func_80BBB718(EnZos* this, PlayState* play) {
             this->actionFunc = func_80BBB8AC;
         } else if (itemAction <= PLAYER_IA_MINUS1) {
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_39_08)) {
-                func_80151938(play, 0x1241);
+                Message_ContinueTextbox(play, 0x1241);
             } else {
-                func_80151938(play, 0x1237);
+                Message_ContinueTextbox(play, 0x1237);
                 SET_WEEKEVENTREG(WEEKEVENTREG_39_08);
                 EnZos_ChangeAnim(this, EN_ZOS_ANIM_TALK_LOOK_DOWN, ANIMMODE_LOOP);
                 this->unk_2B6 |= 4;
@@ -425,13 +425,13 @@ void func_80BBB8AC(EnZos* this, PlayState* play) {
             case 0x123C:
             case 0x123E:
             case 0x123F:
-                func_80151938(play, play->msgCtx.currentTextId + 1);
+                Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                 break;
 
             case 0x1244:
                 this->unk_2B6 &= ~0x10;
                 EnZos_ChangeAnim(this, EN_ZOS_ANIM_TALK_HANDS_ON_HIPS, ANIMMODE_LOOP);
-                func_80151938(play, play->msgCtx.currentTextId + 1);
+                Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                 break;
 
             case 0x1232:
@@ -441,29 +441,29 @@ void func_80BBB8AC(EnZos* this, PlayState* play) {
             case 0x1239:
             case 0x1246:
                 EnZos_ChangeAnim(this, EN_ZOS_ANIM_TALK_HANDS_ON_HIPS, ANIMMODE_LOOP);
-                func_80151938(play, play->msgCtx.currentTextId + 1);
+                Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                 break;
 
             case 0x1233:
                 EnZos_ChangeAnim(this, EN_ZOS_ANIM_TALK_ARMS_OUT, ANIMMODE_LOOP);
-                func_80151938(play, play->msgCtx.currentTextId + 1);
+                Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                 break;
 
             case 0x1245:
             case 0x1248:
                 EnZos_ChangeAnim(this, EN_ZOS_ANIM_TALK_FOOT_TAP, ANIMMODE_LOOP);
-                func_80151938(play, play->msgCtx.currentTextId + 1);
+                Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                 break;
 
             case 0x1231:
-                func_80151938(play, 0xFF);
+                Message_ContinueTextbox(play, 0xFF);
                 this->actionFunc = func_80BBB718;
                 break;
 
             case 0x1243:
             case 0x1249:
                 EnZos_ChangeAnim(this, EN_ZOS_ANIM_HANDS_ON_HIPS, ANIMMODE_LOOP);
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 this->actionFunc = func_80BBBDE0;
                 this->unk_2B6 |= 1;
                 break;
@@ -473,21 +473,21 @@ void func_80BBB8AC(EnZos* this, PlayState* play) {
             case 0x1242:
                 EnZos_ChangeAnim(this, EN_ZOS_ANIM_HANDS_ON_HIPS, ANIMMODE_LOOP);
                 Actor_ProcessTalkRequest(&this->actor, &play->state);
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 this->actionFunc = func_80BBBDE0;
                 this->unk_2B6 |= 1;
                 break;
 
             case 0x1236:
                 EnZos_ChangeAnim(this, EN_ZOS_ANIM_HANDS_ON_HIPS, ANIMMODE_LOOP);
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 this->actionFunc = func_80BBBDE0;
                 this->unk_2B6 |= 1;
                 break;
 
             default:
                 if (1) {}
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 this->actionFunc = func_80BBBDE0;
                 this->unk_2B6 |= 1;
                 break;
@@ -612,7 +612,7 @@ void func_80BBC070(EnZos* this, PlayState* play) {
         case TEXT_STATE_5:
             if (Message_ShouldAdvance(play)) {
                 EnZos_ChangeAnim(this, EN_ZOS_ANIM_HANDS_ON_HIPS, ANIMMODE_LOOP);
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 this->actionFunc = func_80BBC14C;
                 this->unk_2B6 |= 1;
             }

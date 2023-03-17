@@ -150,7 +150,7 @@ void func_80952FE0(EnHs* this, PlayState* play) {
     } else {
         this->actionFunc = func_80953180;
         this->stateFlags &= ~4;
-        func_80151938(play, 0x33F6);
+        Message_ContinueTextbox(play, 0x33F6);
         func_80952DFC(play);
     }
     this->stateTimer++;
@@ -178,20 +178,20 @@ void func_80953180(EnHs* this, PlayState* play) {
         switch (play->msgCtx.currentTextId) {
             case 0x33F4: // text: laughing that they are all roosters (!)
             case 0x33F6: // text: Grog regrets not being able to see his chicks reach adult hood
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 this->actionFunc = func_8095345C;
                 break;
 
             case 0x33F7: // text: notice his chicks are grown up, happy, wants to give you bunny hood
                 this->actor.flags &= ~ACTOR_FLAG_10000;
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 this->actionFunc = func_80953098;
                 func_80953098(this, play);
                 break;
 
             case 0x33F9: // text: laughing that they are all roosters (.)
                 this->actor.flags &= ~ACTOR_FLAG_10000;
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 this->actionFunc = func_8095345C;
                 break;
 
@@ -204,7 +204,7 @@ void func_80953180(EnHs* this, PlayState* play) {
                 break;
 
             default:
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 this->actionFunc = func_8095345C;
                 break;
         }

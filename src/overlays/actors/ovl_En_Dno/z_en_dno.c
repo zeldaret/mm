@@ -441,7 +441,7 @@ void func_80A71F18(EnDno* this, PlayState* play) {
 
                     case EN_DNO_ANIM_IMPLORE_END:
                         if (this->skelAnime.curFrame == this->skelAnime.endFrame) {
-                            func_801477B4(play);
+                            Message_CloseTextbox(play);
                             SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, EN_DNO_ANIM_IDLE,
                                                             &this->animIndex);
                             func_80A71B68(this, play);
@@ -474,7 +474,7 @@ void func_80A71F18(EnDno* this, PlayState* play) {
 
                         case EN_DNO_ANIM_IMPLORE_END:
                             if (this->skelAnime.curFrame == this->skelAnime.endFrame) {
-                                func_801477B4(play);
+                                Message_CloseTextbox(play);
                                 SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, EN_DNO_ANIM_IDLE,
                                                                 &this->animIndex);
                                 func_80A71B68(this, play);
@@ -485,13 +485,13 @@ void func_80A71F18(EnDno* this, PlayState* play) {
 
                 case 0x80C:
                     if (Message_ShouldAdvance(play)) {
-                        func_80151938(play, 0x80D);
+                        Message_ContinueTextbox(play, 0x80D);
                     }
                     break;
 
                 case 0x80D:
                     if (Message_ShouldAdvance(play)) {
-                        func_80151938(play, 0x80E);
+                        Message_ContinueTextbox(play, 0x80E);
                     }
                     break;
 
@@ -505,21 +505,21 @@ void func_80A71F18(EnDno* this, PlayState* play) {
                                                             &this->animIndex);
                         }
                     } else if ((this->animIndex == EN_DNO_ANIM_IDLE) && Message_ShouldAdvance(play)) {
-                        func_801477B4(play);
+                        Message_CloseTextbox(play);
                         func_80A71B68(this, play);
                     }
                     break;
 
                 case 0x80F:
                     if (Message_ShouldAdvance(play)) {
-                        func_80151938(play, 0x810);
+                        Message_ContinueTextbox(play, 0x810);
                     }
                     break;
 
                 case 0x810:
                     if (Message_ShouldAdvance(play)) {
                         this->unk_3B0 |= 0x20;
-                        func_801477B4(play);
+                        Message_CloseTextbox(play);
                         func_80A71B68(this, play);
                         break;
                     }
@@ -541,7 +541,7 @@ void func_80A71F18(EnDno* this, PlayState* play) {
 
                 case 0x811:
                     if (Message_ShouldAdvance(play)) {
-                        func_801477B4(play);
+                        Message_CloseTextbox(play);
                         func_80A71B68(this, play);
                     }
                     break;
@@ -676,7 +676,7 @@ void func_80A725F8(EnDno* this, PlayState* play) {
                             this->getItemId = GI_MASK_SCENTS;
                         }
                         Actor_OfferGetItem(&this->actor, play, this->getItemId, 60.0f, 60.0f);
-                        func_801477B4(play);
+                        Message_CloseTextbox(play);
                         func_80A72B84(this, play);
                     }
                     break;
@@ -699,14 +699,14 @@ void func_80A725F8(EnDno* this, PlayState* play) {
                         }
                     } else if ((this->animIndex == EN_DNO_ANIM_GREETING_WITH_CANDLE) &&
                                (this->skelAnime.curFrame == this->skelAnime.endFrame)) {
-                        func_801477B4(play);
+                        Message_CloseTextbox(play);
                         func_80A72438(this, play);
                     }
                     break;
 
                 case 0x806:
                     if (Message_ShouldAdvance(play)) {
-                        func_80151938(play, 0x800);
+                        Message_ContinueTextbox(play, 0x800);
                     }
                     break;
 

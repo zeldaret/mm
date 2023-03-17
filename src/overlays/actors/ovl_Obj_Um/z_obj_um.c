@@ -937,7 +937,7 @@ s32 func_80B7984C(PlayState* play, ObjUm* this, s32 arg2, s32* arg3) {
         return 0;
     }
     if (*arg3 == 3) {
-        func_80151938(play, this->dyna.actor.textId);
+        Message_ContinueTextbox(play, this->dyna.actor.textId);
         *arg3 = 1;
         return 0;
     }
