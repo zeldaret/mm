@@ -2684,10 +2684,7 @@ void func_8018450C(PlayState* play, SkeletonInfo* skeleton, Mtx* mtx, OverrideKe
 // void func_801850A0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
 // void func_801853C8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
 // void func_80185460(void);
-//void Slowly_Main(SlowlyTask* slowly);
-//void Slowly_ThreadEntry(SlowlyTask* slowly);
-void Slowly_Start(SlowlyTask* slowly, void* stack, void (*callback)(), void* callbackArg0, void* callbackArg1);
-void Slowly_Stop(SlowlyTask* slowly);
+
 // void func_801857C0(void);
 // char* func_801857D0(void);
 // void func_80185864(void);
