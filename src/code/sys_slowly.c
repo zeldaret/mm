@@ -30,7 +30,7 @@ void Slowly_ThreadEntry(void* arg) {
     Slowly_Main(slowly);
 }
 
-void Slowly_Start(SlowlyMgr* slowly, void* stack, SlowlyCallbackTwo callback, void* arg0, void* arg1) {
+void Slowly_Init(SlowlyMgr* slowly, void* stack, SlowlyCallbackTwo callback, void* arg0, void* arg1) {
     bzero(slowly, sizeof(SlowlyMgr));
 
     slowly->argCount = 2;
@@ -43,6 +43,6 @@ void Slowly_Start(SlowlyMgr* slowly, void* stack, SlowlyCallbackTwo callback, vo
     osStartThread(&slowly->thread);
 }
 
-void Slowly_Stop(SlowlyMgr* slowly) {
+void Slowly_Destroy(SlowlyMgr* slowly) {
     osDestroyThread(&slowly->thread);
 }

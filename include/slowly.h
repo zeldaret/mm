@@ -25,7 +25,7 @@ typedef struct {
     /* 0x1BC */ void* arg1;
 } SlowlyMgr; // size = 0x1C0
 
-void Slowly_Start(SlowlyMgr* slowly, void* stack, SlowlyCallbackTwo callback, void* arg0, void* arg1);
-void Slowly_Stop(SlowlyMgr* slowly);
+void Slowly_Init(SlowlyMgr* slowly, void* stack, SlowlyCallbackTwo callback, void* arg0, void* arg1);
+void Slowly_Destroy(SlowlyMgr* slowly);
 
 #endif
