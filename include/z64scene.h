@@ -433,7 +433,7 @@ typedef struct {
 
 typedef struct {
     /* 0x00 */ u16 unknown;
-    /* 0x02 */ s8 bgId;
+    /* 0x02 */ s8 bgID;
     /* 0x04 */ u32 imagePtr;
     /* 0x08 */ u32 unknown2;
     /* 0x0C */ u32 unknown3;
