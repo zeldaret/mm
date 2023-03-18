@@ -5548,7 +5548,7 @@ void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2) {
 
         rot.x = 1.6707964f;
         rot.y = 1.0f;
-        rot.z = (Camera_GetInputDirYaw(mainCam) * -(M_PI / 0x8000)) + rot.y; // -BINANG_TO_RAD(Camera_GetInputDirYaw(mainCam))
+        rot.z = (Camera_GetInputDirYaw(mainCam) * -(M_PI / 0x8000)) + rot.y;
 
         for (i = 0; i < (u8)D_8090CCD0; i++) {
             pos.x = randPlusMinusPoint5Scaled(700.0f) + play->view.eye.x;
