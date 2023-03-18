@@ -1,3 +1,13 @@
+/**
+ * @file sys_slowly.c
+ *
+ * This file implements a manager for running an asynchronous task on a thread with the lowest priority.
+ *
+ * The task callback is expected to have up to 2 void* arguments and have a void return. Setting `argCount` will adjust
+ * how many args the callback gets called with, but defaults to 2 and using the 2 argument callback.
+ *
+ * @note: `argCount` must be set manually, as this file implements no way to configure it.
+ */
 #include "slowly.h"
 #include "global.h"
 
