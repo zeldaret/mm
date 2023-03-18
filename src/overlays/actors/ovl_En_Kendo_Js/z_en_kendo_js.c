@@ -193,6 +193,7 @@ void func_80B2654C(EnKendoJs* this, PlayState* play) {
         } else if ((Player_GetMask(play) != PLAYER_MASK_NONE) && (Player_GetMask(play) < PLAYER_MASK_GIANT)) {
             u16 sp2E = Player_GetMask(play) + 0x273C;
 
+            //! FAKE:
             if (1) {}
 
             Message_StartTextbox(play, sp2E, &this->actor);

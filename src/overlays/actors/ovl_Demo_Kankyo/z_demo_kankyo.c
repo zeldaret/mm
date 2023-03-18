@@ -444,6 +444,7 @@ void DemoKankyo_Init(Actor* thisx, PlayState* play) {
     for (i = 0; i < ARRAY_COUNT(this->effects); i++) { this->effects[i].state = DEMO_KANKYO_STATE_INIT; }
     // clang-format on
 
+    //! FAKE:
     if (1) {}
 
     switch (this->actor.params) {

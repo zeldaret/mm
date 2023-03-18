@@ -42,6 +42,7 @@ s32 Snap_RecordPictographedActors(PlayState* play) {
                     break;
             }
 
+            //! FAKE:
             if (1) {}
 
             // Actors which may be pictographed anywhere
