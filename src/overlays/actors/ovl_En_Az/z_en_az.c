@@ -1835,7 +1835,7 @@ void EnAz_Draw(Actor* thisx, PlayState* play2) {
         } else {
             Matrix_Push();
             Matrix_Translate(0.0f, 2000.0f, -2000.0f, MTXMODE_APPLY);
-            Matrix_RotateZS(D_80A993D0[this->unk_384].z * (0x10000 / 360.0f), MTXMODE_APPLY);
+            Matrix_RotateZS(DEG_TO_BINANG(D_80A993D0[this->unk_384].z), MTXMODE_APPLY);
             Matrix_Scale(D_80A993AC[this->unk_384].x, D_80A993AC[this->unk_384].y, 0.0f, MTXMODE_APPLY);
             if (this->unk_374 & 0x800) {
                 gSPSegment(POLY_XLU_DISP++, 0x08, Gfx_PrimColor(play->state.gfxCtx, 0x80, 255, 255, 255, 255));
@@ -1846,7 +1846,7 @@ void EnAz_Draw(Actor* thisx, PlayState* play2) {
             gSPDisplayList(POLY_XLU_DISP++, gBeaverYoungerBrotherTailVortexDL);
             Matrix_Pop();
             Matrix_Translate(0.0f, 2000.0f, -2100.0f, MTXMODE_APPLY);
-            Matrix_RotateZS(D_80A993D0[this->unk_384].z * (0x10000 / 360.0f), MTXMODE_APPLY);
+            Matrix_RotateZS(DEG_TO_BINANG(D_80A993D0[this->unk_384].z), MTXMODE_APPLY);
             Matrix_Scale(D_80A993D0[this->unk_384].x, D_80A993D0[this->unk_384].y, 0.0f, MTXMODE_APPLY);
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_XLU_DISP++, gBeaverYoungerBrotherTailSplashDL);

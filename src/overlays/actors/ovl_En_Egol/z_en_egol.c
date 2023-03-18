@@ -767,8 +767,8 @@ void EnEgol_Laser(EnEgol* this, PlayState* play) {
                  * rotToNorm.x = func_80086B30(nz, ny) * 0x8000 / M_PI;
                  * rotToNorm.z = func_80086B30(-nx, sqrtf(1.0f - SQ(nx))) * 0x8000 / M_PI;
                  */
-                rotToNorm.x = -func_80086B30(-nz * ny, 1.0f) * 0x8000 / M_PI;
-                rotToNorm.z = func_80086B30(-nx * ny, 1.0f) * 0x8000 / M_PI;
+                rotToNorm.x = RAD_TO_BINANG_ALT2(-func_80086B30(-nz * ny, 1.0f));
+                rotToNorm.z = RAD_TO_BINANG_ALT2(func_80086B30(-nx * ny, 1.0f));
 
                 if ((this->actor.world.pos.y - 50.0f) <= player->actor.world.pos.y) {
                     EnEgol_SpawnEffect(this, &hitPos, &rotToNorm, 100, 0.02f, EYEGORE_EFFECT_IMPACT);
