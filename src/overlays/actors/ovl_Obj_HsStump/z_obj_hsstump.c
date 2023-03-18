@@ -94,7 +94,7 @@ void ObjHsStump_Appear(ObjHsStump* this, PlayState* play) {
             s16 numDirections = 4;
             Vec3f iceSmokePosOffset;
             Vec3f iceSmokeVelOffset;
-            s16 rotAngle;
+            s16 iceSmokeAngle;
             Vec3f iceSmokeVel;
             f32 baseAngle;
             Vec3f iceSmokePos;
@@ -110,9 +110,10 @@ void ObjHsStump_Appear(ObjHsStump* this, PlayState* play) {
             baseAngle = (s32)DEG_TO_BINANG_ALT3(360.0f / numDirections);
 
             for (i = 0; i < numDirections; i++) {
-                rotAngle = i * baseAngle;
-                Lib_Vec3f_TranslateAndRotateY(&this->dyna.actor.world.pos, rotAngle, &iceSmokePosOffset, &iceSmokePos);
-                Lib_Vec3f_TranslateAndRotateY(&gZeroVec3f, rotAngle, &iceSmokeVelOffset, &iceSmokeVel);
+                iceSmokeAngle = i * baseAngle;
+                Lib_Vec3f_TranslateAndRotateY(&this->dyna.actor.world.pos, iceSmokeAngle, &iceSmokePosOffset,
+                                              &iceSmokePos);
+                Lib_Vec3f_TranslateAndRotateY(&gZeroVec3f, iceSmokeAngle, &iceSmokeVelOffset, &iceSmokeVel);
                 EffectSsIceSmoke_Spawn(play, &iceSmokePos, &iceSmokeVel, &sIceSmokeAccel, 100);
             }
         }
