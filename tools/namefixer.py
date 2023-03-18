@@ -304,6 +304,8 @@ wordReplace = {
     "func_800B867C": "Actor_TextboxIsClosing",
     "func_800BDC5C": "Actor_ChangeAnimationByInfo",
     "Actor_ChangeAnimation": "Actor_ChangeAnimationByInfo",
+    "func_801477B4": "Message_CloseTextbox",
+    "func_80151938": "Message_ContinueTextbox",
     "func_80152498": "Message_GetState",
     "func_800B8898": "Actor_GetScreenPos",
     "Audio_PlayActorSound2": "Actor_PlaySfx",

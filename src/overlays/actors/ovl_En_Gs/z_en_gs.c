@@ -249,7 +249,7 @@ void func_80997E4C(EnGs* this, PlayState* play) {
                                 this->unk_210 = this->unk_195 + 0x20F7;
                                 break;
                         }
-                        func_80151938(play, this->unk_210);
+                        Message_ContinueTextbox(play, this->unk_210);
                         break;
 
                     default:
