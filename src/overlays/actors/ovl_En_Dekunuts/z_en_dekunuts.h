@@ -14,7 +14,7 @@ enum {
     /* 0x00 */ ENDEKUNUTS_GET_FF00_0,
     /* 0x01 */ ENDEKUNUTS_GET_FF00_1,
     /* 0x02 */ ENDEKUNUTS_GET_FF00_2,
-    /* 0xFF */ ENDEKUNUTS_GET_FF00_FF = 0xFF,
+    /* 0xFF */ ENDEKUNUTS_GET_FF00_FF = 0xFF
 };
 
 typedef struct EnDekunuts {
