@@ -446,9 +446,9 @@ typedef struct {
 } BackgroundRecord; // size = 0x1C
 
 typedef struct {
-    /* 0x0 */ s16 playerXMax;
+    /* 0x0 */ s16 playerXMax; 
     /* 0x2 */ s16 playerZMax;
-    /* 0x4 */ s16 playerXMin;
+    /* 0x4 */ s16 playerXMin; 
     /* 0x6 */ s16 playerZMin;
     /* 0x8 */ u32 opaqueDList;
     /* 0xC */ u32 translucentDList;
@@ -459,7 +459,7 @@ typedef struct {
     /* 0x1 */ u8 numEntries;
     /* 0x4 */ u32 dListStart;
     /* 0x8 */ u32 dListEnd;
-} MeshHeader2; // size = 0xC
+} MeshHeader2; // size = 0xC 
 
 typedef struct {
     /* 0x0 */ u8 count; // number of points in the path
