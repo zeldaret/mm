@@ -111,8 +111,7 @@ void ObjHsStump_Appear(ObjHsStump* this, PlayState* play) {
 
             for (i = 0; i < numDirections; i++) {
                 rotAngle = i * baseAngle;
-                Lib_Vec3f_TranslateAndRotateY(&this->dyna.actor.world.pos, rotAngle, &iceSmokePosOffset,
-                                              &iceSmokePos);
+                Lib_Vec3f_TranslateAndRotateY(&this->dyna.actor.world.pos, rotAngle, &iceSmokePosOffset, &iceSmokePos);
                 Lib_Vec3f_TranslateAndRotateY(&gZeroVec3f, rotAngle, &iceSmokeVelOffset, &iceSmokeVel);
                 EffectSsIceSmoke_Spawn(play, &iceSmokePos, &iceSmokeVel, &sIceSmokeAccel, 100);
             }
