@@ -19,7 +19,7 @@ typedef struct EnSlime {
     /* 0x144 */ EnSlimeActionFunc actionFunc;
     /* 0x148 */ u8 iceBlockTimer;
     /* 0x149 */ u8 eyeTexIndex;
-    /* 0x14A */ u8 damageEffectType;
+    /* 0x14A */ u8 drawDmgEffType;
     /* 0x14C */ s16 timer;
     /* 0x14E */ s16 idleRotY;
     /* 0x150 */ s16 respawnRotY;
@@ -29,9 +29,9 @@ typedef struct EnSlime {
                     Vec3f wobbleRot;
                 };
     /* 0x160 */ TexturePtr dropObjectTex;
-    /* 0x164 */ f32 effectAlpha;
-    /* 0x168 */ f32 effectScale;
-    /* 0x16C */ f32 frozenSteamScale;
+    /* 0x164 */ f32 drawDmgEffAlpha;
+    /* 0x168 */ f32 drawDmgEffScale;
+    /* 0x16C */ f32 drawDmgEffFrozenSteamScale;
     /* 0x170 */ f32 distLimit;
     /* 0x174 */ Vec3f respawnScale;
     /* 0x180 */ Vec3f limbPos[EN_SLIME_LIMBPOS_COUNT];

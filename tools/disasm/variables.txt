@@ -11158,7 +11158,7 @@
     0x80A31B3C:("sColChkInfoInit","CollisionCheckInfoInit","",0x1),
     0x80A31B44:("sEyeTextures","TexturePtr","",0x4),
     0x80A31B54:("sInitChain","InitChainEntry","",0x1),
-    0x80A31B5C:("sVirtualAddrInit","s32","",0x1),
+    0x80A31B5C:("sTexturesDesegmented","s32","",0x1),
     0x80A31B60:("sBubblePrimColor","Color_RGBA8","",0x1),
     0x80A31B64:("sBubbleEnvColor","Color_RGBA8","",0x1),
     0x80A31B68:("sBubbleAccel","Vec3f","",0x1),
