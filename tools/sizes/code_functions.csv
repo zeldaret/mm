@@ -2959,8 +2959,8 @@ asm/non_matchings/code/c_keyframe/func_801853C8.s,func_801853C8,0x801853C8,0x26
 asm/non_matchings/code/c_keyframe/func_80185460.s,func_80185460,0x80185460,0x80
 asm/non_matchings/code/sys_slowly/Slowly_Main.s,Slowly_Main,0x80185660,0x27
 asm/non_matchings/code/sys_slowly/Slowly_ThreadEntry.s,Slowly_ThreadEntry,0x801856FC,0x8
-asm/non_matchings/code/sys_slowly/Slowly_Start.s,Slowly_Start,0x8018571C,0x21
-asm/non_matchings/code/sys_slowly/Slowly_Stop.s,Slowly_Stop,0x801857A0,0x8
+asm/non_matchings/code/sys_slowly/Slowly_Init.s,Slowly_Init,0x8018571C,0x21
+asm/non_matchings/code/sys_slowly/Slowly_Destroy.s,Slowly_Destroy,0x801857A0,0x8
 asm/non_matchings/code/sys_flashrom/func_801857C0.s,func_801857C0,0x801857C0,0x4
 asm/non_matchings/code/sys_flashrom/func_801857D0.s,func_801857D0,0x801857D0,0x25
 asm/non_matchings/code/sys_flashrom/func_80185864.s,func_80185864,0x80185864,0x29
