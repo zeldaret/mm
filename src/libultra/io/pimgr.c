@@ -1,9 +1,10 @@
 #include "global.h"
+#include "stack.h"
 
 OSPiHandle D_8009D130;
 OSPiHandle D_8009D1A8;
-OSThread D_8009D220;
-u8 piManagerStack[0x1000];
+OSThread sPiMgrThread;
+STACK(sPiMgrStack, 0x1000);
 OSMesgQueue D_8009E3D0;
 OSMesg D_8009E3E8[1];
 
@@ -27,14 +28,14 @@ void osCreatePiManager(OSPri pri, OSMesgQueue* cmdQ, OSMesg* cmdBuf, s32 cmdMsgC
         }
         savedMask = __osDisableInt();
         __osPiDevMgr.active = 1;
-        __osPiDevMgr.thread = &D_8009D220;
+        __osPiDevMgr.thread = &sPiMgrThread;
         __osPiDevMgr.cmdQueue = cmdQ;
         __osPiDevMgr.evtQueue = &D_8009E3D0;
         __osPiDevMgr.acsQueue = &__osPiAccessQueue;
         __osPiDevMgr.piDmaCallback = __osPiRawStartDma;
         __osPiDevMgr.epiDmaCallback = __osEPiRawStartDma;
-        osCreateThread(&D_8009D220, 0, __osDevMgrMain, (void*)&__osPiDevMgr, &piManagerStack[4096], pri);
-        osStartThread(&D_8009D220);
+        osCreateThread(&sPiMgrThread, 0, __osDevMgrMain, &__osPiDevMgr, STACK_TOP(sPiMgrStack), pri);
+        osStartThread(&sPiMgrThread);
         __osRestoreInt(savedMask);
         if (oldPri != -1) {
             osSetThreadPri(NULL, oldPri);

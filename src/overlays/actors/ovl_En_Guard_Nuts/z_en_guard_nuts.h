@@ -6,13 +6,13 @@
 
 struct EnGuardNuts;
 
-typedef void (*EnGuardNutsActionFunc)(struct EnGuardNuts*, GlobalContext*);
+typedef void (*EnGuardNutsActionFunc)(struct EnGuardNuts*, PlayState*);
 
 typedef struct EnGuardNuts {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
-    /* 0x188 */ Vec3s jointTable[OBJECT_DNK_LIMB_MAX];
-    /* 0x1CA */ Vec3s morphTable[OBJECT_DNK_LIMB_MAX];
+    /* 0x188 */ Vec3s jointTable[DEKU_PALACE_GUARD_LIMB_MAX];
+    /* 0x1CA */ Vec3s morphTable[DEKU_PALACE_GUARD_LIMB_MAX];
     /* 0x20C */ EnGuardNutsActionFunc actionFunc;
     /* 0x210 */ s16 eyeState;
     /* 0x212 */ s16 blinkTimer;
@@ -28,7 +28,5 @@ typedef struct EnGuardNuts {
     /* 0x240 */ f32 animFrameCount;
     /* 0x244 */ ColliderCylinder collider;
 } EnGuardNuts; // size = 0x290
-
-extern const ActorInit En_Guard_Nuts_InitVars;
 
 #endif // Z_EN_GUARD_NUTS_H

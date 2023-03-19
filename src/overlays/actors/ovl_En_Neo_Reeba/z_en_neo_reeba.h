@@ -8,7 +8,7 @@
 
 struct EnNeoReeba;
 
-typedef void (*EnNeoReebaActionFunc)(struct EnNeoReeba*, GlobalContext*);
+typedef void (*EnNeoReebaActionFunc)(struct EnNeoReeba*, PlayState*);
 
 typedef struct EnNeoReeba {
     /* 0x000 */ Actor actor;
@@ -30,7 +30,5 @@ typedef struct EnNeoReeba {
     /* 0x30E */ s16 stunTimer;
     /* 0x310 */ u8 drawEffectType;
 } EnNeoReeba; // size = 0x314
-
-extern const ActorInit En_Neo_Reeba_InitVars;
 
 #endif // Z_EN_NEO_REEBA_H

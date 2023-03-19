@@ -10,15 +10,15 @@
 
 #define THIS ((EnZl4*)thisx)
 
-void EnZl4_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnZl4_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnZl4_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnZl4_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnZl4_Init(Actor* thisx, PlayState* play);
+void EnZl4_Destroy(Actor* thisx, PlayState* play);
+void EnZl4_Update(Actor* thisx, PlayState* play);
+void EnZl4_Draw(Actor* thisx, PlayState* play);
 
-void func_809A1D0C(EnZl4* this, GlobalContext* globalCtx);
+void func_809A1D0C(EnZl4* this, PlayState* play);
 
 #if 0
-const ActorInit En_Zl4_InitVars = {
+ActorInit En_Zl4_InitVars = {
     ACTOR_EN_ZL4,
     ACTORCAT_ITEMACTION,
     FLAGS,

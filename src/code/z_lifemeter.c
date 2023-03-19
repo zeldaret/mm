@@ -1,7 +1,6 @@
-#include "prevent_bss_reordering.h"
 #include "global.h"
+#include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
 #include "interface/parameter_static/parameter_static.h"
-#include "prevent_bss_reordering.h"
 
 s16 sHeartsPrimColors[3][3] = { { 255, 70, 50 }, { 255, 190, 0 }, { 100, 100, 255 } };
 s16 sHeartsEnvColors[3][3] = { { 50, 40, 60 }, { 255, 0, 0 }, { 0, 0, 255 } };
@@ -33,10 +32,10 @@ TexturePtr HeartDDTextures[] = {
     gDefenseHeartThreeQuarterTex,
 };
 
-void LifeMeter_Init(GlobalContext* globalCtx) {
-    InterfaceContext* interfaceCtx = &globalCtx->interfaceCtx;
+void LifeMeter_Init(PlayState* play) {
+    InterfaceContext* interfaceCtx = &play->interfaceCtx;
 
-    interfaceCtx->unkTimer = 320;
+    interfaceCtx->healthTimer = 320;
 
     interfaceCtx->health = gSaveContext.save.playerData.health;
 
@@ -71,8 +70,8 @@ void LifeMeter_Init(GlobalContext* globalCtx) {
     sHeartsDDEnv[0][2] = sHeartsDDEnv[1][2] = 0;
 }
 
-void LifeMeter_UpdateColors(GlobalContext* globalCtx) {
-    InterfaceContext* interfaceCtx = &globalCtx->interfaceCtx;
+void LifeMeter_UpdateColors(PlayState* play) {
+    InterfaceContext* interfaceCtx = &play->interfaceCtx;
     f32 factorBeating = interfaceCtx->lifeColorChange * 0.1f;
     f32 ddFactor;
     s32 type = 0;
@@ -167,42 +166,47 @@ void LifeMeter_UpdateColors(GlobalContext* globalCtx) {
     sBeatingHeartsDDEnv[2] = (u8)(bFactor + 0) & 0xFF;
 }
 
-s32 LifeMeter_SaveInterfaceHealth(GlobalContext* globalCtx) {
-    gSaveContext.save.playerData.health = globalCtx->interfaceCtx.health;
+// Unused
+s32 LifeMeter_SaveInterfaceHealth(PlayState* play) {
+    InterfaceContext* interfaceCtx = &play->interfaceCtx;
+
+    gSaveContext.save.playerData.health = interfaceCtx->health;
 
     return 1;
 }
 
-s32 LifeMeter_IncreaseInterfaceHealth(GlobalContext* globalCtx) {
-    InterfaceContext* interfaceCtx = &globalCtx->interfaceCtx;
+// Unused
+s32 LifeMeter_IncreaseInterfaceHealth(PlayState* play) {
+    InterfaceContext* interfaceCtx = &play->interfaceCtx;
 
-    interfaceCtx->unkTimer = 320;
+    interfaceCtx->healthTimer = 320;
     interfaceCtx->health += 0x10;
-    if (globalCtx->interfaceCtx.health >= gSaveContext.save.playerData.health) {
-        globalCtx->interfaceCtx.health = gSaveContext.save.playerData.health;
-        return 1;
+    if (play->interfaceCtx.health >= gSaveContext.save.playerData.health) {
+        play->interfaceCtx.health = gSaveContext.save.playerData.health;
+        return true;
     }
-    return 0;
+    return false;
 }
 
-s32 LifeMeter_DecreaseInterfaceHealth(GlobalContext* globalCtx) {
-    InterfaceContext* interfaceCtx = &globalCtx->interfaceCtx;
+// Unused
+s32 LifeMeter_DecreaseInterfaceHealth(PlayState* play) {
+    InterfaceContext* interfaceCtx = &play->interfaceCtx;
 
-    if (interfaceCtx->unkTimer != 0) {
-        interfaceCtx->unkTimer--;
+    if (interfaceCtx->healthTimer != 0) {
+        interfaceCtx->healthTimer--;
     } else {
-        interfaceCtx->unkTimer = 320;
+        interfaceCtx->healthTimer = 320;
         interfaceCtx->health -= 0x10;
         if (interfaceCtx->health <= 0) {
             interfaceCtx->health = 0;
-            globalCtx->damagePlayer(globalCtx, -(((void)0, gSaveContext.save.playerData.health) + 1));
-            return 1;
+            play->damagePlayer(play, -(((void)0, gSaveContext.save.playerData.health) + 1));
+            return true;
         }
     }
-    return 0;
+    return false;
 }
 
-void LifeMeter_Draw(GlobalContext* globalCtx) {
+void LifeMeter_Draw(PlayState* play) {
     s32 pad[5];
     TexturePtr heartTex;
     s32 curColorSet;
@@ -213,8 +217,8 @@ void LifeMeter_Draw(GlobalContext* globalCtx) {
     f32 posX;
     f32 halfTexSize;
     f32 temp_f4;
-    GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
-    InterfaceContext* interfaceCtx = &globalCtx->interfaceCtx;
+    GraphicsContext* gfxCtx = play->state.gfxCtx;
+    InterfaceContext* interfaceCtx = &play->interfaceCtx;
     Vtx* beatingHeartVtx = interfaceCtx->beatingHeartVtx;
     s32 fractionHeartCount = gSaveContext.save.playerData.health % 0x10;
     s16 healthCapacity = gSaveContext.save.playerData.healthCapacity / 0x10;
@@ -223,13 +227,14 @@ void LifeMeter_Draw(GlobalContext* globalCtx) {
     f32 lifesize = interfaceCtx->lifeSizeChange * 0.1f;
     u32 curCombineModeSet = 0;
     TexturePtr temp = NULL;
-    s32 ddCount = gSaveContext.save.inventory.dungeonKeys[9] - 1;
+    s32 ddCount = gSaveContext.save.inventory.defenseHearts - 1;
 
     OPEN_DISPS(gfxCtx);
 
     if ((gSaveContext.save.playerData.health % 0x10) == 0) {
         fullHeartCount--;
     }
+
     offsetY = 0.0f;
     offsetX = 0.0f;
     curColorSet = -1;
@@ -376,12 +381,13 @@ void LifeMeter_Draw(GlobalContext* globalCtx) {
                 }
             }
             mtx = GRAPH_ALLOC(gfxCtx, sizeof(Mtx));
-            func_801780F0(mtx, 1.0f - (0.32f * lifesize), 1.0f - (0.32f * lifesize), 1.0f - (0.32f * lifesize),
-                          -130.0f + offsetX, 94.5f - offsetY, 0.0f);
+            Mtx_SetTranslateScaleMtx(mtx, 1.0f - (0.32f * lifesize), 1.0f - (0.32f * lifesize),
+                                     1.0f - (0.32f * lifesize), -130.0f + offsetX, 94.5f - offsetY, 0.0f);
             gSPMatrix(OVERLAY_DISP++, mtx, G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPVertex(OVERLAY_DISP++, beatingHeartVtx, 4, 0);
             gSP1Quadrangle(OVERLAY_DISP++, 0, 2, 3, 1, 0);
         }
+
         offsetX += 10.0f;
         if (i == 9) {
             offsetY += 10.0f;
@@ -391,16 +397,16 @@ void LifeMeter_Draw(GlobalContext* globalCtx) {
     CLOSE_DISPS(gfxCtx);
 }
 
-void LifeMeter_UpdateSizeAndBeep(GlobalContext* globalCtx) {
-    InterfaceContext* interfaceCtx = &globalCtx->interfaceCtx;
+void LifeMeter_UpdateSizeAndBeep(PlayState* play) {
+    InterfaceContext* interfaceCtx = &play->interfaceCtx;
 
     if (interfaceCtx->lifeSizeChangeDirection != 0) {
         interfaceCtx->lifeSizeChange--;
         if (interfaceCtx->lifeSizeChange <= 0) {
             interfaceCtx->lifeSizeChange = 0;
             interfaceCtx->lifeSizeChangeDirection = 0;
-            if (!Player_InCsMode(&globalCtx->state) && (globalCtx->pauseCtx.state == 0) &&
-                (globalCtx->pauseCtx.debugState == 0) && LifeMeter_IsCritical() && !Play_InCsMode(globalCtx)) {
+            if (!Player_InCsMode(play) && (play->pauseCtx.state == PAUSE_STATE_OFF) &&
+                (play->pauseCtx.debugEditor == DEBUG_EDITOR_NONE) && LifeMeter_IsCritical() && !Play_InCsMode(play)) {
                 play_sound(NA_SE_SY_HITPOINT_ALARM);
             }
         }
@@ -416,16 +422,14 @@ void LifeMeter_UpdateSizeAndBeep(GlobalContext* globalCtx) {
 u32 LifeMeter_IsCritical(void) {
     s16 criticalThreshold;
 
-    if (gSaveContext.save.playerData.healthCapacity <= 80) { // healthCapacity <= 5 hearts?
-        criticalThreshold = 16;
-
-    } else if (gSaveContext.save.playerData.healthCapacity <= 160) { // healthCapacity <= 10 hearts?
-        criticalThreshold = 24;
-
-    } else if (gSaveContext.save.playerData.healthCapacity <= 240) { // healthCapacity <= 15 hearts?
-        criticalThreshold = 32;
+    if (gSaveContext.save.playerData.healthCapacity <= 0x50) {
+        criticalThreshold = 0x10;
+    } else if (gSaveContext.save.playerData.healthCapacity <= 0xA0) {
+        criticalThreshold = 0x18;
+    } else if (gSaveContext.save.playerData.healthCapacity <= 0xF0) {
+        criticalThreshold = 0x20;
     } else {
-        criticalThreshold = 44;
+        criticalThreshold = 0x2C;
     }
 
     if ((criticalThreshold >= gSaveContext.save.playerData.health) && (gSaveContext.save.playerData.health > 0)) {

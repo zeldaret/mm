@@ -14,11 +14,11 @@ extern f32 func_80086D18(f32 x);
 s32 gUseAtanContFrac;
 
 /**
- * Tangent function computed using libultra __sinf and __cosf
+ * Tangent function computed using libultra sinf and cosf
  */
 // Math_FTanF
 f32 func_80086760(f32 x) {
-    return __sinf(x) / __cosf(x);
+    return sinf(x) / cosf(x);
 }
 
 // Unused

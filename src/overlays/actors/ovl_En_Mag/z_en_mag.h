@@ -9,7 +9,6 @@ typedef struct EnMag {
     /* 0x00000 */ Actor actor;
     /* 0x00144 */ UNK_TYPE1 unk144[0x2C];
     /* 0x00170 */ Font font;
-    /* 0x11EFC */ UNK_TYPE1 unk11EFC[4];
     /* 0x11F00 */ s16 unk11F00; // Set and not used.
     /* 0x11F02 */ s16 unk11F02; // Set and not used.
     /* 0x11F04 */ s16 state; // State of whole actor, uses EnMagState enum
@@ -47,7 +46,5 @@ typedef struct EnMag {
     /* 0x11F72 */ s16 delayTimer; // Delays start of next action in Update.
     /* 0x11F74 */ UNK_TYPE1 unk11F74[4];
 } EnMag; // size = 0x11F78
-
-extern const ActorInit En_Mag_InitVars;
 
 #endif // Z_EN_MAG_H

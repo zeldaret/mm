@@ -5,7 +5,7 @@
 
 struct ObjRaillift;
 
-typedef void (*ObjRailliftActionFunc)(struct ObjRaillift*, GlobalContext*);
+typedef void (*ObjRailliftActionFunc)(struct ObjRaillift*, PlayState*);
 
 #define OBJRAILLIFT_GET_TYPE(thisx) (((thisx)->params >> 0xF) & 1)
 #define OBJRAILLIFT_HAS_FLAG(thisx) (((thisx)->params >> 0xD) & 1)
@@ -37,7 +37,5 @@ typedef struct ObjRaillift {
     /* 0x186 */ s16 waitTimer;
     /* 0x188 */ s16 cutsceneTimer;
 } ObjRaillift; // size = 0x18C
-
-extern const ActorInit Obj_Raillift_InitVars;
 
 #endif // Z_OBJ_RAILLIFT_H

@@ -49,7 +49,7 @@
         <Limb Name="object_jso_Standardlimb_0030F8" Type="Standard" EnumName="OBJECT_JSO_1_LIMB_11" Offset="0x30F8" />
         <Limb Name="object_jso_Standardlimb_003104" Type="Standard" EnumName="OBJECT_JSO_1_LIMB_12" Offset="0x3104" />
         <Limb Name="object_jso_Standardlimb_003110" Type="Standard" EnumName="OBJECT_JSO_1_LIMB_13" Offset="0x3110" />
-        <Skeleton Name="object_jso_Skel_003168" Type="Flex" LimbType="Standard" LimbNone="OBJECT_JSO_1_LIMB_NONE" LimbMax="OBJECT_JSO_1_LIMB_MAX" EnumName="object_jso_1_Limbs" Offset="0x3168" />
+        <Skeleton Name="object_jso_Skel_003168" Type="Flex" LimbType="Standard" LimbNone="OBJECT_JSO_1_LIMB_NONE" LimbMax="OBJECT_JSO_1_LIMB_MAX" EnumName="ObjectJso1Limb" Offset="0x3168" />
         <Animation Name="object_jso_Anim_003238" Offset="0x3238" />
         <Animation Name="object_jso_Anim_003530" Offset="0x3530" />
         <Animation Name="object_jso_Anim_00378C" Offset="0x378C" />
@@ -114,7 +114,7 @@
         <Limb Name="object_jso_Standardlimb_00A990" Type="Standard" EnumName="OBJECT_JSO_2_LIMB_11" Offset="0xA990" />
         <Limb Name="object_jso_Standardlimb_00A99C" Type="Standard" EnumName="OBJECT_JSO_2_LIMB_12" Offset="0xA99C" />
         <Limb Name="object_jso_Standardlimb_00A9A8" Type="Standard" EnumName="OBJECT_JSO_2_LIMB_13" Offset="0xA9A8" />
-        <Skeleton Name="object_jso_Skel_00AA00" Type="Flex" LimbType="Standard" LimbNone="OBJECT_JSO_2_LIMB_NONE" LimbMax="OBJECT_JSO_2_LIMB_MAX" EnumName="object_jso_2_Limbs" Offset="0xAA00" />
+        <Skeleton Name="object_jso_Skel_00AA00" Type="Flex" LimbType="Standard" LimbNone="OBJECT_JSO_2_LIMB_NONE" LimbMax="OBJECT_JSO_2_LIMB_MAX" EnumName="ObjectJso2Limb" Offset="0xAA00" />
         <Animation Name="object_jso_Anim_00AE80" Offset="0xAE80" />
         <Animation Name="object_jso_Anim_00B1DC" Offset="0xB1DC" />
         <Animation Name="object_jso_Anim_00B5F0" Offset="0xB5F0" />

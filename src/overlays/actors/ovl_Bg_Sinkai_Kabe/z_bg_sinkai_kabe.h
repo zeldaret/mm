@@ -2,18 +2,19 @@
 #define Z_BG_SINKAI_KABE_H
 
 #include "global.h"
+#include "overlays/actors/ovl_En_Dragon/z_en_dragon.h"
 
 struct BgSinkaiKabe;
 
-typedef void (*BgSinkaiKabeActionFunc)(struct BgSinkaiKabe*, GlobalContext*);
+typedef void (*BgSinkaiKabeActionFunc)(struct BgSinkaiKabe*, PlayState*);
 
 typedef struct BgSinkaiKabe {
-    /* 0x0000 */ Actor actor;
-    /* 0x0144 */ char unk_144[0x18];
-    /* 0x015C */ BgSinkaiKabeActionFunc actionFunc;
-    /* 0x0160 */ char unk_160[0x10];
+    /* 0x000 */ DynaPolyActor dyna;
+    /* 0x15C */ BgSinkaiKabeActionFunc actionFunc;
+    /* 0x160 */ Actor* deepPython;
+    /* 0x164 */ s16 cutscenes[2];
+    /* 0x168 */ UNK_TYPE1 unk_168[0x4];
+    /* 0x16C */ s32 pythonIndex;
 } BgSinkaiKabe; // size = 0x170
-
-extern const ActorInit Bg_Sinkai_Kabe_InitVars;
 
 #endif // Z_BG_SINKAI_KABE_H

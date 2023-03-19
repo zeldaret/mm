@@ -11,19 +11,19 @@
 
 #define THIS ((ObjArmos*)thisx)
 
-void ObjArmos_Init(Actor* thisx, GlobalContext* globalCtx);
-void ObjArmos_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void ObjArmos_Update(Actor* thisx, GlobalContext* globalCtx);
-void ObjArmos_Draw(Actor* thisx, GlobalContext* globalCtx);
+void ObjArmos_Init(Actor* thisx, PlayState* play);
+void ObjArmos_Destroy(Actor* thisx, PlayState* play);
+void ObjArmos_Update(Actor* thisx, PlayState* play2);
+void ObjArmos_Draw(Actor* thisx, PlayState* play);
 
 void func_809A54B4(ObjArmos* this);
-void func_809A54E0(ObjArmos* this, GlobalContext* globalCtx);
+void func_809A54E0(ObjArmos* this, PlayState* play);
 void func_809A5610(ObjArmos* this);
-void func_809A562C(ObjArmos* this, GlobalContext* globalCtx);
+void func_809A562C(ObjArmos* this, PlayState* play);
 void func_809A57D8(ObjArmos* this);
-void func_809A57F4(ObjArmos* this, GlobalContext* globalCtx);
+void func_809A57F4(ObjArmos* this, PlayState* play);
 
-const ActorInit Obj_Armos_InitVars = {
+ActorInit Obj_Armos_InitVars = {
     ACTOR_OBJ_ARMOS,
     ACTORCAT_PROP,
     FLAGS,
@@ -44,9 +44,9 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 10, ICHAIN_STOP),
 };
 
-s32 func_809A4E00(ObjArmos* this, GlobalContext* globalCtx, s16 arg2) {
-    return !DynaPolyActor_ValidateMove(globalCtx, &this->dyna, 30, arg2, 1) ||
-           !DynaPolyActor_ValidateMove(globalCtx, &this->dyna, 30, arg2, 28);
+s32 func_809A4E00(ObjArmos* this, PlayState* play, s16 arg2) {
+    return !DynaPolyActor_ValidateMove(play, &this->dyna, 30, arg2, 1) ||
+           !DynaPolyActor_ValidateMove(play, &this->dyna, 30, arg2, 28);
 }
 
 s32 func_809A4E68(ObjArmos* this) {
@@ -176,7 +176,7 @@ void func_809A518C(ObjArmos* this, s32 arg1) {
     this->unk_264 = arg1;
 }
 
-void ObjArmos_Init(Actor* thisx, GlobalContext* globalCtx) {
+void ObjArmos_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     ObjArmos* this = THIS;
     s32 sp44 = OBJARMOS_GET_ROTZ_7(&this->dyna.actor);
@@ -189,16 +189,16 @@ void ObjArmos_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->dyna.actor.world.rot.z = this->dyna.actor.shape.rot.x = this->dyna.actor.shape.rot.z = 0;
 
     DynaPolyActor_Init(&this->dyna, 0);
-    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_am_Colheader_005CF8);
+    DynaPolyActor_LoadMesh(play, &this->dyna, &object_am_Colheader_005CF8);
 
-    SkelAnime_Init(globalCtx, &this->skelAnime, &object_am_Skel_005948, &gArmosPushedBackAnim, this->jointTable,
+    SkelAnime_Init(play, &this->skelAnime, &object_am_Skel_005948, &gArmosPushedBackAnim, this->jointTable,
                    this->morphTable, OBJECT_AM_LIMB_MAX);
 
     Animation_Change(&this->skelAnime, &gArmosPushedBackAnim, 0.0f, sp3C, sp3C, ANIMMODE_ONCE, 0.0f);
 
     if (sp40 == 0) {
         func_809A57D8(this);
-    } else if (Flags_GetSwitch(globalCtx, OBJARMOS_GET_7F(&this->dyna.actor))) {
+    } else if (Flags_GetSwitch(play, OBJARMOS_GET_7F(&this->dyna.actor))) {
         if (sp44 == OBJARMOS_ROT_7_0) {
             this->dyna.actor.world.pos.x = this->dyna.actor.home.pos.x + (sp40 * 60);
             func_809A57D8(this);
@@ -219,10 +219,10 @@ void ObjArmos_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-void ObjArmos_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void ObjArmos_Destroy(Actor* thisx, PlayState* play) {
     ObjArmos* this = THIS;
 
-    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
 
 void func_809A54B4(ObjArmos* this) {
@@ -234,7 +234,7 @@ void func_809A54B4(ObjArmos* this) {
     this->unk_266[0] = 0;
 }
 
-void func_809A54E0(ObjArmos* this, GlobalContext* globalCtx) {
+void func_809A54E0(ObjArmos* this, PlayState* play) {
     s32 i;
     s32 sp20 = func_809A4E68(this);
 
@@ -248,11 +248,11 @@ void func_809A54E0(ObjArmos* this, GlobalContext* globalCtx) {
 
     if (sp20 != -1) {
         if ((this->unk_266[sp20] >= 9) && func_809A4F00(this, sp20) && func_809A500C(this, sp20) &&
-            !func_809A4E00(this, globalCtx, (this->dyna.pushForce > 0.0f) ? 90 : 120)) {
+            !func_809A4E00(this, play, (this->dyna.pushForce > 0.0f) ? 90 : 120)) {
             func_809A518C(this, sp20);
             func_809A5610(this);
         } else {
-            GET_PLAYER(globalCtx)->stateFlags2 &= ~0x10;
+            GET_PLAYER(play)->stateFlags2 &= ~PLAYER_STATE2_10;
             this->dyna.pushForce = 0.0f;
         }
     }
@@ -263,7 +263,7 @@ void func_809A5610(ObjArmos* this) {
     this->unk_24C = 5;
 }
 
-void func_809A562C(ObjArmos* this, GlobalContext* globalCtx) {
+void func_809A562C(ObjArmos* this, PlayState* play) {
     s32 pad[2];
     Player* player;
     f32 temp2 = this->unk_260 - *this->unk_25C;
@@ -271,25 +271,25 @@ void func_809A562C(ObjArmos* this, GlobalContext* globalCtx) {
     s32 sp20;
 
     if (Math_StepToF(this->unk_25C, this->unk_260, (Math_SinS(fabsf(temp2) * 546.13336f) * 1.6f) + 1.0f)) {
-        player = GET_PLAYER(globalCtx);
+        player = GET_PLAYER(play);
         temp = OBJARMOS_GET_ROTZ_7(&this->dyna.actor);
         sp20 = false;
 
         if ((temp == OBJARMOS_ROT_7_4) || (temp == OBJARMOS_ROT_7_5) || (temp == OBJARMOS_ROT_7_6)) {
-            if (!func_809A500C(this, this->unk_264) || func_809A4E00(this, globalCtx, 0x5A)) {
-                Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
+            if (!func_809A500C(this, this->unk_264) || func_809A4E00(this, play, 0x5A)) {
+                Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
             }
         } else if (func_809A500C(this, this->unk_264)) {
-            if (func_809A4E00(this, globalCtx, 0x5A)) {
-                Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
+            if (func_809A4E00(this, play, 0x5A)) {
+                Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
             }
         } else {
-            Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
-            Flags_SetSwitch(globalCtx, OBJARMOS_GET_7F(&this->dyna.actor));
+            Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
+            Flags_SetSwitch(play, OBJARMOS_GET_7F(&this->dyna.actor));
             sp20 = true;
         }
 
-        player->stateFlags2 &= ~0x10;
+        player->stateFlags2 &= ~PLAYER_STATE2_10;
         this->dyna.pushForce = 0.0f;
 
         if (!sp20) {
@@ -307,26 +307,26 @@ void func_809A57D8(ObjArmos* this) {
     this->unk_24C = 4;
 }
 
-void func_809A57F4(ObjArmos* this, GlobalContext* globalCtx) {
+void func_809A57F4(ObjArmos* this, PlayState* play) {
     if (fabsf(this->dyna.pushForce) > 0.1f) {
-        GET_PLAYER(globalCtx)->stateFlags2 &= ~0x10;
+        GET_PLAYER(play)->stateFlags2 &= ~PLAYER_STATE2_10;
         this->dyna.pushForce = 0.0f;
     }
 }
 
-void ObjArmos_Update(Actor* thisx, GlobalContext* globalCtx2) {
-    GlobalContext* globalCtx = globalCtx2;
+void ObjArmos_Update(Actor* thisx, PlayState* play2) {
+    PlayState* play = play2;
     ObjArmos* this = THIS;
     s32 sp2C;
 
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
     this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y;
 
     if (this->unk_24C != 0) {
-        Actor_UpdateBgCheckInfo(globalCtx, &this->dyna.actor, 20.0f, 30.0f, 0.0f, this->unk_24C);
+        Actor_UpdateBgCheckInfo(play, &this->dyna.actor, 20.0f, 30.0f, 0.0f, this->unk_24C);
 
-        if ((this->actionFunc == func_809A54E0) && (this->dyna.actor.bgCheckFlags & 1) &&
-            (DynaPoly_GetActor(&globalCtx->colCtx, this->dyna.actor.floorBgId) == NULL)) {
+        if ((this->actionFunc == func_809A54E0) && (this->dyna.actor.bgCheckFlags & BGCHECKFLAG_GROUND) &&
+            (DynaPoly_GetActor(&play->colCtx, this->dyna.actor.floorBgId) == NULL)) {
             this->unk_24C = 0;
         }
 
@@ -334,39 +334,39 @@ void ObjArmos_Update(Actor* thisx, GlobalContext* globalCtx2) {
         this->unk_250.y = this->dyna.actor.world.pos.y + 20.0f;
         this->unk_250.z = (Math_CosS(this->dyna.actor.shape.rot.y) * -9.0f) + this->dyna.actor.world.pos.z;
 
-        this->dyna.actor.floorHeight = BgCheck_EntityRaycastFloor5(&globalCtx->colCtx, &this->dyna.actor.floorPoly,
-                                                                   &sp2C, &this->dyna.actor, &this->unk_250);
+        this->dyna.actor.floorHeight = BgCheck_EntityRaycastFloor5(&play->colCtx, &this->dyna.actor.floorPoly, &sp2C,
+                                                                   &this->dyna.actor, &this->unk_250);
     }
 }
 
-void func_809A5960(ObjArmos* this, GlobalContext* globalCtx) {
+void func_809A5960(ObjArmos* this, PlayState* play) {
     s32 pad;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
     Vec3f sp28;
 
     sp28.x = Math_SinS(this->dyna.actor.shape.rot.y);
-    Matrix_SetStateRotationAndTranslation(
-        (sp28.x * -9.0f) + this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
-        (Math_CosS(this->dyna.actor.shape.rot.y) * -9.0f) + this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
+    Matrix_SetTranslateRotateYXZ((sp28.x * -9.0f) + this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
+                                 (Math_CosS(this->dyna.actor.shape.rot.y) * -9.0f) + this->dyna.actor.world.pos.z,
+                                 &this->dyna.actor.shape.rot);
     Matrix_Scale(0.014f, 0.014f, 0.014f, MTXMODE_APPLY);
-    func_8012C28C(globalCtx->state.gfxCtx);
+    func_8012C28C(play->state.gfxCtx);
 
     gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 0);
 
-    SkelAnime_DrawOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, NULL, NULL, &this->dyna.actor);
+    SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, NULL, NULL, &this->dyna.actor);
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }
 
-void func_809A5A3C(ObjArmos* this, GlobalContext* globalCtx) {
+void func_809A5A3C(ObjArmos* this, PlayState* play) {
     s32 pad[2];
     MtxF sp48;
 
     if (this->dyna.actor.floorPoly != NULL) {
-        OPEN_DISPS(globalCtx->state.gfxCtx);
+        OPEN_DISPS(play->state.gfxCtx);
 
-        func_8012C448(globalCtx->state.gfxCtx);
+        func_8012C448(play->state.gfxCtx);
 
         gDPSetCombineLERP(POLY_XLU_DISP++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, COMBINED, 0, 0, 0,
                           COMBINED);
@@ -374,19 +374,19 @@ void func_809A5A3C(ObjArmos* this, GlobalContext* globalCtx) {
 
         func_800C0094(this->dyna.actor.floorPoly, this->unk_250.x, this->dyna.actor.floorHeight, this->unk_250.z,
                       &sp48);
-        Matrix_SetCurrentState(&sp48);
+        Matrix_Put(&sp48);
         Matrix_Scale(0.6f, 1.0f, 0.6f, MTXMODE_APPLY);
 
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, gCircleShadowDL);
 
-        CLOSE_DISPS(globalCtx->state.gfxCtx);
+        CLOSE_DISPS(play->state.gfxCtx);
     }
 }
 
-void ObjArmos_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void ObjArmos_Draw(Actor* thisx, PlayState* play) {
     ObjArmos* this = THIS;
 
-    func_809A5960(this, globalCtx);
-    func_809A5A3C(this, globalCtx);
+    func_809A5960(this, play);
+    func_809A5A3C(this, play);
 }

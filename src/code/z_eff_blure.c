@@ -309,6 +309,7 @@ void EffectBlure_GetComputedValues(EffectBlure* this, s32 index, f32 ratio, Vec3
     Vec3s sp30;
     f32 mode4Param;
     EffectBlureElement* elem = &this->elements[index];
+    Vec3s* unusedPtr = &sp30; // Optimized out but seems necessary to match stack usage
 
     switch (this->calcMode) {
         case 1:
@@ -367,8 +368,6 @@ void EffectBlure_GetComputedValues(EffectBlure* this, s32 index, f32 ratio, Vec3
             break;
     }
 
-    sp30 = sp30; // Optimized out but seems necessary to match stack usage
-
     if (this->flags & 0x10) {
         color1->r = color1->g = color1->b = color1->a = 255;
         color2->r = color2->g = color2->b = color2->a = 255;
@@ -409,7 +408,7 @@ void EffectBlure_DrawElemNoInterpolation(EffectBlure* this, EffectBlureElement* 
 
     Math_Vec3s_ToVec3f(&sp6C, &this->elements[0].p2);
 
-    vtx = GRAPH_ALLOC(gfxCtx, sizeof(Vtx[4]));
+    vtx = GRAPH_ALLOC(gfxCtx, 4 * sizeof(Vtx));
     if (vtx == NULL) {
     } else {
         vtx[0].v = baseVtx;
@@ -560,7 +559,7 @@ void EffectBlure_DrawElemHermiteInterpolation(EffectBlure* this, EffectBlureElem
     Math_Vec3f_Scale(&sp174, 0.5f);
     Math_Vec3f_Scale(&sp168, 0.5f);
 
-    vtx = GRAPH_ALLOC(gfxCtx, sizeof(Vtx[16]));
+    vtx = GRAPH_ALLOC(gfxCtx, 16 * sizeof(Vtx));
     if (vtx == NULL) {
     } else {
         Math_Vec3f_Diff(&sp1CC, &sp138, &sp158);
@@ -850,7 +849,7 @@ void EffectBlure_DrawSimple(EffectBlure* this2, GraphicsContext* gfxCtx) {
     if (this->numElements >= 2) {
         vtxCount = this->numElements * 4;
 
-        vtx = GRAPH_ALLOC(gfxCtx, ALIGN16(vtxCount * sizeof(Vtx)));
+        vtx = GRAPH_ALLOC(gfxCtx, vtxCount * sizeof(Vtx));
         if (vtx == NULL) {
             return;
         }
@@ -942,7 +941,7 @@ void EffectBlure_Draw(void* thisx, GraphicsContext* gfxCtx) {
             func_8012C560(gfxCtx);
             gDPPipeSync(POLY_XLU_DISP++);
 
-            vtx = GRAPH_ALLOC(gfxCtx, sizeof(Vtx[32]));
+            vtx = GRAPH_ALLOC(gfxCtx, 32 * sizeof(Vtx));
             if (vtx == NULL) {
             } else {
                 j = 0;

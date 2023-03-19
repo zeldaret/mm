@@ -5,6 +5,9 @@
  */
 
 #include "z_file_choose.h"
+#include "z64rumble.h"
+#include "z64shrink_window.h"
+#include "z64view.h"
 
 extern UNK_TYPE D_01002800;
 extern UNK_TYPE D_01007980;
@@ -18,15 +21,15 @@ extern GfxMasterList D_0E000000;
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_8080BC20.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/FileChoose_nop8080bc44.s")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/FileSelect_nop8080bc44.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/FileChoose_nop8080BC4C.s")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/FileSelect_nop8080BC4C.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_8080BC58.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_8080BDAC.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/FileChoose_RenderView.s")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/FileSelect_RenderView.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_8080BE60.s")
 
@@ -84,13 +87,13 @@ extern GfxMasterList D_0E000000;
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_80812ED0.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/FileChoose_UpdateAndDrawSkybox.s")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/FileSelect_UpdateAndDrawSkybox.s")
 
-void FileChoose_Main(GameState* thisx);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/FileChoose_Main.s")
+void FileSelect_Main(GameState* thisx);
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/FileSelect_Main.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_80813908.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/FileChoose_Destroy.s")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/FileSelect_Destroy.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/FileChoose_Init.s")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/FileSelect_Init.s")

@@ -12,14 +12,14 @@
 
 #define THIS ((EnNutsball*)thisx)
 
-void EnNutsball_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnNutsball_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnNutsball_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnNutsball_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnNutsball_Init(Actor* thisx, PlayState* play);
+void EnNutsball_Destroy(Actor* thisx, PlayState* play);
+void EnNutsball_Update(Actor* thisx, PlayState* play2);
+void EnNutsball_Draw(Actor* thisx, PlayState* play);
 
 void EnNutsball_InitColliderParams(EnNutsball* this);
 
-const ActorInit En_Nutsball_InitVars = {
+ActorInit En_Nutsball_InitVars = {
     ACTOR_EN_NUTSBALL,
     ACTORCAT_PROP,
     FLAGS,
@@ -51,13 +51,13 @@ static ColliderCylinderInit sCylinderInit = {
     { 13, 13, 0, { 0, 0, 0 } },
 };
 
-void EnNutsball_Init(Actor* thisx, GlobalContext* globalCtx) {
+void EnNutsball_Init(Actor* thisx, PlayState* play) {
     EnNutsball* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 400.0f, ActorShadow_DrawCircle, 13.0f);
-    Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
+    Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     this->actor.shape.rot.y = 0;
-    this->actor.speedXZ = 10.0f;
+    this->actor.speed = 10.0f;
     if (this->actor.params == 2) {
         this->timer = 1;
         this->timerThreshold = 0;
@@ -74,9 +74,9 @@ void EnNutsball_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-void EnNutsball_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnNutsball_Destroy(Actor* thisx, PlayState* play) {
     EnNutsball* this = THIS;
-    Collider_DestroyCylinder(globalCtx, &this->collider);
+    Collider_DestroyCylinder(play, &this->collider);
 }
 
 void EnNutsball_InitColliderParams(EnNutsball* this) {
@@ -86,10 +86,10 @@ void EnNutsball_InitColliderParams(EnNutsball* this) {
     this->collider.info.toucher.damage = 2;
 }
 
-void EnNutsball_Update(Actor* thisx, GlobalContext* globalCtx2) {
-    GlobalContext* globalCtx = globalCtx2;
+void EnNutsball_Update(Actor* thisx, PlayState* play2) {
+    PlayState* play = play2;
     EnNutsball* this = THIS;
-    Player* player = GET_PLAYER(globalCtx);
+    Player* player = GET_PLAYER(play);
     Vec3f worldPos;
     Vec3s worldRot;
     Vec3f spawnBurstPos;
@@ -97,56 +97,57 @@ void EnNutsball_Update(Actor* thisx, GlobalContext* globalCtx2) {
     s32 bgId;
     CollisionPoly* poly;
 
-    if (!(player->stateFlags1 & 0x300000C0)) {
+    if (!(player->stateFlags1 &
+          (PLAYER_STATE1_40 | PLAYER_STATE1_80 | PLAYER_STATE1_10000000 | PLAYER_STATE1_20000000))) {
         this->timer--;
         if (this->timer < 0) {
             this->actor.velocity.y += this->actor.gravity;
             spdXZ = sqrtf((this->actor.velocity.x * this->actor.velocity.x) +
                           (this->actor.velocity.z * this->actor.velocity.z));
-            this->actor.world.rot.x = Math_FAtan2F(spdXZ, this->actor.velocity.y);
+            this->actor.world.rot.x = Math_Atan2S_XY(spdXZ, this->actor.velocity.y);
         }
         this->actor.home.rot.z += 0x2AA8;
-        if ((this->actor.bgCheckFlags & 8) || (this->actor.bgCheckFlags & 1) || (this->actor.bgCheckFlags & 16) ||
-            (this->collider.base.atFlags & AT_HIT) || (this->collider.base.acFlags & AC_HIT) ||
-            (this->collider.base.ocFlags1 & OC1_HIT)) {
+        if ((this->actor.bgCheckFlags & BGCHECKFLAG_WALL) || (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) ||
+            (this->actor.bgCheckFlags & BGCHECKFLAG_CEILING) || (this->collider.base.atFlags & AT_HIT) ||
+            (this->collider.base.acFlags & AC_HIT) || (this->collider.base.ocFlags1 & OC1_HIT)) {
             if ((player->currentShield == PLAYER_SHIELD_HEROS_SHIELD) && (this->collider.base.atFlags & AT_HIT) &&
                 (this->collider.base.atFlags & AT_TYPE_ENEMY) && (this->collider.base.atFlags & AT_BOUNCED)) {
                 EnNutsball_InitColliderParams(this);
-                func_8018219C(&player->shieldMf, &worldRot, 0);
+                Matrix_MtxFToYXZRot(&player->shieldMf, &worldRot, false);
                 this->actor.world.rot.y = BINANG_ROT180(worldRot.y);
                 this->timer = 20;
             } else {
                 spawnBurstPos.x = this->actor.world.pos.x;
                 spawnBurstPos.y = this->actor.world.pos.y + 4.0f;
                 spawnBurstPos.z = this->actor.world.pos.z;
-                EffectSsHahen_SpawnBurst(globalCtx, &spawnBurstPos, 6.0f, 0, 7, 3, 15, HAHEN_OBJECT_DEFAULT, 10, NULL);
+                EffectSsHahen_SpawnBurst(play, &spawnBurstPos, 6.0f, 0, 7, 3, 15, HAHEN_OBJECT_DEFAULT, 10, NULL);
                 if (this->actor.params == 1) {
-                    SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 20, NA_SE_EV_NUTS_BROKEN);
+                    SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 20, NA_SE_EV_NUTS_BROKEN);
                 } else {
-                    SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 20, NA_SE_EN_OCTAROCK_ROCK);
+                    SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 20, NA_SE_EN_OCTAROCK_ROCK);
                 }
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
             }
         } else {
             if (this->timer == -300) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
             }
         }
 
         Actor_MoveWithoutGravity(&this->actor);
         Math_Vec3f_Copy(&worldPos, &this->actor.world.pos);
-        Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 10.0f, 5.0f, 10.0f, 0x7);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 5.0f, 10.0f, 0x7);
 
-        if (this->actor.bgCheckFlags & 8) {
-            if (func_800C9A4C(&globalCtx->colCtx, this->actor.wallPoly, this->actor.wallBgId) & 0x30) {
-                this->actor.bgCheckFlags &= ~8;
-                if (BgCheck_EntityLineTest1(&globalCtx->colCtx, &this->actor.prevPos, &worldPos, &this->actor.world.pos,
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
+            if (func_800C9A4C(&play->colCtx, this->actor.wallPoly, this->actor.wallBgId) & 0x30) {
+                this->actor.bgCheckFlags &= ~BGCHECKFLAG_WALL;
+                if (BgCheck_EntityLineTest1(&play->colCtx, &this->actor.prevPos, &worldPos, &this->actor.world.pos,
                                             &poly, true, false, false, true, &bgId)) {
-                    if (func_800C9A4C(&globalCtx->colCtx, poly, bgId) & 0x30) {
+                    if (func_800C9A4C(&play->colCtx, poly, bgId) & 0x30) {
                         this->actor.world.pos.x += this->actor.velocity.x * 0.01f;
                         this->actor.world.pos.z += this->actor.velocity.z * 0.01f;
                     } else {
-                        this->actor.bgCheckFlags |= 8;
+                        this->actor.bgCheckFlags |= BGCHECKFLAG_WALL;
                     }
                 } else {
                     Math_Vec3f_Copy(&this->actor.world.pos, &worldPos);
@@ -157,23 +158,23 @@ void EnNutsball_Update(Actor* thisx, GlobalContext* globalCtx2) {
 
         this->actor.flags |= ACTOR_FLAG_1000000;
 
-        CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
-        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+        CollisionCheck_SetAT(play, &play->colChkCtx, &this->collider.base);
+        CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
 
         if (this->timer < this->timerThreshold) {
-            CollisionCheck_SetOC(globalCtx, &globalCtx2->colChkCtx, &this->collider.base);
+            CollisionCheck_SetOC(play, &play2->colChkCtx, &this->collider.base);
         }
     }
 }
 
-void EnNutsball_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void EnNutsball_Draw(Actor* thisx, PlayState* play) {
     EnNutsball* this = THIS;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
-    func_8012C28C(globalCtx->state.gfxCtx);
-    Matrix_InsertMatrix(&globalCtx->billboardMtxF, MTXMODE_APPLY);
-    Matrix_InsertZRotation_s(this->actor.home.rot.z, MTXMODE_APPLY);
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    OPEN_DISPS(play->state.gfxCtx);
+    func_8012C28C(play->state.gfxCtx);
+    Matrix_Mult(&play->billboardMtxF, MTXMODE_APPLY);
+    Matrix_RotateZS(this->actor.home.rot.z, MTXMODE_APPLY);
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_058BA0);
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }

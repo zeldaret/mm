@@ -1,4 +1,5 @@
 #include "global.h"
+#include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
 
 Gfx sSetupDL[438] = {
     /* 0x00 */
@@ -777,19 +778,19 @@ Gfx* Gfx_SetFog(Gfx* gfx, s32 r, s32 g, s32 b, s32 a, s32 n, s32 f) {
 
     if (n >= 997) {
         if (n >= 1000) {
-            gSPFogFactor(gfx + 1, 0, 0); // gSPFogPosition(gfx++, ?, ?)
+            gSPFogFactor(&gfx[1], 0, 0); // gSPFogPosition(gfx++, ?, ?)
         } else {
-            gSPFogFactor(gfx + 1, 0x7FFF, 0x8100); // gSPFogPosition(gfx++, ?, ?)
+            gSPFogFactor(&gfx[1], 0x7FFF, 0x8100); // gSPFogPosition(gfx++, ?, ?)
         }
     } else {
         if (n < 0) {
-            gSPFogFactor(gfx + 1, 0, 255); // gSPFogPosition(gfx++, ?, ?)
+            gSPFogFactor(&gfx[1], 0, 255); // gSPFogPosition(gfx++, ?, ?)
         } else {
-            gSPFogPosition(gfx + 1, n, f);
+            gSPFogPosition(&gfx[1], n, f);
         }
     }
 
-    return gfx + 2;
+    return &gfx[2];
 }
 
 Gfx* Gfx_SetFogWithSync(Gfx* gfx, s32 r, s32 g, s32 b, s32 a, s32 n, s32 f) {
@@ -896,8 +897,8 @@ void func_8012C240(GraphicsContext* gfxCtx) {
     gSPDisplayList(gfxCtx->polyXlu.p++, &sSetupDL[6 * 0x19]);
 }
 
-void func_8012C268(GlobalContext* globalCtx) {
-    func_8012C28C(globalCtx->state.gfxCtx);
+void func_8012C268(PlayState* play) {
+    func_8012C28C(play->state.gfxCtx);
 }
 
 void func_8012C28C(GraphicsContext* gfxCtx) {
@@ -1107,13 +1108,13 @@ void func_8012CA38(GraphicsContext* gfxCtx) {
 }
 
 Gfx* Gfx_BranchTexScroll(Gfx** gfxp, u32 x, u32 y, s32 width, s32 height) {
-    Gfx* displayList = Graph_DlistAlloc(gfxp, 3 * sizeof(Gfx));
+    Gfx* gfx = Graph_DlistAlloc(gfxp, 3 * sizeof(Gfx));
 
-    gDPTileSync(displayList);
-    gDPSetTileSize(displayList + 1, 0, x, y, (x + ((width - 1) << 2)), (y + ((height - 1) << 2)));
-    gSPEndDisplayList(displayList + 2);
+    gDPTileSync(&gfx[0]);
+    gDPSetTileSize(&gfx[1], 0, x, y, (x + ((width - 1) << 2)), (y + ((height - 1) << 2)));
+    gSPEndDisplayList(&gfx[2]);
 
-    return displayList;
+    return gfx;
 }
 
 void func_8012CB04(Gfx** gfxp, u32 x, u32 y) {
@@ -1125,101 +1126,71 @@ Gfx* func_8012CB28(GraphicsContext* gfxCtx, u32 x, u32 y) {
 }
 
 Gfx* Gfx_TexScroll(GraphicsContext* gfxCtx, u32 x, u32 y, s32 width, s32 height) {
-    Gfx* displayList;
-
-    {
-        Gfx* _g = (Gfx*)gfxCtx->polyOpa.d - 4;
-        displayList = _g;
-        gfxCtx->polyOpa.d = _g;
-    }
+    Gfx* gfx = GRAPH_ALLOC(gfxCtx, 3 * sizeof(Gfx));
 
     x %= 2048;
     y %= 2048;
 
-    gDPTileSync(displayList);
-    gDPSetTileSize(displayList + 1, 0, x, y, (x + ((width - 1) << 2)), (y + ((height - 1) << 2)));
-    gSPEndDisplayList(displayList + 2);
+    gDPTileSync(&gfx[0]);
+    gDPSetTileSize(&gfx[1], 0, x, y, (x + ((width - 1) << 2)), (y + ((height - 1) << 2)));
+    gSPEndDisplayList(&gfx[2]);
 
-    return displayList;
+    return gfx;
 }
 
 Gfx* Gfx_TwoTexScroll(GraphicsContext* gfxCtx, s32 tile1, u32 x1, u32 y1, s32 width1, s32 height1, s32 tile2, u32 x2,
                       u32 y2, s32 width2, s32 height2) {
-    Gfx* displayList;
-
-    {
-        Gfx* _g = (Gfx*)gfxCtx->polyOpa.d - 6;
-        displayList = _g;
-        gfxCtx->polyOpa.d = _g;
-    }
+    Gfx* gfx = GRAPH_ALLOC(gfxCtx, 5 * sizeof(Gfx));
 
     x1 %= 2048;
     y1 %= 2048;
     x2 %= 2048;
     y2 %= 2048;
 
-    gDPTileSync(displayList);
-    gDPSetTileSize(displayList + 1, tile1, x1, y1, (x1 + ((width1 - 1) << 2)), (y1 + ((height1 - 1) << 2)));
-    gDPTileSync(displayList + 2);
-    gDPSetTileSize(displayList + 3, tile2, x2, y2, (x2 + ((width2 - 1) << 2)), (y2 + ((height2 - 1) << 2)));
-    gSPEndDisplayList(displayList + 4);
+    gDPTileSync(&gfx[0]);
+    gDPSetTileSize(&gfx[1], tile1, x1, y1, (x1 + ((width1 - 1) << 2)), (y1 + ((height1 - 1) << 2)));
+    gDPTileSync(&gfx[2]);
+    gDPSetTileSize(&gfx[3], tile2, x2, y2, (x2 + ((width2 - 1) << 2)), (y2 + ((height2 - 1) << 2)));
+    gSPEndDisplayList(&gfx[4]);
 
-    return displayList;
+    return gfx;
 }
 
 Gfx* Gfx_TwoTexScrollEnvColor(GraphicsContext* gfxCtx, s32 tile1, u32 x1, u32 y1, s32 width1, s32 height1, s32 tile2,
                               u32 x2, u32 y2, s32 width2, s32 height2, s32 r, s32 g, s32 b, s32 a) {
-    Gfx* displayList;
-
-    {
-        Gfx* _g = (Gfx*)gfxCtx->polyOpa.d - 6;
-        displayList = _g;
-        gfxCtx->polyOpa.d = _g;
-    }
+    Gfx* gfx = GRAPH_ALLOC(gfxCtx, 6 * sizeof(Gfx));
 
     x1 %= 2048;
     y1 %= 2048;
     x2 %= 2048;
     y2 %= 2048;
 
-    gDPTileSync(displayList);
-    gDPSetTileSize(displayList + 1, tile1, x1, y1, (x1 + ((width1 - 1) << 2)), (y1 + ((height1 - 1) << 2)));
-    gDPTileSync(displayList + 2);
-    gDPSetTileSize(displayList + 3, tile2, x2, y2, (x2 + ((width2 - 1) << 2)), (y2 + ((height2 - 1) << 2)));
-    gDPSetEnvColor(displayList + 4, r, g, b, a);
-    gSPEndDisplayList(displayList + 5);
+    gDPTileSync(&gfx[0]);
+    gDPSetTileSize(&gfx[1], tile1, x1, y1, (x1 + ((width1 - 1) << 2)), (y1 + ((height1 - 1) << 2)));
+    gDPTileSync(&gfx[2]);
+    gDPSetTileSize(&gfx[3], tile2, x2, y2, (x2 + ((width2 - 1) << 2)), (y2 + ((height2 - 1) << 2)));
+    gDPSetEnvColor(&gfx[4], r, g, b, a);
+    gSPEndDisplayList(&gfx[5]);
 
-    return displayList;
+    return gfx;
 }
 
 Gfx* Gfx_EnvColor(GraphicsContext* gfxCtx, s32 r, s32 g, s32 b, s32 a) {
-    Gfx* displayList;
+    Gfx* gfx = GRAPH_ALLOC(gfxCtx, 2 * sizeof(Gfx));
 
-    {
-        Gfx* _g = (Gfx*)gfxCtx->polyOpa.d - 2;
-        displayList = _g;
-        gfxCtx->polyOpa.d = _g;
-    }
+    gDPSetEnvColor(&gfx[0], r, g, b, a);
+    gSPEndDisplayList(&gfx[1]);
 
-    gDPSetEnvColor(displayList, r, g, b, a);
-    gSPEndDisplayList(displayList + 1);
-
-    return displayList;
+    return gfx;
 }
 
 Gfx* Gfx_PrimColor(GraphicsContext* gfxCtx, s32 lodfrac, s32 r, s32 g, s32 b, s32 a) {
-    Gfx* displayList;
+    Gfx* gfx = GRAPH_ALLOC(gfxCtx, 2 * sizeof(Gfx));
 
-    {
-        Gfx* _g = (Gfx*)gfxCtx->polyOpa.d - 2;
-        displayList = _g;
-        gfxCtx->polyOpa.d = _g;
-    }
+    gDPSetPrimColor(&gfx[0], 0, lodfrac, r, g, b, a);
+    gSPEndDisplayList(&gfx[1]);
 
-    gDPSetPrimColor(displayList, 0, lodfrac, r, g, b, a);
-    gSPEndDisplayList(displayList + 1);
-
-    return displayList;
+    return gfx;
 }
 
 void func_8012CF0C(GraphicsContext* gfxCtx, s32 clearFb, s32 clearZb, u8 r, u8 g, u8 b) {
@@ -1239,11 +1210,11 @@ void func_8012CF0C(GraphicsContext* gfxCtx, s32 clearFb, s32 clearZb, u8 r, u8 g
 
     gSPDisplayList(&masterGfx[0], D_0E000000.syncSegments);
     gSPDisplayList(&masterGfx[1], sFillSetupDL);
-    gDPSetColorImage(&masterGfx[2], G_IM_FMT_RGBA, G_IM_SIZ_16b, D_801FBBCC, &D_0F000000);
+    gDPSetColorImage(&masterGfx[2], G_IM_FMT_RGBA, G_IM_SIZ_16b, D_801FBBCC, D_0F000000);
     if (zbuffer != NULL) {
         gDPSetDepthImage(&masterGfx[3], zbuffer);
     } else {
-        gDPSetDepthImage(&masterGfx[3], &D_0F000000);
+        gDPSetDepthImage(&masterGfx[3], D_0F000000);
     }
     gSPEndDisplayList(&masterGfx[4]);
 
@@ -1267,7 +1238,7 @@ void func_8012CF0C(GraphicsContext* gfxCtx, s32 clearFb, s32 clearZb, u8 r, u8 g
         gDPSetRenderMode(&masterGfx[3], G_RM_NOOP, G_RM_NOOP2);
         gDPSetFillColor(&masterGfx[4], (GPACK_RGBA5551(255, 255, 240, 0) << 16) | GPACK_RGBA5551(255, 255, 240, 0));
         gSPDisplayList(&masterGfx[5], D_0E000000.clearFillRect);
-        gDPSetColorImage(&masterGfx[6], G_IM_FMT_RGBA, G_IM_SIZ_16b, D_801FBBCC, &D_0F000000);
+        gDPSetColorImage(&masterGfx[6], G_IM_FMT_RGBA, G_IM_SIZ_16b, D_801FBBCC, D_0F000000);
         gSPEndDisplayList(&masterGfx[7]);
     }
 
@@ -1275,7 +1246,7 @@ void func_8012CF0C(GraphicsContext* gfxCtx, s32 clearFb, s32 clearZb, u8 r, u8 g
 
     masterGfx = gGfxMasterDL->clearFrameBuffer;
 
-    gDPSetColorImage(&masterGfx[0], G_IM_FMT_RGBA, G_IM_SIZ_16b, D_801FBBCC, &D_0F000000);
+    gDPSetColorImage(&masterGfx[0], G_IM_FMT_RGBA, G_IM_SIZ_16b, D_801FBBCC, D_0F000000);
     gDPSetCycleType(&masterGfx[1], G_CYC_FILL);
     gDPSetRenderMode(&masterGfx[2], G_RM_NOOP, G_RM_NOOP2);
     gDPSetFillColor(&masterGfx[3], (GPACK_RGBA5551(r, g, b, 1) << 16) | GPACK_RGBA5551(r, g, b, 1));
@@ -1328,7 +1299,7 @@ void func_8012CF0C(GraphicsContext* gfxCtx, s32 clearFb, s32 clearZb, u8 r, u8 g
 }
 
 void func_8012D374(GraphicsContext* gfxCtx, u8 r, u8 g, u8 b) {
-    if ((R_PAUSE_MENU_MODE < 2) && (D_801F6D10 < 2)) {
+    if ((R_PAUSE_BG_PRERENDER_STATE <= PAUSE_BG_PRERENDER_SETUP) && (gTransitionTileState <= TRANS_TILE_SETUP)) {
         func_8012CF0C(gfxCtx, true, true, r, g, b);
     } else {
         func_8012CF0C(gfxCtx, false, false, r, g, b);

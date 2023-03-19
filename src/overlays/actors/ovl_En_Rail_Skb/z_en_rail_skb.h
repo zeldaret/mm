@@ -2,10 +2,11 @@
 #define Z_EN_RAIL_SKB_H
 
 #include "global.h"
+#include "overlays/actors/ovl_Obj_Hakaisi/z_obj_hakaisi.h"
 
 struct EnRailSkb;
 
-typedef void (*EnRailSkbActionFunc)(struct EnRailSkb*, GlobalContext*);
+typedef void (*EnRailSkbActionFunc)(struct EnRailSkb*, PlayState*);
 typedef void (*EnRailSkbUnkFunc)(struct EnRailSkb*);
 
 #define ENRAILSKB_GET_FF00(thisx) (((thisx)->params >> 8) & 0xFF)
@@ -41,7 +42,5 @@ typedef struct EnRailSkb {
     /* 0x402 */ u8 unk_402;
     /* 0x403 */ u8 drawDmgEffType;
 } EnRailSkb; // size = 0x404
-
-extern const ActorInit En_Rail_Skb_InitVars;
 
 #endif // Z_EN_RAIL_SKB_H

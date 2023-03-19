@@ -5,7 +5,7 @@
 
 struct EnBom;
 
-typedef void (*EnBomActionFunc)(struct EnBom*, GlobalContext*);
+typedef void (*EnBomActionFunc)(struct EnBom*, PlayState*);
 
 #define ENBOM_GETX_1(thisx) ((thisx)->shape.rot.x & 1)
 #define ENBOM_GETZ_80(thisx) ((thisx)->shape.rot.z & 0x80)
@@ -30,7 +30,5 @@ typedef struct EnBom {
     /* 0x1FC */ u8 unk_1FC;
     /* 0x200 */ EnBomActionFunc actionFunc;
 } EnBom; // size = 0x204
-
-extern const ActorInit En_Bom_InitVars;
 
 #endif // Z_EN_BOM_H

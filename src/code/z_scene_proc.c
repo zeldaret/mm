@@ -1,3 +1,4 @@
+#include "prevent_bss_reordering.h"
 #include "global.h"
 
 s32 sMatAnimStep;
@@ -22,8 +23,8 @@ static Gfx sSceneDrawDefaultDL[] = {
 /**
  * Executes the current scene draw config handler.
  */
-void Scene_ExecuteDrawConfig(GlobalContext* globalCtx) {
-    static void (*sceneDrawConfigHandlers[])(GlobalContext*) = {
+void Scene_Draw(PlayState* play) {
+    static void (*sceneDrawConfigHandlers[])(PlayState*) = {
         Scene_DrawConfigDefault,
         Scene_DrawConfigMatAnim,
         Scene_DrawConfigDoNothing,
@@ -34,27 +35,27 @@ void Scene_ExecuteDrawConfig(GlobalContext* globalCtx) {
         Scene_DrawConfigMatAnimManualStep,
     };
 
-    sceneDrawConfigHandlers[globalCtx->sceneConfig](globalCtx);
+    sceneDrawConfigHandlers[play->sceneConfig](play);
 }
 
 /**
  * SceneTableEntry Draw Config 0:
  * Default scene draw config function. This just executes `sSceneDrawDefaultDL`.
  */
-void Scene_DrawConfigDefault(GlobalContext* globalCtx) {
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+void Scene_DrawConfigDefault(PlayState* play) {
+    OPEN_DISPS(play->state.gfxCtx);
 
     gSPDisplayList(POLY_OPA_DISP++, sSceneDrawDefaultDL);
     gSPDisplayList(POLY_XLU_DISP++, sSceneDrawDefaultDL);
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }
 
 /**
  * Returns a pointer to a single layer texture scroll displaylist.
  */
-Gfx* AnimatedMat_TexScroll(GlobalContext* globalCtx, AnimatedMatTexScrollParams* params) {
-    return Gfx_TexScroll(globalCtx->state.gfxCtx, params->xStep * sMatAnimStep, -(params->yStep * sMatAnimStep),
+Gfx* AnimatedMat_TexScroll(PlayState* play, AnimatedMatTexScrollParams* params) {
+    return Gfx_TexScroll(play->state.gfxCtx, params->xStep * sMatAnimStep, -(params->yStep * sMatAnimStep),
                          params->width, params->height);
 }
 
@@ -62,11 +63,11 @@ Gfx* AnimatedMat_TexScroll(GlobalContext* globalCtx, AnimatedMatTexScrollParams*
  * Animated Material Type 0:
  * Scrolls a single layer texture using the provided `AnimatedMatTexScrollParams`.
  */
-void AnimatedMat_DrawTexScroll(GlobalContext* globalCtx, s32 segment, void* params) {
+void AnimatedMat_DrawTexScroll(PlayState* play, s32 segment, void* params) {
     AnimatedMatTexScrollParams* texScrollParams = (AnimatedMatTexScrollParams*)params;
-    Gfx* texScrollDList = AnimatedMat_TexScroll(globalCtx, texScrollParams);
+    Gfx* texScrollDList = AnimatedMat_TexScroll(play, texScrollParams);
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
     if (sMatAnimFlags & 1) {
         gSPSegment(POLY_OPA_DISP++, segment, texScrollDList);
@@ -76,28 +77,27 @@ void AnimatedMat_DrawTexScroll(GlobalContext* globalCtx, s32 segment, void* para
         gSPSegment(POLY_XLU_DISP++, segment, texScrollDList);
     }
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }
 
 /**
  * Returns a pointer to a two layer texture scroll displaylist.
  */
-Gfx* AnimatedMat_TwoLayerTexScroll(GlobalContext* globalCtx, AnimatedMatTexScrollParams* params) {
-    return Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, params[0].xStep * sMatAnimStep,
-                            -(params[0].yStep * sMatAnimStep), params[0].width, params[0].height, 1,
-                            params[1].xStep * sMatAnimStep, -(params[1].yStep * sMatAnimStep), params[1].width,
-                            params[1].height);
+Gfx* AnimatedMat_TwoLayerTexScroll(PlayState* play, AnimatedMatTexScrollParams* params) {
+    return Gfx_TwoTexScroll(play->state.gfxCtx, 0, params[0].xStep * sMatAnimStep, -(params[0].yStep * sMatAnimStep),
+                            params[0].width, params[0].height, 1, params[1].xStep * sMatAnimStep,
+                            -(params[1].yStep * sMatAnimStep), params[1].width, params[1].height);
 }
 
 /**
  * Animated Material Type 1:
  * Scrolls a two layer texture using the provided `AnimatedMatTexScrollParams`.
  */
-void AnimatedMat_DrawTwoTexScroll(GlobalContext* globalCtx, s32 segment, void* params) {
+void AnimatedMat_DrawTwoTexScroll(PlayState* play, s32 segment, void* params) {
     AnimatedMatTexScrollParams* texScrollParams = (AnimatedMatTexScrollParams*)params;
-    Gfx* texScrollDList = AnimatedMat_TwoLayerTexScroll(globalCtx, texScrollParams);
+    Gfx* texScrollDList = AnimatedMat_TwoLayerTexScroll(play, texScrollParams);
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
     if (sMatAnimFlags & 1) {
         gSPSegment(POLY_OPA_DISP++, segment, texScrollDList);
@@ -107,39 +107,39 @@ void AnimatedMat_DrawTwoTexScroll(GlobalContext* globalCtx, s32 segment, void* p
         gSPSegment(POLY_XLU_DISP++, segment, texScrollDList);
     }
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }
 
 /**
  * Generates a displaylist that sets the prim and env color, and stores it in the provided segment ID.
  */
-void AnimatedMat_SetColor(GlobalContext* globalCtx, s32 segment, F3DPrimColor* primColorResult, F3DEnvColor* envColor) {
-    Gfx* colorDList = GRAPH_ALLOC(globalCtx->state.gfxCtx, sizeof(Gfx) * 4);
+void AnimatedMat_SetColor(PlayState* play, s32 segment, F3DPrimColor* primColorResult, F3DEnvColor* envColor) {
+    Gfx* gfx = GRAPH_ALLOC(play->state.gfxCtx, 3 * sizeof(Gfx));
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
     // clang-format off
-    if (sMatAnimFlags & 1) { gSPSegment(POLY_OPA_DISP++, segment, colorDList); }
-    if (sMatAnimFlags & 2) { gSPSegment(POLY_XLU_DISP++, segment, colorDList); }
+    if (sMatAnimFlags & 1) { gSPSegment(POLY_OPA_DISP++, segment, gfx); }
+    if (sMatAnimFlags & 2) { gSPSegment(POLY_XLU_DISP++, segment, gfx); }
     // clang-format on
 
-    gDPSetPrimColor(colorDList++, 0, primColorResult->lodFrac, primColorResult->r, primColorResult->g,
-                    primColorResult->b, (u8)(primColorResult->a * sMatAnimAlphaRatio));
+    gDPSetPrimColor(gfx++, 0, primColorResult->lodFrac, primColorResult->r, primColorResult->g, primColorResult->b,
+                    (u8)(primColorResult->a * sMatAnimAlphaRatio));
 
     if (envColor != NULL) {
-        gDPSetEnvColor(colorDList++, envColor->r, envColor->g, envColor->b, envColor->a);
+        gDPSetEnvColor(gfx++, envColor->r, envColor->g, envColor->b, envColor->a);
     }
 
-    gSPEndDisplayList(colorDList++);
+    gSPEndDisplayList(gfx++);
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }
 
 /**
  * Animated Material Type 2:
  * Color key frame animation without linear interpolation.
  */
-void AnimatedMat_DrawColor(GlobalContext* globalCtx, s32 segment, void* params) {
+void AnimatedMat_DrawColor(PlayState* play, s32 segment, void* params) {
     AnimatedMatColorParams* colorAnimParams = (AnimatedMatColorParams*)params;
     F3DPrimColor* primColor = Lib_SegmentedToVirtual(colorAnimParams->primColors);
     F3DEnvColor* envColor;
@@ -150,7 +150,7 @@ void AnimatedMat_DrawColor(GlobalContext* globalCtx, s32 segment, void* params) 
                    ? (F3DEnvColor*)Lib_SegmentedToVirtual(colorAnimParams->envColors) + curFrame
                    : NULL;
 
-    AnimatedMat_SetColor(globalCtx, segment, primColor, envColor);
+    AnimatedMat_SetColor(play, segment, primColor, envColor);
 }
 
 /**
@@ -164,7 +164,7 @@ s32 AnimatedMat_Lerp(s32 min, s32 max, f32 norm) {
  * Animated Material Type 3:
  * Color key frame animation with linear interpolation.
  */
-void AnimatedMat_DrawColorLerp(GlobalContext* globalCtx, s32 segment, void* params) {
+void AnimatedMat_DrawColorLerp(PlayState* play, s32 segment, void* params) {
     AnimatedMatColorParams* colorAnimParams = (AnimatedMatColorParams*)params;
     F3DPrimColor* primColorMax = Lib_SegmentedToVirtual(colorAnimParams->primColors);
     F3DEnvColor* envColorMax;
@@ -216,7 +216,7 @@ void AnimatedMat_DrawColorLerp(GlobalContext* globalCtx, s32 segment, void* para
         envColorMax = NULL;
     }
 
-    AnimatedMat_SetColor(globalCtx, segment, &primColorResult, (envColorMax != NULL) ? &envColorResult : NULL);
+    AnimatedMat_SetColor(play, segment, &primColorResult, (envColorMax != NULL) ? &envColorResult : NULL);
 }
 
 /**
@@ -234,7 +234,7 @@ f32 Scene_LagrangeInterp(s32 n, f32 x[], f32 fx[], f32 xp) {
     s32 i;
     s32 j;
 
-    for (i = 0, weightsPtr = weights, xPtr1 = x, fxPtr = fx, weightsPtr = weightsPtr; i < n; i++) {
+    for (i = 0, xPtr1 = x, fxPtr = fx, weightsPtr = weights; i < n; i++) {
         for (xVal = *xPtr1, m = 1.0f, j = 0, xPtr2 = x; j < n; j++) {
             if (j != i) {
                 m *= xVal - (*xPtr2);
@@ -277,7 +277,7 @@ u8 Scene_LagrangeInterpColor(s32 n, f32 x[], f32 fx[], f32 xp) {
  * Animated Material Type 4:
  * Color key frame animation with non-linear interpolation.
  */
-void AnimatedMat_DrawColorNonLinearInterp(GlobalContext* globalCtx, s32 segment, void* params) {
+void AnimatedMat_DrawColorNonLinearInterp(PlayState* play, s32 segment, void* params) {
     AnimatedMatColorParams* colorAnimParams = (AnimatedMatColorParams*)params;
     F3DPrimColor* primColorCur = Lib_SegmentedToVirtual(colorAnimParams->primColors);
     F3DEnvColor* envColorCur = Lib_SegmentedToVirtual(colorAnimParams->envColors);
@@ -355,21 +355,21 @@ void AnimatedMat_DrawColorNonLinearInterp(GlobalContext* globalCtx, s32 segment,
         envColorCur = NULL;
     }
 
-    AnimatedMat_SetColor(globalCtx, segment, &primColorResult, (envColorCur != NULL) ? &envColorResult : NULL);
+    AnimatedMat_SetColor(play, segment, &primColorResult, (envColorCur != NULL) ? &envColorResult : NULL);
 }
 
 /**
  * Animated Material Type 5:
  * Cycles between a list of textures (imagine like a GIF)
  */
-void AnimatedMat_DrawTexCycle(GlobalContext* globalCtx, s32 segment, void* params) {
+void AnimatedMat_DrawTexCycle(PlayState* play, s32 segment, void* params) {
     AnimatedMatTexCycleParams* texAnimParams = params;
-    void** texList = Lib_SegmentedToVirtual(texAnimParams->textureList);
+    TexturePtr* texList = Lib_SegmentedToVirtual(texAnimParams->textureList);
     u8* texId = Lib_SegmentedToVirtual(texAnimParams->textureIndexList);
     s32 curFrame = sMatAnimStep % texAnimParams->keyFrameLength;
-    void* tex = Lib_SegmentedToVirtual(texList[texId[curFrame]]);
+    TexturePtr tex = Lib_SegmentedToVirtual(texList[texId[curFrame]]);
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
     if (sMatAnimFlags & 1) {
         gSPSegment(POLY_OPA_DISP++, segment, tex);
@@ -379,15 +379,15 @@ void AnimatedMat_DrawTexCycle(GlobalContext* globalCtx, s32 segment, void* param
         gSPSegment(POLY_XLU_DISP++, segment, tex);
     }
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }
 
 /**
  * This is the main function that handles the animated material system.
  * There are six different animated material types, which should be set in the provided `AnimatedMaterial`.
  */
-void AnimatedMat_DrawMain(GlobalContext* globalCtx, AnimatedMaterial* matAnim, f32 alphaRatio, u32 step, u32 flags) {
-    static void (*matAnimDrawHandlers[])(GlobalContext*, s32 segment, void* params) = {
+void AnimatedMat_DrawMain(PlayState* play, AnimatedMaterial* matAnim, f32 alphaRatio, u32 step, u32 flags) {
+    static void (*matAnimDrawHandlers[])(PlayState*, s32 segment, void* params) = {
         AnimatedMat_DrawTexScroll, AnimatedMat_DrawTwoTexScroll,         AnimatedMat_DrawColor,
         AnimatedMat_DrawColorLerp, AnimatedMat_DrawColorNonLinearInterp, AnimatedMat_DrawTexCycle,
     };
@@ -402,7 +402,7 @@ void AnimatedMat_DrawMain(GlobalContext* globalCtx, AnimatedMaterial* matAnim, f
         do {
             segment = matAnim->segment;
             segmentAbs = ((segment < 0) ? -segment : segment) + 7;
-            matAnimDrawHandlers[matAnim->type](globalCtx, segmentAbs, Lib_SegmentedToVirtual(matAnim->params));
+            matAnimDrawHandlers[matAnim->type](play, segmentAbs, Lib_SegmentedToVirtual(matAnim->params));
             matAnim++;
         } while (segment >= 0);
     }
@@ -411,123 +411,123 @@ void AnimatedMat_DrawMain(GlobalContext* globalCtx, AnimatedMaterial* matAnim, f
 /**
  * Draws an animated material to both OPA and XLU buffers.
  */
-void AnimatedMat_Draw(GlobalContext* globalCtx, AnimatedMaterial* matAnim) {
-    AnimatedMat_DrawMain(globalCtx, matAnim, 1, globalCtx->gameplayFrames, 3);
+void AnimatedMat_Draw(PlayState* play, AnimatedMaterial* matAnim) {
+    AnimatedMat_DrawMain(play, matAnim, 1, play->gameplayFrames, 3);
 }
 
 /**
  * Draws an animated material to only the OPA buffer.
  */
-void AnimatedMat_DrawOpa(GlobalContext* globalCtx, AnimatedMaterial* matAnim) {
-    AnimatedMat_DrawMain(globalCtx, matAnim, 1, globalCtx->gameplayFrames, 1);
+void AnimatedMat_DrawOpa(PlayState* play, AnimatedMaterial* matAnim) {
+    AnimatedMat_DrawMain(play, matAnim, 1, play->gameplayFrames, 1);
 }
 
 /**
  * Draws an animated material to only the XLU buffer.
  */
-void AnimatedMat_DrawXlu(GlobalContext* globalCtx, AnimatedMaterial* matAnim) {
-    AnimatedMat_DrawMain(globalCtx, matAnim, 1, globalCtx->gameplayFrames, 2);
+void AnimatedMat_DrawXlu(PlayState* play, AnimatedMaterial* matAnim) {
+    AnimatedMat_DrawMain(play, matAnim, 1, play->gameplayFrames, 2);
 }
 
 /**
  * Draws an animated material with an alpha ratio (0.0 - 1.0) both OPA and XLU buffers.
  */
-void AnimatedMat_DrawAlpha(GlobalContext* globalCtx, AnimatedMaterial* matAnim, f32 alphaRatio) {
-    AnimatedMat_DrawMain(globalCtx, matAnim, alphaRatio, globalCtx->gameplayFrames, 3);
+void AnimatedMat_DrawAlpha(PlayState* play, AnimatedMaterial* matAnim, f32 alphaRatio) {
+    AnimatedMat_DrawMain(play, matAnim, alphaRatio, play->gameplayFrames, 3);
 }
 
 /**
  * Draws an animated material with an alpha ratio (0.0 - 1.0) to only the OPA buffer.
  */
-void AnimatedMat_DrawAlphaOpa(GlobalContext* globalCtx, AnimatedMaterial* matAnim, f32 alphaRatio) {
-    AnimatedMat_DrawMain(globalCtx, matAnim, alphaRatio, globalCtx->gameplayFrames, 1);
+void AnimatedMat_DrawAlphaOpa(PlayState* play, AnimatedMaterial* matAnim, f32 alphaRatio) {
+    AnimatedMat_DrawMain(play, matAnim, alphaRatio, play->gameplayFrames, 1);
 }
 
 /**
  * Draws an animated material with an alpha ratio (0.0 - 1.0) to only the XLU buffer.
  */
-void AnimatedMat_DrawAlphaXlu(GlobalContext* globalCtx, AnimatedMaterial* matAnim, f32 alphaRatio) {
-    AnimatedMat_DrawMain(globalCtx, matAnim, alphaRatio, globalCtx->gameplayFrames, 2);
+void AnimatedMat_DrawAlphaXlu(PlayState* play, AnimatedMaterial* matAnim, f32 alphaRatio) {
+    AnimatedMat_DrawMain(play, matAnim, alphaRatio, play->gameplayFrames, 2);
 }
 
 /**
  * Draws an animated material with a step to both the OPA and XLU buffers.
  */
-void AnimatedMat_DrawStep(GlobalContext* globalCtx, AnimatedMaterial* matAnim, u32 step) {
-    AnimatedMat_DrawMain(globalCtx, matAnim, 1, step, 3);
+void AnimatedMat_DrawStep(PlayState* play, AnimatedMaterial* matAnim, u32 step) {
+    AnimatedMat_DrawMain(play, matAnim, 1, step, 3);
 }
 
 /**
  * Draws an animated material with a step to only the OPA buffer.
  */
-void AnimatedMat_DrawStepOpa(GlobalContext* globalCtx, AnimatedMaterial* textures, u32 step) {
-    AnimatedMat_DrawMain(globalCtx, textures, 1, step, 1);
+void AnimatedMat_DrawStepOpa(PlayState* play, AnimatedMaterial* matAnim, u32 step) {
+    AnimatedMat_DrawMain(play, matAnim, 1, step, 1);
 }
 
 /**
  * Draws an animated material with a step to only the XLU buffer.
  */
-void AnimatedMat_DrawStepXlu(GlobalContext* globalCtx, AnimatedMaterial* matAnim, u32 step) {
-    AnimatedMat_DrawMain(globalCtx, matAnim, 1, step, 2);
+void AnimatedMat_DrawStepXlu(PlayState* play, AnimatedMaterial* matAnim, u32 step) {
+    AnimatedMat_DrawMain(play, matAnim, 1, step, 2);
 }
 
 /**
  * Draws an animated material with an alpha ratio (0.0 - 1.0) and a step to both the OPA and XLU buffers.
  */
-void AnimatedMat_DrawAlphaStep(GlobalContext* globalCtx, AnimatedMaterial* matAnim, f32 alphaRatio, u32 step) {
-    AnimatedMat_DrawMain(globalCtx, matAnim, alphaRatio, step, 3);
+void AnimatedMat_DrawAlphaStep(PlayState* play, AnimatedMaterial* matAnim, f32 alphaRatio, u32 step) {
+    AnimatedMat_DrawMain(play, matAnim, alphaRatio, step, 3);
 }
 
 /**
  * Draws an animated material with an alpha ratio (0.0 - 1.0) and a step to only the OPA buffer.
  */
-void AnimatedMat_DrawAlphaStepOpa(GlobalContext* globalCtx, AnimatedMaterial* matAnim, f32 alphaRatio, u32 step) {
-    AnimatedMat_DrawMain(globalCtx, matAnim, alphaRatio, step, 1);
+void AnimatedMat_DrawAlphaStepOpa(PlayState* play, AnimatedMaterial* matAnim, f32 alphaRatio, u32 step) {
+    AnimatedMat_DrawMain(play, matAnim, alphaRatio, step, 1);
 }
 
 /**
  * Draws an animated material with an alpha ratio (0.0 - 1.0) and a step to only the XLU buffer.
  */
-void AnimatedMat_DrawAlphaStepXlu(GlobalContext* globalCtx, AnimatedMaterial* matAnim, f32 alphaRatio, u32 step) {
-    AnimatedMat_DrawMain(globalCtx, matAnim, alphaRatio, step, 2);
+void AnimatedMat_DrawAlphaStepXlu(PlayState* play, AnimatedMaterial* matAnim, f32 alphaRatio, u32 step) {
+    AnimatedMat_DrawMain(play, matAnim, alphaRatio, step, 2);
 }
 
 /**
  * SceneTableEntry Draw Config 1:
  * Allows the usage of the animated material system in scenes.
  */
-void Scene_DrawConfigMatAnim(GlobalContext* globalCtx) {
-    AnimatedMat_Draw(globalCtx, globalCtx->sceneMaterialAnims);
+void Scene_DrawConfigMatAnim(PlayState* play) {
+    AnimatedMat_Draw(play, play->sceneMaterialAnims);
 }
 
 /**
  * SceneTableEntry Draw Config 3:
  * This config is unused, although it is identical to the grotto scene config from Ocarina of Time.
  */
-void Scene_DrawConfig3(GlobalContext* globalCtx) {
+void Scene_DrawConfig3(PlayState* play) {
     u32 frames;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
-    frames = globalCtx->gameplayFrames;
+    frames = play->gameplayFrames;
 
-    gSPSegment(POLY_XLU_DISP++, 0x08, Gfx_TexScroll(globalCtx->state.gfxCtx, 0, (frames * 1) % 64, 256, 16));
+    gSPSegment(POLY_XLU_DISP++, 0x08, Gfx_TexScroll(play->state.gfxCtx, 0, (frames * 1) % 64, 256, 16));
 
     gSPSegment(POLY_XLU_DISP++, 0x09,
-               Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 127 - (frames % 128), (frames * 1) % 128, 32, 32, 1,
+               Gfx_TwoTexScroll(play->state.gfxCtx, 0, 127 - (frames % 128), (frames * 1) % 128, 32, 32, 1,
                                 frames % 128, (frames * 1) % 128, 32, 32));
 
     gSPSegment(POLY_OPA_DISP++, 0x0A,
-               Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, 0, 32, 32, 1, 0, 127 - (frames * 1) % 128, 32, 32));
+               Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, 0, 32, 32, 1, 0, 127 - (frames * 1) % 128, 32, 32));
 
-    gSPSegment(POLY_OPA_DISP++, 0x0B, Gfx_TexScroll(globalCtx->state.gfxCtx, 0, (frames * 1) % 128, 32, 32));
+    gSPSegment(POLY_OPA_DISP++, 0x0B, Gfx_TexScroll(play->state.gfxCtx, 0, (frames * 1) % 128, 32, 32));
 
-    gSPSegment(POLY_XLU_DISP++, 0x0C,
-               Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, (frames * 50) % 2048, 8, 512, 1, 0, (frames * 60) % 2048,
-                                8, 512));
+    gSPSegment(
+        POLY_XLU_DISP++, 0x0C,
+        Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, (frames * 50) % 2048, 8, 512, 1, 0, (frames * 60) % 2048, 8, 512));
 
     gSPSegment(POLY_OPA_DISP++, 0x0D,
-               Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, 0, 32, 64, 1, 0, (frames * 1) % 128, 32, 32));
+               Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, 0, 32, 64, 1, 0, (frames * 1) % 128, 32, 32));
 
     gDPPipeSync(POLY_XLU_DISP++);
     gDPSetEnvColor(POLY_XLU_DISP++, 128, 128, 128, 128);
@@ -535,7 +535,7 @@ void Scene_DrawConfig3(GlobalContext* globalCtx) {
     gDPPipeSync(POLY_OPA_DISP++);
     gDPSetEnvColor(POLY_OPA_DISP++, 128, 128, 128, 128);
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }
 
 /**
@@ -543,16 +543,16 @@ void Scene_DrawConfig3(GlobalContext* globalCtx) {
  * This config is unused and just has a single TwoTexScroll intended for two 32x32 textures (likely two water textures).
  * It is identical to the Castle Courtyard and Sacred Forest Meadow scene config from Ocarina of Time.
  */
-void Scene_DrawConfig4(GlobalContext* globalCtx) {
+void Scene_DrawConfig4(PlayState* play) {
     u32 frames;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
-    frames = globalCtx->gameplayFrames;
+    frames = play->gameplayFrames;
 
     gSPSegment(POLY_XLU_DISP++, 0x08,
-               Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 127 - frames % 128, (frames * 1) % 128, 32, 32, 1,
-                                frames % 128, (frames * 1) % 128, 32, 32));
+               Gfx_TwoTexScroll(play->state.gfxCtx, 0, 127 - frames % 128, (frames * 1) % 128, 32, 32, 1, frames % 128,
+                                (frames * 1) % 128, 32, 32));
 
     gDPPipeSync(POLY_OPA_DISP++);
     gDPSetEnvColor(POLY_OPA_DISP++, 128, 128, 128, 128);
@@ -560,20 +560,20 @@ void Scene_DrawConfig4(GlobalContext* globalCtx) {
     gDPPipeSync(POLY_XLU_DISP++);
     gDPSetEnvColor(POLY_XLU_DISP++, 128, 128, 128, 128);
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }
 
 /**
  * SceneTableEntry Draw Config 2:
  * Has no effect, and is only used in SPOT00 (cutscene scene).
  */
-void Scene_DrawConfigDoNothing(GlobalContext* globalCtx) {
+void Scene_DrawConfigDoNothing(PlayState* play) {
 }
 
 /**
  * Stores a displaylist in the provided segment ID that sets a render mode from the index provided.
  */
-void Scene_SetRenderModeXlu(GlobalContext* globalCtx, s32 index, u32 flags) {
+void Scene_SetRenderModeXlu(PlayState* play, s32 index, u32 flags) {
     static Gfx renderModeSetNoneDL[] = {
         gsSPEndDisplayList(),
         // These instructions will never get executed
@@ -612,7 +612,7 @@ void Scene_SetRenderModeXlu(GlobalContext* globalCtx, s32 index, u32 flags) {
     };
     Gfx* dList = dLists[index];
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
     if (flags & 1) {
         gSPSegment(POLY_OPA_DISP++, 0x0C, dList);
@@ -622,14 +622,14 @@ void Scene_SetRenderModeXlu(GlobalContext* globalCtx, s32 index, u32 flags) {
         gSPSegment(POLY_XLU_DISP++, 0x0C, dList);
     }
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }
 
 /**
  * Although this function is unused, it will store a displaylist in the provided segment ID that sets the culling mode
  * from the index provided.
  */
-void Scene_SetCullFlag(GlobalContext* globalCtx, s32 index, u32 flags) {
+void Scene_SetCullFlag(PlayState* play, s32 index, u32 flags) {
     static Gfx setBackCullDL[] = {
         gsSPSetGeometryMode(G_CULL_BACK),
         gsSPEndDisplayList(),
@@ -644,7 +644,7 @@ void Scene_SetCullFlag(GlobalContext* globalCtx, s32 index, u32 flags) {
     };
     Gfx* dList = dLists[index];
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
     if (flags & 1) {
         gSPSegment(POLY_OPA_DISP++, 0x0C, dList);
@@ -654,37 +654,37 @@ void Scene_SetCullFlag(GlobalContext* globalCtx, s32 index, u32 flags) {
         gSPSegment(POLY_XLU_DISP++, 0x0C, dList);
     }
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }
 
 /**
  * SceneTableEntry Draw Config 5:
  * This config is unused, and its purpose is unknown.
  */
-void Scene_DrawConfig5(GlobalContext* globalCtx) {
+void Scene_DrawConfig5(PlayState* play) {
     u32 dListIndex;
     u32 alpha;
 
-    if (globalCtx->roomCtx.unk7A[0] != 0) {
+    if (play->roomCtx.unk7A[0] != 0) {
         dListIndex = 1;
-        alpha = globalCtx->roomCtx.unk7A[1];
+        alpha = play->roomCtx.unk7A[1];
     } else {
         dListIndex = 0;
         alpha = 255;
     }
 
     if (alpha == 0) {
-        globalCtx->roomCtx.unk78 = 0;
+        play->roomCtx.unk78 = 0;
     } else {
-        OPEN_DISPS(globalCtx->state.gfxCtx);
+        OPEN_DISPS(play->state.gfxCtx);
 
-        globalCtx->roomCtx.unk78 = 1;
-        AnimatedMat_Draw(globalCtx, globalCtx->sceneMaterialAnims);
-        Scene_SetRenderModeXlu(globalCtx, dListIndex, 3);
+        play->roomCtx.unk78 = 1;
+        AnimatedMat_Draw(play, play->sceneMaterialAnims);
+        Scene_SetRenderModeXlu(play, dListIndex, 3);
         gDPSetEnvColor(POLY_OPA_DISP++, 255, 255, 255, alpha);
         gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 255, alpha);
 
-        CLOSE_DISPS(globalCtx->state.gfxCtx);
+        CLOSE_DISPS(play->state.gfxCtx);
     }
 }
 
@@ -693,8 +693,8 @@ void Scene_DrawConfig5(GlobalContext* globalCtx) {
  * This is a special draw config for Sakon's Hideout, as well as the Music Box House. Its step value is set manually
  * rather than always animating like `Scene_DrawConfigMatAnim`.
  */
-void Scene_DrawConfigMatAnimManualStep(GlobalContext* globalCtx) {
-    AnimatedMat_DrawStep(globalCtx, globalCtx->sceneMaterialAnims, globalCtx->roomCtx.unk7A[0]);
+void Scene_DrawConfigMatAnimManualStep(PlayState* play) {
+    AnimatedMat_DrawStep(play, play->sceneMaterialAnims, play->roomCtx.unk7A[0]);
 }
 
 /**
@@ -703,90 +703,88 @@ void Scene_DrawConfigMatAnimManualStep(GlobalContext* globalCtx) {
  * fraction to a certain value when certain flags are set, which are likely used for the pipes whenever they are
  * activated.
  */
-void Scene_DrawConfigGreatBayTemple(GlobalContext* globalCtx) {
+void Scene_DrawConfigGreatBayTemple(PlayState* play) {
     static Gfx greatBayTempleColorSetDL[] = {
         gsDPSetPrimColor(0, 255, 255, 255, 255, 255),
         gsSPEndDisplayList(),
     };
     s32 lodFrac;
     s32 i;
-    Gfx* dListHead;
-    Gfx* dList;
+    Gfx* gfx;
+    Gfx* gfxHead;
 
-    if (Flags_GetSwitch(globalCtx, 0x33) && Flags_GetSwitch(globalCtx, 0x34) && Flags_GetSwitch(globalCtx, 0x35) &&
-        Flags_GetSwitch(globalCtx, 0x36)) {
-        BgCheck_SetContextFlags(&globalCtx->colCtx, BGCHECK_FLAG_REVERSE_CONVEYOR_FLOW);
+    if (Flags_GetSwitch(play, 0x33) && Flags_GetSwitch(play, 0x34) && Flags_GetSwitch(play, 0x35) &&
+        Flags_GetSwitch(play, 0x36)) {
+        BgCheck_SetContextFlags(&play->colCtx, BGCHECK_FLAG_REVERSE_CONVEYOR_FLOW);
     } else {
-        BgCheck_UnsetContextFlags(&globalCtx->colCtx, BGCHECK_FLAG_REVERSE_CONVEYOR_FLOW);
+        BgCheck_UnsetContextFlags(&play->colCtx, BGCHECK_FLAG_REVERSE_CONVEYOR_FLOW);
     }
 
-    dList = GRAPH_ALLOC(globalCtx->state.gfxCtx, sizeof(Gfx) * 18);
+    gfxHead = GRAPH_ALLOC(play->state.gfxCtx, 18 * sizeof(Gfx));
 
-    AnimatedMat_Draw(globalCtx, globalCtx->sceneMaterialAnims);
+    AnimatedMat_Draw(play, play->sceneMaterialAnims);
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
-    for (dListHead = dList, i = 0; i < 9; i++, dListHead += 2) {
+    for (gfx = gfxHead, i = 0; i < 9; i++, gfx += 2) {
         lodFrac = 0;
 
-        bcopy(greatBayTempleColorSetDL, dListHead, sizeof(greatBayTempleColorSetDL));
+        bcopy(greatBayTempleColorSetDL, gfx, sizeof(greatBayTempleColorSetDL));
 
         switch (i) {
             case 0:
-                if (Flags_GetSwitch(globalCtx, 0x33) && Flags_GetSwitch(globalCtx, 0x34) &&
-                    Flags_GetSwitch(globalCtx, 0x35) && Flags_GetSwitch(globalCtx, 0x36)) {
+                if (Flags_GetSwitch(play, 0x33) && Flags_GetSwitch(play, 0x34) && Flags_GetSwitch(play, 0x35) &&
+                    Flags_GetSwitch(play, 0x36)) {
                     lodFrac = 255;
                 }
                 break;
             case 1:
-                if (Flags_GetSwitch(globalCtx, 0x37)) {
+                if (Flags_GetSwitch(play, 0x37)) {
                     lodFrac = 68;
                 }
                 break;
             case 2:
-                if (Flags_GetSwitch(globalCtx, 0x37) && Flags_GetSwitch(globalCtx, 0x38)) {
+                if (Flags_GetSwitch(play, 0x37) && Flags_GetSwitch(play, 0x38)) {
                     lodFrac = 68;
                 }
                 break;
             case 3:
-                if (Flags_GetSwitch(globalCtx, 0x37) && Flags_GetSwitch(globalCtx, 0x38) &&
-                    Flags_GetSwitch(globalCtx, 0x39)) {
+                if (Flags_GetSwitch(play, 0x37) && Flags_GetSwitch(play, 0x38) && Flags_GetSwitch(play, 0x39)) {
                     lodFrac = 68;
                 }
                 break;
             case 4:
-                if (!(Flags_GetSwitch(globalCtx, 0x33))) {
+                if (!(Flags_GetSwitch(play, 0x33))) {
                     lodFrac = 68;
                 }
                 break;
             case 5:
-                if (Flags_GetSwitch(globalCtx, 0x34)) {
+                if (Flags_GetSwitch(play, 0x34)) {
                     lodFrac = 68;
                 }
                 break;
             case 6:
-                if (Flags_GetSwitch(globalCtx, 0x34) && Flags_GetSwitch(globalCtx, 0x35)) {
+                if (Flags_GetSwitch(play, 0x34) && Flags_GetSwitch(play, 0x35)) {
                     lodFrac = 68;
                 }
                 break;
             case 7:
-                if (Flags_GetSwitch(globalCtx, 0x34) && Flags_GetSwitch(globalCtx, 0x35) &&
-                    Flags_GetSwitch(globalCtx, 0x36)) {
+                if (Flags_GetSwitch(play, 0x34) && Flags_GetSwitch(play, 0x35) && Flags_GetSwitch(play, 0x36)) {
                     lodFrac = 68;
                 }
                 break;
             case 8:
-                if (Flags_GetSwitch(globalCtx, 0x3A)) {
+                if (Flags_GetSwitch(play, 0x3A)) {
                     lodFrac = 68;
                 }
                 break;
         }
 
-        gDPSetPrimColor(dListHead, 0, lodFrac, 255, 255, 255, 255);
+        gDPSetPrimColor(gfx, 0, lodFrac, 255, 255, 255, 255);
     }
 
-    gSPSegment(POLY_OPA_DISP++, 0x06, dList);
-    gSPSegment(POLY_XLU_DISP++, 0x06, dList);
+    gSPSegment(POLY_OPA_DISP++, 0x06, gfxHead);
+    gSPSegment(POLY_XLU_DISP++, 0x06, gfxHead);
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }

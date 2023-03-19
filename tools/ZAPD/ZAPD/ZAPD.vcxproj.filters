@@ -165,9 +165,6 @@
     <ClCompile Include="ZTexture.cpp">
       <Filter>Source Files\Z64</Filter>
     </ClCompile>
-    <ClCompile Include="Overlays\ZOverlay.cpp">
-      <Filter>Source Files\Z64</Filter>
-    </ClCompile>
     <ClCompile Include="ZSkeleton.cpp">
       <Filter>Source Files\Z64</Filter>
     </ClCompile>
@@ -243,9 +240,6 @@
     <ClCompile Include="ZRoom\Commands\SetMinimapList.cpp">
       <Filter>Source Files\Z64\ZRoom\Commands</Filter>
     </ClCompile>
-    <ClCompile Include="ZCutsceneMM.cpp">
-      <Filter>Source Files\Z64</Filter>
-    </ClCompile>
     <ClCompile Include="ZBackground.cpp">
       <Filter>Source Files\Z64</Filter>
     </ClCompile>
@@ -281,6 +275,21 @@
     </ClCompile>
     <ClCompile Include="WarningHandler.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ZCollisionPoly.cpp">
+      <Filter>Source Files\Z64</Filter>
+    </ClCompile>
+    <ClCompile Include="OtherStructs\Cutscene_Commands.cpp">
+      <Filter>Source Files\Z64</Filter>
+    </ClCompile>
+    <ClCompile Include="OtherStructs\CutsceneMM_Commands.cpp">
+      <Filter>Source Files\Z64</Filter>
+    </ClCompile>
+    <ClCompile Include="CrashHandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ZSurfaceType.cpp">
+      <Filter>Source Files\Z64</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -407,9 +416,6 @@
     <ClInclude Include="..\lib\stb\stb_image_write.h">
       <Filter>Header Files\Libraries</Filter>
     </ClInclude>
-    <ClInclude Include="Overlays\ZOverlay.h">
-      <Filter>Header Files\Z64</Filter>
-    </ClInclude>
     <ClInclude Include="ZTexture.h">
       <Filter>Header Files\Z64</Filter>
     </ClInclude>
@@ -500,9 +506,6 @@
     <ClInclude Include="ZRoom\Commands\SetMinimapList.h">
       <Filter>Header Files\Z64\ZRoom\Commands</Filter>
     </ClInclude>
-    <ClInclude Include="ZCutsceneMM.h">
-      <Filter>Header Files\Z64</Filter>
-    </ClInclude>
     <ClInclude Include="ZBackground.h">
       <Filter>Header Files\Z64</Filter>
     </ClInclude>
@@ -535,6 +538,21 @@
     </ClInclude>
     <ClInclude Include="WarningHandler.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ZCollisionPoly.h">
+      <Filter>Header Files\Z64</Filter>
+    </ClInclude>
+    <ClInclude Include="OtherStructs\Cutscene_Commands.h">
+      <Filter>Header Files\Z64</Filter>
+    </ClInclude>
+    <ClInclude Include="OtherStructs\CutsceneMM_Commands.h">
+      <Filter>Header Files\Z64</Filter>
+    </ClInclude>
+    <ClInclude Include="CrashHandler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ZSurfaceType.h">
+      <Filter>Header Files\Z64</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

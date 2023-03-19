@@ -6,39 +6,40 @@
 
 #include "prevent_bss_reordering.h"
 #include "z_bg_hakugin_post.h"
+#include "z64quake.h"
+#include "z64rumble.h"
 #include "objects/object_hakugin_obj/object_hakugin_obj.h"
-#include "prevent_bss_reordering.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((BgHakuginPost*)thisx)
 
-void BgHakuginPost_Init(Actor* thisx, GlobalContext* globalCtx);
-void BgHakuginPost_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void BgHakuginPost_Update(Actor* thisx, GlobalContext* globalCtx);
+void BgHakuginPost_Init(Actor* thisx, PlayState* play);
+void BgHakuginPost_Destroy(Actor* thisx, PlayState* play);
+void BgHakuginPost_Update(Actor* thisx, PlayState* play);
 
 void func_80A9CA94(BgHakuginPost* this);
-void func_80A9CAA8(BgHakuginPost* this, GlobalContext* globalCtx);
+void func_80A9CAA8(BgHakuginPost* this, PlayState* play);
 void func_80A9CC84(BgHakuginPost* this);
-void func_80A9CCA0(BgHakuginPost* this, GlobalContext* globalCtx);
+void func_80A9CCA0(BgHakuginPost* this, PlayState* play);
 void func_80A9CD00(BgHakuginPost* this);
-void func_80A9CD14(BgHakuginPost* this, GlobalContext* globalCtx);
+void func_80A9CD14(BgHakuginPost* this, PlayState* play);
 void func_80A9CE00(BgHakuginPost* this);
-void func_80A9CE1C(BgHakuginPost* this, GlobalContext* globalCtx);
+void func_80A9CE1C(BgHakuginPost* this, PlayState* play);
 void func_80A9D0A0(BgHakuginPost* this);
-void func_80A9D0B4(BgHakuginPost* this, GlobalContext* globalCtx);
+void func_80A9D0B4(BgHakuginPost* this, PlayState* play);
 void func_80A9D1E0(BgHakuginPost* this, BgHakuginPostFunc unkFunc, f32 arg2, s16 arg3, s16 arg4);
-void func_80A9D260(BgHakuginPost* this, GlobalContext* globalCtx);
+void func_80A9D260(BgHakuginPost* this, PlayState* play);
 void func_80A9D2C4(BgHakuginPost* this, BgHakuginPostFunc unkFunc, f32 arg2, s16 arg3, s16 arg4);
-void func_80A9D360(BgHakuginPost* this, GlobalContext* globalCtx);
+void func_80A9D360(BgHakuginPost* this, PlayState* play);
 void func_80A9D3E4(BgHakuginPost* this);
-void func_80A9D434(BgHakuginPost* this, GlobalContext* globalCtx);
-void func_80A9D61C(Actor* thisx, GlobalContext* globalCtx);
+void func_80A9D434(BgHakuginPost* this, PlayState* play);
+void func_80A9D61C(Actor* thisx, PlayState* play);
 
 BgHakuginPostColliders D_80A9DDC0;
 BgHakuginPostUnkStruct D_80A9E028;
 
-const ActorInit Bg_Hakugin_Post_InitVars = {
+ActorInit Bg_Hakugin_Post_InitVars = {
     ACTOR_BG_HAKUGIN_POST,
     ACTORCAT_BG,
     FLAGS,
@@ -96,7 +97,7 @@ void func_80A9ACF0(void) {
     bzero(&D_80A9DDC0, sizeof(BgHakuginPostColliders));
 }
 
-void func_80A9AD18(BgHakuginPost* this, GlobalContext* globalCtx, BgHakuginPostUnkStruct* unkStruct) {
+void func_80A9AD18(BgHakuginPost* this, PlayState* play, BgHakuginPostUnkStruct* unkStruct) {
     s32 i;
 
     for (i = 0; i < unkStruct->count; i++) {
@@ -105,8 +106,8 @@ void func_80A9AD18(BgHakuginPost* this, GlobalContext* globalCtx, BgHakuginPostU
         if ((unkStruct3->unk_04) && (D_80A9DDC0.count < 8)) {
             ColliderCylinder* collider = &D_80A9DDC0.colliders[D_80A9DDC0.count];
 
-            Collider_InitCylinder(globalCtx, collider);
-            Collider_SetCylinder(globalCtx, collider, &this->dyna.actor, &sCylinderInit);
+            Collider_InitCylinder(play, collider);
+            Collider_SetCylinder(play, collider, &this->dyna.actor, &sCylinderInit);
             collider->dim.height = (s32)unkStruct3->unk_00 - 40;
             unkStruct->unk_0000[i].collider = collider;
             D_80A9DDC0.count++;
@@ -114,14 +115,14 @@ void func_80A9AD18(BgHakuginPost* this, GlobalContext* globalCtx, BgHakuginPostU
     }
 }
 
-void func_80A9AE3C(BgHakuginPost* this, GlobalContext* globalCtx) {
+void func_80A9AE3C(BgHakuginPost* this, PlayState* play) {
     while (D_80A9DDC0.count != 0) {
         D_80A9DDC0.count--;
-        Collider_DestroyCylinder(globalCtx, &D_80A9DDC0.colliders[D_80A9DDC0.count]);
+        Collider_DestroyCylinder(play, &D_80A9DDC0.colliders[D_80A9DDC0.count]);
     }
 }
 
-void func_80A9AEB8(BgHakuginPost* this, GlobalContext* globalCtx, BgHakuginPostUnkStruct* unkStruct) {
+void func_80A9AEB8(BgHakuginPost* this, PlayState* play, BgHakuginPostUnkStruct* unkStruct) {
     s32 i;
 
     for (i = 0; i < unkStruct->count; i++) {
@@ -131,12 +132,12 @@ void func_80A9AEB8(BgHakuginPost* this, GlobalContext* globalCtx, BgHakuginPostU
             collider->dim.pos.x = unkStruct->unk_0000[i].unk_14.x + this->dyna.actor.home.pos.x;
             collider->dim.pos.y = unkStruct->unk_0000[i].unk_14.y + this->unk_16C;
             collider->dim.pos.z = unkStruct->unk_0000[i].unk_14.z + this->dyna.actor.home.pos.z;
-            CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &collider->base);
+            CollisionCheck_SetAC(play, &play->colChkCtx, &collider->base);
         }
     }
 }
 
-void func_80A9AFB4(BgHakuginPost* this, GlobalContext* globalCtx, BgHakuginPostUnkStruct* unkStruct) {
+void func_80A9AFB4(BgHakuginPost* this, PlayState* play, BgHakuginPostUnkStruct* unkStruct) {
     s32 i;
     s32 j;
 
@@ -156,7 +157,7 @@ void func_80A9AFB4(BgHakuginPost* this, GlobalContext* globalCtx, BgHakuginPostU
         Math_Vec3f_Copy(&unkStruct->unk_0000[i].unk_14, &this->dyna.actor.world.pos);
         unkStruct->unk_0000[i].unk_2E = BGHAKUGINPOST_GET_7F00(&this->dyna.actor);
         if (D_80A9D880[unkStruct->unk_0000[i].unk_00].unk_04) {
-            if (Flags_GetSwitch(globalCtx, unkStruct->unk_0000[i].unk_2E)) {
+            if (Flags_GetSwitch(play, unkStruct->unk_0000[i].unk_2E)) {
                 unkStruct->unk_0000[i].unk_34 = 5;
             } else {
                 unkStruct->unk_0000[i].unk_34 = 1;
@@ -174,7 +175,7 @@ void func_80A9AFB4(BgHakuginPost* this, GlobalContext* globalCtx, BgHakuginPostU
     }
 }
 
-void func_80A9B160(BgHakuginPostUnkStruct* unkStruct, GlobalContext* globalCtx) {
+void func_80A9B160(BgHakuginPostUnkStruct* unkStruct, PlayState* play) {
     s32 i;
 
     for (i = 0; i < unkStruct->count; i++) {
@@ -183,7 +184,7 @@ void func_80A9B160(BgHakuginPostUnkStruct* unkStruct, GlobalContext* globalCtx) 
         unkStruct->unk_0000[i].unk_24 = 0.0f;
         unkStruct->unk_0000[i].unk_34 = 1;
         if (D_80A9D880[unkStruct->unk_0000[i].unk_00].unk_04 != 0) {
-            Flags_UnsetSwitch(globalCtx, unkStruct->unk_0000[i].unk_2E);
+            Flags_UnsetSwitch(play, unkStruct->unk_0000[i].unk_2E);
         }
     }
 }
@@ -230,34 +231,34 @@ BgHakuginPostUnkStruct1* func_80A9B32C(BgHakuginPostUnkStruct* unkStruct, BgHaku
 }
 
 void func_80A9B384(Vec3f* arg0) {
-    MtxF* matrix = Matrix_GetCurrentState();
+    MtxF* matrix = Matrix_GetCurrent();
 
     matrix->mf[3][0] = arg0->x;
     matrix->mf[3][1] = arg0->y;
     matrix->mf[3][2] = arg0->z;
 }
 
-void func_80A9B3BC(BgHakuginPost* this, GlobalContext* globalCtx) {
+void func_80A9B3BC(BgHakuginPost* this, PlayState* play) {
     s32 pad;
     s32 sp28 = BGHAKUGINPOST_GET_7F00(&this->dyna.actor);
     s32 sp24 = BGHAKUGINPOST_GET_7F00(&this->dyna.actor) + 1;
     s32 sp20;
     s32 sp1C;
 
-    if (Flags_GetSwitch(globalCtx, sp28)) {
+    if (Flags_GetSwitch(play, sp28)) {
         sp20 = true;
     } else {
         sp20 = false;
     }
 
-    if (Flags_GetSwitch(globalCtx, sp24)) {
+    if (Flags_GetSwitch(play, sp24)) {
         sp1C = true;
     } else {
         sp1C = false;
     }
 
     if (!(sp20 | sp1C)) {
-        Flags_SetSwitch(globalCtx, sp28);
+        Flags_SetSwitch(play, sp28);
         this->unk_170 = true;
     } else {
         this->unk_170 = sp20;
@@ -266,36 +267,36 @@ void func_80A9B3BC(BgHakuginPost* this, GlobalContext* globalCtx) {
     this->unk_174 = sp1C;
 }
 
-void func_80A9B46C(BgHakuginPost* this, GlobalContext* globalCtx) {
+void func_80A9B46C(BgHakuginPost* this, PlayState* play) {
     s32 pad;
     s32 sp30 = BGHAKUGINPOST_GET_7F00(&this->dyna.actor);
     s32 sp2C = BGHAKUGINPOST_GET_7F00(&this->dyna.actor) + 1;
     s32 sp28;
     s32 sp24;
 
-    if (Flags_GetSwitch(globalCtx, sp30)) {
+    if (Flags_GetSwitch(play, sp30)) {
         sp28 = true;
     } else {
         sp28 = false;
     }
 
-    if (Flags_GetSwitch(globalCtx, sp2C)) {
+    if (Flags_GetSwitch(play, sp2C)) {
         sp24 = true;
     } else {
         sp24 = false;
     }
 
     if (!this->unk_170 && (sp28 == 1)) {
-        Flags_UnsetSwitch(globalCtx, sp2C);
+        Flags_UnsetSwitch(play, sp2C);
     } else if (!this->unk_174 && (sp24 == 1)) {
-        Flags_UnsetSwitch(globalCtx, sp30);
+        Flags_UnsetSwitch(play, sp30);
     }
 
     this->unk_170 = sp28;
     this->unk_174 = sp24;
 }
 
-void func_80A9B554(BgHakuginPost* this, GlobalContext* globalCtx, BgHakuginPostUnkStruct* unkStruct,
+void func_80A9B554(BgHakuginPost* this, PlayState* play, BgHakuginPostUnkStruct* unkStruct,
                    BgHakuginPostUnkStruct1* unkStruct1) {
     f32 spE4 = D_80A9D880[unkStruct1->unk_00].unk_00;
     s32 i;
@@ -343,9 +344,9 @@ void func_80A9B554(BgHakuginPost* this, GlobalContext* globalCtx, BgHakuginPostU
         temp_f0 = spAC.z;
         unkStruct2->unk_10.z = ((Rand_ZeroOne() * 60.0f - 30.0f) + temp_f28 * 50.0f) * temp_f22 + temp_f0 * temp_f20;
         unkStruct2->unk_1C = 0.90999997f - (0.04f - unkStruct2->unk_00) * (500.0f / 19.0f) * 0.02f;
-        unkStruct2->unk_20.x = Rand_Next() >> 0x10;
-        unkStruct2->unk_20.y = Rand_Next() >> 0x10;
-        unkStruct2->unk_20.z = Rand_Next() >> 0x10;
+        unkStruct2->unk_20.x = (s32)Rand_Next() >> 0x10;
+        unkStruct2->unk_20.y = (s32)Rand_Next() >> 0x10;
+        unkStruct2->unk_20.z = (s32)Rand_Next() >> 0x10;
         unkStruct2->unk_26 = (Rand_Next() & 0x3FFF) - 0x1FFF;
         unkStruct2->unk_28 = (Rand_Next() & 0x1FFF) - 0xFFF;
         unkStruct2->unk_2A = (Rand_Next() & 0x1FFF) - 0xFFF;
@@ -358,8 +359,8 @@ void func_80A9B554(BgHakuginPost* this, GlobalContext* globalCtx, BgHakuginPostU
         spA0.x = Math_SinS(val) * temp_f20 + spB8.x;
         spA0.y = (Rand_ZeroOne() * 1.2f - 0.1f) * spE4 + spB8.y;
         spA0.z = Math_CosS(val) * temp_f20 + spB8.z;
-        func_800B0E48(globalCtx, &spA0, &gZeroVec3f, &D_80A9D8EC, &D_80A9D8E4, &D_80A9D8E8,
-                      (Rand_Next() >> 0x1A) + 0x82, (Rand_Next() >> 0x1A) + 0x6E);
+        func_800B0E48(play, &spA0, &gZeroVec3f, &D_80A9D8EC, &D_80A9D8E4, &D_80A9D8E8,
+                      ((s32)Rand_Next() >> 0x1A) + 0x82, ((s32)Rand_Next() >> 0x1A) + 0x6E);
     }
 
     unkStruct1Temp = func_80A9B32C(unkStruct, unkStruct1);
@@ -386,9 +387,9 @@ void func_80A9B554(BgHakuginPost* this, GlobalContext* globalCtx, BgHakuginPostU
             unkStruct2->unk_10.y = 0.0f;
             unkStruct2->unk_10.z = Rand_ZeroOne() + temp_f28 * 7.0f;
             unkStruct2->unk_1C = 0.90999997f - (0.04f - unkStruct2->unk_00) * (500.0f / 19.0f) * 0.075f;
-            unkStruct2->unk_20.x = Rand_Next() >> 0x10;
-            unkStruct2->unk_20.y = Rand_Next() >> 0x10;
-            unkStruct2->unk_20.z = Rand_Next() >> 0x10;
+            unkStruct2->unk_20.x = (s32)Rand_Next() >> 0x10;
+            unkStruct2->unk_20.y = (s32)Rand_Next() >> 0x10;
+            unkStruct2->unk_20.z = (s32)Rand_Next() >> 0x10;
             unkStruct2->unk_26 = (Rand_Next() & 0x1FFF) - 0xFFF;
             unkStruct2->unk_28 = (Rand_Next() & 0x1FFF) - 0xFFF;
             unkStruct2->unk_2A = (Rand_Next() & 0x1FFF) - 0xFFF;
@@ -424,7 +425,7 @@ void func_80A9BC0C(BgHakuginPostUnkStruct* unkStruct) {
     }
 }
 
-void func_80A9BD24(BgHakuginPost* this, GlobalContext* globalCtx, BgHakuginPostUnkStruct* unkStruct) {
+void func_80A9BD24(BgHakuginPost* this, PlayState* play, BgHakuginPostUnkStruct* unkStruct) {
     s32 i;
     s32 j;
 
@@ -490,7 +491,7 @@ void func_80A9BD24(BgHakuginPost* this, GlobalContext* globalCtx, BgHakuginPostU
             }
         } else if (unkStruct->unk_0000[i].unk_34 == 3) {
             if (Math3D_Dist1DSq(unkStruct->unk_0000[i].unk_14.x, unkStruct->unk_0000[i].unk_14.z) > 278784.03f) {
-                func_80A9B554(this, globalCtx, unkStruct, &unkStruct->unk_0000[i]);
+                func_80A9B554(this, play, unkStruct, &unkStruct->unk_0000[i]);
                 func_8019F128(NA_SE_EV_GLASSBROKEN_IMPACT);
                 unkStruct->unk_0000[i].unk_34 = 4;
                 unkStruct->unk_0000[i].unk_30 = 30;
@@ -504,12 +505,12 @@ void func_80A9BD24(BgHakuginPost* this, GlobalContext* globalCtx, BgHakuginPostU
     }
 }
 
-void func_80A9C058(BgHakuginPost* this, GlobalContext* globalCtx, BgHakuginPostUnkStruct* unkStruct) {
+void func_80A9C058(BgHakuginPost* this, PlayState* play, BgHakuginPostUnkStruct* unkStruct) {
     s32 i;
     s32 pad;
     Vec3f sp44;
     s32 pad2[2];
-    s16 quake;
+    s16 quakeIndex;
 
     if (this->unk_170 == 0) {
         for (i = 0; i < unkStruct->count; i++) {
@@ -519,11 +520,13 @@ void func_80A9C058(BgHakuginPost* this, GlobalContext* globalCtx, BgHakuginPostU
                 sp44.x = this->dyna.actor.home.pos.x + unkStruct1->unk_14.x;
                 sp44.y = this->unk_16C + unkStruct1->unk_14.y;
                 sp44.z = this->dyna.actor.home.pos.z + unkStruct1->unk_14.z;
-                func_8013ECE0(Math3D_Vec3fDistSq(&sp44, &GET_PLAYER(globalCtx)->actor.world.pos), 255, 20, 150);
-                quake = Quake_Add(GET_ACTIVE_CAM(globalCtx), 3);
-                Quake_SetSpeed(quake, 20000);
-                Quake_SetQuakeValues(quake, 7, 0, 0, 0);
-                Quake_SetCountdown(quake, 12);
+                Rumble_Request(Math3D_Vec3fDistSq(&sp44, &GET_PLAYER(play)->actor.world.pos), 255, 20, 150);
+
+                quakeIndex = Quake_Add(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
+                Quake_SetSpeed(quakeIndex, 20000);
+                Quake_SetQuakeValues(quakeIndex, 7, 0, 0, 0);
+                Quake_SetCountdown(quakeIndex, 12);
+
                 if (this->unk_179 <= 0) {
                     func_8019F128(NA_SE_EV_STONEDOOR_STOP);
                     this->unk_179 = 40;
@@ -534,22 +537,23 @@ void func_80A9C058(BgHakuginPost* this, GlobalContext* globalCtx, BgHakuginPostU
     }
 }
 
-void func_80A9C18C(BgHakuginPost* this, GlobalContext* globalCtx) {
+void func_80A9C18C(BgHakuginPost* this, PlayState* play) {
     s32 pad;
-    Player* player = GET_PLAYER(globalCtx);
-    Camera* activeCam = GET_ACTIVE_CAM(globalCtx);
-    s16 quake;
+    Player* player = GET_PLAYER(play);
+    Camera* activeCam = GET_ACTIVE_CAM(play);
+    s16 quakeIndex;
 
-    func_8013ECE0(Math3D_Dist2DSq(player->actor.world.pos.x, player->actor.world.pos.z,
-                                           this->dyna.actor.home.pos.x, this->dyna.actor.home.pos.z),
-                  255, 20, 150);
-    quake = Quake_Add(activeCam, 3);
-    Quake_SetSpeed(quake, 17232);
-    Quake_SetQuakeValues(quake, 6, 0, 0, 0);
-    Quake_SetCountdown(quake, 20);
+    Rumble_Request(Math3D_Dist2DSq(player->actor.world.pos.x, player->actor.world.pos.z, this->dyna.actor.home.pos.x,
+                                   this->dyna.actor.home.pos.z),
+                   255, 20, 150);
+
+    quakeIndex = Quake_Add(activeCam, QUAKE_TYPE_3);
+    Quake_SetSpeed(quakeIndex, 17232);
+    Quake_SetQuakeValues(quakeIndex, 6, 0, 0, 0);
+    Quake_SetCountdown(quakeIndex, 20);
 }
 
-void func_80A9C228(BgHakuginPost* this, GlobalContext* globalCtx, BgHakuginPostUnkStruct* unkStruct) {
+void func_80A9C228(BgHakuginPost* this, PlayState* play, BgHakuginPostUnkStruct* unkStruct) {
     s32 val;
     BgHakuginPostUnkStruct1* spC8 = NULL;
     BgHakuginPostUnkStruct1* spC4;
@@ -585,7 +589,7 @@ void func_80A9C228(BgHakuginPost* this, GlobalContext* globalCtx, BgHakuginPostU
                     spA0.y = 0.2f;
                     spA0.z = spAC.z * -0.08f;
 
-                    func_800B0E48(globalCtx, &spB8, &spAC, &spA0, &D_80A9D8E4, &D_80A9D8E8, 0x50,
+                    func_800B0E48(play, &spB8, &spAC, &spA0, &D_80A9D8E4, &D_80A9D8E8, 0x50,
                                   (s32)(Rand_ZeroOne() * 60.0f) + 110);
                 }
             }
@@ -610,14 +614,14 @@ void func_80A9C228(BgHakuginPost* this, GlobalContext* globalCtx, BgHakuginPostU
                 spA0.y = 0.2f;
                 spA0.z = spAC.z * -0.08f;
 
-                func_800B0E48(globalCtx, &spB8, &spAC, &spA0, &D_80A9D8E4, &D_80A9D8E8, 0xC8,
+                func_800B0E48(play, &spB8, &spAC, &spA0, &D_80A9D8E4, &D_80A9D8E8, 0xC8,
                               (s32)(Rand_ZeroOne() * 70.0f) + 100);
             }
         }
     }
 }
 
-void func_80A9C634(BgHakuginPost* this, GlobalContext* globalCtx) {
+void func_80A9C634(BgHakuginPost* this, PlayState* play) {
     s32 i;
     Vec3f spB8;
     Vec3f spAC;
@@ -645,12 +649,11 @@ void func_80A9C634(BgHakuginPost* this, GlobalContext* globalCtx) {
         spA0.x = spAC.x * -0.08f;
         spA0.y = 0.8f;
         spA0.z = spAC.z * -0.08f;
-        func_800B0DE0(globalCtx, &spB8, &spAC, &spA0, &D_80A9D8E4, &D_80A9D8E8, (s32)(Rand_ZeroOne() * 400.0f) + 2500,
-                      -250);
+        func_800B0DE0(play, &spB8, &spAC, &spA0, &D_80A9D8E4, &D_80A9D8E8, (s32)(Rand_ZeroOne() * 400.0f) + 2500, -250);
     }
 }
 
-void func_80A9C854(BgHakuginPost* this, GlobalContext* globalCtx) {
+void func_80A9C854(BgHakuginPost* this, PlayState* play) {
     s32 pad;
     s32 sp38 = false;
     s32 pad2;
@@ -659,13 +662,13 @@ void func_80A9C854(BgHakuginPost* this, GlobalContext* globalCtx) {
     s32 sp28;
 
     if (this->unk_174 != 0) {
-        if (Flags_GetSwitch(globalCtx, this->dyna.actor.home.rot.z & 0x7F)) {
+        if (Flags_GetSwitch(play, this->dyna.actor.home.rot.z & 0x7F)) {
             sp28 = true;
 
             for (i = 0; i < D_80A9E028.count; i++) {
                 ColliderCylinder* collider = D_80A9E028.unk_0000[i].collider;
 
-                if ((collider != NULL) && Flags_GetSwitch(globalCtx, D_80A9E028.unk_0000[i].unk_2E)) {
+                if ((collider != NULL) && Flags_GetSwitch(play, D_80A9E028.unk_0000[i].unk_2E)) {
                     sp28 = false;
                     break;
                 }
@@ -678,13 +681,13 @@ void func_80A9C854(BgHakuginPost* this, GlobalContext* globalCtx) {
     }
 
     if (sp38) {
-        Flags_SetSwitch(globalCtx, this->dyna.actor.home.rot.x & 0x7F);
+        Flags_SetSwitch(play, this->dyna.actor.home.rot.x & 0x7F);
     } else {
-        Flags_UnsetSwitch(globalCtx, this->dyna.actor.home.rot.x & 0x7F);
+        Flags_UnsetSwitch(play, this->dyna.actor.home.rot.x & 0x7F);
     }
 }
 
-void BgHakuginPost_Init(Actor* thisx, GlobalContext* globalCtx) {
+void BgHakuginPost_Init(Actor* thisx, PlayState* play) {
     static s32 D_80A9D8FC = 1;
     BgHakuginPost* this = THIS;
 
@@ -701,21 +704,21 @@ void BgHakuginPost_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->dyna.actor.shape.rot.x = 0;
         this->dyna.actor.shape.rot.z = 0;
         DynaPolyActor_Init(&this->dyna, 1);
-        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_hakugin_obj_Colheader_00D3B0);
-        func_80A9B3BC(this, globalCtx);
+        DynaPolyActor_LoadMesh(play, &this->dyna, &object_hakugin_obj_Colheader_00D3B0);
+        func_80A9B3BC(this, play);
         func_80A9CA94(this);
     } else {
-        func_80A9AFB4(this, globalCtx, &D_80A9E028);
-        Actor_MarkForDeath(&this->dyna.actor);
+        func_80A9AFB4(this, play, &D_80A9E028);
+        Actor_Kill(&this->dyna.actor);
     }
 }
 
-void BgHakuginPost_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void BgHakuginPost_Destroy(Actor* thisx, PlayState* play) {
     BgHakuginPost* this = THIS;
 
     if (BGHAKUGINPOST_GET_7(&this->dyna.actor) == 7) {
-        DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
-        func_80A9AE3C(this, globalCtx);
+        DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
+        func_80A9AE3C(this, play);
     }
 }
 
@@ -723,7 +726,7 @@ void func_80A9CA94(BgHakuginPost* this) {
     this->actionFunc = func_80A9CAA8;
 }
 
-void func_80A9CAA8(BgHakuginPost* this, GlobalContext* globalCtx) {
+void func_80A9CAA8(BgHakuginPost* this, PlayState* play) {
     s32 pad[2];
     s32 i;
 
@@ -763,7 +766,7 @@ void func_80A9CAA8(BgHakuginPost* this, GlobalContext* globalCtx) {
         }
     }
 
-    func_80A9AD18(this, globalCtx, &D_80A9E028);
+    func_80A9AD18(this, play, &D_80A9E028);
     this->dyna.actor.draw = func_80A9D61C;
     if (this->unk_170 != 0) {
         func_80A9CC84(this);
@@ -777,7 +780,7 @@ void func_80A9CC84(BgHakuginPost* this) {
     this->unk_16C = this->unk_164;
 }
 
-void func_80A9CCA0(BgHakuginPost* this, GlobalContext* globalCtx) {
+void func_80A9CCA0(BgHakuginPost* this, PlayState* play) {
     if (this->unk_174 != 0) {
         func_80A9D1E0(this, func_80A9CD00, (this->unk_164 - this->dyna.actor.home.pos.y) + 100.0f, 60,
                       this->dyna.actor.cutscene);
@@ -788,14 +791,14 @@ void func_80A9CD00(BgHakuginPost* this) {
     this->actionFunc = func_80A9CD14;
 }
 
-void func_80A9CD14(BgHakuginPost* this, GlobalContext* globalCtx) {
+void func_80A9CD14(BgHakuginPost* this, PlayState* play) {
     f32 temp_f12 =
         Math_SinS((this->unk_16C - this->unk_164) * 0x8000 / (this->unk_168 - this->unk_164)) * 140.0f + 4.0f;
 
     temp_f12 = CLAMP_MAX(temp_f12, 40.0f);
     this->unk_16C += temp_f12;
     if (this->unk_168 <= this->unk_16C) {
-        func_80A9C18C(this, globalCtx);
+        func_80A9C18C(this, play);
         func_8019F128(NA_SE_EV_STONEDOOR_STOP);
         func_80A9CE00(this);
     } else {
@@ -808,9 +811,9 @@ void func_80A9CE00(BgHakuginPost* this) {
     this->unk_16C = this->unk_168;
 }
 
-void func_80A9CE1C(BgHakuginPost* this, GlobalContext* globalCtx) {
+void func_80A9CE1C(BgHakuginPost* this, PlayState* play) {
     s32 pad;
-    Player* player = GET_PLAYER(globalCtx);
+    Player* player = GET_PLAYER(play);
     ColliderCylinder* collider;
     s32 yDiff;
     s32 i;
@@ -836,9 +839,9 @@ void func_80A9CE1C(BgHakuginPost* this, GlobalContext* globalCtx) {
                 temp = (s16)(this->dyna.actor.yawTowardsPlayer + 0x58F0);
                 D_80A9E028.unk_0000[i].unk_28 = ((s16)(player->actor.shape.rot.y - temp) / 3) + temp;
                 D_80A9E028.unk_0000[i].unk_34 = 2;
-                func_800B8E58(player, NA_SE_IT_HAMMER_HIT);
+                Player_PlaySfx(player, NA_SE_IT_HAMMER_HIT);
                 func_8019F128(NA_SE_EV_SLIDE_DOOR_OPEN);
-                Flags_SetSwitch(globalCtx, D_80A9E028.unk_0000[i].unk_2E);
+                Flags_SetSwitch(play, D_80A9E028.unk_0000[i].unk_2E);
                 this->unk_178 = 20;
                 func_80A9D2C4(this, func_80A9CE00, D_80A9E028.unk_0000[i].unk_14.y + 50.0f,
                               D_80A9E028.unk_0000[i].unk_2A, D_80A9E028.unk_0000[i].unk_2C);
@@ -855,7 +858,7 @@ void func_80A9CE1C(BgHakuginPost* this, GlobalContext* globalCtx) {
     }
 
     if (this->unk_178 <= 0) {
-        func_80A9AEB8(this, globalCtx, &D_80A9E028);
+        func_80A9AEB8(this, play, &D_80A9E028);
     }
 }
 
@@ -863,17 +866,17 @@ void func_80A9D0A0(BgHakuginPost* this) {
     this->actionFunc = func_80A9D0B4;
 }
 
-void func_80A9D0B4(BgHakuginPost* this, GlobalContext* globalCtx) {
+void func_80A9D0B4(BgHakuginPost* this, PlayState* play) {
     f32 sp24 = (this->unk_164 + this->unk_160) - func_80A9B2B8(&D_80A9E028);
     f32 temp_f14 = Math_SinS((this->unk_16C - sp24) * 0x8000 / (this->unk_168 - sp24)) * 140.0f + 4.0f;
 
     temp_f14 = CLAMP_MAX(temp_f14, 40.0f);
     this->unk_16C -= temp_f14;
     if (this->unk_16C <= sp24) {
-        func_80A9C634(this, globalCtx);
-        func_80A9B160(&D_80A9E028, globalCtx);
+        func_80A9C634(this, play);
+        func_80A9B160(&D_80A9E028, play);
         this->unk_16C = this->unk_164;
-        func_80A9C18C(this, globalCtx);
+        func_80A9C18C(this, play);
         func_8019F128(NA_SE_EV_STONEDOOR_STOP);
         func_80A9CC84(this);
     } else {
@@ -894,7 +897,7 @@ void func_80A9D1E0(BgHakuginPost* this, BgHakuginPostFunc unkFunc, f32 arg2, s16
     this->actionFunc = func_80A9D260;
 }
 
-void func_80A9D260(BgHakuginPost* this, GlobalContext* globalCtx) {
+void func_80A9D260(BgHakuginPost* this, PlayState* play) {
     if (ActorCutscene_GetCanPlayNext(this->unk_184)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->unk_184, &this->dyna.actor);
         this->unkFunc(this);
@@ -918,7 +921,7 @@ void func_80A9D2C4(BgHakuginPost* this, BgHakuginPostFunc unkFunc, f32 arg2, s16
     this->actionFunc = func_80A9D360;
 }
 
-void func_80A9D360(BgHakuginPost* this, GlobalContext* globalCtx) {
+void func_80A9D360(BgHakuginPost* this, PlayState* play) {
     if (ActorCutscene_GetCanPlayNext(this->unk_184)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->unk_184, &this->dyna.actor);
         if (this->unk_186 >= 0) {
@@ -939,7 +942,7 @@ void func_80A9D3E4(BgHakuginPost* this) {
     this->actionFunc = func_80A9D434;
 }
 
-void func_80A9D434(BgHakuginPost* this, GlobalContext* globalCtx) {
+void func_80A9D434(BgHakuginPost* this, PlayState* play) {
     if (ActorCutscene_GetCanPlayNext(this->unk_186) != 0) {
         ActorCutscene_StartAndSetUnkLinkFields(this->unk_186, &this->dyna.actor);
         this->unkFunc(this);
@@ -948,11 +951,11 @@ void func_80A9D434(BgHakuginPost* this, GlobalContext* globalCtx) {
     }
 }
 
-void BgHakuginPost_Update(Actor* thisx, GlobalContext* globalCtx) {
+void BgHakuginPost_Update(Actor* thisx, PlayState* play) {
     BgHakuginPost* this = THIS;
     f32 temp;
 
-    func_80A9B46C(this, globalCtx);
+    func_80A9B46C(this, play);
     if ((this->unk_180 >= 0) && ((this->actionFunc != func_80A9D260) || (this->actionFunc != func_80A9D360))) {
         this->unk_180--;
         if (this->unk_180 < 0) {
@@ -976,10 +979,10 @@ void BgHakuginPost_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     func_80A9BC0C(&D_80A9E028);
-    this->actionFunc(this, globalCtx);
-    func_80A9BD24(this, globalCtx, &D_80A9E028);
-    func_80A9C058(this, globalCtx, &D_80A9E028);
-    func_80A9C228(this, globalCtx, &D_80A9E028);
+    this->actionFunc(this, play);
+    func_80A9BD24(this, play, &D_80A9E028);
+    func_80A9C058(this, play, &D_80A9E028);
+    func_80A9C228(this, play, &D_80A9E028);
     temp = func_80A9B2B8(&D_80A9E028);
     this->dyna.actor.scale.y = temp + this->unk_16C - this->dyna.actor.home.pos.y;
     this->dyna.actor.scale.y *= 0.0025f;
@@ -987,10 +990,10 @@ void BgHakuginPost_Update(Actor* thisx, GlobalContext* globalCtx) {
         thisx->scale.y = 0.0001f;
     }
 
-    func_80A9C854(this, globalCtx);
+    func_80A9C854(this, play);
 }
 
-void func_80A9D61C(Actor* thisx, GlobalContext* globalCtx) {
+void func_80A9D61C(Actor* thisx, PlayState* play) {
     static Gfx* D_80A9D900[] = {
         object_hakugin_obj_DL_00C1A8, object_hakugin_obj_DL_00C568, NULL, NULL,
         object_hakugin_obj_DL_00CA38, object_hakugin_obj_DL_00CEC8, NULL,
@@ -1007,11 +1010,11 @@ void func_80A9D61C(Actor* thisx, GlobalContext* globalCtx) {
     Vec3f sp68;
     s32 i;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(globalCtx->state.gfxCtx);
-    Matrix_SetStateRotationAndTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
-                                          this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
+    func_8012C28C(play->state.gfxCtx);
+    Matrix_SetTranslateRotateYXZ(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
+                                 this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
     Matrix_Scale(0.1f, 0.1f, 0.1f, MTXMODE_APPLY);
 
     for (i = 0; i < D_80A9E028.count; i++) {
@@ -1022,8 +1025,7 @@ void func_80A9D61C(Actor* thisx, GlobalContext* globalCtx) {
             sp68.z = unkStruct1->unk_14.z + this->dyna.actor.home.pos.z;
             func_80A9B384(&sp68);
 
-            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
-                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_OPA_DISP++, D_80A9D900[unkStruct1->unk_00]);
         }
     }
@@ -1032,16 +1034,16 @@ void func_80A9D61C(Actor* thisx, GlobalContext* globalCtx) {
         for (i = 0; i < ARRAY_COUNT(D_80A9E028.unk_02A4); i++) {
             unkStruct2 = &D_80A9E028.unk_02A4[i];
             if (unkStruct2->unk_2C > 0) {
-                Matrix_SetStateRotationAndTranslation(unkStruct2->unk_04.x, unkStruct2->unk_04.y, unkStruct2->unk_04.z,
-                                                      &unkStruct2->unk_20);
+                Matrix_SetTranslateRotateYXZ(unkStruct2->unk_04.x, unkStruct2->unk_04.y, unkStruct2->unk_04.z,
+                                             &unkStruct2->unk_20);
                 Matrix_Scale(unkStruct2->unk_00, unkStruct2->unk_00, unkStruct2->unk_00, MTXMODE_APPLY);
 
-                gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
+                gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx),
                           G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
                 gSPDisplayList(POLY_OPA_DISP++, D_80A9D91C[unkStruct2->unk_2D]);
             }
         }
     }
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }

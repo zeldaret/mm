@@ -19,33 +19,33 @@
 
 #define THIS ((BgBreakwall*)thisx)
 
-void BgBreakwall_Init(Actor* thisx, GlobalContext* globalCtx);
-void BgBreakwall_Update(Actor* thisx, GlobalContext* globalCtx);
+void BgBreakwall_Init(Actor* thisx, PlayState* play);
+void BgBreakwall_Update(Actor* thisx, PlayState* play);
 
 void BgBreakwall_SetupAction(BgBreakwall* this, BgBreakwallActionFunc actionFunc);
-s32 func_808B736C(BgBreakwall* this, GlobalContext* globalCtx);
-s32 func_808B7380(BgBreakwall* this, GlobalContext* globalCtx);
-s32 func_808B73C4(BgBreakwall* this, GlobalContext* globalCtx);
-s32 func_808B73FC(BgBreakwall* this, GlobalContext* globalCtx);
-s32 func_808B7410(BgBreakwall* this, GlobalContext* globalCtx);
-s32 func_808B7460(BgBreakwall* this, GlobalContext* globalCtx);
-s32 func_808B74A8(BgBreakwall* this, GlobalContext* globalCtx);
-s32 func_808B74D8(BgBreakwall* this, GlobalContext* globalCtx);
-s32 func_808B751C(BgBreakwall* this, GlobalContext* globalCtx);
-void func_808B76CC(BgBreakwall* this, GlobalContext* globalCtx);
-void func_808B77D0(BgBreakwall* this, GlobalContext* globalCtx);
-void func_808B77E0(BgBreakwall* this, GlobalContext* globalCtx);
-void func_808B782C(BgBreakwall* this, GlobalContext* globalCtx);
-void func_808B78A4(BgBreakwall* this, GlobalContext* globalCtx);
-void func_808B78DC(BgBreakwall* this, GlobalContext* globalCtx);
-void func_808B7914(BgBreakwall* this, GlobalContext* globalCtx);
-void func_808B7A10(BgBreakwall* this, GlobalContext* globalCtx);
-void func_808B7A90(Actor* thisx, GlobalContext* globalCtx);
-void func_808B7B54(Actor* thisx, GlobalContext* globalCtx);
-void func_808B7D34(Actor* thisx, GlobalContext* globalCtx);
-void BgBreakwall_Draw(Actor* thisx, GlobalContext* globalCtx);
+s32 func_808B736C(BgBreakwall* this, PlayState* play);
+s32 func_808B7380(BgBreakwall* this, PlayState* play);
+s32 func_808B73C4(BgBreakwall* this, PlayState* play);
+s32 func_808B73FC(BgBreakwall* this, PlayState* play);
+s32 func_808B7410(BgBreakwall* this, PlayState* play);
+s32 func_808B7460(BgBreakwall* this, PlayState* play);
+s32 func_808B74A8(BgBreakwall* this, PlayState* play);
+s32 func_808B74D8(BgBreakwall* this, PlayState* play);
+s32 func_808B751C(BgBreakwall* this, PlayState* play);
+void func_808B76CC(BgBreakwall* this, PlayState* play);
+void func_808B77D0(BgBreakwall* this, PlayState* play);
+void func_808B77E0(BgBreakwall* this, PlayState* play);
+void func_808B782C(BgBreakwall* this, PlayState* play);
+void func_808B78A4(BgBreakwall* this, PlayState* play);
+void func_808B78DC(BgBreakwall* this, PlayState* play);
+void func_808B7914(BgBreakwall* this, PlayState* play);
+void func_808B7A10(BgBreakwall* this, PlayState* play);
+void func_808B7A90(Actor* thisx, PlayState* play);
+void func_808B7B54(Actor* thisx, PlayState* play);
+void func_808B7D34(Actor* thisx, PlayState* play);
+void BgBreakwall_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit Bg_Breakwall_InitVars = {
+ActorInit Bg_Breakwall_InitVars = {
     ACTOR_BG_BREAKWALL, ACTORCAT_ITEMACTION,           FLAGS,
     GAMEPLAY_KEEP,      sizeof(BgBreakwall),           (ActorFunc)BgBreakwall_Init,
     (ActorFunc)NULL,    (ActorFunc)BgBreakwall_Update, (ActorFunc)NULL,
@@ -141,63 +141,63 @@ void BgBreakwall_SetupAction(BgBreakwall* this, BgBreakwallActionFunc actionFunc
     this->actionFunc = actionFunc;
 }
 
-s32 func_808B736C(BgBreakwall* this, GlobalContext* globalCtx) {
+s32 func_808B736C(BgBreakwall* this, PlayState* play) {
     return true;
 }
 
-s32 func_808B7380(BgBreakwall* this, GlobalContext* globalCtx) {
-    if ((gSaveContext.save.day >= 2) && !(gSaveContext.save.weekEventReg[22] & 1)) {
+s32 func_808B7380(BgBreakwall* this, PlayState* play) {
+    if ((gSaveContext.save.day >= 2) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01)) {
         return false;
     }
     return true;
 }
 
-s32 func_808B73C4(BgBreakwall* this, GlobalContext* globalCtx) {
-    return (gSaveContext.save.weekEventReg[33] & 0x80) || (gSaveContext.save.weekEventReg[21] & 1);
+s32 func_808B73C4(BgBreakwall* this, PlayState* play) {
+    return CHECK_WEEKEVENTREG(WEEKEVENTREG_33_80) || CHECK_WEEKEVENTREG(WEEKEVENTREG_21_01);
 }
 
-s32 func_808B73FC(BgBreakwall* this, GlobalContext* globalCtx) {
+s32 func_808B73FC(BgBreakwall* this, PlayState* play) {
     return true;
 }
 
-s32 func_808B7410(BgBreakwall* this, GlobalContext* globalCtx) {
-    if (Flags_GetSwitch(globalCtx, this->switchFlag)) {
+s32 func_808B7410(BgBreakwall* this, PlayState* play) {
+    if (Flags_GetSwitch(play, this->switchFlag)) {
         this->dyna.actor.draw = NULL;
     }
     Actor_SetScale(&this->dyna.actor, 0.1f);
     return true;
 }
 
-s32 func_808B7460(BgBreakwall* this, GlobalContext* globalCtx) {
-    if (!Flags_GetSwitch(globalCtx, this->switchFlag)) {
+s32 func_808B7460(BgBreakwall* this, PlayState* play) {
+    if (!Flags_GetSwitch(play, this->switchFlag)) {
         this->dyna.actor.scale.x = 0.1f;
     }
     return true;
 }
 
-s32 func_808B74A8(BgBreakwall* this, GlobalContext* globalCtx) {
-    if (gSaveContext.save.weekEventReg[55] & 0x80) {
+s32 func_808B74A8(BgBreakwall* this, PlayState* play) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80)) {
         return false;
     }
     return true;
 }
 
-s32 func_808B74D8(BgBreakwall* this, GlobalContext* globalCtx) {
-    if (!(gSaveContext.save.weekEventReg[9] & 0x80) || (gSaveContext.save.weekEventReg[23] & 0x20)) {
+s32 func_808B74D8(BgBreakwall* this, PlayState* play) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_09_80) || CHECK_WEEKEVENTREG(WEEKEVENTREG_23_20)) {
         return false;
     }
     return true;
 }
 
-s32 func_808B751C(BgBreakwall* this, GlobalContext* globalCtx) {
+s32 func_808B751C(BgBreakwall* this, PlayState* play) {
     Actor_SetScale(&this->dyna.actor, 0.1f);
 
     if ((BGBREAKWALL_SWITCHFLAG(&this->dyna.actor) != 0x7F) &&
-        !Flags_GetSwitch(globalCtx, BGBREAKWALL_SWITCHFLAG(&this->dyna.actor))) {
+        !Flags_GetSwitch(play, BGBREAKWALL_SWITCHFLAG(&this->dyna.actor))) {
         return false;
     }
 
-    func_800FEA50(globalCtx);
+    func_800FEA50(play);
 
     if (gSaveContext.save.isNight) {
         this->unk_15E = 0;
@@ -207,16 +207,16 @@ s32 func_808B751C(BgBreakwall* this, GlobalContext* globalCtx) {
     return true;
 }
 
-void BgBreakwall_Init(Actor* thisx, GlobalContext* globalCtx) {
+void BgBreakwall_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     BgBreakwall* this = THIS;
     BgBreakwallStruct* sp24 = &D_808B8140[BGBREAKWALL_GET_F(&this->dyna.actor)];
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    this->unk_15C = Object_GetIndex(&globalCtx->objectCtx, sp24->unk_00);
+    this->unk_15C = Object_GetIndex(&play->objectCtx, sp24->unk_00);
 
-    if ((this->unk_15C < 0) || !sp24->unk_14(this, globalCtx)) {
-        Actor_MarkForDeath(&this->dyna.actor);
+    if ((this->unk_15C < 0) || !sp24->unk_14(this, play)) {
+        Actor_Kill(&this->dyna.actor);
         return;
     }
 
@@ -224,17 +224,17 @@ void BgBreakwall_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->switchFlag = BGBREAKWALL_SWITCHFLAG(&this->dyna.actor);
 }
 
-void BgBreakwall_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void BgBreakwall_Destroy(Actor* thisx, PlayState* play) {
     BgBreakwall* this = THIS;
     BgBreakwallStruct* temp_s1 = &D_808B8140[BGBREAKWALL_GET_F(&this->dyna.actor)];
 
     if (temp_s1->unk_10 != NULL) {
-        DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+        DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
     }
 }
 
-void func_808B76CC(BgBreakwall* this, GlobalContext* globalCtx) {
-    if (Object_IsLoaded(&globalCtx->objectCtx, this->unk_15C)) {
+void func_808B76CC(BgBreakwall* this, PlayState* play) {
+    if (Object_IsLoaded(&play->objectCtx, this->unk_15C)) {
         BgBreakwallStruct* temp_s1 = &D_808B8140[BGBREAKWALL_GET_F(&this->dyna.actor)];
 
         this->dyna.actor.objBankIndex = this->unk_15C;
@@ -246,7 +246,7 @@ void func_808B76CC(BgBreakwall* this, GlobalContext* globalCtx) {
             this->dyna.actor.flags &= ~ACTOR_FLAG_10;
         }
 
-        Actor_SetObjectDependency(globalCtx, &this->dyna.actor);
+        Actor_SetObjectDependency(play, &this->dyna.actor);
 
         if (temp_s1->unk_0C != NULL) {
             temp_s1->unk_0C = Lib_SegmentedToVirtual(temp_s1->unk_0C);
@@ -254,7 +254,7 @@ void func_808B76CC(BgBreakwall* this, GlobalContext* globalCtx) {
 
         if (temp_s1->unk_10 != NULL) {
             DynaPolyActor_Init(&this->dyna, 0);
-            DynaPolyActor_LoadMesh(globalCtx, &this->dyna, temp_s1->unk_10);
+            DynaPolyActor_LoadMesh(play, &this->dyna, temp_s1->unk_10);
         }
 
         BgBreakwall_SetupAction(this, temp_s1->unk_18);
@@ -262,21 +262,21 @@ void func_808B76CC(BgBreakwall* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_808B77D0(BgBreakwall* this, GlobalContext* globalCtx) {
+void func_808B77D0(BgBreakwall* this, PlayState* play) {
 }
 
-void func_808B77E0(BgBreakwall* this, GlobalContext* globalCtx) {
-    if (!Flags_GetSwitch(globalCtx, this->switchFlag)) {
+void func_808B77E0(BgBreakwall* this, PlayState* play) {
+    if (!Flags_GetSwitch(play, this->switchFlag)) {
         this->dyna.actor.draw = BgBreakwall_Draw;
     } else {
         this->dyna.actor.draw = NULL;
     }
 }
 
-void func_808B782C(BgBreakwall* this, GlobalContext* globalCtx) {
+void func_808B782C(BgBreakwall* this, PlayState* play) {
     f32 phi_f0;
 
-    if (Flags_GetSwitch(globalCtx, this->switchFlag)) {
+    if (Flags_GetSwitch(play, this->switchFlag)) {
         phi_f0 = 1.0f;
     } else {
         phi_f0 = 0.1f;
@@ -284,23 +284,23 @@ void func_808B782C(BgBreakwall* this, GlobalContext* globalCtx) {
     Math_SmoothStepToF(&this->dyna.actor.scale.x, phi_f0, 0.2f, 0.3f, 0.06f);
 }
 
-void func_808B78A4(BgBreakwall* this, GlobalContext* globalCtx) {
-    if (gSaveContext.save.weekEventReg[55] & 0x80) {
-        Actor_MarkForDeath(&this->dyna.actor);
+void func_808B78A4(BgBreakwall* this, PlayState* play) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80)) {
+        Actor_Kill(&this->dyna.actor);
     }
 }
 
-void func_808B78DC(BgBreakwall* this, GlobalContext* globalCtx) {
+void func_808B78DC(BgBreakwall* this, PlayState* play) {
     Actor_SetScale(&this->dyna.actor, 3.5f);
     func_800B9010(&this->dyna.actor, NA_SE_EV_TORNADE - SFX_FLAG);
 }
 
-void func_808B7914(BgBreakwall* this, GlobalContext* globalCtx) {
+void func_808B7914(BgBreakwall* this, PlayState* play) {
     s32 pad;
     Vec3f sp30;
     Vec3f sp24;
 
-    if ((globalCtx->gameplayFrames % 8) == 0) {
+    if ((play->gameplayFrames % 8) == 0) {
         sp30.x = Rand_ZeroFloat(80.0f) + (this->dyna.actor.world.pos.x - 55.0f);
         sp30.y = this->dyna.actor.world.pos.y + 70.0f;
         sp30.z = Rand_ZeroFloat(80.0f) + (this->dyna.actor.world.pos.z - 130.0f);
@@ -309,11 +309,11 @@ void func_808B7914(BgBreakwall* this, GlobalContext* globalCtx) {
         sp24.y = 0.5f;
         sp24.z = 0.0f;
 
-        EffectSsIceSmoke_Spawn(globalCtx, &sp30, &sp24, &gZeroVec3f, -200 - (s32)(Rand_ZeroOne() * 50.0f));
+        EffectSsIceSmoke_Spawn(play, &sp30, &sp24, &gZeroVec3f, -200 - (s32)(Rand_ZeroOne() * 50.0f));
     }
 }
 
-void func_808B7A10(BgBreakwall* this, GlobalContext* globalCtx) {
+void func_808B7A10(BgBreakwall* this, PlayState* play) {
     if (gSaveContext.save.isNight) {
         if (this->unk_15E < 245) {
             this->unk_15E += 10;
@@ -327,17 +327,17 @@ void func_808B7A10(BgBreakwall* this, GlobalContext* globalCtx) {
     }
 }
 
-void BgBreakwall_Update(Actor* thisx, GlobalContext* globalCtx) {
+void BgBreakwall_Update(Actor* thisx, PlayState* play) {
     BgBreakwall* this = THIS;
 
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
 }
 
-void func_808B7A90(Actor* thisx, GlobalContext* globalCtx) {
+void func_808B7A90(Actor* thisx, PlayState* play) {
     Color_RGBA8 sp2C;
     Color_RGBA8 sp28;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
     func_800FE7A8(D_808B82F0, &sp2C);
     func_800FE7A8(D_808B8300, &sp28);
@@ -345,19 +345,19 @@ void func_808B7A90(Actor* thisx, GlobalContext* globalCtx) {
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, sp2C.r, sp2C.g, sp2C.b, 255);
     gDPSetEnvColor(POLY_XLU_DISP++, sp28.r, sp28.g, sp28.b, 255);
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }
 
-void func_808B7B54(Actor* thisx, GlobalContext* globalCtx) {
+void func_808B7B54(Actor* thisx, PlayState* play) {
     s32 pad;
     Color_RGBA8 sp50;
     Color_RGBA8 sp4C;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(globalCtx->state.gfxCtx);
+    func_8012C2DC(play->state.gfxCtx);
 
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
     func_800FE7A8(D_808B8310, &sp50);
     func_800FE7A8(D_808B8330, &sp4C);
@@ -373,17 +373,17 @@ void func_808B7B54(Actor* thisx, GlobalContext* globalCtx) {
     gDPSetEnvColor(POLY_XLU_DISP++, sp4C.r, sp4C.g, sp4C.b, 255);
     gSPDisplayList(POLY_XLU_DISP++, object_kumo30_DL_000C98);
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }
 
-void func_808B7D34(Actor* thisx, GlobalContext* globalCtx) {
+void func_808B7D34(Actor* thisx, PlayState* play) {
     BgBreakwall* this = THIS;
     s32 sp48;
     s32 tempA;
     s32 tempB;
     s32 tempC;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
     sp48 = 255 - this->unk_15E;
 
@@ -391,50 +391,50 @@ void func_808B7D34(Actor* thisx, GlobalContext* globalCtx) {
     tempB = (((sp48 * 145) + (this->unk_15E * 85)) & 0xFF00) >> 8;
     tempC = (((sp48 * 135) + (this->unk_15E * 55)) & 0xFF00) >> 8;
 
-    gSPSegment(POLY_XLU_DISP++, 0x09, Gfx_PrimColor(globalCtx->state.gfxCtx, 255, 255, tempA, tempB, tempC));
+    gSPSegment(POLY_XLU_DISP++, 0x09, Gfx_PrimColor(play->state.gfxCtx, 255, 255, tempA, tempB, tempC));
 
     tempA = (((sp48 * 255) + (this->unk_15E * 150)) & 0xFF00) >> 8;
     tempB = (((sp48 * 255) + (this->unk_15E * 100)) & 0xFF00) >> 8;
     tempC = (((sp48 * 255) + (this->unk_15E * 75)) & 0xFF00) >> 8;
 
-    gSPSegment(POLY_XLU_DISP++, 0x0A, Gfx_PrimColor(globalCtx->state.gfxCtx, 255, tempA, tempA, tempB, tempC));
+    gSPSegment(POLY_XLU_DISP++, 0x0A, Gfx_PrimColor(play->state.gfxCtx, 255, tempA, tempA, tempB, tempC));
 
     tempA = (((sp48 * 185) + (this->unk_15E * 140)) & 0xFF00) >> 8;
     tempB = (((sp48 * 235) + (this->unk_15E * 45)) & 0xFF00) >> 8;
 
-    gSPSegment(POLY_XLU_DISP++, 0x0B, Gfx_PrimColor(globalCtx->state.gfxCtx, 255, 255, 255, tempA, tempB));
+    gSPSegment(POLY_XLU_DISP++, 0x0B, Gfx_PrimColor(play->state.gfxCtx, 255, 255, 255, tempA, tempB));
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }
 
-void BgBreakwall_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void BgBreakwall_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
     BgBreakwall* this = THIS;
     BgBreakwallStruct* temp_s2 = &D_808B8140[BGBREAKWALL_GET_F(&this->dyna.actor)];
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
     if (temp_s2->unk_0C != NULL) {
-        AnimatedMat_Draw(globalCtx, temp_s2->unk_0C);
+        AnimatedMat_Draw(play, temp_s2->unk_0C);
     }
 
     if (temp_s2->unk_1C != NULL) {
-        temp_s2->unk_1C(&this->dyna.actor, globalCtx);
+        temp_s2->unk_1C(&this->dyna.actor, play);
     }
 
     if (temp_s2->unk_04 != NULL) {
-        func_8012C28C(globalCtx->state.gfxCtx);
+        func_8012C28C(play->state.gfxCtx);
 
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, temp_s2->unk_04);
     }
 
     if (temp_s2->unk_08 != NULL) {
-        func_8012C2DC(globalCtx->state.gfxCtx);
+        func_8012C2DC(play->state.gfxCtx);
 
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, temp_s2->unk_08);
     }
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }

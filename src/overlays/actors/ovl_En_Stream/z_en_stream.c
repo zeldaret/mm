@@ -11,14 +11,14 @@
 
 #define THIS ((EnStream*)thisx)
 
-void EnStream_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnStream_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnStream_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnStream_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnStream_Init(Actor* thisx, PlayState* play);
+void EnStream_Destroy(Actor* thisx, PlayState* play);
+void EnStream_Update(Actor* thisx, PlayState* play);
+void EnStream_Draw(Actor* thisx, PlayState* play);
 
-void EnStream_WaitForPlayer(EnStream* this, GlobalContext* globalCtx);
+void EnStream_WaitForPlayer(EnStream* this, PlayState* play);
 
-const ActorInit En_Stream_InitVars = {
+ActorInit En_Stream_InitVars = {
     ACTOR_EN_STREAM,
     ACTORCAT_BG,
     FLAGS,
@@ -38,7 +38,7 @@ void EnStream_SetupAction(EnStream* this, EnStreamActionFunc actionFunc) {
     this->actionFunc = actionFunc;
 }
 
-void EnStream_Init(Actor* thisx, GlobalContext* globalCtx) {
+void EnStream_Init(Actor* thisx, PlayState* play) {
     EnStream* this = THIS;
 
     this->size = EN_STREAM_SIZE(&this->actor);
@@ -49,7 +49,7 @@ void EnStream_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnStream_SetupAction(this, EnStream_WaitForPlayer);
 }
 
-void EnStream_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnStream_Destroy(Actor* thisx, PlayState* play) {
 }
 
 s32 EnStream_PlayerIsInRange(Vec3f* vortexWorldPos, Vec3f* playerWorldPos, Vec3f* posDifference, f32 vortexYScale) {
@@ -81,8 +81,8 @@ s32 EnStream_PlayerIsInRange(Vec3f* vortexWorldPos, Vec3f* playerWorldPos, Vec3f
     return ret;
 }
 
-void EnStream_SuckPlayer(EnStream* this, GlobalContext* globalCtx) {
-    Player* player = GET_PLAYER(globalCtx);
+void EnStream_SuckPlayer(EnStream* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
     s32 pad48;
     Vec3f posDifference;
     f32 xzDist;
@@ -104,7 +104,7 @@ void EnStream_SuckPlayer(EnStream* this, GlobalContext* globalCtx) {
         if (yDistWithOffset > 0.0f) {
             Math_SmoothStepToF(&player->actor.velocity.y, -3.0f, 0.7f, yDistWithOffset, 0.0f);
             if (posDifference.y < -70.0f) {
-                player->stateFlags2 |= 0x80000000;
+                player->stateFlags2 |= PLAYER_STATE2_80000000;
             }
         }
     } else {
@@ -112,8 +112,8 @@ void EnStream_SuckPlayer(EnStream* this, GlobalContext* globalCtx) {
     }
 }
 
-void EnStream_WaitForPlayer(EnStream* this, GlobalContext* globalCtx) {
-    Player* player = GET_PLAYER(globalCtx);
+void EnStream_WaitForPlayer(EnStream* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
     s32 pad;
     Vec3f temp;
 
@@ -123,27 +123,27 @@ void EnStream_WaitForPlayer(EnStream* this, GlobalContext* globalCtx) {
     }
 }
 
-void EnStream_Update(Actor* thisx, GlobalContext* globalCtx) {
+void EnStream_Update(Actor* thisx, PlayState* play) {
     EnStream* this = THIS;
 
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
     func_800B8FE8(&this->actor, NA_SE_EV_WHIRLPOOL - SFX_FLAG);
 }
 
-void EnStream_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void EnStream_Draw(Actor* thisx, PlayState* play) {
     u32 multipliedFrames;
-    u32 frames = globalCtx->gameplayFrames;
+    u32 frames = play->gameplayFrames;
     Gfx* gfx;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
-    func_8012C2DC(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
+    func_8012C2DC(play->state.gfxCtx);
     gfx = POLY_XLU_DISP;
-    gSPMatrix(&gfx[0], Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPMatrix(&gfx[0], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     multipliedFrames = frames * 20;
     gSPSegment(&gfx[1], 0x08,
-               Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, frames * 30, -multipliedFrames, 64, 64, 1, multipliedFrames,
+               Gfx_TwoTexScroll(play->state.gfxCtx, 0, frames * 30, -multipliedFrames, 64, 64, 1, multipliedFrames,
                                 -multipliedFrames, 64, 64));
     gSPDisplayList(&gfx[2], gWaterVortexDL);
     POLY_XLU_DISP = &gfx[3];
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }

@@ -1,7 +1,7 @@
 ﻿<Root>
     <File Name="object_fu" Segment="6">
-        <Animation Name="object_fu_Anim_00057C" Offset="0x57C" />
-        <Animation Name="object_fu_Anim_000B04" Offset="0xB04" />
+        <Animation Name="object_fu_Anim_00057C" Offset="0x57C" /> <!-- Original name is "are_are" -->
+        <Animation Name="object_fu_Anim_000B04" Offset="0xB04" /> <!-- Original name is "fu_mawasu" -->
         <DList Name="object_fu_DL_003130" Offset="0x3130" />
         <DList Name="object_fu_DL_003320" Offset="0x3320" />
         <DList Name="object_fu_DL_0036A0" Offset="0x36A0" />
@@ -47,6 +47,6 @@
         <Limb Name="object_fu_Standardlimb_006C30" Type="Standard" EnumName="OBJECT_FU_LIMB_0D" Offset="0x6C30" />
         <Limb Name="object_fu_Standardlimb_006C3C" Type="Standard" EnumName="OBJECT_FU_LIMB_0E" Offset="0x6C3C" />
         <Limb Name="object_fu_Standardlimb_006C48" Type="Standard" EnumName="OBJECT_FU_LIMB_0F" Offset="0x6C48" />
-        <Skeleton Name="object_fu_Skel_006C90" Type="Flex" LimbType="Standard" LimbNone="OBJECT_FU_LIMB_NONE" LimbMax="OBJECT_FU_LIMB_MAX" EnumName="object_fu_Limbs" Offset="0x6C90" />
+        <Skeleton Name="object_fu_Skel_006C90" Type="Flex" LimbType="Standard" LimbNone="OBJECT_FU_LIMB_NONE" LimbMax="OBJECT_FU_LIMB_MAX" EnumName="ObjectFuLimb" Offset="0x6C90" />
     </File>
 </Root>

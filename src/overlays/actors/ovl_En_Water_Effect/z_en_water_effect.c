@@ -1,7 +1,15 @@
 /*
  * File: z_en_water_effect.c
  * Overlay: ovl_En_Water_Effect
- * Description: Water splashing effect (used for Gyorg)
+ * Description: Water/rock drop spawner and Gyorg water splashing effect
+ *
+ * This actor serves two purposes:
+ * - It can act as a "spawner" for either water drops or flaming rocks. This
+ *   spawner can be placed in the ceiling to drop these repeatedly.
+ * - It is also used to control various water splashing effects for the Gyorg
+ *   fight. Specifically, it handles the splashing that is caused when it
+ *   enters or exits the water, and it handles the shockwave that is created
+ *   when it rams the center platform.
  */
 
 #include "z_en_water_effect.h"
@@ -12,17 +20,17 @@
 
 #define THIS ((EnWaterEffect*)thisx)
 
-void EnWaterEffect_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnWaterEffect_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnWaterEffect_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnWaterEffect_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnWaterEffect_Init(Actor* thisx, PlayState* play);
+void EnWaterEffect_Destroy(Actor* thisx, PlayState* play);
+void EnWaterEffect_Update(Actor* thisx, PlayState* play2);
+void EnWaterEffect_Draw(Actor* thisx, PlayState* play2);
 
-void func_80A59C04(Actor* thisx, GlobalContext* globalCtx2);
-void func_80A5A184(Actor* thisx, GlobalContext* globalCtx2);
-void func_80A5A534(Actor* thisx, GlobalContext* globalCtx);
-void func_80A5A6B8(Actor* thisx, GlobalContext* globalCtx2);
+void func_80A59C04(Actor* thisx, PlayState* play2);
+void func_80A5A184(Actor* thisx, PlayState* play2);
+void func_80A5A534(Actor* thisx, PlayState* play);
+void func_80A5A6B8(Actor* thisx, PlayState* play2);
 
-const ActorInit En_Water_Effect_InitVars = {
+ActorInit En_Water_Effect_InitVars = {
     ACTOR_EN_WATER_EFFECT,
     ACTORCAT_BOSS,
     FLAGS,
@@ -78,34 +86,37 @@ void func_80A58908(EnWaterEffect* this, Vec3f* arg1, Vec3f* arg2, u8 arg3) {
     }
 }
 
-void EnWaterEffect_Init(Actor* thisx, GlobalContext* globalCtx) {
+void EnWaterEffect_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     EnWaterEffect* this = THIS;
 
     this->actor.flags &= ~ACTOR_FLAG_1;
     this->unk_DC4 = Rand_ZeroFloat(100.0f);
 
-    if (this->actor.params == ENWATEREFFECT_1) {
+    if (this->actor.params == ENWATEREFFECT_TYPE_FALLING_ROCK_SPAWNER) {
         this->actor.update = func_80A59C04;
         this->actor.draw = func_80A5A184;
         this->unk_DC6 = Rand_ZeroFloat(100.0f) + 60.0f;
-    } else if ((this->actor.params == ENWATEREFFECT_777) || (this->actor.params == ENWATEREFFECT_778) ||
-               (this->actor.params == ENWATEREFFECT_779) || (this->actor.params == ENWATEREFFECT_780)) {
+    } else if ((this->actor.params == ENWATEREFFECT_TYPE_GYORG_RIPPLES) ||
+               (this->actor.params == ENWATEREFFECT_TYPE_GYORG_PRIMARY_SPRAY) ||
+               (this->actor.params == ENWATEREFFECT_TYPE_GYORG_SECONDARY_SPRAY) ||
+               (this->actor.params == ENWATEREFFECT_TYPE_GYORG_SHOCKWAVE)) {
         this->actor.update = func_80A5A534;
         this->actor.draw = func_80A5A6B8;
         this->actor.shape.rot.y = Rand_ZeroFloat(0x10000);
         Actor_SetScale(&this->actor, this->actor.shape.rot.z * 0.0002f);
 
-        if (this->actor.params == ENWATEREFFECT_777) {
-            Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_WATER_EFFECT, this->actor.world.pos.x,
-                        this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, this->actor.shape.rot.z, 0x30A);
-            Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_WATER_EFFECT, this->actor.world.pos.x,
-                        this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, this->actor.shape.rot.z, 0x30B);
-        } else if (this->actor.params == ENWATEREFFECT_778) {
+        if (this->actor.params == ENWATEREFFECT_TYPE_GYORG_RIPPLES) {
+            Actor_Spawn(&play->actorCtx, play, ACTOR_EN_WATER_EFFECT, this->actor.world.pos.x, this->actor.world.pos.y,
+                        this->actor.world.pos.z, 0, 0, this->actor.shape.rot.z, ENWATEREFFECT_TYPE_GYORG_PRIMARY_SPRAY);
+            Actor_Spawn(&play->actorCtx, play, ACTOR_EN_WATER_EFFECT, this->actor.world.pos.x, this->actor.world.pos.y,
+                        this->actor.world.pos.z, 0, 0, this->actor.shape.rot.z,
+                        ENWATEREFFECT_TYPE_GYORG_SECONDARY_SPRAY);
+        } else if (this->actor.params == ENWATEREFFECT_TYPE_GYORG_PRIMARY_SPRAY) {
             this->unk_DC4 = -3;
-        } else if (this->actor.params == ENWATEREFFECT_779) {
+        } else if (this->actor.params == ENWATEREFFECT_TYPE_GYORG_SECONDARY_SPRAY) {
             this->unk_DC4 = -6;
-        } else if (this->actor.params == ENWATEREFFECT_780) {
+        } else if (this->actor.params == ENWATEREFFECT_TYPE_GYORG_SHOCKWAVE) {
             this->unk_DC4 = 23;
         }
 
@@ -127,13 +138,13 @@ void EnWaterEffect_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-void EnWaterEffect_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnWaterEffect_Destroy(Actor* thisx, PlayState* play) {
 }
 
-void EnWaterEffect_Update(Actor* thisx, GlobalContext* globalCtx2) {
-    GlobalContext* globalCtx = globalCtx2;
+void EnWaterEffect_Update(Actor* thisx, PlayState* play2) {
+    PlayState* play = play2;
     EnWaterEffect* this = THIS;
-    Player* player = GET_PLAYER(globalCtx);
+    Player* player = GET_PLAYER(play);
     EnWaterEffectStruct* ptr = &this->unk_144[0];
     s16 i;
     s16 j;
@@ -143,11 +154,11 @@ void EnWaterEffect_Update(Actor* thisx, GlobalContext* globalCtx2) {
     u8 phi_v1;
     Vec3f sp88;
 
-    if (!Flags_GetSwitch(globalCtx, this->actor.params)) {
+    if (!Flags_GetSwitch(play, this->actor.params)) {
         this->unk_DC4++;
         if ((this->unk_DC4 % 32) == 0) {
             if (Rand_ZeroOne() < 0.5f) {
-                Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 20.0f, 10.0f, 40.0f, 4);
+                Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 10.0f, 40.0f, 4);
                 sp88.x = randPlusMinusPoint5Scaled(50.0f) + this->actor.world.pos.x;
                 sp88.y = this->actor.world.pos.y;
                 sp88.z = randPlusMinusPoint5Scaled(50.0f) + this->actor.world.pos.z;
@@ -198,11 +209,11 @@ void EnWaterEffect_Update(Actor* thisx, GlobalContext* globalCtx2) {
 
                     if (phi_v0) {
                         ptr->unk_00 = 0;
-                        SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &ptr->unk_04, 30, NA_SE_EV_BOMB_DROP_WATER);
+                        SoundSource_PlaySfxAtFixedWorldPos(play, &ptr->unk_04, 30, NA_SE_EV_BOMB_DROP_WATER);
                     } else {
                         ptr->unk_04.y = this->actor.floorHeight;
                         if (ptr->unk_2A == 0) {
-                            SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &ptr->unk_04, 30, NA_SE_EV_WATERDROP_GRD);
+                            SoundSource_PlaySfxAtFixedWorldPos(play, &ptr->unk_04, 30, NA_SE_EV_WATERDROP_GRD);
                             ptr->unk_00 = 3;
                             ptr->unk_2C.x = 0.1f;
                             ptr->unk_2C.y = 0.6f;
@@ -212,21 +223,21 @@ void EnWaterEffect_Update(Actor* thisx, GlobalContext* globalCtx2) {
                             ptr->unk_28 = 9;
                             Math_Vec3f_Copy(&sp98, &ptr->unk_04);
                             sp98.y += 3.0f;
-                            EffectSsGSplash_Spawn(globalCtx, &sp98, NULL, NULL, 1, 100);
+                            EffectSsGSplash_Spawn(play, &sp98, NULL, NULL, 1, 100);
                         } else {
                             ptr->unk_00 = 0;
-                            SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &ptr->unk_04, 30, NA_SE_EV_WATERDROP);
-                            EffectSsGRipple_Spawn(globalCtx, &ptr->unk_04, 70, 500, 0);
-                            EffectSsGRipple_Spawn(globalCtx, &ptr->unk_04, 70, 500, 10);
+                            SoundSource_PlaySfxAtFixedWorldPos(play, &ptr->unk_04, 30, NA_SE_EV_WATERDROP);
+                            EffectSsGRipple_Spawn(play, &ptr->unk_04, 70, 500, 0);
+                            EffectSsGRipple_Spawn(play, &ptr->unk_04, 70, 500, 10);
                             Math_Vec3f_Copy(&sp98, &ptr->unk_04);
                             sp98.y += 10.0f;
-                            EffectSsGSplash_Spawn(globalCtx, &sp98, NULL, NULL, 1, 300);
+                            EffectSsGSplash_Spawn(play, &sp98, NULL, NULL, 1, 300);
                         }
                     }
 
                     for (j = 0; j < 12; j++) {
-                        Matrix_InsertYRotation_f((2.0f * (j * M_PI)) / 5.5f, MTXMODE_NEW);
-                        Matrix_GetStateTranslationAndScaledZ(Rand_ZeroFloat(1.5f) + 1.5f, &spA4);
+                        Matrix_RotateYF((2.0f * (j * M_PI)) / 5.5f, MTXMODE_NEW);
+                        Matrix_MultVecZ(Rand_ZeroFloat(1.5f) + 1.5f, &spA4);
                         spA4.y = Rand_ZeroFloat(4.0f) + 2.0f;
                         func_80A58908(this, &ptr->unk_04, &spA4, ptr->unk_2A);
                     }
@@ -249,7 +260,7 @@ void EnWaterEffect_Update(Actor* thisx, GlobalContext* globalCtx2) {
                             ptr->unk_3C = 150;
                             ptr->unk_28 = Rand_ZeroFloat(5.0f) + 7.0f;
                         } else {
-                            EffectSsGRipple_Spawn(globalCtx, &ptr->unk_04, 0, 200, 0);
+                            EffectSsGRipple_Spawn(play, &ptr->unk_04, 0, 200, 0);
                             ptr->unk_00 = 0;
                         }
                     }
@@ -266,9 +277,9 @@ void EnWaterEffect_Update(Actor* thisx, GlobalContext* globalCtx2) {
     }
 }
 
-void EnWaterEffect_Draw(Actor* thisx, GlobalContext* globalCtx2) {
-    GlobalContext* globalCtx = globalCtx2;
-    GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
+void EnWaterEffect_Draw(Actor* thisx, PlayState* play2) {
+    PlayState* play = play2;
+    GraphicsContext* gfxCtx = play->state.gfxCtx;
     EnWaterEffect* this = THIS;
     s32 pad;
     EnWaterEffectStruct* backupPtr = &this->unk_144[0];
@@ -278,14 +289,14 @@ void EnWaterEffect_Draw(Actor* thisx, GlobalContext* globalCtx2) {
 
     OPEN_DISPS(gfxCtx);
 
-    func_8012C2DC(globalCtx->state.gfxCtx);
+    func_8012C2DC(play->state.gfxCtx);
 
     for (i = 0; i < ARRAY_COUNT(this->unk_144) / 2; i++, ptr++) {
         if ((ptr->unk_00 == 1) || (ptr->unk_00 == 2)) {
             if (!phi_s4) {
                 POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 0);
 
-                gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gDust1Tex));
+                gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gEffDust1Tex));
                 gSPDisplayList(POLY_XLU_DISP++, object_water_effect_DL_004260);
                 gDPSetEnvColor(POLY_XLU_DISP++, 250, 250, 255, 0);
                 phi_s4++;
@@ -293,16 +304,16 @@ void EnWaterEffect_Draw(Actor* thisx, GlobalContext* globalCtx2) {
 
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, (u8)ptr->unk_38, (u8)(((void)0, ptr->unk_38) + 55.0f), 225, 150);
 
-            Matrix_InsertTranslation(ptr->unk_04.x, ptr->unk_04.y, ptr->unk_04.z, MTXMODE_NEW);
+            Matrix_Translate(ptr->unk_04.x, ptr->unk_04.y, ptr->unk_04.z, MTXMODE_NEW);
 
             if (ptr->unk_00 == 1) {
-                Matrix_RotateY(Camera_GetInputDirYaw(GET_ACTIVE_CAM(globalCtx)), MTXMODE_APPLY);
+                Matrix_RotateYS(Camera_GetInputDirYaw(GET_ACTIVE_CAM(play)), MTXMODE_APPLY);
             } else {
-                Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
+                Matrix_ReplaceRotation(&play->billboardMtxF);
             }
 
             Matrix_Scale(ptr->unk_2C.x, ptr->unk_2C.y, 1.0f, MTXMODE_APPLY);
-            Matrix_InsertZRotation_f(ptr->unk_2C.z, MTXMODE_APPLY);
+            Matrix_RotateZF(ptr->unk_2C.z, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_XLU_DISP++, object_water_effect_DL_0042B0);
@@ -317,7 +328,7 @@ void EnWaterEffect_Draw(Actor* thisx, GlobalContext* globalCtx2) {
             if (!phi_s4) {
                 func_8012C448(gfxCtx);
 
-                gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gDust1Tex));
+                gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gEffDust1Tex));
                 gDPSetEnvColor(POLY_XLU_DISP++, 250, 250, 255, 0);
                 gSPDisplayList(POLY_XLU_DISP++, object_water_effect_DL_004260);
                 phi_s4++;
@@ -326,9 +337,9 @@ void EnWaterEffect_Draw(Actor* thisx, GlobalContext* globalCtx2) {
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, (u8)ptr->unk_38, (u8)(((void)0, ptr->unk_38) + 55.0f), 225,
                             ptr->unk_3C);
 
-            Matrix_InsertTranslation(ptr->unk_04.x, ptr->unk_04.y, ptr->unk_04.z, MTXMODE_NEW);
+            Matrix_Translate(ptr->unk_04.x, ptr->unk_04.y, ptr->unk_04.z, MTXMODE_NEW);
             Matrix_Scale(ptr->unk_2C.x, 1.0f, ptr->unk_2C.x, MTXMODE_APPLY);
-            Matrix_InsertYRotation_f(ptr->unk_2C.z, MTXMODE_APPLY);
+            Matrix_RotateYF(ptr->unk_2C.z, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_XLU_DISP++, object_water_effect_DL_0042F8);
@@ -378,15 +389,15 @@ void func_80A599E8(EnWaterEffect* this, Vec3f* arg1, u8 arg2) {
     }
 }
 
-void func_80A59C04(Actor* thisx, GlobalContext* globalCtx2) {
-    GlobalContext* globalCtx = globalCtx2;
+void func_80A59C04(Actor* thisx, PlayState* play2) {
+    PlayState* play = play2;
     EnWaterEffect* this = THIS;
     s16 i;
     s16 j;
     f32 temp_f0_2;
-    Player* player = GET_PLAYER(globalCtx);
+    Player* player = GET_PLAYER(play);
     Vec3f sp90;
-    Actor* rotaryRoom = globalCtx->actorCtx.actorLists[ACTORCAT_BG].first;
+    Actor* rotaryRoom = play->actorCtx.actorLists[ACTORCAT_BG].first;
     CollisionPoly* sp88;
     EnWaterEffectStruct* ptr = &this->unk_144[0];
     u8 phi_s5;
@@ -403,13 +414,13 @@ void func_80A59C04(Actor* thisx, GlobalContext* globalCtx2) {
         this->unk_DC6--;
     }
 
-    if ((rotaryRoom != NULL) && Flags_GetSwitch(globalCtx, (rotaryRoom->params >> 1) & 0x7F)) {
+    if ((rotaryRoom != NULL) && Flags_GetSwitch(play, (rotaryRoom->params >> 1) & 0x7F)) {
         this->unk_DC6 = Rand_ZeroFloat(150.0f) + 100.0f;
-    } else if (!Play_InCsMode(globalCtx)) {
+    } else if (!Play_InCsMode(play)) {
         this->unk_DC4++;
         if (this->unk_DC6 == 0) {
             this->unk_DC6 = Rand_ZeroFloat(150.0f) + 100.0f;
-            Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 20.0f, 10.0f, 40.0f, 4);
+            Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 10.0f, 40.0f, 4);
             sp74.x = randPlusMinusPoint5Scaled(50.0f) + this->actor.world.pos.x;
             sp74.y = this->actor.world.pos.y;
             sp74.z = randPlusMinusPoint5Scaled(50.0f) + this->actor.world.pos.z;
@@ -466,19 +477,19 @@ void func_80A59C04(Actor* thisx, GlobalContext* globalCtx2) {
                         (fabsf(ptr->unk_04.y - (player->actor.world.pos.y + 25.0f)) < 30.0f)) {
                         phi_s5 = true;
                         if ((player->transformation != PLAYER_FORM_GORON) && !player->isBurning) {
-                            func_800B8D50(globalCtx, &this->actor, 2.0f, Rand_ZeroFloat(0x10000), 0.0f, 0x10);
+                            func_800B8D50(play, &this->actor, 2.0f, Rand_ZeroFloat(0x10000), 0.0f, 0x10);
                             for (j = 0; j < ARRAY_COUNT(player->flameTimers); j++) {
                                 player->flameTimers[j] = Rand_S16Offset(0, 200);
                             }
                             player->isBurning = true;
-                            func_800B8E58(player, player->ageProperties->unk_92 + NA_SE_VO_LI_DEMO_DAMAGE);
+                            Player_PlaySfx(player, player->ageProperties->voiceSfxIdOffset + NA_SE_VO_LI_DEMO_DAMAGE);
                         }
                     }
 
                     Math_Vec3f_Copy(&sp90, &ptr->unk_04);
                     sp90.y += 30.0f;
 
-                    temp_f0_2 = BgCheck_EntityRaycastFloor1(&globalCtx->colCtx, &sp88, &sp90);
+                    temp_f0_2 = BgCheck_EntityRaycastFloor1(&play->colCtx, &sp88, &sp90);
                     if (fabsf(temp_f0_2 - this->actor.floorHeight) > 200.0f) {
                         phi_s5 = true;
                     }
@@ -493,7 +504,7 @@ void func_80A59C04(Actor* thisx, GlobalContext* globalCtx2) {
                             for (j = 0; j < 5; j++) {
                                 func_80A599E8(this, &ptr->unk_04, 2);
                             }
-                            SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &ptr->unk_04, 30, NA_SE_EV_PLANT_BROKEN);
+                            SoundSource_PlaySfxAtFixedWorldPos(play, &ptr->unk_04, 30, NA_SE_EV_PLANT_BROKEN);
                         }
                         ptr->unk_2A++;
                     }
@@ -503,18 +514,18 @@ void func_80A59C04(Actor* thisx, GlobalContext* globalCtx2) {
     }
 }
 
-void func_80A5A184(Actor* thisx, GlobalContext* globalCtx2) {
-    GlobalContext* globalCtx = globalCtx2;
+void func_80A5A184(Actor* thisx, PlayState* play2) {
+    PlayState* play = play2;
     EnWaterEffect* this = THIS;
-    GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
+    GraphicsContext* gfxCtx = play->state.gfxCtx;
     EnWaterEffectStruct* ptr = &this->unk_144[0];
     u8 flag = false;
     s16 i;
 
     OPEN_DISPS(gfxCtx);
 
-    func_8012C28C(globalCtx->state.gfxCtx);
-    func_8012C2DC(globalCtx->state.gfxCtx);
+    func_8012C28C(play->state.gfxCtx);
+    func_8012C2DC(play->state.gfxCtx);
 
     for (i = 0; i < ARRAY_COUNT(this->unk_144); i++, ptr++) {
         if (ptr->unk_00 == 4) {
@@ -527,50 +538,49 @@ void func_80A5A184(Actor* thisx, GlobalContext* globalCtx2) {
 
             gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, (u8)ptr->unk_38, 0, 0, (u8)ptr->unk_3C);
             gSPSegment(POLY_XLU_DISP++, 0x08,
-                       Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, 0, 0x20, 0x40, 1, 0, (ptr->unk_01 * -20) & 0x1FF,
+                       Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, 0, 0x20, 0x40, 1, 0, (ptr->unk_01 * -20) & 0x1FF,
                                         0x20, 0x80));
 
-            Matrix_InsertTranslation(ptr->unk_04.x, ptr->unk_04.y, ptr->unk_04.z, MTXMODE_NEW);
+            Matrix_Translate(ptr->unk_04.x, ptr->unk_04.y, ptr->unk_04.z, MTXMODE_NEW);
 
             if (ptr->unk_2A >= 2) {
-                Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
+                Matrix_ReplaceRotation(&play->billboardMtxF);
             } else {
-                Matrix_RotateY(Camera_GetInputDirYaw(GET_ACTIVE_CAM(globalCtx)), MTXMODE_APPLY);
+                Matrix_RotateYS(Camera_GetInputDirYaw(GET_ACTIVE_CAM(play)), MTXMODE_APPLY);
             }
 
             Matrix_Scale(ptr->unk_2C.x, ptr->unk_2C.y, 1.0f, MTXMODE_APPLY);
 
             if ((i & 1) != 0) {
-                Matrix_InsertYRotation_f(M_PI, MTXMODE_APPLY);
+                Matrix_RotateYF(M_PI, MTXMODE_APPLY);
             }
 
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
-                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_XLU_DISP++, object_water_effect_DL_0043E8);
 
             if ((ptr->unk_2A & 1) == 0) {
-                Matrix_InsertTranslation(ptr->unk_04.x, ptr->unk_04.y + 5.0f, ptr->unk_04.z, MTXMODE_NEW);
-                Matrix_InsertXRotation_s(ptr->unk_28, MTXMODE_APPLY);
+                Matrix_Translate(ptr->unk_04.x, ptr->unk_04.y + 5.0f, ptr->unk_04.z, MTXMODE_NEW);
+                Matrix_RotateXS(ptr->unk_28, MTXMODE_APPLY);
                 Matrix_Scale(ptr->unk_2C.z, ptr->unk_2C.z, ptr->unk_2C.z, MTXMODE_APPLY);
 
-                gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
+                gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx),
                           G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
                 gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_06AB30);
             }
         }
     }
 
-    POLY_OPA_DISP = func_801660B8(globalCtx, POLY_OPA_DISP);
+    POLY_OPA_DISP = Play_SetFog(play, POLY_OPA_DISP);
 
     CLOSE_DISPS(gfxCtx);
 }
 
-void func_80A5A534(Actor* thisx, GlobalContext* globalCtx) {
+void func_80A5A534(Actor* thisx, PlayState* play) {
     EnWaterEffect* this = THIS;
     s32 i;
 
     if (this->unk_E38 < 1.0f) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 
     this->unk_DC4++;
@@ -601,87 +611,87 @@ void func_80A5A534(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-void func_80A5A6B8(Actor* thisx, GlobalContext* globalCtx2) {
-    GlobalContext* globalCtx = globalCtx2;
+void func_80A5A6B8(Actor* thisx, PlayState* play2) {
+    PlayState* play = play2;
     EnWaterEffect* this = THIS;
     EnWaterEffectStruct* ptr = &this->unk_144[0];
     u8 phi_s4 = false;
     s16 i;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
-    Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
-    Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_APPLY);
+    Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
+    Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_APPLY);
     Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-    func_8012C2DC(globalCtx->state.gfxCtx);
+    func_8012C2DC(play->state.gfxCtx);
 
     gDPSetEnvColor(POLY_XLU_DISP++, 165, 235, 255, 128);
 
-    Matrix_StatePush();
-    Matrix_StatePush();
-    Matrix_StatePush();
+    Matrix_Push();
+    Matrix_Push();
+    Matrix_Push();
 
-    if ((this->actor.params == ENWATEREFFECT_777) || (this->actor.params == ENWATEREFFECT_778)) {
+    if ((this->actor.params == ENWATEREFFECT_TYPE_GYORG_RIPPLES) ||
+        (this->actor.params == ENWATEREFFECT_TYPE_GYORG_PRIMARY_SPRAY)) {
         if (this->unk_E2C > 1.0f) {
-            func_8012C2DC(globalCtx->state.gfxCtx);
-            AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(object_water_effect_Matanimheader_000DE0));
+            func_8012C2DC(play->state.gfxCtx);
+            AnimatedMat_Draw(play, Lib_SegmentedToVirtual(object_water_effect_Matanimheader_000DE0));
             Matrix_Scale(this->unk_DC8[1].y, this->unk_DC8[1].z, this->unk_DC8[1].y, MTXMODE_APPLY);
 
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
-                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, (u8)this->unk_E2C);
             gSPDisplayList(POLY_XLU_DISP++, object_water_effect_DL_000420);
         }
 
-        Matrix_StatePop();
+        Matrix_Pop();
 
         if (this->unk_E30 > 1.0f) {
-            func_8012C2DC(globalCtx->state.gfxCtx);
-            AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(object_water_effect_Matanimheader_000E0C));
+            func_8012C2DC(play->state.gfxCtx);
+            AnimatedMat_Draw(play, Lib_SegmentedToVirtual(object_water_effect_Matanimheader_000E0C));
             Matrix_Scale(this->unk_DC8[2].y, this->unk_DC8[2].z, this->unk_DC8[2].y, MTXMODE_APPLY);
 
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
-                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, (u8)this->unk_E30);
             gSPDisplayList(POLY_XLU_DISP++, object_water_effect_DL_000730);
         }
-        Matrix_StatePop();
+        Matrix_Pop();
     } else {
-        Matrix_StatePop();
-        Matrix_StatePop();
+        Matrix_Pop();
+        Matrix_Pop();
     }
 
-    if ((this->unk_E34 > 1.0f) && (this->actor.params != ENWATEREFFECT_780)) {
-        func_8012C2DC(globalCtx->state.gfxCtx);
-        AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(object_water_effect_Matanimheader_000E40));
+    if ((this->unk_E34 > 1.0f) && (this->actor.params != ENWATEREFFECT_TYPE_GYORG_SHOCKWAVE)) {
+        func_8012C2DC(play->state.gfxCtx);
+        AnimatedMat_Draw(play, Lib_SegmentedToVirtual(object_water_effect_Matanimheader_000E40));
         Matrix_Scale(this->unk_DC8[3].y, this->unk_DC8[3].z, this->unk_DC8[3].y, MTXMODE_APPLY);
 
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, (u8)this->unk_E34);
         gSPDisplayList(POLY_XLU_DISP++, object_water_effect_DL_000A48);
     }
 
-    Matrix_StatePop();
+    Matrix_Pop();
 
-    if ((this->actor.params == ENWATEREFFECT_777) || (this->actor.params == ENWATEREFFECT_780)) {
-        func_8012C2DC(globalCtx->state.gfxCtx);
-        AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(object_water_effect_Matanimheader_000E58));
+    if ((this->actor.params == ENWATEREFFECT_TYPE_GYORG_RIPPLES) ||
+        (this->actor.params == ENWATEREFFECT_TYPE_GYORG_SHOCKWAVE)) {
+        func_8012C2DC(play->state.gfxCtx);
+        AnimatedMat_Draw(play, Lib_SegmentedToVirtual(object_water_effect_Matanimheader_000E58));
         Matrix_Scale(this->unk_DC8[4].y, this->unk_DC8[4].z, this->unk_DC8[4].y, MTXMODE_APPLY);
 
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, (u8)this->unk_E38);
         gSPDisplayList(POLY_XLU_DISP++, object_water_effect_DL_000CD8);
     }
 
-    if (this->actor.params == ENWATEREFFECT_777) {
-        func_8012C2DC(globalCtx->state.gfxCtx);
+    if (this->actor.params == ENWATEREFFECT_TYPE_GYORG_RIPPLES) {
+        func_8012C2DC(play->state.gfxCtx);
 
         for (i = 0; i < ARRAY_COUNT(this->unk_144) / 2; i++, ptr++) {
             if (ptr->unk_00 == 3) {
                 if (!phi_s4) {
-                    func_8012C448(globalCtx->state.gfxCtx);
+                    func_8012C448(play->state.gfxCtx);
 
-                    gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gDust1Tex));
+                    gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gEffDust1Tex));
                     gDPSetEnvColor(POLY_XLU_DISP++, 250, 250, 255, 0);
                     gSPDisplayList(POLY_XLU_DISP++, object_water_effect_DL_004260);
                     phi_s4++;
@@ -690,16 +700,16 @@ void func_80A5A6B8(Actor* thisx, GlobalContext* globalCtx2) {
                 gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, (u8)ptr->unk_38, (u8)(((void)0, ptr->unk_38) + 55.0f), 225,
                                 ptr->unk_3C);
 
-                Matrix_InsertTranslation(ptr->unk_04.x, ptr->unk_04.y, ptr->unk_04.z, MTXMODE_NEW);
+                Matrix_Translate(ptr->unk_04.x, ptr->unk_04.y, ptr->unk_04.z, MTXMODE_NEW);
                 Matrix_Scale(ptr->unk_2C.x, 1.0f, ptr->unk_2C.x, MTXMODE_APPLY);
-                Matrix_InsertYRotation_f(ptr->unk_2C.z, MTXMODE_APPLY);
+                Matrix_RotateYF(ptr->unk_2C.z, MTXMODE_APPLY);
 
-                gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
+                gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
                           G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
                 gSPDisplayList(POLY_XLU_DISP++, object_water_effect_DL_0042F8);
             }
         }
     }
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }

@@ -7,27 +7,28 @@
 #include "z_en_fu_kago.h"
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
 #include "overlays/actors/ovl_En_Fu/z_en_fu.h"
+#include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
 #include "objects/object_fu_mato/object_fu_mato.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnFuKago*)thisx)
 
-void EnFuKago_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnFuKago_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnFuKago_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnFuKago_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnFuKago_Init(Actor* thisx, PlayState* play);
+void EnFuKago_Destroy(Actor* thisx, PlayState* play);
+void EnFuKago_Update(Actor* thisx, PlayState* play);
+void EnFuKago_Draw(Actor* thisx, PlayState* play);
 
 void func_80ACF994(EnFuKago* this);
-void func_80ACF9A8(EnFuKago* this, GlobalContext* globalCtx);
+void func_80ACF9A8(EnFuKago* this, PlayState* play);
 void func_80ACF9DC(EnFuKago* this);
-void func_80ACF9FC(EnFuKago* this, GlobalContext* globalCtx);
-void func_80ACFA78(EnFuKago* this, GlobalContext* globalCtx);
-void func_80AD0028(EnFuKago* this, GlobalContext* globalCtx);
+void func_80ACF9FC(EnFuKago* this, PlayState* play);
+void func_80ACFA78(EnFuKago* this, PlayState* play);
+void func_80AD0028(EnFuKago* this, PlayState* play);
 void func_80AD0274(EnFuKago* this);
-void func_80AD0288(EnFuKago* this, GlobalContext* globalCtx);
+void func_80AD0288(EnFuKago* this, PlayState* play);
 
-const ActorInit En_Fu_Kago_InitVars = {
+ActorInit En_Fu_Kago_InitVars = {
     ACTOR_EN_FU_KAGO,
     ACTORCAT_BG,
     FLAGS,
@@ -79,15 +80,15 @@ Vec3f D_80AD06C4[] = {
     { 13.7f, 9.0f, -15.5f }, { -13.7f, 9.0f, -15.5f }, { -13.7f, 9.0f, 0.0f },
 };
 
-void EnFuKago_Init(Actor* thisx, GlobalContext* globalCtx) {
+void EnFuKago_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     EnFuKago* this = THIS;
     CollisionHeader* sp34 = NULL;
-    Actor* npc = globalCtx->actorCtx.actorLists[ACTORCAT_NPC].first;
+    Actor* npc = play->actorCtx.actorLists[ACTORCAT_NPC].first;
 
     DynaPolyActor_Init(&this->dyna, 1);
     CollisionHeader_GetVirtual(&object_fu_mato_Colheader_0015C0, &sp34);
-    this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, sp34);
+    this->dyna.bgId = DynaPoly_SetBgActor(play, &play->colCtx.dyna, &this->dyna.actor, sp34);
     Actor_SetScale(&this->dyna.actor, 0.1f);
 
     while (npc != NULL) {
@@ -99,12 +100,12 @@ void EnFuKago_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     if (npc == NULL) {
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
         return;
     }
 
-    Collider_InitSphere(globalCtx, &this->collider);
-    Collider_SetSphere(globalCtx, &this->collider, &this->dyna.actor, &sSphereInit);
+    Collider_InitSphere(play, &this->collider);
+    Collider_SetSphere(play, &this->collider, &this->dyna.actor, &sSphereInit);
     this->collider.dim.worldSphere.radius = 10;
     this->unk_33A = 0;
     this->unk_33C = 0;
@@ -112,13 +113,13 @@ void EnFuKago_Init(Actor* thisx, GlobalContext* globalCtx) {
     func_80ACF994(this);
 }
 
-void EnFuKago_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnFuKago_Destroy(Actor* thisx, PlayState* play) {
     EnFuKago* this = THIS;
 
-    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
 
-s32 func_80ACF8B8(EnFuKago* this, GlobalContext* globalCtx) {
+s32 func_80ACF8B8(EnFuKago* this, PlayState* play) {
     this->collider.dim.worldSphere.center.x = this->dyna.actor.world.pos.x;
     this->collider.dim.worldSphere.center.y = this->dyna.actor.world.pos.y + 10.0f;
     this->collider.dim.worldSphere.center.z = this->dyna.actor.world.pos.z;
@@ -129,16 +130,16 @@ s32 func_80ACF8B8(EnFuKago* this, GlobalContext* globalCtx) {
         if (this->collider.base.oc->id == ACTOR_EN_BOM) {
             this->dyna.actor.child = this->collider.base.oc;
         } else if (this->collider.base.oc->id == ACTOR_PLAYER) {
-            func_80ACFA78(this, globalCtx);
+            func_80ACFA78(this, play);
             return false;
         } else {
             return false;
         }
 
-        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_SY_TRE_BOX_APPEAR);
+        Actor_PlaySfx(&this->dyna.actor, NA_SE_SY_TRE_BOX_APPEAR);
         return true;
     } else {
-        CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+        CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
     }
     return false;
 }
@@ -147,8 +148,8 @@ void func_80ACF994(EnFuKago* this) {
     this->actionFunc = func_80ACF9A8;
 }
 
-void func_80ACF9A8(EnFuKago* this, GlobalContext* globalCtx) {
-    if (func_80ACF8B8(this, globalCtx)) {
+void func_80ACF9A8(EnFuKago* this, PlayState* play) {
+    if (func_80ACF8B8(this, play)) {
         func_80ACF9DC(this);
     }
 }
@@ -160,7 +161,7 @@ void func_80ACF9DC(EnFuKago* this) {
     this->actionFunc = func_80ACF9FC;
 }
 
-void func_80ACF9FC(EnFuKago* this, GlobalContext* globalCtx) {
+void func_80ACF9FC(EnFuKago* this, PlayState* play) {
     EnBom* bom = (EnBom*)this->dyna.actor.child;
     EnFu* fu = (EnFu*)this->dyna.actor.parent;
 
@@ -169,14 +170,14 @@ void func_80ACF9FC(EnFuKago* this, GlobalContext* globalCtx) {
         func_80ACF994(this);
     } else if (bom->timer == 1) {
         fu->unk_548++;
-        func_80ACFA78(this, globalCtx);
+        func_80ACFA78(this, play);
     } else {
         this->dyna.actor.child->world.pos.x = this->dyna.actor.world.pos.x;
         this->dyna.actor.child->world.pos.z = this->dyna.actor.world.pos.z;
     }
 }
 
-void func_80ACFA78(EnFuKago* this, GlobalContext* globalCtx) {
+void func_80ACFA78(EnFuKago* this, PlayState* play) {
     s32 i;
     Vec3f sp98;
     Vec3s sp90;
@@ -221,19 +222,19 @@ void func_80ACFA78(EnFuKago* this, GlobalContext* globalCtx) {
     }
 
     this->dyna.actor.freezeTimer = 2;
-    EffectSsHahen_SpawnBurst(globalCtx, &this->dyna.actor.world.pos, 17.0f, 0, 15, 13, 20, -1, 10, NULL);
+    EffectSsHahen_SpawnBurst(play, &this->dyna.actor.world.pos, 17.0f, 0, 15, 13, 20, HAHEN_OBJECT_DEFAULT, 10, NULL);
 
     this->unk_338 = 60;
     this->unk_33A = 1;
 
-    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_WOODBOX_BREAK);
-    func_800C62BC(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_WOODBOX_BREAK);
+    func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
     this->actionFunc = func_80AD0028;
 }
 
 Vec3f D_80AD0714 = { 0.0f, 0.0f, 0.0f };
 
-void func_80ACFDAC(EnFuKago* this, GlobalContext* globalCtx, EnFuKagoStruct* arg2) {
+void func_80ACFDAC(EnFuKago* this, PlayState* play, EnFuKagoStruct* arg2) {
     Vec3f sp34;
     f32 temp_f0;
 
@@ -241,8 +242,8 @@ void func_80ACFDAC(EnFuKago* this, GlobalContext* globalCtx, EnFuKagoStruct* arg
         if (arg2->unk_00.y < 15.0f) {
             sp34 = arg2->unk_00;
             sp34.y = 30.0f;
-            EffectSsGSplash_Spawn(globalCtx, &sp34, NULL, NULL, 0, 800);
-            EffectSsGRipple_Spawn(globalCtx, &sp34, 250, 650, 0);
+            EffectSsGSplash_Spawn(play, &sp34, NULL, NULL, 0, 800);
+            EffectSsGRipple_Spawn(play, &sp34, 250, 650, 0);
             arg2->unk_3C = 1;
         }
 
@@ -271,19 +272,19 @@ void func_80ACFDAC(EnFuKago* this, GlobalContext* globalCtx, EnFuKagoStruct* arg
         Math_SmoothStepToS(&arg2->unk_36.z, 0, 0xA, 0x64, 0xA);
     }
 
-    if ((globalCtx->gameplayFrames % 8) == 0) {
+    if ((play->gameplayFrames % 8) == 0) {
         sp34 = arg2->unk_00;
         sp34.y = 30.0f;
-        EffectSsGRipple_Spawn(globalCtx, &sp34, 250, 650, 0);
+        EffectSsGRipple_Spawn(play, &sp34, 250, 650, 0);
     }
 }
 
-void func_80AD0028(EnFuKago* this, GlobalContext* globalCtx) {
+void func_80AD0028(EnFuKago* this, PlayState* play) {
     EnFuKagoStruct* ptr = this->unk_1B8;
     s32 i;
 
     for (i = 0; i < ARRAY_COUNT(this->unk_1B8); i++) {
-        func_80ACFDAC(this, globalCtx, ptr);
+        func_80ACFDAC(this, play, ptr);
 
         ptr->unk_0C.x += ptr->unk_18.x;
         ptr->unk_0C.y += ptr->unk_18.y;
@@ -333,7 +334,7 @@ void func_80AD0274(EnFuKago* this) {
     this->actionFunc = func_80AD0288;
 }
 
-void func_80AD0288(EnFuKago* this, GlobalContext* globalCtx) {
+void func_80AD0288(EnFuKago* this, PlayState* play) {
     s32 pad;
     Vec3f* scale = &this->dyna.actor.scale;
 
@@ -341,57 +342,57 @@ void func_80AD0288(EnFuKago* this, GlobalContext* globalCtx) {
     scale->z = scale->x;
     scale->y = scale->x;
     if (scale->x == 0.0f) {
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
     }
 }
 
-void EnFuKago_Update(Actor* thisx, GlobalContext* globalCtx) {
+void EnFuKago_Update(Actor* thisx, PlayState* play) {
     EnFuKago* this = THIS;
 
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
 
     if (this->unk_33C == 1) {
         func_80AD0274(this);
     }
 }
 
-void func_80AD0340(EnFuKago* this, GlobalContext* globalCtx) {
+void func_80AD0340(EnFuKago* this, PlayState* play) {
     s32 pad[2];
     EnFuKagoStruct* ptr = &this->unk_1B8[0];
     s32 i;
     Vec3f* scale = &this->dyna.actor.scale;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(globalCtx->state.gfxCtx);
+    func_8012C28C(play->state.gfxCtx);
 
     for (i = 0; i < ARRAY_COUNT(D_80AD061C); i++, ptr++) {
-        Matrix_StatePush();
-        Matrix_SetStateRotationAndTranslation(ptr->unk_00.x, ptr->unk_00.y, ptr->unk_00.z, &this->dyna.actor.shape.rot);
-        Matrix_InsertTranslation(ptr->unk_24.x, ptr->unk_24.y, ptr->unk_24.z, MTXMODE_APPLY);
-        Matrix_InsertRotation(ptr->unk_30.x, ptr->unk_30.y, ptr->unk_30.z, MTXMODE_APPLY);
-        Matrix_InsertTranslation(-ptr->unk_24.x, -ptr->unk_24.y, -ptr->unk_24.z, MTXMODE_APPLY);
+        Matrix_Push();
+        Matrix_SetTranslateRotateYXZ(ptr->unk_00.x, ptr->unk_00.y, ptr->unk_00.z, &this->dyna.actor.shape.rot);
+        Matrix_Translate(ptr->unk_24.x, ptr->unk_24.y, ptr->unk_24.z, MTXMODE_APPLY);
+        Matrix_RotateZYX(ptr->unk_30.x, ptr->unk_30.y, ptr->unk_30.z, MTXMODE_APPLY);
+        Matrix_Translate(-ptr->unk_24.x, -ptr->unk_24.y, -ptr->unk_24.z, MTXMODE_APPLY);
         Matrix_Scale(scale->x, scale->y, scale->z, MTXMODE_APPLY);
 
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, D_80AD061C[i]);
 
-        Matrix_StatePop();
+        Matrix_Pop();
     }
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }
 
-void EnFuKago_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void EnFuKago_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
     EnFuKago* this = THIS;
 
     if (this->unk_33A == 0) {
-        OPEN_DISPS(globalCtx->state.gfxCtx);
+        OPEN_DISPS(play->state.gfxCtx);
 
-        func_8012C28C(globalCtx->state.gfxCtx);
+        func_8012C28C(play->state.gfxCtx);
 
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, object_fu_mato_DL_0006A0);
         gSPDisplayList(POLY_OPA_DISP++, object_fu_mato_DL_000740);
         gSPDisplayList(POLY_OPA_DISP++, object_fu_mato_DL_0007E0);
@@ -399,8 +400,8 @@ void EnFuKago_Draw(Actor* thisx, GlobalContext* globalCtx) {
         gSPDisplayList(POLY_OPA_DISP++, object_fu_mato_DL_000920);
         gSPDisplayList(POLY_OPA_DISP++, object_fu_mato_DL_0009C0);
 
-        CLOSE_DISPS(globalCtx->state.gfxCtx);
+        CLOSE_DISPS(play->state.gfxCtx);
     } else {
-        func_80AD0340(this, globalCtx);
+        func_80AD0340(this, play);
     }
 }

@@ -51,7 +51,7 @@ void ZCollisionHeader::ParseRawData()
 	vertices.reserve(numVerts);
 	polygons.reserve(numPolygons);
 
-	uint32_t currentPtr = vtxSegmentOffset;
+	offset_t currentPtr = vtxSegmentOffset;
 
 	for (uint16_t i = 0; i < numVerts; i++)
 	{
@@ -63,19 +63,30 @@ void ZCollisionHeader::ParseRawData()
 	}
 
 	for (uint16_t i = 0; i < numPolygons; i++)
-		polygons.push_back(PolygonEntry(rawData, polySegmentOffset + (i * 16)));
+	{
+		ZCollisionPoly poly(parent);
+		poly.SetRawDataIndex(polySegmentOffset + (i * 16));
+		poly.ParseRawData();
+		polygons.push_back(poly);
+	}
 
 	uint16_t highestPolyType = 0;
 
-	for (PolygonEntry poly : polygons)
+	for (const ZCollisionPoly& poly : polygons)
 	{
 		if (poly.type > highestPolyType)
 			highestPolyType = poly.type;
 	}
 
 	for (uint16_t i = 0; i < highestPolyType + 1; i++)
-		polygonTypes.push_back(
-			BitConverter::ToUInt64BE(rawData, polyTypeDefSegmentOffset + (i * 8)));
+	{
+		ZSurfaceType surfaceType(parent);
+		surfaceType.SetRawDataIndex(polyTypeDefSegmentOffset + (i * 8));
+		surfaceType.ParseRawData();
+		polygonTypes.push_back(surfaceType);
+	}
+	// polygonTypes.push_back(
+	//	BitConverter::ToUInt64BE(rawData, polyTypeDefSegmentOffset + (i * 8)));
 
 	if (camDataAddress != SEGMENTED_NULL)
 	{
@@ -149,32 +160,27 @@ void ZCollisionHeader::DeclareReferences(const std::string& prefix)
 
 		for (size_t i = 0; i < polygons.size(); i++)
 		{
-			declaration += StringHelper::Sprintf(
-				"\t{ 0x%04X, 0x%04X, 0x%04X, 0x%04X, 0x%04X, 0x%04X, 0x%04X, 0x%04X },",
-				polygons[i].type, polygons[i].vtxA, polygons[i].vtxB, polygons[i].vtxC,
-				polygons[i].a, polygons[i].b, polygons[i].c, polygons[i].d);
+			declaration += StringHelper::Sprintf("\t%s,", polygons[i].GetBodySourceCode().c_str());
 			if (i + 1 < polygons.size())
 				declaration += "\n";
 		}
 
-		parent->AddDeclarationArray(
-			polySegmentOffset, DeclarationAlignment::Align4, polygons.size() * 16, "CollisionPoly",
-			StringHelper::Sprintf("%sPolygons", auxName.c_str()), polygons.size(), declaration);
+		parent->AddDeclarationArray(polySegmentOffset, DeclarationAlignment::Align4,
+		                            polygons.size() * 16, polygons[0].GetSourceTypeName().c_str(),
+		                            StringHelper::Sprintf("%sPolygons", auxName.c_str()),
+		                            polygons.size(), declaration);
 	}
 
 	declaration.clear();
-	for (size_t i = 0; i < polygonTypes.size(); i++)
+	for (const auto& polyType : polygonTypes)
 	{
-		declaration += StringHelper::Sprintf("\t{ 0x%08lX, 0x%08lX },", polygonTypes[i] >> 32,
-		                                     polygonTypes[i] & 0xFFFFFFFF);
-
-		if (i < polygonTypes.size() - 1)
-			declaration += "\n";
+		declaration += StringHelper::Sprintf("\t%s,", polyType.GetBodySourceCode().c_str());
 	}
 
-	if (polyTypeDefAddress != 0)
+	if (polyTypeDefAddress != SEGMENTED_NULL)
 		parent->AddDeclarationArray(polyTypeDefSegmentOffset, DeclarationAlignment::Align4,
-		                            polygonTypes.size() * 8, "SurfaceType",
+		                            polygonTypes.size() * 8,
+		                            polygonTypes[0].GetSourceTypeName().c_str(),
 		                            StringHelper::Sprintf("%sSurfaceType", auxName.c_str()),
 		                            polygonTypes.size(), declaration);
 
@@ -252,18 +258,6 @@ ZResourceType ZCollisionHeader::GetResourceType() const
 size_t ZCollisionHeader::GetRawDataSize() const
 {
 	return 44;
-}
-
-PolygonEntry::PolygonEntry(const std::vector<uint8_t>& rawData, uint32_t rawDataIndex)
-{
-	type = BitConverter::ToUInt16BE(rawData, rawDataIndex + 0);
-	vtxA = BitConverter::ToUInt16BE(rawData, rawDataIndex + 2);
-	vtxB = BitConverter::ToUInt16BE(rawData, rawDataIndex + 4);
-	vtxC = BitConverter::ToUInt16BE(rawData, rawDataIndex + 6);
-	a = BitConverter::ToUInt16BE(rawData, rawDataIndex + 8);
-	b = BitConverter::ToUInt16BE(rawData, rawDataIndex + 10);
-	c = BitConverter::ToUInt16BE(rawData, rawDataIndex + 12);
-	d = BitConverter::ToUInt16BE(rawData, rawDataIndex + 14);
 }
 
 WaterBoxHeader::WaterBoxHeader(const std::vector<uint8_t>& rawData, uint32_t rawDataIndex)

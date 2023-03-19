@@ -12,17 +12,17 @@
 
 #define THIS ((ObjIcePoly*)thisx)
 
-void ObjIcePoly_Init(Actor* thisx, GlobalContext* globalCtx);
-void ObjIcePoly_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void ObjIcePoly_Update(Actor* thisx, GlobalContext* globalCtx);
-void ObjIcePoly_Draw(Actor* thisx, GlobalContext* globalCtx);
+void ObjIcePoly_Init(Actor* thisx, PlayState* play);
+void ObjIcePoly_Destroy(Actor* thisx, PlayState* play);
+void ObjIcePoly_Update(Actor* thisx, PlayState* play);
+void ObjIcePoly_Draw(Actor* thisx, PlayState* play);
 
-void func_80931828(ObjIcePoly* this, GlobalContext* globalCtx);
-void func_80931A38(ObjIcePoly* this, GlobalContext* globalCtx);
-void func_80931E58(ObjIcePoly* this, GlobalContext* globalCtx);
-void func_80931EEC(ObjIcePoly* this, GlobalContext* globalCtx);
+void func_80931828(ObjIcePoly* this, PlayState* play);
+void func_80931A38(ObjIcePoly* this, PlayState* play);
+void func_80931E58(ObjIcePoly* this, PlayState* play);
+void func_80931EEC(ObjIcePoly* this, PlayState* play);
 
-const ActorInit Obj_Ice_Poly_InitVars = {
+ActorInit Obj_Ice_Poly_InitVars = {
     ACTOR_OBJ_ICE_POLY,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -77,7 +77,7 @@ static ColliderCylinderInit sCylinderInit2 = {
 static Color_RGBA8 D_80932378 = { 250, 250, 250, 255 };
 static Color_RGBA8 D_8093237C = { 180, 180, 180, 255 };
 
-void ObjIcePoly_Init(Actor* thisx, GlobalContext* globalCtx) {
+void ObjIcePoly_Init(Actor* thisx, PlayState* play) {
     ObjIcePoly* this = THIS;
     s32 i;
 
@@ -88,8 +88,8 @@ void ObjIcePoly_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_SetScale(thisx, thisx->params * 0.01f);
 
     for (i = 0; i < ARRAY_COUNT(this->colliders1); i++) {
-        Collider_InitAndSetCylinder(globalCtx, &this->colliders1[i], thisx, &sCylinderInit1);
-        Collider_InitAndSetCylinder(globalCtx, &this->colliders2[i], thisx, &sCylinderInit2);
+        Collider_InitAndSetCylinder(play, &this->colliders1[i], thisx, &sCylinderInit1);
+        Collider_InitAndSetCylinder(play, &this->colliders2[i], thisx, &sCylinderInit2);
         Collider_UpdateCylinder(thisx, &this->colliders1[i]);
         Collider_UpdateCylinder(thisx, &this->colliders2[i]);
     }
@@ -115,26 +115,26 @@ void ObjIcePoly_Init(Actor* thisx, GlobalContext* globalCtx) {
     thisx->shape.rot.x = 0x500;
     thisx->shape.rot.z = -0x500;
 
-    if (((this->unk_149 != OBJICEPOLY_FF_FF) && Flags_GetSwitch(globalCtx, this->unk_149)) ||
-        ((globalCtx->sceneNum == SCENE_KAJIYA) && (gSaveContext.save.weekEventReg[33] & 0x80))) {
-        Actor_MarkForDeath(thisx);
+    if (((this->unk_149 != OBJICEPOLY_FF_FF) && Flags_GetSwitch(play, this->unk_149)) ||
+        ((play->sceneId == SCENE_KAJIYA) && CHECK_WEEKEVENTREG(WEEKEVENTREG_33_80))) {
+        Actor_Kill(thisx);
         return;
     }
 
     this->actionFunc = func_80931A38;
 }
 
-void ObjIcePoly_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void ObjIcePoly_Destroy(Actor* thisx, PlayState* play) {
     ObjIcePoly* this = THIS;
     s32 i;
 
     for (i = 0; i < ARRAY_COUNT(this->colliders1); i++) {
-        Collider_DestroyCylinder(globalCtx, &this->colliders1[i]);
-        Collider_DestroyCylinder(globalCtx, &this->colliders2[i]);
+        Collider_DestroyCylinder(play, &this->colliders1[i]);
+        Collider_DestroyCylinder(play, &this->colliders2[i]);
     }
 }
 
-void func_80931828(ObjIcePoly* this, GlobalContext* globalCtx) {
+void func_80931828(ObjIcePoly* this, PlayState* play) {
     static Color_RGBA8 D_80932380 = { 170, 255, 255, 255 };
     static Color_RGBA8 D_80932384 = { 0, 50, 100, 255 };
     static Vec3f D_80932388 = { 0.0f, -1.0f, 0.0f };
@@ -149,7 +149,7 @@ void func_80931828(ObjIcePoly* this, GlobalContext* globalCtx) {
     spA0.y = (this->colliders1[0].dim.height * 2) + this->actor.world.pos.y;
     spA0.z = this->actor.world.pos.z;
 
-    sp90 = BgCheck_EntityRaycastFloor1(&globalCtx->colCtx, &sp88, &spA0);
+    sp90 = BgCheck_EntityRaycastFloor1(&play->colCtx, &sp88, &spA0);
     if (sp90 < this->actor.world.pos.y) {
         sp90 = this->actor.world.pos.y;
     }
@@ -163,14 +163,14 @@ void func_80931828(ObjIcePoly* this, GlobalContext* globalCtx) {
         spA0.x = (this->colliders1[0].dim.radius * (sp94.x * (1.0f / 12))) + this->actor.world.pos.x;
         spA0.z = (this->colliders1[0].dim.radius * (sp94.z * (1.0f / 12))) + this->actor.world.pos.z;
         spA0.y = Rand_ZeroFloat(temp) + sp90;
-        EffectSsEnIce_Spawn(globalCtx, &spA0, (Rand_ZeroFloat(0.4f) + 0.3f) * this->actor.scale.x, &sp94, &D_80932388,
+        EffectSsEnIce_Spawn(play, &spA0, (Rand_ZeroFloat(0.4f) + 0.3f) * this->actor.scale.x, &sp94, &D_80932388,
                             &D_80932380, &D_80932384, 40);
     }
 }
 
-void func_80931A38(ObjIcePoly* this, GlobalContext* globalCtx) {
+void func_80931A38(ObjIcePoly* this, PlayState* play) {
     s32 pad;
-    Player* player = GET_PLAYER(globalCtx);
+    Player* player = GET_PLAYER(play);
     Vec3f sp6C;
     s32 i;
     s32 pad2;
@@ -178,7 +178,7 @@ void func_80931A38(ObjIcePoly* this, GlobalContext* globalCtx) {
     s32 pad3;
     f32 sp58;
 
-    if (!(player->stateFlags2 & 0x4000) && (this->unk_14A != 0)) {
+    if (!(player->stateFlags2 & PLAYER_STATE2_4000) && (this->unk_14A != 0)) {
         this->unk_14A--;
     }
 
@@ -205,11 +205,11 @@ void func_80931A38(ObjIcePoly* this, GlobalContext* globalCtx) {
         this->actionFunc = func_80931E58;
         this->actor.focus.rot.y = this->actor.yawTowardsPlayer;
 
-        if (globalCtx->sceneNum == SCENE_00KEIKOKU) {
+        if (play->sceneId == SCENE_00KEIKOKU) {
             Actor* actor = NULL;
 
             do {
-                actor = SubS_FindActor(globalCtx, actor, ACTORCAT_ITEMACTION, ACTOR_OBJ_ICE_POLY);
+                actor = SubS_FindActor(play, actor, ACTORCAT_ITEMACTION, ACTOR_OBJ_ICE_POLY);
                 if (actor != NULL) {
                     if ((&this->actor != actor) && (&this->actor != actor)) {
                         ((ObjIcePoly*)actor)->unk_14A = 0;
@@ -219,7 +219,7 @@ void func_80931A38(ObjIcePoly* this, GlobalContext* globalCtx) {
                 }
             } while (actor != NULL);
         }
-    } else if ((this->unk_149 != OBJICEPOLY_FF_FF) && Flags_GetSwitch(globalCtx, this->unk_149)) {
+    } else if ((this->unk_149 != OBJICEPOLY_FF_FF) && Flags_GetSwitch(play, this->unk_149)) {
         ActorCutscene_SetIntentToPlay(this->actor.cutscene);
         this->unk_14A = 1;
         this->actionFunc = func_80931E58;
@@ -231,14 +231,14 @@ void func_80931A38(ObjIcePoly* this, GlobalContext* globalCtx) {
         }
 
         if (this->unk_14A == 0) {
-            CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->colliders1[0].base);
-            CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->colliders1[1].base);
+            CollisionCheck_SetAT(play, &play->colChkCtx, &this->colliders1[0].base);
+            CollisionCheck_SetAT(play, &play->colChkCtx, &this->colliders1[1].base);
         }
 
         for (i = 0; i < ARRAY_COUNT(this->colliders1); i++) {
-            CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->colliders1[i].base);
-            CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->colliders1[i].base);
-            CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->colliders2[i].base);
+            CollisionCheck_SetAC(play, &play->colChkCtx, &this->colliders1[i].base);
+            CollisionCheck_SetOC(play, &play->colChkCtx, &this->colliders1[i].base);
+            CollisionCheck_SetAC(play, &play->colChkCtx, &this->colliders2[i].base);
         }
     }
 
@@ -260,27 +260,28 @@ void func_80931A38(ObjIcePoly* this, GlobalContext* globalCtx) {
         }
         sp6C.z = (phi_v0 * (15.0f + (sp58 * 15.0f)) * this->actor.scale.z) + this->actor.world.pos.z;
 
-        EffectSsKiraKira_SpawnDispersed(globalCtx, &sp6C, &gZeroVec3f, &gZeroVec3f, &D_80932378, &D_8093237C, 2000, 5);
+        EffectSsKirakira_SpawnDispersed(play, &sp6C, &gZeroVec3f, &gZeroVec3f, &D_80932378, &D_8093237C, 2000, 5);
     }
 }
 
-void func_80931E58(ObjIcePoly* this, GlobalContext* globalCtx) {
+void func_80931E58(ObjIcePoly* this, PlayState* play) {
     if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
         if (this->unk_14A == 1) {
-            func_80931828(this, globalCtx);
-            Actor_MarkForDeath(&this->actor);
-        } else {
-            this->unk_14A = 40;
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_ICE_MELT);
-            this->actionFunc = func_80931EEC;
+            func_80931828(this, play);
+            Actor_Kill(&this->actor);
+            return;
         }
+
+        this->unk_14A = 40;
+        Actor_PlaySfx(&this->actor, NA_SE_EV_ICE_MELT);
+        this->actionFunc = func_80931EEC;
     } else {
         ActorCutscene_SetIntentToPlay(this->actor.cutscene);
     }
 }
 
-void func_80931EEC(ObjIcePoly* this, GlobalContext* globalCtx) {
+void func_80931EEC(ObjIcePoly* this, PlayState* play) {
     Vec3f spAC;
     Vec3f spA0;
     Vec3f sp94;
@@ -314,7 +315,7 @@ void func_80931EEC(ObjIcePoly* this, GlobalContext* globalCtx) {
         }
         sp94.z = (phi_v0 * (20.0f + (20.0f * temp_f20)) * this->actor.scale.x) + this->actor.world.pos.z;
 
-        func_800B0DE0(globalCtx, &sp94, &spA0, &spAC, &D_80932378, &D_8093237C,
+        func_800B0DE0(play, &sp94, &spA0, &spAC, &D_80932378, &D_8093237C,
                       ((Rand_ZeroOne() * 100.0f) + 350.0f) * this->actor.scale.x, this->actor.scale.x * 20.0f);
     }
 
@@ -328,33 +329,33 @@ void func_80931EEC(ObjIcePoly* this, GlobalContext* globalCtx) {
     if (this->unk_14A == 0) {
         ActorCutscene_Stop(this->actor.cutscene);
         if (this->unk_149 != OBJICEPOLY_FF_FF) {
-            Flags_SetSwitch(globalCtx, this->unk_149);
+            Flags_SetSwitch(play, this->unk_149);
         }
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
-void ObjIcePoly_Update(Actor* thisx, GlobalContext* globalCtx) {
+void ObjIcePoly_Update(Actor* thisx, PlayState* play) {
     ObjIcePoly* this = THIS;
 
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
 }
 
-void ObjIcePoly_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void ObjIcePoly_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
     ObjIcePoly* this = THIS;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(globalCtx->state.gfxCtx);
-    func_800B8118(&this->actor, globalCtx, 0);
+    func_8012C2DC(play->state.gfxCtx);
+    func_800B8118(&this->actor, play, 0);
 
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPSegment(POLY_XLU_DISP++, 0x08,
-               Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, globalCtx->gameplayFrames % 256, 0x20, 0x10, 1, 0,
-                                (globalCtx->gameplayFrames * 2) % 256, 0x40, 0x20));
+               Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, play->gameplayFrames % 256, 0x20, 0x10, 1, 0,
+                                (play->gameplayFrames * 2) % 256, 0x40, 0x20));
     gDPSetEnvColor(POLY_XLU_DISP++, 0, 50, 100, this->unk_148);
-    gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_050D10);
+    gSPDisplayList(POLY_XLU_DISP++, gEffIceFragment3DL);
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }

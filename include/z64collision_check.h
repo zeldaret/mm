@@ -1,5 +1,5 @@
-#ifndef _Z_COLLISION_CHECK_H_
-#define _Z_COLLISION_CHECK_H_
+#ifndef Z64COLLISION_CHECK_H
+#define Z64COLLISION_CHECK_H
 
 #include "PR/ultratypes.h"
 #include "z64math.h"
@@ -21,54 +21,54 @@ typedef struct {
 } Collider; // size = 0x18
 
 typedef struct {
-    /* 0x00 */ u8 colType;  // Determines hitmarks and sound effects during AC collisions.
-    /* 0x01 */ u8 atFlags;  // Information flags for AT collisions. 
-    /* 0x02 */ u8 acFlags;  // Information flags for OC collisions.
-    /* 0x03 */ u8 ocFlags1; // Information flags for OC collisions.
-    /* 0x04 */ u8 ocFlags2; // Flags related to which colliders it can OC collide with.
-    /* 0x05 */ u8 shape;    // JntSph, Cylinder, Tris, or Quad
-} ColliderInit; // size = 0x06
+    /* 0x0 */ u8 colType;  // Determines hitmarks and sound effects during AC collisions.
+    /* 0x1 */ u8 atFlags;  // Information flags for AT collisions. 
+    /* 0x2 */ u8 acFlags;  // Information flags for OC collisions.
+    /* 0x3 */ u8 ocFlags1; // Information flags for OC collisions.
+    /* 0x4 */ u8 ocFlags2; // Flags related to which colliders it can OC collide with.
+    /* 0x5 */ u8 shape;    // JntSph, Cylinder, Tris, or Quad
+} ColliderInit; // size = 0x6
 
 typedef struct {
-    /* 0x00 */ u8 colType;  // Determines hitmarks and sound effects during AC collisions.
-    /* 0x01 */ u8 atFlags;  // Information flags for AT collisions. 
-    /* 0x02 */ u8 acFlags;  // Information flags for AC collisions.
-    /* 0x03 */ u8 ocFlags1; // Information flags for OC collisions.
-    /* 0x04 */ u8 shape;    // JntSph, Cylinder, Tris, or Quad
-} ColliderInitType1; // size = 0x05
+    /* 0x0 */ u8 colType;  // Determines hitmarks and sound effects during AC collisions.
+    /* 0x1 */ u8 atFlags;  // Information flags for AT collisions. 
+    /* 0x2 */ u8 acFlags;  // Information flags for AC collisions.
+    /* 0x3 */ u8 ocFlags1; // Information flags for OC collisions.
+    /* 0x4 */ u8 shape;    // JntSph, Cylinder, Tris, or Quad
+} ColliderInitType1; // size = 0x5
 
 typedef struct {
-    /* 0x00 */ struct Actor* actor; // Attached actor
-    /* 0x04 */ u8 atFlags;          // Information flags for AT collisions.
-    /* 0x05 */ u8 acFlags;          // Information flags for AC collisions.
-    /* 0x06 */ u8 ocFlags1;         // Information flags for OC collisions.
-    /* 0x07 */ u8 shape;            // JntSph, Cylinder, Tris, or Quad
-} ColliderInitToActor; // size = 0x08
+    /* 0x0 */ struct Actor* actor; // Attached actor
+    /* 0x4 */ u8 atFlags;          // Information flags for AT collisions.
+    /* 0x5 */ u8 acFlags;          // Information flags for AC collisions.
+    /* 0x6 */ u8 ocFlags1;         // Information flags for OC collisions.
+    /* 0x7 */ u8 shape;            // JntSph, Cylinder, Tris, or Quad
+} ColliderInitToActor; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ u32 dmgFlags;    // Toucher damage type flags.
-    /* 0x04 */ u8  effect;      // Damage Effect (Knockback, Fire, etc.)
-    /* 0x05 */ u8  damage;      // Damage or Stun Timer
-} ColliderTouch; // size = 0x08
+    /* 0x0 */ u32 dmgFlags;    // Toucher damage type flags.
+    /* 0x4 */ u8  effect;      // Damage Effect (Knockback, Fire, etc.)
+    /* 0x5 */ u8  damage;      // Damage or Stun Timer
+} ColliderTouch; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ u32 dmgFlags;    // Toucher damage type flags.
-    /* 0x04 */ u8  effect;      // Damage Effect (Knockback, Fire, etc.)
-    /* 0x05 */ u8  damage;      // Damage or Stun Timer
-} ColliderTouchInit; // size = 0x08
+    /* 0x0 */ u32 dmgFlags;    // Toucher damage type flags.
+    /* 0x4 */ u8  effect;      // Damage Effect (Knockback, Fire, etc.)
+    /* 0x5 */ u8  damage;      // Damage or Stun Timer
+} ColliderTouchInit; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ u32   dmgFlags;  // Bumper damage type flags.
-    /* 0x04 */ u8    effect;    // Damage Effect (Knockback, Fire, etc.)
-    /* 0x05 */ u8    defense;   // Damage Resistance
-    /* 0x06 */ Vec3s hitPos;    // Point of contact
-} ColliderBump; // size = 0x0C
+    /* 0x0 */ u32   dmgFlags;  // Bumper damage type flags.
+    /* 0x4 */ u8    effect;    // Damage Effect (Knockback, Fire, etc.)
+    /* 0x5 */ u8    defense;   // Damage Resistance
+    /* 0x6 */ Vec3s hitPos;    // Point of contact
+} ColliderBump; // size = 0xC
 
 typedef struct {
-    /* 0x00 */ u32 dmgFlags;    // Bumper exclusion mask
-    /* 0x04 */ u8  effect;      // Damage Effect (Knockback, Fire, etc.)
-    /* 0x05 */ u8  defense;     // Damage Resistance
-} ColliderBumpInit; // size = 0x08
+    /* 0x0 */ u32 dmgFlags;    // Bumper exclusion mask
+    /* 0x4 */ u8  effect;      // Damage Effect (Knockback, Fire, etc.)
+    /* 0x5 */ u8  defense;     // Damage Resistance
+} ColliderBumpInit; // size = 0x8
 
 typedef struct ColliderInfo {
     /* 0x00 */ ColliderTouch toucher;           // Damage properties when acting as an AT collider
@@ -100,10 +100,10 @@ typedef struct {
 } ColliderJntSphElementDim; // size = 0x18
 
 typedef struct {
-    /* 0x00 */ u8       limb;           // attached limb
-    /* 0x02 */ Sphere16 modelSphere;    // model space sphere
-    /* 0x0A */ s16      scale;          // world space sphere = model * scale * 0.01
-} ColliderJntSphElementDimInit; // size = 0x0C
+    /* 0x0 */ u8       limb;           // attached limb
+    /* 0x2 */ Sphere16 modelSphere;    // model space sphere
+    /* 0xA */ s16      scale;          // world space sphere = model * scale * 0.01
+} ColliderJntSphElementDimInit; // size = 0xC
 
 typedef struct {
     /* 0x00 */ ColliderInfo info;
@@ -128,15 +128,15 @@ typedef struct {
 } ColliderJntSphInit; // size = 0x10
 
 typedef struct {
-    /* 0x00 */ ColliderInitType1 base;
-    /* 0x08 */ s32 count;
-    /* 0x0C */ ColliderJntSphElementInit* elements;
+    /* 0x0 */ ColliderInitType1 base;
+    /* 0x8 */ s32 count;
+    /* 0xC */ ColliderJntSphElementInit* elements;
 } ColliderJntSphInitType1; // size = 0x10
 
 typedef struct {
-    /* 0x00 */ ColliderInitToActor base;
-    /* 0x08 */ s32 count;
-    /* 0x0C */ ColliderJntSphElementInit* elements;
+    /* 0x0 */ ColliderInitToActor base;
+    /* 0x8 */ s32 count;
+    /* 0xC */ ColliderJntSphElementInit* elements;
 } ColliderJntSphInitToActor; // size = 0x10
 
 typedef struct {
@@ -190,9 +190,9 @@ typedef struct {
 } ColliderTrisInit; // size = 0x10
 
 typedef struct {
-    /* 0x00 */ ColliderInitType1 base;
-    /* 0x08 */ s32 count;
-    /* 0x0C */ ColliderTrisElementInit* elements;
+    /* 0x0 */ ColliderInitType1 base;
+    /* 0x8 */ s32 count;
+    /* 0xC */ ColliderTrisElementInit* elements;
 } ColliderTrisInitType1; // size = 0x10
 
 typedef struct {
@@ -254,8 +254,8 @@ typedef struct {
 } CollisionCheckContext; // size = 0x29C
 
 typedef struct {
-    /* 0 */ u8 blood;
-    /* 1 */ u8 effect;
+    /* 0x0 */ u8 blood;
+    /* 0x1 */ u8 effect;
 } HitInfo; // size = 0x2
 
 typedef enum {
@@ -283,16 +283,16 @@ typedef enum {
 } ColChkMassType;
 
 typedef enum {
-    /* 0  */ COLTYPE_HIT0, // Blue blood, white hitmark
-    /* 1  */ COLTYPE_HIT1, // No blood, dust hitmark
-    /* 2  */ COLTYPE_HIT2, // Green blood, dust hitmark
-    /* 3  */ COLTYPE_HIT3, // No blood, white hitmark
-    /* 4  */ COLTYPE_HIT4, // Water burst, no hitmark
-    /* 5  */ COLTYPE_HIT5, // No blood, red hitmark
-    /* 6  */ COLTYPE_HIT6, // Green blood, white hitmark
-    /* 7  */ COLTYPE_HIT7, // Red blood, white hitmark
-    /* 8  */ COLTYPE_HIT8, // Blue blood, red hitmark
-    /* 9  */ COLTYPE_METAL,
+    /*  0 */ COLTYPE_HIT0, // Blue blood, white hitmark
+    /*  1 */ COLTYPE_HIT1, // No blood, dust hitmark
+    /*  2 */ COLTYPE_HIT2, // Green blood, dust hitmark
+    /*  3 */ COLTYPE_HIT3, // No blood, white hitmark
+    /*  4 */ COLTYPE_HIT4, // Water burst, no hitmark
+    /*  5 */ COLTYPE_HIT5, // No blood, red hitmark
+    /*  6 */ COLTYPE_HIT6, // Green blood, white hitmark
+    /*  7 */ COLTYPE_HIT7, // Red blood, white hitmark
+    /*  8 */ COLTYPE_HIT8, // Blue blood, red hitmark
+    /*  9 */ COLTYPE_METAL,
     /* 10 */ COLTYPE_NONE,
     /* 11 */ COLTYPE_WOOD,
     /* 12 */ COLTYPE_HARD,

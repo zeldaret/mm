@@ -1,11 +1,12 @@
-#include "prevent_bss_reordering.h"
 #include "global.h"
+#include "buffers.h"
 #include "system_malloc.h"
 #include "overlays/gamestates/ovl_daytelop/z_daytelop.h"
 #include "overlays/gamestates/ovl_file_choose/z_file_choose.h"
 #include "overlays/gamestates/ovl_opening/z_opening.h"
 #include "overlays/gamestates/ovl_select/z_select.h"
 #include "overlays/gamestates/ovl_title/z_title.h"
+#include "z_title_setup.h"
 
 FaultAddrConvClient sGraphFaultAddrConvClient;
 FaultClient sGraphFaultClient;
@@ -13,7 +14,7 @@ GfxMasterList* gGfxMasterDL;
 CfbInfo sGraphCfbInfos[3];
 OSTime sGraphTaskStartTime;
 
-void* Graph_FaultClient(void) {
+void Graph_FaultClient(void) {
     FaultDrawer_DrawText(30, 100, "ShowFrameBuffer PAGE 0/1");
     osViSwapBuffer(SysCfb_GetFbPtr(0));
     osViSetMode(D_801FBB88);
@@ -49,7 +50,7 @@ void Graph_SetNextGfxPool(GraphicsContext* gfxCtx) {
     gfxCtx->workBuffer = pool->workBuffer;
     gfxCtx->debugBuffer = pool->debugBuffer;
 
-    gfxCtx->curFrameBuffer = (u16*)SysCfb_GetFbPtr(gfxCtx->framebufferIdx % 2);
+    gfxCtx->curFrameBuffer = SysCfb_GetFbPtr(gfxCtx->framebufferIndex % 2);
     gSegments[0x0F] = gfxCtx->curFrameBuffer;
 
     gfxCtx->zbuffer = SysCfb_GetZBuffer();
@@ -63,47 +64,48 @@ void Graph_SetNextGfxPool(GraphicsContext* gfxCtx) {
 }
 
 GameStateOverlay* Graph_GetNextGameState(GameState* gameState) {
-    GameStateFunc gameStateInit = GameState_GetNextStateInit(gameState);
+    GameStateFunc gameStateInit = GameState_GetInit(gameState);
 
-    if (gameStateInit == (GameStateFunc)TitleSetup_Init) {
+    if (gameStateInit == Setup_Init) {
         return &gGameStateOverlayTable[0];
     }
-    if (gameStateInit == (GameStateFunc)Select_Init) {
+    if (gameStateInit == MapSelect_Init) {
         return &gGameStateOverlayTable[1];
     }
-    if (gameStateInit == (GameStateFunc)Title_Init) {
+    if (gameStateInit == ConsoleLogo_Init) {
         return &gGameStateOverlayTable[2];
     }
-    if (gameStateInit == (GameStateFunc)Play_Init) {
+    if (gameStateInit == Play_Init) {
         return &gGameStateOverlayTable[3];
     }
-    if (gameStateInit == (GameStateFunc)Opening_Init) {
+    if (gameStateInit == TitleSetup_Init) {
         return &gGameStateOverlayTable[4];
     }
-    if (gameStateInit == (GameStateFunc)FileChoose_Init) {
+    if (gameStateInit == FileSelect_Init) {
         return &gGameStateOverlayTable[5];
     }
-    if (gameStateInit == (GameStateFunc)Daytelop_Init) {
+    if (gameStateInit == DayTelop_Init) {
         return &gGameStateOverlayTable[6];
     }
+
     return NULL;
 }
 
-void* Graph_FaultAddrConvFunc(void* address, void* param) {
+void* Graph_FaultAddrConv(void* address, void* param) {
     uintptr_t addr = address;
-    GameStateOverlay* gamestateOvl = &gGameStateOverlayTable[0];
-    uintptr_t ramConv;
+    GameStateOverlay* gameStateOvl = &gGameStateOverlayTable[0];
+    size_t ramConv;
     void* ramStart;
-    uintptr_t diff;
+    size_t diff;
     s32 i;
 
-    for (i = 0; i < graphNumGameStates; i++, gamestateOvl++) {
-        diff = VRAM_PTR_SIZE(gamestateOvl);
-        ramStart = gamestateOvl->loadedRamAddr;
-        ramConv = (uintptr_t)gamestateOvl->vramStart - (uintptr_t)ramStart;
+    for (i = 0; i < gGraphNumGameStates; i++, gameStateOvl++) {
+        diff = VRAM_PTR_SIZE(gameStateOvl);
+        ramStart = gameStateOvl->loadedRamAddr;
+        ramConv = (uintptr_t)gameStateOvl->vramStart - (uintptr_t)ramStart;
 
         if (ramStart != NULL) {
-            if (addr >= (uintptr_t)ramStart && addr < (uintptr_t)ramStart + diff) {
+            if ((addr >= (uintptr_t)ramStart) && (addr < (uintptr_t)ramStart + diff)) {
                 return addr + ramConv;
             }
         }
@@ -114,14 +116,14 @@ void* Graph_FaultAddrConvFunc(void* address, void* param) {
 void Graph_Init(GraphicsContext* gfxCtx) {
     bzero(gfxCtx, sizeof(GraphicsContext));
     gfxCtx->gfxPoolIdx = 0;
-    gfxCtx->framebufferIdx = 0;
+    gfxCtx->framebufferIndex = 0;
     gfxCtx->viMode = NULL;
     gfxCtx->viConfigFeatures = gViConfigFeatures;
     gfxCtx->xScale = gViConfigXScale;
     gfxCtx->yScale = gViConfigYScale;
     osCreateMesgQueue(&gfxCtx->queue, gfxCtx->msgBuff, ARRAY_COUNT(gfxCtx->msgBuff));
     Fault_AddClient(&sGraphFaultClient, Graph_FaultClient, NULL, NULL);
-    Fault_AddAddrConvClient(&sGraphFaultAddrConvClient, Graph_FaultAddrConvFunc, NULL);
+    Fault_AddAddrConvClient(&sGraphFaultAddrConvClient, Graph_FaultAddrConv, NULL);
 }
 
 void Graph_Destroy(GraphicsContext* gfxCtx) {
@@ -163,7 +165,7 @@ retry:
 
     gfxCtx->masterList = gGfxMasterDL;
     if (gfxCtx->callback != NULL) {
-        gfxCtx->callback(gfxCtx, gfxCtx->callbackParam);
+        gfxCtx->callback(gfxCtx, gfxCtx->callbackArg);
     }
 
     task->type = M_GFXTASK;
@@ -172,8 +174,8 @@ retry:
     task->ucodeBootSize = SysUcode_GetUCodeBootSize();
     task->ucode = SysUcode_GetUCode();
     task->ucodeData = SysUcode_GetUCodeData();
-    task->ucodeSize = 0x1000;
-    task->ucodeDataSize = 0x800;
+    task->ucodeSize = SP_UCODE_SIZE;
+    task->ucodeDataSize = SP_UCODE_DATA_SIZE;
     task->dramStack = (u64*)gGfxSPTaskStack;
     task->dramStackSize = sizeof(gGfxSPTaskStack);
     task->outputBuff = gGfxSPTaskOutputBufferPtr;
@@ -189,7 +191,7 @@ retry:
     if (SREG(33) & 1) {
         SREG(33) &= ~1;
         scTask->flags &= ~OS_SC_SWAPBUFFER;
-        gfxCtx->framebufferIdx--;
+        gfxCtx->framebufferIndex--;
     }
 
     scTask->msgQ = &gfxCtx->queue;
@@ -230,12 +232,12 @@ void Graph_UpdateGame(GameState* gameState) {
     Game_UpdateInput(gameState);
     Game_IncrementFrameCount(gameState);
     if (SREG(20) < 3) {
-        func_8019E014();
+        Audio_Update();
     }
 }
 
 /**
- *  Run the gamestate logic, then finalize the gfx buffer
+ *  Run the game state logic, then finalize the gfx buffer
  *  and run the graphics task for this frame.
  */
 void Graph_ExecuteAndDraw(GraphicsContext* gfxCtx, GameState* gameState) {
@@ -303,7 +305,7 @@ void Graph_ExecuteAndDraw(GraphicsContext* gfxCtx, GameState* gameState) {
     if (!problem) {
         Graph_TaskSet00(gfxCtx, gameState);
         gfxCtx->gfxPoolIdx++;
-        gfxCtx->framebufferIdx++;
+        gfxCtx->framebufferIndex++;
     }
 
     {

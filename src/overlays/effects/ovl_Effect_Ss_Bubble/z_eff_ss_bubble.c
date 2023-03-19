@@ -1,7 +1,7 @@
 /*
  * File: z_eff_ss_bubble.c
  * Overlay: ovl_Effect_Ss_Bubble
- * Description:
+ * Description: Water Bubbles
  */
 
 #include "z_eff_ss_bubble.h"
@@ -13,9 +13,9 @@
 
 #define PARAMS ((EffectSsBubbleInitParams*)initParamsx)
 
-u32 EffectSsBubble_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx);
-void EffectSsBubble_Update(GlobalContext* globalCtx, u32 index, EffectSs* this);
-void EffectSsBubble_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this);
+u32 EffectSsBubble_Init(PlayState* play, u32 index, EffectSs* this, void* initParamsx);
+void EffectSsBubble_Update(PlayState* play2, u32 index, EffectSs* this);
+void EffectSsBubble_Draw(PlayState* play, u32 index, EffectSs* this);
 
 const EffectSsInit Effect_Ss_Bubble_InitVars = {
     EFFECT_SS_BUBBLE,
@@ -24,7 +24,7 @@ const EffectSsInit Effect_Ss_Bubble_InitVars = {
 
 static f32 sVecAdjMaximums[] = { 291.0f, 582.0f, 1600.0f };
 
-u32 EffectSsBubble_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx) {
+u32 EffectSsBubble_Init(PlayState* play, u32 index, EffectSs* this, void* initParamsx) {
     EffectSsBubbleInitParams* initParams = (EffectSsBubbleInitParams*)initParamsx;
 
     {
@@ -45,13 +45,13 @@ u32 EffectSsBubble_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, voi
     return 1;
 }
 
-void EffectSsBubble_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) {
-    GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
+void EffectSsBubble_Draw(PlayState* play, u32 index, EffectSs* this) {
+    GraphicsContext* gfxCtx = play->state.gfxCtx;
     f32 scale = this->rScale / 100.0f;
 
     OPEN_DISPS(gfxCtx);
 
-    Matrix_InsertTranslation(this->pos.x, this->pos.y, this->pos.z, MTXMODE_NEW);
+    Matrix_Translate(this->pos.x, this->pos.y, this->pos.z, MTXMODE_NEW);
     Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -64,13 +64,13 @@ void EffectSsBubble_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) {
     CLOSE_DISPS(gfxCtx);
 }
 
-void EffectSsBubble_Update(GlobalContext* globalCtx2, u32 index, EffectSs* this) {
+void EffectSsBubble_Update(PlayState* play2, u32 index, EffectSs* this) {
     WaterBox* waterBox;
     f32 waterSurfaceY = this->pos.y;
     Vec3f ripplePos;
-    GlobalContext* globalCtx = globalCtx2;
+    PlayState* play = play2;
 
-    if (!WaterBox_GetSurface1(globalCtx, &globalCtx->colCtx, this->pos.x, this->pos.z, &waterSurfaceY, &waterBox)) {
+    if (!WaterBox_GetSurface1(play, &play->colCtx, this->pos.x, this->pos.z, &waterSurfaceY, &waterBox)) {
         this->life = -1;
         return;
     }
@@ -78,21 +78,21 @@ void EffectSsBubble_Update(GlobalContext* globalCtx2, u32 index, EffectSs* this)
         ripplePos.x = this->pos.x;
         ripplePos.y = waterSurfaceY;
         ripplePos.z = this->pos.z;
-        EffectSsGRipple_Spawn(globalCtx, &ripplePos, 0, 80, 0);
+        EffectSsGRipple_Spawn(play, &ripplePos, 0, 80, 0);
         this->life = -1;
     label:
         return;
     }
-    if (((globalCtx->gameplayFrames + index) % 8) == 0) {
+    if (((play->gameplayFrames + index) % 8) == 0) {
         CollisionPoly* colPoly;
         u32 speed;
         s16 direction;
         f32 rVecAdjMax;
 
-        BgCheck_EntityRaycastFloor2_1(globalCtx, &globalCtx->colCtx, &colPoly, &this->pos);
-        speed = SurfaceType_GetConveyorSpeed(&globalCtx->colCtx, colPoly, BGCHECK_SCENE);
-        if ((speed != 0) && !SurfaceType_GetConveyorType(&globalCtx->colCtx, colPoly, BGCHECK_SCENE)) {
-            direction = SurfaceType_GetConveyorDirection(&globalCtx->colCtx, colPoly, BGCHECK_SCENE) << 0xA;
+        BgCheck_EntityRaycastFloor2_1(play, &play->colCtx, &colPoly, &this->pos);
+        speed = SurfaceType_GetConveyorSpeed(&play->colCtx, colPoly, BGCHECK_SCENE);
+        if ((speed != 0) && !SurfaceType_IsFloorConveyor(&play->colCtx, colPoly, BGCHECK_SCENE)) {
+            direction = SurfaceType_GetConveyorDirection(&play->colCtx, colPoly, BGCHECK_SCENE) << 0xA;
             rVecAdjMax = sVecAdjMaximums[speed - 1];
             this->rVecAdjX = Math_SinS(direction) * rVecAdjMax;
             this->rVecAdjZ = Math_CosS(direction) * rVecAdjMax;

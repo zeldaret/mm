@@ -2,6 +2,7 @@
 #define Z_BG_NUMA_HANA_H
 
 #include "global.h"
+#include "z_fireobj.h"
 
 #define BG_NUMA_HANA_GET_TYPE(thisx) ((thisx)->params & 1)
 #define BG_NUMA_HANA_SWITCH_FLAG(thisx) (((thisx)->params >> 8) & 0x7F)
@@ -13,7 +14,7 @@ typedef enum {
 
 struct BgNumaHana;
 
-typedef void (*BgNumaHanaActionFunc)(struct BgNumaHana*, GlobalContext*);
+typedef void (*BgNumaHanaActionFunc)(struct BgNumaHana*, PlayState*);
 
 typedef struct {
     /* 0x00 */ Vec3f pos;
@@ -39,7 +40,5 @@ typedef struct BgNumaHana {
     /* 0x33C */ s16 flowerRotationalVelocity;
     /* 0x33E */ s16 transitionTimer;
 } BgNumaHana; // size = 0x340
-
-extern const ActorInit Bg_Numa_Hana_InitVars;
 
 #endif // Z_BG_NUMA_HANA_H

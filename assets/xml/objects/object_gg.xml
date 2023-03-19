@@ -71,7 +71,7 @@
         <Limb Name="object_gg_Standardlimb_00F650" Type="Standard" EnumName="OBJECT_GG_LIMB_11" Offset="0xF650" />
         <Limb Name="object_gg_Standardlimb_00F65C" Type="Standard" EnumName="OBJECT_GG_LIMB_12" Offset="0xF65C" />
         <Limb Name="object_gg_Standardlimb_00F668" Type="Standard" EnumName="OBJECT_GG_LIMB_13" Offset="0xF668" />
-        <Skeleton Name="object_gg_Skel_00F6C0" Type="Flex" LimbType="Standard" LimbNone="OBJECT_GG_LIMB_NONE" LimbMax="OBJECT_GG_LIMB_MAX" EnumName="object_gg_Limbs" Offset="0xF6C0" />
+        <Skeleton Name="object_gg_Skel_00F6C0" Type="Flex" LimbType="Standard" LimbNone="OBJECT_GG_LIMB_NONE" LimbMax="OBJECT_GG_LIMB_MAX" EnumName="ObjectGgLimb" Offset="0xF6C0" />
         <Animation Name="object_gg_Anim_0100C8" Offset="0x100C8" />
     </File>
 </Root>

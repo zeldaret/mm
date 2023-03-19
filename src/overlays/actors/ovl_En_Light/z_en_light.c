@@ -11,14 +11,14 @@
 
 #define THIS ((EnLight*)thisx)
 
-void EnLight_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnLight_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnLight_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnLight_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnLight_Init(Actor* thisx, PlayState* play);
+void EnLight_Destroy(Actor* thisx, PlayState* play);
+void EnLight_Update(Actor* thisx, PlayState* play);
+void EnLight_Draw(Actor* thisx, PlayState* play);
 
-void func_80865F38(Actor* thisx, GlobalContext* globalCtx);
+void func_80865F38(Actor* thisx, PlayState* play);
 
-const ActorInit En_Light_InitVars = {
+ActorInit En_Light_InitVars = {
     ACTOR_EN_LIGHT,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -47,7 +47,7 @@ EnLightStruct D_808666D0[] = {
     { { 170, 255, 255, 255 }, { 0, 0, 255 }, 75 },   { { 170, 255, 255, 255 }, { 0, 150, 255 }, 75 },
 };
 
-void EnLight_Init(Actor* thisx, GlobalContext* globalCtx) {
+void EnLight_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     EnLight* this = THIS;
 
@@ -61,7 +61,7 @@ void EnLight_Init(Actor* thisx, GlobalContext* globalCtx) {
                                     ((this->actor.params < 0) ? 1 : 40) + (s32)this->actor.world.pos.y,
                                     this->actor.world.pos.z, 255, 255, 180, -1);
         }
-        this->lightNode = LightContext_InsertLight(globalCtx, &globalCtx->lightCtx, &this->lightInfo);
+        this->lightNode = LightContext_InsertLight(play, &play->lightCtx, &this->lightInfo);
     }
 
     Actor_SetScale(&this->actor, D_808666D0[ENLIGHT_GET_F(&this->actor)].unk_07 * 0.0001f);
@@ -70,7 +70,7 @@ void EnLight_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     if (ENLIGHT_GET_800(&this->actor)) {
         this->actor.update = func_80865F38;
-        if (ENLIGHT_GET_1000(&this->actor) && Flags_GetSwitch(globalCtx, ENLIGHT_SWITCHFLAG(&this->actor))) {
+        if (ENLIGHT_GET_1000(&this->actor) && Flags_GetSwitch(play, ENLIGHT_SWITCHFLAG(&this->actor))) {
             Actor_SetScale(&this->actor, 0.0f);
         }
     } else if (ENLIGHT_GET_2000(&this->actor)) {
@@ -78,16 +78,16 @@ void EnLight_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-void EnLight_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnLight_Destroy(Actor* thisx, PlayState* play) {
     EnLight* this = THIS;
 
     if (!ENLIGHT_GET_4000(&this->actor)) {
-        LightContext_RemoveLight(globalCtx, &globalCtx->lightCtx, this->lightNode);
+        LightContext_RemoveLight(play, &play->lightCtx, this->lightNode);
     }
 }
 
-void func_80865BF8(EnLight* this, GlobalContext* globalCtx) {
-    this->actor.shape.rot.y = BINANG_ROT180(Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx)));
+void func_80865BF8(EnLight* this, PlayState* play) {
+    this->actor.shape.rot.y = BINANG_ROT180(Camera_GetCamDirYaw(GET_ACTIVE_CAM(play)));
 
     if (this->actor.parent != NULL) {
         Math_Vec3f_Copy(&this->actor.world.pos, &this->actor.parent->world.pos);
@@ -97,7 +97,7 @@ void func_80865BF8(EnLight* this, GlobalContext* globalCtx) {
     this->unk_144++;
 }
 
-void EnLight_Update(Actor* thisx, GlobalContext* globalCtx) {
+void EnLight_Update(Actor* thisx, PlayState* play) {
     EnLight* this = THIS;
 
     if (!ENLIGHT_GET_4000(&this->actor)) {
@@ -109,14 +109,14 @@ void EnLight_Update(Actor* thisx, GlobalContext* globalCtx) {
                                       (u8)(sp28->unk_00.b * temp_f2), radius);
     }
 
-    func_80865BF8(this, globalCtx);
+    func_80865BF8(this, play);
 
     if ((this->actor.params >= 0) && !ENLIGHT_GET_4000(&this->actor)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_TORCH - SFX_FLAG);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_TORCH - SFX_FLAG);
     }
 }
 
-void func_80865F38(Actor* thisx, GlobalContext* globalCtx) {
+void func_80865F38(Actor* thisx, PlayState* play) {
     EnLight* this = THIS;
     EnLightStruct* sp38 = &D_808666D0[ENLIGHT_GET_F(&this->actor)];
     f32 temp_f2;
@@ -124,7 +124,7 @@ void func_80865F38(Actor* thisx, GlobalContext* globalCtx) {
     s32 sp2C = false;
 
     if (ENLIGHT_GET_1000(&this->actor)) {
-        if (Flags_GetSwitch(globalCtx, ENLIGHT_SWITCHFLAG(&this->actor))) {
+        if (Flags_GetSwitch(play, ENLIGHT_SWITCHFLAG(&this->actor))) {
             Math_StepToF(&sp30, 1.0f, 0.05f);
             sp2C = true;
         } else {
@@ -134,7 +134,7 @@ void func_80865F38(Actor* thisx, GlobalContext* globalCtx) {
             }
             Math_StepToF(&sp30, 0.0f, 0.05f);
         }
-    } else if (Flags_GetSwitch(globalCtx, ENLIGHT_SWITCHFLAG(&this->actor))) {
+    } else if (Flags_GetSwitch(play, ENLIGHT_SWITCHFLAG(&this->actor))) {
         if (sp30 < 0.1f) {
             Actor_SetScale(&this->actor, 0.0f);
             sp30 = 0.0f;
@@ -153,50 +153,49 @@ void func_80865F38(Actor* thisx, GlobalContext* globalCtx) {
                                       (u8)(sp38->unk_00.b * temp_f2), 300.0f * sp30);
     }
 
-    func_80865BF8(this, globalCtx);
+    func_80865BF8(this, play);
 
     if ((this->actor.params >= 0) && (sp2C == true)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_TORCH - SFX_FLAG);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_TORCH - SFX_FLAG);
     }
 }
 
-void EnLight_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void EnLight_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
     EnLight* this = THIS;
     EnLightStruct* sp6C = &D_808666D0[ENLIGHT_GET_F(&this->actor)];
     Gfx* sp68;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(globalCtx->state.gfxCtx);
+    func_8012C2DC(play->state.gfxCtx);
 
     if (this->actor.params >= 0) {
-        gSPSegment(POLY_XLU_DISP++, 0x08,
-                   Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, 0, 0x20, 0x40, 1, 0, (this->unk_144 * -20) & 0x1FF,
-                                    0x20, 0x80));
-        sp68 = gGameplayKeepDrawFlameDL;
+        gSPSegment(
+            POLY_XLU_DISP++, 0x08,
+            Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, 0, 0x20, 0x40, 1, 0, (this->unk_144 * -20) & 0x1FF, 0x20, 0x80));
+        sp68 = gEffFire1DL;
         gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, sp6C->unk_00.r, sp6C->unk_00.g, sp6C->unk_00.b, sp6C->unk_00.a);
         gDPSetEnvColor(POLY_XLU_DISP++, sp6C->unk_04.r, sp6C->unk_04.g, sp6C->unk_04.b, 0);
     } else {
         gSPSegment(POLY_XLU_DISP++, 0x08,
-                   Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, 0, 0x10, 0x20, 1, (this->unk_144 * 2) & 0x3F,
+                   Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, 0, 0x10, 0x20, 1, (this->unk_144 * 2) & 0x3F,
                                     (this->unk_144 * -6) & 0x7F, 0x10, 0x20));
         sp68 = gameplay_keep_DL_01ACF0;
         gDPSetPrimColor(POLY_XLU_DISP++, 0xC0, 0xC0, 255, 200, 0, 0);
         gDPSetEnvColor(POLY_XLU_DISP++, 255, 0, 0, 0);
     }
 
-    Matrix_RotateY(BINANG_ROT180(Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx)) - this->actor.shape.rot.y),
-                   MTXMODE_APPLY);
+    Matrix_RotateYS(BINANG_ROT180(Camera_GetCamDirYaw(GET_ACTIVE_CAM(play)) - this->actor.shape.rot.y), MTXMODE_APPLY);
 
     if (ENLIGHT_GET_1(&this->actor)) {
-        Matrix_InsertYRotation_f(M_PI, MTXMODE_APPLY);
+        Matrix_RotateYF(M_PI, MTXMODE_APPLY);
     }
 
     Matrix_Scale(1.0f, 1.0f, 1.0f, MTXMODE_APPLY);
 
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_XLU_DISP++, sp68);
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }

@@ -5,7 +5,7 @@
 
 struct DmSa;
 
-typedef void (*DmSaActionFunc)(struct DmSa*, GlobalContext*);
+typedef void (*DmSaActionFunc)(struct DmSa*, PlayState*);
 
 typedef struct DmSa {
     /* 0x000 */ Actor actor;
@@ -19,7 +19,5 @@ typedef struct DmSa {
     /* 0x2E2 */ UNK_TYPE1 unk2E2[0xE];
     /* 0x2F0 */ u32 alpha;
 } DmSa; // size = 0x2F4
-
-extern const ActorInit Dm_Sa_InitVars;
 
 #endif // Z_DM_SA_H

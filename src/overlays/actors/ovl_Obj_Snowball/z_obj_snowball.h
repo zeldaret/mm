@@ -5,7 +5,7 @@
 
 struct ObjSnowball;
 
-typedef void (*ObjSnowballActionFunc)(struct ObjSnowball*, GlobalContext*);
+typedef void (*ObjSnowballActionFunc)(struct ObjSnowball*, PlayState*);
 
 #define OBJSNOWBALL_GET_3F(thisx) ((thisx)->params & 0x3F)
 #define OBJSNOWBALL_GET_7F00(thisx) (((thisx)->params >> 8) & 0x7F)
@@ -39,7 +39,5 @@ typedef struct ObjSnowball {
     /* 0x210 */ s8 unk_210;
     /* 0x211 */ s8 unk_211;
 } ObjSnowball; // size = 0x214
-
-extern const ActorInit Obj_Snowball_InitVars;
 
 #endif // Z_OBJ_SNOWBALL_H

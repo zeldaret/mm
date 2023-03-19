@@ -11,12 +11,12 @@
 
 #define THIS ((ObjSmork*)thisx)
 
-void ObjSmork_Init(Actor* thisx, GlobalContext* globalCtx);
-void ObjSmork_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void ObjSmork_Update(Actor* thisx, GlobalContext* globalCtx);
-void ObjSmork_Draw(Actor* thisx, GlobalContext* globalCtx);
+void ObjSmork_Init(Actor* thisx, PlayState* play);
+void ObjSmork_Destroy(Actor* thisx, PlayState* play);
+void ObjSmork_Update(Actor* thisx, PlayState* play);
+void ObjSmork_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit Obj_Smork_InitVars = {
+ActorInit Obj_Smork_InitVars = {
     ACTOR_OBJ_SMORK,
     ACTORCAT_PROP,
     FLAGS,
@@ -90,7 +90,7 @@ void func_80A3D940(ObjSmork* this) {
     Math_ApproachF(&this->unk_1B8, (this->unk_1C4 == 0) ? 0.0f : 1.0f, 0.02f, 1000.0f);
 }
 
-void func_80A3D9C4(ObjSmork* this, GlobalContext* globalCtx) {
+void func_80A3D9C4(ObjSmork* this, PlayState* play) {
     u8 sp57;
     u8 sp56;
     s32 i;
@@ -108,27 +108,26 @@ void func_80A3D9C4(ObjSmork* this, GlobalContext* globalCtx) {
     }
 
     if (this->unk_1B8 > 0.0f) {
-        Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
-                                 MTXMODE_NEW);
-        this->actor.shape.rot.y = BINANG_ROT180(Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx)));
-        Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_APPLY);
+        Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
+        this->actor.shape.rot.y = BINANG_ROT180(Camera_GetCamDirYaw(GET_ACTIVE_CAM(play)));
+        Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_APPLY);
         Matrix_Scale(0.1f, 0.1f, 0.0f, MTXMODE_APPLY);
 
-        OPEN_DISPS(globalCtx->state.gfxCtx);
+        OPEN_DISPS(play->state.gfxCtx);
 
-        func_8012C28C(globalCtx->state.gfxCtx);
+        func_8012C28C(play->state.gfxCtx);
 
         gSPSegment(POLY_XLU_DISP++, 0x08,
-                   Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, sp57, 0x20, 0x20, 1, 0, sp56, 0x20, 0x20));
+                   Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, sp57, 0x20, 0x20, 1, 0, sp56, 0x20, 0x20));
         gSPSegment(POLY_XLU_DISP++, 0x09, Lib_SegmentedToVirtual(this->unk_148));
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, object_f53_obj_DL_001C00);
 
-        CLOSE_DISPS(globalCtx->state.gfxCtx);
+        CLOSE_DISPS(play->state.gfxCtx);
     }
 }
 
-void ObjSmork_Init(Actor* thisx, GlobalContext* globalCtx) {
+void ObjSmork_Init(Actor* thisx, PlayState* play) {
     ObjSmork* this = THIS;
 
     Lib_MemCpy(this->unk_148, ovl_Obj_Smork_Vtx_000C10, sizeof(Vtx) * ARRAY_COUNT(ovl_Obj_Smork_Vtx_000C10));
@@ -136,17 +135,17 @@ void ObjSmork_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_1C4 = 0;
 }
 
-void ObjSmork_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void ObjSmork_Destroy(Actor* thisx, PlayState* play) {
 }
 
-void ObjSmork_Update(Actor* thisx, GlobalContext* globalCtx) {
+void ObjSmork_Update(Actor* thisx, PlayState* play) {
     ObjSmork* this = THIS;
 
     func_80A3D940(this);
 }
 
-void ObjSmork_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void ObjSmork_Draw(Actor* thisx, PlayState* play) {
     ObjSmork* this = THIS;
 
-    func_80A3D9C4(this, globalCtx);
+    func_80A3D9C4(this, play);
 }

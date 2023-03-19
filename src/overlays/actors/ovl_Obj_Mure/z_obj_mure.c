@@ -10,17 +10,17 @@
 
 #define THIS ((ObjMure*)thisx)
 
-void ObjMure_Init(Actor* thisx, GlobalContext* globalCtx);
-void ObjMure_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void ObjMure_Update(Actor* thisx, GlobalContext* globalCtx);
+void ObjMure_Init(Actor* thisx, PlayState* play);
+void ObjMure_Destroy(Actor* thisx, PlayState* play);
+void ObjMure_Update(Actor* thisx, PlayState* play);
 
-void ObjMure_InitialAction(ObjMure* this, GlobalContext* globalCtx);
-void ObjMure_CulledState(ObjMure* this, GlobalContext* globalCtx);
-void ObjMure_ActiveState(ObjMure* this, GlobalContext* globalCtx);
-void ObjMure_KillActors(ObjMure* this, GlobalContext* globalCtx);
-void ObjMure_CheckChildren(ObjMure* this, GlobalContext* globalCtx);
+void ObjMure_InitialAction(ObjMure* this, PlayState* play);
+void ObjMure_CulledState(ObjMure* this, PlayState* play);
+void ObjMure_ActiveState(ObjMure* this, PlayState* play);
+void ObjMure_KillActors(ObjMure* this, PlayState* play);
+void ObjMure_CheckChildren(ObjMure* this, PlayState* play);
 
-const ActorInit Obj_Mure_InitVars = {
+ActorInit Obj_Mure_InitVars = {
     ACTOR_OBJ_MURE,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -72,7 +72,7 @@ typedef enum {
     /* 2 */ OBJMURE_CHILD_STATE_2
 } ObjMureChildState;
 
-s32 func_808D78D0(ObjMure* this, GlobalContext* globalCtx) {
+s32 func_808D78D0(ObjMure* this, PlayState* play) {
     if (this->type == OBJMURE_TYPE_FISH || this->type == OBJMURE_TYPE_BUGS || this->type == OBJMURE_TYPE_BUTTERFLY) {
         Actor_ProcessInitChain(&this->actor, sInitChain);
     } else {
@@ -81,36 +81,36 @@ s32 func_808D78D0(ObjMure* this, GlobalContext* globalCtx) {
     return true;
 }
 
-s32 func_808D7928(ObjMure* this, GlobalContext* globalCtx) {
-    if (!func_808D78D0(this, globalCtx)) {
+s32 func_808D7928(ObjMure* this, PlayState* play) {
+    if (!func_808D78D0(this, play)) {
         return false;
     }
     return true;
 }
 
-void ObjMure_Init(Actor* thisx, GlobalContext* globalCtx) {
+void ObjMure_Init(Actor* thisx, PlayState* play) {
     ObjMure* this = THIS;
 
-    this->chNum = OBJ_MURE_GET_CHNUM(this->actor.params);
-    this->ptn = OBJ_MURE_GET_PTN(this->actor.params);
-    this->svNum = OBJ_MURE_GET_SVNUM(this->actor.params);
-    this->type = OBJ_MURE_GET_TYPE(this->actor.params);
+    this->chNum = OBJ_MURE_GET_CHNUM(&this->actor);
+    this->ptn = OBJ_MURE_GET_PTN(&this->actor);
+    this->svNum = OBJ_MURE_GET_SVNUM(&this->actor);
+    this->type = OBJ_MURE_GET_TYPE(&this->actor);
     if (this->ptn >= 4) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
     if (this->type >= OBJMURE_TYPE_MAX) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
-    if (!func_808D7928(this, globalCtx)) {
-        Actor_MarkForDeath(&this->actor);
+    if (!func_808D7928(this, play)) {
+        Actor_Kill(&this->actor);
         return;
     }
     this->actionFunc = ObjMure_InitialAction;
 }
 
-void ObjMure_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void ObjMure_Destroy(Actor* thisx, PlayState* play) {
 }
 
 s32 ObjMure_GetMaxChildSpawns(ObjMure* this) {
@@ -124,7 +124,7 @@ void ObjMure_GetSpawnPos(Vec3f* outPos, Vec3f* inPos, s32 ptn, s32 idx) {
     *outPos = *inPos;
 }
 
-void ObjMure_SpawnActors0(Actor* thisx, GlobalContext* globalCtx) {
+void ObjMure_SpawnActors0(Actor* thisx, PlayState* play) {
     ObjMure* this = THIS;
     s32 i;
     Vec3f pos;
@@ -138,9 +138,9 @@ void ObjMure_SpawnActors0(Actor* thisx, GlobalContext* globalCtx) {
             case OBJMURE_CHILD_STATE_2:
                 ObjMure_GetSpawnPos(&pos, &this->actor.world.pos, this->ptn, i);
                 this->children[i] = Actor_SpawnAsChildAndCutscene(
-                    &globalCtx->actorCtx, globalCtx, sSpawnActorIds[this->type], pos.x, pos.y, pos.z,
-                    this->actor.world.rot.x, this->actor.world.rot.y, this->actor.world.rot.z, sSpawnParams[this->type],
-                    this->actor.cutscene, this->actor.unk20, NULL);
+                    &play->actorCtx, play, sSpawnActorIds[this->type], pos.x, pos.y, pos.z, this->actor.world.rot.x,
+                    this->actor.world.rot.y, this->actor.world.rot.z, sSpawnParams[this->type], this->actor.cutscene,
+                    this->actor.halfDaysBits, NULL);
                 if (this->children[i] != NULL) {
                     if (this->type == 0x90) {
                         ((ObjMureChild*)this->children[i])->unk_197 = 1;
@@ -151,9 +151,9 @@ void ObjMure_SpawnActors0(Actor* thisx, GlobalContext* globalCtx) {
             default:
                 ObjMure_GetSpawnPos(&pos, &this->actor.world.pos, this->ptn, i);
                 this->children[i] = Actor_SpawnAsChildAndCutscene(
-                    &globalCtx->actorCtx, globalCtx, sSpawnActorIds[this->type], pos.x, pos.y, pos.z,
-                    this->actor.world.rot.x, this->actor.world.rot.y, this->actor.world.rot.z, sSpawnParams[this->type],
-                    this->actor.cutscene, this->actor.unk20, NULL);
+                    &play->actorCtx, play, sSpawnActorIds[this->type], pos.x, pos.y, pos.z, this->actor.world.rot.x,
+                    this->actor.world.rot.y, this->actor.world.rot.z, sSpawnParams[this->type], this->actor.cutscene,
+                    this->actor.halfDaysBits, NULL);
                 if (this->children[i] != NULL) {
                     this->children[i]->room = this->actor.room;
                 }
@@ -162,8 +162,8 @@ void ObjMure_SpawnActors0(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-void ObjMure_SpawnActors1(ObjMure* this, GlobalContext* globalCtx2) {
-    GlobalContext* globalCtx = globalCtx2;
+void ObjMure_SpawnActors1(ObjMure* this, PlayState* play2) {
+    PlayState* play = play2;
     Actor* actor = &this->actor;
     Vec3f spawnPos;
     s32 maxChildren = ObjMure_GetMaxChildSpawns(this);
@@ -172,10 +172,10 @@ void ObjMure_SpawnActors1(ObjMure* this, GlobalContext* globalCtx2) {
     for (i = 0; i < maxChildren; i++) {
         ObjMure_GetSpawnPos(&spawnPos, &actor->world.pos, this->ptn, i);
         this->children[i] = Actor_SpawnAsChildAndCutscene(
-            &globalCtx2->actorCtx, globalCtx, sSpawnActorIds[this->type], spawnPos.x, spawnPos.y, spawnPos.z,
-            actor->world.rot.x, actor->world.rot.y, actor->world.rot.z,
+            &play2->actorCtx, play, sSpawnActorIds[this->type], spawnPos.x, spawnPos.y, spawnPos.z, actor->world.rot.x,
+            actor->world.rot.y, actor->world.rot.z,
             (this->type == OBJMURE_TYPE_BUTTERFLY && i == 0) ? 1 : sSpawnParams[this->type], this->actor.cutscene,
-            this->actor.unk20, NULL);
+            this->actor.halfDaysBits, NULL);
         if (this->children[i] != NULL) {
             this->childrenStates[i] = OBJMURE_CHILD_STATE_0;
             this->children[i]->room = actor->room;
@@ -185,18 +185,18 @@ void ObjMure_SpawnActors1(ObjMure* this, GlobalContext* globalCtx2) {
     }
 }
 
-void ObjMure_SpawnActors(ObjMure* this, GlobalContext* globalCtx) {
+void ObjMure_SpawnActors(ObjMure* this, PlayState* play) {
     switch (this->svNum) {
         case 0:
-            ObjMure_SpawnActors0(&this->actor, globalCtx);
+            ObjMure_SpawnActors0(&this->actor, play);
             break;
         case 1:
-            ObjMure_SpawnActors1(this, globalCtx);
+            ObjMure_SpawnActors1(this, play);
             break;
     }
 }
 
-void ObjMure_KillActorsImpl(ObjMure* this, GlobalContext* globalCtx) {
+void ObjMure_KillActorsImpl(ObjMure* this, PlayState* play) {
     s32 maxChildren = ObjMure_GetMaxChildSpawns(this);
     s32 i;
 
@@ -207,16 +207,16 @@ void ObjMure_KillActorsImpl(ObjMure* this, GlobalContext* globalCtx) {
                 break;
             case OBJMURE_CHILD_STATE_2:
                 if (this->children[i] != NULL) {
-                    Actor_MarkForDeath(this->children[i]);
+                    Actor_Kill(this->children[i]);
                     this->children[i] = NULL;
                 }
                 break;
             default:
                 if (this->children[i] != NULL) {
-                    if (Actor_HasParent(this->children[i], globalCtx)) {
+                    if (Actor_HasParent(this->children[i], play)) {
                         this->children[i] = NULL;
                     } else {
-                        Actor_MarkForDeath(this->children[i]);
+                        Actor_Kill(this->children[i]);
                         this->children[i] = NULL;
                     }
                 }
@@ -225,11 +225,11 @@ void ObjMure_KillActorsImpl(ObjMure* this, GlobalContext* globalCtx) {
     }
 }
 
-void ObjMure_KillActors(ObjMure* this, GlobalContext* globalCtx) {
-    ObjMure_KillActorsImpl(this, globalCtx);
+void ObjMure_KillActors(ObjMure* this, PlayState* play) {
+    ObjMure_KillActorsImpl(this, play);
 }
 
-void ObjMure_CheckChildren(ObjMure* this, GlobalContext* globalCtx) {
+void ObjMure_CheckChildren(ObjMure* this, PlayState* play) {
     s32 maxChildren = ObjMure_GetMaxChildSpawns(this);
     s32 i;
 
@@ -252,15 +252,15 @@ void ObjMure_CheckChildren(ObjMure* this, GlobalContext* globalCtx) {
     }
 }
 
-void ObjMure_InitialAction(ObjMure* this, GlobalContext* globalCtx) {
+void ObjMure_InitialAction(ObjMure* this, PlayState* play) {
     this->actionFunc = ObjMure_CulledState;
 }
 
-void ObjMure_CulledState(ObjMure* this, GlobalContext* globalCtx) {
+void ObjMure_CulledState(ObjMure* this, PlayState* play) {
     if (fabsf(this->actor.projectedPos.z) < sZClip[this->type]) {
         this->actionFunc = ObjMure_ActiveState;
         this->actor.flags |= ACTOR_FLAG_10;
-        ObjMure_SpawnActors(this, globalCtx);
+        ObjMure_SpawnActors(this, play);
     }
 }
 
@@ -310,7 +310,7 @@ void ObjMure_SetChildToFollowPlayer(ObjMure* this, s32 idx1) {
 }
 
 // Fish, Bugs
-void ObjMure_GroupBehavior0(ObjMure* this, GlobalContext* globalCtx) {
+void ObjMure_GroupBehavior0(ObjMure* this, PlayState* play) {
     if (this->unk_19C <= 0) {
         if (this->unk_19E) {
             this->unk_19E = false;
@@ -344,7 +344,7 @@ void ObjMure_GroupBehavior0(ObjMure* this, GlobalContext* globalCtx) {
 }
 
 // Butterflies
-void ObjMure_GroupBehavior1(ObjMure* this, GlobalContext* globalCtx) {
+void ObjMure_GroupBehavior1(ObjMure* this, PlayState* play) {
     s32 maxChildren;
     s32 i;
 
@@ -378,22 +378,22 @@ static ObjMureActionFunc sTypeGroupBehaviorFunc[] = {
     NULL, NULL, ObjMure_GroupBehavior0, ObjMure_GroupBehavior0, ObjMure_GroupBehavior1,
 };
 
-void ObjMure_ActiveState(ObjMure* this, GlobalContext* globalCtx) {
-    ObjMure_CheckChildren(this, globalCtx);
+void ObjMure_ActiveState(ObjMure* this, PlayState* play) {
+    ObjMure_CheckChildren(this, play);
     if (sZClip[this->type] + 40.0f <= fabsf(this->actor.projectedPos.z)) {
         this->actionFunc = ObjMure_CulledState;
         this->actor.flags &= ~ACTOR_FLAG_10;
-        ObjMure_KillActors(this, globalCtx);
+        ObjMure_KillActors(this, play);
     } else if (sTypeGroupBehaviorFunc[this->type] != NULL) {
-        sTypeGroupBehaviorFunc[this->type](this, globalCtx);
+        sTypeGroupBehaviorFunc[this->type](this, play);
     }
 }
 
-void ObjMure_Update(Actor* thisx, GlobalContext* globalCtx) {
+void ObjMure_Update(Actor* thisx, PlayState* play) {
     ObjMure* this = THIS;
 
     if (this->unk_19C > 0) {
         this->unk_19C--;
     }
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
 }

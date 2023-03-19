@@ -250,7 +250,8 @@ s32 Math3D_PlaneVsPlaneVsLineClosestPoint(f32 planeAA, f32 planeAB, f32 planeAC,
 #endif
 
 /**
- * Calculates the point on the line from starting point `v0`, in the direction `dir` scaled by `scale`. Result is placed in `ret`
+ * Calculates the point on the line from starting point `v0`, in the direction `dir` scaled by `scale`. Result is placed
+ * in `ret`
  */
 void Math3D_PointOnDirectedLine(Vec3f* v0, Vec3f* dir, f32 scale, Vec3f* ret) {
     ret->x = (dir->x * scale) + v0->x;
@@ -940,7 +941,7 @@ s32 Math3D_LineVsCubeShort(Vec3s* min, Vec3s* max, Vec3s* a, Vec3s* b) {
     return Math3D_LineVsCube(&D_801FBD20, &D_801FBD30, &D_801FBD40, &D_801FBD50);
 }
 #else
-#pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/func_8017B68C.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/Math3D_LineVsCubeShort.s")
 #endif
 
 void Math3D_RotateXZPlane(Vec3f* pointOnPlane, s16 angle, f32* a, f32* c, f32* d) {
@@ -2272,7 +2273,6 @@ s32 Math3D_YZInSphere(Sphere16* sphere, f32 y, f32 z) {
     }
     return false;
 }
-
 
 // Math3D_CircleLineIntersections?
 /**

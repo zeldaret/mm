@@ -1,3 +1,4 @@
+#include "prevent_bss_reordering.h"
 #include "global.h"
 
 #define FLAGS                                                                                               \
@@ -9,12 +10,12 @@ ActorFunc sPlayerCallDestroyFunc;
 ActorFunc sPlayerCallUpdateFunc;
 ActorFunc sPlayerCallDrawFunc;
 
-void PlayerCall_Init(Actor* thisx, GlobalContext* globalCtx);
-void PlayerCall_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void PlayerCall_Update(Actor* thisx, GlobalContext* globalCtx);
-void PlayerCall_Draw(Actor* thisx, GlobalContext* globalCtx);
+void PlayerCall_Init(Actor* thisx, PlayState* play);
+void PlayerCall_Destroy(Actor* thisx, PlayState* play);
+void PlayerCall_Update(Actor* thisx, PlayState* play);
+void PlayerCall_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit Player_InitVars = {
+ActorInit Player_InitVars = {
     ACTOR_PLAYER,
     ACTORCAT_PLAYER,
     FLAGS,
@@ -26,10 +27,10 @@ const ActorInit Player_InitVars = {
     (ActorFunc)PlayerCall_Draw,
 };
 
-void Player_Init(Actor* thisx, GlobalContext* globalCtx);
-void Player_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void Player_Update(Actor* thisx, GlobalContext* globalCtx);
-void Player_Draw(Actor* thisx, GlobalContext* globalCtx);
+void Player_Init(Actor* thisx, PlayState* play);
+void Player_Destroy(Actor* thisx, PlayState* play);
+void Player_Update(Actor* thisx, PlayState* play);
+void Player_Draw(Actor* thisx, PlayState* play);
 
 void PlayerCall_InitFuncPtrs(void) {
     sPlayerCallInitFunc = KaleidoManager_GetRamAddr(Player_Init);
@@ -38,23 +39,23 @@ void PlayerCall_InitFuncPtrs(void) {
     sPlayerCallDrawFunc = KaleidoManager_GetRamAddr(Player_Draw);
 }
 
-void PlayerCall_Init(Actor* thisx, GlobalContext* globalCtx) {
+void PlayerCall_Init(Actor* thisx, PlayState* play) {
     KaleidoScopeCall_LoadPlayer();
     PlayerCall_InitFuncPtrs();
-    sPlayerCallInitFunc(thisx, globalCtx);
+    sPlayerCallInitFunc(thisx, play);
 }
 
-void PlayerCall_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void PlayerCall_Destroy(Actor* thisx, PlayState* play) {
     KaleidoScopeCall_LoadPlayer();
-    sPlayerCallDestroyFunc(thisx, globalCtx);
+    sPlayerCallDestroyFunc(thisx, play);
 }
 
-void PlayerCall_Update(Actor* thisx, GlobalContext* globalCtx) {
+void PlayerCall_Update(Actor* thisx, PlayState* play) {
     KaleidoScopeCall_LoadPlayer();
-    sPlayerCallUpdateFunc(thisx, globalCtx);
+    sPlayerCallUpdateFunc(thisx, play);
 }
 
-void PlayerCall_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void PlayerCall_Draw(Actor* thisx, PlayState* play) {
     KaleidoScopeCall_LoadPlayer();
-    sPlayerCallDrawFunc(thisx, globalCtx);
+    sPlayerCallDrawFunc(thisx, play);
 }

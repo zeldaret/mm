@@ -5,19 +5,18 @@
 
 struct EnArrow;
 
-typedef void (*EnArrowActionFunc)(struct EnArrow*, GlobalContext*);
+typedef void (*EnArrowActionFunc)(struct EnArrow*, PlayState*);
 
 enum {
-    /* -8  */ ENARROW_MINUS8 = -8,
-    /*  0  */ ENARROW_0 = 0,
-    /*  1  */ ENARROW_1,
-    /*  2  */ ENARROW_2,
-    /*  3  */ ENARROW_3,
-    /*  4  */ ENARROW_4,
-    /*  5  */ ENARROW_5,
-    /*  6  */ ENARROW_6,
-    /*  7  */ ENARROW_7,
-    /*  8  */ ENARROW_8,
+    /* 0 */ ENARROW_0, // Lit arrow
+    /* 1 */ ENARROW_1, // Horse arrow
+    /* 2 */ ENARROW_2, // Normal arrow
+    /* 3 */ ENARROW_3, // Fire arrow
+    /* 4 */ ENARROW_4, // Ice arrow
+    /* 5 */ ENARROW_5, // Light arrow
+    /* 6 */ ENARROW_6, // ?
+    /* 7 */ ENARROW_7, // Deku bubble
+    /* 8 */ ENARROW_8, // Deku Nut
 };
 
 typedef struct {
@@ -43,13 +42,7 @@ typedef struct EnArrow {
     /* 0x228 */ Vec3f unk_228;
     /* 0x234 */ Vec3f unk_234;
     /* 0x240 */ s32 unk_240;
-    /* 0x244 */ s32 unk_244;
-    /* 0x248 */ f32 unk_248;
-    /* 0x24C */ f32 unk_24C;
-    /* 0x250 */ f32 unk_250;
-    /* 0x254 */ f32 unk_254;
-    /* 0x258 */ f32 unk_258;
-    /* 0x25C */ f32 unk_25C;
+    /* 0x244 */ WeaponInfo unk_244;
     /* 0x260 */ u8 unk_260; // timer in OoT
     /* 0x261 */ u8 unk_261; // hitFlags in OoT
     /* 0x262 */ u8 unk_262;
@@ -58,7 +51,5 @@ typedef struct EnArrow {
     /* 0x268 */ Vec3f unk_268;
     /* 0x274 */ EnArrowActionFunc actionFunc;
 } EnArrow; // size = 0x278
-
-extern const ActorInit En_Arrow_InitVars;
 
 #endif // Z_EN_ARROW_H

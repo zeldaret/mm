@@ -11,28 +11,28 @@
 
 #define THIS ((EnYb*)thisx)
 
-void EnYb_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnYb_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnYb_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnYb_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnYb_Init(Actor* thisx, PlayState* play);
+void EnYb_Destroy(Actor* thisx, PlayState* play);
+void EnYb_Update(Actor* thisx, PlayState* play);
+void EnYb_Draw(Actor* thisx, PlayState* play);
 
-void EnYb_Idle(EnYb* this, GlobalContext* globalCtx);
-void EnYb_TeachingDanceFinish(EnYb* this, GlobalContext* globalCtx);
-void EnYb_SetupLeaving(EnYb* this, GlobalContext* globalCtx);
+void EnYb_Idle(EnYb* this, PlayState* play);
+void EnYb_TeachingDanceFinish(EnYb* this, PlayState* play);
+void EnYb_SetupLeaving(EnYb* this, PlayState* play);
 
-void EnYb_UpdateAnimation(EnYb* this, GlobalContext* globalCtx);
+void EnYb_UpdateAnimation(EnYb* this, PlayState* play);
 void EnYb_FinishTeachingCutscene(EnYb* this);
-void EnYb_Disappear(EnYb* this, GlobalContext* globalCtx);
-void EnYb_ReceiveMask(EnYb* this, GlobalContext* globalCtx);
-void EnYb_Talk(EnYb* this, GlobalContext* globalCtx);
-void EnYb_TeachingDance(EnYb* this, GlobalContext* globalCtx);
-void EnYb_WaitForMidnight(EnYb* this, GlobalContext* globalCtx);
+void EnYb_Disappear(EnYb* this, PlayState* play);
+void EnYb_ReceiveMask(EnYb* this, PlayState* play);
+void EnYb_Talk(EnYb* this, PlayState* play);
+void EnYb_TeachingDance(EnYb* this, PlayState* play);
+void EnYb_WaitForMidnight(EnYb* this, PlayState* play);
 
-void EnYb_ActorShadowFunc(Actor* thisx, Lights* mapper, GlobalContext* globalCtx);
-void EnYb_SetAnimation(GlobalContext*, EnYb*, s16, u8, f32);
-s32 EnYb_CanTalk(EnYb* this, GlobalContext* globalCtx);
+void EnYb_ActorShadowFunc(Actor* thisx, Lights* mapper, PlayState* play);
+void EnYb_ChangeAnim(PlayState* play, EnYb* this, s16 animIndex, u8 animMode, f32 morphFrames);
+s32 EnYb_CanTalk(EnYb* this, PlayState* play);
 
-const ActorInit En_Yb_InitVars = {
+ActorInit En_Yb_InitVars = {
     ACTOR_EN_YB,
     ACTORCAT_NPC,
     FLAGS,
@@ -68,7 +68,7 @@ static ColliderCylinderInit sCylinderInit = {
 //  assumption: draw uses two different skeleton functions, might be incompatible
 static AnimationHeader* gYbUnusedAnimations[] = { &object_yb_Anim_000200 };
 
-static LinkAnimationHeader* gLinkAnimations[] = { &gameplay_keep_Linkanim_00DF28, &gameplay_keep_Linkanim_00CF98 };
+static LinkAnimationHeader* gLinkAnimations[] = { &gPlayerAnim_link_normal_wait_free, &gPlayerAnim_alink_dance_loop };
 
 static Vec3f D_80BFB2E8 = { 0.0f, 0.5f, 0.0f };
 
@@ -76,7 +76,7 @@ static Vec3f D_80BFB2F4 = { 500.0f, -500.0, 0.0f };
 
 static Vec3f D_80BFB300 = { 500.0f, -500.0f, 0.0f };
 
-void EnYb_Init(Actor* thisx, GlobalContext* globalCtx) {
+void EnYb_Init(Actor* thisx, PlayState* play) {
     EnYb* this = THIS;
     s16 tempCutscene;
     s32 i;
@@ -84,20 +84,20 @@ void EnYb_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_SetScale(&this->actor, 0.01f);
     ActorShape_Init(&this->actor.shape, 0.0f, EnYb_ActorShadowFunc, 20.0f);
 
-    // @Bug this alignment is because of player animations, but should be using ALIGN16
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gYbSkeleton, &object_yb_Anim_000200,
-                       (uintptr_t)this->jointTable & ~0xF, (uintptr_t)this->morphTable & ~0xF, YB_LIMB_MAX);
+    // @bug this alignment is because of player animations, but should be using ALIGN16
+    SkelAnime_InitFlex(play, &this->skelAnime, &gYbSkeleton, &object_yb_Anim_000200, (uintptr_t)this->jointTable & ~0xF,
+                       (uintptr_t)this->morphTable & ~0xF, YB_LIMB_MAX);
 
     Animation_PlayLoop(&this->skelAnime, &object_yb_Anim_000200);
 
-    Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
+    Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->actionFunc = EnYb_Idle;
-    this->currentAnimIndex = 3; // gets overwritten to 2 in EnYb_SetAnimation later
+    this->animIndex = 3; // gets overwritten to 2 in EnYb_ChangeAnim later
     this->actor.terminalVelocity = -9.0f;
     this->actor.gravity = -1.0f;
 
-    EnYb_SetAnimation(globalCtx, this, 2, ANIMMODE_LOOP, 0.0f);
+    EnYb_ChangeAnim(play, this, 2, ANIMMODE_LOOP, 0.0f);
 
     tempCutscene = this->actor.cutscene;
     for (i = 0; i < ARRAY_COUNT(this->cutscenes); i++) {
@@ -120,40 +120,39 @@ void EnYb_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->actor.flags &= ~ACTOR_FLAG_1;
     }
 
-    // check if already healed
-    if (gSaveContext.save.weekEventReg[82] & 4) {
-        Actor_MarkForDeath(&this->actor);
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_82_04)) {
+        Actor_Kill(&this->actor);
     }
 }
 
-void EnYb_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnYb_Destroy(Actor* thisx, PlayState* play) {
     EnYb* this = THIS;
 
-    Collider_DestroyCylinder(globalCtx, &this->collider);
+    Collider_DestroyCylinder(play, &this->collider);
 }
 
-void func_80BFA2FC(GlobalContext* globalCtx) {
+void func_80BFA2FC(PlayState* play) {
     if (INV_CONTENT(ITEM_MASK_KAMARO) == ITEM_MASK_KAMARO) {
-        func_80151BB4(globalCtx, 0x34);
+        func_80151BB4(play, 0x34);
     }
-    func_80151BB4(globalCtx, 0xF);
+    func_80151BB4(play, 0xF);
 }
 
 /**
  * Custom shadow draw function of type ActorShadowFunc.
  */
-void EnYb_ActorShadowFunc(Actor* thisx, Lights* mapper, GlobalContext* globalCtx) {
+void EnYb_ActorShadowFunc(Actor* thisx, Lights* mapper, PlayState* play) {
     Vec3f oldPos;
     EnYb* this = THIS;
 
     if (this->alpha > 0) {
-        if (this->currentAnimIndex == 2) {
+        if (this->animIndex == 2) {
             f32 tempScale = (((27.0f - this->shadowPos.y) + this->actor.world.pos.y) * ((1 / 2.25f) * 0.001f)) + 0.01f;
             this->actor.scale.x = tempScale;
         }
         Math_Vec3f_Copy(&oldPos, &this->actor.world.pos);
         Math_Vec3f_Copy(&this->actor.world.pos, &this->shadowPos);
-        func_800B4AEC(globalCtx, &this->actor, 50.0f);
+        func_800B4AEC(play, &this->actor, 50.0f);
 
         if (oldPos.y < this->actor.floorHeight) {
             this->actor.world.pos.y = this->actor.floorHeight;
@@ -161,25 +160,25 @@ void EnYb_ActorShadowFunc(Actor* thisx, Lights* mapper, GlobalContext* globalCtx
             this->actor.world.pos.y = oldPos.y;
         }
 
-        ActorShadow_DrawCircle(&this->actor, mapper, globalCtx);
+        ActorShadow_DrawCircle(&this->actor, mapper, play);
         Math_Vec3f_Copy(&this->actor.world.pos, &oldPos);
         this->actor.scale.x = 0.01f;
     }
 }
 
-void EnYb_SetAnimation(GlobalContext* globalCtx, EnYb* this, s16 animIndex, u8 animMode, f32 transitionRate) {
+void EnYb_ChangeAnim(PlayState* play, EnYb* this, s16 animIndex, u8 animMode, f32 morphFrames) {
     if (animIndex >= 0 && animIndex < 3) {
-        if (animIndex != this->currentAnimIndex || animMode != ANIMMODE_LOOP) {
+        if (animIndex != this->animIndex || animMode != ANIMMODE_LOOP) {
             if (animIndex > 0) {
                 if (animMode == ANIMMODE_LOOP) {
-                    LinkAnimation_Change(globalCtx, &this->skelAnime, gLinkAnimations[animIndex - 1], 1.0f, 0.0f,
+                    LinkAnimation_Change(play, &this->skelAnime, gLinkAnimations[animIndex - 1], 1.0f, 0.0f,
                                          Animation_GetLastFrame(gLinkAnimations[animIndex - 1]), ANIMMODE_LOOP,
-                                         transitionRate);
+                                         morphFrames);
                 } else {
                     // unused case, (only called once with animMode = ANIMMODE_LOOP)
-                    LinkAnimation_Change(globalCtx, &this->skelAnime, gLinkAnimations[animIndex - 1], 1.0f, 0.0f,
+                    LinkAnimation_Change(play, &this->skelAnime, gLinkAnimations[animIndex - 1], 1.0f, 0.0f,
                                          Animation_GetLastFrame(gLinkAnimations[animIndex - 1]), ANIMMODE_LOOP,
-                                         transitionRate);
+                                         morphFrames);
                 }
             } else {
                 // unused case, (only called once with animIndex = 2)
@@ -188,15 +187,15 @@ void EnYb_SetAnimation(GlobalContext* globalCtx, EnYb* this, s16 animIndex, u8 a
                 if (1) {}
 
                 Animation_Change(&this->skelAnime, gYbUnusedAnimations[animIndex], 1.0f, 0.0f,
-                                 Animation_GetLastFrame(animationPtr), animMode, transitionRate);
+                                 Animation_GetLastFrame(animationPtr), animMode, morphFrames);
             }
-            this->currentAnimIndex = animIndex;
+            this->animIndex = animIndex;
         }
     }
 }
 
-s32 EnYb_CanTalk(EnYb* this, GlobalContext* globalCtx) {
-    if (this->actor.xzDistToPlayer < 100.0f && Player_IsFacingActor(&this->actor, 0x3000, globalCtx) &&
+s32 EnYb_CanTalk(EnYb* this, PlayState* play) {
+    if (this->actor.xzDistToPlayer < 100.0f && Player_IsFacingActor(&this->actor, 0x3000, play) &&
         Actor_IsFacingPlayer(&this->actor, 0x3000)) {
         return true;
     } else {
@@ -204,11 +203,11 @@ s32 EnYb_CanTalk(EnYb* this, GlobalContext* globalCtx) {
     }
 }
 
-void EnYb_UpdateAnimation(EnYb* this, GlobalContext* globalCtx) {
-    if (this->currentAnimIndex <= 0) {
+void EnYb_UpdateAnimation(EnYb* this, PlayState* play) {
+    if (this->animIndex <= 0) {
         SkelAnime_Update(&this->skelAnime);
     } else {
-        LinkAnimation_Update(globalCtx, &this->skelAnime);
+        LinkAnimation_Update(play, &this->skelAnime);
     }
 }
 
@@ -233,84 +232,84 @@ void EnYb_EnableProximityMusic(EnYb* this) {
     func_800B9084(&this->actor);
 }
 
-void EnYb_Disappear(EnYb* this, GlobalContext* globalCtx) {
+void EnYb_Disappear(EnYb* this, PlayState* play) {
     s32 pad;
     Vec3f sp60;
     s32 i;
 
-    EnYb_UpdateAnimation(this, globalCtx);
+    EnYb_UpdateAnimation(this, play);
     for (i = 3; i >= 0; i--) {
         sp60.x = randPlusMinusPoint5Scaled(60.0f) + this->actor.world.pos.x;
         sp60.z = randPlusMinusPoint5Scaled(60.0f) + this->actor.world.pos.z;
         sp60.y = randPlusMinusPoint5Scaled(50.0f) + (this->actor.world.pos.y + 20.0f);
-        func_800B3030(globalCtx, &sp60, &D_80BFB2E8, &D_80BFB2E8, 100, 0, 2);
+        func_800B3030(play, &sp60, &D_80BFB2E8, &D_80BFB2E8, 100, 0, 2);
     }
 
-    SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 20, NA_SE_EN_EXTINCT);
+    SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 20, NA_SE_EN_EXTINCT);
     if (this->alpha > 10) {
         this->alpha -= 10;
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
-void EnYb_SetupLeaving(EnYb* this, GlobalContext* globalCtx) {
-    EnYb_UpdateAnimation(this, globalCtx);
-    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
+void EnYb_SetupLeaving(EnYb* this, PlayState* play) {
+    EnYb_UpdateAnimation(this, play);
+    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->actor.flags &= ~ACTOR_FLAG_10000;
         this->actionFunc = EnYb_Talk;
         // I am counting on you
-        Message_StartTextbox(globalCtx, 0x147D, &this->actor);
-        func_80BFA2FC(globalCtx);
+        Message_StartTextbox(play, 0x147D, &this->actor);
+        func_80BFA2FC(play);
     } else {
-        func_800B8500(&this->actor, globalCtx, 1000.0f, 1000.0f, -1);
+        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
     }
     EnYb_EnableProximityMusic(this);
 }
 
-void EnYb_ReceiveMask(EnYb* this, GlobalContext* globalCtx) {
-    EnYb_UpdateAnimation(this, globalCtx);
+void EnYb_ReceiveMask(EnYb* this, PlayState* play) {
+    EnYb_UpdateAnimation(this, play);
     // Player is parent: receiving the Kamaro mask
-    if (Actor_HasParent(&this->actor, globalCtx)) {
+    if (Actor_HasParent(&this->actor, play)) {
         this->actor.parent = NULL;
         this->actionFunc = EnYb_SetupLeaving;
         this->actor.flags |= ACTOR_FLAG_10000;
-        func_800B8500(&this->actor, globalCtx, 1000.0f, 1000.0f, -1);
+        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
     } else {
-        Actor_PickUp(&this->actor, globalCtx, GI_MASK_KAMARO, 10000.0f, 100.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_MASK_KAMARO, 10000.0f, 100.0f);
     }
     EnYb_EnableProximityMusic(this);
 }
 
-void EnYb_Talk(EnYb* this, GlobalContext* globalCtx) {
+void EnYb_Talk(EnYb* this, PlayState* play) {
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 2, 0x1000, 0x200);
     this->actor.world.rot.y = this->actor.shape.rot.y;
-    EnYb_UpdateAnimation(this, globalCtx);
+    EnYb_UpdateAnimation(this, play);
 
-    if (Message_GetState(&globalCtx->msgCtx) == 5 && Message_ShouldAdvance(globalCtx) != 0) {
-        switch (globalCtx->msgCtx.currentTextId) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+        switch (play->msgCtx.currentTextId) {
             case 0x147D: // I am counting on you
-                func_801477B4(globalCtx);
+                Message_CloseTextbox(play);
                 this->actionFunc = EnYb_Disappear;
-                gSaveContext.save.weekEventReg[82] |= 0x4;
+                SET_WEEKEVENTREG(WEEKEVENTREG_82_04);
                 break;
             case 0x147C: // Spread my dance across the world
-                if (Player_GetMask(globalCtx) == PLAYER_MASK_KAMARO) {
-                    func_801477B4(globalCtx);
+                if (Player_GetMask(play) == PLAYER_MASK_KAMARO) {
+                    Message_CloseTextbox(play);
                     this->actionFunc = EnYb_Idle;
 
                 } else if (INV_CONTENT(ITEM_MASK_KAMARO) == ITEM_MASK_KAMARO) {
-                    func_80151938(globalCtx, 0x147D); // I am counting on you
-                    func_80BFA2FC(globalCtx);
+                    Message_ContinueTextbox(play, 0x147D); // I am counting on you
+                    func_80BFA2FC(play);
 
                 } else {
-                    func_801477B4(globalCtx);
+                    Message_CloseTextbox(play);
                     this->actionFunc = EnYb_ReceiveMask;
-                    EnYb_ReceiveMask(this, globalCtx);
+                    EnYb_ReceiveMask(this, play);
                 }
                 break;
             default:
-                func_801477B4(globalCtx);
+                Message_CloseTextbox(play);
                 this->actionFunc = EnYb_Idle;
                 break;
         }
@@ -318,22 +317,22 @@ void EnYb_Talk(EnYb* this, GlobalContext* globalCtx) {
     EnYb_EnableProximityMusic(this);
 }
 
-void EnYb_TeachingDanceFinish(EnYb* this, GlobalContext* globalCtx) {
-    EnYb_UpdateAnimation(this, globalCtx);
-    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
+void EnYb_TeachingDanceFinish(EnYb* this, PlayState* play) {
+    EnYb_UpdateAnimation(this, play);
+    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->actionFunc = EnYb_Talk;
         // Spread my dance across the world
-        Message_StartTextbox(globalCtx, 0x147C, &this->actor);
+        Message_StartTextbox(play, 0x147C, &this->actor);
         this->actor.flags &= ~ACTOR_FLAG_10000;
     } else {
-        func_800B8500(&this->actor, globalCtx, 1000.0f, 1000.0f, -1);
+        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
     }
     EnYb_EnableProximityMusic(this);
 }
 
 // dancing countdown
-void EnYb_TeachingDance(EnYb* this, GlobalContext* globalCtx) {
-    EnYb_UpdateAnimation(this, globalCtx);
+void EnYb_TeachingDance(EnYb* this, PlayState* play) {
+    EnYb_UpdateAnimation(this, play);
 
     if (this->teachingCutsceneTimer > 0) {
         this->teachingCutsceneTimer--;
@@ -341,52 +340,52 @@ void EnYb_TeachingDance(EnYb* this, GlobalContext* globalCtx) {
         EnYb_FinishTeachingCutscene(this);
         this->actionFunc = EnYb_TeachingDanceFinish;
         this->actor.flags |= ACTOR_FLAG_10000;
-        func_800B8500(&this->actor, globalCtx, 1000.0f, 1000.0f, -1);
+        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
     }
     EnYb_EnableProximityMusic(this);
 }
 
-void EnYb_Idle(EnYb* this, GlobalContext* globalCtx) {
+void EnYb_Idle(EnYb* this, PlayState* play) {
     s32 pad;
-    Player* player = GET_PLAYER(globalCtx);
+    Player* player = GET_PLAYER(play);
 
-    EnYb_UpdateAnimation(this, globalCtx);
+    EnYb_UpdateAnimation(this, play);
     if (this->actor.xzDistToPlayer < 180.0f && fabsf(this->actor.playerHeightRel) < 50.0f &&
-        globalCtx->msgCtx.ocarinaMode == 3 && globalCtx->msgCtx.unk1202E == 7 &&
+        play->msgCtx.ocarinaMode == 3 && play->msgCtx.lastPlayedSong == OCARINA_SONG_HEALING &&
         gSaveContext.save.playerForm == PLAYER_FORM_HUMAN) {
         this->actionFunc = EnYb_TeachingDance;
         this->teachingCutsceneTimer = 200;
         EnYb_ChangeCutscene(this, 0);
-    } else if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
-        func_80BFA2FC(globalCtx);
+    } else if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+        func_80BFA2FC(play);
         this->actionFunc = EnYb_Talk;
-        if (Player_GetMask(globalCtx) == PLAYER_MASK_KAMARO) {
+        if (Player_GetMask(play) == PLAYER_MASK_KAMARO) {
             // I have taught you, go use it
-            Message_StartTextbox(globalCtx, 0x147C, &this->actor);
+            Message_StartTextbox(play, 0x147C, &this->actor);
         } else {
             // regular talk to him first dialogue
-            Message_StartTextbox(globalCtx, 0x147B, &this->actor);
+            Message_StartTextbox(play, 0x147B, &this->actor);
         }
-    } else if (EnYb_CanTalk(this, globalCtx)) {
-        func_800B8614(&this->actor, globalCtx, 120.0f);
+    } else if (EnYb_CanTalk(this, play)) {
+        func_800B8614(&this->actor, play, 120.0f);
     }
 
     if (this->playerOcarinaOut & 1) {
-        if (!(player->stateFlags2 & 0x8000000)) {
+        if (!(player->stateFlags2 & PLAYER_STATE2_8000000)) {
             this->playerOcarinaOut &= ~1;
         }
-    } else if ((player->stateFlags2 & 0x8000000) && this->actor.xzDistToPlayer < 180.0f &&
+    } else if ((player->stateFlags2 & PLAYER_STATE2_8000000) && this->actor.xzDistToPlayer < 180.0f &&
                fabsf(this->actor.playerHeightRel) < 50.0f) {
         this->playerOcarinaOut |= 1;
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_TRE_BOX_APPEAR);
+        Actor_PlaySfx(&this->actor, NA_SE_SY_TRE_BOX_APPEAR);
     }
 
     EnYb_EnableProximityMusic(this);
 }
 
-void EnYb_WaitForMidnight(EnYb* this, GlobalContext* globalCtx) {
+void EnYb_WaitForMidnight(EnYb* this, PlayState* play) {
     if (gSaveContext.save.time < CLOCK_TIME(6, 0)) {
-        EnYb_UpdateAnimation(this, globalCtx);
+        EnYb_UpdateAnimation(this, play);
         this->alpha += 5;
         if (this->alpha > 250) {
             this->alpha = 255;
@@ -397,20 +396,20 @@ void EnYb_WaitForMidnight(EnYb* this, GlobalContext* globalCtx) {
     }
 }
 
-void EnYb_Update(Actor* thisx, GlobalContext* globalCtx) {
+void EnYb_Update(Actor* thisx, PlayState* play) {
     s32 pad;
     EnYb* this = THIS;
 
     if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_1)) {
         Collider_UpdateCylinder(&this->actor, &this->collider);
-        CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+        CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
     }
     if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_1)) {
         Actor_MoveWithGravity(&this->actor);
-        Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 40.0f, 25.0f, 40.0f, 5);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 40.0f, 25.0f, 40.0f, 5);
     }
 
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
 
     if (this->cutsceneIndex != -1 && ActorCutscene_GetCurrentIndex() != this->cutscenes[this->cutsceneIndex]) {
         if (ActorCutscene_GetCurrentIndex() == 0x7C) {
@@ -426,57 +425,57 @@ void EnYb_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-void EnYb_PostLimbDrawOpa(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void EnYb_PostLimbDrawOpa(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnYb* this = THIS;
 
     if (limbIndex == YB_LIMB_HEAD) {
-        Matrix_MultiplyVector3fByState(&D_80BFB2F4, &this->actor.focus.pos);
+        Matrix_MultVec3f(&D_80BFB2F4, &this->actor.focus.pos);
     }
     if (limbIndex == YB_LIMB_LEGS_ROOT) {
-        Matrix_MultiplyVector3fByState(&gZeroVec3f, &this->shadowPos);
+        Matrix_MultVec3f(&gZeroVec3f, &this->shadowPos);
     }
 }
 
-void EnYb_PostLimbDrawXlu(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
+void EnYb_PostLimbDrawXlu(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
     EnYb* this = THIS;
 
     if (limbIndex == YB_LIMB_HEAD) {
-        Matrix_MultiplyVector3fByState(&D_80BFB300, &this->actor.focus.pos);
+        Matrix_MultVec3f(&D_80BFB300, &this->actor.focus.pos);
     }
     if (limbIndex == YB_LIMB_LEGS_ROOT) {
-        Matrix_MultiplyVector3fByState(&gZeroVec3f, &this->shadowPos);
+        Matrix_MultVec3f(&gZeroVec3f, &this->shadowPos);
     }
 }
 
-void EnYb_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void EnYb_Draw(Actor* thisx, PlayState* play) {
     EnYb* this = THIS;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
     if (this->alpha != 0) {
         if (this->alpha < 255) {
             if (this->alpha > 128) {
                 func_8012C2B4(POLY_XLU_DISP++);
-                Scene_SetRenderModeXlu(globalCtx, 2, 2);
+                Scene_SetRenderModeXlu(play, 2, 2);
             } else {
                 func_8012C304(POLY_XLU_DISP++);
-                Scene_SetRenderModeXlu(globalCtx, 1, 2);
+                Scene_SetRenderModeXlu(play, 1, 2);
             }
             gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0, this->alpha);
 
             if (1) {}
 
             POLY_XLU_DISP =
-                SkelAnime_DrawFlex(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
+                SkelAnime_DrawFlex(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                    this->skelAnime.dListCount, NULL, EnYb_PostLimbDrawXlu, &this->actor, POLY_XLU_DISP);
 
         } else {
-            func_8012C28C(globalCtx->state.gfxCtx);
-            Scene_SetRenderModeXlu(globalCtx, 0, 1);
-            SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
+            func_8012C28C(play->state.gfxCtx);
+            Scene_SetRenderModeXlu(play, 0, 1);
+            SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                   this->skelAnime.dListCount, NULL, EnYb_PostLimbDrawOpa, &this->actor);
         }
     }
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }

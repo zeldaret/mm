@@ -5,7 +5,7 @@
 
 struct EnDoor;
 
-typedef void (*EnDoorActionFunc)(struct EnDoor*, GlobalContext*);
+typedef void (*EnDoorActionFunc)(struct EnDoor*, PlayState*);
 
 #define ENDOOR_GET_PARAMS_7(thisx) (((thisx)->params >> 7) & 7)
 #define ENDOOR_GET_PARAMS_7F(thisx) (((thisx)->params) & 0x7F)
@@ -25,7 +25,5 @@ typedef struct EnDoor {
     /* 0x1A8 */ Vec3s limbTable[5];
     /* 0x1C8 */ EnDoorActionFunc actionFunc;
 } EnDoor;
-
-extern const ActorInit En_Door_InitVars;
 
 #endif // Z_EN_DOOR_H

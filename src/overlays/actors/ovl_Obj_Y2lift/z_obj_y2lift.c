@@ -5,18 +5,18 @@
  */
 
 #include "z_obj_y2lift.h"
+#include "objects/object_kaizoku_obj/object_kaizoku_obj.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((ObjY2lift*)thisx)
 
-void ObjY2lift_Init(Actor* thisx, GlobalContext* globalCtx);
-void ObjY2lift_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void ObjY2lift_Update(Actor* thisx, GlobalContext* globalCtx);
-void ObjY2lift_Draw(Actor* thisx, GlobalContext* globalCtx);
+void ObjY2lift_Init(Actor* thisx, PlayState* play);
+void ObjY2lift_Destroy(Actor* thisx, PlayState* play);
+void ObjY2lift_Update(Actor* thisx, PlayState* play);
+void ObjY2lift_Draw(Actor* thisx, PlayState* play);
 
-#if 0
-const ActorInit Obj_Y2lift_InitVars = {
+ActorInit Obj_Y2lift_InitVars = {
     ACTOR_OBJ_Y2LIFT,
     ACTORCAT_BG,
     FLAGS,
@@ -28,25 +28,68 @@ const ActorInit Obj_Y2lift_InitVars = {
     (ActorFunc)ObjY2lift_Draw,
 };
 
-// static InitChainEntry sInitChain[] = {
-static InitChainEntry D_80B9A940[] = {
+static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneScale, 800, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneDownward, 800, ICHAIN_STOP),
 };
 
-#endif
+void ObjY2lift_Init(Actor* thisx, PlayState* play) {
+    ObjY2lift* this = THIS;
 
-extern InitChainEntry D_80B9A940[];
+    Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
+    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_LoadMesh(play, &this->dyna, &gPirateLiftPlatformCol);
+}
 
-extern UNK_TYPE D_06001680;
-extern UNK_TYPE D_060019B0;
+void ObjY2lift_Destroy(Actor* thisx, PlayState* play) {
+    ObjY2lift* this = THIS;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Y2lift/ObjY2lift_Init.s")
+    DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Y2lift/ObjY2lift_Destroy.s")
+void ObjY2lift_Update(Actor* thisx, PlayState* play) {
+    ObjY2lift* this = THIS;
+    f32 temp_fv0 = this->dyna.actor.world.pos.y;
+    f32 targetVelocityY = 0.0f;
+    s32 temp_v0 = DynaPolyActor_IsInRidingMovingState(&this->dyna);
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Y2lift/ObjY2lift_Update.s")
+    if (temp_v0 || DynaPolyActor_IsInRidingFallingState(&this->dyna)) {
+        if (!this->unk15D) {
+            this->unk15D = true;
+            this->unk15F = 12;
+        } else if (this->unk15F == 0 && temp_v0) {
+            this->unk15C = 16;
+        }
+    } else {
+        this->unk15D = false;
+    }
+    if (DECR(this->unk15C) != 0) {
+        temp_fv0 = this->dyna.actor.home.pos.y + 180.0f;
+        targetVelocityY = 2.0f;
+    } else if (!temp_v0 && this->dyna.actor.velocity.y <= 0.0f) {
+        temp_fv0 = this->dyna.actor.home.pos.y;
+        targetVelocityY = -2.0f;
+    }
+    Math_StepToF(&this->dyna.actor.velocity.y, targetVelocityY, 0.1f);
+    this->dyna.actor.world.pos.y += this->dyna.actor.velocity.y;
+    if (((this->dyna.actor.world.pos.y - temp_fv0) * targetVelocityY) >= 0.0f) {
+        this->dyna.actor.world.pos.y = temp_fv0;
+        this->dyna.actor.velocity.y = 0.0f;
+        if (!this->unk15E) {
+            this->unk15E = true;
+            this->unk15F = 12;
+        }
+    } else {
+        this->unk15E = false;
+        func_800B9010(&this->dyna.actor, NA_SE_EV_PLATE_LIFT_LEVEL - SFX_FLAG);
+    }
+    if (DECR(this->unk15F) != 0) {
+        this->dyna.actor.shape.yOffset = (2.0f * (this->unk15F & 1)) * this->unk15F;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Y2lift/ObjY2lift_Draw.s")
+void ObjY2lift_Draw(Actor* thisx, PlayState* play) {
+    Gfx_DrawDListOpa(play, gPirateLiftPlatformDL);
+}

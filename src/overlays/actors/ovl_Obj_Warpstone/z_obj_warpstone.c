@@ -12,17 +12,17 @@
 
 #define THIS ((ObjWarpstone*)thisx)
 
-void ObjWarpstone_Init(Actor* thisx, GlobalContext* globalCtx);
-void ObjWarpstone_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void ObjWarpstone_Update(Actor* thisx, GlobalContext* globalCtx);
-void ObjWarpstone_Draw(Actor* thisx, GlobalContext* globalCtx);
+void ObjWarpstone_Init(Actor* thisx, PlayState* play);
+void ObjWarpstone_Destroy(Actor* thisx, PlayState* play);
+void ObjWarpstone_Update(Actor* thisx, PlayState* play);
+void ObjWarpstone_Draw(Actor* thisx, PlayState* play2);
 void ObjWarpstone_SetupAction(ObjWarpstone* this, ObjWarpstoneActionFunc actionFunc);
-s32 ObjWarpstone_ClosedIdle(ObjWarpstone* this, GlobalContext* globalCtx);
-s32 ObjWarpstone_BeginOpeningCutscene(ObjWarpstone* this, GlobalContext* globalCtx);
-s32 ObjWarpstone_PlayOpeningCutscene(ObjWarpstone* this, GlobalContext* globalCtx);
-s32 ObjWarpstone_OpenedIdle(ObjWarpstone* this, GlobalContext* globalCtx);
+s32 ObjWarpstone_ClosedIdle(ObjWarpstone* this, PlayState* play);
+s32 ObjWarpstone_BeginOpeningCutscene(ObjWarpstone* this, PlayState* play);
+s32 ObjWarpstone_PlayOpeningCutscene(ObjWarpstone* this, PlayState* play);
+s32 ObjWarpstone_OpenedIdle(ObjWarpstone* this, PlayState* play);
 
-const ActorInit Obj_Warpstone_InitVars = {
+ActorInit Obj_Warpstone_InitVars = {
     ACTOR_OBJ_WARPSTONE,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -64,14 +64,14 @@ void ObjWarpstone_SetupAction(ObjWarpstone* this, ObjWarpstoneActionFunc actionF
     this->actionFunc = actionFunc;
 }
 
-void ObjWarpstone_Init(Actor* thisx, GlobalContext* globalCtx) {
+void ObjWarpstone_Init(Actor* thisx, PlayState* play) {
     ObjWarpstone* this = THIS;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->dyna.actor, &sCylinderInit);
+    Collider_InitAndSetCylinder(play, &this->collider, &this->dyna.actor, &sCylinderInit);
     Actor_SetFocus(&this->dyna.actor, 40.0f);
 
-    if (!OBJ_WARPSTONE_IS_ACTIVATED(OBJ_WARPSTONE_GET_ID(this))) {
+    if (!OBJ_WARPSTONE_IS_ACTIVATED(OBJ_WARPSTONE_GET_ID(&this->dyna.actor))) {
         ObjWarpstone_SetupAction(this, ObjWarpstone_ClosedIdle);
     } else {
         ObjWarpstone_SetupAction(this, ObjWarpstone_OpenedIdle);
@@ -79,13 +79,13 @@ void ObjWarpstone_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-void ObjWarpstone_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void ObjWarpstone_Destroy(Actor* thisx, PlayState* play) {
     ObjWarpstone* this = THIS;
 
-    Collider_DestroyCylinder(globalCtx, &this->collider);
+    Collider_DestroyCylinder(play, &this->collider);
 }
 
-s32 ObjWarpstone_ClosedIdle(ObjWarpstone* this, GlobalContext* globalCtx) {
+s32 ObjWarpstone_ClosedIdle(ObjWarpstone* this, PlayState* play) {
     if (this->collider.base.acFlags & AC_HIT) {
         ObjWarpstone_SetupAction(this, ObjWarpstone_BeginOpeningCutscene);
         return true;
@@ -96,21 +96,21 @@ s32 ObjWarpstone_ClosedIdle(ObjWarpstone* this, GlobalContext* globalCtx) {
     }
 }
 
-s32 ObjWarpstone_BeginOpeningCutscene(ObjWarpstone* this, GlobalContext* globalCtx) {
+s32 ObjWarpstone_BeginOpeningCutscene(ObjWarpstone* this, PlayState* play) {
     if (this->dyna.actor.cutscene < 0 || ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
         ObjWarpstone_SetupAction(this, ObjWarpstone_PlayOpeningCutscene);
-        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_OWL_WARP_SWITCH_ON);
+        Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_OWL_WARP_SWITCH_ON);
     } else {
         ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
     }
     return true;
 }
 
-s32 ObjWarpstone_PlayOpeningCutscene(ObjWarpstone* this, GlobalContext* globalCtx) {
+s32 ObjWarpstone_PlayOpeningCutscene(ObjWarpstone* this, PlayState* play) {
     if (this->openingCSTimer++ >= OBJ_WARPSTONE_TIMER_ACTIVATE_THRESHOLD) {
         ActorCutscene_Stop(this->dyna.actor.cutscene);
-        Sram_ActivateOwl(OBJ_WARPSTONE_GET_ID(this));
+        Sram_ActivateOwl(OBJ_WARPSTONE_GET_ID(&this->dyna.actor));
         ObjWarpstone_SetupAction(this, ObjWarpstone_OpenedIdle);
     } else if (this->openingCSTimer < OBJ_WARPSTONE_TIMER_OPEN_THRESHOLD) {
         Math_StepToF(&this->dyna.actor.velocity.x, 0.01f, 0.001f);
@@ -125,67 +125,67 @@ s32 ObjWarpstone_PlayOpeningCutscene(ObjWarpstone* this, GlobalContext* globalCt
     return true;
 }
 
-s32 ObjWarpstone_OpenedIdle(ObjWarpstone* this, GlobalContext* globalCtx) {
+s32 ObjWarpstone_OpenedIdle(ObjWarpstone* this, PlayState* play) {
     /*You can save your progress and quit here.*/
     this->dyna.actor.textId = 0xC01;
     return false;
 }
 
-void ObjWarpstone_Update(Actor* thisx, GlobalContext* globalCtx) {
+void ObjWarpstone_Update(Actor* thisx, PlayState* play) {
     ObjWarpstone* this = THIS;
     s32 pad;
 
     if (this->isTalking) {
-        if (Actor_TextboxIsClosing(&this->dyna.actor, globalCtx)) {
+        if (Actor_TextboxIsClosing(&this->dyna.actor, play)) {
             this->isTalking = false;
-        } else if ((Message_GetState(&globalCtx->msgCtx) == 4) && (Message_ShouldAdvance(globalCtx))) {
-            if (globalCtx->msgCtx.choiceIndex != 0) {
+        } else if ((Message_GetState(&play->msgCtx) == TEXT_STATE_CHOICE) && Message_ShouldAdvance(play)) {
+            if (play->msgCtx.choiceIndex != 0) {
                 func_8019F208();
-                globalCtx->msgCtx.msgMode = 0x4D;
-                globalCtx->msgCtx.unk120D6 = 0;
-                globalCtx->msgCtx.unk120D4 = 0;
-                gSaveContext.save.owlSaveLocation = OBJ_WARPSTONE_GET_ID(this);
+                play->msgCtx.msgMode = 0x4D;
+                play->msgCtx.unk120D6 = 0;
+                play->msgCtx.unk120D4 = 0;
+                gSaveContext.save.owlSaveLocation = OBJ_WARPSTONE_GET_ID(&this->dyna.actor);
             } else {
-                func_801477B4(globalCtx);
+                Message_CloseTextbox(play);
             }
         }
-    } else if (Actor_ProcessTalkRequest(&this->dyna.actor, &globalCtx->state)) {
+    } else if (Actor_ProcessTalkRequest(&this->dyna.actor, &play->state)) {
         this->isTalking = true;
-    } else if (!this->actionFunc(this, globalCtx)) {
-        func_800B863C(&this->dyna.actor, globalCtx);
+    } else if (!this->actionFunc(this, play)) {
+        func_800B863C(&this->dyna.actor, play);
     }
 
-    Collider_ResetCylinderAC(globalCtx, &this->collider.base);
+    Collider_ResetCylinderAC(play, &this->collider.base);
     Collider_UpdateCylinder(&this->dyna.actor, &this->collider);
-    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
-    CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+    CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
+    CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
 }
 
-void ObjWarpstone_Draw(Actor* thisx, GlobalContext* globalCtx2) {
-    GlobalContext* globalCtx = globalCtx2;
+void ObjWarpstone_Draw(Actor* thisx, PlayState* play2) {
+    PlayState* play = play2;
     ObjWarpstone* this = THIS;
 
-    Gfx_DrawDListOpa(globalCtx, sOwlStatueDLs[this->modelIndex]);
+    Gfx_DrawDListOpa(play, sOwlStatueDLs[this->modelIndex]);
     if (this->dyna.actor.home.rot.x != 0) {
-        OPEN_DISPS(globalCtx->state.gfxCtx);
-        func_8012C2DC(globalCtx->state.gfxCtx);
-        Matrix_InsertTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y + 34.0f,
-                                 this->dyna.actor.world.pos.z, MTXMODE_NEW);
-        Matrix_InsertMatrix(&globalCtx->billboardMtxF, MTXMODE_APPLY);
-        Matrix_InsertTranslation(0.0f, 0.0f, 30.0f, MTXMODE_APPLY);
+        OPEN_DISPS(play->state.gfxCtx);
+        func_8012C2DC(play->state.gfxCtx);
+        Matrix_Translate(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y + 34.0f,
+                         this->dyna.actor.world.pos.z, MTXMODE_NEW);
+        Matrix_Mult(&play->billboardMtxF, MTXMODE_APPLY);
+        Matrix_Translate(0.0f, 0.0f, 30.0f, MTXMODE_APPLY);
         Matrix_Scale(this->dyna.actor.velocity.x, this->dyna.actor.velocity.x, this->dyna.actor.velocity.x,
                      MTXMODE_APPLY);
-        Matrix_StatePush();
+        Matrix_Push();
         gDPPipeSync(POLY_XLU_DISP++);
         gDPSetPrimColor(POLY_XLU_DISP++, 128, 128, 255, 255, 200, this->dyna.actor.home.rot.x);
         gDPSetEnvColor(POLY_XLU_DISP++, 100, 200, 0, 255);
-        Matrix_InsertZRotation_f((((globalCtx->gameplayFrames * 1500) & 0xFFFF) * M_PI) / 0x8000, MTXMODE_APPLY);
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_XLU_DISP++, gOwlStatueWhiteFlashDL);
-        Matrix_StatePop();
-        Matrix_InsertZRotation_f((~((globalCtx->gameplayFrames * 1200) & 0xFFFF) * M_PI) / 0x8000, MTXMODE_APPLY);
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_XLU_DISP++, gOwlStatueWhiteFlashDL);
-        CLOSE_DISPS(globalCtx->state.gfxCtx);
+        Matrix_RotateZF((((play->gameplayFrames * 1500) & 0xFFFF) * M_PI) / 0x8000, MTXMODE_APPLY);
+        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPDisplayList(POLY_XLU_DISP++, gEffFlash1DL);
+        Matrix_Pop();
+        Matrix_RotateZF((~((play->gameplayFrames * 1200) & 0xFFFF) * M_PI) / 0x8000, MTXMODE_APPLY);
+        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPDisplayList(POLY_XLU_DISP++, gEffFlash1DL);
+        CLOSE_DISPS(play->state.gfxCtx);
     }
 }

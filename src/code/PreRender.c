@@ -1,4 +1,5 @@
 #include "global.h"
+#include "stack.h"
 
 /**
  * Assigns the "save" values in PreRender
@@ -191,8 +192,6 @@ void func_80170774(PreRender* this, Gfx** gfxp) {
     func_8016FF70(this, gfxp, this->zbufSave, this->zbuf);
 }
 
-#ifdef NON_MATCHING
-// just regalloc
 void func_80170798(PreRender* this, Gfx** gfxp) {
     Gfx* gfx;
     s32 y;
@@ -231,10 +230,11 @@ void func_80170798(PreRender* this, Gfx** gfxp) {
             gDPLoadMultiTile(gfx++, this->fbufSave, 0x0000, G_TX_RENDERTILE, G_IM_FMT_RGBA, G_IM_SIZ_16b, this->width,
                              this->height, uls, ult, lrs, lrt, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP,
                              G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
-            if (1) {}
             gDPLoadMultiTile(gfx++, this->cvgSave, 0x0160, rtile, G_IM_FMT_I, G_IM_SIZ_8b, this->width, this->height,
                              uls, ult, lrs, lrt, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK,
                              G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+            //! FAKE
+            if (1) {}
             if (1) {}
             gSPTextureRectangle(gfx++, uls << 2, ult << 2, (lrs + 1) << 2, (lrt + 1) << 2, G_TX_RENDERTILE, uls << 5,
                                 ult << 5, 1 << 10, 1 << 10);
@@ -247,9 +247,6 @@ void func_80170798(PreRender* this, Gfx** gfxp) {
         *gfxp = gfx;
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/PreRender/func_80170798.s")
-#endif
 
 void func_80170AE0(PreRender* this, Gfx** gfxp, s32 alpha) {
     func_8016FF90(this, gfxp, this->fbufSave, this->fbuf, 255, 255, 255, alpha);
@@ -414,19 +411,24 @@ void PreRender_ApplyFilters(PreRender* this) {
     }
 }
 
+extern SlowlyTask D_801F6E00;
+extern s32 D_801F6FC0;
+extern StackEntry sSlowlyStackInfo;
+extern STACK(sSlowlyStack, 0x1000);
+
 /**
  * Initializes `PreRender_ApplyFilters` onto a new "slowly" thread
  */
 void PreRender_ApplyFiltersSlowlyInit(PreRender* this) {
     if ((this->cvgSave != NULL) && (this->fbufSave != NULL)) {
         if (D_801F6FC0) {
-            StackCheck_Cleanup(&slowlyStackEntry);
+            StackCheck_Cleanup(&sSlowlyStackInfo);
             Slowly_Stop(&D_801F6E00);
         }
 
         this->unk_4D = 1;
-        StackCheck_Init(&slowlyStackEntry, slowlyStack, &slowlyStack[4096], 0, 0x100, "slowly");
-        Slowly_Start(&D_801F6E00, &D_801F7FE8, PreRender_ApplyFilters, this, NULL);
+        StackCheck_Init(&sSlowlyStackInfo, sSlowlyStack, STACK_TOP(sSlowlyStack), 0, 0x100, "slowly");
+        Slowly_Start(&D_801F6E00, STACK_TOP(sSlowlyStack), PreRender_ApplyFilters, this, NULL);
         D_801F6FC0 = true;
     }
 }
@@ -436,7 +438,7 @@ void PreRender_ApplyFiltersSlowlyInit(PreRender* this) {
  */
 void PreRender_ApplyFiltersSlowlyDestroy(PreRender* this) {
     if (D_801F6FC0) {
-        StackCheck_Cleanup(&slowlyStackEntry);
+        StackCheck_Cleanup(&sSlowlyStackInfo);
         Slowly_Stop(&D_801F6E00);
         D_801F6FC0 = false;
     }

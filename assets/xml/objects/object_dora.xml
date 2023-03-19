@@ -1,17 +1,18 @@
 ﻿<Root>
+    <!-- Object for the Gong and KendoKanban board in the Swordsman's School -->
     <File Name="object_dora" Segment="6">
-        <DList Name="object_dora_DL_000180" Offset="0x180" />
-        <Texture Name="object_dora_Tex_000280" OutName="tex_000280" Format="rgba16" Width="32" Height="64" Offset="0x280" />
-        <Texture Name="object_dora_Tex_001280" OutName="tex_001280" Format="rgba16" Width="32" Height="32" Offset="0x1280" />
-        <DList Name="object_dora_DL_002080" Offset="0x2080" />
-        <DList Name="object_dora_DL_002180" Offset="0x2180" />
-        <DList Name="object_dora_DL_002280" Offset="0x2280" />
-        <DList Name="object_dora_DL_002380" Offset="0x2380" />
-        <Texture Name="object_dora_Tex_002480" OutName="tex_002480" Format="rgba16" Width="32" Height="64" Offset="0x2480" />
-        <Texture Name="object_dora_Tex_003480" OutName="tex_003480" Format="rgba16" Width="32" Height="32" Offset="0x3480" />
-        <DList Name="object_dora_DL_003FD0" Offset="0x3FD0" />
-        <DList Name="object_dora_DL_004160" Offset="0x4160" />
-        <Texture Name="object_dora_Tex_004208" OutName="tex_004208" Format="rgba16" Width="32" Height="32" Offset="0x4208" />
-        <Texture Name="object_dora_Tex_004A08" OutName="tex_004A08" Format="rgba16" Width="16" Height="64" Offset="0x4A08" />
+        <DList Name="gKendoKanbanDL" Offset="0x180" /> <!-- Original name is "djo_kanban_model" -->
+        <Texture Name="gKendoKanbanFrontTex" OutName="kendo_kanban_front" Format="rgba16" Width="32" Height="64" Offset="0x280" />
+        <Texture Name="gKendoKanbanSideTex" OutName="kendo_kanban_side" Format="rgba16" Width="32" Height="32" Offset="0x1280" />
+        <DList Name="gKendoKanbanTopRightDL" Offset="0x2080" /> <!-- Original name is "ita_tR_model" -->
+        <DList Name="gKendoKanbanTopLeftDL" Offset="0x2180" /> <!-- Original name is "ita_tL_model" -->
+        <DList Name="gKendoKanbanBottomLeftDL" Offset="0x2280" /> <!-- Original name is "ita_bL_model" -->
+        <DList Name="gKendoKanbanBottomRightDL" Offset="0x2380" /> <!-- Original name is "ita_bR_model" -->
+        <Texture Name="gKendoKanbanSplitFrontTex" OutName="kendo_kanban_front_split_alt" Format="rgba16" Width="32" Height="64" Offset="0x2480" />
+        <Texture Name="gKendoKanbanSplitSideTex" OutName="kendo_kanban_side_split_alt" Format="rgba16" Width="32" Height="32" Offset="0x3480" />
+        <DList Name="gDoraGongDL" Offset="0x3FD0" /> <!-- Original name is "dora_hontai_model" -->
+        <DList Name="gDoraChainDL" Offset="0x4160" /> <!-- Original name is "kusariT_model" -->
+        <Texture Name="gDoraGongTex" OutName="dora_gong" Format="rgba16" Width="32" Height="32" Offset="0x4208" />
+        <Texture Name="gDoraChainTex" OutName="dora_chain" Format="rgba16" Width="16" Height="64" Offset="0x4A08" />
     </File>
 </Root>

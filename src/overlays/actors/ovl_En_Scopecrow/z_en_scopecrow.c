@@ -10,16 +10,15 @@
 
 #define THIS ((EnScopecrow*)thisx)
 
-void EnScopecrow_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnScopecrow_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnScopecrow_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnScopecrow_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnScopecrow_Init(Actor* thisx, PlayState* play);
+void EnScopecrow_Destroy(Actor* thisx, PlayState* play);
+void EnScopecrow_Update(Actor* thisx, PlayState* play);
+void EnScopecrow_Draw(Actor* thisx, PlayState* play);
 
-void func_80BCD590(EnScopecrow* this, GlobalContext* globalCtx);
-void func_80BCD640(EnScopecrow* this, GlobalContext* globalCtx);
+void func_80BCD590(EnScopecrow* this, PlayState* play);
+void func_80BCD640(EnScopecrow* this, PlayState* play);
 
-#if 0
-const ActorInit En_Scopecrow_InitVars = {
+ActorInit En_Scopecrow_InitVars = {
     ACTOR_EN_SCOPECROW,
     ACTORCAT_NPC,
     FLAGS,
@@ -31,47 +30,331 @@ const ActorInit En_Scopecrow_InitVars = {
     (ActorFunc)EnScopecrow_Draw,
 };
 
-// static ColliderJntSphElementInit sJntSphElementsInit[1] = {
-static ColliderJntSphElementInit D_80BCDB70[1] = {
+static ColliderJntSphElementInit sJntSphElementsInit[] = {
     {
-        { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
+        {
+            ELEMTYPE_UNK0,
+            { 0x00000000, 0x00, 0x00 },
+            { 0xF7CFFFFF, 0x00, 0x00 },
+            TOUCH_NONE | TOUCH_SFX_NORMAL,
+            BUMP_ON,
+            OCELEM_ON,
+        },
         { 1, { { 0, 60, 0 }, 50 }, 100 },
     },
 };
 
-// static ColliderJntSphInit sJntSphInit = {
-static ColliderJntSphInit D_80BCDB94 = {
-    { COLTYPE_HIT3, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_JNTSPH, },
-    1, D_80BCDB70, // sJntSphElementsInit,
+static ColliderJntSphInit sJntSphInit = {
+    {
+        COLTYPE_HIT3,
+        AT_NONE,
+        AC_ON | AC_TYPE_PLAYER,
+        OC1_ON | OC1_TYPE_ALL,
+        OC2_TYPE_1,
+        COLSHAPE_JNTSPH,
+    },
+    ARRAY_COUNT(sJntSphElementsInit),
+    sJntSphElementsInit,
 };
 
-#endif
+void func_80BCD000(EnScopecrow* this, PlayState* play) {
+    this->collider.elements->dim.worldSphere.center.x = this->actor.world.pos.x;
+    this->collider.elements->dim.worldSphere.center.y =
+        sJntSphInit.elements[0].dim.modelSphere.center.y + this->actor.world.pos.y;
+    this->collider.elements->dim.worldSphere.center.z = this->actor.world.pos.z;
 
-extern ColliderJntSphElementInit D_80BCDB70[1];
-extern ColliderJntSphInit D_80BCDB94;
+    CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
+}
 
-extern UNK_TYPE D_060010C0;
+s32 func_80BCD09C(s16 arg0) {
+    switch (arg0) {
+        case 0:
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_53_04)) {
+                return true;
+            } else {
+                return false;
+            }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Scopecrow/func_80BCD000.s")
+        case 1:
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_53_80)) {
+                return true;
+            } else {
+                return false;
+            }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Scopecrow/func_80BCD09C.s")
+        case 2:
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_54_01)) {
+                return true;
+            } else {
+                return false;
+            }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Scopecrow/func_80BCD1AC.s")
+        case 3:
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_54_02)) {
+                return true;
+            } else {
+                return false;
+            }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Scopecrow/func_80BCD2BC.s")
+        case 4:
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_54_04)) {
+                return true;
+            } else {
+                return false;
+            }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Scopecrow/func_80BCD334.s")
+        case 5:
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_54_08)) {
+                return true;
+            } else {
+                return false;
+            }
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Scopecrow/func_80BCD4D0.s")
+    return false;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Scopecrow/func_80BCD590.s")
+s32 func_80BCD1AC(s16 arg0) {
+    switch (arg0) {
+        case 0:
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_53_04)) {
+                SET_WEEKEVENTREG(WEEKEVENTREG_53_04);
+                return true;
+            }
+            break;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Scopecrow/func_80BCD640.s")
+        case 1:
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_53_80)) {
+                SET_WEEKEVENTREG(WEEKEVENTREG_53_80);
+                return true;
+            }
+            break;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Scopecrow/EnScopecrow_Init.s")
+        case 2:
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_54_01)) {
+                SET_WEEKEVENTREG(WEEKEVENTREG_54_01);
+                return true;
+            }
+            break;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Scopecrow/EnScopecrow_Destroy.s")
+        case 3:
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_54_02)) {
+                SET_WEEKEVENTREG(WEEKEVENTREG_54_02);
+                return true;
+            }
+            break;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Scopecrow/EnScopecrow_Update.s")
+        case 4:
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_54_04)) {
+                SET_WEEKEVENTREG(WEEKEVENTREG_54_04);
+                return true;
+            }
+            break;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Scopecrow/EnScopecrow_Draw.s")
+        case 5:
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_54_08)) {
+                SET_WEEKEVENTREG(WEEKEVENTREG_54_08);
+                return true;
+            }
+            break;
+    }
+
+    return false;
+}
+
+void func_80BCD2BC(EnScopecrow* this, PlayState* play) {
+    Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ACTOR_EN_SC_RUPPE, this->actor.world.pos.x,
+                                  this->actor.world.pos.y, this->actor.world.pos.z, this->actor.shape.rot.x,
+                                  this->actor.shape.rot.y, this->actor.shape.rot.z, this->actor.params,
+                                  this->actor.cutscene, this->actor.halfDaysBits, NULL);
+}
+
+s32 func_80BCD334(EnScopecrow* this, Path* path, s32 pointIndex) {
+    Vec3s* points = Lib_SegmentedToVirtual(path->points);
+    s32 sp58 = path->count;
+    s32 index = pointIndex;
+    s32 ret = false;
+    f32 phi_fa0;
+    f32 phi_fa1;
+    Vec3f sp3C;
+    Vec3f sp30;
+
+    Math_Vec3s_ToVec3f(&sp30, &points[index]);
+
+    if (index == 0) {
+        phi_fa0 = points[1].x - points[0].x;
+        phi_fa1 = points[1].z - points[0].z;
+    } else if ((sp58 - 1) == index) {
+        phi_fa0 = points[sp58 - 1].x - points[sp58 - 2].x;
+        phi_fa1 = points[sp58 - 1].z - points[sp58 - 2].z;
+    } else {
+        phi_fa0 = points[index + 1].x - points[index - 1].x;
+        phi_fa1 = points[index + 1].z - points[index - 1].z;
+    }
+
+    func_8017B7F8(&sp30, RADF_TO_BINANG(func_80086B30(phi_fa0, phi_fa1)), &sp3C.z, &sp3C.y, &sp3C.x);
+
+    if (((this->actor.world.pos.x * sp3C.z) + (sp3C.y * this->actor.world.pos.z) + sp3C.x) > 0.0f) {
+        ret = true;
+    }
+    return ret;
+}
+
+f32 func_80BCD4D0(Path* path, s32 count, Vec3f* arg2, Vec3s* arg3) {
+    Vec3s* temp;
+    Vec3f sp20;
+    Vec3s* points;
+
+    if (path != NULL) {
+        temp = Lib_SegmentedToVirtual(path->points);
+        points = temp + count;
+
+        sp20.x = points->x;
+        sp20.y = points->y;
+        sp20.z = points->z;
+    }
+
+    arg3->y = Math_Vec3f_Yaw(arg2, &sp20);
+    arg3->x = Math_Vec3f_Pitch(arg2, &sp20);
+    return sp20.y - arg2->y;
+}
+
+void func_80BCD590(EnScopecrow* this, PlayState* play) {
+    Vec3f screenPos;
+
+    Play_GetScreenPos(play, &this->actor.world.pos, &screenPos);
+
+    if ((screenPos.x >= 130.0f) && (screenPos.x < (SCREEN_WIDTH - 130.0f)) && (screenPos.y >= 90.0f) &&
+        (screenPos.y < (SCREEN_HEIGHT - 90.0f))) {
+        this->actor.draw = EnScopecrow_Draw;
+        this->actionFunc = func_80BCD640;
+    }
+}
+
+void func_80BCD640(EnScopecrow* this, PlayState* play) {
+    Vec3s sp30;
+
+    if (this->path != NULL) {
+        func_80BCD4D0(this->path, this->unk_1FC, &this->actor.world.pos, &sp30);
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
+            sp30.y = this->actor.wallYaw;
+        }
+
+        Math_SmoothStepToS(&this->actor.world.rot.y, sp30.y, 4, 0x3E8, 1);
+        this->actor.shape.rot.y = this->actor.world.rot.y;
+        Math_SmoothStepToS(&this->actor.world.rot.x, -sp30.x, 4, 0x3E8, 1);
+
+        if (func_80BCD334(this, this->path, this->unk_1FC)) {
+            if ((this->unk_1FC == this->unk_262) && func_80BCD1AC(this->unk_260)) {
+                func_80BCD2BC(this, play);
+            }
+
+            if (this->unk_1FC >= (this->path->count - 1)) {
+                Actor_Kill(&this->actor);
+            } else {
+                this->unk_1FC++;
+            }
+        }
+    }
+
+    Math_ApproachF(&this->actor.speed, 6.0f, 0.2f, 1.0f);
+    Actor_MoveWithoutGravity(&this->actor);
+    this->unk_264 += 0x1000;
+    this->actor.shape.yOffset = Math_SinS(this->unk_264) * 500.0f;
+}
+
+void EnScopecrow_Init(Actor* thisx, PlayState* play) {
+    EnScopecrow* this = THIS;
+    Vec3s* temp;
+    CollisionPoly* sp4C;
+    Vec3s* points;
+    Vec3f sp3C;
+
+    this->unk_260 = ENSCOPECROW_GET_1F(&this->actor);
+    if ((this->unk_260 < 0) || (this->unk_260 >= 6)) {
+        this->unk_260 = 0;
+    }
+
+    if (func_80BCD09C(this->unk_260)) {
+        this->path = SubS_GetPathByIndex(play, ENSCOPECROW_GET_PATH(&this->actor), 0x3F);
+        this->unk_262 = ENSCOPECROW_GET_3E0(&this->actor);
+
+        if (this->path != NULL) {
+            if ((this->unk_262 <= 0) || ((this->path->count - 1) < this->unk_262)) {
+                this->unk_262 = this->path->count - 1;
+            }
+
+            temp = Lib_SegmentedToVirtual(this->path->points);
+            points = temp + this->unk_262;
+
+            sp3C.x = points->x;
+            sp3C.y = points->y;
+            sp3C.z = points->z;
+
+            this->actor.world.pos = sp3C;
+            this->actor.world.pos.y = BgCheck_EntityRaycastFloor1(&play->colCtx, &sp4C, &sp3C);
+            if (this->actor.world.pos.y == BGCHECK_Y_MIN) {
+                Actor_Kill(&this->actor);
+            }
+
+            func_80BCD2BC(this, play);
+            Actor_Kill(&this->actor);
+            return;
+        }
+
+        Actor_Kill(&this->actor);
+        return;
+    }
+
+    if (play->actorCtx.flags & ACTORCTX_FLAG_1) {
+        SkelAnime_InitFlex(play, &this->skelAnime, &gGuaySkel, &gGuayFlyAnim, this->jointTable, this->morphTable,
+                           OBJECT_CROW_LIMB_MAX);
+        ActorShape_Init(&this->actor.shape, 2000.0f, ActorShadow_DrawCircle, 20.0f);
+
+        Collider_InitJntSph(play, &this->collider);
+        Collider_InitAndSetJntSph(play, &this->collider, &this->actor, &sJntSphInit, this->colliderElements);
+        this->collider.elements->dim.worldSphere.radius = sJntSphInit.elements[0].dim.modelSphere.radius;
+
+        Actor_SetScale(&this->actor, 0.03f);
+        this->path = SubS_GetPathByIndex(play, ENSCOPECROW_GET_PATH(&this->actor), 0x3F);
+        this->unk_262 = ENSCOPECROW_GET_3E0(&this->actor);
+
+        if (this->path != NULL) {
+            if ((this->unk_262 <= 0) || ((this->path->count - 1) < this->unk_262)) {
+                this->unk_262 = this->path->count - 1;
+            }
+            this->actor.draw = NULL;
+            this->actor.gravity = 0.0f;
+            this->actionFunc = func_80BCD590;
+            return;
+        }
+
+        Actor_Kill(&this->actor);
+        return;
+    }
+
+    Actor_Kill(&this->actor);
+}
+
+void EnScopecrow_Destroy(Actor* thisx, PlayState* play) {
+    EnScopecrow* this = THIS;
+
+    Collider_DestroyJntSph(play, &this->collider);
+}
+
+void EnScopecrow_Update(Actor* thisx, PlayState* play) {
+    EnScopecrow* this = THIS;
+
+    this->actionFunc(this, play);
+
+    SkelAnime_Update(&this->skelAnime);
+    func_80BCD000(this, play);
+}
+
+void EnScopecrow_Draw(Actor* thisx, PlayState* play) {
+    EnScopecrow* this = THIS;
+
+    func_8012C28C(play->state.gfxCtx);
+    SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, NULL,
+                          NULL, &this->actor);
+}

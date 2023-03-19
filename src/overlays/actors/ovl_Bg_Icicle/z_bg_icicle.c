@@ -11,16 +11,16 @@
 
 #define THIS ((BgIcicle*)thisx)
 
-void BgIcicle_Init(Actor* thisx, GlobalContext* globalCtx);
-void BgIcicle_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void BgIcicle_Update(Actor* thisx, GlobalContext* globalCtx);
-void BgIcicle_Draw(Actor* thisx, GlobalContext* globalCtx);
+void BgIcicle_Init(Actor* thisx, PlayState* play);
+void BgIcicle_Destroy(Actor* thisx, PlayState* play);
+void BgIcicle_Update(Actor* thisx, PlayState* play);
+void BgIcicle_Draw(Actor* thisx, PlayState* play);
 
-void BgIcicle_DoNothing(BgIcicle* this, GlobalContext* globalCtx);
-void BgIcicle_Wait(BgIcicle* this, GlobalContext* globalCtx);
-void BgIcicle_Shiver(BgIcicle* this, GlobalContext* globalCtx);
-void BgIcicle_Fall(BgIcicle* this, GlobalContext* globalCtx);
-void BgIcicle_Regrow(BgIcicle* this, GlobalContext* globalCtx);
+void BgIcicle_DoNothing(BgIcicle* this, PlayState* play);
+void BgIcicle_Wait(BgIcicle* this, PlayState* play);
+void BgIcicle_Shiver(BgIcicle* this, PlayState* play);
+void BgIcicle_Fall(BgIcicle* this, PlayState* play);
+void BgIcicle_Regrow(BgIcicle* this, PlayState* play);
 
 static ColliderCylinderInit sCylinderInit = {
     {
@@ -42,7 +42,7 @@ static ColliderCylinderInit sCylinderInit = {
     { 13, 120, 0, { 0, 0, 0 } },
 };
 
-const ActorInit Bg_Icicle_InitVars = {
+ActorInit Bg_Icicle_InitVars = {
     ACTOR_BG_ICICLE,
     ACTORCAT_PROP,
     FLAGS,
@@ -61,7 +61,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-void BgIcicle_Init(Actor* thisx, GlobalContext* globalCtx) {
+void BgIcicle_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     BgIcicle* this = THIS;
     s32 paramsHigh;
@@ -69,9 +69,9 @@ void BgIcicle_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_ProcessInitChain(thisx, sInitChain);
     DynaPolyActor_Init(&this->dyna, 0);
-    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_icicle_Colheader_000294);
+    DynaPolyActor_LoadMesh(play, &this->dyna, &object_icicle_Colheader_000294);
 
-    Collider_InitAndSetCylinder(globalCtx, &this->collider, thisx, &sCylinderInit);
+    Collider_InitAndSetCylinder(play, &this->collider, thisx, &sCylinderInit);
     Collider_UpdateCylinder(thisx, &this->collider);
 
     paramsHigh = (thisx->params >> 8) & 0xFF;
@@ -89,14 +89,14 @@ void BgIcicle_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-void BgIcicle_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void BgIcicle_Destroy(Actor* thisx, PlayState* play) {
     BgIcicle* this = THIS;
 
-    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
-    Collider_DestroyCylinder(globalCtx, &this->collider);
+    DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
+    Collider_DestroyCylinder(play, &this->collider);
 }
 
-void BgIcicle_Break(BgIcicle* this, GlobalContext* globalCtx, f32 arg2) {
+void BgIcicle_Break(BgIcicle* this, PlayState* play, f32 arg2) {
     static Vec3f accel = { 0.0f, -1.0f, 0.0f };
     static Color_RGBA8 primColor = { 170, 255, 255, 255 };
     static Color_RGBA8 envColor = { 0, 50, 100, 255 };
@@ -105,7 +105,7 @@ void BgIcicle_Break(BgIcicle* this, GlobalContext* globalCtx, f32 arg2) {
     s32 j;
     s32 i;
 
-    SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->dyna.actor.world.pos, 30, NA_SE_EV_ICE_BROKEN);
+    SoundSource_PlaySfxAtFixedWorldPos(play, &this->dyna.actor.world.pos, 30, NA_SE_EV_ICE_BROKEN);
 
     for (i = 0; i < 2; i++) {
         for (j = 0; j < 10; j++) {
@@ -117,23 +117,23 @@ void BgIcicle_Break(BgIcicle* this, GlobalContext* globalCtx, f32 arg2) {
             velocity.z = randPlusMinusPoint5Scaled(7.0f);
             velocity.y = (Rand_ZeroOne() * 4.0f) + 8.0f;
 
-            EffectSsEnIce_Spawn(globalCtx, &pos, (Rand_ZeroOne() * 0.2f) + 0.1f, &velocity, &accel, &primColor,
-                                &envColor, 30);
+            EffectSsEnIce_Spawn(play, &pos, (Rand_ZeroOne() * 0.2f) + 0.1f, &velocity, &accel, &primColor, &envColor,
+                                30);
         }
     }
 }
 
-void BgIcicle_DoNothing(BgIcicle* this, GlobalContext* globalCtx) {
+void BgIcicle_DoNothing(BgIcicle* this, PlayState* play) {
 }
 
-void BgIcicle_Wait(BgIcicle* this, GlobalContext* globalCtx) {
+void BgIcicle_Wait(BgIcicle* this, PlayState* play) {
     if (this->dyna.actor.xzDistToPlayer < 60.0f) {
         this->shiverTimer = 10;
         this->actionFunc = BgIcicle_Shiver;
     }
 }
 
-void BgIcicle_Shiver(BgIcicle* this, GlobalContext* globalCtx) {
+void BgIcicle_Shiver(BgIcicle* this, PlayState* play) {
     s32 randSign;
     f32 rand;
 
@@ -142,15 +142,15 @@ void BgIcicle_Shiver(BgIcicle* this, GlobalContext* globalCtx) {
     }
 
     if (!(this->shiverTimer % 4)) {
-        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_ICE_SWING);
+        Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_ICE_SWING);
     }
 
     if (this->shiverTimer == 0) {
         this->dyna.actor.world.pos.x = this->dyna.actor.home.pos.x;
         this->dyna.actor.world.pos.z = this->dyna.actor.home.pos.z;
 
-        CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
-        func_800C62BC(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+        CollisionCheck_SetAT(play, &play->colChkCtx, &this->collider.base);
+        func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
         this->actionFunc = BgIcicle_Fall;
     } else {
         rand = Rand_ZeroOne();
@@ -162,86 +162,85 @@ void BgIcicle_Shiver(BgIcicle* this, GlobalContext* globalCtx) {
     }
 }
 
-void BgIcicle_Fall(BgIcicle* this, GlobalContext* globalCtx) {
-    if ((this->collider.base.atFlags & AT_HIT) || (this->dyna.actor.bgCheckFlags & 1)) {
+void BgIcicle_Fall(BgIcicle* this, PlayState* play) {
+    if ((this->collider.base.atFlags & AT_HIT) || (this->dyna.actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
         this->collider.base.atFlags &= ~AT_HIT;
-        this->dyna.actor.bgCheckFlags &= ~1;
+        this->dyna.actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND;
 
         if (this->dyna.actor.world.pos.y < this->dyna.actor.floorHeight) {
             this->dyna.actor.world.pos.y = this->dyna.actor.floorHeight;
         }
 
-        BgIcicle_Break(this, globalCtx, 40.0f);
+        BgIcicle_Break(this, play, 40.0f);
 
         if (this->dyna.actor.params == ICICLE_STALACTITE_REGROW) {
             this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y + 120.0f;
-            func_800C6314(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+            func_800C6314(play, &play->colCtx.dyna, this->dyna.bgId);
             this->actionFunc = BgIcicle_Regrow;
         } else {
-            Actor_MarkForDeath(&this->dyna.actor);
-            return;
+            Actor_Kill(&this->dyna.actor);
         }
     } else {
         Actor_MoveWithGravity(&this->dyna.actor);
         this->dyna.actor.world.pos.y += 40.0f;
-        Actor_UpdateBgCheckInfo(globalCtx, &this->dyna.actor, 0.0f, 0.0f, 0.0f, 4);
+        Actor_UpdateBgCheckInfo(play, &this->dyna.actor, 0.0f, 0.0f, 0.0f, 4);
         this->dyna.actor.world.pos.y -= 40.0f;
-        CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+        CollisionCheck_SetAT(play, &play->colChkCtx, &this->collider.base);
     }
 }
 
-void BgIcicle_Regrow(BgIcicle* this, GlobalContext* globalCtx) {
+void BgIcicle_Regrow(BgIcicle* this, PlayState* play) {
     if (Math_StepToF(&this->dyna.actor.world.pos.y, this->dyna.actor.home.pos.y, 1.0f)) {
         this->actionFunc = BgIcicle_Wait;
         this->dyna.actor.velocity.y = 0.0f;
     }
 }
 
-void BgIcicle_UpdateAttacked(BgIcicle* this, GlobalContext* globalCtx) {
+void BgIcicle_UpdateAttacked(BgIcicle* this, PlayState* play) {
     s32 dropItem00Id;
 
     if (this->collider.base.acFlags & AC_HIT) {
         this->collider.base.acFlags &= ~AC_HIT;
 
         if (this->dyna.actor.params == ICICLE_STALAGMITE_RANDOM_DROP) {
-            BgIcicle_Break(this, globalCtx, 50.0f);
+            BgIcicle_Break(this, play, 50.0f);
 
             if (this->unk_160 != 0xFF) {
-                Item_DropCollectibleRandom(globalCtx, NULL, &this->dyna.actor.world.pos, this->unk_160 << 4);
+                Item_DropCollectibleRandom(play, NULL, &this->dyna.actor.world.pos, this->unk_160 << 4);
             }
         } else if (this->dyna.actor.params == ICICLE_STALAGMITE_FIXED_DROP) {
             dropItem00Id = func_800A8150(this->unk_160);
-            BgIcicle_Break(this, globalCtx, 50.0f);
-            Item_DropCollectible(globalCtx, &this->dyna.actor.world.pos, (this->unk_161 << 8) | dropItem00Id);
+            BgIcicle_Break(this, play, 50.0f);
+            Item_DropCollectible(play, &this->dyna.actor.world.pos, (this->unk_161 << 8) | dropItem00Id);
         } else {
             if (this->dyna.actor.params == ICICLE_STALACTITE_REGROW) {
-                BgIcicle_Break(this, globalCtx, 40.0f);
+                BgIcicle_Break(this, play, 40.0f);
                 this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y + 120.0f;
-                func_800C6314(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+                func_800C6314(play, &play->colCtx.dyna, this->dyna.bgId);
                 this->actionFunc = BgIcicle_Regrow;
                 return;
             }
 
-            BgIcicle_Break(this, globalCtx, 40.0f);
+            BgIcicle_Break(this, play, 40.0f);
         }
 
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
     }
 }
 
-void BgIcicle_Update(Actor* thisx, GlobalContext* globalCtx) {
+void BgIcicle_Update(Actor* thisx, PlayState* play) {
     s32 pad;
     BgIcicle* this = THIS;
 
-    BgIcicle_UpdateAttacked(this, globalCtx);
-    this->actionFunc(this, globalCtx);
+    BgIcicle_UpdateAttacked(this, play);
+    this->actionFunc(this, play);
 
     if (this->actionFunc != BgIcicle_Regrow) {
         Collider_UpdateCylinder(&this->dyna.actor, &this->collider);
-        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+        CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
     }
 }
 
-void BgIcicle_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    Gfx_DrawDListOpa(globalCtx, object_icicle_DL_0000D0);
+void BgIcicle_Draw(Actor* thisx, PlayState* play) {
+    Gfx_DrawDListOpa(play, object_icicle_DL_0000D0);
 }

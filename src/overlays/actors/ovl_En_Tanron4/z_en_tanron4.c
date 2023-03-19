@@ -10,16 +10,16 @@
 
 #define THIS ((EnTanron4*)thisx)
 
-void EnTanron4_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnTanron4_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnTanron4_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnTanron4_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnTanron4_Init(Actor* thisx, PlayState* play2);
+void EnTanron4_Destroy(Actor* thisx, PlayState* play);
+void EnTanron4_Update(Actor* thisx, PlayState* play);
+void EnTanron4_Draw(Actor* thisx, PlayState* play);
 
 void EnTanron4_SetupFlyNearHome(EnTanron4* this);
 void EnTanron4_SetupFlyNearActor(EnTanron4* this);
 
-void EnTanron4_FlyNearHome(EnTanron4* this, GlobalContext* globalCtx);
-void EnTanron4_FlyNearActor(EnTanron4* this, GlobalContext* globalCtx);
+void EnTanron4_FlyNearHome(EnTanron4* this, PlayState* play);
+void EnTanron4_FlyNearActor(EnTanron4* this, PlayState* play);
 
 typedef enum {
     /* 0 */ SEAGULL_FLY_FLAP,
@@ -31,7 +31,7 @@ typedef enum {
     /* 1 */ SEAGULL_TIMER_CHOOSE_TARGET,
 } SeagullTimers;
 
-const ActorInit En_Tanron4_InitVars = {
+ActorInit En_Tanron4_InitVars = {
     ACTOR_EN_TANRON4,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -43,15 +43,15 @@ const ActorInit En_Tanron4_InitVars = {
     (ActorFunc)EnTanron4_Draw,
 };
 
-void EnTanron4_Init(Actor* thisx, GlobalContext* globalCtx2) {
-    GlobalContext* globalCtx = globalCtx2;
+void EnTanron4_Init(Actor* thisx, PlayState* play2) {
+    PlayState* play = play2;
     EnTanron4* this = THIS;
 
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gSeagullSkel, &gSeagullFlapAnim, this->jointTable,
-                       this->morphTable, OBJECT_TANRON4_LIMB_MAX);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gSeagullSkel, &gSeagullFlapAnim, this->jointTable, this->morphTable,
+                       OBJECT_TANRON4_LIMB_MAX);
 
     thisx->flags &= ~ACTOR_FLAG_1;
-    thisx->speedXZ = 3.0f + KREG(48);
+    thisx->speed = 3.0f + KREG(48);
     thisx->uncullZoneForward = 10000.0f + KREG(70);
     this->randRollTimer = Rand_ZeroFloat(10.0f);
 
@@ -65,7 +65,7 @@ void EnTanron4_Init(Actor* thisx, GlobalContext* globalCtx2) {
             s32 i;
 
             for (i = 0; i < thisx->params; i++) {
-                Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_TANRON4,
+                Actor_Spawn(&play->actorCtx, play, ACTOR_EN_TANRON4,
                             thisx->world.pos.x + randPlusMinusPoint5Scaled(500.0f),
                             thisx->world.pos.y + randPlusMinusPoint5Scaled(100.0f),
                             thisx->world.pos.z + randPlusMinusPoint5Scaled(500.0f), 0, Rand_ZeroFloat(65536.0f), 0,
@@ -80,7 +80,7 @@ void EnTanron4_Init(Actor* thisx, GlobalContext* globalCtx2) {
     }
 }
 
-void EnTanron4_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnTanron4_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void EnTanron4_SetupFlyNearHome(EnTanron4* this) {
@@ -88,7 +88,7 @@ void EnTanron4_SetupFlyNearHome(EnTanron4* this) {
     Animation_MorphToLoop(&this->skelAnime, &gSeagullFlapAnim, 0.0f);
 }
 
-void EnTanron4_FlyNearHome(EnTanron4* this, GlobalContext* globalCtx) {
+void EnTanron4_FlyNearHome(EnTanron4* this, PlayState* play) {
     f32 xDiff;
     f32 yDiff;
     f32 zDiff;
@@ -175,7 +175,7 @@ void EnTanron4_SetupFlyNearActor(EnTanron4* this) {
     Animation_MorphToLoop(&this->skelAnime, &gSeagullFlapAnim, 0.0f);
 }
 
-void EnTanron4_FlyNearActor(EnTanron4* this, GlobalContext* globalCtx) {
+void EnTanron4_FlyNearActor(EnTanron4* this, PlayState* play) {
     f32 xDiff;
     f32 yDiff;
     f32 zDiff;
@@ -249,7 +249,7 @@ void EnTanron4_FlyNearActor(EnTanron4* this, GlobalContext* globalCtx) {
     Math_ApproachS(&this->roll, this->rollTarget, 3, 0x3E8 + KREG(45));
 }
 
-void EnTanron4_Update(Actor* thisx, GlobalContext* globalCtx) {
+void EnTanron4_Update(Actor* thisx, PlayState* play) {
     EnTanron4* this = THIS;
 
     Actor_SetScale(&this->actor, 0.001f * KREG(16) + 0.01f);
@@ -265,19 +265,19 @@ void EnTanron4_Update(Actor* thisx, GlobalContext* globalCtx) {
             }
         }
 
-        this->actionFunc(this, globalCtx);
+        this->actionFunc(this, play);
 
         Actor_UpdateVelocityWithoutGravity(&this->actor);
         Actor_UpdatePos(&this->actor);
     }
 }
 
-void EnTanron4_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void EnTanron4_Draw(Actor* thisx, PlayState* play) {
     EnTanron4* this = THIS;
 
     if (this->timeInfluence < 1400.0f) {
-        Matrix_InsertZRotation_s(this->roll, MTXMODE_APPLY);
-        SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
-                              this->skelAnime.dListCount, NULL, NULL, &this->actor);
+        Matrix_RotateZS(this->roll, MTXMODE_APPLY);
+        SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+                              NULL, NULL, &this->actor);
     }
 }

@@ -2,37 +2,39 @@
  * File: z_en_kujiya.c
  * Overlay: ovl_En_Kujiya
  * Description: Clock Town - Lottery Shop
+ *
+ * (kuji = lottery, ya = shop)
  */
 
 #include "z_en_kujiya.h"
 #include "objects/object_kujiya/object_kujiya.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_8000000)
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_CANT_LOCK_ON)
 
 #define THIS ((EnKujiya*)thisx)
 
-void EnKujiya_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnKujiya_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnKujiya_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnKujiya_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnKujiya_Init(Actor* thisx, PlayState* play);
+void EnKujiya_Destroy(Actor* thisx, PlayState* play);
+void EnKujiya_Update(Actor* thisx, PlayState* play);
+void EnKujiya_Draw(Actor* thisx, PlayState* play);
 
-void func_80BB09A8(EnKujiya* this);
-void func_80BB09BC(EnKujiya* this, GlobalContext* globalCtx);
-void func_80BB0E44(EnKujiya* this);
-void func_80BB0E58(EnKujiya* this, GlobalContext* globalCtx);
-void func_80BB0F24(EnKujiya* this);
-void func_80BB0F38(EnKujiya* this, GlobalContext* globalCtx);
-void func_80BB0F94(EnKujiya* this);
-void func_80BB0FA8(EnKujiya* this, GlobalContext* globalCtx);
-s32 func_80BB0FF8(void);
-void func_80BB1088(void);
-void func_80BB10F8(void);
-void func_80BB1168(EnKujiya* this);
-void func_80BB1180(EnKujiya* this, GlobalContext* globalCtx);
-void func_80BB1250(EnKujiya* this);
-void func_80BB1268(EnKujiya* this, GlobalContext* globalCtx);
+void EnKujiya_SetupWait(EnKujiya* this);
+void EnKujiya_Wait(EnKujiya* this, PlayState* play);
+void EnKujiya_SetupTalk(EnKujiya* this);
+void EnKujiya_Talk(EnKujiya* this, PlayState* play);
+void EnKujiya_SetupGivePrize(EnKujiya* this);
+void EnKujiya_GivePrize(EnKujiya* this, PlayState* play);
+void EnKujiya_SetupFinishGivePrize(EnKujiya* this);
+void EnKujiya_FinishGivePrize(EnKujiya* this, PlayState* play);
+s32 EnKujiya_CheckBoughtTicket(void);
+void EnKujiya_SetBoughtTicket(void);
+void EnKujiya_UnsetBoughtTicket(void);
+void EnKujiya_SetupTurnToOpen(EnKujiya* this);
+void EnKujiya_TurnToOpen(EnKujiya* this, PlayState* play);
+void EnKujiya_SetupTurnToClosed(EnKujiya* this);
+void EnKujiya_TurnToClosed(EnKujiya* this, PlayState* play);
 
-const ActorInit En_Kujiya_InitVars = {
+ActorInit En_Kujiya_InitVars = {
     ACTOR_EN_KUJIYA,
     ACTORCAT_NPC,
     FLAGS,
@@ -52,7 +54,7 @@ const ActorInit En_Kujiya_InitVars = {
      ((u32)((void)0, gSaveContext.save.lotteryCodes[CURRENT_DAY - 1][2]) ==       \
       (((void)0, gSaveContext.save.lotteryCodeGuess & 0xFFFF) & 0xF)))
 
-void EnKujiya_Init(Actor* thisx, GlobalContext* globalCtx) {
+void EnKujiya_Init(Actor* thisx, PlayState* play) {
     EnKujiya* this = THIS;
 
     Actor_SetScale(&this->actor, 0.1f);
@@ -63,192 +65,189 @@ void EnKujiya_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.focus.pos = this->actor.world.pos;
     this->actor.focus.pos.y += 30.0f;
 
-    if (func_80BB0FF8() && (gSaveContext.save.time >= CLOCK_TIME(6, 0)) &&
+    if (EnKujiya_CheckBoughtTicket() && (gSaveContext.save.time >= CLOCK_TIME(6, 0)) &&
         (gSaveContext.save.time < CLOCK_TIME(18, 0))) {
         this->actor.shape.rot.y = 0;
     } else {
         this->actor.shape.rot.y = 0x7555;
     }
-    func_80BB09A8(this);
+    EnKujiya_SetupWait(this);
 }
 
-void EnKujiya_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnKujiya_Destroy(Actor* thisx, PlayState* play) {
 }
 
-void func_80BB09A8(EnKujiya* this) {
-    this->actionFunc = func_80BB09BC;
+void EnKujiya_SetupWait(EnKujiya* this) {
+    this->actionFunc = EnKujiya_Wait;
 }
 
-void func_80BB09BC(EnKujiya* this, GlobalContext* globalCtx) {
-    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
+void EnKujiya_Wait(EnKujiya* this, PlayState* play) {
+    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         if ((gSaveContext.save.time >= CLOCK_TIME(6, 0)) && (gSaveContext.save.time < CLOCK_TIME(18, 0))) {
-            if (func_80BB0FF8()) {
-                Message_StartTextbox(globalCtx, 0x2B61, &this->actor);
-                this->unk_14A = 0x2B61;
+            if (EnKujiya_CheckBoughtTicket()) {
+                Message_StartTextbox(play, 0x2B61, &this->actor);
+                this->textId = 0x2B61; // Come back tomorrow
             } else {
-                Message_StartTextbox(globalCtx, 0x2B5C, &this->actor);
-                this->unk_14A = 0x2B5C;
+                Message_StartTextbox(play, 0x2B5C, &this->actor);
+                this->textId = 0x2B5C; // Pick 3 numbers
             }
-        } else if (func_80BB0FF8()) {
-            Message_StartTextbox(globalCtx, 0x2B64, &this->actor);
-            this->unk_14A = 0x2B64;
+        } else if (EnKujiya_CheckBoughtTicket()) {
+            Message_StartTextbox(play, 0x2B64, &this->actor);
+            this->textId = 0x2B64; // Announce winning numbers
         } else {
-            Message_StartTextbox(globalCtx, 0x2B63, &this->actor);
-            this->unk_14A = 0x2B63;
+            Message_StartTextbox(play, 0x2B63, &this->actor);
+            this->textId = 0x2B63; // Exchanging winning tickets
         }
-        func_80BB0E44(this);
-    } else if ((gSaveContext.save.time >= CLOCK_TIME(18, 0)) && func_80BB0FF8() && (this->actor.shape.rot.y == 0)) {
-        func_80BB1168(this);
+
+        EnKujiya_SetupTalk(this);
+    } else if ((gSaveContext.save.time >= CLOCK_TIME(18, 0)) && EnKujiya_CheckBoughtTicket() &&
+               (this->actor.shape.rot.y == 0)) {
+        EnKujiya_SetupTurnToOpen(this);
     } else if (this->actor.xzDistToPlayer < 100.0f) {
-        func_800B8614(&this->actor, globalCtx, 100.0f);
+        func_800B8614(&this->actor, play, 100.0f);
     }
 }
 
-void func_80BB0B28(EnKujiya* this, GlobalContext* globalCtx) {
-    if (Message_ShouldAdvance(globalCtx)) {
-        if (globalCtx->msgCtx.choiceIndex == 0) {
+void EnKujiya_HandlePlayerChoice(EnKujiya* this, PlayState* play) {
+    if (Message_ShouldAdvance(play)) {
+        if (play->msgCtx.choiceIndex == 0) { // Buy
             if (gSaveContext.save.playerData.rupees < 10) {
                 play_sound(NA_SE_SY_ERROR);
-                Message_StartTextbox(globalCtx, 0x2B62, &this->actor);
-                this->unk_14A = 0x2B62;
+                Message_StartTextbox(play, 0x2B62, &this->actor);
+                this->textId = 0x2B62; // Not enough Rupees
             } else {
                 func_8019F208();
-                func_801159EC(-10);
-                Message_StartTextbox(globalCtx, 0x2B5F, &this->actor);
-                this->unk_14A = 0x2B5F;
+                Rupees_ChangeBy(-10);
+                Message_StartTextbox(play, 0x2B5F, &this->actor);
+                this->textId = 0x2B5F; // Enter number
             }
-        } else {
+        } else { // Don't buy
             func_8019F230();
-            Message_StartTextbox(globalCtx, 0x2B5E, &this->actor);
-            this->unk_14A = 0x2B5E;
+            Message_StartTextbox(play, 0x2B5E, &this->actor);
+            this->textId = 0x2B5E; // Too bad
         }
     }
 }
 
-void func_80BB0BF8(EnKujiya* this, GlobalContext* globalCtx) {
-    u32 lotteryCode;
-    s8 digit1;
-    s8 digit2;
-    s8 digit3;
-    s8* lotteryCodes;
-
-    if (this->unk_14A == 0x2B65) {
-        if (this->unk_148 != 0) {
-            this->unk_148--;
+void EnKujiya_ChooseNextDialogue(EnKujiya* this, PlayState* play) {
+    // Build suspense
+    if (this->textId == 0x2B65) { // Your numbers vs winning numbers
+        if (this->timer != 0) {
+            this->timer--;
             return;
         }
     }
 
-    if (Message_ShouldAdvance(globalCtx)) {
-        switch (this->unk_14A) {
+    if (Message_ShouldAdvance(play)) {
+        switch (this->textId) {
             case 0x2B5C:
-                Message_StartTextbox(globalCtx, 0x2B5D, &this->actor);
-                this->unk_14A = 0x2B5D;
+                Message_StartTextbox(play, 0x2B5D, &this->actor);
+                this->textId = 0x2B5D; // Buy or not
                 break;
 
             case 0x2B60:
-                func_80BB1088();
-                func_801477B4(globalCtx);
-                func_80BB1250(this);
+                EnKujiya_SetBoughtTicket();
+                Message_CloseTextbox(play);
+                EnKujiya_SetupTurnToClosed(this);
                 break;
 
             case 0x2B64:
-                func_80BB10F8();
-                this->unk_148 = 0x14;
-                Message_StartTextbox(globalCtx, 0x2B65, &this->actor);
-                this->unk_14A = 0x2B65;
+                EnKujiya_UnsetBoughtTicket();
+                this->timer = 20;
+                Message_StartTextbox(play, 0x2B65, &this->actor);
+                this->textId = 0x2B65; // Your numbers vs winning numbers
                 break;
 
             case 0x2B65:
                 if (CHECK_LOTTERY_NUMBERS) {
-                    Message_StartTextbox(globalCtx, 0x2B66, &this->actor);
-                    this->unk_14A = 0x2B66;
+                    Message_StartTextbox(play, 0x2B66, &this->actor);
+                    this->textId = 0x2B66; // Won 50 Rupees
                 } else {
-                    Message_StartTextbox(globalCtx, 0x2B67, &this->actor);
-                    this->unk_14A = 0x2B67;
+                    Message_StartTextbox(play, 0x2B67, &this->actor);
+                    this->textId = 0x2B67; // Lost, come back tomorrow
                 }
                 break;
 
             case 0x2B66:
-                func_801477B4(globalCtx);
-                func_80BB0F24(this);
-                func_80BB0F38(this, globalCtx);
+                Message_CloseTextbox(play);
+                EnKujiya_SetupGivePrize(this);
+                EnKujiya_GivePrize(this, play);
                 break;
         }
     }
 }
 
-void func_80BB0E44(EnKujiya* this) {
-    this->actionFunc = func_80BB0E58;
+void EnKujiya_SetupTalk(EnKujiya* this) {
+    this->actionFunc = EnKujiya_Talk;
 }
 
-void func_80BB0E58(EnKujiya* this, GlobalContext* globalCtx) {
-    switch (Message_GetState(&globalCtx->msgCtx)) {
-        case 0:
+void EnKujiya_Talk(EnKujiya* this, PlayState* play) {
+    switch (Message_GetState(&play->msgCtx)) {
+        case TEXT_STATE_NONE:
             break;
 
-        case 4:
-            func_80BB0B28(this, globalCtx);
+        case TEXT_STATE_CHOICE:
+            EnKujiya_HandlePlayerChoice(this, play);
             break;
 
-        case 5:
-            func_80BB0BF8(this, globalCtx);
+        case TEXT_STATE_5:
+            EnKujiya_ChooseNextDialogue(this, play);
             break;
 
-        case 6:
-            if (Message_ShouldAdvance(globalCtx)) {
-                func_80BB09A8(this);
+        case TEXT_STATE_DONE:
+            if (Message_ShouldAdvance(play)) {
+                EnKujiya_SetupWait(this);
             }
             break;
 
-        case 17:
-            if (Message_ShouldAdvance(globalCtx)) {
-                Inventory_SaveLotteryCodeGuess(globalCtx);
-                Message_StartTextbox(globalCtx, 0x2B60, &this->actor);
-                this->unk_14A = 0x2B60;
+        case TEXT_STATE_17:
+            if (Message_ShouldAdvance(play)) {
+                Inventory_SaveLotteryCodeGuess(play);
+                Message_StartTextbox(play, 0x2B60, &this->actor);
+                this->textId = 0x2B60; // Will announce winning numbers after 6
             }
             break;
     }
 }
 
-void func_80BB0F24(EnKujiya* this) {
-    this->actionFunc = func_80BB0F38;
+void EnKujiya_SetupGivePrize(EnKujiya* this) {
+    this->actionFunc = EnKujiya_GivePrize;
 }
 
-void func_80BB0F38(EnKujiya* this, GlobalContext* globalCtx) {
-    if (Actor_HasParent(&this->actor, globalCtx)) {
-        func_80BB0F94(this);
+void EnKujiya_GivePrize(EnKujiya* this, PlayState* play) {
+    if (Actor_HasParent(&this->actor, play)) {
+        EnKujiya_SetupFinishGivePrize(this);
     } else {
-        Actor_PickUp(&this->actor, globalCtx, GI_RUPEE_PURPLE, 500.0f, 100.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_RUPEE_PURPLE, 500.0f, 100.0f);
     }
 }
 
-void func_80BB0F94(EnKujiya* this) {
-    this->actionFunc = func_80BB0FA8;
+void EnKujiya_SetupFinishGivePrize(EnKujiya* this) {
+    this->actionFunc = EnKujiya_FinishGivePrize;
 }
 
-void func_80BB0FA8(EnKujiya* this, GlobalContext* globalCtx) {
-    if ((Message_GetState(&globalCtx->msgCtx) == 6) && Message_ShouldAdvance(globalCtx)) {
-        func_80BB09A8(this);
+void EnKujiya_FinishGivePrize(EnKujiya* this, PlayState* play) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_DONE) && Message_ShouldAdvance(play)) {
+        EnKujiya_SetupWait(this);
     }
 }
 
-s32 func_80BB0FF8(void) {
+s32 EnKujiya_CheckBoughtTicket(void) {
     switch (CURRENT_DAY) {
         case 1:
-            if (gSaveContext.save.weekEventReg[33] & 0x10) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_33_10)) {
                 return true;
             }
             break;
 
         case 2:
-            if (gSaveContext.save.weekEventReg[33] & 0x20) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_33_20)) {
                 return true;
             }
             break;
 
         case 3:
-            if (gSaveContext.save.weekEventReg[33] & 0x40) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_33_40)) {
                 return true;
             }
             break;
@@ -256,44 +255,47 @@ s32 func_80BB0FF8(void) {
     return false;
 }
 
-void func_80BB1088(void) {
+void EnKujiya_SetBoughtTicket(void) {
     switch (CURRENT_DAY) {
         case 1:
-            gSaveContext.save.weekEventReg[33] |= 0x10;
+            SET_WEEKEVENTREG(WEEKEVENTREG_33_10);
             break;
 
         case 2:
-            gSaveContext.save.weekEventReg[33] |= 0x20;
+            SET_WEEKEVENTREG(WEEKEVENTREG_33_20);
             break;
 
         case 3:
-            gSaveContext.save.weekEventReg[33] |= 0x40;
+            SET_WEEKEVENTREG(WEEKEVENTREG_33_40);
             break;
     }
 }
 
-void func_80BB10F8(void) {
+/**
+ * Used when player turns in a ticket
+ */
+void EnKujiya_UnsetBoughtTicket(void) {
     switch (CURRENT_DAY) {
         case 1:
-            gSaveContext.save.weekEventReg[33] &= (u8)~0x10;
+            CLEAR_WEEKEVENTREG(WEEKEVENTREG_33_10);
             break;
 
         case 2:
-            gSaveContext.save.weekEventReg[33] &= (u8)~0x20;
+            CLEAR_WEEKEVENTREG(WEEKEVENTREG_33_20);
             break;
 
         case 3:
-            gSaveContext.save.weekEventReg[33] &= (u8)~0x40;
+            CLEAR_WEEKEVENTREG(WEEKEVENTREG_33_40);
             break;
     }
 }
 
-void func_80BB1168(EnKujiya* this) {
-    this->unk_148 = 0;
-    this->actionFunc = func_80BB1180;
+void EnKujiya_SetupTurnToOpen(EnKujiya* this) {
+    this->timer = 0;
+    this->actionFunc = EnKujiya_TurnToOpen;
 }
 
-void func_80BB1180(EnKujiya* this, GlobalContext* globalCtx) {
+void EnKujiya_TurnToOpen(EnKujiya* this, PlayState* play) {
     if (this->actor.cutscene != -1) {
         if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
             ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
@@ -303,25 +305,25 @@ void func_80BB1180(EnKujiya* this, GlobalContext* globalCtx) {
     }
 
     if (!Math_SmoothStepToS(&this->actor.shape.rot.y, 0x7555, 0xA, 0x16C, 0x16C)) {
-        if (this->unk_148 > 20) {
+        if (this->timer > 20) {
             if (ActorCutscene_GetCurrentIndex() == this->actor.cutscene) {
                 ActorCutscene_Stop(this->actor.cutscene);
             }
-            func_80BB09A8(this);
+            EnKujiya_SetupWait(this);
         } else {
-            this->unk_148++;
+            this->timer++;
         }
     } else {
         func_800B9010(&this->actor, NA_SE_EV_WINDMILL_LEVEL - SFX_FLAG);
     }
 }
 
-void func_80BB1250(EnKujiya* this) {
-    this->unk_148 = 0;
-    this->actionFunc = func_80BB1268;
+void EnKujiya_SetupTurnToClosed(EnKujiya* this) {
+    this->timer = 0;
+    this->actionFunc = EnKujiya_TurnToClosed;
 }
 
-void func_80BB1268(EnKujiya* this, GlobalContext* globalCtx) {
+void EnKujiya_TurnToClosed(EnKujiya* this, PlayState* play) {
     if (this->actor.cutscene != -1) {
         if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
             ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
@@ -331,45 +333,45 @@ void func_80BB1268(EnKujiya* this, GlobalContext* globalCtx) {
     }
 
     if (!Math_SmoothStepToS(&this->actor.shape.rot.y, 0, 0xA, 0x16C, 0x16C)) {
-        if (this->unk_148 > 20) {
+        if (this->timer > 20) {
             if (ActorCutscene_GetCurrentIndex() == this->actor.cutscene) {
                 ActorCutscene_Stop(this->actor.cutscene);
             }
-            func_80BB09A8(this);
+            EnKujiya_SetupWait(this);
         } else {
-            this->unk_148++;
+            this->timer++;
         }
     } else {
         func_800B9010(&this->actor, NA_SE_EV_WINDMILL_LEVEL - SFX_FLAG);
     }
 }
 
-void EnKujiya_Update(Actor* thisx, GlobalContext* globalCtx) {
+void EnKujiya_Update(Actor* thisx, PlayState* play) {
     EnKujiya* this = THIS;
 
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
 }
 
-void EnKujiya_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void EnKujiya_Draw(Actor* thisx, PlayState* play) {
     EnKujiya* this = THIS;
 
-    AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(object_kujiya_Matanimheader_006198));
+    AnimatedMat_Draw(play, Lib_SegmentedToVirtual(gLotteryShopTexAnim));
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(globalCtx->state.gfxCtx);
+    func_8012C28C(play->state.gfxCtx);
 
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, object_kujiya_DL_002A80);
-    gSPDisplayList(POLY_OPA_DISP++, object_kujiya_DL_003030);
-    gSPDisplayList(POLY_OPA_DISP++, object_kujiya_DL_003248);
-    gSPDisplayList(POLY_OPA_DISP++, object_kujiya_DL_003358);
-    gSPDisplayList(POLY_OPA_DISP++, object_kujiya_DL_0034A8);
-    gSPDisplayList(POLY_OPA_DISP++, object_kujiya_DL_0035B8);
-    gSPDisplayList(POLY_OPA_DISP++, object_kujiya_DL_0036B0);
-    gSPDisplayList(POLY_OPA_DISP++, object_kujiya_DL_0037C0);
-    gSPDisplayList(POLY_OPA_DISP++, object_kujiya_DL_003C80);
-    gSPDisplayList(POLY_OPA_DISP++, object_kujiya_DL_003D58);
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(POLY_OPA_DISP++, gLotteryShopCylinderDL);
+    gSPDisplayList(POLY_OPA_DISP++, gLotteryShopBackSignDL);
+    gSPDisplayList(POLY_OPA_DISP++, gLotteryShopOpenBoxDL);
+    gSPDisplayList(POLY_OPA_DISP++, gLotteryShopScrollingEffectsDL);
+    gSPDisplayList(POLY_OPA_DISP++, gLotteryShopRedRupeesDL);
+    gSPDisplayList(POLY_OPA_DISP++, gLotteryShopGreenRupeesDL);
+    gSPDisplayList(POLY_OPA_DISP++, gLotteryShopBlueRupeesDL);
+    gSPDisplayList(POLY_OPA_DISP++, gLotteryShopTargetArrowAndSignDL);
+    gSPDisplayList(POLY_OPA_DISP++, gLotteryShopScrollingArrowDL);
+    gSPDisplayList(POLY_OPA_DISP++, gLotteryShopMaskDL);
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }

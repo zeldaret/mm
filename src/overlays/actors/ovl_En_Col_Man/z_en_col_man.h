@@ -5,7 +5,7 @@
 
 struct EnColMan;
 
-typedef void (*EnColManActionFunc)(struct EnColMan*, GlobalContext*);
+typedef void (*EnColManActionFunc)(struct EnColMan*, PlayState*);
 
 typedef struct EnColMan {
     /* 0x000 */ Actor actor;
@@ -23,7 +23,5 @@ typedef enum {
     /* 3 */ EN_COL_MAN_CUTSCENE_BOMB,
     /* 4 */ EN_COL_MAN_GAMEPLAY_BOMB,
 } EnColManType;
-
-extern const ActorInit En_Col_Man_InitVars;
 
 #endif // Z_EN_COL_MAN_H

@@ -1,28 +1,31 @@
 ﻿<Root>
+    <!-- Death Armos: flying statues in Inverted Stone Tower Temple -->
     <File Name="object_famos" Segment="6">
-        <Animation Name="object_famos_Anim_0000F8" Offset="0xF8" />
-        <DList Name="object_famos_DL_0012B0" Offset="0x12B0" />
-        <DList Name="object_famos_DL_001528" Offset="0x1528" />
-        <DList Name="object_famos_DL_001C88" Offset="0x1C88" />
-        <DList Name="object_famos_DL_001DE8" Offset="0x1DE8" />
-        <DList Name="object_famos_DL_001FA8" Offset="0x1FA8" />
-        <Texture Name="object_famos_TLUT_002068" OutName="tlut_002068" Format="rgba16" Width="4" Height="4" Offset="0x2068" />
-        <Texture Name="object_famos_TLUT_002088" OutName="tlut_002088" Format="rgba16" Width="4" Height="4" Offset="0x2088" />
-        <Texture Name="object_famos_TLUT_0020A8" OutName="tlut_0020A8" Format="rgba16" Width="4" Height="4" Offset="0x20A8" />
-        <Texture Name="object_famos_TLUT_0020C8" OutName="tlut_0020C8" Format="rgba16" Width="4" Height="4" Offset="0x20C8" />
-        <Texture Name="object_famos_Tex_0020E8" OutName="tex_0020E8" Format="ci4" Width="64" Height="64" Offset="0x20E8" />
-        <Texture Name="object_famos_Tex_0028E8" OutName="tex_0028E8" Format="ci4" Width="32" Height="32" Offset="0x28E8" />
-        <Texture Name="object_famos_Tex_002AE8" OutName="tex_002AE8" Format="ci4" Width="64" Height="64" Offset="0x2AE8" />
-        <Texture Name="object_famos_Tex_0032E8" OutName="tex_0032E8" Format="ci4" Width="32" Height="32" Offset="0x32E8" />
-        <Texture Name="object_famos_Tex_0034E8" OutName="tex_0034E8" Format="rgba16" Width="32" Height="32" Offset="0x34E8" />
-        <Limb Name="object_famos_Standardlimb_003CE8" Type="Standard" EnumName="OBJECT_FAMOS_LIMB_01" Offset="0x3CE8" />
-        <Limb Name="object_famos_Standardlimb_003CF4" Type="Standard" EnumName="OBJECT_FAMOS_LIMB_02" Offset="0x3CF4" />
-        <Limb Name="object_famos_Standardlimb_003D00" Type="Standard" EnumName="OBJECT_FAMOS_LIMB_03" Offset="0x3D00" />
-        <Limb Name="object_famos_Standardlimb_003D0C" Type="Standard" EnumName="OBJECT_FAMOS_LIMB_04" Offset="0x3D0C" />
-        <Limb Name="object_famos_Standardlimb_003D18" Type="Standard" EnumName="OBJECT_FAMOS_LIMB_05" Offset="0x3D18" />
-        <Skeleton Name="object_famos_Skel_003D38" Type="Normal" LimbType="Standard" LimbNone="OBJECT_FAMOS_LIMB_NONE" LimbMax="OBJECT_FAMOS_LIMB_MAX" EnumName="object_famos_Limbs" Offset="0x3D38" />
-        <Animation Name="object_famos_Anim_003DC8" Offset="0x3DC8" />
-        <TextureAnimation Name="object_famos_Matanimheader_003E30" Offset="0x3E30" />
-        <TextureAnimation Name="object_famos_Matanimheader_003E38" Offset="0x3E38" />
+        <Animation Name="gFamosShakeAnim" Offset="0xF8" /> <!-- Original name is "fam_aizu" -->
+        <DList Name="gFamosHelmetDL" Offset="0x12B0" />
+        <DList Name="gFamosMainBodyDL" Offset="0x1528" />
+        <DList Name="gFamosShieldDL" Offset="0x1C88" />
+        <DList Name="gFamosSwordDL" Offset="0x1DE8" />
+        <DList Name="gFamosLightSwitchDL" Offset="0x1FA8" />
+        <Texture Name="gFamosBodyTLUT" OutName="body_tlut" Format="rgba16" Width="4" Height="4" Offset="0x2068" />
+        <Texture Name="gFamosBottomTLUT" OutName="bottom_tlut" Format="rgba16" Width="4" Height="4" Offset="0x2088" />
+        <Texture Name="gFamosShieldTLUT" OutName="shield_tlut" Format="rgba16" Width="4" Height="4" Offset="0x20A8" />
+        <Texture Name="gFamosSwordHiltTLUT" OutName="sword_hilt_tlut" Format="rgba16" Width="4" Height="4" Offset="0x20C8" />
+        <Texture Name="gFamosMainBodyTex" OutName="famos_main_body" Format="ci4" Width="64" Height="64" Offset="0x20E8" />
+        <Texture Name="gFamosBottomTex" OutName="famos_bottom" Format="ci4" Width="32" Height="32" Offset="0x28E8" />
+        <Texture Name="gFamosShieldTex" OutName="famos_shield" Format="ci4" Width="64" Height="64" Offset="0x2AE8" />
+        <Texture Name="gFamosSwordHiltTex" OutName="famos_sword_hilt" Format="ci4" Width="32" Height="32" Offset="0x32E8" />
+        <Texture Name="gFamosLightSwitchTex" OutName="famos_light_switch" Format="rgba16" Width="32" Height="32" Offset="0x34E8" />
+
+        <Limb Name="gFamosBodyLimb" Type="Standard" EnumName="FAMOS_LIMB_BODY" Offset="0x3CE8" />
+        <Limb Name="gFamosEmblemLimb" Type="Standard" EnumName="FAMOS_LIMB_EMBLEM" Offset="0x3CF4" />
+        <Limb Name="gFamosSwordLimb" Type="Standard" EnumName="FAMOS_LIMB_SWORD" Offset="0x3D00" />
+        <Limb Name="gFamosShieldLimb" Type="Standard" EnumName="FAMOS_LIMB_SHIELD" Offset="0x3D0C" />
+        <Limb Name="gFamosHeadLimb" Type="Standard" EnumName="FAMOS_LIMB_HEAD" Offset="0x3D18" />
+        <Skeleton Name="gFamosSkeleton" Type="Normal" LimbType="Standard" LimbNone="FAMOS_LIMB_NONE" LimbMax="FAMOS_LIMB_MAX" EnumName="FamosLimb" Offset="0x3D38" />
+
+        <Animation Name="gFamosIdleAnim" Offset="0x3DC8" /> <!-- Original name is "fam_dosun" -->
+        <TextureAnimation Name="gFamosNormalGlowingEmblemTexAnim" Offset="0x3E30" />
+        <TextureAnimation Name="gFamosFlippedGlowingEmblemTexAnim" Offset="0x3E38" />
     </File>
 </Root>

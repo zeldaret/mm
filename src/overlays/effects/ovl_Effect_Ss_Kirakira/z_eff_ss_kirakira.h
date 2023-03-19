@@ -15,7 +15,7 @@ typedef struct {
     /* 0x34 */ s16 rotSpeed;
     /* 0x36 */ s16 yaw;
     /* 0x38 */ u8 updateMode;
-} EffectSsKiraKiraInitParams; // size = 0x3C
+} EffectSsKirakiraInitParams; // size = 0x3C
 
 extern const EffectSsInit Effect_Ss_Kirakira_InitVars;
 

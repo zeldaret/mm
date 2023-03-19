@@ -1,0 +1,12 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/git-commands/git-subrepo#readme
+;
+[subrepo]
+	remote = git@github.com:EllipticEllipsis/fado.git
+	branch = master
+	commit = 8d896ee97d565508755584803c409fc33bb0c953
+	parent = b51c9f4d22d6e7db63700c163418654431a2a61a
+	method = merge
+	cmdver = 0.4.3

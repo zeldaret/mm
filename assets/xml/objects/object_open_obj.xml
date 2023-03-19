@@ -4,11 +4,11 @@
         <DList Name="object_open_obj_DL_0003E8" Offset="0x3E8" />
         <Texture Name="object_open_obj_Tex_000558" OutName="tex_000558" Format="rgba16" Width="32" Height="64" Offset="0x558" />
         <Collision Name="object_open_obj_Colheader_001640" Offset="0x1640" />
-        <DList Name="object_open_obj_DL_001A60" Offset="0x1A60" />
-        <DList Name="object_open_obj_DL_001B40" Offset="0x1B40" />
-        <Texture Name="object_open_obj_Tex_001CD0" OutName="tex_001CD0" Format="rgba16" Width="32" Height="32" Offset="0x1CD0" />
-        <Texture Name="object_open_obj_Tex_0024D0" OutName="tex_0024D0" Format="ia8" Width="32" Height="64" Offset="0x24D0" />
-        <TextureAnimation Name="object_open_obj_Matanimheader_002CE0" Offset="0x2CE0" />
+        <DList Name="gSpotlightLeftDL" Offset="0x1A60" />
+        <DList Name="gSpotlightRightDL" Offset="0x1B40" />
+        <Texture Name="gSpotlightShapesTex" OutName="spotlight_shapes" Format="rgba16" Width="32" Height="32" Offset="0x1CD0" />
+        <Texture Name="gSpotlightFloorTex" OutName="spotlight_floor" Format="ia8" Width="32" Height="64" Offset="0x24D0" />
+        <TextureAnimation Name="gSpotlightTexAnim" Offset="0x2CE0" />
         <DList Name="object_open_obj_DL_002D30" Offset="0x2D30" />
         <DList Name="object_open_obj_DL_002DC0" Offset="0x2DC0" />
         <!-- <Blob Name="object_open_obj_Blob_002DC8" Size="0xE608" Offset="0x2DC8" /> -->

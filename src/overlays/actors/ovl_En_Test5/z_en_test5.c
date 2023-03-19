@@ -10,13 +10,13 @@
 
 #define THIS ((EnTest5*)thisx)
 
-void EnTest5_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnTest5_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnTest5_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnTest5_HandleBottleAction(EnTest5* this, GlobalContext* globalCtx);
+void EnTest5_Init(Actor* thisx, PlayState* play2);
+void EnTest5_Destroy(Actor* thisx, PlayState* play);
+void EnTest5_Update(Actor* thisx, PlayState* play2);
+void EnTest5_HandleBottleAction(EnTest5* this, PlayState* play);
 void EnTest5_SetupAction(EnTest5* this, EnTest5ActionFunc actionFunc);
 
-const ActorInit En_Test5_InitVars = {
+ActorInit En_Test5_InitVars = {
     ACTOR_EN_TEST5,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -32,16 +32,16 @@ void EnTest5_SetupAction(EnTest5* this, EnTest5ActionFunc actionFunc) {
     this->actionFunc = actionFunc;
 }
 
-void EnTest5_Init(Actor* thisx, GlobalContext* globalCtx2) {
-    GlobalContext* globalCtx = globalCtx2;
+void EnTest5_Init(Actor* thisx, PlayState* play2) {
+    PlayState* play = play2;
     EnTest5* this = THIS;
     WaterBox* water;
     f32 ySurface;
 
     // If not spawned above a water source, immediately despawn
-    if (!WaterBox_GetSurface1(globalCtx, &globalCtx->colCtx, this->actor.world.pos.x, this->actor.world.pos.z,
-                              &ySurface, &water)) {
-        Actor_MarkForDeath(&this->actor);
+    if (!WaterBox_GetSurface1(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &ySurface,
+                              &water)) {
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -52,19 +52,19 @@ void EnTest5_Init(Actor* thisx, GlobalContext* globalCtx2) {
     EnTest5_SetupAction(this, EnTest5_HandleBottleAction);
 }
 
-void EnTest5_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnTest5_Destroy(Actor* thisx, PlayState* play) {
 }
 
-void EnTest5_HandleBottleAction(EnTest5* this, GlobalContext* globalCtx) {
+void EnTest5_HandleBottleAction(EnTest5* this, PlayState* play) {
     Player* player;
     Vec3f playerPosRelativeToWater;
 
-    if (Actor_HasParent(&this->actor, globalCtx)) {
+    if (Actor_HasParent(&this->actor, play)) {
         this->actor.parent = NULL;
         return;
     }
 
-    player = GET_PLAYER(globalCtx);
+    player = GET_PLAYER(play);
 
     if (player->interactRangeActor == NULL || player->getItemId != GI_MAX) {
         Math_Vec3f_DistXYZAndStoreDiff(&this->minPos, &player->actor.world.pos, &playerPosRelativeToWater);
@@ -73,28 +73,28 @@ void EnTest5_HandleBottleAction(EnTest5* this, GlobalContext* globalCtx) {
         if (playerPosRelativeToWater.x >= 0.0f && playerPosRelativeToWater.x <= this->xLength &&
             playerPosRelativeToWater.z >= 0.0f && playerPosRelativeToWater.z <= this->zLength &&
             fabsf(playerPosRelativeToWater.y) < 100.0f && player->actor.depthInWater > 12.0f) {
-            Actor_PickUp(&this->actor, globalCtx, GI_MAX, this->actor.xzDistToPlayer,
-                         fabsf(this->actor.playerHeightRel));
+            Actor_OfferGetItem(&this->actor, play, GI_MAX, this->actor.xzDistToPlayer,
+                               fabsf(this->actor.playerHeightRel));
         }
     }
 }
 
-void EnTest5_Update(Actor* thisx, GlobalContext* globalCtx2) {
-    GlobalContext* globalCtx = globalCtx2;
+void EnTest5_Update(Actor* thisx, PlayState* play2) {
+    PlayState* play = play2;
     EnTest5* this = THIS;
     Vec3f steamPos;
     CollisionPoly* poly;
     s32 pad;
 
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
 
     // If it's the hot spring variant, generate steam clouds
-    if (ENTEST5_IS_HOT_SPRING(&this->actor) && (globalCtx->state.frames % 4) == 0) {
+    if (ENTEST5_IS_HOT_SPRING(&this->actor) && (play->state.frames % 4) == 0) {
         steamPos.x = (Rand_ZeroOne() * this->xLength) + this->minPos.x;
         steamPos.y = this->minPos.y + 100.0f;
         steamPos.z = (Rand_ZeroOne() * this->zLength) + this->minPos.z;
 
-        if ((BgCheck_EntityRaycastFloor2(globalCtx, &globalCtx->colCtx, &poly, &steamPos) + 10.0f) < this->minPos.y) {
+        if ((BgCheck_EntityRaycastFloor2(play, &play->colCtx, &poly, &steamPos) + 10.0f) < this->minPos.y) {
             Vec3f steamVel;
 
             steamPos.y = this->minPos.y + 10.0f;
@@ -102,7 +102,7 @@ void EnTest5_Update(Actor* thisx, GlobalContext* globalCtx2) {
             steamVel.x = 0.0f;
             steamVel.z = 0.0f;
 
-            EffectSsIceSmoke_Spawn(globalCtx, &steamPos, &steamVel, &gZeroVec3f,
+            EffectSsIceSmoke_Spawn(play, &steamPos, &steamVel, &gZeroVec3f,
                                    (s16)((-200) - (s32)(Rand_ZeroOne() * 50.0f)));
         }
     }

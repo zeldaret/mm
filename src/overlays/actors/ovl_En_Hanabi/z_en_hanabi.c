@@ -11,17 +11,17 @@
 
 #define THIS ((EnHanabi*)thisx)
 
-void EnHanabi_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnHanabi_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnHanabi_Update(Actor* thisx, GlobalContext* globalCtx);
+void EnHanabi_Init(Actor* thisx, PlayState* play2);
+void EnHanabi_Destroy(Actor* thisx, PlayState* play2);
+void EnHanabi_Update(Actor* thisx, PlayState* play);
 
-void func_80B23894(EnHanabi* this, GlobalContext* globalCtx);
-void func_80B238D4(EnHanabi* this, GlobalContext* globalCtx);
-void func_80B23910(EnHanabi* this, GlobalContext* globalCtx);
-void func_80B23934(EnHanabi* this, GlobalContext* globalCtx);
-void EnHanabi_Draw(Actor* thisx, GlobalContext* globalCtx);
+void func_80B23894(EnHanabi* this, PlayState* play);
+void func_80B238D4(EnHanabi* this, PlayState* play);
+void func_80B23910(EnHanabi* this, PlayState* play);
+void func_80B23934(EnHanabi* this, PlayState* play);
+void EnHanabi_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit En_Hanabi_InitVars = {
+ActorInit En_Hanabi_InitVars = {
     ACTOR_EN_HANABI,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -133,38 +133,37 @@ s32 func_80B22F34(EnHanabiStruct* arg0) {
     return count;
 }
 
-void func_80B22FA8(EnHanabiStruct* arg0, GlobalContext* globalCtx2) {
-    GlobalContext* globalCtx = globalCtx2;
-    GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
+void func_80B22FA8(EnHanabiStruct* arg0, PlayState* play2) {
+    PlayState* play = play2;
+    GraphicsContext* gfxCtx = play->state.gfxCtx;
     s32 i;
     u8 sp53;
 
     OPEN_DISPS(gfxCtx);
 
-    func_8012C2DC(globalCtx->state.gfxCtx);
+    func_8012C2DC(play->state.gfxCtx);
 
     POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 20);
 
     gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gSun1Tex));
-    gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_07AB10);
+    gSPDisplayList(POLY_XLU_DISP++, gSunSparkleMaterialDL);
 
     sp53 = 0xFF;
     if (sp53) {}
 
     for (i = 0; i < 400; i++, arg0++) {
         if (arg0->unk_00 == 1) {
-            Matrix_InsertTranslation(arg0->unk_08.x, arg0->unk_08.y, arg0->unk_08.z, MTXMODE_NEW);
-            Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
+            Matrix_Translate(arg0->unk_08.x, arg0->unk_08.y, arg0->unk_08.z, MTXMODE_NEW);
+            Matrix_ReplaceRotation(&play->billboardMtxF);
             if (arg0->unk_01 < 40) {
                 Matrix_Scale(arg0->unk_04 * 0.025f * arg0->unk_01, arg0->unk_04 * 0.025f * arg0->unk_01, 1.0f,
                              MTXMODE_APPLY);
             } else {
                 Matrix_Scale(arg0->unk_04, arg0->unk_04, 1.0f, MTXMODE_APPLY);
             }
-            Matrix_InsertZRotation_s(globalCtx->gameplayFrames * 4864, MTXMODE_APPLY);
+            Matrix_RotateZS(play->gameplayFrames * 4864, MTXMODE_APPLY);
 
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
-                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
             if (sp53 != arg0->unk_02) {
                 gDPPipeSync(POLY_XLU_DISP++);
@@ -182,15 +181,15 @@ void func_80B22FA8(EnHanabiStruct* arg0, GlobalContext* globalCtx2) {
                                 D_80B23C2C[arg0->unk_02 + 2], 255);
             }
 
-            gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_07AB58);
+            gSPDisplayList(POLY_XLU_DISP++, gSunSparkleModelDL);
         }
     }
 
     CLOSE_DISPS(gfxCtx);
 }
 
-void EnHanabi_Init(Actor* thisx, GlobalContext* globalCtx2) {
-    GlobalContext* globalCtx = globalCtx2;
+void EnHanabi_Init(Actor* thisx, PlayState* play2) {
+    PlayState* play = play2;
     EnHanabi* this = THIS;
     s32 i;
 
@@ -204,7 +203,7 @@ void EnHanabi_Init(Actor* thisx, GlobalContext* globalCtx2) {
     for (i = 0; i < ARRAY_COUNT(this->unk_4608); i++) {
         Lights_PointNoGlowSetInfo(&this->unk_4608[i], thisx->world.pos.x, thisx->world.pos.y, thisx->world.pos.z, 255,
                                   255, 255, -1);
-        this->unk_4634[i] = LightContext_InsertLight(globalCtx, &globalCtx->lightCtx, &this->unk_4608[i]);
+        this->unk_4634[i] = LightContext_InsertLight(play, &play->lightCtx, &this->unk_4608[i]);
     }
 
     if (ENHANABI_GET_1F(thisx) == ENHANABI_1F_1) {
@@ -213,13 +212,13 @@ void EnHanabi_Init(Actor* thisx, GlobalContext* globalCtx2) {
     }
 }
 
-void EnHanabi_Destroy(Actor* thisx, GlobalContext* globalCtx2) {
-    GlobalContext* globalCtx = globalCtx2;
+void EnHanabi_Destroy(Actor* thisx, PlayState* play2) {
+    PlayState* play = play2;
     EnHanabi* this = THIS;
     s32 i;
 
     for (i = 0; i < ARRAY_COUNT(this->unk_4634); i++) {
-        LightContext_RemoveLight(globalCtx, &globalCtx->lightCtx, this->unk_4634[i]);
+        LightContext_RemoveLight(play, &play->lightCtx, this->unk_4634[i]);
     }
 }
 
@@ -264,7 +263,7 @@ void func_80B235CC(EnHanabi* this, Vec3f* arg1, s32 arg2) {
     }
 }
 
-void func_80B236C8(EnHanabi* this, GlobalContext* globalCtx) {
+void func_80B236C8(EnHanabi* this, PlayState* play) {
     Vec3f sp34;
     f32 sp30;
     s32 pad;
@@ -298,57 +297,57 @@ void func_80B236C8(EnHanabi* this, GlobalContext* globalCtx) {
 
         this->actor.home.rot.y += (s16)((Rand_ZeroFloat(40.0f) + 80.0f) * 256.0f);
         this->unk_144 = (s32)Rand_ZeroFloat(5.0f) + 20;
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_OC_FIREWORKS);
+        Actor_PlaySfx(&this->actor, NA_SE_OC_FIREWORKS);
         func_80B235CC(this, &sp34, sp28);
     }
 }
 
-void func_80B23894(EnHanabi* this, GlobalContext* globalCtx) {
-    func_80B236C8(this, globalCtx);
+void func_80B23894(EnHanabi* this, PlayState* play) {
+    func_80B236C8(this, play);
     if (func_80B22F34(this->unk_148) == 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
-void func_80B238D4(EnHanabi* this, GlobalContext* globalCtx) {
-    func_80B236C8(this, globalCtx);
+void func_80B238D4(EnHanabi* this, PlayState* play) {
+    func_80B236C8(this, play);
     if (this->actor.home.rot.x == 0) {
         this->actionFunc = func_80B23894;
     }
 }
 
-void func_80B23910(EnHanabi* this, GlobalContext* globalCtx) {
+void func_80B23910(EnHanabi* this, PlayState* play) {
     if (this->actor.home.rot.x != 0) {
         this->actionFunc = func_80B238D4;
     }
 }
 
-void func_80B23934(EnHanabi* this, GlobalContext* globalCtx) {
-    if ((gSaveContext.save.entranceIndex == 0x5410) && (gSaveContext.sceneSetupIndex == 7)) {
-        if (globalCtx->csCtx.frames > 1650) {
-            func_80B236C8(this, globalCtx);
+void func_80B23934(EnHanabi* this, PlayState* play) {
+    if ((gSaveContext.save.entrance == ENTRANCE(TERMINA_FIELD, 1)) && (gSaveContext.sceneLayer == 7)) {
+        if (play->csCtx.frames > 1650) {
+            func_80B236C8(this, play);
             func_800B8FE8(&this->actor, NA_SE_EV_FIREWORKS_LAUNCH - SFX_FLAG);
         }
     }
 
-    if ((globalCtx->sceneNum == SCENE_00KEIKOKU) && (gSaveContext.sceneSetupIndex == 7) &&
-        (globalCtx->csCtx.currentCsIndex == 0) && (globalCtx->csCtx.frames == 610)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_KYOJIN_GROAN);
+    if ((play->sceneId == SCENE_00KEIKOKU) && (gSaveContext.sceneLayer == 7) && (play->csCtx.currentCsIndex == 0) &&
+        (play->csCtx.frames == 610)) {
+        Actor_PlaySfx(&this->actor, NA_SE_EV_KYOJIN_GROAN);
     }
 }
 
-void EnHanabi_Update(Actor* thisx, GlobalContext* globalCtx) {
+void EnHanabi_Update(Actor* thisx, PlayState* play) {
     EnHanabi* this = THIS;
 
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
 
     func_80B22E0C(this->unk_148);
 }
 
-void EnHanabi_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void EnHanabi_Draw(Actor* thisx, PlayState* play) {
     EnHanabi* this = THIS;
 
-    Matrix_StatePush();
-    func_80B22FA8(this->unk_148, globalCtx);
-    Matrix_StatePop();
+    Matrix_Push();
+    func_80B22FA8(this->unk_148, play);
+    Matrix_Pop();
 }

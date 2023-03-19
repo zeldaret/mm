@@ -6,7 +6,7 @@
 
 struct EnAob01;
 
-typedef void (*EnAob01ActionFunc)(struct EnAob01*, GlobalContext*);
+typedef void (*EnAob01ActionFunc)(struct EnAob01*, PlayState*);
 
 #define ENAOB01_GET_7E00_1(thisx) ((thisx)->params & 0x7E00)
 #define ENAOB01_GET_7E00_2(thisx) (((thisx)->params & 0x7E00) >> 9)
@@ -21,9 +21,9 @@ typedef struct EnAob01 {
     /* 0x212 */ Vec3s jointTable[MAMAMU_YAN_LIMB_MAX];
     /* 0x272 */ Vec3s morphTable[MAMAMU_YAN_LIMB_MAX];
     /* 0x2D2 */ u16 unk_2D2;
-    /* 0x2D4 */ Vec3s unk_2D4;
-    /* 0x2DA */ Vec3s unk_2DA;
-    /* 0x2E0 */ Vec3s unk_2E0;
+    /* 0x2D4 */ Vec3s trackTarget;
+    /* 0x2DA */ Vec3s headRot;
+    /* 0x2E0 */ Vec3s torsoRot;
     /* 0x2E6 */ Vec3s unk_2E6;
     /* 0x2EC */ Vec3s unk_2EC;
     /* 0x2F2 */ Vec3s unk_2F2;
@@ -41,7 +41,5 @@ typedef struct EnAob01 {
     /* 0x43C */ s32 unk_43C;
     /* 0x440 */ s16 unk_440;
 } EnAob01; // size = 0x444
-
-extern const ActorInit En_Aob_01_InitVars;
 
 #endif // Z_EN_AOB_01_H

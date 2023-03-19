@@ -5,34 +5,36 @@
  */
 
 #include "z_bg_ikana_rotaryroom.h"
+#include "z64quake.h"
 #include "overlays/actors/ovl_Bg_Ikana_Block/z_bg_ikana_block.h"
 #include "overlays/actors/ovl_En_Torch2/z_en_torch2.h"
+#include "overlays/actors/ovl_En_Water_Effect/z_en_water_effect.h"
 #include "objects/object_ikana_obj/object_ikana_obj.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((BgIkanaRotaryroom*)thisx)
 
-void BgIkanaRotaryroom_Init(Actor* thisx, GlobalContext* globalCtx);
-void BgIkanaRotaryroom_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void BgIkanaRotaryroom_Update(Actor* thisx, GlobalContext* globalCtx);
-void BgIkanaRotaryroom_Draw(Actor* thisx, GlobalContext* globalCtx);
+void BgIkanaRotaryroom_Init(Actor* thisx, PlayState* play);
+void BgIkanaRotaryroom_Destroy(Actor* thisx, PlayState* play);
+void BgIkanaRotaryroom_Update(Actor* thisx, PlayState* play);
+void BgIkanaRotaryroom_Draw(Actor* thisx, PlayState* play);
 
-void func_80B814B8(BgIkanaRotaryroom* this, GlobalContext* globalCtx);
+void func_80B814B8(BgIkanaRotaryroom* this, PlayState* play);
 void func_80B818B4(BgIkanaRotaryroom* this);
-void func_80B818C8(Actor* thisx, GlobalContext* globalCtx);
+void func_80B818C8(Actor* thisx, PlayState* play);
 void func_80B81978(BgIkanaRotaryroom* this);
-void func_80B8198C(Actor* thisx, GlobalContext* globalCtx);
+void func_80B8198C(Actor* thisx, PlayState* play);
 void func_80B819DC(BgIkanaRotaryroom* this);
-void func_80B819F0(Actor* thisx, GlobalContext* globalCtx);
+void func_80B819F0(Actor* thisx, PlayState* play);
 void func_80B81A64(BgIkanaRotaryroom* this);
-void func_80B81A80(Actor* thisx, GlobalContext* globalCtx);
+void func_80B81A80(Actor* thisx, PlayState* play);
 void func_80B81B84(BgIkanaRotaryroom* this);
-void func_80B81BA0(Actor* thisx, GlobalContext* globalCtx);
+void func_80B81BA0(Actor* thisx, PlayState* play);
 void func_80B81DAC(BgIkanaRotaryroom* this);
-void func_80B81DC8(Actor* thisx, GlobalContext* globalCtx);
+void func_80B81DC8(Actor* thisx, PlayState* play);
 
-const ActorInit Bg_Ikana_Rotaryroom_InitVars = {
+ActorInit Bg_Ikana_Rotaryroom_InitVars = {
     ACTOR_BG_IKANA_ROTARYROOM,
     ACTORCAT_BG,
     FLAGS,
@@ -78,7 +80,7 @@ static ColliderJntSphInit sJntSphInit1 = {
         OC2_NONE,
         COLSHAPE_JNTSPH,
     },
-    2,
+    ARRAY_COUNT(sJntSphElementsInit1),
     sJntSphElementsInit1,
 };
 
@@ -105,7 +107,7 @@ static ColliderJntSphInit sJntSphInit2 = {
         OC2_NONE,
         COLSHAPE_JNTSPH,
     },
-    1,
+    ARRAY_COUNT(sJntSphElementsInit2),
     sJntSphElementsInit2,
 };
 
@@ -140,8 +142,8 @@ CollisionHeader* D_80B82218[] = { &object_ikana_obj_Colheader_006368, &object_ik
 void func_80B802E0(BgIkanaRotaryroom* this) {
     s32 pad;
 
-    Matrix_SetStateRotationAndTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
-                                          this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
+    Matrix_SetTranslateRotateYXZ(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
+                                 this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
     Matrix_Scale(this->dyna.actor.scale.x, this->dyna.actor.scale.y, this->dyna.actor.scale.z, MTXMODE_APPLY);
 
     Collider_UpdateSpheres(0, &this->collider);
@@ -160,28 +162,28 @@ void func_80B80358(Vec3f* arg0) {
     arg0->z = (s32)arg0->z;
 }
 
-void func_80B80440(BgIkanaRotaryroom* this, GlobalContext* globalCtx) {
+void func_80B80440(BgIkanaRotaryroom* this, PlayState* play) {
     s32 pad;
     Vec3f sp50;
 
-    Matrix_StatePush();
-    Matrix_SetStateRotationAndTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
-                                          this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
-    if (Flags_GetSwitch(globalCtx, BGIKANAROTARYROOM_GET_7F00(&this->dyna.actor))) {
-        Matrix_InsertTranslation(D_80B82178.x, D_80B82178.y, D_80B82178.z, MTXMODE_APPLY);
+    Matrix_Push();
+    Matrix_SetTranslateRotateYXZ(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
+                                 this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
+    if (Flags_GetSwitch(play, BGIKANAROTARYROOM_GET_7F00(&this->dyna.actor))) {
+        Matrix_Translate(D_80B82178.x, D_80B82178.y, D_80B82178.z, MTXMODE_APPLY);
     } else {
-        Matrix_InsertTranslation(D_80B8216C.x, D_80B8216C.y, D_80B8216C.z, MTXMODE_APPLY);
+        Matrix_Translate(D_80B8216C.x, D_80B8216C.y, D_80B8216C.z, MTXMODE_APPLY);
     }
-    Matrix_GetStateTranslation(&sp50);
+    Matrix_MultZero(&sp50);
     func_80B80358(&sp50);
     this->unk_204.unk_00 = Actor_SpawnAsChildAndCutscene(
-        &globalCtx->actorCtx, globalCtx, ACTOR_BG_IKANA_BLOCK, sp50.x, sp50.y, sp50.z, this->dyna.actor.shape.rot.x,
+        &play->actorCtx, play, ACTOR_BG_IKANA_BLOCK, sp50.x, sp50.y, sp50.z, this->dyna.actor.shape.rot.x,
         this->dyna.actor.shape.rot.y, this->dyna.actor.shape.rot.z, -1,
-        ActorCutscene_GetAdditionalCutscene(this->dyna.actor.cutscene), this->dyna.actor.unk20, NULL);
-    Matrix_StatePop();
+        ActorCutscene_GetAdditionalCutscene(this->dyna.actor.cutscene), this->dyna.actor.halfDaysBits, NULL);
+    Matrix_Pop();
 }
 
-void func_80B80550(BgIkanaRotaryroom* this, GlobalContext* globalCtx) {
+void func_80B80550(BgIkanaRotaryroom* this, PlayState* play) {
     s32 pad;
     s32 spC8 = BGIKANAROTARYROOM_GET_1(&this->dyna.actor);
     s32 spC4;
@@ -193,19 +195,19 @@ void func_80B80550(BgIkanaRotaryroom* this, GlobalContext* globalCtx) {
     MtxF sp68;
     Vec3s sp60;
 
-    if (Flags_GetSwitch(globalCtx, BGIKANAROTARYROOM_GET_FE(&this->dyna.actor))) {
+    if (Flags_GetSwitch(play, BGIKANAROTARYROOM_GET_FE(&this->dyna.actor))) {
         spC4 = 1;
     } else {
         spC4 = 0;
     }
 
-    actor = globalCtx->actorCtx.actorLists[ACTORCAT_DOOR].first;
-    Matrix_StatePush();
+    actor = play->actorCtx.actorLists[ACTORCAT_DOOR].first;
+    Matrix_Push();
     sp60.x = BINANG_ROT180(this->dyna.actor.home.rot.x);
     sp60.y = this->dyna.actor.home.rot.y;
     sp60.z = this->dyna.actor.home.rot.z;
-    Matrix_SetStateRotationAndTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
-                                          this->dyna.actor.world.pos.z, &sp60);
+    Matrix_SetTranslateRotateYXZ(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
+                                 this->dyna.actor.world.pos.z, &sp60);
 
     while (actor != NULL) {
         if (actor->id == ACTOR_DOOR_SHUTTER) {
@@ -215,27 +217,27 @@ void func_80B80550(BgIkanaRotaryroom* this, GlobalContext* globalCtx) {
                 ptr = &D_80B82184[spC8][i];
 
                 if ((Math3D_Vec3fDistSq(&spB4, &D_80B82184[spC8][i].unk_04) < SQ(250.0f)) &&
-                    ((ptr->unk_00 ^ spC4) && (ptr->unk_01 == 0U))) {
-                    Matrix_StatePush();
-                    Matrix_InsertTranslation(spB4.x, spB4.y, spB4.z, MTXMODE_APPLY);
-                    Matrix_RotateY(actor->shape.rot.y - this->dyna.actor.home.rot.y, MTXMODE_APPLY);
-                    Matrix_InsertXRotation_s(actor->shape.rot.x - this->dyna.actor.home.rot.x, MTXMODE_APPLY);
-                    Matrix_InsertZRotation_s(actor->shape.rot.z - this->dyna.actor.home.rot.z, MTXMODE_APPLY);
-                    Matrix_GetStateTranslation(&actor->world.pos);
+                    ((ptr->unk_00 ^ spC4) && (ptr->unk_01 == 0))) {
+                    Matrix_Push();
+                    Matrix_Translate(spB4.x, spB4.y, spB4.z, MTXMODE_APPLY);
+                    Matrix_RotateYS(actor->shape.rot.y - this->dyna.actor.home.rot.y, MTXMODE_APPLY);
+                    Matrix_RotateXS(actor->shape.rot.x - this->dyna.actor.home.rot.x, MTXMODE_APPLY);
+                    Matrix_RotateZS(actor->shape.rot.z - this->dyna.actor.home.rot.z, MTXMODE_APPLY);
+                    Matrix_MultZero(&actor->world.pos);
                     func_80B80358(&actor->world.pos);
-                    Matrix_CopyCurrentState(&sp68);
-                    func_8018219C(&sp68, &actor->shape.rot, 0);
-                    Matrix_StatePop();
+                    Matrix_Get(&sp68);
+                    Matrix_MtxFToYXZRot(&sp68, &actor->shape.rot, false);
+                    Matrix_Pop();
                 }
             }
         }
         actor = actor->next;
     }
 
-    Matrix_StatePop();
+    Matrix_Pop();
 }
 
-BgIkanaRotaryroomStruct4* func_80B80778(BgIkanaRotaryroom* this, GlobalContext* globalCtx, Actor* arg2) {
+BgIkanaRotaryroomStruct4* func_80B80778(BgIkanaRotaryroom* this, PlayState* play, Actor* arg2) {
     s32 i;
     Vec3f sp68;
     s32 pad[2];
@@ -246,69 +248,68 @@ BgIkanaRotaryroomStruct4* func_80B80778(BgIkanaRotaryroom* this, GlobalContext* 
     if (1) {}
 
     if (arg2->id == ACTOR_DOOR_SHUTTER) {
-        Matrix_StatePush();
+        Matrix_Push();
 
         for (i = 0; i < ARRAY_COUNT(D_80B82184); i++) {
             ptr = &D_80B82184[temp_s3][i];
             if ((ptr->unk_01 == 0) &&
-                (Matrix_SetStateRotationAndTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
-                                                       this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot),
-                 Matrix_MultiplyVector3fByState(&ptr->unk_04, &sp68),
-                 (Math3D_Vec3fDistSq(&arg2->world.pos, &sp68) < SQ(250.0f)))) {
+                (Matrix_SetTranslateRotateYXZ(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
+                                              this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot),
+                 Matrix_MultVec3f(&ptr->unk_04, &sp68), (Math3D_Vec3fDistSq(&arg2->world.pos, &sp68) < SQ(250.0f)))) {
                 sp58 = ptr;
                 break;
             }
         }
 
-        Matrix_StatePop();
+        Matrix_Pop();
     }
     return sp58;
 }
 
-void func_80B80894(BgIkanaRotaryroom* this, GlobalContext* globalCtx) {
+void func_80B80894(BgIkanaRotaryroom* this, PlayState* play) {
     s32 pad[7];
     Actor* actor = this->unk_204.unk_00;
     s32 i;
 
-    Matrix_StatePush();
+    Matrix_Push();
 
-    Matrix_InsertZRotation_s(-this->dyna.actor.shape.rot.z, MTXMODE_NEW);
-    Matrix_InsertXRotation_s(-this->dyna.actor.shape.rot.x, MTXMODE_APPLY);
-    Matrix_RotateY(-this->dyna.actor.shape.rot.y, MTXMODE_APPLY);
-    Matrix_InsertTranslation(-this->dyna.actor.world.pos.x, -this->dyna.actor.world.pos.y,
-                             -this->dyna.actor.world.pos.z, MTXMODE_APPLY);
+    Matrix_RotateZS(-this->dyna.actor.shape.rot.z, MTXMODE_NEW);
+    Matrix_RotateXS(-this->dyna.actor.shape.rot.x, MTXMODE_APPLY);
+    Matrix_RotateYS(-this->dyna.actor.shape.rot.y, MTXMODE_APPLY);
+    Matrix_Translate(-this->dyna.actor.world.pos.x, -this->dyna.actor.world.pos.y, -this->dyna.actor.world.pos.z,
+                     MTXMODE_APPLY);
 
     if (actor != NULL) {
-        Matrix_StatePush();
+        Matrix_Push();
 
-        Matrix_InsertTranslation(actor->world.pos.x, actor->world.pos.y, actor->world.pos.z, MTXMODE_APPLY);
-        Matrix_RotateY(actor->shape.rot.y, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(actor->shape.rot.x, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(actor->shape.rot.z, MTXMODE_APPLY);
-        Matrix_CopyCurrentState(&this->unk_204.unk_04);
+        Matrix_Translate(actor->world.pos.x, actor->world.pos.y, actor->world.pos.z, MTXMODE_APPLY);
+        Matrix_RotateYS(actor->shape.rot.y, MTXMODE_APPLY);
+        Matrix_RotateXS(actor->shape.rot.x, MTXMODE_APPLY);
+        Matrix_RotateZS(actor->shape.rot.z, MTXMODE_APPLY);
+        Matrix_Get(&this->unk_204.unk_04);
 
-        Matrix_StatePop();
+        Matrix_Pop();
     }
 
     for (i = 0; i < ARRAY_COUNT(this->unk_248); i++) {
         this->unk_248[i].unk_00 = NULL;
     }
 
-    actor = globalCtx->actorCtx.actorLists[ACTORCAT_DOOR].first;
+    actor = play->actorCtx.actorLists[ACTORCAT_DOOR].first;
     i = 0;
     while (actor != NULL) {
-        if (func_80B80778(this, globalCtx, actor) && (i < 2)) {
+        if (func_80B80778(this, play, actor) && (i < 2)) {
             this->unk_248[i].unk_00 = actor;
 
-            Matrix_StatePush();
+            Matrix_Push();
 
-            Matrix_InsertTranslation(actor->world.pos.x, actor->world.pos.y, actor->world.pos.z, MTXMODE_APPLY);
-            Matrix_RotateY(actor->shape.rot.y, MTXMODE_APPLY);
-            Matrix_InsertXRotation_s(actor->shape.rot.x, MTXMODE_APPLY);
-            Matrix_InsertZRotation_s(actor->shape.rot.z, MTXMODE_APPLY);
-            Matrix_CopyCurrentState(&this->unk_248[i].unk_04);
+            Matrix_Translate(actor->world.pos.x, actor->world.pos.y, actor->world.pos.z, MTXMODE_APPLY);
+            Matrix_RotateYS(actor->shape.rot.y, MTXMODE_APPLY);
+            Matrix_RotateXS(actor->shape.rot.x, MTXMODE_APPLY);
+            Matrix_RotateZS(actor->shape.rot.z, MTXMODE_APPLY);
+            Matrix_Get(&this->unk_248[i].unk_04);
 
-            Matrix_StatePop();
+            Matrix_Pop();
             i++;
         }
         actor = actor->next;
@@ -318,21 +319,21 @@ void func_80B80894(BgIkanaRotaryroom* this, GlobalContext* globalCtx) {
         this->unk_2D0[i].unk_00 = NULL;
     }
 
-    actor = globalCtx->actorCtx.actorLists[ACTORCAT_ITEMACTION].first;
+    actor = play->actorCtx.actorLists[ACTORCAT_ITEMACTION].first;
     i = 0;
     while (actor != NULL) {
         if ((actor->id == ACTOR_EN_TORCH2) && (actor->update != NULL) && (i < ARRAY_COUNT(this->unk_2D0))) {
             this->unk_2D0[i].unk_00 = actor;
 
-            Matrix_StatePush();
+            Matrix_Push();
 
-            Matrix_InsertTranslation(actor->world.pos.x, actor->world.pos.y, actor->world.pos.z, MTXMODE_APPLY);
-            Matrix_RotateY(actor->shape.rot.y, MTXMODE_APPLY);
-            Matrix_InsertXRotation_s(actor->shape.rot.x, MTXMODE_APPLY);
-            Matrix_InsertZRotation_s(actor->shape.rot.z, MTXMODE_APPLY);
-            Matrix_CopyCurrentState(&this->unk_2D0[i].unk_04);
+            Matrix_Translate(actor->world.pos.x, actor->world.pos.y, actor->world.pos.z, MTXMODE_APPLY);
+            Matrix_RotateYS(actor->shape.rot.y, MTXMODE_APPLY);
+            Matrix_RotateXS(actor->shape.rot.x, MTXMODE_APPLY);
+            Matrix_RotateZS(actor->shape.rot.z, MTXMODE_APPLY);
+            Matrix_Get(&this->unk_2D0[i].unk_04);
 
-            Matrix_StatePop();
+            Matrix_Pop();
             i++;
         }
         actor = actor->next;
@@ -342,7 +343,7 @@ void func_80B80894(BgIkanaRotaryroom* this, GlobalContext* globalCtx) {
         this->unk_3E0[i].unk_00 = NULL;
     }
 
-    actor = globalCtx->actorCtx.actorLists[ACTORCAT_ENEMY].first;
+    actor = play->actorCtx.actorLists[ACTORCAT_ENEMY].first;
     i = 0;
     while (actor != NULL) {
         if ((actor->update != NULL) && (actor->id != ACTOR_EN_WATER_EFFECT) && (i < ARRAY_COUNT(this->unk_3E0))) {
@@ -350,39 +351,39 @@ void func_80B80894(BgIkanaRotaryroom* this, GlobalContext* globalCtx) {
             this->unk_3E0[i].unk_44 = actor->shape.rot;
             this->unk_3E0[i].unk_4C = 0.0f;
 
-            Matrix_StatePush();
+            Matrix_Push();
 
-            Matrix_InsertTranslation(actor->world.pos.x, actor->world.pos.y, actor->world.pos.z, MTXMODE_APPLY);
-            Matrix_RotateY(actor->shape.rot.y, MTXMODE_APPLY);
-            Matrix_InsertXRotation_s(actor->shape.rot.x, MTXMODE_APPLY);
-            Matrix_InsertZRotation_s(actor->shape.rot.z, MTXMODE_APPLY);
-            Matrix_CopyCurrentState(&this->unk_3E0[i].unk_04);
+            Matrix_Translate(actor->world.pos.x, actor->world.pos.y, actor->world.pos.z, MTXMODE_APPLY);
+            Matrix_RotateYS(actor->shape.rot.y, MTXMODE_APPLY);
+            Matrix_RotateXS(actor->shape.rot.x, MTXMODE_APPLY);
+            Matrix_RotateZS(actor->shape.rot.z, MTXMODE_APPLY);
+            Matrix_Get(&this->unk_3E0[i].unk_04);
 
-            Matrix_StatePop();
+            Matrix_Pop();
             i++;
         }
         actor = actor->next;
     }
 
-    actor = &GET_PLAYER(globalCtx)->actor;
+    actor = &GET_PLAYER(play)->actor;
     if (actor->update != NULL) {
         this->unk_520.unk_40 = actor->shape.rot;
 
-        Matrix_StatePush();
+        Matrix_Push();
 
-        Matrix_InsertTranslation(actor->world.pos.x, actor->world.pos.y, actor->world.pos.z, MTXMODE_APPLY);
-        Matrix_RotateY(actor->shape.rot.y, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(actor->shape.rot.x, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(actor->shape.rot.z, MTXMODE_APPLY);
-        Matrix_CopyCurrentState(&this->unk_520.unk_00);
+        Matrix_Translate(actor->world.pos.x, actor->world.pos.y, actor->world.pos.z, MTXMODE_APPLY);
+        Matrix_RotateYS(actor->shape.rot.y, MTXMODE_APPLY);
+        Matrix_RotateXS(actor->shape.rot.x, MTXMODE_APPLY);
+        Matrix_RotateZS(actor->shape.rot.z, MTXMODE_APPLY);
+        Matrix_Get(&this->unk_520.unk_00);
 
-        Matrix_StatePop();
+        Matrix_Pop();
     }
 
-    Matrix_StatePop();
+    Matrix_Pop();
 }
 
-void func_80B80C88(BgIkanaRotaryroom* this, GlobalContext* globalCtx) {
+void func_80B80C88(BgIkanaRotaryroom* this, PlayState* play) {
     s32 pad[5];
     BgIkanaBlock* ikanaBlock = (BgIkanaBlock*)this->unk_204.unk_00;
     Player* player;
@@ -392,116 +393,117 @@ void func_80B80C88(BgIkanaRotaryroom* this, GlobalContext* globalCtx) {
     s32 i;
     MtxF sp3C;
 
-    Matrix_StatePush();
-    Matrix_SetStateRotationAndTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
-                                          this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
+    Matrix_Push();
+    Matrix_SetTranslateRotateYXZ(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
+                                 this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
 
     if (ikanaBlock != NULL) {
-        Matrix_StatePush();
+        Matrix_Push();
 
-        Matrix_InsertMatrix(&this->unk_204.unk_04, MTXMODE_APPLY);
-        Matrix_GetStateTranslation(&ikanaBlock->actor.world.pos);
-        func_80B80358(&ikanaBlock->actor.world.pos);
-        Matrix_CopyCurrentState(&sp3C);
-        func_8018219C(&sp3C, &ikanaBlock->actor.shape.rot, 0);
+        Matrix_Mult(&this->unk_204.unk_04, MTXMODE_APPLY);
+        Matrix_MultZero(&ikanaBlock->dyna.actor.world.pos);
+        func_80B80358(&ikanaBlock->dyna.actor.world.pos);
+        Matrix_Get(&sp3C);
+        Matrix_MtxFToYXZRot(&sp3C, &ikanaBlock->dyna.actor.shape.rot, false);
 
-        Matrix_StatePop();
+        Matrix_Pop();
     }
 
     for (i = 0; i < ARRAY_COUNT(this->unk_248); i++) {
         ptr = this->unk_248[i].unk_00;
         if (ptr != NULL) {
-            Matrix_StatePush();
+            Matrix_Push();
 
-            Matrix_InsertMatrix(&this->unk_248[i].unk_04, MTXMODE_APPLY);
-            Matrix_GetStateTranslation(&ptr->world.pos);
+            Matrix_Mult(&this->unk_248[i].unk_04, MTXMODE_APPLY);
+            Matrix_MultZero(&ptr->world.pos);
             func_80B80358(&ptr->world.pos);
-            Matrix_CopyCurrentState(&sp3C);
-            func_8018219C(&sp3C, &ptr->shape.rot, 0);
+            Matrix_Get(&sp3C);
+            Matrix_MtxFToYXZRot(&sp3C, &ptr->shape.rot, false);
 
-            Matrix_StatePop();
+            Matrix_Pop();
         }
     }
 
     for (i = 0; i < ARRAY_COUNT(this->unk_2D0); i++) {
         ptr2 = this->unk_2D0[i].unk_00;
         if (ptr2 != NULL) {
-            Matrix_StatePush();
+            Matrix_Push();
 
-            Matrix_InsertMatrix(&this->unk_2D0[i].unk_04, MTXMODE_APPLY);
-            Matrix_GetStateTranslation(&ptr2->world.pos);
+            Matrix_Mult(&this->unk_2D0[i].unk_04, MTXMODE_APPLY);
+            Matrix_MultZero(&ptr2->world.pos);
             func_80B80358(&ptr2->world.pos);
-            Matrix_CopyCurrentState(&sp3C);
-            func_8018219C(&sp3C, &ptr2->shape.rot, 0);
+            Matrix_Get(&sp3C);
+            Matrix_MtxFToYXZRot(&sp3C, &ptr2->shape.rot, false);
 
-            Matrix_StatePop();
+            Matrix_Pop();
         }
     }
 
     for (i = 0; i < ARRAY_COUNT(this->unk_3E0); i++) {
         ptr3 = this->unk_3E0[i].unk_00;
         if (ptr3 != NULL) {
-            Matrix_StatePush();
+            Matrix_Push();
 
-            Matrix_InsertMatrix(&this->unk_3E0[i].unk_04, MTXMODE_APPLY);
-            Matrix_GetStateTranslation(&ptr3->world.pos);
+            Matrix_Mult(&this->unk_3E0[i].unk_04, MTXMODE_APPLY);
+            Matrix_MultZero(&ptr3->world.pos);
             func_80B80358(&ptr3->world.pos);
-            Matrix_CopyCurrentState(&sp3C);
-            func_8018219C(&sp3C, &ptr3->shape.rot, 0);
+            Matrix_Get(&sp3C);
+            Matrix_MtxFToYXZRot(&sp3C, &ptr3->shape.rot, false);
 
-            Matrix_StatePop();
+            Matrix_Pop();
         }
     }
 
-    player = GET_PLAYER(globalCtx);
+    player = GET_PLAYER(play);
     if (player != NULL) {
-        Matrix_StatePush();
+        Matrix_Push();
 
-        Matrix_InsertMatrix(&this->unk_520.unk_00, MTXMODE_APPLY);
-        Matrix_GetStateTranslation(&player->actor.world.pos);
+        Matrix_Mult(&this->unk_520.unk_00, MTXMODE_APPLY);
+        Matrix_MultZero(&player->actor.world.pos);
         Math_Vec3f_Copy(&player->actor.home.pos, &player->actor.world.pos);
         func_80B80358(&player->actor.world.pos);
-        Matrix_CopyCurrentState(&sp3C);
-        func_8018219C(&sp3C, &player->actor.shape.rot, 0);
+        Matrix_Get(&sp3C);
+        Matrix_MtxFToYXZRot(&sp3C, &player->actor.shape.rot, false);
 
-        Matrix_StatePop();
+        Matrix_Pop();
         player->actor.freezeTimer = 2;
     }
 
-    Matrix_StatePop();
+    Matrix_Pop();
 }
 
-s32 func_80B80F08(BgIkanaRotaryroom* this, GlobalContext* globalCtx) {
+s32 func_80B80F08(BgIkanaRotaryroom* this, PlayState* play) {
     s32 pad;
-    BgIkanaBlock* sp40 = (BgIkanaBlock*)this->unk_204.unk_00;
+    BgIkanaBlock* ikanaBlock = (BgIkanaBlock*)this->unk_204.unk_00;
     Vec3f sp34;
     Vec3f sp28;
     s32 sp24 = false;
 
-    if (sp40 != NULL) {
-        Matrix_StatePush();
+    if (ikanaBlock != NULL) {
+        Matrix_Push();
 
-        Matrix_SetStateRotationAndTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
-                                              this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
-        Matrix_InsertTranslation(D_80B82178.x, D_80B82178.y, D_80B82178.z, MTXMODE_APPLY);
-        Matrix_GetStateTranslation(&sp34);
-        Matrix_SetStateRotationAndTranslation(sp40->actor.world.pos.x, sp40->actor.world.pos.y + sp40->unk_170,
-                                              sp40->actor.world.pos.z, &sp40->actor.shape.rot);
-        Matrix_GetStateTranslation(&sp28);
+        Matrix_SetTranslateRotateYXZ(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
+                                     this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
+        Matrix_Translate(D_80B82178.x, D_80B82178.y, D_80B82178.z, MTXMODE_APPLY);
+        Matrix_MultZero(&sp34);
+        Matrix_SetTranslateRotateYXZ(ikanaBlock->dyna.actor.world.pos.x,
+                                     ikanaBlock->dyna.actor.world.pos.y + ikanaBlock->unk_170,
+                                     ikanaBlock->dyna.actor.world.pos.z, &ikanaBlock->dyna.actor.shape.rot);
+        Matrix_MultZero(&sp28);
 
-        Matrix_StatePop();
+        Matrix_Pop();
 
         if (Math3D_Vec3fDistSq(&sp34, &sp28) < 3.0f) {
-            if (!Flags_GetSwitch(globalCtx, BGIKANAROTARYROOM_GET_7F00(&this->dyna.actor))) {
+            if (!Flags_GetSwitch(play, BGIKANAROTARYROOM_GET_7F00(&this->dyna.actor))) {
                 sp24 = true;
             }
-            Flags_SetSwitch(globalCtx, BGIKANAROTARYROOM_GET_7F00(&this->dyna.actor));
+            Flags_SetSwitch(play, BGIKANAROTARYROOM_GET_7F00(&this->dyna.actor));
         }
     }
     return sp24;
 }
 
-void func_80B81010(BgIkanaRotaryroom* this, GlobalContext* globalCtx) {
+void func_80B81010(BgIkanaRotaryroom* this, PlayState* play) {
     s32 pad;
     f32 temp_f0;
     s32 temp_s2;
@@ -538,7 +540,7 @@ void func_80B81010(BgIkanaRotaryroom* this, GlobalContext* globalCtx) {
                 sp84.y = ptr->prevPos.y + 50.0f;
                 sp84.z = ptr->prevPos.z;
 
-                temp_f0 = BgCheck_EntityRaycastFloor5_2(globalCtx, &globalCtx->colCtx, &sp7C, &sp78, NULL, &sp84);
+                temp_f0 = BgCheck_EntityRaycastFloor5_2(play, &play->colCtx, &sp7C, &sp78, NULL, &sp84);
                 if (ptr->world.pos.y <= temp_f0) {
                     ptr->world.pos.y = temp_f0;
                 } else {
@@ -568,9 +570,9 @@ void func_80B81010(BgIkanaRotaryroom* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80B81234(BgIkanaRotaryroom* this, GlobalContext* globalCtx) {
+void func_80B81234(BgIkanaRotaryroom* this, PlayState* play) {
     s32 pad[2];
-    Player* player = GET_PLAYER(globalCtx);
+    Player* player = GET_PLAYER(play);
     BgIkanaRotaryroomStruct3* ptr;
     s32 sp64;
     Vec3f sp58;
@@ -603,16 +605,16 @@ void func_80B81234(BgIkanaRotaryroom* this, GlobalContext* globalCtx) {
             }
             ptr->unk_4C.y += ptr->unk_48;
 
-            Matrix_StatePush();
+            Matrix_Push();
 
-            Matrix_RotateY(player->actor.shape.rot.y, MTXMODE_NEW);
-            Matrix_InsertXRotation_s(player->actor.shape.rot.x, MTXMODE_APPLY);
-            Matrix_InsertZRotation_s(player->actor.shape.rot.z, MTXMODE_APPLY);
-            Matrix_GetStateTranslationAndScaledY(sp44, &sp4C);
+            Matrix_RotateYS(player->actor.shape.rot.y, MTXMODE_NEW);
+            Matrix_RotateXS(player->actor.shape.rot.x, MTXMODE_APPLY);
+            Matrix_RotateZS(player->actor.shape.rot.z, MTXMODE_APPLY);
+            Matrix_MultVecY(sp44, &sp4C);
 
-            Matrix_StatePop();
+            Matrix_Pop();
 
-            temp_f0 = BgCheck_EntityRaycastFloor5_2(globalCtx, &globalCtx->colCtx, &sp40, &sp3C, NULL, &sp58);
+            temp_f0 = BgCheck_EntityRaycastFloor5_2(play, &play->colCtx, &sp40, &sp3C, NULL, &sp58);
             if (ptr->unk_4C.y <= temp_f0) {
                 ptr->unk_4C.y = temp_f0;
             } else {
@@ -641,15 +643,15 @@ void func_80B81234(BgIkanaRotaryroom* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80B814B8(BgIkanaRotaryroom* this, GlobalContext* globalCtx) {
-    Player* player = GET_PLAYER(globalCtx);
+void func_80B814B8(BgIkanaRotaryroom* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
 
     if (ActorCutscene_GetCurrentIndex() == this->dyna.actor.cutscene) {
-        if (player->actor.bgCheckFlags & 0x100) {
-            func_800B8E58(player, NA_SE_VO_LI_DAMAGE_S + player->ageProperties->unk_92);
-            func_80169EFC(&globalCtx->state);
-            func_800B8E58(player, NA_SE_VO_LI_TAKEN_AWAY + player->ageProperties->unk_92);
-            globalCtx->unk_18845 = 1;
+        if (player->actor.bgCheckFlags & BGCHECKFLAG_CRUSHED) {
+            Player_PlaySfx(player, NA_SE_VO_LI_DAMAGE_S + player->ageProperties->voiceSfxIdOffset);
+            func_80169EFC(&play->state);
+            Player_PlaySfx(player, NA_SE_VO_LI_TAKEN_AWAY + player->ageProperties->voiceSfxIdOffset);
+            play->haltAllActors = true;
             play_sound(NA_SE_OC_ABYSS);
             this->actionFunc = NULL;
         }
@@ -658,31 +660,32 @@ void func_80B814B8(BgIkanaRotaryroom* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80B81570(BgIkanaRotaryroom* this, GlobalContext* globalCtx) {
+void func_80B81570(BgIkanaRotaryroom* this, PlayState* play) {
     s32 i;
     Vec3f sp70;
     Vec3f sp64;
     s32 pad;
     s32 pad2;
 
-    Matrix_StatePush();
-    Matrix_RotateY(this->dyna.actor.shape.rot.y, MTXMODE_NEW);
+    Matrix_Push();
+    Matrix_RotateYS(this->dyna.actor.shape.rot.y, MTXMODE_NEW);
 
     for (i = 0; i < ARRAY_COUNT(D_80B821C4); i++) {
         sp64.x = D_80B821C4[i].x;
         sp64.y = D_80B821C4[i].y;
         sp64.z = D_80B821C4[i].z;
 
-        Matrix_MultiplyVector3fByState(&sp64, &sp70);
+        Matrix_MultVec3f(&sp64, &sp70);
 
         sp70.x += this->dyna.actor.world.pos.x;
         sp70.y += this->dyna.actor.world.pos.y;
         sp70.z += this->dyna.actor.world.pos.z;
 
-        Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_WATER_EFFECT, sp70.x, sp70.y, sp70.z, 0, 0, 0, 1);
+        Actor_Spawn(&play->actorCtx, play, ACTOR_EN_WATER_EFFECT, sp70.x, sp70.y, sp70.z, 0, 0, 0,
+                    ENWATEREFFECT_TYPE_FALLING_ROCK_SPAWNER);
     }
 
-    Matrix_StatePop();
+    Matrix_Pop();
 }
 
 s32 func_80B816A4(BgIkanaRotaryroom* this) {
@@ -698,27 +701,27 @@ s32 func_80B816A4(BgIkanaRotaryroom* this) {
     return count;
 }
 
-void BgIkanaRotaryroom_Init(Actor* thisx, GlobalContext* globalCtx) {
+void BgIkanaRotaryroom_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     BgIkanaRotaryroom* this = THIS;
     s32 sp34 = BGIKANAROTARYROOM_GET_1(&this->dyna.actor);
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
 
-    if (Flags_GetSwitch(globalCtx, BGIKANAROTARYROOM_GET_FE(&this->dyna.actor))) {
+    if (Flags_GetSwitch(play, BGIKANAROTARYROOM_GET_FE(&this->dyna.actor))) {
         this->dyna.actor.shape.rot.x = -0x8000;
     } else {
         this->dyna.actor.shape.rot.x = 0;
     }
 
     DynaPolyActor_Init(&this->dyna, 1);
-    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, D_80B82218[sp34]);
+    DynaPolyActor_LoadMesh(play, &this->dyna, D_80B82218[sp34]);
 
-    Collider_InitJntSph(globalCtx, &this->collider);
+    Collider_InitJntSph(play, &this->collider);
     if (!sp34) {
-        Collider_SetJntSph(globalCtx, &this->collider, &this->dyna.actor, &sJntSphInit1, this->colliderElements);
+        Collider_SetJntSph(play, &this->collider, &this->dyna.actor, &sJntSphInit1, this->colliderElements);
     } else {
-        Collider_SetJntSph(globalCtx, &this->collider, &this->dyna.actor, &sJntSphInit2, this->colliderElements);
+        Collider_SetJntSph(play, &this->collider, &this->dyna.actor, &sJntSphInit2, this->colliderElements);
     }
 
     func_80B802E0(this);
@@ -728,41 +731,41 @@ void BgIkanaRotaryroom_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     if (!sp34) {
-        func_80B80440(this, globalCtx);
+        func_80B80440(this, play);
     } else {
-        func_80B81570(this, globalCtx);
+        func_80B81570(this, play);
     }
 
-    func_80B80550(this, globalCtx);
+    func_80B80550(this, play);
     func_80B818B4(this);
 }
 
-void BgIkanaRotaryroom_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void BgIkanaRotaryroom_Destroy(Actor* thisx, PlayState* play) {
     BgIkanaRotaryroom* this = THIS;
 
-    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
-    Collider_DestroyJntSph(globalCtx, &this->collider);
+    DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
+    Collider_DestroyJntSph(play, &this->collider);
 }
 
 void func_80B818B4(BgIkanaRotaryroom* this) {
     this->unk_200 = func_80B818C8;
 }
 
-void func_80B818C8(Actor* thisx, GlobalContext* globalCtx) {
+void func_80B818C8(Actor* thisx, PlayState* play) {
     BgIkanaRotaryroom* this = THIS;
     s32 sp20;
 
     if (this->collider.base.acFlags & AC_HIT) {
         this->collider.base.acFlags &= ~AC_HIT;
         sp20 = BGIKANAROTARYROOM_GET_FE(&this->dyna.actor);
-        if (Flags_GetSwitch(globalCtx, sp20)) {
-            Flags_UnsetSwitch(globalCtx, sp20);
+        if (Flags_GetSwitch(play, sp20)) {
+            Flags_UnsetSwitch(play, sp20);
         } else {
-            Flags_SetSwitch(globalCtx, sp20);
+            Flags_SetSwitch(play, sp20);
         }
         func_80B81978(this);
     } else {
-        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+        CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
     }
 }
 
@@ -770,7 +773,7 @@ void func_80B81978(BgIkanaRotaryroom* this) {
     this->unk_200 = func_80B8198C;
 }
 
-void func_80B8198C(Actor* thisx, GlobalContext* globalCtx) {
+void func_80B8198C(Actor* thisx, PlayState* play) {
     BgIkanaRotaryroom* this = THIS;
 
     if (this->unk_204.unk_00 == NULL) {
@@ -785,13 +788,13 @@ void func_80B819DC(BgIkanaRotaryroom* this) {
     this->unk_200 = func_80B819F0;
 }
 
-void func_80B819F0(Actor* thisx, GlobalContext* globalCtx) {
+void func_80B819F0(Actor* thisx, PlayState* play) {
     BgIkanaRotaryroom* this = THIS;
 
     if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
         if (this->dyna.actor.cutscene >= 0) {
-            func_800B7298(globalCtx, &this->dyna.actor, 7);
+            func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_7);
         }
         func_80B81A64(this);
     } else {
@@ -804,7 +807,7 @@ void func_80B81A64(BgIkanaRotaryroom* this) {
     this->unk_200 = func_80B81A80;
 }
 
-void func_80B81A80(Actor* thisx, GlobalContext* globalCtx) {
+void func_80B81A80(Actor* thisx, PlayState* play) {
     BgIkanaRotaryroom* this = THIS;
     s32 pad;
     s32 i;
@@ -818,7 +821,7 @@ void func_80B81A80(Actor* thisx, GlobalContext* globalCtx) {
         if (1) {}
         if (1) {}
         if (1) {}
-        func_80B80894(this, globalCtx);
+        func_80B80894(this, play);
 
         for (i = 0; i < ARRAY_COUNT(this->unk_2D0); i++) {
             ptr = &this->unk_2D0[i];
@@ -829,11 +832,11 @@ void func_80B81A80(Actor* thisx, GlobalContext* globalCtx) {
 
         func_80B81B84(this);
     } else if (this->unk_584 == 15) {
-        s16 sp26 = Quake_Add(GET_ACTIVE_CAM(globalCtx), 3);
+        s16 quakeIndex = Quake_Add(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
 
-        Quake_SetSpeed(sp26, 0x7B30);
-        Quake_SetQuakeValues(sp26, 6, 0, 100, 0);
-        Quake_SetCountdown(sp26, 22);
+        Quake_SetSpeed(quakeIndex, 31536);
+        Quake_SetQuakeValues(quakeIndex, 6, 0, 100, 0);
+        Quake_SetCountdown(quakeIndex, 22);
     }
 }
 
@@ -842,7 +845,7 @@ void func_80B81B84(BgIkanaRotaryroom* this) {
     this->unk_200 = func_80B81BA0;
 }
 
-void func_80B81BA0(Actor* thisx, GlobalContext* globalCtx) {
+void func_80B81BA0(Actor* thisx, PlayState* play) {
     BgIkanaRotaryroom* this = THIS;
     s32 sp30 = 0;
     s32 i;
@@ -856,14 +859,14 @@ void func_80B81BA0(Actor* thisx, GlobalContext* globalCtx) {
     thisx->shape.rot.x += 0x1F4;
 
     if (!(this->unk_584 & 7)) {
-        s16 quake = Quake_Add(GET_ACTIVE_CAM(globalCtx), 3);
+        s16 quakeIndex = Quake_Add(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
 
-        Quake_SetSpeed(quake, 0x7B30);
-        Quake_SetQuakeValues(quake, (s32)(Rand_ZeroOne() * 2.5f) + 3, 0, 10, 0);
-        Quake_SetCountdown(quake, 15);
+        Quake_SetSpeed(quakeIndex, 31536);
+        Quake_SetQuakeValues(quakeIndex, (s32)(Rand_ZeroOne() * 2.5f) + 3, 0, 10, 0);
+        Quake_SetCountdown(quakeIndex, 15);
     }
 
-    if (Flags_GetSwitch(globalCtx, BGIKANAROTARYROOM_GET_FE(&this->dyna.actor))) {
+    if (Flags_GetSwitch(play, BGIKANAROTARYROOM_GET_FE(&this->dyna.actor))) {
         if (this->dyna.actor.shape.rot.x < 0) {
             this->dyna.actor.shape.rot.x = -0x8000;
             sp30 = 1;
@@ -873,10 +876,10 @@ void func_80B81BA0(Actor* thisx, GlobalContext* globalCtx) {
         sp30 = 1;
     }
 
-    func_80B80C88(this, globalCtx);
+    func_80B80C88(this, play);
 
     if (sp30 != 0) {
-        Player* player = GET_PLAYER(globalCtx);
+        Player* player = GET_PLAYER(play);
         BgIkanaRotaryroomStruct1* ptr;
         BgIkanaBlock* block = (BgIkanaBlock*)this->unk_204.unk_00;
 
@@ -913,7 +916,7 @@ void func_80B81DAC(BgIkanaRotaryroom* this) {
     this->unk_200 = func_80B81DC8;
 }
 
-void func_80B81DC8(Actor* thisx, GlobalContext* globalCtx) {
+void func_80B81DC8(Actor* thisx, PlayState* play) {
     s32 pad;
     BgIkanaRotaryroom* this = THIS;
 
@@ -926,15 +929,15 @@ void func_80B81DC8(Actor* thisx, GlobalContext* globalCtx) {
         ActorCutscene_Stop(this->dyna.actor.cutscene);
         func_80B818B4(this);
     } else if (this->unk_584 == 19) {
-        s16 quake = Quake_Add(GET_ACTIVE_CAM(globalCtx), 3);
+        s16 quakeIndex = Quake_Add(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
 
-        Quake_SetSpeed(quake, 0x4E20);
-        Quake_SetQuakeValues(quake, 5, 0, 40, 60);
-        Quake_SetCountdown(quake, 17);
+        Quake_SetSpeed(quakeIndex, 20000);
+        Quake_SetQuakeValues(quakeIndex, 5, 0, 40, 60);
+        Quake_SetCountdown(quakeIndex, 17);
     }
 }
 
-void BgIkanaRotaryroom_Update(Actor* thisx, GlobalContext* globalCtx) {
+void BgIkanaRotaryroom_Update(Actor* thisx, PlayState* play) {
     BgIkanaRotaryroom* this = THIS;
     BgIkanaRotaryroomStruct1* ptr;
     BgIkanaRotaryroomStruct1* ptr2;
@@ -966,37 +969,37 @@ void BgIkanaRotaryroom_Update(Actor* thisx, GlobalContext* globalCtx) {
         }
     }
 
-    if (func_80B80F08(this, globalCtx)) {
+    if (func_80B80F08(this, play)) {
         if (this->unk_204.unk_00 != NULL) {
             ((BgIkanaBlock*)this->unk_204.unk_00)->unk_17E = 1;
         }
     }
 
-    this->unk_200(&this->dyna.actor, globalCtx);
+    this->unk_200(&this->dyna.actor, play);
 
     if (this->unk_578 != NULL) {
-        this->unk_578(this, globalCtx);
+        this->unk_578(this, play);
     }
 
     if (this->unk_57C != NULL) {
-        this->unk_57C(this, globalCtx);
+        this->unk_57C(this, play);
     }
 
     if (this->actionFunc != NULL) {
-        this->actionFunc(this, globalCtx);
+        this->actionFunc(this, play);
     }
 }
 
-void BgIkanaRotaryroom_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void BgIkanaRotaryroom_Draw(Actor* thisx, PlayState* play) {
     BgIkanaRotaryroom* this = THIS;
     s32 param = BGIKANAROTARYROOM_GET_1(&this->dyna.actor);
 
     if (!param) {
-        Gfx_DrawDListOpa(globalCtx, object_ikana_obj_DL_0048A0);
-        Gfx_DrawDListXlu(globalCtx, object_ikana_obj_DL_004710);
+        Gfx_DrawDListOpa(play, object_ikana_obj_DL_0048A0);
+        Gfx_DrawDListXlu(play, object_ikana_obj_DL_004710);
     } else {
-        AnimatedMat_Draw(globalCtx, this->unk_1FC);
-        Gfx_DrawDListOpa(globalCtx, object_ikana_obj_DL_007448);
-        Gfx_DrawDListXlu(globalCtx, object_ikana_obj_DL_007360);
+        AnimatedMat_Draw(play, this->unk_1FC);
+        Gfx_DrawDListOpa(play, object_ikana_obj_DL_007448);
+        Gfx_DrawDListXlu(play, object_ikana_obj_DL_007360);
     }
 }

@@ -25,14 +25,14 @@
  * the timer to 130 frames if the player strays too far from the Wallmaster's current position.
  */
 typedef enum {
-    /* 0x00 */ WALLMASTER_TYPE_TIMER_ONLY,
-    /* 0x01 */ WALLMASTER_TYPE_PROXIMITY,
-    /* 0x02 */ WALLMASTER_TYPE_FLAG
+    /* 0x0 */ WALLMASTER_TYPE_TIMER_ONLY,
+    /* 0x1 */ WALLMASTER_TYPE_PROXIMITY,
+    /* 0x2 */ WALLMASTER_TYPE_FLAG
 } WallmasterType;
 
 struct EnWallmas;
 
-typedef void (*EnWallmasActionFunc)(struct EnWallmas*, GlobalContext*);
+typedef void (*EnWallmasActionFunc)(struct EnWallmas*, PlayState*);
 
 typedef struct EnWallmas {
     /* 0x000 */ Actor actor;
@@ -51,7 +51,5 @@ typedef struct EnWallmas {
     /* 0x2D4 */ Vec3f limbPos[11];
     /* 0x358 */ ColliderCylinder collider;
 } EnWallmas; // size = 0x3A4
-
-extern const ActorInit En_Wallmas_InitVars;
 
 #endif // Z_EN_WALLMAS_H

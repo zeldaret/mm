@@ -1,4 +1,5 @@
 #include "global.h"
+#include "z64load.h"
 
 #define KALEIDO_OVERLAY(name)                                                                        \
     {                                                                                                \
@@ -13,24 +14,23 @@ KaleidoMgrOverlay gKaleidoMgrOverlayTable[] = {
 
 void* sKaleidoAreaPtr = NULL;
 KaleidoMgrOverlay* gKaleidoMgrCurOvl = NULL;
-FaultAddrConvClient sKaleidoAreaFaultClient;
+FaultAddrConvClient sKaleidoMgrFaultAddrConvClient;
 
-void* KaleidoManager_FaultAddrConvFunc(void* address, void* param) {
-    u8* ptr = address;
-    KaleidoMgrOverlay* ovl = &gKaleidoMgrCurOvl[0];
-    u8* ramStart;
-    u8* ramEnd;
-    size_t size;
-    uintptr_t offset;
+void* KaleidoManager_FaultAddrConv(void* address, void* param) {
+    uintptr_t addr = address;
+    KaleidoMgrOverlay* kaleidoMgrOvl = gKaleidoMgrCurOvl;
+    size_t ramConv;
+    void* ramStart;
+    size_t diff;
 
-    if (ovl != NULL) {
-        size = VRAM_PTR_SIZE(ovl);
-        ramStart = ovl->loadedRamAddr;
-        ramEnd = ramStart + size;
-        offset = (u8*)ovl->vramStart - ramStart;
+    if (kaleidoMgrOvl != NULL) {
+        diff = VRAM_PTR_SIZE(kaleidoMgrOvl);
+        ramStart = kaleidoMgrOvl->loadedRamAddr;
+        ramConv = (uintptr_t)kaleidoMgrOvl->vramStart - (uintptr_t)ramStart;
+
         if (ramStart != NULL) {
-            if (ptr >= ramStart && ptr < ramEnd) {
-                return ptr + offset;
+            if ((addr >= (uintptr_t)ramStart) && (addr < (uintptr_t)ramStart + diff)) {
+                return addr + ramConv;
             }
         }
     }
@@ -53,7 +53,7 @@ void KaleidoManager_ClearOvl(KaleidoMgrOverlay* ovl) {
     }
 }
 
-void KaleidoManager_Init(GlobalContext* globalCtx) {
+void KaleidoManager_Init(PlayState* play) {
     s32 largestSize = 0;
     s32 size;
     u32 i;
@@ -65,13 +65,13 @@ void KaleidoManager_Init(GlobalContext* globalCtx) {
         }
     }
 
-    sKaleidoAreaPtr = THA_AllocEndAlign16(&globalCtx->state.heap, largestSize);
+    sKaleidoAreaPtr = THA_AllocEndAlign16(&play->state.heap, largestSize);
     gKaleidoMgrCurOvl = NULL;
-    Fault_AddAddrConvClient(&sKaleidoAreaFaultClient, KaleidoManager_FaultAddrConvFunc, NULL);
+    Fault_AddAddrConvClient(&sKaleidoMgrFaultAddrConvClient, KaleidoManager_FaultAddrConv, NULL);
 }
 
 void KaleidoManager_Destroy() {
-    Fault_RemoveAddrConvClient(&sKaleidoAreaFaultClient);
+    Fault_RemoveAddrConvClient(&sKaleidoMgrFaultAddrConvClient);
 
     if (gKaleidoMgrCurOvl != NULL) {
         KaleidoManager_ClearOvl(gKaleidoMgrCurOvl);

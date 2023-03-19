@@ -5,35 +5,37 @@
  */
 
 #include "z_en_bsb.h"
+#include "z64rumble.h"
+#include "z64shrink_window.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_2000000)
 
 #define THIS ((EnBsb*)thisx)
 
-void EnBsb_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnBsb_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnBsb_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnBsb_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnBsb_Init(Actor* thisx, PlayState* play);
+void EnBsb_Destroy(Actor* thisx, PlayState* play);
+void EnBsb_Update(Actor* thisx, PlayState* play);
+void EnBsb_Draw(Actor* thisx, PlayState* play);
 
-void func_80C0BFE8(EnBsb* this, GlobalContext* globalCtx);
-void func_80C0C238(EnBsb* this, GlobalContext* globalCtx);
-void func_80C0C364(EnBsb* this, GlobalContext* globalCtx);
-void func_80C0C484(EnBsb* this, GlobalContext* globalCtx);
-void func_80C0C6A8(EnBsb* this, GlobalContext* globalCtx);
-void func_80C0C8EC(EnBsb* this, GlobalContext* globalCtx);
-void func_80C0CB3C(EnBsb* this, GlobalContext* globalCtx);
-void func_80C0CD04(EnBsb* this, GlobalContext* globalCtx);
-void func_80C0CDE4(EnBsb* this, GlobalContext* globalCtx);
-void func_80C0CFDC(EnBsb* this, GlobalContext* globalCtx);
-void func_80C0D10C(EnBsb* this, GlobalContext* globalCtx);
-void func_80C0D27C(EnBsb* this, GlobalContext* globalCtx);
-void func_80C0D384(EnBsb* this, GlobalContext* globalCtx);
-void func_80C0D51C(EnBsb* this, GlobalContext* globalCtx);
-void func_80C0D9B4(EnBsb* this, GlobalContext* globalCtx);
-void func_80C0DB18(EnBsb* this, GlobalContext* globalCtx);
-void func_80C0E1C0(EnBsb* this, GlobalContext* globalCtx);
-void func_80C0E480(EnBsb* this, GlobalContext* globalCtx);
-void func_80C0E4FC(EnBsb* this, GlobalContext* globalCtx);
+void func_80C0BFE8(EnBsb* this, PlayState* play);
+void func_80C0C238(EnBsb* this, PlayState* play);
+void func_80C0C364(EnBsb* this, PlayState* play);
+void func_80C0C484(EnBsb* this, PlayState* play);
+void func_80C0C6A8(EnBsb* this, PlayState* play);
+void func_80C0C8EC(EnBsb* this, PlayState* play);
+void func_80C0CB3C(EnBsb* this, PlayState* play);
+void func_80C0CD04(EnBsb* this, PlayState* play);
+void func_80C0CDE4(EnBsb* this, PlayState* play);
+void func_80C0CFDC(EnBsb* this, PlayState* play);
+void func_80C0D10C(EnBsb* this, PlayState* play);
+void func_80C0D27C(EnBsb* this, PlayState* play);
+void func_80C0D384(EnBsb* this, PlayState* play);
+void func_80C0D51C(EnBsb* this, PlayState* play);
+void func_80C0D9B4(EnBsb* this, PlayState* play);
+void func_80C0DB18(EnBsb* this, PlayState* play);
+void func_80C0E1C0(EnBsb* this, PlayState* play);
+void func_80C0E480(EnBsb* this, PlayState* play);
+void func_80C0E4FC(EnBsb* this, PlayState* play);
 
 #if 0
 // static ColliderJntSphElementInit sJntSphElementsInit[7] = {
@@ -71,7 +73,7 @@ static ColliderJntSphElementInit D_80C0F8D4[7] = {
 // static ColliderJntSphInit sJntSphInit = {
 static ColliderJntSphInit D_80C0F9D0 = {
     { COLTYPE_HIT6, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_PLAYER, OC2_TYPE_1, COLSHAPE_JNTSPH, },
-    7, D_80C0F8D4, // sJntSphElementsInit,
+    ARRAY_COUNT(sJntSphElementsInit), D_80C0F8D4, // sJntSphElementsInit,
 };
 
 // static DamageTable sDamageTable = {
@@ -110,7 +112,7 @@ static DamageTable D_80C0F9E0 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0xD),
 };
 
-const ActorInit En_Bsb_InitVars = {
+ActorInit En_Bsb_InitVars = {
     ACTOR_EN_BSB,
     ACTORCAT_PROP,
     FLAGS,

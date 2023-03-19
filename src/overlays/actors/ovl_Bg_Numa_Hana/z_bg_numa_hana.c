@@ -12,25 +12,25 @@
 
 #define THIS ((BgNumaHana*)thisx)
 
-void BgNumaHana_Init(Actor* thisx, GlobalContext* globalCtx);
-void BgNumaHana_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void BgNumaHana_Update(Actor* thisx, GlobalContext* globalCtx);
-void BgNumaHana_Draw(Actor* thisx, GlobalContext* globalCtx);
+void BgNumaHana_Init(Actor* thisx, PlayState* play);
+void BgNumaHana_Destroy(Actor* thisx, PlayState* play);
+void BgNumaHana_Update(Actor* thisx, PlayState* play);
+void BgNumaHana_Draw(Actor* thisx, PlayState* play2);
 
 void BgNumaHana_SetupDoNothing(BgNumaHana* this);
-void BgNumaHana_DoNothing(BgNumaHana* this, GlobalContext* globalCtx);
+void BgNumaHana_DoNothing(BgNumaHana* this, PlayState* play);
 void BgNumaHana_SetupClosedIdle(BgNumaHana* this);
-void BgNumaHana_ClosedIdle(BgNumaHana* this, GlobalContext* globalCtx);
+void BgNumaHana_ClosedIdle(BgNumaHana* this, PlayState* play);
 void BgNumaHana_SetupUnfoldInnerPetals(BgNumaHana* this);
-void BgNumaHana_UnfoldInnerPetals(BgNumaHana* this, GlobalContext* globalCtx);
+void BgNumaHana_UnfoldInnerPetals(BgNumaHana* this, PlayState* play);
 void BgNumaHana_SetupUnfoldOuterPetals(BgNumaHana* this);
-void BgNumaHana_UnfoldOuterPetals(BgNumaHana* this, GlobalContext* globalCtx);
+void BgNumaHana_UnfoldOuterPetals(BgNumaHana* this, PlayState* play);
 void BgNumaHana_SetupRaiseFlower(BgNumaHana* this);
-void BgNumaHana_RaiseFlower(BgNumaHana* this, GlobalContext* globalCtx);
+void BgNumaHana_RaiseFlower(BgNumaHana* this, PlayState* play);
 void BgNumaHana_SetupOpenedIdle(BgNumaHana* this);
-void BgNumaHana_OpenedIdle(BgNumaHana* this, GlobalContext* globalCtx);
+void BgNumaHana_OpenedIdle(BgNumaHana* this, PlayState* play);
 
-const ActorInit Bg_Numa_Hana_InitVars = {
+ActorInit Bg_Numa_Hana_InitVars = {
     ACTOR_BG_NUMA_HANA,
     ACTORCAT_BG,
     FLAGS,
@@ -63,7 +63,7 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 static FireObjInitParams sFireObjInit = {
-    0.00405000010505f, 0.0500000007451f, 3, 1, 0, 0, 0,
+    0.00405f, 1.0f / 20.0f, FIRE_STATE_NOT_LIT, 1, 0, 0, 0,
 };
 
 static s16 sInitialAnglePerPetal[] = { 0x0000, 0x2AAA, 0x5555, 0x8000, 0xAAAA, 0xD555 };
@@ -79,10 +79,10 @@ static InitChainEntry sInitChain[] = {
  * Spawns another wooden flower instance that handles the opened flower's collision.
  * Returns true if this wooden flower instance was succesfully spawned.
  */
-s32 BgNumaHana_SpawnOpenFlowerCollisionChild(BgNumaHana* this, GlobalContext* globalCtx) {
+s32 BgNumaHana_SpawnOpenFlowerCollisionChild(BgNumaHana* this, PlayState* play) {
     Actor* child;
 
-    child = Actor_SpawnAsChild(&globalCtx->actorCtx, &this->dyna.actor, globalCtx, ACTOR_BG_NUMA_HANA,
+    child = Actor_SpawnAsChild(&play->actorCtx, &this->dyna.actor, play, ACTOR_BG_NUMA_HANA,
                                this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z,
                                this->dyna.actor.shape.rot.x, this->dyna.actor.shape.rot.y, this->dyna.actor.shape.rot.z,
                                BG_NUMA_HANA_TYPE_OPEN_FLOWER_COLLISION);
@@ -136,7 +136,7 @@ void BgNumaHana_UpdateSettleRotation(s16* settleZRotation, s16* settleAngle, f32
     *settleZRotation += (s16)(Math_SinS(*settleAngle) * *settleScale);
 }
 
-void BgNumaHana_Init(Actor* thisx, GlobalContext* globalCtx) {
+void BgNumaHana_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     DynaPolyActor* child;
     s32 type;
@@ -147,22 +147,22 @@ void BgNumaHana_Init(Actor* thisx, GlobalContext* globalCtx) {
     DynaPolyActor_Init(&this->dyna, 3);
 
     if (type == BG_NUMA_HANA_TYPE_OPEN_FLOWER_COLLISION) {
-        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &gWoodenFlowerOpenedFlowerCol);
+        DynaPolyActor_LoadMesh(play, &this->dyna, &gWoodenFlowerOpenedFlowerCol);
         BgNumaHana_SetupDoNothing(this);
         this->dyna.actor.draw = NULL;
     } else {
-        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &gWoodenFlowerClosedFlowerCol);
-        FireObj_Init(globalCtx, &this->fire, &sFireObjInit, &this->dyna.actor);
-        Collider_InitCylinder(globalCtx, &this->torchCollider);
-        Collider_SetCylinder(globalCtx, &this->torchCollider, &this->dyna.actor, &sCylinderInit);
+        DynaPolyActor_LoadMesh(play, &this->dyna, &gWoodenFlowerClosedFlowerCol);
+        FireObj_Init(play, &this->fire, &sFireObjInit, &this->dyna.actor);
+        Collider_InitCylinder(play, &this->torchCollider);
+        Collider_SetCylinder(play, &this->torchCollider, &this->dyna.actor, &sCylinderInit);
         this->dyna.actor.colChkInfo.mass = MASS_IMMOVABLE;
-        if (!BgNumaHana_SpawnOpenFlowerCollisionChild(this, globalCtx)) {
-            Actor_MarkForDeath(&this->dyna.actor);
+        if (!BgNumaHana_SpawnOpenFlowerCollisionChild(this, play)) {
+            Actor_Kill(&this->dyna.actor);
             return;
         }
 
-        if (gSaveContext.save.weekEventReg[12] & 1) {
-            func_800C62BC(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_12_01)) {
+            func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
 
             this->petalZRotation = 0x2000;
             this->innerPetalZRotation = 0x2000;
@@ -175,13 +175,13 @@ void BgNumaHana_Init(Actor* thisx, GlobalContext* globalCtx) {
             this->flowerRotationalVelocity = 0x147;
 
             this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y + 210.0f;
-            FireObj_SetState2(&this->fire, 0.05f, 2);
-            Flags_SetSwitch(globalCtx, BG_NUMA_HANA_SWITCH_FLAG(&this->dyna.actor));
+            FireObj_SetState2(&this->fire, 0.05f, FIRE_STATE_FULLY_LIT);
+            Flags_SetSwitch(play, BG_NUMA_HANA_SWITCH_FLAG(&this->dyna.actor));
             BgNumaHana_SetupOpenedIdle(this);
         } else {
             child = (DynaPolyActor*)this->dyna.actor.child;
-            func_800C62BC(globalCtx, &globalCtx->colCtx.dyna, child->bgId);
-            Flags_UnsetSwitch(globalCtx, BG_NUMA_HANA_SWITCH_FLAG(&this->dyna.actor));
+            func_800C62BC(play, &play->colCtx.dyna, child->bgId);
+            Flags_UnsetSwitch(play, BG_NUMA_HANA_SWITCH_FLAG(&this->dyna.actor));
             BgNumaHana_SetupClosedIdle(this);
         }
 
@@ -189,13 +189,13 @@ void BgNumaHana_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-void BgNumaHana_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void BgNumaHana_Destroy(Actor* thisx, PlayState* play) {
     BgNumaHana* this = THIS;
 
-    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
     if (BG_NUMA_HANA_GET_TYPE(&this->dyna.actor) == BG_NUMA_HANA_TYPE_NORMAL) {
-        FireObj_Destroy(globalCtx, &this->fire);
-        Collider_DestroyCylinder(globalCtx, &this->torchCollider);
+        FireObj_Destroy(play, &this->fire);
+        Collider_DestroyCylinder(play, &this->torchCollider);
     }
 }
 
@@ -203,7 +203,7 @@ void BgNumaHana_SetupDoNothing(BgNumaHana* this) {
     this->actionFunc = BgNumaHana_DoNothing;
 }
 
-void BgNumaHana_DoNothing(BgNumaHana* this, GlobalContext* globalCtx) {
+void BgNumaHana_DoNothing(BgNumaHana* this, PlayState* play) {
 }
 
 void BgNumaHana_SetupClosedIdle(BgNumaHana* this) {
@@ -214,13 +214,13 @@ void BgNumaHana_SetupClosedIdle(BgNumaHana* this) {
  * This function waits for the torch to be lit. Once it is, it starts
  * the cutscene where the petals unfold.
  */
-void BgNumaHana_ClosedIdle(BgNumaHana* this, GlobalContext* globalCtx) {
-    if (this->fire.state != 3) {
-        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_FLAME_IGNITION);
+void BgNumaHana_ClosedIdle(BgNumaHana* this, PlayState* play) {
+    if (this->fire.state != FIRE_STATE_NOT_LIT) {
+        Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_FLAME_IGNITION);
         if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
             ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
-            gSaveContext.save.weekEventReg[12] |= 1;
-            Flags_SetSwitch(globalCtx, BG_NUMA_HANA_SWITCH_FLAG(&this->dyna.actor));
+            SET_WEEKEVENTREG(WEEKEVENTREG_12_01);
+            Flags_SetSwitch(play, BG_NUMA_HANA_SWITCH_FLAG(&this->dyna.actor));
             BgNumaHana_SetupUnfoldInnerPetals(this);
         } else {
             ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
@@ -237,7 +237,7 @@ void BgNumaHana_SetupUnfoldInnerPetals(BgNumaHana* this) {
  * Partially moves the flower to the "open" position by raising the "inner"
  * parts of the petals that are closest to the stalk.
  */
-void BgNumaHana_UnfoldInnerPetals(BgNumaHana* this, GlobalContext* globalCtx) {
+void BgNumaHana_UnfoldInnerPetals(BgNumaHana* this, PlayState* play) {
     Math_StepToS(&this->innerPetalZRotationalVelocity, 240, 14);
     if (Math_ScaledStepToS(&this->innerPetalZRotation, 0x2000, this->innerPetalZRotationalVelocity)) {
         if (this->transitionTimer >= 11) {
@@ -247,7 +247,7 @@ void BgNumaHana_UnfoldInnerPetals(BgNumaHana* this, GlobalContext* globalCtx) {
                 this->settleZRotation = 0;
                 this->settleAngle = 0;
                 this->settleScale = 420.0f;
-                Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_FLOWERPETAL_STOP);
+                Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_FLOWERPETAL_STOP);
             }
             this->transitionTimer++;
         }
@@ -269,7 +269,7 @@ void BgNumaHana_SetupUnfoldOuterPetals(BgNumaHana* this) {
  * Partially moves the flower to the "open" position by lowering the "outer"
  * parts of the petals that are furthest to the stalk.
  */
-void BgNumaHana_UnfoldOuterPetals(BgNumaHana* this, GlobalContext* globalCtx) {
+void BgNumaHana_UnfoldOuterPetals(BgNumaHana* this, PlayState* play) {
     Math_StepToS(&this->outerPetalZRotationalVelocity, 240, 14);
     if (Math_ScaledStepToS(&this->outerPetalZRotation, -0x4000, this->outerPetalZRotationalVelocity)) {
         if (this->transitionTimer >= 11) {
@@ -279,7 +279,7 @@ void BgNumaHana_UnfoldOuterPetals(BgNumaHana* this, GlobalContext* globalCtx) {
                 this->settleZRotation = 0;
                 this->settleAngle = 0x5120;
                 this->settleScale = 130.0f;
-                Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_FLOWERPETAL_STOP);
+                Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_FLOWERPETAL_STOP);
             }
             this->transitionTimer++;
         }
@@ -299,7 +299,7 @@ void BgNumaHana_SetupRaiseFlower(BgNumaHana* this) {
 /**
  * This function slowly raises the flower to its final height and makes it start spinning.
  */
-void BgNumaHana_RaiseFlower(BgNumaHana* this, GlobalContext* globalCtx) {
+void BgNumaHana_RaiseFlower(BgNumaHana* this, PlayState* play) {
     s32 pad;
     DynaPolyActor* child;
 
@@ -314,8 +314,8 @@ void BgNumaHana_RaiseFlower(BgNumaHana* this, GlobalContext* globalCtx) {
         child = (DynaPolyActor*)this->dyna.actor.child;
 
         // Swaps out the "closed" flower collision for the "opened" collision.
-        func_800C6314(globalCtx, &globalCtx->colCtx.dyna, child->bgId);
-        func_800C62BC(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+        func_800C6314(play, &play->colCtx.dyna, child->bgId);
+        func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
 
         this->petalZRotation = 0x2000;
         this->innerPetalZRotation = 0x2000;
@@ -342,14 +342,14 @@ void BgNumaHana_SetupOpenedIdle(BgNumaHana* this) {
 /**
  * Spins the "opened" flower around the y-axis.
  */
-void BgNumaHana_OpenedIdle(BgNumaHana* this, GlobalContext* globalCtx) {
+void BgNumaHana_OpenedIdle(BgNumaHana* this, PlayState* play) {
     this->dyna.actor.shape.rot.y += this->flowerRotationalVelocity;
     this->petalZRotation = this->innerPetalZRotation + this->settleZRotation;
     BgNumaHana_UpdatePetalPosRots(this);
     func_800B9010(&this->dyna.actor, NA_SE_EV_FLOWER_ROLLING - SFX_FLAG);
 }
 
-void BgNumaHana_Update(Actor* thisx, GlobalContext* globalCtx) {
+void BgNumaHana_Update(Actor* thisx, PlayState* play) {
     s32 pad;
     BgNumaHana* this = THIS;
     s32 type = BG_NUMA_HANA_GET_TYPE(&this->dyna.actor);
@@ -360,61 +360,61 @@ void BgNumaHana_Update(Actor* thisx, GlobalContext* globalCtx) {
         firePos.y = this->dyna.actor.world.pos.y + 10.5f;
         firePos.z = this->dyna.actor.world.pos.z;
         FireObj_SetPosition(&this->fire, &firePos);
-        FireObj_Update(globalCtx, &this->fire, &this->dyna.actor);
+        FireObj_Update(play, &this->fire, &this->dyna.actor);
     }
 
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
 
     if (type == BG_NUMA_HANA_TYPE_NORMAL) {
         this->dyna.actor.child->shape.rot = this->dyna.actor.shape.rot;
         Collider_UpdateCylinder(&this->dyna.actor, &this->torchCollider);
-        CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->torchCollider.base);
-        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->torchCollider.base);
+        CollisionCheck_SetOC(play, &play->colChkCtx, &this->torchCollider.base);
+        CollisionCheck_SetAC(play, &play->colChkCtx, &this->torchCollider.base);
     }
 }
 
-void BgNumaHana_Draw(Actor* thisx, GlobalContext* globalCtx2) {
-    GlobalContext* globalCtx = globalCtx2;
+void BgNumaHana_Draw(Actor* thisx, PlayState* play2) {
+    PlayState* play = play2;
     BgNumaHana* this = THIS;
     WoodenFlowerPetalPosRot* innerPetalPosRot;
     WoodenFlowerPetalPosRot* outerPetalPosRot;
     s32 objectIndex;
     s32 i;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(globalCtx->state.gfxCtx);
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    func_8012C28C(play->state.gfxCtx);
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, gWoodenFlowerStalkDL);
 
     for (i = 0; i < ARRAY_COUNT(this->innerPetalPosRot); i++) {
         innerPetalPosRot = &this->innerPetalPosRot[i];
         outerPetalPosRot = &this->outerPetalPosRot[i];
 
-        Matrix_SetStateRotationAndTranslation(innerPetalPosRot->pos.x, innerPetalPosRot->pos.y, innerPetalPosRot->pos.z,
-                                              &innerPetalPosRot->rot);
+        Matrix_SetTranslateRotateYXZ(innerPetalPosRot->pos.x, innerPetalPosRot->pos.y, innerPetalPosRot->pos.z,
+                                     &innerPetalPosRot->rot);
         Matrix_Scale(0.1f, 0.1f, 0.1f, MTXMODE_APPLY);
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, gWoodenFlowerInnerPetalDL);
 
-        Matrix_SetStateRotationAndTranslation(outerPetalPosRot->pos.x, outerPetalPosRot->pos.y, outerPetalPosRot->pos.z,
-                                              &outerPetalPosRot->rot);
+        Matrix_SetTranslateRotateYXZ(outerPetalPosRot->pos.x, outerPetalPosRot->pos.y, outerPetalPosRot->pos.z,
+                                     &outerPetalPosRot->rot);
         Matrix_Scale(0.1f, 0.1f, 0.1f, MTXMODE_APPLY);
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, gWoodenFlowerOuterPetalDL);
     }
 
-    objectIndex = Object_GetIndex(&globalCtx->objectCtx, OBJECT_SYOKUDAI);
-    if ((objectIndex >= 0) && (Object_IsLoaded(&globalCtx->objectCtx, objectIndex))) {
-        Matrix_SetStateRotationAndTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y - 64.5f,
-                                              this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
+    objectIndex = Object_GetIndex(&play->objectCtx, OBJECT_SYOKUDAI);
+    if ((objectIndex >= 0) && (Object_IsLoaded(&play->objectCtx, objectIndex))) {
+        Matrix_SetTranslateRotateYXZ(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y - 64.5f,
+                                     this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
         Matrix_Scale(1.5f, 1.5f, 1.5f, MTXMODE_APPLY);
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPSegment(POLY_OPA_DISP++, 0x06, globalCtx->objectCtx.status[objectIndex].segment);
+        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.status[objectIndex].segment);
         gSPDisplayList(POLY_OPA_DISP++, gObjectSyokudaiTypeNoSwitchDL);
     }
 
-    FireObj_Draw(globalCtx, &this->fire);
+    FireObj_Draw(play, &this->fire);
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }

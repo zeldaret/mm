@@ -6,7 +6,8 @@
 
 struct EnShn;
 
-typedef void (*EnShnActionFunc)(struct EnShn*, GlobalContext*);
+typedef void (*EnShnActionFunc)(struct EnShn*, PlayState*);
+typedef s32 (*MsgEventFunc)(Actor*, PlayState*);
 
 typedef struct EnShn {
     /* 0x000 */ Actor actor;
@@ -20,8 +21,8 @@ typedef struct EnShn {
     /* 0x1E4 */ Player* shnPlayerRef;
     /* 0x1E8 */ Vec3f unk_1E8;
     /* 0x1F4 */ Vec3s unk_1F4;
-    /* 0x1FA */ Vec3s jointTable[OBJECT_SHN_LIMB_MAX];
-    /* 0x25A */ Vec3s morphTable[OBJECT_SHN_LIMB_MAX];
+    /* 0x1FA */ Vec3s jointTable[BURLY_GUY_LIMB_MAX];
+    /* 0x25A */ Vec3s morphTable[BURLY_GUY_LIMB_MAX];
     /* 0x2BA */ s16 unk_2BA;
     /* 0x2BC */ s16 unk_2BC;
     /* 0x2BE */ s16 unk_2BE;
@@ -34,14 +35,12 @@ typedef struct EnShn {
     /* 0x2CC */ f32 playSpeed;
     /* 0x2D0 */ f32 unk_2D0;
     /* 0x2D4 */ f32 unk_2D4;
-    /* 0x2D8 */ s32 unk_2D8;
-    /* 0x2DC */ s32 msgState;
+    /* 0x2D8 */ MsgEventFunc unk_2D8;
+    /* 0x2DC */ s32 prevTalkState;
     /* 0x2E0 */ s32 unk_2E0;
     /* 0x2E4 */ s32 unk_2E4;
     /* 0x2E8 */ s32 unk_2E8;
     /* 0x2EC */ s32 unk_2EC;
 } EnShn; // size = 0x2F0
-
-extern const ActorInit En_Shn_InitVars;
 
 #endif // Z_EN_SHN_H

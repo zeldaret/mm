@@ -13,26 +13,26 @@
 
 #define THIS ((EnHakurock*)thisx)
 
-void EnHakurock_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnHakurock_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnHakurock_Update(Actor* thisx, GlobalContext* globalCtx);
+void EnHakurock_Init(Actor* thisx, PlayState* play);
+void EnHakurock_Destroy(Actor* thisx, PlayState* play);
+void EnHakurock_Update(Actor* thisx, PlayState* play);
 
 void func_80B21BE0(BossHakugin* parent, Vec3f* arg1, s32 arg2);
 void func_80B21EA4(EnHakurock* this, s32 arg1);
 void func_80B21FFC(EnHakurock* this);
-void func_80B22040(EnHakurock* this, GlobalContext* globalCtx);
+void func_80B22040(EnHakurock* this, PlayState* play);
 void func_80B220A8(EnHakurock* this);
-void func_80B221E8(EnHakurock* this, GlobalContext* globalCtx);
-void func_80B222AC(EnHakurock* this, GlobalContext* globalCtx);
-void func_80B2242C(EnHakurock* this, GlobalContext* globalCtx);
+void func_80B221E8(EnHakurock* this, PlayState* play);
+void func_80B222AC(EnHakurock* this, PlayState* play);
+void func_80B2242C(EnHakurock* this, PlayState* play);
 void func_80B224C0(EnHakurock* this);
-void func_80B22500(EnHakurock* this, GlobalContext* globalCtx);
+void func_80B22500(EnHakurock* this, PlayState* play);
 void func_80B226AC(EnHakurock* this);
-void func_80B22750(EnHakurock* this, GlobalContext* globalCtx);
-void func_80B228F4(Actor* thisx, GlobalContext* globalCtx);
-void EnHakurock_Draw(Actor* thisx, GlobalContext* globalCtx);
+void func_80B22750(EnHakurock* this, PlayState* play);
+void func_80B228F4(Actor* thisx, PlayState* play);
+void EnHakurock_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit En_Hakurock_InitVars = {
+ActorInit En_Hakurock_InitVars = {
     ACTOR_EN_HAKUROCK,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -68,11 +68,11 @@ static CollisionCheckInfoInit sColChkInfoInit = { 0, 60, 60, MASS_IMMOVABLE };
 
 // Stalactite
 
-void EnHakurock_Init(Actor* thisx, GlobalContext* globalCtx) {
+void EnHakurock_Init(Actor* thisx, PlayState* play) {
     EnHakurock* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 52.0f);
-    Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
+    Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo(&this->actor.colChkInfo, NULL, &sColChkInfoInit);
     if (this->actor.params == EN_HAKUROCK_TYPE_BOULDER) {
         this->actor.gravity = -1.5f;
@@ -84,46 +84,46 @@ void EnHakurock_Init(Actor* thisx, GlobalContext* globalCtx) {
     func_80B21FFC(this);
 }
 
-void EnHakurock_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnHakurock_Destroy(Actor* thisx, PlayState* play) {
     EnHakurock* this = THIS;
 
-    Collider_DestroyCylinder(globalCtx, &this->collider);
+    Collider_DestroyCylinder(play, &this->collider);
 }
 
 void func_80B21BE0(BossHakugin* parent, Vec3f* arg1, s32 arg2) {
     s32 i;
 
     for (i = 0; i < ARRAY_COUNT(parent->unk_9F8); i++) {
-        BossHakuginParticle* gohtParticle = &parent->unk_9F8[i];
-        if (gohtParticle->unk_18 < 0) {
+        BossHakuginEffect* gohtEffect = &parent->unk_9F8[i];
+        if (gohtEffect->unk_18 < 0) {
             s16 sp2E;
             s16 sp2C;
             f32 sp28;
 
-            Math_Vec3f_Copy(&gohtParticle->unk_0, arg1);
+            Math_Vec3f_Copy(&gohtEffect->unk_0, arg1);
             sp2C = Rand_S16Offset(0x1000, 0x3000);
-            sp2E = (u32)Rand_Next() >> 0x10;
+            sp2E = Rand_Next() >> 0x10;
             sp28 = Rand_ZeroFloat(5.0f) + 10.0f;
-            gohtParticle->unk_C.x = (sp28 * Math_CosS(sp2C)) * Math_SinS(sp2E);
-            gohtParticle->unk_C.y = (Math_SinS(sp2C) * sp28);
-            gohtParticle->unk_C.z = (sp28 * Math_CosS(sp2C)) * Math_CosS(sp2E);
+            gohtEffect->unk_C.x = (sp28 * Math_CosS(sp2C)) * Math_SinS(sp2E);
+            gohtEffect->unk_C.y = (Math_SinS(sp2C) * sp28);
+            gohtEffect->unk_C.z = (sp28 * Math_CosS(sp2C)) * Math_CosS(sp2E);
             if ((arg2 == 1) || (arg2 == 3)) {
-                gohtParticle->unk_24 = ((Rand_ZeroFloat(5.0f) + 25.0f) * 0.0012f);
-                gohtParticle->unk_0.x = ((Rand_ZeroFloat(2.0f) + 9.0f) * gohtParticle->unk_C.x) + arg1->x;
-                gohtParticle->unk_0.y = ((Rand_ZeroFloat(2.0f) + 3.0f) * gohtParticle->unk_C.y) + arg1->y;
-                gohtParticle->unk_0.z = ((Rand_ZeroFloat(2.0f) + 9.0f) * gohtParticle->unk_C.z) + arg1->z;
-                gohtParticle->unk_1A = 1;
+                gohtEffect->unk_24 = ((Rand_ZeroFloat(5.0f) + 25.0f) * 0.0012f);
+                gohtEffect->unk_0.x = ((Rand_ZeroFloat(2.0f) + 9.0f) * gohtEffect->unk_C.x) + arg1->x;
+                gohtEffect->unk_0.y = ((Rand_ZeroFloat(2.0f) + 3.0f) * gohtEffect->unk_C.y) + arg1->y;
+                gohtEffect->unk_0.z = ((Rand_ZeroFloat(2.0f) + 9.0f) * gohtEffect->unk_C.z) + arg1->z;
+                gohtEffect->unk_1A = 1;
             } else {
-                gohtParticle->unk_24 = ((Rand_ZeroFloat(5.0f) + 18.0f) * 0.0001f);
-                gohtParticle->unk_0.x = ((Rand_ZeroFloat(2.0f) + 3.0f) * gohtParticle->unk_C.x) + arg1->x;
-                gohtParticle->unk_0.y = ((Rand_ZeroFloat(3.0f) + 1.0f) * gohtParticle->unk_C.y) + arg1->y;
-                gohtParticle->unk_0.z = ((Rand_ZeroFloat(2.0f) + 3.0f) * gohtParticle->unk_C.z) + arg1->z;
-                gohtParticle->unk_1A = 0;
+                gohtEffect->unk_24 = ((Rand_ZeroFloat(5.0f) + 18.0f) * 0.0001f);
+                gohtEffect->unk_0.x = ((Rand_ZeroFloat(2.0f) + 3.0f) * gohtEffect->unk_C.x) + arg1->x;
+                gohtEffect->unk_0.y = ((Rand_ZeroFloat(3.0f) + 1.0f) * gohtEffect->unk_C.y) + arg1->y;
+                gohtEffect->unk_0.z = ((Rand_ZeroFloat(2.0f) + 3.0f) * gohtEffect->unk_C.z) + arg1->z;
+                gohtEffect->unk_1A = 0;
             }
-            gohtParticle->unk_1C.x = Rand_Next() >> 0x10;
-            gohtParticle->unk_1C.y = Rand_Next() >> 0x10;
-            gohtParticle->unk_1C.z = Rand_Next() >> 0x10;
-            gohtParticle->unk_18 = 0x28;
+            gohtEffect->unk_1C.x = (s32)Rand_Next() >> 0x10;
+            gohtEffect->unk_1C.y = (s32)Rand_Next() >> 0x10;
+            gohtEffect->unk_1C.z = (s32)Rand_Next() >> 0x10;
+            gohtEffect->unk_18 = 0x28;
             return;
         }
     }
@@ -165,7 +165,7 @@ void func_80B21EA4(EnHakurock* this, s32 arg1) {
 }
 
 void func_80B21FFC(EnHakurock* this) {
-    this->actor.bgCheckFlags &= ~1;
+    this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND;
     this->collider.base.atFlags &= ~AT_HIT;
     this->collider.base.ocFlags1 &= ~OC1_HIT;
     this->actor.draw = NULL;
@@ -173,11 +173,11 @@ void func_80B21FFC(EnHakurock* this) {
     this->actionFunc = func_80B22040;
 }
 
-void func_80B22040(EnHakurock* this, GlobalContext* globalCtx) {
+void func_80B22040(EnHakurock* this, PlayState* play) {
     if (this->actor.params == EN_HAKUROCK_TYPE_BOULDER) {
         func_80B220A8(this);
     } else if (this->actor.params == EN_HAKUROCK_TYPE_UNK_2) {
-        func_80B222AC(this, globalCtx);
+        func_80B222AC(this, play);
     } else if (this->actor.params == EN_HAKUROCK_TYPE_FENCE_PILLAR) {
         func_80B226AC(this);
     }
@@ -186,13 +186,13 @@ void func_80B22040(EnHakurock* this, GlobalContext* globalCtx) {
 void func_80B220A8(EnHakurock* this) {
     this->actor.params = EN_HAKUROCK_TYPE_BOULDER;
     this->actor.draw = func_80B228F4;
-    this->actor.speedXZ = Rand_ZeroFloat(3.5f) + 2.5f;
+    this->actor.speed = Rand_ZeroFloat(3.5f) + 2.5f;
     this->actor.velocity.y = Rand_ZeroFloat(4.5f) + 18.0f;
     Actor_SetScale(&this->actor, (Rand_ZeroFloat(5.0f) + 15.0f) * 0.001f);
-    this->actor.world.rot.y = (Rand_Next() >> 0x12) + this->actor.parent->shape.rot.y + 0x8000;
-    this->actor.shape.rot.x = Rand_Next() >> 0x10;
-    this->actor.shape.rot.y = Rand_Next() >> 0x10;
-    this->actor.shape.rot.z = Rand_Next() >> 0x10;
+    this->actor.world.rot.y = ((s32)Rand_Next() >> 0x12) + this->actor.parent->shape.rot.y + 0x8000;
+    this->actor.shape.rot.x = (s32)Rand_Next() >> 0x10;
+    this->actor.shape.rot.y = (s32)Rand_Next() >> 0x10;
+    this->actor.shape.rot.z = (s32)Rand_Next() >> 0x10;
     this->collider.dim.radius = (this->actor.scale.x * 2500.0f);
     this->collider.dim.yShift = -this->collider.dim.radius;
     this->collider.dim.height = this->collider.dim.radius * 2;
@@ -201,7 +201,7 @@ void func_80B220A8(EnHakurock* this) {
     this->actionFunc = func_80B221E8;
 }
 
-void func_80B221E8(EnHakurock* this, GlobalContext* globalCtx) {
+void func_80B221E8(EnHakurock* this, PlayState* play) {
     if (this->counter > 0) {
         this->counter--;
     }
@@ -209,21 +209,21 @@ void func_80B221E8(EnHakurock* this, GlobalContext* globalCtx) {
     this->actor.shape.rot.y += 0x900;
     this->actor.shape.rot.z += 0xB00;
 
-    if (this->collider.base.atFlags & AT_HIT || ((this->counter == 0) && (this->collider.base.ocFlags1 & OC1_HIT)) ||
-        ((this->actor.bgCheckFlags & 1) && (this->actor.velocity.y < 0.0f))) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_ROCK_BROKEN);
+    if ((this->collider.base.atFlags & AT_HIT) || ((this->counter == 0) && (this->collider.base.ocFlags1 & OC1_HIT)) ||
+        ((this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) && (this->actor.velocity.y < 0.0f))) {
+        Actor_PlaySfx(&this->actor, NA_SE_EV_ROCK_BROKEN);
         func_80B21EA4(this, 0);
         func_80B21FFC(this);
     }
 }
 
-void func_80B222AC(EnHakurock* this, GlobalContext* globalCtx) {
-    Player* player = GET_PLAYER(globalCtx);
+void func_80B222AC(EnHakurock* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
     s16 angle;
 
     this->actor.draw = EnHakurock_Draw;
-    angle = (Rand_Next() >> 0x13) + player->actor.shape.rot.y;
-    this->actor.shape.rot.y = Rand_Next() >> 0x10;
+    angle = ((s32)Rand_Next() >> 0x13) + player->actor.shape.rot.y;
+    this->actor.shape.rot.y = (s32)Rand_Next() >> 0x10;
     this->actor.world.pos.x = (Math_SinS(angle) * 600.0f) + player->actor.world.pos.x;
     this->actor.world.pos.y = player->actor.world.pos.y + 700.0f;
     this->actor.world.pos.z = (Math_CosS(angle) * 600.0f) + player->actor.world.pos.z;
@@ -240,13 +240,13 @@ void func_80B222AC(EnHakurock* this, GlobalContext* globalCtx) {
     this->actionFunc = func_80B2242C;
 }
 
-void func_80B2242C(EnHakurock* this, GlobalContext* globalCtx) {
+void func_80B2242C(EnHakurock* this, PlayState* play) {
     if ((this->collider.base.ocFlags1 & OC1_HIT) && (this->collider.base.oc == this->actor.parent)) {
         func_80B21EA4(this, 1);
         func_80B21FFC(this);
-    } else if ((this->actor.bgCheckFlags & 1)) {
+    } else if ((this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
         func_80B21EA4(this, 2);
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_OBJECT_STICK);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_OBJECT_STICK);
         func_80B224C0(this);
     }
 }
@@ -259,8 +259,8 @@ void func_80B224C0(EnHakurock* this) {
     this->actionFunc = func_80B22500;
 }
 
-void func_80B22500(EnHakurock* this, GlobalContext* globalCtx) {
-    Player* player = GET_PLAYER(globalCtx);
+void func_80B22500(EnHakurock* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
 
     if (this->counter > 0) {
         this->counter--;
@@ -276,7 +276,8 @@ void func_80B22500(EnHakurock* this, GlobalContext* globalCtx) {
              (this->collider.base.oc->params == EN_HAKUROCK_TYPE_UNK_2))) {
             func_80B21EA4(this, 3);
             func_80B21FFC(this);
-        } else if ((&player->actor == this->collider.base.oc) && ((player->stateFlags3 & 0x81000) != 0) &&
+        } else if ((&player->actor == this->collider.base.oc) &&
+                   (player->stateFlags3 & (PLAYER_STATE3_1000 | PLAYER_STATE3_80000)) &&
                    (player->linearVelocity > 8.0f)) {
             player->unk_B08[0] = player->linearVelocity = -5.0f;
             player->unk_B08[1] += (player->linearVelocity * 0.05f);
@@ -307,52 +308,52 @@ void func_80B226AC(EnHakurock* this) {
     this->actionFunc = func_80B22750;
 }
 
-void func_80B22750(EnHakurock* this, GlobalContext* globalCtx) {
+void func_80B22750(EnHakurock* this, PlayState* play) {
     if (this->actor.params == EN_HAKUROCK_TYPE_UNK_0) {
         func_80B21EA4(this, 3);
         func_80B21FFC(this);
     }
 }
 
-void EnHakurock_Update(Actor* thisx, GlobalContext* globalCtx) {
+void EnHakurock_Update(Actor* thisx, PlayState* play) {
     EnHakurock* this = THIS;
     s16 rockParams;
 
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
     rockParams = this->actor.params;
     if ((rockParams == EN_HAKUROCK_TYPE_BOULDER) || (rockParams == EN_HAKUROCK_TYPE_UNK_2)) {
         Actor_MoveWithGravity(&this->actor);
-        Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, this->collider.dim.radius, 0.0f, 0x85);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, this->collider.dim.radius, 0.0f, 0x85);
         if (this->actor.floorHeight == BGCHECK_Y_MIN) {
             func_80B21FFC(this);
         } else {
             Collider_UpdateCylinder(&this->actor, &this->collider);
-            CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
-            CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
-            CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+            CollisionCheck_SetAT(play, &play->colChkCtx, &this->collider.base);
+            CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
+            CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
         }
     } else if ((rockParams == EN_HAKUROCK_TYPE_STALACTITE) || (rockParams == EN_HAKUROCK_TYPE_FENCE_PILLAR)) {
         Collider_UpdateCylinder(&this->actor, &this->collider);
-        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
-        CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+        CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
+        CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
     }
 }
 
-void func_80B228F4(Actor* thisx, GlobalContext* globalCtx) {
-    OPEN_DISPS(globalCtx->state.gfxCtx);
-    func_8012C28C(globalCtx->state.gfxCtx);
+void func_80B228F4(Actor* thisx, PlayState* play) {
+    OPEN_DISPS(play->state.gfxCtx);
+    func_8012C28C(play->state.gfxCtx);
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0x80, 255, 185, 24, 255);
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_06AB30);
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }
 
-void EnHakurock_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    OPEN_DISPS(globalCtx->state.gfxCtx);
-    func_8012C28C(globalCtx->state.gfxCtx);
-    Matrix_InsertTranslation(-100.0f, 0.0f, 0.0f, MTXMODE_APPLY);
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, object_boss_hakugin_DL_011100);
-    gSPDisplayList(POLY_OPA_DISP++, object_boss_hakugin_DL_011178);
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+void EnHakurock_Draw(Actor* thisx, PlayState* play) {
+    OPEN_DISPS(play->state.gfxCtx);
+    func_8012C28C(play->state.gfxCtx);
+    Matrix_Translate(-100.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(POLY_OPA_DISP++, gGohtStalactiteMaterialDL);
+    gSPDisplayList(POLY_OPA_DISP++, gGohtStalactiteModelDL);
+    CLOSE_DISPS(play->state.gfxCtx);
 }

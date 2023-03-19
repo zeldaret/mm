@@ -5,7 +5,7 @@
 
 struct EnGs;
 
-typedef void (*EnGsActionFunc)(struct EnGs*, GlobalContext*);
+typedef void (*EnGsActionFunc)(struct EnGs*, PlayState*);
 
 #define ENGS_GET_1F(thisx) ((thisx)->params & 0x1F)
 #define ENGS_GET_FE0(thisx) (((thisx)->params >> 5) & 0x7F)
@@ -56,7 +56,5 @@ typedef struct EnGs {
     /* 0x21C */ s16 unk_21C;
     /* 0x21E */ s16 unk_21E;
 } EnGs; // size = 0x220
-
-extern const ActorInit En_Gs_InitVars;
 
 #endif // Z_EN_GS_H

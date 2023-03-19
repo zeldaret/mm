@@ -11,15 +11,15 @@
 
 #define THIS ((EnEndingHero5*)thisx)
 
-void EnEndingHero5_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnEndingHero5_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnEndingHero5_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnEndingHero5_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnEndingHero5_Init(Actor* thisx, PlayState* play);
+void EnEndingHero5_Destroy(Actor* thisx, PlayState* play);
+void EnEndingHero5_Update(Actor* thisx, PlayState* play);
+void EnEndingHero5_Draw(Actor* thisx, PlayState* play);
 
 void func_80C23980(EnEndingHero5* this);
-void func_80C2399C(EnEndingHero5* this, GlobalContext* globalCtx);
+void func_80C2399C(EnEndingHero5* this, PlayState* play);
 
-const ActorInit En_Ending_Hero5_InitVars = {
+ActorInit En_Ending_Hero5_InitVars = {
     ACTOR_EN_ENDING_HERO5,
     ACTORCAT_NPC,
     FLAGS,
@@ -31,21 +31,21 @@ const ActorInit En_Ending_Hero5_InitVars = {
     (ActorFunc)EnEndingHero5_Draw,
 };
 
-void EnEndingHero5_Init(Actor* thisx, GlobalContext* globalCtx) {
+void EnEndingHero5_Init(Actor* thisx, PlayState* play) {
     EnEndingHero5* this = THIS;
 
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     Actor_SetScale(&this->actor, 0.01f);
     this->actor.targetMode = 6;
     this->actor.gravity = -3.0f;
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_daiku_Skel_00A850, &object_daiku_Anim_002FA0,
-                       this->jointTable, this->morphTable, 17);
+    SkelAnime_InitFlex(play, &this->skelAnime, &object_daiku_Skel_00A850, &object_daiku_Anim_002FA0, this->jointTable,
+                       this->morphTable, 17);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 25.0f);
     this->unk25C = this->actor.params;
     func_80C23980(this);
 }
 
-void EnEndingHero5_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnEndingHero5_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void func_80C23980(EnEndingHero5* this) {
@@ -53,39 +53,39 @@ void func_80C23980(EnEndingHero5* this) {
     this->actionFunc = func_80C2399C;
 }
 
-void func_80C2399C(EnEndingHero5* this, GlobalContext* globalCtx) {
+void func_80C2399C(EnEndingHero5* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
 }
 
-void EnEndingHero5_Update(Actor* thisx, GlobalContext* globalCtx) {
+void EnEndingHero5_Update(Actor* thisx, PlayState* play) {
     EnEndingHero5* this = THIS;
 
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 20.0f, 20.0f, 50.0f, 0x1D);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 50.0f, 0x1D);
 }
 
 Gfx* D_80C23BF0[] = { object_daiku_DL_0070C0, object_daiku_DL_006FB0, object_daiku_DL_006E80, object_daiku_DL_006D70,
                       object_daiku_DL_00A390 };
 
-void EnEndingHero5_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void EnEndingHero5_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnEndingHero5* this = THIS;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
     if (limbIndex == 15) {
         gSPDisplayList(POLY_OPA_DISP++, D_80C23BF0[this->unk25C]);
     }
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }
 
-void EnEndingHero5_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void EnEndingHero5_Draw(Actor* thisx, PlayState* play) {
     EnEndingHero5* this = THIS;
 
-    func_8012C28C(globalCtx->state.gfxCtx);
-    func_8012C2DC(globalCtx->state.gfxCtx);
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    func_8012C28C(play->state.gfxCtx);
+    func_8012C2DC(play->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
     switch (this->unk25C) {
         case 0:
@@ -105,8 +105,8 @@ void EnEndingHero5_Draw(Actor* thisx, GlobalContext* globalCtx) {
             break;
     }
 
-    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                          NULL, EnEndingHero5_PostLimbDraw, &this->actor);
+    SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, NULL,
+                          EnEndingHero5_PostLimbDraw, &this->actor);
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }
