@@ -13,7 +13,7 @@ typedef struct EnMaYts {
     /* 0x144 */ SkelAnime skelAnime;
     /* 0x188 */ EnMaYtsActionFunc actionFunc;
     /* 0x18C */ ColliderCylinder collider;
-    /* 0x1D8 */ struct_800BD888_arg1 unk_1D8;
+    /* 0x1D8 */ NpcInteractInfo interactInfo;
     /* 0x200 */ s32 unk_200; // Set, but not used
     /* 0x204 */ Vec3s jointTable[ROMANI_LIMB_MAX];
     /* 0x28E */ UNK_TYPE1 unk_28E[0x6];

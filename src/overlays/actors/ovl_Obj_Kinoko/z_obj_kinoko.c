@@ -52,7 +52,7 @@ void ObjKinoko_Update(Actor* thisx, PlayState* play) {
             Actor_Kill(thisx);
             return;
         }
-        Actor_PickUp(thisx, play, GI_MAX, 20.0f, 10.0f);
+        Actor_OfferGetItem(thisx, play, GI_MAX, 20.0f, 10.0f);
         if (Math_SmoothStepToF(&thisx->speed, 0.0f, 0.04f, 2.0f, 0.5f) < 0.5f) {
             thisx->scale.x = 0.0f;
             thisx->speed = 110.0f;
