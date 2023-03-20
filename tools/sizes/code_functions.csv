@@ -1747,7 +1747,7 @@ asm/non_matchings/code/z_player_lib/Player_GetExplosiveHeld.s,Player_GetExplosiv
 asm/non_matchings/code/z_player_lib/Player_SwordFromIA.s,Player_SwordFromIA,0x80124278,0xF
 asm/non_matchings/code/z_player_lib/func_801242B4.s,func_801242B4,0x801242B4,0xA
 asm/non_matchings/code/z_player_lib/Player_GetEnvironmentalHazard.s,Player_GetEnvironmentalHazard,0x801242DC,0x51
-asm/non_matchings/code/z_player_lib/Player_UpdateBunnyEarsKinematics.s,Player_UpdateBunnyEarsKinematics,0x80124420,0x7E
+asm/non_matchings/code/z_player_lib/Player_UpdateBunnyEars.s,Player_UpdateBunnyEars,0x80124420,0x7E
 asm/non_matchings/code/z_player_lib/func_80124618.s,func_80124618,0x80124618,0x37
 asm/non_matchings/code/z_player_lib/Player_DrawImpl.s,Player_DrawImpl,0x801246F4,0x5F
 asm/non_matchings/code/z_player_lib/func_80124870.s,func_80124870,0x80124870,0x115

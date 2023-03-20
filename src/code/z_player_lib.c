@@ -1,13 +1,20 @@
+/**
+ * File: z_player_lib.c
+ * Description: Set of library functions to interact with the Player system
+ */
+
 #include "global.h"
 
 #include "objects/gameplay_keep/gameplay_keep.h"
 
+// Assets for each player form
 #include "objects/object_link_boy/object_link_boy.h"
 #include "objects/object_link_goron/object_link_goron.h"
 #include "objects/object_link_zora/object_link_zora.h"
 #include "objects/object_link_nuts/object_link_nuts.h"
 #include "objects/object_link_child/object_link_child.h"
 
+// Assets for each mask
 #include "objects/object_mask_truth/object_mask_truth.h"
 #include "objects/object_mask_kerfay/object_mask_kerfay.h"
 #include "objects/object_mask_yofukasi/object_mask_yofukasi.h"
@@ -33,6 +40,7 @@
 #include "objects/object_mask_zora/object_mask_zora.h"
 #include "objects/object_mask_nuts/object_mask_nuts.h"
 
+// Assets for other actors
 #include "overlays/actors/ovl_En_Arrow/z_en_arrow.h"
 
 void PlayerCall_Init(Actor* thisx, PlayState* play);
@@ -64,7 +72,7 @@ Vec3f* sPlayerCurBodyPartPos;
 
 s32 D_801F59E0;
 
-s32 sPlayerLod;
+LevelOfDetail sPlayerLod;
 
 Vec3f sPlayerGetItemRefPos;
 
@@ -405,13 +413,21 @@ FlexSkeletonHeader* gPlayerSkeletons[PLAYER_FORM_MAX] = {
 };
 
 s16 D_801BFE14[PLAYER_BOOTS_MAX][18] = {
+    // PLAYER_BOOTS_FIERCE_DEITY
     { 200, 666, 200, 700, 366, 200, 600, 175, 60, 800, 1000, -100, 600, 590, 800, 125, 300, 65 },
+    // PLAYER_BOOTS_HYLIAN
     { 200, 1000, 300, 800, 500, 400, 800, 400, 120, 800, 550, -100, 600, 540, 750, 125, 400, 200 },
+    // PLAYER_BOOTS_GIANT
     { 100, 1000, 300, 800, 250, 200, 800, 200, 90, 800, 350, -80, 600, 540, 750, 60, 200, 200 },
+    // PLAYER_BOOTS_DEKU
     { 200, 1000, 300, 700, 550, 270, 600, 1000, 120, 800, 600, -100, 600, 590, 750, 125, 200, 130 },
+    // PLAYER_BOOTS_ZORA_LAND
     { 200, 1000, 300, 700, 550, 270, 700, 300, 120, 800, 600, -100, 600, 590, 750, 125, 200, 130 },
+    // PLAYER_BOOTS_ZORA_UNDERWATER
     { 200, 1000, 300, 700, 550, 270, 700, 300, 120, 800, 600, -100, 600, 590, 750, 125, 200, 130 },
+    // PLAYER_BOOTS_GORON
     { 200, 1000, 300, 700, 550, 270, 700, 200, 120, 800, 600, -140, 600, 590, 750, 125, 200, 130 },
+    // PLAYER_BOOTS_7
     { 80, 800, 150, 700, 480, 270, 600, 50, 120, 800, 300, -40, 400, 540, 270, 25, 0, 80 },
 };
 
@@ -1509,7 +1525,7 @@ s32 Player_GetEnvironmentalHazard(PlayState* play) {
     return envHazard + 1;
 }
 
-void Player_UpdateBunnyEarsKinematics(Player* player) {
+void Player_UpdateBunnyEars(Player* player) {
     Vec3s force;
     s16 angle;
 
@@ -1647,7 +1663,7 @@ PlayerFaceIndices sPlayerFaces[] = {
 
 // Note the correct pointer to pass as the jointTable is the jointTable pointer from the SkelAnime struct, not the
 // buffer from the Player struct itself since that one may be misaligned.
-void Player_DrawImpl(PlayState* play, void** skeleton, Vec3s* jointTable, s32 dListCount, s32 lod,
+void Player_DrawImpl(PlayState* play, void** skeleton, Vec3s* jointTable, s32 dListCount, LevelOfDetail lod,
                      PlayerTransformation playerForm, s32 boots, s32 face, OverrideLimbDrawFlex overrideLimbDraw,
                      PostLimbDrawFlex postLimbDraw, Actor* actor) {
     s32 eyeIndex = GET_EYE_INDEX_FROM_JOINT_TABLE(jointTable);
@@ -3425,7 +3441,7 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
                 static Gfx* D_801C0D94 = object_link_child_DL_017818;
                 static Vec3f D_801C0D98 = { -35.0f, -395.0f, 0.0f };
                 // Unused
-                static f32 D_801C0DA4 = 0.0f;
+                static s32 D_801C0DA4 = 0;
 
                 OPEN_DISPS(play->state.gfxCtx);
 

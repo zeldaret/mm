@@ -30,11 +30,17 @@ typedef enum AnimationMode {
     /* 5 */ ANIMMODE_LOOP_PARTIAL_INTERP
 } AnimationMode;
 
-typedef enum { 
+typedef enum {
     /* -1 */ ANIMTAPER_DECEL = -1,
-    /*  0 */ ANIMTAPER_NONE, 
+    /*  0 */ ANIMTAPER_NONE,
     /*  1 */ ANIMTAPER_ACCEL
 } AnimationTapers;
+
+typedef enum LevelOfDetail {
+    /* 0 */ LEVEL_OF_DETAIL_NEAR,
+    /* 1 */ LEVEL_OF_DETAIL_FAR,
+    /* 2 */ LEVEL_OF_DETAIL_MAX
+} LevelOfDetail;
 
 typedef struct {
     /* 0x0 */ Vec3s jointPos; // Root is position in model space, children are relative to parent
@@ -49,7 +55,7 @@ typedef struct {
     /* 0x0 */ Vec3s jointPos; // Root is position in model space, children are relative to parent
     /* 0x6 */ u8 child;
     /* 0x7 */ u8 sibling;
-    /* 0x8 */ Gfx* dLists[2]; // Near and far
+    /* 0x8 */ Gfx* dLists[LEVEL_OF_DETAIL_MAX]; // Near and far
 } LodLimb; // size = 0x10
 
 // Model has limbs with only rigid meshes

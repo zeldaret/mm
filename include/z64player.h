@@ -395,14 +395,6 @@ typedef enum PlayerFacialExpression {
     /* 15 */ PLAYER_FACE_15
 } PlayerFacialExpression;
 
-#define GET_GESTURE_FROM_JOINT_TABLE(jointTable)           (((PlayerAnimationFrame *)(jointTable))->gestureInfo)
-#define GET_EYE_INDEX_FROM_JOINT_TABLE(jointTable)         ((GET_GESTURE_FROM_JOINT_TABLE(jointTable) & 0xF) - 1)
-#define GET_MOUTH_INDEX_FROM_JOINT_TABLE(jointTable)       (((GET_GESTURE_FROM_JOINT_TABLE(jointTable) >> 4) & 0xF) - 1)
-
-// Note the returned value from this macro needs to be shifted
-#define GET_LEFT_HAND_INDEX_FROM_JOINT_TABLE(jointTable)   (GET_GESTURE_FROM_JOINT_TABLE(jointTable) & 0xF000)
-#define GET_RIGHT_HAND_INDEX_FROM_JOINT_TABLE(jointTable)  (GET_GESTURE_FROM_JOINT_TABLE(jointTable) & 0x0F00)
-
 typedef enum PlayerLimb {
     /* 0x00 */ PLAYER_LIMB_NONE,
     /* 0x01 */ PLAYER_LIMB_ROOT,
@@ -453,10 +445,18 @@ typedef enum PlayerBodyPart {
 
 typedef struct PlayerAnimationFrame {
     /* 0x000 */ Vec3s frameTable[PLAYER_LIMB_MAX];
-    /* 0x108 */ s16 gestureInfo; // bitpack containing the face and hands info
+    /* 0x108 */ s16 appearanceInfo; // bitpack containing the face and hands info
 } PlayerAnimationFrame; // size = 0x10A
 
 #define PLAYER_LIMB_BUF_SIZE (ALIGN16(sizeof(PlayerAnimationFrame)) + 0xF)
+
+#define GET_APPEARANCE_FROM_JOINT_TABLE(jointTable)           (((PlayerAnimationFrame *)(jointTable))->appearanceInfo)
+#define GET_EYE_INDEX_FROM_JOINT_TABLE(jointTable)         ((GET_APPEARANCE_FROM_JOINT_TABLE(jointTable) & 0xF) - 1)
+#define GET_MOUTH_INDEX_FROM_JOINT_TABLE(jointTable)       (((GET_APPEARANCE_FROM_JOINT_TABLE(jointTable) >> 4) & 0xF) - 1)
+
+// Note the returned value from this macro needs to be shifted
+#define GET_LEFT_HAND_INDEX_FROM_JOINT_TABLE(jointTable)   (GET_APPEARANCE_FROM_JOINT_TABLE(jointTable) & 0xF000)
+#define GET_RIGHT_HAND_INDEX_FROM_JOINT_TABLE(jointTable)  (GET_APPEARANCE_FROM_JOINT_TABLE(jointTable) & 0x0F00)
 
 typedef struct PlayerAgeProperties {
     /* 0x00 */ f32 unk_00; // ceilingCheckHeight?

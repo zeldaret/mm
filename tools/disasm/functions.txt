@@ -2233,7 +2233,7 @@
     0x80124278:("Player_SwordFromIA",),
     0x801242B4:("func_801242B4",),
     0x801242DC:("Player_GetEnvironmentalHazard",),
-    0x80124420:("Player_UpdateBunnyEarsKinematics",),
+    0x80124420:("Player_UpdateBunnyEars",),
     0x80124618:("func_80124618",),
     0x801246F4:("Player_DrawImpl",),
     0x80124870:("func_80124870",),

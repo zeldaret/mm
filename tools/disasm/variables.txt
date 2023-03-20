@@ -1316,6 +1316,7 @@
     0x801C0D78:("sMeleeWeaponLengths","f32","[7]",0x1C),
     0x801C0D94:("D_801C0D94","UNK_TYPE4","",0x4),
     0x801C0D98:("D_801C0D98","Vec3f","",0xC),
+    0x801C0DA4:("D_801C0DA4","UNK_TYPE4","",0x4),
     0x801C0DA8:("sRightHandLimbModelShieldQuadVertices","Vec3f","[4]",0x30),
     0x801C0DD8:("D_801C0DD8","UNK_TYPE1","",0x1),
     0x801C0DE4:("D_801C0DE4","UNK_TYPE1","",0x1),
