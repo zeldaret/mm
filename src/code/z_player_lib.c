@@ -57,9 +57,11 @@ typedef struct {
 
 struct_801F58B0 D_801F58B0[3][3];
 
-Vec3f D_801F59B0[2];
+#define D_801F59B0_LEN 2
 
-s32 D_801F59C8[2];
+Vec3f D_801F59B0[D_801F59B0_LEN];
+
+s32 D_801F59C8[D_801F59B0_LEN];
 
 typedef struct BunnyEarKinematics {
     /* 0x0 */ Vec3s rot;
@@ -222,7 +224,7 @@ void func_801229FC(Player* player) {
     } else if (player->currentMask == PLAYER_MASK_CIRCUS_LEADER) {
         s32 i;
 
-        for (i = 0; i < ARRAY_COUNT(D_801F59C8); i++) {
+        for (i = 0; i < D_801F59B0_LEN; i++) {
             D_801F59C8[i] += Rand_S16Offset(4, 23) + (s32)(fabsf(player->linearVelocity) * 50.0f);
         }
     }
@@ -2536,7 +2538,7 @@ Gfx* D_801C0B20[] = {
     object_mask_nuts_DL_001D90,
 };
 
-Vec3f D_801C0B90[] = {
+Vec3f D_801C0B90[D_801F59B0_LEN] = {
     { 950.0f, -800.0f, 300.0f },
     { 950.0f, -800.0f, -300.0f },
 };
@@ -2856,7 +2858,7 @@ void Player_DrawCircusLeadersMask(PlayState* play, Player* player) {
 
     gfx = POLY_XLU_DISP;
 
-    for (i = 0; i < ARRAY_COUNT(D_801C0B90); i++) {
+    for (i = 0; i < D_801F59B0_LEN; i++) {
         f32 scaleY = (D_801F59C8[i] / 400.0f) * 0.1f;
 
         Matrix_MultVec3f(&D_801C0B90[i], &D_801F59B0[i]);
