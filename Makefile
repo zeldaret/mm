@@ -90,7 +90,7 @@ OBJCOPY    := $(MIPS_BINUTILS_PREFIX)objcopy
 OBJDUMP    := $(MIPS_BINUTILS_PREFIX)objdump
 ASM_PROC   := python3 tools/asm-processor/build.py
 
-ASM_PROC_FLAGS := --input-enc=utf-8 --output-enc=euc-jp
+ASM_PROC_FLAGS := --input-enc=utf-8 --output-enc=euc-jp --convert-statics=global-with-filename
 
 IINC       := -Iinclude -Isrc -Iassets -Ibuild -I.
 
