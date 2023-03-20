@@ -74,7 +74,7 @@ Vec3f* sPlayerCurBodyPartPos;
 
 s32 D_801F59E0;
 
-LevelOfDetail sPlayerLod;
+s32 sPlayerLod;
 
 Vec3f sPlayerGetItemRefPos;
 
@@ -1665,7 +1665,7 @@ PlayerFaceIndices sPlayerFaces[] = {
 
 // Note the correct pointer to pass as the jointTable is the jointTable pointer from the SkelAnime struct, not the
 // buffer from the Player struct itself since that one may be misaligned.
-void Player_DrawImpl(PlayState* play, void** skeleton, Vec3s* jointTable, s32 dListCount, LevelOfDetail lod,
+void Player_DrawImpl(PlayState* play, void** skeleton, Vec3s* jointTable, s32 dListCount, s32 lod,
                      PlayerTransformation playerForm, s32 boots, s32 face, OverrideLimbDrawFlex overrideLimbDraw,
                      PostLimbDrawFlex postLimbDraw, Actor* actor) {
     s32 eyeIndex = GET_EYE_INDEX_FROM_JOINT_TABLE(jointTable);

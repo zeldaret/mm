@@ -638,8 +638,7 @@ void EnArrow_Draw(Actor* thisx, PlayState* play) {
     if (this->actor.params < ENARROW_6) {
         func_8012C28C(play->state.gfxCtx);
         SkelAnime_DrawLod(play, this->arrow.skelAnime.skeleton, this->arrow.skelAnime.jointTable, NULL, NULL,
-                          &this->actor,
-                          this->actor.projectedPos.z < 160.0f ? LEVEL_OF_DETAIL_NEAR : LEVEL_OF_DETAIL_FAR);
+                          &this->actor, this->actor.projectedPos.z < 160.0f ? 0 : 1);
     } else if (this->actor.params == ENARROW_7) {
         s32 spA4 = 255 - (s32)(this->bubble.unk_144 * 4.0f);
         f32 spA0 = (this->actor.speed * 0.1f) + 1.0f;

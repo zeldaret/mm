@@ -26,8 +26,7 @@ s32 sDisableAnimQueueFlags;
  * Draws the limb at `limbIndex` with a level of detail display lists index by `dListIndex`
  */
 void SkelAnime_DrawLimbLod(PlayState* play, s32 limbIndex, void** skeleton, Vec3s* jointTable,
-                           OverrideLimbDrawOpa overrideLimbDraw, PostLimbDrawOpa postLimbDraw, Actor* actor,
-                           LevelOfDetail lod) {
+                           OverrideLimbDrawOpa overrideLimbDraw, PostLimbDrawOpa postLimbDraw, Actor* actor, s32 lod) {
     LodLimb* limb;
     Gfx* dList;
     Vec3f pos;
@@ -79,7 +78,7 @@ void SkelAnime_DrawLimbLod(PlayState* play, s32 limbIndex, void** skeleton, Vec3
  * Near or far display list is specified via `lod`
  */
 void SkelAnime_DrawLod(PlayState* play, void** skeleton, Vec3s* jointTable, OverrideLimbDrawOpa overrideLimbDraw,
-                       PostLimbDrawOpa postLimbDraw, Actor* actor, LevelOfDetail lod) {
+                       PostLimbDrawOpa postLimbDraw, Actor* actor, s32 lod) {
     LodLimb* rootLimb;
     s32 pad;
     Gfx* dList;
@@ -134,7 +133,7 @@ void SkelAnime_DrawLod(PlayState* play, void** skeleton, Vec3s* jointTable, Over
  */
 void SkelAnime_DrawFlexLimbLod(PlayState* play, s32 limbIndex, void** skeleton, Vec3s* jointTable,
                                OverrideLimbDrawFlex overrideLimbDraw, PostLimbDrawFlex postLimbDraw, Actor* actor,
-                               LevelOfDetail lod, Mtx** mtx) {
+                               s32 lod, Mtx** mtx) {
     LodLimb* limb;
     Gfx* newDList;
     Gfx* limbDList;
@@ -195,7 +194,7 @@ void SkelAnime_DrawFlexLimbLod(PlayState* play, s32 limbIndex, void** skeleton, 
  */
 void SkelAnime_DrawFlexLod(PlayState* play, void** skeleton, Vec3s* jointTable, s32 dListCount,
                            OverrideLimbDrawFlex overrideLimbDraw, PostLimbDrawFlex postLimbDraw, Actor* actor,
-                           LevelOfDetail lod) {
+                           s32 lod) {
     LodLimb* rootLimb;
     s32 pad;
     Gfx* newDList;
