@@ -93,7 +93,7 @@ void EnNiw_Init(Actor* thisx, PlayState* play) {
         ICHAIN_F32(targetArrowOffset, 0, ICHAIN_STOP),
     };
     EnNiw* this = THIS;
-    Vec3f D_808934C4 = {90000.0f, 90000.0f, 90000.0f};
+    Vec3f D_808934C4 = { 90000.0f, 90000.0f, 90000.0f };
 
     if (this->actor.params < 0) { // all scene spawned cucco are (-1)
         this->actor.params = NIW_TYPE_REGULAR;
@@ -426,7 +426,7 @@ void EnNiw_Idle(EnNiw* this, PlayState* play) {
 }
 
 void EnNiw_Held(EnNiw* this, PlayState* play) {
-    Vec3f D_808934DC = {90000.0f, 90000.0f, 90000.0f};
+    Vec3f D_808934DC = { 90000.0f, 90000.0f, 90000.0f };
     s16 rotZ;
 
     if (this->heldTimer == 0) {
@@ -642,7 +642,7 @@ void EnNiw_SetupRunAway(EnNiw* this) {
 
 void EnNiw_RunAway(EnNiw* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    Vec3f D_808934E8 = {90000.0f, 90000.0f, 90000.0f};
+    Vec3f D_808934E8 = { 90000.0f, 90000.0f, 90000.0f };
     s16 temp298;
     f32 dX;
     f32 dZ;
