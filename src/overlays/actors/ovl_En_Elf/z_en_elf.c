@@ -1376,11 +1376,11 @@ void func_8088FE64(Actor* thisx, PlayState* play2) {
 
                 switch (play->msgCtx.choiceIndex) {
                     case 0:
-                        func_80151938(play, play->msgCtx.currentTextId - 1);
+                        Message_ContinueTextbox(play, play->msgCtx.currentTextId - 1);
                         break;
 
                     case 1:
-                        func_80151938(play, play->msgCtx.currentTextId + 1);
+                        Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                         break;
                 }
             }
@@ -1390,7 +1390,7 @@ void func_8088FE64(Actor* thisx, PlayState* play2) {
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
                     case 0x240:
-                        func_80151938(play, 0x245);
+                        Message_ContinueTextbox(play, 0x245);
                         break;
 
                     case 0x21D:
@@ -1407,28 +1407,28 @@ void func_8088FE64(Actor* thisx, PlayState* play2) {
                     case 0x244:
                         switch (CURRENT_DAY) {
                             case 1:
-                                func_80151938(play, 0x246);
+                                Message_ContinueTextbox(play, 0x246);
                                 break;
 
                             case 2:
-                                func_80151938(play, 0x247);
+                                Message_ContinueTextbox(play, 0x247);
                                 break;
 
                             case 3:
                                 if (!gSaveContext.save.isNight) {
-                                    func_80151938(play, 0x248);
+                                    Message_ContinueTextbox(play, 0x248);
                                 } else if ((gSaveContext.save.time < CLOCK_TIME(6, 0)) &&
                                            CHECK_WEEKEVENTREG(WEEKEVENTREG_74_20)) {
-                                    func_80151938(play, 0x225);
+                                    Message_ContinueTextbox(play, 0x225);
                                 } else {
-                                    func_80151938(play, 0x249);
+                                    Message_ContinueTextbox(play, 0x249);
                                 }
                                 break;
                         }
                         break;
 
                     default:
-                        func_801477B4(play);
+                        Message_CloseTextbox(play);
                         func_8088FDCC(this);
                         break;
                 }
