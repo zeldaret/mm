@@ -368,7 +368,7 @@ void func_808CCBE4(EnVm* this, PlayState* play) {
     Animation_Change(&this->skelAnime, &object_vm_Anim_000068, -1.0f, Animation_GetLastFrame(&object_vm_Anim_000068),
                      0.0f, ANIMMODE_ONCE, 0.0f);
     Enemy_StartFinishingBlow(play, &this->actor);
-    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 33);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 33);
     this->unk_214 = 33;
     this->unk_220 = 0.0f;
     this->unk_224 = 0.0f;

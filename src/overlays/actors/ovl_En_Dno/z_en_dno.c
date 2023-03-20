@@ -441,7 +441,7 @@ void func_80A71F18(EnDno* this, PlayState* play) {
 
                     case EN_DNO_ANIM_IMPLORE_END:
                         if (this->skelAnime.curFrame == this->skelAnime.endFrame) {
-                            func_801477B4(play);
+                            Message_CloseTextbox(play);
                             SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, EN_DNO_ANIM_IDLE,
                                                             &this->animIndex);
                             func_80A71B68(this, play);
@@ -474,7 +474,7 @@ void func_80A71F18(EnDno* this, PlayState* play) {
 
                         case EN_DNO_ANIM_IMPLORE_END:
                             if (this->skelAnime.curFrame == this->skelAnime.endFrame) {
-                                func_801477B4(play);
+                                Message_CloseTextbox(play);
                                 SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, EN_DNO_ANIM_IDLE,
                                                                 &this->animIndex);
                                 func_80A71B68(this, play);
@@ -485,13 +485,13 @@ void func_80A71F18(EnDno* this, PlayState* play) {
 
                 case 0x80C:
                     if (Message_ShouldAdvance(play)) {
-                        func_80151938(play, 0x80D);
+                        Message_ContinueTextbox(play, 0x80D);
                     }
                     break;
 
                 case 0x80D:
                     if (Message_ShouldAdvance(play)) {
-                        func_80151938(play, 0x80E);
+                        Message_ContinueTextbox(play, 0x80E);
                     }
                     break;
 
@@ -505,21 +505,21 @@ void func_80A71F18(EnDno* this, PlayState* play) {
                                                             &this->animIndex);
                         }
                     } else if ((this->animIndex == EN_DNO_ANIM_IDLE) && Message_ShouldAdvance(play)) {
-                        func_801477B4(play);
+                        Message_CloseTextbox(play);
                         func_80A71B68(this, play);
                     }
                     break;
 
                 case 0x80F:
                     if (Message_ShouldAdvance(play)) {
-                        func_80151938(play, 0x810);
+                        Message_ContinueTextbox(play, 0x810);
                     }
                     break;
 
                 case 0x810:
                     if (Message_ShouldAdvance(play)) {
                         this->unk_3B0 |= 0x20;
-                        func_801477B4(play);
+                        Message_CloseTextbox(play);
                         func_80A71B68(this, play);
                         break;
                     }
@@ -541,7 +541,7 @@ void func_80A71F18(EnDno* this, PlayState* play) {
 
                 case 0x811:
                     if (Message_ShouldAdvance(play)) {
-                        func_801477B4(play);
+                        Message_CloseTextbox(play);
                         func_80A71B68(this, play);
                     }
                     break;
@@ -675,8 +675,8 @@ void func_80A725F8(EnDno* this, PlayState* play) {
                         } else {
                             this->getItemId = GI_MASK_SCENTS;
                         }
-                        Actor_PickUp(&this->actor, play, this->getItemId, 60.0f, 60.0f);
-                        func_801477B4(play);
+                        Actor_OfferGetItem(&this->actor, play, this->getItemId, 60.0f, 60.0f);
+                        Message_CloseTextbox(play);
                         func_80A72B84(this, play);
                     }
                     break;
@@ -699,14 +699,14 @@ void func_80A725F8(EnDno* this, PlayState* play) {
                         }
                     } else if ((this->animIndex == EN_DNO_ANIM_GREETING_WITH_CANDLE) &&
                                (this->skelAnime.curFrame == this->skelAnime.endFrame)) {
-                        func_801477B4(play);
+                        Message_CloseTextbox(play);
                         func_80A72438(this, play);
                     }
                     break;
 
                 case 0x806:
                     if (Message_ShouldAdvance(play)) {
-                        func_80151938(play, 0x800);
+                        Message_ContinueTextbox(play, 0x800);
                     }
                     break;
 
@@ -741,13 +741,13 @@ void func_80A72BA4(EnDno* this, PlayState* play) {
         this->actor.parent = NULL;
         this->actionFunc = func_80A72598;
     } else {
-        Actor_PickUp(&this->actor, play, this->getItemId, 60.0f, 60.0f);
+        Actor_OfferGetItem(&this->actor, play, this->getItemId, 60.0f, 60.0f);
     }
 }
 
 void func_80A72C04(EnDno* this, PlayState* play) {
     SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, EN_DNO_ANIM_START_RACE_START, &this->animIndex);
-    this->actor.flags |= ACTOR_FLAG_8000000;
+    this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
     this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_8);
     Math_Vec3f_Copy(&this->unk_334, &this->actor.world.pos);
     SubS_ActorPathing_Init(play, &this->unk_334, &this->actor, &this->actorPath, play->setupPathList,
@@ -873,7 +873,7 @@ void func_80A730A0(EnDno* this, PlayState* play) {
 }
 
 void func_80A73244(EnDno* this, PlayState* play) {
-    this->actor.flags &= ~ACTOR_FLAG_8000000;
+    this->actor.flags &= ~ACTOR_FLAG_CANT_LOCK_ON;
     this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8);
     this->unk_328 = 2;
     this->actor.speed = 0.0f;

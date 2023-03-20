@@ -125,7 +125,7 @@ void EnDemoheishi_Idle(EnDemoheishi* this, PlayState* play) {
     s32 absYawDiff;
     s16 yawDiff;
 
-    this->actor.flags &= ~ACTOR_FLAG_8000000;
+    this->actor.flags &= ~ACTOR_FLAG_CANT_LOCK_ON;
     yawDiff = this->actor.yawTowardsPlayer - this->actor.world.rot.y;
     absYawDiff = ABS_ALT(yawDiff);
 
@@ -143,7 +143,7 @@ void EnDemoheishi_SetupTalk(EnDemoheishi* this) {
 
 void EnDemoheishi_Talk(EnDemoheishi* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-        func_801477B4(play);
+        Message_CloseTextbox(play);
         EnDemoheishi_SetupIdle(this);
     }
 }

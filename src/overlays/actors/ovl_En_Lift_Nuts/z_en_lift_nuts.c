@@ -511,7 +511,7 @@ void func_80AEA910(EnLiftNuts* this, PlayState* play) {
                 break;
 
             case 0x27E5:
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 player->stateFlags1 |= PLAYER_STATE1_20;
                 func_80AEAEAC(this);
                 break;
@@ -544,7 +544,7 @@ void func_80AEA910(EnLiftNuts* this, PlayState* play) {
                 break;
 
             case 0x27FA:
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 player->stateFlags1 &= ~PLAYER_STATE1_20;
                 func_80AEB114(this);
                 break;
@@ -556,7 +556,7 @@ void func_80AEA910(EnLiftNuts* this, PlayState* play) {
                 break;
 
             case 0x27EF:
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 func_80AEB584(this);
                 func_80AEB598(this, play);
                 break;
@@ -573,13 +573,13 @@ void func_80AEA910(EnLiftNuts* this, PlayState* play) {
                 break;
 
             case 0x27F4:
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 func_80AEB584(this);
                 func_80AEB598(this, play);
                 break;
 
             case 0x27F5:
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 func_80AE9B4C(1, 0);
                 player->stateFlags1 &= ~PLAYER_STATE1_20;
                 func_80AE9FC8(this);
@@ -839,9 +839,9 @@ void func_80AEB598(EnLiftNuts* this, PlayState* play) {
         }
         func_80AEB684(this);
     } else if ((this->textId == 0x27F4) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_14_80)) {
-        Actor_PickUp(&this->actor, play, GI_HEART_PIECE, 500.0f, 100.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_HEART_PIECE, 500.0f, 100.0f);
     } else {
-        Actor_PickUp(&this->actor, play, GI_RUPEE_PURPLE, 500.0f, 100.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_RUPEE_PURPLE, 500.0f, 100.0f);
     }
 }
 
@@ -882,7 +882,7 @@ void func_80AEB698(EnLiftNuts* this, PlayState* play) {
                 break;
         }
     } else {
-        func_800B85E0(&this->actor, play, 200.0f, -1);
+        func_800B85E0(&this->actor, play, 200.0f, PLAYER_IA_MINUS1);
     }
 }
 

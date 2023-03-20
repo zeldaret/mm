@@ -203,7 +203,7 @@ s32 func_80B40E54(EnKgy* this) {
 }
 
 void func_80B40E74(EnKgy* this, PlayState* play, u16 textId) {
-    func_80151938(play, textId);
+    Message_ContinueTextbox(play, textId);
     this->actor.textId = textId;
     func_80B40E18(this, this->actor.textId);
 }
@@ -250,7 +250,7 @@ void func_80B40EE8(EnKgy* this, PlayState* play) {
         }
 
         if (((temp_f0 < 0.15f) && (temp_f0 > -0.15f)) || (this->unk_2E6 == 0)) {
-            func_80151938(play, this->actor.textId);
+            Message_ContinueTextbox(play, this->actor.textId);
             this->unk_29C &= ~0x2;
             func_80B40E18(this, this->actor.textId);
 
@@ -456,9 +456,9 @@ void func_80B4163C(EnKgy* this, PlayState* play) {
 void func_80B417B8(EnKgy* this, PlayState* play) {
     func_80B4163C(this, play);
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-        func_801477B4(play);
+        Message_CloseTextbox(play);
         func_80B413C8(this);
-        this->actor.flags &= ~ACTOR_FLAG_100;
+        this->actor.flags &= ~ACTOR_FLAG_TALK_REQUESTED;
         this->actionFunc = func_80B419B0;
         func_80B40E18(this, 7);
     }
@@ -481,12 +481,12 @@ void func_80B418C4(EnKgy* this, PlayState* play) {
     if ((this->unk_2E4 <= 0) && !(this->unk_29C & 2) && (func_80B40E54(this) == 0) &&
         (Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play) &&
         ((play->msgCtx.currentTextId == 0xC4E) || (play->msgCtx.currentTextId == 0xC4F))) {
-        func_801477B4(play);
+        Message_CloseTextbox(play);
         this->actor.textId = 0xC4F;
         func_80B413C8(this);
         ActorCutscene_SetIntentToPlay(this->unk_2D4[5]);
         this->actionFunc = func_80B41858;
-        this->actor.flags &= ~ACTOR_FLAG_100;
+        this->actor.flags &= ~ACTOR_FLAG_TALK_REQUESTED;
     }
     func_80B40EE8(this, play);
 }
@@ -529,7 +529,7 @@ void func_80B41ACC(EnKgy* this, PlayState* play) {
         }
 
         if (itemAction > PLAYER_IA_NONE) {
-            func_801477B4(play);
+            Message_CloseTextbox(play);
             if (itemAction == PLAYER_IA_BOTTLE_GOLD_DUST) {
                 if (this->unk_29C & 0x10) {
                     this->actor.textId = 0xC55;
@@ -573,7 +573,7 @@ void func_80B41C54(EnKgy* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     if (Actor_TextboxIsClosing(&this->actor, play)) {
         this->actionFunc = func_80B41C30;
-        this->actor.flags &= ~ACTOR_FLAG_100;
+        this->actor.flags &= ~ACTOR_FLAG_TALK_REQUESTED;
     }
     func_80B40EE8(this, play);
 }
@@ -597,7 +597,7 @@ void func_80B41D64(EnKgy* this, PlayState* play) {
         this->actor.flags |= ACTOR_FLAG_10000;
         func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
     } else {
-        Actor_PickUp(&this->actor, play, this->unk_2EA, 2000.0f, 1000.0f);
+        Actor_OfferGetItem(&this->actor, play, this->unk_2EA, 2000.0f, 1000.0f);
     }
     func_80B40EE8(this, play);
 }
@@ -678,7 +678,7 @@ void func_80B41E18(EnKgy* this, PlayState* play) {
                         case 0xC39:
                         case 0xC52:
                         case 0xC54:
-                            func_801477B4(play);
+                            Message_CloseTextbox(play);
                             this->actionFunc = func_80B425A0;
                             func_80B413C8(this);
                             func_80B40E18(this, 5);
@@ -698,7 +698,7 @@ void func_80B41E18(EnKgy* this, PlayState* play) {
                             break;
 
                         case 0xC3D:
-                            func_801477B4(play);
+                            Message_CloseTextbox(play);
                             this->actionFunc = func_80B41C54;
                             this->actor.textId = 0xC3E;
                             func_80B413C8(this);
@@ -734,7 +734,7 @@ void func_80B41E18(EnKgy* this, PlayState* play) {
 
                         case 0xC57:
                             this->unk_29C &= ~0x8;
-                            func_801477B4(play);
+                            Message_CloseTextbox(play);
                             this->actionFunc = func_80B41C54;
                             this->actor.textId = 0xC58;
                             func_80B413C8(this);
@@ -780,7 +780,7 @@ void func_80B41E18(EnKgy* this, PlayState* play) {
                         case 0xC4A:
                         case 0xC4B:
                             func_80B40BC0(this, 4);
-                            func_801477B4(play);
+                            Message_CloseTextbox(play);
                             this->actionFunc = func_80B41C54;
                             this->actor.textId = 0xC4B;
                             func_80B413C8(this);
@@ -795,10 +795,10 @@ void func_80B41E18(EnKgy* this, PlayState* play) {
                                 this->unk_2EA = 56;
                                 this->actor.textId = 0xC51;
                             }
-                            func_801477B4(play);
+                            Message_CloseTextbox(play);
                             this->actionFunc = func_80B41D64;
                             func_80B413C8(this);
-                            Actor_PickUp(&this->actor, play, this->unk_2EA, 2000.0f, 1000.0f);
+                            Actor_OfferGetItem(&this->actor, play, this->unk_2EA, 2000.0f, 1000.0f);
                             break;
 
                         case 0xC51:
@@ -810,7 +810,7 @@ void func_80B41E18(EnKgy* this, PlayState* play) {
                             break;
 
                         case 0xC56:
-                            func_801477B4(play);
+                            Message_CloseTextbox(play);
                             this->actionFunc = func_80B41C54;
                             this->actor.textId = 0xC56;
                             func_80B413C8(this);
@@ -855,9 +855,9 @@ void func_80B42660(EnKgy* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     this->actor.focus.pos = this->unk_2A8;
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-        func_801477B4(play);
+        Message_CloseTextbox(play);
         func_80B413C8(this);
-        this->actor.flags &= ~ACTOR_FLAG_100;
+        this->actor.flags &= ~ACTOR_FLAG_TALK_REQUESTED;
         this->actionFunc = func_80B42714;
         func_80B40E18(this, 7);
     }
@@ -918,7 +918,7 @@ void func_80B427C8(EnKgy* this, PlayState* play) {
                 break;
 
             case 0xC34:
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 this->actionFunc = func_80B41C54;
                 func_80B413C8(this);
                 func_80B40E18(this, 6);
@@ -1032,7 +1032,7 @@ void func_80B42A8C(EnKgy* this, PlayState* play) {
 
             case 0xC2C:
             case 0xC2F:
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 this->actionFunc = func_80B42D28;
                 func_80B413C8(this);
                 func_80B40E18(this, 1);

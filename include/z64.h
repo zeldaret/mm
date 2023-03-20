@@ -216,25 +216,6 @@ typedef struct {
     /* 0x10 */ OSTime resetTime;
 } NmiBuff; // size >= 0x18
 
-typedef enum {
-    SLOWLY_CALLBACK_NO_ARGS,
-    SLOWLY_CALLBACK_ONE_ARG,
-    SLOWLY_CALLBACK_TWO_ARGS
-} SlowlyCallbackArgCount;
-
-typedef struct {
-    /* 0x000 */ OSThread thread;
-    /* 0x1B0 */ u8 callbackArgCount;
-    /* 0x1B1 */ u8 status;
-    /* 0x1B4 */ union {
-        void (*callback0)(void);
-        void (*callback1)(void*);
-        void (*callback2)(void*, void*);
-    };
-    /* 0x1B8 */ void* callbackArg0;
-    /* 0x1BC */ void* callbackArg1;
-} SlowlyTask; // size = 0x1C0
-
 typedef struct {
     /* 0x00 */ int unk0;
     /* 0x04 */ void* unk4;
@@ -811,11 +792,6 @@ typedef struct {
     /* 0x10 */ u16* tlut;
     /* 0x14 */ Gfx* dList;
 } VisMono; // size = 0x18
-
-typedef struct {
-    /* 0x0 */ f32 rangeSq;
-    /* 0x4 */ f32 leashScale;
-} TargetRangeParams; // size = 0x8
 
 typedef struct {
     /* 0x0 */ u8* value;
