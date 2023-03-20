@@ -265,8 +265,8 @@ void EnOssan_Init(Actor* thisx, PlayState* play) {
     EnOssan* this = THIS;
     s16 id;
 
-    //! @bug Condition is impossible, && should be ||
     if ((this->actor.params > ENOSSAN_PART_TIME_WORKER) && (this->actor.params < ENOSSAN_CURIOSITY_SHOP_MAN)) {
+        //! @bug: Impossible to reach, && should be an ||
         Actor_Kill(&this->actor);
         return;
     }

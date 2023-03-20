@@ -146,7 +146,7 @@ void EnPoFusen_Destroy(Actor* thisx, PlayState* play) {
 }
 
 /**
- * Search for Romani's actor, beacuse it's PoFusen's job to update her actor on pop.
+ * Search for Romani's actor, beacuse it's PoFusen's job to update her actor when the balloon is popped.
  */
 s32 EnPoFusen_CheckParent(EnPoFusen* this, PlayState* play) {
     Actor* actorIter = play->actorCtx.actorLists[ACTORCAT_NPC].first;
