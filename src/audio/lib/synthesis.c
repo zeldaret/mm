@@ -223,7 +223,7 @@ Acmd* AudioSynth_Update(Acmd* abiCmdStart, s32* numAbiCmds, s16* aiBufStart, s32
 
     for (reverseUpdateIndex = gAudioCtx.audioBufferParameters.updatesPerFrame; reverseUpdateIndex > 0;
          reverseUpdateIndex--) {
-        AudioSeq_ProcessSequences(reverseUpdateIndex - 1);
+        AudioScript_ProcessSequences(reverseUpdateIndex - 1);
         AudioSynth_SyncSampleStates(gAudioCtx.audioBufferParameters.updatesPerFrame - reverseUpdateIndex);
     }
 
