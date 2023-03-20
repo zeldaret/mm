@@ -212,13 +212,13 @@ void AudioThread_ProcessGlobalCmd(AudioCmd* cmd) {
         case AUDIOCMD_OP_GLOBAL_INIT_SEQPLAYER_SKIP_TICKS:
             AudioLoad_SyncInitSeqPlayerSkipTicks(cmd->arg0, cmd->arg1, cmd->asInt);
             AudioThread_SetFadeInTimer(cmd->arg0, 500);
-            AudioSeq_SkipForwardSequence(&gAudioCtx.seqPlayers[cmd->arg0]);
+            AudioScript_SkipForwardSequence(&gAudioCtx.seqPlayers[cmd->arg0]);
             break;
 
         case AUDIOCMD_OP_GLOBAL_DISABLE_SEQPLAYER:
             if (gAudioCtx.seqPlayers[cmd->arg0].enabled) {
                 if (cmd->asInt == 0) {
-                    AudioSeq_SequencePlayerDisableAsFinished(&gAudioCtx.seqPlayers[cmd->arg0]);
+                    AudioScript_SequencePlayerDisableAsFinished(&gAudioCtx.seqPlayers[cmd->arg0]);
                 } else {
                     AudioThread_SetFadeOutTimer(cmd->arg0, cmd->asInt);
                 }
@@ -322,7 +322,7 @@ void AudioThread_ProcessGlobalCmd(AudioCmd* cmd) {
             if (flags == AUDIO_NOTE_RELEASE) {
                 for (i = 0; i < gAudioCtx.audioBufferParameters.numSequencePlayers; i++) {
                     if (gAudioCtx.seqPlayers[i].enabled) {
-                        AudioSeq_SequencePlayerDisableAsFinished(&gAudioCtx.seqPlayers[i]);
+                        AudioScript_SequencePlayerDisableAsFinished(&gAudioCtx.seqPlayers[i]);
                     }
                 }
             }
