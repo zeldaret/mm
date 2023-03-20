@@ -2338,7 +2338,7 @@ asm/non_matchings/code/z_message/func_80147520.s,func_80147520,0x80147520,0x11
 asm/non_matchings/code/z_message/func_80147564.s,func_80147564,0x80147564,0x30
 asm/non_matchings/code/z_message/Message_ShouldAdvance.s,Message_ShouldAdvance,0x80147624,0x44
 asm/non_matchings/code/z_message/Message_ShouldAdvanceSilent.s,Message_ShouldAdvanceSilent,0x80147734,0x20
-asm/non_matchings/code/z_message/func_801477B4.s,func_801477B4,0x801477B4,0x19
+asm/non_matchings/code/z_message/Message_CloseTextbox.s,Message_CloseTextbox,0x801477B4,0x19
 asm/non_matchings/code/z_message/func_80147818.s,func_80147818,0x80147818,0x1C0
 asm/non_matchings/code/z_message/func_80147F18.s,func_80147F18,0x80147F18,0x190
 asm/non_matchings/code/z_message/func_80148558.s,func_80148558,0x80148558,0x190
@@ -2367,7 +2367,7 @@ asm/non_matchings/code/z_message/func_80150A84.s,func_80150A84,0x80150A84,0xA1
 asm/non_matchings/code/z_message/func_80150D08.s,func_80150D08,0x80150D08,0x1EA
 asm/non_matchings/code/z_message/func_801514B0.s,func_801514B0,0x801514B0,0x100
 asm/non_matchings/code/z_message/Message_StartTextbox.s,Message_StartTextbox,0x801518B0,0x22
-asm/non_matchings/code/z_message/func_80151938.s,func_80151938,0x80151938,0x4C
+asm/non_matchings/code/z_message/Message_ContinueTextbox.s,Message_ContinueTextbox,0x80151938,0x4C
 asm/non_matchings/code/z_message/func_80151A68.s,func_80151A68,0x80151A68,0x53
 asm/non_matchings/code/z_message/func_80151BB4.s,func_80151BB4,0x80151BB4,0x3A
 asm/non_matchings/code/z_message/func_80151C9C.s,func_80151C9C,0x80151C9C,0x42
@@ -2959,8 +2959,8 @@ asm/non_matchings/code/c_keyframe/func_801853C8.s,func_801853C8,0x801853C8,0x26
 asm/non_matchings/code/c_keyframe/func_80185460.s,func_80185460,0x80185460,0x80
 asm/non_matchings/code/sys_slowly/Slowly_Main.s,Slowly_Main,0x80185660,0x27
 asm/non_matchings/code/sys_slowly/Slowly_ThreadEntry.s,Slowly_ThreadEntry,0x801856FC,0x8
-asm/non_matchings/code/sys_slowly/Slowly_Start.s,Slowly_Start,0x8018571C,0x21
-asm/non_matchings/code/sys_slowly/Slowly_Stop.s,Slowly_Stop,0x801857A0,0x8
+asm/non_matchings/code/sys_slowly/Slowly_Init.s,Slowly_Init,0x8018571C,0x21
+asm/non_matchings/code/sys_slowly/Slowly_Destroy.s,Slowly_Destroy,0x801857A0,0x8
 asm/non_matchings/code/sys_flashrom/func_801857C0.s,func_801857C0,0x801857C0,0x4
 asm/non_matchings/code/sys_flashrom/func_801857D0.s,func_801857D0,0x801857D0,0x25
 asm/non_matchings/code/sys_flashrom/func_80185864.s,func_80185864,0x80185864,0x29
