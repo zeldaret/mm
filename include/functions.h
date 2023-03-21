@@ -1476,7 +1476,7 @@ void Lights_BindPointWithReference(Lights* lights, LightParams* params, Vec3f* p
 void Lights_BindPoint(Lights* lights, LightParams* params, PlayState* play);
 void Lights_BindDirectional(Lights* lights, LightParams* params, void* unused);
 void Lights_BindAll(Lights* lights, LightNode* listHead, Vec3f* refPos, PlayState* play);
-LightNode* Lights_FindBufSlot();
+LightNode* Lights_FindBufSlot(void);
 void Lights_FreeNode(LightNode* light);
 void LightContext_Init(PlayState* play, LightContext* lightCtx);
 void LightContext_SetAmbientColor(LightContext* lightCtx, u8 r, u8 g, u8 b);

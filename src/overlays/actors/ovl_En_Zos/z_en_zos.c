@@ -486,7 +486,9 @@ void func_80BBB8AC(EnZos* this, PlayState* play) {
                 break;
 
             default:
-                if (0) {}
+                //! FAKE:
+                if (1) {}
+
                 Message_CloseTextbox(play);
                 this->actionFunc = func_80BBBDE0;
                 this->unk_2B6 |= 1;
