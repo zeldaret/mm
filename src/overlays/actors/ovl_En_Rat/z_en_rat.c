@@ -740,7 +740,7 @@ void EnRat_Bounced(EnRat* this, PlayState* play) {
 
 void EnRat_Explode(EnRat* this, PlayState* play) {
     EnBom* bomb = (EnBom*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOM, this->actor.world.pos.x,
-                                      this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, ENBOM_0);
+                                      this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, BOMB_BODY);
 
     if (bomb != NULL) {
         bomb->timer = 0;
