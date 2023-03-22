@@ -4,7 +4,6 @@
  * Description: Player
  */
 
-#include "prevent_bss_reordering.h"
 #include "global.h"
 #include "z64quake.h"
 #include "z64rumble.h"
@@ -559,7 +558,7 @@ void func_8082DAD4(Player* this) {
 s32 func_8082DAFC(PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    return CHECK_FLAG_ALL(player->actor.flags, ACTOR_FLAG_100);
+    return CHECK_FLAG_ALL(player->actor.flags, ACTOR_FLAG_TALK_REQUESTED);
 }
 
 void Player_AnimationPlayOnce(PlayState* play, Player* this, LinkAnimationHeader* anim) {
@@ -4279,7 +4278,8 @@ void func_80831990(PlayState* play, Player* this, ItemId item) {
         f32 sp54;
         s32 explAction;
 
-        if (var_v1 || (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_100) && (actionParam != PLAYER_IA_NONE)) ||
+        if (var_v1 ||
+            (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_TALK_REQUESTED) && (actionParam != PLAYER_IA_NONE)) ||
             (actionParam == PLAYER_IA_OCARINA) ||
             ((actionParam > PLAYER_IA_BOTTLE) && actionParam < PLAYER_IA_MASK_TRUTH) ||
             ((actionParam == PLAYER_IA_PICTO_BOX) && (this->talkActor != NULL) &&
@@ -4616,7 +4616,7 @@ void func_80832888(Player* this, PlayState* play) {
                 var_a1 = gSaveContext.options.zTargetSetting != 0 || this != GET_PLAYER(play);
                 this->stateFlags1 |= PLAYER_STATE1_8000;
                 if ((this->currentMask != PLAYER_MASK_GIANT) && (var_v1_2 != NULL) &&
-                    !(var_v1_2->flags & ACTOR_FLAG_8000000) &&
+                    !(var_v1_2->flags & ACTOR_FLAG_CANT_LOCK_ON) &&
                     !(this->stateFlags3 & (PLAYER_STATE3_200 | PLAYER_STATE3_2000))) {
                     if ((var_v1_2 == this->targetedActor) && (this == GET_PLAYER(play))) {
                         var_v1_2 = play->actorCtx.targetContext.unk_94;
@@ -6139,7 +6139,7 @@ s32 func_808365DC(Player* this, PlayState* play) {
             if (this->doorType <= PLAYER_DOORTYPE_TALKING) {
                 Player_TalkWithPlayer(play, doorActor);
                 if (doorActor->textId == 0x1821) {
-                    doorActor->flags |= ACTOR_FLAG_100;
+                    doorActor->flags |= ACTOR_FLAG_TALK_REQUESTED;
                 }
                 return true;
             }
@@ -6923,7 +6923,7 @@ void Player_StopCurrentActorCutscene(Player* this) {
 s32 func_808387A0(PlayState* play, Player* this) {
     if (this->unk_AA5 == PLAYER_UNKAA5_4) {
         Player_StopCurrentActorCutscene(this);
-        this->actor.flags &= ~ACTOR_FLAG_100;
+        this->actor.flags &= ~ACTOR_FLAG_TALK_REQUESTED;
         Player_SetAction(play, this, func_8085B08C, 0);
         if (this->doorBgCamIndex != 0) {
             this->stateFlags1 |= PLAYER_STATE1_20000000;
@@ -7135,7 +7135,7 @@ s32 func_80838A90(Player* this, PlayState* play) {
                         func_808388B8(play, this, this->itemAction - PLAYER_IA_MASK_FIERCE_DEITY);
                     }
                     gSaveContext.save.equippedMask = this->currentMask;
-                } else if (((this->actor.flags & ACTOR_FLAG_100) == ACTOR_FLAG_100) ||
+                } else if (((this->actor.flags & ACTOR_FLAG_TALK_REQUESTED) == ACTOR_FLAG_TALK_REQUESTED) ||
                            (this->itemAction == PLAYER_IA_PICTO_BOX) ||
                            ((this->itemAction != this->unk_B2B) &&
                             ((this->itemAction == PLAYER_IA_BOTTLE_BIG_POE) ||
@@ -7181,7 +7181,7 @@ s32 func_80838A90(Player* this, PlayState* play) {
                             this->currentActorCsIndex = 0x7C;
                         }
 
-                        talkActor->flags |= ACTOR_FLAG_100;
+                        talkActor->flags |= ACTOR_FLAG_TALK_REQUESTED;
                         this->actor.textId = 0;
                         this->targetedActor = this->talkActor;
                     } else {
@@ -7190,7 +7190,7 @@ s32 func_80838A90(Player* this, PlayState* play) {
                         this->unk_AE7 = 1;
                         this->actor.textId = 0xFE;
                     }
-                    this->actor.flags |= ACTOR_FLAG_100;
+                    this->actor.flags |= ACTOR_FLAG_TALK_REQUESTED;
                     this->exchangeItemId = this->itemAction;
                     if (this->unk_AE7 >= 0) {
                         Player_AnimationPlayOnce(play, this, D_8085D1F8[this->unk_AE7]);
@@ -7869,7 +7869,7 @@ void func_8083A98C(Actor* thisx, PlayState* play2) {
 
         // Exit
         if (CHECK_BTN_ALL(sPlayerControlInput->press.button, BTN_B)) {
-            func_801477B4(play);
+            Message_CloseTextbox(play);
 
             if (play->sceneId == SCENE_00KEIKOKU) {
                 gSaveContext.respawn[RESPAWN_MODE_DOWN].entrance = ENTRANCE(ASTRAL_OBSERVATORY, 2);
@@ -11082,7 +11082,7 @@ void Player_UpdateCamAndSeqModes(PlayState* play, Player* this) {
             } else if (this->stateFlags2 & PLAYER_STATE2_100) {
                 camMode = CAM_MODE_PUSHPULL;
             } else if (this->targetedActor != NULL) {
-                if ((this->actor.flags & ACTOR_FLAG_100) == ACTOR_FLAG_100) {
+                if ((this->actor.flags & ACTOR_FLAG_TALK_REQUESTED) == ACTOR_FLAG_TALK_REQUESTED) {
                     camMode = CAM_MODE_TALK;
                 } else if (this->stateFlags1 & PLAYER_STATE1_10000) {
                     if (this->stateFlags1 & PLAYER_STATE1_2000000) {
@@ -11786,7 +11786,7 @@ void Player_UpdateCommon(Player* this, PlayState* play, Input* input) {
         }
 
         func_80832578(this, play);
-        if (this->actor.flags & ACTOR_FLAG_100) {
+        if (this->actor.flags & ACTOR_FLAG_TALK_REQUESTED) {
             this->talkActorDistance = 0.0f;
         } else {
             this->talkActor = NULL;
@@ -13883,7 +13883,7 @@ void func_8084B4A8(Player* this, PlayState* play) {
         if (!func_80838A90(this, play)) {
             func_80836A98(this, D_8085BE84[PLAYER_ANIMGROUP_33][this->modelAnimType], play);
         }
-        this->actor.flags &= ~ACTOR_FLAG_100;
+        this->actor.flags &= ~ACTOR_FLAG_TALK_REQUESTED;
         func_800E0238(Play_GetCamera(play, CAM_ID_MAIN));
     }
 }
@@ -15035,7 +15035,7 @@ void func_8084E980(Player* this, PlayState* play) {
     func_8083249C(this);
     func_8083216C(this, play);
     if (Message_GetState(&play->msgCtx) == TEXT_STATE_CLOSING) {
-        this->actor.flags &= ~ACTOR_FLAG_100;
+        this->actor.flags &= ~ACTOR_FLAG_TALK_REQUESTED;
         if (!CHECK_FLAG_ALL(this->talkActor->flags, ACTOR_FLAG_1 | ACTOR_FLAG_4)) {
             this->stateFlags2 &= ~PLAYER_STATE2_2000;
         }
@@ -16923,7 +16923,7 @@ void func_80853A5C(Player* this, PlayState* play) {
             this->getItemDrawIdPlusOne = GID_NONE + 1;
 
             if ((talkActor->textId != 0) && (talkActor->textId != 0xFFFF)) {
-                this->actor.flags |= ACTOR_FLAG_100;
+                this->actor.flags |= ACTOR_FLAG_TALK_REQUESTED;
             }
             Player_TalkWithPlayer(play, talkActor);
         } else {
@@ -16942,7 +16942,7 @@ void func_80853A5C(Player* this, PlayState* play) {
             } else if (Message_GetState(&play->msgCtx) == TEXT_STATE_CLOSING) {
                 Player_StopCurrentActorCutscene(this);
                 this->getItemDrawIdPlusOne = GID_NONE + 1;
-                this->actor.flags &= ~ACTOR_FLAG_100;
+                this->actor.flags &= ~ACTOR_FLAG_TALK_REQUESTED;
                 func_80839E74(this, play);
                 this->unk_B5E = 0xA;
             }
@@ -19732,7 +19732,7 @@ void func_8085A7C0(PlayState* play, Player* this, UNK_TYPE arg2) {
                 this->actor.parent = NULL;
                 this->unk_AE8 = 1;
             } else {
-                Actor_PickUp(&this->actor, play, GI_PENDANT_OF_MEMORIES, 9999.9f, 9999.9f);
+                Actor_OfferGetItem(&this->actor, play, GI_PENDANT_OF_MEMORIES, 9999.9f, 9999.9f);
             }
         }
     } else if (LinkAnimation_OnFrame(&this->skelAnime, 4.0f)) {
@@ -20030,7 +20030,7 @@ void Player_TalkWithPlayer(PlayState* play, Actor* actor) {
     func_808323C0(player, 0x7C);
     if ((player->talkActor != NULL) || (actor == player->tatlActor) ||
         CHECK_FLAG_ALL(actor->flags, ACTOR_FLAG_1 | ACTOR_FLAG_40000)) {
-        actor->flags |= ACTOR_FLAG_100;
+        actor->flags |= ACTOR_FLAG_TALK_REQUESTED;
     }
 
     player->talkActor = actor;
@@ -20039,13 +20039,13 @@ void Player_TalkWithPlayer(PlayState* play, Actor* actor) {
 
     if (actor->textId == 0xFFFF) {
         func_800B7298(play, actor, PLAYER_CSMODE_1);
-        actor->flags |= ACTOR_FLAG_100;
+        actor->flags |= ACTOR_FLAG_TALK_REQUESTED;
         func_8082DE14(play, player);
     } else {
-        if (player->actor.flags & ACTOR_FLAG_100) {
+        if (player->actor.flags & ACTOR_FLAG_TALK_REQUESTED) {
             player->actor.textId = 0;
         } else {
-            player->actor.flags |= ACTOR_FLAG_100;
+            player->actor.flags |= ACTOR_FLAG_TALK_REQUESTED;
             player->actor.textId = actor->textId;
         }
 
@@ -20087,7 +20087,7 @@ void Player_TalkWithPlayer(PlayState* play, Actor* actor) {
     }
 
     if ((player->tatlActor == player->talkActor) && ((player->talkActor->textId & 0xFF00) != 0x200)) {
-        player->tatlActor->flags |= ACTOR_FLAG_100;
+        player->tatlActor->flags |= ACTOR_FLAG_TALK_REQUESTED;
     }
 }
 
@@ -20149,7 +20149,7 @@ PlayerItemAction func_8085B854(PlayState* play, Player* player, ItemId itemId) {
 s32 func_8085B930(PlayState* play, LinkAnimationHeader* talkAnim, s32 animMode) {
     Player* player = GET_PLAYER(play);
 
-    if (!(player->actor.flags & ACTOR_FLAG_100)) {
+    if (!(player->actor.flags & ACTOR_FLAG_TALK_REQUESTED)) {
         return false;
     }
 
