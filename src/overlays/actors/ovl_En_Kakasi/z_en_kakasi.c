@@ -414,7 +414,7 @@ void EnKakasi_RegularDialogue(EnKakasi* this, PlayState* play) {
     }
 
     if ((this->talkState == Message_GetState(&play->msgCtx)) && Message_ShouldAdvance(play)) {
-        func_801477B4(play);
+        Message_CloseTextbox(play);
         if (this->talkState == TEXT_STATE_5) {
             // bad song input
             if (this->unkState196 == 2 && this->picto.actor.textId == 0x1647) {
@@ -440,7 +440,7 @@ void EnKakasi_RegularDialogue(EnKakasi* this, PlayState* play) {
                     this->picto.actor.textId = 0x1645;
                 }
 
-                func_80151938(play, this->picto.actor.textId);
+                Message_ContinueTextbox(play, this->picto.actor.textId);
                 return;
 
             } else if (this->picto.actor.textId == 0x165D || this->picto.actor.textId == 0x165F ||
@@ -538,7 +538,7 @@ void EnKakasi_RegularDialogue(EnKakasi* this, PlayState* play) {
                 }
             }
         }
-        func_80151938(play, this->picto.actor.textId);
+        Message_ContinueTextbox(play, this->picto.actor.textId);
     }
 }
 
@@ -674,7 +674,7 @@ void EnKakasi_PostSongLearnDialogue(EnKakasi* this, PlayState* play) {
     Math_SmoothStepToS(&player->actor.shape.rot.y, this->picto.actor.yawTowardsPlayer + 0x8000, 5, 1000, 0);
 
     if (this->unk190 == 0) {
-        func_801477B4(play);
+        Message_CloseTextbox(play);
         func_800B7298(play, &this->picto.actor, PLAYER_CSMODE_86);
         this->picto.actor.textId = 0x1648;
         Message_StartTextbox(play, (this->picto.actor.textId), &this->picto.actor);
@@ -735,7 +735,7 @@ void EnKakasi_PostSongLearnDialogue(EnKakasi* this, PlayState* play) {
     if ((this->unkState1A8 != 0) && (Message_GetState(&play->msgCtx) == this->talkState) &&
         Message_ShouldAdvance(play)) {
 
-        func_801477B4(play);
+        Message_CloseTextbox(play);
 
         if (this->talkState == TEXT_STATE_5) {
             this->unk190++;
@@ -778,7 +778,7 @@ void EnKakasi_PostSongLearnDialogue(EnKakasi* this, PlayState* play) {
                 this->picto.actor.textId = 0x1661;
             }
         }
-        func_80151938(play, this->picto.actor.textId);
+        Message_ContinueTextbox(play, this->picto.actor.textId);
     }
 }
 
@@ -934,7 +934,7 @@ void EnKakasi_DancingNightAway(EnKakasi* this, PlayState* play) {
                 func_80169EFC(&play->state);
 
                 //! FAKE
-                if (0) {}
+                if (1) {}
 
                 if (gSaveContext.save.time > CLOCK_TIME(18, 0) || gSaveContext.save.time < CLOCK_TIME(6, 0)) {
                     gSaveContext.save.time = CLOCK_TIME(6, 0);
@@ -1025,7 +1025,7 @@ void EnKakasi_DiggingAway(EnKakasi* this, PlayState* play) {
 void EnKakasi_SetupIdleUnderground(EnKakasi* this) {
     this->picto.actor.shape.yOffset = -7000.0;
     this->picto.actor.draw = NULL;
-    this->picto.actor.flags |= ACTOR_FLAG_8000000;
+    this->picto.actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
     this->unkState196 = 5;
     this->actionFunc = EnKakasi_IdleUnderground;
 }
@@ -1033,7 +1033,7 @@ void EnKakasi_SetupIdleUnderground(EnKakasi* this) {
 void EnKakasi_IdleUnderground(EnKakasi* this, PlayState* play) {
     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_79_08) && this->picto.actor.xzDistToPlayer < this->songSummonDist &&
         (BREG(1) != 0 || play->msgCtx.ocarinaMode == 0xD)) {
-        this->picto.actor.flags &= ~ACTOR_FLAG_8000000;
+        this->picto.actor.flags &= ~ACTOR_FLAG_CANT_LOCK_ON;
         play->msgCtx.ocarinaMode = 4;
         this->actionFunc = EnKakasi_SetupRiseOutOfGround;
     }
@@ -1102,7 +1102,7 @@ void EnKakasi_RisenDialogue(EnKakasi* this, PlayState* play) {
     Math_SmoothStepToS(&this->picto.actor.shape.rot.y, this->picto.actor.yawTowardsPlayer, 5, 1000, 0);
 
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-        func_801477B4(play);
+        Message_CloseTextbox(play);
         EnKakasi_SetupIdleRisen(this);
     }
 }

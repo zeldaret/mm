@@ -386,9 +386,9 @@ void func_80C14554(EnJgameTsn* this, PlayState* play) {
         }
         func_80C145FC(this);
     } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_82_10)) {
-        Actor_PickUp(&this->actor, play, GI_RUPEE_PURPLE, 500.0f, 100.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_RUPEE_PURPLE, 500.0f, 100.0f);
     } else {
-        Actor_PickUp(&this->actor, play, GI_HEART_PIECE, 500.0f, 100.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_HEART_PIECE, 500.0f, 100.0f);
     }
 }
 
@@ -402,7 +402,7 @@ void func_80C14610(EnJgameTsn* this, PlayState* play) {
         this->unk_300 = 0x10A4;
         func_80C14030(this);
     } else {
-        func_800B85E0(&this->actor, play, 200.0f, -1);
+        func_800B85E0(&this->actor, play, 200.0f, PLAYER_IA_MINUS1);
     }
 }
 
@@ -471,7 +471,7 @@ void func_80C147B4(EnJgameTsn* this, PlayState* play) {
                 if (ActorCutscene_GetCurrentIndex() == this->actor.cutscene) {
                     ActorCutscene_Stop(this->actor.cutscene);
                 }
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 func_80C1476C(this, play);
                 func_80C1410C(this, play);
                 break;
@@ -479,7 +479,7 @@ void func_80C147B4(EnJgameTsn* this, PlayState* play) {
             case 0x109F:
             case 0x10A0:
             case 0x10A1:
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 gSaveContext.minigameStatus = MINIGAME_STATUS_END;
                 gSaveContext.timerStates[TIMER_ID_MINIGAME_2] = TIMER_STATE_STOP;
                 CLEAR_WEEKEVENTREG(WEEKEVENTREG_90_20);
@@ -487,7 +487,7 @@ void func_80C147B4(EnJgameTsn* this, PlayState* play) {
                 break;
 
             case 0x10A3:
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 func_80C14540(this);
                 func_80C14554(this, play);
                 break;

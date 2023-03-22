@@ -476,7 +476,7 @@ void EnEgol_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void EnEgol_SetupWait(EnEgol* this) {
-    this->actor.flags |= ACTOR_FLAG_8000000;
+    this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
     this->action = EYEGORE_ACTION_WAIT;
     this->actionFunc = EnEgol_Wait;
 }
@@ -493,7 +493,7 @@ void EnEgol_Wait(EnEgol* this, PlayState* play) {
 
 void EnEgol_SetupStand(EnEgol* this) {
     EnEgol_ChangeAnim(this, EYEGORE_ANIM_STAND);
-    this->actor.flags &= ~ACTOR_FLAG_8000000;
+    this->actor.flags &= ~ACTOR_FLAG_CANT_LOCK_ON;
     this->action = EYEGORE_ACTION_STAND;
     Actor_PlaySfx(&this->actor, NA_SE_EN_EYEGOLE_STAND);
     this->actionFunc = EnEgol_Stand;
@@ -1034,7 +1034,7 @@ void EnEgol_Damaged(EnEgol* this, PlayState* play) {
         } else {
             Enemy_StartFinishingBlow(play, &this->actor);
             Actor_PlaySfx(&this->actor, NA_SE_EN_EYEGOLE_DEAD);
-            this->actor.flags |= ACTOR_FLAG_8000000;
+            this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
             this->actor.flags &= ~ACTOR_FLAG_1;
             this->actor.flags |= ACTOR_FLAG_100000;
             this->actionFunc = EnEgol_StartDeathCutscene;
@@ -1145,7 +1145,8 @@ void EnEgol_CollisionCheck(EnEgol* this, PlayState* play) {
                         Math_Vec3f_Copy(&this->laserCollider.dim.quad[3], &this->laserBase);
                         Math_Vec3f_Copy(&this->laserCollider.dim.quad[0], &this->laserBase);
                         Math_Vec3f_Copy(&this->laserCollider.dim.quad[2], &this->laserBase);
-                        Actor_SetColorFilter(&this->actor, 0, 120, false, 40);
+                        Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 120, COLORFILTER_BUFFLAG_OPA,
+                                             40);
                         Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_FREEZE);
                         EnEgol_SetupStunned(this);
                     }
@@ -1167,7 +1168,7 @@ void EnEgol_CollisionCheck(EnEgol* this, PlayState* play) {
         CollisionCheck_BlueBlood(play, NULL, &this->eyePos);
         CollisionCheck_BlueBlood(play, NULL, &this->eyePos);
         CollisionCheck_BlueBlood(play, NULL, &this->eyePos);
-        Actor_SetColorFilter(&this->actor, 0x4000, 255, false, 25);
+        Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 25);
         Actor_PlaySfx(&this->actor, NA_SE_EN_EYEGOLE_DAMAGE);
         EnEgol_SetupDamaged(this);
     } else if (reaction == EYEGORE_HIT_IMMUNE) {

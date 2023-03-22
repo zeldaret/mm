@@ -468,12 +468,6 @@ void func_80866A5C(EnDoor* this, PlayState* play) {
 void func_80866B20(EnDoor* this, PlayState* play) {
     static s32 D_80867BC0;
     Player* player = GET_PLAYER(play);
-    Vec3f playerPosRelToDoor;
-    s16 temp_a2;
-    s16 yawDiff;
-    s32 temp_a1_2;
-    s32 temp_t0;
-    u8 temp_a1;
 
     if (Actor_ProcessTalkRequest(&this->door.dyna.actor, &play->state) && (this->door.dyna.actor.textId == 0x1821)) {
         D_80867BC0 = true;
@@ -491,10 +485,13 @@ void func_80866B20(EnDoor* this, PlayState* play) {
         this->actionFunc = func_80866F94;
         Actor_PlaySfx(&this->door.dyna.actor, NA_SE_EV_DOOR_OPEN);
     } else if (!Player_InCsMode(play)) {
+        Vec3f playerPosRelToDoor;
+
         Actor_OffsetOfPointInActorCoords(&this->door.dyna.actor, &playerPosRelToDoor, &player->actor.world.pos);
         if (D_80867BC0 || ((fabsf(playerPosRelToDoor.y) < 20.0f) && (fabsf(playerPosRelToDoor.x) < 20.0f) &&
                            (fabsf(playerPosRelToDoor.z) < 50.0f))) {
-            yawDiff = player->actor.shape.rot.y - this->door.dyna.actor.shape.rot.y;
+            s16 yawDiff = player->actor.shape.rot.y - this->door.dyna.actor.shape.rot.y;
+
             if (playerPosRelToDoor.z > 0.0f) {
                 yawDiff = (0x8000 - yawDiff);
             }
@@ -514,15 +511,14 @@ void func_80866B20(EnDoor* this, PlayState* play) {
                     this->door.dyna.actor.textId = 0x1800;
                 } else if ((this->doorType == ENDOOR_TYPE_0) || (this->doorType == ENDOOR_TYPE_2) ||
                            (this->doorType == ENDOOR_TYPE_3)) {
-                    s32 textIdOffset;
+                    s32 halfDaysDayBit = (play->actorCtx.halfDaysBit & HALFDAYBIT_DAWNS) >> 1;
+                    s32 halfDaysNightBit = play->actorCtx.halfDaysBit & HALFDAYBIT_NIGHTS;
+                    s16 temp_a2 = D_801AED48[this->switchFlag & 7];
+                    s32 textIdOffset = (this->switchFlag >> 3) & 0xF;
 
-                    temp_t0 = (play->actorCtx.unkC & 0x2AA) >> 1;
-                    temp_a2 = D_801AED48[this->switchFlag & 7];
-                    temp_a1_2 = play->actorCtx.unkC & 0x155;
-                    textIdOffset = (this->switchFlag >> 3) & 0xF;
-                    if (((this->doorType == ENDOOR_TYPE_0) && (((temp_t0 | temp_a1_2) & temp_a2) == 0)) ||
-                        ((this->doorType == ENDOOR_TYPE_2) && ((temp_a2 & temp_a1_2) == 0)) ||
-                        ((this->doorType == ENDOOR_TYPE_3) && ((temp_a2 & temp_t0) == 0))) {
+                    if (((this->doorType == ENDOOR_TYPE_0) && !((halfDaysDayBit | halfDaysNightBit) & temp_a2)) ||
+                        ((this->doorType == ENDOOR_TYPE_2) && !(halfDaysNightBit & temp_a2)) ||
+                        ((this->doorType == ENDOOR_TYPE_3) && !(halfDaysDayBit & temp_a2))) {
                         s16 baseTextId = 0x182D;
 
                         if (this->doorType == ENDOOR_TYPE_3) {
@@ -534,10 +530,10 @@ void func_80866B20(EnDoor* this, PlayState* play) {
                         this->door.dyna.actor.textId = baseTextId + textIdOffset;
                     }
                 } else if ((this->doorType == ENDOOR_TYPE_5) && (playerPosRelToDoor.z > 0.0f)) {
-                    ScheduleOutput sp30;
+                    ScheduleOutput scheduleOutput;
 
-                    if (Schedule_RunScript(play, D_8086778C[this->switchFlag], &sp30)) {
-                        this->door.dyna.actor.textId = sp30.result + 0x1800;
+                    if (Schedule_RunScript(play, D_8086778C[this->switchFlag], &scheduleOutput)) {
+                        this->door.dyna.actor.textId = scheduleOutput.result + 0x1800;
 
                         player->doorType = ((this->door.dyna.actor.textId == 0x1821) && D_80867BC0)
                                                ? PLAYER_DOORTYPE_PROXIMITY

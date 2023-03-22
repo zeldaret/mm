@@ -1,5 +1,16 @@
 #include "global.h"
+#include "stack.h"
 #include "system_malloc.h"
+
+// extern UNK_TYPE1 D_801FBE10;
+// extern UNK_TYPE1 D_801FBE28;
+// extern UNK_TYPE1 D_801FBE2C;
+// extern UNK_TYPE4 D_801FBE30;
+extern STACK(sSysFlashromStack, 0x1000);
+extern StackEntry sys_flashromStackEntry;
+extern OSThread sys_flashromOSThread;
+extern s80185D40 D_801FD008;
+extern OSMesg D_801FD034;
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/sys_flashrom/func_801857C0.s")
 

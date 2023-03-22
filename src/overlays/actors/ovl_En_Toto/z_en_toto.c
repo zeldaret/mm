@@ -251,7 +251,7 @@ void func_80BA39C8(EnToto* this, PlayState* play) {
         return;
     }
 
-    //! @TODO: 0xED02 nor 0xED01 match CLOCK_TIME macro
+    //! TODO: Neither 0xED02 nor 0xED01 match CLOCK_TIME macro
     if (((play->sceneId == SCENE_MILK_BAR) &&
          !((gSaveContext.save.time >= CLOCK_TIME(6, 0)) && (gSaveContext.save.time < 0xED02))) ||
         ((play->sceneId != SCENE_MILK_BAR) && func_80BA397C(this, 0x2000))) {
@@ -364,9 +364,9 @@ s32 func_80BA3EE8(EnToto* this, PlayState* play) {
 
 s32 func_80BA3F2C(EnToto* this, PlayState* play) {
     if (this->text->textId != 0) {
-        func_80151938(play, this->text->textId);
+        Message_ContinueTextbox(play, this->text->textId);
     } else {
-        func_801477B4(play);
+        Message_CloseTextbox(play);
         func_80BA3EE8(this, play);
     }
     if (this->text->unk0 == 4) {
@@ -700,7 +700,7 @@ void func_80BA4CB4(EnToto* this, PlayState* play) {
         }
     }
     if (this->unk2B5 == 4 && !Actor_HasParent(&this->actor, play)) {
-        Actor_PickUp(&this->actor, play, GI_MASK_CIRCUS_LEADER, 9999.9f, 9999.9f);
+        Actor_OfferGetItem(&this->actor, play, GI_MASK_CIRCUS_LEADER, 9999.9f, 9999.9f);
     }
 }
 

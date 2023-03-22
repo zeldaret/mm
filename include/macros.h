@@ -50,9 +50,9 @@
 #define CLOCK_TIME_MINUTE  (CLOCK_TIME(0, 1))
 #define DAY_LENGTH (CLOCK_TIME(24, 0))
 
+#define TIME_TO_HOURS_F(time) ((time) * (24.0f / 0x10000))
 #define TIME_TO_MINUTES_F(time) ((time) * ((24.0f * 60.0f) / 0x10000)) // 0.021972656f
 #define TIME_TO_MINUTES_ALT_F(time) ((time) / (0x10000 / (24.0f * 60.0f)))
-
 #define TIME_TO_SECONDS_F(time) ((time) * ((24.0f * 60.0f * 60.0f) / 0x10000))
 
 #define CLOCK_TIME_F(hr, min) (((hr) * 60.0f + (min)) * (0x10000 / (24.0f * 60.0f)))
@@ -149,12 +149,13 @@ extern GraphicsContext* __gfxCtx;
 
 #define ROUND(x) (s32)(((x) >= 0.0) ? ((x) + 0.5) : ((x) - 0.5))
 
-#define SWAP(type, a, b)  \
-    {                     \
-        type _temp = (a); \
-        (a) = (b);        \
-        (b) = _temp;      \
-    }
+#define SWAP(type, a, b)    \
+    {                       \
+        type _temp = (a);   \
+        (a) = (b);          \
+        (b) = _temp;        \
+    }                       \
+    (void)0
 
 #define OVERLAY_RELOCATION_OFFSET(overlayEntry) ((uintptr_t)((overlayEntry)->vramStart) - (uintptr_t)((overlayEntry)->loadedRamAddr))
 #define VRAM_PTR_SIZE(entry) ((uintptr_t)((entry)->vramEnd) - (uintptr_t)((entry)->vramStart))

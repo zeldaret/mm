@@ -1,5 +1,5 @@
-#ifndef Z64_BGCHECK_H
-#define Z64_BGCHECK_H
+#ifndef Z64BGCHECK_H
+#define Z64BGCHECK_H
 
 struct PlayState;
 struct Actor;

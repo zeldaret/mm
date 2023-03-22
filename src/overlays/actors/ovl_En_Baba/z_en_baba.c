@@ -638,7 +638,7 @@ void EnBaba_GiveBlastMask(EnBaba* this, PlayState* play) {
         this->stateFlags |= BOMB_SHOP_LADY_STATE_GAVE_BLAST_MASK;
         this->actionFunc = EnBaba_GaveBlastMask;
     } else {
-        Actor_PickUp(&this->actor, play, GI_MASK_BLAST, 300.0f, 300.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_MASK_BLAST, 300.0f, 300.0f);
     }
 }
 
