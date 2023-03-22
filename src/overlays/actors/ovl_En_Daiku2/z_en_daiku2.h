@@ -7,9 +7,9 @@ struct EnDaiku2;
 
 typedef void (*EnDaiku2ActionFunc)(struct EnDaiku2*, PlayState*);
 
-#define ENDAIKU2_GET_7F(thisx) ((thisx)->params & 0x7F);
-#define ENDAIKU2_GET_PATH_INDEX(thisx) (((thisx)->params >> 7) & 0x3F);
-#define ENDAIKU2_GET_8000(thisx) (((thisx)->params >> 15) & 0x1);
+#define ENDAIKU2_GET_7F(thisx) ((thisx)->params & 0x7F)
+#define ENDAIKU2_GET_PATH_INDEX(thisx) (((thisx)->params >> 7) & 0x3F)
+#define ENDAIKU2_GET_8000(thisx) (((thisx)->params >> 15) & 0x1)
 
 #define ENDAIKU2_PATH_INDEX_NONE (PATH_INDEX_NONE & 0x3F)
 

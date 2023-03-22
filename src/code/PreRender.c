@@ -1,4 +1,5 @@
 #include "global.h"
+#include "slowly.h"
 #include "stack.h"
 
 /**
@@ -411,7 +412,7 @@ void PreRender_ApplyFilters(PreRender* this) {
     }
 }
 
-extern SlowlyTask D_801F6E00;
+extern SlowlyMgr sSlowlyMgr;
 extern s32 D_801F6FC0;
 extern StackEntry sSlowlyStackInfo;
 extern STACK(sSlowlyStack, 0x1000);
@@ -423,12 +424,12 @@ void PreRender_ApplyFiltersSlowlyInit(PreRender* this) {
     if ((this->cvgSave != NULL) && (this->fbufSave != NULL)) {
         if (D_801F6FC0) {
             StackCheck_Cleanup(&sSlowlyStackInfo);
-            Slowly_Stop(&D_801F6E00);
+            Slowly_Destroy(&sSlowlyMgr);
         }
 
         this->unk_4D = 1;
         StackCheck_Init(&sSlowlyStackInfo, sSlowlyStack, STACK_TOP(sSlowlyStack), 0, 0x100, "slowly");
-        Slowly_Start(&D_801F6E00, STACK_TOP(sSlowlyStack), PreRender_ApplyFilters, this, NULL);
+        Slowly_Init(&sSlowlyMgr, STACK_TOP(sSlowlyStack), (void*)PreRender_ApplyFilters, this, NULL);
         D_801F6FC0 = true;
     }
 }
@@ -439,7 +440,7 @@ void PreRender_ApplyFiltersSlowlyInit(PreRender* this) {
 void PreRender_ApplyFiltersSlowlyDestroy(PreRender* this) {
     if (D_801F6FC0) {
         StackCheck_Cleanup(&sSlowlyStackInfo);
-        Slowly_Stop(&D_801F6E00);
+        Slowly_Destroy(&sSlowlyMgr);
         D_801F6FC0 = false;
     }
 }

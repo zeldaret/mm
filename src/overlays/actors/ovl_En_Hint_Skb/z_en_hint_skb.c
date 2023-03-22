@@ -570,7 +570,7 @@ void func_80C20C24(EnHintSkb* this, PlayState* play) {
             break;
 
         case 0x1151:
-            func_801477B4(play);
+            Message_CloseTextbox(play);
             if (this->unk_3E8 & 0x10) {
                 SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 40, NA_SE_EN_STALKID_DEAD);
                 func_80C20484(this);

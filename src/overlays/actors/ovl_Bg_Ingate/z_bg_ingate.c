@@ -276,7 +276,7 @@ void func_809543D4(BgIngate* this, PlayState* play) {
         switch (this->dyna.actor.textId) {
             case 0x9E4:
                 this->dyna.actor.textId = 0x9E5;
-                func_80151938(play, this->dyna.actor.textId);
+                Message_ContinueTextbox(play, this->dyna.actor.textId);
                 break;
             case 0x9E5:
                 if (play->msgCtx.choiceIndex == 0) {
@@ -293,7 +293,7 @@ void func_809543D4(BgIngate* this, PlayState* play) {
                     CLEAR_WEEKEVENTREG(WEEKEVENTREG_90_40);
                     func_8019F230();
                 }
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 break;
             case 0x9E6:
                 if (play->msgCtx.choiceIndex == 0) {
@@ -307,7 +307,7 @@ void func_809543D4(BgIngate* this, PlayState* play) {
                     Environment_StartTime();
                     func_8019F230();
                 }
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 break;
         }
     }

@@ -7,8 +7,8 @@ struct EnDaiku;
 
 typedef void (*EnDaikuActionFunc)(struct EnDaiku*, PlayState*);
 
-#define ENDAIKU_GET_FF(thisx) ((thisx)->params & 0xFF);
-#define ENDAIKU_GET_PATH_INDEX(thisx) (((thisx)->params >> 8) & 0xFF);
+#define ENDAIKU_GET_FF(thisx) ((thisx)->params & 0xFF)
+#define ENDAIKU_GET_PATH_INDEX(thisx) (((thisx)->params >> 8) & 0xFF)
 
 #define ENDAIKU_PATH_INDEX_NONE (PATH_INDEX_NONE & 0x3F)
 

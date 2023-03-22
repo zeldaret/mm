@@ -732,7 +732,7 @@ void func_80B71F3C(EnRailSkb* this, PlayState* play) {
                     Message_StartTextbox(play, 0x13F4, &this->actor);
                     this->unk_400 = 0x13F4;
                 } else {
-                    func_801477B4(play);
+                    Message_CloseTextbox(play);
                     func_80B71D8C(this, play, func_80B71650);
                 }
                 break;
@@ -744,7 +744,7 @@ void func_80B71F3C(EnRailSkb* this, PlayState* play) {
                 break;
 
             case 0x13F4:
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 func_80B71D8C(this, play, func_80B718B0);
                 break;
         }
