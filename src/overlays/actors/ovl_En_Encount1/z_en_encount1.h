@@ -7,7 +7,7 @@
 #define ENENCOUNT1_GET_7C0(thisx) (((thisx)->params >> 6) & 0x1F)
 #define ENENCOUNT1_GET_PATH_INDEX(thisx) ((thisx)->params & 0x3F)
 
-#define ENENCOUNT1_PATH_INDEX_NONE (PATH_INDEX_NONE & 0x3F)
+#define ENENCOUNT1_PATH_INDEX_NONE 0x3F
 
 typedef enum EnEncount1Enemy {
     /* 0x0 */ EN_ENCOUNT1_GRASSHOPPER,

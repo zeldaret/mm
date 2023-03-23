@@ -12,7 +12,7 @@ typedef void (*EnLookNutsActionFunc)(struct EnLookNuts*, PlayState*);
 #define LOOKNUTS_GET_SCENE_FLAG(thisx) ((thisx)->params & 0x7F)
 #define LOOKNUTS_GET_PATH_INDEX(thisx) (((thisx)->params >> 0x7) & 0x1F)
 
-#define LOOKNUTS_PATH_INDEX_NONE (PATH_INDEX_NONE & 0x1F)
+#define LOOKNUTS_PATH_INDEX_NONE 0x1F
 
 typedef struct EnLookNuts {
     /* 0x000 */ Actor actor;

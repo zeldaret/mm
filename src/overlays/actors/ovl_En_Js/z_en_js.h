@@ -8,7 +8,7 @@
 #define ENJS_GET_PATH_INDEX(thisx) (((thisx)->params & 0xFC00) >> 10)
 #define ENJS_GET_EXIT_INDEX(thisx)  (((thisx)->params & 0x3F0) >> 4)
 
-#define ENJS_PATH_INDEX_NONE (PATH_INDEX_NONE & 0x3F)
+#define ENJS_PATH_INDEX_NONE 0x3F
 
 struct EnJs;
 

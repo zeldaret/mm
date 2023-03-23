@@ -8,7 +8,7 @@
 #define GERUDO_WHITE_GET_TYPE(thisx) (((thisx)->params) & 0xF)
 #define GERUDO_WHITE_GET_PATH_INDEX(thisx) ((((thisx)->params) & 0xFC00) >> 10)
 
-#define GERUDO_WHITE_PATH_INDEX_NONE (PATH_INDEX_NONE & 0x3F)
+#define GERUDO_WHITE_PATH_INDEX_NONE 0x3F
 
 //! Only the first type is used
 typedef enum {

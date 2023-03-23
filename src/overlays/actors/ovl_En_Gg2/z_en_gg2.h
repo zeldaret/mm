@@ -9,7 +9,7 @@ typedef void (*EnGg2ActionFunc)(struct EnGg2*, PlayState*);
 
 #define ENGG2_GET_PATH_INDEX(thisx) (((thisx)->params & 0xFC00) >> 0xA)
 
-#define ENGG2_PATH_INDEX_NONE (PATH_INDEX_NONE & 0x3F)
+#define ENGG2_PATH_INDEX_NONE 0x3F
 
 typedef struct EnGg2 {
     /* 0x000 */ Actor actor;

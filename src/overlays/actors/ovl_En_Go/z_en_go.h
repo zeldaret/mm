@@ -11,7 +11,7 @@ typedef void (*EnGoActionFunc)(struct EnGo*, PlayState*);
 #define ENGO_GET_70(thisx) ((((thisx)->params & 0x70) >> 4) & 0xFF)
 #define ENGO_GET_PATH_INDEX(thisx) ((((thisx)->params & 0x7F80) >> 7) & 0xFF)
 
-#define ENGO_PATH_INDEX_NONE (PATH_INDEX_NONE & 0xFF)
+#define ENGO_PATH_INDEX_NONE 0xFF
 
 enum {
     /* 0 */ ENGO_F_0,

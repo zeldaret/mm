@@ -13,7 +13,7 @@ typedef void (*EnSwActionFunc)(struct EnSw*, PlayState*);
 #define ENSW_GET_3FC(thisx) (ENSW_GETS_3FC((thisx)->params))
 #define ENSW_GET_PATH_INDEX(thisx) ((((thisx)->params & 0xFF00) >> 8) & 0xFF)
 
-#define ENSW_PATH_INDEX_NONE (PATH_INDEX_NONE & 0xFF)
+#define ENSW_PATH_INDEX_NONE 0xFF
 
 typedef struct EnSw {
     /* 0x000 */ Actor actor;

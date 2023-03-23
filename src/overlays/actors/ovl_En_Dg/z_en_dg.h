@@ -22,7 +22,7 @@ typedef void (*EnDgActionFunc)(struct EnDg*, PlayState*);
 #define ENDG_GET_PATH_INDEX(thisx) (((thisx)->params & 0xFC00) >> 10)
 #define ENDG_PARAMS(path, index) ((path << 10) | (index << 5))
 
-#define ENDG_PATH_INDEX_NONE (PATH_INDEX_NONE & 0x3F)
+#define ENDG_PATH_INDEX_NONE 0x3F
 
 typedef enum {
     /*  0 */ ENDG_INDEX_RACETRACK_0,

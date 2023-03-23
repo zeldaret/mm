@@ -18,7 +18,7 @@ typedef struct EnFamosRock {
 #define FAMOS_GET_PATH_INDEX(thisx) ((thisx)->params)
 #define FAMOS_GET_AGGRO_DISTANCE(thisx) ((thisx)->shape.rot.x)
 
-#define FAMOS_PATH_INDEX_NONE (PATH_INDEX_NONE & 0xFF)
+#define FAMOS_PATH_INDEX_NONE 0xFF
 
 // stateTimer gets reused:
 //   after spotting player, counts frames until first attack (8)

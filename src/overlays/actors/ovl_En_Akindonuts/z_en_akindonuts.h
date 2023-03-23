@@ -12,7 +12,7 @@ typedef void (*EnAkindonutsUnkFunc)(struct EnAkindonuts*, PlayState*);
 #define ENAKINDONUTS_GET_4(thisx) (((thisx)->params & 4) >> 2)
 #define ENAKINDONUTS_GET_PATH_INDEX(thisx) (((thisx)->params & 0xFC00) >> 0xA)
 
-#define ENAKINDONUTS_PATH_INDEX_NONE (PATH_INDEX_NONE & 0x3F)
+#define ENAKINDONUTS_PATH_INDEX_NONE 0x3F
 
 enum {
     /* 1 */ ENAKINDONUTS_3_1 = 1,

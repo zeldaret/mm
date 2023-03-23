@@ -11,7 +11,7 @@ typedef s32 (*EnTruUnkFunc)(Actor*, PlayState*);
 
 #define ENTRU_GET_PATH_INDEX(thisx) ((thisx)->params & 0xFF)
 
-#define ENTRU_PATH_INDEX_NONE (PATH_INDEX_NONE & 0xFF)
+#define ENTRU_PATH_INDEX_NONE 0xFF
 
 typedef struct {
     /* 0x00 */ u8 unk_00;

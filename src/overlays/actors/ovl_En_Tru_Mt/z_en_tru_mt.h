@@ -11,7 +11,7 @@ typedef void (*EnTruMtActionFunc)(struct EnTruMt*, PlayState*);
 #define ENTRUMT_GET_FF(thisx) ((thisx)->params & 0xFF)
 #define ENTRUMT_GET_FC00(thisx) (((thisx)->params & 0xFC00) >> 0xA)
 
-#define ENTRUMT_PATH_INDEX_NONE (PATH_INDEX_NONE & 0x3F)
+#define ENTRUMT_PATH_INDEX_NONE 0x3F
 
 typedef struct EnTruMt {
     /* 0x000 */ Actor actor;

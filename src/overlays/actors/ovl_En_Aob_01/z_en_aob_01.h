@@ -11,7 +11,7 @@ typedef void (*EnAob01ActionFunc)(struct EnAob01*, PlayState*);
 #define ENAOB01_GET_7E00_1(thisx) ((thisx)->params & 0x7E00)
 #define ENAOB01_GET_7E00_2(thisx) (((thisx)->params & 0x7E00) >> 9)
 
-#define ENAOB01_PATH_INDEX_NONE (PATH_INDEX_NONE & 0x3F)
+#define ENAOB01_PATH_INDEX_NONE 0x3F
 
 typedef struct EnAob01 {
     /* 0x000 */ Actor actor;

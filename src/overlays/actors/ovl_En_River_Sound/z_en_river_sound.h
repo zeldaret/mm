@@ -8,7 +8,7 @@ struct EnRiverSound;
 #define RS_GET_TYPE(thisx) ((thisx)->params & 0xFF);
 #define RS_GET_PATH_INDEX(thisx) (((thisx)->params >> 8) & 0xFF);
 
-#define RS_PATH_INDEX_NONE (PATH_INDEX_NONE & 0xFF)
+#define RS_PATH_INDEX_NONE 0xFF
 
 // Any param not as one of these values will result in UB
 typedef enum {

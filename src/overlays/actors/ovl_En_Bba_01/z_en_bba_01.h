@@ -9,7 +9,7 @@ typedef void (*EnBba01ActionFunc)(struct EnBba01*, PlayState*);
 
 #define ENBBA01_GET_PATH_INDEX(thisx) (((thisx)->params & 0x7E00) >> 9)
 
-#define ENBBA01_PATH_INDEX_NONE (PATH_INDEX_NONE & 0x3F)
+#define ENBBA01_PATH_INDEX_NONE 0x3F
 
 typedef struct EnBba01 {
     /* 0x000 */ EnHy enHy;

@@ -10,7 +10,7 @@ typedef void (*EnPr2ActionFunc)(struct EnPr2*, PlayState*);
 #define ENPR2_GET_F(thisx) ((thisx)->params & 0xF)
 #define ENPR2_GET_FF0(thisx) (((thisx)->params >> 4) & 0xFF)
 
-#define ENPR2_PATH_INDEX_NONE (PATH_INDEX_NONE & 0x3F)
+#define ENPR2_PATH_INDEX_NONE 0x3F
 
 typedef struct EnPr2 {
     /* 0x000 */ Actor actor;
