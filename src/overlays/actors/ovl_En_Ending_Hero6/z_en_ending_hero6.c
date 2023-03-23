@@ -122,7 +122,7 @@ void EnEndingHero6_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec
 
 void EnEndingHero6_Draw(Actor* thisx, PlayState* play) {
     static TexturePtr sEyeTextures[] = { gDotourEyeShockTex, gDotourEyeOpenTex, gDotourEyeClosedTex,
-                                       gDotourEyeLookDownTex, gDotourEyeSquintTex };
+                                         gDotourEyeLookDownTex, gDotourEyeSquintTex };
     static TexturePtr sEyebrowTextures[] = { gDotourEyebrowHighTex, gDotourEyebrowMidTex, gDotourEyebrowLowTex };
     s32 pad;
     EnEndingHero6* this = THIS;
