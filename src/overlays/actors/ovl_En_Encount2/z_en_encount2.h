@@ -21,7 +21,7 @@ typedef struct EnEncount2Effect{
 #define EN_ENCOUNT2_EFFECT_COUNT 200
 
 typedef struct EnEncount2 {
-    /* 0x0000 */ DynaPolyActor dyna;
+    /* 0x0000 */ DynaPolyActor dynaActor;
     /* 0x015C */ EnEncount2ActionFunc actionFunc;
     /* 0x0160 */ s16 deathTimer;
     /* 0x0162 */ s16 isPopped;
