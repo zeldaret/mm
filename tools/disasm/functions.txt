@@ -8682,7 +8682,7 @@
     0x809A20FC:("EnMm2_WaitForRead",),
     0x809A2194:("EnMm2_Update",),
     0x809A21B8:("EnMm2_Draw",),
-    0x809A2B60:("DoorSpiral_SetupAction",),
+    0x809A2B60:("func_809A2B60",),
     0x809A2B70:("func_809A2B70",),
     0x809A2BF8:("func_809A2BF8",),
     0x809A2C78:("DoorSpiral_Init",),

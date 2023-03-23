@@ -35,26 +35,26 @@ const ActorInit Door_Spiral_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Door_Spiral_0x809A2B60/func_809A2B60.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Door_Spiral/func_809A2B60.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Door_Spiral_0x809A2B60/func_809A2B70.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Door_Spiral/func_809A2B70.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Door_Spiral_0x809A2B60/func_809A2BF8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Door_Spiral/func_809A2BF8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Door_Spiral_0x809A2B60/DoorSpiral_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Door_Spiral/DoorSpiral_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Door_Spiral_0x809A2B60/DoorSpiral_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Door_Spiral/DoorSpiral_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Door_Spiral_0x809A2B60/func_809A2DB0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Door_Spiral/func_809A2DB0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Door_Spiral_0x809A2B60/func_809A2E08.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Door_Spiral/func_809A2E08.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Door_Spiral_0x809A2B60/func_809A2EA0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Door_Spiral/func_809A2EA0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Door_Spiral_0x809A2B60/func_809A2FF8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Door_Spiral/func_809A2FF8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Door_Spiral_0x809A2B60/func_809A3098.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Door_Spiral/func_809A3098.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Door_Spiral_0x809A2B60/DoorSpiral_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Door_Spiral/DoorSpiral_Update.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Door_Spiral_0x809A2B60/DoorSpiral_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Door_Spiral/DoorSpiral_Draw.s")

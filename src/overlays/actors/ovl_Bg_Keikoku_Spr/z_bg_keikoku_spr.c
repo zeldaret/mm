@@ -24,10 +24,10 @@ const ActorInit Bg_Keikoku_Spr_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Keikoku_Spr_0x808C3A50/BgKeikokuSpr_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Keikoku_Spr/BgKeikokuSpr_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Keikoku_Spr_0x808C3A50/BgKeikokuSpr_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Keikoku_Spr/BgKeikokuSpr_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Keikoku_Spr_0x808C3A50/BgKeikokuSpr_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Keikoku_Spr/BgKeikokuSpr_Update.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Keikoku_Spr_0x808C3A50/BgKeikokuSpr_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Keikoku_Spr/BgKeikokuSpr_Draw.s")

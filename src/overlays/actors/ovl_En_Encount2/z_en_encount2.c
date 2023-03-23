@@ -131,7 +131,7 @@ void EnEncount2_Init(Actor* thisx, PlayState* play) {
     this->collider.elements->dim.modelSphere.center.y = -4;
     this->collider.elements->dim.modelSphere.center.z = 0;
 
-    this->dynaActor.actor.colChkInfo.damageTable = &sDamageTable;
+    this->dyna.actor.colChkInfo.damageTable = &sDamageTable;
     EnEncount2_SetIdle(this);
 }
 
@@ -149,7 +149,7 @@ void EnEncount2_SetIdle(EnEncount2* this) {
 
 void EnEncount2_Idle(EnEncount2* this, PlayState* play) {
     this->oscillationAngle += 1500.0f;
-    this->dynaActor.actor.velocity.y = Math_SinS(this->oscillationAngle);
+    this->dyna.actor.velocity.y = Math_SinS(this->oscillationAngle);
     Math_ApproachF(&this->scale, 0.1f, 0.3f, 0.01f);
     if ((this->collider.base.acFlags & AC_HIT) && (this->dyna.actor.colChkInfo.damageEffect == 0xE)) {
         this->dyna.actor.colChkInfo.health = 0;
@@ -162,7 +162,7 @@ void EnEncount2_Popped(EnEncount2* this, PlayState* play) {
     s32 i;
     Vec3f curPos;
 
-    Math_Vec3f_Copy(&curPos, &this->dynaActor.actor.world.pos);
+    Math_Vec3f_Copy(&curPos, &this->dyna.actor.world.pos);
     curPos.y += 60.0f;
     Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, curPos.x, curPos.y, curPos.z, 255, 255, 200,
                 CLEAR_TAG_LARGE_EXPLOSION);

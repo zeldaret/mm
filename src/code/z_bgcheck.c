@@ -171,7 +171,7 @@ void BgCheck_Vec3fToVec3s(Vec3s* dest, Vec3f* src) {
     dest->z = src->z;
 }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_bgcheck/func_800BFD84.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800BFD84.s")
 
 /**
  * Unused
