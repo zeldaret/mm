@@ -171,10 +171,7 @@ void BgCheck_Vec3fToVec3s(Vec3s* dest, Vec3f* src) {
     dest->z = src->z;
 }
 
-f32 func_800BFD84(CollisionPoly* poly, f32 arg1, f32 arg2) {
-    return (COLPOLY_GET_NORMAL(poly->normal.x * arg1 + poly->normal.z * arg2) + poly->dist) /
-           COLPOLY_GET_NORMAL(-poly->normal.y);
-}
+#pragma GLOBAL_ASM("./asm/non_matchings/code/z_bgcheck/func_800BFD84.asm")
 
 /**
  * Unused
