@@ -16,58 +16,13 @@
 
 #define THIS ((DoorSpiral*)thisx)
 
-typedef enum {
-    /* 0 */ SPIRAL_OVERWORLD, // does not display anything as there is not a DL in GAMEPLAY_KEEP for it
-    /* 1 */ SPIRAL_DUNGEON,
-    /* 2 */ SPIRAL_WOODFALL_TEMPLE,
-    /* 3 */ SPIRAL_WOODFALL_TEMPLE_ALT, // SPIRAL_WOODFALL_TEMPLE but with positional lights enabled?
-    /* 4 */ SPIRAL_SNOWHEAD_TEMPLE,
-    /* 5 */ SPIRAL_STONE_TOWER,
-    /* 6 */ SPIRAL_IKANA_CASTLE,
-    /* 7 */ SPIRAL_DAMPES_HOUSE
-} SpiralType;
-
-typedef enum {
-    /* 0 */ SPIRAL_OBJECT_OVERWORLD,
-    /* 1 */ SPIRAL_OBJECT_DUNGEON,
-    /* 2 */ SPIRAL_OBJECT_WOODFALL,
-    /* 3 */ SPIRAL_OBJECT_SNOWHEAD,
-    /* 4 */ SPIRAL_OBJECT_STONE_TOWER,
-    /* 5 */ SPIRAL_OBJECT_DAMPES_HOUSE,
-    /* 6 */ SPIRAL_OBJECT_IKANA_CASTLE
-} SpiralObjectType;
-
-typedef struct {
-    /* 0x00 */ Gfx* spiralDL[2]; // one displaylist for downward spiral, and one for upward
-    /* 0x08 */ s32 unk8;         // unused
-    /* 0x0C */ u8 unkC;          // unused
-    /* 0x0D */ u8 unkD;          // unused
-    /* 0x0E */ u8 spiralWidth;
-    /* 0x0F */ u8 spiralHeight;
-} SpiralInfo;
-
-// Maps SpiralObjectType to SpiralType
-typedef struct {
-    /* 0x00 */ s16 objectBankId;
-    /* 0x02 */ u8 spiralType;
-} SpiralObjectInfo;
-
-// Maps scenes to SpiralObjectType
-typedef struct {
-    /* 0x00 */ s16 sceneId;
-    /* 0x02 */ u8 objectType;
-} SpiralSceneInfo;
-
 void DoorSpiral_Init(Actor* thisx, PlayState* play);
 void DoorSpiral_Destroy(Actor* thisx, PlayState* play);
 void DoorSpiral_Update(Actor* thisx, PlayState* play);
 void DoorSpiral_Draw(Actor* thisx, PlayState* play);
 
-void DoorSpiral_WaitForObject(DoorSpiral* this, PlayState* play);
-void DoorSpiral_Wait(DoorSpiral* this, PlayState* play);
-void DoorSpiral_PlayerClimb(DoorSpiral* this, PlayState* play);
-
-ActorInit Door_Spiral_InitVars = {
+/*
+const ActorInit Door_Spiral_InitVars = {
     ACTOR_DOOR_SPIRAL,
     ACTORCAT_DOOR,
     FLAGS,
@@ -76,257 +31,30 @@ ActorInit Door_Spiral_InitVars = {
     (ActorFunc)DoorSpiral_Init,
     (ActorFunc)DoorSpiral_Destroy,
     (ActorFunc)DoorSpiral_Update,
-    (ActorFunc)DoorSpiral_Draw,
+    (ActorFunc)DoorSpiral_Draw
 };
+*/
 
-// Parameters for each staircase, indexed with SpiralType
-static SpiralInfo sSpiralInfo[] = {
-    { { NULL, NULL }, 0, 130, 12, 50, 15 },                                                       // SPIRAL_OVERWORLD
-    { { gameplay_dangeon_keep_DL_0219E0, gameplay_dangeon_keep_DL_01D980 }, 0, 130, 12, 50, 15 }, // SPIRAL_DUNGEON
-    { { object_numa_obj_DL_004448, object_numa_obj_DL_0007A8 }, 0, 130, 12, 50, 15 }, // SPIRAL_WOODFALL_TEMPLE
-    { { object_numa_obj_DL_0051B8, object_numa_obj_DL_0014C8 }, 0, 130, 12, 50, 15 }, // SPIRAL_WOODFALL_TEMPLE_ALT
-    { { object_hakugin_obj_DL_009278, object_hakugin_obj_DL_006128 }, 0, 130, 12, 50, 15 }, // SPIRAL_SNOWHEAD_TEMPLE
-    { { object_ikana_obj_DL_013EA8, object_ikana_obj_DL_012B70 }, 0, 130, 12, 50, 15 },     // SPIRAL_STONE_TOWER
-    { { object_ikninside_obj_DL_000EA0, object_ikninside_obj_DL_000590 }, 0, 130, 12, 50, 15 }, // SPIRAL_IKANA_CASTLE
-    { { object_danpei_object_DL_002110, object_danpei_object_DL_0012C0 }, 0, 130, 12, 50, 15 }, // SPIRAL_DAMPES_HOUSE
-};
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Door_Spiral_0x809A2B60/func_809A2B60.asm")
 
-// Defines which object bank a staircase should use, and its index to `sSpiralInfo`
-static SpiralObjectInfo sSpiralObjectInfo[] = {
-    { GAMEPLAY_KEEP, SPIRAL_OVERWORLD },           { GAMEPLAY_DANGEON_KEEP, SPIRAL_DUNGEON },
-    { OBJECT_NUMA_OBJ, SPIRAL_WOODFALL_TEMPLE },   { OBJECT_HAKUGIN_OBJ, SPIRAL_SNOWHEAD_TEMPLE },
-    { OBJECT_IKANA_OBJ, SPIRAL_STONE_TOWER },      { OBJECT_DANPEI_OBJECT, SPIRAL_DAMPES_HOUSE },
-    { OBJECT_IKNINSIDE_OBJ, SPIRAL_IKANA_CASTLE },
-};
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Door_Spiral_0x809A2B60/func_809A2B70.asm")
 
-/**
- * Sets the actor's action function
- */
-void DoorSpiral_SetupAction(DoorSpiral* this, DoorSpiralActionFunc actionFunc) {
-    this->actionFunc = actionFunc;
-    this->unk14A = 0; // set but never used
-}
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Door_Spiral_0x809A2B60/func_809A2BF8.asm")
 
-/**
- * Sets this->spiralType, which is derived from `sSpiralObjectInfo`, and is used as an index to `sSpiralInfo`.
- */
-s32 DoorSpiral_SetSpiralType(DoorSpiral* this, PlayState* play) {
-    SpiralObjectInfo* doorObjectInfo = &sSpiralObjectInfo[this->objectType];
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Door_Spiral_0x809A2B60/DoorSpiral_Init.asm")
 
-    this->spiralType = doorObjectInfo->spiralType;
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Door_Spiral_0x809A2B60/DoorSpiral_Destroy.asm")
 
-    if ((this->spiralType == SPIRAL_DAMPES_HOUSE) ||
-        ((this->spiralType == SPIRAL_WOODFALL_TEMPLE) && play->roomCtx.curRoom.enablePosLights)) {
-        if (this->spiralType == SPIRAL_WOODFALL_TEMPLE) {
-            this->spiralType = SPIRAL_WOODFALL_TEMPLE_ALT;
-        }
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Door_Spiral_0x809A2B60/func_809A2DB0.asm")
 
-        this->actor.flags |= ACTOR_FLAG_10000000;
-    }
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Door_Spiral_0x809A2B60/func_809A2E08.asm")
 
-    DoorSpiral_SetupAction(this, DoorSpiral_Wait);
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Door_Spiral_0x809A2B60/func_809A2EA0.asm")
 
-    return 0;
-}
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Door_Spiral_0x809A2B60/func_809A2FF8.asm")
 
-/**
- * Gets the object type to be used as an index to `sSpiralObjectInfo`.
- * It first checks `sSpiralSceneInfo`, but if the current scene is not found it will fall back to the default spiral
- * (overworld or dungeon).
- */
-s32 DoorSpiral_GetObjectType(PlayState* play) {
-    // Defines which object type should be used for specific scenes
-    static SpiralSceneInfo spiralSceneInfo[] = {
-        { SCENE_MITURIN, SPIRAL_OBJECT_WOODFALL },         { SCENE_HAKUGIN, SPIRAL_OBJECT_SNOWHEAD },
-        { SCENE_INISIE_N, SPIRAL_OBJECT_STONE_TOWER },     { SCENE_INISIE_R, SPIRAL_OBJECT_STONE_TOWER },
-        { SCENE_DANPEI2TEST, SPIRAL_OBJECT_DAMPES_HOUSE }, { SCENE_IKNINSIDE, SPIRAL_OBJECT_IKANA_CASTLE },
-        { SCENE_CASTLE, SPIRAL_OBJECT_IKANA_CASTLE },
-    };
-    SpiralSceneInfo* sceneInfo = spiralSceneInfo;
-    s32 i;
-    s32 type;
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Door_Spiral_0x809A2B60/func_809A3098.asm")
 
-    for (i = 0; i < ARRAY_COUNT(spiralSceneInfo); sceneInfo++, i++) {
-        if (play->sceneId == sceneInfo->sceneId) {
-            break;
-        }
-    }
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Door_Spiral_0x809A2B60/DoorSpiral_Update.asm")
 
-    type = i;
-
-    if (type < ARRAY_COUNT(spiralSceneInfo)) {
-        type = sceneInfo->objectType;
-    } else {
-        // Set the type based on if link is in a dungeon scene, or the overworld
-        type = (Object_GetIndex(&play->objectCtx, GAMEPLAY_DANGEON_KEEP) >= 0) ? SPIRAL_OBJECT_DUNGEON
-                                                                               : SPIRAL_OBJECT_OVERWORLD;
-    }
-
-    return type;
-}
-
-static InitChainEntry sInitChain[] = {
-    ICHAIN_VEC3F(scale, 1, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneScale, 400, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 400, ICHAIN_STOP),
-};
-
-void DoorSpiral_Init(Actor* thisx, PlayState* play) {
-    DoorSpiral* this = THIS;
-    s32 pad;
-    s32 transition = DOORSPIRAL_GET_TRANSITION_ID(thisx);
-    s8 objBankId;
-
-    if (this->actor.room != play->doorCtx.transitionActorList[transition].sides[0].room) {
-        Actor_Kill(&this->actor);
-        return;
-    }
-
-    Actor_ProcessInitChain(&this->actor, sInitChain);
-    this->unk145 = DOORSPIRAL_GET_UNK145(thisx); // set but never used
-    this->orientation = DOORSPIRAL_GET_ORIENTATION(thisx);
-    this->objectType = DoorSpiral_GetObjectType(play);
-    objBankId = Object_GetIndex(&play->objectCtx, sSpiralObjectInfo[this->objectType].objectBankId);
-    this->bankIndex = objBankId;
-
-    if (objBankId < 0) {
-        Actor_Kill(&this->actor);
-        return;
-    }
-
-    DoorSpiral_SetupAction(this, DoorSpiral_WaitForObject);
-    Actor_SetFocus(&this->actor, 60.0f);
-}
-
-void DoorSpiral_Destroy(Actor* thisx, PlayState* play) {
-    s32 transition = DOORSPIRAL_GET_TRANSITION_ID(thisx);
-
-    play->doorCtx.transitionActorList[transition].id *= -1;
-}
-
-/**
- * Waits for the required object to be loaded.
- */
-void DoorSpiral_WaitForObject(DoorSpiral* this, PlayState* play) {
-    if (Object_IsLoaded(&play->objectCtx, this->bankIndex)) {
-        this->actor.objBankIndex = this->bankIndex;
-        DoorSpiral_SetSpiralType(this, play);
-    }
-}
-
-/**
- * Finds the distance between the stairs and the player.
- */
-f32 DoorSpiral_GetDistFromPlayer(PlayState* play, DoorSpiral* this, f32 yOffset, f32 spiralWidth, f32 spiralHeight) {
-    Player* player = GET_PLAYER(play);
-    Vec3f target;
-    Vec3f offset;
-
-    target.x = player->actor.world.pos.x;
-    target.y = player->actor.world.pos.y + yOffset;
-    target.z = player->actor.world.pos.z;
-
-    Actor_OffsetOfPointInActorCoords(&this->actor, &offset, &target);
-
-    if ((spiralWidth < fabsf(offset.x)) || (spiralHeight < fabsf(offset.y))) {
-        return FLT_MAX;
-    }
-
-    return offset.z;
-}
-
-/**
- * Checks if the player should climb the stairs.
- */
-s32 DoorSpiral_PlayerShouldClimb(DoorSpiral* this, PlayState* play) {
-    Player* player = GET_PLAYER(play);
-
-    if (!Player_InCsMode(play)) {
-        SpiralInfo* spiralInfo = &sSpiralInfo[this->spiralType];
-        f32 dist = DoorSpiral_GetDistFromPlayer(play, this, 0.0f, spiralInfo->spiralWidth, spiralInfo->spiralHeight);
-
-        if (fabsf(dist) < 64.0f) {
-            s16 angle = player->actor.shape.rot.y - this->actor.shape.rot.y;
-
-            if (dist > 0.0f) {
-                angle = 0x8000 - angle;
-            }
-
-            if (ABS_ALT(angle) < 0x3000) {
-                return (dist >= 0.0f) ? 1.0f : -1.0f;
-            }
-        }
-    }
-
-    return 0;
-}
-
-/**
- * Wait for the player to interact with the stairs.
- */
-void DoorSpiral_Wait(DoorSpiral* this, PlayState* play) {
-    Player* player;
-    s32 transition;
-
-    if (this->shouldClimb) {
-        DoorSpiral_SetupAction(this, DoorSpiral_PlayerClimb);
-    } else if (DoorSpiral_PlayerShouldClimb(this, play)) {
-        player = GET_PLAYER(play);
-
-        player->doorType = PLAYER_DOORTYPE_STAIRCASE;
-        player->doorDirection = this->orientation;
-        player->doorActor = &this->actor;
-        transition = DOORSPIRAL_GET_TRANSITION_ID(&this->actor);
-        player->doorNext = ((u16)play->doorCtx.transitionActorList[transition].params) >> 10;
-
-        func_80122F28(player);
-    }
-}
-
-/**
- * Player is climbing the stairs.
- */
-void DoorSpiral_PlayerClimb(DoorSpiral* this, PlayState* play) {
-    Player* player = GET_PLAYER(play);
-
-    if (!(player->stateFlags1 & PLAYER_STATE1_20000000)) {
-        DoorSpiral_SetupAction(this, DoorSpiral_WaitForObject);
-        this->shouldClimb = 0;
-    }
-}
-
-void DoorSpiral_Update(Actor* thisx, PlayState* play) {
-    DoorSpiral* this = THIS;
-    s32 pad;
-    Player* player = GET_PLAYER(play);
-
-    if (!(player->stateFlags1 & (PLAYER_STATE1_40 | PLAYER_STATE1_80 | PLAYER_STATE1_400 | PLAYER_STATE1_10000000)) ||
-        (this->actionFunc == DoorSpiral_WaitForObject)) {
-        this->actionFunc(this, play);
-    }
-}
-
-void DoorSpiral_Draw(Actor* thisx, PlayState* play) {
-    s32 pad;
-    DoorSpiral* this = THIS;
-
-    if (this->actor.objBankIndex == this->bankIndex) {
-        SpiralInfo* spiralInfo = &sSpiralInfo[this->spiralType];
-        Gfx* dList;
-
-        // Set the model to render based on the orientation of the stairs (upward or downward)
-        dList = spiralInfo->spiralDL[this->orientation];
-
-        if (dList != NULL) {
-            OPEN_DISPS(play->state.gfxCtx);
-
-            func_8012C28C(play->state.gfxCtx);
-
-            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_OPA_DISP++, spiralInfo->spiralDL[this->orientation]);
-
-            CLOSE_DISPS(play->state.gfxCtx);
-        }
-    }
-}
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Door_Spiral_0x809A2B60/DoorSpiral_Draw.asm")

@@ -229,6 +229,7 @@ void EnPoFusen_IncrementRomaniPop(EnPoFusen* this) {
 
     if ((parent != NULL) && (parent->id == ACTOR_EN_MA4)) {
         EnMa4* romani = (EnMa4*)parent;
+
         romani->poppedBalloonCounter++;
     }
 
