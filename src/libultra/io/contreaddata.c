@@ -36,7 +36,7 @@ void osContGetReadData(OSContPad* data) {
             data->stick_x = readformat.stick_x;
             data->stick_y = readformat.stick_y;
         }
-    };
+    }
 }
 
 void __osPackReadData(void) {

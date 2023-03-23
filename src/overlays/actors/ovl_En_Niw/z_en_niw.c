@@ -86,41 +86,20 @@ static ColliderCylinderInit sCylinderInit = {
     { 15, 25, 4, { 0, 0, 0 } },
 };
 
-static Vec3f D_808934C4 = {
-    90000.0f,
-    90000.0f,
-    90000.0f,
-};
-
-static InitChainEntry sInitChain[] = {
-    ICHAIN_U8(targetMode, 6, ICHAIN_CONTINUE),
-    ICHAIN_F32_DIV1000(gravity, -2000, ICHAIN_CONTINUE),
-    ICHAIN_F32(targetArrowOffset, 0, ICHAIN_STOP),
-};
-
-static Vec3f D_808934DC = {
-    90000.0f,
-    90000.0f,
-    90000.0f,
-};
-
-static Vec3f D_808934E8 = {
-    90000.0f,
-    90000.0f,
-    90000.0f,
-};
-
-static s32 pad = 0;
-
 void EnNiw_Init(Actor* thisx, PlayState* play) {
+    static InitChainEntry sInitChain[] = {
+        ICHAIN_U8(targetMode, 6, ICHAIN_CONTINUE),
+        ICHAIN_F32_DIV1000(gravity, -2000, ICHAIN_CONTINUE),
+        ICHAIN_F32(targetArrowOffset, 0, ICHAIN_STOP),
+    };
     EnNiw* this = THIS;
-    Vec3f dTemp = D_808934C4;
+    Vec3f D_808934C4 = { 90000.0f, 90000.0f, 90000.0f };
 
     if (this->actor.params < 0) { // all scene spawned cucco are (-1)
         this->actor.params = NIW_TYPE_REGULAR;
     }
 
-    Math_Vec3f_Copy(&this->unk2BC, &dTemp);
+    Math_Vec3f_Copy(&this->unk2BC, &D_808934C4);
 
     this->niwType = this->actor.params;
     Actor_ProcessInitChain(&this->actor, sInitChain);
@@ -138,9 +117,6 @@ void EnNiw_Init(Actor* thisx, PlayState* play) {
     Actor_SetScale(&this->actor, 0.01f);
 
     if (this->niwType == NIW_TYPE_UNK1) {
-        // @Bug this unused variant is broken and crashes on spawn (EnNiw_Update expects a parent, NULL)
-        //   if modified to change niwType to TYPE_REGULAR here, new size is smaller than normal
-        //   theory: was meant to be a small hand held cucco for grog to show the player
         Actor_SetScale(&this->actor, (BREG(86) / 10000.0f) + 0.004f);
     }
 
@@ -450,7 +426,7 @@ void EnNiw_Idle(EnNiw* this, PlayState* play) {
 }
 
 void EnNiw_Held(EnNiw* this, PlayState* play) {
-    Vec3f vec3fcopy = D_808934DC;
+    Vec3f D_808934DC = { 90000.0f, 90000.0f, 90000.0f };
     s16 rotZ;
 
     if (this->heldTimer == 0) {
@@ -483,7 +459,7 @@ void EnNiw_Held(EnNiw* this, PlayState* play) {
         this->actor.shape.rot.y = rotZ;
         this->actor.shape.rot.x = rotZ;
         Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
-        Math_Vec3f_Copy(&this->unk2BC, &vec3fcopy);
+        Math_Vec3f_Copy(&this->unk2BC, &D_808934DC);
         this->actor.flags |= ACTOR_FLAG_1; // targetable ON
         this->actionFunc = EnNiw_Thrown;
     }
@@ -666,7 +642,7 @@ void EnNiw_SetupRunAway(EnNiw* this) {
 
 void EnNiw_RunAway(EnNiw* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    Vec3f tempVec3f = D_808934E8;
+    Vec3f D_808934E8 = { 90000.0f, 90000.0f, 90000.0f };
     s16 temp298;
     f32 dX;
     f32 dZ;
@@ -682,7 +658,7 @@ void EnNiw_RunAway(EnNiw* this, PlayState* play) {
         this->targetLimbRots[6] = 0;
         this->targetLimbRots[5] = 0;
         this->targetLimbRots[7] = 0;
-        Math_Vec3f_Copy(&this->unk2BC, &tempVec3f);
+        Math_Vec3f_Copy(&this->unk2BC, &D_808934E8);
 
         EnNiw_SetupIdle(this);
 

@@ -1450,9 +1450,12 @@ typedef enum SunsSongState {
 
 #define GET_WEEKEVENTREG_RACE_FLAGS (WEEKEVENTREG(92) & WEEKEVENTREG_RACE_FLAGS)
 
-#define SET_WEEKEVENTREG_RACE_FLAGS(flag)             \
-    WEEKEVENTREG(92) &= (u8)~WEEKEVENTREG_RACE_FLAGS; \
-    WEEKEVENTREG(92) = WEEKEVENTREG(92) | (u8)((WEEKEVENTREG(92) & ~WEEKEVENTREG_RACE_FLAGS) | (flag))
+#define SET_WEEKEVENTREG_RACE_FLAGS(flag)                                                                   \
+    {                                                                                                       \
+        WEEKEVENTREG(92) &= (u8)~WEEKEVENTREG_RACE_FLAGS;                                                   \
+        WEEKEVENTREG(92) = WEEKEVENTREG(92) | (u8)((WEEKEVENTREG(92) & ~WEEKEVENTREG_RACE_FLAGS) | (flag)); \
+    }                                                                                                       \
+    (void)0
 
 /**
  * gSaveContext.eventInf

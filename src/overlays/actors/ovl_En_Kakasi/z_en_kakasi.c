@@ -934,7 +934,7 @@ void EnKakasi_DancingNightAway(EnKakasi* this, PlayState* play) {
                 func_80169EFC(&play->state);
 
                 //! FAKE
-                if (0) {}
+                if (1) {}
 
                 if (gSaveContext.save.time > CLOCK_TIME(18, 0) || gSaveContext.save.time < CLOCK_TIME(6, 0)) {
                     gSaveContext.save.time = CLOCK_TIME(6, 0);

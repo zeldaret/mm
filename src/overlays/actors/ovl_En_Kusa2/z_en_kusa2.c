@@ -1292,7 +1292,7 @@ void func_80A5E604(Actor* thisx, PlayState* play) {
     } else {
         this->actor.draw = func_80A5E6F0;
 
-        if (play->roomCtx.curRoom.unk3 == 0) {
+        if (play->roomCtx.curRoom.behaviorType1 == ROOM_BEHAVIOR_TYPE1_0) {
             func_80A5B508();
         }
         func_80A5CAF4(&D_80A5F1C0);
@@ -1355,7 +1355,7 @@ void EnKusa2_Draw(Actor* thisx, PlayState* play) {
     EnKusa2* this = THIS;
 
     if (this->actor.projectedPos.z <= 1200.0f) {
-        if ((play->roomCtx.curRoom.unk3 == 0) && (this->actor.projectedPos.z > -150.0f) &&
+        if ((play->roomCtx.curRoom.behaviorType1 == ROOM_BEHAVIOR_TYPE1_0) && (this->actor.projectedPos.z > -150.0f) &&
             (this->actor.projectedPos.z < 400.0f)) {
             func_80A5B954(&D_80A60908[this->unk_1CE], 0.0015f);
         }

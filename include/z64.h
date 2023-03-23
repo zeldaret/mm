@@ -560,8 +560,6 @@ typedef void (*ColChkApplyFunc)(struct PlayState*, CollisionCheckContext*, Colli
 typedef void (*ColChkVsFunc)(struct PlayState*, CollisionCheckContext*, Collider*, Collider*);
 typedef s32 (*ColChkLineFunc)(struct PlayState*, CollisionCheckContext*, Collider*, Vec3f*, Vec3f*);
 
-typedef void(*room_draw_func)(struct PlayState* play, Room* room, u32 flags);
-
 typedef struct {
     /* 0x000 */ u8 controllers; // bit 0 is set if controller 1 is plugged in, etc.
     /* 0x001 */ UNK_TYPE1 pad1[0x13];

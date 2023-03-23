@@ -1,63 +1,482 @@
 #include "global.h"
 #include "libc/assert.h"
 
-void Room_nop8012D510(PlayState* play, Room* room, UNK_PTR param_3, UNK_TYPE1 param_4) {
+void Room_Noop(PlayState* play, Room* room, Input* input, s32 arg3) {
 }
 
-void Room_DrawType3Mesh(PlayState* play, Room* room, u32 flags) {
+void Room_DrawNone(PlayState* play, Room* room, u32 flags) {
 }
 
-void Room_DrawType0Mesh(PlayState* play, Room* room, u32 flags) {
-    RoomMeshType0* mesh;
+static Vec3f sZeroVec = { 0.0f, 0.0f, 0.0f };
+
+void Room_DrawNormal(PlayState* play, Room* room, u32 flags) {
+    RoomShapeNormal* roomShape;
+    RoomShapeDListsEntry* entry;
     s32 i;
-    RoomMeshType0Params* meshParams;
-    GraphicsContext* gfxCtx;
-    UNK_TYPE4 pad;
 
-    gfxCtx = play->state.gfxCtx;
-    if (flags & 1) {
-        func_800BCBF4(&D_801C1D10, play);
-        gSPSegment(gfxCtx->polyOpa.p++, 0x03, room->segment);
+    OPEN_DISPS(play->state.gfxCtx);
+
+    if (flags & ROOM_DRAW_OPA) {
+        func_800BCBF4(&sZeroVec, play);
+        gSPSegment(POLY_OPA_DISP++, 0x03, room->segment);
         func_8012C268(play);
-        gSPMatrix(gfxCtx->polyOpa.p++, &gIdentityMtx, G_MTX_MODELVIEW | G_MTX_LOAD);
+        gSPMatrix(POLY_OPA_DISP++, &gIdentityMtx, G_MTX_MODELVIEW | G_MTX_LOAD);
     }
 
-    if (flags & 2) {
-        func_800BCC68(&D_801C1D10, play);
-        gSPSegment(gfxCtx->polyXlu.p++, 0x03, room->segment);
+    if (flags & ROOM_DRAW_XLU) {
+        func_800BCC68(&sZeroVec, play);
+        gSPSegment(POLY_XLU_DISP++, 0x03, room->segment);
         func_8012C2DC(play->state.gfxCtx);
-        gSPMatrix(gfxCtx->polyXlu.p++, &gIdentityMtx, G_MTX_MODELVIEW | G_MTX_LOAD);
+        gSPMatrix(POLY_XLU_DISP++, &gIdentityMtx, G_MTX_MODELVIEW | G_MTX_LOAD);
     }
 
-    mesh = &room->mesh->type0;
-    meshParams = Lib_SegmentedToVirtual(mesh->paramsStart);
-    for (i = 0; i < mesh->count; i++) {
-        if ((flags & 1) && (meshParams->opaqueDl != NULL)) {
-            gSPDisplayList(gfxCtx->polyOpa.p++, meshParams->opaqueDl);
+    roomShape = &room->roomShape->normal;
+    entry = Lib_SegmentedToVirtual(roomShape->entries);
+    for (i = 0; i < roomShape->numEntries; i++) {
+        if ((flags & ROOM_DRAW_OPA) && (entry->opa != NULL)) {
+            gSPDisplayList(POLY_OPA_DISP++, entry->opa);
         }
 
-        if ((flags & 2) && (meshParams->translucentDl != NULL)) {
-            gSPDisplayList(gfxCtx->polyXlu.p++, meshParams->translucentDl);
+        if ((flags & ROOM_DRAW_XLU) && (entry->xlu != NULL)) {
+            gSPDisplayList(POLY_XLU_DISP++, entry->xlu);
         }
 
-        meshParams++;
+        entry++;
     }
+
+    CLOSE_DISPS(play->state.gfxCtx);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_room/Room_DrawType2Mesh.s")
+typedef enum {
+    /* 0 */ ROOM_CULL_DEBUG_MODE_OFF,
+    /* 1 */ ROOM_CULL_DEBUG_MODE_UP_TO_TARGET,
+    /* 2 */ ROOM_CULL_DEBUG_MODE_ONLY_TARGET
+} RoomCullableDebugMode;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_room/func_8012DEE8.s")
+typedef struct RoomShapeCullableEntryLinked {
+    /* 0x00 */ RoomShapeCullableEntry* entry;
+    /* 0x04 */ f32 boundsNearZ;
+    /* 0x08 */ struct RoomShapeCullableEntryLinked* prev;
+    /* 0x0C */ struct RoomShapeCullableEntryLinked* next;
+} RoomShapeCullableEntryLinked; // size = 0x10
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_room/func_8012E254.s")
+// TODO: 127 is an arbitrarily chosen number to make the stack sorta work
+#define ROOM_SHAPE_CULLABLE_MAX_ENTRIES 127
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_room/func_8012E32C.s")
+#ifdef NON_MATCHING
+// Small regalloc, likely related to temp usage and scoping
+void Room_DrawCullable(PlayState* play, Room* room, u32 flags) {
+    RoomShapeCullable* roomShape;
+    RoomShapeCullableEntry* roomShapeCullableEntry;
+    RoomShapeCullableEntry* roomShapeCullableEntries;
+    RoomShapeCullableEntry* roomShapeCullableEntryIter;
+    Gfx* displayList;
+    f32 entryBoundsNearZ;
+    RoomShapeCullableEntryLinked linkedEntriesBuffer[ROOM_SHAPE_CULLABLE_MAX_ENTRIES];
+    RoomShapeCullableEntryLinked* head = NULL;
+    RoomShapeCullableEntryLinked* tail = NULL;
+    s32 var_a1;
+    RoomShapeCullableEntryLinked* iter;
+    RoomShapeCullableEntryLinked* insert;
+    f32 var_fv1;
+    s32 i;
+    Vec3f pos;
+    Vec3f projectedPos;
+    s32 pad2;
 
-void Room_DrawType1Mesh(PlayState* play, Room* room, u32 flags) {
-    RoomMeshType1* mesh = &room->mesh->type1;
-    if (mesh->format == 1) {
-        func_8012DEE8(play, room, flags);
-    } else if (mesh->format == 2) {
-        func_8012E32C(play, room, flags);
+    OPEN_DISPS(play->state.gfxCtx);
+
+    if (flags & ROOM_DRAW_OPA) {
+        func_800BCBF4(&sZeroVec, play);
+
+        //! TODO: Fake
+        if (1) {}
+        if (1) {}
+        if (1) {}
+
+        gSPSegment(POLY_OPA_DISP++, 0x03, room->segment);
+        if (play->roomCtx.unk74 != NULL) {
+            gSPSegment(POLY_OPA_DISP++, 0x06, play->roomCtx.unk74);
+        }
+        func_8012C268(play);
+        gSPMatrix(POLY_OPA_DISP++, &gIdentityMtx, G_MTX_MODELVIEW | G_MTX_LOAD);
+    }
+
+    if (flags & ROOM_DRAW_XLU) {
+        func_800BCC68(&sZeroVec, play);
+        gSPSegment(POLY_XLU_DISP++, 0x03, room->segment);
+        if (play->roomCtx.unk74 != NULL) {
+            gSPSegment(POLY_XLU_DISP++, 0x06, play->roomCtx.unk74);
+        }
+        func_8012C2DC(play->state.gfxCtx);
+        gSPMatrix(POLY_XLU_DISP++, &gIdentityMtx, G_MTX_MODELVIEW | G_MTX_LOAD);
+    }
+
+    if ((room->enablePosLights != 0) || (MREG(93) != 0)) {
+        gSPSetGeometryMode(POLY_OPA_DISP++, G_LIGHTING_POSITIONAL);
+        gSPSetGeometryMode(POLY_XLU_DISP++, G_LIGHTING_POSITIONAL);
+    }
+
+    roomShape = &room->roomShape->cullable;
+    roomShapeCullableEntry = Lib_SegmentedToVirtual(roomShape->entries);
+    insert = linkedEntriesBuffer;
+
+    roomShapeCullableEntries = roomShapeCullableEntry;
+
+    if (play->roomCtx.unk78 < 0) {
+        for (i = 0; i < roomShape->numEntries; i++, roomShapeCullableEntry++) {
+            if (R_ROOM_CULL_DEBUG_MODE != 0) {
+                if (((R_ROOM_CULL_DEBUG_MODE == ROOM_CULL_DEBUG_MODE_UP_TO_TARGET) &&
+                     (i <= R_ROOM_CULL_DEBUG_TARGET)) ||
+                    ((R_ROOM_CULL_DEBUG_MODE == ROOM_CULL_DEBUG_MODE_ONLY_TARGET) && (i == R_ROOM_CULL_DEBUG_TARGET))) {
+                    if (flags & ROOM_DRAW_OPA) {
+                        displayList = roomShapeCullableEntry->opa;
+                        if (displayList != NULL) {
+                            gSPDisplayList(POLY_OPA_DISP++, displayList);
+                        }
+                    }
+
+                    if (flags & ROOM_DRAW_XLU) {
+                        displayList = roomShapeCullableEntry->xlu;
+                        if (displayList != NULL) {
+                            gSPDisplayList(POLY_XLU_DISP++, displayList);
+                        }
+                    }
+                }
+            } else {
+                if (flags & ROOM_DRAW_OPA) {
+                    displayList = roomShapeCullableEntry->opa;
+                    if (displayList != NULL) {
+                        gSPDisplayList(POLY_OPA_DISP++, displayList);
+                    }
+                }
+
+                if (flags & ROOM_DRAW_XLU) {
+                    displayList = roomShapeCullableEntry->xlu;
+                    if (displayList != NULL) {
+                        gSPDisplayList(POLY_XLU_DISP++, displayList);
+                    }
+                }
+            }
+        }
+    } else {
+        f32 var_fa1 = 1.0f / play->projectionMtxFDiagonal.z; // sp54
+        s32 pad5;
+
+        // Pick and sort entries by depth
+        for (i = 0; i < roomShape->numEntries; i++, roomShapeCullableEntry++) {
+
+            // Project the entry position, to get the depth it is at.
+            pos.x = roomShapeCullableEntry->boundsSphereCenter.x;
+            pos.y = roomShapeCullableEntry->boundsSphereCenter.y;
+            pos.z = roomShapeCullableEntry->boundsSphereCenter.z;
+            SkinMatrix_Vec3fMtxFMultXYZ(&play->viewProjectionMtxF, &pos, &projectedPos);
+
+            projectedPos.z *= var_fa1;
+
+            var_fv1 = ABS_ALT(roomShapeCullableEntry->boundsSphereRadius);
+
+            // If the entry bounding sphere isn't fully before the rendered depth range
+            if (-var_fv1 < projectedPos.z) {
+
+                // Compute the depth of the nearest point in the entry's bounding sphere
+                entryBoundsNearZ = projectedPos.z - var_fv1;
+
+                // If the entry bounding sphere isn't fully beyond the rendered depth range
+                if (entryBoundsNearZ < play->lightCtx.zFar) {
+
+                    // This entry will be rendered
+                    insert->entry = roomShapeCullableEntry;
+
+                    if (roomShapeCullableEntry->boundsSphereRadius < 0) {
+                        insert->boundsNearZ = FLT_MAX;
+                    } else {
+                        insert->boundsNearZ = entryBoundsNearZ;
+                    }
+
+                    // Insert into the linked list, ordered by ascending depth of the nearest point in the bounding
+                    // sphere
+                    iter = head;
+                    if (iter == NULL) {
+                        head = tail = insert;
+                        insert->prev = insert->next = NULL;
+                    } else {
+                        do {
+                            if (insert->boundsNearZ < iter->boundsNearZ) {
+                                break;
+                            }
+                            iter = iter->next;
+                        } while (iter != NULL);
+
+                        if (iter == NULL) {
+                            insert->prev = tail;
+                            insert->next = NULL;
+                            tail->next = insert;
+                            tail = insert;
+                        } else {
+                            insert->prev = iter->prev;
+                            if (insert->prev == NULL) {
+                                head = insert;
+                            } else {
+                                insert->prev->next = insert;
+                            }
+                            iter->prev = insert;
+                            insert->next = iter;
+                        }
+                    }
+
+                    insert++;
+                }
+            }
+        }
+
+        //! FAKE: Similar trick used in OoT
+        R_ROOM_CULL_NUM_ENTRIES = roomShape->numEntries & 0xFFFF & 0xFFFF & 0xFFFF;
+
+        // Draw entries, from nearest to furthest
+        i = 1;
+
+        if (flags & ROOM_DRAW_OPA) {
+            for (; head != NULL; head = head->next, i++) {
+                s32 pad3;
+                RoomShapeCullableEntry* roomShapeCullableEntry;
+
+                roomShapeCullableEntry = head->entry;
+
+                if (R_ROOM_CULL_DEBUG_MODE != ROOM_CULL_DEBUG_MODE_OFF) {
+                    // Debug mode drawing
+
+                    if (((R_ROOM_CULL_DEBUG_MODE == ROOM_CULL_DEBUG_MODE_UP_TO_TARGET) &&
+                         (i <= R_ROOM_CULL_DEBUG_TARGET)) ||
+                        ((R_ROOM_CULL_DEBUG_MODE == ROOM_CULL_DEBUG_MODE_ONLY_TARGET) &&
+                         (i == R_ROOM_CULL_DEBUG_TARGET))) {
+
+                        displayList = roomShapeCullableEntry->opa;
+                        if (displayList != NULL) {
+                            gSPDisplayList(POLY_OPA_DISP++, displayList);
+                        }
+                    }
+                } else {
+                    displayList = roomShapeCullableEntry->opa;
+                    if (displayList != NULL) {
+                        gSPDisplayList(POLY_OPA_DISP++, displayList);
+                    }
+                }
+            }
+        }
+
+        if (flags & ROOM_DRAW_XLU) {
+            for (; head != NULL; head = head->prev) {
+                f32 temp_fv0;
+                f32 temp_fv1;
+
+                roomShapeCullableEntry = head->entry;
+                displayList = roomShapeCullableEntry->xlu;
+
+                if (displayList != NULL) {
+                    if (roomShapeCullableEntry->boundsSphereRadius & 1) {
+
+                        temp_fv0 = head->boundsNearZ - (f32)(iREG(93) + 0xBB8);
+                        temp_fv1 = iREG(94) + 0x7D0;
+
+                        if (temp_fv0 < temp_fv1) {
+                            if (temp_fv0 < 0.0f) {
+                                var_a1 = 255;
+                            } else {
+                                var_a1 = 255 - (s32)((temp_fv0 / temp_fv1) * 255.0f);
+                            }
+                            gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 255, var_a1);
+                            gSPDisplayList(POLY_XLU_DISP++, displayList);
+                        }
+                    } else {
+                        gSPDisplayList(POLY_XLU_DISP++, displayList);
+                    }
+                }
+            }
+        }
+
+        R_ROOM_CULL_USED_ENTRIES = i - 1;
+    }
+
+    CLOSE_DISPS(play->state.gfxCtx);
+}
+#else
+void Room_DrawCullable(PlayState* play, Room* room, u32 flags);
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_room/Room_DrawCullable.s")
+#endif
+
+#define ROOM_IMAGE_NODRAW_BACKGROUND (1 << 0)
+#define ROOM_IMAGE_NODRAW_OPA (1 << 1)
+#define ROOM_IMAGE_NODRAW_XLU (1 << 2)
+
+void Room_DrawImageSingle(PlayState* play, Room* room, u32 flags) {
+    Camera* activeCam;
+    Gfx* gfx;
+    RoomShapeImageSingle* roomShape;
+    RoomShapeDListsEntry* entry;
+    u32 isFixedCamera;
+    u32 drawBackground;
+    u32 drawOpa;
+    u32 drawXlu;
+
+    OPEN_DISPS(play->state.gfxCtx);
+
+    activeCam = GET_ACTIVE_CAM(play);
+    isFixedCamera = false; // Condition is inferred from OoT
+    roomShape = &room->roomShape->image.single;
+    entry = Lib_SegmentedToVirtual(roomShape->base.entry);
+    drawBackground = (flags & ROOM_DRAW_OPA) && isFixedCamera && (roomShape->source != NULL) &&
+                     !(R_ROOM_IMAGE_NODRAW_FLAGS & ROOM_IMAGE_NODRAW_BACKGROUND);
+    drawOpa = (flags & ROOM_DRAW_OPA) && (entry->opa != NULL) && !(R_ROOM_IMAGE_NODRAW_FLAGS & ROOM_IMAGE_NODRAW_OPA);
+    drawXlu = (flags & ROOM_DRAW_XLU) && (entry->xlu != NULL) && !(R_ROOM_IMAGE_NODRAW_FLAGS & ROOM_IMAGE_NODRAW_XLU);
+
+    if (drawOpa || drawBackground) {
+        gSPSegment(POLY_OPA_DISP++, 0x03, room->segment);
+
+        if (drawOpa) {
+            func_8012C28C(play->state.gfxCtx);
+            gSPMatrix(POLY_OPA_DISP++, &gIdentityMtx, G_MTX_MODELVIEW | G_MTX_LOAD);
+            gSPDisplayList(POLY_OPA_DISP++, entry->opa);
+        }
+
+        if (drawBackground) {
+            gSPLoadUcodeL(POLY_OPA_DISP++, gspS2DEX2_fifo);
+
+            gfx = POLY_OPA_DISP;
+
+            {
+                Vec3f quakeOffset;
+
+                Camera_GetQuakeOffset(&quakeOffset, activeCam);
+
+                Prerender_DrawBackground2D(
+                    &gfx, roomShape->source, roomShape->tlut, roomShape->width, roomShape->height, roomShape->fmt,
+                    roomShape->siz, roomShape->tlutMode, roomShape->tlutCount,
+                    (quakeOffset.x + quakeOffset.z) * 1.2f + quakeOffset.y * 0.6f,
+                    quakeOffset.y * 2.4f + (quakeOffset.x + quakeOffset.z) * 0.3f, 1.0f, 1.0f, 0);
+            }
+
+            POLY_OPA_DISP = gfx;
+
+            gSPLoadUcode(POLY_OPA_DISP++, SysUcode_GetUCode(), SysUcode_GetUCodeData());
+        }
+    }
+
+    if (drawXlu) {
+        gSPSegment(POLY_XLU_DISP++, 0x03, room->segment);
+        func_8012C2DC(play->state.gfxCtx);
+        gSPMatrix(POLY_XLU_DISP++, &gIdentityMtx, G_MTX_MODELVIEW | G_MTX_LOAD);
+        gSPDisplayList(POLY_XLU_DISP++, entry->xlu);
+    }
+
+    CLOSE_DISPS(play->state.gfxCtx);
+}
+
+RoomShapeImageMultiBgEntry* Room_GetImageMultiBgEntry(RoomShapeImageMulti* roomShapeImageMulti, PlayState* play) {
+    Camera* activeCam = GET_ACTIVE_CAM(play);
+    s32 bgCamIndex = activeCam->bgCamDataId;
+    s16 overrideBgCamIndex;
+    Player* player;
+    RoomShapeImageMultiBgEntry* bgEntry;
+    s32 i;
+
+    overrideBgCamIndex = ((BgCamFuncData*)BgCheck_GetBgCamFuncDataImpl(&play->colCtx, bgCamIndex, BGCHECK_SCENE))
+                             ->roomImageOverrideBgCamIndex;
+    if (overrideBgCamIndex >= 0) {
+        bgCamIndex = overrideBgCamIndex;
+    }
+
+    player = GET_PLAYER(play);
+    player->actor.params = (player->actor.params & 0xFF00) | bgCamIndex;
+
+    bgEntry = Lib_SegmentedToVirtual(roomShapeImageMulti->backgrounds);
+    for (i = 0; i < roomShapeImageMulti->numBackgrounds; i++) {
+        if (bgEntry->bgCamIndex == bgCamIndex) {
+            return bgEntry;
+        }
+        bgEntry++;
+    }
+
+    __assert("../z_room.c", 849);
+
+    return NULL;
+}
+
+void Room_DrawImageMulti(PlayState* play, Room* room, u32 flags) {
+    Camera* activeCam;
+    Gfx* gfx;
+    RoomShapeImageMulti* roomShape;
+    RoomShapeImageMultiBgEntry* bgEntry;
+    RoomShapeDListsEntry* dListsEntry;
+    u32 isFixedCamera;
+    u32 drawBackground;
+    u32 drawOpa;
+    u32 drawXlu;
+
+    OPEN_DISPS(play->state.gfxCtx);
+
+    activeCam = GET_ACTIVE_CAM(play);
+    isFixedCamera = false; // Condition is inferred from OoT
+    roomShape = &room->roomShape->image.multi;
+    dListsEntry = Lib_SegmentedToVirtual(roomShape->base.entry);
+
+    bgEntry = Room_GetImageMultiBgEntry(roomShape, play);
+
+    drawBackground = (flags & ROOM_DRAW_OPA) && isFixedCamera && (bgEntry->source != NULL) &&
+                     !(R_ROOM_IMAGE_NODRAW_FLAGS & ROOM_IMAGE_NODRAW_BACKGROUND);
+    drawOpa =
+        (flags & ROOM_DRAW_OPA) && (dListsEntry->opa != NULL) && !(R_ROOM_IMAGE_NODRAW_FLAGS & ROOM_IMAGE_NODRAW_OPA);
+    drawXlu =
+        (flags & ROOM_DRAW_XLU) && (dListsEntry->xlu != NULL) && !(R_ROOM_IMAGE_NODRAW_FLAGS & ROOM_IMAGE_NODRAW_XLU);
+
+    if (drawOpa || drawBackground) {
+        gSPSegment(POLY_OPA_DISP++, 0x03, room->segment);
+
+        if (drawOpa) {
+            func_8012C28C(play->state.gfxCtx);
+            gSPMatrix(POLY_OPA_DISP++, &gIdentityMtx, G_MTX_MODELVIEW | G_MTX_LOAD);
+            gSPDisplayList(POLY_OPA_DISP++, dListsEntry->opa);
+        }
+
+        if (drawBackground) {
+            gSPLoadUcodeL(POLY_OPA_DISP++, gspS2DEX2_fifo);
+
+            gfx = POLY_OPA_DISP;
+
+            {
+                Vec3f quakeOffset;
+
+                Camera_GetQuakeOffset(&quakeOffset, activeCam);
+                Prerender_DrawBackground2D(&gfx, bgEntry->source, bgEntry->tlut, bgEntry->width, bgEntry->height,
+                                           bgEntry->fmt, bgEntry->siz, bgEntry->tlutMode, bgEntry->tlutCount,
+                                           (quakeOffset.x + quakeOffset.z) * 1.2f + quakeOffset.y * 0.6f,
+                                           quakeOffset.y * 2.4f + (quakeOffset.x + quakeOffset.z) * 0.3f, 1.0f, 1.0f,
+                                           0);
+            }
+
+            POLY_OPA_DISP = gfx;
+
+            gSPLoadUcode(POLY_OPA_DISP++, SysUcode_GetUCode(), SysUcode_GetUCodeData());
+        }
+    }
+
+    if (drawXlu) {
+        gSPSegment(POLY_XLU_DISP++, 0x03, room->segment);
+        func_8012C2DC(play->state.gfxCtx);
+        gSPMatrix(POLY_XLU_DISP++, &gIdentityMtx, G_MTX_MODELVIEW | G_MTX_LOAD);
+        gSPDisplayList(POLY_XLU_DISP++, dListsEntry->xlu);
+    }
+
+    CLOSE_DISPS(play->state.gfxCtx);
+}
+
+void Room_DrawImage(PlayState* play, Room* room, u32 flags) {
+    RoomShapeImageBase* roomShape = &room->roomShape->image.base;
+
+    if (roomShape->amountType == ROOM_SHAPE_IMAGE_AMOUNT_SINGLE) {
+        Room_DrawImageSingle(play, room, flags);
+    } else if (roomShape->amountType == ROOM_SHAPE_IMAGE_AMOUNT_MULTI) {
+        Room_DrawImageMulti(play, room, flags);
     } else {
         __assert("../z_room.c", 965);
     }
@@ -65,31 +484,96 @@ void Room_DrawType1Mesh(PlayState* play, Room* room, u32 flags) {
 
 void Room_Init(PlayState* play, RoomContext* roomCtx) {
     s32 i;
+
     roomCtx->curRoom.num = -1;
     roomCtx->curRoom.segment = NULL;
     roomCtx->unk78 = 1;
     roomCtx->unk79 = 0;
-    for (i = 0; i < 3; i++) {
+    for (i = 0; i < ARRAY_COUNT(roomCtx->unk7A); i++) {
         roomCtx->unk7A[i] = 0;
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_room/Room_AllocateAndLoad.s")
+size_t Room_AllocateAndLoad(PlayState* play, RoomContext* roomCtx) {
+    size_t maxRoomSize = 0;
+    size_t roomSize;
+    s32 i;
+    s32 j;
+    s32 frontRoom;
+    s32 backRoom;
+    size_t frontRoomSize;
+    size_t backRoomSize;
+    size_t cumulRoomSize;
+    s32 pad[2];
+
+    {
+        RomFile* roomList = play->roomList;
+
+        for (i = 0; i < play->numRooms; i++) {
+            roomSize = roomList[i].vromEnd - roomList[i].vromStart;
+            maxRoomSize = MAX(roomSize, maxRoomSize);
+        }
+    }
+
+    if ((u32)play->doorCtx.numTransitionActors != 0) {
+        RomFile* roomList = play->roomList;
+        TransitionActorEntry* transitionActor = &play->doorCtx.transitionActorList[0];
+
+        for (j = 0; j < play->doorCtx.numTransitionActors; j++) {
+            frontRoom = transitionActor->sides[0].room;
+            backRoom = transitionActor->sides[1].room;
+            frontRoomSize = (frontRoom < 0) ? 0 : roomList[frontRoom].vromEnd - roomList[frontRoom].vromStart;
+            backRoomSize = (backRoom < 0) ? 0 : roomList[backRoom].vromEnd - roomList[backRoom].vromStart;
+            cumulRoomSize = (frontRoom != backRoom) ? frontRoomSize + backRoomSize : frontRoomSize;
+
+            maxRoomSize = MAX(cumulRoomSize, maxRoomSize);
+            transitionActor++;
+        }
+    }
+
+    roomCtx->roomMemPages[0] = THA_AllocEndAlign16(&play->state.heap, maxRoomSize);
+    if (roomCtx->roomMemPages[0] == NULL) {
+        __assert("../z_room.c", 1078);
+    }
+    roomCtx->roomMemPages[1] = (void*)((uintptr_t)roomCtx->roomMemPages[0] + maxRoomSize);
+    roomCtx->activeMemPage = 0;
+    roomCtx->status = 0;
+
+    if ((gSaveContext.respawnFlag != 0) && (gSaveContext.respawnFlag != -2) && (gSaveContext.respawnFlag != -7)) {
+        s32 respawnMode;
+
+        if ((gSaveContext.respawnFlag == -8) || (gSaveContext.respawnFlag == -5) || (gSaveContext.respawnFlag == -4) ||
+            ((gSaveContext.respawnFlag < 0) && (gSaveContext.respawnFlag != -1) && (gSaveContext.respawnFlag != -6))) {
+            respawnMode = RESPAWN_MODE_DOWN;
+        } else if (gSaveContext.respawnFlag < 0) {
+            respawnMode = RESPAWN_MODE_TOP;
+        } else {
+            respawnMode = gSaveContext.respawnFlag - 1;
+        }
+        frontRoom = gSaveContext.respawn[respawnMode].roomIndex;
+    } else {
+        frontRoom = play->setupEntranceList[play->curSpawn].room;
+    }
+
+    Room_StartRoomTransition(play, roomCtx, frontRoom);
+
+    return maxRoomSize;
+}
 
 s32 Room_StartRoomTransition(PlayState* play, RoomContext* roomCtx, s32 index) {
-    if (roomCtx->unk31 == 0) {
-        s32 size;
+    if (roomCtx->status == 0) {
+        size_t size;
 
         roomCtx->prevRoom = roomCtx->curRoom;
         roomCtx->curRoom.num = index;
         roomCtx->curRoom.segment = NULL;
-        roomCtx->unk31 = 1;
+        roomCtx->status = 1;
 
         size = play->roomList[index].vromEnd - play->roomList[index].vromStart;
-        roomCtx->activeRoomVram = (void*)(ALIGN16((u32)roomCtx->roomMemPages[roomCtx->activeMemPage] -
+        roomCtx->activeRoomVram = (void*)(ALIGN16((uintptr_t)roomCtx->roomMemPages[roomCtx->activeMemPage] -
                                                   (size + 8) * roomCtx->activeMemPage - 7));
 
-        osCreateMesgQueue(&roomCtx->loadQueue, roomCtx->loadMsg, 1);
+        osCreateMesgQueue(&roomCtx->loadQueue, roomCtx->loadMsg, ARRAY_COUNT(roomCtx->loadMsg));
         DmaMgr_SendRequestImpl(&roomCtx->dmaRequest, roomCtx->activeRoomVram, play->roomList[index].vromStart, size, 0,
                                &roomCtx->loadQueue, NULL);
         roomCtx->activeMemPage ^= 1;
@@ -101,14 +585,13 @@ s32 Room_StartRoomTransition(PlayState* play, RoomContext* roomCtx, s32 index) {
 }
 
 s32 Room_HandleLoadCallbacks(PlayState* play, RoomContext* roomCtx) {
-    if (roomCtx->unk31 == 1) {
-        if (!osRecvMesg(&roomCtx->loadQueue, NULL, OS_MESG_NOBLOCK)) {
-            roomCtx->unk31 = 0;
+    if (roomCtx->status == 1) {
+        if (osRecvMesg(&roomCtx->loadQueue, NULL, OS_MESG_NOBLOCK) == 0) {
+            roomCtx->status = 0;
             roomCtx->curRoom.segment = roomCtx->activeRoomVram;
-            // TODO: Segment number enum
-            gSegments[0x03] = VIRTUAL_TO_PHYSICAL(roomCtx->activeRoomVram);
+            gSegments[3] = VIRTUAL_TO_PHYSICAL(roomCtx->activeRoomVram);
 
-            Scene_ProcessHeader(play, (SceneCmd*)roomCtx->curRoom.segment);
+            Scene_ExecuteCommands(play, roomCtx->curRoom.segment);
             func_80123140(play, GET_PLAYER(play));
             Actor_SpawnTransitionActors(play, &play->actorCtx);
 
@@ -128,11 +611,17 @@ s32 Room_HandleLoadCallbacks(PlayState* play, RoomContext* roomCtx) {
     return 1;
 }
 
+RoomDrawHandler sRoomDrawHandlers[] = {
+    Room_DrawNormal,   // ROOM_SHAPE_TYPE_NORMAL
+    Room_DrawImage,    // ROOM_SHAPE_TYPE_IMAGE
+    Room_DrawCullable, // ROOM_SHAPE_TYPE_CULLABLE
+    Room_DrawNone,     // ROOM_SHAPE_TYPE_NONE
+};
+
 void Room_Draw(PlayState* play, Room* room, u32 flags) {
     if (room->segment != NULL) {
-        // TODO: Segment number enum
-        gSegments[0x03] = VIRTUAL_TO_PHYSICAL(room->segment);
-        roomDrawFuncs[room->mesh->type0.type](play, room, flags);
+        gSegments[3] = VIRTUAL_TO_PHYSICAL(room->segment);
+        sRoomDrawHandlers[room->roomShape->base.type](play, room, flags);
     }
     return;
 }
