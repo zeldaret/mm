@@ -86,7 +86,7 @@ void AudioHeap_DiscardFont(s32 fontId) {
 
             AudioPlayback_NoteDisable(note);
             AudioPlayback_AudioListRemove(&note->listItem);
-            AudioSeq_AudioListPushBack(&gAudioCtx.noteFreeLists.disabled, &note->listItem);
+            AudioScript_AudioListPushBack(&gAudioCtx.noteFreeLists.disabled, &note->listItem);
         }
     }
 }
@@ -113,7 +113,7 @@ void AudioHeap_DiscardSequence(s32 seqId) {
 
     for (i = 0; i < gAudioCtx.audioBufferParameters.numSequencePlayers; i++) {
         if (gAudioCtx.seqPlayers[i].enabled && gAudioCtx.seqPlayers[i].seqId == seqId) {
-            AudioSeq_SequencePlayerDisable(&gAudioCtx.seqPlayers[i]);
+            AudioScript_SequencePlayerDisable(&gAudioCtx.seqPlayers[i]);
         }
     }
 }
@@ -857,7 +857,7 @@ s32 AudioHeap_ResetStep(void) {
     switch (gAudioCtx.resetStatus) {
         case 5:
             for (i = 0; i < gAudioCtx.audioBufferParameters.numSequencePlayers; i++) {
-                AudioSeq_SequencePlayerDisableAsFinished(&gAudioCtx.seqPlayers[i]);
+                AudioScript_SequencePlayerDisableAsFinished(&gAudioCtx.seqPlayers[i]);
             }
             gAudioCtx.audioResetFadeOutFramesLeft = 2 / count;
             gAudioCtx.resetStatus--;
@@ -1059,10 +1059,10 @@ void AudioHeap_Init(void) {
     }
 
     // Initialize sequence players
-    AudioSeq_InitSequencePlayers();
+    AudioScript_InitSequencePlayers();
     for (i = 0; i < gAudioCtx.audioBufferParameters.numSequencePlayers; i++) {
-        AudioSeq_InitSequencePlayerChannels(i);
-        AudioSeq_ResetSequencePlayer(&gAudioCtx.seqPlayers[i]);
+        AudioScript_InitSequencePlayerChannels(i);
+        AudioScript_ResetSequencePlayer(&gAudioCtx.seqPlayers[i]);
     }
 
     // Initialize two additional caches on the audio heap to store individual audio samples

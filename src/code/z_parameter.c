@@ -1767,7 +1767,7 @@ void Interface_UpdateHudAlphas(PlayState* play, s16 dimmingAlpha) {
             break;
     }
 
-    if ((play->roomCtx.curRoom.unk3 == 1) && (interfaceCtx->minimapAlpha >= 255)) {
+    if ((play->roomCtx.curRoom.behaviorType1 == ROOM_BEHAVIOR_TYPE1_1) && (interfaceCtx->minimapAlpha >= 255)) {
         interfaceCtx->minimapAlpha = 255;
     }
 }
@@ -5096,8 +5096,9 @@ void Interface_Draw(PlayState* play) {
             // Load in Grandma's Story
             gSPLoadUcodeL(OVERLAY_DISP++, gspS2DEX2_fifo);
             gfx = OVERLAY_DISP;
-            func_80172758(&gfx, sStoryTextures[interfaceCtx->storyType], sStoryTLUTs[interfaceCtx->storyType],
-                          SCREEN_WIDTH, SCREEN_HEIGHT, 2, 1, 0x8000, 0x100, 0.0f, 0.0f, 1.0f, 1.0f, 0);
+            Prerender_DrawBackground2D(&gfx, sStoryTextures[interfaceCtx->storyType],
+                                       sStoryTLUTs[interfaceCtx->storyType], SCREEN_WIDTH, SCREEN_HEIGHT, 2, 1, 0x8000,
+                                       0x100, 0.0f, 0.0f, 1.0f, 1.0f, 0);
             OVERLAY_DISP = gfx;
             gSPLoadUcode(OVERLAY_DISP++, SysUcode_GetUCode(), SysUcode_GetUCodeData());
 

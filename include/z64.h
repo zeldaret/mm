@@ -207,25 +207,6 @@ typedef struct {
     /* 0x10 */ OSTime resetTime;
 } NmiBuff; // size >= 0x18
 
-typedef enum {
-    SLOWLY_CALLBACK_NO_ARGS,
-    SLOWLY_CALLBACK_ONE_ARG,
-    SLOWLY_CALLBACK_TWO_ARGS
-} SlowlyCallbackArgCount;
-
-typedef struct {
-    /* 0x000 */ OSThread thread;
-    /* 0x1B0 */ u8 callbackArgCount;
-    /* 0x1B1 */ u8 status;
-    /* 0x1B4 */ union {
-        void (*callback0)(void);
-        void (*callback1)(void*);
-        void (*callback2)(void*, void*);
-    };
-    /* 0x1B8 */ void* callbackArg0;
-    /* 0x1BC */ void* callbackArg1;
-} SlowlyTask; // size = 0x1C0
-
 typedef struct {
     /* 0x00 */ int unk0;
     /* 0x04 */ void* unk4;
@@ -569,8 +550,6 @@ typedef void (*ColChkBloodFunc)(struct PlayState*, Collider*, Vec3f*);
 typedef void (*ColChkApplyFunc)(struct PlayState*, CollisionCheckContext*, Collider*);
 typedef void (*ColChkVsFunc)(struct PlayState*, CollisionCheckContext*, Collider*, Collider*);
 typedef s32 (*ColChkLineFunc)(struct PlayState*, CollisionCheckContext*, Collider*, Vec3f*, Vec3f*);
-
-typedef void(*room_draw_func)(struct PlayState* play, Room* room, u32 flags);
 
 typedef struct {
     /* 0x000 */ u8 controllers; // bit 0 is set if controller 1 is plugged in, etc.

@@ -937,7 +937,7 @@ s32 func_80B7984C(PlayState* play, ObjUm* this, s32 arg2, s32* arg3) {
         return 0;
     }
     if (*arg3 == 3) {
-        func_80151938(play, this->dyna.actor.textId);
+        Message_ContinueTextbox(play, this->dyna.actor.textId);
         *arg3 = 1;
         return 0;
     }
@@ -1703,7 +1703,7 @@ void ObjUm_ChangeAnim(ObjUm* this, PlayState* play, ObjUmAnimation animIndex) {
     if (this->wheelRot / 0x199A != this->unk_420) {
         this->unk_420 = this->wheelRot / 0x199A;
         //! FAKE
-        if (!&sUmAnims[0]) {}
+        if (sUmAnims[0].doesMove) {}
         Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_CART_WHEEL);
     }
 }
