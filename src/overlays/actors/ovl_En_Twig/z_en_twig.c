@@ -4,6 +4,7 @@
  * Description: Beaver Race Ring
  */
 
+#include "prevent_bss_reordering.h"
 #include "z_en_twig.h"
 #include "objects/object_twig/object_twig.h"
 
@@ -37,9 +38,9 @@ ActorInit En_Twig_InitVars = {
     (ActorFunc)EnTwig_Draw,
 };
 
-static s32 sCurrentRing;
-static s16 sRingCount;
-static s16 sRingNotCollected[25];
+s32 sCurrentRing;
+s16 sRingCount;
+s16 sRingNotCollected[25];
 
 static CollisionHeader* sColHeaders[] = {
     NULL,
