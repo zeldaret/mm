@@ -351,7 +351,7 @@ void EnBom_Explode(EnBom* this, PlayState* play) {
         this->collider2.base.atFlags &= ~OC1_TYPE_1;
     }
 
-    if (this->actor.params == BOMB_EXPLOSION) {
+    if (this->actor.params == BOMB_TYPE_EXPLOSION) {
         CollisionCheck_SetAT(play, &play->colChkCtx, &this->collider2.base);
     }
 
@@ -477,7 +477,7 @@ void EnBom_Update(Actor* thisx, PlayState* play) {
         this->actionFunc(this, play);
 
         Actor_UpdateBgCheckInfo(play, thisx, 35.0f, 10.0f, 36.0f, 0x1F);
-        if (thisx->params == BOMB_BODY) {
+        if (thisx->params == BOMB_TYPE_BODY) {
             static Vec3us D_80872ED4[] = {
                 { 40, 20, 100 },
                 { 300, 60, 600 },
@@ -549,7 +549,7 @@ void EnBom_Update(Actor* thisx, PlayState* play) {
                 play->envCtx.lightSettings.ambientColor[0] = play->envCtx.lightSettings.ambientColor[1] =
                     play->envCtx.lightSettings.ambientColor[2] = 250;
                 Camera_AddQuake(&play->mainCamera, 2, 11, 8);
-                thisx->params = BOMB_EXPLOSION;
+                thisx->params = BOMB_TYPE_EXPLOSION;
                 this->timer = 10;
                 thisx->flags |= (ACTOR_FLAG_20 | ACTOR_FLAG_100000);
                 this->actionFunc = EnBom_Explode;
@@ -564,7 +564,7 @@ void EnBom_Update(Actor* thisx, PlayState* play) {
 
         Actor_SetFocus(thisx, 20.0f);
 
-        if (thisx->params <= BOMB_BODY) {
+        if (thisx->params <= BOMB_TYPE_BODY) {
             Collider_UpdateCylinder(thisx, &this->collider1);
 
             // if link is not holding the bomb anymore and bump conditions are met, subscribe to OC
@@ -574,7 +574,7 @@ void EnBom_Update(Actor* thisx, PlayState* play) {
             CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider1.base);
         }
 
-        if ((enBomScales[this->isPowderKeg] <= thisx->scale.x) && (thisx->params != BOMB_EXPLOSION)) {
+        if ((enBomScales[this->isPowderKeg] <= thisx->scale.x) && (thisx->params != BOMB_TYPE_EXPLOSION)) {
             if (thisx->depthInWater >= 20.0f) {
                 Vec3f sp54;
 
@@ -612,7 +612,7 @@ void EnBom_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    if (this->actor.params == BOMB_BODY) {
+    if (this->actor.params == BOMB_TYPE_BODY) {
         func_8012C28C(play->state.gfxCtx);
 
         Collider_UpdateSpheres(0, &this->collider2);
