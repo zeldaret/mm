@@ -505,7 +505,6 @@ beginseg
     include "build/src/code/z_rcp.o"
     pad_text
     include "build/src/code/z_room.o"
-    include "build/data/code/z_room.data.o"
     include "build/src/code/code_8012EC80.o"
     pad_text
     include "build/data/code/code_801C2410.data.o"

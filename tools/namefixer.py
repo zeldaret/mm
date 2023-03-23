@@ -304,6 +304,8 @@ wordReplace = {
     "func_800B867C": "Actor_TextboxIsClosing",
     "func_800BDC5C": "Actor_ChangeAnimationByInfo",
     "Actor_ChangeAnimation": "Actor_ChangeAnimationByInfo",
+    "func_801477B4": "Message_CloseTextbox",
+    "func_80151938": "Message_ContinueTextbox",
     "func_80152498": "Message_GetState",
     "func_800B8898": "Actor_GetScreenPos",
     "Audio_PlayActorSound2": "Actor_PlaySfx",
@@ -490,7 +492,7 @@ wordReplace = {
     "func_800DFC90": "Camera_GetCamDir",
     "func_800DFD04": "Camera_AddQuake",
     "func_800DFFAC": "Camera_ChangeDoorCam",
-
+    "func_80169FFC": "Play_CamIsNotFixed",
     "func_801694DC": "Play_CreateSubCamera",
     "Play_GetActiveCameraIndex": "Play_GetActiveCamId",
     "func_80169590": "Play_ChangeCameraStatus",
@@ -812,6 +814,9 @@ wordReplace = {
     "play->nextEntranceIndex": "play->nextEntrance",
     "play->sceneNum": "play->sceneId",
     "play->pauseCtx.unk_1F0": "play->pauseCtx.bombersNotebookOpen",
+    "play->roomCtx.curRoom.unk3": "play->roomCtx.curRoom.behaviorType1",
+    "play->roomCtx.curRoom.unk2": "play->roomCtx.curRoom.behaviorType2",
+    "play->roomCtx.unk31": "play->roomCtx.status",
 
     "actorCtx.unkC": "actorCtx.halfDaysBit",
     "actorCtx.unk1F4": "actorCtx.unk_1F4.unk_00",

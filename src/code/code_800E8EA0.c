@@ -1,7 +1,7 @@
 #include "global.h"
 
 void Actor_ContinueText(PlayState* play, Actor* actor, u16 textId) {
-    func_80151938(play, textId);
+    Message_ContinueTextbox(play, textId);
     actor->textId = textId;
 }
 
