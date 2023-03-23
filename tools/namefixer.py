@@ -492,7 +492,7 @@ wordReplace = {
     "func_800DFC90": "Camera_GetCamDir",
     "func_800DFD04": "Camera_AddQuake",
     "func_800DFFAC": "Camera_ChangeDoorCam",
-
+    "func_80169FFC": "Play_CamIsNotFixed",
     "func_801694DC": "Play_CreateSubCamera",
     "Play_GetActiveCameraIndex": "Play_GetActiveCamId",
     "func_80169590": "Play_ChangeCameraStatus",
@@ -817,6 +817,9 @@ wordReplace = {
     "play->sceneLoadFlag": "play->transitionTrigger",
     "play->unk_18B4A": "play->transitionMode",
     "play->unk_1887F": "play->transitionType",
+    "play->roomCtx.curRoom.unk3": "play->roomCtx.curRoom.behaviorType1",
+    "play->roomCtx.curRoom.unk2": "play->roomCtx.curRoom.behaviorType2",
+    "play->roomCtx.unk31": "play->roomCtx.status",
 
     "actorCtx.unkC": "actorCtx.halfDaysBit",
     "actorCtx.unk1F4": "actorCtx.unk_1F4.unk_00",
