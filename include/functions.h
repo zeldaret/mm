@@ -2989,9 +2989,6 @@ u8 func_801A982C(void);
 // void func_801A99B8(void);
 // void func_801A9A74(void);
 
-void GameOver_Init(PlayState* play);
-void GameOver_FadeLights(PlayState* play);
-void GameOver_Update(PlayState* play);
 void Regs_InitData(PlayState* play);
 
 #endif
