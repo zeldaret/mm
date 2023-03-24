@@ -6006,16 +6006,16 @@ void Interface_Init(PlayState* play) {
     interfaceCtx->healthTimer = 200;
 
     parameterStaticSize = SEGMENT_ROM_SIZE(parameter_static);
-    interfaceCtx->parameterSegment = THA_AllocEndAlign16(&play->state.heap, parameterStaticSize);
+    interfaceCtx->parameterSegment = THA_AllocTailAlign16(&play->state.heap, parameterStaticSize);
     DmaMgr_SendRequest0(interfaceCtx->parameterSegment, SEGMENT_ROM_START(parameter_static), parameterStaticSize);
 
-    interfaceCtx->doActionSegment = THA_AllocEndAlign16(&play->state.heap, 0xC90);
+    interfaceCtx->doActionSegment = THA_AllocTailAlign16(&play->state.heap, 0xC90);
     DmaMgr_SendRequest0(interfaceCtx->doActionSegment, SEGMENT_ROM_START(do_action_static), 0x300);
     DmaMgr_SendRequest0(interfaceCtx->doActionSegment + 0x300, SEGMENT_ROM_START(do_action_static) + 0x480, 0x180);
 
     Interface_NewDay(play, CURRENT_DAY);
 
-    interfaceCtx->iconItemSegment = THA_AllocEndAlign16(&play->state.heap, 0x4000);
+    interfaceCtx->iconItemSegment = THA_AllocTailAlign16(&play->state.heap, 0x4000);
 
     if (CUR_FORM_EQUIP(EQUIP_SLOT_B) < ITEM_F0) {
         Interface_LoadItemIconImpl(play, EQUIP_SLOT_B);

@@ -25,6 +25,8 @@
 
 #include "gfxprint.h"
 #include "sys_matrix.h"
+#include "tha.h"
+#include "thga.h"
 #include "z64actor.h"
 #include "z64animation.h"
 #include "z64audio.h"
@@ -114,20 +116,6 @@ typedef struct {
     /* 0x4 */ void* start;
     /* 0x8 */ void* end;
 } PolygonType2; // size = 0xC
-
-typedef struct {
-    /* 0x0 */ u32    size;
-    /* 0x4 */ void*  bufp;
-    /* 0x8 */ void*  head;
-    /* 0xC */ void*  tail;
-} TwoHeadArena; // size = 0x10
-
-typedef struct {
-    /* 0x0 */ u32    size;
-    /* 0x4 */ Gfx*   bufp;
-    /* 0x8 */ Gfx*   p;
-    /* 0xC */ Gfx*   d;
-} TwoHeadGfxArena; // size = 0x10
 
 typedef struct {
     /* 0x000 */ Gfx taskStart[9];
