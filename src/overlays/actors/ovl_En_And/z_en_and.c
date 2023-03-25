@@ -5,6 +5,7 @@
  */
 
 #include "z_en_and.h"
+#include "objects/object_and/object_and.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -17,7 +18,7 @@ void EnAnd_Draw(Actor* thisx, PlayState* play);
 
 void func_80C18C50(EnAnd* this, PlayState* play);
 void func_80C18ED0(PlayState* play, s32 limbIndex, Actor* thisx);
-#if 0
+
 ActorInit En_And_InitVars = {
     ACTOR_EN_AND,
     ACTORCAT_NPC,
@@ -31,31 +32,15 @@ ActorInit En_And_InitVars = {
 };
 
 static AnimationInfoS D_80C19180[8] = {
-    { (AnimationHeader *)0x060000C8, 1.0f, 0, -1, 0, 0 },
-    { (AnimationHeader *)0x060122D0, 1.0f, 0, -1, 0, 0 },
-    { (AnimationHeader *)0x0600DA58, 1.0f, 0, -1, 0, 0 },
-    { (AnimationHeader *)0x0600FE64, 1.0f, 0, -1, 2, 0 },
-    { (AnimationHeader *)0x0601067C, 1.0f, 0, -1, 0, 0 },
-    { (AnimationHeader *)0x0600EE00, 1.0f, 0, -1, 2, 0 },
-    { (AnimationHeader *)0x0600F6C4, 1.0f, 0, -1, 0, 0 },
-    { (AnimationHeader *)0x06011AFC, 1.0f, 0, -1, 2, 0 },
+    { &object_and_Anim_0000C8, 1.0f, 0, -1, 0, 0 },
+    { &object_and_Anim_0122D0, 1.0f, 0, -1, 0, 0 },
+    { &object_and_Anim_00DA58, 1.0f, 0, -1, 0, 0 },
+    { &object_and_Anim_00FE64, 1.0f, 0, -1, 2, 0 },
+    { &object_and_Anim_01067C, 1.0f, 0, -1, 0, 0 },
+    { &object_and_Anim_00EE00, 1.0f, 0, -1, 2, 0 },
+    { &object_and_Anim_00F6C4, 1.0f, 0, -1, 0, 0 },
+    { &object_and_Anim_011AFC, 1.0f, 0, -1, 2, 0 },
 };
-
-static void* D_80C19218[2] = { (void *)0x06009DF0, (void *)0x0600A1F0 };
-static void* D_80C19220[4] = {
-    (void*)0x06007DF0,
-    (void*)0x060085F0,
-    (void*)0x06008DF0,
-    (void*)0x060095F0,
-};
-
-#endif
-
-extern FlexSkeletonHeader D_0600B380;
-
-extern AnimationInfoS D_80C19180[];
-extern void* D_80C19218[];
-extern void* D_80C19220[];
 
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_And/func_80C18B90.s")
 s32 func_80C18B90(EnAnd* this, s32 animIndex) { // Change animation
@@ -79,8 +64,6 @@ void func_80C18BD8(EnAnd* this) { // Blink
     }
 }
 
-
-#ifdef NON_MATCHING
 void func_80C18C50(EnAnd* this, PlayState* play) {
     s32 D_80C19200[] = {
         0x00000000,
@@ -123,15 +106,12 @@ void func_80C18C50(EnAnd* this, PlayState* play) {
         func_80C18B90(this, this->unk308);
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_And/func_80C18C50.s")
-#endif // NON_MATCHING
 
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_And/EnAnd_Init.s")
 void EnAnd_Init(Actor* thisx, PlayState* play) {
     EnAnd* this = THIS;
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 14.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &D_0600B380, NULL, this->jointTable, this->morphTable, 26);
+    SkelAnime_InitFlex(play, &this->skelAnime, &object_and_Skel_00B380, NULL, this->jointTable, this->morphTable, 26);
     this->currentAnim = -1;
     func_80C18B90(this, 0);
     Actor_SetScale(&this->actor, 0.01f);
@@ -190,6 +170,14 @@ void func_80C18ED0(PlayState* play, s32 limbIndex, Actor* thisx) { // TransformL
 
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_And/EnAnd_Draw.s")
 void EnAnd_Draw(Actor* thisx, PlayState* play) {
+    static void* D_80C19218[2] = { object_and_Tex_009DF0, object_and_Tex_00A1F0 };
+    static void* D_80C19220[4] = {
+        object_and_Tex_007DF0,
+        object_and_Tex_0085F0,
+        object_and_Tex_008DF0,
+        object_and_Tex_0095F0,
+    };
+
     EnAnd* this = THIS;
 
     OPEN_DISPS(play->state.gfxCtx);
