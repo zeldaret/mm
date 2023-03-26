@@ -53,8 +53,8 @@ void func_8016FDB8(PreRender* this, Gfx** gfxp, void* buf, void* bufSave, u32 ar
         flags = 0x1C;
     }
 
-    func_80172758(&gfx, buf, NULL, this->width, this->height, G_IM_FMT_RGBA, G_IM_SIZ_16b, G_TT_NONE, 0, 0.0f, 0.0f,
-                  1.0f, 1.0f, flags);
+    Prerender_DrawBackground2D(&gfx, buf, NULL, this->width, this->height, G_IM_FMT_RGBA, G_IM_SIZ_16b, G_TT_NONE, 0,
+                               0.0f, 0.0f, 1.0f, 1.0f, flags);
     gDPPipeSync(gfx++);
     gDPSetColorImage(gfx++, G_IM_FMT_RGBA, G_IM_SIZ_16b, this->width, this->fbuf);
 
@@ -89,8 +89,8 @@ void func_8016FF90(PreRender* this, Gfx** gfxp, void* buf, void* bufSave, s32 en
 
     gDPSetScissor(gfx++, G_SC_NON_INTERLACE, 0, 0, this->width, this->height);
 
-    func_80172758(&gfx, buf, 0, this->width, this->height, G_IM_FMT_RGBA, G_IM_SIZ_16b, G_TT_NONE, 0, 0.0f, 0.0f, 1.0f,
-                  1.0f, 0xB);
+    Prerender_DrawBackground2D(&gfx, buf, 0, this->width, this->height, G_IM_FMT_RGBA, G_IM_SIZ_16b, G_TT_NONE, 0, 0.0f,
+                               0.0f, 1.0f, 1.0f, 0xB);
     gDPPipeSync(gfx++);
     gDPSetColorImage(gfx++, G_IM_FMT_RGBA, G_IM_SIZ_16b, this->width, this->fbuf);
 
@@ -454,8 +454,8 @@ void func_801720C4(PreRender* this) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/PreRender/func_801720FC.s")
 
-void func_80172758(Gfx** gfxp, void* timg, void* tlut, u16 width, u16 height, u8 fmt, u8 siz, u16 tt, u16 arg8, f32 x,
-                   f32 y, f32 xScale, f32 yScale, u32 flags) {
+void Prerender_DrawBackground2D(Gfx** gfxp, void* timg, void* tlut, u16 width, u16 height, u8 fmt, u8 siz, u16 tt,
+                                u16 arg8, f32 x, f32 y, f32 xScale, f32 yScale, u32 flags) {
     PreRenderParams params;
     PreRenderParams* paramsp = &params;
 

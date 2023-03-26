@@ -1,6 +1,10 @@
-#include "global.h"
+#include "z64game_over.h"
 #include "z64rumble.h"
 #include "z64shrink_window.h"
+#include "z64.h"
+#include "functions.h"
+#include "variables.h"
+#include "macros.h"
 
 void GameOver_Init(PlayState* play) {
     play->gameOverCtx.state = GAMEOVER_INACTIVE;
@@ -67,6 +71,7 @@ void GameOver_Update(PlayState* play) {
             Rumble_Request(0.0f, 126, 124, 63);
             gameOverCtx->state = GAMEOVER_DEATH_WAIT_GROUND;
             break;
+
         case GAMEOVER_DEATH_FADE_OUT:
             if (Audio_GetActiveSequence(SEQ_PLAYER_FANFARE) != NA_BGM_GAME_OVER) {
                 func_80169F78(&play->state);
@@ -83,31 +88,36 @@ void GameOver_Update(PlayState* play) {
                 Rumble_StateReset();
             }
             break;
+
         case GAMEOVER_REVIVE_START:
-            gameOverCtx->state++;
+            gameOverCtx->state++; // GAMEOVER_REVIVE_RUMBLE
             sGameOverTimer = 0;
             Kankyo_InitGameOverLights(play);
             ShrinkWindow_Letterbox_SetSizeTarget(32);
             break;
+
         case GAMEOVER_REVIVE_RUMBLE:
             sGameOverTimer = 50;
-            gameOverCtx->state++;
+            gameOverCtx->state++; // GAMEOVER_REVIVE_WAIT_GROUND
             Rumble_Request(0.0f, 126, 124, 63);
             break;
+
         case GAMEOVER_REVIVE_WAIT_GROUND:
             sGameOverTimer--;
             if (sGameOverTimer == 0) {
                 sGameOverTimer = 64;
-                gameOverCtx->state++;
+                gameOverCtx->state++; // GAMEOVER_REVIVE_WAIT_FAIRY
             }
             break;
+
         case GAMEOVER_REVIVE_WAIT_FAIRY:
             sGameOverTimer--;
             if (sGameOverTimer == 0) {
                 sGameOverTimer = 50;
-                gameOverCtx->state++;
+                gameOverCtx->state++; // GAMEOVER_REVIVE_FADE_OUT
             }
             break;
+
         case GAMEOVER_REVIVE_FADE_OUT:
             Kankyo_FadeOutGameOverLights(play);
             sGameOverTimer--;
