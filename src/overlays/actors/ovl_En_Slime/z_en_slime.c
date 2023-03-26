@@ -249,7 +249,7 @@ void EnSlime_Freeze(EnSlime* this) {
     this->drawDmgEffAlpha = 1.0f;
     this->timer = 80;
     this->actor.flags &= ~ACTOR_FLAG_400;
-    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0x2000, 80);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_XLU, 80);
 }
 
 /**
@@ -646,7 +646,7 @@ void EnSlime_ReactToBluntHit(EnSlime* this, PlayState* play) {
 }
 
 /**
- * Spawn bubbles & splash, start actor rebuff wobble, 
+ * Spawn bubbles & splash, start actor rebuff wobble,
  * push actor, and play sfx.
  */
 void EnSlime_SetupDamaged(EnSlime* this, PlayState* play, s32 arg2) {
@@ -660,7 +660,7 @@ void EnSlime_SetupDamaged(EnSlime* this, PlayState* play, s32 arg2) {
     if (this->actor.velocity.y > 0.0f) {
         this->actor.velocity.y = 0.0f;
     }
-    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0x2000, 20);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_XLU, 20);
     this->timer = 20;
     this->actor.speed = 10.0f;
     if (arg2 == true) {
@@ -819,7 +819,8 @@ void EnSlime_SetupSpawnIceBlock(EnSlime* this) {
     this->actor.gravity = 0.0f;
     this->iceBlockSnapPos.x = EnSlime_SnapIceBlockPosition(this->actor.world.pos.x, this->actor.home.pos.x);
     this->iceBlockSnapPos.z = EnSlime_SnapIceBlockPosition(this->actor.world.pos.z, this->actor.home.pos.z);
-    Actor_SetColorFilter(&this->actor, 0x8000, 0x80FF, 0x2000, 10);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_GRAY, COLORFILTER_INTENSITY_FLAG | 255,
+                         COLORFILTER_BUFFLAG_XLU, 10);
     this->eyeTexIndex = EN_SLIME_EYETEX_OPEN;
     this->iceBlockTimer = ICE_BLOCK_TIMER_MAX;
     this->actionFunc = EnSlime_SpawnIceBlock;
@@ -912,7 +913,8 @@ void EnSlime_Stun(EnSlime* this, PlayState* play) {
 void EnSlime_SetupIceBlockThaw(EnSlime* this) {
     this->actor.colorFilterTimer = 0;
     this->actor.gravity = -2.0f;
-    Actor_SetColorFilter(&this->actor, 0x8000, 0x80FF, 0x2000, 10);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_GRAY, COLORFILTER_INTENSITY_FLAG | 255,
+                         COLORFILTER_BUFFLAG_XLU, 10);
     this->actionFunc = EnSlime_IceBlockThaw;
 }
 
@@ -1066,7 +1068,7 @@ void EnSlime_UpdateDamage(EnSlime* this, PlayState* play) {
                 EnSlime_SetupReactToBluntHit(this);
             } else if (this->actor.colChkInfo.damageEffect == EN_SLIME_DMGEFF_STUN) {
                 this->timer = 40;
-                Actor_SetColorFilter(&this->actor, 0, 255, 0x2000, 40);
+                Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 255, COLORFILTER_BUFFLAG_XLU, 40);
                 Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_FREEZE);
                 EnSlime_SetupStun(this);
             } else if (this->actor.colChkInfo.damageEffect != EN_SLIME_DMGEFF_HOOKSHOT) {
