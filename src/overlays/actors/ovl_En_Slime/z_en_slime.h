@@ -7,8 +7,8 @@
 
 #define EN_SLIME_LIMBPOS_COUNT 5
 
-#define EN_SLIME_GET_MAIN_TYPE(thisx) ((thisx)->params)
-#define EN_SLIME_GET_RESPAWN_TIME(thisx) ((((thisx)->params) >> 8) & 0xFF)
+#define EN_SLIME_GET_TYPE(thisx) ((thisx)->params)
+#define EN_SLIME_GET_REVIVE_TIME(thisx) ((((thisx)->params) >> 8) & 0xFF)
 
 struct EnSlime;
 
@@ -22,18 +22,18 @@ typedef struct EnSlime {
     /* 0x14A */ u8 drawDmgEffType;
     /* 0x14C */ s16 timer;
     /* 0x14E */ s16 idleRotY;
-    /* 0x150 */ s16 respawnRotY;
-    /* 0x152 */ s16 respawnTime;
+    /* 0x150 */ s16 reviveRotY;
+    /* 0x152 */ s16 reviveTime;
     /* 0x154 */ union { 
                     Vec3f iceBlockSnapPos;
                     Vec3f wobbleRot;
                 };
-    /* 0x160 */ TexturePtr dropObjectTex;
+    /* 0x160 */ TexturePtr itemDropTex;
     /* 0x164 */ f32 drawDmgEffAlpha;
     /* 0x168 */ f32 drawDmgEffScale;
     /* 0x16C */ f32 drawDmgEffFrozenSteamScale;
     /* 0x170 */ f32 distLimit;
-    /* 0x174 */ Vec3f respawnScale;
+    /* 0x174 */ Vec3f reviveScale;
     /* 0x180 */ Vec3f limbPos[EN_SLIME_LIMBPOS_COUNT];
     /* 0x1BC */ ColliderCylinder collider;
 } EnSlime; // size = 0x208

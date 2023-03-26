@@ -1,5 +1,5 @@
 ﻿<Root>
-	<!-- Object file for Chuchus -->
+    <!-- Object file for Chuchus -->
     <File Name="object_slime" Segment="6">
         <DList Name="gChuchuBodyDL" Offset="0x4C0" />
         <DList Name="gChuchuEyesDL" Offset="0x650" />

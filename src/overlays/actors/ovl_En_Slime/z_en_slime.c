@@ -10,22 +10,26 @@
 
 #define THIS ((EnSlime*)thisx)
 
+#define ICE_BLOCK_UNUSED 255
+#define ICE_BLOCK_TIMER_MAX 254
+
 typedef enum EnSlimeEyeTexture {
     /* 0 */ EN_SLIME_EYETEX_OPEN,
     /* 1 */ EN_SLIME_EYETEX_HALF,
     /* 2 */ EN_SLIME_EYETEX_CLOSED,
-    /* 3 */ EN_SLIME_EYETEX_HALF2
+    /* 3 */ EN_SLIME_EYETEX_HALF2,
+    /* 4 */ EN_SLIME_EYETEX_MAX
 } EnSlimeEyeTexture;
 
-typedef enum EnSlimeDamageType {
-    /* 0x0 */ ENSLIME_DMGEFF_NORMAL,
-    /* 0x1 */ ENSLIME_DMGEFF_STUN,
-    /* 0x3 */ ENSLIME_DMGEFF_ICEARROW = 0x3,
-    /* 0x4 */ ENSLIME_DMGEFF_LIGHT,
-    /* 0x5 */ ENSLIME_DMGEFF_ELECTRIC,
-    /* 0xE */ ENSLIME_DMGEFF_HOOKSHOT = 0xE,
-    /* 0xF */ ENSLIME_DMGEFF_BLUNT,
-} EnSlimeDamageType;
+typedef enum EnSlimeDamageEffect {
+    /* 0x0 */ EN_SLIME_DMGEFF_NORMAL,
+    /* 0x1 */ EN_SLIME_DMGEFF_STUN,
+    /* 0x3 */ EN_SLIME_DMGEFF_FREEZE = 0x3,
+    /* 0x4 */ EN_SLIME_DMGEFF_LIGHT,
+    /* 0x5 */ EN_SLIME_DMGEFF_ELECTRIC,
+    /* 0xE */ EN_SLIME_DMGEFF_HOOKSHOT = 0xE,
+    /* 0xF */ EN_SLIME_DMGEFF_BLUNT,
+} EnSlimeDamageEffect;
 
 void EnSlime_Init(Actor* thisx, PlayState* play);
 void EnSlime_Destroy(Actor* thisx, PlayState* play);
@@ -94,38 +98,38 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 static DamageTable sDamageTable = {
-    /* Deku Nut       */ DMG_ENTRY(0, ENSLIME_DMGEFF_STUN),
-    /* Deku Stick     */ DMG_ENTRY(3, ENSLIME_DMGEFF_NORMAL),
-    /* Horse trample  */ DMG_ENTRY(1, ENSLIME_DMGEFF_NORMAL),
-    /* Explosives     */ DMG_ENTRY(1, ENSLIME_DMGEFF_NORMAL),
-    /* Zora boomerang */ DMG_ENTRY(1, ENSLIME_DMGEFF_NORMAL),
-    /* Normal arrow   */ DMG_ENTRY(1, ENSLIME_DMGEFF_NORMAL),
-    /* UNK_DMG_0x06   */ DMG_ENTRY(0, ENSLIME_DMGEFF_NORMAL),
-    /* Hookshot       */ DMG_ENTRY(0, ENSLIME_DMGEFF_HOOKSHOT),
-    /* Goron punch    */ DMG_ENTRY(0, ENSLIME_DMGEFF_BLUNT),
-    /* Sword          */ DMG_ENTRY(1, ENSLIME_DMGEFF_NORMAL),
-    /* Goron pound    */ DMG_ENTRY(0, ENSLIME_DMGEFF_BLUNT),
-    /* Fire arrow     */ DMG_ENTRY(2, ENSLIME_DMGEFF_NORMAL),
-    /* Ice arrow      */ DMG_ENTRY(2, ENSLIME_DMGEFF_ICEARROW),
-    /* Light arrow    */ DMG_ENTRY(2, ENSLIME_DMGEFF_LIGHT),
-    /* Goron spikes   */ DMG_ENTRY(1, ENSLIME_DMGEFF_NORMAL),
-    /* Deku spin      */ DMG_ENTRY(1, ENSLIME_DMGEFF_NORMAL),
-    /* Deku bubble    */ DMG_ENTRY(0, ENSLIME_DMGEFF_BLUNT),
-    /* Deku launch    */ DMG_ENTRY(2, ENSLIME_DMGEFF_NORMAL),
-    /* UNK_DMG_0x12   */ DMG_ENTRY(0, ENSLIME_DMGEFF_STUN),
-    /* Zora barrier   */ DMG_ENTRY(1, ENSLIME_DMGEFF_ELECTRIC),
-    /* Normal shield  */ DMG_ENTRY(0, ENSLIME_DMGEFF_NORMAL),
-    /* Light ray      */ DMG_ENTRY(0, ENSLIME_DMGEFF_NORMAL),
-    /* Thrown object  */ DMG_ENTRY(0, ENSLIME_DMGEFF_BLUNT),
-    /* Zora punch     */ DMG_ENTRY(1, ENSLIME_DMGEFF_NORMAL),
-    /* Spin attack    */ DMG_ENTRY(1, ENSLIME_DMGEFF_NORMAL),
-    /* Sword beam     */ DMG_ENTRY(0, ENSLIME_DMGEFF_NORMAL),
-    /* Normal Roll    */ DMG_ENTRY(0, ENSLIME_DMGEFF_NORMAL),
-    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, ENSLIME_DMGEFF_NORMAL),
-    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, ENSLIME_DMGEFF_NORMAL),
-    /* Unblockable    */ DMG_ENTRY(0, ENSLIME_DMGEFF_NORMAL),
-    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, ENSLIME_DMGEFF_NORMAL),
-    /* Powder Keg     */ DMG_ENTRY(1, ENSLIME_DMGEFF_NORMAL),
+    /* Deku Nut       */ DMG_ENTRY(0, EN_SLIME_DMGEFF_STUN),
+    /* Deku Stick     */ DMG_ENTRY(3, EN_SLIME_DMGEFF_NORMAL),
+    /* Horse trample  */ DMG_ENTRY(1, EN_SLIME_DMGEFF_NORMAL),
+    /* Explosives     */ DMG_ENTRY(1, EN_SLIME_DMGEFF_NORMAL),
+    /* Zora boomerang */ DMG_ENTRY(1, EN_SLIME_DMGEFF_NORMAL),
+    /* Normal arrow   */ DMG_ENTRY(1, EN_SLIME_DMGEFF_NORMAL),
+    /* UNK_DMG_0x06   */ DMG_ENTRY(0, EN_SLIME_DMGEFF_NORMAL),
+    /* Hookshot       */ DMG_ENTRY(0, EN_SLIME_DMGEFF_HOOKSHOT),
+    /* Goron punch    */ DMG_ENTRY(0, EN_SLIME_DMGEFF_BLUNT),
+    /* Sword          */ DMG_ENTRY(1, EN_SLIME_DMGEFF_NORMAL),
+    /* Goron pound    */ DMG_ENTRY(0, EN_SLIME_DMGEFF_BLUNT),
+    /* Fire arrow     */ DMG_ENTRY(2, EN_SLIME_DMGEFF_NORMAL),
+    /* Ice arrow      */ DMG_ENTRY(2, EN_SLIME_DMGEFF_FREEZE),
+    /* Light arrow    */ DMG_ENTRY(2, EN_SLIME_DMGEFF_LIGHT),
+    /* Goron spikes   */ DMG_ENTRY(1, EN_SLIME_DMGEFF_NORMAL),
+    /* Deku spin      */ DMG_ENTRY(1, EN_SLIME_DMGEFF_NORMAL),
+    /* Deku bubble    */ DMG_ENTRY(0, EN_SLIME_DMGEFF_BLUNT),
+    /* Deku launch    */ DMG_ENTRY(2, EN_SLIME_DMGEFF_NORMAL),
+    /* UNK_DMG_0x12   */ DMG_ENTRY(0, EN_SLIME_DMGEFF_STUN),
+    /* Zora barrier   */ DMG_ENTRY(1, EN_SLIME_DMGEFF_ELECTRIC),
+    /* Normal shield  */ DMG_ENTRY(0, EN_SLIME_DMGEFF_NORMAL),
+    /* Light ray      */ DMG_ENTRY(0, EN_SLIME_DMGEFF_NORMAL),
+    /* Thrown object  */ DMG_ENTRY(0, EN_SLIME_DMGEFF_BLUNT),
+    /* Zora punch     */ DMG_ENTRY(1, EN_SLIME_DMGEFF_NORMAL),
+    /* Spin attack    */ DMG_ENTRY(1, EN_SLIME_DMGEFF_NORMAL),
+    /* Sword beam     */ DMG_ENTRY(0, EN_SLIME_DMGEFF_NORMAL),
+    /* Normal Roll    */ DMG_ENTRY(0, EN_SLIME_DMGEFF_NORMAL),
+    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, EN_SLIME_DMGEFF_NORMAL),
+    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, EN_SLIME_DMGEFF_NORMAL),
+    /* Unblockable    */ DMG_ENTRY(0, EN_SLIME_DMGEFF_NORMAL),
+    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, EN_SLIME_DMGEFF_NORMAL),
+    /* Powder Keg     */ DMG_ENTRY(1, EN_SLIME_DMGEFF_NORMAL),
 };
 
 static CollisionCheckInfoInit sColChkInfoInit = { 1, 22, 35, 60 };
@@ -169,11 +173,8 @@ static Vec3f sLimbPosOffsets[EN_SLIME_LIMBPOS_COUNT] = {
 
 AnimatedMaterial* sSlimeTexAnim;
 
-/**
- * Initialize EnSlime instance.
- */
 void EnSlime_Init(Actor* thisx, PlayState* play) {
-    s32 respawnTimeSeconds;
+    s32 reviveTimeSeconds;
     s32 i;
     EnSlime* this = THIS;
 
@@ -182,7 +183,7 @@ void EnSlime_Init(Actor* thisx, PlayState* play) {
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 38.0f);
 
-    this->iceBlockTimer = 255; // 255 is the value used when the ice block is not in use
+    this->iceBlockTimer = ICE_BLOCK_UNUSED;
     this->eyeTexIndex = EN_SLIME_EYETEX_OPEN;
     this->wobbleRot.y = 0.0f;
 
@@ -194,35 +195,34 @@ void EnSlime_Init(Actor* thisx, PlayState* play) {
     }
 
     this->actor.shape.rot.x = 0;
-    respawnTimeSeconds = EN_SLIME_GET_RESPAWN_TIME(&this->actor);
+    reviveTimeSeconds = EN_SLIME_GET_REVIVE_TIME(&this->actor);
     this->actor.shape.rot.z = 0;
     this->actor.params &= 0xFF;
-    if (respawnTimeSeconds == 0xFF) {
-        respawnTimeSeconds = 0;
+    if (reviveTimeSeconds == 0xFF) {
+        reviveTimeSeconds = 0;
     }
 
-    // Upper byte of actorParams at init is # of seconds past 10s to respawn.
-    this->respawnTime = (respawnTimeSeconds * 20) + 200;
+    // Upper byte of actorParams at init is # of seconds past 10s to revive.
+    this->reviveTime = (reviveTimeSeconds * 20) + 200;
 
     // Update addresses of texture assets (if another instance hasn't already)
     if (!sTexturesDesegmented) {
-        for (i = 0; i < ARRAY_COUNT(sEyeTextures); i++) {
+        for (i = 0; i < EN_SLIME_EYETEX_MAX; i++) {
             sEyeTextures[i] = Lib_SegmentedToVirtual(sEyeTextures[i]);
         }
         sSlimeTexAnim = Lib_SegmentedToVirtual(gChuchuSlimeFlowTexAnim);
         sTexturesDesegmented = true;
     }
 
-    // Lower byte of actorParams is the chuchu color type
     // Set hint IDs and drop item icon depending on chuchu color
-    if (EN_SLIME_GET_MAIN_TYPE(&this->actor) == EN_SLIME_TYPE_YELLOW) {
-        this->dropObjectTex = Lib_SegmentedToVirtual(gDropArrows1Tex);
+    if (EN_SLIME_GET_TYPE(&this->actor) == EN_SLIME_TYPE_YELLOW) {
+        this->itemDropTex = Lib_SegmentedToVirtual(gDropArrows1Tex);
         this->actor.hintId = TATL_HINT_ID_YELLOW_CHUCHU;
-    } else if (EN_SLIME_GET_MAIN_TYPE(&this->actor) == EN_SLIME_TYPE_GREEN) {
-        this->dropObjectTex = Lib_SegmentedToVirtual(gDropMagicSmallTex);
+    } else if (EN_SLIME_GET_TYPE(&this->actor) == EN_SLIME_TYPE_GREEN) {
+        this->itemDropTex = Lib_SegmentedToVirtual(gDropMagicSmallTex);
         this->actor.hintId = TATL_HINT_ID_GREEN_CHUCHU;
-    } else if (EN_SLIME_GET_MAIN_TYPE(&this->actor) == EN_SLIME_TYPE_RED) {
-        this->dropObjectTex = Lib_SegmentedToVirtual(gDropRecoveryHeartTex);
+    } else if (EN_SLIME_GET_TYPE(&this->actor) == EN_SLIME_TYPE_RED) {
+        this->itemDropTex = Lib_SegmentedToVirtual(gDropRecoveryHeartTex);
         this->actor.hintId = TATL_HINT_ID_RED_CHUCHU;
     } else {
         this->actor.hintId = TATL_HINT_ID_BLUE_CHUCHU;
@@ -232,9 +232,6 @@ void EnSlime_Init(Actor* thisx, PlayState* play) {
     EnSlime_SetupInitializeIdle(this);
 }
 
-/**
- * Destroy EnSlime instance.
- */
 void EnSlime_Destroy(Actor* thisx, PlayState* play) {
     EnSlime* this = THIS;
     Collider_DestroyCylinder(play, &this->collider);
@@ -276,7 +273,7 @@ void EnSlime_Thaw(EnSlime* this, PlayState* play) {
 void EnSlime_Blink(EnSlime* this) {
     if (this->eyeTexIndex != EN_SLIME_EYETEX_OPEN) {
         this->eyeTexIndex++;
-        if (this->eyeTexIndex == 4) {
+        if (this->eyeTexIndex == EN_SLIME_EYETEX_MAX) {
             this->eyeTexIndex = EN_SLIME_EYETEX_OPEN;
         }
     } else if (Rand_ZeroOne() < 0.05f) {
@@ -346,7 +343,7 @@ void EnSlime_Idle(EnSlime* this, PlayState* play) {
         Actor_IsFacingPlayer(&this->actor, 0x5000)) {
         EnSlime_SetupTurnToPlayer(this);
     } else if (this->timer == 0) {
-        // Done sitting, start moving (remaining idle)
+        // Start moving (remaining idle)
         EnSlime_SetupMoveInDirection(this);
     }
 }
@@ -358,9 +355,8 @@ void EnSlime_Idle(EnSlime* this, PlayState* play) {
 void EnSlime_SetupMoveInDirection(EnSlime* this) {
     this->timer = 120;
 
-    /* If actor is more than 120 units from its home, set the new direction to be towards its home.
-     * Otherwise, the new direction to move is pretty much random.
-     */
+    // If actor is more than 120 units from its home, set the new direction to be towards its home.
+    // Otherwise, the new direction to move is pretty much random.
     if (Actor_WorldDistXZToPoint(&this->actor, &this->actor.home.pos) > 120.0f) {
         this->idleRotY = Actor_WorldYawTowardPoint(&this->actor, &this->actor.home.pos);
     } else if (Rand_ZeroOne() < 0.7f) {
@@ -467,9 +463,6 @@ void EnSlime_MoveToHome(EnSlime* this, PlayState* play) {
     }
 }
 
-/**
- * Initialize or restart the engage/attack player cycle.
- */
 void EnSlime_SetupTurnToPlayer(EnSlime* this) {
     this->actor.shape.rot.x = 0;
     this->actor.shape.rot.z = 0;
@@ -502,7 +495,6 @@ void EnSlime_TurnToPlayer(EnSlime* this, PlayState* play) {
 }
 
 /**
- * Initialize jump toward player.
  * If fewer than 120 units from the player, start a larger attack lunge.
  * Otherwise, hop forward.
  */
@@ -548,10 +540,6 @@ void EnSlime_Jump(EnSlime* this, PlayState* play) {
     }
 }
 
-/**
- * Initialize jump landing.
- * Adjust timer and scale, and stop xz movement.
- */
 void EnSlime_SetupLand(EnSlime* this) {
     this->timer = 15;
     this->actor.scale.x = 0.0132f;
@@ -658,10 +646,10 @@ void EnSlime_ReactToBluntHit(EnSlime* this, PlayState* play) {
 }
 
 /**
- * Initialize reaction to taking damage.
- * Spawn bubbles & splash, start actor rebuff wobble, push actor, and play sfx.
+ * Spawn bubbles & splash, start actor rebuff wobble, 
+ * push actor, and play sfx.
  */
-void EnSlime_SetupDamaged(EnSlime* this, PlayState* play, s32 faceDamageSource) {
+void EnSlime_SetupDamaged(EnSlime* this, PlayState* play, s32 arg2) {
     s32 i;
     Vec3f effectVelocity;
     Vec3f effectPos;
@@ -675,8 +663,8 @@ void EnSlime_SetupDamaged(EnSlime* this, PlayState* play, s32 faceDamageSource) 
     Actor_SetColorFilter(&this->actor, 0x4000, 255, 0x2000, 20);
     this->timer = 20;
     this->actor.speed = 10.0f;
-    if (faceDamageSource == true) {
-        // This function changes actor's world Y rotation - I think it's maybe to face source of damage?
+    if (arg2 == true) {
+        // This function changes actor's world Y rotation?
         func_800BE504(&this->actor, &this->collider);
     }
 
@@ -740,8 +728,7 @@ void EnSlime_Damaged(EnSlime* this, PlayState* play) {
 }
 
 /**
- * Initialize death action cycle. Disable AC_ON flag,
- * make actor stop moving, and shrink the actor.
+ * Disable AC_ON flag, make actor stop moving, and shrink the actor.
  */
 void EnSlime_SetupDead(EnSlime* this) {
     this->collider.base.acFlags &= ~AC_ON;
@@ -834,7 +821,7 @@ void EnSlime_SetupSpawnIceBlock(EnSlime* this) {
     this->iceBlockSnapPos.z = EnSlime_SnapIceBlockPosition(this->actor.world.pos.z, this->actor.home.pos.z);
     Actor_SetColorFilter(&this->actor, 0x8000, 0x80FF, 0x2000, 10);
     this->eyeTexIndex = EN_SLIME_EYETEX_OPEN;
-    this->iceBlockTimer = 254;
+    this->iceBlockTimer = ICE_BLOCK_TIMER_MAX;
     this->actionFunc = EnSlime_SpawnIceBlock;
 }
 
@@ -844,7 +831,7 @@ void EnSlime_SetupSpawnIceBlock(EnSlime* this) {
  * If ice block spawn fails, chuchu returns to idle.
  */
 void EnSlime_SpawnIceBlock(EnSlime* this, PlayState* play) {
-    s32 stepCheck; // bool
+    s32 stepCheck;
 
     stepCheck = Math_StepToF(&this->actor.world.pos.x, this->iceBlockSnapPos.x, 10.0f);
     stepCheck &= Math_StepToF(&this->actor.world.pos.z, this->iceBlockSnapPos.z, 10.0f);
@@ -860,7 +847,7 @@ void EnSlime_SpawnIceBlock(EnSlime* this, PlayState* play) {
         } else {
             this->actor.colorFilterTimer = 0;
             this->collider.base.acFlags |= AC_ON;
-            this->iceBlockTimer = 255;
+            this->iceBlockTimer = ICE_BLOCK_UNUSED;
             this->actor.flags |= ACTOR_FLAG_1;
             this->actor.gravity = -2.0f;
             EnSlime_SetupIdle(this);
@@ -868,10 +855,6 @@ void EnSlime_SpawnIceBlock(EnSlime* this, PlayState* play) {
     }
 }
 
-/**
- * Enter state as a chuchu frozen in an ice block.
- * This function is called after ice block spawn is successful.
- */
 void EnSlime_SetupIceBlock(EnSlime* this) {
     this->actor.flags |= ACTOR_FLAG_10;
     this->actionFunc = EnSlime_IceBlock;
@@ -899,9 +882,6 @@ void EnSlime_IceBlock(EnSlime* this, PlayState* play) {
     }
 }
 
-/**
- * Prepare the actor to behave as if stunned.
- */
 void EnSlime_SetupStun(EnSlime* this) {
     this->actor.speed = 0.0f;
     func_800BE504(&this->actor, &this->collider);
@@ -929,9 +909,6 @@ void EnSlime_Stun(EnSlime* this, PlayState* play) {
     }
 }
 
-/**
- * Setup ice block thaw
- */
 void EnSlime_SetupIceBlockThaw(EnSlime* this) {
     this->actor.colorFilterTimer = 0;
     this->actor.gravity = -2.0f;
@@ -949,14 +926,14 @@ void EnSlime_IceBlockThaw(EnSlime* this, PlayState* play) {
     this->actor.colorFilterTimer = 10;
     if ((this->actor.child != NULL) && (this->actor.child->update != NULL)) {
         iceBlockTimerAdj = (0.1f - this->actor.child->scale.y) * 10.0f * 255.0f;
-        this->iceBlockTimer = CLAMP(iceBlockTimerAdj, 0, 255);
+        this->iceBlockTimer = CLAMP(iceBlockTimerAdj, 0, ICE_BLOCK_UNUSED);
     } else {
         this->actor.child = NULL;
         iceBlockTimerAdj = this->iceBlockTimer + 10;
-        this->iceBlockTimer = CLAMP_MAX(iceBlockTimerAdj, 255);
+        this->iceBlockTimer = CLAMP_MAX(iceBlockTimerAdj, ICE_BLOCK_UNUSED);
     }
 
-    if (this->iceBlockTimer == 255) {
+    if (this->iceBlockTimer == ICE_BLOCK_UNUSED) {
         this->collider.base.acFlags |= AC_ON;
         this->actor.flags |= ACTOR_FLAG_1;
         this->actor.flags &= ~ACTOR_FLAG_10;
@@ -966,7 +943,7 @@ void EnSlime_IceBlockThaw(EnSlime* this, PlayState* play) {
 
 /**
  * Set speed to zero, and make undrawable.
- * Initialize respawn timer.
+ * Initialize revive timer.
  */
 void EnSlime_SetupWaitForRevive(EnSlime* this) {
     this->actor.draw = NULL;
@@ -976,7 +953,7 @@ void EnSlime_SetupWaitForRevive(EnSlime* this) {
     this->actor.velocity.y = 0.0f;
     this->actor.speed = 0.0f;
     this->collider.base.ocFlags1 &= ~OC1_ON;
-    this->timer = this->respawnTime;
+    this->timer = this->reviveTime;
     this->actionFunc = EnSlime_WaitForRevive;
 }
 
@@ -994,12 +971,12 @@ void EnSlime_WaitForRevive(EnSlime* this, PlayState* play) {
 
 /**
  * Re-enable drawing, reset the actor's health and home,
- * and setup and initialize respawn action.
+ * and setup and initialize revive action.
  */
 void EnSlime_SetupRevive(EnSlime* this) {
     this->actor.draw = EnSlime_Draw;
     this->actor.colChkInfo.health = sColChkInfoInit.health;
-    this->iceBlockTimer = 255;
+    this->iceBlockTimer = ICE_BLOCK_UNUSED;
     Math_Vec3f_Copy(&this->actor.world.pos, &this->actor.home.pos);
     this->timer = 0;
     this->actor.colorFilterTimer = 0;
@@ -1027,29 +1004,29 @@ void EnSlime_Revive(EnSlime* this, PlayState* play) {
     } else {
         if (this->timer < 12) {
             rescaleFactor1 = this->timer * 0.0008333333f; // This is about 1/1200, but (1.0f/1200.0f) does not match
-            this->respawnScale.x = rescaleFactor1;
-            this->respawnScale.z = rescaleFactor1;
-            this->respawnScale.y = 2.0f * rescaleFactor1;
-            this->respawnRotY = this->timer * (0x4000 / 10.0f);
+            this->reviveScale.x = rescaleFactor1;
+            this->reviveScale.z = rescaleFactor1;
+            this->reviveScale.y = 2.0f * rescaleFactor1;
+            this->reviveRotY = this->timer * (0x4000 / 10.0f);
         } else if (this->timer < 20) {
             rescaleFactor1 = (this->timer - 12) * (1.0f / 1600.0f);
             rescaleFactor2 = 0.01f + rescaleFactor1;
-            this->respawnScale.x = rescaleFactor2;
-            this->respawnScale.z = rescaleFactor2;
-            this->respawnScale.y = 2.0f * (0.01f - rescaleFactor1);
-            this->respawnRotY = this->timer * (0x4000 / 10.0f);
+            this->reviveScale.x = rescaleFactor2;
+            this->reviveScale.z = rescaleFactor2;
+            this->reviveScale.y = 2.0f * (0.01f - rescaleFactor1);
+            this->reviveRotY = this->timer * (0x4000 / 10.0f);
         } else if (this->timer < 24) {
             rescaleFactor1 = (this->timer - 20) * 0.0033333332f; // This is about 1/300
             rescaleFactor2 = 0.015f - rescaleFactor1;
-            this->respawnScale.x = rescaleFactor2;
-            this->respawnScale.z = rescaleFactor2;
-            this->respawnScale.y = (2.0f * rescaleFactor1) + 0.01f;
+            this->reviveScale.x = rescaleFactor2;
+            this->reviveScale.z = rescaleFactor2;
+            this->reviveScale.y = (2.0f * rescaleFactor1) + 0.01f;
             Actor_SetScale(&this->actor, 1.5f * rescaleFactor1);
-            this->respawnRotY = ((23 - this->timer) * 7281.778f) + 10922.667f;
+            this->reviveRotY = ((23 - this->timer) * 7281.778f) + 10922.667f;
             this->actor.shape.rot.y = (28 - this->timer) * (f32)0x1000;
         } else {
             Actor_SetScale(&this->actor, (((28 - this->timer) * 0.1f) + 1.0f) * 0.01f);
-            Math_Vec3f_Copy(&this->respawnScale, &gZeroVec3f);
+            Math_Vec3f_Copy(&this->reviveScale, &gZeroVec3f);
             this->actor.shape.rot.y = (28 - this->timer) * (f32)0x1000;
         }
 
@@ -1057,7 +1034,7 @@ void EnSlime_Revive(EnSlime* this, PlayState* play) {
             this->collider.base.ocFlags1 |= OC1_ON;
         }
 
-        this->respawnRotY += this->actor.home.rot.y;
+        this->reviveRotY += this->actor.home.rot.y;
         this->actor.shape.rot.y += this->actor.home.rot.y;
     }
 }
@@ -1074,7 +1051,7 @@ void EnSlime_UpdateDamage(EnSlime* this, PlayState* play) {
 
             EnSlime_Thaw(this, play);
             if ((this->actor.params == EN_SLIME_TYPE_BLUE) &&
-                (this->actor.colChkInfo.damageEffect == ENSLIME_DMGEFF_ICEARROW)) {
+                (this->actor.colChkInfo.damageEffect == EN_SLIME_DMGEFF_FREEZE)) {
                 // Blue chuchus take no damage from ice arrows.
                 this->actor.colChkInfo.damage = 0;
             }
@@ -1085,15 +1062,15 @@ void EnSlime_UpdateDamage(EnSlime* this, PlayState* play) {
                 this->actor.flags &= ~ACTOR_FLAG_1;
             }
 
-            if (this->actor.colChkInfo.damageEffect == ENSLIME_DMGEFF_BLUNT) {
+            if (this->actor.colChkInfo.damageEffect == EN_SLIME_DMGEFF_BLUNT) {
                 EnSlime_SetupReactToBluntHit(this);
-            } else if (this->actor.colChkInfo.damageEffect == ENSLIME_DMGEFF_STUN) {
+            } else if (this->actor.colChkInfo.damageEffect == EN_SLIME_DMGEFF_STUN) {
                 this->timer = 40;
                 Actor_SetColorFilter(&this->actor, 0, 255, 0x2000, 40);
                 Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_FREEZE);
                 EnSlime_SetupStun(this);
-            } else if (this->actor.colChkInfo.damageEffect != ENSLIME_DMGEFF_HOOKSHOT) {
-                if (this->actor.colChkInfo.damageEffect == ENSLIME_DMGEFF_ICEARROW) {
+            } else if (this->actor.colChkInfo.damageEffect != EN_SLIME_DMGEFF_HOOKSHOT) {
+                if (this->actor.colChkInfo.damageEffect == EN_SLIME_DMGEFF_FREEZE) {
                     if (this->actor.params == EN_SLIME_TYPE_BLUE) {
                         EnSlime_SetupSpawnIceBlock(this);
                     } else {
@@ -1105,14 +1082,14 @@ void EnSlime_UpdateDamage(EnSlime* this, PlayState* play) {
                         EnSlime_SetupStun(this);
                     }
                 } else {
-                    if (this->actor.colChkInfo.damageEffect == ENSLIME_DMGEFF_LIGHT) {
+                    if (this->actor.colChkInfo.damageEffect == EN_SLIME_DMGEFF_LIGHT) {
                         this->drawDmgEffAlpha = 4.0f;
                         this->drawDmgEffScale = 0.4f;
                         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
                         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->collider.info.bumper.hitPos.x,
                                     this->collider.info.bumper.hitPos.y, this->collider.info.bumper.hitPos.z, 0, 0, 0,
                                     CLEAR_TAG_LARGE_LIGHT_RAYS);
-                    } else if (this->actor.colChkInfo.damageEffect == ENSLIME_DMGEFF_ELECTRIC) {
+                    } else if (this->actor.colChkInfo.damageEffect == EN_SLIME_DMGEFF_ELECTRIC) {
                         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_LARGE;
                         this->drawDmgEffAlpha = 4.0f;
                         this->drawDmgEffScale = 0.4f;
@@ -1134,7 +1111,7 @@ void EnSlime_Update(Actor* thisx, PlayState* play) {
 
     // Note: Does not match if you use this->actor instead of thisx
     thisx->shape.shadowAlpha = this->iceBlockTimer;
-    if (this->iceBlockTimer == 255) {
+    if (this->iceBlockTimer == ICE_BLOCK_UNUSED) {
         if (thisx->scale.y > 0.0001f) {
             thisx->targetArrowOffset = 60.0f / thisx->scale.y;
         }
@@ -1191,7 +1168,7 @@ void EnSlime_Draw(Actor* thisx, PlayState* play) {
     func_8012C28C(play->state.gfxCtx);
     func_8012C2DC(play->state.gfxCtx);
     func_800B8118(&this->actor, play, 0);
-    if (this->iceBlockTimer != 255) {
+    if (this->iceBlockTimer != ICE_BLOCK_UNUSED) {
         gSPSegment(POLY_XLU_DISP++, 10, D_801AEFA0);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 170, 255, 255, 255, 255);
         gDPSetEnvColor(POLY_XLU_DISP++, 150, 255, 255, this->iceBlockTimer);
@@ -1218,7 +1195,7 @@ void EnSlime_Draw(Actor* thisx, PlayState* play) {
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_XLU_DISP++, gChuchuBodyDL);
 
-    if (this->iceBlockTimer == 255) {
+    if (this->iceBlockTimer == ICE_BLOCK_UNUSED) {
         // Ice block is not active
         Scene_SetRenderModeXlu(play, 0, 1);
 
@@ -1240,8 +1217,8 @@ void EnSlime_Draw(Actor* thisx, PlayState* play) {
 
     if (this->actionFunc == EnSlime_Revive) {
         Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
-        Matrix_RotateYS(this->respawnRotY, MTXMODE_APPLY);
-        Matrix_Scale(this->respawnScale.x, this->respawnScale.y, this->respawnScale.z, MTXMODE_APPLY);
+        Matrix_RotateYS(this->reviveRotY, MTXMODE_APPLY);
+        Matrix_Scale(this->reviveScale.x, this->reviveScale.y, this->reviveScale.z, MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, gChuchuPuddleDL);
@@ -1255,7 +1232,7 @@ void EnSlime_Draw(Actor* thisx, PlayState* play) {
                          this->actor.world.pos.z, MTXMODE_NEW);
         Matrix_Scale(0.03f, 0.03f, 0.03f, MTXMODE_APPLY);
 
-        gSPSegment(POLY_OPA_DISP++, 8, (u32)this->dropObjectTex);
+        gSPSegment(POLY_OPA_DISP++, 8, (u32)this->itemDropTex);
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, gItemDropDL);
     }
