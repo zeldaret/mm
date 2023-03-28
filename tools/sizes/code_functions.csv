@@ -2072,7 +2072,7 @@ asm/non_matchings/code/z_skelanime/AnimationContext_CopyTrue.s,AnimationContext_
 asm/non_matchings/code/z_skelanime/AnimationContext_CopyFalse.s,AnimationContext_CopyFalse,0x80135DB8,0x21
 asm/non_matchings/code/z_skelanime/AnimationContext_MoveActor.s,AnimationContext_MoveActor,0x80135E3C,0x2B
 asm/non_matchings/code/z_skelanime/AnimationContext_Update.s,AnimationContext_Update,0x80135EE8,0x28
-asm/non_matchings/code/z_skelanime/SkelAnime_InitPlayerAnimetion.s,SkelAnime_InitPlayerAnimetion,0x80135F88,0x48
+asm/non_matchings/code/z_skelanime/SkelAnime_InitDmaAnimetion.s,SkelAnime_InitDmaAnimetion,0x80135F88,0x48
 asm/non_matchings/code/z_skelanime/DmaAnimation_SetUpdateFunction.s,DmaAnimation_SetUpdateFunction,0x801360A8,0xE
 asm/non_matchings/code/z_skelanime/DmaAnimation_Update.s,DmaAnimation_Update,0x801360E0,0x9
 asm/non_matchings/code/z_skelanime/DmaAnimation_Morph.s,DmaAnimation_Morph,0x80136104,0x2E

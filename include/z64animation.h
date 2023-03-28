@@ -323,7 +323,7 @@ void AnimationContext_SetCopyFalse(struct PlayState* play, s32 vecCount, Vec3s* 
 void AnimationContext_SetMoveActor(struct PlayState* play, struct Actor* actor, SkelAnime* skelAnime, f32 arg3);
 
 void AnimationContext_Update(struct PlayState* play, AnimationContext* animationCtx);
-void SkelAnime_InitPlayer(struct PlayState* play, SkelAnime* skelAnime, FlexSkeletonHeader* skeletonHeaderSeg, DmaAnimationHeader* animation, s32 flags, void* jointTableBuffer, void* morphTableBuffer, s32 limbBufCount);
+void SkelAnime_InitDma(struct PlayState* play, SkelAnime* skelAnime, FlexSkeletonHeader* skeletonHeaderSeg, DmaAnimationHeader* animation, s32 flags, void* jointTableBuffer, void* morphTableBuffer, s32 limbBufCount);
 void DmaAnimation_SetUpdateFunction(SkelAnime* skelAnime);
 s32 DmaAnimation_Update(struct PlayState* play, SkelAnime* skelAnime);
 void Animation_SetMorph(struct PlayState* play, SkelAnime* skelAnime, f32 morphFrames);
