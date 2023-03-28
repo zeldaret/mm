@@ -321,7 +321,7 @@ s32 func_80A3E898(EnTest3* this, PlayState* play) {
         func_80151938(play, textId);
     }
     if (textId == 0x296B) {
-        PlayerAnimation_PlayOnceSetSpeed(play, &this->player.skelAnime, &gPlayerAnim_al_yareyare, 2.0f / 3.0f);
+        DmaAnimation_PlayOnceSetSpeed(play, &this->player.skelAnime, &gPlayerAnim_al_yareyare, 2.0f / 3.0f);
     }
     return false;
 }
