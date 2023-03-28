@@ -21,7 +21,7 @@ typedef struct StackEntry {
 } StackEntry; // size = 0x1C
 
 
-void StackCheck_Init(StackEntry* entry, void* stackTop, void* stackBottom, u32 initValue, s32 minSpace, const char* name);
+void StackCheck_Init(StackEntry* entry, void* stackBottom, void* stackTop, u32 initValue, s32 minSpace, const char* name);
 void StackCheck_Cleanup(StackEntry* entry);
 u32 StackCheck_Check(StackEntry* entry);
 
