@@ -5,7 +5,6 @@
  */
 
 #include "z_en_and.h"
-#include "objects/object_and/object_and.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -31,14 +30,14 @@ ActorInit En_And_InitVars = {
 };
 
 static AnimationInfoS sAnimationInfo[8] = {
-    { &object_and_Anim_0000C8, 1.0f, 0, -1, 0, 0 },
-    { &object_and_Anim_0122D0, 1.0f, 0, -1, 0, 0 },
-    { &object_and_Anim_00DA58, 1.0f, 0, -1, 0, 0 },
-    { &object_and_Anim_00FE64, 1.0f, 0, -1, 2, 0 },
-    { &object_and_Anim_01067C, 1.0f, 0, -1, 0, 0 },
-    { &object_and_Anim_00EE00, 1.0f, 0, -1, 2, 0 },
-    { &object_and_Anim_00F6C4, 1.0f, 0, -1, 0, 0 },
-    { &object_and_Anim_011AFC, 1.0f, 0, -1, 2, 0 },
+    { &gAndStaticAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gAndIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gAndWalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gAndRaiseHeadAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &gAndRaisedHeadLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gAndRaiseHandAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &gAndRaisedHandLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gAndRaisedHandWalkAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
 };
 
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_And/EnAnd_ChangeAnimation.s")
@@ -65,31 +64,25 @@ void EnAnd_Blink(EnAnd* this) {
 
 void EnAnd_HandleCsAction(EnAnd* this, PlayState* play) {
     // Action animations
-    s32 D_80C19200[] = { // TODO: Rename accordingly? Other similar code has not done so.
-        0x00000000,
-        0x00000001,
-        0x00000002,
-        0x00000003,
-        0x00000005,
-        0x00000007,
-    };
+    // TODO: Rename accordingly? Other similar code has not done so.
+    s32 D_80C19200[] = { 0, 1, 2, 3, 5, 7 };
     u16 csAction;
     s32 actionIndex;
 
-    if (play->csCtx.state != 0) {
-        if (!this->unk30C) { // TODO: prevPlaying?
-            this->unk18C = 0xFF; // TODO: prevAction?
+    if (play->csCtx.state != CS_STATE_0) {
+        if (!this->unk30C) { // TODO: playing/prevPlaying?
+            this->action = 0xFF;
             this->unk30C = true;
             this->unk308 = this->animIndex; // TODO: startAnimIndex?
         }
         if (Cutscene_CheckActorAction(play, 0x235U)) {
             actionIndex = Cutscene_GetActorActionIndex(play, 0x235U);
             csAction = play->csCtx.actorActions[actionIndex]->action;
-            if (this->unk18C != (u8)csAction) {
-                this->unk18C = csAction;
+            if (this->action != (u8)csAction) {
+                this->action = csAction;
                 EnAnd_ChangeAnimation(this, D_80C19200[csAction]);
             }
-            switch (this->unk18C) {
+            switch (this->action) {
                 case 3:
                 case 4:
                     if ((this->animIndex == 3) || (this->animIndex == 5)) {
@@ -111,7 +104,7 @@ void EnAnd_HandleCsAction(EnAnd* this, PlayState* play) {
 void EnAnd_Init(Actor* thisx, PlayState* play) {
     EnAnd* this = THIS;
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 14.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_and_Skel_00B380, NULL, this->jointTable, this->morphTable, 26);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gAndSkel, NULL, this->jointTable, this->morphTable, OBJECT_AND_LIMB_MAX);
     this->animIndex = -1;
     EnAnd_ChangeAnimation(this, 0);
     Actor_SetScale(&this->actor, 0.01f);
@@ -145,37 +138,38 @@ void EnAnd_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
         overrideRot = false;
     }
 
-    if (limbIndex != 2) {
-        if (limbIndex == 18) {
-            SubS_UpdateLimb(this->unk2F6 + this->unk2FA + 0x4000, this->unk2F8 + this->unk2FC + this->actor.shape.rot.y + 0x4000, &this->limbPos1, &this->limbRot1, stepRot, overrideRot);
+    if (limbIndex != OBJECT_AND_LIMB_TORSO) {
+        if (limbIndex == OBJECT_AND_LIMB_HEAD) {
+            // TODO: limbTorsoRotZ/Y and limbHeadRotZ/Y?
+            SubS_UpdateLimb(this->unk2F6 + this->unk2FA + 0x4000, this->unk2F8 + this->unk2FC + this->actor.shape.rot.y + 0x4000, &this->limbHeadPos, &this->limbHeadRot, stepRot, overrideRot);
             Matrix_Pop();
-            Matrix_Translate(this->limbPos1.x, this->limbPos1.y, this->limbPos1.z, MTXMODE_NEW);
+            Matrix_Translate(this->limbHeadPos.x, this->limbHeadPos.y, this->limbHeadPos.z, MTXMODE_NEW);
             Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-            Matrix_RotateYS(this->limbRot1.y, MTXMODE_APPLY);
-            Matrix_RotateXS(this->limbRot1.x, MTXMODE_APPLY);
-            Matrix_RotateZS(this->limbRot1.z, MTXMODE_APPLY);
+            Matrix_RotateYS(this->limbHeadRot.y, MTXMODE_APPLY);
+            Matrix_RotateXS(this->limbHeadRot.x, MTXMODE_APPLY);
+            Matrix_RotateZS(this->limbHeadRot.z, MTXMODE_APPLY);
             Matrix_Push();
         }
     } else {
-        SubS_UpdateLimb(this->unk2FA + 0x4000, this->unk2FC + this->actor.shape.rot.y + 0x4000, &this->limbPos2, &this->limbRot2, stepRot, overrideRot);
+        SubS_UpdateLimb(this->unk2FA + 0x4000, this->unk2FC + this->actor.shape.rot.y + 0x4000, &this->limbTorsoPos, &this->limbTorsoRot, stepRot, overrideRot);
         Matrix_Pop();
-        Matrix_Translate(this->limbPos2.x, this->limbPos2.y, this->limbPos2.z, MTXMODE_NEW);
+        Matrix_Translate(this->limbTorsoPos.x, this->limbTorsoPos.y, this->limbTorsoPos.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-        Matrix_RotateYS(this->limbRot2.y, MTXMODE_APPLY);
-        Matrix_RotateXS(this->limbRot2.x, MTXMODE_APPLY);
-        Matrix_RotateZS(this->limbRot2.z, MTXMODE_APPLY);
+        Matrix_RotateYS(this->limbTorsoRot.y, MTXMODE_APPLY);
+        Matrix_RotateXS(this->limbTorsoRot.x, MTXMODE_APPLY);
+        Matrix_RotateZS(this->limbTorsoRot.z, MTXMODE_APPLY);
         Matrix_Push();
     }
 }
 
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_And/EnAnd_Draw.s")
 void EnAnd_Draw(Actor* thisx, PlayState* play) {
-    static TexturePtr sMouthTextures[2] = { object_and_Tex_009DF0, object_and_Tex_00A1F0 };
+    static TexturePtr sMouthTextures[2] = { gAndMouthNeutralTex, gAndMouthSmileTex };
     static TexturePtr sEyeTextures[4] = {
-        object_and_Tex_007DF0,
-        object_and_Tex_0085F0,
-        object_and_Tex_008DF0,
-        object_and_Tex_0095F0,
+        gAndEyeOpenTex,
+        gAndEyeClosingTex,
+        gAndEyeClosedTex,
+        gAndEyeOpeningTex,
     };
 
     EnAnd* this = THIS;
@@ -187,7 +181,7 @@ void EnAnd_Draw(Actor* thisx, PlayState* play) {
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyeTextures[this->eyeTexIndex]));
     gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(sMouthTextures[0]));
 
-    SkelAnime_DrawTransformFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, (s32) this->skelAnime.dListCount, NULL, NULL, EnAnd_TransformLimbDraw, &this->actor);
+    SkelAnime_DrawTransformFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, NULL, NULL, EnAnd_TransformLimbDraw, &this->actor);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
