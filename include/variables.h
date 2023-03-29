@@ -35,8 +35,6 @@ extern const char* sCpuExceptions[18];
 extern const char* sFpuExceptions[6];
 extern FaultDrawer* sFaultDrawContext;
 extern FaultDrawer sFaultDrawerDefault;
-extern s32 gLoadLogSeverity;
-extern s32 gLoad2LogSeverity;
 extern StackEntry* sStackInfoListStart;
 extern StackEntry* sStackInfoListEnd;
 // extern UNK_TYPE1 sGfxPrintFontTLUT;

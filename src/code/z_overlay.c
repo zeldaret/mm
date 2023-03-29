@@ -13,7 +13,7 @@
  */
 
 #include "global.h"
-#include "z64load.h"
+#include "load.h"
 
 void* TransitionOverlay_VramToRam(TransitionOverlay* overlayEntry, void* vramAddr) {
     void* loadedRamAddr = Lib_PhysicalToVirtual(overlayEntry->loadInfo.addr);
@@ -45,7 +45,7 @@ s32 TransitionOverlay_Load(TransitionOverlay* overlayEntry) {
         if (loadedRamAddr == NULL) {
             return -1;
         }
-        Load2_LoadOverlay(overlayEntry->vromStart, overlayEntry->vromEnd, overlayEntry->vramStart,
+        Overlay_Load(overlayEntry->vromStart, overlayEntry->vromEnd, overlayEntry->vramStart,
                           overlayEntry->vramEnd, loadedRamAddr);
         overlayEntry->loadInfo.addr = Lib_VirtualToPhysical(loadedRamAddr);
         overlayEntry->loadInfo.count = 1;

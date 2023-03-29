@@ -1,5 +1,5 @@
 #include "global.h"
-#include "z64load.h"
+#include "load.h"
 
 EffectSsInfo sEffectSsInfo = { NULL, 0, 0 };
 
@@ -185,7 +185,7 @@ void EffectSs_Spawn(PlayState* play, s32 type, s32 priority, void* initData) {
                 return;
             }
 
-            Load2_LoadOverlay(entry->vromStart, entry->vromEnd, entry->vramStart, entry->vramEnd, entry->loadedRamAddr);
+            Overlay_Load(entry->vromStart, entry->vromEnd, entry->vramStart, entry->vramEnd, entry->loadedRamAddr);
         }
 
         initInfo = (uintptr_t)((entry->initInfo != NULL)

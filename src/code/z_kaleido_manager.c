@@ -1,5 +1,5 @@
 #include "global.h"
-#include "z64load.h"
+#include "load.h"
 
 #define KALEIDO_OVERLAY(name)                                                                        \
     {                                                                                                \
@@ -39,7 +39,7 @@ void* KaleidoManager_FaultAddrConv(void* address, void* param) {
 
 void KaleidoManager_LoadOvl(KaleidoMgrOverlay* ovl) {
     ovl->loadedRamAddr = sKaleidoAreaPtr;
-    Load2_LoadOverlay(ovl->vromStart, ovl->vromEnd, ovl->vramStart, ovl->vramEnd, ovl->loadedRamAddr);
+    Overlay_Load(ovl->vromStart, ovl->vromEnd, ovl->vramStart, ovl->vramEnd, ovl->loadedRamAddr);
     ovl->offset = (uintptr_t)ovl->loadedRamAddr - (uintptr_t)ovl->vramStart;
     gKaleidoMgrCurOvl = ovl;
 }
