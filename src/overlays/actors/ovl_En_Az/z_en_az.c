@@ -4,6 +4,7 @@
  * Description: Beaver Bros
  */
 
+#include "prevent_bss_reordering.h"
 #include "z_en_az.h"
 #include "objects/object_az/object_az.h"
 #include "overlays/actors/ovl_En_Twig/z_en_twig.h"
