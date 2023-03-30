@@ -90,7 +90,7 @@ char D_801ED9A0[80];
 
 char D_801EDAA8[80];
 char D_801EDAF8[80];
-MtxF D_801EDA40;
+MtxF sModelToWorldMtxF;
 
 void BgCheck_GetStaticLookupIndicesFromPos(CollisionContext* colCtx, Vec3f* pos, Vec3i* sector);
 f32 BgCheck_RaycastFloorDyna(DynaRaycast* dynaRaycast);
@@ -955,7 +955,7 @@ s32 BgCheck_CheckStaticCeiling(StaticLookup* lookup, u16 xpFlags, CollisionConte
 s32 BgCheck_CheckLineAgainstSSList(StaticLineTest* arg0) {
     CollisionPoly* polyList;
     s32 result;
-    Vec3f polyIntersect; // sp7C
+    Vec3f polyIntersect; // worldMinPosZOffset
     SSNode* curNode;
     u8* checkedPoly;
     f32 minY;
@@ -2949,7 +2949,7 @@ void DynaPoly_ExpandSRT(PlayState* play, DynaCollisionContext* dyna, s32 bgId, s
     }
 
     SkinMatrix_SetScaleRotateYRPTranslate(
-        &D_801EDA40, dyna->bgActors[bgId].curTransform.scale.x, dyna->bgActors[bgId].curTransform.scale.y,
+        &sModelToWorldMtxF, dyna->bgActors[bgId].curTransform.scale.x, dyna->bgActors[bgId].curTransform.scale.y,
         dyna->bgActors[bgId].curTransform.scale.z, dyna->bgActors[bgId].curTransform.rot.x,
         dyna->bgActors[bgId].curTransform.rot.y, dyna->bgActors[bgId].curTransform.rot.z,
         dyna->bgActors[bgId].curTransform.pos.x, dyna->bgActors[bgId].curTransform.pos.y,
@@ -2966,7 +2966,7 @@ void DynaPoly_ExpandSRT(PlayState* play, DynaCollisionContext* dyna, s32 bgId, s
             s32 pad;
 
             Math_Vec3s_ToVec3f(&vtx, &pbgdata->vtxList[i]);
-            SkinMatrix_Vec3fMtxFMultXYZ(&D_801EDA40, &vtx, &vtxT);
+            SkinMatrix_Vec3fMtxFMultXYZ(&sModelToWorldMtxF, &vtx, &vtxT);
             BgCheck_Vec3fToVec3s(&dyna->vtxList[*vtxStartIndex + (u32)i], &vtxT);
 
             if (i == 0) {
@@ -3059,24 +3059,24 @@ void DynaPoly_ExpandSRT(PlayState* play, DynaCollisionContext* dyna, s32 bgId, s
     if (pbgdata->numWaterBoxes > 0) {
         for (wi = 0; wi < pbgdata->numWaterBoxes; wi++) {
             WaterBox* waterBox;
-            Vec3f spB8; // waterbox ?
-            Vec3f spAC;
-            Vec3f spA0; // waterbox ?
-            Vec3f sp94;
-            Vec3f sp88; // waterbox ?
-            Vec3f sp7C;
+            Vec3f modelMinPos;
+            Vec3f worldMinPos;
+            Vec3f modelMinPosXOffset;
+            Vec3f worldMinPosXOffset;
+            Vec3f modelMinPosZOffset;
+            Vec3f worldMinPosZOffset;
 
-            Math_Vec3s_ToVec3f(&spB8, &pbgdata->waterBoxes[wi].minPos);
-            Math_Vec3f_Copy(&spA0, &spB8);
-            spA0.x += pbgdata->waterBoxes[wi].xLength;
-            Math_Vec3f_Copy(&sp88, &spB8);
-            sp88.z += pbgdata->waterBoxes[wi].zLength;
-            SkinMatrix_Vec3fMtxFMultXYZ(&D_801EDA40, &spB8, &spAC);
-            SkinMatrix_Vec3fMtxFMultXYZ(&D_801EDA40, &spA0, &sp94);
-            SkinMatrix_Vec3fMtxFMultXYZ(&D_801EDA40, &sp88, &sp7C);
+            Math_Vec3s_ToVec3f(&modelMinPos, &pbgdata->waterBoxes[wi].minPos);
+            Math_Vec3f_Copy(&modelMinPosXOffset, &modelMinPos);
+            modelMinPosXOffset.x += pbgdata->waterBoxes[wi].xLength;
+            Math_Vec3f_Copy(&modelMinPosZOffset, &modelMinPos);
+            modelMinPosZOffset.z += pbgdata->waterBoxes[wi].zLength;
+            SkinMatrix_Vec3fMtxFMultXYZ(&sModelToWorldMtxF, &modelMinPos, &worldMinPos);
+            SkinMatrix_Vec3fMtxFMultXYZ(&sModelToWorldMtxF, &modelMinPosXOffset, &worldMinPosXOffset);
+            SkinMatrix_Vec3fMtxFMultXYZ(&sModelToWorldMtxF, &modelMinPosZOffset, &worldMinPosZOffset);
             waterBox = &dyna->waterBoxList.boxes[*waterBoxStartIndex + wi];
-            BgCheck_CalcWaterboxDimensions(&spAC, &sp94, &sp7C, &waterBox->minPos, &waterBox->xLength,
-                                           &waterBox->zLength);
+            BgCheck_CalcWaterboxDimensions(&worldMinPos, &worldMinPosXOffset, &worldMinPosZOffset, &waterBox->minPos,
+                                           &waterBox->xLength, &waterBox->zLength);
             waterBox->properties = pbgdata->waterBoxes[wi].properties;
         }
     }

@@ -2259,7 +2259,7 @@ extern char D_801ED950[80];
 extern char D_801ED9A0[80];
 extern Vec3f D_801ED9F0[3];
 extern Vec3f D_801EDA18[3];
-extern MtxF D_801EDA40;
+extern MtxF sModelToWorldMtxF;
 extern Vec3f D_801EDA80[3];
 extern char D_801EDAA8[80];
 extern char D_801EDAF8[80];
