@@ -441,7 +441,7 @@ void func_80123140(PlayState* play, Player* player) {
     IREG(69) = bootRegs[16];
     MREG(95) = bootRegs[17];
 
-    if (play->roomCtx.curRoom.unk3 == 2) {
+    if (play->roomCtx.curRoom.behaviorType1 == ROOM_BEHAVIOR_TYPE1_2) {
         R_RUN_SPEED_LIMIT = 500;
     }
 
@@ -1456,7 +1456,7 @@ s32 Player_GetEnvironmentalHazard(PlayState* play) {
     EnvHazardTextTriggerEntry* triggerEntry;
     s32 envHazard;
 
-    if (play->roomCtx.curRoom.unk2 == 3) { // Room is hot
+    if (play->roomCtx.curRoom.behaviorType2 == ROOM_BEHAVIOR_TYPE2_HOT) {
         envHazard = PLAYER_ENV_HAZARD_HOTROOM - 1;
     } else if ((player->transformation != PLAYER_FORM_ZORA) && (player->underwaterTimer > 80)) {
         envHazard = PLAYER_ENV_HAZARD_UNDERWATER_FREE - 1;
@@ -2169,15 +2169,15 @@ void Player_DrawBlastMask(PlayState* play, Player* player) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    if (player->unk_B60 != 0) {
+    if (player->blastMaskTimer != 0) {
         s32 alpha;
 
         gSegments[0xA] = VIRTUAL_TO_PHYSICAL(player->maskObjectSegment);
 
         AnimatedMat_DrawOpa(play, Lib_SegmentedToVirtual(&object_mask_bakuretu_Matanimheader_0011F8));
 
-        if (player->unk_B60 < 11) {
-            alpha = (player->unk_B60 / 10.0f) * 255;
+        if (player->blastMaskTimer <= 10) {
+            alpha = (player->blastMaskTimer / 10.0f) * 255;
         } else {
             alpha = 255;
         }

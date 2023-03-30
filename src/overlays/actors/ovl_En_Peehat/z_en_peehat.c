@@ -234,7 +234,7 @@ void func_80897170(EnPeehat* this) {
     this->drawDmgEffAlpha = 1.0f;
     this->colliderSphere.base.colType = COLTYPE_HIT3;
     this->unk_2B0 = 80;
-    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 80);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 80);
 }
 
 void func_808971DC(EnPeehat* this, PlayState* play) {
@@ -626,7 +626,7 @@ void func_808984E0(EnPeehat* this) {
     this->unk_2B2 = 4000;
     this->unk_2B0 = 14;
     this->actor.speed = 10.0f;
-    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 14);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 14);
     this->colliderSphere.base.acFlags &= ~AC_ON;
     this->unk_2C4 = 0.0f;
     if (this->actor.colChkInfo.health == 0) {
@@ -697,7 +697,7 @@ void func_8089874C(EnPeehat* this, PlayState* play) {
 
             if (this->actor.colChkInfo.damageEffect == 5) {
                 this->unk_2B0 = 40;
-                Actor_SetColorFilter(&this->actor, 0, 255, 0, 40);
+                Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 255, COLORFILTER_BUFFLAG_OPA, 40);
                 Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_FREEZE);
                 this->drawDmgEffScale = 1.1f;
                 this->drawDmgEffAlpha = 2.0f;
@@ -705,7 +705,7 @@ void func_8089874C(EnPeehat* this, PlayState* play) {
                 func_80898414(this);
             } else if (this->actor.colChkInfo.damageEffect == 1) {
                 this->unk_2B0 = 40;
-                Actor_SetColorFilter(&this->actor, 0, 200, 0, 40);
+                Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 200, COLORFILTER_BUFFLAG_OPA, 40);
                 Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_FREEZE);
                 func_80898414(this);
             } else if (this->actor.colChkInfo.damageEffect == 3) {

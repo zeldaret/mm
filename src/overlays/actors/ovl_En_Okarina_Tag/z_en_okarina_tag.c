@@ -6,7 +6,7 @@
 
 #include "z_en_okarina_tag.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_2000000 | ACTOR_FLAG_8000000)
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_2000000 | ACTOR_FLAG_CANT_LOCK_ON)
 
 #define THIS ((EnOkarinaTag*)thisx)
 
