@@ -2169,15 +2169,15 @@ void Player_DrawBlastMask(PlayState* play, Player* player) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    if (player->unk_B60 != 0) {
+    if (player->blastMaskTimer != 0) {
         s32 alpha;
 
         gSegments[0xA] = VIRTUAL_TO_PHYSICAL(player->maskObjectSegment);
 
         AnimatedMat_DrawOpa(play, Lib_SegmentedToVirtual(&object_mask_bakuretu_Matanimheader_0011F8));
 
-        if (player->unk_B60 < 11) {
-            alpha = (player->unk_B60 / 10.0f) * 255;
+        if (player->blastMaskTimer <= 10) {
+            alpha = (player->blastMaskTimer / 10.0f) * 255;
         } else {
             alpha = 255;
         }

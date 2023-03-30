@@ -1,4 +1,5 @@
 #include "global.h"
+#include "z64snap.h"
 #include "z64view.h"
 #include "interface/parameter_static/parameter_static.h"
 #include "interface/do_action_static/do_action_static.h"
@@ -7,12 +8,19 @@
 #include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
 #include "overlays/actors/ovl_En_Mm3/z_en_mm3.h"
 
+extern TexturePtr D_08095AC0; // gMagicArrowEquipEffectTex
+
 typedef enum {
     /* 0 */ PICTO_BOX_STATE_OFF,         // Not using the pictograph
     /* 1 */ PICTO_BOX_STATE_LENS,        // Looking through the lens of the pictograph
     /* 2 */ PICTO_BOX_STATE_SETUP_PHOTO, // Looking at the photo currently taken
     /* 3 */ PICTO_BOX_STATE_PHOTO
 } PictoBoxState;
+
+// TODO extract this information from the texture definitions themselves
+#define DO_ACTION_TEX_WIDTH 48
+#define DO_ACTION_TEX_HEIGHT 16
+#define DO_ACTION_TEX_SIZE ((DO_ACTION_TEX_WIDTH * DO_ACTION_TEX_HEIGHT) / 2) // (sizeof(gCheckDoActionENGTex))
 
 typedef struct {
     /* 0x00 */ u8 scene;
@@ -1021,7 +1029,7 @@ void Interface_SetHudVisibility(u16 hudVisibility) {
 void Interface_UpdateButtonAlphasByStatus(PlayState* play, s16 risingAlpha) {
     InterfaceContext* interfaceCtx = &play->interfaceCtx;
 
-    if ((gSaveContext.buttonStatus[EQUIP_SLOT_B] == BTN_DISABLED) || (gSaveContext.unk_1015 == ITEM_NONE)) {
+    if ((gSaveContext.buttonStatus[EQUIP_SLOT_B] == BTN_DISABLED) || (gSaveContext.bButtonStatus == BTN_DISABLED)) {
         if (interfaceCtx->bAlpha != 70) {
             interfaceCtx->bAlpha = 70;
         }
@@ -1393,7 +1401,8 @@ void Interface_UpdateHudAlphas(PlayState* play, s16 dimmingAlpha) {
                 interfaceCtx->aAlpha = risingAlpha;
             }
 
-            if ((gSaveContext.buttonStatus[EQUIP_SLOT_B] == BTN_DISABLED) || (gSaveContext.unk_1015 == ITEM_NONE)) {
+            if ((gSaveContext.buttonStatus[EQUIP_SLOT_B] == BTN_DISABLED) ||
+                (gSaveContext.bButtonStatus == ITEM_NONE)) {
                 if (interfaceCtx->bAlpha != 70) {
                     interfaceCtx->bAlpha = 70;
                 }
@@ -1772,10 +1781,736 @@ void Interface_UpdateHudAlphas(PlayState* play, s16 dimmingAlpha) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_80110038.s")
+/**
+ * A continuation of the if-else chain from Interface_UpdateButtonsPart1
+ * Also used directly when opening the pause menu i.e. skips part 1
+ */
+void Interface_UpdateButtonsPart2(PlayState* play) {
+    MessageContext* msgCtx = &play->msgCtx;
+    InterfaceContext* interfaceCtx = &play->interfaceCtx;
+    Player* player = GET_PLAYER(play);
+    s16 i;
+    s16 restoreHudVisibility = false;
 
-void func_80111CB4(PlayState* play);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_80111CB4.s")
+    if (CHECK_EVENTINF(EVENTINF_41)) {
+        // Related to swamp boat (non-minigame)?
+        for (i = EQUIP_SLOT_C_LEFT; i <= EQUIP_SLOT_C_RIGHT; i++) {
+            if ((GET_CUR_FORM_BTN_ITEM(i) != ITEM_PICTO_BOX) || (msgCtx->msgMode != 0)) {
+                if (gSaveContext.buttonStatus[i] == BTN_ENABLED) {
+                    restoreHudVisibility = true;
+                }
+                gSaveContext.buttonStatus[i] = BTN_DISABLED;
+            } else {
+                if (gSaveContext.buttonStatus[i] == BTN_DISABLED) {
+                    restoreHudVisibility = true;
+                }
+                gSaveContext.buttonStatus[i] = BTN_ENABLED;
+            }
+        }
+
+        if (sPictoState == PICTO_BOX_STATE_OFF) {
+            if (gSaveContext.buttonStatus[EQUIP_SLOT_B] != BTN_DISABLED) {
+                restoreHudVisibility = true;
+            }
+            gSaveContext.buttonStatus[EQUIP_SLOT_B] = BTN_DISABLED;
+        } else {
+            if (gSaveContext.buttonStatus[EQUIP_SLOT_B] == BTN_DISABLED) {
+                restoreHudVisibility = true;
+            }
+            gSaveContext.buttonStatus[EQUIP_SLOT_B] = BTN_ENABLED;
+        }
+    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_90_20)) {
+        // Fishermans's jumping minigame
+        for (i = EQUIP_SLOT_C_LEFT; i <= EQUIP_SLOT_C_RIGHT; i++) {
+            if (gSaveContext.buttonStatus[i] == BTN_ENABLED) {
+                gSaveContext.buttonStatus[i] = BTN_DISABLED;
+            }
+        }
+
+        Interface_SetHudVisibility(HUD_VISIBILITY_B);
+    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_82_08)) {
+        // Swordsman's log minigame
+        for (i = EQUIP_SLOT_C_LEFT; i <= EQUIP_SLOT_C_RIGHT; i++) {
+            if (gSaveContext.buttonStatus[i] == BTN_ENABLED) {
+                gSaveContext.buttonStatus[i] = BTN_DISABLED;
+            }
+        }
+
+        Interface_SetHudVisibility(HUD_VISIBILITY_A_B_HEARTS_MAGIC_MINIMAP);
+    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_84_20)) {
+        // Related to moon child
+        if (player->currentMask == PLAYER_MASK_FIERCE_DEITY) {
+            for (i = EQUIP_SLOT_C_LEFT; i <= EQUIP_SLOT_C_RIGHT; i++) {
+                if ((GET_CUR_FORM_BTN_ITEM(i) == ITEM_MASK_FIERCE_DEITY) ||
+                    ((GET_CUR_FORM_BTN_ITEM(i) >= ITEM_BOTTLE) && (GET_CUR_FORM_BTN_ITEM(i) <= ITEM_OBABA_DRINK))) {
+                    if (gSaveContext.buttonStatus[i] == BTN_DISABLED) {
+                        restoreHudVisibility = true;
+                        gSaveContext.buttonStatus[i] = BTN_ENABLED;
+                    }
+                } else {
+                    if (gSaveContext.buttonStatus[i] != BTN_DISABLED) {
+                        gSaveContext.buttonStatus[i] = BTN_DISABLED;
+                        restoreHudVisibility = true;
+                    }
+                }
+            }
+        } else {
+            for (i = EQUIP_SLOT_C_LEFT; i <= EQUIP_SLOT_C_RIGHT; i++) {
+                if ((GET_CUR_FORM_BTN_ITEM(i) >= ITEM_MASK_DEKU) && (GET_CUR_FORM_BTN_ITEM(i) <= ITEM_MASK_ZORA)) {
+                    if (gSaveContext.buttonStatus[i] != BTN_DISABLED) {
+                        restoreHudVisibility = true;
+                    }
+                    gSaveContext.buttonStatus[i] = BTN_DISABLED;
+                } else {
+                    if (gSaveContext.buttonStatus[i] == BTN_DISABLED) {
+                        restoreHudVisibility = true;
+                    }
+                    gSaveContext.buttonStatus[i] = BTN_ENABLED;
+                }
+            }
+        }
+    } else if ((play->sceneId == SCENE_SPOT00) && (gSaveContext.sceneLayer == 6)) {
+        // Unknown cutscene
+        for (i = EQUIP_SLOT_C_LEFT; i <= EQUIP_SLOT_C_RIGHT; i++) {
+            if (gSaveContext.buttonStatus[i] == BTN_ENABLED) {
+                restoreHudVisibility = true;
+            }
+            gSaveContext.buttonStatus[i] = BTN_DISABLED;
+        }
+    } else if (CHECK_EVENTINF(EVENTINF_34)) {
+        // Deku playground minigame
+        if (player->stateFlags3 & PLAYER_STATE3_1000000) {
+            if (gSaveContext.save.inventory.items[SLOT_NUT] == ITEM_NUT) {
+                BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) = ITEM_NUT;
+                Interface_LoadItemIconImpl(play, EQUIP_SLOT_B);
+            } else {
+                gSaveContext.buttonStatus[EQUIP_SLOT_B] = BTN_DISABLED;
+                restoreHudVisibility = true;
+            }
+        } else {
+            if (gSaveContext.buttonStatus[EQUIP_SLOT_B] == BTN_DISABLED) {
+                gSaveContext.buttonStatus[EQUIP_SLOT_B] = BTN_ENABLED;
+                restoreHudVisibility = true;
+            }
+
+            for (i = EQUIP_SLOT_C_LEFT; i <= EQUIP_SLOT_C_RIGHT; i++) {
+                if (gSaveContext.buttonStatus[i] == BTN_ENABLED) {
+                    restoreHudVisibility = true;
+                }
+                gSaveContext.buttonStatus[i] = BTN_DISABLED;
+            }
+        }
+
+        if (restoreHudVisibility || (gSaveContext.hudVisibility != HUD_VISIBILITY_A_B_MINIMAP)) {
+            gSaveContext.hudVisibility = HUD_VISIBILITY_IDLE;
+            Interface_SetHudVisibility(HUD_VISIBILITY_A_B_MINIMAP);
+            restoreHudVisibility = false;
+        }
+    } else if (player->stateFlags3 & PLAYER_STATE3_1000000) {
+        // Nuts on B (from flying as Deku Link)
+        if (gSaveContext.save.inventory.items[SLOT_NUT] == ITEM_NUT) {
+            if (BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) != ITEM_NUT) {
+                BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) = ITEM_NUT;
+                Interface_LoadItemIconImpl(play, EQUIP_SLOT_B);
+                gSaveContext.buttonStatus[EQUIP_SLOT_B] = BTN_ENABLED;
+                restoreHudVisibility = true;
+            }
+        } else if (gSaveContext.buttonStatus[EQUIP_SLOT_B] == BTN_ENABLED) {
+            gSaveContext.buttonStatus[EQUIP_SLOT_B] = BTN_DISABLED;
+            restoreHudVisibility = true;
+        }
+
+        if (restoreHudVisibility) {
+            gSaveContext.buttonStatus[EQUIP_SLOT_C_LEFT] = BTN_DISABLED;
+            gSaveContext.buttonStatus[EQUIP_SLOT_C_DOWN] = BTN_DISABLED;
+            gSaveContext.buttonStatus[EQUIP_SLOT_C_RIGHT] = BTN_DISABLED;
+        }
+    } else if (!gSaveContext.save.playerData.isMagicAcquired && (CUR_FORM == PLAYER_FORM_DEKU) &&
+               (BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) == ITEM_NUT)) {
+        // Nuts on B (as Deku Link)
+        BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) = ITEM_FD;
+        gSaveContext.buttonStatus[EQUIP_SLOT_B] = BTN_DISABLED;
+    } else if ((Player_GetEnvironmentalHazard(play) >= PLAYER_ENV_HAZARD_UNDERWATER_FLOOR) &&
+               (Player_GetEnvironmentalHazard(play) <= PLAYER_ENV_HAZARD_UNDERWATER_FREE)) {
+        // Swimming underwater
+        if (CUR_FORM != PLAYER_FORM_ZORA) {
+            if ((player->currentMask == PLAYER_MASK_BLAST) && (player->blastMaskTimer == 0)) {
+                if (gSaveContext.bButtonStatus == BTN_DISABLED) {
+                    restoreHudVisibility = true;
+                }
+                gSaveContext.bButtonStatus = BTN_ENABLED;
+            } else if ((interfaceCtx->bButtonDoAction == DO_ACTION_EXPLODE) &&
+                       (player->currentMask == PLAYER_MASK_BLAST)) {
+                if (gSaveContext.bButtonStatus != BTN_DISABLED) {
+                    gSaveContext.bButtonStatus = BTN_DISABLED;
+                    restoreHudVisibility = true;
+                }
+            } else {
+                if (gSaveContext.buttonStatus[EQUIP_SLOT_B] != BTN_DISABLED) {
+                    restoreHudVisibility = true;
+                }
+                gSaveContext.buttonStatus[EQUIP_SLOT_B] = BTN_DISABLED;
+            }
+        } else {
+            if (gSaveContext.buttonStatus[EQUIP_SLOT_B] == BTN_DISABLED) {
+                restoreHudVisibility = true;
+            }
+            gSaveContext.buttonStatus[EQUIP_SLOT_B] = BTN_ENABLED;
+        }
+
+        for (i = EQUIP_SLOT_C_LEFT; i <= EQUIP_SLOT_C_RIGHT; i++) {
+            if (GET_CUR_FORM_BTN_ITEM(i) != ITEM_MASK_ZORA) {
+                if (Player_GetEnvironmentalHazard(play) == PLAYER_ENV_HAZARD_UNDERWATER_FLOOR) {
+                    if (!((GET_CUR_FORM_BTN_ITEM(i) >= ITEM_BOTTLE) &&
+                          (GET_CUR_FORM_BTN_ITEM(i) <= ITEM_OBABA_DRINK))) {
+                        if (gSaveContext.buttonStatus[i] == BTN_ENABLED) {
+                            restoreHudVisibility = true;
+                        }
+                        gSaveContext.buttonStatus[i] = BTN_DISABLED;
+                    } else {
+                        if (gSaveContext.buttonStatus[i] == BTN_DISABLED) {
+                            restoreHudVisibility = true;
+                        }
+                        gSaveContext.buttonStatus[i] = BTN_ENABLED;
+                    }
+                } else {
+                    if (gSaveContext.buttonStatus[i] == BTN_ENABLED) {
+                        restoreHudVisibility = true;
+                    }
+                    gSaveContext.buttonStatus[i] = BTN_DISABLED;
+                }
+            } else if (gSaveContext.buttonStatus[i] == BTN_DISABLED) {
+                gSaveContext.buttonStatus[i] = BTN_ENABLED;
+                restoreHudVisibility = true;
+            }
+        }
+
+        if (restoreHudVisibility) {
+            gSaveContext.hudVisibility = HUD_VISIBILITY_IDLE;
+        }
+
+        if ((play->transitionTrigger == TRANS_TRIGGER_OFF) && (play->transitionMode == TRANS_MODE_OFF)) {
+            if (ActorCutscene_GetCurrentIndex() == -1) {
+                Interface_SetHudVisibility(HUD_VISIBILITY_ALL);
+            }
+        }
+    } else if (player->stateFlags1 & PLAYER_STATE1_200000) {
+        // First person view
+        for (i = EQUIP_SLOT_C_LEFT; i <= EQUIP_SLOT_C_RIGHT; i++) {
+            if (GET_CUR_FORM_BTN_ITEM(i) != ITEM_LENS) {
+                if (gSaveContext.buttonStatus[i] == BTN_ENABLED) {
+                    restoreHudVisibility = true;
+                }
+                gSaveContext.buttonStatus[i] = BTN_DISABLED;
+            } else {
+                if (gSaveContext.buttonStatus[i] == BTN_DISABLED) {
+                    restoreHudVisibility = true;
+                }
+                gSaveContext.buttonStatus[i] = BTN_ENABLED;
+            }
+        }
+
+        if (gSaveContext.buttonStatus[EQUIP_SLOT_B] != BTN_DISABLED) {
+            gSaveContext.buttonStatus[EQUIP_SLOT_B] = BTN_DISABLED;
+            restoreHudVisibility = true;
+        }
+    } else if (player->stateFlags1 & PLAYER_STATE1_2000) {
+        // Hanging from a ledge
+        if (gSaveContext.buttonStatus[EQUIP_SLOT_B] != BTN_DISABLED) {
+            gSaveContext.buttonStatus[EQUIP_SLOT_B] = BTN_DISABLED;
+            gSaveContext.buttonStatus[EQUIP_SLOT_C_LEFT] = BTN_DISABLED;
+            gSaveContext.buttonStatus[EQUIP_SLOT_C_DOWN] = BTN_DISABLED;
+            gSaveContext.buttonStatus[EQUIP_SLOT_C_RIGHT] = BTN_DISABLED;
+            restoreHudVisibility = true;
+            Interface_SetHudVisibility(HUD_VISIBILITY_ALL);
+        }
+    } else {
+        // End of special event cases
+
+        // B button
+        if ((interfaceCtx->bButtonDoAction == DO_ACTION_EXPLODE) && (player->currentMask == PLAYER_MASK_BLAST) &&
+            (player->blastMaskTimer != 0)) {
+            // Cooldown period for blast mask
+            if (gSaveContext.bButtonStatus != BTN_DISABLED) {
+                gSaveContext.bButtonStatus = BTN_DISABLED;
+                restoreHudVisibility = true;
+            }
+        } else {
+            // default to enabled
+            if (gSaveContext.bButtonStatus == BTN_DISABLED) {
+                gSaveContext.bButtonStatus = BTN_ENABLED;
+                restoreHudVisibility = true;
+            }
+
+            // Apply B button restriction
+            if (interfaceCtx->restrictions.bButton == 0) {
+                if ((BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) == ITEM_BOW) ||
+                    (BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) == ITEM_BOMB) ||
+                    (BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) == ITEM_BOMBCHU)) {
+                    if (GET_CUR_EQUIP_VALUE(EQUIP_TYPE_SWORD) == EQUIP_VALUE_SWORD_NONE) {
+                        gSaveContext.buttonStatus[EQUIP_SLOT_B] = BTN_DISABLED;
+                    }
+
+                    if (gSaveContext.buttonStatus[EQUIP_SLOT_B] == BTN_ENABLED) {
+                        gSaveContext.buttonStatus[EQUIP_SLOT_B] =
+                            ITEM_SWORD_KOKIRI + GET_CUR_EQUIP_VALUE(EQUIP_TYPE_SWORD) - EQUIP_VALUE_SWORD_KOKIRI;
+                    }
+
+                    BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) = gSaveContext.buttonStatus[EQUIP_SLOT_B];
+
+                    if (BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) != ITEM_NONE) {
+                        Interface_LoadItemIconImpl(play, EQUIP_SLOT_B);
+                    }
+                    restoreHudVisibility = true;
+                } else if (BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) == ITEM_NONE) {
+                    if (interfaceCtx->bButtonDoAction != 0) {
+                        if (gSaveContext.buttonStatus[EQUIP_SLOT_B] == BTN_DISABLED) {
+                            restoreHudVisibility = true;
+                            gSaveContext.buttonStatus[EQUIP_SLOT_B] = BTN_ENABLED;
+                        }
+                    } else {
+                        if (gSaveContext.buttonStatus[EQUIP_SLOT_B] != BTN_DISABLED) {
+                            restoreHudVisibility = true;
+                            gSaveContext.buttonStatus[EQUIP_SLOT_B] = BTN_DISABLED;
+                        }
+                    }
+                } else if (BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) == ITEM_NONE) {
+                    if (gSaveContext.buttonStatus[EQUIP_SLOT_B] != BTN_DISABLED) {
+                        restoreHudVisibility = true;
+                        gSaveContext.buttonStatus[EQUIP_SLOT_B] = BTN_DISABLED;
+                    }
+                } else {
+                    if (gSaveContext.buttonStatus[EQUIP_SLOT_B] == BTN_DISABLED) {
+                        restoreHudVisibility = true;
+                        gSaveContext.buttonStatus[EQUIP_SLOT_B] = BTN_ENABLED;
+                    }
+                }
+            } else if (interfaceCtx->restrictions.bButton != 0) {
+                if ((BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) == ITEM_BOW) ||
+                    (BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) == ITEM_BOMB) ||
+                    (BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) == ITEM_BOMBCHU)) {
+                    if (GET_CUR_EQUIP_VALUE(EQUIP_TYPE_SWORD) == EQUIP_VALUE_SWORD_NONE) {
+                        gSaveContext.buttonStatus[EQUIP_SLOT_B] = BTN_DISABLED;
+                    }
+
+                    BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) = gSaveContext.buttonStatus[EQUIP_SLOT_B];
+
+                    if (BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) != ITEM_NONE) {
+                        Interface_LoadItemIconImpl(play, EQUIP_SLOT_B);
+                    }
+                    restoreHudVisibility = true;
+                }
+                if (gSaveContext.buttonStatus[EQUIP_SLOT_B] != BTN_DISABLED) {
+                    gSaveContext.buttonStatus[EQUIP_SLOT_B] = BTN_DISABLED;
+                    restoreHudVisibility = true;
+                }
+            }
+        }
+
+        // C buttons
+        if (gSaveContext.save.playerForm == player->transformation) {
+            for (i = EQUIP_SLOT_C_LEFT; i <= EQUIP_SLOT_C_RIGHT; i++) {
+                // Individual C button
+                if (!gPlayerFormItemRestrictions[(void)0, gSaveContext.save.playerForm][GET_CUR_FORM_BTN_ITEM(i)]) {
+                    // Item not usable in current playerForm
+                    if (gSaveContext.buttonStatus[i] != BTN_DISABLED) {
+                        gSaveContext.buttonStatus[i] = BTN_DISABLED;
+                        restoreHudVisibility = true;
+                    }
+                } else if (player->actor.id != ACTOR_PLAYER) {
+                    // Currently not playing as the main player
+                    if (gSaveContext.buttonStatus[i] != BTN_DISABLED) {
+                        gSaveContext.buttonStatus[i] = BTN_DISABLED;
+                        restoreHudVisibility = true;
+                    }
+                } else if (player->currentMask == PLAYER_MASK_GIANT) {
+                    // Currently wearing Giant's Mask
+                    if (GET_CUR_FORM_BTN_ITEM(i) != ITEM_MASK_GIANT) {
+                        if (gSaveContext.buttonStatus[i] != BTN_DISABLED) {
+                            gSaveContext.buttonStatus[i] = BTN_DISABLED;
+                            restoreHudVisibility = true;
+                        }
+                    } else if (gSaveContext.buttonStatus[i] == BTN_DISABLED) {
+                        restoreHudVisibility = true;
+                        gSaveContext.buttonStatus[i] = BTN_ENABLED;
+                    }
+                } else if (GET_CUR_FORM_BTN_ITEM(i) == ITEM_MASK_GIANT) {
+                    // Giant's Mask is equipped
+                    if (play->sceneId != SCENE_INISIE_BS) {
+                        if (gSaveContext.buttonStatus[i] != BTN_DISABLED) {
+                            gSaveContext.buttonStatus[i] = BTN_DISABLED;
+                            restoreHudVisibility = true;
+                        }
+                    } else if (gSaveContext.buttonStatus[i] == BTN_DISABLED) {
+                        restoreHudVisibility = true;
+                        gSaveContext.buttonStatus[i] = BTN_ENABLED;
+                    }
+                } else if (GET_CUR_FORM_BTN_ITEM(i) == ITEM_MASK_FIERCE_DEITY) {
+                    // Fierce Deity's Mask is equipped
+                    if ((play->sceneId != SCENE_MITURIN_BS) && (play->sceneId != SCENE_HAKUGIN_BS) &&
+                        (play->sceneId != SCENE_SEA_BS) && (play->sceneId != SCENE_INISIE_BS) &&
+                        (play->sceneId != SCENE_LAST_BS)) {
+                        if (gSaveContext.buttonStatus[i] != BTN_DISABLED) {
+                            gSaveContext.buttonStatus[i] = BTN_DISABLED;
+                            restoreHudVisibility = true;
+                        }
+                    } else if (gSaveContext.buttonStatus[i] == BTN_DISABLED) {
+                        restoreHudVisibility = true;
+                        gSaveContext.buttonStatus[i] = BTN_ENABLED;
+                    }
+                } else {
+                    // End of special item cases. Apply restrictions to buttons
+                    if (interfaceCtx->restrictions.tradeItems != 0) {
+                        if (((GET_CUR_FORM_BTN_ITEM(i) >= ITEM_MOON_TEAR) &&
+                             (GET_CUR_FORM_BTN_ITEM(i) <= ITEM_PENDANT_OF_MEMORIES)) ||
+                            ((GET_CUR_FORM_BTN_ITEM(i) >= ITEM_BOTTLE) &&
+                             (GET_CUR_FORM_BTN_ITEM(i) <= ITEM_OBABA_DRINK)) ||
+                            (GET_CUR_FORM_BTN_ITEM(i) == ITEM_OCARINA)) {
+                            if (gSaveContext.buttonStatus[i] == BTN_ENABLED) {
+                                restoreHudVisibility = true;
+                            }
+                            gSaveContext.buttonStatus[i] = BTN_DISABLED;
+                        }
+                    } else if (interfaceCtx->restrictions.tradeItems == 0) {
+                        if (((GET_CUR_FORM_BTN_ITEM(i) >= ITEM_MOON_TEAR) &&
+                             (GET_CUR_FORM_BTN_ITEM(i) <= ITEM_PENDANT_OF_MEMORIES)) ||
+                            ((GET_CUR_FORM_BTN_ITEM(i) >= ITEM_BOTTLE) &&
+                             (GET_CUR_FORM_BTN_ITEM(i) <= ITEM_OBABA_DRINK)) ||
+                            (GET_CUR_FORM_BTN_ITEM(i) == ITEM_OCARINA)) {
+                            if (gSaveContext.buttonStatus[i] == BTN_DISABLED) {
+                                restoreHudVisibility = true;
+                            }
+                            gSaveContext.buttonStatus[i] = BTN_ENABLED;
+                        }
+                    }
+
+                    if (interfaceCtx->restrictions.masks != 0) {
+                        if ((GET_CUR_FORM_BTN_ITEM(i) >= ITEM_MASK_DEKU) &&
+                            (GET_CUR_FORM_BTN_ITEM(i) <= ITEM_MASK_GIANT)) {
+                            if (!gSaveContext.buttonStatus[i]) { // == BTN_ENABLED
+                                restoreHudVisibility = true;
+                            }
+                            gSaveContext.buttonStatus[i] = BTN_DISABLED;
+                        }
+                    } else if (interfaceCtx->restrictions.masks == 0) {
+                        if ((GET_CUR_FORM_BTN_ITEM(i) >= ITEM_MASK_DEKU) &&
+                            (GET_CUR_FORM_BTN_ITEM(i) <= ITEM_MASK_GIANT)) {
+                            if (gSaveContext.buttonStatus[i] == BTN_DISABLED) {
+                                restoreHudVisibility = true;
+                            }
+                            gSaveContext.buttonStatus[i] = BTN_ENABLED;
+                        }
+                    }
+
+                    if (interfaceCtx->restrictions.pictoBox != 0) {
+                        if (GET_CUR_FORM_BTN_ITEM(i) == ITEM_PICTO_BOX) {
+                            if (!gSaveContext.buttonStatus[i]) { // == BTN_ENABLED
+                                restoreHudVisibility = true;
+                            }
+                            gSaveContext.buttonStatus[i] = BTN_DISABLED;
+                        }
+                    } else if (interfaceCtx->restrictions.pictoBox == 0) {
+                        if (GET_CUR_FORM_BTN_ITEM(i) == ITEM_PICTO_BOX) {
+                            if (gSaveContext.buttonStatus[i] == BTN_DISABLED) {
+                                restoreHudVisibility = true;
+                            }
+                            gSaveContext.buttonStatus[i] = BTN_ENABLED;
+                        }
+                    }
+
+                    if (interfaceCtx->restrictions.all != 0) {
+                        if (!((GET_CUR_FORM_BTN_ITEM(i) >= ITEM_MOON_TEAR) &&
+                              (GET_CUR_FORM_BTN_ITEM(i) <= ITEM_PENDANT_OF_MEMORIES)) &&
+                            !((GET_CUR_FORM_BTN_ITEM(i) >= ITEM_BOTTLE) &&
+                              (GET_CUR_FORM_BTN_ITEM(i) <= ITEM_OBABA_DRINK)) &&
+                            (GET_CUR_FORM_BTN_ITEM(i) != ITEM_OCARINA) &&
+                            !((GET_CUR_FORM_BTN_ITEM(i) >= ITEM_MASK_DEKU) &&
+                              (GET_CUR_FORM_BTN_ITEM(i) <= ITEM_MASK_GIANT)) &&
+                            (GET_CUR_FORM_BTN_ITEM(i) != ITEM_PICTO_BOX)) {
+
+                            if ((gSaveContext.buttonStatus[i] == BTN_ENABLED)) {
+                                restoreHudVisibility = true;
+                                gSaveContext.buttonStatus[i] = BTN_DISABLED;
+                            }
+                        }
+                    } else if (interfaceCtx->restrictions.all == 0) {
+                        if (!((GET_CUR_FORM_BTN_ITEM(i) >= ITEM_MOON_TEAR) &&
+                              (GET_CUR_FORM_BTN_ITEM(i) <= ITEM_PENDANT_OF_MEMORIES)) &&
+                            !((GET_CUR_FORM_BTN_ITEM(i) >= ITEM_BOTTLE) &&
+                              (GET_CUR_FORM_BTN_ITEM(i) <= ITEM_OBABA_DRINK)) &&
+                            (GET_CUR_FORM_BTN_ITEM(i) != ITEM_OCARINA) &&
+                            !((GET_CUR_FORM_BTN_ITEM(i) >= ITEM_MASK_DEKU) &&
+                              (GET_CUR_FORM_BTN_ITEM(i) <= ITEM_MASK_GIANT)) &&
+                            (GET_CUR_FORM_BTN_ITEM(i) != ITEM_PICTO_BOX)) {
+
+                            if ((gSaveContext.buttonStatus[i] == BTN_DISABLED)) {
+                                restoreHudVisibility = true;
+                                gSaveContext.buttonStatus[i] = BTN_ENABLED;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    if (restoreHudVisibility && (play->activeCamId == CAM_ID_MAIN) && (play->transitionTrigger == TRANS_TRIGGER_OFF) &&
+        (play->transitionMode == TRANS_MODE_OFF)) {
+        gSaveContext.hudVisibility = HUD_VISIBILITY_IDLE;
+        Interface_SetHudVisibility(HUD_VISIBILITY_ALL);
+    }
+}
+
+void Interface_UpdateButtonsPart1(PlayState* play) {
+    InterfaceContext* interfaceCtx = &play->interfaceCtx;
+    Player* player = GET_PLAYER(play);
+    s32 pad;
+    s32 restoreHudVisibility = false;
+
+    if (gSaveContext.save.cutscene < 0xFFF0) {
+        gSaveContext.hudVisibilityForceButtonAlphasByStatus = false;
+        if ((player->stateFlags1 & PLAYER_STATE1_800000) || CHECK_WEEKEVENTREG(WEEKEVENTREG_08_01) ||
+            (!(CHECK_EVENTINF(EVENTINF_41)) && (play->unk_1887C >= 2))) {
+            // Riding Epona OR Honey & Darling minigame OR Horseback balloon minigame OR related to swamp boat
+            // (non-minigame?)
+            if ((player->stateFlags1 & PLAYER_STATE1_800000) && (player->currentMask == PLAYER_MASK_BLAST) &&
+                (gSaveContext.bButtonStatus == BTN_DISABLED)) {
+                // Riding Epona with blast mask?
+                restoreHudVisibility = true;
+                gSaveContext.bButtonStatus = BTN_ENABLED;
+            }
+
+            if (BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) != ITEM_NONE) {
+                if ((player->transformation == PLAYER_FORM_DEKU) && CHECK_WEEKEVENTREG(WEEKEVENTREG_08_01)) {
+                    gSaveContext.hudVisibilityForceButtonAlphasByStatus = true;
+                    if (play->sceneId == SCENE_BOWLING) {
+                        if (gSaveContext.buttonStatus[EQUIP_SLOT_B] == BTN_DISABLED) {
+                            gSaveContext.buttonStatus[EQUIP_SLOT_B] = BTN_ENABLED;
+                            gSaveContext.buttonStatus[EQUIP_SLOT_C_LEFT] = BTN_DISABLED;
+                            gSaveContext.buttonStatus[EQUIP_SLOT_C_DOWN] = BTN_DISABLED;
+                            gSaveContext.buttonStatus[EQUIP_SLOT_C_RIGHT] = BTN_DISABLED;
+                        }
+                    } else if (gSaveContext.buttonStatus[EQUIP_SLOT_B] == BTN_DISABLED) {
+                        gSaveContext.buttonStatus[EQUIP_SLOT_B] = BTN_ENABLED;
+                        gSaveContext.buttonStatus[EQUIP_SLOT_C_LEFT] = BTN_ENABLED;
+                        gSaveContext.buttonStatus[EQUIP_SLOT_C_DOWN] = BTN_ENABLED;
+                        gSaveContext.buttonStatus[EQUIP_SLOT_C_RIGHT] = BTN_ENABLED;
+                    }
+
+                    Interface_SetHudVisibility(HUD_VISIBILITY_B_MAGIC);
+                } else {
+                    if ((BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) != ITEM_BOW) &&
+                        (BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) != ITEM_BOMB) &&
+                        (BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) != ITEM_BOMBCHU)) {
+                        gSaveContext.hudVisibilityForceButtonAlphasByStatus = true;
+                        gSaveContext.buttonStatus[EQUIP_SLOT_B] = BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B);
+                        gSaveContext.buttonStatus[EQUIP_SLOT_C_LEFT] = BTN_ENABLED;
+                        gSaveContext.buttonStatus[EQUIP_SLOT_C_DOWN] = BTN_ENABLED;
+                        gSaveContext.buttonStatus[EQUIP_SLOT_C_RIGHT] = BTN_ENABLED;
+                        if (play->sceneId == SCENE_BOWLING) {
+                            if (CURRENT_DAY == 1) {
+                                BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) = ITEM_BOMBCHU;
+                            } else if (CURRENT_DAY == 2) {
+                                BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) = ITEM_BOMB;
+                            } else {
+                                BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) = ITEM_BOW;
+                            }
+                            Interface_LoadItemIconImpl(play, EQUIP_SLOT_B);
+                            gSaveContext.buttonStatus[EQUIP_SLOT_C_LEFT] = BTN_DISABLED;
+                            gSaveContext.buttonStatus[EQUIP_SLOT_C_DOWN] = BTN_DISABLED;
+                            gSaveContext.buttonStatus[EQUIP_SLOT_C_RIGHT] = BTN_DISABLED;
+                        } else {
+                            BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) = ITEM_BOW;
+
+                            if (play->unk_1887C >= 2) {
+                                Interface_LoadItemIconImpl(play, EQUIP_SLOT_B);
+                            } else if (gSaveContext.save.inventory.items[SLOT_BOW] == ITEM_NONE) {
+                                BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) = ITEM_NONE;
+                            } else {
+                                Interface_LoadItemIconImpl(play, EQUIP_SLOT_B);
+                            }
+
+                            gSaveContext.buttonStatus[EQUIP_SLOT_C_LEFT] = BTN_DISABLED;
+                            gSaveContext.buttonStatus[EQUIP_SLOT_C_DOWN] = BTN_DISABLED;
+                            gSaveContext.buttonStatus[EQUIP_SLOT_C_RIGHT] = BTN_DISABLED;
+                            Interface_SetHudVisibility(HUD_VISIBILITY_A_HEARTS_MAGIC_MINIMAP_WITH_OVERWRITE);
+                        }
+                    }
+
+                    if (play->transitionMode != TRANS_MODE_OFF) {
+                        Interface_SetHudVisibility(HUD_VISIBILITY_NONE);
+                    } else if ((gSaveContext.minigameStatus == MINIGAME_STATUS_ACTIVE) &&
+                               (gSaveContext.save.entrance == ENTRANCE(ROMANI_RANCH, 0)) &&
+                               (Cutscene_GetSceneLayer(play) != 0) && (play->transitionTrigger == TRANS_TRIGGER_OFF)) {
+                        Interface_SetHudVisibility(HUD_VISIBILITY_A_B_MINIMAP);
+                    } else if ((gSaveContext.minigameStatus == MINIGAME_STATUS_ACTIVE) &&
+                               (CHECK_EVENTINF(EVENTINF_35))) {
+                        Interface_SetHudVisibility(HUD_VISIBILITY_B_MINIMAP);
+                    } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_82_08) &&
+                               (gSaveContext.minigameStatus == MINIGAME_STATUS_ACTIVE)) {
+                        Interface_SetHudVisibility(HUD_VISIBILITY_B);
+                    } else if (play->unk_1887C >= 2) {
+                        Interface_SetHudVisibility(HUD_VISIBILITY_B);
+                    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_08_01)) {
+                        gSaveContext.buttonStatus[EQUIP_SLOT_C_LEFT] = BTN_DISABLED;
+                        gSaveContext.buttonStatus[EQUIP_SLOT_C_DOWN] = BTN_DISABLED;
+                        gSaveContext.buttonStatus[EQUIP_SLOT_C_RIGHT] = BTN_DISABLED;
+                        Interface_SetHudVisibility(HUD_VISIBILITY_A_B_MINIMAP);
+                    } else if (player->stateFlags1 & PLAYER_STATE1_800000) {
+                        Interface_SetHudVisibility(HUD_VISIBILITY_A_B_MINIMAP);
+                    }
+                }
+            } else {
+                if (player->stateFlags1 & PLAYER_STATE1_800000) {
+                    Interface_SetHudVisibility(HUD_VISIBILITY_A_B_MINIMAP);
+                }
+
+                if (play->sceneId == SCENE_BOWLING) {
+                    if (CURRENT_DAY == 1) {
+                        BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) = ITEM_BOMBCHU;
+                    } else if (CURRENT_DAY == 2) {
+                        BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) = ITEM_BOMB;
+                    } else {
+                        BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) = ITEM_BOW;
+                    }
+                    gSaveContext.buttonStatus[EQUIP_SLOT_C_LEFT] = BTN_DISABLED;
+                    gSaveContext.buttonStatus[EQUIP_SLOT_C_DOWN] = BTN_DISABLED;
+                    gSaveContext.buttonStatus[EQUIP_SLOT_C_RIGHT] = BTN_DISABLED;
+                } else {
+                    BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) = ITEM_BOW;
+                }
+
+                if (play->unk_1887C >= 2) {
+                    Interface_LoadItemIconImpl(play, EQUIP_SLOT_B);
+                } else if (gSaveContext.save.inventory.items[SLOT_BOW] == ITEM_NONE) {
+                    BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) = ITEM_NONE;
+                } else {
+                    Interface_LoadItemIconImpl(play, EQUIP_SLOT_B);
+                }
+
+                if (gSaveContext.buttonStatus[EQUIP_SLOT_B] == BTN_DISABLED) {
+                    gSaveContext.buttonStatus[EQUIP_SLOT_B] = BTN_ENABLED;
+                    restoreHudVisibility = true;
+                }
+
+                gSaveContext.buttonStatus[EQUIP_SLOT_C_LEFT] = BTN_DISABLED;
+                gSaveContext.buttonStatus[EQUIP_SLOT_C_DOWN] = BTN_DISABLED;
+                gSaveContext.buttonStatus[EQUIP_SLOT_C_RIGHT] = BTN_DISABLED;
+                Interface_SetHudVisibility(HUD_VISIBILITY_A_HEARTS_MAGIC_MINIMAP_WITH_OVERWRITE);
+
+                if (play->transitionMode != TRANS_MODE_OFF) {
+                    Interface_SetHudVisibility(HUD_VISIBILITY_NONE);
+                } else if ((gSaveContext.minigameStatus == MINIGAME_STATUS_ACTIVE) &&
+                           (gSaveContext.save.entrance == ENTRANCE(ROMANI_RANCH, 0)) &&
+                           (Cutscene_GetSceneLayer(play) != 0) && (play->transitionTrigger == TRANS_TRIGGER_OFF)) {
+                    Interface_SetHudVisibility(HUD_VISIBILITY_A_B_MINIMAP);
+                } else if (gSaveContext.minigameStatus == MINIGAME_STATUS_ACTIVE) {
+                    Interface_SetHudVisibility(HUD_VISIBILITY_B);
+                } else if (play->unk_1887C >= 2) {
+                    Interface_SetHudVisibility(HUD_VISIBILITY_B);
+                } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_08_01)) {
+                    gSaveContext.buttonStatus[EQUIP_SLOT_C_LEFT] = BTN_DISABLED;
+                    gSaveContext.buttonStatus[EQUIP_SLOT_C_DOWN] = BTN_DISABLED;
+                    gSaveContext.buttonStatus[EQUIP_SLOT_C_RIGHT] = BTN_DISABLED;
+                    Interface_SetHudVisibility(HUD_VISIBILITY_A_B_MINIMAP);
+                } else if (player->stateFlags1 & PLAYER_STATE1_800000) {
+                    Interface_SetHudVisibility(HUD_VISIBILITY_A_B_MINIMAP);
+                }
+            }
+        } else if (sPictoState != PICTO_BOX_STATE_OFF) {
+            // Related to pictograph
+            if (sPictoState == PICTO_BOX_STATE_LENS) {
+                if (!(play->actorCtx.flags & ACTORCTX_FLAG_PICTO_BOX_ON)) {
+                    Play_CompressI8ToI5((play->pictoPhotoI8 != NULL) ? play->pictoPhotoI8 : D_801FBB90,
+                                        (u8*)((void)0, gSaveContext.pictoPhotoI5),
+                                        PICTO_PHOTO_WIDTH * PICTO_PHOTO_HEIGHT);
+                    interfaceCtx->unk_222 = interfaceCtx->unk_224 = 0;
+                    restoreHudVisibility = true;
+                    sPictoState = PICTO_BOX_STATE_OFF;
+                } else if (CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_B)) {
+                    play->actorCtx.flags &= ~ACTORCTX_FLAG_PICTO_BOX_ON;
+                    interfaceCtx->unk_222 = interfaceCtx->unk_224 = 0;
+                    restoreHudVisibility = true;
+                    sPictoState = PICTO_BOX_STATE_OFF;
+                } else if (CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_A) || (func_801A5100() == 1)) {
+                    if (!(CHECK_EVENTINF(EVENTINF_41)) ||
+                        ((CHECK_EVENTINF(EVENTINF_41)) && (ActorCutscene_GetCurrentIndex() == -1))) {
+                        play_sound(NA_SE_SY_CAMERA_SHUTTER);
+                        SREG(89) = 1;
+                        play->haltAllActors = true;
+                        sPictoState = PICTO_BOX_STATE_SETUP_PHOTO;
+                        sPictoPhotoBeingTaken = true;
+                    }
+                }
+            } else if ((sPictoState >= PICTO_BOX_STATE_SETUP_PHOTO) && (Message_GetState(&play->msgCtx) == 4) &&
+                       Message_ShouldAdvance(play)) {
+                play->haltAllActors = false;
+                player->stateFlags1 &= ~PLAYER_STATE1_200;
+                Message_CloseTextbox(play);
+                if (play->msgCtx.choiceIndex != 0) {
+                    func_8019F230();
+                    func_80115844(play, DO_ACTION_STOP);
+                    Interface_SetHudVisibility(HUD_VISIBILITY_A_B);
+                    sPictoState = PICTO_BOX_STATE_LENS;
+                    REMOVE_QUEST_ITEM(QUEST_PICTOGRAPH);
+                } else {
+                    func_8019F208();
+                    interfaceCtx->unk_222 = interfaceCtx->unk_224 = 0;
+                    restoreHudVisibility = true;
+                    Interface_SetHudVisibility(HUD_VISIBILITY_ALL);
+                    sPictoState = PICTO_BOX_STATE_OFF;
+                    if (sPictoPhotoBeingTaken) {
+                        Play_CompressI8ToI5((play->pictoPhotoI8 != NULL) ? play->pictoPhotoI8 : D_801FBB90,
+                                            (u8*)((void)0, gSaveContext.pictoPhotoI5),
+                                            PICTO_PHOTO_WIDTH * PICTO_PHOTO_HEIGHT);
+                        Snap_RecordPictographedActors(play);
+                    }
+                    play->actorCtx.flags &= ~ACTORCTX_FLAG_PICTO_BOX_ON;
+                    SET_QUEST_ITEM(QUEST_PICTOGRAPH);
+                    sPictoPhotoBeingTaken = false;
+                }
+            }
+        } else if ((gSaveContext.minigameStatus == MINIGAME_STATUS_ACTIVE) &&
+                   (gSaveContext.save.entrance == ENTRANCE(WATERFALL_RAPIDS, 1)) &&
+                   (play->transitionTrigger == TRANS_TRIGGER_OFF) && (play->transitionMode == TRANS_MODE_OFF)) {
+            // Beaver race minigame
+            gSaveContext.buttonStatus[EQUIP_SLOT_C_LEFT] = BTN_DISABLED;
+            gSaveContext.buttonStatus[EQUIP_SLOT_C_DOWN] = BTN_DISABLED;
+            gSaveContext.buttonStatus[EQUIP_SLOT_C_RIGHT] = BTN_DISABLED;
+            Interface_SetHudVisibility(HUD_VISIBILITY_A_B_MINIMAP);
+        } else if ((gSaveContext.save.entrance == ENTRANCE(GORON_RACETRACK, 1)) &&
+                   (play->transitionTrigger == TRANS_TRIGGER_OFF) && (play->transitionMode == TRANS_MODE_OFF)) {
+            // Goron race minigame
+            gSaveContext.buttonStatus[EQUIP_SLOT_C_LEFT] = BTN_DISABLED;
+            gSaveContext.buttonStatus[EQUIP_SLOT_C_DOWN] = BTN_DISABLED;
+            gSaveContext.buttonStatus[EQUIP_SLOT_C_RIGHT] = BTN_DISABLED;
+            Interface_SetHudVisibility(HUD_VISIBILITY_A_B_HEARTS_MAGIC_MINIMAP);
+        } else if (play->actorCtx.flags & ACTORCTX_FLAG_PICTO_BOX_ON) {
+            // Related to pictograph
+            if (!CHECK_QUEST_ITEM(QUEST_PICTOGRAPH)) {
+                func_80115844(play, DO_ACTION_STOP);
+                Interface_SetHudVisibility(HUD_VISIBILITY_A_B);
+                sPictoState = PICTO_BOX_STATE_LENS;
+            } else {
+                Play_DecompressI5ToI8((u8*)((void)0, gSaveContext.pictoPhotoI5),
+                                      (play->pictoPhotoI8 != NULL) ? play->pictoPhotoI8 : D_801FBB90,
+                                      PICTO_PHOTO_WIDTH * PICTO_PHOTO_HEIGHT);
+                play->haltAllActors = true;
+                sPictoState = PICTO_BOX_STATE_SETUP_PHOTO;
+            }
+        } else {
+            // Continue processing the remaining cases
+            Interface_UpdateButtonsPart2(play);
+        }
+    }
+
+    if (restoreHudVisibility) {
+        gSaveContext.hudVisibility = HUD_VISIBILITY_IDLE;
+        if ((play->transitionTrigger == TRANS_TRIGGER_OFF) && (play->transitionMode == TRANS_MODE_OFF)) {
+            Interface_SetHudVisibility(HUD_VISIBILITY_ALL);
+        }
+    }
+}
 
 void Interface_SetSceneRestrictions(PlayState* play) {
     InterfaceContext* interfaceCtx = &play->interfaceCtx;
@@ -1823,7 +2558,40 @@ void Interface_InitMinigame(PlayState* play) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/Interface_LoadItemIcon.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_80112C0C.s")
+/**
+ * @param play PlayState
+ * @param flag 0 for default update, 1 for simplified update
+ */
+void Interface_UpdateButtonsAlt(PlayState* play, u16 flag) {
+    if (flag) {
+        if ((BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) == ITEM_BOW) ||
+            (BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) == ITEM_BOMB) ||
+            (BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) == ITEM_BOMBCHU) ||
+            (BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) == ITEM_FISHING_ROD) ||
+            (gSaveContext.buttonStatus[EQUIP_SLOT_B] == BTN_DISABLED)) {
+            if ((BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) == ITEM_BOW) ||
+                (BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) == ITEM_BOMB) ||
+                (BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) == ITEM_BOMBCHU) ||
+                (BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) == ITEM_FISHING_ROD)) {
+                BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) = gSaveContext.buttonStatus[EQUIP_SLOT_B];
+                Interface_LoadItemIconImpl(play, EQUIP_SLOT_B);
+            }
+        } else if (BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) == ITEM_NONE) {
+            if (BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) != ITEM_NONE) {
+                BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) = gSaveContext.buttonStatus[EQUIP_SLOT_B];
+                Interface_LoadItemIconImpl(play, EQUIP_SLOT_B);
+            }
+        }
+
+        gSaveContext.buttonStatus[EQUIP_SLOT_C_RIGHT] = gSaveContext.buttonStatus[EQUIP_SLOT_C_DOWN] =
+            gSaveContext.buttonStatus[EQUIP_SLOT_C_LEFT] = gSaveContext.buttonStatus[EQUIP_SLOT_B] = BTN_ENABLED;
+        Interface_SetHudVisibility(HUD_VISIBILITY_ALL_NO_MINIMAP_W_DISABLED);
+    } else {
+        gSaveContext.buttonStatus[EQUIP_SLOT_C_RIGHT] = gSaveContext.buttonStatus[EQUIP_SLOT_C_DOWN] =
+            gSaveContext.buttonStatus[EQUIP_SLOT_C_LEFT] = gSaveContext.buttonStatus[EQUIP_SLOT_B] = BTN_ENABLED;
+        Interface_UpdateButtonsPart1(play);
+    }
+}
 
 s16 sAmmoRefillCounts[] = { 5, 10, 20, 30 }; // Sticks, nuts, bombs
 s16 sArrowRefillCounts[] = { 10, 30, 40, 50 };
@@ -3146,49 +3914,500 @@ void Magic_DrawMeter(PlayState* play) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_80116FD8.s")
+void Interface_SetPerspectiveView(PlayState* play, s32 topY, s32 bottomY, s32 leftX, s32 rightX) {
+    InterfaceContext* interfaceCtx = &play->interfaceCtx;
+    Vec3f eye;
+    Vec3f at;
+    Vec3f up;
 
-void func_801170B8(InterfaceContext* interfaceCtx);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_801170B8.s")
+    eye.x = eye.y = eye.z = 0.0f;
+    at.x = at.y = 0.0f;
+    at.z = -1.0f;
+    up.x = up.z = 0.0f;
+    up.y = 1.0f;
 
-TexturePtr cUpLabelTextures[] = {
-    gTatlCUpENGTex, gTatlCUpENGTex, gTatlCUpGERTex, gTatlCUpFRATex, gTatlCUpESPTex,
-};
-s16 startButtonLeftPos[] = {
-    // Remnant of OoT
-    130, 136, 136, 136, 136,
-};
-s16 D_801BFAF4[] = { 0x1D, 0x1B };
-s16 D_801BFAF8[] = { 0x1B, 0x1B };
+    View_LookAt(&interfaceCtx->view, &eye, &at, &up);
 
-void func_80117100(PlayState* play);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_80117100.s")
+    interfaceCtx->viewport.topY = topY;
+    interfaceCtx->viewport.bottomY = bottomY;
+    interfaceCtx->viewport.leftX = leftX;
+    interfaceCtx->viewport.rightX = rightX;
+    View_SetViewport(&interfaceCtx->view, &interfaceCtx->viewport);
 
-s16 D_801BFAFC[] = { 30, 24, 24, 24 };
+    View_SetPerspective(&interfaceCtx->view, 60.0f, 10.0f, 60.0f);
+    View_ApplyPerspectiveToOverlay(&interfaceCtx->view);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_80117A20.s")
+void Interface_SetOrthoView(InterfaceContext* interfaceCtx) {
+    SET_FULLSCREEN_VIEWPORT(&interfaceCtx->view);
+    View_ApplyOrthoToOverlay(&interfaceCtx->view);
+}
+
+void Interface_DrawItemButtons(PlayState* play) {
+    static TexturePtr cUpLabelTextures[] = {
+        gTatlCUpENGTex, gTatlCUpENGTex, gTatlCUpGERTex, gTatlCUpFRATex, gTatlCUpESPTex,
+    };
+    static s16 startButtonLeftPos[] = {
+        // Remnant of OoT
+        130, 136, 136, 136, 136,
+    };
+    static s16 D_801BFAF4[] = { 0x1D, 0x1B };
+    static s16 D_801BFAF8[] = { 0x1B, 0x1B };
+    InterfaceContext* interfaceCtx = &play->interfaceCtx;
+    Player* player = GET_PLAYER(play);
+    PauseContext* pauseCtx = &play->pauseCtx;
+    MessageContext* msgCtx = &play->msgCtx;
+    s16 temp; // Used as both an alpha value and a button index
+    s32 pad;
+
+    OPEN_DISPS(play->state.gfxCtx);
+
+    gDPPipeSync(OVERLAY_DISP++);
+    gDPSetCombineMode(OVERLAY_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
+
+    // B Button Color & Texture
+    OVERLAY_DISP = Gfx_DrawTexRectIA8_DropShadow(OVERLAY_DISP, gButtonBackgroundTex, 0x20, 0x20, D_801BF9D4[0],
+                                                 D_801BF9DC[0], D_801BFAF4[0], D_801BFAF4[0], D_801BF9E4[0] * 2,
+                                                 D_801BF9E4[0] * 2, 100, 255, 120, interfaceCtx->bAlpha);
+    if (1) {}
+    gDPPipeSync(OVERLAY_DISP++);
+
+    // C-Left Button Color & Texture
+    OVERLAY_DISP = Gfx_DrawRect_DropShadow(OVERLAY_DISP, D_801BF9D4[1], D_801BF9DC[1], D_801BFAF4[1], D_801BFAF4[1],
+                                           D_801BF9E4[1] * 2, D_801BF9E4[1] * 2, 255, 240, 0, interfaceCtx->cLeftAlpha);
+    // C-Down Button Color & Texture
+    OVERLAY_DISP = Gfx_DrawRect_DropShadow(OVERLAY_DISP, D_801BF9D8[0], D_801BF9E0[0], D_801BFAF8[0], D_801BFAF8[0],
+                                           D_801BF9E4[2] * 2, D_801BF9E4[2] * 2, 255, 240, 0, interfaceCtx->cDownAlpha);
+    // C-Right Button Color & Texture
+    OVERLAY_DISP =
+        Gfx_DrawRect_DropShadow(OVERLAY_DISP, D_801BF9D8[1], D_801BF9E0[1], D_801BFAF8[1], D_801BFAF8[1],
+                                D_801BF9E4[3] * 2, D_801BF9E4[3] * 2, 255, 240, 0, interfaceCtx->cRightAlpha);
+
+    if (!IS_PAUSE_STATE_GAMEOVER) {
+        if ((play->pauseCtx.state != PAUSE_STATE_OFF) || (play->pauseCtx.debugEditor != DEBUG_EDITOR_NONE)) {
+            OVERLAY_DISP = Gfx_DrawRect_DropShadow(OVERLAY_DISP, 0x88, 0x11, 0x16, 0x16, 0x5B6, 0x5B6, 0xFF, 0x82, 0x3C,
+                                                   interfaceCtx->startAlpha);
+            // Start Button Texture, Color & Label
+            gDPPipeSync(OVERLAY_DISP++);
+            gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 255, 255, 255, interfaceCtx->startAlpha);
+            gDPSetEnvColor(OVERLAY_DISP++, 0, 0, 0, 0);
+            gDPSetCombineLERP(OVERLAY_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0,
+                              PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
+            gDPLoadTextureBlock_4b(OVERLAY_DISP++, interfaceCtx->doActionSegment + DO_ACTION_TEX_SIZE * 2, G_IM_FMT_IA,
+                                   DO_ACTION_TEX_WIDTH, DO_ACTION_TEX_HEIGHT, 0, G_TX_NOMIRROR | G_TX_WRAP,
+                                   G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+            gSPTextureRectangle(OVERLAY_DISP++, 0x01F8, 0x0054, 0x02D4, 0x009C, G_TX_RENDERTILE, 0, 0, 0x04A6, 0x04A6);
+        }
+    }
+
+    if (interfaceCtx->tatlCalling && (play->pauseCtx.state == PAUSE_STATE_OFF) &&
+        (play->pauseCtx.debugEditor == DEBUG_EDITOR_NONE) && (play->csCtx.state == 0) &&
+        (sPictoState == PICTO_BOX_STATE_OFF)) {
+        if (sCUpInvisible == 0) {
+            // C-Up Button Texture, Color & Label (Tatl Text)
+            gDPPipeSync(OVERLAY_DISP++);
+
+            if ((gSaveContext.hudVisibility == HUD_VISIBILITY_NONE) ||
+                (gSaveContext.hudVisibility == HUD_VISIBILITY_NONE_ALT) ||
+                (gSaveContext.hudVisibility == HUD_VISIBILITY_A_HEARTS_MAGIC_WITH_OVERWRITE) ||
+                (msgCtx->msgMode != 0)) {
+                temp = 0;
+            } else if (player->stateFlags1 & PLAYER_STATE1_200000) {
+                temp = 70;
+            } else {
+                temp = interfaceCtx->aAlpha;
+            }
+
+            OVERLAY_DISP =
+                Gfx_DrawRect_DropShadow(OVERLAY_DISP, 0xFE, 0x10, 0x10, 0x10, 0x800, 0x800, 0xFF, 0xF0, 0, temp);
+
+            gDPPipeSync(OVERLAY_DISP++);
+            gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 255, 255, 255, temp);
+            gDPSetEnvColor(OVERLAY_DISP++, 0, 0, 0, 0);
+            gDPSetCombineLERP(OVERLAY_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0,
+                              PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
+            gDPLoadTextureBlock_4b(OVERLAY_DISP++, cUpLabelTextures[gSaveContext.options.language], G_IM_FMT_IA, 32, 12,
+                                   0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
+                                   G_TX_NOLOD, G_TX_NOLOD);
+            gSPTextureRectangle(OVERLAY_DISP++, 0x03DC, 0x0048, 0x045C, 0x0078, G_TX_RENDERTILE, 0, 0, 1 << 10,
+                                1 << 10);
+        }
+
+        sCUpTimer--;
+        if (sCUpTimer == 0) {
+            sCUpInvisible ^= 1;
+            sCUpTimer = 10;
+        }
+    }
+
+    gDPPipeSync(OVERLAY_DISP++);
+
+    // Empty C Button Arrows
+    for (temp = EQUIP_SLOT_C_LEFT; temp <= EQUIP_SLOT_C_RIGHT; temp++) {
+        if (GET_CUR_FORM_BTN_ITEM(temp) > 0xF0) {
+            if (temp == EQUIP_SLOT_C_LEFT) {
+                gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 255, 240, 0, interfaceCtx->cLeftAlpha);
+            } else if (temp == EQUIP_SLOT_C_DOWN) {
+                gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 255, 240, 0, interfaceCtx->cDownAlpha);
+            } else { // EQUIP_SLOT_C_RIGHT
+                gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 255, 240, 0, interfaceCtx->cRightAlpha);
+            }
+            OVERLAY_DISP = Gfx_DrawTexRectIA8(OVERLAY_DISP, ((u8*)gButtonBackgroundTex + ((32 * 32) * (temp + 1))),
+                                              0x20, 0x20, D_801BF9D4[temp], D_801BF9DC[temp], D_801BFAF4[temp],
+                                              D_801BFAF4[temp], D_801BF9E4[temp] * 2, D_801BF9E4[temp] * 2);
+        }
+    }
+
+    CLOSE_DISPS(play->state.gfxCtx);
+}
+
+void Interface_DrawItemIconTexture(PlayState* play, TexturePtr texture, s16 button) {
+    static s16 D_801BFAFC[] = { 30, 24, 24, 24 };
+
+    OPEN_DISPS(play->state.gfxCtx);
+
+    gDPLoadTextureBlock(OVERLAY_DISP++, texture, G_IM_FMT_RGBA, G_IM_SIZ_32b, 32, 32, 0, G_TX_NOMIRROR | G_TX_WRAP,
+                        G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+
+    gSPTextureRectangle(OVERLAY_DISP++, D_801BF9D4[button] << 2, D_801BF9DC[button] << 2,
+                        (D_801BF9D4[button] + D_801BFAFC[button]) << 2, (D_801BF9DC[button] + D_801BFAFC[button]) << 2,
+                        G_TX_RENDERTILE, 0, 0, D_801BF9BC[button] << 1, D_801BF9BC[button] << 1);
+
+    CLOSE_DISPS(play->state.gfxCtx);
+}
 
 s16 D_801BFB04[] = { 0xA2, 0xE4, 0xFA, 0x110 };
 s16 D_801BFB0C[] = { 0x23, 0x23, 0x33, 0x23 };
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_80117BD0.s")
+void Interface_DrawAmmoCount(PlayState* play, s16 button, s16 alpha) {
+    u8 i;
+    u16 ammo;
 
-void func_80118084(PlayState* play);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_80118084.s")
+    OPEN_DISPS(play->state.gfxCtx);
 
-void func_80118890(PlayState* play);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_80118890.s")
+    i = ((void)0, GET_CUR_FORM_BTN_ITEM(button));
 
-void func_80118BA4(PlayState* play);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_80118BA4.s")
+    if ((i == ITEM_STICK) || (i == ITEM_NUT) || (i == ITEM_BOMB) || (i == ITEM_BOW) ||
+        ((i >= ITEM_BOW_ARROW_FIRE) && (i <= ITEM_BOW_ARROW_LIGHT)) || (i == ITEM_BOMBCHU) || (i == ITEM_POWDER_KEG) ||
+        (i == ITEM_MAGIC_BEANS) || (i == ITEM_PICTO_BOX)) {
 
-extern TexturePtr D_08095AC0;            // gMagicArrowEquipEffectTex
-s16 D_801BFB14[] = { 255, 100, 255, 0 }; // magicArrowEffectsR
-s16 D_801BFB1C[] = { 0, 100, 255, 0 };   // magicArrowEffectsG
-s16 D_801BFB24[] = { 0, 255, 100, 0 };   // magicArrowEffectsB
+        if ((i >= ITEM_BOW_ARROW_FIRE) && (i <= ITEM_BOW_ARROW_LIGHT)) {
+            i = ITEM_BOW;
+        }
 
-void func_80119030(PlayState* play);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_80119030.s")
+        ammo = AMMO(i);
+
+        if (i == ITEM_PICTO_BOX) {
+            if (!CHECK_QUEST_ITEM(QUEST_PICTOGRAPH)) {
+                ammo = 0;
+            } else {
+                ammo = 1;
+            }
+        }
+
+        gDPPipeSync(OVERLAY_DISP++);
+
+        if ((button == EQUIP_SLOT_B) && (gSaveContext.minigameStatus == MINIGAME_STATUS_ACTIVE)) {
+            ammo = play->interfaceCtx.minigameAmmo;
+        } else if ((button == EQUIP_SLOT_B) && (play->unk_1887C > 1)) {
+            ammo = play->unk_1887C - 1;
+        } else if (((i == ITEM_BOW) && (AMMO(i) == CUR_CAPACITY(UPG_QUIVER))) ||
+                   ((i == ITEM_BOMB) && (AMMO(i) == CUR_CAPACITY(UPG_BOMB_BAG))) ||
+                   ((i == ITEM_STICK) && (AMMO(i) == CUR_CAPACITY(UPG_STICKS))) ||
+                   ((i == ITEM_NUT) && (AMMO(i) == CUR_CAPACITY(UPG_NUTS))) ||
+                   ((i == ITEM_BOMBCHU) && (AMMO(i) == CUR_CAPACITY(UPG_BOMB_BAG))) ||
+                   ((i == ITEM_POWDER_KEG) && (ammo == 1)) || ((i == ITEM_PICTO_BOX) && (ammo == 1)) ||
+                   ((i == ITEM_MAGIC_BEANS) && (ammo == 20))) {
+            gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 120, 255, 0, alpha);
+        }
+
+        if ((u32)ammo == 0) {
+            gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 100, 100, 100, alpha);
+        }
+
+        for (i = 0; ammo >= 10; i++) {
+            ammo -= 10;
+        }
+
+        // Draw upper digit (tens)
+        if ((u32)i != 0) {
+            OVERLAY_DISP = Gfx_DrawTexRectIA8(OVERLAY_DISP, ((u8*)gAmmoDigit0Tex + ((8 * 8) * i)), 8, 8,
+                                              D_801BFB04[button], D_801BFB0C[button], 8, 8, 1 << 10, 1 << 10);
+        }
+
+        // Draw lower digit (ones)
+        OVERLAY_DISP = Gfx_DrawTexRectIA8(OVERLAY_DISP, ((u8*)gAmmoDigit0Tex + ((8 * 8) * ammo)), 8, 8,
+                                          D_801BFB04[button] + 6, D_801BFB0C[button], 8, 8, 1 << 10, 1 << 10);
+    }
+
+    CLOSE_DISPS(play->state.gfxCtx);
+}
+
+void Interface_DrawBButtonIcons(PlayState* play) {
+    InterfaceContext* interfaceCtx = &play->interfaceCtx;
+    Player* player = GET_PLAYER(play);
+
+    OPEN_DISPS(play->state.gfxCtx);
+
+    gDPPipeSync(OVERLAY_DISP++);
+    gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 255, 255, 255, interfaceCtx->bAlpha);
+    gDPSetCombineMode(OVERLAY_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
+
+    if ((interfaceCtx->unk_222 == 0) && (player->stateFlags3 & PLAYER_STATE3_1000000)) {
+        if (gSaveContext.buttonStatus[EQUIP_SLOT_B] != BTN_DISABLED) {
+            Interface_DrawItemIconTexture(play, interfaceCtx->iconItemSegment, EQUIP_SLOT_B);
+            gDPPipeSync(OVERLAY_DISP++);
+            gDPSetCombineLERP(OVERLAY_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0,
+                              PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
+
+            Interface_DrawAmmoCount(play, EQUIP_SLOT_B, interfaceCtx->bAlpha);
+        }
+    } else if ((!interfaceCtx->unk_21C && (interfaceCtx->unk_222 == 0)) ||
+               ((interfaceCtx->unk_21C &&
+                 ((BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) < ITEM_SWORD_KOKIRI) ||
+                  (BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) > ITEM_SWORD_GILDED)) &&
+                 BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) != ITEM_NONE) &&
+                (BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) != ITEM_NUT))) {
+        if ((player->transformation == PLAYER_FORM_FIERCE_DEITY) || (player->transformation == PLAYER_FORM_HUMAN)) {
+            if (BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) != ITEM_NONE) {
+                Interface_DrawItemIconTexture(play, interfaceCtx->iconItemSegment, EQUIP_SLOT_B);
+                if ((player->stateFlags1 & PLAYER_STATE1_800000) || CHECK_WEEKEVENTREG(WEEKEVENTREG_08_01) ||
+                    (play->unk_1887C >= 2)) {
+                    gDPPipeSync(OVERLAY_DISP++);
+                    gDPSetCombineLERP(OVERLAY_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE,
+                                      0, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
+
+                    if ((play->sceneId != SCENE_SYATEKI_MIZU) && (play->sceneId != SCENE_SYATEKI_MORI) &&
+                        (play->sceneId != SCENE_BOWLING) &&
+                        ((gSaveContext.minigameStatus != MINIGAME_STATUS_ACTIVE) ||
+                         (gSaveContext.save.entrance != ENTRANCE(ROMANI_RANCH, 0))) &&
+                        ((gSaveContext.minigameStatus != MINIGAME_STATUS_ACTIVE) || !(CHECK_EVENTINF(EVENTINF_35))) &&
+                        (!CHECK_WEEKEVENTREG(WEEKEVENTREG_31_80) || (play->unk_1887C != 100))) {
+                        Interface_DrawAmmoCount(play, EQUIP_SLOT_B, interfaceCtx->bAlpha);
+                    }
+                }
+            }
+        }
+    } else if (interfaceCtx->unk_222 != 0) {
+        gDPPipeSync(OVERLAY_DISP++);
+        gDPSetCombineLERP(OVERLAY_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0,
+                          PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
+        gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 255, 255, 255, interfaceCtx->bAlpha);
+        gDPLoadTextureBlock_4b(OVERLAY_DISP++, interfaceCtx->doActionSegment + 0x480, G_IM_FMT_IA, 48, 16, 0,
+                               G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
+                               G_TX_NOLOD, G_TX_NOLOD);
+
+        D_801BF9B0 = 1024.0f / (D_801BF9B4[gSaveContext.options.language] / 100.0f);
+
+        gSPTextureRectangle(
+            OVERLAY_DISP++, (D_801BF9C4[gSaveContext.options.language] * 4),
+            (D_801BF9C8[gSaveContext.options.language] * 4), ((D_801BF9C4[gSaveContext.options.language] + 0x30) << 2),
+            ((D_801BF9C8[gSaveContext.options.language] + 0x10) << 2), G_TX_RENDERTILE, 0, 0, D_801BF9B0, D_801BF9B0);
+    } else if (interfaceCtx->bButtonDoAction != DO_ACTION_NONE) {
+        gDPPipeSync(OVERLAY_DISP++);
+        gDPSetCombineLERP(OVERLAY_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0,
+                          PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
+        gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 255, 255, 255, interfaceCtx->bAlpha);
+        gDPLoadTextureBlock_4b(OVERLAY_DISP++, interfaceCtx->doActionSegment + 0x600, G_IM_FMT_IA, 48, 16, 0,
+                               G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
+                               G_TX_NOLOD, G_TX_NOLOD);
+
+        D_801BF9B0 = 1024.0f / (D_801BF9B4[gSaveContext.options.language] / 100.0f);
+
+        gSPTextureRectangle(
+            OVERLAY_DISP++, (D_801BF9C4[gSaveContext.options.language] * 4),
+            (D_801BF9C8[gSaveContext.options.language] * 4), ((D_801BF9C4[gSaveContext.options.language] + 0x30) << 2),
+            ((D_801BF9C8[gSaveContext.options.language] + 0x10) << 2), G_TX_RENDERTILE, 0, 0, D_801BF9B0, D_801BF9B0);
+    }
+
+    CLOSE_DISPS(play->state.gfxCtx);
+}
+
+/**
+ * Draws the icons and ammo for each of the C buttons
+ */
+void Interface_DrawCButtonIcons(PlayState* play) {
+    InterfaceContext* interfaceCtx = &play->interfaceCtx;
+
+    OPEN_DISPS(play->state.gfxCtx);
+
+    gDPPipeSync(OVERLAY_DISP++);
+
+    // C-Left Button Icon & Ammo Count
+    if (BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_LEFT) < ITEM_F0) {
+        gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 255, 255, 255, interfaceCtx->cLeftAlpha);
+        gDPSetCombineMode(OVERLAY_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
+        Interface_DrawItemIconTexture(play, interfaceCtx->iconItemSegment + 0x1000, EQUIP_SLOT_C_LEFT);
+        gDPPipeSync(OVERLAY_DISP++);
+        gDPSetCombineLERP(OVERLAY_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0,
+                          PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
+        Interface_DrawAmmoCount(play, EQUIP_SLOT_C_LEFT, interfaceCtx->cLeftAlpha);
+    }
+
+    gDPPipeSync(OVERLAY_DISP++);
+
+    // C-Down Button Icon & Ammo Count
+    if (BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_DOWN) < ITEM_F0) {
+        gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 255, 255, 255, interfaceCtx->cDownAlpha);
+        gDPSetCombineMode(OVERLAY_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
+        Interface_DrawItemIconTexture(play, interfaceCtx->iconItemSegment + 0x2000, EQUIP_SLOT_C_DOWN);
+        gDPPipeSync(OVERLAY_DISP++);
+        gDPSetCombineLERP(OVERLAY_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0,
+                          PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
+        Interface_DrawAmmoCount(play, EQUIP_SLOT_C_DOWN, interfaceCtx->cDownAlpha);
+    }
+
+    gDPPipeSync(OVERLAY_DISP++);
+
+    // C-Right Button Icon & Ammo Count
+    if (BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_RIGHT) < ITEM_F0) {
+        gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 255, 255, 255, interfaceCtx->cRightAlpha);
+        gDPSetCombineMode(OVERLAY_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
+        Interface_DrawItemIconTexture(play, interfaceCtx->iconItemSegment + 0x3000, EQUIP_SLOT_C_RIGHT);
+        gDPPipeSync(OVERLAY_DISP++);
+        gDPSetCombineLERP(OVERLAY_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0,
+                          PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
+        Interface_DrawAmmoCount(play, EQUIP_SLOT_C_RIGHT, interfaceCtx->cRightAlpha);
+    }
+
+    CLOSE_DISPS(play->state.gfxCtx);
+}
+
+void Interface_DrawAButton(PlayState* play) {
+    InterfaceContext* interfaceCtx = &play->interfaceCtx;
+    s16 aAlpha;
+
+    OPEN_DISPS(play->state.gfxCtx);
+
+    aAlpha = interfaceCtx->aAlpha;
+
+    if (aAlpha > 100) {
+        aAlpha = 100;
+    }
+
+    func_8012C8D4(play->state.gfxCtx);
+
+    Interface_SetPerspectiveView(play, 25 + R_A_BTN_Y_OFFSET, 70 + R_A_BTN_Y_OFFSET, 192, 237);
+
+    gSPClearGeometryMode(OVERLAY_DISP++, G_CULL_BOTH);
+    gDPSetCombineMode(OVERLAY_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
+    gDPSetAlphaCompare(OVERLAY_DISP++, G_AC_THRESHOLD);
+
+    Matrix_Translate(0.0f, 0.0f, -38.0f, MTXMODE_NEW);
+    Matrix_Scale(1.0f, 1.0f, 1.0f, MTXMODE_APPLY);
+    Matrix_RotateXFApply(interfaceCtx->aButtonRoll / 10000.0f);
+
+    // Draw A button Shadow
+    gSPMatrix(OVERLAY_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gDPPipeSync(OVERLAY_DISP++);
+    gSPVertex(OVERLAY_DISP++, &interfaceCtx->actionVtx[4], 4, 0);
+    gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 0, 0, 0, aAlpha);
+
+    OVERLAY_DISP = Gfx_DrawTexQuadIA8(OVERLAY_DISP, gButtonBackgroundTex, 32, 32, 0);
+
+    // Draw A Button Colored
+    gDPPipeSync(OVERLAY_DISP++);
+    Interface_SetPerspectiveView(play, 23 + R_A_BTN_Y_OFFSET, 68 + R_A_BTN_Y_OFFSET, 190, 235);
+    gSPVertex(OVERLAY_DISP++, &interfaceCtx->actionVtx[0], 4, 0);
+    gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 100, 200, 255, interfaceCtx->aAlpha);
+    gSP1Quadrangle(OVERLAY_DISP++, 0, 2, 3, 1, 0);
+
+    // Draw A Button Do-Action
+    gDPPipeSync(OVERLAY_DISP++);
+    Interface_SetPerspectiveView(play, 23 + R_A_BTN_Y_OFFSET, 68 + R_A_BTN_Y_OFFSET, 190, 235);
+    gSPSetGeometryMode(OVERLAY_DISP++, G_CULL_BACK);
+    gDPSetCombineLERP(OVERLAY_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0, PRIMITIVE,
+                      ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
+    gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 255, 255, 255, interfaceCtx->aAlpha);
+    gDPSetEnvColor(OVERLAY_DISP++, 0, 0, 0, 0);
+
+    Matrix_Translate(0.0f, 0.0f, D_801BF9CC[gSaveContext.options.language] / 10.0f, MTXMODE_NEW);
+    Matrix_Scale(1.0f, 1.0f, 1.0f, MTXMODE_APPLY);
+    Matrix_RotateXFApply(interfaceCtx->aButtonRoll / 10000.0f);
+    gSPMatrix(OVERLAY_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPVertex(OVERLAY_DISP++, &interfaceCtx->actionVtx[8], 4, 0);
+
+    // Draw Action Label
+    if (((interfaceCtx->aButtonState <= A_BTN_STATE_1) || (interfaceCtx->aButtonState == A_BTN_STATE_3))) {
+        OVERLAY_DISP = Gfx_DrawTexQuad4b(OVERLAY_DISP, interfaceCtx->doActionSegment, 3, DO_ACTION_TEX_WIDTH,
+                                         DO_ACTION_TEX_HEIGHT, 0);
+    } else {
+        OVERLAY_DISP = Gfx_DrawTexQuad4b(OVERLAY_DISP, interfaceCtx->doActionSegment + DO_ACTION_TEX_SIZE, 3,
+                                         DO_ACTION_TEX_WIDTH, DO_ACTION_TEX_HEIGHT, 0);
+    }
+
+    CLOSE_DISPS(play->state.gfxCtx);
+}
+
+static s16 sMagicArrowEffectsR[] = { 255, 100, 255 };
+static s16 sMagicArrowEffectsG[] = { 0, 100, 255 };
+static s16 sMagicArrowEffectsB[] = { 0, 255, 100 };
+
+void Interface_DrawPauseMenuEquippingIcons(PlayState* play) {
+    InterfaceContext* interfaceCtx = &play->interfaceCtx;
+    PauseContext* pauseCtx = &play->pauseCtx;
+    s16 temp;
+
+    OPEN_DISPS(play->state.gfxCtx);
+
+    gDPPipeSync(OVERLAY_DISP++);
+
+    // This is needed as `Interface_DrawPauseMenuEquippingIcons` is call immediately
+    // after `Interface_DrawAButton`, which sets the view to perspective mode
+    Interface_SetOrthoView(interfaceCtx);
+
+    if ((pauseCtx->state == PAUSE_STATE_MAIN) && ((pauseCtx->mainState == PAUSE_MAIN_STATE_EQUIP_ITEM) ||
+                                                  (pauseCtx->mainState == PAUSE_MAIN_STATE_EQUIP_MASK))) {
+        // Inventory Equip Effects
+        gSPSegment(OVERLAY_DISP++, 0x08, pauseCtx->iconItemSegment);
+        func_8012C8D4(play->state.gfxCtx);
+        gDPSetCombineMode(OVERLAY_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
+        gDPSetAlphaCompare(OVERLAY_DISP++, G_AC_THRESHOLD);
+        gSPMatrix(OVERLAY_DISP++, &gIdentityMtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+
+        pauseCtx->cursorVtx[16].v.ob[0] = pauseCtx->cursorVtx[18].v.ob[0] = pauseCtx->equipAnimX / 10;
+        pauseCtx->cursorVtx[17].v.ob[0] = pauseCtx->cursorVtx[19].v.ob[0] =
+            pauseCtx->cursorVtx[16].v.ob[0] + (pauseCtx->equipAnimScale / 10);
+        pauseCtx->cursorVtx[16].v.ob[1] = pauseCtx->cursorVtx[17].v.ob[1] = pauseCtx->equipAnimY / 10;
+        pauseCtx->cursorVtx[18].v.ob[1] = pauseCtx->cursorVtx[19].v.ob[1] =
+            pauseCtx->cursorVtx[16].v.ob[1] - (pauseCtx->equipAnimScale / 10);
+
+        if (pauseCtx->equipTargetItem < 0xB5) {
+            // Normal Equip (icon goes from the inventory slot to the C button when equipping it)
+            gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 255, 255, 255, pauseCtx->equipAnimAlpha);
+            gSPVertex(OVERLAY_DISP++, &pauseCtx->cursorVtx[16], 4, 0);
+            gDPLoadTextureBlock(OVERLAY_DISP++, gItemIcons[pauseCtx->equipTargetItem], G_IM_FMT_RGBA, G_IM_SIZ_32b, 32,
+                                32, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
+                                G_TX_NOLOD, G_TX_NOLOD);
+        } else {
+            // Magic Arrow Equip Effect
+            temp = pauseCtx->equipTargetItem - 0xB5;
+            gDPSetPrimColor(OVERLAY_DISP++, 0, 0, sMagicArrowEffectsR[temp], sMagicArrowEffectsG[temp],
+                            sMagicArrowEffectsB[temp], pauseCtx->equipAnimAlpha);
+
+            if ((pauseCtx->equipAnimAlpha > 0) && (pauseCtx->equipAnimAlpha < 255)) {
+                temp = (pauseCtx->equipAnimAlpha / 8) / 2;
+                pauseCtx->cursorVtx[16].v.ob[0] = pauseCtx->cursorVtx[18].v.ob[0] =
+                    pauseCtx->cursorVtx[16].v.ob[0] - temp;
+                pauseCtx->cursorVtx[17].v.ob[0] = pauseCtx->cursorVtx[19].v.ob[0] =
+                    pauseCtx->cursorVtx[16].v.ob[0] + temp * 2 + 32;
+                pauseCtx->cursorVtx[16].v.ob[1] = pauseCtx->cursorVtx[17].v.ob[1] =
+                    pauseCtx->cursorVtx[16].v.ob[1] + temp;
+                pauseCtx->cursorVtx[18].v.ob[1] = pauseCtx->cursorVtx[19].v.ob[1] =
+                    pauseCtx->cursorVtx[16].v.ob[1] - temp * 2 - 32;
+            }
+
+            gSPVertex(OVERLAY_DISP++, &pauseCtx->cursorVtx[16], 4, 0);
+            gDPLoadTextureBlock(OVERLAY_DISP++, &D_08095AC0, G_IM_FMT_IA, G_IM_SIZ_8b, 32, 32, 0,
+                                G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
+                                G_TX_NOLOD, G_TX_NOLOD);
+        }
+
+        gSP1Quadrangle(OVERLAY_DISP++, 0, 2, 3, 1, 0);
+    }
+
+    CLOSE_DISPS(play->state.gfxCtx);
+}
 
 /**
  * Draws either the analog three-day clock or the digital final-hours clock
@@ -5083,7 +6302,7 @@ void Interface_Draw(PlayState* play) {
 
     if (pauseCtx->debugEditor == DEBUG_EDITOR_NONE) {
         Interface_SetVertices(play);
-        func_801170B8(interfaceCtx);
+        Interface_SetOrthoView(interfaceCtx);
 
         // Draw Grandma's Story
         if (interfaceCtx->storyDmaStatus == STORY_DMA_DONE) {
@@ -5300,16 +6519,16 @@ void Interface_Draw(PlayState* play) {
 
         func_8012C654(play->state.gfxCtx);
 
-        func_80117100(play);
+        Interface_DrawItemButtons(play);
 
         if (player->transformation == ((void)0, gSaveContext.save.playerForm)) {
-            func_80118084(play);
+            Interface_DrawBButtonIcons(play);
         }
-        func_80118890(play);
+        Interface_DrawCButtonIcons(play);
 
-        func_80118BA4(play);
+        Interface_DrawAButton(play);
 
-        func_80119030(play);
+        Interface_DrawPauseMenuEquippingIcons(play);
 
         // Draw either the minigame countdown or the three-day clock
         if ((play->pauseCtx.state == PAUSE_STATE_OFF) && (play->pauseCtx.debugEditor == DEBUG_EDITOR_NONE)) {
@@ -5516,7 +6735,7 @@ void Interface_Update(PlayState* play) {
     // Update buttons
     if ((play->pauseCtx.state == PAUSE_STATE_OFF) && (play->pauseCtx.debugEditor == DEBUG_EDITOR_NONE)) {
         if (play->gameOverCtx.state == GAMEOVER_INACTIVE) {
-            func_80111CB4(play);
+            Interface_UpdateButtonsPart1(play);
         }
     }
 
