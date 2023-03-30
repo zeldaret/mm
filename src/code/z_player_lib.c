@@ -479,7 +479,7 @@ void func_80123140(PlayState* play, Player* player) {
     IREG(69) = bootRegs[16];
     MREG(95) = bootRegs[17];
 
-    if (play->roomCtx.curRoom.unk3 == 2) {
+    if (play->roomCtx.curRoom.behaviorType1 == ROOM_BEHAVIOR_TYPE1_2) {
         R_RUN_SPEED_LIMIT = 500;
     }
 
@@ -533,7 +533,8 @@ s32 func_801234D4(PlayState* play) {
     return (player->stateFlags2 & PLAYER_STATE2_8) || (player->actor.speed != 0.0f) ||
            ((player->transformation != PLAYER_FORM_ZORA) && (player->stateFlags1 & PLAYER_STATE1_8000000)) ||
            ((player->transformation == PLAYER_FORM_ZORA) && (player->stateFlags1 & PLAYER_STATE1_8000000) &&
-            (!(player->actor.bgCheckFlags & 1) || (player->currentBoots < PLAYER_BOOTS_ZORA_UNDERWATER)));
+            (!(player->actor.bgCheckFlags & BGCHECKFLAG_GROUND) ||
+             (player->currentBoots < PLAYER_BOOTS_ZORA_UNDERWATER)));
 }
 
 s32 func_80123590(PlayState* play, Actor* actor) {
@@ -1320,7 +1321,7 @@ void func_80123DA4(Player* player) {
 }
 
 void func_80123DC0(Player* player) {
-    if ((player->actor.bgCheckFlags & 1) ||
+    if ((player->actor.bgCheckFlags & BGCHECKFLAG_GROUND) ||
         (player->stateFlags1 & (PLAYER_STATE1_200000 | PLAYER_STATE1_800000 | PLAYER_STATE1_8000000)) ||
         (!(player->stateFlags1 & (PLAYER_STATE1_40000 | PLAYER_STATE1_80000)) &&
          ((player->actor.world.pos.y - player->actor.floorHeight) < 100.0f))) {
@@ -1500,13 +1501,13 @@ s32 Player_GetEnvironmentalHazard(PlayState* play) {
     EnvHazardTextTriggerEntry* triggerEntry;
     s32 envHazard;
 
-    if (play->roomCtx.curRoom.unk2 == 3) { // Room is hot
+    if (play->roomCtx.curRoom.behaviorType2 == ROOM_BEHAVIOR_TYPE2_HOT) {
         envHazard = PLAYER_ENV_HAZARD_HOTROOM - 1;
     } else if ((player->transformation != PLAYER_FORM_ZORA) && (player->underwaterTimer > 80)) {
         envHazard = PLAYER_ENV_HAZARD_UNDERWATER_FREE - 1;
     } else if (player->stateFlags1 & PLAYER_STATE1_8000000) {
         if ((player->transformation == PLAYER_FORM_ZORA) && (player->currentBoots >= PLAYER_BOOTS_ZORA_UNDERWATER) &&
-            (player->actor.bgCheckFlags & 1)) {
+            (player->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
             envHazard = PLAYER_ENV_HAZARD_UNDERWATER_FLOOR - 1;
         } else {
             envHazard = PLAYER_ENV_HAZARD_SWIMMING - 1;
@@ -2929,15 +2930,15 @@ void Player_DrawBlastMask(PlayState* play, Player* player) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    if (player->unk_B60 != 0) {
+    if (player->blastMaskTimer != 0) {
         s32 alpha;
 
         gSegments[0xA] = VIRTUAL_TO_PHYSICAL(player->maskObjectSegment);
 
         AnimatedMat_DrawOpa(play, Lib_SegmentedToVirtual(&object_mask_bakuretu_Matanimheader_0011F8));
 
-        if (player->unk_B60 < 11) {
-            alpha = (player->unk_B60 / 10.0f) * 255;
+        if (player->blastMaskTimer <= 10) {
+            alpha = (player->blastMaskTimer / 10.0f) * 255;
         } else {
             alpha = 255;
         }

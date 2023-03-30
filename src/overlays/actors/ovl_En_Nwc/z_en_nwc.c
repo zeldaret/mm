@@ -382,7 +382,7 @@ void EnNwc_HopForward(EnNwc* this, PlayState* play) {
     }
 
     // they only move forward while off the ground, which gives the visual of them hopping to move
-    if (this->actor.bgCheckFlags & 0x1) { // touching floor
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         this->actor.speed = 0.0f;
     } else {
         this->actor.speed = 2.0f;
@@ -408,7 +408,7 @@ void EnNwc_RunAway(EnNwc* this, PlayState* play) {
     }
 
     this->actor.speed = 2.0f;
-    if (this->actor.bgCheckFlags & 0x8) { // touching wall
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
         EnNwc_ToggleState(this);
     }
 }
@@ -433,7 +433,7 @@ void EnNwc_Turn(EnNwc* this, PlayState* play) {
     }
 
     // they only rotate when off the ground, giving the visual that they turn by hopping
-    if (!(this->actor.bgCheckFlags & 0x1)) { // NOT touching floor
+    if (!(this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
         Math_SmoothStepToS(&this->actor.shape.rot.y, this->fallingRotY, 0xA, 0x1000, 0x800);
         this->actor.world.rot.y = this->actor.shape.rot.y;
     }

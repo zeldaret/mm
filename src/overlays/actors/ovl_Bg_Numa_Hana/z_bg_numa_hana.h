@@ -2,6 +2,7 @@
 #define Z_BG_NUMA_HANA_H
 
 #include "global.h"
+#include "z_fireobj.h"
 
 #define BG_NUMA_HANA_GET_TYPE(thisx) ((thisx)->params & 1)
 #define BG_NUMA_HANA_SWITCH_FLAG(thisx) (((thisx)->params >> 8) & 0x7F)

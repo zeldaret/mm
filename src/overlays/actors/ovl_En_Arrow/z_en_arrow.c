@@ -78,9 +78,9 @@ void EnArrow_Init(Actor* thisx, PlayState* play) {
     EnArrow* this = THIS;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    if (this->actor.params == ENARROW_MINUS8) {
+    if (this->actor.params == -ENARROW_8) {
         this->unk_263 = 1;
-        this->actor.params = 8;
+        this->actor.params = ENARROW_8;
     }
 
     if (this->actor.params < ENARROW_6) {
@@ -113,7 +113,7 @@ void EnArrow_Init(Actor* thisx, PlayState* play) {
     if (this->actor.params < ENARROW_0) {
         this->collider.base.atFlags = (AT_TYPE_ENEMY | AT_ON);
     } else {
-        this->collider.info.toucher.dmgFlags = func_800BC188(this->actor.params);
+        this->collider.info.toucher.dmgFlags = Actor_GetArrowDmgFlags(this->actor.params);
         if (this->actor.params == ENARROW_8) {
             this->collider.info.toucher.damage = 1;
         }
@@ -273,8 +273,8 @@ void func_8088AA98(EnArrow* this, PlayState* play) {
     f32 temp_f0;
 
     if (WaterBox_GetSurface1(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &sp50, &sp54) &&
-        (this->actor.world.pos.y < sp50) && !(this->actor.bgCheckFlags & 0x20)) {
-        this->actor.bgCheckFlags |= 0x20;
+        (this->actor.world.pos.y < sp50) && !(this->actor.bgCheckFlags & BGCHECKFLAG_WATER)) {
+        this->actor.bgCheckFlags |= BGCHECKFLAG_WATER;
 
         Math_Vec3f_Diff(&this->actor.world.pos, &this->actor.home.pos, &sp44);
 

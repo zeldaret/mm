@@ -43,8 +43,8 @@ void BgTobira01_Open(BgTobira01* this, PlayState* play) {
         } else {
             ActorCutscene_SetIntentToPlay(cutsceneId);
         }
-    } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_88_40) && (this->timer == 0) && (play->actorCtx.unk1F5 != 0) &&
-               (play->actorCtx.unk1F4 == 0) &&
+    } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_88_40) && (this->timer == 0) && (play->actorCtx.unk_1F4.timer != 0) &&
+               (play->actorCtx.unk_1F4.unk_00 == 0) &&
                (SurfaceType_GetSceneExitIndex(&play->colCtx, player->actor.floorPoly, player->actor.floorBgId) == 6)) {
         this->playCutscene = true;
         this->unk_16C = 0; // this variable is not used anywhere else
@@ -56,7 +56,7 @@ void BgTobira01_Open(BgTobira01* this, PlayState* play) {
         this->timer++;
     } else {
         this->timer--;
-    };
+    }
 
     this->timer = CLAMP(this->timer, 0, 60);
 

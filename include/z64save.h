@@ -313,7 +313,7 @@ typedef struct SaveContext {
     /* 0x0000 */ Save save;
     /* 0x100C */ u8 eventInf[8];                        // "event_inf"
     /* 0x1014 */ u8 unk_1014;                           // "stone_set_flag"
-    /* 0x1015 */ u8 unk_1015;
+    /* 0x1015 */ u8 bButtonStatus;
     /* 0x1016 */ u16 jinxTimer;
     /* 0x1018 */ s16 rupeeAccumulator;                  // "lupy_udct"
     /* 0x101A */ u8 bottleTimerStates[BOTTLE_MAX]; // See the `BottleTimerState` enum. "bottle_status"
@@ -572,15 +572,21 @@ typedef enum SunsSongState {
 #define WEEKEVENTREG_07_10 PACK_WEEKEVENTREG_FLAG(7, 0x10)
 #define WEEKEVENTREG_07_20 PACK_WEEKEVENTREG_FLAG(7, 0x20)
 #define WEEKEVENTREG_07_40 PACK_WEEKEVENTREG_FLAG(7, 0x40)
+
 // Entrance cutscene watched to the prison where the deku princess is kept. Also set in door_warp1.c
 #define WEEKEVENTREG_ENTERED_WOODFALL_TEMPLE_PRISON PACK_WEEKEVENTREG_FLAG(7, 0x80)
+
+// Related to Honey & Darling minigame
 #define WEEKEVENTREG_08_01 PACK_WEEKEVENTREG_FLAG(8, 0x01)
 #define WEEKEVENTREG_08_02 PACK_WEEKEVENTREG_FLAG(8, 0x02)
 #define WEEKEVENTREG_08_04 PACK_WEEKEVENTREG_FLAG(8, 0x04)
 #define WEEKEVENTREG_08_08 PACK_WEEKEVENTREG_FLAG(8, 0x08)
 #define WEEKEVENTREG_08_10 PACK_WEEKEVENTREG_FLAG(8, 0x10)
 #define WEEKEVENTREG_08_20 PACK_WEEKEVENTREG_FLAG(8, 0x20)
+
+// Related to final hours
 #define WEEKEVENTREG_08_40 PACK_WEEKEVENTREG_FLAG(8, 0x40)
+
 #define WEEKEVENTREG_08_80 PACK_WEEKEVENTREG_FLAG(8, 0x80)
 #define WEEKEVENTREG_09_01 PACK_WEEKEVENTREG_FLAG(9, 0x01)
 #define WEEKEVENTREG_09_02 PACK_WEEKEVENTREG_FLAG(9, 0x02)
@@ -622,9 +628,18 @@ typedef enum SunsSongState {
 #define WEEKEVENTREG_13_04 PACK_WEEKEVENTREG_FLAG(13, 0x04)
 #define WEEKEVENTREG_13_08 PACK_WEEKEVENTREG_FLAG(13, 0x08)
 #define WEEKEVENTREG_13_10 PACK_WEEKEVENTREG_FLAG(13, 0x10)
-#define WEEKEVENTREG_13_20 PACK_WEEKEVENTREG_FLAG(13, 0x20)
-#define WEEKEVENTREG_13_40 PACK_WEEKEVENTREG_FLAG(13, 0x40)
-#define WEEKEVENTREG_13_80 PACK_WEEKEVENTREG_FLAG(13, 0x80)
+
+// This flag marks that the player has finished the Oceanside Spider House and has exited.
+// Used to identify if EnSth should be moved deeper into the house.
+// This does NOT flag:
+//   A) that the player has completed the house (Inventory_GetSkullTokenCount(play->sceneId))
+//   B) that the player has collected a reward (WEEKEVENTREG_OCEANSIDE_SPIDER_HOUSE_COLLECTED_REWARD)
+//   C) that the player has collected the wallet (WEEKEVENTREG_RECEIVED_OCEANSIDE_WALLET_UPGRADE)
+#define WEEKEVENTREG_OCEANSIDE_SPIDER_HOUSE_BUYER_MOVED_IN PACK_WEEKEVENTREG_FLAG(13, 0x20)
+
+#define WEEKEVENTREG_RECEIVED_OCEANSIDE_WALLET_UPGRADE PACK_WEEKEVENTREG_FLAG(13, 0x40)
+// You only get a wallet if completed on Day 1: repeat gets silver rupee, other days get less
+#define WEEKEVENTREG_OCEANSIDE_SPIDER_HOUSE_COLLECTED_REWARD PACK_WEEKEVENTREG_FLAG(13, 0x80)
 
 // PlayedMilkMinigame
 // Attempted Cremia Cart Ride
@@ -830,10 +845,10 @@ typedef enum SunsSongState {
 
 #define WEEKEVENTREG_34_02 PACK_WEEKEVENTREG_FLAG(34, 0x02)
 #define WEEKEVENTREG_34_04 PACK_WEEKEVENTREG_FLAG(34, 0x04)
-#define WEEKEVENTREG_34_08 PACK_WEEKEVENTREG_FLAG(34, 0x08)
+#define WEEKEVENTREG_SWAMP_SPIDER_HOUSE_TALKED PACK_WEEKEVENTREG_FLAG(34, 0x08)
 #define WEEKEVENTREG_34_10 PACK_WEEKEVENTREG_FLAG(34, 0x10)
 #define WEEKEVENTREG_34_20 PACK_WEEKEVENTREG_FLAG(34, 0x20)
-#define WEEKEVENTREG_34_40 PACK_WEEKEVENTREG_FLAG(34, 0x40)
+#define WEEKEVENTREG_RECEIVED_MASK_OF_TRUTH PACK_WEEKEVENTREG_FLAG(34, 0x40)
 
 // Cremia did Milk Run alone. Player didn't interact or didn't accept the ride
 #define WEEKEVENTREG_34_80 PACK_WEEKEVENTREG_FLAG(34, 0x80)
@@ -1081,8 +1096,12 @@ typedef enum SunsSongState {
 #define WEEKEVENTREG_62_20 PACK_WEEKEVENTREG_FLAG(62, 0x20)
 #define WEEKEVENTREG_62_40 PACK_WEEKEVENTREG_FLAG(62, 0x40)
 #define WEEKEVENTREG_62_80 PACK_WEEKEVENTREG_FLAG(62, 0x80)
-#define WEEKEVENTREG_63_01 PACK_WEEKEVENTREG_FLAG(63, 0x01)
-#define WEEKEVENTREG_63_02 PACK_WEEKEVENTREG_FLAG(63, 0x02)
+
+// See `EnTimeTag_KickOut_WaitForTime` and `EnTimeTag_KickOut_WaitForTrigger`
+#define WEEKEVENTREG_KICKOUT_WAIT PACK_WEEKEVENTREG_FLAG(63, 0x01)
+// See `EnTimeTag_KickOut_WaitForTime` and `EnTimeTag_KickOut_WaitForTrigger`
+#define WEEKEVENTREG_KICKOUT_TIME_PASSED PACK_WEEKEVENTREG_FLAG(63, 0x02)
+
 #define WEEKEVENTREG_63_04 PACK_WEEKEVENTREG_FLAG(63, 0x04)
 #define WEEKEVENTREG_63_08 PACK_WEEKEVENTREG_FLAG(63, 0x08)
 #define WEEKEVENTREG_63_10 PACK_WEEKEVENTREG_FLAG(63, 0x10)
@@ -1251,6 +1270,7 @@ typedef enum SunsSongState {
 // check if already healed Kamaro the Dancing Ghost
 #define WEEKEVENTREG_82_04 PACK_WEEKEVENTREG_FLAG(82, 0x04)
 
+// Related to Swordsman's log minigame
 #define WEEKEVENTREG_82_08 PACK_WEEKEVENTREG_FLAG(82, 0x08)
 #define WEEKEVENTREG_82_10 PACK_WEEKEVENTREG_FLAG(82, 0x10)
 #define WEEKEVENTREG_82_20 PACK_WEEKEVENTREG_FLAG(82, 0x20)
@@ -1274,6 +1294,7 @@ typedef enum SunsSongState {
 #define WEEKEVENTREG_84_10 PACK_WEEKEVENTREG_FLAG(84, 0x10)
 
 // Unconfirmed: "Obtained Fierce Deity's Mask?"
+// Also related to moon child
 #define WEEKEVENTREG_84_20 PACK_WEEKEVENTREG_FLAG(84, 0x20)
 
 #define WEEKEVENTREG_84_40 PACK_WEEKEVENTREG_FLAG(84, 0x40)
@@ -1338,6 +1359,8 @@ typedef enum SunsSongState {
 #define WEEKEVENTREG_90_04 PACK_WEEKEVENTREG_FLAG(90, 0x04)
 #define WEEKEVENTREG_90_08 PACK_WEEKEVENTREG_FLAG(90, 0x08)
 #define WEEKEVENTREG_90_10 PACK_WEEKEVENTREG_FLAG(90, 0x10)
+
+// Related to Fishermans's jumping minigame
 #define WEEKEVENTREG_90_20 PACK_WEEKEVENTREG_FLAG(90, 0x20)
 #define WEEKEVENTREG_90_40 PACK_WEEKEVENTREG_FLAG(90, 0x40)
 #define WEEKEVENTREG_90_80 PACK_WEEKEVENTREG_FLAG(90, 0x80)
@@ -1434,9 +1457,12 @@ typedef enum SunsSongState {
 
 #define GET_WEEKEVENTREG_RACE_FLAGS (WEEKEVENTREG(92) & WEEKEVENTREG_RACE_FLAGS)
 
-#define SET_WEEKEVENTREG_RACE_FLAGS(flag)             \
-    WEEKEVENTREG(92) &= (u8)~WEEKEVENTREG_RACE_FLAGS; \
-    WEEKEVENTREG(92) = WEEKEVENTREG(92) | (u8)((WEEKEVENTREG(92) & ~WEEKEVENTREG_RACE_FLAGS) | (flag))
+#define SET_WEEKEVENTREG_RACE_FLAGS(flag)                                                                   \
+    {                                                                                                       \
+        WEEKEVENTREG(92) &= (u8)~WEEKEVENTREG_RACE_FLAGS;                                                   \
+        WEEKEVENTREG(92) = WEEKEVENTREG(92) | (u8)((WEEKEVENTREG(92) & ~WEEKEVENTREG_RACE_FLAGS) | (flag)); \
+    }                                                                                                       \
+    (void)0
 
 /**
  * gSaveContext.eventInf
@@ -1474,11 +1500,15 @@ typedef enum SunsSongState {
 #define EVENTINF_32 0x32
 
 #define EVENTINF_33 0x33
+
+// Related to Deku playground minigame
 #define EVENTINF_34 0x34
 #define EVENTINF_35 0x35
 #define EVENTINF_36 0x36
 #define EVENTINF_37 0x37
 #define EVENTINF_40 0x40
+
+// Related to swamp boat (non-minigame)?
 #define EVENTINF_41 0x41
 #define EVENTINF_42 0x42
 #define EVENTINF_43 0x43

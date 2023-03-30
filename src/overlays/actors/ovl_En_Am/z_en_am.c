@@ -265,7 +265,7 @@ void EnAm_ApplyEnemyTexture(EnAm* this, PlayState* play) {
 
 void func_808B0208(EnAm* this, PlayState* play) {
     // If the armos is against a wall, rotate and turn away from it
-    if ((this->actor.speed > 0.0f) && (this->actor.bgCheckFlags & 8)) {
+    if ((this->actor.speed > 0.0f) && (this->actor.bgCheckFlags & BGCHECKFLAG_WALL)) {
         this->actor.world.rot.y = (this->actor.wallYaw * 2) - this->actor.world.rot.y;
         this->actor.world.pos.x += this->actor.speed * Math_SinS(this->actor.world.rot.y);
         this->actor.world.pos.z += this->actor.speed * Math_CosS(this->actor.world.rot.y);
@@ -275,12 +275,12 @@ void func_808B0208(EnAm* this, PlayState* play) {
         this->actor.speed = this->speed;
         this->actor.velocity.y = 12.0f;
     } else if (this->skelAnime.curFrame > 11.0f) {
-        if (!(this->actor.bgCheckFlags & 1)) {
+        if (!(this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
             this->skelAnime.curFrame = 11.0f;
         } else {
             Math_ScaledStepToS(&this->actor.world.rot.y, this->armosYaw, 0x1F40);
             this->actor.speed = 0.0f;
-            if (this->actor.bgCheckFlags & 2) {
+            if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND_TOUCH) {
                 EnAm_SpawnEffects(this, play);
             }
         }
@@ -302,7 +302,7 @@ void func_808B0358(EnAm* this) {
 void func_808B03C0(EnAm* this, PlayState* play) {
     this->armosYaw = this->actor.yawTowardsPlayer;
     func_808B0208(this, play);
-    if (this->actor.bgCheckFlags & 2) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND_TOUCH) {
         this->explodeTimer--;
     }
     if (this->explodeTimer == 0) {
@@ -334,7 +334,7 @@ void func_808B04E4(EnAm* this) {
 
 void func_808B0508(EnAm* this, PlayState* play) {
     func_808B0208(this, play);
-    if (!(this->actor.bgCheckFlags & 1)) {
+    if (!(this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
         Math_StepToF(&this->actor.world.pos.x, this->actor.home.pos.x, 2.0f);
         Math_StepToF(&this->actor.world.pos.z, this->actor.home.pos.z, 2.0f);
     }
@@ -383,7 +383,8 @@ void EnAm_TakeDamage(EnAm* this, PlayState* play) {
                      Animation_GetLastFrame(&gArmosTakeDamageAnim) - 6, ANIMMODE_ONCE, 0.0f);
     func_800BE504(&this->actor, &this->enemyCollider);
     this->actor.speed = 6.0f;
-    Actor_SetColorFilter(&this->actor, 0x4000, 0xFF, 0, Animation_GetLastFrame(&gArmosTakeDamageAnim) - 10);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA,
+                         Animation_GetLastFrame(&gArmosTakeDamageAnim) - 10);
     Actor_PlaySfx(&this->actor, NA_SE_EN_EYEGOLE_DAMAGE);
     this->enemyCollider.base.acFlags &= ~AC_ON;
     this->textureBlend = 255;
@@ -440,7 +441,7 @@ void func_808B0894(EnAm* this, PlayState* play) {
         Actor_Kill(&this->actor);
         return;
     } else if (!(this->explodeTimer & 3)) {
-        Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 4);
+        Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 4);
     }
     if (this->actor.world.rot.z < 0x1F40) {
         this->actor.world.rot.z += 0x320;

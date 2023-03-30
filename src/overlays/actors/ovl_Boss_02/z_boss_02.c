@@ -979,7 +979,7 @@ void func_809DAB78(Boss02* this, PlayState* play) {
                     }
 
                     if (otherTwinmold->unk_0144 >= 10) {
-                        Audio_QueueSeqCmd(NA_BGM_CLEAR_BOSS | 0x8000);
+                        SEQCMD_PLAY_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 0, NA_BGM_CLEAR_BOSS | SEQ_FLAG_ASYNC);
                     }
 
                     Actor_PlaySfx(&this->actor, NA_SE_EN_INBOSS_DEAD_OLD);
@@ -996,7 +996,7 @@ void func_809DAB78(Boss02* this, PlayState* play) {
             Actor_MoveWithGravity(&this->actor);
             Actor_UpdateBgCheckInfo(play, &this->actor, 50.0f, 150.0f, 100.0f, 4);
 
-            if (this->actor.bgCheckFlags & 1) {
+            if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
                 this->unk_0144 = 23;
                 this->actor.speed = 0.0f;
                 this->unk_0170 = this->unk_017C;
@@ -1105,7 +1105,7 @@ void func_809DBFB4(Boss02* this, PlayState* play) {
                         this->unk_0144 = 20;
 
                         if (otherTwinmold->unk_0144 >= 10) {
-                            Audio_QueueSeqCmd(0x100100FF);
+                            SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 1);
                         } else {
                             otherTwinmold->unk_0195 = 1;
                         }
@@ -1311,7 +1311,7 @@ void Boss02_Static_Update(Actor* thisx, PlayState* play) {
         if (sMusicStartTimer != 0) {
             sMusicStartTimer--;
             if (sMusicStartTimer == 0) {
-                Audio_QueueSeqCmd(NA_BGM_BOSS | 0x8000);
+                SEQCMD_PLAY_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 0, NA_BGM_BOSS | SEQ_FLAG_ASYNC);
             }
         }
     }

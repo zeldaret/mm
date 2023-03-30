@@ -468,7 +468,7 @@ void EnClearTag_Init(Actor* thisx, PlayState* play) {
             EnClearTag_CreateFlashEffect(this, &pos, sFlashMaxScale[thisx->params], this->actor.floorHeight);
 
             // Is not underwater
-            if (!(this->actor.bgCheckFlags & 0x20)) {
+            if (!(this->actor.bgCheckFlags & BGCHECKFLAG_WATER)) {
                 if (thisx->params < 10) {
                     pos.y = this->actor.world.pos.y - 40.0f;
 

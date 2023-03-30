@@ -1119,7 +1119,7 @@ void func_80A881E0(EnTru* this, PlayState* play) {
         this->unk_34E &= ~(0x1000 | 0x8);
         this->unk_34E |= 0x10;
         this->actor.shape.rot.y = this->actor.world.rot.y;
-        this->actor.flags &= ~ACTOR_FLAG_100;
+        this->actor.flags &= ~ACTOR_FLAG_TALK_REQUESTED;
         this->unk_1E8 = 0;
         this->actionFunc = func_80A87FD0;
     }

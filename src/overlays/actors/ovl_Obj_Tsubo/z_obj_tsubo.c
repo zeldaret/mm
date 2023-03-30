@@ -473,7 +473,7 @@ void func_809289E4(ObjTsubo* this, PlayState* play) {
                (acHit && (this->cylinderCollider.info.acHitInfo->toucher.dmgFlags & 0x058BFFBC))) {
         typeData = &sPotTypeData[type];
         this->unk_19B = 0;
-        if ((this->actor.bgCheckFlags & 0x20) && (this->actor.depthInWater > 15.0f)) {
+        if ((this->actor.bgCheckFlags & BGCHECKFLAG_WATER) && (this->actor.depthInWater > 15.0f)) {
             typeData->breakPot3(this, play);
         } else {
             typeData->breakPot1(this, play);
@@ -494,7 +494,8 @@ void func_809289E4(ObjTsubo* this, PlayState* play) {
         if (!this->unk_195) {
             Actor_MoveWithGravity(&this->actor);
             Actor_UpdateBgCheckInfo(play, &this->actor, 15.0f, 15.0f, 0.0f, 0x44);
-            if ((this->actor.bgCheckFlags & 1) && (DynaPoly_GetActor(&play->colCtx, this->actor.floorBgId) == NULL)) {
+            if ((this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) &&
+                (DynaPoly_GetActor(&play->colCtx, this->actor.floorBgId) == NULL)) {
                 this->unk_195 = true;
                 this->actor.flags &= ~ACTOR_FLAG_10;
             }
@@ -509,7 +510,7 @@ void func_809289E4(ObjTsubo* this, PlayState* play) {
                     s32 absYawDiff = ABS_ALT(yawDiff);
 
                     if (absYawDiff > (0x10000 / 3)) {
-                        Actor_PickUp(&this->actor, play, GI_NONE, 36.0f, 30.0f);
+                        Actor_OfferGetItem(&this->actor, play, GI_NONE, 36.0f, 30.0f);
                     }
                 }
             }
@@ -568,7 +569,8 @@ void func_80928F18(ObjTsubo* this, PlayState* play) {
         this->unk_194--;
     }
     typeData = &sPotTypeData[type];
-    if ((this->actor.bgCheckFlags & 0xB) || atHit || (this->unk_194 <= 0)) {
+    if ((this->actor.bgCheckFlags & (BGCHECKFLAG_GROUND | BGCHECKFLAG_GROUND_TOUCH | BGCHECKFLAG_WALL)) || atHit ||
+        (this->unk_194 <= 0)) {
         typeData->breakPot1(this, play);
         if (type == OBJ_TSUBO_TYPE_3) {
             func_8092762C(this, play);
@@ -582,7 +584,7 @@ void func_80928F18(ObjTsubo* this, PlayState* play) {
         }
 
         func_809291DC(this);
-    } else if (this->actor.bgCheckFlags & 0x40) {
+    } else if (this->actor.bgCheckFlags & BGCHECKFLAG_WATER_TOUCH) {
         typeData->breakPot2(this, play);
         if (type == OBJ_TSUBO_TYPE_3) {
             func_8092762C(this, play);

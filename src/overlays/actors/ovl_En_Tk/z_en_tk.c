@@ -590,13 +590,13 @@ void func_80AED610(EnTk* this, PlayState* play) {
                         break;
 
                     case 0x13FE:
-                        func_80151938(play, 0x13FF);
+                        Message_ContinueTextbox(play, 0x13FF);
                         break;
 
                     case 0x1413:
                         Rupees_ChangeBy(30);
                         SET_WEEKEVENTREG(WEEKEVENTREG_60_02);
-                        func_80151938(play, 0x13FF);
+                        Message_ContinueTextbox(play, 0x13FF);
                         break;
 
                     case 0x13FF:
@@ -715,7 +715,7 @@ void func_80AEDC4C(EnTk* this, PlayState* play) {
     if ((this->actor.params >= 0) && SubS_StartActorCutscene(&this->actor, this->cutscenes[1], this->actor.params,
                                                              SUBS_CUTSCENE_SET_UNK_LINK_FIELDS)) {
         this->unk_2E8 = ActorCutscene_GetLength(this->cutscenes[1]);
-        func_80151938(play, 0x1411);
+        Message_ContinueTextbox(play, 0x1411);
         func_80AEDCBC(this, play);
     }
 }
@@ -734,7 +734,7 @@ void func_80AEDD4C(EnTk* this, PlayState* play) {
     this->unk_2E8--;
     if (this->unk_2E8 <= 0) {
         ActorCutscene_Stop(this->cutscenes[1]);
-        func_801477B4(play);
+        Message_CloseTextbox(play);
         Actor_Kill(&this->actor);
     }
 }
@@ -837,29 +837,29 @@ void func_80AEDF5C(EnTk* this, PlayState* play) {
                         break;
 
                     case 0x1405:
-                        func_80151938(play, 0x1406);
+                        Message_ContinueTextbox(play, 0x1406);
                         break;
 
                     case 0x1406:
-                        func_80151938(play, 0x1407);
+                        Message_ContinueTextbox(play, 0x1407);
                         break;
 
                     case 0x1407:
                         if (play->msgCtx.choiceIndex == 0) {
                             func_8019F208();
-                            func_80151938(play, 0x1409);
+                            Message_ContinueTextbox(play, 0x1409);
                         } else {
                             func_8019F230();
-                            func_80151938(play, 0x1408);
+                            Message_ContinueTextbox(play, 0x1408);
                         }
                         break;
 
                     case 0x1408:
-                        func_80151938(play, 0x1407);
+                        Message_ContinueTextbox(play, 0x1407);
                         break;
 
                     case 0x1409:
-                        func_80151938(play, 0x140A);
+                        Message_ContinueTextbox(play, 0x140A);
                         break;
 
                     case 0x140A:
@@ -877,7 +877,7 @@ void func_80AEDF5C(EnTk* this, PlayState* play) {
                             func_80AEE2A8(this, play);
                         } else {
                             func_8019F230();
-                            func_80151938(play, 0x140E);
+                            Message_ContinueTextbox(play, 0x140E);
                         }
                         break;
 
@@ -996,7 +996,7 @@ void func_80AEE6B8(EnTk* this, PlayState* play) {
     if (this->unk_2CA & 0x20) {
         if (this->unk_2E4 >= 3) {
             ActorCutscene_Stop(this->cutscenes[0]);
-            func_801477B4(play);
+            Message_CloseTextbox(play);
             func_80AEDBEC(this, play);
         } else if (SubS_StartActorCutscene(&this->actor, 0x7C, this->cutscenes[0], SUBS_CUTSCENE_SET_UNK_LINK_FIELDS)) {
             this->unk_310 = 3;
@@ -1321,9 +1321,9 @@ void EnTk_Update(Actor* thisx, PlayState* play) {
     }
 
     if (!(this->unk_2CA & 0x200)) {
-        if (!(this->actor.bgCheckFlags & 1)) {
+        if (!(this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
             func_800B9010(&this->actor, NA_SE_EV_HONEYCOMB_FALL - SFX_FLAG);
-        } else if (this->actor.bgCheckFlags & 2) {
+        } else if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND_TOUCH) {
             Actor_PlaySfx(&this->actor, NA_SE_EV_HUMAN_BOUND);
         }
     }

@@ -272,7 +272,8 @@ s32 func_8092CC68(PlayState* play) {
     s32 ret = false;
     s16 bgId;
 
-    if (!Play_InCsMode(play) && (player->actor.bgCheckFlags & 1) && (player->transformation != PLAYER_FORM_DEKU)) {
+    if (!Play_InCsMode(play) && (player->actor.bgCheckFlags & BGCHECKFLAG_GROUND) &&
+        (player->transformation != PLAYER_FORM_DEKU)) {
         bgId = player->actor.floorBgId;
         if (SurfaceType_GetSceneExitIndex(&play->colCtx, player->actor.floorPoly, bgId) != 4) {
             ret = true;

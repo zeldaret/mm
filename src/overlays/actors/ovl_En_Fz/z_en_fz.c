@@ -359,9 +359,9 @@ void func_80932C98(EnFz* this, PlayState* play) {
     Vec3f sp3C;
 
     if (this->unk_BCD != 0) {
-        if ((this->actor.bgCheckFlags & 8) ||
+        if ((this->actor.bgCheckFlags & BGCHECKFLAG_WALL) ||
             !Actor_TestFloorInDirection(&this->actor, play, 60.0f, this->actor.world.rot.y)) {
-            this->actor.bgCheckFlags &= ~0x8;
+            this->actor.bgCheckFlags &= ~BGCHECKFLAG_WALL;
             this->unk_BCD = 0;
             this->unk_BBC = 0.0f;
             this->actor.speed = 0.0f;
@@ -420,7 +420,7 @@ void func_80932C98(EnFz* this, PlayState* play) {
 
                 case 15:
                     Actor_ApplyDamage(&this->actor);
-                    Actor_SetColorFilter(&this->actor, 0x4000, 0xFF, 0x2000, 8);
+                    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_XLU, 8);
                     if (this->actor.colChkInfo.health != 0) {
                         Actor_PlaySfx(&this->actor, NA_SE_EN_FREEZAD_DAMAGE);
                         sp3C.x = this->actor.world.pos.x;

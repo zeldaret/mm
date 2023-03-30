@@ -100,9 +100,10 @@ void func_80A5B160(EnKusa2* this, PlayState* play) {
 
     if (this->unk_194[0] == NULL) {
         ptr = this->unk_194;
-        actor = (EnKusa2*)Actor_SpawnAsChildAndCutscene(
-            &play->actorCtx, play, ACTOR_EN_KUSA2, this->actor.world.pos.x, this->actor.world.pos.y,
-            this->actor.world.pos.z, 0, Rand_Next() >> 0x10, 0, 1, this->actor.cutscene, this->actor.unk20, NULL);
+        actor = (EnKusa2*)Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ACTOR_EN_KUSA2, this->actor.world.pos.x,
+                                                        this->actor.world.pos.y, this->actor.world.pos.z, 0,
+                                                        Rand_Next() >> 0x10, 0, 1, this->actor.cutscene,
+                                                        this->actor.halfDaysBits, NULL);
         *ptr = actor;
 
         if (*ptr != NULL) {
@@ -118,7 +119,7 @@ void func_80A5B160(EnKusa2* this, PlayState* play) {
             actor = (EnKusa2*)Actor_SpawnAsChildAndCutscene(
                 &play->actorCtx, play, ACTOR_EN_KUSA2, (Math_SinS(temp_s1) * 80.0f) + this->actor.world.pos.x,
                 this->actor.world.pos.y, (Math_CosS(temp_s1) * 80.0f) + this->actor.world.pos.z, 0, Rand_Next() >> 0x10,
-                0, 1, this->actor.cutscene, this->actor.unk20, NULL);
+                0, 1, this->actor.cutscene, this->actor.halfDaysBits, NULL);
             *ptr = actor;
             if (*ptr != NULL) {
                 (*ptr)->actor.room = this->actor.room;
@@ -159,7 +160,8 @@ void func_80A5B3BC(EnKusa2* this) {
 void func_80A5B490(EnKusa2* this, PlayState* play) {
     Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ACTOR_EN_KITAN, this->actor.world.pos.x,
                                   this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0,
-                                  ENKUSA2_GET_7F00(&this->actor) << 9, this->actor.cutscene, this->actor.unk20, NULL);
+                                  ENKUSA2_GET_7F00(&this->actor) << 9, this->actor.cutscene, this->actor.halfDaysBits,
+                                  NULL);
 }
 
 void func_80A5B508(void) {
@@ -990,7 +992,7 @@ void func_80A5D7C4(EnKusa2* this, PlayState* play) {
             if (this->actor.xzDistToPlayer < 400.0f) {
                 CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
                 if (this->actor.xzDistToPlayer < 100.0f) {
-                    Actor_LiftActor(&this->actor, play);
+                    Actor_OfferCarry(&this->actor, play);
                 }
             }
         }
@@ -1087,12 +1089,12 @@ void func_80A5DC98(EnKusa2* this, PlayState* play) {
         func_80A5BF38(this, 4);
         func_80A5BF84(this, play);
 
-        if (this->actor.bgCheckFlags & 1) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
             func_80A5CD0C(this);
             func_80A5BB40(this, play, 1);
             Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_WALK);
             func_80A5DE18(this);
-        } else if (this->actor.bgCheckFlags & 0x20) {
+        } else if (this->actor.bgCheckFlags & BGCHECKFLAG_WATER) {
             func_80A5BDB0(this, play);
             func_80A5E418(this);
         } else if (this->unk_1CA > 0) {
@@ -1157,7 +1159,7 @@ void func_80A5DEB4(EnKusa2* this, PlayState* play) {
             func_80A5CD0C(this);
         }
 
-        if (this->actor.bgCheckFlags & 0x20) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_WATER) {
             func_80A5BDB0(this, play);
             func_80A5E418(this);
         } else {
@@ -1168,7 +1170,7 @@ void func_80A5DEB4(EnKusa2* this, PlayState* play) {
                 this->actor.speed += 4.0f;
                 this->actor.velocity.y = (Rand_ZeroOne() * 4.0f) + 15.0f;
                 func_80A5E1D8(this);
-            } else if (this->actor.bgCheckFlags & 1) {
+            } else if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
                 this->unk_1CA--;
                 if (this->unk_1CA <= 0) {
                     func_80A5CD0C(this);
@@ -1200,9 +1202,9 @@ void func_80A5E1D8(EnKusa2* this) {
 void func_80A5E210(EnKusa2* this, PlayState* play) {
     Math_StepToF(&this->actor.gravity, -4.0f, 0.5f);
 
-    if (this->actor.bgCheckFlags & 1) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         this->actor.speed *= 0.4f;
-        if (this->actor.bgCheckFlags & 2) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND_TOUCH) {
             func_80A5D178(this);
             SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 40, NA_SE_EN_KUSAMUSHI_HIDE);
         }
@@ -1229,7 +1231,7 @@ void func_80A5E210(EnKusa2* this, PlayState* play) {
     if (this->actor.velocity.y > 1.0f) {
         Math_StepToF(&this->actor.scale.y, 0.24000001f, 0.080000006f);
         Math_StepToF(&this->actor.scale.x, 0.32000002f, 0.040000003f);
-    } else if (this->actor.bgCheckFlags & 1) {
+    } else if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         Math_StepToF(&this->actor.scale.y, 0.0f, 0.120000005f);
         Math_StepToF(&this->actor.scale.x, 0.48000002f, 0.120000005f);
     } else {
@@ -1269,7 +1271,8 @@ void func_80A5E4BC(EnKusa2* this, PlayState* play) {
     this->actor.shape.rot.x -= 0x5DC;
     this->actor.shape.rot.y += this->unk_1CC;
 
-    if ((this->actor.bgCheckFlags & 0x20) && (this->actor.depthInWater > 5.0f) && (Rand_ZeroOne() < 0.8f)) {
+    if ((this->actor.bgCheckFlags & BGCHECKFLAG_WATER) && (this->actor.depthInWater > 5.0f) &&
+        (Rand_ZeroOne() < 0.8f)) {
         EffectSsBubble_Spawn(play, &this->actor.world.pos, 20.0f, 10.0f, 20.0f, (Rand_ZeroOne() * 0.08f) + 0.04f);
     }
 
@@ -1290,7 +1293,7 @@ void func_80A5E604(Actor* thisx, PlayState* play) {
     } else {
         this->actor.draw = func_80A5E6F0;
 
-        if (play->roomCtx.curRoom.unk3 == 0) {
+        if (play->roomCtx.curRoom.behaviorType1 == ROOM_BEHAVIOR_TYPE1_0) {
             func_80A5B508();
         }
         func_80A5CAF4(&D_80A5F1C0);
@@ -1353,7 +1356,7 @@ void EnKusa2_Draw(Actor* thisx, PlayState* play) {
     EnKusa2* this = THIS;
 
     if (this->actor.projectedPos.z <= 1200.0f) {
-        if ((play->roomCtx.curRoom.unk3 == 0) && (this->actor.projectedPos.z > -150.0f) &&
+        if ((play->roomCtx.curRoom.behaviorType1 == ROOM_BEHAVIOR_TYPE1_0) && (this->actor.projectedPos.z > -150.0f) &&
             (this->actor.projectedPos.z < 400.0f)) {
             func_80A5B954(&D_80A60908[this->unk_1CE], 0.0015f);
         }

@@ -231,7 +231,7 @@ void func_809AB4A8(ObjGrassCarry* this, PlayState* play) {
         this->actor.playerHeightRel = Actor_HeightDiff(&this->actor, &player->actor);
         this->actor.xyzDistToPlayerSq = SQ(this->actor.xzDistToPlayer) + SQ(this->actor.playerHeightRel);
         this->actor.yawTowardsPlayer = Actor_WorldYawTowardActor(&this->actor, &player->actor);
-        Actor_LiftActor(&this->actor, play);
+        Actor_OfferCarry(&this->actor, play);
     }
 }
 
@@ -283,7 +283,8 @@ void func_809AB77C(ObjGrassCarry* this, PlayState* play) {
 
     this->unk_19A--;
 
-    if ((this->actor.bgCheckFlags & (1 | 2 | 8)) || temp_v0 || (this->unk_19A <= 0)) {
+    if ((this->actor.bgCheckFlags & (BGCHECKFLAG_GROUND | BGCHECKFLAG_GROUND_TOUCH | BGCHECKFLAG_WALL)) || temp_v0 ||
+        (this->unk_19A <= 0)) {
         func_809AAFE8(&this->actor.world.pos, play);
         func_809AAF9C(&this->actor.world.pos, this->unk_198, play);
 
@@ -294,14 +295,14 @@ void func_809AB77C(ObjGrassCarry* this, PlayState* play) {
             this->actor.room = this->unk_190->actor.room;
         }
 
-        if (!(this->actor.bgCheckFlags & 0x20)) {
+        if (!(this->actor.bgCheckFlags & BGCHECKFLAG_WATER)) {
             SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 20, NA_SE_EV_PLANT_BROKEN);
         }
         func_809AB428(this);
         return;
     }
 
-    if (this->actor.bgCheckFlags & 0x40) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_WATER_TOUCH) {
         sp5C.y = this->actor.world.pos.y + this->actor.depthInWater;
 
         for (phi_s0 = 0, i = 0; i < 4; i++, phi_s0 += 0x4000) {
@@ -326,7 +327,7 @@ void func_809AB77C(ObjGrassCarry* this, PlayState* play) {
         D_809ABBFC = D_809ABBFC >> 1;
         D_809ABC08 = D_809ABC08 >> 1;
         D_809ABC04 = D_809ABC04 >> 1;
-        this->actor.bgCheckFlags &= ~0x40;
+        this->actor.bgCheckFlags &= ~BGCHECKFLAG_WATER_TOUCH;
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 40, NA_SE_EV_DIVE_INTO_WATER_L);
     }
 

@@ -254,7 +254,7 @@ s32 EnHy_PlayWalkingSound(EnHy* enHy, PlayState* play, f32 distAboveThreshold) {
     u16 sfxId;
     u8 isFootOnGround;
 
-    if (enHy->actor.bgCheckFlags & 0x20) {
+    if (enHy->actor.bgCheckFlags & BGCHECKFLAG_WATER) {
         if (enHy->actor.depthInWater < 20.0f) {
             waterSfxId = NA_SE_PL_WALK_WATER0 - SFX_FLAG;
         } else {

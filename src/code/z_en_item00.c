@@ -299,7 +299,7 @@ void EnItem00_Init(Actor* thisx, PlayState* play) {
     }
 
     if ((getItemId != GI_NONE) && !Actor_HasParent(&this->actor, play)) {
-        Actor_PickUp(&this->actor, play, getItemId, 50.0f, 20.0f);
+        Actor_OfferGetItem(&this->actor, play, getItemId, 50.0f, 20.0f);
     }
 
     this->actionFunc = func_800A6A40;
@@ -362,7 +362,7 @@ void func_800A640C(EnItem00* this, PlayState* play) {
         }
     }
 
-    if ((this->actor.gravity != 0.0f) && !(this->actor.bgCheckFlags & 1)) {
+    if ((this->actor.gravity != 0.0f) && !(this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
         this->actionFunc = func_800A6650;
     }
 }
@@ -387,12 +387,12 @@ void func_800A6650(EnItem00* this, PlayState* play) {
         EffectSsKirakira_SpawnSmall(play, &pos, &sEffectVelocity, &sEffectAccel, &sEffectPrimColor, &sEffectEnvColor);
     }
 
-    if (this->actor.bgCheckFlags & 3) {
+    if (this->actor.bgCheckFlags & (BGCHECKFLAG_GROUND | BGCHECKFLAG_GROUND_TOUCH)) {
         if (this->actor.velocity.y > -2.0f) {
             this->actionFunc = func_800A640C;
         } else {
             this->actor.velocity.y = this->actor.velocity.y * -0.8f;
-            this->actor.bgCheckFlags &= ~1;
+            this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND;
         }
     }
 }
@@ -444,7 +444,7 @@ void func_800A6780(EnItem00* this, PlayState* play) {
         EffectSsKirakira_SpawnSmall(play, &pos, &sEffectVelocity, &sEffectAccel, &sEffectPrimColor, &sEffectEnvColor);
     }
 
-    if (this->actor.bgCheckFlags & 3) {
+    if (this->actor.bgCheckFlags & (BGCHECKFLAG_GROUND | BGCHECKFLAG_GROUND_TOUCH)) {
         this->actionFunc = func_800A640C;
         this->actor.shape.rot.z = 0;
         this->actor.speed = 0.0f;
@@ -456,7 +456,7 @@ void func_800A6A40(EnItem00* this, PlayState* play) {
 
     if (this->getItemId != GI_NONE) {
         if (!Actor_HasParent(&this->actor, play)) {
-            Actor_PickUp(&this->actor, play, this->getItemId, 50.0f, 80.0f);
+            Actor_OfferGetItem(&this->actor, play, this->getItemId, 50.0f, 80.0f);
             this->unk152++;
         } else {
             this->getItemId = GI_NONE;
@@ -646,7 +646,7 @@ void EnItem00_Update(Actor* thisx, PlayState* play) {
 
     if (getItemId != GI_NONE) {
         if (!Actor_HasParent(&this->actor, play)) {
-            Actor_PickUp(&this->actor, play, getItemId, 50.0f, 20.0f);
+            Actor_OfferGetItem(&this->actor, play, getItemId, 50.0f, 20.0f);
         }
     }
 
@@ -1128,16 +1128,17 @@ void Item_DropCollectibleRandom(PlayState* play, Actor* fromActor, Vec3f* spawnP
 
         if (fromActor != NULL) {
             dropFlag = fromActor->dropFlag;
-            if (dropFlag != 0) {
-                if (fromActor->dropFlag & 1) {
+
+            if (dropFlag != DROPFLAG_NONE) {
+                if (fromActor->dropFlag & DROPFLAG_1) {
                     params = 0x10;
                     dropId = ITEM00_ARROWS_30;
                     dropQuantity = 1;
-                } else if (fromActor->dropFlag & 2) {
+                } else if (fromActor->dropFlag & DROPFLAG_2) {
                     params = 0x10;
                     dropId = ITEM00_RECOVERY_HEART;
                     dropQuantity = 1;
-                } else if (fromActor->dropFlag & 0x20) {
+                } else if (fromActor->dropFlag & DROPFLAG_20) {
                     dropId = ITEM00_RUPEE_PURPLE;
                     dropQuantity = 1;
                 }

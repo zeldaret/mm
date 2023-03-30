@@ -274,7 +274,7 @@ void EnAz_Init(Actor* thisx, PlayState* play2) {
         this->collider.dim.yShift *= 1.2f;
     }
     Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 5);
-    if ((this->actor.bgCheckFlags & 0x20) && (this->actor.depthInWater > 22.0f)) {
+    if ((this->actor.bgCheckFlags & BGCHECKFLAG_WATER) && (this->actor.depthInWater > 22.0f)) {
         this->unk_374 |= 0x100;
         this->unk_376 |= 0x100;
     }
@@ -560,7 +560,7 @@ s32 func_80A95B34(PlayState* play, ActorPathing* actorPathing) {
         } else {
             ret = func_80A958B0(play, actorPathing);
         }
-    } else if (this->actor.bgCheckFlags & 1) {
+    } else if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         if (this->unk_374 & 8) {
             SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo, BEAVER_ANIM_WALK, &this->animIndex);
             this->unk_374 &= ~8;
@@ -578,21 +578,21 @@ void func_80A95C5C(EnAz* this, PlayState* play) {
     this->actor.gravity = -1.0f;
     SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo, BEAVER_ANIM_IDLE, &this->animIndex);
     this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_8);
-    this->actor.bgCheckFlags &= ~0x21;
+    this->actor.bgCheckFlags &= ~(BGCHECKFLAG_GROUND | BGCHECKFLAG_WATER);
     this->unk_3C0 = 0;
     this->actionFunc = func_80A95CEC;
 }
 
 void func_80A95CEC(EnAz* this, PlayState* play) {
     if (this->unk_374 & 0x8000) {
-        if (!(this->actor.bgCheckFlags & 1)) {
+        if (!(this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
             this->actor.world.rot.y = this->actor.yawTowardsPlayer;
             this->actor.shape.rot.y = this->actor.world.rot.y;
             this->actor.draw = EnAz_Draw;
             Actor_MoveWithGravity(&this->actor);
             func_800B9010(&this->actor, NA_SE_EV_HONEYCOMB_FALL - SFX_FLAG);
         } else {
-            if (this->actor.bgCheckFlags & 2) {
+            if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND_TOUCH) {
                 Actor_PlaySfx(&this->actor, NA_SE_EN_GERUDOFT_DOWN);
             }
             if (SubS_StartActorCutscene(&this->actor, 0x7C, this->unk_3D0[0], SUBS_CUTSCENE_NORMAL)) {
@@ -613,7 +613,7 @@ void func_80A95DA0(EnAz* this, PlayState* play) {
     SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo, BEAVER_ANIM_SWIM_WITH_SPINNING_TAIL,
                                     &this->animIndex);
     this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8);
-    this->actor.bgCheckFlags &= ~0x21;
+    this->actor.bgCheckFlags &= ~(BGCHECKFLAG_GROUND | BGCHECKFLAG_WATER);
     this->unk_374 |= 0x1000;
     Math_Vec3f_Copy(&this->actor.world.pos, &sp40->curPoint);
     this->actionFunc = func_80A95E88;
@@ -641,7 +641,7 @@ void func_80A95E88(EnAz* this, PlayState* play) {
 }
 
 void func_80A95F94(EnAz* this, PlayState* play) {
-    func_800BE33C(&this->actor.world.pos, &this->actor.home.pos, &this->actor.world.rot, 0);
+    func_800BE33C(&this->actor.world.pos, &this->actor.home.pos, &this->actor.world.rot, false);
     this->unk_39E = 0;
     this->actor.shape.rot.y = this->actor.world.rot.y;
     this->actionFunc = func_80A95FE8;
@@ -656,7 +656,7 @@ void func_80A95FE8(EnAz* this, PlayState* play) {
     }
     if (Actor_WorldDistXYZToPoint(&this->actor, &this->actor.home.pos) > 20.0f) {
         func_800B9010(&this->actor, NA_SE_EV_BEAVER_SWIM_MOTOR - SFX_FLAG);
-        func_800BE33C(&this->actor.world.pos, &this->actor.home.pos, &this->actor.world.rot, 0);
+        func_800BE33C(&this->actor.world.pos, &this->actor.home.pos, &this->actor.world.rot, false);
         Math_SmoothStepToS(&this->actor.shape.rot.x, this->actor.world.rot.x, 3, 0xE38, 0x38E);
         Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.world.rot.y, 3, 0xE38, 0x38E);
         this->actor.shape.rot.z = 0;
@@ -668,7 +668,7 @@ void func_80A95FE8(EnAz* this, PlayState* play) {
         this->actor.speed = 0.0f;
         Math_SmoothStepToS(&this->actor.shape.rot.x, 0, 3, 0x1000, 0x100);
         Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.world.rot.y, 3, 0x1038, 0x100);
-        if (this->actor.bgCheckFlags & 1) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
             this->actor.shape.rot.x = 0;
             this->actor.gravity = 0.0f;
             func_80A97C0C(this, play);
@@ -1293,7 +1293,7 @@ void func_80A97410(EnAz* this, PlayState* play) {
         }
     }
     if (this->unk_378 == 3) {
-        func_80151938(play, this->actor.textId);
+        Message_ContinueTextbox(play, this->actor.textId);
         this->unk_378 = 2;
     } else if (this->unk_378 == 5) {
         Message_StartTextbox(play, this->actor.textId, &this->actor);
@@ -1309,8 +1309,8 @@ void func_80A97410(EnAz* this, PlayState* play) {
                     this->unk_378 = 0;
                 }
             } else {
-                Actor_PickUp(&this->actor, play, this->getItemId, this->actor.xzDistToPlayer,
-                             this->actor.playerHeightRel);
+                Actor_OfferGetItem(&this->actor, play, this->getItemId, this->actor.xzDistToPlayer,
+                                   this->actor.playerHeightRel);
             }
         }
         if (this->unk_378 == 9) {
@@ -1370,7 +1370,7 @@ void func_80A97410(EnAz* this, PlayState* play) {
                 } else {
                     Actor_GetScreenPos(play, &this->actor, &sp56, &sp54);
                     if ((sp56 >= 0) && (sp56 <= SCREEN_WIDTH) && (sp54 >= 0) && (sp54 <= SCREEN_HEIGHT) &&
-                        func_800B8500(&this->actor, play, 120.0f, 120.0f, 0)) {
+                        func_800B8500(&this->actor, play, 120.0f, 120.0f, PLAYER_IA_NONE)) {
                         this->unk_3D2 = func_80A97274(this, play);
                         if ((this->unk_3D2 == 0x10CE) || (this->unk_3D2 == 0x10D4)) {
                             this->actor.textId = 0;
@@ -1420,7 +1420,7 @@ void func_80A97AB4(EnAz* this, PlayState* play) {
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
                     case 0x10D7:
-                        func_80151938(play, 0x10D8);
+                        Message_ContinueTextbox(play, 0x10D8);
                         break;
                     case 0x10D8:
                         if (play->msgCtx.choiceIndex == 0) {
@@ -1434,7 +1434,7 @@ void func_80A97AB4(EnAz* this, PlayState* play) {
                             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_24_04)) {
                                 CLEAR_WEEKEVENTREG(WEEKEVENTREG_24_04);
                             }
-                            func_80151938(play, 0x10D9);
+                            Message_ContinueTextbox(play, 0x10D9);
                         }
                         break;
                     case 0x10D9:
@@ -1515,9 +1515,9 @@ void func_80A97EAC(EnAz* this, PlayState* play) {
     this->actor.velocity.y = 6.0f;
     SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo, BEAVER_ANIM_SWIM_WITH_SPINNING_TAIL,
                                     &this->animIndex);
-    this->actor.flags |= ACTOR_FLAG_8000000;
+    this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
     this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_8);
-    this->actor.bgCheckFlags &= ~0x21;
+    this->actor.bgCheckFlags &= ~(BGCHECKFLAG_GROUND | BGCHECKFLAG_WATER);
     this->unk_374 |= 0x1000;
     this->unk_3C2 = 0;
     this->unk_3C4 = 0;
@@ -1589,7 +1589,7 @@ void func_80A982E0(PlayState* play, ActorPathing* actorPathing) {
     Vec3f sp28;
 
     actorPathing->curPoint.x = actorPathing->points[actorPathing->curPointIndex].x;
-    if (this->actor.bgCheckFlags & 1) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         actorPathing->curPoint.y = actorPathing->points[actorPathing->curPointIndex].y;
     } else {
         actorPathing->curPoint.y = actorPathing->points[actorPathing->curPointIndex].y - this->unk_3A4;
@@ -1627,7 +1627,7 @@ void EnAz_Update(Actor* thisx, PlayState* play2) {
     EnAz* this = THIS;
 
     this->unk_374 &= ~0x100;
-    if ((this->actor.bgCheckFlags & 0x20) && (this->actor.depthInWater > 22.0f)) {
+    if ((this->actor.bgCheckFlags & BGCHECKFLAG_WATER) && (this->actor.depthInWater > 22.0f)) {
         if (!(this->unk_376 & 0x100)) {
             this->unk_374 |= 0x200;
         }
