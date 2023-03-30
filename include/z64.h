@@ -20,11 +20,14 @@
 #include "color.h"
 #include "ichain.h"
 #include "sequence.h"
+#include "seqcmd.h"
 #include "sfx.h"
 #include "message_data_static.h"
 
 #include "gfxprint.h"
 #include "sys_matrix.h"
+#include "tha.h"
+#include "thga.h"
 #include "z64actor.h"
 #include "z64animation.h"
 #include "z64audio.h"
@@ -37,6 +40,7 @@
 #include "z64eff_footmark.h"
 #include "z64effect.h"
 #include "z64frameadvance.h"
+#include "z64game_over.h"
 #include "z64interface.h"
 #include "z64item.h"
 #include "z64light.h"
@@ -117,20 +121,6 @@ typedef struct {
     /* 0x4 */ void* start;
     /* 0x8 */ void* end;
 } PolygonType2; // size = 0xC
-
-typedef struct {
-    /* 0x0 */ u32    size;
-    /* 0x4 */ void*  bufp;
-    /* 0x8 */ void*  head;
-    /* 0xC */ void*  tail;
-} TwoHeadArena; // size = 0x10
-
-typedef struct {
-    /* 0x0 */ u32    size;
-    /* 0x4 */ Gfx*   bufp;
-    /* 0x8 */ Gfx*   p;
-    /* 0xC */ Gfx*   d;
-} TwoHeadGfxArena; // size = 0x10
 
 typedef struct {
     /* 0x000 */ Gfx taskStart[9];
@@ -501,8 +491,6 @@ typedef void (*ColChkApplyFunc)(struct PlayState*, CollisionCheckContext*, Colli
 typedef void (*ColChkVsFunc)(struct PlayState*, CollisionCheckContext*, Collider*, Collider*);
 typedef s32 (*ColChkLineFunc)(struct PlayState*, CollisionCheckContext*, Collider*, Vec3f*, Vec3f*);
 
-typedef void(*room_draw_func)(struct PlayState* play, Room* room, u32 flags);
-
 typedef struct {
     /* 0x000 */ u8 controllers; // bit 0 is set if controller 1 is plugged in, etc.
     /* 0x001 */ UNK_TYPE1 pad1[0x13];
@@ -566,22 +554,6 @@ typedef struct {
     /* 0x0 */ u8   seqId;
     /* 0x1 */ u8   ambienceId;
 } SequenceContext; // size = 0x2
-
-typedef enum {
-    /*  0 */ GAMEOVER_INACTIVE,
-    /*  1 */ GAMEOVER_DEATH_START,
-    /*  2 */ GAMEOVER_DEATH_WAIT_GROUND,    // wait for player to fall and hit the ground
-    /*  3 */ GAMEOVER_DEATH_FADE_OUT,       // wait before fading out
-    /* 20 */ GAMEOVER_REVIVE_START = 20,
-    /* 21 */ GAMEOVER_REVIVE_RUMBLE,
-    /* 22 */ GAMEOVER_REVIVE_WAIT_GROUND,   // wait for player to fall and hit the ground
-    /* 23 */ GAMEOVER_REVIVE_WAIT_FAIRY,    // wait for the fairy to rise all the way up out of player's body
-    /* 24 */ GAMEOVER_REVIVE_FADE_OUT       // fade out the game over lights as player is revived and gets back up
-} GameOverState;
-
-typedef struct {
-    /* 0x0 */ u16 state;
-} GameOverContext; // size = 0x2
 
 typedef struct PlayState {
     /* 0x00000 */ GameState state;

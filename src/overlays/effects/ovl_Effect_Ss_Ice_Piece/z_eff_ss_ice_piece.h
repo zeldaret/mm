@@ -11,6 +11,4 @@ typedef struct {
     /* 0x28 */ s32 life;
 } EffectSsIcePieceInitParams; // size = 0xC
 
-extern const EffectSsInit Effect_Ss_Ice_Piece_InitVars;
-
 #endif

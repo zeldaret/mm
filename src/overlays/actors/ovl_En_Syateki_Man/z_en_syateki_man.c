@@ -404,7 +404,7 @@ void EnSyatekiMan_Swamp_HandleNormalMessage(EnSyatekiMan* this, PlayState* play)
                 func_80123F2C(play, 80);
                 this->shootingGameState = SG_GAME_STATE_RUNNING;
                 this->actionFunc = EnSyatekiMan_Swamp_StartGame;
-                func_801A2BB8(NA_BGM_TIMED_MINI_GAME);
+                Audio_PlaySubBgm(NA_BGM_TIMED_MINI_GAME);
                 break;
 
             case 0xA32: // You have to try harder!
@@ -762,7 +762,7 @@ void EnSyatekiMan_Town_HandleNormalMessage(EnSyatekiMan* this, PlayState* play) 
                 Interface_InitMinigame(play);
                 func_80123F2C(play, 0x63);
                 this->shootingGameState = SG_GAME_STATE_RUNNING;
-                func_801A2BB8(NA_BGM_TIMED_MINI_GAME);
+                Audio_PlaySubBgm(NA_BGM_TIMED_MINI_GAME);
                 this->actionFunc = EnSyatekiMan_Town_StartGame;
                 break;
 
@@ -1078,7 +1078,7 @@ void EnSyatekiMan_Swamp_RunGame(EnSyatekiMan* this, PlayState* play) {
         this->currentWave = 0;
         player->stateFlags1 |= PLAYER_STATE1_20;
         sHasSpawnedGuaysForThisWave = false;
-        func_801A2C20();
+        Audio_StopSubBgm();
         this->actionFunc = EnSyatekiMan_Swamp_EndGame;
     } else if ((this->currentWave == 4) && (this->wolfosFlags == 0) &&
                (this->perGameVar2.bonusDekuScrubHitCounter == 2)) {
@@ -1087,7 +1087,7 @@ void EnSyatekiMan_Swamp_RunGame(EnSyatekiMan* this, PlayState* play) {
         this->currentWave = 0;
         player->stateFlags1 |= PLAYER_STATE1_20;
         sHasSpawnedGuaysForThisWave = false;
-        func_801A2C20();
+        Audio_StopSubBgm();
         this->shootingGameState = SG_GAME_STATE_GIVING_BONUS;
         if (this->score == 2120) {
             Interface_SetPerfectLetters(play, PERFECT_LETTERS_TYPE_2);
@@ -1355,7 +1355,7 @@ void EnSyatekiMan_Town_RunGame(EnSyatekiMan* this, PlayState* play) {
             player->stateFlags1 |= PLAYER_STATE1_20;
             sModFromLosingTime = 0;
             this->actor.draw = EnSyatekiMan_Draw;
-            func_801A2C20();
+            Audio_StopSubBgm();
             this->actionFunc = EnSyatekiMan_Town_EndGame;
             if (this->score == 50) {
                 Audio_PlayFanfare(NA_BGM_GET_ITEM | 0x900);

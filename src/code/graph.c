@@ -33,7 +33,7 @@ void Graph_FaultClient(void) {
 }
 
 void Graph_InitTHGA(TwoHeadGfxArena* arena, Gfx* buffer, s32 size) {
-    THGA_Ct(arena, buffer, size);
+    THGA_Init(arena, buffer, size);
 }
 
 void Graph_SetNextGfxPool(GraphicsContext* gfxCtx) {

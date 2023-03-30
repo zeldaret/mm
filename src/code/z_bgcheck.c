@@ -1,4 +1,3 @@
-#include "prevent_bss_reordering.h"
 #include "global.h"
 #include "fault.h"
 #include "vt.h"
@@ -141,7 +140,7 @@ void DynaSSNodeList_Init(PlayState* play, DynaSSNodeList* list) {
 }
 
 void DynaSSNodeList_Alloc(PlayState* play, DynaSSNodeList* list, u32 numNodes) {
-    list->tbl = (SSNode*)THA_AllocEndAlign(&play->state.heap, numNodes * sizeof(SSNode), -2);
+    list->tbl = (SSNode*)THA_AllocTailAlign(&play->state.heap, numNodes * sizeof(SSNode), -2);
     list->maxNodes = numNodes;
     list->count = 0;
 }
@@ -1592,7 +1591,7 @@ void BgCheck_Allocate(CollisionContext* colCtx, PlayState* play, CollisionHeader
             colCtx->subdivAmount.z = 16;
         }
     }
-    colCtx->lookupTbl = THA_AllocEndAlign(
+    colCtx->lookupTbl = THA_AllocTailAlign(
         &play->state.heap,
         colCtx->subdivAmount.x * sizeof(StaticLookup) * colCtx->subdivAmount.y * colCtx->subdivAmount.z, ~1);
     if (colCtx->lookupTbl == NULL) {
@@ -2479,8 +2478,8 @@ void SSNodeList_Init(SSNodeList* this) {
 void SSNodeList_Alloc(PlayState* play, SSNodeList* this, s32 tblMax, s32 numPolys) {
     this->max = tblMax;
     this->count = 0;
-    this->tbl = THA_AllocEndAlign(&play->state.heap, tblMax * sizeof(SSNode), -2);
-    this->polyCheckTbl = THA_AllocEndAlign16(&play->state.heap, numPolys * sizeof(u8));
+    this->tbl = THA_AllocTailAlign(&play->state.heap, tblMax * sizeof(SSNode), -2);
+    this->polyCheckTbl = THA_AllocTailAlign16(&play->state.heap, numPolys * sizeof(u8));
 
     if (this->polyCheckTbl == NULL) {
         sprintf(D_801ED950, "this->polygon_check == NULL(game_alloc() MemoryAllocationError.)\n");
@@ -2622,7 +2621,7 @@ void DynaPoly_NullPolyList(CollisionPoly** polyList) {
  * Allocate dyna.polyList
  */
 void DynaPoly_AllocPolyList(PlayState* play, CollisionPoly** polyList, s32 numPolys) {
-    *polyList = THA_AllocEndAlign(&play->state.heap, numPolys * sizeof(CollisionPoly), -2);
+    *polyList = THA_AllocTailAlign(&play->state.heap, numPolys * sizeof(CollisionPoly), -2);
 }
 
 /**
@@ -2636,7 +2635,7 @@ void DynaPoly_NullVtxList(Vec3s** vtxList) {
  * Allocate dyna.vtxList
  */
 void DynaPoly_AllocVtxList(PlayState* play, Vec3s** vtxList, s32 numVtx) {
-    *vtxList = THA_AllocEndAlign(&play->state.heap, numVtx * sizeof(Vec3s), -2);
+    *vtxList = THA_AllocTailAlign(&play->state.heap, numVtx * sizeof(Vec3s), -2);
 }
 
 /**
@@ -2651,7 +2650,7 @@ void DynaPoly_InitWaterBoxList(DynaWaterBoxList* waterBoxList) {
  * Allocate dyna.waterBoxList
  */
 void DynaPoly_AllocWaterBoxList(PlayState* play, DynaWaterBoxList* waterBoxList, s32 numWaterBoxes) {
-    waterBoxList->boxes = THA_AllocEndAlign(&play->state.heap, numWaterBoxes * sizeof(WaterBox), -2);
+    waterBoxList->boxes = THA_AllocTailAlign(&play->state.heap, numWaterBoxes * sizeof(WaterBox), -2);
 }
 
 /**

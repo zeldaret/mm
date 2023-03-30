@@ -373,7 +373,7 @@ void func_80A6F9DC(EnMm3* this, PlayState* play) {
 void func_80A6FBA0(EnMm3* this) {
     AudioSfx_MuteBanks((1 << BANK_PLAYER) | (1 << BANK_ITEM) | (1 << BANK_ENV) | (1 << BANK_ENEMY) |
                        (1 << BANK_OCARINA) | (1 << BANK_VOICE));
-    func_801A0238(0, 5);
+    Audio_SetMainBgmVolume(0, 5);
     SET_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_WAIT);
     CLEAR_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_TIME_PASSED);
     this->actionFunc = func_80A6FBFC;
@@ -400,7 +400,7 @@ void func_80A6FBFC(EnMm3* this, PlayState* play) {
 
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         AudioSfx_MuteBanks(0);
-        func_801A0238(0x7F, 5);
+        Audio_SetMainBgmVolume(0x7F, 5);
         Message_StartTextbox(play, 0x2791, &this->actor);
         this->unk_2B4 = 0x2791;
         this->unk_2AC = 7;

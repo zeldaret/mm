@@ -19,7 +19,7 @@ u32 EffectSsFhgFlash_Init(PlayState* play, u32 index, EffectSs* this, void* init
 void EffectSsFhgFlash_Update(PlayState* play, u32 index, EffectSs* this);
 void EffectSsFhgFlash_Draw(PlayState* play, u32 index, EffectSs* this);
 
-const EffectSsInit Effect_Ss_Fhg_Flash_InitVars = {
+EffectSsInit Effect_Ss_Fhg_Flash_InitVars = {
     EFFECT_SS_FHG_FLASH,
     EffectSsFhgFlash_Init,
 };
