@@ -130,7 +130,7 @@ void Overlay_Relocate(void* allocatedRamAddr, OverlayRelocationSection* ovlReloc
 }
 
 size_t Overlay_Load(uintptr_t vromStart, uintptr_t vromEnd, uintptr_t vramStart, uintptr_t vramEnd,
-                         void* allocatedRamAddr) {
+                    void* allocatedRamAddr) {
     s32 pad[2];
     s32 size = vromEnd - vromStart;
     void* end;

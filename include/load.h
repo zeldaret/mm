@@ -33,7 +33,7 @@ typedef struct OverlayRelocationSection {
     /* 0x14 */ u32 relocations[1]; // size is nRelocations
 } OverlayRelocationSection; // size >= 0x18
 
-size_t Overlay_Load(uintptr_t vRomStart, uintptr_t vRomEnd, uintptr_t vRamStart, uintptr_t vRamEnd, void* allocatedVRamAddr);
-void* Overlay_AllocateAndLoad(uintptr_t vRomStart, uintptr_t vRomEnd, uintptr_t vRamStart, uintptr_t vRamEnd);
+size_t Overlay_Load(uintptr_t vromStart, uintptr_t vromEnd, uintptr_t vramStart, uintptr_t vramEnd, void* allocatedRamAddr);
+void* Overlay_AllocateAndLoad(uintptr_t vromStart, uintptr_t vromEnd, uintptr_t vramStart, uintptr_t vramEnd);
 
 #endif

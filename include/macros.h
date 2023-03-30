@@ -35,8 +35,8 @@
     do {                                                 \
         GameState* state = curState;                     \
                                                          \
-        (state)->init = nextInit;                        \
-        (state)->size = nextSize;                        \
+        state->init = nextInit;                          \
+        state->size = nextSize;                          \
     } while (0)
 
 #define GET_PLAYER(play) ((Player*)(play)->actorCtx.actorLists[ACTORCAT_PLAYER].first)
@@ -140,10 +140,6 @@ extern GraphicsContext* __gfxCtx;
 #define CLAMP_MAX(x, max) ((x) > (max) ? (max) : (x))
 #define CLAMP_MIN(x, min) ((x) < (min) ? (min) : (x))
 
-#define RGBA16_GET_R(pixel) (((pixel) >> 11) & 0x1F)
-#define RGBA16_GET_G(pixel) (((pixel) >> 6) & 0x1F)
-#define RGBA16_GET_B(pixel) (((pixel) >> 1) & 0x1F)
-
 #define ROUND(x) (s32)(((x) >= 0.0) ? ((x) + 0.5) : ((x) - 0.5))
 
 #define SWAP(type, a, b)    \
@@ -153,8 +149,5 @@ extern GraphicsContext* __gfxCtx;
         (b) = _temp;        \
     }                       \
     (void)0
-
-#define OVERLAY_RELOCATION_OFFSET(overlayEntry) ((uintptr_t)((overlayEntry)->vramStart) - (uintptr_t)((overlayEntry)->loadedRamAddr))
-#define VRAM_PTR_SIZE(entry) ((uintptr_t)((entry)->vramEnd) - (uintptr_t)((entry)->vramStart))
 
 #endif // MACROS_H

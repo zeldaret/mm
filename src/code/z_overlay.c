@@ -40,13 +40,13 @@ s32 TransitionOverlay_Load(TransitionOverlay* overlayEntry) {
         return 3;
     }
     if (Lib_PhysicalToVirtual(overlayEntry->loadInfo.addr) == NULL) {
-        loadedRamAddr = ZeldaArena_Malloc(VRAM_PTR_SIZE(overlayEntry));
+        loadedRamAddr = ZeldaArena_Malloc((uintptr_t)overlayEntry->vramEnd - (uintptr_t)overlayEntry->vramStart);
 
         if (loadedRamAddr == NULL) {
             return -1;
         }
-        Overlay_Load(overlayEntry->vromStart, overlayEntry->vromEnd, overlayEntry->vramStart,
-                          overlayEntry->vramEnd, loadedRamAddr);
+        Overlay_Load(overlayEntry->vromStart, overlayEntry->vromEnd, overlayEntry->vramStart, overlayEntry->vramEnd,
+                     loadedRamAddr);
         overlayEntry->loadInfo.addr = Lib_VirtualToPhysical(loadedRamAddr);
         overlayEntry->loadInfo.count = 1;
         return 0;
