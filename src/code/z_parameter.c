@@ -1880,7 +1880,7 @@ void Interface_UpdateButtonsPart2(PlayState* play) {
     } else if (CHECK_EVENTINF(EVENTINF_34)) {
         // Deku playground minigame
         if (player->stateFlags3 & PLAYER_STATE3_1000000) {
-            if (gSaveContext.save.inventory.items[SLOT_NUT] == ITEM_NUT) {
+            if (gSaveContext.save.saveInfo.inventory.items[SLOT_NUT] == ITEM_NUT) {
                 BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) = ITEM_NUT;
                 Interface_LoadItemIconImpl(play, EQUIP_SLOT_B);
             } else {
@@ -1908,7 +1908,7 @@ void Interface_UpdateButtonsPart2(PlayState* play) {
         }
     } else if (player->stateFlags3 & PLAYER_STATE3_1000000) {
         // Nuts on B (from flying as Deku Link)
-        if (gSaveContext.save.inventory.items[SLOT_NUT] == ITEM_NUT) {
+        if (gSaveContext.save.saveInfo.inventory.items[SLOT_NUT] == ITEM_NUT) {
             if (BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) != ITEM_NUT) {
                 BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) = ITEM_NUT;
                 Interface_LoadItemIconImpl(play, EQUIP_SLOT_B);
@@ -1925,7 +1925,7 @@ void Interface_UpdateButtonsPart2(PlayState* play) {
             gSaveContext.buttonStatus[EQUIP_SLOT_C_DOWN] = BTN_DISABLED;
             gSaveContext.buttonStatus[EQUIP_SLOT_C_RIGHT] = BTN_DISABLED;
         }
-    } else if (!gSaveContext.save.playerData.isMagicAcquired && (CUR_FORM == PLAYER_FORM_DEKU) &&
+    } else if (!gSaveContext.save.saveInfo.playerData.isMagicAcquired && (CUR_FORM == PLAYER_FORM_DEKU) &&
                (BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) == ITEM_NUT)) {
         // Nuts on B (as Deku Link)
         BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) = ITEM_FD;
@@ -2324,7 +2324,7 @@ void Interface_UpdateButtonsPart1(PlayState* play) {
 
                             if (play->unk_1887C >= 2) {
                                 Interface_LoadItemIconImpl(play, EQUIP_SLOT_B);
-                            } else if (gSaveContext.save.inventory.items[SLOT_BOW] == ITEM_NONE) {
+                            } else if (gSaveContext.save.saveInfo.inventory.items[SLOT_BOW] == ITEM_NONE) {
                                 BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) = ITEM_NONE;
                             } else {
                                 Interface_LoadItemIconImpl(play, EQUIP_SLOT_B);
@@ -2382,7 +2382,7 @@ void Interface_UpdateButtonsPart1(PlayState* play) {
 
                 if (play->unk_1887C >= 2) {
                     Interface_LoadItemIconImpl(play, EQUIP_SLOT_B);
-                } else if (gSaveContext.save.inventory.items[SLOT_BOW] == ITEM_NONE) {
+                } else if (gSaveContext.save.saveInfo.inventory.items[SLOT_BOW] == ITEM_NONE) {
                     BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) = ITEM_NONE;
                 } else {
                     Interface_LoadItemIconImpl(play, EQUIP_SLOT_B);
