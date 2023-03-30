@@ -65,7 +65,7 @@ void KaleidoManager_Init(PlayState* play) {
         }
     }
 
-    sKaleidoAreaPtr = THA_AllocEndAlign16(&play->state.heap, largestSize);
+    sKaleidoAreaPtr = THA_AllocTailAlign16(&play->state.heap, largestSize);
     gKaleidoMgrCurOvl = NULL;
     Fault_AddAddrConvClient(&sKaleidoMgrFaultAddrConvClient, KaleidoManager_FaultAddrConv, NULL);
 }

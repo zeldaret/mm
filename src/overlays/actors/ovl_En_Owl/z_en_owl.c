@@ -327,12 +327,12 @@ void func_8095AD54(EnOwl* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_CHOICE) && Message_ShouldAdvance(play)) {
         switch (play->msgCtx.choiceIndex) {
             case OWL_REPEAT:
-                func_80151938(play, 0x7D1);
+                Message_ContinueTextbox(play, 0x7D1);
                 this->actionFunc = func_8095AE00;
                 break;
 
             case OWL_OK:
-                func_80151938(play, 0x7D3);
+                Message_ContinueTextbox(play, 0x7D3);
                 this->actionFunc = func_8095ABF0;
                 break;
         }
@@ -341,14 +341,14 @@ void func_8095AD54(EnOwl* this, PlayState* play) {
 
 void func_8095AE00(EnOwl* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-        func_80151938(play, 0x7D2);
+        Message_ContinueTextbox(play, 0x7D2);
         this->actionFunc = func_8095AD54;
     }
 }
 
 void func_8095AE60(EnOwl* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-        func_80151938(play, 0x7D1);
+        Message_ContinueTextbox(play, 0x7D1);
         this->actionFunc = func_8095AE00;
     }
 }
@@ -367,10 +367,10 @@ void func_8095AF2C(EnOwl* this, PlayState* play) {
             if (Message_ShouldAdvance(play)) {
                 if (play->msgCtx.currentTextId == 0xBFE) {
                     func_8095ACEC(this);
-                    func_801477B4(play);
+                    Message_CloseTextbox(play);
                     this->actionFunc = func_8095ABF0;
                 } else {
-                    func_80151938(play, play->msgCtx.currentTextId + 1);
+                    Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                 }
             }
             break;
@@ -614,16 +614,16 @@ void func_8095BA84(EnOwl* this, PlayState* play) {
                             case 0:
                                 func_8019F208();
                                 if (CHECK_WEEKEVENTREG(WEEKEVENTREG_09_40)) {
-                                    func_80151938(play, 0xBF4);
+                                    Message_ContinueTextbox(play, 0xBF4);
                                 } else {
                                     SET_WEEKEVENTREG(WEEKEVENTREG_09_40);
-                                    func_80151938(play, 0xBED);
+                                    Message_ContinueTextbox(play, 0xBED);
                                 }
                                 break;
 
                             case 1:
                                 func_8019F230();
-                                func_80151938(play, 0xBEF);
+                                Message_ContinueTextbox(play, 0xBEF);
                                 break;
                         }
                         break;
@@ -632,12 +632,12 @@ void func_8095BA84(EnOwl* this, PlayState* play) {
                         switch (play->msgCtx.choiceIndex) {
                             case 0:
                                 func_8019F208();
-                                func_80151938(play, 0xBF4);
+                                Message_ContinueTextbox(play, 0xBF4);
                                 return;
 
                             case 1:
                                 func_8019F230();
-                                func_80151938(play, 0xBF3);
+                                Message_ContinueTextbox(play, 0xBF3);
                                 return;
                         }
                         break;
@@ -650,21 +650,21 @@ void func_8095BA84(EnOwl* this, PlayState* play) {
                 switch (play->msgCtx.currentTextId) {
                     case 0xBEA:
                         SET_WEEKEVENTREG(WEEKEVENTREG_09_20);
-                        func_80151938(play, 0xBEB);
+                        Message_ContinueTextbox(play, 0xBEB);
                         break;
 
                     case 0xBEB:
                     case 0xBF0:
-                        func_80151938(play, 0xBEC);
+                        Message_ContinueTextbox(play, 0xBEC);
                         break;
 
                     case 0xBED:
                     case 0xBF4:
-                        func_80151938(play, 0xBEE);
+                        Message_ContinueTextbox(play, 0xBEE);
                         break;
 
                     case 0xBEE:
-                        func_801477B4(play);
+                        Message_CloseTextbox(play);
                         SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_FANFARE, 0);
                         EnOwl_ChangeMode(this, func_8095B9FC, func_8095C484, &this->skelAnime1, &object_owl_Anim_00CB94,
                                          0.0f);
@@ -680,7 +680,7 @@ void func_8095BA84(EnOwl* this, PlayState* play) {
 
                     case 0xBEF:
                     case 0xBF3:
-                        func_801477B4(play);
+                        Message_CloseTextbox(play);
                         SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_FANFARE, 0);
                         func_8095ACEC(this);
                         this->actor.flags &= ~ACTOR_FLAG_10000;
@@ -689,11 +689,11 @@ void func_8095BA84(EnOwl* this, PlayState* play) {
                         break;
 
                     case 0xBF1:
-                        func_80151938(play, 0xBF2);
+                        Message_ContinueTextbox(play, 0xBF2);
                         break;
 
                     case 0xBF5:
-                        func_801477B4(play);
+                        Message_CloseTextbox(play);
                         SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_FANFARE, 0);
                         this->actor.flags &= ~ACTOR_FLAG_10000;
                         EnOwl_ChangeMode(this, func_8095B3DC, func_8095C484, &this->skelAnime1, &object_owl_Anim_00CB94,

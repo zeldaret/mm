@@ -203,7 +203,7 @@ void func_80C102D4(EnRecepgirl* this, PlayState* play) {
                 this->actor.textId = 0x2AE0;
             }
         }
-        func_80151938(play, this->actor.textId);
+        Message_ContinueTextbox(play, this->actor.textId);
     }
 }
 
@@ -540,7 +540,7 @@ void func_80C102D4(EnRecepgirl* this, PlayState* play) {
                 this->actor.textId = 0x2AE0; // drawing room on the right, don't go in without an appointment
             }
         }
-        func_80151938(play, this->actor.textId);
+        Message_ContinueTextbox(play, this->actor.textId);
     }
 }
 ```

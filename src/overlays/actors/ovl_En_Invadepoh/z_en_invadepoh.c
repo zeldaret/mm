@@ -2186,7 +2186,7 @@ void func_80B47830(EnInvadepoh* this) {
     this->collider.base.acFlags &= ~AC_ON;
     this->collider.base.ocFlags1 |= OC1_ON;
     Animation_PlayLoop(&this->skelAnime, &gAlienJerkingAnim);
-    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 16);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 16);
     this->alienAlpha = 255;
     this->actor.draw = func_80B4DB14;
     this->drawAlien = true;
@@ -3415,7 +3415,7 @@ void func_80B4ADCC(EnInvadepoh* this, PlayState* play) {
         if (this->textId == 0x3333) {
             func_80B4AEC0(this);
         } else if (this->textId == 0x3334) {
-            func_801477B4(play);
+            Message_CloseTextbox(play);
             func_80B4B024(this);
         }
     }
@@ -3430,7 +3430,7 @@ void func_80B4AEDC(EnInvadepoh* this, PlayState* play) {
     if (this->actionTimer > 0) {
         this->actionTimer--;
         if (this->actionTimer == 0) {
-            func_801477B4(play);
+            Message_CloseTextbox(play);
         }
     }
     if (Actor_HasParent(&this->actor, play)) {
@@ -3438,7 +3438,7 @@ void func_80B4AEDC(EnInvadepoh* this, PlayState* play) {
         SET_WEEKEVENTREG(WEEKEVENTREG_22_02);
         func_80B4AF80(this);
     } else {
-        Actor_PickUp(&this->actor, play, GI_MILK_BOTTLE, 2000.0f, 2000.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_MILK_BOTTLE, 2000.0f, 2000.0f);
     }
 }
 

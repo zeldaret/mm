@@ -270,7 +270,7 @@ void func_80893DD4(EnTite* this) {
     this->drawDmgEffScale = 0.5f;
     this->drawDmgEffFrozenSteamScale = 0.75f;
     this->drawDmgEffAlpha = 1.0f;
-    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 80);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 80);
     this->actor.flags &= ~ACTOR_FLAG_200;
 }
 
@@ -960,7 +960,7 @@ void func_80895FF8(EnTite* this, PlayState* play) {
             if (this->actor.colChkInfo.damageEffect != 0xF) {
                 if (this->actor.colChkInfo.damageEffect == 5) {
                     this->unk_2BC = 40;
-                    Actor_SetColorFilter(&this->actor, 0, 200, 0, 40);
+                    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 200, COLORFILTER_BUFFLAG_OPA, 40);
                     Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_FREEZE);
                     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_LARGE;
                     this->drawDmgEffScale = 0.5f;
@@ -971,7 +971,7 @@ void func_80895FF8(EnTite* this, PlayState* play) {
 
                 if (this->actor.colChkInfo.damageEffect == 1) {
                     this->unk_2BC = 40;
-                    Actor_SetColorFilter(&this->actor, 0, 200, 0, 40);
+                    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 200, COLORFILTER_BUFFLAG_OPA, 40);
                     Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_FREEZE);
                     func_80894DD0(this);
                     return;
@@ -1000,7 +1000,7 @@ void func_80895FF8(EnTite* this, PlayState* play) {
                                 CLEAR_TAG_LARGE_LIGHT_RAYS);
                 }
 
-                Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 8);
+                Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 8);
 
                 if (this->actor.colChkInfo.health == 0) {
                     func_80895020(this, play);
