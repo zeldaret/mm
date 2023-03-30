@@ -12,6 +12,4 @@ typedef struct {
     /* 0x28 */ u8 drawMode;
 } EffectSsBomb2InitParams; // size = 0x30
 
-extern const EffectSsInit Effect_Ss_Bomb2_InitVars;
-
 #endif

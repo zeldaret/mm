@@ -800,7 +800,7 @@ void EnKakasi_DancingRemark(EnKakasi* this, PlayState* play) {
         if (currentDay == 3 && gSaveContext.save.isNight) {
             EnKakasi_SetupDigAway(this);
         } else {
-            func_801A2BB8(NA_BGM_SARIAS_SONG);
+            Audio_PlaySubBgm(NA_BGM_SARIAS_SONG);
             EnKakasi_SetupDanceNightAway(this);
         }
     }
@@ -934,7 +934,7 @@ void EnKakasi_DancingNightAway(EnKakasi* this, PlayState* play) {
                 func_80169EFC(&play->state);
 
                 //! FAKE
-                if (0) {}
+                if (1) {}
 
                 if (gSaveContext.save.time > CLOCK_TIME(18, 0) || gSaveContext.save.time < CLOCK_TIME(6, 0)) {
                     gSaveContext.save.time = CLOCK_TIME(6, 0);

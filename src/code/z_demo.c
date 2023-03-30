@@ -1,4 +1,3 @@
-#include "prevent_bss_reordering.h"
 #include "global.h"
 #include "z64quake.h"
 #include "z64rumble.h"
@@ -396,9 +395,9 @@ void Cutscene_Command_FadeSequence(PlayState* play, CutsceneContext* csCtx, CsCm
         u8 fadeTimer = cmd->endFrame - cmd->startFrame;
 
         if (cmd->type == 2) {
-            Audio_QueueSeqCmd((fadeTimer << 0x10) | 0x110000FF);
+            SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_FANFARE, fadeTimer);
         } else {
-            Audio_QueueSeqCmd((fadeTimer << 0x10) | NA_BGM_STOP);
+            SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_BGM_MAIN, fadeTimer);
         }
     }
 }
@@ -471,7 +470,7 @@ void func_800EADB0(PlayState* play, CutsceneContext* csCtx, CsCmdBase* cmd) {
                 break;
 
             case 7:
-                seqId = Audio_GetActiveSequence(SEQ_PLAYER_BGM_MAIN);
+                seqId = AudioSeq_GetActiveSeqId(SEQ_PLAYER_BGM_MAIN);
                 break;
 
             case 8:
@@ -492,7 +491,7 @@ void Cutscene_Command_FadeAmbienceSequence(PlayState* play, CutsceneContext* csC
     if (csCtx->frames == cmd->startFrame && csCtx->frames < cmd->endFrame) {
         u8 fadeTimer = cmd->endFrame - cmd->startFrame;
 
-        Audio_QueueSeqCmd((fadeTimer << 0x10) | 0x140000FF);
+        SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_AMBIENCE, fadeTimer);
     }
 }
 

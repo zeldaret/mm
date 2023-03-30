@@ -313,7 +313,7 @@ typedef struct SaveContext {
     /* 0x0000 */ Save save;
     /* 0x100C */ u8 eventInf[8];                        // "event_inf"
     /* 0x1014 */ u8 unk_1014;                           // "stone_set_flag"
-    /* 0x1015 */ u8 unk_1015;
+    /* 0x1015 */ u8 bButtonStatus;
     /* 0x1016 */ u16 jinxTimer;
     /* 0x1018 */ s16 rupeeAccumulator;                  // "lupy_udct"
     /* 0x101A */ u8 bottleTimerStates[BOTTLE_MAX]; // See the `BottleTimerState` enum. "bottle_status"
@@ -572,8 +572,11 @@ typedef enum SunsSongState {
 #define WEEKEVENTREG_07_10 PACK_WEEKEVENTREG_FLAG(7, 0x10)
 #define WEEKEVENTREG_07_20 PACK_WEEKEVENTREG_FLAG(7, 0x20)
 #define WEEKEVENTREG_07_40 PACK_WEEKEVENTREG_FLAG(7, 0x40)
+
 // Entrance cutscene watched to the prison where the deku princess is kept. Also set in door_warp1.c
 #define WEEKEVENTREG_ENTERED_WOODFALL_TEMPLE_PRISON PACK_WEEKEVENTREG_FLAG(7, 0x80)
+
+// Related to Honey & Darling minigame
 #define WEEKEVENTREG_08_01 PACK_WEEKEVENTREG_FLAG(8, 0x01)
 #define WEEKEVENTREG_08_02 PACK_WEEKEVENTREG_FLAG(8, 0x02)
 #define WEEKEVENTREG_08_04 PACK_WEEKEVENTREG_FLAG(8, 0x04)
@@ -1267,6 +1270,7 @@ typedef enum SunsSongState {
 // check if already healed Kamaro the Dancing Ghost
 #define WEEKEVENTREG_82_04 PACK_WEEKEVENTREG_FLAG(82, 0x04)
 
+// Related to Swordsman's log minigame
 #define WEEKEVENTREG_82_08 PACK_WEEKEVENTREG_FLAG(82, 0x08)
 #define WEEKEVENTREG_82_10 PACK_WEEKEVENTREG_FLAG(82, 0x10)
 #define WEEKEVENTREG_82_20 PACK_WEEKEVENTREG_FLAG(82, 0x20)
@@ -1290,6 +1294,7 @@ typedef enum SunsSongState {
 #define WEEKEVENTREG_84_10 PACK_WEEKEVENTREG_FLAG(84, 0x10)
 
 // Unconfirmed: "Obtained Fierce Deity's Mask?"
+// Also related to moon child
 #define WEEKEVENTREG_84_20 PACK_WEEKEVENTREG_FLAG(84, 0x20)
 
 #define WEEKEVENTREG_84_40 PACK_WEEKEVENTREG_FLAG(84, 0x40)
@@ -1354,6 +1359,8 @@ typedef enum SunsSongState {
 #define WEEKEVENTREG_90_04 PACK_WEEKEVENTREG_FLAG(90, 0x04)
 #define WEEKEVENTREG_90_08 PACK_WEEKEVENTREG_FLAG(90, 0x08)
 #define WEEKEVENTREG_90_10 PACK_WEEKEVENTREG_FLAG(90, 0x10)
+
+// Related to Fishermans's jumping minigame
 #define WEEKEVENTREG_90_20 PACK_WEEKEVENTREG_FLAG(90, 0x20)
 #define WEEKEVENTREG_90_40 PACK_WEEKEVENTREG_FLAG(90, 0x40)
 #define WEEKEVENTREG_90_80 PACK_WEEKEVENTREG_FLAG(90, 0x80)
@@ -1450,9 +1457,12 @@ typedef enum SunsSongState {
 
 #define GET_WEEKEVENTREG_RACE_FLAGS (WEEKEVENTREG(92) & WEEKEVENTREG_RACE_FLAGS)
 
-#define SET_WEEKEVENTREG_RACE_FLAGS(flag)             \
-    WEEKEVENTREG(92) &= (u8)~WEEKEVENTREG_RACE_FLAGS; \
-    WEEKEVENTREG(92) = WEEKEVENTREG(92) | (u8)((WEEKEVENTREG(92) & ~WEEKEVENTREG_RACE_FLAGS) | (flag))
+#define SET_WEEKEVENTREG_RACE_FLAGS(flag)                                                                   \
+    {                                                                                                       \
+        WEEKEVENTREG(92) &= (u8)~WEEKEVENTREG_RACE_FLAGS;                                                   \
+        WEEKEVENTREG(92) = WEEKEVENTREG(92) | (u8)((WEEKEVENTREG(92) & ~WEEKEVENTREG_RACE_FLAGS) | (flag)); \
+    }                                                                                                       \
+    (void)0
 
 /**
  * gSaveContext.eventInf
@@ -1490,11 +1500,15 @@ typedef enum SunsSongState {
 #define EVENTINF_32 0x32
 
 #define EVENTINF_33 0x33
+
+// Related to Deku playground minigame
 #define EVENTINF_34 0x34
 #define EVENTINF_35 0x35
 #define EVENTINF_36 0x36
 #define EVENTINF_37 0x37
 #define EVENTINF_40 0x40
+
+// Related to swamp boat (non-minigame)?
 #define EVENTINF_41 0x41
 #define EVENTINF_42 0x42
 #define EVENTINF_43 0x43
