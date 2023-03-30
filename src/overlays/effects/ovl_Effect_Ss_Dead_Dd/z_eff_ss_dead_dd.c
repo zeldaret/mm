@@ -25,7 +25,7 @@ u32 EffectSsDeadDd_Init(PlayState* play, u32 index, EffectSs* this, void* initPa
 void EffectSsDeadDd_Update(PlayState* play, u32 index, EffectSs* this);
 void EffectSsDeadDd_Draw(PlayState* play, u32 index, EffectSs* this);
 
-const EffectSsInit Effect_Ss_Dead_Dd_InitVars = {
+EffectSsInit Effect_Ss_Dead_Dd_InitVars = {
     EFFECT_SS_DEAD_DD,
     EffectSsDeadDd_Init,
 };

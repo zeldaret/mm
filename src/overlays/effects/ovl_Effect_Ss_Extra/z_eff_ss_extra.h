@@ -17,6 +17,4 @@ typedef struct {
     /* 0x26 */ s16 scoreIdx;
 } EffectSsExtraInitParams; // size = 0x28
 
-extern const EffectSsInit Effect_Ss_Extra_InitVars;
-
 #endif
