@@ -193,7 +193,7 @@ void func_808AEAE0(EnBombf* this, PlayState* play) {
                 }
             } else {
                 if (!Actor_HasParent(&this->actor, play)) {
-                    Actor_LiftActor(&this->actor, play);
+                    Actor_OfferCarry(&this->actor, play);
                     return;
                 }
                 player->actor.child = NULL;
@@ -245,7 +245,7 @@ void func_808AEE3C(EnBombf* this, PlayState* play) {
             this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND;
         }
     } else if (this->timer >= 4) {
-        Actor_LiftActor(&this->actor, play);
+        Actor_OfferCarry(&this->actor, play);
     }
 }
 

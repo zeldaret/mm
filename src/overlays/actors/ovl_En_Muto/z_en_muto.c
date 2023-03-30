@@ -199,7 +199,7 @@ void EnMuto_InDialogue(EnMuto* this, PlayState* play) {
     if (!this->isInMayorsRoom) {
         this->yawTowardsTarget = this->actor.yawTowardsPlayer;
         if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-            func_801477B4(play);
+            Message_CloseTextbox(play);
 
             if (this->actor.textId == 0x62C) {
                 SET_WEEKEVENTREG(WEEKEVENTREG_88_08);

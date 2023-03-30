@@ -154,6 +154,7 @@ s32 func_80B3CA20(EnDnp* this) {
             Actor_PlaySfx(&this->actor, NA_SE_EN_DEKUHIME_GREET2);
         }
     } else if ((this->animIndex == EN_DNP_ANIM_UNUSED_WALK) && (this->animIndex == EN_DNP_ANIM_WALK)) {
+        //! @bug: Impossible to reach, && should be an ||
         if (Animation_OnFrame(&this->skelAnime, 7.0f) || Animation_OnFrame(&this->skelAnime, 15.0f)) {
             Actor_PlaySfx(&this->actor, NA_SE_EN_DEKUHIME_WALK);
         }
@@ -217,7 +218,8 @@ s32 func_80B3CDA4(EnDnp* this, PlayState* play) {
     pitch = Math_Vec3f_Pitch(&sp3C, &sp30);
 
     //! FAKE
-    if (1) {};
+    if (1) {}
+
     Math_SmoothStepToS(&this->unk_330, pitch, 3, 0x2AA8, 0x1);
 
     return 1;
@@ -459,7 +461,7 @@ void EnDnp_Update(Actor* thisx, PlayState* play) {
         sp2C = this->collider.dim.radius + 50;
         sp28 = this->collider.dim.height + 30;
         if ((this->unk_322 & 0x400) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_23_20)) {
-            Actor_PickUp(&this->actor, play, GI_MAX, sp2C, sp28);
+            Actor_OfferGetItem(&this->actor, play, GI_MAX, sp2C, sp28);
         }
         func_8013C964(&this->actor, play, sp2C, sp28, PLAYER_IA_NONE, this->unk_322 & 7);
         Actor_SetFocus(&this->actor, 30.0f);

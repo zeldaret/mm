@@ -716,7 +716,7 @@ void DmStk_PlaySfxForEndingCutsceneSecondPart(DmStk* this, PlayState* play) {
             break;
 
         case 1730:
-            Audio_QueueSeqCmd(0x141400FF);
+            SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_AMBIENCE, 20);
             break;
 
         case 1395:
@@ -724,7 +724,7 @@ void DmStk_PlaySfxForEndingCutsceneSecondPart(DmStk* this, PlayState* play) {
             break;
 
         case 1850:
-            Audio_QueueSeqCmd(0x42320000);
+            SEQCMD_SET_SEQPLAYER_VOLUME(SEQ_PLAYER_SFX, 50, 0);
             break;
 
         case 2000:

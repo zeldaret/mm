@@ -624,7 +624,7 @@ void func_80BB2944(EnGeg* this, PlayState* play) {
             this->actionFunc = func_80BB2520;
         } else {
             this->unk_496 = func_80BB16D0(this);
-            func_80151938(play, this->unk_496);
+            Message_ContinueTextbox(play, this->unk_496);
         }
     }
 }
@@ -663,7 +663,7 @@ void func_80BB2B1C(EnGeg* this, PlayState* play) {
             this->unk_230 |= 0x10;
             ActorCutscene_StartAndSetFlag(this->unk_498, &this->actor);
             this->unk_496 = 0xD68;
-            func_80151938(play, this->unk_496);
+            Message_ContinueTextbox(play, this->unk_496);
             this->unk_248 = Object_GetIndex(&play->objectCtx, OBJECT_TAISOU);
             if (this->unk_248 >= 0) {
                 this->unk_4AC = 13;
@@ -804,7 +804,7 @@ void func_80BB31B8(EnGeg* this, PlayState* play) {
         }
         this->actionFunc = func_80BB32AC;
     } else {
-        Actor_PickUp(&this->actor, play, getItemId, 300.0f, 300.0f);
+        Actor_OfferGetItem(&this->actor, play, getItemId, 300.0f, 300.0f);
     }
 }
 
@@ -813,7 +813,7 @@ void func_80BB32AC(EnGeg* this, PlayState* play) {
         Message_StartTextbox(play, this->unk_496, &this->actor);
         this->actionFunc = func_80BB27D4;
     } else {
-        func_800B85E0(&this->actor, play, 400.0f, -1);
+        func_800B85E0(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
     }
 }
 

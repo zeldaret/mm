@@ -1059,7 +1059,7 @@ void EnDekubaba_DeadStickDrop(EnDekubaba* this, PlayState* play) {
         return;
     }
 
-    Actor_PickUpNearby(&this->actor, play, GI_STICKS_1);
+    Actor_OfferGetItemNearby(&this->actor, play, GI_STICKS_1);
 }
 
 /* Update and associated functions */

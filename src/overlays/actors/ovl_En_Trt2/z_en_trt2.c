@@ -417,15 +417,15 @@ void func_80AD3FF4(EnTrt2* this, PlayState* play) {
         this->actor.parent = NULL;
         this->unk_3B2 = 14;
     } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_12_10)) {
-        Actor_PickUp(&this->actor, play, GI_POTION_RED, 300.0f, 300.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_POTION_RED, 300.0f, 300.0f);
     } else {
-        Actor_PickUp(&this->actor, play, GI_POTION_RED_BOTTLE, 300.0f, 300.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_POTION_RED_BOTTLE, 300.0f, 300.0f);
     }
 }
 
 void func_80AD40AC(EnTrt2* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_DONE) && Message_ShouldAdvance(play)) {
-        func_800B85E0(&this->actor, play, 400.0f, -1);
+        func_800B85E0(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
         this->unk_3B2 = 13;
     }
 }
@@ -433,10 +433,10 @@ void func_80AD40AC(EnTrt2* this, PlayState* play) {
 void func_80AD4110(EnTrt2* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->unk_3A8 = 0x84C;
-        func_80151938(play, this->unk_3A8);
+        Message_ContinueTextbox(play, this->unk_3A8);
         this->unk_3B2 = 10;
     } else {
-        func_800B85E0(&this->actor, play, 400.0f, -1);
+        func_800B85E0(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
     }
 }
 

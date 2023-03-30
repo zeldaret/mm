@@ -104,11 +104,11 @@ void EnSi_GiveToken(EnSi* this, PlayState* play) {
         Flags_SetTreasure(play, chestFlag);
     }
     Item_Give(play, ITEM_SKULL_TOKEN);
-    if (Inventory_GetSkullTokenCount(play->sceneId) >= 30) {
-        Message_StartTextbox(play, 0xFC, NULL);
+    if (Inventory_GetSkullTokenCount(play->sceneId) >= SPIDER_HOUSE_TOKENS_REQUIRED) {
+        Message_StartTextbox(play, 0xFC, NULL); // You collected all tokens, curse lifted
         Audio_PlayFanfare(NA_BGM_GET_ITEM | 0x900);
     } else {
-        Message_StartTextbox(play, 0x52, NULL);
+        Message_StartTextbox(play, 0x52, NULL); // You got one more gold token, your [count] one!
         Audio_PlayFanfare(NA_BGM_GET_SMALL_ITEM);
     }
 }

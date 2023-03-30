@@ -248,7 +248,7 @@ s32 func_808F8FAC(EnHorseGameCheck* this, PlayState* play) {
     }
 
     if (gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2] >= SECONDS_TO_TIMER(180)) {
-        Audio_QueueSeqCmd(0x8041);
+        SEQCMD_PLAY_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 0, NA_BGM_HORSE_GOAL | SEQ_FLAG_ASYNC);
         play_sound(NA_SE_SY_START_SHOT);
         this->unk_164 |= 0x40000;
         gSaveContext.timerStates[TIMER_ID_MINIGAME_2] = TIMER_STATE_6;
@@ -281,7 +281,7 @@ s32 func_808F8FAC(EnHorseGameCheck* this, PlayState* play) {
     if ((this->unk_164 & 0x4000) && (horseGameCheck != NULL) &&
         (horseGameCheck->dyna.actor.id == ACTOR_EN_HORSE_GAME_CHECK) &&
         (horseGameCheck->unk_15C == ENHORSEGAMECHECK_FF_7) && !(this->unk_164 & 0x40000)) {
-        Audio_QueueSeqCmd(0x8041);
+        SEQCMD_PLAY_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 0, NA_BGM_HORSE_GOAL | SEQ_FLAG_ASYNC);
         play_sound(NA_SE_SY_START_SHOT);
         this->unk_164 |= 0x40000;
         gSaveContext.timerStates[TIMER_ID_MINIGAME_2] = TIMER_STATE_6;
@@ -314,7 +314,7 @@ s32 func_808F8FAC(EnHorseGameCheck* this, PlayState* play) {
     if ((this->unk_164 & 0x200000) && (horseGameCheck != NULL) &&
         (horseGameCheck->dyna.actor.id == ACTOR_EN_HORSE_GAME_CHECK) &&
         (horseGameCheck->unk_15C == ENHORSEGAMECHECK_FF_7) && !(this->unk_164 & 0x02000000)) {
-        Audio_QueueSeqCmd(0x8041);
+        SEQCMD_PLAY_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 0, NA_BGM_HORSE_GOAL | SEQ_FLAG_ASYNC);
         play_sound(NA_SE_SY_START_SHOT);
         this->unk_164 |= 0x02000000;
         gSaveContext.timerStates[TIMER_ID_MINIGAME_2] = TIMER_STATE_6;
@@ -343,7 +343,7 @@ s32 func_808F8FAC(EnHorseGameCheck* this, PlayState* play) {
     if ((this->unk_164 & 0x80) && (horseGameCheck != NULL) &&
         (horseGameCheck->dyna.actor.id == ACTOR_EN_HORSE_GAME_CHECK) &&
         (horseGameCheck->unk_15C == ENHORSEGAMECHECK_FF_7) && !(this->unk_164 & 0x800)) {
-        Audio_QueueSeqCmd(0x8041);
+        SEQCMD_PLAY_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 0, NA_BGM_HORSE_GOAL | SEQ_FLAG_ASYNC);
         play_sound(NA_SE_SY_START_SHOT);
         this->unk_164 |= 0x800;
         gSaveContext.timerStates[TIMER_ID_MINIGAME_2] = TIMER_STATE_6;

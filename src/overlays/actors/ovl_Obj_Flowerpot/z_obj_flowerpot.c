@@ -520,7 +520,7 @@ void func_80A1C838(ObjFlowerpot* this, PlayState* play) {
                     s16 temp_v0_3 = this->actor.yawTowardsPlayer - GET_PLAYER(play)->actor.world.rot.y;
 
                     if (ABS_ALT(temp_v0_3) >= 0x5556) {
-                        Actor_PickUp(&this->actor, play, GI_NONE, 36.0f, 30.0f);
+                        Actor_OfferGetItem(&this->actor, play, GI_NONE, 36.0f, 30.0f);
                     }
                 }
             }
@@ -656,7 +656,7 @@ void ObjFlowerpot_Update(Actor* thisx, PlayState* play2) {
 
     func_80A1C554(this);
 
-    if ((D_80A1D830 != play->gameplayFrames) && (play->roomCtx.curRoom.unk3 == 0)) {
+    if ((D_80A1D830 != play->gameplayFrames) && (play->roomCtx.curRoom.behaviorType1 == ROOM_BEHAVIOR_TYPE1_0)) {
         func_80A1B3D0();
         D_80A1D830 = play->gameplayFrames;
     }
@@ -681,7 +681,7 @@ void ObjFlowerpot_Draw(Actor* thisx, PlayState* play) {
     }
 
     if (!(this->unk_1EA & 2)) {
-        if ((play->roomCtx.curRoom.unk3 == 0) && (this->actionFunc == func_80A1C838)) {
+        if ((play->roomCtx.curRoom.behaviorType1 == ROOM_BEHAVIOR_TYPE1_0) && (this->actionFunc == func_80A1C838)) {
             if ((this->actor.projectedPos.z > -150.0f) && (this->actor.projectedPos.z < 400.0f)) {
                 func_80A1B840(&D_80A1D838[this->unk_1EB]);
 

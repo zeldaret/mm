@@ -221,10 +221,10 @@ void func_80BE8AAC(EnBaisen* this, PlayState* play) {
         }
     }
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-        func_801477B4(play);
+        Message_CloseTextbox(play);
         this->textIdIndex++;
         if (this->textIdIndex < 6) {
-            func_80151938(play, sTextIds[this->textIdIndex]);
+            Message_ContinueTextbox(play, sTextIds[this->textIdIndex]);
             if ((this->textIdIndex % 2) == 0) {
                 this->unk2A4 = this->heishiPointer;
             } else {

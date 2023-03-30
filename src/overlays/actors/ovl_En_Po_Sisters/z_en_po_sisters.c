@@ -522,7 +522,8 @@ void EnPoSisters_SetupDamageFlinch(EnPoSisters* this) {
 
     this->poSisterFlags &=
         ~(POE_SISTERS_FLAG_MATCH_PLAYER_HEIGHT | POE_SISTERS_FLAG_UPDATE_SHAPE_ROT | POE_SISTERS_FLAG_CHECK_AC);
-    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 16);
+
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 16);
     this->actionFunc = EnPoSisters_DamageFlinch;
 }
 

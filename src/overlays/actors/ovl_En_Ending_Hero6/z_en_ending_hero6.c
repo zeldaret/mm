@@ -123,9 +123,9 @@ void EnEndingHero6_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec
 }
 
 void EnEndingHero6_Draw(Actor* thisx, PlayState* play) {
-    static TexturePtr D_80C24280[] = { object_dt_Tex_007350, object_dt_Tex_009590, object_dt_Tex_009F90,
-                                       object_dt_Tex_00A790, object_dt_Tex_00AB90 };
-    static TexturePtr D_80C24294[] = { object_dt_Tex_007750, object_dt_Tex_00A390, object_dt_Tex_00A490 };
+    static TexturePtr sEyeTextures[] = { gDotourEyeShockTex, gDotourEyeOpenTex, gDotourEyeClosedTex,
+                                         gDotourEyeLookDownTex, gDotourEyeSquintTex };
+    static TexturePtr sEyebrowTextures[] = { gDotourEyebrowHighTex, gDotourEyebrowMidTex, gDotourEyebrowLowTex };
     s32 pad;
     EnEndingHero6* this = THIS;
     s32 index = 0;
@@ -158,13 +158,13 @@ void EnEndingHero6_Draw(Actor* thisx, PlayState* play) {
             }
 
             if (this->npcIndex == 0) {
-                gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80C24280[this->eyeState]));
+                gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyeTextures[this->eyeState]));
 
                 if (this->eyeState < 3) {
                     index = this->eyeState;
                 }
 
-                gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(D_80C24294[index]));
+                gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(sEyebrowTextures[index]));
             }
 
             SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,

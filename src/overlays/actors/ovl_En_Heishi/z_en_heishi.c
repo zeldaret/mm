@@ -87,7 +87,7 @@ void EnHeishi_Init(Actor* thisx, PlayState* play) {
     this->actor.targetMode = 6;
     this->actor.gravity = -3.0f;
     Collider_InitAndSetCylinder(play, &this->colliderCylinder, &this->actor, &sCylinderInit);
-    this->actor.flags |= ACTOR_FLAG_8000000;
+    this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
     EnHeishi_SetupIdle(this);
 }
 

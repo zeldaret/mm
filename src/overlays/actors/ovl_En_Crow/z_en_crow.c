@@ -324,7 +324,7 @@ void EnCrow_SetupDamaged(EnCrow* this, PlayState* play) {
         this->drawDmgEffFrozenSteamScale = 0.5f;
     }
 
-    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 40);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 40);
     if (this->actor.flags & ACTOR_FLAG_8000) {
         this->actor.speed = 0.0f;
     }
@@ -390,9 +390,9 @@ void EnCrow_SetupTurnAway(EnCrow* this) {
     this->yawTarget = this->actor.yawTowardsPlayer + 0x8000;
     this->skelAnime.playSpeed = 2.0f;
     if (this->actor.colChkInfo.damageEffect == GUAY_DMGEFF_STUN) {
-        Actor_SetColorFilter(&this->actor, 0, 255, 0, 40);
+        Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 255, COLORFILTER_BUFFLAG_OPA, 40);
     } else {
-        Actor_SetColorFilter(&this->actor, 0, 255, 0, 40);
+        Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 255, COLORFILTER_BUFFLAG_OPA, 40);
     }
     Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_FREEZE);
     this->actionFunc = EnCrow_TurnAway;

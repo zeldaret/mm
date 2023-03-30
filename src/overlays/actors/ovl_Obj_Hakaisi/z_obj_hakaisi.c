@@ -207,7 +207,7 @@ void func_80B1456C(ObjHakaisi* this, PlayState* play) {
 
 void func_80B145F4(ObjHakaisi* this) {
     this->unk_19A = 0;
-    this->dyna.actor.flags |= ACTOR_FLAG_8000000;
+    this->dyna.actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
     this->dyna.actor.flags &= ~ACTOR_FLAG_1;
     Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_WALL_BROKEN);
     this->actionFunc = func_80B14648;

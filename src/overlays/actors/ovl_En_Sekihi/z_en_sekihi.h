@@ -2,6 +2,8 @@
 #define Z_EN_SEKIHI_H
 
 #include "global.h"
+#include "overlays/actors/ovl_En_Si/z_en_si.h"
+
 
 #define ENSIKIHI_GET_TYPE(thisx) ((thisx)->params & 0xF)
 

@@ -760,7 +760,7 @@ void func_80C02A14(EnBomjimb* this, PlayState* play) {
     }
 
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-        func_801477B4(play);
+        Message_CloseTextbox(play);
         if ((this->unk_2CA == 8) && (gSaveContext.save.bombersCaughtNum >= 5)) {
             func_80C02CA4(this, play);
         } else {
@@ -779,7 +779,7 @@ void func_80C02BCC(EnBomjimb* this, PlayState* play) {
     if (this->unk_2C0 == 0) {
         player->actor.freezeTimer = 3;
         if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-            func_801477B4(play);
+            Message_CloseTextbox(play);
             this->unk_2C0 = 1;
             player->stateFlags1 &= ~PLAYER_STATE1_10000000;
         }

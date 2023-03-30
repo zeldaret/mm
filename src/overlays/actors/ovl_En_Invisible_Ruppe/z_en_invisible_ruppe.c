@@ -60,7 +60,7 @@ void func_80C258A0(EnInvisibleRuppe* this, PlayState* play) {
 
 void func_80C2590C(EnInvisibleRuppe* this, PlayState* play) {
     if (this->collider.base.ocFlags1 & OC1_HIT) {
-        switch (INVISIBLERUPPE_GET_3(this)) {
+        switch (INVISIBLERUPPE_GET_3(&this->actor)) {
             case 0:
                 play_sound(NA_SE_SY_GET_RUPY);
                 Item_DropCollectible(play, &this->actor.world.pos, 0x8000 | ITEM00_RUPEE_GREEN);
@@ -93,7 +93,7 @@ void EnInvisibleRuppe_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     EnInvisibleRuppe* this = THIS;
 
-    this->unk_190 = INVISIBLERUPPE_GET_1FC(this);
+    this->unk_190 = INVISIBLERUPPE_GET_1FC(&this->actor);
 
     if (this->unk_190 == 0x7F) {
         this->unk_190 = -1;

@@ -390,7 +390,7 @@ void func_80B39C9C(ObjSnowball2* this, PlayState* play) {
                 if (this->actor.xzDistToPlayer < 100.0f) {
                     if (ABS_ALT(BINANG_SUB(this->actor.yawTowardsPlayer, GET_PLAYER(play)->actor.world.rot.y)) >=
                         0x5556) {
-                        Actor_PickUp(&this->actor, play, GI_NONE, 36.0f, 30.0f);
+                        Actor_OfferGetItem(&this->actor, play, GI_NONE, 36.0f, 30.0f);
                     }
                 }
             }

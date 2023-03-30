@@ -211,7 +211,7 @@ void EnFish2_Init(Actor* thisx, PlayState* play) {
     } else if (this->actor.params != 0) {
         this->unk_2B4 = 10;
         this->actor.draw = NULL;
-        this->actor.flags |= ACTOR_FLAG_8000000;
+        this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
         this->actionFunc = func_80B2A01C;
     }
 }
@@ -436,7 +436,7 @@ void func_80B29128(EnFish2* this) {
 
 void func_80B2913C(EnFish2* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-        func_801477B4(play);
+        Message_CloseTextbox(play);
         func_80B28B5C(this);
     }
 }

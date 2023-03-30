@@ -888,7 +888,7 @@ void func_8091F5A4(Actor* thisx, PlayState* play) {
 
             func_8091D904(this);
         } else if (func_8091DDF4(this, play)) {
-            Actor_PickUp(&this->actor, play, GI_MAX, 80.0f, 25.0f);
+            Actor_OfferGetItem(&this->actor, play, GI_MAX, 80.0f, 25.0f);
         }
     }
 }

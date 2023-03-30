@@ -151,7 +151,10 @@ void ObjAqua_Init(Actor* thisx, PlayState* play) {
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 60.0f);
-    if (1) {};
+
+    //! FAKE:
+    if (1) {}
+
     this->actor.shape.shadowAlpha = 140;
     this->alpha = 255;
     if (func_80ACBA60(this, play)) {
