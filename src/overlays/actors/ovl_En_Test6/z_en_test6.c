@@ -834,7 +834,7 @@ void func_80A92188(EnTest6* this, PlayState* play) {
                (CHECK_BTN_ALL(input->press.button, BTN_A) || CHECK_BTN_ALL(input->press.button, BTN_B))) {
         this->unk_286 = 1;
         this->unk_27A = 39;
-        Audio_QueueSeqCmd(0x111400FF);
+        SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_FANFARE, 20);
     }
 
     if (DECR(this->unk_27A) == 0) {

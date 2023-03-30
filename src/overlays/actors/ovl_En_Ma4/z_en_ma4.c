@@ -142,19 +142,21 @@ void EnMa4_ChangeAnim(EnMa4* this, s32 animIndex) {
 
 void func_80ABDD9C(EnMa4* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    s16 flag;
+    s16 trackingMode;
 
-    if (this->unk_1D8.unk_00 == 0 &&
+    if ((this->interactInfo.talkState == NPC_TALK_STATE_IDLE) &&
         ((this->skelAnime.animation == &gRomaniRunAnim) || (this->skelAnime.animation == &gRomaniLookAroundAnim) ||
          (this->skelAnime.animation == &gRomaniShootBowAnim))) {
-        flag = 1;
+        trackingMode = NPC_TRACKING_NONE;
     } else {
-        flag = (this->type == MA4_TYPE_ALIENS_WON && this->actionFunc != EnMa4_DialogueHandler) ? 1 : 0;
+        trackingMode = ((this->type == MA4_TYPE_ALIENS_WON) && (this->actionFunc != EnMa4_DialogueHandler))
+                           ? NPC_TRACKING_NONE
+                           : NPC_TRACKING_PLAYER_AUTO_TURN;
     }
 
-    this->unk_1D8.unk_18 = player->actor.world.pos;
-    this->unk_1D8.unk_18.y -= -10.0f;
-    func_800BD888(&this->actor, &this->unk_1D8, 0, flag);
+    this->interactInfo.trackPos = player->actor.world.pos;
+    this->interactInfo.trackPos.y -= -10.0f;
+    Npc_TrackPoint(&this->actor, &this->interactInfo, 0, trackingMode);
 }
 
 void EnMa4_InitPath(EnMa4* this, PlayState* play) {
@@ -192,7 +194,7 @@ void EnMa4_Init(Actor* thisx, PlayState* play) {
     Actor_SetScale(&this->actor, 0.01f);
 
     this->actor.targetMode = 0;
-    this->unk_1D8.unk_00 = 0;
+    this->interactInfo.talkState = NPC_TALK_STATE_IDLE;
     this->unk_334 = 0;
     this->hasBow = true;
     this->mouthTexIndex = 0;
@@ -260,14 +262,14 @@ void EnMa4_RunInCircles(EnMa4* this, PlayState* play) {
                 sAnimIndex = 13;
             }
         } else {
-            this->actor.speedXZ = 2.7f;
+            this->actor.speed = 2.7f;
             EnMa4_ChangeAnim(this, 9);
             sAnimIndex = 9;
         }
     }
 
     if (sAnimIndex == 13 && Animation_OnFrame(&this->skelAnime, 37.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_ROMANI_BOW_FLICK);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_ROMANI_BOW_FLICK);
     }
 
     sp34.x = this->pathPoints[this->pathIndex].x;
@@ -279,7 +281,7 @@ void EnMa4_RunInCircles(EnMa4* this, PlayState* play) {
         Math_SmoothStepToS(&this->actor.shape.rot.y, sp2E, 5, 0x3000, 0x100);
     } else {
         if ((D_80AC0254 == 0) && ((Rand_Next() % 4) == 0)) {
-            this->actor.speedXZ = 0.0f;
+            this->actor.speed = 0.0f;
             D_80AC0254 = 2;
             EnMa4_ChangeAnim(this, 3);
             sAnimIndex = 3;
@@ -300,7 +302,7 @@ void EnMa4_RunInCircles(EnMa4* this, PlayState* play) {
     Actor_MoveWithGravity(&this->actor);
     if (this->skelAnime.animation == &gRomaniRunAnim) {
         if (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 4.0f)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_ROMANI_WALK);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_ROMANI_WALK);
         }
     }
 }
@@ -309,14 +311,14 @@ void EnMa4_SetupWait(EnMa4* this) {
     if ((this->state != MA4_STATE_AFTERHORSEBACKGAME) && (this->state != MA4_STATE_AFTERDESCRIBETHEMCS)) {
         if (this->type != MA4_TYPE_ALIENS_WON) {
             EnMa4_ChangeAnim(this, 9);
-            this->actor.speedXZ = 2.7f;
+            this->actor.speed = 2.7f;
         } else {
             EnMa4_ChangeAnim(this, 15);
-            this->actor.speedXZ = 0.0f;
+            this->actor.speed = 0.0f;
         }
     } else {
         EnMa4_ChangeAnim(this, 1);
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
     }
 
     this->actor.gravity = -0.2f;
@@ -449,7 +451,7 @@ void EnMa4_HandlePlayerChoice(EnMa4* this, PlayState* play) {
                 // "Try again?"
                 if (play->msgCtx.choiceIndex == 0) { // Yes
                     func_8019F208();
-                    func_801477B4(play);
+                    Message_CloseTextbox(play);
                     EnMa4_SetupBeginHorsebackGame(this);
                 } else { // No
                     if (this->type == MA4_TYPE_ALIENS_DEFEATED) {
@@ -492,7 +494,7 @@ void EnMa4_ChooseNextDialogue(EnMa4* this, PlayState* play) {
     if (Message_ShouldAdvance(play)) {
         switch (this->textId) {
             case 0x2390:
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 EnMa4_SetupBeginHorsebackGame(this);
                 break;
 
@@ -527,7 +529,7 @@ void EnMa4_ChooseNextDialogue(EnMa4* this, PlayState* play) {
                 break;
 
             case 0x333E:
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 EnMa4_SetupBeginDescribeThemCs(this);
                 break;
 
@@ -564,7 +566,7 @@ void EnMa4_ChooseNextDialogue(EnMa4* this, PlayState* play) {
                 break;
 
             case 0x334A:
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 EnMa4_SetupBeginHorsebackGame(this);
                 break;
 
@@ -595,7 +597,7 @@ void EnMa4_ChooseNextDialogue(EnMa4* this, PlayState* play) {
                     Message_StartTextbox(play, 0x334C, &this->actor);
                     this->textId = 0x334C;
                 } else {
-                    func_801477B4(play);
+                    Message_CloseTextbox(play);
                     player->stateFlags1 |= PLAYER_STATE1_20;
                     EnMa4_SetupBeginEponasSongCs(this);
                     EnMa4_BeginEponasSongCs(this, play);
@@ -728,8 +730,8 @@ void EnMa4_HorsebackGameWait(EnMa4* this, PlayState* play) {
 void EnMa4_SetupHorsebackGameEnd(EnMa4* this, PlayState* play) {
     CLEAR_WEEKEVENTREG(WEEKEVENTREG_08_01);
     this->actionFunc = EnMa4_HorsebackGameEnd;
-    Audio_QueueSeqCmd(NA_BGM_STOP);
-    Audio_QueueSeqCmd(NA_BGM_HORSE_GOAL | 0x8000);
+    SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 0);
+    SEQCMD_PLAY_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 0, NA_BGM_HORSE_GOAL | SEQ_FLAG_ASYNC);
 }
 
 void EnMa4_HorsebackGameEnd(EnMa4* this, PlayState* play) {
@@ -1027,17 +1029,17 @@ void EnMa4_Update(Actor* thisx, PlayState* play) {
 
 s32 EnMa4_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnMa4* this = THIS;
-    Vec3s sp4;
+    Vec3s limbRot;
 
     if (limbIndex == ROMANI_LIMB_HEAD) {
-        sp4 = this->unk_1D8.unk_08;
-        rot->x = rot->x + sp4.y;
-        rot->z = rot->z + sp4.x;
+        limbRot = this->interactInfo.headRot;
+        rot->x += limbRot.y;
+        rot->z += limbRot.x;
     }
     if (limbIndex == ROMANI_LIMB_TORSO) {
-        sp4 = this->unk_1D8.unk_0E;
-        rot->x = rot->x - sp4.y;
-        rot->z = rot->z - sp4.x;
+        limbRot = this->interactInfo.torsoRot;
+        rot->x -= limbRot.y;
+        rot->z -= limbRot.x;
     }
 
     return false;

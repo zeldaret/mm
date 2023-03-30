@@ -69,7 +69,7 @@ void EnMs_Init(Actor* thisx, PlayState* play) {
     Actor_SetScale(&this->actor, 0.015f);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE; // Eating Magic Beans all day will do that to you
     this->actionFunc = EnMs_Wait;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actor.velocity.y = 0.0f;
     this->actor.gravity = -1.0f;
 }
@@ -106,9 +106,9 @@ void EnMs_Talk(EnMs* this, PlayState* play) {
 
         case TEXT_STATE_5:
             if (Message_ShouldAdvance(play)) {
-                func_801477B4(play);
-                Actor_PickUp(&this->actor, play, GI_MAGIC_BEANS, this->actor.xzDistToPlayer,
-                             this->actor.playerHeightRel);
+                Message_CloseTextbox(play);
+                Actor_OfferGetItem(&this->actor, play, GI_MAGIC_BEANS, this->actor.xzDistToPlayer,
+                                   this->actor.playerHeightRel);
                 this->actionFunc = EnMs_Sell;
             }
             break;
@@ -117,16 +117,16 @@ void EnMs_Talk(EnMs* this, PlayState* play) {
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.choiceIndex) {
                     case 0: // yes
-                        func_801477B4(play);
+                        Message_CloseTextbox(play);
                         if (gSaveContext.save.playerData.rupees < 10) {
                             play_sound(NA_SE_SY_ERROR);
-                            func_80151938(play, 0x935); // "[...] You don't have enough Rupees."
+                            Message_ContinueTextbox(play, 0x935); // "[...] You don't have enough Rupees."
                         } else if (AMMO(ITEM_MAGIC_BEANS) >= 20) {
                             play_sound(NA_SE_SY_ERROR);
-                            func_80151938(play, 0x937); // "[...] You can't carry anymore."
+                            Message_ContinueTextbox(play, 0x937); // "[...] You can't carry anymore."
                         } else {
                             func_8019F208();
-                            Actor_PickUp(&this->actor, play, GI_MAGIC_BEANS, 90.0f, 10.0f);
+                            Actor_OfferGetItem(&this->actor, play, GI_MAGIC_BEANS, 90.0f, 10.0f);
                             Rupees_ChangeBy(-10);
                             this->actionFunc = EnMs_Sell;
                         }
@@ -135,7 +135,7 @@ void EnMs_Talk(EnMs* this, PlayState* play) {
                     case 1: // no
                     default:
                         func_8019F230();
-                        func_80151938(play, 0x934); // "[...] Well, if your mood changes [...]"
+                        Message_ContinueTextbox(play, 0x934); // "[...] Well, if your mood changes [...]"
                         break;
                 }
             }
@@ -152,13 +152,13 @@ void EnMs_Sell(EnMs* this, PlayState* play) {
         func_800B8500(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel, PLAYER_IA_NONE);
         this->actionFunc = EnMs_TalkAfterPurchase;
     } else {
-        Actor_PickUp(&this->actor, play, GI_MAGIC_BEANS, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
+        Actor_OfferGetItem(&this->actor, play, GI_MAGIC_BEANS, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
     }
 }
 
 void EnMs_TalkAfterPurchase(EnMs* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-        func_80151938(play, 0x936); // "You can plant 'em whenever you want [...]"
+        Message_ContinueTextbox(play, 0x936); // "You can plant 'em whenever you want [...]"
         this->actionFunc = EnMs_Talk;
     } else {
         func_800B8500(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel, PLAYER_IA_MINUS1);

@@ -150,7 +150,7 @@ void ObjChan_CalculatePotPosition(Vec3f* childPosOut, Vec3s* childRotOut, Vec3f*
     childRotOut->y += childAngle;
 }
 
-//! @TODO: Possibly takes actor and recasts
+//! TODO: Possibly takes actor and recasts
 void ObjChan_InitChandelier(ObjChan* this2, PlayState* play) {
     ObjChan* this = this2;
     s32 i;
@@ -176,9 +176,10 @@ void ObjChan_InitChandelier(ObjChan* this2, PlayState* play) {
     for (i = 0; i < 5; i++) {
         ObjChan_CalculatePotPosition(&childPos, &childRot, &this->actor.world.pos, &this->actor.shape.rot,
                                      (s32)(i * 360.0f / 5.0f * (65536.0f / 360.0f)) + this->rotation);
-        temp_v0 = (ObjChan*)Actor_SpawnAsChildAndCutscene(
-            &play->actorCtx, play, ACTOR_OBJ_CHAN, childPos.x, childPos.y, childPos.z, childRot.x, childRot.y,
-            childRot.z, (this->actor.params & 0xFFF) | 0x1000, this->actor.csId, this->actor.unk20, &this->actor);
+        temp_v0 = (ObjChan*)Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ACTOR_OBJ_CHAN, childPos.x, childPos.y,
+                                                          childPos.z, childRot.x, childRot.y, childRot.z,
+                                                          (this->actor.params & 0xFFF) | 0x1000, this->actor.csId,
+                                                          this->actor.halfDaysBits, &this->actor);
         if (temp_v0 != NULL) {
             this->pots[i] = temp_v0;
             temp_v0->myPotIndex = i;
@@ -209,7 +210,7 @@ void ObjChan_InitChandelier(ObjChan* this2, PlayState* play) {
     this->actionFunc = ObjChan_ChandelierAction;
 }
 
-//! @TODO: More descriptive name than Action?
+//! TODO: More descriptive name than Action?
 void ObjChan_ChandelierAction(ObjChan* this2, PlayState* play) {
     ObjChan* this = this2;
     ObjChan* temp;
@@ -314,7 +315,7 @@ void ObjChan_PotAction(ObjChan* this, PlayState* play) {
                 SET_WEEKEVENTREG(WEEKEVENTREG_37_10);
                 Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ACTOR_EN_MM, this->actor.world.pos.x,
                                               this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, 0x8000,
-                                              this->actor.csId, this->actor.unk20, NULL);
+                                              this->actor.csId, this->actor.halfDaysBits, NULL);
             }
         }
         Actor_Kill(&this->actor);

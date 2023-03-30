@@ -487,7 +487,7 @@ void func_80A3A610(EnElfgrp* this, PlayState* play) {
     if (this->unk_144 > 0) {
         player->actor.freezeTimer = 100;
         player->stateFlags1 |= PLAYER_STATE1_20000000;
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_FAIRY_GROUP_HEAL - SFX_FLAG);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_FAIRY_GROUP_HEAL - SFX_FLAG);
     } else {
         player->actor.freezeTimer = 0;
         player->stateFlags1 &= ~PLAYER_STATE1_20000000;
@@ -580,7 +580,7 @@ void EnElfgrp_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
 
     if (this->unk_14A & 8) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_FAIRY_GROUP_FRY - SFX_FLAG);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_FAIRY_GROUP_FRY - SFX_FLAG);
     }
 
     if (this->unk_144 != 0) {

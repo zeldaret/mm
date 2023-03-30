@@ -485,7 +485,7 @@ void func_80B82DE0(BgDblueBalance* this, PlayState* play) {
             this->unk_178 *= -0.6f;
             this->unk_17C++;
             if (this->unk_182) {
-                Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_SEESAW_WATER_BOUND);
+                Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_SEESAW_WATER_BOUND);
                 sp5C = this->unk_15C;
                 Matrix_Push();
                 Matrix_RotateYS(BINANG_SUB(this->dyna.actor.shape.rot.y, 0x4000), MTXMODE_NEW);
@@ -498,7 +498,7 @@ void func_80B82DE0(BgDblueBalance* this, PlayState* play) {
 
                 func_80B8296C(play, &sp50, 70.0f);
             } else {
-                Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_SEESAW_BOUND);
+                Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_SEESAW_BOUND);
             }
         } else {
             this->dyna.actor.shape.rot.z = 0x1C72;
@@ -510,7 +510,7 @@ void func_80B82DE0(BgDblueBalance* this, PlayState* play) {
             this->unk_178 *= -0.6f;
             this->unk_17C++;
             if (this->unk_182) {
-                Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_SEESAW_WATER_BOUND);
+                Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_SEESAW_WATER_BOUND);
                 sp3C = this->unk_160;
                 Matrix_Push();
                 Matrix_RotateYS(BINANG_ADD(this->dyna.actor.shape.rot.y, 0x4000), MTXMODE_NEW);
@@ -523,7 +523,7 @@ void func_80B82DE0(BgDblueBalance* this, PlayState* play) {
 
                 func_80B8296C(play, &sp30, 47.0f);
             } else {
-                Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_SEESAW_BOUND);
+                Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_SEESAW_BOUND);
             }
         } else {
             this->dyna.actor.shape.rot.z = -0x1C72;

@@ -30,7 +30,7 @@ void MapSelect_LoadGame(MapSelectState* this, u32 entrance, s32 spawn) {
     gSaveContext.hudVisibility = HUD_VISIBILITY_IDLE;
     gSaveContext.hudVisibilityTimer = 0;
 
-    Audio_QueueSeqCmd(NA_BGM_STOP);
+    SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 0);
     gSaveContext.save.entrance = entrance;
 
     if (spawn != 0) {

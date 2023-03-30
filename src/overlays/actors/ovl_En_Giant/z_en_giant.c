@@ -390,10 +390,10 @@ void EnGiant_PlaySound(EnGiant* this) {
     if (this->actor.draw != NULL && this->alpha > 0) {
         if (this->animIndex == GIANT_ANIM_WALKING_LOOP &&
             (Animation_OnFrame(&this->skelAnime, 40.0f) || Animation_OnFrame(&this->skelAnime, 100.0f))) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_KYOJIN_WALK);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_KYOJIN_WALK);
         }
         if (this->animIndex == GIANT_ANIM_FALLING_OVER && Animation_OnFrame(&this->skelAnime, 40.0f)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_KYOJIN_VOICE_FAIL);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_KYOJIN_VOICE_FAIL);
         }
         if (this->sfxId != 0xFFFF &&
             ((this->animIndex == GIANT_ANIM_BIG_CALL_START && this->skelAnime.curFrame >= 18.0f) ||

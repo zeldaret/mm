@@ -136,7 +136,7 @@ void func_80C05C44(EnBombal* this, PlayState* play) {
         }
 
         SET_WEEKEVENTREG(WEEKEVENTREG_83_04);
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_MUJURA_BALLOON_BROKEN);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_MUJURA_BALLOON_BROKEN);
         this->timer = 30;
         this->isPopped = true;
         this->actionFunc = func_80C05DE8;

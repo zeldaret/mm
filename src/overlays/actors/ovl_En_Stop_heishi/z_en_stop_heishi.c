@@ -351,7 +351,7 @@ void func_80AE7E9C(EnStopheishi* this) {
     this->unk_274 = 0;
     this->disableCollider = false;
     this->actionFunc = func_80AE7F34;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
 }
 
 void func_80AE7F34(EnStopheishi* this, PlayState* play) {
@@ -365,7 +365,7 @@ void func_80AE7F34(EnStopheishi* this, PlayState* play) {
 
     SkelAnime_Update(&this->skelAnime);
     if ((this->currentAnim == SOLDIER_ANIM_5) && (((s16)this->skelAnime.curFrame % 2) != 0)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SOLDIER_WALK);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_SOLDIER_WALK);
     }
     if (gSaveContext.save.day != 3) {
         EnStopheishi_UpdateHeadNormal(this, play);
@@ -521,13 +521,13 @@ void func_80AE85C4(EnStopheishi* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         if (this->unk_27E != 0) {
             this->actor.textId = this->unk_27E;
-            func_80151938(play, this->actor.textId);
+            Message_ContinueTextbox(play, this->actor.textId);
             EnStopHeishi_ChangeAnim(this, SOLDIER_ANIM_STAND_HAND_ON_HIP);
             SET_WEEKEVENTREG(WEEKEVENTREG_12_20);
             this->unk_265 = 1;
             this->unk_27E = 0;
         } else {
-            func_801477B4(play);
+            Message_CloseTextbox(play);
             func_80AE7E9C(this);
         }
     }

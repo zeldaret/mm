@@ -8,7 +8,7 @@
 #include "z_en_warp_tag.h"
 #include "objects/gameplay_dangeon_keep/gameplay_dangeon_keep.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_10 | ACTOR_FLAG_2000000 | ACTOR_FLAG_8000000)
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_10 | ACTOR_FLAG_2000000 | ACTOR_FLAG_CANT_LOCK_ON)
 
 #define THIS ((EnWarptag*)thisx)
 
@@ -156,7 +156,7 @@ void EnWarpTag_RespawnPlayer(EnWarptag* this, PlayState* play) {
 
         } else {
             CutsceneManager_StartWithPlayerCs(play->playerCsIds[PLAYER_CS_ID_WARP_PAD_MOON], &this->dyna.actor);
-            func_800B8E58(player, NA_SE_PL_WARP_PLATE);
+            Player_PlaySfx(player, NA_SE_PL_WARP_PLATE);
             Play_EnableMotionBlur(0);
         }
 

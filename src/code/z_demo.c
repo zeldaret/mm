@@ -428,9 +428,9 @@ void CutsceneCmd_FadeOutSequence(PlayState* play, CutsceneContext* csCtx, CsCmdF
         u8 fadeOutDuration = cmd->endFrame - cmd->startFrame;
 
         if (cmd->seqPlayer == CS_FADE_OUT_FANFARE) {
-            Audio_QueueSeqCmd((fadeOutDuration << 0x10) | 0x110000FF);
+            SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_FANFARE, fadeOutDuration);
         } else { // CS_FADE_OUT_BGM_MAIN
-            Audio_QueueSeqCmd((fadeOutDuration << 0x10) | NA_BGM_STOP);
+            SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_BGM_MAIN, fadeOutDuration);
         }
     }
 }
@@ -493,7 +493,7 @@ void CutsceneCmd_ModifySequence(PlayState* play, CutsceneContext* csCtx, CsCmdMo
                 break;
 
             case CS_MOD_SEQ_STORE:
-                sSeqId = Audio_GetActiveSequence(SEQ_PLAYER_BGM_MAIN);
+                sSeqId = AudioSeq_GetActiveSeqId(SEQ_PLAYER_BGM_MAIN);
                 break;
 
             case CS_MOD_SEQ_RESTORE:
@@ -516,7 +516,7 @@ void CutsceneCmd_FadeOutAmbience(PlayState* play, CutsceneContext* csCtx, CsCmdF
     if ((csCtx->curFrame == cmd->startFrame) && (csCtx->curFrame < cmd->endFrame)) {
         u8 fadeOutDuration = cmd->endFrame - cmd->startFrame;
 
-        Audio_QueueSeqCmd((fadeOutDuration << 0x10) | 0x140000FF);
+        SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_AMBIENCE, fadeOutDuration);
     }
 }
 
@@ -1069,7 +1069,7 @@ void CutsceneCmd_Text(PlayState* play, CutsceneContext* csCtx, CsCmdText* cmd) {
                     }
 
                     if (cmd->altTextId1 != 0xFFFF) {
-                        func_80151938(play, cmd->altTextId1);
+                        Message_ContinueTextbox(play, cmd->altTextId1);
                         if (cmd->type == CS_TEXT_TYPE_3) {
                             sCutsceneTextboxType = CS_TEXT_TYPE_3;
                             if (cmd->altTextId2 != 0xFFFF) {
@@ -1077,7 +1077,7 @@ void CutsceneCmd_Text(PlayState* play, CutsceneContext* csCtx, CsCmdText* cmd) {
                             }
                         }
                     } else {
-                        func_801477B4(play);
+                        Message_CloseTextbox(play);
                         csCtx->curFrame++;
                     }
                 } else {
@@ -1087,7 +1087,7 @@ void CutsceneCmd_Text(PlayState* play, CutsceneContext* csCtx, CsCmdText* cmd) {
                     }
 
                     if (cmd->altTextId2 != 0xFFFF) {
-                        func_80151938(play, cmd->altTextId2);
+                        Message_ContinueTextbox(play, cmd->altTextId2);
                         if (cmd->type == CS_TEXT_TYPE_3) {
                             sCutsceneTextboxType = CS_TEXT_TYPE_3;
                             if (cmd->altTextId1 != 0xFFFF) {
@@ -1095,7 +1095,7 @@ void CutsceneCmd_Text(PlayState* play, CutsceneContext* csCtx, CsCmdText* cmd) {
                             }
                         }
                     } else {
-                        func_801477B4(play);
+                        Message_CloseTextbox(play);
                         csCtx->curFrame++;
                     }
                 }

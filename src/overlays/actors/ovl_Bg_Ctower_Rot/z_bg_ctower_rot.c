@@ -99,7 +99,7 @@ void BgCtowerRot_DoorDoNothing(BgCtowerRot* this, PlayState* play) {
 void BgCtowerRot_DoorClose(BgCtowerRot* this, PlayState* play) {
     if (!Math_SmoothStepToF(&this->timer, 0.0f, 0.1f, 15.0f, 0.1f)) {
         if (this->dyna.actor.params == BGCTOWERROT_STONE_DOOR_MAIN) {
-            Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_STONEDOOR_STOP);
+            Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_STONEDOOR_STOP);
             CutsceneManager_Stop(this->dyna.actor.csId);
         }
         this->actionFunc = BgCtowerRot_DoorDoNothing;

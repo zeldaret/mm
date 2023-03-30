@@ -517,7 +517,7 @@ Actor* SubS_FindNearestActor(Actor* actor, PlayState* play, u8 actorCategory, s1
         actorIter = actorTmp;
 
         if (actorIter != actor) {
-            dist = Actor_DistanceBetweenActors(actor, actorIter);
+            dist = Actor_WorldDistXYZToActor(actor, actorIter);
             if (!isSetup || dist < minDist) {
                 closestActor = actorIter;
                 minDist = dist;
@@ -762,7 +762,7 @@ s32 SubS_WeightPathing_Move(Actor* actor, Path* path, s32* waypoint, f32* progre
     }
     while (true) {
         if (!SubS_WeightPathing_ComputePoint(path, *waypoint, &point, *progress, direction) ||
-            ((s32)(actor->speedXZ * 10000.0f) == 0)) {
+            ((s32)(actor->speed * 10000.0f) == 0)) {
             return false;
         }
         dist = Math_Vec3f_DistXZ(&actor->world.pos, &point);
@@ -828,7 +828,7 @@ s32 func_8013C964(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, s32 it
         case 1:
             yRange = fabsf(actor->playerHeightRel) + 1.0f;
             xzRange = actor->xzDistToPlayer + 1.0f;
-            ret = Actor_PickUp(actor, play, itemId, xzRange, yRange);
+            ret = Actor_OfferGetItem(actor, play, itemId, xzRange, yRange);
             break;
 
         case 2:
@@ -1527,7 +1527,7 @@ s32 func_8013E748(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, s32 ex
 s32 SubS_ActorAndPlayerFaceEachOther(PlayState* play, Actor* actor, void* data) {
     Player* player = GET_PLAYER(play);
     Vec3s* yawTols = (Vec3s*)data;
-    s16 playerYaw = ABS(BINANG_SUB(Actor_YawBetweenActors(&player->actor, actor), player->actor.shape.rot.y));
+    s16 playerYaw = ABS(BINANG_SUB(Actor_WorldYawTowardActor(&player->actor, actor), player->actor.shape.rot.y));
     s16 actorYaw = ABS(BINANG_SUB(actor->yawTowardsPlayer, actor->shape.rot.y));
     s32 areFacing = false;
     s32 actorYawTol = ABS(yawTols->y);

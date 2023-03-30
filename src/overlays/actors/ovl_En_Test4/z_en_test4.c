@@ -367,7 +367,7 @@ void func_80A42AB8(EnTest4* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if ((play->transitionMode == TRANS_MODE_OFF) && !Play_InCsMode(play) && (play->numSetupActors <= 0) &&
-        (play->roomCtx.unk31 == 0) && !Play_IsDebugCamEnabled()) {
+        (play->roomCtx.status == 0) && !Play_IsDebugCamEnabled()) {
         s16 temp_a2;
         u16 temp_a0 = D_80A43364[this->csIdIndex];
         s16 temp_a3;

@@ -141,15 +141,15 @@ void ObjRaillift_Move(ObjRaillift* this, PlayState* play) {
         step = this->speed * 0.16f;
     }
 
-    Math_StepToF(&thisx->speedXZ, target, step);
-    if ((thisx->speedXZ + 0.05f) < speed) {
-        Math_Vec3f_Scale(&thisx->velocity, thisx->speedXZ / speed);
+    Math_StepToF(&thisx->speed, target, step);
+    if ((thisx->speed + 0.05f) < speed) {
+        Math_Vec3f_Scale(&thisx->velocity, thisx->speed / speed);
         thisx->world.pos.x += thisx->velocity.x;
         thisx->world.pos.y += thisx->velocity.y;
         thisx->world.pos.z += thisx->velocity.z;
     } else {
         this->curPoint += this->direction;
-        thisx->speedXZ *= 0.4f;
+        thisx->speed *= 0.4f;
         isTeleporting = OBJRAILLIFT_SHOULD_TELEPORT(thisx);
         isPosUpdated = true;
         if (((this->curPoint >= this->endPoint) && (this->direction > 0)) ||
@@ -191,13 +191,13 @@ void ObjRaillift_Wait(ObjRaillift* this, PlayState* play) {
     this->waitTimer--;
     if (this->waitTimer <= 0) {
         this->actionFunc = ObjRaillift_Move;
-        this->dyna.actor.speedXZ = 0.0f;
+        this->dyna.actor.speed = 0.0f;
     }
 }
 
 void ObjRaillift_Idle(ObjRaillift* this, PlayState* play) {
     if (Flags_GetSwitch(play, OBJRAILLIFT_GET_FLAG(&this->dyna.actor))) {
-        this->dyna.actor.speedXZ = 0.0f;
+        this->dyna.actor.speed = 0.0f;
         CutsceneManager_Queue(this->dyna.actor.csId);
         this->actionFunc = ObjRaillift_StartCutscene;
     }

@@ -750,7 +750,7 @@ s32 func_80BF2470(EnIg* this, PlayState* play) {
         Lib_Vec3f_TranslateAndRotateY(&this->unk_2B0, this->actor.world.rot.y, &sp38, &this->actor.world.pos);
         this->unk_3E2 += this->timePathTimeSpeed;
         if (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 13.0f)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_PIRATE_WALK);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_PIRATE_WALK);
         }
     }
     return false;
@@ -804,7 +804,7 @@ s32 func_80BF25E8(EnIg* this, PlayState* play) {
         this->timePathWaypoint = sp50;
         this->timePathTargetPos = timePathTargetPos;
     } else if (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 13.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_PIRATE_WALK);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_PIRATE_WALK);
     }
     return false;
 }
@@ -816,9 +816,9 @@ s32 func_80BF2890(EnIg* this, PlayState* play) {
 
     if (!(this->unk_3D0 & 0x100) && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         if (this->unk_408 != 0) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_GOLON_SNORE1);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_GOLON_SNORE1);
         } else {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_GOLON_SNORE2);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_GOLON_SNORE2);
         }
         this->unk_408 ^= 1;
     }

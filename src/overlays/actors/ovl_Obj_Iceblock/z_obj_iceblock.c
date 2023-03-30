@@ -206,10 +206,10 @@ s32 func_80A236D4(ObjIceblock* this, Vec3f* arg1) {
     s32 sp20;
 
     sp26 = Math_Vec3f_Yaw(&this->dyna.actor.world.pos, arg1);
-    sp2C = Math_SinS(sp26) * this->dyna.actor.speedXZ;
+    sp2C = Math_SinS(sp26) * this->dyna.actor.speed;
     sp2C = fabsf(sp2C) + 0.01f;
 
-    sp28 = Math_CosS(sp26) * this->dyna.actor.speedXZ;
+    sp28 = Math_CosS(sp26) * this->dyna.actor.speed;
     sp28 = fabsf(sp28) + 0.01f;
 
     sp20 = Math_StepToF(&this->dyna.actor.world.pos.x, arg1->x, sp2C);
@@ -892,7 +892,7 @@ void func_80A25440(ObjIceblock* this) {
 }
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32_DIV1000(speedXZ, 16000, ICHAIN_CONTINUE),
+    ICHAIN_F32_DIV1000(speed, 16000, ICHAIN_CONTINUE),
     ICHAIN_F32_DIV1000(gravity, -1800, ICHAIN_CONTINUE),
     ICHAIN_F32_DIV1000(terminalVelocity, -26000, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_CONTINUE),
@@ -1096,13 +1096,13 @@ void func_80A25BBC(ObjIceblock* this, PlayState* play) {
     func_80A23690(this);
 
     if (func_80A23F90(this, play)) {
-        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
+        Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
     }
 
     if (func_80A24954(this, play)) {
         func_80A2491C(this);
         if (this->unk_2B0 == 3) {
-            Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_DIVE_INTO_WATER_L);
+            Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_DIVE_INTO_WATER_L);
         }
     }
 }
@@ -1175,7 +1175,7 @@ void func_80A25E50(ObjIceblock* this, PlayState* play) {
         func_80A25BA0(this);
     } else if (sp38) {
         if (func_80A24118(this, play, 59.9f, &sp28)) {
-            Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
+            Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
         }
         func_80A2541C(this, play);
         func_80A25CF4(this);
@@ -1262,7 +1262,7 @@ void func_80A26144(ObjIceblock* this, PlayState* play) {
         func_80A23B88(this);
         func_80A25BA0(this);
     } else if (sp28) {
-        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
+        Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
         func_80A23B88(this);
         func_80A25FA0(this);
     } else {

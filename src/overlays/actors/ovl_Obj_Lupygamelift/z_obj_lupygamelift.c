@@ -131,7 +131,7 @@ void func_80AF04D8(ObjLupygamelift* this, PlayState* play) {
 
 void func_80AF0514(ObjLupygamelift* this) {
     this->actionFunc = func_80AF0530;
-    this->dyna.actor.speedXZ = this->targetSpeedXZ;
+    this->dyna.actor.speed = this->targetSpeedXZ;
 }
 
 void func_80AF0530(ObjLupygamelift* this, PlayState* play) {
@@ -141,11 +141,11 @@ void func_80AF0530(ObjLupygamelift* this, PlayState* play) {
     target.x = this->points[this->pointIndex].x;
     target.y = this->points[this->pointIndex].y;
     target.z = this->points[this->pointIndex].z;
-    distRemaining = Math_Vec3f_StepTo(&this->dyna.actor.world.pos, &target, this->dyna.actor.speedXZ);
+    distRemaining = Math_Vec3f_StepTo(&this->dyna.actor.world.pos, &target, this->dyna.actor.speed);
     if (distRemaining > 30.0f) {
-        Math_SmoothStepToF(&this->dyna.actor.speedXZ, this->targetSpeedXZ, 0.5f, 5.0f, 0.1f);
+        Math_SmoothStepToF(&this->dyna.actor.speed, this->targetSpeedXZ, 0.5f, 5.0f, 0.1f);
     } else if (distRemaining > 0.0f) {
-        Math_SmoothStepToF(&this->dyna.actor.speedXZ, 5.0f, 0.5f, 5.0f, 1.0f);
+        Math_SmoothStepToF(&this->dyna.actor.speed, 5.0f, 0.5f, 5.0f, 1.0f);
     } else {
         if (this->pointIndex < (this->count - 1)) {
             this->pointIndex++;

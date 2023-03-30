@@ -86,7 +86,9 @@ void EnWeatherTag_Init(Actor* thisx, PlayState* play) {
             EnWeatherTag_SetupAction(this, func_80966E0C);
             break;
         case WEATHERTAG_TYPE_UNK3:
-            if (0) {} // this can move to diff locations and still match
+            //! FAKE: this can move to different locations and still match
+            if (1) {}
+
             EnWeatherTag_SetupAction(this, func_80966EF0);
             break;
         case WEATHERTAG_TYPE_UNK4:
@@ -119,7 +121,7 @@ u8 func_80966608(EnWeatherTag* this, PlayState* play, UNK_TYPE a3, UNK_TYPE a4, 
     Player* player = GET_PLAYER(play);
     u8 returnVal = 0;
 
-    if (WEATHER_TAG_RANGE100(&this->actor) > Actor_XZDistanceBetweenActors(&player->actor, &this->actor)) {
+    if (WEATHER_TAG_RANGE100(&this->actor) > Actor_WorldDistXZToActor(&player->actor, &this->actor)) {
         if (play->envCtx.unk_1F == play->envCtx.unk_20) {
             D_801BDBB8 = 1;
             if (!(play->envCtx.unk_1E == 0) || ((play->envCtx.unk_1F != 1) && (play->envCtx.unk_21 == 0))) {
@@ -147,7 +149,7 @@ u8 func_80966758(EnWeatherTag* this, PlayState* play, UNK_TYPE a3, UNK_TYPE a4, 
     Player* player = GET_PLAYER(play);
     u8 returnVal = 0;
 
-    if (WEATHER_TAG_RANGE100(&this->actor) < Actor_XZDistanceBetweenActors(&player->actor, &this->actor)) {
+    if (WEATHER_TAG_RANGE100(&this->actor) < Actor_WorldDistXZToActor(&player->actor, &this->actor)) {
         if (play->envCtx.unk_1F == play->envCtx.unk_20) {
             D_801BDBB8 = 1;
             if (!(play->envCtx.unk_1E == 0) || ((play->envCtx.unk_1F != 1) && (play->envCtx.unk_21 == 0))) {
@@ -173,7 +175,7 @@ void func_8096689C(EnWeatherTag* this, PlayState* play) {
     f32 distance;
     f32 partialResult;
 
-    distance = Actor_XZDistanceBetweenActors(&player->actor, &this->actor);
+    distance = Actor_WorldDistXZToActor(&player->actor, &this->actor);
     if (this->fadeDistance < distance) {
         distance = this->fadeDistance;
     }
@@ -421,7 +423,7 @@ void func_809672DC(EnWeatherTag* this, PlayState* play) {
     Actor_GetClosestPosOnPath(this->pathPoints, this->pathCount, &GET_PLAYER(play)->actor.world.pos,
                               &this->actor.world.pos, false);
 
-    distance = Actor_XZDistanceBetweenActors(&player->actor, &this->actor);
+    distance = Actor_WorldDistXZToActor(&player->actor, &this->actor);
     range = WEATHER_TAG_RANGE100(&this->actor);
 
     if (distance < range) {
@@ -446,7 +448,7 @@ void func_809672DC(EnWeatherTag* this, PlayState* play) {
 void func_809674C8(EnWeatherTag* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (Actor_XZDistanceBetweenActors(&player->actor, &this->actor) < WEATHER_TAG_RANGE100(&this->actor)) {
+    if (Actor_WorldDistXZToActor(&player->actor, &this->actor) < WEATHER_TAG_RANGE100(&this->actor)) {
         if (CURRENT_DAY == 2) {
             if ((gSaveContext.save.time >= CLOCK_TIME(7, 0)) && (gSaveContext.save.time < CLOCK_TIME(17, 30)) &&
                 (play->envCtx.unk_F2[2] == 0)) {
@@ -470,7 +472,7 @@ void func_809674C8(EnWeatherTag* this, PlayState* play) {
 // WEATHERTAG_TYPE_LOCALDAY2RAIN 2
 void func_80967608(EnWeatherTag* this, PlayState* play) {
     if ((WEATHER_TAG_RANGE100(&this->actor) + 10.0f) <
-        Actor_XZDistanceBetweenActors(&GET_PLAYER(play)->actor, &this->actor)) {
+        Actor_WorldDistXZToActor(&GET_PLAYER(play)->actor, &this->actor)) {
         gWeatherMode = 0;
         EnWeatherTag_SetupAction(this, func_809674C8);
     }

@@ -202,7 +202,7 @@ void EnGe1_SetupPath(EnGe1* this, PlayState* play) {
 
             this->picto.actor.world.rot.y = Math_Vec3f_Yaw(&this->picto.actor.world.pos, &nextPoint);
             this->picto.actor.world.rot.x = Math_Vec3f_Pitch(&this->picto.actor.world.pos, &nextPoint);
-            this->picto.actor.speedXZ = 15.0f;
+            this->picto.actor.speed = 15.0f;
         }
     } else {
         this->path = NULL;
@@ -243,9 +243,9 @@ s32 EnGe1_FollowPath(EnGe1* this) {
 
 void EnGe1_Scream(EnGe1* this) {
     if ((s32)Rand_ZeroFloat(2.0f) == 0) {
-        Actor_PlaySfxAtPos(&this->picto.actor, NA_SE_VO_FPVO00);
+        Actor_PlaySfx(&this->picto.actor, NA_SE_VO_FPVO00);
     } else {
-        Actor_PlaySfxAtPos(&this->picto.actor, NA_SE_VO_FPVO01);
+        Actor_PlaySfx(&this->picto.actor, NA_SE_VO_FPVO01);
     }
 }
 
@@ -331,11 +331,11 @@ void EnGe1_PerformCutsceneActions(EnGe1* this, PlayState* play) {
 
         if ((this->animIndex == GERUDO_WHITE_ANIM_TRUDGING_OFF) &&
             (Animation_OnFrame(&this->skelAnime, 12.0f) || Animation_OnFrame(&this->skelAnime, 25.0f))) {
-            Actor_PlaySfxAtPos(&this->picto.actor, NA_SE_EV_PIRATE_WALK);
+            Actor_PlaySfx(&this->picto.actor, NA_SE_EV_PIRATE_WALK);
         }
 
         if ((this->animIndex == GERUDO_WHITE_ANIM_SALUTE) && Animation_OnFrame(&this->skelAnime, 14.0f)) {
-            Actor_PlaySfxAtPos(&this->picto.actor, NA_SE_EV_PIRATE_WALK);
+            Actor_PlaySfx(&this->picto.actor, NA_SE_EV_PIRATE_WALK);
         }
     } else {
         this->picto.actor.draw = NULL;

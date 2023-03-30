@@ -106,7 +106,7 @@ void func_80B02CD0(ObjSnowball* this, PlayState* play) {
 
     Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ptr->unk_00, this->actor.home.pos.x, this->actor.home.pos.y,
                                   this->actor.home.pos.z, this->actor.home.rot.x, 0, this->actor.home.rot.z,
-                                  ptr->unk_02, CS_ID_NONE, this->actor.unk20, NULL);
+                                  ptr->unk_02, CS_ID_NONE, this->actor.halfDaysBits, NULL);
 }
 
 void func_80B02D58(ObjSnowball* this, PlayState* play) {
@@ -124,7 +124,7 @@ void func_80B02DB0(ObjSnowball* this, PlayState* play) {
     Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ptr->unk_00, this->actor.home.pos.x, this->actor.home.pos.y,
                                   this->actor.home.pos.z, this->actor.home.rot.x, 0, this->actor.home.rot.z,
                                   this->actor.params | ptr->unk_02, CutsceneManager_GetAdditionalCsId(this->actor.csId),
-                                  this->actor.unk20, NULL);
+                                  this->actor.halfDaysBits, NULL);
 }
 
 void func_80B02E54(ObjSnowball* this, PlayState* play) {
@@ -132,7 +132,7 @@ void func_80B02E54(ObjSnowball* this, PlayState* play) {
 
     Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ptr->unk_00, this->actor.home.pos.x, this->actor.home.pos.y,
                                   this->actor.home.pos.z, this->actor.home.rot.x, 0, this->actor.home.rot.z,
-                                  this->actor.params | ptr->unk_02, CS_ID_NONE, this->actor.unk20, NULL);
+                                  this->actor.params | ptr->unk_02, CS_ID_NONE, this->actor.halfDaysBits, NULL);
 }
 
 void func_80B02EE4(ObjSnowball* this, PlayState* play) {
@@ -440,7 +440,7 @@ void func_80B03FF8(ObjSnowball* this, PlayState* play) {
         sp18->unk_04(this, play);
     }
 
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SNOWBALL_BROKEN);
+    Actor_PlaySfx(&this->actor, NA_SE_EV_SNOWBALL_BROKEN);
 
     if (rotY == 5) {
         Flags_SetSwitch(play, OBJSNOWBALL_GET_3F(&this->actor));
@@ -571,7 +571,7 @@ void func_80B04350(ObjSnowball* this, PlayState* play) {
             } else {
                 this->unk_209 = 10;
             }
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_REFLECTION_SNOW);
+            Actor_PlaySfx(&this->actor, NA_SE_IT_REFLECTION_SNOW);
         }
     }
 

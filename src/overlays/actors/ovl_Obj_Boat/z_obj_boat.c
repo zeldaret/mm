@@ -111,7 +111,7 @@ void ObjBoat_Update(Actor* thisx, PlayState* play) {
             }
             this->timer = 60;
         }
-    } else if (this->dyna.actor.speedXZ == 0.0f) {
+    } else if (this->dyna.actor.speed == 0.0f) {
         if (this->timer != 0) {
             this->timer--;
         }
@@ -124,7 +124,7 @@ void ObjBoat_Update(Actor* thisx, PlayState* play) {
             if (this->curPointIndex == this->lastPointIndex) {
                 if (OBJBOAT_GET_4000(thisx)) {
                     this->curPointIndex = 0;
-                } else if (this->dyna.actor.speedXZ == 0.0f) {
+                } else if (this->dyna.actor.speed == 0.0f) {
                     this->curPointIndex = 0;
                     this->direction = -1;
                 }
@@ -135,11 +135,11 @@ void ObjBoat_Update(Actor* thisx, PlayState* play) {
     }
 
     if (player->csMode != PLAYER_CSMODE_26) {
-        Math_ScaledStepToS(&this->dyna.actor.shape.rot.y, yawTarget, (s32)(fabsf(this->dyna.actor.speedXZ) * 40.0f));
+        Math_ScaledStepToS(&this->dyna.actor.shape.rot.y, yawTarget, (s32)(fabsf(this->dyna.actor.speed) * 40.0f));
         this->dyna.actor.world.rot.y = this->dyna.actor.shape.rot.y;
-        Math_StepToF(&this->dyna.actor.speedXZ, speedTarget, 0.05f);
+        Math_StepToF(&this->dyna.actor.speed, speedTarget, 0.05f);
         Actor_MoveWithGravity(&this->dyna.actor);
-        if (this->dyna.actor.speedXZ != 0.0f) {
+        if (this->dyna.actor.speed != 0.0f) {
             func_800B9010(&this->dyna.actor, NA_SE_EV_PIRATE_SHIP - SFX_FLAG);
         }
     }
@@ -166,7 +166,7 @@ void ObjBoat_UpdateCutscene(Actor* thisx, PlayState* play2) {
                 this->maxPointIndex = path->count;
                 this->points = Lib_SegmentedToVirtual(path->points);
                 Math_Vec3s_ToVec3f(&this->dyna.actor.world.pos, this->points);
-                this->dyna.actor.speedXZ = cue->rot.z * (45.0f / 0x2000);
+                this->dyna.actor.speed = cue->rot.z * (45.0f / 0x2000);
                 this->points++;
                 this->curPointIndex = 1;
             }
@@ -178,8 +178,8 @@ void ObjBoat_UpdateCutscene(Actor* thisx, PlayState* play2) {
                 f32 distRemaining;
 
                 Math_Vec3s_ToVec3f(&posTarget, this->points);
-                distRemaining = Math_Vec3f_StepTo(&this->dyna.actor.world.pos, &posTarget, this->dyna.actor.speedXZ);
-                if ((this->curPointIndex < this->maxPointIndex) && (distRemaining < this->dyna.actor.speedXZ)) {
+                distRemaining = Math_Vec3f_StepTo(&this->dyna.actor.world.pos, &posTarget, this->dyna.actor.speed);
+                if ((this->curPointIndex < this->maxPointIndex) && (distRemaining < this->dyna.actor.speed)) {
                     this->points++;
                     this->curPointIndex++;
                 }

@@ -292,7 +292,7 @@ void func_8095ABA8(EnOwl* this) {
 
 void func_8095ABF0(EnOwl* this, PlayState* play) {
     if (Actor_TextboxIsClosing(&this->actor, play)) {
-        Audio_QueueSeqCmd(0x110000FF);
+        SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_FANFARE, 0);
         func_8095AAD0(this, play);
         this->actor.flags &= ~ACTOR_FLAG_10000;
     }
@@ -301,7 +301,7 @@ void func_8095ABF0(EnOwl* this, PlayState* play) {
 // Unused?
 void func_8095AC50(EnOwl* this, PlayState* play) {
     if (Actor_TextboxIsClosing(&this->actor, play)) {
-        Audio_QueueSeqCmd(0x110000FF);
+        SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_FANFARE, 0);
         if ((this->unk_3DA % 64) == 0) {
             func_8095AAD0(this, play);
         } else {
@@ -327,12 +327,12 @@ void func_8095AD54(EnOwl* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_CHOICE) && Message_ShouldAdvance(play)) {
         switch (play->msgCtx.choiceIndex) {
             case OWL_REPEAT:
-                func_80151938(play, 0x7D1);
+                Message_ContinueTextbox(play, 0x7D1);
                 this->actionFunc = func_8095AE00;
                 break;
 
             case OWL_OK:
-                func_80151938(play, 0x7D3);
+                Message_ContinueTextbox(play, 0x7D3);
                 this->actionFunc = func_8095ABF0;
                 break;
         }
@@ -341,14 +341,14 @@ void func_8095AD54(EnOwl* this, PlayState* play) {
 
 void func_8095AE00(EnOwl* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-        func_80151938(play, 0x7D2);
+        Message_ContinueTextbox(play, 0x7D2);
         this->actionFunc = func_8095AD54;
     }
 }
 
 void func_8095AE60(EnOwl* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-        func_80151938(play, 0x7D1);
+        Message_ContinueTextbox(play, 0x7D1);
         this->actionFunc = func_8095AE00;
     }
 }
@@ -367,10 +367,10 @@ void func_8095AF2C(EnOwl* this, PlayState* play) {
             if (Message_ShouldAdvance(play)) {
                 if (play->msgCtx.currentTextId == 0xBFE) {
                     func_8095ACEC(this);
-                    func_801477B4(play);
+                    Message_CloseTextbox(play);
                     this->actionFunc = func_8095ABF0;
                 } else {
-                    func_80151938(play, play->msgCtx.currentTextId + 1);
+                    Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                 }
             }
             break;
@@ -419,13 +419,13 @@ void func_8095B158(EnOwl* this) {
     if (Animation_OnFrame(&this->skelAnime1, 2.0f) || Animation_OnFrame(&this->skelAnime1, 9.0f) ||
         Animation_OnFrame(&this->skelAnime1, 23.0f) || Animation_OnFrame(&this->skelAnime1, 40.0f) ||
         Animation_OnFrame(&this->skelAnime1, 58.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_OWL_FLUTTER);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_OWL_FLUTTER);
     }
 }
 
 void func_8095B1E4(EnOwl* this, PlayState* play) {
-    if (this->actor.speedXZ < 6.0f) {
-        this->actor.speedXZ += 1.0f;
+    if (this->actor.speed < 6.0f) {
+        this->actor.speed += 1.0f;
     }
 
     if (this->actor.xzDistToPlayer > 6000.0f) {
@@ -434,8 +434,8 @@ void func_8095B1E4(EnOwl* this, PlayState* play) {
 }
 
 void func_8095B254(EnOwl* this, PlayState* play) {
-    if (this->actor.speedXZ < 6.0f) {
-        this->actor.speedXZ += 1.0f;
+    if (this->actor.speed < 6.0f) {
+        this->actor.speed += 1.0f;
     }
 
     if (this->actionFlags & 1) {
@@ -491,7 +491,7 @@ void func_8095B480(EnOwl* this, PlayState* play) {
         this->unk_3EC = this->actor.home.rot.y;
         this->actor.world.pos = this->actor.home.pos;
         func_8095A510(this, play);
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
         this->actionFunc = func_8095BE0C;
     }
 }
@@ -540,8 +540,8 @@ void func_8095B76C(EnOwl* this, PlayState* play) {
 
     Math_SmoothStepToS(&this->actor.world.rot.y, sp4A, 6, 0x800, 0x200);
     this->actor.shape.rot.y = this->actor.world.rot.y;
-    if (sp44 < SQ(this->actor.speedXZ)) {
-        this->actor.speedXZ = 0.0f;
+    if (sp44 < SQ(this->actor.speed)) {
+        this->actor.speed = 0.0f;
         points = Lib_SegmentedToVirtual(this->path->points);
         points += this->unk_3F8;
 
@@ -564,13 +564,13 @@ void func_8095B76C(EnOwl* this, PlayState* play) {
         }
         func_8095B0C8(this);
     } else if (sp44 < SQ(21.0f)) {
-        if (this->actor.speedXZ > 1.0f) {
-            this->actor.speedXZ -= 1.0f;
+        if (this->actor.speed > 1.0f) {
+            this->actor.speed -= 1.0f;
         } else {
-            this->actor.speedXZ = 1.0f;
+            this->actor.speed = 1.0f;
         }
-    } else if (this->actor.speedXZ < 6.0f) {
-        this->actor.speedXZ += 1.0f;
+    } else if (this->actor.speed < 6.0f) {
+        this->actor.speed += 1.0f;
     }
 
     func_8095B06C(this);
@@ -614,16 +614,16 @@ void func_8095BA84(EnOwl* this, PlayState* play) {
                             case 0:
                                 func_8019F208();
                                 if (CHECK_WEEKEVENTREG(WEEKEVENTREG_09_40)) {
-                                    func_80151938(play, 0xBF4);
+                                    Message_ContinueTextbox(play, 0xBF4);
                                 } else {
                                     SET_WEEKEVENTREG(WEEKEVENTREG_09_40);
-                                    func_80151938(play, 0xBED);
+                                    Message_ContinueTextbox(play, 0xBED);
                                 }
                                 break;
 
                             case 1:
                                 func_8019F230();
-                                func_80151938(play, 0xBEF);
+                                Message_ContinueTextbox(play, 0xBEF);
                                 break;
                         }
                         break;
@@ -632,12 +632,12 @@ void func_8095BA84(EnOwl* this, PlayState* play) {
                         switch (play->msgCtx.choiceIndex) {
                             case 0:
                                 func_8019F208();
-                                func_80151938(play, 0xBF4);
+                                Message_ContinueTextbox(play, 0xBF4);
                                 return;
 
                             case 1:
                                 func_8019F230();
-                                func_80151938(play, 0xBF3);
+                                Message_ContinueTextbox(play, 0xBF3);
                                 return;
                         }
                         break;
@@ -650,22 +650,22 @@ void func_8095BA84(EnOwl* this, PlayState* play) {
                 switch (play->msgCtx.currentTextId) {
                     case 0xBEA:
                         SET_WEEKEVENTREG(WEEKEVENTREG_09_20);
-                        func_80151938(play, 0xBEB);
+                        Message_ContinueTextbox(play, 0xBEB);
                         break;
 
                     case 0xBEB:
                     case 0xBF0:
-                        func_80151938(play, 0xBEC);
+                        Message_ContinueTextbox(play, 0xBEC);
                         break;
 
                     case 0xBED:
                     case 0xBF4:
-                        func_80151938(play, 0xBEE);
+                        Message_ContinueTextbox(play, 0xBEE);
                         break;
 
                     case 0xBEE:
-                        func_801477B4(play);
-                        Audio_QueueSeqCmd(0x110000FF);
+                        Message_CloseTextbox(play);
+                        SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_FANFARE, 0);
                         EnOwl_ChangeMode(this, func_8095B9FC, func_8095C484, &this->skelAnime1, &object_owl_Anim_00CB94,
                                          0.0f);
                         this->eyeTexIndex = 0;
@@ -680,8 +680,8 @@ void func_8095BA84(EnOwl* this, PlayState* play) {
 
                     case 0xBEF:
                     case 0xBF3:
-                        func_801477B4(play);
-                        Audio_QueueSeqCmd(0x110000FF);
+                        Message_CloseTextbox(play);
+                        SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_FANFARE, 0);
                         func_8095ACEC(this);
                         this->actor.flags &= ~ACTOR_FLAG_10000;
                         this->actor.textId = 0xBF0;
@@ -689,12 +689,12 @@ void func_8095BA84(EnOwl* this, PlayState* play) {
                         break;
 
                     case 0xBF1:
-                        func_80151938(play, 0xBF2);
+                        Message_ContinueTextbox(play, 0xBF2);
                         break;
 
                     case 0xBF5:
-                        func_801477B4(play);
-                        Audio_QueueSeqCmd(0x110000FF);
+                        Message_CloseTextbox(play);
+                        SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_FANFARE, 0);
                         this->actor.flags &= ~ACTOR_FLAG_10000;
                         EnOwl_ChangeMode(this, func_8095B3DC, func_8095C484, &this->skelAnime1, &object_owl_Anim_00CB94,
                                          0.0f);
@@ -745,8 +745,8 @@ void func_8095BF78(EnOwl* this, PlayState* play) {
 
     Math_SmoothStepToS(&this->actor.world.rot.y, this->unk_3EC, 2, 0x80, 0x40);
     this->actor.shape.rot.y = this->actor.world.rot.y;
-    if (this->actor.speedXZ < 16.0f) {
-        this->actor.speedXZ += 0.5f;
+    if (this->actor.speed < 16.0f) {
+        this->actor.speed += 0.5f;
     }
 
     if ((this->unk_3E4 + 1000.0f) < this->actor.world.pos.y) {
@@ -767,11 +767,11 @@ void func_8095C09C(EnOwl* this, PlayState* play) {
     if (this->skelAnime1.curFrame > 45.0f) {
         this->actor.velocity.y = 2.0f;
         this->actor.gravity = 0.0f;
-        this->actor.speedXZ = 8.0f;
+        this->actor.speed = 8.0f;
     } else if (this->skelAnime1.curFrame > 17.0f) {
         this->actor.velocity.y = 6.0f;
         this->actor.gravity = 0.0f;
-        this->actor.speedXZ = 4.0f;
+        this->actor.speed = 4.0f;
     }
 
     if (this->actionFlags & 1) {
@@ -899,7 +899,7 @@ void EnOwl_Update(Actor* thisx, PlayState* play) {
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
     if (this->actor.update != NULL) {
         if ((this->skelAnime1.animation == &object_owl_Anim_001ADC) && Animation_OnFrame(&this->skelAnime1, 4.0f)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_OWL_FLUTTER);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_OWL_FLUTTER);
         }
 
         if (this->actionFlags & 2) {
@@ -1078,7 +1078,7 @@ void func_8095CCF4(Actor* thisx, PlayState* play) {
 
     this->actor.world.pos.y -= 1.0f;
     Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 10.0f, 10.0f, 4);
-    if (this->actor.bgCheckFlags & 1) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         this->unk_3DA = (this->unk_3DA >> 3) * 7;
         if (this->unk_3DC > 0) {
             this->unk_3DC--;

@@ -100,7 +100,7 @@ void BgSinkaiKabe_Init(Actor* thisx, PlayState* play) {
         if (shouldSpawnSeahorse) {
             Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ACTOR_EN_OT, pos.x, pos.y, pos.z, 0,
                                           this->dyna.actor.shape.rot.y, 0, 0x4000, this->dyna.actor.csId,
-                                          this->dyna.actor.unk20, NULL);
+                                          this->dyna.actor.halfDaysBits, NULL);
         }
 
         Actor_Kill(&this->dyna.actor);

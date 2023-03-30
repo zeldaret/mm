@@ -63,7 +63,7 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 static FireObjInitParams sFireObjInit = {
-    0.00405000010505f, 0.0500000007451f, 3, 1, 0, 0, 0,
+    0.00405f, 1.0f / 20.0f, FIRE_STATE_NOT_LIT, 1, 0, 0, 0,
 };
 
 static s16 sInitialAnglePerPetal[] = { 0x0000, 0x2AAA, 0x5555, 0x8000, 0xAAAA, 0xD555 };
@@ -175,7 +175,7 @@ void BgNumaHana_Init(Actor* thisx, PlayState* play) {
             this->flowerRotationalVelocity = 0x147;
 
             this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y + 210.0f;
-            FireObj_SetState2(&this->fire, 0.05f, 2);
+            FireObj_SetState2(&this->fire, 0.05f, FIRE_STATE_FULLY_LIT);
             Flags_SetSwitch(play, BG_NUMA_HANA_SWITCH_FLAG(&this->dyna.actor));
             BgNumaHana_SetupOpenedIdle(this);
         } else {
@@ -215,8 +215,8 @@ void BgNumaHana_SetupClosedIdle(BgNumaHana* this) {
  * the cutscene where the petals unfold.
  */
 void BgNumaHana_ClosedIdle(BgNumaHana* this, PlayState* play) {
-    if (this->fire.state != 3) {
-        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_FLAME_IGNITION);
+    if (this->fire.state != FIRE_STATE_NOT_LIT) {
+        Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_FLAME_IGNITION);
         if (CutsceneManager_IsNext(this->dyna.actor.csId)) {
             CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
             SET_WEEKEVENTREG(WEEKEVENTREG_12_01);
@@ -247,7 +247,7 @@ void BgNumaHana_UnfoldInnerPetals(BgNumaHana* this, PlayState* play) {
                 this->settleZRotation = 0;
                 this->settleAngle = 0;
                 this->settleScale = 420.0f;
-                Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_FLOWERPETAL_STOP);
+                Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_FLOWERPETAL_STOP);
             }
             this->transitionTimer++;
         }
@@ -279,7 +279,7 @@ void BgNumaHana_UnfoldOuterPetals(BgNumaHana* this, PlayState* play) {
                 this->settleZRotation = 0;
                 this->settleAngle = 0x5120;
                 this->settleScale = 130.0f;
-                Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_FLOWERPETAL_STOP);
+                Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_FLOWERPETAL_STOP);
             }
             this->transitionTimer++;
         }

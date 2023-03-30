@@ -278,7 +278,7 @@ void func_80BA1CF8(ElfMsg6* this, PlayState* play) {
 
     if ((this->actor.textId == 0x224) && CHECK_WEEKEVENTREG(WEEKEVENTREG_08_40)) {
         this->actor.textId = 0x25B;
-    } else if (func_80BA1C00(this) && (player->actor.speedXZ > 1.0f)) {
+    } else if (func_80BA1C00(this) && (player->actor.speed > 1.0f)) {
         player->tatlTextId = -this->actor.textId;
         CutsceneManager_Queue(CS_ID_GLOBAL_TALK);
         sp20->elfMsg = &this->actor;
@@ -319,7 +319,7 @@ void func_80BA1E30(ElfMsg6* this, PlayState* play) {
         return;
     }
 
-    if (func_80BA1C00(this) && (player->actor.speedXZ > 1.0f)) {
+    if (func_80BA1C00(this) && (player->actor.speed > 1.0f)) {
         player->tatlTextId = -this->actor.textId;
         CutsceneManager_Queue(CS_ID_GLOBAL_TALK);
         sp20->elfMsg = &this->actor;

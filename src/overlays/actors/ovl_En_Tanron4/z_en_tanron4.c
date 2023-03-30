@@ -51,7 +51,7 @@ void EnTanron4_Init(Actor* thisx, PlayState* play2) {
                        OBJECT_TANRON4_LIMB_MAX);
 
     thisx->flags &= ~ACTOR_FLAG_1;
-    thisx->speedXZ = 3.0f + KREG(48);
+    thisx->speed = 3.0f + KREG(48);
     thisx->uncullZoneForward = 10000.0f + KREG(70);
     this->randRollTimer = Rand_ZeroFloat(10.0f);
 

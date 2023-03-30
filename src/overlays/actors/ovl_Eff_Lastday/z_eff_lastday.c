@@ -195,7 +195,7 @@ void func_80BEBF78(EffLastday* this, PlayState* play) {
             case EFFLASTDAY_ACTION_2:
                 if (!this->actor.home.rot.z) {
                     this->actor.home.rot.z = true;
-                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_COMING_FIRE);
+                    Actor_PlaySfx(&this->actor, NA_SE_EV_COMING_FIRE);
                 }
                 this->actor.draw = EffLastday_Draw;
                 if (this->alpha < 255) {

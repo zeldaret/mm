@@ -202,7 +202,7 @@ void func_80AA88A8(DmChar01* this, PlayState* play) {
         if (play->csCtx.curFrame ==
             play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_135)]->startFrame) {
             D_80AAAE24 = 1;
-            Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_FORT_RISING);
+            Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_FORT_RISING);
         }
     } else {
         D_80AAAE24 = 0;
@@ -278,7 +278,7 @@ void func_80AA8C28(DmChar01* this, PlayState* play) {
 
     switch (this->unk_346) {
         case 0:
-            Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_WATER_PURIFICATION);
+            Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_WATER_PURIFICATION);
             D_80AAAE22 = -2200;
             D_80AAAE20 = 100;
             this->unk_346++;

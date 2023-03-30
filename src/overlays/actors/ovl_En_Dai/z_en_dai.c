@@ -291,7 +291,7 @@ s32 func_80B3E96C(EnDai* this, PlayState* play) {
                 break;
 
             case 1:
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SNOWSTORM_HARD);
+                Actor_PlaySfx(&this->actor, NA_SE_EV_SNOWSTORM_HARD);
                 Actor_Spawn(&play->actorCtx, play, ACTOR_EN_WEATHER_TAG, this->actor.world.pos.x,
                             this->actor.world.pos.y, this->actor.world.pos.z, 0x1388, 0x708, 0x3E8, 0);
                 func_80B3E5DC(this, 3);
@@ -351,8 +351,8 @@ s32 func_80B3EC84(EnDai* this) {
     };
 
     static Vec3f D_80B3FD7C[] = {
-        { 1.0f, 1.0f, 1.0f }, { 1.0f, 0.8, 0.8 },   { 1.0f, 1.1f, 1.1f }, { 1.0f, 1.3f, 1.3f }, { 1.0f, 0.7f, 0.9f },
-        { 1.0f, 0.8, 0.9f },  { 1.0f, 0.7f, 0.9f }, { 1.0f, 0.8, 0.9f },  { 1.0f, 1.0f, 1.0f },
+        { 1.0f, 1.0f, 1.0f }, { 1.0f, 0.8f, 0.8f }, { 1.0f, 1.1f, 1.1f }, { 1.0f, 1.3f, 1.3f }, { 1.0f, 0.7f, 0.9f },
+        { 1.0f, 0.8f, 0.9f }, { 1.0f, 0.7f, 0.9f }, { 1.0f, 0.8f, 0.9f }, { 1.0f, 1.0f, 1.0f },
     };
 
     s32 i;
@@ -379,7 +379,10 @@ s32 func_80B3ED88(EnDai* this) {
     static s16 D_80B3FE00[] = { 1, 2, 3 };
 
     static Vec3f D_80B3FE08[] = {
-        1.0f, 1.0f, 1.0f, 1.0f, 1.2f, 1.2f, 1.0f, 0.7f, 0.8f, 1.0f, 1.0f, 1.0f,
+        { 1.0f, 1.0f, 1.0f },
+        { 1.0f, 1.2f, 1.2f },
+        { 1.0f, 0.7f, 0.8f },
+        { 1.0f, 1.0f, 1.0f },
     };
 
     s32 i;
@@ -456,7 +459,7 @@ void func_80B3F044(EnDai* this, PlayState* play) {
                     break;
 
                 case 2:
-                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_ROLL_AND_FALL);
+                    Actor_PlaySfx(&this->actor, NA_SE_EV_ROLL_AND_FALL);
                     break;
 
                 case 3:
@@ -479,27 +482,27 @@ void func_80B3F044(EnDai* this, PlayState* play) {
 
         case 2:
             if (play->csCtx.curFrame == 360) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DAIGOLON_SLEEP3 - SFX_FLAG);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_DAIGOLON_SLEEP3 - SFX_FLAG);
             }
             if (Animation_OnFrame(&this->skelAnime, 43.0f)) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_GORON_BOUND_1);
+                Actor_PlaySfx(&this->actor, NA_SE_EV_GORON_BOUND_1);
             }
             this->unk_1D6 = func_80B3E8BC(this, this->cueId);
             break;
 
         case 3:
             if (Animation_OnFrame(&this->skelAnime, 6.0f)) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DAIGOLON_SLEEP1);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_DAIGOLON_SLEEP1);
             }
             this->unk_1D6 = func_80B3E8BC(this, this->cueId);
             break;
 
         case 4:
             if (Animation_OnFrame(&this->skelAnime, 30.0f)) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DAIGOLON_SLEEP2);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_DAIGOLON_SLEEP2);
             }
             if (Animation_OnFrame(&this->skelAnime, 35.0f)) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_GORON_BOUND_0);
+                Actor_PlaySfx(&this->actor, NA_SE_EV_GORON_BOUND_0);
             }
             this->unk_1D6 = func_80B3E8BC(this, this->cueId);
             break;

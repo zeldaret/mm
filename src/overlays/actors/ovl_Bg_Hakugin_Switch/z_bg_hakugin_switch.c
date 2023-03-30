@@ -102,7 +102,7 @@ static InitChainEntry sInitChain2[] = {
 
 void func_80B15790(BgHakuginSwitch* this, u16 sfxId) {
     if (this->unk_1B2 <= 0) {
-        Actor_PlaySfxAtPos(&this->dyna.actor, sfxId);
+        Actor_PlaySfx(&this->dyna.actor, sfxId);
     }
 }
 

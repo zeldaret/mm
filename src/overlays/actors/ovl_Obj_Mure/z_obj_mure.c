@@ -140,7 +140,7 @@ void ObjMure_SpawnActors0(Actor* thisx, PlayState* play) {
                 this->children[i] = Actor_SpawnAsChildAndCutscene(
                     &play->actorCtx, play, sSpawnActorIds[this->type], pos.x, pos.y, pos.z, this->actor.world.rot.x,
                     this->actor.world.rot.y, this->actor.world.rot.z, sSpawnParams[this->type], this->actor.csId,
-                    this->actor.unk20, NULL);
+                    this->actor.halfDaysBits, NULL);
                 if (this->children[i] != NULL) {
                     if (this->type == 0x90) {
                         ((ObjMureChild*)this->children[i])->unk_197 = 1;
@@ -153,7 +153,7 @@ void ObjMure_SpawnActors0(Actor* thisx, PlayState* play) {
                 this->children[i] = Actor_SpawnAsChildAndCutscene(
                     &play->actorCtx, play, sSpawnActorIds[this->type], pos.x, pos.y, pos.z, this->actor.world.rot.x,
                     this->actor.world.rot.y, this->actor.world.rot.z, sSpawnParams[this->type], this->actor.csId,
-                    this->actor.unk20, NULL);
+                    this->actor.halfDaysBits, NULL);
                 if (this->children[i] != NULL) {
                     this->children[i]->room = this->actor.room;
                 }
@@ -175,7 +175,7 @@ void ObjMure_SpawnActors1(ObjMure* this, PlayState* play2) {
             &play2->actorCtx, play, sSpawnActorIds[this->type], spawnPos.x, spawnPos.y, spawnPos.z, actor->world.rot.x,
             actor->world.rot.y, actor->world.rot.z,
             (this->type == OBJMURE_TYPE_BUTTERFLY && i == 0) ? 1 : sSpawnParams[this->type], this->actor.csId,
-            this->actor.unk20, NULL);
+            this->actor.halfDaysBits, NULL);
         if (this->children[i] != NULL) {
             this->childrenStates[i] = OBJMURE_CHILD_STATE_0;
             this->children[i]->room = actor->room;

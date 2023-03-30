@@ -1,5 +1,5 @@
-#ifndef Z64_PRENMI_H
-#define Z64_PRENMI_H
+#ifndef Z64PRENMI_H
+#define Z64PRENMI_H
 
 #include "global.h"
 

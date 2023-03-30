@@ -148,7 +148,7 @@ s32 func_80BC3B00(BgF40Block* this) {
         }
     }
 
-    if (Math_Vec3f_StepTo(&this->dyna.actor.world.pos, &sp28, this->dyna.actor.speedXZ) <= 0.0f) {
+    if (Math_Vec3f_StepTo(&this->dyna.actor.world.pos, &sp28, this->dyna.actor.speed) <= 0.0f) {
         this->unk_168 = 6;
         this->unk_160 = this->unk_164;
         return true;
@@ -182,26 +182,26 @@ s32 func_80BC3D08(BgF40Block* this, PlayState* play, s32 arg2) {
 
     if (arg2 != 0) {
         sp48.x =
-            (D_80BC4620[this->unk_168].x * ((800.0f * this->dyna.actor.scale.x) - (this->dyna.actor.speedXZ * 0.5f))) +
+            (D_80BC4620[this->unk_168].x * ((800.0f * this->dyna.actor.scale.x) - (this->dyna.actor.speed * 0.5f))) +
             this->dyna.actor.world.pos.x;
         sp48.y =
-            (D_80BC4620[this->unk_168].y * ((800.0f * this->dyna.actor.scale.y) - (this->dyna.actor.speedXZ * 0.5f))) +
+            (D_80BC4620[this->unk_168].y * ((800.0f * this->dyna.actor.scale.y) - (this->dyna.actor.speed * 0.5f))) +
             this->dyna.actor.world.pos.y;
         sp48.z =
-            (D_80BC4620[this->unk_168].z * ((800.0f * this->dyna.actor.scale.z) - (this->dyna.actor.speedXZ * 0.5f))) +
+            (D_80BC4620[this->unk_168].z * ((800.0f * this->dyna.actor.scale.z) - (this->dyna.actor.speed * 0.5f))) +
             this->dyna.actor.world.pos.z;
 
-        sp3C.x = (D_80BC4620[this->unk_168].x * this->dyna.actor.speedXZ) + sp48.x;
-        sp3C.y = (D_80BC4620[this->unk_168].y * this->dyna.actor.speedXZ) + sp48.y;
-        sp3C.z = (D_80BC4620[this->unk_168].z * this->dyna.actor.speedXZ) + sp48.z;
+        sp3C.x = (D_80BC4620[this->unk_168].x * this->dyna.actor.speed) + sp48.x;
+        sp3C.y = (D_80BC4620[this->unk_168].y * this->dyna.actor.speed) + sp48.y;
+        sp3C.z = (D_80BC4620[this->unk_168].z * this->dyna.actor.speed) + sp48.z;
     } else {
         sp3C.x = (D_80BC4620[this->unk_168].x * 800.0f * this->dyna.actor.scale.x) + this->dyna.actor.world.pos.x;
         sp3C.y = (D_80BC4620[this->unk_168].y * 800.0f * this->dyna.actor.scale.y) + this->dyna.actor.world.pos.y;
         sp3C.z = (D_80BC4620[this->unk_168].z * 800.0f * this->dyna.actor.scale.z) + this->dyna.actor.world.pos.z;
 
-        sp48.x = sp3C.x - (D_80BC4620[this->unk_168].x * this->dyna.actor.speedXZ * 1.5f);
-        sp48.y = sp3C.y - (D_80BC4620[this->unk_168].y * this->dyna.actor.speedXZ * 1.5f);
-        sp48.z = sp3C.z - (D_80BC4620[this->unk_168].z * this->dyna.actor.speedXZ * 1.5f);
+        sp48.x = sp3C.x - (D_80BC4620[this->unk_168].x * this->dyna.actor.speed * 1.5f);
+        sp48.y = sp3C.y - (D_80BC4620[this->unk_168].y * this->dyna.actor.speed * 1.5f);
+        sp48.z = sp3C.z - (D_80BC4620[this->unk_168].z * this->dyna.actor.speed * 1.5f);
     }
 
     if (BgCheck_AnyLineTest1(&play->colCtx, &sp48, &sp3C, &sp30, &sp54, true)) {
@@ -240,11 +240,11 @@ void BgF40Block_Init(Actor* thisx, PlayState* play) {
     if (this->path != NULL) {
         if (Flags_GetSwitch(play, BGF40BLOCK_GET_SWITCHFLAG(&this->dyna.actor))) {
             this->actionFunc = func_80BC4530;
-            this->dyna.actor.speedXZ = 40.0f;
+            this->dyna.actor.speed = 40.0f;
             func_80BC3A2C(this, play);
         } else {
             this->actionFunc = func_80BC4380;
-            this->dyna.actor.speedXZ = 20.0f;
+            this->dyna.actor.speed = 20.0f;
             func_80BC3980(this, play);
         }
     } else {
@@ -272,20 +272,20 @@ void func_80BC41AC(BgF40Block* this, PlayState* play) {
 
 void func_80BC4228(BgF40Block* this, PlayState* play) {
     if (func_80BC3B00(this)) {
-        this->dyna.actor.speedXZ = 20.0f;
+        this->dyna.actor.speed = 20.0f;
         if (this->unk_160 < (this->path->count - 1)) {
             this->unk_164 = this->unk_160 + 1;
         } else {
             this->actionFunc = func_80BC4530;
             CutsceneManager_Stop(this->dyna.actor.csId);
-            Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_IKANA_BLOCK_STOP_C);
+            Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_IKANA_BLOCK_STOP_C);
         }
     }
 
     if (func_80BC3D08(this, play, 0)) {
         CutsceneManager_Stop(this->dyna.actor.csId);
         this->actionFunc = func_80BC41AC;
-        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_IKANA_BLOCK_STOP_F);
+        Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_IKANA_BLOCK_STOP_F);
         return;
     }
 
@@ -332,20 +332,20 @@ void func_80BC43CC(BgF40Block* this, PlayState* play) {
 
 void func_80BC4448(BgF40Block* this, PlayState* play) {
     if (func_80BC3B00(this)) {
-        this->dyna.actor.speedXZ = 40.0f;
+        this->dyna.actor.speed = 40.0f;
         if (this->unk_160 > 0) {
             this->unk_164 = this->unk_160 - 1;
         } else {
             this->actionFunc = func_80BC4380;
             CutsceneManager_Stop(this->dyna.actor.csId);
-            Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_IKANA_BLOCK_STOP_C);
+            Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_IKANA_BLOCK_STOP_C);
         }
     }
 
     if (func_80BC3D08(this, play, 0)) {
         CutsceneManager_Stop(this->dyna.actor.csId);
         this->actionFunc = func_80BC43CC;
-        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_IKANA_BLOCK_STOP_F);
+        Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_IKANA_BLOCK_STOP_F);
     }
 }
 

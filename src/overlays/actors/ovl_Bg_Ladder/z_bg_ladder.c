@@ -100,7 +100,7 @@ void BgLadder_StartCutscene(BgLadder* this, PlayState* play) {
     if (CutsceneManager_IsNext(this->dyna.actor.csId)) {
         CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
         this->dyna.actor.draw = BgLadder_Draw;
-        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_SECRET_LADDER_APPEAR);
+        Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_SECRET_LADDER_APPEAR);
         this->action = BgLadder_FadeIn;
     } else {
         CutsceneManager_Queue(this->dyna.actor.csId);

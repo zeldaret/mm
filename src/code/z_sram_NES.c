@@ -1,3 +1,4 @@
+#include "prevent_bss_reordering.h"
 #include "global.h"
 #include "overlays/gamestates/ovl_file_choose/z_file_choose.h"
 
@@ -1598,7 +1599,7 @@ void Sram_InitSram(GameState* gameState, SramContext* sramCtx) {
 
 void Sram_Alloc(GameState* gameState, SramContext* sramCtx) {
     if (gSaveContext.unk_3F3F) {
-        sramCtx->saveBuf = THA_AllocEndAlign16(&gameState->heap, SAVE_BUFFER_SIZE);
+        sramCtx->saveBuf = THA_AllocTailAlign16(&gameState->heap, SAVE_BUFFER_SIZE);
         sramCtx->status = 0;
     }
 }
