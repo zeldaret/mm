@@ -7,8 +7,8 @@ struct EnInvisibleRuppe;
 
 typedef void (*EnInvisibleRuppeActionFunc)(struct EnInvisibleRuppe*, PlayState*);
 
-#define INVISIBLERUPPE_GET_3(thisx) ((thisx)->actor.params & 3)
-#define INVISIBLERUPPE_GET_1FC(thisx) (((thisx)->actor.params & 0x1FC) >> 2)
+#define INVISIBLERUPPE_GET_3(thisx) ((thisx)->params & 3)
+#define INVISIBLERUPPE_GET_1FC(thisx) (((thisx)->params & 0x1FC) >> 2)
 
 typedef struct EnInvisibleRuppe {
     /* 0x000 */ Actor actor;

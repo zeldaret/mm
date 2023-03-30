@@ -962,7 +962,7 @@ void KaleidoScope_Update(PlayState* play) {
             pauseCtx->promptChoice = PAUSE_PROMPT_YES;
             pauseCtx->state++;
             if (gameOverCtx->state == GAMEOVER_INACTIVE) {
-                pauseCtx->state++;
+                pauseCtx->state++; // GAMEOVER_DEATH_START
             }
             break;
 

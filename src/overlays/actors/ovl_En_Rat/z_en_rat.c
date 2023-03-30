@@ -718,7 +718,7 @@ void EnRat_SetupBounced(EnRat* this) {
     this->actor.world.rot.y = this->actor.yawTowardsPlayer + 0x8000;
     this->actor.gravity = -1.0f;
     EnRat_UpdateSparkOffsets(this);
-    this->actor.bgCheckFlags &= ~(0x10 | 0x8 | 0x1);
+    this->actor.bgCheckFlags &= ~(BGCHECKFLAG_GROUND | BGCHECKFLAG_WALL | BGCHECKFLAG_CEILING);
     this->actionFunc = EnRat_Bounced;
 }
 
@@ -733,14 +733,14 @@ void EnRat_Bounced(EnRat* this, PlayState* play) {
         this->timer = 30;
     }
 
-    if (this->actor.bgCheckFlags & (0x10 | 0x8 | 0x1)) {
+    if (this->actor.bgCheckFlags & (BGCHECKFLAG_GROUND | BGCHECKFLAG_WALL | BGCHECKFLAG_CEILING)) {
         EnRat_Explode(this, play);
     }
 }
 
 void EnRat_Explode(EnRat* this, PlayState* play) {
     EnBom* bomb = (EnBom*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOM, this->actor.world.pos.x,
-                                      this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, ENBOM_0);
+                                      this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, BOMB_TYPE_BODY);
 
     if (bomb != NULL) {
         bomb->timer = 0;
@@ -791,7 +791,7 @@ void EnRat_Update(Actor* thisx, PlayState* play) {
             this->damageReaction.hookedState = EN_RAT_HOOK_STARTED;
         } else if (this->actor.colChkInfo.damageEffect == EN_RAT_DMGEFF_STUN) {
             Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_FREEZE);
-            Actor_SetColorFilter(&this->actor, 0, 120, 0, 40);
+            Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 120, COLORFILTER_BUFFLAG_OPA, 40);
             if (this->actionFunc == EnRat_Bounced) {
                 this->actor.speed = 0.0f;
                 if (this->actor.velocity.y > 0.0f) {

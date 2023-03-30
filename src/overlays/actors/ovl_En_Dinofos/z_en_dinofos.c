@@ -382,7 +382,7 @@ void func_8089AC70(EnDinofos* this) {
     this->drawDmgEffAlpha = 1.0f;
     this->unk_290 = 80;
     this->actor.flags &= ~ACTOR_FLAG_400;
-    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 80);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 80);
 }
 
 void func_8089ACEC(EnDinofos* this, PlayState* play) {
@@ -523,7 +523,7 @@ void func_8089B3D4(EnDinofos* this, PlayState* play) {
     }
 
     Play_SetCameraAtEye(play, this->subCamId, &subCamAt, &subCam->eye);
-    if (this->actor.bgCheckFlags & 1) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         func_8089B4A4(this);
     }
 }
@@ -733,7 +733,7 @@ void func_8089BD28(EnDinofos* this, PlayState* play) {
 
     Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0xBB8);
     if (!func_8089AE00(this, play)) {
-        if (this->actor.bgCheckFlags & 8) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
             if (this->actor.speed >= 0.0f) {
                 phi_v0 = BINANG_ADD(this->actor.shape.rot.y, 0x4000);
             } else {
@@ -835,20 +835,20 @@ void func_8089C164(EnDinofos* this) {
         }
     }
 
-    this->actor.bgCheckFlags &= ~1;
+    this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND;
     Actor_PlaySfx(&this->actor, NA_SE_EN_RIZA_JUMP);
     this->actionFunc = func_8089C1F8;
 }
 
 void func_8089C1F8(EnDinofos* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
-    if (this->actor.bgCheckFlags & 1) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         func_8089C398(this);
     }
 }
 
 void func_8089C244(EnDinofos* this) {
-    this->actor.bgCheckFlags &= ~1;
+    this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND;
     this->actor.speed = 8.0f;
     this->actor.velocity.y = 16.0f;
     Actor_PlaySfx(&this->actor, NA_SE_EN_RIZA_JUMP);
@@ -867,7 +867,7 @@ void func_8089C2A8(EnDinofos* this, PlayState* play) {
         Animation_Change(&this->skelAnime, &object_dinofos_Anim_0025B4, 1.0f, 7.0f, 13.0f, ANIMMODE_ONCE, -2.0f);
     }
 
-    if (this->actor.bgCheckFlags & 1) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         this->colliderQuad.base.atFlags &= ~AT_ON;
         func_8089C398(this);
     }
@@ -947,7 +947,7 @@ void func_8089C690(EnDinofos* this) {
 }
 
 void func_8089C724(EnDinofos* this, PlayState* play) {
-    if (this->actor.bgCheckFlags & 1) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         Math_StepToF(&this->actor.speed, 0.0f, 0.5f);
     }
 
@@ -996,13 +996,13 @@ void func_8089C87C(EnDinofos* this, s32 arg1) {
     this->unk_28E = 0;
     Actor_PlaySfx(&this->actor, NA_SE_EN_RIZA_DAMAGE);
     this->colliderJntSph.base.acFlags &= ~AC_ON;
-    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 18);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 18);
     this->actionFunc = func_8089C938;
 }
 
 void func_8089C938(EnDinofos* this, PlayState* play) {
     Math_StepToF(&this->actor.speed, 0.0f, 0.5f);
-    if (SkelAnime_Update(&this->skelAnime) && (this->actor.bgCheckFlags & 1)) {
+    if (SkelAnime_Update(&this->skelAnime) && (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
         if (this->actor.colChkInfo.health == 0) {
             if (this->actor.cutscene == -1) {
                 func_8089CFAC(this);
@@ -1303,7 +1303,7 @@ s32 func_8089D60C(EnDinofos* this, PlayState* play) {
 
         if (this->actor.colChkInfo.damageEffect == 1) {
             this->unk_290 = 40;
-            Actor_SetColorFilter(&this->actor, 0, 255, 0, 40);
+            Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 255, COLORFILTER_BUFFLAG_OPA, 40);
             Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_FREEZE);
             func_8089C784(this);
             return true;
@@ -1311,7 +1311,7 @@ s32 func_8089D60C(EnDinofos* this, PlayState* play) {
 
         if (this->actor.colChkInfo.damageEffect == 5) {
             this->unk_290 = 40;
-            Actor_SetColorFilter(&this->actor, 0, 255, 0, 40);
+            Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 255, COLORFILTER_BUFFLAG_OPA, 40);
             this->drawDmgEffScale = 0.55f;
             this->drawDmgEffAlpha = 2.0f;
             this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_MEDIUM;

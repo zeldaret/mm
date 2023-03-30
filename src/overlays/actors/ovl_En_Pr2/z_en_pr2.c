@@ -173,7 +173,7 @@ void EnPr2_Init(Actor* thisx, PlayState* play) {
 
     Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 20.0f, 20.0f, 0x1D);
 
-    if (!(this->actor.bgCheckFlags & 0x60)) {
+    if (!(this->actor.bgCheckFlags & (BGCHECKFLAG_WATER | BGCHECKFLAG_WATER_TOUCH))) {
         Actor_Kill(&this->actor);
     }
 }
@@ -398,7 +398,8 @@ void func_80A748E8(EnPr2* this, PlayState* play) {
                 sp3C.x += Math_SinS(this->actor.world.rot.y) * 20.0f;
                 sp3C.z += Math_CosS(this->actor.world.rot.y) * 20.0f;
                 if (fabsf(this->actor.world.rot.y - this->unk_1EE) < 100.0f) {
-                    if (BgCheck_SphVsFirstPoly(&play->colCtx, &sp3C, 20.0f) || (this->actor.bgCheckFlags & 8)) {
+                    if (BgCheck_SphVsFirstPoly(&play->colCtx, &sp3C, 20.0f) ||
+                        (this->actor.bgCheckFlags & BGCHECKFLAG_WALL)) {
                         this->unk_1DC = 0;
                         this->unk_1F2++;
                         Math_Vec3f_Copy(&this->unk_21C, &this->unk_228);
@@ -514,7 +515,7 @@ void func_80A74E90(EnPr2* this, PlayState* play) {
 
 void func_80A751B4(EnPr2* this) {
     this->unk_1EC = 0;
-    this->actor.flags |= ACTOR_FLAG_8000000;
+    this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
     this->actor.flags &= ~ACTOR_FLAG_1;
     if (this->unk_1E0 < 10) {
         func_80A74510(this, 2);
@@ -535,7 +536,7 @@ void func_80A751B4(EnPr2* this) {
         this->actor.speed = Rand_ZeroFloat(0.5f);
         this->actor.world.rot.y = randPlusMinusPoint5Scaled(0x8000);
     }
-    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 10);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 10);
     this->unk_1D4 = 3;
     this->actionFunc = func_80A75310;
 }

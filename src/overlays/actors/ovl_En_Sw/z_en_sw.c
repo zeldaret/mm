@@ -504,8 +504,8 @@ s32 func_808D99C8(EnSw* this, PlayState* play) {
         return false;
     }
 
-    if ((this->actor.xyzDistToPlayerSq < ((sREG(16) * 10) + 60000)) && (play->actorCtx.unk1F5 != 0) &&
-        (play->actorCtx.unk1F4 == 0)) {
+    if ((this->actor.xyzDistToPlayerSq < ((sREG(16) * 10) + 60000)) && (play->actorCtx.unk_1F4.timer != 0) &&
+        (play->actorCtx.unk_1F4.unk_00 == 0)) {
         this->actor.colChkInfo.damage = 4;
         phi_v1 = true;
     }
@@ -717,19 +717,20 @@ s32 func_808DA08C(EnSw* this, PlayState* play) {
             }
             this->unk_458 = 20;
             this->unk_45A = 0;
-            Actor_SetColorFilter(&this->actor, 0x4000, 200, 0, this->unk_458);
+            Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 200, COLORFILTER_BUFFLAG_OPA, this->unk_458);
             ret = true;
         } else if (this->actor.colChkInfo.damageEffect == 1) {
             if (this->unk_45A == 0) {
                 Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_FREEZE);
                 this->unk_45A = 40;
-                Actor_SetColorFilter(&this->actor, 0, 200, 0, this->unk_45A);
+                Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 200, COLORFILTER_BUFFLAG_OPA,
+                                     this->unk_45A);
             }
         } else {
             Actor_PlaySfx(&this->actor, NA_SE_EN_STALTU_DAMAGE);
             this->unk_458 = 20;
             this->unk_45A = 0;
-            Actor_SetColorFilter(&this->actor, 0x4000, 200, 0, this->unk_458);
+            Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 200, COLORFILTER_BUFFLAG_OPA, this->unk_458);
         }
     }
     return ret;
@@ -873,7 +874,7 @@ void func_808DA89C(EnSw* this, PlayState* play) {
     } else if (ENSW_GET_3(&this->actor)) {
         this->actionFunc = func_808DAEB4;
     } else {
-        if (this->actor.bgCheckFlags & 1) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
             f32 temp_f2;
 
             this->actor.shape.yOffset = 400.0f;
@@ -1103,7 +1104,7 @@ void func_808DB25C(EnSw* this, PlayState* play) {
 void func_808DB2E0(EnSw* this, PlayState* play) {
     f32 temp_f2;
 
-    if (this->actor.bgCheckFlags & 1) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         func_808D9F78(this, play, 0);
         temp_f2 = fabsf(this->actor.velocity.y) * 0.6f;
         this->actor.velocity.x *= 0.5f;

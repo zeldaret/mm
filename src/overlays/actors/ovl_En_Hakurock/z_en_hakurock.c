@@ -165,7 +165,7 @@ void func_80B21EA4(EnHakurock* this, s32 arg1) {
 }
 
 void func_80B21FFC(EnHakurock* this) {
-    this->actor.bgCheckFlags &= ~1;
+    this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND;
     this->collider.base.atFlags &= ~AT_HIT;
     this->collider.base.ocFlags1 &= ~OC1_HIT;
     this->actor.draw = NULL;
@@ -210,7 +210,7 @@ void func_80B221E8(EnHakurock* this, PlayState* play) {
     this->actor.shape.rot.z += 0xB00;
 
     if ((this->collider.base.atFlags & AT_HIT) || ((this->counter == 0) && (this->collider.base.ocFlags1 & OC1_HIT)) ||
-        ((this->actor.bgCheckFlags & 1) && (this->actor.velocity.y < 0.0f))) {
+        ((this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) && (this->actor.velocity.y < 0.0f))) {
         Actor_PlaySfx(&this->actor, NA_SE_EV_ROCK_BROKEN);
         func_80B21EA4(this, 0);
         func_80B21FFC(this);
@@ -244,7 +244,7 @@ void func_80B2242C(EnHakurock* this, PlayState* play) {
     if ((this->collider.base.ocFlags1 & OC1_HIT) && (this->collider.base.oc == this->actor.parent)) {
         func_80B21EA4(this, 1);
         func_80B21FFC(this);
-    } else if ((this->actor.bgCheckFlags & 1)) {
+    } else if ((this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
         func_80B21EA4(this, 2);
         Actor_PlaySfx(&this->actor, NA_SE_EV_OBJECT_STICK);
         func_80B224C0(this);

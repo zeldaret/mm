@@ -445,7 +445,7 @@ void EnJg_Walk(EnJg* this, PlayState* play) {
 
     if (this->path != NULL) {
         yRotation = EnJg_GetWalkingYRotation(this->path, this->currentPoint, &this->actor.world.pos, &distSQ);
-        if (this->actor.bgCheckFlags & 8) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
             yRotation = this->actor.wallYaw;
         }
 
@@ -687,7 +687,7 @@ void EnJg_LullabyIntroCutsceneAction(EnJg* this, PlayState* play) {
             this->drum = Actor_SpawnAsChildAndCutscene(
                 &play->actorCtx, play, ACTOR_OBJ_JG_GAKKI, this->actor.world.pos.x, this->actor.world.pos.y,
                 this->actor.world.pos.z, this->actor.shape.rot.x, this->actor.shape.rot.y, this->actor.shape.rot.z,
-                this->actor.params, this->actor.cutscene, this->actor.unk20, NULL);
+                this->actor.params, this->actor.cutscene, this->actor.halfDaysBits, NULL);
         }
 
         if (this->cutsceneAnimIndex == EN_JG_ANIM_TAKING_OUT_DRUM) {

@@ -457,7 +457,7 @@ void func_80C11454(EnThiefbird* this) {
     this->drawDmgEffFrozenSteamScale = 0.75f;
     this->drawDmgEffAlpha = 1.0f;
     this->actor.flags &= ~ACTOR_FLAG_200;
-    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 80);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 80);
 }
 
 void func_80C114C0(EnThiefbird* this, PlayState* play) {
@@ -484,7 +484,7 @@ void func_80C11590(EnThiefbird* this, PlayState* play) {
     sp38 = Animation_OnFrame(&this->skelAnime, 0.0f);
     this->actor.speed = (Rand_ZeroOne() * 1.5f) + 3.0f;
 
-    if (this->actor.bgCheckFlags & 8) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
         this->unk_192 = this->actor.wallYaw;
     } else {
         if (Actor_WorldDistXZToPoint(&this->actor, &this->actor.home.pos) > 300.0f) {
@@ -504,7 +504,7 @@ void func_80C11590(EnThiefbird* this, PlayState* play) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_THIEFBIRD_VOICE);
     }
 
-    if ((this->actor.depthInWater > -40.0f) || (this->actor.bgCheckFlags & 1)) {
+    if ((this->actor.depthInWater > -40.0f) || (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
         this->unk_190 = -4096;
     } else if (this->actor.world.pos.y < (this->actor.home.pos.y - 75.0f)) {
         this->unk_190 = -Rand_S16Offset(2048, 2048);
@@ -557,7 +557,7 @@ void func_80C1193C(EnThiefbird* this, PlayState* play) {
     pitch = Actor_WorldPitchTowardActor(&this->actor, &player->actor);
     pitch = CLAMP(pitch, -0x2800, 0x2800);
     Math_SmoothStepToS(&this->actor.shape.rot.x, pitch, 4, 0x800, 0x80);
-    if (this->actor.bgCheckFlags & 8) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
         Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.wallYaw, 6, 0x1000, 0x100);
     } else if (Actor_IsFacingPlayer(&this->actor, 0x3C00) || (this->actor.xzDistToPlayer > 120.0f)) {
         s16 rot = BINANG_ROT180(this->actor.yawTowardsPlayer - player->actor.shape.rot.y);
@@ -574,7 +574,7 @@ void func_80C1193C(EnThiefbird* this, PlayState* play) {
 
     if ((this->unk_18E == 0) || (player->stateFlags1 & PLAYER_STATE1_800000) ||
         (Player_GetMask(play) == PLAYER_MASK_STONE) || (this->collider.base.atFlags & AT_HIT) ||
-        (this->actor.bgCheckFlags & 1) || (this->actor.depthInWater > -40.0f)) {
+        (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) || (this->actor.depthInWater > -40.0f)) {
         if (this->collider.base.atFlags & AT_HIT) {
             this->collider.base.atFlags &= ~AT_HIT;
             Actor_PlaySfx(&this->actor, NA_SE_EN_THIEFBIRD_VOICE);
@@ -602,12 +602,12 @@ void func_80C11C60(EnThiefbird* this) {
     this->actor.speed = 0.0f;
     this->actor.velocity.y = 0.0f;
     Animation_PlayOnce(&this->skelAnime, &gTakkuriDeathAnim);
-    this->actor.bgCheckFlags &= ~1;
+    this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND;
     this->actor.shape.rot.x = 0;
     this->unk_18E = 40;
     this->actor.velocity.y = 0.0f;
     Actor_PlaySfx(&this->actor, NA_SE_EN_THIEFBIRD_DEAD);
-    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 40);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 40);
     this->collider.base.acFlags &= ~AC_ON;
     this->actor.flags |= ACTOR_FLAG_10;
     this->unk_192 = 0x1C00;
@@ -654,7 +654,7 @@ void func_80C11DF0(EnThiefbird* this, PlayState* play) {
         this->actor.shape.rot.y += this->unk_192;
     }
 
-    if ((this->actor.bgCheckFlags & 1) || (this->actor.floorHeight == BGCHECK_Y_MIN)) {
+    if ((this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) || (this->actor.floorHeight == BGCHECK_Y_MIN)) {
         for (i = 0; i < ARRAY_COUNT(this->limbPos); i++) {
             func_800B3030(play, &this->limbPos[i], &gZeroVec3f, &gZeroVec3f, 0x8C, 0, 0);
         }
@@ -682,13 +682,13 @@ void func_80C11F6C(EnThiefbird* this, PlayState* play) {
     }
 
     if (this->actor.colChkInfo.damageEffect == 5) {
-        Actor_SetColorFilter(&this->actor, 0, 255, 0, 40);
+        Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 255, COLORFILTER_BUFFLAG_OPA, 40);
         Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_FREEZE);
     } else if (this->actor.colChkInfo.damageEffect == 1) {
-        Actor_SetColorFilter(&this->actor, 0, 255, 0, 40);
+        Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 255, COLORFILTER_BUFFLAG_OPA, 40);
         Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_FREEZE);
     } else {
-        Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 40);
+        Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 40);
         Actor_PlaySfx(&this->actor, NA_SE_EN_THIEFBIRD_DAMAGE);
     }
 
@@ -732,7 +732,7 @@ void func_80C1215C(EnThiefbird* this, PlayState* play) {
     }
 
     SkelAnime_Update(&this->skelAnime);
-    if (this->actor.bgCheckFlags & 8) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
         this->unk_192 = this->actor.wallYaw;
     } else if (this->unk_3E8 == 0) {
         this->unk_192 = BINANG_ROT180(this->actor.yawTowardsPlayer);
@@ -771,7 +771,7 @@ void func_80C12378(EnThiefbird* this, PlayState* play) {
     }
 
     SkelAnime_Update(&this->skelAnime);
-    if (this->actor.bgCheckFlags & 8) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
         this->unk_192 = this->actor.wallYaw;
     } else {
         this->unk_192 = BINANG_ROT180(this->actor.yawTowardsPlayer);
@@ -798,7 +798,7 @@ void func_80C124B0(EnThiefbird* this, PlayState* play) {
     s16 temp_v1;
 
     SkelAnime_Update(&this->skelAnime);
-    if (this->actor.bgCheckFlags & 8) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
         this->unk_192 = this->actor.wallYaw;
     } else {
         this->unk_192 = Actor_WorldYawTowardPoint(&this->actor, &D_80C13920);
@@ -881,7 +881,7 @@ void func_80C127F4(EnThiefbird* this, PlayState* play) {
     }
 
     if (this->unk_3EC != NULL) {
-        if (this->actor.bgCheckFlags & 8) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
             Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.wallYaw, 3, 0x2000, 0x100);
         } else {
             Math_SmoothStepToS(&this->actor.shape.rot.y, Actor_WorldYawTowardActor(&this->actor, &this->unk_3EC->actor),
@@ -909,7 +909,7 @@ void func_80C127F4(EnThiefbird* this, PlayState* play) {
         }
     } else {
         this->actor.speed = 4.0f;
-        if (this->actor.bgCheckFlags & 8) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
             Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.wallYaw, 6, 0x1000, 0x100);
         } else {
             Math_SmoothStepToS(&this->actor.shape.rot.y, BINANG_ROT180(this->actor.yawTowardsPlayer), 6, 0x1000, 0x100);

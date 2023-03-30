@@ -535,12 +535,12 @@ s32 func_80B78A54(ObjUm* this, PlayState* play, s32 arg2, EnHorse* arg3, EnHorse
             arg3->unk_564 = 1;
             if (arg3->rider != NULL) {
                 arg3->rider->actor.colorFilterTimer = 20;
-                Actor_SetColorFilter(&arg3->rider->actor, 0x4000, 0xFF, 0, 40);
+                Actor_SetColorFilter(&arg3->rider->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 40);
             }
         } else {
             if (arg3->rider != NULL) {
                 arg3->rider->actor.colorFilterTimer = 20;
-                Actor_SetColorFilter(&arg3->rider->actor, 0x4000, 0xFF, 0, 40);
+                Actor_SetColorFilter(&arg3->rider->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 40);
             }
             Audio_PlaySfxAtPos(&arg3->actor.projectedPos, NA_SE_EN_CUTBODY);
         }
@@ -937,7 +937,7 @@ s32 func_80B7984C(PlayState* play, ObjUm* this, s32 arg2, s32* arg3) {
         return 0;
     }
     if (*arg3 == 3) {
-        func_80151938(play, this->dyna.actor.textId);
+        Message_ContinueTextbox(play, this->dyna.actor.textId);
         *arg3 = 1;
         return 0;
     }
@@ -1703,7 +1703,7 @@ void ObjUm_ChangeAnim(ObjUm* this, PlayState* play, ObjUmAnimation animIndex) {
     if (this->wheelRot / 0x199A != this->unk_420) {
         this->unk_420 = this->wheelRot / 0x199A;
         //! FAKE
-        if (!&sUmAnims[0]) {}
+        if (sUmAnims[0].doesMove) {}
         Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_CART_WHEEL);
     }
 }

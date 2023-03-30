@@ -420,7 +420,7 @@ void func_80BDD350(EnZow* this, PlayState* play) {
         }
     }
 
-    if ((this->actor.bgCheckFlags & 1) || (this->actor.depthInWater > 180.0f)) {
+    if ((this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) || (this->actor.depthInWater > 180.0f)) {
         this->actor.velocity.y = 0.0f;
         this->actionFunc = func_80BDD79C;
     }
@@ -477,11 +477,11 @@ void func_80BDD570(EnZow* this, PlayState* play) {
                     case 0x12FB:
                     case 0x12FD:
                     case 0x12FF:
-                        func_80151938(play, play->msgCtx.currentTextId + 1);
+                        Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                         break;
 
                     default:
-                        func_801477B4(play);
+                        Message_CloseTextbox(play);
                         break;
                 }
             }

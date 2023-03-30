@@ -206,7 +206,7 @@ void EnBigpo_Init(Actor* thisx, PlayState* play2) {
     }
 
     ActorShape_Init(&thisx->shape, 0.0f, ActorShadow_DrawCircle, 45.0f);
-    thisx->bgCheckFlags |= 0x400;
+    thisx->bgCheckFlags |= BGCHECKFLAG_PLAYER_400;
     this->savedHeight = thisx->home.pos.y + 100.0f;
     this->mainColor.r = 255;
     this->mainColor.g = 255;
@@ -645,7 +645,7 @@ void EnBigpo_SpinningDown(EnBigpo* this, PlayState* play) {
  */
 void EnBigpo_HitStun(EnBigpo* this) {
     Animation_MorphToPlayOnce(&this->skelAnime, &gBigpoShockAnim, -6.0f);
-    Actor_SetColorFilter(&this->actor, 0x4000, 0xFF, 0, 0x10);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 16);
     this->collider.base.acFlags &= ~AC_ON;
     func_800BE504(&this->actor, &this->collider);
     this->actionFunc = EnBigpo_CheckHealth;
@@ -744,12 +744,12 @@ void EnBigpo_SetupLanternDrop(EnBigpo* this, PlayState* play) {
     this->actor.world.pos.y -= 15.0f;
     func_800BC154(play, &play->actorCtx, &this->actor, ACTORCAT_MISC);
     this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_4); // targetable OFF, enemy music OFF
-    this->actor.bgCheckFlags &= ~0x400;
+    this->actor.bgCheckFlags &= ~BGCHECKFLAG_PLAYER_400;
     this->actionFunc = EnBigpo_LanternFalling;
 }
 
 void EnBigpo_LanternFalling(EnBigpo* this, PlayState* play) {
-    if (this->actor.bgCheckFlags & 1 || this->actor.floorHeight == BGCHECK_Y_MIN) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND || this->actor.floorHeight == BGCHECK_Y_MIN) {
         if (this->switchFlags != 0xFF) {
             Flags_SetSwitch(play, this->switchFlags);
         }
@@ -827,7 +827,7 @@ void EnBigpo_ScoopSoulIdle(EnBigpo* this, PlayState* play) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_PO_LAUGH);
         EnBigpo_SetupScoopSoulLeaving(this);
     } else {
-        Actor_PickUp(&this->actor, play, GI_MAX, 35.0f, 60.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_MAX, 35.0f, 60.0f);
         this->actor.world.pos.y = (sin_rad(this->idleTimer * (M_PI / 20)) * 5.0f) + this->savedHeight;
     }
 }

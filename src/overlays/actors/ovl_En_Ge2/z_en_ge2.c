@@ -405,7 +405,7 @@ void EnGe2_Charge(EnGe2* this, PlayState* play) {
 
     if (this->picto.actor.xzDistToPlayer < 50.0f) {
         EnGe2_SetupCapturePlayer(this);
-    } else if (!(this->picto.actor.bgCheckFlags & 1)) {
+    } else if (!(this->picto.actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
         this->picto.actor.world.pos = this->picto.actor.prevPos;
         EnGe2_SetupCapturePlayer(this);
     }

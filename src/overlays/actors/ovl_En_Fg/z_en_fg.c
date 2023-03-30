@@ -275,7 +275,7 @@ void EnFg_Jump(EnFg* this, PlayState* play) {
                 this->skelAnime.playSpeed = 0.0f;
             }
 
-            if ((this->actor.velocity.y <= 0.0f) && (this->actor.bgCheckFlags & 1)) {
+            if ((this->actor.velocity.y <= 0.0f) && (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
                 EnFg_ChangeAnim(&this->skelAnime, 0);
                 this->actionFunc = EnFg_Idle;
                 this->actor.velocity.y = 0.0f;
@@ -289,7 +289,7 @@ void EnFg_DoNothing(EnFg* this, PlayState* play) {
 }
 
 void EnFg_Knockback(EnFg* this, PlayState* play) {
-    if ((this->actor.velocity.y <= 0.0f) && (this->actor.bgCheckFlags & 1)) {
+    if ((this->actor.velocity.y <= 0.0f) && (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
         this->bounceCounter++;
         if (this->bounceCounter < 4) {
             this->actor.shape.rot.x += 0x1000;
@@ -298,7 +298,7 @@ void EnFg_Knockback(EnFg* this, PlayState* play) {
             this->actionFunc = EnFg_DoNothing;
         }
     } else {
-        if (this->actor.bgCheckFlags & 8) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
             this->actor.world.rot.y = this->actor.wallYaw;
             this->actor.shape.rot = this->actor.world.rot;
         }
