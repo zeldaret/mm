@@ -451,7 +451,7 @@ void EnMa4_HandlePlayerChoice(EnMa4* this, PlayState* play) {
                 // "Try again?"
                 if (play->msgCtx.choiceIndex == 0) { // Yes
                     func_8019F208();
-                    func_801477B4(play);
+                    Message_CloseTextbox(play);
                     EnMa4_SetupBeginHorsebackGame(this);
                 } else { // No
                     if (this->type == MA4_TYPE_ALIENS_DEFEATED) {
@@ -494,7 +494,7 @@ void EnMa4_ChooseNextDialogue(EnMa4* this, PlayState* play) {
     if (Message_ShouldAdvance(play)) {
         switch (this->textId) {
             case 0x2390:
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 EnMa4_SetupBeginHorsebackGame(this);
                 break;
 
@@ -529,7 +529,7 @@ void EnMa4_ChooseNextDialogue(EnMa4* this, PlayState* play) {
                 break;
 
             case 0x333E:
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 EnMa4_SetupBeginDescribeThemCs(this);
                 break;
 
@@ -566,7 +566,7 @@ void EnMa4_ChooseNextDialogue(EnMa4* this, PlayState* play) {
                 break;
 
             case 0x334A:
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 EnMa4_SetupBeginHorsebackGame(this);
                 break;
 
@@ -597,7 +597,7 @@ void EnMa4_ChooseNextDialogue(EnMa4* this, PlayState* play) {
                     Message_StartTextbox(play, 0x334C, &this->actor);
                     this->textId = 0x334C;
                 } else {
-                    func_801477B4(play);
+                    Message_CloseTextbox(play);
                     player->stateFlags1 |= PLAYER_STATE1_20;
                     EnMa4_SetupBeginEponasSongCs(this);
                     EnMa4_BeginEponasSongCs(this, play);
@@ -730,8 +730,8 @@ void EnMa4_HorsebackGameWait(EnMa4* this, PlayState* play) {
 void EnMa4_SetupHorsebackGameEnd(EnMa4* this, PlayState* play) {
     CLEAR_WEEKEVENTREG(WEEKEVENTREG_08_01);
     this->actionFunc = EnMa4_HorsebackGameEnd;
-    Audio_QueueSeqCmd(NA_BGM_STOP);
-    Audio_QueueSeqCmd(NA_BGM_HORSE_GOAL | 0x8000);
+    SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 0);
+    SEQCMD_PLAY_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 0, NA_BGM_HORSE_GOAL | SEQ_FLAG_ASYNC);
 }
 
 void EnMa4_HorsebackGameEnd(EnMa4* this, PlayState* play) {

@@ -229,7 +229,7 @@ void EnFu_Init(Actor* thisx, PlayState* play) {
 void EnFu_Destroy(Actor* thisx, PlayState* play) {
     EnFu* this = THIS;
 
-    CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_01);
+    CLEAR_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_WAIT);
     CLEAR_WEEKEVENTREG(WEEKEVENTREG_08_01);
     Collider_DestroyCylinder(play, &this->collider);
 }
@@ -532,13 +532,13 @@ void func_80962660(EnFu* this, PlayState* play) {
                 break;
 
             case 0x287D:
-                SET_WEEKEVENTREG(WEEKEVENTREG_63_01);
-                CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_02);
-                func_801477B4(play);
+                SET_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_WAIT);
+                CLEAR_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_TIME_PASSED);
+                Message_CloseTextbox(play);
                 player->stateFlags1 |= PLAYER_STATE1_20;
                 this->unk_53C = 0;
                 Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 3);
-                func_801A2BB8(NA_BGM_TIMED_MINI_GAME);
+                Audio_PlaySubBgm(NA_BGM_TIMED_MINI_GAME);
                 if (this->unk_542 == 0) {
                     if (this->unk_546 == 1) {
                         func_80961EC8(play);
@@ -560,7 +560,7 @@ void func_80962660(EnFu* this, PlayState* play) {
             case 0x287E:
             case 0x2880:
             case 0x2883:
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 func_80963540(this);
                 func_80963560(this, play);
                 break;
@@ -605,8 +605,8 @@ void func_809628D0(EnFu* this, PlayState* play) {
                     case 0x2884:
                     case 0x2887:
                     case 0x288A:
-                        CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_01);
-                        CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_02);
+                        CLEAR_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_WAIT);
+                        CLEAR_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_TIME_PASSED);
                         func_809622FC(this);
                         break;
 
@@ -789,14 +789,14 @@ void func_80962F4C(EnFu* this, PlayState* play) {
                 Message_StartTextbox(play, 0x2888, &this->actor);
                 this->unk_552 = 0x2888;
             }
-            func_801A2C20();
+            Audio_StopSubBgm();
             gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2] = SECONDS_TO_TIMER(0);
             gSaveContext.timerStates[TIMER_ID_MINIGAME_2] = TIMER_STATE_STOP;
             this->unk_548 = 0;
             func_809632D0(this);
         } else {
             this->unk_548 = 0;
-            func_801A2C20();
+            Audio_StopSubBgm();
             gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2] = SECONDS_TO_TIMER(0);
             gSaveContext.timerStates[TIMER_ID_MINIGAME_2] = TIMER_STATE_STOP;
             Audio_PlayFanfare(NA_BGM_GET_ITEM | 0x900);
@@ -843,7 +843,7 @@ void func_80963350(EnFu* this, PlayState* play) {
     if ((this->unk_54A == 0) &&
         (((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) ||
          ((Message_GetState(&play->msgCtx) == TEXT_STATE_CLOSING) && (play->msgCtx.stateTimer == 1)))) {
-        func_801477B4(play);
+        Message_CloseTextbox(play);
         this->unk_54A = 2;
         D_80964C24 = 1;
     }
