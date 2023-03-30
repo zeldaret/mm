@@ -257,7 +257,7 @@ void EnMttag_ShowFalseStartMessage(EnMttag* this, PlayState* play) {
     gSaveContext.timerStates[TIMER_ID_MINIGAME_2] = TIMER_STATE_OFF;
     Message_StartTextbox(play, 0xE95, NULL); // An entrant made a false start
     func_800B7298(play, &this->actor, PLAYER_CSMODE_7);
-    Audio_QueueSeqCmd(0x101400FF);
+    SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 20);
     this->actionFunc = EnMttag_PotentiallyRestartRace;
 }
 
@@ -317,7 +317,7 @@ void EnMttag_RaceStart(EnMttag* this, PlayState* play) {
             if (DECR(this->timer) == 60) {
                 Interface_StartTimer(TIMER_ID_MINIGAME_2, 0);
                 play->interfaceCtx.minigameState = MINIGAME_STATE_COUNTDOWN_SETUP_3;
-                Audio_QueueSeqCmd(NA_BGM_GORON_RACE | 0x8000);
+                SEQCMD_PLAY_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 0, NA_BGM_GORON_RACE | SEQ_FLAG_ASYNC);
                 play->envCtx.unk_E4 = 0xFE;
                 player->stateFlags1 &= ~PLAYER_STATE1_20;
             } else if ((this->timer < 60) && (play->interfaceCtx.minigameState == MINIGAME_STATE_COUNTDOWN_GO)) {
@@ -362,14 +362,14 @@ void EnMttag_Race(EnMttag* this, PlayState* play) {
     if (EnMttag_IsInFinishLine(playerPos)) {
         gSaveContext.timerStates[TIMER_ID_MINIGAME_2] = TIMER_STATE_6;
         play_sound(NA_SE_SY_START_SHOT);
-        Audio_QueueSeqCmd(NA_BGM_GORON_GOAL | 0x8000);
+        SEQCMD_PLAY_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 0, NA_BGM_GORON_GOAL | SEQ_FLAG_ASYNC);
         this->timer = 55;
         SET_EVENTINF(EVENTINF_11);
         this->actionFunc = EnMttag_RaceFinish;
     } else if (EnMttag_IsAnyRaceGoronOverFinishLine(this)) {
         gSaveContext.timerStates[TIMER_ID_MINIGAME_2] = TIMER_STATE_6;
         play_sound(NA_SE_SY_START_SHOT);
-        Audio_QueueSeqCmd(NA_BGM_GORON_GOAL | 0x8000);
+        SEQCMD_PLAY_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 0, NA_BGM_GORON_GOAL | SEQ_FLAG_ASYNC);
         this->timer = 55;
         SET_EVENTINF(EVENTINF_12);
         this->actionFunc = EnMttag_RaceFinish;

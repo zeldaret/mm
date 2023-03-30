@@ -29,7 +29,7 @@ void EffectSsKakera_Draw(PlayState* play, u32 index, EffectSs* this);
 
 void EffectSsKakera_CheckForObject(EffectSs* this, PlayState* play);
 
-const EffectSsInit Effect_Ss_Kakera_InitVars = {
+EffectSsInit Effect_Ss_Kakera_InitVars = {
     EFFECT_SS_KAKERA,
     EffectSsKakera_Init,
 };

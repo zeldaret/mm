@@ -531,7 +531,7 @@ size_t Room_AllocateAndLoad(PlayState* play, RoomContext* roomCtx) {
         }
     }
 
-    roomCtx->roomMemPages[0] = THA_AllocEndAlign16(&play->state.heap, maxRoomSize);
+    roomCtx->roomMemPages[0] = THA_AllocTailAlign16(&play->state.heap, maxRoomSize);
     if (roomCtx->roomMemPages[0] == NULL) {
         __assert("../z_room.c", 1078);
     }

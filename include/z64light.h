@@ -4,6 +4,7 @@
 #include "ultra64.h"
 #include "ultra64/gbi.h"
 #include "color.h"
+#include "z64math.h"
 
 struct PlayState;
 
