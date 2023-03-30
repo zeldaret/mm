@@ -340,7 +340,7 @@ void func_80B320E0(EnZoraegg* this, PlayState* play) {
         this->actionFunc = func_80B32094;
         Message_StartTextbox(play, 0x24B, &this->actor);
     } else {
-        Actor_PickUp(&this->actor, play, GI_MAX, 80.0f, 60.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_MAX, 80.0f, 60.0f);
         if (this->actor.isTargeted) {
             func_800B8614(&this->actor, play, 110.0f);
         }
@@ -579,7 +579,7 @@ void func_80B32BB8(EnZoraegg* this, PlayState* play) {
     func_80B31C40(this, play);
     func_80B31D64(this, play, 13, 0.0f);
 
-    if (this->actor.bgCheckFlags & 0x1) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         this->actionFunc = func_80B32B70;
     }
 

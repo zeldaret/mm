@@ -190,7 +190,7 @@ void EnToto_Init(Actor* thisx, PlayState* play) {
         return;
     }
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 30.0f);
-    this->actor.bgCheckFlags |= 0x400;
+    this->actor.bgCheckFlags |= BGCHECKFLAG_PLAYER_400;
     SkelAnime_InitFlex(play, &this->skelAnime, &object_zm_Skel_00A978,
                        ((play->sceneId == SCENE_SONCHONOIE) ? &object_zm_Anim_003AA8 : &object_zm_Anim_00C880),
                        this->jointTable, this->morphTable, 18);
@@ -251,7 +251,7 @@ void func_80BA39C8(EnToto* this, PlayState* play) {
         return;
     }
 
-    //! @TODO: 0xED02 nor 0xED01 match CLOCK_TIME macro
+    //! TODO: Neither 0xED02 nor 0xED01 match CLOCK_TIME macro
     if (((play->sceneId == SCENE_MILK_BAR) &&
          !((gSaveContext.save.time >= CLOCK_TIME(6, 0)) && (gSaveContext.save.time < 0xED02))) ||
         ((play->sceneId != SCENE_MILK_BAR) && func_80BA397C(this, 0x2000))) {
@@ -364,9 +364,9 @@ s32 func_80BA3EE8(EnToto* this, PlayState* play) {
 
 s32 func_80BA3F2C(EnToto* this, PlayState* play) {
     if (this->text->textId != 0) {
-        func_80151938(play, this->text->textId);
+        Message_ContinueTextbox(play, this->text->textId);
     } else {
-        func_801477B4(play);
+        Message_CloseTextbox(play);
         func_80BA3EE8(this, play);
     }
     if (this->text->unk0 == 4) {
@@ -515,7 +515,7 @@ s32 func_80BA4530(EnToto* this, PlayState* play) {
         this->unk2B6 = 1;
         return this->text->unk1;
     }
-    if (player->actor.bgCheckFlags & 1) {
+    if (player->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         temp_s0 = &D_80BA50DC[gSaveContext.save.playerForm - 1];
         if (func_80BA44D4(temp_s0, player)) {
             Math_Vec3s_ToVec3f(&player->actor.world.pos, &temp_s0->unk6);
@@ -699,7 +699,7 @@ void func_80BA4CB4(EnToto* this, PlayState* play) {
         }
     }
     if (this->unk2B5 == 4 && !Actor_HasParent(&this->actor, play)) {
-        Actor_PickUp(&this->actor, play, GI_MASK_CIRCUS_LEADER, 9999.9f, 9999.9f);
+        Actor_OfferGetItem(&this->actor, play, GI_MASK_CIRCUS_LEADER, 9999.9f, 9999.9f);
     }
 }
 

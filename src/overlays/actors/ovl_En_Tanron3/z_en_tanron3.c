@@ -180,7 +180,7 @@ void EnTanron3_Live(EnTanron3* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     this->skelAnime.curFrame = 4.0f;
-    if ((player->actor.bgCheckFlags & 1) && player->actor.shape.feetPos[0].y >= 438.0f) {
+    if ((player->actor.bgCheckFlags & BGCHECKFLAG_GROUND) && player->actor.shape.feetPos[0].y >= 438.0f) {
         // Player is standing on the central platform, so stop chasing them
         this->isNonHostile = true;
     } else if (this->isNonHostile && this->workTimer[WORK_TIMER_WAIT] == 0 && !(this->timer & 0x1F)) {
@@ -275,13 +275,13 @@ void EnTanron3_Live(EnTanron3* this, PlayState* play) {
                 this->targetPosWithDeviation.y = this->waterSurfaceYPos - 50.0f;
                 this->workTimer[WORK_TIMER_OUT_OF_WATER] = 25;
                 Math_ApproachS(&this->actor.world.rot.x, 0x3000, 5, 0xBD0);
-                if (this->actor.bgCheckFlags & 8) {
+                if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
                     this->actor.speed = 0.0f;
                     if (this->actor.velocity.y > 0.0f) {
                         this->actor.velocity.y = -1.0f;
                     }
                 }
-                if (this->actor.bgCheckFlags & 1) {
+                if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
                     // Fish has touched land
                     this->isBeached = true;
                 }
@@ -289,7 +289,7 @@ void EnTanron3_Live(EnTanron3* this, PlayState* play) {
             case true:
                 this->nextRotationAngle = 0x3A98;
                 this->actor.gravity = -1.5f;
-                if (this->actor.bgCheckFlags & 1) {
+                if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
                     // Fish is still touching land, so it's still beached. Randomly flop around
                     this->actor.velocity.y = Rand_ZeroFloat(5.0f) + 5.0f;
                     this->actor.speed = Rand_ZeroFloat(2.0f) + 2.0f;

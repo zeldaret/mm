@@ -512,23 +512,23 @@ void EnBomChu_Update(Actor* thisx, PlayState* play) {
             this->actor.depthInWater = waterY - this->actor.world.pos.y;
 
             if (this->actor.depthInWater < 0.0f) {
-                if (this->actor.bgCheckFlags & 0x20) {
+                if (this->actor.bgCheckFlags & BGCHECKFLAG_WATER) {
                     EnBomChu_SpawnRipplesAndSplashes(this, play, waterY, true);
                 }
 
-                this->actor.bgCheckFlags &= ~0x20;
+                this->actor.bgCheckFlags &= ~BGCHECKFLAG_WATER;
                 return;
             }
 
-            if (!(this->actor.bgCheckFlags & 0x20) && (this->timer != 120)) {
+            if (!(this->actor.bgCheckFlags & BGCHECKFLAG_WATER) && (this->timer != 120)) {
                 EnBomChu_SpawnRipplesAndSplashes(this, play, waterY, true);
             } else {
                 EffectSsBubble_Spawn(play, &this->actor.world.pos, 0.0f, 3.0f, 15.0f, 0.25f);
             }
 
-            this->actor.bgCheckFlags |= 0x20;
+            this->actor.bgCheckFlags |= BGCHECKFLAG_WATER;
         } else {
-            this->actor.bgCheckFlags &= ~0x20;
+            this->actor.bgCheckFlags &= ~BGCHECKFLAG_WATER;
             this->actor.depthInWater = BGCHECK_Y_MIN;
         }
     }

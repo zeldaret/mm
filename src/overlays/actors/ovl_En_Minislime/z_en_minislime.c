@@ -140,36 +140,36 @@ void EnMinislime_CheckBackgroundCollision(EnMinislime* this) {
     f32 scaleY = this->actor.scale.y * 400.0f;
     f32 scaleZ = this->actor.scale.z * 400.0f;
 
-    this->actor.bgCheckFlags &= ~(0x10 | 0x8 | 0x2);
+    this->actor.bgCheckFlags &= ~(BGCHECKFLAG_GROUND_TOUCH | BGCHECKFLAG_WALL | BGCHECKFLAG_CEILING);
 
     if ((this->actor.world.pos.y + scaleY) > GBT_ROOM_5_MAX_Y) {
-        this->actor.bgCheckFlags |= 0x10;
-        this->actor.bgCheckFlags &= ~1;
+        this->actor.bgCheckFlags |= BGCHECKFLAG_CEILING;
+        this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND;
         this->actor.world.pos.y = GBT_ROOM_5_MAX_Y - scaleY;
     } else if ((this->actor.world.pos.y - scaleY) < GBT_ROOM_5_MIN_Y) {
         this->actor.world.pos.y = GBT_ROOM_5_MIN_Y + scaleY;
-        if (!(this->actor.bgCheckFlags & 1)) {
-            this->actor.bgCheckFlags |= 2;
+        if (!(this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
+            this->actor.bgCheckFlags |= BGCHECKFLAG_GROUND_TOUCH;
         }
-        this->actor.bgCheckFlags |= 1;
+        this->actor.bgCheckFlags |= BGCHECKFLAG_GROUND;
     } else {
-        this->actor.bgCheckFlags &= ~1;
+        this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND;
     }
 
     if ((this->actor.world.pos.x + scaleX) > GBT_ROOM_5_MAX_X) {
-        this->actor.bgCheckFlags |= 8;
+        this->actor.bgCheckFlags |= BGCHECKFLAG_WALL;
         this->actor.world.pos.x = GBT_ROOM_5_MAX_X - scaleX;
     } else if ((this->actor.world.pos.x - scaleX) < GBT_ROOM_5_MIN_X) {
         this->actor.world.pos.x = GBT_ROOM_5_MIN_X + scaleX;
-        this->actor.bgCheckFlags |= 8;
+        this->actor.bgCheckFlags |= BGCHECKFLAG_WALL;
     }
 
     if ((this->actor.world.pos.z + scaleZ) > GBT_ROOM_5_MAX_Z) {
-        this->actor.bgCheckFlags |= 8;
+        this->actor.bgCheckFlags |= BGCHECKFLAG_WALL;
         this->actor.world.pos.z = GBT_ROOM_5_MAX_Z - scaleZ;
     } else if ((this->actor.world.pos.z - scaleZ) < GBT_ROOM_5_MIN_Z) {
         this->actor.world.pos.z = GBT_ROOM_5_MIN_Z + scaleZ;
-        this->actor.bgCheckFlags |= 8;
+        this->actor.bgCheckFlags |= BGCHECKFLAG_WALL;
     }
 }
 
@@ -259,7 +259,7 @@ void EnMinislime_Fall(EnMinislime* this, PlayState* play) {
     Math_StepToF(&this->actor.scale.x, 0.17999999f, 0.003f);
     Math_StepToF(&this->actor.scale.y, 0.05f, 0.003f);
     this->actor.scale.z = this->actor.scale.x;
-    if (this->actor.bgCheckFlags & 1) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         EnMinislime_SetupGrowAndShrink(this);
     }
 }
@@ -271,7 +271,7 @@ void EnMinislime_SetupBreakFromBigslime(EnMinislime* this) {
     this->actor.shape.rot.y = this->actor.world.rot.y;
     this->actor.speed = Math_CosS(this->actor.world.rot.x) * 15.0f;
     velY = Math_SinS(this->actor.world.rot.x) * 15.0f;
-    this->actor.bgCheckFlags &= ~1;
+    this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND;
     this->actor.velocity.y = velY + 2.0f;
     this->actor.gravity = -1.0f;
     this->frozenScale = 0.1f;
@@ -289,7 +289,7 @@ void EnMinislime_BreakFromBigslime(EnMinislime* this, PlayState* play) {
     this->actor.shape.rot.x += this->actor.world.rot.x;
     if (this->actor.velocity.y < 0.0f) {
         this->collider.base.ocFlags1 |= OC1_ON;
-        if (this->actor.bgCheckFlags & 1) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
             EnMinislime_AddIceShardEffect(this);
             this->attackTimer = 40;
             EnMinislime_SetupGrowAndShrink(this);
@@ -341,7 +341,7 @@ void EnMinislime_IceArrowDamage(EnMinislime* this, PlayState* play) {
         return;
     }
 
-    if (this->actor.bgCheckFlags & 2) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND_TOUCH) {
         EnMinislime_AddIceShardEffect(this);
         EnMinislime_SetupGrowAndShrink(this);
     }
@@ -478,7 +478,7 @@ void EnMinislime_Bounce(EnMinislime* this, PlayState* play) {
         } else {
             Math_StepToF(&this->actor.scale.x, 0.17999999f, 0.003f);
             Math_StepToF(&this->actor.scale.y, 0.05f, 0.003f);
-            if (this->actor.bgCheckFlags & 1) {
+            if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
                 EnMinislime_SetupGrowAndShrink(this);
                 return;
             }
@@ -661,7 +661,7 @@ void EnMinislime_SetupGekkoThrow(EnMinislime* this) {
     this->actor.world.rot.y = this->actor.yawTowardsPlayer;
     this->actor.gravity = -1.0f;
     this->actor.velocity.y = ((xzDistToPlayer - 200.0f) * 0.01f) + 3.0f;
-    this->actor.bgCheckFlags &= ~1;
+    this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND;
     this->throwTimer = 10;
     this->actionFunc = EnMinislime_GekkoThrow;
 }
@@ -678,7 +678,7 @@ void EnMinislime_GekkoThrow(EnMinislime* this, PlayState* play) {
         this->throwTimer = 10;
     }
 
-    if (this->actor.bgCheckFlags & 1) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         EnMinislime_SetupGrowAndShrink(this);
     }
 }
@@ -713,7 +713,7 @@ void EnMinislime_Update(Actor* thisx, PlayState* play) {
     s32 pad;
     Vec3f vec1;
 
-    if ((this->actor.params == MINISLIME_DEFEAT_IDLE) && (this->actor.bgCheckFlags & 1)) {
+    if ((this->actor.params == MINISLIME_DEFEAT_IDLE) && (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
         EnMinislime_SetupDefeatIdle(this);
     } else if (this->actor.params == MINISLIME_DEFEAT_MELT) {
         EnMinislime_SetupDefeatMelt(this, play);
@@ -761,7 +761,7 @@ void EnMinislime_Update(Actor* thisx, PlayState* play) {
             this->attackTimer--;
         }
 
-        if (this->actor.bgCheckFlags & 2) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND_TOUCH) {
             player = GET_PLAYER(play);
             vec1.x = this->actor.world.pos.x;
             vec1.z = this->actor.world.pos.z;

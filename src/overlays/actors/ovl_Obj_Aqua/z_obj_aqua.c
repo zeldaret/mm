@@ -151,7 +151,10 @@ void ObjAqua_Init(Actor* thisx, PlayState* play) {
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 60.0f);
-    if (1) {};
+
+    //! FAKE:
+    if (1) {}
+
     this->actor.shape.shadowAlpha = 140;
     this->alpha = 255;
     if (func_80ACBA60(this, play)) {
@@ -175,8 +178,8 @@ void func_80ACBC70(ObjAqua* this) {
 }
 
 void func_80ACBC8C(ObjAqua* this, PlayState* play) {
-    if (this->actor.bgCheckFlags & 0x21) {
-        if (this->actor.bgCheckFlags & 1) {
+    if (this->actor.bgCheckFlags & (BGCHECKFLAG_GROUND | BGCHECKFLAG_WATER)) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
             func_80ACB7F4(this, play);
             func_80ACBA10(this);
             Actor_PlaySfx(&this->actor, NA_SE_EV_BOTTLE_WATERING);

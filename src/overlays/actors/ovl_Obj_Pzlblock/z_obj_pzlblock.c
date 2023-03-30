@@ -351,7 +351,8 @@ void func_809A3E58(Actor* thisx, PlayState* play) {
     if (this->unk_160 != 0) {
         Actor_UpdateBgCheckInfo(play, &this->dyna.actor, 15.0f, 30.0f, 0.0f, this->unk_160);
         if (((this->actionFunc == func_809A3A74) || (this->actionFunc == func_809A3D38)) &&
-            (this->dyna.actor.bgCheckFlags & 1) && !DynaPoly_GetActor(&play->colCtx, this->dyna.actor.floorBgId)) {
+            (this->dyna.actor.bgCheckFlags & BGCHECKFLAG_GROUND) &&
+            !DynaPoly_GetActor(&play->colCtx, this->dyna.actor.floorBgId)) {
             this->unk_160 = 0;
         }
     }

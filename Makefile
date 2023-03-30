@@ -210,7 +210,7 @@ build/src/libultra/rmon/%.o: OPTFLAGS := -O2
 build/src/libultra/flash/%.o: OPTFLAGS := -g
 build/src/libultra/flash/%.o: MIPS_VERSION := -mips1
 
-build/src/code/audio/%.o: OPTFLAGS := -O2
+build/src/audio/%.o: OPTFLAGS := -O2
 
 build/assets/%.o: OPTFLAGS := -O1
 build/assets/%.o: ASM_PROC_FLAGS := 
@@ -238,7 +238,7 @@ build/src/libultra/%.o: CC := $(CC_OLD)
 build/src/libultra/voice/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(CC_OLD) -- $(AS) $(ASFLAGS) --
 
 build/src/code/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(CC) -- $(AS) $(ASFLAGS) --
-build/src/code/audio/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(CC) -- $(AS) $(ASFLAGS) --
+build/src/audio/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(CC) -- $(AS) $(ASFLAGS) --
 
 build/src/overlays/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(CC) -- $(AS) $(ASFLAGS) --
 

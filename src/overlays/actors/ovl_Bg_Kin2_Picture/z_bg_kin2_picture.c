@@ -283,7 +283,7 @@ void BgKin2Picture_Fall(BgKin2Picture* this, PlayState* play) {
     Actor_MoveWithGravity(&this->dyna.actor);
     Actor_UpdateBgCheckInfo(play, &this->dyna.actor, 0.0f, 0.0f, 0.0f, 4);
 
-    if (this->dyna.actor.bgCheckFlags & 1) {
+    if (this->dyna.actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         Math_StepToS(&this->step, 0x7D0, 0x78);
 
         if (this->landTimer < 3) {

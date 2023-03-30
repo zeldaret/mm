@@ -383,7 +383,7 @@ void func_80C01A24(EnBomjimb* this, PlayState* play) {
         Math_ApproachF(&this->actor.speed, 6.0f, 0.5f, 2.0f);
     }
 
-    if ((this->unk_2C0 != 0) && !(this->actor.bgCheckFlags & 1)) {
+    if ((this->unk_2C0 != 0) && !(this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
         func_80C01B40(this);
     }
 }
@@ -396,7 +396,7 @@ void func_80C01B40(EnBomjimb* this) {
 
 void func_80C01B74(EnBomjimb* this, PlayState* play) {
     Math_ApproachF(&this->actor.speed, 6.0f, 0.5f, 2.0f);
-    if ((this->collider.base.acFlags & AC_HIT) || (this->actor.bgCheckFlags & 1)) {
+    if ((this->collider.base.acFlags & AC_HIT) || (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
         this->collider.base.acFlags &= ~AC_HIT;
         if ((this->unk_2E4 != NULL) && (this->unk_2E4->update != NULL)) {
             ((EnNiw*)this->unk_2E4)->unk2BC.z = 90000.0f;
@@ -450,7 +450,7 @@ void func_80C01CD0(EnBomjimb* this, PlayState* play) {
         this->actor.draw = NULL;
     }
 
-    if ((this->unk_2C0 == 0) && (this->unk_2E4->bgCheckFlags & 1)) {
+    if ((this->unk_2C0 == 0) && (this->unk_2E4->bgCheckFlags & BGCHECKFLAG_GROUND)) {
         Actor_PlaySfx(&this->actor, NA_SE_EV_PUT_DOWN_WOODBOX);
         this->unk_2C0 = 1;
     }
@@ -760,7 +760,7 @@ void func_80C02A14(EnBomjimb* this, PlayState* play) {
     }
 
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-        func_801477B4(play);
+        Message_CloseTextbox(play);
         if ((this->unk_2CA == 8) && (gSaveContext.save.bombersCaughtNum >= 5)) {
             func_80C02CA4(this, play);
         } else {
@@ -779,7 +779,7 @@ void func_80C02BCC(EnBomjimb* this, PlayState* play) {
     if (this->unk_2C0 == 0) {
         player->actor.freezeTimer = 3;
         if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-            func_801477B4(play);
+            Message_CloseTextbox(play);
             this->unk_2C0 = 1;
             player->stateFlags1 &= ~PLAYER_STATE1_10000000;
         }
@@ -840,7 +840,7 @@ void EnBomjimb_Update(Actor* thisx, PlayState* play2) {
     if (this->unk_2CA == 0) {
         if ((this->unk_2E4 != NULL) && (this->unk_2E4->update != NULL)) {
             Math_Vec3f_Copy(&this->unk_2E4->world.pos, &this->actor.world.pos);
-            if (this->actor.bgCheckFlags & 1) {
+            if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
                 this->unk_2E4->world.pos.y = this->actor.world.pos.y + 35.0f;
             } else {
                 this->unk_2E4->world.pos.y = this->actor.world.pos.y + 25.0f;

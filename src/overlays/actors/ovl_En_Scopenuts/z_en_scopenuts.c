@@ -208,7 +208,7 @@ void func_80BCB078(EnScopenuts* this, PlayState* play) {
 
     if (this->path != NULL) {
         func_80BCC448(this->path, this->unk_334, &this->actor.world.pos, &sp30);
-        if (this->actor.bgCheckFlags & 8) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
             sp30.y = this->actor.wallYaw;
         }
         Math_SmoothStepToS(&this->actor.world.rot.y, sp30.y, 10, 300, 0);
@@ -238,7 +238,7 @@ void func_80BCB078(EnScopenuts* this, PlayState* play) {
 void func_80BCB1C8(EnScopenuts* this, PlayState* play) {
     this->unk_350 *= 0.92f;
     Actor_SetScale(&this->actor, this->unk_350);
-    if (this->actor.bgCheckFlags & 1) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         SET_WEEKEVENTREG(WEEKEVENTREG_52_40);
         Actor_Kill(&this->actor);
     }
@@ -360,7 +360,7 @@ void func_80BCB6D0(EnScopenuts* this, PlayState* play) {
             }
         }
     } else if (talkState == TEXT_STATE_DONE) {
-        func_800B85E0(&this->actor, play, 400.0f, -1);
+        func_800B85E0(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
         this->actionFunc = func_80BCB980;
     }
 }
@@ -371,7 +371,7 @@ void func_80BCB90C(EnScopenuts* this, PlayState* play) {
         SET_WEEKEVENTREG(WEEKEVENTREG_53_02);
         this->actionFunc = func_80BCB6D0;
     } else {
-        Actor_PickUp(&this->actor, play, GI_HEART_PIECE, 300.0f, 300.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_HEART_PIECE, 300.0f, 300.0f);
     }
 }
 
@@ -382,7 +382,7 @@ void func_80BCB980(EnScopenuts* this, PlayState* play) {
         Message_StartTextbox(play, this->unk_33C, &this->actor);
         this->actionFunc = func_80BCB6D0;
     } else {
-        func_800B85E0(&this->actor, play, 400.0f, -1);
+        func_800B85E0(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
     }
 }
 
@@ -564,7 +564,7 @@ void func_80BCBFFC(EnScopenuts* this, PlayState* play) {
 
     if (this->path != NULL) {
         sp34 = func_80BCC448(this->path, this->unk_334, &this->actor.world.pos, &sp38);
-        if (this->actor.bgCheckFlags & 8) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
             sp38.y = this->actor.wallYaw;
         }
 

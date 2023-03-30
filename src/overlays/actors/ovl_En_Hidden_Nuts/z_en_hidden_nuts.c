@@ -226,14 +226,14 @@ void func_80BDB59C(EnHiddenNuts* this, PlayState* play) {
     }
 
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-        func_801477B4(play);
+        Message_CloseTextbox(play);
         func_80BDB268(this);
     }
 }
 
 void func_80BDB788(EnHiddenNuts* this) {
     this->actor.flags |= ACTOR_FLAG_10;
-    this->actor.flags |= ACTOR_FLAG_8000000;
+    this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
     Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_UP);
     Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_DEAD);
     this->unk_21A = 2;

@@ -325,7 +325,7 @@ void ObjArmos_Update(Actor* thisx, PlayState* play2) {
     if (this->unk_24C != 0) {
         Actor_UpdateBgCheckInfo(play, &this->dyna.actor, 20.0f, 30.0f, 0.0f, this->unk_24C);
 
-        if ((this->actionFunc == func_809A54E0) && (this->dyna.actor.bgCheckFlags & 1) &&
+        if ((this->actionFunc == func_809A54E0) && (this->dyna.actor.bgCheckFlags & BGCHECKFLAG_GROUND) &&
             (DynaPoly_GetActor(&play->colCtx, this->dyna.actor.floorBgId) == NULL)) {
             this->unk_24C = 0;
         }

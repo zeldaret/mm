@@ -589,21 +589,24 @@ s32 func_808A6580(EnSt* this, PlayState* play) {
                 case 1:
                     Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_FREEZE);
                     this->unk_312 = 40;
-                    Actor_SetColorFilter(&this->actor, 0, 200, 0, this->unk_312);
+                    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 200, COLORFILTER_BUFFLAG_OPA,
+                                         this->unk_312);
                     break;
 
                 case 5:
                     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_SMALL;
                     this->unk_312 = 40;
                     func_808A576C(this);
-                    Actor_SetColorFilter(&this->actor, 0, 200, 0, this->unk_312);
+                    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 200, COLORFILTER_BUFFLAG_OPA,
+                                         this->unk_312);
                     break;
 
                 default:
                     Actor_PlaySfx(&this->actor, NA_SE_EN_STALTU_DAMAGE);
                     this->unk_314 = 20;
                     this->unk_312 = 0;
-                    Actor_SetColorFilter(&this->actor, 0x4000, 200, 0, this->unk_314);
+                    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 200, COLORFILTER_BUFFLAG_OPA,
+                                         this->unk_314);
                     SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 1);
                     this->unk_18C |= 8;
                     this->actionFunc = func_808A6D84;
@@ -652,7 +655,7 @@ s32 func_808A6580(EnSt* this, PlayState* play) {
             }
             this->unk_314 = 20;
             this->unk_312 = 0;
-            Actor_SetColorFilter(&this->actor, 0x4000, 200, 0, this->unk_314);
+            Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 200, COLORFILTER_BUFFLAG_OPA, this->unk_314);
             ret = true;
         }
         this->unk_310 = 0;
@@ -776,7 +779,7 @@ void func_808A6E24(EnSt* this, PlayState* play) {
         this->unk_2CC = 0.0f;
         this->unk_2D4 = 0.0f;
     } else {
-        if (this->actor.bgCheckFlags & 1) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
             this->actor.shape.yOffset = 400.0f;
             this->actor.world.rot.x = 0x4000;
             this->actor.shape.rot.x = this->actor.world.rot.x;

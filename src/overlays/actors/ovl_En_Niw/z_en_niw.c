@@ -86,41 +86,20 @@ static ColliderCylinderInit sCylinderInit = {
     { 15, 25, 4, { 0, 0, 0 } },
 };
 
-static Vec3f D_808934C4 = {
-    90000.0f,
-    90000.0f,
-    90000.0f,
-};
-
-static InitChainEntry sInitChain[] = {
-    ICHAIN_U8(targetMode, 6, ICHAIN_CONTINUE),
-    ICHAIN_F32_DIV1000(gravity, -2000, ICHAIN_CONTINUE),
-    ICHAIN_F32(targetArrowOffset, 0, ICHAIN_STOP),
-};
-
-static Vec3f D_808934DC = {
-    90000.0f,
-    90000.0f,
-    90000.0f,
-};
-
-static Vec3f D_808934E8 = {
-    90000.0f,
-    90000.0f,
-    90000.0f,
-};
-
-static s32 pad = 0;
-
 void EnNiw_Init(Actor* thisx, PlayState* play) {
+    static InitChainEntry sInitChain[] = {
+        ICHAIN_U8(targetMode, 6, ICHAIN_CONTINUE),
+        ICHAIN_F32_DIV1000(gravity, -2000, ICHAIN_CONTINUE),
+        ICHAIN_F32(targetArrowOffset, 0, ICHAIN_STOP),
+    };
     EnNiw* this = THIS;
-    Vec3f dTemp = D_808934C4;
+    Vec3f D_808934C4 = { 90000.0f, 90000.0f, 90000.0f };
 
     if (this->actor.params < 0) { // all scene spawned cucco are (-1)
         this->actor.params = NIW_TYPE_REGULAR;
     }
 
-    Math_Vec3f_Copy(&this->unk2BC, &dTemp);
+    Math_Vec3f_Copy(&this->unk2BC, &D_808934C4);
 
     this->niwType = this->actor.params;
     Actor_ProcessInitChain(&this->actor, sInitChain);
@@ -138,9 +117,6 @@ void EnNiw_Init(Actor* thisx, PlayState* play) {
     Actor_SetScale(&this->actor, 0.01f);
 
     if (this->niwType == NIW_TYPE_UNK1) {
-        // @Bug this unused variant is broken and crashes on spawn (EnNiw_Update expects a parent, NULL)
-        //   if modified to change niwType to TYPE_REGULAR here, new size is smaller than normal
-        //   theory: was meant to be a small hand held cucco for grog to show the player
         Actor_SetScale(&this->actor, (BREG(86) / 10000.0f) + 0.004f);
     }
 
@@ -319,8 +295,8 @@ void EnNiw_UpdateRunning(EnNiw* this, PlayState* play, s32 isStormCucco) {
 
     if (this->hopTimer == 0) {
         this->hopTimer = 3;
-        if (this->actor.bgCheckFlags & 1) { // hit floor
-            this->actor.velocity.y = 3.5f;  // hopping up while running away
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
+            this->actor.velocity.y = 3.5f; // hopping up while running away
         }
     }
 
@@ -336,8 +312,7 @@ void EnNiw_UpdateRunning(EnNiw* this, PlayState* play, s32 isStormCucco) {
         runningDirection = -runningAngles[isStormCucco];
     }
 
-    if (isStormCucco == true &&
-        (this->runAwayTimer == 0 || (this->actor.bgCheckFlags & 8))) { // bgCheckFlags 8: hit a wall
+    if (isStormCucco == true && (this->runAwayTimer == 0 || (this->actor.bgCheckFlags & BGCHECKFLAG_WALL))) {
         this->runAwayTimer = 150;
         if (this->yawTimer == 0) {
             this->yawTimer = 70;
@@ -376,7 +351,7 @@ void EnNiw_Idle(EnNiw* this, PlayState* play) {
             this->actionFunc = EnNiw_Held;
             return;
         } else {
-            Actor_LiftActor(&this->actor, play);
+            Actor_OfferCarry(&this->actor, play);
         }
     } else { // NIW_TYPE_UNK1 || NIW_TYPE_HELD
         this->unkIdleTimer2 = 10;
@@ -414,7 +389,7 @@ void EnNiw_Idle(EnNiw* this, PlayState* play) {
 
         } else {
             this->unkIdleTimer = 4;
-            if (this->actor.bgCheckFlags & 1) { // hit floor
+            if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
                 this->actor.speed = 0.0f;
                 this->actor.velocity.y = 3.5f; // hopping up and down
             }
@@ -451,7 +426,7 @@ void EnNiw_Idle(EnNiw* this, PlayState* play) {
 }
 
 void EnNiw_Held(EnNiw* this, PlayState* play) {
-    Vec3f vec3fcopy = D_808934DC;
+    Vec3f D_808934DC = { 90000.0f, 90000.0f, 90000.0f };
     s16 rotZ;
 
     if (this->heldTimer == 0) {
@@ -484,7 +459,7 @@ void EnNiw_Held(EnNiw* this, PlayState* play) {
         this->actor.shape.rot.y = rotZ;
         this->actor.shape.rot.x = rotZ;
         Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
-        Math_Vec3f_Copy(&this->unk2BC, &vec3fcopy);
+        Math_Vec3f_Copy(&this->unk2BC, &D_808934DC);
         this->actor.flags |= ACTOR_FLAG_1; // targetable ON
         this->actionFunc = EnNiw_Thrown;
     }
@@ -494,7 +469,7 @@ void EnNiw_Held(EnNiw* this, PlayState* play) {
 
 void EnNiw_Thrown(EnNiw* this, PlayState* play) {
     if (this->unk2EC == 0) {
-        if (this->actor.bgCheckFlags & 1) { // hit floor
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
             this->unk2EC = 1;
             this->hoppingTimer = 80; // hop timer
             this->actor.speed = 0.0f;
@@ -503,7 +478,7 @@ void EnNiw_Thrown(EnNiw* this, PlayState* play) {
             return; // wait until back on floor
         }
     } else {
-        if (this->actor.bgCheckFlags & 1) { // hit floor
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
             this->sfxTimer1 = 0;
             this->actor.velocity.y = 4.0f; // vertical hop
             this->unk29E = 1;
@@ -529,7 +504,7 @@ void EnNiw_Thrown(EnNiw* this, PlayState* play) {
         this->actor.speed = 0.0f;
     } else {
         if (this->hoppingTimer > 5) {
-            Actor_LiftActor(&this->actor, play);
+            Actor_OfferCarry(&this->actor, play);
         }
         EnNiw_AnimateWingHead(this, play, NIW_ANIM_PECKING_AND_WAVING);
     }
@@ -545,7 +520,7 @@ void EnNiw_Swimming(EnNiw* this, PlayState* play) {
     }
 
     this->actor.speed = 2.0f;
-    if (this->actor.bgCheckFlags & 0x20) { // touching water
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_WATER) {
         this->actor.gravity = 0.0f;
         if (this->actor.depthInWater > 15.0f) {
             this->actor.world.pos.y += 2.0f;
@@ -557,13 +532,13 @@ void EnNiw_Swimming(EnNiw* this, PlayState* play) {
 
             EffectSsGRipple_Spawn(play, &ripplePos, 100, 500, 30);
         }
-        if (this->actor.bgCheckFlags & 8) { // hit a wall
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
             this->actor.velocity.y = 10.0f; // fly up in straight line
             this->actor.speed = 1.0f;
         }
     } else {
         this->actor.gravity = -2.0f;
-        if (this->actor.bgCheckFlags & 8) { // hit a wall
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
             this->actor.velocity.y = 10.0f; // fly up in straight line
             this->actor.speed = 1.0f;
             this->actor.gravity = 0.0f;
@@ -571,7 +546,7 @@ void EnNiw_Swimming(EnNiw* this, PlayState* play) {
             this->actor.speed = 4.0f;
         }
 
-        if (this->actor.bgCheckFlags & 1) { // hit floor
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
             this->actor.gravity = -2.0f;
             this->runAwayTimer = 100;
             this->swimRippleTimer = 0;
@@ -667,7 +642,7 @@ void EnNiw_SetupRunAway(EnNiw* this) {
 
 void EnNiw_RunAway(EnNiw* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    Vec3f tempVec3f = D_808934E8;
+    Vec3f D_808934E8 = { 90000.0f, 90000.0f, 90000.0f };
     s16 temp298;
     f32 dX;
     f32 dZ;
@@ -683,7 +658,7 @@ void EnNiw_RunAway(EnNiw* this, PlayState* play) {
         this->targetLimbRots[6] = 0;
         this->targetLimbRots[5] = 0;
         this->targetLimbRots[7] = 0;
-        Math_Vec3f_Copy(&this->unk2BC, &tempVec3f);
+        Math_Vec3f_Copy(&this->unk2BC, &D_808934E8);
 
         EnNiw_SetupIdle(this);
 
@@ -702,7 +677,7 @@ void EnNiw_RunAway(EnNiw* this, PlayState* play) {
 }
 
 void EnNiw_LandBeforeIdle(EnNiw* this, PlayState* play) {
-    if (this->actor.bgCheckFlags & 1) { // hit floor
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         EnNiw_SetupIdle(this);
     }
 }
@@ -890,8 +865,8 @@ void EnNiw_Update(Actor* thisx, PlayState* play) {
         return;
     }
 
-    if ((this->actor.bgCheckFlags & 0x20) && // touching water
-        this->actor.depthInWater > 15.0f && this->niwState != NIW_STATE_SWIMMING) {
+    if ((this->actor.bgCheckFlags & BGCHECKFLAG_WATER) && (this->actor.depthInWater > 15.0f) &&
+        (this->niwState != NIW_STATE_SWIMMING)) {
         this->actor.velocity.y = 0.0f;
         this->actor.gravity = 0.0f;
         Math_Vec3f_Copy(&pos, &this->actor.world.pos);

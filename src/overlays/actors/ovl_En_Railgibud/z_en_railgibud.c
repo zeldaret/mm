@@ -597,9 +597,9 @@ void EnRailgibud_SetupStunned(EnRailgibud* this) {
     this->stunTimer = 10;
 
     if (this->drawDmgEffTimer != 0) {
-        Actor_SetColorFilter(&this->actor, 0, 0xC8, 0, 0x28);
+        Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 200, COLORFILTER_BUFFLAG_OPA, 40);
     } else {
-        Actor_SetColorFilter(&this->actor, 0, 0xC8, 0, 0x28);
+        Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 200, COLORFILTER_BUFFLAG_OPA, 40);
     }
 
     this->actionFunc = EnRailgibud_Stunned;
@@ -788,7 +788,7 @@ void EnRailgibud_UpdateDamage(EnRailgibud* this, PlayState* play) {
 
         switch (this->actor.colChkInfo.damageEffect) {
             case EN_RAILGIBUD_DMGEFF_DAMAGE:
-                Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 8);
+                Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 8);
                 if (player->unk_ADC != 0) {
                     this->unk_405 = player->unk_ADD;
                 }
@@ -809,7 +809,7 @@ void EnRailgibud_UpdateDamage(EnRailgibud* this, PlayState* play) {
                 break;
 
             case EN_RAILGIBUD_DMGEFF_FIRE_ARROW:
-                Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 8);
+                Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 8);
                 if (this->actor.colChkInfo.health == 0) {
                     EnRailgibud_SetupDead(this);
                 } else {
@@ -821,7 +821,7 @@ void EnRailgibud_UpdateDamage(EnRailgibud* this, PlayState* play) {
                 break;
 
             case EN_RAILGIBUD_DMGEFF_LIGHT_ARROW:
-                Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 8);
+                Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 8);
                 if (this->actor.colChkInfo.health == 0) {
                     EnRailgibud_SetupDead(this);
                 } else {
@@ -907,7 +907,7 @@ void EnRailgibud_MoveGrabbedPlayerAwayFromWall(EnRailgibud* this, PlayState* pla
     }
 
     if ((this->actionFunc == EnRailgibud_Grab) && (this->grabState == EN_RAILGIBUD_GRAB_START) &&
-        (this->actor.bgCheckFlags & 8)) {
+        (this->actor.bgCheckFlags & BGCHECKFLAG_WALL)) {
         targetPos = player->actor.world.pos;
         targetPos.x += 10.0f * Math_SinS(this->actor.wallYaw);
         targetPos.z += 10.0f * Math_CosS(this->actor.wallYaw);

@@ -329,7 +329,7 @@ void EnRuppecrow_UpdatePosition(EnRuppecrow* this, PlayState* play) {
     Vec3s nextPointDirection;
 
     EnRuppecrow_GetPointDirection(this->path, this->currentPoint, &this->actor.world, &nextPointDirection);
-    if (this->actor.bgCheckFlags & 0x8) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
         nextPointDirection.y = this->actor.wallYaw;
     }
 
@@ -444,7 +444,7 @@ void EnRuppecrow_HandleDeath(EnRuppecrow* this) {
 
     this->actor.shape.yOffset = 0.0f;
     this->actor.targetArrowOffset = 0.0f;
-    this->actor.bgCheckFlags &= ~0x1;
+    this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND;
 
     scale = this->actor.scale.x * 100.0f;
     this->actor.world.pos.y += 20.0f * scale;
@@ -464,7 +464,7 @@ void EnRuppecrow_HandleDeath(EnRuppecrow* this) {
         this->unk_2C8 = 5.0f;
     }
 
-    Actor_SetColorFilter(&this->actor, 0x4000, 0xFF, 0x0, 0x28);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 40);
     if (this->actor.flags & ACTOR_FLAG_8000) {
         this->actor.speed = 0.0f;
     }
@@ -492,7 +492,7 @@ void EnRuppecrow_HandleSong(EnRuppecrow* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     EnRuppecrow_UpdatePosition(this, play);
-    if (this->actor.xzDistToPlayer < 1000.0f && EnRuppecrow_CheckPlayedMatchingSong(play)) {
+    if ((this->actor.xzDistToPlayer < 1000.0f) && EnRuppecrow_CheckPlayedMatchingSong(play)) {
         // If Link is in front, the guay will turn around and go the other way
         if (Actor_IsFacingPlayer(&this->actor, 0x4000)) {
             this->isGoingCounterClockwise |= 1;
@@ -569,7 +569,7 @@ void EnRuppecrow_FlyWhileDroppingRupees(EnRuppecrow* this, PlayState* play) {
 }
 
 void EnRuppecrow_FlyToDespawn(EnRuppecrow* this, PlayState* play) {
-    if (this->actor.bgCheckFlags & 0x8) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
         this->actor.world.rot.y *= -0x1;
     }
 
@@ -608,7 +608,7 @@ void EnRuppecrow_FallToDespawn(EnRuppecrow* this, PlayState* play) {
             this->actor.shape.rot.z += 0x1780;
         }
 
-        if (this->actor.bgCheckFlags & 0x1 || this->actor.floorHeight == BGCHECK_Y_MIN) {
+        if ((this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) || (this->actor.floorHeight == BGCHECK_Y_MIN)) {
             EnRuppecrow_ShatterIce(this, play);
             func_800B3030(play, &this->actor.world.pos, &gZeroVec3f, &gZeroVec3f, (this->actor.scale.x * 10000.0f), 0x0,
                           0x0);

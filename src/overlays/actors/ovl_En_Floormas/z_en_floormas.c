@@ -176,7 +176,7 @@ void EnFloormas_Init(Actor* thisx, PlayState* play2) {
 
     this->actor.parent = Actor_SpawnAsChildAndCutscene(
         &play->actorCtx, play, ACTOR_EN_FLOORMAS, this->actor.world.pos.x, this->actor.world.pos.y,
-        this->actor.world.pos.z, 0, 0, 0, params + 0x10, -1, this->actor.unk20, NULL);
+        this->actor.world.pos.z, 0, 0, 0, params + 0x10, -1, this->actor.halfDaysBits, NULL);
     if (this->actor.parent == NULL) {
         Actor_Kill(&this->actor);
         return;
@@ -184,7 +184,7 @@ void EnFloormas_Init(Actor* thisx, PlayState* play2) {
 
     this->actor.child = Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ACTOR_EN_FLOORMAS, this->actor.world.pos.x,
                                                       this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0,
-                                                      params + 0x10, -1, this->actor.unk20, NULL);
+                                                      params + 0x10, -1, this->actor.halfDaysBits, NULL);
     if (this->actor.child == NULL) {
         Actor_Kill(this->actor.parent);
         Actor_Kill(&this->actor);
@@ -239,7 +239,7 @@ void func_808D09CC(EnFloormas* this) {
     this->collider.base.colType = COLTYPE_HIT3;
     this->unk_18E = 80;
     this->actor.flags &= ~(ACTOR_FLAG_200 | ACTOR_FLAG_400);
-    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 80);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 80);
 }
 
 void func_808D0A48(EnFloormas* this, PlayState* play) {
@@ -321,7 +321,7 @@ void func_808D0D70(EnFloormas* this, PlayState* play) {
 
     if ((this->actor.xzDistToPlayer < 320.0f) && Actor_IsFacingPlayer(&this->actor, 0x4000)) {
         func_808D0F50(this);
-    } else if (this->actor.bgCheckFlags & 8) {
+    } else if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
         this->unk_190 = this->actor.wallYaw;
         func_808D108C(this);
     } else if ((this->actor.xzDistToPlayer < 400.0f) && !Actor_IsFacingPlayer(&this->actor, 0x4000)) {
@@ -360,7 +360,7 @@ void func_808D0F80(EnFloormas* this, PlayState* play) {
 
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 3, 0x71C);
     if ((this->actor.xzDistToPlayer < 280.0f) && Actor_IsFacingPlayer(&this->actor, 0x2000) &&
-        !(this->actor.bgCheckFlags & 8)) {
+        !(this->actor.bgCheckFlags & BGCHECKFLAG_WALL)) {
         func_808D1380(this, play);
     } else if (this->actor.xzDistToPlayer > 400.0f) {
         func_808D0CE4(this);
@@ -485,7 +485,7 @@ void func_808D1650(EnFloormas* this, PlayState* play) {
         func_808D14DC(this, play);
     }
 
-    if ((this->actor.bgCheckFlags & 8) || (this->unk_18E == 0)) {
+    if ((this->actor.bgCheckFlags & BGCHECKFLAG_WALL) || (this->unk_18E == 0)) {
         func_808D1740(this);
     }
 }
@@ -502,9 +502,9 @@ void func_808D1740(EnFloormas* this) {
 }
 
 void func_808D17EC(EnFloormas* this, PlayState* play) {
-    s32 sp24 = this->actor.bgCheckFlags & 1;
+    s32 sp24 = this->actor.bgCheckFlags & BGCHECKFLAG_GROUND;
 
-    if (this->actor.bgCheckFlags & 2) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND_TOUCH) {
         if (this->actor.params != ENFLOORMAS_GET_7FFF_40) {
             func_808D0908(this);
         }
@@ -518,7 +518,7 @@ void func_808D17EC(EnFloormas* this, PlayState* play) {
         }
     }
 
-    if (this->actor.bgCheckFlags & 8) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
         this->actor.speed = 0.0f;
     }
 
@@ -581,7 +581,7 @@ void func_808D19D4(EnFloormas* this) {
 }
 
 void func_808D1B44(EnFloormas* this, PlayState* play) {
-    if (this->actor.bgCheckFlags & 1) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         if (SkelAnime_Update(&this->skelAnime)) {
             this->actor.flags |= ACTOR_FLAG_1;
             this->unk_194 = 50;
@@ -589,7 +589,7 @@ void func_808D1B44(EnFloormas* this, PlayState* play) {
         }
         Math_StepToF(&this->actor.speed, 0.0f, 1.0f);
     }
-    if (this->actor.bgCheckFlags & 2) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND_TOUCH) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_FLOORMASTER_SM_LAND);
     }
 }
@@ -612,7 +612,7 @@ void func_808D1C1C(EnFloormas* this, PlayState* play) {
 
     if (this->unk_194 == 0) {
         func_808D1D0C(this);
-    } else if (this->actor.bgCheckFlags & 8) {
+    } else if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
         this->unk_190 = this->actor.wallYaw;
         func_808D108C(this);
     } else if (this->actor.xzDistToPlayer < 120.0f) {
@@ -637,7 +637,7 @@ void func_808D1D6C(EnFloormas* this, PlayState* play) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_FLOORMASTER_SM_WALK);
     }
 
-    flags = this->actor.bgCheckFlags & 8;
+    flags = this->actor.bgCheckFlags & BGCHECKFLAG_WALL;
     if (flags) {
         this->unk_190 = this->actor.wallYaw;
         func_808D108C(this);
@@ -699,7 +699,7 @@ void func_808D2040(EnFloormas* this, PlayState* play) {
     } else if (Animation_OnFrame(&this->skelAnime, 20.0f)) {
         this->actor.speed = 5.0f;
         this->actor.velocity.y = 7.0f;
-    } else if (this->actor.bgCheckFlags & 2) {
+    } else if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND_TOUCH) {
         this->unk_18E = 50;
         this->actor.speed = 0.0f;
         Actor_PlaySfx(&this->actor, NA_SE_EN_FLOORMASTER_SM_LAND);
@@ -783,7 +783,7 @@ void func_808D24F0(EnFloormas* this, PlayState* play) {
     } else if (this->actor.child->params == ENFLOORMAS_GET_7FFF_40) {
         phi_s1 = this->actor.child;
     } else {
-        if (this->actor.bgCheckFlags & 2) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND_TOUCH) {
             this->actor.params = ENFLOORMAS_GET_7FFF_10;
             func_808D1740(this);
         }
@@ -800,7 +800,7 @@ void func_808D24F0(EnFloormas* this, PlayState* play) {
                (fabsf(this->actor.world.pos.z - phi_s1->world.pos.z) < 10.0f)) {
         func_808D2A20(this);
         this->collider.base.ocFlags1 |= OC1_ON;
-    } else if (this->actor.bgCheckFlags & 2) {
+    } else if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND_TOUCH) {
         this->actor.speed = 0.0f;
         Actor_PlaySfx(&this->actor, NA_SE_EN_FLOORMASTER_SM_LAND);
         func_808D1740(this);
@@ -923,7 +923,7 @@ void func_808D2AF4(EnFloormas* this, PlayState* play) {
 void func_808D2B18(EnFloormas* this) {
     Animation_MorphToPlayOnce(&this->skelAnime, &gWallmasterDamageAnim, -3.0f);
     func_800BE504(&this->actor, &this->collider);
-    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 20);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 20);
     this->actor.speed = 5.0f;
     this->actor.velocity.y = 5.5f;
     if (this->actor.params == ENFLOORMAS_GET_7FFF_40) {
@@ -944,7 +944,7 @@ void func_808D2B18(EnFloormas* this) {
 }
 
 void func_808D2C08(EnFloormas* this, PlayState* play) {
-    if (SkelAnime_Update(&this->skelAnime) && (this->actor.bgCheckFlags & 1)) {
+    if (SkelAnime_Update(&this->skelAnime) && (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
         if (this->actor.colChkInfo.health == 0) {
             func_808D0930(this, play);
         } else {
@@ -1044,12 +1044,14 @@ void func_808D2E34(EnFloormas* this, PlayState* play) {
                         func_808D2D6C(this);
                     } else if (this->actor.colChkInfo.damageEffect == 1) {
                         this->unk_18E = 40;
-                        Actor_SetColorFilter(&this->actor, 0, 255, 0, 40);
+                        Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 255, COLORFILTER_BUFFLAG_OPA,
+                                             40);
                         Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_FREEZE);
                         func_808D2D6C(this);
                     } else if (this->actor.colChkInfo.damageEffect == 5) {
                         this->unk_18E = 40;
-                        Actor_SetColorFilter(&this->actor, 0, 255, 0, 40);
+                        Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 255, COLORFILTER_BUFFLAG_OPA,
+                                             40);
                         Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_FREEZE);
                         this->drawDmgEffScale = 0.55f;
                         this->drawDmgEffAlpha = 2.0f;

@@ -316,9 +316,9 @@ s32 func_80A3E898(EnTest3* this, PlayState* play) {
         func_80151BB4(play, 2);
     }
     if (textId == 0xFFFF) {
-        func_801477B4(play);
+        Message_CloseTextbox(play);
     } else if (textId) { // != 0
-        func_80151938(play, textId);
+        Message_ContinueTextbox(play, textId);
     }
     if (textId == 0x296B) {
         LinkAnimation_PlayOnceSetSpeed(play, &this->player.skelAnime, &gPlayerAnim_al_yareyare, 2.0f / 3.0f);
@@ -773,7 +773,7 @@ s32 func_80A3FBE8(EnTest3* this, PlayState* play) {
             if (play->actorCtx.flags & ACTORCTX_FLAG_5) {
                 this->unk_D8D = ActorCutscene_GetAdditionalCutscene(this->unk_D8D);
             }
-            Audio_QueueSeqCmd(NA_BGM_STOP | 0x10000);
+            SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 1);
             D_80A41D20 = 2;
         } else {
             func_80A3F73C(this, play);

@@ -6,7 +6,7 @@
 
 #include "z_en_raf.h"
 
-#define FLAGS (ACTOR_FLAG_8000000)
+#define FLAGS (ACTOR_FLAG_CANT_LOCK_ON)
 
 #define THIS ((EnRaf*)thisx)
 

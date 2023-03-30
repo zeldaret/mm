@@ -576,7 +576,7 @@ void func_80937FC8(ObjBean* this, PlayState* play) {
                 CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
             }
         } else {
-            func_800B85E0(&this->dyna.actor, play, 28.0f, 0x2E);
+            func_800B85E0(&this->dyna.actor, play, 28.0f, PLAYER_IA_MAGIC_BEANS);
         }
     }
 }
