@@ -73,7 +73,7 @@ static TexturePtr sTextures[] = {
     gEffHitmarkWhiteMetal8Tex,
 };
 
-const EffectSsInit Effect_Ss_Hitmark_InitVars = {
+EffectSsInit Effect_Ss_Hitmark_InitVars = {
     EFFECT_SS_HITMARK,
     EffectSsHitmark_Init,
 };

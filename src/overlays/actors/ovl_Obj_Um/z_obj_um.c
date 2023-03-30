@@ -222,7 +222,7 @@ s32 ObjUm_InitBandits(ObjUm* this, PlayState* play) {
     EnHorse* bandit2;
 
     spawnPoints = Lib_SegmentedToVirtual(path->points);
-    Audio_QueueSeqCmd(0x8000 | NA_BGM_CHASE);
+    SEQCMD_PLAY_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 0, NA_BGM_CHASE | SEQ_FLAG_ASYNC);
 
     bandit1 = (EnHorse*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_HORSE, spawnPoints[0].x, spawnPoints[0].y,
                                     spawnPoints[0].z, 0, this->dyna.actor.shape.rot.y, 0,
