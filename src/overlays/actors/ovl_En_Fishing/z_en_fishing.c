@@ -4,7 +4,6 @@
  * Description: Fishing Pond Elements (Owner, Fish, Props, Effects...)
  */
 
-#include "prevent_bss_reordering.h"
 #include "z_en_fishing.h"
 #include "z64rumble.h"
 #include "z64shrink_window.h"
@@ -851,7 +850,7 @@ void EnFishing_Init(Actor* thisx, PlayState* play2) {
         D_809171FC = 0;
         D_809171F6 = 10;
 
-        Audio_QueueSeqCmd(0x100100FF);
+        SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 1);
 
         if (sLinkAge == 1) {
             if (gSaveContext.save.saveInfo.unk_EC0 & 0x7F) {
@@ -3540,7 +3539,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                     this->unk_190 = 1.7f;
                     this->unk_194 = 7000.0f;
                     D_80917274 = 1;
-                    Audio_QueueSeqCmd(0x881A); // Changed from 0x81A in OoT
+                    SEQCMD_PLAY_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 0, NA_BGM_ENEMY | 0x800 | SEQ_FLAG_ASYNC);
                     D_809171F6 = 0;
 
                     if (this->unk_148 == 1) {
@@ -3751,7 +3750,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                 } else {
                     // Assignment of OoT's D_80B7E086 here removed in MM
                     Rumble_Override(0.0f, 1, 3, 1);
-                    Audio_QueueSeqCmd(0x100A00FF);
+                    SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 10);
                 }
 
                 this->unk_150 = this->unk_152 = 0;
@@ -3819,7 +3818,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
             }
 
             if (this->unk_172[0] == 90) {
-                Audio_QueueSeqCmd(0x8924); // changed from 0x924 in OoT
+                SEQCMD_PLAY_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 0, NA_BGM_GET_HEART | 0x900 | SEQ_FLAG_ASYNC);
                 D_8090CCFC = 40;
 
                 if (this->unk_148 == 0) {
@@ -3933,7 +3932,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
 
                 D_809101C4 = 520.0f;
                 D_809101C0 = 195.0f;
-                Audio_QueueSeqCmd(0x100A00FF);
+                SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 10);
                 D_809171F6 = 20;
                 D_8090CD4C = 3;
             }
@@ -5148,7 +5147,7 @@ void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2) {
         D_8090CD4C = 20;
         Rumble_Override(0.0f, 150, 10, 10);
         play_sound(NA_SE_SY_TRE_BOX_APPEAR);
-        Audio_QueueSeqCmd(0x101400FF);
+        SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 20);
     }
 
     if (D_8090CD50 != 0) {
@@ -5356,7 +5355,7 @@ void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2) {
 
         case 22:
             if (D_8090CD50 == 30) {
-                Audio_QueueSeqCmd(0x8922); // changed from 0x922 to 0x8922 in MM
+                SEQCMD_PLAY_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 0, NA_BGM_GET_ITEM | 0x900 | SEQ_FLAG_ASYNC);
             }
 
             D_8090CD54 = 1;
@@ -5638,15 +5637,15 @@ void EnFishing_DrawOwner(Actor* thisx, PlayState* play) {
 
         if (D_809171F6 == 0) {
             if (sLinkAge != 1) {
-                Audio_QueueSeqCmd(0x8019); // Changed from 0x19 in OoT
+                SEQCMD_PLAY_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 0, NA_BGM_CLEAR_EVENT | SEQ_FLAG_ASYNC);
             } else {
-                Audio_QueueSeqCmd(0x8027); // Changed from 0x27 in OoT
+                SEQCMD_PLAY_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 0, NA_BGM_MUSIC_BOX_HOUSE | SEQ_FLAG_ASYNC);
             }
 
             if (sLinkAge != 1) {
-                Audio_QueueSeqCmd(0x8019); // Changed from 0x19 in OoT
+                SEQCMD_PLAY_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 0, NA_BGM_CLEAR_EVENT | SEQ_FLAG_ASYNC);
             } else {
-                Audio_QueueSeqCmd(0x8027); // Changed from 0x27 in OoT
+                SEQCMD_PLAY_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 0, NA_BGM_MUSIC_BOX_HOUSE | SEQ_FLAG_ASYNC);
             }
         }
     }

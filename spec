@@ -505,7 +505,6 @@ beginseg
     include "build/src/code/z_rcp.o"
     pad_text
     include "build/src/code/z_room.o"
-    include "build/data/code/z_room.data.o"
     include "build/src/code/code_8012EC80.o"
     pad_text
     include "build/data/code/code_801C2410.data.o"
@@ -623,7 +622,6 @@ beginseg
     include "build/src/audio/sfx_params.o"
     include "build/src/audio/sfx.o"
     include "build/src/audio/sequence.o"
-    include "build/data/code/sequence.data.o"
     include "build/data/code/sequence.bss.o"
     include "build/src/audio/session_config.o"
     include "build/src/code/jpegutils.o"

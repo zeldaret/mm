@@ -1654,7 +1654,7 @@ void func_80B4627C(EnInvadepoh* this, PlayState* play) {
         } else {
             func_80B454BC(this, play);
             func_80B452EC(this, play);
-            Audio_QueueSeqCmd(NA_BGM_ALIEN_INVASION | 0x8000);
+            SEQCMD_PLAY_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 0, NA_BGM_ALIEN_INVASION | SEQ_FLAG_ASYNC);
             func_80B46F88(this);
         }
     } else if (D_80B4E940 == 3) {
@@ -1942,7 +1942,7 @@ void func_80B46EE8(EnInvadepoh* this, PlayState* play) {
     this->actionTimer--;
     if (this->actionTimer <= 0) {
         ActorCutscene_Stop(D_80B50404[0]);
-        Audio_QueueSeqCmd(NA_BGM_ALIEN_INVASION | 0x8000);
+        SEQCMD_PLAY_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 0, NA_BGM_ALIEN_INVASION | SEQ_FLAG_ASYNC);
         func_80B46F88(this);
     }
 }

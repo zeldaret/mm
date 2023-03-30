@@ -528,7 +528,7 @@ void KaleidoScope_UpdateOpening(PlayState* play) {
 
     if (pauseCtx->switchPageTimer == 64) {
         // Finished opening
-        func_80112C0C(play, 1);
+        Interface_UpdateButtonsAlt(play, 1);
 
         if (pauseCtx->cursorSpecialPos == 0) {
             gSaveContext.buttonStatus[EQUIP_SLOT_B] = D_801C6A98[pauseCtx->pageIndex][0];
@@ -962,7 +962,7 @@ void KaleidoScope_Update(PlayState* play) {
             pauseCtx->promptChoice = PAUSE_PROMPT_YES;
             pauseCtx->state++;
             if (gameOverCtx->state == GAMEOVER_INACTIVE) {
-                pauseCtx->state++;
+                pauseCtx->state++; // GAMEOVER_DEATH_START
             }
             break;
 
@@ -1340,7 +1340,7 @@ void KaleidoScope_Update(PlayState* play) {
             gSaveContext.buttonStatus[EQUIP_SLOT_C_RIGHT] = sUnpausedButtonStatus[EQUIP_SLOT_C_RIGHT];
             gSaveContext.buttonStatus[EQUIP_SLOT_A] = sUnpausedButtonStatus[EQUIP_SLOT_A];
 
-            func_80110038(play);
+            Interface_UpdateButtonsPart2(play);
             gSaveContext.hudVisibility = HUD_VISIBILITY_IDLE;
             Interface_SetHudVisibility(HUD_VISIBILITY_ALL);
             MsgEvent_SendNullTask();

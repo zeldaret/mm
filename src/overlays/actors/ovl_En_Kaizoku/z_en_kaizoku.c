@@ -506,7 +506,7 @@ void func_80B85FA8(EnKaizoku* this, PlayState* play) {
             this->subCamUp.x = -0.11f;
             this->picto.actor.draw = EnKaizoku_Draw;
             this->unk_598 = 0;
-            func_801A0238(0, 0xA);
+            Audio_SetMainBgmVolume(0, 0xA);
             this->unk_59C++;
 
         case 1:
@@ -575,7 +575,7 @@ void func_80B85FA8(EnKaizoku* this, PlayState* play) {
                 Message_CloseTextbox(play);
                 this->unk_598 = 0;
                 this->unk_59C++;
-                func_801A0238(0x7F, 0);
+                Audio_SetMainBgmVolume(0x7F, 0);
                 Audio_PlayBgm_StorePrevBgm(NA_BGM_MINI_BOSS);
                 EnKaizoku_ChangeAnim(this, EN_KAIZOKU_ANIM_13);
             }

@@ -731,7 +731,7 @@ void func_80AEAFA0(EnLiftNuts* this, PlayState* play) {
 }
 
 void func_80AEB114(EnLiftNuts* this) {
-    func_801A2BB8(NA_BGM_TIMED_MINI_GAME);
+    Audio_PlaySubBgm(NA_BGM_TIMED_MINI_GAME);
     this->actionFunc = func_80AEB148;
 }
 
