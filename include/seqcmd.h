@@ -281,9 +281,8 @@ typedef enum {
  * the absolute tempo is constrained to a maximum of 300
  */
 #define SEQCMD_SCALE_TEMPO(seqPlayerIndex, duration, tempoScale)                                         \
-    AudioSeq_QueueSeqCmd(0xB0000000 | (SEQCMD_SUB_OP_TEMPO_SCALE << 12) | ((u8)(seqPlayerIndex) << 24) | \
+    AudioSeq_QueueSeqCmd((SEQCMD_OP_TEMPO_CMD << 28) | (SEQCMD_SUB_OP_TEMPO_SCALE << 12) | ((u8)(seqPlayerIndex) << 24) | \
                          ((u8)(duration) << 16) | (u16)(tempoScale))
-// Note that (SEQCMD_OP_TEMPO_CMD << 28) breaks matching
 
 /**
  * Reset the tempo of a sequence to the original tempo on a given seqPlayer over a specified duration
@@ -292,9 +291,8 @@ typedef enum {
  * @param duration duration to transition to the tempo
  */
 #define SEQCMD_RESET_TEMPO(seqPlayerIndex, duration)                                                     \
-    AudioSeq_QueueSeqCmd(0xB0000000 | (SEQCMD_SUB_OP_TEMPO_RESET << 12) | ((u8)(seqPlayerIndex) << 24) | \
+    AudioSeq_QueueSeqCmd((SEQCMD_OP_TEMPO_CMD << 28) | (SEQCMD_SUB_OP_TEMPO_RESET << 12) | ((u8)(seqPlayerIndex) << 24) | \
                          ((u8)(duration) << 16))
-// Note that (SEQCMD_OP_TEMPO_CMD << 28) breaks matching
 
 /**
  * ==== Audio Sequence Setup Commands ====
