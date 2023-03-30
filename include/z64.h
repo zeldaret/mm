@@ -20,6 +20,7 @@
 #include "color.h"
 #include "ichain.h"
 #include "sequence.h"
+#include "seqcmd.h"
 #include "sfx.h"
 #include "message_data_static.h"
 

@@ -472,7 +472,7 @@ void EnZod_SetupRehearse(EnZod* this, PlayState* play) {
         this->actor.cutscene = ActorCutscene_GetAdditionalCutscene(this->actor.cutscene);
         ActorCutscene_SetIntentToPlay(this->actor.cutscene);
         gSaveContext.save.weekEventReg[79] |= 1;
-        Audio_QueueSeqCmd(NA_BGM_INDIGO_GO_SESSION | 0x8000);
+        SEQCMD_PLAY_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 0, NA_BGM_INDIGO_GO_SESSION | SEQ_FLAG_ASYNC);
     }
 }
 
