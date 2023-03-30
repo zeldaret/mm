@@ -2446,7 +2446,7 @@ void Interface_UpdateButtonsPart1(PlayState* play) {
                        Message_ShouldAdvance(play)) {
                 play->haltAllActors = false;
                 player->stateFlags1 &= ~PLAYER_STATE1_200;
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 if (play->msgCtx.choiceIndex != 0) {
                     func_8019F230();
                     func_80115844(play, DO_ACTION_STOP);
