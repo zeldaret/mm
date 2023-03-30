@@ -419,7 +419,7 @@ void EnSsh_Sway(EnSsh* this) {
         }
 
         temp_f20 = (this->swayTimer * (1.0f / 6));
-        swayAngle = DEG_TO_BINANG_ALT3(temp_f20) * Math_SinS(this->swayAngle);
+        swayAngle = (f32)DEG_TO_BINANG_ALT3(temp_f20) * Math_SinS(this->swayAngle);
         temp_f20 = this->actor.world.pos.y - this->ceilingPos.y;
 
         swayVecBase.x = Math_SinS(swayAngle) * temp_f20;
