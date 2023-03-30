@@ -27,7 +27,7 @@ u32 EffectSsGRipple_Init(PlayState* play, u32 index, EffectSs* this, void* initP
 void EffectSsGRipple_Update(PlayState* play, u32 index, EffectSs* this);
 void EffectSsGRipple_Draw(PlayState* play, u32 index, EffectSs* this);
 
-const EffectSsInit Effect_Ss_G_Ripple_InitVars = {
+EffectSsInit Effect_Ss_G_Ripple_InitVars = {
     EFFECT_SS_G_RIPPLE,
     EffectSsGRipple_Init,
 };

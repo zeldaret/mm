@@ -20,6 +20,4 @@ typedef struct {
     /* 0x34 */ u8 updateMode;
 } EffectSsGSpkInitParams; // size = 0x38
 
-extern const EffectSsInit Effect_Ss_G_Spk_InitVars;
-
 #endif
