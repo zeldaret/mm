@@ -180,13 +180,13 @@ s32 func_80B761FC(EnTruMt* this, PlayState* play) {
             this->collider.base.acFlags &= ~AC_HIT;
             if (this->unk_3A4 == 0) {
                 this->unk_3A4 = 1;
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KOUME_DAMAGE);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_KOUME_DAMAGE);
             } else {
                 this->unk_3A4 = 0;
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KOUME_DAMAGE2);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_KOUME_DAMAGE2);
             }
             play->interfaceCtx.minigameHiddenPoints = 1;
-            Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 25);
+            Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 25);
             return true;
         }
     }
@@ -247,13 +247,13 @@ void func_80B76440(EnTruMt* this, PlayState* play) {
         s16 temp_v1 = this->unk_394 - Math_Vec3f_Yaw(&this->unk_398, &this->actor.world.pos);
 
         if ((temp_v1 <= -0x2000) || (temp_v1 >= 0x2000)) {
-            Math_ApproachF(&this->actor.speedXZ, 7.0f, 0.2f, 1.0f);
+            Math_ApproachF(&this->actor.speed, 7.0f, 0.2f, 1.0f);
         } else if (this->actor.xzDistToPlayer < 300.0f) {
-            Math_ApproachF(&this->actor.speedXZ, 7.0f, 0.2f, 1.0f);
+            Math_ApproachF(&this->actor.speed, 7.0f, 0.2f, 1.0f);
         } else if (this->actor.xzDistToPlayer > 500.0f) {
-            Math_ApproachF(&this->actor.speedXZ, 2.5f, 0.2f, 1.0f);
+            Math_ApproachF(&this->actor.speed, 2.5f, 0.2f, 1.0f);
         } else {
-            Math_ApproachF(&this->actor.speedXZ, 4.0f, 0.2f, 1.0f);
+            Math_ApproachF(&this->actor.speed, 4.0f, 0.2f, 1.0f);
         }
     }
 }
@@ -335,7 +335,7 @@ s32 func_80B768F0(EnTruMt* this, PlayState* play) {
 }
 
 void func_80B76924(EnTruMt* this) {
-    this->unk_38E.z = Math_SinS(this->unk_388) * 30.0f * (0x10000 / 360.0f);
+    this->unk_38E.z = DEG_TO_BINANG(Math_SinS(this->unk_388) * 30.0f);
     this->unk_388 += 0x400;
 }
 
@@ -347,7 +347,7 @@ void func_80B76980(EnTruMt* this, PlayState* play) {
         SET_EVENTINF(EVENTINF_36);
         SET_EVENTINF(EVENTINF_40);
         player->stateFlags3 &= ~PLAYER_STATE3_400;
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
         this->actionFunc = func_80B76BB8;
     } else if (CHECK_EVENTINF(EVENTINF_40)) {
         u32 score = gSaveContext.minigameScore;
@@ -381,7 +381,7 @@ void func_80B76A64(EnTruMt* this, PlayState* play) {
         if (func_80B76600(this, this->path, this->unk_36C)) {
             if (this->unk_36C >= (this->path->count - 1)) {
                 this->actionFunc = func_80B76C38;
-                this->actor.speedXZ = 0.0f;
+                this->actor.speed = 0.0f;
                 return;
             }
             this->unk_36C++;

@@ -24,4 +24,4 @@ GameStateOverlay gGameStateOverlayTable[] = {
     GAMESTATE_OVERLAY(daytelop, DayTelop_Init, DayTelop_Destroy, sizeof(DayTelopState)),
 };
 
-s32 graphNumGameStates = ARRAY_COUNT(gGameStateOverlayTable);
+s32 gGraphNumGameStates = ARRAY_COUNT(gGameStateOverlayTable);

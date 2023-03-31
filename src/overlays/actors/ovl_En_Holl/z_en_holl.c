@@ -151,13 +151,15 @@ void EnHoll_VisibleIdle(EnHoll* this, PlayState* play) {
     f32 playerDistFromCentralPlane;
 
     if (this->type == EN_HOLL_TYPE_DEFAULT) {
-        u32 actorCtxBitmask = (play->actorCtx.unkC & 0x2AA) >> 1 | (play->actorCtx.unkC & 0x155);
+        u32 halfDaysBit =
+            ((play->actorCtx.halfDaysBit & HALFDAYBIT_DAWNS) >> 1) | (play->actorCtx.halfDaysBit & HALFDAYBIT_NIGHTS);
         u32 zActorBitmask = D_801AED48[EN_HOLL_GET_Z_ACTOR_BITMASK_INDEX(&this->actor)];
 
-        if (!(actorCtxBitmask & zActorBitmask)) {
+        if (!(halfDaysBit & zActorBitmask)) {
             Actor_Kill(&this->actor);
             return;
         }
+
         if (this == sInstancePlayingSound) {
             func_800B9010(&this->actor, NA_SE_EV_INVISIBLE_MONKEY - SFX_FLAG);
         }
@@ -180,7 +182,7 @@ void EnHoll_VisibleIdle(EnHoll* this, PlayState* play) {
             u32 enHollId = EN_HOLL_GET_ID(&this->actor);
 
             if (sLoadingPlaneDistance < playerDistFromCentralPlane) {
-                if ((play->roomCtx.prevRoom.num >= 0) && (play->roomCtx.unk31 == 0)) {
+                if ((play->roomCtx.prevRoom.num >= 0) && (play->roomCtx.status == 0)) {
                     this->actor.room = play->doorCtx.transitionActorList[enHollId].sides[this->playerSide].room;
                     if (play->roomCtx.prevRoom.num == this->actor.room) {
                         EnHoll_ChangeRooms(play);
@@ -296,7 +298,7 @@ void EnHoll_VerticalIdle(EnHoll* this, PlayState* play) {
 }
 
 void EnHoll_RoomTransitionIdle(EnHoll* this, PlayState* play) {
-    if (play->roomCtx.unk31 == 0) {
+    if (play->roomCtx.status == 0) {
         func_8012EBF8(play, &play->roomCtx);
         if (play->bgCoverAlpha == 0) {
             this->bgCoverAlphaActive = false;

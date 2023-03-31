@@ -329,7 +329,7 @@ void func_808B90CC(DoorWarp1* this, PlayState* play) {
         DoorWarp1_SetupAction(this, func_808B921C);
     }
 
-    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_WARP_HOLE_ENERGY - SFX_FLAG);
+    Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_WARP_HOLE_ENERGY - SFX_FLAG);
 }
 
 void func_808B921C(DoorWarp1* this, PlayState* play) {
@@ -350,7 +350,7 @@ void func_808B921C(DoorWarp1* this, PlayState* play) {
         DoorWarp1_SetupAction(this, func_808B93A0);
     }
 
-    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_BOSS_WARP_HOLE - SFX_FLAG);
+    Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_BOSS_WARP_HOLE - SFX_FLAG);
 }
 
 void func_808B93A0(DoorWarp1* this, PlayState* play) {
@@ -358,7 +358,7 @@ void func_808B93A0(DoorWarp1* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_CHOICE) && Message_ShouldAdvance(play)) {
-        func_801477B4(play);
+        Message_CloseTextbox(play);
         if (play->msgCtx.choiceIndex == 0) {
             func_8019F208();
             func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_9);
@@ -373,7 +373,7 @@ void func_808B93A0(DoorWarp1* this, PlayState* play) {
         }
     }
     func_808BB8D4(this, play, 1);
-    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_BOSS_WARP_HOLE - SFX_FLAG);
+    Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_BOSS_WARP_HOLE - SFX_FLAG);
 }
 
 void func_808B94A4(DoorWarp1* this, PlayState* play) {
@@ -381,7 +381,7 @@ void func_808B94A4(DoorWarp1* this, PlayState* play) {
         DoorWarp1_SetupAction(this, func_808B921C);
     }
     func_808BB8D4(this, play, 1);
-    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_BOSS_WARP_HOLE - SFX_FLAG);
+    Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_BOSS_WARP_HOLE - SFX_FLAG);
 }
 
 void func_808B9524(DoorWarp1* this, PlayState* play) {
@@ -416,14 +416,14 @@ void func_808B958C(DoorWarp1* this, PlayState* play) {
     }
 
     Math_SmoothStepToF(&this->unk_1A8, 6.0f, 0.2f, 0.02f, 0.01f);
-    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_LINK_WARP - SFX_FLAG);
+    Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_LINK_WARP - SFX_FLAG);
 }
 
 void func_808B96A0(DoorWarp1* this, PlayState* play) {
 }
 
 void func_808B96B0(DoorWarp1* this, PlayState* play) {
-    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_WARP_HOLE - SFX_FLAG);
+    Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_WARP_HOLE - SFX_FLAG);
     Math_SmoothStepToF(&this->unk_1B0, 255.0f, 0.4f, 10.0f, 0.01f);
     Math_SmoothStepToF(&this->unk_1B4, 255.0f, 0.4f, 10.0f, 0.01f);
 
@@ -443,7 +443,7 @@ void func_808B96B0(DoorWarp1* this, PlayState* play) {
 }
 
 void func_808B977C(DoorWarp1* this, PlayState* play) {
-    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_WARP_HOLE - SFX_FLAG);
+    Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_WARP_HOLE - SFX_FLAG);
     if (func_808B866C(this, play) && !Play_InCsMode(play)) {
         Player* player = GET_PLAYER(play);
 
@@ -516,7 +516,7 @@ void func_808B9B30(DoorWarp1* this, PlayState* play) {
 }
 
 void func_808B9BE8(DoorWarp1* this, PlayState* play) {
-    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_WARP_HOLE - SFX_FLAG);
+    Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_WARP_HOLE - SFX_FLAG);
     Math_SmoothStepToF(&this->unk_1B0, 255.0f, 0.2f, 2.0f, 0.1f);
     Math_SmoothStepToF(&this->unk_1B4, 255.0f, 0.2f, 2.0f, 0.1f);
     if (this->unk_1C4 < 10) {
@@ -548,7 +548,7 @@ void func_808B9CE8(DoorWarp1* this, PlayState* play) {
     }
 
     if (!Actor_HasParent(&this->dyna.actor, play)) {
-        Actor_PickUp(&this->dyna.actor, play, (GI_REMAINS_ODOLWA - 1) + func_808B849C(this, play), 30.0f, 80.0f);
+        Actor_OfferGetItem(&this->dyna.actor, play, (GI_REMAINS_ODOLWA - 1) + func_808B849C(this, play), 30.0f, 80.0f);
         return;
     }
 
@@ -595,7 +595,7 @@ void func_808B9ED8(DoorWarp1* this, PlayState* play) {
 }
 
 void func_808B9F10(DoorWarp1* this, PlayState* play) {
-    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_WARP_HOLE - SFX_FLAG);
+    Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_WARP_HOLE - SFX_FLAG);
     if ((this->unk_203 == 0) && func_808B866C(this, play) && !Play_InCsMode(play) && (this->unk_203 == 0)) {
         Player* player = GET_PLAYER(play);
 

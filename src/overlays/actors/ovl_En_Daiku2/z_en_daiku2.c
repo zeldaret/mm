@@ -234,7 +234,7 @@ void func_80BE66E4(EnDaiku2* this, PlayState* play) {
 
     func_800B8614(&this->actor, play, 80.0f);
     if ((this->unk_276 == 8) && Animation_OnFrame(&this->skelAnime, 6.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_ROCK_BROKEN);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_ROCK_BROKEN);
 
         for (i = 0; i < 10; i++) {
             Math_Vec3f_Copy(&sp70, &this->actor.world.pos);
@@ -297,7 +297,7 @@ void func_80BE6BC0(EnDaiku2* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         s32 day = gSaveContext.save.day - 1;
 
-        func_801477B4(play);
+        Message_CloseTextbox(play);
 
         if (this->unk_288 == 2) {
             this->actionFunc = func_80BE6D40;
@@ -305,7 +305,7 @@ void func_80BE6BC0(EnDaiku2* this, PlayState* play) {
             this->actionFunc = func_80BE6EF0;
         } else if ((this->unk_28A == 0) || (this->unk_28A == 2)) {
             this->unk_28A++;
-            func_80151938(play, sTextIds[this->unk_28A]);
+            Message_ContinueTextbox(play, sTextIds[this->unk_28A]);
         } else {
             switch (day) {
                 case 0:

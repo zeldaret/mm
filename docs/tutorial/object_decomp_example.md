@@ -6,11 +6,11 @@ Let's take a look at `object_dns`, which is a pretty typical NPC object. It's us
 
 ## Step 1: Naming the skeleton and limbs
 
-We already went through the steps of opening an object file in Z64Utils in the [documenting step](documenting.md#z64utils), but we'll do it in more detail here. First, search for the object file, then right-click and select "Open in Object Analyzer". It will ask you to choose a segment: this is the segment that the file is put on, and allows Z64Utils to resolve the segmented addresses it references into symbols. The json already knows it should be segment 6, so just click OK.
+We already went through the steps of opening an object file in Z64Utils in the [documenting step](documenting.md#z64utils), but we'll do it in more detail here. First, search for the object file, then either double-click on it or right-click it and select "Open in Object Analyzer". It will ask you to choose a segment: this is the segment that the file is put on, and allows Z64Utils to resolve the segmented addresses it references into symbols. The json already knows it should be segment 6, so just click OK.
 
 ![Opening object_dns in Z64Utils](images/z64utils_open_dns.png)
 
-In the resulting window, go to "Analysis -> Find Dlists" and press OK (the defaults are usually fine). This will only find display lists, so to find everything else in the obect, do "Analysis -> Analyze Dlists". We're looking for the skeleton, so scroll down to the SkeletonHeader, right-click it, and select "Open in Skeleton Viewer":
+In the resulting window, you'll see displaylists, textures, and other assets. We're looking for the skeleton, so scroll down to the SkeletonHeader, then either double-click on it or right-click it and select "Open in Skeleton Viewer":
 
 ![Finding object_dns's SkeletonHeader in Z64Utils](images/z64utils_dns_skeletonheader.png)
 
@@ -186,7 +186,7 @@ For some actors, there may be a few other things left to name that are directly 
 gSPDisplayList(POLY_OPA_DISP++, &D_06002C48);
 ```
 
-In Z64Utils, scroll to find this display list, then right-click and select "Open in Dlist Viewer":
+In Z64Utils, scroll to find this display list, then either double-click it or right-click it and select "Open in Dlist Viewer":
 
 ![Opening dlist_00002C48 in Z64Utils](images/z64utils_dns_display_list.png)
 

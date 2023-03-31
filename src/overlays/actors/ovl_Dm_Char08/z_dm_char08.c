@@ -422,7 +422,7 @@ void func_80AAFCCC(DmChar08* this, PlayState* play) {
 
                     case 2:
                         if (Message_GetState(&play->msgCtx) == TEXT_STATE_CLOSING) {
-                            func_801477B4(play);
+                            Message_CloseTextbox(play);
                             this->unk_206 = 0;
                         }
                         break;
@@ -509,7 +509,7 @@ void func_80AAFE88(DmChar08* this, PlayState* play) {
                     break;
 
                 case 14:
-                    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_BIG_TORTOISE_ROLL);
+                    Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_BIG_TORTOISE_ROLL);
                     this->animIndex = TURTLE_ANIM_FLOAT;
                     break;
             }
@@ -896,11 +896,11 @@ void func_80AB096C(DmChar08* this, PlayState* play) {
     if ((play->csCtx.state != 0) && (play->sceneId == SCENE_31MISAKI) && (gSaveContext.sceneLayer == 0) &&
         (play->csCtx.currentCsIndex == 0)) {
         if ((play->csCtx.frames >= 890) && (play->csCtx.frames < 922)) {
-            Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_EARTHQUAKE_LAST2 - SFX_FLAG);
+            Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_EARTHQUAKE_LAST2 - SFX_FLAG);
         }
     }
     if ((this->animIndex == TURTLE_ANIM_SWIM) && Animation_OnFrame(&this->skelAnime, 16.0f)) {
-        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_BIG_TORTOISE_SWIM);
+        Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_BIG_TORTOISE_SWIM);
     }
 }
 

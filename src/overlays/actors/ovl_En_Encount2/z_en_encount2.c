@@ -113,7 +113,7 @@ void EnEncount2_Init(Actor* thisx, PlayState* play) {
 
     this->dyna.actor.targetMode = 6;
     this->dyna.actor.colChkInfo.health = 1;
-    this->scale = 0.1;
+    this->scale = 0.1f;
     this->switchFlag = ENCOUNT2_GET_SWITCH_FLAG(&this->dyna.actor);
 
     if (this->switchFlag == 0x7F) {
@@ -171,7 +171,7 @@ void EnEncount2_Popped(EnEncount2* this, PlayState* play) {
         EnEncount2_InitEffects(this, &curPos, 10);
     }
 
-    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_MUJURA_BALLOON_BROKEN);
+    Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_MUJURA_BALLOON_BROKEN);
     this->deathTimer = 30;
     this->actionFunc = EnEncount2_Die;
 }

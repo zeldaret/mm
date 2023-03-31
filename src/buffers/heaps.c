@@ -1,4 +1,4 @@
-#include "global.h"
+#include "buffers.h"
 
 u8 gAudioHeap[0x138000];
 

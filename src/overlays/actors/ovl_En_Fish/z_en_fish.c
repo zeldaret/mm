@@ -278,12 +278,12 @@ void func_8091DF68(Actor* thisx, PlayState* play) {
     EnFish* this = THIS;
 
     func_8091DD48(this);
-    Math_SmoothStepToF(&thisx->speedXZ, 0.0f, 0.05f, 0.3f, 0.0f);
+    Math_SmoothStepToF(&thisx->speed, 0.0f, 0.05f, 0.3f, 0.0f);
 
-    if ((thisx->speedXZ * 1.4f) + 0.8f > 2.0f) {
+    if ((thisx->speed * 1.4f) + 0.8f > 2.0f) {
         this->skelAnime.playSpeed = 2.0f;
     } else {
-        this->skelAnime.playSpeed = (thisx->speedXZ * 1.4f) + 0.8f;
+        this->skelAnime.playSpeed = (thisx->speed * 1.4f) + 0.8f;
     }
 
     this->unk_270 >>= 1;
@@ -327,7 +327,7 @@ void func_8091E128(Actor* thisx, PlayState* play) {
     EnFish* this = THIS;
 
     func_8091DD48(this);
-    Math_SmoothStepToF(&thisx->speedXZ, 1.8f, 0.08f, 0.4f, 0.0f);
+    Math_SmoothStepToF(&thisx->speed, 1.8f, 0.08f, 0.4f, 0.0f);
 
     if ((func_8091D630(&thisx->world.pos, &thisx->home.pos) > SQ(80.0f)) || (this->unk_240 < 4)) {
         this->unk_270 = this->unk_264;
@@ -342,10 +342,10 @@ void func_8091E128(Actor* thisx, PlayState* play) {
         this->unk_24C = 0.0f;
     }
 
-    if ((thisx->speedXZ * 1.5f) + 0.8f > 4.0f) {
+    if ((thisx->speed * 1.5f) + 0.8f > 4.0f) {
         this->skelAnime.playSpeed = 4.0f;
     } else {
-        this->skelAnime.playSpeed = (thisx->speedXZ * 1.5f) + 0.8f;
+        this->skelAnime.playSpeed = (thisx->speed * 1.5f) + 0.8f;
     }
 
     if (this->unk_240 <= 0) {
@@ -378,7 +378,7 @@ void func_8091E34C(Actor* thisx, PlayState* play2) {
     s32 pad;
 
     func_8091DD48(this);
-    Math_SmoothStepToF(&thisx->speedXZ, 4.2f, 0.08f, 1.4f, 0.0f);
+    Math_SmoothStepToF(&thisx->speed, 4.2f, 0.08f, 1.4f, 0.0f);
 
     if (func_8091D630(&thisx->world.pos, &thisx->home.pos) > SQ(160.0f)) {
         this->unk_270 = this->unk_264;
@@ -418,10 +418,10 @@ void func_8091E34C(Actor* thisx, PlayState* play2) {
         this->unk_24C = 0.0f;
     }
 
-    if ((thisx->speedXZ * 1.5f) + 0.8f > 4.0f) {
+    if ((thisx->speed * 1.5f) + 0.8f > 4.0f) {
         this->skelAnime.playSpeed = 4.0f;
     } else {
-        this->skelAnime.playSpeed = (thisx->speedXZ * 1.5f) + 0.8f;
+        this->skelAnime.playSpeed = (thisx->speed * 1.5f) + 0.8f;
     }
 
     if ((this->unk_240 <= 0) || (!sp3C && (sp38 == 0))) {
@@ -453,7 +453,7 @@ void func_8091E658(Actor* thisx, PlayState* play) {
     s16 sp32;
 
     func_8091DD48(this);
-    Math_SmoothStepToF(&thisx->speedXZ, 1.8f, 0.1f, 0.5f, 0.0f);
+    Math_SmoothStepToF(&thisx->speed, 1.8f, 0.1f, 0.5f, 0.0f);
 
     if (func_8091D630(&thisx->world.pos, &thisx->home.pos) > SQ(80.0f)) {
         this->unk_270 = this->unk_264;
@@ -475,10 +475,10 @@ void func_8091E658(Actor* thisx, PlayState* play) {
         this->unk_24C = 1.2f;
     }
 
-    if ((thisx->speedXZ * 1.5f) + 0.8f > 4.0f) {
+    if ((thisx->speed * 1.5f) + 0.8f > 4.0f) {
         this->skelAnime.playSpeed = 4.0f;
     } else {
-        this->skelAnime.playSpeed = (thisx->speedXZ * 1.5f) + 0.8f;
+        this->skelAnime.playSpeed = (thisx->speed * 1.5f) + 0.8f;
     }
 
     if (this->unk_240 <= 0) {
@@ -502,16 +502,16 @@ void func_8091E810(EnFish* this) {
 void func_8091E880(Actor* thisx, PlayState* play) {
     EnFish* this = THIS;
 
-    Math_SmoothStepToF(&this->actor.speedXZ, 0.0f, 0.1f, 0.1f, 0.0f);
+    Math_SmoothStepToF(&this->actor.speed, 0.0f, 0.1f, 0.1f, 0.0f);
     this->unk_26E = 0x43;
     this->unk_272 = 0x43;
     this->unk_268 = 0x4000;
     this->unk_26C = -0x4000;
-    if (this->actor.bgCheckFlags & 1) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         this->unk_240 = 400;
         func_8091E9A4(this);
-    } else if (this->actor.bgCheckFlags & 0x20) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_DIVE_INTO_WATER_L);
+    } else if (this->actor.bgCheckFlags & BGCHECKFLAG_WATER) {
+        Actor_PlaySfx(&this->actor, NA_SE_EV_DIVE_INTO_WATER_L);
         func_8091D840(thisx, play, 10, 15.0f);
         if (func_8091DA14(this, play)) {
             func_8091EF30(this);
@@ -554,7 +554,7 @@ void func_8091E9A4(EnFish* this) {
     this->unk_248 = 5;
     this->unk_24C = 0.0f;
     if (sp24 && (this->actor.draw != NULL)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_FISH_LEAP);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_FISH_LEAP);
     }
 }
 
@@ -563,7 +563,7 @@ void func_8091EAF0(Actor* thisx, PlayState* play) {
     s32 sp40 = play->state.frames;
     s16 phi_v1;
 
-    Math_SmoothStepToF(&this->actor.speedXZ, Rand_ZeroOne() * 0.2f, 0.1f, 0.1f, 0.0f);
+    Math_SmoothStepToF(&this->actor.speed, Rand_ZeroOne() * 0.2f, 0.1f, 0.1f, 0.0f);
     phi_v1 = (s16)((((sp40 >> 5) & 2) | ((sp40 >> 2) & 1)) << 0xB) * 0.3f;
     if (sp40 & 4) {
         phi_v1 *= -1;
@@ -592,13 +592,13 @@ void func_8091EAF0(Actor* thisx, PlayState* play) {
         } else {
             this->actor.draw = NULL;
         }
-    } else if (this->actor.bgCheckFlags & 0x20) {
+    } else if (this->actor.bgCheckFlags & BGCHECKFLAG_WATER) {
         if (func_8091DA14(this, play)) {
             func_8091EF30(this);
         } else {
             func_8091ECF4(this);
         }
-    } else if (this->actor.bgCheckFlags & 1) {
+    } else if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         func_8091E9A4(this);
     }
 }
@@ -625,12 +625,12 @@ void func_8091ED70(Actor* thisx, PlayState* play) {
         func_8091D840(thisx, play, 2, 25.0f);
     }
 
-    Math_SmoothStepToF(&thisx->speedXZ, 2.8f, 0.1f, 0.4f, 0.0f);
+    Math_SmoothStepToF(&thisx->speed, 2.8f, 0.1f, 0.4f, 0.0f);
 
-    if ((thisx->bgCheckFlags & 8) || !(thisx->bgCheckFlags & 0x20)) {
+    if ((thisx->bgCheckFlags & BGCHECKFLAG_WALL) || !(thisx->bgCheckFlags & BGCHECKFLAG_WATER)) {
         sp2E = Math_Vec3f_Yaw(&thisx->world.pos, &thisx->home.pos);
         thisx->home.rot.y = Rand_S16Offset(-100, 100) + sp2E;
-        thisx->speedXZ *= 0.5f;
+        thisx->speed *= 0.5f;
     }
 
     this->unk_268 = 0;
@@ -640,7 +640,7 @@ void func_8091ED70(Actor* thisx, PlayState* play) {
     this->unk_270 = 2000;
     this->unk_272 = 0x29B;
 
-    if (thisx->bgCheckFlags & 1) {
+    if (thisx->bgCheckFlags & BGCHECKFLAG_GROUND) {
         Math_StepToF(&thisx->world.pos.y, thisx->home.pos.y - 4.0f, 2.0f);
     } else {
         Math_StepToF(&thisx->world.pos.y, thisx->home.pos.y - 10.0f, 2.0f);
@@ -651,10 +651,10 @@ void func_8091ED70(Actor* thisx, PlayState* play) {
         func_8091D728(this);
     }
 
-    if ((thisx->speedXZ * 1.5f) + 1.0f > 4.8f) {
+    if ((thisx->speed * 1.5f) + 1.0f > 4.8f) {
         this->skelAnime.playSpeed = 4.8f;
     } else {
-        this->skelAnime.playSpeed = (thisx->speedXZ * 1.5f) + 1.0f;
+        this->skelAnime.playSpeed = (thisx->speed * 1.5f) + 1.0f;
     }
 
     if (this->unk_240 <= 0) {
@@ -700,18 +700,19 @@ void func_8091EFE8(Actor* thisx, PlayState* play) {
     }
 
     if (this->unk_277 == 0) {
-        Math_SmoothStepToF(&this->actor.speedXZ, 2.8f, 0.1f, 0.4f, 0.0f);
+        Math_SmoothStepToF(&this->actor.speed, 2.8f, 0.1f, 0.4f, 0.0f);
         if (this->unk_240 < 6) {
-            this->actor.speedXZ *= 0.75f;
+            this->actor.speed *= 0.75f;
         }
     }
 
-    if ((this->actor.bgCheckFlags & 8) && !(this->actor.bgCheckFlags & 0x20)) {
-        this->actor.speedXZ *= 0.5f;
+    if ((this->actor.bgCheckFlags & BGCHECKFLAG_WALL) && !(this->actor.bgCheckFlags & BGCHECKFLAG_WATER)) {
+        this->actor.speed *= 0.5f;
     }
 
-    if (((Rand_Next() >> 0x1B) == 0) || ((this->actor.bgCheckFlags & 8) && ((Rand_Next() >> 0x1E) == 0)) ||
-        !(this->actor.bgCheckFlags & 0x20)) {
+    if (((Rand_Next() >> 0x1B) == 0) ||
+        ((this->actor.bgCheckFlags & BGCHECKFLAG_WALL) && ((Rand_Next() >> 0x1E) == 0)) ||
+        !(this->actor.bgCheckFlags & BGCHECKFLAG_WATER)) {
         temp_f0 = Rand_ZeroOne();
         sp34 = (1.0f - SQ(temp_f0)) * sp3C->home.rot.x;
         sp30 = Rand_ZeroOne() * sp3C->home.rot.z;
@@ -760,10 +761,10 @@ void func_8091EFE8(Actor* thisx, PlayState* play) {
     }
 
     this->actor.velocity.y *= 0.8f;
-    if ((this->actor.speedXZ * 1.5f) + 1.0f > 4.8f) {
+    if ((this->actor.speed * 1.5f) + 1.0f > 4.8f) {
         this->skelAnime.playSpeed = 4.8f;
     } else {
-        this->skelAnime.playSpeed = (this->actor.speedXZ * 1.5f) + 1.0f;
+        this->skelAnime.playSpeed = (this->actor.speed * 1.5f) + 1.0f;
     }
 }
 
@@ -804,7 +805,7 @@ void func_8091F3BC(Actor* thisx, PlayState* play) {
 
     func_8091DD48(this);
     Math_StepToF(&this->actor.world.pos.y, this->actor.home.pos.y, 2.0f);
-    Math_SmoothStepToF(&this->actor.speedXZ, sp3C->x, sp3C->y, sp3C->z, 0.0f);
+    Math_SmoothStepToF(&this->actor.speed, sp3C->x, sp3C->y, sp3C->z, 0.0f);
     this->unk_24C = 0.0f;
 
     if (func_8091D630(&this->actor.world.pos, &this->actor.home.pos) > SQ(15.0f)) {
@@ -820,7 +821,7 @@ void func_8091F3BC(Actor* thisx, PlayState* play) {
         phi_f0 = 0.0f;
     }
 
-    temp_f2 = this->actor.speedXZ + 0.4f + phi_f0;
+    temp_f2 = this->actor.speed + 0.4f + phi_f0;
     this->skelAnime.playSpeed = CLAMP(temp_f2, 0.5f, 1.6f);
 
     if (this->unk_240 <= 0) {
@@ -887,7 +888,7 @@ void func_8091F5A4(Actor* thisx, PlayState* play) {
 
             func_8091D904(this);
         } else if (func_8091DDF4(this, play)) {
-            Actor_PickUp(&this->actor, play, GI_MAX, 80.0f, 25.0f);
+            Actor_OfferGetItem(&this->actor, play, GI_MAX, 80.0f, 25.0f);
         }
     }
 }

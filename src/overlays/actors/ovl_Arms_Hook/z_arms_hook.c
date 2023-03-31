@@ -109,7 +109,7 @@ s32 ArmsHook_CheckForCancel(ArmsHook* this) {
     Player* player = (Player*)this->actor.parent;
 
     if (Player_IsHoldingHookshot(player)) {
-        if ((player->itemAction != player->heldItemAction) || (player->actor.flags & ACTOR_FLAG_100) ||
+        if ((player->itemAction != player->heldItemAction) || (player->actor.flags & ACTOR_FLAG_TALK_REQUESTED) ||
             (player->stateFlags1 & (PLAYER_STATE1_80 | PLAYER_STATE1_4000000))) {
             this->timer = 0;
             ArmsHook_DetachHookFromActor(this);
@@ -168,7 +168,7 @@ void ArmsHook_Shoot(ArmsHook* this, PlayState* play) {
                 grabbed = NULL;
                 this->grabbed = NULL;
             } else if (this->actor.child != NULL) {
-                f32 sp94 = Actor_DistanceBetweenActors(&this->actor, grabbed);
+                f32 sp94 = Actor_WorldDistXYZToActor(&this->actor, grabbed);
                 f32 sp90 = sqrtf(SQXYZ(this->unk1FC));
 
                 Math_Vec3f_Diff(&grabbed->world.pos, &this->unk1FC, &this->actor.world.pos);
@@ -238,7 +238,7 @@ void ArmsHook_Shoot(ArmsHook* this, PlayState* play) {
         Actor_MoveWithGravity(&this->actor);
         Math_Vec3f_Diff(&this->actor.world.pos, &this->actor.prevPos, &prevFrameDiff);
         Math_Vec3f_Sum(&this->unk1E0, &prevFrameDiff, &this->unk1E0);
-        this->actor.shape.rot.x = Math_Atan2S_XY(this->actor.speedXZ, -this->actor.velocity.y);
+        this->actor.shape.rot.x = Math_Atan2S_XY(this->actor.speed, -this->actor.velocity.y);
         sp60.x = this->unk1EC.x - (this->unk1E0.x - this->unk1EC.x);
         sp60.y = this->unk1EC.y - (this->unk1E0.y - this->unk1EC.y);
         sp60.z = this->unk1EC.z - (this->unk1E0.z - this->unk1EC.z);

@@ -1,3 +1,3 @@
-#include "global.h"
+#include "buffers.h"
 
-u8 gGfxSPTaskStack[0x400];
+STACK(gGfxSPTaskStack, 0x400);

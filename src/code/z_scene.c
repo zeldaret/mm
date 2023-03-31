@@ -48,7 +48,7 @@ void Object_InitBank(GameState* gameState, ObjectContext* objectCtx) {
     for (i = 0; i < OBJECT_EXCHANGE_BANK_MAX; i++) { objectCtx->status[i].id = 0; }
     // clang-format on
 
-    objectCtx->spaceStart = objectCtx->status[0].segment = THA_AllocEndAlign16(&gameState->heap, spaceSize);
+    objectCtx->spaceStart = objectCtx->status[0].segment = THA_AllocTailAlign16(&gameState->heap, spaceSize);
     objectCtx->spaceEnd = (void*)((u32)objectCtx->spaceStart + spaceSize);
     objectCtx->mainKeepIndex = Object_Spawn(objectCtx, GAMEPLAY_KEEP);
 
@@ -141,7 +141,7 @@ void* func_8012F73C(ObjectContext* objectCtx, s32 iParm2, s16 id) {
 }
 
 // SceneTableEntry Header Command 0x00: Spawn List
-void Scene_HeaderCmdSpawnList(PlayState* play, SceneCmd* cmd) {
+void Scene_CommandSpawnList(PlayState* play, SceneCmd* cmd) {
     s32 loadedCount;
     s16 playerObjectId;
     void* nextObject;
@@ -168,19 +168,19 @@ void Scene_HeaderCmdSpawnList(PlayState* play, SceneCmd* cmd) {
 }
 
 // SceneTableEntry Header Command 0x01: Actor List
-void Scene_HeaderCmdActorList(PlayState* play, SceneCmd* cmd) {
+void Scene_CommandActorList(PlayState* play, SceneCmd* cmd) {
     play->numSetupActors = cmd->actorList.num;
     play->setupActorList = Lib_SegmentedToVirtual(cmd->actorList.segment);
-    play->actorCtx.unkC = 0;
+    play->actorCtx.halfDaysBit = 0;
 }
 
 // SceneTableEntry Header Command 0x02: List of camera data for actor cutscenes
-void Scene_HeaderCmdActorCutsceneCamList(PlayState* play, SceneCmd* cmd) {
+void Scene_CommandActorCutsceneCamList(PlayState* play, SceneCmd* cmd) {
     play->actorCsCamList = Lib_SegmentedToVirtual(cmd->actorCsCamList.segment);
 }
 
 // SceneTableEntry Header Command 0x03: Collision Header
-void Scene_HeaderCmdColHeader(PlayState* play, SceneCmd* cmd) {
+void Scene_CommandCollisionHeader(PlayState* play, SceneCmd* cmd) {
     CollisionHeader* colHeaderTemp;
     CollisionHeader* colHeader;
 
@@ -205,18 +205,18 @@ void Scene_HeaderCmdColHeader(PlayState* play, SceneCmd* cmd) {
 }
 
 // SceneTableEntry Header Command 0x04: Room List
-void Scene_HeaderCmdRoomList(PlayState* play, SceneCmd* cmd) {
+void Scene_CommandRoomList(PlayState* play, SceneCmd* cmd) {
     play->numRooms = cmd->roomList.num;
     play->roomList = Lib_SegmentedToVirtual(cmd->roomList.segment);
 }
 
 // SceneTableEntry Header Command 0x06: Entrance List
-void Scene_HeaderCmdEntranceList(PlayState* play, SceneCmd* cmd) {
+void Scene_CommandEntranceList(PlayState* play, SceneCmd* cmd) {
     play->setupEntranceList = Lib_SegmentedToVirtual(cmd->entranceList.segment);
 }
 
 // SceneTableEntry Header Command 0x07: Special Files
-void Scene_HeaderCmdSpecialFiles(PlayState* play, SceneCmd* cmd) {
+void Scene_CommandSpecialFiles(PlayState* play, SceneCmd* cmd) {
     // @note These quest hint files are identical to OoT's.
     // They are not relevant in this game and the system to process these scripts has been removed.
     static RomFile naviQuestHintFiles[2] = {
@@ -236,9 +236,9 @@ void Scene_HeaderCmdSpecialFiles(PlayState* play, SceneCmd* cmd) {
 }
 
 // SceneTableEntry Header Command 0x08: Room Behavior
-void Scene_HeaderCmdRoomBehavior(PlayState* play, SceneCmd* cmd) {
-    play->roomCtx.curRoom.unk3 = cmd->roomBehavior.gpFlag1;
-    play->roomCtx.curRoom.unk2 = cmd->roomBehavior.gpFlag2 & 0xFF;
+void Scene_CommandRoomBehavior(PlayState* play, SceneCmd* cmd) {
+    play->roomCtx.curRoom.behaviorType1 = cmd->roomBehavior.gpFlag1;
+    play->roomCtx.curRoom.behaviorType2 = cmd->roomBehavior.gpFlag2 & 0xFF;
     play->roomCtx.curRoom.lensMode = (cmd->roomBehavior.gpFlag2 >> 8) & 1;
     play->msgCtx.unk12044 = (cmd->roomBehavior.gpFlag2 >> 0xA) & 1;
     play->roomCtx.curRoom.enablePosLights = (cmd->roomBehavior.gpFlag2 >> 0xB) & 1;
@@ -246,12 +246,12 @@ void Scene_HeaderCmdRoomBehavior(PlayState* play, SceneCmd* cmd) {
 }
 
 // SceneTableEntry Header Command 0x0A: Mesh Header
-void Scene_HeaderCmdMesh(PlayState* play, SceneCmd* cmd) {
-    play->roomCtx.curRoom.mesh = Lib_SegmentedToVirtual(cmd->mesh.segment);
+void Scene_CommandMesh(PlayState* play, SceneCmd* cmd) {
+    play->roomCtx.curRoom.roomShape = Lib_SegmentedToVirtual(cmd->mesh.segment);
 }
 
 // SceneTableEntry Header Command 0x0B:  Object List
-void Scene_HeaderCmdObjectList(PlayState* play, SceneCmd* cmd) {
+void Scene_CommandObjectList(PlayState* play, SceneCmd* cmd) {
     s32 i;
     s32 j;
     s32 k;
@@ -277,7 +277,7 @@ void Scene_HeaderCmdObjectList(PlayState* play, SceneCmd* cmd) {
             }
 
             play->objectCtx.num = i;
-            func_800BA6FC(play, &play->actorCtx);
+            Actor_KillAllWithMissingObject(play, &play->actorCtx);
 
             continue;
         }
@@ -304,7 +304,7 @@ void Scene_HeaderCmdObjectList(PlayState* play, SceneCmd* cmd) {
 }
 
 // SceneTableEntry Header Command 0x0C: Light List
-void Scene_HeaderCmdLightList(PlayState* play, SceneCmd* cmd) {
+void Scene_CommandLightList(PlayState* play, SceneCmd* cmd) {
     s32 i;
     LightInfo* lightInfo = Lib_SegmentedToVirtual(cmd->lightList.segment);
 
@@ -315,12 +315,12 @@ void Scene_HeaderCmdLightList(PlayState* play, SceneCmd* cmd) {
 }
 
 // SceneTableEntry Header Command 0x0D: Path List
-void Scene_HeaderCmdPathList(PlayState* play, SceneCmd* cmd) {
+void Scene_CommandPathList(PlayState* play, SceneCmd* cmd) {
     play->setupPathList = Lib_SegmentedToVirtual(cmd->pathList.segment);
 }
 
 // SceneTableEntry Header Command 0x0E: Transition Actor List
-void Scene_HeaderCmdTransiActorList(PlayState* play, SceneCmd* cmd) {
+void Scene_CommandTransiActorList(PlayState* play, SceneCmd* cmd) {
     play->doorCtx.numTransitionActors = cmd->transiActorList.num;
     play->doorCtx.transitionActorList = Lib_SegmentedToVirtual(cmd->transiActorList.segment);
     func_80105818(play, play->doorCtx.numTransitionActors, play->doorCtx.transitionActorList);
@@ -332,7 +332,7 @@ void Door_InitContext(GameState* state, DoorContext* doorCtx) {
 }
 
 // SceneTableEntry Header Command 0x0F: Environment Light Settings List
-void Scene_HeaderCmdEnvLightSettings(PlayState* play, SceneCmd* cmd) {
+void Scene_CommandEnvLightSettings(PlayState* play, SceneCmd* cmd) {
     play->envCtx.numLightSettings = cmd->lightSettingList.num;
     play->envCtx.lightSettingsList = Lib_SegmentedToVirtual(cmd->lightSettingList.segment);
 }
@@ -357,13 +357,13 @@ void Scene_LoadAreaTextures(PlayState* play, s32 fileIndex) {
     size_t size = sceneTextureFiles[fileIndex].vromEnd - vromStart;
 
     if (size != 0) {
-        play->roomCtx.unk74 = THA_AllocEndAlign16(&play->state.heap, size);
+        play->roomCtx.unk74 = THA_AllocTailAlign16(&play->state.heap, size);
         DmaMgr_SendRequest0(play->roomCtx.unk74, vromStart, size);
     }
 }
 
 // SceneTableEntry Header Command 0x11: Skybox Settings
-void Scene_HeaderCmdSkyboxSettings(PlayState* play, SceneCmd* cmd) {
+void Scene_CommandSkyboxSettings(PlayState* play, SceneCmd* cmd) {
     play->skyboxId = cmd->skyboxSettings.skyboxId & 3;
     play->envCtx.skyboxConfig = play->envCtx.changeSkyboxNextConfig = cmd->skyboxSettings.skyboxConfig;
     play->envCtx.lightMode = cmd->skyboxSettings.envLightMode;
@@ -371,13 +371,13 @@ void Scene_HeaderCmdSkyboxSettings(PlayState* play, SceneCmd* cmd) {
 }
 
 // SceneTableEntry Header Command 0x12: Skybox Disables
-void Scene_HeaderCmdSkyboxDisables(PlayState* play, SceneCmd* cmd) {
+void Scene_CommandSkyboxDisables(PlayState* play, SceneCmd* cmd) {
     play->envCtx.skyboxDisabled = cmd->skyboxDisables.unk4;
     play->envCtx.sunMoonDisabled = cmd->skyboxDisables.unk5;
 }
 
 // SceneTableEntry Header Command 0x10: Time Settings
-void Scene_HeaderCmdTimeSettings(PlayState* play, SceneCmd* cmd) {
+void Scene_CommandTimeSettings(PlayState* play, SceneCmd* cmd) {
     if ((cmd->timeSettings.hour != 0xFF) && (cmd->timeSettings.min != 0xFF)) {
         gSaveContext.skyboxTime = gSaveContext.save.time =
             CLOCK_TIME_ALT2_F(cmd->timeSettings.hour, cmd->timeSettings.min);
@@ -418,7 +418,7 @@ void Scene_HeaderCmdTimeSettings(PlayState* play, SceneCmd* cmd) {
 }
 
 // SceneTableEntry Header Command 0x05: Wind Settings
-void Scene_HeaderCmdWindSettings(PlayState* play, SceneCmd* cmd) {
+void Scene_CommandWindSettings(PlayState* play, SceneCmd* cmd) {
     s8 temp1 = cmd->windSettings.west;
     s8 temp2 = cmd->windSettings.vertical;
     s8 temp3 = cmd->windSettings.south;
@@ -430,32 +430,32 @@ void Scene_HeaderCmdWindSettings(PlayState* play, SceneCmd* cmd) {
 }
 
 // SceneTableEntry Header Command 0x13: Exit List
-void Scene_HeaderCmdExitList(PlayState* play, SceneCmd* cmd) {
+void Scene_CommandExitList(PlayState* play, SceneCmd* cmd) {
     play->setupExitList = Lib_SegmentedToVirtual(cmd->exitList.segment);
 }
 
 // SceneTableEntry Header Command 0x09: Undefined
-void Scene_HeaderCmd09(PlayState* play, SceneCmd* cmd) {
+void Scene_Command09(PlayState* play, SceneCmd* cmd) {
 }
 
 // SceneTableEntry Header Command 0x15: Sound Settings=
-void Scene_HeaderCmdSoundSettings(PlayState* play, SceneCmd* cmd) {
+void Scene_CommandSoundSettings(PlayState* play, SceneCmd* cmd) {
     play->sequenceCtx.seqId = cmd->soundSettings.seqId;
     play->sequenceCtx.ambienceId = cmd->soundSettings.ambienceId;
 
     if (gSaveContext.seqId == (u8)NA_BGM_DISABLED ||
-        Audio_GetActiveSequence(SEQ_PLAYER_BGM_MAIN) == NA_BGM_FINAL_HOURS) {
+        AudioSeq_GetActiveSeqId(SEQ_PLAYER_BGM_MAIN) == NA_BGM_FINAL_HOURS) {
         Audio_SetSpec(cmd->soundSettings.specId);
     }
 }
 
 // SceneTableEntry Header Command 0x16: Echo Setting
-void Scene_HeaderCmdEchoSetting(PlayState* play, SceneCmd* cmd) {
+void Scene_CommandEchoSetting(PlayState* play, SceneCmd* cmd) {
     play->roomCtx.curRoom.echo = cmd->echoSettings.echo;
 }
 
 // SceneTableEntry Header Command 0x18: Alternate Header List=
-void Scene_HeaderCmdAltHeaderList(PlayState* play, SceneCmd* cmd) {
+void Scene_CommandAltHeaderList(PlayState* play, SceneCmd* cmd) {
     SceneCmd** altHeaderList;
     SceneCmd* altHeader;
 
@@ -464,40 +464,40 @@ void Scene_HeaderCmdAltHeaderList(PlayState* play, SceneCmd* cmd) {
         altHeader = altHeaderList[gSaveContext.sceneLayer - 1];
 
         if (altHeader != NULL) {
-            Scene_ProcessHeader(play, Lib_SegmentedToVirtual(altHeader));
+            Scene_ExecuteCommands(play, Lib_SegmentedToVirtual(altHeader));
             (cmd + 1)->base.code = 0x14;
         }
     }
 }
 
 // SceneTableEntry Header Command 0x17: Cutscene List
-void Scene_HeaderCmdCutsceneList(PlayState* play, SceneCmd* cmd) {
+void Scene_CommandCutsceneList(PlayState* play, SceneCmd* cmd) {
     play->csCtx.sceneCsCount = cmd->cutsceneList.sceneCsCount;
     play->csCtx.sceneCsList = Lib_SegmentedToVirtual(cmd->cutsceneList.segment);
 }
 
 // SceneTableEntry Header Command 0x1B: Actor Cutscene List
-void Scene_HeaderCmdActorCutsceneList(PlayState* play, SceneCmd* cmd) {
+void Scene_CommandActorCutsceneList(PlayState* play, SceneCmd* cmd) {
     ActorCutscene_Init(play, Lib_SegmentedToVirtual(cmd->cutsceneActorList.segment), cmd->cutsceneActorList.num);
 }
 
 // SceneTableEntry Header Command 0x1C: Mini Maps
-void Scene_HeaderCmdMiniMap(PlayState* play, SceneCmd* cmd) {
+void Scene_CommandMiniMap(PlayState* play, SceneCmd* cmd) {
     func_80104CF4(play);
     func_8010549C(play, cmd->minimapSettings.segment);
 }
 
 // SceneTableEntry Header Command 0x1D: Undefined
-void Scene_HeaderCmd1D(PlayState* play, SceneCmd* cmd) {
+void Scene_Command1D(PlayState* play, SceneCmd* cmd) {
 }
 
 // SceneTableEntry Header Command 0x1E: Minimap Compass Icon Info
-void Scene_HeaderCmdMiniMapCompassInfo(PlayState* play, SceneCmd* cmd) {
+void Scene_CommandMiniMapCompassInfo(PlayState* play, SceneCmd* cmd) {
     func_8010565C(play, cmd->minimapChests.num, cmd->minimapChests.segment);
 }
 
 // SceneTableEntry Header Command 0x19: Sets Region Visited Flag
-void Scene_HeaderCmdSetRegionVisitedFlag(PlayState* play, SceneCmd* cmd) {
+void Scene_CommandSetRegionVisitedFlag(PlayState* play, SceneCmd* cmd) {
     s16 j = 0;
     s16 i = 0;
 
@@ -525,7 +525,7 @@ void Scene_HeaderCmdSetRegionVisitedFlag(PlayState* play, SceneCmd* cmd) {
 }
 
 // SceneTableEntry Header Command 0x1A: Material Animations
-void Scene_HeaderCmdAnimatedMaterials(PlayState* play, SceneCmd* cmd) {
+void Scene_CommandAnimatedMaterials(PlayState* play, SceneCmd* cmd) {
     play->sceneMaterialAnims = (AnimatedMaterial*)Lib_SegmentedToVirtual(cmd->textureAnimations.segment);
 }
 
@@ -536,57 +536,58 @@ void Scene_SetExitFade(PlayState* play) {
     play->transitionType = Entrance_GetTransitionFlags(play->nextEntrance) & 0x7F;
 }
 
+void (*sSceneCmdHandlers[])(PlayState*, SceneCmd*) = {
+    Scene_CommandSpawnList,
+    Scene_CommandActorList,
+    Scene_CommandActorCutsceneCamList,
+    Scene_CommandCollisionHeader,
+    Scene_CommandRoomList,
+    Scene_CommandWindSettings,
+    Scene_CommandEntranceList,
+    Scene_CommandSpecialFiles,
+    Scene_CommandRoomBehavior,
+    Scene_Command09,
+    Scene_CommandMesh,
+    Scene_CommandObjectList,
+    Scene_CommandLightList,
+    Scene_CommandPathList,
+    Scene_CommandTransiActorList,
+    Scene_CommandEnvLightSettings,
+    Scene_CommandTimeSettings,
+    Scene_CommandSkyboxSettings,
+    Scene_CommandSkyboxDisables,
+    Scene_CommandExitList,
+    NULL,
+    Scene_CommandSoundSettings,
+    Scene_CommandEchoSetting,
+    Scene_CommandCutsceneList,
+    Scene_CommandAltHeaderList,
+    Scene_CommandSetRegionVisitedFlag,
+    Scene_CommandAnimatedMaterials,
+    Scene_CommandActorCutsceneList,
+    Scene_CommandMiniMap,
+    Scene_Command1D,
+    Scene_CommandMiniMapCompassInfo,
+};
+
 /**
  * Executes all of the commands in a scene or room header.
  */
-s32 Scene_ProcessHeader(PlayState* play, SceneCmd* header) {
-    static void (*sceneCmdHandlers[])(PlayState*, SceneCmd*) = {
-        Scene_HeaderCmdSpawnList,
-        Scene_HeaderCmdActorList,
-        Scene_HeaderCmdActorCutsceneCamList,
-        Scene_HeaderCmdColHeader,
-        Scene_HeaderCmdRoomList,
-        Scene_HeaderCmdWindSettings,
-        Scene_HeaderCmdEntranceList,
-        Scene_HeaderCmdSpecialFiles,
-        Scene_HeaderCmdRoomBehavior,
-        Scene_HeaderCmd09,
-        Scene_HeaderCmdMesh,
-        Scene_HeaderCmdObjectList,
-        Scene_HeaderCmdLightList,
-        Scene_HeaderCmdPathList,
-        Scene_HeaderCmdTransiActorList,
-        Scene_HeaderCmdEnvLightSettings,
-        Scene_HeaderCmdTimeSettings,
-        Scene_HeaderCmdSkyboxSettings,
-        Scene_HeaderCmdSkyboxDisables,
-        Scene_HeaderCmdExitList,
-        NULL,
-        Scene_HeaderCmdSoundSettings,
-        Scene_HeaderCmdEchoSetting,
-        Scene_HeaderCmdCutsceneList,
-        Scene_HeaderCmdAltHeaderList,
-        Scene_HeaderCmdSetRegionVisitedFlag,
-        Scene_HeaderCmdAnimatedMaterials,
-        Scene_HeaderCmdActorCutsceneList,
-        Scene_HeaderCmdMiniMap,
-        Scene_HeaderCmd1D,
-        Scene_HeaderCmdMiniMapCompassInfo,
-    };
+s32 Scene_ExecuteCommands(PlayState* play, SceneCmd* sceneCmd) {
     u32 cmdId;
 
     while (true) {
-        cmdId = header->base.code;
+        cmdId = sceneCmd->base.code;
 
         if (cmdId == SCENE_CMD_ID_END) {
             break;
         }
 
         if (cmdId < SCENE_CMD_MAX) {
-            sceneCmdHandlers[cmdId](play, header);
+            sSceneCmdHandlers[cmdId](play, sceneCmd);
         }
 
-        header++;
+        sceneCmd++;
     }
 
     return 0;

@@ -7,6 +7,4 @@ typedef struct {
     /* 0x00 */ Vec3f pos;
 } EffectSsGFireInitParams; // size = 0xC
 
-extern const EffectSsInit Effect_Ss_G_Fire_InitVars;
-
 #endif

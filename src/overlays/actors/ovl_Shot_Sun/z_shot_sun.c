@@ -61,7 +61,7 @@ void ShotSun_Init(Actor* thisx, PlayState* play) {
         this->actor.flags |= ACTOR_FLAG_10;
         this->actor.flags |= ACTOR_FLAG_2000000;
         this->actionFunc = ShotSun_UpdateForOcarina;
-        this->actor.flags |= ACTOR_FLAG_8000000;
+        this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
     } else {
         Collider_InitCylinder(play, &this->collider);
         Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
@@ -160,7 +160,7 @@ void ShotSun_UpdateHyliaSun(ShotSun* this, PlayState* play) {
             collectible = (EnItem00*)Item_DropCollectible(play, &spawnPos, ITEM00_MAGIC_LARGE);
             if (collectible != NULL) {
                 collectible->unk152 = 0x1770;
-                collectible->actor.speedXZ = 0.0f;
+                collectible->actor.speed = 0.0f;
             }
         }
 
