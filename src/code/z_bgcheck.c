@@ -954,12 +954,12 @@ s32 BgCheck_CheckStaticCeiling(StaticLookup* lookup, u16 xpFlags, CollisionConte
 s32 BgCheck_CheckLineAgainstSSList(StaticLineTest* arg0) {
     CollisionPoly* polyList;
     s32 result;
-    Vec3f polyIntersect; // worldMinPosZOffset
+    Vec3f polyIntersect;
     SSNode* curNode;
     u8* checkedPoly;
     f32 minY;
     f32 distSq;
-    BgLineVsPolyTest test; // sp50
+    BgLineVsPolyTest test;
     s16 polyId;
 
     result = false;
