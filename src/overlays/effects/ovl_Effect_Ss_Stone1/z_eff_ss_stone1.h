@@ -8,6 +8,4 @@ typedef struct {
     /* 0x0C */ s32 reg0;
 } EffectSsStone1InitParams; // size = 0x10
 
-extern const EffectSsInit Effect_Ss_Stone1_InitVars;
-
 #endif
