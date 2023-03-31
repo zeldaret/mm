@@ -1,4 +1,3 @@
-#include "prevent_bss_reordering.h"
 #include "global.h"
 #include "z64quake.h"
 #include "z64shrink_window.h"
@@ -7163,18 +7162,18 @@ void func_800DDFE0(Camera* camera) {
         camera->prevSetting = camera->setting = CAM_SET_FREE0;
         Camera_UnsetStateFlag(camera, CAM_STATE_2);
     } else {
-        switch (camera->play->roomCtx.curRoom.unk3) {
-            case 1:
+        switch (camera->play->roomCtx.curRoom.behaviorType1) {
+            case ROOM_BEHAVIOR_TYPE1_1:
                 camera->prevSetting = CAM_SET_DUNGEON0;
                 Camera_ChangeSettingFlags(camera, CAM_SET_DUNGEON0, CAM_CHANGE_SETTING_1);
                 break;
 
-            case 0:
+            case ROOM_BEHAVIOR_TYPE1_0:
                 camera->prevSetting = CAM_SET_NORMAL0;
                 Camera_ChangeSettingFlags(camera, CAM_SET_NORMAL0, CAM_CHANGE_SETTING_1);
                 break;
 
-            case 2:
+            case ROOM_BEHAVIOR_TYPE1_2:
                 camera->prevSetting = CAM_SET_ROOM0;
                 Camera_ChangeSettingFlags(camera, CAM_SET_ROOM0, CAM_CHANGE_SETTING_1);
                 break;
@@ -7415,7 +7414,7 @@ void Camera_EarthquakeDay3(Camera* camera) {
  */
 s32 Camera_UpdateHotRoom(Camera* camera) {
     Distortion_ClearType(DISTORTION_TYPE_0);
-    if (camera->play->roomCtx.curRoom.unk2 == 3) {
+    if (camera->play->roomCtx.curRoom.behaviorType2 == ROOM_BEHAVIOR_TYPE2_HOT) {
         Distortion_SetType(DISTORTION_TYPE_0);
     }
     return true;
@@ -7871,7 +7870,7 @@ s32 Camera_ChangeModeFlags(Camera* camera, s16 mode, u8 forceChange) {
                 break;
 
             case CAM_CHANGE_MODE_1:
-                if (camera->play->roomCtx.curRoom.unk3 == 1) {
+                if (camera->play->roomCtx.curRoom.behaviorType1 == ROOM_BEHAVIOR_TYPE1_1) {
                     play_sound(NA_SE_SY_ATTENTION_URGENCY);
                 } else {
 

@@ -13,7 +13,7 @@ u32 EffectSsGFire_Init(PlayState* play, u32 index, EffectSs* this, void* initPar
 void EffectSsGFire_Update(PlayState* play, u32 index, EffectSs* this);
 void EffectSsGFire_Draw(PlayState* play, u32 index, EffectSs* this);
 
-const EffectSsInit Effect_Ss_G_Fire_InitVars = {
+EffectSsInit Effect_Ss_G_Fire_InitVars = {
     EFFECT_SS_G_FIRE,
     EffectSsGFire_Init,
 };

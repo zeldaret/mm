@@ -246,7 +246,7 @@ void func_809A48AC(ObjToge* this, PlayState* play) {
     Actor_MoveWithGravity(&this->actor);
     Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, D_809A4D0C[OBJTOGE_GET_4000(&this->actor)] * 30.0f, 0.0f, 0x81);
 
-    if (this->actor.bgCheckFlags & 8) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
         this->actor.world.rot.y = Math_Vec3f_Yaw(&this->actor.world.pos, &this->unk_198[this->unk_194]);
         this->unk_194 = sp30;
         if (this->unk_1B4 && (this->unk_194 == 0)) {
@@ -279,7 +279,7 @@ void ObjToge_Update(Actor* thisx, PlayState* play) {
     if (this->collider.base.acFlags & AC_HIT) {
         if (this->collider.info.acHitInfo->toucher.dmgFlags & 0x1000) {
             func_809A43A8(this, play);
-            Actor_SetColorFilter(&this->actor, 0, 250, 0, 250);
+            Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 250, COLORFILTER_BUFFLAG_OPA, 250);
         }
         collider->base.acFlags &= ~AC_HIT;
     }

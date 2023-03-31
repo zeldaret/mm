@@ -861,7 +861,8 @@ void EnDekubaba_PrunedSomersaultDie(EnDekubaba* this, PlayState* play) {
         EffectSsHahen_SpawnBurst(play, &this->actor.world.pos, this->size * 3.0f, 0, (s32)(this->size * 12.0f),
                                  (s32)(this->size * 5.0f), 1, HAHEN_OBJECT_DEFAULT, 10, NULL);
 
-        if ((this->actor.scale.x > 0.005f) && ((this->actor.bgCheckFlags & 2) || (this->actor.bgCheckFlags & 8))) {
+        if ((this->actor.scale.x > 0.005f) &&
+            ((this->actor.bgCheckFlags & BGCHECKFLAG_GROUND_TOUCH) || (this->actor.bgCheckFlags & BGCHECKFLAG_WALL))) {
             this->actor.scale.z = 0.0f;
             this->actor.scale.y = 0.0f;
             this->actor.scale.x = 0.0f;
@@ -871,7 +872,7 @@ void EnDekubaba_PrunedSomersaultDie(EnDekubaba* this, PlayState* play) {
                                      (s32)(this->size * 5.0f), 15, HAHEN_OBJECT_DEFAULT, 10, NULL);
         }
 
-        if (this->actor.bgCheckFlags & 2) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND_TOUCH) {
             Actor_PlaySfx(&this->actor, NA_SE_EN_EYEGOLE_ATTACK);
             this->timer = 1;
         }
@@ -1058,7 +1059,7 @@ void EnDekubaba_DeadStickDrop(EnDekubaba* this, PlayState* play) {
         return;
     }
 
-    Actor_PickUpNearby(&this->actor, play, GI_STICKS_1);
+    Actor_OfferGetItemNearby(&this->actor, play, GI_STICKS_1);
 }
 
 /* Update and associated functions */

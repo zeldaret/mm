@@ -317,9 +317,10 @@ void EnFirefly_FlyIdle(EnFirefly* this, PlayState* play) {
                 this->pitchTarget = 0x2154;
             }
         } else {
-            if (this->actor.bgCheckFlags & 1) {
+            if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
                 this->pitchTarget = 0x954;
-            } else if ((this->actor.bgCheckFlags & 0x10) || (this->maxAltitude < this->actor.world.pos.y)) {
+            } else if ((this->actor.bgCheckFlags & BGCHECKFLAG_CEILING) ||
+                       (this->maxAltitude < this->actor.world.pos.y)) {
                 this->pitchTarget = 0x2154;
             }
         }
@@ -327,7 +328,7 @@ void EnFirefly_FlyIdle(EnFirefly* this, PlayState* play) {
         Math_ScaledStepToS(&this->actor.shape.rot.x, this->pitchTarget, 0x100);
     }
 
-    if (this->actor.bgCheckFlags & 8) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
         Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.wallYaw, 2, 0xC00, 0x300);
     }
 
@@ -344,9 +345,9 @@ void EnFirefly_SetupFall(EnFirefly* this, PlayState* play) {
     this->actor.flags |= ACTOR_FLAG_10;
 
     if (this->isInvisible) {
-        Actor_SetColorFilter(&this->actor, 0x4000, 255, 0x2000, 40);
+        Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_XLU, 40);
     } else {
-        Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 40);
+        Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 40);
     }
 
     if (this->actor.colChkInfo.damageEffect == KEESE_DMGEFF_ICE) {
@@ -389,7 +390,7 @@ void EnFirefly_Fall(EnFirefly* this, PlayState* play) {
             this->actor.shape.rot.y -= 0x300;
         }
 
-        if ((this->actor.bgCheckFlags & 1) || (this->actor.floorHeight == BGCHECK_Y_MIN)) {
+        if ((this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) || (this->actor.floorHeight == BGCHECK_Y_MIN)) {
             EnFirefly_SpawnIceEffects(this, play);
             EnFirefly_SetupDie(this);
         }
@@ -436,7 +437,7 @@ void EnFirefly_DiveAttack(EnFirefly* this, PlayState* play) {
 
     Math_StepToF(&this->actor.speed, 4.0f, 0.5f);
 
-    if (this->actor.bgCheckFlags & 8) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
         Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.wallYaw, 2, 0xC00, 0x300);
         Math_ScaledStepToS(&this->actor.shape.rot.x, this->pitchTarget, 0x100);
     } else if (Actor_IsFacingPlayer(&this->actor, 0x2800)) {
@@ -457,11 +458,11 @@ void EnFirefly_DiveAttack(EnFirefly* this, PlayState* play) {
             Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 2, 0xC00, 0x300);
         }
 
-        if (this->actor.bgCheckFlags & 1) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
             this->pitchTarget = 0x954;
         }
 
-        if ((this->actor.bgCheckFlags & 0x10) || (this->maxAltitude < this->actor.world.pos.y)) {
+        if ((this->actor.bgCheckFlags & BGCHECKFLAG_CEILING) || (this->maxAltitude < this->actor.world.pos.y)) {
             this->pitchTarget = 0x2154;
         } else {
             this->pitchTarget = 0x954;
@@ -523,15 +524,15 @@ void EnFirefly_FlyAway(EnFirefly* this, PlayState* play) {
 
     Math_StepToF(&this->actor.speed, 3.0f, 0.3f);
 
-    if (this->actor.bgCheckFlags & 1) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         this->pitchTarget = 0x954;
-    } else if ((this->actor.bgCheckFlags & 0x10) || (this->maxAltitude < this->actor.world.pos.y)) {
+    } else if ((this->actor.bgCheckFlags & BGCHECKFLAG_CEILING) || (this->maxAltitude < this->actor.world.pos.y)) {
         this->pitchTarget = 0x2154;
     } else {
         this->pitchTarget = 0x954;
     }
 
-    if (this->actor.bgCheckFlags & 8) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
         Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.wallYaw, 2, 0xC00, 0x300);
     } else {
         Math_ScaledStepToS(&this->actor.shape.rot.y, Actor_WorldYawTowardPoint(&this->actor, &this->actor.home.pos),
@@ -543,9 +544,9 @@ void EnFirefly_FlyAway(EnFirefly* this, PlayState* play) {
 
 void EnFirefly_SetupStunned(EnFirefly* this) {
     if (this->isInvisible) {
-        Actor_SetColorFilter(&this->actor, 0, 255, 0x2000, this->timer);
+        Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 255, COLORFILTER_BUFFLAG_XLU, this->timer);
     } else {
-        Actor_SetColorFilter(&this->actor, 0, 255, 0, this->timer);
+        Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 255, COLORFILTER_BUFFLAG_OPA, this->timer);
     }
 
     if (this->actionFunc != EnFirefly_Stunned) {
@@ -560,7 +561,7 @@ void EnFirefly_SetupStunned(EnFirefly* this) {
 
 void EnFirefly_Stunned(EnFirefly* this, PlayState* play) {
     Math_ScaledStepToS(&this->actor.shape.rot.x, 0x1554, 0x100);
-    if ((this->actor.bgCheckFlags & 1) || (this->actor.floorHeight == BGCHECK_Y_MIN)) {
+    if ((this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) || (this->actor.floorHeight == BGCHECK_Y_MIN)) {
         if (this->timer != 0) {
             this->timer--;
         }

@@ -990,7 +990,7 @@ typedef struct Player {
     /* 0xB5D */ u8 unk_B5D;
     /* 0xB5E */ u8 unk_B5E;
     /* 0xB5F */ u8 unk_B5F;
-    /* 0xB60 */ u16 unk_B60; // blast mask timer?
+    /* 0xB60 */ u16 blastMaskTimer;
     /* 0xB62 */ s16 unk_B62;
     /* 0xB64 */ u8 unk_B64;
     /* 0xB65 */ u8 shockTimer;

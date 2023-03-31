@@ -345,7 +345,7 @@ void func_8087B7C0(EnHorse* this, PlayState* play, Path* path) {
 
     func_8017D7C0(this->actor.world.pos.x, this->actor.world.pos.z, sp80.x, sp80.z, sp8C.x, sp8C.z, &sp70);
 
-    if ((this->actor.bgCheckFlags & 8) || (this->unk_1EC & 4)) {
+    if ((this->actor.bgCheckFlags & BGCHECKFLAG_WALL) || (this->unk_1EC & 4)) {
         EnHorse_RotateToPoint(this, play, &sp8C, 0xC80);
         if (this->unk_1EC & 4) {
             this->unk_1EC &= ~4;
@@ -672,7 +672,7 @@ s32 EnHorse_PlayerCanMove(EnHorse* this, PlayState* play) {
     if ((player->stateFlags1 & PLAYER_STATE1_1) || (func_800B7128(GET_PLAYER(play)) == true) ||
         (player->stateFlags1 & PLAYER_STATE1_100000) ||
         (((this->stateFlags & ENHORSE_FLAG_19) || (this->stateFlags & ENHORSE_FLAG_29)) && !this->inRace) ||
-        (this->action == ENHORSE_ACTION_HBA) || (player->actor.flags & ACTOR_FLAG_100) ||
+        (this->action == ENHORSE_ACTION_HBA) || (player->actor.flags & ACTOR_FLAG_TALK_REQUESTED) ||
         (play->csCtx.state != CS_STATE_0) || (ActorCutscene_GetCurrentIndex() != -1) ||
         (player->stateFlags1 & PLAYER_STATE1_20) || (player->csMode != PLAYER_CSMODE_0)) {
         return false;
@@ -1642,7 +1642,7 @@ void EnHorse_Reverse(EnHorse* this, PlayState* play) {
         } else if (stickMag < 10.0f) {
             stickAngle = -0x7FFF;
         }
-    } else if ((player->actor.flags & ACTOR_FLAG_100) || (play->csCtx.state != CS_STATE_0) ||
+    } else if ((player->actor.flags & ACTOR_FLAG_TALK_REQUESTED) || (play->csCtx.state != CS_STATE_0) ||
                (ActorCutscene_GetCurrentIndex() != -1) || (player->stateFlags1 & PLAYER_STATE1_20)) {
         EnHorse_StartMountedIdleResetAnim(this);
         this->actor.speed = 0.0f;
@@ -2934,7 +2934,7 @@ void EnHorse_UpdateHorsebackArchery(EnHorse* this, PlayState* play) {
 
     if (((play->interfaceCtx.minigameAmmo == 0) || (this->hbaFlags & 2)) && (this->hbaFlags & 4)) {
         this->hbaFlags &= ~4;
-        Audio_QueueSeqCmd(0x8041);
+        SEQCMD_PLAY_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 0, NA_BGM_HORSE_GOAL | SEQ_FLAG_ASYNC);
     }
 
     if (this->hbaStarted == 0) {
@@ -3744,7 +3744,8 @@ void EnHorse_UpdateBgCheckInfo(EnHorse* this, PlayState* play) {
         Actor_UpdateBgCheckInfo(play, &this->actor, 40.0f, 35.0f, 100.0f, 0x1C);
     }
 
-    if ((this->actor.bgCheckFlags & 8) && (Math_CosS(this->actor.wallYaw - this->actor.world.rot.y) < -0.3f)) {
+    if ((this->actor.bgCheckFlags & BGCHECKFLAG_WALL) &&
+        (Math_CosS(this->actor.wallYaw - this->actor.world.rot.y) < -0.3f)) {
         if (this->actor.speed > 4.0f) {
             this->actor.speed -= 1.0f;
             if (this->type == HORSE_TYPE_2) {

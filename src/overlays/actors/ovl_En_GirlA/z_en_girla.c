@@ -159,8 +159,8 @@ void EnGirlA_SetupAction(EnGirlA* this, EnGirlAActionFunc action) {
 void EnGirlA_InitObjIndex(EnGirlA* this, PlayState* play) {
     s16 params = this->actor.params;
 
-    //! @bug: Condition is impossible, && should be an ||
     if ((params >= SI_MAX) && (params < SI_POTION_RED_1)) {
+        //! @bug: Impossible to reach, && should be an ||
         Actor_Kill(&this->actor);
         return;
     }

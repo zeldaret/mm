@@ -99,7 +99,7 @@ s32 Message_ShouldAdvanceSilent(PlayState* play) {
     }
 }
 
-void func_801477B4(PlayState* play) {
+void Message_CloseTextbox(PlayState* play) {
     MessageContext* msgCtx = &play->msgCtx;
 
     if (play->msgCtx.msgLength != 0) {
@@ -309,7 +309,7 @@ void Message_StartTextbox(PlayState* play, u16 textId, Actor* Actor) {
     play->msgCtx.ocarinaMode = 0;
 }
 
-void func_80151938(PlayState* play, u16 textId) {
+void Message_ContinueTextbox(PlayState* play, u16 textId) {
     MessageContext* msgCtx = &play->msgCtx;
     InterfaceContext* interfaceCtx = &play->interfaceCtx;
 
@@ -395,7 +395,7 @@ u32 func_80151C9C(PlayState* play) {
             SET_WEEKEVENTREG(D_801C6B28[msgCtx->unk120B2[msgCtx->unk120B1]]);
 
             if ((D_801C6AB8[msgCtx->unk120B2[msgCtx->unk120B1]] != 0) && CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
-                func_80151938(play, D_801C6AB8[msgCtx->unk120B2[msgCtx->unk120B1]]);
+                Message_ContinueTextbox(play, D_801C6AB8[msgCtx->unk120B2[msgCtx->unk120B1]]);
                 play_sound(NA_SE_SY_SCHEDULE_WRITE);
                 return true;
             }
@@ -572,7 +572,7 @@ void Message_Init(PlayState* play) {
     messageCtx->ocarinaAction = messageCtx->unk11FF2 = 0;
     messageCtx->unk1201E = 0xFF;
     View_Init(&messageCtx->view, play->state.gfxCtx);
-    messageCtx->unk11EF8 = THA_AllocEndAlign16(&play->state.heap, 0x13C00);
+    messageCtx->unk11EF8 = THA_AllocTailAlign16(&play->state.heap, 0x13C00);
     font = &play->msgCtx.font;
     Font_LoadOrderedFont(&play->msgCtx.font);
     font->unk_11D88 = 0;
