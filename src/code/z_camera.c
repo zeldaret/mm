@@ -1,9 +1,3 @@
-#include "global.h"
-#include "z64quake.h"
-#include "z64shrink_window.h"
-#include "z64view.h"
-#include "overlays/actors/ovl_En_Horse/z_en_horse.h"
-
 /**
  * @file camera.c
  * Implements the camera system. Camera functionality depends on the current combination of
@@ -48,6 +42,11 @@
  *          -Y                      +Z                      -Y
  *
  */
+#include "global.h"
+#include "z64quake.h"
+#include "z64shrink_window.h"
+#include "z64view.h"
+#include "overlays/actors/ovl_En_Horse/z_en_horse.h"
 
 void func_800DDFE0(Camera* camera);
 s32 Camera_ChangeMode(Camera* camera, s16 mode);
@@ -891,6 +890,8 @@ s16 D_801EDBF0;
  *
  * @return pitchOffset resulting pitch adjustment
  */
+#ifdef NON_MATCHING
+// Matching: in-function bss
 s16 Camera_GetPitchAdjFromFloorHeightDiffs(Camera* camera, s16 viewYaw, s16 shouldInit) {
     static f32 sFloorYNear;
     static f32 sFloorYFar;
@@ -962,13 +963,20 @@ s16 Camera_GetPitchAdjFromFloorHeightDiffs(Camera* camera, s16 viewYaw, s16 shou
     }
 
     floorYDiffNear = (sFloorYNear - camera->focalActorFloorHeight) * 0.8f;
-    floorYDiffFar = (sFloorYFar - camera->focalActorFloorHeight) * 0.19999999f;
+    floorYDiffFar = (sFloorYFar - camera->focalActorFloorHeight) * (20.0f * 0.01f);
 
     pitchNear = CAM_DEG_TO_BINANG(RADF_TO_DEGF(func_80086B30(floorYDiffNear, nearDist)));
     pitchFar = CAM_DEG_TO_BINANG(RADF_TO_DEGF(func_80086B30(floorYDiffFar, farDist)));
 
     return pitchNear + pitchFar;
 }
+#else
+f32 sFloorYNear;
+f32 sFloorYFar;
+CameraCollision sFarColChk;
+s16 Camera_GetPitchAdjFromFloorHeightDiffs(Camera* camera, s16 viewYaw, s16 shouldInit);
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_GetPitchAdjFromFloorHeightDiffs.s")
+#endif
 
 f32 func_800CCCEC(Camera* camera, s16 reset) {
     static s32 D_801B9E5C = 0;
@@ -1046,7 +1054,7 @@ f32 func_800CCCEC(Camera* camera, s16 reset) {
             // Always going to result in 28.0f?
             distResult = OLib_Vec3fDistXZ(&offsetForwards, &camCollision.pos);
 
-            if ((D_801B9E5C != 1) || !(D_801B9E60 >= -(distResult - 50.0f))) {
+            if (!((D_801B9E5C == 1) && (D_801B9E60 >= -(distResult - 50.0f)))) {
                 D_801B9E5C = 2;
                 distResult = distResult - 50.0f;
                 D_801B9E60 = distResult;
@@ -1324,7 +1332,7 @@ s32 Camera_CalcAtDefault(Camera* camera, VecSph* eyeAtDir, f32 yOffset, s16 calc
     return 1;
 }
 
-s32 Camera_CalcLookAtForScreen(Camera* camera, VecSph* eyeAtDir, f32 yOffset, f32* focalActorPosY, f32 deltaYMax) {
+s32 Camera_CalcAtForScreen(Camera* camera, VecSph* eyeAtDir, f32 yOffset, f32* focalActorPosY, f32 deltaYMax) {
     f32 deltaY;
     Vec3f focalActorAtOffsetTarget;
     Vec3f atTarget;
@@ -1370,7 +1378,7 @@ s32 Camera_CalcLookAtForScreen(Camera* camera, VecSph* eyeAtDir, f32 yOffset, f3
     return 1;
 }
 
-s32 Camera_CalcLookAtForNormal1(Camera* camera, VecSph* arg1, f32 yOffset, f32 forwardDist) {
+s32 Camera_CalcAtForNormal1(Camera* camera, VecSph* arg1, f32 yOffset, f32 forwardDist) {
     PosRot* focalActorPosRot = &camera->focalActorPosRot;
     Vec3f focalActorAtOffsetTarget;
     Vec3f atTarget;
@@ -1406,8 +1414,8 @@ s32 Camera_CalcLookAtForNormal1(Camera* camera, VecSph* arg1, f32 yOffset, f32 f
 /**
  * Adjusts the camera's at position for Camera_Parallel1
  */
-s32 Camera_CalcLookAtForParallel(Camera* camera, VecSph* arg1, f32 yOffset, f32 xzOffsetMax, f32* focalActorPosY,
-                                 s16 flags) {
+s32 Camera_CalcAtForParallel(Camera* camera, VecSph* arg1, f32 yOffset, f32 xzOffsetMax, f32* focalActorPosY,
+                             s16 flags) {
     f32 pad;
     Vec3f focalActorAtOffsetTarget;
     Vec3f atTarget;
@@ -1485,8 +1493,8 @@ s32 Camera_CalcLookAtForParallel(Camera* camera, VecSph* arg1, f32 yOffset, f32 
     return 1;
 }
 
-s32 Camera_CalcLookAtForFriendlyLockOn(Camera* camera, VecSph* eyeAtDir, Vec3f* targetPos, f32 yOffset, f32 distance,
-                                       f32* yPosOffset, VecSph* outPlayerToTargetDir, s16 flags) {
+s32 Camera_CalcAtForFriendlyLockOn(Camera* camera, VecSph* eyeAtDir, Vec3f* targetPos, f32 yOffset, f32 distance,
+                                   f32* yPosOffset, VecSph* outPlayerToTargetDir, s16 flags) {
     Vec3f* at = &camera->at;
     Vec3f focalActorAtOffsetTarget;
     Vec3f atTarget;
@@ -1578,8 +1586,8 @@ s32 Camera_CalcLookAtForFriendlyLockOn(Camera* camera, VecSph* eyeAtDir, Vec3f* 
     return 1;
 }
 
-s32 Camera_CalcLookAtForEnemyLockOn(Camera* camera, f32* arg1, s32 arg2, f32 yOffset, f32 arg4, f32 arg5, f32* arg6,
-                                    VecSph* arg7, s16 flags) {
+s32 Camera_CalcAtForEnemyLockOn(Camera* camera, f32* arg1, s32 arg2, f32 yOffset, f32 arg4, f32 arg5, f32* arg6,
+                                VecSph* arg7, s16 flags) {
     PosRot* focalActorPosRot = &camera->focalActorPosRot;
     Vec3f focalActorAtOffsetTarget;
     Vec3f atTarget;
@@ -1663,7 +1671,7 @@ s32 Camera_CalcLookAtForEnemyLockOn(Camera* camera, f32* arg1, s32 arg2, f32 yOf
     return true;
 }
 
-s32 Camera_CalcLookAtForHorse(Camera* camera, VecSph* eyeAtDir, f32 yOffset, f32* yPosOffset, s16 calcSlope) {
+s32 Camera_CalcAtForHorse(Camera* camera, VecSph* eyeAtDir, f32 yOffset, f32* yPosOffset, s16 calcSlope) {
     Vec3f* at = &camera->at;
     Vec3f posOffsetTarget;
     Vec3f atTarget;
@@ -2181,12 +2189,12 @@ s32 Camera_Normal1(Camera* camera) {
             phi_f16_2 = spD4;
         }
 
-        Camera_CalcLookAtForNormal1(camera, &sp9C, phi_f2_2, 25.0f * phi_f16_2 * camera->speedRatio);
+        Camera_CalcAtForNormal1(camera, &sp9C, phi_f2_2, 25.0f * phi_f16_2 * camera->speedRatio);
         rwData->unk_10 = 120.0f;
         spD0 = phi_f16_2;
     } else if ((roData->interfaceFlags & NORMAL1_FLAG_7) && (rwData->unk_0A < 0)) {
         phi_f0_4 = rwData->unk_0A / -1200.0f; // May be used to swap $f registers
-        Camera_CalcLookAtForNormal1(
+        Camera_CalcAtForNormal1(
             camera, &sp9C,
             phi_f2_2 - ((phi_f2_2 - ((0.8f - ((68.0f / sp88) * -0.2f)) * sp88 * -0.45f)) * phi_f0_4 * 0.75f),
             10.0f * phi_f0_4);
@@ -2196,7 +2204,7 @@ s32 Camera_Normal1(Camera* camera) {
         if (0) {}
     } else if (roData->interfaceFlags & NORMAL1_FLAG_3) {
         spD0 = phi_f16_2;
-        Camera_CalcLookAtForScreen(camera, &sp9C, roData->unk_00, &rwData->unk_00, rwData->unk_10);
+        Camera_CalcAtForScreen(camera, &sp9C, roData->unk_00, &rwData->unk_00, rwData->unk_10);
         if (rwData->unk_10 > 20.0f) {
             rwData->unk_10 -= 0.2f;
         }
@@ -2505,7 +2513,7 @@ s32 Camera_Normal3(Camera* camera) {
     if ((roData->interfaceFlags & NORMAL3_FLAG_6) || (player->rideActor == NULL)) {
         Camera_CalcAtDefault(camera, &sp68, roData->yOffset, 1);
     } else {
-        Camera_CalcLookAtForHorse(camera, &sp68, roData->yOffset, &rwData->yPosOffset, 1);
+        Camera_CalcAtForHorse(camera, &sp68, roData->yOffset, &rwData->yPosOffset, 1);
     }
 
     sp88 = (roData->distMax + roData->distMin) * 0.5f;
@@ -2707,7 +2715,7 @@ s32 Camera_Normal0(Camera* camera) {
         Camera_CalcAtDefault(camera, &sp78, roData->unk_00, roData->interfaceFlags & NORMAL0_FLAG_0);
         rwData->unk_28 = 120.0f;
     } else {
-        Camera_CalcLookAtForScreen(camera, &sp78, roData->unk_00, &rwData->unk_24, rwData->unk_28);
+        Camera_CalcAtForScreen(camera, &sp78, roData->unk_00, &rwData->unk_24, rwData->unk_28);
         if (rwData->unk_28 > 20.0f) {
             rwData->unk_28 -= 0.2f;
         }
@@ -3033,11 +3041,11 @@ s32 Camera_Parallel1(Camera* camera) {
         Camera_CalcAtDefault(camera, &sp78, roData->unk_00, 0);
         rwData->timer1 = 200.0f;
     } else if (!(roData->interfaceFlags & PARALLEL1_FLAG_7) && !sp72) {
-        Camera_CalcLookAtForParallel(camera, &sp78, roData->unk_00, roData->unk_08, &rwData->unk_04,
-                                     roData->interfaceFlags & (PARALLEL1_FLAG_6 | PARALLEL1_FLAG_0));
+        Camera_CalcAtForParallel(camera, &sp78, roData->unk_00, roData->unk_08, &rwData->unk_04,
+                                 roData->interfaceFlags & (PARALLEL1_FLAG_6 | PARALLEL1_FLAG_0));
         rwData->timer1 = 200.0f;
     } else {
-        Camera_CalcLookAtForScreen(camera, &sp78, roData->unk_00, &rwData->unk_04, rwData->timer1);
+        Camera_CalcAtForScreen(camera, &sp78, roData->unk_00, &rwData->unk_04, rwData->timer1);
         if (rwData->timer1 > 10.0f) {
             rwData->timer1--;
         }
@@ -3490,8 +3498,8 @@ s32 Camera_Jump3(Camera* camera) {
     if (sp60 < 50.0f) {
         sp5C = camera->waterYPos - spC0;
 
-        Camera_CalcLookAtForScreen(camera, &sp94, roData->unk_00, &sp5C,
-                                   ((sp60 < 0.0f) ? 1.0f : 1.0f - (sp60 / 50.0f)) * 50.0f);
+        Camera_CalcAtForScreen(camera, &sp94, roData->unk_00, &sp5C,
+                               ((sp60 < 0.0f) ? 1.0f : 1.0f - (sp60 / 50.0f)) * 50.0f);
     } else {
         Camera_CalcAtDefault(camera, &sp94, roData->unk_00, roData->interfaceFlags);
     }
@@ -3785,9 +3793,9 @@ s32 Camera_Battle1(Camera* camera) {
     // spF8 should be set with swc1 twice, not once
 
     // sp94 is loading in too early
-    Camera_CalcLookAtForEnemyLockOn(
-        camera, &sp94.r, sp40, roData->unk_00, roData->unk_2C, 1.0f - spEC, &rwData->unk_04, &spA4,
-        (sp84 ? (BATTLE1_FLAG_7 | BATTLE1_FLAG_0) : BATTLE1_FLAG_0) | roData->interfaceFlags);
+    Camera_CalcAtForEnemyLockOn(camera, &sp94.r, sp40, roData->unk_00, roData->unk_2C, 1.0f - spEC, &rwData->unk_04,
+                                &spA4,
+                                (sp84 ? (BATTLE1_FLAG_7 | BATTLE1_FLAG_0) : BATTLE1_FLAG_0) | roData->interfaceFlags);
 
     sp88 = spA4.yaw;
     OLib_Vec3fDiffToVecSphGeo(&spBC, sp4C, sp48);
@@ -4143,8 +4151,8 @@ s32 Camera_KeepOn1(Camera* camera) {
         sp70 = true;
     }
 
-    Camera_CalcLookAtForFriendlyLockOn(camera, &spC0, sp30, roData->unk_00, roData->unk_08, &rwData->unk_08, &spD0,
-                                       roData->interfaceFlags | (sp70 ? KEEPON1_FLAG_7 : 0));
+    Camera_CalcAtForFriendlyLockOn(camera, &spC0, sp30, roData->unk_00, roData->unk_08, &rwData->unk_08, &spD0,
+                                   roData->interfaceFlags | (sp70 ? KEEPON1_FLAG_7 : 0));
     sp124 = sp3C->pos;
     sp124.y += sp60;
     OLib_Vec3fDiffToVecSphGeo(&spD0, &sp124, sp30);
