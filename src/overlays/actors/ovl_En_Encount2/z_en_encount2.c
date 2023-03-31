@@ -113,7 +113,7 @@ void EnEncount2_Init(Actor* thisx, PlayState* play) {
 
     this->dyna.actor.targetMode = 6;
     this->dyna.actor.colChkInfo.health = 1;
-    this->scale = 0.1;
+    this->scale = 0.1f;
     this->switchFlag = ENCOUNT2_GET_SWITCH_FLAG(&this->dyna.actor);
 
     if (this->switchFlag == 0x7F) {

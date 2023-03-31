@@ -450,7 +450,8 @@ void EnGrasshopper_RoamInCircles(EnGrasshopper* this, PlayState* play) {
         collisionCheckPos.y = this->actor.world.pos.y;
         collisionCheckPos.z = (Math_CosS(this->actor.shape.rot.y) * 100.0f) + this->actor.world.pos.z;
 
-        if ((this->actor.bgCheckFlags & 8) || BgCheck_SphVsFirstPoly(&play->colCtx, &collisionCheckPos, 10.0f)) {
+        if ((this->actor.bgCheckFlags & BGCHECKFLAG_WALL) ||
+            BgCheck_SphVsFirstPoly(&play->colCtx, &collisionCheckPos, 10.0f)) {
             EnGrasshopper_SetupBank(this);
         } else if (player->stateFlags1 & PLAYER_STATE1_8000000) {
             this->collider.elements[0].info.toucherFlags |= (TOUCH_ON | TOUCH_SFX_WOOD);
@@ -712,7 +713,7 @@ void EnGrasshopper_SetupDamaged(EnGrasshopper* this, PlayState* play) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
     }
 
-    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 8);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 8);
     this->action = EN_GRASSHOPPER_ACTION_DAMAGED;
     this->actionFunc = EnGrasshopper_Damaged;
 }
@@ -726,7 +727,7 @@ void EnGrasshopper_Damaged(EnGrasshopper* this, PlayState* play) {
 
 void EnGrasshopper_SetupDead(EnGrasshopper* this, PlayState* play) {
     EnGrasshopper_ChangeAnim(this, EN_GRASSHOPPER_ANIM_DEAD);
-    this->actor.flags |= ACTOR_FLAG_8000000;
+    this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
     this->actor.speed = 0.0f;
     this->approachSpeed = 0.0f;
     this->actor.velocity.y = 5.0f;
@@ -737,7 +738,7 @@ void EnGrasshopper_SetupDead(EnGrasshopper* this, PlayState* play) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
     }
 
-    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 25);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 25);
     Enemy_StartFinishingBlow(play, &this->actor);
     Actor_PlaySfx(&this->actor, NA_SE_EN_BATTA_DEAD);
     this->action = EN_GRASSHOPPER_ACTION_DEAD;
@@ -874,7 +875,7 @@ void EnGrasshopper_UpdateDamage(EnGrasshopper* this, PlayState* play) {
                     return;
                 }
             } else if (this->actor.colChkInfo.damageEffect == EN_GRASSHOPPER_DMGEFF_LIGHT_ORB) {
-                Actor_SetColorFilter(&this->actor, 0x8000, 255, 0, 25);
+                Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_GRAY, 255, COLORFILTER_BUFFLAG_OPA, 25);
                 this->drawDmgEffTimer = 20;
                 this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
                 Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->actor.focus.pos.x, this->actor.focus.pos.y,

@@ -318,7 +318,7 @@ void func_80BF40F4(EnRg* this) {
 }
 
 s32 func_80BF416C(EnRg* this, PlayState* play) {
-    if ((this->actor.bgCheckFlags & 1) && (this->actor.speed >= 0.01f)) {
+    if ((this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) && (this->actor.speed >= 0.01f)) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_GOLON_ROLLING - SFX_FLAG);
         func_800AE930(&play->colCtx, Effect_GetByIndex(this->unk_340), &this->actor.world.pos, 18.0f,
                       this->actor.shape.rot.y, this->actor.floorPoly, this->actor.floorBgId);
@@ -410,7 +410,7 @@ s32 func_80BF45B4(EnRg* this) {
     s16 temp_v0;
     s16 temp_v1;
 
-    if ((this->actor.bgCheckFlags & 8) && (this->actor.speed >= 5.0f)) {
+    if ((this->actor.bgCheckFlags & BGCHECKFLAG_WALL) && (this->actor.speed >= 5.0f)) {
         temp_v1 = this->actor.world.rot.y;
         temp_v0 = temp_v1 - BINANG_ROT180(this->actor.wallYaw);
 
@@ -439,7 +439,7 @@ s32 func_80BF45B4(EnRg* this) {
                 this->actor.world.rot.y += 0x2000;
             }
         }
-        Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 40);
+        Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 40);
         this->unk_322 = 0xA;
     }
 
@@ -533,7 +533,7 @@ void func_80BF4964(EnRg* this) {
         }
 
         if (!(this->unk_310 & 0x400) && !(this->unk_310 & 0x1000) && (this->unk_322 == 0) && (this->unk_324 == 0) &&
-            (this->actor.bgCheckFlags & 1)) {
+            (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
             if (this->unk_18C == NULL) {
                 Math_Vec3s_ToVec3f(&sp30, &sp3C[this->unk_33C]);
             } else {
@@ -676,7 +676,7 @@ void func_80BF4FC4(EnRg* this, PlayState* play) {
     this->unk_344 = func_80BF4560(this, play);
 
     if (!Play_InCsMode(play)) {
-        if (this->actor.bgCheckFlags & 2) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND_TOUCH) {
             if (this->unk_310 & 0x400) {
                 this->unk_310 &= ~0x400;
                 this->actor.speed = 0.0f;
@@ -688,7 +688,7 @@ void func_80BF4FC4(EnRg* this, PlayState* play) {
                     this->unk_33C++;
                 }
             }
-        } else if ((this->actor.bgCheckFlags & 1) && !(this->unk_310 & 0x1000) &&
+        } else if ((this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) && !(this->unk_310 & 0x1000) &&
                    func_80BF4D64(&this->actor.world.pos)) {
             this->unk_310 |= 0x1000;
         }

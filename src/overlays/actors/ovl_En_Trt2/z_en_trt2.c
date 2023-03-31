@@ -164,7 +164,7 @@ void func_80AD3530(EnTrt2* this, PlayState* play) {
     func_80AD46F8(this);
     if (this->path != NULL) {
         phi_a1 = func_80AD48F8(this->path, this->unk_1E4, &this->actor.world.pos, &sp30);
-        if (this->actor.bgCheckFlags & 8) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
             phi_a1 = this->actor.wallYaw;
         }
         Math_SmoothStepToS(&this->actor.world.rot.y, phi_a1, 4, 1000, 1);
@@ -269,7 +269,7 @@ void func_80AD38B8(EnTrt2* this, PlayState* play) {
             }
         }
 
-        if (this->actor.bgCheckFlags & 8) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
             if (this->unk_1E4 >= (this->path->count - 1)) {
                 ActorCutscene_Stop(this->unk_3DA);
                 this->unk_3D9 = 2;
@@ -332,7 +332,7 @@ void func_80AD3BE4(EnTrt2* this, PlayState* play) {
 void func_80AD3C94(EnTrt2* this, PlayState* play) {
     if (this->actor.world.pos.y < 5.0f) {
         func_80AD4A78(this, play);
-        if (this->actor.bgCheckFlags & 1) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
             this->unk_3B2 = 0xF;
         }
     }
@@ -417,15 +417,15 @@ void func_80AD3FF4(EnTrt2* this, PlayState* play) {
         this->actor.parent = NULL;
         this->unk_3B2 = 14;
     } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_12_10)) {
-        Actor_PickUp(&this->actor, play, GI_POTION_RED, 300.0f, 300.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_POTION_RED, 300.0f, 300.0f);
     } else {
-        Actor_PickUp(&this->actor, play, GI_POTION_RED_BOTTLE, 300.0f, 300.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_POTION_RED_BOTTLE, 300.0f, 300.0f);
     }
 }
 
 void func_80AD40AC(EnTrt2* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_DONE) && Message_ShouldAdvance(play)) {
-        func_800B85E0(&this->actor, play, 400.0f, -1);
+        func_800B85E0(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
         this->unk_3B2 = 13;
     }
 }
@@ -433,10 +433,10 @@ void func_80AD40AC(EnTrt2* this, PlayState* play) {
 void func_80AD4110(EnTrt2* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->unk_3A8 = 0x84C;
-        func_80151938(play, this->unk_3A8);
+        Message_ContinueTextbox(play, this->unk_3A8);
         this->unk_3B2 = 10;
     } else {
-        func_800B85E0(&this->actor, play, 400.0f, -1);
+        func_800B85E0(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
     }
 }
 
@@ -666,7 +666,7 @@ s32 func_80AD4B4C(EnTrt2* this, PlayState* play) {
         this->actor.speed = 0.0f;
         func_80AD349C(this);
         this->unk_3B4 = this->unk_3B2;
-        if (this->actor.bgCheckFlags & 1) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
             if ((player->transformation != PLAYER_FORM_HUMAN) && (player->transformation != PLAYER_FORM_FIERCE_DEITY)) {
                 this->unk_3A8 = 0x84F;
             }
@@ -686,7 +686,7 @@ s32 func_80AD4B4C(EnTrt2* this, PlayState* play) {
 }
 
 s32 func_80AD4C4C(EnTrt2* this) {
-    if (this->actor.bgCheckFlags & 1) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         if (this->actor.xzDistToPlayer < 100.0f) {
             return true;
         }
@@ -700,7 +700,8 @@ s32 func_80AD4CCC(EnTrt2* this, PlayState* play) {
     s16 sp1E = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
     Player* player = GET_PLAYER(play);
 
-    if (((this->unk_3B2 == 4) || (this->unk_3B2 == 5)) && this->actor.isTargeted && !(this->actor.bgCheckFlags & 1) &&
+    if (((this->unk_3B2 == 4) || (this->unk_3B2 == 5)) && this->actor.isTargeted &&
+        !(this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) &&
         ((player->transformation == PLAYER_FORM_HUMAN) || (player->transformation == PLAYER_FORM_FIERCE_DEITY))) {
         this->actor.speed = 0.0f;
         this->actor.velocity.y = 1.5f;

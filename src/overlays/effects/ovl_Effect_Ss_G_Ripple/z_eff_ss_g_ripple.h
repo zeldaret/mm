@@ -10,6 +10,4 @@ typedef struct {
     /* 0x10 */ s16 life;
 } EffectSsGRippleInitParams; // size = 0x14
 
-extern const EffectSsInit Effect_Ss_G_Ripple_InitVars;
-
 #endif

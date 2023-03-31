@@ -166,7 +166,7 @@ void func_80BCD2BC(EnScopecrow* this, PlayState* play) {
     Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ACTOR_EN_SC_RUPPE, this->actor.world.pos.x,
                                   this->actor.world.pos.y, this->actor.world.pos.z, this->actor.shape.rot.x,
                                   this->actor.shape.rot.y, this->actor.shape.rot.z, this->actor.params,
-                                  this->actor.cutscene, this->actor.unk20, NULL);
+                                  this->actor.cutscene, this->actor.halfDaysBits, NULL);
 }
 
 s32 func_80BCD334(EnScopecrow* this, Path* path, s32 pointIndex) {
@@ -236,7 +236,7 @@ void func_80BCD640(EnScopecrow* this, PlayState* play) {
 
     if (this->path != NULL) {
         func_80BCD4D0(this->path, this->unk_1FC, &this->actor.world.pos, &sp30);
-        if (this->actor.bgCheckFlags & 8) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
             sp30.y = this->actor.wallYaw;
         }
 

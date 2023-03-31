@@ -433,20 +433,20 @@ void func_80ADB924(EnSellnuts* this, PlayState* play) {
                 this->unk_340 = player->actor.textId;
                 this->actionFunc = func_80ADB0D8;
             }
-            func_801477B4(play);
+            Message_CloseTextbox(play);
         } else if (itemAction <= PLAYER_IA_MINUS1) {
             this->unk_340 = D_80ADD920[this->unk_33A];
-            func_80151938(play, this->unk_340);
+            Message_ContinueTextbox(play, this->unk_340);
             this->actionFunc = func_80ADB0D8;
         }
     } else if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         if (this->unk_340 == D_80ADD910[this->unk_33A]) {
             this->unk_340 = D_80ADD938[this->unk_33A];
-            func_80151938(play, this->unk_340);
+            Message_ContinueTextbox(play, this->unk_340);
             this->actionFunc = func_80ADB0D8;
         } else {
             this->unk_340 = 0xFF;
-            func_80151938(play, this->unk_340);
+            Message_ContinueTextbox(play, this->unk_340);
             this->actionFunc = func_80ADB0D8;
         }
     }
@@ -483,7 +483,7 @@ void func_80ADBBEC(EnSellnuts* this, PlayState* play) {
         SET_WEEKEVENTREG(WEEKEVENTREG_17_80);
         this->actionFunc = func_80ADBCE4;
     } else {
-        Actor_PickUp(&this->actor, play, GI_DEED_LAND, 300.0f, 300.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_DEED_LAND, 300.0f, 300.0f);
     }
 }
 
@@ -649,7 +649,7 @@ void func_80ADC37C(EnSellnuts* this, PlayState* play) {
     this->actor.gravity = 0.0f;
     if (this->path != NULL) {
         sp2C = func_80ADCFE8(this->path, this->unk_334, &this->actor.world.pos, &sp30);
-        if (this->actor.bgCheckFlags & 8) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
             sp30.y = this->actor.wallYaw;
         }
         Math_SmoothStepToS(&this->actor.world.rot.y, sp30.y, 0xA, 0x12C, 0);
@@ -780,7 +780,7 @@ void func_80ADC8C4(EnSellnuts* this, PlayState* play) {
 
     if (this->path != NULL) {
         func_80ADCFE8(this->path, this->unk_334, &this->actor.world.pos, &sp30);
-        if (this->actor.bgCheckFlags & 8) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
             sp30.y = this->actor.wallYaw;
         }
         Math_SmoothStepToS(&this->actor.world.rot.y, sp30.y, 0xA, 0x12C, 0);

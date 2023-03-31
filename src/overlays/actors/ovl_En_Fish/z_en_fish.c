@@ -507,10 +507,10 @@ void func_8091E880(Actor* thisx, PlayState* play) {
     this->unk_272 = 0x43;
     this->unk_268 = 0x4000;
     this->unk_26C = -0x4000;
-    if (this->actor.bgCheckFlags & 1) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         this->unk_240 = 400;
         func_8091E9A4(this);
-    } else if (this->actor.bgCheckFlags & 0x20) {
+    } else if (this->actor.bgCheckFlags & BGCHECKFLAG_WATER) {
         Actor_PlaySfx(&this->actor, NA_SE_EV_DIVE_INTO_WATER_L);
         func_8091D840(thisx, play, 10, 15.0f);
         if (func_8091DA14(this, play)) {
@@ -592,13 +592,13 @@ void func_8091EAF0(Actor* thisx, PlayState* play) {
         } else {
             this->actor.draw = NULL;
         }
-    } else if (this->actor.bgCheckFlags & 0x20) {
+    } else if (this->actor.bgCheckFlags & BGCHECKFLAG_WATER) {
         if (func_8091DA14(this, play)) {
             func_8091EF30(this);
         } else {
             func_8091ECF4(this);
         }
-    } else if (this->actor.bgCheckFlags & 1) {
+    } else if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         func_8091E9A4(this);
     }
 }
@@ -627,7 +627,7 @@ void func_8091ED70(Actor* thisx, PlayState* play) {
 
     Math_SmoothStepToF(&thisx->speed, 2.8f, 0.1f, 0.4f, 0.0f);
 
-    if ((thisx->bgCheckFlags & 8) || !(thisx->bgCheckFlags & 0x20)) {
+    if ((thisx->bgCheckFlags & BGCHECKFLAG_WALL) || !(thisx->bgCheckFlags & BGCHECKFLAG_WATER)) {
         sp2E = Math_Vec3f_Yaw(&thisx->world.pos, &thisx->home.pos);
         thisx->home.rot.y = Rand_S16Offset(-100, 100) + sp2E;
         thisx->speed *= 0.5f;
@@ -640,7 +640,7 @@ void func_8091ED70(Actor* thisx, PlayState* play) {
     this->unk_270 = 2000;
     this->unk_272 = 0x29B;
 
-    if (thisx->bgCheckFlags & 1) {
+    if (thisx->bgCheckFlags & BGCHECKFLAG_GROUND) {
         Math_StepToF(&thisx->world.pos.y, thisx->home.pos.y - 4.0f, 2.0f);
     } else {
         Math_StepToF(&thisx->world.pos.y, thisx->home.pos.y - 10.0f, 2.0f);
@@ -706,12 +706,13 @@ void func_8091EFE8(Actor* thisx, PlayState* play) {
         }
     }
 
-    if ((this->actor.bgCheckFlags & 8) && !(this->actor.bgCheckFlags & 0x20)) {
+    if ((this->actor.bgCheckFlags & BGCHECKFLAG_WALL) && !(this->actor.bgCheckFlags & BGCHECKFLAG_WATER)) {
         this->actor.speed *= 0.5f;
     }
 
-    if (((Rand_Next() >> 0x1B) == 0) || ((this->actor.bgCheckFlags & 8) && ((Rand_Next() >> 0x1E) == 0)) ||
-        !(this->actor.bgCheckFlags & 0x20)) {
+    if (((Rand_Next() >> 0x1B) == 0) ||
+        ((this->actor.bgCheckFlags & BGCHECKFLAG_WALL) && ((Rand_Next() >> 0x1E) == 0)) ||
+        !(this->actor.bgCheckFlags & BGCHECKFLAG_WATER)) {
         temp_f0 = Rand_ZeroOne();
         sp34 = (1.0f - SQ(temp_f0)) * sp3C->home.rot.x;
         sp30 = Rand_ZeroOne() * sp3C->home.rot.z;
@@ -887,7 +888,7 @@ void func_8091F5A4(Actor* thisx, PlayState* play) {
 
             func_8091D904(this);
         } else if (func_8091DDF4(this, play)) {
-            Actor_PickUp(&this->actor, play, GI_MAX, 80.0f, 25.0f);
+            Actor_OfferGetItem(&this->actor, play, GI_MAX, 80.0f, 25.0f);
         }
     }
 }

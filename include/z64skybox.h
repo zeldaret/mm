@@ -1,8 +1,9 @@
-#ifndef Z64_SKYBOX_H
-#define Z64_SKYBOX_H
+#ifndef Z64SKYBOX_H
+#define Z64SKYBOX_H
 
 #include "PR/ultratypes.h"
 #include "PR/gbi.h"
+#include "color.h"
 
 #include "z64dma.h"
 #include "z64math.h"
@@ -33,17 +34,11 @@ typedef struct SkyboxContext {
     /* 0x1E8 */ OSMesgQueue loadQueue;
     /* 0x200 */ OSMesg loadMsg;
     /* 0x204 */ s16 skyboxShouldDraw;
-    /* 0x208 */ f32 rotX;
-    /* 0x20C */ f32 rotY;
-    /* 0x210 */ f32 rotZ;
+    /* 0x208 */ Vec3f rot;
     /* 0x214 */ Vec3f eye;
     /* 0x220 */ s16 angle;
-    /* 0x222 */ u8 primR;
-    /* 0x223 */ u8 primG;
-    /* 0x224 */ u8 primB;
-    /* 0x225 */ u8 envR;
-    /* 0x226 */ u8 envG;
-    /* 0x227 */ u8 envB;
+    /* 0x222 */ Color_RGB8 prim;
+    /* 0x225 */ Color_RGB8 env;
 } SkyboxContext; // size = 0x228
 
 typedef struct struct_801C5F44 {

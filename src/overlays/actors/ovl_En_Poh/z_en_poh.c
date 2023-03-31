@@ -167,7 +167,7 @@ void EnPoh_Init(Actor* thisx, PlayState* play) {
                             255, 255, 255, 0);
     SkelAnime_Init(play, &this->skelAnime, &object_po_Skel_0050D0, &object_po_Anim_000A60, this->jointTable,
                    this->morphTable, 21);
-    this->actor.bgCheckFlags |= 0x400;
+    this->actor.bgCheckFlags |= BGCHECKFLAG_PLAYER_400;
     func_80B2D0E8(this);
 }
 
@@ -346,7 +346,7 @@ void func_80B2CFF8(EnPoh* this) {
     func_800BE504(&this->actor, &this->colliderCylinder);
     this->colliderCylinder.base.acFlags &= ~AC_ON;
     this->actor.speed = 5.0f;
-    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 16);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 16);
     this->actionFunc = func_80B2D07C;
 }
 
@@ -582,7 +582,7 @@ void func_80B2DC50(EnPoh* this, PlayState* play) {
 }
 
 void func_80B2DD2C(EnPoh* this, PlayState* play) {
-    if ((this->actor.bgCheckFlags & 1) || (this->actor.floorHeight <= BGCHECK_Y_MIN)) {
+    if ((this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) || (this->actor.floorHeight <= BGCHECK_Y_MIN)) {
         EffectSsHahen_SpawnBurst(play, &this->actor.world.pos, 6.0f, 0, 1, 1, 15, OBJECT_PO, 10, object_po_DL_002D28);
         func_80B2E0B0(this);
     }
@@ -663,7 +663,7 @@ void func_80B2E230(EnPoh* this, PlayState* play) {
         return;
     }
 
-    Actor_PickUp(&this->actor, play, GI_MAX, 35.0f, 60.0f);
+    Actor_OfferGetItem(&this->actor, play, GI_MAX, 35.0f, 60.0f);
     this->actor.world.pos.y = (Math_SinS(this->unk_18D * 0x800) * 5.0f) + this->actor.home.pos.y;
     if (this->unk_18D) {
         this->unk_18D--;

@@ -393,7 +393,7 @@ void EnRacedog_Race(EnRacedog* this, PlayState* play) {
     this->collider.dim.radius = 15;
     if (this->path != NULL) {
         yRotation = EnRacedog_GetYRotation(this->path, this->currentPoint, &this->actor.world.pos, &distSq);
-        if (this->actor.bgCheckFlags & 8) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
             yRotation = this->actor.wallYaw;
         }
 
@@ -586,7 +586,7 @@ void EnRacedog_CheckForFinish(EnRacedog* this) {
         this->raceStatus == RACEDOG_RACE_STATUS_AFTER_POINT_11) {
         sNumberOfDogsFinished++;
         if (sNumberOfDogsFinished == 1) {
-            Audio_QueueSeqCmd(NA_BGM_HORSE_GOAL | 0x8000);
+            SEQCMD_PLAY_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 0, NA_BGM_HORSE_GOAL | SEQ_FLAG_ASYNC);
             play_sound(NA_SE_SY_START_SHOT);
         }
 
@@ -701,7 +701,7 @@ void EnRacedog_Update(Actor* thisx, PlayState* play) {
         }
     }
 
-    if (!(this->actor.bgCheckFlags & 1)) {
+    if (!(this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
         this->skelAnime.curFrame = 0.0f;
     }
 

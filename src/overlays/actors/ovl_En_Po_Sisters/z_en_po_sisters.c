@@ -373,7 +373,7 @@ void EnPoSisters_AimlessIdleFlying(EnPoSisters* this, PlayState* play) {
         EnPoSisters_SetupAimlessIdleFlying2(this);
     }
 
-    if (this->actor.bgCheckFlags & 8) { // touching a wall
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
         Math_ScaledStepToS(&this->actor.world.rot.y, Actor_WorldYawTowardPoint(&this->actor, &this->actor.home.pos),
                            0x71C);
     } else if (Actor_WorldDistXZToPoint(&this->actor, &this->actor.home.pos) > 600.0f) {
@@ -522,7 +522,8 @@ void EnPoSisters_SetupDamageFlinch(EnPoSisters* this) {
 
     this->poSisterFlags &=
         ~(POE_SISTERS_FLAG_MATCH_PLAYER_HEIGHT | POE_SISTERS_FLAG_UPDATE_SHAPE_ROT | POE_SISTERS_FLAG_CHECK_AC);
-    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 16);
+
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 16);
     this->actionFunc = EnPoSisters_DamageFlinch;
 }
 
@@ -573,7 +574,7 @@ void EnPoSisters_Flee(EnPoSisters* this, PlayState* play) {
         DECR(this->fleeTimer);
     }
 
-    if (this->actor.bgCheckFlags & 8) { // touching a wall
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
         this->actor.world.rot.y = this->actor.shape.rot.y;
         this->poSisterFlags |= POE_SISTERS_FLAG_UPDATE_SHAPE_ROT;
         EnPoSisters_SetupSpinToInvis(this);

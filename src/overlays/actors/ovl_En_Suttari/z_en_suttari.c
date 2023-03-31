@@ -632,7 +632,7 @@ void func_80BABA90(EnSuttari* this, s32 arg1, u8 arg2) {
 
     if (this->paths[arg1] != NULL) {
         target = EnSuttari_GetDistSqAndOrient(this->paths[arg1], this->unk1F4[arg1], &this->actor.world.pos, &dist);
-        if (this->actor.bgCheckFlags & 8) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
             if (arg2 == 2) {
                 this->unk1F4[arg1] = -0x63;
             } else {
@@ -661,7 +661,7 @@ void func_80BABB90(EnSuttari* this, s32 arg1) {
 
     if (this->paths[arg1] != NULL) {
         target = EnSuttari_GetDistSqAndOrient(this->paths[arg1], this->unk1F4[arg1], &this->actor.world.pos, &sp30);
-        if (this->actor.bgCheckFlags & 8) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
             target = this->actor.wallYaw;
         }
         Math_SmoothStepToS(&this->actor.world.rot.y, target, 1, 0xBB8, 0);
@@ -1045,7 +1045,7 @@ void func_80BACBB0(EnSuttari* this, PlayState* play) {
         this->actionFunc = func_80BACA14;
     }
     if ((this->actor.playerHeightRel < 60.0f) && (this->actor.xzDistToPlayer < 500.0f)) {
-        if (this->actor.bgCheckFlags & 8) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
             target = this->actor.wallYaw;
         } else if (func_80BAA904(this, play)) {
             target = -this->actor.world.rot.y;
@@ -1060,7 +1060,7 @@ void func_80BACBB0(EnSuttari* this, PlayState* play) {
         this->actor.speed = 0.0f;
     }
     Actor_MoveWithGravity(&this->actor);
-    if (!(this->actor.bgCheckFlags & 1)) {
+    if (!(this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
         this->actor.world.pos = this->actor.prevPos;
         this->actor.world.rot.y = -this->actor.world.rot.y;
         this->actionFunc = func_80BACE4C;
@@ -1082,7 +1082,7 @@ void func_80BACD2C(EnSuttari* this, PlayState* play) {
         this->actor.shape.rot.y = this->actor.world.rot.y;
     }
     Actor_MoveWithGravity(&this->actor);
-    if (!(this->actor.bgCheckFlags & 1)) {
+    if (!(this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
         this->actor.world.pos = this->actor.prevPos;
         this->actor.world.rot.y = -this->actor.world.rot.y;
         this->actionFunc = func_80BACE4C;
@@ -1173,7 +1173,7 @@ void func_80BAD230(EnSuttari* this, PlayState* play) {
         this->textId = 0x2A31;
         Message_StartTextbox(play, this->textId, &this->actor);
         this->flags1 |= 0x4000;
-        Audio_QueueSeqCmd(NA_BGM_CHASE | 0x8000);
+        SEQCMD_PLAY_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 0, NA_BGM_CHASE | SEQ_FLAG_ASYNC);
         this->actionFunc = func_80BAD380;
     } else {
         ActorCutscene_SetIntentToPlay(this->cutscenes[1]);
@@ -1234,7 +1234,7 @@ void func_80BAD380(EnSuttari* this, PlayState* play) {
                 SET_WEEKEVENTREG(WEEKEVENTREG_33_08);
             }
             this->actor.speed = 0.0f;
-            Audio_QueueSeqCmd(0x101400FF);
+            SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 20);
             this->flags2 |= 4;
             EnSuttari_TriggerTransition(play, ENTRANCE(NORTH_CLOCK_TOWN, 7));
         } else {
@@ -1465,7 +1465,7 @@ void EnSuttari_Destroy(Actor* thisx, PlayState* play) {
     EnSuttari* this = THIS;
 
     if ((play->sceneId == SCENE_BACKTOWN) && !(this->flags2 & 4)) {
-        Audio_QueueSeqCmd(0x101400FF);
+        SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 20);
     }
     Collider_DestroyCylinder(play, &this->collider);
 }
@@ -1562,11 +1562,12 @@ void EnSuttari_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
 void EnSuttari_Draw(Actor* thisx, PlayState* play) {
     EnSuttari* this = THIS;
     s32 pad;
-    Vec3f sp5C;
-    Vec3f sp50;
+    Vec3f pos;
+    Vec3f scale;
 
     if (this->flags1 & 0x80) {
         OPEN_DISPS(play->state.gfxCtx);
+
         func_8012C28C(play->state.gfxCtx);
         gSPSegment(POLY_OPA_DISP++, 0x08, Gfx_EnvColor(play->state.gfxCtx, 255, 255, 255, 0));
         gSPSegment(POLY_OPA_DISP++, 0x09, Gfx_EnvColor(play->state.gfxCtx, 55, 55, 255, 0));
@@ -1576,12 +1577,13 @@ void EnSuttari_Draw(Actor* thisx, PlayState* play) {
                                        EnSuttari_TransformLimbDraw, &this->actor);
         if (this->flags1 & 0x80) {
             func_8012C2DC(play->state.gfxCtx);
-            sp5C = this->actor.world.pos;
-            sp50.x = 0.2f;
-            sp50.y = 0.2f;
-            sp50.z = 0.2f;
-            func_800BC620(&sp5C, &sp50, 0xFF, play);
+            pos = this->actor.world.pos;
+            scale.x = 0.2f;
+            scale.y = 0.2f;
+            scale.z = 0.2f;
+            func_800BC620(&pos, &scale, 255, play);
         }
+
         CLOSE_DISPS(play->state.gfxCtx);
     }
 }

@@ -4,6 +4,7 @@
  * Description: Great Bay Temple - Waterwheels, push switches, gear shafts, and whirlpools
  */
 
+#include "prevent_bss_reordering.h"
 #include "z_bg_dblue_movebg.h"
 #include "objects/object_dblue_object/object_dblue_object.h"
 #include "overlays/actors/ovl_Obj_Hunsui/z_obj_hunsui.h"
@@ -218,7 +219,7 @@ void BgDblueMovebg_Init(Actor* thisx, PlayState* play) {
             } else {
                 this->unk_18C = 0;
             }
-            this->dyna.actor.shape.rot.y += (s16)((this->unk_18C / 10.0f) * (0x10000 / 360.0f));
+            this->dyna.actor.shape.rot.y += DEG_TO_BINANG(this->unk_18C / 10.0f);
             this->actionFunc = func_80A2A714;
             break;
 
@@ -244,7 +245,7 @@ void BgDblueMovebg_Init(Actor* thisx, PlayState* play) {
             this->dyna.actor.draw = func_80A2B308;
             this->unk_17E = 0;
             this->unk_184 = 0.0f;
-            this->dyna.actor.shape.rot.y += (s16)((this->unk_18C / 10.0f) * (0x10000 / 360.0f));
+            this->dyna.actor.shape.rot.y += DEG_TO_BINANG(this->unk_18C / 10.0f);
             this->actionFunc = func_80A2A32C;
             break;
 

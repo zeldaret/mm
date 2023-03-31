@@ -205,7 +205,7 @@ void EnWallmas_Freeze(EnWallmas* this) {
     this->collider.base.colType = 3;
     this->timer = 80;
     this->actor.flags &= ~ACTOR_FLAG_400;
-    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 80);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 80);
 }
 
 void EnWallmas_ThawIfFrozen(EnWallmas* this, PlayState* play) {
@@ -245,7 +245,7 @@ void EnWallmas_WaitToDrop(EnWallmas* this, PlayState* play) {
 
     if ((player->stateFlags1 & (PLAYER_STATE1_100000 | PLAYER_STATE1_8000000)) ||
         (player->stateFlags2 & PLAYER_STATE2_80) || (player->unk_B5E > 0) || (player->actor.freezeTimer > 0) ||
-        !(player->actor.bgCheckFlags & 1) ||
+        !(player->actor.bgCheckFlags & BGCHECKFLAG_GROUND) ||
         ((WALLMASTER_GET_TYPE(&this->actor) == WALLMASTER_TYPE_PROXIMITY) &&
          (Math_Vec3f_DistXZ(&this->actor.home.pos, playerPos) > (120.f + this->detectionRadius)))) {
         AudioSfx_StopById(NA_SE_EN_FALL_AIM);
@@ -397,7 +397,7 @@ void EnWallmas_SetupDamage(EnWallmas* this, s32 arg1) {
         func_800BE504(&this->actor, &this->collider);
     }
 
-    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 20);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 20);
     this->actor.speed = 5.0f;
     this->actor.velocity.y = 10.0f;
     this->actionFunc = EnWallmas_Damage;
@@ -583,12 +583,12 @@ void EnWallmas_UpdateDamage(EnWallmas* this, PlayState* play) {
                     EnWallmas_SetupStun(this);
                 } else if (this->actor.colChkInfo.damageEffect == WALLMASTER_DMGEFF_STUN) {
                     this->timer = 40;
-                    Actor_SetColorFilter(&this->actor, 0, 255, 0, 40);
+                    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 255, COLORFILTER_BUFFLAG_OPA, 40);
                     Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_FREEZE);
                     EnWallmas_SetupStun(this);
                 } else if (this->actor.colChkInfo.damageEffect == WALLMASTER_DMGEFF_ZORA_MAGIC) {
                     this->timer = 40;
-                    Actor_SetColorFilter(&this->actor, 0, 255, 0, 40);
+                    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 255, COLORFILTER_BUFFLAG_OPA, 40);
                     Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_FREEZE);
                     this->drawDmgEffScale = 0.55f;
                     this->drawDmgEffAlpha = 2.0f;
@@ -635,7 +635,7 @@ void EnWallmas_Update(Actor* thisx, PlayState* play) {
         if ((this->actionFunc != EnWallmas_Die) && (this->actionFunc != EnWallmas_Drop)) {
             Collider_UpdateCylinder(&this->actor, &this->collider);
             CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
-            if ((this->actionFunc != EnWallmas_Damage) && (this->actor.bgCheckFlags & 1) &&
+            if ((this->actionFunc != EnWallmas_Damage) && (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) &&
                 (this->actor.freezeTimer == 0)) {
                 CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
             }

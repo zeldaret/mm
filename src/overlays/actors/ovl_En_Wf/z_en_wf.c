@@ -367,7 +367,7 @@ void func_809907D4(EnWf* this) {
     this->collider3.base.colType = COLTYPE_HIT3;
     this->unk_2A0 = 80;
     this->actor.flags &= ~ACTOR_FLAG_400;
-    Actor_SetColorFilter(&this->actor, 0x4000, 0xFF, 0, 80);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 80);
 }
 
 void func_80990854(EnWf* this, PlayState* play) {
@@ -419,7 +419,7 @@ s32 func_80990948(PlayState* play, EnWf* this, s16 arg2) {
     if (func_800BE184(play, &this->actor, 100.0f, 24000, 0x2AA8, this->actor.shape.rot.y)) {
         this->actor.shape.rot.y = this->actor.yawTowardsPlayer;
         this->actor.world.rot.y = this->actor.yawTowardsPlayer;
-        if ((this->actor.bgCheckFlags & 8) && (sp38 < 12000)) {
+        if ((this->actor.bgCheckFlags & BGCHECKFLAG_WALL) && (sp38 < 12000)) {
             func_809926D0(this);
             return true;
         }
@@ -499,7 +499,7 @@ void func_80990C6C(EnWf* this, PlayState* play, s32 arg2) {
 }
 
 void func_80990E4C(EnWf* this, PlayState* play) {
-    if (Animation_OnFrame(&this->skelAnime, 1.0f) && (this->actor.bgCheckFlags & 1)) {
+    if (Animation_OnFrame(&this->skelAnime, 1.0f) && (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
         func_80990C6C(this, play, 2);
         Actor_PlaySfx(&this->actor, NA_SE_EN_WOLFOS_WALK);
     }
@@ -776,7 +776,7 @@ void func_809919F4(EnWf* this, PlayState* play) {
     if (!func_8099408C(play, this) && !func_80990948(play, this, 0)) {
         this->actor.world.rot.y = this->actor.shape.rot.y;
         sp26 = BINANG_ROT180(player->actor.shape.rot.y + this->unk_29A);
-        if (this->actor.bgCheckFlags & 8) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
             temp_v0 = (this->actor.wallYaw - this->actor.yawTowardsPlayer) - this->unk_29A;
             if (ABS_ALT(temp_v0) > 0x2EE0) {
                 this->unk_29A = -this->unk_29A;
@@ -974,7 +974,7 @@ void func_809923E4(EnWf* this, PlayState* play) {
 void func_8099245C(EnWf* this) {
     this->collider2.base.acFlags &= ~AC_ON;
     Animation_MorphToPlayOnce(&this->skelAnime, &gWolfosDamagedAnim, -4.0f);
-    if (this->actor.bgCheckFlags & 1) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         this->actor.speed = -4.0f;
     }
     this->unk_298 = 0;
@@ -986,11 +986,11 @@ void func_8099245C(EnWf* this) {
 void func_809924EC(EnWf* this, PlayState* play) {
     s16 sp26;
 
-    if (this->actor.bgCheckFlags & 2) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND_TOUCH) {
         this->actor.speed = 0.0f;
     }
 
-    if ((this->actor.bgCheckFlags & 1) && (this->actor.speed < 0.0f)) {
+    if ((this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) && (this->actor.speed < 0.0f)) {
         this->actor.speed += 0.05f;
     }
 
@@ -1002,7 +1002,8 @@ void func_809924EC(EnWf* this, PlayState* play) {
             return;
         }
 
-        if ((this->actor.bgCheckFlags & 8) && (ABS_ALT(sp26) < 0x2EE0) && (this->actor.xzDistToPlayer < 120.0f)) {
+        if ((this->actor.bgCheckFlags & BGCHECKFLAG_WALL) && (ABS_ALT(sp26) < 0x2EE0) &&
+            (this->actor.xzDistToPlayer < 120.0f)) {
             func_809926D0(this);
         } else if (!func_8099408C(play, this)) {
             if ((this->actor.xzDistToPlayer <= 80.0f) && !Actor_OtherIsTargeted(play, &this->actor) &&
@@ -1033,7 +1034,8 @@ void func_809926D0(EnWf* this) {
 
 void func_80992784(EnWf* this, PlayState* play) {
     Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 2500);
-    if (SkelAnime_Update(&this->skelAnime) && (this->actor.bgCheckFlags & (2 | 1))) {
+    if (SkelAnime_Update(&this->skelAnime) &&
+        (this->actor.bgCheckFlags & (BGCHECKFLAG_GROUND | BGCHECKFLAG_GROUND_TOUCH))) {
         this->actor.shape.rot.x = 0;
         this->actor.world.rot.y = this->actor.yawTowardsPlayer;
         this->actor.shape.rot.y = this->actor.yawTowardsPlayer;
@@ -1115,7 +1117,7 @@ void func_80992B8C(EnWf* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer + this->unk_29A, 2000);
-    if (this->actor.bgCheckFlags & 8) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
         sp2C = BINANG_SUB((this->actor.wallYaw - this->actor.yawTowardsPlayer), this->unk_29A);
         if (ABS_ALT(sp2C) > 0x2EE0) {
             this->unk_29A = -this->unk_29A;
@@ -1155,7 +1157,7 @@ void func_80992D6C(EnWf* this) {
     this->collider2.base.acFlags &= ~AC_ON;
     Animation_MorphToPlayOnce(&this->skelAnime, &gWolfosRearUpFallOverAnim, -4.0f);
     this->actor.world.rot.y = this->actor.yawTowardsPlayer;
-    if (this->actor.bgCheckFlags & 1) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         this->actor.speed = -6.0f;
     }
     this->actor.flags &= ~ACTOR_FLAG_1;
@@ -1167,11 +1169,11 @@ void func_80992D6C(EnWf* this) {
 void func_80992E0C(EnWf* this, PlayState* play) {
     static Vec3f D_809942F0 = { 0.0f, 0.5f, 0.0f };
 
-    if (this->actor.bgCheckFlags & 2) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND_TOUCH) {
         this->actor.speed = 0.0f;
     }
 
-    if (this->actor.bgCheckFlags & 1) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         Math_StepToF(&this->actor.speed, 0.0f, 0.5f);
     }
 
@@ -1337,7 +1339,7 @@ void func_8099357C(EnWf* this, PlayState* play) {
                 return;
             }
 
-            if (this->actor.bgCheckFlags & 8) {
+            if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
                 if (BINANG_SUB(sp2E, this->actor.wallYaw) > 0) {
                     sp2E = this->actor.wallYaw - 0x4000;
                 } else {
@@ -1422,12 +1424,12 @@ void func_8099386C(EnWf* this, PlayState* play) {
 
             if (this->actor.colChkInfo.damageEffect == 1) {
                 this->unk_2A0 = 40;
-                Actor_SetColorFilter(&this->actor, 0, 0x78, 0, 40);
+                Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 120, COLORFILTER_BUFFLAG_OPA, 40);
                 Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_FREEZE);
                 func_809923B0(this);
             } else if (this->actor.colChkInfo.damageEffect == 5) {
                 this->unk_2A0 = 40;
-                Actor_SetColorFilter(&this->actor, 0, 0xFF, 0, 40);
+                Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 255, COLORFILTER_BUFFLAG_OPA, 40);
                 this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_SMALL;
                 this->drawDmgEffScale = 0.75f;
                 this->drawDmgEffAlpha = 2.0f;
@@ -1454,7 +1456,7 @@ void func_8099386C(EnWf* this, PlayState* play) {
                                 CLEAR_TAG_LARGE_LIGHT_RAYS);
                 }
 
-                Actor_SetColorFilter(&this->actor, 0x4000, 0xFF, 0, 8);
+                Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 8);
                 if (this->actor.colChkInfo.health == 0) {
                     func_80992D6C(this);
                 } else {
@@ -1486,7 +1488,7 @@ void EnWf_Update(Actor* thisx, PlayState* play) {
     Actor_UpdateBgCheckInfo(play, &this->actor, 32.0f, 30.0f, 60.0f, 0x1D);
     func_80993738(this, play);
 
-    if (this->actor.bgCheckFlags & (2 | 1)) {
+    if (this->actor.bgCheckFlags & (BGCHECKFLAG_GROUND | BGCHECKFLAG_GROUND_TOUCH)) {
         func_800BE3D0(&this->actor, this->actor.shape.rot.y, &this->actor.shape.rot);
     } else {
         Math_ScaledStepToS(&this->actor.shape.rot.x, 0, 600);
