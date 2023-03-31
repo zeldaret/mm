@@ -1015,7 +1015,7 @@ void FileSelect_DrawOptionsImpl(GameState* thisx) {
         gDPPipeSync(POLY_OPA_DISP++);
 
         if (i == (gSaveContext.options.zTargetSetting + 4)) {
-            if (sSelectedSetting == FS_SETTING_TARGET) {
+            if (sSelectedSetting == FS_SETTING_ZTARGET) {
                 gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, sCursorPrimRed, sCursorPrimGreen, sCursorPrimBlue,
                                 this->titleAlpha[0]);
                 gDPSetEnvColor(POLY_OPA_DISP++, sCursorEnvRed, sCursorEnvGreen, sCursorEnvBlue, 255);

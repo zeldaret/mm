@@ -138,7 +138,7 @@ void FileSelect_FadeInMenuElements(FileSelectState* this) {
         this->fileButtonAlpha[i] = this->windowAlpha;
 
         if (!gSaveContext.flashSaveAvailable) {
-            if (OOT_SLOT_OCCUPIED(sramCtx, i)) {
+            if (NO_FLASH_SLOT_OCCUPIED(sramCtx, i)) {
                 this->nameBoxAlpha[i] = this->nameAlpha[i] = this->windowAlpha;
                 this->connectorAlpha[i] += 20;
                 if (this->connectorAlpha[i] >= 255) {
@@ -242,7 +242,7 @@ void FileSelect_UpdateMainMenu(GameState* thisx) {
     if (CHECK_BTN_ALL(input->press.button, BTN_START) || CHECK_BTN_ALL(input->press.button, BTN_A)) {
         if (this->buttonIndex <= FS_BTN_MAIN_FILE_3) {
             if (!gSaveContext.flashSaveAvailable) {
-                if (!OOT_SLOT_OCCUPIED(sramCtx, this->buttonIndex)) {
+                if (!NO_FLASH_SLOT_OCCUPIED(sramCtx, this->buttonIndex)) {
                     play_sound(NA_SE_SY_FSEL_DECIDE_L);
                     this->configMode = CM_ROTATE_TO_NAME_ENTRY;
                     this->kbdButton = FS_KBD_BTN_NONE;
@@ -341,13 +341,13 @@ void FileSelect_UpdateMainMenu(GameState* thisx) {
 
         if (this->buttonIndex == FS_BTN_MAIN_COPY) {
             if (!gSaveContext.flashSaveAvailable) {
-                if (!OOT_SLOT_OCCUPIED(sramCtx, 0) && !OOT_SLOT_OCCUPIED(sramCtx, 1) &&
-                    !OOT_SLOT_OCCUPIED(sramCtx, 2)) {
+                if (!NO_FLASH_SLOT_OCCUPIED(sramCtx, 0) && !NO_FLASH_SLOT_OCCUPIED(sramCtx, 1) &&
+                    !NO_FLASH_SLOT_OCCUPIED(sramCtx, 2)) {
                     this->warningButtonIndex = this->buttonIndex;
                     this->warningLabel = FS_WARNING_NO_FILE_COPY;
                     this->emptyFileTextAlpha = 255;
-                } else if (OOT_SLOT_OCCUPIED(sramCtx, 0) && OOT_SLOT_OCCUPIED(sramCtx, 1) &&
-                           OOT_SLOT_OCCUPIED(sramCtx, 2)) {
+                } else if (NO_FLASH_SLOT_OCCUPIED(sramCtx, 0) && NO_FLASH_SLOT_OCCUPIED(sramCtx, 1) &&
+                           NO_FLASH_SLOT_OCCUPIED(sramCtx, 2)) {
                     this->warningButtonIndex = this->buttonIndex;
                     this->warningLabel = FS_WARNING_NO_EMPTY_FILES;
                     this->emptyFileTextAlpha = 255;
@@ -369,8 +369,8 @@ void FileSelect_UpdateMainMenu(GameState* thisx) {
             }
         } else if (this->buttonIndex == FS_BTN_MAIN_ERASE) {
             if (!gSaveContext.flashSaveAvailable) {
-                if (!OOT_SLOT_OCCUPIED(sramCtx, 0) && !OOT_SLOT_OCCUPIED(sramCtx, 1) &&
-                    !OOT_SLOT_OCCUPIED(sramCtx, 2)) {
+                if (!NO_FLASH_SLOT_OCCUPIED(sramCtx, 0) && !NO_FLASH_SLOT_OCCUPIED(sramCtx, 1) &&
+                    !NO_FLASH_SLOT_OCCUPIED(sramCtx, 2)) {
                     this->warningButtonIndex = this->buttonIndex;
                     this->warningLabel = FS_WARNING_NO_FILE_ERASE;
                     this->emptyFileTextAlpha = 255;
@@ -1134,17 +1134,44 @@ void FileSelect_SetWindowContentVtx(GameState* thisx);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/FileSelect_SetWindowContentVtx.s")
 #endif
 
-u16 D_80814654[] = { 0x88, 0x194, 0x2A0 };
-TexturePtr sFileSelRemainsTextures[] = { gFileSelOdolwasRemainsTex, gFileSelGohtsRemainsTex, gFileSelGyorgsRemainsTex,
-                                         gFileSelTwinmoldsRemainsTex };
-TexturePtr sFileSelDayENGTextures[] = { gFileSelFirstDayENGTex, gFileSelFirstDayENGTex, gFileSelSecondDayENGTex,
-                                        gFileSelFinalDayENGTex };
-TexturePtr sFileSelHeartPieceTextures[] = { gFileSel0QuarterHeartENGTex, gFileSel1QuarterHeartENGTex,
-                                            gFileSel2QuarterHeartENGTex, gFileSel3QuarterHeartENGTex };
+u16 D_80814654[] = {
+    0x88,
+    0x194,
+    0x2A0,
+};
+TexturePtr sFileSelRemainsTextures[] = {
+    gFileSelOdolwasRemainsTex,
+    gFileSelGohtsRemainsTex,
+    gFileSelGyorgsRemainsTex,
+    gFileSelTwinmoldsRemainsTex,
+};
+TexturePtr sFileSelDayENGTextures[] = {
+    gFileSelFirstDayENGTex,
+    gFileSelFirstDayENGTex,
+    gFileSelSecondDayENGTex,
+    gFileSelFinalDayENGTex,
+};
+TexturePtr sFileSelHeartPieceTextures[] = {
+    gFileSel0QuarterHeartENGTex,
+    gFileSel1QuarterHeartENGTex,
+    gFileSel2QuarterHeartENGTex,
+    gFileSel3QuarterHeartENGTex,
+};
 static TexturePtr sHeartTextures[2][5] = {
-    { gHeartEmptyTex, gHeartQuarterTex, gHeartHalfTex, gHeartThreeQuarterTex, gHeartFullTex },
-    { gDefenseHeartEmptyTex, gDefenseHeartQuarterTex, gDefenseHeartHalfTex, gDefenseHeartThreeQuarterTex,
-      gDefenseHeartFullTex },
+    {
+        gHeartEmptyTex,
+        gHeartQuarterTex,
+        gHeartHalfTex,
+        gHeartThreeQuarterTex,
+        gHeartFullTex,
+    },
+    {
+        gDefenseHeartEmptyTex,
+        gDefenseHeartQuarterTex,
+        gDefenseHeartHalfTex,
+        gDefenseHeartThreeQuarterTex,
+        gDefenseHeartFullTex,
+    },
 };
 u8 sHealthToQuarterHeartCount[] = {
     0, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3,
@@ -1159,8 +1186,14 @@ s16 sFileSelRupeeEnvColors[3][3] = {
     { 10, 10, 80 },
     { 40, 10, 0 },
 };
-static s16 sHeartPrimColors[2][3] = { { 255, 70, 50 }, { 200, 0, 0 } };
-static s16 sHeartEnvColors[2][3] = { { 50, 40, 60 }, { 255, 255, 255 } };
+static s16 sHeartPrimColors[2][3] = {
+    { 255, 70, 50 },
+    { 200, 0, 0 },
+};
+static s16 sHeartEnvColors[2][3] = {
+    { 50, 40, 60 },
+    { 255, 255, 255 },
+};
 
 void FileSelect_DrawFileInfo(GameState* thisx, s16 fileIndex) {
     FileSelectState* this = (FileSelectState*)thisx;
@@ -1749,7 +1782,7 @@ void FileSelect_FadeMainToSelect(GameState* thisx) {
                 this->optionButtonAlpha = this->fileButtonAlpha[i];
 
             if (!gSaveContext.flashSaveAvailable) {
-                if (OOT_SLOT_OCCUPIED(sramCtx, i)) {
+                if (NO_FLASH_SLOT_OCCUPIED(sramCtx, i)) {
                     this->nameAlpha[i] = this->nameBoxAlpha[i] = this->fileButtonAlpha[i];
                     this->connectorAlpha[i] -= 255 / 4;
                 }
@@ -1901,7 +1934,7 @@ void FileSelect_MoveSelectedFileToSlot(GameState* thisx) {
                 this->optionButtonAlpha = this->fileButtonAlpha[i];
 
             if (!gSaveContext.flashSaveAvailable) {
-                if (OOT_SLOT_OCCUPIED(sramCtx, i)) {
+                if (NO_FLASH_SLOT_OCCUPIED(sramCtx, i)) {
                     this->nameBoxAlpha[i] = this->nameAlpha[i] = this->fileButtonAlpha[i];
                     this->connectorAlpha[i] += 255 / 4;
                 }

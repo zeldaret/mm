@@ -3,14 +3,15 @@
 
 #include "global.h"
 
-// `sramCtx->noFlashSaveBuf` is never allocated space, so should never use
-// Slot offsets are also based on OoT SaveContext sizes
-#define OOT_GET_NEWF(sramCtx, slotNum, index) \
+// `sramCtx->noFlashSaveBuf` is never allocated space, so should never be used
+// Slot offsets are also based on OoT SaveContext sizes, and contains incorrect sizes from MM
+// Macros appear to be remnant from OoT
+#define NO_FLASH_GET_NEWF(sramCtx, slotNum, index) \
     (sramCtx->noFlashSaveBuf[gSramSlotOffsets[slotNum] + offsetof(SaveContext, save.playerData.newf[index])])
-#define OOT_SLOT_OCCUPIED(sramCtx, slotNum)                                                  \
-    ((OOT_GET_NEWF(sramCtx, slotNum, 0) == 'Z') || (OOT_GET_NEWF(sramCtx, slotNum, 1) == 'E') || \
-     (OOT_GET_NEWF(sramCtx, slotNum, 2) == 'L') || (OOT_GET_NEWF(sramCtx, slotNum, 3) == 'D') || \
-     (OOT_GET_NEWF(sramCtx, slotNum, 4) == 'A') || (OOT_GET_NEWF(sramCtx, slotNum, 5) == '3'))
+#define NO_FLASH_SLOT_OCCUPIED(sramCtx, slotNum)                                                  \
+    ((NO_FLASH_GET_NEWF(sramCtx, slotNum, 0) == 'Z') || (NO_FLASH_GET_NEWF(sramCtx, slotNum, 1) == 'E') || \
+     (NO_FLASH_GET_NEWF(sramCtx, slotNum, 2) == 'L') || (NO_FLASH_GET_NEWF(sramCtx, slotNum, 3) == 'D') || \
+     (NO_FLASH_GET_NEWF(sramCtx, slotNum, 4) == 'A') || (NO_FLASH_GET_NEWF(sramCtx, slotNum, 5) == '3'))
 
 #define GET_NEWF(fileSelect, slotNum, index) (fileSelect->newf[slotNum][index])
 #define SLOT_OCCUPIED(fileSelect, slotNum)                                                                 \
@@ -150,7 +151,7 @@ typedef enum {
 
 typedef enum {
     /* 0 */ FS_SETTING_AUDIO,
-    /* 1 */ FS_SETTING_TARGET
+    /* 1 */ FS_SETTING_ZTARGET
 } SettingIndex;
 
 typedef enum {
@@ -243,7 +244,7 @@ typedef struct FileSelectState {
     /* 0x244E4 */ s16 nameEntryBoxAlpha;
     /* 0x244E6 */ s16 controlsAlpha;
     /* 0x244E8 */ s16 emptyFileTextAlpha;
-    /* 0x244EA */ s16 highlightColor[4]; // last elt may be separate
+    /* 0x244EA */ s16 highlightColor[4];
     /* 0x244F2 */ s16 highlightPulseDir;
     /* 0x244F4 */ s16 unk_244F4;
     /* 0x244F6 */ s16 confirmButtonTexIndices[2];

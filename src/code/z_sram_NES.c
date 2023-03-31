@@ -237,6 +237,7 @@ u16 D_801C66D0[ARRAY_COUNT(gSaveContext.save.weekEventReg)] = {
     /* 99 */ 0,
 };
 
+// Unused remnant values from OoT. Not the correct sizes in MM.
 #define OOT_SAVECONTEXT_SIZE 0x1428
 #define OOT_SLOT_SIZE (OOT_SAVECONTEXT_SIZE + 0x28)
 #define OOT_SRAM_HEADER_SIZE 0x10
