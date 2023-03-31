@@ -48,10 +48,10 @@ void FileSelect_IncrementConfigMode(FileSelectState* this) {
     this->configMode++;
 }
 
-void FileSelect_nop8080bc44(void) {
+void FileSelect_Noop1(void) {
 }
 
-void FileSelect_nop8080BC4C(FileSelectState* this) {
+void FileSelect_Noop2(FileSelectState* this) {
 }
 
 void FileSelect_InitModeUpdate(GameState* thisx) {
@@ -92,7 +92,7 @@ void FileSelect_InitModeDraw(GameState* thisx) {
     FileSelectState* this = (FileSelectState*)thisx;
 
     func_8012C628(this->state.gfxCtx);
-    FileSelect_nop8080BC4C(this);
+    FileSelect_Noop2(this);
 }
 
 void FileSelect_SetView(FileSelectState* this, f32 eyeX, f32 eyeY, f32 eyeZ) {
