@@ -162,7 +162,7 @@ s32 EnRuppecrow_ReachedPointClockwise(EnRuppecrow* this, Path* path, s32 pointIn
         }
     }
 
-    func_8017B7F8(&point, RAD_TO_BINANG(func_80086B30(diffX, diffZ)), &px, &pz, &d);
+    func_8017B7F8(&point, RADF_TO_BINANG(func_80086B30(diffX, diffZ)), &px, &pz, &d);
     if (((this->actor.world.pos.x * px) + (pz * this->actor.world.pos.z) + d) > 0.0f) {
         reached = true;
     }
@@ -197,7 +197,7 @@ s32 EnRuppecrow_ReachedPointCounterClockwise(EnRuppecrow* this, Path* path, s32 
         }
     }
 
-    func_8017B7F8(&point, RAD_TO_BINANG(func_80086B30(diffX, diffZ)), &px, &pz, &d);
+    func_8017B7F8(&point, RADF_TO_BINANG(func_80086B30(diffX, diffZ)), &px, &pz, &d);
     if (((this->actor.world.pos.x * px) + (pz * this->actor.world.pos.z) + d) > 0.0f) {
         reached = true;
     }

@@ -878,9 +878,9 @@ void Distortion_Update(void) {
         screenPlanePhase += CAM_DEG_TO_BINANG(screenPlanePhaseStep);
 
         View_SetDistortionOrientation(&sDistortionRequest.play->view,
-                                      Math_CosS(depthPhase) * (DEG_TO_RAD(rotX) * xyScaleFactor),
-                                      Math_SinS(depthPhase) * (DEG_TO_RAD(rotY) * xyScaleFactor),
-                                      Math_SinS(screenPlanePhase) * (DEG_TO_RAD(rotZ) * zScaleFactor));
+                                      Math_CosS(depthPhase) * (DEGF_TO_RADF(rotX) * xyScaleFactor),
+                                      Math_SinS(depthPhase) * (DEGF_TO_RADF(rotY) * xyScaleFactor),
+                                      Math_SinS(screenPlanePhase) * (DEGF_TO_RADF(rotZ) * zScaleFactor));
         View_SetDistortionScale(&sDistortionRequest.play->view,
                                 (Math_SinS(screenPlanePhase) * (xScale * xyScaleFactor)) + 1.0f,
                                 (Math_CosS(screenPlanePhase) * (yScale * xyScaleFactor)) + 1.0f,

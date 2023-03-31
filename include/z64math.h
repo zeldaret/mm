@@ -130,17 +130,11 @@ typedef enum {
 
 // Angle conversion macros
 #define DEG_TO_BINANG(degrees) (s16)((degrees) * (0x8000 / 180.0f))
-#define DEG_TO_BINANG_ALT(degrees) (s16)(((degrees) / 180.0f) * 0x8000)
-#define RAD_TO_BINANG(radians) (s16)((radians) * (0x8000 / M_PI))
-#define RAD_TO_BINANG_ALT(radians) (s16)((radians * 0x8000) / M_PI)
-
-#define RAD_TO_DEG(radians) ((radians) * (180.0f / M_PI))
-#define DEG_TO_RAD(degrees) ((degrees) * (M_PI / 180.0f))
-
-#define BINANG_TO_DEG(binang) ((f32)(binang) * (180.0f / 0x8000))
+#define RADF_TO_BINANG(radians) (s16)((radians) * (0x8000 / M_PI))
+#define RADF_TO_DEGF(radians) ((radians) * (180.0f / M_PI))
+#define DEGF_TO_RADF(degrees) ((degrees) * (M_PI / 180.0f))
 #define BINANG_TO_RAD(binang) ((f32)(binang) * (M_PI / 0x8000))
 #define BINANG_TO_RAD_ALT(binang) (((f32)(binang) / 0x8000) * M_PI)
-#define BINANG_TO_RAD_ALT2(binang) (((f32)(binang) * M_PI) / 0x8000)
 
 // Angle arithmetic macros
 #define BINANG_ROT180(angle) ((s16)(angle + 0x8000))

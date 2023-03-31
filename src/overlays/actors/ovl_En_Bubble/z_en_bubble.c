@@ -409,9 +409,9 @@ void EnBubble_Draw(Actor* thisx, PlayState* play) {
         Math_SmoothStepToF(&this->modelEllipticity, 0.08f, 0.2f, 1000.0f, 0.0f);
         Matrix_ReplaceRotation(&play->billboardMtxF);
         Matrix_Scale(this->modelWidth + 1.0f, this->modelHeight + 1.0f, 1.0f, MTXMODE_APPLY);
-        Matrix_RotateZF(DEG_TO_RAD((f32)play->state.frames) * this->modelRotSpeed, MTXMODE_APPLY);
+        Matrix_RotateZF(DEGF_TO_RADF((f32)play->state.frames) * this->modelRotSpeed, MTXMODE_APPLY);
         Matrix_Scale(this->modelEllipticity + 1.0f, 1.0f, 1.0f, MTXMODE_APPLY);
-        Matrix_RotateZF(DEG_TO_RAD(-(f32)play->state.frames) * this->modelRotSpeed, MTXMODE_APPLY);
+        Matrix_RotateZF(DEGF_TO_RADF(-(f32)play->state.frames) * this->modelRotSpeed, MTXMODE_APPLY);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
         gSPDisplayList(POLY_XLU_DISP++, gBubbleDL);
