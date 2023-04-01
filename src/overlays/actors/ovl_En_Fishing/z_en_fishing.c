@@ -3599,7 +3599,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
 
                         for (spA2 = 0; spA2 < 100; spA2++) {
 
-                            Matrix_RotateYF(randPlusMinusPoint5Scaled(2.3561945f) +
+                            Matrix_RotateYF(randPlusMinusPoint5Scaled(0.75f * M_PI) +
                                                 BINANG_TO_RAD_ALT(this->actor.yawTowardsPlayer + 0x8000),
                                             MTXMODE_NEW);
                             Matrix_MultVec3f(&sp10C, &sp100);
