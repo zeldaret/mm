@@ -10,8 +10,8 @@
 
 #define THIS ((EnSlime*)thisx)
 
-#define ICE_BLOCK_UNUSED 255
 #define ICE_BLOCK_TIMER_MAX 254
+#define ICE_BLOCK_UNUSED (ICE_BLOCK_TIMER_MAX + 1)
 
 typedef enum EnSlimeEyeTexture {
     /* 0 */ EN_SLIME_EYETEX_OPEN,
@@ -150,7 +150,7 @@ static s32 sTexturesDesegmented = false;
 
 static Color_RGBA8 sBubblePrimColor = { 255, 255, 255, 255 };
 static Color_RGBA8 sBubbleEnvColor = { 150, 150, 150, 0 };
-static Vec3f sBubbleAccel = { 0.0, -0.8, 0.0 };
+static Vec3f sBubbleAccel = { 0.0f, -0.8f, 0.0f };
 
 static Color_RGBA8 sPrimColors[] = {
     { 255, 255, 255, 255 },
@@ -167,16 +167,16 @@ static Color_RGBA8 sEnvColors[] = {
 };
 
 static Vec3f sLimbPosOffsets[EN_SLIME_LIMBPOS_COUNT] = {
-    { 2000.0, 2000.0, 0.0 }, { -1500.0, 2500.0, -500.0 }, { -500.0, 1000.0, 2500.0 },
-    { 0.0, 4000.0, 0.0 },    { 0.0, 2000.0, -2000.0 },
+    { 2000.0f, 2000.0f, 0.0f }, { -1500.0f, 2500.0f, -500.0f }, { -500.0f, 1000.0f, 2500.0f },
+    { 0.0f, 4000.0f, 0.0f },    { 0.0f, 2000.0f, -2000.0f },
 };
 
 AnimatedMaterial* sSlimeTexAnim;
 
 void EnSlime_Init(Actor* thisx, PlayState* play) {
+    EnSlime* this = THIS;
     s32 reviveTimeSeconds;
     s32 i;
-    EnSlime* this = THIS;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
@@ -234,6 +234,7 @@ void EnSlime_Init(Actor* thisx, PlayState* play) {
 
 void EnSlime_Destroy(Actor* thisx, PlayState* play) {
     EnSlime* this = THIS;
+
     Collider_DestroyCylinder(play, &this->collider);
 }
 
@@ -261,7 +262,7 @@ void EnSlime_Thaw(EnSlime* this, PlayState* play) {
         this->drawDmgEffType = 0; // So it's not triggered again until Freeze has been called again.
         this->collider.base.colType = COLTYPE_NONE;
         this->drawDmgEffAlpha = 0.0f;
-        Actor_SpawnIceEffects(play, &this->actor, this->limbPos, EN_SLIME_LIMBPOS_COUNT, 2, 0.2f, 0.2f);
+        Actor_SpawnIceEffects(play, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), 2, 0.2f, 0.2f);
         this->actor.flags |= ACTOR_FLAG_200;
     }
 }
@@ -316,7 +317,7 @@ void EnSlime_SetupIdle(EnSlime* this) {
 /**
  * Sit idle for one frame, updating rotation and scale to give
  * the actor an amorphous, oozing effect.
- * Chuchu will engage player during idle sit if player is visible and
+ * Chuchu will engage player if player is visible and
  * close enough to it.
  */
 void EnSlime_Idle(EnSlime* this, PlayState* play) {
@@ -380,9 +381,8 @@ void EnSlime_MoveInDirection(EnSlime* this, PlayState* play) {
     this->timer--;
     Math_ApproachS(&this->actor.shape.rot.y, this->idleRotY, 4, 0x100);
 
-    /* If actor is touching a wall, set target rotation to match wall where it is touching.
-     * If actor is more than 120 units from its home, turn around to face home.
-     */
+    // If actor is touching a wall, set target rotation to match wall where it is touching.
+    // If actor is more than 120 units from its home, turn around to face home.
     if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
         this->idleRotY = this->actor.wallYaw;
     } else if (Actor_WorldDistXZToPoint(&this->actor, &this->actor.home.pos) > 120.0f) {
@@ -1167,6 +1167,7 @@ void EnSlime_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
 
     OPEN_DISPS(play->state.gfxCtx);
+
     func_8012C28C(play->state.gfxCtx);
     func_8012C2DC(play->state.gfxCtx);
     func_800B8118(&this->actor, play, 0);
