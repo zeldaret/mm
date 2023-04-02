@@ -40,7 +40,8 @@ static AnimationInfoS sAnimationInfo[8] = {
     { &gAndRaisedHandWalkAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
 };
 
-// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_And/EnAnd_ChangeAnimation.s")
+static TexturePtr sEyeTextures[4];
+
 s32 EnAnd_ChangeAnimation(EnAnd* this, s32 animIndex) {
     s32 ret = false;
 
@@ -51,11 +52,10 @@ s32 EnAnd_ChangeAnimation(EnAnd* this, s32 animIndex) {
     return ret;
 }
 
-// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_And/EnAnd_Blink.s")
 void EnAnd_Blink(EnAnd* this) {
     if (DECR(this->blinkTimer) == 0) {
         this->eyeTexIndex++;
-        if (this->eyeTexIndex >= 4) {
+        if (this->eyeTexIndex >= ARRAY_COUNT(sEyeTextures)) {
             this->blinkTimer = Rand_S16Offset(30, 30);
             this->eyeTexIndex = 0;
         }
@@ -63,24 +63,22 @@ void EnAnd_Blink(EnAnd* this) {
 }
 
 void EnAnd_HandleCsAction(EnAnd* this, PlayState* play) {
-    // Action animations
-    // TODO: Rename accordingly? Other similar code has not done so.
-    s32 D_80C19200[] = { 0, 1, 2, 3, 5, 7 };
+    s32 actionAnimations[] = { 0, 1, 2, 3, 5, 7 };
     u16 csAction;
     s32 actionIndex;
 
     if (play->csCtx.state != CS_STATE_0) {
-        if (!this->unk30C) { // TODO: playing/prevPlaying?
+        if (!this->hasAction) {
             this->action = 0xFF;
-            this->unk30C = true;
-            this->unk308 = this->animIndex; // TODO: startAnimIndex?
+            this->hasAction = true;
+            this->prevAnimIndex = this->animIndex;
         }
         if (Cutscene_CheckActorAction(play, 0x235U)) {
             actionIndex = Cutscene_GetActorActionIndex(play, 0x235U);
             csAction = play->csCtx.actorActions[actionIndex]->action;
             if (this->action != (u8)csAction) {
                 this->action = csAction;
-                EnAnd_ChangeAnimation(this, D_80C19200[csAction]);
+                EnAnd_ChangeAnimation(this, actionAnimations[csAction]);
             }
             switch (this->action) {
                 case 3:
@@ -94,84 +92,84 @@ void EnAnd_HandleCsAction(EnAnd* this, PlayState* play) {
             }
             Cutscene_ActorTranslateAndYaw(&this->actor, play, actionIndex);
         }
-    } else if (this->unk30C) {
-        this->unk30C = false;
-        EnAnd_ChangeAnimation(this, this->unk308);
+    } else if (this->hasAction) {
+        this->hasAction = false;
+        EnAnd_ChangeAnimation(this, this->prevAnimIndex);
     }
 }
 
-// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_And/EnAnd_Init.s")
 void EnAnd_Init(Actor* thisx, PlayState* play) {
     EnAnd* this = THIS;
+
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 14.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &gAndSkel, NULL, this->jointTable, this->morphTable, OBJECT_AND_LIMB_MAX);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gAndSkel, NULL, this->jointTable, this->morphTable,
+                       OBJECT_AND_LIMB_MAX);
     this->animIndex = -1;
     EnAnd_ChangeAnimation(this, 0);
     Actor_SetScale(&this->actor, 0.01f);
-    this->actor.flags &= ~1;
-    this->unk2F0 |= 8; // TODO: Is there any good name for this?
+    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->flags |= 8;
     this->actionFunc = EnAnd_HandleCsAction;
 }
 
-// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_And/EnAnd_Destroy.s")
 void EnAnd_Destroy(Actor* thisx, PlayState* play) {
 }
 
-// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_And/EnAnd_Update.s")
 void EnAnd_Update(Actor* thisx, PlayState* play) {
     EnAnd* this = THIS;
+
     this->actionFunc(this, play);
     SkelAnime_Update(&this->skelAnime);
     EnAnd_Blink(this);
 }
 
-// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_And/EnAnd_TransformLimbDraw.s")
 void EnAnd_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
     EnAnd* this = THIS;
 
     s32 stepRot;
     s32 overrideRot;
 
-    stepRot = this->unk2F0 & 8 ? false : true;
-    overrideRot = this->unk2F0 & 2 ? true : false;
+    stepRot = this->flags & 8 ? false : true;
+    overrideRot = this->flags & 2 ? true : false;
     if (!stepRot) {
         overrideRot = false;
     }
 
     if (limbIndex != OBJECT_AND_LIMB_TORSO) {
         if (limbIndex == OBJECT_AND_LIMB_HEAD) {
-            // TODO: limbTorsoRotZ/Y and limbHeadRotZ/Y?
-            SubS_UpdateLimb(this->unk2F6 + this->unk2FA + 0x4000, this->unk2F8 + this->unk2FC + this->actor.shape.rot.y + 0x4000, &this->limbHeadPos, &this->limbHeadRot, stepRot, overrideRot);
+            SubS_UpdateLimb(this->headRotZ + this->torsoRotZ + 0x4000,
+                            this->headRotY + this->torsoRotY + this->actor.shape.rot.y + 0x4000, &this->headComputedPos,
+                            &this->headComputedRot, stepRot, overrideRot);
             Matrix_Pop();
-            Matrix_Translate(this->limbHeadPos.x, this->limbHeadPos.y, this->limbHeadPos.z, MTXMODE_NEW);
+            Matrix_Translate(this->headComputedPos.x, this->headComputedPos.y, this->headComputedPos.z, MTXMODE_NEW);
             Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-            Matrix_RotateYS(this->limbHeadRot.y, MTXMODE_APPLY);
-            Matrix_RotateXS(this->limbHeadRot.x, MTXMODE_APPLY);
-            Matrix_RotateZS(this->limbHeadRot.z, MTXMODE_APPLY);
+            Matrix_RotateYS(this->headComputedRot.y, MTXMODE_APPLY);
+            Matrix_RotateXS(this->headComputedRot.x, MTXMODE_APPLY);
+            Matrix_RotateZS(this->headComputedRot.z, MTXMODE_APPLY);
             Matrix_Push();
         }
     } else {
-        SubS_UpdateLimb(this->unk2FA + 0x4000, this->unk2FC + this->actor.shape.rot.y + 0x4000, &this->limbTorsoPos, &this->limbTorsoRot, stepRot, overrideRot);
+        SubS_UpdateLimb(this->torsoRotZ + 0x4000, this->torsoRotY + this->actor.shape.rot.y + 0x4000,
+                        &this->torsoComputedPos, &this->torsoComputedRot, stepRot, overrideRot);
         Matrix_Pop();
-        Matrix_Translate(this->limbTorsoPos.x, this->limbTorsoPos.y, this->limbTorsoPos.z, MTXMODE_NEW);
+        Matrix_Translate(this->torsoComputedPos.x, this->torsoComputedPos.y, this->torsoComputedPos.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-        Matrix_RotateYS(this->limbTorsoRot.y, MTXMODE_APPLY);
-        Matrix_RotateXS(this->limbTorsoRot.x, MTXMODE_APPLY);
-        Matrix_RotateZS(this->limbTorsoRot.z, MTXMODE_APPLY);
+        Matrix_RotateYS(this->torsoComputedRot.y, MTXMODE_APPLY);
+        Matrix_RotateXS(this->torsoComputedRot.x, MTXMODE_APPLY);
+        Matrix_RotateZS(this->torsoComputedRot.z, MTXMODE_APPLY);
         Matrix_Push();
     }
 }
 
-// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_And/EnAnd_Draw.s")
-void EnAnd_Draw(Actor* thisx, PlayState* play) {
-    static TexturePtr sMouthTextures[2] = { gAndMouthNeutralTex, gAndMouthSmileTex };
-    static TexturePtr sEyeTextures[4] = {
-        gAndEyeOpenTex,
-        gAndEyeClosingTex,
-        gAndEyeClosedTex,
-        gAndEyeOpeningTex,
-    };
+static TexturePtr sMouthTextures[2] = { gAndMouthNeutralTex, gAndMouthSmileTex };
+static TexturePtr sEyeTextures[4] = {
+    gAndEyeOpenTex,
+    gAndEyeClosingTex,
+    gAndEyeClosedTex,
+    gAndEyeOpeningTex,
+};
 
+void EnAnd_Draw(Actor* thisx, PlayState* play) {
     EnAnd* this = THIS;
 
     OPEN_DISPS(play->state.gfxCtx);
@@ -181,7 +179,8 @@ void EnAnd_Draw(Actor* thisx, PlayState* play) {
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyeTextures[this->eyeTexIndex]));
     gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(sMouthTextures[0]));
 
-    SkelAnime_DrawTransformFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, NULL, NULL, EnAnd_TransformLimbDraw, &this->actor);
+    SkelAnime_DrawTransformFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
+                                   this->skelAnime.dListCount, NULL, NULL, EnAnd_TransformLimbDraw, &this->actor);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
