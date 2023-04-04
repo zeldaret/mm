@@ -15,8 +15,6 @@ void EnAnd_Destroy(Actor* thisx, PlayState* play);
 void EnAnd_Update(Actor* thisx, PlayState* play);
 void EnAnd_Draw(Actor* thisx, PlayState* play);
 
-void EnAnd_HandleCsAction(EnAnd* this, PlayState* play);
-
 ActorInit En_And_InitVars = {
     ACTOR_EN_AND,
     ACTORCAT_NPC,
@@ -42,7 +40,7 @@ static AnimationInfoS sAnimationInfo[8] = {
 
 static TexturePtr sEyeTextures[4];
 
-s32 EnAnd_ChangeAnimation(EnAnd* this, s32 animIndex) {
+s32 EnAnd_ChangeAnim(EnAnd* this, s32 animIndex) {
     s32 ret = false;
 
     if (this->animIndex != animIndex) {
@@ -73,19 +71,19 @@ void EnAnd_HandleCsAction(EnAnd* this, PlayState* play) {
             this->hasAction = true;
             this->prevAnimIndex = this->animIndex;
         }
-        if (Cutscene_CheckActorAction(play, 0x235U)) {
-            actionIndex = Cutscene_GetActorActionIndex(play, 0x235U);
+        if (Cutscene_CheckActorAction(play, 0x235)) {
+            actionIndex = Cutscene_GetActorActionIndex(play, 0x235);
             csAction = play->csCtx.actorActions[actionIndex]->action;
             if (this->action != (u8)csAction) {
                 this->action = csAction;
-                EnAnd_ChangeAnimation(this, actionAnimations[csAction]);
+                EnAnd_ChangeAnim(this, actionAnimations[csAction]);
             }
             switch (this->action) {
                 case 3:
                 case 4:
                     if ((this->animIndex == 3) || (this->animIndex == 5)) {
                         if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-                            EnAnd_ChangeAnimation(this, this->animIndex + 1);
+                            EnAnd_ChangeAnim(this, this->animIndex + 1);
                         }
                     }
                     break;
@@ -94,7 +92,7 @@ void EnAnd_HandleCsAction(EnAnd* this, PlayState* play) {
         }
     } else if (this->hasAction) {
         this->hasAction = false;
-        EnAnd_ChangeAnimation(this, this->prevAnimIndex);
+        EnAnd_ChangeAnim(this, this->prevAnimIndex);
     }
 }
 
@@ -105,7 +103,7 @@ void EnAnd_Init(Actor* thisx, PlayState* play) {
     SkelAnime_InitFlex(play, &this->skelAnime, &gAndSkel, NULL, this->jointTable, this->morphTable,
                        OBJECT_AND_LIMB_MAX);
     this->animIndex = -1;
-    EnAnd_ChangeAnimation(this, 0);
+    EnAnd_ChangeAnim(this, 0);
     Actor_SetScale(&this->actor, 0.01f);
     this->actor.flags &= ~ACTOR_FLAG_1;
     this->flags |= 8;
@@ -125,7 +123,6 @@ void EnAnd_Update(Actor* thisx, PlayState* play) {
 
 void EnAnd_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
     EnAnd* this = THIS;
-
     s32 stepRot;
     s32 overrideRot;
 

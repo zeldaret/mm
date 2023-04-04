@@ -1,4 +1,5 @@
 ﻿<Root>
+    <!-- Assets for Anju in a wedding dress -->
     <File Name="object_and" Segment="6">
         <Animation Name="gAndStaticAnim" Offset="0xC8" /> <!-- Original name is "and_test" -->
         <DList Name="gAndTrainDL" Offset="0x4670" />
