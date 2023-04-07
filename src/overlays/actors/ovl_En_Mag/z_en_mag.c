@@ -388,7 +388,7 @@ void EnMag_Update(Actor* thisx, PlayState* play) {
                                     D_801BB12C = 0;
                                 }
                                 play_sound(NA_SE_SY_PIECE_OF_HEART);
-                                gSaveContext.gameMode = 2; // Go to FileSelect
+                                gSaveContext.gameMode = GAMEMODE_FILE_SELECT;
                                 play->transitionTrigger = TRANS_TRIGGER_START;
                                 play->transitionType = TRANS_TYPE_FADE_BLACK;
                                 play->nextEntrance = ENTRANCE(CUTSCENE, 0);

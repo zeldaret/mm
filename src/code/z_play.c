@@ -689,10 +689,10 @@ void Play_UpdateTransition(PlayState* this) {
                         D_801D0D54 = false;
                     }
 
-                    if (gSaveContext.gameMode == 4) {
+                    if (gSaveContext.gameMode == GAMEMODE_OWL_SAVE) {
                         STOP_GAMESTATE(&this->state);
                         SET_NEXT_GAMESTATE(&this->state, TitleSetup_Init, sizeof(TitleSetupState));
-                    } else if (gSaveContext.gameMode != 2) {
+                    } else if (gSaveContext.gameMode != GAMEMODE_FILE_SELECT) {
                         STOP_GAMESTATE(&this->state);
                         SET_NEXT_GAMESTATE(&this->state, Play_Init, sizeof(PlayState));
                         gSaveContext.save.entrance = this->nextEntrance;
@@ -700,7 +700,7 @@ void Play_UpdateTransition(PlayState* this) {
                         if (gSaveContext.minigameStatus == MINIGAME_STATUS_ACTIVE) {
                             gSaveContext.minigameStatus = MINIGAME_STATUS_END;
                         }
-                    } else { // 2
+                    } else { // GAMEMODE_FILE_SELECT
                         STOP_GAMESTATE(&this->state);
                         SET_NEXT_GAMESTATE(&this->state, FileSelect_Init, sizeof(FileSelectState));
                     }
@@ -946,7 +946,7 @@ void Play_UpdateMain(PlayState* this) {
         }
         Play_UpdateTransition(this);
         if (gTransitionTileState != TRANS_TILE_READY) {
-            if ((gSaveContext.gameMode == 0) &&
+            if ((gSaveContext.gameMode == GAMEMODE_NORMAL) &&
                 (((this->msgCtx.msgMode == 0)) ||
                  ((this->msgCtx.currentTextId == 0xFF) && (this->msgCtx.msgMode == 0x42) &&
                   (this->msgCtx.unk12020 == 0x41)) ||
@@ -1076,7 +1076,7 @@ void Play_PostWorldDraw(PlayState* this) {
         KaleidoScopeCall_Draw(this);
     }
 
-    if (gSaveContext.gameMode == 0) {
+    if (gSaveContext.gameMode == GAMEMODE_NORMAL) {
         Interface_Draw(this);
     }
 
@@ -2202,7 +2202,8 @@ void Play_Init(GameState* thisx) {
 
     func_800EDDB0(this);
 
-    if (((gSaveContext.gameMode != 0) && (gSaveContext.gameMode != 1)) || (gSaveContext.save.cutscene >= 0xFFF0)) {
+    if (((gSaveContext.gameMode != GAMEMODE_NORMAL) && (gSaveContext.gameMode != GAMEMODE_TITLE_SCREEN)) ||
+        (gSaveContext.save.cutscene >= 0xFFF0)) {
         gSaveContext.nayrusLoveTimer = 0;
         Magic_Reset(this);
         gSaveContext.sceneLayer = (gSaveContext.save.cutscene & 0xF) + 1;
@@ -2263,7 +2264,7 @@ void Play_Init(GameState* thisx) {
     this->haltAllActors = false;
     this->unk_18844 = false;
 
-    if (gSaveContext.gameMode != 1) {
+    if (gSaveContext.gameMode != GAMEMODE_TITLE_SCREEN) {
         if (gSaveContext.nextTransitionType == TRANS_NEXT_TYPE_DEFAULT) {
             this->transitionType =
                 (Entrance_GetTransitionFlags(((void)0, gSaveContext.save.entrance) + sceneLayer) >> 7) & 0x7F;

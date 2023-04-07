@@ -314,7 +314,7 @@ void FileSelect_UpdateMainMenu(GameState* thisx) {
             play_sound(NA_SE_SY_FSEL_ERROR);
         }
     } else if (CHECK_BTN_ALL(input->press.button, BTN_B)) {
-        gSaveContext.gameMode = 1;
+        gSaveContext.gameMode = GAMEMODE_TITLE_SCREEN;
         STOP_GAMESTATE(&this->state);
         SET_NEXT_GAMESTATE(&this->state, TitleSetup_Init, sizeof(TitleSetupState));
     } else {
@@ -1989,7 +1989,7 @@ void FileSelect_LoadGame(GameState* thisx) {
     gSaveContext.fileNum = this->buttonIndex;
     Sram_OpenSave(this, &this->sramCtx);
 
-    gSaveContext.gameMode = 0;
+    gSaveContext.gameMode = GAMEMODE_NORMAL;
 
     STOP_GAMESTATE(&this->state);
     SET_NEXT_GAMESTATE(&this->state, Play_Init, sizeof(PlayState));
