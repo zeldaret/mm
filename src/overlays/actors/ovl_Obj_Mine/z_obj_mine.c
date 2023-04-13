@@ -140,7 +140,7 @@ s32 ObjMine_GetUnitVec3fNorm(Vec3f* src, Vec3f* dst, f32* norm, f32* invNorm) {
 void ObjMine_Path_SpawnBomb(ObjMine* this, PlayState* play) {
     EnBom* bomb =
         (EnBom*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOM, this->actor.world.pos.x,
-                            this->actor.world.pos.y - BOMB_SPAWN_OFFSET, this->actor.world.pos.z, 0, 0, 0, ENBOM_0);
+                            this->actor.world.pos.y - BOMB_SPAWN_OFFSET, this->actor.world.pos.z, 0, 0, 0, BOMB_TYPE_BODY);
 
     if (bomb != NULL) {
         bomb->timer = 0;
@@ -151,7 +151,7 @@ void ObjMine_AirWater_SpawnBomb(ObjMine* this, PlayState* play) {
     f32 x = this->collider.elements[0].dim.worldSphere.center.x;
     f32 y = this->collider.elements[0].dim.worldSphere.center.y - BOMB_SPAWN_OFFSET;
     f32 z = this->collider.elements[0].dim.worldSphere.center.z;
-    EnBom* bomb = (EnBom*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOM, x, y, z, 0, 0, 0, ENBOM_0);
+    EnBom* bomb = (EnBom*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOM, x, y, z, 0, 0, 0, BOMB_TYPE_BODY);
 
     if (bomb != NULL) {
         bomb->timer = 0;
@@ -193,7 +193,7 @@ void ObjMine_Air_CheckAC(ObjMine* this, s16* hitAngle, s16* torqueAngle) {
         Vec3s* hitPos3s = &this->collider.elements[0].info.bumper.hitPos;
 
         Math_Vec3s_ToVec3f(&hitPos, hitPos3s);
-        *hitAngle = Actor_YawBetweenActors(attackActor, &this->actor);
+        *hitAngle = Actor_WorldYawTowardActor(attackActor, &this->actor);
         *torqueAngle = Math_Vec3f_Yaw(&attackActor->world.pos, &hitPos) - yawToAttack;
     }
 }
@@ -771,17 +771,17 @@ void ObjMine_Path_Move(ObjMine* this, PlayState* play) {
         target = this->pathSpeed;
         step = this->pathSpeed * 0.16f;
     }
-    Math_StepToF(&this->actor.speedXZ, target, step);
+    Math_StepToF(&this->actor.speed, target, step);
 
     // Checks if mine will reach the waypoint next frame
-    if ((this->actor.speedXZ + 0.05f) < distToWaypoint) {
-        // Scales thisx->velocity to be equal in magnitude to speedXZ
-        Math_Vec3f_Scale(&thisx->velocity, this->actor.speedXZ / distToWaypoint);
+    if ((this->actor.speed + 0.05f) < distToWaypoint) {
+        // Scales thisx->velocity to be equal in magnitude to speed
+        Math_Vec3f_Scale(&thisx->velocity, this->actor.speed / distToWaypoint);
         this->actor.world.pos.x += thisx->velocity.x;
         this->actor.world.pos.y += thisx->velocity.y;
         this->actor.world.pos.z += thisx->velocity.z;
     } else {
-        this->actor.speedXZ *= 0.4f;
+        this->actor.speed *= 0.4f;
         this->waypointIndex++;
         if (this->waypointIndex >= this->waypointCount) {
             this->waypointIndex = 0;
@@ -798,7 +798,7 @@ void ObjMine_Path_Move(ObjMine* this, PlayState* play) {
         // Makes mines appear to roll while traversing the path
         Math3D_CrossProduct(&sStandardBasis.y, &thisx->velocity, &yhatCrossV);
         if (ObjMine_GetUnitVec3f(&yhatCrossV, &rotAxis)) {
-            Matrix_RotateAxisF(this->actor.speedXZ / PATH_RADIUS, &rotAxis, MTXMODE_NEW);
+            Matrix_RotateAxisF(this->actor.speed / PATH_RADIUS, &rotAxis, MTXMODE_NEW);
             Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_APPLY);
             Matrix_RotateXS(this->actor.shape.rot.x, MTXMODE_APPLY);
             Matrix_RotateZS(this->actor.shape.rot.z, MTXMODE_APPLY);
