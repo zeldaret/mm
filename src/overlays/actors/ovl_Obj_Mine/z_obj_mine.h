@@ -45,9 +45,9 @@ typedef struct {
     /* 0x44 */ f32 drag;
     /* 0x48 */ f32 knockback;
     /* 0x4C */ s16 knockbackAngle;
-    /* 0x50 */ f32 wobbleSize;
-    /* 0x54 */ s16 wobblePhase;
-    /* 0x58 */ f32 wobble;
+    /* 0x50 */ f32 swaySize;
+    /* 0x54 */ s16 swayPhase;
+    /* 0x58 */ f32 swayMax;
     /* 0x5C */ f32 wallCheckDist;
     /* 0x60 */ ObjMineAirLink links[OBJMINE_CHAIN_MAX];
 } ObjMineAirChain; // size = 0x15C
@@ -63,10 +63,10 @@ typedef struct {
     /* 0x00 */ f32 drag;
     /* 0x04 */ Vec3f knockbackDir;
     /* 0x10 */ f32 knockback;
-    /* 0x14 */ f32 wobbleXZ;
-    /* 0x18 */ f32 wobbleY;
-    /* 0x1C */ f32 wobble;
-    /* 0x20 */ s16 wobblePhaseVel;
+    /* 0x14 */ f32 swayXZ;
+    /* 0x18 */ f32 swayY;
+    /* 0x1C */ f32 swayMax;
+    /* 0x20 */ s16 swayPhaseVel;
     /* 0x24 */ f32 restoreXZ;
     /* 0x28 */ f32 maxY;
     /* 0x2C */ f32 restY;

@@ -308,7 +308,7 @@ void ObjMine_Air_InitChain(ObjMine* this, s32 linkCount) {
         airChain->drag = 0.95f + ((0.02000004f / (63.0f)) * linkCountF); // constant is close to 1/50
     }
 
-    airChain->wobble = 0.0002f;
+    airChain->swayMax = 0.0002f;
 
     // Consecutive chain links are offset 90 degrees.
     for (i = 0, airLink = airChain->links; i < linkCount; i++, airLink++) {
@@ -370,16 +370,16 @@ void ObjMine_Water_InitChain(ObjMine* this, s32 linkCount) {
     s32 i;
     f32 wallCheckRadius = this->actor.home.rot.z * 5.0f;
     f32 linkY;
-    f32 wobbleVel;
+    f32 swayVel;
 
     waterChain->drag = 0.9f;
-    waterChain->wobble = 0.003f;
+    waterChain->swayMax = 0.003f;
 
-    waterChain->wobblePhaseVel = RANDU_BITS(13);
+    waterChain->swayPhaseVel = RANDU_BITS(13);
     waterChain->restoreXZ = -0.0002f;
     waterChain->restoreY = -0.0002f;
 
-    wobbleVel = waterChain->wobble * (LINK_SIZE / 2.0f);
+    swayVel = waterChain->swayMax * (LINK_SIZE / 2.0f);
     linkY = this->actor.home.pos.y;
 
     for (i = 0, waterLink = waterChain->links; i < linkCount; i++, waterLink++) {
@@ -390,9 +390,9 @@ void ObjMine_Water_InitChain(ObjMine* this, s32 linkCount) {
         waterLink->pos.x = this->actor.home.pos.x;
         waterLink->pos.y = linkY;
         waterLink->pos.z = this->actor.home.pos.z;
-        waterLink->vel.x = (Rand_ZeroOne() - 0.5f) * wobbleVel;
-        waterLink->vel.y = (Rand_ZeroOne() - 0.5f) * wobbleVel;
-        waterLink->vel.z = (Rand_ZeroOne() - 0.5f) * wobbleVel;
+        waterLink->vel.x = (Rand_ZeroOne() - 0.5f) * swayVel;
+        waterLink->vel.y = (Rand_ZeroOne() - 0.5f) * swayVel;
+        waterLink->vel.z = (Rand_ZeroOne() - 0.5f) * swayVel;
     }
     waterChain->maxY = linkY;
 
@@ -486,7 +486,7 @@ void ObjMine_Water_ApplyForces(ObjMine *this) {
     ObjMineWaterChain *waterChain = &this->chain.water;
     ObjMineWaterLink *waterLink;
     s32 i;
-    s16 wobblePhase;
+    s16 swayPhase;
     s32 linkCount = OBJMINE_GET_LINK_COUNT(&this->actor);
     f32 inverseCount = 1.0f / (f32) linkCount;
     f32 restoreY = (waterChain->links[linkCount - 1].pos.y - waterChain->restY) * waterChain->restoreY;
@@ -494,7 +494,7 @@ void ObjMine_Water_ApplyForces(ObjMine *this) {
     f32 scaledKnockback;
 
     // Applies the buoyant force and sway from the water.
-    for(i = 0, waterLink = waterChain->links, wobblePhase = 0; i < linkCount; i++, waterLink++, wobblePhase += waterChain->wobblePhaseVel) {
+    for(i = 0, waterLink = waterChain->links, swayPhase = 0; i < linkCount; i++, waterLink++, swayPhase += waterChain->swayPhaseVel) {
         Math_Vec3f_Copy(&sLastLinkAccel[i], &waterLink->accel);
         if (waterLink->pos.y <= this->actor.home.pos.y) {
             waterLink->accel.y = waterChain->restoreY * -96.0f;
@@ -505,9 +505,9 @@ void ObjMine_Water_ApplyForces(ObjMine *this) {
         }
         waterLink->accel.x = (waterLink->pos.x - this->actor.home.pos.x) * waterChain->restoreXZ;
         waterLink->accel.z = (waterLink->pos.z - this->actor.home.pos.z) * waterChain->restoreXZ;
-        waterLink->accel.x += waterChain->wobbleXZ * Math_SinS(wobblePhase);
-        waterLink->accel.y += waterChain->wobbleY;
-        waterLink->accel.z += waterChain->wobbleXZ * Math_CosS(wobblePhase);
+        waterLink->accel.x += waterChain->swayXZ * Math_SinS(swayPhase);
+        waterLink->accel.y += waterChain->swayY;
+        waterLink->accel.z += waterChain->swayXZ * Math_CosS(swayPhase);
     }
 
     // Applies knockback force. Knockback on the links is scaled quadratically, possibly to account for link rotations being cumulative
@@ -883,11 +883,11 @@ void ObjMine_Air_Chained(ObjMine* this, PlayState* play) {
 
     // Applies chain sway, choosing a new sway randomly about every 32 frames
     if (RANDU_BITS(5) == 0) {
-        airChain->wobbleSize = Rand_ZeroOne() * airChain->wobble;
-        airChain->wobblePhase = RANDU_BITS(16);
+        airChain->swaySize = Rand_ZeroOne() * airChain->swayMax;
+        airChain->swayPhase = RANDU_BITS(16);
     }
-    xAccel = Math_SinS(airChain->wobblePhase) * airChain->wobbleSize;
-    zAccel = Math_CosS(airChain->wobblePhase) * airChain->wobbleSize;
+    xAccel = Math_SinS(airChain->swayPhase) * airChain->swaySize;
+    zAccel = Math_CosS(airChain->swayPhase) * airChain->swaySize;
     airChain->xVel += xAccel;
     airChain->zVel += zAccel;
 
@@ -1014,14 +1014,14 @@ void ObjMine_Water_Chained(ObjMine* this, PlayState* play) {
     waterChain->drag = 0.9f;
     waterChain->restoreXZ = -0.0002f;
     waterChain->restoreY = -0.0002f;
-    waterChain->wobble = 0.003f;
+    waterChain->swayMax = 0.003f;
 
     if (RANDU_BITS(5) == 0) {
         s16 randAngle = RANDU_BITS(16);
 
-        waterChain->wobbleXZ = Math_SinS(randAngle) * 1.8f * waterChain->wobble;
-        waterChain->wobbleY = Math_CosS(randAngle) * 0.2f * waterChain->wobble;
-        waterChain->wobblePhaseVel = RANDU_BITS(13);
+        waterChain->swayXZ = Math_SinS(randAngle) * 1.8f * waterChain->swayMax;
+        waterChain->swayY = Math_CosS(randAngle) * 0.2f * waterChain->swayMax;
+        waterChain->swayPhaseVel = RANDU_BITS(13);
     }
 
     ObjMine_Water_UpdateChain(this, play);
