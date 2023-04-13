@@ -165,13 +165,13 @@ void func_80C038B4(EnBombers* this) {
     if ((this->unk_2C4 == 2) &&
         (Animation_OnFrame(&this->skelAnime, 9.0f) || Animation_OnFrame(&this->skelAnime, 10.0f) ||
          Animation_OnFrame(&this->skelAnime, 17.0f) || Animation_OnFrame(&this->skelAnime, 18.0f))) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BOMBERS_WALK);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_BOMBERS_WALK);
     }
 
     if ((this->unk_2C4 == 15) &&
         (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 2.0f) ||
          Animation_OnFrame(&this->skelAnime, 4.0f) || Animation_OnFrame(&this->skelAnime, 6.0f))) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BOMBERS_WALK);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_BOMBERS_WALK);
     }
 }
 
@@ -338,7 +338,7 @@ void func_80C03FAC(EnBombers* this, PlayState* play) {
 
     if ((this->unk_2A6 == Message_GetState(&play->msgCtx)) && Message_ShouldAdvance(play)) {
         sp2A = 0;
-        func_801477B4(play);
+        Message_CloseTextbox(play);
         this->unk_2A6 = TEXT_STATE_5;
 
         if ((this->actor.textId == 0x73D) || (this->actor.textId == 0x73E) || (this->actor.textId == 0x73F)) {
@@ -420,7 +420,7 @@ void func_80C03FAC(EnBombers* this, PlayState* play) {
                 break;
 
             case 1:
-                func_80151938(play, this->actor.textId);
+                Message_ContinueTextbox(play, this->actor.textId);
                 break;
         }
     }
@@ -449,7 +449,7 @@ void func_80C04354(EnBombers* this, PlayState* play) {
 void func_80C043C8(EnBombers* this, PlayState* play) {
     Math_SmoothStepToS(&this->unk_288, this->unk_28E, 1, 0x3E8, 0);
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-        func_801477B4(play);
+        Message_CloseTextbox(play);
         func_80C042F8(this);
     }
 }

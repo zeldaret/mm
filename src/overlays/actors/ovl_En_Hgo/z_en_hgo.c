@@ -268,7 +268,7 @@ void EnHgo_HandlePlayerChoice(EnHgo* this, PlayState* play) {
                 break;
 
             case 0x15A7:
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 EnHgo_SetupTalk(this);
                 break;
         }
@@ -322,7 +322,7 @@ s32 EnHgo_HandleCsAction(EnHgo* this, PlayState* play) {
                         this->isInCutscene = true;
                         if ((gSaveContext.sceneLayer == 0) &&
                             ((play->csCtx.currentCsIndex == 2) || (play->csCtx.currentCsIndex == 4))) {
-                            Actor_PlaySfxAtPos(&this->actor, NA_SE_VO_GBVO02);
+                            Actor_PlaySfx(&this->actor, NA_SE_VO_GBVO02);
                         }
                     }
                     break;

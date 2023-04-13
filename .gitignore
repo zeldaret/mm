@@ -14,6 +14,8 @@ tags
 
 # Project-specific ignores
 *.z64
+*.n64
+*.v64
 *.sra
 *.bin
 *.elf

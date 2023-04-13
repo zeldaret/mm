@@ -1,3 +1,4 @@
+#include "prevent_bss_reordering.h"
 #include "global.h"
 
 #define ANIM_INTERP 1
@@ -629,7 +630,8 @@ void SkelAnime_GetFrameData(AnimationHeader* animation, s32 frame, s32 limbCount
         frameTable->x = jointIndices->x >= staticIndexMax ? dynamicData[jointIndices->x] : frameData[jointIndices->x];
         frameTable->y = jointIndices->y >= staticIndexMax ? dynamicData[jointIndices->y] : frameData[jointIndices->y];
         frameTable->z = jointIndices->z >= staticIndexMax ? dynamicData[jointIndices->z] : frameData[jointIndices->z];
-        jointIndices++, frameTable++;
+        jointIndices++;
+        frameTable++;
     }
 }
 
@@ -1576,7 +1578,7 @@ void SkelAnime_InitSkin(GameState* gameState, SkelAnime* skelAnime, SkeletonHead
     skelAnime->morphTable = ZeldaArena_Malloc(sizeof(*skelAnime->morphTable) * skelAnime->limbCount);
 
     // Debug prints here, required to match.
-    if (1) {};
+    if (1) {}
 
     if (animation != NULL) {
         Animation_PlayLoop(skelAnime, animation);

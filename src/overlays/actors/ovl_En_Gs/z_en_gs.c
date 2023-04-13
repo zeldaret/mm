@@ -249,7 +249,7 @@ void func_80997E4C(EnGs* this, PlayState* play) {
                                 this->unk_210 = this->unk_195 + 0x20F7;
                                 break;
                         }
-                        func_80151938(play, this->unk_210);
+                        Message_ContinueTextbox(play, this->unk_210);
                         break;
 
                     default:
@@ -281,7 +281,7 @@ void func_8099807C(EnGs* this, PlayState* play) {
                     if (!Flags_GetSwitch(play, this->unk_196)) {
                         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ELF, this->actor.world.pos.x,
                                     this->actor.world.pos.y + 40.0f, this->actor.world.pos.z, 0, 0, 0, 2);
-                        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BUTTERFRY_TO_FAIRY);
+                        Actor_PlaySfx(&this->actor, NA_SE_EV_BUTTERFRY_TO_FAIRY);
                         Flags_SetSwitch(play, this->unk_196);
                     }
                     break;
@@ -290,7 +290,7 @@ void func_8099807C(EnGs* this, PlayState* play) {
                     if (!Flags_GetSwitch(play, this->unk_196)) {
                         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ELF, this->actor.world.pos.x,
                                     this->actor.world.pos.y + 40.0f, this->actor.world.pos.z, 0, 0, 0, 7);
-                        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BUTTERFRY_TO_FAIRY);
+                        Actor_PlaySfx(&this->actor, NA_SE_EV_BUTTERFRY_TO_FAIRY);
                         Flags_SetSwitch(play, this->unk_196);
                     }
                     break;
@@ -411,7 +411,7 @@ void func_809985B8(EnGs* this, PlayState* play) {
 void func_80998704(EnGs* this, PlayState* play) {
     this->unk_19D = 0;
     this->unk_19A &= ~(0x100 | 0x4);
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_G_STONE_CHANGE_COLOR);
+    Actor_PlaySfx(&this->actor, NA_SE_EV_G_STONE_CHANGE_COLOR);
     this->actionFunc = func_8099874C;
 }
 
@@ -500,7 +500,7 @@ void func_8099874C(EnGs* this, PlayState* play) {
 }
 
 void func_809989B4(EnGs* this, PlayState* play) {
-    Actor_PickUp(&this->actor, play, this->unk_20C, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
+    Actor_OfferGetItem(&this->actor, play, this->unk_20C, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
     this->actionFunc = func_809989F4;
 }
 
@@ -509,7 +509,7 @@ void func_809989F4(EnGs* this, PlayState* play) {
         this->actor.parent = NULL;
         func_80997D14(this, play);
     } else {
-        Actor_PickUp(&this->actor, play, this->unk_20C, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
+        Actor_OfferGetItem(&this->actor, play, this->unk_20C, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
     }
 }
 
@@ -518,7 +518,7 @@ s32 func_80998A48(EnGs* this, PlayState* play) {
 
     if (this->unk_19D == 0) {
         this->unk_216 = 200;
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKID_ATTACK);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_STALKID_ATTACK);
 
         this->unk_1D4 = 0;
         this->unk_19A |= 1;
@@ -536,7 +536,7 @@ s32 func_80998A48(EnGs* this, PlayState* play) {
             if ((this->actor.params != ENGS_0) && !Play_InCsMode(play) &&
                 (Message_GetState(&play->msgCtx) == TEXT_STATE_NONE)) {
                 this->unk_216 = 0;
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_FAIVE_LUPY_COUNT);
+                Actor_PlaySfx(&this->actor, NA_SE_EV_FAIVE_LUPY_COUNT);
                 Message_StartTextbox(play, 0x20D2, NULL);
             }
             this->unk_19A &= ~1;
@@ -551,7 +551,7 @@ s32 func_80998BBC(EnGs* this, PlayState* play) {
 
     if (this->unk_19D == 0) {
         this->unk_216 = 200;
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKID_ATTACK);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_STALKID_ATTACK);
         this->unk_1DC = 0.3f;
         this->unk_1E0 = 0.0f;
 
@@ -563,7 +563,7 @@ s32 func_80998BBC(EnGs* this, PlayState* play) {
         this->unk_197 &= 0xF;
         this->unk_19D = 1;
     } else if (this->unk_19D == 1) {
-        this->unk_19E[0].z = (this->unk_1D4 % 8) * 0.125f * 360.0f * (0x10000 / 360.0f);
+        this->unk_19E[0].z = DEG_TO_BINANG((this->unk_1D4 % 8) * 0.125f * 360.0f);
         this->unk_19E[1].z = -this->unk_19E[0].z;
         if (func_80998334(this, play, &this->unk_1DC, &this->unk_1E0, &this->unk_1D4, 0.8f, 0.005f, 0.001f, 7, 0) ==
             0.0f) {
@@ -582,7 +582,7 @@ s32 func_80998D44(EnGs* this, PlayState* play) {
         this->unk_216 = 200;
         this->unk_1DC = this->unk_1B0[0].y - 1.0f;
         this->unk_1E0 = -0.8f;
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_G_STONE_CRUSH);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_G_STONE_CRUSH);
         this->unk_19A |= 1;
         this->unk_21C = 40;
         this->unk_21E = 11;
@@ -613,7 +613,7 @@ s32 func_80998D44(EnGs* this, PlayState* play) {
             this->unk_21C = 10;
             this->unk_21E = 10;
             this->unk_1DC = 0.5f;
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKID_ATTACK);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_STALKID_ATTACK);
             this->unk_19D += 1;
         }
     } else if ((this->unk_19D == 4) && (func_80998334(this, play, &this->unk_1DC, &this->unk_1E0, &this->unk_1D4, 1.0f,
@@ -662,7 +662,7 @@ s32 func_80998F9C(EnGs* this, PlayState* play) {
             this->unk_1E0 = 1.5f;
             this->unk_1E4 = this->unk_1B0[1].y - 1.0f;
             this->unk_1E8 = -0.3f;
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_STONE_GROW_UP);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_STONE_GROW_UP);
             this->unk_19D = 3;
         }
     }
@@ -712,7 +712,7 @@ s32 func_80998F9C(EnGs* this, PlayState* play) {
             this->unk_1E8 = 0.0f;
             this->unk_1F0 = 0.0f;
             this->unk_1EC = 0.5f;
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKID_ATTACK);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_STALKID_ATTACK);
             this->unk_21C = 20;
             this->unk_21E = 2;
             this->unk_19D = 6;
@@ -735,7 +735,7 @@ s32 func_80998F9C(EnGs* this, PlayState* play) {
     }
 
     if ((u16)this->unk_19E[0].y < sp3A) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_STONE_ROLLING);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_STONE_ROLLING);
     }
 
     return sp4C;
@@ -843,13 +843,13 @@ s32 func_809995A4(EnGs* this, PlayState* play) {
 
     if (this->unk_19D == 4) {
         Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 60.0f, 3);
-        if (this->actor.bgCheckFlags & (0x10 | 0x8)) {
+        if (this->actor.bgCheckFlags & (BGCHECKFLAG_WALL | BGCHECKFLAG_CEILING)) {
             Vec3f sp54;
 
             sp54.x = this->actor.world.pos.x;
             sp54.y = this->actor.world.pos.y;
             sp54.z = this->actor.world.pos.z;
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_BOMB_EXPLOSION);
+            Actor_PlaySfx(&this->actor, NA_SE_IT_BOMB_EXPLOSION);
             EffectSsBomb2_SpawnLayered(play, &sp54, &bomb2Velocity, &bomb2Accel, 100, 20);
             this->unk_1D4 = 10;
             this->unk_19A |= 8;

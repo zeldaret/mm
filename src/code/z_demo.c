@@ -1,4 +1,3 @@
-#include "prevent_bss_reordering.h"
 #include "global.h"
 #include "z64quake.h"
 #include "z64rumble.h"
@@ -396,9 +395,9 @@ void Cutscene_Command_FadeSequence(PlayState* play, CutsceneContext* csCtx, CsCm
         u8 fadeTimer = cmd->endFrame - cmd->startFrame;
 
         if (cmd->type == 2) {
-            Audio_QueueSeqCmd((fadeTimer << 0x10) | 0x110000FF);
+            SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_FANFARE, fadeTimer);
         } else {
-            Audio_QueueSeqCmd((fadeTimer << 0x10) | NA_BGM_STOP);
+            SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_BGM_MAIN, fadeTimer);
         }
     }
 }
@@ -471,7 +470,7 @@ void func_800EADB0(PlayState* play, CutsceneContext* csCtx, CsCmdBase* cmd) {
                 break;
 
             case 7:
-                seqId = Audio_GetActiveSequence(SEQ_PLAYER_BGM_MAIN);
+                seqId = AudioSeq_GetActiveSeqId(SEQ_PLAYER_BGM_MAIN);
                 break;
 
             case 8:
@@ -492,7 +491,7 @@ void Cutscene_Command_FadeAmbienceSequence(PlayState* play, CutsceneContext* csC
     if (csCtx->frames == cmd->startFrame && csCtx->frames < cmd->endFrame) {
         u8 fadeTimer = cmd->endFrame - cmd->startFrame;
 
-        Audio_QueueSeqCmd((fadeTimer << 0x10) | 0x140000FF);
+        SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_AMBIENCE, fadeTimer);
     }
 }
 
@@ -559,7 +558,7 @@ void Cutscene_TerminatorImpl(PlayState* play, CutsceneContext* csCtx, CsCmdBase*
     Audio_SetCutsceneFlag(false);
     gSaveContext.cutsceneTransitionControl = 1;
 
-    if ((gSaveContext.gameMode != 0) && (csCtx->frames != cmd->startFrame)) {
+    if ((gSaveContext.gameMode != GAMEMODE_NORMAL) && (csCtx->frames != cmd->startFrame)) {
         gSaveContext.hudVisibilityForceButtonAlphasByStatus = true;
     }
 
@@ -568,7 +567,7 @@ void Cutscene_TerminatorImpl(PlayState* play, CutsceneContext* csCtx, CsCmdBase*
         play->nextEntrance = play->csCtx.sceneCsList[play->csCtx.currentCsIndex].nextEntrance;
         gSaveContext.nextCutsceneIndex = 0;
         play->transitionTrigger = TRANS_TRIGGER_START;
-        if (gSaveContext.gameMode != 1) {
+        if (gSaveContext.gameMode != GAMEMODE_TITLE_SCREEN) {
             Scene_SetExitFade(play);
         } else {
             D_801BB12C++;
@@ -1035,7 +1034,7 @@ void Cutscene_Command_Textbox(PlayState* play, CutsceneContext* csCtx, CsCmdText
                         }
 
                         if (cmd->textId1 != 0xFFFF) {
-                            func_80151938(play, cmd->textId1);
+                            Message_ContinueTextbox(play, cmd->textId1);
                             if (cmd->type == CS_TEXTBOX_TYPE_3) {
                                 D_801BB160 = CS_TEXTBOX_TYPE_3;
                                 if (cmd->textId2 != 0xFFFF) {
@@ -1043,7 +1042,7 @@ void Cutscene_Command_Textbox(PlayState* play, CutsceneContext* csCtx, CsCmdText
                                 }
                             }
                         } else {
-                            func_801477B4(play);
+                            Message_CloseTextbox(play);
                             csCtx->frames++;
                         }
                     } else {
@@ -1052,7 +1051,7 @@ void Cutscene_Command_Textbox(PlayState* play, CutsceneContext* csCtx, CsCmdText
                         }
 
                         if (cmd->textId2 != 0xFFFF) {
-                            func_80151938(play, cmd->textId2);
+                            Message_ContinueTextbox(play, cmd->textId2);
                             if (cmd->type == CS_TEXTBOX_TYPE_3) {
                                 D_801BB160 = CS_TEXTBOX_TYPE_3;
                                 if (cmd->textId1 != 0xFFFF) {
@@ -1060,7 +1059,7 @@ void Cutscene_Command_Textbox(PlayState* play, CutsceneContext* csCtx, CsCmdText
                                 }
                             }
                         } else {
-                            func_801477B4(play);
+                            Message_CloseTextbox(play);
                             csCtx->frames++;
                         }
                     }
@@ -1417,7 +1416,7 @@ void func_800EDA04(PlayState* play, CutsceneContext* csCtx) {
         }
 
         gSaveContext.save.cutscene = 0;
-        gSaveContext.gameMode = 0;
+        gSaveContext.gameMode = GAMEMODE_NORMAL;
         ActorCutscene_Stop(0x7F);
         Audio_SetCutsceneFlag(false);
         csCtx->state = CS_STATE_0;
@@ -1470,7 +1469,8 @@ void func_800EDBE0(PlayState* play) {
     SceneTableEntry* sp24;
     s32 temp_v0_3;
 
-    if (((gSaveContext.gameMode == 0) || (gSaveContext.gameMode == 1)) && (gSaveContext.respawnFlag <= 0)) {
+    if (((gSaveContext.gameMode == GAMEMODE_NORMAL) || (gSaveContext.gameMode == GAMEMODE_TITLE_SCREEN)) &&
+        (gSaveContext.respawnFlag <= 0)) {
         sp2A = func_800F21CC();
         if (sp2A != -1) {
             temp_v0_3 = func_800F2138(sp2A);
