@@ -12,8 +12,10 @@ typedef void (*ObjMineActionFunc)(struct ObjMine*, PlayState*);
 #define OBJMINE_GET_PATH_SPEED(thisx) (((thisx)->params >> 8) & 7)
 #define OBJMINE_GET_TYPE(thisx) (((thisx)->params >> 12) & 3)
 
-#define OBJMINE_SET_PARAM0(pathIndex, pathSpeed, type) ((pathIndex) | ((pathSpeed) << 8))
-#define OBJMINE_SET_PARAM12(linkCount, type) ((linkCount) | ((type) << 0xC))
+#define OBJMINE_SET_PARAM(type, linkCount, pathIndex, pathSpeed) (((type) << 0xC) | ((type == OBJMINE_TYPE_PATH) ? ((pathIndex) | ((pathSpeed) << 8)) : (linkCount)))
+#define OBJMINE_PATH_SET_PARAM(pathIndex, pathSpeed) OBJMINE_SET_PARAM(OBJMINE_TYPE_PATH, 0, pathIndex, pathSpeed)
+#define OBJMINE_AIR_SET_PARAM(linkCount) OBJMINE_SET_PARAM(OBJMINE_TYPE_AIR, linkCount, 0, 0)
+#define OBJMINE_WATER_SET_PARAM(linkCount) OBJMINE_SET_PARAM(OBJMINE_TYPE_WATER, linkCount, 0, 0)
 
 #define OBJMINE_CHAIN_MAX 63
 
@@ -37,10 +39,8 @@ typedef struct {
 typedef struct {
     /* 0x00 */ ObjMineMtxF3 basis;
     /* 0x24 */ Vec3f translation; // unused
-    /* 0x30 */ f32 xDiff;
-    /* 0x34 */ f32 zDiff;
-    /* 0x38 */ f32 xVel;
-    /* 0x3C */ f32 zVel;
+    /* 0x30 */ Vec2f displacement;
+    /* 0x38 */ Vec2f velocity;
     /* 0x40 */ f32 restore;
     /* 0x44 */ f32 drag;
     /* 0x48 */ f32 knockback;
@@ -48,14 +48,14 @@ typedef struct {
     /* 0x50 */ f32 swaySize;
     /* 0x54 */ s16 swayPhase;
     /* 0x58 */ f32 swayMax;
-    /* 0x5C */ f32 wallCheckDist;
+    /* 0x5C */ f32 wallCheckDistSq;
     /* 0x60 */ ObjMineAirLink links[OBJMINE_CHAIN_MAX];
 } ObjMineAirChain; // size = 0x15C
 
 typedef struct {
     /* 0x00 */ ObjMineMtxF3 basis;
     /* 0x24 */ Vec3f pos; 
-    /* 0x30 */ Vec3f vel;
+    /* 0x30 */ Vec3f velocity;
     /* 0x3C */ Vec3f accel; 
 } ObjMineWaterLink; // size = 0x48
 
@@ -71,9 +71,8 @@ typedef struct {
     /* 0x28 */ f32 maxY;
     /* 0x2C */ f32 restY;
     /* 0x30 */ f32 restoreY;
-    /* 0x34 */ f32 wallCheckDist;
-    /* 0x38 */ f32 wallEjectX;
-    /* 0x3C */ f32 wallEjectZ;
+    /* 0x34 */ f32 wallCheckDistSq;
+    /* 0x38 */ Vec2f wallEject;
     /* 0x40 */ s8 touchWall;
     /* 0x44 */ ObjMineWaterLink links[OBJMINE_CHAIN_MAX];
 } ObjMineWaterChain; // size = 0x11FC
