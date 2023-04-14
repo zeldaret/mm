@@ -12311,7 +12311,7 @@
     0x80A84698:("D_80A84698","f32","",0x4),
     0x80A8469C:("D_80A8469C","f32","",0x4),
     0x80A846A0:("D_80A846A0","f32","",0x4),
-    0x80A849D0:("D_80A849D0","UNK_TYPE4","",0x4),
+    0x80A849D0:("sLastLinkAccel","Vec3f[]","",0x4),
     0x80A85460:("Obj_Purify_InitVars","UNK_TYPE1","",0x1),
     0x80A85480:("ObjPurifyInfoList","UNK_TYPE1","",0x1),
     0x80A854A0:("D_80A854A0","UNK_TYPE1","",0x1),

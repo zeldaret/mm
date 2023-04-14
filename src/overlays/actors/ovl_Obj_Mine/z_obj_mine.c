@@ -6,7 +6,7 @@
 
 #include "z_obj_mine.h"
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
-#include "assets/objects/object_ny/object_ny.h"
+#include "objects/object_ny/object_ny.h"
 
 #define FLAGS 0x00000000
 
@@ -482,9 +482,11 @@ void ObjMine_Water_WallCheck(ObjMine* this, PlayState* play) {
 }
 
 #ifdef NON_MATCHING
+// https://decomp.me/scratch/BW51G
 // Probably equivalent, but nightmare loop unrolls. The tension section also has weird comparisons. It should be
 // equivalent to what's written, but it seems the actual code comparisons were implemented differently. ASM suggests
 // multiple index variables were used at once.
+
 void ObjMine_Water_ApplyForces(ObjMine* this) {
     static Vec3f sLastLinkAccel[OBJMINE_CHAIN_MAX + 1];
     ObjMineWaterChain* waterChain = &this->chain.water;
@@ -492,7 +494,7 @@ void ObjMine_Water_ApplyForces(ObjMine* this) {
     s32 i;
     s16 swayPhase;
     s32 linkCount = OBJMINE_GET_LINK_COUNT(&this->actor);
-    f32 inverseCount = 1.0f / (f32)linkCount;
+    f32 inverseCount = 1.0f / linkCount;
     f32 restoreY = (waterChain->links[linkCount - 1].pos.y - waterChain->restY) * waterChain->restoreY;
     Vec3f tension;
     f32 scaledKnockback;
@@ -570,7 +572,7 @@ void ObjMine_Water_ApplyForces(ObjMine* this) {
     }
 }
 #else
-Vec3f D_80A849D0[0x40];
+Vec3f sLastLinkAccel[OBJMINE_CHAIN_MAX + 1];
 void ObjMine_Water_ApplyForces(ObjMine* this);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Mine/ObjMine_Water_ApplyForces.s")
 #endif
