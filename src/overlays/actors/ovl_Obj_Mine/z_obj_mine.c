@@ -138,9 +138,9 @@ s32 ObjMine_GetUnitVec3fNorm(Vec3f* src, Vec3f* dst, f32* norm, f32* invNorm) {
 }
 
 void ObjMine_Path_SpawnBomb(ObjMine* this, PlayState* play) {
-    EnBom* bomb =
-        (EnBom*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOM, this->actor.world.pos.x,
-                            this->actor.world.pos.y - BOMB_SPAWN_OFFSET, this->actor.world.pos.z, 0, 0, 0, BOMB_TYPE_BODY);
+    EnBom* bomb = (EnBom*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOM, this->actor.world.pos.x,
+                                      this->actor.world.pos.y - BOMB_SPAWN_OFFSET, this->actor.world.pos.z, 0, 0, 0,
+                                      BOMB_TYPE_BODY);
 
     if (bomb != NULL) {
         bomb->timer = 0;
