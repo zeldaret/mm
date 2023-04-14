@@ -4,6 +4,7 @@
  * Description: Sakon's Hideout Objects (Sun's Mask, doors, etc)
  */
 
+#include "prevent_bss_reordering.h"
 #include "z_obj_nozoki.h"
 #include "objects/object_secom_obj/object_secom_obj.h"
 
@@ -199,7 +200,7 @@ void func_80BA27C4(ObjNozoki* this, PlayState* play) {
 void func_80BA28DC(ObjNozoki* this, PlayState* play) {
     if (this->unk_15E != 0) {
         if (DECR(this->unk_15E) == 0) {
-            Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_SLIDE_DOOR_OPEN);
+            Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_SLIDE_DOOR_OPEN);
         }
         return;
     }
@@ -231,7 +232,7 @@ void func_80BA28DC(ObjNozoki* this, PlayState* play) {
             } else if (ActorCutscene_GetCurrentIndex() != this->unk_15F) {
                 this->unk_15F = cs;
                 this->dyna.actor.params &= ~OBJNOZOKI_400;
-                Audio_QueueSeqCmd(0x881A);
+                SEQCMD_PLAY_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 0, NA_BGM_ENEMY | 0x800 | SEQ_FLAG_ASYNC);
             }
             return;
         }
@@ -239,7 +240,7 @@ void func_80BA28DC(ObjNozoki* this, PlayState* play) {
 
     ObjNozoki_SetupAction(this, func_80BA2AB4);
     this->dyna.actor.velocity.y = 0.0f;
-    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_SLIDE_DOOR_CLOSE);
+    Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_SLIDE_DOOR_CLOSE);
 }
 
 void func_80BA2AB4(ObjNozoki* this, PlayState* play) {
@@ -314,17 +315,17 @@ void func_80BA2C94(ObjNozoki* this, PlayState* play) {
             Flags_UnsetSwitch(play, this->dyna.actor.world.rot.x);
         }
 
-        Math_StepToF(&this->dyna.actor.speedXZ, D_80BA34E4[this->unk_15D], 0.1f);
+        Math_StepToF(&this->dyna.actor.speed, D_80BA34E4[this->unk_15D], 0.1f);
 
         if ((play->actorCtx.flags & ACTORCTX_FLAG_6) || (play->actorCtx.flags & ACTORCTX_FLAG_5)) {
             temp_f0 = 0.5f;
         } else {
-            temp_f0 = this->dyna.actor.speedXZ;
+            temp_f0 = this->dyna.actor.speed;
         }
 
         sp34 = Math_Vec3f_StepToXZ(&this->dyna.actor.world.pos, &this->dyna.actor.home.pos, temp_f0);
 
-        D_80BA36B8 += this->dyna.actor.speedXZ;
+        D_80BA36B8 += this->dyna.actor.speed;
 
         if (play->actorCtx.flags & ACTORCTX_FLAG_6) {
             if (sp34 <= 5.0f) {
@@ -355,14 +356,14 @@ void func_80BA2C94(ObjNozoki* this, PlayState* play) {
         }
     }
 
-    this->dyna.actor.velocity.x += this->dyna.actor.speedXZ * 0.66f;
+    this->dyna.actor.velocity.x += this->dyna.actor.speed * 0.66f;
     if (this->dyna.actor.velocity.x >= 0x10000) {
         this->dyna.actor.velocity.x -= 0x10000;
     }
 
     play->roomCtx.unk7A[0] = this->dyna.actor.velocity.x;
 
-    func_8019FAD8(&gSfxDefaultPos, NA_SE_EV_SECOM_CONVEYOR - SFX_FLAG, this->dyna.actor.speedXZ);
+    func_8019FAD8(&gSfxDefaultPos, NA_SE_EV_SECOM_CONVEYOR - SFX_FLAG, this->dyna.actor.speed);
 }
 
 void func_80BA3044(ObjNozoki* this, PlayState* play) {
@@ -393,10 +394,10 @@ void func_80BA311C(ObjNozoki* this, PlayState* play) {
     } else if (this->unk_15D == 1) {
         if (D_80BA36B8 > 40.0f) {
             this->unk_15D = 2;
-            Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_PL_SIT_ON_HORSE);
+            Actor_PlaySfx(&this->dyna.actor, NA_SE_PL_SIT_ON_HORSE);
         } else if (this->unk_15E != 0) {
             if (DECR(this->unk_15E) == 0) {
-                Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_CONVEYOR_SHUTTER_OPEN);
+                Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_CONVEYOR_SHUTTER_OPEN);
             }
         } else {
             Math_StepToF(&this->dyna.actor.world.pos.y, this->dyna.actor.home.pos.y + 50.0f, 4.0f);

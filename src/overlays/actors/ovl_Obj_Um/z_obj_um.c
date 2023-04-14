@@ -222,7 +222,7 @@ s32 ObjUm_InitBandits(ObjUm* this, PlayState* play) {
     EnHorse* bandit2;
 
     spawnPoints = Lib_SegmentedToVirtual(path->points);
-    Audio_QueueSeqCmd(0x8000 | NA_BGM_CHASE);
+    SEQCMD_PLAY_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 0, NA_BGM_CHASE | SEQ_FLAG_ASYNC);
 
     bandit1 = (EnHorse*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_HORSE, spawnPoints[0].x, spawnPoints[0].y,
                                     spawnPoints[0].z, 0, this->dyna.actor.shape.rot.y, 0,
@@ -410,11 +410,11 @@ s32 func_80B783E0(ObjUm* this, PlayState* play, s32 banditIndex, EnHorse* bandit
     }
 
     bandit->actor.world.rot.y = Math_Vec3f_Yaw(&bandit->actor.world.pos, &sp50);
-    bandit->actor.speedXZ = 45.0f;
+    bandit->actor.speed = 45.0f;
 
-    sp3C = Math_CosS(bandit->actor.world.rot.x) * bandit->actor.speedXZ;
+    sp3C = Math_CosS(bandit->actor.world.rot.x) * bandit->actor.speed;
     bandit->actor.velocity.x = Math_SinS(bandit->actor.world.rot.y) * sp3C;
-    bandit->actor.velocity.y = Math_SinS(bandit->actor.world.rot.x) * bandit->actor.speedXZ;
+    bandit->actor.velocity.y = Math_SinS(bandit->actor.world.rot.x) * bandit->actor.speed;
     bandit->actor.velocity.z = Math_CosS(bandit->actor.world.rot.y) * sp3C;
 
     bandit->banditPosition.x =
@@ -535,12 +535,12 @@ s32 func_80B78A54(ObjUm* this, PlayState* play, s32 arg2, EnHorse* arg3, EnHorse
             arg3->unk_564 = 1;
             if (arg3->rider != NULL) {
                 arg3->rider->actor.colorFilterTimer = 20;
-                Actor_SetColorFilter(&arg3->rider->actor, 0x4000, 0xFF, 0, 40);
+                Actor_SetColorFilter(&arg3->rider->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 40);
             }
         } else {
             if (arg3->rider != NULL) {
                 arg3->rider->actor.colorFilterTimer = 20;
-                Actor_SetColorFilter(&arg3->rider->actor, 0x4000, 0xFF, 0, 40);
+                Actor_SetColorFilter(&arg3->rider->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 40);
             }
             Audio_PlaySfxAtPos(&arg3->actor.projectedPos, NA_SE_EN_CUTBODY);
         }
@@ -937,7 +937,7 @@ s32 func_80B7984C(PlayState* play, ObjUm* this, s32 arg2, s32* arg3) {
         return 0;
     }
     if (*arg3 == 3) {
-        func_80151938(play, this->dyna.actor.textId);
+        Message_ContinueTextbox(play, this->dyna.actor.textId);
         *arg3 = 1;
         return 0;
     }
@@ -1122,9 +1122,9 @@ ObjUmPathState ObjUm_UpdatePath(ObjUm* this, PlayState* play) {
     }
 
     if (this->animIndex == OBJ_UM_ANIM_TROT) {
-        this->dyna.actor.speedXZ = 4.0f;
+        this->dyna.actor.speed = 4.0f;
     } else if (this->animIndex == OBJ_UM_ANIM_GALLOP) {
-        this->dyna.actor.speedXZ = 8.0f;
+        this->dyna.actor.speed = 8.0f;
     }
 
     return sp3C;
@@ -1656,9 +1656,9 @@ void ObjUm_ChangeAnim(ObjUm* this, PlayState* play, ObjUmAnimation animIndex) {
     }
 
     if (animIndex == OBJ_UM_ANIM_TROT) {
-        animPlaybackSpeed = this->dyna.actor.speedXZ * 0.25f;
+        animPlaybackSpeed = this->dyna.actor.speed * 0.25f;
     } else if (animIndex == OBJ_UM_ANIM_GALLOP) {
-        animPlaybackSpeed = this->dyna.actor.speedXZ * 0.2f;
+        animPlaybackSpeed = this->dyna.actor.speed * 0.2f;
     } else if (animIndex == OBJ_UM_ANIM_IDLE) {
         animPlaybackSpeed = 1.0f;
     }
@@ -1703,8 +1703,8 @@ void ObjUm_ChangeAnim(ObjUm* this, PlayState* play, ObjUmAnimation animIndex) {
     if (this->wheelRot / 0x199A != this->unk_420) {
         this->unk_420 = this->wheelRot / 0x199A;
         //! FAKE
-        if (!&sUmAnims[0]) {}
-        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_CART_WHEEL);
+        if (sUmAnims[0].doesMove) {}
+        Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_CART_WHEEL);
     }
 }
 

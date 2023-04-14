@@ -14,6 +14,4 @@ typedef struct {
     /* 0x30 */ s32 life;
 } EffectSsDeadDbInitParams; // size = 0x34
 
-extern const EffectSsInit Effect_Ss_Dead_Db_InitVars;
-
 #endif

@@ -81,7 +81,7 @@ void EnNimotsu_Update(Actor* thisx, PlayState* play) {
 
     Actor_MoveWithGravity(&this->actor);
 
-    if (!(this->dustDone & 1) && (this->actor.bgCheckFlags & 1)) {
+    if (!(this->dustDone & 1) && (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
         if (DECR(this->timer) == 0) {
             this->dustDone |= 1;
         }

@@ -129,10 +129,10 @@ static InitChainEntry sInitChain[] = {
 };
 
 void func_80BECBE0(EnAkindonuts* this, s16 arg1) {
-    f32 sp24 = Math_CosS(this->actor.world.rot.x) * this->actor.speedXZ;
+    f32 sp24 = Math_CosS(this->actor.world.rot.x) * this->actor.speed;
 
     this->actor.velocity.x = Math_SinS(this->actor.world.rot.y) * sp24;
-    this->actor.velocity.y = Math_SinS(this->actor.world.rot.x) * this->actor.speedXZ;
+    this->actor.velocity.y = Math_SinS(this->actor.world.rot.x) * this->actor.speed;
     this->actor.velocity.z = Math_CosS(this->actor.world.rot.y) * sp24;
 
     if (arg1) {
@@ -1084,10 +1084,10 @@ void func_80BEE73C(EnAkindonuts* this, PlayState* play) {
             this->unk_33C = player->actor.textId;
             this->actionFunc = func_80BEF18C;
         }
-        func_801477B4(play);
+        Message_CloseTextbox(play);
     } else if (itemAction <= PLAYER_IA_MINUS1) {
         this->unk_33C = D_80BF04AC[params];
-        func_80151938(play, this->unk_33C);
+        Message_ContinueTextbox(play, this->unk_33C);
         this->actionFunc = func_80BEF18C;
     }
 }
@@ -1173,7 +1173,7 @@ void func_80BEEB20(EnAkindonuts* this, PlayState* play) {
         }
 
         if (phi_v0) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_AKINDONUTS_HIDE);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_AKINDONUTS_HIDE);
             this->actionFunc = func_80BEEDC0;
             this->unk_338 = 3;
             this->collider.dim.height = 64;
@@ -1186,12 +1186,12 @@ void func_80BEEB20(EnAkindonuts* this, PlayState* play) {
         if ((this->unk_338 == 4) || (this->unk_338 == 18)) {
             this->unk_338 = 17;
             this->collider.dim.height = 0;
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_DOWN);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_DOWN);
             SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 17);
         } else if (this->unk_338 == 2) {
             this->unk_338 = 16;
             this->collider.dim.height = 32;
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_UP);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_UP);
             SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 16);
         } else if (this->unk_338 == 17) {
             phi_v0 = DECR(this->unk_33A);
@@ -1330,19 +1330,19 @@ void func_80BEF360(EnAkindonuts* this, PlayState* play) {
             this->unk_32C &= ~0x40;
             this->actionFunc = func_80BEF450;
         } else {
-            Actor_PickUp(&this->actor, play, func_80BED034(this), 300.0f, 300.0f);
+            Actor_OfferGetItem(&this->actor, play, func_80BED034(this), 300.0f, 300.0f);
         }
     } else if (Actor_HasParent(&this->actor, play)) {
         this->actor.parent = NULL;
         this->actionFunc = func_80BEF450;
     } else {
-        Actor_PickUp(&this->actor, play, func_80BECFBC(this), 300.0f, 300.0f);
+        Actor_OfferGetItem(&this->actor, play, func_80BECFBC(this), 300.0f, 300.0f);
     }
 }
 
 void func_80BEF450(EnAkindonuts* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_DONE) && Message_ShouldAdvance(play)) {
-        func_800B85E0(&this->actor, play, 400.0f, -1);
+        func_800B85E0(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
         this->actionFunc = func_80BEF4B8;
     }
 }
@@ -1352,7 +1352,7 @@ void func_80BEF4B8(EnAkindonuts* this, PlayState* play) {
         this->unk_2DC(this, play);
         this->actionFunc = func_80BEEFA8;
     } else {
-        func_800B85E0(&this->actor, play, 400.0f, -1);
+        func_800B85E0(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
     }
 }
 
@@ -1433,7 +1433,7 @@ void func_80BEF518(EnAkindonuts* this, PlayState* play) {
         this->unk_33E = 3;
         this->unk_338 = 19;
         SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->unk_338);
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_DOWN);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_DOWN);
         this->unk_32C &= ~2;
         this->unk_32C |= 0x80;
         this->unk_358 = this->actor.world.pos.y;
@@ -1492,7 +1492,7 @@ void func_80BEF83C(EnAkindonuts* this, PlayState* play) {
         this->unk_34C = 0.3f;
         this->unk_338 = 9;
         SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->unk_338);
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_AKINDONUTS_HIDE);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_AKINDONUTS_HIDE);
         this->actionFunc = func_80BEF9F0;
     }
 }
@@ -1529,7 +1529,7 @@ void func_80BEFAF0(EnAkindonuts* this, PlayState* play) {
 
     if (this->path != NULL) {
         sp34 = func_80BECEAC(this->path, this->unk_334, &this->actor.world.pos, &sp38);
-        if (this->actor.bgCheckFlags & 0x8) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
             sp38.y = this->actor.wallYaw;
         }
 
@@ -1561,9 +1561,9 @@ void func_80BEFAF0(EnAkindonuts* this, PlayState* play) {
         if (this->unk_334 >= 3) {
             sp32 = true;
         }
-        Math_ApproachF(&this->actor.speedXZ, 1.5f, 0.2f, 1.0f);
+        Math_ApproachF(&this->actor.speed, 1.5f, 0.2f, 1.0f);
     } else {
-        Math_ApproachF(&this->actor.speedXZ, 2.0f, 0.2f, 1.0f);
+        Math_ApproachF(&this->actor.speed, 2.0f, 0.2f, 1.0f);
     }
 
     func_80BECBE0(this, sp32);

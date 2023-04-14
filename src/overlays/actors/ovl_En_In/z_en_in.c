@@ -170,11 +170,11 @@ s32 func_808F3178(EnIn* this, PlayState* play) {
 
     this->unk260 = tmp = SubS_IsFloorAbove(play, &this->unk248, -6.0f);
     if (this->unk260 != 0 && prevUnk260 == 0 && tmp) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_PL_WALK_CONCRETE);
+        Actor_PlaySfx(&this->actor, NA_SE_PL_WALK_CONCRETE);
     }
     this->unk261 = tmp = SubS_IsFloorAbove(play, &this->unk254, -6.0f);
     if (this->unk261 != 0 && prevUnk261 == 0 && tmp) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_PL_WALK_CONCRETE);
+        Actor_PlaySfx(&this->actor, NA_SE_PL_WALK_CONCRETE);
     }
 
     return 0;
@@ -214,7 +214,7 @@ s32 func_808F3334(EnIn* this, PlayState* play) {
         if (this->colliderJntSph.base.atFlags & AT_BOUNCED) {
             return 0;
         }
-        Actor_PlaySfxAtPos(&player->actor, NA_SE_PL_BODY_HIT);
+        Actor_PlaySfx(&player->actor, NA_SE_PL_BODY_HIT);
         func_800B8D98(play, &this->actor, 3.0f, this->actor.yawTowardsPlayer, 6.0f);
     }
     return 1;
@@ -287,8 +287,8 @@ void func_808F3690(EnIn* this, PlayState* play) {
     s16 sp36;
     Vec3f sp28;
 
-    Math_SmoothStepToF(&this->actor.speedXZ, 1.0f, 0.4f, 1000.0f, 0.0f);
-    sp36 = this->actor.speedXZ * 400.0f;
+    Math_SmoothStepToF(&this->actor.speed, 1.0f, 0.4f, 1000.0f, 0.0f);
+    sp36 = this->actor.speed * 400.0f;
     if (SubS_CopyPointFromPath(this->path, this->unk244, &sp28) && SubS_MoveActorToPoint(&this->actor, &sp28, sp36)) {
         this->unk244++;
         if (this->unk244 >= this->path->count) {
@@ -313,7 +313,7 @@ void func_808F374C(EnIn* this, PlayState* play) {
         }
     }
     if (this->skelAnime.animation == &object_in_Anim_0198A8 && Animation_OnFrame(&this->skelAnime, 20.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_VO_IN_CRY_0);
+        Actor_PlaySfx(&this->actor, NA_SE_VO_IN_CRY_0);
     }
     if (SkelAnime_Update(&this->skelAnime)) {
         this->unk488 %= ARRAY_COUNT(sAnimations);
@@ -376,9 +376,9 @@ void func_808F39DC(EnIn* this, PlayState* play) {
     this->actor.textId = textId;
     this->actionFunc = func_808F395C;
     if (this->unk4B0 == WEEKEVENTREG_RACE_FLAG_2) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_VO_IN_LOST);
+        Actor_PlaySfx(&this->actor, NA_SE_VO_IN_LOST);
     } else {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_VO_IN_JOY0);
+        Actor_PlaySfx(&this->actor, NA_SE_VO_IN_JOY0);
     }
 }
 
@@ -402,7 +402,7 @@ void func_808F3B40(EnIn* this, PlayState* play) {
         textId = gSaveContext.save.day != 3 ? 0x3481 : 0x34A4;
         this->actor.textId = textId;
     } else {
-        Actor_PickUp(&this->actor, play, GI_MILK, 500.0f, 100.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_MILK, 500.0f, 100.0f);
     }
 }
 
@@ -426,7 +426,7 @@ void func_808F3C40(EnIn* this, PlayState* play) {
         textId = gSaveContext.save.day != 3 ? 0x346A : 0x3492;
         this->actor.textId = textId;
     } else {
-        Actor_PickUp(&this->actor, play, GI_MILK, 500.0f, 100.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_MILK, 500.0f, 100.0f);
     }
 }
 
@@ -450,7 +450,7 @@ void func_808F3D40(EnIn* this, PlayState* play) {
         this->actor.textId = textId;
         this->actor.flags |= ACTOR_FLAG_10000;
     } else {
-        Actor_PickUp(&this->actor, play, GI_MASK_GARO, 500.0f, 100.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_MASK_GARO, 500.0f, 100.0f);
     }
 }
 
@@ -750,7 +750,7 @@ s32 func_808F4414(PlayState* play, EnIn* this, s32 arg2) {
                         if (gSaveContext.save.playerData.rupees >= play->msgCtx.unk1206C) {
                             if (Inventory_HasEmptyBottle()) {
                                 this->actionFunc = func_808F3C40;
-                                Actor_PickUp(&this->actor, play, GI_MILK, 500.0f, 100.0f);
+                                Actor_OfferGetItem(&this->actor, play, GI_MILK, 500.0f, 100.0f);
                                 Rupees_ChangeBy(-play->msgCtx.unk1206C);
                                 ret = true;
                             } else {
@@ -896,7 +896,7 @@ s32 func_808F4414(PlayState* play, EnIn* this, s32 arg2) {
                     func_808F35D8(this, play);
                     if (Inventory_HasEmptyBottle()) {
                         this->actionFunc = func_808F3B40;
-                        Actor_PickUp(&this->actor, play, GI_MILK, 500.0f, 100.0f);
+                        Actor_OfferGetItem(&this->actor, play, GI_MILK, 500.0f, 100.0f);
                         ret = true;
                     } else {
                         Actor_ContinueText(play, &this->actor, 0x347F);
@@ -920,7 +920,7 @@ s32 func_808F4414(PlayState* play, EnIn* this, s32 arg2) {
                     break;
                 case 0x347C:
                     this->actionFunc = func_808F3D40;
-                    Actor_PickUp(&this->actor, play, GI_MASK_GARO, 500.0f, 100.0f);
+                    Actor_OfferGetItem(&this->actor, play, GI_MASK_GARO, 500.0f, 100.0f);
                     func_808F35D8(this, play);
                     ret = true;
                     break;
@@ -1002,7 +1002,7 @@ s32 func_808F4414(PlayState* play, EnIn* this, s32 arg2) {
                         if (gSaveContext.save.playerData.rupees >= play->msgCtx.unk1206C) {
                             if (Inventory_HasEmptyBottle()) {
                                 this->actionFunc = func_808F3C40;
-                                Actor_PickUp(&this->actor, play, GI_MILK, 500.0f, 100.0f);
+                                Actor_OfferGetItem(&this->actor, play, GI_MILK, 500.0f, 100.0f);
                                 Rupees_ChangeBy(-play->msgCtx.unk1206C);
                                 ret = true;
                             } else {
@@ -1085,7 +1085,7 @@ s32 func_808F4414(PlayState* play, EnIn* this, s32 arg2) {
                     break;
                 case 0x349F:
                     this->actionFunc = func_808F3D40;
-                    Actor_PickUp(&this->actor, play, GI_MASK_GARO, 500.0f, 100.0f);
+                    Actor_OfferGetItem(&this->actor, play, GI_MASK_GARO, 500.0f, 100.0f);
                     func_808F35D8(this, play);
                     ret = true;
                     break;
@@ -1100,7 +1100,7 @@ s32 func_808F4414(PlayState* play, EnIn* this, s32 arg2) {
                     func_808F35D8(this, play);
                     if (Inventory_HasEmptyBottle()) {
                         this->actionFunc = func_808F3B40;
-                        Actor_PickUp(&this->actor, play, GI_MILK, 500.0f, 100.0f);
+                        Actor_OfferGetItem(&this->actor, play, GI_MILK, 500.0f, 100.0f);
                         ret = true;
                     } else {
                         Actor_ContinueText(play, &this->actor, 0x34A2);
@@ -1188,7 +1188,7 @@ s32 func_808F5674(PlayState* play, EnIn* this, s32 arg2) {
         case TEXT_STATE_CHOICE:
         case TEXT_STATE_5:
             if (Message_ShouldAdvance(play) && func_808F4414(play, this, arg2)) {
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 ret = true;
             }
             break;
@@ -1210,7 +1210,7 @@ s32 func_808F5728(PlayState* play, EnIn* this, s32 arg2, s32* arg3) {
         return 0;
     }
     if (*arg3 == 3) {
-        func_80151938(play, this->actor.textId);
+        Message_ContinueTextbox(play, this->actor.textId);
         *arg3 = 1;
         return 0;
     }
@@ -1335,9 +1335,9 @@ void func_808F5C98(EnIn* this, PlayState* play) {
     }
     if (this->unk4A8 == 2) {
         if (this->unk4B0 == WEEKEVENTREG_RACE_FLAG_2) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_VO_IN_LOST);
+            Actor_PlaySfx(&this->actor, NA_SE_VO_IN_LOST);
         } else {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_VO_IN_JOY0);
+            Actor_PlaySfx(&this->actor, NA_SE_VO_IN_JOY0);
         }
         this->unk4A8 = 3;
     } else if (this->unk4A8 < 3) {

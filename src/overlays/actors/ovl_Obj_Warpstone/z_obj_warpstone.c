@@ -100,7 +100,7 @@ s32 ObjWarpstone_BeginOpeningCutscene(ObjWarpstone* this, PlayState* play) {
     if (this->dyna.actor.cutscene < 0 || ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
         ObjWarpstone_SetupAction(this, ObjWarpstone_PlayOpeningCutscene);
-        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_OWL_WARP_SWITCH_ON);
+        Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_OWL_WARP_SWITCH_ON);
     } else {
         ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
     }
@@ -146,7 +146,7 @@ void ObjWarpstone_Update(Actor* thisx, PlayState* play) {
                 play->msgCtx.unk120D4 = 0;
                 gSaveContext.save.owlSaveLocation = OBJ_WARPSTONE_GET_ID(&this->dyna.actor);
             } else {
-                func_801477B4(play);
+                Message_CloseTextbox(play);
             }
         }
     } else if (Actor_ProcessTalkRequest(&this->dyna.actor, &play->state)) {

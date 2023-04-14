@@ -17,11 +17,12 @@ void EnBom_Destroy(Actor* thisx, PlayState* play);
 void EnBom_Update(Actor* thisx, PlayState* play);
 void EnBom_Draw(Actor* thisx, PlayState* play);
 
-void func_80871058(EnBom* this, PlayState* play);
-void func_808714D4(EnBom* this, PlayState* play);
+void EnBom_Move(EnBom* this, PlayState* play);
+void EnBom_WaitForRelease(EnBom* this, PlayState* play);
+
 void func_80872648(PlayState* play, Vec3f* arg1);
 void func_808726DC(PlayState* play, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3, s32 arg4);
-void func_80872BC0(PlayState* play, s32 arg1);
+void EnBom_DrawKeg(PlayState* play, s32 arg1);
 
 typedef struct {
     /* 0x00 */ Vec3f pos;
@@ -30,7 +31,7 @@ typedef struct {
     /* 0x1A */ s16 rotX;
 } PowderKegFuseSegment; // size = 0x1C
 
-static PowderKegFuseSegment sPowderKegFuseSegments[16];
+PowderKegFuseSegment sPowderKegFuseSegments[16];
 
 ActorInit En_Bom_InitVars = {
     ACTOR_EN_BOM,
@@ -173,11 +174,11 @@ void EnBom_Init(Actor* thisx, PlayState* play) {
     this->actor.flags |= ACTOR_FLAG_100000;
 
     if (Actor_HasParent(&this->actor, play)) {
-        this->actionFunc = func_808714D4;
+        this->actionFunc = EnBom_WaitForRelease;
         this->actor.room = -1;
         Actor_SetScale(&this->actor, enBomScales[this->isPowderKeg]);
     } else {
-        this->actionFunc = func_80871058;
+        this->actionFunc = EnBom_Move;
         gSaveContext.powderKegTimer = 0;
     }
 }
@@ -192,24 +193,26 @@ void EnBom_Destroy(Actor* thisx, PlayState* play) {
     }
 }
 
-void func_80871058(EnBom* this, PlayState* play) {
+void EnBom_Move(EnBom* this, PlayState* play) {
     static Vec3f D_80872E68[] = {
         { 2.0f, -6.0f, -0.3f },
         { 1.5f, -5.0f, -0.6f },
         { 0.2f, -6.0f, -0.1f },
     };
 
+    // if bomb has a parent actor, the bomb hasnt been released yet
     if (Actor_HasParent(&this->actor, play)) {
-        this->actionFunc = func_808714D4;
+        this->actionFunc = EnBom_WaitForRelease;
         this->actor.room = -1;
         return;
     }
 
-    if ((this->actor.velocity.y > 0.0f) && (this->actor.bgCheckFlags & 0x10)) {
+    if ((this->actor.velocity.y > 0.0f) && (this->actor.bgCheckFlags & BGCHECKFLAG_CEILING)) {
         this->actor.velocity.y = -this->actor.velocity.y;
     }
 
-    if ((this->actor.speedXZ != 0.0f) && (this->actor.bgCheckFlags & 8)) {
+    // rebound bomb off the wall it hits
+    if ((this->actor.speed != 0.0f) && (this->actor.bgCheckFlags & BGCHECKFLAG_WALL)) {
         s16 yDiff = BINANG_SUB(this->actor.wallYaw, this->actor.world.rot.y);
 
         if (ABS_ALT(yDiff) > 0x4000) {
@@ -217,14 +220,14 @@ void func_80871058(EnBom* this, PlayState* play) {
                 BINANG_SUB(this->actor.wallYaw - this->actor.world.rot.y + this->actor.wallYaw, 0x8000);
         }
 
-        Actor_PlaySfxAtPos(&this->actor, this->isPowderKeg ? NA_SE_EV_PUT_DOWN_WOODBOX : NA_SE_EV_BOMB_BOUND);
+        Actor_PlaySfx(&this->actor, this->isPowderKeg ? NA_SE_EV_PUT_DOWN_WOODBOX : NA_SE_EV_BOMB_BOUND);
         Actor_MoveWithGravity(&this->actor);
-        this->actor.speedXZ *= 0.7f;
-        this->actor.bgCheckFlags &= ~8;
+        this->actor.speed *= 0.7f;
+        this->actor.bgCheckFlags &= ~BGCHECKFLAG_WALL;
     }
 
-    if (!(this->actor.bgCheckFlags & 1)) {
-        Math_StepToF(&this->actor.speedXZ, 0.0f, 0.08f);
+    if (!(this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
+        Math_StepToF(&this->actor.speed, 0.0f, 0.08f);
     } else {
         Vec3f* sp58;
         u32 sp54 = func_800C99D4(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
@@ -251,64 +254,65 @@ void func_80871058(EnBom* this, PlayState* play) {
             Math_ApproachF(&this->actor.shape.yOffset, 700.0f, 1.0f, 700.0f);
         }
 
-        sp40 = Math_SinS(this->actor.world.rot.y) * this->actor.speedXZ;
-        sp3C = Math_CosS(this->actor.world.rot.y) * this->actor.speedXZ;
+        sp40 = Math_SinS(this->actor.world.rot.y) * this->actor.speed;
+        sp3C = Math_CosS(this->actor.world.rot.y) * this->actor.speed;
         Actor_GetSlopeDirection(this->actor.floorPoly, &slopeNormal, &downwardSlopeYaw);
 
         sp40 += 3.0f * slopeNormal.x;
         sp3C += 3.0f * slopeNormal.z;
         sp38 = sqrtf(SQ(sp40) + SQ(sp3C));
 
-        if ((sp38 < this->actor.speedXZ) ||
+        if ((sp38 < this->actor.speed) ||
             (SurfaceType_GetSlope(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId) == 1)) {
             if (sp38 > 16.0f) {
-                this->actor.speedXZ = 16.0f;
+                this->actor.speed = 16.0f;
             } else {
-                this->actor.speedXZ = sp38;
+                this->actor.speed = sp38;
             }
             this->actor.world.rot.y = Math_Atan2S_XY(sp3C, sp40);
         }
 
-        if (!Math_StepToF(&this->actor.speedXZ, 0.0f, sp58->x)) {
+        if (!Math_StepToF(&this->actor.speed, 0.0f, sp58->x)) {
             s16 temp = this->actor.world.rot.y;
             s32 pad;
 
             if (ABS_ALT(BINANG_SUB(this->actor.world.rot.y, this->actor.shape.rot.y)) > 0x4000) {
                 temp = BINANG_ROT180(temp);
             }
-            Math_ScaledStepToS(&this->actor.shape.rot.y, temp, this->actor.speedXZ * 100.0f);
-            this->unk_1FA += (s16)(this->actor.speedXZ * 800.0f);
+            Math_ScaledStepToS(&this->actor.shape.rot.y, temp, this->actor.speed * 100.0f);
+            this->unk_1FA += (s16)(this->actor.speed * 800.0f);
         }
 
-        if (this->actor.bgCheckFlags & 2) {
-            Actor_PlaySfxAtPos(&this->actor, this->isPowderKeg ? NA_SE_EV_TRE_BOX_BOUND : NA_SE_EV_BOMB_BOUND);
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND_TOUCH) {
+            Actor_PlaySfx(&this->actor, this->isPowderKeg ? NA_SE_EV_TRE_BOX_BOUND : NA_SE_EV_BOMB_BOUND);
             if (this->actor.velocity.y < sp58->y) {
                 if ((sp54 == 4) || (sp54 == 14) || (sp54 == 15)) {
                     this->actor.velocity.y = 0.0f;
                 } else {
                     this->actor.velocity.y = this->actor.velocity.y * sp58->z;
                 }
-                this->actor.bgCheckFlags &= ~1;
+                this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND;
             }
         } else if (this->timer >= 4) {
-            Actor_LiftActor(&this->actor, play);
+            Actor_OfferCarry(&this->actor, play);
         }
     }
 
     Actor_MoveWithGravity(&this->actor);
 }
 
-void func_808714D4(EnBom* this, PlayState* play) {
+void EnBom_WaitForRelease(EnBom* this, PlayState* play) {
+    // if parent is NULL bomb has been released
     if (Actor_HasNoParent(&this->actor, play)) {
-        this->actionFunc = func_80871058;
+        this->actionFunc = EnBom_Move;
         this->actor.room = play->roomCtx.curRoom.num;
         this->actor.flags &= ~ACTOR_FLAG_100000;
-        this->actor.bgCheckFlags &= ~1;
+        this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND;
         Math_Vec3s_ToVec3f(&this->actor.prevPos, &this->actor.home.rot);
         if (this->isPowderKeg) {
             gSaveContext.powderKegTimer = 0;
         }
-        func_80871058(this, play);
+        EnBom_Move(this, play);
     } else {
         Math_Vec3f_ToVec3s(&this->actor.home.rot, &this->actor.parent->world.pos);
         if (this->isPowderKeg) {
@@ -318,7 +322,7 @@ void func_808714D4(EnBom* this, PlayState* play) {
     Math_ScaledStepToS(&this->unk_1FA, 0, 2000);
 }
 
-void func_808715B8(EnBom* this, PlayState* play) {
+void EnBom_Explode(EnBom* this, PlayState* play) {
     static s16 D_80872E8C[] = { 100, 200 };
     static Color_RGBA8 D_80872E90 = { 185, 140, 70, 255 };
     static Color_RGBA8 D_80872E94 = { 255, 255, 255, 255 };
@@ -347,7 +351,7 @@ void func_808715B8(EnBom* this, PlayState* play) {
         this->collider2.base.atFlags &= ~OC1_TYPE_1;
     }
 
-    if (this->actor.params == ENBOM_1) {
+    if (this->actor.params == BOMB_TYPE_EXPLOSION) {
         CollisionCheck_SetAT(play, &play->colChkCtx, &this->collider2.base);
     }
 
@@ -423,12 +427,12 @@ static s16 D_80872E98[] = { 3, 5 };
 static s16 D_80872E9C[] = { 10, 15 };
 
 void EnBom_Update(Actor* thisx, PlayState* play) {
-    Vec3f spA4 = { 0.0f, 0.0f, 0.0f };
-    Vec3f sp98 = { 0.0f, 0.1f, 0.0f };
-    Vec3f sp8C = { 0.0f, 0.0f, 0.0f };
-    Vec3f sp80;
-    Vec3f sp74 = { 0.0f, 0.6f, 0.0f };
-    Color_RGBA8 sp70 = { 255, 255, 255, 255 };
+    Vec3f effVelocity = { 0.0f, 0.0f, 0.0f };
+    Vec3f bomb2Accel = { 0.0f, 0.1f, 0.0f }; // unused
+    Vec3f effAccel = { 0.0f, 0.0f, 0.0f };
+    Vec3f effPos;
+    Vec3f dustAccel = { 0.0f, 0.6f, 0.0f };
+    Color_RGBA8 dustColor = { 255, 255, 255, 255 };
     EnBom* this = THIS;
     s32 pad;
     Player* player = GET_PLAYER(play);
@@ -444,7 +448,7 @@ void EnBom_Update(Actor* thisx, PlayState* play) {
 
     if (this->unk_1FC != 0) {
         this->unk_1FC--;
-        Math_ApproachZeroF(&thisx->speedXZ, 1.0f, 1.0f);
+        Math_ApproachZeroF(&thisx->speed, 1.0f, 1.0f);
         Actor_MoveWithGravity(thisx);
         Actor_UpdateBgCheckInfo(play, thisx, 35.0f, 10.0f, 36.0f, 4);
         if (this->unk_1FC == 0) {
@@ -456,13 +460,13 @@ void EnBom_Update(Actor* thisx, PlayState* play) {
     } else {
         thisx->gravity = -1.2f;
         if (this->timer != 0) {
-            if (!this->isPowderKeg || (func_808715B8 == this->actionFunc) || !Play_InCsMode(play)) {
+            if (!this->isPowderKeg || (EnBom_Explode == this->actionFunc) || !Play_InCsMode(play)) {
                 this->timer--;
             }
         }
 
         if ((!this->isPowderKeg && (this->timer == 67)) || (this->isPowderKeg && (this->timer <= 2400))) {
-            Actor_PlaySfxAtPos(thisx, NA_SE_PL_TAKE_OUT_SHIELD);
+            Actor_PlaySfx(thisx, NA_SE_PL_TAKE_OUT_SHIELD);
             Actor_SetScale(thisx, enBomScales[this->isPowderKeg]);
         }
 
@@ -473,17 +477,18 @@ void EnBom_Update(Actor* thisx, PlayState* play) {
         this->actionFunc(this, play);
 
         Actor_UpdateBgCheckInfo(play, thisx, 35.0f, 10.0f, 36.0f, 0x1F);
-        if (thisx->params == ENBOM_0) {
+        if (thisx->params == BOMB_TYPE_BODY) {
             static Vec3us D_80872ED4[] = {
                 { 40, 20, 100 },
                 { 300, 60, 600 },
             };
             Vec3us* sp60 = &D_80872ED4[this->isPowderKeg];
 
-            sp74.y = 0.2f;
-            Math_Vec3f_Copy(&sp80, &thisx->home.pos);
+            // spawn spark effect on even frames
+            dustAccel.y = 0.2f;
+            Math_Vec3f_Copy(&effPos, &thisx->home.pos);
             if ((play->gameplayFrames % 2) == 0) {
-                EffectSsGSpk_SpawnFuse(play, thisx, &sp80, &spA4, &sp8C);
+                EffectSsGSpk_SpawnFuse(play, thisx, &effPos, &effVelocity, &effAccel);
             }
             if (this->isPowderKeg) {
                 func_801A0810(&thisx->projectedPos, NA_SE_IT_BIG_BOMB_IGNIT - SFX_FLAG,
@@ -491,25 +496,30 @@ void EnBom_Update(Actor* thisx, PlayState* play) {
                               : (this->flashSpeedScale == 3) ? 1
                                                              : 2);
             } else {
-                Actor_PlaySfxAtPos(thisx, NA_SE_IT_BOMB_IGNIT - SFX_FLAG);
+                Actor_PlaySfx(thisx, NA_SE_IT_BOMB_IGNIT - SFX_FLAG);
             }
 
-            sp80.y += 3.0f;
-            func_800B0DE0(play, &sp80, &spA4, &sp74, &sp70, &sp70, 50, 5);
+            effPos.y += 3.0f;
+            func_800B0DE0(play, &effPos, &effVelocity, &dustAccel, &dustColor, &dustColor, 50, 5);
 
             if ((this->collider1.base.acFlags & AC_HIT) ||
                 ((this->collider1.base.ocFlags1 & OC1_HIT) && ((this->collider1.base.oc->category == ACTORCAT_ENEMY) ||
                                                                (this->collider1.base.oc->category == ACTORCAT_BOSS)))) {
                 this->timer = 0;
                 thisx->shape.rot.z = 0;
-            } else if ((this->timer > 100) && (Player_IsBurningStickInRange(play, &thisx->world.pos, 30.0f, 50.0f))) {
-                this->timer = 100;
+            } else {
+                // if a lit stick touches the bomb, set timer to 100
+                // these bombs never have a timer over 70, so this isn't used
+                if ((this->timer > 100) && Player_IsBurningStickInRange(play, &thisx->world.pos, 30.0f, 50.0f)) {
+                    this->timer = 100;
+                }
             }
 
-            sp74.y = 0.2f;
-            sp80 = thisx->world.pos;
-            sp80.y += 10.0f;
+            dustAccel.y = 0.2f;
+            effPos = thisx->world.pos;
+            effPos.y += 10.0f;
 
+            // double bomb flash speed and adjust red color at certain times during the countdown
             if ((this->timer == sp60->x) || (this->timer == sp60->y) || (this->timer == 3)) {
                 thisx->shape.rot.z = 0;
                 this->flashSpeedScale >>= 1;
@@ -526,12 +536,12 @@ void EnBom_Update(Actor* thisx, PlayState* play) {
             }
 
             if (this->timer == 0) {
-                sp80 = thisx->world.pos;
-                sp80.y += 10.0f;
+                effPos = thisx->world.pos;
+                effPos.y += 10.0f;
                 if (Actor_HasParent(thisx, play)) {
-                    sp80.y += 30.0f;
+                    effPos.y += 30.0f;
                 }
-                Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, sp80.x, sp80.y - 10.0f, sp80.z, 0, 0, 0,
+                Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, effPos.x, effPos.y - 10.0f, effPos.z, 0, 0, 0,
                             this->isPowderKeg);
                 func_800BC848(thisx, play, D_80872E98[this->isPowderKeg], D_80872E9C[this->isPowderKeg]);
                 play->envCtx.lightSettings.diffuseColor1[0] = play->envCtx.lightSettings.diffuseColor1[1] =
@@ -539,30 +549,32 @@ void EnBom_Update(Actor* thisx, PlayState* play) {
                 play->envCtx.lightSettings.ambientColor[0] = play->envCtx.lightSettings.ambientColor[1] =
                     play->envCtx.lightSettings.ambientColor[2] = 250;
                 Camera_AddQuake(&play->mainCamera, 2, 11, 8);
-                thisx->params = ENBOM_1;
+                thisx->params = BOMB_TYPE_EXPLOSION;
                 this->timer = 10;
                 thisx->flags |= (ACTOR_FLAG_20 | ACTOR_FLAG_100000);
-                this->actionFunc = func_808715B8;
+                this->actionFunc = EnBom_Explode;
                 if (this->isPowderKeg) {
                     gSaveContext.powderKegTimer = 0;
-                    Actor_PlaySfxAtPos(thisx, NA_SE_IT_BIG_BOMB_EXPLOSION);
+                    Actor_PlaySfx(thisx, NA_SE_IT_BIG_BOMB_EXPLOSION);
                 } else {
-                    Actor_PlaySfxAtPos(thisx, NA_SE_IT_BOMB_EXPLOSION);
+                    Actor_PlaySfx(thisx, NA_SE_IT_BOMB_EXPLOSION);
                 }
             }
         }
 
         Actor_SetFocus(thisx, 20.0f);
 
-        if (thisx->params <= ENBOM_0) {
+        if (thisx->params <= BOMB_TYPE_BODY) {
             Collider_UpdateCylinder(thisx, &this->collider1);
+
+            // if link is not holding the bomb anymore and bump conditions are met, subscribe to OC
             if (!Actor_HasParent(thisx, play) && (this->unk_1F8 != 0)) {
                 CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider1.base);
             }
             CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider1.base);
         }
 
-        if ((enBomScales[this->isPowderKeg] <= thisx->scale.x) && (thisx->params != ENBOM_1)) {
+        if ((enBomScales[this->isPowderKeg] <= thisx->scale.x) && (thisx->params != BOMB_TYPE_EXPLOSION)) {
             if (thisx->depthInWater >= 20.0f) {
                 Vec3f sp54;
 
@@ -579,9 +591,9 @@ void EnBom_Update(Actor* thisx, PlayState* play) {
                 thisx->velocity.y = (KREG(83) * 0.1f) + -2.0f;
                 thisx->gravity = (KREG(84) * 0.1f) + -0.5f;
                 this->unk_1FC = KREG(81) + 10;
-            } else if (thisx->bgCheckFlags & 0x40) {
-                thisx->bgCheckFlags &= ~0x40;
-                Actor_PlaySfxAtPos(thisx, NA_SE_EV_BOMB_DROP_WATER);
+            } else if (thisx->bgCheckFlags & BGCHECKFLAG_WATER_TOUCH) {
+                thisx->bgCheckFlags &= ~BGCHECKFLAG_WATER_TOUCH;
+                Actor_PlaySfx(thisx, NA_SE_EV_BOMB_DROP_WATER);
             }
         }
     }
@@ -600,7 +612,7 @@ void EnBom_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    if (this->actor.params == ENBOM_0) {
+    if (this->actor.params == BOMB_TYPE_BODY) {
         func_8012C28C(play->state.gfxCtx);
 
         Collider_UpdateSpheres(0, &this->collider2);
@@ -644,7 +656,7 @@ void EnBom_Draw(Actor* thisx, PlayState* play) {
             gSPDisplayList(POLY_OPA_DISP++, gPowderKegGoronSkullDL);
 
             func_808726DC(play, &this->actor.home.pos, &sp58, &sp4C, this->timer);
-            func_80872BC0(play, this->timer);
+            EnBom_DrawKeg(play, this->timer);
         }
     }
 
@@ -768,7 +780,7 @@ void func_808726DC(PlayState* play, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3, s32 a
     Math_Vec3f_Copy(arg1, &fuseSegmentPtr->pos);
 }
 
-void func_80872BC0(PlayState* play, s32 arg1) {
+void EnBom_DrawKeg(PlayState* play, s32 arg1) {
     s32 temp_s5;
     s32 i;
     PowderKegFuseSegment* fuseSegmentPtr = &sPowderKegFuseSegments[0];

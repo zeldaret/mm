@@ -268,7 +268,7 @@ s32 func_80B50854(EnGk* this, PlayState* play) {
 
 void func_80B50954(EnGk* this) {
     if (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 4.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_GOLONKID_WALK);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_GOLONKID_WALK);
     }
 }
 
@@ -511,7 +511,7 @@ void func_80B51410(EnGk* this, PlayState* play) {
         }
 
         if (ActorCutscene_GetCanPlayNext(this->unk_318)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_GOLONKID_SOB_TALK);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_GOLONKID_SOB_TALK);
             ActorCutscene_Start(this->unk_318, &this->actor);
             this->unk_1E4 &= ~0x20;
             return;
@@ -816,12 +816,12 @@ void func_80B51EA4(EnGk* this, PlayState* play) {
             }
         }
 
-        if (this->actor.bgCheckFlags & 8) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
             sp38.y = this->actor.wallYaw;
         }
 
         if (ABS_ALT(sp36) < 0x2AAA) {
-            Math_ApproachF(&this->actor.speedXZ, 3.0f, 0.2f, 0.5f);
+            Math_ApproachF(&this->actor.speed, 3.0f, 0.2f, 0.5f);
         }
         Actor_MoveWithGravity(&this->actor);
     }
@@ -897,7 +897,7 @@ void func_80B5227C(EnGk* this, PlayState* play) {
         if (!(this->unk_1E4 & 0x80)) {
             SET_WEEKEVENTREG(WEEKEVENTREG_22_04);
         }
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_GOLON_SIT_IMT);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_GOLON_SIT_IMT);
         this->unk_350 = 0x4000;
         this->actionFunc = func_80B52654;
     }
@@ -968,7 +968,7 @@ void func_80B5253C(EnGk* this, PlayState* play) {
         }
         this->actionFunc = func_80B525E0;
     } else {
-        Actor_PickUp(&this->actor, play, sp24, 300.0f, 300.0f);
+        Actor_OfferGetItem(&this->actor, play, sp24, 300.0f, 300.0f);
     }
 }
 
@@ -978,7 +978,7 @@ void func_80B525E0(EnGk* this, PlayState* play) {
         Message_StartTextbox(play, this->unk_31C, &this->actor);
         this->actionFunc = func_80B52430;
     } else {
-        func_800B85E0(&this->actor, play, 400.0f, -1);
+        func_800B85E0(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
     }
 }
 
@@ -993,7 +993,7 @@ void func_80B52654(EnGk* this, PlayState* play) {
     this->actor.scale.z = 0.006f - this->unk_354;
     this->actor.scale.x = 0.006f + this->unk_354;
     if (this->unk_350 == 0) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_GOLONKID_SNORE);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_GOLONKID_SNORE);
     }
 }
 
@@ -1226,8 +1226,8 @@ TexturePtr D_80B533E4[] = {
 void EnGk_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
     EnGk* this = THIS;
-    Vec3f sp5C;
-    Vec3f sp50;
+    Vec3f pos;
+    Vec3f scale;
 
     OPEN_DISPS(play->state.gfxCtx);
 
@@ -1242,12 +1242,12 @@ void EnGk_Draw(Actor* thisx, PlayState* play) {
 
         func_8012C2DC(play->state.gfxCtx);
 
-        sp5C = this->actor.world.pos;
-        sp50.x = 0.2f;
-        sp50.y = 0.2f;
-        sp50.z = 0.2f;
+        pos = this->actor.world.pos;
+        scale.x = 0.2f;
+        scale.y = 0.2f;
+        scale.z = 0.2f;
 
-        func_800BC620(&sp5C, &sp50, 255, play);
+        func_800BC620(&pos, &scale, 255, play);
     } else {
         gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80B533E4[this->unk_2E0]));
 
@@ -1259,20 +1259,21 @@ void EnGk_Draw(Actor* thisx, PlayState* play) {
             func_8012C2DC(play->state.gfxCtx);
             if ((this->unk_2E4 == 0) || (this->unk_2E4 == 1) || (this->unk_2E4 == 2) || (this->unk_2E4 == 3) ||
                 (this->unk_2E4 == 4)) {
-                sp5C.x = this->actor.world.pos.x - 15.0f;
-                sp5C.y = this->actor.world.pos.y;
-                sp5C.z = this->actor.world.pos.z;
+                pos.x = this->actor.world.pos.x - 15.0f;
+                pos.y = this->actor.world.pos.y;
+                pos.z = this->actor.world.pos.z;
 
-                sp50.x = 0.2f;
-                sp50.y = 0.2f;
-                sp50.z = 0.2f;
+                scale.x = 0.2f;
+                scale.y = 0.2f;
+                scale.z = 0.2f;
             } else {
-                sp5C = this->actor.world.pos;
-                sp50.x = 0.2f;
-                sp50.y = 0.2f;
-                sp50.z = 0.2f;
+                pos = this->actor.world.pos;
+                scale.x = 0.2f;
+                scale.y = 0.2f;
+                scale.z = 0.2f;
             }
-            func_800BC620(&sp5C, &sp50, 255, play);
+
+            func_800BC620(&pos, &scale, 255, play);
         }
     }
 
