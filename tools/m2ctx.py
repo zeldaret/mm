@@ -25,11 +25,8 @@ CPP_FLAGS = [
     "-D_Static_assert(x, y)=",
     "-D__attribute__(x)="
     "-DNDEBUG",
-    "-D_FINALROM",
     "-D_MIPS_SZLONG=32",
-    "-DSCRIPT(x)="
     "-D__attribute__(x)=",
-    "-D__asm__(x)=",
     "-ffreestanding",
     "-DM2CTX",
     "-DNON_MATCHING",
