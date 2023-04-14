@@ -21,9 +21,6 @@
 #define WATER_KNOCKBACK 7.0f
 #define AIR_KNOCKBACK 0.04f
 
-#define RAND_PLUSMINUS(limit) (Rand_ZeroOne() * (2.0f * (limit)) - (limit))
-#define RAND_PLUSMINUSALT(limit) ((Rand_ZeroOne() - 0.5f) * (2.0f * limit))
-
 void ObjMine_Init(Actor* thisx, PlayState* play);
 void ObjMine_Destroy(Actor* thisx, PlayState* play);
 void ObjMine_Path_Update(Actor* thisx, PlayState* play);
