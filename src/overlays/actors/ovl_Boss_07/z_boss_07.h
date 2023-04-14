@@ -61,7 +61,7 @@ typedef struct Boss07 {
     /* 0x014F */ u8 whipCrackTimer;
     /* 0x0150 */ s16 timers[3];
     /* 0x0156 */ s16 jumpSfxTimer;
-    /* 0x0158 */ s16 unk_158; // turns off collision
+    /* 0x0158 */ s16 collisionTimer; // turns off collision
     /* 0x015A */ s16 whipCollisionTimer;
     /* 0x015C */ s16 invincibilityTimer;
     /* 0x015E */ s16 dmgFogEffectTimer;
