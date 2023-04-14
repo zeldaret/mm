@@ -10,6 +10,8 @@
 
 #define THIS ((EnAnd*)thisx)
 
+#define EYE_TEXTURES_COUNT 4
+
 void EnAnd_Init(Actor* thisx, PlayState* play);
 void EnAnd_Destroy(Actor* thisx, PlayState* play);
 void EnAnd_Update(Actor* thisx, PlayState* play);
@@ -38,8 +40,6 @@ static AnimationInfoS sAnimationInfo[8] = {
     { &gAndRaisedHandWalkAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
 };
 
-static TexturePtr sEyeTextures[4];
-
 s32 EnAnd_ChangeAnim(EnAnd* this, s32 animIndex) {
     s32 ret = false;
 
@@ -53,7 +53,7 @@ s32 EnAnd_ChangeAnim(EnAnd* this, s32 animIndex) {
 void EnAnd_Blink(EnAnd* this) {
     if (DECR(this->blinkTimer) == 0) {
         this->eyeTexIndex++;
-        if (this->eyeTexIndex >= ARRAY_COUNT(sEyeTextures)) {
+        if (this->eyeTexIndex >= EYE_TEXTURES_COUNT) {
             this->blinkTimer = Rand_S16Offset(30, 30);
             this->eyeTexIndex = 0;
         }
@@ -158,15 +158,14 @@ void EnAnd_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
     }
 }
 
-static TexturePtr sMouthTextures[2] = { gAndMouthNeutralTex, gAndMouthSmileTex };
-static TexturePtr sEyeTextures[4] = {
-    gAndEyeOpenTex,
-    gAndEyeClosingTex,
-    gAndEyeClosedTex,
-    gAndEyeOpeningTex,
-};
-
 void EnAnd_Draw(Actor* thisx, PlayState* play) {
+    static TexturePtr sMouthTextures[] = { gAndMouthNeutralTex, gAndMouthSmileTex };
+    static TexturePtr sEyeTextures[] = {
+        gAndEyeOpenTex,
+        gAndEyeClosingTex,
+        gAndEyeClosedTex,
+        gAndEyeOpeningTex,
+    };
     EnAnd* this = THIS;
 
     OPEN_DISPS(play->state.gfxCtx);
