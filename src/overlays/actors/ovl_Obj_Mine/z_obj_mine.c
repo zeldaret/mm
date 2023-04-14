@@ -163,7 +163,7 @@ s32 ObjMine_AirWater_CheckOC(ObjMine* this) {
         return true;
     }
 
-    if ((this->collider.base.ocFlags1 & OC1_HIT)) {
+    if (this->collider.base.ocFlags1 & OC1_HIT) {
         Actor* hitActor = this->collider.base.oc;
 
         if ((hitActor->id == ACTOR_OBJ_MINE) && (hitActor->room == this->actor.room)) {
