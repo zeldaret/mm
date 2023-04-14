@@ -14,69 +14,69 @@ typedef void (*EnInvadepohActionFunc)(struct EnInvadepoh* this, PlayState* play)
 typedef void (*EnInvadepohMainFunc)(Actor* thisx, PlayState* play); // PlayState, not GameState
 
 typedef struct {
-    f32 unk0;
-    s16 unk4;
-    s16 unk6;
-} EnInvadepohUnkStruct1;
+    /* 0x0 */ f32 unk0;
+    /* 0x4 */ s16 unk4;
+    /* 0x6 */ s16 unk6;
+} EnInvadepohUnkStruct1; // size = 0x8
 
 typedef struct {
-    s8 unk_0;
-    s8 timer;
-    u8 alpha;
-    Vec3f pos;
-} EnInvadepohWarpEffect;
+    /* 0x0 */ s8 unk_0;
+    /* 0x1 */ s8 timer;
+    /* 0x2 */ u8 alpha;
+    /* 0x4 */ Vec3f pos;
+} EnInvadepohWarpEffect; // size = 0x10
 
 typedef struct {
-    s8* index;
-    s8 count;
-} EnInvadepohFaceFrame;
+    /* 0x0 */ s8* index;
+    /* 0x1 */ s8 count;
+} EnInvadepohFaceFrame; // size = 0x2
 
 typedef struct {
-    s8 type;
-    EnInvadepohFaceFrame* frames;
-} EnInvadepohFaceAnim;
+    /* 0x0 */ s8 type;
+    /* 0x4 */ EnInvadepohFaceFrame* frames;
+} EnInvadepohFaceAnim; // size = 0x8
 
 typedef struct {
-    s8 index;
-    f32 chance;
-} EnInvadepohFaceAnimNext;
+    /* 0x0 */ s8 index;
+    /* 0x4 */ f32 chance;
+} EnInvadepohFaceAnimNext; // size = 0x8
 
 typedef struct {
-    EnInvadepohFaceAnim anim;
-    s8 nextCount;
-    EnInvadepohFaceAnimNext* nextAnims;
-} EnInvadepohFaceAnimLoop;
+    /* 0x0 */ EnInvadepohFaceAnim anim;
+    /* 0x8 */ s8 nextCount;
+    /* 0xC */ EnInvadepohFaceAnimNext* nextAnims;
+} EnInvadepohFaceAnimLoop; // size = 0x10
 
 typedef struct {
-    EnInvadepohFaceAnimLoop loop;
-    s16 minDelay;
-    s16 maxDelay;
-} EnInvadepohFaceAnimLoopDelayed;
+    /* 0x00 */ EnInvadepohFaceAnimLoop loop;
+    /* 0x10 */ s16 minDelay;
+    /* 0x12 */ s16 maxDelay;
+} EnInvadepohFaceAnimLoopDelayed; // size = 0x14
 
 typedef struct {
-    EnInvadepohFaceAnim** animSet;
-    s8 curAnimType;
-    EnInvadepohFaceAnim* curAnim;
-    s16 delayTimer;
-    s8 curFrame;
-    s8 curIndex;
-} EnInvadePohFaceInfo;
+    /* 0x0 */ EnInvadepohFaceAnim** animSet;
+    /* 0x4 */ s8 curAnimType;
+    /* 0x8 */ EnInvadepohFaceAnim* curAnim;
+    /* 0xC */ s16 delayTimer;
+    /* 0xE */ s8 curFrame;
+    /* 0xF */ s8 curIndex;
+} EnInvadePohFaceInfo; // size = 0x10
 
 typedef struct {
-    EnInvadePohFaceInfo eyeAnim;
-    EnInvadePohFaceInfo mouthAnim;
-    Vec3s unk_20;
-    Vec3s unk_26;
-    s16 unk_2C;
-    f32 unk_30;
-    f32 unk_34;
-    f32 unk_38;
-    f32 unk_3C;
-    s16 unk_40;
-    s16 unk_42;
-    f32 unk_44;
-    s16 unk_48;
-} EnInvadePohUnkStruct_324;
+    /* 0x00 */ EnInvadePohFaceInfo eyeAnim;
+    /* 0x10 */ EnInvadePohFaceInfo mouthAnim;
+    /* 0x20 */ Vec3s unk_20;
+    /* 0x26 */ Vec3s unk_26;
+    /* 0x2C */ s16 unk_2C;
+    /* 0x30 */ f32 unk_30;
+    /* 0x34 */ f32 unk_34;
+    /* 0x38 */ f32 unk_38;
+    /* 0x3c */ f32 unk_3C;
+    /* 0x40 */ s16 unk_40;
+    /* 0x42 */ s16 unk_42;
+    /* 0x44 */ f32 unk_44;
+    /* 0x48 */ s16 unk_48;
+} EnInvadePohUnkStruct_324; // size = 0x4C
 
 typedef void (*EnInvadepohFaceFunc) (EnInvadePohFaceInfo*, EnInvadepohFaceAnim**);
 
@@ -154,8 +154,5 @@ typedef enum {
 #define ENINVADEPOH_GET_PARAM_7F00(thisx) ((thisx)->params >> 8 & 0x7F)
 
 #define ENINVADEPOH_SET_PARAMS(p7F00, pF0, p7) (((p7) & 7) | (((p7F00) << 8) & 0x7F00) | (((pF0) << 4) & 0xF0))
-
-
-extern ActorInit En_Invadepoh_InitVars;
 
 #endif // Z_EN_INVADEPOH_H
