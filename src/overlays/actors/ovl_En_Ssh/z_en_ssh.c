@@ -694,11 +694,11 @@ void EnSsh_Talk(EnSsh* this, PlayState* play) {
             case 0x911: // Find all in here and defeat them
             case 0x912: // Don't forget to collect their token
             case 0x914: // In here, cursed spiders, defeat them to make me normal
-                func_80151938(play, play->msgCtx.currentTextId + 1);
+                Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                 break;
 
             default: // intended case 0x915 from above (914+1)
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 this->actionFunc = EnSsh_Idle;
                 break;
         }

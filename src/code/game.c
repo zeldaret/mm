@@ -158,11 +158,11 @@ void GameState_InitArena(GameState* gameState, size_t size) {
     void* buf = GameAlloc_Malloc(alloc, size);
 
     if (buf) {
-        THA_Ct(&gameState->heap, buf, size);
+        THA_Init(&gameState->heap, buf, size);
         return;
     }
 
-    THA_Ct(&gameState->heap, NULL, 0);
+    THA_Init(&gameState->heap, NULL, 0);
     __assert("../game.c", 1035);
 }
 
@@ -174,9 +174,9 @@ void GameState_Realloc(GameState* gameState, size_t size) {
     size_t bytesAllocated;
     void* heapStart;
 
-    heapStart = gameState->heap.bufp;
+    heapStart = gameState->heap.start;
     alloc = &gameState->alloc;
-    THA_Dt(&gameState->heap);
+    THA_Destroy(&gameState->heap);
     GameAlloc_Free(alloc, heapStart);
     SystemArena_GetSizes(&systemMaxFree, &bytesFree, &bytesAllocated);
     size = ((systemMaxFree - (sizeof(ArenaNode))) < size) ? (0) : (size);
@@ -185,9 +185,9 @@ void GameState_Realloc(GameState* gameState, size_t size) {
     }
 
     if ((gameArena = GameAlloc_Malloc(alloc, size)) != NULL) {
-        THA_Ct(&gameState->heap, gameArena, size);
+        THA_Init(&gameState->heap, gameArena, size);
     } else {
-        THA_Ct(&gameState->heap, 0, 0);
+        THA_Init(&gameState->heap, 0, 0);
         __assert("../game.c", 1074);
     }
 }
@@ -240,7 +240,7 @@ void GameState_Destroy(GameState* gameState) {
     func_801420F4(&D_801F8020);
     VisMono_Destroy(&sMonoColors);
     func_80140900(&D_801F8048);
-    THA_Dt(&gameState->heap);
+    THA_Destroy(&gameState->heap);
     GameAlloc_Cleanup(&gameState->alloc);
 }
 
@@ -257,7 +257,7 @@ u32 GameState_IsRunning(GameState* gameState) {
 }
 
 s32 GameState_GetArenaSize(GameState* gameState) {
-    return THA_GetSize(&gameState->heap);
+    return THA_GetRemaining(&gameState->heap);
 }
 
 s32 func_80173B48(GameState* gameState) {

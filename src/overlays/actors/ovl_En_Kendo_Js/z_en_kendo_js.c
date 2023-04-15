@@ -193,7 +193,8 @@ void func_80B2654C(EnKendoJs* this, PlayState* play) {
         } else if ((Player_GetMask(play) != PLAYER_MASK_NONE) && (Player_GetMask(play) < PLAYER_MASK_GIANT)) {
             u16 sp2E = Player_GetMask(play) + 0x273C;
 
-            if (0) {}
+            //! FAKE:
+            if (1) {}
 
             Message_StartTextbox(play, sp2E, &this->actor);
             this->unk_288 = sp2E;
@@ -280,13 +281,13 @@ void func_80B269A4(EnKendoJs* this, PlayState* play) {
             break;
 
         case 0x2719:
-            func_801477B4(play);
+            Message_CloseTextbox(play);
             player->stateFlags1 |= PLAYER_STATE1_20;
             func_80B2701C(this);
             break;
 
         case 0x271A:
-            func_801477B4(play);
+            Message_CloseTextbox(play);
             func_80B2714C(this);
             break;
 
@@ -296,14 +297,14 @@ void func_80B269A4(EnKendoJs* this, PlayState* play) {
             break;
 
         case 0x273B:
-            func_801477B4(play);
+            Message_CloseTextbox(play);
             Interface_InitMinigame(play);
             player->stateFlags1 |= PLAYER_STATE1_20;
             func_80B273D0(this);
             break;
 
         case 0x272D:
-            func_801477B4(play);
+            Message_CloseTextbox(play);
             gSaveContext.minigameStatus = MINIGAME_STATUS_END;
             func_80B276C4(this);
             func_80B276D8(this, play);
@@ -523,7 +524,7 @@ void func_80B27188(EnKendoJs* this, PlayState* play) {
                 Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 3);
             }
             this->unk_286 = 2;
-            func_801477B4(play);
+            Message_CloseTextbox(play);
             player->stateFlags1 &= ~PLAYER_STATE1_20;
         }
     } else if (this->unk_286 == 2) {

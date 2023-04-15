@@ -154,6 +154,7 @@ s32 func_80B3CA20(EnDnp* this) {
             Actor_PlaySfx(&this->actor, NA_SE_EN_DEKUHIME_GREET2);
         }
     } else if ((this->animIndex == EN_DNP_ANIM_UNUSED_WALK) && (this->animIndex == EN_DNP_ANIM_WALK)) {
+        //! @bug: Impossible to reach, && should be an ||
         if (Animation_OnFrame(&this->skelAnime, 7.0f) || Animation_OnFrame(&this->skelAnime, 15.0f)) {
             Actor_PlaySfx(&this->actor, NA_SE_EN_DEKUHIME_WALK);
         }
@@ -217,7 +218,8 @@ s32 func_80B3CDA4(EnDnp* this, PlayState* play) {
     pitch = Math_Vec3f_Pitch(&sp3C, &sp30);
 
     //! FAKE
-    if (1) {};
+    if (1) {}
+
     Math_SmoothStepToS(&this->unk_330, pitch, 3, 0x2AA8, 0x1);
 
     return 1;

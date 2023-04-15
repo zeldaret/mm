@@ -586,7 +586,7 @@ void EnRacedog_CheckForFinish(EnRacedog* this) {
         this->raceStatus == RACEDOG_RACE_STATUS_AFTER_POINT_11) {
         sNumberOfDogsFinished++;
         if (sNumberOfDogsFinished == 1) {
-            Audio_QueueSeqCmd(NA_BGM_HORSE_GOAL | 0x8000);
+            SEQCMD_PLAY_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 0, NA_BGM_HORSE_GOAL | SEQ_FLAG_ASYNC);
             play_sound(NA_SE_SY_START_SHOT);
         }
 

@@ -208,7 +208,7 @@ void func_80BC7068(EnGuruguru* this, PlayState* play) {
         }
     }
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-        func_801477B4(play);
+        Message_CloseTextbox(play);
         this->headZRotTarget = 0;
         if ((this->textIdIndex == 13) || (this->textIdIndex == 14)) {
             func_80151BB4(play, 0x13);
@@ -257,11 +257,11 @@ void func_80BC7068(EnGuruguru* this, PlayState* play) {
             }
             if ((this->unk268 != 0) && (this->textIdIndex >= 7)) {
                 this->skelAnime.playSpeed = 2.0f;
-                func_801A29D4(3, 1.18921f, 2);
+                Audio_SetSeqTempoAndFreq(3, 1.18921f, 2);
                 func_801A3B48(0);
             } else {
                 if (this->skelAnime.playSpeed == 2.0f) {
-                    func_801A29D4(3, 1.0f, 2);
+                    Audio_SetSeqTempoAndFreq(3, 1.0f, 2);
                 }
                 if (this->unk268 == 0) {
                     func_801A3B48(1);
@@ -271,7 +271,7 @@ void func_80BC7068(EnGuruguru* this, PlayState* play) {
                 this->skelAnime.playSpeed = 1.0f;
             }
             this->unk266 = 1;
-            func_80151938(play, textIDs[this->textIdIndex]);
+            Message_ContinueTextbox(play, textIDs[this->textIdIndex]);
             return;
         }
         func_801A3B48(0);

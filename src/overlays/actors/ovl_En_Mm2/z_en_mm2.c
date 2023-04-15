@@ -49,7 +49,7 @@ void EnMm2_Reading(EnMm2* this, PlayState* play) {
     switch (Message_GetState(&play->msgCtx)) {
         case TEXT_STATE_5:
             if (Message_ShouldAdvance(play)) {
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 this->actionFunc = EnMm2_WaitForRead;
             }
             break;

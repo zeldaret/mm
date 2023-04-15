@@ -289,27 +289,27 @@ void EnYb_Talk(EnYb* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         switch (play->msgCtx.currentTextId) {
             case 0x147D: // I am counting on you
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 this->actionFunc = EnYb_Disappear;
                 SET_WEEKEVENTREG(WEEKEVENTREG_82_04);
                 break;
             case 0x147C: // Spread my dance across the world
                 if (Player_GetMask(play) == PLAYER_MASK_KAMARO) {
-                    func_801477B4(play);
+                    Message_CloseTextbox(play);
                     this->actionFunc = EnYb_Idle;
 
                 } else if (INV_CONTENT(ITEM_MASK_KAMARO) == ITEM_MASK_KAMARO) {
-                    func_80151938(play, 0x147D); // I am counting on you
+                    Message_ContinueTextbox(play, 0x147D); // I am counting on you
                     func_80BFA2FC(play);
 
                 } else {
-                    func_801477B4(play);
+                    Message_CloseTextbox(play);
                     this->actionFunc = EnYb_ReceiveMask;
                     EnYb_ReceiveMask(this, play);
                 }
                 break;
             default:
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 this->actionFunc = EnYb_Idle;
                 break;
         }

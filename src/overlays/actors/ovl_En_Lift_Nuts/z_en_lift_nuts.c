@@ -511,7 +511,7 @@ void func_80AEA910(EnLiftNuts* this, PlayState* play) {
                 break;
 
             case 0x27E5:
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 player->stateFlags1 |= PLAYER_STATE1_20;
                 func_80AEAEAC(this);
                 break;
@@ -544,7 +544,7 @@ void func_80AEA910(EnLiftNuts* this, PlayState* play) {
                 break;
 
             case 0x27FA:
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 player->stateFlags1 &= ~PLAYER_STATE1_20;
                 func_80AEB114(this);
                 break;
@@ -556,7 +556,7 @@ void func_80AEA910(EnLiftNuts* this, PlayState* play) {
                 break;
 
             case 0x27EF:
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 func_80AEB584(this);
                 func_80AEB598(this, play);
                 break;
@@ -573,13 +573,13 @@ void func_80AEA910(EnLiftNuts* this, PlayState* play) {
                 break;
 
             case 0x27F4:
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 func_80AEB584(this);
                 func_80AEB598(this, play);
                 break;
 
             case 0x27F5:
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 func_80AE9B4C(1, 0);
                 player->stateFlags1 &= ~PLAYER_STATE1_20;
                 func_80AE9FC8(this);
@@ -731,7 +731,7 @@ void func_80AEAFA0(EnLiftNuts* this, PlayState* play) {
 }
 
 void func_80AEB114(EnLiftNuts* this) {
-    func_801A2BB8(NA_BGM_TIMED_MINI_GAME);
+    Audio_PlaySubBgm(NA_BGM_TIMED_MINI_GAME);
     this->actionFunc = func_80AEB148;
 }
 

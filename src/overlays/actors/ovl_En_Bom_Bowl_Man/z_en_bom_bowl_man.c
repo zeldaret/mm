@@ -242,7 +242,7 @@ void func_809C4DA4(EnBomBowlMan* this, PlayState* play) {
         s32 pad;
         s32 sp28 = false;
 
-        func_801477B4(play);
+        Message_CloseTextbox(play);
 
         switch (this->unk_2C0) {
             case 0:
@@ -319,9 +319,9 @@ void func_809C4DA4(EnBomBowlMan* this, PlayState* play) {
 
         if (!sp28) {
             if (player->transformation == PLAYER_FORM_HUMAN) {
-                func_80151938(play, D_809C618C[this->unk_2C0]);
+                Message_ContinueTextbox(play, D_809C618C[this->unk_2C0]);
             } else {
-                func_80151938(play, D_809C6198[this->unk_2C0]);
+                Message_ContinueTextbox(play, D_809C6198[this->unk_2C0]);
             }
         }
     }
@@ -411,7 +411,7 @@ void func_809C5524(EnBomBowlMan* this, PlayState* play) {
 
 void func_809C5598(EnBomBowlMan* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-        func_801477B4(play);
+        Message_CloseTextbox(play);
         if ((this->actor.textId == 0x72F) || (this->actor.textId == 0x730)) {
             this->actor.textId = 0x731;
         } else if (this->actor.textId == 0x731) {
@@ -439,7 +439,7 @@ void func_809C5598(EnBomBowlMan* this, PlayState* play) {
             this->actionFunc = func_809C5738;
             return;
         }
-        func_80151938(play, this->actor.textId);
+        Message_ContinueTextbox(play, this->actor.textId);
     }
 }
 
@@ -579,7 +579,7 @@ void func_809C5BF4(EnBomBowlMan* this, PlayState* play) {
             if (D_809C6100 > 5) {
                 Player* player = GET_PLAYER(play);
 
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 Camera_SetTargetActor(subCam, &this->unk_2D8[0]->actor);
                 func_809C493C(this, 13, 1.0f);
                 D_809C6100 = 0;

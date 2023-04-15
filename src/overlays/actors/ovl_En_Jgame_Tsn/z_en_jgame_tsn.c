@@ -284,7 +284,7 @@ void func_80C1410C(EnJgameTsn* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     player->stateFlags1 |= PLAYER_STATE1_20;
-    func_801A2BB8(0x25);
+    Audio_PlaySubBgm(0x25);
     play->interfaceCtx.minigameState = MINIGAME_STATE_COUNTDOWN_SETUP_3;
     Interface_InitMinigame(play);
     SET_WEEKEVENTREG(WEEKEVENTREG_90_20);
@@ -341,7 +341,7 @@ void func_80C14230(EnJgameTsn* this, PlayState* play) {
         this->unk_300 = 0x109F;
         player->stateFlags1 |= PLAYER_STATE1_20;
         *this->unk_208[this->unk_218] &= ~OBJLUPYGAMELIFT_IGNITE_FIRE;
-        func_801A2C20();
+        Audio_StopSubBgm();
         func_80C14030(this);
     } else if ((player->actor.bgCheckFlags & BGCHECKFLAG_WATER_TOUCH) ||
                (player->actor.bgCheckFlags & BGCHECKFLAG_WATER)) {
@@ -350,7 +350,7 @@ void func_80C14230(EnJgameTsn* this, PlayState* play) {
         this->unk_300 = 0x10A0;
         player->stateFlags1 |= PLAYER_STATE1_20;
         *this->unk_208[this->unk_218] &= ~OBJLUPYGAMELIFT_IGNITE_FIRE;
-        func_801A2C20();
+        Audio_StopSubBgm();
         func_80C14030(this);
     }
 
@@ -359,7 +359,7 @@ void func_80C14230(EnJgameTsn* this, PlayState* play) {
         this->unk_300 = 0x10A1;
         player->stateFlags1 |= PLAYER_STATE1_20;
         *this->unk_208[this->unk_218] &= ~OBJLUPYGAMELIFT_IGNITE_FIRE;
-        func_801A2C20();
+        Audio_StopSubBgm();
         func_80C14030(this);
     }
 }
@@ -471,7 +471,7 @@ void func_80C147B4(EnJgameTsn* this, PlayState* play) {
                 if (ActorCutscene_GetCurrentIndex() == this->actor.cutscene) {
                     ActorCutscene_Stop(this->actor.cutscene);
                 }
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 func_80C1476C(this, play);
                 func_80C1410C(this, play);
                 break;
@@ -479,7 +479,7 @@ void func_80C147B4(EnJgameTsn* this, PlayState* play) {
             case 0x109F:
             case 0x10A0:
             case 0x10A1:
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 gSaveContext.minigameStatus = MINIGAME_STATUS_END;
                 gSaveContext.timerStates[TIMER_ID_MINIGAME_2] = TIMER_STATE_STOP;
                 CLEAR_WEEKEVENTREG(WEEKEVENTREG_90_20);
@@ -487,7 +487,7 @@ void func_80C147B4(EnJgameTsn* this, PlayState* play) {
                 break;
 
             case 0x10A3:
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 func_80C14540(this);
                 func_80C14554(this, play);
                 break;

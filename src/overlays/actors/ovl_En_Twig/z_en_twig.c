@@ -37,9 +37,9 @@ ActorInit En_Twig_InitVars = {
     /**/ EnTwig_Draw,
 };
 
-static s32 sCurrentRing;
-static s16 sRingCount;
-static s16 sRingNotCollected[25];
+s32 sCurrentRing;
+s16 sRingCount;
+s16 sRingNotCollected[25];
 
 static CollisionHeader* sColHeaders[] = {
     NULL,

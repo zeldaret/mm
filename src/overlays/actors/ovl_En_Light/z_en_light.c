@@ -52,7 +52,7 @@ void EnLight_Init(Actor* thisx, PlayState* play) {
     EnLight* this = THIS;
 
     if (!ENLIGHT_GET_4000(&this->actor)) {
-        if ((gSaveContext.gameMode == 3) || ENLIGHT_GET_2000(&this->actor)) {
+        if ((gSaveContext.gameMode == GAMEMODE_END_CREDITS) || ENLIGHT_GET_2000(&this->actor)) {
             Lights_PointNoGlowSetInfo(&this->lightInfo, this->actor.world.pos.x,
                                       ((this->actor.params < 0) ? 1 : 40) + (s32)this->actor.world.pos.y,
                                       this->actor.world.pos.z, 255, 255, 180, -1);

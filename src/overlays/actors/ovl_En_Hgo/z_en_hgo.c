@@ -268,7 +268,7 @@ void EnHgo_HandlePlayerChoice(EnHgo* this, PlayState* play) {
                 break;
 
             case 0x15A7:
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 EnHgo_SetupTalk(this);
                 break;
         }

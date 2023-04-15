@@ -236,7 +236,7 @@ void EnSth_HandlePanicConversation(EnSth* this, PlayState* play) {
 
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         this->actionFunc = EnSth_PanicIdle;
-        func_801477B4(play);
+        Message_CloseTextbox(play);
     }
 }
 
@@ -351,17 +351,17 @@ void EnSth_HandleOceansideSpiderHouseConversation(EnSth* this, PlayState* play) 
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
                     case 0x1134: // (does not exist)
-                        func_80151938(play, play->msgCtx.currentTextId + 1);
+                        Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                         break;
 
-                    case 0x1132:                     // Heard noise, came in to see
-                    case 0x113A:                     // Had no idea there was a basement here
-                    case 0x113F:                     // Heard noise... I never thought I'd find a place like this
-                        func_80151938(play, 0x1133); // did you find this place?
+                    case 0x1132: // Heard noise, came in to see
+                    case 0x113A: // Had no idea there was a basement here
+                    case 0x113F: // Heard noise... I never thought I'd find a place like this
+                        Message_ContinueTextbox(play, 0x1133); // did you find this place?
                         break;
 
-                    case 0x1133:                     // did you find this place?
-                        func_80151938(play, 0x1136); // I want to buy this place from you
+                    case 0x1133:                               // did you find this place?
+                        Message_ContinueTextbox(play, 0x1136); // I want to buy this place from you
                         EnSth_ChangeAnim(this, STH_ANIM_PLEAD);
                         break;
 
@@ -397,23 +397,23 @@ void EnSth_HandleOceansideSpiderHouseConversation(EnSth* this, PlayState* play) 
                                 STH_GI_ID(&this->actor) = GI_RUPEE_RED;
                                 break;
                         }
-                        func_801477B4(play);
+                        Message_CloseTextbox(play);
                         this->actionFunc = EnSth_GiveOceansideSpiderHouseReward;
                         EnSth_GiveOceansideSpiderHouseReward(this, play);
                         break;
 
-                    case 0x113C:                     // (Second day) I am giving you my life savings
-                        func_80151938(play, 0x113B); // If only I had gotten here yesterday...
+                    case 0x113C:                               // (Second day) I am giving you my life savings
+                        Message_ContinueTextbox(play, 0x113B); // If only I had gotten here yesterday...
                         break;
 
-                    case 0x1141:                     // (Final day) This is all I have
-                        func_80151938(play, 0x1140); // If only I had gotten here two days ago...
+                    case 0x1141:                               // (Final day) This is all I have
+                        Message_ContinueTextbox(play, 0x1140); // If only I had gotten here two days ago...
                         EnSth_ChangeAnim(this, STH_ANIM_WAIT);
                         break;
 
                     default:
                         this->actionFunc = EnSth_OceansideSpiderHouseIdle;
-                        func_801477B4(play);
+                        Message_CloseTextbox(play);
                         this->sthFlags |= STH_FLAG_OCEANSIDE_SPIDER_HOUSE_GREET;
                         break;
                 }
@@ -443,7 +443,7 @@ void EnSth_HandleMoonLookingConversation(EnSth* this, PlayState* play) {
 
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         this->actionFunc = EnSth_MoonLookingIdle;
-        func_801477B4(play);
+        Message_CloseTextbox(play);
     }
     this->headRot.x = -0x1388;
 }
@@ -539,13 +539,13 @@ void EnSth_HandleSwampSpiderHouseConversation(EnSth* this, PlayState* play) {
         switch (play->msgCtx.currentTextId) {
             case 0x90C: // (does not exist)
                 EnSth_ChangeAnim(this, STH_ANIM_TALK);
-                func_80151938(play, play->msgCtx.currentTextId + 1);
+                Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                 break;
 
             case 0x916: // I have been saved! I thought I was doomed
             case 0x919: // I have been saved! I thought I was doomed (duplicate)
                 EnSth_ChangeAnim(this, STH_ANIM_WAIT);
-                func_80151938(play, play->msgCtx.currentTextId + 1);
+                Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                 break;
 
             case 0x8FC: // (does not exist)
@@ -553,13 +553,13 @@ void EnSth_HandleSwampSpiderHouseConversation(EnSth* this, PlayState* play) {
             case 0x900: // (does not exist)
             case 0x90A: // (does not exist)
             case 0x90D: // (does not exist)
-                func_80151938(play, play->msgCtx.currentTextId + 1);
+                Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                 break;
 
             case 0x901: // (does not exist)
             case 0x90B: // (does not exist)
             case 0x917: // Someone gave me this mask and said it would make me rich, Take it
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 this->actionFunc = EnSth_SwampSpiderHouseGiveMask;
                 EnSth_SwampSpiderHouseGiveMask(this, play);
                 break;
@@ -578,7 +578,7 @@ void EnSth_HandleSwampSpiderHouseConversation(EnSth* this, PlayState* play) {
 
             default:
                 this->actor.flags &= ~ACTOR_FLAG_10000;
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 this->actionFunc = EnSth_SwampSpiderHouseIdle;
                 break;
         }

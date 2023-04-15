@@ -147,7 +147,7 @@ void EnKujiya_ChooseNextDialogue(EnKujiya* this, PlayState* play) {
 
             case 0x2B60:
                 EnKujiya_SetBoughtTicket();
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 EnKujiya_SetupTurnToClosed(this);
                 break;
 
@@ -169,7 +169,7 @@ void EnKujiya_ChooseNextDialogue(EnKujiya* this, PlayState* play) {
                 break;
 
             case 0x2B66:
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 EnKujiya_SetupGivePrize(this);
                 EnKujiya_GivePrize(this, play);
                 break;

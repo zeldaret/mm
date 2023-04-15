@@ -804,12 +804,12 @@ void func_80B5D160(EnOt* this, PlayState* play) {
                         break;
 
                     case 0x10A5:
-                        func_801477B4(play);
+                        Message_CloseTextbox(play);
                         func_80B5CE6C(this, play);
                         break;
 
                     case 0x106D:
-                        func_801477B4(play);
+                        Message_CloseTextbox(play);
                         func_80B5C154(this, play);
                         break;
                 }

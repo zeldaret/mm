@@ -414,8 +414,8 @@ void func_809C16DC(EnAob01* this, PlayState* play) {
 
 void func_809C1C9C(EnAob01* this, PlayState* play) {
     if (gSaveContext.rupeeAccumulator == 0) {
-        SET_WEEKEVENTREG(WEEKEVENTREG_63_01);
-        CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_02);
+        SET_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_WAIT);
+        CLEAR_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_TIME_PASSED);
         this->unk_2D2 |= 0x20;
         func_800FD750(0x40);
         play->nextEntrance = ENTRANCE(DOGGY_RACETRACK, 1);
@@ -673,7 +673,7 @@ void func_809C2730(EnAob01* this, PlayState* play) {
 void func_809C2788(EnAob01* this, PlayState* play) {
     this->unk_2D2 |= 0x20;
     if (func_809C25E4(this, play)) {
-        if (Audio_GetActiveSequence(SEQ_PLAYER_BGM_MAIN) != NA_BGM_HORSE_GOAL) {
+        if (AudioSeq_GetActiveSeqId(SEQ_PLAYER_BGM_MAIN) != NA_BGM_HORSE_GOAL) {
             play->nextEntrance = ENTRANCE(DOGGY_RACETRACK, 1);
             gSaveContext.eventInf[0] = (gSaveContext.eventInf[0] & (u8)~7) | 3;
             play->transitionType = TRANS_TYPE_64;
@@ -781,12 +781,12 @@ void func_809C2BE4(EnAob01* this, PlayState* play) {
     u8 talkState = Message_GetState(&play->msgCtx);
 
     if (((talkState == TEXT_STATE_5) || (talkState == TEXT_STATE_DONE)) && Message_ShouldAdvance(play)) {
-        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_63_02)) {
-            CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_02);
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_TIME_PASSED)) {
+            CLEAR_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_TIME_PASSED);
         }
 
-        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_63_01)) {
-            CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_01);
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_WAIT)) {
+            CLEAR_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_WAIT);
         }
 
         this->unk_210 = 0;
@@ -799,7 +799,7 @@ void func_809C2BE4(EnAob01* this, PlayState* play) {
 void func_809C2C9C(EnAob01* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->unk_210 = 0x354C;
-        func_80151938(play, this->unk_210);
+        Message_ContinueTextbox(play, this->unk_210);
         this->actionFunc = func_809C1D64;
     } else {
         func_800B85E0(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
@@ -835,12 +835,12 @@ void func_809C2D0C(EnAob01* this, PlayState* play) {
 
             this->unk_434 = 0;
             this->actor.shape.rot.y = this->actor.world.rot.y;
-            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_63_02)) {
-                CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_02);
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_TIME_PASSED)) {
+                CLEAR_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_TIME_PASSED);
             }
 
-            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_63_01)) {
-                CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_01);
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_WAIT)) {
+                CLEAR_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_WAIT);
             }
 
             this->unk_210 = 0x354C;
@@ -969,7 +969,7 @@ void EnAob01_Destroy(Actor* thisx, PlayState* play) {
     EnAob01* this = THIS;
 
     if (!(this->unk_2D2 & 0x20)) {
-        CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_01);
+        CLEAR_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_WAIT);
     }
     Collider_DestroyCylinder(play, &this->collider);
 }
