@@ -128,7 +128,7 @@ void Debug_DrawText(GraphicsContext* gfxCtx) {
     Gfx* gfxHead;
     GfxPrint printer;
 
-    if (THGA_GetSize(&gfxCtx->polyOpa) >= 0x2800) {
+    if (THGA_GetRemaining(&gfxCtx->polyOpa) >= 0x2800) {
         GfxPrint_Init(&printer);
 
         OPEN_DISPS(gfxCtx);
