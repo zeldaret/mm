@@ -327,17 +327,13 @@ the fourth element is the object (it is actually an enum, but the file itself ha
 
 ## Z64Utils
 
-The latest release of Z64Utils can be downloaded from [https://github.com/Random06457/Z64Utils/releases]. To use it with MM, you also need a json file to fill in the file names: the latest version can be obtained from [https://github.com/Random06457/Z64Utils-Config]. It should work on Wine. Some graphics cards don't love it, but the 3D graphical part is only required for skeleton and animations.
+The latest release of Z64Utils can be downloaded from [https://github.com/zeldaret/Z64Utils/releases]. It should work on Wine. Some graphics cards don't love it, but the 3D graphical part is only required for skeleton and animations.
 
 Having downloaded and unzipped it, open the baserom file. This will populate the main window with a list:
 
 ![Z64Utils' main window](images/z64utils_main.png)
 
-Search for the object file, right-click and select "Open in Object Analyzer". It will ask you to choose a segment: this is the segment that the file is put on, and allows Z64Utils to resolve the segmented addresses it references into symbols. The json already knows it should be segment `6`, so just click okay. This will open this window:
-
-![Z64Utils' object analyzer window](images/z64utils_object_analyzer.png)
-
-Go to "Analysis -> Find Dlists" and press OK (the defaults are usually fine). This will automatically search for displaylists in the object, which are a sufficiently distinctive format to be easy to find. We want to see the other stuff in the object too, so also do "Analysis -> Analyze Dlists". This will populate the window with even more stuff:
+Search for the object file, then either double-click it or right-click it and select "Open in Object Analyzer" to open it. It will ask you to choose a segment: this is the segment that the file is put on, and allows Z64Utils to resolve the segmented addresses it references into symbols. The json already knows it should be segment `6`, so just click okay. This will open this window; displaylists and other data will automatically be analyzed when the object is opened:
 
 ![Z64Utils, with an analyzed object](images/z64utils_object_analyzed.png)
 
@@ -347,7 +343,7 @@ We will talk about what all these types of data are next time, but for now, all 
 static void* D_80C106B0[4] = { object_bg_Tex_00F8F0, object_bg_Tex_00FCF0, object_bg_Tex_0100F0, object_bg_Tex_00FCF0 };
 ```
 
-actually are. We know they are set on segment 8, so we need to find where the skeleton uses them. We know from `object_bg_Skel_011B60` that this is at `0x06011B60`, so scroll down to it, right-click on it, and choose "Open in Skeleton Viewer". Pick an animation that we know it uses (sometimes Z64Utils misidentifies other things for animations), such as `object_bg_Anim_000968`, and you will get this error:
+actually are. We know they are set on segment 8, so we need to find where the skeleton uses them. We know from `object_bg_Skel_011B60` that this is at `0x06011B60`, so scroll down to it and either double-click on it or right-click on it and choose "Open in Skeleton Viewer". Pick an animation that we know it uses (sometimes Z64Utils misidentifies other things for animations), such as `object_bg_Anim_000968`, and you will get this error:
 
 ![Z64Utils, error when viewing skeleton](images/z64utils_skeleton_error.png)
 
@@ -447,7 +443,7 @@ void EnRecepgirl_UnkLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
 }
 ```
 
-It is used to do a rotation of whatever limb `5` is. (The `+=` is because `rot->x` is the base rotation of the limb, and we have to add the same thing to it every frame to keep the angle changed and constant.) We can use Z64Utils to : setting segment `8` to one of what we know now are the eye textures, we can view the model in the skeleton viewer. The limb numbers in the object are one smaller than those in the actor (the root limb is only a concept for the code, not the object), so we find limb 4:
+It is used to do a rotation of whatever limb `5` is. (The `+=` is because `rot->x` is the base rotation of the limb, and we have to add the same thing to it every frame to keep the angle changed and constant.) We can use Z64Utils to figure this out: setting segment `8` to one of what we know now are the eye textures, we can view the model in the skeleton viewer. The limb numbers in the object are one smaller than those in the actor (the root limb is only a concept for the code, not the object), so we find limb 4:
 
 ![Z64Utils highlighting a limb](images/z64utils_skeleton_head.png)
 
