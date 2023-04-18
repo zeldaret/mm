@@ -3063,7 +3063,7 @@ void func_80127B64(struct_801F58B0 arg0[], s32 count, Vec3f* arg2) {
 }
 
 // Draws the Great Fairy's Mask particles when a stray fairy is in the room
-void func_80127BE8(PlayState* play, Vec3f* arg1) {
+void Player_DrawStrayFairyParticles(PlayState* play, Vec3f* arg1) {
     Vec3f sp2C;
     f32 sp28;
 
@@ -3123,7 +3123,7 @@ void func_80127DA4(PlayState* play, struct_801F58B0 arg1[], struct_80128388_arg1
 
             *arg6 += 0x16;
             if (!(*arg6 & 1)) {
-                func_80127BE8(play, &phi_s1->unk_00);
+                Player_DrawStrayFairyParticles(play, &phi_s1->unk_00);
             }
         }
         Math_Vec3f_Sum(&phi_s1->unk_00, &phi_s1->unk_0C, &phi_s1->unk_00);

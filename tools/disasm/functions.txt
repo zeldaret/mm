@@ -2267,7 +2267,7 @@
     0x801278F8:("Player_DrawBlastMask",),
     0x80127A60:("Player_DrawBunnyHood",),
     0x80127B64:("func_80127B64",),
-    0x80127BE8:("func_80127BE8",),
+    0x80127BE8:("Player_DrawStrayFairyParticles",),
     0x80127DA4:("func_80127DA4",),
     0x80128388:("func_80128388",),
     0x801284A0:("Player_DrawGreatFairysMask",),
