@@ -3862,7 +3862,7 @@
     0x801ED9A0:("D_801ED9A0","char","[80]",0x50),
     0x801ED9F0:("D_801ED9F0","Vec3f","[3]",0x24),
     0x801EDA18:("D_801EDA18","Vec3f","[3]",0x24),
-    0x801EDA40:("D_801EDA40","MtxF","",0x40),
+    0x801EDA40:("sModelToWorldMtxF","MtxF","",0x40),
     0x801EDA80:("D_801EDA80","Vec3f","[3]",0x24),
     0x801EDAA8:("D_801EDAA8","char","[80]",0x50),
     0x801EDAF8:("D_801EDAF8","char","[80]",0x50),
