@@ -2259,7 +2259,7 @@ extern char D_801ED950[80];
 extern char D_801ED9A0[80];
 extern Vec3f D_801ED9F0[3];
 extern Vec3f D_801EDA18[3];
-extern MtxF D_801EDA40;
+extern MtxF sModelToWorldMtxF;
 extern Vec3f D_801EDA80[3];
 extern char D_801EDAA8[80];
 extern char D_801EDAF8[80];
@@ -2440,7 +2440,7 @@ extern u8 sMotionBlurStatus;
 
 extern UNK_TYPE1 D_801F7FF0;
 extern struct_801F8010 D_801F8010;
-extern struct_801F8020 D_801F8020;
+extern VisZbuf sVisZbuf;
 extern VisMono sMonoColors;
 extern UNK_TYPE1 D_801F8048;
 extern FaultAddrConvClient sGraphFaultAddrConvClient;
