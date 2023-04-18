@@ -345,7 +345,7 @@ void func_808A1090(DoorShutter* this, PlayState* play) {
         if (this->unk_166 != 0) {
             Flags_SetSwitch(play, DOORSHUTTER_GET_7F(&this->actor));
             if (this->doorType != 5) {
-                gSaveContext.save.inventory.dungeonKeys[gSaveContext.mapIndex]--;
+                gSaveContext.save.saveInfo.inventory.dungeonKeys[gSaveContext.mapIndex]--;
                 Actor_PlaySfx(&this->actor, NA_SE_EV_CHAIN_KEY_UNLOCK);
             } else {
                 Actor_PlaySfx(&this->actor, NA_SE_EV_CHAIN_KEY_UNLOCK_B);
@@ -368,7 +368,7 @@ void func_808A1090(DoorShutter* this, PlayState* play) {
             }
 
             if (this->doorType == 6) {
-                if (gSaveContext.save.playerData.healthCapacity < (DOORSHUTTER_GET_1F(&this->actor) * 0x10)) {
+                if (gSaveContext.save.saveInfo.playerData.healthCapacity < (DOORSHUTTER_GET_1F(&this->actor) * 0x10)) {
                     player->doorType = PLAYER_DOORTYPE_TALKING;
                     this->actor.textId = 0x14FC;
                 }

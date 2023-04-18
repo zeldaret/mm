@@ -162,7 +162,7 @@ void ElfMsg6_Init(Actor* thisx, PlayState* play) {
 
             switch (ELFMSG6_GET_F0(&this->actor)) {
                 case 0:
-                    if (gSaveContext.save.inventory.items[ITEM_HOOKSHOT] != ITEM_HOOKSHOT) {
+                    if (gSaveContext.save.saveInfo.inventory.items[ITEM_HOOKSHOT] != ITEM_HOOKSHOT) {
                         Actor_Kill(&this->actor);
                         return;
                     }

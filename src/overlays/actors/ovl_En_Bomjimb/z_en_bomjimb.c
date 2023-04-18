@@ -686,11 +686,12 @@ void func_80C02740(EnBomjimb* this, PlayState* play) {
         return;
     }
 
-    Message_StartTextbox(play, D_80C03230[((void)0, gSaveContext.save.bombersCaughtNum)], &this->actor);
-    gSaveContext.save.bombersCaughtOrder[((void)0, gSaveContext.save.bombersCaughtNum)] = this->unk_2C8 + 1;
-    gSaveContext.save.bombersCaughtNum++;
+    Message_StartTextbox(play, D_80C03230[((void)0, gSaveContext.save.saveInfo.bombersCaughtNum)], &this->actor);
+    gSaveContext.save.saveInfo.bombersCaughtOrder[((void)0, gSaveContext.save.saveInfo.bombersCaughtNum)] =
+        this->unk_2C8 + 1;
+    gSaveContext.save.saveInfo.bombersCaughtNum++;
 
-    if (gSaveContext.save.bombersCaughtNum > 4) {
+    if (gSaveContext.save.saveInfo.bombersCaughtNum > 4) {
         Audio_PlayFanfare(NA_BGM_GET_ITEM | 0x900);
     } else {
         Actor_PlaySfx(&this->actor, NA_SE_SY_PIECE_OF_HEART);
@@ -761,7 +762,7 @@ void func_80C02A14(EnBomjimb* this, PlayState* play) {
 
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         Message_CloseTextbox(play);
-        if ((this->unk_2CA == 8) && (gSaveContext.save.bombersCaughtNum >= 5)) {
+        if ((this->unk_2CA == 8) && (gSaveContext.save.saveInfo.bombersCaughtNum >= 5)) {
             func_80C02CA4(this, play);
         } else {
             if (this->unk_2CA == 8) {
