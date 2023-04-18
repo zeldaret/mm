@@ -153,7 +153,7 @@ typedef enum WallType {
 #define WALL_FLAG_5 (1 << 5)
 #define WALL_FLAG_6 (1 << 6)
 
-// SurfaceType Can Leave Imprints in the Material
+// SurfaceType can leave footsteps imprints in the material
 #define MATERIAL_PROPERTY_SOFT_IMPRINT (1 << 0)
 
 typedef enum FloorProperty {
