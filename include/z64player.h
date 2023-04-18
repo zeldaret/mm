@@ -172,14 +172,14 @@ typedef enum PlayerItemAction {
 } PlayerItemAction;
 
 // Relies on B swords related item actions to be contiguous
-#define GET_BSWORD_FROM_IA(itemAction) ((itemAction) - PLAYER_IA_SWORD_MIN + 1)
+#define GET_B_SWORD_FROM_IA(itemAction) ((itemAction) - PLAYER_IA_SWORD_MIN + 1)
 
 typedef enum PlayerBButtonSword {
-    /* 0 */ PLAYER_BSWORD_NONE,
-    /* 1 */ PLAYER_BSWORD_KOKIRI = GET_BSWORD_FROM_IA(PLAYER_IA_SWORD_KOKIRI),
-    /* 2 */ PLAYER_BSWORD_RAZOR = GET_BSWORD_FROM_IA(PLAYER_IA_SWORD_RAZOR),
-    /* 3 */ PLAYER_BSWORD_GILDED = GET_BSWORD_FROM_IA(PLAYER_IA_SWORD_GILDED),
-    /* 4 */ PLAYER_BSWORD_MAX
+    /* 0 */ PLAYER_B_SWORD_NONE,
+    /* 1 */ PLAYER_B_SWORD_KOKIRI = GET_B_SWORD_FROM_IA(PLAYER_IA_SWORD_KOKIRI),
+    /* 2 */ PLAYER_B_SWORD_RAZOR = GET_B_SWORD_FROM_IA(PLAYER_IA_SWORD_RAZOR),
+    /* 3 */ PLAYER_B_SWORD_GILDED = GET_B_SWORD_FROM_IA(PLAYER_IA_SWORD_GILDED),
+    /* 4 */ PLAYER_B_SWORD_MAX
 } PlayerBButtonSword;
 
 // Relies on melee weapon related item actions to be contiguous
