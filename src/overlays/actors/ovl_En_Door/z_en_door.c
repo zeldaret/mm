@@ -477,7 +477,7 @@ void func_80866B20(EnDoor* this, PlayState* play) {
         Animation_PlayOnceSetSpeed(&this->door.skelAnime, sAnimations[this->door.animIndex],
                                    (player->stateFlags1 & PLAYER_STATE1_8000000) ? 0.75f : 1.5f);
         if (this->unk_1A6 != 0) {
-            gSaveContext.save.inventory.dungeonKeys[gSaveContext.mapIndex]--;
+            gSaveContext.save.saveInfo.inventory.dungeonKeys[gSaveContext.mapIndex]--;
             Flags_SetSwitch(play, this->switchFlag);
             Actor_PlaySfx(&this->door.dyna.actor, NA_SE_EV_CHAIN_KEY_UNLOCK);
         }
@@ -500,7 +500,7 @@ void func_80866B20(EnDoor* this, PlayState* play) {
                 player->doorDirection = playerPosRelToDoor.z >= 0.0f ? 1.0f : -1.0f;
                 player->doorActor = &this->door.dyna.actor;
                 if (this->unk_1A6 != 0) {
-                    if (gSaveContext.save.inventory.dungeonKeys[((void)0, gSaveContext.mapIndex)] <= 0) {
+                    if (gSaveContext.save.saveInfo.inventory.dungeonKeys[((void)0, gSaveContext.mapIndex)] <= 0) {
                         player->doorType = PLAYER_DOORTYPE_TALKING;
                         this->door.dyna.actor.textId = 0x1802;
                     } else {

@@ -334,7 +334,7 @@ void func_80BCB6D0(EnScopenuts* this, PlayState* play) {
         if (Message_ShouldAdvance(play)) {
             switch (play->msgCtx.choiceIndex) {
                 case 0:
-                    if (gSaveContext.save.playerData.rupees < this->unk_358) {
+                    if (gSaveContext.save.saveInfo.playerData.rupees < this->unk_358) {
                         play_sound(NA_SE_SY_ERROR);
                         this->unk_33C = 0x1636;
                         this->unk_328 |= 1;
@@ -684,7 +684,8 @@ void EnScopenuts_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     EnScopenuts* this = THIS;
 
-    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_74_40) && (gSaveContext.save.inventory.items[ITEM_OCARINA] == ITEM_NONE)) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_74_40) &&
+        (gSaveContext.save.saveInfo.inventory.items[ITEM_OCARINA] == ITEM_NONE)) {
         Actor_Kill(&this->actor);
         return;
     }
