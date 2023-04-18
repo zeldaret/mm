@@ -101,7 +101,7 @@ void EnTorch2_Update(Actor* thisx, PlayState* play) {
 
     this->actor.gravity = -1.0f;
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 20.0f, 70.0f, 0x05);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 20.0f, 70.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
 
     if (this->framesUntilNextState == 0) {
         remainingFrames = 0;

@@ -853,7 +853,8 @@ void EnRat_Update(Actor* thisx, PlayState* play) {
             this->actor.floorHeight = this->actor.world.pos.y;
         } else {
             Actor_MoveWithGravity(&this->actor);
-            Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 30.0f, 60.0f, 7);
+            Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 30.0f, 60.0f,
+                                    UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_2 | UPDBGCHECKINFO_FLAG_4);
         }
 
         if (SurfaceType_IsWallDamage(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId)) {

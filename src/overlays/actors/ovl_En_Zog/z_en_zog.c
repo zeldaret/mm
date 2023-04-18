@@ -956,7 +956,7 @@ void EnZog_Update(Actor* thisx, PlayState* play) {
     EnZog* this = THIS;
 
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 10.0f, 10.0f, 5);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 10.0f, 10.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
     if (Cutscene_CheckActorAction(play, 0x1D7) && (ENZOG_GET_F(&this->actor) != ENZOG_F_2)) {
         this->actionFunc = func_80B9461C;
         this->actor.shape.yOffset = 0.0f;

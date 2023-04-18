@@ -392,7 +392,8 @@ void EnBubble_Update(Actor* thisx, PlayState* play) {
     EnBubble* this = (EnBubble*)thisx;
 
     Actor_UpdatePos(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 16.0f, 16.0f, 0.0f, 7);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 16.0f, 16.0f, 0.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_2 | UPDBGCHECKINFO_FLAG_4);
     this->actionFunc(this, play);
     Actor_SetFocus(&this->actor, this->actor.shape.yOffset);
 }

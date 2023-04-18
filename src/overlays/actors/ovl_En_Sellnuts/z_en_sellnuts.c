@@ -118,7 +118,7 @@ void func_80ADADD0(EnSellnuts* this, PlayState* play) {
     }
 
     if (this->unk_338 & 1) {
-        Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 20.0f, 5);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 20.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
     }
 }
 

@@ -174,7 +174,8 @@ void EnEstone_Update(Actor* thisx, PlayState* play2) {
 
     Actor_MoveWithGravity(&this->actor);
     if ((this->timer == 0) && !this->inactive) {
-        Actor_UpdateBgCheckInfo(play, &this->actor, 50.0f, 50.0f, 100.0f, 0x1C);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 50.0f, 50.0f, 100.0f,
+                                UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 | UPDBGCHECKINFO_FLAG_10);
     }
     if (!this->inactive) {
         Collider_UpdateCylinder(&this->actor, &this->collider);

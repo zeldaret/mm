@@ -849,7 +849,7 @@ void EnSsh_Update(Actor* thisx, PlayState* play) {
     } else {
         SkelAnime_Update(&this->skelAnime);
         Actor_UpdatePos(&this->actor);
-        Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
         this->actionFunc(this, play);
     }
 

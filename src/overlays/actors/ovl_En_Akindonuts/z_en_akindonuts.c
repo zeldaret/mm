@@ -150,7 +150,7 @@ void func_80BECC7C(EnAkindonuts* this, PlayState* play) {
     }
 
     if (this->unk_32C & 2) {
-        Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 20.0f, 5);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 20.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
     }
 }
 

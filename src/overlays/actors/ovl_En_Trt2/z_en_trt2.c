@@ -792,7 +792,7 @@ void func_80AD4FE4(EnTrt2* this, PlayState* play) {
     Actor_MoveWithGravity(&this->actor);
 
     if (play->sceneId != SCENE_20SICHITAI) {
-        Actor_UpdateBgCheckInfo(play, &this->actor, 26.0f, 10.0f, 0.0f, 5);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 26.0f, 10.0f, 0.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
     }
 
     Actor_SetFocus(&this->actor, 90.0f);

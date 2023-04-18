@@ -273,7 +273,7 @@ void EnAz_Init(Actor* thisx, PlayState* play2) {
         this->collider.dim.height *= 1.2f;
         this->collider.dim.yShift *= 1.2f;
     }
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 5);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
     if ((this->actor.bgCheckFlags & BGCHECKFLAG_WATER) && (this->actor.depthInWater > 22.0f)) {
         this->unk_374 |= 0x100;
         this->unk_376 |= 0x100;
@@ -1660,9 +1660,9 @@ void EnAz_Update(Actor* thisx, PlayState* play2) {
         this->unk_39C = 0;
     }
     if (!(this->unk_374 & 0x1000)) {
-        Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 20.0f, 5);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 20.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
     } else {
-        Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 20.0f, 0x400);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 20.0f, UPDBGCHECKINFO_FLAG_400);
         this->unk_374 &= ~0x1000;
     }
     Collider_UpdateCylinder(&this->actor, &this->collider);

@@ -237,7 +237,7 @@ void EnDg_UpdateCollision(EnDg* this, PlayState* play) {
         Collider_ResetCylinderOC(play, &this->collider.base);
     }
 
-    Actor_UpdateBgCheckInfo(play, &this->actor, 26.0f, 10.0f, 0.0f, 5);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 26.0f, 10.0f, 0.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
 }
 
 void EnDg_GetFloorRot(EnDg* this, Vec3f* floorRot) {

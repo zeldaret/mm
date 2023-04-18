@@ -147,7 +147,8 @@ void EnTite_Init(Actor* thisx, PlayState* play) {
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
     Collider_InitAndSetSphere(play, &this->collider, &this->actor, &sSphereInit);
     this->collider.dim.worldSphere.radius = sSphereInit.dim.modelSphere.radius;
-    this->unk_2C0 = 0x1D;
+    this->updBgCheckInfoFlags =
+        UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 | UPDBGCHECKINFO_FLAG_10;
 
     if (!D_80896B60) {
         for (i = 0; i < ARRAY_COUNT(D_80896B24); i++) {
@@ -178,7 +179,7 @@ void EnTite_Init(Actor* thisx, PlayState* play) {
     }
 
     if (this->actor.params == ENTITE_MINUS_2) {
-        this->unk_2C0 |= 0x40;
+        this->updBgCheckInfoFlags |= UPDBGCHECKINFO_FLAG_40;
         this->actor.colChkInfo.health = 3;
     }
 }
@@ -1062,7 +1063,7 @@ void EnTite_Update(Actor* thisx, PlayState* play) {
 
     if (this->actionFunc != func_808951B8) {
         Actor_MoveWithGravity(&this->actor);
-        Actor_UpdateBgCheckInfo(play, &this->actor, 25.0f, 40.0f, 20.0f, this->unk_2C0);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 25.0f, 40.0f, 20.0f, this->updBgCheckInfoFlags);
         func_808963B4(this, play);
         if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
             func_800BE3D0(&this->actor, this->actor.shape.rot.y, &this->actor.shape.rot);

@@ -384,7 +384,8 @@ void func_80A1C554(ObjFlowerpot* this) {
 }
 
 void func_80A1C5E8(ObjFlowerpot* this, PlayState* play) {
-    Actor_UpdateBgCheckInfo(play, &this->actor, 18.0f, 15.0f, 0.0f, 0x45);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 18.0f, 15.0f, 0.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_40);
 }
 
 void func_80A1C62C(ObjFlowerpot* this, PlayState* play) {

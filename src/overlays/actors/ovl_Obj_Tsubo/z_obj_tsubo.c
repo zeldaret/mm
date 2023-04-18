@@ -431,7 +431,7 @@ void func_80928914(ObjTsubo* this) {
 
 void func_80928928(ObjTsubo* this, PlayState* play) {
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 15.0f, 15.0f, 0.0f, 0x44);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 15.0f, 15.0f, 0.0f, UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_40);
     if (Object_IsLoaded(&play->objectCtx, this->objBankIndex)) {
         this->actor.objBankIndex = this->objBankIndex;
         func_809289B4(this);
@@ -493,7 +493,8 @@ void func_809289E4(ObjTsubo* this, PlayState* play) {
     } else {
         if (!this->unk_195) {
             Actor_MoveWithGravity(&this->actor);
-            Actor_UpdateBgCheckInfo(play, &this->actor, 15.0f, 15.0f, 0.0f, 0x44);
+            Actor_UpdateBgCheckInfo(play, &this->actor, 15.0f, 15.0f, 0.0f,
+                                    UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_40);
             if ((this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) &&
                 (DynaPoly_GetActor(&play->colCtx, this->actor.floorBgId) == NULL)) {
                 this->unk_195 = true;
@@ -532,7 +533,9 @@ void func_80928D80(ObjTsubo* this, PlayState* play) {
         this->actor.room = play->roomCtx.curRoom.num;
         Actor_MoveWithGravity(&this->actor);
         this->actor.flags &= ~ACTOR_FLAG_4000000;
-        Actor_UpdateBgCheckInfo(play, &this->actor, 15.0f, 15.0f, 0.0f, 0xC5);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 15.0f, 15.0f, 0.0f,
+                                UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_40 |
+                                    UPDBGCHECKINFO_FLAG_80);
         func_80928E74(this);
     } else {
         pos.x = this->actor.world.pos.x;
@@ -605,7 +608,9 @@ void func_80928F18(ObjTsubo* this, PlayState* play) {
         Math_StepToS(&D_8092950C, D_80929508, 150);
         this->actor.shape.rot.x += D_80929504;
         this->actor.shape.rot.y += D_8092950C;
-        Actor_UpdateBgCheckInfo(play, &this->actor, 15.0f, 15.0f, 0.0f, 0xC5);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 15.0f, 15.0f, 0.0f,
+                                UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_40 |
+                                    UPDBGCHECKINFO_FLAG_80);
         Collider_UpdateCylinder(&this->actor, &this->cylinderCollider);
         CollisionCheck_SetOC(play, &play->colChkCtx, &this->cylinderCollider.base);
         CollisionCheck_SetAT(play, &play->colChkCtx, &this->cylinderCollider.base);
