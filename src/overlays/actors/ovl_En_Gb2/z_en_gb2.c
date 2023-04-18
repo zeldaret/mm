@@ -163,7 +163,7 @@ u16 func_80B0F7FC(EnGb2* this) {
                 return 0x14E4;
             }
 
-            if (gSaveContext.save.playerData.health > 48) {
+            if (gSaveContext.save.saveInfo.playerData.health > 48) {
                 return 0x14D2;
             }
 
@@ -171,7 +171,7 @@ u16 func_80B0F7FC(EnGb2* this) {
             return 0x14D3;
 
         case 0x14E4:
-            if (gSaveContext.save.playerData.health > 48) {
+            if (gSaveContext.save.saveInfo.playerData.health > 48) {
                 return 0x14D2;
             }
 
@@ -407,7 +407,7 @@ void func_80B0FFA8(EnGb2* this, PlayState* play) {
         if (this->unk_26E == 0x14D5) {
             switch (play->msgCtx.choiceIndex) {
                 case 0:
-                    if (gSaveContext.save.playerData.rupees < this->unk_288) {
+                    if (gSaveContext.save.saveInfo.playerData.rupees < this->unk_288) {
                         play_sound(NA_SE_SY_ERROR);
                         this->unk_26E = 0x14D7;
                         this->unk_26C |= 2;
@@ -505,7 +505,7 @@ void func_80B10344(EnGb2* this, PlayState* play) {
         }
     }
 
-    if (gSaveContext.save.playerData.health < 49) {
+    if (gSaveContext.save.saveInfo.playerData.health < 49) {
         gSaveContext.timerStates[TIMER_ID_MINIGAME_1] = TIMER_STATE_STOP;
         SET_EVENTINF(EVENTINF_46);
         SET_EVENTINF(EVENTINF_45);
@@ -575,7 +575,7 @@ void func_80B10634(EnGb2* this, PlayState* play) {
     } else if ((talkState == TEXT_STATE_CHOICE) && Message_ShouldAdvance(play)) {
         switch (play->msgCtx.choiceIndex) {
             case 0:
-                if (gSaveContext.save.playerData.rupees < this->unk_288) {
+                if (gSaveContext.save.saveInfo.playerData.rupees < this->unk_288) {
                     play_sound(NA_SE_SY_ERROR);
                     this->unk_26E = 0x14D7;
                     this->unk_26C |= 2;

@@ -173,9 +173,9 @@ void func_809C4BC4(EnBomBowlMan* this, PlayState* play) {
     func_809C4B50(this);
     func_809C493C(this, 0, 1.0f);
 
-    for (i = 0; i < ARRAY_COUNT(gSaveContext.save.bomberCode); i++) {
+    for (i = 0; i < ARRAY_COUNT(gSaveContext.save.saveInfo.bomberCode); i++) {
         Math_Vec3f_Copy(&sp7C, &this->actor.home.pos);
-        code = gSaveContext.save.bomberCode[i];
+        code = gSaveContext.save.saveInfo.bomberCode[i];
         if (code == 1) {
             Math_Vec3f_Copy(&this->actor.world.pos, &D_809C61A0[i]);
             this->unk_2D8[code] = this;

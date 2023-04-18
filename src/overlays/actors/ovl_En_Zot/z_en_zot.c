@@ -467,7 +467,7 @@ void func_80B973BC(EnZot* this, PlayState* play) {
                 break;
 
             case 0x1275:
-                if (gSaveContext.save.playerData.rupees < 10) {
+                if (gSaveContext.save.saveInfo.playerData.rupees < 10) {
                     Message_ContinueTextbox(play, 0x1277);
                 } else {
                     Message_ContinueTextbox(play, 0x1278);
