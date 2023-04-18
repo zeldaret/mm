@@ -489,7 +489,7 @@ void EnFamos_SetupChase(EnFamos* this) {
 void EnFamos_Chase(EnFamos* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     Vec3f abovePlayerPos;
-    BgFloorProperty surfaceType;
+    FloorProperty surfaceType;
 
     EnFamos_UpdateBobbingHeight(this);
     Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0x800);
@@ -502,7 +502,7 @@ void EnFamos_Chase(EnFamos* this, PlayState* play) {
 
     surfaceType = SurfaceType_GetFloorProperty2(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
     if ((this->actor.xzDistToPlayer < 30.0f) && (this->actor.floorHeight > BGCHECK_Y_MIN) && // close enough
-        (surfaceType != BG_FLOOR_PROPERTY_12 && surfaceType != BG_FLOOR_PROPERTY_13)) {
+        (surfaceType != FLOOR_PROPERTY_12 && surfaceType != FLOOR_PROPERTY_13)) {
         EnFamos_SetupAttackAim(this);
 
     } else if ((Player_GetMask(play) == PLAYER_MASK_STONE) ||

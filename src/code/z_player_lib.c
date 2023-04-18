@@ -1700,7 +1700,7 @@ void func_80124870(PlayState* play, Player* player, SkelAnime* skelAnime, Vec3f*
     f32 sp4C;
     f32 sp48;
     s32 temp_f8;
-    BgFloorType floorType;
+    FloorType floorType;
     s16 phi_t1;
 
     if ((player->stateFlags3 & PLAYER_STATE3_1) || !(player->actor.scale.y >= 0.0f) ||
@@ -1765,7 +1765,7 @@ void func_80124870(PlayState* play, Player* player, SkelAnime* skelAnime, Vec3f*
         skelAnime->jointTable[arg7].z = (skelAnime->jointTable[arg7].z + (s16)temp_f8) - phi_t1;
 
         floorType = SurfaceType_GetFloorType(&play->colCtx, spA4, spA0);
-        if ((floorType >= BG_FLOOR_TYPE_2) && (floorType < BG_FLOOR_TYPE_4) &&
+        if ((floorType >= FLOOR_TYPE_2) && (floorType < FLOOR_TYPE_4) &&
             !SurfaceType_IsWallDamage(&play->colCtx, spA4, spA0)) {
             footprintPos.y = sp9C;
             EffectSsGFire_Spawn(play, &footprintPos);

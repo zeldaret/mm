@@ -1067,7 +1067,7 @@ typedef struct Player {
     /* 0xD58 */ PlayerFuncD58 unk_D58;
     /* 0xD5C */ s8 invincibilityTimer; // prevents damage when nonzero (positive = visible, counts towards zero each frame)
     /* 0xD5D */ u8 unk_D5D;
-    /* 0xD5E */ u8 floorProperty; // BgFloorProperty enum
+    /* 0xD5E */ u8 floorProperty; // FloorProperty enum
     /* 0xD60 */ f32 unk_D60;
     /* 0xD64 */ s16 unk_D64;
     /* 0xD66 */ u16 unk_D66; // sfx
