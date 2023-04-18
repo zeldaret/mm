@@ -3,15 +3,15 @@
 
 #define ANIM_INTERP 1
 
-s32 DmaAnimation_Loop(PlayState* play, SkelAnime* skelAnime);
-s32 DmaAnimation_Once(PlayState* play, SkelAnime* skelAnime);
+s32 PlayerAnimation_Loop(PlayState* play, SkelAnime* skelAnime);
+s32 PlayerAnimation_Once(PlayState* play, SkelAnime* skelAnime);
 s32 SkelAnime_LoopFull(SkelAnime* skelAnime);
 s32 SkelAnime_LoopPartial(SkelAnime* skelAnime);
 s32 SkelAnime_Once(SkelAnime* skelAnime);
 void Animation_PlayLoop(SkelAnime* skelAnime, AnimationHeader* animation);
 void SkelAnime_UpdateTranslation(SkelAnime* skelAnime, Vec3f* diff, s16 angle);
-void DmaAnimation_Change(PlayState* play, SkelAnime* skelAnime, DmaAnimationHeader* animation, f32 playSpeed,
-                         f32 startFrame, f32 endFrame, u8 mode, f32 morphFrames);
+void PlayerAnimation_Change(PlayState* play, SkelAnime* skelAnime, PlayerAnimationHeader* animation, f32 playSpeed,
+                            f32 startFrame, f32 endFrame, u8 mode, f32 morphFrames);
 void SkelAnime_CopyFrameTable(SkelAnime* skelAnime, Vec3s* dst, Vec3s* src);
 
 void AnimationContext_LoadFrame(struct PlayState* play, AnimationEntryData* data);
@@ -1001,18 +1001,18 @@ AnimationEntry* AnimationContext_AddEntry(AnimationContext* animationCtx, Animat
 /**
  * Requests loading frame data from the Player animation into frameTable
  */
-void AnimationContext_SetLoadFrame(PlayState* play, DmaAnimationHeader* animation, s32 frame, s32 limbCount,
+void AnimationContext_SetLoadFrame(PlayState* play, PlayerAnimationHeader* animation, s32 frame, s32 limbCount,
                                    Vec3s* frameTable) {
     AnimationEntry* entry = AnimationContext_AddEntry(&play->animationCtx, ANIMATION_LINKANIMETION);
 
     if (entry != NULL) {
-        DmaAnimationHeader* dmaAnimHeader = Lib_SegmentedToVirtual(animation);
+        PlayerAnimationHeader* playerAnimHeader = Lib_SegmentedToVirtual(animation);
         void* ram = (void*)frameTable;
 
         osCreateMesgQueue(&entry->data.load.msgQueue, entry->data.load.msg, ARRAY_COUNT(entry->data.load.msg));
         DmaMgr_SendRequestImpl(
             &entry->data.load.req, ram,
-            LINK_ANIMETION_OFFSET(dmaAnimHeader->segmentVoid, (sizeof(Vec3s) * limbCount + sizeof(s16)) * frame),
+            LINK_ANIMETION_OFFSET(playerAnimHeader->linkAnimSegment, (sizeof(Vec3s) * limbCount + sizeof(s16)) * frame),
             sizeof(Vec3s) * limbCount + sizeof(s16), 0, &entry->data.load.msgQueue, NULL);
     }
 }
@@ -1195,11 +1195,11 @@ void AnimationContext_Update(PlayState* play, AnimationContext* animationCtx) {
 }
 
 /**
- * Initializes a skeleton to be used with DMA animations to a looping animation, dynamically allocating the frame
+ * Initializes a skeleton to be used with Player animations to a looping animation, dynamically allocating the frame
  * tables if not given.
  */
 void SkelAnime_InitPlayer(PlayState* play, SkelAnime* skelAnime, FlexSkeletonHeader* skeletonHeaderSeg,
-                          DmaAnimationHeader* animation, s32 flags, void* jointTableBuffer, void* morphTableBuffer,
+                          PlayerAnimationHeader* animation, s32 flags, void* jointTableBuffer, void* morphTableBuffer,
                           s32 limbBufCount) {
     FlexSkeletonHeader* skeletonHeader;
     s32 headerJointCount;
@@ -1236,17 +1236,17 @@ void SkelAnime_InitPlayer(PlayState* play, SkelAnime* skelAnime, FlexSkeletonHea
         skelAnime->morphTable = (void*)ALIGN16((uintptr_t)morphTableBuffer);
     }
 
-    DmaAnimation_Change(play, skelAnime, animation, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f);
+    PlayerAnimation_Change(play, skelAnime, animation, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f);
 }
 
 /**
- * Sets the update function of a SkelAnime that uses DMA animations based on its mode
+ * Sets the update function of a SkelAnime that uses Player animations based on its mode
  */
-void DmaAnimation_SetUpdateFunction(SkelAnime* skelAnime) {
+void PlayerAnimation_SetUpdateFunction(SkelAnime* skelAnime) {
     if (skelAnime->mode <= ANIMMODE_LOOP_INTERP) {
-        skelAnime->update.dma = DmaAnimation_Loop;
+        skelAnime->update.player = PlayerAnimation_Loop;
     } else {
-        skelAnime->update.dma = DmaAnimation_Once;
+        skelAnime->update.player = PlayerAnimation_Once;
     }
     skelAnime->morphWeight = 0.0f;
 }
@@ -1255,21 +1255,21 @@ void DmaAnimation_SetUpdateFunction(SkelAnime* skelAnime) {
  * Advances the current Player animation and updates all frame tables. If the animation plays once, returns true when it
  * finishes.
  */
-s32 DmaAnimation_Update(PlayState* play, SkelAnime* skelAnime) {
-    return skelAnime->update.dma(play, skelAnime);
+s32 PlayerAnimation_Update(PlayState* play, SkelAnime* skelAnime) {
+    return skelAnime->update.player(play, skelAnime);
 }
 
 /**
  * Requests an interpolation between the pose in jointTable to the one in morphTable, advancing the morph but not the
  * animation frame
  */
-s32 DmaAnimation_Morph(PlayState* play, SkelAnime* skelAnime) {
+s32 PlayerAnimation_Morph(PlayState* play, SkelAnime* skelAnime) {
     f32 prevMorphWeight = skelAnime->morphWeight;
     f32 updateRate = (s32)play->state.framerateDivisor * 0.5f;
 
     skelAnime->morphWeight -= skelAnime->morphRate * updateRate;
     if (skelAnime->morphWeight <= 0.0f) {
-        DmaAnimation_SetUpdateFunction(skelAnime);
+        PlayerAnimation_SetUpdateFunction(skelAnime);
     }
 
     AnimationContext_SetInterp(play, skelAnime->limbCount, skelAnime->jointTable, skelAnime->morphTable,
@@ -1281,7 +1281,7 @@ s32 DmaAnimation_Morph(PlayState* play, SkelAnime* skelAnime) {
  * Requests a load of the next frame of a Player animation, advances the morph, and requests an interpolation between
  * jointTable and morphTable
  */
-void DmaAnimation_AnimateFrame(PlayState* play, SkelAnime* skelAnime) {
+void PlayerAnimation_AnimateFrame(PlayState* play, SkelAnime* skelAnime) {
     AnimationContext_SetLoadFrame(play, skelAnime->animation, skelAnime->curFrame, skelAnime->limbCount,
                                   skelAnime->jointTable);
     if (skelAnime->morphWeight != 0) {
@@ -1299,7 +1299,7 @@ void DmaAnimation_AnimateFrame(PlayState* play, SkelAnime* skelAnime) {
 /**
  * Advances a Player animation that loops over its full length
  */
-s32 DmaAnimation_Loop(PlayState* play, SkelAnime* skelAnime) {
+s32 PlayerAnimation_Loop(PlayState* play, SkelAnime* skelAnime) {
     f32 updateRate = (s32)play->state.framerateDivisor * 0.5f;
 
     skelAnime->curFrame += skelAnime->playSpeed * updateRate;
@@ -1308,18 +1308,18 @@ s32 DmaAnimation_Loop(PlayState* play, SkelAnime* skelAnime) {
     } else if (skelAnime->animLength <= skelAnime->curFrame) {
         skelAnime->curFrame -= skelAnime->animLength;
     }
-    DmaAnimation_AnimateFrame(play, skelAnime);
+    PlayerAnimation_AnimateFrame(play, skelAnime);
     return false;
 }
 
 /**
  * Advances a Player animation that stops at endFrame and returns true when it is reached.
  */
-s32 DmaAnimation_Once(PlayState* play, SkelAnime* skelAnime) {
+s32 PlayerAnimation_Once(PlayState* play, SkelAnime* skelAnime) {
     f32 updateRate = (s32)play->state.framerateDivisor * 0.5f;
 
     if (skelAnime->curFrame == skelAnime->endFrame) {
-        DmaAnimation_AnimateFrame(play, skelAnime);
+        PlayerAnimation_AnimateFrame(play, skelAnime);
         return true;
     }
 
@@ -1334,7 +1334,7 @@ s32 DmaAnimation_Once(PlayState* play, SkelAnime* skelAnime) {
             skelAnime->curFrame -= skelAnime->animLength;
         }
     }
-    DmaAnimation_AnimateFrame(play, skelAnime);
+    PlayerAnimation_AnimateFrame(play, skelAnime);
     return false;
 }
 
@@ -1352,22 +1352,23 @@ void Animation_SetMorph(PlayState* play, SkelAnime* skelAnime, f32 morphFrames) 
  * animation, then start the new animation. Negative morph frames start the new animation immediately, modified by the
  * pose immediately before the animation change.
  */
-void DmaAnimation_Change(PlayState* play, SkelAnime* skelAnime, DmaAnimationHeader* animation, f32 playSpeed,
-                         f32 startFrame, f32 endFrame, u8 mode, f32 morphFrames) {
+void PlayerAnimation_Change(PlayState* play, SkelAnime* skelAnime, PlayerAnimationHeader* animation, f32 playSpeed,
+                            f32 startFrame, f32 endFrame, u8 mode, f32 morphFrames) {
     skelAnime->mode = mode;
     if ((morphFrames != 0.0f) && ((animation != skelAnime->animation) || (startFrame != skelAnime->curFrame))) {
         if (morphFrames < 0) {
-            DmaAnimation_SetUpdateFunction(skelAnime);
+            PlayerAnimation_SetUpdateFunction(skelAnime);
             SkelAnime_CopyFrameTable(skelAnime, skelAnime->morphTable, skelAnime->jointTable);
             morphFrames = -morphFrames;
         } else {
-            skelAnime->update.dma = DmaAnimation_Morph;
-            AnimationContext_SetLoadFrame(play, animation, startFrame, skelAnime->limbCount, skelAnime->morphTable);
+            skelAnime->update.player = PlayerAnimation_Morph;
+            AnimationContext_SetLoadFrame(play, animation, (s32)startFrame, skelAnime->limbCount,
+                                          skelAnime->morphTable);
         }
         skelAnime->morphWeight = 1.0f;
         skelAnime->morphRate = 1.0f / morphFrames;
     } else {
-        DmaAnimation_SetUpdateFunction(skelAnime);
+        PlayerAnimation_SetUpdateFunction(skelAnime);
         AnimationContext_SetLoadFrame(play, animation, (s32)startFrame, skelAnime->limbCount, skelAnime->jointTable);
         skelAnime->morphWeight = 0.0f;
     }
@@ -1384,77 +1385,78 @@ void DmaAnimation_Change(PlayState* play, SkelAnime* skelAnime, DmaAnimationHead
 /**
  * Immediately changes to a Player animation that plays once at the default speed.
  */
-void DmaAnimation_PlayOnce(PlayState* play, SkelAnime* skelAnime, DmaAnimationHeader* animation) {
-    DmaAnimation_Change(play, skelAnime, animation, 1.0f, 0.0f, Animation_GetLastFrame(&animation->common),
-                        ANIMMODE_ONCE, 0.0f);
+void PlayerAnimation_PlayOnce(PlayState* play, SkelAnime* skelAnime, PlayerAnimationHeader* animation) {
+    PlayerAnimation_Change(play, skelAnime, animation, 1.0f, 0.0f, Animation_GetLastFrame(&animation->common),
+                           ANIMMODE_ONCE, 0.0f);
 }
 
 /**
  * Immediately changes to a Player animation that plays once at the specified speed.
  */
-void DmaAnimation_PlayOnceSetSpeed(PlayState* play, SkelAnime* skelAnime, DmaAnimationHeader* animation,
-                                   f32 playSpeed) {
-    DmaAnimation_Change(play, skelAnime, animation, playSpeed, 0.0f, Animation_GetLastFrame(&animation->common),
-                        ANIMMODE_ONCE, 0.0f);
+void PlayerAnimation_PlayOnceSetSpeed(PlayState* play, SkelAnime* skelAnime, PlayerAnimationHeader* animation,
+                                      f32 playSpeed) {
+    PlayerAnimation_Change(play, skelAnime, animation, playSpeed, 0.0f, Animation_GetLastFrame(&animation->common),
+                           ANIMMODE_ONCE, 0.0f);
 }
 
 /**
  * Immediately changes to a Player animation that loops at the default speed.
  */
-void DmaAnimation_PlayLoop(PlayState* play, SkelAnime* skelAnime, DmaAnimationHeader* animation) {
-    DmaAnimation_Change(play, skelAnime, animation, 1.0f, 0.0f, Animation_GetLastFrame(&animation->common),
-                        ANIMMODE_LOOP, 0.0f);
+void PlayerAnimation_PlayLoop(PlayState* play, SkelAnime* skelAnime, PlayerAnimationHeader* animation) {
+    PlayerAnimation_Change(play, skelAnime, animation, 1.0f, 0.0f, Animation_GetLastFrame(&animation->common),
+                           ANIMMODE_LOOP, 0.0f);
 }
 
 /**
  * Immediately changes to a Player animation that loops at the specified speed.
  */
-void DmaAnimation_PlayLoopSetSpeed(PlayState* play, SkelAnime* skelAnime, DmaAnimationHeader* animation,
-                                   f32 playSpeed) {
-    DmaAnimation_Change(play, skelAnime, animation, playSpeed, 0.0f, Animation_GetLastFrame(&animation->common),
-                        ANIMMODE_LOOP, 0.0f);
+void PlayerAnimation_PlayLoopSetSpeed(PlayState* play, SkelAnime* skelAnime, PlayerAnimationHeader* animation,
+                                      f32 playSpeed) {
+    PlayerAnimation_Change(play, skelAnime, animation, playSpeed, 0.0f, Animation_GetLastFrame(&animation->common),
+                           ANIMMODE_LOOP, 0.0f);
 }
 
 /**
  * Requests copying jointTable to morphTable
  */
-void DmaAnimation_CopyJointToMorph(PlayState* play, SkelAnime* skelAnime) {
+void PlayerAnimation_CopyJointToMorph(PlayState* play, SkelAnime* skelAnime) {
     AnimationContext_SetCopyAll(play, skelAnime->limbCount, skelAnime->morphTable, skelAnime->jointTable);
 }
 
 /**
  * Requests copying morphTable to jointTable
  */
-void DmaAnimation_CopyMorphToJoint(PlayState* play, SkelAnime* skelAnime) {
+void PlayerAnimation_CopyMorphToJoint(PlayState* play, SkelAnime* skelAnime) {
     AnimationContext_SetCopyAll(play, skelAnime->limbCount, skelAnime->jointTable, skelAnime->morphTable);
 }
 
 /**
  * Requests loading frame data from the Player animation into morphTable
  */
-void DmaAnimation_LoadToMorph(PlayState* play, SkelAnime* skelAnime, DmaAnimationHeader* animation, f32 frame) {
+void PlayerAnimation_LoadToMorph(PlayState* play, SkelAnime* skelAnime, PlayerAnimationHeader* animation, f32 frame) {
     AnimationContext_SetLoadFrame(play, animation, (s32)frame, skelAnime->limbCount, skelAnime->morphTable);
 }
 
 /**
  * Requests loading frame data from the Player animation into jointTable
  */
-void DmaAnimation_LoadToJoint(PlayState* play, SkelAnime* skelAnime, DmaAnimationHeader* animation, f32 frame) {
+void PlayerAnimation_LoadToJoint(PlayState* play, SkelAnime* skelAnime, PlayerAnimationHeader* animation, f32 frame) {
     AnimationContext_SetLoadFrame(play, animation, (s32)frame, skelAnime->limbCount, skelAnime->jointTable);
 }
 
 /**
  * Requests interpolating between jointTable and morphTable, placing the result in jointTable
  */
-void DmaAnimation_InterpJointMorph(PlayState* play, SkelAnime* skelAnime, f32 weight) {
+void PlayerAnimation_InterpJointMorph(PlayState* play, SkelAnime* skelAnime, f32 weight) {
     AnimationContext_SetInterp(play, skelAnime->limbCount, skelAnime->jointTable, skelAnime->morphTable, weight);
 }
 
 /**
- * Requests loading frame data from the DMA animations and blending them, placing the result in jointTable
+ * Requests loading frame data from the Player animations and blending them, placing the result in jointTable
  */
-void DmaAnimation_BlendToJoint(PlayState* play, SkelAnime* skelAnime, DmaAnimationHeader* animation1, f32 frame1,
-                               DmaAnimationHeader* animation2, f32 frame2, f32 blendWeight, void* blendTableBuffer) {
+void PlayerAnimation_BlendToJoint(PlayState* play, SkelAnime* skelAnime, PlayerAnimationHeader* animation1, f32 frame1,
+                                  PlayerAnimationHeader* animation2, f32 frame2, f32 blendWeight,
+                                  void* blendTableBuffer) {
     void* alignedBlendTable;
 
     AnimationContext_SetLoadFrame(play, animation1, (s32)frame1, skelAnime->limbCount, skelAnime->jointTable);
@@ -1466,10 +1468,11 @@ void DmaAnimation_BlendToJoint(PlayState* play, SkelAnime* skelAnime, DmaAnimati
 }
 
 /**
- * Requests loading frame data from the DMA animations and blending them, placing the result in morphTable
+ * Requests loading frame data from the Player animations and blending them, placing the result in morphTable
  */
-void DmaAnimation_BlendToMorph(PlayState* play, SkelAnime* skelAnime, DmaAnimationHeader* animation1, f32 frame1,
-                               DmaAnimationHeader* animation2, f32 frame2, f32 blendWeight, void* blendTableBuffer) {
+void PlayerAnimation_BlendToMorph(PlayState* play, SkelAnime* skelAnime, PlayerAnimationHeader* animation1, f32 frame1,
+                                  PlayerAnimationHeader* animation2, f32 frame2, f32 blendWeight,
+                                  void* blendTableBuffer) {
     void* alignedBlendTable;
 
     AnimationContext_SetLoadFrame(play, animation1, (s32)frame1, skelAnime->limbCount, skelAnime->morphTable);
@@ -1483,9 +1486,9 @@ void DmaAnimation_BlendToMorph(PlayState* play, SkelAnime* skelAnime, DmaAnimati
 /**
  * Changes a looping animation to one that stops at the end.
  */
-void DmaAnimation_EndLoop(SkelAnime* skelAnime) {
+void PlayerAnimation_EndLoop(SkelAnime* skelAnime) {
     skelAnime->mode = ANIMMODE_ONCE;
-    DmaAnimation_SetUpdateFunction(skelAnime);
+    PlayerAnimation_SetUpdateFunction(skelAnime);
 }
 
 /**
@@ -1518,7 +1521,7 @@ s32 Animation_OnFrameImpl(SkelAnime* skelAnime, f32 frame, f32 updateRate) {
 /**
  * Checks if the current Player animation has reached the specified frame
  */
-s32 DmaAnimation_OnFrame(SkelAnime* skelAnime, f32 frame) {
+s32 PlayerAnimation_OnFrame(SkelAnime* skelAnime, f32 frame) {
     f32 updateRate = gFramerateDivisorHalf;
 
     return Animation_OnFrameImpl(skelAnime, frame, updateRate);

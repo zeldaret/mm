@@ -399,15 +399,15 @@ typedef struct PlayerAgeProperties {
     /* 0x94 */ u16 surfaceSfxIdOffset;
     /* 0x98 */ f32 unk_98;
     /* 0x9C */ f32 unk_9C;
-    /* 0xA0 */ DmaAnimationHeader* unk_A0;
-    /* 0xA4 */ DmaAnimationHeader* unk_A4;
-    /* 0xA8 */ DmaAnimationHeader* unk_A8;
-    /* 0xAC */ DmaAnimationHeader* unk_AC;
-    /* 0xB0 */ DmaAnimationHeader* unk_B0;
-    /* 0xB4 */ DmaAnimationHeader* unk_B4[4];
-    /* 0xC4 */ DmaAnimationHeader* unk_C4[2];
-    /* 0xCC */ DmaAnimationHeader* unk_CC[2];
-    /* 0xD4 */ DmaAnimationHeader* unk_D4[2];
+    /* 0xA0 */ PlayerAnimationHeader* unk_A0;
+    /* 0xA4 */ PlayerAnimationHeader* unk_A4;
+    /* 0xA8 */ PlayerAnimationHeader* unk_A8;
+    /* 0xAC */ PlayerAnimationHeader* unk_AC;
+    /* 0xB0 */ PlayerAnimationHeader* unk_B0;
+    /* 0xB4 */ PlayerAnimationHeader* unk_B4[4];
+    /* 0xC4 */ PlayerAnimationHeader* unk_C4[2];
+    /* 0xCC */ PlayerAnimationHeader* unk_CC[2];
+    /* 0xD4 */ PlayerAnimationHeader* unk_D4[2];
 } PlayerAgeProperties; // size = 0xDC
 
 typedef struct {

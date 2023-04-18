@@ -68,7 +68,7 @@ static ColliderCylinderInit sCylinderInit = {
 //  assumption: draw uses two different skeleton functions, might be incompatible
 static AnimationHeader* gYbUnusedAnimations[] = { &object_yb_Anim_000200 };
 
-static DmaAnimationHeader* gDmaAnimations[] = {
+static PlayerAnimationHeader* gPlayerAnimations[] = {
     &gPlayerAnim_link_normal_wait_free,
     &gPlayerAnim_alink_dance_loop,
 };
@@ -174,14 +174,14 @@ void EnYb_ChangeAnim(PlayState* play, EnYb* this, s16 animIndex, u8 animMode, f3
         if ((animIndex != this->animIndex) || (animMode != ANIMMODE_LOOP)) {
             if (animIndex > 0) {
                 if (animMode == ANIMMODE_LOOP) {
-                    DmaAnimation_Change(play, &this->skelAnime, gDmaAnimations[animIndex - 1], 1.0f, 0.0f,
-                                        Animation_GetLastFrame(gDmaAnimations[animIndex - 1]), ANIMMODE_LOOP,
-                                        morphFrames);
+                    PlayerAnimation_Change(play, &this->skelAnime, gPlayerAnimations[animIndex - 1], 1.0f, 0.0f,
+                                           Animation_GetLastFrame(gPlayerAnimations[animIndex - 1]), ANIMMODE_LOOP,
+                                           morphFrames);
                 } else {
                     // unused case, (only called once with animMode = ANIMMODE_LOOP)
-                    DmaAnimation_Change(play, &this->skelAnime, gDmaAnimations[animIndex - 1], 1.0f, 0.0f,
-                                        Animation_GetLastFrame(gDmaAnimations[animIndex - 1]), ANIMMODE_LOOP,
-                                        morphFrames);
+                    PlayerAnimation_Change(play, &this->skelAnime, gPlayerAnimations[animIndex - 1], 1.0f, 0.0f,
+                                           Animation_GetLastFrame(gPlayerAnimations[animIndex - 1]), ANIMMODE_LOOP,
+                                           morphFrames);
                 }
             } else {
                 // unused case, (only called once with animIndex = 2)
@@ -210,7 +210,7 @@ void EnYb_UpdateAnimation(EnYb* this, PlayState* play) {
     if (this->animIndex <= 0) {
         SkelAnime_Update(&this->skelAnime);
     } else {
-        DmaAnimation_Update(play, &this->skelAnime);
+        PlayerAnimation_Update(play, &this->skelAnime);
     }
 }
 
