@@ -2558,7 +2558,7 @@
     0x80135DB8:("AnimationContext_CopyFalse",),
     0x80135E3C:("AnimationContext_MoveActor",),
     0x80135EE8:("AnimationContext_Update",),
-    0x80135F88:("SkelAnime_InitDma",),
+    0x80135F88:("SkelAnime_InitPlayer",),
     0x801360A8:("DmaAnimation_SetUpdateFunction",),
     0x801360E0:("DmaAnimation_Update",),
     0x80136104:("DmaAnimation_Morph",),
