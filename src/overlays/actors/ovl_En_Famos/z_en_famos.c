@@ -500,7 +500,7 @@ void EnFamos_Chase(EnFamos* this, PlayState* play) {
     this->actor.world.rot.x = -Actor_WorldPitchTowardPoint(&this->actor, &abovePlayerPos);
     Math_StepToF(&this->actor.speed, 6.0f, 0.5f);
 
-    surfaceType = func_800C9B18(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
+    surfaceType = SurfaceType_GetFloorProperty2(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
     if ((this->actor.xzDistToPlayer < 30.0f) && (this->actor.floorHeight > BGCHECK_Y_MIN) && // close enough
         (surfaceType != 0xC && surfaceType != 0xD)) {
         EnFamos_SetupAttackAim(this);
@@ -543,7 +543,7 @@ void EnFamos_Attack(EnFamos* this, PlayState* play) {
         this->emblemCollider.base.acFlags &= ~AC_ON;
     }
 
-    surfaceType = func_800C9B18(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
+    surfaceType = SurfaceType_GetFloorProperty2(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
     hitFloor = this->actor.bgCheckFlags & BGCHECKFLAG_GROUND;
     if (hitFloor || (this->actor.floorHeight == BGCHECK_Y_MIN) || (surfaceType == 0xC) || (surfaceType == 0xD)) {
         this->collider1.base.atFlags &= ~AT_ON;

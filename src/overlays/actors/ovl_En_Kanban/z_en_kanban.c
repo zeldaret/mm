@@ -209,7 +209,7 @@ void EnKanban_Update(Actor* thisx, PlayState* play) {
     Vec3f offset;
     EnKanban* piece;
     EnKanban* signpost;
-    s32 temp_v0_18;
+    FloorType floorType;
     f32 phi_f0;
     s32 pad2;
 
@@ -517,11 +517,11 @@ void EnKanban_Update(Actor* thisx, PlayState* play) {
             }
 
             if (onGround) {
-                temp_v0_18 = func_800C99D4(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
+                floorType = SurfaceType_GetFloorType(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
 
-                if ((temp_v0_18 == 15) || (temp_v0_18 == 14)) {
+                if ((floorType == FLOOR_TYPE_15) || (floorType == FLOOR_TYPE_14)) {
                     this->unk_197 = 1;
-                } else if (temp_v0_18 == 5) {
+                } else if (floorType == FLOOR_TYPE_5) {
                     this->unk_197 = -1;
                 }
 
@@ -623,7 +623,7 @@ void EnKanban_Update(Actor* thisx, PlayState* play) {
 
             if (bounced) {
                 if (this->unk_197 > 0) {
-                    Actor_PlaySfx(&this->actor, NA_SE_PL_WALK_SNOW);
+                    Actor_PlaySfx(&this->actor, NA_SE_PL_WALK_GROUND + SURFACE_SFX_OFFSET_SNOW);
                 } else {
                     Actor_PlaySfx(&this->actor, NA_SE_EV_WOODPLATE_BOUND);
                 }

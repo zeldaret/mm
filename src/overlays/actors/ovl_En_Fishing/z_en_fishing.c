@@ -2445,7 +2445,7 @@ void EnFishing_UpdateLure(EnFishing* this, PlayState* play) {
                     sLureRot.x = 0.0f;
                     if (CHECK_BTN_ALL(input->press.button, BTN_B)) {
                         D_809101C0 += 6.0f;
-                        Audio_PlaySfxAtPos(&D_8090D614, NA_SE_PL_WALK_SAND);
+                        Audio_PlaySfxAtPos(&D_8090D614, NA_SE_PL_WALK_GROUND + SURFACE_SFX_OFFSET_SAND);
                     }
                 } else {
                     if (D_809101C0 > 150.0f) {

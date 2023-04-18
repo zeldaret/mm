@@ -234,8 +234,9 @@ void ActorShadow_DrawFeet(Actor* actor, Lights* mapper, PlayState* play) {
                 if (distToFloor <= 10.0f) {
                     actor->shape.feetFloorFlags |= spB8;
 
-                    if ((actor->depthInWater < 0.0f) && (bgId == 0x32) && ((actor->shape.unk_17 & spB8) != 0)) {
-                        if (func_800C9C24(&play->colCtx, poly, bgId, 1)) {
+                    if ((actor->depthInWater < 0.0f) && (bgId == BGCHECK_SCENE) && (actor->shape.unk_17 & spB8)) {
+                        if (SurfaceType_HasMaterialProperty(&play->colCtx, poly, bgId,
+                                                            MATERIAL_PROPERTY_SOFT_IMPRINT)) {
                             SkinMatrix_MtxFCopy(&sp13C, &spFC);
                             SkinMatrix_MulYRotation(&spFC, actor->shape.rot.y);
                             EffFootmark_Add(play, &spFC, actor, i, feetPosPtr, (actor->shape.shadowScale * 0.3f),
@@ -2183,20 +2184,20 @@ void Actor_PlaySfx(Actor* actor, u16 sfxId) {
 }
 
 void func_800B8EF4(PlayState* play, Actor* actor) {
-    u32 sfxId;
+    SurfaceSfxOffset surfaceSfxOffset;
 
     if (actor->bgCheckFlags & BGCHECKFLAG_WATER) {
         if (actor->depthInWater < 20.0f) {
-            sfxId = NA_SE_PL_WALK_WATER0 - SFX_FLAG;
+            surfaceSfxOffset = SURFACE_SFX_OFFSET_WATER_SHALLOW;
         } else {
-            sfxId = NA_SE_PL_WALK_WATER1 - SFX_FLAG;
+            surfaceSfxOffset = SURFACE_SFX_OFFSET_WATER_DEEP;
         }
     } else {
-        sfxId = SurfaceType_GetSfx(&play->colCtx, actor->floorPoly, actor->floorBgId);
+        surfaceSfxOffset = SurfaceType_GetSfxOffset(&play->colCtx, actor->floorPoly, actor->floorBgId);
     }
 
     Audio_PlaySfxAtPos(&actor->projectedPos, NA_SE_EV_BOMB_BOUND);
-    Audio_PlaySfxAtPos(&actor->projectedPos, sfxId + SFX_FLAG);
+    Audio_PlaySfxAtPos(&actor->projectedPos, NA_SE_PL_WALK_GROUND + surfaceSfxOffset);
 }
 
 void func_800B8F98(Actor* actor, u16 sfxId) {
@@ -2248,7 +2249,7 @@ void func_800B9098(Actor* actor) {
 }
 
 s32 func_800B90AC(PlayState* play, Actor* actor, CollisionPoly* polygon, s32 bgId, Vec3f* arg4) {
-    if (func_800C99D4(&play->colCtx, polygon, bgId) == 8) {
+    if (SurfaceType_GetFloorType(&play->colCtx, polygon, bgId) == FLOOR_TYPE_8) {
         return true;
     }
 

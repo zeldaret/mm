@@ -6,44 +6,51 @@
 #define DYNA_RAYCAST_WALLS 2
 #define DYNA_RAYCAST_CEILINGS 4
 
-u32 sWallFlags[32] = {
-    0, 1, 3, 5, 8, 16, 32, 64, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+u32 sWallFlags[WALL_TYPE_MAX] = {
+    0,                         // WALL_TYPE_0
+    WALL_FLAG_0,               // WALL_TYPE_1
+    WALL_FLAG_0 | WALL_FLAG_1, // WALL_TYPE_2
+    WALL_FLAG_0 | WALL_FLAG_2, // WALL_TYPE_3
+    WALL_FLAG_3,               // WALL_TYPE_4
+    WALL_FLAG_4,               // WALL_TYPE_5
+    WALL_FLAG_5,               // WALL_TYPE_6
+    WALL_FLAG_6,               // WALL_TYPE_7
 };
 
-u16 sSurfaceTypeSfx[] = {
-    /* 0x00 */ NA_SE_PL_WALK_GROUND - SFX_FLAG,
-    /* 0x01 */ NA_SE_PL_WALK_SAND - SFX_FLAG,
-    /* 0x02 */ NA_SE_PL_WALK_CONCRETE - SFX_FLAG,
-    /* 0x03 */ NA_SE_PL_WALK_DIRT - SFX_FLAG,
-    /* 0x04 */ NA_SE_PL_WALK_WATER0 - SFX_FLAG,
-    /* 0x05 */ NA_SE_PL_WALK_WATER1 - SFX_FLAG,
-    /* 0x06 */ NA_SE_PL_WALK_WATER2 - SFX_FLAG,
-    /* 0x07 */ NA_SE_PL_WALK_MAGMA - SFX_FLAG,
-    /* 0x08 */ NA_SE_PL_WALK_GRASS - SFX_FLAG,
-    /* 0x09 */ NA_SE_PL_WALK_GLASS - SFX_FLAG,
-    /* 0x0A */ NA_SE_PL_WALK_LADDER - SFX_FLAG,
-    /* 0x0B */ NA_SE_PL_WALK_GROUND - SFX_FLAG,
-    /* 0x0C */ NA_SE_PL_WALK_ICE - SFX_FLAG,
-    /* 0x0D */ NA_SE_PL_WALK_IRON - SFX_FLAG,
-    /* 0x0E */ NA_SE_PL_WALK_SNOW - SFX_FLAG
+u16 sSurfaceSfxOffsets[SURFACE_MATERIAL_MAX] = {
+    SURFACE_SFX_OFFSET_DIRT,          // SURFACE_MATERIAL_DIRT
+    SURFACE_SFX_OFFSET_SAND,          // SURFACE_MATERIAL_SAND
+    SURFACE_SFX_OFFSET_STONE,         // SURFACE_MATERIAL_STONE
+    SURFACE_SFX_OFFSET_DIRT_SHALLOW,  // SURFACE_MATERIAL_DIRT_SHALLOW
+    SURFACE_SFX_OFFSET_WATER_SHALLOW, // SURFACE_MATERIAL_WATER_SHALLOW
+    SURFACE_SFX_OFFSET_WATER_DEEP,    // SURFACE_MATERIAL_WATER_DEEP
+    SURFACE_SFX_OFFSET_TALL_GRASS,    // SURFACE_MATERIAL_TALL_GRASS
+    SURFACE_SFX_OFFSET_LAVA,          // SURFACE_MATERIAL_LAVA
+    SURFACE_SFX_OFFSET_GRASS,         // SURFACE_MATERIAL_GRASS
+    SURFACE_SFX_OFFSET_BRIDGE,        // SURFACE_MATERIAL_BRIDGE
+    SURFACE_SFX_OFFSET_WOOD,          // SURFACE_MATERIAL_WOOD
+    SURFACE_SFX_OFFSET_DIRT,          // SURFACE_MATERIAL_DIRT_SOFT
+    SURFACE_SFX_OFFSET_ICE,           // SURFACE_MATERIAL_ICE
+    SURFACE_SFX_OFFSET_CARPET,        // SURFACE_MATERIAL_CARPET
+    SURFACE_SFX_OFFSET_SNOW,          // SURFACE_MATERIAL_SNOW
 };
 
-u8 D_801B46C0[] = {
-    /* 0x00 */ 1,
-    /* 0x01 */ 1,
-    /* 0x02 */ 0,
-    /* 0x03 */ 1,
-    /* 0x04 */ 0,
-    /* 0x05 */ 0,
-    /* 0x06 */ 0,
-    /* 0x07 */ 0,
-    /* 0x08 */ 0,
-    /* 0x09 */ 0,
-    /* 0x0A */ 0,
-    /* 0x0B */ 0,
-    /* 0x0C */ 0,
-    /* 0x0D */ 0,
-    /* 0x0E */ 1
+u8 sSurfaceMaterialProperties[SURFACE_MATERIAL_MAX] = {
+    MATERIAL_PROPERTY_SOFT_IMPRINT, // SURFACE_MATERIAL_DIRT
+    MATERIAL_PROPERTY_SOFT_IMPRINT, // SURFACE_MATERIAL_SAND
+    0,                              // SURFACE_MATERIAL_STONE
+    MATERIAL_PROPERTY_SOFT_IMPRINT, // SURFACE_MATERIAL_DIRT_SHALLOW
+    0,                              // SURFACE_MATERIAL_WATER_SHALLOW
+    0,                              // SURFACE_MATERIAL_WATER_DEEP
+    0,                              // SURFACE_MATERIAL_TALL_GRASS
+    0,                              // SURFACE_MATERIAL_LAVA
+    0,                              // SURFACE_MATERIAL_GRASS
+    0,                              // SURFACE_MATERIAL_BRIDGE
+    0,                              // SURFACE_MATERIAL_WOOD
+    0,                              // SURFACE_MATERIAL_DIRT_SOFT
+    0,                              // SURFACE_MATERIAL_ICE
+    0,                              // SURFACE_MATERIAL_CARPET
+    MATERIAL_PROPERTY_SOFT_IMPRINT, // SURFACE_MATERIAL_SNOW
 };
 
 s16 sSmallMemSceneIds[] = {
@@ -51,9 +58,9 @@ s16 sSmallMemSceneIds[] = {
 };
 
 typedef struct {
-    s16 sceneId;
-    u32 memSize;
-} BgCheckSceneMemEntry;
+    /* 0x0 */ s16 sceneId;
+    /* 0x4 */ u32 memSize;
+} BgCheckSceneMemEntry; // size = 0x8
 
 BgCheckSceneMemEntry sSceneMemList[] = {
     { SCENE_00KEIKOKU, 0xC800 },
@@ -1734,7 +1741,7 @@ f32 BgCheck_RaycastFloorImpl(PlayState* play, CollisionContext* colCtx, u16 xpFl
         }
     }
 
-    if ((yIntersect != BGCHECK_Y_MIN) && func_800C9B68(colCtx, *outPoly, *outBgId)) {
+    if ((yIntersect != BGCHECK_Y_MIN) && SurfaceType_IsSoft(colCtx, *outPoly, *outBgId)) {
         yIntersect -= 1.0f;
     }
     return yIntersect;
@@ -3204,7 +3211,8 @@ f32 BgCheck_RaycastFloorDynaList(DynaRaycast* dynaRaycast, u32 listType) {
             (COLPOLY_VIA_FLAG_TEST(polyList[id].flags_vIB, 4) &&
              (((dynaRaycast->actor != NULL) && (dynaRaycast->actor->category != ACTORCAT_PLAYER)) ||
               ((dynaRaycast->actor == NULL) && (dynaRaycast->xpFlags != COLPOLY_IGNORE_CAMERA)))) ||
-            ((dynaRaycast->unk_24 & 0x20) && func_800C9B68(dynaRaycast->colCtx, &polyList[id], dynaRaycast->unk1C))) {
+            ((dynaRaycast->unk_24 & 0x20) &&
+             SurfaceType_IsSoft(dynaRaycast->colCtx, &polyList[id], dynaRaycast->unk1C))) {
             if (curNode->next == SS_NULL) {
                 break;
             } else {
@@ -4187,17 +4195,11 @@ Vec3s* BgCheck_GetBgCamFuncData(CollisionContext* colCtx, CollisionPoly* poly, s
     return BgCheck_GetBgCamFuncDataImpl(colCtx, SurfaceType_GetBgCamIndex(colCtx, poly, bgId), bgId);
 }
 
-/**
- * SurfaceType Get Scene Exit Index
- */
 u32 SurfaceType_GetSceneExitIndex(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
     return SurfaceType_GetData(colCtx, poly, bgId, 0) >> 8 & 0x1F;
 }
 
-/**
- * SurfaceType Get ? Property (& 0x0003_E000)
- */
-u32 func_800C99D4(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
+FloorType SurfaceType_GetFloorType(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
     return SurfaceType_GetData(colCtx, poly, bgId, 0) >> 13 & 0x1F;
 }
 
@@ -4208,126 +4210,85 @@ u32 func_800C99FC(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
     return SurfaceType_GetData(colCtx, poly, bgId, 0) >> 18 & 7;
 }
 
-/**
- * SurfaceType Get Wall Property (Internal)
- */
-u32 func_800C9A24(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
+WallType SurfaceType_GetWallType(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
     return SurfaceType_GetData(colCtx, poly, bgId, 0) >> 21 & 0x1F;
 }
 
-/**
- * SurfaceType Get Wall Flags
- */
-s32 func_800C9A4C(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
-    return sWallFlags[func_800C9A24(colCtx, poly, bgId)];
+s32 SurfaceType_GetWallFlags(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
+    return sWallFlags[SurfaceType_GetWallType(colCtx, poly, bgId)];
 }
 
-/**
- * SurfaceType Is Wall Flag (1 << 0) Set
- */
-s32 func_800C9A7C(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
-    return (func_800C9A4C(colCtx, poly, bgId) & 1) ? true : false;
+s32 SurfaceType_CheckWallFlag0(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
+    return (SurfaceType_GetWallFlags(colCtx, poly, bgId) & WALL_FLAG_0) ? true : false;
 }
 
-/**
- * SurfaceType Is Wall Flag (1 << 1) Set
- */
-s32 func_800C9AB0(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
-    return (func_800C9A4C(colCtx, poly, bgId) & 2) ? true : false;
+s32 SurfaceType_CheckWallFlag1(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
+    return (SurfaceType_GetWallFlags(colCtx, poly, bgId) & WALL_FLAG_1) ? true : false;
 }
 
-/**
- * SurfaceType Is Wall Flag (1 << 2) Set
- */
-s32 func_800C9AE4(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
-    return (func_800C9A4C(colCtx, poly, bgId) & 4) ? true : false;
+s32 SurfaceType_CheckWallFlag2(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
+    return (SurfaceType_GetWallFlags(colCtx, poly, bgId) & WALL_FLAG_2) ? true : false;
 }
 
-u32 func_800C9B18(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
+FloorProperty SurfaceType_GetFloorProperty2(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
     return SurfaceType_GetData(colCtx, poly, bgId, 0) >> 26 & 0xF;
 }
 
-/**
- * SurfaceType Get Floor Property
- */
-u32 func_800C9B40(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
+FloorProperty SurfaceType_GetFloorProperty(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
     return SurfaceType_GetData(colCtx, poly, bgId, 0) >> 26 & 0xF;
 }
 
-/**
- * SurfaceType Is Floor Minus 1
- */
-u32 func_800C9B68(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
+u32 SurfaceType_IsSoft(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
     return SurfaceType_GetData(colCtx, poly, bgId, 0) >> 30 & 1;
 }
 
-/**
- * SurfaceType Is Horse Blocked
- */
 u32 SurfaceType_IsHorseBlocked(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
     return SurfaceType_GetData(colCtx, poly, bgId, 0) >> 31 & 1;
 }
 
-u32 func_800C9BB8(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
+SurfaceMaterial SurfaceType_GetMaterial(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
     return SurfaceType_GetData(colCtx, poly, bgId, 1) & 0xF;
 }
 
-/**
- * SurfaceType Get Poly Sfx
- */
-u16 SurfaceType_GetSfx(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
-    s32 id = func_800C9BB8(colCtx, poly, bgId);
+u16 SurfaceType_GetSfxOffset(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
+    SurfaceMaterial surfaceMaterial = SurfaceType_GetMaterial(colCtx, poly, bgId);
 
-    if ((id < 0) || (id > 14)) {
-        return NA_SE_PL_WALK_GROUND - SFX_FLAG;
+    if ((surfaceMaterial < 0) || (surfaceMaterial >= ARRAY_COUNT(sSurfaceSfxOffsets))) {
+        return SURFACE_SFX_OFFSET_DIRT;
     }
-    return sSurfaceTypeSfx[id];
+
+    return sSurfaceSfxOffsets[surfaceMaterial];
 }
 
 /**
- * SurfaceType Get ? (same indexer as Get Poly Sfx)
+ * Checks if the material has the bitwise propertyType
  */
-s32 func_800C9C24(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId, s32 arg3) {
-    s32 id = func_800C9BB8(colCtx, poly, bgId);
+s32 SurfaceType_HasMaterialProperty(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId, s32 propertyType) {
+    SurfaceMaterial surfaceMaterial = SurfaceType_GetMaterial(colCtx, poly, bgId);
 
-    if ((id < 0) || (id > 14)) {
+    if ((surfaceMaterial < 0) || (surfaceMaterial >= ARRAY_COUNT(sSurfaceMaterialProperties))) {
         return 0;
     }
-    return D_801B46C0[id] & arg3;
+
+    return sSurfaceMaterialProperties[surfaceMaterial] & propertyType;
 }
 
-/**
- * SurfaceType get terrain slope surface
- */
-u32 SurfaceType_GetSlope(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
+FloorEffect SurfaceType_GetFloorEffect(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
     return SurfaceType_GetData(colCtx, poly, bgId, 1) >> 4 & 3;
 }
 
-/**
- * SurfaceType get surface lighting setting
- */
 u32 SurfaceType_GetLightSettingIndex(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
     return SurfaceType_GetData(colCtx, poly, bgId, 1) >> 6 & 0x1F;
 }
 
-/**
- * SurfaceType get echo
- */
 u32 SurfaceType_GetEcho(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
     return SurfaceType_GetData(colCtx, poly, bgId, 1) >> 11 & 0x3F;
 }
 
-/**
- * SurfaceType Is Hookshot Surface
- */
 u32 SurfaceType_IsHookshotSurface(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
     return SurfaceType_GetData(colCtx, poly, bgId, 1) >> 17 & 1;
 }
 
-/**
- * CollisionPoly is ignored by entities
- * Returns true if poly is ignored by entities, else false
- */
 s32 SurfaceType_IsIgnoredByEntities(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
     u32 flags;
 
@@ -4338,10 +4299,6 @@ s32 SurfaceType_IsIgnoredByEntities(CollisionContext* colCtx, CollisionPoly* pol
     return !!flags;
 }
 
-/**
- * CollisionPoly is ignored by projectiles
- * Returns true if poly is ignored by projectiles, else false
- */
 s32 SurfaceType_IsIgnoredByProjectiles(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
     u32 flags;
 
@@ -4384,10 +4341,7 @@ s32 func_800C9DDC(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
     return !!flags;
 }
 
-/**
- * SurfaceType Get Conveyor Surface Speed
- */
-u32 SurfaceType_GetConveyorSpeed(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
+ConveyorSpeed SurfaceType_GetConveyorSpeed(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
     return SurfaceType_GetData(colCtx, poly, bgId, 1) >> 18 & 7;
 }
 
@@ -4405,9 +4359,6 @@ u32 SurfaceType_GetConveyorDirection(CollisionContext* colCtx, CollisionPoly* po
     return data & 0x3F;
 }
 
-/**
- * SurfaceType is Wall Damage
- */
 u32 SurfaceType_IsWallDamage(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
     return (SurfaceType_GetData(colCtx, poly, bgId, 1) & 0x8000000) ? true : false;
 }

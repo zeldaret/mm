@@ -1035,13 +1035,13 @@ s32 func_80AEE86C(EnTk* this, PlayState* play) {
     s32 pad;
     s32 ret = false;
     s32 pad2;
-    CollisionPoly* sp38;
-    s32 sp34;
+    CollisionPoly* groundPoly;
+    s32 bgId;
     Vec3f sp28;
 
     Lib_Vec3f_TranslateAndRotateY(&this->actor.world.pos, this->actor.shape.rot.y, &D_80AEFA78, &sp28);
-    if ((BgCheck_EntityRaycastFloor3(&play->colCtx, &sp38, &sp34, &sp28) != BGCHECK_Y_MIN) &&
-        (func_800C9BB8(&play->colCtx, sp38, sp34) == 1) && (this->unk_2D0 == (u32)1) &&
+    if ((BgCheck_EntityRaycastFloor3(&play->colCtx, &groundPoly, &bgId, &sp28) != BGCHECK_Y_MIN) &&
+        (SurfaceType_GetMaterial(&play->colCtx, groundPoly, bgId) == SURFACE_MATERIAL_SAND) && (this->unk_2D0 == 1) &&
         (this->actor.xyzDistToPlayerSq <= SQ(115.0f)) &&
         func_80AEE7E0(&this->actor.world.pos, 100.0f, this->unk_324, this->unk_36C) &&
         (((this->unk_2CA & 2) && (Math_Vec3f_DistXZ(&this->unk_300, &sp28) >= 100.0f)) || !(this->unk_2CA & 2)) &&
@@ -1312,7 +1312,8 @@ void EnTk_Update(Actor* thisx, PlayState* play) {
     Actor_MoveWithGravity(&this->actor);
     Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 10.0f, 0.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
 
-    if ((this->unk_2B0 == 0) && (func_800C9B40(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId) == 12)) {
+    if ((this->unk_2B0 == 0) && (SurfaceType_GetFloorProperty(&play->colCtx, this->actor.floorPoly,
+                                                              this->actor.floorBgId) == FLOOR_PROPERTY_12)) {
         Math_Vec3f_Copy(&this->actor.world.pos, &this->actor.prevPos);
         this->unk_2CA |= 0x200;
         this->actor.velocity.y = 0.0f;
