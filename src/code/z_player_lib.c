@@ -1824,7 +1824,7 @@ void Player_AdjustSingleLeg(PlayState* play, Player* player, SkelAnime* skelAnim
         skelAnime->jointTable[shinLimbIndex].z += phi_t1;
         skelAnime->jointTable[footLimbIndex].z = (skelAnime->jointTable[footLimbIndex].z + temp_f8) - phi_t1;
 
-        temp_v0_4 = func_800C99D4(&play->colCtx, poly, bgId);
+        temp_v0_4 = SurfaceType_GetFloorType(&play->colCtx, poly, bgId);
         if ((temp_v0_4 >= 2) && (temp_v0_4 < 4) && !SurfaceType_IsWallDamage(&play->colCtx, poly, bgId)) {
             footprintPos.y = yIntersect;
             EffectSsGFire_Spawn(play, &footprintPos);
