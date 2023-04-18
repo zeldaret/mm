@@ -24,7 +24,7 @@ typedef struct EnTest {
     /* 0x1C0 */ Vec3s unk_1C0[12];
     /* 0x208 */ u8 unk_208;
     /* 0x209 */ u8 unk_209;
-    /* 0x20A */ u8 unk_20A;
+    /* 0x20A */ u8 surfaceMaterial;
     /* 0x20C */ EnTestStruct unk_20C[20];
 } EnTest; // size = 0x6BC
 

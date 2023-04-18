@@ -8,6 +8,7 @@
 #include "fault.h"
 #include "buffers.h"
 #include "stack.h"
+#include "stackcheck.h"
 
 extern OSMesgQueue sSiIntMsgQ;
 extern OSMesg sSiIntMsgBuf[1];

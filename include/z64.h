@@ -514,22 +514,6 @@ typedef struct {
     /* 0x47F */ UNK_TYPE1 pad47F[0x1];
 } PadMgr; // size = 0x480
 
-typedef struct StackEntry {
-    /* 0x00 */ struct StackEntry* next;
-    /* 0x04 */ struct StackEntry* prev;
-    /* 0x08 */ u32 head;
-    /* 0x0C */ u32 tail;
-    /* 0x10 */ u32 initValue;
-    /* 0x14 */ s32 minSpace;
-    /* 0x18 */ const char* name;
-} StackEntry; // size = 0x1C
-
-typedef enum {
-    STACK_STATUS_OK = 0,
-    STACK_STATUS_WARNING = 1,
-    STACK_STATUS_OVERFLOW = 2
-} StackStatus;
-
 #define OS_SC_RETRACE_MSG       1
 #define OS_SC_DONE_MSG          2
 #define OS_SC_NMI_MSG           3 // name is made up, 3 is OS_SC_RDP_DONE_MSG in the original sched.c
@@ -693,9 +677,9 @@ typedef struct {
 typedef struct {
     /* 0x0 */ u32 useRgba;
     /* 0x4 */ u32 setScissor;
-    /* 0x8 */ Color_RGBA8 primColor;
-    /* 0xC */ Color_RGBA8 envColor;
-} struct_801F8020; // size = 0x10
+    /* 0x8 */ Color_RGBA8_u32 primColor;
+    /* 0xC */ Color_RGBA8_u32 envColor;
+} VisZbuf; // size = 0x10
 
 typedef struct {
     /* 0x00 */ u32 unk_00;

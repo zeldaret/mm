@@ -44,6 +44,7 @@
 #include "fault.h"
 #include "global.h"
 #include "vt.h"
+#include "stackcheck.h"
 
 // bss
 extern FaultMgr* sFaultInstance;

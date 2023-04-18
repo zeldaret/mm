@@ -7,44 +7,51 @@
 #define DYNA_RAYCAST_WALLS 2
 #define DYNA_RAYCAST_CEILINGS 4
 
-u32 sWallFlags[32] = {
-    0, 1, 3, 5, 8, 16, 32, 64, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+u32 sWallFlags[WALL_TYPE_MAX] = {
+    0,                         // WALL_TYPE_0
+    WALL_FLAG_0,               // WALL_TYPE_1
+    WALL_FLAG_0 | WALL_FLAG_1, // WALL_TYPE_2
+    WALL_FLAG_0 | WALL_FLAG_2, // WALL_TYPE_3
+    WALL_FLAG_3,               // WALL_TYPE_4
+    WALL_FLAG_4,               // WALL_TYPE_5
+    WALL_FLAG_5,               // WALL_TYPE_6
+    WALL_FLAG_6,               // WALL_TYPE_7
 };
 
-u16 sSurfaceTypeSfx[] = {
-    /* 0x00 */ NA_SE_PL_WALK_GROUND - SFX_FLAG,
-    /* 0x01 */ NA_SE_PL_WALK_SAND - SFX_FLAG,
-    /* 0x02 */ NA_SE_PL_WALK_CONCRETE - SFX_FLAG,
-    /* 0x03 */ NA_SE_PL_WALK_DIRT - SFX_FLAG,
-    /* 0x04 */ NA_SE_PL_WALK_WATER0 - SFX_FLAG,
-    /* 0x05 */ NA_SE_PL_WALK_WATER1 - SFX_FLAG,
-    /* 0x06 */ NA_SE_PL_WALK_WATER2 - SFX_FLAG,
-    /* 0x07 */ NA_SE_PL_WALK_MAGMA - SFX_FLAG,
-    /* 0x08 */ NA_SE_PL_WALK_GRASS - SFX_FLAG,
-    /* 0x09 */ NA_SE_PL_WALK_GLASS - SFX_FLAG,
-    /* 0x0A */ NA_SE_PL_WALK_LADDER - SFX_FLAG,
-    /* 0x0B */ NA_SE_PL_WALK_GROUND - SFX_FLAG,
-    /* 0x0C */ NA_SE_PL_WALK_ICE - SFX_FLAG,
-    /* 0x0D */ NA_SE_PL_WALK_IRON - SFX_FLAG,
-    /* 0x0E */ NA_SE_PL_WALK_SNOW - SFX_FLAG
+u16 sSurfaceSfxOffsets[SURFACE_MATERIAL_MAX] = {
+    SURFACE_SFX_OFFSET_DIRT,          // SURFACE_MATERIAL_DIRT
+    SURFACE_SFX_OFFSET_SAND,          // SURFACE_MATERIAL_SAND
+    SURFACE_SFX_OFFSET_STONE,         // SURFACE_MATERIAL_STONE
+    SURFACE_SFX_OFFSET_DIRT_SHALLOW,  // SURFACE_MATERIAL_DIRT_SHALLOW
+    SURFACE_SFX_OFFSET_WATER_SHALLOW, // SURFACE_MATERIAL_WATER_SHALLOW
+    SURFACE_SFX_OFFSET_WATER_DEEP,    // SURFACE_MATERIAL_WATER_DEEP
+    SURFACE_SFX_OFFSET_TALL_GRASS,    // SURFACE_MATERIAL_TALL_GRASS
+    SURFACE_SFX_OFFSET_LAVA,          // SURFACE_MATERIAL_LAVA
+    SURFACE_SFX_OFFSET_GRASS,         // SURFACE_MATERIAL_GRASS
+    SURFACE_SFX_OFFSET_BRIDGE,        // SURFACE_MATERIAL_BRIDGE
+    SURFACE_SFX_OFFSET_WOOD,          // SURFACE_MATERIAL_WOOD
+    SURFACE_SFX_OFFSET_DIRT,          // SURFACE_MATERIAL_DIRT_SOFT
+    SURFACE_SFX_OFFSET_ICE,           // SURFACE_MATERIAL_ICE
+    SURFACE_SFX_OFFSET_CARPET,        // SURFACE_MATERIAL_CARPET
+    SURFACE_SFX_OFFSET_SNOW,          // SURFACE_MATERIAL_SNOW
 };
 
-u8 D_801B46C0[] = {
-    /* 0x00 */ 1,
-    /* 0x01 */ 1,
-    /* 0x02 */ 0,
-    /* 0x03 */ 1,
-    /* 0x04 */ 0,
-    /* 0x05 */ 0,
-    /* 0x06 */ 0,
-    /* 0x07 */ 0,
-    /* 0x08 */ 0,
-    /* 0x09 */ 0,
-    /* 0x0A */ 0,
-    /* 0x0B */ 0,
-    /* 0x0C */ 0,
-    /* 0x0D */ 0,
-    /* 0x0E */ 1
+u8 sSurfaceMaterialProperties[SURFACE_MATERIAL_MAX] = {
+    MATERIAL_PROPERTY_SOFT_IMPRINT, // SURFACE_MATERIAL_DIRT
+    MATERIAL_PROPERTY_SOFT_IMPRINT, // SURFACE_MATERIAL_SAND
+    0,                              // SURFACE_MATERIAL_STONE
+    MATERIAL_PROPERTY_SOFT_IMPRINT, // SURFACE_MATERIAL_DIRT_SHALLOW
+    0,                              // SURFACE_MATERIAL_WATER_SHALLOW
+    0,                              // SURFACE_MATERIAL_WATER_DEEP
+    0,                              // SURFACE_MATERIAL_TALL_GRASS
+    0,                              // SURFACE_MATERIAL_LAVA
+    0,                              // SURFACE_MATERIAL_GRASS
+    0,                              // SURFACE_MATERIAL_BRIDGE
+    0,                              // SURFACE_MATERIAL_WOOD
+    0,                              // SURFACE_MATERIAL_DIRT_SOFT
+    0,                              // SURFACE_MATERIAL_ICE
+    0,                              // SURFACE_MATERIAL_CARPET
+    MATERIAL_PROPERTY_SOFT_IMPRINT, // SURFACE_MATERIAL_SNOW
 };
 
 s16 sSmallMemSceneIds[] = {
@@ -52,9 +59,9 @@ s16 sSmallMemSceneIds[] = {
 };
 
 typedef struct {
-    s16 sceneId;
-    u32 memSize;
-} BgCheckSceneMemEntry;
+    /* 0x0 */ s16 sceneId;
+    /* 0x4 */ u32 memSize;
+} BgCheckSceneMemEntry; // size = 0x8
 
 BgCheckSceneMemEntry sSceneMemList[] = {
     { SCENE_00KEIKOKU, 0xC800 },
@@ -90,7 +97,7 @@ char D_801ED9A0[80];
 
 char D_801EDAA8[80];
 char D_801EDAF8[80];
-MtxF D_801EDA40;
+MtxF sModelToWorldMtxF;
 
 void BgCheck_GetStaticLookupIndicesFromPos(CollisionContext* colCtx, Vec3f* pos, Vec3i* sector);
 f32 BgCheck_RaycastFloorDyna(DynaRaycast* dynaRaycast);
@@ -955,12 +962,12 @@ s32 BgCheck_CheckStaticCeiling(StaticLookup* lookup, u16 xpFlags, CollisionConte
 s32 BgCheck_CheckLineAgainstSSList(StaticLineTest* arg0) {
     CollisionPoly* polyList;
     s32 result;
-    Vec3f polyIntersect; // sp7C
+    Vec3f polyIntersect;
     SSNode* curNode;
     u8* checkedPoly;
     f32 minY;
     f32 distSq;
-    BgLineVsPolyTest test; // sp50
+    BgLineVsPolyTest test;
     s16 polyId;
 
     result = false;
@@ -1735,7 +1742,7 @@ f32 BgCheck_RaycastFloorImpl(PlayState* play, CollisionContext* colCtx, u16 xpFl
         }
     }
 
-    if ((yIntersect != BGCHECK_Y_MIN) && func_800C9B68(colCtx, *outPoly, *outBgId)) {
+    if ((yIntersect != BGCHECK_Y_MIN) && SurfaceType_IsSoft(colCtx, *outPoly, *outBgId)) {
         yIntersect -= 1.0f;
     }
     return yIntersect;
@@ -2856,38 +2863,28 @@ void BgCheck_CalcWaterboxDimensions(Vec3f* minPos, Vec3f* maxXPos, Vec3f* maxZPo
     }
 }
 
-#ifdef NON_MATCHING
 /**
  * original name: DynaPolyInfo_expandSRT
  */
 void DynaPoly_ExpandSRT(PlayState* play, DynaCollisionContext* dyna, s32 bgId, s32* vtxStartIndex, s32* polyStartIndex,
                         s32* waterBoxStartIndex) {
     Actor* actor;
-    s32 pad;
-    s32 pad2;
-    f32 numVtxInverse;
     s32 i;
-    Vec3f pos; // sp170
+    s32 j;
+    s32 wi;
+    f32 numVtxInverse;
+    Vec3f pos;
     Sphere16* sphere;
     Vec3s* dVtxList;
     Vec3s* point;
-    Vec3f newCenterPoint; // sp158
-
+    Vec3f newCenterPoint;
     f32 newRadiusSq;
     CollisionHeader* pbgdata;
-    Vec3f newVtx; // sp144
-    Vec3f vtxA;   // sp138
-    Vec3f vtxB;   // sp12C
-    Vec3f vtxC;   // sp120
+    Vec3f newVtx;
+    Vec3f vtxA;
+    Vec3f vtxB;
+    Vec3f vtxC;
     Vec3f newNormal;
-    s32 wi;
-    Vec3f spB8; // waterbox ?
-    Vec3f spAC;
-    Vec3f spA0; // waterbox ?
-    Vec3f sp94;
-    Vec3f sp88; // waterbox ?
-    Vec3f sp7C;
-    WaterBox* waterBox;
 
     pbgdata = dyna->bgActors[bgId].colHeader;
     sphere = &dyna->bgActors[bgId].boundingSphere;
@@ -2898,12 +2895,15 @@ void DynaPoly_ExpandSRT(PlayState* play, DynaCollisionContext* dyna, s32 bgId, s
     pos = actor->world.pos;
     pos.y += actor->shape.yOffset * actor->scale.y;
 
+    //! FAKE:
+    if (pbgdata && pbgdata) {}
+
     ScaleRotPos_SetValue(&dyna->bgActors[bgId].curTransform, &actor->scale, &actor->shape.rot, &pos);
 
     if (dyna->bgActorFlags[bgId] & 4) {
         return;
     }
-    // if(&pos){} // fake but considerably improves match. commented out to stop warnings
+
     if (*waterBoxStartIndex + pbgdata->numWaterBoxes > DYNA_WATERBOX_MAX) {
         sprintf(D_801EDAA8, "water_poly Error:[MoveBG OSUGI!!!]");
         sprintf(D_801EDAF8, "num = %d > %d\n", *waterBoxStartIndex + pbgdata->numWaterBoxes, DYNA_WATERBOX_MAX);
@@ -2952,139 +2952,145 @@ void DynaPoly_ExpandSRT(PlayState* play, DynaCollisionContext* dyna, s32 bgId, s
         *polyStartIndex += pbgdata->numPolygons;
         *vtxStartIndex += pbgdata->numVertices;
         *waterBoxStartIndex += pbgdata->numWaterBoxes;
-    } else {
-        SkinMatrix_SetScaleRotateYRPTranslate(
-            &D_801EDA40, dyna->bgActors[bgId].curTransform.scale.x, dyna->bgActors[bgId].curTransform.scale.y,
-            dyna->bgActors[bgId].curTransform.scale.z, dyna->bgActors[bgId].curTransform.rot.x,
-            dyna->bgActors[bgId].curTransform.rot.y, dyna->bgActors[bgId].curTransform.rot.z,
-            dyna->bgActors[bgId].curTransform.pos.x, dyna->bgActors[bgId].curTransform.pos.y,
-            dyna->bgActors[bgId].curTransform.pos.z);
-
-        if ((pbgdata->numVertices != 0) && (pbgdata->numPolygons != 0)) {
-            s32 j;
-            numVtxInverse = 1.0f / pbgdata->numVertices;
-            newCenterPoint.x = newCenterPoint.y = newCenterPoint.z = 0.0f;
-            for (i = 0; i < pbgdata->numVertices; i++) {
-                Vec3f vtx;  // spF4
-                Vec3f vtxT; // spE8 Vtx after mtx transform
-
-                Math_Vec3s_ToVec3f(&vtx, &pbgdata->vtxList[i]);
-                SkinMatrix_Vec3fMtxFMultXYZ(&D_801EDA40, &vtx, &vtxT);
-                BgCheck_Vec3fToVec3s(&dyna->vtxList[*vtxStartIndex + i], &vtxT);
-
-                if (i == 0) {
-                    dyna->bgActors[bgId].minY = dyna->bgActors[bgId].maxY = vtxT.y;
-                } else if (vtxT.y < dyna->bgActors[bgId].minY) {
-                    dyna->bgActors[bgId].minY = vtxT.y;
-                } else if (dyna->bgActors[bgId].maxY < vtxT.y) {
-                    dyna->bgActors[bgId].maxY = vtxT.y;
-                }
-                newCenterPoint.x += vtxT.x;
-                newCenterPoint.y += vtxT.y;
-                newCenterPoint.z += vtxT.z;
-            }
-
-            newCenterPoint.x *= numVtxInverse;
-            newCenterPoint.y *= numVtxInverse;
-            newCenterPoint.z *= numVtxInverse;
-            sphere->center.x = newCenterPoint.x;
-            sphere->center.y = newCenterPoint.y;
-            sphere->center.z = newCenterPoint.z;
-            newRadiusSq = -100.0f;
-
-            for (i = 0, j = *vtxStartIndex; i < pbgdata->numVertices; i++, j++) {
-                f32 radiusSq;
-
-                newVtx.x = dyna->vtxList[j].x;
-                newVtx.y = dyna->vtxList[j].y;
-                newVtx.z = dyna->vtxList[j].z;
-                radiusSq = Math3D_Vec3fDistSq(&newVtx, &newCenterPoint);
-                if (newRadiusSq < radiusSq) {
-                    newRadiusSq = radiusSq;
-                }
-            }
-
-            sphere->radius = sqrtf(newRadiusSq) * 1.1f;
-
-            for (i = 0; i < pbgdata->numPolygons; i++) {
-                CollisionPoly* newPoly = &dyna->polyList[*polyStartIndex + i];
-                f32 newNormMagnitude;
-                u32 vIA;
-                u32 vIB;
-                u32 vIC;
-
-                *newPoly = pbgdata->polyList[i];
-
-                vIA = (COLPOLY_VTX_INDEX(newPoly->flags_vIA) + *vtxStartIndex);
-                vIB = (COLPOLY_VTX_INDEX(newPoly->flags_vIB) + *vtxStartIndex);
-                vIC = newPoly->vIC + *vtxStartIndex;
-
-                newPoly->flags_vIA = vIA | ((*newPoly).flags_vIA & 0xE000);
-                newPoly->flags_vIB = vIB | ((*newPoly).flags_vIB & 0xE000);
-                newPoly->vIC = vIC;
-                dVtxList = dyna->vtxList;
-                vtxA.x = dVtxList[vIA].x;
-                vtxA.y = dVtxList[vIA].y;
-                vtxA.z = dVtxList[vIA].z;
-                vtxB.x = dVtxList[vIB].x;
-                vtxB.y = dVtxList[vIB].y;
-                vtxB.z = dVtxList[vIB].z;
-                vtxC.x = dVtxList[vIC].x;
-                vtxC.y = dVtxList[vIC].y;
-                vtxC.z = dVtxList[vIC].z;
-                Math3D_SurfaceNorm(&vtxA, &vtxB, &vtxC, &newNormal);
-                newNormMagnitude = Math3D_Vec3fMagnitude(&newNormal);
-
-                if (!IS_ZERO(newNormMagnitude)) {
-                    newNormal.x *= (1.0f / newNormMagnitude);
-                    newNormal.y *= (1.0f / newNormMagnitude);
-                    newNormal.z *= (1.0f / newNormMagnitude);
-                    newPoly->normal.x = COLPOLY_SNORMAL(newNormal.x);
-                    newPoly->normal.y = COLPOLY_SNORMAL(newNormal.y);
-                    newPoly->normal.z = COLPOLY_SNORMAL(newNormal.z);
-                }
-
-                newPoly->dist = func_80086D24(-DOTXYZ(newNormal, vtxA));
-                if (newNormal.y > 0.5f) {
-                    s16 polyId = *polyStartIndex + i;
-
-                    DynaSSNodeList_SetSSListHead(&dyna->polyNodes, &dyna->bgActors[bgId].dynaLookup.floor, &polyId);
-                } else if (newNormal.y < -0.8f) {
-                    s16 polyId = *polyStartIndex + i;
-
-                    DynaSSNodeList_SetSSListHead(&dyna->polyNodes, &dyna->bgActors[bgId].dynaLookup.ceiling, &polyId);
-                } else {
-                    s16 polyId = *polyStartIndex + i;
-
-                    DynaSSNodeList_SetSSListHead(&dyna->polyNodes, &dyna->bgActors[bgId].dynaLookup.wall, &polyId);
-                }
-            }
-        }
-
-        if (pbgdata->numWaterBoxes > 0) {
-            for (wi = 0; wi < pbgdata->numWaterBoxes; wi++) {
-                Math_Vec3s_ToVec3f(&spB8, &pbgdata->waterBoxes[wi].minPos);
-                Math_Vec3f_Copy(&spA0, &spB8);
-                spA0.x += pbgdata->waterBoxes[wi].xLength;
-                Math_Vec3f_Copy(&sp88, &spB8);
-                sp88.z += pbgdata->waterBoxes[wi].zLength;
-                SkinMatrix_Vec3fMtxFMultXYZ(&D_801EDA40, &spB8, &spAC);
-                SkinMatrix_Vec3fMtxFMultXYZ(&D_801EDA40, &spA0, &sp94);
-                SkinMatrix_Vec3fMtxFMultXYZ(&D_801EDA40, &sp88, &sp7C);
-                waterBox = &dyna->waterBoxList.boxes[*waterBoxStartIndex + wi];
-                BgCheck_CalcWaterboxDimensions(&spAC, &sp94, &sp7C, &waterBox->minPos, &waterBox->xLength,
-                                               &waterBox->zLength);
-                waterBox->properties = pbgdata->waterBoxes[wi].properties;
-            }
-        }
-        *polyStartIndex += pbgdata->numPolygons;
-        *vtxStartIndex += pbgdata->numVertices;
-        *waterBoxStartIndex += pbgdata->numWaterBoxes;
+        return;
     }
+
+    SkinMatrix_SetScaleRotateYRPTranslate(
+        &sModelToWorldMtxF, dyna->bgActors[bgId].curTransform.scale.x, dyna->bgActors[bgId].curTransform.scale.y,
+        dyna->bgActors[bgId].curTransform.scale.z, dyna->bgActors[bgId].curTransform.rot.x,
+        dyna->bgActors[bgId].curTransform.rot.y, dyna->bgActors[bgId].curTransform.rot.z,
+        dyna->bgActors[bgId].curTransform.pos.x, dyna->bgActors[bgId].curTransform.pos.y,
+        dyna->bgActors[bgId].curTransform.pos.z);
+
+    if ((pbgdata->numVertices != 0) && (pbgdata->numPolygons != 0)) {
+        f32 radiusSq;
+
+        numVtxInverse = 1.0f / pbgdata->numVertices;
+        newCenterPoint.x = newCenterPoint.y = newCenterPoint.z = 0.0f;
+        for (i = 0; i < pbgdata->numVertices; i++) {
+            Vec3f vtx;
+            Vec3f vtxT; // Vtx after mtx transform
+            s32 pad;
+
+            Math_Vec3s_ToVec3f(&vtx, &pbgdata->vtxList[i]);
+            SkinMatrix_Vec3fMtxFMultXYZ(&sModelToWorldMtxF, &vtx, &vtxT);
+            BgCheck_Vec3fToVec3s(&dyna->vtxList[*vtxStartIndex + (u32)i], &vtxT);
+
+            if (i == 0) {
+                dyna->bgActors[bgId].minY = dyna->bgActors[bgId].maxY = vtxT.y;
+            } else if (vtxT.y < dyna->bgActors[bgId].minY) {
+                dyna->bgActors[bgId].minY = vtxT.y;
+            } else if (dyna->bgActors[bgId].maxY < vtxT.y) {
+                dyna->bgActors[bgId].maxY = vtxT.y;
+            }
+            newCenterPoint.x += vtxT.x;
+            newCenterPoint.y += vtxT.y;
+            newCenterPoint.z += vtxT.z;
+        }
+
+        newCenterPoint.x *= numVtxInverse;
+        newCenterPoint.y *= numVtxInverse;
+        newCenterPoint.z *= numVtxInverse;
+        sphere->center.x = newCenterPoint.x;
+        sphere->center.y = newCenterPoint.y;
+        sphere->center.z = newCenterPoint.z;
+        newRadiusSq = -100.0f;
+
+        for (i = 0, j = *vtxStartIndex; i < pbgdata->numVertices; i++, j++) {
+            newVtx.x = dyna->vtxList[j].x;
+            newVtx.y = dyna->vtxList[j].y;
+            newVtx.z = dyna->vtxList[j].z;
+            radiusSq = Math3D_Vec3fDistSq(&newVtx, &newCenterPoint);
+            if (newRadiusSq < radiusSq) {
+                newRadiusSq = radiusSq;
+            }
+        }
+
+        sphere->radius = sqrtf(newRadiusSq) * 1.1f;
+
+        for (i = 0; i < pbgdata->numPolygons; i++) {
+            CollisionPoly* newPoly = &dyna->polyList[*polyStartIndex + i];
+            f32 newNormMagnitude;
+            u32 vIA;
+            u32 vIB;
+            u32 vIC;
+
+            *newPoly = pbgdata->polyList[i];
+
+            vIA = (COLPOLY_VTX_INDEX(newPoly->flags_vIA) + *vtxStartIndex);
+            vIB = (COLPOLY_VTX_INDEX(newPoly->flags_vIB) + *vtxStartIndex);
+            vIC = newPoly->vIC + *vtxStartIndex;
+
+            newPoly->flags_vIA = vIA | (newPoly->flags_vIA & 0xE000);
+            newPoly->flags_vIB = vIB | (newPoly->flags_vIB & 0xE000);
+            newPoly->vIC = vIC;
+            dVtxList = dyna->vtxList;
+            vtxA.x = dVtxList[vIA].x;
+            vtxA.y = dVtxList[vIA].y;
+            vtxA.z = dVtxList[vIA].z;
+            vtxB.x = dVtxList[vIB].x;
+            vtxB.y = dVtxList[vIB].y;
+            vtxB.z = dVtxList[vIB].z;
+            vtxC.x = dVtxList[vIC].x;
+            vtxC.y = dVtxList[vIC].y;
+            vtxC.z = dVtxList[vIC].z;
+            Math3D_SurfaceNorm(&vtxA, &vtxB, &vtxC, &newNormal);
+            newNormMagnitude = Math3D_Vec3fMagnitude(&newNormal);
+
+            if (!IS_ZERO(newNormMagnitude)) {
+                newNormal.x *= 1.0f / newNormMagnitude;
+                newNormal.y *= 1.0f / newNormMagnitude;
+                newNormal.z *= 1.0f / newNormMagnitude;
+                newPoly->normal.x = COLPOLY_SNORMAL(newNormal.x);
+                newPoly->normal.y = COLPOLY_SNORMAL(newNormal.y);
+                newPoly->normal.z = COLPOLY_SNORMAL(newNormal.z);
+            }
+
+            newPoly->dist = func_80086D24(-DOTXYZ(newNormal, vtxA));
+            if (newNormal.y > 0.5f) {
+                s16 polyId = *polyStartIndex + i;
+
+                DynaSSNodeList_SetSSListHead(&dyna->polyNodes, &dyna->bgActors[bgId].dynaLookup.floor, &polyId);
+            } else if (newNormal.y < -0.8f) {
+                s16 polyId = *polyStartIndex + i;
+
+                DynaSSNodeList_SetSSListHead(&dyna->polyNodes, &dyna->bgActors[bgId].dynaLookup.ceiling, &polyId);
+            } else {
+                s16 polyId = *polyStartIndex + i;
+
+                DynaSSNodeList_SetSSListHead(&dyna->polyNodes, &dyna->bgActors[bgId].dynaLookup.wall, &polyId);
+            }
+        }
+    }
+
+    if (pbgdata->numWaterBoxes > 0) {
+        for (wi = 0; wi < pbgdata->numWaterBoxes; wi++) {
+            WaterBox* waterBox;
+            Vec3f modelMinPos;
+            Vec3f worldMinPos;
+            Vec3f modelMinPosXOffset;
+            Vec3f worldMinPosXOffset;
+            Vec3f modelMinPosZOffset;
+            Vec3f worldMinPosZOffset;
+
+            Math_Vec3s_ToVec3f(&modelMinPos, &pbgdata->waterBoxes[wi].minPos);
+            Math_Vec3f_Copy(&modelMinPosXOffset, &modelMinPos);
+            modelMinPosXOffset.x += pbgdata->waterBoxes[wi].xLength;
+            Math_Vec3f_Copy(&modelMinPosZOffset, &modelMinPos);
+            modelMinPosZOffset.z += pbgdata->waterBoxes[wi].zLength;
+            SkinMatrix_Vec3fMtxFMultXYZ(&sModelToWorldMtxF, &modelMinPos, &worldMinPos);
+            SkinMatrix_Vec3fMtxFMultXYZ(&sModelToWorldMtxF, &modelMinPosXOffset, &worldMinPosXOffset);
+            SkinMatrix_Vec3fMtxFMultXYZ(&sModelToWorldMtxF, &modelMinPosZOffset, &worldMinPosZOffset);
+            waterBox = &dyna->waterBoxList.boxes[*waterBoxStartIndex + wi];
+            BgCheck_CalcWaterboxDimensions(&worldMinPos, &worldMinPosXOffset, &worldMinPosZOffset, &waterBox->minPos,
+                                           &waterBox->xLength, &waterBox->zLength);
+            waterBox->properties = pbgdata->waterBoxes[wi].properties;
+        }
+    }
+    *polyStartIndex += pbgdata->numPolygons;
+    *vtxStartIndex += pbgdata->numVertices;
+    *waterBoxStartIndex += pbgdata->numWaterBoxes;
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/DynaPoly_ExpandSRT.s")
-#endif
 
 void BgCheck_ResetFlagsIfLoadedActor(PlayState* play, DynaCollisionContext* dyna, Actor* actor) {
     DynaPolyActor* dynaActor;
@@ -3206,7 +3212,8 @@ f32 BgCheck_RaycastFloorDynaList(DynaRaycast* dynaRaycast, u32 listType) {
             (COLPOLY_VIA_FLAG_TEST(polyList[id].flags_vIB, 4) &&
              (((dynaRaycast->actor != NULL) && (dynaRaycast->actor->category != ACTORCAT_PLAYER)) ||
               ((dynaRaycast->actor == NULL) && (dynaRaycast->xpFlags != COLPOLY_IGNORE_CAMERA)))) ||
-            ((dynaRaycast->unk_24 & 0x20) && func_800C9B68(dynaRaycast->colCtx, &polyList[id], dynaRaycast->unk1C))) {
+            ((dynaRaycast->unk_24 & 0x20) &&
+             SurfaceType_IsSoft(dynaRaycast->colCtx, &polyList[id], dynaRaycast->unk1C))) {
             if (curNode->next == SS_NULL) {
                 break;
             } else {
@@ -4189,17 +4196,11 @@ Vec3s* BgCheck_GetBgCamFuncData(CollisionContext* colCtx, CollisionPoly* poly, s
     return BgCheck_GetBgCamFuncDataImpl(colCtx, SurfaceType_GetBgCamIndex(colCtx, poly, bgId), bgId);
 }
 
-/**
- * SurfaceType Get Scene Exit Index
- */
 u32 SurfaceType_GetSceneExitIndex(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
     return SurfaceType_GetData(colCtx, poly, bgId, 0) >> 8 & 0x1F;
 }
 
-/**
- * SurfaceType Get ? Property (& 0x0003_E000)
- */
-u32 func_800C99D4(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
+FloorType SurfaceType_GetFloorType(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
     return SurfaceType_GetData(colCtx, poly, bgId, 0) >> 13 & 0x1F;
 }
 
@@ -4210,126 +4211,85 @@ u32 func_800C99FC(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
     return SurfaceType_GetData(colCtx, poly, bgId, 0) >> 18 & 7;
 }
 
-/**
- * SurfaceType Get Wall Property (Internal)
- */
-u32 func_800C9A24(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
+WallType SurfaceType_GetWallType(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
     return SurfaceType_GetData(colCtx, poly, bgId, 0) >> 21 & 0x1F;
 }
 
-/**
- * SurfaceType Get Wall Flags
- */
-s32 func_800C9A4C(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
-    return sWallFlags[func_800C9A24(colCtx, poly, bgId)];
+s32 SurfaceType_GetWallFlags(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
+    return sWallFlags[SurfaceType_GetWallType(colCtx, poly, bgId)];
 }
 
-/**
- * SurfaceType Is Wall Flag (1 << 0) Set
- */
-s32 func_800C9A7C(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
-    return (func_800C9A4C(colCtx, poly, bgId) & 1) ? true : false;
+s32 SurfaceType_CheckWallFlag0(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
+    return (SurfaceType_GetWallFlags(colCtx, poly, bgId) & WALL_FLAG_0) ? true : false;
 }
 
-/**
- * SurfaceType Is Wall Flag (1 << 1) Set
- */
-s32 func_800C9AB0(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
-    return (func_800C9A4C(colCtx, poly, bgId) & 2) ? true : false;
+s32 SurfaceType_CheckWallFlag1(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
+    return (SurfaceType_GetWallFlags(colCtx, poly, bgId) & WALL_FLAG_1) ? true : false;
 }
 
-/**
- * SurfaceType Is Wall Flag (1 << 2) Set
- */
-s32 func_800C9AE4(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
-    return (func_800C9A4C(colCtx, poly, bgId) & 4) ? true : false;
+s32 SurfaceType_CheckWallFlag2(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
+    return (SurfaceType_GetWallFlags(colCtx, poly, bgId) & WALL_FLAG_2) ? true : false;
 }
 
-u32 func_800C9B18(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
+FloorProperty SurfaceType_GetFloorProperty2(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
     return SurfaceType_GetData(colCtx, poly, bgId, 0) >> 26 & 0xF;
 }
 
-/**
- * SurfaceType Get Floor Property
- */
-u32 func_800C9B40(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
+FloorProperty SurfaceType_GetFloorProperty(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
     return SurfaceType_GetData(colCtx, poly, bgId, 0) >> 26 & 0xF;
 }
 
-/**
- * SurfaceType Is Floor Minus 1
- */
-u32 func_800C9B68(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
+u32 SurfaceType_IsSoft(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
     return SurfaceType_GetData(colCtx, poly, bgId, 0) >> 30 & 1;
 }
 
-/**
- * SurfaceType Is Horse Blocked
- */
 u32 SurfaceType_IsHorseBlocked(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
     return SurfaceType_GetData(colCtx, poly, bgId, 0) >> 31 & 1;
 }
 
-u32 func_800C9BB8(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
+SurfaceMaterial SurfaceType_GetMaterial(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
     return SurfaceType_GetData(colCtx, poly, bgId, 1) & 0xF;
 }
 
-/**
- * SurfaceType Get Poly Sfx
- */
-u16 SurfaceType_GetSfx(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
-    s32 id = func_800C9BB8(colCtx, poly, bgId);
+u16 SurfaceType_GetSfxOffset(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
+    SurfaceMaterial surfaceMaterial = SurfaceType_GetMaterial(colCtx, poly, bgId);
 
-    if ((id < 0) || (id > 14)) {
-        return NA_SE_PL_WALK_GROUND - SFX_FLAG;
+    if ((surfaceMaterial < 0) || (surfaceMaterial >= ARRAY_COUNT(sSurfaceSfxOffsets))) {
+        return SURFACE_SFX_OFFSET_DIRT;
     }
-    return sSurfaceTypeSfx[id];
+
+    return sSurfaceSfxOffsets[surfaceMaterial];
 }
 
 /**
- * SurfaceType Get ? (same indexer as Get Poly Sfx)
+ * Checks if the material has the bitwise propertyType
  */
-s32 func_800C9C24(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId, s32 arg3) {
-    s32 id = func_800C9BB8(colCtx, poly, bgId);
+s32 SurfaceType_HasMaterialProperty(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId, s32 propertyType) {
+    SurfaceMaterial surfaceMaterial = SurfaceType_GetMaterial(colCtx, poly, bgId);
 
-    if ((id < 0) || (id > 14)) {
+    if ((surfaceMaterial < 0) || (surfaceMaterial >= ARRAY_COUNT(sSurfaceMaterialProperties))) {
         return 0;
     }
-    return D_801B46C0[id] & arg3;
+
+    return sSurfaceMaterialProperties[surfaceMaterial] & propertyType;
 }
 
-/**
- * SurfaceType get terrain slope surface
- */
-u32 SurfaceType_GetSlope(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
+FloorEffect SurfaceType_GetFloorEffect(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
     return SurfaceType_GetData(colCtx, poly, bgId, 1) >> 4 & 3;
 }
 
-/**
- * SurfaceType get surface lighting setting
- */
 u32 SurfaceType_GetLightSettingIndex(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
     return SurfaceType_GetData(colCtx, poly, bgId, 1) >> 6 & 0x1F;
 }
 
-/**
- * SurfaceType get echo
- */
 u32 SurfaceType_GetEcho(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
     return SurfaceType_GetData(colCtx, poly, bgId, 1) >> 11 & 0x3F;
 }
 
-/**
- * SurfaceType Is Hookshot Surface
- */
 u32 SurfaceType_IsHookshotSurface(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
     return SurfaceType_GetData(colCtx, poly, bgId, 1) >> 17 & 1;
 }
 
-/**
- * CollisionPoly is ignored by entities
- * Returns true if poly is ignored by entities, else false
- */
 s32 SurfaceType_IsIgnoredByEntities(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
     u32 flags;
 
@@ -4340,10 +4300,6 @@ s32 SurfaceType_IsIgnoredByEntities(CollisionContext* colCtx, CollisionPoly* pol
     return !!flags;
 }
 
-/**
- * CollisionPoly is ignored by projectiles
- * Returns true if poly is ignored by projectiles, else false
- */
 s32 SurfaceType_IsIgnoredByProjectiles(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
     u32 flags;
 
@@ -4386,10 +4342,7 @@ s32 func_800C9DDC(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
     return !!flags;
 }
 
-/**
- * SurfaceType Get Conveyor Surface Speed
- */
-u32 SurfaceType_GetConveyorSpeed(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
+ConveyorSpeed SurfaceType_GetConveyorSpeed(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
     return SurfaceType_GetData(colCtx, poly, bgId, 1) >> 18 & 7;
 }
 
@@ -4407,9 +4360,6 @@ u32 SurfaceType_GetConveyorDirection(CollisionContext* colCtx, CollisionPoly* po
     return data & 0x3F;
 }
 
-/**
- * SurfaceType is Wall Damage
- */
 u32 SurfaceType_IsWallDamage(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
     return (SurfaceType_GetData(colCtx, poly, bgId, 1) & 0x8000000) ? true : false;
 }

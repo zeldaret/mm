@@ -559,7 +559,7 @@ void Cutscene_TerminatorImpl(PlayState* play, CutsceneContext* csCtx, CsCmdBase*
     Audio_SetCutsceneFlag(false);
     gSaveContext.cutsceneTransitionControl = 1;
 
-    if ((gSaveContext.gameMode != 0) && (csCtx->frames != cmd->startFrame)) {
+    if ((gSaveContext.gameMode != GAMEMODE_NORMAL) && (csCtx->frames != cmd->startFrame)) {
         gSaveContext.hudVisibilityForceButtonAlphasByStatus = true;
     }
 
@@ -568,7 +568,7 @@ void Cutscene_TerminatorImpl(PlayState* play, CutsceneContext* csCtx, CsCmdBase*
         play->nextEntrance = play->csCtx.sceneCsList[play->csCtx.currentCsIndex].nextEntrance;
         gSaveContext.nextCutsceneIndex = 0;
         play->transitionTrigger = TRANS_TRIGGER_START;
-        if (gSaveContext.gameMode != 1) {
+        if (gSaveContext.gameMode != GAMEMODE_TITLE_SCREEN) {
             Scene_SetExitFade(play);
         } else {
             D_801BB12C++;
@@ -1417,7 +1417,7 @@ void func_800EDA04(PlayState* play, CutsceneContext* csCtx) {
         }
 
         gSaveContext.save.cutscene = 0;
-        gSaveContext.gameMode = 0;
+        gSaveContext.gameMode = GAMEMODE_NORMAL;
         ActorCutscene_Stop(0x7F);
         Audio_SetCutsceneFlag(false);
         csCtx->state = CS_STATE_0;
@@ -1470,7 +1470,8 @@ void func_800EDBE0(PlayState* play) {
     SceneTableEntry* sp24;
     s32 temp_v0_3;
 
-    if (((gSaveContext.gameMode == 0) || (gSaveContext.gameMode == 1)) && (gSaveContext.respawnFlag <= 0)) {
+    if (((gSaveContext.gameMode == GAMEMODE_NORMAL) || (gSaveContext.gameMode == GAMEMODE_TITLE_SCREEN)) &&
+        (gSaveContext.respawnFlag <= 0)) {
         sp2A = func_800F21CC();
         if (sp2A != -1) {
             temp_v0_3 = func_800F2138(sp2A);

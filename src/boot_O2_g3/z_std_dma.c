@@ -1,6 +1,7 @@
 #include "global.h"
 #include "fault.h"
 #include "stack.h"
+#include "stackcheck.h"
 
 u32 sDmaMgrDmaBuffSize = 0x2000;
 
