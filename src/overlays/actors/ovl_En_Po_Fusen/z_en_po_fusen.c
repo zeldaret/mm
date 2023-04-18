@@ -16,7 +16,7 @@ void EnPoFusen_Destroy(Actor* thisx, PlayState* play);
 void EnPoFusen_Update(Actor* thisx, PlayState* play);
 void EnPoFusen_Draw(Actor* thisx, PlayState* play);
 
-u16 EnPoFusen_CheckParent(EnPoFusen* this, PlayState* play);
+s32 EnPoFusen_CheckParent(EnPoFusen* this, PlayState* play);
 void EnPoFusen_InitNoFuse(EnPoFusen* this);
 void EnPoFusen_InitFuse(EnPoFusen* this);
 void EnPoFusen_Pop(EnPoFusen* this, PlayState* play);
@@ -146,9 +146,9 @@ void EnPoFusen_Destroy(Actor* thisx, PlayState* play) {
 }
 
 /**
- * Search for Romani's actor, beacuse it's PoFusen's job to update her actor on pop.
+ * Search for Romani's actor, beacuse it's PoFusen's job to update her actor when the balloon is popped.
  */
-u16 EnPoFusen_CheckParent(EnPoFusen* this, PlayState* play) {
+s32 EnPoFusen_CheckParent(EnPoFusen* this, PlayState* play) {
     Actor* actorIter = play->actorCtx.actorLists[ACTORCAT_NPC].first;
 
     if (POE_BALLOON_IS_FUSE_TYPE(&this->actor)) {
@@ -166,7 +166,7 @@ u16 EnPoFusen_CheckParent(EnPoFusen* this, PlayState* play) {
     return false;
 }
 
-u16 EnPoFusen_CheckCollision(EnPoFusen* this, PlayState* play) {
+s32 EnPoFusen_CheckCollision(EnPoFusen* this, PlayState* play) {
     if (this->actionFunc == EnPoFusen_IdleFuse) {
         return false;
     }
@@ -195,7 +195,6 @@ void EnPoFusen_Idle(EnPoFusen* this, PlayState* play) {
     f32 shadowScaleTmp;
     f32 shadowAlphaTmp;
     f32 heightOffset;
-    f32 f255 = 255.0f;
 
     this->actor.world.pos = this->actor.home.pos;
     this->randScaleChange += 0x190;
@@ -207,7 +206,7 @@ void EnPoFusen_Idle(EnPoFusen* this, PlayState* play) {
     this->actor.world.pos.y += heightOffset;
     this->actor.shape.rot.z = (Math_SinS(this->randBaseRotChange) * 910.0f);
 
-    if ((this->randScaleChange < 0x4000) && (this->randScaleChange >= -0x3FFF)) {
+    if ((this->randScaleChange < 0x4000) && (this->randScaleChange > -0x4000)) {
         Math_SmoothStepToS(&this->limbRotChainAndLantern, 0x38E, 0x14, 0xBB8, 0x64);
     } else {
         Math_SmoothStepToS(&this->limbRotChainAndLantern, 0x71C, 0x8, 0xBB8, 0x64);
@@ -222,7 +221,7 @@ void EnPoFusen_Idle(EnPoFusen* this, PlayState* play) {
     shadowScaleTmp = ((1.0f - Math_SinS(this->randScaleChange)) * 10.0f) + 50.0f;
     shadowAlphaTmp = ((1.0f - Math_SinS(this->randScaleChange)) * 75.0f) + 100.0f;
     this->actor.shape.shadowScale = shadowScaleTmp;
-    this->actor.shape.shadowAlpha = (shadowAlphaTmp > f255) ? (u8)f255 : (u8)shadowAlphaTmp;
+    this->actor.shape.shadowAlpha = CLAMP_MAX(shadowAlphaTmp, 255.0f);
 }
 
 void EnPoFusen_IncrementRomaniPop(EnPoFusen* this) {
@@ -230,6 +229,7 @@ void EnPoFusen_IncrementRomaniPop(EnPoFusen* this) {
 
     if ((parent != NULL) && (parent->id == ACTOR_EN_MA4)) {
         EnMa4* romani = (EnMa4*)parent;
+
         romani->poppedBalloonCounter++;
     }
 

@@ -73,7 +73,8 @@ void EnTest5_HandleBottleAction(EnTest5* this, PlayState* play) {
         if (playerPosRelativeToWater.x >= 0.0f && playerPosRelativeToWater.x <= this->xLength &&
             playerPosRelativeToWater.z >= 0.0f && playerPosRelativeToWater.z <= this->zLength &&
             fabsf(playerPosRelativeToWater.y) < 100.0f && player->actor.depthInWater > 12.0f) {
-            Actor_PickUp(&this->actor, play, GI_MAX, this->actor.xzDistToPlayer, fabsf(this->actor.playerHeightRel));
+            Actor_OfferGetItem(&this->actor, play, GI_MAX, this->actor.xzDistToPlayer,
+                               fabsf(this->actor.playerHeightRel));
         }
     }
 }

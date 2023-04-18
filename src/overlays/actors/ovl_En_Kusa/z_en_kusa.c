@@ -329,7 +329,7 @@ void EnKusa_SpawnBugs(EnKusa* this, PlayState* play) {
     for (numBugs = 0; numBugs < 3; numBugs++) {
         Actor* bug = Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ACTOR_EN_INSECT, this->actor.world.pos.x,
                                                    this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, 1,
-                                                   this->actor.cutscene, this->actor.unk20, 0);
+                                                   this->actor.cutscene, this->actor.halfDaysBits, 0);
 
         if (bug == NULL) {
             break;
@@ -490,7 +490,7 @@ void EnKusa_WaitForInteract(EnKusa* this, PlayState* play) {
                 CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
                 if (this->actor.xzDistToPlayer < 100.0f) {
                     if (KUSA_GET_TYPE(&this->actor) != ENKUSA_TYPE_GRASS_2) {
-                        Actor_LiftActor(&this->actor, play);
+                        Actor_OfferCarry(&this->actor, play);
                     }
                 }
             }
@@ -684,7 +684,8 @@ void EnKusa_Update(Actor* thisx, PlayState* play2) {
     } else {
         this->actor.shape.yOffset = 0.0f;
     }
-    if ((kusaGameplayFrames != play->gameplayFrames) && (play->roomCtx.curRoom.unk3 == 0)) {
+    if ((kusaGameplayFrames != play->gameplayFrames) &&
+        (play->roomCtx.curRoom.behaviorType1 == ROOM_BEHAVIOR_TYPE1_0)) {
         EnKusa_Sway();
         kusaGameplayFrames = play->gameplayFrames;
     }
@@ -696,8 +697,9 @@ void EnKusa_DrawBush(Actor* thisx, PlayState* play2) {
 
     if ((this->actor.projectedPos.z <= 1200.0f) || ((this->isInWater & 1) && (this->actor.projectedPos.z < 1300.0f))) {
 
-        if ((play->roomCtx.curRoom.unk3 == 0) && (this->actionFunc == EnKusa_WaitForInteract) &&
-            (this->actor.projectedPos.z > -150.0f) && (this->actor.projectedPos.z < 400.0f)) {
+        if ((play->roomCtx.curRoom.behaviorType1 == ROOM_BEHAVIOR_TYPE1_0) &&
+            (this->actionFunc == EnKusa_WaitForInteract) && (this->actor.projectedPos.z > -150.0f) &&
+            (this->actor.projectedPos.z < 400.0f)) {
             EnKusa_ApplySway(&D_80936AD8[this->kusaMtxIdx]);
         }
 
@@ -725,7 +727,8 @@ void EnKusa_DrawGrass(Actor* thisx, PlayState* play) {
     if (this->isCut) {
         Gfx_DrawDListOpa(play, gKusaStump);
     } else {
-        if ((play->roomCtx.curRoom.unk3 == 0) && (this->actionFunc == EnKusa_WaitForInteract)) {
+        if ((play->roomCtx.curRoom.behaviorType1 == ROOM_BEHAVIOR_TYPE1_0) &&
+            (this->actionFunc == EnKusa_WaitForInteract)) {
             if ((this->actor.projectedPos.z > -150.0f) && (this->actor.projectedPos.z < 400.0f)) {
                 EnKusa_ApplySway(&D_80936AD8[this->kusaMtxIdx]);
             }

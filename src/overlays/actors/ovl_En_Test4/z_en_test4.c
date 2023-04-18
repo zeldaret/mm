@@ -315,7 +315,7 @@ void EnTest4_Init(Actor* thisx, PlayState* play) {
         if (CURRENT_DAY == 0) {
             if (gSaveContext.save.time < CLOCK_TIME(6, 1)) {
                 gSaveContext.save.time = CLOCK_TIME(6, 0);
-                gSaveContext.gameMode = 0;
+                gSaveContext.gameMode = GAMEMODE_NORMAL;
                 STOP_GAMESTATE(&play->state);
                 SET_NEXT_GAMESTATE(&play->state, DayTelop_Init, sizeof(DayTelopState));
                 this->unk_144 = 1;
@@ -367,7 +367,7 @@ void func_80A42AB8(EnTest4* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if ((play->transitionMode == TRANS_MODE_OFF) && !Play_InCsMode(play) && (play->numSetupActors <= 0) &&
-        (play->roomCtx.unk31 == 0) && !Play_IsDebugCamEnabled()) {
+        (play->roomCtx.status == 0) && !Play_IsDebugCamEnabled()) {
         s16 temp_a2;
         u16 temp_a0 = D_80A43364[this->unk_144];
         s16 temp_a3;

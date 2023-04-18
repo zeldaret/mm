@@ -282,7 +282,7 @@ void EnSsh_SetColliderScale(EnSsh* this, f32 arg1, f32 arg2) {
 
 s32 EnSsh_Damaged(EnSsh* this) {
     if ((this->stunTimer == 120) && (this->stateFlags & SSH_STATE_STUNNED)) {
-        Actor_SetColorFilter(&this->actor, 0, 200, 0, this->stunTimer);
+        Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 200, COLORFILTER_BUFFLAG_OPA, this->stunTimer);
     }
 
     if (DECR(this->stunTimer) != 0) {
@@ -694,11 +694,11 @@ void EnSsh_Talk(EnSsh* this, PlayState* play) {
             case 0x911: // Find all in here and defeat them
             case 0x912: // Don't forget to collect their token
             case 0x914: // In here, cursed spiders, defeat them to make me normal
-                func_80151938(play, play->msgCtx.currentTextId + 1);
+                Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                 break;
 
             default: // intended case 0x915 from above (914+1)
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 this->actionFunc = EnSsh_Idle;
                 break;
         }

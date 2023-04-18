@@ -4,6 +4,7 @@
  * Description: Bad Bat
  */
 
+#include "prevent_bss_reordering.h"
 #include "z_en_bat.h"
 #include "objects/object_bat/object_bat.h"
 
@@ -164,8 +165,8 @@ void EnBat_Init(Actor* thisx, PlayState* play) {
                 &play->actorCtx, play, ACTOR_EN_BAT, thisx->world.pos.x + randPlusMinusPoint5Scaled(200.0f),
                 thisx->world.pos.y + randPlusMinusPoint5Scaled(100.0f),
                 thisx->world.pos.z + randPlusMinusPoint5Scaled(200.0f), randPlusMinusPoint5Scaled(0x2000),
-                0xFFFF * Rand_ZeroOne(), 0, BAD_BAT_PARAMS(this->switchFlag, this->paramFlags, 0), -1, thisx->unk20,
-                NULL);
+                0xFFFF * Rand_ZeroOne(), 0, BAD_BAT_PARAMS(this->switchFlag, this->paramFlags, 0), -1,
+                thisx->halfDaysBits, NULL);
             BAD_BAT_GET_NUMBER_TO_SPAWN(thisx)--;
         }
     }
@@ -340,7 +341,7 @@ void EnBat_SetupDie(EnBat* this, PlayState* play) {
         this->drawDmgEffScale = 0.45f;
     }
 
-    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 40);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 40);
 
     if (this->actor.flags & ACTOR_FLAG_8000) {
         this->actor.speed = 0.0f;
@@ -400,8 +401,9 @@ void EnBat_SetupStunned(EnBat* this) {
         this->actor.speed = 0.0f;
         this->actor.world.pos.y += 13.0f;
     }
+
     Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_FREEZE);
-    Actor_SetColorFilter(&this->actor, 0, 255, 0, this->timer);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 255, COLORFILTER_BUFFLAG_OPA, this->timer);
     this->actionFunc = EnBat_Stunned;
 }
 
