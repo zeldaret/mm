@@ -36,7 +36,6 @@ typedef enum {
     /*  1 */ ANIMTAPER_ACCEL
 } AnimationTapers;
 
-
 typedef struct {
     /* 0x0 */ Vec3s jointPos; // Root is position in model space, children are relative to parent
     /* 0x6 */ u8 child;       // The first child's index into the limb table.

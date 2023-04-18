@@ -171,6 +171,7 @@ typedef enum PlayerItemAction {
     /* 0x53 */ PLAYER_IA_MAX
 } PlayerItemAction;
 
+// Relies on B swords related item actions to be contiguous
 #define GET_BSWORD_FROM_IA(itemAction) ((itemAction) - PLAYER_IA_SWORD_MIN + 1)
 
 typedef enum PlayerBButtonSword {
@@ -181,6 +182,7 @@ typedef enum PlayerBButtonSword {
     /* 4 */ PLAYER_BSWORD_MAX
 } PlayerBButtonSword;
 
+// Relies on melee weapon related item actions to be contiguous
 #define GET_MELEE_WEAPON_FROM_IA(itemAction) ((itemAction) - PLAYER_IA_SWORD_MIN + 1)
 
 typedef enum PlayerMeleeWeapon {
@@ -194,6 +196,7 @@ typedef enum PlayerMeleeWeapon {
     /* 7 */ PLAYER_MELEEWEAPON_MAX
 } PlayerMeleeWeapon;
 
+// Relies on bottle-related item actions to be contiguous
 #define GET_BOTTLE_FROM_IA(itemAction) ((itemAction) - PLAYER_IA_BOTTLE_MIN)
 
 typedef enum PlayerBottle {
@@ -222,6 +225,7 @@ typedef enum PlayerBottle {
     /* 21 */ PLAYER_BOTTLE_MAX
 } PlayerBottle;
 
+// Relies on explosive-related item actions to be contiguous
 #define GET_EXPLOSIVE_FROM_IA(itemAction) ((itemAction) - PLAYER_IA_EXPLOSIVE_MIN)
 
 typedef enum PlayerExplosive {
@@ -232,6 +236,7 @@ typedef enum PlayerExplosive {
     /*  3 */ PLAYER_EXPLOSIVE_MAX
 } PlayerExplosive;
 
+// Relies on sword item actions to be contiguous
 #define GET_SWORD_FROM_IA(itemAction) ((itemAction) - PLAYER_IA_SWORD_MIN)
 
 typedef enum PlayerSword {

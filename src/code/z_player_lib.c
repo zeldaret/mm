@@ -834,8 +834,8 @@ Gfx* gPlayerWaistDLs[2 * PLAYER_FORM_MAX] = {
 };
 
 Gfx* gPlayerHandHoldingShields[2 * (PLAYER_SHIELD_MAX - 1)] = {
-    gLinkHumanRightHandHoldingHylianShieldDL,
-    gLinkHumanRightHandHoldingHylianShieldDL,
+    gLinkHumanRightHandHoldingHerosShieldDL,
+    gLinkHumanRightHandHoldingHerosShieldDL,
     gLinkHumanRightHandHoldingMirrorShieldDL,
     gLinkHumanRightHandHoldingMirrorShieldDL,
 };
@@ -880,8 +880,8 @@ Gfx* gPlayerSheath14DLs[2 * PLAYER_FORM_MAX] = {
 };
 
 Gfx* gPlayerShields[] = {
-    gLinkHumanHylianShieldWithMtxDL,
-    gLinkHumanHylianShieldWithMtxDL,
+    gLinkHumanHerosShieldWithMtxDL,
+    gLinkHumanHerosShieldWithMtxDL,
     gLinkHumanMirrorShieldWithMtxDL,
     gLinkHumanMirrorShieldWithMtxDL,
 };
@@ -3726,6 +3726,7 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
                         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx),
                                   G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
                         //! FAKE (yes, all of them are required)
+                        // https://decomp.me/scratch/AdU3G
                         if (1) {}
                         if (1) {}
                         if (1) {}
