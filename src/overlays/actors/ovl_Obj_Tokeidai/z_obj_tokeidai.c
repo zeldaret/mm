@@ -618,7 +618,7 @@ void ObjTokeidai_StaircaseToRooftop_Idle(ObjTokeidai* this, PlayState* play) {
 }
 
 s32 ObjTokeidai_IsPostFirstCycleFinalHours(ObjTokeidai* this, PlayState* play) {
-    if (gSaveContext.save.inventory.items[SLOT_OCARINA] == ITEM_NONE) {
+    if (gSaveContext.save.saveInfo.inventory.items[SLOT_OCARINA] == ITEM_NONE) {
         return false;
     }
     if (CURRENT_DAY == 3 && gSaveContext.save.time < CLOCK_TIME(6, 0)) {

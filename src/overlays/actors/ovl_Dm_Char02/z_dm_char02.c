@@ -83,7 +83,7 @@ void DmChar02_PlaySfxForCutscenes(DmChar02* this, PlayState* play) {
 void DmChar02_Init(Actor* thisx, PlayState* play) {
     DmChar02* this = THIS;
 
-    if (gSaveContext.save.inventory.items[SLOT_OCARINA] == ITEM_NONE) {
+    if (gSaveContext.save.saveInfo.inventory.items[SLOT_OCARINA] == ITEM_NONE) {
         this->animIndex = DMCHAR02_ANIM_HIT_GROUND;
         this->actor.targetArrowOffset = 3000.0f;
         ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);

@@ -907,9 +907,9 @@ void EnMa4_StartDialogue(EnMa4* this, PlayState* play) {
                     this->textId = 0x336D;
                 } else {
                     time = gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2];
-                    if ((s32)time < (s32)gSaveContext.save.horseBackBalloonHighScore) {
+                    if ((s32)time < (s32)gSaveContext.save.saveInfo.horseBackBalloonHighScore) {
                         // [Score] New record!
-                        gSaveContext.save.horseBackBalloonHighScore = time;
+                        gSaveContext.save.saveInfo.horseBackBalloonHighScore = time;
                         EnMa4_SetFaceExpression(this, 0, 3);
                         Message_StartTextbox(play, 0x3350, &this->actor);
                         this->textId = 0x3350;
@@ -951,8 +951,8 @@ void EnMa4_StartDialogue(EnMa4* this, PlayState* play) {
                     this->textId = 0x3356;
                 } else {
                     time = gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2];
-                    if ((s32)time < (s32)gSaveContext.save.horseBackBalloonHighScore) {
-                        gSaveContext.save.horseBackBalloonHighScore = time;
+                    if ((s32)time < (s32)gSaveContext.save.saveInfo.horseBackBalloonHighScore) {
+                        gSaveContext.save.saveInfo.horseBackBalloonHighScore = time;
                         EnMa4_SetFaceExpression(this, 0, 3);
                         Message_StartTextbox(play, 0x3350, &this->actor);
                         this->textId = 0x3350;
@@ -978,9 +978,9 @@ void EnMa4_StartDialogue(EnMa4* this, PlayState* play) {
                     this->textId = 0x3356;
                 } else {
                     time = gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2];
-                    if ((s32)time < (s32)gSaveContext.save.horseBackBalloonHighScore) {
+                    if ((s32)time < (s32)gSaveContext.save.saveInfo.horseBackBalloonHighScore) {
                         // New record
-                        gSaveContext.save.horseBackBalloonHighScore = time;
+                        gSaveContext.save.saveInfo.horseBackBalloonHighScore = time;
                         Message_StartTextbox(play, 0x335D, &this->actor);
                         this->textId = 0x335D;
                     } else {

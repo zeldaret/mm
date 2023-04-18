@@ -843,20 +843,20 @@ def applyChange(fileContents: str, compiledRegex: re.Pattern, callback) -> str:
 
 
 def updateCheck(fileContents: str) -> str:
-    # gSaveContext.save.weekEventReg[86] & 2
-    checkRegex = re.compile(rf"gSaveContext.save.weekEventReg\[(?P<index>{NUMBER_PATTERN})\]\s*\&\s*(?P<mask>{NUMBER_PATTERN})")
+    # gSaveContext.save.saveInfo.weekEventReg[86] & 2
+    checkRegex = re.compile(rf"gSaveContext.save.saveInfo.weekEventReg\[(?P<index>{NUMBER_PATTERN})\]\s*\&\s*(?P<mask>{NUMBER_PATTERN})")
 
     return applyChange(fileContents, checkRegex, getCheckMacro)
 
 def updateSet(fileContents: str) -> str:
-    # gSaveContext.save.weekEventReg[51] |= 0x10
-    setRegex = re.compile(rf"gSaveContext.save.weekEventReg\[(?P<index>{NUMBER_PATTERN})\]\s*\|=\s*(?P<mask>{NUMBER_PATTERN})")
+    # gSaveContext.save.saveInfo.weekEventReg[51] |= 0x10
+    setRegex = re.compile(rf"gSaveContext.save.saveInfo.weekEventReg\[(?P<index>{NUMBER_PATTERN})\]\s*\|=\s*(?P<mask>{NUMBER_PATTERN})")
 
     return applyChange(fileContents, setRegex, getSetMacro)
 
 def updateClear(fileContents: str) -> str:
-    # gSaveContext.save.weekEventReg[85] &= (u8)~0x80
-    clearRegex = re.compile(rf"gSaveContext.save.weekEventReg\[(?P<index>{NUMBER_PATTERN})\]\s*\&=\s*(\(u8\))?~(?P<mask>{NUMBER_PATTERN})")
+    # gSaveContext.save.saveInfo.weekEventReg[85] &= (u8)~0x80
+    clearRegex = re.compile(rf"gSaveContext.save.saveInfo.weekEventReg\[(?P<index>{NUMBER_PATTERN})\]\s*\&=\s*(\(u8\))?~(?P<mask>{NUMBER_PATTERN})")
 
     return applyChange(fileContents, clearRegex, getClearMacro)
 

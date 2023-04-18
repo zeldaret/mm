@@ -300,7 +300,7 @@ s32 func_80BED208(EnAkindonuts* this) {
         return 0;
     }
 
-    if (gSaveContext.save.playerData.rupees < 10) {
+    if (gSaveContext.save.saveInfo.playerData.rupees < 10) {
         return 1;
     }
 
@@ -322,7 +322,7 @@ s32 func_80BED27C(EnAkindonuts* this) {
         return 0;
     }
 
-    if (gSaveContext.save.playerData.rupees < 200) {
+    if (gSaveContext.save.saveInfo.playerData.rupees < 200) {
         return 1;
     }
 
@@ -336,7 +336,7 @@ s32 func_80BED2FC(EnAkindonuts* this) {
         return 2;
     }
 
-    if (gSaveContext.save.playerData.rupees < 40) {
+    if (gSaveContext.save.saveInfo.playerData.rupees < 40) {
         return 1;
     }
 
@@ -350,7 +350,7 @@ s32 func_80BED35C(EnAkindonuts* this) {
         return 2;
     }
 
-    if (gSaveContext.save.playerData.rupees < 100) {
+    if (gSaveContext.save.saveInfo.playerData.rupees < 100) {
         return 1;
     }
 

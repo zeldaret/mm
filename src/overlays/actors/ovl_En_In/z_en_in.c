@@ -576,7 +576,7 @@ s32 func_808F4150(PlayState* play, EnIn* this, s32 arg2, MessageContext* msgCtx)
 
     if (msgCtx->choiceIndex == 0) {
         func_8019F208();
-        if (gSaveContext.save.playerData.rupees >= play->msgCtx.unk1206C) {
+        if (gSaveContext.save.saveInfo.playerData.rupees >= play->msgCtx.unk1206C) {
             Rupees_ChangeBy(-play->msgCtx.unk1206C);
             if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_57_01)) {
                 func_808F4108(this, play, 0x3474);
@@ -602,7 +602,7 @@ s32 func_808F4270(PlayState* play, EnIn* this, s32 arg2, MessageContext* msgCtx,
 
     if (msgCtx->choiceIndex == 0) {
         func_8019F208();
-        if (gSaveContext.save.playerData.rupees >= fee) {
+        if (gSaveContext.save.saveInfo.playerData.rupees >= fee) {
             Rupees_ChangeBy(-fee);
             if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_57_01)) {
                 if (arg4 != 0) {
@@ -747,7 +747,7 @@ s32 func_808F4414(PlayState* play, EnIn* this, s32 arg2) {
                 case 0x3466:
                     if (msgCtx->choiceIndex == 0) {
                         func_8019F208();
-                        if (gSaveContext.save.playerData.rupees >= play->msgCtx.unk1206C) {
+                        if (gSaveContext.save.saveInfo.playerData.rupees >= play->msgCtx.unk1206C) {
                             if (Inventory_HasEmptyBottle()) {
                                 this->actionFunc = func_808F3C40;
                                 Actor_OfferGetItem(&this->actor, play, GI_MILK, 500.0f, 100.0f);
@@ -999,7 +999,7 @@ s32 func_808F4414(PlayState* play, EnIn* this, s32 arg2) {
                 case 0x3490:
                     if (msgCtx->choiceIndex == 0) {
                         func_8019F208();
-                        if (gSaveContext.save.playerData.rupees >= play->msgCtx.unk1206C) {
+                        if (gSaveContext.save.saveInfo.playerData.rupees >= play->msgCtx.unk1206C) {
                             if (Inventory_HasEmptyBottle()) {
                                 this->actionFunc = func_808F3C40;
                                 Actor_OfferGetItem(&this->actor, play, GI_MILK, 500.0f, 100.0f);

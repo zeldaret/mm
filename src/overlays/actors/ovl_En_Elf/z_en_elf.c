@@ -355,8 +355,9 @@ void EnElf_Init(Actor* thisx, PlayState* play2) {
             this->elfMsg = NULL;
             this->unk_234 = NULL;
             this->unk_269 = 20;
-            if ((gSaveContext.save.playerData.tatlTimer >= 25800) || (gSaveContext.save.playerData.tatlTimer < 3000)) {
-                gSaveContext.save.playerData.tatlTimer = 0;
+            if ((gSaveContext.save.saveInfo.playerData.tatlTimer >= 25800) ||
+                (gSaveContext.save.saveInfo.playerData.tatlTimer < 3000)) {
+                gSaveContext.save.saveInfo.playerData.tatlTimer = 0;
             }
             this->unk_266 = QuestHint_GetTatlTextId(play);
             break;
@@ -1454,11 +1455,12 @@ void func_8089010C(Actor* thisx, PlayState* play) {
 
     if (temp_v0 != this->unk_266) {
         this->unk_266 = temp_v0;
-        gSaveContext.save.playerData.tatlTimer = 0;
+        gSaveContext.save.saveInfo.playerData.tatlTimer = 0;
     }
 
     if ((player->tatlTextId == 0) && (player->targetedActor == NULL)) {
-        if ((gSaveContext.save.playerData.tatlTimer >= 600) && (gSaveContext.save.playerData.tatlTimer <= 3000)) {
+        if ((gSaveContext.save.saveInfo.playerData.tatlTimer >= 600) &&
+            (gSaveContext.save.saveInfo.playerData.tatlTimer <= 3000)) {
             player->tatlTextId = QuestHint_GetTatlTextId(play);
         }
     }
@@ -1473,7 +1475,7 @@ void func_8089010C(Actor* thisx, PlayState* play) {
 
         if (thisx->textId == QuestHint_GetTatlTextId(play)) {
             this->fairyFlags |= 0x80;
-            gSaveContext.save.playerData.tatlTimer = 3001;
+            gSaveContext.save.saveInfo.playerData.tatlTimer = 3001;
         }
 
         this->fairyFlags |= 0x10;
@@ -1504,10 +1506,10 @@ void func_8089010C(Actor* thisx, PlayState* play) {
         this->actionFunc(this, play);
 
         if (!Play_InCsMode(play)) {
-            if (gSaveContext.save.playerData.tatlTimer < 25800) {
-                gSaveContext.save.playerData.tatlTimer++;
+            if (gSaveContext.save.saveInfo.playerData.tatlTimer < 25800) {
+                gSaveContext.save.saveInfo.playerData.tatlTimer++;
             } else if (!(this->fairyFlags & 0x80)) {
-                gSaveContext.save.playerData.tatlTimer = 0;
+                gSaveContext.save.saveInfo.playerData.tatlTimer = 0;
             }
         }
     }
