@@ -612,7 +612,8 @@ void EnBox_Update(Actor* thisx, PlayState* play) {
     }
     if (!(this->movementFlags & ENBOX_MOVE_IMMOBILE)) {
         Actor_MoveWithGravity(&this->dyna.actor);
-        Actor_UpdateBgCheckInfo(play, &this->dyna.actor, 0.0f, 0.0f, 0.0f, 0x1C);
+        Actor_UpdateBgCheckInfo(play, &this->dyna.actor, 0.0f, 0.0f, 0.0f,
+                                UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 | UPDBGCHECKINFO_FLAG_10);
     }
     Actor_SetFocus(&this->dyna.actor, 40.0f);
     if ((this->getItemId == GI_ICE_TRAP) && (this->actionFunc == EnBox_Open) && (this->skelAnime.curFrame > 45.0f) &&

@@ -53,7 +53,7 @@ void ObjLupygamelift_Init(Actor* thisx, PlayState* play) {
     this->dyna.actor.shape.rot.z = 0;
     this->dyna.actor.world.rot.z = 0;
     this->timer = 0;
-    Actor_UpdateBgCheckInfo(play, thisx, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, thisx, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
     ActorShape_Init(&thisx->shape, 0.0f, ActorShadow_DrawSquare, 0.0f);
     DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
     DynaPolyActor_LoadMesh(play, &this->dyna, &object_raillift_Colheader_0048D0);

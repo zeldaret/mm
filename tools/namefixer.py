@@ -480,9 +480,19 @@ wordReplace = {
     "func_800C9704": "SurfaceType_GetBgCamIndex",
     "func_800C9924": "BgCheck_GetBgCamFuncData",
     "func_800C99AC": "SurfaceType_GetSceneExitIndex",
+    "func_800C99D4": "SurfaceType_GetFloorType",
+    "func_800C9A24": "SurfaceType_GetWallType",
+    "func_800C9A4C": "SurfaceType_GetWallFlags",
+    "func_800C9A7C": "SurfaceType_CheckWallFlag0",
+    "func_800C9AB0": "SurfaceType_CheckWallFlag1",
+    "func_800C9AE4": "SurfaceType_CheckWallFlag2",
+    "func_800C9B18": "SurfaceType_GetFloorProperty2",
+    "func_800C9B40": "SurfaceType_GetFloorProperty",
+    "func_800C9BB8": "SurfaceType_GetMaterial",
     "func_800C9B90": "SurfaceType_IsHorseBlocked",
-    "func_800C9BDC": "SurfaceType_GetSfx",
-    "func_800C9C74": "SurfaceType_GetSlope",
+    "func_800C9BDC": "SurfaceType_GetSfxOffset",
+    "SurfaceType_GetSfx": "SurfaceType_GetSfxOffset",
+    "func_800C9C74": "SurfaceType_GetFloorEffect",
     "func_800C9C9C": "SurfaceType_GetLightSettingIndex",
     "func_800C9CC4": "SurfaceType_GetEcho",
     "func_800C9CEC": "SurfaceType_IsHookshotSurface",
@@ -893,6 +903,10 @@ wordReplace = {
     "ICHAIN_F32_DIV1000(minVelocityY,": "ICHAIN_F32_DIV1000(terminalVelocity,",
     "ICHAIN_F32(minVelocityY,": "ICHAIN_F32(terminalVelocity,",
 
+    "RADF_TO_BINANG": "RAD_TO_BINANG",
+    "RADF_TO_DEGF": "RAD_TO_DEG",
+    "DEGF_TO_RADF": "DEG_TO_RAD",
+
     "ACTORCTX_FLAG_2": "ACTORCTX_FLAG_PICTO_BOX_ON",
 
     "ACTOR_FLAG_100": "ACTOR_FLAG_TALK_REQUESTED",
@@ -938,6 +952,11 @@ wordReplace = {
     "TRANS_TYPE_20": "TRANS_TYPE_FADE_DYNAMIC",
     "TRANS_TYPE_21": "TRANS_TYPE_CIRCLE",
     "TRANS_TYPE_22": "TRANS_TYPE_WIPE5",
+
+    "COLPOLY_SURFACE_GROUND": "SURFACE_MATERIAL_DIRT",
+    "COLPOLY_SURFACE_SAND": "SURFACE_MATERIAL_SAND",
+    "COLPOLY_SURFACE_SNOW": "SURFACE_MATERIAL_SNOW",
+
     # Example of custom behaviour:
     # "PLAYER": ("GET_PLAYER(play)", {"ignore": (-1, '"PLAYER"')}), # ignore "PLAYER" in sSoundBankNames
 }

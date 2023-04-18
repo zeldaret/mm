@@ -4,7 +4,6 @@
  * Description: Twinmold
  */
 
-#include "prevent_bss_reordering.h"
 #include "z_boss_02.h"
 #include "z64rumble.h"
 #include "z64shrink_window.h"
@@ -994,7 +993,7 @@ void func_809DAB78(Boss02* this, PlayState* play) {
             this->unk_0B1C[i].y += this->unk_0164;
             Math_ApproachF(&this->unk_0B1C[i].x, -(M_PI / 2), 0.1f, 0.07f);
             Actor_MoveWithGravity(&this->actor);
-            Actor_UpdateBgCheckInfo(play, &this->actor, 50.0f, 150.0f, 100.0f, 4);
+            Actor_UpdateBgCheckInfo(play, &this->actor, 50.0f, 150.0f, 100.0f, UPDBGCHECKINFO_FLAG_4);
 
             if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
                 this->unk_0144 = 23;

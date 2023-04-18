@@ -94,14 +94,14 @@ void ObjHsStump_Appear(ObjHsStump* this, PlayState* play) {
     }
     if (this->framesAppeared <= 10) {
         if (this->framesAppeared == 0) {
+            s32 pad;
             s32 i;
-            f32 angleDeg;
             s16 numDirections = 4;
             Vec3f iceSmokePosOffset;
             Vec3f iceSmokeVelOffset;
-            s16 offsetAngle;
+            s16 iceSmokeAngle;
             Vec3f iceSmokeVel;
-            f32 angleBrad;
+            f32 baseAngle;
             Vec3f iceSmokePos;
 
             iceSmokePosOffset.x = 1.0f;
@@ -112,14 +112,13 @@ void ObjHsStump_Appear(ObjHsStump* this, PlayState* play) {
             iceSmokeVelOffset.y = 0.5f;
             iceSmokeVelOffset.z = 0.0f;
 
-            angleDeg = (360.0f / numDirections);
-            angleBrad = (s32)(angleDeg * (0x10000 / 360.0f));
+            baseAngle = (s32)DEG_TO_BINANG_ALT3(360.0f / numDirections);
 
             for (i = 0; i < numDirections; i++) {
-                offsetAngle = i * angleBrad;
-                Lib_Vec3f_TranslateAndRotateY(&this->dyna.actor.world.pos, offsetAngle, &iceSmokePosOffset,
+                iceSmokeAngle = i * baseAngle;
+                Lib_Vec3f_TranslateAndRotateY(&this->dyna.actor.world.pos, iceSmokeAngle, &iceSmokePosOffset,
                                               &iceSmokePos);
-                Lib_Vec3f_TranslateAndRotateY(&gZeroVec3f, offsetAngle, &iceSmokeVelOffset, &iceSmokeVel);
+                Lib_Vec3f_TranslateAndRotateY(&gZeroVec3f, iceSmokeAngle, &iceSmokeVelOffset, &iceSmokeVel);
                 EffectSsIceSmoke_Spawn(play, &iceSmokePos, &iceSmokeVel, &sIceSmokeAccel, 100);
             }
         }
@@ -128,7 +127,7 @@ void ObjHsStump_Appear(ObjHsStump* this, PlayState* play) {
         Math_SmoothStepToF(&this->dyna.actor.scale.x, 18.0f * 0.01f, 1.0f, 0.01f, 0.001f);
         Actor_SetScale(&this->dyna.actor, this->dyna.actor.scale.x);
     }
-    if (this->dyna.actor.scale.x == 18.0f * 0.01f) {
+    if (this->dyna.actor.scale.x == (18.0f * 0.01f)) {
         this->isHidden = false;
         DynaPoly_EnableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
         ObjHsStump_SetupIdle(this, play);

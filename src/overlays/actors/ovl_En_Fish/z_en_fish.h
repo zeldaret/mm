@@ -26,7 +26,7 @@ typedef struct EnFish {
     /* 0x242 */ s16 unk_242;
     /* 0x244 */ s16 unk_244;
     /* 0x246 */ s16 unk_246;
-    /* 0x248 */ s32 unk_248;
+    /* 0x248 */ s32 updBgCheckInfoFlags;
     /* 0x24C */ f32 unk_24C;
     /* 0x250 */ f32 unk_250;
     /* 0x254 */ f32 unk_254;

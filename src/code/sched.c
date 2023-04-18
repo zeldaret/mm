@@ -1,4 +1,5 @@
 #include "global.h"
+#include "stackcheck.h"
 
 #define RSP_DONE_MSG 667
 #define RDP_DONE_MSG 668

@@ -15,7 +15,7 @@ u32 EffectSsSolderSrchBall_Init(PlayState* play, u32 index, EffectSs* this, void
 void EffectSsSolderSrchBall_Update(PlayState* play, u32 index, EffectSs* this);
 void EffectSsSolderSrchBall_Draw(PlayState* play, u32 index, EffectSs* this);
 
-const EffectSsInit Effect_Ss_Solder_Srch_Ball_InitVars = {
+EffectSsInit Effect_Ss_Solder_Srch_Ball_InitVars = {
     EFFECT_SS_SOLDER_SRCH_BALL,
     EffectSsSolderSrchBall_Init,
 };
@@ -60,7 +60,7 @@ void EffectSsSolderSrchBall_Draw(PlayState* play, u32 index, EffectSs* this) {
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, 255);
     gDPSetEnvColor(POLY_XLU_DISP++, 250, 180, 255, 255);
     Matrix_Mult(&play->billboardMtxF, MTXMODE_APPLY);
-    Matrix_RotateZF(DEGF_TO_RADF(20.0f * play->state.frames), MTXMODE_APPLY);
+    Matrix_RotateZF(DEG_TO_RAD(20.0f * play->state.frames), MTXMODE_APPLY);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_XLU_DISP++, gSunSparkleModelDL);
 

@@ -2,6 +2,7 @@
 #include "global.h"
 #include "stack.h"
 #include "vt.h"
+#include "stackcheck.h"
 
 extern FaultThreadStruct* sFaultContext;
 extern f32 D_8009BE54;
@@ -801,8 +802,8 @@ void Fault_ThreadEntry(void* arg) {
     u32 pad;
     OSThread* faultedThread;
 
-    osSetEventMesg(10, &sFaultContext->queue, (OSMesg)1);
-    osSetEventMesg(12, &sFaultContext->queue, (OSMesg)2);
+    osSetEventMesg(OS_EVENT_CPU_BREAK, &sFaultContext->queue, (OSMesg)1);
+    osSetEventMesg(OS_EVENT_FAULT, &sFaultContext->queue, (OSMesg)2);
     while (1) {
         do {
             osRecvMesg(&sFaultContext->queue, &msg, OS_MESG_BLOCK);

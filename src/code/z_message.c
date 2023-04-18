@@ -106,7 +106,7 @@ void Message_CloseTextbox(PlayState* play) {
         msgCtx->stateTimer = 2;
         msgCtx->msgMode = 0x43;
         msgCtx->unk12020 = 0;
-        play_sound(NA_SE_PL_WALK_GROUND - SFX_FLAG);
+        play_sound(NA_SE_NONE);
     }
 }
 

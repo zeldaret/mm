@@ -111,7 +111,7 @@ void EnPoFusen_Init(Actor* thisx, PlayState* play) {
     SkelAnime_InitFlex(play, &this->anime, &gPoeBalloonSkel, &gPoeBalloonEmptyAnim, this->jointTable, this->morphTable,
                        POE_BALLOON_LIMB_MAX);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 25.0f);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 0x4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
 
     if (!EnPoFusen_CheckParent(this, play)) {
         Actor_Kill(&this->actor);
@@ -229,6 +229,7 @@ void EnPoFusen_IncrementRomaniPop(EnPoFusen* this) {
 
     if ((parent != NULL) && (parent->id == ACTOR_EN_MA4)) {
         EnMa4* romani = (EnMa4*)parent;
+
         romani->poppedBalloonCounter++;
     }
 

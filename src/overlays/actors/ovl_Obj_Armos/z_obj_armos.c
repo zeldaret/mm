@@ -227,7 +227,7 @@ void ObjArmos_Destroy(Actor* thisx, PlayState* play) {
 
 void func_809A54B4(ObjArmos* this) {
     this->actionFunc = func_809A54E0;
-    this->unk_24C = 4;
+    this->updBgCheckInfoFlags = UPDBGCHECKINFO_FLAG_4;
     this->unk_266[1] = 0;
     this->unk_266[2] = 0;
     this->unk_266[3] = 0;
@@ -260,7 +260,7 @@ void func_809A54E0(ObjArmos* this, PlayState* play) {
 
 void func_809A5610(ObjArmos* this) {
     this->actionFunc = func_809A562C;
-    this->unk_24C = 5;
+    this->updBgCheckInfoFlags = UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4;
 }
 
 void func_809A562C(ObjArmos* this, PlayState* play) {
@@ -304,7 +304,7 @@ void func_809A562C(ObjArmos* this, PlayState* play) {
 
 void func_809A57D8(ObjArmos* this) {
     this->actionFunc = func_809A57F4;
-    this->unk_24C = 4;
+    this->updBgCheckInfoFlags = UPDBGCHECKINFO_FLAG_4;
 }
 
 void func_809A57F4(ObjArmos* this, PlayState* play) {
@@ -322,12 +322,12 @@ void ObjArmos_Update(Actor* thisx, PlayState* play2) {
     this->actionFunc(this, play);
     this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y;
 
-    if (this->unk_24C != 0) {
-        Actor_UpdateBgCheckInfo(play, &this->dyna.actor, 20.0f, 30.0f, 0.0f, this->unk_24C);
+    if (this->updBgCheckInfoFlags != 0) {
+        Actor_UpdateBgCheckInfo(play, &this->dyna.actor, 20.0f, 30.0f, 0.0f, this->updBgCheckInfoFlags);
 
         if ((this->actionFunc == func_809A54E0) && (this->dyna.actor.bgCheckFlags & BGCHECKFLAG_GROUND) &&
             (DynaPoly_GetActor(&play->colCtx, this->dyna.actor.floorBgId) == NULL)) {
-            this->unk_24C = 0;
+            this->updBgCheckInfoFlags = 0;
         }
 
         this->unk_250.x = (Math_SinS(this->dyna.actor.shape.rot.y) * -9.0f) + this->dyna.actor.world.pos.x;

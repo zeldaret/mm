@@ -1713,7 +1713,8 @@ void ObjUm_Update(Actor* thisx, PlayState* play) {
 
     this->actionFunc(this, play);
     this->unk_350++;
-    Actor_UpdateBgCheckInfo(play, &this->dyna.actor, 0.0f, 0.0f, 0.0f, 0x1C);
+    Actor_UpdateBgCheckInfo(play, &this->dyna.actor, 0.0f, 0.0f, 0.0f,
+                            UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 | UPDBGCHECKINFO_FLAG_10);
 
     if (this->donkey != NULL) {
         this->donkey->actor.world.pos.x = this->dyna.actor.world.pos.x;

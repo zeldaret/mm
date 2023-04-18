@@ -614,7 +614,8 @@ void func_80A2264C(ObjSkateblock* this, PlayState* play) {
 
     sp20 = func_80A21548(this, play);
     if (sp20 || ((this->unk_160 - this->dyna.actor.world.pos.y) > 300.0f)) {
-        if (func_800C9B40(&play->colCtx, this->dyna.actor.floorPoly, this->dyna.actor.floorBgId) == 12) {
+        if (SurfaceType_GetFloorProperty(&play->colCtx, this->dyna.actor.floorPoly, this->dyna.actor.floorBgId) ==
+            FLOOR_PROPERTY_12) {
             DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
             this->dyna.actor.draw = NULL;
             func_80A22728(this);

@@ -16,6 +16,4 @@ typedef struct {
     /* 0x08 */ Vec3f pos;
 } EffectSsHitmarkInitParams; // size = 0x14
 
-extern const EffectSsInit Effect_Ss_Hitmark_InitVars;
-
 #endif

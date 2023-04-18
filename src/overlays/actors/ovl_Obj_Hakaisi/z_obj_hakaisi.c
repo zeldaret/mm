@@ -123,7 +123,7 @@ void ObjHakaisi_Init(Actor* thisx, PlayState* play) {
         Actor_Kill(&this->dyna.actor);
     }
 
-    Actor_UpdateBgCheckInfo(play, &this->dyna.actor, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->dyna.actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
 
     if (this->dyna.actor.floorPoly == NULL) {
         Actor_Kill(&this->dyna.actor);
@@ -423,7 +423,7 @@ void func_80B1544C(Actor* thisx, PlayState* play) {
 
     this->actionFunc(this, play);
 
-    Actor_UpdateBgCheckInfo(play, &this->dyna.actor, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->dyna.actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
 }
 
 void func_80B154A0(Actor* thisx, PlayState* play) {
