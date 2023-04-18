@@ -122,11 +122,6 @@ s8 PadUtils_GetRelYImpl(Input* input);
 s8 PadUtils_GetRelX(Input* input);
 s8 PadUtils_GetRelY(Input* input);
 void PadUtils_UpdateRelXY(Input* input);
-void StackCheck_Init(StackEntry* entry, void* stackTop, void* stackBottom, u32 initValue, s32 minSpace, const char* name);
-void StackCheck_Cleanup(StackEntry* entry);
-StackStatus StackCheck_GetState(StackEntry* entry);
-u32 StackCheck_CheckAll(void);
-u32 StackCheck_Check(StackEntry* entry);
 
 void MtxConv_F2L(Mtx* mtx, MtxF* mf);
 void MtxConv_L2F(MtxF* mtx, Mtx* mf);
