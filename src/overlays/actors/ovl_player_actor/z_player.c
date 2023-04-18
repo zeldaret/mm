@@ -4,6 +4,7 @@
  * Description: Player
  */
 
+#include "prevent_bss_reordering.h"
 #include "global.h"
 #include "z64quake.h"
 #include "z64rumble.h"
@@ -3195,7 +3196,7 @@ void Player_SpawnExplosive(PlayState* play, Player* this) {
     explosiveActor = Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, explosiveInfo->actorId,
                                         this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
                                         explosiveType == 1 ? BOMB_CAT_POWDER_KEG : BOMB_CAT_BOMB,
-                                        this->actor.shape.rot.y, 0, BOMB_BODY);
+                                        this->actor.shape.rot.y, 0, BOMB_TYPE_BODY);
     if (explosiveActor != NULL) {
         if ((explosiveType == 0) && (play->unk_1887E != 0)) {
             play->unk_1887E--;
@@ -3603,7 +3604,7 @@ void func_8082FE0C(Player* this, PlayState* play) {
             if (this->blastMaskTimer == 0) {
                 EnBom* bomb = (EnBom*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOM, this->actor.focus.pos.x,
                                                   this->actor.focus.pos.y, this->actor.focus.pos.z, BOMB_CAT_BOMB, 0, 0,
-                                                  BOMB_BODY);
+                                                  BOMB_TYPE_BODY);
 
                 if (bomb != NULL) {
                     bomb->timer = 0;
@@ -4107,7 +4108,7 @@ void func_808313F0(Player* this, PlayState* play) {
 // Stops the current fanfare if a stateflag is set; these two are Kamaro Dancing and Bremen Marching.
 void func_80831454(Player* this) {
     if ((this->stateFlags3 & PLAYER_STATE3_20000000) || (this->stateFlags2 & PLAYER_STATE2_2000000)) {
-        Audio_QueueSeqCmd(0x110000FF);
+        AudioSeq_QueueSeqCmd(0x110000FF);
     }
 }
 
@@ -4384,7 +4385,7 @@ void func_80831F34(PlayState* play, Player* this, LinkAnimationHeader* anim) {
 
     if (this == GET_PLAYER(play)) {
         this->currentActorCsIndex = play->playerActorCsIds[6];
-        func_801A0184();
+        Audio_SetBgmVolumeOff();
         gSaveContext.powderKegTimer = 0;
         gSaveContext.unk_1014 = 0;
         gSaveContext.jinxTimer = 0;
@@ -5959,6 +5960,7 @@ void Player_Door_Staircase(PlayState* play, Player* this, Actor* door) {
     Player_TranslateAndRotateY(this, &this->unk_3A0, &D_8085D10C, &this->unk_3AC);
 
     doorStaircase->shouldClimb = true;
+
     func_8082DAD4(this);
 
     if (this->doorTimer != 0) {
@@ -7490,7 +7492,7 @@ s32 func_80839A84(PlayState* play, Player* this) {
 }
 
 s32 func_80839B18(Player* this, PlayState* play) {
-    if (CHECK_BTN_ALL(sPlayerControlInput->press.button, BTN_A) && (play->roomCtx.curRoom.unk3 != 2) &&
+    if (CHECK_BTN_ALL(sPlayerControlInput->press.button, BTN_A) && (play->roomCtx.curRoom.behaviorType1 != 2) &&
         (sPlayerCurrentFloorType != BG_FLOOR_TYPE_7) && (D_80862B40 != 1)) {
         s32 temp_a2 = this->unk_AE3[this->unk_ADE];
 
@@ -9267,7 +9269,7 @@ void Player_ChooseIdleAnim(PlayState* play, Player* this) {
         if (this->stateFlags1 & PLAYER_STATE1_800) {
             anim = func_8082ED20(this);
         } else {
-            animIndex = play->roomCtx.curRoom.unk2;
+            animIndex = play->roomCtx.curRoom.behaviorType2;
 
             if (healthIsCritical) {
                 if (this->unk_AA4 >= 0) {
@@ -9854,7 +9856,7 @@ void func_80840770(PlayState* play, Player* this) {
 
             this->unk_D6B = 20;
             func_808339B4(this, -20);
-            func_801A01C4();
+            Audio_SetBgmVolumeOn();
         }
     } else if (this->unk_AE7 != 0) {
         Player_StopCurrentActorCutscene(this);
@@ -10707,10 +10709,10 @@ void Player_SetDoAction(PlayState* play, Player* this) {
                     !(this->stateFlags1 & (PLAYER_STATE1_4 | PLAYER_STATE1_4000)) && (sp28 <= 0) &&
                     ((func_80123420(this)) ||
                      ((sPlayerCurrentFloorType != BG_FLOOR_TYPE_7) &&
-                      ((func_80123434(this)) || ((play->roomCtx.curRoom.unk3 != 2) &&
+                      ((func_80123434(this)) || ((play->roomCtx.curRoom.behaviorType1 != 2) &&
                                                  !(this->stateFlags1 & PLAYER_STATE1_400000) && (sp28 == 0)))))) {
                     doActionA = DO_ACTION_ATTACK;
-                } else if ((play->roomCtx.curRoom.unk3 != 2) && sp24 && (sp28 > 0)) {
+                } else if ((play->roomCtx.curRoom.behaviorType1 != 2) && sp24 && (sp28 > 0)) {
                     doActionA = DO_ACTION_JUMP;
                 } else if ((this->transformation == PLAYER_FORM_DEKU) && !(this->stateFlags1 & PLAYER_STATE1_8000000) &&
                            (this->actor.bgCheckFlags & 1)) {
@@ -10791,7 +10793,7 @@ void func_80843178(PlayState* play, Player* this) {
             var_v1 = 0x38;
             this->actor.bgCheckFlags &= ~1;
         } else {
-            if ((this->stateFlags1 & 1) && (play->roomCtx.curRoom.unk3 != 1) &&
+            if ((this->stateFlags1 & 1) && (play->roomCtx.curRoom.behaviorType1 != 1) &&
                 ((this->unk_D68 - (s32)this->actor.world.pos.y) >= 0x64)) {
                 var_v1 = 0x39;
             } else if (!(this->stateFlags1 & PLAYER_STATE1_1) &&
@@ -14134,7 +14136,7 @@ AnimSfxEntry D_8085D60C[] = {
 
 void func_8084BFDC(Player* this, PlayState* play) {
     if ((this->transformation != PLAYER_FORM_GORON) && (this->actor.depthInWater <= 0.0f)) {
-        if ((play->roomCtx.curRoom.unk2 == 3) || (sPlayerCurrentFloorType == BG_FLOOR_TYPE_9) ||
+        if ((play->roomCtx.curRoom.behaviorType2 == 3) || (sPlayerCurrentFloorType == BG_FLOOR_TYPE_9) ||
             ((func_808340AC(sPlayerCurrentFloorType) >= 0) &&
              !SurfaceType_IsWallDamage(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId))) {
             func_808344C0(play, this);
@@ -14667,7 +14669,7 @@ void func_8084D820(Player* this, PlayState* play) {
             var_t0 = func_808411D4(play, this, &sp6C, -1);
             if (this->unk_397 == 4) {
                 if (R_PLAY_FILL_SCREEN_ON < 0) {
-                    if (play->roomCtx.unk31 != 1) {
+                    if (play->roomCtx.status != 1) {
                         R_PLAY_FILL_SCREEN_ALPHA += R_PLAY_FILL_SCREEN_ON;
                         if (R_PLAY_FILL_SCREEN_ALPHA < 0) {
                             R_PLAY_FILL_SCREEN_ALPHA = 0;
@@ -19085,7 +19087,7 @@ void func_8085978C(PlayState* play, Player* this, UNK_TYPE arg2) {
         this->linearVelocity = 2.5f;
     }
 
-    if ((this->transformation != PLAYER_FORM_HUMAN) && (play->roomCtx.curRoom.unk3 == 5)) {
+    if ((this->transformation != PLAYER_FORM_HUMAN) && (play->roomCtx.curRoom.behaviorType1 == ROOM_BEHAVIOR_TYPE1_5)) {
         R_PLAY_FILL_SCREEN_ON = 0x2D;
         R_PLAY_FILL_SCREEN_R = 0xFF;
         R_PLAY_FILL_SCREEN_G = 0xFF;
@@ -19741,7 +19743,7 @@ void func_8085A7C0(PlayState* play, Player* this, UNK_TYPE arg2) {
 }
 
 void func_8085A8C4(PlayState* play, Player* this, UNK_TYPE arg2) {
-    if ((this->transformation != PLAYER_FORM_HUMAN) && (play->roomCtx.curRoom.unk3 == 5)) {
+    if ((this->transformation != PLAYER_FORM_HUMAN) && (play->roomCtx.curRoom.behaviorType1 == ROOM_BEHAVIOR_TYPE1_5)) {
         R_PLAY_FILL_SCREEN_ON = 0x2D;
         R_PLAY_FILL_SCREEN_R = 0xFF;
         R_PLAY_FILL_SCREEN_G = 0xFF;
