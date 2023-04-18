@@ -96,7 +96,7 @@ char D_801ED9A0[80];
 
 char D_801EDAA8[80];
 char D_801EDAF8[80];
-MtxF D_801EDA40;
+MtxF sModelToWorldMtxF;
 
 void BgCheck_GetStaticLookupIndicesFromPos(CollisionContext* colCtx, Vec3f* pos, Vec3i* sector);
 f32 BgCheck_RaycastFloorDyna(DynaRaycast* dynaRaycast);
@@ -961,12 +961,12 @@ s32 BgCheck_CheckStaticCeiling(StaticLookup* lookup, u16 xpFlags, CollisionConte
 s32 BgCheck_CheckLineAgainstSSList(StaticLineTest* arg0) {
     CollisionPoly* polyList;
     s32 result;
-    Vec3f polyIntersect; // sp7C
+    Vec3f polyIntersect;
     SSNode* curNode;
     u8* checkedPoly;
     f32 minY;
     f32 distSq;
-    BgLineVsPolyTest test; // sp50
+    BgLineVsPolyTest test;
     s16 polyId;
 
     result = false;
@@ -2862,38 +2862,28 @@ void BgCheck_CalcWaterboxDimensions(Vec3f* minPos, Vec3f* maxXPos, Vec3f* maxZPo
     }
 }
 
-#ifdef NON_MATCHING
 /**
  * original name: DynaPolyInfo_expandSRT
  */
 void DynaPoly_ExpandSRT(PlayState* play, DynaCollisionContext* dyna, s32 bgId, s32* vtxStartIndex, s32* polyStartIndex,
                         s32* waterBoxStartIndex) {
     Actor* actor;
-    s32 pad;
-    s32 pad2;
-    f32 numVtxInverse;
     s32 i;
-    Vec3f pos; // sp170
+    s32 j;
+    s32 wi;
+    f32 numVtxInverse;
+    Vec3f pos;
     Sphere16* sphere;
     Vec3s* dVtxList;
     Vec3s* point;
-    Vec3f newCenterPoint; // sp158
-
+    Vec3f newCenterPoint;
     f32 newRadiusSq;
     CollisionHeader* pbgdata;
-    Vec3f newVtx; // sp144
-    Vec3f vtxA;   // sp138
-    Vec3f vtxB;   // sp12C
-    Vec3f vtxC;   // sp120
+    Vec3f newVtx;
+    Vec3f vtxA;
+    Vec3f vtxB;
+    Vec3f vtxC;
     Vec3f newNormal;
-    s32 wi;
-    Vec3f spB8; // waterbox ?
-    Vec3f spAC;
-    Vec3f spA0; // waterbox ?
-    Vec3f sp94;
-    Vec3f sp88; // waterbox ?
-    Vec3f sp7C;
-    WaterBox* waterBox;
 
     pbgdata = dyna->bgActors[bgId].colHeader;
     sphere = &dyna->bgActors[bgId].boundingSphere;
@@ -2904,12 +2894,15 @@ void DynaPoly_ExpandSRT(PlayState* play, DynaCollisionContext* dyna, s32 bgId, s
     pos = actor->world.pos;
     pos.y += actor->shape.yOffset * actor->scale.y;
 
+    //! FAKE:
+    if (pbgdata && pbgdata) {}
+
     ScaleRotPos_SetValue(&dyna->bgActors[bgId].curTransform, &actor->scale, &actor->shape.rot, &pos);
 
     if (dyna->bgActorFlags[bgId] & 4) {
         return;
     }
-    // if(&pos){} // fake but considerably improves match. commented out to stop warnings
+
     if (*waterBoxStartIndex + pbgdata->numWaterBoxes > DYNA_WATERBOX_MAX) {
         sprintf(D_801EDAA8, "water_poly Error:[MoveBG OSUGI!!!]");
         sprintf(D_801EDAF8, "num = %d > %d\n", *waterBoxStartIndex + pbgdata->numWaterBoxes, DYNA_WATERBOX_MAX);
@@ -2958,139 +2951,145 @@ void DynaPoly_ExpandSRT(PlayState* play, DynaCollisionContext* dyna, s32 bgId, s
         *polyStartIndex += pbgdata->numPolygons;
         *vtxStartIndex += pbgdata->numVertices;
         *waterBoxStartIndex += pbgdata->numWaterBoxes;
-    } else {
-        SkinMatrix_SetScaleRotateYRPTranslate(
-            &D_801EDA40, dyna->bgActors[bgId].curTransform.scale.x, dyna->bgActors[bgId].curTransform.scale.y,
-            dyna->bgActors[bgId].curTransform.scale.z, dyna->bgActors[bgId].curTransform.rot.x,
-            dyna->bgActors[bgId].curTransform.rot.y, dyna->bgActors[bgId].curTransform.rot.z,
-            dyna->bgActors[bgId].curTransform.pos.x, dyna->bgActors[bgId].curTransform.pos.y,
-            dyna->bgActors[bgId].curTransform.pos.z);
-
-        if ((pbgdata->numVertices != 0) && (pbgdata->numPolygons != 0)) {
-            s32 j;
-            numVtxInverse = 1.0f / pbgdata->numVertices;
-            newCenterPoint.x = newCenterPoint.y = newCenterPoint.z = 0.0f;
-            for (i = 0; i < pbgdata->numVertices; i++) {
-                Vec3f vtx;  // spF4
-                Vec3f vtxT; // spE8 Vtx after mtx transform
-
-                Math_Vec3s_ToVec3f(&vtx, &pbgdata->vtxList[i]);
-                SkinMatrix_Vec3fMtxFMultXYZ(&D_801EDA40, &vtx, &vtxT);
-                BgCheck_Vec3fToVec3s(&dyna->vtxList[*vtxStartIndex + i], &vtxT);
-
-                if (i == 0) {
-                    dyna->bgActors[bgId].minY = dyna->bgActors[bgId].maxY = vtxT.y;
-                } else if (vtxT.y < dyna->bgActors[bgId].minY) {
-                    dyna->bgActors[bgId].minY = vtxT.y;
-                } else if (dyna->bgActors[bgId].maxY < vtxT.y) {
-                    dyna->bgActors[bgId].maxY = vtxT.y;
-                }
-                newCenterPoint.x += vtxT.x;
-                newCenterPoint.y += vtxT.y;
-                newCenterPoint.z += vtxT.z;
-            }
-
-            newCenterPoint.x *= numVtxInverse;
-            newCenterPoint.y *= numVtxInverse;
-            newCenterPoint.z *= numVtxInverse;
-            sphere->center.x = newCenterPoint.x;
-            sphere->center.y = newCenterPoint.y;
-            sphere->center.z = newCenterPoint.z;
-            newRadiusSq = -100.0f;
-
-            for (i = 0, j = *vtxStartIndex; i < pbgdata->numVertices; i++, j++) {
-                f32 radiusSq;
-
-                newVtx.x = dyna->vtxList[j].x;
-                newVtx.y = dyna->vtxList[j].y;
-                newVtx.z = dyna->vtxList[j].z;
-                radiusSq = Math3D_Vec3fDistSq(&newVtx, &newCenterPoint);
-                if (newRadiusSq < radiusSq) {
-                    newRadiusSq = radiusSq;
-                }
-            }
-
-            sphere->radius = sqrtf(newRadiusSq) * 1.1f;
-
-            for (i = 0; i < pbgdata->numPolygons; i++) {
-                CollisionPoly* newPoly = &dyna->polyList[*polyStartIndex + i];
-                f32 newNormMagnitude;
-                u32 vIA;
-                u32 vIB;
-                u32 vIC;
-
-                *newPoly = pbgdata->polyList[i];
-
-                vIA = (COLPOLY_VTX_INDEX(newPoly->flags_vIA) + *vtxStartIndex);
-                vIB = (COLPOLY_VTX_INDEX(newPoly->flags_vIB) + *vtxStartIndex);
-                vIC = newPoly->vIC + *vtxStartIndex;
-
-                newPoly->flags_vIA = vIA | ((*newPoly).flags_vIA & 0xE000);
-                newPoly->flags_vIB = vIB | ((*newPoly).flags_vIB & 0xE000);
-                newPoly->vIC = vIC;
-                dVtxList = dyna->vtxList;
-                vtxA.x = dVtxList[vIA].x;
-                vtxA.y = dVtxList[vIA].y;
-                vtxA.z = dVtxList[vIA].z;
-                vtxB.x = dVtxList[vIB].x;
-                vtxB.y = dVtxList[vIB].y;
-                vtxB.z = dVtxList[vIB].z;
-                vtxC.x = dVtxList[vIC].x;
-                vtxC.y = dVtxList[vIC].y;
-                vtxC.z = dVtxList[vIC].z;
-                Math3D_SurfaceNorm(&vtxA, &vtxB, &vtxC, &newNormal);
-                newNormMagnitude = Math3D_Vec3fMagnitude(&newNormal);
-
-                if (!IS_ZERO(newNormMagnitude)) {
-                    newNormal.x *= (1.0f / newNormMagnitude);
-                    newNormal.y *= (1.0f / newNormMagnitude);
-                    newNormal.z *= (1.0f / newNormMagnitude);
-                    newPoly->normal.x = COLPOLY_SNORMAL(newNormal.x);
-                    newPoly->normal.y = COLPOLY_SNORMAL(newNormal.y);
-                    newPoly->normal.z = COLPOLY_SNORMAL(newNormal.z);
-                }
-
-                newPoly->dist = func_80086D24(-DOTXYZ(newNormal, vtxA));
-                if (newNormal.y > 0.5f) {
-                    s16 polyId = *polyStartIndex + i;
-
-                    DynaSSNodeList_SetSSListHead(&dyna->polyNodes, &dyna->bgActors[bgId].dynaLookup.floor, &polyId);
-                } else if (newNormal.y < -0.8f) {
-                    s16 polyId = *polyStartIndex + i;
-
-                    DynaSSNodeList_SetSSListHead(&dyna->polyNodes, &dyna->bgActors[bgId].dynaLookup.ceiling, &polyId);
-                } else {
-                    s16 polyId = *polyStartIndex + i;
-
-                    DynaSSNodeList_SetSSListHead(&dyna->polyNodes, &dyna->bgActors[bgId].dynaLookup.wall, &polyId);
-                }
-            }
-        }
-
-        if (pbgdata->numWaterBoxes > 0) {
-            for (wi = 0; wi < pbgdata->numWaterBoxes; wi++) {
-                Math_Vec3s_ToVec3f(&spB8, &pbgdata->waterBoxes[wi].minPos);
-                Math_Vec3f_Copy(&spA0, &spB8);
-                spA0.x += pbgdata->waterBoxes[wi].xLength;
-                Math_Vec3f_Copy(&sp88, &spB8);
-                sp88.z += pbgdata->waterBoxes[wi].zLength;
-                SkinMatrix_Vec3fMtxFMultXYZ(&D_801EDA40, &spB8, &spAC);
-                SkinMatrix_Vec3fMtxFMultXYZ(&D_801EDA40, &spA0, &sp94);
-                SkinMatrix_Vec3fMtxFMultXYZ(&D_801EDA40, &sp88, &sp7C);
-                waterBox = &dyna->waterBoxList.boxes[*waterBoxStartIndex + wi];
-                BgCheck_CalcWaterboxDimensions(&spAC, &sp94, &sp7C, &waterBox->minPos, &waterBox->xLength,
-                                               &waterBox->zLength);
-                waterBox->properties = pbgdata->waterBoxes[wi].properties;
-            }
-        }
-        *polyStartIndex += pbgdata->numPolygons;
-        *vtxStartIndex += pbgdata->numVertices;
-        *waterBoxStartIndex += pbgdata->numWaterBoxes;
+        return;
     }
+
+    SkinMatrix_SetScaleRotateYRPTranslate(
+        &sModelToWorldMtxF, dyna->bgActors[bgId].curTransform.scale.x, dyna->bgActors[bgId].curTransform.scale.y,
+        dyna->bgActors[bgId].curTransform.scale.z, dyna->bgActors[bgId].curTransform.rot.x,
+        dyna->bgActors[bgId].curTransform.rot.y, dyna->bgActors[bgId].curTransform.rot.z,
+        dyna->bgActors[bgId].curTransform.pos.x, dyna->bgActors[bgId].curTransform.pos.y,
+        dyna->bgActors[bgId].curTransform.pos.z);
+
+    if ((pbgdata->numVertices != 0) && (pbgdata->numPolygons != 0)) {
+        f32 radiusSq;
+
+        numVtxInverse = 1.0f / pbgdata->numVertices;
+        newCenterPoint.x = newCenterPoint.y = newCenterPoint.z = 0.0f;
+        for (i = 0; i < pbgdata->numVertices; i++) {
+            Vec3f vtx;
+            Vec3f vtxT; // Vtx after mtx transform
+            s32 pad;
+
+            Math_Vec3s_ToVec3f(&vtx, &pbgdata->vtxList[i]);
+            SkinMatrix_Vec3fMtxFMultXYZ(&sModelToWorldMtxF, &vtx, &vtxT);
+            BgCheck_Vec3fToVec3s(&dyna->vtxList[*vtxStartIndex + (u32)i], &vtxT);
+
+            if (i == 0) {
+                dyna->bgActors[bgId].minY = dyna->bgActors[bgId].maxY = vtxT.y;
+            } else if (vtxT.y < dyna->bgActors[bgId].minY) {
+                dyna->bgActors[bgId].minY = vtxT.y;
+            } else if (dyna->bgActors[bgId].maxY < vtxT.y) {
+                dyna->bgActors[bgId].maxY = vtxT.y;
+            }
+            newCenterPoint.x += vtxT.x;
+            newCenterPoint.y += vtxT.y;
+            newCenterPoint.z += vtxT.z;
+        }
+
+        newCenterPoint.x *= numVtxInverse;
+        newCenterPoint.y *= numVtxInverse;
+        newCenterPoint.z *= numVtxInverse;
+        sphere->center.x = newCenterPoint.x;
+        sphere->center.y = newCenterPoint.y;
+        sphere->center.z = newCenterPoint.z;
+        newRadiusSq = -100.0f;
+
+        for (i = 0, j = *vtxStartIndex; i < pbgdata->numVertices; i++, j++) {
+            newVtx.x = dyna->vtxList[j].x;
+            newVtx.y = dyna->vtxList[j].y;
+            newVtx.z = dyna->vtxList[j].z;
+            radiusSq = Math3D_Vec3fDistSq(&newVtx, &newCenterPoint);
+            if (newRadiusSq < radiusSq) {
+                newRadiusSq = radiusSq;
+            }
+        }
+
+        sphere->radius = sqrtf(newRadiusSq) * 1.1f;
+
+        for (i = 0; i < pbgdata->numPolygons; i++) {
+            CollisionPoly* newPoly = &dyna->polyList[*polyStartIndex + i];
+            f32 newNormMagnitude;
+            u32 vIA;
+            u32 vIB;
+            u32 vIC;
+
+            *newPoly = pbgdata->polyList[i];
+
+            vIA = (COLPOLY_VTX_INDEX(newPoly->flags_vIA) + *vtxStartIndex);
+            vIB = (COLPOLY_VTX_INDEX(newPoly->flags_vIB) + *vtxStartIndex);
+            vIC = newPoly->vIC + *vtxStartIndex;
+
+            newPoly->flags_vIA = vIA | (newPoly->flags_vIA & 0xE000);
+            newPoly->flags_vIB = vIB | (newPoly->flags_vIB & 0xE000);
+            newPoly->vIC = vIC;
+            dVtxList = dyna->vtxList;
+            vtxA.x = dVtxList[vIA].x;
+            vtxA.y = dVtxList[vIA].y;
+            vtxA.z = dVtxList[vIA].z;
+            vtxB.x = dVtxList[vIB].x;
+            vtxB.y = dVtxList[vIB].y;
+            vtxB.z = dVtxList[vIB].z;
+            vtxC.x = dVtxList[vIC].x;
+            vtxC.y = dVtxList[vIC].y;
+            vtxC.z = dVtxList[vIC].z;
+            Math3D_SurfaceNorm(&vtxA, &vtxB, &vtxC, &newNormal);
+            newNormMagnitude = Math3D_Vec3fMagnitude(&newNormal);
+
+            if (!IS_ZERO(newNormMagnitude)) {
+                newNormal.x *= 1.0f / newNormMagnitude;
+                newNormal.y *= 1.0f / newNormMagnitude;
+                newNormal.z *= 1.0f / newNormMagnitude;
+                newPoly->normal.x = COLPOLY_SNORMAL(newNormal.x);
+                newPoly->normal.y = COLPOLY_SNORMAL(newNormal.y);
+                newPoly->normal.z = COLPOLY_SNORMAL(newNormal.z);
+            }
+
+            newPoly->dist = func_80086D24(-DOTXYZ(newNormal, vtxA));
+            if (newNormal.y > 0.5f) {
+                s16 polyId = *polyStartIndex + i;
+
+                DynaSSNodeList_SetSSListHead(&dyna->polyNodes, &dyna->bgActors[bgId].dynaLookup.floor, &polyId);
+            } else if (newNormal.y < -0.8f) {
+                s16 polyId = *polyStartIndex + i;
+
+                DynaSSNodeList_SetSSListHead(&dyna->polyNodes, &dyna->bgActors[bgId].dynaLookup.ceiling, &polyId);
+            } else {
+                s16 polyId = *polyStartIndex + i;
+
+                DynaSSNodeList_SetSSListHead(&dyna->polyNodes, &dyna->bgActors[bgId].dynaLookup.wall, &polyId);
+            }
+        }
+    }
+
+    if (pbgdata->numWaterBoxes > 0) {
+        for (wi = 0; wi < pbgdata->numWaterBoxes; wi++) {
+            WaterBox* waterBox;
+            Vec3f modelMinPos;
+            Vec3f worldMinPos;
+            Vec3f modelMinPosXOffset;
+            Vec3f worldMinPosXOffset;
+            Vec3f modelMinPosZOffset;
+            Vec3f worldMinPosZOffset;
+
+            Math_Vec3s_ToVec3f(&modelMinPos, &pbgdata->waterBoxes[wi].minPos);
+            Math_Vec3f_Copy(&modelMinPosXOffset, &modelMinPos);
+            modelMinPosXOffset.x += pbgdata->waterBoxes[wi].xLength;
+            Math_Vec3f_Copy(&modelMinPosZOffset, &modelMinPos);
+            modelMinPosZOffset.z += pbgdata->waterBoxes[wi].zLength;
+            SkinMatrix_Vec3fMtxFMultXYZ(&sModelToWorldMtxF, &modelMinPos, &worldMinPos);
+            SkinMatrix_Vec3fMtxFMultXYZ(&sModelToWorldMtxF, &modelMinPosXOffset, &worldMinPosXOffset);
+            SkinMatrix_Vec3fMtxFMultXYZ(&sModelToWorldMtxF, &modelMinPosZOffset, &worldMinPosZOffset);
+            waterBox = &dyna->waterBoxList.boxes[*waterBoxStartIndex + wi];
+            BgCheck_CalcWaterboxDimensions(&worldMinPos, &worldMinPosXOffset, &worldMinPosZOffset, &waterBox->minPos,
+                                           &waterBox->xLength, &waterBox->zLength);
+            waterBox->properties = pbgdata->waterBoxes[wi].properties;
+        }
+    }
+    *polyStartIndex += pbgdata->numPolygons;
+    *vtxStartIndex += pbgdata->numVertices;
+    *waterBoxStartIndex += pbgdata->numWaterBoxes;
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/DynaPoly_ExpandSRT.s")
-#endif
 
 void BgCheck_ResetFlagsIfLoadedActor(PlayState* play, DynaCollisionContext* dyna, Actor* actor) {
     DynaPolyActor* dynaActor;

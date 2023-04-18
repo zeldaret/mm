@@ -162,7 +162,7 @@ void EnTg_Update(Actor* thisx, PlayState* play) {
     EnTg* this = THIS;
 
     this->actionFunc(this, play);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
     EnTg_UpdateSkelAnime(this, play);
     EnTg_UpdateHearts(play, this->effects, ARRAY_COUNT(this->effects));
     EnTg_UpdateCollider(this, play);

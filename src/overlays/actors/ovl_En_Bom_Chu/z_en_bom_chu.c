@@ -177,7 +177,7 @@ void EnBomChu_WaitForRelease(EnBomChu* this, PlayState* play) {
     } else if (Actor_HasNoParent(&this->actor, play)) {
         player = GET_PLAYER(play);
         Math_Vec3f_Copy(&this->actor.world.pos, &player->actor.world.pos);
-        Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
 
         this->actor.shape.rot.y = player->actor.shape.rot.y;
         this->actor.flags |= ACTOR_FLAG_1;

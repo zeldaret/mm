@@ -280,7 +280,7 @@ void EnZo_Update(Actor* thisx, PlayState* play) {
     EnZo* this = THIS;
 
     this->actionFunc(this, play);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
     EnZo_LookAtPlayer(this, play);
     EnZo_PlayWalkingSound(this, play);
     EnZo_UpdateCollider(this, play);

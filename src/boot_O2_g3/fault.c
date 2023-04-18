@@ -2,6 +2,7 @@
 #include "global.h"
 #include "stack.h"
 #include "vt.h"
+#include "stackcheck.h"
 
 extern FaultThreadStruct* sFaultContext;
 extern f32 D_8009BE54;

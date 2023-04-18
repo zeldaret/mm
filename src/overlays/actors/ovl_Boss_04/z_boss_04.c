@@ -197,7 +197,7 @@ void Boss04_Init(Actor* thisx, PlayState* play2) {
     this->unk_6F0 = this->unk_6E0 + ((this->unk_6E4 - this->unk_6E0) * 0.5f);
     this->actor.world.pos.x = this->unk_6E8;
     this->actor.world.pos.z = this->unk_6F0;
-    Actor_UpdateBgCheckInfo(play, &this->actor, 35.0f, 60.0f, 60.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 35.0f, 60.0f, 60.0f, UPDBGCHECKINFO_FLAG_4);
 
     if ((KREG(64) != 0) || CHECK_EVENTINF(EVENTINF_60)) {
         func_809ECD00(this, play);
@@ -709,7 +709,8 @@ void Boss04_Update(Actor* thisx, PlayState* play2) {
         Actor_MoveWithGravity(&this->actor);
         this->actor.world.pos.y -= 100.0f;
         this->actor.prevPos.y -= 100.0f;
-        Actor_UpdateBgCheckInfo(play, &this->actor, 100.0f, 120.0f, 200.0f, 5);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 100.0f, 120.0f, 200.0f,
+                                UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
         this->actor.world.pos.y += 100.0f;
         this->actor.prevPos.y += 100.0f;
     }

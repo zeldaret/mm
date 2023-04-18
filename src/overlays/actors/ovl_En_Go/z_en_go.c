@@ -1939,7 +1939,7 @@ void EnGo_Update(Actor* thisx, PlayState* play) {
 
     if ((ENGO_GET_F(&this->actor) != ENGO_F_8) && (ENGO_GET_F(&this->actor) != ENGO_F_2) &&
         (ENGO_GET_F(&this->actor) != ENGO_F_1)) {
-        Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, 4);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
     }
 
     func_80A122EC(this);

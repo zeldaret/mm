@@ -1485,7 +1485,8 @@ void EnGoroiwa_Update(Actor* thisx, PlayState* play) {
 
             switch (ENGOROIWA_GET_400(&this->actor)) {
                 case ENGOROIWA_400_1:
-                    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 0x1C);
+                    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f,
+                                            UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 | UPDBGCHECKINFO_FLAG_10);
                     break;
 
                 case ENGOROIWA_400_0:

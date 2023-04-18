@@ -600,7 +600,8 @@ void EnBbfall_Update(Actor* thisx, PlayState* play) {
     if (this->actionFunc != EnBbfall_Dead) {
         Actor_MoveWithGravity(&this->actor);
         if (this->isBgCheckCollisionEnabled) {
-            Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 25.0f, 20.0f, 7);
+            Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 25.0f, 20.0f,
+                                    UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_2 | UPDBGCHECKINFO_FLAG_4);
         }
 
         for (i = ARRAY_COUNT(this->flamePos) - 1; i >= 2; i--) {

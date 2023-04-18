@@ -10,6 +10,7 @@
  */
 #include "slowly.h"
 #include "global.h"
+#include "stackcheck.h"
 
 void Slowly_Main(SlowlyMgr* slowly) {
     slowly->status |= SLOWLY_STATUS_STARTED;

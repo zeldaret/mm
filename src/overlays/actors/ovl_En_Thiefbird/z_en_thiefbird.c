@@ -1020,7 +1020,8 @@ void EnThiefbird_Update(Actor* thisx, PlayState* play2) {
         Actor_MoveWithGravity(&this->actor);
     }
 
-    Actor_UpdateBgCheckInfo(play, &this->actor, 25.0f, 25.0f, 50.0f, 7);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 25.0f, 25.0f, 50.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_2 | UPDBGCHECKINFO_FLAG_4);
     if (this->actionFunc == func_80C1193C) {
         CollisionCheck_SetAT(play, &play->colChkCtx, &this->collider.base);
     }
