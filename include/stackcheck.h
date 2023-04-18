@@ -3,7 +3,6 @@
 
 #include "ultra64.h"
 
-
 typedef enum StackStatus {
     /* 0 */ STACK_STATUS_OK,
     /* 1 */ STACK_STATUS_WARNING,
@@ -19,7 +18,6 @@ typedef struct StackEntry {
     /* 0x14 */ s32 minSpace;
     /* 0x18 */ const char* name;
 } StackEntry; // size = 0x1C
-
 
 void StackCheck_Init(StackEntry* entry, void* stackBottom, void* stackTop, u32 initValue, s32 minSpace, const char* name);
 void StackCheck_Cleanup(StackEntry* entry);
