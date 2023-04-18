@@ -369,7 +369,8 @@ void func_808A1090(DoorShutter* this, PlayState* play) {
             }
 
             if (this->doorType == 6) {
-                if (gSaveContext.save.saveInfo.playerData.healthCapacity < (DOORSHUTTER_GET_1F(&this->door.dyna.actor) * 0x10)) {
+                if (gSaveContext.save.saveInfo.playerData.healthCapacity <
+                    (DOORSHUTTER_GET_1F(&this->door.dyna.actor) * 0x10)) {
                     player->doorType = PLAYER_DOORTYPE_TALKING;
                     this->door.dyna.actor.textId = 0x14FC;
                 }
