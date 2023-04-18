@@ -163,7 +163,7 @@ void EnKanban_Init(Actor* thisx, PlayState* play) {
 
         this->bounceX = 1;
         this->partFlags = 0xFFFF;
-        Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 10.0f, 50.0f, 4);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 10.0f, 50.0f, UPDBGCHECKINFO_FLAG_4);
         func_80954960(this);
     }
 }
@@ -209,7 +209,7 @@ void EnKanban_Update(Actor* thisx, PlayState* play) {
     Vec3f offset;
     EnKanban* piece;
     EnKanban* signpost;
-    s32 temp_v0_18;
+    FloorType floorType;
     f32 phi_f0;
     s32 pad2;
 
@@ -433,7 +433,8 @@ void EnKanban_Update(Actor* thisx, PlayState* play) {
                 Actor_MoveWithGravity(&this->actor);
             }
 
-            Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 10.0f, 50.0f, 5);
+            Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 10.0f, 50.0f,
+                                    UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
 
             tempX = this->actor.world.pos.x;
             tempY = this->actor.world.pos.y;
@@ -442,7 +443,7 @@ void EnKanban_Update(Actor* thisx, PlayState* play) {
             tempWaterDepth = this->actor.depthInWater;
             this->actor.world.pos.z += ((this->actor.world.pos.y - this->actor.floorHeight) * -50.0f) / 100.0f;
 
-            Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 10.0f, 50.0f, 4);
+            Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 10.0f, 50.0f, UPDBGCHECKINFO_FLAG_4);
             func_80954960(this);
 
             this->actor.world.pos.x = tempX;
@@ -516,11 +517,11 @@ void EnKanban_Update(Actor* thisx, PlayState* play) {
             }
 
             if (onGround) {
-                temp_v0_18 = func_800C99D4(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
+                floorType = SurfaceType_GetFloorType(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
 
-                if ((temp_v0_18 == 15) || (temp_v0_18 == 14)) {
+                if ((floorType == FLOOR_TYPE_15) || (floorType == FLOOR_TYPE_14)) {
                     this->unk_197 = 1;
-                } else if (temp_v0_18 == 5) {
+                } else if (floorType == FLOOR_TYPE_5) {
                     this->unk_197 = -1;
                 }
 
@@ -622,7 +623,7 @@ void EnKanban_Update(Actor* thisx, PlayState* play) {
 
             if (bounced) {
                 if (this->unk_197 > 0) {
-                    Actor_PlaySfx(&this->actor, NA_SE_PL_WALK_SNOW);
+                    Actor_PlaySfx(&this->actor, NA_SE_PL_WALK_GROUND + SURFACE_SFX_OFFSET_SNOW);
                 } else {
                     Actor_PlaySfx(&this->actor, NA_SE_EV_WOODPLATE_BOUND);
                 }
@@ -709,7 +710,8 @@ void EnKanban_Update(Actor* thisx, PlayState* play) {
                 Actor_MoveWithGravity(&this->actor);
 
                 if (this->actor.speed != 0.0f) {
-                    Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 10.0f, 50.0f, 5);
+                    Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 10.0f, 50.0f,
+                                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
                     if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
                         this->actor.speed *= -0.5f;
                         if (this->spinVel.y > 0) {
