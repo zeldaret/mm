@@ -874,6 +874,10 @@ wordReplace = {
     "ICHAIN_F32_DIV1000(minVelocityY,": "ICHAIN_F32_DIV1000(terminalVelocity,",
     "ICHAIN_F32(minVelocityY,": "ICHAIN_F32(terminalVelocity,",
 
+    "RADF_TO_BINANG": "RAD_TO_BINANG",
+    "RADF_TO_DEGF": "RAD_TO_DEG",
+    "DEGF_TO_RADF": "DEG_TO_RAD",
+
     "ACTORCTX_FLAG_2": "ACTORCTX_FLAG_PICTO_BOX_ON",
 
     "ACTOR_FLAG_100": "ACTOR_FLAG_TALK_REQUESTED",
