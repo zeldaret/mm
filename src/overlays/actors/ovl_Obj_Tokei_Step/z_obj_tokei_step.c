@@ -247,7 +247,7 @@ void ObjTokeiStep_SetupOpen(ObjTokeiStep* this) {
 
 void ObjTokeiStep_Open(ObjTokeiStep* this, PlayState* play) {
     if (ObjTokeiStep_OpenProcess(this, play)) {
-        func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+        DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
         ObjTokeiStep_SetupDoNothingOpen(this);
     }
 }

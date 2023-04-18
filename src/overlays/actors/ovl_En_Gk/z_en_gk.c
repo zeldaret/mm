@@ -240,7 +240,8 @@ void func_80B507A0(EnGk* this, PlayState* play) {
 
     CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 30.0f, 30.0f, 7);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 30.0f, 30.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_2 | UPDBGCHECKINFO_FLAG_4);
 }
 
 s32 func_80B50854(EnGk* this, PlayState* play) {
@@ -373,7 +374,7 @@ s32 func_80B50C78(EnGk* this, Path* path, s32 arg2_) {
         phi_f14 = sp5C[arg2 + 1].z - sp5C[arg2 - 1].z;
     }
 
-    func_8017B7F8(&sp30, RADF_TO_BINANG(func_80086B30(phi_f12, phi_f14)), &sp44, &sp40, &sp3C);
+    func_8017B7F8(&sp30, RAD_TO_BINANG(func_80086B30(phi_f12, phi_f14)), &sp44, &sp40, &sp3C);
 
     if (((this->actor.world.pos.x * sp44) + (sp40 * this->actor.world.pos.z) + sp3C) > 0.0f) {
         ret = true;

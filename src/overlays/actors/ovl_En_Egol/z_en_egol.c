@@ -767,8 +767,8 @@ void EnEgol_Laser(EnEgol* this, PlayState* play) {
                  * rotToNorm.x = func_80086B30(nz, ny) * 0x8000 / M_PI;
                  * rotToNorm.z = func_80086B30(-nx, sqrtf(1.0f - SQ(nx))) * 0x8000 / M_PI;
                  */
-                rotToNorm.x = -func_80086B30(-nz * ny, 1.0f) * 0x8000 / M_PI;
-                rotToNorm.z = func_80086B30(-nx * ny, 1.0f) * 0x8000 / M_PI;
+                rotToNorm.x = RAD_TO_BINANG_ALT2(-func_80086B30(-nz * ny, 1.0f));
+                rotToNorm.z = RAD_TO_BINANG_ALT2(func_80086B30(-nx * ny, 1.0f));
 
                 if ((this->actor.world.pos.y - 50.0f) <= player->actor.world.pos.y) {
                     EnEgol_SpawnEffect(this, &hitPos, &rotToNorm, 100, 0.02f, EYEGORE_EFFECT_IMPACT);
@@ -1294,7 +1294,9 @@ void EnEgol_Update(Actor* thisx, PlayState* play) {
     Math_SmoothStepToS(&this->eyelidRot, this->eyelidRotTarget, 1, 0x7D0, 0);
     EnEgol_CollisionCheck(this, play);
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 50.0f, 50.0f, 0x1D);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 50.0f, 50.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                UPDBGCHECKINFO_FLAG_10);
     if (this->action != EYEGORE_ACTION_DEAD) {
         //! @bug This should be ||, not &&. As is, the check always succeeds.
         if (!((this->action == EYEGORE_ACTION_DAMAGED) && (this->action == EYEGORE_ACTION_DYING))) {

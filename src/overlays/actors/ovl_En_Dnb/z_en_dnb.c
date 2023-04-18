@@ -104,7 +104,7 @@ void EnDnb_Init(Actor* thisx, PlayState* play) {
     s32 i;
     s16* alloc;
 
-    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
     DynaPolyActor_LoadMesh(play, &this->dyna, &object_hanareyama_obj_Colheader_004D8C);
 
     alloc = Lib_SegmentedToVirtual(object_hanareyama_obj_Vec_004710);

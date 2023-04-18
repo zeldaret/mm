@@ -203,7 +203,7 @@ void EnTanron5_Init(Actor* thisx, PlayState* play) {
 
         Actor_Kill(&this->actor);
     } else {
-        Actor_UpdateBgCheckInfo(play, &this->actor, 50.0f, 150.0f, 100.0f, 4);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 50.0f, 150.0f, 100.0f, UPDBGCHECKINFO_FLAG_4);
         this->actor.world.pos.y = this->actor.floorHeight + -20.0f;
     }
 }
@@ -417,7 +417,7 @@ void func_80BE5818(Actor* thisx, PlayState* play2) {
 
     if (this->actor.speed > 0.02f) {
         Actor_MoveWithGravity(&this->actor);
-        Actor_UpdateBgCheckInfo(play, &this->actor, 50.0f, 150.0f, 100.0f, 4);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 50.0f, 150.0f, 100.0f, UPDBGCHECKINFO_FLAG_4);
     }
 
     if (ENTANRON5_GET(&this->actor) < ENTANRON5_110) {

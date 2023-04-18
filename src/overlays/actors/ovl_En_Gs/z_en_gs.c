@@ -349,8 +349,8 @@ f32 func_80998334(EnGs* this, PlayState* play, f32* arg2, f32* arg3, s16* arg4, 
 
     if (arg9 == 0) {
         sp2C = Math_SmoothStepToF(arg2, *arg3, arg5, arg6, arg7);
-        this->unk_1B0[0].x = (sinf(DEGF_TO_RADF((*arg4 % arg8) * (1.0f / arg8) * 360.0f)) * *arg2) + 1.0f;
-        this->unk_1B0[0].y = 1.0f - (sinf(DEGF_TO_RADF((*arg4 % arg8) * (1.0f / arg8) * 360.0f)) * *arg2);
+        this->unk_1B0[0].x = (sinf(DEG_TO_RAD((*arg4 % arg8) * (1.0f / arg8) * 360.0f)) * *arg2) + 1.0f;
+        this->unk_1B0[0].y = 1.0f - (sinf(DEG_TO_RAD((*arg4 % arg8) * (1.0f / arg8) * 360.0f)) * *arg2);
         (*arg4)++;
     }
     return sp2C;
@@ -648,7 +648,7 @@ s32 func_80998F9C(EnGs* this, PlayState* play) {
     if (this->unk_19D == 1) {
         Math_SmoothStepToF(&this->unk_1E4, this->unk_1E8, 1.0f, 0.1f, 0.001f);
         sp48 = Math_SmoothStepToF(&this->unk_1DC, this->unk_1E0, 1.0f, this->unk_1E4, 0.001f);
-        this->unk_19E[0].y += (s32)(this->unk_1DC * (0x10000 / 360.0f));
+        this->unk_19E[0].y += (s32)DEG_TO_BINANG_ALT3(this->unk_1DC);
         if (sp48 == 0.0f) {
             this->unk_1D4 = 0;
             this->unk_19D = 2;
@@ -656,7 +656,7 @@ s32 func_80998F9C(EnGs* this, PlayState* play) {
     }
 
     if (this->unk_19D == 2) {
-        this->unk_19E[0].y += (s32)(this->unk_1DC * (0x10000 / 360.0f));
+        this->unk_19E[0].y += (s32)DEG_TO_BINANG_ALT3(this->unk_1DC);
         if (this->unk_1D4++ > 40) {
             this->unk_1DC = this->unk_1B0[0].y - 1.0f;
             this->unk_1E0 = 1.5f;
@@ -725,8 +725,8 @@ s32 func_80998F9C(EnGs* this, PlayState* play) {
         sp40 = Math_SmoothStepToF(&this->unk_1EC, this->unk_1F0, 0.8f, 0.02f, 0.001f);
         this->unk_1B0[0].x = this->unk_1E4 + 1.0f;
         this->unk_1B0[0].y = this->unk_1DC + 1.0f;
-        this->unk_1B0[0].x += sinf(DEGF_TO_RADF((this->unk_1D4 % 10) * 0.1f * 360.0f)) * this->unk_1EC;
-        this->unk_1B0[0].y += sinf(DEGF_TO_RADF((this->unk_1D4 % 10) * 0.1f * 360.0f)) * this->unk_1EC;
+        this->unk_1B0[0].x += sinf(DEG_TO_RAD((this->unk_1D4 % 10) * 0.1f * 360.0f)) * this->unk_1EC;
+        this->unk_1B0[0].y += sinf(DEG_TO_RAD((this->unk_1D4 % 10) * 0.1f * 360.0f)) * this->unk_1EC;
         this->unk_1D4++;
         if ((sp48 == 0.0f) && (sp44 == 0.0f) && (sp40 == 0.0f)) {
             this->unk_216 = 0;
@@ -842,7 +842,7 @@ s32 func_809995A4(EnGs* this, PlayState* play) {
     }
 
     if (this->unk_19D == 4) {
-        Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 60.0f, 3);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 60.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_2);
         if (this->actor.bgCheckFlags & (BGCHECKFLAG_WALL | BGCHECKFLAG_CEILING)) {
             Vec3f sp54;
 

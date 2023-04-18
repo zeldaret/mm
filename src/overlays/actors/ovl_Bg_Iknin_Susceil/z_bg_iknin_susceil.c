@@ -62,11 +62,11 @@ s32 func_80C0A740(BgIkninSusceil* this, PlayState* play) {
 }
 
 void func_80C0A804(BgIkninSusceil* this, PlayState* play) {
-    func_800C6314(play, &play->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_EnableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
 }
 
 void func_80C0A838(BgIkninSusceil* this, PlayState* play) {
-    func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
 }
 
 void BgIkninSusceil_RequestQuakeAndRumble(BgIkninSusceil* this, PlayState* play, s16 quakeY, s16 quakeDuration,
@@ -116,7 +116,7 @@ void BgIkninSusceil_Init(Actor* thisx, PlayState* play) {
     BgIkninSusceil* this = THIS;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
     DynaPolyActor_LoadMesh(play, &this->dyna, &object_ikninside_obj_Colheader_00CBAC);
     this->animatedTexture = Lib_SegmentedToVirtual(object_ikninside_obj_Matanimheader_00C670);
     func_80C0AC74(this);

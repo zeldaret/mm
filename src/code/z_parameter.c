@@ -3701,7 +3701,7 @@ void Magic_Update(PlayState* play) {
             // Add magic until magicFillTarget is reached
             gSaveContext.save.playerData.magic += 0x10;
 
-            if ((gSaveContext.gameMode == 0) && (gSaveContext.sceneLayer < 4)) {
+            if ((gSaveContext.gameMode == GAMEMODE_NORMAL) && (gSaveContext.sceneLayer < 4)) {
                 play_sound(NA_SE_SY_GAUGE_UP - SFX_FLAG);
             }
 
@@ -4482,7 +4482,7 @@ void Interface_DrawClock(PlayState* play) {
     if (R_TIME_SPEED != 0) {
         if ((msgCtx->msgMode == 0) || ((play->actorCtx.flags & ACTORCTX_FLAG_1) && !Play_InCsMode(play)) ||
             (msgCtx->msgMode == 0) || ((msgCtx->currentTextId >= 0x100) && (msgCtx->currentTextId <= 0x200)) ||
-            (gSaveContext.gameMode == 3)) {
+            (gSaveContext.gameMode == GAMEMODE_END_CREDITS)) {
             if (!FrameAdvance_IsEnabled(&play->state) && !Environment_IsTimeStopped() && (gSaveContext.save.day < 4)) {
                 /**
                  * Changes Clock's transparancy depending if Player is moving or not and possibly other things

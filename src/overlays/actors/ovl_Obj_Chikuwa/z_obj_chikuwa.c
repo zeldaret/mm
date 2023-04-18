@@ -49,7 +49,7 @@ void func_809B1550(Actor* thisx, PlayState* play) {
         thisx->world.pos.x = (Math_SinS(thisx->shape.rot.y) * sp18) + thisx->home.pos.x;
         thisx->world.pos.z = (Math_CosS(thisx->shape.rot.y) * sp18) + thisx->home.pos.z;
     } else {
-        func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+        DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
     }
 }
 

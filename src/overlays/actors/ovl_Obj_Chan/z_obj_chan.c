@@ -119,7 +119,7 @@ u32 func_80BB9A1C(ObjChan* this, f32 arg1) {
     sp20 = Math_SinS(this->unk1D4) * this->unk1D0;
     temp_f6 = (Math_CosS(this->unk1D4) * (400 * M_PI / 0x8000) * this->unk1D0) + arg1;
     if (temp_f6 != 0.0f) {
-        this->unk1D4 = RADF_TO_BINANG(func_80086B30(sp20 * (400 * M_PI / 0x8000), temp_f6));
+        this->unk1D4 = RAD_TO_BINANG(func_80086B30(sp20 * (400 * M_PI / 0x8000), temp_f6));
     } else if (sp20 >= 0.0f) {
         this->unk1D4 = 0x4000;
     } else {
@@ -175,7 +175,7 @@ void ObjChan_InitChandelier(ObjChan* this2, PlayState* play) {
 
     for (i = 0; i < 5; i++) {
         ObjChan_CalculatePotPosition(&childPos, &childRot, &this->actor.world.pos, &this->actor.shape.rot,
-                                     (s32)(i * 360.0f / 5.0f * (65536.0f / 360.0f)) + this->rotation);
+                                     (s32)DEG_TO_BINANG_ALT3(i * 360.0f / 5.0f) + this->rotation);
         temp_v0 = (ObjChan*)Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ACTOR_OBJ_CHAN, childPos.x, childPos.y,
                                                           childPos.z, childRot.x, childRot.y, childRot.z,
                                                           (this->actor.params & 0xFFF) | 0x1000, this->actor.cutscene,
@@ -251,7 +251,7 @@ void ObjChan_ChandelierAction(ObjChan* this2, PlayState* play) {
         temp = this->pots[i];
         if (temp != NULL) {
             ObjChan_CalculatePotPosition(&sp60, &sp58, &this->actor.world.pos, &this->actor.shape.rot,
-                                         (s32)(i * 360.0f / 5.0f * (65536.0f / 360.0f)) + this->rotation);
+                                         (s32)DEG_TO_BINANG_ALT3(i * 360.0f / 5.0f) + this->rotation);
             Math_Vec3f_Copy(&temp->actor.world.pos, &sp60);
             Math_Vec3s_Copy(&temp->actor.shape.rot, &this->actor.shape.rot);
             temp->actor.shape.rot.y = this->rotation;

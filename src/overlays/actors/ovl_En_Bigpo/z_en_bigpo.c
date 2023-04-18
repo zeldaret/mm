@@ -1174,7 +1174,7 @@ void EnBigpo_Update(Actor* thisx, PlayState* play) {
         Actor_MoveWithGravity(&this->actor);
     }
     if (this->actionFunc == EnBigpo_LanternFalling) {
-        Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 27.0f, 60.0f, 4);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 27.0f, 60.0f, UPDBGCHECKINFO_FLAG_4);
     }
 
     if (this->actor.draw == EnBigpo_DrawScoopSoul) {

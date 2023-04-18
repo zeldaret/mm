@@ -419,7 +419,7 @@ void EnSsh_Sway(EnSsh* this) {
         }
 
         temp_f20 = (this->swayTimer * (1.0f / 6));
-        swayAngle = Math_SinS(this->swayAngle) * (temp_f20 * (0x10000 / 360.0f));
+        swayAngle = (f32)DEG_TO_BINANG_ALT3(temp_f20) * Math_SinS(this->swayAngle);
         temp_f20 = this->actor.world.pos.y - this->ceilingPos.y;
 
         swayVecBase.x = Math_SinS(swayAngle) * temp_f20;
@@ -849,7 +849,7 @@ void EnSsh_Update(Actor* thisx, PlayState* play) {
     } else {
         SkelAnime_Update(&this->skelAnime);
         Actor_UpdatePos(&this->actor);
-        Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
         this->actionFunc(this, play);
     }
 

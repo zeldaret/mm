@@ -228,7 +228,7 @@ void BgF40Block_Init(Actor* thisx, PlayState* play) {
     BgF40Block* this = THIS;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
     DynaPolyActor_LoadMesh(play, &this->dyna, &object_f40_obj_Colheader_004640);
 
     if (BGF40BLOCK_GET_PATH(&this->dyna.actor) != 0x3F) {

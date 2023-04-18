@@ -181,7 +181,7 @@ void DmAh_Update(Actor* thisx, PlayState* play) {
     func_80C1D6E0(this, play);
     SkelAnime_Update(&this->skelAnime);
     func_80C1D458(this);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
 }
 
 static Vec3f D_80C1DE14 = { 1000.0f, 0.0f, 0.0f };
