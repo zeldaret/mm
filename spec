@@ -527,7 +527,7 @@ beginseg
     include "build/data/code/code_80140CE0.data.o"
     include "build/src/code/code_80140E80.o"
     include "build/src/code/z_vismono.o"
-    include "build/src/code/code_801420C0.o"
+    include "build/src/code/z_viszbuf.o"
     include "build/src/code/z_vr_box.o"
     include "build/src/code/z_vr_box_draw.o"
     include "build/src/code/z_sram_NES.o"
@@ -2557,9 +2557,7 @@ beginseg
     name "ovl_En_Slime"
     compress
     include "build/src/overlays/actors/ovl_En_Slime/z_en_slime.o"
-    include "build/data/ovl_En_Slime/ovl_En_Slime.data.o"
-    include "build/data/ovl_En_Slime/ovl_En_Slime.bss.o"
-    include "build/data/ovl_En_Slime/ovl_En_Slime.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Slime/ovl_En_Slime_reloc.o"
 endseg
 
 beginseg

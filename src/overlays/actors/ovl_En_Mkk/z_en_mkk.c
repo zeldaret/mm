@@ -415,7 +415,9 @@ void EnMkk_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
     this->actor.world.rot.y = this->actor.shape.rot.y;
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 20.0f, 0x1D);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 20.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                UPDBGCHECKINFO_FLAG_10);
     if (this->actor.params == 0) {
         func_80A4E84C(this);
     }

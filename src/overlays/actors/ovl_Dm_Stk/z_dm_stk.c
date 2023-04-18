@@ -648,7 +648,7 @@ void DmStk_PlaySfxForPlayingWithFairiesCutscene(DmStk* this, PlayState* play) {
         case 72:
         case 77:
         case 79:
-            Actor_PlaySfx(&this->actor, NA_SE_PL_WALK_WATER2);
+            Actor_PlaySfx(&this->actor, NA_SE_PL_WALK_GROUND + SURFACE_SFX_OFFSET_TALL_GRASS);
             Actor_PlaySfx(&this->actor, NA_SE_EN_STALKIDS_WALK);
             break;
 
