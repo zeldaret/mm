@@ -310,7 +310,7 @@ void EnRaf_Idle(EnRaf* this, PlayState* play) {
     if (this->timer == 0) {
         if ((player->transformation != PLAYER_FORM_DEKU) &&
             (this->dyna.actor.xzDistToPlayer < (BREG(48) + 80.0f) && (player->invincibilityTimer == 0) &&
-             DynaPolyActor_IsInRidingMovingState(&this->dyna) && !(player->stateFlags1 & PLAYER_STATE1_8000000) &&
+             DynaPolyActor_IsPlayerOnTop(&this->dyna) && !(player->stateFlags1 & PLAYER_STATE1_8000000) &&
              play->grabPlayer(play, player))) {
             player->actor.parent = &this->dyna.actor;
             this->grabTarget = EN_RAF_GRAB_TARGET_PLAYER;
@@ -710,7 +710,7 @@ void EnRaf_Update(Actor* thisx, PlayState* play) {
         return;
     }
 
-    if (DynaPolyActor_IsInRidingMovingState(&this->dyna)) {
+    if (DynaPolyActor_IsPlayerOnTop(&this->dyna)) {
         if ((this->heightDiffFromPlayer > -0.1f) && !this->isCurrentlyInRidingMovingState) {
             this->heightDiffFromPlayer = -20.0f;
             this->isCurrentlyInRidingMovingState = true;

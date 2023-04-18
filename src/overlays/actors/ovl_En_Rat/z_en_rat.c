@@ -331,7 +331,7 @@ void EnRat_ChooseDirection(EnRat* this) {
     }
 
     angle = CLAMP(angle, -0x800, 0x800);
-    Matrix_RotateAxisF(angle * (M_PI / 0x8000), &this->axisUp, MTXMODE_NEW);
+    Matrix_RotateAxisF(BINANG_TO_RAD(angle), &this->axisUp, MTXMODE_NEW);
     Matrix_MultVec3f(&this->axisForwards, &newAxisForwards);
     Math_Vec3f_Copy(&this->axisForwards, &newAxisForwards);
     Math3D_CrossProduct(&this->axisUp, &this->axisForwards, &this->axisLeft);
@@ -355,7 +355,8 @@ s32 EnRat_IsOnCollisionPoly(PlayState* play, Vec3f* posA, Vec3f* posB, Vec3f* po
     }
 
     if (BgCheck_EntityLineTest1(&play->colCtx, posA, posB, posResult, poly, 1, 1, 1, 1, bgId)) {
-        if (!(func_800C9A4C(&play->colCtx, *poly, *bgId) & 0x30) && (!isOnWater || (waterSurface <= posResult->y))) {
+        if (!(SurfaceType_GetWallFlags(&play->colCtx, *poly, *bgId) & (WALL_FLAG_4 | WALL_FLAG_5)) &&
+            (!isOnWater || (waterSurface <= posResult->y))) {
             return true;
         }
     }
@@ -494,7 +495,7 @@ void EnRat_HandleNonSceneCollision(EnRat* this, PlayState* play) {
     f32 cos;
     f32 tempX;
 
-    BgCheck2_UpdateActorAttachedToMesh(&play->colCtx, this->actor.floorBgId, &this->actor);
+    DynaPolyActor_TransformCarriedActor(&play->colCtx, this->actor.floorBgId, &this->actor);
 
     if (yaw != this->actor.shape.rot.y) {
         yaw = this->actor.shape.rot.y - yaw;
@@ -853,7 +854,8 @@ void EnRat_Update(Actor* thisx, PlayState* play) {
             this->actor.floorHeight = this->actor.world.pos.y;
         } else {
             Actor_MoveWithGravity(&this->actor);
-            Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 30.0f, 60.0f, 7);
+            Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 30.0f, 60.0f,
+                                    UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_2 | UPDBGCHECKINFO_FLAG_4);
         }
 
         if (SurfaceType_IsWallDamage(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId)) {

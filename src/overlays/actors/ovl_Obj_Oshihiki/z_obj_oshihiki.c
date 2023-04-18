@@ -196,7 +196,7 @@ void ObjOshihiki_SetColor(ObjOshihiki* this, PlayState* play) {
 void ObjOshihiki_Init(Actor* thisx, PlayState* play) {
     ObjOshihiki* this = THIS;
 
-    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
 
     if ((OBJOSHIHIKI_GET_FF00(&this->dyna.actor) >= OBJOSHIHIKI_FF00_0) &&
         (OBJOSHIHIKI_GET_FF00(&this->dyna.actor) < OBJOSHIHIKI_FF00_80)) {
@@ -439,8 +439,8 @@ void ObjOshihiki_OnActor(ObjOshihiki* this, PlayState* play) {
         } else {
             dyna = DynaPoly_GetActor(&play->colCtx, this->floorBgIds[this->highestFloor]);
             if (dyna != NULL) {
-                DynaPolyActor_SetRidingFallingState(dyna);
-                DynaPolyActor_SetSwitchPressedState(dyna);
+                DynaPolyActor_SetActorOnTop(dyna);
+                DynaPolyActor_SetActorOnSwitch(dyna);
                 if ((this->timer <= 0) && (fabsf(this->dyna.pushForce) > 0.001f) &&
                     ObjOshihiki_StrongEnough(this, play) && ObjOshihiki_NoSwitchPress(this, dyna, play) &&
                     !ObjOshihiki_CheckWall(play, this->dyna.yRotation, this->dyna.pushForce, this)) {
@@ -456,9 +456,9 @@ void ObjOshihiki_OnActor(ObjOshihiki* this, PlayState* play) {
         ObjOshihiki_SetupFall(this, play);
     } else {
         dyna = DynaPoly_GetActor(&play->colCtx, this->floorBgIds[this->highestFloor]);
-        if ((dyna != NULL) && (dyna->flags & 1)) {
-            DynaPolyActor_SetRidingFallingState(dyna);
-            DynaPolyActor_SetSwitchPressedState(dyna);
+        if ((dyna != NULL) && (dyna->transformFlags & DYNA_TRANSFORM_POS)) {
+            DynaPolyActor_SetActorOnTop(dyna);
+            DynaPolyActor_SetActorOnSwitch(dyna);
             this->dyna.actor.world.pos.y = this->dyna.actor.floorHeight;
         } else {
             ObjOshihiki_SetupFall(this, play);
@@ -554,9 +554,9 @@ void ObjOshihiki_Fall(ObjOshihiki* this, PlayState* play) {
             ObjOshihiki_SetupOnActor(this, play);
         }
         Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
-        Actor_PlaySfx(&this->dyna.actor, SurfaceType_GetSfx(&play->colCtx, this->floorPolys[this->highestFloor],
-                                                            this->floorBgIds[this->highestFloor]) +
-                                             SFX_FLAG);
+        Actor_PlaySfx(&this->dyna.actor, NA_SE_PL_WALK_GROUND + SurfaceType_GetSfxOffset(
+                                                                    &play->colCtx, this->floorPolys[this->highestFloor],
+                                                                    this->floorBgIds[this->highestFloor]));
     }
 }
 

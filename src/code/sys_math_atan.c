@@ -127,7 +127,7 @@ s16 Math_Atan2S(f32 y, f32 x) {
 }
 
 f32 Math_Atan2F(f32 y, f32 x) {
-    return Math_Atan2S(y, x) * (M_PI / 0x8000);
+    return BINANG_TO_RAD(Math_Atan2S(y, x));
 }
 
 // Match the OoT implementation of Math_Atan2S

@@ -775,7 +775,7 @@ void func_80962F4C(EnFu* this, PlayState* play) {
         Message_StartTextbox(play, 0x288B, &this->actor);
     }
 
-    if ((!DynaPolyActor_IsInRidingRotatingState((DynaPolyActor*)this->actor.child) &&
+    if ((!DynaPolyActor_IsPlayerAbove((DynaPolyActor*)this->actor.child) &&
          (player->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) ||
         (gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2] <= SECONDS_TO_TIMER(0)) || (this->unk_548 == this->unk_54C)) {
         player->stateFlags3 &= ~PLAYER_STATE3_400000;
@@ -1337,7 +1337,7 @@ void EnFu_Update(Actor* thisx, PlayState* play) {
     func_809642E0(this, play);
     Actor_MoveWithGravity(&this->actor);
     func_8096209C(this, play);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
     SkelAnime_Update(&this->skelAnime);
     func_80961D7C(play);
     func_809640D8(this, play);

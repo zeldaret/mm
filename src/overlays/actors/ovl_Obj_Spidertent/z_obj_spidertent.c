@@ -755,7 +755,7 @@ void func_80B30AF8(ObjSpidertent* this, PlayState* play) {
 
     this->unk_3C1--;
     if (this->unk_3C1 == 40) {
-        func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+        DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
     }
 
     if (this->unk_3C1 >= 32) {

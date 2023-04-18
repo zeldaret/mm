@@ -53,7 +53,7 @@ static ColliderCylinderInit sCylinderInit = {
 void EnNimotsu_UpdateCollision(EnNimotsu* this, PlayState* play) {
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 32.0f, 30.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 32.0f, 30.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
 }
 
 void EnNimotsu_Init(Actor* thisx, PlayState* play) {

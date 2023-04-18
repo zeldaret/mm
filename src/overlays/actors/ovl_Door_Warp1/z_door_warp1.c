@@ -47,8 +47,8 @@ void func_808BAAF4(DoorWarp1* this, PlayState* play);
 void func_808BABF4(DoorWarp1* this, PlayState* play);
 void func_808BB8D4(DoorWarp1* this, PlayState* play, s32 arg2);
 
-static s16 D_808BC000;
-static f32 D_808BC004;
+s16 D_808BC000;
+f32 D_808BC004;
 
 ActorInit Door_Warp1_InitVars = {
     ACTOR_DOOR_WARP1,

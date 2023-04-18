@@ -324,7 +324,7 @@ void ObjTokeidai_ExteriorGear_Collapse(ObjTokeidai* this, PlayState* play) {
         this->actor.shape.rot.x += 0x50;
         this->actor.shape.rot.z += 0x50;
         Actor_MoveWithGravity(&this->actor);
-        Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
     }
 }
 
