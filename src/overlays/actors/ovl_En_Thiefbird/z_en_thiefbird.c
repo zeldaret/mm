@@ -223,10 +223,10 @@ s32 func_80C10B0C(EnThiefbird* this, PlayState* play) {
     s16 itemId2 = 0;
 
     for (; slotId < 24; slotId++) {
-        if ((gSaveContext.save.inventory.items[slotId] >= ITEM_BOTTLE) &&
-            (gSaveContext.save.inventory.items[slotId] <= ITEM_POTION_BLUE)) {
+        if ((gSaveContext.save.saveInfo.inventory.items[slotId] >= ITEM_BOTTLE) &&
+            (gSaveContext.save.saveInfo.inventory.items[slotId] <= ITEM_POTION_BLUE)) {
             isItemFound = true;
-            itemId2 = gSaveContext.save.inventory.items[slotId];
+            itemId2 = gSaveContext.save.saveInfo.inventory.items[slotId];
             break;
         }
     }
@@ -343,7 +343,7 @@ s32 func_80C10E98(PlayState* play) {
         spAC = 0;
     }
 
-    sp98 = (gSaveContext.save.playerData.rupees / 4) * 3;
+    sp98 = (gSaveContext.save.saveInfo.playerData.rupees / 4) * 3;
     phi_s0_2 = sp98 / 50;
     sp5C = (-spB0 - spAC);
     sp5C += 8;
