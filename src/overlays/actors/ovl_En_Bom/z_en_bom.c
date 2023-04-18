@@ -230,7 +230,7 @@ void EnBom_Move(EnBom* this, PlayState* play) {
         Math_StepToF(&this->actor.speed, 0.0f, 0.08f);
     } else {
         Vec3f* sp58;
-        BgFloorType floorType = SurfaceType_GetFloorType(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
+        FloorType floorType = SurfaceType_GetFloorType(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
         Vec3f slopeNormal;
         s16 downwardSlopeYaw;
         f32 sp40;
@@ -239,11 +239,11 @@ void EnBom_Move(EnBom* this, PlayState* play) {
 
         sp58 = &D_80872E68[this->isPowderKeg];
 
-        if (floorType == BG_FLOOR_TYPE_5) {
+        if (floorType == FLOOR_TYPE_5) {
             sp58 = &D_80872E68[2];
         }
 
-        if ((floorType == BG_FLOOR_TYPE_4) || (floorType == BG_FLOOR_TYPE_14) || (floorType == BG_FLOOR_TYPE_15)) {
+        if ((floorType == FLOOR_TYPE_4) || (floorType == FLOOR_TYPE_14) || (floorType == FLOOR_TYPE_15)) {
             s16 sp36;
 
             Math_ApproachF(&this->actor.shape.yOffset, 0.0f, 0.1f, 50.0f);
@@ -262,8 +262,8 @@ void EnBom_Move(EnBom* this, PlayState* play) {
         sp3C += 3.0f * slopeNormal.z;
         sp38 = sqrtf(SQ(sp40) + SQ(sp3C));
 
-        if ((sp38 < this->actor.speed) ||
-            (SurfaceType_GetSlope(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId) == 1)) {
+        if ((sp38 < this->actor.speed) || (SurfaceType_GetFloorEffect(&play->colCtx, this->actor.floorPoly,
+                                                                      this->actor.floorBgId) == FLOOR_EFFECT_1)) {
             if (sp38 > 16.0f) {
                 this->actor.speed = 16.0f;
             } else {
@@ -286,8 +286,7 @@ void EnBom_Move(EnBom* this, PlayState* play) {
         if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND_TOUCH) {
             Actor_PlaySfx(&this->actor, this->isPowderKeg ? NA_SE_EV_TRE_BOX_BOUND : NA_SE_EV_BOMB_BOUND);
             if (this->actor.velocity.y < sp58->y) {
-                if ((floorType == BG_FLOOR_TYPE_4) || (floorType == BG_FLOOR_TYPE_14) ||
-                    (floorType == BG_FLOOR_TYPE_15)) {
+                if ((floorType == FLOOR_TYPE_4) || (floorType == FLOOR_TYPE_14) || (floorType == FLOOR_TYPE_15)) {
                     this->actor.velocity.y = 0.0f;
                 } else {
                     this->actor.velocity.y = this->actor.velocity.y * sp58->z;
@@ -328,7 +327,7 @@ void EnBom_Explode(EnBom* this, PlayState* play) {
     static Color_RGBA8 D_80872E90 = { 185, 140, 70, 255 };
     static Color_RGBA8 D_80872E94 = { 255, 255, 255, 255 };
     s32 i;
-    BgFloorType floorType;
+    FloorType floorType;
     f32 temp_f20;
     s32 pad;
     f32 spCC;
@@ -398,9 +397,8 @@ void EnBom_Explode(EnBom* this, PlayState* play) {
                 floorType = SurfaceType_GetFloorType(&play->colCtx, spB0, spAC);
                 temp_f20 = BgCheck_EntityRaycastFloor1(&play->colCtx, &spB0, &spB4);
 
-                if ((floorType == BG_FLOOR_TYPE_4) || (floorType == BG_FLOOR_TYPE_15) ||
-                    (floorType == BG_FLOOR_TYPE_14)) {
-                    if (floorType == BG_FLOOR_TYPE_4) {
+                if ((floorType == FLOOR_TYPE_4) || (floorType == FLOOR_TYPE_15) || (floorType == FLOOR_TYPE_14)) {
+                    if (floorType == FLOOR_TYPE_4) {
                         sp84 = D_80872E90;
                         sp80 = D_80872E90;
                     } else {

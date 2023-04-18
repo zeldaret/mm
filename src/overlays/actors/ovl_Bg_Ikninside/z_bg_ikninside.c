@@ -121,7 +121,7 @@ void func_80C072D0(BgIkninside* this, PlayState* play) {
             Flags_SetSwitch(play, DMIKNINSIDE_GET_SWITCH(&this->dyna.actor));
             this->actionFunc = func_80C07230;
             this->dyna.actor.draw = NULL;
-            func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+            DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
         } else {
             this->timer = 20;
         }

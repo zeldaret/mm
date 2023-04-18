@@ -169,12 +169,12 @@ s32 func_808F3178(EnIn* this, PlayState* play) {
     u8 tmp;
 
     this->unk260 = tmp = SubS_IsFloorAbove(play, &this->unk248, -6.0f);
-    if (this->unk260 != 0 && prevUnk260 == 0 && tmp) {
-        Actor_PlaySfx(&this->actor, NA_SE_PL_WALK_CONCRETE);
+    if ((this->unk260 != 0) && (prevUnk260 == 0) && tmp) {
+        Actor_PlaySfx(&this->actor, NA_SE_PL_WALK_GROUND + SURFACE_SFX_OFFSET_STONE);
     }
     this->unk261 = tmp = SubS_IsFloorAbove(play, &this->unk254, -6.0f);
-    if (this->unk261 != 0 && prevUnk261 == 0 && tmp) {
-        Actor_PlaySfx(&this->actor, NA_SE_PL_WALK_CONCRETE);
+    if ((this->unk261 != 0) && (prevUnk261 == 0) && tmp) {
+        Actor_PlaySfx(&this->actor, NA_SE_PL_WALK_GROUND + SURFACE_SFX_OFFSET_STONE);
     }
 
     return 0;

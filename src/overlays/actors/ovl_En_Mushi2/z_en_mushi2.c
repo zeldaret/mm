@@ -1089,9 +1089,9 @@ void func_80A6B0D8(EnMushi2* this, PlayState* play) {
         s32 sp44 = 0;
 
         if (this->poly != NULL) {
-            BgFloorType floorType = SurfaceType_GetFloorType(&play->colCtx, this->poly, this->polyBgId);
+            FloorType floorType = SurfaceType_GetFloorType(&play->colCtx, this->poly, this->polyBgId);
 
-            if ((floorType == BG_FLOOR_TYPE_5) || (floorType == BG_FLOOR_TYPE_14) || (floorType == BG_FLOOR_TYPE_15)) {
+            if ((floorType == FLOOR_TYPE_5) || (floorType == FLOOR_TYPE_14) || (floorType == FLOOR_TYPE_15)) {
                 sp44 = 1;
             }
         }
@@ -1161,7 +1161,7 @@ void EnMushi2_Update(Actor* thisx, PlayState* play) {
     if ((temp != BGCHECK_SCENE) &&
         ((this->actionFunc == func_80A6A5C0) || (this->actionFunc == func_80A6A824) ||
          (this->actionFunc == func_80A6A9E4) || (this->actionFunc == func_80A6B0D8)) &&
-        BgCheck2_UpdateActorAttachedToMesh(&play->colCtx, temp, &this->actor)) {
+        DynaPolyActor_TransformCarriedActor(&play->colCtx, temp, &this->actor)) {
         func_80A68F24(this);
     }
 

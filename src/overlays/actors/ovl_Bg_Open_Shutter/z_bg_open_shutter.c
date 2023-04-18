@@ -92,7 +92,7 @@ void BgOpenShutter_Init(Actor* thisx, PlayState* play) {
     BgOpenShutter* this = THIS;
 
     Actor_ProcessInitChain(&this->door.dyna.actor, sInitChain);
-    DynaPolyActor_Init(&this->door.dyna, 1);
+    DynaPolyActor_Init(&this->door.dyna, DYNA_TRANSFORM_POS);
     DynaPolyActor_LoadMesh(play, &this->door.dyna, &object_open_obj_Colheader_001640);
     this->actionFunc = func_80ACAD88;
 }

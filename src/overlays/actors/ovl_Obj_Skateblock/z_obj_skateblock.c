@@ -489,7 +489,7 @@ void ObjSkateblock_Init(Actor* thisx, PlayState* play) {
     ObjSkateblock* this = THIS;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
     DynaPolyActor_LoadMesh(play, &this->dyna, &gameplay_dangeon_keep_Colheader_007498);
     if (D_80A22A18 == NULL) {
         D_80A22A18 = Lib_SegmentedToVirtual(gameplay_dangeon_keep_Matanimheader_01B370);
@@ -615,8 +615,8 @@ void func_80A2264C(ObjSkateblock* this, PlayState* play) {
     sp20 = func_80A21548(this, play);
     if (sp20 || ((this->unk_160 - this->dyna.actor.world.pos.y) > 300.0f)) {
         if (SurfaceType_GetFloorProperty(&play->colCtx, this->dyna.actor.floorPoly, this->dyna.actor.floorBgId) ==
-            BG_FLOOR_PROPERTY_12) {
-            func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+            FLOOR_PROPERTY_12) {
+            DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
             this->dyna.actor.draw = NULL;
             func_80A22728(this);
             return;
@@ -633,7 +633,7 @@ void func_80A22728(ObjSkateblock* this) {
 }
 
 void func_80A2273C(ObjSkateblock* this, PlayState* play) {
-    if (!DynaPolyActor_IsInRidingMovingState(&this->dyna)) {
+    if (!DynaPolyActor_IsPlayerOnTop(&this->dyna)) {
         this->dyna.actor.world.pos.x = this->dyna.actor.home.pos.x;
         this->dyna.actor.world.pos.y = (this->dyna.actor.home.pos.y - (600.0f * this->dyna.actor.scale.y)) - 10.0f;
         this->dyna.actor.world.pos.z = this->dyna.actor.home.pos.z;
@@ -657,14 +657,14 @@ void func_80A227C0(ObjSkateblock* this, PlayState* play) {
         return;
     }
 
-    func_800C6314(play, &play->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_EnableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
     this->dyna.actor.draw = ObjSkateblock_Draw;
 
     if (Math_StepToF(&this->dyna.actor.world.pos.y, this->dyna.actor.home.pos.y, 1.0f)) {
         func_80A22308(this);
     }
 
-    if (DynaPolyActor_IsInRidingMovingState(&this->dyna)) {
+    if (DynaPolyActor_IsPlayerOnTop(&this->dyna)) {
         D_80A22A10 |= 1 << this->unk_1C0;
     }
 }

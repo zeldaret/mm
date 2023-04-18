@@ -197,7 +197,7 @@ void func_80893A18(EnTite* this) {
 
 s32 func_80893A34(EnTite* this, PlayState* play) {
     if ((this->actor.params == ENTITE_MINUS_2) && (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) &&
-        (SurfaceType_GetFloorType(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId) == BG_FLOOR_TYPE_5)) {
+        (SurfaceType_GetFloorType(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId) == FLOOR_TYPE_5)) {
         return true;
     }
     return false;
@@ -240,13 +240,14 @@ void func_80893BCC(EnTite* this, PlayState* play) {
     s32 j;
 
     if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND_TOUCH) {
-        BgSurfaceSfxType sfxType = SurfaceType_GetSfxType(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
+        SurfaceMaterial surfaceMaterial =
+            SurfaceType_GetMaterial(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
 
-        if ((sfxType == BG_SURFACE_SFX_TYPE_0) || (sfxType == BG_SURFACE_SFX_TYPE_1)) {
+        if ((surfaceMaterial == SURFACE_MATERIAL_DIRT) || (surfaceMaterial == SURFACE_MATERIAL_SAND)) {
             for (i = 5; i < ARRAY_COUNT(this->limbPos); i++) {
                 func_800BBFB0(play, &this->limbPos[i], 1.0f, 2, 80, 15, 1);
             }
-        } else if (sfxType == BG_SURFACE_SFX_TYPE_14) {
+        } else if (surfaceMaterial == SURFACE_MATERIAL_SNOW) {
             Vec3f* ptr;
 
             for (i = 5; i < ARRAY_COUNT(this->limbPos); i++) {

@@ -317,7 +317,7 @@ void BgDblueBalance_Init(Actor* thisx, PlayState* play) {
     this->dyna.actor.update = sTypeInfo[sp2C].update;
     this->dyna.actor.draw = sTypeInfo[sp2C].draw;
 
-    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
     DynaPolyActor_LoadMesh(play, &this->dyna, sTypeInfo[sp2C].colHeader);
 
     if (sp2C == 3) {
@@ -412,17 +412,17 @@ void func_80B82DE0(BgDblueBalance* this, PlayState* play) {
         phi_a1 = 1;
         this->unk_17D = 20;
         if (balance1 != NULL) {
-            if (balance1->unk_181 != 0) {
+            if (balance1->isHeavySwitchPressed) {
                 phi_a0 = 4;
-            } else if (balance1->unk_180 != 0) {
+            } else if (balance1->isSwitchPressed) {
                 phi_a0 = 2;
             }
         }
 
         if (balance2 != NULL) {
-            if (balance2->unk_181 != 0) {
+            if (balance2->isHeavySwitchPressed) {
                 phi_a1 = 5;
-            } else if (balance2->unk_180 != 0) {
+            } else if (balance2->isSwitchPressed) {
                 phi_a1 = 3;
             }
         }
@@ -546,8 +546,8 @@ void BgDblueBalance_Update(Actor* thisx, PlayState* play) {
 void func_80B8330C(Actor* thisx, PlayState* play) {
     BgDblueBalance* this = THIS;
 
-    this->unk_180 = DynaPolyActor_IsInSwitchPressedState(&this->dyna);
-    this->unk_181 = DynaPolyActor_IsInHeavySwitchPressedState(&this->dyna);
+    this->isSwitchPressed = DynaPolyActor_IsSwitchPressed(&this->dyna);
+    this->isHeavySwitchPressed = DynaPolyActor_IsHeavySwitchPressed(&this->dyna);
 }
 
 void func_80B83344(BgDblueBalance* this) {

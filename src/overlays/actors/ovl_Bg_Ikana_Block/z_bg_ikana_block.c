@@ -184,9 +184,9 @@ void BgIkanaBlock_Init(Actor* thisx, PlayState* play) {
     BgIkanaBlock* this = THIS;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
     DynaPolyActor_LoadMesh(play, &this->dyna, &gameplay_dangeon_keep_Colheader_007498);
-    func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
     this->unk_15C = Lib_SegmentedToVirtual(gameplay_dangeon_keep_Matanimheader_01B370);
     this->unk_174 = this->dyna.actor.shape.rot;
     func_80B7ED54(this);
@@ -211,7 +211,7 @@ void func_80B7F034(BgIkanaBlock* this, PlayState* play) {
     }
 
     if (func_80B7EEB4(this, play)) {
-        func_800C6314(play, &play->colCtx.dyna, this->dyna.bgId);
+        DynaPoly_EnableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
         this->dyna.actor.draw = func_80B7F564;
         func_80B7F0A4(this);
     }
@@ -335,9 +335,9 @@ void func_80B7F398(BgIkanaBlock* this, PlayState* play) {
 
     if (func_80B7EE70(this, play)) {
         Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
-        Actor_PlaySfx(&this->dyna.actor, SurfaceType_GetSfxIdOffset(&play->colCtx, this->dyna.actor.floorPoly,
-                                                                    this->dyna.actor.floorBgId) +
-                                             SFX_FLAG);
+        Actor_PlaySfx(&this->dyna.actor,
+                      NA_SE_PL_WALK_GROUND + SurfaceType_GetSfxOffset(&play->colCtx, this->dyna.actor.floorPoly,
+                                                                      this->dyna.actor.floorBgId));
         func_80B7F0A4(this);
     }
 }

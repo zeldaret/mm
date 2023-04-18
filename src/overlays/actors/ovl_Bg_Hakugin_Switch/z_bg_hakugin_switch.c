@@ -126,7 +126,7 @@ void BgHakuginSwitch_Init(Actor* thisx, PlayState* play) {
         sp30 = false;
     }
 
-    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
     DynaPolyActor_LoadMesh(play, &this->dyna, &object_goronswitch_Colheader_0005C8);
 
     Collider_InitCylinder(play, &this->collider);
@@ -244,7 +244,7 @@ void func_80B15B74(BgHakuginSwitch* this, PlayState* play) {
 
     if (sp34) {
         this->collider.base.acFlags &= ~AC_HIT;
-        if (DynaPolyActor_IsInRidingMovingState(&this->dyna)) {
+        if (DynaPolyActor_IsPlayerOnTop(&this->dyna)) {
             sp24 = true;
             sp20 = sp28;
         }
@@ -306,7 +306,7 @@ void func_80B15E78(BgHakuginSwitch* this, PlayState* play) {
     BgHakuginSwitchStruct* sp20 = &D_80B1688C[BGHAKUGINSWITCH_GET_7(&this->dyna.actor)];
 
     if (Math_StepToF(&this->dyna.actor.world.pos.y, sp20->unk_4 + this->dyna.actor.home.pos.y, sp20->unk_C)) {
-        if (DynaPolyActor_IsInRidingMovingState(&this->dyna)) {
+        if (DynaPolyActor_IsPlayerOnTop(&this->dyna)) {
             Rumble_Request(this->dyna.actor.xyzDistToPlayerSq, 120, 20, 10);
         }
         func_80B15F3C(this, play);
@@ -413,7 +413,7 @@ void func_80B162AC(BgHakuginSwitch* this, PlayState* play) {
 
     if (sp34) {
         this->collider.base.acFlags &= ~AC_HIT;
-        if (DynaPolyActor_IsInRidingMovingState(&this->dyna)) {
+        if (DynaPolyActor_IsPlayerOnTop(&this->dyna)) {
             sp24 = true;
             sp28 = true;
         }
@@ -446,7 +446,7 @@ void func_80B163C4(BgHakuginSwitch* this, PlayState* play) {
 void func_80B16400(BgHakuginSwitch* this, PlayState* play) {
     if (Math_StepToF(&this->dyna.actor.world.pos.y,
                      (this->dyna.actor.home.pos.y + 2.0f) - (1800.0f * this->dyna.actor.scale.y), 10.0f)) {
-        if (DynaPolyActor_IsInRidingMovingState(&this->dyna)) {
+        if (DynaPolyActor_IsPlayerOnTop(&this->dyna)) {
             Rumble_Request(this->dyna.actor.xyzDistToPlayerSq, 120, 20, 10);
         }
         func_80B16494(this, play);
@@ -510,8 +510,8 @@ void BgHakuginSwitch_Update(Actor* thisx, PlayState* play) {
     if (this->unk_1C0 != 0) {
         f32 phi_f0;
 
-        if (DynaPolyActor_IsInSwitchPressedState(&this->dyna)) {
-            if (DynaPolyActor_IsInHeavySwitchPressedState(&this->dyna)) {
+        if (DynaPolyActor_IsSwitchPressed(&this->dyna)) {
+            if (DynaPolyActor_IsHeavySwitchPressed(&this->dyna)) {
                 phi_f0 = (sp24 - -10.0f) * -0.21f;
             } else {
                 phi_f0 = (sp24 - -3.0f) * -0.08f;

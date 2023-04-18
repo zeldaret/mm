@@ -289,12 +289,12 @@ void func_80AD75A8(EnKame* this, PlayState* play) {
 
     if ((this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) && (this->actor.speed >= 3.0f)) {
         if ((play->gameplayFrames % 2) == 0) {
-            BgSurfaceSfxType sfxType =
-                SurfaceType_GetSfxType(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
+            SurfaceMaterial surfaceMaterial =
+                SurfaceType_GetMaterial(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
 
-            if ((sfxType == BG_SURFACE_SFX_TYPE_0) || (sfxType == BG_SURFACE_SFX_TYPE_1)) {
+            if ((surfaceMaterial == SURFACE_MATERIAL_DIRT) || (surfaceMaterial == SURFACE_MATERIAL_SAND)) {
                 func_800B1210(play, &this->actor.world.pos, &D_80AD8E5C, &gZeroVec3f, 550, 100);
-            } else if (sfxType == BG_SURFACE_SFX_TYPE_14) {
+            } else if (surfaceMaterial == SURFACE_MATERIAL_SNOW) {
                 func_800B0DE0(play, &this->actor.world.pos, &D_80AD8E5C, &gZeroVec3f, &D_80AD8E54, &D_80AD8E58, 550,
                               100);
             }
