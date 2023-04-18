@@ -2440,7 +2440,7 @@ extern u8 sMotionBlurStatus;
 
 extern UNK_TYPE1 D_801F7FF0;
 extern struct_801F8010 D_801F8010;
-extern struct_801F8020 D_801F8020;
+extern VisZbuf sVisZbuf;
 extern VisMono sMonoColors;
 extern UNK_TYPE1 D_801F8048;
 extern FaultAddrConvClient sGraphFaultAddrConvClient;

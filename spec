@@ -527,7 +527,7 @@ beginseg
     include "build/data/code/code_80140CE0.data.o"
     include "build/src/code/code_80140E80.o"
     include "build/src/code/z_vismono.o"
-    include "build/src/code/code_801420C0.o"
+    include "build/src/code/z_viszbuf.o"
     include "build/src/code/z_vr_box.o"
     include "build/src/code/z_vr_box_draw.o"
     include "build/src/code/z_sram_NES.o"
