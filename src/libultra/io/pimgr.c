@@ -19,7 +19,7 @@ void osCreatePiManager(OSPri pri, OSMesgQueue* cmdQ, OSMesg* cmdBuf, s32 cmdMsgC
         if (!__osPiAccessQueueEnabled) {
             __osPiCreateAccessQueue();
         }
-        osSetEventMesg(8, &D_8009E3D0, (OSMesg)0x22222222);
+        osSetEventMesg(OS_EVENT_PI, &D_8009E3D0, (OSMesg)0x22222222);
         oldPri = -1;
         myPri = osGetThreadPri(NULL);
         if (myPri < pri) {

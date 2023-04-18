@@ -169,12 +169,12 @@ s32 func_808F3178(EnIn* this, PlayState* play) {
     u8 tmp;
 
     this->unk260 = tmp = SubS_IsFloorAbove(play, &this->unk248, -6.0f);
-    if (this->unk260 != 0 && prevUnk260 == 0 && tmp) {
-        Actor_PlaySfx(&this->actor, NA_SE_PL_WALK_CONCRETE);
+    if ((this->unk260 != 0) && (prevUnk260 == 0) && tmp) {
+        Actor_PlaySfx(&this->actor, NA_SE_PL_WALK_GROUND + SURFACE_SFX_OFFSET_STONE);
     }
     this->unk261 = tmp = SubS_IsFloorAbove(play, &this->unk254, -6.0f);
-    if (this->unk261 != 0 && prevUnk261 == 0 && tmp) {
-        Actor_PlaySfx(&this->actor, NA_SE_PL_WALK_CONCRETE);
+    if ((this->unk261 != 0) && (prevUnk261 == 0) && tmp) {
+        Actor_PlaySfx(&this->actor, NA_SE_PL_WALK_GROUND + SURFACE_SFX_OFFSET_STONE);
     }
 
     return 0;
@@ -1468,7 +1468,7 @@ void EnIn_Update(Actor* thisx, PlayState* play) {
         this->unk4AC &= ~0x40;
     }
     this->actionFunc(this, play);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 0x4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
     func_808F3414(this, play);
     func_808F32A0(this, play);
 }

@@ -135,6 +135,7 @@ typedef struct {
     /* 0x18 */ Vec3f feetPos[2]; // Update by using `Actor_SetFeetPos` in PostLimbDrawOpa
 } ActorShape; // size = 0x30
 
+// Flags for bgCheckFlags
 #define BGCHECKFLAG_GROUND (1 << 0) // Standing on the ground
 #define BGCHECKFLAG_GROUND_TOUCH (1 << 1) // Has touched the ground (only active for 1 frame)
 #define BGCHECKFLAG_GROUND_LEAVE (1 << 2) // Has left the ground (only active for 1 frame)
@@ -148,6 +149,20 @@ typedef struct {
 #define BGCHECKFLAG_PLAYER_400 (1 << 10) // 
 #define BGCHECKFLAG_PLAYER_800 (1 << 11) // 
 #define BGCHECKFLAG_PLAYER_1000 (1 << 12) // 
+
+// Flags for Actor_UpdateBgCheckInfo
+#define UPDBGCHECKINFO_FLAG_1 (1 << 0) // check wall
+#define UPDBGCHECKINFO_FLAG_2 (1 << 1) // check ceiling
+#define UPDBGCHECKINFO_FLAG_4 (1 << 2) // check floor and water
+#define UPDBGCHECKINFO_FLAG_8 (1 << 3)
+#define UPDBGCHECKINFO_FLAG_10 (1 << 4)
+#define UPDBGCHECKINFO_FLAG_20 (1 << 5) // unused
+#define UPDBGCHECKINFO_FLAG_40 (1 << 6) // disable water ripples
+#define UPDBGCHECKINFO_FLAG_80 (1 << 7)
+#define UPDBGCHECKINFO_FLAG_100 (1 << 8)
+#define UPDBGCHECKINFO_FLAG_200 (1 << 9)
+#define UPDBGCHECKINFO_FLAG_400 (1 << 10) // check water
+#define UPDBGCHECKINFO_FLAG_800 (1 << 11)
 
 typedef struct Actor {
     /* 0x000 */ s16 id; // Actor ID

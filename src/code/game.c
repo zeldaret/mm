@@ -23,7 +23,7 @@ void Game_SetFramerateDivisor(GameState* gameState, s32 divisor) {
     Game_UpdateFramerateVariables(divisor);
 }
 
-void GameState_SetFBFilter(Gfx** gfx, u32 arg1) {
+void GameState_SetFBFilter(Gfx** gfx, void* zbuffer) {
     Gfx* dlist = *gfx;
 
     if ((R_FB_FILTER_TYPE > 0) && (R_FB_FILTER_TYPE < 5)) {
@@ -32,33 +32,29 @@ void GameState_SetFBFilter(Gfx** gfx, u32 arg1) {
         D_801F8010.color.g = R_FB_FILTER_PRIM_COLOR(1);
         D_801F8010.color.b = R_FB_FILTER_PRIM_COLOR(2);
         D_801F8010.color.a = R_FB_FILTER_A;
-        func_80140D10(&D_801F8010, &dlist, arg1);
-    } else {
-        if ((R_FB_FILTER_TYPE == 5) || (R_FB_FILTER_TYPE == 6)) {
-            D_801F8020.useRgba = (R_FB_FILTER_TYPE == 6);
-            D_801F8020.primColor.r = R_FB_FILTER_PRIM_COLOR(0);
-            D_801F8020.primColor.g = R_FB_FILTER_PRIM_COLOR(1);
-            D_801F8020.primColor.b = R_FB_FILTER_PRIM_COLOR(2);
-            D_801F8020.primColor.a = R_FB_FILTER_A;
-            D_801F8020.envColor.r = R_FB_FILTER_ENV_COLOR(0);
-            D_801F8020.envColor.g = R_FB_FILTER_ENV_COLOR(1);
-            D_801F8020.envColor.b = R_FB_FILTER_ENV_COLOR(2);
-            D_801F8020.envColor.a = R_FB_FILTER_A;
-            func_80142100(&D_801F8020, &dlist, arg1);
-        } else {
-            if (R_FB_FILTER_TYPE == 7) {
-                sMonoColors.unk_00 = 0;
-                sMonoColors.primColor.r = R_FB_FILTER_PRIM_COLOR(0);
-                sMonoColors.primColor.g = R_FB_FILTER_PRIM_COLOR(1);
-                sMonoColors.primColor.b = R_FB_FILTER_PRIM_COLOR(2);
-                sMonoColors.primColor.a = R_FB_FILTER_A;
-                sMonoColors.envColor.r = R_FB_FILTER_ENV_COLOR(0);
-                sMonoColors.envColor.g = R_FB_FILTER_ENV_COLOR(1);
-                sMonoColors.envColor.b = R_FB_FILTER_ENV_COLOR(2);
-                sMonoColors.envColor.a = R_FB_FILTER_A;
-                VisMono_Draw(&sMonoColors, &dlist);
-            }
-        }
+        func_80140D10(&D_801F8010, &dlist, zbuffer);
+    } else if ((R_FB_FILTER_TYPE == 5) || (R_FB_FILTER_TYPE == 6)) {
+        sVisZbuf.useRgba = (R_FB_FILTER_TYPE == 6);
+        sVisZbuf.primColor.r = R_FB_FILTER_PRIM_COLOR(0);
+        sVisZbuf.primColor.g = R_FB_FILTER_PRIM_COLOR(1);
+        sVisZbuf.primColor.b = R_FB_FILTER_PRIM_COLOR(2);
+        sVisZbuf.primColor.a = R_FB_FILTER_A;
+        sVisZbuf.envColor.r = R_FB_FILTER_ENV_COLOR(0);
+        sVisZbuf.envColor.g = R_FB_FILTER_ENV_COLOR(1);
+        sVisZbuf.envColor.b = R_FB_FILTER_ENV_COLOR(2);
+        sVisZbuf.envColor.a = R_FB_FILTER_A;
+        VisZbuf_Draw(&sVisZbuf, &dlist, zbuffer);
+    } else if (R_FB_FILTER_TYPE == 7) {
+        sMonoColors.unk_00 = 0;
+        sMonoColors.primColor.r = R_FB_FILTER_PRIM_COLOR(0);
+        sMonoColors.primColor.g = R_FB_FILTER_PRIM_COLOR(1);
+        sMonoColors.primColor.b = R_FB_FILTER_PRIM_COLOR(2);
+        sMonoColors.primColor.a = R_FB_FILTER_A;
+        sMonoColors.envColor.r = R_FB_FILTER_ENV_COLOR(0);
+        sMonoColors.envColor.g = R_FB_FILTER_ENV_COLOR(1);
+        sMonoColors.envColor.b = R_FB_FILTER_ENV_COLOR(2);
+        sMonoColors.envColor.a = R_FB_FILTER_A;
+        VisMono_Draw(&sMonoColors, &dlist);
     }
 
     *gfx = dlist;
@@ -77,7 +73,7 @@ void GameState_Draw(GameState* gameState, GraphicsContext* gfxCtx) {
     gSPDisplayList(OVERLAY_DISP++, nextDisplayList);
 
     if (R_FB_FILTER_TYPE && R_FB_FILTER_ENV_COLOR(3) == 0) {
-        GameState_SetFBFilter(&nextDisplayList, (u32)gfxCtx->zbuffer);
+        GameState_SetFBFilter(&nextDisplayList, gfxCtx->zbuffer);
     }
 
     if (R_ENABLE_ARENA_DBG < 0) {
@@ -216,7 +212,7 @@ void GameState_Init(GameState* gameState, GameStateFunc init, GraphicsContext* g
         init(gameState);
 
         func_80140CE0(&D_801F8010);
-        func_801420C0(&D_801F8020);
+        VisZbuf_Init(&sVisZbuf);
         VisMono_Init(&sMonoColors);
         func_80140898(&D_801F8048);
         func_801773A0(&D_801F7FF0);
@@ -238,7 +234,7 @@ void GameState_Destroy(GameState* gameState) {
     Rumble_Destroy();
     func_801773C4(&D_801F7FF0);
     func_80140D04(&D_801F8010);
-    func_801420F4(&D_801F8020);
+    VisZbuf_Destroy(&sVisZbuf);
     VisMono_Destroy(&sMonoColors);
     func_80140900(&D_801F8048);
     THA_Destroy(&gameState->heap);
