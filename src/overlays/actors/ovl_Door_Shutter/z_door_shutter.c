@@ -501,7 +501,7 @@ void func_808A1618(DoorShutter* this, PlayState* play) {
 void func_808A1684(DoorShutter* this, PlayState* play) {
     f32 phi_f0;
 
-    if ((DECR(this->unk_166) == 0) && (play->roomCtx.unk31 == 0) && func_808A1340(this, play)) {
+    if ((DECR(this->unk_166) == 0) && (play->roomCtx.status == 0) && func_808A1340(this, play)) {
         if (this->doorType == 5) {
             phi_f0 = 20.0f;
         } else {

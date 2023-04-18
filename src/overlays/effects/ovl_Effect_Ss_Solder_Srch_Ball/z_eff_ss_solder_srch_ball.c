@@ -15,7 +15,7 @@ u32 EffectSsSolderSrchBall_Init(PlayState* play, u32 index, EffectSs* this, void
 void EffectSsSolderSrchBall_Update(PlayState* play, u32 index, EffectSs* this);
 void EffectSsSolderSrchBall_Draw(PlayState* play, u32 index, EffectSs* this);
 
-const EffectSsInit Effect_Ss_Solder_Srch_Ball_InitVars = {
+EffectSsInit Effect_Ss_Solder_Srch_Ball_InitVars = {
     EFFECT_SS_SOLDER_SRCH_BALL,
     EffectSsSolderSrchBall_Init,
 };

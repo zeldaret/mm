@@ -13,6 +13,4 @@ typedef struct {
     /* 0x2C */ s32 life;
 } EffectSsDeadDsInitParams; // size = 0x30
 
-extern const EffectSsInit Effect_Ss_Dead_Ds_InitVars;
-
 #endif

@@ -1,3 +1,5 @@
+#include "prevent_bss_reordering.h"
+
 #include "global.h"
 
 #include "objects/gameplay_keep/gameplay_keep.h"
@@ -441,7 +443,7 @@ void func_80123140(PlayState* play, Player* player) {
     IREG(69) = bootRegs[16];
     MREG(95) = bootRegs[17];
 
-    if (play->roomCtx.curRoom.unk3 == 2) {
+    if (play->roomCtx.curRoom.behaviorType1 == ROOM_BEHAVIOR_TYPE1_2) {
         R_RUN_SPEED_LIMIT = 500;
     }
 
@@ -1457,7 +1459,7 @@ s32 Player_GetEnvironmentalHazard(PlayState* play) {
     EnvHazardTextTriggerEntry* triggerEntry;
     s32 envHazard;
 
-    if (play->roomCtx.curRoom.unk2 == 3) { // Room is hot
+    if (play->roomCtx.curRoom.behaviorType2 == ROOM_BEHAVIOR_TYPE2_HOT) {
         envHazard = PLAYER_ENV_HAZARD_HOTROOM - 1;
     } else if ((player->transformation != PLAYER_FORM_ZORA) && (player->underwaterTimer > 80)) {
         envHazard = PLAYER_ENV_HAZARD_UNDERWATER_FREE - 1;

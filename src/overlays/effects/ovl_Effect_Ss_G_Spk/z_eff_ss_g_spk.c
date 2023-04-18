@@ -26,7 +26,7 @@ void EffectSsGSpk_Update(PlayState* play, u32 index, EffectSs* this);
 void EffectSsGSpk_UpdateNoAccel(PlayState* play, u32 index, EffectSs* this);
 void EffectSsGSpk_Draw(PlayState* play, u32 index, EffectSs* this);
 
-const EffectSsInit Effect_Ss_G_Spk_InitVars = {
+EffectSsInit Effect_Ss_G_Spk_InitVars = {
     EFFECT_SS_G_SPK,
     EffectSsGSpk_Init,
 };

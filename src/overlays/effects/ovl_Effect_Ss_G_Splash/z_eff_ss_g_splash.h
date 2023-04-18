@@ -18,6 +18,4 @@ typedef struct {
     /* 0x14 */ Color_RGBA8 envColor;
 } EffectSsGSplashInitParams; // size = 0x18
 
-extern const EffectSsInit Effect_Ss_G_Splash_InitVars;
-
 #endif
