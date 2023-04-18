@@ -1012,22 +1012,22 @@ Gfx* gPlayerLeftHandBottleDLs[2 * PLAYER_FORM_MAX] = {
 
 /* DLists groups end */
 
-Gfx* D_801C0294[PLAYER_FORM_MAX] = {
+Gfx* sPlayerFirstPersonLeftForearmDLs[PLAYER_FORM_MAX] = {
     gLinkFierceDeityLeftForearmDL, gLinkGoronLeftForearmDL, gLinkZoraLeftForearmDL,
     gLinkDekuLeftForearmDL,        gLinkHumanLeftForearmDL,
 };
 
-Gfx* D_801C02A8[PLAYER_FORM_MAX] = {
+Gfx* sPlayerFirstPersonLeftHandDLs[PLAYER_FORM_MAX] = {
     gLinkFierceDeityLeftHandDL, gLinkGoronLeftHandOpenDL,   gLinkZoraLeftHandClosedDL,
     gLinkDekuLeftHandDL,        gLinkHumanLeftHandClosedDL,
 };
 
-Gfx* D_801C02BC[PLAYER_FORM_MAX] = {
+Gfx* sPlayerFirstPersonRightShoulderDLs[PLAYER_FORM_MAX] = {
     gLinkFierceDeityRightShoulderDL, gLinkGoronRightShoulderDL, gLinkZoraRightShoulderDL,
     gLinkDekuRightShoulderDL,        gLinkHumanRightShoulderDL,
 };
 
-Gfx* D_801C02D0[PLAYER_FORM_MAX] = {
+Gfx* sPlayerFirstPersonRightHandDLs[PLAYER_FORM_MAX] = {
     gLinkFierceDeityRightHandDL,
     //! @bug This is in the middle of a texture in the link_goron object. It has the same offset as a link_nuts dlist
     0x060038C0,
@@ -1036,7 +1036,7 @@ Gfx* D_801C02D0[PLAYER_FORM_MAX] = {
     object_link_child_DL_018490,
 };
 
-Gfx* D_801C02E4[PLAYER_FORM_MAX] = {
+Gfx* sPlayerFirstPersonRightHandHookshotDLs[PLAYER_FORM_MAX] = {
     gLinkFierceDeityRightHandDL,
     //! @bug This is in the middle of a texture in the link_goron object. It has the same offset as a link_nuts dlist
     0x060038C0,
@@ -1747,8 +1747,8 @@ f32 D_801C0938[PLAYER_FORM_MAX] = {
 /**
  * Adjusts player's legs to slopes and spawns flames when running on lava
  */
-void func_80124870(PlayState* play, Player* player, SkelAnime* skelAnime, Vec3f* pos, Vec3s* rot, s32 thighLimbIndex,
-                   s32 shinLimbIndex, s32 footLimbIndex) {
+void Player_AdjustSingleLeg(PlayState* play, Player* player, SkelAnime* skelAnime, Vec3f* pos, Vec3s* rot,
+                            s32 thighLimbIndex, s32 shinLimbIndex, s32 footLimbIndex) {
     CollisionPoly* poly;
     s32 bgId;
     f32 yIntersect;
@@ -2009,11 +2009,11 @@ void Player_DrawZoraShield(PlayState* play, Player* player) {
 
 void func_80125500(PlayState* play, Player* player, s32 limbIndex, Vec3f* pos, Vec3s* rot) {
     if (limbIndex == PLAYER_LIMB_LEFT_THIGH) {
-        func_80124870(play, player, &player->skelAnime, pos, rot, PLAYER_LIMB_LEFT_THIGH, PLAYER_LIMB_LEFT_SHIN,
-                      PLAYER_LIMB_LEFT_FOOT);
+        Player_AdjustSingleLeg(play, player, &player->skelAnime, pos, rot, PLAYER_LIMB_LEFT_THIGH,
+                               PLAYER_LIMB_LEFT_SHIN, PLAYER_LIMB_LEFT_FOOT);
     } else if (limbIndex == PLAYER_LIMB_RIGHT_THIGH) {
-        func_80124870(play, player, &player->skelAnime, pos, rot, PLAYER_LIMB_RIGHT_THIGH, PLAYER_LIMB_RIGHT_SHIN,
-                      PLAYER_LIMB_RIGHT_FOOT);
+        Player_AdjustSingleLeg(play, player, &player->skelAnime, pos, rot, PLAYER_LIMB_RIGHT_THIGH,
+                               PLAYER_LIMB_RIGHT_SHIN, PLAYER_LIMB_RIGHT_FOOT);
     }
 }
 
@@ -2318,16 +2318,16 @@ s32 Player_OverrideLimbDrawGameplayFirstPerson(PlayState* play, s32 limbIndex, G
         if (player->unk_AA5 != 3) {
             *dList = NULL;
         } else if (limbIndex == PLAYER_LIMB_LEFT_FOREARM) {
-            *dList = D_801C0294[player->transformation];
+            *dList = sPlayerFirstPersonLeftForearmDLs[player->transformation];
         } else if (limbIndex == PLAYER_LIMB_LEFT_HAND) {
-            *dList = D_801C02A8[player->transformation];
+            *dList = sPlayerFirstPersonLeftHandDLs[player->transformation];
         } else if (limbIndex == PLAYER_LIMB_RIGHT_SHOULDER) {
-            *dList = D_801C02BC[player->transformation];
+            *dList = sPlayerFirstPersonRightShoulderDLs[player->transformation];
         } else if (limbIndex == PLAYER_LIMB_RIGHT_HAND) {
             if (Player_IsHoldingHookshot(player)) {
-                *dList = D_801C02E4[player->transformation];
+                *dList = sPlayerFirstPersonRightHandHookshotDLs[player->transformation];
             } else {
-                *dList = D_801C02D0[player->transformation];
+                *dList = sPlayerFirstPersonRightHandDLs[player->transformation];
             }
         } else {
             *dList = NULL;

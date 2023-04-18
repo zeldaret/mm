@@ -1750,7 +1750,7 @@ asm/non_matchings/code/z_player_lib/Player_GetEnvironmentalHazard.s,Player_GetEn
 asm/non_matchings/code/z_player_lib/Player_UpdateBunnyEars.s,Player_UpdateBunnyEars,0x80124420,0x7E
 asm/non_matchings/code/z_player_lib/func_80124618.s,func_80124618,0x80124618,0x37
 asm/non_matchings/code/z_player_lib/Player_DrawImpl.s,Player_DrawImpl,0x801246F4,0x5F
-asm/non_matchings/code/z_player_lib/func_80124870.s,func_80124870,0x80124870,0x115
+asm/non_matchings/code/z_player_lib/Player_AdjustSingleLeg.s,Player_AdjustSingleLeg,0x80124870,0x115
 asm/non_matchings/code/z_player_lib/Player_DrawHookshotReticle.s,Player_DrawHookshotReticle,0x80124CC4,0x95
 asm/non_matchings/code/z_player_lib/func_80124F18.s,func_80124F18,0x80124F18,0x36
 asm/non_matchings/code/z_player_lib/func_80124FF0.s,func_80124FF0,0x80124FF0,0x75
