@@ -25,10 +25,8 @@ CPP_FLAGS = [
     "-D_Static_assert(x, y)=",
     "-D__attribute__(x)="
     "-D_MIPS_SZLONG=32",
-    "-D__attribute__(x)=",
     "-ffreestanding",
     "-DM2CTX",
-    "-DNON_MATCHING",
 
     "-std=gnu89",
 ]
