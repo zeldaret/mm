@@ -87,7 +87,7 @@ void DmNb_Update(Actor* thisx, PlayState* play) {
 
     this->actionFunc(this, play);
     SkelAnime_Update(&this->skelAnime);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
 }
 
 void DmNb_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {

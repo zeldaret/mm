@@ -8,7 +8,7 @@
 #include "objects/gameplay_dangeon_keep/gameplay_dangeon_keep.h"
 #include "objects/object_kibako/object_kibako.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_4000000)
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_CAN_PRESS_SWITCH)
 
 #define THIS ((ObjKibako*)thisx)
 
@@ -252,7 +252,8 @@ void func_80926B40(ObjKibako* this) {
 
 void func_80926B54(ObjKibako* this, PlayState* play) {
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 18.0f, 15.0f, 0.0f, 0x45);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 18.0f, 15.0f, 0.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_40);
     if (Object_IsLoaded(&play->objectCtx, this->bankIndex)) {
         this->actor.draw = ObjKibako_Draw;
         this->actor.objBankIndex = this->bankIndex;
@@ -293,7 +294,8 @@ void ObjKibako_Idle(ObjKibako* this, PlayState* play) {
     } else {
         Actor_MoveWithGravity(&this->actor);
         func_809262BC(this);
-        Actor_UpdateBgCheckInfo(play, &this->actor, 18.0f, 15.0f, 0.0f, 0x45);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 18.0f, 15.0f, 0.0f,
+                                UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_40);
 
         if (!(this->collider.base.ocFlags1 & OC1_TYPE_PLAYER) && (this->actor.xzDistToPlayer > 28.0f)) {
             this->collider.base.ocFlags1 |= OC1_TYPE_PLAYER;
@@ -347,9 +349,10 @@ void ObjKibako_Held(ObjKibako* this, PlayState* play) {
         } else {
             Actor_MoveWithGravity(&this->actor);
             ObjKibako_SetupThrown(this);
-            this->actor.flags &= ~ACTOR_FLAG_4000000;
+            this->actor.flags &= ~ACTOR_FLAG_CAN_PRESS_SWITCH;
         }
-        Actor_UpdateBgCheckInfo(play, &this->actor, 18.0f, 15.0f, 0.0f, 0x45);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 18.0f, 15.0f, 0.0f,
+                                UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_40);
     } else {
         pos.x = this->actor.world.pos.x;
         pos.y = this->actor.world.pos.y + 20.0f;
@@ -406,7 +409,8 @@ void ObjKibako_Thrown(ObjKibako* this, PlayState* play) {
             Math_StepToS(&D_8092738C, D_80927388, 0xA0);
             this->actor.shape.rot.x = (s16)(this->actor.shape.rot.x + D_80927384);
             this->actor.shape.rot.y = (s16)(this->actor.shape.rot.y + D_8092738C);
-            Actor_UpdateBgCheckInfo(play, &this->actor, 18.0f, 15.0f, 0.0f, 0x45);
+            Actor_UpdateBgCheckInfo(play, &this->actor, 18.0f, 15.0f, 0.0f,
+                                    UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_40);
             Collider_UpdateCylinder(&this->actor, &this->collider);
             CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
             CollisionCheck_SetAT(play, &play->colChkCtx, &this->collider.base);

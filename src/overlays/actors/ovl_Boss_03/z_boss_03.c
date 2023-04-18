@@ -1993,7 +1993,8 @@ void Boss03_Update(Actor* thisx, PlayState* play2) {
             Math_ApproachS(&this->actor.shape.rot.z, 0, 0xA, 0x800);
             this->actor.world.pos.y -= 100.0f;
             this->actor.prevPos.y -= 100.0f;
-            Actor_UpdateBgCheckInfo(play, &this->actor, 50.0f, 150.0f, 100.0f, 5);
+            Actor_UpdateBgCheckInfo(play, &this->actor, 50.0f, 150.0f, 100.0f,
+                                    UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
             this->actor.world.pos.y += 100.0f;
             this->actor.prevPos.y += 100.0f;
         }
@@ -2439,7 +2440,7 @@ void Boss03_DrawEffects(PlayState* play) {
             Matrix_Translate(eff->pos.x, eff->pos.y, eff->pos.z, MTXMODE_NEW);
 
             if (eff->type == GYORG_EFFECT_DROPLET) {
-                Matrix_RotateYF(Camera_GetInputDirYaw(GET_ACTIVE_CAM(play)) * (M_PI / 0x8000), MTXMODE_APPLY);
+                Matrix_RotateYF(BINANG_TO_RAD(Camera_GetInputDirYaw(GET_ACTIVE_CAM(play))), MTXMODE_APPLY);
             } else { // GYORG_EFFECT_SPLASH
                 Matrix_ReplaceRotation(&play->billboardMtxF);
             }

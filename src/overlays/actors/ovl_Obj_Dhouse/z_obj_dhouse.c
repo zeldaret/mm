@@ -441,7 +441,7 @@ void func_80B13940(ObjDhouse* this, PlayState* play2) {
 
     if (sp20) {
         func_80B12A88(&this->dyna.actor);
-        func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+        DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
         this->dyna.actor.draw = func_80B13C08;
         this->dyna.actor.flags |= ACTOR_FLAG_20;
         func_80B139D8(this);

@@ -463,7 +463,7 @@ void EnClearTag_Init(Actor* thisx, PlayState* play) {
             }
 
             // Initialize flash effect
-            Actor_UpdateBgCheckInfo(play, &this->actor, 50.0f, 30.0f, 100.0f, 4);
+            Actor_UpdateBgCheckInfo(play, &this->actor, 50.0f, 30.0f, 100.0f, UPDBGCHECKINFO_FLAG_4);
             pos = this->actor.world.pos;
             EnClearTag_CreateFlashEffect(this, &pos, sFlashMaxScale[thisx->params], this->actor.floorHeight);
 

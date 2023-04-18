@@ -1328,7 +1328,7 @@ void EnSGoro_Update(Actor* thisx, PlayState* play) {
     EnSGoro* this = (EnSGoro*)thisx;
 
     this->actionFunc(this, play);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, 5);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
     gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[this->loadedObjIndex].segment);
     SkelAnime_Update(&this->skelAnime);
     if (this->animInfoIndex != EN_S_GORO_ANIM_SLEEPY) {

@@ -100,7 +100,7 @@ void BgAstrBombwall_Init(Actor* thisx, PlayState* play) {
     BgAstrBombwall* this = THIS;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
     DynaPolyActor_LoadMesh(play, &this->dyna, &object_astr_obj_Colheader_002498);
     Collider_InitTris(play, &this->collider);
     if (Flags_GetSwitch(play, BGASTRBOMBWALL_GET_SWITCHFLAG(thisx))) {
@@ -181,7 +181,7 @@ void func_80C0A418(BgAstrBombwall* this, PlayState* play) {
 }
 
 void func_80C0A458(BgAstrBombwall* this, PlayState* play) {
-    func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
     this->dyna.actor.draw = NULL;
     func_80C0A120(this, play);
     Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_WALL_BROKEN);
