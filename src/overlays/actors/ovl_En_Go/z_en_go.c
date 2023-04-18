@@ -6,6 +6,7 @@
 
 #include "z_en_go.h"
 #include "z64quake.h"
+#include "overlays/actors/ovl_En_Bom/z_en_bom.h"
 #include "objects/object_oF1d_map/object_oF1d_map.h"
 #include "objects/object_hakugin_demo/object_hakugin_demo.h"
 #include "objects/object_taisou/object_taisou.h"
@@ -1249,7 +1250,8 @@ s32 func_80A13E80(EnGo* this, PlayState* play) {
                 func_80A12C48(this, play, 1);
                 Lib_Vec3f_TranslateAndRotateY(&this->actor.world.pos, this->actor.shape.rot.y, &D_80A166A4, &sp48);
                 gSaveContext.powderKegTimer = 2400;
-                Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOM, sp48.x, sp48.y, sp48.z, 1, 0, 0, 0);
+                Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOM, sp48.x, sp48.y, sp48.z, BOMB_CAT_POWDER_KEG, 0, 0,
+                            BOMB_TYPE_BODY);
                 func_80A134B0(this, play, 1);
                 this->unk_3C2 = 0;
                 this->unk_3C0++;

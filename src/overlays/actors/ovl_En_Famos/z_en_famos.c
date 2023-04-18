@@ -689,9 +689,9 @@ void EnFamos_DeathExplosion(EnFamos* this, PlayState* play) {
     this->actor.world.pos.x = randPlusMinusPoint5Scaled(5.0f) + this->targetDest.x;
     this->actor.world.pos.z = randPlusMinusPoint5Scaled(5.0f) + this->targetDest.z;
     if (this->stateTimer == 1) {
-        EnBom* explosion =
-            (EnBom*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOM, this->actor.world.pos.x,
-                                this->actor.world.pos.y + 40.0f, this->actor.world.pos.z, 0, 0, 0, BOMB_TYPE_BODY);
+        EnBom* explosion = (EnBom*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOM, this->actor.world.pos.x,
+                                               this->actor.world.pos.y + 40.0f, this->actor.world.pos.z, BOMB_CAT_BOMB,
+                                               0, 0, BOMB_TYPE_BODY);
         if (explosion != NULL) {
             explosion->timer = 0; // instant explosion
         }

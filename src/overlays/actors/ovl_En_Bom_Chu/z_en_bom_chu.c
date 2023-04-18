@@ -326,7 +326,7 @@ void EnBomChu_Explode(EnBomChu* this, PlayState* play) {
     s32 i;
 
     bomb = (EnBom*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOM, this->actor.world.pos.x, this->actor.world.pos.y,
-                               this->actor.world.pos.z, 0, 0, 0, 0);
+                               this->actor.world.pos.z, BOMB_CAT_BOMB, 0, 0, BOMB_TYPE_BODY);
 
     this->shouldTimerCountDown = true;
     this->isMoving = false;
