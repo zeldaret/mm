@@ -1559,7 +1559,7 @@ s32 func_800B7678(PlayState* play, Actor* actor, Vec3f* pos, s32 updBgCheckInfoF
             }
 
             actor->bgCheckFlags |= BGCHECKFLAG_GROUND;
-            BgCheck2_AttachToMesh(&play->colCtx, actor, (s32)actor->floorBgId);
+            DynaPolyActor_AttachCarriedActor(&play->colCtx, actor, actor->floorBgId);
         }
     } else {
         return func_800B761C(actor, distToFloor, updBgCheckInfoFlags);
@@ -1575,7 +1575,7 @@ void Actor_UpdateBgCheckInfo(PlayState* play, Actor* actor, f32 wallCheckHeight,
     Vec3f pos;
 
     if ((actor->floorBgId != BGCHECK_SCENE) && (actor->bgCheckFlags & BGCHECKFLAG_GROUND)) {
-        BgCheck2_UpdateActorAttachedToMesh(&play->colCtx, actor->floorBgId, actor);
+        DynaPolyActor_TransformCarriedActor(&play->colCtx, actor->floorBgId, actor);
     }
 
     if (updBgCheckInfoFlags & UPDBGCHECKINFO_FLAG_1) {
@@ -2426,7 +2426,7 @@ Actor* Actor_UpdateActor(UpdateActor_Params* params) {
                 }
 
                 actor->update(actor, play);
-                BgCheck_ResetFlagsIfLoadedActor(play, &play->colCtx.dyna, actor);
+                DynaPoly_UnsetAllInteractFlags(play, &play->colCtx.dyna, actor);
             }
 
             CollisionCheck_ResetDamage(&actor->colChkInfo);
@@ -2516,7 +2516,7 @@ void Actor_UpdateAll(PlayState* play, ActorContext* actorCtx) {
         }
 
         if (i == ACTORCAT_BG) {
-            DynaPoly_Setup(play, &play->colCtx.dyna);
+            DynaPoly_UpdateContext(play, &play->colCtx.dyna);
         }
     }
 
@@ -3395,7 +3395,7 @@ void func_800BB604(GameState* gameState, ActorContext* actorCtx, Player* player,
 
                 if ((actor != targetedActor) || (actor->flags & ACTOR_FLAG_80000)) {
                     temp_f0_2 = func_800B82EC(actor, player, D_801ED8DC);
-                    phi_s2_2 = (actor->flags & 1) != 0;
+                    phi_s2_2 = (actor->flags & ACTOR_FLAG_1) != 0;
                     if (phi_s2_2) {
                         phi_s2_2 = temp_f0_2 < D_801ED8C8;
                     }

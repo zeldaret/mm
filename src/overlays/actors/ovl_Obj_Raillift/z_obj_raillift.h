@@ -14,7 +14,7 @@ typedef void (*ObjRailliftActionFunc)(struct ObjRaillift*, PlayState*);
 #define OBJRAILLIFT_GET_STARTING_POINT(thisx) (((thisx)->params >> 7) & 0x1F)
 #define OBJRAILLIFT_GET_SPEED(thisx) ((thisx)->home.rot.z * 0.1f)
 #define OBJRAILLIFT_SHOULD_TELEPORT(thisx) (((thisx)->params >> 0xC) & 1)
-#define OBJRAILLIFT_SHOULD_REACT_TO_WEIGHT(thisx) (((thisx)->params >> 0xE) & 1)
+#define OBJRAILLIFT_REACT_TO_PLAYER_ON_TOP(thisx) (((thisx)->params >> 0xE) & 1)
 
 typedef enum {
     /* 0 */ OOT_WATER_TEMPLE_WATERFALL_PLATFORM,
@@ -29,8 +29,8 @@ typedef struct ObjRaillift {
     /* 0x168 */ s32 curPoint;
     /* 0x16C */ s32 direction; // +1 for forward, -1 for backward
     /* 0x170 */ Vec3s* points;
-    /* 0x174 */ s32 isWeightOn;
-    /* 0x178 */ s32 isWeightOnPrev;
+    /* 0x174 */ s32 isPlayerOnTop;
+    /* 0x178 */ s32 isPlayerOnTopPrev;
     /* 0x17C */ f32 cycleSpeed;
     /* 0x180 */ f32 maxHeight;
     /* 0x184 */ s16 cycle;

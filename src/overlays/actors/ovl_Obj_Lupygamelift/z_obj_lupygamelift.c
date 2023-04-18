@@ -55,7 +55,7 @@ void ObjLupygamelift_Init(Actor* thisx, PlayState* play) {
     this->timer = 0;
     Actor_UpdateBgCheckInfo(play, thisx, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
     ActorShape_Init(&thisx->shape, 0.0f, ActorShadow_DrawSquare, 0.0f);
-    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
     DynaPolyActor_LoadMesh(play, &this->dyna, &object_raillift_Colheader_0048D0);
     this->targetSpeedXZ = thisx->home.rot.z * 0.1f;
     if (this->targetSpeedXZ < 0.0f) {
