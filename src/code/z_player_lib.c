@@ -2804,7 +2804,7 @@ s32 func_801271B0(PlayState* play, Player* player, s32 arg2) {
 
             // Close flower / Open flower
             gSPDisplayList(POLY_OPA_DISP++,
-                           player->actor.velocity.y < -6.0f ? object_link_nuts_DL_008AA0 : object_link_nuts_DL_008C50);
+                           player->actor.velocity.y < -6.0f ? gLinkDekuClosedFlowerDL : gLinkDekuOpenFlowerDL);
 
             Matrix_MultZero(&player->bodyPartsPos[D_801C0B1C[arg2]]);
             Matrix_Pop();
