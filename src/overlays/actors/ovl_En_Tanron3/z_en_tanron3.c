@@ -404,7 +404,7 @@ void EnTanron3_Update(Actor* thisx, PlayState* play) {
         }
 
         this->actionFunc(this, play);
-        Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 10.0f, 20.0f, 5);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 10.0f, 20.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
 
         // The fish has either just entered or just exited the water, so create a splash effect
         if (((this->actor.prevPos.y < this->waterSurfaceYPos) && (this->waterSurfaceYPos <= this->actor.world.pos.y)) ||

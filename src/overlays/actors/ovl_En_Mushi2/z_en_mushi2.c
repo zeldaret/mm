@@ -439,7 +439,8 @@ void func_80A69388(EnMushi2* this) {
 }
 
 void func_80A69424(EnMushi2* this, PlayState* play) {
-    Actor_UpdateBgCheckInfo(play, &this->actor, 8.0f, 9.0f, 0.0f, 0x45);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 8.0f, 9.0f, 0.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_40);
 }
 
 s32 func_80A69468(EnMushi2* this, PlayState* play) {

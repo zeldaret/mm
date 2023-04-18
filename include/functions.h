@@ -122,11 +122,6 @@ s8 PadUtils_GetRelYImpl(Input* input);
 s8 PadUtils_GetRelX(Input* input);
 s8 PadUtils_GetRelY(Input* input);
 void PadUtils_UpdateRelXY(Input* input);
-void StackCheck_Init(StackEntry* entry, void* stackTop, void* stackBottom, u32 initValue, s32 minSpace, const char* name);
-void StackCheck_Cleanup(StackEntry* entry);
-StackStatus StackCheck_GetState(StackEntry* entry);
-u32 StackCheck_CheckAll(void);
-u32 StackCheck_Check(StackEntry* entry);
 
 void MtxConv_F2L(Mtx* mtx, MtxF* mf);
 void MtxConv_L2F(MtxF* mtx, Mtx* mf);
@@ -667,7 +662,7 @@ s32 Actor_IsFacingAndNearPlayer(Actor* actor, f32 range, s16 maxAngleDiff);
 s32 Actor_ActorAIsFacingAndNearActorB(Actor* actorA, Actor* actorB, f32 range, s16 maxAngleDiff);
 
 void Actor_GetSlopeDirection(CollisionPoly* floorPoly, Vec3f* slopeNormal, s16* downwardSlopeYaw);
-void Actor_UpdateBgCheckInfo(PlayState* play, Actor* actor, f32 wallCheckHeight, f32 wallCheckRadius, f32 ceilingCheckHeight, u32 flags);
+void Actor_UpdateBgCheckInfo(PlayState* play, Actor* actor, f32 wallCheckHeight, f32 wallCheckRadius, f32 ceilingCheckHeight, u32 updBgCheckInfoFlags);
 Hilite* Hilite_DrawOpa(Vec3f* object, Vec3f* eye, Vec3f* lightDir, GraphicsContext* gfxCtx);
 void func_800B8050(Actor* actor, PlayState* play, s32 flag);
 void func_800B8118(Actor* actor, PlayState* play, s32 flag);
@@ -2133,9 +2128,10 @@ void VisMono_Destroy(VisMono* this);
 // void VisMono_DesaturateDList(Gfx* gfx);
 void VisMono_Draw(VisMono* this, Gfx** gfxp);
 // void VisMono_DrawOld(VisMono* this);
-void func_801420C0(void* arg0);
-void func_801420F4(void* arg0);
-void func_80142100(void* arg0, Gfx** gfx, u32 arg2);
+
+void VisZbuf_Init(VisZbuf* this);
+void VisZbuf_Destroy(VisZbuf* this);
+void VisZbuf_Draw(VisZbuf* this, Gfx** gfxP, void* zbuffer);
 
 // void func_80147520(void);
 void func_80147564(PlayState* play);
@@ -2374,7 +2370,7 @@ void AudioMgr_Init(AudioMgr* audioMgr, void* stack, OSPri pri, OSId id, SchedCon
 
 void Game_UpdateFramerateVariables(s32 divisor);
 void Game_SetFramerateDivisor(GameState* gameState, s32 divisor);
-void GameState_SetFBFilter(Gfx** gfx, u32 arg1);
+void GameState_SetFBFilter(Gfx** gfx, void* zbuffer);
 void Game_Nop80173534(GameState* gameState);
 void GameState_Draw(GameState* gameState, GraphicsContext* gfxCtx);
 void GameState_SetFrameBuffer(GraphicsContext* gfxCtx);

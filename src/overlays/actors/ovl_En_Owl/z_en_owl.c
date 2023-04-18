@@ -894,7 +894,7 @@ void EnOwl_Update(Actor* thisx, PlayState* play) {
 
     this->actionFunc(this, play);
     func_8095C568(this);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 10.0f, 10.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 10.0f, 10.0f, UPDBGCHECKINFO_FLAG_4);
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
     if (this->actor.update != NULL) {
@@ -1077,7 +1077,7 @@ void func_8095CCF4(Actor* thisx, PlayState* play) {
     }
 
     this->actor.world.pos.y -= 1.0f;
-    Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 10.0f, 10.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 10.0f, 10.0f, UPDBGCHECKINFO_FLAG_4);
     if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         this->unk_3DA = (this->unk_3DA >> 3) * 7;
         if (this->unk_3DC > 0) {

@@ -507,7 +507,9 @@ void EnItem00_Update(Actor* thisx, PlayState* play) {
 
     if (this->actor.gravity != 0.0f) {
         Actor_MoveWithGravity(&this->actor);
-        Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 15.0f, 15.0f, 0x1D);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 15.0f, 15.0f,
+                                UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                    UPDBGCHECKINFO_FLAG_10);
 
         if (this->actor.floorHeight <= BGCHECK_Y_MIN) {
             Actor_Kill(&this->actor);
