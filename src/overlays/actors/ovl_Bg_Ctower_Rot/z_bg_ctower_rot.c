@@ -46,7 +46,7 @@ void BgCtowerRot_Init(Actor* thisx, PlayState* play) {
     Vec3f offset;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
     if (this->dyna.actor.params == BGCTOWERROT_CORRIDOR) {
         DynaPolyActor_LoadMesh(play, &this->dyna, &gClockTowerCorridorCol);
         this->actionFunc = BgCtowerRot_CorridorRotate;

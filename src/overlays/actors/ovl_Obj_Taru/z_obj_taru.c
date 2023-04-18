@@ -279,7 +279,7 @@ void func_80B9C07C(ObjTaru* this, PlayState* play) {
             this->actionFunc = func_80B9C1A0;
         } else {
             this->dyna.actor.flags |= ACTOR_FLAG_10;
-            func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+            DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
             this->dyna.actor.draw = NULL;
             this->actionFunc = func_80B9C174;
         }

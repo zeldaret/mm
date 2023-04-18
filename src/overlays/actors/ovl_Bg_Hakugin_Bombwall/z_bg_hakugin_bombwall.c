@@ -369,7 +369,7 @@ s32 func_80ABCC00(BgHakuginBombwall* this, PlayState* play) {
                     return true;
                 }
             }
-        } else if (DynaPolyActor_IsInRidingMovingState(&this->dyna)) {
+        } else if (DynaPolyActor_IsPlayerOnTop(&this->dyna)) {
             SoundSource_PlaySfxAtFixedWorldPos(play, &this->dyna.actor.world.pos, 50, NA_SE_EV_WALL_BROKEN);
             return true;
         }
@@ -401,7 +401,7 @@ void func_80ABCD98(BgHakuginBombwall* this, PlayState* play) {
         this->dyna.actor.draw = NULL;
         this->unk_1AC = 20;
         Flags_SetSwitch(play, BGHAKUGIN_BOMBWALL_SWITCHFLAG(&this->dyna.actor));
-        func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+        DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
         this->actionFunc = func_80ABCE60;
     } else {
         CutsceneManager_Queue(this->dyna.actor.csId);

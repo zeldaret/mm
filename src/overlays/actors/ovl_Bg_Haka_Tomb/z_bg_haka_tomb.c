@@ -45,7 +45,7 @@ void BgHakaTomb_Init(Actor* thisx, PlayState* play) {
     BgHakaTomb* this = THIS;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
     DynaPolyActor_LoadMesh(play, &this->dyna, &object_haka_obj_Colheader_000EE8);
     SubS_FillCutscenesList(&this->dyna.actor, this->csIdList, ARRAY_COUNT(this->csIdList));
     func_80BD6624(this);

@@ -213,7 +213,7 @@ void EnBox_Init(Actor* thisx, PlayState* play) {
         this->dyna.actor.world.rot.x = 0x7FFF;
         this->collectableFlag = 0;
     } else {
-        func_800C636C(play, &play->colCtx.dyna, this->dyna.bgId);
+        DynaPoly_DisableCeilingCollision(play, &play->colCtx.dyna, this->dyna.bgId);
         this->collectableFlag = (this->dyna.actor.world.rot.x & 0x7F);
         this->dyna.actor.world.rot.x = 0;
     }
@@ -228,7 +228,7 @@ void EnBox_Init(Actor* thisx, PlayState* play) {
         animFrame = animFrameEnd;
     } else if (((this->type == ENBOX_TYPE_BIG_SWITCH_FLAG_FALL) || (this->type == ENBOX_TYPE_SMALL_SWITCH_FLAG_FALL)) &&
                !Flags_GetSwitch(play, this->switchFlag)) {
-        func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+        DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
         if (Rand_ZeroOne() < 0.5f) {
             this->movementFlags |= ENBOX_MOVE_FALL_ANGLE_SIDE;
         }
@@ -240,7 +240,7 @@ void EnBox_Init(Actor* thisx, PlayState* play) {
     } else if (((this->type == ENBOX_TYPE_BIG_ROOM_CLEAR) || (this->type == ENBOX_TYPE_SMALL_ROOM_CLEAR)) &&
                !Flags_GetClear(play, this->dyna.actor.room)) {
         EnBox_SetupAction(this, EnBox_AppearOnRoomClear);
-        func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+        DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
         if (this->movementFlags & ENBOX_MOVE_0x80) {
             this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y + 50.0f;
         } else {
@@ -254,7 +254,7 @@ void EnBox_Init(Actor* thisx, PlayState* play) {
     } else if (((this->type == ENBOX_TYPE_BIG_SWITCH_FLAG) || (this->type == ENBOX_TYPE_SMALL_SWITCH_FLAG)) &&
                !Flags_GetSwitch(play, this->switchFlag)) {
         EnBox_SetupAction(this, EnBox_AppearSwitchFlag);
-        func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+        DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
         if (this->movementFlags & ENBOX_MOVE_0x80) {
             this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y + 50.0f;
         } else {
@@ -377,7 +377,7 @@ void EnBox_FallOnSwitchFlag(EnBox* this, PlayState* play) {
     Actor_SetClosestSecretDistance(&this->dyna.actor, play);
     if (this->unk_1A0 >= 0) {
         EnBox_SetupAction(this, EnBox_Fall);
-        func_800C6314(play, &play->colCtx.dyna, this->dyna.bgId);
+        DynaPoly_EnableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
     } else if (this->unk_1A0 >= -11) {
         this->unk_1A0++;
     } else if (Flags_GetSwitch(play, this->switchFlag)) {
@@ -422,7 +422,7 @@ void func_80868AFC(EnBox* this, PlayState* play) {
 }
 
 void func_80868B74(EnBox* this, PlayState* play) {
-    func_800C6314(play, &play->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_EnableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
     if (this->unk_1A0 < 0) {
         this->unk_1A0++;
     } else if (this->unk_1A0 < 40) {

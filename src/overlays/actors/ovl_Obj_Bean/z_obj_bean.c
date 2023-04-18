@@ -365,7 +365,7 @@ void ObjBean_Init(Actor* thisx, PlayState* play) {
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     this->unk_1FE = 0;
     this->unk_1B8 = 0.1f;
-    DynaPolyActor_Init(&this->dyna, 3);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS | DYNA_TRANSFORM_ROT_Y);
     Collider_InitCylinder(play, &this->collider);
 
     if ((sp2C == ENOBJBEAN_GET_C000_1) || (sp2C == ENOBJBEAN_GET_C000_2)) {
@@ -414,7 +414,7 @@ void ObjBean_Init(Actor* thisx, PlayState* play) {
         if (OBJBEAN_GET_80(&this->dyna.actor) || Flags_GetSwitch(play, OBJBEAN_GET_7F(&this->dyna.actor, 1))) {
             func_80938804(this);
         } else {
-            func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+            DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
             func_80938704(this);
         }
     }
@@ -765,7 +765,7 @@ void func_80938804(ObjBean* this) {
 }
 
 void func_80938834(ObjBean* this, PlayState* play) {
-    if (DynaPolyActor_IsInRidingMovingState(&this->dyna)) {
+    if (DynaPolyActor_IsPlayerOnTop(&this->dyna)) {
         func_80938874(this);
     }
     func_80936F24(this);
@@ -784,7 +784,7 @@ void func_809388A8(ObjBean* this, PlayState* play) {
         func_80937268(this, play);
         func_809372A8(this);
         func_8093892C(this);
-    } else if (DynaPolyActor_IsInRidingMovingState(&this->dyna)) {
+    } else if (DynaPolyActor_IsPlayerOnTop(&this->dyna)) {
         func_800B9010(&this->dyna.actor, NA_SE_PL_PLANT_MOVE - SFX_FLAG);
     }
     func_80936F24(this);
@@ -797,7 +797,7 @@ void func_8093892C(ObjBean* this) {
 }
 
 void func_80938958(ObjBean* this, PlayState* play) {
-    if (!DynaPolyActor_IsInRidingRotatingState(&this->dyna)) {
+    if (!DynaPolyActor_IsPlayerAbove(&this->dyna)) {
         func_80938804(this);
     }
     func_80936F24(this);
@@ -810,7 +810,7 @@ void func_80938998(ObjBean* this) {
 }
 
 void func_809389BC(ObjBean* this, PlayState* play) {
-    if (!DynaPolyActor_IsInRidingMovingState(&this->dyna)) {
+    if (!DynaPolyActor_IsPlayerOnTop(&this->dyna)) {
         func_80937268(this, play);
         func_809372A8(this);
         func_80937238(this);
@@ -851,9 +851,9 @@ void func_80938AD8(ObjBean* this, PlayState* play) {
     }
 
     if (sp30 != 0) {
-        func_800C6314(play, &play->colCtx.dyna, this->dyna.bgId);
+        DynaPoly_EnableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
     } else {
-        func_800C6314(play, &play->colCtx.dyna, this->dyna.bgId);
+        DynaPoly_EnableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
     }
 
     if (this->dyna.actor.xzDistToPlayer < 74.0f) {
@@ -925,7 +925,7 @@ void ObjBean_Update(Actor* thisx, PlayState* play) {
         this->dyna.actor.shape.shadowScale = this->dyna.actor.scale.x * 88.0f;
         if (func_80937468(this, play)) {
             func_809375F4(this, play);
-            func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+            DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
             func_80938998(this);
         }
     } else {

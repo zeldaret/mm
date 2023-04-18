@@ -202,7 +202,7 @@ void BgHakaBombwall_PlayCutscene(BgHakaBombwall* this, PlayState* play) {
         this->dyna.actor.draw = NULL;
         Flags_SetSwitch(play, BGHAKABOMBWALL_GET_7F(&this->dyna.actor));
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->dyna.actor.world.pos, 0x3C, NA_SE_EV_WALL_BROKEN);
-        func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+        DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
         BgHakaBombwall_SetupEndCutscene(this);
     } else {
         CutsceneManager_Queue(this->dyna.actor.csId);

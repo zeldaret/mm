@@ -187,7 +187,7 @@ void BgKin2Bombwall_PlayCutscene(BgKin2Bombwall* this, PlayState* play) {
         CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
         Flags_SetSwitch(play, BG_KIN2_BOMBWALL_SWITCH_FLAG(&this->dyna.actor));
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->dyna.actor.world.pos, 60, NA_SE_EV_WALL_BROKEN);
-        func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+        DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
         this->dyna.actor.draw = NULL;
         BgKin2Bombwall_SpawnEffects(this, play);
         BgKin2Bombwall_SetupEndCutscene(this);

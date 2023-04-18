@@ -75,7 +75,7 @@ void BgLadder_Init(Actor* thisx, PlayState* play) {
     } else {
         // Otherwise, the ladder doesn't draw; wait for the flag to be set
         this->alpha = 5;
-        func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+        DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
         this->dyna.actor.draw = NULL;
         this->action = BgLadder_Wait;
     }
@@ -113,7 +113,7 @@ void BgLadder_FadeIn(BgLadder* this, PlayState* play) {
     if (this->alpha >= 255) {
         this->alpha = 255;
         CutsceneManager_Stop(this->dyna.actor.csId);
-        func_800C6314(play, &play->colCtx.dyna, this->dyna.bgId);
+        DynaPoly_EnableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
         this->dyna.actor.flags &= ~ACTOR_FLAG_10; // always update = off
         this->action = BgLadder_DoNothing;
     }

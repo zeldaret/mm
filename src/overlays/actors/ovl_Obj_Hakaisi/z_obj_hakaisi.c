@@ -106,7 +106,7 @@ void ObjHakaisi_Init(Actor* thisx, PlayState* play) {
         return;
     }
 
-    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
     CollisionHeader_GetVirtual(&object_hakaisi_Colheader_002FC4, &sp7C);
 
     this->dyna.bgId = DynaPoly_SetBgActor(play, &play->colCtx.dyna, &this->dyna.actor, sp7C);
@@ -201,7 +201,7 @@ void func_80B1456C(ObjHakaisi* this, PlayState* play) {
     }
     if (this->dyna.actor.colChkInfo.health < 30) {
         func_80B145F4(this);
-        func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+        DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
     }
 }
 

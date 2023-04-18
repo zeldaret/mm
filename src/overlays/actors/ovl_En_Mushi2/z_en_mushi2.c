@@ -1161,7 +1161,7 @@ void EnMushi2_Update(Actor* thisx, PlayState* play) {
     if ((temp != BGCHECK_SCENE) &&
         ((this->actionFunc == func_80A6A5C0) || (this->actionFunc == func_80A6A824) ||
          (this->actionFunc == func_80A6A9E4) || (this->actionFunc == func_80A6B0D8)) &&
-        BgCheck2_UpdateActorAttachedToMesh(&play->colCtx, temp, &this->actor)) {
+        DynaPolyActor_TransformCarriedActor(&play->colCtx, temp, &this->actor)) {
         func_80A68F24(this);
     }
 

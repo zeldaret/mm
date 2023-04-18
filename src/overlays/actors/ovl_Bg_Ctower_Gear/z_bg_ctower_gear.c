@@ -127,12 +127,12 @@ void BgCtowerGear_Init(Actor* thisx, PlayState* play) {
         Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     }
     if (type == BGCTOWERGEAR_WATER_WHEEL) {
-        DynaPolyActor_Init(&this->dyna, 3);
+        DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS | DYNA_TRANSFORM_ROT_Y);
         DynaPolyActor_LoadMesh(play, &this->dyna, &gClockTowerWaterWheelCol);
     } else if (type == BGCTOWERGEAR_ORGAN) {
         DynaPolyActor_Init(&this->dyna, 0);
         DynaPolyActor_LoadMesh(play, &this->dyna, &gClockTowerOrganCol);
-        func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+        DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
     }
 }
 
@@ -167,14 +167,19 @@ void BgCtowerGear_UpdateOrgan(Actor* thisx, PlayState* play) {
         switch (play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_104)]->id) {
             case 1:
                 this->dyna.actor.draw = NULL;
-                func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+                DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
                 break;
+
             case 2:
                 this->dyna.actor.draw = BgCtowerGear_DrawOrgan;
-                func_800C6314(play, &play->colCtx.dyna, this->dyna.bgId);
+                DynaPoly_EnableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
                 break;
+
             case 3:
                 Actor_Kill(&this->dyna.actor);
+                break;
+
+            default:
                 break;
         }
     }

@@ -314,10 +314,16 @@ typedef struct {
     /* 0x60 */ f32 maxY;
 } BgActor; // size = 0x64
 
+#define BGACTOR_IN_USE (1 << 0) // The bgActor entry is in use
+#define BGACTOR_1 (1 << 1)
+#define BGACTOR_COLLISION_DISABLED (1 << 2) // The collision of the bgActor is disabled
+#define BGACTOR_CEILING_COLLISION_DISABLED (1 << 3) // The ceiling collision of the bgActor is ignored
+#define BGACTOR_FLOOR_COLLISION_DISABLED (1 << 5) // The floor collision of the bgActor is ignored
+
 typedef struct {
     /* 0x0000 */ u8 bitFlag;
     /* 0x0004 */ BgActor bgActors[BG_ACTOR_MAX];
-    /* 0x138C */ u16 bgActorFlags[BG_ACTOR_MAX]; // bit 0 - Is mesh active
+    /* 0x138C */ u16 bgActorFlags[BG_ACTOR_MAX];
     /* 0x13F0 */ CollisionPoly* polyList;
     /* 0x13F4 */ Vec3s* vtxList;
     /* 0x13F8 */ DynaWaterBoxList waterBoxList;
@@ -521,18 +527,18 @@ void DynaPoly_Init(struct PlayState* play, DynaCollisionContext* dyna);
 void DynaPoly_Alloc(struct PlayState* play, DynaCollisionContext* dyna);
 s32 DynaPoly_SetBgActor(struct PlayState* play, DynaCollisionContext* dyna, Actor* actor, CollisionHeader* colHeader);
 DynaPolyActor* DynaPoly_GetActor(CollisionContext* colCtx, s32 bgId);
-void func_800C62BC(struct PlayState* play, DynaCollisionContext* dyna, s32 bgId);
-void func_800C6314(struct PlayState* play, DynaCollisionContext* dyna, s32 bgId);
-void func_800C636C(struct PlayState* play, DynaCollisionContext* dyna, s32 bgId);
-void func_800C63C4(struct PlayState* play, DynaCollisionContext* dyna, s32 bgId);
-void func_800C641C(struct PlayState* play, DynaCollisionContext* dyna, s32 bgId);
-void func_800C6474(struct PlayState* play, DynaCollisionContext* dyna, s32 bgId);
-void func_800C6554(struct PlayState* play, DynaCollisionContext* dyna);
+void DynaPoly_DisableCollision(struct PlayState* play, DynaCollisionContext* dyna, s32 bgId);
+void DynaPoly_EnableCollision(struct PlayState* play, DynaCollisionContext* dyna, s32 bgId);
+void DynaPoly_DisableCeilingCollision(struct PlayState* play, DynaCollisionContext* dyna, s32 bgId);
+void DynaPoly_EnableCeilingCollision(struct PlayState* play, DynaCollisionContext* dyna, s32 bgId);
+void DynaPoly_DisableFloorCollision(struct PlayState* play, DynaCollisionContext* dyna, s32 bgId);
+void DynaPoly_EnableFloorCollision(struct PlayState* play, DynaCollisionContext* dyna, s32 bgId);
+void DynaPoly_InvalidateLookup(struct PlayState* play, DynaCollisionContext* dyna);
 void DynaPoly_DeleteBgActor(struct PlayState* play, DynaCollisionContext* dyna, s32 bgId);
 void BgCheck_CalcWaterboxDimensions(Vec3f* minPos, Vec3f* maxXPos, Vec3f* maxZPos, Vec3s* minPosOut, s16* xLength, s16* zLength);
-void DynaPoly_ExpandSRT(struct PlayState* play, DynaCollisionContext* dyna, s32 bgId, s32* vtxStartIndex, s32* polyStartIndex, s32* waterBoxStartIndex);
-void BgCheck_ResetFlagsIfLoadedActor(struct PlayState* play, DynaCollisionContext* dyna, Actor* actor);
-void DynaPoly_Setup(struct PlayState* play, DynaCollisionContext* dyna);
+void DynaPoly_AddBgActorToLookup(struct PlayState* play, DynaCollisionContext* dyna, s32 bgId, s32* vtxStartIndex, s32* polyStartIndex, s32* waterBoxStartIndex);
+void DynaPoly_UnsetAllInteractFlags(struct PlayState* play, DynaCollisionContext* dyna, Actor* actor);
+void DynaPoly_UpdateContext(struct PlayState* play, DynaCollisionContext* dyna);
 void func_800C756C(DynaCollisionContext* dyna, s32* numPolygons, s32* numVertices, s32* numWaterBoxes);
 void DynaPoly_UpdateBgActorTransforms(struct PlayState* play, DynaCollisionContext* dyna);
 void CollisionHeader_SegmentedToVirtual(CollisionHeader* colHeader);
