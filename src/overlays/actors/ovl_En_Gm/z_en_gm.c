@@ -1715,7 +1715,7 @@ void EnGm_Update(Actor* thisx, PlayState* play) {
             func_8013C964(&this->actor, play, this->unk_3B4, 30.0f, PLAYER_IA_NONE, this->unk_3A4 & 7);
             if ((this->unk_258 != 3) && (this->unk_258 != 5) && (this->unk_258 != 8)) {
                 Actor_MoveWithGravity(&this->actor);
-                Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, 4);
+                Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
             }
             func_8094E1DC(this, play);
         }

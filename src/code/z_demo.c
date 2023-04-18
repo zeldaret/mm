@@ -1,3 +1,4 @@
+#include "prevent_bss_reordering.h"
 #include "global.h"
 #include "z64quake.h"
 #include "z64rumble.h"
@@ -584,7 +585,7 @@ void CutsceneCmd_DestinationDefault(PlayState* play, CutsceneContext* csCtx, CsC
     // `hudVisibilityForceButtonAlphasByStatus` has a secondary purpose, which is to signal to the title
     // screen actor that it should display immediately. This occurs when a title screen cutscene that
     // is not the main clock town scene is skipped.
-    if ((gSaveContext.gameMode != 0) && (csCtx->curFrame != cmd->startFrame)) {
+    if ((gSaveContext.gameMode != GAMEMODE_NORMAL) && (csCtx->curFrame != cmd->startFrame)) {
         gSaveContext.hudVisibilityForceButtonAlphasByStatus = true;
     }
 
@@ -595,7 +596,7 @@ void CutsceneCmd_DestinationDefault(PlayState* play, CutsceneContext* csCtx, CsC
         gSaveContext.nextCutsceneIndex = 0;
         play->transitionTrigger = TRANS_TRIGGER_START;
 
-        if (gSaveContext.gameMode != 1) {
+        if (gSaveContext.gameMode != GAMEMODE_TITLE_SCREEN) {
             Scene_SetExitFade(play);
         } else {
             gOpeningEntranceIndex++;
@@ -1476,7 +1477,7 @@ void CutsceneHandler_StopScript(PlayState* play, CutsceneContext* csCtx) {
         }
 
         gSaveContext.save.cutsceneIndex = 0;
-        gSaveContext.gameMode = 0;
+        gSaveContext.gameMode = GAMEMODE_NORMAL;
 
         CutsceneManager_Stop(CS_ID_GLOBAL_END);
         Audio_SetCutsceneFlag(false);
@@ -1533,7 +1534,8 @@ void Cutscene_HandleEntranceTriggers(PlayState* play) {
     SceneTableEntry* scene;
     s32 scriptIndex;
 
-    if (((gSaveContext.gameMode == 0) || (gSaveContext.gameMode == 1)) && (gSaveContext.respawnFlag <= 0)) {
+    if (((gSaveContext.gameMode == GAMEMODE_NORMAL) || (gSaveContext.gameMode == GAMEMODE_TITLE_SCREEN)) &&
+        (gSaveContext.respawnFlag <= 0)) {
         // Try to find an actor cutscene that's triggered by the current spawn
         csId = CutsceneManager_FindEntranceCsId();
         if (csId != CS_ID_NONE) {

@@ -130,7 +130,8 @@ s32 EnRuppecrow_UpdateCollision(EnRuppecrow* this, PlayState* play) {
     this->collider.elements->dim.worldSphere.center.z = this->actor.world.pos.z;
 
     CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 12.0f, 25.0f, 50.0f, 0x07);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 12.0f, 25.0f, 50.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_2 | UPDBGCHECKINFO_FLAG_4);
 
     return true;
 }
@@ -162,7 +163,7 @@ s32 EnRuppecrow_ReachedPointClockwise(EnRuppecrow* this, Path* path, s32 pointIn
         }
     }
 
-    func_8017B7F8(&point, RADF_TO_BINANG(func_80086B30(diffX, diffZ)), &px, &pz, &d);
+    func_8017B7F8(&point, RAD_TO_BINANG(func_80086B30(diffX, diffZ)), &px, &pz, &d);
     if (((this->actor.world.pos.x * px) + (pz * this->actor.world.pos.z) + d) > 0.0f) {
         reached = true;
     }
@@ -197,7 +198,7 @@ s32 EnRuppecrow_ReachedPointCounterClockwise(EnRuppecrow* this, Path* path, s32 
         }
     }
 
-    func_8017B7F8(&point, RADF_TO_BINANG(func_80086B30(diffX, diffZ)), &px, &pz, &d);
+    func_8017B7F8(&point, RAD_TO_BINANG(func_80086B30(diffX, diffZ)), &px, &pz, &d);
     if (((this->actor.world.pos.x * px) + (pz * this->actor.world.pos.z) + d) > 0.0f) {
         reached = true;
     }

@@ -217,7 +217,7 @@ void func_80BB178C(EnGeg* this, PlayState* play) {
 
     if (collider != NULL) {
         CollisionCheck_SetOC(play, &play->colChkCtx, collider);
-        Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, 5);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
     }
 }
 

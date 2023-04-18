@@ -431,7 +431,7 @@
             0x80140CE0 : "code_80140CE0",
             0x80140E80 : "code_80140E80",
             0x801418B0 : "z_vismono",
-            0x801420C0 : "code_801420C0",
+            0x801420C0 : "z_viszbuf",
             0x80142440 : "z_vr_box",
             0x801435A0 : "z_vr_box_draw",
             0x80143A10 : "z_sram_NES",

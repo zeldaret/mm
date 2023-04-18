@@ -235,7 +235,7 @@ void EnMaYts_Init(Actor* thisx, PlayState* play) {
         this->collider.dim.radius = 40;
     }
 
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 0x4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
     Actor_SetScale(&this->actor, 0.01f);
 
     this->interactInfo.talkState = NPC_TALK_STATE_IDLE;

@@ -1071,7 +1071,7 @@ void EnRailSkb_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
 
     func_80B72190(this, play);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 15.0f, 30.0f, 60.0f, 5);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 15.0f, 30.0f, 60.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
     func_80B72970(this, play);
 
     if ((this->actionFunc != func_80B710E4) && (this->actionFunc != func_80B7114C) &&

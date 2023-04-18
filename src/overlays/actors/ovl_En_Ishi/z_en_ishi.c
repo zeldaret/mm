@@ -541,7 +541,9 @@ void func_8095E95C(EnIshi* this, PlayState* play) {
         func_8095E14C(this);
         func_8095E180(&this->actor.velocity, D_8095F6C8[ENISHI_GET_1(&this->actor)]);
         Actor_UpdatePos(&this->actor);
-        Actor_UpdateBgCheckInfo(play, &this->actor, 7.5f, 35.0f, 0.0f, 0xC5);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 7.5f, 35.0f, 0.0f,
+                                UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_40 |
+                                    UPDBGCHECKINFO_FLAG_80);
     } else {
         sp30.x = this->actor.world.pos.x;
         sp30.y = this->actor.world.pos.y + 20.0f;
@@ -648,7 +650,9 @@ void func_8095EBDC(EnIshi* this, PlayState* play) {
     Actor_UpdatePos(&this->actor);
     this->actor.shape.rot.x += D_8095F690;
     this->actor.shape.rot.y += D_8095F694;
-    Actor_UpdateBgCheckInfo(play, &this->actor, 7.5f, 35.0f, 0.0f, 0xC5);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 7.5f, 35.0f, 0.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_40 |
+                                UPDBGCHECKINFO_FLAG_80);
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
     CollisionCheck_SetAT(play, &play->colChkCtx, &this->collider.base);

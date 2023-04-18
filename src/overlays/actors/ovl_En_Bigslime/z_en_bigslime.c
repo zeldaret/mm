@@ -2838,7 +2838,9 @@ void EnBigslime_UpdateGekko(Actor* thisx, PlayState* play) {
         Actor_MoveWithoutGravity(&this->actor);
     }
 
-    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 40.0f, 80.0f, 0x1F);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 40.0f, 80.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_2 | UPDBGCHECKINFO_FLAG_4 |
+                                UPDBGCHECKINFO_FLAG_8 | UPDBGCHECKINFO_FLAG_10);
     this->gekkoCollider.dim.pos.x = (s16)this->actor.world.pos.x;
     this->gekkoCollider.dim.pos.z = (s16)this->actor.world.pos.z;
     if (this->gekkoCollider.base.acFlags & AC_ON) {

@@ -2044,7 +2044,7 @@ void func_80AFA5FC(EnPm* this, PlayState* play) {
 
 void func_80AFA724(EnPm* this, PlayState* play) {
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
     if (Animation_OnFrame(&this->skelAnime, 3.0f) || Animation_OnFrame(&this->skelAnime, 8.0f)) {
         Actor_PlaySfx(&this->actor, NA_SE_EV_POSTMAN_WALK);
     }
@@ -2091,7 +2091,7 @@ void EnPm_Update(Actor* thisx, PlayState* play) {
             func_80AF8AC8(this);
             func_8013C964(&this->actor, play, this->unk_368, 30.0f, this->unk_394, this->unk_356 & 7);
             Actor_MoveWithGravity(&this->actor);
-            Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, 4);
+            Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
             func_80AF7F68(this, play);
         }
     }

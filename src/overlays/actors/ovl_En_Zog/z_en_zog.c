@@ -781,15 +781,15 @@ void func_80B94A00(EnZog* this, PlayState* play) {
 
     if ((this->unk_304 == 4) &&
         (Animation_OnFrame(&this->skelAnime, 136.0f) || Animation_OnFrame(&this->skelAnime, 155.0f))) {
-        Actor_PlaySfx(&this->actor, NA_SE_PL_WALK_WATER0);
+        Actor_PlaySfx(&this->actor, NA_SE_PL_WALK_GROUND + SURFACE_SFX_OFFSET_WATER_SHALLOW);
     }
 
     if ((this->unk_304 == 5) &&
         (Animation_OnFrame(&this->skelAnime, 12.0f) || Animation_OnFrame(&this->skelAnime, 37.0f))) {
         if (this->actor.depthInWater > 0.0f) {
-            Actor_PlaySfx(&this->actor, NA_SE_PL_WALK_WATER0);
+            Actor_PlaySfx(&this->actor, NA_SE_PL_WALK_GROUND + SURFACE_SFX_OFFSET_WATER_SHALLOW);
         } else {
-            Actor_PlaySfx(&this->actor, NA_SE_PL_WALK_SAND);
+            Actor_PlaySfx(&this->actor, NA_SE_PL_WALK_GROUND + SURFACE_SFX_OFFSET_SAND);
         }
     }
 }
@@ -956,7 +956,7 @@ void EnZog_Update(Actor* thisx, PlayState* play) {
     EnZog* this = THIS;
 
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 10.0f, 10.0f, 5);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 10.0f, 10.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
     if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_471) && (ENZOG_GET_F(&this->actor) != ENZOG_F_2)) {
         this->actionFunc = func_80B9461C;
         this->actor.shape.yOffset = 0.0f;

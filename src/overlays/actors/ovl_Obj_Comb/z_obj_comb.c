@@ -475,7 +475,7 @@ void func_8098DEA0(ObjComb* this, PlayState* play) {
         Actor_MoveWithGravity(&this->actor);
         this->actor.shape.rot.x += this->unk_1AE;
         this->actor.shape.rot.y += this->unk_1B0;
-        Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 12.0f, 0.0f, 5);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 12.0f, 0.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
         CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
     }
 }

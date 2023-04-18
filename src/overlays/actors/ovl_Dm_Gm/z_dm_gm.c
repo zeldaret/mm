@@ -264,7 +264,7 @@ void DmGm_Update(Actor* thisx, PlayState* play) {
         func_80C24360(this, play);
         func_80C24504(this);
     }
-    Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
 }
 
 Vec3f D_80C25218 = { 450.0f, 700.0f, -760.0f };

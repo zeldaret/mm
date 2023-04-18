@@ -1337,7 +1337,7 @@ void EnFu_Update(Actor* thisx, PlayState* play) {
     func_809642E0(this, play);
     Actor_MoveWithGravity(&this->actor);
     func_8096209C(this, play);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
     SkelAnime_Update(&this->skelAnime);
     func_80961D7C(play);
     func_809640D8(this, play);

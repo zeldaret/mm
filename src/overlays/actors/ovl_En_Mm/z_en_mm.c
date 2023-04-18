@@ -149,7 +149,8 @@ void func_80965DB4(EnMm* this, PlayState* play) {
             temp_f2 = sqrtf(SQ(temp_f14) + SQ(temp_f12));
 
             if ((temp_f2 < this->actor.speed) ||
-                (SurfaceType_GetSlope(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId) == 1)) {
+                (SurfaceType_GetFloorEffect(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId) ==
+                 FLOOR_EFFECT_1)) {
                 this->actor.speed = CLAMP_MAX(temp_f2, 16.0f);
                 this->actor.world.rot.y = Math_Atan2S_XY(temp_f12, temp_f14);
             }
@@ -200,7 +201,9 @@ void EnMm_Update(Actor* thisx, PlayState* play) {
 
     Collider_ResetCylinderAC(play, &this->collider.base);
     this->actionFunc(this, play);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 10.0f, 20.0f, 31);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 10.0f, 20.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_2 | UPDBGCHECKINFO_FLAG_4 |
+                                UPDBGCHECKINFO_FLAG_8 | UPDBGCHECKINFO_FLAG_10);
     Actor_SetFocus(&this->actor, 20.0f);
 }
 

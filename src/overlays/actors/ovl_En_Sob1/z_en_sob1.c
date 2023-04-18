@@ -1286,7 +1286,7 @@ s16 EnSob1_GetDistSqAndOrient(Path* path, s32 pointIndex, Vec3f* pos, f32* distS
         diffZ = 0.0f;
     }
     *distSq = SQ(diffX) + SQ(diffZ);
-    return RADF_TO_BINANG(Math_Atan2F_XY(diffZ, diffX));
+    return RAD_TO_BINANG(Math_Atan2F_XY(diffZ, diffX));
 }
 
 void EnSob1_GetCutscenes(EnSob1* this) {

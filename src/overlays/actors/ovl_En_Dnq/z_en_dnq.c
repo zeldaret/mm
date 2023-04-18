@@ -455,7 +455,7 @@ void EnDnq_Update(Actor* thisx, PlayState* play) {
         this->actionFunc(this, play);
         func_80A52B68(this, play);
         SkelAnime_Update(&this->skelAnime);
-        Actor_UpdateBgCheckInfo(play, &this->picto.actor, 30.0f, 12.0f, 0.0f, 4);
+        Actor_UpdateBgCheckInfo(play, &this->picto.actor, 30.0f, 12.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
         this->unk_394 = this->picto.actor.xzDistToPlayer;
         func_80A52C6C(this, play);
         func_8013C964(&this->picto.actor, play, this->unk_390, fabsf(this->picto.actor.playerHeightRel) + 1.0f,

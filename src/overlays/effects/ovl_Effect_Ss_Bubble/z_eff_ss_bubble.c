@@ -17,12 +17,16 @@ u32 EffectSsBubble_Init(PlayState* play, u32 index, EffectSs* this, void* initPa
 void EffectSsBubble_Update(PlayState* play2, u32 index, EffectSs* this);
 void EffectSsBubble_Draw(PlayState* play, u32 index, EffectSs* this);
 
-const EffectSsInit Effect_Ss_Bubble_InitVars = {
+EffectSsInit Effect_Ss_Bubble_InitVars = {
     EFFECT_SS_BUBBLE,
     EffectSsBubble_Init,
 };
 
-static f32 sVecAdjMaximums[] = { 291.0f, 582.0f, 1600.0f };
+static f32 sVecAdjMaximums[] = {
+    291.0f,  // CONVEYOR_SPEED_SLOW
+    582.0f,  // CONVEYOR_SPEED_MEDIUM
+    1600.0f, // CONVEYOR_SPEED_FAST
+};
 
 u32 EffectSsBubble_Init(PlayState* play, u32 index, EffectSs* this, void* initParamsx) {
     EffectSsBubbleInitParams* initParams = (EffectSsBubbleInitParams*)initParamsx;
@@ -85,17 +89,18 @@ void EffectSsBubble_Update(PlayState* play2, u32 index, EffectSs* this) {
     }
     if (((play->gameplayFrames + index) % 8) == 0) {
         CollisionPoly* colPoly;
-        u32 speed;
-        s16 direction;
+        ConveyorSpeed conveyorSpeed;
+        s16 conveyorDir;
         f32 rVecAdjMax;
 
         BgCheck_EntityRaycastFloor2_1(play, &play->colCtx, &colPoly, &this->pos);
-        speed = SurfaceType_GetConveyorSpeed(&play->colCtx, colPoly, BGCHECK_SCENE);
-        if ((speed != 0) && !SurfaceType_IsFloorConveyor(&play->colCtx, colPoly, BGCHECK_SCENE)) {
-            direction = SurfaceType_GetConveyorDirection(&play->colCtx, colPoly, BGCHECK_SCENE) << 0xA;
-            rVecAdjMax = sVecAdjMaximums[speed - 1];
-            this->rVecAdjX = Math_SinS(direction) * rVecAdjMax;
-            this->rVecAdjZ = Math_CosS(direction) * rVecAdjMax;
+        conveyorSpeed = SurfaceType_GetConveyorSpeed(&play->colCtx, colPoly, BGCHECK_SCENE);
+        if ((conveyorSpeed != CONVEYOR_SPEED_DISABLED) &&
+            !SurfaceType_IsFloorConveyor(&play->colCtx, colPoly, BGCHECK_SCENE)) {
+            conveyorDir = SurfaceType_GetConveyorDirection(&play->colCtx, colPoly, BGCHECK_SCENE) << 10;
+            rVecAdjMax = sVecAdjMaximums[conveyorSpeed - 1];
+            this->rVecAdjX = Math_SinS(conveyorDir) * rVecAdjMax;
+            this->rVecAdjZ = Math_CosS(conveyorDir) * rVecAdjMax;
         }
     }
     this->vec.x += this->rVecAdjX / 100.0f;

@@ -507,7 +507,8 @@ void EnCrow_Update(Actor* thisx, PlayState* play) {
             height = 0.0f;
             Actor_MoveWithGravity(&this->actor);
         }
-        Actor_UpdateBgCheckInfo(play, &this->actor, 12.0f * scale, 25.0f * scale, 50.0f * scale, 7);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 12.0f * scale, 25.0f * scale, 50.0f * scale,
+                                UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_2 | UPDBGCHECKINFO_FLAG_4);
     } else {
         height = 0.0f;
     }

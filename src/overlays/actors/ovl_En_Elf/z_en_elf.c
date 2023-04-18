@@ -1089,7 +1089,7 @@ void func_8088EFA4(EnElf* this, PlayState* play) {
         }
     } else if ((arrayPointerActor != NULL) && (player->targetedActor != NULL)) {
         u8 temp = this->unk_269;
-        u16 targetSfxId = this->unk_269 == 0 ? NA_SE_PL_WALK_GROUND - SFX_FLAG : NA_SE_PL_WALK_GROUND - SFX_FLAG;
+        u16 targetSfxId = (this->unk_269 == 0) ? NA_SE_NONE : NA_SE_NONE;
 
         if (!temp) {
             Actor_PlaySfx(&this->actor, targetSfxId);

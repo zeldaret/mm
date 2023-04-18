@@ -948,7 +948,7 @@ void EnOt_Update(Actor* thisx, PlayState* play) {
         }
     }
 
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 10.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 10.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
 
     if (this->actor.world.pos.y <= this->actor.floorHeight + 50.0f) {
         this->actor.world.pos.y = this->actor.floorHeight + 50.0f;

@@ -987,7 +987,8 @@ void EnFish2_Update(Actor* thisx, PlayState* play2) {
         this->unk_33C = 25.0f - ((this->unk_330 - 0.01f) * 1000.0f);
         Actor_SetScale(&this->actor, this->unk_330);
         Actor_MoveWithGravity(&this->actor);
-        Actor_UpdateBgCheckInfo(play, &this->actor, 0, 15.0f, 10.0f, 7);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 0, 15.0f, 10.0f,
+                                UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_2 | UPDBGCHECKINFO_FLAG_4);
 
         if (this->actor.params != 2) {
             this->unk_2D4 = this->actor.floorHeight + (this->unk_330 * 1000.0f);
