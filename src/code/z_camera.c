@@ -874,7 +874,7 @@ void func_800CC938(Camera* camera) {
  * Calculates the angle between points `from` and `to`
  */
 s16 Camera_CalcXZAngle(Vec3f* to, Vec3f* from) {
-    return CAM_DEG_TO_BINANG(RADF_TO_DEGF(func_80086B30(from->x - to->x, from->z - to->z)));
+    return CAM_DEG_TO_BINANG(RAD_TO_DEG(func_80086B30(from->x - to->x, from->z - to->z)));
 }
 
 // BSS
@@ -965,8 +965,8 @@ s16 Camera_GetPitchAdjFromFloorHeightDiffs(Camera* camera, s16 viewYaw, s16 shou
     floorYDiffNear = (sFloorYNear - camera->focalActorFloorHeight) * 0.8f;
     floorYDiffFar = (sFloorYFar - camera->focalActorFloorHeight) * (20.0f * 0.01f);
 
-    pitchNear = CAM_DEG_TO_BINANG(RADF_TO_DEGF(func_80086B30(floorYDiffNear, nearDist)));
-    pitchFar = CAM_DEG_TO_BINANG(RADF_TO_DEGF(func_80086B30(floorYDiffFar, farDist)));
+    pitchNear = CAM_DEG_TO_BINANG(RAD_TO_DEG(func_80086B30(floorYDiffNear, nearDist)));
+    pitchFar = CAM_DEG_TO_BINANG(RAD_TO_DEG(func_80086B30(floorYDiffFar, farDist)));
 
     return pitchNear + pitchFar;
 }
@@ -1467,7 +1467,7 @@ s32 Camera_CalcAtForParallel(Camera* camera, VecSph* arg1, f32 yOffset, f32 xzOf
 
         // Math_FTanF
         // Get the height based on 80% of the fov
-        fovHeight = func_80086760(DEGF_TO_RADF(camera->fov * (0.8f * 0.5f))) * eyeAtDistXZ;
+        fovHeight = func_80086760(DEG_TO_RAD(camera->fov * (0.8f * 0.5f))) * eyeAtDistXZ;
 
         if (deltaY > fovHeight) {
             //! FAKE
@@ -1548,7 +1548,7 @@ s32 Camera_CalcAtForFriendlyLockOn(Camera* camera, VecSph* eyeAtDir, Vec3f* targ
             sp50 = OLib_Vec3fDistXZ(at, &camera->eye);
             phi_f16 = sp50;
             func_80086B30(deltaY, sp50);
-            fovHeight = func_80086760(DEGF_TO_RADF(camera->fov * 0.4f)) * phi_f16;
+            fovHeight = func_80086760(DEG_TO_RAD(camera->fov * 0.4f)) * phi_f16;
 
             if (fovHeight < deltaY) {
                 *yPosOffset += deltaY - fovHeight;
@@ -1636,7 +1636,7 @@ s32 Camera_CalcAtForEnemyLockOn(Camera* camera, f32* arg1, s32 arg2, f32 yOffset
         temp_f0_3 = func_80086B30(deltaY, sp4C);
 
         if (!(flags & 0x80)) {
-            fovHeight = func_80086760(DEGF_TO_RADF(camera->fov * 0.4f)) * sp4C;
+            fovHeight = func_80086760(DEG_TO_RAD(camera->fov * 0.4f)) * sp4C;
 
             if (fovHeight < deltaY) {
                 *arg6 += deltaY - fovHeight;
@@ -6351,7 +6351,7 @@ s32 Camera_Demo4(Camera* camera) {
             // Camera rolls left and right
             if (rwData->timer >= 12) {
                 rwData->unk_0C = (rwData->timer - 12) * 10.384615f;
-                sin = sin_rad(DEGF_TO_RADF(rwData->unk_0C));
+                sin = sin_rad(DEG_TO_RAD(rwData->unk_0C));
                 rwData->unk_0C = ((rwData->unk_10 < 0.0f) ? -1.0f : 1.0f) * sin;
                 if (rwData->timer == 12) {
                     Distortion_SetType(DISTORTION_TYPE_9);
@@ -6522,7 +6522,7 @@ s32 Camera_Demo5(Camera* camera) {
         case 2:
             // Camera zooms out while rolling back and forth
             rwData->unk_0C = rwData->timer * (180.0f / 23.0f);
-            sp58 = DEGF_TO_RADF(rwData->unk_0C);
+            sp58 = DEG_TO_RAD(rwData->unk_0C);
             sin = sin_rad(sp58);
             rwData->unk_0C = ((rwData->unk_10 < 0.0f) ? -1.0f : 1.0f) * sin;
             new_var = (46 - rwData->timer) * (5.0f / 46.0f);
