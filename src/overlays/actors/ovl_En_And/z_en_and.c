@@ -87,6 +87,9 @@ void EnAnd_HandleCsAction(EnAnd* this, PlayState* play) {
                         }
                     }
                     break;
+
+                default:
+                    break;
             }
             Cutscene_ActorTranslateAndYaw(&this->actor, play, actionIndex);
         }
@@ -160,7 +163,7 @@ void EnAnd_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
 
 void EnAnd_Draw(Actor* thisx, PlayState* play) {
     static TexturePtr sMouthTextures[] = { gAndMouthNeutralTex, gAndMouthSmileTex };
-    static TexturePtr sEyeTextures[] = {
+    static TexturePtr sEyeTextures[EYE_TEXTURES_COUNT] = {
         gAndEyeOpenTex,
         gAndEyeClosingTex,
         gAndEyeClosedTex,
