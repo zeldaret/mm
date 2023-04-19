@@ -27,9 +27,9 @@ typedef enum AnimationMode {
     /* 5 */ ANIMMODE_LOOP_PARTIAL_INTERP
 } AnimationMode;
 
-typedef enum { 
+typedef enum {
     /* -1 */ ANIMTAPER_DECEL = -1,
-    /*  0 */ ANIMTAPER_NONE, 
+    /*  0 */ ANIMTAPER_NONE,
     /*  1 */ ANIMTAPER_ACCEL
 } AnimationTapers;
 
