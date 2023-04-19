@@ -2,6 +2,7 @@
 #define Z_BG_OPEN_SHUTTER_H
 
 #include "global.h"
+#include "z64door.h"
 
 struct BgOpenShutter;
 

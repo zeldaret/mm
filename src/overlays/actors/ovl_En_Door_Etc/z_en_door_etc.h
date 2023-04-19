@@ -2,6 +2,7 @@
 #define Z_EN_DOOR_ETC_H
 
 #include "global.h"
+#include "z64door.h"
 
 struct EnDoorEtc;
 

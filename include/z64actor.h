@@ -733,23 +733,6 @@ typedef struct NpcInteractInfo {
     /* 0x24 */ UNK_TYPE1 unk_24[0x4];
 } NpcInteractInfo; // size = 0x28
 
-typedef struct DoorHandleActor {
-    /* 0x000 */ DynaPolyActor dyna;
-    /* 0x15C */ SkelAnime skelAnime;
-    /* 0x1A0 */ u8 animIndex;
-    /* 0x1A1 */ u8 playOpenAnim;
-    /* 0x1A2 */ s8 requiredObjBankIndex;
-    /* 0x1A3 */ s8 dlIndex;
-} DoorHandleActor; // size = 0x1A4
-
-typedef struct DoorSlidingActor {
-    /* 0x000 */ DynaPolyActor dyna;
-    /* 0x15C */ s16 unk_15C;
-    /* 0x15E */ s16 unk_15E;
-} DoorSlidingActor; // size = 0x160
-
-#define DOOR_GET_TRANSITION_ID(thisx) ((u16)(thisx)->params >> 10)
-
 typedef struct BlinkInfo {
     /* 0x0 */ s16 eyeTexIndex;
     /* 0x2 */ s16 blinkTimer;

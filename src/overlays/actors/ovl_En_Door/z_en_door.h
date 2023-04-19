@@ -2,6 +2,7 @@
 #define Z_EN_DOOR_H
 
 #include "global.h"
+#include "z64door.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
 struct EnDoor;
