@@ -8,7 +8,7 @@
 #include "objects/gameplay_dangeon_keep/gameplay_dangeon_keep.h"
 #include "objects/object_secom_obj/object_secom_obj.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_4000000)
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_CAN_PRESS_SWITCH)
 
 #define THIS ((ObjPzlblock*)thisx)
 
@@ -244,7 +244,7 @@ void func_809A3A48(ObjPzlblock* this) {
     this->unk_16E[2] = 0;
     this->unk_16E[3] = 0;
     this->unk_16E[0] = 0;
-    this->unk_160 = 4;
+    this->updBgCheckInfoFlags = UPDBGCHECKINFO_FLAG_4;
 }
 
 void func_809A3A74(ObjPzlblock* this, PlayState* play) {
@@ -275,7 +275,7 @@ void func_809A3A74(ObjPzlblock* this, PlayState* play) {
 
 void func_809A3BA4(ObjPzlblock* this) {
     this->actionFunc = func_809A3BC0;
-    this->unk_160 = 5;
+    this->updBgCheckInfoFlags = UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4;
 }
 
 void func_809A3BC0(ObjPzlblock* this, PlayState* play) {
@@ -313,7 +313,7 @@ void func_809A3BC0(ObjPzlblock* this, PlayState* play) {
 
 void func_809A3D1C(ObjPzlblock* this) {
     this->actionFunc = func_809A3D38;
-    this->unk_160 = 4;
+    this->updBgCheckInfoFlags = UPDBGCHECKINFO_FLAG_4;
 }
 
 void func_809A3D38(ObjPzlblock* this, PlayState* play) {
@@ -328,7 +328,7 @@ void ObjPzlblock_Update(Actor* thisx, PlayState* play) {
     ObjPzlblock* this = THIS;
 
     this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y;
-    Actor_UpdateBgCheckInfo(play, &this->dyna.actor, 15.0f, 30.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->dyna.actor, 15.0f, 30.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
 
     if (Object_IsLoaded(&play->objectCtx, this->unk_17A)) {
         ObjPzlblockStruct* sp2C = &D_809A4060[OBJPZLBLOCK_GET_1000(&this->dyna.actor)];
@@ -348,12 +348,12 @@ void func_809A3E58(Actor* thisx, PlayState* play) {
 
     this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y;
 
-    if (this->unk_160 != 0) {
-        Actor_UpdateBgCheckInfo(play, &this->dyna.actor, 15.0f, 30.0f, 0.0f, this->unk_160);
+    if (this->updBgCheckInfoFlags != 0) {
+        Actor_UpdateBgCheckInfo(play, &this->dyna.actor, 15.0f, 30.0f, 0.0f, this->updBgCheckInfoFlags);
         if (((this->actionFunc == func_809A3A74) || (this->actionFunc == func_809A3D38)) &&
             (this->dyna.actor.bgCheckFlags & BGCHECKFLAG_GROUND) &&
             !DynaPoly_GetActor(&play->colCtx, this->dyna.actor.floorBgId)) {
-            this->unk_160 = 0;
+            this->updBgCheckInfoFlags = 0;
         }
     }
 }

@@ -156,7 +156,8 @@ void Map_InitRoomData(PlayState* play, s16 room) {
 
     if (room >= 0) {
         if (Map_IsInDungeonOrBossArea(play)) {
-            gSaveContext.save.permanentSceneFlags[Play_GetOriginalSceneId(play->sceneId)].rooms |= gBitFlags[room];
+            gSaveContext.save.saveInfo.permanentSceneFlags[Play_GetOriginalSceneId(play->sceneId)].rooms |=
+                gBitFlags[room];
             interfaceCtx->mapRoomNum = room;
             interfaceCtx->dungeonOrBossAreaMapIndex = mapIndex;
         }
@@ -243,7 +244,7 @@ void Map_Update(PlayState* play) {
         if (Map_IsInDungeonArea(play)) {
             floor = func_80109124(player->actor.world.pos.y);
             if (floor != -1) {
-                gSaveContext.save.permanentSceneFlags[Play_GetOriginalSceneId(play->sceneId)].unk_14 |=
+                gSaveContext.save.saveInfo.permanentSceneFlags[Play_GetOriginalSceneId(play->sceneId)].unk_14 |=
                     gBitFlags[FLOOR_INDEX_MAX - floor];
                 R_REVERSE_FLOOR_INDEX = FLOOR_INDEX_MAX - floor;
                 if (interfaceCtx->mapRoomNum != sLastRoomNum) {

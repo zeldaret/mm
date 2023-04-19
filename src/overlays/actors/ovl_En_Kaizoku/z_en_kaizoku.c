@@ -1764,14 +1764,14 @@ void func_80B89A08(EnKaizoku* this, PlayState* play) {
     Vec3f sp58;
     s32 i;
 
-    if (gSaveContext.save.playerData.health <= 0x10) {
+    if (gSaveContext.save.saveInfo.playerData.health <= 0x10) {
         this->swordCollider.info.toucher.damage = 0;
     } else {
         this->swordCollider.info.toucher.damage = 4;
     }
 
     if (!(this->swordCollider.base.atFlags & AT_BOUNCED) && (this->swordCollider.base.atFlags & AT_HIT)) {
-        if ((gSaveContext.save.playerData.health <= 0x10) && (this->action != KAIZOKU_ACTION_16)) {
+        if ((gSaveContext.save.saveInfo.playerData.health <= 0x10) && (this->action != KAIZOKU_ACTION_16)) {
             this->unk_2D0 = 2;
             this->subCamId = 0;
             this->picto.actor.flags |= ACTOR_FLAG_100000;
@@ -1788,7 +1788,7 @@ void func_80B89A08(EnKaizoku* this, PlayState* play) {
         } else if ((this->action == KAIZOKU_ACTION_11) && (this->swordCollider.base.at == &GET_PLAYER(play)->actor)) {
             func_800B8D98(play, &this->picto.actor, 3.0f, this->picto.actor.yawTowardsPlayer, 1.0f);
             Health_ChangeBy(play, -0xC);
-            if ((gSaveContext.save.playerData.health <= 0x10) && (this->action != KAIZOKU_ACTION_16)) {
+            if ((gSaveContext.save.saveInfo.playerData.health <= 0x10) && (this->action != KAIZOKU_ACTION_16)) {
                 Health_ChangeBy(play, 0x10);
                 this->unk_2D0 = 2;
                 this->subCamId = 0;
@@ -2028,7 +2028,9 @@ void EnKaizoku_Update(Actor* thisx, PlayState* play2) {
         Math_ApproachZeroF(&this->unk_2F0, 1.0f, 5.0f);
     }
 
-    Actor_UpdateBgCheckInfo(play, &this->picto.actor, 35.0f, 40.0f, 35.0f, 0x1F);
+    Actor_UpdateBgCheckInfo(play, &this->picto.actor, 35.0f, 40.0f, 35.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_2 | UPDBGCHECKINFO_FLAG_4 |
+                                UPDBGCHECKINFO_FLAG_8 | UPDBGCHECKINFO_FLAG_10);
     Collider_UpdateCylinder(&this->picto.actor, &this->bodyCollider);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->bodyCollider.base);
     if ((this->unk_2D0 < 2) && (this->action != KAIZOKU_ACTION_0)) {

@@ -720,12 +720,12 @@ void func_80BFF9B0(EnBomjima* this, PlayState* play) {
         CLEAR_WEEKEVENTREG(WEEKEVENTREG_76_08);
         CLEAR_WEEKEVENTREG(WEEKEVENTREG_76_10);
 
-        gSaveContext.save.bombersCaughtNum = 0;
-        gSaveContext.save.bombersCaughtOrder[0] = 0;
-        gSaveContext.save.bombersCaughtOrder[1] = 0;
-        gSaveContext.save.bombersCaughtOrder[2] = 0;
-        gSaveContext.save.bombersCaughtOrder[3] = 0;
-        gSaveContext.save.bombersCaughtOrder[4] = 0;
+        gSaveContext.save.saveInfo.bombersCaughtNum = 0;
+        gSaveContext.save.saveInfo.bombersCaughtOrder[0] = 0;
+        gSaveContext.save.saveInfo.bombersCaughtOrder[1] = 0;
+        gSaveContext.save.saveInfo.bombersCaughtOrder[2] = 0;
+        gSaveContext.save.saveInfo.bombersCaughtOrder[3] = 0;
+        gSaveContext.save.saveInfo.bombersCaughtOrder[4] = 0;
 
         func_80BFE494(this, 3, 1.0f);
         this->unk_2C8 = 9;
@@ -1044,7 +1044,9 @@ void EnBomjima_Update(Actor* thisx, PlayState* play) {
         }
     }
 
-    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 50.0f, 0x1D);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 50.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                UPDBGCHECKINFO_FLAG_10);
     this->actor.uncullZoneForward = 500.0f;
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);

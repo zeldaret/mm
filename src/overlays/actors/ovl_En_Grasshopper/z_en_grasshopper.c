@@ -920,7 +920,9 @@ void EnGrasshopper_Update(Actor* thisx, PlayState* play) {
     Math_ApproachZeroF(&this->damagedVelocity.y, 1.0f, 2.0f);
     Math_ApproachZeroF(&this->damagedVelocity.z, 1.0f, 2.0f);
     if ((this->action != EN_GRASSHOPPER_ACTION_FALL) && (this->type != EN_GRASSHOPPER_TYPE_WOODFALL)) {
-        Actor_UpdateBgCheckInfo(play, &this->actor, 35.0f, 60.0f, 60.0f, 0x1D);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 35.0f, 60.0f, 60.0f,
+                                UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                    UPDBGCHECKINFO_FLAG_10);
     }
 
     this->actor.shape.rot.z = this->actor.world.rot.z;

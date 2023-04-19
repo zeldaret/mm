@@ -67,7 +67,7 @@ static ColliderCylinderInit sCylinderInit = {
 void EnScRuppe_UpdateCollision(EnScRuppe* this, PlayState* play) {
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 32.0f, 30.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 32.0f, 30.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
 }
 
 s32 func_80BD697C(s16 ruppeIndex) {
