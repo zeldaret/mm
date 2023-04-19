@@ -202,7 +202,7 @@ void DmChar09_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
     func_80AB2268(this, play);
     func_80AB24BC(this, play);
-    if ((play->csCtx.state != 0) && this->unk_22E && DMCHAR09_GET_100(thisx)) {
+    if ((play->csCtx.state != CS_STATE_IDLE) && this->unk_22E && DMCHAR09_GET_100(thisx)) {
         Actor_PlaySfx(&this->actor, NA_SE_EV_POSTMAN_WALK + SFX_FLAG);
     }
 }
@@ -217,7 +217,7 @@ s32 DmChar09_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f
 void DmChar09_Draw(Actor* thisx, PlayState* play) {
     DmChar09* this = THIS;
 
-    if ((play->csCtx.state != 0) && this->unk_22E) {
+    if ((play->csCtx.state != CS_STATE_IDLE) && this->unk_22E) {
         func_8012C28C(play->state.gfxCtx);
         func_8012C2DC(play->state.gfxCtx);
         SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, DmChar09_OverrideLimbDraw, NULL,

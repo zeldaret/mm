@@ -220,7 +220,7 @@ void EnHoll_VisibleIdle(EnHoll* this, PlayState* play) {
 
 void EnHoll_TransparentIdle(EnHoll* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    s32 useViewEye = gDbgCamEnabled || play->csCtx.state != 0;
+    s32 useViewEye = gDbgCamEnabled || (play->csCtx.state != CS_STATE_IDLE);
     Vec3f transformedPlayerPos;
     f32 enHollTop;
     f32 playerDistFromCentralPlane;
