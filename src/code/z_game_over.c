@@ -50,7 +50,7 @@ void GameOver_Update(PlayState* play) {
             }
 
             gSaveContext.unk_3DC0 = 2000;
-            gSaveContext.save.playerData.tatlTimer = 0;
+            gSaveContext.save.saveInfo.playerData.tatlTimer = 0;
             gSaveContext.seqId = (u8)NA_BGM_DISABLED;
             gSaveContext.ambienceId = AMBIENCE_ID_DISABLED;
             gSaveContext.eventInf[0] = 0;
@@ -73,13 +73,13 @@ void GameOver_Update(PlayState* play) {
             break;
 
         case GAMEOVER_DEATH_FADE_OUT:
-            if (Audio_GetActiveSequence(SEQ_PLAYER_FANFARE) != NA_BGM_GAME_OVER) {
+            if (AudioSeq_GetActiveSeqId(SEQ_PLAYER_FANFARE) != NA_BGM_GAME_OVER) {
                 func_80169F78(&play->state);
                 if (gSaveContext.respawnFlag != -7) {
                     gSaveContext.respawnFlag = -6;
                 }
                 gSaveContext.nextTransitionType = TRANS_TYPE_FADE_BLACK;
-                gSaveContext.save.playerData.health = 0x30;
+                gSaveContext.save.saveInfo.playerData.health = 0x30;
                 gameOverCtx->state++;
                 if (INV_CONTENT(ITEM_MASK_DEKU) == ITEM_MASK_DEKU) {
                     gSaveContext.save.playerForm = PLAYER_FORM_HUMAN;

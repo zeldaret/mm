@@ -315,7 +315,7 @@ void EnTest4_Init(Actor* thisx, PlayState* play) {
         if (CURRENT_DAY == 0) {
             if (gSaveContext.save.time < CLOCK_TIME(6, 1)) {
                 gSaveContext.save.time = CLOCK_TIME(6, 0);
-                gSaveContext.gameMode = 0;
+                gSaveContext.gameMode = GAMEMODE_NORMAL;
                 STOP_GAMESTATE(&play->state);
                 SET_NEXT_GAMESTATE(&play->state, DayTelop_Init, sizeof(DayTelopState));
                 this->unk_144 = 1;
@@ -436,7 +436,7 @@ void func_80A42AB8(EnTest4* this, PlayState* play) {
 
             if (CURRENT_DAY == 3) {
                 if ((this->nextBellTime == CLOCK_TIME(0, 0)) &&
-                    ((gSaveContext.save.inventory.items[SLOT_OCARINA] == ITEM_NONE) ||
+                    ((gSaveContext.save.saveInfo.inventory.items[SLOT_OCARINA] == ITEM_NONE) ||
                      (play->sceneId == SCENE_CLOCKTOWER))) {
                     s32 playerParams;
                     u32 entrance = gSaveContext.save.entrance;

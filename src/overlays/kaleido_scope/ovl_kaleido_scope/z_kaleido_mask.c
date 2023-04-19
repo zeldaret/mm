@@ -221,7 +221,7 @@ void KaleidoScope_DrawMaskSelect(PlayState* play) {
     for (j = 0, i = 0; i < NUM_MASK_SLOTS; i++, j += 4) {
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, pauseCtx->alpha);
 
-        if (((void)0, gSaveContext.save.inventory.items[i + NUM_ITEM_SLOTS]) != ITEM_NONE) {
+        if (((void)0, gSaveContext.save.saveInfo.inventory.items[i + NUM_ITEM_SLOTS]) != ITEM_NONE) {
             if (!CHECK_GIVEN_MASK_ON_MOON(i)) {
                 if ((pauseCtx->mainState == PAUSE_MAIN_STATE_IDLE) && (pauseCtx->pageIndex == PAUSE_MASK) &&
                     (pauseCtx->cursorSpecialPos == 0) &&
@@ -258,8 +258,8 @@ void KaleidoScope_DrawMaskSelect(PlayState* play) {
 
                 gSPVertex(POLY_OPA_DISP++, &pauseCtx->maskVtx[j + 0], 4, 0);
                 KaleidoScope_DrawTexQuadRGBA32(
-                    play->state.gfxCtx, gItemIcons[((void)0, gSaveContext.save.inventory.items[i + NUM_ITEM_SLOTS])],
-                    32, 32, 0);
+                    play->state.gfxCtx,
+                    gItemIcons[((void)0, gSaveContext.save.saveInfo.inventory.items[i + NUM_ITEM_SLOTS])], 32, 32, 0);
             }
         }
     }
@@ -371,7 +371,8 @@ void KaleidoScope_UpdateMaskCursor(PlayState* play) {
                 }
 
                 if (moveCursorResult == PAUSE_CURSOR_RESULT_SLOT) {
-                    cursorItem = gSaveContext.save.inventory.items[pauseCtx->cursorPoint[PAUSE_MASK] + NUM_ITEM_SLOTS];
+                    cursorItem =
+                        gSaveContext.save.saveInfo.inventory.items[pauseCtx->cursorPoint[PAUSE_MASK] + NUM_ITEM_SLOTS];
                     if (CHECK_GIVEN_MASK_ON_MOON(pauseCtx->cursorPoint[PAUSE_MASK])) {
                         cursorItem = ITEM_NONE;
                     }
@@ -387,7 +388,7 @@ void KaleidoScope_UpdateMaskCursor(PlayState* play) {
                 // Search for slot to move to
                 while (true) {
                     // Check if current cursor has an item in its slot
-                    if ((gSaveContext.save.inventory.items[cursorPoint + NUM_ITEM_SLOTS] != ITEM_NONE) &&
+                    if ((gSaveContext.save.saveInfo.inventory.items[cursorPoint + NUM_ITEM_SLOTS] != ITEM_NONE) &&
                         !CHECK_GIVEN_MASK_ON_MOON(cursorPoint)) {
                         pauseCtx->cursorPoint[PAUSE_MASK] = cursorPoint;
                         pauseCtx->cursorXIndex[PAUSE_MASK] = cursorXIndex;
@@ -428,7 +429,7 @@ void KaleidoScope_UpdateMaskCursor(PlayState* play) {
                 // Search for slot to move to
                 while (true) {
                     // Check if current cursor has an item in its slot
-                    if ((gSaveContext.save.inventory.items[cursorPoint + NUM_ITEM_SLOTS] != ITEM_NONE) &&
+                    if ((gSaveContext.save.saveInfo.inventory.items[cursorPoint + NUM_ITEM_SLOTS] != ITEM_NONE) &&
                         !CHECK_GIVEN_MASK_ON_MOON(cursorPoint)) {
                         pauseCtx->cursorPoint[PAUSE_MASK] = cursorPoint;
                         pauseCtx->cursorXIndex[PAUSE_MASK] = cursorXIndex;
@@ -500,12 +501,14 @@ void KaleidoScope_UpdateMaskCursor(PlayState* play) {
             pauseCtx->cursorColorSet = PAUSE_CURSOR_COLOR_SET_YELLOW;
 
             if (moveCursorResult == PAUSE_CURSOR_RESULT_SLOT) {
-                cursorItem = gSaveContext.save.inventory.items[pauseCtx->cursorPoint[PAUSE_MASK] + NUM_ITEM_SLOTS];
+                cursorItem =
+                    gSaveContext.save.saveInfo.inventory.items[pauseCtx->cursorPoint[PAUSE_MASK] + NUM_ITEM_SLOTS];
                 if (CHECK_GIVEN_MASK_ON_MOON(pauseCtx->cursorPoint[PAUSE_MASK])) {
                     cursorItem = ITEM_NONE;
                 }
             } else if (moveCursorResult != PAUSE_CURSOR_RESULT_SPECIAL_POS) {
-                cursorItem = gSaveContext.save.inventory.items[pauseCtx->cursorPoint[PAUSE_MASK] + NUM_ITEM_SLOTS];
+                cursorItem =
+                    gSaveContext.save.saveInfo.inventory.items[pauseCtx->cursorPoint[PAUSE_MASK] + NUM_ITEM_SLOTS];
                 if (CHECK_GIVEN_MASK_ON_MOON(pauseCtx->cursorPoint[PAUSE_MASK])) {
                     cursorItem = ITEM_NONE;
                 }

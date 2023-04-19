@@ -585,7 +585,8 @@ void EnBb_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
     if ((this->actionFunc != EnBb_Dead) && (this->actionFunc != EnBb_WaitForRevive)) {
         Actor_MoveWithGravity(&this->actor);
-        Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 25.0f, 40.0f, 7);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 25.0f, 40.0f,
+                                UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_2 | UPDBGCHECKINFO_FLAG_4);
 
         this->collider.dim.worldSphere.center.x = this->actor.world.pos.x;
         this->collider.dim.worldSphere.center.y = this->actor.world.pos.y + 15.0f;

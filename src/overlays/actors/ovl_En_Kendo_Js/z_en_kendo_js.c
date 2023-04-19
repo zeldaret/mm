@@ -125,7 +125,7 @@ void EnKendoJs_Init(Actor* thisx, PlayState* play) {
         Actor_Kill(&this->actor);
     }
 
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
 
     if (ENKENDOJS_GET_FF(&this->actor) != ENKENDOJS_FF_1) {
         Path* path = &play->setupPathList[ENKENDOJS_GET_FF00(&this->actor)];
@@ -224,7 +224,7 @@ void func_80B26758(EnKendoJs* this, PlayState* play) {
                     Message_StartTextbox(play, 0x272C, &this->actor);
                     this->unk_288 = 0x272C;
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 2);
-                } else if (gSaveContext.save.playerData.rupees < play->msgCtx.unk1206C) {
+                } else if (gSaveContext.save.saveInfo.playerData.rupees < play->msgCtx.unk1206C) {
                     play_sound(NA_SE_SY_ERROR);
                     Message_StartTextbox(play, 0x2718, &this->actor);
                     this->unk_288 = 0x2718;
@@ -242,7 +242,7 @@ void func_80B26758(EnKendoJs* this, PlayState* play) {
                     Message_StartTextbox(play, 0x272C, &this->actor);
                     this->unk_288 = 0x272C;
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 2);
-                } else if (gSaveContext.save.playerData.rupees < play->msgCtx.unk12070) {
+                } else if (gSaveContext.save.saveInfo.playerData.rupees < play->msgCtx.unk12070) {
                     play_sound(NA_SE_SY_ERROR);
                     Message_StartTextbox(play, 0x2718, &this->actor);
                     this->unk_288 = 0x2718;

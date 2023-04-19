@@ -115,7 +115,7 @@ void EnZod_Init(Actor* thisx, PlayState* play) {
 
     switch (ENZOD_GET_TYPE(thisx)) {
         case ENZOD_TYPE_1:
-            if (gSaveContext.save.weekEventReg[78] & 1) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_78_01)) {
                 this->actionFunc = func_80BAFDB4;
                 EnZod_ChangeAnim(this, ENZOD_ANIM_PLAYING_VIVACE, ANIMMODE_ONCE);
                 this->actor.flags |= ACTOR_FLAG_10;
@@ -124,7 +124,7 @@ void EnZod_Init(Actor* thisx, PlayState* play) {
             }
 
             this->actionFunc = func_80BAFB84;
-            if (!(gSaveContext.save.weekEventReg[55] & 0x80)) {
+            if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80))) {
                 Actor_Kill(&this->actor);
                 break;
             }
@@ -137,7 +137,7 @@ void EnZod_Init(Actor* thisx, PlayState* play) {
             break;
 
         default:
-            if (gSaveContext.save.weekEventReg[55] & 0x80) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80)) {
                 Actor_Kill(&this->actor);
             }
             this->actor.flags |= ACTOR_FLAG_10;
@@ -156,19 +156,19 @@ void EnZod_HandleRoomConversation(EnZod* this, PlayState* play) {
 
     if (gSaveContext.save.playerForm != PLAYER_FORM_ZORA) {
         textId = 0x1227;
-        if (gSaveContext.save.weekEventReg[32] & 8) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_32_08)) {
             textId = 0x1229;
         } else {
-            gSaveContext.save.weekEventReg[32] |= 8;
+            SET_WEEKEVENTREG(WEEKEVENTREG_32_08);
         }
     } else if (this->stateFlags & TIJO_STATE_1) {
         textId = 0x1225;
     } else {
         textId = 0x1219;
-        if (gSaveContext.save.weekEventReg[32] & 0x10) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_32_10)) {
             textId = 0x1226;
         } else {
-            gSaveContext.save.weekEventReg[32] |= 0x10;
+            SET_WEEKEVENTREG(WEEKEVENTREG_32_10);
         }
         this->stateFlags |= TIJO_STATE_1;
     }
@@ -394,14 +394,14 @@ void func_80BAFA44(EnZod* this, PlayState* play) {
     u16 textId;
 
     if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
-        if (gSaveContext.save.weekEventReg[79] & 1) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_79_01)) {
             textId = 0x1253;
         } else {
             textId = 0x1251;
-            if (gSaveContext.save.weekEventReg[78] & 0x20) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_78_20)) {
                 textId = 0x1252;
             } else {
-                gSaveContext.save.weekEventReg[78] |= 0x20;
+                SET_WEEKEVENTREG(WEEKEVENTREG_78_20);
             }
         }
     } else {
@@ -453,7 +453,7 @@ void EnZod_Rehearse(EnZod* this, PlayState* play) {
             play->nextEntrance = play->setupExitList[ENZOD_GET_ENTRANCE_INDEX(&this->actor)];
             play->transitionType = TRANS_TYPE_FADE_WHITE_FAST;
             play->transitionTrigger = TRANS_TRIGGER_START;
-            gSaveContext.save.weekEventReg[78] &= (u8)~1;
+            CLEAR_WEEKEVENTREG(WEEKEVENTREG_78_01);
         } else {
             ActorCutscene_SetIntentToPlay(this->actor.cutscene);
         }
@@ -471,8 +471,8 @@ void EnZod_SetupRehearse(EnZod* this, PlayState* play) {
         ActorCutscene_Stop(this->actor.cutscene);
         this->actor.cutscene = ActorCutscene_GetAdditionalCutscene(this->actor.cutscene);
         ActorCutscene_SetIntentToPlay(this->actor.cutscene);
-        gSaveContext.save.weekEventReg[79] |= 1;
-        Audio_QueueSeqCmd(NA_BGM_INDIGO_GO_SESSION | 0x8000);
+        SET_WEEKEVENTREG(WEEKEVENTREG_79_01);
+        SEQCMD_PLAY_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 0, NA_BGM_INDIGO_GO_SESSION | SEQ_FLAG_ASYNC);
     }
 }
 
@@ -527,7 +527,7 @@ void EnZod_Update(Actor* thisx, PlayState* play) {
     Actor_MoveWithGravity(&this->actor);
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 10.0f, 10.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 10.0f, 10.0f, UPDBGCHECKINFO_FLAG_4);
     this->actionFunc(this, play);
     EnZod_UpdateInstruments(this);
 

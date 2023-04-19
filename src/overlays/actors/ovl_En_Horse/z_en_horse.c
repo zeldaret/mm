@@ -2934,7 +2934,7 @@ void EnHorse_UpdateHorsebackArchery(EnHorse* this, PlayState* play) {
 
     if (((play->interfaceCtx.minigameAmmo == 0) || (this->hbaFlags & 2)) && (this->hbaFlags & 4)) {
         this->hbaFlags &= ~4;
-        Audio_QueueSeqCmd(0x8041);
+        SEQCMD_PLAY_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 0, NA_BGM_HORSE_GOAL | SEQ_FLAG_ASYNC);
     }
 
     if (this->hbaStarted == 0) {
@@ -3472,7 +3472,7 @@ s32 EnHorse_CalcFloorHeight(EnHorse* this, PlayState* play, Vec3f* pos, Collisio
 
     if ((COLPOLY_GET_NORMAL((*polyFloor)->normal.y) < 0.81915206f) ||
         SurfaceType_IsHorseBlocked(&play->colCtx, *polyFloor, *bgId) ||
-        (func_800C99D4(&play->colCtx, *polyFloor, *bgId) == 7)) {
+        (SurfaceType_GetFloorType(&play->colCtx, *polyFloor, *bgId) == FLOOR_TYPE_7)) {
         return 3; // Horse blocked surface
     }
 
@@ -3619,7 +3619,7 @@ void EnHorse_CheckFloors(EnHorse* this, PlayState* play) {
 
         if ((ny < 0.81915206f) ||
             SurfaceType_IsHorseBlocked(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId) ||
-            (func_800C99D4(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId) == 7)) {
+            (SurfaceType_GetFloorType(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId) == FLOOR_TYPE_7)) {
             if (this->actor.speed >= 0.0f) {
                 EnHorse_ObstructMovement(this, play, 4, galloping);
             } else {
@@ -3739,9 +3739,12 @@ void EnHorse_UpdateBgCheckInfo(EnHorse* this, PlayState* play) {
 
     if ((this->actor.params != ENHORSE_4) && (this->actor.params != ENHORSE_5) && (this->actor.params != ENHORSE_19) &&
         (this->actor.params != ENHORSE_20) && (this->actor.params != ENHORSE_18)) {
-        Actor_UpdateBgCheckInfo(play, &this->actor, 40.0f, 35.0f, 100.0f, 0x1D);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 40.0f, 35.0f, 100.0f,
+                                UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                    UPDBGCHECKINFO_FLAG_10);
     } else {
-        Actor_UpdateBgCheckInfo(play, &this->actor, 40.0f, 35.0f, 100.0f, 0x1C);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 40.0f, 35.0f, 100.0f,
+                                UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 | UPDBGCHECKINFO_FLAG_10);
     }
 
     if ((this->actor.bgCheckFlags & BGCHECKFLAG_WALL) &&
@@ -3888,7 +3891,7 @@ void EnHorse_UpdateBgCheckInfo(EnHorse* this, PlayState* play) {
 
     temp_f0 = COLPOLY_GET_NORMAL(obstacleFloor->normal.y);
     if ((temp_f0 < 0.81915206f) || SurfaceType_IsHorseBlocked(&play->colCtx, obstacleFloor, bgId) ||
-        (func_800C99D4(&play->colCtx, obstacleFloor, bgId) == 7)) {
+        (SurfaceType_GetFloorType(&play->colCtx, obstacleFloor, bgId) == FLOOR_TYPE_7)) {
         if ((Math_CosS(sp7E) < 0.9f) && (movingFast == true) && (this->playerControlled == true) &&
             (this->action != ENHORSE_ACTION_STOPPING) && (play->sceneId != SCENE_KOEPONARACE)) {
             this->stateFlags |= ENHORSE_FORCE_REVERSING;
@@ -3951,7 +3954,7 @@ void EnHorse_UpdateBgCheckInfo(EnHorse* this, PlayState* play) {
 
     temp_f0 = COLPOLY_GET_NORMAL(obstacleFloor->normal.y);
     if ((temp_f0 < 0.81915206f) || SurfaceType_IsHorseBlocked(&play->colCtx, obstacleFloor, bgId) ||
-        (func_800C99D4(&play->colCtx, obstacleFloor, bgId) == 7)) {
+        (SurfaceType_GetFloorType(&play->colCtx, obstacleFloor, bgId) == FLOOR_TYPE_7)) {
         if ((movingFast == true) && (this->playerControlled == true) && (this->action != ENHORSE_ACTION_STOPPING) &&
             (play->sceneId != SCENE_KOEPONARACE)) {
             this->stateFlags |= ENHORSE_FORCE_REVERSING;
@@ -4119,7 +4122,8 @@ s32 EnHorse_UpdateConveyors(EnHorse* this, PlayState* play) {
     s16 conveyorDir;
 
     if ((this->actor.floorPoly == NULL) || (&this->actor != player->rideActor) ||
-        !SurfaceType_GetConveyorSpeed(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId)) {
+        (SurfaceType_GetConveyorSpeed(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId) ==
+         CONVEYOR_SPEED_DISABLED)) {
         return false;
     }
 

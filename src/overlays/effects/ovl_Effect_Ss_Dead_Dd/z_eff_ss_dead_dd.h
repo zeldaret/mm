@@ -23,6 +23,4 @@ typedef struct {
     /* 0x40 */ u8 type;
 } EffectSsDeadDdInitParams; // size = 0x44
 
-extern const EffectSsInit Effect_Ss_Dead_Dd_InitVars;
-
 #endif

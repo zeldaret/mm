@@ -101,13 +101,13 @@ void EnElfgrp_Init(Actor* thisx, PlayState* play) {
                         break;
 
                     case ENELFGRP_2:
-                        if (gSaveContext.save.playerData.isDoubleMagicAcquired == true) {
+                        if (gSaveContext.save.saveInfo.playerData.isDoubleMagicAcquired == true) {
                             func_80A396B0(this, 1);
                         }
                         break;
 
                     case ENELFGRP_3:
-                        if (gSaveContext.save.playerData.doubleDefense) {
+                        if (gSaveContext.save.saveInfo.playerData.doubleDefense) {
                             func_80A396B0(this, 1);
                         }
                         break;
@@ -125,7 +125,7 @@ void EnElfgrp_Init(Actor* thisx, PlayState* play) {
                 this->actor.textId = (this->unk_147 * 3) + 0x581;
             } else {
                 this->actionFunc = func_80A3A8F8;
-                if ((gSaveContext.save.weekEventReg[9] & this->unk_146)) {
+                if ((gSaveContext.save.saveInfo.weekEventReg[9] & this->unk_146)) {
                     this->actor.textId = (this->unk_147 * 3) + 0x580;
                 } else {
                     this->actor.textId = (this->unk_147 * 3) + 0x57F;
@@ -158,13 +158,13 @@ void EnElfgrp_Init(Actor* thisx, PlayState* play) {
                         func_80A396B0(this, 3);
                         this->unk_14A |= 2;
                     }
-                } else if (gSaveContext.save.playerData.isMagicAcquired == true) {
+                } else if (gSaveContext.save.saveInfo.playerData.isMagicAcquired == true) {
                     func_80A396B0(this, 1);
                 }
             } else {
                 func_80A39DC8(this, play, 24, 0);
                 this->actionFunc = func_80A3A8F8;
-                if ((gSaveContext.save.weekEventReg[9] & this->unk_146)) {
+                if ((gSaveContext.save.saveInfo.weekEventReg[9] & this->unk_146)) {
                     this->actor.textId = 0x580;
                 } else {
                     this->actor.textId = 0x578;
@@ -183,7 +183,7 @@ s32 func_80A39BD0(PlayState* play, s32 arg2) {
         return 0;
     }
 
-    return (((void)0, gSaveContext.save.inventory.strayFairies[arg2 - 1]) - func_80A39C1C(play, arg2)) + 10;
+    return (((void)0, gSaveContext.save.saveInfo.inventory.strayFairies[arg2 - 1]) - func_80A39C1C(play, arg2)) + 10;
 }
 
 s32 func_80A39C1C(PlayState* play, s32 arg1) {
@@ -207,13 +207,13 @@ s32 func_80A39C1C(PlayState* play, s32 arg1) {
     }
 
     if (arg1 == 0) {
-        if (gSaveContext.save.permanentSceneFlags[play->sceneId].unk_14 & 1) {
+        if (gSaveContext.save.saveInfo.permanentSceneFlags[play->sceneId].unk_14 & 1) {
             return 25;
         }
         return 24;
     }
 
-    temp_v1 = (gSaveContext.save.permanentSceneFlags[play->sceneId].unk_14 >> (((arg1 - 1) * 5) + 1)) & 0x1F;
+    temp_v1 = (gSaveContext.save.saveInfo.permanentSceneFlags[play->sceneId].unk_14 >> (((arg1 - 1) * 5) + 1)) & 0x1F;
     if (temp_v1 < 10) {
         temp_v1 = 10;
     } else if (temp_v1 > 25) {
@@ -229,13 +229,13 @@ void func_80A39CD4(PlayState* play, s32 arg1, s32 arg2) {
 
     if (arg1 == 0) {
         if (arg2 == 25) {
-            gSaveContext.save.permanentSceneFlags[play->sceneId].unk_14 |= 1;
+            gSaveContext.save.saveInfo.permanentSceneFlags[play->sceneId].unk_14 |= 1;
         } else {
-            gSaveContext.save.permanentSceneFlags[play->sceneId].unk_14 &= ~1;
+            gSaveContext.save.saveInfo.permanentSceneFlags[play->sceneId].unk_14 &= ~1;
         }
     } else {
-        gSaveContext.save.permanentSceneFlags[play->sceneId].unk_14 &= ~(0x1F << ((arg1 * 5) - 4));
-        gSaveContext.save.permanentSceneFlags[play->sceneId].unk_14 |= arg2 << ((arg1 * 5) - 4);
+        gSaveContext.save.saveInfo.permanentSceneFlags[play->sceneId].unk_14 &= ~(0x1F << ((arg1 * 5) - 4));
+        gSaveContext.save.saveInfo.permanentSceneFlags[play->sceneId].unk_14 |= arg2 << ((arg1 * 5) - 4);
     }
 }
 
@@ -524,7 +524,7 @@ void func_80A3A7FC(EnElfgrp* this, PlayState* play) {
     s32 temp_s0;
 
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-        gSaveContext.save.weekEventReg[9] |= this->unk_146;
+        gSaveContext.save.saveInfo.weekEventReg[9] |= this->unk_146;
         this->actionFunc = func_80A3A6F4;
         temp_s0 = func_80A39BD0(play, this->unk_147);
         func_80A39DC8(this, play, temp_s0, 1);
@@ -544,7 +544,7 @@ void func_80A3A8F8(EnElfgrp* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-        gSaveContext.save.weekEventReg[9] |= this->unk_146;
+        gSaveContext.save.saveInfo.weekEventReg[9] |= this->unk_146;
         this->actionFunc = func_80A3A6F4;
         return;
     }
@@ -563,7 +563,7 @@ void func_80A3A8F8(EnElfgrp* this, PlayState* play) {
             player->stateFlags1 |= PLAYER_STATE1_20000000;
             Message_StartTextbox(play, this->actor.textId, &this->actor);
             this->actionFunc = func_80A3A77C;
-            gSaveContext.save.weekEventReg[9] |= this->unk_146;
+            gSaveContext.save.saveInfo.weekEventReg[9] |= this->unk_146;
         } else {
             this->actor.flags |= ACTOR_FLAG_10000;
             func_800B8614(&this->actor, play, 100.0f);

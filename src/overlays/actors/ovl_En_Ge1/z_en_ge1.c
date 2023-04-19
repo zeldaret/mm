@@ -375,7 +375,8 @@ void EnGe1_Update(Actor* thisx, PlayState* play) {
     if (!(this->stateFlags & GERUDO_WHITE_STATE_DISABLE_MOVEMENT)) {
         Actor_MoveWithGravity(&this->picto.actor);
     }
-    Actor_UpdateBgCheckInfo(play, &this->picto.actor, 40.0f, 25.0f, 40.0f, 5);
+    Actor_UpdateBgCheckInfo(play, &this->picto.actor, 40.0f, 25.0f, 40.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
     this->actionFunc(this, play);
     this->torsoRot.x = this->torsoRot.y = this->torsoRot.z = 0;
 

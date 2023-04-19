@@ -61,7 +61,7 @@ void ObjBoat_Init(Actor* thisx, PlayState* play) {
     Vec3f sp24;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    DynaPolyActor_Init(&this->dyna, 3);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS | DYNA_TRANSFORM_ROT_Y);
     DynaPolyActor_LoadMesh(play, &this->dyna, &object_kaizoku_obj_Colheader_009A88);
     if (thisx->params < 0) {
         this->dyna.actor.update = ObjBoat_UpdateCutscene;
@@ -95,14 +95,14 @@ void ObjBoat_Update(Actor* thisx, PlayState* play) {
     s32 pad;
     ObjBoat* this = THIS;
     Player* player = GET_PLAYER(play);
-    s32 temp = DynaPolyActor_IsInRidingMovingState(&this->dyna);
+    s32 isPlayerOnTop = DynaPolyActor_IsPlayerOnTop(&this->dyna);
     f32 speedTarget = 0.0f;
     s16 yawTarget = this->dyna.actor.shape.rot.y;
     Vec3f nextPoint;
 
-    if (temp || ((DynaPolyActor_IsInRidingFallingState(&this->dyna)))) {
+    if (isPlayerOnTop || DynaPolyActor_IsActorOnTop(&this->dyna)) {
         if ((this->timer == 0) &&
-            (OBJBOAT_GET_4000(thisx) || (temp && (this->curPointIndex == this->lastPointIndex)))) {
+            (OBJBOAT_GET_4000(thisx) || (isPlayerOnTop && (this->curPointIndex == this->lastPointIndex)))) {
             this->direction = -this->direction;
             if (this->direction > 0) {
                 this->lastPointIndex = this->maxPointIndex;

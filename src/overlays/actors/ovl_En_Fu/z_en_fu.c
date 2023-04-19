@@ -429,7 +429,7 @@ void func_80962588(EnFu* this, PlayState* play) {
     if (Message_ShouldAdvance(play) && (this->unk_552 == 0x2871)) {
         if (1) {}
         if (play->msgCtx.choiceIndex == 0) {
-            if (gSaveContext.save.playerData.rupees >= 10) {
+            if (gSaveContext.save.saveInfo.playerData.rupees >= 10) {
                 func_8019F208();
                 Rupees_ChangeBy(-10);
                 func_80963DE4(this, play);
@@ -538,7 +538,7 @@ void func_80962660(EnFu* this, PlayState* play) {
                 player->stateFlags1 |= PLAYER_STATE1_20;
                 this->unk_53C = 0;
                 Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 3);
-                func_801A2BB8(NA_BGM_TIMED_MINI_GAME);
+                Audio_PlaySubBgm(NA_BGM_TIMED_MINI_GAME);
                 if (this->unk_542 == 0) {
                     if (this->unk_546 == 1) {
                         func_80961EC8(play);
@@ -652,7 +652,7 @@ void func_80962A10(EnFu* this, PlayState* play) {
         this->unk_546 = 1;
     }
 
-    if ((gSaveContext.save.playerForm == PLAYER_FORM_DEKU) && gSaveContext.save.playerData.isMagicAcquired) {
+    if ((gSaveContext.save.playerForm == PLAYER_FORM_DEKU) && gSaveContext.save.saveInfo.playerData.isMagicAcquired) {
         Magic_Add(play, MAGIC_FILL_TO_CAPACITY);
     }
 
@@ -775,7 +775,7 @@ void func_80962F4C(EnFu* this, PlayState* play) {
         Message_StartTextbox(play, 0x288B, &this->actor);
     }
 
-    if ((!DynaPolyActor_IsInRidingRotatingState((DynaPolyActor*)this->actor.child) &&
+    if ((!DynaPolyActor_IsPlayerAbove((DynaPolyActor*)this->actor.child) &&
          (player->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) ||
         (gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2] <= SECONDS_TO_TIMER(0)) || (this->unk_548 == this->unk_54C)) {
         player->stateFlags3 &= ~PLAYER_STATE3_400000;
@@ -789,14 +789,14 @@ void func_80962F4C(EnFu* this, PlayState* play) {
                 Message_StartTextbox(play, 0x2888, &this->actor);
                 this->unk_552 = 0x2888;
             }
-            func_801A2C20();
+            Audio_StopSubBgm();
             gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2] = SECONDS_TO_TIMER(0);
             gSaveContext.timerStates[TIMER_ID_MINIGAME_2] = TIMER_STATE_STOP;
             this->unk_548 = 0;
             func_809632D0(this);
         } else {
             this->unk_548 = 0;
-            func_801A2C20();
+            Audio_StopSubBgm();
             gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2] = SECONDS_TO_TIMER(0);
             gSaveContext.timerStates[TIMER_ID_MINIGAME_2] = TIMER_STATE_STOP;
             Audio_PlayFanfare(NA_BGM_GET_ITEM | 0x900);
@@ -1139,7 +1139,7 @@ void func_80963DE4(EnFu* this, PlayState* play) {
 }
 
 void func_80963EAC(EnFu* this, PlayState* play) {
-    if (gSaveContext.save.playerData.isMagicAcquired) {
+    if (gSaveContext.save.saveInfo.playerData.isMagicAcquired) {
         if (this->unk_540 == 1) {
             Message_StartTextbox(play, 0x2847, &this->actor);
             this->unk_552 = 0x2847;
@@ -1337,7 +1337,7 @@ void EnFu_Update(Actor* thisx, PlayState* play) {
     func_809642E0(this, play);
     Actor_MoveWithGravity(&this->actor);
     func_8096209C(this, play);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
     SkelAnime_Update(&this->skelAnime);
     func_80961D7C(play);
     func_809640D8(this, play);

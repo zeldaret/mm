@@ -4,14 +4,13 @@
  * Description: Kafei
  */
 
-#include "prevent_bss_reordering.h"
 #include "z_en_test3.h"
 #include "objects/object_test3/object_test3.h"
 #include "overlays/actors/ovl_En_Door/z_en_door.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 #include "objects/object_mask_ki_tan/object_mask_ki_tan.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_4000000)
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_CAN_PRESS_SWITCH)
 
 #define THIS ((EnTest3*)thisx)
 
@@ -321,7 +320,7 @@ s32 func_80A3E898(EnTest3* this, PlayState* play) {
         Message_ContinueTextbox(play, textId);
     }
     if (textId == 0x296B) {
-        LinkAnimation_PlayOnceSetSpeed(play, &this->player.skelAnime, &gPlayerAnim_al_yareyare, 2.0f / 3.0f);
+        PlayerAnimation_PlayOnceSetSpeed(play, &this->player.skelAnime, &gPlayerAnim_al_yareyare, 2.0f / 3.0f);
     }
     return false;
 }
@@ -773,7 +772,7 @@ s32 func_80A3FBE8(EnTest3* this, PlayState* play) {
             if (play->actorCtx.flags & ACTORCTX_FLAG_5) {
                 this->unk_D8D = ActorCutscene_GetAdditionalCutscene(this->unk_D8D);
             }
-            Audio_QueueSeqCmd(NA_BGM_STOP | 0x10000);
+            SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 1);
             D_80A41D20 = 2;
         } else {
             func_80A3F73C(this, play);

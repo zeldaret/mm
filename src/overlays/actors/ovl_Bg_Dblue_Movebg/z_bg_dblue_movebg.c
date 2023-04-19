@@ -4,6 +4,7 @@
  * Description: Great Bay Temple - Waterwheels, push switches, gear shafts, and whirlpools
  */
 
+#include "prevent_bss_reordering.h"
 #include "z_bg_dblue_movebg.h"
 #include "objects/object_dblue_object/object_dblue_object.h"
 #include "overlays/actors/ovl_Obj_Hunsui/z_obj_hunsui.h"
@@ -162,7 +163,7 @@ void BgDblueMovebg_Init(Actor* thisx, PlayState* play) {
     this->unk_160 = BGDBLUEMOVEBG_GET_F(thisx);
     this->unk_1BC = BGDBLUEMOVEBG_GET_F000(thisx);
     this->unk_1C0 = BGDBLUEMOVEBG_GET_FF0(thisx);
-    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
 
     if ((this->unk_160 == 9) || (this->unk_160 == 8)) {
         if (D_80A2BBF4.unk_00 != 0) {
@@ -407,7 +408,7 @@ void func_80A2A444(BgDblueMovebg* this, PlayState* play) {
     sp20 = Math_StepToS(&this->unk_18A, 900, this->unk_188);
     temp_v0 = this->unk_18A * this->unk_17E;
     this->dyna.actor.shape.rot.y =
-        (s32)((this->unk_18C + temp_v0) * 0.1f * (0x10000 / 360.0f)) + this->dyna.actor.home.rot.y;
+        (s32)DEG_TO_BINANG_ALT3((this->unk_18C + temp_v0) * 0.1f) + this->dyna.actor.home.rot.y;
 
     if ((player->stateFlags2 & PLAYER_STATE2_10) && (this->unk_184 > 0.0f)) {
         player->actor.world.pos.x =
@@ -494,8 +495,7 @@ void func_80A2A7F8(BgDblueMovebg* this, PlayState* play) {
 
     sp28 = Math_StepToS(&this->unk_18A, 900, this->unk_188);
     sp26 = this->unk_18A * this->unk_17E;
-    this->dyna.actor.shape.rot.y =
-        (s32)((this->unk_18C + sp26) * 0.1f * (0x10000 / 360.0f)) + this->dyna.actor.home.rot.y;
+    this->dyna.actor.shape.rot.y = (s32)DEG_TO_BINANG_ALT3((this->unk_18C + sp26) * 0.1f) + this->dyna.actor.home.rot.y;
 
     if ((player->stateFlags2 & PLAYER_STATE2_10) && (this->unk_184 > 0.0f)) {
         player->actor.world.pos.x =

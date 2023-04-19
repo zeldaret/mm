@@ -390,7 +390,7 @@ void Scene_CommandTimeSettings(PlayState* play, SceneCmd* cmd) {
     }
 
     // Increase time speed during first cycle
-    if ((gSaveContext.save.inventory.items[SLOT_OCARINA] == ITEM_NONE) && (play->envCtx.sceneTimeSpeed != 0)) {
+    if ((gSaveContext.save.saveInfo.inventory.items[SLOT_OCARINA] == ITEM_NONE) && (play->envCtx.sceneTimeSpeed != 0)) {
         play->envCtx.sceneTimeSpeed = 5;
     }
 
@@ -444,7 +444,7 @@ void Scene_CommandSoundSettings(PlayState* play, SceneCmd* cmd) {
     play->sequenceCtx.ambienceId = cmd->soundSettings.ambienceId;
 
     if (gSaveContext.seqId == (u8)NA_BGM_DISABLED ||
-        Audio_GetActiveSequence(SEQ_PLAYER_BGM_MAIN) == NA_BGM_FINAL_HOURS) {
+        AudioSeq_GetActiveSeqId(SEQ_PLAYER_BGM_MAIN) == NA_BGM_FINAL_HOURS) {
         Audio_SetSpec(cmd->soundSettings.specId);
     }
 }
@@ -519,8 +519,8 @@ void Scene_CommandSetRegionVisitedFlag(PlayState* play, SceneCmd* cmd) {
     }
 
     if (i < REGION_MAX) {
-        gSaveContext.save.regionsVisited =
-            (gBitFlags[i] | gSaveContext.save.regionsVisited) | gSaveContext.save.regionsVisited;
+        gSaveContext.save.saveInfo.regionsVisited =
+            (gBitFlags[i] | gSaveContext.save.saveInfo.regionsVisited) | gSaveContext.save.saveInfo.regionsVisited;
     }
 }
 

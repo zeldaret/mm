@@ -305,7 +305,7 @@ void func_809C16DC(EnAob01* this, PlayState* play) {
                         break;
 
                     case PLAYER_FORM_HUMAN:
-                        if (gSaveContext.save.playerData.rupees < 10) {
+                        if (gSaveContext.save.saveInfo.playerData.rupees < 10) {
                             this->unk_210 = 0x3524;
                             this->unk_2D2 |= 0x10;
                         } else {
@@ -369,7 +369,7 @@ void func_809C16DC(EnAob01* this, PlayState* play) {
             break;
 
         case 0x3528:
-            if (gSaveContext.save.playerData.rupees < this->unk_434) {
+            if (gSaveContext.save.saveInfo.playerData.rupees < this->unk_434) {
                 this->unk_210 = 0x3536;
                 this->unk_2D2 |= 0x40;
                 this->unk_43C = 1;
@@ -434,7 +434,7 @@ void func_809C1D64(EnAob01* this, PlayState* play) {
         if (Message_ShouldAdvance(play)) {
             switch (play->msgCtx.choiceIndex) {
                 case 0:
-                    if (gSaveContext.save.playerData.rupees < 10) {
+                    if (gSaveContext.save.saveInfo.playerData.rupees < 10) {
                         play_sound(NA_SE_SY_ERROR);
                         this->unk_210 = 0x3524;
                         Message_StartTextbox(play, this->unk_210, &this->actor);
@@ -673,7 +673,7 @@ void func_809C2730(EnAob01* this, PlayState* play) {
 void func_809C2788(EnAob01* this, PlayState* play) {
     this->unk_2D2 |= 0x20;
     if (func_809C25E4(this, play)) {
-        if (Audio_GetActiveSequence(SEQ_PLAYER_BGM_MAIN) != NA_BGM_HORSE_GOAL) {
+        if (AudioSeq_GetActiveSeqId(SEQ_PLAYER_BGM_MAIN) != NA_BGM_HORSE_GOAL) {
             play->nextEntrance = ENTRANCE(DOGGY_RACETRACK, 1);
             gSaveContext.eventInf[0] = (gSaveContext.eventInf[0] & (u8)~7) | 3;
             play->transitionType = TRANS_TYPE_64;
@@ -904,7 +904,7 @@ void func_809C2FA0(void) {
     }
 
     for (i = 0; i < ARRAY_COUNT(sp44); i++) {
-        gSaveContext.save.weekEventReg[42 + i] = 0;
+        gSaveContext.save.saveInfo.weekEventReg[42 + i] = 0;
         sp44[i] = 0;
     }
 
@@ -914,8 +914,8 @@ void func_809C2FA0(void) {
 
         if (i % 2) {
             sp44[index] |= orig2 << 0x4;
-            gSaveContext.save.weekEventReg[42 + index] =
-                ((void)0, gSaveContext.save.weekEventReg[42 + index]) | sp44[index];
+            gSaveContext.save.saveInfo.weekEventReg[42 + index] =
+                ((void)0, gSaveContext.save.saveInfo.weekEventReg[42 + index]) | sp44[index];
         } else {
             sp44[index] |= orig2;
         }

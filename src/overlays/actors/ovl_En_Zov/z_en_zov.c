@@ -429,7 +429,7 @@ void func_80BD1DB8(EnZov* this, PlayState* play) {
                 SET_WEEKEVENTREG(WEEKEVENTREG_78_01);
                 this->actionFunc = func_80BD1D94;
                 play->msgCtx.msgLength = 0;
-                Audio_QueueSeqCmd(0x101400FF);
+                SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 20);
                 break;
 
             default:
@@ -476,7 +476,7 @@ void EnZov_Update(Actor* thisx, PlayState* play) {
     Actor_MoveWithGravity(&this->picto.actor);
     Collider_UpdateCylinder(&this->picto.actor, &this->collider);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
-    Actor_UpdateBgCheckInfo(play, &this->picto.actor, 10.0f, 10.0f, 10.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->picto.actor, 10.0f, 10.0f, 10.0f, UPDBGCHECKINFO_FLAG_4);
 
     this->actionFunc(this, play);
 

@@ -20,7 +20,7 @@ u32 EffectSsKFire_Init(PlayState* play, u32 index, EffectSs* this, void* initPar
 void EffectSsKFire_Update(PlayState* play, u32 index, EffectSs* this);
 void EffectSsKFire_Draw(PlayState* play, u32 index, EffectSs* this);
 
-const EffectSsInit Effect_Ss_K_Fire_InitVars = {
+EffectSsInit Effect_Ss_K_Fire_InitVars = {
     EFFECT_SS_K_FIRE,
     EffectSsKFire_Init,
 };

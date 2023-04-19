@@ -173,9 +173,9 @@ void func_809C4BC4(EnBomBowlMan* this, PlayState* play) {
     func_809C4B50(this);
     func_809C493C(this, 0, 1.0f);
 
-    for (i = 0; i < ARRAY_COUNT(gSaveContext.save.bomberCode); i++) {
+    for (i = 0; i < ARRAY_COUNT(gSaveContext.save.saveInfo.bomberCode); i++) {
         Math_Vec3f_Copy(&sp7C, &this->actor.home.pos);
-        code = gSaveContext.save.bomberCode[i];
+        code = gSaveContext.save.saveInfo.bomberCode[i];
         if (code == 1) {
             Math_Vec3f_Copy(&this->actor.world.pos, &D_809C61A0[i]);
             this->unk_2D8[code] = this;
@@ -630,7 +630,9 @@ void EnBomBowlMan_Update(Actor* thisx, PlayState* play) {
             this->unk_2F2 = (s32)Rand_ZeroFloat(60.0f) + 20;
         }
     }
-    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 50.0f, 0x1D);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 50.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                UPDBGCHECKINFO_FLAG_10);
 }
 
 s32 EnBomBowlMan_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {

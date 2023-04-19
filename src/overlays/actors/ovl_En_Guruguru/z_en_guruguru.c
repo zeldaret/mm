@@ -257,11 +257,11 @@ void func_80BC7068(EnGuruguru* this, PlayState* play) {
             }
             if ((this->unk268 != 0) && (this->textIdIndex >= 7)) {
                 this->skelAnime.playSpeed = 2.0f;
-                func_801A29D4(3, 1.18921f, 2);
+                Audio_SetSeqTempoAndFreq(3, 1.18921f, 2);
                 func_801A3B48(0);
             } else {
                 if (this->skelAnime.playSpeed == 2.0f) {
-                    func_801A29D4(3, 1.0f, 2);
+                    Audio_SetSeqTempoAndFreq(3, 1.0f, 2);
                 }
                 if (this->unk268 == 0) {
                     func_801A3B48(1);
@@ -363,7 +363,9 @@ void EnGuruguru_Update(Actor* thisx, PlayState* play) {
     Actor_MoveWithGravity(&this->actor);
     Math_SmoothStepToS(&this->headXRot, this->headXRotTarget, 1, 3000, 0);
     Math_SmoothStepToS(&this->headZRot, this->headZRotTarget, 1, 1000, 0);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 50.0f, 0x1D);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 50.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                UPDBGCHECKINFO_FLAG_10);
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
 }

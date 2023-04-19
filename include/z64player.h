@@ -399,15 +399,15 @@ typedef struct PlayerAgeProperties {
     /* 0x94 */ u16 surfaceSfxIdOffset;
     /* 0x98 */ f32 unk_98;
     /* 0x9C */ f32 unk_9C;
-    /* 0xA0 */ LinkAnimationHeader* unk_A0;
-    /* 0xA4 */ LinkAnimationHeader* unk_A4;
-    /* 0xA8 */ LinkAnimationHeader* unk_A8;
-    /* 0xAC */ LinkAnimationHeader* unk_AC;
-    /* 0xB0 */ LinkAnimationHeader* unk_B0;
-    /* 0xB4 */ LinkAnimationHeader* unk_B4[4];
-    /* 0xC4 */ LinkAnimationHeader* unk_C4[2];
-    /* 0xCC */ LinkAnimationHeader* unk_CC[2];
-    /* 0xD4 */ LinkAnimationHeader* unk_D4[2];
+    /* 0xA0 */ PlayerAnimationHeader* unk_A0;
+    /* 0xA4 */ PlayerAnimationHeader* unk_A4;
+    /* 0xA8 */ PlayerAnimationHeader* unk_A8;
+    /* 0xAC */ PlayerAnimationHeader* unk_AC;
+    /* 0xB0 */ PlayerAnimationHeader* unk_B0;
+    /* 0xB4 */ PlayerAnimationHeader* unk_B4[4];
+    /* 0xC4 */ PlayerAnimationHeader* unk_C4[2];
+    /* 0xCC */ PlayerAnimationHeader* unk_CC[2];
+    /* 0xD4 */ PlayerAnimationHeader* unk_D4[2];
 } PlayerAgeProperties; // size = 0xDC
 
 typedef struct {
@@ -990,7 +990,7 @@ typedef struct Player {
     /* 0xB5D */ u8 unk_B5D;
     /* 0xB5E */ u8 unk_B5E;
     /* 0xB5F */ u8 unk_B5F;
-    /* 0xB60 */ u16 unk_B60; // blast mask timer?
+    /* 0xB60 */ u16 blastMaskTimer;
     /* 0xB62 */ s16 unk_B62;
     /* 0xB64 */ u8 unk_B64;
     /* 0xB65 */ u8 shockTimer;
