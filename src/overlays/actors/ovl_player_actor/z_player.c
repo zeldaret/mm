@@ -49,7 +49,7 @@ void Player_TalkWithPlayer(PlayState* play, Actor* actor);
 void func_8085B74C(PlayState* play);
 void func_8085B820(PlayState* play, s16 arg1);
 PlayerItemAction func_8085B854(PlayState* play, Player* player, ItemId itemId);
-s32 func_8085B930(PlayState* play, PlayerAnimationHeader* talkAnim, s32 animMode);
+s32 func_8085B930(PlayState* play, PlayerAnimationHeader* talkAnim, AnimationMode animMode);
 
 void Player_UpdateCommon(Player* this, PlayState* play, Input* input);
 s32 Player_StartFishing(PlayState* play);
@@ -488,9 +488,6 @@ typedef struct struct_8085D200 {
     /* 0x9 */ u8 unk_9;
 } struct_8085D200; // size = 0xC
 
-// bss
-#if 1
-// Vec3f sDogSpawnPos; // sDogSpawnPos // In-function static
 f32 D_80862AFC;                          // distance of the analog stick to its center
 s16 D_80862B00;                          // analog stick angle/yaw
 s16 D_80862B02;                          // analog stick yaw + camera yaw
@@ -515,32 +512,6 @@ s32 D_80862B48;
 s32 D_80862B4C;
 EnvLightSettings D_80862B50; // backup of play->envCtx.lightSettings
 s32 D_80862B6C;              // this->skelAnime.moveFlags // sPlayerSkelMoveFlags?
-#else
-extern Vec3f sDogSpawnPos;
-extern f32 D_80862AFC;
-extern s16 D_80862B00;
-extern s16 D_80862B02;
-extern s32 D_80862B04;
-extern FloorType sPlayerCurrentFloorType;
-extern u32 sPlayerCurrentWallFlags;
-extern ConveyorSpeed sPlayerConveyorSpeedIndex;
-extern s16 sPlayerIsOnFloorConveyor;
-extern s16 D_80862B16;
-extern f32 D_80862B18;
-extern FloorProperty sPlayerPrevFloorProperty;
-extern s32 D_80862B20;
-extern s32 D_80862B24;
-extern s16 D_80862B28;
-extern s32 D_80862B2C;
-extern Vec3f D_80862B30;
-extern f32 D_80862B3C;
-extern FloorEffect D_80862B40;
-extern Input* sPlayerControlInput;
-extern s32 D_80862B48;
-extern s32 D_80862B4C;
-extern EnvLightSettings D_80862B50;
-extern s32 D_80862B6C;
-#endif
 
 s32 func_8082DA90(PlayState* play) {
     return (play->transitionTrigger != TRANS_TRIGGER_OFF) || (play->transitionMode != TRANS_MODE_OFF);
@@ -2869,7 +2840,7 @@ s8 sItemActionParams[] = {
     PLAYER_IA_HOOKSHOT,                // ITEM_HOOKSHOT,
     PLAYER_IA_SWORD_GREAT_FAIRY,       // ITEM_SWORD_GREAT_FAIRY,
     PLAYER_IA_PICTO_BOX,               // ITEM_LONGSHOT, // OoT Leftover
-    PLAYER_IA_BOTTLE,                  // ITEM_BOTTLE,
+    PLAYER_IA_BOTTLE_EMPTY,            // ITEM_BOTTLE,
     PLAYER_IA_BOTTLE_POTION_RED,       // ITEM_POTION_RED,
     PLAYER_IA_BOTTLE_POTION_GREEN,     // ITEM_POTION_GREEN,
     PLAYER_IA_BOTTLE_POTION_BLUE,      // ITEM_POTION_BLUE,
@@ -2989,7 +2960,7 @@ PlayerFuncAC4 D_8085C9F0[PLAYER_IA_MAX] = {
     func_80848B6C, // PLAYER_IA_NUT
     func_80848780, // PLAYER_IA_PICTO_BOX
     func_80848780, // PLAYER_IA_OCARINA
-    func_80848780, // PLAYER_IA_BOTTLE
+    func_80848780, // PLAYER_IA_BOTTLE_EMPTY
     func_80848780, // PLAYER_IA_BOTTLE_FISH
     func_80848780, // PLAYER_IA_BOTTLE_SPRING_WATER
     func_80848780, // PLAYER_IA_BOTTLE_HOT_SPRING_WATER
@@ -3076,7 +3047,7 @@ void (*D_8085CB3C[PLAYER_IA_MAX])(PlayState*, Player*) = {
     func_8082F5C0,         // PLAYER_IA_NUT
     func_8082F594,         // PLAYER_IA_PICTO_BOX
     func_8082F594,         // PLAYER_IA_OCARINA
-    func_8082F594,         // PLAYER_IA_BOTTLE
+    func_8082F594,         // PLAYER_IA_BOTTLE_EMPTY
     func_8082F594,         // PLAYER_IA_BOTTLE_FISH
     func_8082F594,         // PLAYER_IA_BOTTLE_SPRING_WATER
     func_8082F594,         // PLAYER_IA_BOTTLE_HOT_SPRING_WATER
@@ -3171,14 +3142,14 @@ s8 D_8085CD00[PLAYER_ANIMTYPE_MAX][PLAYER_ANIMTYPE_MAX] = {
     { 6, -4, -2, 7, 6, 0xA },  { 8, -5, -3, -6, 8, 0xB }, { 8, -5, -3, -6, 8, 0xB },
 };
 
-ExplosiveInfo sPlayerExplosiveInfo[] = {
-    { ITEM_BOMB, ACTOR_EN_BOM },        // PLAYER_IA_BOMB
-    { ITEM_POWDER_KEG, ACTOR_EN_BOM },  // PLAYER_IA_POWDER_KEG
-    { ITEM_BOMBCHU, ACTOR_EN_BOM_CHU }, // PLAYER_IA_BOMBCHU
+ExplosiveInfo sPlayerExplosiveInfo[PLAYER_EXPLOSIVE_MAX] = {
+    { ITEM_BOMB, ACTOR_EN_BOM },        // PLAYER_EXPLOSIVE_BOMB
+    { ITEM_POWDER_KEG, ACTOR_EN_BOM },  // PLAYER_EXPLOSIVE_POWDER_KEG
+    { ITEM_BOMBCHU, ACTOR_EN_BOM_CHU }, // PLAYER_EXPLOSIVE_BOMBCHU
 };
 
 void Player_SpawnExplosive(PlayState* play, Player* this) {
-    s32 explosiveType;
+    PlayerExplosive explosiveType;
     ExplosiveInfo* explosiveInfo;
     Actor* explosiveActor;
 
@@ -3573,7 +3544,7 @@ void func_8082FE0C(Player* this, PlayState* play) {
     }
 
     if (((this->actor.id == ACTOR_PLAYER) && (this->itemAction >= PLAYER_IA_FISHING_ROD)) &&
-        !(((func_80124148(this) == 0) || (gSaveContext.jinxTimer == 0)) &&
+        !(((Player_GetHeldBButtonSword(this) == PLAYER_B_SWORD_NONE) || (gSaveContext.jinxTimer == 0)) &&
           (func_8082FC78(this, (IREG(1) != 0) ? ITEM_FISHING_ROD : Inventory_GetBtnBItem(play)) ||
            func_8082FC78(this, C_BTN_ITEM(EQUIP_SLOT_C_LEFT)) || func_8082FC78(this, C_BTN_ITEM(EQUIP_SLOT_C_DOWN)) ||
            func_8082FC78(this, C_BTN_ITEM(EQUIP_SLOT_C_RIGHT))))) {
@@ -3615,7 +3586,8 @@ void func_8082FE0C(Player* this, PlayState* play) {
             func_80839978(play, this);
         } else if (item == ITEM_F2) {
             func_80839A10(play, this);
-        } else if ((func_80124110(this, Player_ItemToActionParam(this, item)) != 0) && (gSaveContext.jinxTimer != 0)) {
+        } else if ((Player_BButtonSwordFromIA(this, Player_ItemToActionParam(this, item)) != PLAYER_B_SWORD_NONE) &&
+                   (gSaveContext.jinxTimer != 0)) {
             if (Message_GetState(&play->msgCtx) == TEXT_STATE_NONE) {
                 Message_StartTextbox(play, 0xF7, NULL);
             }
@@ -3645,9 +3617,9 @@ void func_808302CC(Player* this, PlayState* play) {
 
     if ((actionParam == PLAYER_IA_ZORA_FINS) || (this->heldItemAction == PLAYER_IA_ZORA_FINS)) {
         var_v1 = (actionParam == PLAYER_IA_NONE) ? -14 : 14;
-    } else if ((actionParam == PLAYER_IA_BOTTLE) || (actionParam == PLAYER_IA_11) ||
+    } else if ((actionParam == PLAYER_IA_BOTTLE_EMPTY) || (actionParam == PLAYER_IA_11) ||
                ((actionParam == PLAYER_IA_NONE) &&
-                ((this->heldItemAction == PLAYER_IA_BOTTLE) || (this->heldItemAction == PLAYER_IA_11)))) {
+                ((this->heldItemAction == PLAYER_IA_BOTTLE_EMPTY) || (this->heldItemAction == PLAYER_IA_11)))) {
         var_v1 = (actionParam == PLAYER_IA_NONE) ? -13 : 13;
     }
 
@@ -3797,7 +3769,7 @@ void func_808308DC(PlayState* play, Player* this) {
     s32 isGoronOrDeku = (this->transformation == PLAYER_FORM_GORON) || (this->transformation == PLAYER_FORM_DEKU);
 
     if ((this->heldItemAction != PLAYER_IA_NONE) && !isGoronOrDeku) {
-        if (Player_ActionToSword(&this->actor, this->heldItemAction) >= 0) {
+        if (Player_SwordFromIA(this, this->heldItemAction) > PLAYER_SWORD_NONE) {
             func_8082E1F0(this, NA_SE_IT_SWORD_PUTAWAY);
         } else {
             func_8082E1F0(this, NA_SE_PL_CHANGE_ARMS);
@@ -3807,7 +3779,7 @@ void func_808308DC(PlayState* play, Player* this) {
     func_80831990(play, this, this->heldItemId);
 
     if (!isGoronOrDeku) {
-        if (Player_ActionToSword(&this->actor, this->heldItemAction) >= 0) {
+        if (Player_SwordFromIA(this, this->heldItemAction) > PLAYER_SWORD_NONE) {
             func_8082E1F0(this, NA_SE_IT_SWORD_PICKOUT);
         } else if (this->heldItemAction != PLAYER_IA_NONE) {
             func_8082E1F0(this, NA_SE_PL_CHANGE_ARMS);
@@ -4265,10 +4237,10 @@ void func_80831990(PlayState* play, Player* this, ItemId item) {
     PlayerItemAction actionParam = Player_ItemToActionParam(this, item);
 
     if ((((this->heldItemAction == this->itemAction) &&
-          (!(this->stateFlags1 & PLAYER_STATE1_400000) || (Player_ActionToMeleeWeapon(actionParam) != 0) ||
-           (actionParam == PLAYER_IA_NONE))) ||
+          (!(this->stateFlags1 & PLAYER_STATE1_400000) ||
+           (Player_MeleeWeaponFromIA(actionParam) != PLAYER_MELEEWEAPON_NONE) || (actionParam == PLAYER_IA_NONE))) ||
          ((this->itemAction <= PLAYER_IA_MINUS1) &&
-          ((Player_ActionToMeleeWeapon(actionParam) != 0) || (actionParam == PLAYER_IA_NONE)))) &&
+          ((Player_MeleeWeaponFromIA(actionParam) != PLAYER_MELEEWEAPON_NONE) || (actionParam == PLAYER_IA_NONE)))) &&
         ((actionParam == PLAYER_IA_NONE) || !(this->stateFlags1 & PLAYER_STATE1_8000000) ||
          (actionParam == PLAYER_IA_MASK_ZORA) ||
          ((this->currentBoots >= PLAYER_BOOTS_ZORA_UNDERWATER) && (this->actor.bgCheckFlags & 1)))) {
@@ -4277,12 +4249,12 @@ void func_80831990(PlayState* play, Player* this, ItemId item) {
         CollisionPoly* sp5C;
         s32 sp58;
         f32 sp54;
-        s32 explAction;
+        PlayerExplosive explAction;
 
         if (var_v1 ||
             (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_TALK_REQUESTED) && (actionParam != PLAYER_IA_NONE)) ||
             (actionParam == PLAYER_IA_OCARINA) ||
-            ((actionParam > PLAYER_IA_BOTTLE) && actionParam < PLAYER_IA_MASK_TRUTH) ||
+            ((actionParam > PLAYER_IA_BOTTLE_EMPTY) && actionParam < PLAYER_IA_MASK_TRUTH) ||
             ((actionParam == PLAYER_IA_PICTO_BOX) && (this->talkActor != NULL) &&
              (this->exchangeItemId > PLAYER_IA_NONE))) {
             if (var_v1) {
@@ -4309,7 +4281,7 @@ void func_80831990(PlayState* play, Player* this, ItemId item) {
                    (((play->unk_1887D != 0) || (play->unk_1887E != 0)) &&
                     (play->actorCtx.actorLists[ACTORCAT_EXPLOSIVES].length >= 5)) ||
                    ((play->unk_1887D == 0) && (play->unk_1887E == 0) &&
-                    ((explAction = Player_ActionToExplosive(this, actionParam)) >= 0) &&
+                    ((explAction = Player_ExplosiveFromIA(this, actionParam)) > PLAYER_EXPLOSIVE_NONE) &&
                     ((AMMO(sPlayerExplosiveInfo[explAction].itemId) == 0) ||
                      (play->actorCtx.actorLists[ACTORCAT_EXPLOSIVES].length >= 3)))) {
             play_sound(NA_SE_SY_ERROR);
@@ -4340,7 +4312,7 @@ void func_80831990(PlayState* play, Player* this, ItemId item) {
             }
             gSaveContext.save.equippedMask = this->currentMask;
         } else if ((actionParam != this->heldItemAction) ||
-                   ((this->heldActor == NULL) && (Player_ActionToExplosive(this, actionParam) >= 0))) {
+                   ((this->heldActor == NULL) && (Player_ExplosiveFromIA(this, actionParam) > PLAYER_EXPLOSIVE_NONE))) {
             u8 nextAnimType;
 
             this->nextModelGroup = Player_ActionToModelGroup(this, actionParam);
@@ -4557,19 +4529,20 @@ s16 func_80832754(Player* this, s32 arg1) {
     s16 var_s1 = this->actor.shape.rot.y;
 
     if (arg1) {
-        this->unk_AB2.x = this->actor.focus.rot.x;
+        this->upperLimbRot.x = this->actor.focus.rot.x;
         var_s1 = this->actor.focus.rot.y;
         this->unk_AA6 |= 0x41;
     } else {
-        s16 temp = func_80832660(&this->unk_AAC.x, this->actor.focus.rot.x, 0x258, 0x2710, this->actor.focus.rot.x, 0);
+        s16 temp =
+            func_80832660(&this->headLimbRot.x, this->actor.focus.rot.x, 0x258, 0x2710, this->actor.focus.rot.x, 0);
 
-        func_80832660(&this->unk_AB2.x, temp, 0xC8, 0xFA0, this->unk_AAC.x, 0x2710);
+        func_80832660(&this->upperLimbRot.x, temp, 0xC8, 0xFA0, this->headLimbRot.x, 0x2710);
 
         sp36 = this->actor.focus.rot.y - var_s1;
-        func_80832660(&sp36, 0, 0xC8, 0x5DC0, this->unk_AB2.y, 0x1F40);
+        func_80832660(&sp36, 0, 0xC8, 0x5DC0, this->upperLimbRot.y, 0x1F40);
         var_s1 = this->actor.focus.rot.y - sp36;
-        func_80832660(&this->unk_AAC.y, (sp36 - this->unk_AB2.y), 0xC8, 0x1F40, sp36, 0x1F40);
-        func_80832660(&this->unk_AB2.y, sp36, 0xC8, 0x1F40, this->unk_AAC.y, 0x1F40);
+        func_80832660(&this->headLimbRot.y, (sp36 - this->upperLimbRot.y), 0xC8, 0x1F40, sp36, 0x1F40);
+        func_80832660(&this->upperLimbRot.y, sp36, 0xC8, 0x1F40, this->headLimbRot.y, 0x1F40);
         this->unk_AA6 |= 0xD9;
     }
 
@@ -6295,12 +6268,12 @@ void func_80836C70(PlayState* play, Player* this, PlayerBodyPart bodyPartIndex) 
 void func_80836D8C(Player* this) {
     this->actor.focus.rot.x = 0;
     this->actor.focus.rot.z = 0;
-    this->unk_AAC.x = 0;
-    this->unk_AAC.y = 0;
-    this->unk_AAC.z = 0;
-    this->unk_AB2.x = 0;
-    this->unk_AB2.y = 0;
-    this->unk_AB2.z = 0;
+    this->headLimbRot.x = 0;
+    this->headLimbRot.y = 0;
+    this->headLimbRot.z = 0;
+    this->upperLimbRot.x = 0;
+    this->upperLimbRot.y = 0;
+    this->upperLimbRot.z = 0;
     this->actor.shape.rot.y = this->actor.focus.rot.y;
     this->currentYaw = this->actor.focus.rot.y;
 }
@@ -7028,7 +7001,7 @@ u8 D_8085D1A4[PLAYER_IA_MAX] = {
     GI_NUTS_1,              // PLAYER_IA_NUT
     GI_PICTO_BOX,           // PLAYER_IA_PICTO_BOX
     GI_OCARINA,             // PLAYER_IA_OCARINA
-    GI_BOTTLE,              // PLAYER_IA_BOTTLE
+    GI_BOTTLE,              // PLAYER_IA_BOTTLE_EMPTY
     GI_FISH,                // PLAYER_IA_BOTTLE_FISH
     GI_75,                  // PLAYER_IA_BOTTLE_SPRING_WATER
     GI_ICE_TRAP,            // PLAYER_IA_BOTTLE_HOT_SPRING_WATER
@@ -7097,11 +7070,8 @@ PlayerAnimationHeader* D_8085D1F8[] = {
     &gPlayerAnim_link_normal_take_out, // Hold up cutscene item; "this item doesn't work here"
 };
 
-// TODO: standarize
-#define BOTTLE_ACTION(item) ((item)-PLAYER_IA_BOTTLE)
-
 s32 func_80838A90(Player* this, PlayState* play) {
-    s32 bottleAction;
+    PlayerBottle bottleAction;
 
     if (this->unk_AA5 != PLAYER_UNKAA5_0) {
         if (!(this->actor.bgCheckFlags & 3) && !(this->stateFlags1 & PLAYER_STATE1_8000000) &&
@@ -7149,7 +7119,7 @@ s32 func_80838A90(Player* this, PlayState* play) {
                               (((this->exchangeItemId == PLAYER_IA_MAGIC_BEANS) &&
                                 (this->itemAction == PLAYER_IA_MAGIC_BEANS)) ||
                                ((this->exchangeItemId != PLAYER_IA_MAGIC_BEANS) &&
-                                (Player_ActionToBottle(this, this->itemAction) > -1))))))) {
+                                (Player_BottleFromIA(this, this->itemAction) > PLAYER_BOTTLE_NONE))))))) {
                     Actor* talkActor;
                     s32 heldItemTemp = this->itemAction;
 
@@ -7201,15 +7171,14 @@ s32 func_80838A90(Player* this, PlayState* play) {
                     func_8082DAD4(this);
                     return true;
                 } else {
-                    bottleAction = Player_ActionToBottle(this, this->itemAction);
+                    bottleAction = Player_BottleFromIA(this, this->itemAction);
 
-                    if (bottleAction > -1) {
+                    if (bottleAction > PLAYER_BOTTLE_NONE) {
                         Player_StopCurrentActorCutscene(this);
-                        if (bottleAction >= BOTTLE_ACTION(PLAYER_IA_BOTTLE_FAIRY)) {
+                        if (bottleAction >= PLAYER_BOTTLE_FAIRY) {
                             func_80831760(play, this, func_80853754, 0);
                             func_8082DB90(play, this, &gPlayerAnim_link_bottle_bug_out);
-                        } else if ((bottleAction > BOTTLE_ACTION(PLAYER_IA_BOTTLE)) &&
-                                   (bottleAction < BOTTLE_ACTION(PLAYER_IA_BOTTLE_POE))) {
+                        } else if ((bottleAction > PLAYER_BOTTLE_EMPTY) && (bottleAction < PLAYER_BOTTLE_POE)) {
                             func_80831760(play, this, func_80853850, 0);
                             func_8082DB90(play, this, &gPlayerAnim_link_bottle_fish_out);
                             this->currentActorCsIndex = play->playerActorCsIds[2];
@@ -7672,9 +7641,9 @@ s32 func_8083A274(Player* this, PlayState* play) {
                             this->unk_B3C = 0.0f;
                             func_8082FC60(this);
                         }
-                        this->unk_AB2.x = 0;
-                        this->unk_AB2.y = 0;
-                        this->unk_AB2.z = 0;
+                        this->upperLimbRot.x = 0;
+                        this->upperLimbRot.y = 0;
+                        this->upperLimbRot.z = 0;
                     }
 
                     endFrame = Animation_GetLastFrame(anim);
@@ -8455,8 +8424,8 @@ void func_8083C6E8(Player* this, PlayState* play) {
 }
 
 void func_8083C85C(Player* this) {
-    Math_ScaledStepToS(&this->unk_AB2.x, D_80862B3C * -500.0f, 900);
-    this->unk_AAC.x = (-(f32)this->unk_AB2.x * 0.5f);
+    Math_ScaledStepToS(&this->upperLimbRot.x, D_80862B3C * -500.0f, 900);
+    this->headLimbRot.x = (-(f32)this->upperLimbRot.x * 0.5f);
     this->unk_AA6 |= 0x48;
 }
 
@@ -8477,10 +8446,10 @@ void func_8083C8E8(Player* this, PlayState* play) {
 
         temp2 = CLAMP(-temp2, -0xFA0, 0xFA0);
 
-        Math_ScaledStepToS(&this->unk_AB2.x, temp1, 0x384);
-        this->unk_AAC.x = -(f32)this->unk_AB2.x * 0.5f;
-        Math_ScaledStepToS(&this->unk_AAC.z, temp2, 0x12C);
-        Math_ScaledStepToS(&this->unk_AB2.z, temp2, 0xC8);
+        Math_ScaledStepToS(&this->upperLimbRot.x, temp1, 0x384);
+        this->headLimbRot.x = -(f32)this->upperLimbRot.x * 0.5f;
+        Math_ScaledStepToS(&this->headLimbRot.z, temp2, 0x12C);
+        Math_ScaledStepToS(&this->upperLimbRot.z, temp2, 0xC8);
         this->unk_AA6 |= 0x168;
     } else {
         func_8083C6E8(this, play);
@@ -9603,7 +9572,7 @@ s32 func_8083FD80(Player* this, PlayState* play) {
         Player_AnimationPlayOnce(play, this, &gPlayerAnim_link_normal_defense_kiru);
         this->unk_AE7 = 1;
         this->meleeWeaponAnimation = PLAYER_MWA_STAB_1H;
-        this->currentYaw = this->actor.shape.rot.y + this->unk_AB2.y;
+        this->currentYaw = this->actor.shape.rot.y + this->upperLimbRot.y;
         this->unk_ADD = 0;
         return true;
     }
@@ -10195,7 +10164,7 @@ void Player_InitCommon(Player* this, PlayState* play, FlexSkeletonHeader* skelHe
         this->unk_284.baseTransl = D_8085D2C4;
 
         if (this->transformation == PLAYER_FORM_GORON) {
-            SkelAnime_InitFlex(play, &this->unk_2C8, &gLinkGoronShieldingSkel, &object_link_goron_Anim_0178D0,
+            SkelAnime_InitFlex(play, &this->unk_2C8, &gLinkGoronShieldingSkel, &gLinkGoronShieldingAnim,
                                this->jointTable, this->morphTable, LINK_GORON_SHIELDING_LIMB_MAX);
         }
 
@@ -10527,29 +10496,29 @@ void func_808425B4(Player* this) {
         func_80842510(&this->actor.focus.rot.x);
     }
     if (!(this->unk_AA6 & 8)) {
-        func_80842510(&this->unk_AAC.x);
+        func_80842510(&this->headLimbRot.x);
     }
     if (!(this->unk_AA6 & 0x40)) {
-        func_80842510(&this->unk_AB2.x);
+        func_80842510(&this->upperLimbRot.x);
     }
     if (!(this->unk_AA6 & 4)) {
         func_80842510(&this->actor.focus.rot.z);
     }
     if (!(this->unk_AA6 & 0x10)) {
-        func_80842510(&this->unk_AAC.y);
+        func_80842510(&this->headLimbRot.y);
     }
     if (!(this->unk_AA6 & 0x20)) {
-        func_80842510(&this->unk_AAC.z);
+        func_80842510(&this->headLimbRot.z);
     }
     if (!(this->unk_AA6 & 0x80)) {
         if (this->unk_AA8 != 0) {
             func_80842510(&this->unk_AA8);
         } else {
-            func_80842510(&this->unk_AB2.y);
+            func_80842510(&this->upperLimbRot.y);
         }
     }
     if (!(this->unk_AA6 & 0x100)) {
-        func_80842510(&this->unk_AB2.z);
+        func_80842510(&this->upperLimbRot.z);
     }
 
     this->unk_AA6 = 0;
@@ -11635,7 +11604,7 @@ void Player_UpdateCommon(Player* this, PlayState* play, Input* input) {
         this->actor.shape.face = ((play->gameplayFrames & 0x20) ? 0 : 3) + this->blinkInfo.eyeTexIndex;
 
         if (this->currentMask == PLAYER_MASK_BUNNY) {
-            func_80124420(this);
+            Player_UpdateBunnyEars(this);
         }
 
         if (func_800B7118(this)) {
@@ -12010,7 +11979,8 @@ void Player_DrawGameplay(PlayState* play, Player* this, s32 lod, Gfx* cullDList,
     gSPSegment(POLY_XLU_DISP++, 0x0C, cullDList);
 
     Player_DrawImpl(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, lod,
-                    this->transformation, 0, this->actor.shape.face, overrideLimbDraw, func_80128BD0, &this->actor);
+                    this->transformation, 0, this->actor.shape.face, overrideLimbDraw, Player_PostLimbDrawGameplay,
+                    &this->actor);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
@@ -12243,7 +12213,7 @@ void Player_Draw(Actor* thisx, PlayState* play) {
             SkelAnime_DrawFlexOpa(play, this->unk_2C8.skeleton, this->unk_2C8.jointTable, this->unk_2C8.dListCount,
                                   NULL, NULL, NULL);
         } else {
-            OverrideLimbDrawFlex sp84 = func_80125D4C;
+            OverrideLimbDrawFlex sp84 = Player_OverrideLimbDrawGameplayDefault;
             s32 lod = ((this->csMode != PLAYER_CSMODE_0) || (this->actor.projectedPos.z < 320.0f)) ? 0 : 1;
             Vec3f sp74;
 
@@ -12252,7 +12222,7 @@ void Player_Draw(Actor* thisx, PlayState* play) {
             if (this->stateFlags1 & PLAYER_STATE1_100000) {
                 SkinMatrix_Vec3fMtxFMultXYZ(&play->viewProjectionMtxF, &this->actor.focus.pos, &sp74);
                 if (sp74.z < -4.0f) {
-                    sp84 = func_801262C8;
+                    sp84 = Player_OverrideLimbDrawGameplayFirstPerson;
                 }
             }
 
@@ -12955,7 +12925,7 @@ s32 func_80848BF4(Player* this, PlayState* play) {
     }
 
     if (this->transformation != PLAYER_FORM_DEKU) {
-        Math_ScaledStepToS(&this->unk_AB2.z, 0x4B0, 0x190);
+        Math_ScaledStepToS(&this->upperLimbRot.z, 0x4B0, 0x190);
         this->unk_AA6 |= 0x100;
     }
 
@@ -13955,12 +13925,12 @@ void func_8084B5C0(Player* this, PlayState* play) {
         var_a2 = ABS_ALT(var_a1 - this->actor.focus.rot.x) * 0.25f;
         var_a2 = CLAMP_MIN(var_a2, 0x64);
 
-        var_a3 = ABS_ALT(temp_ft5 - this->unk_AB2.y) * 0.25f;
+        var_a3 = ABS_ALT(temp_ft5 - this->upperLimbRot.y) * 0.25f;
         var_a3 = CLAMP_MIN(var_a3, 0x32);
         Math_ScaledStepToS(&this->actor.focus.rot.x, var_a1, var_a2);
 
-        this->unk_AB2.x = this->actor.focus.rot.x;
-        Math_ScaledStepToS(&this->unk_AB2.y, temp_ft5, var_a3);
+        this->upperLimbRot.x = this->actor.focus.rot.x;
+        Math_ScaledStepToS(&this->upperLimbRot.y, temp_ft5, var_a3);
 
         if (this->unk_AE7 != 0) {
             if (!func_808401F4(play, this)) {
@@ -15505,16 +15475,16 @@ void func_8084FD7C(PlayState* play, Player* this, Actor* actor) {
         return;
     }
 
-    this->unk_AB2.y = func_80847190(play, this, 1) - this->actor.shape.rot.y;
+    this->upperLimbRot.y = func_80847190(play, this, 1) - this->actor.shape.rot.y;
 
-    var_a3 = ABS_ALT(this->unk_AB2.y) - 0x4000;
+    var_a3 = ABS_ALT(this->upperLimbRot.y) - 0x4000;
     if (var_a3 > 0) {
         var_a3 = CLAMP_MAX(var_a3, 0x15E);
-        actor->shape.rot.y += var_a3 * ((this->unk_AB2.y >= 0) ? 1 : -1);
+        actor->shape.rot.y += var_a3 * ((this->upperLimbRot.y >= 0) ? 1 : -1);
         actor->world.rot.y = actor->shape.rot.y;
     }
 
-    this->unk_AB2.y += 0x2710;
+    this->upperLimbRot.y += 0x2710;
     this->unk_AA8 = -0x1388;
 }
 
@@ -15712,10 +15682,10 @@ void func_8084FE7C(Player* this, PlayState* play) {
                     !func_80847BF0(this, play) && !func_80838A90(this, play))) {
             if (this->targetedActor != NULL) {
                 if (func_800B7128(this)) {
-                    this->unk_AB2.y = func_8083C62C(this, true) - this->actor.shape.rot.y;
-                    this->unk_AB2.y = CLAMP(this->unk_AB2.y, -0x4AAA, 0x4AAA);
-                    this->actor.focus.rot.y = this->actor.shape.rot.y + this->unk_AB2.y;
-                    this->unk_AB2.y += 0xFA0;
+                    this->upperLimbRot.y = func_8083C62C(this, true) - this->actor.shape.rot.y;
+                    this->upperLimbRot.y = CLAMP(this->upperLimbRot.y, -0x4AAA, 0x4AAA);
+                    this->actor.focus.rot.y = this->actor.shape.rot.y + this->upperLimbRot.y;
+                    this->upperLimbRot.y += 0xFA0;
                     this->unk_AA6 |= 0x80;
                 } else {
                     func_8083C62C(this, false);
@@ -16347,12 +16317,12 @@ void func_80852290(PlayState* play, Player* this) {
 
         var_a1_3 = (sp3C * -100.0f);
         var_a1_3 = CLAMP_MAX(var_a1_3, 0xFA0);
-        Math_SmoothStepToS(&this->unk_AB2.x, var_a1_3, 4, 0x7D0, 0);
-        Math_SmoothStepToS(&this->unk_AB2.y, sp38, 4, 0x7D0, 0);
-        this->unk_AAC.x = -this->unk_AB2.x;
+        Math_SmoothStepToS(&this->upperLimbRot.x, var_a1_3, 4, 0x7D0, 0);
+        Math_SmoothStepToS(&this->upperLimbRot.y, sp38, 4, 0x7D0, 0);
+        this->headLimbRot.x = -this->upperLimbRot.x;
         this->unk_AA6 |= 0xC8;
 
-        var_a1_3 = ABS_ALT(this->unk_AB2.x);
+        var_a1_3 = ABS_ALT(this->upperLimbRot.x);
         if (var_a1_3 < 0x7D0) {
             this->actor.shape.face = 0;
         } else if (var_a1_3 < 0xFA0) {
@@ -16363,8 +16333,8 @@ void func_80852290(PlayState* play, Player* this) {
     }
 
     if (DECR(this->unk_B8A) != 0) {
-        this->unk_B86[0] += (s16)(this->unk_AB2.x * 2.5f);
-        this->unk_B86[1] += (s16)(this->unk_AB2.y * 3.0f);
+        this->unk_B86[0] += (s16)(this->upperLimbRot.x * 2.5f);
+        this->unk_B86[1] += (s16)(this->upperLimbRot.y * 3.0f);
     } else {
         this->unk_B86[0] = 0;
         this->unk_B86[1] = 0;
@@ -16730,7 +16700,7 @@ void func_80853194(Player* this, PlayState* play) {
 
             Player_UpdateBottleHeld(play, this,
                                     (this->itemAction == PLAYER_IA_BOTTLE_MILK) ? ITEM_MILK_HALF : ITEM_BOTTLE,
-                                    PLAYER_IA_BOTTLE);
+                                    PLAYER_IA_BOTTLE_EMPTY);
         }
 
         Player_AnimSfx_PlayVoice(this, NA_SE_VO_LI_DRINK - SFX_FLAG);
@@ -16842,7 +16812,7 @@ void func_80853754(Player* this, PlayState* play) {
         Player_PlaySfx(this, NA_SE_EV_BOTTLE_CAP_OPEN);
         Player_AnimSfx_PlayVoice(this, NA_SE_VO_LI_AUTO_JUMP);
         if (this->itemAction == PLAYER_IA_BOTTLE_FAIRY) {
-            Player_UpdateBottleHeld(play, this, ITEM_BOTTLE, PLAYER_IA_BOTTLE);
+            Player_UpdateBottleHeld(play, this, ITEM_BOTTLE, PLAYER_IA_BOTTLE_EMPTY);
             Player_PlaySfx(this, NA_SE_EV_FIATY_HEAL - SFX_FLAG);
             sp2C = 1;
         }
@@ -16855,17 +16825,17 @@ void func_80853850(Player* this, PlayState* play) {
     static Vec3f D_8085D7F8 = { 10.0f, 26.800001f, 30.0f };
     static s8 D_8085D804[PLAYER_FORM_MAX] = { 0x2D, 0x4B, 0x37, 0x23, 0x28 };
     static struct_8085D80C D_8085D80C[] = {
-        { ACTOR_EN_FISH, 0 },       // PLAYER_IA_BOTTLE_FISH
-        { ACTOR_OBJ_AQUA, 0 },      // PLAYER_IA_BOTTLE_SPRING_WATER
-        { ACTOR_OBJ_AQUA, 1 },      // PLAYER_IA_BOTTLE_HOT_SPRING_WATER
-        { ACTOR_EN_ZORAEGG, 0x11 }, // PLAYER_IA_BOTTLE_ZORA_EGG
-        { ACTOR_EN_DNP, 1 },        // PLAYER_IA_BOTTLE_DEKU_PRINCESS
-        { ACTOR_EN_MUSHI2, 0 },     // PLAYER_IA_BOTTLE_GOLD_DUST
-        { ACTOR_EN_MUSHI2, 0 },     // PLAYER_IA_BOTTLE_1C
-        { ACTOR_EN_OT, 0x8000 },    // PLAYER_IA_BOTTLE_SEAHORSE
-        { ACTOR_EN_MUSHI2, 0 },     // PLAYER_IA_BOTTLE_MUSHROOM
-        { ACTOR_EN_MUSHI2, 0 },     // PLAYER_IA_BOTTLE_HYLIAN_LOACH
-        { ACTOR_EN_MUSHI2, 0 },     // PLAYER_IA_BOTTLE_BUG
+        { ACTOR_EN_FISH, 0 },       // PLAYER_BOTTLE_FISH
+        { ACTOR_OBJ_AQUA, 0 },      // PLAYER_BOTTLE_SPRING_WATER
+        { ACTOR_OBJ_AQUA, 1 },      // PLAYER_BOTTLE_HOT_SPRING_WATER
+        { ACTOR_EN_ZORAEGG, 0x11 }, // PLAYER_BOTTLE_ZORA_EGG
+        { ACTOR_EN_DNP, 1 },        // PLAYER_BOTTLE_DEKU_PRINCESS
+        { ACTOR_EN_MUSHI2, 0 },     // PLAYER_BOTTLE_GOLD_DUST
+        { ACTOR_EN_MUSHI2, 0 },     // PLAYER_BOTTLE_1C
+        { ACTOR_EN_OT, 0x8000 },    // PLAYER_BOTTLE_SEAHORSE
+        { ACTOR_EN_MUSHI2, 0 },     // PLAYER_BOTTLE_MUSHROOM
+        { ACTOR_EN_MUSHI2, 0 },     // PLAYER_BOTTLE_HYLIAN_LOACH
+        { ACTOR_EN_MUSHI2, 0 },     // PLAYER_BOTTLE_BUG
     };
     static AnimSfxEntry D_8085D838[] = {
         ANIMSFX(ANIMSFX_TYPE_VOICE, 38, NA_SE_VO_LI_AUTO_JUMP, CONTINUE),
@@ -16903,13 +16873,13 @@ void func_80853850(Player* this, PlayState* play) {
             func_80839E74(this, play);
         }
     } else if (PlayerAnimation_OnFrame(&this->skelAnime, 76.0f)) {
-        sp4C = &D_8085D80C[this->itemAction - PLAYER_IA_BOTTLE - 1];
+        sp4C = &D_8085D80C[GET_BOTTLE_FROM_IA(this->itemAction) - 1];
 
         Actor_Spawn(&play->actorCtx, play, sp4C->actorId,
                     (Math_SinS(this->actor.shape.rot.y) * 5.0f) + this->leftHandWorld.pos.x, this->leftHandWorld.pos.y,
                     (Math_CosS(this->actor.shape.rot.y) * 5.0f) + this->leftHandWorld.pos.z, 0x4000,
                     this->actor.shape.rot.y, 0, sp4C->params);
-        Player_UpdateBottleHeld(play, this, ITEM_BOTTLE, PLAYER_IA_BOTTLE);
+        Player_UpdateBottleHeld(play, this, ITEM_BOTTLE, PLAYER_IA_BOTTLE_EMPTY);
     } else {
         Player_PlayAnimSfx(this, D_8085D838);
     }
@@ -16939,7 +16909,7 @@ void func_80853A5C(Player* this, PlayState* play) {
         } else {
             GetItemEntry* giEntry = &sGetItemTable[D_8085D1A4[this->exchangeItemId] - 1];
 
-            if (Player_ActionToBottle(this, this->itemAction) < 0) {
+            if (Player_BottleFromIA(this, this->itemAction) <= PLAYER_BOTTLE_NONE) {
                 this->getItemDrawIdPlusOne = ABS_ALT(giEntry->gid);
             }
 
@@ -16958,7 +16928,8 @@ void func_80853A5C(Player* this, PlayState* play) {
             }
         }
     } else if (this->unk_AE8 >= 0) {
-        if ((Player_ActionToBottle(this, this->itemAction) >= 0) && PlayerAnimation_OnFrame(&this->skelAnime, 36.0f)) {
+        if ((Player_BottleFromIA(this, this->itemAction) > PLAYER_BOTTLE_NONE) &&
+            PlayerAnimation_OnFrame(&this->skelAnime, 36.0f)) {
             Player_SetModels(this, PLAYER_MODELGROUP_BOTTLE);
         } else if (PlayerAnimation_OnFrame(&this->skelAnime, 2.0f)) {
             GetItemEntry* giEntry = &sGetItemTable[D_8085D1A4[this->itemAction] - 1];
@@ -17192,7 +17163,7 @@ void func_80854614(Player* this, PlayState* play) {
     func_8083868C(play, this);
     PlayerAnimation_Update(play, &this->skelAnime);
     func_8083216C(this, play);
-    this->unk_AB2.y = func_80847190(play, this, 1) - this->actor.shape.rot.y;
+    this->upperLimbRot.y = func_80847190(play, this, 1) - this->actor.shape.rot.y;
     this->unk_AA6 |= 0x80;
 
     if (play->unk_1887C < 0) {
@@ -20159,7 +20130,7 @@ PlayerItemAction func_8085B854(PlayState* play, Player* player, ItemId itemId) {
     return itemAction;
 }
 
-s32 func_8085B930(PlayState* play, PlayerAnimationHeader* talkAnim, s32 animMode) {
+s32 func_8085B930(PlayState* play, PlayerAnimationHeader* talkAnim, AnimationMode animMode) {
     Player* player = GET_PLAYER(play);
 
     if (!(player->actor.flags & ACTOR_FLAG_TALK_REQUESTED)) {

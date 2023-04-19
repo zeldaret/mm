@@ -2037,7 +2037,7 @@ s32 Player_OverrideLimbDrawGameplayCommon(PlayState* play, s32 limbIndex, Gfx** 
                 pos->x *= player->ageProperties->unk_08;
                 pos->z *= player->ageProperties->unk_08;
             }
-            if (!(player->skelAnime.moveFlags & ANIM_FLAG_4) || (player->skelAnime.moveFlags & ANIM_FLAG_UPDATEY)) {
+            if (!(player->skelAnime.moveFlags & ANIM_FLAG_4) || (player->skelAnime.moveFlags & ANIM_FLAG_UPDATE_Y)) {
                 pos->y *= player->ageProperties->unk_08;
             }
         }
@@ -2866,14 +2866,14 @@ void Player_DrawCircusLeadersMask(PlayState* play, Player* player) {
 
         if (1) {}
 
-        D_801F59B0[i].y += -10.0f * temp_f22;
+        D_801F59B0[i].y += -10.0f * scaleY;
 
         if (D_801F59C8[i] < 400) {
             f32 scaleXZ = CLAMP_MAX(scaleY, 0.05f);
 
             Matrix_Push();
-            Matrix_Translate(D_801F59B0[i].x, D_801F59B0[i].y, D_801F59B0[i].z, 0);
-            Matrix_Scale(phi_f20, temp_f22, phi_f20, 1);
+            Matrix_Translate(D_801F59B0[i].x, D_801F59B0[i].y, D_801F59B0[i].z, MTXMODE_NEW);
+            Matrix_Scale(scaleXZ, scaleY, scaleXZ, MTXMODE_APPLY);
 
             gSPMatrix(&gfx[0], Matrix_NewMtx(play->state.gfxCtx), G_MTX_PUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPSegment(&gfx[1], 0x08, gSegments[SEGMENT_NUMBER(gEffBubble1Tex)] + SEGMENT_OFFSET(gEffBubble1Tex));
@@ -3430,8 +3430,8 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
                     func_80126B8C(play, player);
                 }
 
-                Matrix_Get(&player->mf_CC4);
-                Matrix_MtxFToYXZRot(&player->mf_CC4, &player->leftHandWorld.rot, false);
+                Matrix_Get(&player->leftHandMf);
+                Matrix_MtxFToYXZRot(&player->leftHandMf, &player->leftHandWorld.rot, false);
             }
         }
     } else if (limbIndex == PLAYER_LIMB_RIGHT_HAND) {
