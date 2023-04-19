@@ -6709,7 +6709,7 @@ s32 func_80837DEC(Player* this, PlayState* play) {
 
                     sp70.x = this->actor.world.pos.x - ((temp_fv0_2 + 1.0f) * entityNormalX);
                     sp70.z = this->actor.world.pos.z - ((temp_fv0_2 + 1.0f) * entityNormalZ);
-                    sp70.y = this->actor.world.pos.y + 26.800001f;
+                    sp70.y = this->actor.world.pos.y + 268 * 0.1f;
 
                     temp_fv1_2 = this->actor.world.pos.y -
                                  BgCheck_EntityRaycastFloor5(&play->colCtx, &sp90, &sp88, &this->actor, &sp70);
@@ -8960,7 +8960,7 @@ s32 func_8083DD1C(PlayState* play, Player* this, f32 arg2, f32 arg3, f32 arg4, f
 void func_8083DEE4(PlayState* play, Player* this) {
     f32 temp_fv0 = this->ageProperties->unk_38;
 
-    func_8083DD1C(play, this, 26.800001f, temp_fv0 + 5.0f, temp_fv0 + 15.0f, 0.0f);
+    func_8083DD1C(play, this, 268 * 0.1f, temp_fv0 + 5.0f, temp_fv0 + 15.0f, 0.0f);
 }
 
 void func_8083DF38(Player* this, PlayerAnimationHeader* anim, PlayState* play) {
@@ -10798,7 +10798,7 @@ void func_80843178(PlayState* play, Player* this) {
         var_v1 &= ~0x18;
     }
 
-    Actor_UpdateBgCheckInfo(play, &this->actor, 26.800001f, temp_fv0, temp_fv1, var_v1);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 268 * 0.1f, temp_fv0, temp_fv1, var_v1);
 
     this->unk_AC0 -= (this->actor.world.pos.y - this->actor.prevPos.y) / this->actor.scale.y;
     this->unk_AC0 = CLAMP(this->unk_AC0, -1000.0f, 1000.0f);
@@ -15152,7 +15152,7 @@ AnimSfxEntry D_8085D658[] = {
     ANIMSFX(ANIMSFX_TYPE_FLOOR, 24, NA_SE_PL_SLIP, STOP),
 };
 
-Vec3f D_8085D660 = { 0.0f, 26.800001f, -60.0f };
+Vec3f D_8085D660 = { 0.0f, 268 * 0.1f, -60.0f };
 
 void func_8084EF9C(Player* this, PlayState* play) {
     PlayerAnimationHeader* anim = D_8085BE84[PLAYER_ANIMGROUP_35][this->modelAnimType];
@@ -15197,7 +15197,7 @@ void func_8084EF9C(Player* this, PlayState* play) {
         Vec3f sp40;
 
         yIntersect = func_80835D2C(play, this, &D_8085D660, &sp64) - this->actor.world.pos.y;
-        if (fabsf(yIntersect) < 26.800001f) {
+        if (fabsf(yIntersect) < 268 * 0.1f) {
             sp64.y -= 7.0f;
             sp4C.x = this->actor.world.pos.x;
             sp4C.z = this->actor.world.pos.z;
@@ -15331,8 +15331,8 @@ void func_8084F4E8(Player* this, PlayState* play) {
             }
         }
 
-        Actor_UpdateBgCheckInfo(play, &this->actor, 26.800001f, 6.0f, this->ageProperties->unk_00 + 15.0f, 7);
-        func_8083DD1C(play, this, 26.800001f, this->ageProperties->unk_3C, 50.0f, -20.0f);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 268 * 0.1f, 6.0f, this->ageProperties->unk_00 + 15.0f, 7);
+        func_8083DD1C(play, this, 268 * 0.1f, this->ageProperties->unk_3C, 50.0f, -20.0f);
     }
 
     func_80831944(play, this);
@@ -16822,7 +16822,7 @@ void func_80853754(Player* this, PlayState* play) {
 }
 
 void func_80853850(Player* this, PlayState* play) {
-    static Vec3f D_8085D7F8 = { 10.0f, 26.800001f, 30.0f };
+    static Vec3f D_8085D7F8 = { 10.0f, 268 * 0.1f, 30.0f };
     static s8 D_8085D804[PLAYER_FORM_MAX] = { 0x2D, 0x4B, 0x37, 0x23, 0x28 };
     static struct_8085D80C D_8085D80C[] = {
         { ACTOR_EN_FISH, 0 },       // PLAYER_BOTTLE_FISH
