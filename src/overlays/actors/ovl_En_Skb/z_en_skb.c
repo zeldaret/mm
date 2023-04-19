@@ -760,7 +760,7 @@ void func_8099630C(EnSkb* this, PlayState* play) {
         this->drawDmgEffScale = 0.0f;
         this->drawDmgEffAlpha = 0.0f;
         if (this->actor.colChkInfo.health != 0) {
-            Actor_SetColorFilter(&this->actor, 0x4000, 0xFF, 0, 8);
+            Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 8);
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 3);
             this->unk_3D8 |= 1;
             func_80995F98(this);
@@ -782,7 +782,7 @@ void func_809963D8(EnSkb* this, PlayState* play) {
         this->drawDmgEffScale = 0.0f;
         this->drawDmgEffAlpha = 0.0f;
         if (this->actor.colChkInfo.health != 0) {
-            Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 8);
+            Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 8);
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 3);
             this->unk_3D8 |= 1;
             func_80995F98(this);
@@ -915,12 +915,12 @@ void func_8099672C(EnSkb* this, PlayState* play) {
                     this->drawDmgEffTimer = 40;
                     this->drawDmgEffAlpha = 1.0f;
                     this->drawDmgEffScale = 0.0f;
-                    Actor_SetColorFilter(&this->actor, 0, 0x78, 0, 40);
+                    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 120, COLORFILTER_BUFFLAG_OPA, 40);
                     func_80995E08(this);
                     break;
 
                 case 1:
-                    Actor_SetColorFilter(&this->actor, 0, 0x78, 0, 40);
+                    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 120, COLORFILTER_BUFFLAG_OPA, 40);
                     func_80995E08(this);
                     break;
 
@@ -929,7 +929,7 @@ void func_8099672C(EnSkb* this, PlayState* play) {
                     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
                     this->drawDmgEffAlpha = 1.0f;
                     this->drawDmgEffScale = 0.0f;
-                    Actor_SetColorFilter(&this->actor, 0x4000, 0xFF, 0, 8);
+                    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 8);
                     this->unk_3D8 |= 1;
                     func_80995F98(this);
                     break;
@@ -944,7 +944,7 @@ void func_8099672C(EnSkb* this, PlayState* play) {
                     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_SFX;
                     this->drawDmgEffAlpha = 1.0f;
                     this->drawDmgEffScale = 0.5f;
-                    Actor_SetColorFilter(&this->actor, 0x4000, 0xFF, 0, 8);
+                    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 8);
                     func_809962D4(this);
                     break;
 
@@ -953,7 +953,7 @@ void func_8099672C(EnSkb* this, PlayState* play) {
                     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
                     this->drawDmgEffAlpha = 1.0f;
                     this->drawDmgEffScale = 0.5f;
-                    Actor_SetColorFilter(&this->actor, 0x4000, 0xFF, 0, 8);
+                    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 8);
                     Actor_PlaySfx(&this->actor, NA_SE_EN_STALKID_DAMAGE);
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 3);
                     func_809963C4(this);
@@ -972,7 +972,7 @@ void func_8099672C(EnSkb* this, PlayState* play) {
                     }
 
                 case 13:
-                    Actor_SetColorFilter(&this->actor, 0x4000, 0xFF, 0, 8);
+                    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 8);
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 3);
                     func_80995F98(this);
                     break;
@@ -1062,7 +1062,9 @@ void EnSkb_Update(Actor* thisx, PlayState* play) {
         Actor_MoveWithGravity(&this->actor);
     }
 
-    Actor_UpdateBgCheckInfo(play, &this->actor, 15.0f, 30.0f, 60.0f, 0x1D);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 15.0f, 30.0f, 60.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                UPDBGCHECKINFO_FLAG_10);
     func_809964DC(this, play);
     func_80996AD0(this, play);
     func_80996D68(this, play);

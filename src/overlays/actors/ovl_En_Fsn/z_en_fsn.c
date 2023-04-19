@@ -997,13 +997,13 @@ void EnFsn_GiveItem(EnFsn* this, PlayState* play) {
         }
         this->actor.parent = NULL;
         if (ENFSN_IS_SHOP(&this->actor) && !this->isSelling) {
-            Player_UpdateBottleHeld(play, GET_PLAYER(play), ITEM_BOTTLE, PLAYER_IA_BOTTLE);
+            Player_UpdateBottleHeld(play, GET_PLAYER(play), ITEM_BOTTLE, PLAYER_IA_BOTTLE_EMPTY);
         }
         this->actionFunc = EnFsn_SetupResumeInteraction;
     } else if (this->isSelling == true) {
-        Actor_PickUp(&this->actor, play, this->items[this->cursorIndex]->getItemId, 300.0f, 300.0f);
+        Actor_OfferGetItem(&this->actor, play, this->items[this->cursorIndex]->getItemId, 300.0f, 300.0f);
     } else {
-        Actor_PickUp(&this->actor, play, this->getItemId, 300.0f, 300.0f);
+        Actor_OfferGetItem(&this->actor, play, this->getItemId, 300.0f, 300.0f);
     }
 }
 
@@ -1154,7 +1154,7 @@ void EnFsn_HandleCanPlayerBuyItem(EnFsn* this, PlayState* play) {
             func_8019F208();
             item = this->items[this->cursorIndex];
             item->buyFanfareFunc(play, item);
-            Actor_PickUp(&this->actor, play, this->items[this->cursorIndex]->getItemId, 300.0f, 300.0f);
+            Actor_OfferGetItem(&this->actor, play, this->items[this->cursorIndex]->getItemId, 300.0f, 300.0f);
             play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
             play->msgCtx.stateTimer = 4;
             Interface_SetHudVisibility(HUD_VISIBILITY_ALL);

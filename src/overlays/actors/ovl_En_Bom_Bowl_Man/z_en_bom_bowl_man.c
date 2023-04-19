@@ -173,9 +173,9 @@ void func_809C4BC4(EnBomBowlMan* this, PlayState* play) {
     func_809C4B50(this);
     func_809C493C(this, 0, 1.0f);
 
-    for (i = 0; i < ARRAY_COUNT(gSaveContext.save.bomberCode); i++) {
+    for (i = 0; i < ARRAY_COUNT(gSaveContext.save.saveInfo.bomberCode); i++) {
         Math_Vec3f_Copy(&sp7C, &this->actor.home.pos);
-        code = gSaveContext.save.bomberCode[i];
+        code = gSaveContext.save.saveInfo.bomberCode[i];
         if (code == 1) {
             Math_Vec3f_Copy(&this->actor.world.pos, &D_809C61A0[i]);
             this->unk_2D8[code] = this;
@@ -351,7 +351,7 @@ void func_809C51B4(EnBomBowlMan* this, PlayState* play) {
 void func_809C52B4(EnBomBowlMan* this) {
     this->actor.draw = NULL;
     this->actor.flags |= ACTOR_FLAG_10;
-    this->actor.flags |= ACTOR_FLAG_8000000;
+    this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
     this->actor.flags &= ~ACTOR_FLAG_1;
     this->actor.world.pos.x = 1340.0f;
     this->actor.world.pos.z = -1795.0f;
@@ -496,7 +496,7 @@ void func_809C5738(EnBomBowlMan* this, PlayState* play) {
 }
 
 void func_809C59A4(EnBomBowlMan* this, PlayState* play) {
-    Actor_PickUp(&this->actor, play, GI_BOMBERS_NOTEBOOK, 300.0f, 300.0f);
+    Actor_OfferGetItem(&this->actor, play, GI_BOMBERS_NOTEBOOK, 300.0f, 300.0f);
     this->unk_29C = 1;
     this->actionFunc = func_809C59F0;
 }
@@ -513,7 +513,7 @@ void func_809C59F0(EnBomBowlMan* this, PlayState* play) {
         func_800B8500(&this->actor, play, 400.0f, 400.0f, PLAYER_IA_MINUS1);
         this->actionFunc = func_809C5AA4;
     } else {
-        Actor_PickUp(&this->actor, play, GI_BOMBERS_NOTEBOOK, 300.0f, 300.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_BOMBERS_NOTEBOOK, 300.0f, 300.0f);
     }
 }
 
@@ -630,7 +630,9 @@ void EnBomBowlMan_Update(Actor* thisx, PlayState* play) {
             this->unk_2F2 = (s32)Rand_ZeroFloat(60.0f) + 20;
         }
     }
-    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 50.0f, 0x1D);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 50.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                UPDBGCHECKINFO_FLAG_10);
 }
 
 s32 EnBomBowlMan_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {

@@ -45,9 +45,9 @@ s32 func_80C07C80(s32 arg0) {
     s32 var_v1;
 
     if (!(arg0 & 1)) {
-        var_v1 = gSaveContext.save.unk_E88[arg0 >> 1] & 0xFFFF;
+        var_v1 = gSaveContext.save.saveInfo.unk_E64[arg0 >> 1] & 0xFFFF;
     } else {
-        var_v1 = (gSaveContext.save.unk_E88[arg0 >> 1] & 0xFFFF0000) >> 0x10;
+        var_v1 = (gSaveContext.save.saveInfo.unk_E64[arg0 >> 1] & 0xFFFF0000) >> 0x10;
     }
     return var_v1 + CLOCK_TIME(2, 30);
 }

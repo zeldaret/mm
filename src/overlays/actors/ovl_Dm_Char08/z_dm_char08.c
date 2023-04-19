@@ -165,15 +165,15 @@ void DmChar08_Init(Actor* thisx, PlayState* play2) {
     this->unk_1F0 = 0.0f;
     if (play->sceneId == SCENE_31MISAKI) {
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_53_20)) {
-            DynaPolyActor_Init(&this->dyna, 3);
+            DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS | DYNA_TRANSFORM_ROT_Y);
             DynaPolyActor_LoadMesh(play, &this->dyna, &gTurtleZoraCapeAwakeCol);
         } else {
-            DynaPolyActor_Init(&this->dyna, 3);
+            DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS | DYNA_TRANSFORM_ROT_Y);
             DynaPolyActor_LoadMesh(play, &this->dyna, &gTurtleZoraCapeAsleepCol);
         }
         this->dynapolyInitialized = true;
     } else if (play->sceneId == SCENE_SEA) {
-        DynaPolyActor_Init(&this->dyna, 3);
+        DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS | DYNA_TRANSFORM_ROT_Y);
         DynaPolyActor_LoadMesh(play, &this->dyna, &sTurtleGreatBayTempleCol);
         this->dynapolyInitialized = true;
     }
@@ -296,7 +296,7 @@ void DmChar08_SetupAppearCs(DmChar08* this, PlayState* play) {
 
 void func_80AAF884(DmChar08* this, PlayState* play) {
     if (play->csCtx.state == CS_STATE_0) {
-        DynaPolyActor_Init(&this->dyna, 3);
+        DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS | DYNA_TRANSFORM_ROT_Y);
         DynaPolyActor_LoadMesh(play, &this->dyna, &gTurtleZoraCapeAwakeCol);
         this->dyna.actor.flags |= ACTOR_FLAG_1;
         this->actionFunc = func_80AAF8F4;
@@ -960,7 +960,7 @@ void DmChar08_UpdateCollision(DmChar08* this, PlayState* play) {
         sTurtleGreatBayTempleColVertices[5].y = 0x4B0;
         sTurtleGreatBayTempleColVertices[9].y = 0x6A4;
     }
-    func_800C6554(play, &play->colCtx.dyna);
+    DynaPoly_InvalidateLookup(play, &play->colCtx.dyna);
 }
 
 void DmChar08_Update(Actor* thisx, PlayState* play) {
@@ -988,9 +988,9 @@ void DmChar08_Update(Actor* thisx, PlayState* play) {
     this->dyna.actor.world.pos.y = this->targetYPos;
     if (play->sceneId == SCENE_31MISAKI) {
         if (this->dyna.actor.xzDistToPlayer > 1300.0f) {
-            func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+            DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
         } else {
-            func_800C6314(play, &play->colCtx.dyna, this->dyna.bgId);
+            DynaPoly_EnableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
         }
     }
     if (this->unk_1FF != 0) {

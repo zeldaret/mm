@@ -194,7 +194,8 @@ void EnJg_UpdateCollision(EnJg* this, PlayState* play) {
 
     CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 30.0f, 30.0f, 7);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 30.0f, 30.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_2 | UPDBGCHECKINFO_FLAG_4);
 }
 
 s16 EnJg_GetWalkingYRotation(Path* path, s32 pointIndex, Vec3f* pos, f32* distSQ) {
@@ -214,7 +215,7 @@ s16 EnJg_GetWalkingYRotation(Path* path, s32 pointIndex, Vec3f* pos, f32* distSQ
 
     *distSQ = SQ(diffX) + SQ(diffZ);
 
-    return RADF_TO_BINANG(Math_Atan2F_XY(diffZ, diffX));
+    return RAD_TO_BINANG(Math_Atan2F_XY(diffZ, diffX));
 }
 
 s32 EnJg_ReachedPoint(EnJg* this, Path* path, s32 pointIndex) {
@@ -241,7 +242,7 @@ s32 EnJg_ReachedPoint(EnJg* this, Path* path, s32 pointIndex) {
         diffZ = points[currentPoint + 1].z - points[currentPoint - 1].z;
     }
 
-    func_8017B7F8(&point, RADF_TO_BINANG(func_80086B30(diffX, diffZ)), &px, &pz, &d);
+    func_8017B7F8(&point, RAD_TO_BINANG(func_80086B30(diffX, diffZ)), &px, &pz, &d);
 
     if (((this->actor.world.pos.x * px) + (pz * this->actor.world.pos.z) + d) > 0.0f) {
         reached = true;
@@ -687,7 +688,7 @@ void EnJg_LullabyIntroCutsceneAction(EnJg* this, PlayState* play) {
             this->drum = Actor_SpawnAsChildAndCutscene(
                 &play->actorCtx, play, ACTOR_OBJ_JG_GAKKI, this->actor.world.pos.x, this->actor.world.pos.y,
                 this->actor.world.pos.z, this->actor.shape.rot.x, this->actor.shape.rot.y, this->actor.shape.rot.z,
-                this->actor.params, this->actor.cutscene, this->actor.unk20, NULL);
+                this->actor.params, this->actor.cutscene, this->actor.halfDaysBits, NULL);
         }
 
         if (this->cutsceneAnimIndex == EN_JG_ANIM_TAKING_OUT_DRUM) {

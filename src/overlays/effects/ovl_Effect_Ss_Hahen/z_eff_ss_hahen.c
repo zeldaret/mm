@@ -21,7 +21,7 @@ u32 EffectSsHahen_Init(PlayState* play, u32 index, EffectSs* this, void* initPar
 void EffectSsHahen_Update(PlayState* play, u32 index, EffectSs* this);
 void EffectSsHahen_Draw(PlayState* play, u32 index, EffectSs* this);
 
-const EffectSsInit Effect_Ss_Hahen_InitVars = {
+EffectSsInit Effect_Ss_Hahen_InitVars = {
     EFFECT_SS_HAHEN,
     EffectSsHahen_Init,
 };

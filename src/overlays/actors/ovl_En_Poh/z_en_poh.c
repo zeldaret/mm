@@ -346,7 +346,7 @@ void func_80B2CFF8(EnPoh* this) {
     func_800BE504(&this->actor, &this->colliderCylinder);
     this->colliderCylinder.base.acFlags &= ~AC_ON;
     this->actor.speed = 5.0f;
-    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 16);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 16);
     this->actionFunc = func_80B2D07C;
 }
 
@@ -588,7 +588,7 @@ void func_80B2DD2C(EnPoh* this, PlayState* play) {
     }
 
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 10.0f, 10.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 10.0f, 10.0f, UPDBGCHECKINFO_FLAG_4);
 }
 
 void func_80B2DDF8(EnPoh* this, s32 arg1) {
@@ -663,7 +663,7 @@ void func_80B2E230(EnPoh* this, PlayState* play) {
         return;
     }
 
-    Actor_PickUp(&this->actor, play, GI_MAX, 35.0f, 60.0f);
+    Actor_OfferGetItem(&this->actor, play, GI_MAX, 35.0f, 60.0f);
     this->actor.world.pos.y = (Math_SinS(this->unk_18D * 0x800) * 5.0f) + this->actor.home.pos.y;
     if (this->unk_18D) {
         this->unk_18D--;
@@ -1005,7 +1005,7 @@ void func_80B2F37C(Actor* thisx, PlayState* play) {
         gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 255, 170, 255, this->unk_197);
         gDPSetEnvColor(POLY_XLU_DISP++, this->unk_194, this->unk_195, this->unk_196, 255);
 
-        Matrix_RotateYF((Camera_GetCamDirYaw(GET_ACTIVE_CAM(play)) + 0x8000) * (M_PI / 32768), MTXMODE_APPLY);
+        Matrix_RotateYF(BINANG_TO_RAD(Camera_GetCamDirYaw(GET_ACTIVE_CAM(play)) + 0x8000), MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, object_po_DL_003850);

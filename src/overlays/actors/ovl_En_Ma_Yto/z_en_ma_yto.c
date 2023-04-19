@@ -174,7 +174,7 @@ void EnMaYto_Init(Actor* thisx, PlayState* play) {
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &sColChkInfoInit2);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
 
     if (EnMaYto_TryFindRomani(this, play) == 1) {
         EnMaYto_SetupKeepLookingForRomani(this);
@@ -960,10 +960,10 @@ void EnMaYto_PostMilkRunGiveReward(EnMaYto* this, PlayState* play) {
     if (Actor_HasParent(&this->actor, play)) {
         EnMaYto_SetupPostMilkRunExplainReward(this);
     } else if (INV_CONTENT(ITEM_MASK_ROMANI) == ITEM_MASK_ROMANI) {
-        Actor_PickUp(&this->actor, play, GI_RUPEE_HUGE, 500.0f, 100.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_RUPEE_HUGE, 500.0f, 100.0f);
         this->unk310 = 2;
     } else {
-        Actor_PickUp(&this->actor, play, GI_MASK_ROMANI, 500.0f, 100.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_MASK_ROMANI, 500.0f, 100.0f);
         this->unk310 = 1;
     }
 }

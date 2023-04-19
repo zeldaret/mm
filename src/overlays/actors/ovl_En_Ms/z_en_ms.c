@@ -83,7 +83,7 @@ void EnMs_Destroy(Actor* thisx, PlayState* play) {
 void EnMs_Wait(EnMs* this, PlayState* play) {
     s16 yawDiff = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
 
-    if (gSaveContext.save.inventory.items[SLOT_MAGIC_BEANS] == ITEM_NONE) {
+    if (gSaveContext.save.saveInfo.inventory.items[SLOT_MAGIC_BEANS] == ITEM_NONE) {
         this->actor.textId = 0x92E; // "[...] You're the first customer [...]"
     } else {
         this->actor.textId = 0x932; // "[...] So you liked my Magic Beans [...]"
@@ -107,8 +107,8 @@ void EnMs_Talk(EnMs* this, PlayState* play) {
         case TEXT_STATE_5:
             if (Message_ShouldAdvance(play)) {
                 Message_CloseTextbox(play);
-                Actor_PickUp(&this->actor, play, GI_MAGIC_BEANS, this->actor.xzDistToPlayer,
-                             this->actor.playerHeightRel);
+                Actor_OfferGetItem(&this->actor, play, GI_MAGIC_BEANS, this->actor.xzDistToPlayer,
+                                   this->actor.playerHeightRel);
                 this->actionFunc = EnMs_Sell;
             }
             break;
@@ -118,7 +118,7 @@ void EnMs_Talk(EnMs* this, PlayState* play) {
                 switch (play->msgCtx.choiceIndex) {
                     case 0: // yes
                         Message_CloseTextbox(play);
-                        if (gSaveContext.save.playerData.rupees < 10) {
+                        if (gSaveContext.save.saveInfo.playerData.rupees < 10) {
                             play_sound(NA_SE_SY_ERROR);
                             Message_ContinueTextbox(play, 0x935); // "[...] You don't have enough Rupees."
                         } else if (AMMO(ITEM_MAGIC_BEANS) >= 20) {
@@ -126,7 +126,7 @@ void EnMs_Talk(EnMs* this, PlayState* play) {
                             Message_ContinueTextbox(play, 0x937); // "[...] You can't carry anymore."
                         } else {
                             func_8019F208();
-                            Actor_PickUp(&this->actor, play, GI_MAGIC_BEANS, 90.0f, 10.0f);
+                            Actor_OfferGetItem(&this->actor, play, GI_MAGIC_BEANS, 90.0f, 10.0f);
                             Rupees_ChangeBy(-10);
                             this->actionFunc = EnMs_Sell;
                         }
@@ -152,7 +152,7 @@ void EnMs_Sell(EnMs* this, PlayState* play) {
         func_800B8500(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel, PLAYER_IA_NONE);
         this->actionFunc = EnMs_TalkAfterPurchase;
     } else {
-        Actor_PickUp(&this->actor, play, GI_MAGIC_BEANS, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
+        Actor_OfferGetItem(&this->actor, play, GI_MAGIC_BEANS, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
     }
 }
 

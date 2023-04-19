@@ -577,7 +577,7 @@ s32 SubS_HasReachedPoint(Actor* actor, Path* path, s32 pointIndex) {
         diffZ = points[index + 1].z - points[index - 1].z;
     }
 
-    func_8017B7F8(&point, RADF_TO_BINANG(func_80086B30(diffX, diffZ)), &px, &pz, &d);
+    func_8017B7F8(&point, RAD_TO_BINANG(func_80086B30(diffX, diffZ)), &px, &pz, &d);
     if (((px * actor->world.pos.x) + (pz * actor->world.pos.z) + d) > 0.0f) {
         reached = true;
     }
@@ -828,7 +828,7 @@ s32 func_8013C964(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, s32 it
         case 1:
             yRange = fabsf(actor->playerHeightRel) + 1.0f;
             xzRange = actor->xzDistToPlayer + 1.0f;
-            ret = Actor_PickUp(actor, play, itemId, xzRange, yRange);
+            ret = Actor_OfferGetItem(actor, play, itemId, xzRange, yRange);
             break;
 
         case 2:
@@ -1023,13 +1023,13 @@ s16 SubS_ComputeTrackPointRot(s16* rot, s16 rotMax, s16 target, f32 slowness, f3
     f32 step;
     f32 prevRotStep;
 
-    step = (f32)(target - *rot) * (360.0f / (f32)0x10000);
+    step = BINANG_TO_DEG(target - *rot);
     step *= gFramerateDivisorHalf;
     prevRotStep = step;
     if (step >= 0.0f) {
         step /= slowness;
         step = CLAMP(step, stepMin, stepMax);
-        *rot += (s16)((step * (f32)0x10000) / 360.0f);
+        *rot += DEG_TO_BINANG_ALT2(step);
         if (prevRotStep < stepMin) {
             *rot = target;
         }
@@ -1039,7 +1039,7 @@ s16 SubS_ComputeTrackPointRot(s16* rot, s16 rotMax, s16 target, f32 slowness, f3
     } else {
         step = (step / slowness) * -1.0f;
         step = CLAMP(step, stepMin, stepMax);
-        *rot -= (s16)((step * (f32)0x10000) / 360.0f);
+        *rot -= DEG_TO_BINANG_ALT2(step);
         if (-stepMin < prevRotStep) {
             *rot = target;
         }

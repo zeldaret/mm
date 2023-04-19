@@ -282,7 +282,7 @@ void EnSsh_SetColliderScale(EnSsh* this, f32 arg1, f32 arg2) {
 
 s32 EnSsh_Damaged(EnSsh* this) {
     if ((this->stunTimer == 120) && (this->stateFlags & SSH_STATE_STUNNED)) {
-        Actor_SetColorFilter(&this->actor, 0, 200, 0, this->stunTimer);
+        Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 200, COLORFILTER_BUFFLAG_OPA, this->stunTimer);
     }
 
     if (DECR(this->stunTimer) != 0) {
@@ -419,7 +419,7 @@ void EnSsh_Sway(EnSsh* this) {
         }
 
         temp_f20 = (this->swayTimer * (1.0f / 6));
-        swayAngle = Math_SinS(this->swayAngle) * (temp_f20 * (0x10000 / 360.0f));
+        swayAngle = (f32)DEG_TO_BINANG_ALT3(temp_f20) * Math_SinS(this->swayAngle);
         temp_f20 = this->actor.world.pos.y - this->ceilingPos.y;
 
         swayVecBase.x = Math_SinS(swayAngle) * temp_f20;
@@ -428,7 +428,7 @@ void EnSsh_Sway(EnSsh* this) {
 
         Matrix_Push();
         Matrix_Translate(this->ceilingPos.x, this->ceilingPos.y, this->ceilingPos.z, MTXMODE_NEW);
-        Matrix_RotateYF(this->actor.world.rot.y * (M_PI / 0x8000), MTXMODE_APPLY);
+        Matrix_RotateYF(BINANG_TO_RAD(this->actor.world.rot.y), MTXMODE_APPLY);
         Matrix_MultVec3f(&swayVecBase, &swayVec);
         Matrix_Pop();
 
@@ -849,7 +849,7 @@ void EnSsh_Update(Actor* thisx, PlayState* play) {
     } else {
         SkelAnime_Update(&this->skelAnime);
         Actor_UpdatePos(&this->actor);
-        Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
         this->actionFunc(this, play);
     }
 

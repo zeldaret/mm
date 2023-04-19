@@ -349,7 +349,7 @@ void EnTrt_GetMushroom(EnTrt* this, PlayState* play) {
                 this->textId = 0x884;
                 Message_StartTextbox(play, this->textId, &this->actor);
                 SET_WEEKEVENTREG(WEEKEVENTREG_53_08);
-                Player_UpdateBottleHeld(play, GET_PLAYER(play), ITEM_BOTTLE, PLAYER_IA_BOTTLE);
+                Player_UpdateBottleHeld(play, GET_PLAYER(play), ITEM_BOTTLE, PLAYER_IA_BOTTLE_EMPTY);
                 break;
             case 0x888:
                 this->textId = 0x889;
@@ -375,10 +375,10 @@ void EnTrt_GetMushroom(EnTrt* this, PlayState* play) {
 void EnTrt_PayForMushroom(EnTrt* this, PlayState* play) {
     if (Actor_HasParent(&this->actor, play)) {
         this->actor.parent = NULL;
-        Player_UpdateBottleHeld(play, GET_PLAYER(play), ITEM_BOTTLE, PLAYER_IA_BOTTLE);
+        Player_UpdateBottleHeld(play, GET_PLAYER(play), ITEM_BOTTLE, PLAYER_IA_BOTTLE_EMPTY);
         this->actionFunc = EnTrt_SetupItemGiven;
     } else {
-        Actor_PickUp(&this->actor, play, GI_RUPEE_RED, 300.0f, 300.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_RUPEE_RED, 300.0f, 300.0f);
     }
 }
 
@@ -453,9 +453,9 @@ void EnTrt_GiveRedPotionForKoume(EnTrt* this, PlayState* play) {
         player->stateFlags2 &= ~PLAYER_STATE2_20000000;
         this->actionFunc = EnTrt_GivenRedPotionForKoume;
     } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_12_10)) {
-        Actor_PickUp(&this->actor, play, GI_POTION_RED, 300.0f, 300.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_POTION_RED, 300.0f, 300.0f);
     } else {
-        Actor_PickUp(&this->actor, play, GI_POTION_RED_BOTTLE, 300.0f, 300.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_POTION_RED_BOTTLE, 300.0f, 300.0f);
     }
 }
 
@@ -649,7 +649,7 @@ void EnTrt_BrowseShelf(EnTrt* this, PlayState* play) {
 void EnTrt_SetupBuyItemWithFanfare(PlayState* play, EnTrt* this) {
     Player* player = GET_PLAYER(play);
 
-    Actor_PickUp(&this->actor, play, this->items[this->cursorIndex]->getItemId, 300.0f, 300.0f);
+    Actor_OfferGetItem(&this->actor, play, this->items[this->cursorIndex]->getItemId, 300.0f, 300.0f);
     play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
     play->msgCtx.stateTimer = 4;
     player->stateFlags2 &= ~PLAYER_STATE2_20000000;
@@ -1090,7 +1090,7 @@ void EnTrt_BuyItemWithFanfare(EnTrt* this, PlayState* play) {
         this->actor.parent = NULL;
         this->actionFunc = EnTrt_SetupItemGiven;
     } else {
-        Actor_PickUp(&this->actor, play, this->items[this->cursorIndex]->getItemId, 300.0f, 300.0f);
+        Actor_OfferGetItem(&this->actor, play, this->items[this->cursorIndex]->getItemId, 300.0f, 300.0f);
     }
 }
 

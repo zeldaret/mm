@@ -116,7 +116,7 @@ void BgIkanaDharma_Init(Actor* thisx, PlayState* play2) {
                                           segmentY, this->dyna.actor.world.pos.z, this->dyna.actor.shape.rot.x,
                                           this->dyna.actor.shape.rot.y, this->dyna.actor.shape.rot.z,
                                           BGIKANADHARMA_PARAMS(0, true, 0), this->dyna.actor.cutscene,
-                                          this->dyna.actor.unk20, NULL);
+                                          this->dyna.actor.halfDaysBits, NULL);
         }
 
         this->dyna.actor.bgCheckFlags |= BGCHECKFLAG_GROUND;
@@ -226,7 +226,7 @@ void BgIkanaDharma_Update(Actor* thisx, PlayState* play) {
         actorBelow = DynaPoly_GetActor(&play->colCtx, this->dyna.actor.floorBgId);
         if (actorBelow == NULL) {
             Actor_MoveWithGravity(&this->dyna.actor);
-            Actor_UpdateBgCheckInfo(play, &this->dyna.actor, 0.0f, 0.0f, 0.0f, 4);
+            Actor_UpdateBgCheckInfo(play, &this->dyna.actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
             if (this->dyna.actor.bgCheckFlags & BGCHECKFLAG_GROUND_TOUCH) {
                 s16 quakeIndex = Quake_Add(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
 
@@ -250,7 +250,8 @@ void BgIkanaDharma_Update(Actor* thisx, PlayState* play) {
         wallCheckRadius = CLAMP_MIN(wallCheckRadius, 2.0f);
 
         Actor_MoveWithGravity(&this->dyna.actor);
-        Actor_UpdateBgCheckInfo(play, &this->dyna.actor, 20.0f, wallCheckRadius, 0.0f, 5);
+        Actor_UpdateBgCheckInfo(play, &this->dyna.actor, 20.0f, wallCheckRadius, 0.0f,
+                                UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
     }
 
     Actor_SetFocus(&this->dyna.actor, 40.0f);

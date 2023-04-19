@@ -211,7 +211,7 @@ void EnFish2_Init(Actor* thisx, PlayState* play) {
     } else if (this->actor.params != 0) {
         this->unk_2B4 = 10;
         this->actor.draw = NULL;
-        this->actor.flags |= ACTOR_FLAG_8000000;
+        this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
         this->actionFunc = func_80B2A01C;
     }
 }
@@ -987,7 +987,8 @@ void EnFish2_Update(Actor* thisx, PlayState* play2) {
         this->unk_33C = 25.0f - ((this->unk_330 - 0.01f) * 1000.0f);
         Actor_SetScale(&this->actor, this->unk_330);
         Actor_MoveWithGravity(&this->actor);
-        Actor_UpdateBgCheckInfo(play, &this->actor, 0, 15.0f, 10.0f, 7);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 0, 15.0f, 10.0f,
+                                UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_2 | UPDBGCHECKINFO_FLAG_4);
 
         if (this->actor.params != 2) {
             this->unk_2D4 = this->actor.floorHeight + (this->unk_330 * 1000.0f);

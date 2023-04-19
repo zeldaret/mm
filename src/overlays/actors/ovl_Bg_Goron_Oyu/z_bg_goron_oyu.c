@@ -91,8 +91,8 @@ void func_80B401F8(BgGoronOyu* this, PlayState* play) {
 
     if (dist.x >= 0.0f && dist.x <= this->waterBoxXLength && dist.z >= 0.0f && dist.z <= this->waterBoxZLength &&
         fabsf(dist.y) < 100.0f && player->actor.depthInWater > 12.0f) {
-        Actor_PickUp(&this->dyna.actor, play, GI_MAX, this->dyna.actor.xzDistToPlayer,
-                     fabsf(this->dyna.actor.playerHeightRel));
+        Actor_OfferGetItem(&this->dyna.actor, play, GI_MAX, this->dyna.actor.xzDistToPlayer,
+                           fabsf(this->dyna.actor.playerHeightRel));
     }
 }
 
@@ -152,7 +152,7 @@ void BgGoronOyu_Init(Actor* thisx, PlayState* play) {
     CollisionHeader* colHeader = NULL;
 
     Actor_SetScale(&this->dyna.actor, 0.1f);
-    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
     CollisionHeader_GetVirtual(&object_oyu_Colheader_000988, &colHeader);
 
     this->dyna.bgId = DynaPoly_SetBgActor(play, &play->colCtx.dyna, &this->dyna.actor, colHeader);

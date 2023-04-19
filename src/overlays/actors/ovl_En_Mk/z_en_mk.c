@@ -120,7 +120,7 @@ void EnMk_Destroy(Actor* thisx, PlayState* play) {
 }
 
 s32 func_80959524(PlayState* play) {
-    return gSaveContext.save.permanentSceneFlags[play->sceneId].unk_14 & 7;
+    return gSaveContext.save.saveInfo.permanentSceneFlags[play->sceneId].unk_14 & 7;
 }
 
 void func_8095954C(EnMk* this, PlayState* play) {
@@ -445,7 +445,7 @@ void EnMk_Update(Actor* thisx, PlayState* play) {
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
 
     this->actionFunc(this, play);
 

@@ -166,7 +166,7 @@ void func_80BCD2BC(EnScopecrow* this, PlayState* play) {
     Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ACTOR_EN_SC_RUPPE, this->actor.world.pos.x,
                                   this->actor.world.pos.y, this->actor.world.pos.z, this->actor.shape.rot.x,
                                   this->actor.shape.rot.y, this->actor.shape.rot.z, this->actor.params,
-                                  this->actor.cutscene, this->actor.unk20, NULL);
+                                  this->actor.cutscene, this->actor.halfDaysBits, NULL);
 }
 
 s32 func_80BCD334(EnScopecrow* this, Path* path, s32 pointIndex) {
@@ -192,7 +192,7 @@ s32 func_80BCD334(EnScopecrow* this, Path* path, s32 pointIndex) {
         phi_fa1 = points[index + 1].z - points[index - 1].z;
     }
 
-    func_8017B7F8(&sp30, RADF_TO_BINANG(func_80086B30(phi_fa0, phi_fa1)), &sp3C.z, &sp3C.y, &sp3C.x);
+    func_8017B7F8(&sp30, RAD_TO_BINANG(func_80086B30(phi_fa0, phi_fa1)), &sp3C.z, &sp3C.y, &sp3C.x);
 
     if (((this->actor.world.pos.x * sp3C.z) + (sp3C.y * this->actor.world.pos.z) + sp3C.x) > 0.0f) {
         ret = true;

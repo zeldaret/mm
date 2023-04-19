@@ -151,33 +151,33 @@ ObjIcePoly* EnKgy_FindIceBlock(PlayState* play) {
 }
 
 void func_80B40C74(PlayState* play) {
-    gSaveContext.save.permanentSceneFlags[play->sceneId].unk_14 |= 1;
+    gSaveContext.save.saveInfo.permanentSceneFlags[play->sceneId].unk_14 |= 1;
     if (CURRENT_DAY == 1) {
-        gSaveContext.save.permanentSceneFlags[play->sceneId].unk_14 |= 2;
+        gSaveContext.save.saveInfo.permanentSceneFlags[play->sceneId].unk_14 |= 2;
     } else {
-        gSaveContext.save.permanentSceneFlags[play->sceneId].unk_14 &= ~2;
+        gSaveContext.save.saveInfo.permanentSceneFlags[play->sceneId].unk_14 &= ~2;
     }
 }
 
 void func_80B40D00(PlayState* play) {
-    gSaveContext.save.permanentSceneFlags[play->sceneId].unk_14 |= 4;
+    gSaveContext.save.saveInfo.permanentSceneFlags[play->sceneId].unk_14 |= 4;
 }
 
 void func_80B40D30(PlayState* play) {
-    gSaveContext.save.permanentSceneFlags[play->sceneId].unk_14 &= ~7;
+    gSaveContext.save.saveInfo.permanentSceneFlags[play->sceneId].unk_14 &= ~7;
 }
 
 s32 func_80B40D64(PlayState* play) {
-    return gSaveContext.save.permanentSceneFlags[play->sceneId].unk_14 & 1;
+    return gSaveContext.save.saveInfo.permanentSceneFlags[play->sceneId].unk_14 & 1;
 }
 
 s32 func_80B40D8C(PlayState* play) {
-    return gSaveContext.save.permanentSceneFlags[play->sceneId].unk_14 & 4;
+    return gSaveContext.save.saveInfo.permanentSceneFlags[play->sceneId].unk_14 & 4;
 }
 
 s32 func_80B40DB4(PlayState* play) {
     if ((CURRENT_DAY == 3) ||
-        ((CURRENT_DAY == 2) && (gSaveContext.save.permanentSceneFlags[play->sceneId].unk_14 & 2))) {
+        ((CURRENT_DAY == 2) && (gSaveContext.save.saveInfo.permanentSceneFlags[play->sceneId].unk_14 & 2))) {
         return true;
     }
     return false;
@@ -458,7 +458,7 @@ void func_80B417B8(EnKgy* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         Message_CloseTextbox(play);
         func_80B413C8(this);
-        this->actor.flags &= ~ACTOR_FLAG_100;
+        this->actor.flags &= ~ACTOR_FLAG_TALK_REQUESTED;
         this->actionFunc = func_80B419B0;
         func_80B40E18(this, 7);
     }
@@ -486,7 +486,7 @@ void func_80B418C4(EnKgy* this, PlayState* play) {
         func_80B413C8(this);
         ActorCutscene_SetIntentToPlay(this->unk_2D4[5]);
         this->actionFunc = func_80B41858;
-        this->actor.flags &= ~ACTOR_FLAG_100;
+        this->actor.flags &= ~ACTOR_FLAG_TALK_REQUESTED;
     }
     func_80B40EE8(this, play);
 }
@@ -573,7 +573,7 @@ void func_80B41C54(EnKgy* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     if (Actor_TextboxIsClosing(&this->actor, play)) {
         this->actionFunc = func_80B41C30;
-        this->actor.flags &= ~ACTOR_FLAG_100;
+        this->actor.flags &= ~ACTOR_FLAG_TALK_REQUESTED;
     }
     func_80B40EE8(this, play);
 }
@@ -597,7 +597,7 @@ void func_80B41D64(EnKgy* this, PlayState* play) {
         this->actor.flags |= ACTOR_FLAG_10000;
         func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
     } else {
-        Actor_PickUp(&this->actor, play, this->unk_2EA, 2000.0f, 1000.0f);
+        Actor_OfferGetItem(&this->actor, play, this->unk_2EA, 2000.0f, 1000.0f);
     }
     func_80B40EE8(this, play);
 }
@@ -621,7 +621,7 @@ void func_80B41E18(EnKgy* this, PlayState* play) {
                         case 0xC3B:
                             switch (play->msgCtx.choiceIndex) {
                                 case 0:
-                                    if (gSaveContext.save.playerData.rupees < play->msgCtx.unk1206C) {
+                                    if (gSaveContext.save.saveInfo.playerData.rupees < play->msgCtx.unk1206C) {
                                         play_sound(NA_SE_SY_ERROR);
                                         func_80B40E74(this, play, 0xC3F);
                                     } else {
@@ -743,7 +743,7 @@ void func_80B41E18(EnKgy* this, PlayState* play) {
 
                         case 0xC46:
                         case 0xC55:
-                            Player_UpdateBottleHeld(play, GET_PLAYER(play), ITEM_BOTTLE, PLAYER_IA_BOTTLE);
+                            Player_UpdateBottleHeld(play, GET_PLAYER(play), ITEM_BOTTLE, PLAYER_IA_BOTTLE_EMPTY);
                             player->exchangeItemId = PLAYER_IA_NONE;
                             this->unk_29C &= ~0x8;
                             play->msgCtx.msgLength = 0;
@@ -798,7 +798,7 @@ void func_80B41E18(EnKgy* this, PlayState* play) {
                             Message_CloseTextbox(play);
                             this->actionFunc = func_80B41D64;
                             func_80B413C8(this);
-                            Actor_PickUp(&this->actor, play, this->unk_2EA, 2000.0f, 1000.0f);
+                            Actor_OfferGetItem(&this->actor, play, this->unk_2EA, 2000.0f, 1000.0f);
                             break;
 
                         case 0xC51:
@@ -857,7 +857,7 @@ void func_80B42660(EnKgy* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         Message_CloseTextbox(play);
         func_80B413C8(this);
-        this->actor.flags &= ~ACTOR_FLAG_100;
+        this->actor.flags &= ~ACTOR_FLAG_TALK_REQUESTED;
         this->actionFunc = func_80B42714;
         func_80B40E18(this, 7);
     }

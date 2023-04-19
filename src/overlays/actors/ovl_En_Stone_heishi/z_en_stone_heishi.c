@@ -186,13 +186,13 @@ void func_80BC9560(EnStoneheishi* this, PlayState* play) {
     }
 
     if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_41_40) && (play->actorCtx.lensMaskSize != 100)) {
-        this->actor.flags |= ACTOR_FLAG_8000000;
+        this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
         return;
     }
 
     SkelAnime_Update(&this->skelAnime);
 
-    this->actor.flags &= ~ACTOR_FLAG_8000000;
+    this->actor.flags &= ~ACTOR_FLAG_CANT_LOCK_ON;
 
     yawDiff = ABS_ALT((s16)(this->actor.yawTowardsPlayer - this->actor.world.rot.y));
 
@@ -347,7 +347,7 @@ void EnStoneheishi_DrinkBottleProcess(EnStoneheishi* this, PlayState* play) {
                 if ((this->timer < 10) && (this->bottleDisplay != EN_STONE_BOTTLE_EMPTY)) {
                     this->bottleDisplay = EN_STONE_BOTTLE_EMPTY;
                     Actor_PlaySfx(&this->actor, NA_SE_VO_NP_DRINK);
-                    Player_UpdateBottleHeld(play, GET_PLAYER(play), ITEM_BOTTLE, PLAYER_IA_BOTTLE);
+                    Player_UpdateBottleHeld(play, GET_PLAYER(play), ITEM_BOTTLE, PLAYER_IA_BOTTLE_EMPTY);
                 }
             } else {
                 this->drinkBottleState++;
@@ -380,9 +380,9 @@ void EnStoneheishi_GiveItemReward(EnStoneheishi* this, PlayState* play) {
     Message_CloseTextbox(play);
 
     if (INV_CONTENT(ITEM_MASK_STONE) == ITEM_MASK_STONE) {
-        Actor_PickUp(&this->actor, play, GI_RUPEE_BLUE, 300.0f, 300.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_RUPEE_BLUE, 300.0f, 300.0f);
     } else {
-        Actor_PickUp(&this->actor, play, GI_MASK_STONE, 300.0f, 300.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_MASK_STONE, 300.0f, 300.0f);
     }
 
     this->action = EN_STONE_ACTION_4;
@@ -401,9 +401,9 @@ void func_80BC9D28(EnStoneheishi* this, PlayState* play) {
         func_800B8500(&this->actor, play, 400.0f, 400.0f, PLAYER_IA_MINUS1);
         this->actionFunc = func_80BC9E50;
     } else if (INV_CONTENT(ITEM_MASK_STONE) == ITEM_MASK_STONE) {
-        Actor_PickUp(&this->actor, play, GI_RUPEE_BLUE, 300.0f, 300.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_RUPEE_BLUE, 300.0f, 300.0f);
     } else {
-        Actor_PickUp(&this->actor, play, GI_MASK_STONE, 300.0f, 300.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_MASK_STONE, 300.0f, 300.0f);
     }
 }
 
@@ -433,7 +433,9 @@ void EnStoneheishi_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
 
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 50.0f, 0x1D);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 50.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                UPDBGCHECKINFO_FLAG_10);
     Actor_SetScale(&this->actor, 0.01f);
 
     if ((CHECK_WEEKEVENTREG(WEEKEVENTREG_41_40) || (play->actorCtx.lensMaskSize == 100)) &&

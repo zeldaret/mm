@@ -171,7 +171,9 @@ void EnPr2_Init(Actor* thisx, PlayState* play) {
         func_80A751B4(this);
     }
 
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 20.0f, 20.0f, 0x1D);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 20.0f, 20.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                UPDBGCHECKINFO_FLAG_10);
 
     if (!(this->actor.bgCheckFlags & (BGCHECKFLAG_WATER | BGCHECKFLAG_WATER_TOUCH))) {
         Actor_Kill(&this->actor);
@@ -515,7 +517,7 @@ void func_80A74E90(EnPr2* this, PlayState* play) {
 
 void func_80A751B4(EnPr2* this) {
     this->unk_1EC = 0;
-    this->actor.flags |= ACTOR_FLAG_8000000;
+    this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
     this->actor.flags &= ~ACTOR_FLAG_1;
     if (this->unk_1E0 < 10) {
         func_80A74510(this, 2);
@@ -536,7 +538,7 @@ void func_80A751B4(EnPr2* this) {
         this->actor.speed = Rand_ZeroFloat(0.5f);
         this->actor.world.rot.y = randPlusMinusPoint5Scaled(0x8000);
     }
-    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 10);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 10);
     this->unk_1D4 = 3;
     this->actionFunc = func_80A75310;
 }
@@ -661,7 +663,9 @@ void EnPr2_Update(Actor* thisx, PlayState* play) {
     Actor_SetFocus(&this->actor, 10.0f);
     func_80A755D8(this, play);
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0, 10.0f, 20.0f, 0x1F);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0, 10.0f, 20.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_2 | UPDBGCHECKINFO_FLAG_4 |
+                                UPDBGCHECKINFO_FLAG_8 | UPDBGCHECKINFO_FLAG_10);
 
     if (this->unk_1D6) {
         s32 i;

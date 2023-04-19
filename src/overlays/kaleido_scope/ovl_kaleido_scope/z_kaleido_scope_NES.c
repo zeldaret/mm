@@ -528,7 +528,7 @@ void KaleidoScope_UpdateOpening(PlayState* play) {
 
     if (pauseCtx->switchPageTimer == 64) {
         // Finished opening
-        func_80112C0C(play, 1);
+        Interface_UpdateButtonsAlt(play, 1);
 
         if (pauseCtx->cursorSpecialPos == 0) {
             gSaveContext.buttonStatus[EQUIP_SLOT_B] = D_801C6A98[pauseCtx->pageIndex][0];
@@ -815,7 +815,7 @@ void KaleidoScope_Update(PlayState* play) {
                         } else {
                             play_sound(NA_SE_SY_PIECE_OF_HEART);
                             Play_SaveCycleSceneFlags(&play->state);
-                            gSaveContext.save.playerData.savedSceneId = play->sceneId;
+                            gSaveContext.save.saveInfo.playerData.savedSceneId = play->sceneId;
                             func_8014546C(sramCtx);
                             if (gSaveContext.unk_3F3F == 0) {
                                 pauseCtx->savePromptState = PAUSE_SAVEPROMPT_STATE_5;
@@ -966,7 +966,7 @@ void KaleidoScope_Update(PlayState* play) {
             pauseCtx->promptChoice = PAUSE_PROMPT_YES;
             pauseCtx->state++;
             if (gameOverCtx->state == GAMEOVER_INACTIVE) {
-                pauseCtx->state++;
+                pauseCtx->state++; // GAMEOVER_DEATH_START
             }
             break;
 
@@ -1076,8 +1076,8 @@ void KaleidoScope_Update(PlayState* play) {
                     play_sound(NA_SE_SY_PIECE_OF_HEART);
                     pauseCtx->promptChoice = PAUSE_PROMPT_YES;
                     Play_SaveCycleSceneFlags(&play->state);
-                    gSaveContext.save.playerData.savedSceneId = play->sceneId;
-                    gSaveContext.save.playerData.health = 0x30;
+                    gSaveContext.save.saveInfo.playerData.savedSceneId = play->sceneId;
+                    gSaveContext.save.saveInfo.playerData.health = 0x30;
                     func_8014546C(sramCtx);
                     if (gSaveContext.unk_3F3F == 0) {
                         pauseCtx->state = PAUSE_STATE_GAMEOVER_8;
@@ -1149,15 +1149,15 @@ void KaleidoScope_Update(PlayState* play) {
                         func_80169FDC(&play->state);
                         gSaveContext.respawnFlag = -2;
                         gSaveContext.nextTransitionType = TRANS_TYPE_FADE_BLACK;
-                        gSaveContext.save.playerData.health = 0x30;
+                        gSaveContext.save.saveInfo.playerData.health = 0x30;
                         Audio_SetSpec(0xA);
                         gSaveContext.healthAccumulator = 0;
                         gSaveContext.magicState = MAGIC_STATE_IDLE;
                         gSaveContext.magicFlag = 0;
                         gSaveContext.magicCapacity = 0;
-                        gSaveContext.magicFillTarget = gSaveContext.save.playerData.magic;
-                        gSaveContext.save.playerData.magicLevel = 0;
-                        gSaveContext.save.playerData.magic = 0;
+                        gSaveContext.magicFillTarget = gSaveContext.save.saveInfo.playerData.magic;
+                        gSaveContext.save.saveInfo.playerData.magicLevel = 0;
+                        gSaveContext.save.saveInfo.playerData.magic = 0;
                     } else { // PAUSE_PROMPT_NO
                         STOP_GAMESTATE(&play->state);
                         SET_NEXT_GAMESTATE(&play->state, TitleSetup_Init, sizeof(TitleSetupState));
@@ -1344,7 +1344,7 @@ void KaleidoScope_Update(PlayState* play) {
             gSaveContext.buttonStatus[EQUIP_SLOT_C_RIGHT] = sUnpausedButtonStatus[EQUIP_SLOT_C_RIGHT];
             gSaveContext.buttonStatus[EQUIP_SLOT_A] = sUnpausedButtonStatus[EQUIP_SLOT_A];
 
-            func_80110038(play);
+            Interface_UpdateButtonsPart2(play);
             gSaveContext.hudVisibility = HUD_VISIBILITY_IDLE;
             Interface_SetHudVisibility(HUD_VISIBILITY_ALL);
             MsgEvent_SendNullTask();

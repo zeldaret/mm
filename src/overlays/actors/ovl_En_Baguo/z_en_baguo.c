@@ -144,7 +144,7 @@ void EnBaguo_Init(Actor* thisx, PlayState* play) {
     this->actor.shape.yOffset = -3000.0f;
     this->actor.gravity = -3.0f;
     this->actor.colChkInfo.damageTable = &sDamageTable;
-    this->actor.flags |= ACTOR_FLAG_8000000;
+    this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
     this->actor.flags &= ~ACTOR_FLAG_1;
     this->collider.base.acFlags |= AC_HARD;
     this->actionFunc = EnBaguo_UndergroundIdle;
@@ -163,7 +163,7 @@ void EnBaguo_UndergroundIdle(EnBaguo* this, PlayState* play) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_BAKUO_APPEAR);
         this->actor.world.rot.z = 0;
         this->actor.world.rot.x = this->actor.world.rot.z;
-        this->actor.flags &= ~ACTOR_FLAG_8000000;
+        this->actor.flags &= ~ACTOR_FLAG_CANT_LOCK_ON;
         this->actor.flags |= ACTOR_FLAG_1;
         this->actionFunc = EnBaguo_EmergeFromUnderground;
     }
@@ -291,7 +291,7 @@ void EnBaguo_RetreatUnderground(EnBaguo* this, PlayState* play) {
         this->actor.draw = EnBaguo_DrawBody;
         Math_Vec3f_Copy(&this->actor.world.pos, &this->actor.home.pos);
         Actor_PlaySfx(&this->actor, NA_SE_EN_BAKUO_APPEAR);
-        this->actor.flags |= ACTOR_FLAG_8000000;
+        this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
         this->actor.flags &= ~ACTOR_FLAG_1;
         this->actionFunc = EnBaguo_UndergroundIdle;
     }
@@ -330,7 +330,7 @@ void EnBaguo_CheckForDetonation(EnBaguo* this, PlayState* play) {
         if ((this->collider.base.acFlags & AC_HIT || i)) {
             this->collider.base.acFlags &= ~AC_HIT;
             if (i || this->actor.colChkInfo.damageEffect == NEJIRON_DMGEFF_KILL) {
-                Actor_SetColorFilter(&this->actor, 0x4000, 0xFF, 0, 8);
+                Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 8);
                 this->action = NEJIRON_ACTION_EXPLODING;
                 this->actor.speed = 0.0f;
                 this->actor.shape.shadowScale = 0.0f;
@@ -352,7 +352,7 @@ void EnBaguo_CheckForDetonation(EnBaguo* this, PlayState* play) {
                 Actor_PlaySfx(&this->actor, NA_SE_EN_BAKUO_DEAD);
 
                 this->timer = 30;
-                this->actor.flags |= ACTOR_FLAG_8000000;
+                this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
                 this->actor.flags &= ~ACTOR_FLAG_1;
                 Actor_SetScale(&this->actor, 0.0f);
                 this->collider.elements->dim.scale = 3.0f;
@@ -392,7 +392,9 @@ void EnBaguo_Update(Actor* thisx, PlayState* play) {
         }
 
         Actor_MoveWithGravity(&this->actor);
-        Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 60.0f, 0x1D);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 60.0f,
+                                UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                    UPDBGCHECKINFO_FLAG_10);
         if (this->action != NEJIRON_ACTION_INACTIVE) {
             CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
         }

@@ -203,7 +203,7 @@ void EnRz_ChangeAnim(PlayState* play, EnRz* this, s16 animIndex, u8 animMode, f3
         &gRosaSistersStandingAnim,   &gRosaSistersStandingAnim, &gRosaSistersWalkingAnim, &gRosaSistersSittingAnim,
         &gRosaSistersApplaudingAnim, &gRosaSistersOnKneesAnim,  &gRosaSistersDancingAnim,
     };
-    static LinkAnimationHeader* sLinkAnimations[] = {
+    static PlayerAnimationHeader* sPlayerAnimations[] = {
         &gPlayerAnim_link_normal_wait_free,
         &gPlayerAnim_alink_dance_loop,
     };
@@ -219,13 +219,15 @@ void EnRz_ChangeAnim(PlayState* play, EnRz* this, s16 animIndex, u8 animMode, f3
     if ((animIndex >= EN_RZ_ANIM_THINKING) && (animIndex < EN_RZ_ANIM_MAX) &&
         ((animIndex != this->animIndex) || (animMode != ANIMMODE_LOOP))) {
         if (animIndex >= ARRAY_COUNT(sJudoAnimations)) {
-            endFrame = Animation_GetLastFrame(sLinkAnimations[animIndex - ARRAY_COUNT(sJudoAnimations)]);
+            endFrame = Animation_GetLastFrame(sPlayerAnimations[animIndex - ARRAY_COUNT(sJudoAnimations)]);
             if (animMode == ANIMMODE_LOOP) {
-                LinkAnimation_Change(play, &this->skelAnime, sLinkAnimations[animIndex - ARRAY_COUNT(sJudoAnimations)],
-                                     2.0f / 3.0f, 0.0f, endFrame, ANIMMODE_LOOP, morphFrames);
+                PlayerAnimation_Change(play, &this->skelAnime,
+                                       sPlayerAnimations[animIndex - ARRAY_COUNT(sJudoAnimations)], 2.0f / 3.0f, 0.0f,
+                                       endFrame, ANIMMODE_LOOP, morphFrames);
             } else {
-                LinkAnimation_Change(play, &this->skelAnime, sLinkAnimations[animIndex - ARRAY_COUNT(sJudoAnimations)],
-                                     2.0f / 3.0f, 0.0f, endFrame, ANIMMODE_LOOP, morphFrames);
+                PlayerAnimation_Change(play, &this->skelAnime,
+                                       sPlayerAnimations[animIndex - ARRAY_COUNT(sJudoAnimations)], 2.0f / 3.0f, 0.0f,
+                                       endFrame, ANIMMODE_LOOP, morphFrames);
             }
         } else {
             Animation_Change(&this->skelAnime, animationPtr[animIndex], 1.0f, 0.0f,
@@ -325,7 +327,7 @@ s32 EnRz_UpdateSkelAnime(EnRz* this, PlayState* play) {
     if (this->animIndex < EN_RZ_ANIM_LINK_NORMAL_WAIT_FREE) {
         return SkelAnime_Update(&this->skelAnime);
     } else {
-        return LinkAnimation_Update(play, &this->skelAnime);
+        return PlayerAnimation_Update(play, &this->skelAnime);
     }
 }
 
@@ -473,7 +475,7 @@ void func_80BFC270(EnRz* this, PlayState* play) {
         this->actionFunc = func_80BFC214;
         func_80BFBDFC(play);
     } else {
-        Actor_PickUp(&this->actor, play, GI_HEART_PIECE, 2000.0f, 1000.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_HEART_PIECE, 2000.0f, 1000.0f);
     }
 }
 
@@ -481,7 +483,7 @@ void func_80BFC2F4(EnRz* this, PlayState* play) {
     EnRz_UpdateSkelAnime(this, play);
     if (!func_80BFBE70(this, play)) {
         Message_CloseTextbox(play);
-        Actor_PickUp(&this->actor, play, GI_HEART_PIECE, 2000.0f, 1000.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_HEART_PIECE, 2000.0f, 1000.0f);
         this->actionFunc = func_80BFC270;
     }
 }
@@ -653,7 +655,7 @@ void EnRz_Update(Actor* thisx, PlayState* play) {
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 40.0f, 25.0f, 40.0f, 5);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 40.0f, 25.0f, 40.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
 
     this->actionFunc(this, play);
 

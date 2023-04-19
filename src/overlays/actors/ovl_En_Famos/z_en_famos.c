@@ -500,7 +500,7 @@ void EnFamos_Chase(EnFamos* this, PlayState* play) {
     this->actor.world.rot.x = -Actor_WorldPitchTowardPoint(&this->actor, &abovePlayerPos);
     Math_StepToF(&this->actor.speed, 6.0f, 0.5f);
 
-    surfaceType = func_800C9B18(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
+    surfaceType = SurfaceType_GetFloorProperty2(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
     if ((this->actor.xzDistToPlayer < 30.0f) && (this->actor.floorHeight > BGCHECK_Y_MIN) && // close enough
         (surfaceType != 0xC && surfaceType != 0xD)) {
         EnFamos_SetupAttackAim(this);
@@ -543,7 +543,7 @@ void EnFamos_Attack(EnFamos* this, PlayState* play) {
         this->emblemCollider.base.acFlags &= ~AC_ON;
     }
 
-    surfaceType = func_800C9B18(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
+    surfaceType = SurfaceType_GetFloorProperty2(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
     hitFloor = this->actor.bgCheckFlags & BGCHECKFLAG_GROUND;
     if (hitFloor || (this->actor.floorHeight == BGCHECK_Y_MIN) || (surfaceType == 0xC) || (surfaceType == 0xD)) {
         this->collider1.base.atFlags &= ~AT_ON;
@@ -652,7 +652,7 @@ void EnFamos_SetupDeathSlam(EnFamos* this) {
     this->emblemCollider.base.acFlags &= ~AC_ON;
     this->stateTimer = 20;
     this->actor.speed = 0.0f;
-    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 20);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 20);
     this->flippedTimer = -1;
     this->actor.world.pos.y = this->actor.floorHeight - 60.0f;
     Actor_PlaySfx(&this->actor, NA_SE_EN_EYEGOLE_DEAD);
@@ -673,7 +673,7 @@ void EnFamos_DeathSlam(EnFamos* this, PlayState* play) {
 
 void EnFamos_SetupDeathExplosion(EnFamos* this) {
     this->actor.world.rot.x = 0x4000;
-    Actor_SetColorFilter(&this->actor, 0x4000, 0xFF, false, 4);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 4);
     this->stateTimer = 25;
     Math_Vec3f_Copy(&this->targetDest, &this->actor.world.pos);
     this->actor.flags |= ACTOR_FLAG_10;
@@ -683,7 +683,7 @@ void EnFamos_SetupDeathExplosion(EnFamos* this) {
 void EnFamos_DeathExplosion(EnFamos* this, PlayState* play) {
     Math_StepToF(&this->actor.speed, 3.0f, 0.3f);
     if (this->actor.colorFilterTimer == 0) {
-        Actor_SetColorFilter(&this->actor, 0x4000, 0xFF, false, 4);
+        Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 4);
     }
 
     this->actor.world.pos.x = randPlusMinusPoint5Scaled(5.0f) + this->targetDest.x;
@@ -691,7 +691,7 @@ void EnFamos_DeathExplosion(EnFamos* this, PlayState* play) {
     if (this->stateTimer == 1) {
         EnBom* explosion =
             (EnBom*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOM, this->actor.world.pos.x,
-                                this->actor.world.pos.y + 40.0f, this->actor.world.pos.z, 0, 0, 0, ENBOM_0);
+                                this->actor.world.pos.y + 40.0f, this->actor.world.pos.z, 0, 0, 0, BOMB_TYPE_BODY);
         if (explosion != NULL) {
             explosion->timer = 0; // instant explosion
         }
@@ -766,7 +766,9 @@ void EnFamos_Update(Actor* thisx, PlayState* play) {
         }
 
         if (this->flippedTimer >= 0) {
-            Actor_UpdateBgCheckInfo(play, &this->actor, 35.0f, 30.0f, 80.0f, 0x1F);
+            Actor_UpdateBgCheckInfo(play, &this->actor, 35.0f, 30.0f, 80.0f,
+                                    UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_2 | UPDBGCHECKINFO_FLAG_4 |
+                                        UPDBGCHECKINFO_FLAG_8 | UPDBGCHECKINFO_FLAG_10);
             if ((this->actionFunc == EnFamos_Attack) && (this->animatedMaterialIndex != FAMOS_ANIMATED_MAT_NORMAL) &&
                 (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
                 this->actor.world.pos.y -= 60.0f;

@@ -1,4 +1,5 @@
 #include "global.h"
+#include "buffers.h"
 #include "system_malloc.h"
 #include "overlays/gamestates/ovl_daytelop/z_daytelop.h"
 #include "overlays/gamestates/ovl_file_choose/z_file_choose.h"
@@ -25,7 +26,7 @@ void Graph_FaultClient(void) {
 }
 
 void Graph_InitTHGA(TwoHeadGfxArena* arena, Gfx* buffer, s32 size) {
-    THGA_Ct(arena, buffer, size);
+    THGA_Init(arena, buffer, size);
 }
 
 void Graph_SetNextGfxPool(GraphicsContext* gfxCtx) {

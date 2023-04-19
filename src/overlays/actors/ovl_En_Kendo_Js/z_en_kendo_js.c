@@ -8,7 +8,7 @@
 #include "overlays/actors/ovl_En_Maruta/z_en_maruta.h"
 #include "objects/object_js/object_js.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_2000000 | ACTOR_FLAG_8000000)
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_2000000 | ACTOR_FLAG_CANT_LOCK_ON)
 
 #define THIS ((EnKendoJs*)thisx)
 
@@ -125,7 +125,7 @@ void EnKendoJs_Init(Actor* thisx, PlayState* play) {
         Actor_Kill(&this->actor);
     }
 
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
 
     if (ENKENDOJS_GET_FF(&this->actor) != ENKENDOJS_FF_1) {
         Path* path = &play->setupPathList[ENKENDOJS_GET_FF00(&this->actor)];
@@ -193,7 +193,8 @@ void func_80B2654C(EnKendoJs* this, PlayState* play) {
         } else if ((Player_GetMask(play) != PLAYER_MASK_NONE) && (Player_GetMask(play) < PLAYER_MASK_GIANT)) {
             u16 sp2E = Player_GetMask(play) + 0x273C;
 
-            if (0) {}
+            //! FAKE:
+            if (1) {}
 
             Message_StartTextbox(play, sp2E, &this->actor);
             this->unk_288 = sp2E;
@@ -223,7 +224,7 @@ void func_80B26758(EnKendoJs* this, PlayState* play) {
                     Message_StartTextbox(play, 0x272C, &this->actor);
                     this->unk_288 = 0x272C;
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 2);
-                } else if (gSaveContext.save.playerData.rupees < play->msgCtx.unk1206C) {
+                } else if (gSaveContext.save.saveInfo.playerData.rupees < play->msgCtx.unk1206C) {
                     play_sound(NA_SE_SY_ERROR);
                     Message_StartTextbox(play, 0x2718, &this->actor);
                     this->unk_288 = 0x2718;
@@ -241,7 +242,7 @@ void func_80B26758(EnKendoJs* this, PlayState* play) {
                     Message_StartTextbox(play, 0x272C, &this->actor);
                     this->unk_288 = 0x272C;
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 2);
-                } else if (gSaveContext.save.playerData.rupees < play->msgCtx.unk12070) {
+                } else if (gSaveContext.save.saveInfo.playerData.rupees < play->msgCtx.unk12070) {
                     play_sound(NA_SE_SY_ERROR);
                     Message_StartTextbox(play, 0x2718, &this->actor);
                     this->unk_288 = 0x2718;
@@ -460,7 +461,7 @@ s32 func_80B26F6C(EnKendoJs* this, PlayState* play) {
 
     switch (this->unk_288) {
         case 0x271D:
-            if (Player_GetMeleeWeaponHeld(player) != 0) {
+            if (Player_GetMeleeWeaponHeld(player) != PLAYER_MELEEWEAPON_NONE) {
                 Message_StartTextbox(play, 0x272A, &this->actor);
                 this->unk_288 = 0x272A;
                 return true;
@@ -649,9 +650,9 @@ void func_80B276D8(EnKendoJs* this, PlayState* play) {
         this->actor.parent = NULL;
         func_80B27760(this);
     } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_63_20)) {
-        Actor_PickUp(&this->actor, play, GI_HEART_PIECE, 800.0f, 100.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_HEART_PIECE, 800.0f, 100.0f);
     } else {
-        Actor_PickUp(&this->actor, play, GI_RUPEE_RED, 800.0f, 100.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_RUPEE_RED, 800.0f, 100.0f);
     }
 }
 
@@ -674,7 +675,7 @@ void func_80B27774(EnKendoJs* this, PlayState* play) {
         func_80B26AE8(this);
         player->stateFlags1 &= ~PLAYER_STATE1_20;
     } else {
-        func_800B85E0(&this->actor, play, 1000.0f, -1);
+        func_800B85E0(&this->actor, play, 1000.0f, PLAYER_IA_MINUS1);
     }
 }
 

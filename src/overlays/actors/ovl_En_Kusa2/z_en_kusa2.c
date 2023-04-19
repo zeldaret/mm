@@ -100,9 +100,10 @@ void func_80A5B160(EnKusa2* this, PlayState* play) {
 
     if (this->unk_194[0] == NULL) {
         ptr = this->unk_194;
-        actor = (EnKusa2*)Actor_SpawnAsChildAndCutscene(
-            &play->actorCtx, play, ACTOR_EN_KUSA2, this->actor.world.pos.x, this->actor.world.pos.y,
-            this->actor.world.pos.z, 0, Rand_Next() >> 0x10, 0, 1, this->actor.cutscene, this->actor.unk20, NULL);
+        actor = (EnKusa2*)Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ACTOR_EN_KUSA2, this->actor.world.pos.x,
+                                                        this->actor.world.pos.y, this->actor.world.pos.z, 0,
+                                                        Rand_Next() >> 0x10, 0, 1, this->actor.cutscene,
+                                                        this->actor.halfDaysBits, NULL);
         *ptr = actor;
 
         if (*ptr != NULL) {
@@ -118,7 +119,7 @@ void func_80A5B160(EnKusa2* this, PlayState* play) {
             actor = (EnKusa2*)Actor_SpawnAsChildAndCutscene(
                 &play->actorCtx, play, ACTOR_EN_KUSA2, (Math_SinS(temp_s1) * 80.0f) + this->actor.world.pos.x,
                 this->actor.world.pos.y, (Math_CosS(temp_s1) * 80.0f) + this->actor.world.pos.z, 0, Rand_Next() >> 0x10,
-                0, 1, this->actor.cutscene, this->actor.unk20, NULL);
+                0, 1, this->actor.cutscene, this->actor.halfDaysBits, NULL);
             *ptr = actor;
             if (*ptr != NULL) {
                 (*ptr)->actor.room = this->actor.room;
@@ -159,7 +160,8 @@ void func_80A5B3BC(EnKusa2* this) {
 void func_80A5B490(EnKusa2* this, PlayState* play) {
     Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ACTOR_EN_KITAN, this->actor.world.pos.x,
                                   this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0,
-                                  ENKUSA2_GET_7F00(&this->actor) << 9, this->actor.cutscene, this->actor.unk20, NULL);
+                                  ENKUSA2_GET_7F00(&this->actor) << 9, this->actor.cutscene, this->actor.halfDaysBits,
+                                  NULL);
 }
 
 void func_80A5B508(void) {
@@ -269,7 +271,8 @@ s32 func_80A5BA58(EnKusa2* this, PlayState* play) {
 }
 
 void func_80A5BAFC(EnKusa2* this, PlayState* play) {
-    Actor_UpdateBgCheckInfo(play, &this->actor, 15.0f, 35.0f, 0.0f, 0x45);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 15.0f, 35.0f, 0.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_40);
 }
 
 void func_80A5BB40(EnKusa2* this, PlayState* play, s32 arg2) {
@@ -990,7 +993,7 @@ void func_80A5D7C4(EnKusa2* this, PlayState* play) {
             if (this->actor.xzDistToPlayer < 400.0f) {
                 CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
                 if (this->actor.xzDistToPlayer < 100.0f) {
-                    Actor_LiftActor(&this->actor, play);
+                    Actor_OfferCarry(&this->actor, play);
                 }
             }
         }
@@ -1291,7 +1294,7 @@ void func_80A5E604(Actor* thisx, PlayState* play) {
     } else {
         this->actor.draw = func_80A5E6F0;
 
-        if (play->roomCtx.curRoom.unk3 == 0) {
+        if (play->roomCtx.curRoom.behaviorType1 == ROOM_BEHAVIOR_TYPE1_0) {
             func_80A5B508();
         }
         func_80A5CAF4(&D_80A5F1C0);
@@ -1354,7 +1357,7 @@ void EnKusa2_Draw(Actor* thisx, PlayState* play) {
     EnKusa2* this = THIS;
 
     if (this->actor.projectedPos.z <= 1200.0f) {
-        if ((play->roomCtx.curRoom.unk3 == 0) && (this->actor.projectedPos.z > -150.0f) &&
+        if ((play->roomCtx.curRoom.behaviorType1 == ROOM_BEHAVIOR_TYPE1_0) && (this->actor.projectedPos.z > -150.0f) &&
             (this->actor.projectedPos.z < 400.0f)) {
             func_80A5B954(&D_80A60908[this->unk_1CE], 0.0015f);
         }

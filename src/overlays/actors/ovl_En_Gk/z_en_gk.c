@@ -240,7 +240,8 @@ void func_80B507A0(EnGk* this, PlayState* play) {
 
     CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 30.0f, 30.0f, 7);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 30.0f, 30.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_2 | UPDBGCHECKINFO_FLAG_4);
 }
 
 s32 func_80B50854(EnGk* this, PlayState* play) {
@@ -373,7 +374,7 @@ s32 func_80B50C78(EnGk* this, Path* path, s32 arg2_) {
         phi_f14 = sp5C[arg2 + 1].z - sp5C[arg2 - 1].z;
     }
 
-    func_8017B7F8(&sp30, RADF_TO_BINANG(func_80086B30(phi_f12, phi_f14)), &sp44, &sp40, &sp3C);
+    func_8017B7F8(&sp30, RAD_TO_BINANG(func_80086B30(phi_f12, phi_f14)), &sp44, &sp40, &sp3C);
 
     if (((this->actor.world.pos.x * sp44) + (sp40 * this->actor.world.pos.z) + sp3C) > 0.0f) {
         ret = true;
@@ -969,7 +970,7 @@ void func_80B5253C(EnGk* this, PlayState* play) {
         }
         this->actionFunc = func_80B525E0;
     } else {
-        Actor_PickUp(&this->actor, play, sp24, 300.0f, 300.0f);
+        Actor_OfferGetItem(&this->actor, play, sp24, 300.0f, 300.0f);
     }
 }
 
@@ -979,7 +980,7 @@ void func_80B525E0(EnGk* this, PlayState* play) {
         Message_StartTextbox(play, this->unk_31C, &this->actor);
         this->actionFunc = func_80B52430;
     } else {
-        func_800B85E0(&this->actor, play, 400.0f, -1);
+        func_800B85E0(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
     }
 }
 
@@ -1227,8 +1228,8 @@ TexturePtr D_80B533E4[] = {
 void EnGk_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
     EnGk* this = THIS;
-    Vec3f sp5C;
-    Vec3f sp50;
+    Vec3f pos;
+    Vec3f scale;
 
     OPEN_DISPS(play->state.gfxCtx);
 
@@ -1243,12 +1244,12 @@ void EnGk_Draw(Actor* thisx, PlayState* play) {
 
         func_8012C2DC(play->state.gfxCtx);
 
-        sp5C = this->actor.world.pos;
-        sp50.x = 0.2f;
-        sp50.y = 0.2f;
-        sp50.z = 0.2f;
+        pos = this->actor.world.pos;
+        scale.x = 0.2f;
+        scale.y = 0.2f;
+        scale.z = 0.2f;
 
-        func_800BC620(&sp5C, &sp50, 255, play);
+        func_800BC620(&pos, &scale, 255, play);
     } else {
         gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80B533E4[this->unk_2E0]));
 
@@ -1260,20 +1261,21 @@ void EnGk_Draw(Actor* thisx, PlayState* play) {
             func_8012C2DC(play->state.gfxCtx);
             if ((this->unk_2E4 == 0) || (this->unk_2E4 == 1) || (this->unk_2E4 == 2) || (this->unk_2E4 == 3) ||
                 (this->unk_2E4 == 4)) {
-                sp5C.x = this->actor.world.pos.x - 15.0f;
-                sp5C.y = this->actor.world.pos.y;
-                sp5C.z = this->actor.world.pos.z;
+                pos.x = this->actor.world.pos.x - 15.0f;
+                pos.y = this->actor.world.pos.y;
+                pos.z = this->actor.world.pos.z;
 
-                sp50.x = 0.2f;
-                sp50.y = 0.2f;
-                sp50.z = 0.2f;
+                scale.x = 0.2f;
+                scale.y = 0.2f;
+                scale.z = 0.2f;
             } else {
-                sp5C = this->actor.world.pos;
-                sp50.x = 0.2f;
-                sp50.y = 0.2f;
-                sp50.z = 0.2f;
+                pos = this->actor.world.pos;
+                scale.x = 0.2f;
+                scale.y = 0.2f;
+                scale.z = 0.2f;
             }
-            func_800BC620(&sp5C, &sp50, 255, play);
+
+            func_800BC620(&pos, &scale, 255, play);
         }
     }
 

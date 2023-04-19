@@ -197,7 +197,7 @@ void func_808FA11C(EnRr* this) {
     this->drawDmgEffFrozenSteamScale = 1.2750001f;
     this->drawDmgEffAlpha = 1.0f;
     this->actor.flags &= ~ACTOR_FLAG_400;
-    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 80);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 80);
 }
 
 void func_808FA19C(EnRr* this, PlayState* play) {
@@ -344,7 +344,7 @@ void func_808FA6B8(EnRr* this) {
     } else {
         this->unk_1EC = 40;
     }
-    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, this->unk_1EC);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, this->unk_1EC);
 
     this->unk_1E6 = 20;
     this->unk_1F6 = 2500;
@@ -405,7 +405,7 @@ void func_808FA910(EnRr* this) {
 
     this->unk_1E4 = 0;
     this->unk_214 = 0.0f;
-    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 40);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 40);
     this->unk_210 = 0.0f;
 
     for (i = 0; i < ARRAY_COUNT(this->unk_324); i++) {
@@ -483,7 +483,7 @@ s32 func_808FAA94(EnRr* this, PlayState* play) {
             }
         } else if (this->actor.colChkInfo.damageEffect == 1) {
             Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_FREEZE);
-            Actor_SetColorFilter(&this->actor, 0, 255, 0, 80);
+            Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 255, COLORFILTER_BUFFLAG_OPA, 80);
             this->unk_1EE = 80;
             func_808FA9CC(this);
         } else if (this->actor.colChkInfo.damageEffect == 3) {
@@ -807,7 +807,9 @@ void EnRr_Update(Actor* thisx, PlayState* play) {
     }
 
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, this->collider1.dim.radius, 0.0f, 0x5D);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, this->collider1.dim.radius, 0.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                UPDBGCHECKINFO_FLAG_10 | UPDBGCHECKINFO_FLAG_40);
     func_808FB794(this, play);
 
     if (this->unk_1FC > 0) {

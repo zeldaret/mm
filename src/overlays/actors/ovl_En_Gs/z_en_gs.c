@@ -112,7 +112,7 @@ s8 func_80997A90(s16 arg0, s16 arg1) {
     if ((arg0 == 0) || ((arg0 != 1) && (arg0 != 2) && (arg0 == 3))) {
         phi_v1 = 0;
     } else {
-        phi_v1 = (gSaveContext.save.unk_EC4 >> (arg1 * 3)) & 7;
+        phi_v1 = (gSaveContext.save.saveInfo.unk_EA0 >> (arg1 * 3)) & 7;
     }
     return phi_v1;
 }
@@ -349,8 +349,8 @@ f32 func_80998334(EnGs* this, PlayState* play, f32* arg2, f32* arg3, s16* arg4, 
 
     if (arg9 == 0) {
         sp2C = Math_SmoothStepToF(arg2, *arg3, arg5, arg6, arg7);
-        this->unk_1B0[0].x = (sinf(DEGF_TO_RADF((*arg4 % arg8) * (1.0f / arg8) * 360.0f)) * *arg2) + 1.0f;
-        this->unk_1B0[0].y = 1.0f - (sinf(DEGF_TO_RADF((*arg4 % arg8) * (1.0f / arg8) * 360.0f)) * *arg2);
+        this->unk_1B0[0].x = (sinf(DEG_TO_RAD((*arg4 % arg8) * (1.0f / arg8) * 360.0f)) * *arg2) + 1.0f;
+        this->unk_1B0[0].y = 1.0f - (sinf(DEG_TO_RAD((*arg4 % arg8) * (1.0f / arg8) * 360.0f)) * *arg2);
         (*arg4)++;
     }
     return sp2C;
@@ -388,8 +388,8 @@ void func_809985B8(EnGs* this, PlayState* play) {
         Math_Vec3f_Sum(&player->actor.world.pos, &sp38, &player->actor.world.pos);
         Math_Vec3f_Copy(&player->actor.prevPos, &player->actor.world.pos);
         this->unk_200 = 0.0f;
-        gSaveContext.save.unk_EC4 = ((u32)gSaveContext.save.unk_EC4 & ~(7 << (this->unk_198 * 3))) |
-                                    ((this->unk_194 & 7) << (this->unk_198 * 3));
+        gSaveContext.save.saveInfo.unk_EA0 = ((u32)gSaveContext.save.saveInfo.unk_EA0 & ~(7 << (this->unk_198 * 3))) |
+                                             ((this->unk_194 & 7) << (this->unk_198 * 3));
         gossipStone = NULL;
 
         do {
@@ -450,7 +450,7 @@ void func_8099874C(EnGs* this, PlayState* play) {
             phi_v0 = 1;
 
             for (i = 0; i < 4; i++) {
-                if (((gSaveContext.save.unk_EC4 >> (i * 3)) & 7) != (u32)this->unk_194) {
+                if (((gSaveContext.save.saveInfo.unk_EA0 >> (i * 3)) & 7) != (u32)this->unk_194) {
                     phi_v0 = 0;
                 }
             }
@@ -500,7 +500,7 @@ void func_8099874C(EnGs* this, PlayState* play) {
 }
 
 void func_809989B4(EnGs* this, PlayState* play) {
-    Actor_PickUp(&this->actor, play, this->unk_20C, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
+    Actor_OfferGetItem(&this->actor, play, this->unk_20C, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
     this->actionFunc = func_809989F4;
 }
 
@@ -509,7 +509,7 @@ void func_809989F4(EnGs* this, PlayState* play) {
         this->actor.parent = NULL;
         func_80997D14(this, play);
     } else {
-        Actor_PickUp(&this->actor, play, this->unk_20C, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
+        Actor_OfferGetItem(&this->actor, play, this->unk_20C, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
     }
 }
 
@@ -563,7 +563,7 @@ s32 func_80998BBC(EnGs* this, PlayState* play) {
         this->unk_197 &= 0xF;
         this->unk_19D = 1;
     } else if (this->unk_19D == 1) {
-        this->unk_19E[0].z = (this->unk_1D4 % 8) * 0.125f * 360.0f * (0x10000 / 360.0f);
+        this->unk_19E[0].z = DEG_TO_BINANG((this->unk_1D4 % 8) * 0.125f * 360.0f);
         this->unk_19E[1].z = -this->unk_19E[0].z;
         if (func_80998334(this, play, &this->unk_1DC, &this->unk_1E0, &this->unk_1D4, 0.8f, 0.005f, 0.001f, 7, 0) ==
             0.0f) {
@@ -648,7 +648,7 @@ s32 func_80998F9C(EnGs* this, PlayState* play) {
     if (this->unk_19D == 1) {
         Math_SmoothStepToF(&this->unk_1E4, this->unk_1E8, 1.0f, 0.1f, 0.001f);
         sp48 = Math_SmoothStepToF(&this->unk_1DC, this->unk_1E0, 1.0f, this->unk_1E4, 0.001f);
-        this->unk_19E[0].y += (s32)(this->unk_1DC * (0x10000 / 360.0f));
+        this->unk_19E[0].y += (s32)DEG_TO_BINANG_ALT3(this->unk_1DC);
         if (sp48 == 0.0f) {
             this->unk_1D4 = 0;
             this->unk_19D = 2;
@@ -656,7 +656,7 @@ s32 func_80998F9C(EnGs* this, PlayState* play) {
     }
 
     if (this->unk_19D == 2) {
-        this->unk_19E[0].y += (s32)(this->unk_1DC * (0x10000 / 360.0f));
+        this->unk_19E[0].y += (s32)DEG_TO_BINANG_ALT3(this->unk_1DC);
         if (this->unk_1D4++ > 40) {
             this->unk_1DC = this->unk_1B0[0].y - 1.0f;
             this->unk_1E0 = 1.5f;
@@ -725,8 +725,8 @@ s32 func_80998F9C(EnGs* this, PlayState* play) {
         sp40 = Math_SmoothStepToF(&this->unk_1EC, this->unk_1F0, 0.8f, 0.02f, 0.001f);
         this->unk_1B0[0].x = this->unk_1E4 + 1.0f;
         this->unk_1B0[0].y = this->unk_1DC + 1.0f;
-        this->unk_1B0[0].x += sinf(DEGF_TO_RADF((this->unk_1D4 % 10) * 0.1f * 360.0f)) * this->unk_1EC;
-        this->unk_1B0[0].y += sinf(DEGF_TO_RADF((this->unk_1D4 % 10) * 0.1f * 360.0f)) * this->unk_1EC;
+        this->unk_1B0[0].x += sinf(DEG_TO_RAD((this->unk_1D4 % 10) * 0.1f * 360.0f)) * this->unk_1EC;
+        this->unk_1B0[0].y += sinf(DEG_TO_RAD((this->unk_1D4 % 10) * 0.1f * 360.0f)) * this->unk_1EC;
         this->unk_1D4++;
         if ((sp48 == 0.0f) && (sp44 == 0.0f) && (sp40 == 0.0f)) {
             this->unk_216 = 0;
@@ -842,7 +842,7 @@ s32 func_809995A4(EnGs* this, PlayState* play) {
     }
 
     if (this->unk_19D == 4) {
-        Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 60.0f, 3);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 60.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_2);
         if (this->actor.bgCheckFlags & (BGCHECKFLAG_WALL | BGCHECKFLAG_CEILING)) {
             Vec3f sp54;
 

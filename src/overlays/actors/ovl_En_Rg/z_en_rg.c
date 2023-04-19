@@ -439,7 +439,7 @@ s32 func_80BF45B4(EnRg* this) {
                 this->actor.world.rot.y += 0x2000;
             }
         }
-        Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 40);
+        Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 40);
         this->unk_322 = 0xA;
     }
 
@@ -786,7 +786,9 @@ void EnRg_Update(Actor* thisx, PlayState* play) {
         func_80BF4024(this, play);
     }
 
-    Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 20.0f, 0.0f, 0x1D);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 20.0f, 0.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                UPDBGCHECKINFO_FLAG_10);
 
     if (this->actor.floorHeight <= BGCHECK_Y_MIN) {
         Math_Vec3f_Copy(&this->actor.world.pos, &this->actor.prevPos);

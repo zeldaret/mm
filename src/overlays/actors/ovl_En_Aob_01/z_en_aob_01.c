@@ -130,7 +130,7 @@ void func_809C11EC(EnAob01* this, PlayState* play) {
 
         this->unk_3F8[i] = Actor_SpawnAsChildAndCutscene(
             &play->actorCtx, play, ACTOR_EN_DG, D_809C384C[i].unk_00.x, D_809C384C[i].unk_00.y, D_809C384C[i].unk_00.z,
-            0, D_809C384C[i].unk_04 * 182.04445f, 0, enDgParams, 0xFFFF, this->actor.unk20, NULL);
+            0, DEG_TO_BINANG(D_809C384C[i].unk_04), 0, enDgParams, 0xFFFF, this->actor.halfDaysBits, NULL);
     }
 }
 
@@ -140,7 +140,7 @@ void func_809C1304(EnAob01* this, PlayState* play) {
     for (i = 0; i < ARRAY_COUNT(this->unk_3F8); i++) {
         this->unk_3F8[i] = Actor_SpawnAsChildAndCutscene(
             &play->actorCtx, play, ACTOR_EN_RACEDOG, (i * 15.0f) + -3897.0f, 130.0f, 1290.0f - (i * 10.0f), 0, 0x1555,
-            0, (i << 5) | ENAOB01_GET_7E00_1(&this->actor), 0xFFFF, this->actor.unk20, NULL);
+            0, (i << 5) | ENAOB01_GET_7E00_1(&this->actor), 0xFFFF, this->actor.halfDaysBits, NULL);
     }
 }
 
@@ -305,7 +305,7 @@ void func_809C16DC(EnAob01* this, PlayState* play) {
                         break;
 
                     case PLAYER_FORM_HUMAN:
-                        if (gSaveContext.save.playerData.rupees < 10) {
+                        if (gSaveContext.save.saveInfo.playerData.rupees < 10) {
                             this->unk_210 = 0x3524;
                             this->unk_2D2 |= 0x10;
                         } else {
@@ -369,7 +369,7 @@ void func_809C16DC(EnAob01* this, PlayState* play) {
             break;
 
         case 0x3528:
-            if (gSaveContext.save.playerData.rupees < this->unk_434) {
+            if (gSaveContext.save.saveInfo.playerData.rupees < this->unk_434) {
                 this->unk_210 = 0x3536;
                 this->unk_2D2 |= 0x40;
                 this->unk_43C = 1;
@@ -414,8 +414,8 @@ void func_809C16DC(EnAob01* this, PlayState* play) {
 
 void func_809C1C9C(EnAob01* this, PlayState* play) {
     if (gSaveContext.rupeeAccumulator == 0) {
-        SET_WEEKEVENTREG(WEEKEVENTREG_63_01);
-        CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_02);
+        SET_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_WAIT);
+        CLEAR_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_TIME_PASSED);
         this->unk_2D2 |= 0x20;
         func_800FD750(0x40);
         play->nextEntrance = ENTRANCE(DOGGY_RACETRACK, 1);
@@ -434,7 +434,7 @@ void func_809C1D64(EnAob01* this, PlayState* play) {
         if (Message_ShouldAdvance(play)) {
             switch (play->msgCtx.choiceIndex) {
                 case 0:
-                    if (gSaveContext.save.playerData.rupees < 10) {
+                    if (gSaveContext.save.saveInfo.playerData.rupees < 10) {
                         play_sound(NA_SE_SY_ERROR);
                         this->unk_210 = 0x3524;
                         Message_StartTextbox(play, this->unk_210, &this->actor);
@@ -673,7 +673,7 @@ void func_809C2730(EnAob01* this, PlayState* play) {
 void func_809C2788(EnAob01* this, PlayState* play) {
     this->unk_2D2 |= 0x20;
     if (func_809C25E4(this, play)) {
-        if (Audio_GetActiveSequence(SEQ_PLAYER_BGM_MAIN) != NA_BGM_HORSE_GOAL) {
+        if (AudioSeq_GetActiveSeqId(SEQ_PLAYER_BGM_MAIN) != NA_BGM_HORSE_GOAL) {
             play->nextEntrance = ENTRANCE(DOGGY_RACETRACK, 1);
             gSaveContext.eventInf[0] = (gSaveContext.eventInf[0] & (u8)~7) | 3;
             play->transitionType = TRANS_TYPE_64;
@@ -770,9 +770,9 @@ void func_809C2A64(EnAob01* this, PlayState* play) {
                 this->actionFunc = func_809C2BE4;
             }
         } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_08_20)) {
-            Actor_PickUp(&this->actor, play, GI_RUPEE_RED, 300.0f, 300.0f);
+            Actor_OfferGetItem(&this->actor, play, GI_RUPEE_RED, 300.0f, 300.0f);
         } else {
-            Actor_PickUp(&this->actor, play, GI_HEART_PIECE, 300.0f, 300.0f);
+            Actor_OfferGetItem(&this->actor, play, GI_HEART_PIECE, 300.0f, 300.0f);
         }
     }
 }
@@ -781,16 +781,16 @@ void func_809C2BE4(EnAob01* this, PlayState* play) {
     u8 talkState = Message_GetState(&play->msgCtx);
 
     if (((talkState == TEXT_STATE_5) || (talkState == TEXT_STATE_DONE)) && Message_ShouldAdvance(play)) {
-        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_63_02)) {
-            CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_02);
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_TIME_PASSED)) {
+            CLEAR_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_TIME_PASSED);
         }
 
-        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_63_01)) {
-            CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_01);
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_WAIT)) {
+            CLEAR_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_WAIT);
         }
 
         this->unk_210 = 0;
-        func_800B85E0(&this->actor, play, 400.0f, -1);
+        func_800B85E0(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
         gSaveContext.eventInf[0] &= (u8)~7;
         this->actionFunc = func_809C2C9C;
     }
@@ -802,7 +802,7 @@ void func_809C2C9C(EnAob01* this, PlayState* play) {
         Message_ContinueTextbox(play, this->unk_210);
         this->actionFunc = func_809C1D64;
     } else {
-        func_800B85E0(&this->actor, play, 400.0f, -1);
+        func_800B85E0(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
     }
 }
 
@@ -835,12 +835,12 @@ void func_809C2D0C(EnAob01* this, PlayState* play) {
 
             this->unk_434 = 0;
             this->actor.shape.rot.y = this->actor.world.rot.y;
-            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_63_02)) {
-                CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_02);
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_TIME_PASSED)) {
+                CLEAR_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_TIME_PASSED);
             }
 
-            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_63_01)) {
-                CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_01);
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_WAIT)) {
+                CLEAR_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_WAIT);
             }
 
             this->unk_210 = 0x354C;
@@ -904,7 +904,7 @@ void func_809C2FA0(void) {
     }
 
     for (i = 0; i < ARRAY_COUNT(sp44); i++) {
-        gSaveContext.save.weekEventReg[42 + i] = 0;
+        gSaveContext.save.saveInfo.weekEventReg[42 + i] = 0;
         sp44[i] = 0;
     }
 
@@ -914,8 +914,8 @@ void func_809C2FA0(void) {
 
         if (i % 2) {
             sp44[index] |= orig2 << 0x4;
-            gSaveContext.save.weekEventReg[42 + index] =
-                ((void)0, gSaveContext.save.weekEventReg[42 + index]) | sp44[index];
+            gSaveContext.save.saveInfo.weekEventReg[42 + index] =
+                ((void)0, gSaveContext.save.saveInfo.weekEventReg[42 + index]) | sp44[index];
         } else {
             sp44[index] |= orig2;
         }
@@ -969,7 +969,7 @@ void EnAob01_Destroy(Actor* thisx, PlayState* play) {
     EnAob01* this = THIS;
 
     if (!(this->unk_2D2 & 0x20)) {
-        CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_01);
+        CLEAR_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_WAIT);
     }
     Collider_DestroyCylinder(play, &this->collider);
 }
@@ -1034,8 +1034,8 @@ void EnAob01_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
 void EnAob01_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
     EnAob01* this = THIS;
-    Vec3f sp5C;
-    Vec3f sp50;
+    Vec3f pos;
+    Vec3f scale;
 
     OPEN_DISPS(play->state.gfxCtx);
 
@@ -1051,11 +1051,11 @@ void EnAob01_Draw(Actor* thisx, PlayState* play) {
 
     if (this->actor.draw != NULL) {
         func_8012C2DC(play->state.gfxCtx);
-        sp5C = this->actor.world.pos;
-        sp50.x = 0.5f;
-        sp50.y = 0.5f;
-        sp50.z = 0.5f;
-        func_800BC620(&sp5C, &sp50, 0xFF, play);
+        pos = this->actor.world.pos;
+        scale.x = 0.5f;
+        scale.y = 0.5f;
+        scale.z = 0.5f;
+        func_800BC620(&pos, &scale, 255, play);
     }
 
     CLOSE_DISPS(play->state.gfxCtx);

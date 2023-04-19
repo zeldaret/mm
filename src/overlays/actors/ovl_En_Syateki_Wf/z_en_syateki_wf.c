@@ -7,7 +7,7 @@
 #include "z_en_syateki_wf.h"
 #include "overlays/actors/ovl_En_Syateki_Man/z_en_syateki_man.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_8000000)
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_CANT_LOCK_ON)
 
 #define THIS ((EnSyatekiWf*)thisx)
 
@@ -425,7 +425,7 @@ void EnSyatekiWf_Update(Actor* thisx, PlayState* play2) {
     }
 
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 32.0f, 30.0f, 60.0f, 5);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 32.0f, 30.0f, 60.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
     this->actionFunc(this, play);
 
     if (this->actor.bgCheckFlags & (BGCHECKFLAG_GROUND | BGCHECKFLAG_GROUND_TOUCH)) {

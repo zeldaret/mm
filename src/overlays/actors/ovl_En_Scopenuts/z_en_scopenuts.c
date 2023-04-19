@@ -163,7 +163,7 @@ void func_80BCAE78(EnScopenuts* this, PlayState* play) {
     }
 
     if (this->unk_328 & 2) {
-        Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 20.0f, 5);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 20.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
     }
 }
 
@@ -334,7 +334,7 @@ void func_80BCB6D0(EnScopenuts* this, PlayState* play) {
         if (Message_ShouldAdvance(play)) {
             switch (play->msgCtx.choiceIndex) {
                 case 0:
-                    if (gSaveContext.save.playerData.rupees < this->unk_358) {
+                    if (gSaveContext.save.saveInfo.playerData.rupees < this->unk_358) {
                         play_sound(NA_SE_SY_ERROR);
                         this->unk_33C = 0x1636;
                         this->unk_328 |= 1;
@@ -360,7 +360,7 @@ void func_80BCB6D0(EnScopenuts* this, PlayState* play) {
             }
         }
     } else if (talkState == TEXT_STATE_DONE) {
-        func_800B85E0(&this->actor, play, 400.0f, -1);
+        func_800B85E0(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
         this->actionFunc = func_80BCB980;
     }
 }
@@ -371,7 +371,7 @@ void func_80BCB90C(EnScopenuts* this, PlayState* play) {
         SET_WEEKEVENTREG(WEEKEVENTREG_53_02);
         this->actionFunc = func_80BCB6D0;
     } else {
-        Actor_PickUp(&this->actor, play, GI_HEART_PIECE, 300.0f, 300.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_HEART_PIECE, 300.0f, 300.0f);
     }
 }
 
@@ -382,7 +382,7 @@ void func_80BCB980(EnScopenuts* this, PlayState* play) {
         Message_StartTextbox(play, this->unk_33C, &this->actor);
         this->actionFunc = func_80BCB6D0;
     } else {
-        func_800B85E0(&this->actor, play, 400.0f, -1);
+        func_800B85E0(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
     }
 }
 
@@ -654,7 +654,7 @@ s32 func_80BCC2AC(EnScopenuts* this, Path* path, s32 arg2_) {
         phi_f14 = sp5C[arg2 + 1].z - sp5C[arg2 - 1].z;
     }
 
-    func_8017B7F8(&sp30, RADF_TO_BINANG(func_80086B30(phi_f12, phi_f14)), &sp44, &sp40, &sp3C);
+    func_8017B7F8(&sp30, RAD_TO_BINANG(func_80086B30(phi_f12, phi_f14)), &sp44, &sp40, &sp3C);
 
     if (((this->actor.world.pos.x * sp44) + (sp40 * this->actor.world.pos.z) + sp3C) > 0.0f) {
         sp50 = true;
@@ -684,7 +684,8 @@ void EnScopenuts_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     EnScopenuts* this = THIS;
 
-    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_74_40) && (gSaveContext.save.inventory.items[ITEM_OCARINA] == ITEM_NONE)) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_74_40) &&
+        (gSaveContext.save.saveInfo.inventory.items[ITEM_OCARINA] == ITEM_NONE)) {
         Actor_Kill(&this->actor);
         return;
     }

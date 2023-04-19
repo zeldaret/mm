@@ -193,7 +193,7 @@ void Message_CloseTextbox(PlayState* play) {
         msgCtx->stateTimer = 2;
         msgCtx->msgMode = MSGMODE_TEXT_CLOSING;
         msgCtx->textboxEndType = 0;
-        play_sound(NA_SE_PL_WALK_GROUND - SFX_FLAG);
+        play_sound(NA_SE_NONE);
     }
 }
 
@@ -3035,7 +3035,7 @@ void Message_OpenText(PlayState* play, u16 textId) {
         if (msgCtx) {}
         textId = 0xC9;
     } else if (textId == 0x11) {
-        if (gSaveContext.save.inventory.strayFairies[((void)0, gSaveContext.dungeonIndex)] == 0xF) {
+        if (gSaveContext.save.saveInfo.inventory.strayFairies[((void)0, gSaveContext.dungeonIndex)] == 0xF) {
             textId = 0xF3;
         }
     } else if ((textId == 0x92) && (play->sceneId == SCENE_KOEPONARACE)) {
@@ -3371,7 +3371,7 @@ void Message_DisplayOcarinaStaffImpl(PlayState* play, u16 ocarinaAction) {
     if (CHECK_QUEST_ITEM(QUEST_SONG_LULLABY)) {
         msgCtx->ocarinaAvailableSongs &= (u16)~0x4000;
     }
-    if (gSaveContext.save.scarecrowSpawnSongSet) {
+    if (gSaveContext.save.saveInfo.scarecrowSpawnSongSet) {
         msgCtx->ocarinaAvailableSongs |= 0x400000;
     }
     if (CHECK_EVENTINF(EVENTINF_31)) {
@@ -4704,12 +4704,12 @@ void Message_DrawMain(PlayState* play, Gfx** gfxP) {
 
                 if (msgCtx->ocarinaStaff->state == 0) {
                     msgCtx->stateTimer = 20;
-                    gSaveContext.save.scarecrowSpawnSongSet = true;
+                    gSaveContext.save.saveInfo.scarecrowSpawnSongSet = true;
                     msgCtx->msgMode = MSGMODE_SCARECROW_SPAWN_RECORDING_DONE;
                     play_sound(NA_SE_SY_TRE_BOX_APPEAR);
-                    Lib_MemCpy(gSaveContext.save.scarecrowSpawnSong, gScarecrowSpawnSongPtr,
-                               sizeof(gSaveContext.save.scarecrowSpawnSong));
-                    for (i = 0; i < ARRAY_COUNT(gSaveContext.save.scarecrowSpawnSong); i++) {
+                    Lib_MemCpy(gSaveContext.save.saveInfo.scarecrowSpawnSong, gScarecrowSpawnSongPtr,
+                               sizeof(gSaveContext.save.saveInfo.scarecrowSpawnSong));
+                    for (i = 0; i < ARRAY_COUNT(gSaveContext.save.saveInfo.scarecrowSpawnSong); i++) {
                         // osSyncPrintf("%d, ", gSaveContext.scarecrowSpawnSong[i]);
                     }
                 } else if (msgCtx->ocarinaStaff->state == 0xFF) {
@@ -5812,7 +5812,7 @@ void Message_Init(PlayState* play) {
 
     View_Init(&msgCtx->view, play->state.gfxCtx);
 
-    msgCtx->textboxSegment = THA_AllocEndAlign16(&play->state.heap, 0x13C00);
+    msgCtx->textboxSegment = THA_AllocTailAlign16(&play->state.heap, 0x13C00);
 
     font = &play->msgCtx.font;
     Font_LoadOrderedFont(&play->msgCtx.font);

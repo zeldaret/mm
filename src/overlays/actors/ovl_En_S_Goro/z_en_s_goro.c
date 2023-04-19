@@ -701,7 +701,7 @@ u16 EnSGoro_BombshopGoron_NextTextId(EnSGoro* this, PlayState* play) {
                     return 0x673;
                 }
                 this->powderKegPrice = play->msgCtx.unk1206C;
-                if (gSaveContext.save.playerData.rupees < this->powderKegPrice) {
+                if (gSaveContext.save.saveInfo.playerData.rupees < this->powderKegPrice) {
                     this->actionFlags |= EN_S_GORO_ACTIONFLAG_LASTMESSAGE;
                     this->actionFlags |= EN_S_GORO_ACTIONFLAG_TIRED;
                     play_sound(NA_SE_SY_ERROR);
@@ -1245,7 +1245,7 @@ void EnSGoro_ShopGoron_Talk(EnSGoro* this, PlayState* play) {
         if ((this->textId == 0x675) || (this->textId == 0x676)) {
             play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
             play->msgCtx.stateTimer = 4;
-            Actor_PickUp(&this->actor, play, GI_POWDER_KEG, 300.0f, 300.0f);
+            Actor_OfferGetItem(&this->actor, play, GI_POWDER_KEG, 300.0f, 300.0f);
             this->actionFunc = EnSGoro_ShopGoron_TakePayment;
         } else {
             Message_StartTextbox(play, this->textId, &this->actor);
@@ -1262,7 +1262,7 @@ void EnSGoro_ShopGoron_TakePayment(EnSGoro* this, PlayState* play) {
         Rupees_ChangeBy(-this->powderKegPrice);
         this->actionFunc = EnSGoro_ShopGoron_FinishTransaction;
     } else {
-        Actor_PickUp(&this->actor, play, GI_POWDER_KEG, 300.0f, 300.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_POWDER_KEG, 300.0f, 300.0f);
     }
 }
 
@@ -1271,7 +1271,7 @@ void EnSGoro_ShopGoron_FinishTransaction(EnSGoro* this, PlayState* play) {
         Message_StartTextbox(play, this->textId, &this->actor);
         this->actionFunc = EnSGoro_ShopGoron_Talk;
     } else {
-        func_800B85E0(&this->actor, play, 400.0f, -1);
+        func_800B85E0(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
     }
 }
 
@@ -1328,7 +1328,7 @@ void EnSGoro_Update(Actor* thisx, PlayState* play) {
     EnSGoro* this = (EnSGoro*)thisx;
 
     this->actionFunc(this, play);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, 5);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
     gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[this->loadedObjIndex].segment);
     SkelAnime_Update(&this->skelAnime);
     if (this->animInfoIndex != EN_S_GORO_ANIM_SLEEPY) {

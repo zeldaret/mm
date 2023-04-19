@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import argparse, csv, git, json, os, re, sys
+import argparse, csv, os, re, sys
 
 parser = argparse.ArgumentParser()
 
@@ -170,6 +170,7 @@ srcCategories = [
     "libultra",
     "code",
     "overlays",
+    "audio",
 ]
 
 srcCategoriesFixer = {
@@ -256,6 +257,12 @@ asmTracker["boot"]["totalSize"] += asmTracker["libultra"]["totalSize"]
 del srcTracker["libultra"]
 del asmTracker["libultra"]
 
+# Add audio to code.
+srcTracker["code"]["totalSize"] += srcTracker["audio"]["totalSize"]
+asmTracker["code"]["totalSize"] += asmTracker["audio"]["totalSize"]
+del srcTracker["audio"]
+del asmTracker["audio"]
+
 # Calculate Non-Matching
 non_matching_functions_ovl = list(map(lambda x: x.split("/")[-1].split(".")[0], filter(lambda x: "/overlays/" in x, non_matching_functions)))
 non_matching_functions_code = list(map(lambda x: x.split("/")[-1].split(".")[0], filter(lambda x: "/code/" in x, non_matching_functions)))
@@ -337,6 +344,8 @@ masks = int(src / bytes_per_mask)
 rupees = int((src % bytes_per_mask) / bytes_per_rupee)
 
 if args.format == 'csv':
+    import git
+
     version = 2
     git_object = git.Repo().head.object
     timestamp = str(git_object.committed_date)
@@ -358,6 +367,8 @@ if args.format == 'csv':
 
     print(",".join(map(str, csv_list)))
 elif args.format == 'shield-json':
+    import json
+
     # https://shields.io/endpoint
     print(json.dumps({
         "schemaVersion": 1,

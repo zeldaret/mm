@@ -206,13 +206,13 @@ void EnZoraegg_Destroy(Actor* thisx, PlayState* play) {
 }
 
 s32 func_80B319A8(PlayState* play) {
-    return gSaveContext.save.permanentSceneFlags[play->sceneId].unk_14 & 7;
+    return gSaveContext.save.saveInfo.permanentSceneFlags[play->sceneId].unk_14 & 7;
 }
 
 void func_80B319D0(PlayState* play, s32 arg1) {
     if ((arg1 < 8) && (arg1 >= 0)) {
-        gSaveContext.save.permanentSceneFlags[play->sceneId].unk_14 &= ~7;
-        gSaveContext.save.permanentSceneFlags[play->sceneId].unk_14 |= arg1;
+        gSaveContext.save.saveInfo.permanentSceneFlags[play->sceneId].unk_14 &= ~7;
+        gSaveContext.save.saveInfo.permanentSceneFlags[play->sceneId].unk_14 |= arg1;
     }
 }
 
@@ -244,7 +244,7 @@ void func_80B31C40(EnZoraegg* this, PlayState* play) {
     Actor_MoveWithGravity(&this->actor);
     Math_Vec3f_Copy(&this->actor.focus.pos, &this->actor.world.pos);
     this->actor.focus.pos.y += 10.0f;
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
 }
 
 Actor* func_80B31CB4(PlayState* play) {
@@ -340,7 +340,7 @@ void func_80B320E0(EnZoraegg* this, PlayState* play) {
         this->actionFunc = func_80B32094;
         Message_StartTextbox(play, 0x24B, &this->actor);
     } else {
-        Actor_PickUp(&this->actor, play, GI_MAX, 80.0f, 60.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_MAX, 80.0f, 60.0f);
         if (this->actor.isTargeted) {
             func_800B8614(&this->actor, play, 110.0f);
         }

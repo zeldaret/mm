@@ -219,7 +219,7 @@ void EnCow_GiveMilkWait(EnCow* this, PlayState* play) {
         this->actor.parent = NULL;
         this->actionFunc = EnCow_GiveMilkEnd;
     } else {
-        Actor_PickUp(&this->actor, play, GI_MILK, 10000.0f, 100.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_MILK, 10000.0f, 100.0f);
     }
 }
 
@@ -228,7 +228,7 @@ void EnCow_GiveMilk(EnCow* this, PlayState* play) {
         this->actor.flags &= ~ACTOR_FLAG_10000;
         Message_CloseTextbox(play);
         this->actionFunc = EnCow_GiveMilkWait;
-        Actor_PickUp(&this->actor, play, GI_MILK, 10000.0f, 100.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_MILK, 10000.0f, 100.0f);
     }
 }
 
@@ -340,7 +340,7 @@ void EnCow_Update(Actor* thisx, PlayState* play2) {
 
     Actor_MoveWithGravity(&this->actor);
 
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
 
     if (SkelAnime_Update(&this->skelAnime)) {
         if (this->skelAnime.animation == &gCowChewAnim) {

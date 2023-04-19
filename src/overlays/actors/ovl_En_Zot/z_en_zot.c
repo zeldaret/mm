@@ -467,7 +467,7 @@ void func_80B973BC(EnZot* this, PlayState* play) {
                 break;
 
             case 0x1275:
-                if (gSaveContext.save.playerData.rupees < 10) {
+                if (gSaveContext.save.saveInfo.playerData.rupees < 10) {
                     Message_ContinueTextbox(play, 0x1277);
                 } else {
                     Message_ContinueTextbox(play, 0x1278);
@@ -943,7 +943,7 @@ void func_80B9854C(EnZot* this, PlayState* play) {
         this->actor.flags |= ACTOR_FLAG_10000;
         func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
     } else {
-        Actor_PickUp(&this->actor, play, this->unk_2D4, 10000.0f, 50.0f);
+        Actor_OfferGetItem(&this->actor, play, this->unk_2D4, 10000.0f, 50.0f);
     }
 }
 
@@ -1205,7 +1205,7 @@ void func_80B98F30(EnZot* this, PlayState* play) {
         this->actor.parent = NULL;
         this->actionFunc = func_80B990A4;
     } else {
-        Actor_PickUp(&this->actor, play, GI_RUPEE_BLUE, 10000.0f, 50.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_RUPEE_BLUE, 10000.0f, 50.0f);
     }
 }
 
@@ -1316,7 +1316,7 @@ void EnZot_Update(Actor* thisx, PlayState* play) {
     Actor_MoveWithGravity(&this->actor);
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 15.0f, 30.0f, 5);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 15.0f, 30.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
 
     this->unk_2F2 &= ~0x40;
     if (SkelAnime_Update(&this->skelAnime) && (this->unk_2F0 != 0)) {

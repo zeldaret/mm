@@ -10,7 +10,7 @@
 
 #define FLAGS                                                                                            \
     (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_1000 | ACTOR_FLAG_100000 | \
-     ACTOR_FLAG_8000000 | ACTOR_FLAG_80000000)
+     ACTOR_FLAG_CANT_LOCK_ON | ACTOR_FLAG_80000000)
 
 #define THIS ((EnWiz*)thisx)
 
@@ -756,7 +756,7 @@ void EnWiz_Appear(EnWiz* this, PlayState* play) {
                 return;
             } else {
                 this->action = EN_WIZ_ACTION_RUN_IN_CIRCLES;
-                this->actor.flags &= ~ACTOR_FLAG_8000000;
+                this->actor.flags &= ~ACTOR_FLAG_CANT_LOCK_ON;
                 this->ghostColliders.elements[0].info.bumper.dmgFlags = 0x1013A22;
                 Math_Vec3f_Copy(&this->staffTargetFlameScale, &staffTargetFlameScale);
                 this->targetPlatformLightAlpha = 0;
@@ -875,7 +875,7 @@ void EnWiz_SecondPhaseCutscene(EnWiz* this, PlayState* play) {
                 s32 pad;
                 s32 i;
 
-                this->actor.flags |= ACTOR_FLAG_8000000;
+                this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
                 if (sqrtf(SQ(diffX) + SQ(diffZ)) < 20.0f) {
                     for (i = 0; i < this->platformCount; i++) {
                         Math_Vec3f_Copy(&this->ghostPos[i], &gZeroVec3f);
@@ -1003,7 +1003,7 @@ void EnWiz_SetupDisappear(EnWiz* this) {
     }
 
     this->targetPlatformLightAlpha = 0;
-    this->actor.flags |= ACTOR_FLAG_8000000;
+    this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
     Actor_PlaySfx(&this->actor, NA_SE_EN_WIZ_DISAPPEAR);
     Math_SmoothStepToS(&this->rotationalVelocity, 0x1388, 0x64, 0x3E8, 0x3E8);
     this->actor.world.rot.y += this->rotationalVelocity;
@@ -1055,7 +1055,7 @@ void EnWiz_Disappear(EnWiz* this, PlayState* play) {
 
 void EnWiz_SetupDamaged(EnWiz* this, PlayState* play) {
     EnWiz_ChangeAnim(this, EN_WIZ_ANIM_DAMAGE, false);
-    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 8);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 8);
     this->timer = 20;
 
     if ((this->fightState != EN_WIZ_FIGHT_STATE_FIRST_PHASE) && (this->actor.colChkInfo.health <= 0)) {
@@ -1146,12 +1146,14 @@ void EnWiz_Damaged(EnWiz* this, PlayState* play) {
             EnWiz_SetupDisappear(this);
         }
 
-        this->actor.flags |= ACTOR_FLAG_8000000;
+        this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
     }
 
     Math_SmoothStepToS(&this->platformLightAlpha, this->targetPlatformLightAlpha, 20, 50, 10);
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 35.0f, 40.0f, 40.0f, 0x1F);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 35.0f, 40.0f, 40.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_2 | UPDBGCHECKINFO_FLAG_4 |
+                                UPDBGCHECKINFO_FLAG_8 | UPDBGCHECKINFO_FLAG_10);
 }
 
 void EnWiz_SetupDead(EnWiz* this) {

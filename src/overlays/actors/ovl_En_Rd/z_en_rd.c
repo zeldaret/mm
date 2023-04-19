@@ -1088,11 +1088,12 @@ void EnRd_SetupStunned(EnRd* this) {
         this->stunnedBySunsSong = true;
         this->sunsSongStunTimer = 600;
         Actor_PlaySfx(&this->actor, NA_SE_EN_LIGHT_ARROW_HIT);
-        Actor_SetColorFilter(&this->actor, 0x8000, 0x80C8, 0, 255);
+        Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_GRAY, COLORFILTER_INTENSITY_FLAG | 200,
+                             COLORFILTER_BUFFLAG_OPA, 255);
     } else if (this->damageEffect == EN_RD_DMGEFF_STUN) {
-        Actor_SetColorFilter(&this->actor, 0, 0xC8, 0, 40);
+        Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 200, COLORFILTER_BUFFLAG_OPA, 40);
     } else if (this->damageEffect == EN_RD_DMGEFF_ZORA_MAGIC) {
-        Actor_SetColorFilter(&this->actor, 0, 0xC8, 0, 40);
+        Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 200, COLORFILTER_BUFFLAG_OPA, 40);
     }
     this->actionFunc = EnRd_Stunned;
 }
@@ -1106,7 +1107,8 @@ void EnRd_Stunned(EnRd* this, PlayState* play) {
         if (this->sunsSongStunTimer != 0) {
             this->sunsSongStunTimer--;
             if (this->sunsSongStunTimer >= 255) {
-                Actor_SetColorFilter(&this->actor, 0x8000, 0x80C8, 0, 255);
+                Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_GRAY, COLORFILTER_INTENSITY_FLAG | 200,
+                                     COLORFILTER_BUFFLAG_OPA, 255);
             }
 
             if (this->sunsSongStunTimer == 0) {
@@ -1186,7 +1188,7 @@ void EnRd_UpdateDamage(EnRd* this, PlayState* play) {
                 return;
 
             case EN_RD_DMGEFF_FIRE_ARROW:
-                Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 40);
+                Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 40);
                 this->drawDmgEffTimer = 180;
                 this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
                 this->stunnedBySunsSong = false;
@@ -1195,7 +1197,7 @@ void EnRd_UpdateDamage(EnRd* this, PlayState* play) {
                 break;
 
             case EN_RD_DMGEFF_LIGHT_ARROW:
-                Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 40);
+                Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 40);
                 this->drawDmgEffTimer = 60;
                 this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
                 this->stunnedBySunsSong = false;
@@ -1204,13 +1206,13 @@ void EnRd_UpdateDamage(EnRd* this, PlayState* play) {
                 break;
 
             case EN_RD_DMGEFF_DAMAGE:
-                Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 8);
+                Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 8);
                 this->stunnedBySunsSong = false;
                 this->sunsSongStunTimer = 0;
                 break;
 
             case EN_RD_DMGEFF_LIGHT_RAY:
-                Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 8);
+                Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 8);
                 this->stunnedBySunsSong = false;
                 this->sunsSongStunTimer = 0;
                 this->actor.colChkInfo.health = 0;
@@ -1278,7 +1280,9 @@ void EnRd_Update(Actor* thisx, PlayState* play) {
         }
 
         if ((this->actor.shape.rot.x == 0) && (this->action != EN_RD_ACTION_GRABBING) && (this->actor.speed != 0.0f)) {
-            Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 20.0f, 35.0f, 0x1D);
+            Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 20.0f, 35.0f,
+                                    UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                        UPDBGCHECKINFO_FLAG_10);
         }
 
         if (this->action == EN_RD_ACTION_ATTEMPTING_PLAYER_STUN) {
@@ -1324,10 +1328,10 @@ void EnRd_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
 }
 
 void EnRd_Draw(Actor* thisx, PlayState* play) {
-    static Vec3f D_808D7138 = { 0.25f, 0.25f, 0.25f };
+    static Vec3f sScale = { 0.25f, 0.25f, 0.25f };
     s32 pad;
     EnRd* this = THIS;
-    Vec3f sp54 = this->actor.world.pos;
+    Vec3f pos = this->actor.world.pos;
 
     OPEN_DISPS(play->state.gfxCtx);
 
@@ -1343,7 +1347,7 @@ void EnRd_Draw(Actor* thisx, PlayState* play) {
             SkelAnime_DrawFlex(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                                EnRd_OverrideLimbDraw, EnRd_PostLimbDraw, &this->actor, POLY_OPA_DISP);
 
-        func_800BC620(&sp54, &D_808D7138, 255, play);
+        func_800BC620(&pos, &sScale, 255, play);
     } else {
         func_8012C2DC(play->state.gfxCtx);
 
@@ -1353,7 +1357,7 @@ void EnRd_Draw(Actor* thisx, PlayState* play) {
         POLY_XLU_DISP =
             SkelAnime_DrawFlex(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                                EnRd_OverrideLimbDraw, NULL, &this->actor, POLY_XLU_DISP);
-        func_800BC620(&sp54, &D_808D7138, this->alpha, play);
+        func_800BC620(&pos, &sScale, this->alpha, play);
     }
 
     CLOSE_DISPS(play->state.gfxCtx);

@@ -218,7 +218,7 @@ void EnLiftNuts_Init(Actor* thisx, PlayState* play) {
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &sColChkInfoInit);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
     if (this->actor.floorBgId != BGCHECK_SCENE) {
         DynaPolyActor* bgActor = DynaPoly_GetActor(&play->colCtx, this->actor.floorBgId);
 
@@ -393,7 +393,7 @@ void func_80AEA1A0(EnLiftNuts* this, PlayState* play) {
                     }
                 } else {
                     if (((void)0, gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2]) >=
-                        gSaveContext.save.dekuPlaygroundHighScores[CURRENT_DAY - 1]) {
+                        gSaveContext.save.saveInfo.dekuPlaygroundHighScores[CURRENT_DAY - 1]) {
                         if (gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2] < 0x2EE0) {
                             Message_StartTextbox(play, 0x27F9, &this->actor);
                             this->textId = 0x27F9;
@@ -452,7 +452,7 @@ void func_80AEA7A4(EnLiftNuts* this, PlayState* play) {
         switch (this->textId) {
             case 0x27E2:
                 if (play->msgCtx.choiceIndex == 0) { // Yes
-                    if (gSaveContext.save.playerData.rupees >= 10) {
+                    if (gSaveContext.save.saveInfo.playerData.rupees >= 10) {
                         func_8019F208();
                         Message_StartTextbox(play, 0x27E5, &this->actor);
                         this->textId = 0x27E5;
@@ -731,7 +731,7 @@ void func_80AEAFA0(EnLiftNuts* this, PlayState* play) {
 }
 
 void func_80AEB114(EnLiftNuts* this) {
-    func_801A2BB8(NA_BGM_TIMED_MINI_GAME);
+    Audio_PlaySubBgm(NA_BGM_TIMED_MINI_GAME);
     this->actionFunc = func_80AEB148;
 }
 
@@ -784,7 +784,7 @@ void func_80AEB294(EnLiftNuts* this, PlayState* play) {
         player->stateFlags1 |= PLAYER_STATE1_20;
 
         if (((void)0, gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2]) <
-            gSaveContext.save.dekuPlaygroundHighScores[CURRENT_DAY - 1]) {
+            gSaveContext.save.saveInfo.dekuPlaygroundHighScores[CURRENT_DAY - 1]) {
             Flags_SetSwitch(play, 0x40);
         }
         Flags_SetSwitch(play, 0x41);
@@ -804,7 +804,7 @@ void func_80AEB428(EnLiftNuts* this, PlayState* play) {
 
     if (this->unk_354 == 10) {
         if (((void)0, gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2]) >
-            gSaveContext.save.dekuPlaygroundHighScores[CURRENT_DAY - 1]) {
+            gSaveContext.save.saveInfo.dekuPlaygroundHighScores[CURRENT_DAY - 1]) {
             Message_StartTextbox(play, 0x27EA, &this->actor);
             this->textId = 0x27EA;
         } else if (*this->ptr_1EC == 300) {
@@ -839,9 +839,9 @@ void func_80AEB598(EnLiftNuts* this, PlayState* play) {
         }
         func_80AEB684(this);
     } else if ((this->textId == 0x27F4) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_14_80)) {
-        Actor_PickUp(&this->actor, play, GI_HEART_PIECE, 500.0f, 100.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_HEART_PIECE, 500.0f, 100.0f);
     } else {
-        Actor_PickUp(&this->actor, play, GI_RUPEE_PURPLE, 500.0f, 100.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_RUPEE_PURPLE, 500.0f, 100.0f);
     }
 }
 
@@ -882,7 +882,7 @@ void func_80AEB698(EnLiftNuts* this, PlayState* play) {
                 break;
         }
     } else {
-        func_800B85E0(&this->actor, play, 200.0f, -1);
+        func_800B85E0(&this->actor, play, 200.0f, PLAYER_IA_MINUS1);
     }
 }
 
@@ -975,7 +975,7 @@ void EnLiftNuts_Update(Actor* thisx, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     this->actionFunc(this, play);
     func_80AEBB30(this, play);
-    Actor_UpdateBgCheckInfo(play, thisx, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, thisx, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
     func_80AE9BCC(this, play);
 
     if (func_80AE9B4C(0, 2)) {

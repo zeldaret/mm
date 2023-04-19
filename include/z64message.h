@@ -220,7 +220,7 @@ typedef enum BombersNotebookEvent {
 
 #define FONT_CHAR_TEX_WIDTH 16
 #define FONT_CHAR_TEX_HEIGHT 16
-//! @TODO: Make this use `sizeof(AnyFontTextureSymbol)`
+//! TODO: Make this use `sizeof(AnyFontTextureSymbol)`
 #define FONT_CHAR_TEX_SIZE ((16 * 16) / 2) // 16x16 I4 texture
 
 // TODO: should Font be in its own header or is it fine to have it here?

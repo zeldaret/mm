@@ -284,7 +284,7 @@ void func_80C1410C(EnJgameTsn* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     player->stateFlags1 |= PLAYER_STATE1_20;
-    func_801A2BB8(0x25);
+    Audio_PlaySubBgm(0x25);
     play->interfaceCtx.minigameState = MINIGAME_STATE_COUNTDOWN_SETUP_3;
     Interface_InitMinigame(play);
     SET_WEEKEVENTREG(WEEKEVENTREG_90_20);
@@ -341,7 +341,7 @@ void func_80C14230(EnJgameTsn* this, PlayState* play) {
         this->unk_300 = 0x109F;
         player->stateFlags1 |= PLAYER_STATE1_20;
         *this->unk_208[this->unk_218] &= ~OBJLUPYGAMELIFT_IGNITE_FIRE;
-        func_801A2C20();
+        Audio_StopSubBgm();
         func_80C14030(this);
     } else if ((player->actor.bgCheckFlags & BGCHECKFLAG_WATER_TOUCH) ||
                (player->actor.bgCheckFlags & BGCHECKFLAG_WATER)) {
@@ -350,7 +350,7 @@ void func_80C14230(EnJgameTsn* this, PlayState* play) {
         this->unk_300 = 0x10A0;
         player->stateFlags1 |= PLAYER_STATE1_20;
         *this->unk_208[this->unk_218] &= ~OBJLUPYGAMELIFT_IGNITE_FIRE;
-        func_801A2C20();
+        Audio_StopSubBgm();
         func_80C14030(this);
     }
 
@@ -359,7 +359,7 @@ void func_80C14230(EnJgameTsn* this, PlayState* play) {
         this->unk_300 = 0x10A1;
         player->stateFlags1 |= PLAYER_STATE1_20;
         *this->unk_208[this->unk_218] &= ~OBJLUPYGAMELIFT_IGNITE_FIRE;
-        func_801A2C20();
+        Audio_StopSubBgm();
         func_80C14030(this);
     }
 }
@@ -386,9 +386,9 @@ void func_80C14554(EnJgameTsn* this, PlayState* play) {
         }
         func_80C145FC(this);
     } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_82_10)) {
-        Actor_PickUp(&this->actor, play, GI_RUPEE_PURPLE, 500.0f, 100.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_RUPEE_PURPLE, 500.0f, 100.0f);
     } else {
-        Actor_PickUp(&this->actor, play, GI_HEART_PIECE, 500.0f, 100.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_HEART_PIECE, 500.0f, 100.0f);
     }
 }
 
@@ -402,14 +402,14 @@ void func_80C14610(EnJgameTsn* this, PlayState* play) {
         this->unk_300 = 0x10A4;
         func_80C14030(this);
     } else {
-        func_800B85E0(&this->actor, play, 200.0f, -1);
+        func_800B85E0(&this->actor, play, 200.0f, PLAYER_IA_MINUS1);
     }
 }
 
 void func_80C14684(EnJgameTsn* this, PlayState* play) {
     if (Message_ShouldAdvance(play)) {
         if (play->msgCtx.choiceIndex == 0) {
-            if (gSaveContext.save.playerData.rupees >= 20) {
+            if (gSaveContext.save.saveInfo.playerData.rupees >= 20) {
                 Message_StartTextbox(play, 0x109E, &this->actor);
                 this->unk_300 = 0x109E;
                 Rupees_ChangeBy(-20);

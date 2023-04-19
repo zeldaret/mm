@@ -68,7 +68,10 @@ static ColliderCylinderInit sCylinderInit = {
 //  assumption: draw uses two different skeleton functions, might be incompatible
 static AnimationHeader* gYbUnusedAnimations[] = { &object_yb_Anim_000200 };
 
-static LinkAnimationHeader* gLinkAnimations[] = { &gPlayerAnim_link_normal_wait_free, &gPlayerAnim_alink_dance_loop };
+static PlayerAnimationHeader* gPlayerAnimations[] = {
+    &gPlayerAnim_link_normal_wait_free,
+    &gPlayerAnim_alink_dance_loop,
+};
 
 static Vec3f D_80BFB2E8 = { 0.0f, 0.5f, 0.0f };
 
@@ -168,17 +171,17 @@ void EnYb_ActorShadowFunc(Actor* thisx, Lights* mapper, PlayState* play) {
 
 void EnYb_ChangeAnim(PlayState* play, EnYb* this, s16 animIndex, u8 animMode, f32 morphFrames) {
     if (animIndex >= 0 && animIndex < 3) {
-        if (animIndex != this->animIndex || animMode != ANIMMODE_LOOP) {
+        if ((animIndex != this->animIndex) || (animMode != ANIMMODE_LOOP)) {
             if (animIndex > 0) {
                 if (animMode == ANIMMODE_LOOP) {
-                    LinkAnimation_Change(play, &this->skelAnime, gLinkAnimations[animIndex - 1], 1.0f, 0.0f,
-                                         Animation_GetLastFrame(gLinkAnimations[animIndex - 1]), ANIMMODE_LOOP,
-                                         morphFrames);
+                    PlayerAnimation_Change(play, &this->skelAnime, gPlayerAnimations[animIndex - 1], 1.0f, 0.0f,
+                                           Animation_GetLastFrame(gPlayerAnimations[animIndex - 1]), ANIMMODE_LOOP,
+                                           morphFrames);
                 } else {
                     // unused case, (only called once with animMode = ANIMMODE_LOOP)
-                    LinkAnimation_Change(play, &this->skelAnime, gLinkAnimations[animIndex - 1], 1.0f, 0.0f,
-                                         Animation_GetLastFrame(gLinkAnimations[animIndex - 1]), ANIMMODE_LOOP,
-                                         morphFrames);
+                    PlayerAnimation_Change(play, &this->skelAnime, gPlayerAnimations[animIndex - 1], 1.0f, 0.0f,
+                                           Animation_GetLastFrame(gPlayerAnimations[animIndex - 1]), ANIMMODE_LOOP,
+                                           morphFrames);
                 }
             } else {
                 // unused case, (only called once with animIndex = 2)
@@ -207,7 +210,7 @@ void EnYb_UpdateAnimation(EnYb* this, PlayState* play) {
     if (this->animIndex <= 0) {
         SkelAnime_Update(&this->skelAnime);
     } else {
-        LinkAnimation_Update(play, &this->skelAnime);
+        PlayerAnimation_Update(play, &this->skelAnime);
     }
 }
 
@@ -276,7 +279,7 @@ void EnYb_ReceiveMask(EnYb* this, PlayState* play) {
         this->actor.flags |= ACTOR_FLAG_10000;
         func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
     } else {
-        Actor_PickUp(&this->actor, play, GI_MASK_KAMARO, 10000.0f, 100.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_MASK_KAMARO, 10000.0f, 100.0f);
     }
     EnYb_EnableProximityMusic(this);
 }
@@ -406,7 +409,7 @@ void EnYb_Update(Actor* thisx, PlayState* play) {
     }
     if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_1)) {
         Actor_MoveWithGravity(&this->actor);
-        Actor_UpdateBgCheckInfo(play, &this->actor, 40.0f, 25.0f, 40.0f, 5);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 40.0f, 25.0f, 40.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
     }
 
     this->actionFunc(this, play);

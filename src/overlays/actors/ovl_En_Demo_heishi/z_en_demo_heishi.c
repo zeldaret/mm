@@ -125,7 +125,7 @@ void EnDemoheishi_Idle(EnDemoheishi* this, PlayState* play) {
     s32 absYawDiff;
     s16 yawDiff;
 
-    this->actor.flags &= ~ACTOR_FLAG_8000000;
+    this->actor.flags &= ~ACTOR_FLAG_CANT_LOCK_ON;
     yawDiff = this->actor.yawTowardsPlayer - this->actor.world.rot.y;
     absYawDiff = ABS_ALT(yawDiff);
 
@@ -160,7 +160,9 @@ void EnDemoheishi_Update(Actor* thisx, PlayState* play) {
     this->actor.shape.rot.y = this->actor.world.rot.y;
     this->actionFunc(this, play);
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 50.0f, 0x1D);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 50.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                UPDBGCHECKINFO_FLAG_10);
     Actor_SetScale(&this->actor, 0.01f);
     EnDemoheishi_SetHeadRotation(this);
 

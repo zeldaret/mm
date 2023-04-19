@@ -476,7 +476,7 @@ void EnEgol_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void EnEgol_SetupWait(EnEgol* this) {
-    this->actor.flags |= ACTOR_FLAG_8000000;
+    this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
     this->action = EYEGORE_ACTION_WAIT;
     this->actionFunc = EnEgol_Wait;
 }
@@ -493,7 +493,7 @@ void EnEgol_Wait(EnEgol* this, PlayState* play) {
 
 void EnEgol_SetupStand(EnEgol* this) {
     EnEgol_ChangeAnim(this, EYEGORE_ANIM_STAND);
-    this->actor.flags &= ~ACTOR_FLAG_8000000;
+    this->actor.flags &= ~ACTOR_FLAG_CANT_LOCK_ON;
     this->action = EYEGORE_ACTION_STAND;
     Actor_PlaySfx(&this->actor, NA_SE_EN_EYEGOLE_STAND);
     this->actionFunc = EnEgol_Stand;
@@ -767,8 +767,8 @@ void EnEgol_Laser(EnEgol* this, PlayState* play) {
                  * rotToNorm.x = func_80086B30(nz, ny) * 0x8000 / M_PI;
                  * rotToNorm.z = func_80086B30(-nx, sqrtf(1.0f - SQ(nx))) * 0x8000 / M_PI;
                  */
-                rotToNorm.x = -func_80086B30(-nz * ny, 1.0f) * 0x8000 / M_PI;
-                rotToNorm.z = func_80086B30(-nx * ny, 1.0f) * 0x8000 / M_PI;
+                rotToNorm.x = RAD_TO_BINANG_ALT2(-func_80086B30(-nz * ny, 1.0f));
+                rotToNorm.z = RAD_TO_BINANG_ALT2(func_80086B30(-nx * ny, 1.0f));
 
                 if ((this->actor.world.pos.y - 50.0f) <= player->actor.world.pos.y) {
                     EnEgol_SpawnEffect(this, &hitPos, &rotToNorm, 100, 0.02f, EYEGORE_EFFECT_IMPACT);
@@ -1034,7 +1034,7 @@ void EnEgol_Damaged(EnEgol* this, PlayState* play) {
         } else {
             Enemy_StartFinishingBlow(play, &this->actor);
             Actor_PlaySfx(&this->actor, NA_SE_EN_EYEGOLE_DEAD);
-            this->actor.flags |= ACTOR_FLAG_8000000;
+            this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
             this->actor.flags &= ~ACTOR_FLAG_1;
             this->actor.flags |= ACTOR_FLAG_100000;
             this->actionFunc = EnEgol_StartDeathCutscene;
@@ -1145,7 +1145,8 @@ void EnEgol_CollisionCheck(EnEgol* this, PlayState* play) {
                         Math_Vec3f_Copy(&this->laserCollider.dim.quad[3], &this->laserBase);
                         Math_Vec3f_Copy(&this->laserCollider.dim.quad[0], &this->laserBase);
                         Math_Vec3f_Copy(&this->laserCollider.dim.quad[2], &this->laserBase);
-                        Actor_SetColorFilter(&this->actor, 0, 120, false, 40);
+                        Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 120, COLORFILTER_BUFFLAG_OPA,
+                                             40);
                         Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_FREEZE);
                         EnEgol_SetupStunned(this);
                     }
@@ -1167,7 +1168,7 @@ void EnEgol_CollisionCheck(EnEgol* this, PlayState* play) {
         CollisionCheck_BlueBlood(play, NULL, &this->eyePos);
         CollisionCheck_BlueBlood(play, NULL, &this->eyePos);
         CollisionCheck_BlueBlood(play, NULL, &this->eyePos);
-        Actor_SetColorFilter(&this->actor, 0x4000, 255, false, 25);
+        Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 25);
         Actor_PlaySfx(&this->actor, NA_SE_EN_EYEGOLE_DAMAGE);
         EnEgol_SetupDamaged(this);
     } else if (reaction == EYEGORE_HIT_IMMUNE) {
@@ -1293,7 +1294,9 @@ void EnEgol_Update(Actor* thisx, PlayState* play) {
     Math_SmoothStepToS(&this->eyelidRot, this->eyelidRotTarget, 1, 0x7D0, 0);
     EnEgol_CollisionCheck(this, play);
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 50.0f, 50.0f, 0x1D);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 50.0f, 50.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                UPDBGCHECKINFO_FLAG_10);
     if (this->action != EYEGORE_ACTION_DEAD) {
         //! @bug This should be ||, not &&. As is, the check always succeeds.
         if (!((this->action == EYEGORE_ACTION_DAMAGED) && (this->action == EYEGORE_ACTION_DYING))) {

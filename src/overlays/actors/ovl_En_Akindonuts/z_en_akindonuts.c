@@ -150,7 +150,7 @@ void func_80BECC7C(EnAkindonuts* this, PlayState* play) {
     }
 
     if (this->unk_32C & 2) {
-        Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 20.0f, 5);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 20.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
     }
 }
 
@@ -179,7 +179,7 @@ s32 func_80BECD10(EnAkindonuts* this, Path* path, s32 arg2) {
         phi_f14 = sp5C[idx + 1].z - sp5C[idx - 1].z;
     }
 
-    func_8017B7F8(&sp30, RADF_TO_BINANG(func_80086B30(phi_f12, phi_f14)), &sp44, &sp40, &sp3C);
+    func_8017B7F8(&sp30, RAD_TO_BINANG(func_80086B30(phi_f12, phi_f14)), &sp44, &sp40, &sp3C);
     if (((this->actor.world.pos.x * sp44) + (sp40 * this->actor.world.pos.z) + sp3C) > 0.0f) {
         sp50 = true;
     }
@@ -300,7 +300,7 @@ s32 func_80BED208(EnAkindonuts* this) {
         return 0;
     }
 
-    if (gSaveContext.save.playerData.rupees < 10) {
+    if (gSaveContext.save.saveInfo.playerData.rupees < 10) {
         return 1;
     }
 
@@ -322,7 +322,7 @@ s32 func_80BED27C(EnAkindonuts* this) {
         return 0;
     }
 
-    if (gSaveContext.save.playerData.rupees < 200) {
+    if (gSaveContext.save.saveInfo.playerData.rupees < 200) {
         return 1;
     }
 
@@ -336,7 +336,7 @@ s32 func_80BED2FC(EnAkindonuts* this) {
         return 2;
     }
 
-    if (gSaveContext.save.playerData.rupees < 40) {
+    if (gSaveContext.save.saveInfo.playerData.rupees < 40) {
         return 1;
     }
 
@@ -350,7 +350,7 @@ s32 func_80BED35C(EnAkindonuts* this) {
         return 2;
     }
 
-    if (gSaveContext.save.playerData.rupees < 100) {
+    if (gSaveContext.save.saveInfo.playerData.rupees < 100) {
         return 1;
     }
 
@@ -1330,19 +1330,19 @@ void func_80BEF360(EnAkindonuts* this, PlayState* play) {
             this->unk_32C &= ~0x40;
             this->actionFunc = func_80BEF450;
         } else {
-            Actor_PickUp(&this->actor, play, func_80BED034(this), 300.0f, 300.0f);
+            Actor_OfferGetItem(&this->actor, play, func_80BED034(this), 300.0f, 300.0f);
         }
     } else if (Actor_HasParent(&this->actor, play)) {
         this->actor.parent = NULL;
         this->actionFunc = func_80BEF450;
     } else {
-        Actor_PickUp(&this->actor, play, func_80BECFBC(this), 300.0f, 300.0f);
+        Actor_OfferGetItem(&this->actor, play, func_80BECFBC(this), 300.0f, 300.0f);
     }
 }
 
 void func_80BEF450(EnAkindonuts* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_DONE) && Message_ShouldAdvance(play)) {
-        func_800B85E0(&this->actor, play, 400.0f, -1);
+        func_800B85E0(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
         this->actionFunc = func_80BEF4B8;
     }
 }
@@ -1352,7 +1352,7 @@ void func_80BEF4B8(EnAkindonuts* this, PlayState* play) {
         this->unk_2DC(this, play);
         this->actionFunc = func_80BEEFA8;
     } else {
-        func_800B85E0(&this->actor, play, 400.0f, -1);
+        func_800B85E0(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
     }
 }
 

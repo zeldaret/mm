@@ -273,7 +273,7 @@ void EnAz_Init(Actor* thisx, PlayState* play2) {
         this->collider.dim.height *= 1.2f;
         this->collider.dim.yShift *= 1.2f;
     }
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 5);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
     if ((this->actor.bgCheckFlags & BGCHECKFLAG_WATER) && (this->actor.depthInWater > 22.0f)) {
         this->unk_374 |= 0x100;
         this->unk_376 |= 0x100;
@@ -641,7 +641,7 @@ void func_80A95E88(EnAz* this, PlayState* play) {
 }
 
 void func_80A95F94(EnAz* this, PlayState* play) {
-    func_800BE33C(&this->actor.world.pos, &this->actor.home.pos, &this->actor.world.rot, 0);
+    func_800BE33C(&this->actor.world.pos, &this->actor.home.pos, &this->actor.world.rot, false);
     this->unk_39E = 0;
     this->actor.shape.rot.y = this->actor.world.rot.y;
     this->actionFunc = func_80A95FE8;
@@ -656,7 +656,7 @@ void func_80A95FE8(EnAz* this, PlayState* play) {
     }
     if (Actor_WorldDistXYZToPoint(&this->actor, &this->actor.home.pos) > 20.0f) {
         func_800B9010(&this->actor, NA_SE_EV_BEAVER_SWIM_MOTOR - SFX_FLAG);
-        func_800BE33C(&this->actor.world.pos, &this->actor.home.pos, &this->actor.world.rot, 0);
+        func_800BE33C(&this->actor.world.pos, &this->actor.home.pos, &this->actor.world.rot, false);
         Math_SmoothStepToS(&this->actor.shape.rot.x, this->actor.world.rot.x, 3, 0xE38, 0x38E);
         Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.world.rot.y, 3, 0xE38, 0x38E);
         this->actor.shape.rot.z = 0;
@@ -1309,8 +1309,8 @@ void func_80A97410(EnAz* this, PlayState* play) {
                     this->unk_378 = 0;
                 }
             } else {
-                Actor_PickUp(&this->actor, play, this->getItemId, this->actor.xzDistToPlayer,
-                             this->actor.playerHeightRel);
+                Actor_OfferGetItem(&this->actor, play, this->getItemId, this->actor.xzDistToPlayer,
+                                   this->actor.playerHeightRel);
             }
         }
         if (this->unk_378 == 9) {
@@ -1370,7 +1370,7 @@ void func_80A97410(EnAz* this, PlayState* play) {
                 } else {
                     Actor_GetScreenPos(play, &this->actor, &sp56, &sp54);
                     if ((sp56 >= 0) && (sp56 <= SCREEN_WIDTH) && (sp54 >= 0) && (sp54 <= SCREEN_HEIGHT) &&
-                        func_800B8500(&this->actor, play, 120.0f, 120.0f, 0)) {
+                        func_800B8500(&this->actor, play, 120.0f, 120.0f, PLAYER_IA_NONE)) {
                         this->unk_3D2 = func_80A97274(this, play);
                         if ((this->unk_3D2 == 0x10CE) || (this->unk_3D2 == 0x10D4)) {
                             this->actor.textId = 0;
@@ -1515,7 +1515,7 @@ void func_80A97EAC(EnAz* this, PlayState* play) {
     this->actor.velocity.y = 6.0f;
     SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo, BEAVER_ANIM_SWIM_WITH_SPINNING_TAIL,
                                     &this->animIndex);
-    this->actor.flags |= ACTOR_FLAG_8000000;
+    this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
     this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_8);
     this->actor.bgCheckFlags &= ~(BGCHECKFLAG_GROUND | BGCHECKFLAG_WATER);
     this->unk_374 |= 0x1000;
@@ -1660,9 +1660,9 @@ void EnAz_Update(Actor* thisx, PlayState* play2) {
         this->unk_39C = 0;
     }
     if (!(this->unk_374 & 0x1000)) {
-        Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 20.0f, 5);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 20.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
     } else {
-        Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 20.0f, 0x400);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 20.0f, UPDBGCHECKINFO_FLAG_400);
         this->unk_374 &= ~0x1000;
     }
     Collider_UpdateCylinder(&this->actor, &this->collider);
@@ -1835,7 +1835,7 @@ void EnAz_Draw(Actor* thisx, PlayState* play2) {
         } else {
             Matrix_Push();
             Matrix_Translate(0.0f, 2000.0f, -2000.0f, MTXMODE_APPLY);
-            Matrix_RotateZS(D_80A993D0[this->unk_384].z * (0x10000 / 360.0f), MTXMODE_APPLY);
+            Matrix_RotateZS(DEG_TO_BINANG(D_80A993D0[this->unk_384].z), MTXMODE_APPLY);
             Matrix_Scale(D_80A993AC[this->unk_384].x, D_80A993AC[this->unk_384].y, 0.0f, MTXMODE_APPLY);
             if (this->unk_374 & 0x800) {
                 gSPSegment(POLY_XLU_DISP++, 0x08, Gfx_PrimColor(play->state.gfxCtx, 0x80, 255, 255, 255, 255));
@@ -1846,7 +1846,7 @@ void EnAz_Draw(Actor* thisx, PlayState* play2) {
             gSPDisplayList(POLY_XLU_DISP++, gBeaverYoungerBrotherTailVortexDL);
             Matrix_Pop();
             Matrix_Translate(0.0f, 2000.0f, -2100.0f, MTXMODE_APPLY);
-            Matrix_RotateZS(D_80A993D0[this->unk_384].z * (0x10000 / 360.0f), MTXMODE_APPLY);
+            Matrix_RotateZS(DEG_TO_BINANG(D_80A993D0[this->unk_384].z), MTXMODE_APPLY);
             Matrix_Scale(D_80A993D0[this->unk_384].x, D_80A993D0[this->unk_384].y, 0.0f, MTXMODE_APPLY);
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_XLU_DISP++, gBeaverYoungerBrotherTailSplashDL);

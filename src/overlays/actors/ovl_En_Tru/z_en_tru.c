@@ -913,7 +913,7 @@ s32 func_80A87880(Actor* thisx, PlayState* play) {
                        Animation_OnFrame(&this->skelAnime, 52.0f)) {
                 if (Animation_OnFrame(&this->skelAnime, 52.0f)) {
                     this->unk_34E &= ~0x400;
-                    Player_UpdateBottleHeld(play, player, ITEM_BOTTLE, PLAYER_IA_BOTTLE);
+                    Player_UpdateBottleHeld(play, player, ITEM_BOTTLE, PLAYER_IA_BOTTLE_EMPTY);
                 }
                 Actor_PlaySfx(&this->actor, NA_SE_EN_KOUME_DRINK);
             } else if (Animation_OnFrame(&this->skelAnime, 90.0f)) {
@@ -1119,7 +1119,7 @@ void func_80A881E0(EnTru* this, PlayState* play) {
         this->unk_34E &= ~(0x1000 | 0x8);
         this->unk_34E |= 0x10;
         this->actor.shape.rot.y = this->actor.world.rot.y;
-        this->actor.flags &= ~ACTOR_FLAG_100;
+        this->actor.flags &= ~ACTOR_FLAG_TALK_REQUESTED;
         this->unk_1E8 = 0;
         this->actionFunc = func_80A87FD0;
     }
@@ -1155,7 +1155,7 @@ void EnTru_Init(Actor* thisx, PlayState* play) {
     }
 
     this->actionFunc = func_80A87FD0;
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
 }
 
 void EnTru_Destroy(Actor* thisx, PlayState* play) {

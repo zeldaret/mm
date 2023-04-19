@@ -338,14 +338,15 @@ void EnFg_Update(Actor* thisx, PlayState* play) {
     s32 flagSet;
 
     flag = this->actor.flags;
-    flagSet = ((flag & 0x2000) == 0x2000);
+    flagSet = CHECK_FLAG_ALL(flag, ACTOR_FLAG_2000);
     if (1) {}
     if (!flagSet) {
-        flagSet = ((flag & 0x8000) == 0x8000);
+        flagSet = CHECK_FLAG_ALL(flag, ACTOR_FLAG_8000);
         if (1) {}
         if (!flagSet) {
             this->actionFunc(this, play);
-            Actor_UpdateBgCheckInfo(play, &this->actor, BASE_REG(16, 0), BASE_REG(16, 1), 0.0f, 0x5);
+            Actor_UpdateBgCheckInfo(play, &this->actor, sREG(0), sREG(1), 0.0f,
+                                    UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
         }
     }
 

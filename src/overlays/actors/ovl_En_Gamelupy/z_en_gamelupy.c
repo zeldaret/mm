@@ -126,7 +126,7 @@ void func_80AF6994(EnGamelupy* this) {
 
 void func_80AF69A8(EnGamelupy* this, PlayState* play) {
     if (this->collider.base.ocFlags1 & OC1_HIT) {
-        *this->unk_198 += 0x32;
+        *this->unk_198 += 50;
         if (this->rupeeIndex == 1) {
             Rupees_ChangeBy(5);
         } else {
@@ -171,7 +171,7 @@ void EnGamelupy_Update(Actor* thisx, PlayState* play) {
 
     this->actionFunc(this, play);
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 32.0f, 30.0f, 0.0f, 0xC);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 32.0f, 30.0f, 0.0f, UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8);
     func_80AF6B40(this, play);
 }
 

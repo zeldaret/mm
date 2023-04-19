@@ -355,8 +355,9 @@ void EnElf_Init(Actor* thisx, PlayState* play2) {
             this->elfMsg = NULL;
             this->unk_234 = NULL;
             this->unk_269 = 20;
-            if ((gSaveContext.save.playerData.tatlTimer >= 25800) || (gSaveContext.save.playerData.tatlTimer < 3000)) {
-                gSaveContext.save.playerData.tatlTimer = 0;
+            if ((gSaveContext.save.saveInfo.playerData.tatlTimer >= 25800) ||
+                (gSaveContext.save.saveInfo.playerData.tatlTimer < 3000)) {
+                gSaveContext.save.saveInfo.playerData.tatlTimer = 0;
             }
             this->unk_266 = QuestHint_GetTatlTextId(play);
             break;
@@ -700,7 +701,7 @@ void func_8088DD34(EnElf* this, PlayState* play) {
     }
 
     if (this->fairyFlags & 0x2000) {
-        Actor_PickUp(&this->actor, play, GI_MAX, 80.0f, 60.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_MAX, 80.0f, 60.0f);
     }
 }
 
@@ -1090,7 +1091,7 @@ void func_8088EFA4(EnElf* this, PlayState* play) {
         }
     } else if ((arrayPointerActor != NULL) && (player->targetedActor != NULL)) {
         u8 temp = this->unk_269;
-        u16 targetSfxId = this->unk_269 == 0 ? NA_SE_PL_WALK_GROUND - SFX_FLAG : NA_SE_PL_WALK_GROUND - SFX_FLAG;
+        u16 targetSfxId = (this->unk_269 == 0) ? NA_SE_NONE : NA_SE_NONE;
 
         if (!temp) {
             Actor_PlaySfx(&this->actor, targetSfxId);
@@ -1455,11 +1456,12 @@ void func_8089010C(Actor* thisx, PlayState* play) {
 
     if (temp_v0 != this->unk_266) {
         this->unk_266 = temp_v0;
-        gSaveContext.save.playerData.tatlTimer = 0;
+        gSaveContext.save.saveInfo.playerData.tatlTimer = 0;
     }
 
     if ((player->tatlTextId == 0) && (player->targetedActor == NULL)) {
-        if ((gSaveContext.save.playerData.tatlTimer >= 600) && (gSaveContext.save.playerData.tatlTimer <= 3000)) {
+        if ((gSaveContext.save.saveInfo.playerData.tatlTimer >= 600) &&
+            (gSaveContext.save.saveInfo.playerData.tatlTimer <= 3000)) {
             player->tatlTextId = QuestHint_GetTatlTextId(play);
         }
     }
@@ -1474,7 +1476,7 @@ void func_8089010C(Actor* thisx, PlayState* play) {
 
         if (thisx->textId == QuestHint_GetTatlTextId(play)) {
             this->fairyFlags |= 0x80;
-            gSaveContext.save.playerData.tatlTimer = 3001;
+            gSaveContext.save.saveInfo.playerData.tatlTimer = 3001;
         }
 
         this->fairyFlags |= 0x10;
@@ -1482,7 +1484,7 @@ void func_8089010C(Actor* thisx, PlayState* play) {
         thisx->update = func_8088FE64;
         func_8088C51C(this, 3);
         if (this->elfMsg != NULL) {
-            this->elfMsg->flags |= ACTOR_FLAG_100;
+            this->elfMsg->flags |= ACTOR_FLAG_TALK_REQUESTED;
             thisx->cutscene = this->elfMsg->cutscene;
             if (thisx->cutscene != -1) {
                 func_8088FD04(this);
@@ -1505,10 +1507,10 @@ void func_8089010C(Actor* thisx, PlayState* play) {
         this->actionFunc(this, play);
 
         if (!Play_InCsMode(play)) {
-            if (gSaveContext.save.playerData.tatlTimer < 25800) {
-                gSaveContext.save.playerData.tatlTimer++;
+            if (gSaveContext.save.saveInfo.playerData.tatlTimer < 25800) {
+                gSaveContext.save.saveInfo.playerData.tatlTimer++;
             } else if (!(this->fairyFlags & 0x80)) {
-                gSaveContext.save.playerData.tatlTimer = 0;
+                gSaveContext.save.saveInfo.playerData.tatlTimer = 0;
             }
         }
     }

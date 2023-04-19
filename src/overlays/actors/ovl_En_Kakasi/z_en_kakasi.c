@@ -801,7 +801,7 @@ void EnKakasi_DancingRemark(EnKakasi* this, PlayState* play) {
         if (currentDay == 3 && gSaveContext.save.isNight) {
             EnKakasi_SetupDigAway(this);
         } else {
-            func_801A2BB8(NA_BGM_SARIAS_SONG);
+            Audio_PlaySubBgm(NA_BGM_SARIAS_SONG);
             EnKakasi_SetupDanceNightAway(this);
         }
     }
@@ -935,7 +935,7 @@ void EnKakasi_DancingNightAway(EnKakasi* this, PlayState* play) {
                 func_80169EFC(&play->state);
 
                 //! FAKE
-                if (0) {}
+                if (1) {}
 
                 if (gSaveContext.save.time > CLOCK_TIME(18, 0) || gSaveContext.save.time < CLOCK_TIME(6, 0)) {
                     gSaveContext.save.time = CLOCK_TIME(6, 0);
@@ -1026,7 +1026,7 @@ void EnKakasi_DiggingAway(EnKakasi* this, PlayState* play) {
 void EnKakasi_SetupIdleUnderground(EnKakasi* this) {
     this->picto.actor.shape.yOffset = -7000.0;
     this->picto.actor.draw = NULL;
-    this->picto.actor.flags |= ACTOR_FLAG_8000000;
+    this->picto.actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
     this->unkState196 = 5;
     this->actionFunc = EnKakasi_IdleUnderground;
 }
@@ -1034,7 +1034,7 @@ void EnKakasi_SetupIdleUnderground(EnKakasi* this) {
 void EnKakasi_IdleUnderground(EnKakasi* this, PlayState* play) {
     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_79_08) && this->picto.actor.xzDistToPlayer < this->songSummonDist &&
         (BREG(1) != 0 || play->msgCtx.ocarinaMode == OCARINA_MODE_PLAYED_SCARECROW_SPAWN)) {
-        this->picto.actor.flags &= ~ACTOR_FLAG_8000000;
+        this->picto.actor.flags &= ~ACTOR_FLAG_CANT_LOCK_ON;
         play->msgCtx.ocarinaMode = OCARINA_MODE_END;
         this->actionFunc = EnKakasi_SetupRiseOutOfGround;
     }
@@ -1137,7 +1137,8 @@ void EnKakasi_Update(Actor* thisx, PlayState* play) {
 
     this->actionFunc(this, play);
     Actor_MoveWithGravity(&this->picto.actor);
-    Actor_UpdateBgCheckInfo(play, &this->picto.actor, 50.0f, 50.0f, 100.0f, 0x1C);
+    Actor_UpdateBgCheckInfo(play, &this->picto.actor, 50.0f, 50.0f, 100.0f,
+                            UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 | UPDBGCHECKINFO_FLAG_10);
     if (this->picto.actor.draw != NULL) {
         Collider_UpdateCylinder(&this->picto.actor, &this->collider);
         CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);

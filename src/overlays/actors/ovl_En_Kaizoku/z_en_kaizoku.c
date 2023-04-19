@@ -284,7 +284,7 @@ void EnKaizoku_Init(Actor* thisx, PlayState* play) {
     blureInit.calcMode = 2;
     Effect_Add(play, &this->blureIndex, EFFECT_BLURE1, 0, 0, &blureInit);
     Actor_SetScale(&this->picto.actor, 0.0125f);
-    this->picto.actor.flags |= ACTOR_FLAG_8000000;
+    this->picto.actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
     this->picto.actor.flags &= ~ACTOR_FLAG_1;
     if (this->switchFlag == 127) {
         this->switchFlag = -1;
@@ -506,7 +506,7 @@ void func_80B85FA8(EnKaizoku* this, PlayState* play) {
             this->subCamUp.x = -0.11f;
             this->picto.actor.draw = EnKaizoku_Draw;
             this->unk_598 = 0;
-            func_801A0238(0, 0xA);
+            Audio_SetMainBgmVolume(0, 0xA);
             this->unk_59C++;
 
         case 1:
@@ -575,7 +575,7 @@ void func_80B85FA8(EnKaizoku* this, PlayState* play) {
                 Message_CloseTextbox(play);
                 this->unk_598 = 0;
                 this->unk_59C++;
-                func_801A0238(0x7F, 0);
+                Audio_SetMainBgmVolume(0x7F, 0);
                 Audio_PlayBgm_StorePrevBgm(NA_BGM_MINI_BOSS);
                 EnKaizoku_ChangeAnim(this, EN_KAIZOKU_ANIM_13);
             }
@@ -613,7 +613,7 @@ void func_80B85FA8(EnKaizoku* this, PlayState* play) {
                 this->unk_59C = 0;
                 this->subCamId = 0;
                 this->picto.actor.flags &= ~ACTOR_FLAG_100000;
-                this->picto.actor.flags &= ~ACTOR_FLAG_8000000;
+                this->picto.actor.flags &= ~ACTOR_FLAG_CANT_LOCK_ON;
                 this->picto.actor.flags |= ACTOR_FLAG_1;
                 func_80B872A4(this);
             }
@@ -1681,7 +1681,7 @@ void func_80B8960C(EnKaizoku* this, PlayState* play) {
     func_800B7298(play, &this->picto.actor, 0x7B);
     Enemy_StartFinishingBlow(play, &this->picto.actor);
     Actor_PlaySfx(&this->picto.actor, NA_SE_EN_PIRATE_DEAD);
-    this->picto.actor.flags |= ACTOR_FLAG_8000000;
+    this->picto.actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
     this->picto.actor.flags &= ~ACTOR_FLAG_1;
     this->picto.actor.flags &= ~ACTOR_FLAG_400;
     this->unk_598 = 0;
@@ -1764,14 +1764,14 @@ void func_80B89A08(EnKaizoku* this, PlayState* play) {
     Vec3f sp58;
     s32 i;
 
-    if (gSaveContext.save.playerData.health <= 0x10) {
+    if (gSaveContext.save.saveInfo.playerData.health <= 0x10) {
         this->swordCollider.info.toucher.damage = 0;
     } else {
         this->swordCollider.info.toucher.damage = 4;
     }
 
     if (!(this->swordCollider.base.atFlags & AT_BOUNCED) && (this->swordCollider.base.atFlags & AT_HIT)) {
-        if ((gSaveContext.save.playerData.health <= 0x10) && (this->action != KAIZOKU_ACTION_16)) {
+        if ((gSaveContext.save.saveInfo.playerData.health <= 0x10) && (this->action != KAIZOKU_ACTION_16)) {
             this->unk_2D0 = 2;
             this->subCamId = 0;
             this->picto.actor.flags |= ACTOR_FLAG_100000;
@@ -1788,7 +1788,7 @@ void func_80B89A08(EnKaizoku* this, PlayState* play) {
         } else if ((this->action == KAIZOKU_ACTION_11) && (this->swordCollider.base.at == &GET_PLAYER(play)->actor)) {
             func_800B8D98(play, &this->picto.actor, 3.0f, this->picto.actor.yawTowardsPlayer, 1.0f);
             Health_ChangeBy(play, -0xC);
-            if ((gSaveContext.save.playerData.health <= 0x10) && (this->action != KAIZOKU_ACTION_16)) {
+            if ((gSaveContext.save.saveInfo.playerData.health <= 0x10) && (this->action != KAIZOKU_ACTION_16)) {
                 Health_ChangeBy(play, 0x10);
                 this->unk_2D0 = 2;
                 this->subCamId = 0;
@@ -1836,7 +1836,8 @@ void func_80B89A08(EnKaizoku* this, PlayState* play) {
                 if (((this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_SFX) &&
                      (this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX)) ||
                     this->unk_2B8 == 0) {
-                    Actor_SetColorFilter(&this->picto.actor, 0, 120, 0, 40);
+                    Actor_SetColorFilter(&this->picto.actor, COLORFILTER_COLORFLAG_BLUE, 120, COLORFILTER_BUFFLAG_OPA,
+                                         40);
                     this->bodyCollider.info.elemType = ELEMTYPE_UNK1;
                     this->bodyCollider.base.colType = COLTYPE_HIT3;
                     this->swordCollider.info.elemType = ELEMTYPE_UNK2;
@@ -1908,7 +1909,7 @@ void func_80B89A08(EnKaizoku* this, PlayState* play) {
         }
 
         if (sp64) {
-            Actor_SetColorFilter(&this->picto.actor, 0x4000, 255, 0, 8);
+            Actor_SetColorFilter(&this->picto.actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 8);
             Actor_ApplyDamage(&this->picto.actor);
             if (this->picto.actor.colChkInfo.health <= 0) {
                 func_80B8960C(this, play);
@@ -2027,7 +2028,9 @@ void EnKaizoku_Update(Actor* thisx, PlayState* play2) {
         Math_ApproachZeroF(&this->unk_2F0, 1.0f, 5.0f);
     }
 
-    Actor_UpdateBgCheckInfo(play, &this->picto.actor, 35.0f, 40.0f, 35.0f, 0x1F);
+    Actor_UpdateBgCheckInfo(play, &this->picto.actor, 35.0f, 40.0f, 35.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_2 | UPDBGCHECKINFO_FLAG_4 |
+                                UPDBGCHECKINFO_FLAG_8 | UPDBGCHECKINFO_FLAG_10);
     Collider_UpdateCylinder(&this->picto.actor, &this->bodyCollider);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->bodyCollider.base);
     if ((this->unk_2D0 < 2) && (this->action != KAIZOKU_ACTION_0)) {

@@ -208,7 +208,7 @@ void EnSnowman_Init(Actor* thisx, PlayState* play) {
                                thisx->world.pos.z, 0, 0, 0, EN_SNOWMAN_TYPE_SPLIT);
             thisx->parent = Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ACTOR_EN_SNOWMAN, thisx->world.pos.x,
                                                           thisx->world.pos.y, thisx->world.pos.z, 0, 0, 0,
-                                                          EN_SNOWMAN_TYPE_SPLIT, -1, thisx->unk20, NULL);
+                                                          EN_SNOWMAN_TYPE_SPLIT, -1, thisx->halfDaysBits, NULL);
             if ((thisx->child == NULL) || (thisx->parent == NULL)) {
                 if (thisx->child != NULL) {
                     Actor_Kill(thisx->child);
@@ -599,7 +599,7 @@ void EnSnowman_Submerge(EnSnowman* this, PlayState* play) {
 }
 
 void EnSnowman_SetupMelt(EnSnowman* this) {
-    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 50);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 50);
     this->collider.base.acFlags &= ~AC_ON;
     this->work.timer = 50;
     this->actor.flags &= ~ACTOR_FLAG_1;
@@ -668,7 +668,7 @@ void EnSnowman_Stun(EnSnowman* this, PlayState* play) {
 
 void EnSnowman_SetupDamaged(EnSnowman* this) {
     Animation_PlayLoop(&this->skelAnime, &gEenoDamageAnim);
-    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 20);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 20);
     this->collider.base.acFlags &= ~AC_ON;
     this->work.timer = 20;
     this->actor.draw = EnSnowman_Draw;
@@ -977,11 +977,11 @@ void EnSnowman_UpdateDamage(EnSnowman* this, PlayState* play) {
                 if ((this->actionFunc == EnSnowman_MoveSnowPile) || (this->actionFunc == EnSnowman_Combine)) {
                     EnSnowman_SetupEmerge(this, play);
                 } else if (this->actor.colChkInfo.damageEffect == EN_SNOWMAN_DMGEFF_STUN) {
-                    Actor_SetColorFilter(&this->actor, 0, 255, 0, 40);
+                    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 255, COLORFILTER_BUFFLAG_OPA, 40);
                     Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_FREEZE);
                     EnSnowman_SetupStun(this);
                 } else if (this->actor.colChkInfo.damageEffect == EN_SNOWMAN_DMGEFF_ELECTRIC_STUN) {
-                    Actor_SetColorFilter(&this->actor, 0, 255, 0, 40);
+                    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 255, COLORFILTER_BUFFLAG_OPA, 40);
                     this->drawDmgEffScale = 0.55f;
                     this->drawDmgEffAlpha = 2.0f;
                     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_LARGE;
@@ -1037,7 +1037,9 @@ void EnSnowman_Update(Actor* thisx, PlayState* play) {
                 wallCheckRadius = this->collider.dim.radius;
             }
 
-            Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, wallCheckRadius, 0.0f, 0x1D);
+            Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, wallCheckRadius, 0.0f,
+                                    UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                        UPDBGCHECKINFO_FLAG_10);
             if ((this->actor.floorPoly != NULL) && ((this->actor.floorPoly->normal.y * SHT_MINV) < 0.7f)) {
                 Math_Vec3f_Copy(&this->actor.world.pos, &this->actor.prevPos);
                 if (!this->turningOnSteepSlope) {
@@ -1111,7 +1113,9 @@ void EnSnowman_UpdateSnowball(Actor* thisx, PlayState* play) {
     this->actor.shape.rot.x += 0xF00;
     Actor_MoveWithGravity(&this->actor);
     Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, this->collider.dim.radius * 0.6f,
-                            this->collider.dim.height - this->collider.dim.yShift, 0x1F);
+                            this->collider.dim.height - this->collider.dim.yShift,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_2 | UPDBGCHECKINFO_FLAG_4 |
+                                UPDBGCHECKINFO_FLAG_8 | UPDBGCHECKINFO_FLAG_10);
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetAT(play, &play->colChkCtx, &this->collider.base);
     CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);

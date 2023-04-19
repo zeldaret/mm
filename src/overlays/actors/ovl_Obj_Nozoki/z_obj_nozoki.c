@@ -231,7 +231,7 @@ void func_80BA28DC(ObjNozoki* this, PlayState* play) {
             } else if (ActorCutscene_GetCurrentIndex() != this->unk_15F) {
                 this->unk_15F = cs;
                 this->dyna.actor.params &= ~OBJNOZOKI_400;
-                Audio_QueueSeqCmd(0x881A);
+                SEQCMD_PLAY_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 0, NA_BGM_ENEMY | 0x800 | SEQ_FLAG_ASYNC);
             }
             return;
         }

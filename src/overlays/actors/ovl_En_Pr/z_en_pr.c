@@ -407,7 +407,7 @@ void func_80A32EA4(EnPr* this, PlayState* play) {
         if (this->actor.colChkInfo.health <= 0) {
             this->unk_206 = 7;
             this->unk_20A = 50;
-            this->actor.flags |= ACTOR_FLAG_8000000;
+            this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
             this->unk_2C4 = 0.0f;
             Enemy_StartFinishingBlow(play, &this->actor);
             Actor_PlaySfx(&this->actor, NA_SE_EN_BUBLEWALK_DEAD);
@@ -470,7 +470,7 @@ void func_80A33098(EnPr* this, PlayState* play) {
 
             if ((this->unk_206 != 6) && (this->unk_206 != 7)) {
                 Actor_ApplyDamage(&this->actor);
-                Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 8);
+                Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 8);
                 Actor_PlaySfx(&this->actor, NA_SE_EN_BUBLEWALK_DAMAGE);
                 func_80A32E60(this);
             }
@@ -536,7 +536,9 @@ void EnPr_Update(Actor* thisx, PlayState* play) {
         }
     }
 
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 30.0f, 20.0f, 0x1D);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 30.0f, 20.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                UPDBGCHECKINFO_FLAG_10);
     Math_Vec3s_Copy(&this->actor.shape.rot, &this->actor.world.rot);
 
     if (this->unk_206 != 7) {

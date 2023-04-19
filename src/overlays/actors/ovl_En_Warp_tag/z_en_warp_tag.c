@@ -8,7 +8,7 @@
 #include "z_en_warp_tag.h"
 #include "objects/gameplay_dangeon_keep/gameplay_dangeon_keep.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_10 | ACTOR_FLAG_2000000 | ACTOR_FLAG_8000000)
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_10 | ACTOR_FLAG_2000000 | ACTOR_FLAG_CANT_LOCK_ON)
 
 #define THIS ((EnWarptag*)thisx)
 
@@ -210,10 +210,9 @@ void EnWarpTag_RespawnPlayer(EnWarptag* this, PlayState* play) {
 
                 // why are we getting player home rotation from the room data? doesnt player have home.rot.y?
                 // especially because we are converting from deg to binang, but isnt home.rot.y already in binang??
-                Play_SetRespawnData(
-                    &play->state, 0, entrance, play->setupEntranceList[playerSpawnIndex].room, playerParams,
-                    &newRespawnPos,
-                    ((((playerActorEntry->rot.y >> 7) & 0x1FF) / 180.0f) * 32768.0f)); // DEG_TO_BINANG ?
+                Play_SetRespawnData(&play->state, 0, entrance, play->setupEntranceList[playerSpawnIndex].room,
+                                    playerParams, &newRespawnPos,
+                                    DEG_TO_BINANG_ALT((playerActorEntry->rot.y >> 7) & 0x1FF));
 
                 func_80169EFC(&play->state);
                 gSaveContext.respawnFlag = -5;

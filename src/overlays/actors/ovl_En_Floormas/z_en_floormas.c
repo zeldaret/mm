@@ -176,7 +176,7 @@ void EnFloormas_Init(Actor* thisx, PlayState* play2) {
 
     this->actor.parent = Actor_SpawnAsChildAndCutscene(
         &play->actorCtx, play, ACTOR_EN_FLOORMAS, this->actor.world.pos.x, this->actor.world.pos.y,
-        this->actor.world.pos.z, 0, 0, 0, params + 0x10, -1, this->actor.unk20, NULL);
+        this->actor.world.pos.z, 0, 0, 0, params + 0x10, -1, this->actor.halfDaysBits, NULL);
     if (this->actor.parent == NULL) {
         Actor_Kill(&this->actor);
         return;
@@ -184,7 +184,7 @@ void EnFloormas_Init(Actor* thisx, PlayState* play2) {
 
     this->actor.child = Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ACTOR_EN_FLOORMAS, this->actor.world.pos.x,
                                                       this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0,
-                                                      params + 0x10, -1, this->actor.unk20, NULL);
+                                                      params + 0x10, -1, this->actor.halfDaysBits, NULL);
     if (this->actor.child == NULL) {
         Actor_Kill(this->actor.parent);
         Actor_Kill(&this->actor);
@@ -239,7 +239,7 @@ void func_808D09CC(EnFloormas* this) {
     this->collider.base.colType = COLTYPE_HIT3;
     this->unk_18E = 80;
     this->actor.flags &= ~(ACTOR_FLAG_200 | ACTOR_FLAG_400);
-    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 80);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 80);
 }
 
 void func_808D0A48(EnFloormas* this, PlayState* play) {
@@ -923,7 +923,7 @@ void func_808D2AF4(EnFloormas* this, PlayState* play) {
 void func_808D2B18(EnFloormas* this) {
     Animation_MorphToPlayOnce(&this->skelAnime, &gWallmasterDamageAnim, -3.0f);
     func_800BE504(&this->actor, &this->collider);
-    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 20);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 20);
     this->actor.speed = 5.0f;
     this->actor.velocity.y = 5.5f;
     if (this->actor.params == ENFLOORMAS_GET_7FFF_40) {
@@ -1044,12 +1044,14 @@ void func_808D2E34(EnFloormas* this, PlayState* play) {
                         func_808D2D6C(this);
                     } else if (this->actor.colChkInfo.damageEffect == 1) {
                         this->unk_18E = 40;
-                        Actor_SetColorFilter(&this->actor, 0, 255, 0, 40);
+                        Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 255, COLORFILTER_BUFFLAG_OPA,
+                                             40);
                         Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_FREEZE);
                         func_808D2D6C(this);
                     } else if (this->actor.colChkInfo.damageEffect == 5) {
                         this->unk_18E = 40;
-                        Actor_SetColorFilter(&this->actor, 0, 255, 0, 40);
+                        Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 255, COLORFILTER_BUFFLAG_OPA,
+                                             40);
                         Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_FREEZE);
                         this->drawDmgEffScale = 0.55f;
                         this->drawDmgEffAlpha = 2.0f;
@@ -1102,7 +1104,9 @@ void EnFloormas_Update(Actor* thisx, PlayState* play) {
                 Actor_MoveWithGravity(&this->actor);
             }
 
-            Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, this->actor.scale.x * 3000.0f, 0.0f, 0x1D);
+            Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, this->actor.scale.x * 3000.0f, 0.0f,
+                                    UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                        UPDBGCHECKINFO_FLAG_10);
             Collider_UpdateCylinder(&this->actor, &this->collider);
             if (this->actionFunc == func_808D1650) {
                 this->actor.flags |= ACTOR_FLAG_1000000;

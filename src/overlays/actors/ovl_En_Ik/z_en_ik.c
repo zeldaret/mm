@@ -300,7 +300,7 @@ void EnIk_Freeze(EnIk* this) {
     this->drawDmgEffAlpha = 1.0f;
     this->timer = 80;
     this->actor.flags &= ~ACTOR_FLAG_400;
-    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 80);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 80);
 }
 
 void EnIk_Thaw(EnIk* this, PlayState* play) {
@@ -776,7 +776,7 @@ void EnIk_UpdateDamage(EnIk* this, PlayState* play) {
         if ((this->actor.colChkInfo.damageEffect != DMG_EFF_IMMUNE) &&
             ((this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) ||
              (!(this->colliderCylinder.info.acHitInfo->toucher.dmgFlags & 0xDB0B3)))) {
-            Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 12);
+            Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 12);
             this->invincibilityFrames = 12;
             EnIk_Thaw(this, play);
             this->colliderQuad.base.atFlags &= ~AT_ON;
@@ -870,7 +870,9 @@ void EnIk_Update(Actor* thisx, PlayState* play2) {
     }
     this->actionFunc(this, play);
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 75.0f, 30.0f, 30.0f, 0x1D);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 75.0f, 30.0f, 30.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                UPDBGCHECKINFO_FLAG_10);
     this->actor.focus.rot.y = this->actor.shape.rot.y;
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->colliderCylinder.base);
     if (this->invincibilityFrames == 0) {
@@ -1064,7 +1066,7 @@ void EnIk_UpdateArmorDraw(EnIk* this, PlayState* play) {
 }
 
 void EnIk_Draw(Actor* thisx, PlayState* play) {
-    static Vec3f D_8092C200 = { 0.53f, 0.53f, 0.53f };
+    static Vec3f sScale = { 0.53f, 0.53f, 0.53f };
     EnIk* this = THIS;
     Gfx* gfx;
     Gfx** gfxArmorType;
@@ -1091,7 +1093,7 @@ void EnIk_Draw(Actor* thisx, PlayState* play) {
     if (this->actor.colorFilterTimer != 0) {
         func_800AE5A0(play);
     }
-    func_800BC620(&this->actor.focus.pos, &D_8092C200, 255, play);
+    func_800BC620(&this->actor.focus.pos, &sScale, 255, play);
     Actor_DrawDamageEffects(play, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), this->drawDmgEffScale,
                             this->drawDmgEffFrozenSteamScale, this->drawDmgEffAlpha, this->drawDmgEffType);
 

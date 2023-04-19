@@ -193,7 +193,7 @@ void func_808AEAE0(EnBombf* this, PlayState* play) {
                 }
             } else {
                 if (!Actor_HasParent(&this->actor, play)) {
-                    Actor_LiftActor(&this->actor, play);
+                    Actor_OfferCarry(&this->actor, play);
                     return;
                 }
                 player->actor.child = NULL;
@@ -245,7 +245,7 @@ void func_808AEE3C(EnBombf* this, PlayState* play) {
             this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND;
         }
     } else if (this->timer >= 4) {
-        Actor_LiftActor(&this->actor, play);
+        Actor_OfferCarry(&this->actor, play);
     }
 }
 
@@ -336,7 +336,9 @@ void EnBombf_Update(Actor* thisx, PlayState* play) {
 
     if (this->actor.gravity != 0.0f) {
         DREG(6) = 1;
-        Actor_UpdateBgCheckInfo(play, &this->actor, 5.0f, 10.0f, 0.0f, 0x1F);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 5.0f, 10.0f, 0.0f,
+                                UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_2 | UPDBGCHECKINFO_FLAG_4 |
+                                    UPDBGCHECKINFO_FLAG_8 | UPDBGCHECKINFO_FLAG_10);
         DREG(6) = 0;
     }
 
@@ -355,7 +357,9 @@ void EnBombf_Update(Actor* thisx, PlayState* play) {
             Actor_PlaySfx(&this->actor, NA_SE_EV_BOMB_BOUND);
             Actor_MoveWithGravity(&this->actor);
             DREG(6) = 1;
-            Actor_UpdateBgCheckInfo(play, &this->actor, 5.0f, 10.0f, 0.0f, 0x1F);
+            Actor_UpdateBgCheckInfo(play, &this->actor, 5.0f, 10.0f, 0.0f,
+                                    UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_2 | UPDBGCHECKINFO_FLAG_4 |
+                                        UPDBGCHECKINFO_FLAG_8 | UPDBGCHECKINFO_FLAG_10);
             DREG(6) = 0;
             this->actor.speed *= 0.7f;
             this->actor.bgCheckFlags &= ~BGCHECKFLAG_WALL;

@@ -273,7 +273,7 @@ void func_80BBB354(EnZos* this, PlayState* play) {
         } else {
             getItemId = GI_HEART_PIECE;
         }
-        Actor_PickUp(&this->actor, play, getItemId, 10000.0f, 50.0f);
+        Actor_OfferGetItem(&this->actor, play, getItemId, 10000.0f, 50.0f);
     }
 }
 
@@ -486,7 +486,9 @@ void func_80BBB8AC(EnZos* this, PlayState* play) {
                 break;
 
             default:
-                if (0) {}
+                //! FAKE:
+                if (1) {}
+
                 Message_CloseTextbox(play);
                 this->actionFunc = func_80BBBDE0;
                 this->unk_2B6 |= 1;
@@ -699,7 +701,7 @@ void EnZos_Update(Actor* thisx, PlayState* play) {
     Actor_MoveWithGravity(&this->actor);
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 10.0f, 30.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 10.0f, 30.0f, UPDBGCHECKINFO_FLAG_4);
 
     this->actionFunc(this, play);
 

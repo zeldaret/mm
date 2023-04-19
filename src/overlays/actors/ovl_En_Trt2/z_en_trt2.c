@@ -417,15 +417,15 @@ void func_80AD3FF4(EnTrt2* this, PlayState* play) {
         this->actor.parent = NULL;
         this->unk_3B2 = 14;
     } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_12_10)) {
-        Actor_PickUp(&this->actor, play, GI_POTION_RED, 300.0f, 300.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_POTION_RED, 300.0f, 300.0f);
     } else {
-        Actor_PickUp(&this->actor, play, GI_POTION_RED_BOTTLE, 300.0f, 300.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_POTION_RED_BOTTLE, 300.0f, 300.0f);
     }
 }
 
 void func_80AD40AC(EnTrt2* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_DONE) && Message_ShouldAdvance(play)) {
-        func_800B85E0(&this->actor, play, 400.0f, -1);
+        func_800B85E0(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
         this->unk_3B2 = 13;
     }
 }
@@ -436,7 +436,7 @@ void func_80AD4110(EnTrt2* this, PlayState* play) {
         Message_ContinueTextbox(play, this->unk_3A8);
         this->unk_3B2 = 10;
     } else {
-        func_800B85E0(&this->actor, play, 400.0f, -1);
+        func_800B85E0(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
     }
 }
 
@@ -592,7 +592,7 @@ s32 func_80AD475C(EnTrt2* this, Path* path, s32 arg2) {
         phi_f14 = points[arg + 1].z - points[arg - 1].z;
     }
 
-    func_8017B7F8(&sp30, RADF_TO_BINANG(func_80086B30(phi_f12, phi_f14)), &sp44, &sp40, &sp3C);
+    func_8017B7F8(&sp30, RAD_TO_BINANG(func_80086B30(phi_f12, phi_f14)), &sp44, &sp40, &sp3C);
 
     if (((this->actor.world.pos.x * sp44) + (sp40 * this->actor.world.pos.z) + sp3C) > 0.0f) {
         ret = true;
@@ -615,7 +615,7 @@ s16 func_80AD48F8(Path* path, s32 arg1, Vec3f* arg2, f32* arg3) {
         phi_f12 = 0.0f;
     }
     *arg3 = SQ(phi_f14) + SQ(phi_f12);
-    return RADF_TO_BINANG(Math_Atan2F_XY(phi_f12, phi_f14));
+    return RAD_TO_BINANG(Math_Atan2F_XY(phi_f12, phi_f14));
 }
 
 f32 func_80AD49B8(Path* path, s32 arg1, Vec3f* arg2, Vec3s* arg3) {
@@ -792,7 +792,7 @@ void func_80AD4FE4(EnTrt2* this, PlayState* play) {
     Actor_MoveWithGravity(&this->actor);
 
     if (play->sceneId != SCENE_20SICHITAI) {
-        Actor_UpdateBgCheckInfo(play, &this->actor, 26.0f, 10.0f, 0.0f, 5);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 26.0f, 10.0f, 0.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
     }
 
     Actor_SetFocus(&this->actor, 90.0f);

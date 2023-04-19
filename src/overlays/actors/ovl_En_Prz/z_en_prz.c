@@ -119,7 +119,7 @@ void EnPrz_Init(Actor* thisx, PlayState* play) {
 
     this->unk_1E6 = ENPRZ_GET(&this->actor);
     this->actor.shape.yOffset = 500.0f;
-    this->actor.flags |= ACTOR_FLAG_8000000;
+    this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
     this->actor.flags &= ~ACTOR_FLAG_1;
 
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
@@ -360,7 +360,7 @@ void func_80A767A8(EnPrz* this, PlayState* play) {
 
 void func_80A76A1C(EnPrz* this) {
     this->unk_1E8 = 0;
-    this->actor.flags |= ACTOR_FLAG_8000000;
+    this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
     this->actor.flags &= ~ACTOR_FLAG_1;
 
     Actor_PlaySfx(&this->actor, NA_SE_EN_BUBLEWALK_DEAD);
@@ -376,7 +376,7 @@ void func_80A76A1C(EnPrz* this) {
     this->actor.speed = Rand_ZeroFloat(0.5f);
     this->actor.world.rot.y = randPlusMinusPoint5Scaled(0x8000);
 
-    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 30);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 30);
     this->unk_1EE = 50;
     func_80A75F18(this, 0);
     this->unk_1EA = 7;
@@ -441,7 +441,9 @@ void EnPrz_Update(Actor* thisx, PlayState* play) {
     }
 
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 10.0f, 10.0f, 0x1D);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 10.0f, 10.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                UPDBGCHECKINFO_FLAG_10);
 
     if (this->unk_1EA != 7) {
         Math_Vec3s_Copy(&this->actor.shape.rot, &this->actor.world.rot);

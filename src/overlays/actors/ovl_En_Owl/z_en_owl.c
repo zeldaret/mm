@@ -157,7 +157,7 @@ void EnOwl_Init(Actor* thisx, PlayState* play) {
             break;
 
         case ENOWL_GET_TYPE_2:
-            if (gSaveContext.save.inventory.items[ITEM_LENS] == ITEM_LENS) {
+            if (gSaveContext.save.saveInfo.inventory.items[ITEM_LENS] == ITEM_LENS) {
                 Actor_Kill(&this->actor);
                 return;
             }
@@ -292,7 +292,7 @@ void func_8095ABA8(EnOwl* this) {
 
 void func_8095ABF0(EnOwl* this, PlayState* play) {
     if (Actor_TextboxIsClosing(&this->actor, play)) {
-        Audio_QueueSeqCmd(0x110000FF);
+        SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_FANFARE, 0);
         func_8095AAD0(this, play);
         this->actor.flags &= ~ACTOR_FLAG_10000;
     }
@@ -301,7 +301,7 @@ void func_8095ABF0(EnOwl* this, PlayState* play) {
 // Unused?
 void func_8095AC50(EnOwl* this, PlayState* play) {
     if (Actor_TextboxIsClosing(&this->actor, play)) {
-        Audio_QueueSeqCmd(0x110000FF);
+        SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_FANFARE, 0);
         if ((this->unk_3DA % 64) == 0) {
             func_8095AAD0(this, play);
         } else {
@@ -665,7 +665,7 @@ void func_8095BA84(EnOwl* this, PlayState* play) {
 
                     case 0xBEE:
                         Message_CloseTextbox(play);
-                        Audio_QueueSeqCmd(0x110000FF);
+                        SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_FANFARE, 0);
                         EnOwl_ChangeMode(this, func_8095B9FC, func_8095C484, &this->skelAnime1, &object_owl_Anim_00CB94,
                                          0.0f);
                         this->eyeTexIndex = 0;
@@ -681,7 +681,7 @@ void func_8095BA84(EnOwl* this, PlayState* play) {
                     case 0xBEF:
                     case 0xBF3:
                         Message_CloseTextbox(play);
-                        Audio_QueueSeqCmd(0x110000FF);
+                        SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_FANFARE, 0);
                         func_8095ACEC(this);
                         this->actor.flags &= ~ACTOR_FLAG_10000;
                         this->actor.textId = 0xBF0;
@@ -694,7 +694,7 @@ void func_8095BA84(EnOwl* this, PlayState* play) {
 
                     case 0xBF5:
                         Message_CloseTextbox(play);
-                        Audio_QueueSeqCmd(0x110000FF);
+                        SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_FANFARE, 0);
                         this->actor.flags &= ~ACTOR_FLAG_10000;
                         EnOwl_ChangeMode(this, func_8095B3DC, func_8095C484, &this->skelAnime1, &object_owl_Anim_00CB94,
                                          0.0f);
@@ -894,7 +894,7 @@ void EnOwl_Update(Actor* thisx, PlayState* play) {
 
     this->actionFunc(this, play);
     func_8095C568(this);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 10.0f, 10.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 10.0f, 10.0f, UPDBGCHECKINFO_FLAG_4);
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
     if (this->actor.update != NULL) {
@@ -1077,7 +1077,7 @@ void func_8095CCF4(Actor* thisx, PlayState* play) {
     }
 
     this->actor.world.pos.y -= 1.0f;
-    Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 10.0f, 10.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 10.0f, 10.0f, UPDBGCHECKINFO_FLAG_4);
     if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         this->unk_3DA = (this->unk_3DA >> 3) * 7;
         if (this->unk_3DC > 0) {

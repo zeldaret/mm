@@ -382,7 +382,7 @@ void func_8089AC70(EnDinofos* this) {
     this->drawDmgEffAlpha = 1.0f;
     this->unk_290 = 80;
     this->actor.flags &= ~ACTOR_FLAG_400;
-    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 80);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 80);
 }
 
 void func_8089ACEC(EnDinofos* this, PlayState* play) {
@@ -996,7 +996,7 @@ void func_8089C87C(EnDinofos* this, s32 arg1) {
     this->unk_28E = 0;
     Actor_PlaySfx(&this->actor, NA_SE_EN_RIZA_DAMAGE);
     this->colliderJntSph.base.acFlags &= ~AC_ON;
-    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 18);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 18);
     this->actionFunc = func_8089C938;
 }
 
@@ -1303,7 +1303,7 @@ s32 func_8089D60C(EnDinofos* this, PlayState* play) {
 
         if (this->actor.colChkInfo.damageEffect == 1) {
             this->unk_290 = 40;
-            Actor_SetColorFilter(&this->actor, 0, 255, 0, 40);
+            Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 255, COLORFILTER_BUFFLAG_OPA, 40);
             Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_FREEZE);
             func_8089C784(this);
             return true;
@@ -1311,7 +1311,7 @@ s32 func_8089D60C(EnDinofos* this, PlayState* play) {
 
         if (this->actor.colChkInfo.damageEffect == 5) {
             this->unk_290 = 40;
-            Actor_SetColorFilter(&this->actor, 0, 255, 0, 40);
+            Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 255, COLORFILTER_BUFFLAG_OPA, 40);
             this->drawDmgEffScale = 0.55f;
             this->drawDmgEffAlpha = 2.0f;
             this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_MEDIUM;
@@ -1356,7 +1356,9 @@ void EnDinofos_Update(Actor* thisx, PlayState* play2) {
 
     this->actionFunc(this, play);
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 25.0f, 30.0f, 60.0f, 0x5D);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 25.0f, 30.0f, 60.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                UPDBGCHECKINFO_FLAG_10 | UPDBGCHECKINFO_FLAG_40);
     if (this->actionFunc != func_8089C7B8) {
         if ((this->actor.depthInWater > 0.0f) && (this->actor.depthInWater < 10.0f)) {
             if (!((play->gameplayFrames % 4) & 1)) {

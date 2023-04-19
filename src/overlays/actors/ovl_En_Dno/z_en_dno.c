@@ -235,7 +235,7 @@ void EnDno_Init(Actor* thisx, PlayState* play) {
                                this->morphTable, DEKU_BUTLER_LIMB_MAX);
             Collider_InitCylinder(play, &this->collider);
             Collider_SetCylinder(play, &this->collider, thisx, &sCylinderInit);
-            Actor_UpdateBgCheckInfo(play, thisx, 0.0f, 0.0f, 0.0f, 4);
+            Actor_UpdateBgCheckInfo(play, thisx, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
             Animation_Change(&this->skelAnime, sAnimations[EN_DNO_ANIM_IDLE_WITH_CANDLE].animation, 1.0f, 0.0f,
                              Animation_GetLastFrame(sAnimations[EN_DNO_ANIM_IDLE_WITH_CANDLE].animation),
                              sAnimations[EN_DNO_ANIM_IDLE_WITH_CANDLE].mode,
@@ -675,7 +675,7 @@ void func_80A725F8(EnDno* this, PlayState* play) {
                         } else {
                             this->getItemId = GI_MASK_SCENTS;
                         }
-                        Actor_PickUp(&this->actor, play, this->getItemId, 60.0f, 60.0f);
+                        Actor_OfferGetItem(&this->actor, play, this->getItemId, 60.0f, 60.0f);
                         Message_CloseTextbox(play);
                         func_80A72B84(this, play);
                     }
@@ -741,13 +741,13 @@ void func_80A72BA4(EnDno* this, PlayState* play) {
         this->actor.parent = NULL;
         this->actionFunc = func_80A72598;
     } else {
-        Actor_PickUp(&this->actor, play, this->getItemId, 60.0f, 60.0f);
+        Actor_OfferGetItem(&this->actor, play, this->getItemId, 60.0f, 60.0f);
     }
 }
 
 void func_80A72C04(EnDno* this, PlayState* play) {
     SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, EN_DNO_ANIM_START_RACE_START, &this->animIndex);
-    this->actor.flags |= ACTOR_FLAG_8000000;
+    this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
     this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_8);
     Math_Vec3f_Copy(&this->unk_334, &this->actor.world.pos);
     SubS_ActorPathing_Init(play, &this->unk_334, &this->actor, &this->actorPath, play->setupPathList,
@@ -762,7 +762,7 @@ void func_80A72C04(EnDno* this, PlayState* play) {
 }
 
 void func_80A72CF8(EnDno* this, PlayState* play) {
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
     Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_DOOR_WARP1, this->actor.world.pos.x + 80.0f,
                        this->actor.floorHeight, this->actor.world.pos.z, 0, 0, 0, 0x201);
 }
@@ -873,7 +873,7 @@ void func_80A730A0(EnDno* this, PlayState* play) {
 }
 
 void func_80A73244(EnDno* this, PlayState* play) {
-    this->actor.flags &= ~ACTOR_FLAG_8000000;
+    this->actor.flags &= ~ACTOR_FLAG_CANT_LOCK_ON;
     this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8);
     this->unk_328 = 2;
     this->actor.speed = 0.0f;
@@ -945,7 +945,9 @@ void func_80A73408(EnDno* this, PlayState* play) {
 
     if ((Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) &&
         (this->animIndex == EN_DNO_ANIM_SHOCK_START)) {
-        if (0) {};
+        //! FAKE:
+        if (1) {}
+
         SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, EN_DNO_ANIM_SHOCK_LOOP, &this->animIndex);
     }
 }
@@ -958,7 +960,7 @@ void EnDno_Update(Actor* thisx, PlayState* play) {
     func_80A73408(this, play);
     this->actionFunc(this, play);
     if (this->unk_3B0 & 4) {
-        Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
     }
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
