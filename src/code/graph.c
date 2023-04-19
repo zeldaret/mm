@@ -117,7 +117,7 @@ uintptr_t Graph_FaultAddrConv(uintptr_t address, void* param) {
             }
         }
     }
-    return NULL;
+    return 0;
 }
 
 void Graph_Init(GraphicsContext* gfxCtx) {

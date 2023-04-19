@@ -80,7 +80,8 @@ uintptr_t ActorOverlayTable_FaultAddrConv(uintptr_t address, void* param) {
             }
         }
     }
-    return NULL;
+
+    return 0;
 }
 
 void ActorOverlayTable_Init(void) {
