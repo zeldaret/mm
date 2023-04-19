@@ -326,6 +326,7 @@ void AnimationContext_Update(struct PlayState* play, AnimationContext* animation
 void SkelAnime_InitPlayer(struct PlayState* play, SkelAnime* skelAnime, FlexSkeletonHeader* skeletonHeaderSeg, PlayerAnimationHeader* animation, s32 flags, void* jointTableBuffer, void* morphTableBuffer, s32 limbBufCount);
 void PlayerAnimation_SetUpdateFunction(SkelAnime* skelAnime);
 s32 PlayerAnimation_Update(struct PlayState* play, SkelAnime* skelAnime);
+void PlayerAnimation_AnimateFrame(struct PlayState* play, SkelAnime* skelAnime);
 void Animation_SetMorph(struct PlayState* play, SkelAnime* skelAnime, f32 morphFrames);
 void PlayerAnimation_Change(struct PlayState* play, SkelAnime* skelAnime, PlayerAnimationHeader* animation, f32 playSpeed, f32 startFrame, f32 endFrame, u8 mode, f32 morphFrames);
 void PlayerAnimation_PlayOnce(struct PlayState* play, SkelAnime* skelAnime, PlayerAnimationHeader* animation);

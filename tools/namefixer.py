@@ -218,6 +218,7 @@ wordReplace = {
     "SkelAnime_InitLink": "SkelAnime_InitPlayer",
     "LinkAnimation_SetUpdateFunction": "PlayerAnimation_SetUpdateFunction",
     "LinkAnimation_Update": "PlayerAnimation_Update",
+    "LinkAnimation_AnimateFrame": "PlayerAnimation_AnimateFrame",
     "SkelAnime_SetTransition": "Animation_SetMorph",
     "LinkAnimation_Change": "PlayerAnimation_Change",
     "LinkAnimation_PlayOnce": "PlayerAnimation_PlayOnce",
