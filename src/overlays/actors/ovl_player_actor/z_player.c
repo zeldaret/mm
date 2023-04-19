@@ -5957,7 +5957,7 @@ void Player_Door_Staircase(PlayState* play, Player* this, Actor* door) {
  * PLAYER_DOORTYPE_SLIDING: DoorShutter, BgOpenShutter
  */
 void Player_Door_Sliding(PlayState* play, Player* this, Actor* door) {
-    DoorSlidingActor* doorSliding = (DoorSlidingActor*)door;
+    SlidingDoorActor* doorSliding = (SlidingDoorActor*)door;
     Vec3f sp38;
 
     this->currentYaw = doorSliding->dyna.actor.home.rot.y;
@@ -6023,7 +6023,7 @@ void Player_Door_Default(PlayState* play, Player* this, Actor* door) {
     s32 temp = this->transformation - 1;
     PlayerAnimationHeader* anim;
     f32 temp_fv0; // sp5C
-    DoorHandleActor* doorHandle = (DoorHandleActor*)door;
+    KnobDoorActor* doorHandle = (KnobDoorActor*)door;
 
     doorHandle->animIndex = this->transformation;
 

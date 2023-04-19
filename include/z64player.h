@@ -1094,7 +1094,7 @@ typedef struct Player {
     /* 0xAE7 */ s8 unk_AE7; // a timer, used as an index for multiple kinds of animations too, room index?, etc
     /* 0xAE8 */ s16 unk_AE8; // multipurpose timer
     /* 0xAEC */ f32 unk_AEC;
-    /* 0xAF0 */ union { // TODO: this may be an union of two structs
+    /* 0xAF0 */ union {
                     Vec3f unk_AF0[2];
                     f32 arr_AF0[6];
                 };

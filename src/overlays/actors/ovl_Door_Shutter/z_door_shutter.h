@@ -13,7 +13,7 @@ typedef void (*DoorShutterActionFunc)(struct DoorShutter*, PlayState*);
 #define DOORSHUTTER_GET_380(thisx) (((thisx)->params >> 7) & 7)
 
 typedef struct DoorShutter {
-    /* 0x000 */ DoorSlidingActor door;
+    /* 0x000 */ SlidingDoorActor door;
     /* 0x160 */ s16 csId;
     /* 0x0162 */ u8 doorType;
     /* 0x0163 */ u8 unk_163;
