@@ -1226,7 +1226,7 @@ void SkelAnime_InitPlayer(PlayState* play, SkelAnime* skelAnime, FlexSkeletonHea
     allocSize = sizeof(Vec3s) * limbCount;
 
     if (flags & 8) {
-        allocSize += 2;
+        allocSize += sizeof(u16);
     }
 
     if (jointTableBuffer == NULL) {

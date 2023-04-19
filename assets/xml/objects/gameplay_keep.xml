@@ -1145,8 +1145,8 @@
         <Texture Name="gElegyShellGoronNecklaceTex" OutName="elegy_shell_goron_necklace" Format="i8" Width="32" Height="32" Offset="0x4DDA0" />
         <Texture Name="gElegyShellGoronPlatformTex" OutName="elegy_shell_goron_platform" Format="ci8" Width="8" Height="16" Offset="0x4E1A0" />
 
-        <Texture Name="gameplay_keep_Tex_04E220" OutName="tex_04E220" Format="i8" Width="64" Height="64" Offset="0x4E220" />
-        <DList Name="gameplay_keep_DL_04F250" Offset="0x4F250" />
+        <Texture Name="gHookshotReticleTex" OutName="tex_04E220" Format="i8" Width="64" Height="64" Offset="0x4E220" />
+        <DList Name="gHookshotReticleDL" Offset="0x4F250" />
         <Texture Name="gameplay_keep_Tex_04F2C0" OutName="tex_04F2C0" Format="ia16" Width="32" Height="64" Offset="0x4F2C0" />
         <DList Name="gEffIceFragment1DL" Offset="0x50550" />
         <DList Name="gEffIceFragment2MaterialDL" Offset="0x50648" />

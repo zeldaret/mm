@@ -842,6 +842,10 @@ wordReplace = {
     "player->unk_A86": "player->currentActorCsIndex",
     "player->unk_A9C": "player->secretRumbleCharge",
     "player->unk_AA0": "player->closestSecretDistSq",
+    "player->unk_AAC": "player->headLimbRot",
+    "player->unk_AB2": "player->upperLimbRot",
+    "player->unk_B2A": "player->getItemDrawIdPlusOne",
+    "player->getItemDrawId": "player->getItemDrawIdPlusOne",
     "player->unk_B68": "player->fallStartHeight",
     "player->unk_B6A": "player->fallDistance",
     "player->unk_B80": "player->pushedSpeed",
@@ -849,8 +853,10 @@ wordReplace = {
     "player->targetActor": "player->talkActor",
     "player->targetActorDistance": "player->talkActorDistance",
     "player->unk_730": "player->targetedActor",
-    "player->ageProperties->unk_92": "player->ageProperties->voiceSfxIdOffset",
-    "player->ageProperties->unk_94": "player->ageProperties->surfaceSfxIdOffset",
+
+    "ageProperties->unk_04": "ageProperties->shadowScale",
+    "ageProperties->unk_92": "ageProperties->voiceSfxOffset",
+    "ageProperties->unk_94": "ageProperties->surfaceSfxOffset",
 
     "csCtx.npcActions": "csCtx.actorActions",
     "csCtx->npcActions": "csCtx->actorActions",
@@ -949,6 +955,7 @@ wordReplace = {
     "EXCH_ITEM_LETTER_MAMA": "PLAYER_IA_LETTER_MAMA",
     "ITEM_FISHING_POLE": "ITEM_FISHING_ROD",
     "PLAYER_AP_FISHING_POLE": "PLAYER_IA_FISHING_ROD",
+    "PLAYER_IA_BOTTLE": "PLAYER_IA_BOTTLE_EMPTY",
 
     # Enums
     "TRANS_TYPE_00": "TRANS_TYPE_WIPE",
