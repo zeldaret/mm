@@ -4628,14 +4628,14 @@ void func_80832888(Player* this, PlayState* play) {
             }
         }
 
-        if ((this->targetedActor != NULL) && !(this->stateFlags3 & (PLAYER_STATE1_200 | PLAYER_STATE1_2000))) {
+        if ((this->targetedActor != NULL) && !(this->stateFlags3 & (PLAYER_STATE3_200 | PLAYER_STATE3_2000))) {
             this->stateFlags1 &= ~(PLAYER_STATE1_10000 | PLAYER_STATE1_20000);
             if ((this->stateFlags1 & PLAYER_STATE1_800) ||
                 !CHECK_FLAG_ALL(this->targetedActor->flags, ACTOR_FLAG_1 | ACTOR_FLAG_4)) {
                 this->stateFlags1 |= PLAYER_STATE1_10000;
             }
         } else if (this->stateFlags1 & PLAYER_STATE1_20000) {
-            this->stateFlags2 &= ~PLAYER_STATE1_2000;
+            this->stateFlags2 &= ~PLAYER_STATE2_2000;
         } else {
             func_80123DC0(this);
         }
@@ -7440,7 +7440,7 @@ void func_80839A10(PlayState* play, Player* this) {
         this->itemAction = PLAYER_IA_NONE;
         func_80831760(play, this, func_8084AEEC, 0);
         func_8082DB60(play, this, &gPlayerAnim_alink_dance_loop);
-        this->stateFlags2 |= PLAYER_STATE3_2000000;
+        this->stateFlags2 |= PLAYER_STATE2_2000000;
         Audio_PlayFanfare(NA_BGM_KAMARO_DANCE);
     }
 }
@@ -8346,7 +8346,7 @@ void func_8083BF54(PlayState* play, Player* this) {
             s32 i;
             f32 var_fv1;
 
-            var_fv1 = (this->stateFlags1 & PLAYER_STATE3_4000000)
+            var_fv1 = (this->stateFlags1 & PLAYER_STATE1_4000000)
                           ? -fabsf(this->linearVelocity)
                           : ((func_80850D68 == this->actionFunc)
                                  ? (ABS_ALT(this->unk_B8A) * -0.004f) + (this->unk_B48 * -0.38f)
@@ -10760,7 +10760,7 @@ void func_80843178(PlayState* play, Player* this) {
     temp_fv1 = this->ageProperties->unk_00;
 
     if (this->stateFlags1 & (PLAYER_STATE1_20000000 | PLAYER_STATE1_80000000)) {
-        if ((!(this->stateFlags1 & PLAYER_STATE1_80) && !(this->stateFlags2 & PLAYER_STATE1_4000) &&
+        if ((!(this->stateFlags1 & PLAYER_STATE1_80) && !(this->stateFlags2 & PLAYER_STATE2_4000) &&
              (this->stateFlags1 & PLAYER_STATE1_80000000)) ||
             spAC) {
             var_v1 = 0x38;
@@ -11859,8 +11859,8 @@ void Player_UpdateCommon(Player* this, PlayState* play, Input* input) {
 
         Collider_UpdateCylinder(&this->actor, &this->cylinder);
         if (!(this->stateFlags2 & PLAYER_STATE2_4000)) {
-            if (!(this->stateFlags1 & (PLAYER_STATE3_4 | PLAYER_STATE3_80 | PLAYER_STATE3_2000 | PLAYER_STATE3_4000 |
-                                       PLAYER_STATE3_800000)) &&
+            if (!(this->stateFlags1 & (PLAYER_STATE1_4 | PLAYER_STATE1_80 | PLAYER_STATE1_2000 | PLAYER_STATE1_4000 |
+                                       PLAYER_STATE1_800000)) &&
                 !(this->stateFlags3 & PLAYER_STATE3_10000000)) {
                 if ((func_808561B0 != this->actionFunc) && (func_80853D68 != this->actionFunc) &&
                     (this->actor.draw != NULL)) {
@@ -13132,7 +13132,7 @@ s32 func_8084933C(Player* this, PlayState* play) {
             }
 
             this->stateFlags1 |= PLAYER_STATE1_2000000;
-            this->stateFlags3 &= ~PLAYER_STATE1_800000;
+            this->stateFlags3 &= ~PLAYER_STATE3_800000;
             if (!func_80123420(this)) {
                 func_8083133C(this);
             }
@@ -15114,7 +15114,7 @@ AnimSfxEntry D_8085D650[] = {
 };
 
 void func_8084EE50(Player* this, PlayState* play) {
-    this->stateFlags2 |= (PLAYER_STATE1_1 | PLAYER_STATE1_40 | PLAYER_STATE1_100);
+    this->stateFlags2 |= (PLAYER_STATE2_1 | PLAYER_STATE2_40 | PLAYER_STATE2_100);
 
     if (func_8082E67C(play, this, &gPlayerAnim_link_normal_pushing)) {
         this->unk_AE8 = 1;
