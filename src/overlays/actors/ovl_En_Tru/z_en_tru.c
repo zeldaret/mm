@@ -771,7 +771,7 @@ s32 func_80A875AC(Actor* thisx, PlayState* play) {
     switch (this->unk_364) {
         case 0:
             if ((this->unk_34E & 0x40) || CHECK_WEEKEVENTREG(WEEKEVENTREG_16_10)) {
-                this->unk_374 = this->actor.cutscene;
+                this->csId = this->actor.csId;
                 this->unk_364++;
             } else {
                 this->unk_364++;
@@ -780,14 +780,14 @@ s32 func_80A875AC(Actor* thisx, PlayState* play) {
             }
 
         case 1:
-            if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-                ActorCutscene_Stop(0x7C);
-                ActorCutscene_SetIntentToPlay(this->unk_374);
-            } else if (ActorCutscene_GetCanPlayNext(this->unk_374)) {
-                ActorCutscene_StartAndSetUnkLinkFields(this->unk_374, &this->actor);
+            if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+                CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
+                CutsceneManager_Queue(this->csId);
+            } else if (CutsceneManager_IsNext(this->csId)) {
+                CutsceneManager_StartWithPlayerCs(this->csId, &this->actor);
                 this->unk_364++;
             } else {
-                ActorCutscene_SetIntentToPlay(this->unk_374);
+                CutsceneManager_Queue(this->csId);
             }
             break;
 
@@ -867,19 +867,19 @@ s32 func_80A87880(Actor* thisx, PlayState* play) {
 
     switch (this->unk_364) {
         case 0:
-            ActorCutscene_Stop(this->unk_374);
-            this->unk_374 = ActorCutscene_GetAdditionalCutscene(this->unk_374);
+            CutsceneManager_Stop(this->csId);
+            this->csId = CutsceneManager_GetAdditionalCsId(this->csId);
             this->unk_364++;
 
         case 1:
-            if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-                ActorCutscene_Stop(0x7C);
-                ActorCutscene_SetIntentToPlay(this->unk_374);
-            } else if (ActorCutscene_GetCanPlayNext(this->unk_374)) {
-                ActorCutscene_StartAndSetUnkLinkFields(this->unk_374, &this->actor);
+            if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+                CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
+                CutsceneManager_Queue(this->csId);
+            } else if (CutsceneManager_IsNext(this->csId)) {
+                CutsceneManager_StartWithPlayerCs(this->csId, &this->actor);
                 this->unk_364++;
             } else {
-                ActorCutscene_SetIntentToPlay(this->unk_374);
+                CutsceneManager_Queue(this->csId);
             }
             break;
 
@@ -999,19 +999,19 @@ s32 func_80A87DC0(Actor* thisx, PlayState* play) {
 
     switch (this->unk_364) {
         case 0:
-            ActorCutscene_Stop(this->unk_374);
-            this->unk_374 = ActorCutscene_GetAdditionalCutscene(this->unk_374);
+            CutsceneManager_Stop(this->csId);
+            this->csId = CutsceneManager_GetAdditionalCsId(this->csId);
             this->unk_364++;
 
         case 1:
-            if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-                ActorCutscene_Stop(0x7C);
-                ActorCutscene_SetIntentToPlay(this->unk_374);
-            } else if (ActorCutscene_GetCanPlayNext(this->unk_374)) {
-                ActorCutscene_StartAndSetUnkLinkFields(this->unk_374, &this->actor);
+            if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+                CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
+                CutsceneManager_Queue(this->csId);
+            } else if (CutsceneManager_IsNext(this->csId)) {
+                CutsceneManager_StartWithPlayerCs(this->csId, &this->actor);
                 this->unk_364++;
             } else {
-                ActorCutscene_SetIntentToPlay(this->unk_374);
+                CutsceneManager_Queue(this->csId);
             }
             break;
 
@@ -1102,8 +1102,8 @@ void func_80A881E0(EnTru* this, PlayState* play) {
             this->unk_34E |= 0x80;
         }
 
-        if (ActorCutscene_GetCurrentIndex() != -1) {
-            ActorCutscene_Stop(ActorCutscene_GetCurrentIndex());
+        if (CutsceneManager_GetCurrentCsId() != CS_ID_NONE) {
+            CutsceneManager_Stop(CutsceneManager_GetCurrentCsId());
         }
 
         if (!(this->unk_34E & 0x40) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_16_10)) {

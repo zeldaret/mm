@@ -21,7 +21,7 @@ typedef struct EnKakasi {
     /* 0x1A4 */ s32 unkCounter1A4; // counter, counts up to F while he digs away, reused elsewhere
     /* 0x1A8 */ s32 unkState1A8;
     /* 0x1AC */ s16 talkState;
-    /* 0x1AE */ s16 actorCutscenes[3];
+    /* 0x1AE */ s16 csIdList[3];
     /* 0x1B4 */ f32 animeFrameCount;
     /* 0x1B8 */ f32 unkHeight;
     /* 0x1BC */ Vec3f unk1BC; // set by post limbdraw func for one limb

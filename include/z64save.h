@@ -299,7 +299,7 @@ typedef struct Save {
     /* 0x05 */ u8 isFirstCycle;                         // "opening_flag"
     /* 0x06 */ u8 unk_06;
     /* 0x07 */ u8 linkAge;                              // "link_age"
-    /* 0x08 */ s32 cutscene;                            // "day_time"
+    /* 0x08 */ s32 cutsceneIndex;                       // "day_time"
     /* 0x0C */ u16 time;                                // "zelda_time"
     /* 0x0E */ u16 owlSaveLocation;
     /* 0x10 */ s32 isNight;                             // "asahiru_fg"
@@ -707,7 +707,7 @@ typedef enum {
 #define WEEKEVENTREG_20_01 PACK_WEEKEVENTREG_FLAG(20, 0x01)
 
 // woodfall temple purification cutscene watched
-#define WEEKEVENTREG_20_02 PACK_WEEKEVENTREG_FLAG(20, 0x02)
+#define WEEKEVENTREG_CLEARED_WOODFALL_TEMPLE PACK_WEEKEVENTREG_FLAG(20, 0x02)
 
 #define WEEKEVENTREG_20_04 PACK_WEEKEVENTREG_FLAG(20, 0x04)
 #define WEEKEVENTREG_20_08 PACK_WEEKEVENTREG_FLAG(20, 0x08)
@@ -851,7 +851,7 @@ typedef enum {
 #define WEEKEVENTREG_33_40 PACK_WEEKEVENTREG_FLAG(33, 0x40)
 
 // Mountain village is unfrozen
-#define WEEKEVENTREG_33_80 PACK_WEEKEVENTREG_FLAG(33, 0x80)
+#define WEEKEVENTREG_CLEARED_SNOWHEAD_TEMPLE PACK_WEEKEVENTREG_FLAG(33, 0x80)
 // Spoken to MINIFROG_YELLOW
 #define WEEKEVENTREG_34_01 PACK_WEEKEVENTREG_FLAG(34, 0x01)
 
@@ -1015,7 +1015,7 @@ typedef enum {
 #define WEEKEVENTREG_52_10 PACK_WEEKEVENTREG_FLAG(52, 0x10)
 
 // cleared Stone Tower Temple
-#define WEEKEVENTREG_52_20 PACK_WEEKEVENTREG_FLAG(52, 0x20)
+#define WEEKEVENTREG_CLEARED_STONE_TOWER_TEMPLE PACK_WEEKEVENTREG_FLAG(52, 0x20)
 
 #define WEEKEVENTREG_52_40 PACK_WEEKEVENTREG_FLAG(52, 0x40)
 #define WEEKEVENTREG_52_80 PACK_WEEKEVENTREG_FLAG(52, 0x80)
@@ -1047,7 +1047,7 @@ typedef enum {
 #define WEEKEVENTREG_55_40 PACK_WEEKEVENTREG_FLAG(55, 0x40)
 
 // Gyorg has been defeated
-#define WEEKEVENTREG_55_80 PACK_WEEKEVENTREG_FLAG(55, 0x80)
+#define WEEKEVENTREG_CLEARED_GREAT_BAY_TEMPLE PACK_WEEKEVENTREG_FLAG(55, 0x80)
 
 #define WEEKEVENTREG_56_01 PACK_WEEKEVENTREG_FLAG(56, 0x01)
 #define WEEKEVENTREG_56_02 PACK_WEEKEVENTREG_FLAG(56, 0x02)
@@ -1576,7 +1576,7 @@ void Sram_IncrementDay(void);
 u16 Sram_CalcChecksum(void* data, size_t count);
 void Sram_InitNewSave(void);
 void Sram_InitDebugSave(void);
-void func_80144A94(SramContext* sramCtx);
+void Sram_ResetSaveFromMoonCrash(SramContext* sramCtx);
 void Sram_OpenSave(struct FileSelectState* fileSelect, SramContext* sramCtx);
 void func_8014546C(SramContext* sramCtx);
 void func_801457CC(struct FileSelectState* fileSelect, SramContext* sramCtx);

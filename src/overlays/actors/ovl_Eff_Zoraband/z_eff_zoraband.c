@@ -43,12 +43,12 @@ void EffZoraband_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void EffZoraband_MikauFadeOut(EffZoraband* this, PlayState* play) {
-    if (Cutscene_CheckActorAction(play, 0x20F)) {
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_527)) {
         if ((EFFZORABAND_GET_F(&this->actor) + 2) ==
-            play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 0x20F)]->action) {
+            play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_527)]->id) {
             this->stateFlags |= 2;
         }
-        if (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 0x20F)]->action == 7) {
+        if (play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_527)]->id == 7) {
             this->actor.draw = NULL;
         } else {
             this->actor.draw = EffZoraband_Draw;

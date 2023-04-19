@@ -535,8 +535,8 @@ typedef enum PlayerCsMode {
     /* 0x03 */ PLAYER_CSMODE_3,
     /* 0x04 */ PLAYER_CSMODE_4,
     /* 0x05 */ PLAYER_CSMODE_5,
-    /* 0x06 */ PLAYER_CSMODE_6,
-    /* 0x07 */ PLAYER_CSMODE_7,
+    /* 0x06 */ PLAYER_CSMODE_END,
+    /* 0x07 */ PLAYER_CSMODE_WAIT,
     /* 0x08 */ PLAYER_CSMODE_8,
     /* 0x09 */ PLAYER_CSMODE_9,
     /* 0x0A */ PLAYER_CSMODE_10,
@@ -1018,7 +1018,7 @@ typedef struct Player {
     /* 0xA7C */ Actor* boomerangActor;
     /* 0xA80 */ Actor* tatlActor;
     /* 0xA84 */ s16 tatlTextId;
-    /* 0xA86 */ s8 unk_A86; // actorCutsceneIndex?
+    /* 0xA86 */ s8 csId;
     /* 0xA87 */ s8 exchangeItemId; // PlayerItemAction enum
     /* 0xA88 */ Actor* talkActor;
     /* 0xA8C */ f32 talkActorDistance;

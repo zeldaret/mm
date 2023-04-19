@@ -168,4 +168,7 @@ extern RegEditor* gRegEditor;
 #define R_ITEM_ICON_WIDTH(i)              VREG(76 + i)
 #define R_ITEM_BTN_WIDTH(i)               VREG(80 + i)
 
+// Name inferred from OoT. Set to true to manually set play->csCtx.script
+#define R_USE_DEBUG_CUTSCENE              dREG(95)
+
 #endif
