@@ -30,6 +30,7 @@
 #include "thga.h"
 #include "z64actor.h"
 #include "z64animation.h"
+#include "z64animation_legacy.h"
 #include "z64audio.h"
 #include "z64bgcheck.h"
 #include "z64camera.h"
@@ -583,14 +584,14 @@ typedef struct PlayState {
     /* 0x1878C */ void (*unk_1878C)(struct PlayState* play);
     /* 0x18790 */ void (*unk_18790)(struct PlayState* play, s16 arg1);
     /* 0x18794 */ PlayerItemAction (*unk_18794)(struct PlayState* play, Player* player, ItemId itemId);
-    /* 0x18798 */ s32 (*setPlayerTalkAnim)(struct PlayState* play, LinkAnimationHeader* talkAnim, s32 animMode);
+    /* 0x18798 */ s32 (*setPlayerTalkAnim)(struct PlayState* play, PlayerAnimationHeader* talkAnim, AnimationMode animMode);
     /* 0x1879C */ s16 playerActorCsIds[10];
     /* 0x187B0 */ MtxF viewProjectionMtxF;
     /* 0x187F0 */ Vec3f projectionMtxFDiagonal;
     /* 0x187FC */ MtxF billboardMtxF;
     /* 0x1883C */ Mtx* billboardMtx;
     /* 0x18840 */ u32 gameplayFrames;
-    /* 0x18844 */ u8 unk_18844;
+    /* 0x18844 */ u8 unk_18844; // bool
     /* 0x18845 */ u8 haltAllActors;
     /* 0x18846 */ s16 numSetupActors;
     /* 0x18848 */ u8 numRooms;
