@@ -939,10 +939,9 @@ void Sram_InitDebugSave(void) {
     Sram_GenerateRandomSaveFields();
 }
 
-// Unused
-void func_80144A94(SramContext* sramCtx) {
+void Sram_ResetSaveFromMoonCrash(SramContext* sramCtx) {
     s32 i;
-    s32 cutscene = gSaveContext.save.cutscene;
+    s32 cutsceneIndex = gSaveContext.save.cutsceneIndex;
 
     bzero(sramCtx->saveBuf, SAVE_BUFFER_SIZE);
 
@@ -957,7 +956,7 @@ void func_80144A94(SramContext* sramCtx) {
                       D_801C67F0[gSaveContext.fileNum * 2 + 1]);
         Lib_MemCpy(&gSaveContext, sramCtx->saveBuf, sizeof(Save));
     }
-    gSaveContext.save.cutscene = cutscene;
+    gSaveContext.save.cutsceneIndex = cutsceneIndex;
 
     for (i = 0; i < ARRAY_COUNT(gSaveContext.eventInf); i++) {
         gSaveContext.eventInf[i] = 0;
@@ -1067,10 +1066,10 @@ void Sram_OpenSave(FileSelectState* fileSelect, SramContext* sramCtx) {
     } else {
         gSaveContext.save.entrance = D_801C6A58[(void)0, gSaveContext.save.owlSaveLocation];
         if ((gSaveContext.save.entrance == ENTRANCE(SOUTHERN_SWAMP_POISONED, 10)) &&
-            CHECK_WEEKEVENTREG(WEEKEVENTREG_20_02)) {
+            CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_WOODFALL_TEMPLE)) {
             gSaveContext.save.entrance = ENTRANCE(SOUTHERN_SWAMP_CLEARED, 10);
         } else if ((gSaveContext.save.entrance == ENTRANCE(MOUNTAIN_VILLAGE_WINTER, 8)) &&
-                   CHECK_WEEKEVENTREG(WEEKEVENTREG_33_80)) {
+                   CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_SNOWHEAD_TEMPLE)) {
             gSaveContext.save.entrance = ENTRANCE(MOUNTAIN_VILLAGE_SPRING, 8);
         }
 
@@ -1532,7 +1531,7 @@ void Sram_InitSave(FileSelectState* fileSelect2, SramContext* sramCtx) {
     if (gSaveContext.unk_3F3F) {
         Sram_InitNewSave();
         if (fileSelect->unk_24480 == 0) {
-            gSaveContext.save.cutscene = 0xFFF0;
+            gSaveContext.save.cutsceneIndex = 0xFFF0;
         }
 
         for (phi_v0 = 0; phi_v0 < ARRAY_COUNT(gSaveContext.save.saveInfo.playerData.playerName); phi_v0++) {
@@ -1634,7 +1633,7 @@ void Sram_SaveSpecialEnterClockTown(PlayState* play) {
  * Saves when beating the game, after showing the "Dawn of the New Day" message
  */
 void Sram_SaveSpecialNewDay(PlayState* play) {
-    s32 cutscene = gSaveContext.save.cutscene;
+    s32 cutsceneIndex = gSaveContext.save.cutsceneIndex;
     s32 day;
     u16 time = gSaveContext.save.time;
 
@@ -1647,7 +1646,7 @@ void Sram_SaveSpecialNewDay(PlayState* play) {
 
     gSaveContext.save.day = day;
     gSaveContext.save.time = time;
-    gSaveContext.save.cutscene = cutscene;
+    gSaveContext.save.cutsceneIndex = cutsceneIndex;
     func_80185F64(play->sramCtx.saveBuf, D_801C67C8[gSaveContext.fileNum * 2], D_801C67F0[gSaveContext.fileNum * 2]);
 }
 

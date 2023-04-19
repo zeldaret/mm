@@ -266,7 +266,7 @@ void ObjSwitch_CrystalUpdateTimer(ObjSwitch* this) {
 
 void ObjSwitch_StopCutscene(ObjSwitch* this) {
     if (this->isPlayingCutscene) {
-        ActorCutscene_Stop(this->dyna.actor.cutscene);
+        CutsceneManager_Stop(this->dyna.actor.csId);
         this->isPlayingCutscene = false;
     }
 }
@@ -486,8 +486,8 @@ void ObjSwitch_TryPlayCutsceneInit(ObjSwitch* this, PlayState* play, ObjSwitchSe
 }
 
 void ObjSwitch_TryPlayCutscene(ObjSwitch* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
+    if (CutsceneManager_IsNext(this->dyna.actor.csId)) {
+        CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
         ObjSwitch_SetSwitchFlagState(this, play, this->nextSwitchFlagState);
         if (this->floorSwitchPlayerSnapState == 1) {
             this->floorSwitchPlayerSnapState = 2;
@@ -495,7 +495,7 @@ void ObjSwitch_TryPlayCutscene(ObjSwitch* this, PlayState* play) {
         this->isPlayingCutscene = true;
         this->setupFunc(this);
     } else {
-        ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+        CutsceneManager_Queue(this->dyna.actor.csId);
     }
 }
 

@@ -113,7 +113,7 @@ void ObjHakaisi_Init(Actor* thisx, PlayState* play) {
     this->unk_19A = 0;
     this->unk_198 = 0;
     this->switchFlag = OBJHAKAISI_GET_SWITCHFLAG(thisx);
-    this->unk_196 = this->dyna.actor.cutscene;
+    this->csId = this->dyna.actor.csId;
 
     if (this->switchFlag == 0xFF) {
         this->switchFlag = -1;
@@ -192,11 +192,11 @@ void func_80B14558(ObjHakaisi* this) {
 }
 
 void func_80B1456C(ObjHakaisi* this, PlayState* play) {
-    if (this->unk_196 != -1) {
-        if (ActorCutscene_GetCanPlayNext(this->unk_196)) {
-            ActorCutscene_StartAndSetUnkLinkFields(this->unk_196, &this->dyna.actor);
+    if (this->csId != CS_ID_NONE) {
+        if (CutsceneManager_IsNext(this->csId)) {
+            CutsceneManager_StartWithPlayerCs(this->csId, &this->dyna.actor);
         } else {
-            ActorCutscene_SetIntentToPlay(this->unk_196);
+            CutsceneManager_Queue(this->csId);
         }
     }
     if (this->dyna.actor.colChkInfo.health < 30) {
@@ -258,8 +258,8 @@ void func_80B149A8(ObjHakaisi* this) {
 void func_80B149C0(ObjHakaisi* this, PlayState* play) {
     if (this->unk_19A < 60) {
         this->unk_19A++;
-    } else if ((this->unk_196 != -1) && !ActorCutscene_GetCanPlayNext(this->unk_196)) {
-        ActorCutscene_Stop(this->unk_196);
+    } else if ((this->csId != CS_ID_NONE) && !CutsceneManager_IsNext(this->csId)) {
+        CutsceneManager_Stop(this->csId);
     }
 }
 
