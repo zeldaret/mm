@@ -7,6 +7,7 @@
 #include "global.h"
 #include "buffers.h"
 #include "stack.h"
+#include "stackcheck.h"
 #include "system_heap.h"
 
 extern OSMesgQueue sSiIntMsgQ;

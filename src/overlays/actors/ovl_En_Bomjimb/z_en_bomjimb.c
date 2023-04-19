@@ -686,11 +686,12 @@ void func_80C02740(EnBomjimb* this, PlayState* play) {
         return;
     }
 
-    Message_StartTextbox(play, D_80C03230[((void)0, gSaveContext.save.bombersCaughtNum)], &this->actor);
-    gSaveContext.save.bombersCaughtOrder[((void)0, gSaveContext.save.bombersCaughtNum)] = this->unk_2C8 + 1;
-    gSaveContext.save.bombersCaughtNum++;
+    Message_StartTextbox(play, D_80C03230[((void)0, gSaveContext.save.saveInfo.bombersCaughtNum)], &this->actor);
+    gSaveContext.save.saveInfo.bombersCaughtOrder[((void)0, gSaveContext.save.saveInfo.bombersCaughtNum)] =
+        this->unk_2C8 + 1;
+    gSaveContext.save.saveInfo.bombersCaughtNum++;
 
-    if (gSaveContext.save.bombersCaughtNum > 4) {
+    if (gSaveContext.save.saveInfo.bombersCaughtNum > 4) {
         Audio_PlayFanfare(NA_BGM_GET_ITEM | 0x900);
     } else {
         Actor_PlaySfx(&this->actor, NA_SE_SY_PIECE_OF_HEART);
@@ -760,8 +761,8 @@ void func_80C02A14(EnBomjimb* this, PlayState* play) {
     }
 
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-        func_801477B4(play);
-        if ((this->unk_2CA == 8) && (gSaveContext.save.bombersCaughtNum >= 5)) {
+        Message_CloseTextbox(play);
+        if ((this->unk_2CA == 8) && (gSaveContext.save.saveInfo.bombersCaughtNum >= 5)) {
             func_80C02CA4(this, play);
         } else {
             if (this->unk_2CA == 8) {
@@ -779,7 +780,7 @@ void func_80C02BCC(EnBomjimb* this, PlayState* play) {
     if (this->unk_2C0 == 0) {
         player->actor.freezeTimer = 3;
         if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-            func_801477B4(play);
+            Message_CloseTextbox(play);
             this->unk_2C0 = 1;
             player->stateFlags1 &= ~PLAYER_STATE1_10000000;
         }
@@ -858,7 +859,9 @@ void EnBomjimb_Update(Actor* thisx, PlayState* play2) {
         }
     }
 
-    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 50.0f, 0x1D);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 50.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                UPDBGCHECKINFO_FLAG_10);
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
 

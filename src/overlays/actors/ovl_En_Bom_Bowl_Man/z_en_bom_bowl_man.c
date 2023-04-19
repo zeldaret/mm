@@ -173,9 +173,9 @@ void func_809C4BC4(EnBomBowlMan* this, PlayState* play) {
     func_809C4B50(this);
     func_809C493C(this, 0, 1.0f);
 
-    for (i = 0; i < ARRAY_COUNT(gSaveContext.save.bomberCode); i++) {
+    for (i = 0; i < ARRAY_COUNT(gSaveContext.save.saveInfo.bomberCode); i++) {
         Math_Vec3f_Copy(&sp7C, &this->actor.home.pos);
-        code = gSaveContext.save.bomberCode[i];
+        code = gSaveContext.save.saveInfo.bomberCode[i];
         if (code == 1) {
             Math_Vec3f_Copy(&this->actor.world.pos, &D_809C61A0[i]);
             this->unk_2D8[code] = this;
@@ -242,7 +242,7 @@ void func_809C4DA4(EnBomBowlMan* this, PlayState* play) {
         s32 pad;
         s32 sp28 = false;
 
-        func_801477B4(play);
+        Message_CloseTextbox(play);
 
         switch (this->unk_2C0) {
             case 0:
@@ -319,9 +319,9 @@ void func_809C4DA4(EnBomBowlMan* this, PlayState* play) {
 
         if (!sp28) {
             if (player->transformation == PLAYER_FORM_HUMAN) {
-                func_80151938(play, D_809C618C[this->unk_2C0]);
+                Message_ContinueTextbox(play, D_809C618C[this->unk_2C0]);
             } else {
-                func_80151938(play, D_809C6198[this->unk_2C0]);
+                Message_ContinueTextbox(play, D_809C6198[this->unk_2C0]);
             }
         }
     }
@@ -411,7 +411,7 @@ void func_809C5524(EnBomBowlMan* this, PlayState* play) {
 
 void func_809C5598(EnBomBowlMan* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-        func_801477B4(play);
+        Message_CloseTextbox(play);
         if ((this->actor.textId == 0x72F) || (this->actor.textId == 0x730)) {
             this->actor.textId = 0x731;
         } else if (this->actor.textId == 0x731) {
@@ -439,7 +439,7 @@ void func_809C5598(EnBomBowlMan* this, PlayState* play) {
             this->actionFunc = func_809C5738;
             return;
         }
-        func_80151938(play, this->actor.textId);
+        Message_ContinueTextbox(play, this->actor.textId);
     }
 }
 
@@ -579,7 +579,7 @@ void func_809C5BF4(EnBomBowlMan* this, PlayState* play) {
             if (D_809C6100 > 5) {
                 Player* player = GET_PLAYER(play);
 
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 Camera_SetTargetActor(subCam, &this->unk_2D8[0]->actor);
                 func_809C493C(this, 13, 1.0f);
                 D_809C6100 = 0;
@@ -630,7 +630,9 @@ void EnBomBowlMan_Update(Actor* thisx, PlayState* play) {
             this->unk_2F2 = (s32)Rand_ZeroFloat(60.0f) + 20;
         }
     }
-    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 50.0f, 0x1D);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 50.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                UPDBGCHECKINFO_FLAG_10);
 }
 
 s32 EnBomBowlMan_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {

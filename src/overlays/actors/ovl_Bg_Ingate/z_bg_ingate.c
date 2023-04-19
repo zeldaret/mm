@@ -237,7 +237,7 @@ void func_809541B8(BgIngate* this, PlayState* play) {
                 this->actionFunc = func_809543D4;
             }
         }
-    } else if (!DynaPolyActor_IsInRidingMovingState(&this->dyna)) {
+    } else if (!DynaPolyActor_IsPlayerOnTop(&this->dyna)) {
         this->unk160 |= 4;
     }
 }
@@ -276,7 +276,7 @@ void func_809543D4(BgIngate* this, PlayState* play) {
         switch (this->dyna.actor.textId) {
             case 0x9E4:
                 this->dyna.actor.textId = 0x9E5;
-                func_80151938(play, this->dyna.actor.textId);
+                Message_ContinueTextbox(play, this->dyna.actor.textId);
                 break;
             case 0x9E5:
                 if (play->msgCtx.choiceIndex == 0) {
@@ -293,7 +293,7 @@ void func_809543D4(BgIngate* this, PlayState* play) {
                     CLEAR_WEEKEVENTREG(WEEKEVENTREG_90_40);
                     func_8019F230();
                 }
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 break;
             case 0x9E6:
                 if (play->msgCtx.choiceIndex == 0) {
@@ -307,7 +307,7 @@ void func_809543D4(BgIngate* this, PlayState* play) {
                     Environment_StartTime();
                     func_8019F230();
                 }
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 break;
         }
     }
@@ -322,7 +322,7 @@ void BgIngate_Init(Actor* thisx, PlayState* play2) {
     Vec3f sp20;
 
     if (BgIngate_FindActor(this, play, ACTORCAT_BG, ACTOR_BG_INGATE) == NULL) {
-        DynaPolyActor_Init(&this->dyna, 3);
+        DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS | DYNA_TRANSFORM_ROT_Y);
         DynaPolyActor_LoadMesh(play, &this->dyna, &gSichitaiBoatCol);
         this->unk160 = 0;
         this->unk160 |= 0x8;

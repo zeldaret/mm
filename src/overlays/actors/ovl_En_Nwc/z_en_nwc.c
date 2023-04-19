@@ -457,7 +457,7 @@ void EnNwc_Update(Actor* thisx, PlayState* play) {
     EnNwc* this = THIS;
 
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 10.0f, 10.0f, 5);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 10.0f, 10.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
     this->actionFunc(this, play);
     if (this->hasGrownUp & 1) {
         this->actor.objBankIndex = this->niwObjectIndex;

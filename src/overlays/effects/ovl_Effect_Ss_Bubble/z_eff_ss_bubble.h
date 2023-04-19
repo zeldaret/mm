@@ -11,6 +11,4 @@ typedef struct {
     /* 0x18 */ f32 scale;
 } EffectSsBubbleInitParams; // size = 0x1C
 
-extern const EffectSsInit Effect_Ss_Bubble_InitVars;
-
 #endif

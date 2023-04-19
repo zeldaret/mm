@@ -15,6 +15,4 @@ typedef struct {
     /* 0x30 */ s32 life;
 } EffectSsDFireInitParams; // size = 0x34
 
-extern const EffectSsInit Effect_Ss_D_Fire_InitVars;
-
 #endif

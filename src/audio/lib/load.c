@@ -584,7 +584,7 @@ s32 AudioLoad_SyncInitSeqPlayerInternal(s32 playerIndex, s32 seqId, s32 arg2) {
         return 0;
     }
 
-    AudioSeq_SequencePlayerDisable(seqPlayer);
+    AudioScript_SequencePlayerDisable(seqPlayer);
 
     if (1) {}
     fontId = 0xFF;
@@ -602,7 +602,7 @@ s32 AudioLoad_SyncInitSeqPlayerInternal(s32 playerIndex, s32 seqId, s32 arg2) {
         return 0;
     }
 
-    AudioSeq_ResetSequencePlayer(seqPlayer);
+    AudioScript_ResetSequencePlayer(seqPlayer);
     seqPlayer->seqId = seqId;
 
     if (fontId != 0xFF) {

@@ -241,9 +241,9 @@ void KaleidoScope_SetCursorVtx(PauseContext* pauseCtx, u16 index, Vtx* vtx) {
     pauseCtx->cursorVtx[0].v.ob[1] = vtx[index].v.ob[1];
 }
 
-s16 sMagicArrowEffectsR[] = { 255, 100, 255 };
-s16 sMagicArrowEffectsG[] = { 0, 100, 255 };
-s16 sMagicArrowEffectsB[] = { 0, 255, 100 };
+static s16 sMagicArrowEffectsR[] = { 255, 100, 255 };
+static s16 sMagicArrowEffectsG[] = { 0, 100, 255 };
+static s16 sMagicArrowEffectsB[] = { 0, 255, 100 };
 
 void KaleidoScope_DrawItemSelect(PlayState* play) {
     PauseContext* pauseCtx = &play->pauseCtx;
@@ -275,7 +275,7 @@ void KaleidoScope_DrawItemSelect(PlayState* play) {
     for (j = 0, i = 0; i < NUM_ITEM_SLOTS; i++, j += 4) {
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, pauseCtx->alpha);
 
-        if (((void)0, gSaveContext.save.inventory.items[i]) != ITEM_NONE) {
+        if (((void)0, gSaveContext.save.saveInfo.inventory.items[i]) != ITEM_NONE) {
             if ((pauseCtx->mainState == PAUSE_MAIN_STATE_IDLE) && (pauseCtx->pageIndex == PAUSE_ITEM) &&
                 (pauseCtx->cursorSpecialPos == 0) &&
                 gPlayerFormSlotRestrictions[(void)0, gSaveContext.save.playerForm][i]) {
@@ -309,8 +309,8 @@ void KaleidoScope_DrawItemSelect(PlayState* play) {
             }
 
             gSPVertex(POLY_OPA_DISP++, &pauseCtx->itemVtx[j + 0], 4, 0);
-            KaleidoScope_DrawTexQuadRGBA32(play->state.gfxCtx,
-                                           gItemIcons[((void)0, gSaveContext.save.inventory.items[i])], 32, 32, 0);
+            KaleidoScope_DrawTexQuadRGBA32(
+                play->state.gfxCtx, gItemIcons[((void)0, gSaveContext.save.saveInfo.inventory.items[i])], 32, 32, 0);
         }
     }
 
@@ -325,9 +325,9 @@ void KaleidoScope_DrawItemSelect(PlayState* play) {
             // Loop over slots (i) and ammoIndex (j)
             for (j = 0, i = 0; i < NUM_ITEM_SLOTS; i++) {
                 if (gAmmoItems[i] != ITEM_NONE) {
-                    if (((void)0, gSaveContext.save.inventory.items[i]) != ITEM_NONE) {
+                    if (((void)0, gSaveContext.save.saveInfo.inventory.items[i]) != ITEM_NONE) {
                         KaleidoScope_DrawAmmoCount(pauseCtx, play->state.gfxCtx,
-                                                   ((void)0, gSaveContext.save.inventory.items[i]), j);
+                                                   ((void)0, gSaveContext.save.saveInfo.inventory.items[i]), j);
                     }
                     j++;
                 }
@@ -446,7 +446,7 @@ void KaleidoScope_UpdateItemCursor(PlayState* play) {
                 }
 
                 if (moveCursorResult == PAUSE_CURSOR_RESULT_SLOT) {
-                    cursorItem = gSaveContext.save.inventory.items[pauseCtx->cursorPoint[PAUSE_ITEM]];
+                    cursorItem = gSaveContext.save.saveInfo.inventory.items[pauseCtx->cursorPoint[PAUSE_ITEM]];
                 }
             }
         } else if (pauseCtx->cursorSpecialPos == PAUSE_CURSOR_PAGE_LEFT) {
@@ -459,7 +459,7 @@ void KaleidoScope_UpdateItemCursor(PlayState* play) {
                 // Search for slot to move to
                 while (true) {
                     // Check if current cursor has an item in its slot
-                    if (gSaveContext.save.inventory.items[cursorPoint] != ITEM_NONE) {
+                    if (gSaveContext.save.saveInfo.inventory.items[cursorPoint] != ITEM_NONE) {
                         pauseCtx->cursorPoint[PAUSE_ITEM] = cursorPoint;
                         pauseCtx->cursorXIndex[PAUSE_ITEM] = cursorXIndex;
                         pauseCtx->cursorYIndex[PAUSE_ITEM] = cursorYIndex;
@@ -497,7 +497,7 @@ void KaleidoScope_UpdateItemCursor(PlayState* play) {
                 // Search for slot to move to
                 while (true) {
                     // Check if current cursor has an item in its slot
-                    if (gSaveContext.save.inventory.items[cursorPoint] != ITEM_NONE) {
+                    if (gSaveContext.save.saveInfo.inventory.items[cursorPoint] != ITEM_NONE) {
                         pauseCtx->cursorPoint[PAUSE_ITEM] = cursorPoint;
                         pauseCtx->cursorXIndex[PAUSE_ITEM] = cursorXIndex;
                         pauseCtx->cursorYIndex[PAUSE_ITEM] = cursorYIndex;
@@ -568,9 +568,9 @@ void KaleidoScope_UpdateItemCursor(PlayState* play) {
             pauseCtx->cursorColorSet = PAUSE_CURSOR_COLOR_SET_YELLOW;
 
             if (moveCursorResult == PAUSE_CURSOR_RESULT_SLOT) {
-                cursorItem = gSaveContext.save.inventory.items[pauseCtx->cursorPoint[PAUSE_ITEM]];
+                cursorItem = gSaveContext.save.saveInfo.inventory.items[pauseCtx->cursorPoint[PAUSE_ITEM]];
             } else if (moveCursorResult != PAUSE_CURSOR_RESULT_SPECIAL_POS) {
-                cursorItem = gSaveContext.save.inventory.items[pauseCtx->cursorPoint[PAUSE_ITEM]];
+                cursorItem = gSaveContext.save.saveInfo.inventory.items[pauseCtx->cursorPoint[PAUSE_ITEM]];
             }
 
             if (cursorItem == ITEM_NONE) {

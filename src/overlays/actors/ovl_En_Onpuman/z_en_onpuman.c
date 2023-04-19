@@ -106,11 +106,11 @@ void func_80B1202C(EnOnpuman* this, PlayState* play2) {
         switch (play->msgCtx.currentTextId) {
             case 0x8D4:
                 this->unk_2A4 |= 1;
-                func_80151938(play, 0x8DA);
+                Message_ContinueTextbox(play, 0x8DA);
                 break;
 
             case 0x8DA:
-                func_80151938(play, 0x8D6);
+                Message_ContinueTextbox(play, 0x8D6);
                 if (this->unk_2A0 != NULL) {
                     this->unk_2A0->home.rot.x = 0x50;
                 }
@@ -140,7 +140,7 @@ void func_80B1202C(EnOnpuman* this, PlayState* play2) {
 void func_80B1217C(EnOnpuman* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && (Message_ShouldAdvance(play))) {
         this->actionFunc = func_80B121D8;
-        func_801477B4(play);
+        Message_CloseTextbox(play);
     }
 }
 
@@ -172,6 +172,6 @@ void EnOnpuman_Update(Actor* thisx, PlayState* play) {
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
     this->actionFunc(this, play);
 }

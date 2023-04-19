@@ -732,7 +732,7 @@ void func_80B71F3C(EnRailSkb* this, PlayState* play) {
                     Message_StartTextbox(play, 0x13F4, &this->actor);
                     this->unk_400 = 0x13F4;
                 } else {
-                    func_801477B4(play);
+                    Message_CloseTextbox(play);
                     func_80B71D8C(this, play, func_80B71650);
                 }
                 break;
@@ -744,7 +744,7 @@ void func_80B71F3C(EnRailSkb* this, PlayState* play) {
                 break;
 
             case 0x13F4:
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 func_80B71D8C(this, play, func_80B718B0);
                 break;
         }
@@ -1071,7 +1071,7 @@ void EnRailSkb_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
 
     func_80B72190(this, play);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 15.0f, 30.0f, 60.0f, 5);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 15.0f, 30.0f, 60.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
     func_80B72970(this, play);
 
     if ((this->actionFunc != func_80B710E4) && (this->actionFunc != func_80B7114C) &&

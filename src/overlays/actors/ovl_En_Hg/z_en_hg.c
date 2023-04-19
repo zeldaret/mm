@@ -428,7 +428,7 @@ void EnHg_Update(Actor* thisx, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     EnHg_UpdateCollision(this, play);
     EnHg_WaitForPlayerAction(this, play);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 25.0f, 0.0f, 5);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 25.0f, 0.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
     EnHg_PlayRedeadSfx(this, play);
 }
 

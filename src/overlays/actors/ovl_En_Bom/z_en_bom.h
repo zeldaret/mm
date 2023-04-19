@@ -11,10 +11,10 @@ typedef void (*EnBomActionFunc)(struct EnBom*, PlayState*);
 #define ENBOM_GETZ_80(thisx) ((thisx)->shape.rot.z & 0x80)
 #define ENBOM_GETZ_FF00(thisx) (((thisx)->shape.rot.z & 0xFF00) >> 8)
 
-enum {
-    /* 0 */ ENBOM_0,
-    /* 1 */ ENBOM_1,
-};
+typedef enum {
+    /* 0 */ BOMB_TYPE_BODY,
+    /* 1 */ BOMB_TYPE_EXPLOSION,
+} BombType;
 
 typedef struct EnBom {
     /* 0x000 */ Actor actor;

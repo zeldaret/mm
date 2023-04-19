@@ -238,7 +238,7 @@ void func_80AE9258(ObjBigicicle* this, PlayState* play) {
     ObjIcePoly* icePoly;
 
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
 
     itemAction = play->actorCtx.actorLists[ACTORCAT_ITEMACTION].first;
 

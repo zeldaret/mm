@@ -613,7 +613,7 @@ void func_80B943EC(EnZog* this, PlayState* play) {
 void func_80B94470(EnZog* this, PlayState* play) {
     if (Message_GetState(&play->msgCtx) == TEXT_STATE_5) {
         if (Message_ShouldAdvance(play) && (play->msgCtx.currentTextId == 0x103C)) {
-            func_801477B4(play);
+            Message_CloseTextbox(play);
             this->actionFunc = func_80B9451C;
             this->unk_300 = this->unk_302 = 0;
             this->unk_31C = 2;
@@ -675,7 +675,7 @@ void func_80B946FC(EnZog* this, PlayState* play) {
 
                     case 1:
                         func_8019F230();
-                        func_80151938(play, 0x1014);
+                        Message_ContinueTextbox(play, 0x1014);
                         break;
                 }
             }
@@ -685,20 +685,20 @@ void func_80B946FC(EnZog* this, PlayState* play) {
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
                     case 0x1008:
-                        func_80151938(play, play->msgCtx.currentTextId + 1);
+                        Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                         break;
 
                     case 0x1009:
                         this->unk_300 = 4;
-                        func_80151938(play, play->msgCtx.currentTextId + 1);
+                        Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                         break;
 
                     case 0x1014:
-                        func_80151938(play, play->msgCtx.currentTextId + 1);
+                        Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                         break;
 
                     case 0x1015:
-                        func_801477B4(play);
+                        Message_CloseTextbox(play);
                         this->actionFunc = func_80B948A8;
                         this->unk_300 = this->unk_302 = 0;
                         this->unk_31C = 2;
@@ -781,15 +781,15 @@ void func_80B94A00(EnZog* this, PlayState* play) {
 
     if ((this->unk_304 == 4) &&
         (Animation_OnFrame(&this->skelAnime, 136.0f) || Animation_OnFrame(&this->skelAnime, 155.0f))) {
-        Actor_PlaySfx(&this->actor, NA_SE_PL_WALK_WATER0);
+        Actor_PlaySfx(&this->actor, NA_SE_PL_WALK_GROUND + SURFACE_SFX_OFFSET_WATER_SHALLOW);
     }
 
     if ((this->unk_304 == 5) &&
         (Animation_OnFrame(&this->skelAnime, 12.0f) || Animation_OnFrame(&this->skelAnime, 37.0f))) {
         if (this->actor.depthInWater > 0.0f) {
-            Actor_PlaySfx(&this->actor, NA_SE_PL_WALK_WATER0);
+            Actor_PlaySfx(&this->actor, NA_SE_PL_WALK_GROUND + SURFACE_SFX_OFFSET_WATER_SHALLOW);
         } else {
-            Actor_PlaySfx(&this->actor, NA_SE_PL_WALK_SAND);
+            Actor_PlaySfx(&this->actor, NA_SE_PL_WALK_GROUND + SURFACE_SFX_OFFSET_SAND);
         }
     }
 }
@@ -834,11 +834,11 @@ void func_80B94D0C(EnZog* this, PlayState* play) {
             case 0x1004:
             case 0x1005:
             case 0x1006:
-                func_80151938(play, play->msgCtx.currentTextId + 1);
+                Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                 break;
 
             case 0x1007:
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 this->actionFunc = func_80B94E34;
                 this->unk_300 = 5;
                 this->unk_320 = 0;
@@ -956,7 +956,7 @@ void EnZog_Update(Actor* thisx, PlayState* play) {
     EnZog* this = THIS;
 
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 10.0f, 10.0f, 5);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 10.0f, 10.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
     if (Cutscene_CheckActorAction(play, 0x1D7) && (ENZOG_GET_F(&this->actor) != ENZOG_F_2)) {
         this->actionFunc = func_80B9461C;
         this->actor.shape.yOffset = 0.0f;

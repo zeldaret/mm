@@ -46,13 +46,13 @@ ActorInit En_Kujiya_InitVars = {
     (ActorFunc)EnKujiya_Draw,
 };
 
-#define CHECK_LOTTERY_NUMBERS                                                     \
-    (((u32)((void)0, gSaveContext.save.lotteryCodes[CURRENT_DAY - 1][0]) ==       \
-      ((((void)0, gSaveContext.save.lotteryCodeGuess & 0xFFFF) & 0xF00) >> 8)) && \
-     ((u32)((void)0, gSaveContext.save.lotteryCodes[CURRENT_DAY - 1][1]) ==       \
-      ((((void)0, gSaveContext.save.lotteryCodeGuess & 0xFFFF) & 0xF0) >> 4)) &&  \
-     ((u32)((void)0, gSaveContext.save.lotteryCodes[CURRENT_DAY - 1][2]) ==       \
-      (((void)0, gSaveContext.save.lotteryCodeGuess & 0xFFFF) & 0xF)))
+#define CHECK_LOTTERY_NUMBERS                                                              \
+    (((u32)((void)0, gSaveContext.save.saveInfo.lotteryCodes[CURRENT_DAY - 1][0]) ==       \
+      ((((void)0, gSaveContext.save.saveInfo.lotteryCodeGuess & 0xFFFF) & 0xF00) >> 8)) && \
+     ((u32)((void)0, gSaveContext.save.saveInfo.lotteryCodes[CURRENT_DAY - 1][1]) ==       \
+      ((((void)0, gSaveContext.save.saveInfo.lotteryCodeGuess & 0xFFFF) & 0xF0) >> 4)) &&  \
+     ((u32)((void)0, gSaveContext.save.saveInfo.lotteryCodes[CURRENT_DAY - 1][2]) ==       \
+      (((void)0, gSaveContext.save.saveInfo.lotteryCodeGuess & 0xFFFF) & 0xF)))
 
 void EnKujiya_Init(Actor* thisx, PlayState* play) {
     EnKujiya* this = THIS;
@@ -111,7 +111,7 @@ void EnKujiya_Wait(EnKujiya* this, PlayState* play) {
 void EnKujiya_HandlePlayerChoice(EnKujiya* this, PlayState* play) {
     if (Message_ShouldAdvance(play)) {
         if (play->msgCtx.choiceIndex == 0) { // Buy
-            if (gSaveContext.save.playerData.rupees < 10) {
+            if (gSaveContext.save.saveInfo.playerData.rupees < 10) {
                 play_sound(NA_SE_SY_ERROR);
                 Message_StartTextbox(play, 0x2B62, &this->actor);
                 this->textId = 0x2B62; // Not enough Rupees
@@ -147,7 +147,7 @@ void EnKujiya_ChooseNextDialogue(EnKujiya* this, PlayState* play) {
 
             case 0x2B60:
                 EnKujiya_SetBoughtTicket();
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 EnKujiya_SetupTurnToClosed(this);
                 break;
 
@@ -169,7 +169,7 @@ void EnKujiya_ChooseNextDialogue(EnKujiya* this, PlayState* play) {
                 break;
 
             case 0x2B66:
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 EnKujiya_SetupGivePrize(this);
                 EnKujiya_GivePrize(this, play);
                 break;
