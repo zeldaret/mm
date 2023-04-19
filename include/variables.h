@@ -2306,6 +2306,7 @@ extern OSThread gGraphThread;
 
 extern u64* gAudioSPDataPtr;
 extern u32 gAudioSPDataSize;
+
 extern volatile OSTime D_801FBAE0;
 extern volatile OSTime D_801FBAE8;
 extern volatile OSTime D_801FBAF0;
