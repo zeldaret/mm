@@ -9,7 +9,7 @@
  *    - Argument 4: Restriction flags. See `RESTRICTIONS_SET` on z_parameter.c
  *    - Argument 5: Persistent cycle flag set: bitwise flags which won't be turned off on a cycle reset (will persist between cycles)
  *
- * DEFINE_ACTOR_UNSET is needed to define empty entries from the original game
+ * DEFINE_SCENE_UNSET is needed to define empty entries from the original game
  *    - Argument 0: Enum value for this scene
  */
 // Southern Swamp (Clear)
