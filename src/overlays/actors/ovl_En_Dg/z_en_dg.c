@@ -237,7 +237,7 @@ void EnDg_UpdateCollision(EnDg* this, PlayState* play) {
         Collider_ResetCylinderOC(play, &this->collider.base);
     }
 
-    Actor_UpdateBgCheckInfo(play, &this->actor, 26.0f, 10.0f, 0.0f, 5);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 26.0f, 10.0f, 0.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
 }
 
 void EnDg_GetFloorRot(EnDg* this, Vec3f* floorRot) {
@@ -281,7 +281,7 @@ s32 EnDg_HasReachedPoint(EnDg* this, Path* path, s32 pointIndex) {
         diffZ = points[currentPoint + 1].z - points[currentPoint - 1].z;
     }
 
-    func_8017B7F8(&point, RADF_TO_BINANG(func_80086B30(diffX, diffZ)), &px, &pz, &d);
+    func_8017B7F8(&point, RAD_TO_BINANG(func_80086B30(diffX, diffZ)), &px, &pz, &d);
 
     if (((this->actor.world.pos.x * px) + (pz * this->actor.world.pos.z) + d) > 0.0f) {
         reached = true;
@@ -310,7 +310,7 @@ s16 EnDg_GetYRotation(Path* path, s32 index, Vec3f* pos, f32* distSq) {
 
     *distSq = SQ(diffX) + SQ(diffZ);
 
-    return RADF_TO_BINANG(Math_Atan2F_XY(diffZ, diffX));
+    return RAD_TO_BINANG(Math_Atan2F_XY(diffZ, diffX));
 }
 
 /**
@@ -426,10 +426,10 @@ void EnDg_UpdateTextId(EnDg* this) {
         // the range of 0x3538 to 0x3545.
         if (this->index % 2) {
             sRacetrackDogInfo[this->index].textId =
-                0x3538 + ((gSaveContext.save.weekEventReg[42 + (this->index / 2)] & 0xF0) >> 4);
+                0x3538 + ((gSaveContext.save.saveInfo.weekEventReg[42 + (this->index / 2)] & 0xF0) >> 4);
         } else {
             sRacetrackDogInfo[this->index].textId =
-                0x3538 + (gSaveContext.save.weekEventReg[42 + (this->index / 2)] & 0x0F);
+                0x3538 + (gSaveContext.save.saveInfo.weekEventReg[42 + (this->index / 2)] & 0x0F);
         }
     } else {
         Actor_Kill(&this->actor);

@@ -1,3 +1,4 @@
+#include "prevent_bss_reordering.h"
 #include "global.h"
 #include "buffers.h"
 #include "z64debug_display.h"
@@ -1265,7 +1266,7 @@ void Play_DrawMain(PlayState* this) {
                 goto PostWorldDraw;
             }
 
-            if (this->unk_18844 == 0) {
+            if (!this->unk_18844) {
                 if (1) {
                     if ((this->skyboxId != SKYBOX_NONE) && !this->envCtx.skyboxDisabled) {
                         if ((this->skyboxId == SKYBOX_NORMAL_SKY) || (this->skyboxId == SKYBOX_3)) {

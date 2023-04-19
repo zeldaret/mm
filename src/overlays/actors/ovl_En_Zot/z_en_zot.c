@@ -467,7 +467,7 @@ void func_80B973BC(EnZot* this, PlayState* play) {
                 break;
 
             case 0x1275:
-                if (gSaveContext.save.playerData.rupees < 10) {
+                if (gSaveContext.save.saveInfo.playerData.rupees < 10) {
                     Message_ContinueTextbox(play, 0x1277);
                 } else {
                     Message_ContinueTextbox(play, 0x1278);
@@ -1316,7 +1316,7 @@ void EnZot_Update(Actor* thisx, PlayState* play) {
     Actor_MoveWithGravity(&this->actor);
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 15.0f, 30.0f, 5);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 15.0f, 30.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
 
     this->unk_2F2 &= ~0x40;
     if (SkelAnime_Update(&this->skelAnime) && (this->unk_2F0 != 0)) {

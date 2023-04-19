@@ -324,7 +324,7 @@ void ObjTokeidai_ExteriorGear_Collapse(ObjTokeidai* this, PlayState* play) {
         this->actor.shape.rot.x += 0x50;
         this->actor.shape.rot.z += 0x50;
         Actor_MoveWithGravity(&this->actor);
-        Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
     }
 }
 
@@ -620,7 +620,7 @@ void ObjTokeidai_StaircaseToRooftop_Idle(ObjTokeidai* this, PlayState* play) {
 }
 
 s32 ObjTokeidai_IsPostFirstCycleFinalHours(ObjTokeidai* this, PlayState* play) {
-    if (gSaveContext.save.inventory.items[SLOT_OCARINA] == ITEM_NONE) {
+    if (gSaveContext.save.saveInfo.inventory.items[SLOT_OCARINA] == ITEM_NONE) {
         return false;
     }
     if (CURRENT_DAY == 3 && gSaveContext.save.time < CLOCK_TIME(6, 0)) {

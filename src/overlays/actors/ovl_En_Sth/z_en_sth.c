@@ -154,7 +154,7 @@ void EnSth_Init(Actor* thisx, PlayState* play) {
             break;
 
         case STH_TYPE_MOON_LOOKING: // South Clock Town
-            if ((gSaveContext.save.skullTokenCount & 0xFFFF) >= SPIDER_HOUSE_TOKENS_REQUIRED) {
+            if ((gSaveContext.save.saveInfo.skullTokenCount & 0xFFFF) >= SPIDER_HOUSE_TOKENS_REQUIRED) {
                 Actor_Kill(&this->actor);
                 return;
             }
@@ -677,7 +677,7 @@ void EnSth_Update(Actor* thisx, PlayState* play) {
     Actor_MoveWithGravity(&this->actor);
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
 
     this->actionFunc(this, play);
 

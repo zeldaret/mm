@@ -151,33 +151,33 @@ ObjIcePoly* EnKgy_FindIceBlock(PlayState* play) {
 }
 
 void func_80B40C74(PlayState* play) {
-    gSaveContext.save.permanentSceneFlags[play->sceneId].unk_14 |= 1;
+    gSaveContext.save.saveInfo.permanentSceneFlags[play->sceneId].unk_14 |= 1;
     if (CURRENT_DAY == 1) {
-        gSaveContext.save.permanentSceneFlags[play->sceneId].unk_14 |= 2;
+        gSaveContext.save.saveInfo.permanentSceneFlags[play->sceneId].unk_14 |= 2;
     } else {
-        gSaveContext.save.permanentSceneFlags[play->sceneId].unk_14 &= ~2;
+        gSaveContext.save.saveInfo.permanentSceneFlags[play->sceneId].unk_14 &= ~2;
     }
 }
 
 void func_80B40D00(PlayState* play) {
-    gSaveContext.save.permanentSceneFlags[play->sceneId].unk_14 |= 4;
+    gSaveContext.save.saveInfo.permanentSceneFlags[play->sceneId].unk_14 |= 4;
 }
 
 void func_80B40D30(PlayState* play) {
-    gSaveContext.save.permanentSceneFlags[play->sceneId].unk_14 &= ~7;
+    gSaveContext.save.saveInfo.permanentSceneFlags[play->sceneId].unk_14 &= ~7;
 }
 
 s32 func_80B40D64(PlayState* play) {
-    return gSaveContext.save.permanentSceneFlags[play->sceneId].unk_14 & 1;
+    return gSaveContext.save.saveInfo.permanentSceneFlags[play->sceneId].unk_14 & 1;
 }
 
 s32 func_80B40D8C(PlayState* play) {
-    return gSaveContext.save.permanentSceneFlags[play->sceneId].unk_14 & 4;
+    return gSaveContext.save.saveInfo.permanentSceneFlags[play->sceneId].unk_14 & 4;
 }
 
 s32 func_80B40DB4(PlayState* play) {
     if ((CURRENT_DAY == 3) ||
-        ((CURRENT_DAY == 2) && (gSaveContext.save.permanentSceneFlags[play->sceneId].unk_14 & 2))) {
+        ((CURRENT_DAY == 2) && (gSaveContext.save.saveInfo.permanentSceneFlags[play->sceneId].unk_14 & 2))) {
         return true;
     }
     return false;
@@ -621,7 +621,7 @@ void func_80B41E18(EnKgy* this, PlayState* play) {
                         case 0xC3B:
                             switch (play->msgCtx.choiceIndex) {
                                 case 0:
-                                    if (gSaveContext.save.playerData.rupees < play->msgCtx.unk1206C) {
+                                    if (gSaveContext.save.saveInfo.playerData.rupees < play->msgCtx.unk1206C) {
                                         play_sound(NA_SE_SY_ERROR);
                                         func_80B40E74(this, play, 0xC3F);
                                     } else {
@@ -743,7 +743,7 @@ void func_80B41E18(EnKgy* this, PlayState* play) {
 
                         case 0xC46:
                         case 0xC55:
-                            Player_UpdateBottleHeld(play, GET_PLAYER(play), ITEM_BOTTLE, PLAYER_IA_BOTTLE);
+                            Player_UpdateBottleHeld(play, GET_PLAYER(play), ITEM_BOTTLE, PLAYER_IA_BOTTLE_EMPTY);
                             player->exchangeItemId = PLAYER_IA_NONE;
                             this->unk_29C &= ~0x8;
                             play->msgCtx.msgLength = 0;

@@ -178,7 +178,7 @@ void func_80AF3C34(ObjLightblock* this, PlayState* play) {
         } else {
             this->alpha = 0;
             this->dyna.actor.draw = NULL;
-            func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+            DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
         }
     }
 }

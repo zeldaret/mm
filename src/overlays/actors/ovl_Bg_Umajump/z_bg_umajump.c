@@ -165,10 +165,10 @@ void BgUmajump_Update(Actor* thisx, PlayState* play) {
                           (gSaveContext.save.time <= CLOCK_TIME(6, 0)))))) {
                 DynaPolyActor_LoadMesh(play, &this->dyna, &object_umajump_Colheader_001558);
             }
-            func_800C641C(play, &play->colCtx.dyna, this->dyna.bgId);
+            DynaPoly_DisableFloorCollision(play, &play->colCtx.dyna, this->dyna.bgId);
             this->dyna.actor.update = func_8091A5A0;
         } else if (this->dyna.actor.params == BG_UMAJUMP_TYPE_4) {
-            func_800C641C(play, &play->colCtx.dyna, this->dyna.bgId);
+            DynaPoly_DisableFloorCollision(play, &play->colCtx.dyna, this->dyna.bgId);
             this->dyna.actor.update = Actor_Noop;
         } else {
             this->dyna.actor.update = Actor_Noop;

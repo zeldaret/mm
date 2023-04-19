@@ -1,4 +1,5 @@
 #include "global.h"
+#include "stackcheck.h"
 
 vs32 gIrqMgrResetStatus = 0;
 volatile OSTime sIrqMgrResetTime = 0;
@@ -160,7 +161,7 @@ void IrqMgr_Init(IrqMgr* irqmgr, void* stack, OSPri pri, u8 retraceCount) {
     irqmgr->lastPrenmiTime = 0;
 
     osCreateMesgQueue(&irqmgr->irqQueue, (OSMesg*)irqmgr->irqBuffer, ARRAY_COUNT(irqmgr->irqBuffer));
-    osSetEventMesg(0xE, &irqmgr->irqQueue, (OSMesg)0x29D);
+    osSetEventMesg(OS_EVENT_PRENMI, &irqmgr->irqQueue, (OSMesg)0x29D);
     osViSetEvent(&irqmgr->irqQueue, (OSMesg)0x29A, retraceCount);
 
     osCreateThread(&irqmgr->thread, Z_THREAD_ID_IRQMGR, IrqMgr_ThreadEntry, irqmgr, stack, pri);

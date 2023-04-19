@@ -323,7 +323,8 @@ void EnHakurock_Update(Actor* thisx, PlayState* play) {
     rockParams = this->actor.params;
     if ((rockParams == EN_HAKUROCK_TYPE_BOULDER) || (rockParams == EN_HAKUROCK_TYPE_UNK_2)) {
         Actor_MoveWithGravity(&this->actor);
-        Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, this->collider.dim.radius, 0.0f, 0x85);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, this->collider.dim.radius, 0.0f,
+                                UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_80);
         if (this->actor.floorHeight == BGCHECK_Y_MIN) {
             func_80B21FFC(this);
         } else {

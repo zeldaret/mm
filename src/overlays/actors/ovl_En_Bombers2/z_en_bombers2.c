@@ -220,7 +220,8 @@ void func_80C04D8C(EnBombers2* this, PlayState* play) {
             s32 correctDigits;
 
             for (i = 0; i < ARRAY_COUNT(this->correctDigitSlots); i++) {
-                if (!(this->correctDigitSlots[i]) && (play->msgCtx.unk12054[i] == gSaveContext.save.bomberCode[i])) {
+                if (!(this->correctDigitSlots[i]) &&
+                    (play->msgCtx.unk12054[i] == gSaveContext.save.saveInfo.bomberCode[i])) {
                     this->correctDigitSlots[i] = true;
                 }
             }
@@ -400,7 +401,9 @@ void EnBombers2_Update(Actor* thisx, PlayState* play) {
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
     if (this->unk_2AC == 0) {
-        Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 50.0f, 0x1D);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 50.0f,
+                                UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                    UPDBGCHECKINFO_FLAG_10);
     }
     Math_Vec3f_Copy(&this->actor.world.pos, &sp34);
 }
