@@ -182,7 +182,7 @@ void func_80AE8FD4(ObjBigicicle* this, PlayState* play) {
     if ((this->collider1.base.acFlags & AC_HIT) ||
         ((this->collider2.base.acFlags & AC_HIT) && (this->collider2.info.acHitInfo->toucher.dmgFlags & 0x3820))) {
         if ((this->unk_148 == 0) || (this->unk_149 == 1)) {
-            ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+            CutsceneManager_Queue(this->actor.csId);
             this->actionFunc = func_80AE9090;
             return;
         }
@@ -195,8 +195,8 @@ void func_80AE8FD4(ObjBigicicle* this, PlayState* play) {
 }
 
 void func_80AE9090(ObjBigicicle* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
+    if (CutsceneManager_IsNext(this->actor.csId)) {
+        CutsceneManager_StartWithPlayerCs(this->actor.csId, &this->actor);
         this->unk_149++;
         func_80AE8DE4(this, play);
         if (this->unk_149 == 2) {
@@ -213,7 +213,7 @@ void func_80AE9090(ObjBigicicle* this, PlayState* play) {
             this->actionFunc = func_80AE9180;
         }
     } else {
-        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+        CutsceneManager_Queue(this->actor.csId);
     }
 }
 
@@ -227,7 +227,7 @@ void func_80AE9180(ObjBigicicle* this, PlayState* play) {
     } else {
         this->actor.shape.rot.x = 0x4000;
         this->actor.shape.rot.z = 0;
-        ActorCutscene_Stop(this->actor.cutscene);
+        CutsceneManager_Stop(this->actor.csId);
         this->actionFunc = func_80AE8FD4;
     }
 }
@@ -284,7 +284,7 @@ void func_80AE939C(ObjBigicicle* this, PlayState* play) {
     }
 
     SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 40, NA_SE_EV_GLASSBROKEN_IMPACT);
-    ActorCutscene_Stop(this->actor.cutscene);
+    CutsceneManager_Stop(this->actor.csId);
     Actor_Kill(&this->actor);
 }
 

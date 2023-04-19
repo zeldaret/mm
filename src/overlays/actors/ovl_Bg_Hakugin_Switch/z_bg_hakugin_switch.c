@@ -143,12 +143,12 @@ void BgHakuginSwitch_Init(Actor* thisx, PlayState* play) {
         this->collider.dim.yShift = 0x1D;
 
         this->unk_1A8 = object_goronswitch_DL_000268;
-        this->unk_1B8 = this->dyna.actor.cutscene;
+        this->csId = this->dyna.actor.csId;
 
         if (sp34 == 0) {
-            this->unk_1BA = -1;
+            this->additionalCsId = CS_ID_NONE;
         } else {
-            this->unk_1BA = ActorCutscene_GetAdditionalCutscene(this->unk_1B8);
+            this->additionalCsId = CutsceneManager_GetAdditionalCsId(this->csId);
         }
 
         if (sp30) {
@@ -166,8 +166,8 @@ void BgHakuginSwitch_Init(Actor* thisx, PlayState* play) {
         Actor_ProcessInitChain(&this->dyna.actor, sInitChain2);
 
         this->unk_1A8 = D_80B1688C[sp34].unk_10;
-        this->unk_1B8 = this->dyna.actor.cutscene;
-        this->unk_1BA = ActorCutscene_GetAdditionalCutscene(this->unk_1B8);
+        this->csId = this->dyna.actor.csId;
+        this->additionalCsId = CutsceneManager_GetAdditionalCsId(this->csId);
 
         if (sp30 == sp28) {
             func_80B15F3C(this, play);
@@ -186,9 +186,9 @@ void BgHakuginSwitch_Destroy(Actor* thisx, PlayState* play) {
     Collider_DestroyCylinder(play, &this->collider);
 }
 
-void func_80B15A4C(BgHakuginSwitch* this, BgHakuginSwitchUnkFunc func, s32 arg2) {
+void func_80B15A4C(BgHakuginSwitch* this, BgHakuginSwitchUnkFunc func, s32 csId) {
     this->unk_1B4 = func;
-    this->unk_1BC = arg2;
+    this->curCsId = csId;
     this->actionFunc = func_80B15A68;
 }
 
@@ -197,14 +197,14 @@ void func_80B15A68(BgHakuginSwitch* this, PlayState* play) {
     BgHakuginSwitchStruct* s = &D_80B1688C[BGHAKUGINSWITCH_GET_7(&this->dyna.actor)];
     s32 sp18 = !(s->unk_14 & 0x40);
 
-    if (ActorCutscene_GetCanPlayNext(this->unk_1BC)) {
+    if (CutsceneManager_IsNext(this->curCsId)) {
         if (sp18) {
-            ActorCutscene_StartAndSetUnkLinkFields(this->unk_1BC, &this->dyna.actor);
+            CutsceneManager_StartWithPlayerCs(this->curCsId, &this->dyna.actor);
             this->unk_1BF = 40;
         }
         this->unk_1B4(this, play);
     } else if (sp18) {
-        ActorCutscene_SetIntentToPlay(this->unk_1BC);
+        CutsceneManager_Queue(this->curCsId);
     }
 }
 
@@ -281,7 +281,7 @@ void func_80B15B74(BgHakuginSwitch* this, PlayState* play) {
         D_80B16AF0 = play->gameplayFrames;
 
         if (sp38->unk_14 & 0x10) {
-            func_80B15A4C(this, func_80B15E0C, this->unk_1B8);
+            func_80B15A4C(this, func_80B15E0C, this->csId);
         } else {
             func_80B15E0C(this, play);
         }
@@ -343,7 +343,7 @@ void func_80B15F88(BgHakuginSwitch* this, PlayState* play) {
     if (phi_a0 != phi_v1) {
         if ((sp18->unk_14 & 0xFF) & 0x20) {
             if (D_80B16AF0 < play->gameplayFrames) {
-                func_80B15A4C(this, func_80B1606C, this->unk_1BA);
+                func_80B15A4C(this, func_80B1606C, this->additionalCsId);
             }
         } else {
             func_80B1606C(this, play);
@@ -372,16 +372,16 @@ void func_80B160DC(BgHakuginSwitch* this, PlayState* play) {
     }
 }
 
-void func_80B16180(BgHakuginSwitch* this, BgHakuginSwitchUnkFunc func, s32 arg2, s32 arg3) {
+void func_80B16180(BgHakuginSwitch* this, BgHakuginSwitchUnkFunc func, s32 arg2, s32 csId) {
     this->unk_1B4 = func;
     this->unk_1BE = arg2;
-    this->unk_1BC = arg3;
+    this->curCsId = csId;
     this->actionFunc = func_80B161A0;
 }
 
 void func_80B161A0(BgHakuginSwitch* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->unk_1BC)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->unk_1BC, &this->dyna.actor);
+    if (CutsceneManager_IsNext(this->curCsId)) {
+        CutsceneManager_StartWithPlayerCs(this->curCsId, &this->dyna.actor);
         if (this->unk_1BE != 0) {
             Flags_SetSwitch(play, BGHAKUGINSWITCH_GET_SWITCHFLAG(&this->dyna.actor));
         } else {
@@ -390,7 +390,7 @@ void func_80B161A0(BgHakuginSwitch* this, PlayState* play) {
         this->unk_1BF = 50;
         this->unk_1B4(this, play);
     } else {
-        ActorCutscene_SetIntentToPlay(this->unk_1BC);
+        CutsceneManager_Queue(this->curCsId);
     }
 }
 
@@ -427,7 +427,7 @@ void func_80B162AC(BgHakuginSwitch* this, PlayState* play) {
 
     if (sp24) {
         if (sp28) {
-            func_80B16180(this, func_80B163C4, 1, this->unk_1B8);
+            func_80B16180(this, func_80B163C4, 1, this->csId);
         } else {
             func_80B163C4(this, play);
         }
@@ -466,7 +466,7 @@ void func_80B16494(BgHakuginSwitch* this, PlayState* play) {
 void func_80B16520(BgHakuginSwitch* this, PlayState* play) {
     if (!Flags_GetSwitch(play, BGHAKUGINSWITCH_GET_SWITCHFLAG(&this->dyna.actor))) {
         if (BGHAKUGINSWITCH_GET_7(&this->dyna.actor) == BGHAKUGINSWITCH_GET_7_1) {
-            func_80B16180(this, func_80B165A0, 0, this->unk_1BA);
+            func_80B16180(this, func_80B165A0, 0, this->additionalCsId);
         } else {
             func_80B165A0(this, play);
         }
@@ -498,7 +498,7 @@ void BgHakuginSwitch_Update(Actor* thisx, PlayState* play) {
         if ((this->actionFunc != func_80B15A68) && (this->actionFunc != func_80B161A0)) {
             this->unk_1BF--;
             if (this->unk_1BF == 0) {
-                ActorCutscene_Stop(this->unk_1BC);
+                CutsceneManager_Stop(this->curCsId);
             }
         }
     }

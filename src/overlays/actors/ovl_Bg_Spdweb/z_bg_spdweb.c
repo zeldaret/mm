@@ -229,7 +229,7 @@ void func_809CE234(BgSpdweb* this, PlayState* play) {
     }
 
     if (this->unk_162 == 0) {
-        ActorCutscene_Stop(this->dyna.actor.cutscene);
+        CutsceneManager_Stop(this->dyna.actor.csId);
         Actor_Kill(&this->dyna.actor);
         return;
     }
@@ -369,8 +369,8 @@ void func_809CE830(BgSpdweb* this, PlayState* play) {
     }
 
     if (this->unk_162 == 0) {
-        if (ActorCutscene_GetLength(this->dyna.actor.cutscene) == -1) {
-            ActorCutscene_Stop(this->dyna.actor.cutscene);
+        if (CutsceneManager_GetLength(this->dyna.actor.csId) == -1) {
+            CutsceneManager_Stop(this->dyna.actor.csId);
         }
         Actor_Kill(&this->dyna.actor);
         return;
@@ -470,16 +470,16 @@ void func_809CEBC0(BgSpdweb* this, PlayState* play) {
 }
 
 void func_809CEE74(BgSpdweb* this) {
-    ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+    CutsceneManager_Queue(this->dyna.actor.csId);
     this->actionFunc = func_809CEEAC;
 }
 
 void func_809CEEAC(BgSpdweb* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
+    if (CutsceneManager_IsNext(this->dyna.actor.csId)) {
+        CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
         func_809CE1D0(this, play);
     } else {
-        ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+        CutsceneManager_Queue(this->dyna.actor.csId);
     }
 }
 

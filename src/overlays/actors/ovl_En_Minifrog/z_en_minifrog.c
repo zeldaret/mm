@@ -263,7 +263,7 @@ void EnMinifrog_ReturnFrogCutscene(EnMinifrog* this, PlayState* play) {
                 break;
 
             case 0xD82:
-                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_33_80)) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_SNOWHEAD_TEMPLE)) {
                     Message_ContinueTextbox(play, 0xD83);
                 } else {
                     Message_ContinueTextbox(play, 0xD86);
@@ -277,9 +277,9 @@ void EnMinifrog_ReturnFrogCutscene(EnMinifrog* this, PlayState* play) {
                 Message_CloseTextbox(play);
                 EnMinifrog_SpawnDust(this, play);
                 SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 30, NA_SE_EN_NPC_FADEAWAY);
-                if (this->actor.cutscene != -1) {
-                    if (ActorCutscene_GetCurrentIndex() == this->actor.cutscene) {
-                        ActorCutscene_Stop(this->actor.cutscene);
+                if (this->actor.csId != CS_ID_NONE) {
+                    if (CutsceneManager_GetCurrentCsId() == this->actor.csId) {
+                        CutsceneManager_Stop(this->actor.csId);
                     }
                 }
 
@@ -289,14 +289,14 @@ void EnMinifrog_ReturnFrogCutscene(EnMinifrog* this, PlayState* play) {
     }
 
     if (this->flags & 1) {
-        if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-            ActorCutscene_Stop(0x7C);
-            ActorCutscene_SetIntentToPlay(this->actor.cutscene);
-        } else if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
-            ActorCutscene_Start(this->actor.cutscene, &this->actor);
+        if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+            CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
+            CutsceneManager_Queue(this->actor.csId);
+        } else if (CutsceneManager_IsNext(this->actor.csId)) {
+            CutsceneManager_Start(this->actor.csId, &this->actor);
             this->flags &= ~1;
         } else {
-            ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+            CutsceneManager_Queue(this->actor.csId);
         }
     }
 }
@@ -319,7 +319,7 @@ void EnMinifrog_Idle(EnMinifrog* this, PlayState* play) {
     EnMinifrog_JumpTimer(this);
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->actionFunc = EnMinifrog_ReturnFrogCutscene;
-        if (this->actor.cutscene != -1) {
+        if (this->actor.csId != CS_ID_NONE) {
             this->flags |= 1;
         }
     } else if ((this->actor.xzDistToPlayer < 100.0f) && Player_IsFacingActor(&this->actor, 0x3000, play) &&
@@ -366,19 +366,19 @@ void EnMinifrog_CheckChoirSuccess(EnMinifrog* this, PlayState* play) {
 
 void EnMinifrog_ContinueChoirCutscene(EnMinifrog* this, PlayState* play) {
     EnMinifrog_Jump(this);
-    if (ActorCutscene_GetCurrentIndex() == 0x7C) {
+    if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
         EnMinifrog_CheckChoirSuccess(this, play);
         return; // necessary to match
-    } else if (ActorCutscene_GetCanPlayNext(0x7C)) {
-        ActorCutscene_Start(0x7C, NULL);
+    } else if (CutsceneManager_IsNext(CS_ID_GLOBAL_TALK)) {
+        CutsceneManager_Start(CS_ID_GLOBAL_TALK, NULL);
         EnMinifrog_CheckChoirSuccess(this, play);
         return; // necessary to match
-    } else if (this->actor.cutscene != -1 && ActorCutscene_GetCurrentIndex() == this->actor.cutscene) {
-        ActorCutscene_Stop(this->actor.cutscene);
-        ActorCutscene_SetIntentToPlay(0x7C);
+    } else if ((this->actor.csId != CS_ID_NONE) && (CutsceneManager_GetCurrentCsId() == this->actor.csId)) {
+        CutsceneManager_Stop(this->actor.csId);
+        CutsceneManager_Queue(CS_ID_GLOBAL_TALK);
         return; // necessary to match
     } else {
-        ActorCutscene_SetIntentToPlay(0x7C);
+        CutsceneManager_Queue(CS_ID_GLOBAL_TALK);
     }
 }
 
@@ -440,20 +440,20 @@ void EnMinifrog_SetupNextFrogChoir(EnMinifrog* this, PlayState* play) {
 
 void EnMinifrog_BeginChoirCutscene(EnMinifrog* this, PlayState* play) {
     EnMinifrog_Jump(this);
-    if (this->actor.cutscene == -1) {
+    if (this->actor.csId == CS_ID_NONE) {
         this->actionFunc = EnMinifrog_SetupNextFrogChoir;
-    } else if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-        ActorCutscene_Stop(0x7C);
-        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
-    } else if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
-        ActorCutscene_Start(this->actor.cutscene, &this->actor);
+    } else if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+        CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
+        CutsceneManager_Queue(this->actor.csId);
+    } else if (CutsceneManager_IsNext(this->actor.csId)) {
+        CutsceneManager_Start(this->actor.csId, &this->actor);
         this->actionFunc = EnMinifrog_SetupNextFrogChoir;
         this->timer = 5;
         func_801A1F00(3, NA_BGM_FROG_SONG);
         this->flags |= 0x100;
         play->setPlayerTalkAnim(play, &gPlayerAnim_pn_gakkiplay, ANIMMODE_LOOP);
     } else {
-        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+        CutsceneManager_Queue(this->actor.csId);
     }
 }
 

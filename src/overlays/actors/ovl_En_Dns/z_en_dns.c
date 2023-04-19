@@ -205,19 +205,19 @@ s32* func_8092C9BC(EnDns* this, PlayState* play) {
     return 0;
 }
 
-s32 func_8092CA74(EnDns* this) {
+s32 EnDns_GetCueType(EnDns* this) {
     switch (ENDNS_GET_7(&this->actor)) {
         case ENDNS_GET_7_0:
-            return 465;
+            return CS_CMD_ACTOR_CUE_465;
 
         case ENDNS_GET_7_1:
-            return 466;
+            return CS_CMD_ACTOR_CUE_466;
 
         case ENDNS_GET_7_2:
-            return 467;
+            return CS_CMD_ACTOR_CUE_467;
 
         case ENDNS_GET_7_3:
-            return 468;
+            return CS_CMD_ACTOR_CUE_468;
     }
 
     return 0;
@@ -251,11 +251,11 @@ s32 func_8092CB98(EnDns* this, PlayState* play) {
 
     if (play->csCtx.state != 0) {
         if (!(this->unk_2C6 & 0x80)) {
-            this->unk_2C8 = func_8092CA74(this);
+            this->cueType = EnDns_GetCueType(this);
             this->actor.flags &= ~ACTOR_FLAG_1;
             SubS_UpdateFlags(&this->unk_2C6, 0, 7);
             this->unk_2C6 |= 0x80;
-            this->unk_1D8 = 0xFF;
+            this->cueId = 255;
         }
         phi_v1 = 1;
     } else if (this->unk_2C6 & 0x80) {
@@ -479,15 +479,15 @@ void func_8092D5E8(EnDns* this, PlayState* play) {
         EN_DNS_ANIM_SURPRISE_START,
         EN_DNS_ANIM_RUN_START,
     };
-    s32 temp_v0;
-    u32 temp_v1;
+    s32 cueChannel;
+    u32 cueId;
 
-    if (Cutscene_CheckActorAction(play, this->unk_2C8)) {
-        temp_v0 = Cutscene_GetActorActionIndex(play, this->unk_2C8);
-        temp_v1 = play->csCtx.actorActions[temp_v0]->action;
-        if (this->unk_1D8 != (u8)temp_v1) {
-            func_8092C63C(this, D_8092DE0C[temp_v1]);
-            this->unk_1D8 = temp_v1;
+    if (Cutscene_IsCueInChannel(play, this->cueType)) {
+        cueChannel = Cutscene_GetCueChannel(play, this->cueType);
+        cueId = play->csCtx.actorCues[cueChannel]->id;
+        if (this->cueId != (u8)cueId) {
+            func_8092C63C(this, D_8092DE0C[cueId]);
+            this->cueId = cueId;
         }
 
         if (((this->animIndex == EN_DNS_ANIM_SURPRISE_START) || (this->animIndex == EN_DNS_ANIM_RUN_START)) &&
@@ -495,7 +495,7 @@ void func_8092D5E8(EnDns* this, PlayState* play) {
             func_8092C63C(this, this->animIndex + 1);
         }
 
-        Cutscene_ActorTranslateAndYaw(&this->actor, play, temp_v0);
+        Cutscene_ActorTranslateAndYaw(&this->actor, play, cueChannel);
     }
 }
 

@@ -28,7 +28,7 @@ typedef struct EnFish2 {
     /* 0x02B4 */ s16 unk_2B4;
     /* 0x02B6 */ s16 unk_2B6;
     /* 0x02B8 */ s16 unk_2B8;
-    /* 0x02BA */ s16 unk_2BA[3];
+    /* 0x02BA */ s16 csIdList[3];
     /* 0x02C0 */ s32 unk_2C0;
     /* 0x02C4 */ s32 unk_2C4;
     /* 0x02C8 */ u8 unk_2C8;

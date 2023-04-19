@@ -104,7 +104,7 @@ void EnBee_Init(Actor* thisx, PlayState* play) {
     sNumLoadedBees++;
     this->actor.shape.shadowScale = 12.0f;
 
-    if (ActorCutscene_GetCurrentIndex() != -1) {
+    if (CutsceneManager_GetCurrentCsId() != CS_ID_NONE) {
         func_800BC154(play, &play->actorCtx, &this->actor, ACTORCAT_ITEMACTION);
     }
 
@@ -149,7 +149,7 @@ void EnBee_FlyIdle(EnBee* this, PlayState* play) {
     Vec3f nextPos;
     s32 pad[2];
 
-    if ((this->actor.category != ACTORCAT_ENEMY) && (ActorCutscene_GetCurrentIndex() == -1)) {
+    if ((this->actor.category != ACTORCAT_ENEMY) && (CutsceneManager_GetCurrentCsId() == CS_ID_NONE)) {
         func_800BC154(play, &play->actorCtx, &this->actor, ACTORCAT_ENEMY);
     }
 
