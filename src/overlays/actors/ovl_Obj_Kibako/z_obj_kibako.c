@@ -8,7 +8,7 @@
 #include "objects/gameplay_dangeon_keep/gameplay_dangeon_keep.h"
 #include "objects/object_kibako/object_kibako.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_4000000)
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_CAN_PRESS_SWITCH)
 
 #define THIS ((ObjKibako*)thisx)
 
@@ -349,7 +349,7 @@ void ObjKibako_Held(ObjKibako* this, PlayState* play) {
         } else {
             Actor_MoveWithGravity(&this->actor);
             ObjKibako_SetupThrown(this);
-            this->actor.flags &= ~ACTOR_FLAG_4000000;
+            this->actor.flags &= ~ACTOR_FLAG_CAN_PRESS_SWITCH;
         }
         Actor_UpdateBgCheckInfo(play, &this->actor, 18.0f, 15.0f, 0.0f,
                                 UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_40);
