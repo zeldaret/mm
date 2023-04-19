@@ -210,10 +210,10 @@ asm/non_matchings/code/z_actor/TitleCard_InitPlaceName.s,TitleCard_InitPlaceName
 asm/non_matchings/code/z_actor/TitleCard_Update.s,TitleCard_Update,0x800B5E68,0x2F
 asm/non_matchings/code/z_actor/TitleCard_Draw.s,TitleCard_Draw,0x800B5F24,0x144
 asm/non_matchings/code/z_actor/func_800B6434.s,func_800B6434,0x800B6434,0xD
-asm/non_matchings/code/z_actor/Player_InitImpact.s,Player_InitImpact,0x800B6468,0x3
-asm/non_matchings/code/z_actor/Player_UpdateImpact.s,Player_UpdateImpact,0x800B6474,0x6
-asm/non_matchings/code/z_actor/Player_SetImpact.s,Player_SetImpact,0x800B648C,0x1C
-asm/non_matchings/code/z_actor/Player_GetImpact.s,Player_GetImpact,0x800B64FC,0x22
+asm/non_matchings/code/z_actor/Actor_InitPlayerImpact.s,Actor_InitPlayerImpact,0x800B6468,0x3
+asm/non_matchings/code/z_actor/Actor_UpdatePlayerImpact.s,Actor_UpdatePlayerImpact,0x800B6474,0x6
+asm/non_matchings/code/z_actor/Actor_SetPlayerImpact.s,Actor_SetPlayerImpact,0x800B648C,0x1C
+asm/non_matchings/code/z_actor/Actor_GetPlayerImpact.s,Actor_GetPlayerImpact,0x800B64FC,0x22
 asm/non_matchings/code/z_actor/func_800B6584.s,func_800B6584,0x800B6584,0x21
 asm/non_matchings/code/z_actor/func_800B6608.s,func_800B6608,0x800B6608,0x1E
 asm/non_matchings/code/z_actor/func_800B6680.s,func_800B6680,0x800B6680,0x23

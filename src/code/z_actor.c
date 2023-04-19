@@ -908,15 +908,15 @@ s32 func_800B6434(PlayState* play, TitleCardContext* titleCtx) {
     return true;
 }
 
-void Player_InitImpact(PlayState* play) {
+void Actor_InitPlayerImpact(PlayState* play) {
     play->actorCtx.playerImpact.timer = 0;
 }
 
-void Player_UpdateImpact(PlayState* play) {
+void Actor_UpdatePlayerImpact(PlayState* play) {
     DECR(play->actorCtx.playerImpact.timer);
 }
 
-s32 Player_SetImpact(PlayState* play, s32 type, s32 timer, f32 dist, Vec3f* pos) {
+s32 Actor_SetPlayerImpact(PlayState* play, s32 type, s32 timer, f32 dist, Vec3f* pos) {
     if ((play->actorCtx.playerImpact.timer != 0) && (dist < play->actorCtx.playerImpact.dist)) {
         return false;
     }
@@ -929,7 +929,7 @@ s32 Player_SetImpact(PlayState* play, s32 type, s32 timer, f32 dist, Vec3f* pos)
     return true;
 }
 
-f32 Player_GetImpact(PlayState* play, f32 range, Vec3f* pos, u32* type) {
+f32 Actor_GetPlayerImpact(PlayState* play, f32 range, Vec3f* pos, u32* type) {
     f32 dist;
 
     if ((play->actorCtx.playerImpact.timer == 0) || (range == 0.0f)) {
@@ -2300,7 +2300,7 @@ void Actor_InitContext(PlayState* play, ActorContext* actorCtx, ActorEntry* acto
     actorCtx->sceneFlags.clearedRoom = cycleFlags->clearedRoom;
 
     TitleCard_ContextInit(&play->state, &actorCtx->titleCtxt);
-    Player_InitImpact(play);
+    Actor_InitPlayerImpact(play);
 
     actorCtx->absoluteSpace = NULL;
 
@@ -2556,7 +2556,7 @@ void Actor_UpdateAll(PlayState* play, ActorContext* actorCtx) {
     }
 
     TitleCard_Update(&play->state, &actorCtx->titleCtxt);
-    Player_UpdateImpact(play);
+    Actor_UpdatePlayerImpact(play);
     DynaPoly_UpdateBgActorTransforms(play, &play->colCtx.dyna);
 }
 

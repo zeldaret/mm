@@ -753,7 +753,7 @@ void EnDragon_UpdateDamage(EnDragon* this, PlayState* play) {
 
     if ((this->action == DEEP_PYTHON_ACTION_EXTEND) && (this->grabWaitTimer == 0) &&
         (player->invincibilityTimer == 0) && (this->collider.elements[0].info.ocElemFlags & OCELEM_HIT) &&
-        (!(Player_GetImpact(play, 1000.0f, &this->actor.world.pos, &playerImpactType) >= 0.0f) ||
+        (!(Actor_GetPlayerImpact(play, 1000.0f, &this->actor.world.pos, &playerImpactType) >= 0.0f) ||
          (playerImpactType != PLAYER_IMPACT_ZORA_BARRIER))) {
         this->actor.speed = 0.0f;
         this->action = DEEP_PYTHON_ACTION_GRAB;
