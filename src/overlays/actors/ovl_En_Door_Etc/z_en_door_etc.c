@@ -176,7 +176,7 @@ void func_80AC21A0(EnDoorEtc* this, PlayState* play) {
     s32 yawDiffAbs;
 
     Actor_OffsetOfPointInActorCoords(&this->door.dyna.actor, &playerOffsetFromDoor, &player->actor.world.pos);
-    if (this->door.playOpenAnim == 0) {
+    if (!this->door.playOpenAnim) {
         if ((!Player_InCsMode(play)) &&
             ((fabsf(playerOffsetFromDoor.y) < 20.0f) && fabsf(playerOffsetFromDoor.x) < 20.0f) &&
             (fabsf(playerOffsetFromDoor.z) < 50.0f)) {
@@ -188,7 +188,7 @@ void func_80AC21A0(EnDoorEtc* this, PlayState* play) {
             if (yawDiffAbs < 0x3000) {
                 player->doorDirection = (playerOffsetFromDoor.z >= 0.0f) ? 1.0f : -1.0f;
                 player->doorActor = &this->door.dyna.actor;
-                player->doorType = -1;
+                player->doorType = PLAYER_DOORTYPE_TALKING;
             }
         }
     }

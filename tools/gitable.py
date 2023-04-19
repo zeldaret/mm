@@ -1115,8 +1115,6 @@ class GetItemEntry:
     textId: int
     objectId: int
 
-    # def __str__(self) -> str:
-    #     return f"0x{self.itemId:X}, 0x{self.field:X}, {hex(self.gi).upper().replace('X', 'x')}, 0x{self.textId:X}, 0x{self.objectId:X}"
     def __str__(self) -> str:
         itemId_name = itemId_names.get(self.itemId, f"NOT FOUND: 0x{self.itemId:X}")
         # getitemId_name = getItemId_names.get(self.itemId, f"NOT FOUND:: 0x{self.itemId:X}")
@@ -1130,11 +1128,8 @@ class GetItemEntry:
 
         objectId_name = objectId_names.get(self.objectId, f"NOT FOUND: 0x{abs(self.objectId):X}")
 
-        # return f"/* 0x{self.pos:02X} */ GET_ITEM({itemId_name}, 0x{self.field:X}, {getitemDrawId_name}, 0x{self.textId:X}, {objectId_name})"
         ret = f"/* 0x{self.getItemId:02X} */ GET_ITEM({itemId_name}, {objectId_name}, {getitemDrawId_name}, 0x{self.textId:X},  0x{self.field:X}, {chest_anim})"
-        # if self.itemId == 0xFF and self.gi == 0 and self.objectId == 0:
-        #     ret = f"/* {hex(self.getItemId).upper().replace('X', 'x')} */ GETITEM_NONE(0x{self.textId:X})"
-            
+
         return ret
 
 def main() -> None:
@@ -1167,7 +1162,7 @@ def main() -> None:
 
         for i,entry in enumerate(unpacked_data):
             get_item_entries.append(GetItemEntry(pos_start + i+1, *entry))
-            
+
         for entry in get_item_entries:
             print(f"{entry},")
 

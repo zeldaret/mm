@@ -175,7 +175,7 @@ f32 func_80086AF0(f32 x) {
     }
 }
 
-// Math_Atan2S_XY
+// Math_FAtan2F
 /**
  * Main two-argument arctangent function
  */
