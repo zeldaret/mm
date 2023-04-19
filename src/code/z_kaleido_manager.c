@@ -17,7 +17,7 @@ void* sKaleidoAreaPtr = NULL;
 KaleidoMgrOverlay* gKaleidoMgrCurOvl = NULL;
 FaultAddrConvClient sKaleidoMgrFaultAddrConvClient;
 
-void* KaleidoManager_FaultAddrConv(void* address, void* param) {
+uintptr_t KaleidoManager_FaultAddrConv(uintptr_t address, void* param) {
     uintptr_t addr = address;
     KaleidoMgrOverlay* kaleidoMgrOvl = gKaleidoMgrCurOvl;
     size_t ramConv;

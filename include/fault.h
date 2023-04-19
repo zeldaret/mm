@@ -41,7 +41,7 @@ typedef struct FaultClient {
 } FaultClient; // size = 0x10
 
 
-typedef void* (*FaultAddrConvClientCallback)(void*, void*);
+typedef uintptr_t (*FaultAddrConvClientCallback)(uintptr_t, void*);
 
 typedef struct FaultAddrConvClient {
     /* 0x0 */ struct FaultAddrConvClient* next;
