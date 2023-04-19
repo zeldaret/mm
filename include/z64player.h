@@ -1139,7 +1139,7 @@ typedef struct Player {
     /* 0xB78 */ f32 unk_B78;
     /* 0xB7C */ f32 unk_B7C;
     /* 0xB80 */ f32 pushedSpeed; // Pushing player, examples include water currents, floor conveyors, climbing sloped surfaces
-    /* 0xB84 */ s16 pushedYaw; // Yaw direction of player being pushed
+    /* 0xB84 */ s16 pushedYaw; // Yaw of direction in which player is being pushed
     /* 0xB86 */ s16 unk_B86[2]; // unknown length
     /* 0xB8A */ s16 unk_B8A;
     /* 0xB8C */ s16 unk_B8C;
