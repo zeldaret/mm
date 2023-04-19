@@ -609,8 +609,8 @@ void Flags_SetCollectible(PlayState* play, s32 flag);
 
 void TitleCard_InitBossName(GameState* gameState, TitleCardContext* titleCtx, TexturePtr texture, s16 x, s16 y, u8 width, u8 height);
 
-s32 Actor_SetPlayerImpact(PlayState* play, s32 type, s32 timer, f32 dist, Vec3f* pos);
-f32 Actor_GetPlayerImpact(PlayState* play, f32 range, Vec3f* pos, u32* type);
+s32 Actor_SetPlayerImpact(PlayState* play, PlayerImpactType type, s32 timer, f32 dist, Vec3f* pos);
+f32 Actor_GetPlayerImpact(PlayState* play, f32 range, Vec3f* pos, PlayerImpactType* type);
 void* func_800B6584(PlayState* play, s16 id, void* arg2, size_t size);
 void* func_800B6608(PlayState* play, s16 id);
 void* func_800B6680(PlayState* play, s16 id);

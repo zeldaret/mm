@@ -34,7 +34,7 @@ ActorInit TG_Sw_InitVars = {
 void TGSw_ActionDecider(TGSw* this, PlayState* play) {
     f32 scaledAbsoluteRotZ;
     f32 scaledAbsoluteRotY;
-    u8 playerImpactType;
+    PlayerImpactType playerImpactType;
 
     if (play->actorCtx.playerImpact.timer != 0) {
         scaledAbsoluteRotY = ABS_ALT(this->actor.world.rot.y) * 4.0f;

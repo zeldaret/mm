@@ -916,7 +916,7 @@ void Actor_UpdatePlayerImpact(PlayState* play) {
     DECR(play->actorCtx.playerImpact.timer);
 }
 
-s32 Actor_SetPlayerImpact(PlayState* play, s32 type, s32 timer, f32 dist, Vec3f* pos) {
+s32 Actor_SetPlayerImpact(PlayState* play, PlayerImpactType type, s32 timer, f32 dist, Vec3f* pos) {
     if ((play->actorCtx.playerImpact.timer != 0) && (dist < play->actorCtx.playerImpact.dist)) {
         return false;
     }
@@ -929,7 +929,7 @@ s32 Actor_SetPlayerImpact(PlayState* play, s32 type, s32 timer, f32 dist, Vec3f*
     return true;
 }
 
-f32 Actor_GetPlayerImpact(PlayState* play, f32 range, Vec3f* pos, u32* type) {
+f32 Actor_GetPlayerImpact(PlayState* play, f32 range, Vec3f* pos, PlayerImpactType* type) {
     f32 dist;
 
     if ((play->actorCtx.playerImpact.timer == 0) || (range == 0.0f)) {

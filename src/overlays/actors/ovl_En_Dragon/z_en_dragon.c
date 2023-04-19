@@ -725,7 +725,7 @@ void EnDragon_Dead(EnDragon* this, PlayState* play) {
 
 void EnDragon_UpdateDamage(EnDragon* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    u32 playerImpactType;
+    PlayerImpactType playerImpactType;
 
     if (this->action == DEEP_PYTHON_ACTION_EXTEND) {
         if ((this->collider.elements[2].info.bumperFlags & BUMP_HIT) ||
