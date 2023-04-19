@@ -152,7 +152,7 @@ typedef enum {
     /*  9 */ CS_CREDITS_MASK_COUPLE,
     /* 10 */ CS_CREDITS_MASK_BUNNY,
     /* 11 */ CS_CREDITS_MASK_POSTMAN
-} CsChooseCreditsScene;
+} CsChooseCreditsSceneType;
 
 typedef union {
     struct {

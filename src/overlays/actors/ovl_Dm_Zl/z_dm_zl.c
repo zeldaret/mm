@@ -131,7 +131,7 @@ void DmZl_DoNothing(DmZl* this, PlayState* play) {
 }
 
 void DmZl_UpdateCutscene(DmZl* this, PlayState* play) {
-    s32 cueChannel;
+    s32 cueChannel; // reused as animIndex
 
     if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_102)) {
         cueChannel = Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_102);

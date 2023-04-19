@@ -191,6 +191,9 @@ s16 CutsceneManager_MarkNextCutscenes(void) {
     return count;
 }
 
+#define RET_CAM sCutsceneMgr.play->cameraPtrs[sCutsceneMgr.retCamId]
+#define CUR_CAM sCutsceneMgr.play->cameraPtrs[sCutsceneMgr.subCamId]
+
 void CutsceneManager_End(void) {
     ActorCutscene* csEntry;
     s16 oldCamId;
@@ -223,9 +226,6 @@ void CutsceneManager_End(void) {
         default: // CS_END_SFX_NONE
             break;
     }
-
-#define RET_CAM sCutsceneMgr.play->cameraPtrs[sCutsceneMgr.retCamId]
-#define CUR_CAM sCutsceneMgr.play->cameraPtrs[sCutsceneMgr.subCamId]
 
     switch (csEntry->endCam) {
         case CS_END_CAM_SMOOTH:
