@@ -11,7 +11,7 @@ struct EnIn;
 
 typedef void (*EnHorseActionFunc)(struct EnHorse*, PlayState*);
 typedef void (*EnHorsePostdrawFunc)(struct EnHorse*, PlayState*);
-typedef void (*EnHorseCsFunc)(struct EnHorse*, PlayState*, CsCmdActorAction*);
+typedef void (*EnHorseCsFunc)(struct EnHorse*, PlayState*, CsCmdActorCue*);
 
 #define ENHORSE_BOOST (1 << 0)                 /*         0x1 */
 #define ENHORSE_BOOST_DECEL (1 << 1)           /*         0x2 */
@@ -202,7 +202,7 @@ typedef struct EnHorse {
     /* 0x3BC */ Vec3f frontLeftHoof;
     /* 0x3C8 */ Vec3f backRightHoof;
     /* 0x3D4 */ Vec3f backLeftHoof;
-    /* 0x3E0 */ s32 unk_3E0;
+    /* 0x3E0 */ s32 cueId;
     /* 0x3E4 */ UNK_TYPE1 unk_3E4[0x4];
     /* 0x3E8 */ f32 unk_3E8;
     /* 0x3EC */ s16 unk_3EC;
@@ -210,7 +210,7 @@ typedef struct EnHorse {
     /* 0x48A */ Vec3s morphTable[OBJECT_HA_1_LIMB_MAX];
     /* 0x528 */ f32 unk_528;
     /* 0x52C */ s32 unk_52C;
-    /* 0x530 */ s32 unk_530;
+    /* 0x530 */ s32 cueChannel;
     /* 0x534 */ s32 unk_534;
     /* 0x538 */ s32 unk_538;
     /* 0x53C */ s32 unk_53C;

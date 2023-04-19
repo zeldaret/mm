@@ -431,16 +431,16 @@ void EnElforg_ClockTownFairyCollected(EnElforg* this, PlayState* play) {
         player->stateFlags1 &= ~PLAYER_STATE1_20000000;
         Actor_Kill(&this->actor);
         SET_WEEKEVENTREG(WEEKEVENTREG_08_80);
-        ActorCutscene_Stop(0x7C);
+        CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
         return;
     }
 
     func_800B9010(&this->actor, NA_SE_PL_CHIBI_FAIRY_HEAL - SFX_FLAG);
-    if (ActorCutscene_GetCurrentIndex() != 0x7C) {
-        if (ActorCutscene_GetCanPlayNext(0x7C)) {
-            ActorCutscene_Start(0x7C, &this->actor);
+    if (CutsceneManager_GetCurrentCsId() != CS_ID_GLOBAL_TALK) {
+        if (CutsceneManager_IsNext(CS_ID_GLOBAL_TALK)) {
+            CutsceneManager_Start(CS_ID_GLOBAL_TALK, &this->actor);
         } else {
-            ActorCutscene_SetIntentToPlay(0x7C);
+            CutsceneManager_Queue(CS_ID_GLOBAL_TALK);
         }
     }
 }
@@ -485,7 +485,7 @@ void EnElforg_FreeFloating(EnElforg* this, PlayState* play) {
                 // Bring me back to North Clock Town!
                 Message_StartTextbox(play, 0x579, NULL);
                 this->actionFunc = EnElforg_ClockTownFairyCollected;
-                ActorCutscene_SetIntentToPlay(0x7C);
+                CutsceneManager_Queue(CS_ID_GLOBAL_TALK);
                 return;
             }
 

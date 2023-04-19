@@ -21,7 +21,7 @@ typedef struct DmAn {
     /* 0x2AC */ s8 unk_2AC;
     /* 0x2AD */ s8 unk_2AD;
     /* 0x2AE */ u16 unk_2AE;
-    /* 0x2B0 */ u8 unk_2B0;
+    /* 0x2B0 */ u8 cueId;
     /* 0x2B4 */ Actor* unk_2B4;
     /* 0x2B8 */ s16 unk_2B8;
     /* 0x2BA */ s16 unk_2BA;

@@ -3357,7 +3357,7 @@ void AudioOcarina_Update(void) {
 
 #define OCARINA_INSTRUMENT_OOT_MAX 7
 
-void AudioOcarina_PlayLongScarecrowAfterCredits(void) {
+void AudioOcarina_PlayLongScarecrowSong(void) {
     static u8 sScarecrowAfterCreditsState = 0;
     static u8 sScarecrowAfterCreditsIntrumentId = OCARINA_INSTRUMENT_DEFAULT;
     static u16 sScarecrowAfterCreditsTimer = 1200;

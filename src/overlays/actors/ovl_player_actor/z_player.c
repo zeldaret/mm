@@ -4356,7 +4356,7 @@ void func_80831F34(PlayState* play, Player* this, PlayerAnimationHeader* anim) {
     Player_AnimSfx_PlayVoice(this, NA_SE_VO_LI_DOWN);
 
     if (this == GET_PLAYER(play)) {
-        this->currentActorCsIndex = play->playerActorCsIds[6];
+        this->csId = play->playerActorCsIds[6];
         Audio_SetBgmVolumeOff();
         gSaveContext.powderKegTimer = 0;
         gSaveContext.unk_1014 = 0;
@@ -4445,25 +4445,25 @@ s32 func_808323C0(Player* this, s16 csIndex) {
         }
         ActorCutscene_Start(csIndex, &this->actor);
     }
-    this->currentActorCsIndex = csIndex;
+    this->csId = csIndex;
 
     return true;
 }
 
 s32 func_80832444(Player* this) {
-    if (this->currentActorCsIndex >= 0) {
-        if (!ActorCutscene_GetCanPlayNext(this->currentActorCsIndex)) {
-            ActorCutscene_SetIntentToPlay(this->currentActorCsIndex);
+    if (this->csId >= 0) {
+        if (!ActorCutscene_GetCanPlayNext(this->csId)) {
+            ActorCutscene_SetIntentToPlay(this->csId);
             return false;
         }
 
-        ActorCutscene_Start(this->currentActorCsIndex, &this->actor);
+        ActorCutscene_Start(this->csId, &this->actor);
     }
     return true;
 }
 
 s32 func_8083249C(Player* this) {
-    if ((this->currentActorCsIndex >= 0) && (ActorCutscene_GetCurrentIndex() != this->currentActorCsIndex)) {
+    if ((this->csId >= 0) && (ActorCutscene_GetCurrentIndex() != this->csId)) {
         return func_80832444(this);
     }
     return true;
@@ -4471,7 +4471,7 @@ s32 func_8083249C(Player* this) {
 
 s32 func_808324EC(PlayState* play, Player* this, PlayerFuncD58 arg2, s32 actorCsIndex) {
     this->unk_D58 = arg2;
-    this->currentActorCsIndex = actorCsIndex;
+    this->csId = actorCsIndex;
     Player_SetAction(play, this, func_8084D770, 0);
     func_8083249C(this);
     this->stateFlags2 |= PLAYER_STATE2_40;
@@ -5640,7 +5640,7 @@ void func_80835324(PlayState* play, Player* this, f32 arg2, s16 arg3) {
     Player_SetAction(play, this, func_8084D820, 0);
     func_8082DD2C(play, this);
 
-    this->currentActorCsIndex = -1;
+    this->csId = -1;
     this->unk_AE7 = 1;
     this->unk_AE8 = 1;
 
@@ -6132,8 +6132,8 @@ s32 func_808365DC(Player* this, PlayState* play) {
             }
 
             if (this->actor.category == ACTORCAT_PLAYER) {
-                this->currentActorCsIndex = 0x7D;
-                ActorCutscene_Start(this->currentActorCsIndex, &this->actor);
+                this->csId = 0x7D;
+                ActorCutscene_Start(this->csId, &this->actor);
             }
 
             if (this->actor.category == ACTORCAT_PLAYER) {
@@ -6890,9 +6890,9 @@ s32 func_8083868C(PlayState* play, Player* this) {
 }
 
 void Player_StopCurrentActorCutscene(Player* this) {
-    if (this->currentActorCsIndex >= 0) {
-        ActorCutscene_Stop(this->currentActorCsIndex);
-        this->currentActorCsIndex = -1;
+    if (this->csId >= 0) {
+        ActorCutscene_Stop(this->csId);
+        this->csId = -1;
     }
 }
 
@@ -7128,7 +7128,7 @@ s32 func_80838A90(Player* this, PlayState* play) {
                     func_80831760(play, this, func_80853A5C, 0);
                     talkActor = this->talkActor;
                     this->itemAction = heldItemTemp;
-                    this->currentActorCsIndex = -1;
+                    this->csId = -1;
 
                     if ((talkActor != NULL) && (((this->exchangeItemId == PLAYER_IA_MAGIC_BEANS) &&
                                                  (this->itemAction == PLAYER_IA_MAGIC_BEANS)) ||
@@ -7151,7 +7151,7 @@ s32 func_80838A90(Player* this, PlayState* play) {
                             this->unk_AE7 = -1;
                             this->targetedActor = this->talkActor;
                         } else {
-                            this->currentActorCsIndex = 0x7C;
+                            this->csId = 0x7C;
                         }
 
                         talkActor->flags |= ACTOR_FLAG_TALK_REQUESTED;
@@ -7159,7 +7159,7 @@ s32 func_80838A90(Player* this, PlayState* play) {
                         this->targetedActor = this->talkActor;
                     } else {
                         this->stateFlags1 |= (PLAYER_STATE1_20000000 | PLAYER_STATE1_10000000 | PLAYER_STATE1_40);
-                        this->currentActorCsIndex = play->playerActorCsIds[3];
+                        this->csId = play->playerActorCsIds[3];
                         this->unk_AE7 = 1;
                         this->actor.textId = 0xFE;
                     }
@@ -7181,7 +7181,7 @@ s32 func_80838A90(Player* this, PlayState* play) {
                         } else if ((bottleAction > PLAYER_BOTTLE_EMPTY) && (bottleAction < PLAYER_BOTTLE_POE)) {
                             func_80831760(play, this, func_80853850, 0);
                             func_8082DB90(play, this, &gPlayerAnim_link_bottle_fish_out);
-                            this->currentActorCsIndex = play->playerActorCsIds[2];
+                            this->csId = play->playerActorCsIds[2];
                         } else {
                             func_80831760(play, this, func_80853194, 0);
                             func_8082E4A4(play, this,
@@ -7198,7 +7198,7 @@ s32 func_80838A90(Player* this, PlayState* play) {
                                 return false;
                             }
                         } else {
-                            this->currentActorCsIndex = -1;
+                            this->csId = -1;
                         }
                         func_80831760(play, this, func_8085269C, 0);
                         if ((this->skelAnime.playSpeed < 0.0f) ||
@@ -8720,7 +8720,7 @@ s32 func_8083D23C(Player* this, PlayState* play) {
                             func_8082DAD4(this);
                             if ((giEntry->itemId != ITEM_NONE) && (giEntry->gid >= 0) &&
                                 (Item_CheckObtainability(giEntry->itemId) == ITEM_NONE)) {
-                                this->currentActorCsIndex = chest->cutsceneIdxB;
+                                this->csId = chest->cutsceneIdxB;
                                 func_8082DB90(play, this, this->ageProperties->openChestAnim);
                                 func_8082E920(play, this, 1 | ANIM_FLAG_UPDATE_Y | 4 | 8 | ANIM_FLAG_NOMOVE | 0x80);
                                 this->actor.bgCheckFlags &= ~0x20;
@@ -9833,7 +9833,7 @@ void func_80840770(PlayState* play, Player* this) {
         }
     } else if (this->unk_AE7 != 0) {
         Player_StopCurrentActorCutscene(this);
-        this->currentActorCsIndex = play->playerActorCsIds[7];
+        this->csId = play->playerActorCsIds[7];
         this->unk_AE8 = 60;
         Player_SpawnFairy(play, this, &this->actor.world.pos, &D_8085D2A4, 5);
         Player_PlaySfx(this, NA_SE_EV_FIATY_HEAL - SFX_FLAG);
@@ -10252,7 +10252,7 @@ void Player_Init(Actor* thisx, PlayState* play) {
     gActorOverlayTable->initInfo->objectId = 1;
 
     this->actor.room = -1;
-    this->currentActorCsIndex = -1;
+    this->csId = -1;
 
     if (this->actor.shape.rot.x != 0) {
         this->transformation = this->actor.shape.rot.x - 1;
@@ -16550,7 +16550,7 @@ void func_80852C04(Player* this, PlayState* play) {
 
                 func_8082E920(play, this, (1 | ANIM_FLAG_UPDATE_Y | 4 | 8 | ANIM_FLAG_NOMOVE | 0x80));
                 Player_StopCurrentActorCutscene(this);
-                this->currentActorCsIndex = play->playerActorCsIds[1];
+                this->csId = play->playerActorCsIds[1];
                 this->unk_AE8 = 2;
             }
         }
@@ -17549,8 +17549,8 @@ void func_808553F4(Player* this, PlayState* play) {
         R_PLAY_FILL_SCREEN_ALPHA = 0;
 
         if (sp48) {
-            if (ActorCutscene_GetCurrentIndex() == this->currentActorCsIndex) {
-                func_800E0348(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(this->currentActorCsIndex)));
+            if (ActorCutscene_GetCurrentIndex() == this->csId) {
+                func_800E0348(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(this->csId)));
             }
 
             if (this->transformation == PLAYER_FORM_HUMAN) {
@@ -17618,7 +17618,7 @@ void func_80855818(Player* this, PlayState* play) {
             if (R_PLAY_FILL_SCREEN_ON == 0) {
                 this->stateFlags1 &= ~PLAYER_STATE1_2;
                 this->prevMask = this->currentMask;
-                this->currentActorCsIndex = play->playerActorCsIds[5];
+                this->csId = play->playerActorCsIds[5];
                 Player_StopCurrentActorCutscene(this);
                 play->envCtx.lightSettings = D_80862B50;
                 func_8085B384(this, play);
@@ -20120,7 +20120,7 @@ PlayerItemAction func_8085B854(PlayState* play, Player* player, ItemId itemId) {
     player->itemAction = PLAYER_IA_NONE;
     player->actionFunc = NULL;
     func_80831760(play, player, func_80853A5C, 0);
-    player->currentActorCsIndex = 0x7C;
+    player->csId = 0x7C;
     player->itemAction = itemAction;
     Player_AnimationPlayOnce(play, player, &gPlayerAnim_link_normal_give_other);
     player->stateFlags1 |= (PLAYER_STATE1_40 | PLAYER_STATE1_20000000);

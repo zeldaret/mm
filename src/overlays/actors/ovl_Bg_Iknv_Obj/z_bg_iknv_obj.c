@@ -107,20 +107,20 @@ void BgIknvObj_Destroy(Actor* thisx, PlayState* play) {
 }
 
 s32 func_80BD7CEC(BgIknvObj* this) {
-    if (this->dyna.actor.cutscene == -1) {
+    if (this->dyna.actor.csId == CS_ID_NONE) {
         return true;
     }
 
-    if (ActorCutscene_GetCurrentIndex() == this->dyna.actor.cutscene) {
+    if (CutsceneManager_GetCurrentCsId() == this->dyna.actor.csId) {
         return true;
     }
 
-    if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
+    if (CutsceneManager_IsNext(this->dyna.actor.csId)) {
+        CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
         return true;
     }
 
-    ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+    CutsceneManager_Queue(this->dyna.actor.csId);
     return false;
 }
 
@@ -131,8 +131,8 @@ void BgIknvObj_UpdateWaterwheel(BgIknvObj* this, PlayState* play) {
         func_800B9010(&this->dyna.actor, NA_SE_EV_WOOD_WATER_WHEEL - SFX_FLAG);
     }
 
-    if ((play->csCtx.state != 0) && (gSaveContext.sceneLayer == 1) && (play->csCtx.currentCsIndex == 4) &&
-        (play->csCtx.frames == 1495)) {
+    if ((play->csCtx.state != 0) && (gSaveContext.sceneLayer == 1) && (play->csCtx.scriptIndex == 4) &&
+        (play->csCtx.curFrame == 1495)) {
         func_8019F128(NA_SE_EV_DOOR_UNLOCK);
     }
 }
@@ -166,7 +166,7 @@ void func_80BD7F4C(BgIknvObj* this, PlayState* play) {
         this->actionFunc = func_80BD7ED8;
     }
     if ((this->dyna.actor.home.rot.x == 1) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_58_80)) {
-        ActorCutscene_Stop(this->dyna.actor.cutscene);
+        CutsceneManager_Stop(this->dyna.actor.csId);
         this->dyna.actor.home.rot.x = 0;
     }
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);

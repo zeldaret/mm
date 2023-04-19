@@ -151,29 +151,29 @@ void ObjBoat_UpdateCutscene(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     ObjBoat* this = THIS;
 
-    if (Cutscene_CheckActorAction(play, 511)) {
-        CsCmdActorAction* actionIndex = play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 511)];
-        if (this->csAction != actionIndex->action) {
-            this->dyna.actor.shape.rot.x = actionIndex->urot.x;
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_511)) {
+        CsCmdActorCue* cue = play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_511)];
 
-            if (actionIndex->action != 1) {
+        if (this->cueId != cue->id) {
+            this->dyna.actor.shape.rot.x = cue->rot.x;
+            if (cue->id != 1) {
                 Path* path = &play->setupPathList[OBJBOAT_GET_PATH(&this->dyna.actor)];
 
-                if (actionIndex->action == 3) {
+                if (cue->id == 3) {
                     path = &play->setupPathList[path->unk1];
                 }
 
                 this->maxPointIndex = path->count;
                 this->points = Lib_SegmentedToVirtual(path->points);
                 Math_Vec3s_ToVec3f(&this->dyna.actor.world.pos, this->points);
-                this->dyna.actor.speed = actionIndex->urot.z * (45.0f / 0x2000);
+                this->dyna.actor.speed = cue->rot.z * (45.0f / 0x2000);
                 this->points++;
                 this->curPointIndex = 1;
             }
 
-            this->csAction = actionIndex->action;
+            this->cueId = cue->id;
         } else {
-            if (actionIndex->action != 1) {
+            if (cue->id != 1) {
                 Vec3f posTarget;
                 f32 distRemaining;
 
@@ -185,9 +185,9 @@ void ObjBoat_UpdateCutscene(Actor* thisx, PlayState* play2) {
                 }
             }
 
-            if (actionIndex->action != 3) {
+            if (cue->id != 3) {
                 ObjBoat_SetRotations(this);
-                if (actionIndex->action == 2) {
+                if (cue->id == 2) {
                     func_800B9010(&this->dyna.actor, NA_SE_EV_PIRATE_SHIP - SFX_FLAG);
                 }
             } else {

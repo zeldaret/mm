@@ -66,7 +66,7 @@ typedef struct EnBigslime {
     /* 0x02B4 */ u8 shockwaveAlpha;
     /* 0x02B5 */ u8 gekkoDrawDmgEffType;
     /* 0x02B6 */ s16 gekkoYaw;
-    /* 0x02B8 */ s16 cutscene;
+    /* 0x02B8 */ s16 csId;
     /* 0x02BA */ union { // multi-use timer
                     s16 idleTimer;
                     s16 noticeTimer;

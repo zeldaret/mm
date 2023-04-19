@@ -45,7 +45,7 @@ typedef struct EnOt {
     /* 0x346 */ s16 unk_346;
     /* 0x348 */ Vec3f unk_348;
     /* 0x354 */ s16 unk_354;
-    /* 0x356 */ s16 cutscenes[4];
+    /* 0x356 */ s16 csIdList[4];
     /* 0x360 */ struct EnOt* unk_360;
     /* 0x364 */ LightNode* lightNode;
     /* 0x368 */ LightInfo lightInfo;

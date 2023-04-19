@@ -42,7 +42,7 @@ void func_80B40080(BgGoronOyu* this) {
 
 void func_80B4009C(BgGoronOyu* this) {
     this->unk_17E = 0;
-    this->initialActorCutscene = this->dyna.actor.cutscene;
+    this->initCsId = this->dyna.actor.csId;
     this->actionFunc = func_80B40100;
     this->unk_164 = 20.0f;
 }
@@ -53,11 +53,11 @@ void func_80B400C8(BgGoronOyu* this, PlayState* play) {
 }
 
 void func_80B40100(BgGoronOyu* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->initialActorCutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->initialActorCutscene, &this->dyna.actor);
+    if (CutsceneManager_IsNext(this->initCsId)) {
+        CutsceneManager_StartWithPlayerCs(this->initCsId, &this->dyna.actor);
         this->actionFunc = func_80B40160;
     } else {
-        ActorCutscene_SetIntentToPlay(this->initialActorCutscene);
+        CutsceneManager_Queue(this->initCsId);
     }
 }
 
@@ -69,7 +69,7 @@ void func_80B40160(BgGoronOyu* this, PlayState* play) {
     BgGoronOyu_UpdateWaterBoxInfo(this, play);
 
     if (this->unk_164 <= 0.0f) {
-        ActorCutscene_Stop(this->initialActorCutscene);
+        CutsceneManager_Stop(this->initCsId);
         this->unk_164 = 0.0f;
         func_80B40080(this);
     }

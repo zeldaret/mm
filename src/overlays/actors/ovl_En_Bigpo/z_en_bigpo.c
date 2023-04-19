@@ -293,22 +293,22 @@ void EnBigpo_WellWaitForProximity(EnBigpo* this, PlayState* play) {
 }
 
 void EnBigpo_SetupSpawnCutscene(EnBigpo* this) {
-    ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+    CutsceneManager_Queue(this->actor.csId);
     this->actionFunc = EnBigpo_WaitCutsceneQueue;
 }
 
 void EnBigpo_WaitCutsceneQueue(EnBigpo* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
-        ActorCutscene_Start(this->actor.cutscene, &this->actor);
-        func_800B724C(play, &this->actor, PLAYER_CSMODE_7);
-        this->subCamId = ActorCutscene_GetCurrentSubCamId(this->actor.cutscene);
+    if (CutsceneManager_IsNext(this->actor.csId)) {
+        CutsceneManager_Start(this->actor.csId, &this->actor);
+        func_800B724C(play, &this->actor, PLAYER_CSMODE_WAIT);
+        this->subCamId = CutsceneManager_GetCurrentSubCamId(this->actor.csId);
         if (this->actor.params == ENBIGPO_REGULAR) { // and SUMMONED, got switched earlier
             EnBigpo_SpawnCutsceneStage1(this, play);
         } else { // ENBIGPO_REVEALEDFIRE
             EnBigpo_SetupFlameCirclePositions(this, play);
         }
     } else {
-        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+        CutsceneManager_Queue(this->actor.csId);
     }
 }
 
@@ -464,14 +464,14 @@ void EnBigpo_SpawnCutsceneStage8(EnBigpo* this, PlayState* play) {
             dampe = SubS_FindActor(play, NULL, ACTORCAT_NPC, ACTOR_EN_TK);
             if (dampe != NULL) {
                 // if dampe exists, switch to viewing his running away cutscene
-                dampe->params = this->actor.cutscene;
+                dampe->params = this->actor.csId;
             } else {
-                ActorCutscene_Stop(this->actor.cutscene);
+                CutsceneManager_Stop(this->actor.csId);
             }
         } else { // ENBIGPO_REGULAR
-            ActorCutscene_Stop(this->actor.cutscene);
+            CutsceneManager_Stop(this->actor.csId);
         }
-        func_800B724C(play, &this->actor, PLAYER_CSMODE_6);
+        func_800B724C(play, &this->actor, PLAYER_CSMODE_END);
         EnBigpo_SetupIdleFlying(this); // setup idle flying
     }
 }
