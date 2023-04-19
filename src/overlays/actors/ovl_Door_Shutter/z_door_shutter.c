@@ -311,15 +311,15 @@ s32 func_808A0E28(DoorShutter* this, PlayState* play) {
 
 void func_808A0F88(DoorShutter* this, PlayState* play) {
     if (Flags_GetClear(play, this->door.dyna.actor.room) || Flags_GetClearTemp(play, this->door.dyna.actor.room)) {
-        this->csId = this->door.dyna.actor.cutscene;
+        this->csId = this->door.dyna.actor.csId;
         if (this->doorType == 7) {
             if (this->csId != CS_ID_NONE) {
                 this->csId = CutsceneManager_GetAdditionalCsId(this->csId);
             }
         }
 
-        if (ActorCutscene_GetCanPlayNext(this->csId)) {
-            ActorCutscene_StartAndSetUnkLinkFields(this->csId, &this->door.dyna.actor);
+        if (CutsceneManager_IsNext(this->csId)) {
+            CutsceneManager_StartWithPlayerCs(this->csId, &this->door.dyna.actor);
             Flags_SetClear(play, this->door.dyna.actor.room);
             DoorShutter_SetupAction(this, func_808A1784);
             this->unk_167 = -1;
@@ -459,7 +459,7 @@ s32 func_808A1478(DoorShutter* this, PlayState* play, f32 arg2) {
         }
 
         if ((this->csId != CS_ID_NONE) && (CutsceneManager_GetCurrentCsId() == this->csId)) {
-            func_800B724C(play, &this->actor, PLAYER_CSMODE_1);
+            func_800B724C(play, &this->door.dyna.actor, PLAYER_CSMODE_1);
         }
     }
 
@@ -471,10 +471,10 @@ s32 func_808A1478(DoorShutter* this, PlayState* play, f32 arg2) {
 
 void func_808A1548(DoorShutter* this, PlayState* play) {
     if (func_808A1478(this, play, 1.0f)) {
-        if (Flags_GetSwitch(play, DOORSHUTTER_GET_7F(&this->actor))) {
-            this->csId = this->actor.csId;
+        if (Flags_GetSwitch(play, DOORSHUTTER_GET_7F(&this->door.dyna.actor))) {
+            this->csId = this->door.dyna.actor.csId;
             if (CutsceneManager_IsNext(this->csId)) {
-                CutsceneManager_StartWithPlayerCs(this->csId, &this->actor);
+                CutsceneManager_StartWithPlayerCs(this->csId, &this->door.dyna.actor);
                 DoorShutter_SetupAction(this, func_808A1784);
                 this->unk_167 = -1;
             } else {

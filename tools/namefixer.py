@@ -18,7 +18,7 @@ simpleReplace = {
 wordReplace = {
     # Functions
     "Actor_GetSwitchFlag": "Flags_GetSwitch",
-    "Math_FAtan2F": "Math_Atan2S_XY",
+    # "Math_FAtan2F": "Math_Atan2S_XY",
     "Math_Acot2F": "Math_Atan2F_XY",
     "atan_flip": "Math_Atan2F_XY",
     "atans": "Math_Atan2S",
@@ -791,9 +791,8 @@ wordReplace = {
     "gSaveContext.permanentSceneFlags": "gSaveContext.save.saveInfo.permanentSceneFlags",
     "gSaveContext.bomberCode": "gSaveContext.save.saveInfo.bomberCode",
     "gSaveContext.skullTokenCount": "gSaveContext.save.saveInfo.skullTokenCount",
-    "gSaveContext.cutscene": "gSaveContext.save.saveInfo.cutsceneIndex",
-    "gSaveContext.save.cutscene": "gSaveContext.save.saveInfo.cutsceneIndex",
-    "gSaveContext.save.saveInfo.cutscene": "gSaveContext.save.saveInfo.cutsceneIndex",
+    "gSaveContext.cutscene": "gSaveContext.save.cutsceneIndex",
+    "gSaveContext.save.cutscene": "gSaveContext.save.cutsceneIndex",
     "gSaveContext.health": "gSaveContext.save.saveInfo.playerData.health",
     "gSaveContext.equips": "gSaveContext.save.saveInfo.equips",
     "gSaveContext.unk_1016": "gSaveContext.jinxTimer",
