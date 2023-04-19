@@ -1,3 +1,9 @@
+/*
+ * File: z_bg_keikoku_spr.c
+ * Overlay: ovl_Bg_Keikoku_Spr
+ * Description: Termina Field Fountain Water
+ */
+
 #include "z_bg_keikoku_spr.h"
 #include "objects/object_keikoku_obj/object_keikoku_obj.h"
 
@@ -10,7 +16,6 @@ void BgKeikokuSpr_Destroy(Actor* thisx, PlayState* play);
 void BgKeikokuSpr_Update(Actor* thisx, PlayState* play);
 void BgKeikokuSpr_Draw(Actor* thisx, PlayState* play);
 
-/*
 const ActorInit Bg_Keikoku_Spr_InitVars = {
     ACTOR_BG_KEIKOKU_SPR,
     ACTORCAT_PROP,
@@ -20,14 +25,38 @@ const ActorInit Bg_Keikoku_Spr_InitVars = {
     (ActorFunc)BgKeikokuSpr_Init,
     (ActorFunc)BgKeikokuSpr_Destroy,
     (ActorFunc)BgKeikokuSpr_Update,
-    (ActorFunc)BgKeikokuSpr_Draw
+    (ActorFunc)BgKeikokuSpr_Draw,
 };
-*/
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Keikoku_Spr/BgKeikokuSpr_Init.s")
+static InitChainEntry sInitChain[] = {
+    ICHAIN_F32(uncullZoneForward, 3000, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneScale, 200, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneDownward, 400, ICHAIN_CONTINUE),
+    ICHAIN_VEC3F_DIV1000(scale, 20, ICHAIN_STOP),
+};
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Keikoku_Spr/BgKeikokuSpr_Destroy.s")
+void BgKeikokuSpr_Init(Actor* thisx, PlayState* play) {
+    BgKeikokuSpr* this = THIS;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Keikoku_Spr/BgKeikokuSpr_Update.s")
+    Actor_ProcessInitChain(&this->actor, sInitChain);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Keikoku_Spr/BgKeikokuSpr_Draw.s")
+void BgKeikokuSpr_Destroy(Actor* thisx, PlayState* play) {
+}
+
+void BgKeikokuSpr_Update(Actor* thisx, PlayState* play) {
+}
+
+void BgKeikokuSpr_Draw(Actor* thisx, PlayState* play) {
+    s32 pad;
+
+    OPEN_DISPS(play->state.gfxCtx);
+    AnimatedMat_Draw(play, Lib_SegmentedToVirtual(object_keikoku_obj_Matanimheader_0001F8));
+    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(POLY_XLU_DISP++, object_keikoku_obj_DL_000100);
+    AnimatedMat_Draw(play, Lib_SegmentedToVirtual(object_keikoku_obj_Matanimheader_0003F8));
+    gSPDisplayList(POLY_XLU_DISP++, object_keikoku_obj_DL_000300);
+    AnimatedMat_Draw(play, Lib_SegmentedToVirtual(object_keikoku_obj_Matanimheader_0005F8));
+    gSPDisplayList(POLY_XLU_DISP++, object_keikoku_obj_DL_000500);
+    CLOSE_DISPS(play->state.gfxCtx);
+}
