@@ -49,7 +49,7 @@ void BgHakaCurtain_Init(Actor* thisx, PlayState* play) {
     BgHakaCurtain* this = THIS;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
     DynaPolyActor_LoadMesh(play, &this->dyna, &object_haka_obj_Colheader_001588);
     if (Flags_GetClear(play, this->dyna.actor.room)) {
         func_80B6DE80(this);

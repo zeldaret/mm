@@ -1559,7 +1559,7 @@ s32 func_800B7678(PlayState* play, Actor* actor, Vec3f* pos, s32 updBgCheckInfoF
             }
 
             actor->bgCheckFlags |= BGCHECKFLAG_GROUND;
-            BgCheck2_AttachToMesh(&play->colCtx, actor, (s32)actor->floorBgId);
+            DynaPolyActor_AttachCarriedActor(&play->colCtx, actor, actor->floorBgId);
         }
     } else {
         return func_800B761C(actor, distToFloor, updBgCheckInfoFlags);
@@ -1575,7 +1575,7 @@ void Actor_UpdateBgCheckInfo(PlayState* play, Actor* actor, f32 wallCheckHeight,
     Vec3f pos;
 
     if ((actor->floorBgId != BGCHECK_SCENE) && (actor->bgCheckFlags & BGCHECKFLAG_GROUND)) {
-        BgCheck2_UpdateActorAttachedToMesh(&play->colCtx, actor->floorBgId, actor);
+        DynaPolyActor_TransformCarriedActor(&play->colCtx, actor->floorBgId, actor);
     }
 
     if (updBgCheckInfoFlags & UPDBGCHECKINFO_FLAG_1) {
@@ -2032,7 +2032,7 @@ s32 Actor_OfferGetItem(Actor* actor, PlayState* play, GetItemId getItemId, f32 x
     if (!(player->stateFlags1 &
           (PLAYER_STATE1_80 | PLAYER_STATE1_1000 | PLAYER_STATE1_2000 | PLAYER_STATE1_4000 | PLAYER_STATE1_40000 |
            PLAYER_STATE1_80000 | PLAYER_STATE1_100000 | PLAYER_STATE1_200000)) &&
-        Player_GetExplosiveHeld(player) < 0) {
+        (Player_GetExplosiveHeld(player) <= PLAYER_EXPLOSIVE_NONE)) {
         if ((actor->xzDistToPlayer <= xzRange) && (fabsf(actor->playerHeightRel) <= fabsf(yRange))) {
             if ((getItemId == GI_MASK_CIRCUS_LEADER || getItemId == GI_PENDANT_OF_MEMORIES ||
                  getItemId == GI_DEED_LAND ||
@@ -2426,7 +2426,7 @@ Actor* Actor_UpdateActor(UpdateActor_Params* params) {
                 }
 
                 actor->update(actor, play);
-                BgCheck_ResetFlagsIfLoadedActor(play, &play->colCtx.dyna, actor);
+                DynaPoly_UnsetAllInteractFlags(play, &play->colCtx.dyna, actor);
             }
 
             CollisionCheck_ResetDamage(&actor->colChkInfo);
@@ -2516,7 +2516,7 @@ void Actor_UpdateAll(PlayState* play, ActorContext* actorCtx) {
         }
 
         if (i == ACTORCAT_BG) {
-            DynaPoly_Setup(play, &play->colCtx.dyna);
+            DynaPoly_UpdateContext(play, &play->colCtx.dyna);
         }
     }
 
@@ -3395,7 +3395,7 @@ void func_800BB604(GameState* gameState, ActorContext* actorCtx, Player* player,
 
                 if ((actor != targetedActor) || (actor->flags & ACTOR_FLAG_80000)) {
                     temp_f0_2 = func_800B82EC(actor, player, D_801ED8DC);
-                    phi_s2_2 = (actor->flags & 1) != 0;
+                    phi_s2_2 = (actor->flags & ACTOR_FLAG_1) != 0;
                     if (phi_s2_2) {
                         phi_s2_2 = temp_f0_2 < D_801ED8C8;
                     }

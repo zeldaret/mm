@@ -86,7 +86,7 @@ void EnFuKago_Init(Actor* thisx, PlayState* play) {
     CollisionHeader* sp34 = NULL;
     Actor* npc = play->actorCtx.actorLists[ACTORCAT_NPC].first;
 
-    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
     CollisionHeader_GetVirtual(&object_fu_mato_Colheader_0015C0, &sp34);
     this->dyna.bgId = DynaPoly_SetBgActor(play, &play->colCtx.dyna, &this->dyna.actor, sp34);
     Actor_SetScale(&this->dyna.actor, 0.1f);
@@ -228,7 +228,7 @@ void func_80ACFA78(EnFuKago* this, PlayState* play) {
     this->unk_33A = 1;
 
     Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_WOODBOX_BREAK);
-    func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
     this->actionFunc = func_80AD0028;
 }
 

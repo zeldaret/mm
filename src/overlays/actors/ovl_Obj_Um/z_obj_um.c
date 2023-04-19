@@ -620,13 +620,13 @@ void func_80B78EBC(ObjUm* this, PlayState* play) {
     player->actor.focus.rot.z = 0;
     player->actor.focus.rot.y = player->actor.shape.rot.y;
 
-    player->unk_AAC.x = 0;
-    player->unk_AAC.y = 0;
-    player->unk_AAC.z = 0;
+    player->headLimbRot.x = 0;
+    player->headLimbRot.y = 0;
+    player->headLimbRot.z = 0;
 
-    player->unk_AB2.x = 0;
-    player->unk_AB2.y = 0;
-    player->unk_AB2.z = 0;
+    player->upperLimbRot.x = 0;
+    player->upperLimbRot.y = 0;
+    player->upperLimbRot.z = 0;
 
     player->currentYaw = player->actor.focus.rot.y;
 }
@@ -763,7 +763,7 @@ void ObjUm_Init(Actor* thisx, PlayState* play) {
         DynaPolyActor_Init(&this->dyna, 0);
         DynaPolyActor_LoadMesh(play, &this->dyna, &object_um_Colheader_007E20);
     } else {
-        DynaPolyActor_Init(&this->dyna, 3);
+        DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS | DYNA_TRANSFORM_ROT_Y);
         DynaPolyActor_LoadMesh(play, &this->dyna, &object_um_Colheader_007F50);
     }
 
@@ -772,7 +772,7 @@ void ObjUm_Init(Actor* thisx, PlayState* play) {
         return;
     }
 
-    func_800C636C(play, &play->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DisableCeilingCollision(play, &play->colCtx.dyna, this->dyna.bgId);
 
     this->donkey =
         (EnHorse*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_HORSE, this->dyna.actor.world.pos.x,

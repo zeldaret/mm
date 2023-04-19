@@ -495,7 +495,7 @@ void EnRat_HandleNonSceneCollision(EnRat* this, PlayState* play) {
     f32 cos;
     f32 tempX;
 
-    BgCheck2_UpdateActorAttachedToMesh(&play->colCtx, this->actor.floorBgId, &this->actor);
+    DynaPolyActor_TransformCarriedActor(&play->colCtx, this->actor.floorBgId, &this->actor);
 
     if (yaw != this->actor.shape.rot.y) {
         yaw = this->actor.shape.rot.y - yaw;

@@ -720,12 +720,12 @@ void func_80BFF9B0(EnBomjima* this, PlayState* play) {
         CLEAR_WEEKEVENTREG(WEEKEVENTREG_76_08);
         CLEAR_WEEKEVENTREG(WEEKEVENTREG_76_10);
 
-        gSaveContext.save.bombersCaughtNum = 0;
-        gSaveContext.save.bombersCaughtOrder[0] = 0;
-        gSaveContext.save.bombersCaughtOrder[1] = 0;
-        gSaveContext.save.bombersCaughtOrder[2] = 0;
-        gSaveContext.save.bombersCaughtOrder[3] = 0;
-        gSaveContext.save.bombersCaughtOrder[4] = 0;
+        gSaveContext.save.saveInfo.bombersCaughtNum = 0;
+        gSaveContext.save.saveInfo.bombersCaughtOrder[0] = 0;
+        gSaveContext.save.saveInfo.bombersCaughtOrder[1] = 0;
+        gSaveContext.save.saveInfo.bombersCaughtOrder[2] = 0;
+        gSaveContext.save.saveInfo.bombersCaughtOrder[3] = 0;
+        gSaveContext.save.saveInfo.bombersCaughtOrder[4] = 0;
 
         func_80BFE494(this, 3, 1.0f);
         this->unk_2C8 = 9;
