@@ -742,7 +742,7 @@ s32 Actor_OtherIsTargeted(PlayState* play, Actor* actor);
 void func_800BC620(Vec3f* pos, Vec3f* scale, u8 alpha, PlayState* play);
 void Actor_AddQuake(PlayState* play, s16 verticalMag, s16 countdown);
 void Actor_AddQuakeWithSpeed(PlayState* play, s16 verticalMag, s16 countdown, s16 speed);
-void func_800BC848(Actor* actor, PlayState* play, s16 verticalMag, s16 countdown);
+void func_800BC848(Actor* actor, PlayState* play, s16 y, s16 countdown);
 void Actor_DrawDoorLock(PlayState* play, s32 frame, s32 type);
 void Actor_SetColorFilter(Actor* actor, u16 colorFlag, u16 colorIntensityMax, u16 bufFlag, u16 duration);
 Hilite* func_800BCBF4(Vec3f* arg0, PlayState* play);
