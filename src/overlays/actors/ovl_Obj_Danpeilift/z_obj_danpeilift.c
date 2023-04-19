@@ -167,7 +167,7 @@ void ObjDanpeilift_Update(Actor* thisx, PlayState* play) {
     if (this->cutsceneTimer > 0) {
         this->cutsceneTimer--;
         if (this->cutsceneTimer == 0) {
-            ActorCutscene_Stop(this->dyna.actor.cutscene);
+            CutsceneManager_Stop(this->dyna.actor.csId);
         }
     }
     if (OBJDANPEILIFT_REACT_TO_PLAYER_ON_TOP(thisx)) {

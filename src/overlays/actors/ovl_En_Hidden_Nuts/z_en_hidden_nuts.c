@@ -105,7 +105,7 @@ void EnHiddenNuts_Init(Actor* thisx, PlayState* play) {
     }
 
     this->path = SubS_GetPathByIndex(play, this->unk_21E, 0x3F);
-    this->unk_226 = this->actor.cutscene;
+    this->csId = this->actor.csId;
     func_801A5080(2);
     func_80BDB268(this);
 }
@@ -243,18 +243,18 @@ void func_80BDB788(EnHiddenNuts* this) {
 void func_80BDB7E8(EnHiddenNuts* this, PlayState* play) {
     Vec3f sp3C;
 
-    if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-        ActorCutscene_Stop(0x7C);
-        ActorCutscene_SetIntentToPlay(this->unk_226);
+    if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+        CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
+        CutsceneManager_Queue(this->csId);
         return;
     }
 
-    if (!ActorCutscene_GetCanPlayNext(this->unk_226)) {
-        ActorCutscene_SetIntentToPlay(this->unk_226);
+    if (!CutsceneManager_IsNext(this->csId)) {
+        CutsceneManager_Queue(this->csId);
         return;
     }
 
-    ActorCutscene_StartAndSetUnkLinkFields(this->unk_226, &this->actor);
+    CutsceneManager_StartWithPlayerCs(this->csId, &this->actor);
     this->unk_228 = -1200.0f;
 
     Math_Vec3f_Copy(&sp3C, &this->actor.world.pos);

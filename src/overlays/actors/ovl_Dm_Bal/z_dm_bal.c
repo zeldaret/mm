@@ -74,15 +74,15 @@ void DmBal_DoNothing(DmBal* this, PlayState* play) {
 }
 
 void func_80C1EAE8(DmBal* this, PlayState* play) {
-    static u16 D_80C1F2C0 = 0x63;
-    s32 actionIndex;
+    static u16 sCueId = 99;
+    s32 cueChannel;
 
-    if (Cutscene_CheckActorAction(play, 0x238)) {
-        actionIndex = Cutscene_GetActorActionIndex(play, 0x238);
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_568)) {
+        cueChannel = Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_568);
 
-        if (D_80C1F2C0 != play->csCtx.actorActions[actionIndex]->action) {
-            D_80C1F2C0 = play->csCtx.actorActions[actionIndex]->action;
-            switch (play->csCtx.actorActions[actionIndex]->action) {
+        if (sCueId != play->csCtx.actorCues[cueChannel]->id) {
+            sCueId = play->csCtx.actorCues[cueChannel]->id;
+            switch (play->csCtx.actorCues[cueChannel]->id) {
                 case 1:
                     this->keepEyesShut = false;
                     this->eyeIndex = 0;
@@ -96,7 +96,7 @@ void func_80C1EAE8(DmBal* this, PlayState* play) {
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 13);
                     break;
             }
-        } else if (D_80C1F2C0 == 3) {
+        } else if (sCueId == 3) {
             if (Animation_OnFrame(&this->skelAnime, 0.0f)) {
                 this->keepEyesShut = true;
             } else if (Animation_OnFrame(&this->skelAnime, 29.0f)) {
@@ -104,12 +104,12 @@ void func_80C1EAE8(DmBal* this, PlayState* play) {
                 this->eyeIndex = 0;
             }
         }
-        Cutscene_ActorTranslateAndYaw(&this->actor, play, actionIndex);
+        Cutscene_ActorTranslateAndYaw(&this->actor, play, cueChannel);
         this->actor.home.pos = this->actor.world.pos;
     } else {
         this->keepEyesShut = false;
         this->eyeIndex = 0;
-        D_80C1F2C0 = 0x63;
+        sCueId = 99;
     }
 }
 

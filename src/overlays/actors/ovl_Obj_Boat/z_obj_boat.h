@@ -15,7 +15,7 @@ typedef struct ObjBoat {
     /* 0x15E */ u8 lastPointIndex; // max point if direction is negative, first point if forwards
     /* 0x15F */ union {
         u8 timer;
-        u8 csAction;
+        u8 cueId;
     };
     /* 0x160 */ s16 angle; // Angle used to set rotations
     /* 0x162 */ UNK_TYPE1 pad_162;

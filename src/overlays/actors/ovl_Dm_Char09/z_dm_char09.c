@@ -127,24 +127,24 @@ void func_80AB2268(DmChar09* this, PlayState* play) {
     Path* path;
     s32 pad;
     s32 i;
-    s32 actionIndex;
+    s32 cueChannel;
     s32 max = 0;
     s32 pathnum;
     u8 temp = false;
 
     if (!DMCHAR09_GET_F(&this->actor)) {
-        if (play->csCtx.currentCsIndex == 1) {
+        if (play->csCtx.scriptIndex == 1) {
             temp = true;
         }
-    } else if (play->csCtx.currentCsIndex == 0) {
+    } else if (play->csCtx.scriptIndex == 0) {
         temp = true;
     }
 
-    if (Cutscene_CheckActorAction(play, 0x1F7) && temp) {
-        actionIndex = Cutscene_GetActorActionIndex(play, 0x1F7);
-        if (this->unk_22F != play->csCtx.actorActions[actionIndex]->action) {
-            this->unk_22F = play->csCtx.actorActions[actionIndex]->action;
-            switch (play->csCtx.actorActions[actionIndex]->action) {
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_503) && temp) {
+        cueChannel = Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_503);
+        if (this->cueId != play->csCtx.actorCues[cueChannel]->id) {
+            this->cueId = play->csCtx.actorCues[cueChannel]->id;
+            switch (play->csCtx.actorCues[cueChannel]->id) {
                 case 2:
                     max = 0;
                     break;
@@ -159,7 +159,7 @@ void func_80AB2268(DmChar09* this, PlayState* play) {
                     break;
             }
 
-            if (play->csCtx.actorActions[actionIndex]->action >= 2) {
+            if (play->csCtx.actorCues[cueChannel]->id >= 2) {
                 pathnum = DMCHAR09_GET_PATH(&this->actor);
                 path = &play->setupPathList[pathnum];
 
@@ -175,7 +175,7 @@ void func_80AB2268(DmChar09* this, PlayState* play) {
                 this->unk_220 = 1;
                 this->unk_22E = true;
 
-                this->speed = (u16)play->csCtx.actorActions[actionIndex]->rot.z * 0.00390625f;
+                this->speed = (u16)play->csCtx.actorCues[cueChannel]->rot.z * 0.00390625f;
                 this->actionFunc = func_80AB1FDC;
             } else {
                 this->unk_22E = false;
@@ -183,7 +183,7 @@ void func_80AB2268(DmChar09* this, PlayState* play) {
             }
         }
     } else {
-        this->unk_22F = 0x63;
+        this->cueId = 99;
     }
 }
 

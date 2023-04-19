@@ -28,9 +28,9 @@ void func_80A9CE00(BgHakuginPost* this);
 void func_80A9CE1C(BgHakuginPost* this, PlayState* play);
 void func_80A9D0A0(BgHakuginPost* this);
 void func_80A9D0B4(BgHakuginPost* this, PlayState* play);
-void func_80A9D1E0(BgHakuginPost* this, BgHakuginPostFunc unkFunc, f32 arg2, s16 arg3, s16 arg4);
+void func_80A9D1E0(BgHakuginPost* this, BgHakuginPostFunc unkFunc, f32 arg2, s16 csLength, s16 csId);
 void func_80A9D260(BgHakuginPost* this, PlayState* play);
-void func_80A9D2C4(BgHakuginPost* this, BgHakuginPostFunc unkFunc, f32 arg2, s16 arg3, s16 arg4);
+void func_80A9D2C4(BgHakuginPost* this, BgHakuginPostFunc unkFunc, f32 arg2, s16 csId, s16 additionalCsId);
 void func_80A9D360(BgHakuginPost* this, PlayState* play);
 void func_80A9D3E4(BgHakuginPost* this);
 void func_80A9D434(BgHakuginPost* this, PlayState* play);
@@ -162,12 +162,12 @@ void func_80A9AFB4(BgHakuginPost* this, PlayState* play, BgHakuginPostUnkStruct*
             } else {
                 unkStruct->unk_0000[i].unk_34 = 1;
             }
-            unkStruct->unk_0000[i].unk_2A = this->dyna.actor.cutscene;
-            unkStruct->unk_0000[i].unk_2C = ActorCutscene_GetAdditionalCutscene(unkStruct->unk_0000[i].unk_2A);
+            unkStruct->unk_0000[i].csId = this->dyna.actor.csId;
+            unkStruct->unk_0000[i].additionalCsId = CutsceneManager_GetAdditionalCsId(unkStruct->unk_0000[i].csId);
         } else {
             unkStruct->unk_0000[i].unk_34 = 1;
-            unkStruct->unk_0000[i].unk_2A = -1;
-            unkStruct->unk_0000[i].unk_2C = -1;
+            unkStruct->unk_0000[i].csId = CS_ID_NONE;
+            unkStruct->unk_0000[i].additionalCsId = CS_ID_NONE;
         }
 
         unkStruct->unk_0000[i].unk_2F = 1;
@@ -783,7 +783,7 @@ void func_80A9CC84(BgHakuginPost* this) {
 void func_80A9CCA0(BgHakuginPost* this, PlayState* play) {
     if (this->unk_174 != 0) {
         func_80A9D1E0(this, func_80A9CD00, (this->unk_164 - this->dyna.actor.home.pos.y) + 100.0f, 60,
-                      this->dyna.actor.cutscene);
+                      this->dyna.actor.csId);
     }
 }
 
@@ -823,7 +823,7 @@ void func_80A9CE1C(BgHakuginPost* this, PlayState* play) {
 
     if (this->unk_170 != 0) {
         func_80A9D1E0(this, func_80A9D0A0, (this->unk_164 - this->dyna.actor.home.pos.y) + 100.0f, 0x3C,
-                      ActorCutscene_GetAdditionalCutscene(this->dyna.actor.cutscene));
+                      CutsceneManager_GetAdditionalCsId(this->dyna.actor.csId));
         return;
     }
 
@@ -843,8 +843,8 @@ void func_80A9CE1C(BgHakuginPost* this, PlayState* play) {
                 func_8019F128(NA_SE_EV_SLIDE_DOOR_OPEN);
                 Flags_SetSwitch(play, D_80A9E028.unk_0000[i].unk_2E);
                 this->unk_178 = 20;
-                func_80A9D2C4(this, func_80A9CE00, D_80A9E028.unk_0000[i].unk_14.y + 50.0f,
-                              D_80A9E028.unk_0000[i].unk_2A, D_80A9E028.unk_0000[i].unk_2C);
+                func_80A9D2C4(this, func_80A9CE00, D_80A9E028.unk_0000[i].unk_14.y + 50.0f, D_80A9E028.unk_0000[i].csId,
+                              D_80A9E028.unk_0000[i].additionalCsId);
                 break;
             }
         }
@@ -884,12 +884,12 @@ void func_80A9D0B4(BgHakuginPost* this, PlayState* play) {
     }
 }
 
-void func_80A9D1E0(BgHakuginPost* this, BgHakuginPostFunc unkFunc, f32 arg2, s16 arg3, s16 arg4) {
+void func_80A9D1E0(BgHakuginPost* this, BgHakuginPostFunc unkFunc, f32 arg2, s16 csLength, s16 csId) {
     this->unkFunc = unkFunc;
-    this->unk_184 = arg4;
-    this->unk_180 = ActorCutscene_GetLength(arg4);
-    if (this->unk_180 < 0) {
-        this->unk_180 = arg3;
+    this->csId = csId;
+    this->csLength = CutsceneManager_GetLength(csId);
+    if (this->csLength < 0) {
+        this->csLength = csLength;
     }
     this->dyna.actor.focus.pos.x = this->dyna.actor.home.pos.x;
     this->dyna.actor.focus.pos.y = this->unk_16C + arg2;
@@ -898,22 +898,22 @@ void func_80A9D1E0(BgHakuginPost* this, BgHakuginPostFunc unkFunc, f32 arg2, s16
 }
 
 void func_80A9D260(BgHakuginPost* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->unk_184)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->unk_184, &this->dyna.actor);
+    if (CutsceneManager_IsNext(this->csId)) {
+        CutsceneManager_StartWithPlayerCs(this->csId, &this->dyna.actor);
         this->unkFunc(this);
     } else {
-        ActorCutscene_SetIntentToPlay(this->unk_184);
+        CutsceneManager_Queue(this->csId);
     }
 }
 
-void func_80A9D2C4(BgHakuginPost* this, BgHakuginPostFunc unkFunc, f32 arg2, s16 arg3, s16 arg4) {
+void func_80A9D2C4(BgHakuginPost* this, BgHakuginPostFunc unkFunc, f32 arg2, s16 csId, s16 additionalCsId) {
     this->unkFunc = unkFunc;
-    this->unk_184 = arg3;
-    this->unk_186 = arg4;
-    this->unk_180 = -1;
-    this->unk_180 = ActorCutscene_GetLength(arg3);
-    if (this->unk_180 < 0) {
-        this->unk_180 = 15;
+    this->csId = csId;
+    this->additionalCsId = additionalCsId;
+    this->csLength = -1;
+    this->csLength = CutsceneManager_GetLength(csId);
+    if (this->csLength < 0) {
+        this->csLength = 15;
     }
     this->dyna.actor.focus.pos.x = this->dyna.actor.home.pos.x;
     this->dyna.actor.focus.pos.y = this->unk_16C + arg2;
@@ -922,32 +922,32 @@ void func_80A9D2C4(BgHakuginPost* this, BgHakuginPostFunc unkFunc, f32 arg2, s16
 }
 
 void func_80A9D360(BgHakuginPost* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->unk_184)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->unk_184, &this->dyna.actor);
-        if (this->unk_186 >= 0) {
+    if (CutsceneManager_IsNext(this->csId)) {
+        CutsceneManager_StartWithPlayerCs(this->csId, &this->dyna.actor);
+        if (this->additionalCsId >= 0) {
             func_80A9D3E4(this);
         } else {
             this->unkFunc(this);
         }
     } else {
-        ActorCutscene_SetIntentToPlay(this->unk_184);
+        CutsceneManager_Queue(this->csId);
     }
 }
 
 void func_80A9D3E4(BgHakuginPost* this) {
-    this->unk_182 = ActorCutscene_GetLength(this->unk_186);
-    if (this->unk_182 < 0) {
-        this->unk_182 = 30;
+    this->additionalCsLength = CutsceneManager_GetLength(this->additionalCsId);
+    if (this->additionalCsLength < 0) {
+        this->additionalCsLength = 30;
     }
     this->actionFunc = func_80A9D434;
 }
 
 void func_80A9D434(BgHakuginPost* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->unk_186) != 0) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->unk_186, &this->dyna.actor);
+    if (CutsceneManager_IsNext(this->additionalCsId)) {
+        CutsceneManager_StartWithPlayerCs(this->additionalCsId, &this->dyna.actor);
         this->unkFunc(this);
     } else {
-        ActorCutscene_SetIntentToPlay(this->unk_186);
+        CutsceneManager_Queue(this->additionalCsId);
     }
 }
 
@@ -956,17 +956,17 @@ void BgHakuginPost_Update(Actor* thisx, PlayState* play) {
     f32 temp;
 
     func_80A9B46C(this, play);
-    if ((this->unk_180 >= 0) && ((this->actionFunc != func_80A9D260) || (this->actionFunc != func_80A9D360))) {
-        this->unk_180--;
-        if (this->unk_180 < 0) {
-            ActorCutscene_Stop(this->unk_184);
+    if ((this->csLength >= 0) && ((this->actionFunc != func_80A9D260) || (this->actionFunc != func_80A9D360))) {
+        this->csLength--;
+        if (this->csLength < 0) {
+            CutsceneManager_Stop(this->csId);
         }
     }
 
-    if ((this->unk_182 >= 0) && (this->actionFunc != func_80A9D434)) {
-        this->unk_182--;
-        if (this->unk_182 < 0) {
-            ActorCutscene_Stop(this->unk_186);
+    if ((this->additionalCsLength >= 0) && (this->actionFunc != func_80A9D434)) {
+        this->additionalCsLength--;
+        if (this->additionalCsLength < 0) {
+            CutsceneManager_Stop(this->additionalCsId);
         }
     }
 
