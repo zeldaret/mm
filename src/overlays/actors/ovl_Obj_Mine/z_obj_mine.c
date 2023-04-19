@@ -199,7 +199,7 @@ void ObjMine_Water_CheckAC(ObjMine* this, Vec3f* knockbackDir) {
     Actor* attackActor = this->collider.base.ac;
 
     // dmgFlag check is (DMG_DEKU_BUBBLE | DMG_LIGHT_ARROW | DMG_ICE_ARROW | DMG_FIRE_ARROW | DMG_NORMAL_ARROW)
-    if ((this->collider.elements[0].info.acHitInfo->toucher.dmgFlags & 0x13820)) {
+    if (this->collider.elements[0].info.acHitInfo->toucher.dmgFlags & 0x13820) {
         Matrix_Push();
         Matrix_RotateYS(attackActor->shape.rot.y, MTXMODE_NEW);
         Matrix_RotateXS(attackActor->shape.rot.x, MTXMODE_APPLY);
@@ -225,33 +225,33 @@ void ObjMine_AirWater_Noop(ObjMine* this) {
 void ObjMine_ReplaceTranslation(Vec3f* translation) {
     MtxF* matrix = Matrix_GetCurrent();
 
-    matrix->mf[3][0] = translation->x;
-    matrix->mf[3][1] = translation->y;
-    matrix->mf[3][2] = translation->z;
+    matrix->xw = translation->x;
+    matrix->yw = translation->y;
+    matrix->zw = translation->z;
 }
 
-void ObjMine_ReplaceRotation(ObjMineMtxF3* basis) {
+void ObjMine_SetRotation(ObjMineMtxF3* basis) {
     MtxF* matrix = Matrix_GetCurrent();
 
-    matrix->mf[0][0] = basis->x.x;
-    matrix->mf[0][1] = basis->x.y;
-    matrix->mf[0][2] = basis->x.z;
-    matrix->mf[0][3] = 0.0f;
+    matrix->xx = basis->x.x;
+    matrix->yx = basis->x.y;
+    matrix->zx = basis->x.z;
+    matrix->wx = 0.0f;
 
-    matrix->mf[1][0] = basis->y.x;
-    matrix->mf[1][1] = basis->y.y;
-    matrix->mf[1][2] = basis->y.z;
-    matrix->mf[1][3] = 0.0f;
+    matrix->xy = basis->y.x;
+    matrix->yy = basis->y.y;
+    matrix->zy = basis->y.z;
+    matrix->wy = 0.0f;
 
-    matrix->mf[2][0] = basis->z.x;
-    matrix->mf[2][1] = basis->z.y;
-    matrix->mf[2][2] = basis->z.z;
-    matrix->mf[2][3] = 0.0f;
+    matrix->xz = basis->z.x;
+    matrix->yz = basis->z.y;
+    matrix->zz = basis->z.z;
+    matrix->wz = 0.0f;
 
-    matrix->mf[3][0] = 0.0f;
-    matrix->mf[3][1] = 0.0f;
-    matrix->mf[3][2] = 0.0f;
-    matrix->mf[3][3] = 1.0f;
+    matrix->xw = 0.0f;
+    matrix->yw = 0.0f;
+    matrix->zw = 0.0f;
+    matrix->ww = 1.0f;
 }
 
 s32 ObjMine_StepUntilParallel(Vec3f* value, Vec3f* target, f32 angleStep) {
@@ -269,7 +269,7 @@ s32 ObjMine_StepUntilParallel(Vec3f* value, Vec3f* target, f32 angleStep) {
     Math_Vec3f_Copy(&prevValue, value);
     Math3D_CrossProduct(value, target, &perpVec);
     if (ObjMine_GetUnitVec3f(&perpVec, &perpNormal)) {
-        Matrix_RotateAxisS(RADF_TO_BINANG(angleStep), &perpNormal, MTXMODE_NEW);
+        Matrix_RotateAxisS(RAD_TO_BINANG(angleStep), &perpNormal, MTXMODE_NEW);
         Matrix_MultVec3f(&prevValue, value);
     } else {
         Matrix_RotateXFNew(angleStep);
@@ -313,7 +313,7 @@ void ObjMine_Air_InitChain(ObjMine* this, s32 linkCount) {
     }
 
     if (wallCheckRadius < 0.0f) {
-        airChain->wallCheckDistSq = -1.0f;
+        airChain->wallCheckDistSq = -1.0f; // Negative value means skip wall collision checks
     } else if (wallCheckRadius <= AIR_RADIUS + 1.0f) {
         airChain->wallCheckDistSq = 0.0f;
     } else {
@@ -403,7 +403,7 @@ void ObjMine_Water_InitChain(ObjMine* this, s32 linkCount) {
     }
 
     if (wallCheckRadius < 0.0f) {
-        waterChain->wallCheckDistSq = -1.0f;
+        waterChain->wallCheckDistSq = -1.0f; // Negative value means skip wall collision checks
     } else if (wallCheckRadius <= WATER_RADIUS + 1.0f) {
         waterChain->wallCheckDistSq = 0.0f;
     } else {
@@ -440,24 +440,24 @@ void ObjMine_Water_WallCheck(ObjMine* this, PlayState* play) {
 
     waterChain->touchWall = false;
     if (waterChain->wallCheckDistSq > -1e-6f) {
-        //  Checks for walls if mine is sufficiently far from home.
+        //  Checks for walls if mine is sufficiently far from home. If found, sets ejection force towards home.
         if (waterChain->wallCheckDistSq <= Math3D_XZDistanceSquared(this->actor.home.pos.x, this->actor.home.pos.z,
                                                                     this->actor.world.pos.x, this->actor.world.pos.z)) {
             Vec3f centerPos;
             Vec3f offsetPos;
-            Vec3f dummyResult;
+            Vec3f result; // not used
             Vec3f xzFromHome;
             Vec3f xzDirFromHome;
-            CollisionPoly* dummyPoly;
-            s32 dummyBgId;
-            f32 dummyNorm;
-            f32 dummyInvNorm;
+            CollisionPoly* poly; // not used
+            s32 bgId;            // not used
+            f32 norm;            // not used
+            f32 invNorm;         // not used
 
             xzFromHome.x = this->actor.world.pos.x - this->actor.home.pos.x;
             xzFromHome.y = 0.0f;
             xzFromHome.z = this->actor.world.pos.z - this->actor.home.pos.z;
 
-            if (ObjMine_GetUnitVec3fNorm(&xzFromHome, &xzDirFromHome, &dummyNorm, &dummyInvNorm)) {
+            if (ObjMine_GetUnitVec3fNorm(&xzFromHome, &xzDirFromHome, &norm, &invNorm)) {
 
                 offsetPos.x = this->actor.world.pos.x + (xzDirFromHome.x * WATER_RADIUS);
                 offsetPos.y = this->actor.world.pos.y;
@@ -467,8 +467,8 @@ void ObjMine_Water_WallCheck(ObjMine* this, PlayState* play) {
                 centerPos.y = this->actor.world.pos.y;
                 centerPos.z = this->actor.home.pos.z;
 
-                if (BgCheck_EntityLineTest1(&play->colCtx, &centerPos, &offsetPos, &dummyResult, &dummyPoly, true,
-                                            false, false, true, &dummyBgId)) {
+                if (BgCheck_EntityLineTest1(&play->colCtx, &centerPos, &offsetPos, &result, &poly, true, false, false,
+                                            true, &bgId)) {
                     waterChain->touchWall = true;
                     waterChain->wallEject.x = xzDirFromHome.x * -0.2f;
                     waterChain->wallEject.z = xzDirFromHome.z * -0.2f;
@@ -588,7 +588,7 @@ void ObjMine_Water_UpdateLinks(ObjMine* this) {
     Vec3f jointPos;
     s32 changeBasis;
     f32 diffNorm;
-    f32 dummyInvNorm;
+    f32 invNorm; // not used
     Vec3f* tempBasisX;
 
     // The joint between the current link and next link is half the link's length from its center. The first link is
@@ -622,7 +622,7 @@ void ObjMine_Water_UpdateLinks(ObjMine* this) {
         // joint. The StepUntilParallel causes the chain to straighten over time.
         Math_Vec3f_Diff(&waterLink->pos, &jointPos, &tempVec);
 
-        if (ObjMine_GetUnitVec3fNorm(&tempVec, &diffDir, &diffNorm, &dummyInvNorm) && (diffNorm > LINK_SIZE / 3.0f)) {
+        if (ObjMine_GetUnitVec3fNorm(&tempVec, &diffDir, &diffNorm, &invNorm) && (diffNorm > LINK_SIZE / 3.0f)) {
             Math_Vec3f_Copy(&newBasis.y, &waterLink->basis.y);
             ObjMine_StepUntilParallel(&newBasis.y, &diffDir, M_PI / 30);
 
@@ -677,7 +677,7 @@ void ObjMine_Init(Actor* thisx, PlayState* play) {
     ObjMine* this = THIS;
     s32 pathIndex = OBJMINE_GET_PATH(&this->actor);
     Path* path;
-    s32 dummyBgId;
+    s32 bgId; // not used
     s32 type = OBJMINE_GET_TYPE(&this->actor);
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
@@ -708,7 +708,7 @@ void ObjMine_Init(Actor* thisx, PlayState* play) {
                                      &this->actor.shape.rot);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
         Collider_UpdateSpheres(0, &this->collider);
-        this->actor.floorHeight = BgCheck_EntityRaycastFloor5(&play->colCtx, &this->actor.floorPoly, &dummyBgId,
+        this->actor.floorHeight = BgCheck_EntityRaycastFloor5(&play->colCtx, &this->actor.floorPoly, &bgId,
                                                               &this->actor, &this->actor.world.pos);
     } else {
         s32 linkCount = OBJMINE_GET_LINK_COUNT(&this->actor);
@@ -769,7 +769,7 @@ void ObjMine_Path_Move(ObjMine* this, PlayState* play) {
     f32 distToWaypoint;
     f32 step;
     f32 target;
-    s32 dummyBgId;
+    s32 bgId; // not used
 
     // thisx->velocity is temporarily set to the vector difference to the next waypoint.
     Math_Vec3s_ToVec3f(&nextWaypoint, &this->waypoints[this->waypointIndex + 1]);
@@ -802,7 +802,7 @@ void ObjMine_Path_Move(ObjMine* this, PlayState* play) {
         ObjMine_Path_MoveToWaypoint(this, this->waypointIndex);
     }
     this->actor.floorHeight =
-        BgCheck_EntityRaycastFloor5(&play->colCtx, &this->actor.floorPoly, &dummyBgId, &this->actor, &thisx->world.pos);
+        BgCheck_EntityRaycastFloor5(&play->colCtx, &this->actor.floorPoly, &bgId, &this->actor, &thisx->world.pos);
     if (this->actor.flags & ACTOR_FLAG_40) {
         Vec3f rotAxis;
         Vec3f yhatCrossV;
@@ -930,19 +930,19 @@ void ObjMine_Air_Chained(ObjMine* this, PlayState* play) {
 
             Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, AIR_RADIUS, 0.0f, 1);
 
-            if ((this->actor.bgCheckFlags & 8) && (this->actor.wallPoly != NULL)) {
+            if ((this->actor.bgCheckFlags & BGCHECKFLAG_WALL) && (this->actor.wallPoly != NULL)) {
                 Vec3f xzDir;
                 Vec3f reflectedDir;
                 Vec3f wallNormal;
                 Vec3f xzVel;
                 f32 xzSpeed;
-                f32 dummyInvNorm;
+                f32 invNorm; // not used
 
                 xzVel.x = airChain->velocity.x;
                 xzVel.y = 0.0f;
                 xzVel.z = airChain->velocity.z;
 
-                if (ObjMine_GetUnitVec3fNorm(&xzVel, &xzDir, &xzSpeed, &dummyInvNorm)) {
+                if (ObjMine_GetUnitVec3fNorm(&xzVel, &xzDir, &xzSpeed, &invNorm)) {
                     wallNormal.x = COLPOLY_GET_NORMAL(this->actor.wallPoly->normal.x);
                     wallNormal.y = COLPOLY_GET_NORMAL(this->actor.wallPoly->normal.y);
                     wallNormal.z = COLPOLY_GET_NORMAL(this->actor.wallPoly->normal.z);
@@ -963,8 +963,10 @@ void ObjMine_Air_Chained(ObjMine* this, PlayState* play) {
         }
     }
 
-    // Applies three torques to individual chain links. The restoring torque towards the default twist of 0x4000, a
-    // random torque for variance, and a linear drag.
+    // Applies three torques to individual chain links:
+    //  - restoring torque towards the default twist of 0x4000
+    //  - random torque for variance
+    //  - linear drag torque
     for (i = 0, airLink = airChain->links; i < linkCount; i++, airLink++) {
         twistDiff = airLink->twist - 0x4000;
         spin = airLink->spin + (twistDiff * -0.05f) + (30.0f * Rand_ZeroOne() - 15.0f);
@@ -1148,7 +1150,7 @@ void ObjMine_Air_Draw(Actor* thisx, PlayState* play) {
     gSPMatrix(gfx++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(gfx++, object_ny_DL_000030);
 
-    ObjMine_ReplaceRotation(&airChain->basis);
+    ObjMine_SetRotation(&airChain->basis);
     Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
     if (linkCount != 0) {
         // Sets pivot point to be half a chain link length below home
@@ -1204,7 +1206,7 @@ void ObjMine_Water_Draw(Actor* thisx, PlayState* play) {
     gSPDisplayList(gfx++, object_ny_DL_000030);
 
     for (i = 0, waterLink = waterChain->links; i < linkCount; i++, waterLink++) {
-        ObjMine_ReplaceRotation(&waterLink->basis);
+        ObjMine_SetRotation(&waterLink->basis);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
         // Consecutive chain links are offset 90 degrees.
         if ((i % 2) == 0) {

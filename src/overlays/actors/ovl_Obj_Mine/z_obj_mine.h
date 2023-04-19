@@ -12,10 +12,10 @@ typedef void (*ObjMineActionFunc)(struct ObjMine*, PlayState*);
 #define OBJMINE_GET_PATH_SPEED(thisx) (((thisx)->params >> 8) & 7)
 #define OBJMINE_GET_TYPE(thisx) (((thisx)->params >> 12) & 3)
 
-#define OBJMINE_SET_PARAM(type, linkCount, pathIndex, pathSpeed) (((type) << 0xC) | ((type == OBJMINE_TYPE_PATH) ? ((pathIndex) | ((pathSpeed) << 8)) : (linkCount)))
-#define OBJMINE_PATH_SET_PARAM(pathIndex, pathSpeed) OBJMINE_SET_PARAM(OBJMINE_TYPE_PATH, 0, pathIndex, pathSpeed)
-#define OBJMINE_AIR_SET_PARAM(linkCount) OBJMINE_SET_PARAM(OBJMINE_TYPE_AIR, linkCount, 0, 0)
-#define OBJMINE_WATER_SET_PARAM(linkCount) OBJMINE_SET_PARAM(OBJMINE_TYPE_WATER, linkCount, 0, 0)
+#define OBJMINE_PARAM(type, linkCount, pathIndex, pathSpeed) (((type) << 0xC) | ((type == OBJMINE_TYPE_PATH) ? ((pathIndex) | ((pathSpeed) << 8)) : (linkCount)))
+#define OBJMINE_PATH_PARAM(pathIndex, pathSpeed) OBJMINE_PARAM(OBJMINE_TYPE_PATH, 0, pathIndex, pathSpeed)
+#define OBJMINE_AIR_PARAM(linkCount) OBJMINE_PARAM(OBJMINE_TYPE_AIR, linkCount, 0, 0)
+#define OBJMINE_WATER_PARAM(linkCount) OBJMINE_PARAM(OBJMINE_TYPE_WATER, linkCount, 0, 0)
 
 #define OBJMINE_CHAIN_MAX 63
 
@@ -32,8 +32,8 @@ typedef struct {
 } ObjMineMtxF3; // size = 0x24
 
 typedef struct {
-    /* 0x00 */ s16 twist;
-    /* 0x02 */ s16 spin;
+    /* 0x0 */ s16 twist;
+    /* 0x2 */ s16 spin;
 } ObjMineAirLink; // size = 0x4
 
 typedef struct {
