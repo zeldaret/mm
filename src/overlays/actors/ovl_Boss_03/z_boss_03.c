@@ -48,6 +48,8 @@
  * - Effect Update/Draw
  * - Seaweed
  */
+
+#include "prevent_bss_reordering.h"
 #include "z_boss_03.h"
 #include "overlays/actors/ovl_Door_Warp1/z_door_warp1.h"
 #include "overlays/actors/ovl_En_Water_Effect/z_en_water_effect.h"
@@ -518,7 +520,7 @@ void Boss03_Init(Actor* thisx, PlayState* play2) {
     if ((KREG(64) != 0) || CHECK_EVENTINF(EVENTINF_56)) {
         this->actionFunc = func_809E344C;
         D_809E9842 = false;
-        Audio_QueueSeqCmd(NA_BGM_STOP | 0x10000);
+        SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 1);
     } else {
         Boss03_SetupIntroCutscene(this, play);
         D_809E9842 = true;
@@ -1305,7 +1307,7 @@ void Boss03_IntroCutscene(Boss03* this, PlayState* play) {
                         this->actor.gravity = -1.5f;
                         this->actor.speed = 20.0f;
 
-                        Audio_QueueSeqCmd(NA_BGM_BOSS | 0x8000);
+                        SEQCMD_PLAY_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 0, NA_BGM_BOSS | SEQ_FLAG_ASYNC);
                         Actor_PlaySfx(&this->actor, NA_SE_EN_KONB_JUMP_OLD);
                         this->skelAnime.playSpeed = 1.0f;
                     }
@@ -1415,7 +1417,7 @@ void Boss03_SetupDeathCutscene(Boss03* this, PlayState* play) {
     this->actionFunc = Boss03_DeathCutscene;
     Animation_MorphToLoop(&this->skelAnime, &gGyorgFloppingAnim, -10.0f);
     this->floppingAnimLastFrame = Animation_GetLastFrame(&gGyorgFloppingAnim);
-    Audio_QueueSeqCmd(NA_BGM_STOP | 0x10000);
+    SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 1);
     this->workTimer[WORK_TIMER_UNK0_C] = 0;
     this->unk_242 = 0;
     this->csState = 0;
@@ -1558,7 +1560,7 @@ void Boss03_DeathCutscene(Boss03* this, PlayState* play) {
 
         case 1:
             if (this->unk_240 == 0x96) {
-                Audio_QueueSeqCmd(NA_BGM_CLEAR_BOSS | 0x8000);
+                SEQCMD_PLAY_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 0, NA_BGM_CLEAR_BOSS | SEQ_FLAG_ASYNC);
             }
             Math_ApproachF(&this->unk_56C, 0.01f, 1.0f, 0.0005f);
             Math_ApproachF(&this->actor.scale.x, 0.01f, 0.05f, 0.001f);
@@ -1993,7 +1995,8 @@ void Boss03_Update(Actor* thisx, PlayState* play2) {
             Math_ApproachS(&this->actor.shape.rot.z, 0, 0xA, 0x800);
             this->actor.world.pos.y -= 100.0f;
             this->actor.prevPos.y -= 100.0f;
-            Actor_UpdateBgCheckInfo(play, &this->actor, 50.0f, 150.0f, 100.0f, 5);
+            Actor_UpdateBgCheckInfo(play, &this->actor, 50.0f, 150.0f, 100.0f,
+                                    UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
             this->actor.world.pos.y += 100.0f;
             this->actor.prevPos.y += 100.0f;
         }
@@ -2084,7 +2087,7 @@ void Boss03_Update(Actor* thisx, PlayState* play2) {
     if (D_809E9841 != 0) {
         D_809E9841--;
         if (D_809E9841 == 0) {
-            Audio_QueueSeqCmd(NA_BGM_BOSS | 0x8000);
+            SEQCMD_PLAY_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 0, NA_BGM_BOSS | SEQ_FLAG_ASYNC);
         }
     }
 
@@ -2439,7 +2442,7 @@ void Boss03_DrawEffects(PlayState* play) {
             Matrix_Translate(eff->pos.x, eff->pos.y, eff->pos.z, MTXMODE_NEW);
 
             if (eff->type == GYORG_EFFECT_DROPLET) {
-                Matrix_RotateYF(Camera_GetInputDirYaw(GET_ACTIVE_CAM(play)) * (M_PI / 0x8000), MTXMODE_APPLY);
+                Matrix_RotateYF(BINANG_TO_RAD(Camera_GetInputDirYaw(GET_ACTIVE_CAM(play))), MTXMODE_APPLY);
             } else { // GYORG_EFFECT_SPLASH
                 Matrix_ReplaceRotation(&play->billboardMtxF);
             }

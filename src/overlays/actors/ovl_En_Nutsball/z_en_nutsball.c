@@ -136,14 +136,16 @@ void EnNutsball_Update(Actor* thisx, PlayState* play2) {
 
         Actor_MoveWithoutGravity(&this->actor);
         Math_Vec3f_Copy(&worldPos, &this->actor.world.pos);
-        Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 5.0f, 10.0f, 0x7);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 5.0f, 10.0f,
+                                UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_2 | UPDBGCHECKINFO_FLAG_4);
 
         if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
-            if (func_800C9A4C(&play->colCtx, this->actor.wallPoly, this->actor.wallBgId) & 0x30) {
+            if (SurfaceType_GetWallFlags(&play->colCtx, this->actor.wallPoly, this->actor.wallBgId) &
+                (WALL_FLAG_4 | WALL_FLAG_5)) {
                 this->actor.bgCheckFlags &= ~BGCHECKFLAG_WALL;
                 if (BgCheck_EntityLineTest1(&play->colCtx, &this->actor.prevPos, &worldPos, &this->actor.world.pos,
                                             &poly, true, false, false, true, &bgId)) {
-                    if (func_800C9A4C(&play->colCtx, poly, bgId) & 0x30) {
+                    if (SurfaceType_GetWallFlags(&play->colCtx, poly, bgId) & (WALL_FLAG_4 | WALL_FLAG_5)) {
                         this->actor.world.pos.x += this->actor.velocity.x * 0.01f;
                         this->actor.world.pos.z += this->actor.velocity.z * 0.01f;
                     } else {

@@ -804,12 +804,12 @@ void func_80B5D160(EnOt* this, PlayState* play) {
                         break;
 
                     case 0x10A5:
-                        func_801477B4(play);
+                        Message_CloseTextbox(play);
                         func_80B5CE6C(this, play);
                         break;
 
                     case 0x106D:
-                        func_801477B4(play);
+                        Message_CloseTextbox(play);
                         func_80B5C154(this, play);
                         break;
                 }
@@ -948,7 +948,7 @@ void EnOt_Update(Actor* thisx, PlayState* play) {
         }
     }
 
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 10.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 10.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
 
     if (this->actor.world.pos.y <= this->actor.floorHeight + 50.0f) {
         this->actor.world.pos.y = this->actor.floorHeight + 50.0f;

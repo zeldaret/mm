@@ -338,7 +338,7 @@ void func_80BD8B70(EnPamera* this, PlayState* play) {
         func_80BD8CCC(this);
     }
 
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
     this->actor.world.pos.y += this->actor.gravity;
 }
 
@@ -382,7 +382,7 @@ void func_80BD8DB0(EnPamera* this, PlayState* play) {
         func_80BD9338(this, play);
         func_80BD8A38(this);
     }
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
     this->actor.world.pos.y += this->actor.gravity;
 }
 
@@ -680,7 +680,7 @@ void func_80BD9B4C(EnPamera* this, PlayState* play) {
                 break;
             case 0x158E:
             case 0x15A8:
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 func_80BD9C70(this, play);
                 break;
         }

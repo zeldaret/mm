@@ -506,7 +506,7 @@ void func_80B85FA8(EnKaizoku* this, PlayState* play) {
             this->subCamUp.x = -0.11f;
             this->picto.actor.draw = EnKaizoku_Draw;
             this->unk_598 = 0;
-            func_801A0238(0, 0xA);
+            Audio_SetMainBgmVolume(0, 0xA);
             this->unk_59C++;
 
         case 1:
@@ -523,7 +523,7 @@ void func_80B85FA8(EnKaizoku* this, PlayState* play) {
             }
 
             if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 EnKaizoku_ChangeAnim(this, EN_KAIZOKU_ANIM_11);
                 this->unk_598 = 0;
                 this->unk_59C++;
@@ -572,10 +572,10 @@ void func_80B85FA8(EnKaizoku* this, PlayState* play) {
 
         case 4:
             if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 this->unk_598 = 0;
                 this->unk_59C++;
-                func_801A0238(0x7F, 0);
+                Audio_SetMainBgmVolume(0x7F, 0);
                 Audio_PlayBgm_StorePrevBgm(NA_BGM_MINI_BOSS);
                 EnKaizoku_ChangeAnim(this, EN_KAIZOKU_ANIM_13);
             }
@@ -722,7 +722,7 @@ void func_80B868B8(EnKaizoku* this, PlayState* play) {
 
         case 2:
             if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 func_800B7298(play, &this->picto.actor, 6);
                 ActorCutscene_Stop(this->unk_2D6);
                 this->subCamId = 0;
@@ -794,7 +794,7 @@ void func_80B86B74(EnKaizoku* this, PlayState* play) {
             }
 
             if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 EnKaizoku_ChangeAnim(this, EN_KAIZOKU_ANIM_18);
                 func_800B7298(play, &this->picto.actor, 0x85);
                 this->unk_5A0 = 0;
@@ -1764,14 +1764,14 @@ void func_80B89A08(EnKaizoku* this, PlayState* play) {
     Vec3f sp58;
     s32 i;
 
-    if (gSaveContext.save.playerData.health <= 0x10) {
+    if (gSaveContext.save.saveInfo.playerData.health <= 0x10) {
         this->swordCollider.info.toucher.damage = 0;
     } else {
         this->swordCollider.info.toucher.damage = 4;
     }
 
     if (!(this->swordCollider.base.atFlags & AT_BOUNCED) && (this->swordCollider.base.atFlags & AT_HIT)) {
-        if ((gSaveContext.save.playerData.health <= 0x10) && (this->action != KAIZOKU_ACTION_16)) {
+        if ((gSaveContext.save.saveInfo.playerData.health <= 0x10) && (this->action != KAIZOKU_ACTION_16)) {
             this->unk_2D0 = 2;
             this->subCamId = 0;
             this->picto.actor.flags |= ACTOR_FLAG_100000;
@@ -1788,7 +1788,7 @@ void func_80B89A08(EnKaizoku* this, PlayState* play) {
         } else if ((this->action == KAIZOKU_ACTION_11) && (this->swordCollider.base.at == &GET_PLAYER(play)->actor)) {
             func_800B8D98(play, &this->picto.actor, 3.0f, this->picto.actor.yawTowardsPlayer, 1.0f);
             Health_ChangeBy(play, -0xC);
-            if ((gSaveContext.save.playerData.health <= 0x10) && (this->action != KAIZOKU_ACTION_16)) {
+            if ((gSaveContext.save.saveInfo.playerData.health <= 0x10) && (this->action != KAIZOKU_ACTION_16)) {
                 Health_ChangeBy(play, 0x10);
                 this->unk_2D0 = 2;
                 this->subCamId = 0;
@@ -2028,7 +2028,9 @@ void EnKaizoku_Update(Actor* thisx, PlayState* play2) {
         Math_ApproachZeroF(&this->unk_2F0, 1.0f, 5.0f);
     }
 
-    Actor_UpdateBgCheckInfo(play, &this->picto.actor, 35.0f, 40.0f, 35.0f, 0x1F);
+    Actor_UpdateBgCheckInfo(play, &this->picto.actor, 35.0f, 40.0f, 35.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_2 | UPDBGCHECKINFO_FLAG_4 |
+                                UPDBGCHECKINFO_FLAG_8 | UPDBGCHECKINFO_FLAG_10);
     Collider_UpdateCylinder(&this->picto.actor, &this->bodyCollider);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->bodyCollider.base);
     if ((this->unk_2D0 < 2) && (this->action != KAIZOKU_ACTION_0)) {

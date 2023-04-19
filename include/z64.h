@@ -20,13 +20,17 @@
 #include "color.h"
 #include "ichain.h"
 #include "sequence.h"
+#include "seqcmd.h"
 #include "sfx.h"
 #include "message_data_static.h"
 
 #include "gfxprint.h"
 #include "sys_matrix.h"
+#include "tha.h"
+#include "thga.h"
 #include "z64actor.h"
 #include "z64animation.h"
+#include "z64animation_legacy.h"
 #include "z64audio.h"
 #include "z64bgcheck.h"
 #include "z64camera.h"
@@ -37,6 +41,7 @@
 #include "z64eff_footmark.h"
 #include "z64effect.h"
 #include "z64frameadvance.h"
+#include "z64game_over.h"
 #include "z64interface.h"
 #include "z64item.h"
 #include "z64light.h"
@@ -114,20 +119,6 @@ typedef struct {
     /* 0x4 */ void* start;
     /* 0x8 */ void* end;
 } PolygonType2; // size = 0xC
-
-typedef struct {
-    /* 0x0 */ u32    size;
-    /* 0x4 */ void*  bufp;
-    /* 0x8 */ void*  head;
-    /* 0xC */ void*  tail;
-} TwoHeadArena; // size = 0x10
-
-typedef struct {
-    /* 0x0 */ u32    size;
-    /* 0x4 */ Gfx*   bufp;
-    /* 0x8 */ Gfx*   p;
-    /* 0xC */ Gfx*   d;
-} TwoHeadGfxArena; // size = 0x10
 
 typedef struct {
     /* 0x000 */ Gfx taskStart[9];
@@ -218,25 +209,6 @@ typedef struct {
     /* 0x08 */ OSTime duration;
     /* 0x10 */ OSTime resetTime;
 } NmiBuff; // size >= 0x18
-
-typedef enum {
-    SLOWLY_CALLBACK_NO_ARGS,
-    SLOWLY_CALLBACK_ONE_ARG,
-    SLOWLY_CALLBACK_TWO_ARGS
-} SlowlyCallbackArgCount;
-
-typedef struct {
-    /* 0x000 */ OSThread thread;
-    /* 0x1B0 */ u8 callbackArgCount;
-    /* 0x1B1 */ u8 status;
-    /* 0x1B4 */ union {
-        void (*callback0)(void);
-        void (*callback1)(void*);
-        void (*callback2)(void*, void*);
-    };
-    /* 0x1B8 */ void* callbackArg0;
-    /* 0x1BC */ void* callbackArg1;
-} SlowlyTask; // size = 0x1C0
 
 typedef struct {
     /* 0x00 */ int unk0;
@@ -582,8 +554,6 @@ typedef void (*ColChkApplyFunc)(struct PlayState*, CollisionCheckContext*, Colli
 typedef void (*ColChkVsFunc)(struct PlayState*, CollisionCheckContext*, Collider*, Collider*);
 typedef s32 (*ColChkLineFunc)(struct PlayState*, CollisionCheckContext*, Collider*, Vec3f*, Vec3f*);
 
-typedef void(*room_draw_func)(struct PlayState* play, Room* room, u32 flags);
-
 typedef struct {
     /* 0x000 */ u8 controllers; // bit 0 is set if controller 1 is plugged in, etc.
     /* 0x001 */ UNK_TYPE1 pad1[0x13];
@@ -606,22 +576,6 @@ typedef struct {
     /* 0x47E */ u8 hasStopped;
     /* 0x47F */ UNK_TYPE1 pad47F[0x1];
 } PadMgr; // size = 0x480
-
-typedef struct StackEntry {
-    /* 0x00 */ struct StackEntry* next;
-    /* 0x04 */ struct StackEntry* prev;
-    /* 0x08 */ u32 head;
-    /* 0x0C */ u32 tail;
-    /* 0x10 */ u32 initValue;
-    /* 0x14 */ s32 minSpace;
-    /* 0x18 */ const char* name;
-} StackEntry; // size = 0x1C
-
-typedef enum {
-    STACK_STATUS_OK = 0,
-    STACK_STATUS_WARNING = 1,
-    STACK_STATUS_OVERFLOW = 2
-} StackStatus;
 
 #define OS_SC_RETRACE_MSG       1
 #define OS_SC_DONE_MSG          2
@@ -647,22 +601,6 @@ typedef struct {
     /* 0x0 */ u8   seqId;
     /* 0x1 */ u8   ambienceId;
 } SequenceContext; // size = 0x2
-
-typedef enum {
-    /*  0 */ GAMEOVER_INACTIVE,
-    /*  1 */ GAMEOVER_DEATH_START,
-    /*  2 */ GAMEOVER_DEATH_WAIT_GROUND,    // wait for player to fall and hit the ground
-    /*  3 */ GAMEOVER_DEATH_FADE_OUT,       // wait before fading out
-    /* 20 */ GAMEOVER_REVIVE_START = 20,
-    /* 21 */ GAMEOVER_REVIVE_RUMBLE,
-    /* 22 */ GAMEOVER_REVIVE_WAIT_GROUND,   // wait for player to fall and hit the ground
-    /* 23 */ GAMEOVER_REVIVE_WAIT_FAIRY,    // wait for the fairy to rise all the way up out of player's body
-    /* 24 */ GAMEOVER_REVIVE_FADE_OUT       // fade out the game over lights as player is revived and gets back up
-} GameOverState;
-
-typedef struct {
-    /* 0x0 */ u16 state;
-} GameOverContext; // size = 0x2
 
 typedef struct PlayState {
     /* 0x00000 */ GameState state;
@@ -708,14 +646,14 @@ typedef struct PlayState {
     /* 0x1878C */ void (*unk_1878C)(struct PlayState* play);
     /* 0x18790 */ void (*unk_18790)(struct PlayState* play, s16 arg1);
     /* 0x18794 */ PlayerItemAction (*unk_18794)(struct PlayState* play, Player* player, ItemId itemId);
-    /* 0x18798 */ s32 (*setPlayerTalkAnim)(struct PlayState* play, LinkAnimationHeader* talkAnim, s32 animMode);
+    /* 0x18798 */ s32 (*setPlayerTalkAnim)(struct PlayState* play, PlayerAnimationHeader* talkAnim, AnimationMode animMode);
     /* 0x1879C */ s16 playerActorCsIds[10];
     /* 0x187B0 */ MtxF viewProjectionMtxF;
     /* 0x187F0 */ Vec3f projectionMtxFDiagonal;
     /* 0x187FC */ MtxF billboardMtxF;
     /* 0x1883C */ Mtx* billboardMtx;
     /* 0x18840 */ u32 gameplayFrames;
-    /* 0x18844 */ u8 unk_18844;
+    /* 0x18844 */ u8 unk_18844; // bool
     /* 0x18845 */ u8 haltAllActors;
     /* 0x18846 */ s16 numSetupActors;
     /* 0x18848 */ u8 numRooms;
@@ -802,9 +740,9 @@ typedef struct {
 typedef struct {
     /* 0x0 */ u32 useRgba;
     /* 0x4 */ u32 setScissor;
-    /* 0x8 */ Color_RGBA8 primColor;
-    /* 0xC */ Color_RGBA8 envColor;
-} struct_801F8020; // size = 0x10
+    /* 0x8 */ Color_RGBA8_u32 primColor;
+    /* 0xC */ Color_RGBA8_u32 envColor;
+} VisZbuf; // size = 0x10
 
 typedef struct {
     /* 0x00 */ u32 unk_00;

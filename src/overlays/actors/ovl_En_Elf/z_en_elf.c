@@ -355,8 +355,9 @@ void EnElf_Init(Actor* thisx, PlayState* play2) {
             this->elfMsg = NULL;
             this->unk_234 = NULL;
             this->unk_269 = 20;
-            if ((gSaveContext.save.playerData.tatlTimer >= 25800) || (gSaveContext.save.playerData.tatlTimer < 3000)) {
-                gSaveContext.save.playerData.tatlTimer = 0;
+            if ((gSaveContext.save.saveInfo.playerData.tatlTimer >= 25800) ||
+                (gSaveContext.save.saveInfo.playerData.tatlTimer < 3000)) {
+                gSaveContext.save.saveInfo.playerData.tatlTimer = 0;
             }
             this->unk_266 = QuestHint_GetTatlTextId(play);
             break;
@@ -1090,7 +1091,7 @@ void func_8088EFA4(EnElf* this, PlayState* play) {
         }
     } else if ((arrayPointerActor != NULL) && (player->targetedActor != NULL)) {
         u8 temp = this->unk_269;
-        u16 targetSfxId = this->unk_269 == 0 ? NA_SE_PL_WALK_GROUND - SFX_FLAG : NA_SE_PL_WALK_GROUND - SFX_FLAG;
+        u16 targetSfxId = (this->unk_269 == 0) ? NA_SE_NONE : NA_SE_NONE;
 
         if (!temp) {
             Actor_PlaySfx(&this->actor, targetSfxId);
@@ -1376,11 +1377,11 @@ void func_8088FE64(Actor* thisx, PlayState* play2) {
 
                 switch (play->msgCtx.choiceIndex) {
                     case 0:
-                        func_80151938(play, play->msgCtx.currentTextId - 1);
+                        Message_ContinueTextbox(play, play->msgCtx.currentTextId - 1);
                         break;
 
                     case 1:
-                        func_80151938(play, play->msgCtx.currentTextId + 1);
+                        Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                         break;
                 }
             }
@@ -1390,7 +1391,7 @@ void func_8088FE64(Actor* thisx, PlayState* play2) {
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
                     case 0x240:
-                        func_80151938(play, 0x245);
+                        Message_ContinueTextbox(play, 0x245);
                         break;
 
                     case 0x21D:
@@ -1407,28 +1408,28 @@ void func_8088FE64(Actor* thisx, PlayState* play2) {
                     case 0x244:
                         switch (CURRENT_DAY) {
                             case 1:
-                                func_80151938(play, 0x246);
+                                Message_ContinueTextbox(play, 0x246);
                                 break;
 
                             case 2:
-                                func_80151938(play, 0x247);
+                                Message_ContinueTextbox(play, 0x247);
                                 break;
 
                             case 3:
                                 if (!gSaveContext.save.isNight) {
-                                    func_80151938(play, 0x248);
+                                    Message_ContinueTextbox(play, 0x248);
                                 } else if ((gSaveContext.save.time < CLOCK_TIME(6, 0)) &&
                                            CHECK_WEEKEVENTREG(WEEKEVENTREG_74_20)) {
-                                    func_80151938(play, 0x225);
+                                    Message_ContinueTextbox(play, 0x225);
                                 } else {
-                                    func_80151938(play, 0x249);
+                                    Message_ContinueTextbox(play, 0x249);
                                 }
                                 break;
                         }
                         break;
 
                     default:
-                        func_801477B4(play);
+                        Message_CloseTextbox(play);
                         func_8088FDCC(this);
                         break;
                 }
@@ -1455,11 +1456,12 @@ void func_8089010C(Actor* thisx, PlayState* play) {
 
     if (temp_v0 != this->unk_266) {
         this->unk_266 = temp_v0;
-        gSaveContext.save.playerData.tatlTimer = 0;
+        gSaveContext.save.saveInfo.playerData.tatlTimer = 0;
     }
 
     if ((player->tatlTextId == 0) && (player->targetedActor == NULL)) {
-        if ((gSaveContext.save.playerData.tatlTimer >= 600) && (gSaveContext.save.playerData.tatlTimer <= 3000)) {
+        if ((gSaveContext.save.saveInfo.playerData.tatlTimer >= 600) &&
+            (gSaveContext.save.saveInfo.playerData.tatlTimer <= 3000)) {
             player->tatlTextId = QuestHint_GetTatlTextId(play);
         }
     }
@@ -1474,7 +1476,7 @@ void func_8089010C(Actor* thisx, PlayState* play) {
 
         if (thisx->textId == QuestHint_GetTatlTextId(play)) {
             this->fairyFlags |= 0x80;
-            gSaveContext.save.playerData.tatlTimer = 3001;
+            gSaveContext.save.saveInfo.playerData.tatlTimer = 3001;
         }
 
         this->fairyFlags |= 0x10;
@@ -1505,10 +1507,10 @@ void func_8089010C(Actor* thisx, PlayState* play) {
         this->actionFunc(this, play);
 
         if (!Play_InCsMode(play)) {
-            if (gSaveContext.save.playerData.tatlTimer < 25800) {
-                gSaveContext.save.playerData.tatlTimer++;
+            if (gSaveContext.save.saveInfo.playerData.tatlTimer < 25800) {
+                gSaveContext.save.saveInfo.playerData.tatlTimer++;
             } else if (!(this->fairyFlags & 0x80)) {
-                gSaveContext.save.playerData.tatlTimer = 0;
+                gSaveContext.save.saveInfo.playerData.tatlTimer = 0;
             }
         }
     }

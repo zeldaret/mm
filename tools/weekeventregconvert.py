@@ -508,8 +508,8 @@ weekEventReg = {
     (62 << 8) | 0x20: "WEEKEVENTREG_62_20",
     (62 << 8) | 0x40: "WEEKEVENTREG_62_40",
     (62 << 8) | 0x80: "WEEKEVENTREG_62_80",
-    (63 << 8) | 0x01: "WEEKEVENTREG_63_01",
-    (63 << 8) | 0x02: "WEEKEVENTREG_63_02",
+    (63 << 8) | 0x01: "WEEKEVENTREG_KICKOUT_WAIT",
+    (63 << 8) | 0x02: "WEEKEVENTREG_KICKOUT_TIME_PASSED",
     (63 << 8) | 0x04: "WEEKEVENTREG_63_04",
     (63 << 8) | 0x08: "WEEKEVENTREG_63_08",
     (63 << 8) | 0x10: "WEEKEVENTREG_63_10",
@@ -843,20 +843,20 @@ def applyChange(fileContents: str, compiledRegex: re.Pattern, callback) -> str:
 
 
 def updateCheck(fileContents: str) -> str:
-    # gSaveContext.save.weekEventReg[86] & 2
-    checkRegex = re.compile(rf"gSaveContext.save.weekEventReg\[(?P<index>{NUMBER_PATTERN})\]\s*\&\s*(?P<mask>{NUMBER_PATTERN})")
+    # gSaveContext.save.saveInfo.weekEventReg[86] & 2
+    checkRegex = re.compile(rf"gSaveContext.save.saveInfo.weekEventReg\[(?P<index>{NUMBER_PATTERN})\]\s*\&\s*(?P<mask>{NUMBER_PATTERN})")
 
     return applyChange(fileContents, checkRegex, getCheckMacro)
 
 def updateSet(fileContents: str) -> str:
-    # gSaveContext.save.weekEventReg[51] |= 0x10
-    setRegex = re.compile(rf"gSaveContext.save.weekEventReg\[(?P<index>{NUMBER_PATTERN})\]\s*\|=\s*(?P<mask>{NUMBER_PATTERN})")
+    # gSaveContext.save.saveInfo.weekEventReg[51] |= 0x10
+    setRegex = re.compile(rf"gSaveContext.save.saveInfo.weekEventReg\[(?P<index>{NUMBER_PATTERN})\]\s*\|=\s*(?P<mask>{NUMBER_PATTERN})")
 
     return applyChange(fileContents, setRegex, getSetMacro)
 
 def updateClear(fileContents: str) -> str:
-    # gSaveContext.save.weekEventReg[85] &= (u8)~0x80
-    clearRegex = re.compile(rf"gSaveContext.save.weekEventReg\[(?P<index>{NUMBER_PATTERN})\]\s*\&=\s*(\(u8\))?~(?P<mask>{NUMBER_PATTERN})")
+    # gSaveContext.save.saveInfo.weekEventReg[85] &= (u8)~0x80
+    clearRegex = re.compile(rf"gSaveContext.save.saveInfo.weekEventReg\[(?P<index>{NUMBER_PATTERN})\]\s*\&=\s*(\(u8\))?~(?P<mask>{NUMBER_PATTERN})")
 
     return applyChange(fileContents, clearRegex, getClearMacro)
 

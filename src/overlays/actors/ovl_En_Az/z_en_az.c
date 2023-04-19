@@ -273,7 +273,7 @@ void EnAz_Init(Actor* thisx, PlayState* play2) {
         this->collider.dim.height *= 1.2f;
         this->collider.dim.yShift *= 1.2f;
     }
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 5);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
     if ((this->actor.bgCheckFlags & BGCHECKFLAG_WATER) && (this->actor.depthInWater > 22.0f)) {
         this->unk_374 |= 0x100;
         this->unk_376 |= 0x100;
@@ -1293,7 +1293,7 @@ void func_80A97410(EnAz* this, PlayState* play) {
         }
     }
     if (this->unk_378 == 3) {
-        func_80151938(play, this->actor.textId);
+        Message_ContinueTextbox(play, this->actor.textId);
         this->unk_378 = 2;
     } else if (this->unk_378 == 5) {
         Message_StartTextbox(play, this->actor.textId, &this->actor);
@@ -1420,7 +1420,7 @@ void func_80A97AB4(EnAz* this, PlayState* play) {
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
                     case 0x10D7:
-                        func_80151938(play, 0x10D8);
+                        Message_ContinueTextbox(play, 0x10D8);
                         break;
                     case 0x10D8:
                         if (play->msgCtx.choiceIndex == 0) {
@@ -1434,7 +1434,7 @@ void func_80A97AB4(EnAz* this, PlayState* play) {
                             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_24_04)) {
                                 CLEAR_WEEKEVENTREG(WEEKEVENTREG_24_04);
                             }
-                            func_80151938(play, 0x10D9);
+                            Message_ContinueTextbox(play, 0x10D9);
                         }
                         break;
                     case 0x10D9:
@@ -1660,9 +1660,9 @@ void EnAz_Update(Actor* thisx, PlayState* play2) {
         this->unk_39C = 0;
     }
     if (!(this->unk_374 & 0x1000)) {
-        Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 20.0f, 5);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 20.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
     } else {
-        Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 20.0f, 0x400);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 20.0f, UPDBGCHECKINFO_FLAG_400);
         this->unk_374 &= ~0x1000;
     }
     Collider_UpdateCylinder(&this->actor, &this->collider);
@@ -1835,7 +1835,7 @@ void EnAz_Draw(Actor* thisx, PlayState* play2) {
         } else {
             Matrix_Push();
             Matrix_Translate(0.0f, 2000.0f, -2000.0f, MTXMODE_APPLY);
-            Matrix_RotateZS(D_80A993D0[this->unk_384].z * (0x10000 / 360.0f), MTXMODE_APPLY);
+            Matrix_RotateZS(DEG_TO_BINANG(D_80A993D0[this->unk_384].z), MTXMODE_APPLY);
             Matrix_Scale(D_80A993AC[this->unk_384].x, D_80A993AC[this->unk_384].y, 0.0f, MTXMODE_APPLY);
             if (this->unk_374 & 0x800) {
                 gSPSegment(POLY_XLU_DISP++, 0x08, Gfx_PrimColor(play->state.gfxCtx, 0x80, 255, 255, 255, 255));
@@ -1846,7 +1846,7 @@ void EnAz_Draw(Actor* thisx, PlayState* play2) {
             gSPDisplayList(POLY_XLU_DISP++, gBeaverYoungerBrotherTailVortexDL);
             Matrix_Pop();
             Matrix_Translate(0.0f, 2000.0f, -2100.0f, MTXMODE_APPLY);
-            Matrix_RotateZS(D_80A993D0[this->unk_384].z * (0x10000 / 360.0f), MTXMODE_APPLY);
+            Matrix_RotateZS(DEG_TO_BINANG(D_80A993D0[this->unk_384].z), MTXMODE_APPLY);
             Matrix_Scale(D_80A993D0[this->unk_384].x, D_80A993D0[this->unk_384].y, 0.0f, MTXMODE_APPLY);
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_XLU_DISP++, gBeaverYoungerBrotherTailSplashDL);

@@ -714,7 +714,7 @@ void BgIkanaRotaryroom_Init(Actor* thisx, PlayState* play) {
         this->dyna.actor.shape.rot.x = 0;
     }
 
-    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
     DynaPolyActor_LoadMesh(play, &this->dyna, D_80B82218[sp34]);
 
     Collider_InitJntSph(play, &this->collider);

@@ -4,14 +4,13 @@
  * Description: Kafei
  */
 
-#include "prevent_bss_reordering.h"
 #include "z_en_test3.h"
 #include "objects/object_test3/object_test3.h"
 #include "overlays/actors/ovl_En_Door/z_en_door.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 #include "objects/object_mask_ki_tan/object_mask_ki_tan.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_4000000)
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_CAN_PRESS_SWITCH)
 
 #define THIS ((EnTest3*)thisx)
 
@@ -316,12 +315,12 @@ s32 func_80A3E898(EnTest3* this, PlayState* play) {
         func_80151BB4(play, 2);
     }
     if (textId == 0xFFFF) {
-        func_801477B4(play);
+        Message_CloseTextbox(play);
     } else if (textId) { // != 0
-        func_80151938(play, textId);
+        Message_ContinueTextbox(play, textId);
     }
     if (textId == 0x296B) {
-        LinkAnimation_PlayOnceSetSpeed(play, &this->player.skelAnime, &gPlayerAnim_al_yareyare, 2.0f / 3.0f);
+        PlayerAnimation_PlayOnceSetSpeed(play, &this->player.skelAnime, &gPlayerAnim_al_yareyare, 2.0f / 3.0f);
     }
     return false;
 }
@@ -773,7 +772,7 @@ s32 func_80A3FBE8(EnTest3* this, PlayState* play) {
             if (play->actorCtx.flags & ACTORCTX_FLAG_5) {
                 this->unk_D8D = ActorCutscene_GetAdditionalCutscene(this->unk_D8D);
             }
-            Audio_QueueSeqCmd(NA_BGM_STOP | 0x10000);
+            SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 1);
             D_80A41D20 = 2;
         } else {
             func_80A3F73C(this, play);
@@ -1124,9 +1123,9 @@ s32 EnTest3_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f*
             *dList = NULL;
         }
         if (limbIndex == OBJECT_TEST3_LIMB_0B) {
-            rot->x += this->player.unk_AAC.z;
-            rot->y -= this->player.unk_AAC.y;
-            rot->z += this->player.unk_AAC.x;
+            rot->x += this->player.headLimbRot.z;
+            rot->y -= this->player.headLimbRot.y;
+            rot->z += this->player.headLimbRot.x;
         } else if (limbIndex == OBJECT_TEST3_LIMB_0A) {
             s32 requiredScopeTemp;
 
@@ -1134,12 +1133,12 @@ s32 EnTest3_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f*
                 Matrix_RotateZS(0x44C, MTXMODE_APPLY);
                 Matrix_RotateYS(this->player.unk_AA8, MTXMODE_APPLY);
             }
-            if (this->player.unk_AB2.y != 0) {
-                Matrix_RotateYS(this->player.unk_AB2.y, MTXMODE_APPLY);
+            if (this->player.upperLimbRot.y != 0) {
+                Matrix_RotateYS(this->player.upperLimbRot.y, MTXMODE_APPLY);
             }
-            Matrix_RotateXS(this->player.unk_AB2.x, MTXMODE_APPLY);
-            if (this->player.unk_AB2.z != 0) {
-                Matrix_RotateZS(this->player.unk_AB2.z, MTXMODE_APPLY);
+            Matrix_RotateXS(this->player.upperLimbRot.x, MTXMODE_APPLY);
+            if (this->player.upperLimbRot.z != 0) {
+                Matrix_RotateZS(this->player.upperLimbRot.z, MTXMODE_APPLY);
             }
         } else {
             func_80125500(play, &this->player, limbIndex, pos, rot);
@@ -1215,7 +1214,7 @@ void EnTest3_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList1, Gfx** dL
     } else if (limbIndex == OBJECT_TEST3_LIMB_15) {
         if (D_80A41D60 || CHECK_WEEKEVENTREG(WEEKEVENTREG_50_80) ||
             (INV_CONTENT(ITEM_PENDANT_OF_MEMORIES) == ITEM_PENDANT_OF_MEMORIES) ||
-            (this->player.getItemDrawId - 1 == GID_PENDANT_OF_MEMORIES)) {
+            (this->player.getItemDrawIdPlusOne - 1 == GID_PENDANT_OF_MEMORIES)) {
             D_80A41D60 = true;
         } else {
             OPEN_DISPS(play->state.gfxCtx);
@@ -1223,7 +1222,7 @@ void EnTest3_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList1, Gfx** dL
             CLOSE_DISPS(play->state.gfxCtx);
         }
     } else {
-        func_80128B74(play, &this->player, limbIndex);
+        Player_SetFeetPos(play, &this->player, limbIndex);
     }
 }
 
@@ -1296,7 +1295,7 @@ void EnTest3_Draw(Actor* thisx, PlayState* play2) {
     if (this->player.invincibilityTimer > 0) {
         POLY_OPA_DISP = Play_SetFog(play, POLY_OPA_DISP);
     }
-    if ((this->player.getItemDrawId - 1) != GID_NONE) {
+    if ((this->player.getItemDrawIdPlusOne - 1) != GID_NONE) {
         Player_DrawGetItem(play, &this->player);
     }
     CLOSE_DISPS(play->state.gfxCtx);

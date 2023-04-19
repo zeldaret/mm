@@ -570,7 +570,7 @@ void func_80C20C24(EnHintSkb* this, PlayState* play) {
             break;
 
         case 0x1151:
-            func_801477B4(play);
+            Message_CloseTextbox(play);
             if (this->unk_3E8 & 0x10) {
                 SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 40, NA_SE_EN_STALKID_DEAD);
                 func_80C20484(this);
@@ -838,7 +838,9 @@ void EnHintSkb_Update(Actor* thisx, PlayState* play) {
     }
 
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 15.0f, 30.0f, 60.0f, 0x1D);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 15.0f, 30.0f, 60.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                UPDBGCHECKINFO_FLAG_10);
     func_80C21250(this, play);
     func_80C20D64(this, play);
     func_80C21320(this, play);

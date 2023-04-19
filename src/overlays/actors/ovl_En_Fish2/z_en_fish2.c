@@ -436,7 +436,7 @@ void func_80B29128(EnFish2* this) {
 
 void func_80B2913C(EnFish2* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-        func_801477B4(play);
+        Message_CloseTextbox(play);
         func_80B28B5C(this);
     }
 }
@@ -987,7 +987,8 @@ void EnFish2_Update(Actor* thisx, PlayState* play2) {
         this->unk_33C = 25.0f - ((this->unk_330 - 0.01f) * 1000.0f);
         Actor_SetScale(&this->actor, this->unk_330);
         Actor_MoveWithGravity(&this->actor);
-        Actor_UpdateBgCheckInfo(play, &this->actor, 0, 15.0f, 10.0f, 7);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 0, 15.0f, 10.0f,
+                                UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_2 | UPDBGCHECKINFO_FLAG_4);
 
         if (this->actor.params != 2) {
             this->unk_2D4 = this->actor.floorHeight + (this->unk_330 * 1000.0f);

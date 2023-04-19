@@ -226,7 +226,7 @@ void func_80BDB59C(EnHiddenNuts* this, PlayState* play) {
     }
 
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-        func_801477B4(play);
+        Message_CloseTextbox(play);
         func_80BDB268(this);
     }
 }
@@ -423,7 +423,9 @@ void EnHiddenNuts_Update(Actor* thisx, PlayState* play) {
 
     if (this->unk_21A >= 4) {
         Actor_MoveWithGravity(&this->actor);
-        Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 40.0f, 0x1D);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 40.0f,
+                                UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                    UPDBGCHECKINFO_FLAG_10);
     }
 
     Collider_UpdateCylinder(&this->actor, &this->collider);

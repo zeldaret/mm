@@ -118,7 +118,7 @@ void func_80ADADD0(EnSellnuts* this, PlayState* play) {
     }
 
     if (this->unk_338 & 1) {
-        Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 20.0f, 5);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 20.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
     }
 }
 
@@ -433,20 +433,20 @@ void func_80ADB924(EnSellnuts* this, PlayState* play) {
                 this->unk_340 = player->actor.textId;
                 this->actionFunc = func_80ADB0D8;
             }
-            func_801477B4(play);
+            Message_CloseTextbox(play);
         } else if (itemAction <= PLAYER_IA_MINUS1) {
             this->unk_340 = D_80ADD920[this->unk_33A];
-            func_80151938(play, this->unk_340);
+            Message_ContinueTextbox(play, this->unk_340);
             this->actionFunc = func_80ADB0D8;
         }
     } else if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         if (this->unk_340 == D_80ADD910[this->unk_33A]) {
             this->unk_340 = D_80ADD938[this->unk_33A];
-            func_80151938(play, this->unk_340);
+            Message_ContinueTextbox(play, this->unk_340);
             this->actionFunc = func_80ADB0D8;
         } else {
             this->unk_340 = 0xFF;
-            func_80151938(play, this->unk_340);
+            Message_ContinueTextbox(play, this->unk_340);
             this->actionFunc = func_80ADB0D8;
         }
     }
@@ -916,7 +916,7 @@ s32 func_80ADCE4C(EnSellnuts* this, Path* path, s32 arg2) {
         pointY = points[var + 1].z - points[var - 1].z;
     }
 
-    func_8017B7F8(&sp30, RADF_TO_BINANG(func_80086B30(pointX, pointY)), &sp44, &sp40, &sp3C);
+    func_8017B7F8(&sp30, RAD_TO_BINANG(func_80086B30(pointX, pointY)), &sp44, &sp40, &sp3C);
     if (((this->actor.world.pos.x * sp44) + (sp40 * this->actor.world.pos.z) + sp3C) > 0.0f) {
         ret = true;
     }
