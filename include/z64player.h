@@ -272,7 +272,6 @@ typedef enum PlayerMeleeWeaponAnimation {
     /* 19 */ PLAYER_MWA_FLIPSLASH_FINISH,      // unused
     /* 20 */ PLAYER_MWA_JUMPSLASH_FINISH,      // End of jumpslash
     /* 21 */ PLAYER_MWA_ZORA_JUMPKICK_FINISH,  // End of Zora jump attack
-    //
     /* 22 */ PLAYER_MWA_BACKSLASH_RIGHT,       // unused
     /* 23 */ PLAYER_MWA_BACKSLASH_LEFT,        // unused
     /* 24 */ PLAYER_MWA_GORON_PUNCH_LEFT,      // Goron punch

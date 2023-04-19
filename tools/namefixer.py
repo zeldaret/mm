@@ -314,7 +314,6 @@ wordReplace = {
     "func_800B8E58": "Player_PlaySfx",
     "func_800BF7CC": "Actor_SpawnIceEffects",
     "Actor_IsFacingPlayerAndWithinRange": "Actor_IsFacingAndNearPlayer",
-    "func_800BC848": "Actor_RequestRumble",
     "func_800BC8B8": "Actor_DrawDoorLock",
     "func_800B86C8": "Actor_ChangeFocus",
     "func_800DF840": "Camera_ChangeMode",

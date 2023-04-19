@@ -281,7 +281,7 @@ void ObjDora_UpdateCollision(ObjDora* this, PlayState* play) {
                     this->lastGongHitType = DORA_HIT_STRONG;
                 }
 
-                Actor_RequestRumble(&this->actor, play, 5, 10);
+                func_800BC848(&this->actor, play, 5, 10);
                 ObjDora_SetupMoveGong(this);
 
                 if ((ObjDora_IsHalfHour(time) == true) && (this->rupeeDropTimer == 0)) {

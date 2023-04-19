@@ -375,7 +375,7 @@ asm/non_matchings/code/z_actor/Actor_OtherIsTargeted.s,Actor_OtherIsTargeted,0x8
 asm/non_matchings/code/z_actor/func_800BC620.s,func_800BC620,0x800BC620,0x54
 asm/non_matchings/code/z_actor/Actor_AddQuake.s,Actor_AddQuake,0x800BC770,0x1A
 asm/non_matchings/code/z_actor/Actor_AddQuakeWithSpeed.s,Actor_AddQuakeWithSpeed,0x800BC7D8,0x1C
-asm/non_matchings/code/z_actor/Actor_RequestRumble.s,Actor_RequestRumble,0x800BC848,0x1C
+asm/non_matchings/code/z_actor/func_800BC848.s,func_800BC848,0x800BC848,0x1C
 asm/non_matchings/code/z_actor/Actor_DrawDoorLock.s,Actor_DrawDoorLock,0x800BC8B8,0xA6
 asm/non_matchings/code/z_actor/Actor_SpawnShieldParticlesMetal.s,Actor_SpawnShieldParticlesMetal,0x800BCB50,0x8
 asm/non_matchings/code/z_actor/Actor_SetColorFilter.s,Actor_SetColorFilter,0x800BCB70,0x21

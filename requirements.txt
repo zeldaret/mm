@@ -1,7 +1,6 @@
 # Setup
 libyaz0>=0.5
 colorama>=0.4.3
-pyelftools>=0.26
 
 # disasm
 rabbitizer>=1.0.0,<2.0.0

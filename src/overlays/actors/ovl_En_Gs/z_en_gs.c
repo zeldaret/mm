@@ -1029,7 +1029,7 @@ void EnGs_Update(Actor* thisx, PlayState* play) {
                 (sp2C > SCREEN_HEIGHT)) {
                 this->unk_216 = 0;
             } else if (this->unk_21C > 0) {
-                Actor_RequestRumble(&this->actor, play, this->unk_21C, this->unk_21E);
+                func_800BC848(&this->actor, play, this->unk_21C, this->unk_21E);
             }
         } else {
             this->unk_216 = 0;

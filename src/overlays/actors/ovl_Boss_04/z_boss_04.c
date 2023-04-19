@@ -481,7 +481,7 @@ void func_809ECF58(Boss04* this, PlayState* play) {
 
         if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
             play_sound(NA_SE_IT_BIG_BOMB_EXPLOSION);
-            Actor_RequestRumble(&this->actor, play, 15, 10);
+            func_800BC848(&this->actor, play, 15, 10);
             this->unk_6F4 = 15;
             sp3C.x = this->actor.focus.pos.x;
             sp3C.y = this->actor.focus.pos.y;

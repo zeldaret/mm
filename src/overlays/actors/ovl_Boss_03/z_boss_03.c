@@ -1052,7 +1052,7 @@ void Boss03_Charge(Boss03* this, PlayState* play) {
         // Attack platform
         if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
             play_sound(NA_SE_IT_BIG_BOMB_EXPLOSION);
-            Actor_RequestRumble(&this->actor, play, 20, 15);
+            func_800BC848(&this->actor, play, 20, 15);
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_WATER_EFFECT, 0.0f, this->waterHeight, 0.0f, 0, 0, 0x96,
                         ENWATEREFFECT_TYPE_GYORG_SHOCKWAVE);
 
@@ -1775,7 +1775,7 @@ void Boss03_Stunned(Boss03* this, PlayState* play) {
         Actor_MoveWithGravity(&this->actor);
         if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND_TOUCH) {
             play_sound(NA_SE_IT_WALL_HIT_HARD);
-            Actor_RequestRumble(&this->actor, play, 10, 10);
+            func_800BC848(&this->actor, play, 10, 10);
         }
     } else {
         Math_ApproachS(&this->actor.shape.rot.z, -0x6000, 0xA, 0x900);
