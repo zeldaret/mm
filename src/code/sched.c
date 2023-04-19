@@ -1,5 +1,5 @@
-#include "prevent_bss_reordering.h"
 #include "global.h"
+#include "prevent_bss_reordering.h"
 #include "fault.h"
 #include "stackcheck.h"
 
