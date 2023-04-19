@@ -1,5 +1,3 @@
-#include "prevent_bss_reordering.h"
-
 #include "global.h"
 
 #include "objects/gameplay_keep/gameplay_keep.h"
