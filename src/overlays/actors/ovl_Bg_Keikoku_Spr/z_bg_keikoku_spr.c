@@ -51,6 +51,7 @@ void BgKeikokuSpr_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
 
     OPEN_DISPS(play->state.gfxCtx);
+
     AnimatedMat_Draw(play, Lib_SegmentedToVirtual(object_keikoku_obj_Matanimheader_0001F8));
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_XLU_DISP++, object_keikoku_obj_DL_000100);
@@ -58,5 +59,6 @@ void BgKeikokuSpr_Draw(Actor* thisx, PlayState* play) {
     gSPDisplayList(POLY_XLU_DISP++, object_keikoku_obj_DL_000300);
     AnimatedMat_Draw(play, Lib_SegmentedToVirtual(object_keikoku_obj_Matanimheader_0005F8));
     gSPDisplayList(POLY_XLU_DISP++, object_keikoku_obj_DL_000500);
+
     CLOSE_DISPS(play->state.gfxCtx);
 }
