@@ -37,8 +37,7 @@ extern FaultDrawer* sFaultDrawContext;
 extern FaultDrawer sFaultDrawerDefault;
 extern s32 gLoadLogSeverity;
 extern s32 gLoad2LogSeverity;
-extern StackEntry* sStackInfoListStart;
-extern StackEntry* sStackInfoListEnd;
+
 // extern UNK_TYPE1 sGfxPrintFontTLUT;
 // extern UNK_TYPE1 sGfxPrintRainbowTLUT;
 // extern UNK_TYPE1 sGfxPrintRainbowData;
@@ -432,19 +431,9 @@ extern EffectShieldParticleInit shieldParticleInitWood;
 // extern UNK_TYPE2 D_801BB0FC;
 // extern UNK_TYPE1 D_801BB100;
 
-extern u8 D_801BB12C;
+extern u8 gOpeningEntranceIndex;
 
-// extern UNK_TYPE1 D_801BC41E;
-extern ActorCutscene actorCutscenesGlobalCutscenes[8];
-extern s16 actorCutsceneCurrent;
-extern s16 actorCutsceneCurrentLength;
-extern s16 actorCutsceneEnding;
-extern s16 actorCutsceneCurrentCamera;
-extern Actor* actorCutsceneCurrentCutsceneActor;
-// extern UNK_TYPE4 actorCutsceneStartMethod;
-extern PlayState* actorCutscenesPlayState;
-extern s16 actorCutsceneReturnCamera;
-extern s16 D_801BD8C6;
+extern ActorCutscene sGlobalCutsceneList[8];
 extern GameStateOverlay gGameStateOverlayTable[];
 extern s32 gGraphNumGameStates;
 // extern UNK_TYPE2 D_801BDA70;
@@ -765,7 +754,7 @@ extern s32 gDbgCamEnabled;
 // extern UNK_TYPE2 sQuakeIndex;
 // extern UNK_TYPE2 sIsCameraUnderwater;
 extern Input* D_801D0D60;
-// extern UNK_TYPE2 D_801D0D64;
+// extern UNK_TYPE2 sPlayerCsIdToCsCamId;
 // extern UNK_TYPE1 D_801D0D7A;
 // extern UNK_TYPE1 D_801D0D80;
 // extern UNK_TYPE1 D_801D11F4;
@@ -2259,7 +2248,7 @@ extern char D_801ED950[80];
 extern char D_801ED9A0[80];
 extern Vec3f D_801ED9F0[3];
 extern Vec3f D_801EDA18[3];
-extern MtxF D_801EDA40;
+extern MtxF sModelToWorldMtxF;
 extern Vec3f D_801EDA80[3];
 extern char D_801EDAA8[80];
 extern char D_801EDAF8[80];
@@ -2336,14 +2325,14 @@ extern SaveContext gSaveContext;
 // extern UNK_TYPE1 D_801F48C8;
 
 extern UNK_TYPE D_801F4DDC;
-extern u8 D_801F4DE0;
-extern s16 D_801F4DE2;
+extern u8 gDisablePlayerCsModeStartPos;
+extern s16 gDungeonBossWarpSceneId;
 
-extern ActorCutscene* actorCutscenes;
-extern s16 actorCutsceneCount;
-extern u8 actorCutsceneWaiting[16];
+extern ActorCutscene* sSceneCutsceneList;
+extern s16 sSceneCutsceneCount;
+extern u8 sWaitingCutsceneList[16];
 // extern UNK_TYPE1 D_801F4E08;
-extern u8 actorCutsceneNextCutscenes[16];
+extern u8 sNextCutsceneList[16];
 // extern UNK_TYPE1 D_801F4E20;
 extern u8 D_801F4E30;
 // extern UNK_TYPE1 D_801F4E31;
@@ -2421,7 +2410,7 @@ extern s16 D_801F4E7A;
 // extern UNK_TYPE1 D_801F6B1E;
 // extern UNK_TYPE1 D_801F6B20;
 // extern UNK_TYPE1 D_801F6B22;
-// extern UNK_TYPE4 D_801F6B50;
+// extern UNK_TYPE4 sCurCsCamera;
 // extern UNK_TYPE1 D_801F6B58;
 extern void (*sKaleidoScopeUpdateFunc)(PlayState* play);
 extern void (*sKaleidoScopeDrawFunc)(PlayState* play);
@@ -2440,7 +2429,7 @@ extern u8 sMotionBlurStatus;
 
 extern UNK_TYPE1 D_801F7FF0;
 extern struct_801F8010 D_801F8010;
-extern struct_801F8020 D_801F8020;
+extern VisZbuf sVisZbuf;
 extern VisMono sMonoColors;
 extern UNK_TYPE1 D_801F8048;
 extern FaultAddrConvClient sGraphFaultAddrConvClient;
@@ -2451,6 +2440,7 @@ extern OSTime sGraphTaskStartTime;
 
 extern u32 gSegments[NUM_SEGMENTS];
 extern SchedContext gSchedContext;
+
 extern OSThread gGraphThread;
 extern PadMgr gPadMgr;
 

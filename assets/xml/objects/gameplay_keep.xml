@@ -787,7 +787,7 @@
         <PlayerAnimation Name="gPlayerAnim_Link_muku" Offset="0xE4E0" />
         <PlayerAnimation Name="gPlayerAnim_Link_otituku_w" Offset="0xE4E8" />
         <PlayerAnimation Name="gPlayerAnim_Link_ue_wait" Offset="0xE4F0" />
-        
+
         <DList Name="gameplay_keep_DL_00E5C0" Offset="0xE5C0" />
 
         <!-- Deku Flower -->
@@ -1145,8 +1145,8 @@
         <Texture Name="gElegyShellGoronNecklaceTex" OutName="elegy_shell_goron_necklace" Format="i8" Width="32" Height="32" Offset="0x4DDA0" />
         <Texture Name="gElegyShellGoronPlatformTex" OutName="elegy_shell_goron_platform" Format="ci8" Width="8" Height="16" Offset="0x4E1A0" />
 
-        <Texture Name="gameplay_keep_Tex_04E220" OutName="tex_04E220" Format="i8" Width="64" Height="64" Offset="0x4E220" />
-        <DList Name="gameplay_keep_DL_04F250" Offset="0x4F250" />
+        <Texture Name="gHookshotReticleTex" OutName="tex_04E220" Format="i8" Width="64" Height="64" Offset="0x4E220" />
+        <DList Name="gHookshotReticleDL" Offset="0x4F250" />
         <Texture Name="gameplay_keep_Tex_04F2C0" OutName="tex_04F2C0" Format="ia16" Width="32" Height="64" Offset="0x4F2C0" />
         <DList Name="gEffIceFragment1DL" Offset="0x50550" />
         <DList Name="gEffIceFragment2MaterialDL" Offset="0x50648" />
@@ -1223,7 +1223,9 @@
         <DList Name="gameplay_keep_DL_054C90" Offset="0x54C90" />
         <Texture Name="gameplay_keep_Tex_054D90" OutName="tex_054D90" Format="i4" Width="16" Height="16" Offset="0x54D90" />
         <Texture Name="gameplay_keep_Tex_054E10" OutName="tex_054E10" Format="i8" Width="16" Height="16" Offset="0x54E10" />
+
         <TextureAnimation Name="gameplay_keep_Matanimheader_054F18" Offset="0x54F18" />
+
         <Texture Name="gameplay_keep_Tex_054F20" OutName="tex_054F20" Format="i8" Width="32" Height="32" Offset="0x54F20" />
         <DList Name="gameplay_keep_DL_055360" Offset="0x55360" />
         <DList Name="gameplay_keep_DL_055620" Offset="0x55620" />
@@ -1477,7 +1479,7 @@
         <Texture Name="gElegyShellZoraPlatformTex" OutName="elegy_shell_zora_platform" Format="rgba16" Width="8" Height="16" Offset="0x8D2E0" />
 
         <Texture Name="gameplay_keep_Tex_08D3E0" OutName="tex_08D3E0" Format="i8" Width="64" Height="32" Offset="0x8D3E0" />
-        
+
         <!-- Dust Textures -->
         <Texture Name="gEffDust1Tex" OutName="eff_dust_1" Format="i8" Width="32" Height="32" Offset="0x8DBE0" />
         <Texture Name="gEffDust2Tex" OutName="eff_dust_2" Format="i8" Width="32" Height="32" Offset="0x8DFE0" />
@@ -1487,7 +1489,7 @@
         <Texture Name="gEffDust6Tex" OutName="eff_dust_6" Format="i8" Width="32" Height="32" Offset="0x8EFE0" />
         <Texture Name="gEffDust7Tex" OutName="eff_dust_7" Format="i8" Width="32" Height="32" Offset="0x8F3E0" />
         <Texture Name="gEffDust8Tex" OutName="eff_dust_8" Format="i8" Width="32" Height="32" Offset="0x8F7E0" />
-        
+
         <Texture Name="gameplay_keep_Tex_08FBE0" OutName="tex_08FBE0" Format="i8" Width="32" Height="64" Offset="0x8FBE0" />
         <Texture Name="gameplay_keep_Tex_0903E0" OutName="tex_0903E0" Format="i8" Width="32" Height="64" Offset="0x903E0" />
         <Texture Name="gameplay_keep_Tex_090BE0" OutName="tex_090BE0" Format="i8" Width="32" Height="64" Offset="0x90BE0" />

@@ -47,8 +47,8 @@ typedef struct EnDragon {
     /* 0x2BA */ s16 action;
     /* 0x2BC */ UNK_TYPE1 unk_2BC[0x2];
     /* 0x2BE */ s16 state;
-    /* 0x2C0 */ s16 grabCutsceneIndex;
-    /* 0x2C2 */ s16 deathCutsceneIndex;
+    /* 0x2C0 */ s16 grabCsId;
+    /* 0x2C2 */ s16 deathCsId;
     /* 0x2C4 */ UNK_TYPE1 unk_2C4[0x4];
     /* 0x2C8 */ s16 subCamId;
     /* 0x2CA */ s16 grabTimer; // Counts up from the time a grab starts until the time the actor begins attacking

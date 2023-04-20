@@ -105,7 +105,7 @@ void EnHiddenNuts_Init(Actor* thisx, PlayState* play) {
     }
 
     this->path = SubS_GetPathByIndex(play, this->pathIndex, ENHIDDENNUTS_PATH_INDEX_NONE_ALT);
-    this->unk_226 = this->actor.cutscene;
+    this->csId = this->actor.csId;
     func_801A5080(2);
     func_80BDB268(this);
 }
@@ -243,18 +243,18 @@ void func_80BDB788(EnHiddenNuts* this) {
 void func_80BDB7E8(EnHiddenNuts* this, PlayState* play) {
     Vec3f sp3C;
 
-    if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-        ActorCutscene_Stop(0x7C);
-        ActorCutscene_SetIntentToPlay(this->unk_226);
+    if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+        CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
+        CutsceneManager_Queue(this->csId);
         return;
     }
 
-    if (!ActorCutscene_GetCanPlayNext(this->unk_226)) {
-        ActorCutscene_SetIntentToPlay(this->unk_226);
+    if (!CutsceneManager_IsNext(this->csId)) {
+        CutsceneManager_Queue(this->csId);
         return;
     }
 
-    ActorCutscene_StartAndSetUnkLinkFields(this->unk_226, &this->actor);
+    CutsceneManager_StartWithPlayerCs(this->csId, &this->actor);
     this->unk_228 = -1200.0f;
 
     Math_Vec3f_Copy(&sp3C, &this->actor.world.pos);
@@ -423,7 +423,9 @@ void EnHiddenNuts_Update(Actor* thisx, PlayState* play) {
 
     if (this->unk_21A >= 4) {
         Actor_MoveWithGravity(&this->actor);
-        Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 40.0f, 0x1D);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 40.0f,
+                                UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                    UPDBGCHECKINFO_FLAG_10);
     }
 
     Collider_UpdateCylinder(&this->actor, &this->collider);

@@ -27,11 +27,11 @@ typedef enum {
 
 //! TODO: work out where to put this
 typedef enum {
-    /* 1 */ ENGE2_CSACTION_BEEHIVE_PATROL = 1,
-    /* 2 */ ENGE2_CSACTION_BEEHIVE_RUN_AWAY,
-    /* 3 */ ENGE2_CSACTION_BEEHIVE_EXIT,
-    /* 4 */ ENGE2_CSACTION_GBT_ENTR_STAND_STILL,
-    /* 5 */ ENGE2_CSACTION_GBT_ENTR_BLOWN_AWAY
+    /* 1 */ ENGE2_CUEID_BEEHIVE_PATROL = 1,
+    /* 2 */ ENGE2_CUEID_BEEHIVE_RUN_AWAY,
+    /* 3 */ ENGE2_CUEID_BEEHIVE_EXIT,
+    /* 4 */ ENGE2_CUEID_GBT_ENTR_STAND_STILL,
+    /* 5 */ ENGE2_CUEID_GBT_ENTR_BLOWN_AWAY
 } EnGe2CsAction;
 
 typedef struct EnGe2 {
@@ -51,7 +51,7 @@ typedef struct EnGe2 {
     /* 0x2FC */ f32 verticalDetectRange; //!< vertical range to look for the player within
     /* 0x300 */ u8 timer;
     /* 0x301 */ u8 detectedStatus;
-    /* 0x302 */ s16 csAction;
+    /* 0x302 */ s16 cueId;
     /* 0x304 */ s16 unk304; // unused
     /* 0x306 */ s16 screamTimer;
     /* 0x308 */ EnGe2ActionFunc actionFunc;

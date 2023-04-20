@@ -156,7 +156,7 @@ void EnPamera_Init(Actor* thisx, PlayState* play) {
 
         if (1) {}
 
-        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_14_04) || CHECK_WEEKEVENTREG(WEEKEVENTREG_52_20) ||
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_14_04) || CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_STONE_TOWER_TEMPLE) ||
             CHECK_WEEKEVENTREG(WEEKEVENTREG_75_20) || (gSaveContext.save.entrance == ENTRANCE(IKANA_CANYON, 9))) {
             Actor_Kill(&this->actor);
         }
@@ -216,14 +216,14 @@ void func_80BD8588(EnPamera* this, PlayState* play) {
 
 void func_80BD8658(EnPamera* this) {
     s32 i;
-    s16 nextCutscene = this->actor.cutscene;
+    s16 csId = this->actor.csId;
 
-    for (i = 0; i < ARRAY_COUNT(this->cutscenes); i++) {
-        if (nextCutscene == -1) {
+    for (i = 0; i < ARRAY_COUNT(this->csIdList); i++) {
+        if (csId == CS_ID_NONE) {
             break;
         }
-        this->cutscenes[i] = nextCutscene;
-        nextCutscene = ActorCutscene_GetAdditionalCutscene(nextCutscene);
+        this->csIdList[i] = csId;
+        csId = CutsceneManager_GetAdditionalCsId(csId);
     }
 }
 
@@ -242,9 +242,9 @@ void func_80BD8700(EnPamera* this) {
 
 void func_80BD8758(EnPamera* this, PlayState* play) {
     if (this->hideInisdeTimer++ > 1800) {
-        if (ActorCutscene_GetCanPlayNext(this->cutscenes[0]) && (this->cutscenes[0] != -1)) {
-            ActorCutscene_StartAndSetUnkLinkFields(this->cutscenes[0], &this->actor);
-            Camera_SetToTrackActor(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(this->cutscenes[0])),
+        if (CutsceneManager_IsNext(this->csIdList[0]) && (this->csIdList[0] != -1)) {
+            CutsceneManager_StartWithPlayerCs(this->csIdList[0], &this->actor);
+            Camera_SetToTrackActor(Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(this->csIdList[0])),
                                    &this->actor);
             this->actor.speed = 1.5f;
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 1);
@@ -252,8 +252,8 @@ void func_80BD8758(EnPamera* this, PlayState* play) {
             this->actor.world.rot.y = this->actor.home.rot.y;
             func_80BD9338(this, play);
             func_80BD8908(this);
-        } else if ((this->cutscenes[0] != -1) && (this->actor.xzDistToPlayer < 1000.0f)) {
-            ActorCutscene_SetIntentToPlay(this->cutscenes[0]);
+        } else if ((this->csIdList[0] != -1) && (this->actor.xzDistToPlayer < 1000.0f)) {
+            CutsceneManager_Queue(this->csIdList[0]);
         } else {
             this->actor.speed = 1.5f;
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 1);
@@ -338,7 +338,7 @@ void func_80BD8B70(EnPamera* this, PlayState* play) {
         func_80BD8CCC(this);
     }
 
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
     this->actor.world.pos.y += this->actor.gravity;
 }
 
@@ -382,7 +382,7 @@ void func_80BD8DB0(EnPamera* this, PlayState* play) {
         func_80BD9338(this, play);
         func_80BD8A38(this);
     }
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
     this->actor.world.pos.y += this->actor.gravity;
 }
 
@@ -429,13 +429,13 @@ void func_80BD90AC(EnPamera* this, PlayState* play) {
         ((this->actor.xzDistToPlayer < 150.0f) ||
          ((this->actionFunc == func_80BD909C) &&
           (Math_Vec3f_DistXZ(&this->actor.home.pos, &player->actor.world.pos) < 200.0f)))) {
-        if ((ActorCutscene_GetCanPlayNext(this->cutscenes[1])) && ((this->cutscenes[1] != -1))) {
-            ActorCutscene_StartAndSetUnkLinkFields(this->cutscenes[1], &this->actor);
-            Camera_SetToTrackActor(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(this->cutscenes[1])),
+        if ((CutsceneManager_IsNext(this->csIdList[1])) && ((this->csIdList[1] != -1))) {
+            CutsceneManager_StartWithPlayerCs(this->csIdList[1], &this->actor);
+            Camera_SetToTrackActor(Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(this->csIdList[1])),
                                    &this->actor);
             EnPamera_LookDownWell(this);
-        } else if (this->cutscenes[1] != -1) {
-            ActorCutscene_SetIntentToPlay(this->cutscenes[1]);
+        } else if (this->csIdList[1] != -1) {
+            CutsceneManager_Queue(this->csIdList[1]);
         } else {
             EnPamera_LookDownWell(this);
         }
@@ -569,7 +569,7 @@ void func_80BD9840(EnPamera* this, PlayState* play) {
     this->actor.update = func_80BDA344;
     this->actor.flags |= ACTOR_FLAG_2000000;
     this->actor.flags |= ACTOR_FLAG_100000;
-    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_75_20) || CHECK_WEEKEVENTREG(WEEKEVENTREG_52_20)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_75_20) || CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_STONE_TOWER_TEMPLE)) {
         func_80BD9E60(this);
         func_80BD9938(this);
     } else {
@@ -605,7 +605,8 @@ void func_80BD994C(EnPamera* this, PlayState* play) {
 
             this->unk_324 = 0x15A8;
         } else if ((gSaveContext.save.playerForm != PLAYER_FORM_HUMAN) ||
-                   (CHECK_WEEKEVENTREG(WEEKEVENTREG_52_20) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_75_20))) {
+                   (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_STONE_TOWER_TEMPLE) &&
+                    !CHECK_WEEKEVENTREG(WEEKEVENTREG_75_20))) {
             func_80BD93CC(this, 1, 0);
             Message_StartTextbox(play, 0x158E, &this->actor);
             this->unk_324 = 0x158E;
@@ -695,14 +696,14 @@ void func_80BD9C70(EnPamera* this, PlayState* play) {
 }
 
 s32 func_80BD9CB8(EnPamera* this, PlayState* play) {
-    s32 actionIndex;
+    s32 cueChannel;
 
-    if (Cutscene_CheckActorAction(play, 0x1E5)) {
-        actionIndex = Cutscene_GetActorActionIndex(play, 0x1E5);
-        if (this->unk_326 != play->csCtx.actorActions[actionIndex]->action) {
-            this->unk_326 = play->csCtx.actorActions[actionIndex]->action;
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_485)) {
+        cueChannel = Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_485);
+        if (this->cueId != play->csCtx.actorCues[cueChannel]->id) {
+            this->cueId = play->csCtx.actorCues[cueChannel]->id;
 
-            switch (play->csCtx.actorActions[actionIndex]->action) {
+            switch (play->csCtx.actorCues[cueChannel]->id) {
                 case 1:
                     func_80BD9E88(this);
                     break;
@@ -727,7 +728,7 @@ s32 func_80BD9CB8(EnPamera* this, PlayState* play) {
                     break;
             }
         }
-        Cutscene_ActorTranslateAndYaw(&this->actor, play, actionIndex);
+        Cutscene_ActorTranslateAndYaw(&this->actor, play, cueChannel);
         this->setupFunc(this, play);
         return 1;
     }
@@ -738,7 +739,7 @@ s32 func_80BD9CB8(EnPamera* this, PlayState* play) {
             func_80BD9E60(this);
         }
     }
-    this->unk_326 = 0x63;
+    this->cueId = 99;
     return 0;
 }
 

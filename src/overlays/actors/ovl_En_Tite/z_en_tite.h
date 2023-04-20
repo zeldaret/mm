@@ -27,7 +27,7 @@ typedef struct EnTite {
     /* 0x2BB */ u8 drawDmgEffType;
     /* 0x2BC */ s16 unk_2BC;
     /* 0x2BE */ s16 unk_2BE;
-    /* 0x2C0 */ s32 unk_2C0;
+    /* 0x2C0 */ s32 updBgCheckInfoFlags;
     /* 0x2C4 */ f32 drawDmgEffAlpha;
     /* 0x2C8 */ f32 drawDmgEffScale;
     /* 0x2CC */ f32 drawDmgEffFrozenSteamScale;

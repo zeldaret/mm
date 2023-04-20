@@ -184,9 +184,9 @@ void BgIkanaBlock_Init(Actor* thisx, PlayState* play) {
     BgIkanaBlock* this = THIS;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
     DynaPolyActor_LoadMesh(play, &this->dyna, &gameplay_dangeon_keep_Colheader_007498);
-    func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
     this->unk_15C = Lib_SegmentedToVirtual(gameplay_dangeon_keep_Matanimheader_01B370);
     this->unk_174 = this->dyna.actor.shape.rot;
     func_80B7ED54(this);
@@ -211,7 +211,7 @@ void func_80B7F034(BgIkanaBlock* this, PlayState* play) {
     }
 
     if (func_80B7EEB4(this, play)) {
-        func_800C6314(play, &play->colCtx.dyna, this->dyna.bgId);
+        DynaPoly_EnableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
         this->dyna.actor.draw = func_80B7F564;
         func_80B7F0A4(this);
     }
@@ -336,8 +336,8 @@ void func_80B7F398(BgIkanaBlock* this, PlayState* play) {
     if (func_80B7EE70(this, play)) {
         Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
         Actor_PlaySfx(&this->dyna.actor,
-                      SurfaceType_GetSfx(&play->colCtx, this->dyna.actor.floorPoly, this->dyna.actor.floorBgId) +
-                          SFX_FLAG);
+                      NA_SE_PL_WALK_GROUND + SurfaceType_GetSfxOffset(&play->colCtx, this->dyna.actor.floorPoly,
+                                                                      this->dyna.actor.floorBgId));
         func_80B7F0A4(this);
     }
 }
@@ -358,13 +358,13 @@ void BgIkanaBlock_Update(Actor* thisx, PlayState* play) {
     if (this->unk_17E != 0) {
         if (this->unk_17F > 0) {
             this->unk_17F--;
-            ActorCutscene_Stop(this->dyna.actor.cutscene);
+            CutsceneManager_Stop(this->dyna.actor.csId);
             this->unk_17E = 0;
-        } else if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
-            ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
+        } else if (CutsceneManager_IsNext(this->dyna.actor.csId)) {
+            CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
             this->unk_17F = 30;
         } else {
-            ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+            CutsceneManager_Queue(this->dyna.actor.csId);
         }
     }
 }

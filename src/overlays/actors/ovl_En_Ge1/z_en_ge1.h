@@ -36,7 +36,7 @@ typedef struct EnGe1 {
     /* 0x2BA */ s16 blinkTimer;
     /* 0x2BC */ u16 stateFlags;
     /* 0x2BE */ s16 animIndex;
-    /* 0x2C0 */ s16 csAction;
+    /* 0x2C0 */ s16 cueId;
     /* 0x2C2 */ s16 screamTimer;
     /* 0x2C4 */ u8 hairstyle;
     /* 0x2C8 */ EnGe1ActionFunc actionFunc;

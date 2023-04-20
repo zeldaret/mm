@@ -58,8 +58,8 @@ typedef struct EnSuttari {
     /* 0x444 */ Vec3f unk444;
     /* 0x450 */ s32 animIndex;
     /* 0x454 */ UNK_TYPE1 unk_454[0x2];
-    /* 0x456 */ s16 cutscenes[2];
-    /* 0x45A */ s16 cutsceneIdx;
+    /* 0x456 */ s16 csIdList[2];
+    /* 0x45A */ s16 csIdIndex;
 } EnSuttari; // size = 0x45C
 
 #endif // Z_EN_SUTTARI_H

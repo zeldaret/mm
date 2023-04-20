@@ -76,7 +76,7 @@ Vec3f D_8096AC30 = { 500.0f, -500.0f, 0.0f };
 
 void EnJs_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    s16 cs;
+    s16 csId;
     s32 i;
     EnJs* this = THIS;
 
@@ -92,17 +92,17 @@ void EnJs_Init(Actor* thisx, PlayState* play) {
     this->actor.terminalVelocity = -9.0f;
     this->actor.gravity = -1.0f;
 
-    cs = this->actor.cutscene;
+    csId = this->actor.csId;
 
-    for (i = 0; i < ARRAY_COUNT(this->cutscenes); i++) {
-        this->cutscenes[i] = cs;
-        if (cs != -1) {
-            this->actor.cutscene = cs;
-            cs = ActorCutscene_GetAdditionalCutscene(this->actor.cutscene);
+    for (i = 0; i < ARRAY_COUNT(this->csIdList); i++) {
+        this->csIdList[i] = csId;
+        if (csId != CS_ID_NONE) {
+            this->actor.csId = csId;
+            csId = CutsceneManager_GetAdditionalCsId(this->actor.csId);
         }
     }
 
-    this->cutsceneIndex = -1;
+    this->csIdIndex = -1;
 
     switch (ENJS_GET_TYPE(&this->actor)) {
         case 0:
@@ -511,17 +511,17 @@ s32 func_809695FC(EnJs* this, PlayState* play) {
 }
 
 void func_80969688(EnJs* this) {
-    if (this->cutsceneIndex != -1) {
-        if (ActorCutscene_GetCurrentIndex() == this->cutscenes[this->cutsceneIndex]) {
-            ActorCutscene_Stop(this->cutscenes[this->cutsceneIndex]);
+    if (this->csIdIndex != -1) {
+        if (CutsceneManager_GetCurrentCsId() == this->csIdList[this->csIdIndex]) {
+            CutsceneManager_Stop(this->csIdList[this->csIdIndex]);
         }
-        this->cutsceneIndex = -1;
+        this->csIdIndex = -1;
     }
 }
 
-void func_809696EC(EnJs* this, s16 arg1) {
+void func_809696EC(EnJs* this, s16 csIdIndex) {
     func_80969688(this);
-    this->cutsceneIndex = arg1;
+    this->csIdIndex = csIdIndex;
 }
 
 void func_8096971C(EnJs* this, PlayState* play) {
@@ -1015,18 +1015,18 @@ void EnJs_Update(Actor* thisx, PlayState* play) {
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
 
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 40.0f, 25.0f, 40.0f, 5);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 40.0f, 25.0f, 40.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
 
     this->actionFunc(this, play);
 
-    if ((this->cutsceneIndex != -1) && (ActorCutscene_GetCurrentIndex() != this->cutscenes[this->cutsceneIndex])) {
-        if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-            ActorCutscene_Stop(0x7C);
-            ActorCutscene_SetIntentToPlay(this->cutscenes[this->cutsceneIndex]);
-        } else if (ActorCutscene_GetCanPlayNext(this->cutscenes[this->cutsceneIndex])) {
-            ActorCutscene_Start(this->cutscenes[this->cutsceneIndex], &this->actor);
+    if ((this->csIdIndex != -1) && (CutsceneManager_GetCurrentCsId() != this->csIdList[this->csIdIndex])) {
+        if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+            CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
+            CutsceneManager_Queue(this->csIdList[this->csIdIndex]);
+        } else if (CutsceneManager_IsNext(this->csIdList[this->csIdIndex])) {
+            CutsceneManager_Start(this->csIdList[this->csIdIndex], &this->actor);
         } else {
-            ActorCutscene_SetIntentToPlay(this->cutscenes[this->cutsceneIndex]);
+            CutsceneManager_Queue(this->csIdList[this->csIdIndex]);
         }
     }
 }

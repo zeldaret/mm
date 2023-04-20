@@ -124,7 +124,7 @@ s32 func_80A52648(EnDnq* this, PlayState* play) {
     if (play->csCtx.state != 0) {
         if (!(this->unk_37C & 0x20)) {
             this->picto.actor.flags &= ~ACTOR_FLAG_1;
-            this->unk_1DC = 0xFF;
+            this->cueId = 255;
             this->unk_37C |= 0x20;
         }
         SubS_UpdateFlags(&this->unk_37C, 0, 7);
@@ -132,7 +132,7 @@ s32 func_80A52648(EnDnq* this, PlayState* play) {
     } else {
         if (this->unk_37C & 0x20) {
             this->picto.actor.flags |= ACTOR_FLAG_1;
-            this->unk_1DC = 0xFF;
+            this->cueId = 255;
             this->unk_37C &= ~0x20;
             SubS_UpdateFlags(&this->unk_37C, 3, 7);
         }
@@ -346,7 +346,7 @@ void func_80A52DC8(EnDnq* this, PlayState* play) {
     if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_23_20)) {
         this->unk_390 = 70.0f;
         if (Inventory_HasItemInBottle(ITEM_DEKU_PRINCESS) && !Play_InCsMode(play) &&
-            (Message_GetState(&play->msgCtx) == TEXT_STATE_NONE) && (ActorCutscene_GetCurrentIndex() == -1)) {
+            (Message_GetState(&play->msgCtx) == TEXT_STATE_NONE) && (CutsceneManager_GetCurrentCsId() == CS_ID_NONE)) {
             if ((DECR(this->unk_384) == 0) && CHECK_WEEKEVENTREG(WEEKEVENTREG_29_40)) {
                 Message_StartTextbox(play, 0x969, NULL);
                 this->unk_384 = 200;
@@ -391,15 +391,15 @@ void func_80A53038(EnDnq* this, PlayState* play) {
     static s32 D_80A535FC[] = {
         0, 1, 2, 3, 5, 6,
     };
-    s32 temp_v0;
-    u32 temp_v1;
+    s32 cueChannel;
+    u32 cueId;
 
-    if (Cutscene_CheckActorAction(play, 105)) {
-        temp_v0 = Cutscene_GetActorActionIndex(play, 105);
-        temp_v1 = play->csCtx.actorActions[temp_v0]->action;
-        if (this->unk_1DC != (u8)temp_v1) {
-            func_80A5257C(this, D_80A535FC[temp_v1]);
-            this->unk_1DC = temp_v1;
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_105)) {
+        cueChannel = Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_105);
+        cueId = play->csCtx.actorCues[cueChannel]->id;
+        if (this->cueId != (u8)cueId) {
+            func_80A5257C(this, D_80A535FC[cueId]);
+            this->cueId = cueId;
         }
 
         if ((this->unk_398 == 4) && Animation_OnFrame(&this->skelAnime, 2.0f)) {
@@ -411,7 +411,7 @@ void func_80A53038(EnDnq* this, PlayState* play) {
             func_80A5257C(this, this->unk_398 + 1);
         }
 
-        Cutscene_ActorTranslateAndYaw(&this->picto.actor, play, temp_v0);
+        Cutscene_ActorTranslateAndYaw(&this->picto.actor, play, cueChannel);
     }
 }
 
@@ -455,7 +455,7 @@ void EnDnq_Update(Actor* thisx, PlayState* play) {
         this->actionFunc(this, play);
         func_80A52B68(this, play);
         SkelAnime_Update(&this->skelAnime);
-        Actor_UpdateBgCheckInfo(play, &this->picto.actor, 30.0f, 12.0f, 0.0f, 4);
+        Actor_UpdateBgCheckInfo(play, &this->picto.actor, 30.0f, 12.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
         this->unk_394 = this->picto.actor.xzDistToPlayer;
         func_80A52C6C(this, play);
         func_8013C964(&this->picto.actor, play, this->unk_390, fabsf(this->picto.actor.playerHeightRel) + 1.0f,

@@ -1006,12 +1006,12 @@ void Interface_NewDay(PlayState* play, s32 day) {
                         (u32)SEGMENT_ROM_START(week_static) + i * 0x510, 0x510);
 
     // i is used to store sceneId
-    for (i = 0; i < ARRAY_COUNT(gSaveContext.save.permanentSceneFlags); i++) {
-        gSaveContext.save.permanentSceneFlags[i].chest = gSaveContext.cycleSceneFlags[i].chest;
-        gSaveContext.save.permanentSceneFlags[i].switch0 = gSaveContext.cycleSceneFlags[i].switch0;
-        gSaveContext.save.permanentSceneFlags[i].switch1 = gSaveContext.cycleSceneFlags[i].switch1;
-        gSaveContext.save.permanentSceneFlags[i].clearedRoom = gSaveContext.cycleSceneFlags[i].clearedRoom;
-        gSaveContext.save.permanentSceneFlags[i].collectible = gSaveContext.cycleSceneFlags[i].collectible;
+    for (i = 0; i < ARRAY_COUNT(gSaveContext.save.saveInfo.permanentSceneFlags); i++) {
+        gSaveContext.save.saveInfo.permanentSceneFlags[i].chest = gSaveContext.cycleSceneFlags[i].chest;
+        gSaveContext.save.saveInfo.permanentSceneFlags[i].switch0 = gSaveContext.cycleSceneFlags[i].switch0;
+        gSaveContext.save.saveInfo.permanentSceneFlags[i].switch1 = gSaveContext.cycleSceneFlags[i].switch1;
+        gSaveContext.save.saveInfo.permanentSceneFlags[i].clearedRoom = gSaveContext.cycleSceneFlags[i].clearedRoom;
+        gSaveContext.save.saveInfo.permanentSceneFlags[i].collectible = gSaveContext.cycleSceneFlags[i].collectible;
     }
 }
 
@@ -1880,7 +1880,7 @@ void Interface_UpdateButtonsPart2(PlayState* play) {
     } else if (CHECK_EVENTINF(EVENTINF_34)) {
         // Deku playground minigame
         if (player->stateFlags3 & PLAYER_STATE3_1000000) {
-            if (gSaveContext.save.inventory.items[SLOT_NUT] == ITEM_NUT) {
+            if (gSaveContext.save.saveInfo.inventory.items[SLOT_NUT] == ITEM_NUT) {
                 BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) = ITEM_NUT;
                 Interface_LoadItemIconImpl(play, EQUIP_SLOT_B);
             } else {
@@ -1908,7 +1908,7 @@ void Interface_UpdateButtonsPart2(PlayState* play) {
         }
     } else if (player->stateFlags3 & PLAYER_STATE3_1000000) {
         // Nuts on B (from flying as Deku Link)
-        if (gSaveContext.save.inventory.items[SLOT_NUT] == ITEM_NUT) {
+        if (gSaveContext.save.saveInfo.inventory.items[SLOT_NUT] == ITEM_NUT) {
             if (BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) != ITEM_NUT) {
                 BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) = ITEM_NUT;
                 Interface_LoadItemIconImpl(play, EQUIP_SLOT_B);
@@ -1925,7 +1925,7 @@ void Interface_UpdateButtonsPart2(PlayState* play) {
             gSaveContext.buttonStatus[EQUIP_SLOT_C_DOWN] = BTN_DISABLED;
             gSaveContext.buttonStatus[EQUIP_SLOT_C_RIGHT] = BTN_DISABLED;
         }
-    } else if (!gSaveContext.save.playerData.isMagicAcquired && (CUR_FORM == PLAYER_FORM_DEKU) &&
+    } else if (!gSaveContext.save.saveInfo.playerData.isMagicAcquired && (CUR_FORM == PLAYER_FORM_DEKU) &&
                (BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) == ITEM_NUT)) {
         // Nuts on B (as Deku Link)
         BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) = ITEM_FD;
@@ -1990,7 +1990,7 @@ void Interface_UpdateButtonsPart2(PlayState* play) {
         }
 
         if ((play->transitionTrigger == TRANS_TRIGGER_OFF) && (play->transitionMode == TRANS_MODE_OFF)) {
-            if (ActorCutscene_GetCurrentIndex() == -1) {
+            if (CutsceneManager_GetCurrentCsId() == CS_ID_NONE) {
                 Interface_SetHudVisibility(HUD_VISIBILITY_ALL);
             }
         }
@@ -2267,7 +2267,7 @@ void Interface_UpdateButtonsPart1(PlayState* play) {
     s32 pad;
     s32 restoreHudVisibility = false;
 
-    if (gSaveContext.save.cutscene < 0xFFF0) {
+    if (gSaveContext.save.cutsceneIndex < 0xFFF0) {
         gSaveContext.hudVisibilityForceButtonAlphasByStatus = false;
         if ((player->stateFlags1 & PLAYER_STATE1_800000) || CHECK_WEEKEVENTREG(WEEKEVENTREG_08_01) ||
             (!(CHECK_EVENTINF(EVENTINF_41)) && (play->unk_1887C >= 2))) {
@@ -2324,7 +2324,7 @@ void Interface_UpdateButtonsPart1(PlayState* play) {
 
                             if (play->unk_1887C >= 2) {
                                 Interface_LoadItemIconImpl(play, EQUIP_SLOT_B);
-                            } else if (gSaveContext.save.inventory.items[SLOT_BOW] == ITEM_NONE) {
+                            } else if (gSaveContext.save.saveInfo.inventory.items[SLOT_BOW] == ITEM_NONE) {
                                 BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) = ITEM_NONE;
                             } else {
                                 Interface_LoadItemIconImpl(play, EQUIP_SLOT_B);
@@ -2382,7 +2382,7 @@ void Interface_UpdateButtonsPart1(PlayState* play) {
 
                 if (play->unk_1887C >= 2) {
                     Interface_LoadItemIconImpl(play, EQUIP_SLOT_B);
-                } else if (gSaveContext.save.inventory.items[SLOT_BOW] == ITEM_NONE) {
+                } else if (gSaveContext.save.saveInfo.inventory.items[SLOT_BOW] == ITEM_NONE) {
                     BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) = ITEM_NONE;
                 } else {
                     Interface_LoadItemIconImpl(play, EQUIP_SLOT_B);
@@ -2434,7 +2434,7 @@ void Interface_UpdateButtonsPart1(PlayState* play) {
                     sPictoState = PICTO_BOX_STATE_OFF;
                 } else if (CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_A) || (func_801A5100() == 1)) {
                     if (!(CHECK_EVENTINF(EVENTINF_41)) ||
-                        ((CHECK_EVENTINF(EVENTINF_41)) && (ActorCutscene_GetCurrentIndex() == -1))) {
+                        ((CHECK_EVENTINF(EVENTINF_41)) && (CutsceneManager_GetCurrentCsId() == CS_ID_NONE))) {
                         play_sound(NA_SE_SY_CAMERA_SHUTTER);
                         SREG(89) = 1;
                         play->haltAllActors = true;
@@ -2627,14 +2627,14 @@ u8 Item_Give(PlayState* play, u8 item) {
         INCREMENT_QUEST_HEART_PIECE_COUNT;
         if (EQ_MAX_QUEST_HEART_PIECE_COUNT) {
             RESET_HEART_PIECE_COUNT;
-            gSaveContext.save.playerData.healthCapacity += 0x10;
-            gSaveContext.save.playerData.health += 0x10;
+            gSaveContext.save.saveInfo.playerData.healthCapacity += 0x10;
+            gSaveContext.save.saveInfo.playerData.health += 0x10;
         }
         return ITEM_NONE;
 
     } else if (item == ITEM_HEART_CONTAINER) {
-        gSaveContext.save.playerData.healthCapacity += 0x10;
-        gSaveContext.save.playerData.health += 0x10;
+        gSaveContext.save.saveInfo.playerData.healthCapacity += 0x10;
+        gSaveContext.save.saveInfo.playerData.health += 0x10;
         return ITEM_NONE;
 
     } else if ((item >= ITEM_SONG_SONATA) && (item <= ITEM_SONG_LULLABY_INTRO)) {
@@ -2646,7 +2646,7 @@ u8 Item_Give(PlayState* play, u8 item) {
         CUR_FORM_EQUIP(EQUIP_SLOT_B) = item;
         Interface_LoadItemIconImpl(play, EQUIP_SLOT_B);
         if (item == ITEM_SWORD_RAZOR) {
-            gSaveContext.save.playerData.swordHealth = 100;
+            gSaveContext.save.saveInfo.playerData.swordHealth = 100;
         }
         return ITEM_NONE;
 
@@ -2824,7 +2824,7 @@ u8 Item_Give(PlayState* play, u8 item) {
         return ITEM_NONE;
 
     } else if ((item >= ITEM_BOMBS_5) && (item <= ITEM_BOMBS_30)) {
-        if (gSaveContext.save.inventory.items[SLOT_BOMB] != ITEM_BOMB) {
+        if (gSaveContext.save.saveInfo.inventory.items[SLOT_BOMB] != ITEM_BOMB) {
             INV_CONTENT(ITEM_BOMB) = ITEM_BOMB;
             AMMO(ITEM_BOMB) += sAmmoRefillCounts[item - ITEM_BOMBS_5];
             return ITEM_NONE;
@@ -2847,7 +2847,7 @@ u8 Item_Give(PlayState* play, u8 item) {
         return ITEM_NONE;
 
     } else if ((item >= ITEM_BOMBCHUS_20) && (item <= ITEM_BOMBCHUS_5)) {
-        if (gSaveContext.save.inventory.items[SLOT_BOMBCHU] != ITEM_BOMBCHU) {
+        if (gSaveContext.save.saveInfo.inventory.items[SLOT_BOMBCHU] != ITEM_BOMBCHU) {
             INV_CONTENT(ITEM_BOMBCHU) = ITEM_BOMBCHU;
             AMMO(ITEM_BOMBCHU) += sBombchuRefillCounts[item - ITEM_BOMBCHUS_20];
 
@@ -2917,8 +2917,8 @@ u8 Item_Give(PlayState* play, u8 item) {
         slot = SLOT(item);
 
         for (i = BOTTLE_FIRST; i < BOTTLE_MAX; i++) {
-            if (gSaveContext.save.inventory.items[slot + i] == ITEM_NONE) {
-                gSaveContext.save.inventory.items[slot + i] = ITEM_POTION_RED;
+            if (gSaveContext.save.saveInfo.inventory.items[slot + i] == ITEM_NONE) {
+                gSaveContext.save.saveInfo.inventory.items[slot + i] = ITEM_POTION_RED;
                 return ITEM_NONE;
             }
         }
@@ -2929,8 +2929,8 @@ u8 Item_Give(PlayState* play, u8 item) {
         slot = SLOT(item);
 
         for (i = BOTTLE_FIRST; i < BOTTLE_MAX; i++) {
-            if (gSaveContext.save.inventory.items[slot + i] == ITEM_NONE) {
-                gSaveContext.save.inventory.items[slot + i] = item;
+            if (gSaveContext.save.saveInfo.inventory.items[slot + i] == ITEM_NONE) {
+                gSaveContext.save.saveInfo.inventory.items[slot + i] = item;
                 return ITEM_NONE;
             }
         }
@@ -2940,8 +2940,8 @@ u8 Item_Give(PlayState* play, u8 item) {
         slot = SLOT(item);
 
         for (i = BOTTLE_FIRST; i < BOTTLE_MAX; i++) {
-            if (gSaveContext.save.inventory.items[slot + i] == ITEM_NONE) {
-                gSaveContext.save.inventory.items[slot + i] = item;
+            if (gSaveContext.save.saveInfo.inventory.items[slot + i] == ITEM_NONE) {
+                gSaveContext.save.saveInfo.inventory.items[slot + i] = item;
                 return ITEM_NONE;
             }
         }
@@ -2971,7 +2971,7 @@ u8 Item_Give(PlayState* play, u8 item) {
             slot = SLOT(item);
 
             for (i = BOTTLE_FIRST; i < BOTTLE_MAX; i++) {
-                if (gSaveContext.save.inventory.items[slot + i] == ITEM_BOTTLE) {
+                if (gSaveContext.save.saveInfo.inventory.items[slot + i] == ITEM_BOTTLE) {
                     if (item == ITEM_HOT_SPRING_WATER) {
                         Interface_StartBottleTimer(60, i);
                     }
@@ -2990,14 +2990,14 @@ u8 Item_Give(PlayState* play, u8 item) {
                         gSaveContext.buttonStatus[EQUIP_SLOT_C_RIGHT] = BTN_ENABLED;
                     }
 
-                    gSaveContext.save.inventory.items[slot + i] = item;
+                    gSaveContext.save.saveInfo.inventory.items[slot + i] = item;
                     return ITEM_NONE;
                 }
             }
         } else {
             for (i = BOTTLE_FIRST; i < BOTTLE_MAX; i++) {
-                if (gSaveContext.save.inventory.items[slot + i] == ITEM_NONE) {
-                    gSaveContext.save.inventory.items[slot + i] = item;
+                if (gSaveContext.save.saveInfo.inventory.items[slot + i] == ITEM_NONE) {
+                    gSaveContext.save.saveInfo.inventory.items[slot + i] = item;
                     return ITEM_NONE;
                 }
             }
@@ -3018,7 +3018,7 @@ u8 Item_Give(PlayState* play, u8 item) {
         return ITEM_NONE;
     }
 
-    temp = gSaveContext.save.inventory.items[slot];
+    temp = gSaveContext.save.saveInfo.inventory.items[slot];
     INV_CONTENT(item) = item;
     return temp;
 }
@@ -3159,13 +3159,13 @@ u8 Item_CheckObtainabilityImpl(u8 item) {
             bottleSlot = SLOT(item);
 
             for (i = BOTTLE_FIRST; i < BOTTLE_MAX; i++) {
-                if (gSaveContext.save.inventory.items[bottleSlot + i] == ITEM_BOTTLE) {
+                if (gSaveContext.save.saveInfo.inventory.items[bottleSlot + i] == ITEM_BOTTLE) {
                     return ITEM_NONE;
                 }
             }
         } else {
             for (i = BOTTLE_FIRST; i < BOTTLE_MAX; i++) {
-                if (gSaveContext.save.inventory.items[bottleSlot + i] == ITEM_NONE) {
+                if (gSaveContext.save.saveInfo.inventory.items[bottleSlot + i] == ITEM_NONE) {
                     return ITEM_NONE;
                 }
             }
@@ -3174,7 +3174,7 @@ u8 Item_CheckObtainabilityImpl(u8 item) {
         return ITEM_NONE;
     }
 
-    return gSaveContext.save.inventory.items[slot];
+    return gSaveContext.save.saveInfo.inventory.items[slot];
 }
 
 u8 Item_CheckObtainability(u8 item) {
@@ -3184,7 +3184,7 @@ u8 Item_CheckObtainability(u8 item) {
 void Inventory_DeleteItem(s16 item, s16 slot) {
     s16 btn;
 
-    gSaveContext.save.inventory.items[slot] = ITEM_NONE;
+    gSaveContext.save.saveInfo.inventory.items[slot] = ITEM_NONE;
 
     for (btn = EQUIP_SLOT_C_LEFT; btn <= EQUIP_SLOT_C_RIGHT; btn++) {
         if (GET_CUR_FORM_BTN_ITEM(btn) == item) {
@@ -3209,8 +3209,8 @@ s32 Inventory_ReplaceItem(PlayState* play, u8 oldItem, u8 newItem) {
     u8 i;
 
     for (i = 0; i < 24; i++) {
-        if (gSaveContext.save.inventory.items[i] == oldItem) {
-            gSaveContext.save.inventory.items[i] = newItem;
+        if (gSaveContext.save.saveInfo.inventory.items[i] == oldItem) {
+            gSaveContext.save.saveInfo.inventory.items[i] = newItem;
 
             for (i = EQUIP_SLOT_C_LEFT; i <= EQUIP_SLOT_C_RIGHT; i++) {
                 if (GET_CUR_FORM_BTN_ITEM(i) == oldItem) {
@@ -3259,7 +3259,7 @@ s32 Inventory_HasEmptyBottle(void) {
     s32 slot;
 
     for (slot = SLOT_BOTTLE_1; slot <= SLOT_BOTTLE_6; slot++) {
-        if (gSaveContext.save.inventory.items[slot] == ITEM_BOTTLE) {
+        if (gSaveContext.save.saveInfo.inventory.items[slot] == ITEM_BOTTLE) {
             return true;
         }
     }
@@ -3270,7 +3270,7 @@ s32 Inventory_HasItemInBottle(u8 item) {
     s32 slot;
 
     for (slot = SLOT_BOTTLE_1; slot <= SLOT_BOTTLE_6; slot++) {
-        if (gSaveContext.save.inventory.items[slot] == item) {
+        if (gSaveContext.save.saveInfo.inventory.items[slot] == item) {
             return true;
         }
     }
@@ -3278,7 +3278,7 @@ s32 Inventory_HasItemInBottle(u8 item) {
 }
 
 void Inventory_UpdateBottleItem(PlayState* play, u8 item, u8 btn) {
-    gSaveContext.save.inventory.items[GET_CUR_FORM_BTN_SLOT(btn)] = item;
+    gSaveContext.save.saveInfo.inventory.items[GET_CUR_FORM_BTN_SLOT(btn)] = item;
     SET_CUR_FORM_BTN_ITEM(btn, item);
 
     Interface_LoadItemIconImpl(play, btn);
@@ -3297,7 +3297,7 @@ s32 Inventory_ConsumeFairy(PlayState* play) {
     u8 i;
 
     for (i = BOTTLE_FIRST; i < BOTTLE_MAX; i++) {
-        if (gSaveContext.save.inventory.items[bottleSlot + i] == ITEM_FAIRY) {
+        if (gSaveContext.save.saveInfo.inventory.items[bottleSlot + i] == ITEM_FAIRY) {
             for (btn = EQUIP_SLOT_C_LEFT; btn <= EQUIP_SLOT_C_RIGHT; btn++) {
                 if (GET_CUR_FORM_BTN_ITEM(btn) == ITEM_FAIRY) {
                     SET_CUR_FORM_BTN_ITEM(btn, ITEM_BOTTLE);
@@ -3307,7 +3307,7 @@ s32 Inventory_ConsumeFairy(PlayState* play) {
                     break;
                 }
             }
-            gSaveContext.save.inventory.items[bottleSlot + i] = ITEM_BOTTLE;
+            gSaveContext.save.saveInfo.inventory.items[bottleSlot + i] = ITEM_BOTTLE;
             return true;
         }
     }
@@ -3321,7 +3321,7 @@ s32 Inventory_ConsumeFairy(PlayState* play) {
 void Inventory_UpdateItem(PlayState* play, s16 slot, s16 item) {
     s16 btn;
 
-    gSaveContext.save.inventory.items[slot] = item;
+    gSaveContext.save.saveInfo.inventory.items[slot] = item;
 
     for (btn = EQUIP_SLOT_C_LEFT; btn <= EQUIP_SLOT_C_RIGHT; btn++) {
         if (GET_CUR_FORM_BTN_SLOT(btn) == slot) {
@@ -3355,18 +3355,19 @@ void func_80115428(InterfaceContext* interfaceCtx, u16 doAction, s16 loadOffset)
 s32 Health_ChangeBy(PlayState* play, s16 healthChange) {
     if (healthChange > 0) {
         play_sound(NA_SE_SY_HP_RECOVER);
-    } else if (gSaveContext.save.playerData.doubleDefense && (healthChange < 0)) {
+    } else if (gSaveContext.save.saveInfo.playerData.doubleDefense && (healthChange < 0)) {
         healthChange >>= 1;
     }
 
-    gSaveContext.save.playerData.health += healthChange;
+    gSaveContext.save.saveInfo.playerData.health += healthChange;
 
-    if (((void)0, gSaveContext.save.playerData.health) > ((void)0, gSaveContext.save.playerData.healthCapacity)) {
-        gSaveContext.save.playerData.health = gSaveContext.save.playerData.healthCapacity;
+    if (((void)0, gSaveContext.save.saveInfo.playerData.health) >
+        ((void)0, gSaveContext.save.saveInfo.playerData.healthCapacity)) {
+        gSaveContext.save.saveInfo.playerData.health = gSaveContext.save.saveInfo.playerData.healthCapacity;
     }
 
-    if (gSaveContext.save.playerData.health <= 0) {
-        gSaveContext.save.playerData.health = 0;
+    if (gSaveContext.save.saveInfo.playerData.health <= 0) {
+        gSaveContext.save.saveInfo.playerData.health = 0;
         return false;
     } else {
         return true;
@@ -3374,7 +3375,7 @@ s32 Health_ChangeBy(PlayState* play, s16 healthChange) {
 }
 
 void Health_GiveHearts(s16 hearts) {
-    gSaveContext.save.playerData.healthCapacity += hearts * 0x10;
+    gSaveContext.save.saveInfo.playerData.healthCapacity += hearts * 0x10;
 }
 
 void Rupees_ChangeBy(s16 rupeeChange) {
@@ -3441,7 +3442,7 @@ void Inventory_ChangeAmmo(s16 item, s16 ammoChange) {
 }
 
 void Magic_Add(PlayState* play, s16 magicToAdd) {
-    if (((void)0, gSaveContext.save.playerData.magic) < ((void)0, gSaveContext.magicCapacity)) {
+    if (((void)0, gSaveContext.save.saveInfo.playerData.magic) < ((void)0, gSaveContext.magicCapacity)) {
         gSaveContext.magicToAdd += magicToAdd;
         gSaveContext.isMagicRequested = true;
     }
@@ -3465,12 +3466,12 @@ s32 Magic_Consume(PlayState* play, s16 magicToConsume, s16 type) {
     InterfaceContext* interfaceCtx = &play->interfaceCtx;
 
     // Magic is not acquired yet
-    if (!gSaveContext.save.playerData.isMagicAcquired) {
+    if (!gSaveContext.save.saveInfo.playerData.isMagicAcquired) {
         return false;
     }
 
     // Not enough magic available to consume
-    if ((gSaveContext.save.playerData.magic - magicToConsume) < 0) {
+    if ((gSaveContext.save.saveInfo.playerData.magic - magicToConsume) < 0) {
         if (gSaveContext.magicCapacity != 0) {
             play_sound(NA_SE_SY_ERROR);
         }
@@ -3518,7 +3519,7 @@ s32 Magic_Consume(PlayState* play, s16 magicToConsume, s16 type) {
 
         case MAGIC_CONSUME_LENS:
             if (gSaveContext.magicState == MAGIC_STATE_IDLE) {
-                if (gSaveContext.save.playerData.magic != 0) {
+                if (gSaveContext.save.saveInfo.playerData.magic != 0) {
                     interfaceCtx->magicConsumptionTimer = 80;
                     gSaveContext.magicState = MAGIC_STATE_CONSUME_LENS;
                     return true;
@@ -3549,7 +3550,7 @@ s32 Magic_Consume(PlayState* play, s16 magicToConsume, s16 type) {
 
         case MAGIC_CONSUME_GORON_ZORA:
             // Goron spiked rolling or Zora electric barrier
-            if (gSaveContext.save.playerData.magic != 0) {
+            if (gSaveContext.save.saveInfo.playerData.magic != 0) {
                 interfaceCtx->magicConsumptionTimer = 10;
                 gSaveContext.magicState = MAGIC_STATE_CONSUME_GORON_ZORA_SETUP;
                 return true;
@@ -3560,7 +3561,7 @@ s32 Magic_Consume(PlayState* play, s16 magicToConsume, s16 type) {
         case MAGIC_CONSUME_GIANTS_MASK:
             // Wearing Giant's Mask
             if (gSaveContext.magicState == MAGIC_STATE_IDLE) {
-                if (gSaveContext.save.playerData.magic != 0) {
+                if (gSaveContext.save.saveInfo.playerData.magic != 0) {
                     interfaceCtx->magicConsumptionTimer = R_MAGIC_CONSUME_TIMER_GIANTS_MASK;
                     gSaveContext.magicState = MAGIC_STATE_CONSUME_GIANTS_MASK;
                     return true;
@@ -3584,7 +3585,7 @@ s32 Magic_Consume(PlayState* play, s16 magicToConsume, s16 type) {
                 if (CHECK_WEEKEVENTREG(WEEKEVENTREG_DRANK_CHATEAU_ROMANI)) {
                     magicToConsume = 0;
                 }
-                gSaveContext.save.playerData.magic -= magicToConsume;
+                gSaveContext.save.saveInfo.playerData.magic -= magicToConsume;
                 return true;
             } else {
                 play_sound(NA_SE_SY_ERROR);
@@ -3597,11 +3598,11 @@ s32 Magic_Consume(PlayState* play, s16 magicToConsume, s16 type) {
 
 void Magic_UpdateAddRequest(void) {
     if (gSaveContext.isMagicRequested) {
-        gSaveContext.save.playerData.magic += 4;
+        gSaveContext.save.saveInfo.playerData.magic += 4;
         play_sound(NA_SE_SY_GAUGE_UP - SFX_FLAG);
 
-        if (((void)0, gSaveContext.save.playerData.magic) >= ((void)0, gSaveContext.magicCapacity)) {
-            gSaveContext.save.playerData.magic = gSaveContext.magicCapacity;
+        if (((void)0, gSaveContext.save.saveInfo.playerData.magic) >= ((void)0, gSaveContext.magicCapacity)) {
+            gSaveContext.save.saveInfo.playerData.magic = gSaveContext.magicCapacity;
             gSaveContext.magicToAdd = 0;
             gSaveContext.isMagicRequested = false;
         } else {
@@ -3677,7 +3678,7 @@ void Magic_Update(PlayState* play) {
         case MAGIC_STATE_STEP_CAPACITY:
             // Step magicCapacity to the capacity determined by magicLevel
             // This changes the width of the magic meter drawn
-            magicCapacityTarget = gSaveContext.save.playerData.magicLevel * MAGIC_NORMAL_METER;
+            magicCapacityTarget = gSaveContext.save.saveInfo.playerData.magicLevel * MAGIC_NORMAL_METER;
             if (gSaveContext.magicCapacity != magicCapacityTarget) {
                 if (gSaveContext.magicCapacity < magicCapacityTarget) {
                     gSaveContext.magicCapacity += 0x10;
@@ -3699,14 +3700,14 @@ void Magic_Update(PlayState* play) {
 
         case MAGIC_STATE_FILL:
             // Add magic until magicFillTarget is reached
-            gSaveContext.save.playerData.magic += 0x10;
+            gSaveContext.save.saveInfo.playerData.magic += 0x10;
 
             if ((gSaveContext.gameMode == GAMEMODE_NORMAL) && (gSaveContext.sceneLayer < 4)) {
                 play_sound(NA_SE_SY_GAUGE_UP - SFX_FLAG);
             }
 
-            if (((void)0, gSaveContext.save.playerData.magic) >= ((void)0, gSaveContext.magicFillTarget)) {
-                gSaveContext.save.playerData.magic = gSaveContext.magicFillTarget;
+            if (((void)0, gSaveContext.save.saveInfo.playerData.magic) >= ((void)0, gSaveContext.magicFillTarget)) {
+                gSaveContext.save.saveInfo.playerData.magic = gSaveContext.magicFillTarget;
                 gSaveContext.magicState = MAGIC_STATE_IDLE;
             }
             break;
@@ -3720,10 +3721,10 @@ void Magic_Update(PlayState* play) {
         case MAGIC_STATE_CONSUME:
             // Consume magic until target is reached or no more magic is available
             if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_DRANK_CHATEAU_ROMANI)) {
-                gSaveContext.save.playerData.magic =
-                    ((void)0, gSaveContext.save.playerData.magic) - ((void)0, gSaveContext.magicToConsume);
-                if (gSaveContext.save.playerData.magic <= 0) {
-                    gSaveContext.save.playerData.magic = 0;
+                gSaveContext.save.saveInfo.playerData.magic =
+                    ((void)0, gSaveContext.save.saveInfo.playerData.magic) - ((void)0, gSaveContext.magicToConsume);
+                if (gSaveContext.save.saveInfo.playerData.magic <= 0) {
+                    gSaveContext.save.saveInfo.playerData.magic = 0;
                 }
                 gSaveContext.magicState = MAGIC_STATE_METER_FLASH_1;
                 sMagicMeterOutlinePrimRed = sMagicMeterOutlinePrimGreen = sMagicMeterOutlinePrimBlue = 255;
@@ -3749,7 +3750,7 @@ void Magic_Update(PlayState* play) {
                 (play->transitionTrigger == TRANS_TRIGGER_OFF) && (play->transitionMode == TRANS_MODE_OFF) &&
                 !Play_InCsMode(play)) {
 
-                if ((gSaveContext.save.playerData.magic == 0) ||
+                if ((gSaveContext.save.saveInfo.playerData.magic == 0) ||
                     ((Player_GetEnvironmentalHazard(play) >= PLAYER_ENV_HAZARD_UNDERWATER_FLOOR) &&
                      (Player_GetEnvironmentalHazard(play) <= PLAYER_ENV_HAZARD_UNDERWATER_FREE)) ||
                     ((BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_LEFT) != ITEM_LENS) &&
@@ -3767,7 +3768,7 @@ void Magic_Update(PlayState* play) {
                 interfaceCtx->magicConsumptionTimer--;
                 if (interfaceCtx->magicConsumptionTimer == 0) {
                     if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_DRANK_CHATEAU_ROMANI)) {
-                        gSaveContext.save.playerData.magic--;
+                        gSaveContext.save.saveInfo.playerData.magic--;
                     }
                     interfaceCtx->magicConsumptionTimer = 80;
                 }
@@ -3779,10 +3780,10 @@ void Magic_Update(PlayState* play) {
 
         case MAGIC_STATE_CONSUME_GORON_ZORA_SETUP:
             if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_DRANK_CHATEAU_ROMANI)) {
-                gSaveContext.save.playerData.magic -= 2;
+                gSaveContext.save.saveInfo.playerData.magic -= 2;
             }
-            if (gSaveContext.save.playerData.magic <= 0) {
-                gSaveContext.save.playerData.magic = 0;
+            if (gSaveContext.save.saveInfo.playerData.magic <= 0) {
+                gSaveContext.save.saveInfo.playerData.magic = 0;
             }
             gSaveContext.magicState = MAGIC_STATE_CONSUME_GORON_ZORA;
             // fallthrough
@@ -3794,10 +3795,10 @@ void Magic_Update(PlayState* play) {
                     interfaceCtx->magicConsumptionTimer--;
                     if (interfaceCtx->magicConsumptionTimer == 0) {
                         if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_DRANK_CHATEAU_ROMANI)) {
-                            gSaveContext.save.playerData.magic--;
+                            gSaveContext.save.saveInfo.playerData.magic--;
                         }
-                        if (gSaveContext.save.playerData.magic <= 0) {
-                            gSaveContext.save.playerData.magic = 0;
+                        if (gSaveContext.save.saveInfo.playerData.magic <= 0) {
+                            gSaveContext.save.saveInfo.playerData.magic = 0;
                         }
                         interfaceCtx->magicConsumptionTimer = 10;
                     }
@@ -3816,10 +3817,10 @@ void Magic_Update(PlayState* play) {
                     interfaceCtx->magicConsumptionTimer--;
                     if (interfaceCtx->magicConsumptionTimer == 0) {
                         if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_DRANK_CHATEAU_ROMANI)) {
-                            gSaveContext.save.playerData.magic--;
+                            gSaveContext.save.saveInfo.playerData.magic--;
                         }
-                        if (gSaveContext.save.playerData.magic <= 0) {
-                            gSaveContext.save.playerData.magic = 0;
+                        if (gSaveContext.save.saveInfo.playerData.magic <= 0) {
+                            gSaveContext.save.saveInfo.playerData.magic = 0;
                         }
                         interfaceCtx->magicConsumptionTimer = R_MAGIC_CONSUME_TIMER_GIANTS_MASK;
                     }
@@ -3842,8 +3843,8 @@ void Magic_DrawMeter(PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    if (gSaveContext.save.playerData.magicLevel != 0) {
-        if (gSaveContext.save.playerData.healthCapacity > 0xA0) {
+    if (gSaveContext.save.saveInfo.playerData.magicLevel != 0) {
+        if (gSaveContext.save.saveInfo.playerData.healthCapacity > 0xA0) {
             magicBarY = 42; // two rows of hearts
         } else {
             magicBarY = 34; // one row of hearts
@@ -3876,8 +3877,8 @@ void Magic_DrawMeter(PlayState* play) {
             gDPLoadTextureBlock_4b(OVERLAY_DISP++, gMagicMeterFillTex, G_IM_FMT_I, 16, 16, 0, G_TX_NOMIRROR | G_TX_WRAP,
                                    G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
             gSPTextureRectangle(OVERLAY_DISP++, 104, (magicBarY + 3) << 2,
-                                (((void)0, gSaveContext.save.playerData.magic) + 26) << 2, (magicBarY + 10) << 2,
-                                G_TX_RENDERTILE, 0, 0, 1 << 10, 1 << 10);
+                                (((void)0, gSaveContext.save.saveInfo.playerData.magic) + 26) << 2,
+                                (magicBarY + 10) << 2, G_TX_RENDERTILE, 0, 0, 1 << 10, 1 << 10);
 
             // Fill the rest of the meter with the normal magic color
             gDPPipeSync(OVERLAY_DISP++);
@@ -3891,7 +3892,8 @@ void Magic_DrawMeter(PlayState* play) {
 
             gSPTextureRectangle(
                 OVERLAY_DISP++, 104, (magicBarY + 3) << 2,
-                ((((void)0, gSaveContext.save.playerData.magic) - ((void)0, gSaveContext.magicToConsume)) + 26) << 2,
+                ((((void)0, gSaveContext.save.saveInfo.playerData.magic) - ((void)0, gSaveContext.magicToConsume)) + 26)
+                    << 2,
                 (magicBarY + 10) << 2, G_TX_RENDERTILE, 0, 0, 1 << 10, 1 << 10);
         } else {
             // Fill the whole meter with the normal magic color
@@ -3906,8 +3908,8 @@ void Magic_DrawMeter(PlayState* play) {
             gDPLoadTextureBlock_4b(OVERLAY_DISP++, gMagicMeterFillTex, G_IM_FMT_I, 16, 16, 0, G_TX_NOMIRROR | G_TX_WRAP,
                                    G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
             gSPTextureRectangle(OVERLAY_DISP++, 104, (magicBarY + 3) << 2,
-                                (((void)0, gSaveContext.save.playerData.magic) + 26) << 2, (magicBarY + 10) << 2,
-                                G_TX_RENDERTILE, 0, 0, 1 << 10, 1 << 10);
+                                (((void)0, gSaveContext.save.saveInfo.playerData.magic) + 26) << 2,
+                                (magicBarY + 10) << 2, G_TX_RENDERTILE, 0, 0, 1 << 10, 1 << 10);
         }
     }
 
@@ -5683,7 +5685,7 @@ void Interface_DrawTimers(PlayState* play) {
 
                         if (interfaceCtx->magicAlpha != 255) {
                             gSaveContext.timerY[sTimerId] = 22;
-                        } else if (gSaveContext.save.playerData.healthCapacity > 0xA0) {
+                        } else if (gSaveContext.save.saveInfo.playerData.healthCapacity > 0xA0) {
                             gSaveContext.timerY[sTimerId] = 54;
                         } else {
                             gSaveContext.timerY[sTimerId] = 46;
@@ -5727,7 +5729,7 @@ void Interface_DrawTimers(PlayState* play) {
                         j = ((((void)0, gSaveContext.timerX[sTimerId]) - 26) / sTimerStateTimer);
                         gSaveContext.timerX[sTimerId] = ((void)0, gSaveContext.timerX[sTimerId]) - j;
 
-                        j = (gSaveContext.save.playerData.healthCapacity > 0xA0)
+                        j = (gSaveContext.save.saveInfo.playerData.healthCapacity > 0xA0)
                                 ? ((((void)0, gSaveContext.timerY[sTimerId]) - 54) / sTimerStateTimer)
                                 : ((((void)0, gSaveContext.timerY[sTimerId]) - 46) / sTimerStateTimer);
                         gSaveContext.timerY[sTimerId] = ((void)0, gSaveContext.timerY[sTimerId]) - j;
@@ -5741,7 +5743,7 @@ void Interface_DrawTimers(PlayState* play) {
                             gSaveContext.timerY[sTimerId] = R_MOON_CRASH_TIMER_Y;
                         } else {
                             gSaveContext.timerX[sTimerId] = 26;
-                            if (gSaveContext.save.playerData.healthCapacity > 0xA0) {
+                            if (gSaveContext.save.saveInfo.playerData.healthCapacity > 0xA0) {
                                 gSaveContext.timerY[sTimerId] = 54;
                             } else {
                                 gSaveContext.timerY[sTimerId] = 46;
@@ -5781,7 +5783,8 @@ void Interface_DrawTimers(PlayState* play) {
                     break;
 
                 case TIMER_STATE_ENV_HAZARD_START:
-                    gSaveContext.timerCurTimes[sTimerId] = SECONDS_TO_TIMER(gSaveContext.save.playerData.health >> 1);
+                    gSaveContext.timerCurTimes[sTimerId] =
+                        SECONDS_TO_TIMER(gSaveContext.save.saveInfo.playerData.health >> 1);
                     gSaveContext.timerDirections[sTimerId] = TIMER_COUNT_DOWN;
                     gSaveContext.timerTimeLimits[sTimerId] = gSaveContext.timerCurTimes[sTimerId];
                     sTimerStateTimer = 20;
@@ -5889,8 +5892,8 @@ void Interface_DrawTimers(PlayState* play) {
                     gSaveContext.timerCurTimes[sTimerId] = SECONDS_TO_TIMER(0);
                     gSaveContext.timerStates[sTimerId] = TIMER_STATE_STOP;
                     if (sEnvTimerActive) {
-                        gSaveContext.save.playerData.health = 0;
-                        play->damagePlayer(play, -(((void)0, gSaveContext.save.playerData.health) + 2));
+                        gSaveContext.save.saveInfo.playerData.health = 0;
+                        play->damagePlayer(play, -(((void)0, gSaveContext.save.saveInfo.playerData.health) + 2));
                     }
                     sEnvTimerActive = false;
                 }
@@ -5958,7 +5961,8 @@ void Interface_DrawTimers(PlayState* play) {
                     }
                 } else if (CHECK_EVENTINF(EVENTINF_34) && (play->sceneId == SCENE_DEKUTES)) {
                     if ((((void)0, gSaveContext.timerCurTimes[sTimerId]) >
-                         (gSaveContext.save.dekuPlaygroundHighScores[CURRENT_DAY - 1] - SECONDS_TO_TIMER(9))) &&
+                         (gSaveContext.save.saveInfo.dekuPlaygroundHighScores[CURRENT_DAY - 1] -
+                          SECONDS_TO_TIMER(9))) &&
                         (sTimerBeepSfxSeconds != sTimerDigits[4])) {
                         play_sound(NA_SE_SY_WARNING_COUNT_E);
                         sTimerBeepSfxSeconds = sTimerDigits[4];
@@ -5996,10 +6000,10 @@ void Interface_DrawTimers(PlayState* play) {
                         }
                     } else if (CHECK_EVENTINF(EVENTINF_34) && (play->sceneId == SCENE_DEKUTES)) {
                         if (((void)0, gSaveContext.timerCurTimes[sTimerId]) >=
-                            gSaveContext.save.dekuPlaygroundHighScores[CURRENT_DAY - 1]) {
+                            gSaveContext.save.saveInfo.dekuPlaygroundHighScores[CURRENT_DAY - 1]) {
                             gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 255, 50, 0, 255);
                         } else if (((void)0, gSaveContext.timerCurTimes[sTimerId]) >=
-                                   (gSaveContext.save.dekuPlaygroundHighScores[CURRENT_DAY - 1] -
+                                   (gSaveContext.save.saveInfo.dekuPlaygroundHighScores[CURRENT_DAY - 1] -
                                     SECONDS_TO_TIMER(9))) {
                             gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 255, 255, 0, 255);
                         } else {
@@ -6107,7 +6111,7 @@ void Interface_UpdateBottleTimers(PlayState* play) {
                     // Time has passed, and the time limit has been exceeded.
                     gSaveContext.bottleTimerCurTimes[i] = SECONDS_TO_TIMER(0);
 
-                    if (gSaveContext.save.inventory.items[i + SLOT_BOTTLE_1] == ITEM_HOT_SPRING_WATER) {
+                    if (gSaveContext.save.saveInfo.inventory.items[i + SLOT_BOTTLE_1] == ITEM_HOT_SPRING_WATER) {
                         Inventory_UpdateItem(play, i + SLOT_BOTTLE_1, ITEM_SPRING_WATER);
                         Message_StartTextbox(play, 0xFA, NULL);
                     }
@@ -6166,7 +6170,7 @@ void Interface_DrawMinigameIcons(PlayState* play) {
             width = 24;
             height = 16;
             rectX = 20;
-            if (gSaveContext.save.playerData.healthCapacity > 0xA0) {
+            if (gSaveContext.save.saveInfo.playerData.healthCapacity > 0xA0) {
                 rectY = 75; // two rows of hearts
             } else {
                 rectY = 67; // one row of hearts
@@ -6210,7 +6214,7 @@ void Interface_DrawMinigameIcons(PlayState* play) {
 
             if (play->sceneId == SCENE_30GYOSON) {
                 rectX += 20;
-                if (gSaveContext.save.playerData.healthCapacity > 0xA0) {
+                if (gSaveContext.save.saveInfo.playerData.healthCapacity > 0xA0) {
                     rectY = 87; // two rows of hearts
                 } else {
                     rectY = 79; // one row of hearts
@@ -6465,7 +6469,7 @@ void Interface_Draw(PlayState* play) {
                           PRIMITIVE, 0);
 
         counterDigits[0] = counterDigits[1] = 0;
-        counterDigits[2] = gSaveContext.save.playerData.rupees;
+        counterDigits[2] = gSaveContext.save.saveInfo.playerData.rupees;
 
         if ((counterDigits[2] > 9999) || (counterDigits[2] < 0)) {
             counterDigits[2] &= 0xDDD;
@@ -6498,9 +6502,9 @@ void Interface_Draw(PlayState* play) {
 
             gDPPipeSync(OVERLAY_DISP++);
 
-            if (gSaveContext.save.playerData.rupees == CUR_CAPACITY(UPG_WALLET)) {
+            if (gSaveContext.save.saveInfo.playerData.rupees == CUR_CAPACITY(UPG_WALLET)) {
                 gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 120, 255, 0, interfaceCtx->magicAlpha);
-            } else if (gSaveContext.save.playerData.rupees != 0) {
+            } else if (gSaveContext.save.saveInfo.playerData.rupees != 0) {
                 gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 255, 255, 255, interfaceCtx->magicAlpha);
             } else {
                 gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 100, 100, 100, interfaceCtx->magicAlpha);
@@ -6851,14 +6855,15 @@ void Interface_Update(PlayState* play) {
     // Update health
     if (gSaveContext.healthAccumulator != 0) {
         gSaveContext.healthAccumulator -= 4;
-        gSaveContext.save.playerData.health += 4;
+        gSaveContext.save.saveInfo.playerData.health += 4;
 
-        if ((gSaveContext.save.playerData.health & 0xF) < 4) {
+        if ((gSaveContext.save.saveInfo.playerData.health & 0xF) < 4) {
             play_sound(NA_SE_SY_HP_RECOVER);
         }
 
-        if (((void)0, gSaveContext.save.playerData.health) >= ((void)0, gSaveContext.save.playerData.healthCapacity)) {
-            gSaveContext.save.playerData.health = gSaveContext.save.playerData.healthCapacity;
+        if (((void)0, gSaveContext.save.saveInfo.playerData.health) >=
+            ((void)0, gSaveContext.save.saveInfo.playerData.healthCapacity)) {
+            gSaveContext.save.saveInfo.playerData.health = gSaveContext.save.saveInfo.playerData.healthCapacity;
             gSaveContext.healthAccumulator = 0;
         }
     }
@@ -6883,26 +6888,26 @@ void Interface_Update(PlayState* play) {
     // Update rupees
     if (gSaveContext.rupeeAccumulator != 0) {
         if (gSaveContext.rupeeAccumulator > 0) {
-            if (gSaveContext.save.playerData.rupees < CUR_CAPACITY(UPG_WALLET)) {
+            if (gSaveContext.save.saveInfo.playerData.rupees < CUR_CAPACITY(UPG_WALLET)) {
                 gSaveContext.rupeeAccumulator--;
-                gSaveContext.save.playerData.rupees++;
+                gSaveContext.save.saveInfo.playerData.rupees++;
                 play_sound(NA_SE_SY_RUPY_COUNT);
             } else {
                 // Max rupees
-                gSaveContext.save.playerData.rupees = CUR_CAPACITY(UPG_WALLET);
+                gSaveContext.save.saveInfo.playerData.rupees = CUR_CAPACITY(UPG_WALLET);
                 gSaveContext.rupeeAccumulator = 0;
             }
-        } else if (gSaveContext.save.playerData.rupees != 0) {
+        } else if (gSaveContext.save.saveInfo.playerData.rupees != 0) {
             if (gSaveContext.rupeeAccumulator <= -50) {
                 gSaveContext.rupeeAccumulator += 10;
-                gSaveContext.save.playerData.rupees -= 10;
-                if (gSaveContext.save.playerData.rupees < 0) {
-                    gSaveContext.save.playerData.rupees = 0;
+                gSaveContext.save.saveInfo.playerData.rupees -= 10;
+                if (gSaveContext.save.saveInfo.playerData.rupees < 0) {
+                    gSaveContext.save.saveInfo.playerData.rupees = 0;
                 }
                 play_sound(NA_SE_SY_RUPY_COUNT);
             } else {
                 gSaveContext.rupeeAccumulator++;
-                gSaveContext.save.playerData.rupees--;
+                gSaveContext.save.saveInfo.playerData.rupees--;
                 play_sound(NA_SE_SY_RUPY_COUNT);
             }
         } else {
@@ -7035,29 +7040,31 @@ void Interface_Update(PlayState* play) {
     if (!(player->stateFlags1 & PLAYER_STATE1_200)) {
         if (R_MAGIC_DBG_SET_UPGRADE == MAGIC_DBG_SET_UPGRADE_DOUBLE_METER) {
             // Upgrade to double magic
-            if (!gSaveContext.save.playerData.isMagicAcquired) {
-                gSaveContext.save.playerData.isMagicAcquired = true;
+            if (!gSaveContext.save.saveInfo.playerData.isMagicAcquired) {
+                gSaveContext.save.saveInfo.playerData.isMagicAcquired = true;
             }
-            gSaveContext.save.playerData.isDoubleMagicAcquired = true;
-            gSaveContext.save.playerData.magic = MAGIC_DOUBLE_METER;
-            gSaveContext.save.playerData.magicLevel = 0;
+            gSaveContext.save.saveInfo.playerData.isDoubleMagicAcquired = true;
+            gSaveContext.save.saveInfo.playerData.magic = MAGIC_DOUBLE_METER;
+            gSaveContext.save.saveInfo.playerData.magicLevel = 0;
             R_MAGIC_DBG_SET_UPGRADE = MAGIC_DBG_SET_UPGRADE_NO_ACTION;
         } else if (R_MAGIC_DBG_SET_UPGRADE == MAGIC_DBG_SET_UPGRADE_NORMAL_METER) {
             // Upgrade to normal magic
-            if (!gSaveContext.save.playerData.isMagicAcquired) {
-                gSaveContext.save.playerData.isMagicAcquired = true;
+            if (!gSaveContext.save.saveInfo.playerData.isMagicAcquired) {
+                gSaveContext.save.saveInfo.playerData.isMagicAcquired = true;
             }
-            gSaveContext.save.playerData.isDoubleMagicAcquired = false;
-            gSaveContext.save.playerData.magic = MAGIC_NORMAL_METER;
-            gSaveContext.save.playerData.magicLevel = 0;
+            gSaveContext.save.saveInfo.playerData.isDoubleMagicAcquired = false;
+            gSaveContext.save.saveInfo.playerData.magic = MAGIC_NORMAL_METER;
+            gSaveContext.save.saveInfo.playerData.magicLevel = 0;
             R_MAGIC_DBG_SET_UPGRADE = MAGIC_DBG_SET_UPGRADE_NO_ACTION;
         }
 
-        if ((gSaveContext.save.playerData.isMagicAcquired) && (gSaveContext.save.playerData.magicLevel == 0)) {
+        if ((gSaveContext.save.saveInfo.playerData.isMagicAcquired) &&
+            (gSaveContext.save.saveInfo.playerData.magicLevel == 0)) {
             // Prepare to step `magicCapacity` to full capacity
-            gSaveContext.save.playerData.magicLevel = gSaveContext.save.playerData.isDoubleMagicAcquired + 1;
-            gSaveContext.magicFillTarget = gSaveContext.save.playerData.magic;
-            gSaveContext.save.playerData.magic = 0;
+            gSaveContext.save.saveInfo.playerData.magicLevel =
+                gSaveContext.save.saveInfo.playerData.isDoubleMagicAcquired + 1;
+            gSaveContext.magicFillTarget = gSaveContext.save.saveInfo.playerData.magic;
+            gSaveContext.save.saveInfo.playerData.magic = 0;
             gSaveContext.magicState = MAGIC_STATE_STEP_CAPACITY;
             BUTTON_ITEM_EQUIP(PLAYER_FORM_DEKU, EQUIP_SLOT_B) = ITEM_NUT;
         }
@@ -7071,7 +7078,7 @@ void Interface_Update(PlayState* play) {
         if ((sEnvHazard == PLAYER_ENV_HAZARD_HOTROOM) || (sEnvHazard == PLAYER_ENV_HAZARD_UNDERWATER_FREE)) {
             if (CUR_FORM != PLAYER_FORM_ZORA) {
                 if (play->gameOverCtx.state == GAMEOVER_INACTIVE) {
-                    if ((gSaveContext.save.playerData.health >> 1) != 0) {
+                    if ((gSaveContext.save.saveInfo.playerData.health >> 1) != 0) {
                         gSaveContext.timerStates[TIMER_ID_ENV_HAZARD] = TIMER_STATE_ENV_HAZARD_START;
                         gSaveContext.timerX[TIMER_ID_ENV_HAZARD] = 115;
                         gSaveContext.timerY[TIMER_ID_ENV_HAZARD] = 80;

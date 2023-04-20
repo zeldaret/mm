@@ -259,7 +259,7 @@ void EnRacedog_UpdateCollision(EnRacedog* this, PlayState* play) {
     this->collider.dim.pos.y = this->actor.world.pos.y;
     this->collider.dim.pos.z = this->actor.world.pos.z;
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 26.0f, 10.0f, 0.0f, 5);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 26.0f, 10.0f, 0.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
 }
 
 /**
@@ -288,7 +288,7 @@ s16 EnRacedog_GetYRotation(Path* path, s32 pointIndex, Vec3f* pos, f32* distSQ) 
     }
 
     *distSQ = SQ(diffX) + SQ(diffZ);
-    return RADF_TO_BINANG(Math_Atan2F_XY(diffZRand, diffXRand));
+    return RAD_TO_BINANG(Math_Atan2F_XY(diffZRand, diffXRand));
 }
 
 void EnRacedog_GetFloorRot(EnRacedog* this, Vec3f* floorRot) {
@@ -443,9 +443,10 @@ void EnRacedog_UpdateTextId(EnRacedog* this) {
     // range of 0x3539 to 0x3546.
     if (this->index % 2) {
         sDogInfo[this->index].textId =
-            (((gSaveContext.save.weekEventReg[42 + (this->index / 2)]) & 0xF0) >> 4) + 0x3539;
+            (((gSaveContext.save.saveInfo.weekEventReg[42 + (this->index / 2)]) & 0xF0) >> 4) + 0x3539;
     } else {
-        sDogInfo[this->index].textId = ((gSaveContext.save.weekEventReg[42 + (this->index / 2)]) & 0x0F) + 0x3539;
+        sDogInfo[this->index].textId =
+            ((gSaveContext.save.saveInfo.weekEventReg[42 + (this->index / 2)]) & 0x0F) + 0x3539;
     }
 
     // As a sanity check, this makes sure the text ID is something in the expected range of 0x3539 to 0x3546.

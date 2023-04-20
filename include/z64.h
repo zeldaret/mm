@@ -30,6 +30,7 @@
 #include "thga.h"
 #include "z64actor.h"
 #include "z64animation.h"
+#include "z64animation_legacy.h"
 #include "z64audio.h"
 #include "z64bgcheck.h"
 #include "z64camera.h"
@@ -85,19 +86,6 @@ typedef enum {
     /* 3 */ EQUIP_SLOT_C_RIGHT,
     /* 4 */ EQUIP_SLOT_A
 } EquipSlot;
-
-typedef struct {
-    /* 0x0 */ s16 priority; // Lower means higher priority. -1 means it ignores priority
-    /* 0x2 */ s16 length;
-    /* 0x4 */ s16 csCamSceneDataId; // Index of CsCameraEntry to use. Negative indices use sGlobalCamDataSettings. Indices 0 and above use CsCameraEntry from scene
-    /* 0x6 */ s16 unk6;
-    /* 0x8 */ s16 additionalCutscene;
-    /* 0xA */ u8 sound;
-    /* 0xB */ u8 unkB;
-    /* 0xC */ s16 unkC;
-    /* 0xE */ u8 unkE;
-    /* 0xF */ u8 letterboxSize;
-} ActorCutscene; // size = 0x10
 
 typedef struct {
     /* 0x0 */ s8 segment;
@@ -576,22 +564,6 @@ typedef struct {
     /* 0x47F */ UNK_TYPE1 pad47F[0x1];
 } PadMgr; // size = 0x480
 
-typedef struct StackEntry {
-    /* 0x00 */ struct StackEntry* next;
-    /* 0x04 */ struct StackEntry* prev;
-    /* 0x08 */ u32 head;
-    /* 0x0C */ u32 tail;
-    /* 0x10 */ u32 initValue;
-    /* 0x14 */ s32 minSpace;
-    /* 0x18 */ const char* name;
-} StackEntry; // size = 0x1C
-
-typedef enum {
-    STACK_STATUS_OK = 0,
-    STACK_STATUS_WARNING = 1,
-    STACK_STATUS_OVERFLOW = 2
-} StackStatus;
-
 #define OS_SC_RETRACE_MSG       1
 #define OS_SC_DONE_MSG          2
 #define OS_SC_NMI_MSG           3 // name is made up, 3 is OS_SC_RDP_DONE_MSG in the original sched.c
@@ -661,14 +633,14 @@ typedef struct PlayState {
     /* 0x1878C */ void (*unk_1878C)(struct PlayState* play);
     /* 0x18790 */ void (*unk_18790)(struct PlayState* play, s16 arg1);
     /* 0x18794 */ PlayerItemAction (*unk_18794)(struct PlayState* play, Player* player, ItemId itemId);
-    /* 0x18798 */ s32 (*setPlayerTalkAnim)(struct PlayState* play, LinkAnimationHeader* talkAnim, s32 animMode);
-    /* 0x1879C */ s16 playerActorCsIds[10];
+    /* 0x18798 */ s32 (*setPlayerTalkAnim)(struct PlayState* play, PlayerAnimationHeader* talkAnim, AnimationMode animMode);
+    /* 0x1879C */ s16 playerCsIds[PLAYER_CS_ID_MAX];
     /* 0x187B0 */ MtxF viewProjectionMtxF;
     /* 0x187F0 */ Vec3f projectionMtxFDiagonal;
     /* 0x187FC */ MtxF billboardMtxF;
     /* 0x1883C */ Mtx* billboardMtx;
     /* 0x18840 */ u32 gameplayFrames;
-    /* 0x18844 */ u8 unk_18844;
+    /* 0x18844 */ u8 unk_18844; // bool
     /* 0x18845 */ u8 haltAllActors;
     /* 0x18846 */ s16 numSetupActors;
     /* 0x18848 */ u8 numRooms;
@@ -693,7 +665,7 @@ typedef struct PlayState {
     /* 0x1887F */ u8 transitionType; // fadeTransition
     /* 0x18880 */ u8 unk_18880;
     /* 0x18884 */ CollisionCheckContext colChkCtx;
-    /* 0x18B20 */ u16 envFlags[20];
+    /* 0x18B20 */ u16 cutsceneFlags[20];
     /* 0x18B48 */ u8 curSpawn;
     /* 0x18B49 */ u8 unk_18B49;
     /* 0x18B4A */ u8 transitionMode;
@@ -755,9 +727,9 @@ typedef struct {
 typedef struct {
     /* 0x0 */ u32 useRgba;
     /* 0x4 */ u32 setScissor;
-    /* 0x8 */ Color_RGBA8 primColor;
-    /* 0xC */ Color_RGBA8 envColor;
-} struct_801F8020; // size = 0x10
+    /* 0x8 */ Color_RGBA8_u32 primColor;
+    /* 0xC */ Color_RGBA8_u32 envColor;
+} VisZbuf; // size = 0x10
 
 typedef struct {
     /* 0x00 */ u32 unk_00;
@@ -811,36 +783,5 @@ enum fram_mode {
     FRAM_MODE_READ,
     FRAM_MODE_STATUS
 };
-
-typedef struct {
-    /* 0x00 */ UNK_TYPE1 unk_00[0x14];
-    /* 0x14 */ s16 unk_14;
-    /* 0x16 */ s16 unk_16;
-    /* 0x18 */ s16 unk_18;
-    /* 0x1A */ UNK_TYPE1 unk_1A[0x3];
-    /* 0x0C */ u8 unk_1D;
-    /* 0x1E */ UNK_TYPE1 unk_1E[0xC];
-    /* 0x2A */ s16 unk_2A;
-    /* 0x1E */ UNK_TYPE1 unk_2C[0x1];
-    /* 0x2D */ u8 unk_2D;
-    /* 0x2E */ UNK_TYPE1 unk_2E[2];
-} DbCameraUnkSubStruct; // size = 0x30
-
-typedef struct {
-    /* 0x00 */ s16 unk_00;
-    /* 0x02 */ s16 unk_02;
-    /* 0x04 */ s16 unk_04;
-    /* 0x06 */ s16 unk_06;
-    /* 0x08 */ s16 unk_08;
-    /* 0x0A */ s16 unk_0A;
-    /* 0x0C */ s16 unk_0C;
-    /* 0x0E */ UNK_TYPE1 unk_0E[0x02];
-    /* 0x10 */ DbCameraUnkSubStruct unk_10;
-    /* 0x40 */ DbCameraUnkSubStruct unk_40;
-    /* 0x70 */ UNK_PTR unk_70;
-    /* 0x74 */ UNK_PTR unk_74;
-    /* 0x78 */ UNK_PTR unk_78;
-    /* 0x7C */ Camera* camera;
-} DbCameraUnkStruct; // size = 0x80
 
 #endif

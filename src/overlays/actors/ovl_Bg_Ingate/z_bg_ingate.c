@@ -126,7 +126,7 @@ s32 func_80953DA8(BgIngate* this, PlayState* play) {
     Camera* mainCam = Play_GetCamera(play, CAM_ID_MAIN);
 
     if (CHECK_EVENTINF(EVENTINF_35)) {
-        func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_7);
+        func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_WAIT);
     } else {
         SET_EVENTINF(EVENTINF_41);
     }
@@ -169,7 +169,7 @@ void func_80953F14(BgIngate* this, PlayState* play) {
     if (this->timePath != NULL) {
         func_80953B40(this);
     }
-    this->unk16E = -1;
+    this->csId = CS_ID_NONE;
     this->actionFunc = func_80953F9C;
 }
 
@@ -192,7 +192,7 @@ void func_80953F9C(BgIngate* this, PlayState* play) {
 
             if (this->timePath->additionalPathIndex != ADDITIONAL_PATH_INDEX_NONE) {
                 func_80953E38(play);
-                func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_7);
+                func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_WAIT);
                 this->dyna.actor.textId = 0x9E4;
                 Message_StartTextbox(play, this->dyna.actor.textId, NULL);
                 this->unk16C += 1;
@@ -206,13 +206,13 @@ void func_80953F9C(BgIngate* this, PlayState* play) {
                 }
                 this->actionFunc = func_809542A0;
             }
-        } else if ((ActorCutscene_GetCurrentIndex() == -1) && (this->timePath != NULL)) {
+        } else if ((CutsceneManager_GetCurrentCsId() == CS_ID_NONE) && (this->timePath != NULL)) {
             Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_CRUISER - SFX_FLAG);
             func_80953BEC(this);
         }
     }
-    if (ActorCutscene_GetCurrentIndex() != this->unk16E) {
-        if (ActorCutscene_GetCurrentIndex() != -1) {
+    if (CutsceneManager_GetCurrentCsId() != this->csId) {
+        if (CutsceneManager_GetCurrentCsId() != CS_ID_NONE) {
             Camera_ChangeSetting(mainCam, CAM_SET_NORMAL0);
             player->stateFlags1 |= PLAYER_STATE1_20;
             play->actorCtx.flags &= ~ACTORCTX_FLAG_PICTO_BOX_ON;
@@ -221,7 +221,7 @@ void func_80953F9C(BgIngate* this, PlayState* play) {
             player->stateFlags1 &= ~PLAYER_STATE1_20;
         }
     }
-    this->unk16E = ActorCutscene_GetCurrentIndex();
+    this->csId = CutsceneManager_GetCurrentCsId();
 }
 
 void func_809541B8(BgIngate* this, PlayState* play) {
@@ -231,13 +231,13 @@ void func_809541B8(BgIngate* this, PlayState* play) {
         if ((player->transformation == PLAYER_FORM_HUMAN) && (player->actor.bgCheckFlags & BGCHECKFLAG_GROUND) &&
             (this->dyna.actor.xzDistToPlayer < 40.0f)) {
             if (this->dyna.actor.playerHeightRel > 15.0f) {
-                func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_7);
+                func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_WAIT);
                 this->dyna.actor.textId = 0x9E6;
                 Message_StartTextbox(play, this->dyna.actor.textId, NULL);
                 this->actionFunc = func_809543D4;
             }
         }
-    } else if (!DynaPolyActor_IsInRidingMovingState(&this->dyna)) {
+    } else if (!DynaPolyActor_IsPlayerOnTop(&this->dyna)) {
         this->unk160 |= 4;
     }
 }
@@ -261,7 +261,7 @@ void func_809542A0(BgIngate* this, PlayState* play) {
 void func_80954340(BgIngate* this, PlayState* play) {
     if (!DECR(this->unk16A)) {
         if (this->timePath != NULL) {
-            func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_6);
+            func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_END);
             this->timePath = &play->setupPathList[this->timePath->additionalPathIndex];
             func_80953F14(this, play);
             Environment_StopTime();
@@ -280,7 +280,7 @@ void func_809543D4(BgIngate* this, PlayState* play) {
                 break;
             case 0x9E5:
                 if (play->msgCtx.choiceIndex == 0) {
-                    func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_6);
+                    func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_END);
                     this->unk160 &= ~0x4;
                     this->actionFunc = func_809541B8;
                     Environment_StartTime();
@@ -301,7 +301,7 @@ void func_809543D4(BgIngate* this, PlayState* play) {
                     CLEAR_WEEKEVENTREG(WEEKEVENTREG_90_40);
                     func_8019F208();
                 } else {
-                    func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_6);
+                    func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_END);
                     this->unk160 &= ~0x4;
                     this->actionFunc = func_809541B8;
                     Environment_StartTime();
@@ -322,7 +322,7 @@ void BgIngate_Init(Actor* thisx, PlayState* play2) {
     Vec3f sp20;
 
     if (BgIngate_FindActor(this, play, ACTORCAT_BG, ACTOR_BG_INGATE) == NULL) {
-        DynaPolyActor_Init(&this->dyna, 3);
+        DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS | DYNA_TRANSFORM_ROT_Y);
         DynaPolyActor_LoadMesh(play, &this->dyna, &gSichitaiBoatCol);
         this->unk160 = 0;
         this->unk160 |= 0x8;
@@ -330,7 +330,7 @@ void BgIngate_Init(Actor* thisx, PlayState* play2) {
         Actor_SetScale(&this->dyna.actor, 1.0f);
         this->timePath = SubS_GetAdditionalPath(play, BGINGATE_GET_FF(&this->dyna.actor), 0);
         this->dyna.actor.room = -1;
-        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_20_02)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_WOODFALL_TEMPLE)) {
             CLEAR_WEEKEVENTREG(WEEKEVENTREG_90_40);
         }
         if (!CHECK_EVENTINF(EVENTINF_35) && CHECK_WEEKEVENTREG(WEEKEVENTREG_90_40)) {

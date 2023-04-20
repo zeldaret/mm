@@ -4,7 +4,7 @@
 #include "global.h"
 
 #define DMOPSTAGE_GET_TYPE(thisx) ((thisx)->params & 0xFF)
-#define DMOPSTAGE_GET_ACTORACTION(thisx) (((thisx)->params >> 8) & 0xFF)
+#define DMOPSTAGE_GET_CUE_TYPE_OFFSET(thisx) (((thisx)->params >> 8) & 0xFF)
 
 struct DmOpstage;
 

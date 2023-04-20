@@ -144,7 +144,8 @@ void func_80B35108(EnGg* this, PlayState* play) {
     this->collider.dim.pos.z = this->actor.world.pos.z;
 
     CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 30.0f, 30.0f, 7);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 30.0f, 30.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_2 | UPDBGCHECKINFO_FLAG_4);
 }
 
 void func_80B351A4(EnGg* this) {
@@ -264,15 +265,15 @@ void func_80B3556C(EnGg* this, PlayState* play) {
 
 void func_80B35634(EnGg* this, PlayState* play) {
     s32 pad;
-    s32 actionIndex;
+    s32 cueChannel;
 
-    if (Cutscene_CheckActorAction(play, 119)) {
-        actionIndex = Cutscene_GetActorActionIndex(play, 119);
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_119)) {
+        cueChannel = Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_119);
 
-        if (this->unk_2DB != play->csCtx.actorActions[actionIndex]->action) {
-            this->unk_2DB = play->csCtx.actorActions[actionIndex]->action;
+        if (this->cueId != play->csCtx.actorCues[cueChannel]->id) {
+            this->cueId = play->csCtx.actorCues[cueChannel]->id;
 
-            switch (play->csCtx.actorActions[actionIndex]->action) {
+            switch (play->csCtx.actorCues[cueChannel]->id) {
                 case 1:
                     this->unk_2DA = 0;
                     this->unk_2E6 = 0;
@@ -333,10 +334,10 @@ void func_80B35634(EnGg* this, PlayState* play) {
             func_80B358D8(this, play);
         }
 
-        Cutscene_ActorTranslateAndYaw(&this->actor, play, actionIndex);
+        Cutscene_ActorTranslateAndYaw(&this->actor, play, cueChannel);
         this->actor.shape.yOffset = 0.0f;
     } else {
-        this->unk_2DB = 99;
+        this->cueId = 99;
     }
 }
 
@@ -406,16 +407,16 @@ void func_80B359DC(EnGg* this, PlayState* play) {
             this->unk_307 = true;
         }
 
-        if (ActorCutscene_GetCanPlayNext(this->unk_2DC)) {
-            ActorCutscene_Start(this->unk_2DC, &this->actor);
+        if (CutsceneManager_IsNext(this->csId)) {
+            CutsceneManager_Start(this->csId, &this->actor);
             this->unk_307 = false;
         } else {
-            if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-                ActorCutscene_Stop(0x7C);
+            if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+                CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
             }
 
             if (this->unk_307) {
-                ActorCutscene_SetIntentToPlay(this->unk_2DC);
+                CutsceneManager_Queue(this->csId);
             }
         }
     } else {
@@ -665,7 +666,7 @@ void EnGg_Init(Actor* thisx, PlayState* play) {
     CLEAR_WEEKEVENTREG(WEEKEVENTREG_20_10);
     this->actor.flags &= ~ACTOR_FLAG_REACT_TO_LENS;
     this->unk_310 = this->actor.home.pos.y;
-    this->unk_2DC = this->actor.cutscene;
+    this->csId = this->actor.csId;
     this->actor.flags |= ACTOR_FLAG_2000000;
     this->unk_308 = 0;
     this->unk_309 = 0;

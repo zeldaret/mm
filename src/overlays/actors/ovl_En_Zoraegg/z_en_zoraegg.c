@@ -75,7 +75,10 @@ void func_80B31590(EnZoraegg* this) {
 void EnZoraegg_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     EnZoraegg* this = THIS;
-    u16 sp40[] = { 457, 458, 459, 460, 461, 462, 464 };
+    u16 cueTypes[] = {
+        CS_CMD_ACTOR_CUE_457, CS_CMD_ACTOR_CUE_458, CS_CMD_ACTOR_CUE_459, CS_CMD_ACTOR_CUE_460,
+        CS_CMD_ACTOR_CUE_461, CS_CMD_ACTOR_CUE_462, CS_CMD_ACTOR_CUE_464,
+    };
 
     Actor_SetScale(&this->actor, 0.006f);
     SkelAnime_InitFlex(play, &this->skelAnime, &object_zoraegg_Skel_004C90, &object_zoraegg_Anim_005098,
@@ -162,7 +165,7 @@ void EnZoraegg_Init(Actor* thisx, PlayState* play) {
         case ENZORAEGG_1F_07:
         case ENZORAEGG_1F_08:
         case ENZORAEGG_1F_09:
-            this->actorActionCmd = sp40[(ENZORAEGG_GET_1F(&this->actor)) - ENZORAEGG_1F_03];
+            this->cueType = cueTypes[(ENZORAEGG_GET_1F(&this->actor)) - ENZORAEGG_1F_03];
             Animation_PlayOnce(&this->skelAnime, &object_zoraegg_Anim_001E08);
             this->unk_1EC = 1;
             this->unk_1EE = 0;
@@ -181,7 +184,7 @@ void EnZoraegg_Init(Actor* thisx, PlayState* play) {
         case ENZORAEGG_1F_0E:
         case ENZORAEGG_1F_0F:
         case ENZORAEGG_1F_10:
-            this->actorActionCmd = sp40[(ENZORAEGG_GET_1F(&this->actor)) - ENZORAEGG_1F_0A];
+            this->cueType = cueTypes[(ENZORAEGG_GET_1F(&this->actor)) - ENZORAEGG_1F_0A];
             this->unk_1EC = 2;
             this->actionFunc = func_80B324B0;
             Animation_PlayLoop(&this->skelAnime, &object_zoraegg_Anim_004FE4);
@@ -206,13 +209,13 @@ void EnZoraegg_Destroy(Actor* thisx, PlayState* play) {
 }
 
 s32 func_80B319A8(PlayState* play) {
-    return gSaveContext.save.permanentSceneFlags[play->sceneId].unk_14 & 7;
+    return gSaveContext.save.saveInfo.permanentSceneFlags[play->sceneId].unk_14 & 7;
 }
 
 void func_80B319D0(PlayState* play, s32 arg1) {
     if ((arg1 < 8) && (arg1 >= 0)) {
-        gSaveContext.save.permanentSceneFlags[play->sceneId].unk_14 &= ~7;
-        gSaveContext.save.permanentSceneFlags[play->sceneId].unk_14 |= arg1;
+        gSaveContext.save.saveInfo.permanentSceneFlags[play->sceneId].unk_14 &= ~7;
+        gSaveContext.save.saveInfo.permanentSceneFlags[play->sceneId].unk_14 |= arg1;
     }
 }
 
@@ -244,7 +247,7 @@ void func_80B31C40(EnZoraegg* this, PlayState* play) {
     Actor_MoveWithGravity(&this->actor);
     Math_Vec3f_Copy(&this->actor.focus.pos, &this->actor.world.pos);
     this->actor.focus.pos.y += 10.0f;
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
 }
 
 Actor* func_80B31CB4(PlayState* play) {
@@ -352,7 +355,7 @@ void func_80B320E0(EnZoraegg* this, PlayState* play) {
 }
 
 void func_80B321D0(EnZoraegg* this, PlayState* play) {
-    if (ActorCutscene_GetCurrentIndex() != this->actor.cutscene) {
+    if (CutsceneManager_GetCurrentCsId() != this->actor.csId) {
         this->actionFunc = func_80B322BC;
         func_80B319D0(play, func_80B319A8(play) + 1);
     }
@@ -362,26 +365,26 @@ void func_80B32228(EnZoraegg* this, PlayState* play) {
     s32 pad;
     Player* player = GET_PLAYER(play);
 
-    if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, this->unk_1DC);
+    if (CutsceneManager_IsNext(this->actor.csId)) {
+        CutsceneManager_StartWithPlayerCs(this->actor.csId, this->unk_1DC);
         this->actionFunc = func_80B321D0;
     } else {
         if (this->unk_1E8 > 0) {
             this->unk_1E8--;
         } else if (this->unk_1E8 == 0) {
-            ActorCutscene_Stop(player->unk_A86);
-            player->unk_A86 = -1;
+            CutsceneManager_Stop(player->csId);
+            player->csId = CS_ID_NONE;
             this->unk_1E8 = -1;
         }
 
-        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+        CutsceneManager_Queue(this->actor.csId);
     }
 }
 
 void func_80B322BC(EnZoraegg* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (this->actor.cutscene != -1) {
+    if (this->actor.csId != CS_ID_NONE) {
         this->unk_1DC = func_80B31CB4(play);
         if (this->unk_1DC != NULL) {
             this->unk_1E8 = 3;
@@ -400,11 +403,11 @@ void func_80B32390(EnZoraegg* this, PlayState* play) {
     s32 pad;
     Player* player = GET_PLAYER(play);
 
-    if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
+    if (CutsceneManager_IsNext(this->actor.csId)) {
         Actor* temp_v0 = func_80B31D14(play);
 
         if (temp_v0 != NULL) {
-            ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, temp_v0);
+            CutsceneManager_StartWithPlayerCs(this->actor.csId, temp_v0);
             SET_EVENTINF(EVENTINF_33);
             Actor_Kill(&this->actor);
         }
@@ -412,29 +415,29 @@ void func_80B32390(EnZoraegg* this, PlayState* play) {
                (fabsf(player->actor.world.pos.x - this->actor.world.pos.x) < (100.0f * this->actor.scale.x)) &&
                (fabsf(player->actor.world.pos.z - this->actor.world.pos.z) < (100.0f * this->actor.scale.z)) &&
                (fabsf(player->actor.world.pos.y - this->actor.world.pos.y) < 30.0f)) {
-        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+        CutsceneManager_Queue(this->actor.csId);
     }
 }
 
 void func_80B324B0(EnZoraegg* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
 
-    if (Cutscene_CheckActorAction(play, this->actorActionCmd)) {
+    if (Cutscene_IsCueInChannel(play, this->cueType)) {
         if (this->unk_1EA & 4) {
-            if (Cutscene_CheckActorAction(play, this->actorActionCmd) &&
-                (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->actorActionCmd)]->action == 3)) {
+            if (Cutscene_IsCueInChannel(play, this->cueType) &&
+                (play->csCtx.actorCues[Cutscene_GetCueChannel(play, this->cueType)]->id == 3)) {
                 Animation_PlayLoop(&this->skelAnime, &object_zoraegg_Anim_004FE4);
                 this->unk_1EA &= ~4;
             }
         } else {
-            if (Cutscene_CheckActorAction(play, this->actorActionCmd) &&
-                (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->actorActionCmd)]->action == 4)) {
+            if (Cutscene_IsCueInChannel(play, this->cueType) &&
+                (play->csCtx.actorCues[Cutscene_GetCueChannel(play, this->cueType)]->id == 4)) {
                 Animation_PlayLoop(&this->skelAnime, &object_zoraegg_Anim_004E04);
                 this->unk_1EA |= 4;
             }
         }
 
-        Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetActorActionIndex(play, this->actorActionCmd));
+        Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetCueChannel(play, this->cueType));
 
         if ((this->unk_1EA & 4) && Animation_OnFrame(&this->skelAnime, this->unk_1E4)) {
             Actor_PlaySfx(&this->actor, NA_SE_EV_ZORA_KIDS_SWIM_1);
@@ -453,10 +456,10 @@ void func_80B32644(EnZoraegg* this, PlayState* play) {
         this->unk_1EA |= 2;
     }
 
-    if (!Cutscene_CheckActorAction(play, this->actorActionCmd)) {
+    if (!Cutscene_IsCueInChannel(play, this->cueType)) {
         this->actionFunc = func_80B324B0;
     } else {
-        Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetActorActionIndex(play, this->actorActionCmd));
+        Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetCueChannel(play, this->cueType));
 
         if (this->unk_1EE > 25) {
             this->unk_1EE -= 25;
@@ -469,8 +472,8 @@ void func_80B32644(EnZoraegg* this, PlayState* play) {
 void func_80B326F4(EnZoraegg* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
 
-    if (Cutscene_CheckActorAction(play, this->actorActionCmd) &&
-        (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->actorActionCmd)]->action == 3)) {
+    if (Cutscene_IsCueInChannel(play, this->cueType) &&
+        (play->csCtx.actorCues[Cutscene_GetCueChannel(play, this->cueType)]->id == 3)) {
         Animation_Change(&this->skelAnime, &object_zoraegg_Anim_004D20, 1.0f, 0.0f,
                          Animation_GetLastFrame(&object_zoraegg_Anim_004D20), ANIMMODE_ONCE, 5.0f);
         this->unk_1E8 = 0;
@@ -481,7 +484,7 @@ void func_80B326F4(EnZoraegg* this, PlayState* play) {
         Actor_PlaySfx(&this->actor, NA_SE_EV_ZORA_KIDS_SWIM_2);
     }
 
-    Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetActorActionIndex(play, this->actorActionCmd));
+    Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetCueChannel(play, this->cueType));
 
     if (Animation_OnFrame(&this->skelAnime, 4.0f)) {
         Actor_PlaySfx(&this->actor, NA_SE_EV_ZORA_KIDS_SWIM_1);
@@ -504,7 +507,7 @@ void func_80B32820(EnZoraegg* this, PlayState* play) {
         SkelAnime_Update(&this->skelAnime);
     }
 
-    Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetActorActionIndex(play, this->actorActionCmd));
+    Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetCueChannel(play, this->cueType));
 
     if (Animation_OnFrame(&this->skelAnime, 16.0f)) {
         Actor_PlaySfx(&this->actor, NA_SE_EV_ZORA_KIDS_SWIM_0);
@@ -538,7 +541,7 @@ void func_80B32928(EnZoraegg* this, PlayState* play) {
         }
     }
 
-    Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetActorActionIndex(play, this->actorActionCmd));
+    Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetCueChannel(play, this->cueType));
 
     if (Animation_OnFrame(&this->skelAnime, 97.0f) || Animation_OnFrame(&this->skelAnime, 101.0f) ||
         Animation_OnFrame(&this->skelAnime, 105.0f)) {
@@ -547,8 +550,8 @@ void func_80B32928(EnZoraegg* this, PlayState* play) {
 }
 
 void func_80B32A88(EnZoraegg* this, PlayState* play) {
-    if (Cutscene_CheckActorAction(play, this->actorActionCmd) &&
-        (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->actorActionCmd)]->action == 2)) {
+    if (Cutscene_IsCueInChannel(play, this->cueType) &&
+        (play->csCtx.actorCues[Cutscene_GetCueChannel(play, this->cueType)]->id == 2)) {
         this->unk_1E8 = 0;
         this->actionFunc = func_80B32928;
     }
@@ -570,7 +573,7 @@ void func_80B32B3C(EnZoraegg* this, PlayState* play) {
 
 void func_80B32B70(EnZoraegg* this, PlayState* play) {
     func_80B31C40(this, play);
-    if (Cutscene_CheckActorAction(play, 0x1C9)) {
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_457)) {
         Actor_Kill(&this->actor);
     }
 }
@@ -583,7 +586,7 @@ void func_80B32BB8(EnZoraegg* this, PlayState* play) {
         this->actionFunc = func_80B32B70;
     }
 
-    if (Cutscene_CheckActorAction(play, 0x1C9)) {
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_457)) {
         Actor_Kill(&this->actor);
     }
 }

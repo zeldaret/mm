@@ -40,7 +40,7 @@ typedef struct EnTrt2 {
     /* 0x3D6 */ s16 unk_3D6;
     /* 0x3D8 */ u8 unk_3D8;
     /* 0x3D9 */ u8 unk_3D9;
-    /* 0x3DA */ s16 unk_3DA;
+    /* 0x3DA */ s16 csId;
 } EnTrt2; // size = 0x3DC
 
 #endif // Z_EN_TRT2_H

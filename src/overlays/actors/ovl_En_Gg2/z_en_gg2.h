@@ -23,7 +23,7 @@ typedef struct EnGg2 {
     /* 0x1EC */ Vec3s jointTable[20];
     /* 0x264 */ Vec3s morphTable[20];
     /* 0x2DC */ UNK_TYPE1 unk2DC[0x8];
-    /* 0x2E4 */ s16 unk_2E4;
+    /* 0x2E4 */ s16 csId;
     /* 0x2E6 */ UNK_TYPE1 unk2E6[4];
     /* 0x2EA */ s16 unk_2EA;
     /* 0x2EC */ s16 unk_2EC;
