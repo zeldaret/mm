@@ -1990,7 +1990,7 @@ void Interface_UpdateButtonsPart2(PlayState* play) {
         }
 
         if ((play->transitionTrigger == TRANS_TRIGGER_OFF) && (play->transitionMode == TRANS_MODE_OFF)) {
-            if (ActorCutscene_GetCurrentIndex() == -1) {
+            if (CutsceneManager_GetCurrentCsId() == CS_ID_NONE) {
                 Interface_SetHudVisibility(HUD_VISIBILITY_ALL);
             }
         }
@@ -2267,7 +2267,7 @@ void Interface_UpdateButtonsPart1(PlayState* play) {
     s32 pad;
     s32 restoreHudVisibility = false;
 
-    if (gSaveContext.save.cutscene < 0xFFF0) {
+    if (gSaveContext.save.cutsceneIndex < 0xFFF0) {
         gSaveContext.hudVisibilityForceButtonAlphasByStatus = false;
         if ((player->stateFlags1 & PLAYER_STATE1_800000) || CHECK_WEEKEVENTREG(WEEKEVENTREG_08_01) ||
             (!(CHECK_EVENTINF(EVENTINF_41)) && (play->unk_1887C >= 2))) {
@@ -2434,7 +2434,7 @@ void Interface_UpdateButtonsPart1(PlayState* play) {
                     sPictoState = PICTO_BOX_STATE_OFF;
                 } else if (CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_A) || (func_801A5100() == 1)) {
                     if (!(CHECK_EVENTINF(EVENTINF_41)) ||
-                        ((CHECK_EVENTINF(EVENTINF_41)) && (ActorCutscene_GetCurrentIndex() == -1))) {
+                        ((CHECK_EVENTINF(EVENTINF_41)) && (CutsceneManager_GetCurrentCsId() == CS_ID_NONE))) {
                         play_sound(NA_SE_SY_CAMERA_SHUTTER);
                         SREG(89) = 1;
                         play->haltAllActors = true;
@@ -4484,7 +4484,8 @@ void Interface_DrawClock(PlayState* play) {
     if (R_TIME_SPEED != 0) {
         if ((msgCtx->msgMode == MSGMODE_NONE) || ((play->actorCtx.flags & ACTORCTX_FLAG_1) && !Play_InCsMode(play)) ||
             (msgCtx->msgMode == MSGMODE_NONE) ||
-            ((msgCtx->currentTextId >= 0x100) && (msgCtx->currentTextId <= 0x200)) || (gSaveContext.gameMode == GAMEMODE_END_CREDITS)) {
+            ((msgCtx->currentTextId >= 0x100) && (msgCtx->currentTextId <= 0x200)) ||
+            (gSaveContext.gameMode == GAMEMODE_END_CREDITS)) {
             if (!FrameAdvance_IsEnabled(&play->state) && !Environment_IsTimeStopped() && (gSaveContext.save.day < 4)) {
                 /**
                  * Changes Clock's transparancy depending if Player is moving or not and possibly other things

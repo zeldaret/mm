@@ -247,7 +247,7 @@ void EnTk_Init(Actor* thisx, PlayState* play) {
     this->actor.shape.rot.y = this->actor.world.rot.y;
     this->actor.flags |= ACTOR_FLAG_10;
     SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, D_80AEF868, 0, &this->unk_2D4);
-    SubS_FillCutscenesList(&this->actor, this->cutscenes, ARRAY_COUNT(this->cutscenes));
+    SubS_FillCutscenesList(&this->actor, this->csIdList, ARRAY_COUNT(this->csIdList));
 
     switch (this->unk_2B0) {
         case 4:
@@ -705,16 +705,16 @@ void func_80AED940(EnTk* this, PlayState* play) {
 
 void func_80AEDBEC(EnTk* this, PlayState* play) {
     this->actor.params = -1;
-    this->unk_2E8 = 0;
+    this->csLength = 0;
     this->actor.speed = 0.0f;
     SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, D_80AEF868, 2, &this->unk_2D4);
     this->actionFunc = func_80AEDC4C;
 }
 
 void func_80AEDC4C(EnTk* this, PlayState* play) {
-    if ((this->actor.params >= 0) && SubS_StartActorCutscene(&this->actor, this->cutscenes[1], this->actor.params,
-                                                             SUBS_CUTSCENE_SET_UNK_LINK_FIELDS)) {
-        this->unk_2E8 = ActorCutscene_GetLength(this->cutscenes[1]);
+    if ((this->actor.params >= 0) &&
+        SubS_StartCutscene(&this->actor, this->csIdList[1], this->actor.params, SUBS_CUTSCENE_WITH_PLAYER)) {
+        this->csLength = CutsceneManager_GetLength(this->csIdList[1]);
         Message_ContinueTextbox(play, 0x1411);
         func_80AEDCBC(this, play);
     }
@@ -731,9 +731,9 @@ void func_80AEDCBC(EnTk* this, PlayState* play) {
 }
 
 void func_80AEDD4C(EnTk* this, PlayState* play) {
-    this->unk_2E8--;
-    if (this->unk_2E8 <= 0) {
-        ActorCutscene_Stop(this->cutscenes[1]);
+    this->csLength--;
+    if (this->csLength <= 0) {
+        CutsceneManager_Stop(this->csIdList[1]);
         Message_CloseTextbox(play);
         Actor_Kill(&this->actor);
     }
@@ -901,7 +901,7 @@ void func_80AEE2A8(EnTk* this, PlayState* play) {
 }
 
 void func_80AEE2C0(EnTk* this, PlayState* play) {
-    if (SubS_StartActorCutscene(&this->actor, this->cutscenes[0], 0x7C, SUBS_CUTSCENE_SET_UNK_LINK_FIELDS)) {
+    if (SubS_StartCutscene(&this->actor, this->csIdList[0], CS_ID_GLOBAL_TALK, SUBS_CUTSCENE_WITH_PLAYER)) {
         func_80AEE374(this, play);
     }
 }
@@ -995,15 +995,15 @@ void func_80AEE650(EnTk* this, PlayState* play) {
 void func_80AEE6B8(EnTk* this, PlayState* play) {
     if (this->unk_2CA & 0x20) {
         if (this->unk_2E4 >= 3) {
-            ActorCutscene_Stop(this->cutscenes[0]);
+            CutsceneManager_Stop(this->csIdList[0]);
             Message_CloseTextbox(play);
             func_80AEDBEC(this, play);
-        } else if (SubS_StartActorCutscene(&this->actor, 0x7C, this->cutscenes[0], SUBS_CUTSCENE_SET_UNK_LINK_FIELDS)) {
+        } else if (SubS_StartCutscene(&this->actor, CS_ID_GLOBAL_TALK, this->csIdList[0], SUBS_CUTSCENE_WITH_PLAYER)) {
             this->unk_310 = 3;
             func_80AEDE10(this, play);
             this->unk_2CA &= ~0x20;
         }
-    } else if (SubS_StartActorCutscene(&this->actor, 0x7C, this->cutscenes[0], SUBS_CUTSCENE_SET_UNK_LINK_FIELDS)) {
+    } else if (SubS_StartCutscene(&this->actor, CS_ID_GLOBAL_TALK, this->csIdList[0], SUBS_CUTSCENE_WITH_PLAYER)) {
         this->unk_310 = 4;
         func_80AEDE10(this, play);
     }

@@ -67,7 +67,7 @@ typedef struct EnGo {
     /* 0x38C */ Actor* unk_38C;
     /* 0x390 */ u16 unk_390;
     /* 0x392 */ u16 unk_392;
-    /* 0x394 */ u8 unk_394;
+    /* 0x394 */ u8 cueId;
     /* 0x398 */ f32 unk_398;
     /* 0x39C */ f32 unk_39C;
     /* 0x3A0 */ f32 unk_3A0;
@@ -79,7 +79,7 @@ typedef struct EnGo {
     /* 0x3B2 */ s16 unk_3B2;
     /* 0x3B4 */ s16 unk_3B4;
     /* 0x3B6 */ s16 unk_3B6;
-    /* 0x3B8 */ s16 unk_3B8;
+    /* 0x3B8 */ s16 csId;
     /* 0x3BA */ s16 unk_3BA;
     /* 0x3BC */ s16 unk_3BC;
     /* 0x3BE */ s16 unk_3BE;

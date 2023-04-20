@@ -48,23 +48,23 @@ s32 DmAl_ChangeAnim(DmAl* this, s32 animIndex) {
 
 void func_80C1BDD8(DmAl* this, PlayState* play) {
     s32 D_80C1C280[] = { 0, 0, 0, 0, 0 };
-    u16 csAction;
-    s32 actionIndex;
+    u16 cueId;
+    s32 cueChannel;
 
     if (play->csCtx.state != 0) {
         if (!this->unk_45C) {
-            this->action = 0xFF;
+            this->cueId = 255;
             this->unk_45C = true;
             this->animIndex2 = this->animIndex;
         }
-        if (Cutscene_CheckActorAction(play, 0x232)) {
-            actionIndex = Cutscene_GetActorActionIndex(play, 0x232);
-            csAction = play->csCtx.actorActions[actionIndex]->action;
-            if (this->action != (u8)csAction) {
-                this->action = csAction;
-                DmAl_ChangeAnim(this, D_80C1C280[csAction]);
+        if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_562)) {
+            cueChannel = Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_562);
+            cueId = play->csCtx.actorCues[cueChannel]->id;
+            if (this->cueId != (u8)cueId) {
+                this->cueId = cueId;
+                DmAl_ChangeAnim(this, D_80C1C280[cueId]);
             }
-            Cutscene_ActorTranslateAndYaw(&this->actor, play, actionIndex);
+            Cutscene_ActorTranslateAndYaw(&this->actor, play, cueChannel);
         }
     } else if (this->unk_45C) {
         this->unk_45C = false;

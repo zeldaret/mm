@@ -86,14 +86,14 @@ Actor* func_80B11F44(PlayState* play) {
 void func_80B11F78(EnOnpuman* this, PlayState* play) {
     if (play->msgCtx.ocarinaMode == OCARINA_MODE_END) {
         this->actionFunc = func_80B121D8;
-        if (this->actor.cutscene != -1) {
-            ActorCutscene_Stop(this->actor.cutscene);
+        if (this->actor.csId != CS_ID_NONE) {
+            CutsceneManager_Stop(this->actor.csId);
         }
     } else if (play->msgCtx.ocarinaMode == OCARINA_MODE_EVENT) {
         play_sound(NA_SE_SY_CORRECT_CHIME);
         play->msgCtx.ocarinaMode = OCARINA_MODE_END;
-        if (this->actor.cutscene != -1) {
-            ActorCutscene_Stop(this->actor.cutscene);
+        if (this->actor.csId != CS_ID_NONE) {
+            CutsceneManager_Stop(this->actor.csId);
         }
         this->actionFunc = func_80B121D8;
     }
@@ -126,13 +126,13 @@ void func_80B1202C(EnOnpuman* this, PlayState* play2) {
         }
     }
     if (this->unk_2A4 & 1) {
-        if (this->actor.cutscene == -1) {
+        if (this->actor.csId == CS_ID_NONE) {
             this->unk_2A4 &= ~1;
-        } else if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
+        } else if (CutsceneManager_IsNext(this->actor.csId)) {
             this->unk_2A4 &= ~1;
-            ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
+            CutsceneManager_StartWithPlayerCs(this->actor.csId, &this->actor);
         } else {
-            ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+            CutsceneManager_Queue(this->actor.csId);
         }
     }
 }

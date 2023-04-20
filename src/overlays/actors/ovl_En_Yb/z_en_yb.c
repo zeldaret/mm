@@ -81,7 +81,7 @@ static Vec3f D_80BFB300 = { 500.0f, -500.0f, 0.0f };
 
 void EnYb_Init(Actor* thisx, PlayState* play) {
     EnYb* this = THIS;
-    s16 tempCutscene;
+    s16 csId;
     s32 i;
 
     Actor_SetScale(&this->actor, 0.01f);
@@ -102,17 +102,17 @@ void EnYb_Init(Actor* thisx, PlayState* play) {
 
     EnYb_ChangeAnim(play, this, 2, ANIMMODE_LOOP, 0.0f);
 
-    tempCutscene = this->actor.cutscene;
-    for (i = 0; i < ARRAY_COUNT(this->cutscenes); i++) {
-        this->cutscenes[i] = tempCutscene;
-        if (tempCutscene != -1) {
-            this->actor.cutscene = tempCutscene;
-            tempCutscene = ActorCutscene_GetAdditionalCutscene(this->actor.cutscene);
+    csId = this->actor.csId;
+    for (i = 0; i < ARRAY_COUNT(this->csIdList); i++) {
+        this->csIdList[i] = csId;
+        if (csId != CS_ID_NONE) {
+            this->actor.csId = csId;
+            csId = CutsceneManager_GetAdditionalCsId(this->actor.csId);
         }
     }
 
-    this->cutsceneIndex = -1;
-    this->actor.cutscene = this->cutscenes[0];
+    this->csIdIndex = -1;
+    this->actor.csId = this->csIdList[0];
 
     // between midnight and morning start spawned
     if (gSaveContext.save.time < CLOCK_TIME(6, 0)) {
@@ -215,17 +215,17 @@ void EnYb_UpdateAnimation(EnYb* this, PlayState* play) {
 }
 
 void EnYb_FinishTeachingCutscene(EnYb* this) {
-    if (this->cutsceneIndex != -1) {
-        if (ActorCutscene_GetCurrentIndex() == this->cutscenes[this->cutsceneIndex]) {
-            ActorCutscene_Stop(this->cutscenes[this->cutsceneIndex]);
+    if (this->csIdIndex != -1) {
+        if (CutsceneManager_GetCurrentCsId() == this->csIdList[this->csIdIndex]) {
+            CutsceneManager_Stop(this->csIdList[this->csIdIndex]);
         }
-        this->cutsceneIndex = -1;
+        this->csIdIndex = -1;
     }
 }
 
-void EnYb_ChangeCutscene(EnYb* this, s16 cutsceneId) {
+void EnYb_ChangeCutscene(EnYb* this, s16 csIdIndex) {
     EnYb_FinishTeachingCutscene(this);
-    this->cutsceneIndex = cutsceneId;
+    this->csIdIndex = csIdIndex;
 }
 
 /**
@@ -414,16 +414,16 @@ void EnYb_Update(Actor* thisx, PlayState* play) {
 
     this->actionFunc(this, play);
 
-    if (this->cutsceneIndex != -1 && ActorCutscene_GetCurrentIndex() != this->cutscenes[this->cutsceneIndex]) {
-        if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-            ActorCutscene_Stop(0x7C);
-            ActorCutscene_SetIntentToPlay(this->cutscenes[this->cutsceneIndex]);
-        } else if (ActorCutscene_GetCanPlayNext(this->cutscenes[this->cutsceneIndex])) {
-            if (this->cutsceneIndex == 0) {
-                ActorCutscene_StartAndSetUnkLinkFields(this->cutscenes[this->cutsceneIndex], &this->actor);
+    if ((this->csIdIndex != -1) && (CutsceneManager_GetCurrentCsId() != this->csIdList[this->csIdIndex])) {
+        if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+            CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
+            CutsceneManager_Queue(this->csIdList[this->csIdIndex]);
+        } else if (CutsceneManager_IsNext(this->csIdList[this->csIdIndex])) {
+            if (this->csIdIndex == 0) {
+                CutsceneManager_StartWithPlayerCs(this->csIdList[this->csIdIndex], &this->actor);
             }
         } else {
-            ActorCutscene_SetIntentToPlay(this->cutscenes[this->cutsceneIndex]);
+            CutsceneManager_Queue(this->csIdList[this->csIdIndex]);
         }
     }
 }

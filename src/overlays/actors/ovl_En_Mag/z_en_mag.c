@@ -239,7 +239,7 @@ void EnMag_Update(Actor* thisx, PlayState* play) {
                 CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_A) ||
                 CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_B)) {
 
-                if (!EnvFlags_Get(play, 4)) {
+                if (!CutsceneFlags_Get(play, 4)) {
                     play_sound(NA_SE_SY_PIECE_OF_HEART);
                     this->state = MAG_STATE_CALLED;
                     this->ocarinaStaff = 0;
@@ -383,16 +383,16 @@ void EnMag_Update(Actor* thisx, PlayState* play) {
                             CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_B)) {
                             if (play->transitionTrigger != TRANS_TRIGGER_START) {
                                 Audio_SetCutsceneFlag(false);
-                                D_801BB12C++;
-                                if (D_801BB12C >= 2) {
-                                    D_801BB12C = 0;
+                                gOpeningEntranceIndex++;
+                                if (gOpeningEntranceIndex >= 2) {
+                                    gOpeningEntranceIndex = 0;
                                 }
                                 play_sound(NA_SE_SY_PIECE_OF_HEART);
                                 gSaveContext.gameMode = GAMEMODE_FILE_SELECT;
                                 play->transitionTrigger = TRANS_TRIGGER_START;
                                 play->transitionType = TRANS_TYPE_FADE_BLACK;
                                 play->nextEntrance = ENTRANCE(CUTSCENE, 0);
-                                gSaveContext.save.cutscene = 0;
+                                gSaveContext.save.cutsceneIndex = 0;
                                 gSaveContext.sceneLayer = 0;
                             }
                             this->unk11F54 = 15;
@@ -438,12 +438,12 @@ void EnMag_Update(Actor* thisx, PlayState* play) {
     }
 
     if (this->state == MAG_STATE_INITIAL) {
-        if (EnvFlags_Get(play, 3)) {
+        if (CutsceneFlags_Get(play, 3)) {
             this->unk11F02 = 40;
             this->state = MAG_STATE_FADE_IN_MASK_EFFECTS;
         }
     } else if (this->state < MAG_STATE_FADE_OUT) {
-        if (EnvFlags_Get(play, 4)) {
+        if (CutsceneFlags_Get(play, 4)) {
             this->state = MAG_STATE_FADE_OUT;
         }
     }
