@@ -88,7 +88,7 @@ void EnGe1_Init(Actor* thisx, PlayState* play) {
     this->picto.actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->picto.actor.targetMode = 6;
     Actor_SetScale(&this->picto.actor, 0.01f);
-    this->animIndex = this->csAction = -1; // GERUDO_WHITE_ANIM_NONE
+    this->animIndex = this->cueId = -1; // GERUDO_WHITE_ANIM_NONE
     this->stateFlags = 0;
     EnGe1_ChangeAnim(this, GERUDO_WHITE_ANIM_ARMS_FOLDED, ANIMMODE_LOOP, 0.0f);
     this->actionFunc = EnGe1_Wait;
@@ -202,7 +202,7 @@ void EnGe1_SetupPath(EnGe1* this, PlayState* play) {
 
             this->picto.actor.world.rot.y = Math_Vec3f_Yaw(&this->picto.actor.world.pos, &nextPoint);
             this->picto.actor.world.rot.x = Math_Vec3f_Pitch(&this->picto.actor.world.pos, &nextPoint);
-            this->picto.actor.speedXZ = 15.0f;
+            this->picto.actor.speed = 15.0f;
         }
     } else {
         this->path = NULL;
@@ -243,9 +243,9 @@ s32 EnGe1_FollowPath(EnGe1* this) {
 
 void EnGe1_Scream(EnGe1* this) {
     if ((s32)Rand_ZeroFloat(2.0f) == 0) {
-        Actor_PlaySfxAtPos(&this->picto.actor, NA_SE_VO_FPVO00);
+        Actor_PlaySfx(&this->picto.actor, NA_SE_VO_FPVO00);
     } else {
-        Actor_PlaySfxAtPos(&this->picto.actor, NA_SE_VO_FPVO01);
+        Actor_PlaySfx(&this->picto.actor, NA_SE_VO_FPVO01);
     }
 }
 
@@ -255,16 +255,16 @@ void EnGe1_Wait(EnGe1* this, PlayState* play) {
 }
 
 void EnGe1_PerformCutsceneActions(EnGe1* this, PlayState* play) {
-    s16 csAction;
+    s16 cueId;
 
-    if (SkelAnime_Update(&this->skelAnime) && (this->csAction == 3)) {
+    if (SkelAnime_Update(&this->skelAnime) && (this->cueId == 3)) {
         EnGe1_ChangeAnim(this, GERUDO_WHITE_ANIM_STIFF_SHIVERING, ANIMMODE_LOOP, 0.0f);
     }
 
-    if (Cutscene_CheckActorAction(play, 121)) {
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_121)) {
         this->picto.actor.draw = EnGe1_Draw;
-        csAction = play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 121)]->action;
-        switch (csAction) {
+        cueId = play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_121)]->id;
+        switch (cueId) {
             case 8:
                 this->stateFlags &= ~GERUDO_WHITE_STATE_DISABLE_MOVEMENT;
                 break;
@@ -275,14 +275,15 @@ void EnGe1_PerformCutsceneActions(EnGe1* this, PlayState* play) {
 
             default:
                 this->stateFlags &= ~GERUDO_WHITE_STATE_DISABLE_MOVEMENT;
-                Cutscene_ActorTranslateAndYaw(&this->picto.actor, play, Cutscene_GetActorActionIndex(play, 0x79));
+                Cutscene_ActorTranslateAndYaw(&this->picto.actor, play,
+                                              Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_121));
                 break;
         }
 
-        if (this->csAction != csAction) {
-            this->csAction = csAction;
+        if (this->cueId != cueId) {
+            this->cueId = cueId;
 
-            switch (this->csAction) {
+            switch (this->cueId) {
                 // Aveil cutscene
                 case 1:
                     EnGe1_ChangeAnim(this, GERUDO_WHITE_ANIM_ARMS_FOLDED, ANIMMODE_LOOP, 0.0f);
@@ -330,17 +331,17 @@ void EnGe1_PerformCutsceneActions(EnGe1* this, PlayState* play) {
 
         if ((this->animIndex == GERUDO_WHITE_ANIM_TRUDGING_OFF) &&
             (Animation_OnFrame(&this->skelAnime, 12.0f) || Animation_OnFrame(&this->skelAnime, 25.0f))) {
-            Actor_PlaySfxAtPos(&this->picto.actor, NA_SE_EV_PIRATE_WALK);
+            Actor_PlaySfx(&this->picto.actor, NA_SE_EV_PIRATE_WALK);
         }
 
         if ((this->animIndex == GERUDO_WHITE_ANIM_SALUTE) && Animation_OnFrame(&this->skelAnime, 14.0f)) {
-            Actor_PlaySfxAtPos(&this->picto.actor, NA_SE_EV_PIRATE_WALK);
+            Actor_PlaySfx(&this->picto.actor, NA_SE_EV_PIRATE_WALK);
         }
     } else {
         this->picto.actor.draw = NULL;
     }
 
-    switch (this->csAction) {
+    switch (this->cueId) {
         case 9:
             if ((this->curPointIndex < this->path->count) && EnGe1_FollowPath(this)) {
                 this->curPointIndex++;
@@ -375,7 +376,8 @@ void EnGe1_Update(Actor* thisx, PlayState* play) {
     if (!(this->stateFlags & GERUDO_WHITE_STATE_DISABLE_MOVEMENT)) {
         Actor_MoveWithGravity(&this->picto.actor);
     }
-    Actor_UpdateBgCheckInfo(play, &this->picto.actor, 40.0f, 25.0f, 40.0f, 5);
+    Actor_UpdateBgCheckInfo(play, &this->picto.actor, 40.0f, 25.0f, 40.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
     this->actionFunc(this, play);
     this->torsoRot.x = this->torsoRot.y = this->torsoRot.z = 0;
 

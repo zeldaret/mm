@@ -205,7 +205,7 @@ void EnWallmas_Freeze(EnWallmas* this) {
     this->collider.base.colType = 3;
     this->timer = 80;
     this->actor.flags &= ~ACTOR_FLAG_400;
-    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 80);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 80);
 }
 
 void EnWallmas_ThawIfFrozen(EnWallmas* this, PlayState* play) {
@@ -245,7 +245,7 @@ void EnWallmas_WaitToDrop(EnWallmas* this, PlayState* play) {
 
     if ((player->stateFlags1 & (PLAYER_STATE1_100000 | PLAYER_STATE1_8000000)) ||
         (player->stateFlags2 & PLAYER_STATE2_80) || (player->unk_B5E > 0) || (player->actor.freezeTimer > 0) ||
-        !(player->actor.bgCheckFlags & 1) ||
+        !(player->actor.bgCheckFlags & BGCHECKFLAG_GROUND) ||
         ((WALLMASTER_GET_TYPE(&this->actor) == WALLMASTER_TYPE_PROXIMITY) &&
          (Math_Vec3f_DistXZ(&this->actor.home.pos, playerPos) > (120.f + this->detectionRadius)))) {
         AudioSfx_StopById(NA_SE_EN_FALL_AIM);
@@ -253,7 +253,7 @@ void EnWallmas_WaitToDrop(EnWallmas* this, PlayState* play) {
     }
 
     if (this->timer == 80) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_FALL_AIM);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_FALL_AIM);
     }
 
     if (this->timer == 0) {
@@ -298,7 +298,7 @@ void EnWallmas_SetupLand(EnWallmas* this, PlayState* play) {
                      ANIMMODE_ONCE, -3.0f);
 
     Actor_SpawnFloorDustRing(play, &this->actor, &this->actor.world.pos, 15.0f, 6, 20.0f, 300, 100, true);
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_FALL_LAND);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_FALL_LAND);
     this->actionFunc = EnWallmas_Land;
 }
 
@@ -324,7 +324,7 @@ void EnWallmas_Stand(EnWallmas* this, PlayState* play) {
 
 void EnWallmas_SetupWalk(EnWallmas* this) {
     Animation_PlayOnceSetSpeed(&this->skelAnime, &gWallmasterWalkAnim, 3.0f);
-    this->actor.speedXZ = 3.0f;
+    this->actor.speed = 3.0f;
     this->actionFunc = EnWallmas_Walk;
 }
 
@@ -337,13 +337,13 @@ void EnWallmas_Walk(EnWallmas* this, PlayState* play) {
     this->actor.world.rot.y = this->actor.shape.rot.y;
     if (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 12.0f) ||
         Animation_OnFrame(&this->skelAnime, 24.0f) || Animation_OnFrame(&this->skelAnime, 36.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_FALL_WALK);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_FALL_WALK);
     }
 }
 
 void EnWallmas_SetupJumpToCeiling(EnWallmas* this) {
     Animation_PlayOnce(&this->skelAnime, &gWallmasterStopWalkAnim);
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actionFunc = EnWallmas_JumpToCeiling;
 }
 
@@ -355,7 +355,7 @@ void EnWallmas_JumpToCeiling(EnWallmas* this, PlayState* play) {
 
 void EnWallmas_SetupReturnToCeiling(EnWallmas* this) {
     this->timer = 0;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     Animation_Change(&this->skelAnime, &gWallmasterJumpAnim, 3.0f, 0.0f, Animation_GetLastFrame(&gWallmasterJumpAnim),
                      ANIMMODE_ONCE, -3.0f);
     this->actionFunc = EnWallmas_ReturnToCeiling;
@@ -372,7 +372,7 @@ void EnWallmas_ReturnToCeiling(EnWallmas* this, PlayState* play) {
     }
 
     if (Animation_OnFrame(&this->skelAnime, 20.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_FALL_UP);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_FALL_UP);
     }
 
     if (this->actor.playerHeightRel < -900.0f) {
@@ -397,8 +397,8 @@ void EnWallmas_SetupDamage(EnWallmas* this, s32 arg1) {
         func_800BE504(&this->actor, &this->collider);
     }
 
-    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 20);
-    this->actor.speedXZ = 5.0f;
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 20);
+    this->actor.speed = 5.0f;
     this->actor.velocity.y = 10.0f;
     this->actionFunc = EnWallmas_Damage;
 }
@@ -413,15 +413,15 @@ void EnWallmas_Damage(EnWallmas* this, PlayState* play) {
     }
 
     if (Animation_OnFrame(&this->skelAnime, 13.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_EYEGOLE_ATTACK);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_EYEGOLE_ATTACK);
     }
 
-    Math_StepToF(&this->actor.speedXZ, 0.0f, 0.2f);
+    Math_StepToF(&this->actor.speed, 0.0f, 0.2f);
 }
 
 void EnWallmas_SetupCooldown(EnWallmas* this) {
     Animation_PlayOnce(&this->skelAnime, &gWallmasterRecoverFromDamageAnim);
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actor.velocity.y = 0.0f;
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->actionFunc = EnWallmas_Cooldown;
@@ -434,7 +434,7 @@ void EnWallmas_Cooldown(EnWallmas* this, PlayState* play) {
 }
 
 void EnWallmas_SetupDie(EnWallmas* this, PlayState* play) {
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actor.velocity.y = 0.0f;
     func_800B3030(play, &this->actor.world.pos, &gZeroVec3f, &gZeroVec3f, 250, -10, 2);
     SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 11, NA_SE_EN_EXTINCT);
@@ -456,7 +456,7 @@ void EnWallmas_SetupTakePlayer(EnWallmas* this, PlayState* play) {
     Animation_MorphToPlayOnce(&this->skelAnime, &gWallmasterHoverAnim, -5.0f);
     this->timer = -30;
     this->actionFunc = EnWallmas_TakePlayer;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actor.velocity.y = 0.0f;
     this->yTarget = this->actor.playerHeightRel;
     func_800B724C(play, &this->actor, PLAYER_CSMODE_18);
@@ -466,8 +466,8 @@ void EnWallmas_TakePlayer(EnWallmas* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (Animation_OnFrame(&this->skelAnime, 1.0f)) {
-        func_800B8E58(player, player->ageProperties->voiceSfxIdOffset + NA_SE_VO_LI_DAMAGE_S);
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_FALL_CATCH);
+        Player_PlaySfx(player, player->ageProperties->voiceSfxIdOffset + NA_SE_VO_LI_DAMAGE_S);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_FALL_CATCH);
     }
 
     if (SkelAnime_Update(&this->skelAnime)) {
@@ -482,11 +482,11 @@ void EnWallmas_TakePlayer(EnWallmas* this, PlayState* play) {
 
         player->actor.world.pos.y = this->actor.world.pos.y - sYOffsetPerForm[GET_PLAYER_FORM];
         if (this->timer == -30) {
-            func_800B8E58(player, player->ageProperties->voiceSfxIdOffset + NA_SE_VO_LI_TAKEN_AWAY);
+            Player_PlaySfx(player, player->ageProperties->voiceSfxIdOffset + NA_SE_VO_LI_TAKEN_AWAY);
         }
 
         if (this->timer == 0) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_FALL_UP);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_FALL_UP);
         }
 
         this->timer += 2;
@@ -530,7 +530,7 @@ void EnWallmas_WaitForSwitchFlag(EnWallmas* this, PlayState* play) {
 }
 
 void EnWallmas_SetupStun(EnWallmas* this) {
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     if (this->actor.velocity.y > 0.0f) {
         this->actor.velocity.y = 0.0f;
     }
@@ -564,10 +564,10 @@ void EnWallmas_UpdateDamage(EnWallmas* this, PlayState* play) {
             (!(this->collider.info.acHitInfo->toucher.dmgFlags & 0xDB0B3))) {
             if (Actor_ApplyDamage(&this->actor) == 0) {
                 Enemy_StartFinishingBlow(play, &this->actor);
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DAIOCTA_REVERSE);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_DAIOCTA_REVERSE);
                 this->actor.flags &= ~ACTOR_FLAG_1;
             } else if (this->actor.colChkInfo.damage != 0) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_FALL_DAMAGE);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_FALL_DAMAGE);
             }
 
             EnWallmas_ThawIfFrozen(this, play);
@@ -583,13 +583,13 @@ void EnWallmas_UpdateDamage(EnWallmas* this, PlayState* play) {
                     EnWallmas_SetupStun(this);
                 } else if (this->actor.colChkInfo.damageEffect == WALLMASTER_DMGEFF_STUN) {
                     this->timer = 40;
-                    Actor_SetColorFilter(&this->actor, 0, 255, 0, 40);
-                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
+                    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 255, COLORFILTER_BUFFLAG_OPA, 40);
+                    Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_FREEZE);
                     EnWallmas_SetupStun(this);
                 } else if (this->actor.colChkInfo.damageEffect == WALLMASTER_DMGEFF_ZORA_MAGIC) {
                     this->timer = 40;
-                    Actor_SetColorFilter(&this->actor, 0, 255, 0, 40);
-                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
+                    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 255, COLORFILTER_BUFFLAG_OPA, 40);
+                    Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_FREEZE);
                     this->drawDmgEffScale = 0.55f;
                     this->drawDmgEffAlpha = 2.0f;
                     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_MEDIUM;
@@ -629,13 +629,15 @@ void EnWallmas_Update(Actor* thisx, PlayState* play) {
         }
 
         if (this->actionFunc != EnWallmas_Drop) {
-            Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 25.0f, 0.0f, 0x1D);
+            Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 25.0f, 0.0f,
+                                    UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                        UPDBGCHECKINFO_FLAG_10);
         }
 
         if ((this->actionFunc != EnWallmas_Die) && (this->actionFunc != EnWallmas_Drop)) {
             Collider_UpdateCylinder(&this->actor, &this->collider);
             CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
-            if ((this->actionFunc != EnWallmas_Damage) && (this->actor.bgCheckFlags & 1) &&
+            if ((this->actionFunc != EnWallmas_Damage) && (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) &&
                 (this->actor.freezeTimer == 0)) {
                 CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
             }

@@ -1,4 +1,5 @@
 #include "global.h"
+#include "buffers.h"
 #include "system_malloc.h"
 
 extern u16 gFramebufferHiRes0[HIRES_BUFFER_WIDTH][HIRES_BUFFER_HEIGHT];

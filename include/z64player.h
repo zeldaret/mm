@@ -22,7 +22,8 @@ typedef enum PlayerBoots {
     /* 4 */ PLAYER_BOOTS_ZORA_LAND,
     /* 5 */ PLAYER_BOOTS_ZORA_UNDERWATER,
     /* 6 */ PLAYER_BOOTS_GORON,
-    /* 7 */ PLAYER_BOOTS_MAX
+    /* 7 */ PLAYER_BOOTS_7,
+    /* 8 */ PLAYER_BOOTS_MAX
 } PlayerBoots;
 
 typedef enum PlayerStrength {
@@ -84,7 +85,8 @@ typedef enum PlayerItemAction {
     /* 0x00 */ PLAYER_IA_NONE,
     /* 0x01 */ PLAYER_IA_LAST_USED,
     /* 0x02 */ PLAYER_IA_FISHING_ROD,
-    /* 0x03 */ PLAYER_IA_SWORD_KOKIRI,
+    /* 0x03 */ PLAYER_IA_SWORD_MIN,
+    /* 0x03 */ PLAYER_IA_SWORD_KOKIRI = PLAYER_IA_SWORD_MIN,
     /* 0x04 */ PLAYER_IA_SWORD_RAZOR,
     /* 0x05 */ PLAYER_IA_SWORD_GILDED,
     /* 0x06 */ PLAYER_IA_SWORD_GREAT_FAIRY,
@@ -95,14 +97,16 @@ typedef enum PlayerItemAction {
     /* 0x0B */ PLAYER_IA_BOW_ICE,
     /* 0x0C */ PLAYER_IA_BOW_LIGHT,
     /* 0x0D */ PLAYER_IA_HOOKSHOT,
-    /* 0x0E */ PLAYER_IA_BOMB,
+    /* 0x0E */ PLAYER_IA_EXPLOSIVE_MIN,
+    /* 0x0E */ PLAYER_IA_BOMB = PLAYER_IA_EXPLOSIVE_MIN,
     /* 0x0F */ PLAYER_IA_POWDER_KEG,
     /* 0x10 */ PLAYER_IA_BOMBCHU,
     /* 0x11 */ PLAYER_IA_11,
     /* 0x12 */ PLAYER_IA_NUT,
     /* 0x13 */ PLAYER_IA_PICTO_BOX,
     /* 0x14 */ PLAYER_IA_OCARINA,
-    /* 0x15 */ PLAYER_IA_BOTTLE,
+    /* 0x15 */ PLAYER_IA_BOTTLE_MIN,
+    /* 0x15 */ PLAYER_IA_BOTTLE_EMPTY = PLAYER_IA_BOTTLE_MIN,
     /* 0x16 */ PLAYER_IA_BOTTLE_FISH,
     /* 0x17 */ PLAYER_IA_BOTTLE_SPRING_WATER,
     /* 0x18 */ PLAYER_IA_BOTTLE_HOT_SPRING_WATER,
@@ -167,6 +171,83 @@ typedef enum PlayerItemAction {
     /* 0x53 */ PLAYER_IA_MAX
 } PlayerItemAction;
 
+// Relies on B swords related item actions to be contiguous
+#define GET_B_SWORD_FROM_IA(itemAction) ((itemAction) - PLAYER_IA_SWORD_MIN + 1)
+
+typedef enum PlayerBButtonSword {
+    /* 0 */ PLAYER_B_SWORD_NONE,
+    /* 1 */ PLAYER_B_SWORD_KOKIRI = GET_B_SWORD_FROM_IA(PLAYER_IA_SWORD_KOKIRI),
+    /* 2 */ PLAYER_B_SWORD_RAZOR = GET_B_SWORD_FROM_IA(PLAYER_IA_SWORD_RAZOR),
+    /* 3 */ PLAYER_B_SWORD_GILDED = GET_B_SWORD_FROM_IA(PLAYER_IA_SWORD_GILDED),
+    /* 4 */ PLAYER_B_SWORD_MAX
+} PlayerBButtonSword;
+
+// Relies on melee weapon related item actions to be contiguous
+#define GET_MELEE_WEAPON_FROM_IA(itemAction) ((itemAction) - PLAYER_IA_SWORD_MIN + 1)
+
+typedef enum PlayerMeleeWeapon {
+    /* 0 */ PLAYER_MELEEWEAPON_NONE,
+    /* 1 */ PLAYER_MELEEWEAPON_SWORD_KOKIRI = GET_MELEE_WEAPON_FROM_IA(PLAYER_IA_SWORD_KOKIRI),
+    /* 2 */ PLAYER_MELEEWEAPON_SWORD_RAZOR = GET_MELEE_WEAPON_FROM_IA(PLAYER_IA_SWORD_RAZOR),
+    /* 3 */ PLAYER_MELEEWEAPON_SWORD_GILDED = GET_MELEE_WEAPON_FROM_IA(PLAYER_IA_SWORD_GILDED),
+    /* 4 */ PLAYER_MELEEWEAPON_SWORD_GREAT_FAIRY = GET_MELEE_WEAPON_FROM_IA(PLAYER_IA_SWORD_GREAT_FAIRY),
+    /* 5 */ PLAYER_MELEEWEAPON_STICK = GET_MELEE_WEAPON_FROM_IA(PLAYER_IA_STICK),
+    /* 6 */ PLAYER_MELEEWEAPON_ZORA_FINS = GET_MELEE_WEAPON_FROM_IA(PLAYER_IA_ZORA_FINS),
+    /* 7 */ PLAYER_MELEEWEAPON_MAX
+} PlayerMeleeWeapon;
+
+// Relies on bottle-related item actions to be contiguous
+#define GET_BOTTLE_FROM_IA(itemAction) ((itemAction) - PLAYER_IA_BOTTLE_MIN)
+
+typedef enum PlayerBottle {
+    /* -1 */ PLAYER_BOTTLE_NONE = -1,
+    /*  0 */ PLAYER_BOTTLE_EMPTY = GET_BOTTLE_FROM_IA(PLAYER_IA_BOTTLE_EMPTY),
+    /*  1 */ PLAYER_BOTTLE_FISH = GET_BOTTLE_FROM_IA(PLAYER_IA_BOTTLE_FISH),
+    /*  2 */ PLAYER_BOTTLE_SPRING_WATER = GET_BOTTLE_FROM_IA(PLAYER_IA_BOTTLE_SPRING_WATER),
+    /*  3 */ PLAYER_BOTTLE_HOT_SPRING_WATER = GET_BOTTLE_FROM_IA(PLAYER_IA_BOTTLE_HOT_SPRING_WATER),
+    /*  4 */ PLAYER_BOTTLE_ZORA_EGG = GET_BOTTLE_FROM_IA(PLAYER_IA_BOTTLE_ZORA_EGG),
+    /*  5 */ PLAYER_BOTTLE_DEKU_PRINCESS = GET_BOTTLE_FROM_IA(PLAYER_IA_BOTTLE_DEKU_PRINCESS),
+    /*  6 */ PLAYER_BOTTLE_GOLD_DUST = GET_BOTTLE_FROM_IA(PLAYER_IA_BOTTLE_GOLD_DUST),
+    /*  7 */ PLAYER_BOTTLE_1C = GET_BOTTLE_FROM_IA(PLAYER_IA_BOTTLE_1C),
+    /*  8 */ PLAYER_BOTTLE_SEAHORSE = GET_BOTTLE_FROM_IA(PLAYER_IA_BOTTLE_SEAHORSE),
+    /*  9 */ PLAYER_BOTTLE_MUSHROOM = GET_BOTTLE_FROM_IA(PLAYER_IA_BOTTLE_MUSHROOM),
+    /* 10 */ PLAYER_BOTTLE_HYLIAN_LOACH = GET_BOTTLE_FROM_IA(PLAYER_IA_BOTTLE_HYLIAN_LOACH),
+    /* 11 */ PLAYER_BOTTLE_BUG = GET_BOTTLE_FROM_IA(PLAYER_IA_BOTTLE_BUG),
+    /* 12 */ PLAYER_BOTTLE_POE = GET_BOTTLE_FROM_IA(PLAYER_IA_BOTTLE_POE),
+    /* 13 */ PLAYER_BOTTLE_BIG_POE = GET_BOTTLE_FROM_IA(PLAYER_IA_BOTTLE_BIG_POE),
+    /* 14 */ PLAYER_BOTTLE_POTION_RED = GET_BOTTLE_FROM_IA(PLAYER_IA_BOTTLE_POTION_RED),
+    /* 15 */ PLAYER_BOTTLE_POTION_BLUE = GET_BOTTLE_FROM_IA(PLAYER_IA_BOTTLE_POTION_BLUE),
+    /* 16 */ PLAYER_BOTTLE_POTION_GREEN = GET_BOTTLE_FROM_IA(PLAYER_IA_BOTTLE_POTION_GREEN),
+    /* 17 */ PLAYER_BOTTLE_MILK = GET_BOTTLE_FROM_IA(PLAYER_IA_BOTTLE_MILK),
+    /* 18 */ PLAYER_BOTTLE_MILK_HALF = GET_BOTTLE_FROM_IA(PLAYER_IA_BOTTLE_MILK_HALF),
+    /* 19 */ PLAYER_BOTTLE_CHATEAU = GET_BOTTLE_FROM_IA(PLAYER_IA_BOTTLE_CHATEAU),
+    /* 20 */ PLAYER_BOTTLE_FAIRY = GET_BOTTLE_FROM_IA(PLAYER_IA_BOTTLE_FAIRY),
+    /* 21 */ PLAYER_BOTTLE_MAX
+} PlayerBottle;
+
+// Relies on explosive-related item actions to be contiguous
+#define GET_EXPLOSIVE_FROM_IA(itemAction) ((itemAction) - PLAYER_IA_EXPLOSIVE_MIN)
+
+typedef enum PlayerExplosive {
+    /* -1 */ PLAYER_EXPLOSIVE_NONE = -1,
+    /*  0 */ PLAYER_EXPLOSIVE_BOMB = GET_EXPLOSIVE_FROM_IA(PLAYER_IA_BOMB),
+    /*  1 */ PLAYER_EXPLOSIVE_POWDER_KEG = GET_EXPLOSIVE_FROM_IA(PLAYER_IA_POWDER_KEG),
+    /*  2 */ PLAYER_EXPLOSIVE_BOMBCHU = GET_EXPLOSIVE_FROM_IA(PLAYER_IA_BOMBCHU),
+    /*  3 */ PLAYER_EXPLOSIVE_MAX
+} PlayerExplosive;
+
+// Relies on sword item actions to be contiguous
+#define GET_SWORD_FROM_IA(itemAction) ((itemAction) - PLAYER_IA_SWORD_MIN)
+
+typedef enum PlayerSword {
+    /* -1 */ PLAYER_SWORD_NONE = -1,
+    /*  0 */ PLAYER_SWORD_KOKIRI = GET_SWORD_FROM_IA(PLAYER_IA_SWORD_KOKIRI),
+    /*  1 */ PLAYER_SWORD_RAZOR = GET_SWORD_FROM_IA(PLAYER_IA_SWORD_RAZOR),
+    /*  2 */ PLAYER_SWORD_GILDED = GET_SWORD_FROM_IA(PLAYER_IA_SWORD_GILDED),
+    /*  3 */ PLAYER_SWORD_GREAT_FAIRY = GET_SWORD_FROM_IA(PLAYER_IA_SWORD_GREAT_FAIRY),
+    /*  4 */ PLAYER_SWORD_MAX
+} PlayerSword;
+
 typedef enum PlayerMeleeWeaponAnimation {
     /*  0 */ PLAYER_MWA_FORWARD_SLASH_1H,      // Vertical one-handed slash
     /*  1 */ PLAYER_MWA_FORWARD_SLASH_2H,      // Vertical two-handed slash
@@ -217,10 +298,10 @@ typedef enum PlayerDoorType {
 } PlayerDoorType;
 
 typedef enum PlayerAnimType {
-    /* 0 */ PLAYER_ANIMTYPE_0,
+    /* 0 */ PLAYER_ANIMTYPE_DEFAULT, // DEFAULT
     /* 1 */ PLAYER_ANIMTYPE_1,
     /* 2 */ PLAYER_ANIMTYPE_2,
-    /* 3 */ PLAYER_ANIMTYPE_3,
+    /* 3 */ PLAYER_ANIMTYPE_3, // Two hand weapon
     /* 4 */ PLAYER_ANIMTYPE_4,
     /* 5 */ PLAYER_ANIMTYPE_5,
     /* 6 */ PLAYER_ANIMTYPE_MAX
@@ -228,28 +309,29 @@ typedef enum PlayerAnimType {
 
 typedef enum PlayerModelType {
     // left hand
-    /*  0 */ PLAYER_MODELTYPE_LH_OPEN,
-    /*  1 */ PLAYER_MODELTYPE_LH_CLOSED,
-    /*  2 */ PLAYER_MODELTYPE_LH_ONE_HAND_SWORD,
-    /*  3 */ PLAYER_MODELTYPE_LH_TWO_HAND_SWORD,
-    /*  4 */ PLAYER_MODELTYPE_LH_4,
-    /*  5 */ PLAYER_MODELTYPE_LH_BOTTLE,
+    /*   0 */ PLAYER_MODELTYPE_LH_OPEN,
+    /*   1 */ PLAYER_MODELTYPE_LH_CLOSED,
+    /*   2 */ PLAYER_MODELTYPE_LH_ONE_HAND_SWORD,
+    /*   3 */ PLAYER_MODELTYPE_LH_TWO_HAND_SWORD,
+    /*   4 */ PLAYER_MODELTYPE_LH_4,
+    /*   5 */ PLAYER_MODELTYPE_LH_BOTTLE,
     // right hand
-    /*  6 */ PLAYER_MODELTYPE_RH_OPEN,
-    /*  7 */ PLAYER_MODELTYPE_RH_CLOSED,
-    /*  8 */ PLAYER_MODELTYPE_RH_SHIELD,
-    /*  9 */ PLAYER_MODELTYPE_RH_BOW,
-    /* 10 */ PLAYER_MODELTYPE_RH_INSTRUMENT,
-    /* 11 */ PLAYER_MODELTYPE_RH_HOOKSHOT,
+    /*   6 */ PLAYER_MODELTYPE_RH_OPEN,
+    /*   7 */ PLAYER_MODELTYPE_RH_CLOSED,
+    /*   8 */ PLAYER_MODELTYPE_RH_SHIELD,
+    /*   9 */ PLAYER_MODELTYPE_RH_BOW,
+    /*  10 */ PLAYER_MODELTYPE_RH_INSTRUMENT,
+    /*  11 */ PLAYER_MODELTYPE_RH_HOOKSHOT,
     // sheath
-    /* 12 */ PLAYER_MODELTYPE_SHEATH_12,
-    /* 13 */ PLAYER_MODELTYPE_SHEATH_13,
-    /* 14 */ PLAYER_MODELTYPE_SHEATH_14,
-    /* 15 */ PLAYER_MODELTYPE_SHEATH_15,
+    /*  12 */ PLAYER_MODELTYPE_SHEATH_12,
+    /*  13 */ PLAYER_MODELTYPE_SHEATH_13,
+    /*  14 */ PLAYER_MODELTYPE_SHEATH_14,
+    /*  15 */ PLAYER_MODELTYPE_SHEATH_15,
     // waist
-    /* 16 */ PLAYER_MODELTYPE_WAIST,
-    /* 17 */ PLAYER_MODELTYPE_17, // NULL?
-    /* 18 */ PLAYER_MODELTYPE_MAX
+    /*  16 */ PLAYER_MODELTYPE_WAIST,
+    /*  17 */ PLAYER_MODELTYPE_17, // NULL?
+    /*  18 */ PLAYER_MODELTYPE_MAX,
+    /* 255 */ PLAYER_MODELTYPE_RH_FF = 0xFF // disable shield collider, cutscene-specific
 } PlayerModelType;
 
 typedef struct PlayerModelIndices {
@@ -368,10 +450,18 @@ typedef enum PlayerBodyPart {
 
 typedef struct PlayerAnimationFrame {
     /* 0x000 */ Vec3s frameTable[PLAYER_LIMB_MAX];
-    /* 0x108 */ s16 faceInfo;
+    /* 0x108 */ s16 appearanceInfo; // bitpack containing the face and hands info
 } PlayerAnimationFrame; // size = 0x10A
 
 #define PLAYER_LIMB_BUF_SIZE (ALIGN16(sizeof(PlayerAnimationFrame)) + 0xF)
+
+#define GET_APPEARANCE_FROM_JOINT_TABLE(jointTable)           (((PlayerAnimationFrame *)(jointTable))->appearanceInfo)
+#define GET_EYE_INDEX_FROM_JOINT_TABLE(jointTable)         ((GET_APPEARANCE_FROM_JOINT_TABLE(jointTable) & 0xF) - 1)
+#define GET_MOUTH_INDEX_FROM_JOINT_TABLE(jointTable)       (((GET_APPEARANCE_FROM_JOINT_TABLE(jointTable) >> 4) & 0xF) - 1)
+
+// Note the returned value from this macro needs to be shifted
+#define GET_LEFT_HAND_INDEX_FROM_JOINT_TABLE(jointTable)   (GET_APPEARANCE_FROM_JOINT_TABLE(jointTable) & 0xF000)
+#define GET_RIGHT_HAND_INDEX_FROM_JOINT_TABLE(jointTable)  (GET_APPEARANCE_FROM_JOINT_TABLE(jointTable) & 0x0F00)
 
 typedef struct PlayerAgeProperties {
     /* 0x00 */ f32 unk_00; // ceilingCheckHeight?
@@ -379,14 +469,14 @@ typedef struct PlayerAgeProperties {
     /* 0x08 */ f32 unk_08;
     /* 0x0C */ f32 unk_0C;
     /* 0x10 */ f32 unk_10;
-    /* 0x14 */ f32 unk_14;
-    /* 0x18 */ f32 unk_18;
-    /* 0x1C */ f32 unk_1C;
-    /* 0x20 */ f32 unk_20;
-    /* 0x24 */ f32 unk_24;
-    /* 0x28 */ f32 unk_28;
-    /* 0x2C */ f32 unk_2C;
-    /* 0x30 */ f32 unk_30;
+    /* 0x14 */ f32 unk_14; // compared to wallHeight
+    /* 0x18 */ f32 unk_18; // compared to wallHeight
+    /* 0x1C */ f32 unk_1C; // compared to wallHeight
+    /* 0x20 */ f32 unk_20; // unused?
+    /* 0x24 */ f32 unk_24; // water stuff // depthInWater
+    /* 0x28 */ f32 unk_28; // water stuff // depthInWater
+    /* 0x2C */ f32 unk_2C; // water stuff // depthInWater
+    /* 0x30 */ f32 unk_30; // water stuff // depthInWater
     /* 0x34 */ f32 unk_34;
     /* 0x38 */ f32 unk_38; // wallCheckHeight?
     /* 0x3C */ f32 unk_3C;
@@ -399,15 +489,15 @@ typedef struct PlayerAgeProperties {
     /* 0x94 */ u16 surfaceSfxIdOffset;
     /* 0x98 */ f32 unk_98;
     /* 0x9C */ f32 unk_9C;
-    /* 0xA0 */ LinkAnimationHeader* unk_A0;
-    /* 0xA4 */ LinkAnimationHeader* unk_A4;
-    /* 0xA8 */ LinkAnimationHeader* unk_A8;
-    /* 0xAC */ LinkAnimationHeader* unk_AC;
-    /* 0xB0 */ LinkAnimationHeader* unk_B0;
-    /* 0xB4 */ LinkAnimationHeader* unk_B4[4];
-    /* 0xC4 */ LinkAnimationHeader* unk_C4[2];
-    /* 0xCC */ LinkAnimationHeader* unk_CC[2];
-    /* 0xD4 */ LinkAnimationHeader* unk_D4[2];
+    /* 0xA0 */ PlayerAnimationHeader* unk_A0;
+    /* 0xA4 */ PlayerAnimationHeader* unk_A4;
+    /* 0xA8 */ PlayerAnimationHeader* unk_A8;
+    /* 0xAC */ PlayerAnimationHeader* unk_AC;
+    /* 0xB0 */ PlayerAnimationHeader* unk_B0;
+    /* 0xB4 */ PlayerAnimationHeader* unk_B4[4];
+    /* 0xC4 */ PlayerAnimationHeader* unk_C4[2];
+    /* 0xCC */ PlayerAnimationHeader* unk_CC[2];
+    /* 0xD4 */ PlayerAnimationHeader* unk_D4[2];
 } PlayerAgeProperties; // size = 0xDC
 
 typedef struct {
@@ -445,8 +535,8 @@ typedef enum PlayerCsMode {
     /* 0x03 */ PLAYER_CSMODE_3,
     /* 0x04 */ PLAYER_CSMODE_4,
     /* 0x05 */ PLAYER_CSMODE_5,
-    /* 0x06 */ PLAYER_CSMODE_6,
-    /* 0x07 */ PLAYER_CSMODE_7,
+    /* 0x06 */ PLAYER_CSMODE_END,
+    /* 0x07 */ PLAYER_CSMODE_WAIT,
     /* 0x08 */ PLAYER_CSMODE_8,
     /* 0x09 */ PLAYER_CSMODE_9,
     /* 0x0A */ PLAYER_CSMODE_10,
@@ -928,7 +1018,7 @@ typedef struct Player {
     /* 0xA7C */ Actor* boomerangActor;
     /* 0xA80 */ Actor* tatlActor;
     /* 0xA84 */ s16 tatlTextId;
-    /* 0xA86 */ s8 unk_A86; // actorCutsceneIndex?
+    /* 0xA86 */ s8 csId;
     /* 0xA87 */ s8 exchangeItemId; // PlayerItemAction enum
     /* 0xA88 */ Actor* talkActor;
     /* 0xA8C */ f32 talkActorDistance;
@@ -942,8 +1032,8 @@ typedef struct Player {
     /* 0xAA6 */ u16 unk_AA6; // flags of some kind
     /* 0xAA8 */ s16 unk_AA8;
     /* 0xAAA */ s16 unk_AAA;
-    /* 0xAAC */ Vec3s unk_AAC;
-    /* 0xAB2 */ Vec3s unk_AB2;
+    /* 0xAAC */ Vec3s headLimbRot;
+    /* 0xAB2 */ Vec3s upperLimbRot;
     /* 0xAB8 */ f32 unk_AB8;
     /* 0xABC */ f32 unk_ABC;
     /* 0xAC0 */ f32 unk_AC0;
@@ -966,11 +1056,14 @@ typedef struct Player {
     /* 0xAE7 */ s8 unk_AE7; // a timer
     /* 0xAE8 */ s16 unk_AE8; // multipurpose timer
     /* 0xAEC */ f32 unk_AEC;
-    /* 0xAF0 */ Vec3f unk_AF0[2];
+    /* 0xAF0 */ union { // TODO: this may be an union of two structs
+                    Vec3f unk_AF0[2];
+                    f32 arr_AF0[6];
+                };
     /* 0xB08 */ f32 unk_B08[2]; // TODO: Investigate if this member actually is an array
     /* 0xB10 */ f32 unk_B10[6];
     /* 0xB28 */ s16 unk_B28; //Burning stick timer?
-    /* 0xB2A */ s8 getItemDrawId;
+    /* 0xB2A */ s8 getItemDrawIdPlusOne;
     /* 0xB2B */ s8 unk_B2B;
     /* 0xB2C */ f32 windSpeed;
     /* 0xB30 */ s16 windAngleX;
@@ -990,7 +1083,7 @@ typedef struct Player {
     /* 0xB5D */ u8 unk_B5D;
     /* 0xB5E */ u8 unk_B5E;
     /* 0xB5F */ u8 unk_B5F;
-    /* 0xB60 */ u16 unk_B60; // blast mask timer?
+    /* 0xB60 */ u16 blastMaskTimer;
     /* 0xB62 */ s16 unk_B62;
     /* 0xB64 */ u8 unk_B64;
     /* 0xB65 */ u8 shockTimer;
@@ -1022,7 +1115,7 @@ typedef struct Player {
     /* 0xCC4 */ MtxF mf_CC4;
     /* 0xD04 */ MtxF shieldMf;
     /* 0xD44 */ u8 isBurning;
-    /* 0xD45 */ u8 flameTimers[PLAYER_BODYPART_MAX];
+    /* 0xD45 */ u8 flameTimers[PLAYER_BODYPART_MAX]; // one flame per body part
     /* 0xD57 */ u8 unk_D57;
     /* 0xD58 */ PlayerFuncD58 unk_D58;
     /* 0xD5C */ s8 invincibilityTimer; // prevents damage when nonzero (positive = visible, counts towards zero each frame)

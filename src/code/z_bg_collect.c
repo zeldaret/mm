@@ -1,103 +1,116 @@
 #include "global.h"
 
-void BgCheck2_UpdateActorPosition(CollisionContext* colCtx, s32 bgId, Actor* actor) {
-    MtxF prevMatrix;
-    MtxF prevMatrixInv;
-    MtxF currMatrix;
-    Vec3f newPos;
-    Vec3f posWithInv;
+/**
+ * Update the `carriedActor`'s position based on the dynapoly actor identified by `bgId`.
+ */
+void DynaPolyActor_UpdateCarriedActorPos(CollisionContext* colCtx, s32 bgId, Actor* carriedActor) {
+    MtxF prevTransform;
+    MtxF prevTransformInv;
+    MtxF curTransform;
+    Vec3f pos;
+    Vec3f tempPos;
 
     if (!DynaPoly_IsBgIdBgActor(bgId)) {
         return;
     }
 
     SkinMatrix_SetScaleRotateYRPTranslate(
-        &prevMatrix, colCtx->dyna.bgActors[bgId].prevTransform.scale.x,
+        &prevTransform, colCtx->dyna.bgActors[bgId].prevTransform.scale.x,
         colCtx->dyna.bgActors[bgId].prevTransform.scale.y, colCtx->dyna.bgActors[bgId].prevTransform.scale.z,
         colCtx->dyna.bgActors[bgId].prevTransform.rot.x, colCtx->dyna.bgActors[bgId].prevTransform.rot.y,
         colCtx->dyna.bgActors[bgId].prevTransform.rot.z, colCtx->dyna.bgActors[bgId].prevTransform.pos.x,
         colCtx->dyna.bgActors[bgId].prevTransform.pos.y, colCtx->dyna.bgActors[bgId].prevTransform.pos.z);
 
-    if (SkinMatrix_Invert(&prevMatrix, &prevMatrixInv) == 2) {
+    if (SkinMatrix_Invert(&prevTransform, &prevTransformInv) == 2) {
         return;
     }
 
     SkinMatrix_SetScaleRotateYRPTranslate(
-        &currMatrix, colCtx->dyna.bgActors[bgId].curTransform.scale.x, colCtx->dyna.bgActors[bgId].curTransform.scale.y,
-        colCtx->dyna.bgActors[bgId].curTransform.scale.z, colCtx->dyna.bgActors[bgId].curTransform.rot.x,
-        colCtx->dyna.bgActors[bgId].curTransform.rot.y, colCtx->dyna.bgActors[bgId].curTransform.rot.z,
-        colCtx->dyna.bgActors[bgId].curTransform.pos.x, colCtx->dyna.bgActors[bgId].curTransform.pos.y,
-        colCtx->dyna.bgActors[bgId].curTransform.pos.z);
+        &curTransform, colCtx->dyna.bgActors[bgId].curTransform.scale.x,
+        colCtx->dyna.bgActors[bgId].curTransform.scale.y, colCtx->dyna.bgActors[bgId].curTransform.scale.z,
+        colCtx->dyna.bgActors[bgId].curTransform.rot.x, colCtx->dyna.bgActors[bgId].curTransform.rot.y,
+        colCtx->dyna.bgActors[bgId].curTransform.rot.z, colCtx->dyna.bgActors[bgId].curTransform.pos.x,
+        colCtx->dyna.bgActors[bgId].curTransform.pos.y, colCtx->dyna.bgActors[bgId].curTransform.pos.z);
 
-    SkinMatrix_Vec3fMtxFMultXYZ(&prevMatrixInv, &actor->world.pos, &posWithInv);
-    SkinMatrix_Vec3fMtxFMultXYZ(&currMatrix, &posWithInv, &newPos);
+    // Apply the movement of the dynapoly actor `bgId` over the last frame to the `carriedActor` position
+    // pos = curTransform * prevTransformInv * pos
+    // Note (curTransform * prevTransformInv) represents the transform relative to the previous frame
+    SkinMatrix_Vec3fMtxFMultXYZ(&prevTransformInv, &carriedActor->world.pos, &tempPos);
+    SkinMatrix_Vec3fMtxFMultXYZ(&curTransform, &tempPos, &pos);
 
-    actor->world.pos = newPos;
+    carriedActor->world.pos = pos;
 }
 
-void BgCheck2_UpdateActorYRotation(CollisionContext* colCtx, s32 bgId, Actor* actor) {
-    s16 angleChange;
+/**
+ * Update the `carriedActor`'s Y rotation based on the dynapoly actor identified by `bgId`.
+ */
+void DynaPolyActor_UpdateCarriedActorRotY(CollisionContext* colCtx, s32 bgId, Actor* carriedActor) {
+    s16 rotY;
 
     if (!DynaPoly_IsBgIdBgActor(bgId)) {
         return;
     }
 
-    angleChange = colCtx->dyna.bgActors[bgId].curTransform.rot.y - colCtx->dyna.bgActors[bgId].prevTransform.rot.y;
+    rotY = colCtx->dyna.bgActors[bgId].curTransform.rot.y - colCtx->dyna.bgActors[bgId].prevTransform.rot.y;
 
-    if (actor->id == 0) {
-        ((Player*)actor)->currentYaw += angleChange;
+    if (carriedActor->id == ACTOR_PLAYER) {
+        ((Player*)carriedActor)->currentYaw += rotY;
     }
 
-    actor->shape.rot.y += angleChange;
-    actor->world.rot.y += angleChange;
+    carriedActor->shape.rot.y += rotY;
+    carriedActor->world.rot.y += rotY;
 }
 
-void BgCheck2_AttachToMesh(CollisionContext* colCtx, Actor* actor, s32 bgId) {
-    DynaPolyActor* meshActor;
+void DynaPolyActor_AttachCarriedActor(CollisionContext* colCtx, Actor* carriedActor, s32 bgId) {
+    DynaPolyActor* dynaActor;
 
     if (!DynaPoly_IsBgIdBgActor(bgId)) {
         return;
     }
 
-    meshActor = DynaPoly_GetActor(colCtx, bgId);
-    if (meshActor != NULL) {
-        DynaPolyActor_SetRidingFallingState(meshActor);
+    dynaActor = DynaPoly_GetActor(colCtx, bgId);
+    if (dynaActor != NULL) {
+        DynaPolyActor_SetActorOnTop(dynaActor);
 
-        if ((actor->flags & 0x4000000) == 0x4000000) {
-            DynaPolyActor_SetSwitchPressedState(meshActor);
+        if (CHECK_FLAG_ALL(carriedActor->flags, ACTOR_FLAG_CAN_PRESS_SWITCH)) {
+            DynaPolyActor_SetActorOnSwitch(dynaActor);
         }
-        if ((actor->flags & 0x20000) == 0x20000) {
-            DynaPolyActor_SetHeavySwitchPressedState(meshActor);
+        if (CHECK_FLAG_ALL(carriedActor->flags, ACTOR_FLAG_CAN_PRESS_HEAVY_SWITCH)) {
+            DynaPolyActor_SetActorOnHeavySwitch(dynaActor);
         }
     }
 }
 
-u32 BgCheck2_UpdateActorAttachedToMesh(CollisionContext* colCtx, s32 bgId, Actor* actor) {
-    u32 wasUpdated = 0;
-    DynaPolyActor* meshActor;
+/**
+ * Update the `carriedActor`'s position and Y rotation based on the dynapoly actor identified by `bgId`, according to
+ * the dynapoly actor's move flags (see `DYNA_TRANSFORM_POS` and `DYNA_TRANSFORM_ROT_Y`).
+ */
+u32 DynaPolyActor_TransformCarriedActor(CollisionContext* colCtx, s32 bgId, Actor* carriedActor) {
+    u32 wasUpdated = false;
+    DynaPolyActor* dynaActor;
 
     if (!DynaPoly_IsBgIdBgActor(bgId)) {
-        return 0;
+        return false;
     }
 
-    if (colCtx->dyna.bgActorFlags[bgId] & 2 || !(colCtx->dyna.bgActorFlags[bgId] & 1)) {
-        return 0;
+    if ((colCtx->dyna.bgActorFlags[bgId] & BGACTOR_1) || !(colCtx->dyna.bgActorFlags[bgId] & BGACTOR_IN_USE)) {
+        return false;
     }
 
-    meshActor = DynaPoly_GetActor(colCtx, bgId);
+    dynaActor = DynaPoly_GetActor(colCtx, bgId);
 
-    if (meshActor == NULL) {
-        return 0;
+    if (dynaActor == NULL) {
+        return false;
     }
 
-    if (meshActor->flags & 1) {
-        BgCheck2_UpdateActorPosition(colCtx, bgId, actor);
-        wasUpdated = 1;
+    if (dynaActor->transformFlags & DYNA_TRANSFORM_POS) {
+        DynaPolyActor_UpdateCarriedActorPos(colCtx, bgId, carriedActor);
+        wasUpdated = true;
     }
 
-    if (meshActor->flags & 2) {
-        BgCheck2_UpdateActorYRotation(colCtx, bgId, actor);
-        wasUpdated = 1;
+    if (dynaActor->transformFlags & DYNA_TRANSFORM_ROT_Y) {
+        DynaPolyActor_UpdateCarriedActorRotY(colCtx, bgId, carriedActor);
+        wasUpdated = true;
     }
 
     return wasUpdated;

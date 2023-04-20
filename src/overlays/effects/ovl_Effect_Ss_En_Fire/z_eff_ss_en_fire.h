@@ -15,6 +15,4 @@ typedef struct {
     /* 0x16 */ s16 bodyPart;
 } EffectSsEnFireInitParams; // size = 0x18
 
-extern const EffectSsInit Effect_Ss_En_Fire_InitVars;
-
 #endif

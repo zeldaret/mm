@@ -67,7 +67,7 @@ void DmChar01_Init(Actor* thisx, PlayState* play) {
 
     switch (DMCHAR01_GET(&this->dyna.actor)) {
         case DMCHAR01_0:
-            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_20_02)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_WOODFALL_TEMPLE)) {
                 this->unk_34C = 2;
                 this->actionFunc = func_80AA8F1C;
                 break;
@@ -97,7 +97,7 @@ void DmChar01_Init(Actor* thisx, PlayState* play) {
             break;
 
         case DMCHAR01_1:
-            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_20_02) || (gSaveContext.sceneLayer == 1)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_WOODFALL_TEMPLE) || (gSaveContext.sceneLayer == 1)) {
                 this->unk_34C = 1;
                 this->actionFunc = func_80AA8F1C;
             } else {
@@ -134,7 +134,7 @@ void DmChar01_Init(Actor* thisx, PlayState* play) {
             DynaPolyActor_LoadMesh(play, &this->dyna, &gWoodfallSceneryTempleRampAndPlatformCol);
 
             this->unk_34D = true;
-            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_20_02)) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_WOODFALL_TEMPLE)) {
                 this->actionFunc = func_80AA9020;
                 this->dyna.actor.world.pos.y -= 120.0f;
             } else {
@@ -187,21 +187,22 @@ void func_80AA8698(DmChar01* this, PlayState* play) {
 }
 
 void func_80AA884C(DmChar01* this, PlayState* play) {
-    s16 sp1E = this->dyna.actor.cutscene;
+    s16 csId = this->dyna.actor.csId;
 
-    if (ActorCutscene_GetCanPlayNext(sp1E)) {
-        ActorCutscene_Start(sp1E, &this->dyna.actor);
+    if (CutsceneManager_IsNext(csId)) {
+        CutsceneManager_Start(csId, &this->dyna.actor);
         this->actionFunc = func_80AA88A8;
     } else {
-        ActorCutscene_SetIntentToPlay(sp1E);
+        CutsceneManager_Queue(csId);
     }
 }
 
 void func_80AA88A8(DmChar01* this, PlayState* play) {
-    if (Cutscene_CheckActorAction(play, 135)) {
-        if (play->csCtx.frames == play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 135)]->startFrame) {
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_135)) {
+        if (play->csCtx.curFrame ==
+            play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_135)]->startFrame) {
             D_80AAAE24 = 1;
-            Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_FORT_RISING);
+            Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_FORT_RISING);
         }
     } else {
         D_80AAAE24 = 0;
@@ -277,7 +278,7 @@ void func_80AA8C28(DmChar01* this, PlayState* play) {
 
     switch (this->unk_346) {
         case 0:
-            Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_WATER_PURIFICATION);
+            Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_WATER_PURIFICATION);
             D_80AAAE22 = -2200;
             D_80AAAE20 = 100;
             this->unk_346++;
@@ -344,11 +345,11 @@ void func_80AA8F2C(DmChar01* this, PlayState* play) {
 }
 
 void func_80AA9020(DmChar01* this, PlayState* play) {
-    if (Cutscene_CheckActorAction(play, 135)) {
-        CsCmdActorAction* temp_v1 = play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 135)];
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_135)) {
+        CsCmdActorCue* cue = play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_135)];
 
-        if ((temp_v1->startFrame == play->csCtx.frames) && (temp_v1->action == 2)) {
-            SET_WEEKEVENTREG(WEEKEVENTREG_20_02);
+        if ((cue->startFrame == play->csCtx.curFrame) && (cue->id == 2)) {
+            SET_WEEKEVENTREG(WEEKEVENTREG_CLEARED_WOODFALL_TEMPLE);
             this->actionFunc = func_80AA90AC;
         }
     }
@@ -373,17 +374,17 @@ void DmChar01_Update(Actor* thisx, PlayState* play2) {
             Player* player = GET_PLAYER(play);
 
             if (player->actor.world.pos.y > 5.0f) {
-                func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+                DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
             } else {
-                func_800C6314(play, &play->colCtx.dyna, this->dyna.bgId);
+                DynaPoly_EnableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
             }
         }
 
         if (DMCHAR01_GET(&this->dyna.actor) == DMCHAR01_2) {
             if (this->dyna.actor.xzDistToPlayer > 600.0f) {
-                func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+                DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
             } else {
-                func_800C6314(play, &play->colCtx.dyna, this->dyna.bgId);
+                DynaPoly_EnableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
             }
         }
     }

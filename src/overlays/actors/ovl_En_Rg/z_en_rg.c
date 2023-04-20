@@ -231,7 +231,7 @@ void func_80BF3DC4(EnRg* this, PlayState* play) {
     this->collider2.dim.worldSphere.center.y = this->actor.world.pos.y + this->actor.shape.yOffset;
     this->collider2.dim.worldSphere.center.z = this->actor.world.pos.z;
 
-    if (this->actor.speedXZ >= 10.0f) {
+    if (this->actor.speed >= 10.0f) {
         CollisionCheck_SetAT(play, &play->colChkCtx, &this->collider2.base);
     }
     CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider2.base);
@@ -285,11 +285,11 @@ void func_80BF3FF8(EnRg* this) {
 s32 func_80BF4024(EnRg* this, PlayState* play) {
     if ((play->csCtx.state == 0) && (this->unk_334 == 1)) {
         if (Animation_OnFrame(&this->skelAnime, 2.0f)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_GOLON_CIRCLE);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_GOLON_CIRCLE);
         }
 
         if (Animation_OnFrame(&this->skelAnime, 22.0f)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_GOLON_SIT_IMT);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_GOLON_SIT_IMT);
         }
     }
 
@@ -318,8 +318,8 @@ void func_80BF40F4(EnRg* this) {
 }
 
 s32 func_80BF416C(EnRg* this, PlayState* play) {
-    if ((this->actor.bgCheckFlags & 1) && (this->actor.speedXZ >= 0.01f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_GOLON_ROLLING - SFX_FLAG);
+    if ((this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) && (this->actor.speed >= 0.01f)) {
+        Actor_PlaySfx(&this->actor, NA_SE_EN_GOLON_ROLLING - SFX_FLAG);
         func_800AE930(&play->colCtx, Effect_GetByIndex(this->unk_340), &this->actor.world.pos, 18.0f,
                       this->actor.shape.rot.y, this->actor.floorPoly, this->actor.floorBgId);
     } else {
@@ -345,9 +345,9 @@ s32 func_80BF42BC(EnRg* this, f32 arg1) {
     f32 sp2C;
     s32 sp24;
 
-    Math_ApproachF(&this->actor.speedXZ, arg1, 0.3f, 0.5f);
+    Math_ApproachF(&this->actor.speed, arg1, 0.3f, 0.5f);
 
-    sp2C = this->actor.speedXZ * (1.0f / 26);
+    sp2C = this->actor.speed * (1.0f / 26);
     if (sp2C > 1.0f) {
         sp2C = 1.0f;
     }
@@ -410,7 +410,7 @@ s32 func_80BF45B4(EnRg* this) {
     s16 temp_v0;
     s16 temp_v1;
 
-    if ((this->actor.bgCheckFlags & 8) && (this->actor.speedXZ >= 5.0f)) {
+    if ((this->actor.bgCheckFlags & BGCHECKFLAG_WALL) && (this->actor.speed >= 5.0f)) {
         temp_v1 = this->actor.world.rot.y;
         temp_v0 = temp_v1 - BINANG_ROT180(this->actor.wallYaw);
 
@@ -419,27 +419,27 @@ s32 func_80BF45B4(EnRg* this) {
             this->unk_322 = 0xA;
         } else if (ABS_ALT(temp_v0) >= 0x1000) {
             this->actor.world.rot.y = BINANG_ROT180(BINANG_ROT180(this->actor.wallYaw) - temp_v0);
-            this->actor.speedXZ *= 0.75f;
+            this->actor.speed *= 0.75f;
             this->unk_322 = 0xA;
         } else {
             this->actor.world.rot.y = BINANG_ROT180(temp_v1);
             ret = 1;
-            this->actor.speedXZ *= 0.25f;
+            this->actor.speed *= 0.25f;
         }
         sp24 = 1;
     } else if (this->unk_310 & 0x40) {
-        s16 yaw = Actor_YawBetweenActors(&this->actor, ((void)0, this->collider2.base.ac));
+        s16 yaw = Actor_WorldYawTowardActor(&this->actor, ((void)0, this->collider2.base.ac));
 
         sp24 = 2;
         if (this->actor.colorFilterTimer == 0) {
-            this->actor.speedXZ *= 0.5f;
+            this->actor.speed *= 0.5f;
             if ((s16)(yaw - this->actor.world.rot.y) > 0) {
                 this->actor.world.rot.y -= 0x2000;
             } else {
                 this->actor.world.rot.y += 0x2000;
             }
         }
-        Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 40);
+        Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 40);
         this->unk_322 = 0xA;
     }
 
@@ -501,7 +501,7 @@ s32 func_80BF47AC(EnRg* this, PlayState* play) {
 
 void func_80BF4934(EnRg* this) {
     if (this->unk_318 == 1) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_GOLON_DASH);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_GOLON_DASH);
     }
 }
 
@@ -533,7 +533,7 @@ void func_80BF4964(EnRg* this) {
         }
 
         if (!(this->unk_310 & 0x400) && !(this->unk_310 & 0x1000) && (this->unk_322 == 0) && (this->unk_324 == 0) &&
-            (this->actor.bgCheckFlags & 1)) {
+            (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
             if (this->unk_18C == NULL) {
                 Math_Vec3s_ToVec3f(&sp30, &sp3C[this->unk_33C]);
             } else {
@@ -625,8 +625,8 @@ s32 func_80BF4DA8(EnRg* this) {
     s32 i;
 
     for (i = 0; i < ARRAY_COUNT(D_80BF596C); i++) {
-        temp_f20 = Actor_XZDistanceToPoint(&this->actor, &D_80BF596C[i]);
-        temp_v1 = Actor_YawToPoint(&this->actor, &D_80BF596C[i]) - this->actor.world.rot.y;
+        temp_f20 = Actor_WorldDistXZToPoint(&this->actor, &D_80BF596C[i]);
+        temp_v1 = Actor_WorldYawTowardPoint(&this->actor, &D_80BF596C[i]) - this->actor.world.rot.y;
 
         if ((temp_f20 < 100.0f) && (ABS_ALT(temp_v1) < 0xC00)) {
             if (temp_v1 > 0) {
@@ -676,10 +676,10 @@ void func_80BF4FC4(EnRg* this, PlayState* play) {
     this->unk_344 = func_80BF4560(this, play);
 
     if (!Play_InCsMode(play)) {
-        if (this->actor.bgCheckFlags & 2) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND_TOUCH) {
             if (this->unk_310 & 0x400) {
                 this->unk_310 &= ~0x400;
-                this->actor.speedXZ = 0.0f;
+                this->actor.speed = 0.0f;
             }
 
             if (this->unk_344 != -1) {
@@ -688,7 +688,7 @@ void func_80BF4FC4(EnRg* this, PlayState* play) {
                     this->unk_33C++;
                 }
             }
-        } else if ((this->actor.bgCheckFlags & 1) && !(this->unk_310 & 0x1000) &&
+        } else if ((this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) && !(this->unk_310 & 0x1000) &&
                    func_80BF4D64(&this->actor.world.pos)) {
             this->unk_310 |= 0x1000;
         }
@@ -786,7 +786,9 @@ void EnRg_Update(Actor* thisx, PlayState* play) {
         func_80BF4024(this, play);
     }
 
-    Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 20.0f, 0.0f, 0x1D);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 20.0f, 0.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                UPDBGCHECKINFO_FLAG_10);
 
     if (this->actor.floorHeight <= BGCHECK_Y_MIN) {
         Math_Vec3f_Copy(&this->actor.world.pos, &this->actor.prevPos);

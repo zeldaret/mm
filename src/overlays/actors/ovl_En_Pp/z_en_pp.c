@@ -446,27 +446,27 @@ void EnPp_PlaySfxForAnimation(EnPp* this) {
             case EN_PP_ANIM_WALK:
             case EN_PP_ANIM_TURN_TO_FACE_PLAYER:
                 if (Animation_OnFrame(&this->skelAnime, 0.0f)) {
-                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_HIPLOOP_FOOTSTEP);
+                    Actor_PlaySfx(&this->actor, NA_SE_EN_HIPLOOP_FOOTSTEP);
                 }
                 break;
 
             case EN_PP_ANIM_WIND_UP:
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_HIPLOOP_FOOT - SFX_FLAG);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_HIPLOOP_FOOT - SFX_FLAG);
                 break;
 
             case EN_PP_ANIM_CHARGE:
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_HIPLOOP_RUN - SFX_FLAG);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_HIPLOOP_RUN - SFX_FLAG);
                 break;
 
             case EN_PP_ANIM_ATTACK:
                 if (Animation_OnFrame(&this->skelAnime, 0.0f)) {
-                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_HIPLOOP_PAUSE);
+                    Actor_PlaySfx(&this->actor, NA_SE_EN_HIPLOOP_PAUSE);
                 }
                 break;
 
             case EN_PP_ANIM_ROAR:
                 if (Animation_OnFrame(&this->skelAnime, 6.0f)) {
-                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_HIPLOOP_PAUSE);
+                    Actor_PlaySfx(&this->actor, NA_SE_EN_HIPLOOP_PAUSE);
                 }
                 break;
 
@@ -537,7 +537,7 @@ void EnPp_Idle(EnPp* this, PlayState* play) {
             posToLookAt.x += randPlusMinusPoint5Scaled(50.0f);
             posToLookAt.z += randPlusMinusPoint5Scaled(50.0f);
             this->targetRotY = Math_Vec3f_Yaw(&this->actor.world.pos, &posToLookAt);
-            this->actor.speedXZ = 0.0f;
+            this->actor.speed = 0.0f;
             if (this->animIndex != EN_PP_ANIM_IDLE) {
                 EnPp_ChangeAnim(this, EN_PP_ANIM_IDLE);
             }
@@ -561,7 +561,7 @@ void EnPp_Idle(EnPp* this, PlayState* play) {
 
             if ((this->maskBounceRotationalVelocity < 0x64) &&
                 (fabsf(this->actor.world.rot.y - this->targetRotY) < 100.0f)) {
-                Math_ApproachF(&this->actor.speedXZ, 1.0f, 0.3f, 1.0f);
+                Math_ApproachF(&this->actor.speed, 1.0f, 0.3f, 1.0f);
             }
 
             Math_SmoothStepToS(&this->actor.world.rot.y, this->targetRotY, 1,
@@ -611,7 +611,7 @@ void EnPp_Charge(EnPp* this, PlayState* play) {
 
     Math_SmoothStepToS(&this->maskBounceRotationalVelocity, 0, 1, 0x1F4, 0);
     if (!this->actionVar.isCharging) {
-        Math_ApproachZeroF(&this->actor.speedXZ, 0.5f, 1.0f);
+        Math_ApproachZeroF(&this->actor.speed, 0.5f, 1.0f);
         if (fabsf(this->actor.world.rot.y - this->targetRotY) < 100.0f) {
             if (this->chargesInStraightLines) {
                 this->actor.world.rot.y = this->targetRotY;
@@ -629,13 +629,13 @@ void EnPp_Charge(EnPp* this, PlayState* play) {
         }
     } else if (this->animIndex == EN_PP_ANIM_CHARGE) {
         if (EnPp_CheckCollision(this, play) != EN_PP_COLLISION_RESULT_OK) {
-            this->actor.speedXZ = 0.0f;
+            this->actor.speed = 0.0f;
             EnPp_SetupRoar(this);
             return;
         }
 
         if (!this->chargesInStraightLines) {
-            Math_ApproachF(&this->actor.speedXZ, 10.0f, 0.3f, 1.0f);
+            Math_ApproachF(&this->actor.speed, 10.0f, 0.3f, 1.0f);
         } else {
             Math_ApproachF(&this->actor.world.pos.x, this->targetPos.x, 0.5f,
                            fabsf(Math_SinS(this->targetRotY) * this->chargeAndBounceSpeed));
@@ -661,9 +661,9 @@ void EnPp_Charge(EnPp* this, PlayState* play) {
             return;
         } else {
             if (EN_PP_GET_TYPE(&this->actor) != EN_PP_TYPE_MASKED) {
-                this->actor.speedXZ *= -1.0f;
+                this->actor.speed *= -1.0f;
             } else {
-                this->actor.speedXZ *= -0.5f;
+                this->actor.speed *= -0.5f;
             }
 
             EnPp_SetupRoar(this);
@@ -682,7 +682,7 @@ void EnPp_SetupAttack(EnPp* this) {
     EnPp_ChangeAnim(this, EN_PP_ANIM_ATTACK);
     this->hornColliderOn = true;
     this->action = EN_PP_ACTION_ATTACK;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actionFunc = EnPp_Attack;
 }
 
@@ -711,7 +711,7 @@ void EnPp_SetupBounced(EnPp* this) {
     this->targetPos.x += distanceFromWorldPos.x;
     this->targetPos.z += distanceFromWorldPos.z;
     EnPp_ChangeAnim(this, EN_PP_ANIM_DAMAGE);
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->action = EN_PP_ACTION_BOUNCED;
     this->chargeAndBounceSpeed = 14.0f;
     this->actionFunc = EnPp_Bounced;
@@ -751,7 +751,7 @@ void EnPp_Roar(EnPp* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
 
     if (EnPp_CheckCollision(this, play) == EN_PP_COLLISION_RESULT_ABOUT_TO_RUN_OFF_LEDGE) {
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
         this->chargeAndBounceSpeed = 0.0f;
     }
 
@@ -771,8 +771,8 @@ void EnPp_Roar(EnPp* this, PlayState* play) {
         }
     }
 
-    Math_ApproachZeroF(&this->actor.speedXZ, 0.5f, 1.0f);
-    if ((this->actor.speedXZ > 0.3f) && (this->secondaryTimer == 0)) {
+    Math_ApproachZeroF(&this->actor.speed, 0.5f, 1.0f);
+    if ((this->actor.speed > 0.3f) && (this->secondaryTimer == 0)) {
         EnPp_SpawnDust(this, play);
         this->secondaryTimer = 3;
     }
@@ -793,7 +793,7 @@ void EnPp_SetupJump(EnPp* this) {
     this->secondaryTimer = 0;
     this->actionVar.hasLandedFromJump = false;
     this->timer = this->secondaryTimer;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actor.velocity.y = 20.0f;
     this->actor.gravity = -3.0f;
     EnPp_ChangeAnim(this, EN_PP_ANIM_JUMP);
@@ -836,7 +836,7 @@ void EnPp_Jump(EnPp* this, PlayState* play) {
 
     Math_SmoothStepToS(&this->actor.world.rot.y, this->targetRotY, 1, 0x1388, 0);
     if (!this->actionVar.hasLandedFromJump) {
-        if (this->actor.bgCheckFlags & 1) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
             this->actionVar.hasLandedFromJump = true;
             EnPp_ChangeAnim(this, EN_PP_ANIM_LAND);
         }
@@ -853,7 +853,7 @@ void EnPp_SetupStunnedOrFrozen(EnPp* this) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
     }
 
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->action = EN_PP_ACTION_STUNNED_OR_FROZEN;
     this->actionFunc = EnPp_StunnedOrFrozen;
 }
@@ -914,7 +914,7 @@ void EnPp_SetupDamaged(EnPp* this, PlayState* play) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
     }
 
-    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 8);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 8);
     this->secondaryTimer = 0;
     EnPp_ChangeAnim(this, EN_PP_ANIM_DAMAGE);
     this->targetRotY = this->actor.yawTowardsPlayer + 0x8000;
@@ -922,10 +922,10 @@ void EnPp_SetupDamaged(EnPp* this, PlayState* play) {
     if (EnPp_CheckCollision(this, play) == EN_PP_COLLISION_RESULT_ABOUT_TO_RUN_OFF_LEDGE) {
         this->damagedVelocity.z = 0.0f;
         this->damagedVelocity.x = 0.0f;
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
     }
 
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_HIPLOOP_DAMAGE);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_HIPLOOP_DAMAGE);
     this->actionFunc = EnPp_Damaged;
 }
 
@@ -957,7 +957,7 @@ void EnPp_Damaged(EnPp* this, PlayState* play) {
     if (EnPp_CheckCollision(this, play) == EN_PP_COLLISION_RESULT_ABOUT_TO_RUN_OFF_LEDGE) {
         this->damagedVelocity.z = 0.0f;
         this->damagedVelocity.x = 0.0f;
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
     }
 
     if ((fabsf(this->actor.home.pos.y - this->actor.world.pos.y) > 100.0f) &&
@@ -998,10 +998,10 @@ void EnPp_SetupDead(EnPp* this, PlayState* play) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
     }
 
-    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 25);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 25);
     Enemy_StartFinishingBlow(play, &this->actor);
     SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 30, NA_SE_EN_HIPLOOP_DEAD);
-    this->actor.flags |= ACTOR_FLAG_8000000;
+    this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
     this->actor.flags &= ~ACTOR_FLAG_1;
     this->action = EN_PP_ACTION_DEAD;
     this->actionFunc = EnPp_Dead;
@@ -1096,7 +1096,7 @@ void EnPp_Mask_SetupDetach(EnPp* this, PlayState* play) {
         }
 
         this->actor.gravity = 0.0f;
-        this->actor.flags |= ACTOR_FLAG_8000000;
+        this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
         this->actor.flags &= ~ACTOR_FLAG_1;
         this->actionVar.maskDetachState = EN_PP_MASK_DETACH_STATE_START;
         EnPp_ChangeAnim(this, EN_PP_ANIM_IDLE);
@@ -1117,7 +1117,7 @@ void EnPp_Mask_Detach(EnPp* this, PlayState* play) {
                 this->maskAccelY = 50.0f;
                 this->maskVelocity.y = -230.0f;
                 this->maskVelocity.x = -150.0f;
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_HIPLOOP_MASC_OFF);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_HIPLOOP_MASC_OFF);
                 this->actionVar.maskDetachState = EN_PP_MASK_DETACH_STATE_FALL;
                 break;
 
@@ -1172,7 +1172,7 @@ void EnPp_BodyPart_SetupMove(EnPp* this) {
     this->deadBodyPartRotationalVelocity.x = (this->deadBodyPartIndex * 0x2E) + 0xFF00;
     this->deadBodyPartRotationalVelocity.z = (this->deadBodyPartIndex * 0x2E) + 0xFF00;
     if (EN_PP_GET_TYPE(&this->actor) != EN_PP_TYPE_BODY_PART_BODY) {
-        this->actor.speedXZ = Rand_ZeroFloat(4.0f) + 4.0f;
+        this->actor.speed = Rand_ZeroFloat(4.0f) + 4.0f;
         this->actor.world.rot.y = ((s32)randPlusMinusPoint5Scaled(223.0f) + 0x1999) * this->deadBodyPartIndex;
     }
 
@@ -1224,7 +1224,7 @@ void EnPp_BodyPart_Move(EnPp* this, PlayState* play) {
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 50, NA_SE_EV_BOMB_DROP_WATER);
     }
 
-    if ((this->timer == 0) || (this->actor.bgCheckFlags & 1)) {
+    if ((this->timer == 0) || (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
         Actor_Kill(&this->actor);
     }
 }
@@ -1276,8 +1276,9 @@ void EnPp_UpdateDamage(EnPp* this, PlayState* play) {
                         (this->drawDmgEffTimer == 0)) {
                         this->drawDmgEffTimer = 40;
                         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_SMALL;
-                        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
-                        Actor_SetColorFilter(&this->actor, 0, 255, 0, 40);
+                        Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_FREEZE);
+                        Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 255, COLORFILTER_BUFFLAG_OPA,
+                                             40);
                         EnPp_SetupStunnedOrFrozen(this);
                     }
                     return;
@@ -1285,8 +1286,9 @@ void EnPp_UpdateDamage(EnPp* this, PlayState* play) {
                     if (((this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_SFX) &&
                          (this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX)) ||
                         (this->drawDmgEffTimer == 0)) {
-                        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
-                        Actor_SetColorFilter(&this->actor, 0, 255, 0, 40);
+                        Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_FREEZE);
+                        Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 255, COLORFILTER_BUFFLAG_OPA,
+                                             40);
                         this->secondaryTimer = 40;
                         EnPp_SetupStunnedOrFrozen(this);
                     }
@@ -1295,7 +1297,7 @@ void EnPp_UpdateDamage(EnPp* this, PlayState* play) {
                            (this->actor.colChkInfo.damageEffect != EN_PP_DMGEFF_JUMP)) {
                     attackDealsDamage = true;
                     this->hasBeenDamaged = true;
-                    this->actor.speedXZ = 0.0f;
+                    this->actor.speed = 0.0f;
                     if (this->actor.colChkInfo.damageEffect == EN_PP_DMGEFF_FIRE) {
                         this->drawDmgEffTimer = 40;
                         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
@@ -1323,7 +1325,8 @@ void EnPp_UpdateDamage(EnPp* this, PlayState* play) {
                         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->actor.focus.pos.x,
                                     this->actor.focus.pos.y, this->actor.focus.pos.z, 0, 0, 0,
                                     CLEAR_TAG_LARGE_LIGHT_RAYS);
-                        Actor_SetColorFilter(&this->actor, 0x8000, 255, 0, 25);
+                        Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_GRAY, 255, COLORFILTER_BUFFLAG_OPA,
+                                             25);
                         this->drawDmgEffTimer = 20;
                         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
                     }
@@ -1350,7 +1353,7 @@ void EnPp_UpdateDamage(EnPp* this, PlayState* play) {
         this->secondaryTimer = 0;
         this->timer = 10;
         this->maskBounceRotationalVelocity = 0x20D0;
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
         if (this->action == EN_PP_ACTION_CHARGE) {
             this->actionVar.isCharging = false;
             EnPp_ChangeAnim(this, EN_PP_ANIM_TURN_TO_FACE_PLAYER);
@@ -1359,7 +1362,7 @@ void EnPp_UpdateDamage(EnPp* this, PlayState* play) {
 
         this->targetRotY = this->actor.yawTowardsPlayer;
         if (EN_PP_GET_TYPE(&this->actor) == EN_PP_TYPE_MASKED) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_SHIELD_BOUND);
+            Actor_PlaySfx(&this->actor, NA_SE_IT_SHIELD_BOUND);
         }
     }
 }
@@ -1413,7 +1416,7 @@ void EnPp_Update(Actor* thisx, PlayState* play) {
     if (this->action != EN_PP_ACTION_BODY_PART_MOVE) {
         EnPp_UpdateDamage(this, play);
         Actor_SetFocus(&this->actor, 40.0f);
-        if ((this->action == EN_PP_ACTION_DEAD) || (this->actor.bgCheckFlags & 1)) {
+        if ((this->action == EN_PP_ACTION_DEAD) || (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
             this->actor.world.pos.x += this->damagedVelocity.x;
             this->actor.world.pos.z += this->damagedVelocity.z;
             Math_ApproachZeroF(&this->damagedVelocity.x, 1.0f, 2.0f);
@@ -1421,7 +1424,9 @@ void EnPp_Update(Actor* thisx, PlayState* play) {
         }
     }
 
-    Actor_UpdateBgCheckInfo(play, &this->actor, 35.0f, 40.0f, 40.0f, 0x1F);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 35.0f, 40.0f, 40.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_2 | UPDBGCHECKINFO_FLAG_4 |
+                                UPDBGCHECKINFO_FLAG_8 | UPDBGCHECKINFO_FLAG_10);
     if (this->action != EN_PP_ACTION_BODY_PART_MOVE) {
         this->actor.shape.rot.y = this->actor.world.rot.y;
     }

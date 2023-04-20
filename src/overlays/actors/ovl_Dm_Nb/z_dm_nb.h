@@ -14,7 +14,7 @@ typedef struct DmNb {
     /* 0x188 */ DmNbActionFunc actionFunc;
     /* 0x18C */ Vec3s jointTable[NB_LIMB_MAX];
     /* 0x1BC */ Vec3s morphTable[NB_LIMB_MAX];
-    /* 0x1EC */ u8 unk1EC;
+    /* 0x1EC */ u8 cueId;
     /* 0x1F0 */ s32 unk1F0;
     /* 0x1F4 */ s32 unk1F4;
     /* 0x1F8 */ s32 unk1F8;

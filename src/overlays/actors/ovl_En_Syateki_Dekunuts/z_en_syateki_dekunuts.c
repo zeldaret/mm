@@ -8,7 +8,7 @@
 #include "overlays/actors/ovl_En_Syateki_Man/z_en_syateki_man.h"
 #include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_8000000)
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_CANT_LOCK_ON)
 
 #define THIS ((EnSyatekiDekunuts*)thisx)
 
@@ -164,7 +164,7 @@ void EnSyatekiDekunuts_Destroy(Actor* thisx, PlayState* play) {
 void EnSyatekiDekunuts_SetupWaitForSignal(EnSyatekiDekunuts* this) {
     Animation_PlayOnceSetSpeed(&this->skelAnime, &gDekuScrubUpAnim, 0.0f);
 
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actor.world = this->actor.home;
     this->actor.prevPos = this->actor.home.pos;
     this->actor.shape.rot = this->actor.world.rot;
@@ -232,7 +232,7 @@ void EnSyatekiDekunuts_WaitToStart(EnSyatekiDekunuts* this, PlayState* play) {
 
     if (this->waitTimer > 20) {
         syatekiMan = (EnSyatekiMan*)this->actor.parent;
-        Actor_PlaySfxAtPos(&syatekiMan->actor, NA_SE_EN_NUTS_DAMAGE);
+        Actor_PlaySfx(&syatekiMan->actor, NA_SE_EN_NUTS_DAMAGE);
         this->waitTimer = 0;
         EnSyatekiDekunuts_SetupWaitToEmerge(this);
     } else {
@@ -258,7 +258,7 @@ void EnSyatekiDekunuts_WaitToEmerge(EnSyatekiDekunuts* this, PlayState* play) {
 }
 
 void EnSyatekiDekunuts_SetupEmerge(EnSyatekiDekunuts* this) {
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_UP);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_UP);
     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_SYATEKI_DEKUNUTS_ANIM_UP);
     this->actor.shape.rot.y = this->actor.yawTowardsPlayer;
     this->actor.world.rot.y = this->actor.yawTowardsPlayer;
@@ -379,7 +379,7 @@ void EnSyatekiDekunuts_SetupDead(EnSyatekiDekunuts* this, PlayState* play) {
         syatekiMan->dekuScrubHitCounter++;
     }
 
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_DAMAGE);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_DAMAGE);
     this->isAlive = false;
     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_SYATEKI_DEKUNUTS_ANIM_DAMAGE);
     this->timer = 160;
@@ -394,7 +394,7 @@ void EnSyatekiDekunuts_Dead(EnSyatekiDekunuts* this, PlayState* play) {
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         if (this->timer == 160) {
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_SYATEKI_DEKUNUTS_ANIM_DIE);
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_DEAD);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_DEAD);
             this->timer--;
         } else if (this->timer < 160) {
             Vec3f pos;

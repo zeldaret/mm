@@ -75,7 +75,7 @@ void BgCraceMovebg_Init(Actor* thisx, PlayState* play) {
         sHasInitializedIsLoaded = true;
     }
 
-    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
     DynaPolyActor_LoadMesh(play, &this->dyna, &gDekuShrineSlidingDoorCol);
 
     this->index = BG_CRACE_MOVEBG_GET_INDEX(&this->dyna.actor);
@@ -343,7 +343,7 @@ void BgCraceMovebg_ClosingDoor_SetupDoNothing(BgCraceMovebg* this, PlayState* pl
     this->targetDoorHeight = 0.0f;
     this->doorHeight = 0.0f;
     this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y;
-    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_STONEDOOR_STOP);
+    Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_STONEDOOR_STOP);
     this->actionFunc = BgCraceMovebg_ClosingDoor_DoNothing;
 }
 

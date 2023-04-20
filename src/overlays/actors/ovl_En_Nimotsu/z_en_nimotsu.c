@@ -53,7 +53,7 @@ static ColliderCylinderInit sCylinderInit = {
 void EnNimotsu_UpdateCollision(EnNimotsu* this, PlayState* play) {
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 32.0f, 30.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 32.0f, 30.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
 }
 
 void EnNimotsu_Init(Actor* thisx, PlayState* play) {
@@ -81,7 +81,7 @@ void EnNimotsu_Update(Actor* thisx, PlayState* play) {
 
     Actor_MoveWithGravity(&this->actor);
 
-    if (!(this->dustDone & 1) && (this->actor.bgCheckFlags & 1)) {
+    if (!(this->dustDone & 1) && (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
         if (DECR(this->timer) == 0) {
             this->dustDone |= 1;
         }

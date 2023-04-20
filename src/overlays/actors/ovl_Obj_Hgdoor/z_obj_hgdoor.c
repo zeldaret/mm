@@ -70,7 +70,7 @@ void ObjHgdoor_Init(Actor* thisx, PlayState* play) {
     CollisionHeader* header = NULL;
 
     Actor_SetScale(&this->dyna.actor, 0.1f);
-    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
     if (OBJHGDOOR_IS_RIGHT_DOOR(&this->dyna.actor)) {
         CollisionHeader_GetVirtual(&object_hgdoor_Colheader_001D10, &header);
     } else {
@@ -79,7 +79,7 @@ void ObjHgdoor_Init(Actor* thisx, PlayState* play) {
     this->dyna.bgId = DynaPoly_SetBgActor(play, &play->colCtx.dyna, &this->dyna.actor, header);
     this->rotation = 0;
     this->timer = 0;
-    this->cutscene = this->dyna.actor.cutscene;
+    this->csId = this->dyna.actor.csId;
     ObjHgdoor_SetupIdle(this);
 }
 
@@ -94,7 +94,7 @@ void ObjHgdoor_SetupIdle(ObjHgdoor* this) {
 }
 
 void ObjHgdoor_Idle(ObjHgdoor* this, PlayState* play) {
-    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_75_20) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_52_20) &&
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_75_20) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_STONE_TOWER_TEMPLE) &&
         (this->dyna.actor.xzDistToPlayer < 100.0f) && (this->dyna.actor.playerHeightRel < 40.0f) &&
         OBJHGDOOR_IS_RIGHT_DOOR(&this->dyna.actor)) {
         ObjHgdoor_SetChild(this, play);
@@ -108,33 +108,33 @@ void ObjHgdoor_SetupCutscene(ObjHgdoor* this) {
 }
 
 void ObjHgdoor_PlayCutscene(ObjHgdoor* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
-        ActorCutscene_Start(this->cutscene, &this->dyna.actor);
+    if (CutsceneManager_IsNext(this->csId)) {
+        CutsceneManager_Start(this->csId, &this->dyna.actor);
         ObjHgdoor_SetupCsAction(this);
         ObjHgdoor_SetupCsAction((ObjHgdoor*)this->dyna.actor.child);
     } else {
-        if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-            ActorCutscene_Stop(0x7C);
+        if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+            CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
         }
-        ActorCutscene_SetIntentToPlay(this->cutscene);
+        CutsceneManager_Queue(this->csId);
     }
 }
 
 void ObjHgdoor_SetupCsAction(ObjHgdoor* this) {
-    this->csAction = 0x63;
+    this->cueId = 99;
     this->actionFunc = ObjHgdoor_HandleCsAction;
 }
 
 void ObjHgdoor_HandleCsAction(ObjHgdoor* this, PlayState* play) {
-    s32 actionIndex;
+    s32 cueChannel;
 
-    if (Cutscene_CheckActorAction(play, 483)) {
-        actionIndex = Cutscene_GetActorActionIndex(play, 483);
-        if (this->csAction != play->csCtx.actorActions[actionIndex]->action) {
-            this->csAction = play->csCtx.actorActions[actionIndex]->action;
-            switch (play->csCtx.actorActions[actionIndex]->action) {
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_483)) {
+        cueChannel = Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_483);
+        if (this->cueId != play->csCtx.actorCues[cueChannel]->id) {
+            this->cueId = play->csCtx.actorCues[cueChannel]->id;
+            switch (play->csCtx.actorCues[cueChannel]->id) {
                 case 1:
-                    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_WOOD_DOOR_OPEN_SPEEDY);
+                    Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_WOOD_DOOR_OPEN_SPEEDY);
                     if ((this->dyna.actor.parent != NULL) && (this->dyna.actor.parent->id == ACTOR_EN_HG)) {
                         this->dyna.actor.parent->colChkInfo.health = 1;
                     }
@@ -149,7 +149,7 @@ void ObjHgdoor_HandleCsAction(ObjHgdoor* this, PlayState* play) {
             ObjHgdoor_SetupStopCs(this);
         }
     } else {
-        this->csAction = 0x63;
+        this->cueId = 99;
     }
 }
 
@@ -160,8 +160,8 @@ void ObjHgdoor_SetupStopCs(ObjHgdoor* this) {
 
 void ObjHgdoor_StopCs(ObjHgdoor* this, PlayState* play) {
     if (this->timer++ > 80) {
-        if (!ActorCutscene_GetCanPlayNext(this->cutscene)) {
-            ActorCutscene_Stop(this->cutscene);
+        if (!CutsceneManager_IsNext(this->csId)) {
+            CutsceneManager_Stop(this->csId);
         }
     }
 }

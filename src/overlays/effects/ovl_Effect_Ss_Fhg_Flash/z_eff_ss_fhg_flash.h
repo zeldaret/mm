@@ -40,6 +40,4 @@ typedef struct {
     /* 0x2C */ u8 type;
 } EffectSsFhgFlashInitParams; // size = 0x30
 
-extern const EffectSsInit Effect_Ss_Fhg_Flash_InitVars;
-
 #endif
