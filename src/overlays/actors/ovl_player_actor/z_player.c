@@ -5279,7 +5279,7 @@ s32 func_808341F4(PlayState* play, Player* this) {
     if ((this->transformation == PLAYER_FORM_ZORA) || (this->transformation == PLAYER_FORM_DEKU)) {
         timerStep = 0;
         if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
-            if (this->cylinder.base.ocFlags1 & 2) {
+            if (this->cylinder.base.ocFlags1 & OC1_HIT) {
                 Math_Vec3f_Copy(&this->actor.world.pos, &this->actor.prevPos);
                 this->linearVelocity = 0.0f;
             }
@@ -5412,8 +5412,8 @@ s32 func_80834600(Player* this, PlayState* play) {
             this->actor.colChkInfo.damage += this->unk_B74;
             func_80833B18(play, this, sp6C[this->unk_B75 - 1], this->unk_B78, this->unk_B7C, this->unk_B76, 20);
         }
-    } else if ((this->shieldQuad.base.acFlags & 0x80) || (this->shieldCylinder.base.acFlags & 0x80) ||
-               ((this->invincibilityTimer < 0) && (this->cylinder.base.acFlags & 2) &&
+    } else if ((this->shieldQuad.base.acFlags & AC_BOUNCED) || (this->shieldCylinder.base.acFlags & AC_BOUNCED) ||
+               ((this->invincibilityTimer < 0) && (this->cylinder.base.acFlags & AC_HIT) &&
                 (this->cylinder.info.acHitInfo != NULL) &&
                 (this->cylinder.info.acHitInfo->toucher.dmgFlags != DMG_UNBLOCKABLE))) {
         PlayerAnimationHeader* var_a2;
@@ -5442,11 +5442,11 @@ s32 func_80834600(Player* this, PlayState* play) {
         }
         return 0;
     } else if ((this->unk_D6B != 0) || (this->invincibilityTimer > 0) || (this->stateFlags1 & PLAYER_STATE1_4000000) ||
-               (this->csMode != PLAYER_CSMODE_0) || (this->meleeWeaponQuads[0].base.atFlags & 2) ||
-               (this->meleeWeaponQuads[1].base.atFlags & 2) || (this->cylinder.base.atFlags & 2) ||
-               (this->shieldCylinder.base.atFlags & 2)) {
+               (this->csMode != PLAYER_CSMODE_0) || (this->meleeWeaponQuads[0].base.atFlags & AT_HIT) ||
+               (this->meleeWeaponQuads[1].base.atFlags & AT_HIT) || (this->cylinder.base.atFlags & AT_HIT) ||
+               (this->shieldCylinder.base.atFlags & AT_HIT)) {
         return 0;
-    } else if (this->cylinder.base.acFlags & 2) {
+    } else if (this->cylinder.base.acFlags & AC_HIT) {
         Actor* sp60 = this->cylinder.base.ac;
         s32 var_a2_2;
 
@@ -8597,7 +8597,7 @@ PlayerAnimationHeader* D_8085D264[] = {
 };
 
 s32 func_8083CF68(PlayState* play, Player* this) {
-    if (!Player_InBlockingCsMode(play, this) && !(this->cylinder.base.ocFlags1 & 2)) {
+    if (!Player_InBlockingCsMode(play, this) && !(this->cylinder.base.ocFlags1 & OC1_HIT)) {
         if ((func_80853D68 != this->actionFunc) && (func_80857BE8 != this->actionFunc) &&
             (D_80862B40 == FLOOR_EFFECT_1)) {
             s16 playerVelYaw = Math_Atan2S_XY(this->actor.velocity.z, this->actor.velocity.x);
@@ -9684,7 +9684,8 @@ s32 func_808401F4(PlayState* play, Player* this) {
         s32 temp_v0_3;
 
         if (this->meleeWeaponAnimation < PLAYER_MWA_SPIN_ATTACK_1H) {
-            if (!(this->meleeWeaponQuads[0].base.atFlags & 4) && !(this->meleeWeaponQuads[1].base.atFlags & 4)) {
+            if (!(this->meleeWeaponQuads[0].base.atFlags & AT_BOUNCED) &&
+                !(this->meleeWeaponQuads[1].base.atFlags & AT_BOUNCED)) {
                 if (this->skelAnime.curFrame >= 2.0f) {
                     CollisionPoly* poly;
                     s32 bgId;
@@ -9732,9 +9733,9 @@ s32 func_808401F4(PlayState* play, Player* this) {
                                     if (bgId != BGCHECK_SCENE) {
                                         temp_v0 = DynaPoly_GetActor(&play->colCtx, bgId);
 
-                                        if ((((this->meleeWeaponQuads[0].base.atFlags & 2) != 0) &&
+                                        if (((this->meleeWeaponQuads[0].base.atFlags & AT_HIT) &&
                                              (&temp_v0->actor == this->meleeWeaponQuads[0].base.at)) ||
-                                            ((this->meleeWeaponQuads[1].base.atFlags & 2) &&
+                                            ((this->meleeWeaponQuads[1].base.atFlags & AT_HIT) &&
                                              (&temp_v0->actor == this->meleeWeaponQuads[1].base.at))) {
                                             return false;
                                         }
@@ -9781,8 +9782,8 @@ s32 func_808401F4(PlayState* play, Player* this) {
             }
         }
 
-        temp_v0_3 = (this->meleeWeaponQuads[0].base.atFlags & 2) != 0;
-        if (temp_v0_3 || (this->meleeWeaponQuads[1].base.atFlags & 2)) {
+        temp_v0_3 = (this->meleeWeaponQuads[0].base.atFlags & AT_HIT) != 0;
+        if (temp_v0_3 || (this->meleeWeaponQuads[1].base.atFlags & AT_HIT)) {
             if ((this->meleeWeaponAnimation < PLAYER_MWA_SPIN_ATTACK_1H) &&
                 (this->transformation != PLAYER_FORM_GORON)) {
                 Actor* temp_v1 = this->meleeWeaponQuads[temp_v0_3 ? 0 : 1].base.at;
@@ -11840,10 +11841,10 @@ void Player_UpdateCommon(Player* this, PlayState* play, Input* input) {
         this->cylinder.dim.yShift = var_fv1_2 - this->actor.world.pos.y;
 
         if (this->unk_B62 != 0) {
-            this->shieldCylinder.base.acFlags = 0;
+            this->shieldCylinder.base.acFlags = AC_NONE;
             this->shieldCylinder.info.toucher.dmgFlags = 0x80000;
-            this->shieldCylinder.info.toucherFlags = 1;
-            this->shieldCylinder.info.bumperFlags = 0;
+            this->shieldCylinder.info.toucherFlags = TOUCH_ON;
+            this->shieldCylinder.info.bumperFlags = BUMP_NONE;
             this->shieldCylinder.dim.height = 80;
             this->shieldCylinder.dim.radius = 50;
             this->shieldCylinder.dim.yShift = ((temp_fv0 + var_fv1_2) * 0.5f - 40.0f) - this->actor.world.pos.y;
@@ -11852,10 +11853,10 @@ void Player_UpdateCommon(Player* this, PlayState* play, Input* input) {
             CollisionCheck_SetAT(play, &play->colChkCtx, &this->shieldCylinder.base);
         } else if (this->stateFlags1 & PLAYER_STATE1_400000) {
             if ((this->transformation == PLAYER_FORM_GORON) || (this->transformation == PLAYER_FORM_DEKU)) {
-                this->shieldCylinder.base.acFlags = 0x15;
+                this->shieldCylinder.base.acFlags = AC_ON | AC_HARD | AC_TYPE_ENEMY;
                 this->shieldCylinder.info.toucher.dmgFlags = 0x100000;
-                this->shieldCylinder.info.toucherFlags = 0;
-                this->shieldCylinder.info.bumperFlags = 1;
+                this->shieldCylinder.info.toucherFlags = TOUCH_NONE;
+                this->shieldCylinder.info.bumperFlags = BUMP_ON;
 
                 if (this->transformation == PLAYER_FORM_GORON) {
                     this->shieldCylinder.dim.height = 35;
@@ -11895,7 +11896,7 @@ void Player_UpdateCommon(Player* this, PlayState* play, Input* input) {
             if (!(this->stateFlags1 & (PLAYER_STATE1_80 | PLAYER_STATE1_4000000)) && (this->invincibilityTimer <= 0)) {
                 if ((func_808561B0 != this->actionFunc) &&
                     ((func_80857BE8 != this->actionFunc) || (this->unk_AE7 != 1))) {
-                    if (this->cylinder.base.atFlags != 0) {
+                    if (this->cylinder.base.atFlags != AT_NONE) {
                         CollisionCheck_SetAT(play, &play->colChkCtx, &this->cylinder.base);
                     }
                     CollisionCheck_SetAC(play, &play->colChkCtx, &this->cylinder.base);
@@ -14062,7 +14063,7 @@ void func_8084BC64(Player* this, PlayState* play) {
                 func_8085B384(this, play);
             }
         } else if ((this->stateFlags1 & PLAYER_STATE1_20000000) ||
-                   (!(this->cylinder.base.acFlags & 2) && (this->unk_B75 == 0))) {
+                   (!(this->cylinder.base.acFlags & AC_HIT) && (this->unk_B75 == 0))) {
             if (this->stateFlags1 & PLAYER_STATE1_20000000) {
                 this->unk_AE8++;
             } else {
