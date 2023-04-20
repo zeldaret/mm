@@ -1,7 +1,8 @@
 #include "global.h"
 #include "system_malloc.h"
 
-#define D_80780000 gPictoPhotoI8
+extern u16 gFramebufferHiRes0[HIRES_BUFFER_WIDTH][HIRES_BUFFER_HEIGHT];
+extern u16 gFramebufferHiRes1[HIRES_BUFFER_WIDTH][HIRES_BUFFER_HEIGHT];
 
 OSViMode sNotebookViMode;
 void* gFramebuffers[2];
@@ -20,8 +21,8 @@ void* gGfxSPTaskOutputBufferSizeLoRes; // Actually points to the end of the task
 
 void* sCfbHiRes1;
 void* sCfbHiRes0;
-u16 (*gZBufferHiRes)[SCREEN_WIDTH_NOTEBOOK * SCREEN_HEIGHT_NOTEBOOK];
-u16 (*gWorkBufferHiRes)[SCREEN_WIDTH_NOTEBOOK * SCREEN_HEIGHT_NOTEBOOK];
+u16 (*gZBufferHiRes)[HIRES_BUFFER_WIDTH * HIRES_BUFFER_HEIGHT];
+u16 (*gWorkBufferHiRes)[HIRES_BUFFER_WIDTH * HIRES_BUFFER_HEIGHT];
 u64 (*gGfxSPTaskOutputBufferHiRes)[0x3000];
 void* gGfxSPTaskOutputBufferSizeHiRes; // Actually points to the end of the task buffer
 
@@ -57,8 +58,8 @@ void SysCfb_SetHiResMode(void) {
     gGfxSPTaskOutputBufferPtr = *gGfxSPTaskOutputBufferHiRes;
     gGfxSPTaskOutputBufferSize = gGfxSPTaskOutputBufferSizeHiRes;
     if (1) {}
-    gCfbWidth = SCREEN_WIDTH_NOTEBOOK;
-    gCfbHeight = SCREEN_HEIGHT_NOTEBOOK;
+    gCfbWidth = HIRES_BUFFER_WIDTH;
+    gCfbHeight = HIRES_BUFFER_HEIGHT;
     gCfbLeftAdjust = 30;
     gCfbUpperAdjust = 10;
     gScreenWidth = gCfbWidth;
@@ -80,13 +81,11 @@ void SysCfb_SetHiResMode(void) {
     gSysCfbHiResEnabled = true;
 }
 
-//! FAKE:
-extern u16 gFramebuffer1_[SCREEN_WIDTH_NOTEBOOK][SCREEN_HEIGHT_NOTEBOOK];
 void SysCfb_Init(void) {
     sCfbLoRes1 = gFramebuffer1;
     sCfbLoRes0 = gFramebuffer0;
-    sCfbHiRes1 = gFramebuffer1_;
-    sCfbHiRes0 = D_80780000;
+    sCfbHiRes1 = gFramebufferHiRes1;
+    sCfbHiRes0 = gFramebufferHiRes0;
     SysCfb_SetLoResMode();
 }
 

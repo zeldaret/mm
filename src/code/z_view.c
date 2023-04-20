@@ -18,8 +18,8 @@ void View_ViewportToVp(Vp* dest, Viewport* src) {
     dest->vp.vtrans[2] = 0x01FF;
     dest->vp.vtrans[3] = 0;
 
-    if ((src->leftX == 0) && (src->rightX == SCREEN_WIDTH_NOTEBOOK) && (src->topY == 0) &&
-        (src->bottomY == SCREEN_HEIGHT_NOTEBOOK)) {}
+    if ((src->leftX == 0) && (src->rightX == HIRES_BUFFER_WIDTH) && (src->topY == 0) &&
+        (src->bottomY == HIRES_BUFFER_HEIGHT)) {}
 }
 
 void View_Init(View* view, GraphicsContext* gfxCtx) {
