@@ -92,7 +92,7 @@ void ObjChan_Init(Actor* thisx, PlayState* play) {
     Actor_ProcessInitChain(&this->actor, sInitChain);
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sObjChanCylinderInit);
-    SubS_FillCutscenesList(&this->actor, this->cutscenes, ARRAY_COUNT(this->cutscenes));
+    SubS_FillCutscenesList(&this->actor, this->csIdList, ARRAY_COUNT(this->csIdList));
     switch (OBJCHAN_SUBTYPE(&this->actor)) {
         case OBJCHAN_SUBTYPE_CHANDELIER:
             this->rotation = this->actor.shape.rot.y;
@@ -178,12 +178,12 @@ void ObjChan_InitChandelier(ObjChan* this2, PlayState* play) {
                                      (s32)DEG_TO_BINANG_ALT3(i * 360.0f / 5.0f) + this->rotation);
         temp_v0 = (ObjChan*)Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ACTOR_OBJ_CHAN, childPos.x, childPos.y,
                                                           childPos.z, childRot.x, childRot.y, childRot.z,
-                                                          (this->actor.params & 0xFFF) | 0x1000, this->actor.cutscene,
+                                                          (this->actor.params & 0xFFF) | 0x1000, this->actor.csId,
                                                           this->actor.halfDaysBits, &this->actor);
         if (temp_v0 != NULL) {
             this->pots[i] = temp_v0;
             temp_v0->myPotIndex = i;
-            temp_v0->actor.cutscene = this->actor.cutscene;
+            temp_v0->actor.csId = this->actor.csId;
         } else {
             Actor_Kill(&this->actor);
         }
@@ -232,13 +232,13 @@ void ObjChan_ChandelierAction(ObjChan* this2, PlayState* play) {
     }
     this->actor.shape.rot.z = (Math_SinS(this->unk1D4) * this->unk1D0);
     if ((this->stateFlags & OBJCHAN_STATE_START_CUTSCENE) &&
-        SubS_StartActorCutscene(&this->actor, this->cutscenes[0], -1, SUBS_CUTSCENE_SET_UNK_LINK_FIELDS)) {
+        SubS_StartCutscene(&this->actor, this->csIdList[0], CS_ID_NONE, SUBS_CUTSCENE_WITH_PLAYER)) {
         this->stateFlags |= OBJCHAN_STATE_CUTSCENE;
         this->stateFlags &= ~OBJCHAN_STATE_START_CUTSCENE;
     }
     if ((this->stateFlags & OBJCHAN_STATE_CUTSCENE) && this->rotationSpeed == OBJCHAN_ROTATION_SPEED) {
         this->stateFlags &= ~OBJCHAN_STATE_CUTSCENE;
-        ActorCutscene_Stop(this->cutscenes[0]);
+        CutsceneManager_Stop(this->csIdList[0]);
     }
     Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_NEW);
     Matrix_RotateXS(this->actor.shape.rot.x, MTXMODE_APPLY);
@@ -315,7 +315,7 @@ void ObjChan_PotAction(ObjChan* this, PlayState* play) {
                 SET_WEEKEVENTREG(WEEKEVENTREG_37_10);
                 Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ACTOR_EN_MM, this->actor.world.pos.x,
                                               this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, 0x8000,
-                                              this->actor.cutscene, this->actor.halfDaysBits, NULL);
+                                              this->actor.csId, this->actor.halfDaysBits, NULL);
             }
         }
         Actor_Kill(&this->actor);

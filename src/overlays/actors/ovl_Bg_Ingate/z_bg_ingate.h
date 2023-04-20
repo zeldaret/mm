@@ -17,7 +17,7 @@ typedef struct BgIngate {
     /* 0x168 */ s16 timePathTimeSpeed;
     /* 0x16A */ s16 unk16A;
     /* 0x16C */ s16 unk16C;
-    /* 0x16E */ s16 unk16E;
+    /* 0x16E */ s16 csId;
     /* 0x170 */ Vec3f timePathTargetPos;
     /* 0x17C */ f32 timePathProgress;
     /* 0x180 */ s32 timePathTotalTime;

@@ -119,7 +119,7 @@ s16 D_80C00AF8[] = {
 
 void EnBomjima_Init(Actor* thisx, PlayState* play) {
     EnBomjima* this = THIS;
-    s32 cs;
+    s32 csId;
     s32 i;
 
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
@@ -135,12 +135,12 @@ void EnBomjima_Init(Actor* thisx, PlayState* play) {
     Actor_SetScale(&this->actor, 0.01f);
 
     if (this->unk_2E6 == 0) {
-        cs = this->actor.cutscene;
+        csId = this->actor.csId;
         i = 0;
 
-        while (cs != -1) {
+        while (csId != CS_ID_NONE) {
             // clang-format off
-            this->cutscenes[i] = cs; cs = ActorCutscene_GetAdditionalCutscene(cs);
+            this->csIdList[i] = csId; csId = CutsceneManager_GetAdditionalCsId(csId);
             // clang-format on
             i++;
         }
@@ -340,8 +340,8 @@ void func_80BFEA94(EnBomjima* this, PlayState* play) {
         this->bombal = (EnBombal*)actor;
         Math_Vec3f_Copy(&this->unk_2B0, &actor->world.pos);
 
-        if (this->bombalCutscene == 0) {
-            this->bombalCutscene = this->bombal->actor.cutscene;
+        if (this->bombalCsId == 0) {
+            this->bombalCsId = this->bombal->actor.csId;
         }
         func_80BFEB1C(this);
         break;
@@ -389,7 +389,7 @@ void func_80BFEB64(EnBomjima* this, PlayState* play) {
         return;
     }
 
-    if (ActorCutscene_GetCurrentIndex() == -1) {
+    if (CutsceneManager_GetCurrentCsId() == CS_ID_NONE) {
         func_800B8614(&this->actor, play, 70.0f);
     }
 
@@ -465,17 +465,17 @@ void func_80BFEFF0(EnBomjima* this) {
 void func_80BFF03C(EnBomjima* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-        ActorCutscene_Stop(0x7C);
-        ActorCutscene_SetIntentToPlay(this->cutscenes[0]);
-    } else if (!ActorCutscene_GetCanPlayNext(this->cutscenes[0])) {
-        ActorCutscene_SetIntentToPlay(this->cutscenes[0]);
+    if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+        CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
+        CutsceneManager_Queue(this->csIdList[0]);
+    } else if (!CutsceneManager_IsNext(this->csIdList[0])) {
+        CutsceneManager_Queue(this->csIdList[0]);
     } else {
         player->stateFlags1 &= ~PLAYER_STATE1_20;
         CLEAR_WEEKEVENTREG(WEEKEVENTREG_83_04);
         this->actor.world.rot.y = Camera_GetCamDirYaw(GET_ACTIVE_CAM(play));
         this->unk_2DC = Camera_GetCamDirYaw(GET_ACTIVE_CAM(play));
-        ActorCutscene_StartAndSetUnkLinkFields(this->cutscenes[0], &this->actor);
+        CutsceneManager_StartWithPlayerCs(this->csIdList[0], &this->actor);
         func_80BFF120(this);
     }
 }
@@ -494,7 +494,7 @@ void func_80BFF174(EnBomjima* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (this->cutsceneTimer == 1) {
-        ActorCutscene_Stop(this->cutscenes[0]);
+        CutsceneManager_Stop(this->csIdList[0]);
         this->cutsceneEnded = true;
     }
 
@@ -576,7 +576,7 @@ void func_80BFF430(EnBomjima* this, PlayState* play) {
 
         if (bombal != NULL) {
             bombal->scale = 0.0f;
-            bombal->cutscene = this->bombalCutscene;
+            bombal->csId = this->bombalCsId;
             Actor_ChangeFocus(&this->actor, play, &bombal->actor);
             CLEAR_WEEKEVENTREG(WEEKEVENTREG_83_04);
             func_80BFE65C(this);
@@ -653,14 +653,14 @@ void func_80BFF754(EnBomjima* this, PlayState* play) {
     f32 y;
     f32 z;
 
-    if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-        ActorCutscene_Stop(0x7C);
-        ActorCutscene_SetIntentToPlay(this->cutscenes[1]);
+    if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+        CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
+        CutsceneManager_Queue(this->csIdList[1]);
         return;
     }
 
-    if (!ActorCutscene_GetCanPlayNext(this->cutscenes[1])) {
-        ActorCutscene_SetIntentToPlay(this->cutscenes[1]);
+    if (!CutsceneManager_IsNext(this->csIdList[1])) {
+        CutsceneManager_Queue(this->csIdList[1]);
         return;
     }
 
@@ -690,7 +690,7 @@ void func_80BFF754(EnBomjima* this, PlayState* play) {
     }
 
     D_80C009F0 = 0;
-    ActorCutscene_StartAndSetUnkLinkFields(this->cutscenes[1], &this->actor);
+    CutsceneManager_StartWithPlayerCs(this->csIdList[1], &this->actor);
     this->actionFunc = func_80BFF9B0;
 }
 
@@ -774,7 +774,7 @@ void func_80BFFBC4(EnBomjima* this, PlayState* play) {
         play->transitionTrigger = TRANS_TRIGGER_START;
         play->transitionType = TRANS_TYPE_86;
         gSaveContext.nextTransitionType = TRANS_TYPE_FADE_WHITE;
-        ActorCutscene_Stop(this->cutscenes[1]);
+        CutsceneManager_Stop(this->csIdList[1]);
     }
 }
 
