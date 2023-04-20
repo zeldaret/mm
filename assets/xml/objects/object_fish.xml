@@ -1,6 +1,6 @@
 ﻿<Root>
     <File Name="object_fish" Segment="6">
-        <Animation Name="gFishingFishAnim" Offset="0x7C" />
+        <Animation Name="gFishingFishAnim" Offset="0x7C" /> <!-- Original name is "basu" -->
         <DList Name="object_fish_DL_000940" Offset="0x940" />
         <DList Name="object_fish_DL_0009E8" Offset="0x9E8" />
         <DList Name="object_fish_DL_000B00" Offset="0xB00" />
@@ -54,10 +54,10 @@
         <Texture Name="object_fish_Tex_003778" OutName="tex_003778" Format="rgba16" Width="16" Height="16" Offset="0x3778" />
         <DList Name="gFishingRainSplashMaterialDL" Offset="0x39A8" />
         <DList Name="gFishingRainSplashModelDL" Offset="0x3A18" />
-        <Animation Name="gFishingOwnerAnim" Offset="0x453C" />
+        <Animation Name="gFishingOwnerAnim" Offset="0x453C" /> <!-- Original name is "fs_matsu" -->
         <DList Name="object_fish_DL_006F60" Offset="0x6F60" />
         <DList Name="gFishingOwnerHairDL" Offset="0x7350" />
-        <DList Name="gFishingOwnerHatDL" Offset="0x74C8" />
+        <DList Name="gFishingOwnerHatDL" Offset="0x74C8" /> <!-- Original name is "fs_cap_model" -->
         <DList Name="object_fish_DL_0076B8" Offset="0x76B8" />
         <DList Name="object_fish_DL_007CF8" Offset="0x7CF8" />
         <DList Name="object_fish_DL_007E48" Offset="0x7E48" />
@@ -78,7 +78,7 @@
         <DList Name="gFishingRippleModelDL" Offset="0x8678" />
         <Texture Name="object_fish_Tex_008690" OutName="tex_008690" Format="i4" Width="32" Height="32" Offset="0x8690" />
         <DList Name="gFishingWaterDustMaterialDL" Offset="0x88C0" />
-        <DList Name="gFishingWaterDustModelDL" Offset="0x8970" />
+        <DList Name="gFishingWaterDustModelDL" Offset="0x8970" /> <!-- Original name is "fs_smoke_modelT" -->
         <Texture Name="object_fish_TLUT_008990" OutName="tlut_008990" Format="rgba16" Width="16" Height="16" Offset="0x8990" />
         <Texture Name="object_fish_Tex_008B90" OutName="tex_008B90" Format="ci8" Width="8" Height="8" Offset="0x8B90" />
         <Texture Name="object_fish_Tex_008BD0" OutName="tex_008BD0" Format="ci8" Width="16" Height="16" Offset="0x8BD0" />
@@ -99,10 +99,10 @@
         <DList Name="gFishingSinkingLureSegmentModelDL" Offset="0xB9C0" />
         <Texture Name="object_fish_Tex_00B9E0" OutName="tex_00B9E0" Format="rgba16" Width="64" Height="16" Offset="0xB9E0" />
         <DList Name="gFishingGroupFishMaterialDL" Offset="0xC220" />
-        <DList Name="gFishingGroupFishModelDL" Offset="0xC298" />
+        <DList Name="gFishingGroupFishModelDL" Offset="0xC298" /> <!-- Original name is "minnow_model" -->
         <DList Name="object_fish_DL_00C650" Offset="0xC650" />
         <Texture Name="object_fish_Tex_00C780" OutName="tex_00C780" Format="rgba16" Width="32" Height="32" Offset="0xC780" />
-        <Animation Name="gFishingLoachAnim" Offset="0xCFE0" />
+        <Animation Name="gFishingLoachAnim" Offset="0xCFE0" /> <!-- Original name is "nz_namazu" -->
         <DList Name="object_fish_DL_00DED0" Offset="0xDED0" />
         <DList Name="object_fish_DL_00DFA8" Offset="0xDFA8" />
         <DList Name="object_fish_DL_00E048" Offset="0xE048" />
@@ -137,26 +137,26 @@
         <Texture Name="gFishingRodSegmentBlackTex" OutName="tex_011170" Format="rgba16" Width="16" Height="8" Offset="0x11170" />
         <Texture Name="gFishingRodSegmentWhiteTex" OutName="tex_011270" Format="rgba16" Width="16" Height="8" Offset="0x11270" />
         <DList Name="gFishingRodSetupDL" Offset="0x113D0" />
-        <DList Name="gFishingRodSegmentDL" Offset="0x11410" />
+        <DList Name="gFishingRodSegmentDL" Offset="0x11410" /> <!-- Original name is "rod_model" -->
         <Texture Name="object_fish_Tex_011440" OutName="tex_011440" Format="rgba16" Width="32" Height="32" Offset="0x11440" />
         <Texture Name="object_fish_Tex_011C40" OutName="tex_011C40" Format="rgba16" Width="32" Height="16" Offset="0x11C40" />
-        <DList Name="gFishingLureHookDL" Offset="0x12160" />
-        <DList Name="gFishingLureFloatDL" Offset="0x121F0" />
+        <DList Name="gFishingLureHookDL" Offset="0x12160" /> <!-- Original name is "rua_hari_model" -->
+        <DList Name="gFishingLureFloatDL" Offset="0x121F0" /> <!-- Original name is "rua_body_model" -->
         <Texture Name="object_fish_Tex_0122E0" OutName="tex_0122E0" Format="rgba16" Width="32" Height="32" Offset="0x122E0" />
         <Texture Name="object_fish_Tex_012AE0" OutName="tex_012AE0" Format="rgba16" Width="32" Height="32" Offset="0x12AE0" />
         <DList Name="gFishingLilyPadMaterialDL" Offset="0x13330" />
-        <DList Name="gFishingLilyPadModelDL" Offset="0x133B0" />
+        <DList Name="gFishingLilyPadModelDL" Offset="0x133B0" /> <!-- Original name is "turi_hasu_model" -->
         <DList Name="gFishingRockMaterialDL" Offset="0x13590" />
         <DList Name="gFishingRockModelDL" Offset="0x13610" />
         <Texture Name="object_fish_Tex_013660" OutName="tex_013660" Format="rgba16" Width="32" Height="32" Offset="0x13660" />
         <DList Name="gFishingWoodPostMaterialDL" Offset="0x13F50" />
         <DList Name="gFishingWoodPostModelDL" Offset="0x13FD0" />
         <DList Name="gFishingReedMaterialDL" Offset="0x14030" />
-        <DList Name="gFishingReedModelDL" Offset="0x140B0" />
+        <DList Name="gFishingReedModelDL" Offset="0x140B0" /> <!-- Original name is "turi_kusa_model" -->
         <Texture Name="object_fish_Tex_0140D0" OutName="tex_0140D0" Format="rgba16" Width="16" Height="16" Offset="0x140D0" />
         <Texture Name="object_fish_Tex_0142D0" OutName="tex_0142D0" Format="rgba16" Width="32" Height="32" Offset="0x142D0" />
         <Texture Name="object_fish_Tex_014AD0" OutName="tex_014AD0" Format="i8" Width="32" Height="32" Offset="0x14AD0" />
         <DList Name="gFishingAquariumBottomDL" Offset="0x153D0" />
-        <DList Name="gFishingAquariumContainerDL" Offset="0x15470" />
+        <DList Name="gFishingAquariumContainerDL" Offset="0x15470" /> <!-- Original name is "turi_suisou_modelT" -->
     </File>
 </Root>

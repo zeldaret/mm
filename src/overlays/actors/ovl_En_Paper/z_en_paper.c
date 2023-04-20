@@ -47,7 +47,7 @@ void EnPaper_Init(Actor* thisx, PlayState* play) {
     Actor_SetScale(&this->actor, 0.01f);
     this->timer = 70;
     this->windForce = sUnitVecZ;
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
     EnPaper_SetupSpreadConfettiGroup(this);
 }
 

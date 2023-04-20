@@ -26,7 +26,7 @@ typedef struct EnDai {
     /* 0x144 */ SkelAnime skelAnime;
     /* 0x188 */ EnDaiActionFunc actionFunc;
     /* 0x18C */ MtxF unk_18C;
-    /* 0x1CC */ u8 unk_1CC;
+    /* 0x1CC */ u8 cueId;
     /* 0x1CD */ u8 unk_1CD;
     /* 0x1CE */ u16 unk_1CE;
     /* 0x1D0 */ s32 unk_1D0;

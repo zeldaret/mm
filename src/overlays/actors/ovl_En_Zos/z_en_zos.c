@@ -100,7 +100,7 @@ void EnZos_Init(Actor* thisx, PlayState* play) {
 
     switch (ENZOS_GET_F(&this->actor)) {
         case ENZOS_F_1:
-            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80)) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_GREAT_BAY_TEMPLE)) {
                 Actor_Kill(&this->actor);
             }
 
@@ -120,7 +120,7 @@ void EnZos_Init(Actor* thisx, PlayState* play) {
             break;
 
         default:
-            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_GREAT_BAY_TEMPLE)) {
                 Actor_Kill(&this->actor);
             }
             this->actor.flags |= ACTOR_FLAG_10;
@@ -273,20 +273,20 @@ void func_80BBB354(EnZos* this, PlayState* play) {
         } else {
             getItemId = GI_HEART_PIECE;
         }
-        Actor_PickUp(&this->actor, play, getItemId, 10000.0f, 50.0f);
+        Actor_OfferGetItem(&this->actor, play, getItemId, 10000.0f, 50.0f);
     }
 }
 
 void func_80BBB414(EnZos* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
 
-    if (Cutscene_CheckActorAction(play, 501)) {
-        s16 action = play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 501)]->action;
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_501)) {
+        s16 cueId = play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_501)]->id;
 
-        if (action != this->unk_2BA) {
-            this->unk_2BA = action;
+        if (this->cueId != cueId) {
+            this->cueId = cueId;
 
-            switch (action) {
+            switch (cueId) {
                 case 1:
                     EnZos_ChangeAnim(this, EN_ZOS_ANIM_LEAN_ON_KEYBOARD_AND_SIGH, ANIMMODE_LOOP);
                     break;
@@ -302,15 +302,15 @@ void func_80BBB414(EnZos* this, PlayState* play) {
 void func_80BBB4CC(EnZos* this, PlayState* play) {
     func_80BBB414(this, play);
 
-    if ((this->actor.cutscene != -1) && (ActorCutscene_GetCurrentIndex() != this->actor.cutscene)) {
-        if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-            ActorCutscene_Stop(0x7C);
-            ActorCutscene_SetIntentToPlay(this->actor.cutscene);
-        } else if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
-            ActorCutscene_Start(this->actor.cutscene, &this->actor);
-            this->actor.cutscene = -1;
+    if ((this->actor.csId != CS_ID_NONE) && (CutsceneManager_GetCurrentCsId() != this->actor.csId)) {
+        if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+            CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
+            CutsceneManager_Queue(this->actor.csId);
+        } else if (CutsceneManager_IsNext(this->actor.csId)) {
+            CutsceneManager_Start(this->actor.csId, &this->actor);
+            this->actor.csId = CS_ID_NONE;
         } else {
-            ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+            CutsceneManager_Queue(this->actor.csId);
         }
     }
 }
@@ -324,7 +324,7 @@ void func_80BBB574(EnZos* this, PlayState* play) {
     if (func_80BBAFFC(this, play)) {
         if (this->unk_2B6 & 0x20) {
             this->unk_2B6 &= ~0x20;
-            func_80151938(play, 0x124C);
+            Message_ContinueTextbox(play, 0x124C);
         }
     }
 
@@ -335,7 +335,7 @@ void func_80BBB574(EnZos* this, PlayState* play) {
                     play->msgCtx.msgLength = 0;
                     this->unk_2B6 |= 0x20;
                 } else {
-                    func_80151938(play, 0x124C);
+                    Message_ContinueTextbox(play, 0x124C);
                 }
                 break;
 
@@ -348,11 +348,11 @@ void func_80BBB574(EnZos* this, PlayState* play) {
             case 0x124D:
                 this->unk_2B6 &= ~0x10;
                 EnZos_ChangeAnim(this, EN_ZOS_ANIM_TALK_HANDS_ON_HIPS, ANIMMODE_LOOP);
-                func_80151938(play, 0x124E);
+                Message_ContinueTextbox(play, 0x124E);
                 break;
 
             case 0x124E:
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 this->actionFunc = func_80BBB354;
                 func_80BBB354(this, play);
                 break;
@@ -370,7 +370,7 @@ void func_80BBB718(EnZos* this, PlayState* play) {
         itemAction = func_80123810(play);
 
         if (itemAction > PLAYER_IA_NONE) {
-            func_801477B4(play);
+            Message_CloseTextbox(play);
 
             if (itemAction == PLAYER_IA_BOTTLE_ZORA_EGG) {
                 player->actor.textId = 0x1232;
@@ -388,9 +388,9 @@ void func_80BBB718(EnZos* this, PlayState* play) {
             this->actionFunc = func_80BBB8AC;
         } else if (itemAction <= PLAYER_IA_MINUS1) {
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_39_08)) {
-                func_80151938(play, 0x1241);
+                Message_ContinueTextbox(play, 0x1241);
             } else {
-                func_80151938(play, 0x1237);
+                Message_ContinueTextbox(play, 0x1237);
                 SET_WEEKEVENTREG(WEEKEVENTREG_39_08);
                 EnZos_ChangeAnim(this, EN_ZOS_ANIM_TALK_LOOK_DOWN, ANIMMODE_LOOP);
                 this->unk_2B6 |= 4;
@@ -425,13 +425,13 @@ void func_80BBB8AC(EnZos* this, PlayState* play) {
             case 0x123C:
             case 0x123E:
             case 0x123F:
-                func_80151938(play, play->msgCtx.currentTextId + 1);
+                Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                 break;
 
             case 0x1244:
                 this->unk_2B6 &= ~0x10;
                 EnZos_ChangeAnim(this, EN_ZOS_ANIM_TALK_HANDS_ON_HIPS, ANIMMODE_LOOP);
-                func_80151938(play, play->msgCtx.currentTextId + 1);
+                Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                 break;
 
             case 0x1232:
@@ -441,29 +441,29 @@ void func_80BBB8AC(EnZos* this, PlayState* play) {
             case 0x1239:
             case 0x1246:
                 EnZos_ChangeAnim(this, EN_ZOS_ANIM_TALK_HANDS_ON_HIPS, ANIMMODE_LOOP);
-                func_80151938(play, play->msgCtx.currentTextId + 1);
+                Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                 break;
 
             case 0x1233:
                 EnZos_ChangeAnim(this, EN_ZOS_ANIM_TALK_ARMS_OUT, ANIMMODE_LOOP);
-                func_80151938(play, play->msgCtx.currentTextId + 1);
+                Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                 break;
 
             case 0x1245:
             case 0x1248:
                 EnZos_ChangeAnim(this, EN_ZOS_ANIM_TALK_FOOT_TAP, ANIMMODE_LOOP);
-                func_80151938(play, play->msgCtx.currentTextId + 1);
+                Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                 break;
 
             case 0x1231:
-                func_80151938(play, 0xFF);
+                Message_ContinueTextbox(play, 0xFF);
                 this->actionFunc = func_80BBB718;
                 break;
 
             case 0x1243:
             case 0x1249:
                 EnZos_ChangeAnim(this, EN_ZOS_ANIM_HANDS_ON_HIPS, ANIMMODE_LOOP);
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 this->actionFunc = func_80BBBDE0;
                 this->unk_2B6 |= 1;
                 break;
@@ -473,21 +473,23 @@ void func_80BBB8AC(EnZos* this, PlayState* play) {
             case 0x1242:
                 EnZos_ChangeAnim(this, EN_ZOS_ANIM_HANDS_ON_HIPS, ANIMMODE_LOOP);
                 Actor_ProcessTalkRequest(&this->actor, &play->state);
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 this->actionFunc = func_80BBBDE0;
                 this->unk_2B6 |= 1;
                 break;
 
             case 0x1236:
                 EnZos_ChangeAnim(this, EN_ZOS_ANIM_HANDS_ON_HIPS, ANIMMODE_LOOP);
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 this->actionFunc = func_80BBBDE0;
                 this->unk_2B6 |= 1;
                 break;
 
             default:
-                if (0) {}
-                func_801477B4(play);
+                //! FAKE:
+                if (1) {}
+
+                Message_CloseTextbox(play);
                 this->actionFunc = func_80BBBDE0;
                 this->unk_2B6 |= 1;
                 break;
@@ -532,7 +534,7 @@ void func_80BBBCBC(EnZos* this, PlayState* play) {
 
 void func_80BBBD5C(EnZos* this, PlayState* play) {
     func_80BBB414(this, play);
-    if (!Cutscene_CheckActorAction(play, 0x1F5)) {
+    if (!Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_501)) {
         this->actionFunc = func_80BBBCBC;
         this->actor.flags |= ACTOR_FLAG_10000;
         func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
@@ -565,7 +567,7 @@ void func_80BBBDE0(EnZos* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->actionFunc = func_80BBB8AC;
         func_80BBB15C(this, play);
-    } else if (Cutscene_CheckActorAction(play, 0x1F5)) {
+    } else if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_501)) {
         this->actionFunc = func_80BBBD5C;
     } else if (func_80BBAF5C(this, play)) {
         func_800B8614(&this->actor, play, 120.0f);
@@ -612,7 +614,7 @@ void func_80BBC070(EnZos* this, PlayState* play) {
         case TEXT_STATE_5:
             if (Message_ShouldAdvance(play)) {
                 EnZos_ChangeAnim(this, EN_ZOS_ANIM_HANDS_ON_HIPS, ANIMMODE_LOOP);
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 this->actionFunc = func_80BBC14C;
                 this->unk_2B6 |= 1;
             }
@@ -673,8 +675,8 @@ void func_80BBC298(EnZos* this, PlayState* play) {
         this->unk_2BC = 999;
     }
 
-    if (Cutscene_CheckActorAction(play, 515)) {
-        if (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 515)]->action == 1) {
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_515)) {
+        if (play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_515)]->id == 1) {
             this->actionFunc = func_80BBC37C;
             this->unk_2BC = -1;
         }
@@ -686,8 +688,8 @@ void func_80BBC298(EnZos* this, PlayState* play) {
 
 void func_80BBC37C(EnZos* this, PlayState* play) {
     func_80BBAFFC(this, play);
-    if (Cutscene_CheckActorAction(play, 515) &&
-        (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 515)]->action == 3)) {
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_515) &&
+        (play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_515)]->id == 3)) {
         this->actionFunc = func_80BBC298;
     }
 }
@@ -699,7 +701,7 @@ void EnZos_Update(Actor* thisx, PlayState* play) {
     Actor_MoveWithGravity(&this->actor);
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 10.0f, 30.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 10.0f, 30.0f, UPDBGCHECKINFO_FLAG_4);
 
     this->actionFunc(this, play);
 

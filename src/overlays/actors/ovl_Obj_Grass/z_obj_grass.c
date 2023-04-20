@@ -4,11 +4,9 @@
  * Description: "Master" instance of grass for unit spawned by Obj_Grass_Unit
  */
 
-#include "prevent_bss_reordering.h"
 #include "z_obj_grass.h"
 #include "overlays/actors/ovl_Obj_Grass_Carry/z_obj_grass_carry.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
-#include "prevent_bss_reordering.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 

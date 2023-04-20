@@ -185,20 +185,20 @@ void func_80C011CC(EnBomjimb* this) {
     if ((this->unk_2DC == 5) &&
         (Animation_OnFrame(&this->skelAnime, 9.0f) || Animation_OnFrame(&this->skelAnime, 10.0f) ||
          Animation_OnFrame(&this->skelAnime, 17.0f) || Animation_OnFrame(&this->skelAnime, 18.0f))) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BOMBERS_WALK);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_BOMBERS_WALK);
     }
 
     if ((this->unk_2DC == 19) &&
         (Animation_OnFrame(&this->skelAnime, 2.0f) || Animation_OnFrame(&this->skelAnime, 6.0f))) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BOMBERS_WALK);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_BOMBERS_WALK);
     }
 
     if ((this->unk_2DC == 18) && Animation_OnFrame(&this->skelAnime, 15.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BOMBERS_LAND);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_BOMBERS_LAND);
     }
 
     if ((this->unk_2DC == 7) && Animation_OnFrame(&this->skelAnime, 8.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BOMBERS_LAND);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_BOMBERS_LAND);
     }
 }
 
@@ -215,7 +215,7 @@ s32 func_80C012FC(EnBomjimb* this, PlayState* play) {
 
     if (!Play_InCsMode(play) && (this->actor.xzDistToPlayer < 40.0f) &&
         (fabsf(player->actor.world.pos.y - this->actor.world.pos.y) < 50.0f) && (play->msgCtx.msgLength == 0)) {
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
         func_80C02740(this, play);
         return true;
     }
@@ -368,7 +368,7 @@ void func_80C01A24(EnBomjimb* this, PlayState* play) {
         if ((this->unk_2E4 != NULL) && (this->unk_2E4->update != NULL)) {
             ((EnNiw*)this->unk_2E4)->unk2BC.z = 90000.0f;
         }
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
         this->unk_2E4 = NULL;
         this->actor.gravity = -2.0f;
         func_80C02108(this);
@@ -380,10 +380,10 @@ void func_80C01A24(EnBomjimb* this, PlayState* play) {
     }
 
     if (this->unk_2C0 != 0) {
-        Math_ApproachF(&this->actor.speedXZ, 6.0f, 0.5f, 2.0f);
+        Math_ApproachF(&this->actor.speed, 6.0f, 0.5f, 2.0f);
     }
 
-    if ((this->unk_2C0 != 0) && !(this->actor.bgCheckFlags & 1)) {
+    if ((this->unk_2C0 != 0) && !(this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
         func_80C01B40(this);
     }
 }
@@ -395,13 +395,13 @@ void func_80C01B40(EnBomjimb* this) {
 }
 
 void func_80C01B74(EnBomjimb* this, PlayState* play) {
-    Math_ApproachF(&this->actor.speedXZ, 6.0f, 0.5f, 2.0f);
-    if ((this->collider.base.acFlags & AC_HIT) || (this->actor.bgCheckFlags & 1)) {
+    Math_ApproachF(&this->actor.speed, 6.0f, 0.5f, 2.0f);
+    if ((this->collider.base.acFlags & AC_HIT) || (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
         this->collider.base.acFlags &= ~AC_HIT;
         if ((this->unk_2E4 != NULL) && (this->unk_2E4->update != NULL)) {
             ((EnNiw*)this->unk_2E4)->unk2BC.z = 90000.0f;
         }
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
         this->unk_2E4 = NULL;
         this->actor.gravity = -2.0f;
         func_80C02108(this);
@@ -419,7 +419,7 @@ void func_80C01C18(EnBomjimb* this, PlayState* play) {
             this->unk_294.z = this->unk_2E4->world.pos.z;
         }
     }
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->unk_2CA = 2;
     this->actionFunc = func_80C01CD0;
 }
@@ -450,8 +450,8 @@ void func_80C01CD0(EnBomjimb* this, PlayState* play) {
         this->actor.draw = NULL;
     }
 
-    if ((this->unk_2C0 == 0) && (this->unk_2E4->bgCheckFlags & 1)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_PUT_DOWN_WOODBOX);
+    if ((this->unk_2C0 == 0) && (this->unk_2E4->bgCheckFlags & BGCHECKFLAG_GROUND)) {
+        Actor_PlaySfx(&this->actor, NA_SE_EV_PUT_DOWN_WOODBOX);
         this->unk_2C0 = 1;
     }
 
@@ -553,7 +553,7 @@ void func_80C0217C(EnBomjimb* this, PlayState* play) {
         return;
     }
 
-    Math_ApproachF(&this->actor.speedXZ, 8.0f, 0.5f, 2.0f);
+    Math_ApproachF(&this->actor.speed, 8.0f, 0.5f, 2.0f);
     Math_Vec3f_Copy(&sp74, &this->actor.world.pos);
 
     sp74.x += Math_SinS(this->actor.world.rot.y) * 50.0f;
@@ -611,7 +611,7 @@ void func_80C0217C(EnBomjimb* this, PlayState* play) {
 void func_80C0250C(EnBomjimb* this) {
     func_80C0113C(this, 15, 1.0f);
     this->unk_2D4 = 0;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->unk_2D6 = BINANG_ROT180(this->actor.yawTowardsPlayer);
     func_80C012E0(this);
     this->unk_2CA = 6;
@@ -640,7 +640,7 @@ void func_80C02570(EnBomjimb* this, PlayState* play) {
 void func_80C0267C(EnBomjimb* this) {
     func_80C012E0(this);
     func_80C0113C(this, 8, 1.0f);
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actor.world.rot.y = this->actor.yawTowardsPlayer;
     this->unk_2AE = 40;
     this->unk_2C2 = 0;
@@ -686,14 +686,15 @@ void func_80C02740(EnBomjimb* this, PlayState* play) {
         return;
     }
 
-    Message_StartTextbox(play, D_80C03230[((void)0, gSaveContext.save.bombersCaughtNum)], &this->actor);
-    gSaveContext.save.bombersCaughtOrder[((void)0, gSaveContext.save.bombersCaughtNum)] = this->unk_2C8 + 1;
-    gSaveContext.save.bombersCaughtNum++;
+    Message_StartTextbox(play, D_80C03230[((void)0, gSaveContext.save.saveInfo.bombersCaughtNum)], &this->actor);
+    gSaveContext.save.saveInfo.bombersCaughtOrder[((void)0, gSaveContext.save.saveInfo.bombersCaughtNum)] =
+        this->unk_2C8 + 1;
+    gSaveContext.save.saveInfo.bombersCaughtNum++;
 
-    if (gSaveContext.save.bombersCaughtNum > 4) {
+    if (gSaveContext.save.saveInfo.bombersCaughtNum > 4) {
         Audio_PlayFanfare(NA_BGM_GET_ITEM | 0x900);
     } else {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_PIECE_OF_HEART);
+        Actor_PlaySfx(&this->actor, NA_SE_SY_PIECE_OF_HEART);
     }
 
     switch (this->unk_2C8) {
@@ -749,7 +750,7 @@ void func_80C02A14(EnBomjimb* this, PlayState* play) {
         player->actor.freezeTimer = 3;
         if (this->unk_2E0 == 0) {
             if (Animation_OnFrame(&this->skelAnime, 7.0f)) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_HUMAN_BOUND);
+                Actor_PlaySfx(&this->actor, NA_SE_EV_HUMAN_BOUND);
                 this->unk_2E0 = 1;
             }
         }
@@ -760,8 +761,8 @@ void func_80C02A14(EnBomjimb* this, PlayState* play) {
     }
 
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-        func_801477B4(play);
-        if ((this->unk_2CA == 8) && (gSaveContext.save.bombersCaughtNum >= 5)) {
+        Message_CloseTextbox(play);
+        if ((this->unk_2CA == 8) && (gSaveContext.save.saveInfo.bombersCaughtNum >= 5)) {
             func_80C02CA4(this, play);
         } else {
             if (this->unk_2CA == 8) {
@@ -779,7 +780,7 @@ void func_80C02BCC(EnBomjimb* this, PlayState* play) {
     if (this->unk_2C0 == 0) {
         player->actor.freezeTimer = 3;
         if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-            func_801477B4(play);
+            Message_CloseTextbox(play);
             this->unk_2C0 = 1;
             player->stateFlags1 &= ~PLAYER_STATE1_10000000;
         }
@@ -840,7 +841,7 @@ void EnBomjimb_Update(Actor* thisx, PlayState* play2) {
     if (this->unk_2CA == 0) {
         if ((this->unk_2E4 != NULL) && (this->unk_2E4->update != NULL)) {
             Math_Vec3f_Copy(&this->unk_2E4->world.pos, &this->actor.world.pos);
-            if (this->actor.bgCheckFlags & 1) {
+            if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
                 this->unk_2E4->world.pos.y = this->actor.world.pos.y + 35.0f;
             } else {
                 this->unk_2E4->world.pos.y = this->actor.world.pos.y + 25.0f;
@@ -858,7 +859,9 @@ void EnBomjimb_Update(Actor* thisx, PlayState* play2) {
         }
     }
 
-    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 50.0f, 0x1D);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 50.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                UPDBGCHECKINFO_FLAG_10);
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
 

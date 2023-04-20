@@ -222,7 +222,7 @@ s32 ObjUm_InitBandits(ObjUm* this, PlayState* play) {
     EnHorse* bandit2;
 
     spawnPoints = Lib_SegmentedToVirtual(path->points);
-    Audio_QueueSeqCmd(0x8000 | NA_BGM_CHASE);
+    SEQCMD_PLAY_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 0, NA_BGM_CHASE | SEQ_FLAG_ASYNC);
 
     bandit1 = (EnHorse*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_HORSE, spawnPoints[0].x, spawnPoints[0].y,
                                     spawnPoints[0].z, 0, this->dyna.actor.shape.rot.y, 0,
@@ -410,11 +410,11 @@ s32 func_80B783E0(ObjUm* this, PlayState* play, s32 banditIndex, EnHorse* bandit
     }
 
     bandit->actor.world.rot.y = Math_Vec3f_Yaw(&bandit->actor.world.pos, &sp50);
-    bandit->actor.speedXZ = 45.0f;
+    bandit->actor.speed = 45.0f;
 
-    sp3C = Math_CosS(bandit->actor.world.rot.x) * bandit->actor.speedXZ;
+    sp3C = Math_CosS(bandit->actor.world.rot.x) * bandit->actor.speed;
     bandit->actor.velocity.x = Math_SinS(bandit->actor.world.rot.y) * sp3C;
-    bandit->actor.velocity.y = Math_SinS(bandit->actor.world.rot.x) * bandit->actor.speedXZ;
+    bandit->actor.velocity.y = Math_SinS(bandit->actor.world.rot.x) * bandit->actor.speed;
     bandit->actor.velocity.z = Math_CosS(bandit->actor.world.rot.y) * sp3C;
 
     bandit->banditPosition.x =
@@ -535,12 +535,12 @@ s32 func_80B78A54(ObjUm* this, PlayState* play, s32 arg2, EnHorse* arg3, EnHorse
             arg3->unk_564 = 1;
             if (arg3->rider != NULL) {
                 arg3->rider->actor.colorFilterTimer = 20;
-                Actor_SetColorFilter(&arg3->rider->actor, 0x4000, 0xFF, 0, 40);
+                Actor_SetColorFilter(&arg3->rider->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 40);
             }
         } else {
             if (arg3->rider != NULL) {
                 arg3->rider->actor.colorFilterTimer = 20;
-                Actor_SetColorFilter(&arg3->rider->actor, 0x4000, 0xFF, 0, 40);
+                Actor_SetColorFilter(&arg3->rider->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 40);
             }
             Audio_PlaySfxAtPos(&arg3->actor.projectedPos, NA_SE_EN_CUTBODY);
         }
@@ -620,13 +620,13 @@ void func_80B78EBC(ObjUm* this, PlayState* play) {
     player->actor.focus.rot.z = 0;
     player->actor.focus.rot.y = player->actor.shape.rot.y;
 
-    player->unk_AAC.x = 0;
-    player->unk_AAC.y = 0;
-    player->unk_AAC.z = 0;
+    player->headLimbRot.x = 0;
+    player->headLimbRot.y = 0;
+    player->headLimbRot.z = 0;
 
-    player->unk_AB2.x = 0;
-    player->unk_AB2.y = 0;
-    player->unk_AB2.z = 0;
+    player->upperLimbRot.x = 0;
+    player->upperLimbRot.y = 0;
+    player->upperLimbRot.z = 0;
 
     player->currentYaw = player->actor.focus.rot.y;
 }
@@ -763,7 +763,7 @@ void ObjUm_Init(Actor* thisx, PlayState* play) {
         DynaPolyActor_Init(&this->dyna, 0);
         DynaPolyActor_LoadMesh(play, &this->dyna, &object_um_Colheader_007E20);
     } else {
-        DynaPolyActor_Init(&this->dyna, 3);
+        DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS | DYNA_TRANSFORM_ROT_Y);
         DynaPolyActor_LoadMesh(play, &this->dyna, &object_um_Colheader_007F50);
     }
 
@@ -772,7 +772,7 @@ void ObjUm_Init(Actor* thisx, PlayState* play) {
         return;
     }
 
-    func_800C636C(play, &play->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DisableCeilingCollision(play, &play->colCtx.dyna, this->dyna.bgId);
 
     this->donkey =
         (EnHorse*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_HORSE, this->dyna.actor.world.pos.x,
@@ -937,7 +937,7 @@ s32 func_80B7984C(PlayState* play, ObjUm* this, s32 arg2, s32* arg3) {
         return 0;
     }
     if (*arg3 == 3) {
-        func_80151938(play, this->dyna.actor.textId);
+        Message_ContinueTextbox(play, this->dyna.actor.textId);
         *arg3 = 1;
         return 0;
     }
@@ -1122,9 +1122,9 @@ ObjUmPathState ObjUm_UpdatePath(ObjUm* this, PlayState* play) {
     }
 
     if (this->animIndex == OBJ_UM_ANIM_TROT) {
-        this->dyna.actor.speedXZ = 4.0f;
+        this->dyna.actor.speed = 4.0f;
     } else if (this->animIndex == OBJ_UM_ANIM_GALLOP) {
-        this->dyna.actor.speedXZ = 8.0f;
+        this->dyna.actor.speed = 8.0f;
     }
 
     return sp3C;
@@ -1139,7 +1139,7 @@ void ObjUm_RanchWaitPathFinished(ObjUm* this, PlayState* play) {
         case OBJUM_PATH_STATE_1:
         case OBJUM_PATH_STATE_FINISH:
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_31_80)) {
-                ActorCutscene_Stop(this->dyna.actor.cutscene);
+                CutsceneManager_Stop(this->dyna.actor.csId);
                 play->nextEntrance = ENTRANCE(MILK_ROAD, 5);
                 play->transitionType = TRANS_TYPE_64;
                 gSaveContext.nextTransitionType = TRANS_TYPE_FADE_WHITE;
@@ -1158,12 +1158,12 @@ void ObjUm_RanchWaitPathFinished(ObjUm* this, PlayState* play) {
 void ObjUm_RanchStartCs(ObjUm* this, PlayState* play) {
     ObjUm_ChangeAnim(this, play, OBJ_UM_ANIM_IDLE);
 
-    if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
+    if (CutsceneManager_IsNext(this->dyna.actor.csId)) {
+        CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
         this->lastTime = gSaveContext.save.time;
         ObjUm_SetupAction(this, func_80B7A0E0);
     } else {
-        ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+        CutsceneManager_Queue(this->dyna.actor.csId);
     }
 }
 
@@ -1276,12 +1276,12 @@ void ObjUm_PreMilkRunStartCs(ObjUm* this, PlayState* play) {
     ObjUm_SetPlayerPosition(this, play);
     this->flags |= OBJ_UM_FLAG_0004;
     player->stateFlags1 |= PLAYER_STATE1_20;
-    if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
+    if (CutsceneManager_IsNext(this->dyna.actor.csId)) {
+        CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
         this->lastTime = gSaveContext.save.time;
         ObjUm_SetupAction(this, func_80B7A394);
     } else {
-        ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+        CutsceneManager_Queue(this->dyna.actor.csId);
     }
 }
 
@@ -1357,17 +1357,17 @@ void func_80B7A614(ObjUm* this, PlayState* play) {
     }
 
     if (this->flags & OBJ_UM_FLAG_MINIGAME_FINISHED) {
-        s32 sp20 = ActorCutscene_GetAdditionalCutscene(this->dyna.actor.cutscene);
+        s32 csId = CutsceneManager_GetAdditionalCsId(this->dyna.actor.csId);
 
         if (this->areAllPotsBroken) {
-            sp20 = ActorCutscene_GetAdditionalCutscene(sp20);
+            csId = CutsceneManager_GetAdditionalCsId(csId);
         }
-        if (ActorCutscene_GetCanPlayNext(sp20)) {
-            ActorCutscene_StartAndSetUnkLinkFields(sp20, &this->dyna.actor);
+        if (CutsceneManager_IsNext(csId)) {
+            CutsceneManager_StartWithPlayerCs(csId, &this->dyna.actor);
             ObjUm_SetupAction(this, ObjUm_RunMinigame);
             this->flags &= ~OBJ_UM_FLAG_PLAYING_MINIGAME;
         } else {
-            ActorCutscene_SetIntentToPlay(sp20);
+            CutsceneManager_Queue(csId);
         }
     }
 
@@ -1396,14 +1396,14 @@ void func_80B7A860(ObjUm* this, PlayState* play) {
     ObjUm_RotatePlayer(this, play, 0);
     this->flags |= OBJ_UM_FLAG_0004;
 
-    if (play->csCtx.frames == 449) {
+    if (play->csCtx.curFrame == 449) {
         ObjUm_InitBandits(this, play);
-    } else if (play->csCtx.frames >= 450) {
+    } else if (play->csCtx.curFrame >= 450) {
         func_80B78DF0(this, play);
     }
 
     if (play->csCtx.state == 0) {
-        ActorCutscene_Stop(this->dyna.actor.cutscene);
+        CutsceneManager_Stop(this->dyna.actor.csId);
         ObjUm_SetupAction(this, func_80B7A7AC);
     }
 
@@ -1526,12 +1526,12 @@ void ObjUm_StartCs(ObjUm* this, PlayState* play) {
     ObjUm_RotatePlayer(this, play, 0);
     this->flags |= OBJ_UM_FLAG_0004;
 
-    if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
+    if (CutsceneManager_IsNext(this->dyna.actor.csId)) {
+        CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
         this->lastTime = gSaveContext.save.time;
         ObjUm_SetupAction(this, func_80B7ABE4);
     } else {
-        ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+        CutsceneManager_Queue(this->dyna.actor.csId);
     }
 }
 
@@ -1546,7 +1546,7 @@ void ObjUm_PostMilkRunWaitPathFinished(ObjUm* this, PlayState* play) {
     ObjUm_ChangeAnim(this, play, OBJ_UM_ANIM_TROT);
 
     if ((ObjUm_UpdatePath(this, play) == OBJUM_PATH_STATE_4) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_59_02)) {
-        ActorCutscene_Stop(this->dyna.actor.cutscene);
+        CutsceneManager_Stop(this->dyna.actor.csId);
         Audio_SetCutsceneFlag(false);
         SET_WEEKEVENTREG(WEEKEVENTREG_59_02);
         gSaveContext.nextCutsceneIndex = 0xFFF3;
@@ -1568,11 +1568,11 @@ void ObjUm_PostMilkRunStartCs(ObjUm* this, PlayState* play) {
     this->flags |= OBJ_UM_FLAG_0004;
     ObjUm_ChangeAnim(this, play, OBJ_UM_ANIM_IDLE);
 
-    if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
+    if (CutsceneManager_IsNext(this->dyna.actor.csId)) {
+        CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
         ObjUm_SetupAction(this, ObjUm_PostMilkRunWaitPathFinished);
     } else {
-        ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+        CutsceneManager_Queue(this->dyna.actor.csId);
     }
 }
 
@@ -1656,9 +1656,9 @@ void ObjUm_ChangeAnim(ObjUm* this, PlayState* play, ObjUmAnimation animIndex) {
     }
 
     if (animIndex == OBJ_UM_ANIM_TROT) {
-        animPlaybackSpeed = this->dyna.actor.speedXZ * 0.25f;
+        animPlaybackSpeed = this->dyna.actor.speed * 0.25f;
     } else if (animIndex == OBJ_UM_ANIM_GALLOP) {
-        animPlaybackSpeed = this->dyna.actor.speedXZ * 0.2f;
+        animPlaybackSpeed = this->dyna.actor.speed * 0.2f;
     } else if (animIndex == OBJ_UM_ANIM_IDLE) {
         animPlaybackSpeed = 1.0f;
     }
@@ -1703,8 +1703,8 @@ void ObjUm_ChangeAnim(ObjUm* this, PlayState* play, ObjUmAnimation animIndex) {
     if (this->wheelRot / 0x199A != this->unk_420) {
         this->unk_420 = this->wheelRot / 0x199A;
         //! FAKE
-        if (!&sUmAnims[0]) {}
-        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_CART_WHEEL);
+        if (sUmAnims[0].doesMove) {}
+        Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_CART_WHEEL);
     }
 }
 
@@ -1713,7 +1713,8 @@ void ObjUm_Update(Actor* thisx, PlayState* play) {
 
     this->actionFunc(this, play);
     this->unk_350++;
-    Actor_UpdateBgCheckInfo(play, &this->dyna.actor, 0.0f, 0.0f, 0.0f, 0x1C);
+    Actor_UpdateBgCheckInfo(play, &this->dyna.actor, 0.0f, 0.0f, 0.0f,
+                            UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 | UPDBGCHECKINFO_FLAG_10);
 
     if (this->donkey != NULL) {
         this->donkey->actor.world.pos.x = this->dyna.actor.world.pos.x;

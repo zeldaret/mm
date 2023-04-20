@@ -104,21 +104,38 @@ typedef struct {
 #define LERPWEIGHT(val, prev, next) (((val) - (prev)) / ((next) - (prev)))
 #define F32_LERPWEIGHT(val, prev, next) (((f32)(val) - (f32)(prev)) / ((f32)(next) - (f32)(prev)))
 
-#define VEC3F_LERPIMPDST(dst, v0, v1, t){ \
-    (dst)->x = (v0)->x + (((v1)->x - (v0)->x) * t); \
-    (dst)->y = (v0)->y + (((v1)->y - (v0)->y) * t); \
-    (dst)->z = (v0)->z + (((v1)->z - (v0)->z) * t); \
-}
+#define VEC3F_LERPIMPDST(dst, v0, v1, t)                \
+    {                                                   \
+        (dst)->x = (v0)->x + (((v1)->x - (v0)->x) * t); \
+        (dst)->y = (v0)->y + (((v1)->y - (v0)->y) * t); \
+        (dst)->z = (v0)->z + (((v1)->z - (v0)->z) * t); \
+    }                                                   \
+    (void)0
 
 #define IS_ZERO(f) (fabsf(f) < 0.008f)
 
+// Casting a float to an integer, when the float value is larger than what the integer type can hold,
+// leads to undefined behavior. For example (f32)0x8000 doesn't fit in a s16, so it cannot be cast to s16.
+// This isn't an issue with IDO, but is one with for example GCC.
+// A partial workaround is to cast to s32 then s16, hoping all binang values used will fit a s32.
+#define TRUNCF_BINANG(f) (s16)(s32)(f)
+
 // Angle conversion macros
-#define DEG_TO_BINANG(degrees) (s16)((degrees) * (0x8000 / 180.0f))
-#define RADF_TO_BINANG(radf) (s16)((radf) * (0x8000 / M_PI))
-#define RADF_TO_DEGF(radf) ((radf) * (180.0f / M_PI))
-#define DEGF_TO_RADF(degf) ((degf) * (M_PI / 180.0f))
-#define BINANG_TO_RAD(binang) ((f32)binang * (M_PI / 0x8000))
-#define BINANG_TO_RAD_ALT(binang) (((f32)binang / 0x8000) * M_PI)
+#define DEG_TO_RAD(degrees) ((degrees) * (M_PI / 180.0f))
+#define DEG_TO_BINANG(degrees) TRUNCF_BINANG((degrees) * (0x8000 / 180.0f))
+#define DEG_TO_BINANG_ALT(degrees) TRUNCF_BINANG(((degrees) / 180.0f) * 0x8000)
+#define DEG_TO_BINANG_ALT2(degrees) TRUNCF_BINANG(((degrees) * 0x10000) / 360.0f)
+#define DEG_TO_BINANG_ALT3(degrees) ((degrees) * (0x8000 / 180.0f))
+
+#define RAD_TO_DEG(radians) ((radians) * (180.0f / M_PI))
+#define RAD_TO_BINANG(radians) TRUNCF_BINANG((radians) * (0x8000 / M_PI))
+#define RAD_TO_BINANG_ALT(radians) TRUNCF_BINANG(((radians) / M_PI) * 0x8000)
+#define RAD_TO_BINANG_ALT2(radians) TRUNCF_BINANG(((radians) * 0x8000) / M_PI)
+
+#define BINANG_TO_DEG(binang) ((f32)(binang) * (180.0f / 0x8000))
+#define BINANG_TO_RAD(binang) ((f32)(binang) * (M_PI / 0x8000))
+#define BINANG_TO_RAD_ALT(binang) (((f32)(binang) / 0x8000) * M_PI)
+#define BINANG_TO_RAD_ALT2(binang) (((f32)(binang) * M_PI) / 0x8000)
 
 // Angle arithmetic macros
 #define BINANG_ROT180(angle) ((s16)(angle + 0x8000))

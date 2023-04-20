@@ -2,6 +2,8 @@
 #define Z_EN_SSH_H
 
 #include "global.h"
+#include "overlays/actors/ovl_En_Si/z_en_si.h"
+#include "overlays/actors/ovl_En_Sth/z_en_sth.h"
 
 struct EnSsh;
 

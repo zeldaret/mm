@@ -237,7 +237,7 @@ void EnDg_UpdateCollision(EnDg* this, PlayState* play) {
         Collider_ResetCylinderOC(play, &this->collider.base);
     }
 
-    Actor_UpdateBgCheckInfo(play, &this->actor, 26.0f, 10.0f, 0.0f, 5);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 26.0f, 10.0f, 0.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
 }
 
 void EnDg_GetFloorRot(EnDg* this, Vec3f* floorRot) {
@@ -281,7 +281,7 @@ s32 EnDg_HasReachedPoint(EnDg* this, Path* path, s32 pointIndex) {
         diffZ = points[currentPoint + 1].z - points[currentPoint - 1].z;
     }
 
-    func_8017B7F8(&point, RADF_TO_BINANG(func_80086B30(diffX, diffZ)), &px, &pz, &d);
+    func_8017B7F8(&point, RAD_TO_BINANG(func_80086B30(diffX, diffZ)), &px, &pz, &d);
 
     if (((this->actor.world.pos.x * px) + (pz * this->actor.world.pos.z) + d) > 0.0f) {
         reached = true;
@@ -310,7 +310,7 @@ s16 EnDg_GetYRotation(Path* path, s32 index, Vec3f* pos, f32* distSq) {
 
     *distSq = SQ(diffX) + SQ(diffZ);
 
-    return RADF_TO_BINANG(Math_Atan2F_XY(diffZ, diffX));
+    return RAD_TO_BINANG(Math_Atan2F_XY(diffZ, diffX));
 }
 
 /**
@@ -322,7 +322,7 @@ void EnDg_MoveAlongPath(EnDg* this, PlayState* play) {
 
     if (this->path != NULL) {
         yRotation = EnDg_GetYRotation(this->path, this->currentPoint, &this->actor.world.pos, &distSq);
-        if (this->actor.bgCheckFlags & 8) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
             yRotation = this->actor.wallYaw;
         }
 
@@ -338,15 +338,15 @@ void EnDg_MoveAlongPath(EnDg* this, PlayState* play) {
 
         if ((this->index == ENDG_INDEX_SWAMP_SPIDER_HOUSE) ||
             ((this->index == ENDG_INDEX_ROMANI_RANCH) && (play->sceneId == SCENE_OMOYA))) {
-            Math_ApproachF(&this->actor.speedXZ, 1.0f, 0.2f, 1.0f);
+            Math_ApproachF(&this->actor.speed, 1.0f, 0.2f, 1.0f);
         } else if (this->index == ENDG_INDEX_ROMANI_RANCH) {
-            Math_ApproachF(&this->actor.speedXZ, 3.5f, 0.2f, 1.0f);
+            Math_ApproachF(&this->actor.speed, 3.5f, 0.2f, 1.0f);
         } else if (play->sceneId == SCENE_CLOCKTOWER) {
-            Math_ApproachF(&this->actor.speedXZ, 3.5f, 0.2f, 1.0f);
+            Math_ApproachF(&this->actor.speed, 3.5f, 0.2f, 1.0f);
         } else if (sRacetrackDogInfo[this->index].textId & 0x11) {
-            Math_ApproachF(&this->actor.speedXZ, 1.0f, 0.2f, 1.0f);
+            Math_ApproachF(&this->actor.speed, 1.0f, 0.2f, 1.0f);
         } else {
-            Math_ApproachF(&this->actor.speedXZ, 3.5f, 0.2f, 1.0f);
+            Math_ApproachF(&this->actor.speed, 3.5f, 0.2f, 1.0f);
         }
     } else {
         Actor_Kill(&this->actor);
@@ -355,7 +355,7 @@ void EnDg_MoveAlongPath(EnDg* this, PlayState* play) {
 
 void EnDg_SpawnFloorDustRing(EnDg* this, PlayState* play) {
     s16 curFrame = this->skelAnime.curFrame;
-    s16 mod = (this->actor.speedXZ > 6.0f) ? 2 : 3;
+    s16 mod = (this->actor.speed > 6.0f) ? 2 : 3;
     Vec3f pos;
 
     if (((this->index + curFrame) % mod) == 0) {
@@ -368,36 +368,36 @@ void EnDg_SpawnFloorDustRing(EnDg* this, PlayState* play) {
 
 void EnDg_PlaySfxWalk(EnDg* this) {
     if (Animation_OnFrame(&this->skelAnime, 1.0f) || Animation_OnFrame(&this->skelAnime, 7.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_MONKEY_WALK);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_MONKEY_WALK);
     }
 }
 
 void EnDg_PlaySfxBark(EnDg* this, f32 frame) {
     if (Animation_OnFrame(&this->skelAnime, frame)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SMALL_DOG_BARK);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_SMALL_DOG_BARK);
     }
 }
 
 void EnDg_PlaySfxAngryBark(EnDg* this, f32 frame) {
     if (Animation_OnFrame(&this->skelAnime, frame)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SMALL_DOG_ANG_BARK);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_SMALL_DOG_ANG_BARK);
     }
 }
 
 void EnDg_PlaySfxWhine(EnDg* this) {
     if (Animation_OnFrame(&this->skelAnime, 23.0f) || Animation_OnFrame(&this->skelAnime, 28.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SMALL_DOG_WHINE);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_SMALL_DOG_WHINE);
     }
 }
 
 void EnDg_PlaySfxGrowl(EnDg* this, f32 frame) {
     if (Animation_OnFrame(&this->skelAnime, frame)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SMALL_DOG_GROAN);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_SMALL_DOG_GROAN);
     }
 }
 
 void EnDg_SetupIdleMove(EnDg* this, PlayState* play) {
-    if (!(this->actor.bgCheckFlags & 0x20)) {
+    if (!(this->actor.bgCheckFlags & BGCHECKFLAG_WATER)) {
         if ((this->index == ENDG_INDEX_SWAMP_SPIDER_HOUSE) ||
             ((this->index == ENDG_INDEX_ROMANI_RANCH) && (play->sceneId == SCENE_OMOYA))) {
             EnDg_ChangeAnim(&this->skelAnime, sAnimationInfo, DOG_ANIM_WALK);
@@ -426,10 +426,10 @@ void EnDg_UpdateTextId(EnDg* this) {
         // the range of 0x3538 to 0x3545.
         if (this->index % 2) {
             sRacetrackDogInfo[this->index].textId =
-                0x3538 + ((gSaveContext.save.weekEventReg[42 + (this->index / 2)] & 0xF0) >> 4);
+                0x3538 + ((gSaveContext.save.saveInfo.weekEventReg[42 + (this->index / 2)] & 0xF0) >> 4);
         } else {
             sRacetrackDogInfo[this->index].textId =
-                0x3538 + (gSaveContext.save.weekEventReg[42 + (this->index / 2)] & 0x0F);
+                0x3538 + (gSaveContext.save.saveInfo.weekEventReg[42 + (this->index / 2)] & 0x0F);
         }
     } else {
         Actor_Kill(&this->actor);
@@ -473,26 +473,26 @@ void EnDg_StartTextBox(EnDg* this, PlayState* play) {
  */
 void EnDg_TryPickUp(EnDg* this, PlayState* play) {
     if (sIsAnyDogHeld && !(this->dogFlags & DOG_FLAG_HELD)) {
-        this->actor.flags |= ACTOR_FLAG_8000000;
+        this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
         this->dogFlags |= DOG_FLAG_HELD;
     } else if (!sIsAnyDogHeld && (this->dogFlags & DOG_FLAG_HELD)) {
-        this->actor.flags &= ~ACTOR_FLAG_8000000;
+        this->actor.flags &= ~ACTOR_FLAG_CANT_LOCK_ON;
         this->dogFlags &= ~DOG_FLAG_HELD;
     }
 
     if (Actor_HasParent(&this->actor, play)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SMALL_DOG_BARK);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_SMALL_DOG_BARK);
         this->grabState = DOG_GRAB_STATE_HELD;
         sSelectedRacetrackDogInfo = sRacetrackDogInfo[this->index];
         if (!sIsAnyDogHeld) {
-            this->actor.flags |= ACTOR_FLAG_8000000;
+            this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
             sIsAnyDogHeld = true;
             this->dogFlags |= DOG_FLAG_HELD;
         }
 
         EnDg_ChangeAnim(&this->skelAnime, sAnimationInfo, DOG_ANIM_SIT_DOWN);
         this->actor.flags &= ~ACTOR_FLAG_1;
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
         if (Player_GetMask(play) == PLAYER_MASK_TRUTH) {
             this->actor.flags |= ACTOR_FLAG_10000;
             func_800B8614(&this->actor, play, 100.0f);
@@ -501,7 +501,7 @@ void EnDg_TryPickUp(EnDg* this, PlayState* play) {
             this->actionFunc = EnDg_Held;
         }
     } else {
-        Actor_LiftActor(&this->actor, play);
+        Actor_OfferCarry(&this->actor, play);
     }
 }
 
@@ -562,7 +562,7 @@ void EnDg_CheckForBremenMaskMarch(EnDg* this, PlayState* play) {
             } else if ((this->actionFunc == EnDg_ApproachPlayer) || (this->actionFunc == EnDg_SitNextToPlayer)) {
                 if (DECR(this->bremenBarkTimer) == 0) {
                     this->bremenBarkTimer = 10;
-                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SMALL_DOG_BARK);
+                    Actor_PlaySfx(&this->actor, NA_SE_EV_SMALL_DOG_BARK);
                 }
             }
         }
@@ -608,7 +608,7 @@ s32 EnDg_ShouldReactToNonHumanPlayer(EnDg* this, PlayState* play) {
 void EnDg_ChooseActionForForm(EnDg* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (!(this->actor.bgCheckFlags & 0x20)) {
+    if (!(this->actor.bgCheckFlags & BGCHECKFLAG_WATER)) {
         switch (player->transformation) {
             case PLAYER_FORM_HUMAN:
                 if (this->behavior != DOG_BEHAVIOR_HUMAN) {
@@ -620,7 +620,7 @@ void EnDg_ChooseActionForForm(EnDg* this, PlayState* play) {
 
             case PLAYER_FORM_ZORA:
                 this->dogFlags &= ~DOG_FLAG_JUMP_ATTACKING;
-                if ((this->behavior != DOG_BEHAVIOR_ZORA) && (player->actor.speedXZ > 1.0f)) {
+                if ((this->behavior != DOG_BEHAVIOR_ZORA) && (player->actor.speed > 1.0f)) {
                     this->behavior = DOG_BEHAVIOR_ZORA;
                     EnDg_ChangeAnim(&this->skelAnime, sAnimationInfo, DOG_ANIM_RUN);
                     this->actionFunc = EnDg_ApproachPlayer;
@@ -634,7 +634,7 @@ void EnDg_ChooseActionForForm(EnDg* this, PlayState* play) {
 
             case PLAYER_FORM_GORON:
                 this->dogFlags &= ~DOG_FLAG_JUMP_ATTACKING;
-                if ((this->behavior != DOG_BEHAVIOR_GORON) && (player->actor.speedXZ > 1.0f)) {
+                if ((this->behavior != DOG_BEHAVIOR_GORON) && (player->actor.speed > 1.0f)) {
                     this->behavior = DOG_BEHAVIOR_GORON;
                     EnDg_ChangeAnim(&this->skelAnime, sAnimationInfo, DOG_ANIM_WALK_BACKWARDS);
                     this->timer = 50;
@@ -649,7 +649,7 @@ void EnDg_ChooseActionForForm(EnDg* this, PlayState* play) {
 
             case PLAYER_FORM_DEKU:
                 this->dogFlags &= ~DOG_FLAG_JUMP_ATTACKING;
-                if ((this->behavior != DOG_BEHAVIOR_DEKU) && (player->actor.speedXZ > 1.0f)) {
+                if ((this->behavior != DOG_BEHAVIOR_DEKU) && (player->actor.speed > 1.0f)) {
                     this->behavior = DOG_BEHAVIOR_DEKU;
                     EnDg_ChangeAnim(&this->skelAnime, sAnimationInfo, DOG_ANIM_RUN);
                     this->actionFunc = EnDg_ApproachPlayerToAttack;
@@ -680,7 +680,7 @@ void EnDg_IdleMove(EnDg* this, PlayState* play) {
 
     EnDg_CheckForBremenMaskMarch(this, play);
     EnDg_PlaySfxWalk(this);
-    if (!(this->actor.bgCheckFlags & 1)) {
+    if (!(this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
         this->actionFunc = EnDg_Fall;
     }
 
@@ -704,7 +704,7 @@ void EnDg_IdleBark(EnDg* this, PlayState* play) {
     EnDg_PlaySfxBark(this, 13.0f);
     EnDg_PlaySfxBark(this, 19.0f);
 
-    if (!(this->actor.bgCheckFlags & 1)) {
+    if (!(this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
         this->actionFunc = EnDg_Fall;
     }
 
@@ -728,12 +728,12 @@ void EnDg_BackAwayFromGoron(EnDg* this, PlayState* play) {
         this->actionFunc = EnDg_RunAwayFromGoron;
     } else {
         Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 4, 0x3E8, 1);
-        if (this->actor.bgCheckFlags & 8) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
             this->actor.shape.rot.y = this->actor.wallYaw;
         }
 
         this->actor.world.rot.y = this->actor.shape.rot.y;
-        Math_ApproachF(&this->actor.speedXZ, -1.5f, 0.2f, 1.0f);
+        Math_ApproachF(&this->actor.speed, -1.5f, 0.2f, 1.0f);
         Actor_MoveWithGravity(&this->actor);
     }
 
@@ -752,7 +752,7 @@ void EnDg_RunAwayFromGoron(EnDg* this, PlayState* play) {
     if (this->actor.xzDistToPlayer < 250.0f) {
         Math_ApproachS(&this->actor.shape.rot.y, -this->actor.yawTowardsPlayer, 4, 0xC00);
 
-        if (this->actor.bgCheckFlags & 8) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
             yRotation = this->actor.wallYaw;
         } else {
             yRotation = 0;
@@ -760,27 +760,27 @@ void EnDg_RunAwayFromGoron(EnDg* this, PlayState* play) {
 
         Math_SmoothStepToS(&this->actor.world.rot.y, yRotation, 4, 0x3E8, 1);
         this->actor.world.rot.y = this->actor.shape.rot.y;
-        if (player->actor.speedXZ != 0.0f) {
-            Math_ApproachF(&this->actor.speedXZ, player->actor.speedXZ, 0.2f, 1.0f);
+        if (player->actor.speed != 0.0f) {
+            Math_ApproachF(&this->actor.speed, player->actor.speed, 0.2f, 1.0f);
         } else {
-            Math_ApproachF(&this->actor.speedXZ, 3.5f, 0.2f, 1.0f);
+            Math_ApproachF(&this->actor.speed, 3.5f, 0.2f, 1.0f);
         }
     } else {
         EnDg_ChangeAnim(&this->skelAnime, sAnimationInfo, DOG_ANIM_BARK);
         this->actionFunc = EnDg_BarkAtGoron;
     }
 
-    if (this->actor.speedXZ > 7.0f) {
-        this->actor.speedXZ = 7.0f;
+    if (this->actor.speed > 7.0f) {
+        this->actor.speed = 7.0f;
     }
 
     Actor_MoveWithGravity(&this->actor);
     EnDg_PlaySfxWalk(this);
 
     if (Animation_OnFrame(&this->skelAnime, 3.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SMALL_DOG_CRY);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_SMALL_DOG_CRY);
     } else if (Animation_OnFrame(&this->skelAnime, 6.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_MONKEY_WALK);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_MONKEY_WALK);
     }
 }
 
@@ -805,13 +805,13 @@ void EnDg_ApproachPlayerToAttack(EnDg* this, PlayState* play) {
 
     this->actor.velocity.y = 0.0f;
     this->actor.gravity = -3.0f;
-    if (this->actor.bgCheckFlags & 8) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
         this->actor.shape.rot.y = this->actor.wallYaw;
     }
 
     this->actor.world.rot.y = this->actor.shape.rot.y;
     if (this->actor.xzDistToPlayer < 70.0f) {
-        Math_ApproachZeroF(&this->actor.speedXZ, 0.2f, 1.0f);
+        Math_ApproachZeroF(&this->actor.speed, 0.2f, 1.0f);
         if (Animation_OnFrame(&this->skelAnime, 7.0f)) {
             s16 yawDiff = ABS_ALT(player->actor.shape.rot.y - this->actor.shape.rot.y);
 
@@ -827,7 +827,7 @@ void EnDg_ApproachPlayerToAttack(EnDg* this, PlayState* play) {
         }
     } else {
         Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 4, 0xC00);
-        Math_ApproachF(&this->actor.speedXZ, 5.0f, 0.2f, 1.0f);
+        Math_ApproachF(&this->actor.speed, 5.0f, 0.2f, 1.0f);
     }
 
     Actor_MoveWithGravity(&this->actor);
@@ -841,7 +841,7 @@ void EnDg_ApproachPlayerToAttack(EnDg* this, PlayState* play) {
  */
 void EnDg_RunAfterAttacking(EnDg* this, PlayState* play) {
     this->dogFlags &= ~DOG_FLAG_BOUNCED;
-    Math_ApproachF(&this->actor.speedXZ, 3.5f, 0.1f, 0.5f);
+    Math_ApproachF(&this->actor.speed, 3.5f, 0.1f, 0.5f);
     Actor_MoveWithGravity(&this->actor);
     if (DECR(this->attackTimer) == 0) {
         this->attackTimer = 20;
@@ -859,7 +859,7 @@ void EnDg_RunAfterAttacking(EnDg* this, PlayState* play) {
 void EnDg_SitNextToPlayer(EnDg* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (!(this->actor.bgCheckFlags & 1)) {
+    if (!(this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
         this->actionFunc = EnDg_Fall;
     }
 
@@ -893,7 +893,7 @@ void EnDg_JumpAttack(EnDg* this, PlayState* play) {
         this->dogFlags &= ~DOG_FLAG_JUMP_ATTACKING;
         this->dogFlags |= DOG_FLAG_BOUNCED;
         this->collider.base.atFlags &= ~AT_BOUNCED;
-        this->actor.speedXZ *= -1.0f;
+        this->actor.speed *= -1.0f;
         EnDg_ChangeAnim(&this->skelAnime, sAnimationInfo, DOG_ANIM_RUN);
         this->actionFunc = EnDg_RunAfterAttacking;
         return;
@@ -919,9 +919,9 @@ void EnDg_JumpAttack(EnDg* this, PlayState* play) {
 
             sAnimationInfo[DOG_ANIM_JUMP_ATTACK].playSpeed = 1.2f;
             this->actor.velocity.y = 2.0f * rand + 3.0f;
-            this->actor.speedXZ = 8.0f + rand;
+            this->actor.speed = 8.0f + rand;
         } else if (curFrame > 20) {
-            Math_ApproachF(&this->actor.speedXZ, 2.5f, 0.2f, 1.0f);
+            Math_ApproachF(&this->actor.speed, 2.5f, 0.2f, 1.0f);
         }
 
         if (curFrame > 23) {
@@ -949,7 +949,7 @@ void EnDg_WalkToPlayer(EnDg* this, PlayState* play) {
     } else {
         Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 4, 0xC00);
         this->actor.world.rot.y = this->actor.shape.rot.y;
-        Math_ApproachF(&this->actor.speedXZ, 2.0f, 0.2f, 1.0f);
+        Math_ApproachF(&this->actor.speed, 2.0f, 0.2f, 1.0f);
         Actor_MoveWithGravity(&this->actor);
     }
 
@@ -960,13 +960,13 @@ void EnDg_WalkToPlayer(EnDg* this, PlayState* play) {
 void EnDg_SetupBremenMaskApproachPlayer(EnDg* this, PlayState* play) {
     if (func_801A46F8() == 1) {
         this->bremenBarkTimer = 10;
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SMALL_DOG_BARK);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_SMALL_DOG_BARK);
         this->actionFunc = EnDg_ApproachPlayer;
     }
 }
 
 void EnDg_Fall(EnDg* this, PlayState* play) {
-    if (this->actor.bgCheckFlags & 1) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         EnDg_ChangeAnim(&this->skelAnime, sAnimationInfo, DOG_ANIM_RUN);
         this->actionFunc = EnDg_IdleMove;
     }
@@ -996,12 +996,12 @@ void EnDg_ApproachPlayer(EnDg* this, PlayState* play) {
         this->actionFunc = EnDg_SitNextToPlayer;
     } else if (player->stateFlags3 & PLAYER_STATE3_20000000) {
         if ((this->actor.xzDistToPlayer > 40.0f) && (player->linearVelocity == 0.0f)) {
-            Math_ApproachF(&this->actor.speedXZ, 1.5f, 0.2f, 1.0f);
+            Math_ApproachF(&this->actor.speed, 1.5f, 0.2f, 1.0f);
         } else {
-            Math_ApproachF(&this->actor.speedXZ, player->actor.speedXZ, 0.2f, 1.0f);
+            Math_ApproachF(&this->actor.speed, player->actor.speed, 0.2f, 1.0f);
         }
     } else {
-        Math_ApproachF(&this->actor.speedXZ, 3.5f, 0.2f, 1.0f);
+        Math_ApproachF(&this->actor.speed, 3.5f, 0.2f, 1.0f);
     }
 
     EnDg_CheckForBremenMaskMarch(this, play);
@@ -1026,14 +1026,14 @@ void EnDg_SlowlyBackUpBeforeAttacking(EnDg* this, PlayState* play) {
     }
 
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 4, 0x3E8, 1);
-    if (this->actor.bgCheckFlags & 8) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
         this->actor.shape.rot.y = this->actor.wallYaw;
         EnDg_ChangeAnim(&this->skelAnime, sAnimationInfo, DOG_ANIM_JUMP_ATTACK);
         this->actionFunc = EnDg_JumpAttack;
     }
 
     this->actor.world.rot.y = this->actor.shape.rot.y;
-    Math_ApproachF(&this->actor.speedXZ, -1.0f, 0.2f, 1.0f);
+    Math_ApproachF(&this->actor.speed, -1.0f, 0.2f, 1.0f);
     Actor_MoveWithGravity(&this->actor);
     EnDg_PlaySfxWalk(this);
     EnDg_PlaySfxGrowl(this, 4.0f);
@@ -1054,17 +1054,17 @@ void EnDg_BackAwayFromPlayer(EnDg* this, PlayState* play) {
         this->actionFunc = EnDg_BarkAtPlayer;
     } else {
         Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 4, 0x3E8, 1);
-        if (this->actor.bgCheckFlags & 8) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
             this->actor.shape.rot.y = this->actor.wallYaw;
         }
 
         this->actor.world.rot.y = this->actor.shape.rot.y;
-        Math_ApproachF(&this->actor.speedXZ, -2.0f, 0.2f, 1.0f);
+        Math_ApproachF(&this->actor.speed, -2.0f, 0.2f, 1.0f);
         Actor_MoveWithGravity(&this->actor);
     }
 
     EnDg_PlaySfxWalk(this);
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SMALL_DOG_GROAN);
+    Actor_PlaySfx(&this->actor, NA_SE_EV_SMALL_DOG_GROAN);
 }
 
 /**
@@ -1106,11 +1106,11 @@ void EnDg_SetupSwim(EnDg* this, PlayState* play) {
         this->actor.gravity = 0.0f;
         this->actor.velocity.y = -3.0f;
         this->swimTimer = 10;
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BOMB_DROP_WATER);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_BOMB_DROP_WATER);
         this->actionFunc = EnDg_Swim;
     }
 
-    Math_ApproachF(&this->actor.speedXZ, 1.0f, 0.2f, 1.0f);
+    Math_ApproachF(&this->actor.speed, 1.0f, 0.2f, 1.0f);
     Actor_MoveWithGravity(&this->actor);
 }
 
@@ -1138,7 +1138,7 @@ void EnDg_Swim(EnDg* this, PlayState* play) {
     if (DECR(this->swimTimer) == 0) {
         if (!(this->dogFlags & DOG_FLAG_SWIMMING)) {
             this->dogFlags |= DOG_FLAG_SWIMMING;
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_OUT_OF_WATER);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_OUT_OF_WATER);
         }
 
         this->swimTimer = 5;
@@ -1158,7 +1158,7 @@ void EnDg_Swim(EnDg* this, PlayState* play) {
     // over. For example, if the player throws the dog at a tall wall next to some water,
     // this code will make the dog "skip" along the water's surface, assuming the floor
     // height is low enough to make it try to jump out.
-    if (this->actor.bgCheckFlags & 8) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
         if (!WaterBox_GetSurface1(play, &play->colCtx, pos.x, pos.z, &waterSurface, &waterBox)) {
             if (floorHeight > -100.0f) {
                 this->dogFlags &= ~DOG_FLAG_SWIMMING;
@@ -1176,20 +1176,20 @@ void EnDg_Swim(EnDg* this, PlayState* play) {
         } else {
             yRotation = this->actor.wallYaw;
         }
-    } else if ((this->actor.bgCheckFlags & 1) && !(this->actor.bgCheckFlags & 0x20)) {
+    } else if ((this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) && !(this->actor.bgCheckFlags & BGCHECKFLAG_WATER)) {
         this->actor.gravity = -3.0f;
         this->dogFlags &= ~DOG_FLAG_SWIMMING;
         this->behavior = DOG_BEHAVIOR_DEFAULT;
         this->timer = Rand_S16Offset(60, 60);
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_OUT_OF_WATER);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_OUT_OF_WATER);
         EnDg_ChangeAnim(&this->skelAnime, sAnimationInfo, DOG_ANIM_RUN);
-        Math_ApproachF(&this->actor.speedXZ, 3.5f, 0.2f, 1.0f);
+        Math_ApproachF(&this->actor.speed, 3.5f, 0.2f, 1.0f);
         this->actionFunc = EnDg_IdleMove;
     }
 
     Math_SmoothStepToS(&this->actor.world.rot.y, yRotation, 4, 0x3E8, 1);
     this->actor.shape.rot.y = this->actor.world.rot.y;
-    Math_ApproachF(&this->actor.speedXZ, 0.5f, 0.2f, 1.0f);
+    Math_ApproachF(&this->actor.speed, 0.5f, 0.2f, 1.0f);
     Actor_MoveWithGravity(&this->actor);
 }
 
@@ -1216,23 +1216,23 @@ void EnDg_JumpOutOfWater(EnDg* this, PlayState* play) {
         this->actor.velocity.y = -1.0f;
     }
 
-    if (this->actor.bgCheckFlags & 8) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
         this->actor.world.pos.y = pos.y;
         this->actor.velocity.y = 10.0f;
         EffectSsGSplash_Spawn(play, &pos, NULL, NULL, 0, 800);
     }
 
-    if (!(this->actor.bgCheckFlags & 0x20)) {
+    if (!(this->actor.bgCheckFlags & BGCHECKFLAG_WATER)) {
         this->behavior = DOG_BEHAVIOR_DEFAULT;
         this->actor.velocity.y = 10.0f;
         this->actor.gravity = -3.0f;
         this->timer = Rand_S16Offset(60, 60);
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_OUT_OF_WATER);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_OUT_OF_WATER);
         EnDg_ChangeAnim(&this->skelAnime, sAnimationInfo, DOG_ANIM_RUN);
         this->actionFunc = EnDg_IdleMove;
-        Math_ApproachF(&this->actor.speedXZ, 3.5f, 0.2f, 1.0f);
+        Math_ApproachF(&this->actor.speed, 3.5f, 0.2f, 1.0f);
     } else {
-        Math_ApproachF(&this->actor.speedXZ, 0.5f, 0.2f, 1.0f);
+        Math_ApproachF(&this->actor.speed, 0.5f, 0.2f, 1.0f);
     }
 
     Actor_MoveWithGravity(&this->actor);
@@ -1243,7 +1243,7 @@ void EnDg_Held(EnDg* this, PlayState* play) {
         this->grabState = DOG_GRAB_STATE_THROWN_OR_SITTING_AFTER_THROW;
         this->actor.flags |= ACTOR_FLAG_1;
         if (sIsAnyDogHeld) {
-            this->actor.flags &= ~ACTOR_FLAG_8000000;
+            this->actor.flags &= ~ACTOR_FLAG_CANT_LOCK_ON;
             sIsAnyDogHeld = false;
             this->dogFlags &= ~DOG_FLAG_HELD;
         }
@@ -1260,13 +1260,13 @@ void EnDg_Held(EnDg* this, PlayState* play) {
 void EnDg_Thrown(EnDg* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (this->actor.bgCheckFlags & 1) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         if (this->dogFlags & DOG_FLAG_THROWN) {
             this->dogFlags &= ~DOG_FLAG_THROWN;
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_MONKEY_WALK);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_MONKEY_WALK);
         }
 
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
         this->actor.gravity = -3.0f;
         if (player->transformation == PLAYER_FORM_HUMAN) {
             EnDg_TryPickUp(this, play);
@@ -1350,7 +1350,7 @@ void EnDg_Update(Actor* thisx, PlayState* play) {
             EnDg_SetupIdleMove(this, play);
         }
 
-        if ((this->actor.bgCheckFlags & 0x40) && Actor_HasNoParent(&this->actor, play)) {
+        if ((this->actor.bgCheckFlags & BGCHECKFLAG_WATER_TOUCH) && Actor_HasNoParent(&this->actor, play)) {
             EnDg_ChangeAnim(&this->skelAnime, sAnimationInfo, DOG_ANIM_SWIM);
             this->actionFunc = EnDg_SetupSwim;
         }

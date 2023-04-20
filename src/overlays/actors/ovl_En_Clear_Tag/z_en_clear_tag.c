@@ -463,12 +463,12 @@ void EnClearTag_Init(Actor* thisx, PlayState* play) {
             }
 
             // Initialize flash effect
-            Actor_UpdateBgCheckInfo(play, &this->actor, 50.0f, 30.0f, 100.0f, 4);
+            Actor_UpdateBgCheckInfo(play, &this->actor, 50.0f, 30.0f, 100.0f, UPDBGCHECKINFO_FLAG_4);
             pos = this->actor.world.pos;
             EnClearTag_CreateFlashEffect(this, &pos, sFlashMaxScale[thisx->params], this->actor.floorHeight);
 
             // Is not underwater
-            if (!(this->actor.bgCheckFlags & 0x20)) {
+            if (!(this->actor.bgCheckFlags & BGCHECKFLAG_WATER)) {
                 if (thisx->params < 10) {
                     pos.y = this->actor.world.pos.y - 40.0f;
 
@@ -549,14 +549,14 @@ void EnClearTag_UpdateCamera(EnClearTag* this, PlayState* play) {
                     player->actor.world.pos.z = -950.0f;
                 }
 
-                player->actor.speedXZ = 0.0f;
+                player->actor.speed = 0.0f;
                 if (this->activeTimer == 0) {
                     this->cameraState = 1;
                 }
             }
             break;
         case 1:
-            Cutscene_Start(play, &play->csCtx);
+            Cutscene_StartManual(play, &play->csCtx);
             this->subCamId = Play_CreateSubCamera(play);
             Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
             Play_ChangeCameraStatus(play, this->subCamId, CAM_STATUS_ACTIVE);
@@ -578,15 +578,15 @@ void EnClearTag_UpdateCamera(EnClearTag* this, PlayState* play) {
                 player->actor.world.pos.z = -950.0f;
             }
 
-            player->actor.speedXZ = 0.0f;
+            player->actor.speed = 0.0f;
             if (Message_GetState(&play->msgCtx) == TEXT_STATE_NONE) {
                 mainCam = Play_GetCamera(play, CAM_ID_MAIN);
                 mainCam->eye = this->subCamEye;
                 mainCam->eyeNext = this->subCamEye;
                 mainCam->at = this->subCamAt;
                 func_80169AFC(play, this->subCamId, 0);
-                Cutscene_End(play, &play->csCtx);
-                func_800B7298(play, &this->actor, PLAYER_CSMODE_6);
+                Cutscene_StopManual(play, &play->csCtx);
+                func_800B7298(play, &this->actor, PLAYER_CSMODE_END);
                 this->cameraState = 0;
                 this->subCamId = SUB_CAM_ID_DONE;
                 this->activeTimer = 20;

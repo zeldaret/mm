@@ -240,7 +240,7 @@ u8 D_80867744[] = {
 };
 
 u8 D_8086775C[] = {
-    /* 0x00 */ SCHEDULE_CMD_CHECK_FLAG_S(WEEKEVENTREG_52_20, 0x1B - 0x04),
+    /* 0x00 */ SCHEDULE_CMD_CHECK_FLAG_S(WEEKEVENTREG_CLEARED_STONE_TOWER_TEMPLE, 0x1B - 0x04),
     /* 0x04 */ SCHEDULE_CMD_CHECK_FLAG_S(WEEKEVENTREG_75_20, 0x1B - 0x08),
     /* 0x08 */ SCHEDULE_CMD_CHECK_FLAG_S(WEEKEVENTREG_14_04, 0x0E - 0x0C),
     /* 0x0C */ SCHEDULE_CMD_RET_VAL_S(29),
@@ -457,7 +457,7 @@ void func_80866A5C(EnDoor* this, PlayState* play) {
                 this->unk_1A6 = 10;
             }
         } else if ((this->unk_1A4 == 4) &&
-                   (Actor_XZDistanceBetweenActors(&this->dyna.actor, &GET_PLAYER(play)->actor) > 120.0f)) {
+                   (Actor_WorldDistXZToActor(&this->dyna.actor, &GET_PLAYER(play)->actor) > 120.0f)) {
             this->actionFunc = func_8086704C;
             this->dyna.actor.world.rot.y = -0x1800;
         }
@@ -467,12 +467,6 @@ void func_80866A5C(EnDoor* this, PlayState* play) {
 void func_80866B20(EnDoor* this, PlayState* play) {
     static s32 D_80867BC0;
     Player* player = GET_PLAYER(play);
-    Vec3f playerPosRelToDoor;
-    s16 temp_a2;
-    s16 yawDiff;
-    s32 temp_a1_2;
-    s32 temp_t0;
-    u8 temp_a1;
 
     if (Actor_ProcessTalkRequest(&this->dyna.actor, &play->state) && (this->dyna.actor.textId == 0x1821)) {
         D_80867BC0 = true;
@@ -482,18 +476,21 @@ void func_80866B20(EnDoor* this, PlayState* play) {
         Animation_PlayOnceSetSpeed(&this->skelAnime, sAnimations[this->animIndex],
                                    (player->stateFlags1 & PLAYER_STATE1_8000000) ? 0.75f : 1.5f);
         if (this->unk_1A6 != 0) {
-            gSaveContext.save.inventory.dungeonKeys[gSaveContext.mapIndex]--;
+            gSaveContext.save.saveInfo.inventory.dungeonKeys[gSaveContext.mapIndex]--;
             Flags_SetSwitch(play, this->switchFlag);
-            Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_CHAIN_KEY_UNLOCK);
+            Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_CHAIN_KEY_UNLOCK);
         }
     } else if (this->unk_1A7 != 0) {
         this->actionFunc = func_80866F94;
-        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_DOOR_OPEN);
+        Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_DOOR_OPEN);
     } else if (!Player_InCsMode(play)) {
+        Vec3f playerPosRelToDoor;
+
         Actor_OffsetOfPointInActorCoords(&this->dyna.actor, &playerPosRelToDoor, &player->actor.world.pos);
         if (D_80867BC0 || ((fabsf(playerPosRelToDoor.y) < 20.0f) && (fabsf(playerPosRelToDoor.x) < 20.0f) &&
                            (fabsf(playerPosRelToDoor.z) < 50.0f))) {
-            yawDiff = player->actor.shape.rot.y - this->dyna.actor.shape.rot.y;
+            s16 yawDiff = player->actor.shape.rot.y - this->dyna.actor.shape.rot.y;
+
             if (playerPosRelToDoor.z > 0.0f) {
                 yawDiff = (0x8000 - yawDiff);
             }
@@ -502,7 +499,7 @@ void func_80866B20(EnDoor* this, PlayState* play) {
                 player->doorDirection = playerPosRelToDoor.z >= 0.0f ? 1.0f : -1.0f;
                 player->doorActor = &this->dyna.actor;
                 if (this->unk_1A6 != 0) {
-                    if (gSaveContext.save.inventory.dungeonKeys[((void)0, gSaveContext.mapIndex)] <= 0) {
+                    if (gSaveContext.save.saveInfo.inventory.dungeonKeys[((void)0, gSaveContext.mapIndex)] <= 0) {
                         player->doorType = PLAYER_DOORTYPE_TALKING;
                         this->dyna.actor.textId = 0x1802;
                     } else {
@@ -512,15 +509,14 @@ void func_80866B20(EnDoor* this, PlayState* play) {
                     player->doorType = PLAYER_DOORTYPE_TALKING;
                     this->dyna.actor.textId = 0x1800;
                 } else if ((this->unk_1A4 == 0) || (this->unk_1A4 == 2) || (this->unk_1A4 == 3)) {
-                    s32 textIdOffset;
+                    s32 halfDaysDayBit = (play->actorCtx.halfDaysBit & HALFDAYBIT_DAWNS) >> 1;
+                    s32 halfDaysNightBit = play->actorCtx.halfDaysBit & HALFDAYBIT_NIGHTS;
+                    s16 temp_a2 = D_801AED48[this->switchFlag & 7];
+                    s32 textIdOffset = (this->switchFlag >> 3) & 0xF;
 
-                    temp_t0 = (play->actorCtx.unkC & 0x2AA) >> 1;
-                    temp_a2 = D_801AED48[this->switchFlag & 7];
-                    temp_a1_2 = play->actorCtx.unkC & 0x155;
-                    textIdOffset = (this->switchFlag >> 3) & 0xF;
-                    if (((this->unk_1A4 == 0) && (((temp_t0 | temp_a1_2) & temp_a2) == 0)) ||
-                        ((this->unk_1A4 == 2) && ((temp_a2 & temp_a1_2) == 0)) ||
-                        ((this->unk_1A4 == 3) && ((temp_a2 & temp_t0) == 0))) {
+                    if (((this->unk_1A4 == 0) && !((halfDaysDayBit | halfDaysNightBit) & temp_a2)) ||
+                        ((this->unk_1A4 == 2) && !(halfDaysNightBit & temp_a2)) ||
+                        ((this->unk_1A4 == 3) && !(halfDaysDayBit & temp_a2))) {
                         s16 baseTextId = 0x182D;
 
                         if (this->unk_1A4 == 3) {
@@ -532,10 +528,10 @@ void func_80866B20(EnDoor* this, PlayState* play) {
                         this->dyna.actor.textId = baseTextId + textIdOffset;
                     }
                 } else if ((this->unk_1A4 == 5) && (playerPosRelToDoor.z > 0.0f)) {
-                    ScheduleOutput sp30;
+                    ScheduleOutput scheduleOutput;
 
-                    if (Schedule_RunScript(play, D_8086778C[this->switchFlag], &sp30)) {
-                        this->dyna.actor.textId = sp30.result + 0x1800;
+                    if (Schedule_RunScript(play, D_8086778C[this->switchFlag], &scheduleOutput)) {
+                        this->dyna.actor.textId = scheduleOutput.result + 0x1800;
 
                         player->doorType = ((this->dyna.actor.textId == 0x1821) && D_80867BC0)
                                                ? PLAYER_DOORTYPE_PROXIMITY
@@ -545,7 +541,7 @@ void func_80866B20(EnDoor* this, PlayState* play) {
                 func_80122F28(player);
             }
         } else if ((this->unk_1A4 == 4) && (this->dyna.actor.xzDistToPlayer > 240.0f)) {
-            Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_DOOR_OPEN);
+            Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_DOOR_OPEN);
             this->actionFunc = func_80867080;
         }
     }
@@ -566,7 +562,7 @@ void func_80866F94(EnDoor* this, PlayState* play) {
     } else {
         if (Math_ScaledStepToS(&this->dyna.actor.world.rot.y, 0, 0x7D0)) {
             this->actionFunc = func_80866B20;
-            Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_AUTO_DOOR_CLOSE);
+            Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_AUTO_DOOR_CLOSE);
         }
     }
 }
@@ -587,7 +583,7 @@ void func_80867080(EnDoor* this, PlayState* play) {
 
 void func_808670F0(EnDoor* this, PlayState* play) {
     if (Math_ScaledStepToS(&this->dyna.actor.world.rot.y, 0, 0x700)) {
-        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_DOOR_CLOSE);
+        Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_DOOR_CLOSE);
         this->actionFunc = func_80866B20;
     }
 }
@@ -601,7 +597,7 @@ void func_80867144(EnDoor* this, PlayState* play) {
             this->actionFunc = func_80866B20;
             this->unk_1A1 = 0;
         } else if (Animation_OnFrame(&this->skelAnime, sAnimOpenFrames[this->animIndex])) {
-            Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_OC_DOOR_OPEN);
+            Actor_PlaySfx(&this->dyna.actor, NA_SE_OC_DOOR_OPEN);
             if (this->skelAnime.playSpeed < 1.5f) {
                 numEffects = (s32)(Rand_ZeroOne() * 30.0f) + 50;
                 for (i = 0; i < numEffects; i++) {
@@ -609,7 +605,7 @@ void func_80867144(EnDoor* this, PlayState* play) {
                 }
             }
         } else if (Animation_OnFrame(&this->skelAnime, sAnimCloseFrames[this->animIndex])) {
-            Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_DOOR_CLOSE);
+            Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_DOOR_CLOSE);
         }
     }
 }

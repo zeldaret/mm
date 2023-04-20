@@ -26,6 +26,4 @@ typedef struct {
     /* 0x34 */ u8 updateMode;
 } EffectSsDustInitParams; // size = 0x38
 
-extern const EffectSsInit Effect_Ss_Dust_InitVars;
-
 #endif

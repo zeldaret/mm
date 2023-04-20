@@ -14,7 +14,7 @@ u32 EffectEnIceBlock_Init(PlayState* play, u32 index, EffectSs* this, void* init
 void EffectEnIceBlock_Update(PlayState* play, u32 index, EffectSs* this);
 void EffectEnIceBlock_Draw(PlayState* play, u32 index, EffectSs* this);
 
-const EffectSsInit Effect_En_Ice_Block_InitVars = {
+EffectSsInit Effect_En_Ice_Block_InitVars = {
     EFFECT_EN_ICE_BLOCK,
     EffectEnIceBlock_Init,
 };

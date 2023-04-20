@@ -121,17 +121,17 @@ void EnMaYts_ChangeAnim(EnMaYts* this, s32 animIndex) {
 
 void func_80B8D12C(EnMaYts* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    s16 flag = this->unk_32C == 2 ? true : false;
+    s16 trackingMode = (this->unk_32C == 2) ? NPC_TRACKING_NONE : NPC_TRACKING_PLAYER_AUTO_TURN;
 
     if (this->unk_32C == 0 || this->actor.parent == NULL) {
-        this->unk_1D8.unk_18 = player->actor.world.pos;
-        this->unk_1D8.unk_18.y -= -10.0f;
+        this->interactInfo.trackPos = player->actor.world.pos;
+        this->interactInfo.trackPos.y -= -10.0f;
     } else {
-        Math_Vec3f_StepTo(&this->unk_1D8.unk_18, &this->actor.parent->world.pos, 8.0f);
-        this->unk_1D8.unk_18.y -= -10.0f;
+        Math_Vec3f_StepTo(&this->interactInfo.trackPos, &this->actor.parent->world.pos, 8.0f);
+        this->interactInfo.trackPos.y -= -10.0f;
     }
 
-    func_800BD888(&this->actor, &this->unk_1D8, 0, flag);
+    Npc_TrackPoint(&this->actor, &this->interactInfo, 0, trackingMode);
 }
 
 void EnMaYts_InitAnimation(EnMaYts* this, PlayState* play) {
@@ -235,10 +235,10 @@ void EnMaYts_Init(Actor* thisx, PlayState* play) {
         this->collider.dim.radius = 40;
     }
 
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 0x4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
     Actor_SetScale(&this->actor, 0.01f);
 
-    this->unk_1D8.unk_00 = 0;
+    this->interactInfo.talkState = NPC_TALK_STATE_IDLE;
     this->unk_200 = 0;
     this->blinkTimer = 0;
 
@@ -248,7 +248,7 @@ void EnMaYts_Init(Actor* thisx, PlayState* play) {
         this->hasBow = false;
     }
 
-    if (CURRENT_DAY == 1 || CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01)) {
+    if ((CURRENT_DAY == 1) || CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01)) {
         this->overrideEyeTexIndex = 0;
         this->eyeTexIndex = 0;
         this->mouthTexIndex = 0;
@@ -377,16 +377,16 @@ void EnMaYts_SetupEndCreditsHandler(EnMaYts* this) {
     this->actionFunc = EnMaYts_EndCreditsHandler;
 }
 
-static u16 D_80B8E32C = 99;
+static u16 sCueId = 99;
 void EnMaYts_EndCreditsHandler(EnMaYts* this, PlayState* play) {
-    if (Cutscene_CheckActorAction(play, 120)) {
-        s32 actionIndex = Cutscene_GetActorActionIndex(play, 120);
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_120)) {
+        s32 cueChannel = Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_120);
 
-        if (play->csCtx.frames == play->csCtx.actorActions[actionIndex]->startFrame) {
-            if (play->csCtx.actorActions[actionIndex]->action != D_80B8E32C) {
-                D_80B8E32C = play->csCtx.actorActions[actionIndex]->action;
+        if (play->csCtx.curFrame == play->csCtx.actorCues[cueChannel]->startFrame) {
+            if (sCueId != play->csCtx.actorCues[cueChannel]->id) {
+                sCueId = play->csCtx.actorCues[cueChannel]->id;
                 this->endCreditsFlag = 0;
-                switch (play->csCtx.actorActions[actionIndex]->action) {
+                switch (play->csCtx.actorCues[cueChannel]->id) {
                     case 1:
                         this->hasBow = true;
                         EnMaYts_ChangeAnim(this, 0);
@@ -410,14 +410,14 @@ void EnMaYts_EndCreditsHandler(EnMaYts* this, PlayState* play) {
             }
         }
 
-        Cutscene_ActorTranslateAndYaw(&this->actor, play, actionIndex);
-        if ((D_80B8E32C == 2) && (this->endCreditsFlag == 0) &&
+        Cutscene_ActorTranslateAndYaw(&this->actor, play, cueChannel);
+        if ((sCueId == 2) && (this->endCreditsFlag == 0) &&
             Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
             this->endCreditsFlag++;
             EnMaYts_ChangeAnim(this, 5);
         }
     } else {
-        D_80B8E32C = 99;
+        sCueId = 99;
         this->hasBow = true;
     }
 }
@@ -501,18 +501,18 @@ void EnMaYts_Update(Actor* thisx, PlayState* play) {
 
 s32 EnMaYts_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnMaYts* this = THIS;
-    Vec3s sp4;
+    Vec3s limbRot;
 
     if (limbIndex == ROMANI_LIMB_HEAD) {
-        sp4 = this->unk_1D8.unk_08;
-        rot->x += sp4.y;
+        limbRot = this->interactInfo.headRot;
+        rot->x += limbRot.y;
         if ((this->skelAnime.animation == &gRomaniIdleAnim) || (this->skelAnime.animation == &gRomaniSittingAnim)) {
-            rot->z += sp4.x;
+            rot->z += limbRot.x;
         }
     } else if (limbIndex == ROMANI_LIMB_TORSO) {
-        sp4 = this->unk_1D8.unk_0E;
-        rot->x += sp4.y;
-        rot->z += sp4.x;
+        limbRot = this->interactInfo.torsoRot;
+        rot->x += limbRot.y;
+        rot->z += limbRot.x;
     }
 
     return false;
