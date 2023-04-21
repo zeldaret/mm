@@ -520,7 +520,7 @@ void EnAm_Update(Actor* thisx, PlayState* play) {
         CollisionCheck_SetAC(play, &play->colChkCtx, &this->enemyCollider.base);
     }
     CollisionCheck_SetAC(play, &play->colChkCtx, &this->interactCollider.base);
-    if (this->enemyCollider.base.atFlags & AC_ON) {
+    if (this->enemyCollider.base.atFlags & AT_ON) {
         this->actor.flags |= ACTOR_FLAG_1000000;
         CollisionCheck_SetAT(play, &play->colChkCtx, &this->enemyCollider.base);
     }

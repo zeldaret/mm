@@ -433,7 +433,7 @@ void EnMkk_Update(Actor* thisx, PlayState* play) {
     if (this->collider.base.atFlags & AT_ON) {
         CollisionCheck_SetAT(play, &play->colChkCtx, &this->collider.base);
     }
-    if (this->collider.base.acFlags & AT_ON) {
+    if (this->collider.base.acFlags & AC_ON) {
         CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
     }
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
