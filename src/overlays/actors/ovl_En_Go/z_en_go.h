@@ -14,15 +14,9 @@ typedef s32 (*MsgEventFunc)(Actor*, PlayState*);
 
 #define ENGO_GET_PATH(thisx) ((((thisx)->params & 0x7F80) >> 7) & 0xFF)
 
-/** Count of effects used for snow.
- * @see EnGoEffect
- */
 #define ENGO_SNOW_EFFECT_COUNT 16
-
-/** Total count of all possible effects.
- * @see EnGoEffect
- */
-#define ENGO_EFFECT_COUNT 32
+#define ENGO_OTHER_EFFECT_COUNT 16
+#define ENGO_EFFECT_COUNT (ENGO_SNOW_EFFECT_COUNT + ENGO_OTHER_EFFECT_COUNT)
 
 /**
  * Struct to track the state of various visual effects.
@@ -49,7 +43,7 @@ typedef struct EnGoEffect {
  * Goron Type, identified by bits [3..0] of the actor's params
  *
  * - The ENGO_STRETCHER and ENGO_SPECTATOR types share the same subtype domain (EnGoRacetrackSubtype: [0,7])
- * - ENGO_BROTHER types have their own subtype domain (EnGoBrotherSubtype: [0,1])
+ * - ENGO_GRAVEYARD types have their own subtype domain (EnGoGraveyardSubtype: [0,1])
  * - Others have no subtypes.
  */
 typedef enum EnGoType {
@@ -57,7 +51,7 @@ typedef enum EnGoType {
     /* 1 */ ENGO_STRETCHER,        // Racers stretching before the race
     /* 2 */ ENGO_SPECTATOR,        // Spectators to the race
     /* 3 */ ENGO_GATEKEEPER,       // Gatekeeper to the Goron Shrine
-    /* 4 */ ENGO_GRAVEBRO,         // Gravemaker and Gravemaker's brother
+    /* 4 */ ENGO_GRAVEYARD,        // Gravemaker and other
     /* 5 */ ENGO_ASIDE_STORE,      // Shrine Goron outside store
     /* 6 */ ENGO_ASIDE_ELDERSROOM, // Shrine Goron outside Elder's room
     /* 7 */ ENGO_ASIDE_ELDERSSON,  // Shrine Goron aside the Elder's Son
@@ -79,19 +73,19 @@ typedef enum EnGoRacetrackSubtype {
 } EnGoRacetrackSubtype;
 
 /**
- * Subtype for Goron brothers outside Daramani's grave (ENGO_GRAVEBRO)
+ * Subtype for Gorons outside the Goron Graveyard (ENGO_GRAVEYARD)
  */
-typedef enum EnGoBrotherSubtype {
-    /* 0 */ ENGO_GRAVEBRO_GRAVEMAKER = 0,
-    /* 1 */ ENGO_GRAVEBRO_FROZEN,
-} EnGoBrotherSubtype;
+typedef enum EnGoGraveyardSubtype {
+    /* 0 */ ENGO_GRAVEYARD_GRAVEMAKER = 0,
+    /* 1 */ ENGO_GRAVEYARD_FROZEN,
+} EnGoGraveyardSubtype;
 
 typedef struct EnGo {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
     /* 0x188 */ EnGoActionFunc actionFunc;
     /* 0x18C */ EnGoActionFunc interruptedActionFunc;
-    /* 0x190 */ EnGoActionFunc graveBroDialogActionFunc;
+    /* 0x190 */ EnGoActionFunc graveyardDialogActionFunc;
     /* 0x194 */ ColliderCylinder colliderCylinder;
     /* 0x1E0 */ ColliderCylinder unusedCylinder;
     /* 0x22C */ ColliderSphere colliderSphere;
@@ -116,7 +110,7 @@ typedef struct EnGo {
     /* 0x3A8 */ f32 scaleFactorPoundDistortion;
     /* 0x3AC */ UNK_TYPE1 unk3AC[0x2];
     /* 0x3AE */ union {
-        s16 snorePhase;      // Used whilst a Goron is sleeping, +1024 at a time
+        s16 snorePhase;      // Used whilst a Goron is sleeping, +0x400 at a time
         s16 elapsedHangtime; // Hangtime at the top of a pound.
     };
     /* 0x3B0 */ s16 headRotZ;
@@ -143,6 +137,7 @@ typedef struct EnGo {
     /* 0x3F0 */ s32 springArrivalCutsceneActive;
     /* 0x3F4 */ s32 changedText;
     /* 0x3F8 */ EnGoEffect effectTable[ENGO_EFFECT_COUNT];
+
 } EnGo; // size = 0xB78
 
 #endif // Z_EN_GO_H
