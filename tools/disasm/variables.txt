@@ -2138,7 +2138,6 @@
     0x801D0D5C:("sIsCameraUnderwater","UNK_TYPE2","",0x2),
     0x801D0D60:("D_801D0D60","Input*","",0x4),
     0x801D0D64:("sPlayerCsIdToCsCamId","s16","[10]",0x14),
-    0x801D0D78:("D_801D0D78","u16","[4]",0x4),
     0x801D0D80:("D_801D0D80","UNK_TYPE1","",0x1),
     0x801D11F4:("D_801D11F4","UNK_TYPE1","",0x1),
     0x801D1230:("D_801D1230","UNK_TYPE1","",0x1),
