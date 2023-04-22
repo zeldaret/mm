@@ -1,13 +1,14 @@
+#include "z64debug_display.h"
 #include "global.h"
 
 DebugDispObject* sDebugObjectListHead;
 
 typedef struct {
-    /* 0x00 */ s16 drawType;  // indicates which draw function to use when displaying the object
-    /* 0x04 */ void* drawArg; // segment address (display list or texture) passed to the draw funciton when called
-} DebugDispObjectInfo;        // size = 0x8
+    /* 0x0 */ s16 drawType;  // indicates which draw function to use when displaying the object
+    /* 0x4 */ void* drawArg; // segment address (display list or texture) passed to the draw funciton when called
+} DebugDispObjectInfo;       // size = 0x8
 
-typedef void (*DebugDispObject_DrawFunc)(DebugDispObject*, void*, PlayState*);
+typedef void (*DebugDispObjectDrawFunc)(DebugDispObject*, void*, PlayState*);
 
 void DebugDisplay_DrawSpriteI8(DebugDispObject*, void*, PlayState*);
 void DebugDisplay_DrawPolygon(DebugDispObject*, void*, PlayState*);
@@ -44,12 +45,12 @@ DebugDispObject* DebugDisplay_AddObject(f32 posX, f32 posY, f32 posZ, s16 rotX, 
 
 #include "code/debug_display/debug_display.c"
 
-DebugDispObject_DrawFunc sDebugObjectDrawFuncTable[] = { DebugDisplay_DrawSpriteI8, DebugDisplay_DrawPolygon };
+DebugDispObjectDrawFunc sDebugObjectDrawFuncTable[] = { DebugDisplay_DrawSpriteI8, DebugDisplay_DrawPolygon };
 
 DebugDispObjectInfo sDebugObjectInfoTable[] = {
     { 0, sDebugDisplayCircleTex }, { 0, sDebugDisplayCrossTex }, { 0, sDebugDisplayBallTex },
-    { 0, sDebugDisplayCursorTex }, { 1, &sDebugDisplay1DL },     { 1, &sDebugDisplay3DL },
-    { 1, &sDebugDisplay2DL },
+    { 0, sDebugDisplayCursorTex }, { 1, sDebugDisplay1DL },      { 1, sDebugDisplay3DL },
+    { 1, sDebugDisplay2DL },
 };
 
 void DebugDisplay_DrawObjects(PlayState* play) {
@@ -86,7 +87,7 @@ void DebugDisplay_DrawSpriteI8(DebugDispObject* dispObj, void* texture, PlayStat
 
 Lights1 sDebugDisplayLight1 = gdSPDefLights1(128, 128, 128, 255, 255, 255, 73, 73, 73);
 
-void DebugDisplay_DrawPolygon(DebugDispObject* dispObj, void* arg1, PlayState* play) {
+void DebugDisplay_DrawPolygon(DebugDispObject* dispObj, void* dList, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     func_8012C588(play->state.gfxCtx);
@@ -99,7 +100,7 @@ void DebugDisplay_DrawPolygon(DebugDispObject* dispObj, void* arg1, PlayState* p
     Matrix_Scale(dispObj->scale.x, dispObj->scale.y, dispObj->scale.z, MTXMODE_APPLY);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-    gSPDisplayList(POLY_XLU_DISP++, arg1);
+    gSPDisplayList(POLY_XLU_DISP++, dList);
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
@@ -148,9 +149,9 @@ Gfx* DebugDisplay_PathDisplayList(GraphicsContext* gfxCtx, Path* path) {
     s32 segment; // of path ending at the current point, 1-indexed
 
     if (path != NULL) {
-        // count - 1 segments, 1 gSPVertex and 3 gSP2Triangles for each, plus a gSPEndDisplayList
-        gfx = GRAPH_ALLOC(gfxCtx, ALIGN16(((path->count - 1) * 4 + 1) * sizeof(Gfx)));
-        curVtx = GRAPH_ALLOC(gfxCtx, ALIGN16(path->count * 6 * sizeof(Vtx)));
+        // (count - 1) segments, 1 gSPVertex and 3 gSP2Triangles for each, plus a gSPEndDisplayList
+        gfx = GRAPH_ALLOC(gfxCtx, ((path->count - 1) * 4 + 1) * sizeof(Gfx));
+        curVtx = GRAPH_ALLOC(gfxCtx, path->count * 6 * sizeof(Vtx));
 
         gfxHead = gfx;
         curBaseVtx = curVtx;
@@ -202,7 +203,7 @@ Gfx* DebugDisplay_PathDisplayList(GraphicsContext* gfxCtx, Path* path) {
         gSPEndDisplayList(gfx++);
     } else {
         // No path, trivial displaylist
-        gfxHead = gfx = GRAPH_ALLOC(gfxCtx, ALIGN16(sizeof(Gfx)));
+        gfx = gfxHead = GRAPH_ALLOC(gfxCtx, sizeof(Gfx));
         gSPEndDisplayList(gfx++);
     }
     return gfxHead;

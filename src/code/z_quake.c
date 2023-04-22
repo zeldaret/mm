@@ -477,13 +477,13 @@ void Distortion_ClearType(s32 type) {
 /**
  * Checks that the bg surface is an underwater conveyor type and if so, returns the conveyor speed
  */
-s32 Distortion_GetUnderwaterCurrentSpeed(Player* player) {
+ConveyorSpeed Distortion_GetUnderwaterCurrentSpeed(Player* player) {
     if (!SurfaceType_IsFloorConveyor(&sDistortionRequest.play->colCtx, player->actor.floorPoly,
                                      player->actor.floorBgId)) {
         return SurfaceType_GetConveyorSpeed(&sDistortionRequest.play->colCtx, player->actor.floorPoly,
                                             player->actor.floorBgId);
     }
-    return 0;
+    return CONVEYOR_SPEED_DISABLED;
 }
 
 void Distortion_Update(void) {
@@ -668,7 +668,7 @@ void Distortion_Update(void) {
             zScaleFactor = 1.0f;
             xyScaleFactor = 1.0f;
             speedScaleFactor = 1.0f;
-        } else if (sDistortionRequest.type & DISTORTION_TYPE_4) {
+        } else if (sDistortionRequest.type & DISTORTION_TYPE_UNDERWATER_ENTRY) {
             if (sDistortionRequest.state == DISTORTION_SETUP) {
                 countdownMax = sDistortionRequest.countdown;
                 depthPhase = 0x760;
@@ -690,7 +690,7 @@ void Distortion_Update(void) {
             countdownRatio = sDistortionRequest.countdown / (f32)countdownMax;
             zScaleFactor = xyScaleFactor = countdownRatio;
             speedScaleFactor = 1.0f;
-        } else if (sDistortionRequest.type & DISTORTION_TYPE_3) {
+        } else if (sDistortionRequest.type & DISTORTION_TYPE_ZORA_SWIMMING) {
             depthPhase = 0x3F0;
             screenPlanePhase = 0x156;
 
@@ -709,21 +709,21 @@ void Distortion_Update(void) {
             rotZ = 0.3f;
 
             switch (Distortion_GetUnderwaterCurrentSpeed(player)) {
-                case 3:
+                case CONVEYOR_SPEED_FAST:
                     xScale = -0.06f;
                     yScale = 0.1f;
                     zScale = 0.03f;
                     speed = 0.33f;
                     break;
 
-                case 2:
+                case CONVEYOR_SPEED_MEDIUM:
                     xScale = -0.06f;
                     yScale = 0.1f;
                     zScale = 0.03f;
                     speed = 0.33f;
                     break;
 
-                case 1:
+                case CONVEYOR_SPEED_SLOW:
                     xScale = -0.06f;
                     yScale = 0.1f;
                     zScale = 0.03f;
@@ -738,14 +738,14 @@ void Distortion_Update(void) {
                     break;
             }
 
-            if (player->unk_B88 < 0) {
-                xyScaleFactor = (player->unk_B88 - (f32)0x4000) / (f32)0xC000;
+            if (player->unk_B86[1] < 0) {
+                xyScaleFactor = (player->unk_B86[1] - (f32)0x4000) / (f32)0xC000;
             } else {
-                xyScaleFactor = (player->unk_B88 + (f32)0x4000) / (f32)0xC000;
+                xyScaleFactor = (player->unk_B86[1] + (f32)0x4000) / (f32)0xC000;
             }
             zScaleFactor = -xyScaleFactor;
             speedScaleFactor = 1.0f;
-        } else if (sDistortionRequest.type & DISTORTION_TYPE_2) {
+        } else if (sDistortionRequest.type & DISTORTION_TYPE_NON_ZORA_SWIMMING) {
             depthPhase = 0x3F0;
             screenPlanePhase = 0x156;
 
@@ -759,21 +759,21 @@ void Distortion_Update(void) {
             rotY = 0.0f;
             rotZ = 0.0f;
             switch (Distortion_GetUnderwaterCurrentSpeed(player)) {
-                case 3:
+                case CONVEYOR_SPEED_FAST:
                     xScale = 0.12f;
                     yScale = 0.12f;
                     zScale = 0.08f;
                     speed = 0.18f;
                     break;
 
-                case 2:
+                case CONVEYOR_SPEED_MEDIUM:
                     xScale = 0.12f;
                     yScale = 0.12f;
                     zScale = 0.08f;
                     speed = 0.12f;
                     break;
 
-                case 1:
+                case CONVEYOR_SPEED_SLOW:
                     xScale = 0.12f;
                     yScale = 0.12f;
                     zScale = 0.08f;
@@ -825,9 +825,9 @@ void Distortion_Update(void) {
         screenPlanePhase += CAM_DEG_TO_BINANG(screenPlanePhaseStep);
 
         View_SetDistortionOrientation(&sDistortionRequest.play->view,
-                                      Math_CosS(depthPhase) * (DEGF_TO_RADF(rotX) * xyScaleFactor),
-                                      Math_SinS(depthPhase) * (DEGF_TO_RADF(rotY) * xyScaleFactor),
-                                      Math_SinS(screenPlanePhase) * (DEGF_TO_RADF(rotZ) * zScaleFactor));
+                                      Math_CosS(depthPhase) * (DEG_TO_RAD(rotX) * xyScaleFactor),
+                                      Math_SinS(depthPhase) * (DEG_TO_RAD(rotY) * xyScaleFactor),
+                                      Math_SinS(screenPlanePhase) * (DEG_TO_RAD(rotZ) * zScaleFactor));
         View_SetDistortionScale(&sDistortionRequest.play->view,
                                 (Math_SinS(screenPlanePhase) * (xScale * xyScaleFactor)) + 1.0f,
                                 (Math_CosS(screenPlanePhase) * (yScale * xyScaleFactor)) + 1.0f,

@@ -206,7 +206,7 @@ void EnBigpo_Init(Actor* thisx, PlayState* play2) {
     }
 
     ActorShape_Init(&thisx->shape, 0.0f, ActorShadow_DrawCircle, 45.0f);
-    thisx->bgCheckFlags |= 0x400;
+    thisx->bgCheckFlags |= BGCHECKFLAG_PLAYER_400;
     this->savedHeight = thisx->home.pos.y + 100.0f;
     this->mainColor.r = 255;
     this->mainColor.g = 255;
@@ -259,7 +259,7 @@ void EnBigpo_UpdateSpin(EnBigpo* this) {
 
     this->actor.shape.rot.y += this->rotVelocity;
     if ((oldYaw < 0) && (this->actor.shape.rot.y > 0)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PO_ROLL); // spinning sfx during spin attack
+        Actor_PlaySfx(&this->actor, NA_SE_EN_PO_ROLL); // spinning sfx during spin attack
     }
 }
 
@@ -293,22 +293,22 @@ void EnBigpo_WellWaitForProximity(EnBigpo* this, PlayState* play) {
 }
 
 void EnBigpo_SetupSpawnCutscene(EnBigpo* this) {
-    ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+    CutsceneManager_Queue(this->actor.csId);
     this->actionFunc = EnBigpo_WaitCutsceneQueue;
 }
 
 void EnBigpo_WaitCutsceneQueue(EnBigpo* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
-        ActorCutscene_Start(this->actor.cutscene, &this->actor);
-        func_800B724C(play, &this->actor, 7);
-        this->subCamId = ActorCutscene_GetCurrentSubCamId(this->actor.cutscene);
+    if (CutsceneManager_IsNext(this->actor.csId)) {
+        CutsceneManager_Start(this->actor.csId, &this->actor);
+        func_800B724C(play, &this->actor, PLAYER_CSMODE_WAIT);
+        this->subCamId = CutsceneManager_GetCurrentSubCamId(this->actor.csId);
         if (this->actor.params == ENBIGPO_REGULAR) { // and SUMMONED, got switched earlier
             EnBigpo_SpawnCutsceneStage1(this, play);
         } else { // ENBIGPO_REVEALEDFIRE
             EnBigpo_SetupFlameCirclePositions(this, play);
         }
     } else {
-        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+        CutsceneManager_Queue(this->actor.csId);
     }
 }
 
@@ -395,7 +395,7 @@ void EnBigpo_SpawnCutsceneStage5(EnBigpo* this) {
     Animation_PlayLoop(&this->skelAnime, &gBigpoAwakenStretchAnim);
     this->actor.draw = EnBigpo_DrawMainBigpo;
     Actor_SetScale(&this->actor, 0.014f);
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_APPEAR);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_STALKIDS_APPEAR);
     this->actionFunc = EnBigpo_SpawnCutsceneStage6;
 }
 
@@ -464,14 +464,14 @@ void EnBigpo_SpawnCutsceneStage8(EnBigpo* this, PlayState* play) {
             dampe = SubS_FindActor(play, NULL, ACTORCAT_NPC, ACTOR_EN_TK);
             if (dampe != NULL) {
                 // if dampe exists, switch to viewing his running away cutscene
-                dampe->params = this->actor.cutscene;
+                dampe->params = this->actor.csId;
             } else {
-                ActorCutscene_Stop(this->actor.cutscene);
+                CutsceneManager_Stop(this->actor.csId);
             }
         } else { // ENBIGPO_REGULAR
-            ActorCutscene_Stop(this->actor.cutscene);
+            CutsceneManager_Stop(this->actor.csId);
         }
-        func_800B724C(play, &this->actor, 6);
+        func_800B724C(play, &this->actor, PLAYER_CSMODE_END);
         EnBigpo_SetupIdleFlying(this); // setup idle flying
     }
 }
@@ -482,8 +482,8 @@ void EnBigpo_SetupWarpOut(EnBigpo* this) {
     this->rotVelocity = 0x2000;
     this->idleTimer = 32;
     this->actor.flags &= ~ACTOR_FLAG_1; // targetable OFF
-    this->actor.speedXZ = 0.0f;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PO_DISAPPEAR);
+    this->actor.speed = 0.0f;
+    Actor_PlaySfx(&this->actor, NA_SE_EN_PO_DISAPPEAR);
     this->actionFunc = EnBigpo_WarpingOut;
 }
 
@@ -505,7 +505,7 @@ void EnBigpo_SetupWarpIn(EnBigpo* this, PlayState* play) {
     f32 distance = CLAMP_MIN(this->actor.xzDistToPlayer, 200.0f);
     s16 randomYaw = ((s32)Rand_Next() >> 0x14) + this->actor.yawTowardsPlayer;
 
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_APPEAR);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_STALKIDS_APPEAR);
     Animation_PlayLoop(&this->skelAnime, &gBigpoAwakenStretchAnim);
     this->rotVelocity = 0x2000;
     this->actor.world.pos.x = (Math_SinS(randomYaw) * distance) + player->actor.world.pos.x;
@@ -556,10 +556,10 @@ void EnBigpo_IdleFlying(EnBigpo* this, PlayState* play) {
     this->hoverHeightCycleTimer = (this->hoverHeightCycleTimer == 0) ? 40 : (this->hoverHeightCycleTimer - 1);
     Math_StepToF(&this->savedHeight, player->actor.world.pos.y + 100.0f, 1.5f);
     this->actor.world.pos.y = (sin_rad(this->hoverHeightCycleTimer * (M_PI / 20)) * 10.0f) + this->savedHeight;
-    Math_StepToF(&this->actor.speedXZ, 3.0f, 0.2f);
+    Math_StepToF(&this->actor.speed, 3.0f, 0.2f);
     func_800B9010(&this->actor, NA_SE_EN_PO_FLY - SFX_FLAG);
-    if (Actor_XZDistanceToPoint(&this->actor, &this->actor.home.pos) > 300.0f) {
-        this->unk208 = Actor_YawToPoint(&this->actor, &this->actor.home.pos);
+    if (Actor_WorldDistXZToPoint(&this->actor, &this->actor.home.pos) > 300.0f) {
+        this->unk208 = Actor_WorldYawTowardPoint(&this->actor, &this->actor.home.pos);
     }
 
     if (Math_ScaledStepToS(&this->actor.shape.rot.y, this->unk208, 0x200) && (Rand_ZeroOne() < 0.075f)) {
@@ -580,7 +580,7 @@ void EnBigpo_SetupSpinUp(EnBigpo* this) {
     this->collider.base.atFlags |= AT_ON;
     this->rotVelocity = 0x800;
     this->actionFunc = EnBigpo_SpinningUp;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
 }
 
 void EnBigpo_SpinningUp(EnBigpo* this, PlayState* play) {
@@ -603,7 +603,7 @@ void EnBigpo_SpinAttack(EnBigpo* this, PlayState* play) {
     s16 yawDiff;
 
     SkelAnime_Update(&this->skelAnime);
-    Math_StepToF(&this->actor.speedXZ, 10.0f, 1.0f);
+    Math_StepToF(&this->actor.speed, 10.0f, 1.0f);
     Math_SmoothStepToF(&this->actor.world.pos.y, player->actor.world.pos.y, 0.3f, 7.5f, 1.0f);
     EnBigpo_UpdateSpin(this);
     yawDiff = this->actor.yawTowardsPlayer - this->actor.world.rot.y;
@@ -628,7 +628,7 @@ void EnBigpo_SpinningDown(EnBigpo* this, PlayState* play) {
 
     SkelAnime_Update(&this->skelAnime);
     Math_SmoothStepToF(&this->actor.world.pos.y, player->actor.world.pos.y + 100.0f, 0.3f, 5.0f, 1.0f);
-    Math_StepToF(&this->actor.speedXZ, 0.0f, 0.2f);
+    Math_StepToF(&this->actor.speed, 0.0f, 0.2f);
     if (Math_ScaledStepToS(&this->rotVelocity, 0, 0x200)) {
         // spin down complete, re-allow hittable
         this->collider.base.colType = COLTYPE_HIT3;
@@ -645,18 +645,18 @@ void EnBigpo_SpinningDown(EnBigpo* this, PlayState* play) {
  */
 void EnBigpo_HitStun(EnBigpo* this) {
     Animation_MorphToPlayOnce(&this->skelAnime, &gBigpoShockAnim, -6.0f);
-    Actor_SetColorFilter(&this->actor, 0x4000, 0xFF, 0, 0x10);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 16);
     this->collider.base.acFlags &= ~AC_ON;
     func_800BE504(&this->actor, &this->collider);
     this->actionFunc = EnBigpo_CheckHealth;
-    this->actor.speedXZ = 5.0f;
+    this->actor.speed = 5.0f;
 }
 
 /*
  * check if just damaged or dead
  */
 void EnBigpo_CheckHealth(EnBigpo* this, PlayState* play) {
-    Math_StepToF(&this->actor.speedXZ, 0.0f, 0.5f);
+    Math_StepToF(&this->actor.speed, 0.0f, 0.5f);
     if (SkelAnime_Update(&this->skelAnime)) {
         if (this->actor.colChkInfo.health == 0) {
             EnBigpo_SetupDeath(this);
@@ -668,7 +668,7 @@ void EnBigpo_CheckHealth(EnBigpo* this, PlayState* play) {
 
 void EnBigpo_SetupDeath(EnBigpo* this) {
     this->idleTimer = 0;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->actor.hintId = TATL_HINT_ID_NONE;
     this->collider.base.ocFlags1 &= ~OC1_ON;
@@ -725,7 +725,7 @@ void EnBigpo_BurnAwayDeath(EnBigpo* this, PlayState* play) {
         func_800B9010(&this->actor, NA_SE_EN_COMMON_EXTINCT_LEV - SFX_FLAG); // burning sfx
     }
     if (this->idleTimer == 18) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_WIZ_DISAPPEAR);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_WIZ_DISAPPEAR);
     }
 }
 
@@ -744,12 +744,12 @@ void EnBigpo_SetupLanternDrop(EnBigpo* this, PlayState* play) {
     this->actor.world.pos.y -= 15.0f;
     func_800BC154(play, &play->actorCtx, &this->actor, ACTORCAT_MISC);
     this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_4); // targetable OFF, enemy music OFF
-    this->actor.bgCheckFlags &= ~0x400;
+    this->actor.bgCheckFlags &= ~BGCHECKFLAG_PLAYER_400;
     this->actionFunc = EnBigpo_LanternFalling;
 }
 
 void EnBigpo_LanternFalling(EnBigpo* this, PlayState* play) {
-    if (this->actor.bgCheckFlags & 1 || this->actor.floorHeight == BGCHECK_Y_MIN) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND || this->actor.floorHeight == BGCHECK_Y_MIN) {
         if (this->switchFlags != 0xFF) {
             Flags_SetSwitch(play, this->switchFlags);
         }
@@ -795,7 +795,7 @@ void EnBigpo_SpawnScoopSoul(EnBigpo* this) {
     this->actor.scale.x = 0.0f;
     this->actor.scale.y = 0.0f;
     this->savedHeight = this->actor.world.pos.y;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_METAL_BOX_BOUND); // misnamed?
+    Actor_PlaySfx(&this->actor, NA_SE_EV_METAL_BOX_BOUND); // misnamed?
     this->actionFunc = EnBigpo_ScoopSoulAppearing;
 }
 
@@ -824,10 +824,10 @@ void EnBigpo_ScoopSoulIdle(EnBigpo* this, PlayState* play) {
 
     if (this->idleTimer == 0) {
         // took too long, soul is leaving
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PO_LAUGH);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_PO_LAUGH);
         EnBigpo_SetupScoopSoulLeaving(this);
     } else {
-        Actor_PickUp(&this->actor, play, GI_MAX, 35.0f, 60.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_MAX, 35.0f, 60.0f);
         this->actor.world.pos.y = (sin_rad(this->idleTimer * (M_PI / 20)) * 5.0f) + this->savedHeight;
     }
 }
@@ -1123,13 +1123,13 @@ s32 EnBigpo_ApplyDamage(EnBigpo* this, PlayState* play) {
 
         if (Actor_ApplyDamage(&this->actor) == 0) {
             this->actor.flags &= ~ACTOR_FLAG_1; // targetable OFF
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PO_DEAD);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_PO_DEAD);
             Enemy_StartFinishingBlow(play, &this->actor);
             if (this->actor.params == ENBIGPO_SUMMONED) { // dampe type
                 Audio_RestorePrevBgm();
             }
         } else {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PO_DAMAGE);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_PO_DAMAGE);
         }
 
         // light arrows
@@ -1164,7 +1164,7 @@ void EnBigpo_Update(Actor* thisx, PlayState* play) {
             this->unk20C = 0;
         }
         if (this->unk20C == 40) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PO_LAUGH);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_PO_LAUGH);
             EnBigpo_SetupWarpOut(this);
         }
     }
@@ -1174,7 +1174,7 @@ void EnBigpo_Update(Actor* thisx, PlayState* play) {
         Actor_MoveWithGravity(&this->actor);
     }
     if (this->actionFunc == EnBigpo_LanternFalling) {
-        Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 27.0f, 60.0f, 4);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 27.0f, 60.0f, UPDBGCHECKINFO_FLAG_4);
     }
 
     if (this->actor.draw == EnBigpo_DrawScoopSoul) {

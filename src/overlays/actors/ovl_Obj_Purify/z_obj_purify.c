@@ -109,14 +109,11 @@ s32 ObjPurify_IsPurified(ObjPurify* this) {
     ObjPurifyInfo* info = &sObjPurifyInfo[OBJPURIFY_GET_INFO_INDEX(&this->dyna.actor)];
 
     if (!info->isDekuCity) {
-        // woodfall temple wood flower unraveled
-        if (gSaveContext.save.weekEventReg[12] & 1) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_12_01)) {
             return true;
         }
-    }
-    // woodfall temple purification cutscene watched
-    else {
-        if (gSaveContext.save.weekEventReg[20] & 2) {
+    } else {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_WOODFALL_TEMPLE)) {
             return true;
         }
     }

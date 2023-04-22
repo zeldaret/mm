@@ -8,7 +8,7 @@
 #include "objects/gameplay_dangeon_keep/gameplay_dangeon_keep.h"
 #include "objects/object_kibako/object_kibako.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_4000000)
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_CAN_PRESS_SWITCH)
 
 #define THIS ((ObjKibako*)thisx)
 
@@ -121,7 +121,7 @@ void func_80926318(ObjKibako* this, PlayState* play) {
     if (this->actor.xzDistToPlayer < 100.0f) {
         angle = this->actor.yawTowardsPlayer - GET_PLAYER(play)->actor.world.rot.y;
         if (ABS_ALT(angle) > 0x5555) {
-            Actor_PickUp(&this->actor, play, GI_NONE, 36.0f, 30.0f);
+            Actor_OfferGetItem(&this->actor, play, GI_NONE, 36.0f, 30.0f);
         }
     }
 }
@@ -252,7 +252,8 @@ void func_80926B40(ObjKibako* this) {
 
 void func_80926B54(ObjKibako* this, PlayState* play) {
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 18.0f, 15.0f, 0.0f, 0x45);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 18.0f, 15.0f, 0.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_40);
     if (Object_IsLoaded(&play->objectCtx, this->bankIndex)) {
         this->actor.draw = ObjKibako_Draw;
         this->actor.objBankIndex = this->bankIndex;
@@ -278,8 +279,8 @@ void ObjKibako_Idle(ObjKibako* this, PlayState* play) {
 
         //! @bug: This function should only pass Player*: it uses *(this + 0x153), which is meant to be
         //! player->currentMask, but in this case is garbage in the collider
-        func_800B8E58((Player*)this, NA_SE_PL_PULL_UP_WOODBOX);
-    } else if ((this->actor.bgCheckFlags & 0x20) && (this->actor.depthInWater > 19.0f)) {
+        Player_PlaySfx((Player*)&this->actor, NA_SE_PL_PULL_UP_WOODBOX);
+    } else if ((this->actor.bgCheckFlags & BGCHECKFLAG_WATER) && (this->actor.depthInWater > 19.0f)) {
         ObjKibako_WaterBreak(this, play);
         ObjKibako_SpawnCollectible(this, play);
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 20, NA_SE_EV_WOODBOX_BREAK);
@@ -293,7 +294,8 @@ void ObjKibako_Idle(ObjKibako* this, PlayState* play) {
     } else {
         Actor_MoveWithGravity(&this->actor);
         func_809262BC(this);
-        Actor_UpdateBgCheckInfo(play, &this->actor, 18.0f, 15.0f, 0.0f, 0x45);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 18.0f, 15.0f, 0.0f,
+                                UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_40);
 
         if (!(this->collider.base.ocFlags1 & OC1_TYPE_PLAYER) && (this->actor.xzDistToPlayer > 28.0f)) {
             this->collider.base.ocFlags1 |= OC1_TYPE_PLAYER;
@@ -340,16 +342,17 @@ void ObjKibako_Held(ObjKibako* this, PlayState* play) {
     func_80926394(this, play);
     if (Actor_HasNoParent(&this->actor, play)) {
         this->actor.room = play->roomCtx.curRoom.num;
-        if (fabsf(this->actor.speedXZ) < 0.1f) {
+        if (fabsf(this->actor.speed) < 0.1f) {
             ObjKibako_SetupIdle(this);
             this->collider.base.ocFlags1 &= ~OC1_TYPE_PLAYER;
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_PUT_DOWN_WOODBOX);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_PUT_DOWN_WOODBOX);
         } else {
             Actor_MoveWithGravity(&this->actor);
             ObjKibako_SetupThrown(this);
-            this->actor.flags &= ~ACTOR_FLAG_4000000;
+            this->actor.flags &= ~ACTOR_FLAG_CAN_PRESS_SWITCH;
         }
-        Actor_UpdateBgCheckInfo(play, &this->actor, 18.0f, 15.0f, 0.0f, 0x45);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 18.0f, 15.0f, 0.0f,
+                                UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_40);
     } else {
         pos.x = this->actor.world.pos.x;
         pos.y = this->actor.world.pos.y + 20.0f;
@@ -384,13 +387,14 @@ void ObjKibako_Thrown(ObjKibako* this, PlayState* play) {
     if (this->timer > 0) {
         this->timer--;
     }
-    if ((this->actor.bgCheckFlags & 0xB) || (atHit) || (this->timer <= 0)) {
+    if ((this->actor.bgCheckFlags & (BGCHECKFLAG_GROUND | BGCHECKFLAG_GROUND_TOUCH | BGCHECKFLAG_WALL)) || atHit ||
+        (this->timer <= 0)) {
         ObjKibako_AirBreak(this, play);
         ObjKibako_SpawnCollectible(this, play);
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 20, NA_SE_EV_WOODBOX_BREAK);
         Actor_Kill(&this->actor);
     } else {
-        if (this->actor.bgCheckFlags & 0x40) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_WATER_TOUCH) {
             ObjKibako_WaterBreak(this, play);
             ObjKibako_SpawnCollectible(this, play);
             SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 20, NA_SE_EV_WOODBOX_BREAK);
@@ -405,7 +409,8 @@ void ObjKibako_Thrown(ObjKibako* this, PlayState* play) {
             Math_StepToS(&D_8092738C, D_80927388, 0xA0);
             this->actor.shape.rot.x = (s16)(this->actor.shape.rot.x + D_80927384);
             this->actor.shape.rot.y = (s16)(this->actor.shape.rot.y + D_8092738C);
-            Actor_UpdateBgCheckInfo(play, &this->actor, 18.0f, 15.0f, 0.0f, 0x45);
+            Actor_UpdateBgCheckInfo(play, &this->actor, 18.0f, 15.0f, 0.0f,
+                                    UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_40);
             Collider_UpdateCylinder(&this->actor, &this->collider);
             CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
             CollisionCheck_SetAT(play, &play->colChkCtx, &this->collider.base);

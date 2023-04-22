@@ -6,7 +6,7 @@
 
 #include "z_en_encount4.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_8000000)
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_CANT_LOCK_ON)
 
 #define THIS ((EnEncount4*)thisx)
 
@@ -152,7 +152,7 @@ void func_809C42A8(EnEncount4* this, PlayState* play) {
         this->actionFunc = func_809C464C;
 
         return;
-    } else if ((gSaveContext.save.weekEventReg[85] & 0x40) || (this->unk_14C >= 2) ||
+    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_85_40) || (this->unk_14C >= 2) ||
                (this->actor.xzDistToPlayer > 240.0f)) {
         return;
     }

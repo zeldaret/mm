@@ -37,7 +37,7 @@ void DmChar06_SetupAction(DmChar06* this, DmChar06ActionFunc actionFunc) {
 void DmChar06_Init(Actor* thisx, PlayState* play) {
     DmChar06* this = THIS;
 
-    gSaveContext.save.weekEventReg[33] |= 0x80;
+    SET_WEEKEVENTREG(WEEKEVENTREG_CLEARED_SNOWHEAD_TEMPLE);
     Actor_SetScale(&this->actor, 1.0f);
     this->alpha = 255;
     DmChar06_SetupAction(this, func_80AAE6F0);
@@ -47,17 +47,17 @@ void DmChar06_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void func_80AAE6F0(DmChar06* this, PlayState* play) {
-    if (Cutscene_CheckActorAction(play, 0x1CF)) {
-        s32 actionIndex = Cutscene_GetActorActionIndex(play, 0x1CF);
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_463)) {
+        s32 cueChannel = Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_463);
 
-        if ((play->csCtx.frames >= play->csCtx.actorActions[actionIndex]->startFrame) &&
-            (play->csCtx.actorActions[actionIndex]->endFrame >= play->csCtx.frames)) {
-            if (play->csCtx.actorActions[actionIndex]->action == 1) {
+        if ((play->csCtx.curFrame >= play->csCtx.actorCues[cueChannel]->startFrame) &&
+            (play->csCtx.actorCues[cueChannel]->endFrame >= play->csCtx.curFrame)) {
+            if (play->csCtx.actorCues[cueChannel]->id == 1) {
                 this->alpha = 255;
-            } else if (play->csCtx.actorActions[actionIndex]->action == 2) {
-                f32 lerp = 1.0f - Environment_LerpWeight(play->csCtx.actorActions[actionIndex]->endFrame,
-                                                         play->csCtx.actorActions[actionIndex]->startFrame,
-                                                         play->csCtx.frames);
+            } else if (play->csCtx.actorCues[cueChannel]->id == 2) {
+                f32 lerp =
+                    1.0f - Environment_LerpWeight(play->csCtx.actorCues[cueChannel]->endFrame,
+                                                  play->csCtx.actorCues[cueChannel]->startFrame, play->csCtx.curFrame);
                 this->alpha = 255 * lerp;
             }
         }

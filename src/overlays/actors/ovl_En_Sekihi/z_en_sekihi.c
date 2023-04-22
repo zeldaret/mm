@@ -54,14 +54,17 @@ void EnSekihi_Init(Actor* thisx, PlayState* play) {
     s32 objectIndex;
     s32 pad;
 
-    if (((params < SEKIHI_TYPE_0) || (params >= SEKIHI_TYPE_MAX)) || sOpaDLists[params] == NULL) {
+    if ((params < SEKIHI_TYPE_0 || params >= SEKIHI_TYPE_MAX) || sOpaDLists[params] == NULL) {
         Actor_Kill(&this->dyna.actor);
         return;
     }
 
-    if ((params == SEKIHI_TYPE_4) && ((gSaveContext.save.skullTokenCount & 0xFFFF) >= 30)) {
-        gSaveContext.save.weekEventReg[13] |= 0x20;
+    if ((params == SEKIHI_TYPE_4) &&
+        ((gSaveContext.save.saveInfo.skullTokenCount & 0xFFFF) >= SPIDER_HOUSE_TOKENS_REQUIRED)) {
+        // For some reason the mikau grave sets the flag instead of something in the spider house on exit.
+        SET_WEEKEVENTREG(WEEKEVENTREG_OCEANSIDE_SPIDER_HOUSE_BUYER_MOVED_IN);
     }
+
     objectIndex = Object_GetIndex(&play->objectCtx, sObjectIds[params]);
     if (objectIndex >= 0) {
         this->objectIndex = objectIndex;
@@ -117,15 +120,15 @@ void func_80A44F40(EnSekihi* this, PlayState* play) {
                 switch (play->msgCtx.choiceIndex) {
                     case 0:
                         func_8019F208();
-                        func_80151938(play, 0x101A);
+                        Message_ContinueTextbox(play, 0x101A);
                         break;
                     case 1:
                         func_8019F208();
-                        func_80151938(play, 0x101B);
+                        Message_ContinueTextbox(play, 0x101B);
                         break;
                     case 2:
                         func_8019F230();
-                        func_801477B4(play);
+                        Message_CloseTextbox(play);
                         this->actionFunc = func_80A450B0;
                         break;
                 }
@@ -137,11 +140,11 @@ void func_80A44F40(EnSekihi* this, PlayState* play) {
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
                     case 0x1018:
-                        func_80151938(play, play->msgCtx.currentTextId + 1);
+                        Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                         break;
                     case 0x101A:
                     case 0x101B:
-                        func_801477B4(play);
+                        Message_CloseTextbox(play);
                         this->actionFunc = func_80A450B0;
                         break;
                 }

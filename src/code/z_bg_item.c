@@ -1,18 +1,15 @@
 #include "global.h"
 
-#define DYNAPOLY_STATE_NONE 0
-#define DYNAPOLY_STATE_RIDING_FALLING (1 << 0)
-#define DYNAPOLY_STATE_RIDING_MOVING (1 << 1)
-#define DYNAPOLY_STATE_RIDING_ROTATING (1 << 2)
-#define DYNAPOLY_STATE_SWITCH_PRESSED (1 << 3)
-#define DYNAPOLY_STATE_HEAVY_SWITCH_PRESSED (1 << 4)
-
-void DynaPolyActor_Init(DynaPolyActor* dynaActor, s32 flags) {
+/**
+ * @param transformFlags How other actors standing on the dynapoly actor's collision move when the dynapoly actor moves.
+ *   See `DYNA_TRANSFORM_POS`, `DYNA_TRANSFORM_ROT_Y`.
+ */
+void DynaPolyActor_Init(DynaPolyActor* dynaActor, s32 transformFlags) {
     dynaActor->bgId = -1;
     dynaActor->pushForce = 0.0f;
     dynaActor->unk14C = 0.0f;
-    dynaActor->flags = flags;
-    dynaActor->stateFlags = DYNAPOLY_STATE_NONE;
+    dynaActor->transformFlags = transformFlags;
+    dynaActor->interactFlags = 0;
 }
 
 void DynaPolyActor_LoadMesh(PlayState* play, DynaPolyActor* dynaActor, CollisionHeader* meshHeader) {
@@ -22,80 +19,80 @@ void DynaPolyActor_LoadMesh(PlayState* play, DynaPolyActor* dynaActor, Collision
     dynaActor->bgId = DynaPoly_SetBgActor(play, &play->colCtx.dyna, &dynaActor->actor, header);
 }
 
-void DynaPolyActor_ResetState(DynaPolyActor* dynaActor) {
-    dynaActor->stateFlags = DYNAPOLY_STATE_NONE;
+void DynaPolyActor_UnsetAllInteractFlags(DynaPolyActor* dynaActor) {
+    dynaActor->interactFlags = 0;
 }
 
-void DynaPolyActor_SetRidingFallingState(DynaPolyActor* dynaActor) {
-    dynaActor->stateFlags |= DYNAPOLY_STATE_RIDING_FALLING;
+void DynaPolyActor_SetActorOnTop(DynaPolyActor* dynaActor) {
+    dynaActor->interactFlags |= DYNA_INTERACT_ACTOR_ON_TOP;
 }
 
-void DynaPolyActor_SetRidingMovingState(DynaPolyActor* dynaActor) {
-    dynaActor->stateFlags |= DYNAPOLY_STATE_RIDING_MOVING;
+void DynaPolyActor_SetPlayerOnTop(DynaPolyActor* dynaActor) {
+    dynaActor->interactFlags |= DYNA_INTERACT_PLAYER_ON_TOP;
 }
 
-void DynaPolyActor_SetRidingMovingStateByIndex(CollisionContext* colCtx, s32 bgId) {
+void DynaPoly_SetPlayerOnTop(CollisionContext* colCtx, s32 bgId) {
     DynaPolyActor* dynaActor = DynaPoly_GetActor(colCtx, bgId);
 
     if (dynaActor != NULL) {
-        DynaPolyActor_SetRidingMovingState(dynaActor);
+        DynaPolyActor_SetPlayerOnTop(dynaActor);
     }
 }
 
-void DynaPolyActor_SetRidingRotatingState(DynaPolyActor* dynaActor) {
-    dynaActor->stateFlags |= DYNAPOLY_STATE_RIDING_ROTATING;
+void DynaPolyActor_SetPlayerAbove(DynaPolyActor* dynaActor) {
+    dynaActor->interactFlags |= DYNA_INTERACT_PLAYER_ABOVE;
 }
 
-void DynaPolyActor_SetRidingRotatingStateByIndex(CollisionContext* colCtx, s32 bgId) {
+void DynaPoly_SetPlayerAbove(CollisionContext* colCtx, s32 bgId) {
     DynaPolyActor* dynaActor = DynaPoly_GetActor(colCtx, bgId);
 
     if (dynaActor != NULL) {
-        DynaPolyActor_SetRidingRotatingState(dynaActor);
+        DynaPolyActor_SetPlayerAbove(dynaActor);
     }
 }
 
-void DynaPolyActor_SetSwitchPressedState(DynaPolyActor* dynaActor) {
-    dynaActor->stateFlags |= DYNAPOLY_STATE_SWITCH_PRESSED;
+void DynaPolyActor_SetActorOnSwitch(DynaPolyActor* dynaActor) {
+    dynaActor->interactFlags |= DYNA_INTERACT_ACTOR_ON_SWITCH;
 }
 
-void DynaPolyActor_SetHeavySwitchPressedState(DynaPolyActor* dynaActor) {
-    dynaActor->stateFlags |= DYNAPOLY_STATE_HEAVY_SWITCH_PRESSED;
+void DynaPolyActor_SetActorOnHeavySwitch(DynaPolyActor* dynaActor) {
+    dynaActor->interactFlags |= DYNA_INTERACT_ACTOR_ON_HEAVY_SWITCH;
 }
 
-s32 DynaPolyActor_IsInRidingFallingState(DynaPolyActor* dynaActor) {
-    if (dynaActor->stateFlags & DYNAPOLY_STATE_RIDING_FALLING) {
+s32 DynaPolyActor_IsActorOnTop(DynaPolyActor* dynaActor) {
+    if (dynaActor->interactFlags & DYNA_INTERACT_ACTOR_ON_TOP) {
         return true;
     } else {
         return false;
     }
 }
 
-s32 DynaPolyActor_IsInRidingMovingState(DynaPolyActor* dynaActor) {
-    if (dynaActor->stateFlags & DYNAPOLY_STATE_RIDING_MOVING) {
+s32 DynaPolyActor_IsPlayerOnTop(DynaPolyActor* dynaActor) {
+    if (dynaActor->interactFlags & DYNA_INTERACT_PLAYER_ON_TOP) {
         return true;
     } else {
         return false;
     }
 }
 
-s32 DynaPolyActor_IsInRidingRotatingState(DynaPolyActor* dynaActor) {
-    if (dynaActor->stateFlags & DYNAPOLY_STATE_RIDING_ROTATING) {
+s32 DynaPolyActor_IsPlayerAbove(DynaPolyActor* dynaActor) {
+    if (dynaActor->interactFlags & DYNA_INTERACT_PLAYER_ABOVE) {
         return true;
     } else {
         return false;
     }
 }
 
-s32 DynaPolyActor_IsInSwitchPressedState(DynaPolyActor* dynaActor) {
-    if (dynaActor->stateFlags & DYNAPOLY_STATE_SWITCH_PRESSED) {
+s32 DynaPolyActor_IsSwitchPressed(DynaPolyActor* dynaActor) {
+    if (dynaActor->interactFlags & DYNA_INTERACT_ACTOR_ON_SWITCH) {
         return true;
     } else {
         return false;
     }
 }
 
-s32 DynaPolyActor_IsInHeavySwitchPressedState(DynaPolyActor* dynaActor) {
-    if (dynaActor->stateFlags & DYNAPOLY_STATE_HEAVY_SWITCH_PRESSED) {
+s32 DynaPolyActor_IsHeavySwitchPressed(DynaPolyActor* dynaActor) {
+    if (dynaActor->interactFlags & DYNA_INTERACT_ACTOR_ON_HEAVY_SWITCH) {
         return true;
     } else {
         return false;
@@ -129,13 +126,16 @@ s32 DynaPolyActor_ValidateMove(PlayState* play, DynaPolyActor* dynaActor, s16 st
                                 &bgId, &dynaActor->actor, 0.0f)) {
         return false;
     }
+
     startPos.x = (dynaActor->actor.world.pos.x * 2.0f) - startPos.x;
     startPos.z = (dynaActor->actor.world.pos.z * 2.0f) - startPos.z;
     endPos.x = sign * adjustedEndRadius * sin + startPos.x;
     endPos.z = sign * adjustedEndRadius * cos + startPos.z;
+
     if (BgCheck_EntityLineTest3(&play->colCtx, &startPos, &endPos, &intersectionPos, &poly, true, false, false, true,
                                 &bgId, &dynaActor->actor, 0.0f)) {
         return false;
     }
+
     return true;
 }

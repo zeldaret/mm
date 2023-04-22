@@ -149,8 +149,8 @@ void EnRecepgirl_Talk(EnRecepgirl* this, PlayState* play) {
             Flags_SetSwitch(play, this->actor.params);
             Animation_MorphToPlayOnce(&this->skelAnime, &object_bg_Anim_00AD98, 10.0f);
 
-            if (gSaveContext.save.weekEventReg[63] & 0x80) { // showed Couple's Mask to meeting
-                this->actor.textId = 0x2ADF;                 // Mayor's office is on the left (meeting ended)
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_63_80)) {
+                this->actor.textId = 0x2ADF; // Mayor's office is on the left (meeting ended)
             } else {
                 this->actor.textId = 0x2ADA; // Mayor's office is on the left (meeting ongoing)
             }
@@ -168,7 +168,7 @@ void EnRecepgirl_Talk(EnRecepgirl* this, PlayState* play) {
                 this->actor.textId = 0x2AE0; // drawing room on the right, don't go in without an appointment
             }
         }
-        func_80151938(play, this->actor.textId);
+        Message_ContinueTextbox(play, this->actor.textId);
     }
 }
 

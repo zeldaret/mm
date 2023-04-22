@@ -146,14 +146,14 @@ s32 func_808B736C(BgBreakwall* this, PlayState* play) {
 }
 
 s32 func_808B7380(BgBreakwall* this, PlayState* play) {
-    if ((gSaveContext.save.day >= 2) && !(gSaveContext.save.weekEventReg[22] & 1)) {
+    if ((gSaveContext.save.day >= 2) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01)) {
         return false;
     }
     return true;
 }
 
 s32 func_808B73C4(BgBreakwall* this, PlayState* play) {
-    return (gSaveContext.save.weekEventReg[33] & 0x80) || (gSaveContext.save.weekEventReg[21] & 1);
+    return CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_SNOWHEAD_TEMPLE) || CHECK_WEEKEVENTREG(WEEKEVENTREG_21_01);
 }
 
 s32 func_808B73FC(BgBreakwall* this, PlayState* play) {
@@ -176,14 +176,14 @@ s32 func_808B7460(BgBreakwall* this, PlayState* play) {
 }
 
 s32 func_808B74A8(BgBreakwall* this, PlayState* play) {
-    if (gSaveContext.save.weekEventReg[55] & 0x80) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_GREAT_BAY_TEMPLE)) {
         return false;
     }
     return true;
 }
 
 s32 func_808B74D8(BgBreakwall* this, PlayState* play) {
-    if (!(gSaveContext.save.weekEventReg[9] & 0x80) || (gSaveContext.save.weekEventReg[23] & 0x20)) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_09_80) || CHECK_WEEKEVENTREG(WEEKEVENTREG_23_20)) {
         return false;
     }
     return true;
@@ -285,7 +285,7 @@ void func_808B782C(BgBreakwall* this, PlayState* play) {
 }
 
 void func_808B78A4(BgBreakwall* this, PlayState* play) {
-    if (gSaveContext.save.weekEventReg[55] & 0x80) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_GREAT_BAY_TEMPLE)) {
         Actor_Kill(&this->dyna.actor);
     }
 }

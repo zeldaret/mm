@@ -188,7 +188,7 @@ void EnFz_Init(Actor* thisx, PlayState* play) {
     this->unk_BCE = 0;
     this->unk_BD7 = 1;
     this->unk_BD8 = 0;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actor.uncullZoneScale = 400.0f;
     this->unk_BAC = this->actor.world.pos.y;
     this->unk_BB4 = this->actor.world.pos.y;
@@ -359,12 +359,12 @@ void func_80932C98(EnFz* this, PlayState* play) {
     Vec3f sp3C;
 
     if (this->unk_BCD != 0) {
-        if ((this->actor.bgCheckFlags & 8) ||
+        if ((this->actor.bgCheckFlags & BGCHECKFLAG_WALL) ||
             !Actor_TestFloorInDirection(&this->actor, play, 60.0f, this->actor.world.rot.y)) {
-            this->actor.bgCheckFlags &= ~0x8;
+            this->actor.bgCheckFlags &= ~BGCHECKFLAG_WALL;
             this->unk_BCD = 0;
             this->unk_BBC = 0.0f;
-            this->actor.speedXZ = 0.0f;
+            this->actor.speed = 0.0f;
         }
     }
 
@@ -375,8 +375,8 @@ void func_80932C98(EnFz* this, PlayState* play) {
             if ((parent->update == NULL) || (parent->colChkInfo.health <= 0)) {
                 this->actor.colChkInfo.health = 0;
                 this->unk_BC4 = 5;
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_FREEZAD_DEAD);
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_ICE_BROKEN);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_FREEZAD_DEAD);
+                Actor_PlaySfx(&this->actor, NA_SE_EV_ICE_BROKEN);
                 sp3C.x = this->actor.world.pos.x;
                 sp3C.y = this->actor.world.pos.y;
                 sp3C.z = this->actor.world.pos.z;
@@ -388,8 +388,8 @@ void func_80932C98(EnFz* this, PlayState* play) {
             if ((this->actor.colChkInfo.health != 0) && (this->unk_BC4 == 1)) {
                 this->actor.colChkInfo.health = 0;
                 this->unk_BC4 = 5;
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_FREEZAD_DEAD);
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_ICE_BROKEN);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_FREEZAD_DEAD);
+                Actor_PlaySfx(&this->actor, NA_SE_EV_ICE_BROKEN);
                 sp3C.x = this->actor.world.pos.x;
                 sp3C.y = this->actor.world.pos.y;
                 sp3C.z = this->actor.world.pos.z;
@@ -405,7 +405,7 @@ void func_80932C98(EnFz* this, PlayState* play) {
             this->unk_BCD = 0;
             this->unk_BBC = 0.0f;
             this->collider1.base.acFlags &= ~AC_HIT;
-            this->actor.speedXZ = 0.0f;
+            this->actor.speed = 0.0f;
             this->unk_BCA = 10;
             func_809330D4(this);
         } else if (this->collider2.base.acFlags & AC_BOUNCED) {
@@ -420,9 +420,9 @@ void func_80932C98(EnFz* this, PlayState* play) {
 
                 case 15:
                     Actor_ApplyDamage(&this->actor);
-                    Actor_SetColorFilter(&this->actor, 0x4000, 0xFF, 0x2000, 8);
+                    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_XLU, 8);
                     if (this->actor.colChkInfo.health != 0) {
-                        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_FREEZAD_DAMAGE);
+                        Actor_PlaySfx(&this->actor, NA_SE_EN_FREEZAD_DAMAGE);
                         sp3C.x = this->actor.world.pos.x;
                         sp3C.y = this->actor.world.pos.y;
                         sp3C.z = this->actor.world.pos.z;
@@ -430,8 +430,8 @@ void func_80932C98(EnFz* this, PlayState* play) {
                         this->unk_BCF++;
                         break;
                     }
-                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_FREEZAD_DEAD);
-                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_ICE_BROKEN);
+                    Actor_PlaySfx(&this->actor, NA_SE_EN_FREEZAD_DEAD);
+                    Actor_PlaySfx(&this->actor, NA_SE_EV_ICE_BROKEN);
                     sp3C.x = this->actor.world.pos.x;
                     sp3C.y = this->actor.world.pos.y;
                     sp3C.z = this->actor.world.pos.z;
@@ -440,7 +440,7 @@ void func_80932C98(EnFz* this, PlayState* play) {
                     break;
 
                 case 2:
-                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_FREEZAD_DEAD);
+                    Actor_PlaySfx(&this->actor, NA_SE_EN_FREEZAD_DEAD);
                     func_80933790(this);
                     break;
             }
@@ -572,7 +572,7 @@ void func_809333D8(EnFz* this, PlayState* play) {
 void func_80933414(EnFz* this) {
     this->unk_BD6 = 1;
     this->unk_BBC = 0.0f;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->unk_BCA = 40;
     this->actionFunc = func_80933444;
 }
@@ -649,7 +649,7 @@ void func_809336C0(EnFz* this, PlayState* play) {
     this->unk_BBC = 0.0f;
     this->actor.gravity = 0.0f;
     this->actor.velocity.y = 0.0f;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->unk_BCC = 1;
     this->unk_BCE = 0;
     this->unk_BD8 = 1;
@@ -672,7 +672,7 @@ void func_80933790(EnFz* this) {
     this->unk_BCE = 0;
     this->unk_BD8 = 1;
     this->actor.flags &= ~ACTOR_FLAG_1;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->unk_BBC = 0.0f;
     this->actionFunc = func_809337D4;
 }
@@ -821,10 +821,10 @@ void EnFz_Update(Actor* thisx, PlayState* play) {
         }
     }
 
-    Math_StepToF(&this->actor.speedXZ, this->unk_BBC, 0.2f);
+    Math_StepToF(&this->actor.speed, this->unk_BBC, 0.2f);
     Actor_MoveWithGravity(&this->actor);
     if (this->unk_BCC != 0) {
-        Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 20.0f, 5);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 20.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
     }
 
     D_809347AC[this->unk_BD6](this);
@@ -1003,7 +1003,7 @@ void func_80934464(EnFz* this, PlayState* play) {
             gDPPipeSync(POLY_XLU_DISP++);
 
             if (flag == 0) {
-                gSPDisplayList(POLY_XLU_DISP++, gFrozenSteamDL);
+                gSPDisplayList(POLY_XLU_DISP++, gFrozenSteamMaterialDL);
                 flag++;
             }
 
@@ -1017,7 +1017,7 @@ void func_80934464(EnFz* this, PlayState* play) {
             Matrix_Scale(ptr->unk_30, ptr->unk_30, 1.0f, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, gFrozenSteamVtxDL);
+            gSPDisplayList(POLY_XLU_DISP++, gFrozenSteamModelDL);
         }
     }
 

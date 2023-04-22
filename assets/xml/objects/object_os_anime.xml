@@ -12,11 +12,11 @@
         <Animation Name="object_os_anime_Anim_00107C" Offset="0x107C" />
         <Animation Name="object_os_anime_Anim_001270" Offset="0x1270" />
         <Animation Name="object_os_anime_Anim_0012FC" Offset="0x12FC" />
-        <Animation Name="object_os_anime_Anim_001458" Offset="0x1458" />
-        <Animation Name="object_os_anime_Anim_0017D8" Offset="0x17D8" />
-        <Animation Name="object_os_anime_Anim_001C9C" Offset="0x1C9C" />
-        <Animation Name="object_os_anime_Anim_001D44" Offset="0x1D44" />
-        <Animation Name="object_os_anime_Anim_001EE0" Offset="0x1EE0" />
+        <Animation Name="object_os_anime_Anim_001458" Offset="0x1458" /> <!-- Original name is "Cne2_15" -->
+        <Animation Name="object_os_anime_Anim_0017D8" Offset="0x17D8" /> <!-- Original name is "Cne_aruku" ("walk") -->
+        <Animation Name="object_os_anime_Anim_001C9C" Offset="0x1C9C" /> <!-- Original name is "Cne_hiso_wait" ("hiso" = onomatopoeic for "whisper") -->
+        <Animation Name="object_os_anime_Anim_001D44" Offset="0x1D44" /> <!-- Original name is "Cne_matsu" -->
+        <Animation Name="object_os_anime_Anim_001EE0" Offset="0x1EE0" /> <!-- Original name is "Cne_n_wait" ("to wait​") -->
         <Animation Name="object_os_anime_Anim_001F78" Offset="0x1F78" />
         <Animation Name="object_os_anime_Anim_0020F8" Offset="0x20F8" />
         <Animation Name="object_os_anime_Anim_0021B8" Offset="0x21B8" />

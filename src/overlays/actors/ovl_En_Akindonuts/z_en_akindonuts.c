@@ -129,10 +129,10 @@ static InitChainEntry sInitChain[] = {
 };
 
 void func_80BECBE0(EnAkindonuts* this, s16 arg1) {
-    f32 sp24 = Math_CosS(this->actor.world.rot.x) * this->actor.speedXZ;
+    f32 sp24 = Math_CosS(this->actor.world.rot.x) * this->actor.speed;
 
     this->actor.velocity.x = Math_SinS(this->actor.world.rot.y) * sp24;
-    this->actor.velocity.y = Math_SinS(this->actor.world.rot.x) * this->actor.speedXZ;
+    this->actor.velocity.y = Math_SinS(this->actor.world.rot.x) * this->actor.speed;
     this->actor.velocity.z = Math_CosS(this->actor.world.rot.y) * sp24;
 
     if (arg1) {
@@ -150,7 +150,7 @@ void func_80BECC7C(EnAkindonuts* this, PlayState* play) {
     }
 
     if (this->unk_32C & 2) {
-        Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 20.0f, 5);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 20.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
     }
 }
 
@@ -179,7 +179,7 @@ s32 func_80BECD10(EnAkindonuts* this, Path* path, s32 arg2) {
         phi_f14 = sp5C[idx + 1].z - sp5C[idx - 1].z;
     }
 
-    func_8017B7F8(&sp30, RADF_TO_BINANG(func_80086B30(phi_f12, phi_f14)), &sp44, &sp40, &sp3C);
+    func_8017B7F8(&sp30, RAD_TO_BINANG(func_80086B30(phi_f12, phi_f14)), &sp44, &sp40, &sp3C);
     if (((this->actor.world.pos.x * sp44) + (sp40 * this->actor.world.pos.z) + sp3C) > 0.0f) {
         sp50 = true;
     }
@@ -257,17 +257,17 @@ void func_80BED090(PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (player->transformation == PLAYER_FORM_DEKU) {
-        gSaveContext.save.weekEventReg[63] |= 8;
-        gSaveContext.save.weekEventReg[63] &= (u8)~0x10;
+        SET_WEEKEVENTREG(WEEKEVENTREG_63_08);
+        CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_10);
     } else if (player->transformation == PLAYER_FORM_ZORA) {
-        gSaveContext.save.weekEventReg[63] &= (u8)~8;
-        gSaveContext.save.weekEventReg[63] |= 0x10;
+        CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_08);
+        SET_WEEKEVENTREG(WEEKEVENTREG_63_10);
     } else if (player->transformation == PLAYER_FORM_GORON) {
-        gSaveContext.save.weekEventReg[63] |= 8;
-        gSaveContext.save.weekEventReg[63] |= 0x10;
+        SET_WEEKEVENTREG(WEEKEVENTREG_63_08);
+        SET_WEEKEVENTREG(WEEKEVENTREG_63_10);
     } else if (player->transformation == PLAYER_FORM_HUMAN) {
-        gSaveContext.save.weekEventReg[63] &= (u8)~8;
-        gSaveContext.save.weekEventReg[63] &= (u8)~0x10;
+        CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_08);
+        CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_10);
     }
 }
 
@@ -275,19 +275,19 @@ s32 func_80BED140(PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (player->transformation == PLAYER_FORM_DEKU) {
-        if ((gSaveContext.save.weekEventReg[63] & 8) && !(gSaveContext.save.weekEventReg[63] & 0x10)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_63_08) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_63_10)) {
             return true;
         }
     } else if (player->transformation == PLAYER_FORM_ZORA) {
-        if (!(gSaveContext.save.weekEventReg[63] & 8) && (gSaveContext.save.weekEventReg[63] & 0x10)) {
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_63_08) && CHECK_WEEKEVENTREG(WEEKEVENTREG_63_10)) {
             return true;
         }
     } else if (player->transformation == PLAYER_FORM_GORON) {
-        if ((gSaveContext.save.weekEventReg[63] & 8) && (gSaveContext.save.weekEventReg[63] & 0x10)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_63_08) && CHECK_WEEKEVENTREG(WEEKEVENTREG_63_10)) {
             return true;
         }
     } else if (player->transformation == PLAYER_FORM_HUMAN) {
-        if (!(gSaveContext.save.weekEventReg[63] & 8) && !(gSaveContext.save.weekEventReg[63] & 0x10)) {
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_63_08) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_63_10)) {
             return true;
         }
     }
@@ -300,7 +300,7 @@ s32 func_80BED208(EnAkindonuts* this) {
         return 0;
     }
 
-    if (gSaveContext.save.playerData.rupees < 10) {
+    if (gSaveContext.save.saveInfo.playerData.rupees < 10) {
         return 1;
     }
 
@@ -322,7 +322,7 @@ s32 func_80BED27C(EnAkindonuts* this) {
         return 0;
     }
 
-    if (gSaveContext.save.playerData.rupees < 200) {
+    if (gSaveContext.save.saveInfo.playerData.rupees < 200) {
         return 1;
     }
 
@@ -336,7 +336,7 @@ s32 func_80BED2FC(EnAkindonuts* this) {
         return 2;
     }
 
-    if (gSaveContext.save.playerData.rupees < 40) {
+    if (gSaveContext.save.saveInfo.playerData.rupees < 40) {
         return 1;
     }
 
@@ -350,7 +350,7 @@ s32 func_80BED35C(EnAkindonuts* this) {
         return 2;
     }
 
-    if (gSaveContext.save.playerData.rupees < 100) {
+    if (gSaveContext.save.saveInfo.playerData.rupees < 100) {
         return 1;
     }
 
@@ -384,8 +384,8 @@ void func_80BED3BC(EnAkindonuts* this, PlayState* play) {
             break;
 
         case 0x15E7:
-            if (!(gSaveContext.save.weekEventReg[61] & 0x20)) {
-                gSaveContext.save.weekEventReg[61] |= 0x20;
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_61_20)) {
+                SET_WEEKEVENTREG(WEEKEVENTREG_61_20);
                 this->unk_33C = 0x15E8;
                 break;
             }
@@ -446,7 +446,7 @@ void func_80BED3BC(EnAkindonuts* this, PlayState* play) {
         case 0x15E5:
             this->unk_33C = 0x15E6;
             func_80BED090(play);
-            gSaveContext.save.weekEventReg[61] |= 0x10;
+            SET_WEEKEVENTREG(WEEKEVENTREG_61_10);
             this->unk_32C |= 0x20;
             break;
 
@@ -461,8 +461,8 @@ void func_80BED3BC(EnAkindonuts* this, PlayState* play) {
 void func_80BED680(EnAkindonuts* this, PlayState* play) {
     switch (this->unk_33C) {
         case 0:
-            if (func_80BED140(play) && !(gSaveContext.save.weekEventReg[61] & 0x40)) {
-                gSaveContext.save.weekEventReg[61] |= 0x40;
+            if (func_80BED140(play) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_61_40)) {
+                SET_WEEKEVENTREG(WEEKEVENTREG_61_40);
                 this->unk_33C = 0x15F0;
                 break;
             }
@@ -562,8 +562,8 @@ void func_80BED8A4(EnAkindonuts* this, PlayState* play) {
             break;
 
         case 0x15FE:
-            if (!(gSaveContext.save.weekEventReg[62] & 1)) {
-                gSaveContext.save.weekEventReg[62] |= 1;
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_62_01)) {
+                SET_WEEKEVENTREG(WEEKEVENTREG_62_01);
                 this->unk_33C = 0x15FF;
                 break;
             }
@@ -623,7 +623,7 @@ void func_80BED8A4(EnAkindonuts* this, PlayState* play) {
 
         case 0x15FA:
             this->unk_33C = 0x15FB;
-            gSaveContext.save.weekEventReg[61] |= 0x80;
+            SET_WEEKEVENTREG(WEEKEVENTREG_61_80);
             this->unk_32C |= 0x20;
             break;
 
@@ -640,8 +640,8 @@ void func_80BEDB88(EnAkindonuts* this, PlayState* play) {
 
     switch (this->unk_33C) {
         case 0:
-            if ((player->transformation == PLAYER_FORM_DEKU) && !(gSaveContext.save.weekEventReg[62] & 2)) {
-                gSaveContext.save.weekEventReg[62] |= 2;
+            if ((player->transformation == PLAYER_FORM_DEKU) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_62_02)) {
+                SET_WEEKEVENTREG(WEEKEVENTREG_62_02);
                 this->unk_33C = 0x15F0;
                 break;
             }
@@ -740,8 +740,8 @@ void func_80BEDDAC(EnAkindonuts* this, PlayState* play) {
             break;
 
         case 0x1610:
-            if (!(gSaveContext.save.weekEventReg[62] & 8)) {
-                gSaveContext.save.weekEventReg[62] |= 8;
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_62_08)) {
+                SET_WEEKEVENTREG(WEEKEVENTREG_62_08);
                 this->unk_33C = 0x1611;
                 break;
             }
@@ -796,7 +796,7 @@ void func_80BEDDAC(EnAkindonuts* this, PlayState* play) {
 
         case 0x15FA:
             this->unk_33C = 0x160D;
-            gSaveContext.save.weekEventReg[62] |= 4;
+            SET_WEEKEVENTREG(WEEKEVENTREG_62_04);
             this->unk_32C |= 0x20;
             break;
 
@@ -813,8 +813,8 @@ void func_80BEE070(EnAkindonuts* this, PlayState* play) {
 
     switch (this->unk_33C) {
         case 0:
-            if ((player->transformation == PLAYER_FORM_GORON) && !(gSaveContext.save.weekEventReg[62] & 0x10)) {
-                gSaveContext.save.weekEventReg[62] |= 0x10;
+            if ((player->transformation == PLAYER_FORM_GORON) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_62_10)) {
+                SET_WEEKEVENTREG(WEEKEVENTREG_62_10);
                 this->unk_33C = 0x1614;
                 break;
             }
@@ -900,8 +900,8 @@ void func_80BEE274(EnAkindonuts* this, PlayState* play) {
             break;
 
         case 0x1624:
-            if (!(gSaveContext.save.weekEventReg[62] & 0x40)) {
-                gSaveContext.save.weekEventReg[62] |= 0x40;
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_62_40)) {
+                SET_WEEKEVENTREG(WEEKEVENTREG_62_40);
                 this->unk_33C = 0x1625;
                 break;
             }
@@ -957,7 +957,7 @@ void func_80BEE274(EnAkindonuts* this, PlayState* play) {
 
         case 0x1622:
             this->unk_33C = 0x1623;
-            gSaveContext.save.weekEventReg[62] |= 0x20;
+            SET_WEEKEVENTREG(WEEKEVENTREG_62_20);
             this->unk_32C |= 0x20;
             break;
 
@@ -974,8 +974,8 @@ void func_80BEE530(EnAkindonuts* this, PlayState* play) {
 
     switch (this->unk_33C) {
         case 0:
-            if ((player->transformation == PLAYER_FORM_ZORA) && !(gSaveContext.save.weekEventReg[62] & 0x80)) {
-                gSaveContext.save.weekEventReg[62] |= 0x80;
+            if ((player->transformation == PLAYER_FORM_ZORA) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_62_80)) {
+                SET_WEEKEVENTREG(WEEKEVENTREG_62_80);
                 this->unk_33C = 0x162A;
                 break;
             }
@@ -1040,41 +1040,41 @@ void func_80BEE73C(EnAkindonuts* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     s32 pad;
     s32 params = ENAKINDONUTS_GET_3(&this->actor);
-    s32 itemActionParam = func_80123810(play);
+    PlayerItemAction itemAction = func_80123810(play);
 
-    if (itemActionParam > PLAYER_AP_NONE) {
-        if (itemActionParam == PLAYER_AP_DEED_LAND) {
+    if (itemAction > PLAYER_IA_NONE) {
+        if (itemAction == PLAYER_IA_DEED_LAND) {
             player->actor.textId = D_80BF048C[params];
             this->unk_33C = player->actor.textId;
             if (this->unk_33C == 0x15E4) {
-                player->exchangeItemId = itemActionParam;
+                player->exchangeItemId = itemAction;
                 this->actionFunc = func_80BEF20C;
             } else {
                 this->actionFunc = func_80BEF18C;
             }
-        } else if (itemActionParam == PLAYER_AP_DEED_SWAMP) {
+        } else if (itemAction == PLAYER_IA_DEED_SWAMP) {
             player->actor.textId = D_80BF0494[params];
             this->unk_33C = player->actor.textId;
             if (this->unk_33C == 0x15F9) {
-                player->exchangeItemId = itemActionParam;
+                player->exchangeItemId = itemAction;
                 this->actionFunc = func_80BEF20C;
             } else {
                 this->actionFunc = func_80BEF18C;
             }
-        } else if (itemActionParam == PLAYER_AP_DEED_MOUNTAIN) {
+        } else if (itemAction == PLAYER_IA_DEED_MOUNTAIN) {
             player->actor.textId = D_80BF049C[params];
             this->unk_33C = player->actor.textId;
             if (this->unk_33C == 0x160C) {
-                player->exchangeItemId = itemActionParam;
+                player->exchangeItemId = itemAction;
                 this->actionFunc = func_80BEF20C;
             } else {
                 this->actionFunc = func_80BEF18C;
             }
-        } else if (itemActionParam == PLAYER_AP_DEED_OCEAN) {
+        } else if (itemAction == PLAYER_IA_DEED_OCEAN) {
             player->actor.textId = D_80BF04A4[params];
             this->unk_33C = player->actor.textId;
             if (this->unk_33C == 0x1621) {
-                player->exchangeItemId = itemActionParam;
+                player->exchangeItemId = itemAction;
                 this->actionFunc = func_80BEF20C;
             } else {
                 this->actionFunc = func_80BEF18C;
@@ -1084,10 +1084,10 @@ void func_80BEE73C(EnAkindonuts* this, PlayState* play) {
             this->unk_33C = player->actor.textId;
             this->actionFunc = func_80BEF18C;
         }
-        func_801477B4(play);
-    } else if (itemActionParam < PLAYER_AP_NONE) {
+        Message_CloseTextbox(play);
+    } else if (itemAction <= PLAYER_IA_MINUS1) {
         this->unk_33C = D_80BF04AC[params];
-        func_80151938(play, this->unk_33C);
+        Message_ContinueTextbox(play, this->unk_33C);
         this->actionFunc = func_80BEF18C;
     }
 }
@@ -1095,7 +1095,7 @@ void func_80BEE73C(EnAkindonuts* this, PlayState* play) {
 void func_80BEE938(EnAkindonuts* this, PlayState* play) {
     switch (ENAKINDONUTS_GET_3(&this->actor)) {
         case 0:
-            if (gSaveContext.save.weekEventReg[61] & 0x10) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_61_10)) {
                 if (ENAKINDONUTS_GET_4(&this->actor)) {
                     this->unk_2DC = func_80BED680;
                 } else {
@@ -1109,7 +1109,7 @@ void func_80BEE938(EnAkindonuts* this, PlayState* play) {
             break;
 
         case 1:
-            if (gSaveContext.save.weekEventReg[61] & 0x80) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_61_80)) {
                 if (ENAKINDONUTS_GET_4(&this->actor)) {
                     this->unk_2DC = func_80BEDB88;
                 } else {
@@ -1123,7 +1123,7 @@ void func_80BEE938(EnAkindonuts* this, PlayState* play) {
             break;
 
         case 2:
-            if (gSaveContext.save.weekEventReg[62] & 4) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_62_04)) {
                 if (ENAKINDONUTS_GET_4(&this->actor)) {
                     this->unk_2DC = func_80BEE070;
                 } else {
@@ -1137,7 +1137,7 @@ void func_80BEE938(EnAkindonuts* this, PlayState* play) {
             break;
 
         case 3:
-            if (gSaveContext.save.weekEventReg[62] & 0x20) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_62_20)) {
                 if (ENAKINDONUTS_GET_4(&this->actor)) {
                     this->unk_2DC = func_80BEE530;
                 } else {
@@ -1173,7 +1173,7 @@ void func_80BEEB20(EnAkindonuts* this, PlayState* play) {
         }
 
         if (phi_v0) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_AKINDONUTS_HIDE);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_AKINDONUTS_HIDE);
             this->actionFunc = func_80BEEDC0;
             this->unk_338 = 3;
             this->collider.dim.height = 64;
@@ -1186,12 +1186,12 @@ void func_80BEEB20(EnAkindonuts* this, PlayState* play) {
         if ((this->unk_338 == 4) || (this->unk_338 == 18)) {
             this->unk_338 = 17;
             this->collider.dim.height = 0;
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_DOWN);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_DOWN);
             SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 17);
         } else if (this->unk_338 == 2) {
             this->unk_338 = 16;
             this->collider.dim.height = 32;
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_UP);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_UP);
             SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 16);
         } else if (this->unk_338 == 17) {
             phi_v0 = DECR(this->unk_33A);
@@ -1330,19 +1330,19 @@ void func_80BEF360(EnAkindonuts* this, PlayState* play) {
             this->unk_32C &= ~0x40;
             this->actionFunc = func_80BEF450;
         } else {
-            Actor_PickUp(&this->actor, play, func_80BED034(this), 300.0f, 300.0f);
+            Actor_OfferGetItem(&this->actor, play, func_80BED034(this), 300.0f, 300.0f);
         }
     } else if (Actor_HasParent(&this->actor, play)) {
         this->actor.parent = NULL;
         this->actionFunc = func_80BEF450;
     } else {
-        Actor_PickUp(&this->actor, play, func_80BECFBC(this), 300.0f, 300.0f);
+        Actor_OfferGetItem(&this->actor, play, func_80BECFBC(this), 300.0f, 300.0f);
     }
 }
 
 void func_80BEF450(EnAkindonuts* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_DONE) && Message_ShouldAdvance(play)) {
-        func_800B85E0(&this->actor, play, 400.0f, -1);
+        func_800B85E0(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
         this->actionFunc = func_80BEF4B8;
     }
 }
@@ -1352,7 +1352,7 @@ void func_80BEF4B8(EnAkindonuts* this, PlayState* play) {
         this->unk_2DC(this, play);
         this->actionFunc = func_80BEEFA8;
     } else {
-        func_800B85E0(&this->actor, play, 400.0f, -1);
+        func_800B85E0(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
     }
 }
 
@@ -1417,14 +1417,14 @@ void func_80BEF518(EnAkindonuts* this, PlayState* play) {
     }
 
     if (this->unk_35E == 0) {
-        if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
-            ActorCutscene_StartAndSetUnkLinkFields(this->cutscene, &this->actor);
+        if (CutsceneManager_IsNext(this->csId)) {
+            CutsceneManager_StartWithPlayerCs(this->csId, &this->actor);
             this->unk_35E = 1;
         } else {
-            if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-                ActorCutscene_Stop(0x7C);
+            if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+                CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
             }
-            ActorCutscene_SetIntentToPlay(this->cutscene);
+            CutsceneManager_Queue(this->csId);
             return;
         }
     }
@@ -1433,7 +1433,7 @@ void func_80BEF518(EnAkindonuts* this, PlayState* play) {
         this->unk_33E = 3;
         this->unk_338 = 19;
         SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->unk_338);
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_DOWN);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_DOWN);
         this->unk_32C &= ~2;
         this->unk_32C |= 0x80;
         this->unk_358 = this->actor.world.pos.y;
@@ -1492,7 +1492,7 @@ void func_80BEF83C(EnAkindonuts* this, PlayState* play) {
         this->unk_34C = 0.3f;
         this->unk_338 = 9;
         SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->unk_338);
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_AKINDONUTS_HIDE);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_AKINDONUTS_HIDE);
         this->actionFunc = func_80BEF9F0;
     }
 }
@@ -1529,7 +1529,7 @@ void func_80BEFAF0(EnAkindonuts* this, PlayState* play) {
 
     if (this->path != NULL) {
         sp34 = func_80BECEAC(this->path, this->unk_334, &this->actor.world.pos, &sp38);
-        if (this->actor.bgCheckFlags & 0x8) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
             sp38.y = this->actor.wallYaw;
         }
 
@@ -1546,14 +1546,14 @@ void func_80BEFAF0(EnAkindonuts* this, PlayState* play) {
 
         if (func_80BECD10(this, this->path, this->unk_334) && (sp34 < 10.0f)) {
             if (this->unk_334 >= (this->path->count - 1)) {
-                ActorCutscene_Stop(this->cutscene);
+                CutsceneManager_Stop(this->csId);
                 this->actionFunc = func_80BEFD74;
             } else {
                 this->unk_334++;
             }
         }
     } else if (this->actor.playerHeightRel > 500.0f) {
-        ActorCutscene_Stop(this->cutscene);
+        CutsceneManager_Stop(this->csId);
         this->actionFunc = func_80BEFD74;
     }
 
@@ -1561,25 +1561,25 @@ void func_80BEFAF0(EnAkindonuts* this, PlayState* play) {
         if (this->unk_334 >= 3) {
             sp32 = true;
         }
-        Math_ApproachF(&this->actor.speedXZ, 1.5f, 0.2f, 1.0f);
+        Math_ApproachF(&this->actor.speed, 1.5f, 0.2f, 1.0f);
     } else {
-        Math_ApproachF(&this->actor.speedXZ, 2.0f, 0.2f, 1.0f);
+        Math_ApproachF(&this->actor.speed, 2.0f, 0.2f, 1.0f);
     }
 
     func_80BECBE0(this, sp32);
 
     if (this->unk_35E == 2) {
-        if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
-            ActorCutscene_StartAndSetUnkLinkFields(this->cutscene, &this->actor);
+        if (CutsceneManager_IsNext(this->csId)) {
+            CutsceneManager_StartWithPlayerCs(this->csId, &this->actor);
             this->unk_35E = 3;
         } else {
-            ActorCutscene_SetIntentToPlay(this->cutscene);
+            CutsceneManager_Queue(this->csId);
             return;
         }
     } else if ((this->unk_35E == 1) && (this->unk_356 == 20)) {
-        ActorCutscene_Stop(this->cutscene);
-        this->cutscene = ActorCutscene_GetAdditionalCutscene(this->cutscene);
-        ActorCutscene_SetIntentToPlay(this->cutscene);
+        CutsceneManager_Stop(this->csId);
+        this->csId = CutsceneManager_GetAdditionalCsId(this->csId);
+        CutsceneManager_Queue(this->csId);
         this->unk_35E = 2;
     }
     this->unk_356++;
@@ -1617,7 +1617,7 @@ void EnAkindonuts_Init(Actor* thisx, PlayState* play) {
     this->unk_32C |= 0x2;
     this->unk_32C |= 0x4;
     this->unk_338 = 4;
-    this->cutscene = this->actor.cutscene;
+    this->csId = this->actor.csId;
     func_80BEE938(this, play);
     this->actionFunc = func_80BEEB20;
 }

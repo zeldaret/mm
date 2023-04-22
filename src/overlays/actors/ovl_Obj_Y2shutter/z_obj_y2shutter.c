@@ -73,7 +73,7 @@ void ObjY2shutter_SetupOpen(ObjY2shutter* this, ShutterInfo* info, ShutterType s
     this->openTimer = info->openTimer;
     this->settleTimer = info->openStartSettleTimer;
     if (shutterType == SHUTTER_BARRED) {
-        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_METALDOOR_OPEN);
+        Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_METALDOOR_OPEN);
     }
 }
 
@@ -105,19 +105,19 @@ void ObjY2shutter_Update(Actor* thisx, PlayState* play) {
 
     if (this->settleTimer == 0) {
         if (Flags_GetSwitch(play, OBJY2SHUTTER_GET_SWITCHFLAG(&this->dyna.actor))) {
-            s16 cutscene = this->dyna.actor.cutscene;
+            s16 csId = this->dyna.actor.csId;
 
             if (this->openTimer == 0) {
-                if ((cutscene >= 0) && !ActorCutscene_GetCanPlayNext(cutscene)) {
-                    ActorCutscene_SetIntentToPlay(cutscene);
-                } else if (cutscene >= 0) {
-                    ActorCutscene_StartAndSetUnkLinkFields(cutscene, &this->dyna.actor);
+                if ((csId >= 0) && !CutsceneManager_IsNext(csId)) {
+                    CutsceneManager_Queue(csId);
+                } else if (csId >= 0) {
+                    CutsceneManager_StartWithPlayerCs(csId, &this->dyna.actor);
                     this->openTimer = -1;
                 } else {
                     ObjY2shutter_SetupOpen(this, info, shutterType);
                 }
             } else if (this->openTimer < 0) {
-                if (func_800F22C4(cutscene, &this->dyna.actor)) {
+                if (func_800F22C4(csId, &this->dyna.actor) != 0) {
                     ObjY2shutter_SetupOpen(this, info, shutterType);
                 }
             } else {
@@ -134,7 +134,7 @@ void ObjY2shutter_Update(Actor* thisx, PlayState* play) {
             this->openTimer = 0;
             this->settleTimer = info->openStartSettleTimer;
             if (shutterType == SHUTTER_BARRED) {
-                Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_METALDOOR_CLOSE);
+                Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_METALDOOR_CLOSE);
             }
         } else {
             targetPosY = this->dyna.actor.home.pos.y;
@@ -153,7 +153,7 @@ void ObjY2shutter_Update(Actor* thisx, PlayState* play) {
             this->isStationary = true;
             this->settleTimer = info->openEndAndCloseSettleTimer;
             if (shutterType != SHUTTER_BARRED) {
-                Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_METALDOOR_STOP);
+                Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_METALDOOR_STOP);
             }
         }
     } else {

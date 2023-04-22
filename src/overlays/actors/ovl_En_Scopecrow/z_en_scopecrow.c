@@ -69,40 +69,46 @@ void func_80BCD000(EnScopecrow* this, PlayState* play) {
 s32 func_80BCD09C(s16 arg0) {
     switch (arg0) {
         case 0:
-            if (gSaveContext.save.weekEventReg[53] & 4) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_53_04)) {
                 return true;
+            } else {
+                return false;
             }
-            return false;
 
         case 1:
-            if (gSaveContext.save.weekEventReg[53] & 0x80) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_53_80)) {
                 return true;
+            } else {
+                return false;
             }
-            return false;
 
         case 2:
-            if (gSaveContext.save.weekEventReg[54] & 1) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_54_01)) {
                 return true;
+            } else {
+                return false;
             }
-            return false;
 
         case 3:
-            if (gSaveContext.save.weekEventReg[54] & 2) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_54_02)) {
                 return true;
+            } else {
+                return false;
             }
-            return false;
 
         case 4:
-            if (gSaveContext.save.weekEventReg[54] & 4) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_54_04)) {
                 return true;
+            } else {
+                return false;
             }
-            return false;
 
         case 5:
-            if (gSaveContext.save.weekEventReg[54] & 8) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_54_08)) {
                 return true;
+            } else {
+                return false;
             }
-            return false;
     }
 
     return false;
@@ -111,43 +117,43 @@ s32 func_80BCD09C(s16 arg0) {
 s32 func_80BCD1AC(s16 arg0) {
     switch (arg0) {
         case 0:
-            if (!(gSaveContext.save.weekEventReg[53] & 4)) {
-                gSaveContext.save.weekEventReg[53] |= 4;
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_53_04)) {
+                SET_WEEKEVENTREG(WEEKEVENTREG_53_04);
                 return true;
             }
             break;
 
         case 1:
-            if (!(gSaveContext.save.weekEventReg[53] & 0x80)) {
-                gSaveContext.save.weekEventReg[53] |= 0x80;
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_53_80)) {
+                SET_WEEKEVENTREG(WEEKEVENTREG_53_80);
                 return true;
             }
             break;
 
         case 2:
-            if (!(gSaveContext.save.weekEventReg[54] & 1)) {
-                gSaveContext.save.weekEventReg[54] |= 1;
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_54_01)) {
+                SET_WEEKEVENTREG(WEEKEVENTREG_54_01);
                 return true;
             }
             break;
 
         case 3:
-            if (!(gSaveContext.save.weekEventReg[54] & 2)) {
-                gSaveContext.save.weekEventReg[54] |= 2;
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_54_02)) {
+                SET_WEEKEVENTREG(WEEKEVENTREG_54_02);
                 return true;
             }
             break;
 
         case 4:
-            if (!(gSaveContext.save.weekEventReg[54] & 4)) {
-                gSaveContext.save.weekEventReg[54] |= 4;
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_54_04)) {
+                SET_WEEKEVENTREG(WEEKEVENTREG_54_04);
                 return true;
             }
             break;
 
         case 5:
-            if (!(gSaveContext.save.weekEventReg[54] & 8)) {
-                gSaveContext.save.weekEventReg[54] |= 8;
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_54_08)) {
+                SET_WEEKEVENTREG(WEEKEVENTREG_54_08);
                 return true;
             }
             break;
@@ -160,7 +166,7 @@ void func_80BCD2BC(EnScopecrow* this, PlayState* play) {
     Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ACTOR_EN_SC_RUPPE, this->actor.world.pos.x,
                                   this->actor.world.pos.y, this->actor.world.pos.z, this->actor.shape.rot.x,
                                   this->actor.shape.rot.y, this->actor.shape.rot.z, this->actor.params,
-                                  this->actor.cutscene, this->actor.unk20, NULL);
+                                  this->actor.csId, this->actor.halfDaysBits, NULL);
 }
 
 s32 func_80BCD334(EnScopecrow* this, Path* path, s32 pointIndex) {
@@ -186,7 +192,7 @@ s32 func_80BCD334(EnScopecrow* this, Path* path, s32 pointIndex) {
         phi_fa1 = points[index + 1].z - points[index - 1].z;
     }
 
-    func_8017B7F8(&sp30, RADF_TO_BINANG(func_80086B30(phi_fa0, phi_fa1)), &sp3C.z, &sp3C.y, &sp3C.x);
+    func_8017B7F8(&sp30, RAD_TO_BINANG(func_80086B30(phi_fa0, phi_fa1)), &sp3C.z, &sp3C.y, &sp3C.x);
 
     if (((this->actor.world.pos.x * sp3C.z) + (sp3C.y * this->actor.world.pos.z) + sp3C.x) > 0.0f) {
         ret = true;
@@ -230,7 +236,7 @@ void func_80BCD640(EnScopecrow* this, PlayState* play) {
 
     if (this->path != NULL) {
         func_80BCD4D0(this->path, this->unk_1FC, &this->actor.world.pos, &sp30);
-        if (this->actor.bgCheckFlags & 8) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
             sp30.y = this->actor.wallYaw;
         }
 
@@ -251,7 +257,7 @@ void func_80BCD640(EnScopecrow* this, PlayState* play) {
         }
     }
 
-    Math_ApproachF(&this->actor.speedXZ, 6.0f, 0.2f, 1.0f);
+    Math_ApproachF(&this->actor.speed, 6.0f, 0.2f, 1.0f);
     Actor_MoveWithoutGravity(&this->actor);
     this->unk_264 += 0x1000;
     this->actor.shape.yOffset = Math_SinS(this->unk_264) * 500.0f;

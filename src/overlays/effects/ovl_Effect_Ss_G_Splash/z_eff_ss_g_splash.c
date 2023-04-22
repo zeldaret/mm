@@ -17,7 +17,7 @@ u32 EffectSsGSplash_Init(PlayState* play, u32 index, EffectSs* this, void* initP
 void EffectSsGSplash_Update(PlayState* play, u32 index, EffectSs* this);
 void EffectSsGSplash_Draw(PlayState* play, u32 index, EffectSs* this);
 
-const EffectSsInit Effect_Ss_G_Splash_InitVars = {
+EffectSsInit Effect_Ss_G_Splash_InitVars = {
     EFFECT_SS_G_SPLASH,
     EffectSsGSplash_Init,
 };

@@ -158,7 +158,7 @@ void EnWaterEffect_Update(Actor* thisx, PlayState* play2) {
         this->unk_DC4++;
         if ((this->unk_DC4 % 32) == 0) {
             if (Rand_ZeroOne() < 0.5f) {
-                Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 10.0f, 40.0f, 4);
+                Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 10.0f, 40.0f, UPDBGCHECKINFO_FLAG_4);
                 sp88.x = randPlusMinusPoint5Scaled(50.0f) + this->actor.world.pos.x;
                 sp88.y = this->actor.world.pos.y;
                 sp88.z = randPlusMinusPoint5Scaled(50.0f) + this->actor.world.pos.z;
@@ -420,7 +420,7 @@ void func_80A59C04(Actor* thisx, PlayState* play2) {
         this->unk_DC4++;
         if (this->unk_DC6 == 0) {
             this->unk_DC6 = Rand_ZeroFloat(150.0f) + 100.0f;
-            Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 10.0f, 40.0f, 4);
+            Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 10.0f, 40.0f, UPDBGCHECKINFO_FLAG_4);
             sp74.x = randPlusMinusPoint5Scaled(50.0f) + this->actor.world.pos.x;
             sp74.y = this->actor.world.pos.y;
             sp74.z = randPlusMinusPoint5Scaled(50.0f) + this->actor.world.pos.z;
@@ -482,7 +482,7 @@ void func_80A59C04(Actor* thisx, PlayState* play2) {
                                 player->flameTimers[j] = Rand_S16Offset(0, 200);
                             }
                             player->isBurning = true;
-                            func_800B8E58(player, player->ageProperties->unk_92 + NA_SE_VO_LI_DEMO_DAMAGE);
+                            Player_PlaySfx(player, player->ageProperties->voiceSfxIdOffset + NA_SE_VO_LI_DEMO_DAMAGE);
                         }
                     }
 
@@ -570,7 +570,7 @@ void func_80A5A184(Actor* thisx, PlayState* play2) {
         }
     }
 
-    POLY_OPA_DISP = func_801660B8(play, POLY_OPA_DISP);
+    POLY_OPA_DISP = Play_SetFog(play, POLY_OPA_DISP);
 
     CLOSE_DISPS(gfxCtx);
 }

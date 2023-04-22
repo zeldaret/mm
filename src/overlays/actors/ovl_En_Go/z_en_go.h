@@ -108,7 +108,7 @@ typedef struct EnGo {
     /* 0x38C */ Actor* attentionTarget;
     /* 0x390 */ u16 actionFlags;
     /* 0x392 */ u16 lastTextId;
-    /* 0x394 */ u8 springArrivalCurrentCsAction;
+    /* 0x394 */ u8 springArrivalCueId;
     /* 0x398 */ f32 currAnimPlaySpeed;
     /* 0x39C */ f32 iceBlockScale;
     /* 0x3A0 */ f32 iceBlockAlpha;
@@ -123,7 +123,7 @@ typedef struct EnGo {
     /* 0x3B2 */ s16 headRotY;
     /* 0x3B4 */ s16 bodyRotZ;
     /* 0x3B6 */ s16 bodyRotY;
-    /* 0x3B8 */ s16 indexCutscene;
+    /* 0x3B8 */ s16 csId;
     /* 0x3BA */ s16 loseAttentionTimer;
     /* 0x3BC */ s16 blinkTimer;
     /* 0x3BE */ s16 eyeTexIndex;

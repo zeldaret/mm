@@ -154,12 +154,12 @@ void ObjEtcetera_Idle(ObjEtcetera* this, PlayState* play) {
             this->oscillationTimer = minOscillationTimer;
         }
     } else {
-        if (DynaPolyActor_IsInRidingMovingState(&this->dyna)) {
+        if (DynaPolyActor_IsPlayerOnTop(&this->dyna)) {
             if (!(this->burrowFlag & 1)) {
                 // Player is walking onto the Deku Flower, or falling on it from a height
                 this->oscillationTimer = 10;
                 ObjEtcetera_StartRustleAnimation(this);
-            } else if ((player->actor.speedXZ > 0.1f) ||
+            } else if ((player->actor.speed > 0.1f) ||
                        ((player->unk_ABC < 0.0f) && !(player->stateFlags3 & PLAYER_STATE3_100))) {
                 // Player is walking on top of the Deku Flower, is at the very start of burrowing, or is at the very
                 // start of launching
@@ -187,7 +187,7 @@ void ObjEtcetera_Idle(ObjEtcetera* this, PlayState* play) {
 }
 
 void ObjEtcetera_PlayRustleAnimation(ObjEtcetera* this, PlayState* play) {
-    if (DynaPolyActor_IsInRidingMovingState(&this->dyna)) {
+    if (DynaPolyActor_IsPlayerOnTop(&this->dyna)) {
         this->burrowFlag |= 1;
     } else {
         this->burrowFlag &= ~1;
@@ -209,11 +209,11 @@ void ObjEtcetera_PlayRustleAnimation(ObjEtcetera* this, PlayState* play) {
 void ObjEtcetera_DoBounceOscillation(ObjEtcetera* this, PlayState* play) {
     // In order to match, we are seemingly required to access scale.x at one point
     // without using this. We can create a thisx or dyna pointer to achieve that, but
-    // it's more likely they used dyna given that DynaPolyActor_IsInRidingMovingState takes a DynaPolyActor.
+    // it's more likely they used dyna given that DynaPolyActor_IsPlayerOnTop takes a DynaPolyActor.
     DynaPolyActor* dyna = &this->dyna;
     f32 scaleTemp;
 
-    if (DynaPolyActor_IsInRidingMovingState(dyna)) {
+    if (DynaPolyActor_IsPlayerOnTop(dyna)) {
         this->burrowFlag |= 1;
     } else {
         this->burrowFlag &= ~1;
@@ -260,7 +260,7 @@ void ObjEtcetera_Setup(ObjEtcetera* this, PlayState* play) {
     if (Object_IsLoaded(&play->objectCtx, this->objIndex)) {
         this->dyna.actor.objBankIndex = this->objIndex;
         Actor_SetObjectDependency(play, &this->dyna.actor);
-        DynaPolyActor_Init(&this->dyna, 1);
+        DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
         thisCollisionHeader = collisionHeaders[type];
         if (thisCollisionHeader != NULL) {
             CollisionHeader_GetVirtual(thisCollisionHeader, &colHeader);

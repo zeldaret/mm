@@ -52,15 +52,15 @@ void func_808A7968(ObjWturn* this, PlayState* play) {
 }
 
 void func_808A7A24(ObjWturn* this) {
-    ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+    CutsceneManager_Queue(this->actor.csId);
     this->actionFunc = func_808A7A5C;
 }
 
 void func_808A7A5C(ObjWturn* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
+    if (CutsceneManager_IsNext(this->actor.csId)) {
         func_808A7AAC(this, play);
     } else {
-        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+        CutsceneManager_Queue(this->actor.csId);
     }
 }
 
@@ -69,10 +69,10 @@ void func_808A7AAC(ObjWturn* this, PlayState* play) {
     Vec3f subCamEye;
     Vec3f subCamAt;
 
-    ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
-    func_8016566C(140);
-    this->subCamId = ActorCutscene_GetCurrentSubCamId(this->actor.cutscene);
-    func_800B7298(play, &this->actor, 21);
+    CutsceneManager_StartWithPlayerCs(this->actor.csId, &this->actor);
+    Play_EnableMotionBlur(140);
+    this->subCamId = CutsceneManager_GetCurrentSubCamId(this->actor.csId);
+    func_800B7298(play, &this->actor, PLAYER_CSMODE_21);
     subCamAt.x = player->actor.focus.pos.x;
     subCamAt.z = player->actor.focus.pos.z;
     subCamAt.y = player->actor.focus.pos.y;
@@ -96,10 +96,10 @@ void func_808A7C04(ObjWturn* this, PlayState* play) {
 
     this->actor.world.pos.y += this->actor.playerHeightRel;
     player->actor.shape.shadowAlpha = 0;
-    func_800B7298(play, &this->actor, 0x54);
-    func_800B8E58(player, NA_SE_VO_NAVY_ENEMY);
+    func_800B7298(play, &this->actor, PLAYER_CSMODE_84);
+    Player_PlaySfx(player, NA_SE_VO_NAVY_ENEMY);
     this->unk_14A = 0;
-    func_80165690();
+    Play_DisableMotionBlur();
     this->actionFunc = func_808A7C78;
 }
 
@@ -113,7 +113,7 @@ void func_808A7C78(ObjWturn* this, PlayState* play) {
     Play_SetCameraAtEyeUp(play, this->subCamId, &player->actor.focus.pos, &subCam->eye, &sSubCamUp);
     if (this->unk_14A == 1) {
         play->transitionType = TRANS_TYPE_64;
-        gSaveContext.nextTransitionType = TRANS_TYPE_03;
+        gSaveContext.nextTransitionType = TRANS_TYPE_FADE_WHITE;
         gSaveContext.nextCutsceneIndex = 0;
         if (play->sceneId == SCENE_F40) {
             play->nextEntrance = ENTRANCE(STONE_TOWER_INVERTED, 0);

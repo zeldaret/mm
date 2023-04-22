@@ -153,7 +153,7 @@ u16 EnFsn_GetWelcome(PlayState* play) {
 void EnFsn_HandleConversationBackroom(EnFsn* this, PlayState* play) {
     switch (this->textId) {
         case 0:
-            if (!(gSaveContext.save.weekEventReg[80] & 0x10)) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_80_10)) {
                 this->textId = 0x29E0;
                 break;
             } else {
@@ -166,7 +166,7 @@ void EnFsn_HandleConversationBackroom(EnFsn* this, PlayState* play) {
                 this->flags |= ENFSN_GIVE_ITEM;
                 this->flags |= ENFSN_GAVE_LETTER_TO_MAMA;
                 this->getItemId = GI_LETTER_TO_MAMA;
-                gSaveContext.save.weekEventReg[80] |= 0x10;
+                SET_WEEKEVENTREG(WEEKEVENTREG_80_10);
                 this->textId = 0x29F1;
                 break;
             } else {
@@ -186,7 +186,7 @@ void EnFsn_HandleConversationBackroom(EnFsn* this, PlayState* play) {
             this->flags |= ENFSN_GIVE_ITEM;
             this->flags |= ENFSN_GAVE_LETTER_TO_MAMA;
             this->getItemId = GI_LETTER_TO_MAMA;
-            gSaveContext.save.weekEventReg[80] |= 0x10;
+            SET_WEEKEVENTREG(WEEKEVENTREG_80_10);
             this->textId = 0x29F1;
             break;
         case 0x29F1:
@@ -212,7 +212,7 @@ void EnFsn_HandleSetupResumeInteraction(EnFsn* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_DONE) && Message_ShouldAdvance(play) &&
         this->cutsceneState == ENFSN_CUTSCENESTATE_STOPPED) {
         Actor_ProcessTalkRequest(&this->actor, &play->state);
-        func_800B85E0(&this->actor, play, 400.0f, PLAYER_AP_MINUS1);
+        func_800B85E0(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
         if (ENFSN_IS_SHOP(&this->actor)) {
             this->actor.textId = 0;
         }
@@ -228,21 +228,21 @@ void EnFsn_UpdateCollider(EnFsn* this, PlayState* play) {
 }
 
 void EnFsn_HandleLookToShopkeeperBuyingCutscene(EnFsn* this) {
-    if ((this->cutsceneState == ENFSN_CUTSCENESTATE_PLAYING) &&
-        (this->lookToShopkeeperBuyingCutscene != this->cutscene) && (this->actor.textId == 0x29CE)) {
-        ActorCutscene_Stop(this->cutscene);
-        if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-            ActorCutscene_Stop(0x7C);
+    if ((this->cutsceneState == ENFSN_CUTSCENESTATE_PLAYING) && (this->lookToShopkeeperBuyingCsId != this->csId) &&
+        (this->actor.textId == 0x29CE)) {
+        CutsceneManager_Stop(this->csId);
+        if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+            CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
         }
-        this->cutscene = this->lookToShopkeeperBuyingCutscene;
-        ActorCutscene_SetIntentToPlay(this->cutscene);
+        this->csId = this->lookToShopkeeperBuyingCsId;
+        CutsceneManager_Queue(this->csId);
         this->cutsceneState = ENFSN_CUTSCENESTATE_WAITING;
     } else if (this->cutsceneState == ENFSN_CUTSCENESTATE_WAITING) {
-        if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
-            ActorCutscene_Start(this->cutscene, &this->actor);
+        if (CutsceneManager_IsNext(this->csId)) {
+            CutsceneManager_Start(this->csId, &this->actor);
             this->cutsceneState = ENFSN_CUTSCENESTATE_PLAYING;
         } else {
-            ActorCutscene_SetIntentToPlay(this->cutscene);
+            CutsceneManager_Queue(this->csId);
         }
     }
 }
@@ -301,8 +301,8 @@ void EnFsn_CursorLeftRight(EnFsn* this) {
 }
 
 s16 EnFsn_GetThirdDayItemId(void) {
-    if (!(gSaveContext.save.weekEventReg[33] & 4) && CURRENT_DAY == 3) {
-        if (!(gSaveContext.save.weekEventReg[33] & 8) && !(gSaveContext.save.weekEventReg[79] & 0x40)) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_33_04) && CURRENT_DAY == 3) {
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_33_08) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_79_40)) {
             return SI_BOMB_BAG_30_1;
         }
         return SI_MASK_ALL_NIGHT;
@@ -335,7 +335,7 @@ s32 EnFsn_HasItemsToSell(void) {
     }
 
     if ((STOLEN_ITEM_1 != STOLEN_ITEM_NONE) || (STOLEN_ITEM_2 != STOLEN_ITEM_NONE) ||
-        !(gSaveContext.save.weekEventReg[33] & 4)) {
+        !CHECK_WEEKEVENTREG(WEEKEVENTREG_33_04)) {
         return true;
     }
 
@@ -387,7 +387,7 @@ void EnFsn_SpawnShopItems(EnFsn* this, PlayState* play) {
 
 void EnFsn_EndInteraction(EnFsn* this, PlayState* play) {
     if (this->cutsceneState == ENFSN_CUTSCENESTATE_PLAYING) {
-        ActorCutscene_Stop(this->cutscene);
+        CutsceneManager_Stop(this->csId);
         this->cutsceneState = ENFSN_CUTSCENESTATE_STOPPED;
     }
     Actor_ProcessTalkRequest(&this->actor, &play->state);
@@ -417,7 +417,7 @@ s32 EnFsn_TestEndInteraction(EnFsn* this, PlayState* play, Input* input) {
 s32 EnFsn_TestCancelOption(EnFsn* this, PlayState* play, Input* input) {
     if (CHECK_BTN_ALL(input->press.button, BTN_B)) {
         this->actionFunc = this->prevActionFunc;
-        func_80151938(play, this->items[this->cursorIndex]->actor.textId);
+        Message_ContinueTextbox(play, this->items[this->cursorIndex]->actor.textId);
         return true;
     }
     return false;
@@ -441,9 +441,9 @@ s32 EnFsn_FacingShopkeeperDialogResult(EnFsn* this, PlayState* play) {
             func_8019F208();
             if (CURRENT_DAY != 3) {
                 this->actor.textId = 0x29FB;
-            } else if (gSaveContext.save.weekEventReg[33] & 4) {
+            } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_33_04)) {
                 this->actor.textId = 0x29FF;
-            } else if (!(gSaveContext.save.weekEventReg[33] & 8) && !(gSaveContext.save.weekEventReg[79] & 0x40)) {
+            } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_33_08) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_79_40)) {
                 this->actor.textId = 0x29D7;
             } else {
                 this->actor.textId = 0x29D8;
@@ -468,7 +468,7 @@ s32 EnFsn_HasPlayerSelectedItem(EnFsn* this, PlayState* play, Input* input) {
     if (EnFsn_TestItemSelected(play)) {
         if (!this->items[this->cursorIndex]->isOutOfStock) {
             this->prevActionFunc = this->actionFunc;
-            func_80151938(play, this->items[this->cursorIndex]->choiceTextId);
+            Message_ContinueTextbox(play, this->items[this->cursorIndex]->choiceTextId);
             play_sound(NA_SE_SY_DECIDE);
             this->stickLeftPrompt.isEnabled = false;
             this->stickRightPrompt.isEnabled = false;
@@ -737,11 +737,11 @@ void EnFsn_Idle(EnFsn* this, PlayState* play) {
 
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         if (this->cutsceneState == ENFSN_CUTSCENESTATE_STOPPED) {
-            if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-                ActorCutscene_Stop(0x7C);
+            if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+                CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
             }
-            this->cutscene = this->lookToShopkeeperCutscene;
-            ActorCutscene_SetIntentToPlay(this->cutscene);
+            this->csId = this->lookToShopkeeperCsId;
+            CutsceneManager_Queue(this->csId);
             this->cutsceneState = ENFSN_CUTSCENESTATE_WAITING;
         }
         this->actor.textId = EnFsn_GetWelcome(play);
@@ -766,7 +766,7 @@ void EnFsn_Haggle(EnFsn* this, PlayState* play) {
         SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animIndex);
     } else {
         if (this->animIndex == FSN_ANIM_SLAM_COUNTER_LOOP && Animation_OnFrame(&this->skelAnime, 18.0f)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_HANKO);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_HANKO);
         }
         if (this->flags & ENFSN_CALM_DOWN) {
             this->flags &= ~ENFSN_CALM_DOWN;
@@ -783,7 +783,7 @@ void EnFsn_Haggle(EnFsn* this, PlayState* play) {
                     SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animIndex);
                 } else {
                     if (Animation_OnFrame(&this->skelAnime, 28.0f)) {
-                        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_HANKO);
+                        Actor_PlaySfx(&this->actor, NA_SE_EV_HANKO);
                     }
                     return;
                 }
@@ -797,11 +797,11 @@ void EnFsn_Haggle(EnFsn* this, PlayState* play) {
 
 void EnFsn_BeginInteraction(EnFsn* this, PlayState* play) {
     if (this->cutsceneState == ENFSN_CUTSCENESTATE_WAITING) {
-        if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
-            ActorCutscene_StartAndSetFlag(this->cutscene, &this->actor);
+        if (CutsceneManager_IsNext(this->csId)) {
+            CutsceneManager_StartWithPlayerCsAndSetFlag(this->csId, &this->actor);
             this->cutsceneState = ENFSN_CUTSCENESTATE_PLAYING;
             if (Player_GetMask(play) == PLAYER_MASK_NONE) {
-                func_8011552C(play, 16);
+                func_8011552C(play, DO_ACTION_NEXT);
                 if (EnFsn_HasItemsToSell()) {
                     this->actionFunc = EnFsn_AskBuyOrSell;
                 } else {
@@ -812,7 +812,7 @@ void EnFsn_BeginInteraction(EnFsn* this, PlayState* play) {
                 this->actionFunc = EnFsn_SetupEndInteractionImmediately;
             }
         } else {
-            ActorCutscene_SetIntentToPlay(this->cutscene);
+            CutsceneManager_Queue(this->csId);
         }
     }
 }
@@ -839,7 +839,7 @@ void EnFsn_StartBuying(EnFsn* this, PlayState* play) {
                 this->actionFunc = EnFsn_DeterminePrice;
                 break;
             case 0x29CF:
-                player->exchangeItemId = PLAYER_AP_NONE;
+                player->exchangeItemId = PLAYER_IA_NONE;
                 this->actionFunc = EnFsn_SetupDeterminePrice;
                 break;
         }
@@ -861,10 +861,9 @@ void EnFsn_AskBuyOrSell(EnFsn* this, PlayState* play) {
                     Message_StartTextbox(play, this->actor.textId, &this->actor);
                     break;
                 case 0x29D2:
-                    if (gSaveContext.save.weekEventReg[33] & 4) {
+                    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_33_04)) {
                         this->actor.textId = 0x2A01;
-                    } else if (!(gSaveContext.save.weekEventReg[33] & 8) &&
-                               !(gSaveContext.save.weekEventReg[79] & 0x40)) {
+                    } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_33_08) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_79_40)) {
                         this->actor.textId = 0x29D3;
                     } else {
                         this->actor.textId = 0x29D4;
@@ -881,7 +880,7 @@ void EnFsn_AskBuyOrSell(EnFsn* this, PlayState* play) {
             }
         }
     } else if (talkState == TEXT_STATE_CHOICE) {
-        func_8011552C(play, 6);
+        func_8011552C(play, DO_ACTION_DECIDE);
         if (!EnFsn_TestEndInteraction(this, play, CONTROLLER1(&play->state)) && Message_ShouldAdvance(play)) {
             switch (play->msgCtx.choiceIndex) {
                 case 0:
@@ -916,12 +915,13 @@ void EnFsn_SetupDeterminePrice(EnFsn* this, PlayState* play) {
 
 void EnFsn_DeterminePrice(EnFsn* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    s32 itemActionParam;
+    PlayerItemAction itemAction;
     u8 buttonItem;
 
     if (Message_GetState(&play->msgCtx) == TEXT_STATE_16) {
-        itemActionParam = func_80123810(play);
-        if (itemActionParam > PLAYER_AP_NONE) {
+        itemAction = func_80123810(play);
+
+        if (itemAction > PLAYER_IA_NONE) {
             buttonItem = GET_CUR_FORM_BTN_ITEM(player->heldItemButton);
             this->price = (buttonItem < ITEM_MOON_TEAR) ? gItemPrices[buttonItem] : 0;
             if (this->price > 0) {
@@ -933,8 +933,8 @@ void EnFsn_DeterminePrice(EnFsn* this, PlayState* play) {
                 this->actionFunc = EnFsn_StartBuying;
             }
             this->actor.textId = player->actor.textId;
-            func_801477B4(play);
-        } else if (itemActionParam < PLAYER_AP_NONE) {
+            Message_CloseTextbox(play);
+        } else if (itemAction <= PLAYER_IA_MINUS1) {
             if (CURRENT_DAY == 3) {
                 this->actor.textId = 0x29DF;
             } else {
@@ -958,7 +958,7 @@ void EnFsn_MakeOffer(EnFsn* this, PlayState* play) {
                 play->msgCtx.msgMode = 0x43;
                 play->msgCtx.stateTimer = 4;
                 if (this->cutsceneState == ENFSN_CUTSCENESTATE_PLAYING) {
-                    ActorCutscene_Stop(this->cutscene);
+                    CutsceneManager_Stop(this->csId);
                     this->cutsceneState = ENFSN_CUTSCENESTATE_STOPPED;
                 }
                 switch (this->price) {
@@ -982,7 +982,7 @@ void EnFsn_MakeOffer(EnFsn* this, PlayState* play) {
                 break;
             case 1:
                 func_8019F230();
-                player->exchangeItemId = PLAYER_AP_NONE;
+                player->exchangeItemId = PLAYER_IA_NONE;
                 this->actionFunc = EnFsn_SetupDeterminePrice;
                 break;
         }
@@ -997,13 +997,13 @@ void EnFsn_GiveItem(EnFsn* this, PlayState* play) {
         }
         this->actor.parent = NULL;
         if (ENFSN_IS_SHOP(&this->actor) && !this->isSelling) {
-            func_80123D50(play, GET_PLAYER(play), ITEM_BOTTLE, PLAYER_AP_BOTTLE);
+            Player_UpdateBottleHeld(play, GET_PLAYER(play), ITEM_BOTTLE, PLAYER_IA_BOTTLE_EMPTY);
         }
         this->actionFunc = EnFsn_SetupResumeInteraction;
     } else if (this->isSelling == true) {
-        Actor_PickUp(&this->actor, play, this->items[this->cursorIndex]->getItemId, 300.0f, 300.0f);
+        Actor_OfferGetItem(&this->actor, play, this->items[this->cursorIndex]->getItemId, 300.0f, 300.0f);
     } else {
-        Actor_PickUp(&this->actor, play, this->getItemId, 300.0f, 300.0f);
+        Actor_OfferGetItem(&this->actor, play, this->getItemId, 300.0f, 300.0f);
     }
 }
 
@@ -1021,70 +1021,70 @@ void EnFsn_ResumeInteraction(EnFsn* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         if (ENFSN_IS_SHOP(&this->actor)) {
             if (!this->isSelling) {
-                this->cutscene = this->lookToShopkeeperBuyingCutscene;
+                this->csId = this->lookToShopkeeperBuyingCsId;
                 this->actor.textId = 0x29D0;
             } else {
-                this->cutscene = this->lookToShopkeeperCutscene;
+                this->csId = this->lookToShopkeeperCsId;
                 this->actor.textId = (this->numSellingItems <= 0) ? 0x29DE : 0x29D6;
             }
             Message_StartTextbox(play, this->actor.textId, &this->actor);
-            if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-                ActorCutscene_Stop(0x7C);
+            if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+                CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
             }
-            ActorCutscene_SetIntentToPlay(this->cutscene);
+            CutsceneManager_Queue(this->csId);
             this->actionFunc = EnFsn_ResumeShoppingInteraction;
         } else {
             EnFsn_HandleConversationBackroom(this, play);
             this->actionFunc = EnFsn_ConverseBackroom;
         }
     } else {
-        func_800B85E0(&this->actor, play, 400.0f, PLAYER_AP_MINUS1);
+        func_800B85E0(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
     }
 }
 
 void EnFsn_ResumeShoppingInteraction(EnFsn* this, PlayState* play) {
     if (this->cutsceneState == ENFSN_CUTSCENESTATE_STOPPED) {
-        if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
-            ActorCutscene_StartAndSetFlag(this->cutscene, &this->actor);
+        if (CutsceneManager_IsNext(this->csId)) {
+            CutsceneManager_StartWithPlayerCsAndSetFlag(this->csId, &this->actor);
             this->cutsceneState = ENFSN_CUTSCENESTATE_PLAYING;
             if (!this->isSelling) {
                 this->actionFunc = EnFsn_AskCanBuyMore;
             } else if (this->actor.textId != 0x29D6) {
                 this->actionFunc = EnFsn_AskCanBuyAterRunningOutOfItems;
             } else {
-                func_8011552C(play, 6);
+                func_8011552C(play, DO_ACTION_DECIDE);
                 this->stickLeftPrompt.isEnabled = false;
                 this->stickRightPrompt.isEnabled = true;
                 this->actionFunc = EnFsn_FaceShopkeeperSelling;
             }
         } else {
-            if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-                ActorCutscene_Stop(0x7C);
+            if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+                CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
             }
-            this->cutscene = !this->isSelling ? this->lookToShopkeeperBuyingCutscene : this->lookToShopkeeperCutscene;
-            ActorCutscene_SetIntentToPlay(this->cutscene);
+            this->csId = !this->isSelling ? this->lookToShopkeeperBuyingCsId : this->lookToShopkeeperCsId;
+            CutsceneManager_Queue(this->csId);
         }
     }
 }
 
 void EnFsn_LookToShelf(EnFsn* this, PlayState* play) {
     if (this->cutsceneState == ENFSN_CUTSCENESTATE_PLAYING) {
-        ActorCutscene_Stop(this->cutscene);
-        if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-            ActorCutscene_Stop(0x7C);
+        CutsceneManager_Stop(this->csId);
+        if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+            CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
         }
-        this->cutscene = this->lookToShelfCutscene;
-        ActorCutscene_SetIntentToPlay(this->cutscene);
+        this->csId = this->lookToShelfCsId;
+        CutsceneManager_Queue(this->csId);
         this->cutsceneState = ENFSN_CUTSCENESTATE_WAITING;
     } else if (this->cutsceneState == ENFSN_CUTSCENESTATE_WAITING) {
-        if (ActorCutscene_GetCanPlayNext(this->cutscene) != 0) {
-            ActorCutscene_StartAndSetFlag(this->cutscene, &this->actor);
+        if (CutsceneManager_IsNext(this->csId)) {
+            CutsceneManager_StartWithPlayerCsAndSetFlag(this->csId, &this->actor);
             this->cutsceneState = ENFSN_CUTSCENESTATE_PLAYING;
             EnFsn_UpdateCursorPos(this, play);
             this->actionFunc = EnFsn_BrowseShelf;
-            func_80151938(play, this->items[this->cursorIndex]->actor.textId);
+            Message_ContinueTextbox(play, this->items[this->cursorIndex]->actor.textId);
         } else {
-            ActorCutscene_SetIntentToPlay(this->cutscene);
+            CutsceneManager_Queue(this->csId);
         }
     }
 }
@@ -1103,12 +1103,12 @@ void EnFsn_BrowseShelf(EnFsn* this, PlayState* play) {
         this->stickLeftPrompt.isEnabled = true;
         EnFsn_UpdateCursorPos(this, play);
         if (talkstate == TEXT_STATE_5) {
-            func_8011552C(play, 6);
+            func_8011552C(play, DO_ACTION_DECIDE);
             if (!EnFsn_HasPlayerSelectedItem(this, play, CONTROLLER1(&play->state))) {
                 EnFsn_CursorLeftRight(this);
                 if (this->cursorIndex != prevCursorIdx) {
                     play_sound(NA_SE_SY_CURSOR);
-                    func_80151938(play, this->items[this->cursorIndex]->actor.textId);
+                    Message_ContinueTextbox(play, this->items[this->cursorIndex]->actor.textId);
                 }
             }
         }
@@ -1117,24 +1117,24 @@ void EnFsn_BrowseShelf(EnFsn* this, PlayState* play) {
 
 void EnFsn_LookToShopkeeperFromShelf(EnFsn* this, PlayState* play) {
     if (this->cutsceneState == ENFSN_CUTSCENESTATE_PLAYING) {
-        ActorCutscene_Stop(this->cutscene);
-        if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-            ActorCutscene_Stop(0x7C);
+        CutsceneManager_Stop(this->csId);
+        if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+            CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
         }
-        this->cutscene = this->lookToShopkeeperFromShelfCutscene;
-        ActorCutscene_SetIntentToPlay(this->cutscene);
+        this->csId = this->lookToShopkeeperFromShelfCsId;
+        CutsceneManager_Queue(this->csId);
         this->cutsceneState = ENFSN_CUTSCENESTATE_WAITING;
     } else if (this->cutsceneState == ENFSN_CUTSCENESTATE_WAITING) {
-        if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
-            ActorCutscene_StartAndSetFlag(this->cutscene, &this->actor);
+        if (CutsceneManager_IsNext(this->csId)) {
+            CutsceneManager_StartWithPlayerCsAndSetFlag(this->csId, &this->actor);
             this->cutsceneState = ENFSN_CUTSCENESTATE_PLAYING;
             this->stickLeftPrompt.isEnabled = false;
             this->stickRightPrompt.isEnabled = true;
             this->actor.textId = 0x29D6;
-            func_80151938(play, this->actor.textId);
+            Message_ContinueTextbox(play, this->actor.textId);
             this->actionFunc = EnFsn_FaceShopkeeperSelling;
         } else {
-            ActorCutscene_SetIntentToPlay(this->cutscene);
+            CutsceneManager_Queue(this->csId);
         }
     }
 }
@@ -1145,16 +1145,16 @@ void EnFsn_HandleCanPlayerBuyItem(EnFsn* this, PlayState* play) {
     switch (item->canBuyFunc(play, item)) {
         case CANBUY_RESULT_SUCCESS_2:
             func_8019F208();
-            gSaveContext.save.weekEventReg[33] |= 4;
+            SET_WEEKEVENTREG(WEEKEVENTREG_33_04);
         case CANBUY_RESULT_SUCCESS_1:
             if (this->cutsceneState == ENFSN_CUTSCENESTATE_PLAYING) {
-                ActorCutscene_Stop(this->cutscene);
+                CutsceneManager_Stop(this->csId);
                 this->cutsceneState = ENFSN_CUTSCENESTATE_STOPPED;
             }
             func_8019F208();
             item = this->items[this->cursorIndex];
             item->buyFanfareFunc(play, item);
-            Actor_PickUp(&this->actor, play, this->items[this->cursorIndex]->getItemId, 300.0f, 300.0f);
+            Actor_OfferGetItem(&this->actor, play, this->items[this->cursorIndex]->getItemId, 300.0f, 300.0f);
             play->msgCtx.msgMode = 0x43;
             play->msgCtx.stateTimer = 4;
             Interface_SetHudVisibility(HUD_VISIBILITY_ALL);
@@ -1173,12 +1173,12 @@ void EnFsn_HandleCanPlayerBuyItem(EnFsn* this, PlayState* play) {
             break;
         case CANBUY_RESULT_NEED_RUPEES:
             play_sound(NA_SE_SY_ERROR);
-            func_80151938(play, 0x29F0);
+            Message_ContinueTextbox(play, 0x29F0);
             this->actionFunc = EnFsn_PlayerCannotBuy;
             break;
         case CANBUY_RESULT_CANNOT_GET_NOW:
             play_sound(NA_SE_SY_ERROR);
-            func_80151938(play, 0x29DD);
+            Message_ContinueTextbox(play, 0x29DD);
             this->actionFunc = EnFsn_PlayerCannotBuy;
             break;
     }
@@ -1205,7 +1205,7 @@ void EnFsn_SelectItem(EnFsn* this, PlayState* play) {
     u8 talkState = Message_GetState(&play->msgCtx);
 
     if (EnFsn_TakeItemOffShelf(this) && (talkState == TEXT_STATE_CHOICE)) {
-        func_8011552C(play, 6);
+        func_8011552C(play, DO_ACTION_DECIDE);
         if (!EnFsn_TestCancelOption(this, play, CONTROLLER1(&play->state)) && Message_ShouldAdvance(play)) {
             switch (play->msgCtx.choiceIndex) {
                 case 0:
@@ -1214,7 +1214,7 @@ void EnFsn_SelectItem(EnFsn* this, PlayState* play) {
                 case 1:
                     func_8019F230();
                     this->actionFunc = this->prevActionFunc;
-                    func_80151938(play, this->items[this->cursorIndex]->actor.textId);
+                    Message_ContinueTextbox(play, this->items[this->cursorIndex]->actor.textId);
             }
         }
     }
@@ -1223,7 +1223,7 @@ void EnFsn_SelectItem(EnFsn* this, PlayState* play) {
 void EnFsn_PlayerCannotBuy(EnFsn* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         this->actionFunc = this->prevActionFunc;
-        func_80151938(play, this->items[this->cursorIndex]->actor.textId);
+        Message_ContinueTextbox(play, this->items[this->cursorIndex]->actor.textId);
     }
 }
 
@@ -1231,15 +1231,15 @@ void EnFsn_AskCanBuyMore(EnFsn* this, PlayState* play) {
     u8 talkState = Message_GetState(&play->msgCtx);
 
     if (this->cutsceneState == ENFSN_CUTSCENESTATE_STOPPED) {
-        if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
-            ActorCutscene_StartAndSetFlag(this->cutscene, &this->actor);
+        if (CutsceneManager_IsNext(this->csId)) {
+            CutsceneManager_StartWithPlayerCsAndSetFlag(this->csId, &this->actor);
             this->cutsceneState = ENFSN_CUTSCENESTATE_PLAYING;
         } else {
-            if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-                ActorCutscene_Stop(0x7C);
+            if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+                CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
             }
-            this->cutscene = this->lookToShopkeeperCutscene;
-            ActorCutscene_SetIntentToPlay(this->cutscene);
+            this->csId = this->lookToShopkeeperCsId;
+            CutsceneManager_Queue(this->csId);
         }
     }
     if (talkState == TEXT_STATE_CHOICE) {
@@ -1277,15 +1277,15 @@ void EnFsn_AskCanBuyAterRunningOutOfItems(EnFsn* this, PlayState* play) {
     u8 talkState = Message_GetState(&play->msgCtx);
 
     if (this->cutsceneState == ENFSN_CUTSCENESTATE_STOPPED) {
-        if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
-            ActorCutscene_StartAndSetFlag(this->cutscene, &this->actor);
+        if (CutsceneManager_IsNext(this->csId)) {
+            CutsceneManager_StartWithPlayerCsAndSetFlag(this->csId, &this->actor);
             this->cutsceneState = ENFSN_CUTSCENESTATE_PLAYING;
         } else {
-            if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-                ActorCutscene_Stop(0x7C);
+            if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+                CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
             }
-            this->cutscene = this->lookToShopkeeperCutscene;
-            ActorCutscene_SetIntentToPlay(this->cutscene);
+            this->csId = this->lookToShopkeeperCsId;
+            CutsceneManager_Queue(this->csId);
         }
     }
     if (talkState == TEXT_STATE_CHOICE) {
@@ -1325,7 +1325,7 @@ void EnFsn_FaceShopkeeperSelling(EnFsn* this, PlayState* play) {
     u8 cursorIndex;
 
     if (talkState == TEXT_STATE_CHOICE) {
-        func_8011552C(play, 6);
+        func_8011552C(play, DO_ACTION_DECIDE);
         if (!EnFsn_TestEndInteraction(this, play, CONTROLLER1(&play->state)) &&
             (!Message_ShouldAdvance(play) || !EnFsn_FacingShopkeeperDialogResult(this, play)) &&
             this->stickAccumX > 0) {
@@ -1333,7 +1333,7 @@ void EnFsn_FaceShopkeeperSelling(EnFsn* this, PlayState* play) {
             if (cursorIndex != CURSOR_INVALID) {
                 this->cursorIndex = cursorIndex;
                 this->actionFunc = EnFsn_LookToShelf;
-                func_8011552C(play, 6);
+                func_8011552C(play, DO_ACTION_DECIDE);
                 this->stickRightPrompt.isEnabled = false;
                 play_sound(NA_SE_SY_CURSOR);
             }
@@ -1380,10 +1380,10 @@ void EnFsn_ConverseBackroom(EnFsn* this, PlayState* play) {
 }
 
 void EnFsn_GetCutscenes(EnFsn* this) {
-    this->lookToShopkeeperCutscene = this->actor.cutscene;
-    this->lookToShelfCutscene = ActorCutscene_GetAdditionalCutscene(this->lookToShopkeeperCutscene);
-    this->lookToShopkeeperFromShelfCutscene = ActorCutscene_GetAdditionalCutscene(this->lookToShelfCutscene);
-    this->lookToShopkeeperBuyingCutscene = ActorCutscene_GetAdditionalCutscene(this->lookToShopkeeperFromShelfCutscene);
+    this->lookToShopkeeperCsId = this->actor.csId;
+    this->lookToShelfCsId = CutsceneManager_GetAdditionalCsId(this->lookToShopkeeperCsId);
+    this->lookToShopkeeperFromShelfCsId = CutsceneManager_GetAdditionalCsId(this->lookToShelfCsId);
+    this->lookToShopkeeperBuyingCsId = CutsceneManager_GetAdditionalCsId(this->lookToShopkeeperFromShelfCsId);
 }
 
 void EnFsn_Blink(EnFsn* this) {
@@ -1416,7 +1416,7 @@ void EnFsn_Init(Actor* thisx, PlayState* play) {
         EnFsn_GetCutscenes(this);
         EnFsn_InitShop(this, play);
     } else {
-        if ((gSaveContext.save.weekEventReg[33] & 8) || (gSaveContext.save.weekEventReg[79] & 0x40)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_33_08) || CHECK_WEEKEVENTREG(WEEKEVENTREG_79_40)) {
             Actor_Kill(&this->actor);
             return;
         }

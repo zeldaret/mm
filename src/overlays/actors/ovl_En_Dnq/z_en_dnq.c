@@ -83,7 +83,7 @@ static AnimationInfoS sAnimationInfo[] = {
 };
 
 s32 EnDnq_ValidatePictograph(PlayState* play, Actor* thisx) {
-    return Snap_ValidatePictograph(play, thisx, PICTOGRAPH_DEKU_KING, &thisx->focus.pos, &thisx->world.rot, 120.0f,
+    return Snap_ValidatePictograph(play, thisx, PICTO_VALID_DEKU_KING, &thisx->focus.pos, &thisx->world.rot, 120.0f,
                                    480.0f, 0x38E3);
 }
 
@@ -121,10 +121,10 @@ void func_80A52604(EnDnq* this, PlayState* play) {
 s32 func_80A52648(EnDnq* this, PlayState* play) {
     s32 ret = false;
 
-    if (play->csCtx.state != 0) {
+    if (play->csCtx.state != CS_STATE_IDLE) {
         if (!(this->unk_37C & 0x20)) {
             this->picto.actor.flags &= ~ACTOR_FLAG_1;
-            this->unk_1DC = 0xFF;
+            this->cueId = 255;
             this->unk_37C |= 0x20;
         }
         SubS_UpdateFlags(&this->unk_37C, 0, 7);
@@ -132,7 +132,7 @@ s32 func_80A52648(EnDnq* this, PlayState* play) {
     } else {
         if (this->unk_37C & 0x20) {
             this->picto.actor.flags |= ACTOR_FLAG_1;
-            this->unk_1DC = 0xFF;
+            this->cueId = 255;
             this->unk_37C &= ~0x20;
             SubS_UpdateFlags(&this->unk_37C, 3, 7);
         }
@@ -259,7 +259,7 @@ s32 func_80A52B68(EnDnq* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     u16 temp = play->msgCtx.currentTextId;
 
-    if ((player->stateFlags1 & PLAYER_STATE1_40) && (player->targetActor == &this->picto.actor)) {
+    if ((player->stateFlags1 & PLAYER_STATE1_40) && (player->talkActor == &this->picto.actor)) {
         switch (temp) {
             case 0x89B:
                 func_80A5257C(this, 18);
@@ -309,7 +309,7 @@ void func_80A52C6C(EnDnq* this, PlayState* play) {
 }
 
 s32* func_80A52CF8(EnDnq* this, PlayState* play) {
-    if (gSaveContext.save.weekEventReg[23] & 0x20) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_23_20)) {
         return &D_80A53400[14];
     }
 
@@ -343,11 +343,11 @@ void func_80A52DC8(EnDnq* this, PlayState* play) {
         SubS_UpdateFlags(&this->unk_37C, 0, 7);
     }
 
-    if (!(gSaveContext.save.weekEventReg[23] & 0x20)) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_23_20)) {
         this->unk_390 = 70.0f;
         if (Inventory_HasItemInBottle(ITEM_DEKU_PRINCESS) && !Play_InCsMode(play) &&
-            (Message_GetState(&play->msgCtx) == TEXT_STATE_NONE) && (ActorCutscene_GetCurrentIndex() == -1)) {
-            if ((DECR(this->unk_384) == 0) && (gSaveContext.save.weekEventReg[29] & 0x40)) {
+            (Message_GetState(&play->msgCtx) == TEXT_STATE_NONE) && (CutsceneManager_GetCurrentCsId() == CS_ID_NONE)) {
+            if ((DECR(this->unk_384) == 0) && CHECK_WEEKEVENTREG(WEEKEVENTREG_29_40)) {
                 Message_StartTextbox(play, 0x969, NULL);
                 this->unk_384 = 200;
             }
@@ -361,7 +361,7 @@ void func_80A52DC8(EnDnq* this, PlayState* play) {
 
         this->picto.actor.xzDistToPlayer = this->unk_394;
 
-        if (gSaveContext.save.weekEventReg[83] & 8) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_83_08)) {
             func_80A52A78(this, play);
         } else if (this->unk_3A4 == 0) {
             Math_ApproachS(&this->picto.actor.shape.rot.y, this->picto.actor.world.rot.y, 3, 0x2AA8);
@@ -391,19 +391,19 @@ void func_80A53038(EnDnq* this, PlayState* play) {
     static s32 D_80A535FC[] = {
         0, 1, 2, 3, 5, 6,
     };
-    s32 temp_v0;
-    u32 temp_v1;
+    s32 cueChannel;
+    u32 cueId;
 
-    if (Cutscene_CheckActorAction(play, 105)) {
-        temp_v0 = Cutscene_GetActorActionIndex(play, 105);
-        temp_v1 = play->csCtx.actorActions[temp_v0]->action;
-        if (this->unk_1DC != (u8)temp_v1) {
-            func_80A5257C(this, D_80A535FC[temp_v1]);
-            this->unk_1DC = temp_v1;
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_105)) {
+        cueChannel = Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_105);
+        cueId = play->csCtx.actorCues[cueChannel]->id;
+        if (this->cueId != (u8)cueId) {
+            func_80A5257C(this, D_80A535FC[cueId]);
+            this->cueId = cueId;
         }
 
         if ((this->unk_398 == 4) && Animation_OnFrame(&this->skelAnime, 2.0f)) {
-            Actor_PlaySfxAtPos(&this->picto.actor, NA_SE_EN_KINGNUTS_DAMAGE);
+            Actor_PlaySfx(&this->picto.actor, NA_SE_EN_KINGNUTS_DAMAGE);
         }
 
         if (((this->unk_398 == 3) || (this->unk_398 == 6)) &&
@@ -411,7 +411,7 @@ void func_80A53038(EnDnq* this, PlayState* play) {
             func_80A5257C(this, this->unk_398 + 1);
         }
 
-        Cutscene_ActorTranslateAndYaw(&this->picto.actor, play, temp_v0);
+        Cutscene_ActorTranslateAndYaw(&this->picto.actor, play, cueChannel);
     }
 }
 
@@ -430,7 +430,7 @@ void EnDnq_Init(Actor* thisx, PlayState* play) {
     this->unk_386 = 0;
     this->unk_37C = 0;
     SubS_UpdateFlags(&this->unk_37C, 3, 7);
-    if (gSaveContext.save.weekEventReg[9] & 0x80) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_09_80)) {
         this->unk_3A4 = 1;
     } else {
         this->unk_3A4 = 0;
@@ -455,11 +455,11 @@ void EnDnq_Update(Actor* thisx, PlayState* play) {
         this->actionFunc(this, play);
         func_80A52B68(this, play);
         SkelAnime_Update(&this->skelAnime);
-        Actor_UpdateBgCheckInfo(play, &this->picto.actor, 30.0f, 12.0f, 0.0f, 4);
+        Actor_UpdateBgCheckInfo(play, &this->picto.actor, 30.0f, 12.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
         this->unk_394 = this->picto.actor.xzDistToPlayer;
         func_80A52C6C(this, play);
         func_8013C964(&this->picto.actor, play, this->unk_390, fabsf(this->picto.actor.playerHeightRel) + 1.0f,
-                      PLAYER_AP_NONE, this->unk_37C & 7);
+                      PLAYER_IA_NONE, this->unk_37C & 7);
         this->picto.actor.xzDistToPlayer = this->unk_394;
         Actor_SetFocus(&this->picto.actor, 46.0f);
         func_80A52604(this, play);

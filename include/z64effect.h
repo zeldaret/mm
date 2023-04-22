@@ -1,7 +1,8 @@
-#ifndef _Z64EFFECT_H_
-#define _Z64EFFECT_H_
+#ifndef Z64EFFECT_H
+#define Z64EFFECT_H
 
 #include "PR/ultratypes.h"
+#include "libc/stdint.h"
 #include "color.h"
 #include "z64light.h"
 #include "z64math.h"
@@ -9,6 +10,8 @@
 
 struct GraphicsContext;
 struct PlayState;
+struct Actor;
+struct CollisionPoly;
 
 #define SPARK_COUNT 3
 #define BLURE_COUNT 25
@@ -181,7 +184,7 @@ typedef struct {
     /* 0x08 */ Vec3s p2;
     /* 0x0E */ s16 life;
     /* 0x10 */ UNK_TYPE1 pad10[0x4];
-    /* 0x14 */ CollisionPoly* colPoly;
+    /* 0x14 */ struct CollisionPoly* colPoly;
 } EffectTireMarkElement; // size = 0x18
 
 typedef struct {
@@ -265,7 +268,7 @@ typedef struct EffectSs {
     /* 0x28 */ EffectSsDrawFunc draw;
     /* 0x2C */ Vec3f vec;
     /* 0x38 */ void* gfx;
-    /* 0x3C */ Actor* actor;
+    /* 0x3C */ struct Actor* actor;
     /* 0x40 */ s16 regs[13]; // These are particle-specific
     /* 0x5A */ u16 flags; // bit 0: set if this entry is not considered free on a priority tie bit 1: ? bit 2: ?
     /* 0x5C */ s16 life; // -1 means this entry is free
@@ -279,47 +282,15 @@ typedef struct {
     /* 0x8 */ s32 size;
 } EffectSsInfo; // size = 0xC
 
-typedef enum {
-    /* 0x00 */ EFFECT_SS_DUST,
-    /* 0x01 */ EFFECT_SS_KIRAKIRA,
-    /* 0x02 */ EFFECT_SS_UNSET_02, // Deleted
-    /* 0x03 */ EFFECT_SS_BOMB2,
-    /* 0x04 */ EFFECT_SS_BLAST,
-    /* 0x05 */ EFFECT_SS_G_SPK,
-    /* 0x06 */ EFFECT_SS_D_FIRE,
-    /* 0x07 */ EFFECT_SS_BUBBLE,
-    /* 0x08 */ EFFECT_SS_UNSET_08, // Deleted
-    /* 0x09 */ EFFECT_SS_G_RIPPLE,
-    /* 0x0A */ EFFECT_SS_G_SPLASH,
-    /* 0x0B */ EFFECT_SS_UNSET_0B,
-    /* 0x0C */ EFFECT_SS_G_FIRE,
-    /* 0x0D */ EFFECT_SS_LIGHTNING,
-    /* 0x0E */ EFFECT_SS_DT_BUBBLE,
-    /* 0x0F */ EFFECT_SS_HAHEN,
-    /* 0x10 */ EFFECT_SS_STICK,
-    /* 0x11 */ EFFECT_SS_SIBUKI,
-    /* 0x12 */ EFFECT_SS_UNSET_12, // Deleted
-    /* 0x13 */ EFFECT_SS_UNSET_13, // Deleted
-    /* 0x14 */ EFFECT_SS_STONE1,
-    /* 0x15 */ EFFECT_SS_HITMARK,
-    /* 0x16 */ EFFECT_SS_FHG_FLASH,
-    /* 0x17 */ EFFECT_SS_K_FIRE,
-    /* 0x18 */ EFFECT_SS_SOLDER_SRCH_BALL,
-    /* 0x19 */ EFFECT_SS_KAKERA,
-    /* 0x1A */ EFFECT_SS_ICE_PIECE,
-    /* 0x1B */ EFFECT_SS_EN_ICE,
-    /* 0x1C */ EFFECT_SS_FIRE_TAIL,
-    /* 0x1D */ EFFECT_SS_EN_FIRE,
-    /* 0x1E */ EFFECT_SS_EXTRA,
-    /* 0x1F */ EFFECT_SS_UNSET_1F, // Deleted
-    /* 0x20 */ EFFECT_SS_DEAD_DB,
-    /* 0x21 */ EFFECT_SS_DEAD_DD,
-    /* 0x22 */ EFFECT_SS_DEAD_DS,
-    /* 0x23 */ EFFECT_SS_UNSET_23, // Deleted
-    /* 0x24 */ EFFECT_SS_ICE_SMOKE,
-    /* 0x25 */ EFFECT_EN_ICE_BLOCK,
-    /* 0x26 */ EFFECT_SS_SBN,
+#define DEFINE_EFFECT_SS(_name, enumValue) enumValue,
+#define DEFINE_EFFECT_SS_UNSET(enumValue) enumValue,
+
+typedef enum EffectSsType {
+    #include "tables/effect_ss_table.h"
     /* 0x27 */ EFFECT_SS_MAX
 } EffectSsType;
+
+#undef DEFINE_EFFECT_SS
+#undef DEFINE_EFFECT_SS_UNSET
 
 #endif

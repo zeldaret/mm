@@ -100,7 +100,7 @@ void DoorAna_WaitClosed(DoorAna* this, PlayState* play) {
 
     if (grottoType == DOORANA_TYPE_HIDDEN_STORMS) {
         //! @bug Implementation from OoT is not updated for MM, grotto does not open on Song of Storms
-        if (this->actor.xyzDistToPlayerSq < SQ(200.0f) && EnvFlags_Get(play, 5)) {
+        if (this->actor.xyzDistToPlayerSq < SQ(200.0f) && CutsceneFlags_Get(play, 5)) {
             grottoIsOpen = true;
             this->actor.flags &= ~ACTOR_FLAG_10; // always update OFF
         }
@@ -122,7 +122,7 @@ void DoorAna_WaitClosed(DoorAna* this, PlayState* play) {
         play_sound(NA_SE_SY_CORRECT_CHIME);
     }
 
-    func_800B8C50(&this->actor, play);
+    Actor_SetClosestSecretDistance(&this->actor, play);
 }
 
 void DoorAna_WaitOpen(DoorAna* this, PlayState* play) {
@@ -141,7 +141,7 @@ void DoorAna_WaitOpen(DoorAna* this, PlayState* play) {
             } else {
                 s32 destinationIdx = DOORANA_GET_ENTRANCE(&this->actor);
 
-                Play_SetupRespawnPoint(&play->state, RESPAWN_MODE_UNK_3, 0x4FF);
+                Play_SetupRespawnPoint(&play->state, RESPAWN_MODE_UNK_3, PLAYER_PARAMS(0xFF, PLAYER_INITMODE_4));
 
                 gSaveContext.respawn[RESPAWN_MODE_UNK_3].pos.y = this->actor.world.pos.y;
                 gSaveContext.respawn[RESPAWN_MODE_UNK_3].yaw = this->actor.home.rot.y;
@@ -176,11 +176,11 @@ void DoorAna_GrabLink(DoorAna* this, PlayState* play) {
     Player* player;
     s8 pad[2];
 
-    if (ActorCutscene_GetCurrentIndex() != this->actor.cutscene) {
-        if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
-            ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
+    if (CutsceneManager_GetCurrentCsId() != this->actor.csId) {
+        if (CutsceneManager_IsNext(this->actor.csId)) {
+            CutsceneManager_StartWithPlayerCs(this->actor.csId, &this->actor);
         } else {
-            ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+            CutsceneManager_Queue(this->actor.csId);
         }
     }
 

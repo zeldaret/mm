@@ -19,7 +19,7 @@ u32 EffectSsFhgFlash_Init(PlayState* play, u32 index, EffectSs* this, void* init
 void EffectSsFhgFlash_Update(PlayState* play, u32 index, EffectSs* this);
 void EffectSsFhgFlash_Draw(PlayState* play, u32 index, EffectSs* this);
 
-const EffectSsInit Effect_Ss_Fhg_Flash_InitVars = {
+EffectSsInit Effect_Ss_Fhg_Flash_InitVars = {
     EFFECT_SS_FHG_FLASH,
     EffectSsFhgFlash_Init,
 };
@@ -89,7 +89,7 @@ void EffectSsFhgFlash_Update(PlayState* play, u32 index, EffectSs* this) {
     if (this->rParams == FHGFLASH_SHOCK_PLAYER) {
         Player* player = GET_PLAYER(play);
 
-        randBodyPart = Rand_ZeroFloat(18 - 0.1f);
+        randBodyPart = Rand_ZeroFloat(PLAYER_BODYPART_MAX - 0.1f);
         this->pos.x = player->bodyPartsPos[randBodyPart].x + randPlusMinusPoint5Scaled(10.0f);
         this->pos.y = player->bodyPartsPos[randBodyPart].y + randPlusMinusPoint5Scaled(15.0f);
         this->pos.z = player->bodyPartsPos[randBodyPart].z + randPlusMinusPoint5Scaled(10.0f);

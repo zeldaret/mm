@@ -33,8 +33,8 @@ typedef struct BgDblueBalance {
     /* 0x17D */ s8 unk_17D;
     /* 0x17E */ s8 unk_17E;
     /* 0x17F */ s8 unk_17F;
-    /* 0x180 */ s8 unk_180;
-    /* 0x181 */ s8 unk_181;
+    /* 0x180 */ s8 isSwitchPressed;
+    /* 0x181 */ s8 isHeavySwitchPressed;
     /* 0x182 */ s8 unk_182;
     /* 0x183 */ u8 unk_183;
     /* 0x184 */ s16 unk_184;

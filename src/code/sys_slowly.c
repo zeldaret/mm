@@ -1,43 +1,59 @@
+/**
+ * @file sys_slowly.c
+ *
+ * This file implements a manager for running an asynchronous task on a thread with the lowest priority.
+ *
+ * The task callback is expected to have up to 2 void* arguments and have a void return. Setting `argCount` will adjust
+ * how many args the callback gets called with, but defaults to 2 and using the 2 argument callback.
+ *
+ * @note: `argCount` must be set manually, as this file implements no way to configure it.
+ */
+#include "slowly.h"
 #include "global.h"
+#include "stackcheck.h"
 
-#define SLOWLY_STATUS_DONE (1 << 0)
-#define SLOWLY_STATUS_STARTED (1 << 1)
-
-void Slowly_Main(SlowlyTask* slowly) {
+void Slowly_Main(SlowlyMgr* slowly) {
     slowly->status |= SLOWLY_STATUS_STARTED;
 
-    switch (slowly->callbackArgCount) {
-        case SLOWLY_CALLBACK_NO_ARGS:
-            slowly->callback0();
+    switch (slowly->argCount) {
+        case 0:
+            slowly->callback.zero();
             break;
-        case SLOWLY_CALLBACK_ONE_ARG:
-            slowly->callback1(slowly->callbackArg0);
+
+        case 1:
+            slowly->callback.one(slowly->arg0);
             break;
-        case SLOWLY_CALLBACK_TWO_ARGS:
-            slowly->callback2(slowly->callbackArg0, slowly->callbackArg1);
+
+        case 2:
+            slowly->callback.two(slowly->arg0, slowly->arg1);
+            break;
+
+        default:
             break;
     }
 
     slowly->status |= SLOWLY_STATUS_DONE;
 }
 
-void Slowly_ThreadEntry(SlowlyTask* slowly) {
+void Slowly_ThreadEntry(void* arg) {
+    SlowlyMgr* slowly = (SlowlyMgr*)arg;
+
     Slowly_Main(slowly);
 }
 
-void Slowly_Start(SlowlyTask* slowly, void* stack, void (*callback)(), void* callbackArg0, void* callbackArg1) {
-    bzero(slowly, sizeof(SlowlyTask));
+void Slowly_Init(SlowlyMgr* slowly, void* stack, SlowlyCallbackTwo callback, void* arg0, void* arg1) {
+    bzero(slowly, sizeof(SlowlyMgr));
 
-    slowly->callbackArgCount = SLOWLY_CALLBACK_TWO_ARGS;
+    slowly->argCount = 2;
     slowly->status = 0;
-    slowly->callback0 = callback;
-    slowly->callbackArg0 = callbackArg0;
-    slowly->callbackArg1 = callbackArg1;
+    slowly->callback.two = callback;
+    slowly->arg0 = arg0;
+    slowly->arg1 = arg1;
 
     osCreateThread(&slowly->thread, Z_THREAD_ID_SLOWLY, Slowly_ThreadEntry, slowly, stack, Z_PRIORITY_SLOWLY);
     osStartThread(&slowly->thread);
 }
 
-void Slowly_Stop(SlowlyTask* slowly) {
+void Slowly_Destroy(SlowlyMgr* slowly) {
     osDestroyThread(&slowly->thread);
 }

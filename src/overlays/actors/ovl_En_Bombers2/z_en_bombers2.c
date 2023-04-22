@@ -94,14 +94,15 @@ void EnBombers2_Init(Actor* thisx, PlayState* play) {
                        this->jointTable, OBJECT_CS_LIMB_MAX);
     this->actor.targetMode = 6;
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
-    if ((gSaveContext.save.weekEventReg[73] & 0x80) || (gSaveContext.save.entrance == ENTRANCE(EAST_CLOCK_TOWN, 2))) {
+
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_73_80) || (gSaveContext.save.entrance == ENTRANCE(EAST_CLOCK_TOWN, 2))) {
         this->actor.world.pos.x += Math_SinS(this->actor.home.rot.y + 0xC100) * 50.0f;
         cos = Math_CosS(this->actor.home.rot.y + 0xC100) * 50.0f;
         this->unk_2AC = 1;
         this->actor.world.pos.z += cos;
     }
-    this->cutscene = this->actor.cutscene;
-    if (this->cutscene == 0) {
+    this->csId = this->actor.csId;
+    if (this->csId == 0) {
         Actor_Kill(&this->actor);
     }
     func_80C04B40(this);
@@ -165,7 +166,7 @@ void func_80C04BA0(EnBombers2* this, PlayState* play) {
 
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->unk_2B6 = this->actor.world.rot.y;
-        gSaveContext.save.weekEventReg[86] |= 2;
+        SET_WEEKEVENTREG(WEEKEVENTREG_86_02);
         func_80C04D00(this);
         return;
     }
@@ -219,7 +220,8 @@ void func_80C04D8C(EnBombers2* this, PlayState* play) {
             s32 correctDigits;
 
             for (i = 0; i < ARRAY_COUNT(this->correctDigitSlots); i++) {
-                if (!(this->correctDigitSlots[i]) && (play->msgCtx.unk12054[i] == gSaveContext.save.bomberCode[i])) {
+                if (!(this->correctDigitSlots[i]) &&
+                    (play->msgCtx.unk12054[i] == gSaveContext.save.saveInfo.bomberCode[i])) {
                     this->correctDigitSlots[i] = true;
                 }
             }
@@ -232,15 +234,15 @@ void func_80C04D8C(EnBombers2* this, PlayState* play) {
             if (correctDigits >= 5) {
                 this->textIdIndex = 6;
                 this->actor.textId = sTextIds[this->textIdIndex];
-                func_80151938(play, this->actor.textId);
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_PIECE_OF_HEART);
+                Message_ContinueTextbox(play, this->actor.textId);
+                Actor_PlaySfx(&this->actor, NA_SE_SY_PIECE_OF_HEART);
                 this->talkState = TEXT_STATE_5;
                 return;
             }
         }
         if (Text_GetFaceReaction(play, 0x15) != 0) {
             this->unk_28E = 0;
-            func_801477B4(play);
+            Message_CloseTextbox(play);
             func_80C04B40(this);
         } else {
             s32 j;
@@ -251,13 +253,13 @@ void func_80C04D8C(EnBombers2* this, PlayState* play) {
                 case 5:
                 case 7:
                     this->unk_28E = 0;
-                    func_801477B4(play);
+                    Message_CloseTextbox(play);
                     func_80C04B40(this);
                     break;
                 case 2:
                     this->textIdIndex = 3;
                     this->actor.textId = sTextIds[this->textIdIndex];
-                    func_80151938(play, this->actor.textId);
+                    Message_ContinueTextbox(play, this->actor.textId);
                     this->talkState = TEXT_STATE_15;
                     break;
                 case 3:
@@ -265,15 +267,15 @@ void func_80C04D8C(EnBombers2* this, PlayState* play) {
                         this->correctDigitSlots[j] = false;
                     }
                     this->textIdIndex = 4;
-                    Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_ERROR);
+                    Actor_PlaySfx(&this->actor, NA_SE_SY_ERROR);
                     this->actor.textId = sTextIds[this->textIdIndex];
-                    func_80151938(play, this->actor.textId);
+                    Message_ContinueTextbox(play, this->actor.textId);
                     this->talkState = TEXT_STATE_5;
                     break;
                 case 4:
                     this->textIdIndex = 5;
                     this->actor.textId = sTextIds[this->textIdIndex];
-                    func_80151938(play, this->actor.textId);
+                    Message_ContinueTextbox(play, this->actor.textId);
                     this->talkState = TEXT_STATE_5;
                     break;
                 case 6:
@@ -307,13 +309,13 @@ void func_80C050B8(EnBombers2* this, PlayState* play) {
 
 void func_80C0520C(EnBombers2* this, PlayState* play) {
     if (this->unk_2A8 == 0) {
-        if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-            ActorCutscene_Stop(0x7C);
-            ActorCutscene_SetIntentToPlay(this->cutscene);
-        } else if (ActorCutscene_GetCanPlayNext(this->cutscene) == 0) {
-            ActorCutscene_SetIntentToPlay(this->cutscene);
+        if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+            CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
+            CutsceneManager_Queue(this->csId);
+        } else if (!CutsceneManager_IsNext(this->csId)) {
+            CutsceneManager_Queue(this->csId);
         } else {
-            ActorCutscene_StartAndSetUnkLinkFields(this->cutscene, &this->actor);
+            CutsceneManager_StartWithPlayerCs(this->csId, &this->actor);
             this->unk_2A8 = 1;
         }
     } else {
@@ -321,16 +323,16 @@ void func_80C0520C(EnBombers2* this, PlayState* play) {
         if ((fabsf(this->unk_29C.x - this->actor.world.pos.x) < 3.0f) &&
             (fabsf(this->unk_29C.z - this->actor.world.pos.z) < 3.0f)) {
             this->unk_2B6 = this->actor.yawTowardsPlayer;
-            this->actor.speedXZ = 0.0f;
+            this->actor.speed = 0.0f;
             if (fabsf(this->actor.world.rot.y - this->actor.yawTowardsPlayer) < 100.0f) {
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 this->talkState = TEXT_STATE_5;
                 this->textIdIndex = 7;
                 EnBombers2_ChangeAnim(this, 6, 1.0f);
                 this->unk_2A8 = 0;
                 this->unk_2C0 = 1;
-                gSaveContext.save.weekEventReg[73] |= 0x80;
-                ActorCutscene_Stop(this->cutscene);
+                SET_WEEKEVENTREG(WEEKEVENTREG_73_80);
+                CutsceneManager_Stop(this->csId);
                 this->unk_2AC = 1;
                 this->actor.textId = sTextIds[this->textIdIndex];
                 Message_StartTextbox(play, this->actor.textId, &this->actor);
@@ -356,7 +358,7 @@ void EnBombers2_Update(Actor* thisx, PlayState* play) {
     if ((this->animIndex == 2) &&
         (Animation_OnFrame(&this->skelAnime, 9.0f) || Animation_OnFrame(&this->skelAnime, 10.0f) ||
          Animation_OnFrame(&this->skelAnime, 17.0f) || Animation_OnFrame(&this->skelAnime, 18.0f))) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BOMBERS_WALK);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_BOMBERS_WALK);
     }
     this->actor.shape.rot.y = this->actor.world.rot.y;
     if (this->unk_2C0 != 2) {
@@ -399,7 +401,9 @@ void EnBombers2_Update(Actor* thisx, PlayState* play) {
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
     if (this->unk_2AC == 0) {
-        Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 50.0f, 0x1D);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 50.0f,
+                                UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                    UPDBGCHECKINFO_FLAG_10);
     }
     Math_Vec3f_Copy(&this->actor.world.pos, &sp34);
 }

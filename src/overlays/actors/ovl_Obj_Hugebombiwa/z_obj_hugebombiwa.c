@@ -380,7 +380,7 @@ void func_80A54C04(ObjHugebombiwa* this, PlayState* play) {
     }
 
     if (func_80A54A0C(this)) {
-        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+        CutsceneManager_Queue(this->actor.csId);
         func_80A54CD8(this);
         return;
     }
@@ -407,12 +407,12 @@ void func_80A54CD8(ObjHugebombiwa* this) {
 void func_80A54CEC(ObjHugebombiwa* this, PlayState* play) {
     s32 pad;
 
-    if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
+    if (CutsceneManager_IsNext(this->actor.csId)) {
+        CutsceneManager_StartWithPlayerCs(this->actor.csId, &this->actor);
         Flags_SetSwitch(play, ENHUGEBOMBIWA_GET_7F(&this->actor));
         if (!(ENHUGEBOMBIWA_GET_100(&this->actor)) &&
             ((play->sceneId == SCENE_17SETUGEN) || (play->sceneId == SCENE_17SETUGEN2))) {
-            gSaveContext.save.weekEventReg[19] |= 2;
+            SET_WEEKEVENTREG(WEEKEVENTREG_19_02);
         }
 
         if (!(ENHUGEBOMBIWA_GET_100(&this->actor))) {
@@ -429,7 +429,7 @@ void func_80A54CEC(ObjHugebombiwa* this, PlayState* play) {
             func_80A55310(this);
         }
     } else {
-        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+        CutsceneManager_Queue(this->actor.csId);
     }
 }
 
@@ -523,7 +523,7 @@ void func_80A55064(ObjHugebombiwa* this, PlayState* play) {
 
     this->unk_4B2--;
     if ((this->unk_4B0 >= 20) || (this->unk_4B2 <= 0)) {
-        ActorCutscene_Stop(this->actor.cutscene);
+        CutsceneManager_Stop(this->actor.csId);
         Actor_Kill(&this->actor);
     }
 }
@@ -619,7 +619,7 @@ void func_80A55564(ObjHugebombiwa* this, PlayState* play) {
 
     this->unk_4B2--;
     if ((this->unk_4B0 >= 20) || (this->unk_4B2 <= 0)) {
-        ActorCutscene_Stop(this->actor.cutscene);
+        CutsceneManager_Stop(this->actor.csId);
         Actor_Kill(&this->actor);
     }
 }

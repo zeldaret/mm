@@ -12,7 +12,7 @@
  *     one outside the shop, not all Gorons in the Goron Shrine are covered by this actor).
  * - Medigoron: The Powder Keg making Medigoron in Goron Village.
  */
-
+#include "global.h"
 #include "z_en_go.h"
 #include "z64quake.h"
 #include "objects/object_hakugin_demo/object_hakugin_demo.h"
@@ -334,7 +334,7 @@ static AnimationInfoS sAnimationInfo[] = {
 
 Actor* EnGo_FindGravemaker(EnGo* this, PlayState* play);
 s32 EnGo_ChangeAnim(EnGo* this, PlayState* play, EnGoAnimationIndex animIndex);
-s32 EnGo_CheckAndChangeCutscene(EnGo* this, s16 indexCutscene);
+s32 EnGo_CheckAndChangeCutscene(EnGo* this, s16 csId);
 s32 EnGo_IsFallingAsleep(EnGo* this, PlayState* play);
 
 void EnGo_SetupAction(EnGo* this, PlayState* play);
@@ -820,9 +820,9 @@ s32 EnGo_IsFallingAsleep(EnGo* this, PlayState* play) {
     if (((player->transformation == PLAYER_FORM_GORON) && (play->msgCtx.ocarinaMode == 3) &&
          (play->msgCtx.lastPlayedSong == OCARINA_SONG_GORON_LULLABY) && (this->sleepState == ENGO_AWAKE) &&
          (this->actor.xzDistToPlayer < 400.0f)) ||
-        (!(gSaveContext.save.weekEventReg[22] & 0x4) && // Elder's son has been calmed
+        (!CHECK_WEEKEVENTREG(WEEKEVENTREG_22_04) && // Elder's son has been calmed
          (play->sceneId == SCENE_16GORON_HOUSE) && (gSaveContext.sceneLayer == 0) && (this->sleepState == ENGO_AWAKE) &&
-         (play->csCtx.currentCsIndex == 1))) {
+         (play->csCtx.scriptIndex == 1))) {
         isFallingAsleep = true;
     }
     return isFallingAsleep;
@@ -1021,10 +1021,10 @@ s32 EnGo_DetectCollisions(EnGo* this, PlayState* play) {
 s32 EnGo_GraveBroGoron_CheckAndSetupCutsceneSpringArrival(EnGo* this, PlayState* play) {
     if ((ENGO_GET_TYPE(&this->actor) == ENGO_GRAVEBRO) && (play->csCtx.state != 0) && (this->actor.draw != NULL) &&
         (play->sceneId == SCENE_10YUKIYAMANOMURA2) && (gSaveContext.sceneLayer == 1) &&
-        (play->csCtx.currentCsIndex == 0)) {
+        (play->csCtx.scriptIndex == 0)) {
         if (this->springArrivalCutsceneActive == false) {
             this->actor.flags &= ~ACTOR_FLAG_1;
-            this->springArrivalCurrentCsAction = 255;
+            this->springArrivalCueId = 255;
             this->springArrivalCutsceneActive = true;
             this->interruptedActionFunc = this->actionFunc;
         }
@@ -1032,7 +1032,7 @@ s32 EnGo_GraveBroGoron_CheckAndSetupCutsceneSpringArrival(EnGo* this, PlayState*
         this->actionFunc = EnGo_GraveBroGoron_CutsceneSpringArrival;
     } else if (this->springArrivalCutsceneActive) {
         this->actor.flags |= ACTOR_FLAG_1;
-        this->springArrivalCurrentCsAction = 255;
+        this->springArrivalCueId = 255;
         this->springArrivalCutsceneActive = false;
         SubS_UpdateFlags(&this->actionFlags, 3, 7);
         this->actionFunc = this->interruptedActionFunc;
@@ -1073,22 +1073,22 @@ s32 EnGo_UpdateAnimationToCurrent(EnGo* this, PlayState* play) {
  * Update sound effects based on animation.
  */
 s32 EnGo_UpdateSfx(EnGo* this, PlayState* play) {
-    if (play->csCtx.state == 0) {
+    if (play->csCtx.state == CS_STATE_IDLE) {
         if (this->currAnimIndex == ENGO_ANIM_ROLL) {
             if (Animation_OnFrame(&this->skelAnime, 2.0f)) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_GOLON_CIRCLE);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_GOLON_CIRCLE);
             }
 
             if (Animation_OnFrame(&this->skelAnime, 22.0f)) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_GOLON_SIT_IMT);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_GOLON_SIT_IMT);
             }
         } else if ((this->currAnimIndex == ENGO_ANIM_UNROLL) || (this->currAnimIndex == ENGO_ANIM_UNROLL_IMM)) {
             if (Animation_OnFrame(&this->skelAnime, 2.0f)) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_GOLON_CIRCLE_OFF);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_GOLON_CIRCLE_OFF);
             }
 
             if (Animation_OnFrame(&this->skelAnime, 24.0f)) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_GOLON_STAND_IMT);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_GOLON_STAND_IMT);
             }
         }
     }
@@ -1294,8 +1294,8 @@ void EnGo_GraveBroGoron_GravemakerIdle(EnGo* this, PlayState* play) {
     if ((fabsf(this->actor.playerHeightRel) > 20.0f) || (this->actor.xzDistToPlayer > 300.0f)) {
         SubS_UpdateFlags(&this->actionFlags, 3, 7);
     } else if ((player->transformation != PLAYER_FORM_GORON) || (ABS_ALT(deltaYaw) >= 0x1C70) ||
-               (gSaveContext.save.weekEventReg[21] & 0x4) || // Spoke to gravemaker as Goron
-               (gSaveContext.save.weekEventReg[21] & 0x8)) { // Thawed gravemaker's brother
+               CHECK_WEEKEVENTREG(WEEKEVENTREG_21_04) || // Spoke to gravemaker as Goron
+               CHECK_WEEKEVENTREG(WEEKEVENTREG_21_08)) { // Thawed gravemaker's brother
         SubS_UpdateFlags(&this->actionFlags, 3, 7);
     } else {
         SubS_UpdateFlags(&this->actionFlags, 4, 7);
@@ -1306,7 +1306,7 @@ void EnGo_GraveBroGoron_GravemakerIdle(EnGo* this, PlayState* play) {
  * Idle action function for the frozen brother
  */
 void EnGo_GraveBroGoron_FrozenIdle(EnGo* this, PlayState* play) {
-    if (gSaveContext.save.weekEventReg[21] & 0x8) { // Thawed gravemaker's brother
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_21_08)) { // Thawed gravemaker's brother
         SubS_UpdateFlags(&this->actionFlags, 3, 7);
     } else {
         SubS_UpdateFlags(&this->actionFlags, 4, 7);
@@ -1347,8 +1347,8 @@ Actor* EnGo_FindGravemaker(EnGo* this, PlayState* play) {
  * The Medigoron's collider radius is greater when it needs to be able to drop the Powder Keg in front of the player.
  */
 void EnGo_Medigoron_UpdateColliderRadius(EnGo* this, PlayState* play, s32 isGivenPowderKeg) {
-    if ((gSaveContext.save.weekEventReg[18] & 0x80) || // Has Powder Keg Privileges
-        (play->actorCtx.flags & ACTORCTX_FLAG_0)       // Same check occurs in Powder Keg ammo check MsgScript Command
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_18_80) || // Has Powder Keg Privileges
+        (play->actorCtx.flags & ACTORCTX_FLAG_0)  // Same check occurs in Powder Keg ammo check MsgScript Command
         || isGivenPowderKeg) {
         this->colliderSphere.dim.modelSphere.radius = 300;
     } else {
@@ -1361,14 +1361,14 @@ void EnGo_Medigoron_UpdateColliderRadius(EnGo* this, PlayState* play, s32 isGive
  *
  * @return true when changed.
  */
-s32 EnGo_CheckAndChangeCutscene(EnGo* this, s16 indexCutscene) {
-    if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-        ActorCutscene_Stop(0x7C);
-    } else if (ActorCutscene_GetCanPlayNext(indexCutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(indexCutscene, &this->actor);
+s32 EnGo_CheckAndChangeCutscene(EnGo* this, s16 csId) {
+    if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+        CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
+    } else if (CutsceneManager_IsNext(csId)) {
+        CutsceneManager_StartWithPlayerCs(csId, &this->actor);
         return true;
     }
-    ActorCutscene_SetIntentToPlay(indexCutscene);
+    CutsceneManager_Queue(csId);
     return false;
 }
 
@@ -1396,7 +1396,7 @@ s32 EnGo_GatekeeperGoron_CutscenePound(EnGo* this, f32 initialVelocity, f32 maxD
     f32 velocity = this->actor.velocity.y + this->actor.gravity;
     s32 isFinished;
 
-    if (this->actor.bgCheckFlags & 2) { // Settled to the ground
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND_TOUCH) {
         // Transition 3->DONE
         isFinished = true;
     } else {
@@ -1518,8 +1518,8 @@ s32 EnGo_GatekeeperGoron_CutsceneOpenShrine(Actor* thisx, PlayState* play) {
 
     switch (this->cutsceneState) {
         case 0:
-            this->indexCutscene = ActorCutscene_GetAdditionalCutscene(this->actor.cutscene);
-            if (EnGo_CheckAndChangeCutscene(this, this->indexCutscene)) {
+            this->csId = CutsceneManager_GetAdditionalCsId(this->actor.csId);
+            if (EnGo_CheckAndChangeCutscene(this, this->csId)) {
                 this->gatekeeperAnimState = 1;
                 this->cutsceneState = 1;
             } else {
@@ -1527,26 +1527,26 @@ s32 EnGo_GatekeeperGoron_CutsceneOpenShrine(Actor* thisx, PlayState* play) {
             }
 
         case 1:
-            if (ActorCutscene_GetCurrentIndex() != this->indexCutscene) {
-                this->indexCutscene = ActorCutscene_GetAdditionalCutscene(this->indexCutscene);
+            if (CutsceneManager_GetCurrentCsId() != this->csId) {
+                this->csId = CutsceneManager_GetAdditionalCsId(this->csId);
                 this->cutsceneState = 2;
             } else {
                 break;
             }
 
         case 2:
-            if (EnGo_CheckAndChangeCutscene(this, this->indexCutscene)) {
+            if (EnGo_CheckAndChangeCutscene(this, this->csId)) {
                 this->cutsceneState = 3;
             } else {
                 break;
             }
 
         case 3:
-            if (ActorCutscene_GetCanPlayNext(0x7C)) {
-                ActorCutscene_StartAndSetUnkLinkFields(0x7C, NULL);
+            if (CutsceneManager_IsNext(CS_ID_GLOBAL_TALK)) {
+                CutsceneManager_StartWithPlayerCs(CS_ID_GLOBAL_TALK, NULL);
                 this->cutsceneState = 4;
-            } else if (ActorCutscene_GetCurrentIndex() == this->indexCutscene) {
-                ActorCutscene_SetIntentToPlay(0x7C);
+            } else if (CutsceneManager_GetCurrentCsId() == this->csId) {
+                CutsceneManager_Queue(CS_ID_GLOBAL_TALK);
             }
     }
 
@@ -1571,7 +1571,7 @@ s32 EnGo_GatekeeperGoron_CutsceneOpenShrine(Actor* thisx, PlayState* play) {
         case 3:
             this->cutsceneDelayTimer++;
             if (this->cutsceneDelayTimer >= 10) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_GOLON_JUMP);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_GOLON_JUMP);
                 this->actor.velocity.y = ENGO_POUND_INITIAL_RISE_VEL;
                 this->actor.gravity = -1.0f;
                 this->gatekeeperAnimState++;
@@ -1580,11 +1580,11 @@ s32 EnGo_GatekeeperGoron_CutsceneOpenShrine(Actor* thisx, PlayState* play) {
 
         case 4:
             if (EnGo_GatekeeperGoron_CutscenePound(this, ENGO_POUND_INITIAL_RISE_VEL, (0.4f) * ENGO_NORMAL_SCALE, 6)) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_GOLON_LAND_BIG);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_GOLON_LAND_BIG);
                 EnGo_GatekeeperGoron_CreateQuakeEffects(this, play);
                 this->gatekeeperAnimState++;
                 this->cutsceneDelayTimer = 0;
-                gSaveContext.save.weekEventReg[88] |= 0x40; // Gatekeeper has Opened Shrine
+                SET_WEEKEVENTREG(WEEKEVENTREG_88_40); // Gatekeeper has Opened Shrine
             }
             break;
 
@@ -1604,16 +1604,16 @@ s32 EnGo_GatekeeperGoron_CutsceneOpenShrine(Actor* thisx, PlayState* play) {
             if (this->cutsceneState >= 65) {
                 switch (player->transformation) {
                     case PLAYER_FORM_HUMAN:
-                        gSaveContext.save.weekEventReg[88] |= 0x80; // Gatekeeper has opened shrine for Human form.
+                        SET_WEEKEVENTREG(WEEKEVENTREG_88_80); // Gatekeeper has opened shrine for Human form.
                         break;
                     case PLAYER_FORM_GORON:
-                        gSaveContext.save.weekEventReg[89] |= 0x4; // Gatekeeper has opened shrine for Goron form.
+                        SET_WEEKEVENTREG(WEEKEVENTREG_89_04); // Gatekeeper has opened shrine for Goron form.
                         break;
                     case PLAYER_FORM_ZORA:
-                        gSaveContext.save.weekEventReg[89] |= 0x2; // Gatekeeper has opened shrine for Zora form.
+                        SET_WEEKEVENTREG(WEEKEVENTREG_89_02); // Gatekeeper has opened shrine for Zora form.
                         break;
                     case PLAYER_FORM_DEKU:
-                        gSaveContext.save.weekEventReg[89] |= 0x1; // Gatekeeper has opened shrine for Deku form.
+                        SET_WEEKEVENTREG(WEEKEVENTREG_89_01); // Gatekeeper has opened shrine for Deku form.
                         break;
                 }
                 ret = true;
@@ -1636,8 +1636,8 @@ s32 EnGo_Medigoron_CutsceneGivePowderKeg(Actor* thisx, PlayState* play) {
 
     switch (this->cutsceneState) {
         case 0:
-            this->indexCutscene = this->actor.cutscene;
-            if (EnGo_CheckAndChangeCutscene(this, this->indexCutscene)) {
+            this->csId = this->actor.csId;
+            if (EnGo_CheckAndChangeCutscene(this, this->csId)) {
                 this->cutsceneState++;
             }
             break;
@@ -1648,7 +1648,7 @@ s32 EnGo_Medigoron_CutsceneGivePowderKeg(Actor* thisx, PlayState* play) {
 
         case 2:
             if (Animation_OnFrame(&this->skelAnime, 16.0f)) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_GORON_HAND_HIT);
+                Actor_PlaySfx(&this->actor, NA_SE_EV_GORON_HAND_HIT);
             }
 
             if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
@@ -1666,7 +1666,7 @@ s32 EnGo_Medigoron_CutsceneGivePowderKeg(Actor* thisx, PlayState* play) {
 
         case 3:
             if (this->cutsceneDelayTimer >= 60) {
-                ActorCutscene_Stop(this->indexCutscene);
+                CutsceneManager_Stop(this->csId);
                 this->cutsceneDelayTimer = 0;
                 this->cutsceneState = 0;
                 ret = true;
@@ -1839,7 +1839,7 @@ void EnGo_ChangeToShiveringAnimation(EnGo* this, PlayState* play) {
 void EnGo_StretcherGoron_Setup(EnGo* this, PlayState* play) {
     if (((gSaveContext.save.entrance == ENTRANCE(GORON_RACETRACK, 0)) ||
          (gSaveContext.save.entrance == ENTRANCE(GORON_RACETRACK, 2))) &&
-        (gSaveContext.save.weekEventReg[33] & 0x80)) {
+        (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_SNOWHEAD_TEMPLE))) {
         EnGo_ChangeToStretchingAnimation(this, play);
         this->actionFunc = EnGo_Idle;
     } else {
@@ -1893,8 +1893,8 @@ void EnGo_GatekeeperGoron_Setup(EnGo* this, PlayState* play) {
 void EnGo_GraveBroGoron_Setup(EnGo* this, PlayState* play) {
     if ((ENGO_GET_SUBTYPE(&this->actor) == ENGO_GRAVEBRO_FROZEN) &&
         (((play->sceneId == SCENE_10YUKIYAMANOMURA2) && // Snow mountain village
-          (gSaveContext.sceneLayer == 1) && (play->csCtx.currentCsIndex == 0)) ||
-         !(gSaveContext.save.weekEventReg[21] & 0x8))) { // Thawed gravemaker's brother
+          (gSaveContext.sceneLayer == 1) && (play->csCtx.scriptIndex == 0)) ||
+         !CHECK_WEEKEVENTREG(WEEKEVENTREG_21_08))) { // Thawed gravemaker's brother
         this->actor.child = EnGo_FindGravemaker(this, play);
         this->actor.child->child = &this->actor;
         EnGo_ChangeToFrozenAnimation(this, play);
@@ -1911,7 +1911,7 @@ void EnGo_GraveBroGoron_Setup(EnGo* this, PlayState* play) {
  * There are three, but they all behave the same way aside from dialog.
  */
 void EnGo_ShrineGoron_Setup(EnGo* this, PlayState* play) {
-    if (!(gSaveContext.save.weekEventReg[22] & 0x4)) { // Elder's son has been calmed
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_22_04)) { // Elder's son has been calmed
         EnGo_ChangeToCoveringEarsAnimation(this, play);
         this->actionFunc = EnGo_Idle;
     } else {
@@ -2017,7 +2017,7 @@ void EnGo_Idle(EnGo* this, PlayState* play) {
     if ((ENGO_GET_TYPE(&this->actor) == ENGO_SPECTATOR) &&
         (gSaveContext.save.entrance == ENTRANCE(GORON_RACETRACK, 1))) {
         // Spectators only cheer. No other interactions
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_GORON_CHEER - SFX_FLAG);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_GORON_CHEER - SFX_FLAG);
     } else if (ENGO_GET_TYPE(&this->actor) != ENGO_MEDIGORON) {
         // All others besides the Medigoron in the Powder Keg Shop can fall asleep
         if (EnGo_IsFallingAsleep(this, play)) {
@@ -2079,7 +2079,7 @@ void EnGo_Sleep(EnGo* this, PlayState* play) {
             this->actionFlags |= ENGO_FLAG_UNROLLING;
             this->actor.shape.yOffset = ENGO_STANDING_Y_OFFSET;
         } else if ((this->sleepState != ENGO_AWAKE) &&
-                   (gSaveContext.save.weekEventReg[22] & 0x4)) { // Elder's son has been calmed
+                   CHECK_WEEKEVENTREG(WEEKEVENTREG_22_04)) { // Elder's son has been calmed
             // While asleep, rhythmicallly snore and change shape to show breathing.
             this->actor.scale.x = this->scaleFactor - (Math_SinS(this->snorePhase) * (0.1f * ENGO_NORMAL_SCALE));
             this->actor.scale.y = this->scaleFactor + (Math_SinS(this->snorePhase) * (0.1f * ENGO_NORMAL_SCALE));
@@ -2088,7 +2088,7 @@ void EnGo_Sleep(EnGo* this, PlayState* play) {
             if (this->snorePhase == 0) {
                 this->sleepState = -this->sleepState;
                 sfxId = (this->sleepState > ENGO_AWAKE) ? NA_SE_EN_GOLON_SNORE1 : NA_SE_EN_GOLON_SNORE2;
-                Actor_PlaySfxAtPos(&this->actor, sfxId);
+                Actor_PlaySfx(&this->actor, sfxId);
             }
             this->snorePhase += 0x400;
             this->actor.shape.yOffset = (this->actor.scale.y / this->scaleFactor) * ENGO_ROLLEDUP_Y_OFFSET;
@@ -2127,7 +2127,7 @@ void EnGo_Frozen(EnGo* this, PlayState* play) {
  * Action function for transitioning to thawing.
  */
 void EnGo_AwaitThaw(EnGo* this, PlayState* play) {
-    if (EnGo_CheckAndChangeCutscene(this, this->actor.cutscene)) {
+    if (EnGo_CheckAndChangeCutscene(this, this->actor.csId)) {
         this->actionFunc = EnGo_Thaw;
     }
 }
@@ -2139,12 +2139,12 @@ void EnGo_Thaw(EnGo* this, PlayState* play) {
     EnGo* unfrozenBro = (EnGo*)this->actor.child;
 
     if ((s32)(this->iceBlockScale * 3.0f) != 0) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_ICE_MELT_LEVEL - SFX_FLAG);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_ICE_MELT_LEVEL - SFX_FLAG);
         Math_ApproachF(&this->iceBlockScale, 0.0f, 0.02f, 1.0f);
         this->iceBlockAlpha = (this->iceBlockScale / 0.9f) * 100.0f;
         EnGo_MakeSteam(this);
     } else {
-        ActorCutscene_Stop(this->actor.cutscene);
+        CutsceneManager_Stop(this->actor.csId);
         EnGo_ChangeToShiveringAnimation(this, play);
         if ((ENGO_GET_TYPE(&this->actor) == ENGO_GRAVEBRO) &&
             (ENGO_GET_SUBTYPE(&this->actor) == ENGO_GRAVEBRO_FROZEN)) {
@@ -2171,35 +2171,35 @@ void EnGo_GraveBroGoron_CutsceneSpringArrival(EnGo* this, PlayState* play) {
         ENGO_ANIM_LYINGDOWNIDLE, ENGO_ANIM_UNROLL, ENGO_ANIM_SHIVER_IMM, ENGO_ANIM_LOOK_AROUND,
         ENGO_ANIM_SHOW,          ENGO_ANIM_SHIVER, ENGO_ANIM_SHIVER,     ENGO_ANIM_CHEER,
     };
-    u16 actorActionCmd = 0;
-    s32 csAction;
-    s32 actionIndex;
+    u16 cueType = 0;
+    s32 cueId;
+    s32 cueChannel;
 
     switch (ENGO_GET_SUBTYPE(&this->actor)) {
         case ENGO_GRAVEBRO_GRAVEMAKER:
-            actorActionCmd = 128;
+            cueType = CS_CMD_ACTOR_CUE_128;
             break;
 
         case ENGO_GRAVEBRO_FROZEN:
-            actorActionCmd = 129;
+            cueType = CS_CMD_ACTOR_CUE_129;
             break;
     }
 
-    if ((actorActionCmd == 128) || (actorActionCmd == 129)) {
-        if (Cutscene_CheckActorAction(play, actorActionCmd)) {
-            actionIndex = Cutscene_GetActorActionIndex(play, actorActionCmd);
-            csAction = play->csCtx.actorActions[actionIndex]->action;
+    if ((cueType == CS_CMD_ACTOR_CUE_128) || (cueType == CS_CMD_ACTOR_CUE_129)) {
+        if (Cutscene_IsCueInChannel(play, cueType)) {
+            cueChannel = Cutscene_GetCueChannel(play, cueType);
+            cueId = play->csCtx.actorCues[cueChannel]->id;
 
-            if (this->springArrivalCurrentCsAction != (u8)csAction) {
-                this->springArrivalCurrentCsAction = csAction;
-                EnGo_ChangeAnim(this, play, animationIndices[csAction]);
+            if (this->springArrivalCueId != (u8)cueId) {
+                this->springArrivalCueId = cueId;
+                EnGo_ChangeAnim(this, play, animationIndices[cueId]);
                 this->actionFlags = ENGO_FLAG_NONE;
                 this->actionFlags |= ENGO_FLAG_EYES_OPEN;
                 this->eyeTexIndex = ENGO_EYETEX_OPEN;
                 this->iceBlockScale = 0.0f;
                 this->iceBlockAlpha = 0.0f;
 
-                switch (csAction) {
+                switch (cueId) {
                     case 1:
                         this->actionFlags |= ENGO_FLAG_STANDING;
                         this->skelAnime.curFrame = this->skelAnime.endFrame;
@@ -2212,7 +2212,7 @@ void EnGo_GraveBroGoron_CutsceneSpringArrival(EnGo* this, PlayState* play) {
                 }
             }
 
-            switch (this->springArrivalCurrentCsAction) {
+            switch (this->springArrivalCueId) {
                 case 3:
                     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame) &&
                         (this->currAnimIndex == ENGO_ANIM_LOOK_AROUND)) {
@@ -2229,7 +2229,7 @@ void EnGo_GraveBroGoron_CutsceneSpringArrival(EnGo* this, PlayState* play) {
 
                 case 6:
                     if ((s32)(this->iceBlockScale * 3.0f) != 0) {
-                        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_ICE_MELT_LEVEL - SFX_FLAG);
+                        Actor_PlaySfx(&this->actor, NA_SE_EV_ICE_MELT_LEVEL - SFX_FLAG);
                         Math_ApproachF(&this->iceBlockScale, 0.0f, 0.02f, 1.0f);
                         this->iceBlockAlpha = (this->iceBlockScale / 0.9f) * 100.0f;
                         EnGo_MakeSteam(this);
@@ -2239,53 +2239,53 @@ void EnGo_GraveBroGoron_CutsceneSpringArrival(EnGo* this, PlayState* play) {
                     break;
             }
 
-            if (actorActionCmd == 128) {
-                switch (play->csCtx.frames) {
+            if (cueType == 128) {
+                switch (play->csCtx.curFrame) {
                     case 55:
                     case 100:
                     case 130:
-                        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_GOLON_COLD);
+                        Actor_PlaySfx(&this->actor, NA_SE_EN_GOLON_COLD);
                         break;
 
                     case 185:
-                        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_GOLON_WAKE_UP);
+                        Actor_PlaySfx(&this->actor, NA_SE_EN_GOLON_WAKE_UP);
                         break;
 
                     case 250:
-                        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_GOLON_EYE_BIG);
+                        Actor_PlaySfx(&this->actor, NA_SE_EN_GOLON_EYE_BIG);
                         break;
 
                     case 465:
-                        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_IWAIGORON_SOLO);
+                        Actor_PlaySfx(&this->actor, NA_SE_EN_IWAIGORON_SOLO);
                         break;
 
                     case 490:
-                        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_GOLON_VOICE_EATFULL);
+                        Actor_PlaySfx(&this->actor, NA_SE_EN_GOLON_VOICE_EATFULL);
                         break;
                 }
-            } else if (actorActionCmd == 129) {
-                switch (play->csCtx.frames) {
+            } else if (cueType == 129) {
+                switch (play->csCtx.curFrame) {
                     case 360:
                     case 390:
-                        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_GOLON_COLD);
+                        Actor_PlaySfx(&this->actor, NA_SE_EN_GOLON_COLD);
                         break;
 
                     case 430:
-                        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_GOLON_WAKE_UP);
+                        Actor_PlaySfx(&this->actor, NA_SE_EN_GOLON_WAKE_UP);
                         break;
 
                     case 450:
-                        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_GOLON_EYE_BIG);
+                        Actor_PlaySfx(&this->actor, NA_SE_EN_GOLON_EYE_BIG);
                         break;
 
                     case 480:
-                        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_GOLON_VOICE_EATFULL);
+                        Actor_PlaySfx(&this->actor, NA_SE_EN_GOLON_VOICE_EATFULL);
                         break;
                 }
             }
 
             SubS_FillLimbRotTables(play, this->limbRotTableY, this->limbRotTableZ, ARRAY_COUNT(this->limbRotTableY));
-            Cutscene_ActorTranslateAndYaw(&this->actor, play, actionIndex);
+            Cutscene_ActorTranslateAndYaw(&this->actor, play, cueChannel);
         }
     }
 }
@@ -2303,13 +2303,13 @@ void EnGo_Gatekeeper_Snowball(EnGo* this, PlayState* play) {
 
     if ((this->actionFlags & ENGO_FLAG_HIT_BY_OTHER) && (this->actor.colChkInfo.damageEffect == ENGO_DMGEFF_BREAK)) {
         // Stop the Gatekeeper when hit by an appropriate effect
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SNOWBALL_BROKEN);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_SNOWBALL_BROKEN);
         this->actor.flags &= ~ACTOR_FLAG_10;
         this->actor.flags |= ACTOR_FLAG_2000000;
         EnGo_InitSnow(this->effectTable, this->actor.world.pos);
         this->actor.shape.rot.x = 0;
-        this->actor.speedXZ = 0.0f;
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_GOLON_COLD);
+        this->actor.speed = 0.0f;
+        Actor_PlaySfx(&this->actor, NA_SE_EN_GOLON_COLD);
 
         if (gSaveContext.save.day == 3) {
             EnGo_ChangeToFrozenAnimation(this, play);
@@ -2320,7 +2320,7 @@ void EnGo_Gatekeeper_Snowball(EnGo* this, PlayState* play) {
         }
     } else if (this->gatekeeperPath != NULL) {
         if (this->actionFlags & ENGO_FLAG_HIT_OTHER) {
-            func_800B8E58(GET_PLAYER(play), NA_SE_PL_BODY_HIT);
+            Player_PlaySfx(GET_PLAYER(play), NA_SE_PL_BODY_HIT);
             func_800B8D50(play, &this->actor, 2.0f, this->actor.yawTowardsPlayer, 0.0f, 0);
         }
 
@@ -2338,16 +2338,16 @@ void EnGo_Gatekeeper_Snowball(EnGo* this, PlayState* play) {
         Math_ApproachS(&this->actor.world.rot.y, Math_Vec3f_Yaw(&currentPos, &currentPathPoint), 4, 0x38E);
         this->actor.shape.rot.y = this->actor.world.rot.y;
 
-        if (this->actor.bgCheckFlags & 1) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BIGBALL_ROLL - SFX_FLAG);
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
+            Actor_PlaySfx(&this->actor, NA_SE_EV_BIGBALL_ROLL - SFX_FLAG);
             func_800AE930(&play->colCtx, Effect_GetByIndex(this->indexEffect), &this->actor.world.pos, 18.0f,
                           this->actor.shape.rot.y, this->actor.floorPoly, this->actor.floorBgId);
         } else {
             func_800AEF44(Effect_GetByIndex(this->indexEffect));
         }
 
-        this->actor.speedXZ = 4.0f;
-        this->actor.shape.rot.x += (s16)(this->actor.speedXZ * 546.0f);
+        this->actor.speed = 4.0f;
+        this->actor.shape.rot.x += (s16)(this->actor.speed * 546.0f);
         Actor_MoveWithGravity(&this->actor);
     }
 }
@@ -2497,15 +2497,15 @@ void EnGo_Update(Actor* thisx, PlayState* play) {
         } else {
             xzRange = this->colliderCylinder.dim.radius + 40;
         }
-        func_8013C964(&this->actor, play, xzRange, 20.0f, PLAYER_AP_NONE, this->actionFlags & 7);
+        func_8013C964(&this->actor, play, xzRange, 20.0f, PLAYER_IA_NONE, this->actionFlags & 7);
     } else if ((this->actionFlags & ENGO_FLAG_ROLLED_UP) && (this->sleepState != ENGO_AWAKE)) {
         xzRange = this->colliderCylinder.dim.radius + 40;
-        func_8013C964(&this->actor, play, xzRange, 20.0f, PLAYER_AP_NONE, this->actionFlags & 7);
+        func_8013C964(&this->actor, play, xzRange, 20.0f, PLAYER_IA_NONE, this->actionFlags & 7);
     }
 
     if ((ENGO_GET_TYPE(&this->actor) != ENGO_MEDIGORON) && (ENGO_GET_TYPE(&this->actor) != ENGO_SPECTATOR) &&
         (ENGO_GET_TYPE(&this->actor) != ENGO_STRETCHER)) {
-        Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, 4);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
     }
 
     EnGo_UpdateFocus(this);

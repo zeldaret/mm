@@ -1,5 +1,5 @@
-#include "prevent_bss_reordering.h"
 #include "global.h"
+#include "buffers.h"
 #include "system_malloc.h"
 #include "overlays/gamestates/ovl_daytelop/z_daytelop.h"
 #include "overlays/gamestates/ovl_file_choose/z_file_choose.h"
@@ -26,7 +26,7 @@ void Graph_FaultClient(void) {
 }
 
 void Graph_InitTHGA(TwoHeadGfxArena* arena, Gfx* buffer, s32 size) {
-    THGA_Ct(arena, buffer, size);
+    THGA_Init(arena, buffer, size);
 }
 
 void Graph_SetNextGfxPool(GraphicsContext* gfxCtx) {
@@ -50,7 +50,7 @@ void Graph_SetNextGfxPool(GraphicsContext* gfxCtx) {
     gfxCtx->workBuffer = pool->workBuffer;
     gfxCtx->debugBuffer = pool->debugBuffer;
 
-    gfxCtx->curFrameBuffer = (u16*)SysCfb_GetFbPtr(gfxCtx->framebufferIdx % 2);
+    gfxCtx->curFrameBuffer = SysCfb_GetFbPtr(gfxCtx->framebufferIndex % 2);
     gSegments[0x0F] = gfxCtx->curFrameBuffer;
 
     gfxCtx->zbuffer = SysCfb_GetZBuffer();
@@ -91,21 +91,21 @@ GameStateOverlay* Graph_GetNextGameState(GameState* gameState) {
     return NULL;
 }
 
-void* Graph_FaultAddrConvFunc(void* address, void* param) {
+void* Graph_FaultAddrConv(void* address, void* param) {
     uintptr_t addr = address;
     GameStateOverlay* gameStateOvl = &gGameStateOverlayTable[0];
-    uintptr_t ramConv;
+    size_t ramConv;
     void* ramStart;
-    uintptr_t diff;
+    size_t diff;
     s32 i;
 
-    for (i = 0; i < graphNumGameStates; i++, gameStateOvl++) {
+    for (i = 0; i < gGraphNumGameStates; i++, gameStateOvl++) {
         diff = VRAM_PTR_SIZE(gameStateOvl);
         ramStart = gameStateOvl->loadedRamAddr;
         ramConv = (uintptr_t)gameStateOvl->vramStart - (uintptr_t)ramStart;
 
         if (ramStart != NULL) {
-            if (addr >= (uintptr_t)ramStart && addr < (uintptr_t)ramStart + diff) {
+            if ((addr >= (uintptr_t)ramStart) && (addr < (uintptr_t)ramStart + diff)) {
                 return addr + ramConv;
             }
         }
@@ -116,14 +116,14 @@ void* Graph_FaultAddrConvFunc(void* address, void* param) {
 void Graph_Init(GraphicsContext* gfxCtx) {
     bzero(gfxCtx, sizeof(GraphicsContext));
     gfxCtx->gfxPoolIdx = 0;
-    gfxCtx->framebufferIdx = 0;
+    gfxCtx->framebufferIndex = 0;
     gfxCtx->viMode = NULL;
     gfxCtx->viConfigFeatures = gViConfigFeatures;
     gfxCtx->xScale = gViConfigXScale;
     gfxCtx->yScale = gViConfigYScale;
     osCreateMesgQueue(&gfxCtx->queue, gfxCtx->msgBuff, ARRAY_COUNT(gfxCtx->msgBuff));
     Fault_AddClient(&sGraphFaultClient, Graph_FaultClient, NULL, NULL);
-    Fault_AddAddrConvClient(&sGraphFaultAddrConvClient, Graph_FaultAddrConvFunc, NULL);
+    Fault_AddAddrConvClient(&sGraphFaultAddrConvClient, Graph_FaultAddrConv, NULL);
 }
 
 void Graph_Destroy(GraphicsContext* gfxCtx) {
@@ -165,7 +165,7 @@ retry:
 
     gfxCtx->masterList = gGfxMasterDL;
     if (gfxCtx->callback != NULL) {
-        gfxCtx->callback(gfxCtx, gfxCtx->callbackParam);
+        gfxCtx->callback(gfxCtx, gfxCtx->callbackArg);
     }
 
     task->type = M_GFXTASK;
@@ -191,7 +191,7 @@ retry:
     if (SREG(33) & 1) {
         SREG(33) &= ~1;
         scTask->flags &= ~OS_SC_SWAPBUFFER;
-        gfxCtx->framebufferIdx--;
+        gfxCtx->framebufferIndex--;
     }
 
     scTask->msgQ = &gfxCtx->queue;
@@ -305,7 +305,7 @@ void Graph_ExecuteAndDraw(GraphicsContext* gfxCtx, GameState* gameState) {
     if (!problem) {
         Graph_TaskSet00(gfxCtx, gameState);
         gfxCtx->gfxPoolIdx++;
-        gfxCtx->framebufferIdx++;
+        gfxCtx->framebufferIndex++;
     }
 
     {
