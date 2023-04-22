@@ -46,7 +46,7 @@ void BgCtowerRot_Init(Actor* thisx, PlayState* play) {
     Vec3f offset;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
     if (this->dyna.actor.params == BGCTOWERROT_CORRIDOR) {
         DynaPolyActor_LoadMesh(play, &this->dyna, &gClockTowerCorridorCol);
         this->actionFunc = BgCtowerRot_CorridorRotate;
@@ -88,7 +88,7 @@ void BgCtowerRot_CorridorRotate(BgCtowerRot* this, PlayState* play) {
     Camera_ChangeSetting(play->cameraPtrs[CAM_ID_MAIN], CAM_SET_DUNGEON0);
     this->dyna.actor.shape.rot.z = rotZ * 16.384f;
 
-    if (play->csCtx.frames == 132) {
+    if (play->csCtx.curFrame == 132) {
         play_sound(NA_SE_SY_SPIRAL_DASH);
     }
 }
@@ -100,7 +100,7 @@ void BgCtowerRot_DoorClose(BgCtowerRot* this, PlayState* play) {
     if (!Math_SmoothStepToF(&this->timer, 0.0f, 0.1f, 15.0f, 0.1f)) {
         if (this->dyna.actor.params == BGCTOWERROT_STONE_DOOR_MAIN) {
             Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_STONEDOOR_STOP);
-            ActorCutscene_Stop(this->dyna.actor.cutscene);
+            CutsceneManager_Stop(this->dyna.actor.csId);
         }
         this->actionFunc = BgCtowerRot_DoorDoNothing;
     } else if (this->dyna.actor.params == BGCTOWERROT_STONE_DOOR_MAIN) {
@@ -119,19 +119,19 @@ void BgCtowerRot_DoorIdle(BgCtowerRot* this, PlayState* play) {
     Actor_OffsetOfPointInActorCoords(&this->dyna.actor, &offset, &player->actor.world.pos);
     if (offset.z > 30.0f) {
         this->unk160 = 0.0f;
-        ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+        CutsceneManager_Queue(this->dyna.actor.csId);
         this->actionFunc = BgCtowerRot_SetupDoorClose;
     }
 }
 
 void BgCtowerRot_SetupDoorClose(BgCtowerRot* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
+    if (CutsceneManager_IsNext(this->dyna.actor.csId)) {
         if (this->dyna.actor.params == BGCTOWERROT_STONE_DOOR_MAIN) {
-            ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
+            CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
         }
         this->actionFunc = BgCtowerRot_DoorClose;
     } else {
-        ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+        CutsceneManager_Queue(this->dyna.actor.csId);
     }
 }
 

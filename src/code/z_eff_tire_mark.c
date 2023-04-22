@@ -11,7 +11,7 @@ void func_800AE930(CollisionContext* colCtx, EffectTireMark* this, Vec3f* pos, f
     u32 spA0;
     Vec3s* vtxList = colCtx->colHeader->vtxList;
 
-    if ((bgId != 50) || (this->numElements >= (ARRAY_COUNT(this->elements) - 1)) || (colPoly == NULL)) {
+    if ((bgId != BGCHECK_SCENE) || (this->numElements >= (ARRAY_COUNT(this->elements) - 1)) || (colPoly == NULL)) {
         func_800AEF44(this);
         return;
     }

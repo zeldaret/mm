@@ -63,6 +63,7 @@ extern RegEditor* gRegEditor;
 #define R_RUN_SPEED_LIMIT                 REG(45)
 
 #define R_ENABLE_ARENA_DBG                SREG(0) // Same as OoT
+#define R_ROOM_IMAGE_NODRAW_FLAGS         SREG(25)
 #define R_UPDATE_RATE                     SREG(30)
 #define R_FB_FILTER_TYPE                  SREG(80)
 #define R_FB_FILTER_PRIM_COLOR(c)         SREG(81 + c)
@@ -139,6 +140,10 @@ extern RegEditor* gRegEditor;
 #define R_MINIMAP_DISABLED                  XREG(95)
 
 #define R_TRANS_FADE_FLASH_ALPHA_STEP     iREG(50) // Set to a negative number to start the flash
+#define R_ROOM_CULL_DEBUG_MODE            iREG(86)
+#define R_ROOM_CULL_NUM_ENTRIES           iREG(87)
+#define R_ROOM_CULL_USED_ENTRIES          iREG(88)
+#define R_ROOM_CULL_DEBUG_TARGET          iREG(89)
 
 #define R_B_LABEL_DD                      WREG(0)
 #define R_OW_MINIMAP_X                    WREG(29)
@@ -160,5 +165,8 @@ extern RegEditor* gRegEditor;
 #define R_ITEM_AMMO_Y(i)                  VREG(68 + i)
 #define R_ITEM_ICON_WIDTH(i)              VREG(76 + i)
 #define R_ITEM_BTN_WIDTH(i)               VREG(80 + i)
+
+// Name inferred from OoT. Set to true to manually set play->csCtx.script
+#define R_USE_DEBUG_CUTSCENE              dREG(95)
 
 #endif

@@ -384,7 +384,8 @@ void func_80A1C554(ObjFlowerpot* this) {
 }
 
 void func_80A1C5E8(ObjFlowerpot* this, PlayState* play) {
-    Actor_UpdateBgCheckInfo(play, &this->actor, 18.0f, 15.0f, 0.0f, 0x45);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 18.0f, 15.0f, 0.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_40);
 }
 
 void func_80A1C62C(ObjFlowerpot* this, PlayState* play) {
@@ -655,7 +656,7 @@ void ObjFlowerpot_Update(Actor* thisx, PlayState* play2) {
 
     func_80A1C554(this);
 
-    if ((D_80A1D830 != play->gameplayFrames) && (play->roomCtx.curRoom.unk3 == 0)) {
+    if ((D_80A1D830 != play->gameplayFrames) && (play->roomCtx.curRoom.behaviorType1 == ROOM_BEHAVIOR_TYPE1_0)) {
         func_80A1B3D0();
         D_80A1D830 = play->gameplayFrames;
     }
@@ -680,7 +681,7 @@ void ObjFlowerpot_Draw(Actor* thisx, PlayState* play) {
     }
 
     if (!(this->unk_1EA & 2)) {
-        if ((play->roomCtx.curRoom.unk3 == 0) && (this->actionFunc == func_80A1C838)) {
+        if ((play->roomCtx.curRoom.behaviorType1 == ROOM_BEHAVIOR_TYPE1_0) && (this->actionFunc == func_80A1C838)) {
             if ((this->actor.projectedPos.z > -150.0f) && (this->actor.projectedPos.z < 400.0f)) {
                 func_80A1B840(&D_80A1D838[this->unk_1EB]);
 

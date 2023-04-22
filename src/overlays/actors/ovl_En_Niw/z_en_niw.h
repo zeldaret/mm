@@ -79,7 +79,7 @@ typedef struct EnNiw {
     /* 0x2E8 */ s16 yawTowardsPlayer;
     /* 0x2EA */ s16 headRotationToggle;
     /* 0x2EC */ s16 unk2EC;
-    /* 0x2EE */ UNK_TYPE1  pad2EE[0x6];
+    /* 0x2EE */ UNK_TYPE1 pad2EE[0x6];
     /* 0x2F4 */ f32 unusedFloat2F4;             // set in EnNiw_Update if Cucco falls off map, never read
     /* 0x2F8 */ f32 unusedFloat2F8;
     /* 0x2FC */ f32 unusedFloat2FC;
@@ -91,12 +91,13 @@ typedef struct EnNiw {
     /* 0x35C */ EnNiwFeather feathers[NIW_FEATHER_COUNT];
 } EnNiw; // size = 0x7BC
 
-// in init, any value below zero becomes zero
-//  however, in vanilla, only 0xFFFF (-1) exists in scene spawns, actors can spawn 0x0
-#define NIW_TYPE_VANILLA 0xFFFF
-#define NIW_TYPE_REGULAR 0
-#define NIW_TYPE_UNK1 1
-#define NIW_TYPE_HELD 2 // spawns held by the bomber kid in east clock town during hide and seek
+typedef enum {
+    /* -1 */ NIW_TYPE_VANILLA = -1, // Will be converted to 0, in vanilla exists only in scene spawns
+    /*  0 */ NIW_TYPE_REGULAR,
+    /*  1 */ NIW_TYPE_UNK1, // This unused variant must be spawned as a child, as it expects a NON-NULL parent.
+                            // Theory: This was meant to be a small hand held cucco for Grog to show the player
+    /*  2 */ NIW_TYPE_HELD // spawns held by the bomber kid in east clock town during hide and seek
+} NiwType;
 // the attacking cuccos are not here, they are a different actor: [ ovl_En_Attack_Niw ]
 
 typedef enum {

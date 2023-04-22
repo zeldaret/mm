@@ -27,7 +27,7 @@ void EffectSsSbn_Update(PlayState* play, u32 index, EffectSs* this);
 void EffectSsSbn_DrawSliding(PlayState* play, u32 index, EffectSs* this);
 void EffectSsSbn_Draw(PlayState* play, u32 index, EffectSs* this);
 
-const EffectSsInit Effect_Ss_Sbn_InitVars = {
+EffectSsInit Effect_Ss_Sbn_InitVars = {
     EFFECT_SS_SBN,
     EffectSsSbn_Init,
 };

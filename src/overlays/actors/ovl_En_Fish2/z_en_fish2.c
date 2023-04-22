@@ -151,7 +151,7 @@ s32 func_80B28478(EnFish2* this) {
 void EnFish2_Init(Actor* thisx, PlayState* play) {
     EnFish2* this = THIS;
     s32 i;
-    s32 cs;
+    s32 csId;
 
     Math_Vec3f_Copy(&this->unk_324, &this->actor.home.pos);
     this->unk_344 = D_80B2B2F0;
@@ -187,12 +187,12 @@ void EnFish2_Init(Actor* thisx, PlayState* play) {
                 this->unk_2C0 = 3;
             }
         }
-        cs = this->actor.cutscene;
+        csId = this->actor.csId;
         this->unk_330 = D_80B2B370[this->unk_2C0];
         i = 0;
 
         // clang-format off
-        while (cs != -1) { this->unk_2BA[i] = cs; cs = ActorCutscene_GetAdditionalCutscene(cs); i++; }
+        while (csId != CS_ID_NONE) { this->csIdList[i] = csId; csId = CutsceneManager_GetAdditionalCsId(csId); i++; }
         // clang-format on
 
         Collider_InitAndSetJntSph(play, &this->collider, &this->actor, &sJntSphInit, this->colliderElements);
@@ -416,7 +416,7 @@ void func_80B28C14(EnFish2* this, PlayState* play) {
                     if (this->unk_354 != NULL) {
                         D_80B2B2E4 = 0;
                         D_80B2B2E0 = 1;
-                        fish->unk_2BA[0] = this->unk_2BA[0];
+                        fish->csIdList[0] = this->csIdList[0];
                         fish->unk_350 = this->unk_350;
                     }
                 }
@@ -784,11 +784,11 @@ void func_80B29EE4(EnFish2* this, PlayState* play) {
 
 void func_80B2A01C(EnFish2* this, PlayState* play) {
     if (this->unk_2B4 == 0) {
-        if (!ActorCutscene_GetCanPlayNext(this->unk_2BA[0])) {
-            ActorCutscene_SetIntentToPlay(this->unk_2BA[0]);
+        if (!CutsceneManager_IsNext(this->csIdList[0])) {
+            CutsceneManager_Queue(this->csIdList[0]);
         } else {
             this->unk_2B4 = 15;
-            ActorCutscene_StartAndSetUnkLinkFields(this->unk_2BA[0], &this->actor);
+            CutsceneManager_StartWithPlayerCs(this->csIdList[0], &this->actor);
             this->actionFunc = func_80B2A094;
         }
     }
@@ -801,13 +801,13 @@ void func_80B2A094(EnFish2* this, PlayState* play) {
         D_80B2B2E4 = 1;
     }
 
-    this->subCamId = ActorCutscene_GetCurrentSubCamId(this->unk_2BA[0]);
+    this->subCamId = CutsceneManager_GetCurrentSubCamId(this->csIdList[0]);
 
     if (D_80B2B2EC != 0) {
         D_80B2B2EC++;
         if (D_80B2B2EC > 200) {
             Actor_Kill(&this->actor);
-            ActorCutscene_Stop(this->unk_2BA[0]);
+            CutsceneManager_Stop(this->csIdList[0]);
             return;
         }
     }
@@ -862,7 +862,7 @@ void func_80B2A23C(EnFish2* this, PlayState* play) {
     if ((this->unk_2B4 == 0) && (D_80B2B2E4 == 3)) {
         D_80B2B2E0 = D_80B2B2EC = D_80B2B2E4 = 0;
         D_80B2B2F4 = NULL;
-        ActorCutscene_Stop(this->unk_2BA[0]);
+        CutsceneManager_Stop(this->csIdList[0]);
         Actor_Kill(&this->actor);
     }
 }
@@ -987,7 +987,8 @@ void EnFish2_Update(Actor* thisx, PlayState* play2) {
         this->unk_33C = 25.0f - ((this->unk_330 - 0.01f) * 1000.0f);
         Actor_SetScale(&this->actor, this->unk_330);
         Actor_MoveWithGravity(&this->actor);
-        Actor_UpdateBgCheckInfo(play, &this->actor, 0, 15.0f, 10.0f, 7);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 0, 15.0f, 10.0f,
+                                UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_2 | UPDBGCHECKINFO_FLAG_4);
 
         if (this->actor.params != 2) {
             this->unk_2D4 = this->actor.floorHeight + (this->unk_330 * 1000.0f);

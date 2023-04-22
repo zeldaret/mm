@@ -190,7 +190,7 @@ void EnMa4_Init(Actor* thisx, PlayState* play) {
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &D_80AC00DC);
 
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
     Actor_SetScale(&this->actor, 0.01f);
 
     this->actor.targetMode = 0;
@@ -298,7 +298,7 @@ void EnMa4_RunInCircles(EnMa4* this, PlayState* play) {
         }
     }
 
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
     Actor_MoveWithGravity(&this->actor);
     if (this->skelAnime.animation == &gRomaniRunAnim) {
         if (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 4.0f)) {
@@ -730,8 +730,8 @@ void EnMa4_HorsebackGameWait(EnMa4* this, PlayState* play) {
 void EnMa4_SetupHorsebackGameEnd(EnMa4* this, PlayState* play) {
     CLEAR_WEEKEVENTREG(WEEKEVENTREG_08_01);
     this->actionFunc = EnMa4_HorsebackGameEnd;
-    Audio_QueueSeqCmd(NA_BGM_STOP);
-    Audio_QueueSeqCmd(NA_BGM_HORSE_GOAL | 0x8000);
+    SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 0);
+    SEQCMD_PLAY_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 0, NA_BGM_HORSE_GOAL | SEQ_FLAG_ASYNC);
 }
 
 void EnMa4_HorsebackGameEnd(EnMa4* this, PlayState* play) {
@@ -780,16 +780,16 @@ void EnMa4_SetupBeginEponasSongCs(EnMa4* this) {
 
 // Epona's Song cutscene is an ActorCutscene
 void EnMa4_BeginEponasSongCs(EnMa4* this, PlayState* play) {
-    s16 cutsceneIndex = this->actor.cutscene;
+    s16 csId = this->actor.csId;
 
-    if (ActorCutscene_GetCanPlayNext(cutsceneIndex) != 0) {
-        ActorCutscene_Start(cutsceneIndex, &this->actor);
+    if (CutsceneManager_IsNext(csId)) {
+        CutsceneManager_Start(csId, &this->actor);
         EnMa4_SetupEponasSongCs(this);
     } else {
-        if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-            ActorCutscene_Stop(0x7C);
+        if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+            CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
         }
-        ActorCutscene_SetIntentToPlay(cutsceneIndex);
+        CutsceneManager_Queue(csId);
     }
 }
 
@@ -798,17 +798,17 @@ void EnMa4_SetupEponasSongCs(EnMa4* this) {
     this->actionFunc = EnMa4_EponasSongCs;
 }
 
-static u16 D_80AC0260 = 99;
+static u16 sCueId = 99;
 void EnMa4_EponasSongCs(EnMa4* this, PlayState* play) {
-    if (Cutscene_CheckActorAction(play, 120)) {
-        s32 actionIndex = Cutscene_GetActorActionIndex(play, 120);
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_120)) {
+        s32 cueChannel = Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_120);
 
-        if (play->csCtx.frames == play->csCtx.actorActions[actionIndex]->startFrame) {
-            if (play->csCtx.actorActions[actionIndex]->action != D_80AC0260) {
-                D_80AC0260 = play->csCtx.actorActions[actionIndex]->action;
+        if (play->csCtx.curFrame == play->csCtx.actorCues[cueChannel]->startFrame) {
+            if (sCueId != play->csCtx.actorCues[cueChannel]->id) {
+                sCueId = play->csCtx.actorCues[cueChannel]->id;
                 this->animTimer = 0;
 
-                switch (play->csCtx.actorActions[actionIndex]->action) {
+                switch (play->csCtx.actorCues[cueChannel]->id) {
                     case 1:
                         this->hasBow = true;
                         EnMa4_ChangeAnim(this, 1);
@@ -822,8 +822,8 @@ void EnMa4_EponasSongCs(EnMa4* this, PlayState* play) {
             }
         }
 
-        Cutscene_ActorTranslateAndYaw(&this->actor, play, actionIndex);
-        if (D_80AC0260 == 2 && this->animTimer == 0 && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
+        Cutscene_ActorTranslateAndYaw(&this->actor, play, cueChannel);
+        if (sCueId == 2 && this->animTimer == 0 && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
             EnMa4_ChangeAnim(this, 7);
         }
     } else {
@@ -831,7 +831,7 @@ void EnMa4_EponasSongCs(EnMa4* this, PlayState* play) {
 
         player->stateFlags1 |= PLAYER_STATE1_20;
         func_800B85E0(&this->actor, play, 200.0f, PLAYER_IA_MINUS1);
-        D_80AC0260 = 99;
+        sCueId = 99;
         this->hasBow = true;
         EnMa4_SetupEndEponasSongCs(this);
     }
@@ -907,9 +907,9 @@ void EnMa4_StartDialogue(EnMa4* this, PlayState* play) {
                     this->textId = 0x336D;
                 } else {
                     time = gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2];
-                    if ((s32)time < (s32)gSaveContext.save.horseBackBalloonHighScore) {
+                    if ((s32)time < (s32)gSaveContext.save.saveInfo.horseBackBalloonHighScore) {
                         // [Score] New record!
-                        gSaveContext.save.horseBackBalloonHighScore = time;
+                        gSaveContext.save.saveInfo.horseBackBalloonHighScore = time;
                         EnMa4_SetFaceExpression(this, 0, 3);
                         Message_StartTextbox(play, 0x3350, &this->actor);
                         this->textId = 0x3350;
@@ -951,8 +951,8 @@ void EnMa4_StartDialogue(EnMa4* this, PlayState* play) {
                     this->textId = 0x3356;
                 } else {
                     time = gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2];
-                    if ((s32)time < (s32)gSaveContext.save.horseBackBalloonHighScore) {
-                        gSaveContext.save.horseBackBalloonHighScore = time;
+                    if ((s32)time < (s32)gSaveContext.save.saveInfo.horseBackBalloonHighScore) {
+                        gSaveContext.save.saveInfo.horseBackBalloonHighScore = time;
                         EnMa4_SetFaceExpression(this, 0, 3);
                         Message_StartTextbox(play, 0x3350, &this->actor);
                         this->textId = 0x3350;
@@ -978,9 +978,9 @@ void EnMa4_StartDialogue(EnMa4* this, PlayState* play) {
                     this->textId = 0x3356;
                 } else {
                     time = gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2];
-                    if ((s32)time < (s32)gSaveContext.save.horseBackBalloonHighScore) {
+                    if ((s32)time < (s32)gSaveContext.save.saveInfo.horseBackBalloonHighScore) {
                         // New record
-                        gSaveContext.save.horseBackBalloonHighScore = time;
+                        gSaveContext.save.saveInfo.horseBackBalloonHighScore = time;
                         Message_StartTextbox(play, 0x335D, &this->actor);
                         this->textId = 0x335D;
                     } else {

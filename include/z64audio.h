@@ -12,6 +12,12 @@
 #define SEQ_IO_VAL_NONE -1
 
 typedef enum {
+    /* 0 */ AUDIO_HEAP_RESET_STATE_NONE,
+    /* 1 */ AUDIO_HEAP_RESET_STATE_RESETTING,
+    /* 2 */ AUDIO_HEAP_RESET_STATE_RESETTING_ALT // Never set to
+} AudioHeapResetState;
+
+typedef enum {
     /* 0x00 */ AUDIO_CUSTOM_FUNCTION_SEQ_0,
     /* 0x01 */ AUDIO_CUSTOM_FUNCTION_SEQ_1,
     /* 0x02 */ AUDIO_CUSTOM_FUNCTION_SEQ_2,
@@ -1090,50 +1096,50 @@ typedef struct {
 } AudioHeapInitSizes; // size = 0xC
 
 typedef struct {
-    /* 0x00 */ f32 unk_00;
-    /* 0x04 */ f32 unk_04;
-    /* 0x08 */ f32 unk_08;
-    /* 0x0C */ f32 unk_10;
-    /* 0x10 */ f32 unk_14;
-    /* 0x14 */ f32 unk_18;
-    /* 0x18 */ u16 unk_0C;
-    /* 0x1A */ u16 unk_1C;
-} unk_50_s; // size = 0x1C
+    /* 0x00 */ f32 volCur;
+    /* 0x04 */ f32 volTarget;
+    /* 0x08 */ f32 volStep;
+    /* 0x0C */ f32 freqScaleCur;
+    /* 0x10 */ f32 freqScaleTarget;
+    /* 0x14 */ f32 freqScaleStep;
+    /* 0x18 */ u16 volTimer;
+    /* 0x1A */ u16 freqScaleTimer;
+} ActiveSequenceChannelData; // size = 0x1C
 
 typedef struct {
-    /* 0x000 */ unk_50_s unk_50[0x10];
+    /* 0x000 */ ActiveSequenceChannelData channelData[SEQ_NUM_CHANNELS];
     /* 0x1C0 */ f32 volCur;
     /* 0x1C4 */ f32 volTarget;
-    /* 0x1C8 */ f32 unk_08;
-    /* 0x1CC */ u32 unk_14;
-    /* 0x1D0 */ f32 unk_1C;
-    /* 0x1D4 */ f32 unk_20;
-    /* 0x1D8 */ f32 unk_24;
-    /* 0x1DC */ u32 unk_2C[8];
-    /* 0x1FC */ u32 unk_25C;
-    /* 0x200 */ u16 unk_0C;
-    /* 0x202 */ u16 unk_18;
-    /* 0x204 */ u16 unk_28;
-    /* 0x206 */ u16 unk_250;
-    /* 0x208 */ u16 unk_252;
+    /* 0x1C8 */ f32 volStep;
+    /* 0x1CC */ u32 tempoCmd;
+    /* 0x1D0 */ f32 tempoCur;
+    /* 0x1D4 */ f32 tempoTarget;
+    /* 0x1D8 */ f32 tempoStep;
+    /* 0x1DC */ u32 setupCmd[8]; // setup commands
+    /* 0x1FC */ u32 startAsyncSeqCmd; // temporarily stores the seqCmd used in SEQCMD_PLAY_SEQUENCE, to be called again once the font is reloaded in
+    /* 0x200 */ u16 volTimer;
+    /* 0x202 */ u16 tempoOriginal;
+    /* 0x204 */ u16 tempoTimer;
+    /* 0x206 */ u16 freqScaleChannelFlags;
+    /* 0x208 */ u16 volChannelFlags;
     /* 0x20A */ u16 seqId;
-    /* 0x20C */ u16 unk_256;
-    /* 0x20E */ u16 unk_258;
-    /* 0x210 */ u8 unk_260;
-    /* 0x211 */ u8 unk_261[0x1];
-    /* 0x212 */ u8 volScales[0x4];
+    /* 0x20C */ u16 prevSeqId; // last seqId played on a player
+    /* 0x20E */ u16 channelPortMask;
+    /* 0x210 */ u8 isWaitingForFonts;
+    /* 0x211 */ u8 fontId;
+    /* 0x212 */ u8 volScales[VOL_SCALE_INDEX_MAX];
     /* 0x216 */ u8 volFadeTimer;
     /* 0x217 */ u8 fadeVolUpdate;
-    /* 0x218 */ u8 unk_4C;
-    /* 0x219 */ u8 unk_4D;
-    /* 0x21A */ u8 unk_4E;
-    /* 0x21B */ u8 unk_21B;
+    /* 0x218 */ u8 setupCmdTimer;
+    /* 0x219 */ u8 setupCmdNum; // number of setup commands
+    /* 0x21A */ u8 setupFadeTimer;
+    /* 0x21B */ u8 isSeqPlayerInit;
 } ActiveSequence; // size = 0x21C
 
 typedef struct {
-    /* 0x0 */ u8 unk_0;
-    /* 0x1 */ u8 unk_1; // importance?
-} Struct_8016E320; // size = 0x02
+    /* 0x0 */ u8 seqId;
+    /* 0x1 */ u8 priority;
+} SeqRequest; // size = 0x02
 
 typedef enum {
     /* 0 */ BANK_PLAYER,

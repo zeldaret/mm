@@ -130,7 +130,8 @@ s32 EnRuppecrow_UpdateCollision(EnRuppecrow* this, PlayState* play) {
     this->collider.elements->dim.worldSphere.center.z = this->actor.world.pos.z;
 
     CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 12.0f, 25.0f, 50.0f, 0x07);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 12.0f, 25.0f, 50.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_2 | UPDBGCHECKINFO_FLAG_4);
 
     return true;
 }
@@ -162,7 +163,7 @@ s32 EnRuppecrow_ReachedPointClockwise(EnRuppecrow* this, Path* path, s32 pointIn
         }
     }
 
-    func_8017B7F8(&point, RADF_TO_BINANG(func_80086B30(diffX, diffZ)), &px, &pz, &d);
+    func_8017B7F8(&point, RAD_TO_BINANG(func_80086B30(diffX, diffZ)), &px, &pz, &d);
     if (((this->actor.world.pos.x * px) + (pz * this->actor.world.pos.z) + d) > 0.0f) {
         reached = true;
     }
@@ -197,7 +198,7 @@ s32 EnRuppecrow_ReachedPointCounterClockwise(EnRuppecrow* this, Path* path, s32 
         }
     }
 
-    func_8017B7F8(&point, RADF_TO_BINANG(func_80086B30(diffX, diffZ)), &px, &pz, &d);
+    func_8017B7F8(&point, RAD_TO_BINANG(func_80086B30(diffX, diffZ)), &px, &pz, &d);
     if (((this->actor.world.pos.x * px) + (pz * this->actor.world.pos.z) + d) > 0.0f) {
         reached = true;
     }
@@ -503,7 +504,7 @@ void EnRuppecrow_HandleSong(EnRuppecrow* this, PlayState* play) {
             }
         }
 
-        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+        CutsceneManager_Queue(this->actor.csId);
         this->actionFunc = EnRuppecrow_HandleSongCutscene;
     }
 
@@ -525,12 +526,12 @@ void EnRuppecrow_HandleSong(EnRuppecrow* this, PlayState* play) {
 void EnRuppecrow_HandleSongCutscene(EnRuppecrow* this, PlayState* play) {
     EnRuppecrow_UpdatePosition(this, play);
 
-    if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
-        ActorCutscene_Start(this->actor.cutscene, &this->actor);
+    if (CutsceneManager_IsNext(this->actor.csId)) {
+        CutsceneManager_Start(this->actor.csId, &this->actor);
         EnRuppecrow_UpdateSpeed(this, play);
         this->actionFunc = EnRuppecrow_FlyWhileDroppingRupees;
     } else {
-        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+        CutsceneManager_Queue(this->actor.csId);
     }
 
     Actor_MoveWithoutGravity(&this->actor);
@@ -553,7 +554,7 @@ void EnRuppecrow_FlyWhileDroppingRupees(EnRuppecrow* this, PlayState* play) {
         this->skelAnime.playSpeed = 1.0f;
         Actor_MoveWithGravity(&this->actor);
     } else {
-        if (ActorCutscene_GetCurrentIndex() != this->actor.cutscene) {
+        if (CutsceneManager_GetCurrentCsId() != this->actor.csId) {
             EnRuppecrow_UpdateSpeed(this, play);
             Math_ApproachF(&this->actor.speed, this->speedModifier, 0.2f, 0.5f);
         }

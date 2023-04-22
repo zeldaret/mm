@@ -1431,7 +1431,7 @@ void EnGoroiwa_Update(Actor* thisx, PlayState* play) {
     Vec3f sp50;
     f32 sp4C;
     s32 sp48 = true;
-    u32 temp_v0_2;
+    FloorType floorType;
     CollisionPoly* tmp;
 
     if (!(player->stateFlags1 &
@@ -1453,9 +1453,9 @@ void EnGoroiwa_Update(Actor* thisx, PlayState* play) {
             if (this->actor.flags & ACTOR_FLAG_40) {
                 tmp = this->actor.floorPoly;
                 if (tmp != NULL) {
-                    temp_v0_2 = func_800C99D4(&play->colCtx, tmp, this->actor.floorBgId);
+                    floorType = SurfaceType_GetFloorType(&play->colCtx, tmp, this->actor.floorBgId);
 
-                    if ((temp_v0_2 == 14) || (temp_v0_2 == 15)) {
+                    if ((floorType == FLOOR_TYPE_14) || (floorType == FLOOR_TYPE_15)) {
                         if (!(this->unk_1E5 & 0x40)) {
                             sp50.x = this->actor.world.pos.x;
                             sp50.y = this->actor.floorHeight;
@@ -1485,7 +1485,8 @@ void EnGoroiwa_Update(Actor* thisx, PlayState* play) {
 
             switch (ENGOROIWA_GET_400(&this->actor)) {
                 case ENGOROIWA_400_1:
-                    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 0x1C);
+                    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f,
+                                            UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 | UPDBGCHECKINFO_FLAG_10);
                     break;
 
                 case ENGOROIWA_400_0:

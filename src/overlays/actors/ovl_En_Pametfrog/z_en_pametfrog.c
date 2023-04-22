@@ -341,8 +341,8 @@ void EnPametfrog_StopCutscene(EnPametfrog* this, PlayState* play) {
         subCam = Play_GetCamera(play, this->subCamId);
         Play_SetCameraAtEye(play, CAM_ID_MAIN, &subCam->at, &subCam->eye);
         this->subCamId = SUB_CAM_ID_DONE;
-        ActorCutscene_Stop(this->cutscene);
-        func_800B724C(play, &this->actor, PLAYER_CSMODE_6);
+        CutsceneManager_Stop(this->csId);
+        func_800B724C(play, &this->actor, PLAYER_CSMODE_END);
     }
 }
 
@@ -991,22 +991,22 @@ void EnPametfrog_SpawnFrog(EnPametfrog* this, PlayState* play) {
 
 void EnPametfrog_SetupCutscene(EnPametfrog* this) {
     if (this->actor.colChkInfo.health == 0) {
-        this->cutscene = this->actor.cutscene;
+        this->csId = this->actor.csId;
     } else {
-        this->cutscene = ActorCutscene_GetAdditionalCutscene(this->actor.cutscene);
+        this->csId = CutsceneManager_GetAdditionalCsId(this->actor.csId);
     }
 
-    ActorCutscene_SetIntentToPlay(this->cutscene);
+    CutsceneManager_Queue(this->csId);
     this->actionFunc = EnPametfrog_PlayCutscene;
     this->actor.speed = 0.0f;
     this->actor.velocity.y = 0.0f;
 }
 
 void EnPametfrog_PlayCutscene(EnPametfrog* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
-        ActorCutscene_Start(this->cutscene, &this->actor);
-        this->subCamId = ActorCutscene_GetCurrentSubCamId(this->cutscene);
-        func_800B724C(play, &this->actor, PLAYER_CSMODE_7);
+    if (CutsceneManager_IsNext(this->csId)) {
+        CutsceneManager_Start(this->csId, &this->actor);
+        this->subCamId = CutsceneManager_GetCurrentSubCamId(this->csId);
+        func_800B724C(play, &this->actor, PLAYER_CSMODE_WAIT);
         if (this->actor.colChkInfo.health == 0) {
             if (this->actor.params == GEKKO_PRE_SNAPPER) {
                 EnPametfrog_SetupCallSnapper(this, play);
@@ -1017,7 +1017,7 @@ void EnPametfrog_PlayCutscene(EnPametfrog* this, PlayState* play) {
             EnPametfrog_SetupFallOffSnapper(this, play);
         }
     } else {
-        ActorCutscene_SetIntentToPlay(this->cutscene);
+        CutsceneManager_Queue(this->csId);
     }
 }
 
@@ -1343,7 +1343,9 @@ void EnPametfrog_Update(Actor* thisx, PlayState* play) {
         if (this->actor.gravity < -0.1f) {
             Actor_MoveWithGravity(&this->actor);
             arg3 = this->actionFunc == EnPametfrog_FallInAir ? 3.0f : 15.0f;
-            Actor_UpdateBgCheckInfo(play, &this->actor, 25.0f, arg3, 3.0f, 0x1F);
+            Actor_UpdateBgCheckInfo(play, &this->actor, 25.0f, arg3, 3.0f,
+                                    UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_2 | UPDBGCHECKINFO_FLAG_4 |
+                                        UPDBGCHECKINFO_FLAG_8 | UPDBGCHECKINFO_FLAG_10);
         } else if (this->freezeTimer == 0) {
             Actor_MoveWithoutGravity(&this->actor);
             this->actor.floorHeight = this->actor.world.pos.y;

@@ -43,23 +43,23 @@ s32 func_80C1DED0(DmNb* this, s32 arg1) {
 
 void func_80C1DF18(DmNb* this, PlayState* play) {
     s32 sp2C[] = { 0, 0, 0, 0, 0 };
-    u16 csAction;
-    s32 csActionIndex;
+    u16 cueId;
+    s32 cueChannel;
 
-    if (play->csCtx.state != 0) {
+    if (play->csCtx.state != CS_STATE_IDLE) {
         if (this->unk1F8 == 0) {
-            this->unk1EC = 0xFF;
+            this->cueId = 255;
             this->unk1F8 = 1;
             this->unk1F4 = this->unk1F0;
         }
-        if (Cutscene_CheckActorAction(play, 0x232)) {
-            csActionIndex = Cutscene_GetActorActionIndex(play, 0x232);
-            csAction = play->csCtx.actorActions[csActionIndex]->action;
-            if (this->unk1EC != (u8)csAction) {
-                this->unk1EC = csAction;
-                func_80C1DED0(this, sp2C[csAction]);
+        if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_562)) {
+            cueChannel = Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_562);
+            cueId = play->csCtx.actorCues[cueChannel]->id;
+            if (this->cueId != (u8)cueId) {
+                this->cueId = cueId;
+                func_80C1DED0(this, sp2C[cueId]);
             }
-            Cutscene_ActorTranslateAndYaw(&this->actor, play, csActionIndex);
+            Cutscene_ActorTranslateAndYaw(&this->actor, play, cueChannel);
         }
     } else if (this->unk1F8 != 0) {
         this->unk1F8 = 0;
@@ -87,7 +87,7 @@ void DmNb_Update(Actor* thisx, PlayState* play) {
 
     this->actionFunc(this, play);
     SkelAnime_Update(&this->skelAnime);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
 }
 
 void DmNb_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {

@@ -182,7 +182,7 @@ void EnHoll_VisibleIdle(EnHoll* this, PlayState* play) {
             u32 enHollId = EN_HOLL_GET_ID(&this->actor);
 
             if (sLoadingPlaneDistance < playerDistFromCentralPlane) {
-                if ((play->roomCtx.prevRoom.num >= 0) && (play->roomCtx.unk31 == 0)) {
+                if ((play->roomCtx.prevRoom.num >= 0) && (play->roomCtx.status == 0)) {
                     this->actor.room = play->doorCtx.transitionActorList[enHollId].sides[this->playerSide].room;
                     if (play->roomCtx.prevRoom.num == this->actor.room) {
                         EnHoll_ChangeRooms(play);
@@ -220,7 +220,7 @@ void EnHoll_VisibleIdle(EnHoll* this, PlayState* play) {
 
 void EnHoll_TransparentIdle(EnHoll* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    s32 useViewEye = gDbgCamEnabled || play->csCtx.state != 0;
+    s32 useViewEye = gDbgCamEnabled || (play->csCtx.state != CS_STATE_IDLE);
     Vec3f transformedPlayerPos;
     f32 enHollTop;
     f32 playerDistFromCentralPlane;
@@ -298,7 +298,7 @@ void EnHoll_VerticalIdle(EnHoll* this, PlayState* play) {
 }
 
 void EnHoll_RoomTransitionIdle(EnHoll* this, PlayState* play) {
-    if (play->roomCtx.unk31 == 0) {
+    if (play->roomCtx.status == 0) {
         func_8012EBF8(play, &play->roomCtx);
         if (play->bgCoverAlpha == 0) {
             this->bgCoverAlphaActive = false;

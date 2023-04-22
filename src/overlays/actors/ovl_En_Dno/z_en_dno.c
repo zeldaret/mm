@@ -235,7 +235,7 @@ void EnDno_Init(Actor* thisx, PlayState* play) {
                                this->morphTable, DEKU_BUTLER_LIMB_MAX);
             Collider_InitCylinder(play, &this->collider);
             Collider_SetCylinder(play, &this->collider, thisx, &sCylinderInit);
-            Actor_UpdateBgCheckInfo(play, thisx, 0.0f, 0.0f, 0.0f, 4);
+            Actor_UpdateBgCheckInfo(play, thisx, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
             Animation_Change(&this->skelAnime, sAnimations[EN_DNO_ANIM_IDLE_WITH_CANDLE].animation, 1.0f, 0.0f,
                              Animation_GetLastFrame(sAnimations[EN_DNO_ANIM_IDLE_WITH_CANDLE].animation),
                              sAnimations[EN_DNO_ANIM_IDLE_WITH_CANDLE].mode,
@@ -243,7 +243,7 @@ void EnDno_Init(Actor* thisx, PlayState* play) {
             this->unk_3BE = 0x3E93;
             this->unk_3C0 = 60.0f;
             this->unk_3B0 = 0;
-            this->unk_468 = 99;
+            this->cueId = 99;
             this->skelAnime.playSpeed = 0.0f;
 
             switch (EN_DNO_GET_C000(thisx)) {
@@ -762,7 +762,7 @@ void func_80A72C04(EnDno* this, PlayState* play) {
 }
 
 void func_80A72CF8(EnDno* this, PlayState* play) {
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
     Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_DOOR_WARP1, this->actor.world.pos.x + 80.0f,
                        this->actor.floorHeight, this->actor.world.pos.z, 0, 0, 0, 0x201);
 }
@@ -916,12 +916,12 @@ void func_80A732C8(EnDno* this, PlayState* play) {
 void func_80A73408(EnDno* this, PlayState* play) {
     s32 phi_a2;
     u8 sp33 = true;
-    s32 temp_v0;
+    s32 cueChannel;
 
-    if (Cutscene_CheckActorAction(play, 475)) {
-        temp_v0 = Cutscene_GetActorActionIndex(play, 475);
-        if (this->unk_468 != play->csCtx.actorActions[temp_v0]->action) {
-            switch (play->csCtx.actorActions[temp_v0]->action) {
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_475)) {
+        cueChannel = Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_475);
+        if (this->cueId != play->csCtx.actorCues[cueChannel]->id) {
+            switch (play->csCtx.actorCues[cueChannel]->id) {
                 case 1:
                     phi_a2 = 13;
                     break;
@@ -940,12 +940,14 @@ void func_80A73408(EnDno* this, PlayState* play) {
                 SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, phi_a2, &this->animIndex);
             }
         }
-        Cutscene_ActorTranslateAndYaw(&this->actor, play, temp_v0);
+        Cutscene_ActorTranslateAndYaw(&this->actor, play, cueChannel);
     }
 
     if ((Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) &&
         (this->animIndex == EN_DNO_ANIM_SHOCK_START)) {
-        if (0) {};
+        //! FAKE:
+        if (1) {}
+
         SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, EN_DNO_ANIM_SHOCK_LOOP, &this->animIndex);
     }
 }
@@ -958,7 +960,7 @@ void EnDno_Update(Actor* thisx, PlayState* play) {
     func_80A73408(this, play);
     this->actionFunc(this, play);
     if (this->unk_3B0 & 4) {
-        Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
     }
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);

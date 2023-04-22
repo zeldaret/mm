@@ -767,8 +767,8 @@ void EnEgol_Laser(EnEgol* this, PlayState* play) {
                  * rotToNorm.x = func_80086B30(nz, ny) * 0x8000 / M_PI;
                  * rotToNorm.z = func_80086B30(-nx, sqrtf(1.0f - SQ(nx))) * 0x8000 / M_PI;
                  */
-                rotToNorm.x = -func_80086B30(-nz * ny, 1.0f) * 0x8000 / M_PI;
-                rotToNorm.z = func_80086B30(-nx * ny, 1.0f) * 0x8000 / M_PI;
+                rotToNorm.x = RAD_TO_BINANG_ALT2(-func_80086B30(-nz * ny, 1.0f));
+                rotToNorm.z = RAD_TO_BINANG_ALT2(func_80086B30(-nx * ny, 1.0f));
 
                 if ((this->actor.world.pos.y - 50.0f) <= player->actor.world.pos.y) {
                     EnEgol_SpawnEffect(this, &hitPos, &rotToNorm, 100, 0.02f, EYEGORE_EFFECT_IMPACT);
@@ -1043,11 +1043,11 @@ void EnEgol_Damaged(EnEgol* this, PlayState* play) {
 }
 
 void EnEgol_StartDeathCutscene(EnEgol* this, PlayState* play) {
-    if (!ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
-        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+    if (!CutsceneManager_IsNext(this->actor.csId)) {
+        CutsceneManager_Queue(this->actor.csId);
     } else {
-        ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
-        this->subCamId = ActorCutscene_GetCurrentSubCamId(this->actor.cutscene);
+        CutsceneManager_StartWithPlayerCs(this->actor.csId, &this->actor);
+        this->subCamId = CutsceneManager_GetCurrentSubCamId(this->actor.csId);
         this->subCamFovTarget = 60.0f;
         EnEgol_ChangeAnim(this, EYEGORE_ANIM_DEATH);
         this->action = EYEGORE_ACTION_DYING;
@@ -1075,7 +1075,7 @@ void EnEgol_Death(EnEgol* this, PlayState* play) {
         if (this->switchFlag > -1) {
             Flags_SetSwitch(play, this->switchFlag);
         }
-        ActorCutscene_Stop(this->actor.cutscene);
+        CutsceneManager_Stop(this->actor.csId);
         Actor_Kill(&this->actor);
     } else {
         if (Animation_OnFrame(&this->skelAnime, 46.0f)) {
@@ -1294,7 +1294,9 @@ void EnEgol_Update(Actor* thisx, PlayState* play) {
     Math_SmoothStepToS(&this->eyelidRot, this->eyelidRotTarget, 1, 0x7D0, 0);
     EnEgol_CollisionCheck(this, play);
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 50.0f, 50.0f, 0x1D);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 50.0f, 50.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                UPDBGCHECKINFO_FLAG_10);
     if (this->action != EYEGORE_ACTION_DEAD) {
         //! @bug This should be ||, not &&. As is, the check always succeeds.
         if (!((this->action == EYEGORE_ACTION_DAMAGED) && (this->action == EYEGORE_ACTION_DYING))) {

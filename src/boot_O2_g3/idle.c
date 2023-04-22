@@ -2,6 +2,7 @@
 #include "global.h"
 #include "stack.h"
 #include "buffers.h"
+#include "stackcheck.h"
 
 u8 D_80096B20 = 1;
 vu8 gViConfigUseDefault = 1;
