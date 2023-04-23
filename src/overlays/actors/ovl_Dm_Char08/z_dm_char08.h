@@ -22,7 +22,7 @@ typedef struct DmChar08 {
     /* 0x1E8 */ UNK_TYPE1 unk_1E8[8];
     /* 0x1F0 */ f32 unk_1F0;
     /* 0x1F4 */ s16 unk_1F4;
-    /* 0x1F6 */ s16 unk_1F6;
+    /* 0x1F6 */ s16 cueId;
     /* 0x1F6 */ s16 blinkTimer;
     /* 0x1FA */ s16 unk_1FA;
     /* 0x1FC */ u16 unk_1FC;

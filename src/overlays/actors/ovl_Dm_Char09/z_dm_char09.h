@@ -31,7 +31,7 @@ typedef struct DmChar09 {
     /* 0x22A */ s16 unk_22A;
     /* 0x22C */ UNK_TYPE1 pad22C[2];
     /* 0x22E */ u8 unk_22E;
-    /* 0x22F */ u8 unk_22F;
+    /* 0x22F */ u8 cueId;
 } DmChar09; // size = 0x230
 
 #endif // Z_DM_CHAR09_H

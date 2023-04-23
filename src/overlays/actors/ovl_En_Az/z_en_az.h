@@ -45,7 +45,7 @@ typedef struct EnAz {
     /* 0x3C4 */ s16 unk_3C4;
     /* 0x3C6 */ UNK_TYPE1 unk3C6[6];
     /* 0x3CC */ s32 getItemId;
-    /* 0x3D0 */ s16 unk_3D0[1];
+    /* 0x3D0 */ s16 csIdList[1];
     /* 0x3D2 */ u16 unk_3D2;
     /* 0x3D4 */ s16 unk_3D4;
     /* 0x3D6 */ s16 unk_3D6;

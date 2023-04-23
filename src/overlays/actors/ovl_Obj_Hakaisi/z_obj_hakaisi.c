@@ -106,14 +106,14 @@ void ObjHakaisi_Init(Actor* thisx, PlayState* play) {
         return;
     }
 
-    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
     CollisionHeader_GetVirtual(&object_hakaisi_Colheader_002FC4, &sp7C);
 
     this->dyna.bgId = DynaPoly_SetBgActor(play, &play->colCtx.dyna, &this->dyna.actor, sp7C);
     this->unk_19A = 0;
     this->unk_198 = 0;
     this->switchFlag = OBJHAKAISI_GET_SWITCHFLAG(thisx);
-    this->unk_196 = this->dyna.actor.cutscene;
+    this->csId = this->dyna.actor.csId;
 
     if (this->switchFlag == 0xFF) {
         this->switchFlag = -1;
@@ -123,7 +123,7 @@ void ObjHakaisi_Init(Actor* thisx, PlayState* play) {
         Actor_Kill(&this->dyna.actor);
     }
 
-    Actor_UpdateBgCheckInfo(play, &this->dyna.actor, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->dyna.actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
 
     if (this->dyna.actor.floorPoly == NULL) {
         Actor_Kill(&this->dyna.actor);
@@ -192,16 +192,16 @@ void func_80B14558(ObjHakaisi* this) {
 }
 
 void func_80B1456C(ObjHakaisi* this, PlayState* play) {
-    if (this->unk_196 != -1) {
-        if (ActorCutscene_GetCanPlayNext(this->unk_196)) {
-            ActorCutscene_StartAndSetUnkLinkFields(this->unk_196, &this->dyna.actor);
+    if (this->csId != CS_ID_NONE) {
+        if (CutsceneManager_IsNext(this->csId)) {
+            CutsceneManager_StartWithPlayerCs(this->csId, &this->dyna.actor);
         } else {
-            ActorCutscene_SetIntentToPlay(this->unk_196);
+            CutsceneManager_Queue(this->csId);
         }
     }
     if (this->dyna.actor.colChkInfo.health < 30) {
         func_80B145F4(this);
-        func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+        DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
     }
 }
 
@@ -258,8 +258,8 @@ void func_80B149A8(ObjHakaisi* this) {
 void func_80B149C0(ObjHakaisi* this, PlayState* play) {
     if (this->unk_19A < 60) {
         this->unk_19A++;
-    } else if ((this->unk_196 != -1) && !ActorCutscene_GetCanPlayNext(this->unk_196)) {
-        ActorCutscene_Stop(this->unk_196);
+    } else if ((this->csId != CS_ID_NONE) && !CutsceneManager_IsNext(this->csId)) {
+        CutsceneManager_Stop(this->csId);
     }
 }
 
@@ -423,7 +423,7 @@ void func_80B1544C(Actor* thisx, PlayState* play) {
 
     this->actionFunc(this, play);
 
-    Actor_UpdateBgCheckInfo(play, &this->dyna.actor, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->dyna.actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
 }
 
 void func_80B154A0(Actor* thisx, PlayState* play) {

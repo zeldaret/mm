@@ -37,7 +37,7 @@ typedef struct BgDblueMovebg {
     /* 0x19C */ Vec3f unk_19C;
     /* 0x1A8 */ Vec3f unk_1A8;
     /* 0x1B4 */ UNK_TYPE1 unk1B4[2];
-    /* 0x1B6 */ s16 unk_1B6[2];
+    /* 0x1B6 */ s16 csIdList[2];
     /* 0x1BC */ s32 unk_1BC;
     /* 0x1C0 */ s32 unk_1C0;
     /* 0x1C4 */ s32 unk_1C4;
@@ -45,7 +45,7 @@ typedef struct BgDblueMovebg {
     /* 0x1CC */ s16 unk_1CC;
     /* 0x1CE */ s16 unk_1CE;
     /* 0x1D0 */ s16 unk_1D0;
-    /* 0x1D2 */ s16 unk_1D2;
+    /* 0x1D2 */ s16 csId;
     /* 0x1D4 */ f32 unk_1D4;
     /* 0x1D8 */ s16 unk_1D8[2][8];
     /* 0x1F8 */ f32 unk_1F8[2][8];

@@ -248,7 +248,7 @@ static TexturePtr D_8089E33C[] = {
     object_dinofos_Tex_009030,
 };
 
-static s16 D_8089E34C = -1;
+static s16 sCsId = CS_ID_NONE;
 static s32 D_8089E350 = 0;
 
 static InitChainEntry sInitChain[] = {
@@ -291,13 +291,13 @@ void EnDinofos_Init(Actor* thisx, PlayState* play) {
     }
 
     this->unk_28B = 0;
-    if (thisx->cutscene == -1) {
+    if (thisx->csId == CS_ID_NONE) {
         func_8089B7B0(this);
     } else {
         this->actor.flags |= ACTOR_FLAG_100000;
         this->actor.gravity = 0.0f;
         this->actor.velocity.y = 0.0f;
-        D_8089E34C = thisx->cutscene;
+        sCsId = thisx->csId;
         func_8089D2E0(this);
     }
 
@@ -367,9 +367,9 @@ void func_8089ABF4(EnDinofos* this, PlayState* play) {
 
         Play_SetCameraAtEye(play, CAM_ID_MAIN, &subCam->at, &subCam->eye);
         this->subCamId = SUB_CAM_ID_DONE;
-        ActorCutscene_Stop(this->actor.cutscene);
+        CutsceneManager_Stop(this->actor.csId);
         if (this->actor.colChkInfo.health == 0) {
-            func_800B724C(play, &this->actor, PLAYER_CSMODE_6);
+            func_800B724C(play, &this->actor, PLAYER_CSMODE_END);
         }
     }
 }
@@ -584,7 +584,7 @@ void func_8089B72C(EnDinofos* this, PlayState* play) {
     if (SkelAnime_Update(&this->skelAnime)) {
         func_8089ABF4(this, play);
         this->actor.flags &= ~ACTOR_FLAG_100000;
-        this->actor.cutscene = -1;
+        this->actor.csId = CS_ID_NONE;
         func_8089B7B0(this);
     }
 }
@@ -972,7 +972,7 @@ void func_8089C7B8(EnDinofos* this, PlayState* play) {
     if (this->unk_290 == 0) {
         func_8089ACEC(this, play);
         if (this->actor.colChkInfo.health == 0) {
-            if (this->actor.cutscene == -1) {
+            if (this->actor.csId == CS_ID_NONE) {
                 func_8089CFAC(this);
             } else {
                 func_8089D2E0(this);
@@ -1004,7 +1004,7 @@ void func_8089C938(EnDinofos* this, PlayState* play) {
     Math_StepToF(&this->actor.speed, 0.0f, 0.5f);
     if (SkelAnime_Update(&this->skelAnime) && (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
         if (this->actor.colChkInfo.health == 0) {
-            if (this->actor.cutscene == -1) {
+            if (this->actor.csId == CS_ID_NONE) {
                 func_8089CFAC(this);
             } else {
                 func_8089D2E0(this);
@@ -1196,21 +1196,21 @@ void func_8089D1E0(EnDinofos* this, PlayState* play) {
 }
 
 void func_8089D2E0(EnDinofos* this) {
-    ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+    CutsceneManager_Queue(this->actor.csId);
     this->actionFunc = func_8089D318;
 }
 
 void func_8089D318(EnDinofos* this, PlayState* play) {
     Vec3f subCamEye;
 
-    if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
+    if (CutsceneManager_IsNext(this->actor.csId)) {
         if (this->actor.colChkInfo.health == 0) {
-            ActorCutscene_Start(this->actor.cutscene, &this->actor);
-            func_800B724C(play, &this->actor, PLAYER_CSMODE_7);
+            CutsceneManager_Start(this->actor.csId, &this->actor);
+            func_800B724C(play, &this->actor, PLAYER_CSMODE_WAIT);
         } else {
-            ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
+            CutsceneManager_StartWithPlayerCs(this->actor.csId, &this->actor);
         }
-        this->subCamId = ActorCutscene_GetCurrentSubCamId(this->actor.cutscene);
+        this->subCamId = CutsceneManager_GetCurrentSubCamId(this->actor.csId);
         if (this->actor.colChkInfo.health == 0) {
             subCamEye.x = (Math_SinS(this->actor.shape.rot.y) * 150.0f) + this->actor.focus.pos.x;
             subCamEye.y = this->actor.focus.pos.y;
@@ -1221,7 +1221,7 @@ void func_8089D318(EnDinofos* this, PlayState* play) {
             func_8089B100(this, play);
         }
     } else {
-        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+        CutsceneManager_Queue(this->actor.csId);
     }
 }
 
@@ -1273,12 +1273,12 @@ s32 func_8089D60C(EnDinofos* this, PlayState* play) {
             Enemy_StartFinishingBlow(play, &this->actor);
             D_8089E350--;
             if (D_8089E350 == 0) {
-                if (D_8089E34C != -1) {
-                    this->actor.cutscene = D_8089E34C;
+                if (sCsId != CS_ID_NONE) {
+                    this->actor.csId = sCsId;
                 }
             }
 
-            if (this->actor.cutscene != -1) {
+            if (this->actor.csId != CS_ID_NONE) {
                 Audio_RestorePrevBgm();
             }
         }
@@ -1356,7 +1356,9 @@ void EnDinofos_Update(Actor* thisx, PlayState* play2) {
 
     this->actionFunc(this, play);
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 25.0f, 30.0f, 60.0f, 0x5D);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 25.0f, 30.0f, 60.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                UPDBGCHECKINFO_FLAG_10 | UPDBGCHECKINFO_FLAG_40);
     if (this->actionFunc != func_8089C7B8) {
         if ((this->actor.depthInWater > 0.0f) && (this->actor.depthInWater < 10.0f)) {
             if (!((play->gameplayFrames % 4) & 1)) {
