@@ -147,7 +147,7 @@ void Room_DrawCullable(PlayState* play, Room* room, u32 flags) {
             }
         }
     } else {
-        f32 var_fa1 = 1.0f / play->projectionMtxFDiagonal.z; // sp54
+        f32 var_fa1 = 1.0f / play->projectionMtxFDiagonal.z;
         f32 var_fv1;
         s32 var_a1;
 
