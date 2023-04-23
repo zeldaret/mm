@@ -60,25 +60,26 @@ void EnAnd_Blink(EnAnd* this) {
     }
 }
 
-void EnAnd_HandleCsAction(EnAnd* this, PlayState* play) {
-    s32 actionAnimations[] = { 0, 1, 2, 3, 5, 7 };
-    u16 csAction;
-    s32 actionIndex;
+void EnAnd_HandleCutscene(EnAnd* this, PlayState* play) {
+    s32 csAnimations[] = { 0, 1, 2, 3, 5, 7 };
+    u16 cueType;
+    s32 cueChannel;
 
-    if (play->csCtx.state != CS_STATE_0) {
-        if (!this->hasAction) {
-            this->action = 0xFF;
-            this->hasAction = true;
+    if (play->csCtx.state != CS_STATE_IDLE) {
+        if (!this->isCutscenePlaying) {
+            // Cutscene is starting
+            this->cueId = 255;
+            this->isCutscenePlaying = true;
             this->prevAnimIndex = this->animIndex;
         }
-        if (Cutscene_CheckActorAction(play, 0x235)) {
-            actionIndex = Cutscene_GetActorActionIndex(play, 0x235);
-            csAction = play->csCtx.actorActions[actionIndex]->action;
-            if (this->action != (u8)csAction) {
-                this->action = csAction;
-                EnAnd_ChangeAnim(this, actionAnimations[csAction]);
+        if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_565)) {
+            cueChannel = Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_565);
+            cueType = play->csCtx.actorCues[cueChannel]->id;
+            if (this->cueId != (u8)cueType) {
+                this->cueId = cueType;
+                EnAnd_ChangeAnim(this, csAnimations[cueType]);
             }
-            switch (this->action) {
+            switch (this->cueId) {
                 case 3:
                 case 4:
                     if ((this->animIndex == 3) || (this->animIndex == 5)) {
@@ -91,10 +92,10 @@ void EnAnd_HandleCsAction(EnAnd* this, PlayState* play) {
                 default:
                     break;
             }
-            Cutscene_ActorTranslateAndYaw(&this->actor, play, actionIndex);
+            Cutscene_ActorTranslateAndYaw(&this->actor, play, cueChannel);
         }
-    } else if (this->hasAction) {
-        this->hasAction = false;
+    } else if (this->isCutscenePlaying) {
+        this->isCutscenePlaying = false;
         EnAnd_ChangeAnim(this, this->prevAnimIndex);
     }
 }
@@ -110,7 +111,7 @@ void EnAnd_Init(Actor* thisx, PlayState* play) {
     Actor_SetScale(&this->actor, 0.01f);
     this->actor.flags &= ~ACTOR_FLAG_1;
     this->flags |= 8;
-    this->actionFunc = EnAnd_HandleCsAction;
+    this->actionFunc = EnAnd_HandleCutscene;
 }
 
 void EnAnd_Destroy(Actor* thisx, PlayState* play) {

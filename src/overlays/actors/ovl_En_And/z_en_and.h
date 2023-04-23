@@ -12,7 +12,7 @@ typedef struct EnAnd {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
     /* 0x188 */ EnAndActionFunc actionFunc;
-    /* 0x18C */ u8 action;
+    /* 0x18C */ u8 cueId;
     /* 0x18D */ UNK_TYPE1 pad18D[0x7];
     /* 0x194 */ Vec3f headComputedPos;
     /* 0x1A0 */ Vec3f torsoComputedPos;
@@ -31,7 +31,7 @@ typedef struct EnAnd {
     /* 0x302 */ s16 eyeTexIndex;
     /* 0x304 */ s32 animIndex;
     /* 0x308 */ s32 prevAnimIndex;
-    /* 0x30C */ s32 hasAction;
+    /* 0x30C */ s32 isCutscenePlaying;
     /* 0x310 */ UNK_TYPE1 pad310[4];
 } EnAnd; // size = 0x314
 
