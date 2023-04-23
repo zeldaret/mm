@@ -585,7 +585,7 @@ void func_8082DCA0(PlayState* play, Player* this) {
         this->stateFlags1 &= ~PLAYER_STATE1_800;
     }
 
-    if (Player_GetExplosiveHeld(this) >= 0) {
+    if (Player_GetExplosiveHeld(this) > PLAYER_EXPLOSIVE_NONE) {
         func_8082F8BC(play, this, PLAYER_IA_NONE);
         this->heldItemId = ITEM_FE;
     }
@@ -3160,7 +3160,7 @@ void Player_SpawnExplosive(PlayState* play, Player* this) {
 
     explosiveType = Player_GetExplosiveHeld(this);
     explosiveInfo = &sPlayerExplosiveInfo[explosiveType];
-    if ((explosiveType == 1) && (gSaveContext.powderKegTimer == 0)) {
+    if ((explosiveType == PLAYER_EXPLOSIVE_POWDER_KEG) && (gSaveContext.powderKegTimer == 0)) {
         gSaveContext.powderKegTimer = 200;
     }
 
@@ -4112,7 +4112,8 @@ s32 Player_SetAction(PlayState* play, Player* this, PlayerActionFunc actionFunc,
         } else {
             Actor_SetScale(&this->actor, 0.01f);
         }
-    } else if ((this->transformation == PLAYER_FORM_GORON) && (Player_GetMeleeWeaponHeld(this) != PLAYER_MELEEWEAPON_NONE)) {
+    } else if ((this->transformation == PLAYER_FORM_GORON) &&
+               (Player_GetMeleeWeaponHeld(this) != PLAYER_MELEEWEAPON_NONE)) {
         func_80831990(play, this, ITEM_NONE);
     }
 
@@ -4953,12 +4954,12 @@ void func_80833728(Player* this, s32 index, u32 dmgFlags, s32 damage) {
 
 MeleeWeaponDamageInfo D_8085D09C[PLAYER_MELEEWEAPON_MAX] = {
     { DMG_GORON_PUNCH, 2, 2, 0, 0 }, // PLAYER_MELEEWEAPON_NONE
-    { DMG_SWORD, 4, 8, 1, 2 }, // PLAYER_MELEEWEAPON_SWORD_KOKIRI
-    { DMG_SWORD, 4, 8, 2, 4 }, // PLAYER_MELEEWEAPON_SWORD_RAZOR
-    { DMG_SWORD, 4, 8, 3, 6 }, // PLAYER_MELEEWEAPON_SWORD_GILDED
-    { DMG_SWORD, 4, 8, 4, 8 }, // PLAYER_MELEEWEAPON_SWORD_GREAT_FAIRY
-    { DMG_DEKU_STICK, 0, 0, 2, 4 }, // PLAYER_MELEEWEAPON_STICK
-    { DMG_ZORA_PUNCH, 1, 2, 0, 0 }, // PLAYER_MELEEWEAPON_ZORA_FINS
+    { DMG_SWORD, 4, 8, 1, 2 },       // PLAYER_MELEEWEAPON_SWORD_KOKIRI
+    { DMG_SWORD, 4, 8, 2, 4 },       // PLAYER_MELEEWEAPON_SWORD_RAZOR
+    { DMG_SWORD, 4, 8, 3, 6 },       // PLAYER_MELEEWEAPON_SWORD_GILDED
+    { DMG_SWORD, 4, 8, 4, 8 },       // PLAYER_MELEEWEAPON_SWORD_GREAT_FAIRY
+    { DMG_DEKU_STICK, 0, 0, 2, 4 },  // PLAYER_MELEEWEAPON_STICK
+    { DMG_ZORA_PUNCH, 1, 2, 0, 0 },  // PLAYER_MELEEWEAPON_ZORA_FINS
 };
 
 // New function in NE0: split out of func_80833864 to be able to call it to patch Power Crouch Stab.
@@ -4974,7 +4975,8 @@ void func_8083375C(Player* this, PlayerMeleeWeaponAnimation meleeWeaponAnimation
         //! @bug Quick Put Away Damage: Since 0 is also the "no weapon" value, producing a weapon quad without a weapon
         //! in hand, such as during Quick Put Away, produced a quad with the Goron punch properties, which does 0 damage
         //! as human.
-        dmgInfo = &D_8085D09C[(this->transformation == PLAYER_FORM_GORON) ? PLAYER_MELEEWEAPON_NONE : Player_GetMeleeWeaponHeld(this)];
+        dmgInfo = &D_8085D09C[(this->transformation == PLAYER_FORM_GORON) ? PLAYER_MELEEWEAPON_NONE
+                                                                          : Player_GetMeleeWeaponHeld(this)];
     }
 
     //! @bug Great Deku Sword: Presumably the dmgTransformed fields are intended for Fierce Deity, but also work for
@@ -7466,8 +7468,9 @@ s32 func_80839B18(Player* this, PlayState* play) {
                     } else {
                         func_80836B3C(play, this, 0.0f);
                     }
-                } else if (!(this->stateFlags1 & PLAYER_STATE1_8000000) && (Player_GetMeleeWeaponHeld(this) != PLAYER_MELEEWEAPON_NONE) &&
-                           func_80832090(this) && (this->transformation != PLAYER_FORM_GORON)) {
+                } else if (!(this->stateFlags1 & PLAYER_STATE1_8000000) &&
+                           (Player_GetMeleeWeaponHeld(this) != PLAYER_MELEEWEAPON_NONE) && func_80832090(this) &&
+                           (this->transformation != PLAYER_FORM_GORON)) {
                     func_808395F0(play, this, PLAYER_MWA_JUMPSLASH_START, 5.0f, 5.0f);
                 } else if (func_80839A84(play, this) == 0) {
                     func_80836B3C(play, this, 0.0f);
@@ -7675,7 +7678,8 @@ void func_8083A548(Player* this) {
 
 s32 func_8083A580(Player* this, PlayState* play) {
     if (CHECK_BTN_ALL(sPlayerControlInput->cur.button, BTN_B)) {
-        if (!(this->stateFlags1 & PLAYER_STATE1_400000) && (Player_GetMeleeWeaponHeld(this) != PLAYER_MELEEWEAPON_NONE)) {
+        if (!(this->stateFlags1 & PLAYER_STATE1_400000) &&
+            (Player_GetMeleeWeaponHeld(this) != PLAYER_MELEEWEAPON_NONE)) {
             if ((this->unk_ADC > 0) && (((this->transformation == PLAYER_FORM_ZORA)) ||
                                         ((this->unk_ADC == 1) && (this->heldItemAction != PLAYER_IA_STICK)))) {
                 if (this->transformation == PLAYER_FORM_ZORA) {
@@ -7709,7 +7713,7 @@ struct_8085D200 D_8085D200[] = {
 
 s32 func_8083A6C0(PlayState* play, Player* this) {
     if (D_80862B48 != 0) {
-        if (Player_GetBottleHeld(this) >= 0) {
+        if (Player_GetBottleHeld(this) > PLAYER_BOTTLE_NONE) {
             Player_SetAction(play, this, func_808534C0, 0);
             if (this->actor.depthInWater > 12.0f) {
                 this->unk_AE8 = 1;
@@ -9246,8 +9250,9 @@ void Player_ChooseIdleAnim(PlayState* play, Player* this) {
             } else {
                 rand = Rand_ZeroOne() * 5.0f;
                 if (rand < 4) {
-                    if (((rand != 0) && (rand != 3)) || ((this->rightHandType == PLAYER_MODELTYPE_RH_SHIELD) &&
-                                                         ((rand == 3) || (Player_GetMeleeWeaponHeld(this) != PLAYER_MELEEWEAPON_NONE)))) {
+                    if (((rand != 0) && (rand != 3)) ||
+                        ((this->rightHandType == PLAYER_MODELTYPE_RH_SHIELD) &&
+                         ((rand == 3) || (Player_GetMeleeWeaponHeld(this) != PLAYER_MELEEWEAPON_NONE)))) {
                         if ((rand == 0) && Player_IsHoldingTwoHandedWeapon(this)) {
                             rand = 4;
                         }
