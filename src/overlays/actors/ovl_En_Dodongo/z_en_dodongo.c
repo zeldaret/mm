@@ -914,8 +914,8 @@ void func_808787B0(EnDodongo* this, PlayState* play) {
     if (SkelAnime_Update(&this->skelAnime)) {
         if (this->timer == 0) {
             EnBom* bomb = (EnBom*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOM, this->actor.world.pos.x,
-                                              this->actor.world.pos.y, this->actor.world.pos.z, BOMB_CAT_BOMB, 0, 0,
-                                              BOMB_TYPE_BODY);
+                                              this->actor.world.pos.y, this->actor.world.pos.z,
+                                              BOMB_EXPLOSIVE_TYPE_BOMB, 0, 0, BOMB_TYPE_BODY);
             if (bomb != NULL) {
                 bomb->timer = 0;
             }

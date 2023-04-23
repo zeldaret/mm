@@ -1250,8 +1250,8 @@ s32 func_80A13E80(EnGo* this, PlayState* play) {
                 func_80A12C48(this, play, 1);
                 Lib_Vec3f_TranslateAndRotateY(&this->actor.world.pos, this->actor.shape.rot.y, &D_80A166A4, &sp48);
                 gSaveContext.powderKegTimer = 2400;
-                Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOM, sp48.x, sp48.y, sp48.z, BOMB_CAT_POWDER_KEG, 0, 0,
-                            BOMB_TYPE_BODY);
+                Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOM, sp48.x, sp48.y, sp48.z, BOMB_EXPLOSIVE_TYPE_POWDER_KEG,
+                            0, 0, BOMB_TYPE_BODY);
                 func_80A134B0(this, play, 1);
                 this->unk_3C2 = 0;
                 this->unk_3C0++;

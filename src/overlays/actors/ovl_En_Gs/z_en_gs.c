@@ -872,7 +872,7 @@ s32 func_809995A4(EnGs* this, PlayState* play) {
 
         if (this->actor.playerHeightRel < -12000.0f) {
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOM, this->actor.world.pos.x, this->actor.world.pos.y,
-                        this->actor.world.pos.z, BOMB_CAT_BOMB, this->actor.world.rot.y, 0, BOMB_TYPE_BODY);
+                        this->actor.world.pos.z, BOMB_EXPLOSIVE_TYPE_BOMB, this->actor.world.rot.y, 0, BOMB_TYPE_BODY);
             Actor_Kill(&this->actor);
             sp7C = 0;
         }

@@ -203,8 +203,8 @@ void func_80AFE25C(EnColMan* this, PlayState* play) {
                         CLEAR_TAG_SMALL_EXPLOSION);
         } else {
             EnBom* bomb = (EnBom*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOM, this->actor.world.pos.x,
-                                              this->actor.world.pos.y, this->actor.world.pos.z, BOMB_CAT_BOMB, 0, 0,
-                                              BOMB_TYPE_BODY);
+                                              this->actor.world.pos.y, this->actor.world.pos.z,
+                                              BOMB_EXPLOSIVE_TYPE_BOMB, 0, 0, BOMB_TYPE_BODY);
 
             if (bomb != NULL) {
                 bomb->timer = 0;

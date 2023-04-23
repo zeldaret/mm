@@ -17,10 +17,10 @@ typedef enum BombType {
 } BombType;
 
 // Passed via x rotation
-typedef enum EnBomCategory {
-    /* 0 */ BOMB_CAT_BOMB,
-    /* 1 */ BOMB_CAT_POWDER_KEG,
-} EnBomCategory;
+typedef enum EnBomExplosiveType {
+    /* 0 */ BOMB_EXPLOSIVE_TYPE_BOMB,
+    /* 1 */ BOMB_EXPLOSIVE_TYPE_POWDER_KEG,
+} EnBomExplosiveType;
 
 typedef struct EnBom {
     /* 0x000 */ Actor actor;

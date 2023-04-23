@@ -3166,7 +3166,7 @@ void Player_SpawnExplosive(PlayState* play, Player* this) {
 
     explosiveActor = Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, explosiveInfo->actorId,
                                         this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
-                                        explosiveType == 1 ? BOMB_CAT_POWDER_KEG : BOMB_CAT_BOMB,
+                                        explosiveType == 1 ? BOMB_EXPLOSIVE_TYPE_POWDER_KEG : BOMB_EXPLOSIVE_TYPE_BOMB,
                                         this->actor.shape.rot.y, 0, BOMB_TYPE_BODY);
     if (explosiveActor != NULL) {
         if ((explosiveType == 0) && (play->unk_1887E != 0)) {
@@ -3574,8 +3574,8 @@ void func_8082FE0C(Player* this, PlayState* play) {
         } else if (item == ITEM_F0) {
             if (this->blastMaskTimer == 0) {
                 EnBom* bomb = (EnBom*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOM, this->actor.focus.pos.x,
-                                                  this->actor.focus.pos.y, this->actor.focus.pos.z, BOMB_CAT_BOMB, 0, 0,
-                                                  BOMB_TYPE_BODY);
+                                                  this->actor.focus.pos.y, this->actor.focus.pos.z,
+                                                  BOMB_EXPLOSIVE_TYPE_BOMB, 0, 0, BOMB_TYPE_BODY);
 
                 if (bomb != NULL) {
                     bomb->timer = 0;

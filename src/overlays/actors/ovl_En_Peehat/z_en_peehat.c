@@ -662,7 +662,7 @@ void func_808986A4(EnPeehat* this, PlayState* play) {
     if (this->unk_2B0 == 5) {
         EnBom* bomb =
             (EnBom*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOM, this->actor.world.pos.x, this->actor.world.pos.y,
-                                this->actor.world.pos.z, BOMB_CAT_BOMB, 0, 0x602, BOMB_TYPE_BODY);
+                                this->actor.world.pos.z, BOMB_EXPLOSIVE_TYPE_BOMB, 0, 0x602, BOMB_TYPE_BODY);
 
         if (bomb != NULL) {
             bomb->timer = 0;

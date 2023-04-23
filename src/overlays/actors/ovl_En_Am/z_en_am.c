@@ -424,7 +424,7 @@ void func_808B0894(EnAm* this, PlayState* play) {
     if (this->explodeTimer == 1) {
         EnBom* bomb =
             (EnBom*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOM, this->actor.world.pos.x, this->actor.world.pos.y,
-                                this->actor.world.pos.z, BOMB_CAT_BOMB, 0, 2, BOMB_TYPE_BODY);
+                                this->actor.world.pos.z, BOMB_EXPLOSIVE_TYPE_BOMB, 0, 2, BOMB_TYPE_BODY);
         if (bomb != NULL) {
             bomb->timer = 0;
         }
