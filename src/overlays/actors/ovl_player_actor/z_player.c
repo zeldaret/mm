@@ -3679,7 +3679,7 @@ s32 func_808305BC(PlayState* play, Player* this, ItemId* item, s32* typeParam) {
 
     if (this->transformation == PLAYER_FORM_DEKU) {
         return ((gSaveContext.save.saveInfo.playerData.magic >= 2) ||
-                ((gSaveContext.save.saveInfo.weekEventReg[8] & 1) && (play->sceneId == SCENE_BOWLING)))
+                ((CHECK_WEEKEVENTREG(WEEKEVENTREG_08_01)) && (play->sceneId == SCENE_BOWLING)))
                    ? 1
                    : 0;
     }
@@ -3740,8 +3740,8 @@ s32 func_808306F8(Player* this, PlayState* play) {
                             arrowType = ENARROW_2;
                             magicArrowType = -1;
                         }
-                    } else if ((arrowType == ENARROW_7) && (!(gSaveContext.save.saveInfo.weekEventReg[8] & 1) ||
-                                                            (play->sceneId != SCENE_BOWLING))) {
+                    } else if ((arrowType == ENARROW_7) &&
+                               (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_08_01)) || (play->sceneId != SCENE_BOWLING))) {
                         magicArrowType = ENARROW_3;
                     } else {
                         magicArrowType = -1;
@@ -8187,7 +8187,7 @@ void func_8083BB4C(PlayState* play, Player* this) {
                     func_808373F8(play, this, NA_SE_VO_LI_AUTO_JUMP);
                 } else {
                     if ((play->sceneId == SCENE_20SICHITAI) && (this->unk_3CF == 0)) {
-                        if (gSaveContext.eventInf[5] & 1) {
+                        if (CHECK_EVENTINF(EVENTINF_50)) {
                             play->nextEntrance = ENTRANCE(TOURIST_INFORMATION, 2);
                         } else {
                             play->nextEntrance = ENTRANCE(TOURIST_INFORMATION, 1);
@@ -9969,7 +9969,7 @@ void func_80840EC0(Player* this, PlayState* play) {
 
 // Spin attack size
 void func_80840F34(Player* this) {
-    Math_StepToF(&this->unk_B08[0], (gSaveContext.save.saveInfo.weekEventReg[23] & 2) ? 1.0f : 0.5f, 0.02f);
+    Math_StepToF(&this->unk_B08[0], (CHECK_WEEKEVENTREG(WEEKEVENTREG_23_02)) ? 1.0f : 0.5f, 0.02f);
 }
 
 s32 func_80840F90(PlayState* play, Player* this, CsCmdActorCue* playerAction, f32 arg3, s16 arg4, s32 arg5) {
@@ -16672,7 +16672,7 @@ void func_80853194(Player* this, PlayState* play) {
                 }
 
                 if (this->itemAction == PLAYER_IA_BOTTLE_CHATEAU) {
-                    gSaveContext.save.saveInfo.weekEventReg[0xE] |= 8;
+                    SET_WEEKEVENTREG(WEEKEVENTREG_DRANK_CHATEAU_ROMANI);
                 }
 
                 gSaveContext.jinxTimer = 0;
@@ -19731,7 +19731,7 @@ void func_8085A7C0(PlayState* play, Player* this, UNK_TYPE arg2) {
             }
         }
     } else if (PlayerAnimation_OnFrame(&this->skelAnime, 4.0f)) {
-        gSaveContext.save.saveInfo.weekEventReg[50] |= 0x80;
+        SET_WEEKEVENTREG(WEEKEVENTREG_50_80);
     }
 }
 
