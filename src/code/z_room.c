@@ -76,7 +76,6 @@ void Room_DrawCullable(PlayState* play, Room* room, u32 flags) {
     Vec3f projectedPos;
     RoomShapeCullableEntry* roomShapeCullableEntries;
 
-
     OPEN_DISPS(play->state.gfxCtx);
 
     if (flags & ROOM_DRAW_OPA) {
