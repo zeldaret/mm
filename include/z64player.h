@@ -919,6 +919,7 @@ typedef enum PlayerCsMode {
 #define PLAYER_STATE3_80000000   (1 << 31)
 
 
+#define PLAYER_GET_BG_CAM_INDEX(thisx) ((thisx)->params & 0xFF)
 #define PLAYER_GET_INITMODE(thisx) (((thisx)->params & 0xF00) >> 8)
 
 typedef enum PlayerInitMode {

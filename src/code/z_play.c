@@ -2327,8 +2327,8 @@ void Play_Init(GameState* thisx) {
     Camera_InitPlayerSettings(&this->mainCamera, player);
     gDbgCamEnabled = false;
 
-    if ((player->actor.params & 0xFF) != 0xFF) {
-        Camera_ChangeDataIdx(&this->mainCamera, player->actor.params & 0xFF);
+    if (PLAYER_GET_BG_CAM_INDEX(&player->actor) != 0xFF) {
+        Camera_ChangeDataIdx(&this->mainCamera, PLAYER_GET_BG_CAM_INDEX(&player->actor));
     }
 
     CutsceneManager_StoreCamera(&this->mainCamera);

@@ -16,7 +16,11 @@ struct PlayerAnimationFrame;
 #define ANIM_FLAG_1         (1 << 0)
 #define ANIM_FLAG_UPDATE_Y  (1 << 1)
 #define ANIM_FLAG_4         (1 << 2)
+#define ANIM_FLAG_8         (1 << 3)
 #define ANIM_FLAG_NOMOVE    (1 << 4)
+#define ANIM_FLAG_80        (1 << 7)
+#define ANIM_FLAG_100       (1 << 8)
+#define ANIM_FLAG_200       (1 << 9)
 
 typedef enum AnimationMode {
     /* 0 */ ANIMMODE_LOOP,
