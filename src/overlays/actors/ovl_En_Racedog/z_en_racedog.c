@@ -15,8 +15,6 @@
 
 #define THIS ((EnRacedog*)thisx)
 
-//! TODO: this file require macros for its uses of weekEventReg
-
 void EnRacedog_Init(Actor* thisx, PlayState* play);
 void EnRacedog_Destroy(Actor* thisx, PlayState* play);
 void EnRacedog_Update(Actor* thisx, PlayState* play);
@@ -353,7 +351,7 @@ void EnRacedog_Init(Actor* thisx, PlayState* play) {
     this->actor.flags |= ACTOR_FLAG_10;
     this->actor.flags |= ACTOR_FLAG_20;
 
-    sSelectedDogInfo = sDogInfo[(s16)((gSaveContext.eventInf[0] & 0xF8) >> 3)];
+    sSelectedDogInfo = sDogInfo[(s16)GET_EVENTINF_DOG_RACE_SELECTED_DOG_INDEX];
     this->selectedDogIndex = sSelectedDogInfo.index;
 
     EnRacedog_ChangeAnim(&this->skelAnime, sAnimationInfo, RACEDOG_ANIM_IDLE);
@@ -439,15 +437,8 @@ void EnRacedog_Race(EnRacedog* this, PlayState* play) {
  * or an intentional choice to introduce a bit of extra variance to the race.
  */
 void EnRacedog_UpdateTextId(EnRacedog* this) {
-    // Assuming that the weekEventRegs haven't been tampered with, then this will produce a text ID in the
-    // range of 0x3539 to 0x3546.
-    if (this->index % 2) {
-        sDogInfo[this->index].textId =
-            (((gSaveContext.save.saveInfo.weekEventReg[42 + (this->index / 2)]) & 0xF0) >> 4) + 0x3539;
-    } else {
-        sDogInfo[this->index].textId =
-            ((gSaveContext.save.saveInfo.weekEventReg[42 + (this->index / 2)]) & 0x0F) + 0x3539;
-    }
+    // This will produce a text ID in the range of 0x3539 to 0x3546.
+    sDogInfo[this->index].textId = GET_WEEKEVENTREG_DOG_RACE_TEXT(this->index, 0x3539);
 
     // As a sanity check, this makes sure the text ID is something in the expected range of 0x3539 to 0x3546.
     if ((sDogInfo[this->index].textId > 0x3546) || (sDogInfo[this->index].textId < 0x3539)) {
@@ -593,7 +584,7 @@ void EnRacedog_CheckForFinish(EnRacedog* this) {
 
         this->raceStatus = RACEDOG_RACE_STATUS_FINISHED;
         if (this->index == this->selectedDogIndex) {
-            gSaveContext.eventInf[0] = (gSaveContext.eventInf[0] & 7) | (sNumberOfDogsFinished * 8);
+            SET_EVENTINF_DOG_RACE_RACE_STANDING(sNumberOfDogsFinished);
         }
     }
 }
