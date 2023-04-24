@@ -602,8 +602,8 @@ void EnWiz_SelectPlatform(EnWiz* this, PlayState* play) {
 
             case EN_WIZ_FIGHT_STATE_SECOND_PHASE_CUTSCENE:
                 //! @bug: Setting the Wizrobe's position to the first platform *without* updating
-                //! this->curPlatformIndex can cause a bug later in EnWiz_Damaged. To fix this,
-                //! set this->curPlatformIndex to 0 here.
+                //! this->curPlatformIndex can cause a bug later in EnWiz_Damaged. One way to fix
+                //! this is to set this->curPlatformIndex to 0 here.
                 Math_Vec3f_Copy(&this->actor.world.pos, &this->platforms[0]->world.pos);
                 for (i = 0, ghostAlpha = 128; i < this->platformCount; i++, ghostAlpha -= 10) {
                     Math_Vec3f_Copy(&this->ghostPos[i], &this->actor.world.pos);
