@@ -89,9 +89,9 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 typedef struct {
-    Vec3f pos;
-    s16 rotY;
-    s16 pathIndex;
+    /* 0x0 */ Vec3f pos;
+    /* 0xC */ s16 rotY;
+    /* 0xE */ s16 pathIndex;
 } DogInfo;
 
 /**
