@@ -328,7 +328,7 @@ void BgIngate_Init(Actor* thisx, PlayState* play2) {
         this->unk160 |= 0x8;
         this->unk160 |= 0x10;
         Actor_SetScale(&this->dyna.actor, 1.0f);
-        this->timePath = SubS_GetAdditionalPath(play, BGINGATE_GET_FF(&this->dyna.actor), 0);
+        this->timePath = SubS_GetAdditionalPath(play, BGINGATE_GET_PATH_INDEX(&this->dyna.actor), 0);
         this->dyna.actor.room = -1;
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_WOODFALL_TEMPLE)) {
             CLEAR_WEEKEVENTREG(WEEKEVENTREG_90_40);
@@ -350,7 +350,7 @@ void BgIngate_Init(Actor* thisx, PlayState* play2) {
                 this->actionFunc = func_80953F8C;
             }
         }
-        this->timePath = SubS_GetAdditionalPath(play, BGINGATE_GET_FF(&this->dyna.actor), phi_a2);
+        this->timePath = SubS_GetAdditionalPath(play, BGINGATE_GET_PATH_INDEX(&this->dyna.actor), phi_a2);
         if (this->timePath != NULL) {
             sp38 = Lib_SegmentedToVirtual(this->timePath->points);
             Math_Vec3s_ToVec3f(&sp2C, &sp38[0]);
@@ -361,7 +361,7 @@ void BgIngate_Init(Actor* thisx, PlayState* play2) {
             this->dyna.actor.world.pos.y = -15.0f;
             this->dyna.actor.world.pos.z = sp2C.z;
         }
-        this->timePath = SubS_GetAdditionalPath(play, BGINGATE_GET_FF(&this->dyna.actor), 0);
+        this->timePath = SubS_GetAdditionalPath(play, BGINGATE_GET_PATH_INDEX(&this->dyna.actor), 0);
     } else {
         Actor_Kill(&this->dyna.actor);
     }

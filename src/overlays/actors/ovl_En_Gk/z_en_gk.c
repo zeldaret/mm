@@ -1024,7 +1024,7 @@ void EnGk_Init(Actor* thisx, PlayState* play) {
                 Actor_Kill(&this->actor);
             } else {
                 this->csId = this->actor.csId;
-                this->path = SubS_GetPathByIndex(play, ENGK_GET_F0(&this->actor), 0xF);
+                this->path = SubS_GetPathByIndex(play, ENGK_GET_PATH_INDEX(&this->actor), ENGK_PATH_INDEX_NONE);
                 this->actionFunc = func_80B51760;
             }
         } else if (play->sceneId == SCENE_GORONRACE) {
