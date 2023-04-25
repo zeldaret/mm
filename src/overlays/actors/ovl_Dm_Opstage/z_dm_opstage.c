@@ -18,7 +18,7 @@ void DmOpstage_Draw(Actor* thisx, PlayState* play);
 
 void DmOpstage_FollowCutsceneScript(DmOpstage* this, PlayState* play);
 
-const ActorInit Dm_Opstage_InitVars = {
+ActorInit Dm_Opstage_InitVars = {
     ACTOR_DM_OPSTAGE,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -70,24 +70,24 @@ void DmOpstage_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void DmOpstage_FollowCutsceneScript(DmOpstage* this, PlayState* play) {
-    s32 actionIndex;
+    s32 cueChannel;
 
     if (DMOPSTAGE_GET_TYPE(&this->dyna.actor) == DMOPSTAGE_TYPE_GROUND) {
-        if (Cutscene_CheckActorAction(play, 0x73)) {
-            actionIndex = Cutscene_GetActorActionIndex(play, 0x73);
-            if (play->csCtx.actorActions[actionIndex]->action == 2) {
+        if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_115)) {
+            cueChannel = Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_115);
+            if (play->csCtx.actorCues[cueChannel]->id == 2) {
                 this->dyna.actor.scale.x = 0.075f;
                 this->dyna.actor.scale.z = 0.3f;
             } else {
                 this->dyna.actor.scale.x = 0.1f;
                 this->dyna.actor.scale.z = 0.1f;
             }
-            Cutscene_ActorTranslateAndYaw(&this->dyna.actor, play, actionIndex);
+            Cutscene_ActorTranslateAndYaw(&this->dyna.actor, play, cueChannel);
         }
-    } else if (Cutscene_CheckActorAction(play, DMOPSTAGE_GET_ACTORACTION(&this->dyna.actor) + 0x74)) {
+    } else if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_116 + DMOPSTAGE_GET_CUE_TYPE_OFFSET(&this->dyna.actor))) {
         Cutscene_ActorTranslateAndYaw(
             &this->dyna.actor, play,
-            Cutscene_GetActorActionIndex(play, DMOPSTAGE_GET_ACTORACTION(&this->dyna.actor) + 0x74));
+            Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_116 + DMOPSTAGE_GET_CUE_TYPE_OFFSET(&this->dyna.actor)));
     }
 }
 
@@ -95,7 +95,7 @@ void DmOpstage_Update(Actor* thisx, PlayState* play) {
     DmOpstage* this = THIS;
 
     this->actionFunc(this, play);
-    if ((play->sceneId == SCENE_SPOT00) && (gSaveContext.sceneLayer == 0) && (play->csCtx.frames == 480)) {
+    if ((play->sceneId == SCENE_SPOT00) && (gSaveContext.sceneLayer == 0) && (play->csCtx.curFrame == 480)) {
         // This actor is responsible for playing the fairy sound during the exposition in the intro,
         // during the transition to Lost Woods, before Ocarina gets stolen.
         func_8019F128(NA_SE_EV_NAVY_FLY_REBIRTH);

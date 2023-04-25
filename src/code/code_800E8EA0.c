@@ -1,7 +1,7 @@
 #include "global.h"
 
 void Actor_ContinueText(PlayState* play, Actor* actor, u16 textId) {
-    func_80151938(play, textId);
+    Message_ContinueTextbox(play, textId);
     actor->textId = textId;
 }
 
@@ -85,7 +85,7 @@ s32 Actor_TrackPlayerSetFocusHeight(PlayState* play, Actor* actor, Vec3s* headRo
     actor->focus.pos = actor->world.pos;
     actor->focus.pos.y += focusHeight;
 
-    if (!((play->csCtx.state != 0) || gDbgCamEnabled)) {
+    if (!((play->csCtx.state != CS_STATE_IDLE) || gDbgCamEnabled)) {
         yaw = ABS_ALT(BINANG_SUB(actor->yawTowardsPlayer, actor->shape.rot.y));
         if (yaw >= 0x4300) {
             Actor_TrackNone(headRot, torsoRot);
@@ -93,7 +93,7 @@ s32 Actor_TrackPlayerSetFocusHeight(PlayState* play, Actor* actor, Vec3s* headRo
         }
     }
 
-    if ((play->csCtx.state != 0) || gDbgCamEnabled) {
+    if ((play->csCtx.state != CS_STATE_IDLE) || gDbgCamEnabled) {
         target = play->view.eye;
     } else {
         target = player->actor.focus.pos;
@@ -127,7 +127,7 @@ s32 Actor_TrackPlayer(PlayState* play, Actor* actor, Vec3s* headRot, Vec3s* tors
 
     actor->focus.pos = focusPos;
 
-    if (!((play->csCtx.state != 0) || gDbgCamEnabled)) {
+    if (!((play->csCtx.state != CS_STATE_IDLE) || gDbgCamEnabled)) {
         yaw = ABS_ALT(BINANG_SUB(actor->yawTowardsPlayer, actor->shape.rot.y));
         if (yaw >= 0x4300) {
             Actor_TrackNone(headRot, torsoRot);
@@ -135,7 +135,7 @@ s32 Actor_TrackPlayer(PlayState* play, Actor* actor, Vec3s* headRot, Vec3s* tors
         }
     }
 
-    if ((play->csCtx.state != 0) || gDbgCamEnabled) {
+    if ((play->csCtx.state != CS_STATE_IDLE) || gDbgCamEnabled) {
         target = play->view.eye;
     } else {
         target = player->actor.focus.pos;

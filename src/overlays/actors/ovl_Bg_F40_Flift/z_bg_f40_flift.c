@@ -19,7 +19,7 @@ void BgF40Flift_Draw(Actor* thisx, PlayState* play);
 void func_808D75F0(BgF40Flift* this, PlayState* play);
 void func_808D7714(BgF40Flift* this, PlayState* play);
 
-const ActorInit Bg_F40_Flift_InitVars = {
+ActorInit Bg_F40_Flift_InitVars = {
     ACTOR_BG_F40_FLIFT,
     ACTORCAT_BG,
     FLAGS,
@@ -41,7 +41,7 @@ void BgF40Flift_Init(Actor* thisx, PlayState* play) {
     BgF40Flift* this = THIS;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
     DynaPolyActor_LoadMesh(play, &this->dyna, &object_f40_obj_Colheader_004240);
     this->dyna.actor.params = 1;
     this->actionFunc = func_808D75F0;
@@ -54,8 +54,8 @@ void BgF40Flift_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void func_808D75F0(BgF40Flift* this, PlayState* play) {
-    if (((this->dyna.actor.params == 1) && (DynaPolyActor_IsInRidingMovingState(&this->dyna))) ||
-        ((this->dyna.actor.params == -1) && (!DynaPolyActor_IsInRidingMovingState(&this->dyna)))) {
+    if (((this->dyna.actor.params == 1) && DynaPolyActor_IsPlayerOnTop(&this->dyna)) ||
+        ((this->dyna.actor.params == -1) && !DynaPolyActor_IsPlayerOnTop(&this->dyna))) {
         this->timer = 96;
         this->actionFunc = func_808D7714;
     } else {

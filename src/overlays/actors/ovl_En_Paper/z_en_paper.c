@@ -1,7 +1,11 @@
-/*
- * File: z_en_paper.c
+/**
+ * @file z_en_paper.c
  * Overlay: ovl_En_Paper
- * Description: Tingle Confetti
+ * Description: Tingle confetti group
+ *
+ * Complex actor for its length, that creates and manages a group of confetti effects. Each is a triangle of a
+ * particular colour, that rotates around a fixed axis at a randomly-chosen fixed velocity, and is subject to gravity,
+ * drag and wind forces.
  */
 
 #include "z_en_paper.h"
@@ -16,14 +20,14 @@ void EnPaper_Destroy(Actor* thisx, PlayState* play);
 void EnPaper_Update(Actor* thisx, PlayState* play);
 void EnPaper_Draw(Actor* thisx, PlayState* play);
 
-void func_80C1F480(EnPaper* this, PlayState* play);
-void func_80C1F4FC(EnPaper* this, PlayState* play);
-void func_80C1F46C(EnPaper* this);
-void func_80C1F4E8(EnPaper* this);
-void func_80C1F55C(EnPaper* this, EnPaperStruct* arg1);
-void func_80C1F6E0(EnPaper* this, EnPaperStruct* arg1);
+void EnPaper_SetupSpreadConfettiGroup(EnPaper* this);
+void EnPaper_SpreadConfettiGroup(EnPaper* this, PlayState* play);
+void EnPaper_SetupFlyConfettiGroup(EnPaper* this);
+void EnPaper_FlyConfettiGroup(EnPaper* this, PlayState* play);
+void EnPaper_InitConfettiPiece(EnPaper* this, EnPaperConfetto* piece);
+void EnPaper_FlyConfettiPiece(EnPaper* this, EnPaperConfetto* piece);
 
-const ActorInit En_Paper_InitVars = {
+ActorInit En_Paper_InitVars = {
     ACTOR_EN_PAPER,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -35,114 +39,155 @@ const ActorInit En_Paper_InitVars = {
     (ActorFunc)EnPaper_Draw,
 };
 
-Vec3f D_80C1FC60 = { 0.0f, 0.0f, 1.0f };
+static Vec3f sUnitVecZ = { 0.0f, 0.0f, 1.0f };
 
 void EnPaper_Init(Actor* thisx, PlayState* play) {
     EnPaper* this = THIS;
 
     Actor_SetScale(&this->actor, 0.01f);
     this->timer = 70;
-    this->unk_D78 = D_80C1FC60;
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
-    func_80C1F46C(this);
+    this->windForce = sUnitVecZ;
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
+    EnPaper_SetupSpreadConfettiGroup(this);
 }
 
 void EnPaper_Destroy(Actor* thisx, PlayState* play) {
 }
 
-void func_80C1F46C(EnPaper* this) {
-    this->actionFunc = func_80C1F480;
+void EnPaper_SetupSpreadConfettiGroup(EnPaper* this) {
+    this->actionFunc = EnPaper_SpreadConfettiGroup;
 }
 
-void func_80C1F480(EnPaper* this, PlayState* play) {
+/**
+ * Set up the pieces of confetti.
+ */
+void EnPaper_SpreadConfettiGroup(EnPaper* this, PlayState* play) {
     s32 i;
 
-    for (i = 0; i < ARRAY_COUNT(this->unk_148); i++) {
-        func_80C1F55C(this, &this->unk_148[i]);
+    for (i = 0; i < ARRAY_COUNT(this->pieces); i++) {
+        EnPaper_InitConfettiPiece(this, &this->pieces[i]);
     }
 
-    func_80C1F4E8(this);
+    EnPaper_SetupFlyConfettiGroup(this);
 }
 
-void func_80C1F4E8(EnPaper* this) {
-    this->actionFunc = func_80C1F4FC;
+void EnPaper_SetupFlyConfettiGroup(EnPaper* this) {
+    this->actionFunc = EnPaper_FlyConfettiGroup;
 }
 
-void func_80C1F4FC(EnPaper* this, PlayState* play) {
+/**
+ * Main action function for the group.
+ */
+void EnPaper_FlyConfettiGroup(EnPaper* this, PlayState* play) {
     s32 i;
 
-    for (i = 0; i < ARRAY_COUNT(this->unk_148); i++) {
-        func_80C1F6E0(this, &this->unk_148[i]);
+    for (i = 0; i < ARRAY_COUNT(this->pieces); i++) {
+        EnPaper_FlyConfettiPiece(this, &this->pieces[i]);
     }
 }
 
-void func_80C1F55C(EnPaper* this, EnPaperStruct* arg1) {
+void EnPaper_InitConfettiPiece(EnPaper* this, EnPaperConfetto* piece) {
+    // Pick rotation axis randomly (significantly biased towards the z = 0 plane)
     Matrix_RotateZYX(Rand_Next(), Rand_Next(), Rand_Next(), MTXMODE_NEW);
-    Matrix_MultVec3f(&D_80C1FC60, &arg1->unk_0C);
+    Matrix_MultVec3f(&sUnitVecZ, &piece->rotAxis);
 
-    arg1->unk_18 = this->actor.world.pos;
+    // copy actor position and distribute uniformly in a cube of side 2 around it
+    piece->pos = this->actor.world.pos;
+    piece->pos.x += Rand_Centered() * 4.0f;
+    piece->pos.y += Rand_Centered() * 4.0f;
+    piece->pos.z += Rand_Centered() * 4.0f;
 
-    arg1->unk_18.x += Rand_Centered() * 4.0f;
-    arg1->unk_18.y += Rand_Centered() * 4.0f;
-    arg1->unk_18.z += Rand_Centered() * 4.0f;
+    // copy actor velocity and distrbute uniformly in a cuboid with sides 9, 6, 9 with actor.velocity in the middle
+    // of the base.
+    piece->vel = this->actor.velocity;
+    piece->vel.x += Rand_Centered() * 9.0f;
+    piece->vel.y += Rand_ZeroOne() * 6.0f;
+    piece->vel.z += Rand_Centered() * 9.0f;
 
-    arg1->unk_24 = this->actor.velocity;
+    // Choose random starting angle and angular velocity
+    piece->angle = Rand_Next();
+    piece->angVel = (Rand_Next() >> 4) + (0x10000 / 180);
 
-    arg1->unk_24.x += Rand_Centered() * 9.0f;
-    arg1->unk_24.y += Rand_ZeroOne() * 6.0f;
-    arg1->unk_24.z += Rand_Centered() * 9.0f;
-
-    arg1->unk_30 = Rand_Next();
-    arg1->unk_32 = (Rand_Next() >> 4) + 0x16C;
-
-    Matrix_RotateAxisS(arg1->unk_30, &arg1->unk_0C, MTXMODE_NEW);
-    Matrix_MultVec3f(&D_80C1FC60, &arg1->unk_00);
+    // Rotate the unit Z-vector by the random starting axis and angle
+    Matrix_RotateAxisS(piece->angle, &piece->rotAxis, MTXMODE_NEW);
+    Matrix_MultVec3f(&sUnitVecZ, &piece->normal);
 }
 
-void func_80C1F6E0(EnPaper* this, EnPaperStruct* arg1) {
-    f32 sp1C = Math_CosS(arg1->unk_30);
-    f32 sp18 = Math_SinS(arg1->unk_30);
-    f32 temp_ft4 = 1.0f - sp1C;
+/**
+ * Main falling function for a single piece, handles dynamics.
+ *
+ * Position \f$ \mathbf{x} \f$ essentially satisfies discretised version of the equation
+ *
+ * \f[
+ *     \ddot{\mathbf{x}} = -0.2 \mathbf{n} (\dot{\mathbf{x}} + \mathbf{W}) + \mathbf{g} ,
+ * \f]
+ *
+ * where
+ *
+ * - \f$ \mathbf{n} \f$ is the unit normal to the confetti triangle's plane
+ * - \f$ \mathbf{W} \f$ is the random wind pressure
+ * - \f$ \mathbf{g} \f$ is gravity
+ *
+ * and the product is componentwise: the normal is being used as a cross-sectional area measure rather than vectorially.
+ */
+void EnPaper_FlyConfettiPiece(EnPaper* this, EnPaperConfetto* piece) {
+    f32 cos = Math_CosS(piece->angle);
+    f32 sin = Math_SinS(piece->angle);
+    f32 versin = 1.0f - cos;
 
-    if (arg1->unk_18.y < (this->actor.floorHeight - 40.0f)) {
+    if (piece->pos.y < (this->actor.floorHeight - 40.0f)) {
         return;
     }
 
-    arg1->unk_24.y += this->actor.gravity;
+    // acceleration due to gravity
+    piece->vel.y += this->actor.gravity;
 
-    arg1->unk_24.x -= 0.2f * fabsf(arg1->unk_00.x) * (arg1->unk_24.x + this->unk_D78.x);
-    arg1->unk_24.y -= 0.2f * fabsf(arg1->unk_00.y) * (arg1->unk_24.y + this->unk_D78.y);
-    arg1->unk_24.z -= 0.2f * fabsf(arg1->unk_00.z) * (arg1->unk_24.z + this->unk_D78.z);
+    // drag and wind force: normal is used to simulate cross-section size of piece, although
+    piece->vel.x -= 0.2f * fabsf(piece->normal.x) * (piece->vel.x + this->windForce.x);
+    piece->vel.y -= 0.2f * fabsf(piece->normal.y) * (piece->vel.y + this->windForce.y);
+    piece->vel.z -= 0.2f * fabsf(piece->normal.z) * (piece->vel.z + this->windForce.z);
 
-    arg1->unk_30 += arg1->unk_32;
+    // rotate around axis
+    piece->angle += piece->angVel;
 
-    arg1->unk_18.x += arg1->unk_24.x;
-    arg1->unk_18.y += arg1->unk_24.y;
-    arg1->unk_18.z += arg1->unk_24.z;
+    // move
+    piece->pos.x += piece->vel.x;
+    piece->pos.y += piece->vel.y;
+    piece->pos.z += piece->vel.z;
 
-    arg1->unk_00.x = (arg1->unk_0C.x * temp_ft4 * arg1->unk_0C.z) - (arg1->unk_0C.y * sp18);
-    arg1->unk_00.y = (arg1->unk_0C.y * temp_ft4 * arg1->unk_0C.z) + (arg1->unk_0C.x * sp18);
-    arg1->unk_00.z = (arg1->unk_0C.z * temp_ft4 * arg1->unk_0C.z) + sp1C;
+    // Rotate unit Z vector about `axis` by `angle` to get forward direction. This is the same calculation as at the
+    // bottom of EnPaper_InitConfettiPiece(), but done manually instead of using any matrix functions.
+    piece->normal.x = (versin * piece->rotAxis.x * piece->rotAxis.z) - (piece->rotAxis.y * sin);
+    piece->normal.y = (versin * piece->rotAxis.y * piece->rotAxis.z) + (piece->rotAxis.x * sin);
+    piece->normal.z = (versin * piece->rotAxis.z * piece->rotAxis.z) + cos;
 }
 
-void func_80C1F87C(EnPaper* this) {
-    f32 sp2C = (Rand_Centered() * 4.0f) + 6.0f;
-    f32 sp28;
+#define WIND_PITCH_BOUND (0x10000 / 12)
 
-    this->unk_D78.y = Math_SinS(this->actor.shape.rot.x) * -sp2C;
+/**
+ * Sets the wind force for the whole group, using the shape.rot from the previous frame, and picks a new random one
+ * for the next frame.
+ */
+void EnPaper_UpdateWind(EnPaper* this) {
+    f32 strength = (Rand_Centered() * 4.0f) + 6.0f;
+    f32 cosX;
 
-    sp28 = Math_CosS(this->actor.shape.rot.x) * -sp2C;
-    this->unk_D78.x = Math_SinS(this->actor.shape.rot.y) * sp28;
-    this->unk_D78.z = Math_CosS(this->actor.shape.rot.y) * sp28;
+    this->windForce.y = Math_SinS(this->actor.shape.rot.x) * -strength;
+    cosX = Math_CosS(this->actor.shape.rot.x) * -strength;
+    this->windForce.x = Math_SinS(this->actor.shape.rot.y) * cosX;
+    this->windForce.z = Math_CosS(this->actor.shape.rot.y) * cosX;
 
+    // New random wind direction. A uniform distribution of the angles in spherical coordinates is not uniformly
+    // distributed on the sphere, so this is biased more towards up and down.
     this->actor.shape.rot.x += (s16)(Rand_Next() >> 8);
     this->actor.shape.rot.y += (s16)(Rand_Next() >> 6);
 
-    if (ABS_ALT(this->actor.shape.rot.x) > 0x1555) {
+    // Essentially a clamp
+    if (ABS_ALT(this->actor.shape.rot.x) > WIND_PITCH_BOUND) {
         if (this->actor.shape.rot.x > 0) {
-            this->actor.shape.rot.x = 0x1555;
+            this->actor.shape.rot.x = WIND_PITCH_BOUND;
         } else {
-            this->actor.shape.rot.x = -0x1555;
+            this->actor.shape.rot.x = -WIND_PITCH_BOUND;
         }
     }
 }
@@ -151,18 +196,19 @@ void EnPaper_Update(Actor* thisx, PlayState* play) {
     EnPaper* this = THIS;
 
     this->actionFunc(this, play);
+    EnPaper_UpdateWind(this);
 
-    func_80C1F87C(this);
     if (this->timer == 0) {
-        Actor_MarkForDeath(&this->actor);
-    } else {
-        this->timer--;
+        Actor_Kill(&this->actor);
+        return;
     }
+
+    this->timer--;
 }
 
 void EnPaper_Draw(Actor* thisx, PlayState* play) {
     EnPaper* this = THIS;
-    EnPaperStruct* ptr = this->unk_148;
+    EnPaperConfetto* piece = this->pieces;
     s32 i;
 
     OPEN_DISPS(play->state.gfxCtx);
@@ -173,7 +219,8 @@ void EnPaper_Draw(Actor* thisx, PlayState* play) {
     gDPSetCombineLERP(POLY_OPA_DISP++, 0, 0, 0, SHADE, 0, 0, 0, SHADE, PRIMITIVE, 0, COMBINED, 0, 0, 0, 0, COMBINED);
     gSPLoadGeometryMode(POLY_OPA_DISP++, G_ZBUFFER | G_SHADE | G_CULL_BACK | G_FOG | G_LIGHTING | G_SHADING_SMOOTH);
 
-    for (i = 0; i < ARRAY_COUNT(this->unk_148); i++, ptr++) {
+    for (i = 0; i < ARRAY_COUNT(this->pieces); i++, piece++) {
+        // colour the first 30 white and 10 each of the other 3 colours
         if (i == 0) {
             gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, 255);
         } else if (i == 30) {
@@ -184,14 +231,15 @@ void EnPaper_Draw(Actor* thisx, PlayState* play) {
             gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 64, 255, 128, 255);
         }
 
-        if ((this->actor.floorHeight - 40.0f) < ptr->unk_18.y) {
-            MtxF* mf = GRAPH_ALLOC(play->state.gfxCtx, sizeof(MtxF));
+        if ((this->actor.floorHeight - 40.0f) < piece->pos.y) {
+            Mtx* mtx = GRAPH_ALLOC(play->state.gfxCtx, sizeof(Mtx));
 
-            func_8017842C(mf, this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, ptr->unk_30, ptr->unk_0C.x,
-                          ptr->unk_0C.y, ptr->unk_0C.z, ptr->unk_18.x, ptr->unk_18.y, ptr->unk_18.z);
+            Mtx_SetTranslationRotationScaleMtx(mtx, this->actor.scale.x, this->actor.scale.y, this->actor.scale.z,
+                                               piece->angle, piece->rotAxis.x, piece->rotAxis.y, piece->rotAxis.z,
+                                               piece->pos.x, piece->pos.y, piece->pos.z);
 
-            gSPMatrix(POLY_OPA_DISP++, mf, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_OPA_DISP++, object_bal_DL_00D5A0);
+            gSPMatrix(POLY_OPA_DISP++, mtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPDisplayList(POLY_OPA_DISP++, gTingleConfettiDL);
         }
     }
 

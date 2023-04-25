@@ -16,7 +16,7 @@ void ObjMilkBin_Destroy(Actor* thisx, PlayState* play);
 void ObjMilkBin_Update(Actor* thisx, PlayState* play2);
 void ObjMilkBin_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit Obj_Milk_Bin_InitVars = {
+ActorInit Obj_Milk_Bin_InitVars = {
     ACTOR_OBJ_MILK_BIN,
     ACTORCAT_PROP,
     FLAGS,
@@ -58,7 +58,7 @@ void ObjMilkBin_Init(Actor* thisx, PlayState* play) {
     this->disableDraw = 0;
     this->type = thisx->params;
 
-    if ((this->type == OBJ_MILK_BIN_TYPE_2) && !(gSaveContext.save.weekEventReg[52] & 1)) {
+    if ((this->type == OBJ_MILK_BIN_TYPE_2) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_52_01)) {
         this->disableDraw |= 1;
     }
 }
@@ -74,14 +74,14 @@ void ObjMilkBin_Update(Actor* thisx, PlayState* play2) {
     ObjMilkBin* this = THIS;
 
     if (this->type == OBJ_MILK_BIN_TYPE_1) {
-        if (gSaveContext.save.weekEventReg[22] & 1) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01)) {
             if (((gSaveContext.save.day == 2) && (gSaveContext.save.isNight == 1)) || (gSaveContext.save.day >= 3)) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
                 return;
             }
         }
     } else if (this->type == OBJ_MILK_BIN_TYPE_2) {
-        if (gSaveContext.save.weekEventReg[52] & 1) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_52_01)) {
             this->disableDraw &= ~1;
         } else {
             this->disableDraw |= 1;

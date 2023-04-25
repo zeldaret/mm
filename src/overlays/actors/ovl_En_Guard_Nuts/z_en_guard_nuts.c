@@ -25,7 +25,7 @@ void EnGuardNuts_Burrow(EnGuardNuts* this, PlayState* play);
 void EnGuardNuts_SetupUnburrow(EnGuardNuts* this, PlayState* play);
 void EnGuardNuts_Unburrow(EnGuardNuts* this, PlayState* play);
 
-const ActorInit En_Guard_Nuts_InitVars = {
+ActorInit En_Guard_Nuts_InitVars = {
     ACTOR_EN_GUARD_NUTS,
     ACTORCAT_NPC,
     FLAGS,
@@ -109,7 +109,7 @@ void EnGuardNuts_Init(Actor* thisx, PlayState* play) {
     sGuardCount++;
 
     // If you have returned deku princess guards will init burrowed.
-    if (!(gSaveContext.save.weekEventReg[23] & 0x20)) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_23_20)) {
         EnGuardNuts_SetupWait(this);
     } else {
         EnGuardNuts_Burrow(this, play);
@@ -158,10 +158,10 @@ void EnGuardNuts_Wait(EnGuardNuts* this, PlayState* play) {
     if (player->transformation == PLAYER_FORM_DEKU) {
         // this is the palace of...
         this->guardTextIndex = 0;
-        if ((gSaveContext.save.weekEventReg[17] & 4) && (!this->hasCompletedConversation)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_17_04) && (!this->hasCompletedConversation)) {
             // I told you not to enter!!
             this->guardTextIndex = 7;
-        } else if (gSaveContext.save.weekEventReg[12] & 0x40) {
+        } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_12_40)) {
             // come to see the monkey again?
             this->guardTextIndex = 4;
         }
@@ -232,9 +232,9 @@ void func_80ABB590(EnGuardNuts* this, PlayState* play) {
         if (Message_ShouldAdvance(play)) {
             if (D_80ABBE38[this->guardTextIndex] != 1) {
                 if (D_80ABBE38[this->guardTextIndex] == 2) {
-                    func_801477B4(play);
+                    Message_CloseTextbox(play);
                     D_80ABBE20 = 2;
-                    gSaveContext.save.weekEventReg[12] |= 0x40;
+                    SET_WEEKEVENTREG(WEEKEVENTREG_12_40);
                     EnGuardNuts_Burrow(this, play);
                 } else {
                     this->guardTextIndex++;
@@ -247,11 +247,11 @@ void func_80ABB590(EnGuardNuts* this, PlayState* play) {
             } else if (this->guardTextIndex != 3) {
                 this->targetHeadPos.x = 0;
                 this->targetHeadPos.y = this->targetHeadPos.x;
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 this->state = GUARD_NUTS_UNK_STATE;
                 this->actionFunc = EnGuardNuts_Unburrow;
             } else {
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 EnGuardNuts_SetupWait(this);
             }
         }
@@ -276,10 +276,10 @@ void EnGuardNuts_Burrow(EnGuardNuts* this, PlayState* play) {
     digPos.y = this->actor.floorHeight;
     EffectSsHahen_SpawnBurst(play, &digPos, 4.0f, 0, 10, 3, 15, HAHEN_OBJECT_DEFAULT, 10, NULL);
     this->targetHeadPos.y = 0;
-    this->actor.flags |= ACTOR_FLAG_8000000;
+    this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
     this->targetHeadPos.x = this->targetHeadPos.y;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_DOWN);
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_UP);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_DOWN);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_UP);
     this->actionFunc = EnGuardNuts_SetupUnburrow;
 }
 
@@ -300,18 +300,18 @@ void EnGuardNuts_Unburrow(EnGuardNuts* this, PlayState* play) {
     Vec3f digPos;
 
     // If you have returned Deku Princess, guards will not unburrow
-    if (!(gSaveContext.save.weekEventReg[23] & 0x20)) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_23_20)) {
         yawDiff = ABS_ALT(BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.home.rot.y));
         if ((yawDiff < 0x4000) && ((D_80ABBE20 == 0) || (this->actor.xzDistToPlayer > 150.0f))) {
             Math_Vec3f_Copy(&digPos, &this->actor.world.pos);
             digPos.y = this->actor.floorHeight;
             EffectSsHahen_SpawnBurst(play, &digPos, 4.0f, 0, 10, 3, 15, HAHEN_OBJECT_DEFAULT, 10, NULL);
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_UP);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_UP);
             D_80ABBE20 = 0;
             if (this->guardTextIndex == 9) {
                 this->hasCompletedConversation = true;
             }
-            this->actor.flags &= ~ACTOR_FLAG_8000000;
+            this->actor.flags &= ~ACTOR_FLAG_CANT_LOCK_ON;
             EnGuardNuts_SetupWait(this);
         }
     }
@@ -329,7 +329,7 @@ void EnGuardNuts_Update(Actor* thisx, PlayState* play) {
     }
     if ((this->animIndex == WALK_ANIM) &&
         ((Animation_OnFrame(&this->skelAnime, 1.0f)) || (Animation_OnFrame(&this->skelAnime, 5.0f)))) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_WALK);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_WALK);
     }
 
     this->actionFunc(this, play);
@@ -345,7 +345,9 @@ void EnGuardNuts_Update(Actor* thisx, PlayState* play) {
     }
 
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 60.0f, 0x1D);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 60.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                UPDBGCHECKINFO_FLAG_10);
     if ((this->state != GUARD_NUTS_BURROWED_STATE) && (this->state != GUARD_NUTS_UNK_STATE)) {
         Collider_UpdateCylinder(&this->actor, &this->collider);
         CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);

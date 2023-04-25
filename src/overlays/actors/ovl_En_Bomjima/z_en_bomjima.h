@@ -40,7 +40,7 @@ typedef struct EnBomjima {
     /* 0x2CA */ s16 unk_2CA;
     /* 0x2CC */ f32 animLastFrame;
     /* 0x2D0 */ f32 unk_2D0;
-    /* 0x2D4 */ s16 cutscenes[2];
+    /* 0x2D4 */ s16 csIdList[2];
     /* 0x2D8 */ UNK_TYPE1 unk2D8[4]; // maybe a part of the above?
     /* 0x2DC */ s16 unk_2DC;
     /* 0x2DE */ s16 cutsceneEnded;
@@ -52,10 +52,8 @@ typedef struct EnBomjima {
     /* 0x2EA */ s16 unk_2EA;
     /* 0x2EC */ s32 animIndex;
     /* 0x2F0 */ EnBombal* bombal;
-    /* 0x2F4 */ s16 bombalCutscene;
+    /* 0x2F4 */ s16 bombalCsId;
     /* 0x2F8 */ ColliderCylinder collider;
 } EnBomjima; // size = 0x344
-
-extern const ActorInit En_Bomjima_InitVars;
 
 #endif // Z_EN_BOMJIMA_H

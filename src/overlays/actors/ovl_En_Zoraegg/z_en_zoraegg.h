@@ -53,12 +53,10 @@ typedef struct EnZoraegg {
     /* 0x1ED */ u8 unk_1ED;
     /* 0x1EE */ u8 unk_1EE;
     /* 0x1EF */ u8 unk_1EF;
-    /* 0x1F0 */ u16 actorActionCmd;
+    /* 0x1F0 */ u16 cueType;
     /* 0x1F2 */ s16 unk_1F2;
     /* 0x1F4 */ s16 unk_1F4;
     /* 0x1F8 */ EnZoraeggActionFunc actionFunc;
 } EnZoraegg; // size = 0x1FC
-
-extern const ActorInit En_Zoraegg_InitVars;
 
 #endif // Z_EN_ZORAEGG_H

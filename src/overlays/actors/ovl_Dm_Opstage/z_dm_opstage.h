@@ -4,7 +4,7 @@
 #include "global.h"
 
 #define DMOPSTAGE_GET_TYPE(thisx) ((thisx)->params & 0xFF)
-#define DMOPSTAGE_GET_ACTORACTION(thisx) (((thisx)->params >> 8) & 0xFF)
+#define DMOPSTAGE_GET_CUE_TYPE_OFFSET(thisx) (((thisx)->params >> 8) & 0xFF)
 
 struct DmOpstage;
 
@@ -23,7 +23,5 @@ typedef struct DmOpstage {
     /* 0x1A0 */ DmOpstageActionFunc actionFunc;
     /* 0x1A4 */ Vec3f drawOffset;
 } DmOpstage; // size = 0x1B0
-
-extern const ActorInit Dm_Opstage_InitVars;
 
 #endif // Z_DM_OPSTAGE_H

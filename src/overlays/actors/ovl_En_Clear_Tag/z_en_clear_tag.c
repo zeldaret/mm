@@ -31,7 +31,7 @@ void EnClearTag_Draw(Actor* thisx, PlayState* play);
 void EnClearTag_UpdateEffects(EnClearTag* this, PlayState* play);
 void EnClearTag_DrawEffects(Actor* thisx, PlayState* play);
 
-const ActorInit En_Clear_Tag_InitVars = {
+ActorInit En_Clear_Tag_InitVars = {
     ACTOR_EN_CLEAR_TAG,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -284,8 +284,8 @@ void EnClearTag_CreateLightRayEffect(EnClearTag* this, Vec3f* pos, Vec3f* veloci
 
             effect->actionTimer = Rand_ZeroFloat(10.0f);
 
-            effect->rotationY = Math_Acot2F(effect->velocity.z, effect->velocity.x);
-            effect->rotationX = -Math_Acot2F(sqrtf(SQXZ(effect->velocity)), effect->velocity.y);
+            effect->rotationY = Math_Atan2F_XY(effect->velocity.z, effect->velocity.x);
+            effect->rotationX = -Math_Atan2F_XY(sqrtf(SQXZ(effect->velocity)), effect->velocity.y);
 
             effect->envColor.r = 255.0f;
             effect->envColor.g = 255.0f;
@@ -326,8 +326,8 @@ void EnClearTag_CreateIsolatedLightRayEffect(EnClearTag* this, Vec3f* pos, Vec3f
 
             effect->actionTimer = Rand_ZeroFloat(10.0f);
 
-            effect->rotationY = Math_Acot2F(effect->velocity.z, effect->velocity.x);
-            effect->rotationX = -Math_Acot2F(sqrtf(SQXZ(effect->velocity)), effect->velocity.y);
+            effect->rotationY = Math_Atan2F_XY(effect->velocity.z, effect->velocity.x);
+            effect->rotationX = -Math_Atan2F_XY(sqrtf(SQXZ(effect->velocity)), effect->velocity.y);
 
             effect->envColor.r = sLightRayEnvColor[colorIndex].x;
             effect->envColor.g = sLightRayEnvColor[colorIndex].y;
@@ -463,12 +463,12 @@ void EnClearTag_Init(Actor* thisx, PlayState* play) {
             }
 
             // Initialize flash effect
-            Actor_UpdateBgCheckInfo(play, &this->actor, 50.0f, 30.0f, 100.0f, 4);
+            Actor_UpdateBgCheckInfo(play, &this->actor, 50.0f, 30.0f, 100.0f, UPDBGCHECKINFO_FLAG_4);
             pos = this->actor.world.pos;
             EnClearTag_CreateFlashEffect(this, &pos, sFlashMaxScale[thisx->params], this->actor.floorHeight);
 
             // Is not underwater
-            if (!(this->actor.bgCheckFlags & 0x20)) {
+            if (!(this->actor.bgCheckFlags & BGCHECKFLAG_WATER)) {
                 if (thisx->params < 10) {
                     pos.y = this->actor.world.pos.y - 40.0f;
 
@@ -549,18 +549,18 @@ void EnClearTag_UpdateCamera(EnClearTag* this, PlayState* play) {
                     player->actor.world.pos.z = -950.0f;
                 }
 
-                player->actor.speedXZ = 0.0f;
+                player->actor.speed = 0.0f;
                 if (this->activeTimer == 0) {
                     this->cameraState = 1;
                 }
             }
             break;
         case 1:
-            Cutscene_Start(play, &play->csCtx);
+            Cutscene_StartManual(play, &play->csCtx);
             this->subCamId = Play_CreateSubCamera(play);
             Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
             Play_ChangeCameraStatus(play, this->subCamId, CAM_STATUS_ACTIVE);
-            func_800B7298(play, &this->actor, 4);
+            func_800B7298(play, &this->actor, PLAYER_CSMODE_4);
             mainCam = Play_GetCamera(play, CAM_ID_MAIN);
             this->subCamEye.x = mainCam->eye.x;
             this->subCamEye.y = mainCam->eye.y;
@@ -578,15 +578,15 @@ void EnClearTag_UpdateCamera(EnClearTag* this, PlayState* play) {
                 player->actor.world.pos.z = -950.0f;
             }
 
-            player->actor.speedXZ = 0.0f;
+            player->actor.speed = 0.0f;
             if (Message_GetState(&play->msgCtx) == TEXT_STATE_NONE) {
                 mainCam = Play_GetCamera(play, CAM_ID_MAIN);
                 mainCam->eye = this->subCamEye;
                 mainCam->eyeNext = this->subCamEye;
                 mainCam->at = this->subCamAt;
                 func_80169AFC(play, this->subCamId, 0);
-                Cutscene_End(play, &play->csCtx);
-                func_800B7298(play, &this->actor, 6);
+                Cutscene_StopManual(play, &play->csCtx);
+                func_800B7298(play, &this->actor, PLAYER_CSMODE_END);
                 this->cameraState = 0;
                 this->subCamId = SUB_CAM_ID_DONE;
                 this->activeTimer = 20;
@@ -615,7 +615,7 @@ void EnClearTag_Update(Actor* thisx, PlayState* play) {
     } else if (this->activeTimer != 0) {
         EnClearTag_UpdateEffects(this, play);
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 

@@ -24,7 +24,7 @@ typedef struct EnScopenuts {
     /* 0x32C */ f32 unk_32C;
     /* 0x330 */ Path* path;
     /* 0x334 */ s32 unk_334;
-    /* 0x338 */ s16 unk_338;
+    /* 0x338 */ s16 csId;
     /* 0x33A */ UNK_TYPE1 unk33A[2];
     /* 0x33C */ u16 unk_33C;
     /* 0x33E */ s16 unk_33E;
@@ -46,7 +46,5 @@ typedef struct EnScopenuts {
     /* 0x370 */ s16 unk_370;
     /* 0x372 */ s16 unk_372;
 } EnScopenuts; // size = 0x374
-
-extern const ActorInit En_Scopenuts_InitVars;
 
 #endif // Z_EN_SCOPENUTS_H

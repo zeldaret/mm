@@ -17,7 +17,7 @@ typedef struct DoorShutter {
     /* 0x0144 */ UNK_TYPE1 unk144[0x18];
     /* 0x015C */ s16 unk_15C;
     /* 0x015E */ s16 unk_15E;
-    /* 0x0160 */ s16 unk_160;
+    /* 0x0160 */ s16 csId;
     /* 0x0162 */ u8 doorType;
     /* 0x0163 */ u8 unk_163;
     /* 0x0164 */ u8 unk_164;
@@ -27,7 +27,5 @@ typedef struct DoorShutter {
     /* 0x0168 */ f32 unk_168;
     /* 0x016C */ DoorShutterActionFunc actionFunc;
 } DoorShutter; // size = 0x170
-
-extern const ActorInit Door_Shutter_InitVars;
 
 #endif // Z_DOOR_SHUTTER_H

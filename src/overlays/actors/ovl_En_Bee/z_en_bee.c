@@ -22,7 +22,7 @@ void EnBee_Attack(EnBee* this, PlayState* play);
 
 s32 sNumLoadedBees = 0;
 
-const ActorInit En_Bee_InitVars = {
+ActorInit En_Bee_InitVars = {
     ACTOR_EN_BEE,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -104,7 +104,7 @@ void EnBee_Init(Actor* thisx, PlayState* play) {
     sNumLoadedBees++;
     this->actor.shape.shadowScale = 12.0f;
 
-    if (ActorCutscene_GetCurrentIndex() != -1) {
+    if (CutsceneManager_GetCurrentCsId() != CS_ID_NONE) {
         func_800BC154(play, &play->actorCtx, &this->actor, ACTORCAT_ITEMACTION);
     }
 
@@ -149,7 +149,7 @@ void EnBee_FlyIdle(EnBee* this, PlayState* play) {
     Vec3f nextPos;
     s32 pad[2];
 
-    if ((this->actor.category != ACTORCAT_ENEMY) && (ActorCutscene_GetCurrentIndex() == -1)) {
+    if ((this->actor.category != ACTORCAT_ENEMY) && (CutsceneManager_GetCurrentCsId() == CS_ID_NONE)) {
         func_800BC154(play, &play->actorCtx, &this->actor, ACTORCAT_ENEMY);
     }
 
@@ -173,7 +173,7 @@ void EnBee_FlyIdle(EnBee* this, PlayState* play) {
     }
 
     Math_SmoothStepToS(&this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &nextPos), 1, 0x7D0, 0);
-    Math_ApproachF(&this->actor.speedXZ, 3.0f, 0.3f, 1.0f);
+    Math_ApproachF(&this->actor.speed, 3.0f, 0.3f, 1.0f);
 
     if ((this->attackDelayTimer == 0) && (this->actor.params != BEE_BEHAVIOR_IDLE)) {
         EnBee_SetupAttack(this);
@@ -227,7 +227,7 @@ void EnBee_Attack(EnBee* this, PlayState* play) {
 
     Math_SmoothStepToS(&this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &nextPos), 1, 0x1388, 0);
     Math_ApproachF(&this->actor.world.pos.y, nextPos.y, 0.3f, 3.0f);
-    Math_ApproachF(&this->actor.speedXZ, 5.0f, 0.3f, 1.0f);
+    Math_ApproachF(&this->actor.speed, 5.0f, 0.3f, 1.0f);
 }
 
 void EnBee_UpdateDamage(EnBee* this, PlayState* play) {
@@ -238,12 +238,12 @@ void EnBee_UpdateDamage(EnBee* this, PlayState* play) {
 
     if (this->collider.base.acFlags & AC_HIT) {
         Enemy_StartFinishingBlow(play, &this->actor);
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 10, NA_SE_EN_CUTBODY);
         this->actor.colChkInfo.health = 0;
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 50, NA_SE_EN_EXTINCT);
         func_800B3030(play, &this->actor.world.pos, &gZeroVec3f, &gZeroVec3f, 100, 0, 2);
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -262,7 +262,7 @@ void EnBee_Update(Actor* thisx, PlayState* play) {
         }
     }
 
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BEE_FLY - SFX_FLAG);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_BEE_FLY - SFX_FLAG);
     EnBee_UpdateDamage(this, play);
     Math_Vec3s_Copy(&this->actor.shape.rot, &this->actor.world.rot);
     Actor_SetFocus(&this->actor, 0.0f);
@@ -271,7 +271,9 @@ void EnBee_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
 
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 40.0f, 40.0f, 0x1D);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 40.0f, 40.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                UPDBGCHECKINFO_FLAG_10);
 
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);

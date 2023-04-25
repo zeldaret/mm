@@ -27,7 +27,7 @@ void func_80A2273C(ObjSkateblock* this, PlayState* play);
 void func_80A227A4(ObjSkateblock* this);
 void func_80A227C0(ObjSkateblock* this, PlayState* play);
 
-const ActorInit Obj_Skateblock_InitVars = {
+ActorInit Obj_Skateblock_InitVars = {
     ACTOR_OBJ_SKATEBLOCK,
     ACTORCAT_BG,
     FLAGS,
@@ -369,7 +369,7 @@ void func_80A21C88(ObjSkateblock* this, s32 arg1) {
 void func_80A21CB4(ObjSkateblock* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    player->stateFlags2 &= ~0x10;
+    player->stateFlags2 &= ~PLAYER_STATE2_10;
     this->dyna.pushForce = 0.0f;
 }
 
@@ -489,7 +489,7 @@ void ObjSkateblock_Init(Actor* thisx, PlayState* play) {
     ObjSkateblock* this = THIS;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
     DynaPolyActor_LoadMesh(play, &this->dyna, &gameplay_dangeon_keep_Colheader_007498);
     if (D_80A22A18 == NULL) {
         D_80A22A18 = Lib_SegmentedToVirtual(gameplay_dangeon_keep_Matanimheader_01B370);
@@ -535,7 +535,7 @@ void func_80A22334(ObjSkateblock* this, PlayState* play) {
         func_80A21C88(this, sp2C);
         func_80A2244C(this);
         sp30 = false;
-        func_800B7298(play, &this->dyna.actor, 7);
+        func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_WAIT);
         this->unk_1C1 |= 1;
     }
 
@@ -563,7 +563,7 @@ void func_80A224A4(ObjSkateblock* this, PlayState* play) {
     *this->unk_16C += this->unk_164;
 
     if (func_80A21934(this, play)) {
-        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
+        Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
         func_80A21D1C(this);
         sp28 = true;
     } else {
@@ -591,7 +591,7 @@ void func_80A224A4(ObjSkateblock* this, PlayState* play) {
 
     if ((this->unk_1C1 & 1) && (sp24 || sp28 || (this->dyna.actor.xzDistToPlayer > 400.0f))) {
         this->unk_1C1 &= ~1;
-        func_800B7298(play, &this->dyna.actor, 6);
+        func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_END);
     }
 
     func_80A21F74(this, play);
@@ -614,8 +614,9 @@ void func_80A2264C(ObjSkateblock* this, PlayState* play) {
 
     sp20 = func_80A21548(this, play);
     if (sp20 || ((this->unk_160 - this->dyna.actor.world.pos.y) > 300.0f)) {
-        if (func_800C9B40(&play->colCtx, this->dyna.actor.floorPoly, this->dyna.actor.floorBgId) == 12) {
-            func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+        if (SurfaceType_GetFloorProperty(&play->colCtx, this->dyna.actor.floorPoly, this->dyna.actor.floorBgId) ==
+            FLOOR_PROPERTY_12) {
+            DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
             this->dyna.actor.draw = NULL;
             func_80A22728(this);
             return;
@@ -632,7 +633,7 @@ void func_80A22728(ObjSkateblock* this) {
 }
 
 void func_80A2273C(ObjSkateblock* this, PlayState* play) {
-    if (!DynaPolyActor_IsInRidingMovingState(&this->dyna)) {
+    if (!DynaPolyActor_IsPlayerOnTop(&this->dyna)) {
         this->dyna.actor.world.pos.x = this->dyna.actor.home.pos.x;
         this->dyna.actor.world.pos.y = (this->dyna.actor.home.pos.y - (600.0f * this->dyna.actor.scale.y)) - 10.0f;
         this->dyna.actor.world.pos.z = this->dyna.actor.home.pos.z;
@@ -656,14 +657,14 @@ void func_80A227C0(ObjSkateblock* this, PlayState* play) {
         return;
     }
 
-    func_800C6314(play, &play->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_EnableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
     this->dyna.actor.draw = ObjSkateblock_Draw;
 
     if (Math_StepToF(&this->dyna.actor.world.pos.y, this->dyna.actor.home.pos.y, 1.0f)) {
         func_80A22308(this);
     }
 
-    if (DynaPolyActor_IsInRidingMovingState(&this->dyna)) {
+    if (DynaPolyActor_IsPlayerOnTop(&this->dyna)) {
         D_80A22A10 |= 1 << this->unk_1C0;
     }
 }

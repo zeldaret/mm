@@ -19,8 +19,8 @@ typedef struct {
     /* 0x20 */ f32 unk_20;
     /* 0x24 */ f32 unk_24;
     /* 0x28 */ s16 unk_28;
-    /* 0x2A */ s16 unk_2A;
-    /* 0x2C */ s16 unk_2C;
+    /* 0x2A */ s16 csId;
+    /* 0x2C */ s16 additionalCsId;
     /* 0x2E */ u8 unk_2E;
     /* 0x2F */ u8 unk_2F;
     /* 0x30 */ s8 unk_30;
@@ -64,12 +64,10 @@ typedef struct BgHakuginPost {
     /* 0x178 */ s8 unk_178;
     /* 0x179 */ s8 unk_179;
     /* 0x17C */ BgHakuginPostFunc unkFunc;
-    /* 0x180 */ s16 unk_180;
-    /* 0x182 */ s16 unk_182;
-    /* 0x184 */ s16 unk_184;
-    /* 0x186 */ s16 unk_186;
+    /* 0x180 */ s16 csLength;
+    /* 0x182 */ s16 additionalCsLength;
+    /* 0x184 */ s16 csId;
+    /* 0x186 */ s16 additionalCsId;
 } BgHakuginPost; // size = 0x188
-
-extern const ActorInit Bg_Hakugin_Post_InitVars;
 
 #endif // Z_BG_HAKUGIN_POST_H

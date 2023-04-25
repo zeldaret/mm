@@ -27,7 +27,7 @@ void ObjLightSwitch_SetupDisabled(ObjLightswitch* this);
 void ObjLightSwitch_Disabled(ObjLightswitch* this, PlayState* play);
 void ObjLightswitch_Idle(ObjLightswitch* this, PlayState* play);
 
-const ActorInit Obj_Lightswitch_InitVars = {
+ActorInit Obj_Lightswitch_InitVars = {
     ACTOR_OBJ_LIGHTSWITCH,
     ACTORCAT_SWITCH,
     FLAGS,
@@ -173,7 +173,7 @@ void ObjLightswitch_Init(Actor* thisx, PlayState* play) {
     }
 
     if (isTriggered) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -189,13 +189,13 @@ void ObjLightswitch_SetAction(ObjLightswitch* this, ObjLightswitchSetupFunc setu
 }
 
 void ObjLightswitch_PlayCinema(ObjLightswitch* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
+    if (CutsceneManager_IsNext(this->actor.csId)) {
+        CutsceneManager_StartWithPlayerCs(this->actor.csId, &this->actor);
         ObjLightswitch_UpdateSwitchFlags(this, play, this->switchFlagSetType);
         this->cutsceneTimer = 50;
         this->setupFunc(this);
     } else {
-        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+        CutsceneManager_Queue(this->actor.csId);
     }
 }
 
@@ -231,7 +231,7 @@ void ObjLightSwitch_SetupAsleep(ObjLightswitch* this) {
 
 void ObjLightSwitch_Asleep(ObjLightswitch* this, PlayState* play) {
     if (this->colorShiftTimer == 0) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SUN_MARK_FLASH);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_SUN_MARK_FLASH);
     }
     this->colorShiftTimer++;
 
@@ -244,7 +244,7 @@ void ObjLightSwitch_Asleep(ObjLightswitch* this, PlayState* play) {
         ObjLightSwitch_SetupEnabled(this);
     } else if (this->colorShiftTimer == 15) {
         this->faceState = LIGHTSWITCH_FACE_WAKING;
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_FOOT_SWITCH);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_FOOT_SWITCH);
     }
 }
 
@@ -302,7 +302,7 @@ void ObjLightSwitch_Disabled(ObjLightswitch* this, PlayState* play) {
         ObjLightswitch_SetupIdle(this);
     } else if (this->colorShiftTimer == 15) {
         this->faceState = LIGHTSWITCH_FACE_ASLEEP;
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_FOOT_SWITCH);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_FOOT_SWITCH);
     }
 }
 
@@ -315,10 +315,11 @@ void ObjLightSwitch_Fade(ObjLightswitch* this, PlayState* play) {
     this->colorAlpha -= 200;
     ObjLightswitch_SpawnEffects(this, play); // spawn burning fire effect
     if (this->colorAlpha < 0) {
-        Actor_MarkForDeath(&this->actor);
-    } else {
-        func_800B9010(&this->actor, NA_SE_EN_COMMON_EXTINCT_LEV - SFX_FLAG); // "burn into ashes"
+        Actor_Kill(&this->actor);
+        return;
     }
+
+    func_800B9010(&this->actor, NA_SE_EN_COMMON_EXTINCT_LEV - SFX_FLAG); // "burn into ashes"
 }
 
 void ObjLightswitch_Update(Actor* thisx, PlayState* play) {
@@ -350,7 +351,7 @@ void ObjLightswitch_Update(Actor* thisx, PlayState* play) {
     if ((this->cutsceneTimer > 0) && ((s32)this->actionFunc != (s32)ObjLightswitch_PlayCinema)) {
         this->cutsceneTimer--;
         if (this->cutsceneTimer == 0) {
-            ActorCutscene_Stop(this->actor.cutscene);
+            CutsceneManager_Stop(this->actor.csId);
         }
     }
 

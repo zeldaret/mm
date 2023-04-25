@@ -19,7 +19,7 @@ void EnDyExtra_Draw(Actor* thisx, PlayState* play);
 void func_80A61334(EnDyExtra* this, PlayState* play);
 void func_80A613C8(EnDyExtra* this, PlayState* play);
 
-const ActorInit En_Dy_Extra_InitVars = {
+ActorInit En_Dy_Extra_InitVars = {
     ACTOR_EN_DY_EXTRA,
     ACTORCAT_PROP,
     FLAGS,
@@ -65,7 +65,7 @@ void func_80A613C8(EnDyExtra* this, PlayState* play) {
     Math_ApproachF(&this->actor.gravity, 0.0f, 0.1f, 0.005f);
 
     if (this->unk14C == 0 || this->unk150 < 0.02f) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -80,7 +80,7 @@ void EnDyExtra_Update(Actor* thisx, PlayState* play) {
     EnDyExtra* this = THIS;
 
     DECR(this->unk14C);
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_PL_SPIRAL_HEAL_BEAM - SFX_FLAG);
+    Actor_PlaySfx(&this->actor, NA_SE_PL_SPIRAL_HEAL_BEAM - SFX_FLAG);
     this->actionFunc(this, play);
     Actor_MoveWithGravity(&this->actor);
 }

@@ -15,22 +15,39 @@ void EnHg_Destroy(Actor* thisx, PlayState* play);
 void EnHg_Update(Actor* thisx, PlayState* play);
 void EnHg_Draw(Actor* thisx, PlayState* play);
 
-void func_80BCF354(EnHg* this);
-void func_80BCF398(EnHg* this, PlayState* play);
-void func_80BCF468(EnHg* this);
-void func_80BCF468(EnHg* this);
-void func_80BCF4AC(EnHg* this, PlayState* play);
-void func_80BCF5F0(EnHg* this);
-void func_80BCF634(EnHg* this, PlayState* play);
-void func_80BCF68C(EnHg* this);
-void func_80BCF6D0(EnHg* this, PlayState* play);
-void func_80BCF8A0(EnHg* this, PlayState* play);
-void func_80BCF93C(EnHg* this);
-void func_80BCF95C(EnHg* this, PlayState* play);
+void EnHg_SetupWait(EnHg* this);
+void EnHg_Wait(EnHg* this, PlayState* play);
+void EnHg_SetupChasePlayer(EnHg* this);
+void EnHg_ChasePlayer(EnHg* this, PlayState* play);
+void EnHg_SetupChasePlayerWait(EnHg* this);
+void EnHg_ChasePlayerWait(EnHg* this, PlayState* play);
+void EnHg_SetupReactToHit(EnHg* this);
+void EnHg_ReactToHit(EnHg* this, PlayState* play);
+void EnHg_PlayCutscene(EnHg* this, PlayState* play);
+void EnHg_SetupCsAction(EnHg* this);
+void EnHg_HandleCsAction(EnHg* this, PlayState* play);
 s32 EnHg_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
 void EnHg_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
 
-const ActorInit En_Hg_InitVars = {
+typedef enum {
+    /* 0 */ HG_ANIM_IDLE,
+    /* 1 */ HG_ANIM_LURCH_FORWARD,
+    /* 2 */ HG_ANIM_RECOIL,
+    /* 3 */ HG_ANIM_LEAN_FORWARD,
+    /* 4 */ HG_ANIM_REACH_FORWARD,
+    /* 5 */ HG_ANIM_CURL_UP,
+    /* 6 */ HG_ANIM_CROUCHED_PANIC,
+    /* 7 */ HG_ANIM_PANIC,
+} HgAnimation;
+
+typedef enum {
+    /* 0 */ HG_CS_FIRST_ENCOUNTER,
+    /* 1 */ HG_CS_GET_MASK,
+    /* 2 */ HG_CS_SUBSEQUENT_ENCOUNTER,
+    /* 3 */ HG_CS_SONG_OF_HEALING,
+} HgCsIndex;
+
+ActorInit En_Hg_InitVars = {
     ACTOR_EN_HG,
     ACTORCAT_PROP,
     FLAGS,
@@ -102,43 +119,43 @@ static CollisionCheckInfoInit2 sColChkInfoInit2 = {
 };
 
 static AnimationInfo sAnimationInfo[] = {
-    { &object_harfgibud_Anim_00260C, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
-    { &object_harfgibud_Anim_009D44, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
-    { &object_harfgibud_Anim_00A164, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
-    { &object_harfgibud_Anim_000370, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
-    { &object_harfgibud_Anim_001138, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_harfgibud_Anim_0015D4, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
-    { &object_harfgibud_Anim_001960, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_harfgibud_Anim_00AE1C, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &gPamelasFatherIdleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
+    { &gPamelasFatherLurchForwardAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
+    { &gPamelasFatherRecoilFromHitAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
+    { &gPamelasFatherLeanForwardAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
+    { &gPamelasFatherReachForwardAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &gPamelasFatherCurlUpAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
+    { &gPamelasFatherCrouchedPanicAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &gPamelasFatherPanicAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
 };
 
-static u32 D_80BD00C8 = false;
+static u32 sHasSoundPlayed = false;
 
 void EnHg_Init(Actor* thisx, PlayState* play) {
     EnHg* this = THIS;
-    s16 currentCutscene = this->actor.cutscene;
+    s16 csId = this->actor.csId;
     s32 i;
 
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 36.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &gHarfgibudGibdoSkel, &object_harfgibud_Anim_00260C, this->jointTable,
-                       this->morphTable, HARFGIBUD_GIBDO_LIMB_MAX);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gPamelasFatherGibdoSkel, &gPamelasFatherIdleAnim, this->jointTable,
+                       this->morphTable, PAMELAS_FATHER_GIBDO_LIMB_MAX);
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit2);
-    if ((gSaveContext.save.weekEventReg[75] & 0x20) || (gSaveContext.save.weekEventReg[52] & 0x20)) {
-        Actor_MarkForDeath(&this->actor);
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_75_20) || CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_STONE_TOWER_TEMPLE)) {
+        Actor_Kill(&this->actor);
     }
     this->actor.targetMode = 1;
     this->actor.colChkInfo.health = 0;
     this->actor.gravity = -1.0f;
-    for (i = 0; i < ARRAY_COUNT(this->cutscenes); i++) {
-        if (currentCutscene == -1) {
+    for (i = 0; i < ARRAY_COUNT(this->csIdList); i++) {
+        if (csId == CS_ID_NONE) {
             break;
         }
-        this->cutscenes[i] = currentCutscene;
-        currentCutscene = ActorCutscene_GetAdditionalCutscene(currentCutscene);
+        this->csIdList[i] = csId;
+        csId = CutsceneManager_GetAdditionalCsId(csId);
     }
-    func_80BCF354(this);
+    EnHg_SetupWait(this);
 }
 
 void EnHg_Destroy(Actor* thisx, PlayState* play) {
@@ -147,35 +164,35 @@ void EnHg_Destroy(Actor* thisx, PlayState* play) {
     Collider_DestroyCylinder(play, &this->collider);
 }
 
-void func_80BCF354(EnHg* this) {
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 0);
-    this->actionFunc = func_80BCF398;
+void EnHg_SetupWait(EnHg* this) {
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, HG_ANIM_IDLE);
+    this->actionFunc = EnHg_Wait;
 }
 
-void func_80BCF398(EnHg* this, PlayState* play) {
+void EnHg_Wait(EnHg* this, PlayState* play) {
     if (this->actor.colChkInfo.health == 1) {
-        if ((this->actor.xzDistToPlayer < 200.0f && this->actor.playerHeightRel < 40.0f) &&
-            !Cutscene_CheckActorAction(play, 0x1E3)) {
-            func_80BCF468(this);
+        if (((this->actor.xzDistToPlayer < 200.0f) && (this->actor.playerHeightRel < 40.0f)) &&
+            !Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_483)) {
+            EnHg_SetupChasePlayer(this);
         }
-        if ((gSaveContext.sceneLayer == 0) && (play->csCtx.currentCsIndex == 0) &&
-            ((play->csCtx.frames == 20) || (play->csCtx.frames == 60))) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_HALF_REDEAD_SURPRISE);
+        if ((gSaveContext.sceneLayer == 0) && (play->csCtx.scriptIndex == 0) &&
+            ((play->csCtx.curFrame == 20) || (play->csCtx.curFrame == 60))) {
+            Actor_PlaySfx(&this->actor, NA_SE_EN_HALF_REDEAD_SURPRISE);
         }
     }
 }
 
-void func_80BCF468(EnHg* this) {
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 1);
-    this->actionFunc = func_80BCF4AC;
+void EnHg_SetupChasePlayer(EnHg* this) {
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, HG_ANIM_LURCH_FORWARD);
+    this->actionFunc = EnHg_ChasePlayer;
 }
 
-void func_80BCF4AC(EnHg* this, PlayState* play) {
+void EnHg_ChasePlayer(EnHg* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     s32 pad;
 
-    this->actor.speedXZ = 1.6f;
-    if (!(player->stateFlags2 & 0x08000000) && Message_GetState(&play->msgCtx) == TEXT_STATE_NONE) {
+    this->actor.speed = 1.6f;
+    if (!(player->stateFlags2 & PLAYER_STATE2_8000000) && Message_GetState(&play->msgCtx) == TEXT_STATE_NONE) {
         if (((this->skelAnime.curFrame > 9.0f) && (this->skelAnime.curFrame < 16.0f)) ||
             ((this->skelAnime.curFrame > 44.0f) && (this->skelAnime.curFrame < 51.0f))) {
             Actor_MoveWithGravity(&this->actor);
@@ -184,38 +201,39 @@ void func_80BCF4AC(EnHg* this, PlayState* play) {
         }
         if ((Math_Vec3f_DistXZ(&this->actor.world.pos, &this->actor.home.pos) > 200.0f) &&
             (Math_Vec3f_DistXZ(&player->actor.world.pos, &this->actor.home.pos) > 200.0f)) {
-            func_80BCF5F0(this);
+            EnHg_SetupChasePlayerWait(this);
         }
     }
 }
 
-void func_80BCF5F0(EnHg* this) {
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 0);
-    this->actionFunc = func_80BCF634;
+void EnHg_SetupChasePlayerWait(EnHg* this) {
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, HG_ANIM_IDLE);
+    this->actionFunc = EnHg_ChasePlayerWait;
 }
 
-void func_80BCF634(EnHg* this, PlayState* play) {
+void EnHg_ChasePlayerWait(EnHg* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (Math_Vec3f_DistXZ(&player->actor.world.pos, &this->actor.home.pos) < 200.0f) {
-        func_80BCF468(this);
+        EnHg_SetupChasePlayer(this);
     }
 }
 
-void func_80BCF68C(EnHg* this) {
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 2);
-    this->actionFunc = func_80BCF6D0;
+void EnHg_SetupReactToHit(EnHg* this) {
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, HG_ANIM_RECOIL);
+    this->actionFunc = EnHg_ReactToHit;
 }
 
-void func_80BCF6D0(EnHg* this, PlayState* play) {
+void EnHg_ReactToHit(EnHg* this, PlayState* play) {
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-        func_80BCF5F0(this);
+        EnHg_SetupChasePlayerWait(this);
     }
 }
 
-void func_80BCF710(EnHg* this, PlayState* play) {
+void EnHg_HandleTatlDialog(EnHg* this, PlayState* play) {
     if (Message_GetState(&play->msgCtx) == TEXT_STATE_NONE) {
         if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+            // "...Sort of looks different..."
             Message_StartTextbox(play, 0x24F, &this->actor);
         } else {
             func_800B8614(&this->actor, play, 80.0f);
@@ -223,164 +241,182 @@ void func_80BCF710(EnHg* this, PlayState* play) {
     }
 }
 
-void func_80BCF778(EnHg* this, PlayState* play) {
+void EnHg_PlayRedeadSfx(EnHg* this, PlayState* play) {
     if (this->actor.colChkInfo.health == 1) {
-        if (this->actionFunc == func_80BCF4AC || this->actionFunc == func_80BCF6D0 ||
-            this->actionFunc == func_80BCF634) {
+        if ((this->actionFunc == EnHg_ChasePlayer) || (this->actionFunc == EnHg_ReactToHit) ||
+            (this->actionFunc == EnHg_ChasePlayerWait)) {
             func_800B9010(&this->actor, NA_SE_EN_HALF_REDEAD_LOOP - SFX_FLAG);
         }
     }
 }
 
-void func_80BCF7D8(EnHg* this, PlayState* play) {
-    if (this->actor.colChkInfo.health) {
+void EnHg_UpdateCollision(EnHg* this, PlayState* play) {
+    if (this->actor.colChkInfo.health != 0) {
         if (this->collider.base.acFlags & AC_HIT) {
             this->collider.base.acFlags &= ~AC_HIT;
-            func_80BCF68C(this);
+            EnHg_SetupReactToHit(this);
         }
         Collider_UpdateCylinder(&this->actor, &this->collider);
         CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
-        if (this->actionFunc != func_80BCF6D0 && this->actionFunc != func_80BCF8A0 &&
-            this->actionFunc != func_80BCF95C) {
+        if ((this->actionFunc != EnHg_ReactToHit) && (this->actionFunc != EnHg_PlayCutscene) &&
+            (this->actionFunc != EnHg_HandleCsAction)) {
             CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
         }
     }
 }
 
-void func_80BCF88C(EnHg* this) {
-    this->actionFunc = func_80BCF8A0;
+void EnHg_SetupCutscene(EnHg* this) {
+    this->actionFunc = EnHg_PlayCutscene;
 }
 
-void func_80BCF8A0(EnHg* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->cutscenes[this->unk218])) {
-        ActorCutscene_Start(this->cutscenes[this->unk218], &this->actor);
-        func_80BCF93C(this);
+void EnHg_PlayCutscene(EnHg* this, PlayState* play) {
+    if (CutsceneManager_IsNext(this->csIdList[this->csIdIndex])) {
+        CutsceneManager_Start(this->csIdList[this->csIdIndex], &this->actor);
+        EnHg_SetupCsAction(this);
     } else {
-        if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-            ActorCutscene_Stop(0x7C);
+        if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+            CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
         }
-        ActorCutscene_SetIntentToPlay(this->cutscenes[this->unk218]);
+        CutsceneManager_Queue(this->csIdList[this->csIdIndex]);
     }
 }
 
-void func_80BCF93C(EnHg* this) {
-    this->cutscenes[3] = 0x63;
-    this->cutscenes[2] = 0;
-    this->actionFunc = func_80BCF95C;
+void EnHg_SetupCsAction(EnHg* this) {
+    this->csIdList[3] = 99;
+    this->csIdList[2] = 0;
+    this->actionFunc = EnHg_HandleCsAction;
 }
 
-void func_80BCF95C(EnHg* this, PlayState* play) {
-    if (Cutscene_CheckActorAction(play, 484)) {
-        s32 actionIndex = Cutscene_GetActorActionIndex(play, 484);
+void EnHg_HandleCsAction(EnHg* this, PlayState* play) {
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_484)) {
+        s32 cueChannel = Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_484);
 
-        if (this->cutscenes[3] != play->csCtx.actorActions[actionIndex]->action) {
-            this->cutscenes[3] = play->csCtx.actorActions[actionIndex]->action;
-            switch (play->csCtx.actorActions[actionIndex]->action) {
+        if (this->csIdList[3] != play->csCtx.actorCues[cueChannel]->id) {
+            this->csIdList[3] = play->csCtx.actorCues[cueChannel]->id;
+            switch (play->csCtx.actorCues[cueChannel]->id) {
                 case 1:
                     this->animIndex = 0;
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 0);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, HG_ANIM_IDLE);
                     break;
+
                 case 2:
-                    this->cutscenes[2] = 0;
-                    this->animIndex = 3;
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 3);
+                    this->csIdList[2] = 0;
+                    this->animIndex = HG_ANIM_LEAN_FORWARD;
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, HG_ANIM_LEAN_FORWARD);
                     break;
+
                 case 3:
-                    this->cutscenes[2] = 0;
-                    this->animIndex = 5;
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 5);
+                    this->csIdList[2] = 0;
+                    this->animIndex = HG_ANIM_CURL_UP;
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, HG_ANIM_CURL_UP);
                     break;
+
                 case 4:
-                    this->cutscenes[2] = 0;
-                    this->animIndex = 7;
-                    if ((this->unk218 == 1) || (this->unk218 == 3)) {
+                    this->csIdList[2] = 0;
+                    this->animIndex = HG_ANIM_PANIC;
+                    if ((this->csIdIndex == HG_CS_GET_MASK) || (this->csIdIndex == HG_CS_SONG_OF_HEALING)) {
                         func_8019F128(NA_SE_EN_HALF_REDEAD_TRANS);
                     }
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 7);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, HG_ANIM_PANIC);
                     break;
+
                 case 5:
-                    this->animIndex = 1;
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 1);
+                    this->animIndex = HG_ANIM_LURCH_FORWARD;
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, HG_ANIM_LURCH_FORWARD);
                     break;
+
                 case 6:
-                    gSaveContext.save.weekEventReg[75] |= 0x20;
-                    Actor_MarkForDeath(&this->actor);
+                    SET_WEEKEVENTREG(WEEKEVENTREG_75_20);
+                    Actor_Kill(&this->actor);
                     break;
             }
-        } else {
-            if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-                switch (this->animIndex) {
-                    case 3:
-                        this->animIndex = 4;
-                        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 4);
-                        break;
-                    case 5:
-                        this->animIndex = 6;
-                        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 6);
-                        break;
-                }
+        } else if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
+            switch (this->animIndex) {
+                case HG_ANIM_LEAN_FORWARD:
+                    this->animIndex = HG_ANIM_REACH_FORWARD;
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, HG_ANIM_REACH_FORWARD);
+                    break;
+
+                case HG_ANIM_CURL_UP:
+                    this->animIndex = HG_ANIM_CROUCHED_PANIC;
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, HG_ANIM_CROUCHED_PANIC);
+                    break;
             }
         }
+
         switch (this->animIndex) {
-            case 3:
-            case 4:
+            case HG_ANIM_LEAN_FORWARD:
+            case HG_ANIM_REACH_FORWARD:
                 func_800B9010(&this->actor, NA_SE_EN_HALF_REDEAD_LOOP - SFX_FLAG);
                 break;
-            case 5:
-            case 6:
+
+            case HG_ANIM_CURL_UP:
+            case HG_ANIM_CROUCHED_PANIC:
                 func_800B9010(&this->actor, NA_SE_EN_HALF_REDEAD_SCREAME - SFX_FLAG);
                 break;
-            case 7:
-                if ((this->unk218 == 0) || (this->unk218 == 2)) {
+
+            case HG_ANIM_PANIC:
+                if ((this->csIdIndex == HG_CS_FIRST_ENCOUNTER) || (this->csIdIndex == HG_CS_SUBSEQUENT_ENCOUNTER)) {
                     func_800B9010(&this->actor, NA_SE_EN_HALF_REDEAD_SCREAME - SFX_FLAG);
                 }
                 break;
         }
-        Cutscene_ActorTranslateAndYaw(&this->actor, play, actionIndex);
+
+        Cutscene_ActorTranslateAndYaw(&this->actor, play, cueChannel);
         return;
-    } else if (play->csCtx.state == 0) {
-        func_80BCF354(this);
+
+    } else if (play->csCtx.state == CS_STATE_IDLE) {
+        EnHg_SetupWait(this);
     }
-    this->cutscenes[3] = 0x63;
+
+    this->csIdList[3] = 99;
 }
 
-void func_80BCFC0C(EnHg* this, PlayState* play) {
+void EnHg_WaitForPlayerAction(EnHg* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (this->actor.colChkInfo.health == 1 && !(fabsf(this->actor.playerHeightRel) >= 80.0f)) {
-        if (player->stateFlags2 & 0x08000000) {
-            if (!D_80BD00C8) {
-                play_sound(NA_SE_SY_TRE_BOX_APPEAR);
-            }
-            D_80BD00C8 = true;
-        } else {
-            D_80BD00C8 = false;
+    // If the player has gone upstairs this interaction will not trigger
+    if ((this->actor.colChkInfo.health != 1) || (fabsf(this->actor.playerHeightRel) >= 80.0f)) {
+        return;
+    }
+
+    if (player->stateFlags2 & PLAYER_STATE2_8000000) {
+        if (!sHasSoundPlayed) {
+            play_sound(NA_SE_SY_TRE_BOX_APPEAR);
         }
-        if (play->msgCtx.ocarinaMode == 3) {
-            if (play->msgCtx.lastPlayedSong == OCARINA_SONG_HEALING &&
-                gSaveContext.save.playerForm == PLAYER_FORM_HUMAN) {
-                if (INV_CONTENT(ITEM_MASK_GIBDO) == ITEM_MASK_GIBDO) {
-                    this->unk218 = 3;
+        sHasSoundPlayed = true;
+    } else {
+        sHasSoundPlayed = false;
+    }
+
+    if (play->msgCtx.ocarinaMode == 3) {
+        if ((play->msgCtx.lastPlayedSong == OCARINA_SONG_HEALING) &&
+            (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN)) {
+            if (INV_CONTENT(ITEM_MASK_GIBDO) == ITEM_MASK_GIBDO) {
+                this->csIdIndex = HG_CS_SONG_OF_HEALING;
+            } else {
+                this->csIdIndex = HG_CS_GET_MASK;
+            }
+
+            EnHg_SetupCutscene(this);
+        }
+
+    } else {
+        if ((this->actor.xzDistToPlayer < 60.0f) && (fabsf(this->actor.playerHeightRel) < 40.0f)) {
+            if ((this->actionFunc != EnHg_PlayCutscene) && (this->actionFunc != EnHg_HandleCsAction)) {
+                if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_61_02)) {
+                    SET_WEEKEVENTREG(WEEKEVENTREG_61_02);
+                    this->csIdIndex = HG_CS_FIRST_ENCOUNTER;
                 } else {
-                    this->unk218 = 1;
+                    this->csIdIndex = HG_CS_SUBSEQUENT_ENCOUNTER;
                 }
-                func_80BCF88C(this);
+
+                EnHg_SetupCutscene(this);
+                return;
             }
-        } else {
-            if (this->actor.xzDistToPlayer < 60.0f && fabsf(this->actor.playerHeightRel) < 40.0f) {
-                if ((this->actionFunc != func_80BCF8A0) && (this->actionFunc != func_80BCF95C)) {
-                    if (!(gSaveContext.save.weekEventReg[61] & 2)) {
-                        gSaveContext.save.weekEventReg[61] |= 2;
-                        this->unk218 = 0;
-                    } else {
-                        this->unk218 = 2;
-                    }
-                    func_80BCF88C(this);
-                    return;
-                }
-            }
-            func_80BCF710(this, play);
         }
+
+        EnHg_HandleTatlDialog(this, play);
     }
 }
 
@@ -389,10 +425,10 @@ void EnHg_Update(Actor* thisx, PlayState* play) {
 
     this->actionFunc(this, play);
     SkelAnime_Update(&this->skelAnime);
-    func_80BCF7D8(this, play);
-    func_80BCFC0C(this, play);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 25.0f, 0.0f, 5);
-    func_80BCF778(this, play);
+    EnHg_UpdateCollision(this, play);
+    EnHg_WaitForPlayerAction(this, play);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 25.0f, 0.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
+    EnHg_PlayRedeadSfx(this, play);
 }
 
 s32 EnHg_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
@@ -401,9 +437,9 @@ s32 EnHg_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* po
 
 void EnHg_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnHg* this = THIS;
-    if (limbIndex == HARFGIBUD_GIBDO_LIMB_EYEBROWS) {
-        Matrix_Get(&this->unk1D8);
-    } else if (limbIndex == HARFGIBUD_GIBDO_LIMB_HEAD) {
+    if (limbIndex == PAMELAS_FATHER_GIBDO_LIMB_EYEBROWS) {
+        Matrix_Get(&this->mf);
+    } else if (limbIndex == PAMELAS_FATHER_GIBDO_LIMB_HEAD) {
         Matrix_MultZero(&this->actor.focus.pos);
     }
 }
@@ -415,8 +451,8 @@ void EnHg_Draw(Actor* thisx, PlayState* play) {
     func_8012C28C(play->state.gfxCtx);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnHg_OverrideLimbDraw, EnHg_PostLimbDraw, &this->actor);
-    Matrix_Put(&this->unk1D8);
+    Matrix_Put(&this->mf);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, gHarfgibudGibdoEyebrowsDL);
+    gSPDisplayList(POLY_OPA_DISP++, gPamelasFatherGibdoEyebrowsDL);
     CLOSE_DISPS(play->state.gfxCtx);
 }

@@ -22,7 +22,7 @@ void DemoKakyo_MoonSparklesActionFunc(DemoKankyo* this, PlayState* play);
 static u8 sLostWoodsSparklesMutex = false; // make sure only one can exist at once
 static s16 sLostWoodsSkyFishParticleNum = 0;
 
-const ActorInit Demo_Kankyo_InitVars = {
+ActorInit Demo_Kankyo_InitVars = {
     ACTOR_DEMO_KANKYO,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -59,7 +59,7 @@ void DemoKakyo_LostWoodsSparkleActionFunc(DemoKankyo* this, PlayState* play) {
         if (play->envCtx.unk_F2[3] != 0) {
             play->envCtx.unk_F2[3]--;
         } else {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     } else if (play->envCtx.unk_F2[3] < DEMOKANKYO_EFFECT_COUNT) {
         play->envCtx.unk_F2[3] += 16;
@@ -444,7 +444,8 @@ void DemoKankyo_Init(Actor* thisx, PlayState* play) {
     for (i = 0; i < ARRAY_COUNT(this->effects); i++) { this->effects[i].state = DEMO_KANKYO_STATE_INIT; }
     // clang-format on
 
-    if (1) {};
+    //! FAKE:
+    if (1) {}
 
     switch (this->actor.params) {
         case DEMO_KANKYO_TYPE_LOSTWOODS:
@@ -454,7 +455,7 @@ void DemoKankyo_Init(Actor* thisx, PlayState* play) {
                 DemoKankyo_SetupAction(this, DemoKakyo_LostWoodsSparkleActionFunc);
                 sLostWoodsSparklesMutex = true;
             } else {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
             }
             break;
 
@@ -484,7 +485,7 @@ void DemoKankyo_Init(Actor* thisx, PlayState* play) {
 void DemoKankyo_Destroy(Actor* thisx, PlayState* play) {
     DemoKankyo* this = THIS;
 
-    Actor_MarkForDeath(&this->actor);
+    Actor_Kill(&this->actor);
 }
 
 void DemoKankyo_Update(Actor* thisx, PlayState* play) {
@@ -571,7 +572,7 @@ void DemoKakyo_DrawLostWoodsSparkle(Actor* thisx, PlayState* play2) {
                 }
 
                 Matrix_Mult(&play->billboardMtxF, MTXMODE_APPLY);
-                Matrix_RotateZF(DEGF_TO_RADF(play->state.frames * 20.0f), MTXMODE_APPLY);
+                Matrix_RotateZF(DEG_TO_RAD(play->state.frames * 20.0f), MTXMODE_APPLY);
 
                 gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
                           G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -639,11 +640,11 @@ void DemoKankyo_DrawMoonAndGiant(Actor* thisx, PlayState* play2) {
                         break;
                 }
 
-                gSPDisplayList(POLY_XLU_DISP++, &gLightOrb1DL);
+                gSPDisplayList(POLY_XLU_DISP++, gLightOrbMaterial1DL);
 
                 Matrix_Mult(&play->billboardMtxF, MTXMODE_APPLY);
 
-                Matrix_RotateZF(DEGF_TO_RADF(play->state.frames * 20.0f), MTXMODE_APPLY);
+                Matrix_RotateZF(DEG_TO_RAD(play->state.frames * 20.0f), MTXMODE_APPLY);
 
                 gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
                           G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -651,7 +652,7 @@ void DemoKankyo_DrawMoonAndGiant(Actor* thisx, PlayState* play2) {
                 if (this->actor.params == DEMO_KANKYO_TYPE_GIANTS) {
                     gSPDisplayList(POLY_XLU_DISP++, gBubbleDL);
                 } else {
-                    gSPDisplayList(POLY_XLU_DISP++, gLightOrbVtxDL);
+                    gSPDisplayList(POLY_XLU_DISP++, gLightOrbModelDL);
                 }
             }
         }

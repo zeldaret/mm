@@ -49,7 +49,7 @@ typedef struct EnTru {
     /* 0x36E */ s16 eyeTexIndex;
     /* 0x370 */ s16 unk_370;
     /* 0x372 */ s16 unk_372;
-    /* 0x374 */ s16 unk_374;
+    /* 0x374 */ s16 csId;
     /* 0x378 */ EnTruUnkFunc unk_378;
     /* 0x37C */ s32 animIndex;
     /* 0x380 */ UNK_TYPE1 unk380[0x4];
@@ -59,7 +59,5 @@ typedef struct EnTru {
     /* 0x390 */ s32 unk_390;
     /* 0x394 */ EnTruUnkStruct unk_394[30];
 } EnTru; // size = 0x934
-
-extern const ActorInit En_Tru_InitVars;
 
 #endif // Z_EN_TRU_H

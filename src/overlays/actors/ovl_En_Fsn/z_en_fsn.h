@@ -33,11 +33,11 @@ typedef struct EnFsn {
     /* 0x364 */ s16 eyeTexIndex;
     /* 0x366 */ s16 blinkTimer;
     /* 0x368 */ s16 cutsceneState;
-    /* 0x36A */ s16 cutscene;
-    /* 0x36C */ s16 lookToShopkeeperCutscene;
-    /* 0x36E */ s16 lookToShelfCutscene;
-    /* 0x370 */ s16 lookToShopkeeperFromShelfCutscene;
-    /* 0x372 */ s16 lookToShopkeeperBuyingCutscene;
+    /* 0x36A */ s16 csId;
+    /* 0x36C */ s16 lookToShopkeeperCsId;
+    /* 0x36E */ s16 lookToShelfCsId;
+    /* 0x370 */ s16 lookToShopkeeperFromShelfCsId;
+    /* 0x372 */ s16 lookToShopkeeperBuyingCsId;
     /* 0x374 */ s16 price;
     /* 0x376 */ u16 textId;
     /* 0x378 */ u8 isSelling;
@@ -67,7 +67,5 @@ typedef struct EnFsn {
     /* 0x44C */ s16 animIndex;
     /* 0x44E */ u16 flags;
 } EnFsn; // size = 0x450
-
-extern const ActorInit En_Fsn_InitVars;
 
 #endif // Z_EN_FSN_H

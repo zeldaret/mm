@@ -137,7 +137,7 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(1, EN_GRASSHOPPER_DMGEFF_HOOK),
 };
 
-const ActorInit En_Grasshopper_InitVars = {
+ActorInit En_Grasshopper_InitVars = {
     ACTOR_EN_GRASSHOPPER,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -354,7 +354,7 @@ void EnGrasshopper_Fly(EnGrasshopper* this, PlayState* play) {
     f32 targetSpeed;
     Vec3f collisionCheckPos;
 
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BATTA_FLY - SFX_FLAG);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_BATTA_FLY - SFX_FLAG);
     diffX = this->flyingHomePos.x - this->actor.world.pos.x;
     diffZ = this->flyingHomePos.z - this->actor.world.pos.z;
     if ((this->type != EN_GRASSHOPPER_TYPE_WOODFALL_TEMPLE_FINAL_ROOM) &&
@@ -390,18 +390,18 @@ void EnGrasshopper_Fly(EnGrasshopper* this, PlayState* play) {
         }
     }
 
-    if ((Player_GetMask(play) != PLAYER_MASK_STONE) && !(gSaveContext.eventInf[4] & 2) && !this->shouldTurn &&
+    if ((Player_GetMask(play) != PLAYER_MASK_STONE) && !CHECK_EVENTINF(EVENTINF_41) && !this->shouldTurn &&
         (this->actor.xzDistToPlayer < 200.0f)) {
         EnGrasshopper_SetupApproachPlayer(this, play);
     } else {
         Math_SmoothStepToS(&this->actor.world.rot.z, this->targetRot.z, 5, 0x3E8, 5);
         this->targetRot.z *= 0.8f;
         if (this->waitTimer != 0) {
-            Math_ApproachZeroF(&this->actor.speedXZ, 0.2f, 0.5f);
+            Math_ApproachZeroF(&this->actor.speed, 0.2f, 0.5f);
         } else {
             this->targetRot.z = (this->actor.world.rot.y - this->targetRot.y) * 0.2f;
             targetSpeed = (this->index * 0.1f) + 4.0f;
-            Math_ApproachF(&this->actor.speedXZ, targetSpeed, 0.4f, 0.7f);
+            Math_ApproachF(&this->actor.speed, targetSpeed, 0.4f, 0.7f);
             Math_ApproachF(&this->rotationalVelocity, 2000.0f, 1.0f, 50.0f);
             Math_SmoothStepToS(&this->actor.world.rot.y, this->targetRot.y, 5, this->rotationalVelocity, 5);
             if (this->timer == 0) {
@@ -430,7 +430,7 @@ void EnGrasshopper_RoamInCircles(EnGrasshopper* this, PlayState* play) {
     Vec3f collisionCheckPos;
     Player* player = GET_PLAYER(play);
 
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BATTA_FLY - SFX_FLAG);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_BATTA_FLY - SFX_FLAG);
     if (Player_GetMask(play) == PLAYER_MASK_STONE) {
         EnGrasshopper_SetupFly(this);
     } else {
@@ -450,7 +450,8 @@ void EnGrasshopper_RoamInCircles(EnGrasshopper* this, PlayState* play) {
         collisionCheckPos.y = this->actor.world.pos.y;
         collisionCheckPos.z = (Math_CosS(this->actor.shape.rot.y) * 100.0f) + this->actor.world.pos.z;
 
-        if ((this->actor.bgCheckFlags & 8) || BgCheck_SphVsFirstPoly(&play->colCtx, &collisionCheckPos, 10.0f)) {
+        if ((this->actor.bgCheckFlags & BGCHECKFLAG_WALL) ||
+            BgCheck_SphVsFirstPoly(&play->colCtx, &collisionCheckPos, 10.0f)) {
             EnGrasshopper_SetupBank(this);
         } else if (player->stateFlags1 & PLAYER_STATE1_8000000) {
             this->collider.elements[0].info.toucherFlags |= (TOUCH_ON | TOUCH_SFX_WOOD);
@@ -464,7 +465,7 @@ void EnGrasshopper_RoamInCircles(EnGrasshopper* this, PlayState* play) {
             rotationSpeed = this->index + 70;
             targetSpeed = (this->index * 0.05f) + 4.0f;
             this->targetRot.y = Math_Atan2S(diffX, diffZ);
-            Math_ApproachF(&this->actor.speedXZ, targetSpeed, 0.4f, 0.8f);
+            Math_ApproachF(&this->actor.speed, targetSpeed, 0.4f, 0.8f);
             Math_SmoothStepToS(&this->actor.world.rot.y, this->targetRot.y, rotationSpeed, 0xFA0, 0xA);
         }
     }
@@ -474,11 +475,11 @@ void EnGrasshopper_RoamInCircles(EnGrasshopper* this, PlayState* play) {
  * Unused in the final game.
  */
 void EnGrasshopper_SetupBank(EnGrasshopper* this) {
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BATTA_FLY - SFX_FLAG);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_BATTA_FLY - SFX_FLAG);
     this->targetBankRot.y = this->actor.world.rot.y + 0x8000;
     this->action = EN_GRASSHOPPER_ACTION_BANK;
     this->bankState = EN_GRASSHOPPER_BANK_STATE_BANKING;
-    this->actor.speedXZ = 2.0f;
+    this->actor.speed = 2.0f;
     this->actionFunc = EnGrasshopper_Bank;
 }
 
@@ -487,7 +488,7 @@ void EnGrasshopper_SetupBank(EnGrasshopper* this) {
  * it flies forward for 100 frames.
  */
 void EnGrasshopper_Bank(EnGrasshopper* this, PlayState* play) {
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BATTA_FLY - SFX_FLAG);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_BATTA_FLY - SFX_FLAG);
     switch (this->bankState) {
         case EN_GRASSHOPPER_BANK_STATE_BANKING:
             Math_SmoothStepToS(&this->actor.world.rot.y, this->targetBankRot.y, 0x64, 0x3E8, 0x3E8);
@@ -529,9 +530,9 @@ void EnGrasshopper_SetupBounced(EnGrasshopper* this) {
 void EnGrasshopper_Bounced(EnGrasshopper* this, PlayState* play) {
     f32 targetSpeed;
 
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BATTA_FLY - SFX_FLAG);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_BATTA_FLY - SFX_FLAG);
     targetSpeed = (this->index * 0.05f) + 7.0f;
-    Math_ApproachF(&this->actor.speedXZ, targetSpeed, 0.4f, 0.8f);
+    Math_ApproachF(&this->actor.speed, targetSpeed, 0.4f, 0.8f);
     Math_SmoothStepToS(&this->actor.world.rot.z, this->targetRot.z, 5, 0x3E8, 5);
     this->targetRot.z *= 0.8f;
     Math_SmoothStepToS(&this->actor.world.rot.y, this->targetRot.y, 5, this->rotationalVelocity, 5);
@@ -564,7 +565,7 @@ void EnGrasshopper_ApproachPlayer(EnGrasshopper* this, PlayState* play) {
     WaterBox* waterBox;
     Vec3f splashPos;
 
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BATTA_FLY - SFX_FLAG);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_BATTA_FLY - SFX_FLAG);
     this->bobPhase += 0xAF0;
     this->targetApproachPos.y = (Math_SinS(this->bobPhase) * 10.0f) + (player->actor.world.pos.y + 120.0f);
 
@@ -603,11 +604,11 @@ void EnGrasshopper_SetupAttack(EnGrasshopper* this) {
     EnGrasshopper_ChangeAnim(this, EN_GRASSHOPPER_ANIM_ATTACK);
     this->approachSpeed = 0.0f;
     Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 0xA, 0xFA0, 0xA);
-    this->actor.speedXZ = 3.0f;
+    this->actor.speed = 3.0f;
     this->baseFlyHeight = this->actor.world.pos.y;
     this->collider.elements[0].info.toucherFlags &= ~(TOUCH_ON | TOUCH_SFX_WOOD);
     this->collider.elements[1].info.toucherFlags |= (TOUCH_ON | TOUCH_SFX_WOOD);
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BATTA_ATTACK);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_BATTA_ATTACK);
     this->action = EN_GRASSHOPPER_ACTION_ATTACK;
     this->actionFunc = EnGrasshopper_Attack;
 }
@@ -675,7 +676,7 @@ void EnGrasshopper_SetupWaitAfterAttack(EnGrasshopper* this) {
     Math_ApproachF(&this->actor.world.pos.y, this->targetPosY, 0.1f, 10.0f);
     this->action = EN_GRASSHOPPER_ACTION_WAIT_AFTER_ATTACK;
     this->waitTimer = 20;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->collider.elements[1].info.toucherFlags &= ~(TOUCH_ON | TOUCH_SFX_WOOD);
     this->actionFunc = EnGrasshopper_WaitAfterAttack;
 }
@@ -697,7 +698,7 @@ void EnGrasshopper_SetupDamaged(EnGrasshopper* this, PlayState* play) {
     Vec3f damagedVelocity;
 
     EnGrasshopper_ChangeAnim(this, EN_GRASSHOPPER_ANIM_DAMAGE);
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actor.flags |= ACTOR_FLAG_1;
     this->approachSpeed = 0.0f;
     this->collider.elements[1].info.toucherFlags &= ~(TOUCH_ON | TOUCH_SFX_WOOD);
@@ -712,7 +713,7 @@ void EnGrasshopper_SetupDamaged(EnGrasshopper* this, PlayState* play) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
     }
 
-    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 8);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 8);
     this->action = EN_GRASSHOPPER_ACTION_DAMAGED;
     this->actionFunc = EnGrasshopper_Damaged;
 }
@@ -726,8 +727,8 @@ void EnGrasshopper_Damaged(EnGrasshopper* this, PlayState* play) {
 
 void EnGrasshopper_SetupDead(EnGrasshopper* this, PlayState* play) {
     EnGrasshopper_ChangeAnim(this, EN_GRASSHOPPER_ANIM_DEAD);
-    this->actor.flags |= ACTOR_FLAG_8000000;
-    this->actor.speedXZ = 0.0f;
+    this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
+    this->actor.speed = 0.0f;
     this->approachSpeed = 0.0f;
     this->actor.velocity.y = 5.0f;
     this->actor.gravity = -0.5f;
@@ -737,9 +738,9 @@ void EnGrasshopper_SetupDead(EnGrasshopper* this, PlayState* play) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
     }
 
-    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 25);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 25);
     Enemy_StartFinishingBlow(play, &this->actor);
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BATTA_DEAD);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_BATTA_DEAD);
     this->action = EN_GRASSHOPPER_ACTION_DEAD;
     this->actionFunc = EnGrasshopper_Dead;
 }
@@ -768,7 +769,7 @@ void EnGrasshopper_Dead(EnGrasshopper* this, PlayState* play) {
 void EnGrasshopper_SetupFall(EnGrasshopper* this) {
     EnGrasshopper_ChangeAnim(this, EN_GRASSHOPPER_ANIM_FALL);
     this->action = EN_GRASSHOPPER_ACTION_FALL;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->approachSpeed = 0.0f;
     this->actionFunc = EnGrasshopper_Fall;
 }
@@ -782,8 +783,8 @@ void EnGrasshopper_Fall(EnGrasshopper* this, PlayState* play) {
     s32 isUnderWater = false;
 
     this->actor.shape.rot.y += 0x1388;
-    if ((this->actor.floorHeight <= -32000.0f) || (this->actor.floorHeight >= 32000.0f)) {
-        Actor_MarkForDeath(&this->actor);
+    if ((this->actor.floorHeight <= BGCHECK_Y_MIN) || (this->actor.floorHeight >= BGCHECK_Y_MAX)) {
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -840,7 +841,7 @@ void EnGrasshopper_Fall(EnGrasshopper* this, PlayState* play) {
         SoundSource_PlaySfxEachFrameAtFixedWorldPos(play, &this->actor.world.pos, 10,
                                                     NA_SE_EN_COMMON_EXTINCT_LEV - SFX_FLAG);
         Item_DropCollectibleRandom(play, NULL, &this->actor.world.pos, 0x60);
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -874,7 +875,7 @@ void EnGrasshopper_UpdateDamage(EnGrasshopper* this, PlayState* play) {
                     return;
                 }
             } else if (this->actor.colChkInfo.damageEffect == EN_GRASSHOPPER_DMGEFF_LIGHT_ORB) {
-                Actor_SetColorFilter(&this->actor, 0x8000, 255, 0, 25);
+                Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_GRAY, 255, COLORFILTER_BUFFLAG_OPA, 25);
                 this->drawDmgEffTimer = 20;
                 this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
                 Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->actor.focus.pos.x, this->actor.focus.pos.y,
@@ -887,7 +888,7 @@ void EnGrasshopper_UpdateDamage(EnGrasshopper* this, PlayState* play) {
     if (attackDealsDamage) {
         Actor_ApplyDamage(&this->actor);
         if (this->actor.colChkInfo.health > 0) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BATTA_DAMAGE);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_BATTA_DAMAGE);
             EnGrasshopper_SetupDamaged(this, play);
         } else {
             EnGrasshopper_SetupDead(this, play);
@@ -919,7 +920,9 @@ void EnGrasshopper_Update(Actor* thisx, PlayState* play) {
     Math_ApproachZeroF(&this->damagedVelocity.y, 1.0f, 2.0f);
     Math_ApproachZeroF(&this->damagedVelocity.z, 1.0f, 2.0f);
     if ((this->action != EN_GRASSHOPPER_ACTION_FALL) && (this->type != EN_GRASSHOPPER_TYPE_WOODFALL)) {
-        Actor_UpdateBgCheckInfo(play, &this->actor, 35.0f, 60.0f, 60.0f, 0x1D);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 35.0f, 60.0f, 60.0f,
+                                UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                    UPDBGCHECKINFO_FLAG_10);
     }
 
     this->actor.shape.rot.z = this->actor.world.rot.z;

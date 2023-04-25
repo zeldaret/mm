@@ -18,7 +18,7 @@ void DmChar04_Draw(Actor* thisx, PlayState* play);
 
 void func_80AABE34(DmChar04* this, PlayState* play);
 
-const ActorInit Dm_Char04_InitVars = {
+ActorInit Dm_Char04_InitVars = {
     ACTOR_DM_CHAR04,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -66,7 +66,7 @@ void DmChar04_Init(Actor* thisx, PlayState* play) {
     this->primColors = sPrimColors[this->actor.params];
     this->envColors = sEnvColors[this->actor.params];
     this->actor.targetArrowOffset = 3000.0f;
-    this->csAction = 0x63;
+    this->cueId = 99;
     this->timer = this->actor.params << 0xB;
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
     SkelAnime_Init(play, &this->skelAnime, &gameplay_keep_Skel_02AF58.sh, &gameplay_keep_Anim_029140, this->jointTable,
@@ -81,15 +81,15 @@ void DmChar04_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void func_80AABE34(DmChar04* this, PlayState* play) {
-    u16 params = this->actor.params + 0x71;
+    u16 cueType = CS_CMD_ACTOR_CUE_113 + this->actor.params;
 
-    if (Cutscene_CheckActorAction(play, params)) {
-        s32 actionIndex = Cutscene_GetActorActionIndex(play, params);
+    if (Cutscene_IsCueInChannel(play, cueType)) {
+        s32 cueChannel = Cutscene_GetCueChannel(play, cueType);
 
-        if (play->csCtx.frames == play->csCtx.actorActions[actionIndex]->startFrame) {
-            if (this->csAction != play->csCtx.actorActions[actionIndex]->action) {
-                this->csAction = play->csCtx.actorActions[actionIndex]->action;
-                if (play->csCtx.actorActions[actionIndex]->action == 1) {
+        if (play->csCtx.curFrame == play->csCtx.actorCues[cueChannel]->startFrame) {
+            if (this->cueId != play->csCtx.actorCues[cueChannel]->id) {
+                this->cueId = play->csCtx.actorCues[cueChannel]->id;
+                if (play->csCtx.actorCues[cueChannel]->id == 1) {
                     this->animIndex = 0;
                 } else {
                     this->animIndex = 0;
@@ -97,9 +97,9 @@ void func_80AABE34(DmChar04* this, PlayState* play) {
                 DmChar04_ChangeAnim(&this->skelAnime, &sAnimationInfo[this->animIndex], 0);
             }
         }
-        Cutscene_ActorTranslateAndYaw(&this->actor, play, actionIndex);
+        Cutscene_ActorTranslateAndYaw(&this->actor, play, cueChannel);
     } else {
-        this->csAction = 0x63;
+        this->cueId = 99;
     }
 }
 
@@ -129,7 +129,7 @@ s32 DmChar04_OverrideLimbDraw(PlayState* play2, s32 limbIndex, Gfx** dList, Vec3
 }
 
 void DmChar04_Draw(Actor* thisx, PlayState* play) {
-    Gfx* gfx = GRAPH_ALLOC(play->state.gfxCtx, sizeof(Gfx) * 4);
+    Gfx* gfx = GRAPH_ALLOC(play->state.gfxCtx, 4 * sizeof(Gfx));
     s32 alpha;
     s32 pad;
     DmChar04* this = THIS;

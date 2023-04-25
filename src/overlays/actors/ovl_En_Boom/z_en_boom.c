@@ -19,7 +19,7 @@ void EnBoom_Draw(Actor* thisx, PlayState* play);
 void EnBoom_SetupAction(EnBoom* this, EnBoomActionFunc actionFunc);
 void func_808A2918(EnBoom* this, PlayState* play);
 
-const ActorInit En_Boom_InitVars = {
+ActorInit En_Boom_InitVars = {
     ACTOR_EN_BOOM,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -63,22 +63,23 @@ void EnBoom_SetupAction(EnBoom* this, EnBoomActionFunc actionFunc) {
 void func_808A24DC(EnBoom* this, PlayState* play) {
     WaterBox* sp54;
     f32 sp50 = this->actor.world.pos.y;
-    u16 sp4E = this->actor.bgCheckFlags & 0x20;
+    u16 sp4E = this->actor.bgCheckFlags & BGCHECKFLAG_WATER;
 
     if (WaterBox_GetSurface1(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &sp50, &sp54) &&
         (this->actor.world.pos.y < sp50)) {
         Vec3f sp40;
 
-        this->actor.bgCheckFlags |= 0x20;
+        this->actor.bgCheckFlags |= BGCHECKFLAG_WATER;
         sp40.x = this->actor.world.pos.x;
         sp40.y = this->actor.world.pos.y - 20.0f;
         sp40.z = this->actor.world.pos.z;
         EffectSsBubble_Spawn(play, &sp40, 20.0f, 10.0f, 20.0f, 0.13f);
     } else {
-        this->actor.bgCheckFlags &= ~0x20;
+        this->actor.bgCheckFlags &= ~BGCHECKFLAG_WATER;
     }
 
-    if ((this->actor.bgCheckFlags & 0x40) && ((this->actor.bgCheckFlags & 0x20) != sp4E)) {
+    if ((this->actor.bgCheckFlags & BGCHECKFLAG_WATER_TOUCH) &&
+        ((this->actor.bgCheckFlags & BGCHECKFLAG_WATER) != sp4E)) {
         Vec3f sp34;
 
         Math_Vec3f_Diff(&this->actor.world.pos, &this->actor.prevPos, &sp34);
@@ -95,14 +96,14 @@ void func_808A24DC(EnBoom* this, PlayState* play) {
             EffectSsGSplash_Spawn(play, &sp34, NULL, NULL, 0, 300);
         }
 
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_DIVE_INTO_WATER_L);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_DIVE_INTO_WATER_L);
 
         EffectSsGRipple_Spawn(play, &sp34, 100, 500, 0);
         EffectSsGRipple_Spawn(play, &sp34, 100, 500, 4);
         EffectSsGRipple_Spawn(play, &sp34, 100, 500, 8);
     }
 
-    this->actor.bgCheckFlags |= 0x40;
+    this->actor.bgCheckFlags |= BGCHECKFLAG_WATER_TOUCH;
 }
 
 void EnBoom_Init(Actor* thisx, PlayState* play) {
@@ -155,10 +156,10 @@ void EnBoom_Destroy(Actor* thisx, PlayState* play) {
                 temp->child = NULL;
             } else {
                 player->boomerangActor = NULL;
-                player->stateFlags1 &= ~0x2000000;
+                player->stateFlags1 &= ~PLAYER_STATE1_2000000;
             }
         }
-        player->stateFlags3 |= 0x800000;
+        player->stateFlags3 |= PLAYER_STATE3_800000;
     }
 }
 
@@ -177,9 +178,9 @@ void func_808A2918(EnBoom* this, PlayState* play) {
     sp7C = this->player;
 
     if (sp7C != NULL) {
-        sp72 = Actor_YawToPoint(&this->actor, &sp7C->focus.pos);
+        sp72 = Actor_WorldYawTowardPoint(&this->actor, &sp7C->focus.pos);
         sp70 = this->actor.world.rot.y - sp72;
-        sp6E = Actor_PitchToPoint(&this->actor, &sp7C->focus.pos);
+        sp6E = Actor_WorldPitchTowardPoint(&this->actor, &sp7C->focus.pos);
         sp6C = this->actor.world.rot.x - sp6E;
 
         sp64 = (200.0f - Math_Vec3f_DistXYZ(&this->actor.world.pos, &sp7C->focus.pos)) * 0.005f;
@@ -262,12 +263,12 @@ void func_808A2918(EnBoom* this, PlayState* play) {
                 Math_Vec3f_Copy(&sp7C->world.pos, &player->actor.world.pos);
                 if (sp7C->id == ACTOR_EN_ITEM00) {
                     sp7C->gravity = -0.9f;
-                    sp7C->bgCheckFlags &= ~3;
+                    sp7C->bgCheckFlags &= ~(BGCHECKFLAG_GROUND | BGCHECKFLAG_GROUND_TOUCH);
                 } else {
                     sp7C->flags &= ~ACTOR_FLAG_2000;
                 }
             }
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     }
 
@@ -286,7 +287,7 @@ void EnBoom_Update(Actor* thisx, PlayState* play) {
     Player* player = GET_PLAYER(play);
     Actor* actor;
 
-    if (!(player->stateFlags1 & 0x20000000)) {
+    if (!(player->stateFlags1 & PLAYER_STATE1_20000000)) {
         this->actionFunc(this, play);
 
         if (((actor = this->actor.child) != NULL) || ((actor = this->actor.parent) != NULL)) {

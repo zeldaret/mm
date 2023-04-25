@@ -19,7 +19,7 @@ void ObjBell_Draw(Actor* thisx, PlayState* play);
 s32 func_80A356D8(ObjBell* this);
 s32 func_80A357A8(ObjBell* this, PlayState* play);
 
-const ActorInit Obj_Bell_InitVars = {
+ActorInit Obj_Bell_InitVars = {
     ACTOR_OBJ_BELL,
     ACTORCAT_PROP,
     FLAGS,
@@ -188,11 +188,11 @@ s32 func_80A357A8(ObjBell* this, PlayState* play) {
         this->unk_20E = 10;
         switch (this->dyna.actor.colChkInfo.damageEffect) {
             case 15:
-                Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_BIGBELL);
+                Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_BIGBELL);
                 func_80A35510(this, 1);
                 break;
             case 14:
-                Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_BIGBELL);
+                Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_BIGBELL);
                 func_80A35510(this, 2);
                 break;
             default:

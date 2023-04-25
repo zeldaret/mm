@@ -26,13 +26,11 @@ typedef struct EnHiddenNuts {
     /* 0x21E */ s16 unk_21E;
     /* 0x220 */ s32 unk_220;
     /* 0x224 */ s16 unk_224;
-    /* 0x226 */ s16 unk_226;
+    /* 0x226 */ s16 csId;
     /* 0x228 */ f32 unk_228;
     /* 0x22C */ f32 unk_22C;
     /* 0x230 */ UNK_TYPE1 unk230[4];
     /* 0x234 */ ColliderCylinder collider;
 } EnHiddenNuts; // size = 0x280
-
-extern const ActorInit En_Hidden_Nuts_InitVars;
 
 #endif // Z_EN_HIDDEN_NUTS_H

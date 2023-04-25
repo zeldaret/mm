@@ -13,12 +13,10 @@ typedef void (*ObjHgdoorActionFunc)(struct ObjHgdoor*, PlayState*);
 typedef struct ObjHgdoor {
     /* 0x000 */ DynaPolyActor dyna;
     /* 0x15C */ ObjHgdoorActionFunc actionFunc;
-    /* 0x160 */ s16 cutscene;
+    /* 0x160 */ s16 csId;
     /* 0x162 */ s16 rotation;
     /* 0x164 */ s16 timer;
-    /* 0x166 */ u16 csAction;
+    /* 0x166 */ u16 cueId;
 } ObjHgdoor; // size = 0x168
-
-extern const ActorInit Obj_Hgdoor_InitVars;
 
 #endif // Z_OBJ_HGDOOR_H

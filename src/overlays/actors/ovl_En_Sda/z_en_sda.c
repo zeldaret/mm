@@ -20,7 +20,7 @@ void func_80947668(u8* shadowTexture, Player* player, PlayState* play);
 
 Vec3f D_80947EA0[16];
 
-const ActorInit En_Sda_InitVars = {
+ActorInit En_Sda_InitVars = {
     ACTOR_EN_SDA,
     ACTORCAT_BOSS,
     FLAGS,
@@ -50,8 +50,8 @@ u8 D_80947AEC[] = {
     2, 2, 2, 3, 3, 3, 3, 3, 3, 0, 0, 0, 0, 0, 0, 3,
 };
 
-s8 D_80947AFC[] = {
-    2, 9, 10, 11, 12, 13, 14, 0, 15, -1, 3, 4, 5, 6, 7, 8, -1, 1, 0, 0,
+s8 D_80947AFC[PLAYER_BODYPART_MAX] = {
+    2, 9, 10, 11, 12, 13, 14, 0, 15, -1, 3, 4, 5, 6, 7, 8, -1, 1,
 };
 
 Vec3f D_80947B10[] = {
@@ -93,7 +93,7 @@ void EnSda_Update(Actor* thisx, PlayState* play) {
 void EnSda_Draw(Actor* thisx, PlayState* play) {
     EnSda* this = THIS;
     Player* player;
-    u8* shadowTexture = GRAPH_ALLOC(play->state.gfxCtx, 64 * 64);
+    u8* shadowTex = GRAPH_ALLOC(play->state.gfxCtx, 64 * 64);
 
     if (this->actor.params == ENSDA_1) {
         player = (Player*)this->actor.parent;
@@ -102,10 +102,10 @@ void EnSda_Draw(Actor* thisx, PlayState* play) {
     }
 
     player->actor.shape.shadowAlpha = 0;
-    func_8094702C(this, shadowTexture, player, play);
+    func_8094702C(this, shadowTex, player, play);
 
     if (KREG(0) < 5) {
-        func_80947668(shadowTexture, player, play);
+        func_80947668(shadowTex, player, play);
     }
 }
 
@@ -242,7 +242,7 @@ void func_8094702C(EnSda* this, u8* shadowTexture, Player* player, PlayState* pl
 
     Matrix_RotateXFNew((BREG(50) + 70) / 100.0f);
 
-    for (i = 0; i < 18; i++) {
+    for (i = 0; i < PLAYER_BODYPART_MAX; i++) {
         if (D_80947AFC[i] >= 0) {
             D_80947EA0[D_80947AFC[i]] = player->bodyPartsPos[i];
         }

@@ -24,8 +24,8 @@ typedef struct {
 typedef struct ObjUsiyane {
     /* 0x000 */ DynaPolyActor dyna;
     /* 0x15C */ ObjUsiyaneActionFunc actionFunc;
-    /* 0x160 */ s32 unk_160;
-    /* 0x164 */ s32 unk_164;
+    /* 0x160 */ s32 cueChannel;
+    /* 0x164 */ s32 cueId;
     /* 0x168 */ ObjUsiyaneStruct unk_168[10][4];
     /* 0x708 */ f32 unk_708;
     /* 0x70C */ f32 unk_70C;
@@ -33,7 +33,5 @@ typedef struct ObjUsiyane {
     /* 0x740 */ s32 unk_740;
     /* 0x744 */ s32 unk_744;
 } ObjUsiyane; // size = 0x748
-
-extern const ActorInit Obj_Usiyane_InitVars;
 
 #endif // Z_OBJ_USIYANE_H

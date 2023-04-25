@@ -25,7 +25,7 @@ void func_80A67450(ObjDriftice* this, PlayState* play);
 void func_80A674A8(ObjDriftice* this);
 void func_80A674C4(ObjDriftice* this, PlayState* play);
 
-const ActorInit Obj_Driftice_InitVars = {
+ActorInit Obj_Driftice_InitVars = {
     ACTOR_OBJ_DRIFTICE,
     ACTORCAT_BG,
     FLAGS,
@@ -358,10 +358,10 @@ void func_80A671E0(ObjDriftice* this, PlayState* play) {
         phi_f12 = this->unk_23C * 0.13f;
     }
 
-    Math_StepToF(&this->dyna.actor.speedXZ, phi_f0, phi_f12);
+    Math_StepToF(&this->dyna.actor.speed, phi_f0, phi_f12);
 
-    if ((this->dyna.actor.speedXZ + 0.05f) < sp3C) {
-        Math_Vec3f_Scale(&this->dyna.actor.velocity, this->dyna.actor.speedXZ / sp3C);
+    if ((this->dyna.actor.speed + 0.05f) < sp3C) {
+        Math_Vec3f_Scale(&this->dyna.actor.velocity, this->dyna.actor.speed / sp3C);
         this->dyna.actor.world.pos.x += this->dyna.actor.velocity.x;
         this->dyna.actor.world.pos.y += this->dyna.actor.velocity.y;
         this->dyna.actor.world.pos.z += this->dyna.actor.velocity.z;
@@ -371,7 +371,7 @@ void func_80A671E0(ObjDriftice* this, PlayState* play) {
 
         if (1) {}
 
-        this->dyna.actor.speedXZ *= 0.5f;
+        this->dyna.actor.speed *= 0.5f;
         if (((this->unk_164 >= this->unk_160) && (this->unk_168 > 0)) ||
             ((this->unk_164 <= 0) && (this->unk_168 < 0))) {
             if (!OBJDRIFTICE_GET_1000(&this->dyna.actor)) {
@@ -389,7 +389,7 @@ void func_80A671E0(ObjDriftice* this, PlayState* play) {
                 if ((this->unk_16C[0].x != points->x) || (this->unk_16C[0].y != points->y) ||
                     (this->unk_16C[0].z != points->z)) {
                     func_80A6743C(this);
-                    func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+                    DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
                     sp30 = false;
                 }
             }
@@ -408,7 +408,7 @@ void func_80A6743C(ObjDriftice* this) {
 void func_80A67450(ObjDriftice* this, PlayState* play) {
     if (this->unk_248 < 0) {
         func_80A66570(this, this->unk_164);
-        func_800C6314(play, &play->colCtx.dyna, this->dyna.bgId);
+        DynaPoly_EnableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
         func_80A671CC(this);
     }
 }
@@ -421,7 +421,7 @@ void func_80A674A8(ObjDriftice* this) {
 void func_80A674C4(ObjDriftice* this, PlayState* play) {
     this->unk_24C--;
     if (this->unk_24C <= 0) {
-        this->dyna.actor.speedXZ = 0.0f;
+        this->dyna.actor.speed = 0.0f;
         func_80A671CC(this);
     }
 }
@@ -429,7 +429,7 @@ void func_80A674C4(ObjDriftice* this, PlayState* play) {
 void ObjDriftice_Update(Actor* thisx, PlayState* play) {
     ObjDriftice* this = THIS;
 
-    if (DynaPolyActor_IsInRidingMovingState(&this->dyna)) {
+    if (DynaPolyActor_IsPlayerOnTop(&this->dyna)) {
         if (this->unk_248 < 0) {
             this->unk_248 = 1;
         } else {

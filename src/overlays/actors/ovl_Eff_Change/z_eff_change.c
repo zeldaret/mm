@@ -18,7 +18,7 @@ void EffChange_Draw(Actor* thisx, PlayState* play);
 void EffChange_SetColors(EffChange* this, s32 arg1);
 void func_80A4C5CC(EffChange* this, PlayState* play);
 
-const ActorInit Eff_Change_InitVars = {
+ActorInit Eff_Change_InitVars = {
     ACTOR_EFF_CHANGE,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -56,7 +56,7 @@ void EffChange_Init(Actor* thisx, PlayState* play) {
     this->step = 0;
     this->actor.shape.rot.y = 0;
     this->skeletonInfo.frameCtrl.unk_C = (2.0f / 3.0f);
-    ActorCutscene_SetIntentToPlay(0x7B);
+    CutsceneManager_Queue(CS_ID_GLOBAL_ELEGY);
 }
 
 void EffChange_Destroy(Actor* thisx, PlayState* play) {
@@ -79,40 +79,41 @@ void func_80A4C5CC(EffChange* this, PlayState* play) {
     f32 phi_fv0;
 
     if (func_80183DE0(&this->skeletonInfo)) {
-        Actor_MarkForDeath(&this->actor);
-        ActorCutscene_Stop(0x7B);
+        Actor_Kill(&this->actor);
+        CutsceneManager_Stop(CS_ID_GLOBAL_ELEGY);
         func_800FD2B4(play, 0.0f, 850.0f, 0.2f, 0.0f);
-    } else {
-        this->step++;
-        if (this->skeletonInfo.frameCtrl.unk_10 < 20.0f) {
-            if ((this->primColors[3]) < 242) {
-                this->primColors[3] += 13;
-            } else {
-                this->primColors[3] = 255;
-            }
-        } else if (this->skeletonInfo.frameCtrl.unk_10 > 70.0f) {
-            if ((this->primColors[3]) >= 14) {
-                this->primColors[3] -= 13;
-            } else {
-                this->primColors[3] = 0;
-            }
+        return;
+    }
+
+    this->step++;
+    if (this->skeletonInfo.frameCtrl.unk_10 < 20.0f) {
+        if ((this->primColors[3]) < 242) {
+            this->primColors[3] += 13;
         } else {
             this->primColors[3] = 255;
         }
-
-        phi_fv0 = this->primColors[3] * (1.0f / 255.0f);
-        if (phi_fv0 > 1.0f) {
-            phi_fv0 = 1.0f;
-        } else if (phi_fv0 < 0.0f) {
-            phi_fv0 = 0.0f;
+    } else if (this->skeletonInfo.frameCtrl.unk_10 > 70.0f) {
+        if ((this->primColors[3]) >= 14) {
+            this->primColors[3] -= 13;
+        } else {
+            this->primColors[3] = 0;
         }
-        func_800FD2B4(play, phi_fv0, 850.0f, 0.2f, 0.0f);
-        if (ActorCutscene_GetCurrentIndex() != 0x7B) {
-            if (ActorCutscene_GetCanPlayNext(0x7B)) {
-                ActorCutscene_Start(0x7B, &this->actor);
-            } else {
-                ActorCutscene_SetIntentToPlay(0x7B);
-            }
+    } else {
+        this->primColors[3] = 255;
+    }
+
+    phi_fv0 = this->primColors[3] * (1.0f / 255.0f);
+    if (phi_fv0 > 1.0f) {
+        phi_fv0 = 1.0f;
+    } else if (phi_fv0 < 0.0f) {
+        phi_fv0 = 0.0f;
+    }
+    func_800FD2B4(play, phi_fv0, 850.0f, 0.2f, 0.0f);
+    if (CutsceneManager_GetCurrentCsId() != CS_ID_GLOBAL_ELEGY) {
+        if (CutsceneManager_IsNext(CS_ID_GLOBAL_ELEGY)) {
+            CutsceneManager_Start(CS_ID_GLOBAL_ELEGY, &this->actor);
+        } else {
+            CutsceneManager_Queue(CS_ID_GLOBAL_ELEGY);
         }
     }
 }
@@ -129,7 +130,7 @@ void EffChange_Draw(Actor* thisx, PlayState* play) {
     EffChange* this = THIS;
 
     AnimatedMat_DrawStepXlu(play, Lib_SegmentedToVirtual(&gameplay_keep_Matanimheader_028FEC), this->step);
-    mtx = GRAPH_ALLOC(play->state.gfxCtx, ALIGN16(this->skeletonInfo.unk_18->unk_1 * sizeof(Mtx)));
+    mtx = GRAPH_ALLOC(play->state.gfxCtx, this->skeletonInfo.unk_18->unk_1 * sizeof(Mtx));
 
     if (mtx != NULL) {
         func_8012C2DC(play->state.gfxCtx);

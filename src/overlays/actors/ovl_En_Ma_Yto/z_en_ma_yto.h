@@ -13,7 +13,7 @@ typedef struct EnMaYto {
     /* 0x144 */ SkelAnime skelAnime;
     /* 0x188 */ EnMaYtoActionFunc actionFunc;
     /* 0x18C */ ColliderCylinder collider;
-    /* 0x1D8 */ struct_800BD888_arg1 unk_1D8;
+    /* 0x1D8 */ NpcInteractInfo interactInfo;
     /* 0x200 */ s32 unk200; // unused
     /* 0x204 */ s32 type;
     /* 0x208 */ Vec3s jointTable[CREMIA_LIMB_MAX];
@@ -29,8 +29,6 @@ typedef struct EnMaYto {
     /* 0x320 */ s16 unk320;
     /* 0x322 */ u16 textId;
 } EnMaYto; // size = 0x324
-
-extern const ActorInit En_Ma_Yto_InitVars;
 
 typedef enum {
     /* 0 */ MA_YTO_TYPE_DEFAULT, // Strokes cow on day 1

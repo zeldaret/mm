@@ -28,7 +28,7 @@ typedef enum EffLastDayAction {
     /* 0x3 */ EFFLASTDAY_ACTION_3
 } EffLastDayAction;
 
-const ActorInit Eff_Lastday_InitVars = {
+ActorInit Eff_Lastday_InitVars = {
     ACTOR_EFF_LASTDAY,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -49,7 +49,7 @@ void EffLastday_Init(Actor* thisx, PlayState* play2) {
         case EFFLASTDAY_PARAMS_1:
             this->dList = object_lastday_DL_000510;
             this->matAnim = Lib_SegmentedToVirtual(object_lastday_Matanimheader_000608);
-            this->csActionCmd = 0x1FC;
+            this->cueType = CS_CMD_ACTOR_CUE_508;
             this->actionFunc = func_80BEBDF8;
             Actor_SetScale(&this->actor, 1.0f);
             break;
@@ -57,7 +57,7 @@ void EffLastday_Init(Actor* thisx, PlayState* play2) {
         case EFFLASTDAY_PARAMS_2:
             this->dList = object_lastday_DL_000210;
             this->matAnim = Lib_SegmentedToVirtual(object_lastday_Matanimheader_000308);
-            this->csActionCmd = 0x1FD;
+            this->cueType = CS_CMD_ACTOR_CUE_509;
             this->actionFunc = func_80BEBEB8;
             Actor_SetScale(&this->actor, 0.5f);
             break;
@@ -65,7 +65,7 @@ void EffLastday_Init(Actor* thisx, PlayState* play2) {
         case EFFLASTDAY_PARAMS_3:
             this->dList = object_lastday_DL_000060;
             this->matAnim = Lib_SegmentedToVirtual(object_lastday_Matanimheader_000148);
-            this->csActionCmd = 0x1FE;
+            this->cueType = CS_CMD_ACTOR_CUE_510;
             this->actionFunc = func_80BEBF78;
             Actor_SetScale(&this->actor, 0.2f);
             this->actor.home.rot.z = 0;
@@ -74,7 +74,7 @@ void EffLastday_Init(Actor* thisx, PlayState* play2) {
         default:
             this->dList = object_lastday_DL_000370;
             this->matAnim = Lib_SegmentedToVirtual(object_lastday_Matanimheader_000448);
-            this->csActionCmd = 0x1FB;
+            this->cueType = CS_CMD_ACTOR_CUE_507;
             this->actionFunc = func_80BEBD0C;
             Actor_SetScale(&this->actor, 1.0f);
             Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EFF_LASTDAY, this->actor.world.pos.x,
@@ -94,12 +94,12 @@ void EffLastday_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void func_80BEBD0C(EffLastday* this, PlayState* play) {
-    u16 csAction;
+    u16 cueId;
 
-    if ((Cutscene_CheckActorAction(play, this->csActionCmd))) {
-        Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetActorActionIndex(play, this->csActionCmd));
-        csAction = play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->csActionCmd)]->action;
-        switch (csAction) {
+    if ((Cutscene_IsCueInChannel(play, this->cueType))) {
+        Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetCueChannel(play, this->cueType));
+        cueId = play->csCtx.actorCues[Cutscene_GetCueChannel(play, this->cueType)]->id;
+        switch (cueId) {
             default:
                 this->actor.draw = NULL;
                 this->alpha = 0;
@@ -128,12 +128,12 @@ void func_80BEBD0C(EffLastday* this, PlayState* play) {
 }
 
 void func_80BEBDF8(EffLastday* this, PlayState* play) {
-    u16 csAction;
+    u16 cueId;
 
-    if (Cutscene_CheckActorAction(play, this->csActionCmd)) {
-        Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetActorActionIndex(play, this->csActionCmd));
-        csAction = play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->csActionCmd)]->action;
-        switch (csAction) {
+    if (Cutscene_IsCueInChannel(play, this->cueType)) {
+        Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetCueChannel(play, this->cueType));
+        cueId = play->csCtx.actorCues[Cutscene_GetCueChannel(play, this->cueType)]->id;
+        switch (cueId) {
             default:
                 this->actor.draw = NULL;
                 this->step = 0;
@@ -154,12 +154,12 @@ void func_80BEBDF8(EffLastday* this, PlayState* play) {
 }
 
 void func_80BEBEB8(EffLastday* this, PlayState* play) {
-    u16 csAction;
+    u16 cueId;
 
-    if (Cutscene_CheckActorAction(play, this->csActionCmd)) {
-        Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetActorActionIndex(play, this->csActionCmd));
-        csAction = play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->csActionCmd)]->action;
-        switch (csAction) {
+    if (Cutscene_IsCueInChannel(play, this->cueType)) {
+        Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetCueChannel(play, this->cueType));
+        cueId = play->csCtx.actorCues[Cutscene_GetCueChannel(play, this->cueType)]->id;
+        switch (cueId) {
             default:
                 this->actor.draw = NULL;
                 this->step = 0;
@@ -180,12 +180,12 @@ void func_80BEBEB8(EffLastday* this, PlayState* play) {
 }
 
 void func_80BEBF78(EffLastday* this, PlayState* play) {
-    u16 csAction;
+    u16 cueId;
 
-    if (Cutscene_CheckActorAction(play, this->csActionCmd)) {
-        Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetActorActionIndex(play, this->csActionCmd));
-        csAction = play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->csActionCmd)]->action;
-        switch (csAction) {
+    if (Cutscene_IsCueInChannel(play, this->cueType)) {
+        Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetCueChannel(play, this->cueType));
+        cueId = play->csCtx.actorCues[Cutscene_GetCueChannel(play, this->cueType)]->id;
+        switch (cueId) {
             default:
                 this->actor.draw = NULL;
                 this->alpha = 0;
@@ -195,7 +195,7 @@ void func_80BEBF78(EffLastday* this, PlayState* play) {
             case EFFLASTDAY_ACTION_2:
                 if (!this->actor.home.rot.z) {
                     this->actor.home.rot.z = true;
-                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_COMING_FIRE);
+                    Actor_PlaySfx(&this->actor, NA_SE_EV_COMING_FIRE);
                 }
                 this->actor.draw = EffLastday_Draw;
                 if (this->alpha < 255) {

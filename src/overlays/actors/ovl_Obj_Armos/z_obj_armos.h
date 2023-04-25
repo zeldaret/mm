@@ -28,7 +28,7 @@ typedef struct ObjArmos {
     /* 0x1A0 */ Vec3s jointTable[OBJECT_AM_LIMB_MAX];
     /* 0x1F4 */ Vec3s morphTable[OBJECT_AM_LIMB_MAX];
     /* 0x248 */ ObjArmosActionFunc actionFunc;
-    /* 0x24C */ u32 unk_24C;
+    /* 0x24C */ u32 updBgCheckInfoFlags;
     /* 0x250 */ Vec3f unk_250;
     /* 0x25C */ f32* unk_25C;
     /* 0x260 */ f32 unk_260;
@@ -37,7 +37,5 @@ typedef struct ObjArmos {
     /* 0x26E */ s16 unk_26E;
     /* 0x270 */ s16 unk_270;
 } ObjArmos; // size = 0x274
-
-extern const ActorInit Obj_Armos_InitVars;
 
 #endif // Z_OBJ_ARMOS_H

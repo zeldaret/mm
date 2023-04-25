@@ -23,7 +23,7 @@ void ArrowIce_Fly(ArrowIce* this, PlayState* play);
 
 s32 unused; // Needed for bss
 
-const ActorInit Arrow_Ice_InitVars = {
+ActorInit Arrow_Ice_InitVars = {
     ACTOR_ARROW_ICE,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -65,7 +65,7 @@ void ArrowIce_Charge(ArrowIce* this, PlayState* play) {
     EnArrow* arrow = (EnArrow*)this->actor.parent;
 
     if ((arrow == NULL) || (arrow->actor.update == NULL)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -136,7 +136,7 @@ void ArrowIce_Hit(ArrowIce* this, PlayState* play) {
 
     if (this->timer == 0) {
         this->timer = 255;
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -146,7 +146,7 @@ void ArrowIce_Fly(ArrowIce* this, PlayState* play) {
     s32 pad;
 
     if ((arrow == NULL) || (arrow->actor.update == NULL)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
     // copy position and rotation from arrow
@@ -160,13 +160,13 @@ void ArrowIce_Fly(ArrowIce* this, PlayState* play) {
     ArrowIce_LerpFiredPosition(&this->firedPos, &this->actor.world.pos, 0.05f);
 
     if (arrow->unk_261 & 1) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_EXPLOSION_ICE);
+        Actor_PlaySfx(&this->actor, NA_SE_IT_EXPLOSION_ICE);
         ArrowIce_SetupAction(this, ArrowIce_Hit);
         this->timer = 32;
         this->alpha = 255;
     } else if (arrow->unk_260 < 34) {
         if (this->alpha < 35) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         } else {
             this->alpha -= 25;
         }
@@ -177,7 +177,7 @@ void ArrowIce_Update(Actor* thisx, PlayState* play) {
     ArrowIce* this = THIS;
 
     if ((play->msgCtx.msgMode == 0xE) || (play->msgCtx.msgMode == 0x12)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     } else {
         this->actionFunc(this, play);

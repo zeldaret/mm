@@ -16,7 +16,7 @@ void EffectSsExtra_Draw(PlayState* play, u32 index, EffectSs* this);
 
 static s16 sScores[] = { 30, 60, 100 };
 
-const EffectSsInit Effect_Ss_Extra_InitVars = {
+EffectSsInit Effect_Ss_Extra_InitVars = {
     EFFECT_SS_EXTRA,
     EffectSsExtra_Init,
 };
@@ -92,6 +92,6 @@ void EffectSsExtra_Update(PlayState* play, u32 index, EffectSs* this) {
     }
 
     if (this->rTimer == 1) {
-        play->interfaceCtx.unk_25C = sScores[this->rScoreIndex];
+        play->interfaceCtx.minigamePoints = sScores[this->rScoreIndex];
     }
 }

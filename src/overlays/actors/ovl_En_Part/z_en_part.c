@@ -19,7 +19,7 @@ void EnPart_Draw(Actor* thisx, PlayState* play);
 void func_80865390(EnPart* this, PlayState* play);
 void func_808654C4(EnPart* this, PlayState* play);
 
-const ActorInit En_Part_InitVars = {
+ActorInit En_Part_InitVars = {
     ACTOR_EN_PART,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -52,7 +52,7 @@ void func_80865390(EnPart* this, PlayState* play) {
             this->actor.world.rot.y = this->actor.parent->shape.rot.y + 0x8000;
             this->unk146 = 100;
             this->actor.velocity.y = 7.0f;
-            this->actor.speedXZ = 2.0f;
+            this->actor.speed = 2.0f;
             this->actor.gravity = -1.0f;
             break;
     }
@@ -79,7 +79,7 @@ void func_808654C4(EnPart* this, PlayState* play) {
             pos.y = this->actor.floorHeight;
             func_800B3030(play, &pos, &gZeroVec3f, &gZeroVec3f, this->actor.scale.y * 1400.0f, 7, 0);
             SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 10, NA_SE_EN_EXTINCT);
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     } else if (this->unk146 <= 0) {
         switch (this->actor.params) {
@@ -101,7 +101,7 @@ void func_808654C4(EnPart* this, PlayState* play) {
                 }
                 break;
         }
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     } else {
         this->unk146--;
         this->zRot += this->unk14C;

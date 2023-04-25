@@ -1,5 +1,5 @@
-#ifndef _Z_COLLISION_CHECK_H_
-#define _Z_COLLISION_CHECK_H_
+#ifndef Z64COLLISION_CHECK_H
+#define Z64COLLISION_CHECK_H
 
 #include "PR/ultratypes.h"
 #include "z64math.h"
@@ -283,16 +283,16 @@ typedef enum {
 } ColChkMassType;
 
 typedef enum {
-    /* 0  */ COLTYPE_HIT0, // Blue blood, white hitmark
-    /* 1  */ COLTYPE_HIT1, // No blood, dust hitmark
-    /* 2  */ COLTYPE_HIT2, // Green blood, dust hitmark
-    /* 3  */ COLTYPE_HIT3, // No blood, white hitmark
-    /* 4  */ COLTYPE_HIT4, // Water burst, no hitmark
-    /* 5  */ COLTYPE_HIT5, // No blood, red hitmark
-    /* 6  */ COLTYPE_HIT6, // Green blood, white hitmark
-    /* 7  */ COLTYPE_HIT7, // Red blood, white hitmark
-    /* 8  */ COLTYPE_HIT8, // Blue blood, red hitmark
-    /* 9  */ COLTYPE_METAL,
+    /*  0 */ COLTYPE_HIT0, // Blue blood, white hitmark
+    /*  1 */ COLTYPE_HIT1, // No blood, dust hitmark
+    /*  2 */ COLTYPE_HIT2, // Green blood, dust hitmark
+    /*  3 */ COLTYPE_HIT3, // No blood, white hitmark
+    /*  4 */ COLTYPE_HIT4, // Water burst, no hitmark
+    /*  5 */ COLTYPE_HIT5, // No blood, red hitmark
+    /*  6 */ COLTYPE_HIT6, // Green blood, white hitmark
+    /*  7 */ COLTYPE_HIT7, // Red blood, white hitmark
+    /*  8 */ COLTYPE_HIT8, // Blue blood, red hitmark
+    /*  9 */ COLTYPE_METAL,
     /* 10 */ COLTYPE_NONE,
     /* 11 */ COLTYPE_WOOD,
     /* 12 */ COLTYPE_HARD,

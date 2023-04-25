@@ -17,7 +17,7 @@ void ObjChikuwa_Destroy(Actor* thisx, PlayState* play);
 void ObjChikuwa_Update(Actor* thisx, PlayState* play);
 void ObjChikuwa_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit Obj_Chikuwa_InitVars = {
+ActorInit Obj_Chikuwa_InitVars = {
     ACTOR_OBJ_CHIKUWA,
     ACTORCAT_BG,
     FLAGS,
@@ -49,7 +49,7 @@ void func_809B1550(Actor* thisx, PlayState* play) {
         thisx->world.pos.x = (Math_SinS(thisx->shape.rot.y) * sp18) + thisx->home.pos.x;
         thisx->world.pos.z = (Math_CosS(thisx->shape.rot.y) * sp18) + thisx->home.pos.z;
     } else {
-        func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+        DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
     }
 }
 

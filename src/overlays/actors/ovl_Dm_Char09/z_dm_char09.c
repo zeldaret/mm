@@ -18,7 +18,7 @@ void DmChar09_Draw(Actor* thisx, PlayState* play);
 void DmChar09_DoNothing(DmChar09* this, PlayState* play);
 void func_80AB2268(DmChar09* this, PlayState* play);
 
-const ActorInit Dm_Char09_InitVars = {
+ActorInit Dm_Char09_InitVars = {
     ACTOR_DM_CHAR09,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -90,15 +90,15 @@ void func_80AB1FDC(DmChar09* this, PlayState* play) {
         phi_fv0 = this->speed;
         phi_fa0 = this->speed * 0.16f;
     }
-    Math_StepToF(&thisx->speedXZ, phi_fv0, phi_fa0);
-    if ((thisx->speedXZ + 0.05f) < sp54) {
-        Math_Vec3f_Scale(&thisx->velocity, thisx->speedXZ / sp54);
+    Math_StepToF(&thisx->speed, phi_fv0, phi_fa0);
+    if ((thisx->speed + 0.05f) < sp54) {
+        Math_Vec3f_Scale(&thisx->velocity, thisx->speed / sp54);
         thisx->world.pos.x += thisx->velocity.x;
         thisx->world.pos.y += thisx->velocity.y;
         thisx->world.pos.z += thisx->velocity.z;
     } else {
         this->unk_21C += this->unk_220;
-        thisx->speedXZ *= 0.4f;
+        thisx->speed *= 0.4f;
         phi_a1 = true;
         if (((this->unk_21C >= this->unk_218) && (this->unk_220 > 0)) ||
             ((this->unk_21C <= 0) && (this->unk_220 < 0))) {
@@ -127,24 +127,24 @@ void func_80AB2268(DmChar09* this, PlayState* play) {
     Path* path;
     s32 pad;
     s32 i;
-    s32 actionIndex;
+    s32 cueChannel;
     s32 max = 0;
     s32 pathnum;
     u8 temp = false;
 
     if (!DMCHAR09_GET_F(&this->actor)) {
-        if (play->csCtx.currentCsIndex == 1) {
+        if (play->csCtx.scriptIndex == 1) {
             temp = true;
         }
-    } else if (play->csCtx.currentCsIndex == 0) {
+    } else if (play->csCtx.scriptIndex == 0) {
         temp = true;
     }
 
-    if (Cutscene_CheckActorAction(play, 0x1F7) && temp) {
-        actionIndex = Cutscene_GetActorActionIndex(play, 0x1F7);
-        if (this->unk_22F != play->csCtx.actorActions[actionIndex]->action) {
-            this->unk_22F = play->csCtx.actorActions[actionIndex]->action;
-            switch (play->csCtx.actorActions[actionIndex]->action) {
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_503) && temp) {
+        cueChannel = Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_503);
+        if (this->cueId != play->csCtx.actorCues[cueChannel]->id) {
+            this->cueId = play->csCtx.actorCues[cueChannel]->id;
+            switch (play->csCtx.actorCues[cueChannel]->id) {
                 case 2:
                     max = 0;
                     break;
@@ -159,7 +159,7 @@ void func_80AB2268(DmChar09* this, PlayState* play) {
                     break;
             }
 
-            if (play->csCtx.actorActions[actionIndex]->action >= 2) {
+            if (play->csCtx.actorCues[cueChannel]->id >= 2) {
                 pathnum = DMCHAR09_GET_PATH(&this->actor);
                 path = &play->setupPathList[pathnum];
 
@@ -175,7 +175,7 @@ void func_80AB2268(DmChar09* this, PlayState* play) {
                 this->unk_220 = 1;
                 this->unk_22E = true;
 
-                this->speed = (u16)play->csCtx.actorActions[actionIndex]->rot.z * 0.00390625f;
+                this->speed = (u16)play->csCtx.actorCues[cueChannel]->rot.z * 0.00390625f;
                 this->actionFunc = func_80AB1FDC;
             } else {
                 this->unk_22E = false;
@@ -183,7 +183,7 @@ void func_80AB2268(DmChar09* this, PlayState* play) {
             }
         }
     } else {
-        this->unk_22F = 0x63;
+        this->cueId = 99;
     }
 }
 
@@ -202,8 +202,8 @@ void DmChar09_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
     func_80AB2268(this, play);
     func_80AB24BC(this, play);
-    if ((play->csCtx.state != 0) && this->unk_22E && DMCHAR09_GET_100(thisx)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_POSTMAN_WALK + SFX_FLAG);
+    if ((play->csCtx.state != CS_STATE_IDLE) && this->unk_22E && DMCHAR09_GET_100(thisx)) {
+        Actor_PlaySfx(&this->actor, NA_SE_EV_POSTMAN_WALK + SFX_FLAG);
     }
 }
 
@@ -217,7 +217,7 @@ s32 DmChar09_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f
 void DmChar09_Draw(Actor* thisx, PlayState* play) {
     DmChar09* this = THIS;
 
-    if ((play->csCtx.state != 0) && this->unk_22E) {
+    if ((play->csCtx.state != CS_STATE_IDLE) && this->unk_22E) {
         func_8012C28C(play->state.gfxCtx);
         func_8012C2DC(play->state.gfxCtx);
         SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, DmChar09_OverrideLimbDraw, NULL,

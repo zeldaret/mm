@@ -15,6 +15,4 @@ typedef struct EnBal {
     /* 0x190 */ char unk_190[0x224];
 } EnBal; // size = 0x3B4
 
-extern const ActorInit En_Bal_InitVars;
-
 #endif // Z_EN_BAL_H

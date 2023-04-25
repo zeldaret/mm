@@ -23,7 +23,7 @@ typedef struct EnSellnuts {
     /* 0x334 */ s32 unk_334;
     /* 0x338 */ u16 unk_338;
     /* 0x33A */ u16 unk_33A;
-    /* 0x33C */ s16 cutscene;
+    /* 0x33C */ s16 csId;
     /* 0x33E */ UNK_TYPE1 unk33E[0x2];
     /* 0x340 */ u16 unk_340;
     /* 0x342 */ u16 unk_342;
@@ -45,7 +45,5 @@ typedef struct EnSellnuts {
     /* 0x370 */ f32 unk_370;
     /* 0x374 */ f32 unk_374;
 } EnSellnuts; // size = 0x378
-
-extern const ActorInit En_Sellnuts_InitVars;
 
 #endif // Z_EN_SELLNUTS_H

@@ -30,7 +30,7 @@ typedef struct EnPametfrog {
     /* 0x2AC */ u8 drawDmgEffType;
     /* 0x2AD */ u8 wallPauseTimer; // Gekko stops 10 times along wall/ceiling after being blown off of Snapper
     /* 0x2AE */ u8 unk_2AE; // True/False
-    /* 0x2B0 */ s16 cutscene;
+    /* 0x2B0 */ s16 csId;
     /* 0x2B2 */ s16 params;
     /* 0x2B4 */ s16 quakeIndex;
     /* 0x2B6 */ s16 timer;
@@ -48,7 +48,5 @@ typedef struct EnPametfrog {
     /* 0x384 */ ColliderJntSph collider;
     /* 0x3A4 */ ColliderJntSphElement colElement[2];
 } EnPametfrog; // size = 0x424
-
-extern const ActorInit En_Pametfrog_InitVars;
 
 #endif // Z_EN_PAMETFROG_H

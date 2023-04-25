@@ -24,7 +24,7 @@ void func_80A52134(EnDnk* this, PlayState* play);
 
 static s16 D_80A521A0 = 0;
 
-const ActorInit En_Dnk_InitVars = {
+ActorInit En_Dnk_InitVars = {
     ACTOR_EN_DNK,
     ACTORCAT_NPC,
     FLAGS,
@@ -213,8 +213,8 @@ void func_80A51648(EnDnk* this, PlayState* play) {
 }
 
 void func_80A51890(EnDnk* this, PlayState* play) {
-    if (Cutscene_CheckActorAction(play, 126)) {
-        Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetActorActionIndex(play, 126));
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_126)) {
+        Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_126));
     }
 }
 
@@ -242,7 +242,7 @@ void EnDnk_Init(Actor* thisx, PlayState* play) {
     if (this->unk_28E >= 0) {
         this->actionFunc = func_80A51648;
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 
     this->unk_2A2 = D_80A521A0;
@@ -423,7 +423,7 @@ void func_80A52018(Actor* thisx, PlayState* play) {
 }
 
 void func_80A52074(EnDnk* this, PlayState* play) {
-    switch (play->csCtx.frames) {
+    switch (play->csCtx.curFrame) {
         case 80:
             func_8019F128(NA_SE_EN_DEKNUTS_DANCE1);
             break;
@@ -433,21 +433,21 @@ void func_80A52074(EnDnk* this, PlayState* play) {
             break;
 
         case 438:
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DEKNUTS_DANCE_BIG);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_DEKNUTS_DANCE_BIG);
             break;
 
         case 493:
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_APPEAR);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_STALKIDS_APPEAR);
             break;
     }
 
-    if ((play->csCtx.frames >= 198) && (play->csCtx.frames < 438)) {
+    if ((play->csCtx.curFrame >= 198) && (play->csCtx.curFrame < 438)) {
         func_8019F128(NA_SE_EN_DEKNUTS_DANCE - SFX_FLAG);
     }
 }
 
 void func_80A52134(EnDnk* this, PlayState* play) {
-    if ((play->csCtx.state != 0) && (ENDNK_GET_3C(&this->actor) == 4) && (play->sceneId == SCENE_SPOT00) &&
+    if ((play->csCtx.state != CS_STATE_IDLE) && (ENDNK_GET_3C(&this->actor) == 4) && (play->sceneId == SCENE_SPOT00) &&
         (gSaveContext.sceneLayer == 2)) {
         func_80A52074(this, play);
     }

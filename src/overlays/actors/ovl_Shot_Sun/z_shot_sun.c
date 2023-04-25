@@ -19,7 +19,7 @@ void ShotSun_Update(Actor* thisx, PlayState* play);
 void ShotSun_UpdateForOcarina(ShotSun* this, PlayState* play);
 void ShotSun_UpdateHyliaSun(ShotSun* this, PlayState* play);
 
-const ActorInit Shot_Sun_InitVars = {
+ActorInit Shot_Sun_InitVars = {
     ACTOR_SHOT_SUN,
     ACTORCAT_PROP,
     FLAGS,
@@ -61,7 +61,7 @@ void ShotSun_Init(Actor* thisx, PlayState* play) {
         this->actor.flags |= ACTOR_FLAG_10;
         this->actor.flags |= ACTOR_FLAG_2000000;
         this->actionFunc = ShotSun_UpdateForOcarina;
-        this->actor.flags |= ACTOR_FLAG_8000000;
+        this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
     } else {
         Collider_InitCylinder(play, &this->collider);
         Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
@@ -87,7 +87,7 @@ void ShotSun_SpawnFairy(ShotSun* this, PlayState* play2) {
     if (this->timer > 0) {
         this->timer--;
     } else {
-        ActorCutscene_Stop(this->actor.cutscene);
+        CutsceneManager_Stop(this->actor.csId);
         switch (params) {
             case SHOTSUN_FAIRY_SPAWNER_SUNS:
                 fairyType = ENELF_TYPE_7;
@@ -98,14 +98,14 @@ void ShotSun_SpawnFairy(ShotSun* this, PlayState* play2) {
         }
         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ELF, this->actor.home.pos.x, this->actor.home.pos.y,
                     this->actor.home.pos.z, 0, 0, 0, fairyType);
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
 void ShotSun_TriggerFairy(ShotSun* this, PlayState* play) {
-    if ((this->actor.cutscene == -1) || ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
-        if (this->actor.cutscene != -1) {
-            ActorCutscene_Start(this->actor.cutscene, &this->actor);
+    if ((this->actor.csId == CS_ID_NONE) || CutsceneManager_IsNext(this->actor.csId)) {
+        if (this->actor.csId != CS_ID_NONE) {
+            CutsceneManager_Start(this->actor.csId, &this->actor);
         }
         this->actionFunc = ShotSun_SpawnFairy;
         this->timer = 50;
@@ -113,7 +113,7 @@ void ShotSun_TriggerFairy(ShotSun* this, PlayState* play) {
                     this->actor.home.pos.z, 0, 0, 0, 0x11);
         Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_EV_TRE_BOX_APPEAR);
     } else {
-        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+        CutsceneManager_Queue(this->actor.csId);
     }
 }
 
@@ -160,16 +160,20 @@ void ShotSun_UpdateHyliaSun(ShotSun* this, PlayState* play) {
             collectible = (EnItem00*)Item_DropCollectible(play, &spawnPos, ITEM00_MAGIC_LARGE);
             if (collectible != NULL) {
                 collectible->unk152 = 0x1770;
-                collectible->actor.speedXZ = 0.0f;
+                collectible->actor.speed = 0.0f;
             }
         }
 
-        Actor_MarkForDeath(&this->actor);
-    } else if (!(this->actor.xzDistToPlayer > 120.0f)) {
+        Actor_Kill(&this->actor);
+        return;
+    }
+
+    if (!(this->actor.xzDistToPlayer > 120.0f)) {
         if ((gSaveContext.save.time >= CLOCK_TIME(6, 30)) && (gSaveContext.save.time < CLOCK_TIME(7, 30))) {
-            cylinderPos.x = player->bodyPartsPos[7].x + (play->envCtx.unk_4 * (1.0f / 6.0f));
-            cylinderPos.y = (player->bodyPartsPos[7].y - 30.0f) + (play->envCtx.unk_8 * (1.0f / 6.0f));
-            cylinderPos.z = player->bodyPartsPos[7].z + (play->envCtx.unk_C * (1.0f / 6.0f));
+            cylinderPos.x = player->bodyPartsPos[PLAYER_BODYPART_HEAD].x + (play->envCtx.sunPos.x * (1.0f / 6.0f));
+            cylinderPos.y =
+                (player->bodyPartsPos[PLAYER_BODYPART_HEAD].y - 30.0f) + (play->envCtx.sunPos.y * (1.0f / 6.0f));
+            cylinderPos.z = player->bodyPartsPos[PLAYER_BODYPART_HEAD].z + (play->envCtx.sunPos.z * (1.0f / 6.0f));
 
             this->hitboxPos = cylinderPos;
 

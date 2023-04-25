@@ -18,7 +18,7 @@ void EnTanron6_Draw(Actor* thisx, PlayState* play);
 void EnTanron6_DoNothing(EnTanron6* this);
 void func_80BE60D0(EnTanron6* this, PlayState* play);
 
-const ActorInit En_Tanron6_InitVars = {
+ActorInit En_Tanron6_InitVars = {
     ACTOR_EN_TANRON6,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -91,7 +91,9 @@ void EnTanron6_Update(Actor* thisx, PlayState* play) {
 
     this->actionFunc(this, play);
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 40.0f, 40.0f, 0x1D);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 40.0f, 40.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                UPDBGCHECKINFO_FLAG_10);
 }
 
 void EnTanron6_Draw(Actor* thisx, PlayState* play) {

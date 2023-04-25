@@ -15,7 +15,7 @@ void OceffWipe5_Destroy(Actor* thisx, PlayState* play);
 void OceffWipe5_Update(Actor* thisx, PlayState* play);
 void OceffWipe5_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit Oceff_Wipe5_InitVars = {
+ActorInit Oceff_Wipe5_InitVars = {
     ACTOR_OCEFF_WIPE5,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -51,7 +51,7 @@ void OceffWipe5_Update(Actor* thisx, PlayState* play) {
     if (this->counter < 100) {
         this->counter++;
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -79,8 +79,8 @@ void OceffWipe5_Draw(Actor* thisx, PlayState* play) {
     f32 phi_fv1 = 1220.0f;
 
     if ((((OCEFF_WIPE5_GET_SONG_TYPE(thisx) == 2) && (play->sceneId == SCENE_LABO)) &&
-         ((play->csCtx.currentCsIndex == 0) || (play->csCtx.currentCsIndex == 1))) &&
-        (play->csCtx.state != 0)) {
+         ((play->csCtx.scriptIndex == 0) || (play->csCtx.scriptIndex == 1))) &&
+        (play->csCtx.state != CS_STATE_IDLE)) {
         phi_fv1 = 1150.0f;
     }
 

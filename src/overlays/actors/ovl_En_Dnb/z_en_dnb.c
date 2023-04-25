@@ -8,7 +8,7 @@
 #include "objects/object_hanareyama_obj/object_hanareyama_obj.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_80)
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_REACT_TO_LENS)
 
 #define THIS ((EnDnb*)thisx)
 
@@ -21,7 +21,7 @@ s32 func_80A507C0(EnDnbUnkStruct* arg0, Vec3f arg1, Vec3f arg2, u8 arg3, f32 arg
 s32 func_80A5086C(EnDnbUnkStruct* arg0);
 s32 func_80A50950(EnDnbUnkStruct* arg0, PlayState* play2);
 
-const ActorInit En_Dnb_InitVars = {
+ActorInit En_Dnb_InitVars = {
     ACTOR_EN_DNB,
     ACTORCAT_BG,
     FLAGS,
@@ -104,7 +104,7 @@ void EnDnb_Init(Actor* thisx, PlayState* play) {
     s32 i;
     s16* alloc;
 
-    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
     DynaPolyActor_LoadMesh(play, &this->dyna, &object_hanareyama_obj_Colheader_004D8C);
 
     alloc = Lib_SegmentedToVirtual(object_hanareyama_obj_Vec_004710);
@@ -275,7 +275,9 @@ s32 func_80A50950(EnDnbUnkStruct* arg0, PlayState* play2) {
             }
             Matrix_Push();
 
-            if (1) {};
+            //! FAKE:
+            if (1) {}
+
             arg0->unk_24 = (arg0->unk_01 / (f32)arg0->unk_02) * 255.0f;
 
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, (u8)arg0->unk_24);

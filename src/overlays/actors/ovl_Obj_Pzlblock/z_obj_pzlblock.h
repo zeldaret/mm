@@ -15,7 +15,7 @@ typedef void (*ObjPzlblockActionFunc)(struct ObjPzlblock*, PlayState*);
 typedef struct ObjPzlblock {
     /* 0x000 */ DynaPolyActor dyna;
     /* 0x15C */ ObjPzlblockActionFunc actionFunc;
-    /* 0x160 */ s32 unk_160;
+    /* 0x160 */ s32 updBgCheckInfoFlags;
     /* 0x164 */ f32* unk_164;
     /* 0x168 */ f32 unk_168;
     /* 0x16C */ s16 unk_16C;
@@ -24,7 +24,5 @@ typedef struct ObjPzlblock {
     /* 0x178 */ s16 unk_178;
     /* 0x17A */ s8 unk_17A;
 } ObjPzlblock; // size = 0x17C
-
-extern const ActorInit Obj_Pzlblock_InitVars;
 
 #endif // Z_OBJ_PZLBLOCK_H

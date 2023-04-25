@@ -29,7 +29,7 @@ void EnMThunder_UnkType_Attack(EnMThunder* this, PlayState* play);
 
 #define ENMTHUNDER_TYPE_MAX 4
 
-const ActorInit En_M_Thunder_InitVars = {
+ActorInit En_M_Thunder_InitVars = {
     ACTOR_EN_M_THUNDER,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -129,21 +129,21 @@ void EnMThunder_Init(Actor* thisx, PlayState* play) {
     this->isCharging = false;
 
     if (player->stateFlags2 & PLAYER_STATE2_20000) {
-        if (!gSaveContext.save.playerData.isMagicAcquired || (gSaveContext.magicState != MAGIC_STATE_IDLE) ||
+        if (!gSaveContext.save.saveInfo.playerData.isMagicAcquired || (gSaveContext.magicState != MAGIC_STATE_IDLE) ||
             ((ENMTHUNDER_GET_MAGIC_COST(&this->actor) != 0) &&
              !Magic_Consume(play, ENMTHUNDER_GET_MAGIC_COST(&this->actor), MAGIC_CONSUME_NOW))) {
             AudioSfx_PlaySfx(NA_SE_IT_ROLLING_CUT, &player->actor.projectedPos, 4, &gSfxDefaultFreqAndVolScale,
                              &gSfxDefaultFreqAndVolScale, &gSfxDefaultReverb);
             AudioSfx_PlaySfx(NA_SE_IT_SWORD_SWING_HARD, &player->actor.projectedPos, 4, &gSfxDefaultFreqAndVolScale,
                              &gSfxDefaultFreqAndVolScale, &gSfxDefaultReverb);
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             return;
         }
 
         player->stateFlags2 &= ~PLAYER_STATE2_20000;
         this->isCharging = false;
 
-        if (gSaveContext.save.weekEventReg[23] & 2) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_23_02)) {
             player->unk_B08[0] = 1.0f;
             this->collider.info.toucher.damage = sDamages[this->type + ENMTHUNDER_TYPE_MAX];
             this->subtype = ENMTHUNDER_SUBTYPE_SPIN_GREAT;
@@ -216,9 +216,12 @@ void EnMThunder_Spin_AttackNoMagic(EnMThunder* this, PlayState* play) {
             AudioSfx_PlaySfx(NA_SE_IT_SWORD_SWING_HARD, &player->actor.projectedPos, 4, &gSfxDefaultFreqAndVolScale,
                              &gSfxDefaultFreqAndVolScale, &gSfxDefaultReverb);
         }
-        Actor_MarkForDeath(&this->actor);
-    } else if (!(player->stateFlags1 & PLAYER_STATE1_1000)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
+        return;
+    }
+
+    if (!(player->stateFlags1 & PLAYER_STATE1_1000)) {
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -260,7 +263,7 @@ void EnMThunder_Charge(EnMThunder* this, PlayState* play) {
                 AudioSfx_PlaySfx(NA_SE_IT_SWORD_SWING_HARD, &player->actor.projectedPos, 4, &gSfxDefaultFreqAndVolScale,
                                  &gSfxDefaultFreqAndVolScale, &gSfxDefaultReverb);
             }
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             return;
         }
 
@@ -313,7 +316,7 @@ void EnMThunder_Charge(EnMThunder* this, PlayState* play) {
         if (this->actor.child != NULL) {
             this->actor.child->parent = NULL;
         }
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -341,7 +344,7 @@ void EnMThunder_Charge(EnMThunder* this, PlayState* play) {
     }
 
     if (Play_InCsMode(play)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -367,7 +370,7 @@ void EnMThunder_Spin_Attack(EnMThunder* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (Math_StepToF(&this->lightColorFrac, 0.0f, 0.0625f)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     } else {
         Math_SmoothStepToF(&this->actor.scale.x, (s32)this->scaleTarget, 0.6f, 0.8f, 0.0f);
         Actor_SetScale(&this->actor, this->actor.scale.x);
@@ -391,7 +394,7 @@ void EnMThunder_Spin_Attack(EnMThunder* this, PlayState* play) {
     func_808B5EEC(this, play);
 
     if (Play_InCsMode(play)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -406,7 +409,7 @@ void EnMThunder_SwordBeam_Attack(EnMThunder* this, PlayState* play) {
     }
 
     if (Math_StepToF(&this->lightColorFrac, 0.0f, 0.05f)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     } else {
         sp2C = -80.0f * Math_CosS(this->actor.world.rot.x);
 
@@ -441,7 +444,7 @@ void EnMThunder_SwordBeam_Attack(EnMThunder* this, PlayState* play) {
 
 void EnMThunder_UnkType_Attack(EnMThunder* this, PlayState* play) {
     if (Math_StepToF(&this->lightColorFrac, 0.0f, 0.0625f)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     } else {
         Math_SmoothStepToF(&this->actor.scale.x, (s32)this->scaleTarget, 0.6f, 0.8f, 0.0f);
         Actor_SetScale(&this->actor, this->actor.scale.x);

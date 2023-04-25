@@ -28,7 +28,7 @@ void func_80A1EC38(ObjSpinyroll* this, PlayState* play);
 void func_80A1ECC0(ObjSpinyroll* this);
 void func_80A1ECD4(ObjSpinyroll* this, PlayState* play);
 
-const ActorInit Obj_Spinyroll_InitVars = {
+ActorInit Obj_Spinyroll_InitVars = {
     ACTOR_OBJ_SPINYROLL,
     ACTORCAT_PROP,
     FLAGS,
@@ -149,7 +149,7 @@ void func_80A1DA50(PlayState* play, ObjSpinyroll* this, Vec3f* arg2, Vec3f* arg3
     Math_Vec3f_Sum(arg2, arg3, &sp1C);
     Math_Vec3f_Scale(&sp1C, 0.5f);
     EffectSsHitmark_SpawnFixedScale(play, 3, &sp1C);
-    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_IT_SHIELD_REFLECT_SW);
+    Actor_PlaySfx(&this->dyna.actor, NA_SE_IT_SHIELD_REFLECT_SW);
 }
 
 void func_80A1DAAC(Vec3f* arg0, Vec3f* arg1, s16 arg2) {
@@ -195,10 +195,10 @@ void func_80A1DC5C(ObjSpinyroll* this) {
 void func_80A1DCCC(ObjSpinyroll* this) {
     f32 phi_f2;
 
-    if (this->dyna.actor.speedXZ > 3.0f) {
+    if (this->dyna.actor.speed > 3.0f) {
         phi_f2 = 3.0f;
     } else {
-        phi_f2 = this->dyna.actor.speedXZ;
+        phi_f2 = this->dyna.actor.speed;
     }
 
     if (this->unk_4D4 < phi_f2) {
@@ -246,15 +246,15 @@ s32 func_80A1DEB8(ObjSpinyroll* this) {
     s32 sp30 = this->unk_4A8 ^ 1;
     Vec3f sp24;
 
-    Math_StepToF(&this->dyna.actor.speedXZ, this->unk_4A4, this->unk_4A4 * 0.2f);
+    Math_StepToF(&this->dyna.actor.speed, this->unk_4A4, this->unk_4A4 * 0.2f);
 
-    this->dyna.actor.world.pos.x += this->dyna.actor.speedXZ * this->unk_4C4.x;
-    this->dyna.actor.world.pos.y += this->dyna.actor.speedXZ * this->unk_4C4.y;
-    this->dyna.actor.world.pos.z += this->dyna.actor.speedXZ * this->unk_4C4.z;
+    this->dyna.actor.world.pos.x += this->dyna.actor.speed * this->unk_4C4.x;
+    this->dyna.actor.world.pos.y += this->dyna.actor.speed * this->unk_4C4.y;
+    this->dyna.actor.world.pos.z += this->dyna.actor.speed * this->unk_4C4.z;
 
     Math_Vec3f_Diff(&this->unk_4AC[sp30], &this->dyna.actor.world.pos, &sp24);
 
-    return Math3D_LengthSquared(&sp24) < (SQ(this->dyna.actor.speedXZ) + 0.05f);
+    return Math3D_LengthSquared(&sp24) < (SQ(this->dyna.actor.speed) + 0.05f);
 }
 
 void func_80A1DFA0(ObjSpinyroll* this) {
@@ -500,7 +500,7 @@ void ObjSpinyroll_Init(Actor* thisx, PlayState* play) {
                ((sp34->x == sp30->x) && (sp34->y == sp30->y) && (sp34->z != sp30->z))) {
         this->unk_49C = false;
     } else {
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
         return;
     }
 
@@ -517,7 +517,7 @@ void ObjSpinyroll_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void func_80A1E9C4(ObjSpinyroll* this) {
-    this->dyna.actor.speedXZ = 0.0f;
+    this->dyna.actor.speed = 0.0f;
     this->actionFunc = func_80A1E9E0;
 }
 
@@ -531,7 +531,7 @@ void func_80A1E9E0(ObjSpinyroll* this, PlayState* play) {
 void func_80A1EA10(ObjSpinyroll* this) {
     this->actionFunc = func_80A1EA4C;
     this->unk_4E2 = D_80A1F1E4[OBJSPINYROLL_GET_1C00(&this->dyna.actor)];
-    this->dyna.actor.speedXZ = 0.0f;
+    this->dyna.actor.speed = 0.0f;
 }
 
 void func_80A1EA4C(ObjSpinyroll* this, PlayState* play) {
@@ -548,7 +548,7 @@ void func_80A1EA4C(ObjSpinyroll* this, PlayState* play) {
 void func_80A1EAAC(ObjSpinyroll* this) {
     this->actionFunc = func_80A1EAE0;
     this->unk_4DC = D_80A1F20C[this->unk_4A8];
-    this->dyna.actor.speedXZ = 0.0f;
+    this->dyna.actor.speed = 0.0f;
 }
 
 void func_80A1EAE0(ObjSpinyroll* this, PlayState* play) {

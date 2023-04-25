@@ -9,7 +9,7 @@ typedef void (*EnTest4ActionFunc)(struct EnTest4*, PlayState*);
 
 typedef struct EnTest4 {
     /* 0x000 */ Actor actor;
-    /* 0x144 */ s8 unk_144; // 0 on night, 1 on day
+    /* 0x144 */ s8 csIdIndex; // 0 on night, 1 on day
     /* 0x145 */ u8 transitionCsTimer;
     /* 0x146 */ u16 unk_146;
     /* 0x148 */ u16 nextBellTime; // Next time the bell will sound
@@ -22,7 +22,5 @@ typedef enum {
     /* 0 */ TEST4_STATE_0,
     /* 1 */ TEST4_STATE_1
 } EnTest4State;
-
-extern const ActorInit En_Test4_InitVars;
 
 #endif // Z_EN_TEST4_H

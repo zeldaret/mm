@@ -12,7 +12,7 @@
         <DList Name="gameplay_keep_DL_001B20" Offset="0x1B20" />
         <DList Name="gameplay_keep_DL_001BC8" Offset="0x1BC8" />
         <DList Name="gameplay_keep_DL_001C60" Offset="0x1C60" />
-        <DList Name="gameplay_keep_DL_001D00" Offset="0x1D00" />
+        <DList Name="gRazorSwordHandleDL" Offset="0x1D00" />
         <DList Name="gameplay_keep_DL_001D28" Offset="0x1D28" />
         <DList Name="gameplay_keep_DL_001DC8" Offset="0x1DC8" />
         <DList Name="gameplay_keep_DL_001E58" Offset="0x1E58" />
@@ -20,8 +20,8 @@
         <DList Name="gameplay_keep_DL_001FA8" Offset="0x1FA8" />
         <DList Name="gameplay_keep_DL_002038" Offset="0x2038" />
         <DList Name="gameplay_keep_DL_0020C8" Offset="0x20C8" />
-        <DList Name="gameplay_keep_DL_002168" Offset="0x2168" />
-        <DList Name="gameplay_keep_DL_0021A8" Offset="0x21A8" />
+        <DList Name="gRazorSwordBladeDL" Offset="0x2168" />
+        <DList Name="gKokiriSwordHandleDL" Offset="0x21A8" />
         <DList Name="gameplay_keep_DL_002480" Offset="0x2480" />
         <DList Name="gameplay_keep_DL_002508" Offset="0x2508" />
         <DList Name="gameplay_keep_DL_002590" Offset="0x2590" />
@@ -30,7 +30,7 @@
         <DList Name="gameplay_keep_DL_002728" Offset="0x2728" />
         <DList Name="gameplay_keep_DL_0027B0" Offset="0x27B0" />
         <DList Name="gameplay_keep_DL_002838" Offset="0x2838" />
-        <DList Name="gameplay_keep_DL_0028C0" Offset="0x28C0" />
+        <DList Name="gKokiriSwordBladeDL" Offset="0x28C0" />
         <Texture Name="gameplay_keep_TLUT_002908" OutName="tlut_002908" Format="rgba16" Width="16" Height="16" Offset="0x2908" />
         <Texture Name="gameplay_keep_Tex_002B08" OutName="tex_002B08" Format="rgba16" Width="8" Height="8" Offset="0x2B08" />
         <Texture Name="gameplay_keep_Tex_002B88" OutName="tex_002B88" Format="rgba16" Width="16" Height="16" Offset="0x2B88" />
@@ -38,11 +38,14 @@
         <Texture Name="gameplay_keep_Tex_002DC8" OutName="tex_002DC8" Format="i8" Width="8" Height="8" Offset="0x2DC8" />
         <Texture Name="gameplay_keep_Tex_002E08" OutName="tex_002E08" Format="rgba16" Width="16" Height="16" Offset="0x2E08" />
         <Texture Name="gameplay_keep_Tex_003008" OutName="tex_003008" Format="i8" Width="8" Height="8" Offset="0x3008" />
-        <Blob Name="gameplay_keep_Blob_003050" Size="0x20" Offset="0x3050" />
+        <DList Name="gKokiriSwordDL" Offset="0x3050" />
+        <DList Name="gRazorSwordDL" Offset="0x3060" />
         <DList Name="gDekuStickDL" Offset="0x32B0" /> <!-- @bug Supplies the wrong size to gsDPLoadTextureBlock, meaning it uses part of gLinkPauseChildJointTable as if it were a texture. -->
         <Blob Name="gameplay_keep_Blob_003400" Size="0x9D0" Offset="0x3400" />
         <DList Name="gameplay_keep_DL_005360" Offset="0x5360" />
-        <DList Name="gameplay_keep_DL_0056C0" Offset="0x56C0" />
+
+        <DList Name="gDekuMaskDL" Offset="0x56C0" />
+
         <DList Name="gameplay_keep_DL_005A10" Offset="0x5A10" />
         <Blob Name="gameplay_keep_Blob_005DB8" Size="0x200" Offset="0x5DB8" />
         <Texture Name="gameplay_keep_TLUT_005FB8" OutName="tlut_005FB8" Format="rgba16" Width="16" Height="16" Offset="0x5FB8" />
@@ -784,7 +787,7 @@
         <PlayerAnimation Name="gPlayerAnim_Link_muku" Offset="0xE4E0" />
         <PlayerAnimation Name="gPlayerAnim_Link_otituku_w" Offset="0xE4E8" />
         <PlayerAnimation Name="gPlayerAnim_Link_ue_wait" Offset="0xE4F0" />
-        
+
         <DList Name="gameplay_keep_DL_00E5C0" Offset="0xE5C0" />
 
         <!-- Deku Flower -->
@@ -881,14 +884,17 @@
         <Texture Name="gameplay_keep_Tex_01A8B0" OutName="tex_01A8B0" Format="i8" Width="16" Height="32" Offset="0x1A8B0" />
         <Texture Name="gameplay_keep_Tex_01AAB0" OutName="tex_01AAB0" Format="i8" Width="16" Height="32" Offset="0x1AAB0" />
         <DList Name="gameplay_keep_DL_01ACF0" Offset="0x1ACF0" />
-        <DList Name="gameplay_keep_DL_01C430" Offset="0x1C430" />
-        <Texture Name="gameplay_keep_Tex_01CAF8" OutName="tex_01CAF8" Format="rgba16" Width="32" Height="32" Offset="0x1CAF8" />
-        <Texture Name="gameplay_keep_Tex_01D2F8" OutName="tex_01D2F8" Format="rgba16" Width="32" Height="64" Offset="0x1D2F8" />
-        <Texture Name="gameplay_keep_Tex_01E2F8" OutName="tex_01E2F8" Format="rgba16" Width="16" Height="8" Offset="0x1E2F8" />
-        <Texture Name="gameplay_keep_Tex_01E3F8" OutName="tex_01E3F8" Format="rgba16" Width="16" Height="16" Offset="0x1E3F8" />
-        <Texture Name="gameplay_keep_Tex_01E5F8" OutName="tex_01E5F8" Format="rgba16" Width="8" Height="16" Offset="0x1E5F8" />
-        <Texture Name="gameplay_keep_Tex_01E6F8" OutName="tex_01E6F8" Format="rgba16" Width="32" Height="16" Offset="0x1E6F8" />
-        <Texture Name="gameplay_keep_Tex_01EAF8" OutName="tex_01EAF8" Format="rgba16" Width="16" Height="16" Offset="0x1EAF8" />
+
+        <!-- Human Elegy of Emptiness Shell -->
+        <DList Name="gElegyShellHumanDL" Offset="0x1C430" /> <!-- Original name is "pls_zo_model" -->
+        <Texture Name="gElegyShellHumanMouthTex" OutName="elegy_shell_human_mouth" Format="rgba16" Width="32" Height="32" Offset="0x1CAF8" />
+        <Texture Name="gElegyShellHumanEyeAndNoseTex" OutName="elegy_shell_human_eye_and_nose" Format="rgba16" Width="32" Height="64" Offset="0x1D2F8" />
+        <Texture Name="gElegyShellHumanNostrilsAndSkinTex" OutName="elegy_shell_human_nostrils_and_skin" Format="rgba16" Width="16" Height="8" Offset="0x1E2F8" />
+        <Texture Name="gElegyShellHumanBootsTex" OutName="elegy_shell_human_boots" Format="rgba16" Width="16" Height="16" Offset="0x1E3F8" />
+        <Texture Name="gElegyShellHumanPlatformTex" OutName="elegy_shell_human_platform" Format="rgba16" Width="8" Height="16" Offset="0x1E5F8" />
+        <Texture Name="gElegyShellBeltAndTunicTex" OutName="elegy_shell_human_belt_and_tunic" Format="rgba16" Width="32" Height="16" Offset="0x1E6F8" />
+        <Texture Name="gElegyShellHumanHairTex" OutName="elegy_shell_human_hair" Format="rgba16" Width="16" Height="16" Offset="0x1EAF8" />
+
         <DList Name="gameplay_keep_DL_01ED00" Offset="0x1ED00" />
         <DList Name="gameplay_keep_DL_01ED90" Offset="0x1ED90" />
         <DList Name="gZTargetArrowDL" Offset="0x1F0F0" />
@@ -926,16 +932,16 @@
         <Animation Name="gameplay_keep_Anim_022FF0" Offset="0x22FF0" />
         <Collision Name="gDoorCol" Offset="0x23100" />
         <DList Name="gEffDustDL" Offset="0x23130" />
-        <DList Name="gOwlStatueWhiteFlashDL" Offset="0x23210" />
-        <DList Name="gameplay_keep_DL_023288" Offset="0x23288" />
-        <DList Name="gLightOrb1DL" Offset="0x23348" />
-        <DList Name="gLightOrb2DL" Offset="0x233B8" />
-        <DList Name="gLightOrbVtxDL" Offset="0x23428" />
-        <DList Name="gElectricSparkDL" Offset="0x23480" />
-        <DList Name="gElectricSparkVtxDL" Offset="0x234F0" />
-        <Texture Name="gLightOrbTex" OutName="light_orb" Format="i8" Width="64" Height="64" Offset="0x23508" />
+        <DList Name="gEffFlash1DL" Offset="0x23210" />
+        <DList Name="gEffFlash2DL" Offset="0x23288" />
+        <DList Name="gLightOrbMaterial1DL" Offset="0x23348" />
+        <DList Name="gLightOrbMaterial2DL" Offset="0x233B8" />
+        <DList Name="gLightOrbModelDL" Offset="0x23428" />
+        <DList Name="gElectricSparkMaterialDL" Offset="0x23480" />
+        <DList Name="gElectricSparkModelDL" Offset="0x234F0" />
+        <Texture Name="gFlashTex" OutName="flash" Format="i8" Width="64" Height="64" Offset="0x23508" />
 
-        <!-- EnMThunder (Spin Attack and Sword Beams)-->
+        <!-- EnMThunder (Spin Attack and Sword Beams) -->
         <!-- Spin Attack -->
         <Texture Name="gSpinAttack1Tex" OutName="spin_attack_1" Format="i8" Width="64" Height="32" Offset="0x24510" />
         <Texture Name="gSpinAttack2Tex" OutName="spin_attack_2" Format="i8" Width="64" Height="32" Offset="0x24D10" />
@@ -1033,14 +1039,14 @@
         <Texture Name="gEffShockwaveTex" OutName="eff_shockwave" Format="i8" Width="64" Height="64" Offset="0x2F100" />
         <DList Name="gEffShockwaveDL" Offset="0x30100" />
         <DList Name="gEffBubbleDL" Offset="0x301B0" />
-        <Texture Name="gEffFireFootprint1Tex" OutName="tex_030270" Format="ia8" Width="32" Height="32" Offset="0x30270" />
-        <Texture Name="gEffFireFootprint2Tex" OutName="tex_030670" Format="ia8" Width="32" Height="32" Offset="0x30670" />
-        <Texture Name="gEffFireFootprint3Tex" OutName="tex_030A70" Format="ia8" Width="32" Height="32" Offset="0x30A70" />
-        <Texture Name="gEffFireFootprint4Tex" OutName="tex_030E70" Format="ia8" Width="32" Height="32" Offset="0x30E70" />
-        <Texture Name="gEffFireFootprint5Tex" OutName="tex_031270" Format="ia8" Width="32" Height="32" Offset="0x31270" />
-        <Texture Name="gEffFireFootprint6Tex" OutName="tex_031670" Format="ia8" Width="32" Height="32" Offset="0x31670" />
-        <Texture Name="gEffFireFootprint7Tex" OutName="tex_031A70" Format="ia8" Width="32" Height="32" Offset="0x31A70" />
-        <Texture Name="gEffFireFootprint8Tex" OutName="tex_031E70" Format="ia8" Width="32" Height="32" Offset="0x31E70" />
+        <Texture Name="gEffFireFootprint1Tex" OutName="eff_fire_footprint_1" Format="ia8" Width="32" Height="32" Offset="0x30270" />
+        <Texture Name="gEffFireFootprint2Tex" OutName="eff_fire_footprint_2" Format="ia8" Width="32" Height="32" Offset="0x30670" />
+        <Texture Name="gEffFireFootprint3Tex" OutName="eff_fire_footprint_3" Format="ia8" Width="32" Height="32" Offset="0x30A70" />
+        <Texture Name="gEffFireFootprint4Tex" OutName="eff_fire_footprint_4" Format="ia8" Width="32" Height="32" Offset="0x30E70" />
+        <Texture Name="gEffFireFootprint5Tex" OutName="eff_fire_footprint_5" Format="ia8" Width="32" Height="32" Offset="0x31270" />
+        <Texture Name="gEffFireFootprint6Tex" OutName="eff_fire_footprint_6" Format="ia8" Width="32" Height="32" Offset="0x31670" />
+        <Texture Name="gEffFireFootprint7Tex" OutName="eff_fire_footprint_7" Format="ia8" Width="32" Height="32" Offset="0x31A70" />
+        <Texture Name="gEffFireFootprint8Tex" OutName="eff_fire_footprint_8" Format="ia8" Width="32" Height="32" Offset="0x31E70" />
         <DList Name="gEffFireFootprintDL" Offset="0x32270" />
         <Texture Name="gameplay_keep_Tex_032310" OutName="tex_032310" Format="rgba32" Width="16" Height="64" Offset="0x32310" />
         <Texture Name="gEffHitmarkWhiteMetal1Tex" OutName="eff_hitmark_white_metal_1" Format="i4" Width="32" Height="24" Offset="0x33310" />
@@ -1116,28 +1122,31 @@
         <Texture Name="gameplay_keep_Tex_044BB0" OutName="tex_044BB0" Format="i8" Width="32" Height="32" Offset="0x44BB0" />
         <Texture Name="gEffIceFragmentTex" OutName="eff_ice_fragment" Format="i8" Width="32" Height="32" Offset="0x44FB0" />
         <Texture Name="gameplay_keep_Tex_0453B0" OutName="tex_0453B0" Format="i8" Width="32" Height="32" Offset="0x453B0" />
-        <DList Name="gameplay_keep_DL_048DF0" Offset="0x48DF0" />
-        <Texture Name="gameplay_keep_TLUT_04A460" OutName="tlut_04A460" Format="rgba16" Width="16" Height="16" Offset="0x4A460" />
-        <Texture Name="gameplay_keep_Tex_04A660" OutName="tex_04A660" Format="ci8" Width="16" Height="16" Offset="0x4A660" />
-        <Texture Name="gameplay_keep_Tex_04A760" OutName="tex_04A760" Format="ci8" Width="16" Height="32" Offset="0x4A760" />
-        <Texture Name="gameplay_keep_Tex_04A960" OutName="tex_04A960" Format="ci8" Width="16" Height="16" Offset="0x4A960" />
-        <Texture Name="gameplay_keep_Tex_04AA60" OutName="tex_04AA60" Format="ci8" Width="8" Height="8" Offset="0x4AA60" />
-        <Texture Name="gameplay_keep_Tex_04AAA0" OutName="tex_04AAA0" Format="ci8" Width="8" Height="8" Offset="0x4AAA0" />
-        <Texture Name="gameplay_keep_Tex_04AAE0" OutName="tex_04AAE0" Format="ci8" Width="16" Height="16" Offset="0x4AAE0" />
-        <Texture Name="gameplay_keep_Tex_04ABE0" OutName="tex_04ABE0" Format="ci8" Width="8" Height="16" Offset="0x4ABE0" />
-        <Texture Name="gameplay_keep_Tex_04AC60" OutName="tex_04AC60" Format="ci8" Width="8" Height="16" Offset="0x4AC60" />
-        <Texture Name="gameplay_keep_Tex_04ACE0" OutName="tex_04ACE0" Format="ci8" Width="8" Height="8" Offset="0x4ACE0" />
-        <Texture Name="gameplay_keep_Tex_04AD20" OutName="tex_04AD20" Format="ci8" Width="32" Height="32" Offset="0x4AD20" />
-        <Texture Name="gameplay_keep_Tex_04B120" OutName="tex_04B120" Format="ci8" Width="32" Height="64" Offset="0x4B120" />
-        <Texture Name="gameplay_keep_Tex_04B920" OutName="tex_04B920" Format="ci8" Width="32" Height="64" Offset="0x4B920" />
-        <Texture Name="gameplay_keep_Tex_04C120" OutName="tex_04C120" Format="ci8" Width="32" Height="64" Offset="0x4C120" />
-        <Texture Name="gameplay_keep_Tex_04C920" OutName="tex_04C920" Format="ci8" Width="8" Height="16" Offset="0x4C920" />
-        <Texture Name="gameplay_keep_Tex_04C9A0" OutName="tex_04C9A0" Format="ci8" Width="32" Height="32" Offset="0x4C9A0" />
-        <Texture Name="gameplay_keep_Tex_04CDA0" OutName="tex_04CDA0" Format="rgba16" Width="32" Height="64" Offset="0x4CDA0" />
-        <Texture Name="gameplay_keep_Tex_04DDA0" OutName="tex_04DDA0" Format="i8" Width="32" Height="32" Offset="0x4DDA0" />
-        <Texture Name="gameplay_keep_Tex_04E1A0" OutName="tex_04E1A0" Format="ci8" Width="8" Height="16" Offset="0x4E1A0" />
-        <Texture Name="gameplay_keep_Tex_04E220" OutName="tex_04E220" Format="i8" Width="64" Height="64" Offset="0x4E220" />
-        <DList Name="gameplay_keep_DL_04F250" Offset="0x4F250" />
+
+        <!-- Goron Elegy of Emptiness Shell -->
+        <DList Name="gElegyShellGoronDL" Offset="0x48DF0" /> <!-- Original name is "pgs_zo_model" -->
+        <Texture Name="gElegyShellGoronTLUT" OutName="elegy_shell_goron_tlut" Format="rgba16" Width="16" Height="16" Offset="0x4A460" />
+        <Texture Name="gElegyShellGoronSkinTex" OutName="elegy_shell_goron_skin" Format="ci8" Width="16" Height="16" Offset="0x4A660" />
+        <Texture Name="gElegyShellGoronHairTex" OutName="elegy_shell_goron_hair" Format="ci8" Width="16" Height="32" Offset="0x4A760" />
+        <Texture Name="gElegyShellGoronSideburnsAndBeardTex" OutName="elegy_shell_goron_sideburns_and_beard" Format="ci8" Width="16" Height="16" Offset="0x4A960" />
+        <Texture Name="gElegyShellGoronNostrilTex" OutName="elegy_shell_goron_nostril" Format="ci8" Width="8" Height="8" Offset="0x4AA60" />
+        <Texture Name="gElegyShellGoronLipsTex" OutName="elegy_shell_goron_lips" Format="ci8" Width="8" Height="8" Offset="0x4AAA0" />
+        <Texture Name="gElegyShellGoronGlovePalmTex" OutName="elegy_shell_goron_glove_palm" Format="ci8" Width="16" Height="16" Offset="0x4AAE0" />
+        <Texture Name="gElegyShellGoronGloveBackTex" OutName="elegy_shell_goron_glove_back" Format="ci8" Width="8" Height="16" Offset="0x4ABE0" />
+        <Texture Name="gElegyShellGoronFingerAndToeTex" OutName="elegy_shell_goron_finger_and_toe" Format="ci8" Width="8" Height="16" Offset="0x4AC60" />
+        <Texture Name="gElegyShellGoronSandalTopAndSideTex" OutName="elegy_shell_goron_sandal_top_and_side" Format="ci8" Width="8" Height="8" Offset="0x4ACE0" />
+        <Texture Name="gElegyShellGoronChestTex" OutName="elegy_shell_goron_chest" Format="ci8" Width="32" Height="32" Offset="0x4AD20" />
+        <Texture Name="gElegyShellGoronBackTex" OutName="elegy_shell_goron_back" Format="ci8" Width="32" Height="64" Offset="0x4B120" />
+        <Texture Name="gElegyShellGoronGoronsRubyTattooTex" OutName="elegy_shell_goron_gorons_ruby_tattoo" Format="ci8" Width="32" Height="64" Offset="0x4B920" />
+        <Texture Name="gElegyShellGoronTribalTattooTex" OutName="elegy_shell_goron_tribal_tattoo" Format="ci8" Width="32" Height="64" Offset="0x4C120" />
+        <Texture Name="gElegyShellGoronLoinclothTex" OutName="elegy_shell_goron_loincloth" Format="ci8" Width="8" Height="16" Offset="0x4C920" />
+        <Texture Name="gElegyShellGoronEyeTex" OutName="elegy_shell_goron_eye" Format="ci8" Width="32" Height="32" Offset="0x4C9A0" />
+        <Texture Name="gElegyShellGoronScarTex" OutName="elegy_shell_goron_scar" Format="rgba16" Width="32" Height="64" Offset="0x4CDA0" />
+        <Texture Name="gElegyShellGoronNecklaceTex" OutName="elegy_shell_goron_necklace" Format="i8" Width="32" Height="32" Offset="0x4DDA0" />
+        <Texture Name="gElegyShellGoronPlatformTex" OutName="elegy_shell_goron_platform" Format="ci8" Width="8" Height="16" Offset="0x4E1A0" />
+
+        <Texture Name="gHookshotReticleTex" OutName="tex_04E220" Format="i8" Width="64" Height="64" Offset="0x4E220" />
+        <DList Name="gHookshotReticleDL" Offset="0x4F250" />
         <Texture Name="gameplay_keep_Tex_04F2C0" OutName="tex_04F2C0" Format="ia16" Width="32" Height="64" Offset="0x4F2C0" />
         <DList Name="gEffIceFragment1DL" Offset="0x50550" />
         <DList Name="gEffIceFragment2MaterialDL" Offset="0x50648" />
@@ -1145,8 +1154,8 @@
         <DList Name="gEffIceFragment3DL" Offset="0x50D10" />
         <Texture Name="gEffIceSmokeTex" OutName="eff_ice_smoke" Format="i4" Width="32" Height="32" Offset="0x50E80" />
         <DList Name="gEffIceSmokeDL" Offset="0x510B0" />
-        <DList Name="gFrozenSteamDL" Offset="0x51180" />
-        <DList Name="gFrozenSteamVtxDL" Offset="0x51238" />
+        <DList Name="gFrozenSteamMaterialDL" Offset="0x51180" />
+        <DList Name="gFrozenSteamModelDL" Offset="0x51238" />
         <Animation Name="gameplay_keep_Anim_05140C" Offset="0x5140C" />
         <DList Name="gameplay_keep_DL_051420" Offset="0x51420" />
         <DList Name="gameplay_keep_DL_0514C0" Offset="0x514C0" />
@@ -1214,18 +1223,23 @@
         <DList Name="gameplay_keep_DL_054C90" Offset="0x54C90" />
         <Texture Name="gameplay_keep_Tex_054D90" OutName="tex_054D90" Format="i4" Width="16" Height="16" Offset="0x54D90" />
         <Texture Name="gameplay_keep_Tex_054E10" OutName="tex_054E10" Format="i8" Width="16" Height="16" Offset="0x54E10" />
-        <Blob Name="gameplay_keep_Blob_054F10" Size="0x10" Offset="0x54F10" />
+
+        <TextureAnimation Name="gameplay_keep_Matanimheader_054F18" Offset="0x54F18" />
+
         <Texture Name="gameplay_keep_Tex_054F20" OutName="tex_054F20" Format="i8" Width="32" Height="32" Offset="0x54F20" />
         <DList Name="gameplay_keep_DL_055360" Offset="0x55360" />
         <DList Name="gameplay_keep_DL_055620" Offset="0x55620" />
         <DList Name="gameplay_keep_DL_055628" Offset="0x55628" />
         <Texture Name="gameplay_keep_Tex_0557F0" OutName="tex_0557F0" Format="rgba16" Width="32" Height="32" Offset="0x557F0" />
         <Texture Name="gameplay_keep_Tex_055FF0" OutName="tex_055FF0" Format="i4" Width="64" Height="64" Offset="0x55FF0" />
-        <DList Name="gameplay_keep_DL_057B10" Offset="0x57B10" />
-        <Texture Name="gameplay_keep_Tex_057FE8" OutName="tex_057FE8" Format="rgba16" Width="8" Height="16" Offset="0x57FE8" />
-        <Texture Name="gameplay_keep_Tex_0580E8" OutName="tex_0580E8" Format="rgba16" Width="16" Height="16" Offset="0x580E8" />
-        <Texture Name="gameplay_keep_Tex_0582E8" OutName="tex_0582E8" Format="rgba16" Width="32" Height="32" Offset="0x582E8" />
-        <Texture Name="gameplay_keep_Tex_058AE8" OutName="tex_058AE8" Format="rgba16" Width="8" Height="8" Offset="0x58AE8" />
+
+        <!-- Deku Elegy of Emptiness Shell -->
+        <DList Name="gElegyShellDekuDL" Offset="0x57B10" /> <!-- Original name is "pns_zo_model" -->
+        <Texture Name="gElegyShellDekuPlatformTex" OutName="elegy_shell_deku_platform" Format="rgba16" Width="8" Height="16" Offset="0x57FE8" />
+        <Texture Name="gElegyShellDekuSkinTex" OutName="elegy_shell_deku_skin" Format="rgba16" Width="16" Height="16" Offset="0x580E8" />
+        <Texture Name="gElegyShellDekuLeafTex" OutName="elegy_shell_deku_leaf" Format="rgba16" Width="32" Height="32" Offset="0x582E8" />
+        <Texture Name="gElegyShellDekuEyeTex" OutName="elegy_shell_deku_eye" Format="rgba16" Width="8" Height="8" Offset="0x58AE8" />
+
         <DList Name="gameplay_keep_DL_058BA0" Offset="0x58BA0" />
         <Texture Name="gameplay_keep_Tex_058C30" OutName="tex_058C30" Format="rgba16" Width="16" Height="16" Offset="0x58C30" />
         <Collision Name="gameplay_keep_Colheader_058F30" Offset="0x58F30" />
@@ -1442,27 +1456,30 @@
         <DList Name="gameplay_keep_DL_085490" Offset="0x85490" />
         <Blob Name="gameplay_keep_Blob_085510" Size="0x130" Offset="0x85510" />
         <Blob Name="gameplay_keep_Blob_085640" Size="0x3A30" Offset="0x85640" />
-        <DList Name="gameplay_keep_DL_089070" Offset="0x89070" />
-        <Texture Name="gameplay_keep_TLUT_08A420" OutName="tlut_08A420" Format="rgba16" Width="16" Height="16" Offset="0x8A420" />
-        <Texture Name="gameplay_keep_Tex_08A620" OutName="tex_08A620" Format="rgba16" Width="16" Height="16" Offset="0x8A620" />
-        <Texture Name="gameplay_keep_Tex_08A820" OutName="tex_08A820" Format="rgba16" Width="16" Height="16" Offset="0x8A820" />
-        <Texture Name="gameplay_keep_Tex_08AA20" OutName="tex_08AA20" Format="rgba16" Width="16" Height="16" Offset="0x8AA20" />
-        <Texture Name="gameplay_keep_Tex_08AC20" OutName="tex_08AC20" Format="rgba16" Width="16" Height="32" Offset="0x8AC20" />
-        <Texture Name="gameplay_keep_Tex_08B020" OutName="tex_08B020" Format="rgba16" Width="16" Height="32" Offset="0x8B020" />
-        <Texture Name="gameplay_keep_Tex_08B420" OutName="tex_08B420" Format="ci8" Width="8" Height="8" Offset="0x8B420" />
-        <Texture Name="gameplay_keep_Tex_08B460" OutName="tex_08B460" Format="ci8" Width="32" Height="32" Offset="0x8B460" />
-        <Texture Name="gameplay_keep_Tex_08B860" OutName="tex_08B860" Format="ci8" Width="16" Height="16" Offset="0x8B860" />
-        <Texture Name="gameplay_keep_Tex_08B960" OutName="tex_08B960" Format="ci8" Width="32" Height="64" Offset="0x8B960" />
-        <Texture Name="gameplay_keep_Tex_08C160" OutName="tex_08C160" Format="ci8" Width="8" Height="16" Offset="0x8C160" />
-        <Texture Name="gameplay_keep_Tex_08C1E0" OutName="tex_08C1E0" Format="ci8" Width="16" Height="16" Offset="0x8C1E0" />
-        <Texture Name="gameplay_keep_Tex_08C2E0" OutName="tex_08C2E0" Format="ci8" Width="32" Height="32" Offset="0x8C2E0" />
-        <Texture Name="gameplay_keep_Tex_08C6E0" OutName="tex_08C6E0" Format="ci8" Width="32" Height="32" Offset="0x8C6E0" />
-        <Texture Name="gameplay_keep_Tex_08CAE0" OutName="tex_08CAE0" Format="ci8" Width="16" Height="32" Offset="0x8CAE0" />
-        <Texture Name="gameplay_keep_Tex_08CCE0" OutName="tex_08CCE0" Format="ci8" Width="16" Height="32" Offset="0x8CCE0" />
-        <Texture Name="gameplay_keep_Tex_08CEE0" OutName="tex_08CEE0" Format="ci8" Width="32" Height="32" Offset="0x8CEE0" />
-        <Texture Name="gameplay_keep_Tex_08D2E0" OutName="tex_08D2E0" Format="rgba16" Width="8" Height="16" Offset="0x8D2E0" />
+
+        <!-- Zora Elegy of Emptiness Shell -->
+        <DList Name="gElegyShellZoraDL" Offset="0x89070" /> <!-- Original name is "pzs_zo_model" -->
+        <Texture Name="gElegyShellZoraTLUT" OutName="elegy_shell_zora_tlut" Format="rgba16" Width="16" Height="16" Offset="0x8A420" />
+        <Texture Name="gElegyShellZoraGuitarJawTex" OutName="elegy_shell_zora_guitar_jaw" Format="rgba16" Width="16" Height="16" Offset="0x8A620" />
+        <Texture Name="gElegyShellZoraGuitarEyeTex" OutName="elegy_shell_zora_guitar_eye" Format="rgba16" Width="16" Height="16" Offset="0x8A820" />
+        <Texture Name="gElegyShellZoraGuitarTeethTex" OutName="elegy_shell_zora_guitar_teeth" Format="rgba16" Width="16" Height="16" Offset="0x8AA20" />
+        <Texture Name="gElegyShellZoraGuitarSpinousTex" OutName="elegy_shell_zora_guitar_spinous" Format="rgba16" Width="16" Height="32" Offset="0x8AC20" />
+        <Texture Name="gElegyShellZoraGuitarBoneTex" OutName="elegy_shell_zora_guitar_bone" Format="rgba16" Width="16" Height="32" Offset="0x8B020" />
+        <Texture Name="gElegyShellZoraSkinTex" OutName="elegy_shell_zora_skin" Format="ci8" Width="8" Height="8" Offset="0x8B420" />
+        <Texture Name="gElegyShellZoraSpottedSkinTex" OutName="elegy_shell_zora_spotted_skin" Format="ci8" Width="32" Height="32" Offset="0x8B460" />
+        <Texture Name="gElegyShellZoraFingersTex" OutName="elegy_shell_zora_fingers" Format="ci8" Width="16" Height="16" Offset="0x8B860" />
+        <Texture Name="gElegyShellZoraBackAndHipSpottedSkinTex" OutName="elegy_shell_zora_back_and_hip_spotted_skin" Format="ci8" Width="32" Height="64" Offset="0x8B960" />
+        <Texture Name="gElegyShellZoraWristbandTex" OutName="elegy_shell_zora_wristband" Format="ci8" Width="8" Height="16" Offset="0x8C160" />
+        <Texture Name="gElegyShellZoraFinTex" OutName="elegy_shell_zora_fin" Format="ci8" Width="16" Height="16" Offset="0x8C1E0" />
+        <Texture Name="gElegyShellZoraEyeTex" OutName="elegy_shell_zora_eye" Format="ci8" Width="32" Height="32" Offset="0x8C2E0" />
+        <Texture Name="gElegyShellZoraMouthTex" OutName="elegy_shell_zora_mouth" Format="ci8" Width="32" Height="32" Offset="0x8C6E0" />
+        <Texture Name="gElegyShellZoraRibsTattoo" OutName="elegy_shell_zora_ribs_tattoo" Format="ci8" Width="16" Height="32" Offset="0x8CAE0" />
+        <Texture Name="gElegyShellZoraArrowTattoo" OutName="elegy_shell_zora_arrow_tattoo" Format="ci8" Width="16" Height="32" Offset="0x8CCE0" />
+        <Texture Name="gElegyShellZoraRightShoulderTattoo" OutName="elegy_shell_zora_right_shoulder_tattoo" Format="ci8" Width="32" Height="32" Offset="0x8CEE0" />
+        <Texture Name="gElegyShellZoraPlatformTex" OutName="elegy_shell_zora_platform" Format="rgba16" Width="8" Height="16" Offset="0x8D2E0" />
+
         <Texture Name="gameplay_keep_Tex_08D3E0" OutName="tex_08D3E0" Format="i8" Width="64" Height="32" Offset="0x8D3E0" />
-        
+
         <!-- Dust Textures -->
         <Texture Name="gEffDust1Tex" OutName="eff_dust_1" Format="i8" Width="32" Height="32" Offset="0x8DBE0" />
         <Texture Name="gEffDust2Tex" OutName="eff_dust_2" Format="i8" Width="32" Height="32" Offset="0x8DFE0" />
@@ -1472,14 +1489,14 @@
         <Texture Name="gEffDust6Tex" OutName="eff_dust_6" Format="i8" Width="32" Height="32" Offset="0x8EFE0" />
         <Texture Name="gEffDust7Tex" OutName="eff_dust_7" Format="i8" Width="32" Height="32" Offset="0x8F3E0" />
         <Texture Name="gEffDust8Tex" OutName="eff_dust_8" Format="i8" Width="32" Height="32" Offset="0x8F7E0" />
-        
+
         <Texture Name="gameplay_keep_Tex_08FBE0" OutName="tex_08FBE0" Format="i8" Width="32" Height="64" Offset="0x8FBE0" />
         <Texture Name="gameplay_keep_Tex_0903E0" OutName="tex_0903E0" Format="i8" Width="32" Height="64" Offset="0x903E0" />
         <Texture Name="gameplay_keep_Tex_090BE0" OutName="tex_090BE0" Format="i8" Width="32" Height="64" Offset="0x90BE0" />
         <Texture Name="gameplay_keep_Tex_0913E0" OutName="tex_0913E0" Format="i8" Width="32" Height="64" Offset="0x913E0" />
         <Texture Name="gEffBubble1Tex" OutName="eff_bubble_1" Format="ia8" Width="16" Height="16" Offset="0x91BE0" />
         <Texture Name="gEffBubble2Tex" OutName="eff_bubble_2" Format="ia8" Width="16" Height="16" Offset="0x91CE0" />
-        
+
         <!-- Electric spark textures from Zora-Form attack -->
         <Texture Name="gElectricSpark1Tex" OutName="electric_spark_1" Format="i4" Width="32" Height="32" Offset="0x91DE0" />
         <Texture Name="gElectricSpark2Tex" OutName="electric_spark_2" Format="i4" Width="32" Height="32" Offset="0x91FE0" />

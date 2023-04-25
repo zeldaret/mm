@@ -21,7 +21,7 @@ void EnNnh_WaitForDialogue(EnNnh* this, PlayState* play);
 void EnNnh_SetupDialogue(EnNnh* this);
 void EnNnh_Dialogue(EnNnh* this, PlayState* play);
 
-const ActorInit En_Nnh_InitVars = {
+ActorInit En_Nnh_InitVars = {
     ACTOR_EN_NNH,
     ACTORCAT_PROP,
     FLAGS,

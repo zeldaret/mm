@@ -28,7 +28,7 @@ void func_808FB710(EnRr* this, PlayState* play);
 void func_808FAD1C(EnRr* this, PlayState* play);
 void func_808FB398(EnRr* this, PlayState* play);
 
-const ActorInit En_Rr_InitVars = {
+ActorInit En_Rr_InitVars = {
     ACTOR_EN_RR,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -197,7 +197,7 @@ void func_808FA11C(EnRr* this) {
     this->drawDmgEffFrozenSteamScale = 1.2750001f;
     this->drawDmgEffAlpha = 1.0f;
     this->actor.flags &= ~ACTOR_FLAG_400;
-    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 80);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 80);
 }
 
 void func_808FA19C(EnRr* this, PlayState* play) {
@@ -214,8 +214,8 @@ void func_808FA19C(EnRr* this, PlayState* play) {
 }
 
 void func_808FA238(EnRr* this, f32 arg1) {
-    this->actor.speedXZ = arg1;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_LIKE_WALK);
+    this->actor.speed = arg1;
+    Actor_PlaySfx(&this->actor, NA_SE_EN_LIKE_WALK);
 }
 
 void func_808FA260(EnRr* this) {
@@ -236,7 +236,7 @@ void func_808FA260(EnRr* this) {
 
     this->actionFunc = func_808FB088;
 
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_LIKE_UNARI);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_LIKE_UNARI);
 }
 
 void func_808FA344(EnRr* this) {
@@ -271,7 +271,7 @@ void func_808FA3F8(EnRr* this, Player* player) {
     this->actor.flags &= ~ACTOR_FLAG_1;
     this->unk_1F0 = 8;
     this->unk_1E1 = 0;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->unk_218 = 0.0f;
     this->unk_210 = 0.0f;
     this->unk_204 = 0.15f;
@@ -286,7 +286,7 @@ void func_808FA3F8(EnRr* this, Player* player) {
     }
 
     this->actionFunc = func_808FB1C0;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_SUISEN_DRINK);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_SUISEN_DRINK);
 }
 
 void func_808FA4F4(EnRr* this, PlayState* play) {
@@ -296,7 +296,7 @@ void func_808FA4F4(EnRr* this, PlayState* play) {
     f32 sp30;
     f32 sp2C;
 
-    if (player->stateFlags2 & 0x80) {
+    if (player->stateFlags2 & PLAYER_STATE2_80) {
         player->actor.parent = NULL;
         player->unk_AE8 = 100;
         this->actor.flags |= ACTOR_FLAG_1;
@@ -331,7 +331,7 @@ void func_808FA4F4(EnRr* this, PlayState* play) {
         player->actor.world.pos.z += sp30 * Math_CosS(this->actor.shape.rot.y);
 
         func_800B8D50(play, &this->actor, sp30, this->actor.shape.rot.y, sp2C, sp38);
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_SUISEN_THROW);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_SUISEN_THROW);
     }
 }
 
@@ -344,7 +344,7 @@ void func_808FA6B8(EnRr* this) {
     } else {
         this->unk_1EC = 40;
     }
-    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, this->unk_1EC);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, this->unk_1EC);
 
     this->unk_1E6 = 20;
     this->unk_1F6 = 2500;
@@ -360,7 +360,7 @@ void func_808FA6B8(EnRr* this) {
     }
 
     this->actionFunc = func_808FB398;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_LIKE_DAMAGE);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_LIKE_DAMAGE);
 }
 
 void func_808FA7AC(EnRr* this) {
@@ -405,7 +405,7 @@ void func_808FA910(EnRr* this) {
 
     this->unk_1E4 = 0;
     this->unk_214 = 0.0f;
-    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 40);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 40);
     this->unk_210 = 0.0f;
 
     for (i = 0; i < ARRAY_COUNT(this->unk_324); i++) {
@@ -415,7 +415,7 @@ void func_808FA910(EnRr* this) {
     }
 
     this->actionFunc = func_808FB42C;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_LIKE_DEAD);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_LIKE_DEAD);
     this->actor.flags &= ~ACTOR_FLAG_1;
 }
 
@@ -482,8 +482,8 @@ s32 func_808FAA94(EnRr* this, PlayState* play) {
                 func_808FA910(this);
             }
         } else if (this->actor.colChkInfo.damageEffect == 1) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
-            Actor_SetColorFilter(&this->actor, 0, 255, 0, 80);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_FREEZE);
+            Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 255, COLORFILTER_BUFFLAG_OPA, 80);
             this->unk_1EE = 80;
             func_808FA9CC(this);
         } else if (this->actor.colChkInfo.damageEffect == 3) {
@@ -571,10 +571,11 @@ void func_808FAF94(EnRr* this, PlayState* play) {
 
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 10, 500, 0);
     this->actor.world.rot.y = this->actor.shape.rot.y;
-    if ((this->unk_1E6 == 0) && !(player->stateFlags2 & 0x80) && (Player_GetMask(play) != PLAYER_MASK_STONE) &&
+    if ((this->unk_1E6 == 0) && !(player->stateFlags2 & PLAYER_STATE2_80) &&
+        (Player_GetMask(play) != PLAYER_MASK_STONE) &&
         (this->actor.xzDistToPlayer < (8421.053f * this->actor.scale.x))) {
         func_808FA260(this);
-    } else if ((this->actor.xzDistToPlayer < 400.0f) && (this->actor.speedXZ == 0.0f)) {
+    } else if ((this->actor.xzDistToPlayer < 400.0f) && (this->actor.speed == 0.0f)) {
         func_808FA238(this, 2.0f);
     }
 }
@@ -631,7 +632,7 @@ void func_808FB1C0(EnRr* this, PlayState* play) {
 
     Rumble_Request(this->actor.xyzDistToPlayerSq, 120, 2, 120);
     if (!(this->unk_1E4 & 7)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_EYEGOLE_DEMO_EYE);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_EYEGOLE_DEMO_EYE);
     }
 
     player->unk_AE8 = 0;
@@ -714,8 +715,11 @@ void func_808FB42C(EnRr* this, PlayState* play) {
             Item_DropCollectible(play, &this->actor.world.pos, ITEM00_SHIELD_HERO);
         }
         Item_DropCollectibleRandom(play, &this->actor, &this->actor.world.pos, 0x90);
-        Actor_MarkForDeath(&this->actor);
-    } else if (this->unk_1E4 == 88) {
+        Actor_Kill(&this->actor);
+        return;
+    }
+
+    if (this->unk_1E4 == 88) {
         Vec3f sp74;
 
         sp74.x = this->actor.world.pos.x;
@@ -738,7 +742,7 @@ void func_808FB680(EnRr* this, PlayState* play) {
     } else {
         Math_SmoothStepToS(&this->actor.shape.rot.y, BINANG_ROT180(this->actor.yawTowardsPlayer), 10, 1000, 0);
         this->actor.world.rot.y = this->actor.shape.rot.y;
-        if (this->actor.speedXZ == 0.0f) {
+        if (this->actor.speed == 0.0f) {
             func_808FA238(this, 2.0f);
         }
     }
@@ -797,19 +801,21 @@ void EnRr_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
 
     if (this->actor.params == ENRR_2) {
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
     } else {
-        Math_StepToF(&this->actor.speedXZ, 0.0f, 0.1f);
+        Math_StepToF(&this->actor.speed, 0.0f, 0.1f);
     }
 
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, this->collider1.dim.radius, 0.0f, 0x5D);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, this->collider1.dim.radius, 0.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                UPDBGCHECKINFO_FLAG_10 | UPDBGCHECKINFO_FLAG_40);
     func_808FB794(this, play);
 
     if (this->unk_1FC > 0) {
         Player* player = GET_PLAYER(play);
 
-        if (!(player->stateFlags2 & 0x80)) {
+        if (!(player->stateFlags2 & PLAYER_STATE2_80)) {
             this->unk_1FC--;
             if (this->unk_1FC == 0) {
                 this->collider1.base.ocFlags1 |= OC1_TYPE_PLAYER;
@@ -870,20 +876,18 @@ void EnRr_Update(Actor* thisx, PlayState* play) {
 void EnRr_Draw(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     EnRr* this = THIS;
-    Mtx* matrix;
+    Mtx* mtx = GRAPH_ALLOC(play->state.gfxCtx, 4 * sizeof(Mtx));
     Vec3f* vecPtr;
     s32 i;
     EnRrStruct* ptr;
     Vec3f spA4;
     f32 temp_f20;
 
-    matrix = GRAPH_ALLOC(play->state.gfxCtx, sizeof(Mtx) * 4);
-
     OPEN_DISPS(play->state.gfxCtx);
 
     func_8012C28C(play->state.gfxCtx);
 
-    gSPSegment(POLY_OPA_DISP++, 0x0C, matrix);
+    gSPSegment(POLY_OPA_DISP++, 0x0C, mtx);
     gSPSegment(POLY_OPA_DISP++, 0x08,
                Gfx_TwoTexScroll(play->state.gfxCtx, 0, (this->unk_1E8 * 0) & 0x7F, (this->unk_1E8 * 0) & 0x3F, 0x20,
                                 0x10, 1, (this->unk_1E8 * 0) & 0x3F, (this->unk_1E8 * -6) & 0x7F, 0x20, 0x10));
@@ -910,7 +914,7 @@ void EnRr_Draw(Actor* thisx, PlayState* play2) {
         Matrix_RotateZYX(ptr->unk_1A.x, ptr->unk_1A.y, ptr->unk_1A.z, MTXMODE_APPLY);
         Matrix_Push();
         Matrix_Scale(temp_f20, 1.0f, temp_f20, MTXMODE_APPLY);
-        Matrix_ToMtx(matrix);
+        Matrix_ToMtx(mtx);
 
         if ((i & 1) != 0) {
             Matrix_RotateYS(0x2000, MTXMODE_APPLY);
@@ -921,7 +925,7 @@ void EnRr_Draw(Actor* thisx, PlayState* play2) {
         Matrix_MultVecX(1842.1053f, vecPtr++);
         Matrix_MultVecX(-1842.1053f, vecPtr++);
         Matrix_Pop();
-        matrix++;
+        mtx++;
         if (i == 3) {
             Matrix_MultZero(&spA4);
         }

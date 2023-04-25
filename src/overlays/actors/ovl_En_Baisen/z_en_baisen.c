@@ -23,7 +23,7 @@ void func_80BE895C(EnBaisen* this, PlayState* play);
 void func_80BE8AAC(EnBaisen* this, PlayState* play);
 void func_80BE89D8(EnBaisen* this, PlayState* play);
 
-const ActorInit En_Baisen_InitVars = {
+ActorInit En_Baisen_InitVars = {
     ACTOR_EN_BAISEN,
     ACTORCAT_NPC,
     FLAGS,
@@ -71,17 +71,15 @@ void EnBaisen_Init(Actor* thisx, PlayState* play) {
     this->paramCopy = this->actor.params;
     if (this->actor.params == 0) {
         this->unk290 = true;
-        if (!(gSaveContext.save.weekEventReg[63] & 0x80) &&
-            ((gSaveContext.save.day != 3) || !gSaveContext.save.isNight)) {
-            Actor_MarkForDeath(&this->actor);
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_63_80) && ((gSaveContext.save.day != 3) || !gSaveContext.save.isNight)) {
+            Actor_Kill(&this->actor);
         }
     } else {
         this->collider.dim.radius = 30;
         this->collider.dim.height = 60;
         this->collider.dim.yShift = 0;
-        if ((gSaveContext.save.weekEventReg[63] & 0x80) ||
-            ((gSaveContext.save.day == 3) && (gSaveContext.save.isNight))) {
-            Actor_MarkForDeath(&this->actor);
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_63_80) || ((gSaveContext.save.day == 3) && gSaveContext.save.isNight)) {
+            Actor_Kill(&this->actor);
         }
     }
     this->actor.targetMode = 6;
@@ -155,7 +153,7 @@ void func_80BE887C(EnBaisen* this, PlayState* play) {
     } else {
         if (this->paramCopy != 0) {
             this->textIdIndex = 0;
-            if (gSaveContext.save.weekEventReg[60] & 8) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_60_08)) {
                 this->textIdIndex = 1;
             }
             if (Player_GetMask(play) == PLAYER_MASK_COUPLE) {
@@ -223,10 +221,10 @@ void func_80BE8AAC(EnBaisen* this, PlayState* play) {
         }
     }
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-        func_801477B4(play);
+        Message_CloseTextbox(play);
         this->textIdIndex++;
         if (this->textIdIndex < 6) {
-            func_80151938(play, sTextIds[this->textIdIndex]);
+            Message_ContinueTextbox(play, sTextIds[this->textIdIndex]);
             if ((this->textIdIndex % 2) == 0) {
                 this->unk2A4 = this->heishiPointer;
             } else {
@@ -249,12 +247,14 @@ void EnBaisen_Update(Actor* thisx, PlayState* play) {
     }
     this->actor.shape.rot.y = this->actor.world.rot.y;
     if ((this->paramCopy != 0) && (gSaveContext.save.day == 3) && gSaveContext.save.isNight) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
     this->actionFunc(this, play);
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 50.0f, 0x1D);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 50.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                UPDBGCHECKINFO_FLAG_10);
     Actor_SetScale(&this->actor, 0.01f);
     if (this->unk290) {
         func_80BE871C(this);

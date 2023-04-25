@@ -26,8 +26,6 @@ typedef struct EnDemoheishi {
     /* 0x270 */ s16 isTalking;
     /* 0x272 */ s16 textIdIndex;
     /* 0x274 */ ColliderCylinder colliderCylinder;
-} EnDemoheishi; //size = 0x2C0
-
-extern const ActorInit En_Demo_heishi_InitVars;
+} EnDemoheishi; // size = 0x2C0
 
 #endif // Z_EN_DEMO_HEISHI_H

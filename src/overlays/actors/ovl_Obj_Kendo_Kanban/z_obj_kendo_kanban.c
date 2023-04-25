@@ -44,7 +44,7 @@ void ObjKendoKanban_Settled(ObjKendoKanban* this, PlayState* play);
 void ObjKendoKanban_HandlePhysics(ObjKendoKanban* this, PlayState* play);
 s32 ObjKendoKanban_IsPlayerOnTop(ObjKendoKanban* this, PlayState* play);
 
-const ActorInit Obj_Kendo_Kanban_InitVars = {
+ActorInit Obj_Kendo_Kanban_InitVars = {
     ACTOR_OBJ_KENDO_KANBAN,
     ACTORCAT_NPC,
     FLAGS,
@@ -211,7 +211,7 @@ void ObjKendoKanban_Init(Actor* thisx, PlayState* play) {
         Collider_SetTrisVertices(&this->colliderTris, i, &vertices[0], &vertices[1], &vertices[2]);
     }
 
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
 
     this->boardFragments = OBJKENDOKANBAN_GET_BOARD_FRAGMENTS(&this->actor);
     this->actor.gravity = -2.0f;
@@ -380,9 +380,9 @@ void ObjKendoKanban_HandlePhysics(ObjKendoKanban* this, PlayState* play) {
         Matrix_Pop();
     }
 
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
 
-    if (this->actor.bgCheckFlags & 1) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         // When on the ground, apply some friction.
         this->actor.velocity.x *= 0.8f;
         this->actor.velocity.z *= 0.8f;
@@ -401,18 +401,18 @@ void ObjKendoKanban_HandlePhysics(ObjKendoKanban* this, PlayState* play) {
             return;
         }
 
-        if (this->actor.bgCheckFlags & 2) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND_TOUCH) {
             // Upon touching the ground...
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_WOODPLATE_BOUND);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_WOODPLATE_BOUND);
             this->hasNewRootCornerPos = false;
             this->actor.velocity.y *= 0.5f;
-        } else if (this->actor.bgCheckFlags & 1) {
+        } else if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
             // When on the ground...
             this->numBounces++;
             this->hasNewRootCornerPos = false;
             this->actor.velocity.x *= 0.3f;
             this->actor.velocity.z *= 0.3f;
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_WOODPLATE_BOUND);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_WOODPLATE_BOUND);
 
             // Adjust and (potentially) reverse rotation depending on the current
             // facing of the board and the direction in which it is rotating.

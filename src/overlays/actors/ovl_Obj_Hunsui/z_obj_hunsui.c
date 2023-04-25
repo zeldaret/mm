@@ -3,7 +3,7 @@
  * Overlay: ovl_Obj_Hunsui
  * Description: Switch-Activated Geyser
  */
-
+#include "prevent_bss_reordering.h"
 #include "z_obj_hunsui.h"
 #include "objects/object_hunsui/object_hunsui.h"
 
@@ -46,7 +46,7 @@ ObjHansuiStruct D_80B9DC70[] = {
     { 3, 3 }, { 3, 5 }, { 3, 1 }, { 3, 6 }, { 3, 2 }, { 3, 4 }, { 3, 0 },
 };
 
-const ActorInit Obj_Hunsui_InitVars = {
+ActorInit Obj_Hunsui_InitVars = {
     ACTOR_OBJ_HUNSUI,
     ACTORCAT_BG,
     FLAGS,
@@ -120,7 +120,7 @@ void func_80B9C5E8(ObjHunsui* this, PlayState* play) {
 
     if ((this->dyna.actor.xzDistToPlayer < (45.0f * this->dyna.actor.scale.x * 10.0f)) &&
         (this->dyna.actor.playerHeightRel < -21.0f)) {
-        if (DynaPolyActor_IsInRidingMovingState(&this->dyna)) {
+        if (DynaPolyActor_IsPlayerOnTop(&this->dyna)) {
             this->unk_172 &= ~8;
             this->unk_19C = 0.0f;
             this->unk_1A0 = 0.0f;
@@ -205,7 +205,7 @@ void ObjHunsui_Init(Actor* thisx, PlayState* play) {
     this->unk_160 = OBJHUNSUI_GET_F000(thisx);
     this->unk_164 = OBJHUNSUI_GET_F80(thisx);
     this->unk_168 = OBJHUNSUI_GET_7F(thisx);
-    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
 
     if ((this->unk_160 != OBJHUNSUI_F000_5) && (this->unk_160 != OBJHUNSUI_F000_6)) {
         DynaPolyActor_LoadMesh(play, &this->dyna, &object_hunsui_Colheader_000C74);
@@ -213,7 +213,7 @@ void ObjHunsui_Init(Actor* thisx, PlayState* play) {
 
     D_80B9DED0 = Lib_SegmentedToVirtual(object_hunsui_Matanimheader_000BF0);
     D_80B9DED4 = Lib_SegmentedToVirtual(object_hunsui_Matanimheader_001888);
-    SubS_FillCutscenesList(&this->dyna.actor, this->unk_170, ARRAY_COUNT(this->unk_170));
+    SubS_FillCutscenesList(&this->dyna.actor, this->csIdList, ARRAY_COUNT(this->csIdList));
     this->unk_18C = 0;
 
     switch (this->unk_160) {
@@ -239,7 +239,7 @@ void ObjHunsui_Init(Actor* thisx, PlayState* play) {
                 this->dyna.actor.shape.rot.z = 0;
                 this->dyna.actor.room = -1;
             } else {
-                Actor_MarkForDeath(&this->dyna.actor);
+                Actor_Kill(&this->dyna.actor);
                 return;
             }
             break;
@@ -253,7 +253,7 @@ void ObjHunsui_Init(Actor* thisx, PlayState* play) {
                 this->dyna.actor.shape.rot.z = 0;
                 this->dyna.actor.room = -1;
             } else {
-                Actor_MarkForDeath(&this->dyna.actor);
+                Actor_Kill(&this->dyna.actor);
                 return;
             }
             break;
@@ -269,7 +269,7 @@ void ObjHunsui_Init(Actor* thisx, PlayState* play) {
                 this->dyna.actor.room = -1; this->actionFunc = func_80B9D714;
                 // clang-format on
             } else {
-                Actor_MarkForDeath(&this->dyna.actor);
+                Actor_Kill(&this->dyna.actor);
                 return;
             }
             break;
@@ -327,7 +327,7 @@ void ObjHunsui_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
 
     if ((this->unk_172 & 0x40) &&
-        SubS_StartActorCutscene(&this->dyna.actor, this->unk_17C, -1, SUBS_CUTSCENE_SET_UNK_LINK_FIELDS)) {
+        SubS_StartCutscene(&this->dyna.actor, this->csId, CS_ID_NONE, SUBS_CUTSCENE_WITH_PLAYER)) {
         this->unk_172 &= ~0x40;
     }
 
@@ -355,7 +355,7 @@ void func_80B9CE64(ObjHunsui* this, PlayState* play) {
 
     if (!(this->unk_172 & 1)) {
         if (sp2C != this->unk_180) {
-            this->unk_17C = this->unk_170[0];
+            this->csId = this->csIdList[0];
             this->unk_172 |= 0x40;
         }
     }
@@ -431,7 +431,7 @@ void func_80B9D120(ObjHunsui* this, PlayState* play) {
                 D_80B9DED8.unk_02 = 0;
                 break;
         }
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
         return;
     }
 
@@ -447,7 +447,7 @@ void func_80B9D120(ObjHunsui* this, PlayState* play) {
     }
 
     if (func_80B9C450(play, this->unk_168, this->unk_164)) {
-        this->unk_17C = this->unk_170[0];
+        this->csId = this->csIdList[0];
         this->unk_172 |= 0x40;
         func_80B9D4D0(this, play);
     }
@@ -536,7 +536,7 @@ void func_80B9D508(ObjHunsui* this, PlayState* play) {
                 D_80B9DED8.unk_02 = 0;
                 break;
         }
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
         return;
     }
 
@@ -560,7 +560,7 @@ void func_80B9D508(ObjHunsui* this, PlayState* play) {
     }
 
     if (!(this->unk_172 & 1) && !func_80B9C450(play, this->unk_168, this->unk_164)) {
-        this->unk_17C = this->unk_170[0];
+        this->csId = this->csIdList[0];
         this->unk_172 |= 0x40;
         func_80B9D0FC(this, play);
     }
@@ -569,29 +569,29 @@ void func_80B9D508(ObjHunsui* this, PlayState* play) {
 void func_80B9D714(ObjHunsui* this, PlayState* play) {
     s32 pad;
     Player* player = GET_PLAYER(play);
-    s16 cs;
+    s16 csId;
     f32 sp28;
 
     if ((this->unk_16C != play->roomCtx.curRoom.num) && (this->unk_16C != play->roomCtx.prevRoom.num) &&
         (this->unk_16D != play->roomCtx.curRoom.num) && (this->unk_16D != play->roomCtx.prevRoom.num)) {
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
     } else {
         if (Flags_GetSwitch(play, this->unk_168)) {
             this->unk_172 &= ~2;
             this->unk_172 |= 0x10;
-            cs = this->dyna.actor.cutscene;
+            csId = this->dyna.actor.csId;
 
             if (this->unk_16E == 0) {
-                if ((cs >= 0) && !ActorCutscene_GetCanPlayNext(cs)) {
-                    ActorCutscene_SetIntentToPlay(cs);
-                } else if (cs >= 0) {
-                    ActorCutscene_StartAndSetUnkLinkFields(cs, &this->dyna.actor);
+                if ((csId >= 0) && !CutsceneManager_IsNext(csId)) {
+                    CutsceneManager_Queue(csId);
+                } else if (csId >= 0) {
+                    CutsceneManager_StartWithPlayerCs(csId, &this->dyna.actor);
                     this->unk_16E = -1;
                 } else {
                     this->unk_16E = 40;
                 }
             } else if (this->unk_16E < 0) {
-                if (func_800F22C4(cs, &this->dyna.actor)) {
+                if (func_800F22C4(csId, &this->dyna.actor) != 0) {
                     this->unk_16E = 40;
                 }
             } else {
@@ -616,7 +616,7 @@ void func_80B9D714(ObjHunsui* this, PlayState* play) {
         }
     }
 
-    if (!DynaPolyActor_IsInRidingMovingState(&this->dyna)) {
+    if (!DynaPolyActor_IsPlayerOnTop(&this->dyna)) {
         if (this->dyna.actor.xzDistToPlayer < 45.0f) {
             if ((this->dyna.actor.playerHeightRel < -this->dyna.actor.velocity.y) &&
                 (this->dyna.actor.playerHeightRel >= -800.0f)) {

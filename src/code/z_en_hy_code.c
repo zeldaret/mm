@@ -69,7 +69,7 @@ EnDoor* EnHy_FindNearestDoor(Actor* actor, PlayState* play) {
     do {
         doorIter = SubS_FindActor(play, doorIter, ACTORCAT_DOOR, ACTOR_EN_DOOR);
         door = (EnDoor*)doorIter;
-        dist = Actor_DistanceBetweenActors(actor, &door->dyna.actor);
+        dist = Actor_WorldDistXYZToActor(actor, &door->dyna.actor);
         if (!isSetup || (dist < minDist)) {
             nearestDoor = door;
             minDist = dist;
@@ -140,7 +140,7 @@ void func_800F0BB4(EnHy* enHy, PlayState* play, EnDoor* door, s16 arg3, s16 arg4
     EnHy_ChangeObjectAndAnim(enHy, play, (animIndex == 0) ? arg3 : arg4);
     enHy->skelAnime.baseTransl = *enHy->skelAnime.jointTable;
     enHy->skelAnime.prevTransl = *enHy->skelAnime.jointTable;
-    enHy->skelAnime.moveFlags |= 3;
+    enHy->skelAnime.moveFlags |= (ANIM_FLAG_UPDATEY | ANIM_FLAG_1);
     AnimationContext_SetMoveActor(play, &enHy->actor, &enHy->skelAnime, 1.0f);
     door->unk_1A1 = 1;
     door->animIndex = animIndex;
@@ -207,8 +207,8 @@ s32 EnHy_MoveForwards(EnHy* enHy, f32 speedTarget) {
     s32 reachedEnd = false;
     Vec3f curPointPos;
 
-    Math_SmoothStepToF(&enHy->actor.speedXZ, speedTarget, 0.4f, 1000.0f, 0.0f);
-    rotStep = enHy->actor.speedXZ * 400.0f;
+    Math_SmoothStepToF(&enHy->actor.speed, speedTarget, 0.4f, 1000.0f, 0.0f);
+    rotStep = enHy->actor.speed * 400.0f;
     if (SubS_CopyPointFromPath(enHy->path, enHy->curPoint, &curPointPos) &&
         SubS_MoveActorToPoint(&enHy->actor, &curPointPos, rotStep)) {
         enHy->curPoint++;
@@ -225,8 +225,8 @@ s32 EnHy_MoveBackwards(EnHy* enHy, f32 speedTarget) {
     s32 reachedEnd = false;
     Vec3f curPointPos;
 
-    Math_SmoothStepToF(&enHy->actor.speedXZ, speedTarget, 0.4f, 1000.0f, 0.0f);
-    rotStep = enHy->actor.speedXZ * 400.0f;
+    Math_SmoothStepToF(&enHy->actor.speed, speedTarget, 0.4f, 1000.0f, 0.0f);
+    rotStep = enHy->actor.speed * 400.0f;
     if (SubS_CopyPointFromPath(enHy->path, enHy->curPoint, &curPointPos) &&
         SubS_MoveActorToPoint(&enHy->actor, &curPointPos, rotStep)) {
         enHy->curPoint--;
@@ -250,29 +250,30 @@ void EnHy_UpdateCollider(EnHy* enHy, PlayState* play) {
 s32 EnHy_PlayWalkingSound(EnHy* enHy, PlayState* play, f32 distAboveThreshold) {
     u8 wasLeftFootOnGround = enHy->isLeftFootOnGround;
     u8 wasRightFootOnGround = enHy->isRightFootOnGround;
-    s32 waterSfxId;
+    SurfaceSfxOffset surfaceSfxOffset;
     u16 sfxId;
     u8 isFootOnGround;
 
-    if (enHy->actor.bgCheckFlags & 0x20) {
+    if (enHy->actor.bgCheckFlags & BGCHECKFLAG_WATER) {
         if (enHy->actor.depthInWater < 20.0f) {
-            waterSfxId = NA_SE_PL_WALK_WATER0 - SFX_FLAG;
+            surfaceSfxOffset = SURFACE_SFX_OFFSET_WATER_SHALLOW;
         } else {
-            waterSfxId = NA_SE_PL_WALK_WATER1 - SFX_FLAG;
+            surfaceSfxOffset = SURFACE_SFX_OFFSET_WATER_DEEP;
         }
-        sfxId = waterSfxId + SFX_FLAG;
+        sfxId = NA_SE_PL_WALK_GROUND + surfaceSfxOffset;
     } else {
-        sfxId = SurfaceType_GetSfx(&play->colCtx, enHy->actor.floorPoly, enHy->actor.floorBgId) + SFX_FLAG;
+        sfxId = NA_SE_PL_WALK_GROUND +
+                SurfaceType_GetSfxOffset(&play->colCtx, enHy->actor.floorPoly, enHy->actor.floorBgId);
     }
 
     enHy->isLeftFootOnGround = isFootOnGround = SubS_IsFloorAbove(play, &enHy->leftFootPos, distAboveThreshold);
     if (enHy->isLeftFootOnGround && !wasLeftFootOnGround && isFootOnGround) {
-        Actor_PlaySfxAtPos(&enHy->actor, sfxId);
+        Actor_PlaySfx(&enHy->actor, sfxId);
     }
 
     enHy->isRightFootOnGround = isFootOnGround = SubS_IsFloorAbove(play, &enHy->rightFootPos, distAboveThreshold);
     if (enHy->isRightFootOnGround && !wasRightFootOnGround && isFootOnGround) {
-        Actor_PlaySfxAtPos(&enHy->actor, sfxId);
+        Actor_PlaySfx(&enHy->actor, sfxId);
     }
 
     return false;

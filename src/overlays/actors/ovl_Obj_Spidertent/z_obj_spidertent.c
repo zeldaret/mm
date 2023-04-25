@@ -23,7 +23,7 @@ void func_80B30A4C(ObjSpidertent* this, PlayState* play);
 void func_80B30AD4(ObjSpidertent* this);
 void func_80B30AF8(ObjSpidertent* this, PlayState* play);
 
-const ActorInit Obj_Spidertent_InitVars = {
+ActorInit Obj_Spidertent_InitVars = {
     ACTOR_OBJ_SPIDERTENT,
     ACTORCAT_BG,
     FLAGS,
@@ -529,7 +529,7 @@ s32 func_80B30480(ObjSpidertent* this, PlayState* play, Vec3f* arg2) {
     Vec3f sp58;
     f32 sp54;
 
-    if (player->itemActionParam == 7) {
+    if (player->heldItemAction == PLAYER_IA_STICK) {
         if (player->unk_B28 > 0) {
             for (i = 0; i < ARRAY_COUNT(this->colliderElements); i++) {
                 triNorm = &this->collider.elements[i].dim;
@@ -565,7 +565,7 @@ void ObjSpidertent_Init(Actor* thisx, PlayState* play) {
     Collider_InitTris(play, &this->collider);
 
     if (Flags_GetSwitch(play, OBJSPIDERTENT_GET_7F00(&this->dyna.actor))) {
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
         return;
     }
 
@@ -676,15 +676,15 @@ void func_80B30A2C(ObjSpidertent* this) {
 }
 
 void func_80B30A4C(ObjSpidertent* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
-        if (this->dyna.actor.cutscene >= 0) {
-            func_800B7298(play, &this->dyna.actor, 1);
+    if (CutsceneManager_IsNext(this->dyna.actor.csId)) {
+        CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
+        if (this->dyna.actor.csId >= 0) {
+            func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_1);
         }
         Flags_SetSwitch(play, OBJSPIDERTENT_GET_7F00(&this->dyna.actor));
         func_80B30AD4(this);
     } else {
-        ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+        CutsceneManager_Queue(this->dyna.actor.csId);
     }
 }
 
@@ -755,14 +755,14 @@ void func_80B30AF8(ObjSpidertent* this, PlayState* play) {
 
     this->unk_3C1--;
     if (this->unk_3C1 == 40) {
-        func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+        DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
     }
 
     if (this->unk_3C1 >= 32) {
         if (this->unk_3C7 > 0) {
             this->unk_3C7--;
         } else if (this->unk_3C1 > 50) {
-            Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EN_EXTINCT);
+            Actor_PlaySfx(&this->dyna.actor, NA_SE_EN_EXTINCT);
             this->unk_3C7 = Rand_S16Offset(2, 2);
         } else {
             SoundSource_PlaySfxAtFixedWorldPos(play, &this->dyna.actor.world.pos, 11, NA_SE_EN_EXTINCT);
@@ -791,8 +791,8 @@ void func_80B30AF8(ObjSpidertent* this, PlayState* play) {
             }
         }
     } else if (this->unk_3C1 <= 0) {
-        ActorCutscene_Stop(this->dyna.actor.cutscene);
-        Actor_MarkForDeath(&this->dyna.actor);
+        CutsceneManager_Stop(this->dyna.actor.csId);
+        Actor_Kill(&this->dyna.actor);
     }
 }
 

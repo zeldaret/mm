@@ -36,7 +36,7 @@ void func_80BD5BD8(BgIkanaShutter* this, PlayState* play);
 void BgIkanaShutter_SetupDoNothing(BgIkanaShutter* this);
 void BgIkanaShutter_DoNothing(BgIkanaShutter* this, PlayState* play);
 
-const ActorInit Bg_Ikana_Shutter_InitVars = {
+ActorInit Bg_Ikana_Shutter_InitVars = {
     ACTOR_BG_IKANA_SHUTTER,
     ACTORCAT_SWITCH,
     FLAGS,
@@ -106,12 +106,12 @@ void func_80BD5878(BgIkanaShutter* this) {
 }
 
 void func_80BD5894(BgIkanaShutter* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
+    if (CutsceneManager_IsNext(this->dyna.actor.csId)) {
+        CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
         func_80BD58F0(this);
         return;
     }
-    ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+    CutsceneManager_Queue(this->dyna.actor.csId);
 }
 
 void func_80BD58F0(BgIkanaShutter* this) {
@@ -177,13 +177,13 @@ void func_80BD5B44(BgIkanaShutter* this) {
 }
 
 void func_80BD5B60(BgIkanaShutter* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
+    if (CutsceneManager_IsNext(this->dyna.actor.csId)) {
+        CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
         Flags_SetClear(play, this->dyna.actor.room);
         func_80BD5BC4(this);
         return;
     }
-    ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+    CutsceneManager_Queue(this->dyna.actor.csId);
 }
 
 void func_80BD5BC4(BgIkanaShutter* this) {

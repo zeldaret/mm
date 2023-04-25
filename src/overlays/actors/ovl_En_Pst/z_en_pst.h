@@ -36,6 +36,4 @@ typedef struct EnPst {
     /* 0x21C */ s32 isLetterToKafeiDeposited;
 } EnPst; // size = 0x220
 
-extern const ActorInit En_Pst_InitVars;
-
 #endif // Z_EN_PST_H

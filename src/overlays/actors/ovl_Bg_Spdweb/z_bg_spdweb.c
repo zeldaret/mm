@@ -24,7 +24,7 @@ void func_809CEBC0(BgSpdweb* this, PlayState* play);
 void func_809CEE74(BgSpdweb* this);
 void func_809CEEAC(BgSpdweb* this, PlayState* play);
 
-const ActorInit Bg_Spdweb_InitVars = {
+ActorInit Bg_Spdweb_InitVars = {
     ACTOR_BG_SPDWEB,
     ACTORCAT_BG,
     FLAGS,
@@ -150,7 +150,7 @@ void BgSpdweb_Init(Actor* thisx, PlayState* play) {
     this->unk_161 = 0;
     this->switchFlag = BGSPDWEB_GET_SWITCHFLAG(&this->dyna.actor);
     thisx->params &= 0xFF;
-    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
 
     if (this->dyna.actor.params == BGSPDWEB_FF_0) {
         Collider_InitAndSetTris(play, &this->collider, &this->dyna.actor, &sTrisInit1, this->colliderElements);
@@ -170,7 +170,7 @@ void BgSpdweb_Init(Actor* thisx, PlayState* play) {
     this->unk_162 = 0;
 
     if (Flags_GetSwitch(play, this->switchFlag)) {
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
     }
 }
 
@@ -229,8 +229,8 @@ void func_809CE234(BgSpdweb* this, PlayState* play) {
     }
 
     if (this->unk_162 == 0) {
-        ActorCutscene_Stop(this->dyna.actor.cutscene);
-        Actor_MarkForDeath(&this->dyna.actor);
+        CutsceneManager_Stop(this->dyna.actor.csId);
+        Actor_Kill(&this->dyna.actor);
         return;
     }
 
@@ -278,7 +278,7 @@ void func_809CE4C8(BgSpdweb* this, PlayState* play) {
     sp40.x = this->dyna.actor.world.pos.x;
     sp40.y = this->dyna.actor.world.pos.y - 50.0f;
     sp40.z = this->dyna.actor.world.pos.z;
-    sp3A = player->unk_B6A;
+    sp3A = player->fallDistance;
 
     if (Player_IsBurningStickInRange(play, &sp40, 70.0f, 50.0f)) {
         this->dyna.actor.home.pos.x = player->meleeWeaponInfo[0].tip.x;
@@ -297,7 +297,7 @@ void func_809CE4C8(BgSpdweb* this, PlayState* play) {
                     return;
                 }
 
-                if (DynaPolyActor_IsInRidingMovingState(&this->dyna)) {
+                if (DynaPolyActor_IsPlayerOnTop(&this->dyna)) {
                     sp3A = 300;
                     break;
                 }
@@ -305,16 +305,16 @@ void func_809CE4C8(BgSpdweb* this, PlayState* play) {
         }
     }
 
-    if (DynaPolyActor_IsInRidingMovingState(&this->dyna)) {
+    if (DynaPolyActor_IsPlayerOnTop(&this->dyna)) {
         temp_f12 = 2.0f * sqrtf(CLAMP_MIN(sp3A, 0));
         if ((this->unk_164 < temp_f12) && (temp_f12 > 2.0f)) {
             this->unk_164 = temp_f12;
             this->unk_162 = 12;
             if (sp3A > 50) {
-                player->stateFlags1 |= 0x20;
+                player->stateFlags1 |= PLAYER_STATE1_20;
                 this->unk_161 = 1;
             }
-        } else if (player->actor.speedXZ != 0.0f) {
+        } else if (player->actor.speed != 0.0f) {
             this->unk_164 = CLAMP_MIN(this->unk_164, 2.0f);
         }
     }
@@ -327,16 +327,15 @@ void func_809CE4C8(BgSpdweb* this, PlayState* play) {
     Math_ApproachZeroF(&this->unk_164, 1.0f, 0.8f);
 
     if (this->unk_162 == 4) {
-        if ((this->unk_161 != 0) ||
-            ((DynaPolyActor_IsInRidingMovingState(&this->dyna) != 0) && (this->unk_164 > 2.0f))) {
+        if ((this->unk_161 != 0) || (DynaPolyActor_IsPlayerOnTop(&this->dyna) && (this->unk_164 > 2.0f))) {
             player->actor.velocity.y = this->unk_164 * 0.7f;
-            player->unk_B68 = (SQ(this->unk_164) * 0.15f) + this->dyna.actor.world.pos.y;
+            player->fallStartHeight = (SQ(this->unk_164) * 0.15f) + this->dyna.actor.world.pos.y;
             this->unk_161 = 0;
-            player->stateFlags1 &= ~0x20;
+            player->stateFlags1 &= ~PLAYER_STATE1_20;
         }
     } else if (this->unk_162 == 11) {
         if (this->unk_164 > 3.0f) {
-            Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_WEB_VIBRATION);
+            Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_WEB_VIBRATION);
         } else {
             AudioSfx_StopById(NA_SE_EV_WEB_VIBRATION);
         }
@@ -370,10 +369,10 @@ void func_809CE830(BgSpdweb* this, PlayState* play) {
     }
 
     if (this->unk_162 == 0) {
-        if (ActorCutscene_GetLength(this->dyna.actor.cutscene) == -1) {
-            ActorCutscene_Stop(this->dyna.actor.cutscene);
+        if (CutsceneManager_GetLength(this->dyna.actor.csId) == -1) {
+            CutsceneManager_Stop(this->dyna.actor.csId);
         }
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
         return;
     }
 
@@ -450,7 +449,7 @@ void func_809CEBC0(BgSpdweb* this, PlayState* play) {
                 this->dyna.actor.world.pos.z;
         }
         func_809CEE74(this);
-    } else if ((player->itemActionParam == 7) && (player->unk_B28 != 0)) {
+    } else if ((player->heldItemAction == PLAYER_IA_STICK) && (player->unk_B28 != 0)) {
         Math_Vec3f_Diff(&player->meleeWeaponInfo[0].tip, &this->dyna.actor.world.pos, &sp3C);
         sp38 = Math_SinS(-this->dyna.actor.shape.rot.x);
         sp34 = Math_CosS(-this->dyna.actor.shape.rot.x);
@@ -471,16 +470,16 @@ void func_809CEBC0(BgSpdweb* this, PlayState* play) {
 }
 
 void func_809CEE74(BgSpdweb* this) {
-    ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+    CutsceneManager_Queue(this->dyna.actor.csId);
     this->actionFunc = func_809CEEAC;
 }
 
 void func_809CEEAC(BgSpdweb* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
+    if (CutsceneManager_IsNext(this->dyna.actor.csId)) {
+        CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
         func_809CE1D0(this, play);
     } else {
-        ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+        CutsceneManager_Queue(this->dyna.actor.csId);
     }
 }
 

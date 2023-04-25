@@ -4,11 +4,9 @@
  * Description: "Master" instance of grass for unit spawned by Obj_Grass_Unit
  */
 
-#include "prevent_bss_reordering.h"
 #include "z_obj_grass.h"
 #include "overlays/actors/ovl_Obj_Grass_Carry/z_obj_grass_carry.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
-#include "prevent_bss_reordering.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -26,7 +24,7 @@ f32 D_809AAE10[20];
 
 #include "overlays/ovl_Obj_Grass/ovl_Obj_Grass.c"
 
-const ActorInit Obj_Grass_InitVars = {
+ActorInit Obj_Grass_InitVars = {
     ACTOR_OBJ_GRASS,
     ACTORCAT_PROP,
     FLAGS,
@@ -73,13 +71,13 @@ s32 func_809A9110(PlayState* play, Vec3f* arg1) {
 
     SkinMatrix_Vec3fMtxFMultXYZW(&play->viewProjectionMtxF, arg1, &sp20, &sp2C);
 
-    if ((play->unk_187F0.z * -130.13191f) < sp20.z) {
+    if ((play->projectionMtxFDiagonal.z * -130.13191f) < sp20.z) {
         if (sp2C < 1.0f) {
             sp2C = 1.0f;
         }
 
-        if (((fabsf(sp20.x) - (130.13191f * play->unk_187F0.x)) < sp2C) &&
-            ((fabsf(sp20.y) - (130.13191f * play->unk_187F0.y)) < sp2C)) {
+        if (((fabsf(sp20.x) - (130.13191f * play->projectionMtxFDiagonal.x)) < sp2C) &&
+            ((fabsf(sp20.y) - (130.13191f * play->projectionMtxFDiagonal.y)) < sp2C)) {
             return true;
         }
     }

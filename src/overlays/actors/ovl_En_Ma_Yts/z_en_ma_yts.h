@@ -13,7 +13,7 @@ typedef struct EnMaYts {
     /* 0x144 */ SkelAnime skelAnime;
     /* 0x188 */ EnMaYtsActionFunc actionFunc;
     /* 0x18C */ ColliderCylinder collider;
-    /* 0x1D8 */ struct_800BD888_arg1 unk_1D8;
+    /* 0x1D8 */ NpcInteractInfo interactInfo;
     /* 0x200 */ s32 unk_200; // Set, but not used
     /* 0x204 */ Vec3s jointTable[ROMANI_LIMB_MAX];
     /* 0x28E */ UNK_TYPE1 unk_28E[0x6];
@@ -30,8 +30,6 @@ typedef struct EnMaYts {
     /* 0x336 */ s16 hasBow;
     /* 0x338 */ u16 textId;
 } EnMaYts; // size = 0x33C
-
-extern const ActorInit En_Ma_Yts_InitVars;
 
 typedef enum {
     /* 0 */ MA_YTS_TYPE_BARN,

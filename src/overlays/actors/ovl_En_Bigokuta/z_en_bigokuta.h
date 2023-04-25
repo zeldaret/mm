@@ -16,7 +16,7 @@ typedef struct EnBigokuta {
     /* 0x190 */ u8 drawDmgEffType;
     /* 0x192 */ s16 timer;
     /* 0x194 */ s16 subCamId;
-    /* 0x196 */ s16 cutscene;
+    /* 0x196 */ s16 csId;
     /* 0x198 */ Vec3s jointTable[BIGOKUTA_LIMB_MAX];
     /* 0x210 */ Vec3s morphTable[BIGOKUTA_LIMB_MAX];
     /* 0x288 */ f32 drawDmgEffAlpha;
@@ -30,7 +30,5 @@ typedef struct EnBigokuta {
     /* 0x360 */ ColliderCylinder shellCollider;
     /* 0x3AC */ ColliderCylinder bodyCollider;
 } EnBigokuta; // size = 0x3F8
-
-extern const ActorInit En_Bigokuta_InitVars;
 
 #endif // Z_EN_BIGOKUTA_H

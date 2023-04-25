@@ -28,7 +28,7 @@ typedef struct EnFish2 {
     /* 0x02B4 */ s16 unk_2B4;
     /* 0x02B6 */ s16 unk_2B6;
     /* 0x02B8 */ s16 unk_2B8;
-    /* 0x02BA */ s16 unk_2BA[3];
+    /* 0x02BA */ s16 csIdList[3];
     /* 0x02C0 */ s32 unk_2C0;
     /* 0x02C4 */ s32 unk_2C4;
     /* 0x02C8 */ u8 unk_2C8;
@@ -59,7 +59,5 @@ typedef struct EnFish2 {
     /* 0x0378 */ ColliderJntSphElement colliderElements[2];
     /* 0x03F8 */ EnFish2UnkStruct unk_3F8[200];
 } EnFish2; // size = 0x2018
-
-extern const ActorInit En_Fish2_InitVars;
 
 #endif // Z_EN_FISH2_H

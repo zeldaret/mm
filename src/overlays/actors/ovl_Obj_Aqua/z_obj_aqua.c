@@ -24,7 +24,7 @@ void func_80ACBDFC(ObjAqua* this, PlayState* play);
 
 void func_80ACBD34(ObjAqua* this);
 
-const ActorInit Obj_Aqua_InitVars = {
+ActorInit Obj_Aqua_InitVars = {
     ACTOR_OBJ_AQUA,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -151,7 +151,10 @@ void ObjAqua_Init(Actor* thisx, PlayState* play) {
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 60.0f);
-    if (1) {};
+
+    //! FAKE:
+    if (1) {}
+
     this->actor.shape.shadowAlpha = 140;
     this->alpha = 255;
     if (func_80ACBA60(this, play)) {
@@ -175,19 +178,19 @@ void func_80ACBC70(ObjAqua* this) {
 }
 
 void func_80ACBC8C(ObjAqua* this, PlayState* play) {
-    if (this->actor.bgCheckFlags & 0x21) {
-        if (this->actor.bgCheckFlags & 1) {
+    if (this->actor.bgCheckFlags & (BGCHECKFLAG_GROUND | BGCHECKFLAG_WATER)) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
             func_80ACB7F4(this, play);
             func_80ACBA10(this);
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BOTTLE_WATERING);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_BOTTLE_WATERING);
             func_80ACBD34(this);
         } else {
             func_80ACB6A0(this, play);
             SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 0x28, NA_SE_EV_BOMB_DROP_WATER);
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     } else if (this->counter <= 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -207,7 +210,7 @@ void func_80ACBD48(ObjAqua* this, PlayState* play) {
     if (this->actor.shape.shadowAlpha > 2) {
         this->actor.shape.shadowAlpha -= 2;
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -232,7 +235,7 @@ void func_80ACBDFC(ObjAqua* this, PlayState* play) {
                              (Rand_ZeroOne() * 0.1f) + 0.03f);
     }
     if (this->counter <= 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -254,7 +257,7 @@ void ObjAqua_Update(Actor* thisx, PlayState* play) {
         }
         this->actor.velocity.y *= 0.9f;
         Actor_MoveWithGravity(&this->actor);
-        Actor_UpdateBgCheckInfo(play, &this->actor, 12.0f, 4.0f, 0.0f, 5);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 12.0f, 4.0f, 0.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
         if (this->actionFunc != func_80ACBDFC) {
             Collider_UpdateCylinder(&this->actor, &this->collider);
             this->collider.dim.radius = this->actor.scale.x * 3000.0f;

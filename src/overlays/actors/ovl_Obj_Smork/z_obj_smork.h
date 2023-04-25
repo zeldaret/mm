@@ -16,6 +16,4 @@ typedef struct ObjSmork {
     /* 0x1C6 */ s16 unk_1C6;
 } ObjSmork; // size = 0x1C8
 
-extern const ActorInit Obj_Smork_InitVars;
-
 #endif // Z_OBJ_SMORK_H

@@ -18,7 +18,7 @@ void EnMm2_Draw(Actor* thisx, PlayState* play);
 void EnMm2_Reading(EnMm2* this, PlayState* play);
 void EnMm2_WaitForRead(EnMm2* this, PlayState* play);
 
-const ActorInit En_Mm2_InitVars = {
+ActorInit En_Mm2_InitVars = {
     ACTOR_EN_MM2,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -49,7 +49,7 @@ void EnMm2_Reading(EnMm2* this, PlayState* play) {
     switch (Message_GetState(&play->msgCtx)) {
         case TEXT_STATE_5:
             if (Message_ShouldAdvance(play)) {
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 this->actionFunc = EnMm2_WaitForRead;
             }
             break;

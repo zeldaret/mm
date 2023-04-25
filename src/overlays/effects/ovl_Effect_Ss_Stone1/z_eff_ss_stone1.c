@@ -15,7 +15,7 @@ u32 EffectSsStone1_Init(PlayState* play, u32 index, EffectSs* this, void* initPa
 void EffectSsStone1_Update(PlayState* play, u32 index, EffectSs* this);
 void EffectSsStone1_Draw(PlayState* play, u32 index, EffectSs* this);
 
-const EffectSsInit Effect_Ss_Stone1_InitVars = {
+EffectSsInit Effect_Ss_Stone1_InitVars = {
     EFFECT_SS_STONE1,
     EffectSsStone1_Init,
 };
@@ -77,6 +77,6 @@ void EffectSsStone1_Draw(PlayState* play, u32 index, EffectSs* this) {
 
 void EffectSsStone1_Update(PlayState* play, u32 index, EffectSs* this) {
     if ((this->life == 6) && (this->rReg0 != 0)) {
-        iREG(50) = 0;
+        R_TRANS_FADE_FLASH_ALPHA_STEP = 0;
     }
 }

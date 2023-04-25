@@ -14,6 +14,4 @@ typedef struct ObjGhaka {
     /* 0x168 */ s16 unk_168;
 } ObjGhaka; // size = 0x16C
 
-extern const ActorInit Obj_Ghaka_InitVars;
-
 #endif // Z_OBJ_GHAKA_H

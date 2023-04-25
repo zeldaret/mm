@@ -19,7 +19,7 @@ void EnEndingHero4_Draw(Actor* thisx, PlayState* play);
 void func_80C23748(EnEndingHero4* this);
 void func_80C23764(EnEndingHero4* this, PlayState* play);
 
-const ActorInit En_Ending_Hero4_InitVars = {
+ActorInit En_Ending_Hero4_InitVars = {
     ACTOR_EN_ENDING_HERO4,
     ACTORCAT_NPC,
     FLAGS,
@@ -61,7 +61,9 @@ void EnEndingHero4_Update(Actor* thisx, PlayState* play) {
 
     this->actionFunc(this, play);
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 50.0f, 0x1D);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 50.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                UPDBGCHECKINFO_FLAG_10);
 }
 
 void EnEndingHero4_Draw(Actor* thisx, PlayState* play) {

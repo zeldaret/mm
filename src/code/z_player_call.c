@@ -1,8 +1,9 @@
+#include "prevent_bss_reordering.h"
 #include "global.h"
 
 #define FLAGS                                                                                               \
     (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_200000 | ACTOR_FLAG_2000000 | \
-     ACTOR_FLAG_4000000 | ACTOR_FLAG_80000000)
+     ACTOR_FLAG_CAN_PRESS_SWITCH | ACTOR_FLAG_80000000)
 
 ActorFunc sPlayerCallInitFunc;
 ActorFunc sPlayerCallDestroyFunc;
@@ -14,7 +15,7 @@ void PlayerCall_Destroy(Actor* thisx, PlayState* play);
 void PlayerCall_Update(Actor* thisx, PlayState* play);
 void PlayerCall_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit Player_InitVars = {
+ActorInit Player_InitVars = {
     ACTOR_PLAYER,
     ACTORCAT_PLAYER,
     FLAGS,

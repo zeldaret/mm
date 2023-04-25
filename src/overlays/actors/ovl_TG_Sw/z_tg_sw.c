@@ -5,6 +5,7 @@
  */
 
 #include "z_tg_sw.h"
+#include "z64debug_display.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -18,7 +19,7 @@ void TGSw_Draw(Actor* thisx, PlayState* play);
 
 void TGSw_ActionExecuteOneShot(struct TGSw* this, PlayState* play);
 
-const ActorInit TG_Sw_InitVars = {
+ActorInit TG_Sw_InitVars = {
     ACTOR_TG_SW,
     ACTORCAT_PROP,
     FLAGS,
@@ -36,14 +37,14 @@ void TGSw_ActionDecider(TGSw* this, PlayState* play) {
     u8 unk1F4;
 
     // Maybe actorCtx Debug Flag?
-    if (play->actorCtx.unk1F5 != 0) {
+    if (play->actorCtx.unk_1F4.timer != 0) {
         scaledAbsoluteRotY = ABS_ALT(this->actor.world.rot.y) * 4.0f;
         scaledAbsoluteRotZ = ABS_ALT(this->actor.world.rot.z) * 4.0f;
 
         if ((scaledAbsoluteRotZ < this->actor.xzDistToPlayer) || (scaledAbsoluteRotY < this->actor.playerHeightRel)) {
             return;
         }
-        unk1F4 = play->actorCtx.unk1F4;
+        unk1F4 = play->actorCtx.unk_1F4.unk_00;
         if (unk1F4 == 2 || unk1F4 == 0) {
             this->actionFunc = TGSw_ActionExecuteOneShot;
         }
@@ -62,7 +63,7 @@ void TGSw_ActionExecuteOneShot(TGSw* this, PlayState* play) {
         }
         if ((((this->actor.params & 0xFC) >> 2) & 0xFF) == (((actor->params & 0xFC) >> 2) & 0xFF)) {
             actor->parent = &this->actor;
-            actor->speedXZ = ABS_ALT(this->actor.world.rot.x);
+            actor->speed = ABS_ALT(this->actor.world.rot.x);
             break;
         }
         actor = actor->next;
@@ -78,19 +79,19 @@ void TGSw_ActionExecuteOneShot(TGSw* this, PlayState* play) {
         }
         if ((((this->actor.params & 0xFC) >> 2) & 0xFF) == (((actor->params & 0xFC) >> 2) & 0xFF)) {
             actor->parent = &this->actor;
-            actor->speedXZ = ABS_ALT(this->actor.world.rot.x);
+            actor->speed = ABS_ALT(this->actor.world.rot.x);
             break;
         }
         actor = actor->next;
     } while (actor != NULL);
 
-    Actor_MarkForDeath(&this->actor);
+    Actor_Kill(&this->actor);
 }
 
 void TGSw_Init(Actor* thisx, PlayState* play) {
     TGSw* this = THIS;
 
-    this->actor.cutscene = this->actor.world.rot.z;
+    this->actor.csId = this->actor.world.rot.z;
     this->actionFunc = TGSw_ActionDecider;
 }
 

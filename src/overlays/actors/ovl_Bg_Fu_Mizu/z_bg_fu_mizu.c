@@ -16,7 +16,7 @@ void BgFuMizu_Destroy(Actor* thisx, PlayState* play);
 void BgFuMizu_Update(Actor* thisx, PlayState* play);
 void BgFuMizu_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit Bg_Fu_Mizu_InitVars = {
+ActorInit Bg_Fu_Mizu_InitVars = {
     ACTOR_BG_FU_MIZU,
     ACTORCAT_BG,
     FLAGS,
@@ -34,7 +34,7 @@ void BgFuMizu_Init(Actor* thisx, PlayState* play) {
     CollisionHeader* colHeader = NULL;
 
     Actor_SetScale(&this->dyna.actor, 1.0f);
-    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
     CollisionHeader_GetVirtual(&object_fu_kaiten_Colheader_0037F8, &colHeader);
     this->dyna.bgId = DynaPoly_SetBgActor(play, &play->colCtx.dyna, &this->dyna.actor, colHeader);
     this->unk_160 = 0;

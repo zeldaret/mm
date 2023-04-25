@@ -34,14 +34,12 @@ typedef struct EnAob01 {
     /* 0x3F0 */ s16 blinkTimer;
     /* 0x3F4 */ Actor* unk_3F4;
     /* 0x3F8 */ Actor* unk_3F8[14];
-    /* 0x430 */ s16 unk_430;
+    /* 0x430 */ s16 csId;
     /* 0x432 */ s16 unk_432;
     /* 0x434 */ s32 unk_434;
     /* 0x438 */ UNK_TYPE1 unk438[4];
     /* 0x43C */ s32 unk_43C;
     /* 0x440 */ s16 unk_440;
 } EnAob01; // size = 0x444
-
-extern const ActorInit En_Aob_01_InitVars;
 
 #endif // Z_EN_AOB_01_H

@@ -67,7 +67,7 @@ static ColliderCylinderInit D_80971D80 = {
     { 20, 70, 0, { 0, 0, 0 } },
 };
 
-const ActorInit En_Kakasi_InitVars = {
+ActorInit En_Kakasi_InitVars = {
     ACTOR_EN_KAKASI,
     ACTORCAT_NPC,
     FLAGS,
@@ -143,7 +143,7 @@ void EnKakasi_Destroy(Actor* thisx, PlayState* play) {
 
 void EnKakasi_Init(Actor* thisx, PlayState* play) {
     EnKakasi* this = THIS;
-    s32 tempCutscene;
+    s32 csId;
     s32 i;
 
     Collider_InitAndSetCylinder(play, &this->collider, &this->picto.actor, &D_80971D80);
@@ -169,22 +169,22 @@ void EnKakasi_Init(Actor* thisx, PlayState* play) {
     Actor_SetScale(&this->picto.actor, 0.01f);
 
     i = 0;
-    tempCutscene = this->picto.actor.cutscene;
-    while (tempCutscene != -1) {
+    csId = this->picto.actor.csId;
+    while (csId != CS_ID_NONE) {
         //! FAKE:
-        tempCutscene = ActorCutscene_GetAdditionalCutscene(this->actorCutscenes[i] = tempCutscene);
+        csId = CutsceneManager_GetAdditionalCsId(this->csIdList[i] = csId);
         i++;
     }
 
     if (this->aboveGroundStatus != 0) {
-        if (gSaveContext.save.weekEventReg[79] & 8) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_79_08)) {
             this->aboveGroundStatus = ENKAKASI_ABOVE_GROUND_TYPE;
             this->songSummonDist = 80.0f;
             EnKakasi_SetupIdleUnderground(this);
         } else {
             Actor_SetFocus(&this->picto.actor, 60.0f);
             this->picto.validationFunc = EnKakasi_ValidatePictograph;
-            if (gSaveContext.save.weekEventReg[83] & 1) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_83_01)) {
                 EnKakasi_InitTimeSkipDialogue(this);
             } else {
                 EnKakasi_SetupIdleStanding(this);
@@ -210,24 +210,24 @@ s32 EnKakasi_ValidatePictograph(PlayState* play, Actor* thisx) {
 void EnKakasi_CheckAnimationSfx(EnKakasi* this) {
     if (this->animIndex == ENKAKASI_ANIM_SIDEWAYS_SHAKING || this->animIndex == ENKAKASI_ANIM_ARMS_CROSSED_STILL) {
         if (Animation_OnFrame(&this->skelanime, 1.0f) || Animation_OnFrame(&this->skelanime, 8.0f)) {
-            Actor_PlaySfxAtPos(&this->picto.actor, NA_SE_EV_KAKASHI_SWING);
+            Actor_PlaySfx(&this->picto.actor, NA_SE_EV_KAKASHI_SWING);
         }
     }
     if (this->animIndex == ENKAKASI_ANIM_HOPPING_REGULAR || this->animIndex == ENKAKASI_ANIM_SLOWROLL) {
         if (Animation_OnFrame(&this->skelanime, 4.0f) || Animation_OnFrame(&this->skelanime, 8.0f)) {
-            Actor_PlaySfxAtPos(&this->picto.actor, NA_SE_EV_KAKASHI_SWING);
+            Actor_PlaySfx(&this->picto.actor, NA_SE_EV_KAKASHI_SWING);
         }
         if (Animation_OnFrame(&this->skelanime, 1.0f) || Animation_OnFrame(&this->skelanime, 9.0f) ||
             Animation_OnFrame(&this->skelanime, 16.0f)) {
-            Actor_PlaySfxAtPos(&this->picto.actor, NA_SE_IT_KAKASHI_JUMP);
+            Actor_PlaySfx(&this->picto.actor, NA_SE_IT_KAKASHI_JUMP);
         }
         if (Animation_OnFrame(&this->skelanime, 18.0f)) {
-            Actor_PlaySfxAtPos(&this->picto.actor, NA_SE_EV_KAKASHI_ROLL);
+            Actor_PlaySfx(&this->picto.actor, NA_SE_EV_KAKASHI_ROLL);
         }
     }
     if (this->animIndex == ENKAKASI_ANIM_SPIN_REACH_OFFER || this->animIndex == ENKAKASI_ANIM_TWIRL) {
         if (Animation_OnFrame(&this->skelanime, 1.0f)) {
-            Actor_PlaySfxAtPos(&this->picto.actor, NA_SE_EV_KAKASH_LONGI_ROLL);
+            Actor_PlaySfx(&this->picto.actor, NA_SE_EV_KAKASH_LONGI_ROLL);
         }
     }
 }
@@ -301,24 +301,24 @@ void EnKakasi_TimeSkipDialogue(EnKakasi* this, PlayState* play) {
 
     if (gSaveContext.respawnFlag != -4 && gSaveContext.respawnFlag != -8) {
         if (gSaveContext.save.time != CLOCK_TIME(6, 0) && gSaveContext.save.time != CLOCK_TIME(18, 0) &&
-            !(gSaveContext.eventInf[1] & 0x80)) {
+            !CHECK_EVENTINF(EVENTINF_17)) {
 
             if (this->picto.actor.textId == 0) {
                 // dialogue after skipped time 'did you feel that? went by in an instant'
                 this->picto.actor.textId = 0x1653;
-                gSaveContext.save.weekEventReg[83] &= (u8)~1;
+                CLEAR_WEEKEVENTREG(WEEKEVENTREG_83_01);
                 this->talkState = TEXT_STATE_5;
-                player->stateFlags1 |= 0x20;
+                player->stateFlags1 |= PLAYER_STATE1_20;
                 this->picto.actor.flags |= ACTOR_FLAG_10000;
             }
 
             if (Actor_ProcessTalkRequest(&this->picto.actor, &play->state)) {
-                player->stateFlags1 &= ~0x20;
+                player->stateFlags1 &= ~PLAYER_STATE1_20;
                 this->unkState196 = 2;
                 this->picto.actor.flags &= ~ACTOR_FLAG_10000;
                 this->actionFunc = EnKakasi_RegularDialogue;
             } else {
-                func_800B8500(&this->picto.actor, play, 9999.9f, 9999.9f, PLAYER_AP_MINUS1);
+                func_800B8500(&this->picto.actor, play, 9999.9f, 9999.9f, PLAYER_IA_MINUS1);
             }
         }
     }
@@ -346,7 +346,7 @@ void EnKakasi_IdleStanding(EnKakasi* this, PlayState* play) {
         EnKakasi_SetupDialogue(this);
         return;
     }
-    if (play->actorCtx.flags & ACTORCTX_FLAG_2) {
+    if (play->actorCtx.flags & ACTORCTX_FLAG_PICTO_BOX_ON) {
         Actor_GetScreenPos(play, &this->picto.actor, &x, &y);
         if (this->picto.actor.projectedPos.z > -20.0f && x > 0 && x < SCREEN_WIDTH && y > 0 && y < SCREEN_HEIGHT &&
             this->animIndex != ENKAKASI_ANIM_SIDEWAYS_SHAKING) {
@@ -409,16 +409,16 @@ void EnKakasi_RegularDialogue(EnKakasi* this, PlayState* play) {
     }
 
     if (this->unkState1A8 == 2 && this->unkState196 == 2) {
-        func_800B7298(play, &this->picto.actor, 0x49);
+        func_800B7298(play, &this->picto.actor, PLAYER_CSMODE_73);
         this->unkState1A8 = 0;
     }
 
     if ((this->talkState == Message_GetState(&play->msgCtx)) && Message_ShouldAdvance(play)) {
-        func_801477B4(play);
+        Message_CloseTextbox(play);
         if (this->talkState == TEXT_STATE_5) {
             // bad song input
             if (this->unkState196 == 2 && this->picto.actor.textId == 0x1647) {
-                func_800B7298(play, &this->picto.actor, 6);
+                func_800B7298(play, &this->picto.actor, PLAYER_CSMODE_END);
             }
 
             // after timeskip
@@ -440,23 +440,23 @@ void EnKakasi_RegularDialogue(EnKakasi* this, PlayState* play) {
                     this->picto.actor.textId = 0x1645;
                 }
 
-                func_80151938(play, this->picto.actor.textId);
+                Message_ContinueTextbox(play, this->picto.actor.textId);
                 return;
 
             } else if (this->picto.actor.textId == 0x165D || this->picto.actor.textId == 0x165F ||
                        this->picto.actor.textId == 0x1660 || this->picto.actor.textId == 0x1652) {
-                func_800B7298(play, &this->picto.actor, 4);
-                if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-                    ActorCutscene_Stop(0x7C);
-                    ActorCutscene_SetIntentToPlay(this->actorCutscenes[0]);
+                func_800B7298(play, &this->picto.actor, PLAYER_CSMODE_4);
+                if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+                    CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
+                    CutsceneManager_Queue(this->csIdList[0]);
                     this->actionFunc = EnKakasi_DancingRemark;
                 } else {
-                    if (!ActorCutscene_GetCanPlayNext(this->actorCutscenes[0])) {
-                        ActorCutscene_SetIntentToPlay(this->actorCutscenes[0]);
+                    if (!CutsceneManager_IsNext(this->csIdList[0])) {
+                        CutsceneManager_Queue(this->csIdList[0]);
                         this->actionFunc = EnKakasi_DancingRemark;
                     } else {
-                        ActorCutscene_StartAndSetUnkLinkFields(this->actorCutscenes[0], &this->picto.actor);
-                        this->subCamId = ActorCutscene_GetCurrentSubCamId(this->picto.actor.cutscene);
+                        CutsceneManager_StartWithPlayerCs(this->csIdList[0], &this->picto.actor);
+                        this->subCamId = CutsceneManager_GetCurrentSubCamId(this->picto.actor.csId);
                         this->actionFunc = EnKakasi_DancingRemark;
                     }
                 }
@@ -538,7 +538,7 @@ void EnKakasi_RegularDialogue(EnKakasi* this, PlayState* play) {
                 }
             }
         }
-        func_80151938(play, this->picto.actor.textId);
+        Message_ContinueTextbox(play, this->picto.actor.textId);
     }
 }
 
@@ -561,19 +561,19 @@ void EnKakasi_OcarinaRemark(EnKakasi* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         func_80152434(play, 0x35);
         this->unkState1A8 = 0;
-        if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-            ActorCutscene_Stop(0x7C);
-            ActorCutscene_SetIntentToPlay(this->actorCutscenes[0]);
+        if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+            CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
+            CutsceneManager_Queue(this->csIdList[0]);
             this->actionFunc = EnKakasi_TeachingSong;
 
-        } else if (ActorCutscene_GetCanPlayNext(this->actorCutscenes[0]) == 0) {
-            ActorCutscene_SetIntentToPlay(this->actorCutscenes[0]);
+        } else if (!CutsceneManager_IsNext(this->csIdList[0])) {
+            CutsceneManager_Queue(this->csIdList[0]);
             this->actionFunc = EnKakasi_TeachingSong;
 
         } else {
             this->unkState1A8 = 1;
-            ActorCutscene_StartAndSetUnkLinkFields(this->actorCutscenes[0], &this->picto.actor);
-            this->subCamId = ActorCutscene_GetCurrentSubCamId(this->picto.actor.cutscene);
+            CutsceneManager_StartWithPlayerCs(this->csIdList[0], &this->picto.actor);
+            this->subCamId = CutsceneManager_GetCurrentSubCamId(this->picto.actor.csId);
             Math_Vec3f_Copy(&this->unk22C, &this->picto.actor.home.pos);
             this->actionFunc = EnKakasi_TeachingSong;
         }
@@ -586,17 +586,17 @@ void EnKakasi_TeachingSong(EnKakasi* this, PlayState* play) {
     EnKakasi_CheckPlayerPosition(this, play);
     Math_SmoothStepToS(&this->picto.actor.shape.rot.y, this->picto.actor.home.rot.y, 1, 3000, 0);
     if (this->unkState1A8 == 0) {
-        if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-            ActorCutscene_Stop(0x7C);
-            ActorCutscene_SetIntentToPlay(this->actorCutscenes[0]);
+        if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+            CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
+            CutsceneManager_Queue(this->csIdList[0]);
             return;
         }
-        if (ActorCutscene_GetCanPlayNext(this->actorCutscenes[0]) == 0) {
-            ActorCutscene_SetIntentToPlay(this->actorCutscenes[0]);
+        if (!CutsceneManager_IsNext(this->csIdList[0])) {
+            CutsceneManager_Queue(this->csIdList[0]);
             return;
         }
-        ActorCutscene_StartAndSetUnkLinkFields(this->actorCutscenes[0], &this->picto.actor);
-        this->subCamId = ActorCutscene_GetCurrentSubCamId(this->picto.actor.cutscene);
+        CutsceneManager_StartWithPlayerCs(this->csIdList[0], &this->picto.actor);
+        this->subCamId = CutsceneManager_GetCurrentSubCamId(this->picto.actor.csId);
         Math_Vec3f_Copy(&this->unk22C, &this->picto.actor.home.pos);
         this->unkState1A8 = 1;
         this->unkState1A8 = 1;
@@ -619,8 +619,8 @@ void EnKakasi_TeachingSong(EnKakasi* this, PlayState* play) {
         if (play->msgCtx.ocarinaMode == 4) { // song failed
             this->unk190 = 0;
             this->unkCounter1A4 = 0;
-            ActorCutscene_Stop(this->actorCutscenes[0]);
-            Actor_PlaySfxAtPos(&this->picto.actor, NA_SE_EN_YASE_DEAD);
+            CutsceneManager_Stop(this->csIdList[0]);
+            Actor_PlaySfx(&this->picto.actor, NA_SE_EN_YASE_DEAD);
             if (this) {}
             this->unkState196 = 2;
             this->subCamId = SUB_CAM_ID_DONE;
@@ -652,7 +652,7 @@ void EnKakasi_PostSongLearnTwirl(EnKakasi* this, PlayState* play) {
 }
 
 void EnKakasi_SetupPostSongLearnDialogue(EnKakasi* this, PlayState* play) {
-    ActorCutscene_Stop(this->actorCutscenes[0]);
+    CutsceneManager_Stop(this->csIdList[0]);
     play->msgCtx.ocarinaMode = 4;
     this->unk190 = 0;
     this->unkCounter1A4 = 0;
@@ -674,8 +674,8 @@ void EnKakasi_PostSongLearnDialogue(EnKakasi* this, PlayState* play) {
     Math_SmoothStepToS(&player->actor.shape.rot.y, this->picto.actor.yawTowardsPlayer + 0x8000, 5, 1000, 0);
 
     if (this->unk190 == 0) {
-        func_801477B4(play);
-        func_800B7298(play, &this->picto.actor, 0x56);
+        Message_CloseTextbox(play);
+        func_800B7298(play, &this->picto.actor, PLAYER_CSMODE_86);
         this->picto.actor.textId = 0x1648;
         Message_StartTextbox(play, (this->picto.actor.textId), &this->picto.actor);
         this->unkState1A8 = 0;
@@ -699,19 +699,19 @@ void EnKakasi_PostSongLearnDialogue(EnKakasi* this, PlayState* play) {
     }
 
     if (this->unkState1A8 == 0) {
-        if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-            ActorCutscene_Stop(0x7C);
-            ActorCutscene_SetIntentToPlay(this->actorCutscenes[0]);
+        if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+            CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
+            CutsceneManager_Queue(this->csIdList[0]);
             return;
         }
-        if (ActorCutscene_GetCanPlayNext(this->actorCutscenes[0]) == 0) {
-            ActorCutscene_SetIntentToPlay(this->actorCutscenes[0]);
+        if (!CutsceneManager_IsNext(this->csIdList[0])) {
+            CutsceneManager_Queue(this->csIdList[0]);
             return;
         }
         Math_Vec3f_Copy(&this->unk22C, &this->picto.actor.home.pos);
-        ActorCutscene_StartAndSetUnkLinkFields(this->actorCutscenes[0], &this->picto.actor);
-        this->subCamId = ActorCutscene_GetCurrentSubCamId(this->picto.actor.cutscene);
-        func_800B7298(play, &this->picto.actor, 0x56);
+        CutsceneManager_StartWithPlayerCs(this->csIdList[0], &this->picto.actor);
+        this->subCamId = CutsceneManager_GetCurrentSubCamId(this->picto.actor.csId);
+        func_800B7298(play, &this->picto.actor, PLAYER_CSMODE_86);
         this->unkState1A8 = 1;
     }
 
@@ -735,7 +735,7 @@ void EnKakasi_PostSongLearnDialogue(EnKakasi* this, PlayState* play) {
     if ((this->unkState1A8 != 0) && (Message_GetState(&play->msgCtx) == this->talkState) &&
         Message_ShouldAdvance(play)) {
 
-        func_801477B4(play);
+        Message_CloseTextbox(play);
 
         if (this->talkState == TEXT_STATE_5) {
             this->unk190++;
@@ -744,7 +744,7 @@ void EnKakasi_PostSongLearnDialogue(EnKakasi* this, PlayState* play) {
             }
 
             if (this->picto.actor.textId == 0x1648) {
-                func_800B7298(play, &this->picto.actor, 7);
+                func_800B7298(play, &this->picto.actor, PLAYER_CSMODE_WAIT);
                 this->picto.actor.textId = 0x1649;
                 if (this->animIndex != ENKAKASI_ANIM_ARMS_CROSSED_ROCKING) {
                     EnKakasi_ChangeAnim(this, ENKAKASI_ANIM_ARMS_CROSSED_ROCKING);
@@ -778,7 +778,7 @@ void EnKakasi_PostSongLearnDialogue(EnKakasi* this, PlayState* play) {
                 this->picto.actor.textId = 0x1661;
             }
         }
-        func_80151938(play, this->picto.actor.textId);
+        Message_ContinueTextbox(play, this->picto.actor.textId);
     }
 }
 
@@ -789,18 +789,18 @@ void EnKakasi_DancingRemark(EnKakasi* this, PlayState* play) {
     u32 currentDay = gSaveContext.save.day;
 
     this->unkState196 = 3;
-    if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-        ActorCutscene_Stop(0x7C);
-        ActorCutscene_SetIntentToPlay(this->actorCutscenes[0]);
-    } else if (ActorCutscene_GetCanPlayNext(this->actorCutscenes[0]) == 0) {
-        ActorCutscene_SetIntentToPlay(this->actorCutscenes[0]);
+    if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+        CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
+        CutsceneManager_Queue(this->csIdList[0]);
+    } else if (!CutsceneManager_IsNext(this->csIdList[0])) {
+        CutsceneManager_Queue(this->csIdList[0]);
     } else {
-        ActorCutscene_StartAndSetUnkLinkFields(this->actorCutscenes[0], &this->picto.actor);
-        this->subCamId = ActorCutscene_GetCurrentSubCamId(this->picto.actor.cutscene);
+        CutsceneManager_StartWithPlayerCs(this->csIdList[0], &this->picto.actor);
+        this->subCamId = CutsceneManager_GetCurrentSubCamId(this->picto.actor.csId);
         if (currentDay == 3 && gSaveContext.save.isNight) {
             EnKakasi_SetupDigAway(this);
         } else {
-            func_801A2BB8(NA_BGM_SARIAS_SONG);
+            Audio_PlaySubBgm(NA_BGM_SARIAS_SONG);
             EnKakasi_SetupDanceNightAway(this);
         }
     }
@@ -813,7 +813,7 @@ void EnKakasi_SetupDanceNightAway(EnKakasi* this) {
     this->subCamFovNext = 60.0f;
     EnKakasi_ChangeAnim(this, ENKAKASI_ANIM_TWIRL);
     Math_Vec3f_Copy(&this->unk22C, &this->picto.actor.home.pos);
-    func_8016566C(0xB4);
+    Play_EnableMotionBlur(180);
     this->actionFunc = EnKakasi_DancingNightAway;
 }
 
@@ -916,8 +916,8 @@ void EnKakasi_DancingNightAway(EnKakasi* this, PlayState* play) {
                 this->unk190++;
                 this->unk204 = 0xA;
                 if (this->unk190 == 0xE) {
-                    func_800B7298(play, &this->picto.actor, 0x49);
-                    func_80165690();
+                    func_800B7298(play, &this->picto.actor, PLAYER_CSMODE_73);
+                    Play_DisableMotionBlur();
                     this->unk204 = 0x14;
                 }
             }
@@ -930,19 +930,21 @@ void EnKakasi_DancingNightAway(EnKakasi* this, PlayState* play) {
                 player = GET_PLAYER(play);
 
                 Play_SetRespawnData(&play->state, RESPAWN_MODE_DOWN, Entrance_CreateFromSpawn(0), player->unk_3CE,
-                                    0xBFF, &player->unk_3C0, player->unk_3CC);
+                                    PLAYER_PARAMS(0xFF, PLAYER_INITMODE_B), &player->unk_3C0, player->unk_3CC);
                 func_80169EFC(&play->state);
 
-                if (0) {}
+                //! FAKE
+                if (1) {}
+
                 if (gSaveContext.save.time > CLOCK_TIME(18, 0) || gSaveContext.save.time < CLOCK_TIME(6, 0)) {
                     gSaveContext.save.time = CLOCK_TIME(6, 0);
                     gSaveContext.respawnFlag = -4;
-                    gSaveContext.eventInf[2] |= 0x80;
+                    SET_EVENTINF(EVENTINF_27);
                 } else {
                     gSaveContext.save.time = CLOCK_TIME(18, 0);
                     gSaveContext.respawnFlag = -8;
                 }
-                gSaveContext.save.weekEventReg[83] |= 1;
+                SET_WEEKEVENTREG(WEEKEVENTREG_83_01);
                 this->unk190 = 0;
                 this->actionFunc = EnKakasi_DoNothing;
             }
@@ -1005,15 +1007,15 @@ void EnKakasi_DiggingAway(EnKakasi* this, PlayState* play) {
         } else {
             Actor_SpawnFloorDustRing(play, &this->picto.actor, &this->picto.actor.world.pos,
                                      this->picto.actor.shape.shadowScale - 20.0f, 5, 4.0f, 200, 10, 1);
-            Actor_PlaySfxAtPos(&this->picto.actor, NA_SE_EN_AKINDONUTS_HIDE);
+            Actor_PlaySfx(&this->picto.actor, NA_SE_EN_AKINDONUTS_HIDE);
         }
     }
 
     Math_ApproachF(&this->picto.actor.shape.yOffset, -6000.0f, 0.5f, 200.0f);
     if (fabsf(this->picto.actor.shape.yOffset + 6000.0f) < 10.0f) {
-        gSaveContext.save.weekEventReg[79] |= 8;
-        func_800B7298(play, &this->picto.actor, 6);
-        ActorCutscene_Stop(this->actorCutscenes[0]);
+        SET_WEEKEVENTREG(WEEKEVENTREG_79_08);
+        func_800B7298(play, &this->picto.actor, PLAYER_CSMODE_END);
+        CutsceneManager_Stop(this->csIdList[0]);
         this->aboveGroundStatus = ENKAKASI_ABOVE_GROUND_TYPE;
         this->songSummonDist = 80.0f;
         EnKakasi_SetupIdleUnderground(this);
@@ -1023,38 +1025,36 @@ void EnKakasi_DiggingAway(EnKakasi* this, PlayState* play) {
 void EnKakasi_SetupIdleUnderground(EnKakasi* this) {
     this->picto.actor.shape.yOffset = -7000.0;
     this->picto.actor.draw = NULL;
-    this->picto.actor.flags |= ACTOR_FLAG_8000000;
+    this->picto.actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
     this->unkState196 = 5;
     this->actionFunc = EnKakasi_IdleUnderground;
 }
 
 void EnKakasi_IdleUnderground(EnKakasi* this, PlayState* play) {
-    if ((gSaveContext.save.weekEventReg[79] & 8) && this->picto.actor.xzDistToPlayer < this->songSummonDist &&
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_79_08) && this->picto.actor.xzDistToPlayer < this->songSummonDist &&
         (BREG(1) != 0 || play->msgCtx.ocarinaMode == 0xD)) {
-        this->picto.actor.flags &= ~ACTOR_FLAG_8000000;
+        this->picto.actor.flags &= ~ACTOR_FLAG_CANT_LOCK_ON;
         play->msgCtx.ocarinaMode = 4;
         this->actionFunc = EnKakasi_SetupRiseOutOfGround;
     }
 }
 
 void EnKakasi_SetupRiseOutOfGround(EnKakasi* this, PlayState* play) {
-    s32 cutsceneIndex;
+    s32 csIdIndex;
 
-    cutsceneIndex = 0;
+    csIdIndex = 0;
     if (this->aboveGroundStatus == ENKAKASI_ABOVE_GROUND_TYPE) {
-        cutsceneIndex = 1;
+        csIdIndex = 1;
     }
 
-    if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-        ActorCutscene_Stop(0x7C);
-        ActorCutscene_SetIntentToPlay(this->actorCutscenes[cutsceneIndex]);
-
-    } else if (ActorCutscene_GetCanPlayNext(this->actorCutscenes[cutsceneIndex]) == 0) {
-        ActorCutscene_SetIntentToPlay(this->actorCutscenes[cutsceneIndex]);
-
+    if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+        CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
+        CutsceneManager_Queue(this->csIdList[csIdIndex]);
+    } else if (!CutsceneManager_IsNext(this->csIdList[csIdIndex])) {
+        CutsceneManager_Queue(this->csIdList[csIdIndex]);
     } else {
-        ActorCutscene_StartAndSetUnkLinkFields(this->actorCutscenes[cutsceneIndex], &this->picto.actor);
-        Actor_PlaySfxAtPos(&this->picto.actor, NA_SE_EN_AKINDONUTS_HIDE);
+        CutsceneManager_StartWithPlayerCs(this->csIdList[csIdIndex], &this->picto.actor);
+        Actor_PlaySfx(&this->picto.actor, NA_SE_EN_AKINDONUTS_HIDE);
         this->picto.actor.draw = EnKakasi_Draw;
         this->unkState196 = 6;
         this->actionFunc = EnKakasi_RisingOutOfGround;
@@ -1071,7 +1071,7 @@ void EnKakasi_RisingOutOfGround(EnKakasi* this, PlayState* play) {
         if ((play->gameplayFrames % 8) == 0) {
             Actor_SpawnFloorDustRing(play, &this->picto.actor, &this->picto.actor.world.pos,
                                      this->picto.actor.shape.shadowScale - 20.0f, 10, 8.0f, 500, 10, 1);
-            Actor_PlaySfxAtPos(&this->picto.actor, NA_SE_EN_AKINDONUTS_HIDE);
+            Actor_PlaySfx(&this->picto.actor, NA_SE_EN_AKINDONUTS_HIDE);
         }
         Math_ApproachF(&this->picto.actor.shape.yOffset, 0.0f, 0.5f, 200.0f);
     } else {
@@ -1100,7 +1100,7 @@ void EnKakasi_RisenDialogue(EnKakasi* this, PlayState* play) {
     Math_SmoothStepToS(&this->picto.actor.shape.rot.y, this->picto.actor.yawTowardsPlayer, 5, 1000, 0);
 
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-        func_801477B4(play);
+        Message_CloseTextbox(play);
         EnKakasi_SetupIdleRisen(this);
     }
 }
@@ -1134,7 +1134,8 @@ void EnKakasi_Update(Actor* thisx, PlayState* play) {
 
     this->actionFunc(this, play);
     Actor_MoveWithGravity(&this->picto.actor);
-    Actor_UpdateBgCheckInfo(play, &this->picto.actor, 50.0f, 50.0f, 100.0f, 0x1C);
+    Actor_UpdateBgCheckInfo(play, &this->picto.actor, 50.0f, 50.0f, 100.0f,
+                            UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 | UPDBGCHECKINFO_FLAG_10);
     if (this->picto.actor.draw != NULL) {
         Collider_UpdateCylinder(&this->picto.actor, &this->collider);
         CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);

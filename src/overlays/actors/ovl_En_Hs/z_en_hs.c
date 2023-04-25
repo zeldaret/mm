@@ -23,7 +23,7 @@ void EnHs_SceneTransitToBunnyHoodDialogue(EnHs* this, PlayState* play);
 void func_80953354(EnHs* this, PlayState* play);
 void func_8095345C(EnHs* this, PlayState* play);
 
-const ActorInit En_Hs_InitVars = {
+ActorInit En_Hs_InitVars = {
     ACTOR_EN_HS,
     ACTORCAT_NPC,
     FLAGS,
@@ -150,7 +150,7 @@ void func_80952FE0(EnHs* this, PlayState* play) {
     } else {
         this->actionFunc = func_80953180;
         this->stateFlags &= ~4;
-        func_80151938(play, 0x33F6);
+        Message_ContinueTextbox(play, 0x33F6);
         func_80952DFC(play);
     }
     this->stateTimer++;
@@ -162,13 +162,13 @@ void func_80953098(EnHs* this, PlayState* play) {
         this->actionFunc = func_8095345C;
         this->actor.flags |= ACTOR_FLAG_10000;
         this->stateFlags |= 0x10;
-        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_AP_MINUS1);
+        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
     } else {
         this->stateFlags |= 8;
         if (INV_CONTENT(ITEM_MASK_BUNNY) == ITEM_MASK_BUNNY) {
-            Actor_PickUp(&this->actor, play, GI_RUPEE_RED, 10000.0f, 50.0f);
+            Actor_OfferGetItem(&this->actor, play, GI_RUPEE_RED, 10000.0f, 50.0f);
         } else {
-            Actor_PickUp(&this->actor, play, GI_MASK_BUNNY, 10000.0f, 50.0f);
+            Actor_OfferGetItem(&this->actor, play, GI_MASK_BUNNY, 10000.0f, 50.0f);
         }
     }
 }
@@ -178,20 +178,20 @@ void func_80953180(EnHs* this, PlayState* play) {
         switch (play->msgCtx.currentTextId) {
             case 0x33F4: // text: laughing that they are all roosters (!)
             case 0x33F6: // text: Grog regrets not being able to see his chicks reach adult hood
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 this->actionFunc = func_8095345C;
                 break;
 
             case 0x33F7: // text: notice his chicks are grown up, happy, wants to give you bunny hood
                 this->actor.flags &= ~ACTOR_FLAG_10000;
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 this->actionFunc = func_80953098;
                 func_80953098(this, play);
                 break;
 
             case 0x33F9: // text: laughing that they are all roosters (.)
                 this->actor.flags &= ~ACTOR_FLAG_10000;
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 this->actionFunc = func_8095345C;
                 break;
 
@@ -204,7 +204,7 @@ void func_80953180(EnHs* this, PlayState* play) {
                 break;
 
             default:
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 this->actionFunc = func_8095345C;
                 break;
         }
@@ -218,14 +218,14 @@ void EnHs_SceneTransitToBunnyHoodDialogue(EnHs* this, PlayState* play) {
     if (DECR(this->stateTimer) == 0) {
         play->nextEntrance = play->setupExitList[HS_GET_EXIT_INDEX(&this->actor)];
         play->transitionTrigger = TRANS_TRIGGER_START;
-        gSaveContext.save.weekEventReg[25] |= 8;
+        SET_WEEKEVENTREG(WEEKEVENTREG_25_08);
         this->actionFunc = EnHs_DoNothing;
     }
 }
 
 void func_80953354(EnHs* this, PlayState* play) {
     if (!Play_InCsMode(play)) {
-        func_800B7298(play, &this->actor, 7);
+        func_800B7298(play, &this->actor, PLAYER_CSMODE_WAIT);
         this->actionFunc = EnHs_SceneTransitToBunnyHoodDialogue;
     }
 }
@@ -239,7 +239,7 @@ void func_809533A0(EnHs* this, PlayState* play) {
     } else if (this->stateFlags & 0x10) {
         sp1E = 0x33F9;
         this->stateFlags &= ~0x10;
-    } else if (gSaveContext.save.weekEventReg[25] & 8) {
+    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_25_08)) {
         sp1E = 0x33F4;
     } else {
         sp1E = 0x33F5;
@@ -264,7 +264,7 @@ void func_8095345C(EnHs* this, PlayState* play) {
         this->actionFunc = func_80953354;
         this->stateTimer = 40;
     } else if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_10000)) {
-        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_AP_MINUS1);
+        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
         this->stateFlags |= 1;
     } else if ((this->actor.xzDistToPlayer < 120.0f) && Player_IsFacingActor(&this->actor, 0x2000, play)) {
         func_800B8614(&this->actor, play, 130.0f);
@@ -282,7 +282,7 @@ void EnHs_Update(Actor* thisx, PlayState* play) {
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
 
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
 
     if (SkelAnime_Update(&this->skelAnime)) {
         this->skelAnime.curFrame = 0.0f;

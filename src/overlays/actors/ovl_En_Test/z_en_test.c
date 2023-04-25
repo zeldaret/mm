@@ -16,7 +16,7 @@ void EnTest_Destroy(Actor* thisx, PlayState* play);
 void EnTest_Update(Actor* thisx, PlayState* play);
 void EnTest_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit En_Test_InitVars = {
+ActorInit En_Test_InitVars = {
     ACTOR_EN_TEST,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -161,21 +161,21 @@ void EnTest_Init(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     EnTest* this = THIS;
     MtxF sp38;
-    s32 sp34;
+    s32 bgId;
 
     this->unk_209 = 0;
     this->unk_174 = 0;
 
     if (thisx->params > 0) {
         Actor_SetScale(thisx, thisx->params / 100000.0f);
-        this->unk_20A = 0;
+        this->surfaceMaterial = SURFACE_MATERIAL_DIRT;
     } else {
         thisx->floorPoly = NULL;
         thisx->world.pos.y += 10.0f;
-        thisx->floorHeight = BgCheck_EntityRaycastFloor3(&play->colCtx, &thisx->floorPoly, &sp34, &thisx->world.pos);
+        thisx->floorHeight = BgCheck_EntityRaycastFloor3(&play->colCtx, &thisx->floorPoly, &bgId, &thisx->world.pos);
 
         if ((thisx->floorPoly == NULL) || (thisx->floorHeight == BGCHECK_Y_MIN)) {
-            Actor_MarkForDeath(thisx);
+            Actor_Kill(thisx);
             return;
         }
 
@@ -183,7 +183,7 @@ void EnTest_Init(Actor* thisx, PlayState* play2) {
         func_800C0094(thisx->floorPoly, thisx->world.pos.x, thisx->floorHeight, thisx->world.pos.z, &sp38);
         Matrix_MtxFToYXZRot(&sp38, &thisx->shape.rot, true);
         thisx->world.rot = thisx->shape.rot;
-        this->unk_20A = func_800C9BB8(&play->colCtx, thisx->floorPoly, sp34);
+        this->surfaceMaterial = SurfaceType_GetMaterial(&play->colCtx, thisx->floorPoly, bgId);
     }
 
     func_80183430(&this->skeletonInfo, &gameplay_keep_Blob_06EB70, &gameplay_keep_Blob_06BB0C, this->unk_178,
@@ -208,7 +208,7 @@ void EnTest_Update(Actor* thisx, PlayState* play) {
     if (func_80183DE0(&this->skeletonInfo) && (this->actor.parent == NULL) && (this->actor.params != -1)) {
         this->unk_209++;
         if (this->unk_209 > 20) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     }
 
@@ -250,24 +250,25 @@ s32 EnTest_OverrideKeyframeDraw(PlayState* play, SkeletonInfo* skeletonInfo, s32
 
 void EnTest_Draw(Actor* thisx, PlayState* play) {
     EnTest* this = THIS;
-    Mtx* sp28;
+    Mtx* mtx;
     s32 sp2C = this->unk_208 - 1;
 
     if (sp2C >= 29) {
         sp2C = 29;
     }
 
-    if ((this->unk_20A == 15) || (this->unk_20A == 14)) {
+    //! @bug Checks for non-existent SURFACE_MATERIAL_MAX material
+    if ((this->surfaceMaterial == SURFACE_MATERIAL_MAX) || (this->surfaceMaterial == SURFACE_MATERIAL_SNOW)) {
         AnimatedMat_DrawStep(play, Lib_SegmentedToVirtual(gameplay_keep_Matanimheader_06B730), sp2C);
     } else {
         AnimatedMat_DrawStep(play, Lib_SegmentedToVirtual(gameplay_keep_Matanimheader_06B6A0), sp2C);
     }
 
-    sp28 = GRAPH_ALLOC(play->state.gfxCtx, ALIGN16(this->skeletonInfo.unk_18->unk_1 * sizeof(Mtx)));
+    mtx = GRAPH_ALLOC(play->state.gfxCtx, this->skeletonInfo.unk_18->unk_1 * sizeof(Mtx));
 
-    if (sp28 != NULL) {
+    if (mtx != NULL) {
         func_8012C2DC(play->state.gfxCtx);
-        func_8018450C(play, &this->skeletonInfo, sp28, EnTest_OverrideKeyframeDraw, NULL, thisx);
+        func_8018450C(play, &this->skeletonInfo, mtx, EnTest_OverrideKeyframeDraw, NULL, thisx);
         func_80863048(play, this->unk_20C);
     }
 }

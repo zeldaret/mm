@@ -22,12 +22,10 @@ typedef struct BgDblueWaterfall {
     /* 0x1A0 */ u8 unk_1A0;
     /* 0x1A1 */ UNK_TYPE1 unk1A1[2];
     /* 0x1A3 */ s8 unk_1A3;
-    /* 0x1A4 */ s16 unk_1A4;
+    /* 0x1A4 */ s16 csId;
     /* 0x1A6 */ UNK_TYPE1 unk1A6[1];
     /* 0x1A7 */ s8 unk_1A7;
     /* 0x1A8 */ f32 unk_1A8;
 } BgDblueWaterfall; // size = 0x1AC
-
-extern const ActorInit Bg_Dblue_Waterfall_InitVars;
 
 #endif // Z_BG_DBLUE_WATERFALL_H

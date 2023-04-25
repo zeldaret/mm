@@ -25,8 +25,7 @@ typedef struct EnDns {
     /* 0x144 */ SkelAnime skelAnime;
     /* 0x188 */ EnDnsActionFunc actionFunc;
     /* 0x18C */ ColliderCylinder collider;
-    /* 0x1D8 */ u8 unk_1D8;
-    /* 0x1D9 */ UNK_TYPE1 unk_1D9[0x3];
+    /* 0x1D8 */ u8 cueId;
     /* 0x1DC */ s32 unk_1DC;
     /* 0x1E0 */ s32* unk_1E0;
     /* 0x1E4 */ Gfx* unk_1E4[13];
@@ -35,7 +34,7 @@ typedef struct EnDns {
     /* 0x22A */ Vec3s jointTable[KINGS_CHAMBER_DEKU_GUARD_LIMB_MAX];
     /* 0x278 */ Vec3s morphTable[KINGS_CHAMBER_DEKU_GUARD_LIMB_MAX];
     /* 0x2C6 */ u16 unk_2C6;
-    /* 0x2C8 */ u16 unk_2C8;
+    /* 0x2C8 */ u16 cueType;
     /* 0x2CA */ UNK_TYPE1 unk_2CA[0x2];
     /* 0x2CC */ s16 unk_2CC;
     /* 0x2CE */ s16 unk_2CE;
@@ -56,7 +55,5 @@ typedef struct EnDns {
     /* 0x2F8 */ s32 animIndex;
     /* 0x2FC */ s32 unk_2FC;
 } EnDns; // size = 0x300
-
-extern const ActorInit En_Dns_InitVars;
 
 #endif // Z_EN_DNS_H

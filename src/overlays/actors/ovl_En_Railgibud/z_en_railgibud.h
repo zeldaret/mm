@@ -47,14 +47,12 @@ typedef struct EnRailgibud {
     /* 0x3F6 */ s16 drawDmgEffTimer;
     /* 0x3F8 */ s16 type;
     /* 0x3FA */ s16 isInvincible;
-    /* 0x3FC */ u16 actorActionCommand;
-    /* 0x3FE */ u16 csAction;
+    /* 0x3FC */ u16 cueType;
+    /* 0x3FE */ u16 cueId;
     /* 0x400 */ u16 textId;
     /* 0x402 */ s16 timeInitialized; // unused other than setting it
     /* 0x404 */ u8 drawDmgEffType;
     /* 0x405 */ s8 unk_405; // related to player->unk_ADD
 } EnRailgibud; // size = 0x408
-
-extern const ActorInit En_Railgibud_InitVars;
 
 #endif // Z_EN_RAILGIBUD_H
