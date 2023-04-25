@@ -37,9 +37,9 @@ typedef struct EnAob01 {
     /* 0x2D4 */ Vec3s trackTarget;
     /* 0x2DA */ Vec3s headRot;
     /* 0x2E0 */ Vec3s torsoRot;
-    /* 0x2E6 */ Vec3s tempTrackTarget;
-    /* 0x2EC */ Vec3s tempHeadRot;
-    /* 0x2F2 */ Vec3s tempTorsoRot;
+    /* 0x2E6 */ Vec3s prevTrackTarget;
+    /* 0x2EC */ Vec3s prevHeadRot;
+    /* 0x2F2 */ Vec3s prevTorsoRot;
     /* 0x2F8 */ s16 limbRotTableY[MAMAMU_YAN_LIMB_MAX];
     /* 0x318 */ s16 limbRotTableZ[MAMAMU_YAN_LIMB_MAX];
     /* 0x338 */ UNK_TYPE1 unk338[0xB6];

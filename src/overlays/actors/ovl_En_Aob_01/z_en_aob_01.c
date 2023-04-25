@@ -57,6 +57,7 @@ typedef enum {
     /* 0 */ EN_AOB01_EYE_OPEN,
     /* 1 */ EN_AOB01_EYE_HALF,
     /* 2 */ EN_AOB01_EYE_CLOSED,
+    /* 3 */ EN_AOB01_EYE_MAX,
 } EnAob01EyeTexture;
 
 static AnimationInfo sAnimationInfo[] = {
@@ -92,7 +93,7 @@ typedef struct {
     /* 0x0 */ Vec3f pos;
     /* 0xC */ s16 rotY;
     /* 0xE */ s16 pathIndex;
-} DogInfo;
+} DogInfo; // size = 0x10
 
 /**
  * Stores the starting position, y-rotation, and path index for all 14 dogs in the racetrack.
@@ -554,7 +555,7 @@ void EnAob01_UpdateCommon(EnAob01* this, PlayState* play) {
         Math_SmoothStepToS(&this->torsoRot.y, 0, 4, 0x3E8, 1);
     }
 
-    EnAob01_Blink(this, EN_AOB01_EYE_CLOSED + 1);
+    EnAob01_Blink(this, EN_AOB01_EYE_MAX);
     SubS_FillLimbRotTables(play, this->limbRotTableY, this->limbRotTableZ, ARRAY_COUNT(this->limbRotTableY));
     EnAob01_UpdateCollision(this, play);
 
@@ -581,9 +582,9 @@ void EnAob01_BeforeRace_Idle(EnAob01* this, PlayState* play) {
         } else if (Actor_ProcessTalkRequest(&this->actor, &play->state) &&
                    (this->stateFlags & ENAOB01_PLAYER_CAN_TALK)) {
             this->stateFlags &= ~ENAOB01_PLAYER_CAN_TALK;
-            this->tempTrackTarget = this->trackTarget;
-            this->tempHeadRot = this->headRot;
-            this->tempTorsoRot = this->torsoRot;
+            this->prevTrackTarget = this->trackTarget;
+            this->prevHeadRot = this->headRot;
+            this->prevTorsoRot = this->torsoRot;
             EnAob01_BeforeRace_HandleConversation(this, play);
             this->actionFunc = EnAob01_BeforeRace_Talk;
         } else {
@@ -604,12 +605,12 @@ void EnAob01_BeforeRace_Talk(EnAob01* this, PlayState* play) {
 
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 4, 4000, 1);
 
-    //! @bug: This block of code is *supposed* to act as a failsafe for when the player triggered this conversation by
-    //! bumping into the racetrack owner while holding the dog and, at the same time, dropped the dog frame-perfectly.
-    //! Without this code, doing those same actions will cause the ractrack owner be stuck in her "talk" action
-    //! permanently, so the developers probably put this code in to prevent it. However, this block of code, as-is,
-    //! causes a much worse problem; for some unknown reason, this code softlocks the game if the player manages to
-    //! perform the simultaneous actions described above.
+    //! @bug: This block of code acts as a failsafe for when the player triggered this conversation by
+    //! bumping into the racetrack owner while holding the dog and, at the same time, threw or dropped
+    //! the dog frame-perfectly by pressing A. In this case, the code successfully returns the racetrack
+    //! owner to her idle state. Unfortunately, there is another way to let go of the dog besides pressing
+    //! A to drop or throw it; the player can also drop the dog by shielding. If this shield drop is done
+    //! frame-perfectly, then the below code will not function properly and will instead softlock the game.
     if ((this->stateFlags & ENAOB01_FLAG_TALKING_TO_PLAYER_HOLDING_DOG) && !EnAob01_PlayerIsHoldingDog(this, play)) {
         if ((this->textId != 0) && (this->textId != 0x3535) && (this->textId != 0x3524) && (this->textId != 0x3548) &&
             (this->textId != 0x3549) && (this->textId != 0x354A)) {
@@ -901,9 +902,9 @@ void EnAob01_AfterRace_GiveReward(EnAob01* this, PlayState* play) {
         }
 
         if (Actor_HasParent(&this->actor, play)) {
-            this->trackTarget = this->tempTrackTarget;
-            this->headRot = this->tempHeadRot;
-            this->torsoRot = this->tempTorsoRot;
+            this->trackTarget = this->prevTrackTarget;
+            this->headRot = this->prevHeadRot;
+            this->torsoRot = this->prevTorsoRot;
             this->actor.parent = NULL;
             this->actor.shape.rot.y = this->actor.world.rot.y;
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_DOGGY_RACETRACK_HEART_PIECE)) {
@@ -989,9 +990,9 @@ void EnAob01_AfterRace_Talk(EnAob01* this, PlayState* play) {
             Message_StartTextbox(play, this->textId, &this->actor);
             this->actionFunc = EnAob01_AfterRace_GiveReward;
         } else {
-            this->trackTarget = this->tempTrackTarget;
-            this->headRot = this->tempHeadRot;
-            this->torsoRot = this->tempTorsoRot;
+            this->trackTarget = this->prevTrackTarget;
+            this->headRot = this->prevHeadRot;
+            this->torsoRot = this->prevTorsoRot;
 
             this->rupeesBet = 0;
             this->actor.shape.rot.y = this->actor.world.rot.y;
