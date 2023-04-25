@@ -572,7 +572,7 @@ void EnAob01_UpdateCommon(EnAob01* this, PlayState* play) {
  */
 void EnAob01_BeforeRace_Idle(EnAob01* this, PlayState* play) {
     if (EnAob01_ProcessIdleAnim(this)) {
-        if (EnAob01_PlayerIsHoldingDog(this, play) && !(this->stateFlags & ENAOB01_PLAYER_CAN_TALK)) {
+        if (EnAob01_PlayerIsHoldingDog(this, play) && !(this->stateFlags & ENAOB01_FLAG_PLAYER_CAN_TALK)) {
             if (this->collider.base.ocFlags2 & OC2_HIT_PLAYER) {
                 this->actor.flags |= ACTOR_FLAG_10000;
                 func_800B8614(&this->actor, play, 100.0f);
@@ -580,17 +580,17 @@ void EnAob01_BeforeRace_Idle(EnAob01* this, PlayState* play) {
                 this->actionFunc = EnAob01_BeforeRace_Talk;
             }
         } else if (Actor_ProcessTalkRequest(&this->actor, &play->state) &&
-                   (this->stateFlags & ENAOB01_PLAYER_CAN_TALK)) {
-            this->stateFlags &= ~ENAOB01_PLAYER_CAN_TALK;
+                   (this->stateFlags & ENAOB01_FLAG_PLAYER_CAN_TALK)) {
+            this->stateFlags &= ~ENAOB01_FLAG_PLAYER_CAN_TALK;
             this->prevTrackTarget = this->trackTarget;
             this->prevHeadRot = this->headRot;
             this->prevTorsoRot = this->torsoRot;
             EnAob01_BeforeRace_HandleConversation(this, play);
             this->actionFunc = EnAob01_BeforeRace_Talk;
         } else {
-            this->stateFlags &= ~ENAOB01_PLAYER_CAN_TALK;
+            this->stateFlags &= ~ENAOB01_FLAG_PLAYER_CAN_TALK;
             if ((this->actor.xzDistToPlayer < 100.0f) && !(this->collider.base.ocFlags2 & OC2_HIT_PLAYER)) {
-                this->stateFlags |= ENAOB01_PLAYER_CAN_TALK;
+                this->stateFlags |= ENAOB01_FLAG_PLAYER_CAN_TALK;
                 func_800B8614(&this->actor, play, 100.0f);
             }
         }
