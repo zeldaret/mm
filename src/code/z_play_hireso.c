@@ -263,7 +263,7 @@ s16 D_801D1330[][3] = {
     { 174, 141, 151 },
 };
 
-#ifdef NON_EQUIVALENT
+#ifdef NON_MATCHING
 // DrawColumnHeaders
 void func_8016AE1C(Gfx** gfxP) {
     Gfx* gfx = *gfxP;
@@ -274,7 +274,7 @@ void func_8016AE1C(Gfx** gfxP) {
     gDPLoadTextureBlock(gfx++, &D_080017D8, G_IM_FMT_I, G_IM_SIZ_8b, 8, 24, 0, G_TX_NOMIRROR | G_TX_WRAP,
                         G_TX_NOMIRROR | G_TX_WRAP, 3, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
-    for (i = 0, xl = 263 << 2, xh = 120 << 2; i < 3; i++, xl += 150 << 2, xh += 150 << 2) {
+    for (i = 0, xl = 120 << 2, xh = 263 << 2; i < 3; i++, xl += 150 << 2, xh += 150 << 2) {
         gDPSetPrimColor(gfx++, 0, 0, D_801D1330[i][0], D_801D1330[i][1], D_801D1330[i][2], 192);
         func_8016AC10(&gfx, xl, 74 << 2, xh, 98 << 2, 0, 0, 0, 0x400, 0x400);
     }
@@ -290,7 +290,7 @@ void func_8016AE1C(Gfx** gfxP) {
     gDPLoadTextureBlock_4b(gfx++, &D_08001F70, G_IM_FMT_IA, 48, 11, 0, G_TX_NOMIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
-    for (i = 0, xl = 172 << 2, xh = xl + (48 << 2); i < 3; i++, xh += 150 << 2, xl += 150 << 2) {
+    for (i = 0, xl = 172 << 2, xh = xl + (48 << 2); i < 3; i++, xl += 150 << 2, xh += 150 << 2) {
         func_8016AC10(&gfx, xl, 86 << 2, xh, 97 << 2, 0, 0, 0, 0x400, 0x400);
     }
 
@@ -794,7 +794,6 @@ void func_8016CD4C(Gfx** gfxP) {
 void func_8016CD4C(Gfx** gfxP);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play_hireso/func_8016CD4C.s")
 #endif
-#undef NON_EQUIVALENT
 
 #ifdef NON_EQUIVALENT
 // DrawCursor
