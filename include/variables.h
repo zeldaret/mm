@@ -622,7 +622,7 @@ extern UNK_PTR D_801C5CB0;
 // extern UNK_TYPE2 D_801C6A94;
 extern u8 D_801C6A98[5][5];
 // extern UNK_TYPE1 D_801C6AB8;
-extern u16 D_801C6B28[];
+extern u16 sBombersNotebookEventWeekEventFlags[];
 // extern UNK_TYPE1 D_801CED40;
 // extern UNK_TYPE2 D_801CFC78;
 // extern UNK_TYPE1 D_801CFC7A;

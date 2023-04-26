@@ -68,7 +68,10 @@ extern TexturePtr D_080032B0;
 #define BOMBERSNOTEBOOK_ENTRY(flag, day, index, startTime, endTime) \
     (((flag)&0xF) << 12) | (((day)&0xF) << 8) | ((index)&0xFF), (startTime), (endTime)
 
-// sBombersNotebookEntry
+#define BOMBERSNOTEBOOK_WEEKEVENTREG_SPECIAL_1 0xFFF0
+#define BOMBERSNOTEBOOK_WEEKEVENTREG_SPECIAL_2 0xFFF1
+
+// sBombersNotebookEntries
 u16 D_801D0D80[][30] = {
     {
         BOMBERSNOTEBOOK_ENTRY(8, 1, 36, CLOCK_TIME(6, 0), CLOCK_TIME(5, 59)),
@@ -204,9 +207,41 @@ s32 D_801D1244[] = {
 s32 D_801D12D0[] = { 0x10, 0x18, 0x20 };
 s32 D_801D12DC[] = { 0x10, 0x1C, 0x1C };
 u16 D_801D12E8[] = {
-    0x4B10, 0x3208, 0x3220, 0x3220, 0xFFF1, 0x3280, 0x3301, 0x3320, 0x1520, 0x1601, 0xFFF0, 0x3401,
-    0xFFF0, 0xFFF0, 0x5010, 0xFFF0, 0xFFF0, 0xFFF0, 0xFFF0, 0xFFF0, 0xFFF0, 0xFFF0, 0xFFF0, 0xFFF0,
-    0xFFF0, 0xFFF0, 0xFFF0, 0xFFF0, 0xFFF0, 0xFFF0, 0xFFF0, 0xFFF0, 0xFFF0, 0xFFF0, 0xFFF0,
+    WEEKEVENTREG_75_10,
+    WEEKEVENTREG_50_08,
+    WEEKEVENTREG_50_20,
+    WEEKEVENTREG_50_20,
+    BOMBERSNOTEBOOK_WEEKEVENTREG_SPECIAL_2,
+    WEEKEVENTREG_50_80,
+    WEEKEVENTREG_51_01,
+    WEEKEVENTREG_51_20,
+    WEEKEVENTREG_21_20,
+    WEEKEVENTREG_22_01,
+    BOMBERSNOTEBOOK_WEEKEVENTREG_SPECIAL_1,
+    WEEKEVENTREG_52_01,
+    BOMBERSNOTEBOOK_WEEKEVENTREG_SPECIAL_1,
+    BOMBERSNOTEBOOK_WEEKEVENTREG_SPECIAL_1,
+    WEEKEVENTREG_80_10,
+    BOMBERSNOTEBOOK_WEEKEVENTREG_SPECIAL_1,
+    BOMBERSNOTEBOOK_WEEKEVENTREG_SPECIAL_1,
+    BOMBERSNOTEBOOK_WEEKEVENTREG_SPECIAL_1,
+    BOMBERSNOTEBOOK_WEEKEVENTREG_SPECIAL_1,
+    BOMBERSNOTEBOOK_WEEKEVENTREG_SPECIAL_1,
+    BOMBERSNOTEBOOK_WEEKEVENTREG_SPECIAL_1,
+    BOMBERSNOTEBOOK_WEEKEVENTREG_SPECIAL_1,
+    BOMBERSNOTEBOOK_WEEKEVENTREG_SPECIAL_1,
+    BOMBERSNOTEBOOK_WEEKEVENTREG_SPECIAL_1,
+    BOMBERSNOTEBOOK_WEEKEVENTREG_SPECIAL_1,
+    BOMBERSNOTEBOOK_WEEKEVENTREG_SPECIAL_1,
+    BOMBERSNOTEBOOK_WEEKEVENTREG_SPECIAL_1,
+    BOMBERSNOTEBOOK_WEEKEVENTREG_SPECIAL_1,
+    BOMBERSNOTEBOOK_WEEKEVENTREG_SPECIAL_1,
+    BOMBERSNOTEBOOK_WEEKEVENTREG_SPECIAL_1,
+    BOMBERSNOTEBOOK_WEEKEVENTREG_SPECIAL_1,
+    BOMBERSNOTEBOOK_WEEKEVENTREG_SPECIAL_1,
+    BOMBERSNOTEBOOK_WEEKEVENTREG_SPECIAL_1,
+    BOMBERSNOTEBOOK_WEEKEVENTREG_SPECIAL_1,
+    BOMBERSNOTEBOOK_WEEKEVENTREG_SPECIAL_1,
 };
 
 // SPScisTextureRectangle
@@ -385,7 +420,7 @@ loop_1:
             func_8016AC10(&sp1AC, (var_s0 + 4) * 4, (arg1 + var_t0) * 4, (var_s0 + temp_s5 + 4) * 4,
                           (arg1 + var_t0 + 0x10), 0, 0, 0, 0x400, 0x400);
         }
-        if (CHECK_WEEKEVENTREG(D_801C6B28[sp84[0] & 0xFF])) {
+        if (CHECK_WEEKEVENTREG(sBombersNotebookEventWeekEventFlags[sp84[0] & 0xFF])) {
             temp_t1_2 = &D_801D12D0[D_801D1244[(sp84[0] & 0xFF) - 20]];
             temp_a0 = *temp_t1_2;
             temp_v1_2 = var_s3 - var_s0;
@@ -415,9 +450,9 @@ loop_1:
                           (D_801D12D0[D_801D1244[(sp84[0] & 0xFF) - 20]] + sp194 + 2) * 4,
                           ((D_801D12DC[D_801D1244[(sp84[0] & 0xFF) - 20]] + var_s7 + 2) * 4), 0, 0, 0, 0x400, 0x400);
             temp_v0_9 = D_801D12E8[(sp84[0] & 0xFF) - 20];
-            if (temp_v0_9 == 0xFFF0) {
+            if (temp_v0_9 == BOMBERSNOTEBOOK_WEEKEVENTREG_SPECIAL_1) {
                 gDPSetPrimColor(sp1AC++, 0, 0, D_801D1374[sp1A4][0], D_801D1374[sp1A4][1], D_801D1374[sp1A4][2], 255);
-            } else if (temp_v0_9 == 0xFFF1) {
+            } else if (temp_v0_9 == BOMBERSNOTEBOOK_WEEKEVENTREG_SPECIAL_2) {
                 temp_v0_11 = gSaveContext.save.saveInfo.weekEventReg[0x1B];
                 if ((temp_v0_11 & 2) || (temp_v0_11 & 4) || (temp_v0_11 & 8) || (temp_v0_11 & 0x10) ||
                     ((temp_v0_11 & 0x20))) {
@@ -537,7 +572,7 @@ void func_8016C344(BombersNotebook* this, Gfx** gfxP) {
 
     for (var_s0 = sp130; var_s0 < sp134; var_s0++) {
         gDPSetPrimColor(sp13C++, 0, 0, 255, 255, 255, 255);
-        if (CHECK_WEEKEVENTREG(D_801C6B28[var_s0])) {
+        if (CHECK_WEEKEVENTREG(sBombersNotebookEventWeekEventFlags[var_s0])) {
             gDPLoadTextureBlock(sp13C++, D_801D1388[var_s0], G_IM_FMT_RGBA, G_IM_SIZ_16b, 32, 32, 0,
                                 G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
         } else {
@@ -571,7 +606,7 @@ void func_8016C344(BombersNotebook* this, Gfx** gfxP) {
                                G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
         func_8016AC10(&sp13C, (sp12C - sp124 + 0x20F) * 4, (var_s3 + 0x10) * 4, (sp12C - sp124 + 0x21F) * 4,
                       (var_s3 + 0x20) * 4, 0, 0, 0, 0x400, 0x400);
-        if (CHECK_WEEKEVENTREG(D_801C6B28[var_s0])) {
+        if (CHECK_WEEKEVENTREG(sBombersNotebookEventWeekEventFlags[var_s0])) {
             gDPPipeSync(sp13C++);
             gDPSetRenderMode(sp13C++, G_RM_OPA_SURF, G_RM_OPA_SURF2);
             gDPSetPrimColor(sp13C++, 0, 0, 255, 255, 255, 255);
@@ -629,10 +664,12 @@ void func_8016CD4C(Gfx** gfxP) {
         var_a1 = 0;
     }
     sp260 = D_801D1230[CURRENT_DAY] + (var_a1 / 455);
-    if ((TEST(CURRENT_DAY) == 1) || ((TEST(CURRENT_DAY) == 2) && (((void)0, gSaveContext.save.time) < CLOCK_TIME(12, 0)))) {
+    if ((TEST(CURRENT_DAY) == 1) ||
+        ((TEST(CURRENT_DAY) == 2) && (((void)0, gSaveContext.save.time) < CLOCK_TIME(12, 0)))) {
         sp260 -= 0x20;
         sp254 = sp260 + 0x20;
-    } else if ((TEST(CURRENT_DAY) == 2) && (var_a1 >= (CLOCK_TIME(17, 0) - CLOCK_TIME(6, 0))) && (var_a1 <= (CLOCK_TIME(19, 0) - CLOCK_TIME(6, 0)))) {
+    } else if ((TEST(CURRENT_DAY) == 2) && (var_a1 >= (CLOCK_TIME(17, 0) - CLOCK_TIME(6, 0))) &&
+               (var_a1 <= (CLOCK_TIME(19, 0) - CLOCK_TIME(6, 0)))) {
         sp260 -= 0x40;
         sp254 = sp260 + 0x40;
     } else {
@@ -653,7 +690,7 @@ void func_8016CD4C(Gfx** gfxP) {
     gDPPipeSync(sp264++);
     gDPSetCombineMode(sp264++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
     gDPSetPrimColor(sp264++, 0, 0, 255, 255, 255, 255);
-    if (((TEST(CURRENT_DAY) >= 3) || ((TEST(CURRENT_DAY) == 2) && (var_a1 > (CLOCK_TIME(18, 0) - CLOCK_TIME(6,0)))))) {
+    if (((TEST(CURRENT_DAY) >= 3) || ((TEST(CURRENT_DAY) == 2) && (var_a1 > (CLOCK_TIME(18, 0) - CLOCK_TIME(6, 0)))))) {
         sp25C = sp260 - 0x9F;
         sp258 = sp260 - 0x11;
     } else {
@@ -1150,7 +1187,7 @@ void BombersNotebook_Update(PlayState* play, BombersNotebook* this, Input* input
             D_801D14E8 = 0;
         }
         if (this->unk_A4 == 0) {
-            if (CHECK_WEEKEVENTREG(D_801C6B28[this->unk_94 + this->unk_9C])) {
+            if (CHECK_WEEKEVENTREG(sBombersNotebookEventWeekEventFlags[this->unk_94 + this->unk_9C])) {
                 sp24 = this->unk_98;
                 if (sp2C > 30) {
                     while (true) {
@@ -1163,14 +1200,17 @@ void BombersNotebook_Update(PlayState* play, BombersNotebook* this, Input* input
                                     break;
                                 }
                                 if (CHECK_WEEKEVENTREG(
-                                        D_801C6B28[D_801D0D80[this->unk_94 + this->unk_9C][sp24 - 3] & 0xFF])) {
+                                        sBombersNotebookEventWeekEventFlags
+                                            [D_801D0D80[this->unk_94 + this->unk_9C][sp24 - 3] & 0xFF])) {
                                     play_sound(NA_SE_SY_ERROR);
                                     break;
                                 }
                             }
                             break;
                         }
-                        if (CHECK_WEEKEVENTREG(D_801C6B28[D_801D0D80[this->unk_94 + this->unk_9C][sp24 - 3] & 0xFF])) {
+                        if (CHECK_WEEKEVENTREG(
+                                sBombersNotebookEventWeekEventFlags[D_801D0D80[this->unk_94 + this->unk_9C][sp24 - 3] &
+                                                                    0xFF])) {
                             play_sound(NA_SE_SY_CURSOR);
                             break;
                         }
@@ -1178,7 +1218,9 @@ void BombersNotebook_Update(PlayState* play, BombersNotebook* this, Input* input
                 } else if (sp2C < -30) {
                     while (sp24 != 0) {
                         sp24 -= 3;
-                        if (CHECK_WEEKEVENTREG(D_801C6B28[D_801D0D80[this->unk_94 + this->unk_9C][sp24 - 3] & 0xFF])) {
+                        if (CHECK_WEEKEVENTREG(
+                                sBombersNotebookEventWeekEventFlags[D_801D0D80[this->unk_94 + this->unk_9C][sp24 - 3] &
+                                                                    0xFF])) {
                             play_sound(NA_SE_SY_CURSOR);
                             break;
                         }
