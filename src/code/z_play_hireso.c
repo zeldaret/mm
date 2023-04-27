@@ -64,145 +64,189 @@ extern TexturePtr D_08002A70;
 extern TexturePtr D_08002E90;
 extern TexturePtr D_080032B0;
 
+#define BOMBERSNOTEBOOK_ENTRY(pos, day, index, startTime, endTime) \
+    ((pos)&0xF000) | (((day)&0xF) << 8) | ((index)&0xFF), (startTime), (endTime)
 #define BOMBERSNOTEBOOK_ENTRY_END 0x9999
-#define BOMBERSNOTEBOOK_ENTRY(flag, day, index, startTime, endTime) \
-    (((flag)&0xF) << 12) | (((day)&0xF) << 8) | ((index)&0xFF), (startTime), (endTime)
 
-#define BOMBERSNOTEBOOK_WEEKEVENTREG_SPECIAL_1 0xFFF0
-#define BOMBERSNOTEBOOK_WEEKEVENTREG_SPECIAL_2 0xFFF1
+#define BOMBERSNOTEBOOK_ENTRY_POS_CENTER 0x0000
+#define BOMBERSNOTEBOOK_ENTRY_POS_BELOW 0x4000
+#define BOMBERSNOTEBOOK_ENTRY_POS_ABOVE 0x8000
 
-// sBombersNotebookEntries
-u16 D_801D0D80[][30] = {
-    {
-        BOMBERSNOTEBOOK_ENTRY(8, 1, 36, CLOCK_TIME(6, 0), CLOCK_TIME(5, 59)),
-        BOMBERSNOTEBOOK_ENTRY(4, 1, 37, CLOCK_TIME(6, 0), CLOCK_TIME(5, 59)),
-        BOMBERSNOTEBOOK_ENTRY(8, 2, 36, CLOCK_TIME(6, 0), CLOCK_TIME(5, 59)),
-        BOMBERSNOTEBOOK_ENTRY(4, 2, 37, CLOCK_TIME(6, 0), CLOCK_TIME(5, 59)),
-        BOMBERSNOTEBOOK_ENTRY(8, 3, 36, CLOCK_TIME(6, 0), CLOCK_TIME(5, 59)),
-        BOMBERSNOTEBOOK_ENTRY(4, 3, 37, CLOCK_TIME(6, 0), CLOCK_TIME(5, 59)),
-        BOMBERSNOTEBOOK_ENTRY_END,
-    },
-    {
-        BOMBERSNOTEBOOK_ENTRY(8, 1, 20, CLOCK_TIME(13, 45), CLOCK_TIME(16, 0)),
-        BOMBERSNOTEBOOK_ENTRY(4, 1, 21, CLOCK_TIME(14, 30), CLOCK_TIME(20, 0)),
-        BOMBERSNOTEBOOK_ENTRY(8, 1, 22, CLOCK_TIME(23, 30), CLOCK_TIME(5, 59)),
-        BOMBERSNOTEBOOK_ENTRY(4, 1, 23, CLOCK_TIME(23, 30), CLOCK_TIME(5, 59)),
-        BOMBERSNOTEBOOK_ENTRY(0, 2, 26, CLOCK_TIME(17, 0), CLOCK_TIME(21, 0)),
-        BOMBERSNOTEBOOK_ENTRY(0, 3, 26, CLOCK_TIME(6, 0), CLOCK_TIME(12, 0)),
-        BOMBERSNOTEBOOK_ENTRY(0, 3, 50, CLOCK_TIME(5, 0), CLOCK_TIME(5, 59)),
-        BOMBERSNOTEBOOK_ENTRY_END,
-    },
-    {
-        BOMBERSNOTEBOOK_ENTRY(0, 2, 25, CLOCK_TIME(16, 30), CLOCK_TIME(22, 0)),
-        BOMBERSNOTEBOOK_ENTRY(0, 3, 27, CLOCK_TIME(18, 0), CLOCK_TIME(19, 0)),
-        BOMBERSNOTEBOOK_ENTRY(0, 3, 50, CLOCK_TIME(5, 0), CLOCK_TIME(5, 59)),
-        BOMBERSNOTEBOOK_ENTRY_END,
-    },
-    {
-        BOMBERSNOTEBOOK_ENTRY(8, 3, 33, CLOCK_TIME(13, 0), CLOCK_TIME(22, 0)),
-        BOMBERSNOTEBOOK_ENTRY(4, 3, 34, CLOCK_TIME(13, 0), CLOCK_TIME(22, 0)),
-        BOMBERSNOTEBOOK_ENTRY(0, 3, 45, CLOCK_TIME(22, 0), CLOCK_TIME(5, 59)),
-        BOMBERSNOTEBOOK_ENTRY_END,
-    },
-    {
-        BOMBERSNOTEBOOK_ENTRY(0, 1, 51, CLOCK_TIME(0, 30), CLOCK_TIME(1, 0)),
-        BOMBERSNOTEBOOK_ENTRY_END,
-    },
-    {
-        BOMBERSNOTEBOOK_ENTRY(0, 1, 28, CLOCK_TIME(6, 0), CLOCK_TIME(18, 0)),
-        BOMBERSNOTEBOOK_ENTRY(8, 1, 29, CLOCK_TIME(2, 30), CLOCK_TIME(5, 15)),
-        BOMBERSNOTEBOOK_ENTRY(4, 1, 30, CLOCK_TIME(2, 30), CLOCK_TIME(5, 15)),
-        BOMBERSNOTEBOOK_ENTRY_END,
-    },
-    {
-        BOMBERSNOTEBOOK_ENTRY(8, 2, 31, CLOCK_TIME(18, 0), CLOCK_TIME(21, 0)),
-        BOMBERSNOTEBOOK_ENTRY(4, 2, 32, CLOCK_TIME(18, 0), CLOCK_TIME(21, 0)),
-        BOMBERSNOTEBOOK_ENTRY_END,
-    },
-    {
-        BOMBERSNOTEBOOK_ENTRY(0, 1, 38, CLOCK_TIME(8, 0), CLOCK_TIME(20, 0)),
-        BOMBERSNOTEBOOK_ENTRY(0, 2, 38, CLOCK_TIME(8, 0), CLOCK_TIME(20, 0)),
-        BOMBERSNOTEBOOK_ENTRY(0, 3, 38, CLOCK_TIME(8, 0), CLOCK_TIME(18, 0)),
-        BOMBERSNOTEBOOK_ENTRY_END,
-    },
-    {
-        BOMBERSNOTEBOOK_ENTRY(0, 1, 44, CLOCK_TIME(8, 0), CLOCK_TIME(20, 0)),
-        BOMBERSNOTEBOOK_ENTRY(0, 2, 44, CLOCK_TIME(8, 0), CLOCK_TIME(20, 0)),
-        BOMBERSNOTEBOOK_ENTRY(0, 3, 35, CLOCK_TIME(18, 0), CLOCK_TIME(5, 59)),
-        BOMBERSNOTEBOOK_ENTRY_END,
-    },
-    {
-        BOMBERSNOTEBOOK_ENTRY(0, 1, 48, CLOCK_TIME(22, 0), CLOCK_TIME(5, 0)),
-        BOMBERSNOTEBOOK_ENTRY(0, 2, 48, CLOCK_TIME(22, 0), CLOCK_TIME(5, 0)),
-        BOMBERSNOTEBOOK_ENTRY_END,
-    },
-    {
-        BOMBERSNOTEBOOK_ENTRY(0, 1, 48, CLOCK_TIME(22, 0), CLOCK_TIME(5, 0)),
-        BOMBERSNOTEBOOK_ENTRY(0, 2, 48, CLOCK_TIME(22, 0), CLOCK_TIME(5, 0)),
-        BOMBERSNOTEBOOK_ENTRY_END,
-    },
-    {
-        BOMBERSNOTEBOOK_ENTRY(0, 1, 43, CLOCK_TIME(15, 0), CLOCK_TIME(0, 0)),
-        BOMBERSNOTEBOOK_ENTRY(0, 1, 24, CLOCK_TIME(0, 0), CLOCK_TIME(5, 59)),
-        BOMBERSNOTEBOOK_ENTRY(0, 2, 24, CLOCK_TIME(6, 0), CLOCK_TIME(12, 0)),
-        BOMBERSNOTEBOOK_ENTRY(0, 2, 43, CLOCK_TIME(15, 0), CLOCK_TIME(0, 0)),
-        BOMBERSNOTEBOOK_ENTRY(0, 3, 49, CLOCK_TIME(18, 0), CLOCK_TIME(5, 59)),
-        BOMBERSNOTEBOOK_ENTRY_END,
-    },
-    {
-        BOMBERSNOTEBOOK_ENTRY(0, 1, 39, CLOCK_TIME(18, 0), CLOCK_TIME(5, 59)),
-        BOMBERSNOTEBOOK_ENTRY(0, 2, 39, CLOCK_TIME(18, 0), CLOCK_TIME(5, 59)),
-        BOMBERSNOTEBOOK_ENTRY_END,
-    },
-    {
-        BOMBERSNOTEBOOK_ENTRY(0, 1, 40, CLOCK_TIME(0, 0), CLOCK_TIME(5, 59)),
-        BOMBERSNOTEBOOK_ENTRY(0, 2, 40, CLOCK_TIME(0, 0), CLOCK_TIME(5, 59)),
-        BOMBERSNOTEBOOK_ENTRY(0, 3, 40, CLOCK_TIME(0, 0), CLOCK_TIME(5, 59)),
-        BOMBERSNOTEBOOK_ENTRY_END,
-    },
-    {
-        BOMBERSNOTEBOOK_ENTRY(8, 1, 41, CLOCK_TIME(8, 0), CLOCK_TIME(18, 0)),
-        BOMBERSNOTEBOOK_ENTRY(4, 1, 42, CLOCK_TIME(8, 0), CLOCK_TIME(18, 0)),
-        BOMBERSNOTEBOOK_ENTRY(8, 2, 41, CLOCK_TIME(8, 0), CLOCK_TIME(18, 0)),
-        BOMBERSNOTEBOOK_ENTRY(4, 2, 42, CLOCK_TIME(8, 0), CLOCK_TIME(18, 0)),
-        BOMBERSNOTEBOOK_ENTRY_END,
-    },
-    {
-        BOMBERSNOTEBOOK_ENTRY(0, 1, 52, CLOCK_TIME(0, 0), CLOCK_TIME(5, 59)),
-        BOMBERSNOTEBOOK_ENTRY(0, 2, 52, CLOCK_TIME(0, 0), CLOCK_TIME(5, 59)),
-        BOMBERSNOTEBOOK_ENTRY(0, 3, 52, CLOCK_TIME(0, 0), CLOCK_TIME(5, 59)),
-        BOMBERSNOTEBOOK_ENTRY_END,
-    },
-    {
-        BOMBERSNOTEBOOK_ENTRY(0, 1, 46, CLOCK_TIME(6, 0), CLOCK_TIME(20, 0)),
-        BOMBERSNOTEBOOK_ENTRY(0, 2, 46, CLOCK_TIME(6, 0), CLOCK_TIME(20, 0)),
-        BOMBERSNOTEBOOK_ENTRY(0, 3, 46, CLOCK_TIME(6, 0), CLOCK_TIME(20, 0)),
-        BOMBERSNOTEBOOK_ENTRY_END,
-    },
-    {
-        BOMBERSNOTEBOOK_ENTRY(0, 1, 47, CLOCK_TIME(6, 0), CLOCK_TIME(18, 0)),
-        BOMBERSNOTEBOOK_ENTRY(0, 2, 47, CLOCK_TIME(6, 0), CLOCK_TIME(18, 0)),
-        BOMBERSNOTEBOOK_ENTRY(0, 2, 31, CLOCK_TIME(18, 0), CLOCK_TIME(21, 0)),
-        BOMBERSNOTEBOOK_ENTRY(0, 3, 47, CLOCK_TIME(6, 0), CLOCK_TIME(18, 0)),
-        BOMBERSNOTEBOOK_ENTRY_END,
-    },
-    {
-        BOMBERSNOTEBOOK_ENTRY(0, 1, 53, CLOCK_TIME(6, 0), CLOCK_TIME(5, 59)),
-        BOMBERSNOTEBOOK_ENTRY(0, 2, 53, CLOCK_TIME(6, 0), CLOCK_TIME(5, 59)),
-        BOMBERSNOTEBOOK_ENTRY(0, 3, 53, CLOCK_TIME(6, 0), CLOCK_TIME(5, 59)),
-        BOMBERSNOTEBOOK_ENTRY_END,
-    },
-    {
-        BOMBERSNOTEBOOK_ENTRY(0, 1, 54, CLOCK_TIME(18, 0), CLOCK_TIME(5, 59)),
-        BOMBERSNOTEBOOK_ENTRY(0, 2, 54, CLOCK_TIME(18, 0), CLOCK_TIME(5, 59)),
-        BOMBERSNOTEBOOK_ENTRY_END,
-    },
-};
+typedef enum {
+    /* 0 */ BOMBERSNOTEBOOK_ENTRY_ICON_EXCLAMATION_POINT,
+    /* 1 */ BOMBERSNOTEBOOK_ENTRY_ICON_MASK,
+    /* 2 */ BOMBERSNOTEBOOK_ENTRY_ICON_RIBBON
+} BombersNotebookEntryIcon;
+
+#define BOMBERSNOTEBOOK_WEEKEVENTREG_NONE 0xFFF0
+#define BOMBERSNOTEBOOK_WEEKEVENTREG_SPECIAL 0xFFF1
+
+    // sBombersNotebookEntries
+    u16 D_801D0D80[][30] = {
+        {
+            BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_ABOVE, 1, 36, CLOCK_TIME(6, 0), CLOCK_TIME(5, 59)),
+            BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_BELOW, 1, 37, CLOCK_TIME(6, 0), CLOCK_TIME(5, 59)),
+            BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_ABOVE, 2, 36, CLOCK_TIME(6, 0), CLOCK_TIME(5, 59)),
+            BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_BELOW, 2, 37, CLOCK_TIME(6, 0), CLOCK_TIME(5, 59)),
+            BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_ABOVE, 3, 36, CLOCK_TIME(6, 0), CLOCK_TIME(5, 59)),
+            BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_BELOW, 3, 37, CLOCK_TIME(6, 0), CLOCK_TIME(5, 59)),
+            BOMBERSNOTEBOOK_ENTRY_END,
+        },
+        {
+            BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_ABOVE, 1, 20, CLOCK_TIME(13, 45), CLOCK_TIME(16, 0)),
+            BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_BELOW, 1, 21, CLOCK_TIME(14, 30), CLOCK_TIME(20, 0)),
+            BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_ABOVE, 1, 22, CLOCK_TIME(23, 30), CLOCK_TIME(5, 59)),
+            BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_BELOW, 1, 23, CLOCK_TIME(23, 30), CLOCK_TIME(5, 59)),
+            BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 2, 26, CLOCK_TIME(17, 0), CLOCK_TIME(21, 0)),
+            BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 3, 26, CLOCK_TIME(6, 0), CLOCK_TIME(12, 0)),
+            BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 3, 50, CLOCK_TIME(5, 0), CLOCK_TIME(5, 59)),
+            BOMBERSNOTEBOOK_ENTRY_END,
+        },
+        {
+            BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 2, 25, CLOCK_TIME(16, 30), CLOCK_TIME(22, 0)),
+            BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 3, 27, CLOCK_TIME(18, 0), CLOCK_TIME(19, 0)),
+            BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 3, 50, CLOCK_TIME(5, 0), CLOCK_TIME(5, 59)),
+            BOMBERSNOTEBOOK_ENTRY_END,
+        },
+        {
+            BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_ABOVE, 3, 33, CLOCK_TIME(13, 0), CLOCK_TIME(22, 0)),
+            BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_BELOW, 3, 34, CLOCK_TIME(13, 0), CLOCK_TIME(22, 0)),
+            BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 3, 45, CLOCK_TIME(22, 0), CLOCK_TIME(5, 59)),
+            BOMBERSNOTEBOOK_ENTRY_END,
+        },
+        {
+            BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 1, 51, CLOCK_TIME(0, 30), CLOCK_TIME(1, 0)),
+            BOMBERSNOTEBOOK_ENTRY_END,
+        },
+        {
+            BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 1, 28, CLOCK_TIME(6, 0), CLOCK_TIME(18, 0)),
+            BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_ABOVE, 1, 29, CLOCK_TIME(2, 30), CLOCK_TIME(5, 15)),
+            BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_BELOW, 1, 30, CLOCK_TIME(2, 30), CLOCK_TIME(5, 15)),
+            BOMBERSNOTEBOOK_ENTRY_END,
+        },
+        {
+            BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_ABOVE, 2, 31, CLOCK_TIME(18, 0), CLOCK_TIME(21, 0)),
+            BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_BELOW, 2, 32, CLOCK_TIME(18, 0), CLOCK_TIME(21, 0)),
+            BOMBERSNOTEBOOK_ENTRY_END,
+        },
+        {
+            BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 1, 38, CLOCK_TIME(8, 0), CLOCK_TIME(20, 0)),
+            BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 2, 38, CLOCK_TIME(8, 0), CLOCK_TIME(20, 0)),
+            BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 3, 38, CLOCK_TIME(8, 0), CLOCK_TIME(18, 0)),
+            BOMBERSNOTEBOOK_ENTRY_END,
+        },
+        {
+            BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 1, 44, CLOCK_TIME(8, 0), CLOCK_TIME(20, 0)),
+            BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 2, 44, CLOCK_TIME(8, 0), CLOCK_TIME(20, 0)),
+            BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 3, 35, CLOCK_TIME(18, 0), CLOCK_TIME(5, 59)),
+            BOMBERSNOTEBOOK_ENTRY_END,
+        },
+        {
+            BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 1, 48, CLOCK_TIME(22, 0), CLOCK_TIME(5, 0)),
+            BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 2, 48, CLOCK_TIME(22, 0), CLOCK_TIME(5, 0)),
+            BOMBERSNOTEBOOK_ENTRY_END,
+        },
+        {
+            BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 1, 48, CLOCK_TIME(22, 0), CLOCK_TIME(5, 0)),
+            BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 2, 48, CLOCK_TIME(22, 0), CLOCK_TIME(5, 0)),
+            BOMBERSNOTEBOOK_ENTRY_END,
+        },
+        {
+            BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 1, 43, CLOCK_TIME(15, 0), CLOCK_TIME(0, 0)),
+            BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 1, 24, CLOCK_TIME(0, 0), CLOCK_TIME(5, 59)),
+            BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 2, 24, CLOCK_TIME(6, 0), CLOCK_TIME(12, 0)),
+            BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 2, 43, CLOCK_TIME(15, 0), CLOCK_TIME(0, 0)),
+            BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 3, 49, CLOCK_TIME(18, 0), CLOCK_TIME(5, 59)),
+            BOMBERSNOTEBOOK_ENTRY_END,
+        },
+        {
+            BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 1, 39, CLOCK_TIME(18, 0), CLOCK_TIME(5, 59)),
+            BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 2, 39, CLOCK_TIME(18, 0), CLOCK_TIME(5, 59)),
+            BOMBERSNOTEBOOK_ENTRY_END,
+        },
+        {
+            BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 1, 40, CLOCK_TIME(0, 0), CLOCK_TIME(5, 59)),
+            BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 2, 40, CLOCK_TIME(0, 0), CLOCK_TIME(5, 59)),
+            BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 3, 40, CLOCK_TIME(0, 0), CLOCK_TIME(5, 59)),
+            BOMBERSNOTEBOOK_ENTRY_END,
+        },
+        {
+            BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_ABOVE, 1, 41, CLOCK_TIME(8, 0), CLOCK_TIME(18, 0)),
+            BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_BELOW, 1, 42, CLOCK_TIME(8, 0), CLOCK_TIME(18, 0)),
+            BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_ABOVE, 2, 41, CLOCK_TIME(8, 0), CLOCK_TIME(18, 0)),
+            BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_BELOW, 2, 42, CLOCK_TIME(8, 0), CLOCK_TIME(18, 0)),
+            BOMBERSNOTEBOOK_ENTRY_END,
+        },
+        {
+            BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 1, 52, CLOCK_TIME(0, 0), CLOCK_TIME(5, 59)),
+            BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 2, 52, CLOCK_TIME(0, 0), CLOCK_TIME(5, 59)),
+            BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 3, 52, CLOCK_TIME(0, 0), CLOCK_TIME(5, 59)),
+            BOMBERSNOTEBOOK_ENTRY_END,
+        },
+        {
+            BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 1, 46, CLOCK_TIME(6, 0), CLOCK_TIME(20, 0)),
+            BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 2, 46, CLOCK_TIME(6, 0), CLOCK_TIME(20, 0)),
+            BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 3, 46, CLOCK_TIME(6, 0), CLOCK_TIME(20, 0)),
+            BOMBERSNOTEBOOK_ENTRY_END,
+        },
+        {
+            BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 1, 47, CLOCK_TIME(6, 0), CLOCK_TIME(18, 0)),
+            BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 2, 47, CLOCK_TIME(6, 0), CLOCK_TIME(18, 0)),
+            BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 2, 31, CLOCK_TIME(18, 0), CLOCK_TIME(21, 0)),
+            BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 3, 47, CLOCK_TIME(6, 0), CLOCK_TIME(18, 0)),
+            BOMBERSNOTEBOOK_ENTRY_END,
+        },
+        {
+            BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 1, 53, CLOCK_TIME(6, 0), CLOCK_TIME(5, 59)),
+            BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 2, 53, CLOCK_TIME(6, 0), CLOCK_TIME(5, 59)),
+            BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 3, 53, CLOCK_TIME(6, 0), CLOCK_TIME(5, 59)),
+            BOMBERSNOTEBOOK_ENTRY_END,
+        },
+        {
+            BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 1, 54, CLOCK_TIME(18, 0), CLOCK_TIME(5, 59)),
+            BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 2, 54, CLOCK_TIME(18, 0), CLOCK_TIME(5, 59)),
+            BOMBERSNOTEBOOK_ENTRY_END,
+        },
+    };
 
 s16 D_801D1230[] = { 0x78, 0x78, 0x10E, 0x1A4 };
 TexturePtr D_801D1238[] = { &D_08002650, &D_08002A70, &D_08002E90 };
 s32 D_801D1244[] = {
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 1, 1, 0, 2, 0, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    BOMBERSNOTEBOOK_ENTRY_ICON_EXCLAMATION_POINT,
+    BOMBERSNOTEBOOK_ENTRY_ICON_EXCLAMATION_POINT,
+    BOMBERSNOTEBOOK_ENTRY_ICON_EXCLAMATION_POINT,
+    BOMBERSNOTEBOOK_ENTRY_ICON_EXCLAMATION_POINT,
+    BOMBERSNOTEBOOK_ENTRY_ICON_EXCLAMATION_POINT,
+    BOMBERSNOTEBOOK_ENTRY_ICON_EXCLAMATION_POINT,
+    BOMBERSNOTEBOOK_ENTRY_ICON_EXCLAMATION_POINT,
+    BOMBERSNOTEBOOK_ENTRY_ICON_EXCLAMATION_POINT,
+    BOMBERSNOTEBOOK_ENTRY_ICON_EXCLAMATION_POINT,
+    BOMBERSNOTEBOOK_ENTRY_ICON_EXCLAMATION_POINT,
+    BOMBERSNOTEBOOK_ENTRY_ICON_RIBBON,
+    BOMBERSNOTEBOOK_ENTRY_ICON_EXCLAMATION_POINT,
+    BOMBERSNOTEBOOK_ENTRY_ICON_MASK,
+    BOMBERSNOTEBOOK_ENTRY_ICON_MASK,
+    BOMBERSNOTEBOOK_ENTRY_ICON_EXCLAMATION_POINT,
+    BOMBERSNOTEBOOK_ENTRY_ICON_RIBBON,
+    BOMBERSNOTEBOOK_ENTRY_ICON_EXCLAMATION_POINT,
+    BOMBERSNOTEBOOK_ENTRY_ICON_RIBBON,
+    BOMBERSNOTEBOOK_ENTRY_ICON_RIBBON,
+    BOMBERSNOTEBOOK_ENTRY_ICON_RIBBON,
+    BOMBERSNOTEBOOK_ENTRY_ICON_RIBBON,
+    BOMBERSNOTEBOOK_ENTRY_ICON_RIBBON,
+    BOMBERSNOTEBOOK_ENTRY_ICON_RIBBON,
+    BOMBERSNOTEBOOK_ENTRY_ICON_RIBBON,
+    BOMBERSNOTEBOOK_ENTRY_ICON_MASK,
+    BOMBERSNOTEBOOK_ENTRY_ICON_MASK,
+    BOMBERSNOTEBOOK_ENTRY_ICON_MASK,
+    BOMBERSNOTEBOOK_ENTRY_ICON_MASK,
+    BOMBERSNOTEBOOK_ENTRY_ICON_MASK,
+    BOMBERSNOTEBOOK_ENTRY_ICON_MASK,
+    BOMBERSNOTEBOOK_ENTRY_ICON_MASK,
+    BOMBERSNOTEBOOK_ENTRY_ICON_MASK,
+    BOMBERSNOTEBOOK_ENTRY_ICON_MASK,
+    BOMBERSNOTEBOOK_ENTRY_ICON_MASK,
+    BOMBERSNOTEBOOK_ENTRY_ICON_MASK,
 };
 s32 D_801D12D0[] = { 0x10, 0x18, 0x20 };
 s32 D_801D12DC[] = { 0x10, 0x1C, 0x1C };
@@ -211,37 +255,37 @@ u16 D_801D12E8[] = {
     WEEKEVENTREG_50_08,
     WEEKEVENTREG_50_20,
     WEEKEVENTREG_50_20,
-    BOMBERSNOTEBOOK_WEEKEVENTREG_SPECIAL_2,
+    BOMBERSNOTEBOOK_WEEKEVENTREG_SPECIAL,
     WEEKEVENTREG_50_80,
     WEEKEVENTREG_51_01,
     WEEKEVENTREG_51_20,
     WEEKEVENTREG_21_20,
     WEEKEVENTREG_22_01,
-    BOMBERSNOTEBOOK_WEEKEVENTREG_SPECIAL_1,
+    BOMBERSNOTEBOOK_WEEKEVENTREG_NONE,
     WEEKEVENTREG_52_01,
-    BOMBERSNOTEBOOK_WEEKEVENTREG_SPECIAL_1,
-    BOMBERSNOTEBOOK_WEEKEVENTREG_SPECIAL_1,
+    BOMBERSNOTEBOOK_WEEKEVENTREG_NONE,
+    BOMBERSNOTEBOOK_WEEKEVENTREG_NONE,
     WEEKEVENTREG_80_10,
-    BOMBERSNOTEBOOK_WEEKEVENTREG_SPECIAL_1,
-    BOMBERSNOTEBOOK_WEEKEVENTREG_SPECIAL_1,
-    BOMBERSNOTEBOOK_WEEKEVENTREG_SPECIAL_1,
-    BOMBERSNOTEBOOK_WEEKEVENTREG_SPECIAL_1,
-    BOMBERSNOTEBOOK_WEEKEVENTREG_SPECIAL_1,
-    BOMBERSNOTEBOOK_WEEKEVENTREG_SPECIAL_1,
-    BOMBERSNOTEBOOK_WEEKEVENTREG_SPECIAL_1,
-    BOMBERSNOTEBOOK_WEEKEVENTREG_SPECIAL_1,
-    BOMBERSNOTEBOOK_WEEKEVENTREG_SPECIAL_1,
-    BOMBERSNOTEBOOK_WEEKEVENTREG_SPECIAL_1,
-    BOMBERSNOTEBOOK_WEEKEVENTREG_SPECIAL_1,
-    BOMBERSNOTEBOOK_WEEKEVENTREG_SPECIAL_1,
-    BOMBERSNOTEBOOK_WEEKEVENTREG_SPECIAL_1,
-    BOMBERSNOTEBOOK_WEEKEVENTREG_SPECIAL_1,
-    BOMBERSNOTEBOOK_WEEKEVENTREG_SPECIAL_1,
-    BOMBERSNOTEBOOK_WEEKEVENTREG_SPECIAL_1,
-    BOMBERSNOTEBOOK_WEEKEVENTREG_SPECIAL_1,
-    BOMBERSNOTEBOOK_WEEKEVENTREG_SPECIAL_1,
-    BOMBERSNOTEBOOK_WEEKEVENTREG_SPECIAL_1,
-    BOMBERSNOTEBOOK_WEEKEVENTREG_SPECIAL_1,
+    BOMBERSNOTEBOOK_WEEKEVENTREG_NONE,
+    BOMBERSNOTEBOOK_WEEKEVENTREG_NONE,
+    BOMBERSNOTEBOOK_WEEKEVENTREG_NONE,
+    BOMBERSNOTEBOOK_WEEKEVENTREG_NONE,
+    BOMBERSNOTEBOOK_WEEKEVENTREG_NONE,
+    BOMBERSNOTEBOOK_WEEKEVENTREG_NONE,
+    BOMBERSNOTEBOOK_WEEKEVENTREG_NONE,
+    BOMBERSNOTEBOOK_WEEKEVENTREG_NONE,
+    BOMBERSNOTEBOOK_WEEKEVENTREG_NONE,
+    BOMBERSNOTEBOOK_WEEKEVENTREG_NONE,
+    BOMBERSNOTEBOOK_WEEKEVENTREG_NONE,
+    BOMBERSNOTEBOOK_WEEKEVENTREG_NONE,
+    BOMBERSNOTEBOOK_WEEKEVENTREG_NONE,
+    BOMBERSNOTEBOOK_WEEKEVENTREG_NONE,
+    BOMBERSNOTEBOOK_WEEKEVENTREG_NONE,
+    BOMBERSNOTEBOOK_WEEKEVENTREG_NONE,
+    BOMBERSNOTEBOOK_WEEKEVENTREG_NONE,
+    BOMBERSNOTEBOOK_WEEKEVENTREG_NONE,
+    BOMBERSNOTEBOOK_WEEKEVENTREG_NONE,
+    BOMBERSNOTEBOOK_WEEKEVENTREG_NONE,
 };
 
 // SPScisTextureRectangle
@@ -365,32 +409,32 @@ void func_8016B4B0(Gfx** gfxP, s32 arg1, s32 arg2) {
     sp84 = D_801D0D80[arg1];
     sp1A0 = false;
 
-    while(true) {
-        if(sp84[0] == BOMBERSNOTEBOOK_ENTRY_END) {
+    while (true) {
+        if (sp84[0] == BOMBERSNOTEBOOK_ENTRY_END) {
             if (!sp1A0) {
                 gDPPipeSync(sp1AC++);
-                gDPSetCombineLERP(sp1AC++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0, PRIMITIVE,
-                                ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
+                gDPSetCombineLERP(sp1AC++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0,
+                                  PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
                 gDPSetPrimColor(sp1AC++, 0, 0, 0, 0, 0, 255);
                 gDPSetEnvColor(sp1AC++, 0, 0, 0, 255);
                 gDPLoadTextureBlock(sp1AC++, &D_08000100, G_IM_FMT_IA, G_IM_SIZ_8b, 32, 48, 0, G_TX_MIRROR | G_TX_WRAP,
                                     G_TX_MIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
-                func_8016AC10(&sp1AC, 0x8DC, (arg2 + 1) * 4, 0x95C, (arg2 + 0x31) * 4, 0, 0, 0, 0x400, 0x400);
+                func_8016AC10(&sp1AC, 0x8DC, (arg2 + 1) << 2, 0x95C, (arg2 + 0x31) << 2, 0, 0, 0, 0x400, 0x400);
                 gDPPipeSync(sp1AC++);
                 gDPSetPrimColor(sp1AC++, 0, 0, 255, 255, 255, 255);
                 gDPSetEnvColor(sp1AC++, 255, 0, 0, 255);
-                func_8016AC10(&sp1AC, 0x8D4, (arg2 - 1) * 4, 0x954, (arg2 + 0x2F) * 4, 0, 0, 0, 0x400, 0x400);
+                func_8016AC10(&sp1AC, 0x8D4, (arg2 - 1) << 2, 0x954, (arg2 + 0x2F) << 2, 0, 0, 0, 0x400, 0x400);
                 gDPPipeSync(sp1AC++);
                 gDPSetCombineMode(sp1AC++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
                 gDPSetEnvColor(sp1AC++, 0, 0, 0, 255);
             }
             break;
         }
-        if (sp84[0] & 0x8000) {
+        if (sp84[0] & BOMBERSNOTEBOOK_ENTRY_POS_ABOVE) {
             var_t0 = 8;
-        } else if (sp84[0] & 0x4000) {
+        } else if (sp84[0] & BOMBERSNOTEBOOK_ENTRY_POS_BELOW) {
             var_t0 = 0x18;
-        } else {
+        } else { // BOMBERSNOTEBOOK_ENTRY_POS_CENTER
             var_t0 = 0x10;
         }
 
@@ -403,29 +447,29 @@ void func_8016B4B0(Gfx** gfxP, s32 arg1, s32 arg2) {
         gDPSetPrimColor(sp1AC++, 0, 0, 0, 0, 0, 255);
         gDPLoadTextureBlock(sp1AC++, &D_08001240, G_IM_FMT_RGBA, G_IM_SIZ_16b, 4, 16, 0, G_TX_MIRROR | G_TX_WRAP,
                             G_TX_MIRROR | G_TX_WRAP, 2, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
-        func_8016AC10(&sp1AC, (var_s0 + 2) * 4, (arg2 + var_t0 + 2) * 4, (var_s0 + 6) * 4, (arg2 + var_t0 + 0x12) * 4,
-                      0, 0, 0, 0x400, 0x400);
-        func_8016AC10(&sp1AC, (var_s3 - 2) * 4, (arg2 + var_t0 + 2) * 4, (var_s3 + 2) * 4, (arg2 + var_t0 + 0x12) * 4,
-                      0, 0x80, 0, 0x400, 0x400);
+        func_8016AC10(&sp1AC, (var_s0 + 2) << 2, (arg2 + var_t0 + 2) << 2, (var_s0 + 6) << 2,
+                      (arg2 + var_t0 + 0x12) << 2, 0, 0, 0, 0x400, 0x400);
+        func_8016AC10(&sp1AC, (var_s3 - 2) << 2, (arg2 + var_t0 + 2) << 2, (var_s3 + 2) << 2,
+                      (arg2 + var_t0 + 0x12) << 2, 0, 0x80, 0, 0x400, 0x400);
         if ((var_s3 - var_s0 - 8) > 0) {
             gDPLoadTextureBlock(sp1AC++, &D_080012C0, G_IM_FMT_RGBA, G_IM_SIZ_16b, 4, 16, 0, G_TX_MIRROR | G_TX_WRAP,
                                 G_TX_MIRROR | G_TX_WRAP, 2, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
-            func_8016AC10(&sp1AC, (var_s0 + 6) * 4, (arg2 + var_t0 + 2) * 4, (var_s0 + (var_s3 - var_s0) - 2) * 4,
-                          (arg2 + var_t0 + 0x12) * 4, 0, 0, 0, 0x400, 0x400);
+            func_8016AC10(&sp1AC, (var_s0 + 6) << 2, (arg2 + var_t0 + 2) << 2, (var_s0 + (var_s3 - var_s0) - 2) << 2,
+                          (arg2 + var_t0 + 0x12) << 2, 0, 0, 0, 0x400, 0x400);
         }
 
         gDPSetPrimColor(sp1AC++, 0, 0, 255, 255, 255, 255);
         gDPLoadTextureBlock(sp1AC++, &D_08001240, G_IM_FMT_RGBA, G_IM_SIZ_16b, 4, 16, 0, G_TX_MIRROR | G_TX_WRAP,
                             G_TX_MIRROR | G_TX_WRAP, 2, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
-        func_8016AC10(&sp1AC, var_s0 * 4, (arg2 + var_t0) * 4, (var_s0 + 4) * 4, (arg2 + var_t0 + 0x10) * 4, 0, 0, 0,
-                      0x400, 0x400);
-        func_8016AC10(&sp1AC, (var_s3 - 4) * 4, (arg2 + var_t0) * 4, var_s3 * 4, (arg2 + var_t0 + 0x10) * 4, 0, 0x80, 0,
-                      0x400, 0x400);
+        func_8016AC10(&sp1AC, var_s0 << 2, (arg2 + var_t0) << 2, (var_s0 + 4) << 2, (arg2 + var_t0 + 0x10) << 2, 0, 0,
+                      0, 0x400, 0x400);
+        func_8016AC10(&sp1AC, (var_s3 - 4) << 2, (arg2 + var_t0) << 2, var_s3 << 2, (arg2 + var_t0 + 0x10) << 2, 0,
+                      0x80, 0, 0x400, 0x400);
         if (((var_s3 - var_s0) - 8) > 0) {
             gDPLoadTextureBlock(sp1AC++, &D_080012C0, G_IM_FMT_RGBA, G_IM_SIZ_16b, 4, 16, 0, G_TX_MIRROR | G_TX_WRAP,
                                 G_TX_MIRROR | G_TX_WRAP, 2, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
-            func_8016AC10(&sp1AC, (var_s0 + 4) * 4, (arg2 + var_t0) * 4, (var_s0 + (var_s3 - var_s0) - 4) * 4,
-                          (arg2 + var_t0 + 0x10) * 4, 0, 0, 0, 0x400, 0x400);
+            func_8016AC10(&sp1AC, (var_s0 + 4) << 2, (arg2 + var_t0) << 2, (var_s0 + (var_s3 - var_s0) - 4) << 2,
+                          (arg2 + var_t0 + 0x10) << 2, 0, 0, 0, 0x400, 0x400);
         }
         if (CHECK_WEEKEVENTREG(sBombersNotebookEventWeekEventFlags[sp84[0] & 0xFF])) {
             sp1A4 = D_801D1244[(sp84[0] & 0xFF) - 20];
@@ -436,9 +480,9 @@ void func_8016B4B0(Gfx** gfxP, s32 arg1, s32 arg2) {
             }
 
             if ((sp1A4 == 1) || (sp1A4 == 2)) {
-                if (sp84[0] & 0x8000) {
+                if (sp84[0] & BOMBERSNOTEBOOK_ENTRY_POS_ABOVE) {
                     var_t0 -= 0xC;
-                } else if (!(sp84[0] & 0x4000)) {
+                } else if (!(sp84[0] & BOMBERSNOTEBOOK_ENTRY_POS_BELOW)) { // BOMBERSNOTEBOOK_ENTRY_POS_CENTER
                     var_t0 -= 6;
                 }
             }
@@ -447,16 +491,16 @@ void func_8016B4B0(Gfx** gfxP, s32 arg1, s32 arg2) {
                                 G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
             gDPSetPrimColor(sp1AC++, 0, 0, 0, 0, 0, 255);
 
-            func_8016AC10(&sp1AC, (sp194 + 2) * 4, (arg2 + var_t0) * 4, (D_801D12D0[sp1A4] + sp194 + 2) * 4,
-                          ((D_801D12DC[sp1A4] + (arg2 + var_t0) + 2) * 4), 0, 0, 0, 0x400, 0x400);
-            if (D_801D12E8[(sp84[0] & 0xFF) - 20] == BOMBERSNOTEBOOK_WEEKEVENTREG_SPECIAL_1) {
+            func_8016AC10(&sp1AC, (sp194 + 2) << 2, (arg2 + var_t0) << 2, (D_801D12D0[sp1A4] + sp194 + 2) << 2,
+                          ((D_801D12DC[sp1A4] + (arg2 + var_t0) + 2) << 2), 0, 0, 0, 0x400, 0x400);
+            if (D_801D12E8[(sp84[0] & 0xFF) - 20] == BOMBERSNOTEBOOK_WEEKEVENTREG_NONE) {
                 gDPSetPrimColor(sp1AC++, 0, 0, D_801D1374[sp1A4][0], D_801D1374[sp1A4][1], D_801D1374[sp1A4][2], 255);
-            } else if (D_801D12E8[(sp84[0] & 0xFF) - 20] == BOMBERSNOTEBOOK_WEEKEVENTREG_SPECIAL_2) {
-                if ((gSaveContext.save.saveInfo.weekEventReg[0x1B] & 2) ||
-                    (gSaveContext.save.saveInfo.weekEventReg[0x1B] & 4) ||
-                    (gSaveContext.save.saveInfo.weekEventReg[0x1B] & 8) ||
-                    (gSaveContext.save.saveInfo.weekEventReg[0x1B] & 0x10) ||
-                    ((gSaveContext.save.saveInfo.weekEventReg[0x1B] & 0x20))) {
+            } else if (D_801D12E8[(sp84[0] & 0xFF) - 20] == BOMBERSNOTEBOOK_WEEKEVENTREG_SPECIAL) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_27_02) ||
+                    CHECK_WEEKEVENTREG(WEEKEVENTREG_27_04) ||
+                    CHECK_WEEKEVENTREG(WEEKEVENTREG_27_08) ||
+                    CHECK_WEEKEVENTREG(WEEKEVENTREG_27_10) ||
+                    CHECK_WEEKEVENTREG(WEEKEVENTREG_27_20)) {
                     gDPSetPrimColor(sp1AC++, 0, 0, D_801D1374[sp1A4][0], D_801D1374[sp1A4][1], D_801D1374[sp1A4][2],
                                     255);
                 } else {
@@ -470,8 +514,8 @@ void func_8016B4B0(Gfx** gfxP, s32 arg1, s32 arg2) {
                     gDPSetPrimColor(sp1AC++, 0, 0, 155, 155, 155, 255);
                 }
             }
-            func_8016AC10(&sp1AC, sp194 * 4, (arg2 + var_t0) * 4, (D_801D12D0[sp1A4] + sp194) * 4,
-                          (D_801D12DC[sp1A4] + (arg2 + var_t0)) * 4, 0, 0, 0, 0x400, 0x400);
+            func_8016AC10(&sp1AC, sp194 << 2, (arg2 + var_t0) << 2, (D_801D12D0[sp1A4] + sp194) << 2,
+                          (D_801D12DC[sp1A4] + (arg2 + var_t0)) << 2, 0, 0, 0, 0x400, 0x400);
             gDPSetPrimColor(sp1AC++, 0, 0, 255, 255, 255, 255);
         } else {
             sp1A0 = true;
@@ -575,8 +619,9 @@ void func_8016C344(BombersNotebook* this, Gfx** gfxP) {
             sp12C = 0x30;
             sp124 = 0;
         }
-        func_8016AC10(&sp13C, (0x39 - sp124) * 4, (var_s3 - sp124) * 4, ((0x39 - sp124) + var_t1) * 4,
-                      ((var_s3 - sp124) + var_t1) * 4, 0, 0, 0, 1024.0f / (sp128 / 100.0f), 1024.0f / (sp128 / 100.0f));
+        func_8016AC10(&sp13C, (0x39 - sp124) << 2, (var_s3 - sp124) << 2, ((0x39 - sp124) + var_t1) << 2,
+                      ((var_s3 - sp124) + var_t1) << 2, 0, 0, 0, 1024.0f / (sp128 / 100.0f),
+                      1024.0f / (sp128 / 100.0f));
         if ((var_s0 == (this->unk_94 + sp130)) && (this->unk_A4 == 0)) {
             gDPSetPrimColor(sp13C++, 0, 0, D_801D13D8, D_801D13DC, D_801D13E0, 255);
         } else {
@@ -584,12 +629,12 @@ void func_8016C344(BombersNotebook* this, Gfx** gfxP) {
         }
         gDPLoadTextureBlock(sp13C++, &D_080018B0, G_IM_FMT_I, G_IM_SIZ_8b, 8, 4, 0, G_TX_NOMIRROR | G_TX_WRAP,
                             G_TX_NOMIRROR | G_TX_WRAP, 3, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
-        func_8016AC10(&sp13C, (sp12C + 0x39) * 4, (var_s3 + 0x16) * 4, (sp12C - sp124 + 0x20F) * 4, (var_s3 + 0x1A) * 4,
-                      0, 0, 0, 0x400, 0x400);
+        func_8016AC10(&sp13C, (sp12C + 0x39) << 2, (var_s3 + 0x16) << 2, (sp12C - sp124 + 0x20F) << 2,
+                      (var_s3 + 0x1A) << 2, 0, 0, 0, 0x400, 0x400);
         gDPLoadTextureBlock_4b(sp13C++, &D_08001358, G_IM_FMT_I, 16, 16, 0, G_TX_NOMIRROR | G_TX_WRAP,
                                G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
-        func_8016AC10(&sp13C, (sp12C - sp124 + 0x20F) * 4, (var_s3 + 0x10) * 4, (sp12C - sp124 + 0x21F) * 4,
-                      (var_s3 + 0x20) * 4, 0, 0, 0, 0x400, 0x400);
+        func_8016AC10(&sp13C, (sp12C - sp124 + 0x20F) << 2, (var_s3 + 0x10) << 2, (sp12C - sp124 + 0x21F) << 2,
+                      (var_s3 + 0x20) << 2, 0, 0, 0, 0x400, 0x400);
         if (CHECK_WEEKEVENTREG(sBombersNotebookEventWeekEventFlags[var_s0])) {
             gDPPipeSync(sp13C++);
             gDPSetRenderMode(sp13C++, G_RM_OPA_SURF, G_RM_OPA_SURF2);
@@ -663,13 +708,13 @@ void func_8016CD4C(Gfx** gfxP) {
     gDPSetPrimColor(sp264++, 0, 0, 255, 255, 255, 255);
     gDPLoadTextureBlock_4b(sp264++, &D_08001950, G_IM_FMT_IA, 64, 28, 0, G_TX_MIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, 6, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
-    func_8016AC10(&sp264, sp260 * 4, 0xA8, (sp260 + 0x80) * 4, 0x118, 0, 0, 0, 0x400, 0x400);
+    func_8016AC10(&sp264, sp260 << 2, 0xA8, (sp260 + 0x80) << 2, 0x118, 0, 0, 0, 0x400, 0x400);
     gDPSetPrimColor(sp264++, 0, 0, 0, 0, 0, 255);
     gDPPipeSync(sp264++);
     gDPSetCombineLERP(sp264++, 0, 0, 0, PRIMITIVE, 0, 0, 0, TEXEL0, 0, 0, 0, PRIMITIVE, 0, 0, 0, TEXEL0);
     gDPLoadTextureBlock_4b(sp264++, &D_080032B0, G_IM_FMT_I, 96, 20, 0, G_TX_MIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
-    func_8016AC10(&sp264, (sp260 + 0x10) * 4, 0xBC, (sp260 + 0x70) * 4, 0x10C, 0, 0, 0, 0x400, 0x400);
+    func_8016AC10(&sp264, (sp260 + 0x10) << 2, 0xBC, (sp260 + 0x70) << 2, 0x10C, 0, 0, 0, 0x400, 0x400);
     gDPPipeSync(sp264++);
     gDPSetCombineMode(sp264++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
     gDPSetPrimColor(sp264++, 0, 0, 255, 255, 255, 255);
@@ -682,23 +727,23 @@ void func_8016CD4C(Gfx** gfxP) {
     }
     gDPLoadTextureBlock_4b(sp264++, &D_08001CD0, G_IM_FMT_IA, 16, 28, 0, G_TX_MIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
-    func_8016AC10(&sp264, sp25C * 4, 0xA8, (sp25C + 0x10) * 4, 0x118, 0, 0, 0, 0x400, 0x400);
+    func_8016AC10(&sp264, sp25C << 2, 0xA8, (sp25C + 0x10) << 2, 0x118, 0, 0, 0, 0x400, 0x400);
     gDPLoadTextureBlock_4b(sp264++, &D_08001E90, G_IM_FMT_IA, 16, 28, 0, G_TX_MIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, 4, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
-    func_8016AC10(&sp264, (sp25C + 0x10) * 4, 0xA8, (sp25C + 0x8D) * 4, 0x118, 0, 0, 0, 0x400, 0x400);
+    func_8016AC10(&sp264, (sp25C + 0x10) << 2, 0xA8, (sp25C + 0x8D) << 2, 0x118, 0, 0, 0, 0x400, 0x400);
     gDPLoadTextureBlock_4b(sp264++, &D_08001DB0, G_IM_FMT_IA, 16, 28, 0, G_TX_MIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
-    func_8016AC10(&sp264, (sp25C + 0x8D) * 4, 0xA8, (sp25C + 0x9D) * 4, 0x118, 0, 0, 0, 0x400, 0x400);
+    func_8016AC10(&sp264, (sp25C + 0x8D) << 2, 0xA8, (sp25C + 0x9D) << 2, 0x118, 0, 0, 0, 0x400, 0x400);
     gDPLoadTextureBlock(sp264++, D_801D1238[TEST(CURRENT_DAY) - 1], G_IM_FMT_IA, G_IM_SIZ_8b, 48, 22, 0,
                         G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
                         G_TX_NOLOD);
-    func_8016AC10(&sp264, (sp25C + D_801D142C[TEST(CURRENT_DAY) - 1]) * 4, 0xB8,
-                  (sp25C + D_801D142C[TEST(CURRENT_DAY) - 1] + 0x30) * 4, 0x110, 0, 0, 0, 0x400, 0x400);
+    func_8016AC10(&sp264, (sp25C + D_801D142C[TEST(CURRENT_DAY) - 1]) << 2, 0xB8,
+                  (sp25C + D_801D142C[TEST(CURRENT_DAY) - 1] + 0x30) << 2, 0x110, 0, 0, 0, 0x400, 0x400);
 
     gDPSetPrimColor(sp264++, 0, 0, 150, 150, 150, 255);
     gDPLoadTextureBlock_4b(sp264++, &D_08001358, G_IM_FMT_I, 16, 16, 0, G_TX_NOMIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
-    func_8016AC10(&sp264, (sp25C + 0x38) * 4, 0xC0, (sp25C + 0x48) * 4, 0x100, 0, 0, 0, 0x400, 0x400);
+    func_8016AC10(&sp264, (sp25C + 0x38) << 2, 0xC0, (sp25C + 0x48) << 2, 0x100, 0, 0, 0, 0x400, 0x400);
     gDPPipeSync(sp264++);
     gDPSetCombineLERP(sp264++, 0, 0, 0, PRIMITIVE, 0, 0, 0, TEXEL0, 0, 0, 0, PRIMITIVE, 0, 0, 0, TEXEL0);
     gDPSetPrimColor(sp264++, 0, 0, 0, 0, 0, 255);
@@ -719,16 +764,16 @@ void func_8016CD4C(Gfx** gfxP) {
     gDPLoadTextureBlock_4b(sp264++, D_801D13F8[sp244], G_IM_FMT_I, 16, 17, 0, G_TX_NOMIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
     sp25C += 0x4B;
-    func_8016AC10(&sp264, sp25C * 4, 0xC0, (sp25C + 0x10) * 4, 0x104, 0, 0, 0, 0x400, 0x400);
+    func_8016AC10(&sp264, sp25C << 2, 0xC0, (sp25C + 0x10) << 2, 0x104, 0, 0, 0, 0x400, 0x400);
 
     sp250 = sp25C + D_801D1420[sp244];
     gDPLoadTextureBlock_4b(sp264++, D_801D13F8[sp248], G_IM_FMT_I, 16, 17, 0, G_TX_NOMIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
-    func_8016AC10(&sp264, sp250 * 4, 0xC0, (sp250 + 0x10) * 4, 0x104, 0, 0, 0, 0x400, 0x400);
+    func_8016AC10(&sp264, sp250 << 2, 0xC0, (sp250 + 0x10) << 2, 0x104, 0, 0, 0, 0x400, 0x400);
     sp250 += D_801D1420[sp248];
     gDPLoadTextureBlock_4b(sp264++, &D_080025C8, G_IM_FMT_I, 16, 17, 0, G_TX_NOMIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
-    func_8016AC10(&sp264, sp250 * 4, 0xC0, (sp250 + 0x10) * 4, 0x104, 0, 0, 0, 0x400, 0x400);
+    func_8016AC10(&sp264, sp250 << 2, 0xC0, (sp250 + 0x10) << 2, 0x104, 0, 0, 0, 0x400, 0x400);
 
     sp244 = 0;
     if (CURRENT_DAY == 0) {
@@ -746,11 +791,11 @@ void func_8016CD4C(Gfx** gfxP) {
     gDPLoadTextureBlock_4b(sp264++, D_801D13F8[sp244], G_IM_FMT_I, 16, 17, 0, G_TX_NOMIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
     sp250 += 7;
-    func_8016AC10(&sp264, sp250 * 4, 0xC0, (sp250 + 0x10) * 4, 0x104, 0, 0, 0, 0x400, 0x400);
+    func_8016AC10(&sp264, sp250 << 2, 0xC0, (sp250 + 0x10) << 2, 0x104, 0, 0, 0, 0x400, 0x400);
     sp250 += D_801D1420[sp244];
     gDPLoadTextureBlock_4b(sp264++, D_801D13F8[sp248], G_IM_FMT_I, 16, 17, 0, G_TX_NOMIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
-    func_8016AC10(&sp264, sp250 * 4, 0xC0, (sp250 + 0x10) * 4, 0x104, 0, 0, 0, 0x400, 0x400);
+    func_8016AC10(&sp264, sp250 << 2, 0xC0, (sp250 + 0x10) << 2, 0x104, 0, 0, 0, 0x400, 0x400);
 
     // Connecting Bar? (Between time of day text box and the time box)
     gDPPipeSync(sp264++);
@@ -758,13 +803,13 @@ void func_8016CD4C(Gfx** gfxP) {
     gDPSetPrimColor(sp264++, 0, 0, 255, 255, 255, 255);
     gDPLoadTextureBlock(sp264++, &D_08000880, G_IM_FMT_IA, G_IM_SIZ_8b, 32, 14, 0, G_TX_MIRROR | G_TX_WRAP,
                         G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
-    func_8016AC10(&sp264, sp258 * 4, 0xC4, (sp258 + 0x20) * 4, 0xFC, 0, 0, 0, 0x400, 0x400);
+    func_8016AC10(&sp264, sp258 << 2, 0xC4, (sp258 + 0x20) << 2, 0xFC, 0, 0, 0, 0x400, 0x400);
 
     // Red Line
     gDPSetPrimColor(sp264++, 0, 0, 242, 0, 14, 255);
     gDPLoadTextureBlock(sp264++, &D_08001898, G_IM_FMT_I, G_IM_SIZ_8b, 8, 1, 0, G_TX_MIRROR | G_TX_WRAP,
                         G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
-    func_8016AC10(&sp264, sp254 * 4, 0x128, (sp254 + 0x20) * 4, 0x7A8, 0, 0, 0, 0x400, 0x400);
+    func_8016AC10(&sp264, sp254 << 2, 0x128, (sp254 + 0x20) << 2, 0x7A8, 0, 0, 0, 0x400, 0x400);
 
     // Red Triangle
     gDPPipeSync(sp264++);
@@ -775,7 +820,7 @@ void func_8016CD4C(Gfx** gfxP) {
     gDPLoadTextureBlock(sp264++, &D_08000700, G_IM_FMT_IA, G_IM_SIZ_8b, 24, 16, 0, G_TX_MIRROR | G_TX_WRAP,
                         G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
     sp254 -= 0xB;
-    func_8016AC10(&sp264, sp254 * 4, 0x118, (sp254 + 0x18) * 4, 0x158, 0, 0, 0, 0x400, 0x400);
+    func_8016AC10(&sp264, sp254 << 2, 0x118, (sp254 + 0x18) << 2, 0x158, 0, 0, 0, 0x400, 0x400);
     gDPPipeSync(sp264++);
     *gfxP = sp264;
 }
@@ -809,21 +854,21 @@ void func_8016E40C(BombersNotebook* this, Gfx** gfxP) {
                            G_TX_MIRROR | G_TX_WRAP, 4, 4, G_TX_NOLOD, G_TX_NOLOD);
 
     if (this->unk_98 == 0) {
-        func_8016AC10(&spA4, 0xBC, (this->unk_94 * 0x34 + 0x61) * 4, 0xFC, (this->unk_94 * 0x34 + 0x71) * 4, 0, 0, 0,
+        func_8016AC10(&spA4, 0xBC, (this->unk_94 * 0x34 + 0x61) << 2, 0xFC, (this->unk_94 * 0x34 + 0x71) << 2, 0, 0, 0,
                       0x400, 0x400);
-        func_8016AC10(&spA4, 0x188, (this->unk_94 * 0x34 + 0x61) * 4, 0x1C8, (this->unk_94 * 0x34 + 0x71) * 4, 0, 0x200,
-                      0, 0x400, 0x400);
-        func_8016AC10(&spA4, 0xBC, (this->unk_94 * 0x34 + 0x93) * 4, 0xFC, (this->unk_94 * 0x34 + 0xA3) * 4, 0, 0,
+        func_8016AC10(&spA4, 0x188, (this->unk_94 * 0x34 + 0x61) << 2, 0x1C8, (this->unk_94 * 0x34 + 0x71) << 2, 0,
+                      0x200, 0, 0x400, 0x400);
+        func_8016AC10(&spA4, 0xBC, (this->unk_94 * 0x34 + 0x93) << 2, 0xFC, (this->unk_94 * 0x34 + 0xA3) << 2, 0, 0,
                       0x200, 0x400, 0x400);
-        func_8016AC10(&spA4, 0x188, (this->unk_94 * 0x34 + 0x93) * 4, 0x1C8, (this->unk_94 * 0x34 + 0xA3) * 4, 0, 0x200,
-                      0x200, 0x400, 0x400);
+        func_8016AC10(&spA4, 0x188, (this->unk_94 * 0x34 + 0x93) << 2, 0x1C8, (this->unk_94 * 0x34 + 0xA3) << 2, 0,
+                      0x200, 0x200, 0x400, 0x400);
     } else {
         temp_t0 = &D_801D0D80[this->unk_94 + this->unk_9C][this->unk_98 - 3];
-        if (temp_t0[0] & 0x8000) {
+        if (temp_t0[0] & BOMBERSNOTEBOOK_ENTRY_POS_ABOVE) {
             sp84 = 8;
-        } else if (temp_t0[0] & 0x4000) {
+        } else if (temp_t0[0] & BOMBERSNOTEBOOK_ENTRY_POS_BELOW) {
             sp84 = 0x18;
-        } else {
+        } else { // BOMBERSNOTEBOOK_ENTRY_POS_CENTER
             sp84 = 0x10;
         }
         var_v0 = D_801D1230[(temp_t0[0] & 0xF00) >> 8] + (((temp_t0[1] - CLOCK_TIME(6, 0)) & 0xFFFF) / 455);
@@ -847,20 +892,20 @@ void func_8016E40C(BombersNotebook* this, Gfx** gfxP) {
         }
         sp88 = ((this->unk_94 * 0x34) + 0x6B) - 8;
         if ((D_801D12D0[temp_v1_2] == 0x18) || (D_801D12D0[temp_v1_2] == 0x20)) {
-            if (temp_t0[0] & 0x8000) {
+            if (temp_t0[0] & BOMBERSNOTEBOOK_ENTRY_POS_ABOVE) {
                 sp84 -= 0xC;
-            } else if (!(temp_t0[0] & 0x4000)) {
+            } else if (!(temp_t0[0] & BOMBERSNOTEBOOK_ENTRY_POS_BELOW)) { // BOMBERSNOTEBOOK_ENTRY_POS_CENTER
                 sp84 -= 6;
             }
         }
-        func_8016AC10(&spA4, sp8C * 4, (sp88 + sp84) * 4, (sp8C + 0x10) * 4, (sp88 + sp84 + 0x10) * 4, 0, 0, 0, 0x400,
-                      0x400);
-        func_8016AC10(&spA4, (D_801D12D0[temp_v1_2] + sp8C) * 4, (sp88 + sp84) * 4,
-                      (D_801D12D0[temp_v1_2] + sp8C + 0x10) * 4, (sp88 + sp84 + 0x10) * 4, 0, 0x200, 0, 0x400, 0x400);
-        func_8016AC10(&spA4, sp8C * 4, (D_801D12DC[temp_v1_2] + sp88 + sp84) * 4, (sp8C + 0x10) * 4,
-                      (D_801D12DC[temp_v1_2] + sp88 + sp84 + 0x10) * 4, 0, 0, 0x200, 0x400, 0x400);
-        func_8016AC10(&spA4, (D_801D12D0[temp_v1_2] + sp8C) * 4, (D_801D12DC[temp_v1_2] + sp88 + sp84) * 4,
-                      (D_801D12D0[temp_v1_2] + sp8C + 0x10) * 4, (D_801D12DC[temp_v1_2] + sp88 + sp84 + 0x10) * 4, 0,
+        func_8016AC10(&spA4, sp8C << 2, (sp88 + sp84) << 2, (sp8C + 0x10) << 2, (sp88 + sp84 + 0x10) << 2, 0, 0, 0,
+                      0x400, 0x400);
+        func_8016AC10(&spA4, (D_801D12D0[temp_v1_2] + sp8C) << 2, (sp88 + sp84) << 2,
+                      (D_801D12D0[temp_v1_2] + sp8C + 0x10) << 2, (sp88 + sp84 + 0x10) << 2, 0, 0x200, 0, 0x400, 0x400);
+        func_8016AC10(&spA4, sp8C << 2, (D_801D12DC[temp_v1_2] + sp88 + sp84) << 2, (sp8C + 0x10) << 2,
+                      (D_801D12DC[temp_v1_2] + sp88 + sp84 + 0x10) << 2, 0, 0, 0x200, 0x400, 0x400);
+        func_8016AC10(&spA4, (D_801D12D0[temp_v1_2] + sp8C) << 2, (D_801D12DC[temp_v1_2] + sp88 + sp84) << 2,
+                      (D_801D12D0[temp_v1_2] + sp8C + 0x10) << 2, (D_801D12DC[temp_v1_2] + sp88 + sp84 + 0x10) << 2, 0,
                       0x200, 0x200, 0x400, 0x400);
     }
     gDPPipeSync(spA4++);
@@ -947,14 +992,16 @@ void func_8016EA90(BombersNotebook* this, Gfx** gfxP) {
                           ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
         gDPSetPrimColor(gfx++, 0, 0, D_801D1434, D_801D1438, D_801D143C, 255);
         gDPSetEnvColor(gfx++, D_801D1434, D_801D1438, D_801D143C, 255);
-        func_8016AC10(&gfx, 0xB8, (-D_801D145C + 0x53) * 4, 0x118, (-D_801D145C + 0x63) * 4, 0, 0, 0x200, 0x400, 0x400);
+        func_8016AC10(&gfx, 0xB8, (-D_801D145C << 2) + (0x53 << 2), 0x118,
+                      (-D_801D145C << 2) + (0x53 << 2) + (0x10 << 2), 0, 0, 0x200, 0x400, 0x400);
     }
 
     if (this->unk_9C < 16) {
         gDPPipeSync(gfx++);
         gDPSetPrimColor(gfx++, 0, 0, D_801D1440, D_801D1444, D_801D1448, 255);
         gDPSetEnvColor(gfx++, D_801D1440, D_801D1444, D_801D1448, 255);
-        func_8016AC10(&gfx, 0xB8, (D_801D1460 + 0x13F) * 4, 0x118, (D_801D1460 + 0x14F) * 4, 0, 0, 0, 0x400, 0x400);
+        func_8016AC10(&gfx, 0xB8, (D_801D1460 << 2) + (0x13F << 2), 0x118, (D_801D1460 << 2) + (0x14F << 2), 0, 0, 0,
+                      0x400, 0x400);
     }
     gDPPipeSync(gfx++);
     *gfxP = gfx;
