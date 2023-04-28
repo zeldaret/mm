@@ -494,7 +494,7 @@ void func_8016B4B0(Gfx** gfxP, s32 arg1, s32 arg2) {
                 sp194 = ((var_s5 - D_801D12D0[sp1A4]) / 2) + var_s0;
             }
 
-            if ((sp1A4 == 1) || (sp1A4 == 2)) {
+            if ((sp1A4 == BOMBERSNOTEBOOK_ENTRY_ICON_MASK) || (sp1A4 == BOMBERSNOTEBOOK_ENTRY_ICON_RIBBON)) {
                 if (sp84[0] & BOMBERSNOTEBOOK_ENTRY_POS_ABOVE) {
                     var_t0 -= 12;
                 } else if (!(sp84[0] & BOMBERSNOTEBOOK_ENTRY_POS_BELOW)) { // BOMBERSNOTEBOOK_ENTRY_POS_CENTER
@@ -697,10 +697,9 @@ s16 D_801D142C[] = { 16, 12, 9, 0 };
 
 #ifdef NON_MATCHING
 #define TEST(day) (((day) == 0) ? 1 : (day))
-
 // DrawTimeOfDay
 void func_8016CD4C(Gfx** gfxP) {
-    Gfx* sp264;
+    Gfx* gfx = *gfxP;
     s32 sp260;
     s32 sp25C;
     s32 sp258;
@@ -711,7 +710,6 @@ void func_8016CD4C(Gfx** gfxP) {
     s32 sp240;
     u16 var_a1;
 
-    sp264 = *gfxP;
     var_a1 = (((void)0, gSaveContext.save.time) - CLOCK_TIME(6, 0));
     if (CURRENT_DAY == 0) {
         var_a1 = 0;
@@ -730,20 +728,20 @@ void func_8016CD4C(Gfx** gfxP) {
         sp254 = sp260 + 0x60;
     }
 
-    gDPSetPrimColor(sp264++, 0, 0, 255, 255, 255, 255);
-    gDPLoadTextureBlock_4b(sp264++, &D_08001950, G_IM_FMT_IA, 64, 28, 0, G_TX_MIRROR | G_TX_WRAP,
+    gDPSetPrimColor(gfx++, 0, 0, 255, 255, 255, 255);
+    gDPLoadTextureBlock_4b(gfx++, &D_08001950, G_IM_FMT_IA, 64, 28, 0, G_TX_MIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, 6, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
-    func_8016AC10(&sp264, sp260 << 2, 42 << 2, (sp260 << 2) + (128 << 2), 70 << 2, 0, 0, 0, 0x400, 0x400);
-    gDPSetPrimColor(sp264++, 0, 0, 0, 0, 0, 255);
-    gDPPipeSync(sp264++);
-    gDPSetCombineLERP(sp264++, 0, 0, 0, PRIMITIVE, 0, 0, 0, TEXEL0, 0, 0, 0, PRIMITIVE, 0, 0, 0, TEXEL0);
-    gDPLoadTextureBlock_4b(sp264++, &D_080032B0, G_IM_FMT_I, 96, 20, 0, G_TX_MIRROR | G_TX_WRAP,
+    func_8016AC10(&gfx, sp260 << 2, 42 << 2, (sp260 << 2) + (128 << 2), 70 << 2, 0, 0, 0, 0x400, 0x400);
+    gDPSetPrimColor(gfx++, 0, 0, 0, 0, 0, 255);
+    gDPPipeSync(gfx++);
+    gDPSetCombineLERP(gfx++, 0, 0, 0, PRIMITIVE, 0, 0, 0, TEXEL0, 0, 0, 0, PRIMITIVE, 0, 0, 0, TEXEL0);
+    gDPLoadTextureBlock_4b(gfx++, &D_080032B0, G_IM_FMT_I, 96, 20, 0, G_TX_MIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
-    func_8016AC10(&sp264, (sp260 << 2) + (16 << 2), 47 << 2, (sp260 << 2) + (112 << 2), 67 << 2, 0, 0, 0, 0x400, 0x400);
-    gDPPipeSync(sp264++);
-    gDPSetCombineMode(sp264++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
-    gDPSetPrimColor(sp264++, 0, 0, 255, 255, 255, 255);
+    func_8016AC10(&gfx, (sp260 << 2) + (16 << 2), 47 << 2, (sp260 << 2) + (112 << 2), 67 << 2, 0, 0, 0, 0x400, 0x400);
+    gDPPipeSync(gfx++);
+    gDPSetCombineMode(gfx++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
+    gDPSetPrimColor(gfx++, 0, 0, 255, 255, 255, 255);
     if (((TEST(CURRENT_DAY) >= 3) || ((TEST(CURRENT_DAY) == 2) && (var_a1 > (CLOCK_TIME(18, 0) - CLOCK_TIME(6, 0)))))) {
         sp25C = sp260 - 159;
         sp258 = sp260 - 17;
@@ -751,29 +749,28 @@ void func_8016CD4C(Gfx** gfxP) {
         sp25C = sp260 + 130;
         sp258 = sp260 + 113;
     }
-    gDPLoadTextureBlock_4b(sp264++, &D_08001CD0, G_IM_FMT_IA, 16, 28, 0, G_TX_MIRROR | G_TX_WRAP,
+    gDPLoadTextureBlock_4b(gfx++, &D_08001CD0, G_IM_FMT_IA, 16, 28, 0, G_TX_MIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
-    func_8016AC10(&sp264, sp25C << 2, 42 << 2, (sp25C << 2) + (16 << 2), 70 << 2, 0, 0, 0, 0x400, 0x400);
-    gDPLoadTextureBlock_4b(sp264++, &D_08001E90, G_IM_FMT_IA, 16, 28, 0, G_TX_MIRROR | G_TX_WRAP,
+    func_8016AC10(&gfx, sp25C << 2, 42 << 2, (sp25C << 2) + (16 << 2), 70 << 2, 0, 0, 0, 0x400, 0x400);
+    gDPLoadTextureBlock_4b(gfx++, &D_08001E90, G_IM_FMT_IA, 16, 28, 0, G_TX_MIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, 4, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
-    func_8016AC10(&sp264, (sp25C << 2) + (16 << 2), 42 << 2, (sp25C << 2) + (141 << 2), 70 << 2, 0, 0, 0, 0x400, 0x400);
-    gDPLoadTextureBlock_4b(sp264++, &D_08001DB0, G_IM_FMT_IA, 16, 28, 0, G_TX_MIRROR | G_TX_WRAP,
+    func_8016AC10(&gfx, (sp25C << 2) + (16 << 2), 42 << 2, (sp25C << 2) + (141 << 2), 70 << 2, 0, 0, 0, 0x400, 0x400);
+    gDPLoadTextureBlock_4b(gfx++, &D_08001DB0, G_IM_FMT_IA, 16, 28, 0, G_TX_MIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
-    func_8016AC10(&sp264, (sp25C << 2) + (141 << 2), 42 << 2, (sp25C << 2) + (157 << 2), 70 << 2, 0, 0, 0, 0x400,
-                  0x400);
-    gDPLoadTextureBlock(sp264++, D_801D1238[TEST(CURRENT_DAY) - 1], G_IM_FMT_IA, G_IM_SIZ_8b, 48, 22, 0,
+    func_8016AC10(&gfx, (sp25C << 2) + (141 << 2), 42 << 2, (sp25C << 2) + (157 << 2), 70 << 2, 0, 0, 0, 0x400, 0x400);
+    gDPLoadTextureBlock(gfx++, D_801D1238[TEST(CURRENT_DAY) - 1], G_IM_FMT_IA, G_IM_SIZ_8b, 48, 22, 0,
                         G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
                         G_TX_NOLOD);
-    func_8016AC10(&sp264, (sp25C + D_801D142C[TEST(CURRENT_DAY) - 1]) << 2, 46 << 2,
+    func_8016AC10(&gfx, (sp25C + D_801D142C[TEST(CURRENT_DAY) - 1]) << 2, 46 << 2,
                   ((sp25C + D_801D142C[TEST(CURRENT_DAY) - 1]) << 2) + (48 << 2), 68 << 2, 0, 0, 0, 0x400, 0x400);
 
-    gDPSetPrimColor(sp264++, 0, 0, 150, 150, 150, 255);
-    gDPLoadTextureBlock_4b(sp264++, &D_08001358, G_IM_FMT_I, 16, 16, 0, G_TX_NOMIRROR | G_TX_WRAP,
+    gDPSetPrimColor(gfx++, 0, 0, 150, 150, 150, 255);
+    gDPLoadTextureBlock_4b(gfx++, &D_08001358, G_IM_FMT_I, 16, 16, 0, G_TX_NOMIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
-    func_8016AC10(&sp264, (sp25C << 2) + (56 << 2), 48 << 2, (sp25C << 2) + (72 << 2), 0x100, 0, 0, 0, 0x400, 0x400);
-    gDPPipeSync(sp264++);
-    gDPSetCombineLERP(sp264++, 0, 0, 0, PRIMITIVE, 0, 0, 0, TEXEL0, 0, 0, 0, PRIMITIVE, 0, 0, 0, TEXEL0);
-    gDPSetPrimColor(sp264++, 0, 0, 0, 0, 0, 255);
+    func_8016AC10(&gfx, (sp25C << 2) + (56 << 2), 48 << 2, (sp25C << 2) + (72 << 2), 0x100, 0, 0, 0, 0x400, 0x400);
+    gDPPipeSync(gfx++);
+    gDPSetCombineLERP(gfx++, 0, 0, 0, PRIMITIVE, 0, 0, 0, TEXEL0, 0, 0, 0, PRIMITIVE, 0, 0, 0, TEXEL0);
+    gDPSetPrimColor(gfx++, 0, 0, 0, 0, 0, 255);
 
     sp244 = 0;
     sp248 = ((void)0, gSaveContext.save.time) / 2730;
@@ -788,19 +785,18 @@ void func_8016CD4C(Gfx** gfxP) {
         }
     } while (sp248 >= 10);
 
-    gDPLoadTextureBlock_4b(sp264++, D_801D13F8[sp244], G_IM_FMT_I, 16, 17, 0, G_TX_NOMIRROR | G_TX_WRAP,
+    gDPLoadTextureBlock_4b(gfx++, D_801D13F8[sp244], G_IM_FMT_I, 16, 17, 0, G_TX_NOMIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
-    sp25C += 75;
-    func_8016AC10(&sp264, sp25C << 2, 48 << 2, (sp25C << 2) + (16 << 2), 65 << 2, 0, 0, 0, 0x400, 0x400);
+    func_8016AC10(&gfx, (sp25C + 75) << 2, 48 << 2, ((sp25C + 75) << 2) + (16 << 2), 65 << 2, 0, 0, 0, 0x400, 0x400);
 
-    sp250 = sp25C + D_801D1420[sp244];
-    gDPLoadTextureBlock_4b(sp264++, D_801D13F8[sp248], G_IM_FMT_I, 16, 17, 0, G_TX_NOMIRROR | G_TX_WRAP,
+    sp250 = sp25C + 75 + D_801D1420[sp244];
+    gDPLoadTextureBlock_4b(gfx++, D_801D13F8[sp248], G_IM_FMT_I, 16, 17, 0, G_TX_NOMIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
-    func_8016AC10(&sp264, sp250 << 2, 48 << 2, (sp250 << 2) + (16 << 2), 65 << 2, 0, 0, 0, 0x400, 0x400);
+    func_8016AC10(&gfx, sp250 << 2, 48 << 2, (sp250 << 2) + (16 << 2), 65 << 2, 0, 0, 0, 0x400, 0x400);
     sp250 += D_801D1420[sp248];
-    gDPLoadTextureBlock_4b(sp264++, &D_080025C8, G_IM_FMT_I, 16, 17, 0, G_TX_NOMIRROR | G_TX_WRAP,
+    gDPLoadTextureBlock_4b(gfx++, &D_080025C8, G_IM_FMT_I, 16, 17, 0, G_TX_NOMIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
-    func_8016AC10(&sp264, sp250 << 2, 48 << 2, (sp250 << 2) + (16 << 2), 65 << 2, 0, 0, 0, 0x400, 0x400);
+    func_8016AC10(&gfx, sp250 << 2, 48 << 2, (sp250 << 2) + (16 << 2), 65 << 2, 0, 0, 0, 0x400, 0x400);
 
     sp244 = 0;
     if (CURRENT_DAY == 0) {
@@ -815,41 +811,40 @@ void func_8016CD4C(Gfx** gfxP) {
         }
     } while (sp248 >= 10);
 
-    gDPLoadTextureBlock_4b(sp264++, D_801D13F8[sp244], G_IM_FMT_I, 16, 17, 0, G_TX_NOMIRROR | G_TX_WRAP,
+    gDPLoadTextureBlock_4b(gfx++, D_801D13F8[sp244], G_IM_FMT_I, 16, 17, 0, G_TX_NOMIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
     sp250 += 7;
-    func_8016AC10(&sp264, sp250 << 2, 48 << 2, (sp250 << 2) + (16 << 2), 65 << 2, 0, 0, 0, 0x400, 0x400);
+    func_8016AC10(&gfx, sp250 << 2, 48 << 2, (sp250 << 2) + (16 << 2), 65 << 2, 0, 0, 0, 0x400, 0x400);
     sp250 += D_801D1420[sp244];
-    gDPLoadTextureBlock_4b(sp264++, D_801D13F8[sp248], G_IM_FMT_I, 16, 17, 0, G_TX_NOMIRROR | G_TX_WRAP,
+    gDPLoadTextureBlock_4b(gfx++, D_801D13F8[sp248], G_IM_FMT_I, 16, 17, 0, G_TX_NOMIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
-    func_8016AC10(&sp264, sp250 << 2, 48 << 2, (sp250 << 2) + (16 << 2), 65 << 2, 0, 0, 0, 0x400, 0x400);
+    func_8016AC10(&gfx, sp250 << 2, 48 << 2, (sp250 << 2) + (16 << 2), 65 << 2, 0, 0, 0, 0x400, 0x400);
 
     // Connecting Bar? (Between time of day text box and the time box)
-    gDPPipeSync(sp264++);
-    gDPSetCombineMode(sp264++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
-    gDPSetPrimColor(sp264++, 0, 0, 255, 255, 255, 255);
-    gDPLoadTextureBlock(sp264++, &D_08000880, G_IM_FMT_IA, G_IM_SIZ_8b, 32, 14, 0, G_TX_MIRROR | G_TX_WRAP,
+    gDPPipeSync(gfx++);
+    gDPSetCombineMode(gfx++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
+    gDPSetPrimColor(gfx++, 0, 0, 255, 255, 255, 255);
+    gDPLoadTextureBlock(gfx++, &D_08000880, G_IM_FMT_IA, G_IM_SIZ_8b, 32, 14, 0, G_TX_MIRROR | G_TX_WRAP,
                         G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
-    func_8016AC10(&sp264, sp258 << 2, 49 << 2, (sp258 << 2) + (32 << 2), 63 << 2, 0, 0, 0, 0x400, 0x400);
+    func_8016AC10(&gfx, sp258 << 2, 49 << 2, (sp258 << 2) + (32 << 2), 63 << 2, 0, 0, 0, 0x400, 0x400);
 
     // Red Line
-    gDPSetPrimColor(sp264++, 0, 0, 242, 0, 14, 255);
-    gDPLoadTextureBlock(sp264++, &D_08001898, G_IM_FMT_I, G_IM_SIZ_8b, 8, 1, 0, G_TX_MIRROR | G_TX_WRAP,
+    gDPSetPrimColor(gfx++, 0, 0, 242, 0, 14, 255);
+    gDPLoadTextureBlock(gfx++, &D_08001898, G_IM_FMT_I, G_IM_SIZ_8b, 8, 1, 0, G_TX_MIRROR | G_TX_WRAP,
                         G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
-    func_8016AC10(&sp264, sp254 << 2, 74 << 2, (sp254 << 2) + (32 << 2), 490 << 2, 0, 0, 0, 0x400, 0x400);
+    func_8016AC10(&gfx, sp254 << 2, 74 << 2, (sp254 << 2) + (32 << 2), 490 << 2, 0, 0, 0, 0x400, 0x400);
 
     // Red Triangle
-    gDPPipeSync(sp264++);
-    gDPSetCombineLERP(sp264++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0, PRIMITIVE,
+    gDPPipeSync(gfx++);
+    gDPSetCombineLERP(gfx++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0, PRIMITIVE,
                       ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
-    gDPSetPrimColor(sp264++, 0, 0, 255, 255, 255, 255);
-    gDPSetEnvColor(sp264++, 200, 0, 0, 255);
-    gDPLoadTextureBlock(sp264++, &D_08000700, G_IM_FMT_IA, G_IM_SIZ_8b, 24, 16, 0, G_TX_MIRROR | G_TX_WRAP,
+    gDPSetPrimColor(gfx++, 0, 0, 255, 255, 255, 255);
+    gDPSetEnvColor(gfx++, 200, 0, 0, 255);
+    gDPLoadTextureBlock(gfx++, &D_08000700, G_IM_FMT_IA, G_IM_SIZ_8b, 24, 16, 0, G_TX_MIRROR | G_TX_WRAP,
                         G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
-    sp254 -= 11;
-    func_8016AC10(&sp264, sp254 << 2, 70 << 2, (sp254 << 2) + (24 << 2), 86 << 2, 0, 0, 0, 0x400, 0x400);
-    gDPPipeSync(sp264++);
-    *gfxP = sp264;
+    func_8016AC10(&gfx, (sp254 << 2) - (11 << 2), 70 << 2, (sp254 << 2) + (13 << 2), 86 << 2, 0, 0, 0, 0x400, 0x400);
+    gDPPipeSync(gfx++);
+    *gfxP = gfx;
 }
 #else
 void func_8016CD4C(Gfx** gfxP);
@@ -859,36 +854,34 @@ void func_8016CD4C(Gfx** gfxP);
 #ifdef NON_MATCHING
 // DrawCursor
 void func_8016E40C(BombersNotebook* this, Gfx** gfxP) {
-    Gfx* spA4;
-    s32 sp8C;
-    s32 sp88;
-    s32 sp84;
-
+    Gfx* gfx = *gfxP;
     s32 temp_v1_2;
     s32 var_a0;
     s32 var_a1;
     s32 var_t0;
     s32 var_v0;
+    s32 sp8C;
+    s32 sp88;
+    s32 sp84;
     u16* temp_t0;
 
-    spA4 = *gfxP;
-    gDPPipeSync(spA4++);
-    gDPSetCombineLERP(spA4++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0, PRIMITIVE,
+    gDPPipeSync(gfx++);
+    gDPSetCombineLERP(gfx++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0, PRIMITIVE,
                       ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
-    gDPSetPrimColor(spA4++, 0, 0, 255, 205, 55, 255);
-    gDPSetEnvColor(spA4++, 0, 0, 0, 255);
-    gDPLoadTextureBlock_4b(spA4++, &D_080018D0, G_IM_FMT_IA, 16, 16, 0, G_TX_MIRROR | G_TX_WRAP,
-                           G_TX_MIRROR | G_TX_WRAP, 4, 4, G_TX_NOLOD, G_TX_NOLOD);
+    gDPSetPrimColor(gfx++, 0, 0, 255, 205, 55, 255);
+    gDPSetEnvColor(gfx++, 0, 0, 0, 255);
+    gDPLoadTextureBlock_4b(gfx++, &D_080018D0, G_IM_FMT_IA, 16, 16, 0, G_TX_MIRROR | G_TX_WRAP, G_TX_MIRROR | G_TX_WRAP,
+                           4, 4, G_TX_NOLOD, G_TX_NOLOD);
 
     if (this->unk_98 == 0) {
-        func_8016AC10(&spA4, 47 << 2, ((this->unk_94 * 52) << 2) + (97 << 2), 63 << 2,
-                      ((this->unk_94 * 52) << 2) + (113 << 2), 0, 0, 0, 0x400, 0x400);
-        func_8016AC10(&spA4, 98 << 2, ((this->unk_94 * 52) << 2) + (97 << 2), 114 << 2,
-                      ((this->unk_94 * 52) << 2) + (113 << 2), 0, 0x200, 0, 0x400, 0x400);
-        func_8016AC10(&spA4, 47 << 2, ((this->unk_94 * 52) << 2) + (147 << 2), 63 << 2,
-                      ((this->unk_94 * 52) << 2) + (163 << 2), 0, 0, 0x200, 0x400, 0x400);
-        func_8016AC10(&spA4, 98 << 2, ((this->unk_94 * 52) << 2) + (147 << 2), 114 << 2,
-                      ((this->unk_94 * 52) << 2) + (163 << 2), 0, 0x200, 0x200, 0x400, 0x400);
+        func_8016AC10(&gfx, 47 << 2, (this->unk_94 * 208) + (97 << 2), 63 << 2, (this->unk_94 * 208) + (113 << 2), 0, 0,
+                      0, 0x400, 0x400);
+        func_8016AC10(&gfx, 98 << 2, (this->unk_94 * 208) + (97 << 2), 114 << 2, (this->unk_94 * 208) + (113 << 2), 0,
+                      0x200, 0, 0x400, 0x400);
+        func_8016AC10(&gfx, 47 << 2, (this->unk_94 * 208) + (147 << 2), 63 << 2, (this->unk_94 * 208) + (163 << 2), 0,
+                      0, 0x200, 0x400, 0x400);
+        func_8016AC10(&gfx, 98 << 2, (this->unk_94 * 208) + (147 << 2), 114 << 2, (this->unk_94 * 208) + (163 << 2), 0,
+                      0x200, 0x200, 0x400, 0x400);
     } else {
         temp_t0 = &D_801D0D80[this->unk_94 + this->unk_9C][this->unk_98 - 3];
         if (temp_t0[0] & BOMBERSNOTEBOOK_ENTRY_POS_ABOVE) {
@@ -912,32 +905,33 @@ void func_8016E40C(BombersNotebook* this, Gfx** gfxP) {
         } else {
             var_t0 = ((var_a1 - D_801D12D0[temp_v1_2]) / 2) + var_v0;
         }
-        if (D_801D12D0[temp_v1_2] == 0x10) {
+        if (temp_v1_2 == BOMBERSNOTEBOOK_ENTRY_ICON_EXCLAMATION_POINT) {
             sp8C = var_t0 - 8;
         } else {
             sp8C = var_t0 - 9;
         }
-        sp88 = ((this->unk_94 * 0x34) + 0x6B) - 8;
-        if ((D_801D12D0[temp_v1_2] == 0x18) || (D_801D12D0[temp_v1_2] == 0x20)) {
+        sp88 = ((this->unk_94 * 52) + 107) - 8;
+        if ((temp_v1_2 == BOMBERSNOTEBOOK_ENTRY_ICON_MASK) || (temp_v1_2 == BOMBERSNOTEBOOK_ENTRY_ICON_RIBBON)) {
             if (temp_t0[0] & BOMBERSNOTEBOOK_ENTRY_POS_ABOVE) {
                 sp84 -= 0xC;
             } else if (!(temp_t0[0] & BOMBERSNOTEBOOK_ENTRY_POS_BELOW)) { // BOMBERSNOTEBOOK_ENTRY_POS_CENTER
                 sp84 -= 6;
             }
         }
-        func_8016AC10(&spA4, sp8C << 2, (sp88 + sp84) << 2, (sp8C << 2) + (16 << 2), ((sp88 + sp84) << 2) + (16 << 2),
-                      0, 0, 0, 0x400, 0x400);
-        func_8016AC10(&spA4, (D_801D12D0[temp_v1_2] + sp8C) << 2, (sp88 + sp84) << 2,
+        func_8016AC10(&gfx, sp8C << 2, (sp88 + sp84) << 2, (sp8C << 2) + (16 << 2), ((sp88 + sp84) << 2) + (16 << 2), 0,
+                      0, 0, 0x400, 0x400);
+        func_8016AC10(&gfx, (D_801D12D0[temp_v1_2] + sp8C) << 2, (sp88 + sp84) << 2,
                       ((D_801D12D0[temp_v1_2] + sp8C) << 2) + (16 << 2), ((sp88 + sp84) << 2) + (16 << 2), 0, 0x200, 0,
                       0x400, 0x400);
-        func_8016AC10(&spA4, sp8C << 2, (D_801D12DC[temp_v1_2] + sp88 + sp84) << 2, (sp8C << 2) + (16 << 2),
+        func_8016AC10(&gfx, sp8C << 2, (D_801D12DC[temp_v1_2] + sp88 + sp84) << 2, (sp8C << 2) + (16 << 2),
                       ((D_801D12DC[temp_v1_2] + sp88 + sp84) << 2) + (16 << 2), 0, 0, 0x200, 0x400, 0x400);
-        func_8016AC10(&spA4, (D_801D12D0[temp_v1_2] + sp8C) << 2, (D_801D12DC[temp_v1_2] + sp88 + sp84) << 2,
+        func_8016AC10(&gfx, (D_801D12D0[temp_v1_2] + sp8C) << 2, (D_801D12DC[temp_v1_2] + sp88 + sp84) << 2,
                       ((D_801D12D0[temp_v1_2] + sp8C) << 2) + (16 << 2),
                       ((D_801D12DC[temp_v1_2] + sp88 + sp84) << 2) + (16 << 2), 0, 0x200, 0x200, 0x400, 0x400);
     }
-    gDPPipeSync(spA4++);
-    *gfxP = spA4;
+
+    gDPPipeSync(gfx++);
+    *gfxP = gfx;
 }
 #else
 void func_8016E40C(BombersNotebook* this, Gfx** gfxP);
@@ -962,6 +956,7 @@ void func_8016EA90(BombersNotebook* this, Gfx** gfxP) {
     static s16 D_801D1464[2] = { 175, 100 };
     static s16 D_801D1468[2] = { 205, 255 };
     Gfx* gfx = *gfxP;
+    s32 xl;
     s16 colorStep;
 
     gDPPipeSync(gfx++);
@@ -1015,21 +1010,21 @@ void func_8016EA90(BombersNotebook* this, Gfx** gfxP) {
     }
 
     if (this->unk_9C != 0) {
+        xl = (-D_801D145C << 2) + (83 << 2);
         gDPPipeSync(gfx++);
         gDPSetCombineLERP(gfx++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0, PRIMITIVE,
                           ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
         gDPSetPrimColor(gfx++, 0, 0, D_801D1434, D_801D1438, D_801D143C, 255);
         gDPSetEnvColor(gfx++, D_801D1434, D_801D1438, D_801D143C, 255);
-        func_8016AC10(&gfx, 0xB8, (-D_801D145C << 2) + (0x53 << 2), 0x118,
-                      (-D_801D145C << 2) + (0x53 << 2) + (0x10 << 2), 0, 0, 0x200, 0x400, 0x400);
+        func_8016AC10(&gfx, 46 << 2, xl, 70 << 2, xl + (16 << 2), 0, 0, 0x200, 0x400, 0x400);
     }
 
     if (this->unk_9C < 16) {
         gDPPipeSync(gfx++);
         gDPSetPrimColor(gfx++, 0, 0, D_801D1440, D_801D1444, D_801D1448, 255);
         gDPSetEnvColor(gfx++, D_801D1440, D_801D1444, D_801D1448, 255);
-        func_8016AC10(&gfx, 0xB8, (D_801D1460 << 2) + (0x13F << 2), 0x118, (D_801D1460 << 2) + (0x14F << 2), 0, 0, 0,
-                      0x400, 0x400);
+        xl = (D_801D1460 << 2) + (319 << 2);
+        func_8016AC10(&gfx, 46 << 2, xl, 70 << 2, xl + (16 << 2), 0, 0, 0, 0x400, 0x400);
     }
     gDPPipeSync(gfx++);
     *gfxP = gfx;
@@ -1075,7 +1070,7 @@ void BombersNotebook_Draw(BombersNotebook* this, GraphicsContext* gfxCtx) {
         gDPLoadTextureBlock(gfx++, &D_080013D8, G_IM_FMT_I, G_IM_SIZ_8b, 32, 32, 0, G_TX_NOMIRROR | G_TX_WRAP,
                             G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
 
-        func_8016AC10(&gfx, 0, 0, 0xA00, 0x780, 0, 0, 0, 0x200, 0x200);
+        func_8016AC10(&gfx, 0 << 2, 0 << 2, 640 << 2, 480 << 2, 0, 0, 0, 0x200, 0x200);
 
         gDPPipeSync(gfx++);
         gDPSetCombineMode(gfx++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
