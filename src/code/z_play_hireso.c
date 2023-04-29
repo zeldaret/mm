@@ -327,45 +327,37 @@ s16 D_801D1330[][3] = {
     { 174, 141, 151 },
 };
 
-#ifdef NON_MATCHING
 // DrawColumnHeaders
 void func_8016AE1C(Gfx** gfxP) {
     Gfx* gfx = *gfxP;
     s32 i;
     s32 x0;
-    s32 xl;
-    s32 xh;
 
-    x0 = 120;
     gDPLoadTextureBlock(gfx++, &D_080017D8, G_IM_FMT_I, G_IM_SIZ_8b, 8, 24, 0, G_TX_NOMIRROR | G_TX_WRAP,
                         G_TX_NOMIRROR | G_TX_WRAP, 3, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
-    for (i = 0, xl = x0 << 2, xh = xl + (143 << 2); i < 3; i++, xh += 150 << 2, xl += 150 << 2) {
+    for (i = 0, x0 = 120; i < 3; i++, x0 += 150) {
         gDPSetPrimColor(gfx++, 0, 0, D_801D1330[i][0], D_801D1330[i][1], D_801D1330[i][2], 192);
-        func_8016AC10(&gfx, xl, 74 << 2, xh, 98 << 2, 0, 0, 0, 0x400, 0x400);
+        func_8016AC10(&gfx, x0 * 4, 74 << 2, (x0 * 4) + (143 << 2), 98 << 2, 0, 0, 0, 0x400, 0x400);
     }
 
-    x0 = 124;
     gDPSetPrimColor(gfx++, 0, 0, 255, 255, 255, 255);
-    for (i = 0, xl = x0 << 2, xh = xl + (48 << 2); i < 3; i++, xh += 150 << 2, xl += 150 << 2) {
+    for (i = 0, x0 = 124; i < 3; i++, x0 += 150) {
         gDPLoadTextureBlock(gfx++, D_801D1238[i], G_IM_FMT_IA, G_IM_SIZ_8b, 48, 22, 0, G_TX_NOMIRROR | G_TX_WRAP,
                             G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
-        func_8016AC10(&gfx, xl, 77 << 2, xh, 99 << 2, 0, 0, 0, 0x400, 0x400);
+        func_8016AC10(&gfx, x0 * 4, 77 << 2, (x0 * 4) + (48 << 2), 99 << 2, 0, 0, 0, 0x400, 0x400);
     }
 
-    x0 += 48;
+    x0 = 172;
     gDPLoadTextureBlock_4b(gfx++, &D_08001F70, G_IM_FMT_IA, 48, 11, 0, G_TX_NOMIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
-    for (i = 0, xl = x0 << 2, xh = xl + (48 << 2); i < 3; i++, xh += 150 << 2, xl += 150 << 2) {
-        func_8016AC10(&gfx, xl, 86 << 2, xh, 97 << 2, 0, 0, 0, 0x400, 0x400);
+    for (i = 0; i < 3; i++) {
+        func_8016AC10(&gfx, x0 * 4, 86 << 2, (x0 * 4) + (48 << 2), 97 << 2, 0, 0, 0, 0x400, 0x400);
+        x0 += 150;
     }
 
     gDPPipeSync(gfx++);
     *gfxP = gfx;
 }
-#else
-void func_8016AE1C(Gfx**);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play_hireso/func_8016AE1C.s")
-#endif
 
 s16 D_801D1344[][3] = {
     { 165, 183, 195 }, { 140, 158, 170 }, { 197, 195, 172 }, { 172, 170, 147 }, { 223, 190, 200 }, { 190, 165, 175 },
@@ -595,8 +587,6 @@ void func_8016C344(BombersNotebook* this, Gfx** gfxP) {
     s32 var_s0;
     s32 var_s3;
     s16 colorStep;
-    s32 xl;
-    s32 yl;
 
     colorStep = ABS_ALT(D_801D13D8 - D_801D13EC[D_801D13E8]) / D_801D13E4;
     if (D_801D13D8 >= D_801D13EC[D_801D13E8]) {
@@ -628,7 +618,6 @@ void func_8016C344(BombersNotebook* this, Gfx** gfxP) {
         D_801D13E8 ^= 1;
     }
 
-    var_s3 = this->unk_A8 + 107;
     if (this->unk_9C >= 0xC) {
         sp134 = 20;
         sp130 = this->unk_9C;
@@ -636,7 +625,7 @@ void func_8016C344(BombersNotebook* this, Gfx** gfxP) {
         sp134 = this->unk_9C + 8;
         sp130 = sp134 - 8;
     }
-
+    var_s3 = this->unk_A8 + 107;
     for (var_s0 = sp130; var_s0 < sp134; var_s0++) {
         gDPSetPrimColor(gfx++, 0, 0, 255, 255, 255, 255);
         if (CHECK_WEEKEVENTREG(sBombersNotebookEventWeekEventFlags[var_s0])) {
@@ -659,9 +648,7 @@ void func_8016C344(BombersNotebook* this, Gfx** gfxP) {
             sp124 = 0;
         }
 
-        xl = (57 << 2) - (sp124 << 2);
-        yl = (var_s3 << 2) - (sp124 << 2);
-        func_8016AC10(&gfx, xl, yl, xl + (var_t1 << 2), yl + (var_t1 << 2), 0, 0, 0, 1024.0f / (sp128 / 100.0f),
+        func_8016AC10(&gfx, (57 - sp124) << 2, (var_s3 - sp124) << 2, (57 - sp124 + var_t1) << 2, (var_s3 - sp124 + var_t1) << 2, 0, 0, 0, 1024.0f / (sp128 / 100.0f),
                       1024.0f / (sp128 / 100.0f));
         if ((var_s0 == (this->unk_94 + sp130)) && (this->unk_A4 == 0)) {
             gDPSetPrimColor(gfx++, 0, 0, D_801D13D8, D_801D13DC, D_801D13E0, 255);
@@ -671,15 +658,11 @@ void func_8016C344(BombersNotebook* this, Gfx** gfxP) {
         gDPLoadTextureBlock(gfx++, &D_080018B0, G_IM_FMT_I, G_IM_SIZ_8b, 8, 4, 0, G_TX_NOMIRROR | G_TX_WRAP,
                             G_TX_NOMIRROR | G_TX_WRAP, 3, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
-        xl = (sp12C << 2) + (57 << 2);
-        yl = (var_s3 << 2) + (22 << 2);
-        func_8016AC10(&gfx, xl, yl, xl + ((470 - sp124) << 2), yl + (4 << 2), 0, 0, 0, 0x400, 0x400);
+        func_8016AC10(&gfx, (sp12C << 2) + (57 << 2), var_s3 * 4 + (22 << 2), ((sp12C - sp124) << 2) + (527 << 2), var_s3 * 4  + (26 << 2), 0, 0, 0, 0x400, 0x400);
         gDPLoadTextureBlock_4b(gfx++, &D_08001358, G_IM_FMT_I, 16, 16, 0, G_TX_NOMIRROR | G_TX_WRAP,
                                G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
-        xl = ((sp12C - sp124) << 2) + (527 << 2);
-        yl = (var_s3 << 2) + (16 << 2);
-        func_8016AC10(&gfx, xl, yl, xl + (16 << 2), yl + (16 << 2), 0, 0, 0, 0x400, 0x400);
+        func_8016AC10(&gfx, ((sp12C - sp124) << 2) + (527 << 2), var_s3 * 4  + (16 << 2), ((sp12C - sp124) << 2) + (543 << 2), var_s3 * 4  + (32 << 2), 0, 0, 0, 0x400, 0x400);
         if (CHECK_WEEKEVENTREG(sBombersNotebookEventWeekEventFlags[var_s0])) {
             gDPPipeSync(gfx++);
             gDPSetRenderMode(gfx++, G_RM_OPA_SURF, G_RM_OPA_SURF2);
@@ -1072,7 +1055,7 @@ void BombersNotebook_Draw(BombersNotebook* this, GraphicsContext* gfxCtx) {
         gDPLoadTextureBlock(gfx++, &D_080013D8, G_IM_FMT_I, G_IM_SIZ_8b, 32, 32, 0, G_TX_NOMIRROR | G_TX_WRAP,
                             G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
 
-        func_8016AC10(&gfx, 0 << 2, 0 << 2, 640 << 2, 480 << 2, 0, 0, 0, 0x200, 0x200);
+        func_8016AC10(&gfx, 0 << 2, 0 << 2, SCREEN_WIDTH_HIRES << 2, SCREEN_HEIGHT_HIRES << 2, 0, 0, 0, 0x200, 0x200);
 
         gDPPipeSync(gfx++);
         gDPSetCombineMode(gfx++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
@@ -1149,7 +1132,7 @@ void BombersNotebook_Update(PlayState* play, BombersNotebook* this, Input* input
         this->unk_88 = ZeldaArena_Malloc(this->unk_90);
     }
 
-    func_8016F4EC(this, 0);
+    func_8016F4EC(this, OS_MESG_NOBLOCK);
 
     if (this->unk_00 == 2) {
         if (sp2C < -30) {
@@ -1326,7 +1309,7 @@ void BombersNotebook_Init(BombersNotebook* this) {
 
 void BombersNotebook_Destroy(BombersNotebook* this) {
     if (this->unk_00 == 1) {
-        func_8016F4EC(this, true);
+        func_8016F4EC(this, OS_MESG_BLOCK);
     }
     if (this->unk_40 != NULL) {
         ZeldaArena_Free(this->unk_40);
