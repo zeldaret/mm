@@ -1117,7 +1117,6 @@ class GetItemEntry:
 
     def __str__(self) -> str:
         itemId_name = itemId_names.get(self.itemId, f"NOT FOUND: 0x{self.itemId:X}")
-        # getitemId_name = getItemId_names.get(self.itemId, f"NOT FOUND:: 0x{self.itemId:X}")
         gid = abs(self.gi) - 1
         getitemDrawId_name = getItemDrawId_names.get(gid, f"NOT FOUND: 0x{abs(self.gi) - 1:X}")
 
