@@ -84,6 +84,7 @@ typedef enum {
 // sBombersNotebookEntries
 u16 D_801D0D80[][30] = {
     {
+        // Bombers
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_ABOVE, 1, 36, CLOCK_TIME(6, 0), CLOCK_TIME(5, 59)),
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_BELOW, 1, 37, CLOCK_TIME(6, 0), CLOCK_TIME(5, 59)),
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_ABOVE, 2, 36, CLOCK_TIME(6, 0), CLOCK_TIME(5, 59)),
@@ -93,6 +94,7 @@ u16 D_801D0D80[][30] = {
         BOMBERSNOTEBOOK_ENTRY_END,
     },
     {
+        // Anju
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_ABOVE, 1, 20, CLOCK_TIME(13, 45), CLOCK_TIME(16, 0)),
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_BELOW, 1, 21, CLOCK_TIME(14, 30), CLOCK_TIME(20, 0)),
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_ABOVE, 1, 22, CLOCK_TIME(23, 30), CLOCK_TIME(5, 59)),
@@ -103,55 +105,65 @@ u16 D_801D0D80[][30] = {
         BOMBERSNOTEBOOK_ENTRY_END,
     },
     {
+        // Kafei
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 2, 25, CLOCK_TIME(16, 30), CLOCK_TIME(22, 0)),
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 3, 27, CLOCK_TIME(18, 0), CLOCK_TIME(19, 0)),
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 3, 50, CLOCK_TIME(5, 0), CLOCK_TIME(5, 59)),
         BOMBERSNOTEBOOK_ENTRY_END,
     },
     {
+        // Curiosity Shop Man
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_ABOVE, 3, 33, CLOCK_TIME(13, 0), CLOCK_TIME(22, 0)),
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_BELOW, 3, 34, CLOCK_TIME(13, 0), CLOCK_TIME(22, 0)),
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 3, 45, CLOCK_TIME(22, 0), CLOCK_TIME(5, 59)),
         BOMBERSNOTEBOOK_ENTRY_END,
     },
     {
+        // Old Lady from Bomb Shop
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 1, 51, CLOCK_TIME(0, 30), CLOCK_TIME(1, 0)),
         BOMBERSNOTEBOOK_ENTRY_END,
     },
     {
+        // Romani
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 1, 28, CLOCK_TIME(6, 0), CLOCK_TIME(18, 0)),
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_ABOVE, 1, 29, CLOCK_TIME(2, 30), CLOCK_TIME(5, 15)),
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_BELOW, 1, 30, CLOCK_TIME(2, 30), CLOCK_TIME(5, 15)),
         BOMBERSNOTEBOOK_ENTRY_END,
     },
     {
+        // Cremia
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_ABOVE, 2, 31, CLOCK_TIME(18, 0), CLOCK_TIME(21, 0)),
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_BELOW, 2, 32, CLOCK_TIME(18, 0), CLOCK_TIME(21, 0)),
         BOMBERSNOTEBOOK_ENTRY_END,
     },
     {
+        // Mayor Dotour
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 1, 38, CLOCK_TIME(8, 0), CLOCK_TIME(20, 0)),
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 2, 38, CLOCK_TIME(8, 0), CLOCK_TIME(20, 0)),
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 3, 38, CLOCK_TIME(8, 0), CLOCK_TIME(18, 0)),
         BOMBERSNOTEBOOK_ENTRY_END,
     },
     {
+        // Madame Aroma
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 1, 44, CLOCK_TIME(8, 0), CLOCK_TIME(20, 0)),
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 2, 44, CLOCK_TIME(8, 0), CLOCK_TIME(20, 0)),
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 3, 35, CLOCK_TIME(18, 0), CLOCK_TIME(5, 59)),
         BOMBERSNOTEBOOK_ENTRY_END,
     },
     {
+        // Toto
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 1, 48, CLOCK_TIME(22, 0), CLOCK_TIME(5, 0)),
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 2, 48, CLOCK_TIME(22, 0), CLOCK_TIME(5, 0)),
         BOMBERSNOTEBOOK_ENTRY_END,
     },
     {
+        // Gorman
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 1, 48, CLOCK_TIME(22, 0), CLOCK_TIME(5, 0)),
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 2, 48, CLOCK_TIME(22, 0), CLOCK_TIME(5, 0)),
         BOMBERSNOTEBOOK_ENTRY_END,
     },
     {
+        // Postman
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 1, 43, CLOCK_TIME(15, 0), CLOCK_TIME(0, 0)),
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 1, 24, CLOCK_TIME(0, 0), CLOCK_TIME(5, 59)),
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 2, 24, CLOCK_TIME(6, 0), CLOCK_TIME(12, 0)),
@@ -160,17 +172,20 @@ u16 D_801D0D80[][30] = {
         BOMBERSNOTEBOOK_ENTRY_END,
     },
     {
+        // Rosa Sisters
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 1, 39, CLOCK_TIME(18, 0), CLOCK_TIME(5, 59)),
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 2, 39, CLOCK_TIME(18, 0), CLOCK_TIME(5, 59)),
         BOMBERSNOTEBOOK_ENTRY_END,
     },
     {
+        // ???
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 1, 40, CLOCK_TIME(0, 0), CLOCK_TIME(5, 59)),
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 2, 40, CLOCK_TIME(0, 0), CLOCK_TIME(5, 59)),
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 3, 40, CLOCK_TIME(0, 0), CLOCK_TIME(5, 59)),
         BOMBERSNOTEBOOK_ENTRY_END,
     },
     {
+        // Anju's Grandmother
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_ABOVE, 1, 41, CLOCK_TIME(8, 0), CLOCK_TIME(18, 0)),
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_BELOW, 1, 42, CLOCK_TIME(8, 0), CLOCK_TIME(18, 0)),
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_ABOVE, 2, 41, CLOCK_TIME(8, 0), CLOCK_TIME(18, 0)),
@@ -178,18 +193,21 @@ u16 D_801D0D80[][30] = {
         BOMBERSNOTEBOOK_ENTRY_END,
     },
     {
+        // Kamaro
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 1, 52, CLOCK_TIME(0, 0), CLOCK_TIME(5, 59)),
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 2, 52, CLOCK_TIME(0, 0), CLOCK_TIME(5, 59)),
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 3, 52, CLOCK_TIME(0, 0), CLOCK_TIME(5, 59)),
         BOMBERSNOTEBOOK_ENTRY_END,
     },
     {
+        // Grog
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 1, 46, CLOCK_TIME(6, 0), CLOCK_TIME(20, 0)),
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 2, 46, CLOCK_TIME(6, 0), CLOCK_TIME(20, 0)),
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 3, 46, CLOCK_TIME(6, 0), CLOCK_TIME(20, 0)),
         BOMBERSNOTEBOOK_ENTRY_END,
     },
     {
+        // Gorman Brothers
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 1, 47, CLOCK_TIME(6, 0), CLOCK_TIME(18, 0)),
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 2, 47, CLOCK_TIME(6, 0), CLOCK_TIME(18, 0)),
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 2, 31, CLOCK_TIME(18, 0), CLOCK_TIME(21, 0)),
@@ -197,12 +215,14 @@ u16 D_801D0D80[][30] = {
         BOMBERSNOTEBOOK_ENTRY_END,
     },
     {
+        // Shiro
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 1, 53, CLOCK_TIME(6, 0), CLOCK_TIME(5, 59)),
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 2, 53, CLOCK_TIME(6, 0), CLOCK_TIME(5, 59)),
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 3, 53, CLOCK_TIME(6, 0), CLOCK_TIME(5, 59)),
         BOMBERSNOTEBOOK_ENTRY_END,
     },
     {
+        // Guru-Guru
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 1, 54, CLOCK_TIME(18, 0), CLOCK_TIME(5, 59)),
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 2, 54, CLOCK_TIME(18, 0), CLOCK_TIME(5, 59)),
         BOMBERSNOTEBOOK_ENTRY_END,
@@ -248,8 +268,8 @@ s32 D_801D1244[] = {
     BOMBERSNOTEBOOK_ENTRY_ICON_MASK,
     BOMBERSNOTEBOOK_ENTRY_ICON_MASK,
 };
-s32 D_801D12D0[] = { 0x10, 0x18, 0x20 };
-s32 D_801D12DC[] = { 0x10, 0x1C, 0x1C };
+s32 D_801D12D0[] = { 16, 24, 32 };
+s32 D_801D12DC[] = { 16, 28, 28 };
 u16 D_801D12E8[] = {
     WEEKEVENTREG_75_10,
     WEEKEVENTREG_50_08,
@@ -394,11 +414,11 @@ s16 D_801D1374[][3] = {
 #ifdef NON_MATCHING
 // DrawEntries
 void func_8016B4B0(Gfx** gfxP, s32 arg1, s32 arg2) {
-    Gfx* sp1AC;
+    Gfx* gfx = *gfxP;
     s32 var_s0;
-    s32 sp1A4;
-    s32 sp1A0;
-    s32 sp194;
+    u32 sp1A4;
+    u32 sp1A0;
+    u32 sp194;
     u16* sp84;
     s32 xl;
     s32 yl;
@@ -406,31 +426,30 @@ void func_8016B4B0(Gfx** gfxP, s32 arg1, s32 arg2) {
     s32 var_s3;
     s32 var_t0;
     s32 var_s5;
+    u16 time1;
+    u16 time2;
 
-    sp1AC = *gfxP;
     sp84 = D_801D0D80[arg1];
     sp1A0 = false;
 
     while (true) {
         if (sp84[0] == BOMBERSNOTEBOOK_ENTRY_END) {
             if (!sp1A0) {
-                gDPPipeSync(sp1AC++);
-                gDPSetCombineLERP(sp1AC++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0,
+                gDPPipeSync(gfx++);
+                gDPSetCombineLERP(gfx++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0,
                                   PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
-                gDPSetPrimColor(sp1AC++, 0, 0, 0, 0, 0, 255);
-                gDPSetEnvColor(sp1AC++, 0, 0, 0, 255);
-                gDPLoadTextureBlock(sp1AC++, &D_08000100, G_IM_FMT_IA, G_IM_SIZ_8b, 32, 48, 0, G_TX_MIRROR | G_TX_WRAP,
+                gDPSetPrimColor(gfx++, 0, 0, 0, 0, 0, 255);
+                gDPSetEnvColor(gfx++, 0, 0, 0, 255);
+                gDPLoadTextureBlock(gfx++, &D_08000100, G_IM_FMT_IA, G_IM_SIZ_8b, 32, 48, 0, G_TX_MIRROR | G_TX_WRAP,
                                     G_TX_MIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
-                xl = (arg2 << 2) + (1 << 2);
-                func_8016AC10(&sp1AC, 567 << 2, xl, 599 << 2, xl + (48 << 2), 0, 0, 0, 0x400, 0x400);
-                gDPPipeSync(sp1AC++);
-                gDPSetPrimColor(sp1AC++, 0, 0, 255, 255, 255, 255);
-                gDPSetEnvColor(sp1AC++, 255, 0, 0, 255);
-                xl = (arg2 << 2) - (1 << 2);
-                func_8016AC10(&sp1AC, 565 << 2, xl, 597 << 2, xl + (48 << 2), 0, 0, 0, 0x400, 0x400);
-                gDPPipeSync(sp1AC++);
-                gDPSetCombineMode(sp1AC++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
-                gDPSetEnvColor(sp1AC++, 0, 0, 0, 255);
+                func_8016AC10(&gfx, 567 << 2, (arg2 << 2) + (1 << 2), 599 << 2, (arg2 << 2) + (49 << 2), 0, 0, 0, 0x400, 0x400);
+                gDPPipeSync(gfx++);
+                gDPSetPrimColor(gfx++, 0, 0, 255, 255, 255, 255);
+                gDPSetEnvColor(gfx++, 255, 0, 0, 255);
+                func_8016AC10(&gfx, 565 << 2, (arg2 << 2) - (1 << 2), 597 << 2, (arg2 << 2) + (47 << 2), 0, 0, 0, 0x400, 0x400);
+                gDPPipeSync(gfx++);
+                gDPSetCombineMode(gfx++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
+                gDPSetEnvColor(gfx++, 0, 0, 0, 255);
             }
             break;
         }
@@ -438,60 +457,62 @@ void func_8016B4B0(Gfx** gfxP, s32 arg1, s32 arg2) {
         if (sp84[0] & BOMBERSNOTEBOOK_ENTRY_POS_ABOVE) {
             var_t0 = 8;
         } else if (sp84[0] & BOMBERSNOTEBOOK_ENTRY_POS_BELOW) {
-            var_t0 = 0x18;
+            var_t0 = 24;
         } else { // BOMBERSNOTEBOOK_ENTRY_POS_CENTER
-            var_t0 = 0x10;
+            var_t0 = 16;
         }
 
-        var_s0 = D_801D1230[(sp84[0] & 0xF00) >> 8] + (((sp84[1] - CLOCK_TIME(6, 0)) & 0xFFFF) / 455);
-        var_s3 = D_801D1230[(sp84[0] & 0xF00) >> 8] + (((sp84[2] - CLOCK_TIME(6, 0)) & 0xFFFF) / 455);
-        var_s5 = var_s3 - var_s0;
-        if (var_s5 < 8) {
-            var_s0 = (var_s0 + var_s5) - 8;
+        time1 = sp84[1] - CLOCK_TIME(6, 0);
+        time2 = sp84[2] - CLOCK_TIME(6, 0);
+        var_s0 = D_801D1230[(sp84[0] & 0xF00) >> 8] + (time1 / 455);
+        var_s3 = D_801D1230[(sp84[0] & 0xF00) >> 8] + (time2 / 455);
+        var_s5 = var_s3 - var_s0 - 8;
+        if ((var_s3 - var_s0) < 8) {
+            var_s0 = ((var_s0 + var_s3) - var_s0) - 8;
             var_s3 = var_s0 + 8;
         }
 
         // Black shadow
-        gDPSetPrimColor(sp1AC++, 0, 0, 0, 0, 0, 255);
-        gDPLoadTextureBlock(sp1AC++, &D_08001240, G_IM_FMT_RGBA, G_IM_SIZ_16b, 4, 16, 0, G_TX_MIRROR | G_TX_WRAP,
+        gDPSetPrimColor(gfx++, 0, 0, 0, 0, 0, 255);
+        gDPLoadTextureBlock(gfx++, &D_08001240, G_IM_FMT_RGBA, G_IM_SIZ_16b, 4, 16, 0, G_TX_MIRROR | G_TX_WRAP,
                             G_TX_MIRROR | G_TX_WRAP, 2, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
         xl = (var_s0 << 2) + (2 << 2);
         yl = ((arg2 + var_t0) << 2) + (2 << 2);
-        func_8016AC10(&sp1AC, xl, yl, xl + (4 << 2), yl + (16 << 2), 0, 0, 0, 0x400, 0x400);
+        func_8016AC10(&gfx, xl, yl, xl + (4 << 2), yl + (16 << 2), 0, 0, 0, 0x400, 0x400);
         xl = (var_s3 << 2) - (2 << 2);
         yl = ((arg2 + var_t0) << 2) + (2 << 2);
-        func_8016AC10(&sp1AC, xl, yl, xl + (4 << 2), yl + (16 << 2), 0, 0x80, 0, 0x400, 0x400);
-        if ((var_s5 - 8) > 0) {
-            gDPLoadTextureBlock(sp1AC++, &D_080012C0, G_IM_FMT_RGBA, G_IM_SIZ_16b, 4, 16, 0, G_TX_MIRROR | G_TX_WRAP,
+        func_8016AC10(&gfx, xl, yl, xl + (4 << 2), yl + (16 << 2), 0, 0x80, 0, 0x400, 0x400);
+        if (var_s5 > 0) {
+            gDPLoadTextureBlock(gfx++, &D_080012C0, G_IM_FMT_RGBA, G_IM_SIZ_16b, 4, 16, 0, G_TX_MIRROR | G_TX_WRAP,
                                 G_TX_MIRROR | G_TX_WRAP, 2, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
             xl = (var_s0 << 2) + (6 << 2);
             yl = ((arg2 + var_t0) << 2) + (2 << 2);
-            func_8016AC10(&sp1AC, xl, yl, xl + ((var_s5 - 8) << 2), yl + (16 << 2), 0, 0, 0, 0x400, 0x400);
+            func_8016AC10(&gfx, xl, yl, xl + (var_s5 << 2), yl + (16 << 2), 0, 0, 0, 0x400, 0x400);
         }
 
         // Blue Box
-        gDPSetPrimColor(sp1AC++, 0, 0, 255, 255, 255, 255);
-        gDPLoadTextureBlock(sp1AC++, &D_08001240, G_IM_FMT_RGBA, G_IM_SIZ_16b, 4, 16, 0, G_TX_MIRROR | G_TX_WRAP,
+        gDPSetPrimColor(gfx++, 0, 0, 255, 255, 255, 255);
+        gDPLoadTextureBlock(gfx++, &D_08001240, G_IM_FMT_RGBA, G_IM_SIZ_16b, 4, 16, 0, G_TX_MIRROR | G_TX_WRAP,
                             G_TX_MIRROR | G_TX_WRAP, 2, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
         xl = (var_s0 << 2) + (0 << 2);
         yl = ((arg2 + var_t0) << 2) + (0 << 0);
-        func_8016AC10(&sp1AC, xl, yl, xl + (4 << 2), yl + (16 << 2), 0, 0, 0, 0x400, 0x400);
+        func_8016AC10(&gfx, xl, yl, xl + (4 << 2), yl + (16 << 2), 0, 0, 0, 0x400, 0x400);
         xl = (var_s3 << 2) - (4 << 2);
         yl = ((arg2 + var_t0) << 2) + (0 << 2);
-        func_8016AC10(&sp1AC, xl, yl, xl + (4 << 2), yl + (16 << 2), 0, 0x80, 0, 0x400, 0x400);
-        if ((var_s5 - 8) > 0) {
-            gDPLoadTextureBlock(sp1AC++, &D_080012C0, G_IM_FMT_RGBA, G_IM_SIZ_16b, 4, 16, 0, G_TX_MIRROR | G_TX_WRAP,
+        func_8016AC10(&gfx, xl, yl, xl + (4 << 2), yl + (16 << 2), 0, 0x80, 0, 0x400, 0x400);
+        if (var_s5 > 0) {
+            gDPLoadTextureBlock(gfx++, &D_080012C0, G_IM_FMT_RGBA, G_IM_SIZ_16b, 4, 16, 0, G_TX_MIRROR | G_TX_WRAP,
                                 G_TX_MIRROR | G_TX_WRAP, 2, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
             xl = (var_s0 << 2) + (4 << 2);
             yl = ((arg2 + var_t0) << 2) + (0 << 2);
-            func_8016AC10(&sp1AC, xl, yl, xl + ((var_s5 - 8) << 2), yl + (16 << 2), 0, 0, 0, 0x400, 0x400);
+            func_8016AC10(&gfx, xl, yl, xl + (var_s5 << 2), yl + (16 << 2), 0, 0, 0, 0x400, 0x400);
         }
         if (CHECK_WEEKEVENTREG(sBombersNotebookEventWeekEventFlags[sp84[0] & 0xFF])) {
             sp1A4 = D_801D1244[(sp84[0] & 0xFF) - 20];
-            if (var_s5 < D_801D12D0[sp1A4]) {
+            if ((var_s3 - var_s0) < D_801D12D0[sp1A4]) {
                 sp194 = (((var_s0 - D_801D12D0[sp1A4]) + var_s3) - var_s0) + 3;
             } else {
-                sp194 = ((var_s5 - D_801D12D0[sp1A4]) / 2) + var_s0;
+                sp194 = (((var_s3 - var_s0) - D_801D12D0[sp1A4]) / 2) + var_s0;
             }
 
             if ((sp1A4 == BOMBERSNOTEBOOK_ENTRY_ICON_MASK) || (sp1A4 == BOMBERSNOTEBOOK_ENTRY_ICON_RIBBON)) {
@@ -501,46 +522,46 @@ void func_8016B4B0(Gfx** gfxP, s32 arg1, s32 arg2) {
                     var_t0 -= 6;
                 }
             }
-            gDPLoadTextureBlock(sp1AC++, D_801D1368[sp1A4], G_IM_FMT_IA, G_IM_SIZ_8b, D_801D12D0[sp1A4],
+            gDPLoadTextureBlock(gfx++, D_801D1368[sp1A4], G_IM_FMT_IA, G_IM_SIZ_8b, D_801D12D0[sp1A4],
                                 D_801D12DC[sp1A4], 0, G_TX_MIRROR | G_TX_WRAP, G_TX_MIRROR | G_TX_WRAP, G_TX_NOMASK,
                                 G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
-            gDPSetPrimColor(sp1AC++, 0, 0, 0, 0, 0, 255);
+            gDPSetPrimColor(gfx++, 0, 0, 0, 0, 0, 255);
 
             xl = (sp194 << 2) + (2 << 2);
             yl = ((arg2 + var_t0) << 2) + (2 << 2);
-            func_8016AC10(&sp1AC, xl, yl, xl + (D_801D12D0[sp1A4] << 2), yl + (D_801D12DC[sp1A4] << 2), 0, 0, 0, 0x400,
+            func_8016AC10(&gfx, xl, yl, xl + (D_801D12D0[sp1A4] << 2), yl + (D_801D12DC[sp1A4] << 2), 0, 0, 0, 0x400,
                           0x400);
             if (D_801D12E8[(sp84[0] & 0xFF) - 20] == BOMBERSNOTEBOOK_WEEKEVENTREG_NONE) {
-                gDPSetPrimColor(sp1AC++, 0, 0, D_801D1374[sp1A4][0], D_801D1374[sp1A4][1], D_801D1374[sp1A4][2], 255);
+                gDPSetPrimColor(gfx++, 0, 0, D_801D1374[sp1A4][0], D_801D1374[sp1A4][1], D_801D1374[sp1A4][2], 255);
             } else if (D_801D12E8[(sp84[0] & 0xFF) - 20] == BOMBERSNOTEBOOK_WEEKEVENTREG_SPECIAL) {
                 if (CHECK_WEEKEVENTREG(WEEKEVENTREG_27_02) || CHECK_WEEKEVENTREG(WEEKEVENTREG_27_04) ||
                     CHECK_WEEKEVENTREG(WEEKEVENTREG_27_08) || CHECK_WEEKEVENTREG(WEEKEVENTREG_27_10) ||
                     CHECK_WEEKEVENTREG(WEEKEVENTREG_27_20)) {
-                    gDPSetPrimColor(sp1AC++, 0, 0, D_801D1374[sp1A4][0], D_801D1374[sp1A4][1], D_801D1374[sp1A4][2],
+                    gDPSetPrimColor(gfx++, 0, 0, D_801D1374[sp1A4][0], D_801D1374[sp1A4][1], D_801D1374[sp1A4][2],
                                     255);
                 } else {
-                    gDPSetPrimColor(sp1AC++, 0, 0, 155, 155, 155, 255);
+                    gDPSetPrimColor(gfx++, 0, 0, 155, 155, 155, 255);
                 }
             } else {
                 if (CHECK_WEEKEVENTREG(D_801D12E8[(sp84[0] & 0xFF) - 20])) {
-                    gDPSetPrimColor(sp1AC++, 0, 0, D_801D1374[sp1A4][0], D_801D1374[sp1A4][1], D_801D1374[sp1A4][2],
+                    gDPSetPrimColor(gfx++, 0, 0, D_801D1374[sp1A4][0], D_801D1374[sp1A4][1], D_801D1374[sp1A4][2],
                                     255);
                 } else {
-                    gDPSetPrimColor(sp1AC++, 0, 0, 155, 155, 155, 255);
+                    gDPSetPrimColor(gfx++, 0, 0, 155, 155, 155, 255);
                 }
             }
             xl = (sp194 << 2) + (0 << 2);
             yl = ((arg2 + var_t0) << 2) + (0 << 2);
-            func_8016AC10(&sp1AC, xl, yl, xl + (D_801D12D0[sp1A4] << 2), yl + (D_801D12DC[sp1A4] << 2), 0, 0, 0, 0x400,
+            func_8016AC10(&gfx, xl, yl, xl + (D_801D12D0[sp1A4] << 2), yl + (D_801D12DC[sp1A4] << 2), 0, 0, 0, 0x400,
                           0x400);
-            gDPSetPrimColor(sp1AC++, 0, 0, 255, 255, 255, 255);
+            gDPSetPrimColor(gfx++, 0, 0, 255, 255, 255, 255);
         } else {
             sp1A0 = true;
         }
         sp84 += 3;
     }
 
-    *gfxP = sp1AC;
+    *gfxP = gfx;
 }
 #else
 void func_8016B4B0(Gfx** gfxP, s32 arg1, s32 arg2);
@@ -564,8 +585,7 @@ void func_8016C344(BombersNotebook* this, Gfx** gfxP) {
     static s16 D_801D13EC[2] = { 100, 0 };
     static s16 D_801D13F0[2] = { 80, 0 };
     static s16 D_801D13F4[2] = { 255, 0 };
-
-    Gfx* sp13C = *gfxP;
+    Gfx* gfx = *gfxP;
     s32 var_t1;
     s32 sp134;
     s32 sp130;
@@ -610,7 +630,7 @@ void func_8016C344(BombersNotebook* this, Gfx** gfxP) {
 
     var_s3 = this->unk_A8 + 107;
     if (this->unk_9C >= 0xC) {
-        sp134 = 0x14;
+        sp134 = 20;
         sp130 = this->unk_9C;
     } else {
         sp134 = this->unk_9C + 8;
@@ -618,12 +638,12 @@ void func_8016C344(BombersNotebook* this, Gfx** gfxP) {
     }
 
     for (var_s0 = sp130; var_s0 < sp134; var_s0++) {
-        gDPSetPrimColor(sp13C++, 0, 0, 255, 255, 255, 255);
+        gDPSetPrimColor(gfx++, 0, 0, 255, 255, 255, 255);
         if (CHECK_WEEKEVENTREG(sBombersNotebookEventWeekEventFlags[var_s0])) {
-            gDPLoadTextureBlock(sp13C++, D_801D1388[var_s0], G_IM_FMT_RGBA, G_IM_SIZ_16b, 32, 32, 0,
+            gDPLoadTextureBlock(gfx++, D_801D1388[var_s0], G_IM_FMT_RGBA, G_IM_SIZ_16b, 32, 32, 0,
                                 G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
         } else {
-            gDPLoadTextureBlock(sp13C++, &D_08000A40, G_IM_FMT_RGBA, G_IM_SIZ_16b, 32, 32, 0, G_TX_NOMIRROR | G_TX_WRAP,
+            gDPLoadTextureBlock(gfx++, &D_08000A40, G_IM_FMT_RGBA, G_IM_SIZ_16b, 32, 32, 0, G_TX_NOMIRROR | G_TX_WRAP,
                                 G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
         }
 
@@ -641,39 +661,39 @@ void func_8016C344(BombersNotebook* this, Gfx** gfxP) {
 
         xl = (57 << 2) - (sp124 << 2);
         yl = (var_s3 << 2) - (sp124 << 2);
-        func_8016AC10(&sp13C, xl, yl, xl + (var_t1 << 2), yl + (var_t1 << 2), 0, 0, 0, 1024.0f / (sp128 / 100.0f),
+        func_8016AC10(&gfx, xl, yl, xl + (var_t1 << 2), yl + (var_t1 << 2), 0, 0, 0, 1024.0f / (sp128 / 100.0f),
                       1024.0f / (sp128 / 100.0f));
         if ((var_s0 == (this->unk_94 + sp130)) && (this->unk_A4 == 0)) {
-            gDPSetPrimColor(sp13C++, 0, 0, D_801D13D8, D_801D13DC, D_801D13E0, 255);
+            gDPSetPrimColor(gfx++, 0, 0, D_801D13D8, D_801D13DC, D_801D13E0, 255);
         } else {
-            gDPSetPrimColor(sp13C++, 0, 0, 0, 0, 0, 60);
+            gDPSetPrimColor(gfx++, 0, 0, 0, 0, 0, 60);
         }
-        gDPLoadTextureBlock(sp13C++, &D_080018B0, G_IM_FMT_I, G_IM_SIZ_8b, 8, 4, 0, G_TX_NOMIRROR | G_TX_WRAP,
+        gDPLoadTextureBlock(gfx++, &D_080018B0, G_IM_FMT_I, G_IM_SIZ_8b, 8, 4, 0, G_TX_NOMIRROR | G_TX_WRAP,
                             G_TX_NOMIRROR | G_TX_WRAP, 3, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
         xl = (sp12C << 2) + (57 << 2);
         yl = (var_s3 << 2) + (22 << 2);
-        func_8016AC10(&sp13C, xl, yl, xl + ((470 - sp124) << 2), yl + (4 << 2), 0, 0, 0, 0x400, 0x400);
-        gDPLoadTextureBlock_4b(sp13C++, &D_08001358, G_IM_FMT_I, 16, 16, 0, G_TX_NOMIRROR | G_TX_WRAP,
+        func_8016AC10(&gfx, xl, yl, xl + ((470 - sp124) << 2), yl + (4 << 2), 0, 0, 0, 0x400, 0x400);
+        gDPLoadTextureBlock_4b(gfx++, &D_08001358, G_IM_FMT_I, 16, 16, 0, G_TX_NOMIRROR | G_TX_WRAP,
                                G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
         xl = ((sp12C - sp124) << 2) + (527 << 2);
         yl = (var_s3 << 2) + (16 << 2);
-        func_8016AC10(&sp13C, xl, yl, xl + (16 << 2), yl + (16 << 2), 0, 0, 0, 0x400, 0x400);
+        func_8016AC10(&gfx, xl, yl, xl + (16 << 2), yl + (16 << 2), 0, 0, 0, 0x400, 0x400);
         if (CHECK_WEEKEVENTREG(sBombersNotebookEventWeekEventFlags[var_s0])) {
-            gDPPipeSync(sp13C++);
-            gDPSetRenderMode(sp13C++, G_RM_OPA_SURF, G_RM_OPA_SURF2);
-            gDPSetPrimColor(sp13C++, 0, 0, 255, 255, 255, 255);
+            gDPPipeSync(gfx++);
+            gDPSetRenderMode(gfx++, G_RM_OPA_SURF, G_RM_OPA_SURF2);
+            gDPSetPrimColor(gfx++, 0, 0, 255, 255, 255, 255);
 
-            func_8016B4B0(&sp13C, var_s0, var_s3);
+            func_8016B4B0(&gfx, var_s0, var_s3);
 
-            gDPPipeSync(sp13C++);
-            gDPSetRenderMode(sp13C++, G_RM_XLU_SURF, G_RM_XLU_SURF2);
+            gDPPipeSync(gfx++);
+            gDPSetRenderMode(gfx++, G_RM_XLU_SURF, G_RM_XLU_SURF2);
         }
         var_s3 += 52;
     }
-    gDPPipeSync(sp13C++);
-    *gfxP = sp13C;
+    gDPPipeSync(gfx++);
+    *gfxP = gfx;
 }
 #else
 static s16 D_801D13D8 = 0;
@@ -700,11 +720,11 @@ s16 D_801D142C[] = { 16, 12, 9, 0 };
 // DrawTimeOfDay
 void func_8016CD4C(Gfx** gfxP) {
     Gfx* gfx = *gfxP;
-    s32 sp260;
-    s32 sp25C;
-    s32 sp258;
-    s32 sp254;
-    s32 sp250;
+    u32 sp260;
+    u32 sp25C;
+    u32 sp258;
+    u32 sp254;
+    u32 sp250;
     s32 sp248;
     s32 sp244;
     s32 sp240;
@@ -717,15 +737,15 @@ void func_8016CD4C(Gfx** gfxP) {
     sp260 = D_801D1230[CURRENT_DAY] + (var_a1 / 455);
     if ((TEST(CURRENT_DAY) == 1) ||
         ((TEST(CURRENT_DAY) == 2) && (((void)0, gSaveContext.save.time) < CLOCK_TIME(12, 0)))) {
-        sp260 -= 0x20;
-        sp254 = sp260 + 0x20;
+        sp260 -= 32;
+        sp254 = sp260 + 32;
     } else if ((TEST(CURRENT_DAY) == 2) && (var_a1 >= (CLOCK_TIME(17, 0) - CLOCK_TIME(6, 0))) &&
                (var_a1 <= (CLOCK_TIME(19, 0) - CLOCK_TIME(6, 0)))) {
-        sp260 -= 0x40;
-        sp254 = sp260 + 0x40;
+        sp260 -= 64;
+        sp254 = sp260 + 64;
     } else {
-        sp260 -= 0x60;
-        sp254 = sp260 + 0x60;
+        sp260 -= 96;
+        sp254 = sp260 + 96;
     }
 
     gDPSetPrimColor(gfx++, 0, 0, 255, 255, 255, 255);
@@ -785,19 +805,22 @@ void func_8016CD4C(Gfx** gfxP) {
         }
     } while (sp248 >= 10);
 
+    sp250 = sp25C + 75;
     gDPLoadTextureBlock_4b(gfx++, D_801D13F8[sp244], G_IM_FMT_I, 16, 17, 0, G_TX_NOMIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
-    func_8016AC10(&gfx, (sp25C + 75) << 2, 48 << 2, ((sp25C + 75) << 2) + (16 << 2), 65 << 2, 0, 0, 0, 0x400, 0x400);
+    func_8016AC10(&gfx, sp250 << 2, 48 << 2, (sp250 << 2) + (16 << 2), 65 << 2, 0, 0, 0, 0x400, 0x400);
 
-    sp250 = sp25C + 75 + D_801D1420[sp244];
+    sp250 += D_801D1420[sp244];
     gDPLoadTextureBlock_4b(gfx++, D_801D13F8[sp248], G_IM_FMT_I, 16, 17, 0, G_TX_NOMIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
     func_8016AC10(&gfx, sp250 << 2, 48 << 2, (sp250 << 2) + (16 << 2), 65 << 2, 0, 0, 0, 0x400, 0x400);
+
     sp250 += D_801D1420[sp248];
     gDPLoadTextureBlock_4b(gfx++, &D_080025C8, G_IM_FMT_I, 16, 17, 0, G_TX_NOMIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
     func_8016AC10(&gfx, sp250 << 2, 48 << 2, (sp250 << 2) + (16 << 2), 65 << 2, 0, 0, 0, 0x400, 0x400);
 
+    sp250 += 7;
     sp244 = 0;
     if (CURRENT_DAY == 0) {
         sp248 = (16384.0f - (sp240 * 2730.6667f)) / 45.511112f;
@@ -813,7 +836,6 @@ void func_8016CD4C(Gfx** gfxP) {
 
     gDPLoadTextureBlock_4b(gfx++, D_801D13F8[sp244], G_IM_FMT_I, 16, 17, 0, G_TX_NOMIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
-    sp250 += 7;
     func_8016AC10(&gfx, sp250 << 2, 48 << 2, (sp250 << 2) + (16 << 2), 65 << 2, 0, 0, 0, 0x400, 0x400);
     sp250 += D_801D1420[sp244];
     gDPLoadTextureBlock_4b(gfx++, D_801D13F8[sp248], G_IM_FMT_I, 16, 17, 0, G_TX_NOMIRROR | G_TX_WRAP,
@@ -851,19 +873,19 @@ void func_8016CD4C(Gfx** gfxP);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play_hireso/func_8016CD4C.s")
 #endif
 
-#ifdef NON_MATCHING
 // DrawCursor
 void func_8016E40C(BombersNotebook* this, Gfx** gfxP) {
     Gfx* gfx = *gfxP;
-    s32 temp_v1_2;
+    s32 tmp2;
+    s32 tmp;
     s32 var_a0;
-    s32 var_a1;
-    s32 var_t0;
     s32 var_v0;
-    s32 sp8C;
-    s32 sp88;
-    s32 sp84;
-    u16* temp_t0;
+    s32 temp_v1_2;
+    u32 sp8C;
+    u32 sp88;
+    u32 sp84;
+    u16 time1;
+    u16 time2;
 
     gDPPipeSync(gfx++);
     gDPSetCombineLERP(gfx++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0, PRIMITIVE,
@@ -883,38 +905,42 @@ void func_8016E40C(BombersNotebook* this, Gfx** gfxP) {
         func_8016AC10(&gfx, 98 << 2, (this->unk_94 * 208) + (147 << 2), 114 << 2, (this->unk_94 * 208) + (163 << 2), 0,
                       0x200, 0x200, 0x400, 0x400);
     } else {
-        temp_t0 = &D_801D0D80[this->unk_94 + this->unk_9C][this->unk_98 - 3];
-        if (temp_t0[0] & BOMBERSNOTEBOOK_ENTRY_POS_ABOVE) {
+        tmp2 = this->unk_94 + this->unk_9C;
+        sp88 = (this->unk_94 * 52) + 107;
+        tmp = this->unk_98 - 3;
+        if (D_801D0D80[tmp2][tmp] & BOMBERSNOTEBOOK_ENTRY_POS_ABOVE) {
             sp84 = 8;
-        } else if (temp_t0[0] & BOMBERSNOTEBOOK_ENTRY_POS_BELOW) {
-            sp84 = 0x18;
+        } else if (D_801D0D80[tmp2][tmp] & BOMBERSNOTEBOOK_ENTRY_POS_BELOW) {
+            sp84 = 24;
         } else { // BOMBERSNOTEBOOK_ENTRY_POS_CENTER
-            sp84 = 0x10;
+            sp84 = 16;
         }
-        var_v0 = D_801D1230[(temp_t0[0] & 0xF00) >> 8] + (((temp_t0[1] - CLOCK_TIME(6, 0)) & 0xFFFF) / 455);
-        var_a0 = D_801D1230[(temp_t0[0] & 0xF00) >> 8] + (((temp_t0[2] - CLOCK_TIME(6, 0)) & 0xFFFF) / 455);
-        var_a1 = var_a0 - var_v0;
-        if (var_a1 < 8) {
+
+        time1 = D_801D0D80[tmp2][tmp + 1] - CLOCK_TIME(6, 0);
+        time2 = D_801D0D80[tmp2][tmp + 2] - CLOCK_TIME(6, 0);
+        var_v0 = D_801D1230[(D_801D0D80[tmp2][tmp] & 0xF00) >> 8] + (time1 / 455);
+        var_a0 = D_801D1230[(D_801D0D80[tmp2][tmp] & 0xF00) >> 8] + (time2 / 455);
+        if ((var_a0 - var_v0) < 8) {
             var_v0 = ((var_v0 + var_a0) - var_v0) - 8;
             var_a0 = var_v0 + 8;
-            var_a1 = var_a0 - var_v0;
         }
-        temp_v1_2 = D_801D1244[(temp_t0[0] & 0xFF) - 20];
-        if (var_a1 < D_801D12D0[temp_v1_2]) {
-            var_t0 = (((var_v0 - D_801D12D0[temp_v1_2]) + var_a0) - var_v0) + 3;
+        temp_v1_2 = D_801D1244[(D_801D0D80[tmp2][tmp] & 0xFF) - 20];
+        if ((var_a0 - var_v0) < D_801D12D0[temp_v1_2]) {
+            sp8C = (((var_v0 - D_801D12D0[temp_v1_2]) + var_a0) - var_v0) + 3;
         } else {
-            var_t0 = ((var_a1 - D_801D12D0[temp_v1_2]) / 2) + var_v0;
+            sp8C = (((var_a0 - var_v0) - D_801D12D0[temp_v1_2]) / 2) + var_v0;
         }
         if (temp_v1_2 == BOMBERSNOTEBOOK_ENTRY_ICON_EXCLAMATION_POINT) {
-            sp8C = var_t0 - 8;
+            sp8C -= 8;
+            sp88 -= 8;
         } else {
-            sp8C = var_t0 - 9;
+            sp8C -= 9;
+            sp88 -= 8;
         }
-        sp88 = ((this->unk_94 * 52) + 107) - 8;
         if ((temp_v1_2 == BOMBERSNOTEBOOK_ENTRY_ICON_MASK) || (temp_v1_2 == BOMBERSNOTEBOOK_ENTRY_ICON_RIBBON)) {
-            if (temp_t0[0] & BOMBERSNOTEBOOK_ENTRY_POS_ABOVE) {
-                sp84 -= 0xC;
-            } else if (!(temp_t0[0] & BOMBERSNOTEBOOK_ENTRY_POS_BELOW)) { // BOMBERSNOTEBOOK_ENTRY_POS_CENTER
+            if (D_801D0D80[tmp2][tmp] & BOMBERSNOTEBOOK_ENTRY_POS_ABOVE) {
+                sp84 -= 12;
+            } else if (!(D_801D0D80[tmp2][tmp] & BOMBERSNOTEBOOK_ENTRY_POS_BELOW)) { // BOMBERSNOTEBOOK_ENTRY_POS_CENTER
                 sp84 -= 6;
             }
         }
@@ -933,12 +959,7 @@ void func_8016E40C(BombersNotebook* this, Gfx** gfxP) {
     gDPPipeSync(gfx++);
     *gfxP = gfx;
 }
-#else
-void func_8016E40C(BombersNotebook* this, Gfx** gfxP);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play_hireso/func_8016E40C.s")
-#endif
 
-#ifdef NON_MATCHING
 // DrawArrows
 void func_8016EA90(BombersNotebook* this, Gfx** gfxP) {
     static s16 D_801D1434 = 0;
@@ -956,7 +977,7 @@ void func_8016EA90(BombersNotebook* this, Gfx** gfxP) {
     static s16 D_801D1464[2] = { 175, 100 };
     static s16 D_801D1468[2] = { 205, 255 };
     Gfx* gfx = *gfxP;
-    s32 xl;
+    u32 xl;
     s16 colorStep;
 
     gDPPipeSync(gfx++);
@@ -1010,12 +1031,12 @@ void func_8016EA90(BombersNotebook* this, Gfx** gfxP) {
     }
 
     if (this->unk_9C != 0) {
-        xl = (-D_801D145C << 2) + (83 << 2);
         gDPPipeSync(gfx++);
         gDPSetCombineLERP(gfx++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0, PRIMITIVE,
                           ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
         gDPSetPrimColor(gfx++, 0, 0, D_801D1434, D_801D1438, D_801D143C, 255);
         gDPSetEnvColor(gfx++, D_801D1434, D_801D1438, D_801D143C, 255);
+        xl = (-D_801D145C << 2) + (83 << 2);
         func_8016AC10(&gfx, 46 << 2, xl, 70 << 2, xl + (16 << 2), 0, 0, 0x200, 0x400, 0x400);
     }
 
@@ -1023,30 +1044,11 @@ void func_8016EA90(BombersNotebook* this, Gfx** gfxP) {
         gDPPipeSync(gfx++);
         gDPSetPrimColor(gfx++, 0, 0, D_801D1440, D_801D1444, D_801D1448, 255);
         gDPSetEnvColor(gfx++, D_801D1440, D_801D1444, D_801D1448, 255);
-        xl = (D_801D1460 << 2) + (319 << 2);
-        func_8016AC10(&gfx, 46 << 2, xl, 70 << 2, xl + (16 << 2), 0, 0, 0, 0x400, 0x400);
+        func_8016AC10(&gfx, 46 << 2, (D_801D1460 << 2) + (319 << 2), 70 << 2, (D_801D1460 << 2) + (335 << 2), 0, 0, 0, 0x400, 0x400);
     }
     gDPPipeSync(gfx++);
     *gfxP = gfx;
 }
-#else
-static s16 D_801D1434 = 0;
-static s16 D_801D1438 = 100;
-static s16 D_801D143C = 255;
-static s16 D_801D1440 = 0;
-static s16 D_801D1444 = 100;
-static s16 D_801D1448 = 255;
-static s16 D_801D144C = 0;
-static s16 D_801D1450 = 0;
-static s16 D_801D1454 = 6;
-static s16 D_801D1458 = 6;
-static s16 D_801D145C = 0;
-static s16 D_801D1460 = 0;
-static s16 D_801D1464[2] = { 175, 100 };
-static s16 D_801D1468[2] = { 205, 255 };
-void func_8016EA90(BombersNotebook* this, Gfx** gfxP);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play_hireso/func_8016EA90.s")
-#endif
 
 void BombersNotebook_Draw(BombersNotebook* this, GraphicsContext* gfxCtx) {
     Gfx* gfx;
