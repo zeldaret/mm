@@ -297,7 +297,7 @@ void func_80A365EC(EnSyatekiOkuta* this, PlayState* play) {
 
 void func_80A368E0(EnSyatekiOkuta* this, PlayState* play) {
     this->collider.dim.height =
-        (sCylinderInit.dim.height - this->collider.dim.yShift) * this->unk_1D8.y * this->actor.scale.y * 100.0f;
+        (sCylinderInit.dim.height - this->collider.dim.yShift) * this->headScale.y * this->actor.scale.y * 100.0f;
     this->collider.dim.radius = sCylinderInit.dim.radius * this->actor.scale.x * 100.0f;
 
     if (this->actionFunc == func_80A363B4) {
@@ -390,48 +390,48 @@ void func_80A36CB0(EnSyatekiOkuta* this) {
 
     if (this->actionFunc == func_80A363B4) {
         if (curFrame < 8.0f) {
-            this->unk_1D8.x = this->unk_1D8.y = this->unk_1D8.z = 1.0f;
+            this->headScale.x = this->headScale.y = this->headScale.z = 1.0f;
         } else if (curFrame < 10.0f) {
-            this->unk_1D8.x = this->unk_1D8.z = 1.0f;
-            this->unk_1D8.y = ((curFrame - 7.0f) * 0.4f) + 1.0f;
+            this->headScale.x = this->headScale.z = 1.0f;
+            this->headScale.y = ((curFrame - 7.0f) * 0.4f) + 1.0f;
         } else if (curFrame < 14.0f) {
-            this->unk_1D8.x = this->unk_1D8.z = ((curFrame - 9.0f) * 0.075f) + 1.0f;
-            this->unk_1D8.y = 1.8f - ((curFrame - 9.0f) * 0.25f);
+            this->headScale.x = this->headScale.z = ((curFrame - 9.0f) * 0.075f) + 1.0f;
+            this->headScale.y = 1.8f - ((curFrame - 9.0f) * 0.25f);
         } else {
-            this->unk_1D8.x = this->unk_1D8.z = 1.3f - ((curFrame - 13.0f) * 0.05f);
-            this->unk_1D8.y = ((curFrame - 13.0f) * 0.0333f) + 0.8f;
+            this->headScale.x = this->headScale.z = 1.3f - ((curFrame - 13.0f) * 0.05f);
+            this->headScale.y = ((curFrame - 13.0f) * 0.0333f) + 0.8f;
         }
     } else if (this->actionFunc == func_80A36488) {
-        this->unk_1D8.x = this->unk_1D8.z = 1.0f;
-        this->unk_1D8.y = (Math_SinF((M_PI / 16) * curFrame) * 0.2f) + 1.0f;
+        this->headScale.x = this->headScale.z = 1.0f;
+        this->headScale.y = (Math_SinF((M_PI / 16) * curFrame) * 0.2f) + 1.0f;
     } else if (this->actionFunc == func_80A36504) {
         if (curFrame < 3.0f) {
-            this->unk_1D8.y = 1.0f;
+            this->headScale.y = 1.0f;
         } else if (curFrame < 4.0f) {
-            this->unk_1D8.y = (curFrame - 2.0f) + 1.0f;
+            this->headScale.y = (curFrame - 2.0f) + 1.0f;
         } else {
-            this->unk_1D8.y = 2.0f - ((curFrame - 3.0f) * 0.333f);
+            this->headScale.y = 2.0f - ((curFrame - 3.0f) * 0.333f);
         }
-        this->unk_1D8.x = this->unk_1D8.z = 1.0f;
+        this->headScale.x = this->headScale.z = 1.0f;
     } else if (this->actionFunc == func_80A365EC) {
         curFrame += this->unk_2A4;
         if (curFrame >= 35.0f) {
-            this->unk_1D8.x = this->unk_1D8.y = this->unk_1D8.z = 1.0f;
+            this->headScale.x = this->headScale.y = this->headScale.z = 1.0f;
         } else if (curFrame < 4.0f) {
-            this->unk_1D8.x = this->unk_1D8.z = 1.0f - (curFrame * 0.0666f);
-            this->unk_1D8.y = (curFrame * 0.1666f) + 1.0f;
+            this->headScale.x = this->headScale.z = 1.0f - (curFrame * 0.0666f);
+            this->headScale.y = (curFrame * 0.1666f) + 1.0f;
         } else if (curFrame < 25.0f) {
-            this->unk_1D8.x = this->unk_1D8.z = ((curFrame - 4.0f) * 0.01f) + 0.8f;
-            this->unk_1D8.y = 1.5f - ((curFrame - 4.0f) * 0.025f);
+            this->headScale.x = this->headScale.z = ((curFrame - 4.0f) * 0.01f) + 0.8f;
+            this->headScale.y = 1.5f - ((curFrame - 4.0f) * 0.025f);
         } else if (curFrame < 27.0f) {
-            this->unk_1D8.x = this->unk_1D8.y = this->unk_1D8.z = ((curFrame - 24.0f) * 0.25f) + 1.0f;
+            this->headScale.x = this->headScale.y = this->headScale.z = ((curFrame - 24.0f) * 0.25f) + 1.0f;
         } else if (curFrame < 30.0f) {
-            this->unk_1D8.x = this->unk_1D8.y = this->unk_1D8.z = 1.5f - ((curFrame - 26.0f) * 0.233f);
+            this->headScale.x = this->headScale.y = this->headScale.z = 1.5f - ((curFrame - 26.0f) * 0.233f);
         } else {
-            this->unk_1D8.x = this->unk_1D8.y = this->unk_1D8.z = ((curFrame - 29.0f) * 0.04f) + 0.8f;
+            this->headScale.x = this->headScale.y = this->headScale.z = ((curFrame - 29.0f) * 0.04f) + 0.8f;
         }
     } else {
-        this->unk_1D8.x = this->unk_1D8.y = this->unk_1D8.z = 1.0f;
+        this->headScale.x = this->headScale.y = this->headScale.z = 1.0f;
     }
 }
 
@@ -464,7 +464,7 @@ s32 func_80A370EC(EnSyatekiOkuta* this, f32 arg1, Vec3f* arg2) {
 
 s32 EnSyatekiOkuta_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     s32 pad;
-    Vec3f sp20;
+    Vec3f scale;
     f32 curFrame;
     EnSyatekiOkuta* this = THIS;
 
@@ -474,10 +474,10 @@ s32 EnSyatekiOkuta_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList,
     }
 
     if (limbIndex == OCTOROK_LIMB_HEAD) {
-        sp20 = this->unk_1D8;
-        Matrix_Scale(sp20.x, sp20.y, sp20.z, MTXMODE_APPLY);
-    } else if ((limbIndex == OCTOROK_LIMB_SNOUT) && (func_80A370EC(this, curFrame, &sp20))) {
-        Matrix_Scale(sp20.x, sp20.y, sp20.z, MTXMODE_APPLY);
+        scale = this->headScale;
+        Matrix_Scale(scale.x, scale.y, scale.z, MTXMODE_APPLY);
+    } else if ((limbIndex == OCTOROK_LIMB_SNOUT) && (func_80A370EC(this, curFrame, &scale))) {
+        Matrix_Scale(scale.x, scale.y, scale.z, MTXMODE_APPLY);
     }
 
     return false;
@@ -497,6 +497,7 @@ void EnSyatekiOkuta_Draw(Actor* thisx, PlayState* play) {
 
     SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, EnSyatekiOkuta_OverrideLimbDraw, NULL,
                       &this->actor);
+
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     if (this->actionFunc == func_80A365EC) {
         Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y + 30.0f, this->actor.world.pos.z + 20.0f,
