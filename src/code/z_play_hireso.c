@@ -1,4 +1,5 @@
 #include "global.h"
+#include "z64bombers_notebook.h"
 
 // Segment 0x07 schedule_dma_static_test
 extern TexturePtr D_07000000;
@@ -61,7 +62,7 @@ extern TexturePtr D_08002E90;
 extern TexturePtr D_080032B0;
 
 #define BOMBERSNOTEBOOK_ENTRY(pos, day, eventIndex, startTime, endTime) \
-    ((pos)&0xF000) | (((day)&0xF) << 8) | ((eventIndex + 20)&0xFF), (startTime), (endTime)
+    ((pos)&0xF000) | (((day)&0xF) << 8) | ((eventIndex + 20) & 0xFF), (startTime), (endTime)
 #define BOMBERSNOTEBOOK_ENTRY_END 0x9999
 
 #define BOMBERSNOTEBOOK_ENTRY_POS_CENTER 0x0000
@@ -69,16 +70,15 @@ extern TexturePtr D_080032B0;
 #define BOMBERSNOTEBOOK_ENTRY_POS_ABOVE 0x8000
 
 typedef enum {
-    /* 0 */ BOMBERSNOTEBOOK_ENTRY_ICON_EXCLAMATION_POINT,
-    /* 1 */ BOMBERSNOTEBOOK_ENTRY_ICON_MASK,
-    /* 2 */ BOMBERSNOTEBOOK_ENTRY_ICON_RIBBON
-} BombersNotebookEntryIcon;
+    /* 0 */ BOMBERSNOTEBOOK_EVENT_ICON_EXCLAMATION_POINT,
+    /* 1 */ BOMBERSNOTEBOOK_EVENT_ICON_MASK,
+    /* 2 */ BOMBERSNOTEBOOK_EVENT_ICON_RIBBON
+} BombersNotebookEventIcon;
 
-#define BOMBERSNOTEBOOK_WEEKEVENTREG_NONE 0xFFF0
-#define BOMBERSNOTEBOOK_WEEKEVENTREG_SPECIAL 0xFFF1
+#define BOMBERSNOTEBOOK_EVENT_COLOR_WEEKEVENTREG_NONE 0xFFF0
+#define BOMBERSNOTEBOOK_EVENT_COLOR_WEEKEVENTREG_DELIVERED_LETTER 0xFFF1
 
-// sBombersNotebookEntries
-u16 D_801D0D80[][30] = {
+u16 sBombersNotebookEntries[][30] = {
     {
         // Bombers
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_ABOVE, 1, 16, CLOCK_TIME(6, 0), CLOCK_TIME(5, 59)),
@@ -225,87 +225,88 @@ u16 D_801D0D80[][30] = {
     },
 };
 
-s16 D_801D1230[] = { 0x78, 0x78, 0x10E, 0x1A4 };
-TexturePtr D_801D1238[] = { &D_08002650, &D_08002A70, &D_08002E90 };
-s32 D_801D1244[] = {
-    BOMBERSNOTEBOOK_ENTRY_ICON_EXCLAMATION_POINT,
-    BOMBERSNOTEBOOK_ENTRY_ICON_EXCLAMATION_POINT,
-    BOMBERSNOTEBOOK_ENTRY_ICON_EXCLAMATION_POINT,
-    BOMBERSNOTEBOOK_ENTRY_ICON_EXCLAMATION_POINT,
-    BOMBERSNOTEBOOK_ENTRY_ICON_EXCLAMATION_POINT,
-    BOMBERSNOTEBOOK_ENTRY_ICON_EXCLAMATION_POINT,
-    BOMBERSNOTEBOOK_ENTRY_ICON_EXCLAMATION_POINT,
-    BOMBERSNOTEBOOK_ENTRY_ICON_EXCLAMATION_POINT,
-    BOMBERSNOTEBOOK_ENTRY_ICON_EXCLAMATION_POINT,
-    BOMBERSNOTEBOOK_ENTRY_ICON_EXCLAMATION_POINT,
-    BOMBERSNOTEBOOK_ENTRY_ICON_RIBBON,
-    BOMBERSNOTEBOOK_ENTRY_ICON_EXCLAMATION_POINT,
-    BOMBERSNOTEBOOK_ENTRY_ICON_MASK,
-    BOMBERSNOTEBOOK_ENTRY_ICON_MASK,
-    BOMBERSNOTEBOOK_ENTRY_ICON_EXCLAMATION_POINT,
-    BOMBERSNOTEBOOK_ENTRY_ICON_RIBBON,
-    BOMBERSNOTEBOOK_ENTRY_ICON_EXCLAMATION_POINT,
-    BOMBERSNOTEBOOK_ENTRY_ICON_RIBBON,
-    BOMBERSNOTEBOOK_ENTRY_ICON_RIBBON,
-    BOMBERSNOTEBOOK_ENTRY_ICON_RIBBON,
-    BOMBERSNOTEBOOK_ENTRY_ICON_RIBBON,
-    BOMBERSNOTEBOOK_ENTRY_ICON_RIBBON,
-    BOMBERSNOTEBOOK_ENTRY_ICON_RIBBON,
-    BOMBERSNOTEBOOK_ENTRY_ICON_RIBBON,
-    BOMBERSNOTEBOOK_ENTRY_ICON_MASK,
-    BOMBERSNOTEBOOK_ENTRY_ICON_MASK,
-    BOMBERSNOTEBOOK_ENTRY_ICON_MASK,
-    BOMBERSNOTEBOOK_ENTRY_ICON_MASK,
-    BOMBERSNOTEBOOK_ENTRY_ICON_MASK,
-    BOMBERSNOTEBOOK_ENTRY_ICON_MASK,
-    BOMBERSNOTEBOOK_ENTRY_ICON_MASK,
-    BOMBERSNOTEBOOK_ENTRY_ICON_MASK,
-    BOMBERSNOTEBOOK_ENTRY_ICON_MASK,
-    BOMBERSNOTEBOOK_ENTRY_ICON_MASK,
-    BOMBERSNOTEBOOK_ENTRY_ICON_MASK,
+s16 sBombersNotebookDayStartX[] = { 120, 120, 270, 420 };
+TexturePtr sBombersNotebookDayTextures[] = { &D_08002650, &D_08002A70, &D_08002E90 };
+
+s32 sBombersNotebookEventIcons[] = {
+    BOMBERSNOTEBOOK_EVENT_ICON_EXCLAMATION_POINT,
+    BOMBERSNOTEBOOK_EVENT_ICON_EXCLAMATION_POINT,
+    BOMBERSNOTEBOOK_EVENT_ICON_EXCLAMATION_POINT,
+    BOMBERSNOTEBOOK_EVENT_ICON_EXCLAMATION_POINT,
+    BOMBERSNOTEBOOK_EVENT_ICON_EXCLAMATION_POINT,
+    BOMBERSNOTEBOOK_EVENT_ICON_EXCLAMATION_POINT,
+    BOMBERSNOTEBOOK_EVENT_ICON_EXCLAMATION_POINT,
+    BOMBERSNOTEBOOK_EVENT_ICON_EXCLAMATION_POINT,
+    BOMBERSNOTEBOOK_EVENT_ICON_EXCLAMATION_POINT,
+    BOMBERSNOTEBOOK_EVENT_ICON_EXCLAMATION_POINT,
+    BOMBERSNOTEBOOK_EVENT_ICON_RIBBON,
+    BOMBERSNOTEBOOK_EVENT_ICON_EXCLAMATION_POINT,
+    BOMBERSNOTEBOOK_EVENT_ICON_MASK,
+    BOMBERSNOTEBOOK_EVENT_ICON_MASK,
+    BOMBERSNOTEBOOK_EVENT_ICON_EXCLAMATION_POINT,
+    BOMBERSNOTEBOOK_EVENT_ICON_RIBBON,
+    BOMBERSNOTEBOOK_EVENT_ICON_EXCLAMATION_POINT,
+    BOMBERSNOTEBOOK_EVENT_ICON_RIBBON,
+    BOMBERSNOTEBOOK_EVENT_ICON_RIBBON,
+    BOMBERSNOTEBOOK_EVENT_ICON_RIBBON,
+    BOMBERSNOTEBOOK_EVENT_ICON_RIBBON,
+    BOMBERSNOTEBOOK_EVENT_ICON_RIBBON,
+    BOMBERSNOTEBOOK_EVENT_ICON_RIBBON,
+    BOMBERSNOTEBOOK_EVENT_ICON_RIBBON,
+    BOMBERSNOTEBOOK_EVENT_ICON_MASK,
+    BOMBERSNOTEBOOK_EVENT_ICON_MASK,
+    BOMBERSNOTEBOOK_EVENT_ICON_MASK,
+    BOMBERSNOTEBOOK_EVENT_ICON_MASK,
+    BOMBERSNOTEBOOK_EVENT_ICON_MASK,
+    BOMBERSNOTEBOOK_EVENT_ICON_MASK,
+    BOMBERSNOTEBOOK_EVENT_ICON_MASK,
+    BOMBERSNOTEBOOK_EVENT_ICON_MASK,
+    BOMBERSNOTEBOOK_EVENT_ICON_MASK,
+    BOMBERSNOTEBOOK_EVENT_ICON_MASK,
+    BOMBERSNOTEBOOK_EVENT_ICON_MASK,
 };
-s32 D_801D12D0[] = { 16, 24, 32 };
-s32 D_801D12DC[] = { 16, 28, 28 };
-u16 D_801D12E8[] = {
+s32 sBombersNotebookEventIconOffsetsX[] = { 16, 24, 32 };
+s32 sBombersNotebookEventIconOffsetsY[] = { 16, 28, 28 };
+u16 sBombersNotebookEventColorWeekEventFlags[] = {
     WEEKEVENTREG_75_10,
     WEEKEVENTREG_50_08,
     WEEKEVENTREG_50_20,
     WEEKEVENTREG_50_20,
-    BOMBERSNOTEBOOK_WEEKEVENTREG_SPECIAL,
+    BOMBERSNOTEBOOK_EVENT_COLOR_WEEKEVENTREG_DELIVERED_LETTER,
     WEEKEVENTREG_50_80,
     WEEKEVENTREG_51_01,
     WEEKEVENTREG_51_20,
     WEEKEVENTREG_21_20,
     WEEKEVENTREG_22_01,
-    BOMBERSNOTEBOOK_WEEKEVENTREG_NONE,
+    BOMBERSNOTEBOOK_EVENT_COLOR_WEEKEVENTREG_NONE,
     WEEKEVENTREG_52_01,
-    BOMBERSNOTEBOOK_WEEKEVENTREG_NONE,
-    BOMBERSNOTEBOOK_WEEKEVENTREG_NONE,
+    BOMBERSNOTEBOOK_EVENT_COLOR_WEEKEVENTREG_NONE,
+    BOMBERSNOTEBOOK_EVENT_COLOR_WEEKEVENTREG_NONE,
     WEEKEVENTREG_80_10,
-    BOMBERSNOTEBOOK_WEEKEVENTREG_NONE,
-    BOMBERSNOTEBOOK_WEEKEVENTREG_NONE,
-    BOMBERSNOTEBOOK_WEEKEVENTREG_NONE,
-    BOMBERSNOTEBOOK_WEEKEVENTREG_NONE,
-    BOMBERSNOTEBOOK_WEEKEVENTREG_NONE,
-    BOMBERSNOTEBOOK_WEEKEVENTREG_NONE,
-    BOMBERSNOTEBOOK_WEEKEVENTREG_NONE,
-    BOMBERSNOTEBOOK_WEEKEVENTREG_NONE,
-    BOMBERSNOTEBOOK_WEEKEVENTREG_NONE,
-    BOMBERSNOTEBOOK_WEEKEVENTREG_NONE,
-    BOMBERSNOTEBOOK_WEEKEVENTREG_NONE,
-    BOMBERSNOTEBOOK_WEEKEVENTREG_NONE,
-    BOMBERSNOTEBOOK_WEEKEVENTREG_NONE,
-    BOMBERSNOTEBOOK_WEEKEVENTREG_NONE,
-    BOMBERSNOTEBOOK_WEEKEVENTREG_NONE,
-    BOMBERSNOTEBOOK_WEEKEVENTREG_NONE,
-    BOMBERSNOTEBOOK_WEEKEVENTREG_NONE,
-    BOMBERSNOTEBOOK_WEEKEVENTREG_NONE,
-    BOMBERSNOTEBOOK_WEEKEVENTREG_NONE,
-    BOMBERSNOTEBOOK_WEEKEVENTREG_NONE,
+    BOMBERSNOTEBOOK_EVENT_COLOR_WEEKEVENTREG_NONE,
+    BOMBERSNOTEBOOK_EVENT_COLOR_WEEKEVENTREG_NONE,
+    BOMBERSNOTEBOOK_EVENT_COLOR_WEEKEVENTREG_NONE,
+    BOMBERSNOTEBOOK_EVENT_COLOR_WEEKEVENTREG_NONE,
+    BOMBERSNOTEBOOK_EVENT_COLOR_WEEKEVENTREG_NONE,
+    BOMBERSNOTEBOOK_EVENT_COLOR_WEEKEVENTREG_NONE,
+    BOMBERSNOTEBOOK_EVENT_COLOR_WEEKEVENTREG_NONE,
+    BOMBERSNOTEBOOK_EVENT_COLOR_WEEKEVENTREG_NONE,
+    BOMBERSNOTEBOOK_EVENT_COLOR_WEEKEVENTREG_NONE,
+    BOMBERSNOTEBOOK_EVENT_COLOR_WEEKEVENTREG_NONE,
+    BOMBERSNOTEBOOK_EVENT_COLOR_WEEKEVENTREG_NONE,
+    BOMBERSNOTEBOOK_EVENT_COLOR_WEEKEVENTREG_NONE,
+    BOMBERSNOTEBOOK_EVENT_COLOR_WEEKEVENTREG_NONE,
+    BOMBERSNOTEBOOK_EVENT_COLOR_WEEKEVENTREG_NONE,
+    BOMBERSNOTEBOOK_EVENT_COLOR_WEEKEVENTREG_NONE,
+    BOMBERSNOTEBOOK_EVENT_COLOR_WEEKEVENTREG_NONE,
+    BOMBERSNOTEBOOK_EVENT_COLOR_WEEKEVENTREG_NONE,
+    BOMBERSNOTEBOOK_EVENT_COLOR_WEEKEVENTREG_NONE,
+    BOMBERSNOTEBOOK_EVENT_COLOR_WEEKEVENTREG_NONE,
+    BOMBERSNOTEBOOK_EVENT_COLOR_WEEKEVENTREG_NONE,
 };
 
-// SPScisTextureRectangle
-void func_8016AC10(Gfx** gfxP, s32 rxl, s32 ryl, s32 rxh, s32 ryh, s32 tile, s32 s, s32 t, s32 dsdx, s32 dtdy) {
+void BombersNotebook_TextureRectangle(Gfx** gfxP, s32 rxl, s32 ryl, s32 rxh, s32 ryh, s32 tile, s32 s, s32 t, s32 dsdx,
+                                      s32 dtdy) {
     s32 xl = rxl - (D_801FBBD0 * 4);
     s32 yl = ryl - (D_801FBBD2 * 4);
     s32 xh = rxh - (D_801FBBD0 * 4);
@@ -317,69 +318,73 @@ void func_8016AC10(Gfx** gfxP, s32 rxl, s32 ryl, s32 rxh, s32 ryh, s32 tile, s32
     *gfxP = gfx;
 }
 
-s16 D_801D1330[][3] = {
+s16 sBombersNotebookHeaderColors[][3] = {
     { 116, 134, 146 },
     { 158, 156, 131 },
     { 174, 141, 151 },
 };
 
-// DrawColumnHeaders
-void func_8016AE1C(Gfx** gfxP) {
+void BombersNotebook_DrawHeaders(Gfx** gfxP) {
     Gfx* gfx = *gfxP;
     s32 i;
-    s32 x0;
+    s32 xStart;
 
     gDPLoadTextureBlock(gfx++, &D_080017D8, G_IM_FMT_I, G_IM_SIZ_8b, 8, 24, 0, G_TX_NOMIRROR | G_TX_WRAP,
                         G_TX_NOMIRROR | G_TX_WRAP, 3, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
-    for (i = 0, x0 = 120; i < 3; i++, x0 += 150) {
-        gDPSetPrimColor(gfx++, 0, 0, D_801D1330[i][0], D_801D1330[i][1], D_801D1330[i][2], 192);
-        func_8016AC10(&gfx, x0 * 4, 74 * 4, (x0 + 143) * 4, 98 * 4, 0, 0, 0, 0x400, 0x400);
+    for (i = 0, xStart = 120; i < 3; i++, xStart += 150) {
+        gDPSetPrimColor(gfx++, 0, 0, sBombersNotebookHeaderColors[i][0], sBombersNotebookHeaderColors[i][1],
+                        sBombersNotebookHeaderColors[i][2], 192);
+        BombersNotebook_TextureRectangle(&gfx, xStart * 4, 74 * 4, (xStart + 143) * 4, 98 * 4, 0, 0, 0, 0x400, 0x400);
     }
 
     gDPSetPrimColor(gfx++, 0, 0, 255, 255, 255, 255);
-    for (i = 0, x0 = 124; i < 3; i++, x0 += 150) {
-        gDPLoadTextureBlock(gfx++, D_801D1238[i], G_IM_FMT_IA, G_IM_SIZ_8b, 48, 22, 0, G_TX_NOMIRROR | G_TX_WRAP,
-                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
-        func_8016AC10(&gfx, x0 * 4, 77 * 4, (x0 + 48) * 4, 99 * 4, 0, 0, 0, 0x400, 0x400);
+    for (i = 0, xStart = 124; i < 3; i++, xStart += 150) {
+        gDPLoadTextureBlock(gfx++, sBombersNotebookDayTextures[i], G_IM_FMT_IA, G_IM_SIZ_8b, 48, 22, 0,
+                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
+                            G_TX_NOLOD);
+        BombersNotebook_TextureRectangle(&gfx, xStart * 4, 77 * 4, (xStart + 48) * 4, 99 * 4, 0, 0, 0, 0x400, 0x400);
     }
 
-    x0 = 172;
+    xStart = 172;
     gDPLoadTextureBlock_4b(gfx++, &D_08001F70, G_IM_FMT_IA, 48, 11, 0, G_TX_NOMIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
     for (i = 0; i < 3; i++) {
-        func_8016AC10(&gfx, x0 * 4, 86 * 4, (x0 + 48) * 4, 97 * 4, 0, 0, 0, 0x400, 0x400);
-        x0 += 150;
+        BombersNotebook_TextureRectangle(&gfx, xStart * 4, 86 * 4, (xStart + 48) * 4, 97 * 4, 0, 0, 0, 0x400, 0x400);
+        xStart += 150;
     }
 
     gDPPipeSync(gfx++);
     *gfxP = gfx;
 }
 
-s16 D_801D1344[][3] = {
-    { 165, 183, 195 }, { 140, 158, 170 }, { 197, 195, 172 }, { 172, 170, 147 }, { 223, 190, 200 }, { 190, 165, 175 },
+s16 sBombersNotebookColumnColors[][2][3] = {
+    { { 165, 183, 195 }, { 140, 158, 170 } },
+    { { 197, 195, 172 }, { 172, 170, 147 } },
+    { { 223, 190, 200 }, { 190, 165, 175 } },
 };
-// DrawColumnBackgrounds
-void func_8016B278(Gfx** gfxP) {
+
+void BombersNotebook_DrawColumns(Gfx** gfxP) {
     Gfx* gfx = *gfxP;
     s16* color;
     s32 i;
     s32 j;
     s32 k;
-    s32 x0;
-    s32 x1;
+    s32 columnXStart;
+    s32 subColumnXStart;
     s32 pad;
 
     gDPLoadTextureBlock_4b(gfx++, &D_08001340, G_IM_FMT_I, 48, 1, 0, G_TX_NOMIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
-    color = D_801D1344[0];
-    for (i = 0, x0 = 120; i < 3; i++, x0 += 150) {
-        x1 = x0;
+    color = &sBombersNotebookColumnColors[0][0][0];
+    for (i = 0, columnXStart = 120; i < 3; i++, columnXStart += 150) {
+        subColumnXStart = columnXStart;
         for (j = 0; j < 2; j++) {
             gDPSetPrimColor(gfx++, 0, 0, color[0], color[1], color[2], 192);
             for (k = 0; k < 2; k++) {
-                func_8016AC10(&gfx, x1 * 4, 104 * 4, (x1 + 48) * 4, 480 * 4, 0, 0, 0, 0x400, 0x400);
-                x1 += 36;
+                BombersNotebook_TextureRectangle(&gfx, subColumnXStart * 4, 104 * 4, (subColumnXStart + 48) * 4,
+                                                 480 * 4, 0, 0, 0, 0x400, 0x400);
+                subColumnXStart += 36;
             }
             color += 3;
         }
@@ -389,30 +394,29 @@ void func_8016B278(Gfx** gfxP) {
     *gfxP = gfx;
 }
 
-TexturePtr D_801D1368[] = { &D_08000000, &D_0700AC00, &D_0700AEA0 };
-s16 D_801D1374[][3] = {
+TexturePtr sBombersNotebookEventIconTextures[] = { &D_08000000, &D_0700AC00, &D_0700AEA0 };
+s16 sBombersNotebookEntryIconColors[][3] = {
     { 255, 255, 0 },
     { 141, 255, 182 },
     { 255, 100, 60 },
 };
 
-// DrawEntries
-void func_8016B4B0(Gfx** gfxP, s32 arg1, u32 arg2) {
+void BombersNotebook_DrawEntries(Gfx** gfxP, s32 row, u32 yStart) {
     Gfx* gfx = *gfxP;
-    s32 var_s0;
-    u32 sp1A4;
-    u32 sp1A0 = false;
-    u16 time1;
-    u16 time2;
+    s32 entryXStart;
+    u32 eventIcon;
+    u32 unfinishedEvent = false;
+    u16 startTime;
+    u16 endTime;
     s32 j = 0;
-    u32 sp194;
-    s32 var_s3;
-    u32 var_t0;
-    s32 var_s5;
+    u32 iconXStart;
+    s32 entryXEnd;
+    u32 yOffset;
+    s32 entryWidth;
 
     while (true) {
-        if (D_801D0D80[arg1][j] == BOMBERSNOTEBOOK_ENTRY_END) {
-            if (!sp1A0) {
+        if (sBombersNotebookEntries[row][j] == BOMBERSNOTEBOOK_ENTRY_END) {
+            if (!unfinishedEvent) {
                 gDPPipeSync(gfx++);
                 gDPSetCombineLERP(gfx++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0,
                                   PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
@@ -420,11 +424,13 @@ void func_8016B4B0(Gfx** gfxP, s32 arg1, u32 arg2) {
                 gDPSetEnvColor(gfx++, 0, 0, 0, 255);
                 gDPLoadTextureBlock(gfx++, &D_08000100, G_IM_FMT_IA, G_IM_SIZ_8b, 32, 48, 0, G_TX_MIRROR | G_TX_WRAP,
                                     G_TX_MIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
-                func_8016AC10(&gfx, 567 * 4, (arg2 + 1) * 4, 599 * 4, (arg2 + 49) * 4, 0, 0, 0, 0x400, 0x400);
+                BombersNotebook_TextureRectangle(&gfx, 567 * 4, (yStart + 1) * 4, 599 * 4, (yStart + 49) * 4, 0, 0, 0,
+                                                 0x400, 0x400);
                 gDPPipeSync(gfx++);
                 gDPSetPrimColor(gfx++, 0, 0, 255, 255, 255, 255);
                 gDPSetEnvColor(gfx++, 255, 0, 0, 255);
-                func_8016AC10(&gfx, 565 * 4, (arg2 + -1) * 4, 597 * 4, (arg2 + 47) * 4, 0, 0, 0, 0x400, 0x400);
+                BombersNotebook_TextureRectangle(&gfx, 565 * 4, (yStart + -1) * 4, 597 * 4, (yStart + 47) * 4, 0, 0, 0,
+                                                 0x400, 0x400);
                 gDPPipeSync(gfx++);
                 gDPSetCombineMode(gfx++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
                 gDPSetEnvColor(gfx++, 0, 0, 0, 255);
@@ -432,37 +438,38 @@ void func_8016B4B0(Gfx** gfxP, s32 arg1, u32 arg2) {
             break;
         }
 
-        if (D_801D0D80[arg1][j] & BOMBERSNOTEBOOK_ENTRY_POS_ABOVE) {
-            var_t0 = 8;
-        } else if (D_801D0D80[arg1][j] & BOMBERSNOTEBOOK_ENTRY_POS_BELOW) {
-            var_t0 = 24;
+        if (sBombersNotebookEntries[row][j] & BOMBERSNOTEBOOK_ENTRY_POS_ABOVE) {
+            yOffset = 8;
+        } else if (sBombersNotebookEntries[row][j] & BOMBERSNOTEBOOK_ENTRY_POS_BELOW) {
+            yOffset = 24;
         } else { // BOMBERSNOTEBOOK_ENTRY_POS_CENTER
-            var_t0 = 16;
+            yOffset = 16;
         }
 
-        time1 = D_801D0D80[arg1][j + 1] - CLOCK_TIME(6, 0);
-        time2 = D_801D0D80[arg1][j + 2] - CLOCK_TIME(6, 0);
-        var_s0 = D_801D1230[(D_801D0D80[arg1][j] & 0xF00) >> 8] + (time1 / 455);
-        var_s3 = D_801D1230[(D_801D0D80[arg1][j] & 0xF00) >> 8] + (time2 / 455);
-        var_s5 = var_s3 - var_s0 - 8;
-        if ((var_s3 - var_s0) < 8) {
-            var_s0 = ((var_s0 + var_s3) - var_s0) - 8;
-            var_s3 = var_s0 + 8;
+        startTime = sBombersNotebookEntries[row][j + 1] - CLOCK_TIME(6, 0);
+        endTime = sBombersNotebookEntries[row][j + 2] - CLOCK_TIME(6, 0);
+        entryXStart = sBombersNotebookDayStartX[(sBombersNotebookEntries[row][j] & 0xF00) >> 8] + (startTime / 455);
+        entryXEnd = sBombersNotebookDayStartX[(sBombersNotebookEntries[row][j] & 0xF00) >> 8] + (endTime / 455);
+        entryWidth = entryXEnd - entryXStart - 8;
+        if ((entryXEnd - entryXStart) < 8) {
+            entryXStart = ((entryXStart + entryXEnd) - entryXStart) - 8;
+            entryXEnd = entryXStart + 8;
         }
 
         // Black shadow
         gDPSetPrimColor(gfx++, 0, 0, 0, 0, 0, 255);
         gDPLoadTextureBlock(gfx++, &D_08001240, G_IM_FMT_RGBA, G_IM_SIZ_16b, 4, 16, 0, G_TX_MIRROR | G_TX_WRAP,
                             G_TX_MIRROR | G_TX_WRAP, 2, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
-        func_8016AC10(&gfx, (var_s0 + 2) * 4, (arg2 + var_t0 + 2) * 4, (var_s0 + 6) * 4, (arg2 + var_t0 + 18) * 4, 0, 0,
-                      0, 0x400, 0x400);
-        func_8016AC10(&gfx, (var_s3 + -2) * 4, (arg2 + var_t0 + 2) * 4, (var_s3 + 2) * 4, (arg2 + var_t0 + 18) * 4, 0,
-                      0x80, 0, 0x400, 0x400);
-        if (var_s5 > 0) {
+        BombersNotebook_TextureRectangle(&gfx, (entryXStart + 2) * 4, (yStart + yOffset + 2) * 4, (entryXStart + 6) * 4,
+                                         (yStart + yOffset + 18) * 4, 0, 0, 0, 0x400, 0x400);
+        BombersNotebook_TextureRectangle(&gfx, (entryXEnd + -2) * 4, (yStart + yOffset + 2) * 4, (entryXEnd + 2) * 4,
+                                         (yStart + yOffset + 18) * 4, 0, 0x80, 0, 0x400, 0x400);
+        if (entryWidth > 0) {
             gDPLoadTextureBlock(gfx++, &D_080012C0, G_IM_FMT_RGBA, G_IM_SIZ_16b, 4, 16, 0, G_TX_MIRROR | G_TX_WRAP,
                                 G_TX_MIRROR | G_TX_WRAP, 2, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
-            func_8016AC10(&gfx, (var_s0 + 6) * 4, (arg2 + var_t0 + 2) * 4, (var_s0 + 6 + var_s5) * 4,
-                          (arg2 + var_t0 + 18) * 4, 0, 0, 0, 0x400, 0x400);
+            BombersNotebook_TextureRectangle(&gfx, (entryXStart + 6) * 4, (yStart + yOffset + 2) * 4,
+                                             (entryXStart + 6 + entryWidth) * 4, (yStart + yOffset + 18) * 4, 0, 0, 0,
+                                             0x400, 0x400);
         }
 
         // Blue Box
@@ -471,62 +478,79 @@ void func_8016B4B0(Gfx** gfxP, s32 arg1, u32 arg2) {
                             G_TX_MIRROR | G_TX_WRAP, 2, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
         //! FAKE: the ^ 0
-        func_8016AC10(&gfx, (var_s0 * 4) ^ 0, (arg2 + var_t0) * 4, (var_s0 + 4) * 4, (arg2 + var_t0 + 16) * 4, 0, 0, 0,
-                      0x400, 0x400);
+        BombersNotebook_TextureRectangle(&gfx, (entryXStart * 4) ^ 0, (yStart + yOffset) * 4, (entryXStart + 4) * 4,
+                                         (yStart + yOffset + 16) * 4, 0, 0, 0, 0x400, 0x400);
         //! FAKE: the ^ 0
-        func_8016AC10(&gfx, (var_s3 + -4) * 4, (arg2 + var_t0) * 4, (var_s3 * 4) ^ 0, (arg2 + var_t0 + 16) * 4, 0, 0x80,
-                      0, 0x400, 0x400);
-        if (var_s5 > 0) {
+        BombersNotebook_TextureRectangle(&gfx, (entryXEnd + -4) * 4, (yStart + yOffset) * 4, (entryXEnd * 4) ^ 0,
+                                         (yStart + yOffset + 16) * 4, 0, 0x80, 0, 0x400, 0x400);
+        if (entryWidth > 0) {
             gDPLoadTextureBlock(gfx++, &D_080012C0, G_IM_FMT_RGBA, G_IM_SIZ_16b, 4, 16, 0, G_TX_MIRROR | G_TX_WRAP,
                                 G_TX_MIRROR | G_TX_WRAP, 2, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
-            func_8016AC10(&gfx, (var_s0 + 4) * 4, (arg2 + var_t0) * 4, (var_s0 + 4 + var_s5) * 4,
-                          (arg2 + var_t0 + 16) * 4, 0, 0, 0, 0x400, 0x400);
+            BombersNotebook_TextureRectangle(&gfx, (entryXStart + 4) * 4, (yStart + yOffset) * 4,
+                                             (entryXStart + 4 + entryWidth) * 4, (yStart + yOffset + 16) * 4, 0, 0, 0,
+                                             0x400, 0x400);
         }
-        if (CHECK_WEEKEVENTREG(sBombersNotebookEventWeekEventFlags[D_801D0D80[arg1][j] & 0xFF])) {
-            sp1A4 = D_801D1244[(D_801D0D80[arg1][j] & 0xFF) - 20];
-            if ((var_s3 - var_s0) < D_801D12D0[sp1A4]) {
-                sp194 = (((var_s0 - D_801D12D0[sp1A4]) + var_s3) - var_s0) + 3;
+        if (CHECK_WEEKEVENTREG(gBombersNotebookWeekEventFlags[sBombersNotebookEntries[row][j] & 0xFF])) {
+            eventIcon = sBombersNotebookEventIcons[(sBombersNotebookEntries[row][j] & 0xFF) - 20];
+            if ((entryXEnd - entryXStart) < sBombersNotebookEventIconOffsetsX[eventIcon]) {
+                iconXStart =
+                    (((entryXStart - sBombersNotebookEventIconOffsetsX[eventIcon]) + entryXEnd) - entryXStart) + 3;
             } else {
-                sp194 = (((var_s3 - var_s0) - D_801D12D0[sp1A4]) / 2) + var_s0;
+                iconXStart =
+                    (((entryXEnd - entryXStart) - sBombersNotebookEventIconOffsetsX[eventIcon]) / 2) + entryXStart;
             }
 
-            if ((sp1A4 == BOMBERSNOTEBOOK_ENTRY_ICON_MASK) || (sp1A4 == BOMBERSNOTEBOOK_ENTRY_ICON_RIBBON)) {
-                if (D_801D0D80[arg1][j] & BOMBERSNOTEBOOK_ENTRY_POS_ABOVE) {
-                    var_t0 -= 12;
-                } else if (!(D_801D0D80[arg1][j] &
-                             BOMBERSNOTEBOOK_ENTRY_POS_BELOW)) { // BOMBERSNOTEBOOK_ENTRY_POS_CENTER
-                    var_t0 -= 6;
+            if ((eventIcon == BOMBERSNOTEBOOK_EVENT_ICON_MASK) || (eventIcon == BOMBERSNOTEBOOK_EVENT_ICON_RIBBON)) {
+                if (sBombersNotebookEntries[row][j] & BOMBERSNOTEBOOK_ENTRY_POS_ABOVE) {
+                    yOffset -= 12;
+                } else if (!(sBombersNotebookEntries[row][j] & BOMBERSNOTEBOOK_ENTRY_POS_BELOW)) {
+                    // BOMBERSNOTEBOOK_ENTRY_POS_CENTER
+                    yOffset -= 6;
                 }
             }
-            gDPLoadTextureBlock(gfx++, D_801D1368[sp1A4], G_IM_FMT_IA, G_IM_SIZ_8b, D_801D12D0[sp1A4],
-                                D_801D12DC[sp1A4], 0, G_TX_MIRROR | G_TX_WRAP, G_TX_MIRROR | G_TX_WRAP, G_TX_NOMASK,
-                                G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+            gDPLoadTextureBlock(gfx++, sBombersNotebookEventIconTextures[eventIcon], G_IM_FMT_IA, G_IM_SIZ_8b,
+                                sBombersNotebookEventIconOffsetsX[eventIcon],
+                                sBombersNotebookEventIconOffsetsY[eventIcon], 0, G_TX_MIRROR | G_TX_WRAP,
+                                G_TX_MIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
             gDPSetPrimColor(gfx++, 0, 0, 0, 0, 0, 255);
 
-            func_8016AC10(&gfx, (sp194 + 2) * 4, (arg2 + var_t0 + 2) * 4, (sp194 + 2 + D_801D12D0[sp1A4]) * 4,
-                          (arg2 + var_t0 + 2 + D_801D12DC[sp1A4]) * 4, 0, 0, 0, 0x400, 0x400);
-            if (D_801D12E8[(D_801D0D80[arg1][j] & 0xFF) - 20] == BOMBERSNOTEBOOK_WEEKEVENTREG_NONE) {
-                gDPSetPrimColor(gfx++, 0, 0, D_801D1374[sp1A4][0], D_801D1374[sp1A4][1], D_801D1374[sp1A4][2], 255);
-            } else if (D_801D12E8[(D_801D0D80[arg1][j] & 0xFF) - 20] == BOMBERSNOTEBOOK_WEEKEVENTREG_SPECIAL) {
+            BombersNotebook_TextureRectangle(&gfx, (iconXStart + 2) * 4, (yStart + yOffset + 2) * 4,
+                                             (iconXStart + 2 + sBombersNotebookEventIconOffsetsX[eventIcon]) * 4,
+                                             (yStart + yOffset + 2 + sBombersNotebookEventIconOffsetsY[eventIcon]) * 4,
+                                             0, 0, 0, 0x400, 0x400);
+            if (sBombersNotebookEventColorWeekEventFlags[(sBombersNotebookEntries[row][j] & 0xFF) - 20] ==
+                BOMBERSNOTEBOOK_EVENT_COLOR_WEEKEVENTREG_NONE) {
+                gDPSetPrimColor(gfx++, 0, 0, sBombersNotebookEntryIconColors[eventIcon][0],
+                                sBombersNotebookEntryIconColors[eventIcon][1],
+                                sBombersNotebookEntryIconColors[eventIcon][2], 255);
+            } else if (sBombersNotebookEventColorWeekEventFlags[(sBombersNotebookEntries[row][j] & 0xFF) - 20] ==
+                       BOMBERSNOTEBOOK_EVENT_COLOR_WEEKEVENTREG_DELIVERED_LETTER) {
                 if (CHECK_WEEKEVENTREG(WEEKEVENTREG_27_02) || CHECK_WEEKEVENTREG(WEEKEVENTREG_27_04) ||
                     CHECK_WEEKEVENTREG(WEEKEVENTREG_27_08) || CHECK_WEEKEVENTREG(WEEKEVENTREG_27_10) ||
                     CHECK_WEEKEVENTREG(WEEKEVENTREG_27_20)) {
-                    gDPSetPrimColor(gfx++, 0, 0, D_801D1374[sp1A4][0], D_801D1374[sp1A4][1], D_801D1374[sp1A4][2], 255);
+                    gDPSetPrimColor(gfx++, 0, 0, sBombersNotebookEntryIconColors[eventIcon][0],
+                                    sBombersNotebookEntryIconColors[eventIcon][1],
+                                    sBombersNotebookEntryIconColors[eventIcon][2], 255);
                 } else {
                     gDPSetPrimColor(gfx++, 0, 0, 155, 155, 155, 255);
                 }
             } else {
-                if (CHECK_WEEKEVENTREG(D_801D12E8[(D_801D0D80[arg1][j] & 0xFF) - 20])) {
-                    gDPSetPrimColor(gfx++, 0, 0, D_801D1374[sp1A4][0], D_801D1374[sp1A4][1], D_801D1374[sp1A4][2], 255);
+                if (CHECK_WEEKEVENTREG(
+                        sBombersNotebookEventColorWeekEventFlags[(sBombersNotebookEntries[row][j] & 0xFF) - 20])) {
+                    gDPSetPrimColor(gfx++, 0, 0, sBombersNotebookEntryIconColors[eventIcon][0],
+                                    sBombersNotebookEntryIconColors[eventIcon][1],
+                                    sBombersNotebookEntryIconColors[eventIcon][2], 255);
                 } else {
                     gDPSetPrimColor(gfx++, 0, 0, 155, 155, 155, 255);
                 }
             }
-            func_8016AC10(&gfx, sp194 * 4, (arg2 + var_t0) * 4, (sp194 + D_801D12D0[sp1A4]) * 4,
-                          (arg2 + var_t0 + D_801D12DC[sp1A4]) * 4, 0, 0, 0, 0x400, 0x400);
+            BombersNotebook_TextureRectangle(&gfx, iconXStart * 4, (yStart + yOffset) * 4,
+                                             (iconXStart + sBombersNotebookEventIconOffsetsX[eventIcon]) * 4,
+                                             (yStart + yOffset + sBombersNotebookEventIconOffsetsY[eventIcon]) * 4, 0,
+                                             0, 0, 0x400, 0x400);
             gDPSetPrimColor(gfx++, 0, 0, 255, 255, 255, 255);
         } else {
-            sp1A0 = true;
+            unfinishedEvent = true;
         }
         j += 3;
     }
@@ -534,22 +558,21 @@ void func_8016B4B0(Gfx** gfxP, s32 arg1, u32 arg2) {
     *gfxP = gfx;
 }
 
-TexturePtr D_801D1388[] = {
+TexturePtr sBombersNotebookPhotoTextures[] = {
     &D_07009800, &D_07000000, &D_07000800, &D_07001000, &D_07001800, &D_07002000, &D_07002800,
     &D_07003000, &D_07003800, &D_07004000, &D_07004800, &D_07005000, &D_07005800, &D_07006000,
     &D_07006800, &D_07007000, &D_07007800, &D_07008000, &D_07008800, &D_07009000,
 };
 
-// DrawRows
-void func_8016C344(BombersNotebook* this, Gfx** gfxP) {
-    static s16 D_801D13D8 = 0;
-    static s16 D_801D13DC = 0;
-    static s16 D_801D13E0 = 0;
-    static s16 D_801D13E4 = 10;
-    static s16 D_801D13E8 = 0;
-    static s16 D_801D13EC[2] = { 100, 0 };
-    static s16 D_801D13F0[2] = { 80, 0 };
-    static s16 D_801D13F4[2] = { 255, 0 };
+void BombersNotebook_DrawRows(BombersNotebook* this, Gfx** gfxP) {
+    static s16 sBarColorR = 0;
+    static s16 sBarColorG = 0;
+    static s16 sBarColorB = 0;
+    static s16 sBarColorTimer = 10;
+    static s16 sBarColorIndex = 0;
+    static s16 sBarColorTargetsR[2] = { 100, 0 };
+    static s16 sBarColorTargetsG[2] = { 80, 0 };
+    static s16 sBarColorTargetsB[2] = { 255, 0 };
     Gfx* gfx = *gfxP;
     s32 var_t1;
     s32 sp134;
@@ -557,60 +580,60 @@ void func_8016C344(BombersNotebook* this, Gfx** gfxP) {
     u32 sp12C;
     f32 sp128;
     u32 sp124;
-    s32 var_s0;
-    u32 var_s3;
+    s32 i;
+    u32 yStart;
     s16 colorStep;
 
-    colorStep = ABS_ALT(D_801D13D8 - D_801D13EC[D_801D13E8]) / D_801D13E4;
-    if (D_801D13D8 >= D_801D13EC[D_801D13E8]) {
-        D_801D13D8 -= colorStep;
+    colorStep = ABS_ALT(sBarColorR - sBarColorTargetsR[sBarColorIndex]) / sBarColorTimer;
+    if (sBarColorR >= sBarColorTargetsR[sBarColorIndex]) {
+        sBarColorR -= colorStep;
     } else {
-        D_801D13D8 += colorStep;
+        sBarColorR += colorStep;
     }
 
-    colorStep = ABS_ALT(D_801D13DC - D_801D13F0[D_801D13E8]) / D_801D13E4;
-    if (D_801D13DC >= D_801D13F0[D_801D13E8]) {
-        D_801D13DC -= colorStep;
+    colorStep = ABS_ALT(sBarColorG - sBarColorTargetsG[sBarColorIndex]) / sBarColorTimer;
+    if (sBarColorG >= sBarColorTargetsG[sBarColorIndex]) {
+        sBarColorG -= colorStep;
     } else {
-        D_801D13DC += colorStep;
+        sBarColorG += colorStep;
     }
 
-    colorStep = ABS_ALT(D_801D13E0 - D_801D13F4[D_801D13E8]) / D_801D13E4;
-    if (D_801D13E0 >= D_801D13F4[D_801D13E8]) {
-        D_801D13E0 -= colorStep;
+    colorStep = ABS_ALT(sBarColorB - sBarColorTargetsB[sBarColorIndex]) / sBarColorTimer;
+    if (sBarColorB >= sBarColorTargetsB[sBarColorIndex]) {
+        sBarColorB -= colorStep;
     } else {
-        D_801D13E0 += colorStep;
+        sBarColorB += colorStep;
     }
 
-    D_801D13E4--;
-    if (D_801D13E4 == 0) {
-        D_801D13E4 = 10;
-        D_801D13D8 = D_801D13EC[D_801D13E8];
-        D_801D13DC = D_801D13F0[D_801D13E8];
-        D_801D13E0 = D_801D13F4[D_801D13E8];
-        D_801D13E8 ^= 1;
+    sBarColorTimer--;
+    if (sBarColorTimer == 0) {
+        sBarColorTimer = 10;
+        sBarColorR = sBarColorTargetsR[sBarColorIndex];
+        sBarColorG = sBarColorTargetsG[sBarColorIndex];
+        sBarColorB = sBarColorTargetsB[sBarColorIndex];
+        sBarColorIndex ^= 1;
     }
 
-    var_s3 = this->unk_A8 + 107;
-    if (this->unk_9C >= 12) {
+    yStart = this->scrollOffset + 107;
+    if (this->cursorPage >= 12) {
         sp134 = 20;
-        var_s0 = this->unk_9C;
+        i = this->cursorPage;
     } else {
-        sp134 = this->unk_9C + 8;
-        var_s0 = sp134 - 8;
+        sp134 = this->cursorPage + 8;
+        i = sp134 - 8;
     }
-    sp130 = var_s0;
-    for (; var_s0 < sp134; var_s0++, var_s3 += 52) {
+    sp130 = i;
+    for (; i < sp134; i++, yStart += 52) {
         gDPSetPrimColor(gfx++, 0, 0, 255, 255, 255, 255);
-        if (CHECK_WEEKEVENTREG(sBombersNotebookEventWeekEventFlags[var_s0])) {
-            gDPLoadTextureBlock(gfx++, D_801D1388[var_s0], G_IM_FMT_RGBA, G_IM_SIZ_16b, 32, 32, 0,
+        if (CHECK_WEEKEVENTREG(gBombersNotebookWeekEventFlags[i])) {
+            gDPLoadTextureBlock(gfx++, sBombersNotebookPhotoTextures[i], G_IM_FMT_RGBA, G_IM_SIZ_16b, 32, 32, 0,
                                 G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
         } else {
             gDPLoadTextureBlock(gfx++, &D_08000A40, G_IM_FMT_RGBA, G_IM_SIZ_16b, 32, 32, 0, G_TX_NOMIRROR | G_TX_WRAP,
                                 G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
         }
 
-        if ((var_s0 == (this->unk_94 + sp130)) && (this->unk_A4 == 0)) {
+        if ((i == (this->cursorPageRow + sp130)) && (this->scrollAmount == 0)) {
             sp12C = 56;
             sp124 = 8;
             sp128 = 200.0f;
@@ -622,29 +645,30 @@ void func_8016C344(BombersNotebook* this, Gfx** gfxP) {
             var_t1 = 48;
         }
 
-        func_8016AC10(&gfx, (57 - sp124) * 4, (var_s3 - sp124) * 4, (57 - sp124 + var_t1) * 4,
-                      (var_s3 - sp124 + var_t1) * 4, 0, 0, 0, 1024.0f / (sp128 / 100.0f), 1024.0f / (sp128 / 100.0f));
-        if ((var_s0 == (this->unk_94 + sp130)) && (this->unk_A4 == 0)) {
-            gDPSetPrimColor(gfx++, 0, 0, D_801D13D8, D_801D13DC, D_801D13E0, 255);
+        BombersNotebook_TextureRectangle(&gfx, (57 - sp124) * 4, (yStart - sp124) * 4, (57 - sp124 + var_t1) * 4,
+                                         (yStart - sp124 + var_t1) * 4, 0, 0, 0, 1024.0f / (sp128 / 100.0f),
+                                         1024.0f / (sp128 / 100.0f));
+        if ((i == (this->cursorPageRow + sp130)) && (this->scrollAmount == 0)) {
+            gDPSetPrimColor(gfx++, 0, 0, sBarColorR, sBarColorG, sBarColorB, 255);
         } else {
             gDPSetPrimColor(gfx++, 0, 0, 0, 0, 0, 60);
         }
         gDPLoadTextureBlock(gfx++, &D_080018B0, G_IM_FMT_I, G_IM_SIZ_8b, 8, 4, 0, G_TX_NOMIRROR | G_TX_WRAP,
                             G_TX_NOMIRROR | G_TX_WRAP, 3, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
-        func_8016AC10(&gfx, (sp12C + 57) * 4, (var_s3 + 22) * 4, (sp12C - sp124 + 527) * 4, (var_s3 + 26) * 4, 0, 0, 0,
-                      0x400, 0x400);
+        BombersNotebook_TextureRectangle(&gfx, (sp12C + 57) * 4, (yStart + 22) * 4, (sp12C - sp124 + 527) * 4,
+                                         (yStart + 26) * 4, 0, 0, 0, 0x400, 0x400);
         gDPLoadTextureBlock_4b(gfx++, &D_08001358, G_IM_FMT_I, 16, 16, 0, G_TX_NOMIRROR | G_TX_WRAP,
                                G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
-        func_8016AC10(&gfx, (sp12C - sp124 + 527) * 4, (var_s3 + 16) * 4, (sp12C - sp124 + 543) * 4, (var_s3 + 32) * 4,
-                      0, 0, 0, 0x400, 0x400);
-        if (CHECK_WEEKEVENTREG(sBombersNotebookEventWeekEventFlags[var_s0])) {
+        BombersNotebook_TextureRectangle(&gfx, (sp12C - sp124 + 527) * 4, (yStart + 16) * 4, (sp12C - sp124 + 543) * 4,
+                                         (yStart + 32) * 4, 0, 0, 0, 0x400, 0x400);
+        if (CHECK_WEEKEVENTREG(gBombersNotebookWeekEventFlags[i])) {
             gDPPipeSync(gfx++);
             gDPSetRenderMode(gfx++, G_RM_OPA_SURF, G_RM_OPA_SURF2);
             gDPSetPrimColor(gfx++, 0, 0, 255, 255, 255, 255);
 
-            func_8016B4B0(&gfx, var_s0, var_s3);
+            BombersNotebook_DrawEntries(&gfx, i, yStart);
 
             gDPPipeSync(gfx++);
             gDPSetRenderMode(gfx++, G_RM_XLU_SURF, G_RM_XLU_SURF2);
@@ -654,85 +678,86 @@ void func_8016C344(BombersNotebook* this, Gfx** gfxP) {
     *gfxP = gfx;
 }
 
-TexturePtr D_801D13F8[] = {
+TexturePtr sBombersNotebookDigitTextures[] = {
     &D_08002078, &D_08002100, &D_08002188, &D_08002210, &D_08002298,
     &D_08002320, &D_080023A8, &D_08002430, &D_080024B8, &D_08002540,
 };
-u8 D_801D1420[] = { 13, 8, 12, 13, 14, 13, 12, 12, 13, 12 };
-s16 D_801D142C[] = { 16, 12, 9, 0 };
+u8 sBombersNotebookDigitOffsetsX[] = { 13, 8, 12, 13, 14, 13, 12, 12, 13, 12 };
+s16 sBombersNotebookDayTexOffsetsX[] = { 16, 12, 9 };
 
-#define TEST(day) (((day) == 0) ? 1 : (day))
-// DrawTimeOfDay
-void func_8016CD4C(Gfx** gfxP) {
+#define CURRENT_DAY_MIN_1 ((CURRENT_DAY == 0) ? 1 : CURRENT_DAY)
+void BombersNotebook_DrawTimeOfDay(Gfx** gfxP) {
     Gfx* gfx = *gfxP;
-    u32 sp260;
+    u32 xStart;
     u32 sp25C;
     u32 sp258;
-    u32 sp254;
+    u32 lineXStart;
     u32 sp250;
-    u16 var_a1;
+    u16 time;
     s32 sp248;
     s32 sp244;
     s32 sp240;
 
-    var_a1 = (((void)0, gSaveContext.save.time) - CLOCK_TIME(6, 0));
+    time = (((void)0, gSaveContext.save.time) - CLOCK_TIME(6, 0));
     if (CURRENT_DAY == 0) {
-        var_a1 = 0;
+        time = 0;
     }
-    sp260 = D_801D1230[CURRENT_DAY] + (var_a1 / 455);
-    if ((TEST(CURRENT_DAY) == 1) ||
-        ((TEST(CURRENT_DAY) == 2) && (((void)0, gSaveContext.save.time) < CLOCK_TIME(12, 0)))) {
-        sp260 -= 32;
-        sp254 = sp260 + 32;
-    } else if ((TEST(CURRENT_DAY) == 2) && (var_a1 >= (CLOCK_TIME(17, 0) - CLOCK_TIME(6, 0))) &&
-               (var_a1 <= (CLOCK_TIME(19, 0) - CLOCK_TIME(6, 0)))) {
-        sp260 -= 64;
-        sp254 = sp260 + 64;
+    xStart = sBombersNotebookDayStartX[CURRENT_DAY] + (time / 455);
+    if ((CURRENT_DAY_MIN_1 == 1) ||
+        ((CURRENT_DAY_MIN_1 == 2) && (((void)0, gSaveContext.save.time) < CLOCK_TIME(12, 0)))) {
+        xStart -= 32;
+        lineXStart = xStart + 32;
+    } else if ((CURRENT_DAY_MIN_1 == 2) && (time >= (CLOCK_TIME(17, 0) - CLOCK_TIME(6, 0))) &&
+               (time <= (CLOCK_TIME(19, 0) - CLOCK_TIME(6, 0)))) {
+        xStart -= 64;
+        lineXStart = xStart + 64;
     } else {
-        sp260 -= 96;
-        sp254 = sp260 + 96;
+        xStart -= 96;
+        lineXStart = xStart + 96;
     }
 
     gDPSetPrimColor(gfx++, 0, 0, 255, 255, 255, 255);
     gDPLoadTextureBlock_4b(gfx++, &D_08001950, G_IM_FMT_IA, 64, 28, 0, G_TX_MIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, 6, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
-    func_8016AC10(&gfx, sp260 * 4, 42 * 4, (sp260 + 128) * 4, 70 * 4, 0, 0, 0, 0x400, 0x400);
+    BombersNotebook_TextureRectangle(&gfx, xStart * 4, 42 * 4, (xStart + 128) * 4, 70 * 4, 0, 0, 0, 0x400, 0x400);
     gDPSetPrimColor(gfx++, 0, 0, 0, 0, 0, 255);
     gDPPipeSync(gfx++);
     gDPSetCombineLERP(gfx++, 0, 0, 0, PRIMITIVE, 0, 0, 0, TEXEL0, 0, 0, 0, PRIMITIVE, 0, 0, 0, TEXEL0);
     gDPLoadTextureBlock_4b(gfx++, &D_080032B0, G_IM_FMT_I, 96, 20, 0, G_TX_MIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
-    func_8016AC10(&gfx, (sp260 + 16) * 4, 47 * 4, (sp260 + 112) * 4, 67 * 4, 0, 0, 0, 0x400, 0x400);
+    BombersNotebook_TextureRectangle(&gfx, (xStart + 16) * 4, 47 * 4, (xStart + 112) * 4, 67 * 4, 0, 0, 0, 0x400,
+                                     0x400);
     gDPPipeSync(gfx++);
     gDPSetCombineMode(gfx++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
     gDPSetPrimColor(gfx++, 0, 0, 255, 255, 255, 255);
-    if (((TEST(CURRENT_DAY) >= 3) || ((TEST(CURRENT_DAY) == 2) && (var_a1 > (CLOCK_TIME(18, 0) - CLOCK_TIME(6, 0)))))) {
-        sp25C = sp260 - 159;
-        sp258 = sp260 - 17;
+    if (((CURRENT_DAY_MIN_1 >= 3) || ((CURRENT_DAY_MIN_1 == 2) && (time > (CLOCK_TIME(18, 0) - CLOCK_TIME(6, 0)))))) {
+        sp25C = xStart - 159;
+        sp258 = xStart - 17;
     } else {
-        sp25C = sp260 + 130;
-        sp258 = sp260 + 113;
+        sp25C = xStart + 130;
+        sp258 = xStart + 113;
     }
     gDPLoadTextureBlock_4b(gfx++, &D_08001CD0, G_IM_FMT_IA, 16, 28, 0, G_TX_MIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
-    func_8016AC10(&gfx, sp25C * 4, 42 * 4, (sp25C + 16) * 4, 70 * 4, 0, 0, 0, 0x400, 0x400);
+    BombersNotebook_TextureRectangle(&gfx, sp25C * 4, 42 * 4, (sp25C + 16) * 4, 70 * 4, 0, 0, 0, 0x400, 0x400);
     gDPLoadTextureBlock_4b(gfx++, &D_08001E90, G_IM_FMT_IA, 16, 28, 0, G_TX_MIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, 4, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
-    func_8016AC10(&gfx, (sp25C + 16) * 4, 42 * 4, (sp25C + 141) * 4, 70 * 4, 0, 0, 0, 0x400, 0x400);
+    BombersNotebook_TextureRectangle(&gfx, (sp25C + 16) * 4, 42 * 4, (sp25C + 141) * 4, 70 * 4, 0, 0, 0, 0x400, 0x400);
     gDPLoadTextureBlock_4b(gfx++, &D_08001DB0, G_IM_FMT_IA, 16, 28, 0, G_TX_MIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
-    func_8016AC10(&gfx, (sp25C + 141) * 4, 42 * 4, (sp25C + 157) * 4, 70 * 4, 0, 0, 0, 0x400, 0x400);
-    gDPLoadTextureBlock(gfx++, D_801D1238[TEST(CURRENT_DAY) - 1], G_IM_FMT_IA, G_IM_SIZ_8b, 48, 22, 0,
+    BombersNotebook_TextureRectangle(&gfx, (sp25C + 141) * 4, 42 * 4, (sp25C + 157) * 4, 70 * 4, 0, 0, 0, 0x400, 0x400);
+    gDPLoadTextureBlock(gfx++, sBombersNotebookDayTextures[CURRENT_DAY_MIN_1 - 1], G_IM_FMT_IA, G_IM_SIZ_8b, 48, 22, 0,
                         G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
                         G_TX_NOLOD);
-    func_8016AC10(&gfx, (sp25C + D_801D142C[TEST(CURRENT_DAY) - 1]) * 4, 46 * 4,
-                  (sp25C + D_801D142C[TEST(CURRENT_DAY) - 1] + 48) * 4, 68 * 4, 0, 0, 0, 0x400, 0x400);
+    BombersNotebook_TextureRectangle(&gfx, (sp25C + sBombersNotebookDayTexOffsetsX[CURRENT_DAY_MIN_1 - 1]) * 4, 46 * 4,
+                                     (sp25C + sBombersNotebookDayTexOffsetsX[CURRENT_DAY_MIN_1 - 1] + 48) * 4, 68 * 4,
+                                     0, 0, 0, 0x400, 0x400);
 
     gDPSetPrimColor(gfx++, 0, 0, 150, 150, 150, 255);
     gDPLoadTextureBlock_4b(gfx++, &D_08001358, G_IM_FMT_I, 16, 16, 0, G_TX_NOMIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
-    func_8016AC10(&gfx, (sp25C + 56) * 4, 48 * 4, (sp25C + 72) * 4, 0x100, 0, 0, 0, 0x400, 0x400);
+    BombersNotebook_TextureRectangle(&gfx, (sp25C + 56) * 4, 48 * 4, (sp25C + 72) * 4, 0x100, 0, 0, 0, 0x400, 0x400);
     gDPPipeSync(gfx++);
     gDPSetCombineLERP(gfx++, 0, 0, 0, PRIMITIVE, 0, 0, 0, TEXEL0, 0, 0, 0, PRIMITIVE, 0, 0, 0, TEXEL0);
     gDPSetPrimColor(gfx++, 0, 0, 0, 0, 0, 255);
@@ -751,19 +776,21 @@ void func_8016CD4C(Gfx** gfxP) {
     } while (sp248 >= 10);
 
     sp250 = sp25C + 75;
-    gDPLoadTextureBlock_4b(gfx++, D_801D13F8[sp244], G_IM_FMT_I, 16, 17, 0, G_TX_NOMIRROR | G_TX_WRAP,
-                           G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
-    func_8016AC10(&gfx, sp250 * 4, 48 * 4, (sp250 + 16) * 4, 65 * 4, 0, 0, 0, 0x400, 0x400);
+    gDPLoadTextureBlock_4b(gfx++, sBombersNotebookDigitTextures[sp244], G_IM_FMT_I, 16, 17, 0,
+                           G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
+                           G_TX_NOLOD);
+    BombersNotebook_TextureRectangle(&gfx, sp250 * 4, 48 * 4, (sp250 + 16) * 4, 65 * 4, 0, 0, 0, 0x400, 0x400);
 
-    sp250 += D_801D1420[sp244];
-    gDPLoadTextureBlock_4b(gfx++, D_801D13F8[sp248], G_IM_FMT_I, 16, 17, 0, G_TX_NOMIRROR | G_TX_WRAP,
-                           G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
-    func_8016AC10(&gfx, sp250 * 4, 48 * 4, (sp250 + 16) * 4, 65 * 4, 0, 0, 0, 0x400, 0x400);
+    sp250 += sBombersNotebookDigitOffsetsX[sp244];
+    gDPLoadTextureBlock_4b(gfx++, sBombersNotebookDigitTextures[sp248], G_IM_FMT_I, 16, 17, 0,
+                           G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
+                           G_TX_NOLOD);
+    BombersNotebook_TextureRectangle(&gfx, sp250 * 4, 48 * 4, (sp250 + 16) * 4, 65 * 4, 0, 0, 0, 0x400, 0x400);
 
-    sp250 += D_801D1420[sp248];
+    sp250 += sBombersNotebookDigitOffsetsX[sp248];
     gDPLoadTextureBlock_4b(gfx++, &D_080025C8, G_IM_FMT_I, 16, 17, 0, G_TX_NOMIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
-    func_8016AC10(&gfx, sp250 * 4, 48 * 4, (sp250 + 16) * 4, 65 * 4, 0, 0, 0, 0x400, 0x400);
+    BombersNotebook_TextureRectangle(&gfx, sp250 * 4, 48 * 4, (sp250 + 16) * 4, 65 * 4, 0, 0, 0, 0x400, 0x400);
 
     sp250 += 7;
     sp244 = 0;
@@ -779,13 +806,15 @@ void func_8016CD4C(Gfx** gfxP) {
         }
     } while (sp248 >= 10);
 
-    gDPLoadTextureBlock_4b(gfx++, D_801D13F8[sp244], G_IM_FMT_I, 16, 17, 0, G_TX_NOMIRROR | G_TX_WRAP,
-                           G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
-    func_8016AC10(&gfx, sp250 * 4, 48 * 4, (sp250 + 16) * 4, 65 * 4, 0, 0, 0, 0x400, 0x400);
-    sp250 += D_801D1420[sp244];
-    gDPLoadTextureBlock_4b(gfx++, D_801D13F8[sp248], G_IM_FMT_I, 16, 17, 0, G_TX_NOMIRROR | G_TX_WRAP,
-                           G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
-    func_8016AC10(&gfx, sp250 * 4, 48 * 4, (sp250 + 16) * 4, 65 * 4, 0, 0, 0, 0x400, 0x400);
+    gDPLoadTextureBlock_4b(gfx++, sBombersNotebookDigitTextures[sp244], G_IM_FMT_I, 16, 17, 0,
+                           G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
+                           G_TX_NOLOD);
+    BombersNotebook_TextureRectangle(&gfx, sp250 * 4, 48 * 4, (sp250 + 16) * 4, 65 * 4, 0, 0, 0, 0x400, 0x400);
+    sp250 += sBombersNotebookDigitOffsetsX[sp244];
+    gDPLoadTextureBlock_4b(gfx++, sBombersNotebookDigitTextures[sp248], G_IM_FMT_I, 16, 17, 0,
+                           G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
+                           G_TX_NOLOD);
+    BombersNotebook_TextureRectangle(&gfx, sp250 * 4, 48 * 4, (sp250 + 16) * 4, 65 * 4, 0, 0, 0, 0x400, 0x400);
 
     // Connecting Bar? (Between time of day text box and the time box)
     gDPPipeSync(gfx++);
@@ -793,13 +822,14 @@ void func_8016CD4C(Gfx** gfxP) {
     gDPSetPrimColor(gfx++, 0, 0, 255, 255, 255, 255);
     gDPLoadTextureBlock(gfx++, &D_08000880, G_IM_FMT_IA, G_IM_SIZ_8b, 32, 14, 0, G_TX_MIRROR | G_TX_WRAP,
                         G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
-    func_8016AC10(&gfx, sp258 * 4, 49 * 4, (sp258 + 32) * 4, 63 * 4, 0, 0, 0, 0x400, 0x400);
+    BombersNotebook_TextureRectangle(&gfx, sp258 * 4, 49 * 4, (sp258 + 32) * 4, 63 * 4, 0, 0, 0, 0x400, 0x400);
 
     // Red Line
     gDPSetPrimColor(gfx++, 0, 0, 242, 0, 14, 255);
     gDPLoadTextureBlock(gfx++, &D_08001898, G_IM_FMT_I, G_IM_SIZ_8b, 8, 1, 0, G_TX_MIRROR | G_TX_WRAP,
                         G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
-    func_8016AC10(&gfx, sp254 * 4, 74 * 4, (sp254 + 32) * 4, 490 * 4, 0, 0, 0, 0x400, 0x400);
+    BombersNotebook_TextureRectangle(&gfx, lineXStart * 4, 74 * 4, (lineXStart + 32) * 4, 490 * 4, 0, 0, 0, 0x400,
+                                     0x400);
 
     // Red Triangle
     gDPPipeSync(gfx++);
@@ -809,25 +839,25 @@ void func_8016CD4C(Gfx** gfxP) {
     gDPSetEnvColor(gfx++, 200, 0, 0, 255);
     gDPLoadTextureBlock(gfx++, &D_08000700, G_IM_FMT_IA, G_IM_SIZ_8b, 24, 16, 0, G_TX_MIRROR | G_TX_WRAP,
                         G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
-    func_8016AC10(&gfx, (sp254 + -11) * 4, 70 * 4, (sp254 + 13) * 4, 86 * 4, 0, 0, 0, 0x400, 0x400);
+    BombersNotebook_TextureRectangle(&gfx, (lineXStart + -11) * 4, 70 * 4, (lineXStart + 13) * 4, 86 * 4, 0, 0, 0,
+                                     0x400, 0x400);
 
     gDPPipeSync(gfx++);
     *gfxP = gfx;
 }
 
-// DrawCursor
-void func_8016E40C(BombersNotebook* this, Gfx** gfxP) {
+void BombersNotebook_DrawCursor(BombersNotebook* this, Gfx** gfxP) {
     Gfx* gfx = *gfxP;
-    s32 tmp2;
-    s32 tmp;
-    s32 var_a0;
-    s32 var_v0;
-    s32 temp_v1_2;
-    u32 sp8C;
-    u32 sp88;
-    u32 sp84;
-    u16 time1;
-    u16 time2;
+    s32 cursorRow;
+    s32 cursorEntry;
+    s32 entryXEnd;
+    s32 entryXStart;
+    s32 entryIcon;
+    u32 cursorXStart;
+    u32 cursorYStart;
+    u32 yOffset;
+    u16 startTime;
+    u16 endTime;
 
     gDPPipeSync(gfx++);
     gDPSetCombineLERP(gfx++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0, PRIMITIVE,
@@ -837,155 +867,167 @@ void func_8016E40C(BombersNotebook* this, Gfx** gfxP) {
     gDPLoadTextureBlock_4b(gfx++, &D_080018D0, G_IM_FMT_IA, 16, 16, 0, G_TX_MIRROR | G_TX_WRAP, G_TX_MIRROR | G_TX_WRAP,
                            4, 4, G_TX_NOLOD, G_TX_NOLOD);
 
-    if (this->unk_98 == 0) {
-        func_8016AC10(&gfx, 47 * 4, (this->unk_94 * 52 + 97) * 4, 63 * 4, (this->unk_94 * 52 + 113) * 4, 0, 0, 0, 0x400,
-                      0x400);
-        func_8016AC10(&gfx, 98 * 4, (this->unk_94 * 52 + 97) * 4, 114 * 4, (this->unk_94 * 52 + 113) * 4, 0, 0x200, 0,
-                      0x400, 0x400);
-        func_8016AC10(&gfx, 47 * 4, (this->unk_94 * 52 + 147) * 4, 63 * 4, (this->unk_94 * 52 + 163) * 4, 0, 0, 0x200,
-                      0x400, 0x400);
-        func_8016AC10(&gfx, 98 * 4, (this->unk_94 * 52 + 147) * 4, 114 * 4, (this->unk_94 * 52 + 163) * 4, 0, 0x200,
-                      0x200, 0x400, 0x400);
+    if (this->cursorEntry == 0) {
+        BombersNotebook_TextureRectangle(&gfx, 47 * 4, (this->cursorPageRow * 52 + 97) * 4, 63 * 4,
+                                         (this->cursorPageRow * 52 + 113) * 4, 0, 0, 0, 0x400, 0x400);
+        BombersNotebook_TextureRectangle(&gfx, 98 * 4, (this->cursorPageRow * 52 + 97) * 4, 114 * 4,
+                                         (this->cursorPageRow * 52 + 113) * 4, 0, 0x200, 0, 0x400, 0x400);
+        BombersNotebook_TextureRectangle(&gfx, 47 * 4, (this->cursorPageRow * 52 + 147) * 4, 63 * 4,
+                                         (this->cursorPageRow * 52 + 163) * 4, 0, 0, 0x200, 0x400, 0x400);
+        BombersNotebook_TextureRectangle(&gfx, 98 * 4, (this->cursorPageRow * 52 + 147) * 4, 114 * 4,
+                                         (this->cursorPageRow * 52 + 163) * 4, 0, 0x200, 0x200, 0x400, 0x400);
     } else {
-        tmp2 = this->unk_94 + this->unk_9C;
-        sp88 = (this->unk_94 * 52) + 107;
-        tmp = this->unk_98 - 3;
-        if (D_801D0D80[tmp2][tmp] & BOMBERSNOTEBOOK_ENTRY_POS_ABOVE) {
-            sp84 = 8;
-        } else if (D_801D0D80[tmp2][tmp] & BOMBERSNOTEBOOK_ENTRY_POS_BELOW) {
-            sp84 = 24;
+        cursorRow = this->cursorPageRow + this->cursorPage;
+        cursorYStart = (this->cursorPageRow * 52) + 107;
+        cursorEntry = this->cursorEntry - 3; // Offset from photo entry
+        if (sBombersNotebookEntries[cursorRow][cursorEntry] & BOMBERSNOTEBOOK_ENTRY_POS_ABOVE) {
+            yOffset = 8;
+        } else if (sBombersNotebookEntries[cursorRow][cursorEntry] & BOMBERSNOTEBOOK_ENTRY_POS_BELOW) {
+            yOffset = 24;
         } else { // BOMBERSNOTEBOOK_ENTRY_POS_CENTER
-            sp84 = 16;
+            yOffset = 16;
         }
 
-        time1 = D_801D0D80[tmp2][tmp + 1] - CLOCK_TIME(6, 0);
-        time2 = D_801D0D80[tmp2][tmp + 2] - CLOCK_TIME(6, 0);
-        var_v0 = D_801D1230[(D_801D0D80[tmp2][tmp] & 0xF00) >> 8] + (time1 / 455);
-        var_a0 = D_801D1230[(D_801D0D80[tmp2][tmp] & 0xF00) >> 8] + (time2 / 455);
-        if ((var_a0 - var_v0) < 8) {
-            var_v0 = ((var_v0 + var_a0) - var_v0) - 8;
-            var_a0 = var_v0 + 8;
+        startTime = sBombersNotebookEntries[cursorRow][cursorEntry + 1] - CLOCK_TIME(6, 0);
+        endTime = sBombersNotebookEntries[cursorRow][cursorEntry + 2] - CLOCK_TIME(6, 0);
+        entryXStart = sBombersNotebookDayStartX[(sBombersNotebookEntries[cursorRow][cursorEntry] & 0xF00) >> 8] +
+                      (startTime / 455);
+        entryXEnd =
+            sBombersNotebookDayStartX[(sBombersNotebookEntries[cursorRow][cursorEntry] & 0xF00) >> 8] + (endTime / 455);
+        if ((entryXEnd - entryXStart) < 8) {
+            entryXStart = ((entryXStart + entryXEnd) - entryXStart) - 8;
+            entryXEnd = entryXStart + 8;
         }
-        temp_v1_2 = D_801D1244[(D_801D0D80[tmp2][tmp] & 0xFF) - 20];
-        if ((var_a0 - var_v0) < D_801D12D0[temp_v1_2]) {
-            sp8C = (((var_v0 - D_801D12D0[temp_v1_2]) + var_a0) - var_v0) + 3;
+        entryIcon = sBombersNotebookEventIcons[(sBombersNotebookEntries[cursorRow][cursorEntry] & 0xFF) - 20];
+        if ((entryXEnd - entryXStart) < sBombersNotebookEventIconOffsetsX[entryIcon]) {
+            cursorXStart =
+                (((entryXStart - sBombersNotebookEventIconOffsetsX[entryIcon]) + entryXEnd) - entryXStart) + 3;
         } else {
-            sp8C = (((var_a0 - var_v0) - D_801D12D0[temp_v1_2]) / 2) + var_v0;
+            cursorXStart =
+                (((entryXEnd - entryXStart) - sBombersNotebookEventIconOffsetsX[entryIcon]) / 2) + entryXStart;
         }
-        if (temp_v1_2 == BOMBERSNOTEBOOK_ENTRY_ICON_EXCLAMATION_POINT) {
-            sp8C -= 8;
-            sp88 -= 8;
+        if (entryIcon == BOMBERSNOTEBOOK_EVENT_ICON_EXCLAMATION_POINT) {
+            cursorXStart -= 8;
+            cursorYStart -= 8;
         } else {
-            sp8C -= 9;
-            sp88 -= 8;
+            cursorXStart -= 9;
+            cursorYStart -= 8;
         }
-        if ((temp_v1_2 == BOMBERSNOTEBOOK_ENTRY_ICON_MASK) || (temp_v1_2 == BOMBERSNOTEBOOK_ENTRY_ICON_RIBBON)) {
-            if (D_801D0D80[tmp2][tmp] & BOMBERSNOTEBOOK_ENTRY_POS_ABOVE) {
-                sp84 -= 12;
-            } else if (!(D_801D0D80[tmp2][tmp] & BOMBERSNOTEBOOK_ENTRY_POS_BELOW)) { // BOMBERSNOTEBOOK_ENTRY_POS_CENTER
-                sp84 -= 6;
+        if ((entryIcon == BOMBERSNOTEBOOK_EVENT_ICON_MASK) || (entryIcon == BOMBERSNOTEBOOK_EVENT_ICON_RIBBON)) {
+            if (sBombersNotebookEntries[cursorRow][cursorEntry] & BOMBERSNOTEBOOK_ENTRY_POS_ABOVE) {
+                yOffset -= 12;
+            } else if (!(sBombersNotebookEntries[cursorRow][cursorEntry] & BOMBERSNOTEBOOK_ENTRY_POS_BELOW)) {
+                // BOMBERSNOTEBOOK_ENTRY_POS_CENTER
+                yOffset -= 6;
             }
         }
-        func_8016AC10(&gfx, sp8C * 4, (sp88 + sp84) * 4, (sp8C + 16) * 4, (sp88 + sp84 + 16) * 4, 0, 0, 0, 0x400,
-                      0x400);
-        func_8016AC10(&gfx, (sp8C + D_801D12D0[temp_v1_2]) * 4, (sp88 + sp84) * 4,
-                      (sp8C + D_801D12D0[temp_v1_2] + 16) * 4, (sp88 + sp84 + 16) * 4, 0, 0x200, 0, 0x400, 0x400);
-        func_8016AC10(&gfx, sp8C * 4, (sp88 + sp84 + D_801D12DC[temp_v1_2]) * 4, (sp8C + 16) * 4,
-                      (sp88 + sp84 + D_801D12DC[temp_v1_2] + 16) * 4, 0, 0, 0x200, 0x400, 0x400);
-        func_8016AC10(&gfx, (sp8C + D_801D12D0[temp_v1_2]) * 4, (sp88 + sp84 + D_801D12DC[temp_v1_2]) * 4,
-                      (sp8C + D_801D12D0[temp_v1_2] + 16) * 4, (sp88 + sp84 + D_801D12DC[temp_v1_2] + 16) * 4, 0, 0x200,
-                      0x200, 0x400, 0x400);
+        BombersNotebook_TextureRectangle(&gfx, cursorXStart * 4, (cursorYStart + yOffset) * 4, (cursorXStart + 16) * 4,
+                                         (cursorYStart + yOffset + 16) * 4, 0, 0, 0, 0x400, 0x400);
+        BombersNotebook_TextureRectangle(&gfx, (cursorXStart + sBombersNotebookEventIconOffsetsX[entryIcon]) * 4,
+                                         (cursorYStart + yOffset) * 4,
+                                         (cursorXStart + sBombersNotebookEventIconOffsetsX[entryIcon] + 16) * 4,
+                                         (cursorYStart + yOffset + 16) * 4, 0, 0x200, 0, 0x400, 0x400);
+        BombersNotebook_TextureRectangle(
+            &gfx, cursorXStart * 4, (cursorYStart + yOffset + sBombersNotebookEventIconOffsetsY[entryIcon]) * 4,
+            (cursorXStart + 16) * 4, (cursorYStart + yOffset + sBombersNotebookEventIconOffsetsY[entryIcon] + 16) * 4,
+            0, 0, 0x200, 0x400, 0x400);
+        BombersNotebook_TextureRectangle(&gfx, (cursorXStart + sBombersNotebookEventIconOffsetsX[entryIcon]) * 4,
+                                         (cursorYStart + yOffset + sBombersNotebookEventIconOffsetsY[entryIcon]) * 4,
+                                         (cursorXStart + sBombersNotebookEventIconOffsetsX[entryIcon] + 16) * 4,
+                                         (cursorYStart + yOffset + sBombersNotebookEventIconOffsetsY[entryIcon] + 16) *
+                                             4,
+                                         0, 0x200, 0x200, 0x400, 0x400);
     }
 
     gDPPipeSync(gfx++);
     *gfxP = gfx;
 }
 
-// DrawArrows
-void func_8016EA90(BombersNotebook* this, Gfx** gfxP) {
-    static s16 D_801D1434 = 0;
-    static s16 D_801D1438 = 100;
-    static s16 D_801D143C = 255;
-    static s16 D_801D1440 = 0;
-    static s16 D_801D1444 = 100;
-    static s16 D_801D1448 = 255;
-    static s16 D_801D144C = 0;
-    static s16 D_801D1450 = 0;
-    static s16 D_801D1454 = 6;
-    static s16 D_801D1458 = 6;
-    static s16 D_801D145C = 0;
-    static s16 D_801D1460 = 0;
-    static s16 D_801D1464[2] = { 175, 100 };
-    static s16 D_801D1468[2] = { 205, 255 };
+void BombersNotebook_DrawArrows(BombersNotebook* this, Gfx** gfxP) {
+    static s16 sUpperArrowColorR = 0;
+    static s16 sUpperArrowColorG = 100;
+    static s16 sUpperArrowColorB = 255;
+    static s16 sLowerArrowColorR = 0;
+    static s16 sLowerArrowColorG = 100;
+    static s16 sLowerArrowColorB = 255;
+    static s16 sUpperArrowColorIndex = 0;
+    static s16 sLowerArrowColorIndex = 0;
+    static s16 sUpperArrowColorTimer = 6;
+    static s16 sLowerArrowColorTimer = 6;
+    static s16 sUpperArrowOffsetY = 0;
+    static s16 sLowerArrowOffsetY = 0;
+    static s16 sArrowColorTargetsG[2] = { 175, 100 };
+    static s16 sArrowColorTargetsB[2] = { 205, 255 };
     Gfx* gfx = *gfxP;
-    u32 xl;
+    u32 yStart;
     s16 colorStep;
 
     gDPPipeSync(gfx++);
     gDPLoadTextureBlock(gfx++, &D_08000700, G_IM_FMT_IA, G_IM_SIZ_8b, 24, 16, 0, G_TX_MIRROR | G_TX_WRAP,
                         G_TX_MIRROR | G_TX_WRAP, G_TX_NOMASK, 4, G_TX_NOLOD, G_TX_NOLOD);
 
-    colorStep = ABS_ALT(D_801D1438 - D_801D1464[D_801D144C]) / D_801D1454;
-    if (D_801D1438 >= D_801D1464[D_801D144C]) {
-        D_801D1438 -= colorStep;
+    colorStep = ABS_ALT(sUpperArrowColorG - sArrowColorTargetsG[sUpperArrowColorIndex]) / sUpperArrowColorTimer;
+    if (sUpperArrowColorG >= sArrowColorTargetsG[sUpperArrowColorIndex]) {
+        sUpperArrowColorG -= colorStep;
     } else {
-        D_801D1438 += colorStep;
+        sUpperArrowColorG += colorStep;
     }
 
-    colorStep = ABS_ALT(D_801D143C - D_801D1468[D_801D144C]) / D_801D1454;
-    if (D_801D143C >= D_801D1468[D_801D144C]) {
-        D_801D143C -= colorStep;
+    colorStep = ABS_ALT(sUpperArrowColorB - sArrowColorTargetsB[sUpperArrowColorIndex]) / sUpperArrowColorTimer;
+    if (sUpperArrowColorB >= sArrowColorTargetsB[sUpperArrowColorIndex]) {
+        sUpperArrowColorB -= colorStep;
     } else {
-        D_801D143C += colorStep;
+        sUpperArrowColorB += colorStep;
     }
 
-    D_801D1454--;
-    if (D_801D1454 == 0) {
-        D_801D145C ^= 6;
-        D_801D1454 = 6;
-        D_801D1438 = D_801D1464[D_801D144C];
-        D_801D143C = D_801D1468[D_801D144C];
-        D_801D144C ^= 1;
+    sUpperArrowColorTimer--;
+    if (sUpperArrowColorTimer == 0) {
+        sUpperArrowOffsetY ^= 6;
+        sUpperArrowColorTimer = 6;
+        sUpperArrowColorG = sArrowColorTargetsG[sUpperArrowColorIndex];
+        sUpperArrowColorB = sArrowColorTargetsB[sUpperArrowColorIndex];
+        sUpperArrowColorIndex ^= 1;
     }
 
-    colorStep = ABS_ALT(D_801D1444 - D_801D1464[D_801D1450]) / D_801D1458;
-    if (D_801D1444 >= D_801D1464[D_801D1450]) {
-        D_801D1444 -= colorStep;
+    colorStep = ABS_ALT(sLowerArrowColorG - sArrowColorTargetsG[sLowerArrowColorIndex]) / sLowerArrowColorTimer;
+    if (sLowerArrowColorG >= sArrowColorTargetsG[sLowerArrowColorIndex]) {
+        sLowerArrowColorG -= colorStep;
     } else {
-        D_801D1444 += colorStep;
+        sLowerArrowColorG += colorStep;
     }
 
-    colorStep = ABS_ALT(D_801D1448 - D_801D1468[D_801D1450]) / D_801D1458;
-    if (D_801D1448 >= D_801D1468[D_801D1450]) {
-        D_801D1448 -= colorStep;
+    colorStep = ABS_ALT(sLowerArrowColorB - sArrowColorTargetsB[sLowerArrowColorIndex]) / sLowerArrowColorTimer;
+    if (sLowerArrowColorB >= sArrowColorTargetsB[sLowerArrowColorIndex]) {
+        sLowerArrowColorB -= colorStep;
     } else {
-        D_801D1448 += colorStep;
+        sLowerArrowColorB += colorStep;
     }
 
-    D_801D1458--;
-    if (D_801D1458 == 0) {
-        D_801D1460 ^= 6;
-        D_801D1458 = 6;
-        D_801D1444 = D_801D1464[D_801D1450];
-        D_801D1448 = D_801D1468[D_801D1450];
-        D_801D1450 ^= 1;
+    sLowerArrowColorTimer--;
+    if (sLowerArrowColorTimer == 0) {
+        sLowerArrowOffsetY ^= 6;
+        sLowerArrowColorTimer = 6;
+        sLowerArrowColorG = sArrowColorTargetsG[sLowerArrowColorIndex];
+        sLowerArrowColorB = sArrowColorTargetsB[sLowerArrowColorIndex];
+        sLowerArrowColorIndex ^= 1;
     }
 
-    if (this->unk_9C != 0) {
+    if (this->cursorPage != 0) {
         gDPPipeSync(gfx++);
         gDPSetCombineLERP(gfx++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0, PRIMITIVE,
                           ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
-        gDPSetPrimColor(gfx++, 0, 0, D_801D1434, D_801D1438, D_801D143C, 255);
-        gDPSetEnvColor(gfx++, D_801D1434, D_801D1438, D_801D143C, 255);
-        xl = (-D_801D145C + 83) * 4;
-        func_8016AC10(&gfx, 46 * 4, xl, 70 * 4, xl + (16 * 4), 0, 0, 0x200, 0x400, 0x400);
+        gDPSetPrimColor(gfx++, 0, 0, sUpperArrowColorR, sUpperArrowColorG, sUpperArrowColorB, 255);
+        gDPSetEnvColor(gfx++, sUpperArrowColorR, sUpperArrowColorG, sUpperArrowColorB, 255);
+        yStart = (-sUpperArrowOffsetY + 83) * 4;
+        BombersNotebook_TextureRectangle(&gfx, 46 * 4, yStart, 70 * 4, yStart + (16 * 4), 0, 0, 0x200, 0x400, 0x400);
     }
 
-    if (this->unk_9C < 16) {
+    if (this->cursorPage < 16) {
         gDPPipeSync(gfx++);
-        gDPSetPrimColor(gfx++, 0, 0, D_801D1440, D_801D1444, D_801D1448, 255);
-        gDPSetEnvColor(gfx++, D_801D1440, D_801D1444, D_801D1448, 255);
-        func_8016AC10(&gfx, 46 * 4, (D_801D1460 + 319) * 4, 70 * 4, (D_801D1460 + 335) * 4, 0, 0, 0, 0x400, 0x400);
+        gDPSetPrimColor(gfx++, 0, 0, sLowerArrowColorR, sLowerArrowColorG, sLowerArrowColorB, 255);
+        gDPSetEnvColor(gfx++, sLowerArrowColorR, sLowerArrowColorG, sLowerArrowColorB, 255);
+        BombersNotebook_TextureRectangle(&gfx, 46 * 4, (sLowerArrowOffsetY + 319) * 4, 70 * 4,
+                                         (sLowerArrowOffsetY + 335) * 4, 0, 0, 0, 0x400, 0x400);
     }
     gDPPipeSync(gfx++);
     *gfxP = gfx;
@@ -995,15 +1037,15 @@ void BombersNotebook_Draw(BombersNotebook* this, GraphicsContext* gfxCtx) {
     Gfx* gfx;
     s32 pad[2];
 
-    func_8012CF0C(gfxCtx, this->unk_00 != 2, false, 0, 0, 0);
+    func_8012CF0C(gfxCtx, this->loadState != BOMBERSNOTEBOOK_LOAD_STATE_DONE, false, 0, 0, 0);
 
     OPEN_DISPS(gfxCtx);
 
     gfx = POLY_OPA_DISP;
 
-    if (this->unk_00 == 2) {
-        gSPSegment(gfx++, 0x07, this->unk_40);
-        gSPSegment(gfx++, 0x08, this->unk_88);
+    if (this->loadState == BOMBERSNOTEBOOK_LOAD_STATE_DONE) {
+        gSPSegment(gfx++, 0x07, this->scheduleDmaSegment);
+        gSPSegment(gfx++, 0x08, this->scheduleSegment);
         gfx = func_8012C600(gfx);
         gDPSetCombineLERP(gfx++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0, PRIMITIVE,
                           ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
@@ -1013,52 +1055,54 @@ void BombersNotebook_Draw(BombersNotebook* this, GraphicsContext* gfxCtx) {
         gDPLoadTextureBlock(gfx++, &D_080013D8, G_IM_FMT_I, G_IM_SIZ_8b, 32, 32, 0, G_TX_NOMIRROR | G_TX_WRAP,
                             G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
 
-        func_8016AC10(&gfx, 0 * 4, 0 * 4, SCREEN_WIDTH_HIRES * 4, SCREEN_HEIGHT_HIRES * 4, 0, 0, 0, 0x200, 0x200);
+        BombersNotebook_TextureRectangle(&gfx, 0 * 4, 0 * 4, SCREEN_WIDTH_HIRES * 4, SCREEN_HEIGHT_HIRES * 4, 0, 0, 0,
+                                         0x200, 0x200);
 
         gDPPipeSync(gfx++);
         gDPSetCombineMode(gfx++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
         gDPSetRenderMode(gfx++, G_RM_XLU_SURF, G_RM_XLU_SURF2);
 
-        func_8016AE1C(&gfx);
-        func_8016B278(&gfx);
+        BombersNotebook_DrawHeaders(&gfx);
+        BombersNotebook_DrawColumns(&gfx);
 
         gDPSetScissor(gfx++, G_SC_NON_INTERLACE, 0, 86, 600, 450);
-        func_8016C344(this, &gfx);
+        BombersNotebook_DrawRows(this, &gfx);
 
         gDPPipeSync(gfx++);
         gSPDisplayList(gfx++, D_0E000000.setScissor);
 
-        func_8016CD4C(&gfx);
+        BombersNotebook_DrawTimeOfDay(&gfx);
 
-        if (this->unk_A4 == 0) {
-            func_8016E40C(this, &gfx);
+        if (this->scrollAmount == 0) {
+            BombersNotebook_DrawCursor(this, &gfx);
         }
-        func_8016EA90(this, &gfx);
+        BombersNotebook_DrawArrows(this, &gfx);
     }
     POLY_OPA_DISP = gfx;
 
     CLOSE_DISPS(gfxCtx);
 }
 
-void func_8016F4EC(BombersNotebook* this, s32 flag) {
-    switch (this->unk_00) {
-        case 0:
-            if (this->unk_40 == NULL) {
+void BombersNotebook_LoadFiles(BombersNotebook* this, s32 flag) {
+    switch (this->loadState) {
+        case BOMBERSNOTEBOOK_LOAD_STATE_NONE:
+            if (this->scheduleDmaSegment == NULL) {
                 break;
             }
-            CmpDma_LoadAllFiles(this->unk_44, this->unk_40, this->unk_48);
-            osCreateMesgQueue(&this->unk_6C, this->unk_84, ARRAY_COUNT(this->unk_84));
-            DmaMgr_SendRequestImpl(&this->unk_4C, this->unk_88, this->unk_8C, this->unk_90, 0, &this->unk_6C, NULL);
-            this->unk_00 = 1;
+            CmpDma_LoadAllFiles(this->scheduleDmaSegmentStart, this->scheduleDmaSegment, this->scheduleDmaSegmentSize);
+            osCreateMesgQueue(&this->loadQueue, this->loadMsg, ARRAY_COUNT(this->loadMsg));
+            DmaMgr_SendRequestImpl(&this->dmaRequest, this->scheduleSegment, this->scheduleSegmentStart,
+                                   this->scheduleSegmentSize, 0, &this->loadQueue, NULL);
+            this->loadState = BOMBERSNOTEBOOK_LOAD_STATE_STARTED;
             // fall-through
-        case 1:
-            if (osRecvMesg(&this->unk_6C, NULL, flag) == 0) {
-                this->unk_00 = 2;
+        case BOMBERSNOTEBOOK_LOAD_STATE_STARTED:
+            if (osRecvMesg(&this->loadQueue, NULL, flag) == 0) {
+                this->loadState = BOMBERSNOTEBOOK_LOAD_STATE_DONE;
             }
     }
 }
 
-u16 D_801D146C[55] = {
+u16 sBombersNotebookTextIds[] = {
     0x21DD, 0x21CA, 0x21CB, 0x21CC, 0x21CD, 0x21CE, 0x21CF, 0x21D0, 0x21D1, 0x21D2, 0x21D3, 0x21D4,
     0x21D5, 0x21D6, 0x21D7, 0x21D8, 0x21D9, 0x21DA, 0x21DB, 0x21DC, //
 
@@ -1068,188 +1112,208 @@ u16 D_801D146C[55] = {
 };
 
 void BombersNotebook_Update(PlayState* play, BombersNotebook* this, Input* input) {
-    static s16 D_801D14DC = 0;
-    static s16 D_801D14E0 = 0;
-    static s16 D_801D14E4 = 0;
-    static s16 D_801D14E8 = 0;
-    s32 sp2C = input->rel.stick_x;
-    s32 sp28 = input->rel.stick_y;
-    s32 sp24;
+    static s16 sStickXRepeatTimer = 0;
+    static s16 sStickYRepeatTimer = 0;
+    static s16 sStickXRepeatState = 0;
+    static s16 sStickYRepeatState = 0;
+    s32 stickAdjX = input->rel.stick_x;
+    s32 stickAdjY = input->rel.stick_y;
+    s32 cursorEntryScan;
 
-    this->unk_44 = SEGMENT_ROM_START(schedule_dma_static_test);
-    this->unk_48 = SEGMENT_ROM_SIZE(schedule_dma_static_old);
-    this->unk_8C = SEGMENT_ROM_START(schedule_static);
-    this->unk_90 = SEGMENT_ROM_SIZE(schedule_static);
+    this->scheduleDmaSegmentStart = SEGMENT_ROM_START(schedule_dma_static_test);
+    this->scheduleDmaSegmentSize = SEGMENT_ROM_SIZE(schedule_dma_static_old);
+    this->scheduleSegmentStart = SEGMENT_ROM_START(schedule_static);
+    this->scheduleSegmentSize = SEGMENT_ROM_SIZE(schedule_static);
 
-    if (this->unk_40 == NULL) {
-        this->unk_40 = ZeldaArena_Malloc(this->unk_48);
+    if (this->scheduleDmaSegment == NULL) {
+        this->scheduleDmaSegment = ZeldaArena_Malloc(this->scheduleDmaSegmentSize);
     }
 
-    if (this->unk_88 == NULL) {
-        this->unk_88 = ZeldaArena_Malloc(this->unk_90);
+    if (this->scheduleSegment == NULL) {
+        this->scheduleSegment = ZeldaArena_Malloc(this->scheduleSegmentSize);
     }
 
-    func_8016F4EC(this, OS_MESG_NOBLOCK);
+    BombersNotebook_LoadFiles(this, OS_MESG_NOBLOCK);
 
-    if (this->unk_00 == 2) {
-        if (sp2C < -30) {
-            if (D_801D14E4 == -1) {
-                D_801D14DC--;
-                if (D_801D14DC < 0) {
-                    D_801D14DC = 2;
+    if (this->loadState == BOMBERSNOTEBOOK_LOAD_STATE_DONE) {
+        if (stickAdjX < -30) {
+            if (sStickXRepeatState == -1) {
+                sStickXRepeatTimer--;
+                if (sStickXRepeatTimer < 0) {
+                    sStickXRepeatTimer = 2;
                 } else {
-                    sp2C = 0;
+                    stickAdjX = 0;
                 }
             } else {
-                D_801D14DC = 10;
-                D_801D14E4 = -1;
+                sStickXRepeatTimer = 10;
+                sStickXRepeatState = -1;
             }
-        } else if (sp2C > 30) {
-            if (D_801D14E4 == 1) {
-                D_801D14DC--;
-                if (D_801D14DC < 0) {
-                    D_801D14DC = 2;
+        } else if (stickAdjX > 30) {
+            if (sStickXRepeatState == 1) {
+                sStickXRepeatTimer--;
+                if (sStickXRepeatTimer < 0) {
+                    sStickXRepeatTimer = 2;
                 } else {
-                    sp2C = 0;
+                    stickAdjX = 0;
                 }
             } else {
-                D_801D14DC = 10;
-                D_801D14E4 = 1;
+                sStickXRepeatTimer = 10;
+                sStickXRepeatState = 1;
             }
         } else {
-            D_801D14E4 = 0;
+            sStickXRepeatState = 0;
         }
 
-        if (sp28 < -30) {
-            if (D_801D14E8 == -1) {
-                D_801D14E0--;
-                if (D_801D14E0 < 0) {
-                    D_801D14E0 = 2;
+        if (stickAdjY < -30) {
+            if (sStickYRepeatState == -1) {
+                sStickYRepeatTimer--;
+                if (sStickYRepeatTimer < 0) {
+                    sStickYRepeatTimer = 2;
                 } else {
-                    sp28 = 0;
+                    stickAdjY = 0;
                 }
             } else {
-                D_801D14E0 = 10;
-                D_801D14E8 = -1;
+                sStickYRepeatTimer = 10;
+                sStickYRepeatState = -1;
             }
-        } else if (sp28 > 30) {
-            if (D_801D14E8 == 1) {
-                D_801D14E0--;
-                if (D_801D14E0 < 0) {
-                    D_801D14E0 = 2;
+        } else if (stickAdjY > 30) {
+            if (sStickYRepeatState == 1) {
+                sStickYRepeatTimer--;
+                if (sStickYRepeatTimer < 0) {
+                    sStickYRepeatTimer = 2;
                 } else {
-                    sp28 = 0;
+                    stickAdjY = 0;
                 }
             } else {
-                D_801D14E0 = 10;
-                D_801D14E8 = 1;
+                sStickYRepeatTimer = 10;
+                sStickYRepeatState = 1;
             }
         } else {
-            D_801D14E8 = 0;
+            sStickYRepeatState = 0;
         }
-        if (this->unk_A4 == 0) {
-            if (CHECK_WEEKEVENTREG(sBombersNotebookEventWeekEventFlags[this->unk_94 + this->unk_9C])) {
-                sp24 = this->unk_98;
-                if (sp2C > 30) {
+
+        if (this->scrollAmount == 0) {
+            if (CHECK_WEEKEVENTREG(gBombersNotebookWeekEventFlags[this->cursorPageRow + this->cursorPage])) {
+                cursorEntryScan = this->cursorEntry;
+                if (stickAdjX > 30) {
                     while (true) {
-                        sp24 += 3;
-                        if (D_801D0D80[this->unk_94 + this->unk_9C][sp24 - 3] == BOMBERSNOTEBOOK_ENTRY_END) {
+                        cursorEntryScan += 3;
+                        if (sBombersNotebookEntries[this->cursorPageRow + this->cursorPage][cursorEntryScan - 3] ==
+                            BOMBERSNOTEBOOK_ENTRY_END) {
                             while (true) {
-                                sp24 -= 3;
-                                if (sp24 == 0) {
+                                cursorEntryScan -= 3;
+                                if (cursorEntryScan == 0) {
                                     play_sound(NA_SE_SY_ERROR);
                                     break;
                                 }
                                 if (CHECK_WEEKEVENTREG(
-                                        sBombersNotebookEventWeekEventFlags
-                                            [D_801D0D80[this->unk_94 + this->unk_9C][sp24 - 3] & 0xFF])) {
+                                        gBombersNotebookWeekEventFlags[((sBombersNotebookEntries[this->cursorPageRow +
+                                                                                                 this->cursorPage]
+                                                                                                [cursorEntryScan - 3] &
+                                                                         0xFF) -
+                                                                        20) +
+                                                                       20])) {
                                     play_sound(NA_SE_SY_ERROR);
                                     break;
                                 }
                             }
                             break;
                         }
-                        if (CHECK_WEEKEVENTREG(
-                                sBombersNotebookEventWeekEventFlags[D_801D0D80[this->unk_94 + this->unk_9C][sp24 - 3] &
-                                                                    0xFF])) {
+                        if (CHECK_WEEKEVENTREG(gBombersNotebookWeekEventFlags
+                                                   [((sBombersNotebookEntries[this->cursorPageRow + this->cursorPage]
+                                                                             [cursorEntryScan - 3] &
+                                                      0xFF) -
+                                                     20) +
+                                                    20])) {
                             play_sound(NA_SE_SY_CURSOR);
                             break;
                         }
                     }
-                    this->unk_98 = sp24;
-                } else if (sp2C < -30) {
-                    if (sp24 != 0) {
+                    this->cursorEntry = cursorEntryScan;
+                } else if (stickAdjX < -30) {
+                    if (cursorEntryScan != 0) {
                         do {
-                            sp24 -= 3;
+                            cursorEntryScan -= 3;
                             if (CHECK_WEEKEVENTREG(
-                                    sBombersNotebookEventWeekEventFlags[D_801D0D80[this->unk_94 + this->unk_9C][sp24 - 3] &
-                                                                        0xFF])) {
+                                    gBombersNotebookWeekEventFlags[((sBombersNotebookEntries[this->cursorPageRow +
+                                                                                             this->cursorPage]
+                                                                                            [cursorEntryScan - 3] &
+                                                                     0xFF) -
+                                                                    20) +
+                                                                   20])) {
                                 play_sound(NA_SE_SY_CURSOR);
                                 break;
                             }
-                        } while (sp24 != 0);
-                        this->unk_98 = sp24;
+                        } while (cursorEntryScan != 0);
+                        this->cursorEntry = cursorEntryScan;
                     }
                 }
-                if (this->unk_98 != 0) {
+                if (this->cursorEntry != 0) {
                     if (play->msgCtx.currentTextId !=
-                        D_801D146C[D_801D0D80[this->unk_94 + this->unk_9C][this->unk_98 - 3] & 0xFF]) {
+                        sBombersNotebookTextIds[((sBombersNotebookEntries[this->cursorPageRow + this->cursorPage]
+                                                                         [this->cursorEntry - 3] &
+                                                  0xFF) -
+                                                 20) +
+                                                20]) {
                         Message_ContinueTextbox(
-                            play, D_801D146C[D_801D0D80[this->unk_94 + this->unk_9C][this->unk_98 - 3] & 0xFF]);
+                            play,
+                            sBombersNotebookTextIds[sBombersNotebookEntries[this->cursorPageRow + this->cursorPage]
+                                                                           [this->cursorEntry - 3] &
+                                                    0xFF]);
                     }
                 } else {
-                    if (play->msgCtx.currentTextId != D_801D146C[this->unk_94 + this->unk_9C]) {
-                        Message_ContinueTextbox(play, D_801D146C[this->unk_94 + this->unk_9C]);
+                    if (play->msgCtx.currentTextId != sBombersNotebookTextIds[this->cursorPageRow + this->cursorPage]) {
+                        Message_ContinueTextbox(play, sBombersNotebookTextIds[this->cursorPageRow + this->cursorPage]);
                     }
                 }
             } else {
                 Message_CloseTextbox(play);
             }
 
-            if (sp28 < -30) {
-                if (this->unk_94 < 3) {
+            if (stickAdjY < -30) {
+                if (this->cursorPageRow < 3) {
                     play_sound(NA_SE_SY_CURSOR);
-                    this->unk_98 = 0;
-                    this->unk_94++;
-                } else if (this->unk_9C < 0x10) {
-                    if (D_801D14E8 == -1) {
-                        this->unk_A4 = -0x18;
+                    this->cursorEntry = 0;
+                    this->cursorPageRow++;
+                } else if (this->cursorPage < 16) {
+                    if (sStickYRepeatState == -1) {
+                        this->scrollAmount = -24;
                     } else {
-                        this->unk_A4 = -0xC;
+                        this->scrollAmount = -12;
                     }
-                    this->unk_A8 = 0;
-                    this->unk_98 = 0;
+                    this->scrollOffset = 0;
+                    this->cursorEntry = 0;
                 }
-            } else if (sp28 > 30) {
-                if (this->unk_94 > 0) {
+            } else if (stickAdjY > 30) {
+                if (this->cursorPageRow > 0) {
                     play_sound(NA_SE_SY_CURSOR);
-                    this->unk_98 = 0;
-                    this->unk_94--;
-                } else if (this->unk_9C != 0) {
+                    this->cursorEntry = 0;
+                    this->cursorPageRow--;
+                } else if (this->cursorPage != 0) {
                     play_sound(NA_SE_SY_CURSOR);
-                    this->unk_9C--;
-                    if (D_801D14E8 == 1) {
-                        this->unk_A4 = 0x18;
+                    this->cursorPage--;
+                    if (sStickYRepeatState == 1) {
+                        this->scrollAmount = 24;
                     } else {
-                        this->unk_A4 = 0xC;
+                        this->scrollAmount = 12;
                     }
-                    this->unk_A8 = -0x30;
-                    this->unk_98 = 0;
+                    this->scrollOffset = -48;
+                    this->cursorEntry = 0;
                 }
             }
-        } else if (this->unk_A4 < 0) {
-            this->unk_A8 += this->unk_A4;
-            if (ABS_ALT(this->unk_A8) >= 0x30) {
+        } else if (this->scrollAmount < 0) {
+            this->scrollOffset += this->scrollAmount;
+            if (ABS_ALT(this->scrollOffset) >= 48) {
                 play_sound(NA_SE_SY_CURSOR);
-                this->unk_A8 = 0;
-                this->unk_A4 = 0;
-                this->unk_9C++;
+                this->scrollOffset = 0;
+                this->scrollAmount = 0;
+                this->cursorPage++;
             }
         } else {
-            this->unk_A8 += this->unk_A4;
-            if (this->unk_A8 == 0) {
-                this->unk_A8 = 0;
-                this->unk_A4 = 0;
+            this->scrollOffset += this->scrollAmount;
+            if (this->scrollOffset == 0) {
+                this->scrollOffset = 0;
+                this->scrollAmount = 0;
             }
         }
     }
@@ -1260,11 +1324,12 @@ void BombersNotebook_Init(BombersNotebook* this) {
 }
 
 void BombersNotebook_Destroy(BombersNotebook* this) {
-    if (this->unk_00 == 1) {
-        func_8016F4EC(this, OS_MESG_BLOCK);
+    if (this->loadState == BOMBERSNOTEBOOK_LOAD_STATE_STARTED) {
+        BombersNotebook_LoadFiles(this, OS_MESG_BLOCK);
     }
-    if (this->unk_40 != NULL) {
-        ZeldaArena_Free(this->unk_40);
-        this->unk_40 = NULL;
+    if (this->scheduleDmaSegment != NULL) {
+        ZeldaArena_Free(this->scheduleDmaSegment);
+        this->scheduleDmaSegment = NULL;
     }
+    //! @bug: Does not free malloc'd memory for schedule segment
 }

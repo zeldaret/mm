@@ -21,7 +21,7 @@ s32 D_801D02F8[15] = { 0,1,2,3,4,0,1,0,0,0,0,0,1,1,0 };
 #endif
 
 extern u16 D_801C6AB8[];
-extern u16 sBombersNotebookEventWeekEventFlags[];
+extern u16 gBombersNotebookWeekEventFlags[];
 extern s16 D_801D02D8[];
 extern s32 D_801D02F8[];
 extern s16 D_801F6B0C;
@@ -370,12 +370,12 @@ void func_80151BB4(PlayState* play, u8 arg1) {
     u8 temp = arg1;
 
     if (CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
-        if (!CHECK_WEEKEVENTREG(sBombersNotebookEventWeekEventFlags[arg1])) {
+        if (!CHECK_WEEKEVENTREG(gBombersNotebookWeekEventFlags[arg1])) {
             msgCtx->unk120B2[msgCtx->unk120B1] = temp;
             msgCtx->unk120B1++;
         }
     } else if (arg1 >= 20) {
-        if (!CHECK_WEEKEVENTREG(sBombersNotebookEventWeekEventFlags[arg1])) {
+        if (!CHECK_WEEKEVENTREG(gBombersNotebookWeekEventFlags[arg1])) {
             msgCtx->unk120B2[msgCtx->unk120B1] = temp;
             msgCtx->unk120B1++;
         }
@@ -391,8 +391,8 @@ u32 func_80151C9C(PlayState* play) {
         }
         msgCtx->unk120B1--;
 
-        if (!CHECK_WEEKEVENTREG(sBombersNotebookEventWeekEventFlags[msgCtx->unk120B2[msgCtx->unk120B1]])) {
-            SET_WEEKEVENTREG(sBombersNotebookEventWeekEventFlags[msgCtx->unk120B2[msgCtx->unk120B1]]);
+        if (!CHECK_WEEKEVENTREG(gBombersNotebookWeekEventFlags[msgCtx->unk120B2[msgCtx->unk120B1]])) {
+            SET_WEEKEVENTREG(gBombersNotebookWeekEventFlags[msgCtx->unk120B2[msgCtx->unk120B1]]);
 
             if ((D_801C6AB8[msgCtx->unk120B2[msgCtx->unk120B1]] != 0) && CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
                 Message_ContinueTextbox(play, D_801C6AB8[msgCtx->unk120B2[msgCtx->unk120B1]]);
