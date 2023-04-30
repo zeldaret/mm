@@ -109,10 +109,10 @@ static DogInfo sDogInfo[] = {
     { { -4827.0f, 168.0f, 1328.0f }, 115, 4 }, { { -4130.0f, 150.0f, 1367.0f }, 112, 0 },
 };
 
-void EnAob01_Blink(EnAob01* this, s32 indexToRestartBlink) {
+void EnAob01_Blink(EnAob01* this, s32 maxEyeIndex) {
     if (DECR(this->blinkTimer) == 0) {
         this->eyeIndex++;
-        if (this->eyeIndex >= indexToRestartBlink) {
+        if (this->eyeIndex >= maxEyeIndex) {
             this->eyeIndex = EN_AOB01_EYE_OPEN;
             this->blinkTimer = Rand_S16Offset(30, 30);
         }
