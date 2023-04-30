@@ -27,8 +27,15 @@ extern TexturePtr D_07009800;
 extern TexturePtr D_0700AC00;
 extern TexturePtr D_0700AEA0;
 
+#define BOMBERSNOTEBOOK_NUM_PEOPLE 20
+
+#define BOMBERSNOTEBOOK_ENTRY_GET_DAY(entry) (((entry)[0] & 0xF00) >> 8)
+#define BOMBERSNOTEBOOK_ENTRY_GET_EVENT_INDEX(entry) (((entry)[0] & 0xFF) - BOMBERSNOTEBOOK_NUM_PEOPLE)
+#define BOMBERSNOTEBOOK_ENTRY_GET_START_TIME(entry) ((entry)[1])
+#define BOMBERSNOTEBOOK_ENTRY_GET_END_TIME(entry) ((entry)[2])
+
 #define BOMBERSNOTEBOOK_ENTRY(pos, day, eventIndex, startTime, endTime) \
-    ((pos)&0xF000) | (((day)&0xF) << 8) | ((eventIndex + 20) & 0xFF), (startTime), (endTime)
+    ((pos)&0xF000) | (((day)&0xF) << 8) | ((eventIndex + BOMBERSNOTEBOOK_NUM_PEOPLE) & 0xFF), (startTime), (endTime)
 #define BOMBERSNOTEBOOK_ENTRY_END 0x9999
 
 #define BOMBERSNOTEBOOK_ENTRY_POS_CENTER 0x0000
@@ -46,7 +53,7 @@ typedef enum {
 
 u16 sBombersNotebookEntries[][30] = {
     {
-        // Bombers
+        /* Bombers */
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_ABOVE, 1, 16, CLOCK_TIME(6, 0), CLOCK_TIME(5, 59)),
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_BELOW, 1, 17, CLOCK_TIME(6, 0), CLOCK_TIME(5, 59)),
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_ABOVE, 2, 16, CLOCK_TIME(6, 0), CLOCK_TIME(5, 59)),
@@ -56,7 +63,7 @@ u16 sBombersNotebookEntries[][30] = {
         BOMBERSNOTEBOOK_ENTRY_END,
     },
     {
-        // Anju
+        /* Anju */
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_ABOVE, 1, 0, CLOCK_TIME(13, 45), CLOCK_TIME(16, 0)),
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_BELOW, 1, 1, CLOCK_TIME(14, 30), CLOCK_TIME(20, 0)),
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_ABOVE, 1, 2, CLOCK_TIME(23, 30), CLOCK_TIME(5, 59)),
@@ -67,65 +74,65 @@ u16 sBombersNotebookEntries[][30] = {
         BOMBERSNOTEBOOK_ENTRY_END,
     },
     {
-        // Kafei
+        /* Kafei */
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 2, 5, CLOCK_TIME(16, 30), CLOCK_TIME(22, 0)),
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 3, 7, CLOCK_TIME(18, 0), CLOCK_TIME(19, 0)),
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 3, 30, CLOCK_TIME(5, 0), CLOCK_TIME(5, 59)),
         BOMBERSNOTEBOOK_ENTRY_END,
     },
     {
-        // Curiosity Shop Man
+        /* Curiosity Shop Man */
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_ABOVE, 3, 13, CLOCK_TIME(13, 0), CLOCK_TIME(22, 0)),
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_BELOW, 3, 14, CLOCK_TIME(13, 0), CLOCK_TIME(22, 0)),
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 3, 25, CLOCK_TIME(22, 0), CLOCK_TIME(5, 59)),
         BOMBERSNOTEBOOK_ENTRY_END,
     },
     {
-        // Old Lady from Bomb Shop
+        /* Old Lady from Bomb Shop */
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 1, 31, CLOCK_TIME(0, 30), CLOCK_TIME(1, 0)),
         BOMBERSNOTEBOOK_ENTRY_END,
     },
     {
-        // Romani
+        /* Romani */
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 1, 8, CLOCK_TIME(6, 0), CLOCK_TIME(18, 0)),
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_ABOVE, 1, 9, CLOCK_TIME(2, 30), CLOCK_TIME(5, 15)),
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_BELOW, 1, 10, CLOCK_TIME(2, 30), CLOCK_TIME(5, 15)),
         BOMBERSNOTEBOOK_ENTRY_END,
     },
     {
-        // Cremia
+        /* Cremia */
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_ABOVE, 2, 11, CLOCK_TIME(18, 0), CLOCK_TIME(21, 0)),
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_BELOW, 2, 12, CLOCK_TIME(18, 0), CLOCK_TIME(21, 0)),
         BOMBERSNOTEBOOK_ENTRY_END,
     },
     {
-        // Mayor Dotour
+        /* Mayor Dotour */
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 1, 18, CLOCK_TIME(8, 0), CLOCK_TIME(20, 0)),
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 2, 18, CLOCK_TIME(8, 0), CLOCK_TIME(20, 0)),
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 3, 18, CLOCK_TIME(8, 0), CLOCK_TIME(18, 0)),
         BOMBERSNOTEBOOK_ENTRY_END,
     },
     {
-        // Madame Aroma
+        /* Madame Aroma */
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 1, 24, CLOCK_TIME(8, 0), CLOCK_TIME(20, 0)),
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 2, 24, CLOCK_TIME(8, 0), CLOCK_TIME(20, 0)),
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 3, 15, CLOCK_TIME(18, 0), CLOCK_TIME(5, 59)),
         BOMBERSNOTEBOOK_ENTRY_END,
     },
     {
-        // Toto
+        /* Toto */
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 1, 28, CLOCK_TIME(22, 0), CLOCK_TIME(5, 0)),
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 2, 28, CLOCK_TIME(22, 0), CLOCK_TIME(5, 0)),
         BOMBERSNOTEBOOK_ENTRY_END,
     },
     {
-        // Gorman
+        /* Gorman */
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 1, 28, CLOCK_TIME(22, 0), CLOCK_TIME(5, 0)),
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 2, 28, CLOCK_TIME(22, 0), CLOCK_TIME(5, 0)),
         BOMBERSNOTEBOOK_ENTRY_END,
     },
     {
-        // Postman
+        /* Postman */
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 1, 23, CLOCK_TIME(15, 0), CLOCK_TIME(0, 0)),
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 1, 4, CLOCK_TIME(0, 0), CLOCK_TIME(5, 59)),
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 2, 4, CLOCK_TIME(6, 0), CLOCK_TIME(12, 0)),
@@ -134,20 +141,20 @@ u16 sBombersNotebookEntries[][30] = {
         BOMBERSNOTEBOOK_ENTRY_END,
     },
     {
-        // Rosa Sisters
+        /* Rosa Sisters */
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 1, 19, CLOCK_TIME(18, 0), CLOCK_TIME(5, 59)),
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 2, 19, CLOCK_TIME(18, 0), CLOCK_TIME(5, 59)),
         BOMBERSNOTEBOOK_ENTRY_END,
     },
     {
-        // ???
+        /* ??? */
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 1, 20, CLOCK_TIME(0, 0), CLOCK_TIME(5, 59)),
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 2, 20, CLOCK_TIME(0, 0), CLOCK_TIME(5, 59)),
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 3, 20, CLOCK_TIME(0, 0), CLOCK_TIME(5, 59)),
         BOMBERSNOTEBOOK_ENTRY_END,
     },
     {
-        // Anju's Grandmother
+        /* Anju's Grandmother */
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_ABOVE, 1, 21, CLOCK_TIME(8, 0), CLOCK_TIME(18, 0)),
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_BELOW, 1, 22, CLOCK_TIME(8, 0), CLOCK_TIME(18, 0)),
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_ABOVE, 2, 21, CLOCK_TIME(8, 0), CLOCK_TIME(18, 0)),
@@ -155,21 +162,21 @@ u16 sBombersNotebookEntries[][30] = {
         BOMBERSNOTEBOOK_ENTRY_END,
     },
     {
-        // Kamaro
+        /* Kamaro */
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 1, 32, CLOCK_TIME(0, 0), CLOCK_TIME(5, 59)),
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 2, 32, CLOCK_TIME(0, 0), CLOCK_TIME(5, 59)),
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 3, 32, CLOCK_TIME(0, 0), CLOCK_TIME(5, 59)),
         BOMBERSNOTEBOOK_ENTRY_END,
     },
     {
-        // Grog
+        /* Grog */
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 1, 26, CLOCK_TIME(6, 0), CLOCK_TIME(20, 0)),
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 2, 26, CLOCK_TIME(6, 0), CLOCK_TIME(20, 0)),
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 3, 26, CLOCK_TIME(6, 0), CLOCK_TIME(20, 0)),
         BOMBERSNOTEBOOK_ENTRY_END,
     },
     {
-        // Gorman Brothers
+        /* Gorman Brothers */
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 1, 27, CLOCK_TIME(6, 0), CLOCK_TIME(18, 0)),
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 2, 27, CLOCK_TIME(6, 0), CLOCK_TIME(18, 0)),
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 2, 11, CLOCK_TIME(18, 0), CLOCK_TIME(21, 0)),
@@ -177,14 +184,14 @@ u16 sBombersNotebookEntries[][30] = {
         BOMBERSNOTEBOOK_ENTRY_END,
     },
     {
-        // Shiro
+        /* Shiro */
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 1, 33, CLOCK_TIME(6, 0), CLOCK_TIME(5, 59)),
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 2, 33, CLOCK_TIME(6, 0), CLOCK_TIME(5, 59)),
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 3, 33, CLOCK_TIME(6, 0), CLOCK_TIME(5, 59)),
         BOMBERSNOTEBOOK_ENTRY_END,
     },
     {
-        // Guru-Guru
+        /* Guru-Guru */
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 1, 34, CLOCK_TIME(18, 0), CLOCK_TIME(5, 59)),
         BOMBERSNOTEBOOK_ENTRY(BOMBERSNOTEBOOK_ENTRY_POS_CENTER, 2, 34, CLOCK_TIME(18, 0), CLOCK_TIME(5, 59)),
         BOMBERSNOTEBOOK_ENTRY_END,
@@ -387,14 +394,13 @@ void BombersNotebook_DrawEntries(Gfx** gfxP, s32 row, u32 rectTop) {
     u16 endTime;
     s32 j = 0;
     u32 iconRectLeft;
-    s32 entryRight;
+    s32 entryRectRight;
     u32 yOffset;
     s32 entryWidth;
 
     while (true) {
         if (sBombersNotebookEntries[row][j] == BOMBERSNOTEBOOK_ENTRY_END) {
             if (!unfinishedEvent) {
-                // Completed Stamp
                 gDPPipeSync(gfx++);
                 gDPSetCombineLERP(gfx++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0,
                                   PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
@@ -425,25 +431,28 @@ void BombersNotebook_DrawEntries(Gfx** gfxP, s32 row, u32 rectTop) {
             yOffset = 16;
         }
 
-        startTime = sBombersNotebookEntries[row][j + 1] - CLOCK_TIME(6, 0);
-        endTime = sBombersNotebookEntries[row][j + 2] - CLOCK_TIME(6, 0);
+        startTime = BOMBERSNOTEBOOK_ENTRY_GET_START_TIME(&sBombersNotebookEntries[row][j]) - CLOCK_TIME(6, 0);
+        endTime = BOMBERSNOTEBOOK_ENTRY_GET_END_TIME(&sBombersNotebookEntries[row][j]) - CLOCK_TIME(6, 0);
         entryRectLeft =
-            sBombersNotebookDayRectRectLeft[(sBombersNotebookEntries[row][j] & 0xF00) >> 8] + (startTime / 455);
-        entryRight = sBombersNotebookDayRectRectLeft[(sBombersNotebookEntries[row][j] & 0xF00) >> 8] + (endTime / 455);
-        entryWidth = entryRight - entryRectLeft - 8;
-        if ((entryRight - entryRectLeft) < 8) {
-            entryRectLeft = ((entryRectLeft + entryRight) - entryRectLeft) - 8;
-            entryRight = entryRectLeft + 8;
+            sBombersNotebookDayRectRectLeft[BOMBERSNOTEBOOK_ENTRY_GET_DAY(&sBombersNotebookEntries[row][j])] +
+            (startTime / 455);
+        entryRectRight =
+            sBombersNotebookDayRectRectLeft[BOMBERSNOTEBOOK_ENTRY_GET_DAY(&sBombersNotebookEntries[row][j])] +
+            (endTime / 455);
+        entryWidth = entryRectRight - entryRectLeft - 8;
+        if ((entryRectRight - entryRectLeft) < 8) {
+            entryRectLeft = ((entryRectLeft + entryRectRight) - entryRectLeft) - 8;
+            entryRectRight = entryRectLeft + 8;
         }
 
-        // Shadow
         gDPSetPrimColor(gfx++, 0, 0, 0, 0, 0, 255);
         gDPLoadTextureBlock(gfx++, gBombersNotebookEntryBoxEndTex, G_IM_FMT_RGBA, G_IM_SIZ_16b, 4, 16, 0,
                             G_TX_MIRROR | G_TX_WRAP, G_TX_MIRROR | G_TX_WRAP, 2, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
         BombersNotebook_TextureRectangle(&gfx, (entryRectLeft + 2) * 4, (rectTop + yOffset + 2) * 4,
                                          (entryRectLeft + 6) * 4, (rectTop + yOffset + 18) * 4, 0, 0, 0, 0x400, 0x400);
-        BombersNotebook_TextureRectangle(&gfx, (entryRight + -2) * 4, (rectTop + yOffset + 2) * 4, (entryRight + 2) * 4,
-                                         (rectTop + yOffset + 18) * 4, 0, 0x80, 0, 0x400, 0x400);
+        BombersNotebook_TextureRectangle(&gfx, (entryRectRight + -2) * 4, (rectTop + yOffset + 2) * 4,
+                                         (entryRectRight + 2) * 4, (rectTop + yOffset + 18) * 4, 0, 0x80, 0, 0x400,
+                                         0x400);
         if (entryWidth > 0) {
             gDPLoadTextureBlock(gfx++, gBombersNotebookEntryBoxMiddleTex, G_IM_FMT_RGBA, G_IM_SIZ_16b, 4, 16, 0,
                                 G_TX_MIRROR | G_TX_WRAP, G_TX_MIRROR | G_TX_WRAP, 2, G_TX_NOMASK, G_TX_NOLOD,
@@ -453,7 +462,6 @@ void BombersNotebook_DrawEntries(Gfx** gfxP, s32 row, u32 rectTop) {
                                              0, 0x400, 0x400);
         }
 
-        // Box
         gDPSetPrimColor(gfx++, 0, 0, 255, 255, 255, 255);
         gDPLoadTextureBlock(gfx++, gBombersNotebookEntryBoxEndTex, G_IM_FMT_RGBA, G_IM_SIZ_16b, 4, 16, 0,
                             G_TX_MIRROR | G_TX_WRAP, G_TX_MIRROR | G_TX_WRAP, 2, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
@@ -461,8 +469,9 @@ void BombersNotebook_DrawEntries(Gfx** gfxP, s32 row, u32 rectTop) {
         BombersNotebook_TextureRectangle(&gfx, (entryRectLeft * 4) ^ 0, (rectTop + yOffset) * 4,
                                          (entryRectLeft + 4) * 4, (rectTop + yOffset + 16) * 4, 0, 0, 0, 0x400, 0x400);
         //! FAKE: the ^ 0
-        BombersNotebook_TextureRectangle(&gfx, (entryRight + -4) * 4, (rectTop + yOffset) * 4, (entryRight * 4) ^ 0,
-                                         (rectTop + yOffset + 16) * 4, 0, 0x80, 0, 0x400, 0x400);
+        BombersNotebook_TextureRectangle(&gfx, (entryRectRight + -4) * 4, (rectTop + yOffset) * 4,
+                                         (entryRectRight * 4) ^ 0, (rectTop + yOffset + 16) * 4, 0, 0x80, 0, 0x400,
+                                         0x400);
         if (entryWidth > 0) {
             gDPLoadTextureBlock(gfx++, gBombersNotebookEntryBoxMiddleTex, G_IM_FMT_RGBA, G_IM_SIZ_16b, 4, 16, 0,
                                 G_TX_MIRROR | G_TX_WRAP, G_TX_MIRROR | G_TX_WRAP, 2, G_TX_NOMASK, G_TX_NOLOD,
@@ -472,15 +481,18 @@ void BombersNotebook_DrawEntries(Gfx** gfxP, s32 row, u32 rectTop) {
                                              0, 0x400, 0x400);
         }
 
-        if (CHECK_WEEKEVENTREG(gBombersNotebookWeekEventFlags[sBombersNotebookEntries[row][j] & 0xFF])) {
-            // Icon
-            eventIcon = sBombersNotebookEventIcons[(sBombersNotebookEntries[row][j] & 0xFF) - 20];
-            if ((entryRight - entryRectLeft) < sBombersNotebookEventIconWidths[eventIcon]) {
+        if (CHECK_WEEKEVENTREG(
+                gBombersNotebookWeekEventFlags[BOMBERSNOTEBOOK_ENTRY_GET_EVENT_INDEX(&sBombersNotebookEntries[row][j]) +
+                                               BOMBERSNOTEBOOK_NUM_PEOPLE])) {
+            eventIcon =
+                sBombersNotebookEventIcons[BOMBERSNOTEBOOK_ENTRY_GET_EVENT_INDEX(&sBombersNotebookEntries[row][j])];
+            if ((entryRectRight - entryRectLeft) < sBombersNotebookEventIconWidths[eventIcon]) {
                 iconRectLeft =
-                    (((entryRectLeft - sBombersNotebookEventIconWidths[eventIcon]) + entryRight) - entryRectLeft) + 3;
+                    (((entryRectLeft - sBombersNotebookEventIconWidths[eventIcon]) + entryRectRight) - entryRectLeft) +
+                    3;
             } else {
-                iconRectLeft =
-                    (((entryRight - entryRectLeft) - sBombersNotebookEventIconWidths[eventIcon]) / 2) + entryRectLeft;
+                iconRectLeft = (((entryRectRight - entryRectLeft) - sBombersNotebookEventIconWidths[eventIcon]) / 2) +
+                               entryRectLeft;
             }
 
             if ((eventIcon == BOMBERSNOTEBOOK_EVENT_ICON_MASK) || (eventIcon == BOMBERSNOTEBOOK_EVENT_ICON_RIBBON)) {
@@ -501,12 +513,13 @@ void BombersNotebook_DrawEntries(Gfx** gfxP, s32 row, u32 rectTop) {
                                              (iconRectLeft + 2 + sBombersNotebookEventIconWidths[eventIcon]) * 4,
                                              (rectTop + yOffset + 2 + sBombersNotebookEventIconHeights[eventIcon]) * 4,
                                              0, 0, 0, 0x400, 0x400);
-            if (sBombersNotebookEventColorWeekEventFlags[(sBombersNotebookEntries[row][j] & 0xFF) - 20] ==
-                BOMBERSNOTEBOOK_EVENT_COLOR_WEEKEVENTREG_NONE) {
+            if (sBombersNotebookEventColorWeekEventFlags[BOMBERSNOTEBOOK_ENTRY_GET_EVENT_INDEX(
+                    &sBombersNotebookEntries[row][j])] == BOMBERSNOTEBOOK_EVENT_COLOR_WEEKEVENTREG_NONE) {
                 gDPSetPrimColor(gfx++, 0, 0, sBombersNotebookEntryIconColors[eventIcon][0],
                                 sBombersNotebookEntryIconColors[eventIcon][1],
                                 sBombersNotebookEntryIconColors[eventIcon][2], 255);
-            } else if (sBombersNotebookEventColorWeekEventFlags[(sBombersNotebookEntries[row][j] & 0xFF) - 20] ==
+            } else if (sBombersNotebookEventColorWeekEventFlags[BOMBERSNOTEBOOK_ENTRY_GET_EVENT_INDEX(
+                           &sBombersNotebookEntries[row][j])] ==
                        BOMBERSNOTEBOOK_EVENT_COLOR_WEEKEVENTREG_DELIVERED_LETTER) {
                 if (CHECK_WEEKEVENTREG(WEEKEVENTREG_27_02) || CHECK_WEEKEVENTREG(WEEKEVENTREG_27_04) ||
                     CHECK_WEEKEVENTREG(WEEKEVENTREG_27_08) || CHECK_WEEKEVENTREG(WEEKEVENTREG_27_10) ||
@@ -518,8 +531,8 @@ void BombersNotebook_DrawEntries(Gfx** gfxP, s32 row, u32 rectTop) {
                     gDPSetPrimColor(gfx++, 0, 0, 155, 155, 155, 255);
                 }
             } else {
-                if (CHECK_WEEKEVENTREG(
-                        sBombersNotebookEventColorWeekEventFlags[(sBombersNotebookEntries[row][j] & 0xFF) - 20])) {
+                if (CHECK_WEEKEVENTREG(sBombersNotebookEventColorWeekEventFlags[BOMBERSNOTEBOOK_ENTRY_GET_EVENT_INDEX(
+                        &sBombersNotebookEntries[row][j])])) {
                     gDPSetPrimColor(gfx++, 0, 0, sBombersNotebookEntryIconColors[eventIcon][0],
                                     sBombersNotebookEntryIconColors[eventIcon][1],
                                     sBombersNotebookEntryIconColors[eventIcon][2], 255);
@@ -848,7 +861,7 @@ void BombersNotebook_DrawCursor(BombersNotebook* this, Gfx** gfxP) {
     Gfx* gfx = *gfxP;
     s32 cursorRow;
     s32 cursorEntry;
-    s32 entryRight;
+    s32 entryRectRight;
     s32 entryRectLeft;
     s32 entryIcon;
     u32 cursorRectLeft;
@@ -886,24 +899,28 @@ void BombersNotebook_DrawCursor(BombersNotebook* this, Gfx** gfxP) {
             yOffset = 16;
         }
 
-        startTime = sBombersNotebookEntries[cursorRow][cursorEntry + 1] - CLOCK_TIME(6, 0);
-        endTime = sBombersNotebookEntries[cursorRow][cursorEntry + 2] - CLOCK_TIME(6, 0);
-        entryRectLeft =
-            sBombersNotebookDayRectRectLeft[(sBombersNotebookEntries[cursorRow][cursorEntry] & 0xF00) >> 8] +
-            (startTime / 455);
-        entryRight = sBombersNotebookDayRectRectLeft[(sBombersNotebookEntries[cursorRow][cursorEntry] & 0xF00) >> 8] +
-                     (endTime / 455);
-        if ((entryRight - entryRectLeft) < 8) {
-            entryRectLeft = ((entryRectLeft + entryRight) - entryRectLeft) - 8;
-            entryRight = entryRectLeft + 8;
+        startTime =
+            BOMBERSNOTEBOOK_ENTRY_GET_START_TIME(&sBombersNotebookEntries[cursorRow][cursorEntry]) - CLOCK_TIME(6, 0);
+        endTime =
+            BOMBERSNOTEBOOK_ENTRY_GET_END_TIME(&sBombersNotebookEntries[cursorRow][cursorEntry]) - CLOCK_TIME(6, 0);
+        entryRectLeft = sBombersNotebookDayRectRectLeft[BOMBERSNOTEBOOK_ENTRY_GET_DAY(
+                            &sBombersNotebookEntries[cursorRow][cursorEntry])] +
+                        (startTime / 455);
+        entryRectRight = sBombersNotebookDayRectRectLeft[BOMBERSNOTEBOOK_ENTRY_GET_DAY(
+                             &sBombersNotebookEntries[cursorRow][cursorEntry])] +
+                         (endTime / 455);
+        if ((entryRectRight - entryRectLeft) < 8) {
+            entryRectLeft = ((entryRectLeft + entryRectRight) - entryRectLeft) - 8;
+            entryRectRight = entryRectLeft + 8;
         }
-        entryIcon = sBombersNotebookEventIcons[(sBombersNotebookEntries[cursorRow][cursorEntry] & 0xFF) - 20];
-        if ((entryRight - entryRectLeft) < sBombersNotebookEventIconWidths[entryIcon]) {
+        entryIcon = sBombersNotebookEventIcons[BOMBERSNOTEBOOK_ENTRY_GET_EVENT_INDEX(
+            &sBombersNotebookEntries[cursorRow][cursorEntry])];
+        if ((entryRectRight - entryRectLeft) < sBombersNotebookEventIconWidths[entryIcon]) {
             cursorRectLeft =
-                (((entryRectLeft - sBombersNotebookEventIconWidths[entryIcon]) + entryRight) - entryRectLeft) + 3;
+                (((entryRectLeft - sBombersNotebookEventIconWidths[entryIcon]) + entryRectRight) - entryRectLeft) + 3;
         } else {
             cursorRectLeft =
-                (((entryRight - entryRectLeft) - sBombersNotebookEventIconWidths[entryIcon]) / 2) + entryRectLeft;
+                (((entryRectRight - entryRectLeft) - sBombersNotebookEventIconWidths[entryIcon]) / 2) + entryRectLeft;
         }
         if (entryIcon == BOMBERSNOTEBOOK_EVENT_ICON_EXCLAMATION_POINT) {
             cursorRectLeft -= 8;
@@ -1259,12 +1276,11 @@ void BombersNotebook_Update(PlayState* play, BombersNotebook* this, Input* input
                                     break;
                                 }
                                 if (CHECK_WEEKEVENTREG(
-                                        gBombersNotebookWeekEventFlags[((sBombersNotebookEntries[this->cursorPageRow +
-                                                                                                 this->cursorPage]
-                                                                                                [cursorEntryScan - 3] &
-                                                                         0xFF) -
-                                                                        20) +
-                                                                       20])) {
+                                        gBombersNotebookWeekEventFlags
+                                            [BOMBERSNOTEBOOK_ENTRY_GET_EVENT_INDEX(
+                                                 &sBombersNotebookEntries[this->cursorPageRow + this->cursorPage]
+                                                                         [cursorEntryScan - 3]) +
+                                             BOMBERSNOTEBOOK_NUM_PEOPLE])) {
                                     play_sound(NA_SE_SY_ERROR);
                                     break;
                                 }
@@ -1272,11 +1288,10 @@ void BombersNotebook_Update(PlayState* play, BombersNotebook* this, Input* input
                             break;
                         }
                         if (CHECK_WEEKEVENTREG(gBombersNotebookWeekEventFlags
-                                                   [((sBombersNotebookEntries[this->cursorPageRow + this->cursorPage]
-                                                                             [cursorEntryScan - 3] &
-                                                      0xFF) -
-                                                     20) +
-                                                    20])) {
+                                                   [BOMBERSNOTEBOOK_ENTRY_GET_EVENT_INDEX(
+                                                        &sBombersNotebookEntries[this->cursorPageRow + this->cursorPage]
+                                                                                [cursorEntryScan - 3]) +
+                                                    BOMBERSNOTEBOOK_NUM_PEOPLE])) {
                             play_sound(NA_SE_SY_CURSOR);
                             break;
                         }
@@ -1287,12 +1302,11 @@ void BombersNotebook_Update(PlayState* play, BombersNotebook* this, Input* input
                         do {
                             cursorEntryScan -= 3;
                             if (CHECK_WEEKEVENTREG(
-                                    gBombersNotebookWeekEventFlags[((sBombersNotebookEntries[this->cursorPageRow +
-                                                                                             this->cursorPage]
-                                                                                            [cursorEntryScan - 3] &
-                                                                     0xFF) -
-                                                                    20) +
-                                                                   20])) {
+                                    gBombersNotebookWeekEventFlags[BOMBERSNOTEBOOK_ENTRY_GET_EVENT_INDEX(
+                                                                       &sBombersNotebookEntries[this->cursorPageRow +
+                                                                                                this->cursorPage]
+                                                                                               [cursorEntryScan - 3]) +
+                                                                   BOMBERSNOTEBOOK_NUM_PEOPLE])) {
                                 play_sound(NA_SE_SY_CURSOR);
                                 break;
                             }
@@ -1302,16 +1316,16 @@ void BombersNotebook_Update(PlayState* play, BombersNotebook* this, Input* input
                 }
                 if (this->cursorEntry != 0) {
                     if (play->msgCtx.currentTextId !=
-                        sBombersNotebookTextIds[((sBombersNotebookEntries[this->cursorPageRow + this->cursorPage]
-                                                                         [this->cursorEntry - 3] &
-                                                  0xFF) -
-                                                 20) +
-                                                20]) {
+                        sBombersNotebookTextIds[BOMBERSNOTEBOOK_ENTRY_GET_EVENT_INDEX(
+                                                    &sBombersNotebookEntries[this->cursorPageRow + this->cursorPage]
+                                                                            [this->cursorEntry - 3]) +
+                                                BOMBERSNOTEBOOK_NUM_PEOPLE]) {
                         Message_ContinueTextbox(
                             play,
-                            sBombersNotebookTextIds[sBombersNotebookEntries[this->cursorPageRow + this->cursorPage]
-                                                                           [this->cursorEntry - 3] &
-                                                    0xFF]);
+                            sBombersNotebookTextIds[BOMBERSNOTEBOOK_ENTRY_GET_EVENT_INDEX(
+                                                        &sBombersNotebookEntries[this->cursorPageRow + this->cursorPage]
+                                                                                [this->cursorEntry - 3]) +
+                                                    BOMBERSNOTEBOOK_NUM_PEOPLE]);
                     }
                 } else {
                     if (play->msgCtx.currentTextId != sBombersNotebookTextIds[this->cursorPageRow + this->cursorPage]) {
