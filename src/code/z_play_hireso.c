@@ -29,10 +29,11 @@ extern TexturePtr D_0700AEA0;
 
 #define BOMBERSNOTEBOOK_NUM_PEOPLE 20
 
-#define BOMBERSNOTEBOOK_ENTRY_GET_DAY(entry) (((entry)[0] & 0xF00) >> 8)
-#define BOMBERSNOTEBOOK_ENTRY_GET_EVENT_INDEX(entry) (((entry)[0] & 0xFF) - BOMBERSNOTEBOOK_NUM_PEOPLE)
-#define BOMBERSNOTEBOOK_ENTRY_GET_START_TIME(entry) ((entry)[1])
-#define BOMBERSNOTEBOOK_ENTRY_GET_END_TIME(entry) ((entry)[2])
+#define BOMBERSNOTEBOOK_ENTRY_GET_DAY(row, entry) (((&sBombersNotebookEntries[row][entry])[0] & 0xF00) >> 8)
+#define BOMBERSNOTEBOOK_ENTRY_GET_EVENT_INDEX(row, entry) \
+    (((&sBombersNotebookEntries[row][entry])[0] & 0xFF) - BOMBERSNOTEBOOK_NUM_PEOPLE)
+#define BOMBERSNOTEBOOK_ENTRY_GET_START_TIME(row, entry) ((&sBombersNotebookEntries[row][entry])[1])
+#define BOMBERSNOTEBOOK_ENTRY_GET_END_TIME(row, entry) ((&sBombersNotebookEntries[row][entry])[2])
 
 #define BOMBERSNOTEBOOK_ENTRY(pos, day, eventIndex, startTime, endTime) \
     ((pos)&0xF000) | (((day)&0xF) << 8) | ((eventIndex + BOMBERSNOTEBOOK_NUM_PEOPLE) & 0xFF), (startTime), (endTime)
@@ -431,14 +432,10 @@ void BombersNotebook_DrawEntries(Gfx** gfxP, s32 row, u32 rectTop) {
             yOffset = 16;
         }
 
-        startTime = BOMBERSNOTEBOOK_ENTRY_GET_START_TIME(&sBombersNotebookEntries[row][j]) - CLOCK_TIME(6, 0);
-        endTime = BOMBERSNOTEBOOK_ENTRY_GET_END_TIME(&sBombersNotebookEntries[row][j]) - CLOCK_TIME(6, 0);
-        entryRectLeft =
-            sBombersNotebookDayRectRectLeft[BOMBERSNOTEBOOK_ENTRY_GET_DAY(&sBombersNotebookEntries[row][j])] +
-            (startTime / 455);
-        entryRectRight =
-            sBombersNotebookDayRectRectLeft[BOMBERSNOTEBOOK_ENTRY_GET_DAY(&sBombersNotebookEntries[row][j])] +
-            (endTime / 455);
+        startTime = BOMBERSNOTEBOOK_ENTRY_GET_START_TIME(row, j) - CLOCK_TIME(6, 0);
+        endTime = BOMBERSNOTEBOOK_ENTRY_GET_END_TIME(row, j) - CLOCK_TIME(6, 0);
+        entryRectLeft = sBombersNotebookDayRectRectLeft[BOMBERSNOTEBOOK_ENTRY_GET_DAY(row, j)] + (startTime / 455);
+        entryRectRight = sBombersNotebookDayRectRectLeft[BOMBERSNOTEBOOK_ENTRY_GET_DAY(row, j)] + (endTime / 455);
         entryWidth = entryRectRight - entryRectLeft - 8;
         if ((entryRectRight - entryRectLeft) < 8) {
             entryRectLeft = ((entryRectLeft + entryRectRight) - entryRectLeft) - 8;
@@ -481,11 +478,9 @@ void BombersNotebook_DrawEntries(Gfx** gfxP, s32 row, u32 rectTop) {
                                              0, 0x400, 0x400);
         }
 
-        if (CHECK_WEEKEVENTREG(
-                gBombersNotebookWeekEventFlags[BOMBERSNOTEBOOK_ENTRY_GET_EVENT_INDEX(&sBombersNotebookEntries[row][j]) +
-                                               BOMBERSNOTEBOOK_NUM_PEOPLE])) {
-            eventIcon =
-                sBombersNotebookEventIcons[BOMBERSNOTEBOOK_ENTRY_GET_EVENT_INDEX(&sBombersNotebookEntries[row][j])];
+        if (CHECK_WEEKEVENTREG(gBombersNotebookWeekEventFlags[BOMBERSNOTEBOOK_ENTRY_GET_EVENT_INDEX(row, j) +
+                                                              BOMBERSNOTEBOOK_NUM_PEOPLE])) {
+            eventIcon = sBombersNotebookEventIcons[BOMBERSNOTEBOOK_ENTRY_GET_EVENT_INDEX(row, j)];
             if ((entryRectRight - entryRectLeft) < sBombersNotebookEventIconWidths[eventIcon]) {
                 iconRectLeft =
                     (((entryRectLeft - sBombersNotebookEventIconWidths[eventIcon]) + entryRectRight) - entryRectLeft) +
@@ -513,13 +508,12 @@ void BombersNotebook_DrawEntries(Gfx** gfxP, s32 row, u32 rectTop) {
                                              (iconRectLeft + 2 + sBombersNotebookEventIconWidths[eventIcon]) * 4,
                                              (rectTop + yOffset + 2 + sBombersNotebookEventIconHeights[eventIcon]) * 4,
                                              0, 0, 0, 0x400, 0x400);
-            if (sBombersNotebookEventColorWeekEventFlags[BOMBERSNOTEBOOK_ENTRY_GET_EVENT_INDEX(
-                    &sBombersNotebookEntries[row][j])] == BOMBERSNOTEBOOK_EVENT_COLOR_WEEKEVENTREG_NONE) {
+            if (sBombersNotebookEventColorWeekEventFlags[BOMBERSNOTEBOOK_ENTRY_GET_EVENT_INDEX(row, j)] ==
+                BOMBERSNOTEBOOK_EVENT_COLOR_WEEKEVENTREG_NONE) {
                 gDPSetPrimColor(gfx++, 0, 0, sBombersNotebookEntryIconColors[eventIcon][0],
                                 sBombersNotebookEntryIconColors[eventIcon][1],
                                 sBombersNotebookEntryIconColors[eventIcon][2], 255);
-            } else if (sBombersNotebookEventColorWeekEventFlags[BOMBERSNOTEBOOK_ENTRY_GET_EVENT_INDEX(
-                           &sBombersNotebookEntries[row][j])] ==
+            } else if (sBombersNotebookEventColorWeekEventFlags[BOMBERSNOTEBOOK_ENTRY_GET_EVENT_INDEX(row, j)] ==
                        BOMBERSNOTEBOOK_EVENT_COLOR_WEEKEVENTREG_DELIVERED_LETTER) {
                 if (CHECK_WEEKEVENTREG(WEEKEVENTREG_27_02) || CHECK_WEEKEVENTREG(WEEKEVENTREG_27_04) ||
                     CHECK_WEEKEVENTREG(WEEKEVENTREG_27_08) || CHECK_WEEKEVENTREG(WEEKEVENTREG_27_10) ||
@@ -531,8 +525,8 @@ void BombersNotebook_DrawEntries(Gfx** gfxP, s32 row, u32 rectTop) {
                     gDPSetPrimColor(gfx++, 0, 0, 155, 155, 155, 255);
                 }
             } else {
-                if (CHECK_WEEKEVENTREG(sBombersNotebookEventColorWeekEventFlags[BOMBERSNOTEBOOK_ENTRY_GET_EVENT_INDEX(
-                        &sBombersNotebookEntries[row][j])])) {
+                if (CHECK_WEEKEVENTREG(
+                        sBombersNotebookEventColorWeekEventFlags[BOMBERSNOTEBOOK_ENTRY_GET_EVENT_INDEX(row, j)])) {
                     gDPSetPrimColor(gfx++, 0, 0, sBombersNotebookEntryIconColors[eventIcon][0],
                                     sBombersNotebookEntryIconColors[eventIcon][1],
                                     sBombersNotebookEntryIconColors[eventIcon][2], 255);
@@ -899,22 +893,17 @@ void BombersNotebook_DrawCursor(BombersNotebook* this, Gfx** gfxP) {
             yOffset = 16;
         }
 
-        startTime =
-            BOMBERSNOTEBOOK_ENTRY_GET_START_TIME(&sBombersNotebookEntries[cursorRow][cursorEntry]) - CLOCK_TIME(6, 0);
-        endTime =
-            BOMBERSNOTEBOOK_ENTRY_GET_END_TIME(&sBombersNotebookEntries[cursorRow][cursorEntry]) - CLOCK_TIME(6, 0);
-        entryRectLeft = sBombersNotebookDayRectRectLeft[BOMBERSNOTEBOOK_ENTRY_GET_DAY(
-                            &sBombersNotebookEntries[cursorRow][cursorEntry])] +
-                        (startTime / 455);
-        entryRectRight = sBombersNotebookDayRectRectLeft[BOMBERSNOTEBOOK_ENTRY_GET_DAY(
-                             &sBombersNotebookEntries[cursorRow][cursorEntry])] +
-                         (endTime / 455);
+        startTime = BOMBERSNOTEBOOK_ENTRY_GET_START_TIME(cursorRow, cursorEntry) - CLOCK_TIME(6, 0);
+        endTime = BOMBERSNOTEBOOK_ENTRY_GET_END_TIME(cursorRow, cursorEntry) - CLOCK_TIME(6, 0);
+        entryRectLeft =
+            sBombersNotebookDayRectRectLeft[BOMBERSNOTEBOOK_ENTRY_GET_DAY(cursorRow, cursorEntry)] + (startTime / 455);
+        entryRectRight =
+            sBombersNotebookDayRectRectLeft[BOMBERSNOTEBOOK_ENTRY_GET_DAY(cursorRow, cursorEntry)] + (endTime / 455);
         if ((entryRectRight - entryRectLeft) < 8) {
             entryRectLeft = ((entryRectLeft + entryRectRight) - entryRectLeft) - 8;
             entryRectRight = entryRectLeft + 8;
         }
-        entryIcon = sBombersNotebookEventIcons[BOMBERSNOTEBOOK_ENTRY_GET_EVENT_INDEX(
-            &sBombersNotebookEntries[cursorRow][cursorEntry])];
+        entryIcon = sBombersNotebookEventIcons[BOMBERSNOTEBOOK_ENTRY_GET_EVENT_INDEX(cursorRow, cursorEntry)];
         if ((entryRectRight - entryRectLeft) < sBombersNotebookEventIconWidths[entryIcon]) {
             cursorRectLeft =
                 (((entryRectLeft - sBombersNotebookEventIconWidths[entryIcon]) + entryRectRight) - entryRectLeft) + 3;
@@ -1276,22 +1265,21 @@ void BombersNotebook_Update(PlayState* play, BombersNotebook* this, Input* input
                                     break;
                                 }
                                 if (CHECK_WEEKEVENTREG(
-                                        gBombersNotebookWeekEventFlags
-                                            [BOMBERSNOTEBOOK_ENTRY_GET_EVENT_INDEX(
-                                                 &sBombersNotebookEntries[this->cursorPageRow + this->cursorPage]
-                                                                         [cursorEntryScan - 3]) +
-                                             BOMBERSNOTEBOOK_NUM_PEOPLE])) {
+                                        gBombersNotebookWeekEventFlags[BOMBERSNOTEBOOK_ENTRY_GET_EVENT_INDEX(
+                                                                           this->cursorPageRow + this->cursorPage,
+                                                                           cursorEntryScan - 3) +
+                                                                       BOMBERSNOTEBOOK_NUM_PEOPLE])) {
                                     play_sound(NA_SE_SY_ERROR);
                                     break;
                                 }
                             }
                             break;
                         }
-                        if (CHECK_WEEKEVENTREG(gBombersNotebookWeekEventFlags
-                                                   [BOMBERSNOTEBOOK_ENTRY_GET_EVENT_INDEX(
-                                                        &sBombersNotebookEntries[this->cursorPageRow + this->cursorPage]
-                                                                                [cursorEntryScan - 3]) +
-                                                    BOMBERSNOTEBOOK_NUM_PEOPLE])) {
+                        if (CHECK_WEEKEVENTREG(
+                                gBombersNotebookWeekEventFlags[BOMBERSNOTEBOOK_ENTRY_GET_EVENT_INDEX(
+                                                                   this->cursorPageRow + this->cursorPage,
+                                                                   cursorEntryScan - 3) +
+                                                               BOMBERSNOTEBOOK_NUM_PEOPLE])) {
                             play_sound(NA_SE_SY_CURSOR);
                             break;
                         }
@@ -1303,9 +1291,8 @@ void BombersNotebook_Update(PlayState* play, BombersNotebook* this, Input* input
                             cursorEntryScan -= 3;
                             if (CHECK_WEEKEVENTREG(
                                     gBombersNotebookWeekEventFlags[BOMBERSNOTEBOOK_ENTRY_GET_EVENT_INDEX(
-                                                                       &sBombersNotebookEntries[this->cursorPageRow +
-                                                                                                this->cursorPage]
-                                                                                               [cursorEntryScan - 3]) +
+                                                                       this->cursorPageRow + this->cursorPage,
+                                                                       cursorEntryScan - 3) +
                                                                    BOMBERSNOTEBOOK_NUM_PEOPLE])) {
                                 play_sound(NA_SE_SY_CURSOR);
                                 break;
@@ -1317,14 +1304,12 @@ void BombersNotebook_Update(PlayState* play, BombersNotebook* this, Input* input
                 if (this->cursorEntry != 0) {
                     if (play->msgCtx.currentTextId !=
                         sBombersNotebookTextIds[BOMBERSNOTEBOOK_ENTRY_GET_EVENT_INDEX(
-                                                    &sBombersNotebookEntries[this->cursorPageRow + this->cursorPage]
-                                                                            [this->cursorEntry - 3]) +
+                                                    this->cursorPageRow + this->cursorPage, this->cursorEntry - 3) +
                                                 BOMBERSNOTEBOOK_NUM_PEOPLE]) {
                         Message_ContinueTextbox(
                             play,
                             sBombersNotebookTextIds[BOMBERSNOTEBOOK_ENTRY_GET_EVENT_INDEX(
-                                                        &sBombersNotebookEntries[this->cursorPageRow + this->cursorPage]
-                                                                                [this->cursorEntry - 3]) +
+                                                        this->cursorPageRow + this->cursorPage, this->cursorEntry - 3) +
                                                     BOMBERSNOTEBOOK_NUM_PEOPLE]);
                     }
                 } else {
