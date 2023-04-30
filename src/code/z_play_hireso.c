@@ -1,6 +1,8 @@
 #include "global.h"
 #include "z64bombers_notebook.h"
+#include "interface/schedule_static/schedule_static.h"
 
+// TODO: Create xml when build supports yaz0 compression/decompression
 // Segment 0x07 schedule_dma_static_test
 extern TexturePtr D_07000000;
 extern TexturePtr D_07000800;
@@ -24,42 +26,6 @@ extern TexturePtr D_07009000;
 extern TexturePtr D_07009800;
 extern TexturePtr D_0700AC00;
 extern TexturePtr D_0700AEA0;
-
-// Segment 0x08 schedule_static
-extern TexturePtr D_08000000;
-extern TexturePtr D_08000100;
-extern TexturePtr D_08000700;
-extern TexturePtr D_08000880;
-extern TexturePtr D_08000A40;
-extern TexturePtr D_08001240;
-extern TexturePtr D_080012C0;
-extern TexturePtr D_08001340;
-extern TexturePtr D_08001358;
-extern TexturePtr D_080013D8;
-extern TexturePtr D_080017D8;
-extern TexturePtr D_08001898;
-extern TexturePtr D_080018B0;
-extern TexturePtr D_080018D0;
-extern TexturePtr D_08001950;
-extern TexturePtr D_08001CD0;
-extern TexturePtr D_08001DB0;
-extern TexturePtr D_08001E90;
-extern TexturePtr D_08001F70;
-extern TexturePtr D_08002078;
-extern TexturePtr D_08002100;
-extern TexturePtr D_08002188;
-extern TexturePtr D_08002210;
-extern TexturePtr D_08002298;
-extern TexturePtr D_08002320;
-extern TexturePtr D_080023A8;
-extern TexturePtr D_08002430;
-extern TexturePtr D_080024B8;
-extern TexturePtr D_08002540;
-extern TexturePtr D_080025C8;
-extern TexturePtr D_08002650;
-extern TexturePtr D_08002A70;
-extern TexturePtr D_08002E90;
-extern TexturePtr D_080032B0;
 
 #define BOMBERSNOTEBOOK_ENTRY(pos, day, eventIndex, startTime, endTime) \
     ((pos)&0xF000) | (((day)&0xF) << 8) | ((eventIndex + 20) & 0xFF), (startTime), (endTime)
@@ -226,7 +192,11 @@ u16 sBombersNotebookEntries[][30] = {
 };
 
 s16 sBombersNotebookDayRectRectLeft[] = { 120, 120, 270, 420 };
-TexturePtr sBombersNotebookDayTextures[] = { &D_08002650, &D_08002A70, &D_08002E90 };
+TexturePtr sBombersNotebookDayTextures[] = {
+    gBombersNotebookDay1stTex,
+    gBombersNotebookDay2ndTex,
+    gBombersNotebookDayFinalTex,
+};
 
 s32 sBombersNotebookEventIcons[] = {
     /* 00 */ BOMBERSNOTEBOOK_EVENT_ICON_EXCLAMATION_POINT,
@@ -329,9 +299,8 @@ void BombersNotebook_DrawHeaders(Gfx** gfxP) {
     s32 i;
     s32 rectLeft;
 
-    // Box
-    gDPLoadTextureBlock(gfx++, &D_080017D8, G_IM_FMT_I, G_IM_SIZ_8b, 8, 24, 0, G_TX_NOMIRROR | G_TX_WRAP,
-                        G_TX_NOMIRROR | G_TX_WRAP, 3, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+    gDPLoadTextureBlock(gfx++, gBombersNotebookHeaderBoxTex, G_IM_FMT_I, G_IM_SIZ_8b, 8, 24, 0,
+                        G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, 3, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
     for (i = 0, rectLeft = 120; i < 3; i++, rectLeft += 150) {
         gDPSetPrimColor(gfx++, 0, 0, sBombersNotebookHeaderColors[i][0], sBombersNotebookHeaderColors[i][1],
                         sBombersNotebookHeaderColors[i][2], 192);
@@ -339,7 +308,6 @@ void BombersNotebook_DrawHeaders(Gfx** gfxP) {
                                          0x400);
     }
 
-    // Day Texture
     gDPSetPrimColor(gfx++, 0, 0, 255, 255, 255, 255);
     for (i = 0, rectLeft = 124; i < 3; i++, rectLeft += 150) {
         gDPLoadTextureBlock(gfx++, sBombersNotebookDayTextures[i], G_IM_FMT_IA, G_IM_SIZ_8b, 48, 22, 0,
@@ -349,9 +317,8 @@ void BombersNotebook_DrawHeaders(Gfx** gfxP) {
                                          0x400);
     }
 
-    // 18:00
     rectLeft = 172;
-    gDPLoadTextureBlock_4b(gfx++, &D_08001F70, G_IM_FMT_IA, 48, 11, 0, G_TX_NOMIRROR | G_TX_WRAP,
+    gDPLoadTextureBlock_4b(gfx++, gBombersNotebook1800Tex, G_IM_FMT_IA, 48, 11, 0, G_TX_NOMIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
     for (i = 0; i < 3; i++) {
         BombersNotebook_TextureRectangle(&gfx, rectLeft * 4, 86 * 4, (rectLeft + 48) * 4, 97 * 4, 0, 0, 0, 0x400,
@@ -379,7 +346,7 @@ void BombersNotebook_DrawColumns(Gfx** gfxP) {
     s32 subColumnRectLeft;
     s32 pad;
 
-    gDPLoadTextureBlock_4b(gfx++, &D_08001340, G_IM_FMT_I, 48, 1, 0, G_TX_NOMIRROR | G_TX_WRAP,
+    gDPLoadTextureBlock_4b(gfx++, gBombersNotebookSubColumnBoxTex, G_IM_FMT_I, 48, 1, 0, G_TX_NOMIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
     color = &sBombersNotebookColumnColors[0][0][0];
@@ -400,7 +367,11 @@ void BombersNotebook_DrawColumns(Gfx** gfxP) {
     *gfxP = gfx;
 }
 
-TexturePtr sBombersNotebookEventIconTextures[] = { &D_08000000, &D_0700AC00, &D_0700AEA0 };
+TexturePtr sBombersNotebookEventIconTextures[] = {
+    gBombersNotebookEntryIconExclamationPoint,
+    &D_0700AC00,
+    &D_0700AEA0,
+};
 s16 sBombersNotebookEntryIconColors[][3] = {
     { 255, 255, 0 },
     { 141, 255, 182 },
@@ -429,8 +400,9 @@ void BombersNotebook_DrawEntries(Gfx** gfxP, s32 row, u32 rectTop) {
                                   PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
                 gDPSetPrimColor(gfx++, 0, 0, 0, 0, 0, 255);
                 gDPSetEnvColor(gfx++, 0, 0, 0, 255);
-                gDPLoadTextureBlock(gfx++, &D_08000100, G_IM_FMT_IA, G_IM_SIZ_8b, 32, 48, 0, G_TX_MIRROR | G_TX_WRAP,
-                                    G_TX_MIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+                gDPLoadTextureBlock(gfx++, gBombersNotebookStampTex, G_IM_FMT_IA, G_IM_SIZ_8b, 32, 48, 0,
+                                    G_TX_MIRROR | G_TX_WRAP, G_TX_MIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
+                                    G_TX_NOLOD, G_TX_NOLOD);
                 BombersNotebook_TextureRectangle(&gfx, 567 * 4, (rectTop + 1) * 4, 599 * 4, (rectTop + 49) * 4, 0, 0, 0,
                                                  0x400, 0x400);
                 gDPPipeSync(gfx++);
@@ -466,15 +438,16 @@ void BombersNotebook_DrawEntries(Gfx** gfxP, s32 row, u32 rectTop) {
 
         // Shadow
         gDPSetPrimColor(gfx++, 0, 0, 0, 0, 0, 255);
-        gDPLoadTextureBlock(gfx++, &D_08001240, G_IM_FMT_RGBA, G_IM_SIZ_16b, 4, 16, 0, G_TX_MIRROR | G_TX_WRAP,
-                            G_TX_MIRROR | G_TX_WRAP, 2, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+        gDPLoadTextureBlock(gfx++, gBombersNotebookEntryBoxEndTex, G_IM_FMT_RGBA, G_IM_SIZ_16b, 4, 16, 0,
+                            G_TX_MIRROR | G_TX_WRAP, G_TX_MIRROR | G_TX_WRAP, 2, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
         BombersNotebook_TextureRectangle(&gfx, (entryRectLeft + 2) * 4, (rectTop + yOffset + 2) * 4,
                                          (entryRectLeft + 6) * 4, (rectTop + yOffset + 18) * 4, 0, 0, 0, 0x400, 0x400);
         BombersNotebook_TextureRectangle(&gfx, (entryRight + -2) * 4, (rectTop + yOffset + 2) * 4, (entryRight + 2) * 4,
                                          (rectTop + yOffset + 18) * 4, 0, 0x80, 0, 0x400, 0x400);
         if (entryWidth > 0) {
-            gDPLoadTextureBlock(gfx++, &D_080012C0, G_IM_FMT_RGBA, G_IM_SIZ_16b, 4, 16, 0, G_TX_MIRROR | G_TX_WRAP,
-                                G_TX_MIRROR | G_TX_WRAP, 2, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+            gDPLoadTextureBlock(gfx++, gBombersNotebookEntryBoxMiddleTex, G_IM_FMT_RGBA, G_IM_SIZ_16b, 4, 16, 0,
+                                G_TX_MIRROR | G_TX_WRAP, G_TX_MIRROR | G_TX_WRAP, 2, G_TX_NOMASK, G_TX_NOLOD,
+                                G_TX_NOLOD);
             BombersNotebook_TextureRectangle(&gfx, (entryRectLeft + 6) * 4, (rectTop + yOffset + 2) * 4,
                                              (entryRectLeft + 6 + entryWidth) * 4, (rectTop + yOffset + 18) * 4, 0, 0,
                                              0, 0x400, 0x400);
@@ -482,8 +455,8 @@ void BombersNotebook_DrawEntries(Gfx** gfxP, s32 row, u32 rectTop) {
 
         // Box
         gDPSetPrimColor(gfx++, 0, 0, 255, 255, 255, 255);
-        gDPLoadTextureBlock(gfx++, &D_08001240, G_IM_FMT_RGBA, G_IM_SIZ_16b, 4, 16, 0, G_TX_MIRROR | G_TX_WRAP,
-                            G_TX_MIRROR | G_TX_WRAP, 2, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+        gDPLoadTextureBlock(gfx++, gBombersNotebookEntryBoxEndTex, G_IM_FMT_RGBA, G_IM_SIZ_16b, 4, 16, 0,
+                            G_TX_MIRROR | G_TX_WRAP, G_TX_MIRROR | G_TX_WRAP, 2, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
         //! FAKE: the ^ 0
         BombersNotebook_TextureRectangle(&gfx, (entryRectLeft * 4) ^ 0, (rectTop + yOffset) * 4,
                                          (entryRectLeft + 4) * 4, (rectTop + yOffset + 16) * 4, 0, 0, 0, 0x400, 0x400);
@@ -491,8 +464,9 @@ void BombersNotebook_DrawEntries(Gfx** gfxP, s32 row, u32 rectTop) {
         BombersNotebook_TextureRectangle(&gfx, (entryRight + -4) * 4, (rectTop + yOffset) * 4, (entryRight * 4) ^ 0,
                                          (rectTop + yOffset + 16) * 4, 0, 0x80, 0, 0x400, 0x400);
         if (entryWidth > 0) {
-            gDPLoadTextureBlock(gfx++, &D_080012C0, G_IM_FMT_RGBA, G_IM_SIZ_16b, 4, 16, 0, G_TX_MIRROR | G_TX_WRAP,
-                                G_TX_MIRROR | G_TX_WRAP, 2, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+            gDPLoadTextureBlock(gfx++, gBombersNotebookEntryBoxMiddleTex, G_IM_FMT_RGBA, G_IM_SIZ_16b, 4, 16, 0,
+                                G_TX_MIRROR | G_TX_WRAP, G_TX_MIRROR | G_TX_WRAP, 2, G_TX_NOMASK, G_TX_NOLOD,
+                                G_TX_NOLOD);
             BombersNotebook_TextureRectangle(&gfx, (entryRectLeft + 4) * 4, (rectTop + yOffset) * 4,
                                              (entryRectLeft + 4 + entryWidth) * 4, (rectTop + yOffset + 16) * 4, 0, 0,
                                              0, 0x400, 0x400);
@@ -633,14 +607,13 @@ void BombersNotebook_DrawRows(BombersNotebook* this, Gfx** gfxP) {
     }
     cursorPage = i;
     for (; i < rowEnd; i++, rectTop += 52) {
-        // Photo
         gDPSetPrimColor(gfx++, 0, 0, 255, 255, 255, 255);
         if (CHECK_WEEKEVENTREG(gBombersNotebookWeekEventFlags[i])) {
             gDPLoadTextureBlock(gfx++, sBombersNotebookPhotoTextures[i], G_IM_FMT_RGBA, G_IM_SIZ_16b, 32, 32, 0,
                                 G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
         } else {
-            gDPLoadTextureBlock(gfx++, &D_08000A40, G_IM_FMT_RGBA, G_IM_SIZ_16b, 32, 32, 0, G_TX_NOMIRROR | G_TX_WRAP,
-                                G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
+            gDPLoadTextureBlock(gfx++, gBombersNotebookEmptyPhotoTex, G_IM_FMT_RGBA, G_IM_SIZ_16b, 32, 32, 0,
+                                G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
         }
         if ((i == (this->cursorPageRow + cursorPage)) && (this->scrollAmount == 0)) {
             barRectLeft = 56;
@@ -657,19 +630,18 @@ void BombersNotebook_DrawRows(BombersNotebook* this, Gfx** gfxP) {
                                          (57 - photoOffset + photoWidth) * 4, (rectTop - photoOffset + photoWidth) * 4,
                                          0, 0, 0, 1024.0f / (photoRectDs / 100.0f), 1024.0f / (photoRectDs / 100.0f));
 
-        // Bar
         if ((i == (this->cursorPageRow + cursorPage)) && (this->scrollAmount == 0)) {
             gDPSetPrimColor(gfx++, 0, 0, sBarColorR, sBarColorG, sBarColorB, 255);
         } else {
             gDPSetPrimColor(gfx++, 0, 0, 0, 0, 0, 60);
         }
-        gDPLoadTextureBlock(gfx++, &D_080018B0, G_IM_FMT_I, G_IM_SIZ_8b, 8, 4, 0, G_TX_NOMIRROR | G_TX_WRAP,
+        gDPLoadTextureBlock(gfx++, gBombersNotebookBarTex, G_IM_FMT_I, G_IM_SIZ_8b, 8, 4, 0, G_TX_NOMIRROR | G_TX_WRAP,
                             G_TX_NOMIRROR | G_TX_WRAP, 3, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
         BombersNotebook_TextureRectangle(&gfx, (barRectLeft + 57) * 4, (rectTop + 22) * 4,
                                          (barRectLeft - photoOffset + 527) * 4, (rectTop + 26) * 4, 0, 0, 0, 0x400,
                                          0x400);
-        gDPLoadTextureBlock_4b(gfx++, &D_08001358, G_IM_FMT_I, 16, 16, 0, G_TX_NOMIRROR | G_TX_WRAP,
+        gDPLoadTextureBlock_4b(gfx++, gBombersNotebookCircleTex, G_IM_FMT_I, 16, 16, 0, G_TX_NOMIRROR | G_TX_WRAP,
                                G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
         BombersNotebook_TextureRectangle(&gfx, (barRectLeft - photoOffset + 527) * 4, (rectTop + 16) * 4,
@@ -692,8 +664,9 @@ void BombersNotebook_DrawRows(BombersNotebook* this, Gfx** gfxP) {
 }
 
 TexturePtr sBombersNotebookDigitTextures[] = {
-    &D_08002078, &D_08002100, &D_08002188, &D_08002210, &D_08002298,
-    &D_08002320, &D_080023A8, &D_08002430, &D_080024B8, &D_08002540,
+    gBombersNotebookDigit0Tex, gBombersNotebookDigit1Tex, gBombersNotebookDigit2Tex, gBombersNotebookDigit3Tex,
+    gBombersNotebookDigit4Tex, gBombersNotebookDigit5Tex, gBombersNotebookDigit6Tex, gBombersNotebookDigit7Tex,
+    gBombersNotebookDigit8Tex, gBombersNotebookDigit9Tex,
 };
 u8 sBombersNotebookDigitRectLeftOffsets[] = { 13, 8, 12, 13, 14, 13, 12, 12, 13, 12 };
 s16 sBombersNotebookDayTexRectLeftOffsets[] = { 16, 12, 9 };
@@ -729,22 +702,20 @@ void BombersNotebook_DrawTimeOfDay(Gfx** gfxP) {
         lineRectLeft = timeOfDayRectLeft + 96;
     }
 
-    // Time of day text box
     gDPSetPrimColor(gfx++, 0, 0, 255, 255, 255, 255);
-    gDPLoadTextureBlock_4b(gfx++, &D_08001950, G_IM_FMT_IA, 64, 28, 0, G_TX_MIRROR | G_TX_WRAP,
+    gDPLoadTextureBlock_4b(gfx++, gBombersNoteoobkTimeOfDayBoxTex, G_IM_FMT_IA, 64, 28, 0, G_TX_MIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, 6, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
     BombersNotebook_TextureRectangle(&gfx, timeOfDayRectLeft * 4, 42 * 4, (timeOfDayRectLeft + 128) * 4, 70 * 4, 0, 0,
                                      0, 0x400, 0x400);
     gDPSetPrimColor(gfx++, 0, 0, 0, 0, 0, 255);
     gDPPipeSync(gfx++);
     gDPSetCombineLERP(gfx++, 0, 0, 0, PRIMITIVE, 0, 0, 0, TEXEL0, 0, 0, 0, PRIMITIVE, 0, 0, 0, TEXEL0);
-    gDPLoadTextureBlock_4b(gfx++, &D_080032B0, G_IM_FMT_I, 96, 20, 0, G_TX_MIRROR | G_TX_WRAP,
+    gDPLoadTextureBlock_4b(gfx++, gBombersNotebookTimeOfDayTex, G_IM_FMT_I, 96, 20, 0, G_TX_MIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
     BombersNotebook_TextureRectangle(&gfx, (timeOfDayRectLeft + 16) * 4, 47 * 4, (timeOfDayRectLeft + 112) * 4, 67 * 4,
                                      0, 0, 0, 0x400, 0x400);
 
-    // Time Box
     gDPPipeSync(gfx++);
     gDPSetCombineMode(gfx++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
     gDPSetPrimColor(gfx++, 0, 0, 255, 255, 255, 255);
@@ -756,15 +727,15 @@ void BombersNotebook_DrawTimeOfDay(Gfx** gfxP) {
         connectorRectLeft = timeOfDayRectLeft + 113;
     }
 
-    gDPLoadTextureBlock_4b(gfx++, &D_08001CD0, G_IM_FMT_IA, 16, 28, 0, G_TX_MIRROR | G_TX_WRAP,
+    gDPLoadTextureBlock_4b(gfx++, gBombersNotebookTimeBoxLeftTex, G_IM_FMT_IA, 16, 28, 0, G_TX_MIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
     BombersNotebook_TextureRectangle(&gfx, timeBoxRectLeft * 4, 42 * 4, (timeBoxRectLeft + 16) * 4, 70 * 4, 0, 0, 0,
                                      0x400, 0x400);
-    gDPLoadTextureBlock_4b(gfx++, &D_08001E90, G_IM_FMT_IA, 16, 28, 0, G_TX_MIRROR | G_TX_WRAP,
+    gDPLoadTextureBlock_4b(gfx++, gBombersNotebookTimeBoxMiddleTex, G_IM_FMT_IA, 16, 28, 0, G_TX_MIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, 4, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
     BombersNotebook_TextureRectangle(&gfx, (timeBoxRectLeft + 16) * 4, 42 * 4, (timeBoxRectLeft + 141) * 4, 70 * 4, 0,
                                      0, 0, 0x400, 0x400);
-    gDPLoadTextureBlock_4b(gfx++, &D_08001DB0, G_IM_FMT_IA, 16, 28, 0, G_TX_MIRROR | G_TX_WRAP,
+    gDPLoadTextureBlock_4b(gfx++, gBombersNotebookTimeBoxRightTex, G_IM_FMT_IA, 16, 28, 0, G_TX_MIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
     BombersNotebook_TextureRectangle(&gfx, (timeBoxRectLeft + 141) * 4, 42 * 4, (timeBoxRectLeft + 157) * 4, 70 * 4, 0,
                                      0, 0, 0x400, 0x400);
@@ -777,7 +748,7 @@ void BombersNotebook_DrawTimeOfDay(Gfx** gfxP) {
         0x400, 0x400);
 
     gDPSetPrimColor(gfx++, 0, 0, 150, 150, 150, 255);
-    gDPLoadTextureBlock_4b(gfx++, &D_08001358, G_IM_FMT_I, 16, 16, 0, G_TX_NOMIRROR | G_TX_WRAP,
+    gDPLoadTextureBlock_4b(gfx++, gBombersNotebookCircleTex, G_IM_FMT_I, 16, 16, 0, G_TX_NOMIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
     BombersNotebook_TextureRectangle(&gfx, (timeBoxRectLeft + 56) * 4, 48 * 4, (timeBoxRectLeft + 72) * 4, 0x100, 0, 0,
                                      0, 0x400, 0x400);
@@ -813,7 +784,7 @@ void BombersNotebook_DrawTimeOfDay(Gfx** gfxP) {
                                      0x400, 0x400);
 
     digitsRectLeft += sBombersNotebookDigitRectLeftOffsets[onesDigit];
-    gDPLoadTextureBlock_4b(gfx++, &D_080025C8, G_IM_FMT_I, 16, 17, 0, G_TX_NOMIRROR | G_TX_WRAP,
+    gDPLoadTextureBlock_4b(gfx++, gBombersNotebookColonTex, G_IM_FMT_I, 16, 17, 0, G_TX_NOMIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
     BombersNotebook_TextureRectangle(&gfx, digitsRectLeft * 4, 48 * 4, (digitsRectLeft + 16) * 4, 65 * 4, 0, 0, 0,
                                      0x400, 0x400);
@@ -844,18 +815,17 @@ void BombersNotebook_DrawTimeOfDay(Gfx** gfxP) {
     BombersNotebook_TextureRectangle(&gfx, digitsRectLeft * 4, 48 * 4, (digitsRectLeft + 16) * 4, 65 * 4, 0, 0, 0,
                                      0x400, 0x400);
 
-    // Connector (Texture that connects time of day text box and the time box)
     gDPPipeSync(gfx++);
     gDPSetCombineMode(gfx++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
     gDPSetPrimColor(gfx++, 0, 0, 255, 255, 255, 255);
-    gDPLoadTextureBlock(gfx++, &D_08000880, G_IM_FMT_IA, G_IM_SIZ_8b, 32, 14, 0, G_TX_MIRROR | G_TX_WRAP,
-                        G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+    gDPLoadTextureBlock(gfx++, gBombersNotebookConnectorTex, G_IM_FMT_IA, G_IM_SIZ_8b, 32, 14, 0,
+                        G_TX_MIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
+                        G_TX_NOLOD);
     BombersNotebook_TextureRectangle(&gfx, connectorRectLeft * 4, 49 * 4, (connectorRectLeft + 32) * 4, 63 * 4, 0, 0, 0,
                                      0x400, 0x400);
 
-    // Line
     gDPSetPrimColor(gfx++, 0, 0, 242, 0, 14, 255);
-    gDPLoadTextureBlock(gfx++, &D_08001898, G_IM_FMT_I, G_IM_SIZ_8b, 8, 1, 0, G_TX_MIRROR | G_TX_WRAP,
+    gDPLoadTextureBlock(gfx++, gBombersNotebookLineTex, G_IM_FMT_I, G_IM_SIZ_8b, 8, 1, 0, G_TX_MIRROR | G_TX_WRAP,
                         G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
     BombersNotebook_TextureRectangle(&gfx, lineRectLeft * 4, 74 * 4, (lineRectLeft + 32) * 4, 490 * 4, 0, 0, 0, 0x400,
                                      0x400);
@@ -865,7 +835,7 @@ void BombersNotebook_DrawTimeOfDay(Gfx** gfxP) {
                       ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
     gDPSetPrimColor(gfx++, 0, 0, 255, 255, 255, 255);
     gDPSetEnvColor(gfx++, 200, 0, 0, 255);
-    gDPLoadTextureBlock(gfx++, &D_08000700, G_IM_FMT_IA, G_IM_SIZ_8b, 24, 16, 0, G_TX_MIRROR | G_TX_WRAP,
+    gDPLoadTextureBlock(gfx++, gBombersNotebookArrowTex, G_IM_FMT_IA, G_IM_SIZ_8b, 24, 16, 0, G_TX_MIRROR | G_TX_WRAP,
                         G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
     BombersNotebook_TextureRectangle(&gfx, (lineRectLeft + -11) * 4, 70 * 4, (lineRectLeft + 13) * 4, 86 * 4, 0, 0, 0,
                                      0x400, 0x400);
@@ -892,8 +862,8 @@ void BombersNotebook_DrawCursor(BombersNotebook* this, Gfx** gfxP) {
                       ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
     gDPSetPrimColor(gfx++, 0, 0, 255, 205, 55, 255);
     gDPSetEnvColor(gfx++, 0, 0, 0, 255);
-    gDPLoadTextureBlock_4b(gfx++, &D_080018D0, G_IM_FMT_IA, 16, 16, 0, G_TX_MIRROR | G_TX_WRAP, G_TX_MIRROR | G_TX_WRAP,
-                           4, 4, G_TX_NOLOD, G_TX_NOLOD);
+    gDPLoadTextureBlock_4b(gfx++, gBombersNotebookCursorTex, G_IM_FMT_IA, 16, 16, 0, G_TX_MIRROR | G_TX_WRAP,
+                           G_TX_MIRROR | G_TX_WRAP, 4, 4, G_TX_NOLOD, G_TX_NOLOD);
 
     if (this->cursorEntry == 0) {
         BombersNotebook_TextureRectangle(&gfx, 47 * 4, (this->cursorPageRow * 52 + 97) * 4, 63 * 4,
@@ -993,7 +963,7 @@ void BombersNotebook_DrawArrows(BombersNotebook* this, Gfx** gfxP) {
     s16 colorStep;
 
     gDPPipeSync(gfx++);
-    gDPLoadTextureBlock(gfx++, &D_08000700, G_IM_FMT_IA, G_IM_SIZ_8b, 24, 16, 0, G_TX_MIRROR | G_TX_WRAP,
+    gDPLoadTextureBlock(gfx++, gBombersNotebookArrowTex, G_IM_FMT_IA, G_IM_SIZ_8b, 24, 16, 0, G_TX_MIRROR | G_TX_WRAP,
                         G_TX_MIRROR | G_TX_WRAP, G_TX_NOMASK, 4, G_TX_NOLOD, G_TX_NOLOD);
 
     colorStep = ABS_ALT(sUpperArrowColorG - sArrowColorTargetsG[sUpperArrowColorIndex]) / sUpperArrowColorTimer;
@@ -1082,8 +1052,8 @@ void BombersNotebook_Draw(BombersNotebook* this, GraphicsContext* gfxCtx) {
         gDPSetRenderMode(gfx++, G_RM_OPA_SURF, G_RM_OPA_SURF2);
         gDPSetPrimColor(gfx++, 0, 0, 255, 255, 215, 255);
         gDPSetEnvColor(gfx++, 100, 100, 100, 255);
-        gDPLoadTextureBlock(gfx++, &D_080013D8, G_IM_FMT_I, G_IM_SIZ_8b, 32, 32, 0, G_TX_NOMIRROR | G_TX_WRAP,
-                            G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
+        gDPLoadTextureBlock(gfx++, gBombersNotebookBackgroundTex, G_IM_FMT_I, G_IM_SIZ_8b, 32, 32, 0,
+                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
 
         BombersNotebook_TextureRectangle(&gfx, 0 * 4, 0 * 4, SCREEN_WIDTH_HIRES * 4, SCREEN_HEIGHT_HIRES * 4, 0, 0, 0,
                                          0x200, 0x200);
