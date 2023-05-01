@@ -1,6 +1,6 @@
 <Root>
     <File Name="schedule_static" Segment="8">
-        <Texture Name="gBombersNotebookEntryIconExclamationPoint" OutName="bombers_notebook_entry_icon_exlamation_point" Format="ia8" Width="16" Height="16" Offset="0x0000"/>
+        <Texture Name="gBombersNotebookEntryIconExclamationPointTex" OutName="bombers_notebook_entry_icon_exlamation_point" Format="ia8" Width="16" Height="16" Offset="0x0000"/>
         <Texture Name="gBombersNotebookStampTex" OutName="bombers_notebook_stamp" Format="ia8" Width="32" Height="48" Offset="0x0100"/>
         <Texture Name="gBombersNotebookArrowTex" OutName="bombers_notebook_arrow" Format="ia8" Width="24" Height="16" Offset="0x0700"/>
         <Texture Name="gBombersNotebookConnectorTex" OutName="bombers_notebook_connector" Format="ia8" Width="32" Height="14" Offset="0x0880"/>

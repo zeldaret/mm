@@ -381,7 +381,7 @@ void BombersNotebook_DrawHeaders(Gfx** gfxP) {
 
     gDPLoadTextureBlock(gfx++, gBombersNotebookHeaderBoxTex, G_IM_FMT_I, G_IM_SIZ_8b, 8, 24, 0,
                         G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, 3, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
-    for (i = 0, rectLeft = 120; i < 3; i++, rectLeft += 150) {
+    for (i = 0, rectLeft = 120; i < ARRAY_COUNT(sBombersNotebookHeaderColors); i++, rectLeft += 150) {
         gDPSetPrimColor(gfx++, 0, 0, sBombersNotebookHeaderColors[i][0], sBombersNotebookHeaderColors[i][1],
                         sBombersNotebookHeaderColors[i][2], 192);
         BombersNotebook_TextureRectangle(&gfx, rectLeft * 4, 74 * 4, (rectLeft + 143) * 4, 98 * 4, 0, 0, 0, 0x400,
@@ -389,7 +389,7 @@ void BombersNotebook_DrawHeaders(Gfx** gfxP) {
     }
 
     gDPSetPrimColor(gfx++, 0, 0, 255, 255, 255, 255);
-    for (i = 0, rectLeft = 124; i < 3; i++, rectLeft += 150) {
+    for (i = 0, rectLeft = 124; i < ARRAY_COUNT(sBombersNotebookDayTextures); i++, rectLeft += 150) {
         gDPLoadTextureBlock(gfx++, sBombersNotebookDayTextures[i], G_IM_FMT_IA, G_IM_SIZ_8b, 48, 22, 0,
                             G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
                             G_TX_NOLOD);
@@ -430,7 +430,7 @@ void BombersNotebook_DrawColumns(Gfx** gfxP) {
                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
     color = &sBombersNotebookColumnColors[0][0][0];
-    for (i = 0, columnRectLeft = 120; i < 3; i++, columnRectLeft += 150) {
+    for (i = 0, columnRectLeft = 120; i < ARRAY_COUNT(sBombersNotebookColumnColors); i++, columnRectLeft += 150) {
         subColumnRectLeft = columnRectLeft;
         for (j = 0; j < 2; j++) {
             gDPSetPrimColor(gfx++, 0, 0, color[0], color[1], color[2], 192);
@@ -448,7 +448,7 @@ void BombersNotebook_DrawColumns(Gfx** gfxP) {
 }
 
 TexturePtr sBombersNotebookEventIconTextures[] = {
-    gBombersNotebookEntryIconExclamationPoint,
+    gBombersNotebookEntryIconExclamationPointTex,
     &D_0700AC00,
     &D_0700AEA0,
 };
