@@ -50,7 +50,7 @@ typedef enum {
 #define BOMBERS_NOTEBOOK_EVENT_COLOR_WEEKEVENTREG_NONE 0xFFF0
 #define BOMBERS_NOTEBOOK_EVENT_COLOR_WEEKEVENTREG_DELIVERED_LETTER 0xFFF1
 
-u16 sBombersNotebookEntries[BOMBERS_NOTEBOOK_NUM_PEOPLE][10 * BOMBERS_NOTEBOOK_ENTRY_SIZE] = {
+u16 sBombersNotebookEntries[BOMBERS_NOTEBOOK_PERSON_MAX][10 * BOMBERS_NOTEBOOK_ENTRY_SIZE] = {
     {
         /* Bombers */
         BOMBERS_NOTEBOOK_ENTRY(BOMBERS_NOTEBOOK_ENTRY_POS_ABOVE, 1, BOMBERS_NOTEBOOK_EVENT_LEARNED_SECRET_CODE,
@@ -279,82 +279,24 @@ TexturePtr sBombersNotebookDayTextures[] = {
     gBombersNotebookDayFinalTex,
 };
 
+#define DEFINE_EVENT(_enum, icon, _colorFlag, _description, _completedMessage) icon,
+
 s32 sBombersNotebookEventIcons[] = {
-    /* 00 */ BOMBERS_NOTEBOOK_EVENT_ICON_EXCLAMATION_POINT,
-    /* 01 */ BOMBERS_NOTEBOOK_EVENT_ICON_EXCLAMATION_POINT,
-    /* 02 */ BOMBERS_NOTEBOOK_EVENT_ICON_EXCLAMATION_POINT,
-    /* 03 */ BOMBERS_NOTEBOOK_EVENT_ICON_EXCLAMATION_POINT,
-    /* 04 */ BOMBERS_NOTEBOOK_EVENT_ICON_EXCLAMATION_POINT,
-    /* 05 */ BOMBERS_NOTEBOOK_EVENT_ICON_EXCLAMATION_POINT,
-    /* 06 */ BOMBERS_NOTEBOOK_EVENT_ICON_EXCLAMATION_POINT,
-    /* 07 */ BOMBERS_NOTEBOOK_EVENT_ICON_EXCLAMATION_POINT,
-    /* 08 */ BOMBERS_NOTEBOOK_EVENT_ICON_EXCLAMATION_POINT,
-    /* 09 */ BOMBERS_NOTEBOOK_EVENT_ICON_EXCLAMATION_POINT,
-    /* 10 */ BOMBERS_NOTEBOOK_EVENT_ICON_RIBBON,
-    /* 11 */ BOMBERS_NOTEBOOK_EVENT_ICON_EXCLAMATION_POINT,
-    /* 12 */ BOMBERS_NOTEBOOK_EVENT_ICON_MASK,
-    /* 13 */ BOMBERS_NOTEBOOK_EVENT_ICON_MASK,
-    /* 14 */ BOMBERS_NOTEBOOK_EVENT_ICON_EXCLAMATION_POINT,
-    /* 15 */ BOMBERS_NOTEBOOK_EVENT_ICON_RIBBON,
-    /* 16 */ BOMBERS_NOTEBOOK_EVENT_ICON_EXCLAMATION_POINT,
-    /* 17 */ BOMBERS_NOTEBOOK_EVENT_ICON_RIBBON,
-    /* 18 */ BOMBERS_NOTEBOOK_EVENT_ICON_RIBBON,
-    /* 19 */ BOMBERS_NOTEBOOK_EVENT_ICON_RIBBON,
-    /* 20 */ BOMBERS_NOTEBOOK_EVENT_ICON_RIBBON,
-    /* 21 */ BOMBERS_NOTEBOOK_EVENT_ICON_RIBBON,
-    /* 22 */ BOMBERS_NOTEBOOK_EVENT_ICON_RIBBON,
-    /* 23 */ BOMBERS_NOTEBOOK_EVENT_ICON_RIBBON,
-    /* 24 */ BOMBERS_NOTEBOOK_EVENT_ICON_MASK,
-    /* 25 */ BOMBERS_NOTEBOOK_EVENT_ICON_MASK,
-    /* 26 */ BOMBERS_NOTEBOOK_EVENT_ICON_MASK,
-    /* 27 */ BOMBERS_NOTEBOOK_EVENT_ICON_MASK,
-    /* 28 */ BOMBERS_NOTEBOOK_EVENT_ICON_MASK,
-    /* 29 */ BOMBERS_NOTEBOOK_EVENT_ICON_MASK,
-    /* 30 */ BOMBERS_NOTEBOOK_EVENT_ICON_MASK,
-    /* 31 */ BOMBERS_NOTEBOOK_EVENT_ICON_MASK,
-    /* 32 */ BOMBERS_NOTEBOOK_EVENT_ICON_MASK,
-    /* 33 */ BOMBERS_NOTEBOOK_EVENT_ICON_MASK,
-    /* 34 */ BOMBERS_NOTEBOOK_EVENT_ICON_MASK,
+#include "tables/bombers_notebook/event_table.h"
 };
+
+#undef DEFINE_EVENT
+
 s32 sBombersNotebookEventIconWidths[] = { 16, 24, 32 };
 s32 sBombersNotebookEventIconHeights[] = { 16, 28, 28 };
+
+#define DEFINE_EVENT(_enum, _icon, colorFlag, _description, _completedMessage) colorFlag,
+
 u16 sBombersNotebookEventColorWeekEventFlags[] = {
-    /* 00 */ WEEKEVENTREG_75_10,
-    /* 01 */ WEEKEVENTREG_50_08,
-    /* 02 */ WEEKEVENTREG_50_20,
-    /* 03 */ WEEKEVENTREG_50_20,
-    /* 04 */ BOMBERS_NOTEBOOK_EVENT_COLOR_WEEKEVENTREG_DELIVERED_LETTER,
-    /* 05 */ WEEKEVENTREG_50_80,
-    /* 06 */ WEEKEVENTREG_51_01,
-    /* 07 */ WEEKEVENTREG_51_20,
-    /* 08 */ WEEKEVENTREG_21_20,
-    /* 09 */ WEEKEVENTREG_22_01,
-    /* 10 */ BOMBERS_NOTEBOOK_EVENT_COLOR_WEEKEVENTREG_NONE,
-    /* 11 */ WEEKEVENTREG_52_01,
-    /* 12 */ BOMBERS_NOTEBOOK_EVENT_COLOR_WEEKEVENTREG_NONE,
-    /* 13 */ BOMBERS_NOTEBOOK_EVENT_COLOR_WEEKEVENTREG_NONE,
-    /* 14 */ WEEKEVENTREG_80_10,
-    /* 15 */ BOMBERS_NOTEBOOK_EVENT_COLOR_WEEKEVENTREG_NONE,
-    /* 16 */ BOMBERS_NOTEBOOK_EVENT_COLOR_WEEKEVENTREG_NONE,
-    /* 17 */ BOMBERS_NOTEBOOK_EVENT_COLOR_WEEKEVENTREG_NONE,
-    /* 18 */ BOMBERS_NOTEBOOK_EVENT_COLOR_WEEKEVENTREG_NONE,
-    /* 19 */ BOMBERS_NOTEBOOK_EVENT_COLOR_WEEKEVENTREG_NONE,
-    /* 20 */ BOMBERS_NOTEBOOK_EVENT_COLOR_WEEKEVENTREG_NONE,
-    /* 21 */ BOMBERS_NOTEBOOK_EVENT_COLOR_WEEKEVENTREG_NONE,
-    /* 22 */ BOMBERS_NOTEBOOK_EVENT_COLOR_WEEKEVENTREG_NONE,
-    /* 23 */ BOMBERS_NOTEBOOK_EVENT_COLOR_WEEKEVENTREG_NONE,
-    /* 24 */ BOMBERS_NOTEBOOK_EVENT_COLOR_WEEKEVENTREG_NONE,
-    /* 25 */ BOMBERS_NOTEBOOK_EVENT_COLOR_WEEKEVENTREG_NONE,
-    /* 26 */ BOMBERS_NOTEBOOK_EVENT_COLOR_WEEKEVENTREG_NONE,
-    /* 27 */ BOMBERS_NOTEBOOK_EVENT_COLOR_WEEKEVENTREG_NONE,
-    /* 28 */ BOMBERS_NOTEBOOK_EVENT_COLOR_WEEKEVENTREG_NONE,
-    /* 29 */ BOMBERS_NOTEBOOK_EVENT_COLOR_WEEKEVENTREG_NONE,
-    /* 30 */ BOMBERS_NOTEBOOK_EVENT_COLOR_WEEKEVENTREG_NONE,
-    /* 31 */ BOMBERS_NOTEBOOK_EVENT_COLOR_WEEKEVENTREG_NONE,
-    /* 32 */ BOMBERS_NOTEBOOK_EVENT_COLOR_WEEKEVENTREG_NONE,
-    /* 33 */ BOMBERS_NOTEBOOK_EVENT_COLOR_WEEKEVENTREG_NONE,
-    /* 34 */ BOMBERS_NOTEBOOK_EVENT_COLOR_WEEKEVENTREG_NONE,
+#include "tables/bombers_notebook/event_table.h"
 };
+
+#undef DEFINE_EVENT
 
 void BombersNotebook_TextureRectangle(Gfx** gfxP, s32 rxl, s32 ryl, s32 rxh, s32 ryh, s32 tile, s32 s, s32 t, s32 dsdx,
                                       s32 dtdy) {
@@ -553,7 +495,7 @@ void BombersNotebook_DrawEntries(Gfx** gfxP, s32 row, u32 rectTop) {
 
         if (CHECK_WEEKEVENTREG(gBombersNotebookWeekEventFlags[BOMBERS_NOTEBOOK_ENTRY_GET_EVENT(row, j)])) {
             eventIcon =
-                sBombersNotebookEventIcons[BOMBERS_NOTEBOOK_ENTRY_GET_EVENT(row, j) - BOMBERS_NOTEBOOK_NUM_PEOPLE];
+                sBombersNotebookEventIcons[BOMBERS_NOTEBOOK_ENTRY_GET_EVENT(row, j) - BOMBERS_NOTEBOOK_PERSON_MAX];
             if ((entryRectRight - entryRectLeft) < sBombersNotebookEventIconWidths[eventIcon]) {
                 iconRectLeft =
                     (((entryRectLeft - sBombersNotebookEventIconWidths[eventIcon]) + entryRectRight) - entryRectLeft) +
@@ -582,13 +524,13 @@ void BombersNotebook_DrawEntries(Gfx** gfxP, s32 row, u32 rectTop) {
                                              (rectTop + yOffset + 2 + sBombersNotebookEventIconHeights[eventIcon]) * 4,
                                              0, 0, 0, 0x400, 0x400);
             if (sBombersNotebookEventColorWeekEventFlags[BOMBERS_NOTEBOOK_ENTRY_GET_EVENT(row, j) -
-                                                         BOMBERS_NOTEBOOK_NUM_PEOPLE] ==
+                                                         BOMBERS_NOTEBOOK_PERSON_MAX] ==
                 BOMBERS_NOTEBOOK_EVENT_COLOR_WEEKEVENTREG_NONE) {
                 gDPSetPrimColor(gfx++, 0, 0, sBombersNotebookEntryIconColors[eventIcon][0],
                                 sBombersNotebookEntryIconColors[eventIcon][1],
                                 sBombersNotebookEntryIconColors[eventIcon][2], 255);
             } else if (sBombersNotebookEventColorWeekEventFlags[BOMBERS_NOTEBOOK_ENTRY_GET_EVENT(row, j) -
-                                                                BOMBERS_NOTEBOOK_NUM_PEOPLE] ==
+                                                                BOMBERS_NOTEBOOK_PERSON_MAX] ==
                        BOMBERS_NOTEBOOK_EVENT_COLOR_WEEKEVENTREG_DELIVERED_LETTER) {
                 if (CHECK_WEEKEVENTREG(WEEKEVENTREG_27_02) || CHECK_WEEKEVENTREG(WEEKEVENTREG_27_04) ||
                     CHECK_WEEKEVENTREG(WEEKEVENTREG_27_08) || CHECK_WEEKEVENTREG(WEEKEVENTREG_27_10) ||
@@ -602,7 +544,7 @@ void BombersNotebook_DrawEntries(Gfx** gfxP, s32 row, u32 rectTop) {
             } else {
                 if (CHECK_WEEKEVENTREG(
                         sBombersNotebookEventColorWeekEventFlags[BOMBERS_NOTEBOOK_ENTRY_GET_EVENT(row, j) -
-                                                                 BOMBERS_NOTEBOOK_NUM_PEOPLE])) {
+                                                                 BOMBERS_NOTEBOOK_PERSON_MAX])) {
                     gDPSetPrimColor(gfx++, 0, 0, sBombersNotebookEntryIconColors[eventIcon][0],
                                     sBombersNotebookEntryIconColors[eventIcon][1],
                                     sBombersNotebookEntryIconColors[eventIcon][2], 255);
@@ -624,11 +566,13 @@ void BombersNotebook_DrawEntries(Gfx** gfxP, s32 row, u32 rectTop) {
     *gfxP = gfx;
 }
 
+#define DEFINE_PERSON(_enum, photo, _description, _metEnum, _metMessage, _metFlag) &photo,
+
 TexturePtr sBombersNotebookPhotoTextures[] = {
-    &D_07009800, &D_07000000, &D_07000800, &D_07001000, &D_07001800, &D_07002000, &D_07002800,
-    &D_07003000, &D_07003800, &D_07004000, &D_07004800, &D_07005000, &D_07005800, &D_07006000,
-    &D_07006800, &D_07007000, &D_07007800, &D_07008000, &D_07008800, &D_07009000,
+#include "tables/bombers_notebook/people_table.h"
 };
+
+#undef DEFINE_PERSON
 
 void BombersNotebook_DrawRows(BombersNotebook* this, Gfx** gfxP) {
     static s16 sBarColorR = 0;
@@ -980,7 +924,7 @@ void BombersNotebook_DrawCursor(BombersNotebook* this, Gfx** gfxP) {
             entryRectRight = entryRectLeft + 8;
         }
         entryIcon = sBombersNotebookEventIcons[BOMBERS_NOTEBOOK_ENTRY_GET_EVENT(cursorRow, cursorEntry) -
-                                               BOMBERS_NOTEBOOK_NUM_PEOPLE];
+                                               BOMBERS_NOTEBOOK_PERSON_MAX];
         if ((entryRectRight - entryRectLeft) < sBombersNotebookEventIconWidths[entryIcon]) {
             cursorRectLeft =
                 (((entryRectLeft - sBombersNotebookEventIconWidths[entryIcon]) + entryRectRight) - entryRectLeft) + 3;
@@ -1185,66 +1129,16 @@ void BombersNotebook_LoadFiles(BombersNotebook* this, s32 flag) {
     }
 }
 
-u16 sBombersNotebookTextIds[] = {
-    /* People */
-    /* 00 */ 0x21DD,
-    /* 01 */ 0x21CA,
-    /* 02 */ 0x21CB,
-    /* 03 */ 0x21CC,
-    /* 04 */ 0x21CD,
-    /* 05 */ 0x21CE,
-    /* 06 */ 0x21CF,
-    /* 07 */ 0x21D0,
-    /* 08 */ 0x21D1,
-    /* 09 */ 0x21D2,
-    /* 10 */ 0x21D3,
-    /* 11 */ 0x21D4,
-    /* 12 */ 0x21D5,
-    /* 13 */ 0x21D6,
-    /* 14 */ 0x21D7,
-    /* 15 */ 0x21D8,
-    /* 16 */ 0x21D9,
-    /* 17 */ 0x21DA,
-    /* 18 */ 0x21DB,
-    /* 19 */ 0x21DC,
+#define DEFINE_PERSON(_enum, _photo, description, _metEnum, _metMessage, _metFlag) description,
+#define DEFINE_EVENT(_enum, _icon, _colorFlag, description, _completedMessage) description,
 
-    /* Events */
-    /* 20 */ 0x2198,
-    /* 21 */ 0x2199,
-    /* 22 */ 0x219A,
-    /* 23 */ 0x219B,
-    /* 24 */ 0x219C,
-    /* 25 */ 0x219D,
-    /* 26 */ 0x219E,
-    /* 27 */ 0x219F,
-    /* 28 */ 0x21A0,
-    /* 29 */ 0x21A1,
-    /* 30 */ 0x21A2,
-    /* 31 */ 0x21A3,
-    /* 32 */ 0x21A4,
-    /* 33 */ 0x21A5,
-    /* 34 */ 0x21A6,
-    /* 35 */ 0x21A7,
-    /* 36 */ 0x21A8,
-    /* 37 */ 0x21A9,
-    /* 38 */ 0x21AA,
-    /* 39 */ 0x21AB,
-    /* 40 */ 0x21AC,
-    /* 41 */ 0x21AD,
-    /* 42 */ 0x21AE,
-    /* 43 */ 0x21AF,
-    /* 44 */ 0x21B0,
-    /* 45 */ 0x21B1,
-    /* 46 */ 0x21B2,
-    /* 47 */ 0x21B3,
-    /* 48 */ 0x21B4,
-    /* 49 */ 0x21B5,
-    /* 50 */ 0x21B6,
-    /* 51 */ 0x21B7,
-    /* 52 */ 0x21B8,
-    /* 53 */ 0x21B9,
-    /* 54 */ 0x21BA,
+u16 sBombersNotebookTextIds[] = {
+#include "tables/bombers_notebook/people_table.h"
+#include "tables/bombers_notebook/event_table.h"
 };
+
+#undef DEFINE_PERSON
+#undef DEFINE_EVENT
 
 void BombersNotebook_Update(PlayState* play, BombersNotebook* this, Input* input) {
     static s16 sStickXRepeatTimer = 0;
