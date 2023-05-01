@@ -1105,7 +1105,7 @@ void func_8088F214(EnElf* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     s32 pad;
 
-    if (play->csCtx.state != 0) {
+    if (play->csCtx.state != CS_STATE_IDLE) {
         if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_201)) {
             switch (play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_201)]->id) {
                 case 4:
@@ -1526,7 +1526,7 @@ void func_8089010C(Actor* thisx, PlayState* play) {
         this->unk_269--;
     }
 
-    if (!this->unk_269 && (play->csCtx.state != 0)) {
+    if (!this->unk_269 && (play->csCtx.state != CS_STATE_IDLE)) {
         this->unk_269 = 1;
     }
 }

@@ -916,7 +916,7 @@ void DmStk_PlaySfxForMoonWarpCutsceneVersion2(DmStk* this, PlayState* play) {
  * Handles sound effects for all cutscenes.
  */
 void DmStk_PlaySfxForCutscenes(DmStk* this, PlayState* play) {
-    if (play->csCtx.state != 0) {
+    if (play->csCtx.state != CS_STATE_IDLE) {
         switch (play->sceneId) {
             case SCENE_LOST_WOODS:
                 if (gSaveContext.sceneLayer == 1) {
@@ -1198,7 +1198,7 @@ void DmStk_ClockTower_StartIntroCutsceneVersion1(DmStk* this, PlayState* play) {
 }
 
 void DmStk_ClockTower_WaitForIntroCutsceneVersion1ToEnd(DmStk* this, PlayState* play) {
-    if (play->csCtx.state == 0) {
+    if (play->csCtx.state == CS_STATE_IDLE) {
         this->animIndex = SK_ANIM_CALL_DOWN_MOON_LOOP;
         this->handType = SK_HAND_TYPE_HOLDING_OCARINA;
         DmStk_ChangeAnim(this, play, &this->skelAnime, &sAnimationInfo[this->animIndex], 0);
@@ -1216,7 +1216,7 @@ void DmStk_ClockTower_StartIntroCutsceneVersion2(DmStk* this, PlayState* play) {
 }
 
 void DmStk_ClockTower_WaitForIntroCutsceneVersion2ToEnd(DmStk* this, PlayState* play) {
-    if (play->csCtx.state == 0) {
+    if (play->csCtx.state == CS_STATE_IDLE) {
         this->animIndex = SK_ANIM_FLOATING_ARMS_CROSSED;
         DmStk_ChangeAnim(this, play, &this->skelAnime, &sAnimationInfo[this->animIndex], 0);
         this->actionFunc = DmStk_ClockTower_Idle;
@@ -1238,7 +1238,7 @@ void DmStk_ClockTower_StartDropOcarinaCutscene(DmStk* this, PlayState* play) {
 }
 
 void DmStk_ClockTower_WaitForDropOcarinaCutsceneToEnd(DmStk* this, PlayState* play) {
-    if ((play->csCtx.state != 0) && (play->csCtx.curFrame > 20)) {
+    if ((play->csCtx.state != CS_STATE_IDLE) && (play->csCtx.curFrame > 20)) {
         this->actionFunc = DmStk_ClockTower_Idle;
     }
 }
@@ -1714,7 +1714,7 @@ void DmStk_UpdateCollision(DmStk* this, PlayState* play) {
 void DmStk_ClockTower_IdleWithOcarina(DmStk* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (play->csCtx.state == 0) {
+    if (play->csCtx.state == CS_STATE_IDLE) {
         DmStk_ClockTower_AdjustHeightAndRotation(this, play);
         this->actor.flags |= ACTOR_FLAG_1;
         this->tatlMessageTimer++;
@@ -1739,7 +1739,7 @@ void DmStk_ClockTower_IdleWithOcarina(DmStk* this, PlayState* play) {
  * If he is hit in this state, he will just deflect the attack.
  */
 void DmStk_ClockTower_Idle(DmStk* this, PlayState* play) {
-    if (play->csCtx.state == 0) {
+    if (play->csCtx.state == CS_STATE_IDLE) {
         DmStk_ClockTower_AdjustHeightAndRotation(this, play);
         this->actor.flags |= ACTOR_FLAG_1;
 
@@ -1804,7 +1804,7 @@ void DmStk_Update(Actor* thisx, PlayState* play) {
                 break;
 
             case SK_DEKU_PIPES_CS_STATE_START:
-                if (play->csCtx.state == 0) {
+                if (play->csCtx.state == CS_STATE_IDLE) {
                     this->dekuPipesCutsceneState = SK_DEKU_PIPES_CS_STATE_END;
                 }
                 break;
@@ -1815,7 +1815,7 @@ void DmStk_Update(Actor* thisx, PlayState* play) {
         if ((play->actorCtx.flags & ACTORCTX_FLAG_1) && (play->msgCtx.msgMode != MSGMODE_NONE) &&
             (play->msgCtx.currentTextId == 0x5E6) && !FrameAdvance_IsEnabled(&play->state) &&
             (play->transitionTrigger == TRANS_TRIGGER_OFF) && (CutsceneManager_GetCurrentCsId() == CS_ID_NONE) &&
-            (play->csCtx.state == 0)) {
+            (play->csCtx.state == CS_STATE_IDLE)) {
             gSaveContext.save.time = ((void)0, gSaveContext.save.time) + (u16)R_TIME_SPEED;
             if (R_TIME_SPEED != 0) {
                 gSaveContext.save.time =

@@ -842,7 +842,7 @@ void func_80B51FD0(EnGk* this, PlayState* play) {
 void func_80B5202C(EnGk* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (play->csCtx.state == 0) {
+    if (play->csCtx.state == CS_STATE_IDLE) {
         func_80B51410(this, play);
     }
 
@@ -861,7 +861,7 @@ void func_80B5202C(EnGk* this, PlayState* play) {
 
         if (this->unk_1E4 & 2) {
             if ((play->msgCtx.ocarinaMode != OCARINA_MODE_ACTIVE) && (play->msgCtx.ocarinaMode != OCARINA_MODE_EVENT) &&
-                (play->csCtx.state == 0)) {
+                (play->csCtx.state == CS_STATE_IDLE)) {
                 func_801A4748(&this->actor.projectedPos, NA_SE_EN_GOLON_KID_CRY - SFX_FLAG);
             }
         } else {

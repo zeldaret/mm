@@ -80,7 +80,7 @@ void OceffWipe5_Draw(Actor* thisx, PlayState* play) {
 
     if ((((OCEFF_WIPE5_GET_SONG_TYPE(thisx) == 2) && (play->sceneId == SCENE_LABO)) &&
          ((play->csCtx.scriptIndex == 0) || (play->csCtx.scriptIndex == 1))) &&
-        (play->csCtx.state != 0)) {
+        (play->csCtx.state != CS_STATE_IDLE)) {
         phi_fv1 = 1150.0f;
     }
 

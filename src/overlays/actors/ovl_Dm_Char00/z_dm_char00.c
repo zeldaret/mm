@@ -448,7 +448,7 @@ void func_80AA5E2C(DmChar00* this, PlayState* play) {
 }
 
 void func_80AA5EBC(DmChar00* this, PlayState* play) {
-    if (play->csCtx.state != 0) {
+    if (play->csCtx.state != CS_STATE_IDLE) {
         switch (play->sceneId) {
             case SCENE_LOST_WOODS:
                 if (gSaveContext.sceneLayer == 1) {
@@ -853,7 +853,7 @@ void func_80AA62FC(DmChar00* this, PlayState* play) {
 void func_80AA67F8(DmChar00* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if ((play->csCtx.state == 0) && (gSaveContext.sceneLayer == 0) && (play->csCtx.scriptIndex == 1)) {
+    if ((play->csCtx.state == CS_STATE_IDLE) && (gSaveContext.sceneLayer == 0) && (play->csCtx.scriptIndex == 1)) {
         if (this->unk_261 != 42) {
             this->unk_261 = 42;
             func_80AA5580(&this->skelAnime, &sAnimationInfo[this->unk_261], 0);
@@ -914,7 +914,7 @@ void DmChar00_Draw(Actor* thisx, PlayState* play2) {
     s32 pad;
     Gfx* gfx = GRAPH_ALLOC(play->state.gfxCtx, 4 * sizeof(Gfx));
 
-    if ((play->csCtx.state == 0) &&
+    if ((play->csCtx.state == CS_STATE_IDLE) &&
         ((play->sceneId != SCENE_OPENINGDAN) || (gSaveContext.sceneLayer != 0) || (play->roomCtx.curRoom.num != 0) ||
          (play->csCtx.scriptIndex != 1) || (DMCHAR00_GET(&this->actor) != DMCHAR00_0))) {
         return;

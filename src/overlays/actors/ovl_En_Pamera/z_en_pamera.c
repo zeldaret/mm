@@ -732,7 +732,7 @@ s32 func_80BD9CB8(EnPamera* this, PlayState* play) {
         this->setupFunc(this, play);
         return 1;
     }
-    if ((play->csCtx.state == 0) && CHECK_WEEKEVENTREG(WEEKEVENTREG_75_20)) {
+    if ((play->csCtx.state == CS_STATE_IDLE) && CHECK_WEEKEVENTREG(WEEKEVENTREG_75_20)) {
         if ((this->actionFunc != func_80BD994C) && (this->actionFunc != EnPamera_HandleDialogue)) {
             this->actor.shape.rot.y = this->actor.world.rot.y;
             func_80BD9904(this);

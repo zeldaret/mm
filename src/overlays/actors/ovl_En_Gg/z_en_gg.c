@@ -226,7 +226,7 @@ void func_80B352A4(EnGg* this, PlayState* play) {
 }
 
 void func_80B35450(EnGg* this, PlayState* play) {
-    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_91_10) && (play->csCtx.state == 0)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_91_10) && (play->csCtx.state == CS_STATE_IDLE)) {
         func_80B359DC(this, play);
     }
 
@@ -692,14 +692,14 @@ void EnGg_Update(Actor* thisx, PlayState* play) {
     }
 
     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_19_80)) {
-        if (play->csCtx.state == 0) {
+        if (play->csCtx.state == CS_STATE_IDLE) {
             this->actor.flags |= ACTOR_FLAG_1;
         } else {
             this->actor.flags &= ~ACTOR_FLAG_1;
         }
     }
 
-    if ((play->csCtx.state == 0) &&
+    if ((play->csCtx.state == CS_STATE_IDLE) &&
         ((this->unk_2DA != 14) && (this->unk_2DA != 11) && (this->unk_2DA != 12) && (this->unk_2DA != 13))) {
         func_80B364D4(&this->unk_344, play);
     }
@@ -723,7 +723,7 @@ void EnGg_Update(Actor* thisx, PlayState* play) {
     Actor_MoveWithoutGravity(&this->actor);
     SkelAnime_Update(&this->skelAnime);
 
-    if (play->csCtx.state == 0) {
+    if (play->csCtx.state == CS_STATE_IDLE) {
         func_80B3584C(this);
     } else {
         this->unk_2E8 = 0;
