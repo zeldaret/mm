@@ -5,9 +5,9 @@
 #include "io/controller.h"
 #include "z64dma.h"
 
-#define DEFINE_PERSON(enum, _photo, _description, _metEnum, _metMessage, _metFlag) enum,
+#define DEFINE_PERSON(enum, _photo, _description, _metMessage, _metFlag) BOMBERS_NOTBOOK_PERSON_##enum,
 typedef enum BombersNotebookPerson {
-    #include "tables/bombers_notebook/people_table.h"
+    #include "tables/bombers_notebook/person_table.h"
     /* 0x14 */ BOMBERS_NOTEBOOK_PERSON_MAX
 } BombersNotebookPerson;
 
@@ -19,10 +19,10 @@ typedef enum BombersNotebookLoadState {
     /* 2 */ BOMBERS_NOTEBOOK_LOAD_STATE_DONE
 } BombersNotebookLoadState;
 
-#define DEFINE_PERSON(_enum, _photo, _description, metEnum, _metMessage, _metFlag) metEnum,
-#define DEFINE_EVENT(enum, _icon, _colorFlag, _description, _completedMessage) enum,
+#define DEFINE_PERSON(enum, _photo, _description, _metMessage, _metFlag) BOMBERS_NOTEBOOK_EVENT_MET_##enum,
+#define DEFINE_EVENT(enum, _icon, _colorFlag, _description, _completedMessage) BOMBERS_NOTEBOOK_EVENT_##enum,
 typedef enum BombersNotebookEvent {
-    #include "tables/bombers_notebook/people_table.h"
+    #include "tables/bombers_notebook/person_table.h"
     #include "tables/bombers_notebook/event_table.h"
     /* 0x37 */ BOMBERS_NOTEBOOK_EVENT_MAX
 } BombersNotebookEvent;
