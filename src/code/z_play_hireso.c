@@ -27,6 +27,7 @@ extern TexturePtr D_07009800;
 extern TexturePtr D_0700AC00;
 extern TexturePtr D_0700AEA0;
 
+#define BOMBERS_NOTEBOOK_ENTRY_SIZE 3
 #define BOMBERS_NOTEBOOK_ENTRY_GET_DAY(row, entry) (((&sBombersNotebookEntries[row][entry])[0] & 0xF00) >> 8)
 #define BOMBERS_NOTEBOOK_ENTRY_GET_EVENT(row, entry) ((&sBombersNotebookEntries[row][entry])[0] & 0xFF)
 #define BOMBERS_NOTEBOOK_ENTRY_GET_START_TIME(row, entry) ((&sBombersNotebookEntries[row][entry])[1])
@@ -49,7 +50,7 @@ typedef enum {
 #define BOMBERS_NOTEBOOK_EVENT_COLOR_WEEKEVENTREG_NONE 0xFFF0
 #define BOMBERS_NOTEBOOK_EVENT_COLOR_WEEKEVENTREG_DELIVERED_LETTER 0xFFF1
 
-u16 sBombersNotebookEntries[BOMBERS_NOTEBOOK_NUM_PEOPLE][10 * 3] = {
+u16 sBombersNotebookEntries[BOMBERS_NOTEBOOK_NUM_PEOPLE][10 * BOMBERS_NOTEBOOK_ENTRY_SIZE] = {
     {
         /* Bombers */
         BOMBERS_NOTEBOOK_ENTRY(BOMBERS_NOTEBOOK_ENTRY_POS_ABOVE, 1, BOMBERS_NOTEBOOK_EVENT_LEARNED_SECRET_CODE,
@@ -617,7 +618,7 @@ void BombersNotebook_DrawEntries(Gfx** gfxP, s32 row, u32 rectTop) {
         } else {
             unfinishedEvent = true;
         }
-        j += 3;
+        j += BOMBERS_NOTEBOOK_ENTRY_SIZE;
     }
 
     *gfxP = gfx;
@@ -959,7 +960,7 @@ void BombersNotebook_DrawCursor(BombersNotebook* this, Gfx** gfxP) {
     } else {
         cursorRow = this->cursorPageRow + this->cursorPage;
         cursorRectTop = (this->cursorPageRow * 52) + 107;
-        cursorEntry = this->cursorEntry - 3; // Offset from photo entry
+        cursorEntry = this->cursorEntry - BOMBERS_NOTEBOOK_ENTRY_SIZE; // Offset from photo entry
         if (sBombersNotebookEntries[cursorRow][cursorEntry] & BOMBERS_NOTEBOOK_ENTRY_POS_ABOVE) {
             yOffset = 8;
         } else if (sBombersNotebookEntries[cursorRow][cursorEntry] & BOMBERS_NOTEBOOK_ENTRY_POS_BELOW) {
@@ -1331,17 +1332,19 @@ void BombersNotebook_Update(PlayState* play, BombersNotebook* this, Input* input
                 cursorEntryScan = this->cursorEntry;
                 if (stickAdjX > 30) {
                     while (true) {
-                        cursorEntryScan += 3;
-                        if (sBombersNotebookEntries[this->cursorPageRow + this->cursorPage][cursorEntryScan - 3] ==
+                        cursorEntryScan += BOMBERS_NOTEBOOK_ENTRY_SIZE;
+                        if (sBombersNotebookEntries[this->cursorPageRow + this->cursorPage]
+                                                   [cursorEntryScan - BOMBERS_NOTEBOOK_ENTRY_SIZE] ==
                             BOMBERS_NOTEBOOK_ENTRY_END) {
                             while (true) {
-                                cursorEntryScan -= 3;
+                                cursorEntryScan -= BOMBERS_NOTEBOOK_ENTRY_SIZE;
                                 if (cursorEntryScan == 0) {
                                     play_sound(NA_SE_SY_ERROR);
                                     break;
                                 }
                                 if (CHECK_WEEKEVENTREG(gBombersNotebookWeekEventFlags[BOMBERS_NOTEBOOK_ENTRY_GET_EVENT(
-                                        this->cursorPageRow + this->cursorPage, cursorEntryScan - 3)])) {
+                                        this->cursorPageRow + this->cursorPage,
+                                        cursorEntryScan - BOMBERS_NOTEBOOK_ENTRY_SIZE)])) {
                                     play_sound(NA_SE_SY_ERROR);
                                     break;
                                 }
@@ -1349,7 +1352,8 @@ void BombersNotebook_Update(PlayState* play, BombersNotebook* this, Input* input
                             break;
                         }
                         if (CHECK_WEEKEVENTREG(gBombersNotebookWeekEventFlags[BOMBERS_NOTEBOOK_ENTRY_GET_EVENT(
-                                this->cursorPageRow + this->cursorPage, cursorEntryScan - 3)])) {
+                                this->cursorPageRow + this->cursorPage,
+                                cursorEntryScan - BOMBERS_NOTEBOOK_ENTRY_SIZE)])) {
                             play_sound(NA_SE_SY_CURSOR);
                             break;
                         }
@@ -1358,9 +1362,10 @@ void BombersNotebook_Update(PlayState* play, BombersNotebook* this, Input* input
                 } else if (stickAdjX < -30) {
                     if (cursorEntryScan != 0) {
                         do {
-                            cursorEntryScan -= 3;
+                            cursorEntryScan -= BOMBERS_NOTEBOOK_ENTRY_SIZE;
                             if (CHECK_WEEKEVENTREG(gBombersNotebookWeekEventFlags[BOMBERS_NOTEBOOK_ENTRY_GET_EVENT(
-                                    this->cursorPageRow + this->cursorPage, cursorEntryScan - 3)])) {
+                                    this->cursorPageRow + this->cursorPage,
+                                    cursorEntryScan - BOMBERS_NOTEBOOK_ENTRY_SIZE)])) {
                                 play_sound(NA_SE_SY_CURSOR);
                                 break;
                             }
@@ -1370,11 +1375,11 @@ void BombersNotebook_Update(PlayState* play, BombersNotebook* this, Input* input
                 }
                 if (this->cursorEntry != 0) {
                     if (play->msgCtx.currentTextId !=
-                        sBombersNotebookTextIds[BOMBERS_NOTEBOOK_ENTRY_GET_EVENT(this->cursorPageRow + this->cursorPage,
-                                                                                 this->cursorEntry - 3)]) {
-                        Message_ContinueTextbox(play,
-                                                sBombersNotebookTextIds[BOMBERS_NOTEBOOK_ENTRY_GET_EVENT(
-                                                    this->cursorPageRow + this->cursorPage, this->cursorEntry - 3)]);
+                        sBombersNotebookTextIds[BOMBERS_NOTEBOOK_ENTRY_GET_EVENT(
+                            this->cursorPageRow + this->cursorPage, this->cursorEntry - BOMBERS_NOTEBOOK_ENTRY_SIZE)]) {
+                        Message_ContinueTextbox(play, sBombersNotebookTextIds[BOMBERS_NOTEBOOK_ENTRY_GET_EVENT(
+                                                          this->cursorPageRow + this->cursorPage,
+                                                          this->cursorEntry - BOMBERS_NOTEBOOK_ENTRY_SIZE)]);
                     }
                 } else {
                     if (play->msgCtx.currentTextId != sBombersNotebookTextIds[this->cursorPageRow + this->cursorPage]) {

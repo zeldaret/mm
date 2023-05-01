@@ -84,7 +84,7 @@ typedef struct {
     /* 0x8C */ uintptr_t scheduleSegmentStart;
     /* 0x90 */ size_t scheduleSegmentSize;
     /* 0x94 */ s32 cursorPageRow;
-    /* 0x98 */ s32 cursorEntry; // Entries are 3 apart
+    /* 0x98 */ s32 cursorEntry; // Entries are 3 apart, see BOMBERS_NOTEBOOK_ENTRY_SIZE
     /* 0x9C */ s32 cursorPage;
     /* 0xA0 */ UNK_TYPE1 padA0[0x4];
     /* 0xA4 */ s32 scrollAmount;
