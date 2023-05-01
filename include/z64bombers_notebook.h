@@ -20,7 +20,7 @@ typedef enum BombersNotebookLoadState {
 } BombersNotebookLoadState;
 
 #define DEFINE_PERSON(enum, _photo, _description, _metMessage, _metFlag) BOMBERS_NOTEBOOK_EVENT_MET_##enum,
-#define DEFINE_EVENT(enum, _icon, _colorFlag, _description, _completedMessage) BOMBERS_NOTEBOOK_EVENT_##enum,
+#define DEFINE_EVENT(enum, _icon, _colorFlag, _description, _completedMessage, _completedFlag) BOMBERS_NOTEBOOK_EVENT_##enum,
 typedef enum BombersNotebookEvent {
     #include "tables/bombers_notebook/person_table.h"
     #include "tables/bombers_notebook/event_table.h"

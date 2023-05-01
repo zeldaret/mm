@@ -279,7 +279,7 @@ TexturePtr sBombersNotebookDayTextures[] = {
     gBombersNotebookDayFinalTex,
 };
 
-#define DEFINE_EVENT(_enum, icon, _colorFlag, _description, _completedMessage) icon,
+#define DEFINE_EVENT(_enum, icon, _colorFlag, _description, _completedMessage, _completedFlag) icon,
 
 s32 sBombersNotebookEventIcons[] = {
 #include "tables/bombers_notebook/event_table.h"
@@ -290,7 +290,7 @@ s32 sBombersNotebookEventIcons[] = {
 s32 sBombersNotebookEventIconWidths[] = { 16, 24, 32 };
 s32 sBombersNotebookEventIconHeights[] = { 16, 28, 28 };
 
-#define DEFINE_EVENT(_enum, _icon, colorFlag, _description, _completedMessage) colorFlag,
+#define DEFINE_EVENT(_enum, _icon, colorFlag, _description, _completedMessage, _completedFlag) colorFlag,
 
 u16 sBombersNotebookEventColorWeekEventFlags[] = {
 #include "tables/bombers_notebook/event_table.h"
@@ -625,8 +625,8 @@ void BombersNotebook_DrawRows(BombersNotebook* this, Gfx** gfxP) {
     }
 
     rectTop = this->scrollOffset + 107;
-    if (this->cursorPage >= 12) {
-        rowEnd = 20;
+    if (this->cursorPage >= (BOMBERS_NOTEBOOK_PERSON_MAX - 8)) {
+        rowEnd = BOMBERS_NOTEBOOK_PERSON_MAX;
         i = this->cursorPage;
     } else {
         rowEnd = this->cursorPage + 8;
@@ -1130,7 +1130,7 @@ void BombersNotebook_LoadFiles(BombersNotebook* this, s32 flag) {
 }
 
 #define DEFINE_PERSON(_enum, _photo, description, _metMessage, _metFlag) description,
-#define DEFINE_EVENT(_enum, _icon, _colorFlag, description, _completedMessage) description,
+#define DEFINE_EVENT(_enum, _icon, _colorFlag, description, _completedMessage, _completedFlag) description,
 
 u16 sBombersNotebookTextIds[] = {
 #include "tables/bombers_notebook/person_table.h"
@@ -1289,7 +1289,7 @@ void BombersNotebook_Update(PlayState* play, BombersNotebook* this, Input* input
                     play_sound(NA_SE_SY_CURSOR);
                     this->cursorEntry = 0;
                     this->cursorPageRow++;
-                } else if (this->cursorPage < 16) {
+                } else if (this->cursorPage < (BOMBERS_NOTEBOOK_PERSON_MAX - 4)) {
                     if (sStickYRepeatState == -1) {
                         this->scrollAmount = -24;
                     } else {
