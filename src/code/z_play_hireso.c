@@ -451,8 +451,10 @@ void BombersNotebook_DrawEntries(Gfx** gfxP, s32 row, u32 rectTop) {
 
         startTime = BOMBERS_NOTEBOOK_ENTRY_GET_START_TIME(row, j) - CLOCK_TIME(6, 0);
         endTime = BOMBERS_NOTEBOOK_ENTRY_GET_END_TIME(row, j) - CLOCK_TIME(6, 0);
-        entryRectLeft = sBombersNotebookDayRectRectLeft[BOMBERS_NOTEBOOK_ENTRY_GET_DAY(row, j)] + (startTime / CLOCK_TIME(0, 10));
-        entryRectRight = sBombersNotebookDayRectRectLeft[BOMBERS_NOTEBOOK_ENTRY_GET_DAY(row, j)] + (endTime / CLOCK_TIME(0, 10));
+        entryRectLeft =
+            sBombersNotebookDayRectRectLeft[BOMBERS_NOTEBOOK_ENTRY_GET_DAY(row, j)] + (startTime / CLOCK_TIME(0, 10));
+        entryRectRight =
+            sBombersNotebookDayRectRectLeft[BOMBERS_NOTEBOOK_ENTRY_GET_DAY(row, j)] + (endTime / CLOCK_TIME(0, 10));
         entryWidth = entryRectRight - entryRectLeft - 8;
         if ((entryRectRight - entryRectLeft) < 8) {
             entryRectLeft = ((entryRectLeft + entryRectRight) - entryRectLeft) - 8;
@@ -917,10 +919,10 @@ void BombersNotebook_DrawCursor(BombersNotebook* this, Gfx** gfxP) {
 
         startTime = BOMBERS_NOTEBOOK_ENTRY_GET_START_TIME(cursorRow, cursorEntry) - CLOCK_TIME(6, 0);
         endTime = BOMBERS_NOTEBOOK_ENTRY_GET_END_TIME(cursorRow, cursorEntry) - CLOCK_TIME(6, 0);
-        entryRectLeft =
-            sBombersNotebookDayRectRectLeft[BOMBERS_NOTEBOOK_ENTRY_GET_DAY(cursorRow, cursorEntry)] + (startTime / CLOCK_TIME(0, 10));
-        entryRectRight =
-            sBombersNotebookDayRectRectLeft[BOMBERS_NOTEBOOK_ENTRY_GET_DAY(cursorRow, cursorEntry)] + (endTime / CLOCK_TIME(0, 10));
+        entryRectLeft = sBombersNotebookDayRectRectLeft[BOMBERS_NOTEBOOK_ENTRY_GET_DAY(cursorRow, cursorEntry)] +
+                        (startTime / CLOCK_TIME(0, 10));
+        entryRectRight = sBombersNotebookDayRectRectLeft[BOMBERS_NOTEBOOK_ENTRY_GET_DAY(cursorRow, cursorEntry)] +
+                         (endTime / CLOCK_TIME(0, 10));
         if ((entryRectRight - entryRectLeft) < 8) {
             entryRectLeft = ((entryRectLeft + entryRectRight) - entryRectLeft) - 8;
             entryRectRight = entryRectLeft + 8;
