@@ -1,5 +1,5 @@
 /**
- * Bombers Notebook People Table
+ * Bombers Notebook Person Table
  *
  * DEFINE_PERSON should be used for people with entries in the notebook
  *    - Argument 0: Enum value for this person (without the prefix)

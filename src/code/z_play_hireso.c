@@ -28,6 +28,8 @@ extern TexturePtr D_0700AC00;
 extern TexturePtr D_0700AEA0;
 
 #define BOMBERS_NOTEBOOK_ENTRY_SIZE 3
+#define BOMBERS_NOTEBOOK_ENTRY_MAX 10
+
 #define BOMBERS_NOTEBOOK_ENTRY_GET_DAY(row, entry) (((&sBombersNotebookEntries[row][entry])[0] & 0xF00) >> 8)
 #define BOMBERS_NOTEBOOK_ENTRY_GET_EVENT(row, entry) ((&sBombersNotebookEntries[row][entry])[0] & 0xFF)
 #define BOMBERS_NOTEBOOK_ENTRY_GET_START_TIME(row, entry) ((&sBombersNotebookEntries[row][entry])[1])
@@ -48,9 +50,9 @@ typedef enum {
 } BombersNotebookEventIcon;
 
 #define BOMBERS_NOTEBOOK_EVENT_COLOR_WEEKEVENTREG_NONE 0xFFF0
-#define BOMBERS_NOTEBOOK_EVENT_COLOR_WEEKEVENTREG_DELIVERED_LETTER 0xFFF1
+#define BOMBERS_NOTEBOOK_EVENT_COLOR_WEEKEVENTREG_DEPOSITED_LETTER 0xFFF1
 
-u16 sBombersNotebookEntries[BOMBERS_NOTEBOOK_PERSON_MAX][10 * BOMBERS_NOTEBOOK_ENTRY_SIZE] = {
+u16 sBombersNotebookEntries[BOMBERS_NOTEBOOK_PERSON_MAX][BOMBERS_NOTEBOOK_ENTRY_MAX * BOMBERS_NOTEBOOK_ENTRY_SIZE] = {
     {
         /* Bombers */
         BOMBERS_NOTEBOOK_ENTRY(BOMBERS_NOTEBOOK_ENTRY_POS_ABOVE, 1, BOMBERS_NOTEBOOK_EVENT_LEARNED_SECRET_CODE,
@@ -449,8 +451,8 @@ void BombersNotebook_DrawEntries(Gfx** gfxP, s32 row, u32 rectTop) {
 
         startTime = BOMBERS_NOTEBOOK_ENTRY_GET_START_TIME(row, j) - CLOCK_TIME(6, 0);
         endTime = BOMBERS_NOTEBOOK_ENTRY_GET_END_TIME(row, j) - CLOCK_TIME(6, 0);
-        entryRectLeft = sBombersNotebookDayRectRectLeft[BOMBERS_NOTEBOOK_ENTRY_GET_DAY(row, j)] + (startTime / 455);
-        entryRectRight = sBombersNotebookDayRectRectLeft[BOMBERS_NOTEBOOK_ENTRY_GET_DAY(row, j)] + (endTime / 455);
+        entryRectLeft = sBombersNotebookDayRectRectLeft[BOMBERS_NOTEBOOK_ENTRY_GET_DAY(row, j)] + (startTime / CLOCK_TIME(0, 10));
+        entryRectRight = sBombersNotebookDayRectRectLeft[BOMBERS_NOTEBOOK_ENTRY_GET_DAY(row, j)] + (endTime / CLOCK_TIME(0, 10));
         entryWidth = entryRectRight - entryRectLeft - 8;
         if ((entryRectRight - entryRectLeft) < 8) {
             entryRectLeft = ((entryRectLeft + entryRectRight) - entryRectLeft) - 8;
@@ -531,7 +533,7 @@ void BombersNotebook_DrawEntries(Gfx** gfxP, s32 row, u32 rectTop) {
                                 sBombersNotebookEntryIconColors[eventIcon][2], 255);
             } else if (sBombersNotebookEventColorWeekEventFlags[BOMBERS_NOTEBOOK_ENTRY_GET_EVENT(row, j) -
                                                                 BOMBERS_NOTEBOOK_PERSON_MAX] ==
-                       BOMBERS_NOTEBOOK_EVENT_COLOR_WEEKEVENTREG_DELIVERED_LETTER) {
+                       BOMBERS_NOTEBOOK_EVENT_COLOR_WEEKEVENTREG_DEPOSITED_LETTER) {
                 if (CHECK_WEEKEVENTREG(WEEKEVENTREG_27_02) || CHECK_WEEKEVENTREG(WEEKEVENTREG_27_04) ||
                     CHECK_WEEKEVENTREG(WEEKEVENTREG_27_08) || CHECK_WEEKEVENTREG(WEEKEVENTREG_27_10) ||
                     CHECK_WEEKEVENTREG(WEEKEVENTREG_27_20)) {
@@ -715,7 +717,7 @@ void BombersNotebook_DrawTimeOfDay(Gfx** gfxP) {
     if (CURRENT_DAY == 0) {
         time = 0;
     }
-    timeOfDayRectLeft = sBombersNotebookDayRectRectLeft[CURRENT_DAY] + (time / 455);
+    timeOfDayRectLeft = sBombersNotebookDayRectRectLeft[CURRENT_DAY] + (time / CLOCK_TIME(0, 10));
     if ((CURRENT_DAY_MIN_1 == 1) ||
         ((CURRENT_DAY_MIN_1 == 2) && (((void)0, gSaveContext.save.time) < CLOCK_TIME(12, 0)))) {
         timeOfDayRectLeft -= 32;
@@ -916,9 +918,9 @@ void BombersNotebook_DrawCursor(BombersNotebook* this, Gfx** gfxP) {
         startTime = BOMBERS_NOTEBOOK_ENTRY_GET_START_TIME(cursorRow, cursorEntry) - CLOCK_TIME(6, 0);
         endTime = BOMBERS_NOTEBOOK_ENTRY_GET_END_TIME(cursorRow, cursorEntry) - CLOCK_TIME(6, 0);
         entryRectLeft =
-            sBombersNotebookDayRectRectLeft[BOMBERS_NOTEBOOK_ENTRY_GET_DAY(cursorRow, cursorEntry)] + (startTime / 455);
+            sBombersNotebookDayRectRectLeft[BOMBERS_NOTEBOOK_ENTRY_GET_DAY(cursorRow, cursorEntry)] + (startTime / CLOCK_TIME(0, 10));
         entryRectRight =
-            sBombersNotebookDayRectRectLeft[BOMBERS_NOTEBOOK_ENTRY_GET_DAY(cursorRow, cursorEntry)] + (endTime / 455);
+            sBombersNotebookDayRectRectLeft[BOMBERS_NOTEBOOK_ENTRY_GET_DAY(cursorRow, cursorEntry)] + (endTime / CLOCK_TIME(0, 10));
         if ((entryRectRight - entryRectLeft) < 8) {
             entryRectLeft = ((entryRectLeft + entryRectRight) - entryRectLeft) - 8;
             entryRectRight = entryRectLeft + 8;
@@ -1121,11 +1123,15 @@ void BombersNotebook_LoadFiles(BombersNotebook* this, s32 flag) {
             DmaMgr_SendRequestImpl(&this->dmaRequest, this->scheduleSegment, this->scheduleSegmentStart,
                                    this->scheduleSegmentSize, 0, &this->loadQueue, NULL);
             this->loadState = BOMBERS_NOTEBOOK_LOAD_STATE_STARTED;
-            // fall-through
+            // fallthrough
         case BOMBERS_NOTEBOOK_LOAD_STATE_STARTED:
             if (osRecvMesg(&this->loadQueue, NULL, flag) == 0) {
                 this->loadState = BOMBERS_NOTEBOOK_LOAD_STATE_DONE;
             }
+            break;
+
+        default:
+            break;
     }
 }
 

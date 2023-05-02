@@ -1053,14 +1053,14 @@ void Play_Update(PlayState* this) {
     if (!sBombersNotebookOpen) {
         if (this->pauseCtx.bombersNotebookOpen) {
             sBombersNotebookOpen = true;
-            sBombersNotebook.loadState = 0;
+            sBombersNotebook.loadState = BOMBERS_NOTEBOOK_LOAD_STATE_NONE;
         }
     } else if (CHECK_BTN_ALL(CONTROLLER1(&this->state)->press.button, BTN_L) ||
                CHECK_BTN_ALL(CONTROLLER1(&this->state)->press.button, BTN_B) ||
                CHECK_BTN_ALL(CONTROLLER1(&this->state)->press.button, BTN_START) || (gIrqMgrResetStatus != 0)) {
         sBombersNotebookOpen = false;
         this->pauseCtx.bombersNotebookOpen = false;
-        sBombersNotebook.loadState = 0;
+        sBombersNotebook.loadState = BOMBERS_NOTEBOOK_LOAD_STATE_NONE;
         this->msgCtx.msgLength = 0;
         this->msgCtx.msgMode = 0;
         this->msgCtx.currentTextId = 0;

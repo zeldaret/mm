@@ -34,8 +34,8 @@ typedef struct {
     /* 0x00 */ u8 loadState;
     /* 0x01 */ UNK_TYPE1 pad01[0x3F];
     /* 0x40 */ void* scheduleDmaSegment;
-    /* 0x44 */ u32 scheduleDmaSegmentStart;
-    /* 0x48 */ u32 scheduleDmaSegmentSize;
+    /* 0x44 */ uintptr_t scheduleDmaSegmentStart;
+    /* 0x48 */ size_t scheduleDmaSegmentSize;
     /* 0x4C */ DmaRequest dmaRequest;
     /* 0x6C */ OSMesgQueue loadQueue;
     /* 0x84 */ OSMesg loadMsg[1];
