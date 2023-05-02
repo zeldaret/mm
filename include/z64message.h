@@ -159,8 +159,8 @@ typedef struct MessageContext {
     /* 0x120A0 */ s32 unk120A0;
     /* 0x120A4 */ s16 unk120A4[6];
     /* 0x120B0 */ u8 unk120B0;
-    /* 0x120B1 */ u8 unk120B1;
-    /* 0x120B2 */ u8 unk120B2[0xA];
+    /* 0x120B1 */ u8 bombersNotebookNewEventQueueSize;
+    /* 0x120B2 */ u8 bombersNotebookNewEventQueue[10];
     /* 0x120BC */ u16 unk_120BC;
     /* 0x120BE */ s16 unk120BE;
     /* 0x120C0 */ s16 unk120C0;

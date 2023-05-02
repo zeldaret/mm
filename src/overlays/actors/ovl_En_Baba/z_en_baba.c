@@ -293,9 +293,9 @@ void EnBaba_HandleConversation(EnBaba* this, PlayState* play) {
     if (this->stateFlags & BOMB_SHOP_LADY_STATE_END_CONVERSATION) {
         if (this->stateFlags & BOMB_SHOP_LADY_STATE_GAVE_BLAST_MASK) {
             this->stateFlags &= ~BOMB_SHOP_LADY_STATE_GAVE_BLAST_MASK;
-            func_80151BB4(play, 0x33);
+            Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_RECEIVED_BLAST_MASK);
         }
-        func_80151BB4(play, 4);
+        Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_BOMB_SHOP_LADY);
     }
 }
 
@@ -602,7 +602,7 @@ void EnBaba_Talk(EnBaba* this, PlayState* play) {
                 play->msgCtx.stateTimer = 4;
                 if (this->stateFlags & BOMB_SHOP_LADY_STATE_AUTOTALK) {
                     if (CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
-                        if (play->msgCtx.unk120B1 == 0) {
+                        if (play->msgCtx.bombersNotebookNewEventQueueSize == 0) {
                             SET_WEEKEVENTREG(WEEKEVENTREG_81_02);
                             EnBaba_TriggerTransition(play, ENTRANCE(NORTH_CLOCK_TOWN, 7));
                             return;
@@ -625,7 +625,7 @@ void EnBaba_Talk(EnBaba* this, PlayState* play) {
             }
         }
     } else if (talkState == TEXT_STATE_DONE) {
-        if (Message_ShouldAdvance(play) && (play->msgCtx.unk120B1 == 0)) {
+        if (Message_ShouldAdvance(play) && (play->msgCtx.bombersNotebookNewEventQueueSize == 0)) {
             SET_WEEKEVENTREG(WEEKEVENTREG_81_02);
             EnBaba_TriggerTransition(play, ENTRANCE(NORTH_CLOCK_TOWN, 7));
         }

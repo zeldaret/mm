@@ -309,9 +309,9 @@ void func_809C4DA4(EnBomBowlMan* this, PlayState* play) {
                 break;
 
             case 5:
-                func_80151BB4(play, 0x24);
-                func_80151BB4(play, 0x25);
-                func_80151BB4(play, 0);
+                Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_LEARNED_SECRET_CODE);
+                Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_RECEIVED_BOMBERS_NOTEBOOK);
+                Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_BOMBERS);
                 this->actionFunc = func_809C51B4;
                 sp28 = true;
                 break;
@@ -330,7 +330,7 @@ void func_809C4DA4(EnBomBowlMan* this, PlayState* play) {
 void func_809C51B4(EnBomBowlMan* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if ((play->msgCtx.unk120B1 == 0) &&
+    if ((play->msgCtx.bombersNotebookNewEventQueueSize == 0) &&
         ((play->msgCtx.msgMode == 0) || (Message_GetState(&play->msgCtx) == TEXT_STATE_DONE))) {
         play->nextEntrance = Entrance_CreateFromSpawn(6);
         gSaveContext.nextCutsceneIndex = 0;
@@ -432,9 +432,9 @@ void func_809C5598(EnBomBowlMan* this, PlayState* play) {
         } else if (this->actor.textId == 0x735) {
             this->unk_2C2 = 0;
             func_809C493C(this, 17, 1.0f);
-            func_80151BB4(play, 0x24);
-            func_80151BB4(play, 0x25);
-            func_80151BB4(play, 0);
+            Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_LEARNED_SECRET_CODE);
+            Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_RECEIVED_BOMBERS_NOTEBOOK);
+            Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_BOMBERS);
             func_800B7298(play, &this->actor, PLAYER_CSMODE_WAIT);
             this->actionFunc = func_809C5738;
             return;
@@ -448,7 +448,7 @@ void func_809C5738(EnBomBowlMan* this, PlayState* play) {
     s16 yaw = Math_Vec3f_Yaw(&this->actor.world.pos, &this->unk_2A0);
 
     if (this->unk_2C2 == 0) {
-        if ((play->msgCtx.unk120B1 == 0) &&
+        if ((play->msgCtx.bombersNotebookNewEventQueueSize == 0) &&
             ((play->msgCtx.msgMode == 0) || (Message_GetState(&play->msgCtx) == TEXT_STATE_DONE))) {
             this->unk_2C2 = 1;
             func_809C4B6C(this);

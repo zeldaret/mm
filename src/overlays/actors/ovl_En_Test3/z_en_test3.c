@@ -312,7 +312,7 @@ s32 func_80A3E898(EnTest3* this, PlayState* play) {
     u16 textId = this->unk_D78->textId;
 
     if ((this->unk_D78->unk_0 == 4) && CHECK_WEEKEVENTREG(WEEKEVENTREG_51_08)) {
-        func_80151BB4(play, 2);
+        Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_KAFEI);
     }
     if (textId == 0xFFFF) {
         Message_CloseTextbox(play);
@@ -657,7 +657,7 @@ s32 func_80A3F73C(EnTest3* this, PlayState* play) {
         this->player.stateFlags2 &= ~PLAYER_STATE2_40000;
         D_80A41D5C = true;
         if ((this->unk_D78->unk_0 == 4) && CHECK_WEEKEVENTREG(WEEKEVENTREG_51_08)) {
-            func_80151BB4(play, 2);
+            Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_KAFEI);
         }
     } else {
         if (play->actorCtx.flags & ACTORCTX_FLAG_4) {
@@ -1018,8 +1018,8 @@ void func_80A40908(EnTest3* this, PlayState* play) {
         func_80A3E7E0(this, func_80A4084C);
         this->player.targetedActor = &GET_PLAYER(play)->actor;
         SET_WEEKEVENTREG(WEEKEVENTREG_51_08);
-        func_80151BB4(play, 0x19);
-        func_80151BB4(play, 2);
+        Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_RECEIVED_PENDANT_OF_MEMORIES);
+        Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_KAFEI);
     } else {
         func_800B8500(&this->player.actor, play, 9999.9f, 9999.9f, PLAYER_IA_MINUS1);
         this->unk_D78 = &D_80A41854[6];

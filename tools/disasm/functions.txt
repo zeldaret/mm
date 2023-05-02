@@ -2855,7 +2855,7 @@
     0x801518B0:("Message_StartTextbox",),
     0x80151938:("Message_ContinueTextbox",),
     0x80151A68:("func_80151A68",),
-    0x80151BB4:("func_80151BB4",),
+    0x80151BB4:("Message_BombersNotebookQueueEvent",),
     0x80151C9C:("func_80151C9C",),
     0x80151DA4:("func_80151DA4",),
     0x80152434:("func_80152434",),

@@ -99,9 +99,9 @@ void EnHs_Destroy(Actor* thisx, PlayState* play) {
 
 void func_80952DFC(PlayState* play) {
     if (INV_CONTENT(ITEM_MASK_BUNNY) == ITEM_MASK_BUNNY) {
-        func_80151BB4(play, 0x2E);
+        Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_RECEIVED_BUNNY_HOOD);
     }
-    func_80151BB4(play, 0x10);
+    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GROG);
 }
 
 void EnHs_UpdateChickPos(Vec3f* dst, Vec3f src, f32 offset) {

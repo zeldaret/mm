@@ -307,7 +307,7 @@ void EnMaYts_StartDialogue(EnMaYts* this, PlayState* play) {
                 EnMaYts_SetFaceExpression(this, 4, 3);
                 Message_StartTextbox(play, 0x3362, &this->actor);
                 this->textId = 0x3362;
-                func_80151BB4(play, 5);
+                Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_ROMANI);
             }
         } else if (Player_GetMask(play) != PLAYER_MASK_NONE) {
             if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_65_40)) {
@@ -319,7 +319,7 @@ void EnMaYts_StartDialogue(EnMaYts* this, PlayState* play) {
                 EnMaYts_SetFaceExpression(this, 4, 2);
                 Message_StartTextbox(play, 0x3366, &this->actor);
                 this->textId = 0x3366;
-                func_80151BB4(play, 5);
+                Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_ROMANI);
             }
         } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_21_20)) {
             EnMaYts_SetFaceExpression(this, 0, 0);
@@ -337,7 +337,7 @@ void EnMaYts_StartDialogue(EnMaYts* this, PlayState* play) {
                 EnMaYts_SetFaceExpression(this, 0, 0);
                 Message_StartTextbox(play, 0x336C, &this->actor);
                 this->textId = 0x336C;
-                func_80151BB4(play, 5);
+                Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_ROMANI);
             }
         }
         EnMaYts_SetupDialogueHandler(this);
@@ -436,7 +436,7 @@ void EnMaYts_ChooseNextDialogue(EnMaYts* this, PlayState* play) {
                 EnMaYts_SetFaceExpression(this, 4, 3);
                 Message_StartTextbox(play, 0x3361, &this->actor);
                 this->textId = 0x3361;
-                func_80151BB4(play, 5);
+                Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_ROMANI);
                 break;
 
             case 0x3363:
@@ -449,14 +449,14 @@ void EnMaYts_ChooseNextDialogue(EnMaYts* this, PlayState* play) {
                 EnMaYts_SetFaceExpression(this, 4, 2);
                 Message_StartTextbox(play, 0x3365, &this->actor);
                 this->textId = 0x3365;
-                func_80151BB4(play, 5);
+                Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_ROMANI);
                 break;
 
             case 0x3367:
                 EnMaYts_SetFaceExpression(this, 4, 3);
                 Message_StartTextbox(play, 0x3368, &this->actor);
                 this->textId = 0x3368;
-                func_80151BB4(play, 5);
+                Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_ROMANI);
                 break;
 
             case 0x3369:
@@ -469,7 +469,7 @@ void EnMaYts_ChooseNextDialogue(EnMaYts* this, PlayState* play) {
                 EnMaYts_SetFaceExpression(this, 3, 3);
                 Message_StartTextbox(play, 0x336B, &this->actor);
                 this->textId = 0x336B;
-                func_80151BB4(play, 5);
+                Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_ROMANI);
                 break;
 
             default:

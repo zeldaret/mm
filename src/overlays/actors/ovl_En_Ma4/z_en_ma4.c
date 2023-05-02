@@ -383,7 +383,7 @@ void EnMa4_HandlePlayerChoice(EnMa4* this, PlayState* play) {
                     Message_StartTextbox(play, 0x3342, &this->actor);
                     this->textId = 0x3342;
                     this->state = MA4_STATE_DEFAULT;
-                    func_80151BB4(play, 5);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_ROMANI);
                 }
                 break;
 
@@ -410,7 +410,7 @@ void EnMa4_HandlePlayerChoice(EnMa4* this, PlayState* play) {
                     func_8019F230();
                     Message_StartTextbox(play, 0x3348, &this->actor);
                     this->textId = 0x3348;
-                    func_80151BB4(play, 5);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_ROMANI);
                 }
                 break;
 
@@ -422,9 +422,9 @@ void EnMa4_HandlePlayerChoice(EnMa4* this, PlayState* play) {
                     Message_StartTextbox(play, 0x334E, &this->actor);
                     this->textId = 0x334E;
                     if (CHECK_QUEST_ITEM(QUEST_SONG_EPONA)) {
-                        func_80151BB4(play, 0x1C);
+                        Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_PROMISED_TO_HELP_WITH_THEM);
                     }
-                    func_80151BB4(play, 5);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_ROMANI);
                 } else { // No.
                     func_8019F230();
                     EnMa4_SetFaceExpression(this, 0, 0);
@@ -443,7 +443,7 @@ void EnMa4_HandlePlayerChoice(EnMa4* this, PlayState* play) {
                     EnMa4_SetFaceExpression(this, 1, 0);
                     Message_StartTextbox(play, 0x3355, &this->actor);
                     this->textId = 0x3355;
-                    func_80151BB4(play, 5);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_ROMANI);
                 }
                 break;
 
@@ -459,13 +459,13 @@ void EnMa4_HandlePlayerChoice(EnMa4* this, PlayState* play) {
                         EnMa4_SetFaceExpression(this, 3, 3);
                         Message_StartTextbox(play, 0x3357, &this->actor);
                         this->textId = 0x3357;
-                        func_80151BB4(play, 5);
+                        Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_ROMANI);
                     } else {
                         func_8019F230();
                         EnMa4_SetFaceExpression(this, 4, 2);
                         Message_StartTextbox(play, 0x335B, &this->actor);
                         this->textId = 0x335B;
-                        func_80151BB4(play, 5);
+                        Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_ROMANI);
                     }
                 }
                 break;
@@ -480,7 +480,7 @@ void EnMa4_HandlePlayerChoice(EnMa4* this, PlayState* play) {
                     EnMa4_SetFaceExpression(this, 4, 2);
                     Message_StartTextbox(play, 0x335A, &this->actor);
                     this->textId = 0x335A;
-                    func_80151BB4(play, 5);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_ROMANI);
                 }
                 break;
         }
@@ -502,7 +502,7 @@ void EnMa4_ChooseNextDialogue(EnMa4* this, PlayState* play) {
                 EnMa4_SetFaceExpression(this, 0, 3);
                 Message_StartTextbox(play, 0x3336, &this->actor);
                 this->textId = 0x3336;
-                func_80151BB4(play, 5);
+                Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_ROMANI);
                 break;
 
             case 0x3338:
@@ -608,7 +608,7 @@ void EnMa4_ChooseNextDialogue(EnMa4* this, PlayState* play) {
                 if ((gSaveContext.save.playerForm != PLAYER_FORM_HUMAN) || !CHECK_QUEST_ITEM(QUEST_SONG_EPONA)) {
                     Message_StartTextbox(play, 0x335C, &this->actor);
                     this->textId = 0x335C;
-                    func_80151BB4(play, 5);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_ROMANI);
                 } else {
                     Message_StartTextbox(play, 0x3359, &this->actor);
                     this->textId = 0x3359;
@@ -642,7 +642,7 @@ void EnMa4_DialogueHandler(EnMa4* this, PlayState* play) {
 
         case TEXT_STATE_DONE: // End conversation
             if (Message_ShouldAdvance(play)) {
-                if ((play->msgCtx.unk120B1 == 0) || !CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
+                if ((play->msgCtx.bombersNotebookNewEventQueueSize == 0) || !CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
                     EnMa4_SetupWait(this);
                 }
             }
@@ -879,7 +879,7 @@ void EnMa4_StartDialogue(EnMa4* this, PlayState* play) {
                     EnMa4_SetFaceExpression(this, 3, 3);
                     Message_StartTextbox(play, 0x3337, &this->actor);
                     this->textId = 0x3337;
-                    func_80151BB4(play, 5);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_ROMANI);
                 } else {
                     Message_StartTextbox(play, 0x3335, &this->actor);
                     this->textId = 0x3335;
@@ -935,7 +935,7 @@ void EnMa4_StartDialogue(EnMa4* this, PlayState* play) {
                     EnMa4_SetFaceExpression(this, 3, 3);
                     Message_StartTextbox(play, 0x3337, &this->actor);
                     this->textId = 0x3337;
-                    func_80151BB4(play, 5);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_ROMANI);
                 } else {
                     Message_StartTextbox(play, 0x3335, &this->actor);
                     this->textId = 0x3335;

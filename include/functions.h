@@ -1877,7 +1877,7 @@ void func_801514B0(PlayState* play, u16 arg1, u8 arg2);
 void Message_StartTextbox(PlayState* play, u16 textId, Actor* Actor);
 void Message_ContinueTextbox(PlayState* play, u16 textId);
 void func_80151A68(PlayState* play, u16 textId);
-void func_80151BB4(PlayState* play, u8 arg1);
+void Message_BombersNotebookQueueEvent(PlayState* play, u8 event);
 // void func_80151C9C(void);
 void func_80151DA4(PlayState* play, u16 arg2);
 void func_80152434(PlayState* play, u16 arg2);

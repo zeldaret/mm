@@ -5,7 +5,7 @@
 #include "io/controller.h"
 #include "z64dma.h"
 
-#define DEFINE_PERSON(enum, _photo, _description, _metMessage, _metFlag) BOMBERS_NOTBOOK_PERSON_##enum,
+#define DEFINE_PERSON(enum, _photo, _description, _metMessage, _metFlag) BOMBERS_NOTEBOOK_PERSON_##enum,
 typedef enum BombersNotebookPerson {
     #include "tables/bombers_notebook/person_table.h"
     /* 0x14 */ BOMBERS_NOTEBOOK_PERSON_MAX

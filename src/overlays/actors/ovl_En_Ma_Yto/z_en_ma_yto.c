@@ -475,7 +475,7 @@ void EnMaYto_DefaultChooseNextDialogue(EnMaYto* this, PlayState* play) {
                 EnMaYto_SetFaceExpression(this, 3, 1);
                 Message_StartTextbox(play, 0x3393, &this->actor);
                 this->textId = 0x3393;
-                func_80151BB4(play, 6);
+                Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_CREMIA);
                 break;
 
             case 0x3394:
@@ -488,7 +488,7 @@ void EnMaYto_DefaultChooseNextDialogue(EnMaYto* this, PlayState* play) {
                 EnMaYto_ChangeAnim(this, 1);
                 Message_StartTextbox(play, 0x3396, &this->actor);
                 this->textId = 0x3396;
-                func_80151BB4(play, 6);
+                Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_CREMIA);
                 break;
         }
     }
@@ -631,8 +631,8 @@ void EnMaYto_DinnerChooseNextDialogue(EnMaYto* this, PlayState* play) {
                 EnMaYto_SetRomaniFaceExpression(this, 0, 1);
                 Message_StartTextbox(play, 0x339E, &this->actor);
                 this->textId = 0x339E;
-                func_80151BB4(play, 6);
-                func_80151BB4(play, 5);
+                Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_CREMIA);
+                Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_ROMANI);
                 break;
 
             case 0x339F:
@@ -667,20 +667,20 @@ void EnMaYto_DinnerChooseNextDialogue(EnMaYto* this, PlayState* play) {
                 EnMaYto_SetFaceExpression(this, 3, 3);
                 Message_StartTextbox(play, 0x33A4, &this->actor);
                 this->textId = 0x33A4;
-                func_80151BB4(play, 6);
-                func_80151BB4(play, 5);
+                Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_CREMIA);
+                Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_ROMANI);
                 break;
 
             case 0x33A5:
                 Message_StartTextbox(play, 0x33A6, &this->actor);
                 this->textId = 0x33A6;
-                func_80151BB4(play, 6);
+                Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_CREMIA);
                 break;
 
             case 0x33A7:
                 Message_StartTextbox(play, 0x33A8, &this->actor);
                 this->textId = 0x33A8;
-                func_80151BB4(play, 6);
+                Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_CREMIA);
                 break;
         }
     }
@@ -789,8 +789,8 @@ void EnMaYto_BarnChooseNextDialogue(EnMaYto* this, PlayState* play) {
                 Actor_ChangeFocus(&this->actor, play, &this->actor);
                 Message_StartTextbox(play, 0x33AD, &this->actor);
                 this->textId = 0x33AD;
-                func_80151BB4(play, 6);
-                func_80151BB4(play, 5);
+                Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_CREMIA);
+                Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_ROMANI);
                 break;
 
             case 0x33AE:
@@ -807,8 +807,8 @@ void EnMaYto_BarnChooseNextDialogue(EnMaYto* this, PlayState* play) {
                 EnMaYto_SetFaceExpression(this, 4, 2);
                 Message_StartTextbox(play, 0x33B0, &this->actor);
                 this->textId = 0x33B0;
-                func_80151BB4(play, 6);
-                func_80151BB4(play, 5);
+                Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_CREMIA);
+                Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_ROMANI);
                 break;
 
             case 0x33B1:
@@ -817,7 +817,7 @@ void EnMaYto_BarnChooseNextDialogue(EnMaYto* this, PlayState* play) {
                 // "I should had believed what Romani said"
                 Message_StartTextbox(play, 0x33B2, &this->actor);
                 this->textId = 0x33B2;
-                func_80151BB4(play, 6);
+                Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_CREMIA);
                 break;
 
             case 0x33C6:
@@ -864,8 +864,8 @@ void EnMaYto_BarnChooseNextDialogue(EnMaYto* this, PlayState* play) {
                 EnMaYto_SetRomaniFaceExpression(this, 3, 3);
                 Message_StartTextbox(play, 0x33CC, &this->actor);
                 this->textId = 0x33CC;
-                func_80151BB4(play, 6);
-                func_80151BB4(play, 5);
+                Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_CREMIA);
+                Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_ROMANI);
                 break;
 
             default:
@@ -901,7 +901,7 @@ void EnMaYto_AfterMilkRunInit(EnMaYto* this, PlayState* play) {
             SET_WEEKEVENTREG(WEEKEVENTREG_14_01);
             this->unk310 = 4;
             EnMaYto_SetupPostMilkRunWaitDialogueEnd(this);
-            func_80151BB4(play, 6);
+            Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_CREMIA);
             return;
         }
 
@@ -981,9 +981,9 @@ void EnMaYto_PostMilkRunExplainReward(EnMaYto* this, PlayState* play) {
             this->textId = 0x33C3;
             SET_WEEKEVENTREG(WEEKEVENTREG_14_01);
             this->unk310 = 3;
-            func_80151BB4(play, 0x20);
-            func_80151BB4(play, 0x1F);
-            func_80151BB4(play, 6);
+            Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_RECEIVED_ROMANIS_MASK);
+            Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_ESCORTED_CREMIA);
+            Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_CREMIA);
             EnMaYto_SetupPostMilkRunWaitDialogueEnd(this);
         } else {
             // You already have the mask
@@ -992,7 +992,7 @@ void EnMaYto_PostMilkRunExplainReward(EnMaYto* this, PlayState* play) {
             this->textId = 0x33D0;
             SET_WEEKEVENTREG(WEEKEVENTREG_14_01);
             this->unk310 = 3;
-            func_80151BB4(play, 6);
+            Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_CREMIA);
             EnMaYto_SetupPostMilkRunWaitDialogueEnd(this);
         }
     } else {
@@ -1073,7 +1073,7 @@ void EnMaYto_PostMilkRunWaitDialogueEnd(EnMaYto* this, PlayState* play) {
         }
     }
 
-    if (Message_GetState(&play->msgCtx) == TEXT_STATE_NONE && play->msgCtx.unk120B1 == 0) {
+    if (Message_GetState(&play->msgCtx) == TEXT_STATE_NONE && play->msgCtx.bombersNotebookNewEventQueueSize == 0) {
         EnMaYto_SetupPostMilkRunEnd(this);
     }
 }
@@ -1141,13 +1141,13 @@ void EnMaYto_DefaultStartDialogue(EnMaYto* this, PlayState* play) {
             EnMaYto_SetFaceExpression(this, 0, 3);
             Message_StartTextbox(play, 0x33C5, &this->actor);
             this->textId = 0x33C5;
-            func_80151BB4(play, 6);
+            Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_CREMIA);
         } else {
             EnMaYto_SetTalkedFlag();
             EnMaYto_SetFaceExpression(this, 0, 3);
             Message_StartTextbox(play, 0x33C4, &this->actor);
             this->textId = 0x33C4;
-            func_80151BB4(play, 6);
+            Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_CREMIA);
         }
     }
 }
@@ -1198,7 +1198,7 @@ void EnMaYto_DinnerStartDialogue(EnMaYto* this, PlayState* play) {
             if (EnMaYto_HasSpokenToPlayer()) {
                 Message_StartTextbox(play, 0x33A6, &this->actor);
                 this->textId = 0x33A6;
-                func_80151BB4(play, 6);
+                Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_CREMIA);
             } else {
                 EnMaYto_SetTalkedFlag();
                 Message_StartTextbox(play, 0x33A5, &this->actor);
@@ -1210,7 +1210,7 @@ void EnMaYto_DinnerStartDialogue(EnMaYto* this, PlayState* play) {
             if (EnMaYto_HasSpokenToPlayer()) {
                 Message_StartTextbox(play, 0x33A8, &this->actor);
                 this->textId = 0x33A8;
-                func_80151BB4(play, 6);
+                Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_CREMIA);
             } else {
                 EnMaYto_SetTalkedFlag();
                 Message_StartTextbox(play, 0x33A7, &this->actor);
@@ -1250,7 +1250,7 @@ void EnMaYto_BarnStartDialogue(EnMaYto* this, PlayState* play) {
             EnMaYto_SetFaceExpression(this, 5, 3);
             Message_StartTextbox(play, 0x33B3, &this->actor);
             this->textId = 0x33B3;
-            func_80151BB4(play, 6);
+            Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_CREMIA);
         } else {
             EnMaYto_SetTalkedFlag();
             EnMaYto_SetFaceExpression(this, 5, 3);

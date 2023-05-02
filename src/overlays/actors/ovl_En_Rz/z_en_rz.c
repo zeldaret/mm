@@ -347,9 +347,9 @@ EnRz* EnRz_FindSister(EnRz* this, PlayState* play) {
 
 void func_80BFBDFC(PlayState* play) {
     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_75_80)) {
-        func_80151BB4(play, 0x27);
+        Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_RECEIVED_ROSA_SISTERS_HP);
     }
-    func_80151BB4(play, 0xC);
+    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_ROSA_SISTERS);
 }
 
 void EnRz_Destroy(Actor* thisx, PlayState* play) {
