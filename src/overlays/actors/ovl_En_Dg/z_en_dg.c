@@ -5,6 +5,7 @@
  */
 
 #include "z_en_dg.h"
+#include "overlays/actors/ovl_En_Aob_01/z_en_aob_01.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_800000)
 
@@ -419,7 +420,7 @@ void EnDg_SetupIdleMove(EnDg* this, PlayState* play) {
  * the dog with the Mask of Truth equipped.
  */
 void EnDg_UpdateTextId(EnDg* this) {
-    if (this->index < 14) {
+    if (this->index < RACEDOG_COUNT) {
         // This will produce a text ID in the range of 0x3538 to 0x3545.
         sRacetrackDogInfo[this->index].textId = GET_WEEKEVENTREG_DOG_RACE_TEXT(this->index, 0x3538);
     } else {

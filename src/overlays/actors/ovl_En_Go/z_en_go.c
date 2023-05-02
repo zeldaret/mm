@@ -1278,7 +1278,7 @@ void func_80A14018(EnGo* this, PlayState* play) {
     s32 phi_v0 = ENGO_GET_70(&this->actor) % 6;
 
     if (phi_v0 < 4) {
-        phi_v0 = ((gSaveContext.eventInf[2] & 0xF) + phi_v0) % 4;
+        phi_v0 = ((gSaveContext.eventInf[EVENTINF_02] & 0xF) + phi_v0) % 4;
     }
 
     func_80A12C48(this, play, D_80A166BC[phi_v0]);

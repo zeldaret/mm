@@ -9,6 +9,7 @@
  */
 
 #include "z_en_racedog.h"
+#include "overlays/actors/ovl_En_Aob_01/z_en_aob_01.h"
 #include "overlays/actors/ovl_En_Dg/z_en_dg.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_80000000)
@@ -315,7 +316,7 @@ void EnRacedog_Init(Actor* thisx, PlayState* play) {
     this->path = SubS_GetPathByIndex(play, ENRACEDOG_GET_PATH(&this->actor), 0x3F);
     Actor_SetScale(&this->actor, 0.0075f);
     this->actor.gravity = -3.0f;
-    if (ENRACEDOG_GET_INDEX(&this->actor) < 14) {
+    if (ENRACEDOG_GET_INDEX(&this->actor) < RACEDOG_COUNT) {
         this->index = ENRACEDOG_GET_INDEX(&this->actor);
     } else {
         Actor_Kill(&this->actor);

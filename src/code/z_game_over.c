@@ -53,10 +53,10 @@ void GameOver_Update(PlayState* play) {
             gSaveContext.save.saveInfo.playerData.tatlTimer = 0;
             gSaveContext.seqId = (u8)NA_BGM_DISABLED;
             gSaveContext.ambienceId = AMBIENCE_ID_DISABLED;
-            gSaveContext.eventInf[0] = 0;
-            gSaveContext.eventInf[1] = 0;
-            gSaveContext.eventInf[2] = 0;
-            gSaveContext.eventInf[3] = 0;
+            gSaveContext.eventInf[EVENTINF_00] = 0;
+            gSaveContext.eventInf[EVENTINF_01] = 0;
+            gSaveContext.eventInf[EVENTINF_02] = 0;
+            gSaveContext.eventInf[EVENTINF_03] = 0;
             gSaveContext.buttonStatus[EQUIP_SLOT_B] = BTN_ENABLED;
             gSaveContext.buttonStatus[EQUIP_SLOT_C_LEFT] = BTN_ENABLED;
             gSaveContext.buttonStatus[EQUIP_SLOT_C_DOWN] = BTN_ENABLED;

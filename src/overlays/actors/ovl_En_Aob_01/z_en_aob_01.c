@@ -99,7 +99,7 @@ typedef struct {
  * Stores the starting position, y-rotation, and path index for all 14 dogs in the racetrack.
  * This actor is responsible for spawning these dogs; they are not spawned as part of the scene.
  */
-static DogInfo sDogInfo[] = {
+static DogInfo sDogInfo[RACEDOG_COUNT] = {
     { { -4130.0f, 150.0f, 1367.0f }, 84, 0 },  { { -4861.0f, 172.0f, 1606.0f }, 94, 4 },
     { { -4139.0f, 155.0f, 2133.0f }, 73, 6 },  { { -4406.0f, 144.0f, 1416.0f }, 88, 2 },
     { { -4156.0f, 155.0f, 1731.0f }, 42, 0 },  { { -4033.0f, 157.0f, 1994.0f }, -65, 1 },
@@ -152,7 +152,7 @@ void EnAob01_SpawnDogs(EnAob01* this, PlayState* play) {
 
     EnAob01_InitializeDogPaths(this, play);
 
-    for (i = 0; i < ARRAY_COUNT(sDogInfo); i++) {
+    for (i = 0; i < RACEDOG_COUNT; i++) {
         enDgParams = ENDG_PARAMS(this->dogPaths[sDogInfo[i].pathIndex]->unk1, i);
 
         this->dogs[i] = Actor_SpawnAsChildAndCutscene(
@@ -167,7 +167,7 @@ void EnAob01_SpawnDogs(EnAob01* this, PlayState* play) {
 void EnAob01_SpawnRacedogs(EnAob01* this, PlayState* play) {
     s16 i;
 
-    for (i = 0; i < ARRAY_COUNT(this->dogs); i++) {
+    for (i = 0; i < RACEDOG_COUNT; i++) {
         this->dogs[i] = Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ACTOR_EN_RACEDOG, (i * 15.0f) + -3897.0f,
                                                       130.0f, 1290.0f - (i * 10.0f), 0, 0x1555, 0,
                                                       ENRACEDOG_PARAMS(i, ENAOB01_GET_RACEDOG_PATH_INDEX(&this->actor)),
@@ -745,7 +745,7 @@ s32 EnAob01_Race_IsRaceOver(EnAob01* this, PlayState* play) {
         npc = npc->next;
     }
 
-    if (finishedCount >= 14) {
+    if (finishedCount >= RACEDOG_COUNT) {
         return true;
     }
 
@@ -1055,19 +1055,22 @@ void EnAob01_Race_HidePlayer(EnAob01* this, PlayState* play) {
  * EnDg uses these text offsets to determine what text to show when the player picks
  * the dog up while equipped with the Mask of Truth, and EnRacedog uses them to
  * determine what condition the dog is in.
+ *
+ * Note that this function will only work properly as-is if RACEDOG_COUNT is an even
+ * number. If it is an odd number, then not all of the weekEventRegs will be updated.
  */
 void EnAob01_InitializeDogTextOffsets(void) {
     u8 i;
     u8 rand;
     u8 dogTextOffsetsTemp;
-    u8 packedDogTextOffsets[7];
-    u8 dogTextOffsets[] = {
+    u8 packedDogTextOffsets[(RACEDOG_COUNT + 1) / 2];
+    u8 dogTextOffsets[RACEDOG_COUNT] = {
         0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13,
     };
 
     // Swap around the dog text offsets randomly 14 times.
-    for (i = 0; i < ARRAY_COUNT(dogTextOffsets); i++) {
-        rand = Rand_ZeroFloat(14.0f);
+    for (i = 0; i < RACEDOG_COUNT; i++) {
+        rand = Rand_ZeroFloat(RACEDOG_COUNT);
 
         dogTextOffsetsTemp = dogTextOffsets[i];
         dogTextOffsets[i] = dogTextOffsets[rand];
@@ -1081,7 +1084,7 @@ void EnAob01_InitializeDogTextOffsets(void) {
     }
 
     // Go through all the dog text offsets and pack them into weekEventRegs.
-    for (i = 0; i < ARRAY_COUNT(dogTextOffsets); i++) {
+    for (i = 0; i < RACEDOG_COUNT; i++) {
         u8 dogTextOffsetsTemp = dogTextOffsets[i];
         u8 j = i / 2;
 
