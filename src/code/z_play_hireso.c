@@ -570,7 +570,7 @@ void BombersNotebook_DrawEntries(Gfx** gfxP, s32 row, u32 rectTop) {
     *gfxP = gfx;
 }
 
-#define DEFINE_PERSON(_enum, photo, _description, _metMessage, _metFlag) &photo,
+#define DEFINE_PERSON(_enum, photo, _description, _metEnum, _metMessage, _metFlag) &photo,
 
 TexturePtr sBombersNotebookPhotoTextures[] = {
 #include "tables/bombers_notebook/person_table.h"
@@ -1137,7 +1137,7 @@ void BombersNotebook_LoadFiles(BombersNotebook* this, s32 flag) {
     }
 }
 
-#define DEFINE_PERSON(_enum, _photo, description, _metMessage, _metFlag) description,
+#define DEFINE_PERSON(_enum, _photo, description, _metEnum, _metMessage, _metFlag) description,
 #define DEFINE_EVENT(_enum, _icon, _colorFlag, description, _completedMessage, _completedFlag) description,
 
 u16 sBombersNotebookTextIds[] = {

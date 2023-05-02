@@ -5,7 +5,7 @@
 #include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
 
 #if 0
-#define DEFINE_PERSON(_enum, _photo, _description, metMessage, _metFlag) metMessage,
+#define DEFINE_PERSON(_enum, _photo, _description, _metEnum, metMessage, _metFlag) metMessage,
 #define DEFINE_EVENT(_enum, _icon, _colorFlag, _description, completedMessage, _completedFlag) completedMessage,
 
 u16 sBombersNotebookEventMessages[] = {
@@ -16,7 +16,7 @@ u16 sBombersNotebookEventMessages[] = {
 #undef DEFINE_PERSON
 #undef DEFINE_EVENT
 
-#define DEFINE_PERSON(_enum, _photo, _description, _metMessage, metFlag) metFlag,
+#define DEFINE_PERSON(_enum, _photo, _description, _metEnum, _metMessage, metFlag) metFlag,
 #define DEFINE_EVENT(_enum, _icon, _colorFlag, _description, _completedMessage, completedFlag) completedFlag,
 
 u16 gBombersNotebookWeekEventFlags[] = {
