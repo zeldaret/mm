@@ -37,8 +37,8 @@ void EnWiz_SetupDead(EnWiz* this);
 void EnWiz_Dead(EnWiz* this, PlayState* play);
 
 // This number is almost-entirely arbirary, with the only requirement being
-// that cannot be a valid curPlatformIndex. Any negative number, or any number
-// larger than 10, would work just as well.
+// that it cannot be a valid curPlatformIndex. Any negative number, or any
+// number larger than 10, would work just as well.
 #define INITIAL_PLATFORM_INDEX 777
 
 typedef enum {
