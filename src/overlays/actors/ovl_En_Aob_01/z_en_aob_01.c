@@ -1055,9 +1055,6 @@ void EnAob01_Race_HidePlayer(EnAob01* this, PlayState* play) {
  * EnDg uses these text offsets to determine what text to show when the player picks
  * the dog up while equipped with the Mask of Truth, and EnRacedog uses them to
  * determine what condition the dog is in.
- *
- * Note that this function will only work properly as-is if RACEDOG_COUNT is an even
- * number. If it is an odd number, then not all of the weekEventRegs will be updated.
  */
 void EnAob01_InitializeDogTextOffsets(void) {
     u8 i;
@@ -1089,6 +1086,8 @@ void EnAob01_InitializeDogTextOffsets(void) {
         u8 j = i / 2;
 
         if (i % 2) {
+            //! @note sets text offsets for both even and odd entry.
+            //! Requires `RACEDOG_COUNT` to be even to work properly.
             packedDogTextOffsets[j] |= dogTextOffsetsTemp << 4;
             SET_WEEKEVENTREG_DOG_RACE_TEXT_OFFSETS(j, packedDogTextOffsets[j]);
         } else {
