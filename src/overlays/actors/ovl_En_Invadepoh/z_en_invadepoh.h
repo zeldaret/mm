@@ -20,21 +20,21 @@ typedef struct {
 } EnInvadepohUnkStruct1; // size = 0x8
 
 typedef struct {
-    /* 0x0 */ s8 unk_0;
+    /* 0x0 */ s8 type;
     /* 0x1 */ s8 timer;
     /* 0x2 */ u8 alpha;
     /* 0x4 */ Vec3f pos;
 } EnInvadepohWarpEffect; // size = 0x10
 
 typedef struct {
-    /* 0x0 */ s8* index;
+    /* 0x0 */ s8* texIndex;
     /* 0x1 */ s8 count;
-} EnInvadepohFaceFrame; // size = 0x2
+} EnInvadepohFaceAnim; // size = 0x2
 
 typedef struct {
     /* 0x0 */ s8 type;
-    /* 0x4 */ EnInvadepohFaceFrame* frames;
-} EnInvadepohFaceAnim; // size = 0x8
+    /* 0x4 */ EnInvadepohFaceAnim* frames;
+} EnInvadepohFaceAnimFixed; // size = 0x8
 
 typedef struct {
     /* 0x0 */ s8 index;
@@ -42,7 +42,7 @@ typedef struct {
 } EnInvadepohFaceAnimNext; // size = 0x8
 
 typedef struct {
-    /* 0x0 */ EnInvadepohFaceAnim anim;
+    /* 0x0 */ EnInvadepohFaceAnimFixed anim;
     /* 0x8 */ s8 nextCount;
     /* 0xC */ EnInvadepohFaceAnimNext* nextAnims;
 } EnInvadepohFaceAnimLoop; // size = 0x10
@@ -54,9 +54,9 @@ typedef struct {
 } EnInvadepohFaceAnimLoopDelayed; // size = 0x14
 
 typedef struct {
-    /* 0x0 */ EnInvadepohFaceAnim** animSet;
+    /* 0x0 */ EnInvadepohFaceAnimFixed** animSet;
     /* 0x4 */ s8 curAnimType;
-    /* 0x8 */ EnInvadepohFaceAnim* curAnim;
+    /* 0x8 */ EnInvadepohFaceAnimFixed* curAnim;
     /* 0xC */ s16 delayTimer;
     /* 0xE */ s8 curFrame;
     /* 0xF */ s8 curIndex;
@@ -65,20 +65,20 @@ typedef struct {
 typedef struct {
     /* 0x00 */ EnInvadePohFaceInfo eyeAnim;
     /* 0x10 */ EnInvadePohFaceInfo mouthAnim;
-    /* 0x20 */ Vec3s unk_20;
-    /* 0x26 */ Vec3s unk_26;
-    /* 0x2C */ s16 unk_2C;
-    /* 0x30 */ f32 unk_30;
-    /* 0x34 */ f32 unk_34;
-    /* 0x38 */ f32 unk_38;
-    /* 0x3c */ f32 unk_3C;
-    /* 0x40 */ s16 unk_40;
-    /* 0x42 */ s16 unk_42;
-    /* 0x44 */ f32 unk_44;
-    /* 0x48 */ s16 unk_48;
-} EnInvadePohUnkStruct_324; // size = 0x4C
+    /* 0x20 */ Vec3s headRot;
+    /* 0x26 */ Vec3s headRotTarget;
+    /* 0x2C */ s16 maxTurnRate;
+    /* 0x30 */ f32 scaledTurnRate;
+    /* 0x34 */ f32 torsoRotXMod;
+    /* 0x38 */ f32 torsoRotXModTarget;
+    /* 0x3c */ f32 torsoRotXModStep;
+    /* 0x40 */ s16 torsoRotZ;
+    /* 0x42 */ s16 torsoRotZTarget;
+    /* 0x44 */ f32 torsoMaxTurnRate;
+    /* 0x48 */ s16 torsoMaxTurnStep;
+} EnInvadePohInteractInfo; // size = 0x4C
 
-typedef void (*EnInvadepohFaceFunc) (EnInvadePohFaceInfo*, EnInvadepohFaceAnim**);
+typedef void (*EnInvadepohFaceFunc) (EnInvadePohFaceInfo*, EnInvadepohFaceAnimFixed**);
 
 #define EN_INVADEPOH_LIMB_MAX 23
 // #define EN_INVADEPOH_LIMB_MAX MAX(MAX(MAX(MAX(MAX(ALIEN_LIMB_MAX, ROMANI_LIMB_MAX), CREMIA_LIMB_MAX), DOG_LIMB_MAX), COW_LIMB_MAX), COW_TAIL_LIMB_MAX)
@@ -106,7 +106,7 @@ typedef struct EnInvadepoh {
     /* 0x310 */ f32 pathLength;
     /* 0x314 */ Vec3f unk_314;
     /* 0x320 */ f32 progress;
-    /* 0x324 */ EnInvadePohUnkStruct_324 unk_324;
+    /* 0x324 */ EnInvadePohInteractInfo unk_324;
     /* 0x370 */ s16 unk_370;
     /* 0x372 */ s16 unk_372;
     /* 0x374 */ s8 unk_374;
@@ -114,7 +114,7 @@ typedef struct EnInvadepoh {
     /* 0x378 */ s8 unk_378;
     /* 0x379 */ s8 spawnCount;
     /* 0x37C */ f32 checkpoints[3];
-    /* 0x388 */ char unk_388; // unused?
+    /* 0x388 */ char torsoRotXModTarget8; // unused?
     /* 0x389 */ u8 alpha;
     /* 0x38A */ s8 atBarn;
     /* 0x38B */ s8 present;
@@ -149,10 +149,10 @@ typedef enum {
     /* 0xD */ ENINVADEPOH_ALIEN_ABDUCTOR,  // Alien abductor, unused, carries cow or Romani
 } EnInvadepohParamsTypes;
 
-#define ENINVADEPOH_GET_PARAM_7(thisx) ((thisx)->params & 7)
-#define ENINVADEPOH_GET_PARAM_F0(thisx) ((thisx)->params >> 4 & 0xF)
-#define ENINVADEPOH_GET_PARAM_7F00(thisx) ((thisx)->params >> 8 & 0x7F)
+#define ENINVADEPOH_GET_INDEX(thisx) ((thisx)->params & 7)
+#define ENINVADEPOH_GET_TYPE(thisx) ((thisx)->params >> 4 & 0xF)
+#define ENINVADEPOH_GET_PATH(thisx) ((thisx)->params >> 8 & 0x7F)
 
-#define ENINVADEPOH_SET_PARAMS(p7F00, pF0, p7) (((p7) & 7) | (((p7F00) << 8) & 0x7F00) | (((pF0) << 4) & 0xF0))
+#define ENINVADEPOH_SET_PARAMS(path, type, index) (((index) & 7) | (((path) << 8) & 0x7F00) | (((type) << 4) & 0xF0))
 
 #endif // Z_EN_INVADEPOH_H
