@@ -25,7 +25,7 @@ static u8 D_80BF3260[] = {
     /* 0x05 */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_TOWN, 0x57 - 0x09),
     /* 0x09 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(15, 25, 15, 45, 0x51 - 0x0F),
     /* 0x0F */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(15, 45, 15, 50, 0x4B - 0x15),
-    /* 0x15 */ SCHEDULE_CMD_CHECK_FLAG_S(WEEKEVENTREG_75_10, 0x1A - 0x19),
+    /* 0x15 */ SCHEDULE_CMD_CHECK_FLAG_S(WEEKEVENTREG_RECEIVED_ROOM_KEY, 0x1A - 0x19),
     /* 0x19 */ SCHEDULE_CMD_RET_NONE(),
     /* 0x1A */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(16, 50, 16, 55, 0x45 - 0x20),
     /* 0x20 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(16, 55, 17, 15, 0x3F - 0x26),
@@ -42,7 +42,7 @@ static u8 D_80BF3260[] = {
     /* 0x5B */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(15, 45, 15, 50, 0xAF - 0x61),
     /* 0x61 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(15, 50, 16, 10, 0xA9 - 0x67),
     /* 0x67 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(16, 10, 16, 30, 0xA3 - 0x6D),
-    /* 0x6D */ SCHEDULE_CMD_CHECK_FLAG_S(WEEKEVENTREG_75_10, 0x8A - 0x71),
+    /* 0x6D */ SCHEDULE_CMD_CHECK_FLAG_S(WEEKEVENTREG_RECEIVED_ROOM_KEY, 0x8A - 0x71),
     /* 0x71 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(16, 30, 16, 50, 0x84 - 0x77),
     /* 0x77 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(16, 50, 16, 55, 0x7E - 0x7D),
     /* 0x7D */ SCHEDULE_CMD_RET_NONE(),
@@ -372,7 +372,7 @@ s32 func_80BF17BC(EnIg* this, PlayState* play) {
 
         case 1:
         case 3:
-            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_75_10) && (this->unk_3F6 == 3)) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_ROOM_KEY) && (this->unk_3F6 == 3)) {
                 CutsceneManager_Stop(csId);
                 this->unk_3F6 = 5;
             } else {

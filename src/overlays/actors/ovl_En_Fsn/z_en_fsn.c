@@ -153,7 +153,7 @@ u16 EnFsn_GetWelcome(PlayState* play) {
 void EnFsn_HandleConversationBackroom(EnFsn* this, PlayState* play) {
     switch (this->textId) {
         case 0:
-            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_80_10)) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_PRIORITY_MAIL)) {
                 this->textId = 0x29E0;
                 break;
             } else {
@@ -166,7 +166,7 @@ void EnFsn_HandleConversationBackroom(EnFsn* this, PlayState* play) {
                 this->flags |= ENFSN_GIVE_ITEM;
                 this->flags |= ENFSN_GAVE_LETTER_TO_MAMA;
                 this->getItemId = GI_LETTER_TO_MAMA;
-                SET_WEEKEVENTREG(WEEKEVENTREG_80_10);
+                SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_PRIORITY_MAIL);
                 this->textId = 0x29F1;
                 break;
             } else {
@@ -186,7 +186,7 @@ void EnFsn_HandleConversationBackroom(EnFsn* this, PlayState* play) {
             this->flags |= ENFSN_GIVE_ITEM;
             this->flags |= ENFSN_GAVE_LETTER_TO_MAMA;
             this->getItemId = GI_LETTER_TO_MAMA;
-            SET_WEEKEVENTREG(WEEKEVENTREG_80_10);
+            SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_PRIORITY_MAIL);
             this->textId = 0x29F1;
             break;
         case 0x29F1:

@@ -202,7 +202,7 @@ void EnMa4_Init(Actor* thisx, PlayState* play) {
 
     if (CURRENT_DAY == 1) {
         this->type = MA4_TYPE_DAY1;
-    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01)) {
+    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) {
         this->type = MA4_TYPE_ALIENS_DEFEATED;
     } else {
         this->type = MA4_TYPE_ALIENS_WON;
@@ -374,7 +374,7 @@ void EnMa4_HandlePlayerChoice(EnMa4* this, PlayState* play) {
             case 0x3341:
                 if (play->msgCtx.choiceIndex == 0) {
                     func_8019F208();
-                    SET_WEEKEVENTREG(WEEKEVENTREG_21_20);
+                    SET_WEEKEVENTREG(WEEKEVENTREG_PROMISED_TO_HELP_WITH_THEM);
                     Message_StartTextbox(play, 0x3343, &this->actor);
                     this->textId = 0x3343;
                 } else {
@@ -390,7 +390,7 @@ void EnMa4_HandlePlayerChoice(EnMa4* this, PlayState* play) {
             case 0x3346:
                 if (play->msgCtx.choiceIndex == 0) {
                     func_8019F208();
-                    SET_WEEKEVENTREG(WEEKEVENTREG_21_20);
+                    SET_WEEKEVENTREG(WEEKEVENTREG_PROMISED_TO_HELP_WITH_THEM);
                     Message_StartTextbox(play, 0x3343, &this->actor);
                     this->textId = 0x3343;
                 } else {
@@ -887,7 +887,7 @@ void EnMa4_StartDialogue(EnMa4* this, PlayState* play) {
                 }
             } else if (this->state == MA4_STATE_DEFAULT) {
                 if (CHECK_WEEKEVENTREG(WEEKEVENTREG_21_40)) {
-                    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_21_20)) {
+                    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_PROMISED_TO_HELP_WITH_THEM)) {
                         Message_StartTextbox(play, 0x3346, &this->actor);
                         this->textId = 0x3346;
                     } else {

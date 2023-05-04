@@ -144,7 +144,7 @@ void EnMaYts_InitAnimation(EnMaYts* this, PlayState* play) {
         case MA_YTS_TYPE_SITTING:
             this->actor.targetMode = 6;
             // Day 1 or "Winning" the alien invasion
-            if (CURRENT_DAY == 1 || CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01)) {
+            if (CURRENT_DAY == 1 || CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) {
                 EnMaYts_ChangeAnim(this, 14);
             } else {
                 EnMaYts_ChangeAnim(this, 18);
@@ -177,14 +177,14 @@ s32 EnMaYts_CheckValidSpawn(EnMaYts* this, PlayState* play) {
 
                 case 2:
                     // Failing the alien invasion
-                    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01)) {
+                    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) {
                         return false;
                     }
                     break;
 
                 case 3:
                     // "Winning" the alien invasion
-                    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01)) {
+                    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) {
                         return false;
                     }
                     break;
@@ -193,7 +193,7 @@ s32 EnMaYts_CheckValidSpawn(EnMaYts* this, PlayState* play) {
 
         case MA_YTS_TYPE_BARN:
             // Failing the alien invasion
-            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01)) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) {
                 return false;
             } else if (gSaveContext.save.time >= CLOCK_TIME(20, 0) && CURRENT_DAY == 3) {
                 return false;
@@ -202,7 +202,7 @@ s32 EnMaYts_CheckValidSpawn(EnMaYts* this, PlayState* play) {
 
         case MA_YTS_TYPE_SLEEPING:
             // "Winning" the alien invasion
-            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) {
                 return false;
             }
             break;
@@ -248,7 +248,7 @@ void EnMaYts_Init(Actor* thisx, PlayState* play) {
         this->hasBow = false;
     }
 
-    if ((CURRENT_DAY == 1) || CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01)) {
+    if ((CURRENT_DAY == 1) || CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) {
         this->overrideEyeTexIndex = 0;
         this->eyeTexIndex = 0;
         this->mouthTexIndex = 0;
@@ -266,7 +266,8 @@ void EnMaYts_Init(Actor* thisx, PlayState* play) {
         this->mouthTexIndex = 0;
         this->unk_32C = 2;
         EnMaYts_SetupEndCreditsHandler(this);
-    } else if (CURRENT_DAY == 2 && gSaveContext.save.isNight == 1 && CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01)) {
+    } else if (CURRENT_DAY == 2 && gSaveContext.save.isNight == 1 &&
+               CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) {
         EnMaYts_SetupStartDialogue(this);
     } else {
         EnMaYts_SetupDoNothing(this);
@@ -321,7 +322,7 @@ void EnMaYts_StartDialogue(EnMaYts* this, PlayState* play) {
                 this->textId = 0x3366;
                 Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_ROMANI);
             }
-        } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_21_20)) {
+        } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_PROMISED_TO_HELP_WITH_THEM)) {
             EnMaYts_SetFaceExpression(this, 0, 0);
             Message_StartTextbox(play, 0x3367, &this->actor);
             this->textId = 0x3367;

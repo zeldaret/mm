@@ -224,7 +224,7 @@ s32 func_808F33B8(void) {
     s32 ret = (((gSaveContext.save.day == 1) &&
                 ((gSaveContext.save.time >= CLOCK_TIME(5, 30)) && (gSaveContext.save.time <= CLOCK_TIME(6, 0)))) ||
                (gSaveContext.save.day >= 2)) &&
-              !CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01);
+              !CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM);
 
     return ret;
 }
@@ -1419,7 +1419,7 @@ void EnIn_Init(Actor* thisx, PlayState* play) {
                             EnIn_ChangeAnim(&this->skelAnime, ENIN_ANIM_0);
                             this->actionFunc = func_808F5A94;
                         } else {
-                            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_52_01)) {
+                            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_ESCORTED_CREMIA)) {
                                 Actor_Spawn(&play->actorCtx, play, ACTOR_EN_KANBAN, this->actor.world.pos.x,
                                             this->actor.world.pos.y, this->actor.world.pos.z, this->actor.shape.rot.x,
                                             this->actor.shape.rot.y, this->actor.shape.rot.z, 0xF);
@@ -1430,7 +1430,7 @@ void EnIn_Init(Actor* thisx, PlayState* play) {
                             }
                         }
                     } else {
-                        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_52_01)) {
+                        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_ESCORTED_CREMIA)) {
                             Actor_Kill(&this->actor);
                         } else {
                             EnIn_ChangeAnim(&this->skelAnime, ENIN_ANIM_7);
