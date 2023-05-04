@@ -46,7 +46,7 @@ void func_80C1DF18(DmNb* this, PlayState* play) {
     u16 cueId;
     s32 cueChannel;
 
-    if (play->csCtx.state != 0) {
+    if (play->csCtx.state != CS_STATE_IDLE) {
         if (this->unk1F8 == 0) {
             this->cueId = 255;
             this->unk1F8 = 1;

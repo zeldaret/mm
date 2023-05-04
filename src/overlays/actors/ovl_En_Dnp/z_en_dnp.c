@@ -265,7 +265,7 @@ s32 func_80B3CF60(EnDnp* this, PlayState* play) {
 s32 func_80B3D044(EnDnp* this, PlayState* play) {
     s32 ret = false;
 
-    if (play->csCtx.state != 0) {
+    if (play->csCtx.state != CS_STATE_IDLE) {
         if (!(this->unk_322 & 0x200)) {
             this->unk_322 |= (0x200 | 0x10);
             this->actor.flags &= ~ACTOR_FLAG_1;

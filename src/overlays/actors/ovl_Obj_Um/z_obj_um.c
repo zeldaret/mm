@@ -1402,7 +1402,7 @@ void func_80B7A860(ObjUm* this, PlayState* play) {
         func_80B78DF0(this, play);
     }
 
-    if (play->csCtx.state == 0) {
+    if (play->csCtx.state == CS_STATE_IDLE) {
         CutsceneManager_Stop(this->dyna.actor.csId);
         ObjUm_SetupAction(this, func_80B7A7AC);
     }

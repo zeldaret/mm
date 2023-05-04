@@ -365,7 +365,7 @@ void EnHg_HandleCsAction(EnHg* this, PlayState* play) {
         Cutscene_ActorTranslateAndYaw(&this->actor, play, cueChannel);
         return;
 
-    } else if (play->csCtx.state == 0) {
+    } else if (play->csCtx.state == CS_STATE_IDLE) {
         EnHg_SetupWait(this);
     }
 

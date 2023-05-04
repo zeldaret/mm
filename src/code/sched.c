@@ -1,5 +1,4 @@
-//#include "global.h"
-//#include "prevent_bss_reordering.h"
+#include "prevent_bss_reordering.h"
 
 #include "z64.h"
 #include "fault.h"
