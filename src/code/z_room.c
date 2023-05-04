@@ -60,39 +60,27 @@ typedef struct RoomShapeCullableEntryLinked {
     /* 0x0C */ struct RoomShapeCullableEntryLinked* next;
 } RoomShapeCullableEntryLinked; // size = 0x10
 
-// TODO: 127 is an arbitrarily chosen number to make the stack sorta work
-#define ROOM_SHAPE_CULLABLE_MAX_ENTRIES 127
+#define ROOM_SHAPE_CULLABLE_MAX_ENTRIES 128
 
-#ifdef NON_MATCHING
-// Small regalloc, likely related to temp usage and scoping
 void Room_DrawCullable(PlayState* play, Room* room, u32 flags) {
     RoomShapeCullable* roomShape;
     RoomShapeCullableEntry* roomShapeCullableEntry;
-    RoomShapeCullableEntry* roomShapeCullableEntries;
-    RoomShapeCullableEntry* roomShapeCullableEntryIter;
-    Gfx* displayList;
-    f32 entryBoundsNearZ;
     RoomShapeCullableEntryLinked linkedEntriesBuffer[ROOM_SHAPE_CULLABLE_MAX_ENTRIES];
     RoomShapeCullableEntryLinked* head = NULL;
     RoomShapeCullableEntryLinked* tail = NULL;
-    s32 var_a1;
     RoomShapeCullableEntryLinked* iter;
+    Gfx* displayList;
     RoomShapeCullableEntryLinked* insert;
-    f32 var_fv1;
+    f32 entryBoundsNearZ;
     s32 i;
     Vec3f pos;
     Vec3f projectedPos;
-    s32 pad2;
+    RoomShapeCullableEntry* roomShapeCullableEntries;
 
     OPEN_DISPS(play->state.gfxCtx);
 
     if (flags & ROOM_DRAW_OPA) {
         func_800BCBF4(&sZeroVec, play);
-
-        //! TODO: Fake
-        if (1) {}
-        if (1) {}
-        if (1) {}
 
         gSPSegment(POLY_OPA_DISP++, 0x03, room->segment);
         if (play->roomCtx.unk74 != NULL) {
@@ -160,8 +148,9 @@ void Room_DrawCullable(PlayState* play, Room* room, u32 flags) {
             }
         }
     } else {
-        f32 var_fa1 = 1.0f / play->projectionMtxFDiagonal.z; // sp54
-        s32 pad5;
+        f32 var_fa1 = 1.0f / play->projectionMtxFDiagonal.z;
+        f32 var_fv1;
+        s32 var_a1;
 
         // Pick and sort entries by depth
         for (i = 0; i < roomShape->numEntries; i++, roomShapeCullableEntry++) {
@@ -238,8 +227,7 @@ void Room_DrawCullable(PlayState* play, Room* room, u32 flags) {
 
         if (flags & ROOM_DRAW_OPA) {
             for (; head != NULL; head = head->next, i++) {
-                s32 pad3;
-                RoomShapeCullableEntry* roomShapeCullableEntry;
+                s32 pad;
 
                 roomShapeCullableEntry = head->entry;
 
@@ -266,17 +254,17 @@ void Room_DrawCullable(PlayState* play, Room* room, u32 flags) {
         }
 
         if (flags & ROOM_DRAW_XLU) {
-            for (; head != NULL; head = head->prev) {
+            for (; tail != NULL; tail = tail->prev) {
                 f32 temp_fv0;
                 f32 temp_fv1;
 
-                roomShapeCullableEntry = head->entry;
+                roomShapeCullableEntry = tail->entry;
                 displayList = roomShapeCullableEntry->xlu;
 
                 if (displayList != NULL) {
                     if (roomShapeCullableEntry->boundsSphereRadius & 1) {
 
-                        temp_fv0 = head->boundsNearZ - (f32)(iREG(93) + 0xBB8);
+                        temp_fv0 = tail->boundsNearZ - (f32)(iREG(93) + 0xBB8);
                         temp_fv1 = iREG(94) + 0x7D0;
 
                         if (temp_fv0 < temp_fv1) {
@@ -300,10 +288,6 @@ void Room_DrawCullable(PlayState* play, Room* room, u32 flags) {
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
-#else
-void Room_DrawCullable(PlayState* play, Room* room, u32 flags);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_room/Room_DrawCullable.s")
-#endif
 
 #define ROOM_IMAGE_NODRAW_BACKGROUND (1 << 0)
 #define ROOM_IMAGE_NODRAW_OPA (1 << 1)

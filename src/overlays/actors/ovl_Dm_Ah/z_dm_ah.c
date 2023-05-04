@@ -127,7 +127,7 @@ void func_80C1D7FC(DmAh* this, PlayState* play) {
     u16 cueId;
     s32 cueChannel;
 
-    if (play->csCtx.state != 0) {
+    if (play->csCtx.state != CS_STATE_IDLE) {
         if (!this->unk_29C) {
             this->cueId = 255;
             this->unk_29C = true;

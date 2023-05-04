@@ -1027,6 +1027,7 @@ wordReplace = {
     "COLPOLY_SURFACE_GROUND": "SURFACE_MATERIAL_DIRT",
     "COLPOLY_SURFACE_SAND": "SURFACE_MATERIAL_SAND",
     "COLPOLY_SURFACE_SNOW": "SURFACE_MATERIAL_SNOW",
+    "CS_STATE_0": "CS_STATE_IDLE",
 
     # Example of custom behaviour:
     # "PLAYER": ("GET_PLAYER(play)", {"ignore": (-1, '"PLAYER"')}), # ignore "PLAYER" in sSoundBankNames
