@@ -689,7 +689,7 @@ void ObjTokeidai_TowerClock_Idle(ObjTokeidai* this, PlayState* play) {
         return;
     }
 
-    if (play->csCtx.state != 0) {
+    if (play->csCtx.state != CS_STATE_IDLE) {
         this->actor.home.rot.x = 1;
         this->clockTime += 3;
         this->actor.draw = ObjTokeidai_Clock_Draw;
@@ -722,7 +722,7 @@ void ObjTokeidai_ExteriorGear_Idle(ObjTokeidai* this, PlayState* play) {
     if (ObjTokeidai_IsPostFirstCycleFinalHours(this, play)) {
         this->actor.draw = ObjTokeidai_ExteriorGear_Draw;
     } else {
-        if (play->csCtx.state != 0) {
+        if (play->csCtx.state != CS_STATE_IDLE) {
             this->actor.home.rot.x = 1;
             this->clockTime += 3;
             this->actor.draw = ObjTokeidai_ExteriorGear_Draw;

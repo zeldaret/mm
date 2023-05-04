@@ -75,7 +75,7 @@ void DmChar02_PlaySfxForDroppingOcarinaCutscene(DmChar02* this, PlayState* play)
 }
 
 void DmChar02_PlaySfxForCutscenes(DmChar02* this, PlayState* play) {
-    if ((play->csCtx.state != 0) && (play->sceneId == SCENE_OKUJOU) && (play->csCtx.scriptIndex == 1)) {
+    if ((play->csCtx.state != CS_STATE_IDLE) && (play->sceneId == SCENE_OKUJOU) && (play->csCtx.scriptIndex == 1)) {
         DmChar02_PlaySfxForDroppingOcarinaCutscene(this, play);
     }
 }
@@ -172,7 +172,7 @@ void DmChar02_Draw(Actor* thisx, PlayState* play) {
     DmChar02* this = THIS;
     s32 shouldDraw = false;
 
-    if ((play->csCtx.state == 0) && (this->actor.world.pos.y < 100.0f)) {
+    if ((play->csCtx.state == CS_STATE_IDLE) && (this->actor.world.pos.y < 100.0f)) {
         shouldDraw = true;
     } else if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_107)) {
         switch (play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_107)]->id) {

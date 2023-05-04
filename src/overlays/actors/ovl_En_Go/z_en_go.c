@@ -711,7 +711,7 @@ s32 func_80A12868(EnGo* this, PlayState* play) {
 }
 
 s32 func_80A12954(EnGo* this, PlayState* play) {
-    if ((ENGO_GET_F(&this->actor) == ENGO_F_4) && (play->csCtx.state != 0) && (this->actor.draw != NULL) &&
+    if ((ENGO_GET_F(&this->actor) == ENGO_F_4) && (play->csCtx.state != CS_STATE_IDLE) && (this->actor.draw != NULL) &&
         (play->sceneId == SCENE_10YUKIYAMANOMURA2) && (gSaveContext.sceneLayer == 1) &&
         (play->csCtx.scriptIndex == 0)) {
         if (this->unk_3F0 == 0) {
@@ -757,7 +757,7 @@ s32 func_80A12A64(EnGo* this, PlayState* play) {
 }
 
 s32 func_80A12B78(EnGo* this, PlayState* play) {
-    if (play->csCtx.state == 0) {
+    if (play->csCtx.state == CS_STATE_IDLE) {
         if (this->unk_3DC == 4) {
             if (Animation_OnFrame(&this->skelAnime, 2.0f)) {
                 Actor_PlaySfx(&this->actor, NA_SE_EN_GOLON_CIRCLE);
