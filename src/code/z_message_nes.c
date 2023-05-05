@@ -1187,15 +1187,15 @@ void Message_DecodeNES(PlayState* play) {
             break;
         } else if (curChar == 0x16) {
             // Substitute the player name control character for the file's player name.
-            for (playerNameLen = ARRAY_COUNT(gSaveContext.save.playerData.playerName); playerNameLen > 0;
+            for (playerNameLen = ARRAY_COUNT(gSaveContext.save.saveInfo.playerData.playerName); playerNameLen > 0;
                  playerNameLen--) {
-                if (gSaveContext.save.playerData.playerName[playerNameLen - 1] != 0x3E) {
+                if (gSaveContext.save.saveInfo.playerData.playerName[playerNameLen - 1] != 0x3E) {
                     break;
                 }
             }
 
             for (i = 0; i < playerNameLen; i++) {
-                curChar2 = gSaveContext.save.playerData.playerName[i];
+                curChar2 = gSaveContext.save.saveInfo.playerData.playerName[i];
                 if (curChar2 == 0x3E) {
                     curChar2 = ' ';
                 } else if (curChar2 == 0x40) {
@@ -1399,7 +1399,7 @@ void Message_DecodeNES(PlayState* play) {
             Message_LoadTimeNES(play, curChar, &charTexIdx, &spA4, &decodedBufPos);
         } else if (curChar == 0xC) {
             digits[0] = digits[1] = 0;
-            digits[2] = gSaveContext.save.inventory.strayFairies[(void)0, gSaveContext.dungeonIndex];
+            digits[2] = gSaveContext.save.saveInfo.inventory.strayFairies[(void)0, gSaveContext.dungeonIndex];
 
             while (digits[2] >= 100) {
                 digits[0]++;
@@ -1421,18 +1421,18 @@ void Message_DecodeNES(PlayState* play) {
                 }
             }
 
-            if ((gSaveContext.save.inventory.strayFairies[(void)0, gSaveContext.dungeonIndex] == 1) ||
-                (gSaveContext.save.inventory.strayFairies[(void)0, gSaveContext.dungeonIndex] == 21)) {
+            if ((gSaveContext.save.saveInfo.inventory.strayFairies[(void)0, gSaveContext.dungeonIndex] == 1) ||
+                (gSaveContext.save.saveInfo.inventory.strayFairies[(void)0, gSaveContext.dungeonIndex] == 21)) {
                 Message_LoadCharNES(play, 's', &charTexIdx, &spA4, decodedBufPos);
                 decodedBufPos++;
                 Message_LoadCharNES(play, 't', &charTexIdx, &spA4, decodedBufPos);
-            } else if ((gSaveContext.save.inventory.strayFairies[(void)0, gSaveContext.dungeonIndex] == 2) ||
-                       (gSaveContext.save.inventory.strayFairies[(void)0, gSaveContext.dungeonIndex] == 22)) {
+            } else if ((gSaveContext.save.saveInfo.inventory.strayFairies[(void)0, gSaveContext.dungeonIndex] == 2) ||
+                       (gSaveContext.save.saveInfo.inventory.strayFairies[(void)0, gSaveContext.dungeonIndex] == 22)) {
                 Message_LoadCharNES(play, 'n', &charTexIdx, &spA4, decodedBufPos);
                 decodedBufPos++;
                 Message_LoadCharNES(play, 'd', &charTexIdx, &spA4, decodedBufPos);
-            } else if ((gSaveContext.save.inventory.strayFairies[(void)0, gSaveContext.dungeonIndex] == 3) ||
-                       (gSaveContext.save.inventory.strayFairies[(void)0, gSaveContext.dungeonIndex] == 23)) {
+            } else if ((gSaveContext.save.saveInfo.inventory.strayFairies[(void)0, gSaveContext.dungeonIndex] == 3) ||
+                       (gSaveContext.save.saveInfo.inventory.strayFairies[(void)0, gSaveContext.dungeonIndex] == 23)) {
                 Message_LoadCharNES(play, 'r', &charTexIdx, &spA4, decodedBufPos);
                 decodedBufPos++;
                 Message_LoadCharNES(play, 'd', &charTexIdx, &spA4, decodedBufPos);
@@ -1597,7 +1597,7 @@ void Message_DecodeNES(PlayState* play) {
         } else if (curChar == 0xD6) {
             for (i = 0; i < 6; i++) {
                 msgCtx->decodedBuffer.schar[decodedBufPos] =
-                    (s8)D_801D08E4[((void)0, gSaveContext.save.spiderHouseMaskOrder[i])];
+                    (s8)D_801D08E4[((void)0, gSaveContext.save.saveInfo.spiderHouseMaskOrder[i])];
                 decodedBufPos++;
                 Message_LoadCharNES(play, i + '1', &charTexIdx, &spA4, decodedBufPos);
                 decodedBufPos++;
@@ -1605,7 +1605,7 @@ void Message_DecodeNES(PlayState* play) {
             msgCtx->decodedBuffer.schar[decodedBufPos] = 0;
         } else if ((curChar >= 0xD7) && (curChar < 0xDB)) {
             digits[0] = digits[1] = 0;
-            digits[2] = 15 - gSaveContext.save.inventory.strayFairies[curChar - 0xD7];
+            digits[2] = 15 - gSaveContext.save.saveInfo.inventory.strayFairies[curChar - 0xD7];
 
             while (digits[2] >= 100) {
                 digits[0]++;
@@ -1662,13 +1662,13 @@ void Message_DecodeNES(PlayState* play) {
             decodedBufPos--;
         } else if ((curChar == 0xDC) || (curChar == 0xDD)) {
             if (curChar == 0xDC) {
-                digits[0] = gSaveContext.save.lotteryCodes[CURRENT_DAY - 1][0];
-                digits[1] = gSaveContext.save.lotteryCodes[CURRENT_DAY - 1][1];
-                digits[2] = gSaveContext.save.lotteryCodes[CURRENT_DAY - 1][2];
+                digits[0] = gSaveContext.save.saveInfo.lotteryCodes[CURRENT_DAY - 1][0];
+                digits[1] = gSaveContext.save.saveInfo.lotteryCodes[CURRENT_DAY - 1][1];
+                digits[2] = gSaveContext.save.saveInfo.lotteryCodes[CURRENT_DAY - 1][2];
             } else {
-                digits[0] = (((void)0, gSaveContext.save.lotteryCodeGuess) & 0xF00) >> 8;
-                digits[1] = (((void)0, gSaveContext.save.lotteryCodeGuess) & 0xF0) >> 4;
-                digits[2] = ((void)0, gSaveContext.save.lotteryCodeGuess) & 0xF;
+                digits[0] = (((void)0, gSaveContext.save.saveInfo.lotteryCodeGuess) & 0xF00) >> 8;
+                digits[1] = (((void)0, gSaveContext.save.saveInfo.lotteryCodeGuess) & 0xF0) >> 4;
+                digits[2] = ((void)0, gSaveContext.save.saveInfo.lotteryCodeGuess) & 0xF;
             }
 
             for (i = 0; i < 3; i++) {
@@ -1712,7 +1712,7 @@ void Message_DecodeNES(PlayState* play) {
             Message_LoadPluralRupeesNES(play, &decodedBufPos, &charTexIdx, &spA4);
         } else if (curChar == 0xDF) {
             for (i = 0; i < 5; i++) {
-                digits[i] = gSaveContext.save.bomberCode[i];
+                digits[i] = gSaveContext.save.saveInfo.bomberCode[i];
                 Font_LoadCharNES(play, digits[i] + '0', charTexIdx);
                 charTexIdx += FONT_CHAR_TEX_SIZE;
                 msgCtx->decodedBuffer.schar[decodedBufPos] = digits[i] + '0';
@@ -1723,14 +1723,14 @@ void Message_DecodeNES(PlayState* play) {
         } else if ((curChar >= 0xE1) && (curChar < 0xE7)) {
             index = curChar - 0xE1;
             msgCtx->decodedBuffer.schar[decodedBufPos] =
-                D_801D08E4[((void)0, gSaveContext.save.spiderHouseMaskOrder[index])];
-            temp_s2_2 = D_801D0900[((void)0, gSaveContext.save.spiderHouseMaskOrder[index])];
+                D_801D08E4[((void)0, gSaveContext.save.saveInfo.spiderHouseMaskOrder[index])];
+            temp_s2_2 = D_801D0900[((void)0, gSaveContext.save.saveInfo.spiderHouseMaskOrder[index])];
             decodedBufPos++;
 
             for (var_s0_2 = 0; var_s0_2 < temp_s2_2; var_s0_2++) {
-                Message_LoadCharNES(play,
-                                    D_801D08E8[((void)0, gSaveContext.save.spiderHouseMaskOrder[index])][var_s0_2],
-                                    &charTexIdx, &spA4, decodedBufPos);
+                Message_LoadCharNES(
+                    play, D_801D08E8[((void)0, gSaveContext.save.saveInfo.spiderHouseMaskOrder[index])][var_s0_2],
+                    &charTexIdx, &spA4, decodedBufPos);
                 decodedBufPos++;
             }
 
@@ -1773,19 +1773,19 @@ void Message_DecodeNES(PlayState* play) {
 
         } else if ((curChar == 0xF0) || (curChar == 0xF1) || (curChar == 0xF2) || (curChar == 0xF8)) {
             if (curChar == 0xF8) {
-                temp = gSaveContext.save.unk_EE8;
+                temp = gSaveContext.save.saveInfo.unk_EC4;
                 index = temp;
             } else {
-                index = (&gSaveContext.save.bankRupees)[curChar - 0xF0];
+                index = (&gSaveContext.save.saveInfo.bankRupees)[curChar - 0xF0];
             }
             if (curChar == 0xF2) {
                 if (((gSaveContext.save.linkAge != 0) ? 5 : 17) == 5) {
                     index &= 0x7F;
                 } else {
-                    index =
-                        ((s16)(((&gSaveContext.save.bankRupees)[font->msgBuf.schar[msgCtx->msgBufPos]] & 0xFF000000) >>
-                               0x18) &
-                         0x7F);
+                    index = ((s16)(((&gSaveContext.save.saveInfo.bankRupees)[font->msgBuf.schar[msgCtx->msgBufPos]] &
+                                    0xFF000000) >>
+                                   0x18) &
+                             0x7F);
                 }
             }
             digits[3] = index;
@@ -1822,11 +1822,11 @@ void Message_DecodeNES(PlayState* play) {
                    (curChar == 0xFC)) {
             var_fs0 = 8.0f;
             if (curChar == 0xF7) {
-                func_80159438(((void)0, gSaveContext.save.unk_EE0), spA8);
+                func_80159438(((void)0, gSaveContext.save.saveInfo.unk_EBC), spA8);
             } else if (curChar == 0xF9) {
-                func_80159438(((void)0, gSaveContext.save.horseBackBalloonHighScore), spA8);
+                func_80159438(((void)0, gSaveContext.save.saveInfo.horseBackBalloonHighScore), spA8);
             } else {
-                func_80159438(((void)0, gSaveContext.save.dekuPlaygroundHighScores[curChar - 0xFA]), spA8);
+                func_80159438(((void)0, gSaveContext.save.saveInfo.dekuPlaygroundHighScores[curChar - 0xFA]), spA8);
             }
 
             loadChar = false;
@@ -1846,7 +1846,7 @@ void Message_DecodeNES(PlayState* play) {
             spA4 += var_fs0 * (16.0f * msgCtx->textCharScale);
             decodedBufPos--;
         } else if ((curChar == 0xF3) || (curChar == 0xF4) || (curChar == 0xF5)) {
-            index = (&gSaveContext.save.unk_EE8)[curChar - 0xF3];
+            index = (&gSaveContext.save.saveInfo.unk_EC4)[curChar - 0xF3];
             digits[0] = digits[1] = digits[2] = 0;
             digits[3] = index;
 
@@ -1881,7 +1881,7 @@ void Message_DecodeNES(PlayState* play) {
             }
             spA4 += 4.0f * (16.0f * msgCtx->textCharScale);
         } else if (curChar == 0xF6) {
-            temp = gSaveContext.save.shootingGalleryHighScores;
+            temp = gSaveContext.save.saveInfo.shootingGalleryHighScores;
             digits[0] = digits[1] = digits[2] = 0;
             digits[3] = temp;
 
@@ -1916,14 +1916,15 @@ void Message_DecodeNES(PlayState* play) {
             index = curChar - 0xFD;
 
             for (var_s0_2 = 8; var_s0_2 > 0; var_s0_2--) {
-                if (gSaveContext.save.inventory.dekuPlaygroundPlayerName[index][var_s0_2 - 1] != 0x3E) {
+                if (gSaveContext.save.saveInfo.inventory.dekuPlaygroundPlayerName[index][var_s0_2 - 1] != 0x3E) {
                     break;
                 }
             }
 
             for (i = 0; i < var_s0_2; i++) {
-                ptr = &font->fontBuf[((void)0, gSaveContext.save.inventory.dekuPlaygroundPlayerName[index][i]) *
-                                     FONT_CHAR_TEX_SIZE];
+                ptr =
+                    &font->fontBuf[((void)0, gSaveContext.save.saveInfo.inventory.dekuPlaygroundPlayerName[index][i]) *
+                                   FONT_CHAR_TEX_SIZE];
                 msgCtx->decodedBuffer.schar[decodedBufPos + i] = 0xFD;
 
                 for (var_v1_3 = 0; var_v1_3 < FONT_CHAR_TEX_SIZE; var_v1_3 += 4) {
@@ -1938,7 +1939,7 @@ void Message_DecodeNES(PlayState* play) {
             spA4 += var_s0_2 * (16.0f * msgCtx->textCharScale);
         } else if (curChar == 0xB) {
             digits[0] = digits[1] = digits[2] = 0;
-            digits[3] = (gSaveContext.save.unk_EE8 & 0xFFFF0000) >> 0x10;
+            digits[3] = (gSaveContext.save.saveInfo.unk_EC4 & 0xFFFF0000) >> 0x10;
 
             while (digits[3] >= 1000) {
                 digits[0]++;

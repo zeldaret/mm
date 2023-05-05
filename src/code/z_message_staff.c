@@ -527,15 +527,15 @@ void Message_DecodeCredits(PlayState* play) {
             break;
         } else if (curChar == 0xF) {
             // Substitute the player name control character for the file's player name.
-            for (playerNameLen = ARRAY_COUNT(gSaveContext.save.playerData.playerName); playerNameLen > 0;
+            for (playerNameLen = ARRAY_COUNT(gSaveContext.save.saveInfo.playerData.playerName); playerNameLen > 0;
                  playerNameLen--) {
-                if (gSaveContext.save.playerData.playerName[playerNameLen - 1] != 0x3E) {
+                if (gSaveContext.save.saveInfo.playerData.playerName[playerNameLen - 1] != 0x3E) {
                     break;
                 }
             }
 
             for (i = 0; i < playerNameLen; i++) {
-                curChar2 = gSaveContext.save.playerData.playerName[i];
+                curChar2 = gSaveContext.save.saveInfo.playerData.playerName[i];
                 if (curChar2 == 0x3E) {
                     curChar2 = ' ';
                 } else if (curChar2 == 0x40) {
@@ -647,12 +647,12 @@ void Message_DecodeCredits(PlayState* play) {
                 }
                 decodedBufPos--;
             } else if (curChar == 0x1E) {
-                value = (&gSaveContext.save.bankRupees)[font->msgBuf.schar[++msgCtx->msgBufPos]];
+                value = (&gSaveContext.save.saveInfo.bankRupees)[font->msgBuf.schar[++msgCtx->msgBufPos]];
                 if ((font->msgBuf.schar[msgCtx->msgBufPos] & 0xFF) == 2) {
                     if (((gSaveContext.save.linkAge != 0) ? 5 : 17) == 5) {
                         value &= 0x7F;
                     } else {
-                        value = (s16)(((&gSaveContext.save.bankRupees)[font->msgBuf.schar[msgCtx->msgBufPos]] &
+                        value = (s16)(((&gSaveContext.save.saveInfo.bankRupees)[font->msgBuf.schar[msgCtx->msgBufPos]] &
                                        0xFF000000) >>
                                       0x18) &
                                 0x7F;
