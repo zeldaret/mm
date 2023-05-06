@@ -6033,7 +6033,7 @@
     0x808BCDF0:("ItemBHeart_Init",),
     0x808BCEA8:("ItemBHeart_Destroy",),
     0x808BCEB8:("ItemBHeart_Update",),
-    0x808BCF54:("func_808BCF54",),
+    0x808BCF54:("ItemBHeart_UpdateRotationAndScale",),
     0x808BCFC4:("ItemBHeart_Draw",),
     0x808BD1E0:("EnDekunuts_Init",),
     0x808BD31C:("EnDekunuts_Destroy",),

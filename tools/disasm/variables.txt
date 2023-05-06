@@ -6549,7 +6549,7 @@
     0x808BCD44:("D_808BCD44","f32","",0x4),
     0x808BCDE0:("sNumLitTorchesInGroup","UNK_TYPE1","",0x1),
     0x808BD160:("Item_B_Heart_InitVars","UNK_TYPE1","",0x1),
-    0x808BD180:("D_808BD180","UNK_TYPE1","",0x1),
+    0x808BD180:("sInitChain","UNK_TYPE1","",0x1),
     0x808BD190:("D_808BD190","f32","",0x4),
     0x808BEF10:("En_Dekunuts_InitVars","UNK_TYPE1","",0x1),
     0x808BEF30:("D_808BEF30","UNK_TYPE1","",0x1),
