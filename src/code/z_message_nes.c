@@ -1130,7 +1130,7 @@ void Message_DecodeNES(PlayState* play) {
     Message_SetupLoadItemIcon(play);
 
     while (true) {
-        curChar = msgCtx->decodedBuffer.schar[decodedBufPos] = font->msgBuf.schar[msgCtx->msgBufPos];
+        msgCtx->decodedBuffer.schar[decodedBufPos] = curChar = font->msgBuf.schar[msgCtx->msgBufPos];
 
         if ((curChar == 0x10) || (curChar == 0x12) || (curChar == 0x1B) || (curChar == 0x1C) || (curChar == 0x1D) ||
             (curChar == 0x19) || (curChar == 0xE0) || (curChar == 0xBF) || (curChar == 0x15) || (curChar == 0x1A)) {
@@ -1203,10 +1203,13 @@ void Message_DecodeNES(PlayState* play) {
                 } else if (curChar2 == 0x3F) {
                     curChar2 = '-';
                 } else if (curChar2 < 0xA) {
+                    curChar2 += 0;
                     curChar2 += '0';
                 } else if (curChar2 < 0x24) {
+                    curChar2 += 0;
                     curChar2 += '7';
                 } else if (curChar2 < 0x3E) {
+                    curChar2 += 0;
                     curChar2 += '=';
                 }
                 if (curChar2 != ' ') {
@@ -1254,7 +1257,7 @@ void Message_DecodeNES(PlayState* play) {
 
             loadChar = false;
             for (i = 0; i < 8; i++) {
-                if ((i == 4) || ((i != 2) && (i != 5) && (spA8[i] != '\0'))) {
+                if ((i == 4) || ((i != 2) && (i != 5) && (spA8[i] != '0'))) {
                     loadChar = true;
                 }
                 if (loadChar) {
@@ -1773,8 +1776,7 @@ void Message_DecodeNES(PlayState* play) {
 
         } else if ((curChar == 0xF0) || (curChar == 0xF1) || (curChar == 0xF2) || (curChar == 0xF8)) {
             if (curChar == 0xF8) {
-                temp = gSaveContext.save.saveInfo.unk_EC4;
-                index = temp;
+                index = (s32)gSaveContext.save.saveInfo.unk_EC4 & 0xFFFF;
             } else {
                 index = (&gSaveContext.save.saveInfo.bankRupees)[curChar - 0xF0];
             }
@@ -1835,7 +1837,7 @@ void Message_DecodeNES(PlayState* play) {
                     loadChar = true;
                 }
                 if (loadChar) {
-                    Font_LoadCharNES(play, spA8[i + 1], charTexIdx);
+                    Font_LoadCharNES(play, spA8[i], charTexIdx);
                     charTexIdx += FONT_CHAR_TEX_SIZE;
                     msgCtx->decodedBuffer.schar[decodedBufPos] = spA8[i];
                     decodedBufPos++;
@@ -1881,9 +1883,8 @@ void Message_DecodeNES(PlayState* play) {
             }
             spA4 += 4.0f * (16.0f * msgCtx->textCharScale);
         } else if (curChar == 0xF6) {
-            temp = gSaveContext.save.saveInfo.shootingGalleryHighScores;
             digits[0] = digits[1] = digits[2] = 0;
-            digits[3] = temp;
+            digits[3] = GET_TOWN_SHOOTING_GALLERY_HIGH_SCORE();
 
             while (digits[3] >= 1000) {
                 digits[0]++;

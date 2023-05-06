@@ -2698,8 +2698,7 @@ void Message_Decode(PlayState* play) {
                 func_8014D304(play, curChar, &charTexIdx, &spC0, &decodedBufPos);
             } else if ((curChar == 0x300) || (curChar == 0x301) || (curChar == 0x302) || (curChar == 0x308)) {
                 if (curChar == 0x308) {
-                    temp = gSaveContext.save.saveInfo.unk_EC4;
-                    value = temp;
+                    value = ((s32)gSaveContext.save.saveInfo.unk_EC4 & 0xFFFF);
                 } else {
                     value = (&gSaveContext.save.saveInfo.bankRupees)[curChar - 0x300];
                 }
@@ -2809,9 +2808,8 @@ void Message_Decode(PlayState* play) {
                 }
                 spC0 += 4.0f * (16.0f * msgCtx->textCharScale);
             } else if (curChar == 0x306) {
-                temp = gSaveContext.save.saveInfo.shootingGalleryHighScores;
                 digits[0] = digits[1] = digits[2] = 0;
-                digits[3] = temp;
+                digits[3] = GET_TOWN_SHOOTING_GALLERY_HIGH_SCORE();
 
                 while (digits[3] >= 1000) {
                     digits[0]++;
@@ -5015,10 +5013,8 @@ s16 D_801D0464[] = {
     0x1B8E,
 };
 
-#ifdef NON_EQUIVALENT
+#ifdef NON_MATCHING
 // Down to a single compiler-managed stack variable
-// Also need to verify the giant msgMode switch jump tables is correct
-// i.e. some may need to break instead of going to default
 // Also contains in-function data
 void Message_Update(PlayState* play) {
     static u8 D_801D0468 = 0;
@@ -5529,7 +5525,7 @@ void Message_Update(PlayState* play) {
                 gSaveContext.healthAccumulator = 20 * 0x10; // Refill 20 hearts
             }
 
-            if ((play->csCtx.state == CS_STATE_IDLE) && (gSaveContext.save.saveInfo.cutsceneIndex < 0xFFF0) &&
+            if ((play->csCtx.state == CS_STATE_IDLE) && (gSaveContext.save.cutsceneIndex < 0xFFF0) &&
                 ((play->activeCamId == 0) || ((play->transitionTrigger == 0) && (play->transitionMode == 0))) &&
                 (play->msgCtx.ocarinaMode == OCARINA_MODE_END)) {
                 if ((gSaveContext.prevHudVisibility == HUD_VISIBILITY_IDLE) ||
@@ -5551,7 +5547,7 @@ void Message_Update(PlayState* play) {
                 msgCtx->msgMode = MSGMODE_NONE;
                 msgCtx->currentTextId = 0;
                 msgCtx->stateTimer = 0;
-                gGameInfo->data[0x55F] = 0;
+                XREG(31) = 0;
                 if (pauseCtx->itemDescriptionOn) {
                     func_8011552C(play, 0x15);
                     pauseCtx->itemDescriptionOn = false;
@@ -5581,7 +5577,7 @@ void Message_Update(PlayState* play) {
                         }
                     } else if (sLastPlayedSong == OCARINA_SONG_INVERTED_TIME) {
                         if (interfaceCtx->restrictions.invSongOfTime == 0) {
-                            if (gGameInfo->data[0xF] != 0) {
+                            if (REG(15) != 0) {
                                 if (gSaveContext.save.timeSpeedOffset == 0) {
                                     Message_StartTextbox(play, 0x1B8C, NULL);
                                 } else {
@@ -5663,7 +5659,7 @@ void Message_Update(PlayState* play) {
             break;
 
         case MSGMODE_SCENE_TITLE_CARD_FADE_IN_BACKGROUND:
-            msgCtx->textboxColorAlphaCurrent += gGameInfo->data[0x589];
+            msgCtx->textboxColorAlphaCurrent += XREG(73);
             if (msgCtx->textboxColorAlphaCurrent >= 255) {
                 msgCtx->textboxColorAlphaCurrent = 255;
                 msgCtx->msgMode = MSGMODE_SCENE_TITLE_CARD_FADE_IN_TEXT;
@@ -5671,7 +5667,7 @@ void Message_Update(PlayState* play) {
             break;
 
         case MSGMODE_SCENE_TITLE_CARD_FADE_IN_TEXT:
-            msgCtx->textColorAlpha += gGameInfo->data[0x589];
+            msgCtx->textColorAlpha += XREG(73);
             if (msgCtx->textColorAlpha >= 255) {
                 msgCtx->textColorAlpha = 255;
                 msgCtx->msgMode = MSGMODE_SCENE_TITLE_CARD_DISPLAYING;
@@ -5686,7 +5682,7 @@ void Message_Update(PlayState* play) {
             break;
 
         case MSGMODE_SCENE_TITLE_CARD_FADE_OUT_TEXT:
-            msgCtx->textColorAlpha -= gGameInfo->data[0x586];
+            msgCtx->textColorAlpha -= XREG(70);
             if (msgCtx->textColorAlpha <= 0) {
                 msgCtx->textColorAlpha = 0;
                 msgCtx->msgMode = MSGMODE_SCENE_TITLE_CARD_FADE_OUT_BACKGROUND;
@@ -5694,7 +5690,7 @@ void Message_Update(PlayState* play) {
             break;
 
         case MSGMODE_SCENE_TITLE_CARD_FADE_OUT_BACKGROUND:
-            msgCtx->textboxColorAlphaCurrent -= gGameInfo->data[0x586];
+            msgCtx->textboxColorAlphaCurrent -= XREG(70);
             if (msgCtx->textboxColorAlphaCurrent <= 0) {
                 if ((msgCtx->currentTextId >= 0x1BB2) && (msgCtx->currentTextId < 0x1BB7) &&
                     (play->actorCtx.flags & 2)) {
@@ -5715,7 +5711,7 @@ void Message_Update(PlayState* play) {
 
         case MSGMODE_NEW_CYCLE_0:
             play->state.unk_A3 = 1;
-            sp44 = gSaveContext.save.saveInfo.cutsceneIndex;
+            sp44 = gSaveContext.save.cutsceneIndex;
             sp3E = gSaveContext.save.time;
             sp40 = gSaveContext.save.day;
 
@@ -5725,7 +5721,7 @@ void Message_Update(PlayState* play) {
 
             gSaveContext.save.day = sp40;
             gSaveContext.save.time = sp3E;
-            gSaveContext.save.saveInfo.cutsceneIndex = sp44;
+            gSaveContext.save.cutsceneIndex = sp44;
 
             if (gSaveContext.fileNum != 0xFF) {
                 func_80147008(sramCtx, D_801C67C8[gSaveContext.fileNum * 2], D_801C6818[gSaveContext.fileNum * 2]);
@@ -5777,7 +5773,7 @@ void Message_Update(PlayState* play) {
                 play->transitionTrigger = TRANS_TRIGGER_START;
                 play->transitionType = TRANS_TYPE_FADE_BLACK;
                 play->nextEntrance = ENTRANCE(CUTSCENE, 0);
-                gSaveContext.save.saveInfo.cutsceneIndex = 0;
+                gSaveContext.save.cutsceneIndex = 0;
                 gSaveContext.sceneLayer = 0;
             }
             break;
