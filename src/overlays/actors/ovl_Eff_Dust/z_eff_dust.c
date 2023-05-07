@@ -326,7 +326,7 @@ void func_809199FC(Actor* thisx, PlayState* play2) {
     distanceTraveled = this->distanceTraveled;
 
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, 255);
-    if (player->unk_B08[0] >= 0.85f) {
+    if (player->unk_B08 >= 0.85f) {
         gDPSetEnvColor(POLY_XLU_DISP++, 255, 0, 0, 0);
     } else {
         gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 255, 0);

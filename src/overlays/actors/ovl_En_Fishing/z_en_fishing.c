@@ -1949,25 +1949,25 @@ void EnFishing_DrawRod(PlayState* play) {
             D_8090CD34 = 0.0f;
         }
 
-        spC8 = player->unk_B08[1];
-        Math_SmoothStepToF(&player->unk_B08[1], input->rel.stick_y * 0.02f, 0.3f, 5.0f, 0.0f);
-        spC8 = player->unk_B08[1] - spC8;
+        spC8 = player->unk_B0C;
+        Math_SmoothStepToF(&player->unk_B0C, input->rel.stick_y * 0.02f, 0.3f, 5.0f, 0.0f);
+        spC8 = player->unk_B0C - spC8;
 
-        spC4 = player->unk_B08[0];
-        Math_SmoothStepToF(&player->unk_B08[0], input->rel.stick_x * 0.02f, 0.3f, 5.0f, 0.0f);
-        spC4 = player->unk_B08[0] - spC4;
+        spC4 = player->unk_B08;
+        Math_SmoothStepToF(&player->unk_B08, input->rel.stick_x * 0.02f, 0.3f, 5.0f, 0.0f);
+        spC4 = player->unk_B08 - spC4;
 
-        if (player->unk_B08[0] > 1.0f) {
-            player->unk_B08[0] = 1.0f;
+        if (player->unk_B08 > 1.0f) {
+            player->unk_B08 = 1.0f;
         }
-        if (player->unk_B08[1] > 1.0f) {
-            player->unk_B08[1] = 1.0f;
+        if (player->unk_B0C > 1.0f) {
+            player->unk_B0C = 1.0f;
         }
-        if (player->unk_B08[0] < -1.0f) {
-            player->unk_B08[0] = -1.0f;
+        if (player->unk_B08 < -1.0f) {
+            player->unk_B08 = -1.0f;
         }
-        if (player->unk_B08[1] < -1.0f) {
-            player->unk_B08[1] = -1.0f;
+        if (player->unk_B0C < -1.0f) {
+            player->unk_B0C = -1.0f;
         }
 
         Math_ApproachF(&D_8090CD28, spC4 * 70.0f * -0.01f, 1.0f, D_8090CD30);
@@ -1976,8 +1976,8 @@ void EnFishing_DrawRod(PlayState* play) {
         Math_ApproachF(&D_8090CD34, 1.0f, 1.0f, 0.1f);
         Math_ApproachZeroF(&D_8090CD38, 1.0f, 0.05f);
     } else {
-        Math_ApproachZeroF(&player->unk_B08[1], 1.0f, 0.1f);
-        Math_ApproachZeroF(&player->unk_B08[0], 1.0f, 0.1f);
+        Math_ApproachZeroF(&player->unk_B0C, 1.0f, 0.1f);
+        Math_ApproachZeroF(&player->unk_B08, 1.0f, 0.1f);
         Math_ApproachF(&D_8090CD2C, (Math_SinS(D_809171FE * 3000) * 0.025f) + -0.03f, 1.0f, 0.05f);
         Math_ApproachZeroF(&D_8090CD28, 1.0f, 0.05f);
 
@@ -2009,11 +2009,11 @@ void EnFishing_DrawRod(PlayState* play) {
     }
 
     Matrix_RotateXFApply(-0.6283185f);
-    Matrix_RotateZF((player->unk_B08[0] * 0.5f) + 0.4712389f, MTXMODE_APPLY);
+    Matrix_RotateZF((player->unk_B08 * 0.5f) + 0.4712389f, MTXMODE_APPLY);
     Matrix_RotateXFApply((D_8090CD40 + 20.0f) * 0.01f * M_PI);
     Matrix_Scale(0.70000005f, 0.70000005f, 0.70000005f, MTXMODE_APPLY);
 
-    spC0 = (D_8090CD3C * (((player->unk_B08[1] - 1.0f) * -0.25f) + 0.5f)) + (D_8090CD2C + D_8090CD38);
+    spC0 = (D_8090CD3C * (((player->unk_B0C - 1.0f) * -0.25f) + 0.5f)) + (D_8090CD2C + D_8090CD38);
 
     Matrix_Translate(0.0f, 0.0f, -1300.0f, MTXMODE_APPLY);
 

@@ -1099,7 +1099,8 @@ typedef struct Player {
                     Vec3f unk_AF0[2];
                     f32 arr_AF0[6];
                 };
-    /* 0xB08 */ f32 unk_B08[2]; // TODO: Investigate if this member actually is an array
+    /* 0xB08 */ f32 unk_B08;
+    /* 0xB0C */ f32 unk_B0C;
     /* 0xB10 */ f32 unk_B10[6];
     /* 0xB28 */ s16 unk_B28; // Burning stick timer?
     /* 0xB2A */ s8 getItemDrawIdPlusOne;

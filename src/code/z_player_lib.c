@@ -556,8 +556,8 @@ s32 func_801235DC(PlayState* play, f32 arg1, s16 arg2) {
     Player* player = GET_PLAYER(play);
 
     if (player->stateFlags3 & PLAYER_STATE3_1000) {
-        player->unk_B08[0] = arg1;
-        player->unk_B08[1] += arg1 * 0.05f;
+        player->unk_B08 = arg1;
+        player->unk_B0C += arg1 * 0.05f;
         player->currentYaw = arg2;
         player->actor.home.rot.y = arg2;
         player->actor.shape.rot.y = arg2;
@@ -3296,7 +3296,7 @@ s32 func_80128640(PlayState* play, Player* player, Gfx* dlist) {
         Matrix_Push();
         Matrix_Translate(-428.26f, 267.2f, -33.82f, MTXMODE_APPLY);
         Matrix_RotateZYX(-0x8000, 0, 0x4000, MTXMODE_APPLY);
-        Matrix_Scale(1.0f, player->unk_B08[1], 1.0f, MTXMODE_APPLY);
+        Matrix_Scale(1.0f, player->unk_B0C, 1.0f, MTXMODE_APPLY);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, gDekuStickDL);
@@ -3425,7 +3425,7 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
                        (player->meleeWeaponAnimation != PLAYER_MWA_GORON_PUNCH_RIGHT) &&
                        (player->meleeWeaponAnimation != PLAYER_MWA_GORON_PUNCH_BUTT))))) {
                     if (player->itemAction == PLAYER_IA_STICK) {
-                        D_801C0994->x = player->unk_B08[1] * 5000.0f;
+                        D_801C0994->x = player->unk_B0C * 5000.0f;
                     } else {
                         D_801C0994->x = sMeleeWeaponLengths[Player_GetMeleeWeaponHeld(player)];
                     }
@@ -3458,18 +3458,18 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
 
                     Matrix_MultZero(&sp20C);
                     temp_fv0 = Math_Vec3f_DistXYZ(sPlayerCurBodyPartPos, &sp20C);
-                    player->unk_B08[0] = temp_fv0 - 3.0f;
+                    player->unk_B08 = temp_fv0 - 3.0f;
                     if (temp_fv0 < 3.0f) {
-                        player->unk_B08[0] = 0.0f;
+                        player->unk_B08 = 0.0f;
                     } else {
-                        player->unk_B08[0] *= 1.6f;
-                        if (player->unk_B08[0] > 1.0f) {
-                            player->unk_B08[0] = 1.0f;
+                        player->unk_B08 *= 1.6f;
+                        if (player->unk_B08 > 1.0f) {
+                            player->unk_B08 = 1.0f;
                         }
                     }
-                    player->unk_B08[1] = -0.5f;
+                    player->unk_B0C = -0.5f;
                 }
-                Matrix_Scale(1.0f, player->unk_B08[0], 1.0f, MTXMODE_APPLY);
+                Matrix_Scale(1.0f, player->unk_B08, 1.0f, MTXMODE_APPLY);
 
                 gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
                           G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
