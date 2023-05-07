@@ -16,7 +16,7 @@ void ItemBHeart_Destroy(Actor* thisx, PlayState* play);
 void ItemBHeart_Update(Actor* thisx, PlayState* play);
 void ItemBHeart_Draw(Actor* thisx, PlayState* play);
 
-void ItemBHeart_UpdateRotationAndScale(ItemBHeart* this, PlayState* play);
+void ItemBHeart_UpdateModel(ItemBHeart* this, PlayState* play);
 
 const ActorInit Item_B_Heart_InitVars = {
     ACTOR_ITEM_B_HEART,
@@ -63,7 +63,7 @@ void ItemBHeart_Destroy(Actor* thisx, PlayState* play) {
 void ItemBHeart_Update(Actor* thisx, PlayState* play) {
     ItemBHeart* this = THIS;
 
-    ItemBHeart_UpdateRotationAndScale(this, play);
+    ItemBHeart_UpdateModel(this, play);
 
     if (!(this->scale < BHEART_SCALE_MIN_COLLECTIBLE)) {
         if (Actor_HasParent(&this->actor, play)) {
@@ -78,7 +78,7 @@ void ItemBHeart_Update(Actor* thisx, PlayState* play) {
 /**
  * Rotate continuously while approaching 40% of object's unit scale.
  */
-void ItemBHeart_UpdateRotationAndScale(ItemBHeart* this, PlayState* play) {
+void ItemBHeart_UpdateModel(ItemBHeart* this, PlayState* play) {
     this->actor.shape.rot.y += 0x400;
     Math_ApproachF(&this->variableScale, 0.4f, 0.1f, 0.01f);
     Actor_SetScale(&this->actor, this->variableScale * this->scale);
