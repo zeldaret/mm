@@ -18,15 +18,17 @@ void ItemBHeart_Draw(Actor* thisx, PlayState* play);
 
 void ItemBHeart_UpdateRotationAndScale(ItemBHeart* this, PlayState* play);
 
-const ActorInit Item_B_Heart_InitVars = { ACTOR_ITEM_B_HEART,
-                                          ACTORCAT_BOSS,
-                                          FLAGS,
-                                          OBJECT_GI_HEARTS,
-                                          sizeof(ItemBHeart),
-                                          (ActorFunc)ItemBHeart_Init,
-                                          (ActorFunc)ItemBHeart_Destroy,
-                                          (ActorFunc)ItemBHeart_Update,
-                                          (ActorFunc)ItemBHeart_Draw };
+const ActorInit Item_B_Heart_InitVars = {
+    ACTOR_ITEM_B_HEART,
+    ACTORCAT_BOSS,
+    FLAGS,
+    OBJECT_GI_HEARTS,
+    sizeof(ItemBHeart),
+    (ActorFunc)ItemBHeart_Init,
+    (ActorFunc)ItemBHeart_Destroy,
+    (ActorFunc)ItemBHeart_Update,
+    (ActorFunc)ItemBHeart_Draw,
+};
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 0, ICHAIN_CONTINUE),
@@ -40,16 +42,16 @@ void ItemBHeart_Init(Actor* thisx, PlayState* play) {
 
     if (Flags_GetCollectible(play, 0x1F)) {
         Actor_Kill(&this->actor);
-    } else {
-        Actor_ProcessInitChain(&this->actor, sInitChain);
-        ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.8f);
-        if (this->actor.params == BHEART_PARAM_SMALL) {
-            this->scale = BHEART_SCALE_SMALL;
-        } else {
-            this->scale = BHEART_SCALE_NORMAL;
-        }
-        this->actor.world.pos.y += 20.0f * this->scale;
+        return;
     }
+    Actor_ProcessInitChain(&this->actor, sInitChain);
+    ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.8f);
+    if (this->actor.params == BHEART_PARAM_SMALL) {
+        this->scale = BHEART_SCALE_SMALL;
+    } else {
+        this->scale = BHEART_SCALE_NORMAL;
+    }
+    this->actor.world.pos.y += 20.0f * this->scale;
 }
 
 void ItemBHeart_Destroy(Actor* thisx, PlayState* play) {
@@ -67,9 +69,9 @@ void ItemBHeart_Update(Actor* thisx, PlayState* play) {
         if (Actor_HasParent(&this->actor, play)) {
             Flags_SetCollectible(play, 0x1F);
             Actor_Kill(&this->actor);
-        } else {
-            Actor_OfferGetItem(&this->actor, play, GI_HEART_CONTAINER, 30.0f, 80.0f);
+            return;
         }
+        Actor_OfferGetItem(&this->actor, play, GI_HEART_CONTAINER, 30.0f, 80.0f);
     }
 }
 
