@@ -3572,7 +3572,7 @@ void func_8082FE0C(Player* this, PlayState* play) {
 
             if (btn < 0) {
                 s32 maskIdMinusOne =
-                    Player_ItemToActionParam(this, GET_CUR_FORM_BTN_ITEM(this->unk_154)) - PLAYER_IA_39 - 1;
+                    GET_MASK_FROM_IA(Player_ItemToActionParam(this, GET_CUR_FORM_BTN_ITEM(this->unk_154))) - 1;
 
                 if ((maskIdMinusOne < PLAYER_MASK_TRUTH - 1) || (maskIdMinusOne >= PLAYER_MASK_MAX - 1)) {
                     maskIdMinusOne = this->currentMask - 1;
@@ -4291,8 +4291,9 @@ void func_80831990(PlayState* play, Player* this, ItemId item) {
         ((actionParam == PLAYER_IA_NONE) || !(this->stateFlags1 & PLAYER_STATE1_8000000) ||
          (actionParam == PLAYER_IA_MASK_ZORA) ||
          ((this->currentBoots >= PLAYER_BOOTS_ZORA_UNDERWATER) && (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)))) {
-        s32 var_v1 = ((actionParam >= PLAYER_IA_MASK_MIN) && (actionParam <= PLAYER_IA_MASK_MAX) &&
-                      ((this->transformation != PLAYER_FORM_HUMAN) || (actionParam >= PLAYER_IA_MASK_GIANT)));
+        s32 var_v1 =
+            ((actionParam >= PLAYER_IA_MASK_MIN) && (actionParam <= PLAYER_IA_MASK_MAX) &&
+             ((this->transformation != PLAYER_FORM_HUMAN) || (actionParam >= PLAYER_IA_MASK_TRANSFORMATION_MIN)));
         CollisionPoly* sp5C;
         s32 sp58;
         f32 sp54;
@@ -7133,7 +7134,8 @@ s32 func_80838A90(Player* this, PlayState* play) {
                     PlayerMask maskId = GET_MASK_FROM_IA(this->itemAction);
 
                     this->prevMask = this->currentMask;
-                    if ((!!(maskId == this->currentMask) != 0) || (this->itemAction < PLAYER_IA_MASK_GIANT) ||
+                    if ((!!(maskId == this->currentMask) != 0) ||
+                        (this->itemAction < PLAYER_IA_MASK_TRANSFORMATION_MIN) ||
                         ((this->itemAction == PLAYER_IA_MASK_GIANT) && (this->transformation != PLAYER_FORM_HUMAN))) {
                         if (maskId == this->currentMask) {
                             this->currentMask = PLAYER_MASK_NONE;

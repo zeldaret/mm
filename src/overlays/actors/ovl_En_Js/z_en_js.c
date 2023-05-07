@@ -377,7 +377,7 @@ void EnJs_TakeMask(s32 itemActions, s32 childType) {
     s32 temp = 0;
 
     if ((childType >= 0) && (childType < 9)) {
-        itemActions -= PLAYER_IA_MASK_TRUTH;
+        itemActions -= PLAYER_IA_MASK_MIN;
         childType *= 3;
         if (itemActions < 8) {
             masksGivenOnMoon[childType] |= 1 << itemActions;
@@ -543,7 +543,7 @@ void func_80969748(EnJs* this, PlayState* play) {
         }
         if (itemAction > PLAYER_IA_NONE) {
             Message_CloseTextbox(play);
-            if ((itemAction >= PLAYER_IA_MASK_TRUTH) && (itemAction <= PLAYER_IA_MASK_GIANT)) {
+            if ((itemAction >= PLAYER_IA_MASK_MIN) && (itemAction <= PLAYER_IA_MASK_TRANSFORMATION_MIN)) {
                 EnJs_TakeMask(itemAction, ENJS_GET_TYPE(&this->actor));
                 Inventory_UnequipItem(itemAction - 4);
                 if (!func_809692A8(ENJS_GET_TYPE(&this->actor))) {
@@ -692,7 +692,7 @@ void func_80969C54(EnJs* this, PlayState* play) {
 
         if (itemAction > PLAYER_IA_NONE) {
             Message_CloseTextbox(play);
-            if ((itemAction >= PLAYER_IA_MASK_TRUTH) && (itemAction <= PLAYER_IA_MASK_GIANT)) {
+            if ((itemAction >= PLAYER_IA_MASK_MIN) && (itemAction <= PLAYER_IA_MASK_TRANSFORMATION_MIN)) {
                 EnJs_TakeMask(itemAction, ENJS_GET_TYPE(&this->actor));
                 Inventory_UnequipItem(itemAction - 4);
                 if (!func_809692A8(ENJS_GET_TYPE(&this->actor))) {
