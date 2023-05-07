@@ -2,7 +2,7 @@
 #include "z64bombers_notebook.h"
 #include "interface/schedule_static/schedule_static.h"
 
-// TODO: Create xml when build supports yaz0 compression/decompression
+// TODO: Needs YAZ0
 // Segment 0x07 schedule_dma_static_test
 extern TexturePtr D_07000000;
 extern TexturePtr D_07000800;
@@ -314,9 +314,9 @@ void BombersNotebook_TextureRectangle(Gfx** gfxP, s32 rxl, s32 ryl, s32 rxh, s32
 }
 
 s16 sBombersNotebookHeaderColors[][3] = {
-    { 116, 134, 146 },
-    { 158, 156, 131 },
-    { 174, 141, 151 },
+    /* Column 1 */ { 116, 134, 146 },
+    /* Column 2 */ { 158, 156, 131 },
+    /* Column 3 */ { 174, 141, 151 },
 };
 
 void BombersNotebook_DrawHeaders(Gfx** gfxP) {
@@ -355,10 +355,11 @@ void BombersNotebook_DrawHeaders(Gfx** gfxP) {
     *gfxP = gfx;
 }
 
+/* Each column/day gets subdivided into 4 sub columns, the first 2 sub cloumns use 1 color, the last 2 another */
 s16 sBombersNotebookColumnColors[][2][3] = {
-    { { 165, 183, 195 }, { 140, 158, 170 } },
-    { { 197, 195, 172 }, { 172, 170, 147 } },
-    { { 223, 190, 200 }, { 190, 165, 175 } },
+    /* Column 1 */ { { 165, 183, 195 }, { 140, 158, 170 } },
+    /* Column 2 */ { { 197, 195, 172 }, { 172, 170, 147 } },
+    /* Column 3 */ { { 223, 190, 200 }, { 190, 165, 175 } },
 };
 
 void BombersNotebook_DrawColumns(Gfx** gfxP) {
