@@ -51,6 +51,7 @@
 #include "z_boss_03.h"
 #include "overlays/actors/ovl_Door_Warp1/z_door_warp1.h"
 #include "overlays/actors/ovl_En_Water_Effect/z_en_water_effect.h"
+#include "overlays/actors/ovl_Item_B_Heart/z_item_b_heart.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 #include "objects/object_water_effect/object_water_effect.h"
 
@@ -451,7 +452,8 @@ void Boss03_Init(Actor* thisx, PlayState* play2) {
     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_GREAT_BAY_TEMPLE)) {
         Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_DOOR_WARP1, 0.0f, PLATFORM_HEIGHT, 200.0f, 0, 0,
                            0, ENDOORWARP1_FF_1);
-        Actor_Spawn(&play->actorCtx, play, ACTOR_ITEM_B_HEART, 0.0f, PLATFORM_HEIGHT, 0.0f, 0, 0, 0, 0);
+        Actor_Spawn(&play->actorCtx, play, ACTOR_ITEM_B_HEART, 0.0f, PLATFORM_HEIGHT, 0.0f, 0, 0, 0,
+                    BHEART_PARAM_NORMAL);
         Actor_Kill(&this->actor);
         return;
     }
@@ -1610,7 +1612,7 @@ void Boss03_DeathCutscene(Boss03* this, PlayState* play) {
                 Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_DOOR_WARP1, 0.0f, PLATFORM_HEIGHT, 200.0f,
                                    0, 0, 0, ENDOORWARP1_FF_1);
                 Actor_Spawn(&play->actorCtx, play, ACTOR_ITEM_B_HEART, this->actor.focus.pos.x, PLATFORM_HEIGHT,
-                            this->actor.focus.pos.z, 0, 0, 0, 0);
+                            this->actor.focus.pos.z, 0, 0, 0, BHEART_PARAM_NORMAL);
                 this->csTimer = 0;
                 Actor_SetScale(&this->actor, 0.0f);
                 AudioSfx_StopByPos(&this->actor.projectedPos);
