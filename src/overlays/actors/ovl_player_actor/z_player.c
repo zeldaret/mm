@@ -3565,7 +3565,7 @@ void func_8082FE0C(Player* this, PlayState* play) {
 
     if (this->transformation == PLAYER_FORM_HUMAN) {
         if (this->currentMask != PLAYER_MASK_NONE) {
-            PlayerItemAction maskActionParam = this->currentMask + PLAYER_IA_MASK_TRUTH - 1;
+            PlayerItemAction maskActionParam = GET_IA_FROM_MASK(this->currentMask);
             s32 btn;
 
             btn = func_8082FD0C(this, maskActionParam);
@@ -4291,7 +4291,7 @@ void func_80831990(PlayState* play, Player* this, ItemId item) {
         ((actionParam == PLAYER_IA_NONE) || !(this->stateFlags1 & PLAYER_STATE1_8000000) ||
          (actionParam == PLAYER_IA_MASK_ZORA) ||
          ((this->currentBoots >= PLAYER_BOOTS_ZORA_UNDERWATER) && (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)))) {
-        s32 var_v1 = ((actionParam >= PLAYER_IA_MASK_TRUTH) && (actionParam <= PLAYER_IA_MASK_DEKU) &&
+        s32 var_v1 = ((actionParam >= PLAYER_IA_MASK_MIN) && (actionParam <= PLAYER_IA_MASK_MAX) &&
                       ((this->transformation != PLAYER_FORM_HUMAN) || (actionParam >= PLAYER_IA_MASK_GIANT)));
         CollisionPoly* sp5C;
         s32 sp58;
@@ -4301,7 +4301,7 @@ void func_80831990(PlayState* play, Player* this, ItemId item) {
         if (var_v1 ||
             (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_TALK_REQUESTED) && (actionParam != PLAYER_IA_NONE)) ||
             (actionParam == PLAYER_IA_OCARINA) ||
-            ((actionParam > PLAYER_IA_BOTTLE_EMPTY) && actionParam < PLAYER_IA_MASK_TRUTH) ||
+            ((actionParam > PLAYER_IA_BOTTLE_MIN) && actionParam < PLAYER_IA_MASK_MIN) ||
             ((actionParam == PLAYER_IA_PICTO_BOX) && (this->talkActor != NULL) &&
              (this->exchangeItemId > PLAYER_IA_NONE))) {
             if (var_v1) {
@@ -4346,9 +4346,9 @@ void func_80831990(PlayState* play, Player* this, ItemId item) {
             } else {
                 play_sound(NA_SE_SY_ERROR);
             }
-        } else if ((this->transformation == PLAYER_FORM_HUMAN) && (actionParam >= PLAYER_IA_MASK_TRUTH) &&
-                   (actionParam < PLAYER_IA_MASK_GIANT)) {
-            s32 maskId = actionParam - PLAYER_IA_39;
+        } else if ((this->transformation == PLAYER_FORM_HUMAN) && (actionParam >= PLAYER_IA_MASK_MIN) &&
+                   (actionParam < PLAYER_IA_MASK_TRANSFORMATION_MIN)) {
+            PlayerMask maskId = GET_MASK_FROM_IA(actionParam);
 
             this->prevMask = this->currentMask;
             if (maskId == this->currentMask) {
@@ -7129,8 +7129,8 @@ s32 func_80838A90(Player* this, PlayState* play) {
         }
         if (!func_808387A0(play, this)) {
             if (this->unk_AA5 == PLAYER_UNKAA5_5) {
-                if ((this->itemAction > PLAYER_IA_MASK_TRUTH - 1) && (this->itemAction <= PLAYER_IA_MASK_DEKU)) {
-                    PlayerMask maskId = this->itemAction - (PLAYER_IA_MASK_TRUTH - 1);
+                if ((this->itemAction >= PLAYER_IA_MASK_MIN) && (this->itemAction <= PLAYER_IA_MASK_MAX)) {
+                    PlayerMask maskId = GET_MASK_FROM_IA(this->itemAction);
 
                     this->prevMask = this->currentMask;
                     if ((!!(maskId == this->currentMask) != 0) || (this->itemAction < PLAYER_IA_MASK_GIANT) ||
@@ -20182,13 +20182,13 @@ void func_8085B820(PlayState* play, s16 arg1) {
 PlayerItemAction func_8085B854(PlayState* play, Player* player, ItemId itemId) {
     PlayerItemAction itemAction = Player_ItemToActionParam(player, itemId);
 
-    if ((itemAction >= PLAYER_IA_MASK_TRUTH) && (itemAction <= PLAYER_IA_MASK_DEKU) &&
-        (itemAction == (player->currentMask + PLAYER_IA_MASK_TRUTH - 1))) {
+    if ((itemAction >= PLAYER_IA_MASK_MIN) && (itemAction <= PLAYER_IA_MASK_MAX) &&
+        (itemAction == GET_IA_FROM_MASK(player->currentMask))) {
         itemAction = PLAYER_IA_NONE;
     }
 
     if ((itemAction <= PLAYER_IA_NONE) || (itemAction >= PLAYER_IA_MAX)) {
-        return -1;
+        return PLAYER_IA_MINUS1;
     }
 
     player->itemAction = PLAYER_IA_NONE;
