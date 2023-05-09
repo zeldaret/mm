@@ -47,25 +47,25 @@ void ItemBHeart_Init(Actor* thisx, PlayState* play) {
     Actor_ProcessInitChain(&this->actor, sInitChain);
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.8f);
     if (this->actor.params == BHEART_PARAM_SMALL) {
-        this->scale = BHEART_SCALE_SMALL;
+        this->unitScale = BHEART_SCALE_SMALL;
     } else {
-        this->scale = BHEART_SCALE_NORMAL;
+        this->unitScale = BHEART_SCALE_NORMAL;
     }
-    this->actor.world.pos.y += 20.0f * this->scale;
+    this->actor.world.pos.y += 20.0f * this->unitScale;
 }
 
 void ItemBHeart_Destroy(Actor* thisx, PlayState* play) {
 }
 
 /**
- * Adjusts size and handles collection (if of proper scale)
+ * Adjusts size and handles collection (if of proper unitScale)
  */
 void ItemBHeart_Update(Actor* thisx, PlayState* play) {
     ItemBHeart* this = THIS;
 
     ItemBHeart_UpdateModel(this, play);
 
-    if (!(this->scale < BHEART_SCALE_MIN_COLLECTIBLE)) {
+    if (!(this->unitScale < BHEART_SCALE_MIN_COLLECTIBLE)) {
         if (Actor_HasParent(&this->actor, play)) {
             Flags_SetCollectible(play, 0x1F);
             Actor_Kill(&this->actor);
@@ -81,11 +81,11 @@ void ItemBHeart_Update(Actor* thisx, PlayState* play) {
 void ItemBHeart_UpdateModel(ItemBHeart* this, PlayState* play) {
     this->actor.shape.rot.y += 0x400;
     Math_ApproachF(&this->variableScale, 0.4f, 0.1f, 0.01f);
-    Actor_SetScale(&this->actor, this->variableScale * this->scale);
+    Actor_SetScale(&this->actor, this->variableScale * this->unitScale);
 }
 
 /**
- * Draw translucently when infront of a boss warp portal
+ * Draw translucently when in front of a boss warp portal
  */
 void ItemBHeart_Draw(Actor* thisx, PlayState* play) {
     ItemBHeart* this = THIS;
