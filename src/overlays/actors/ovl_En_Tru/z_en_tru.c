@@ -178,6 +178,7 @@ void func_80A85788(EnTruUnkStruct* arg0, PlayState* play) {
     s32 flag = false;
 
     OPEN_DISPS(play->state.gfxCtx);
+
     func_8012C2DC(play->state.gfxCtx);
 
     for (i = 0; i < 30; i++, arg0++) {
@@ -232,11 +233,12 @@ void func_80A85AA4(EnTruUnkStruct* arg0, Vec3f* arg1, f32 arg2, f32 arg3, f32 ar
 }
 
 void func_80A85BCC(EnTruUnkStruct* arg0, PlayState* play) {
-    s32 i;
     GraphicsContext* gfxCtx = play->state.gfxCtx;
+    s32 i;
     s32 flag = false;
 
     OPEN_DISPS(play->state.gfxCtx);
+
     func_8012C2DC(play->state.gfxCtx);
 
     for (i = 0; i < 30; i++, arg0++) {
@@ -287,11 +289,12 @@ void func_80A85E2C(EnTruUnkStruct* arg0, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3, 
 }
 
 void func_80A85F84(EnTruUnkStruct* arg0, PlayState* play) {
-    s32 i;
     GraphicsContext* gfxCtx = play->state.gfxCtx;
+    s32 i;
     s32 flag = false;
 
     OPEN_DISPS(play->state.gfxCtx);
+
     func_8012C2DC(play->state.gfxCtx);
 
     for (i = 0; i < 30; i++, arg0++) {
@@ -332,7 +335,8 @@ void func_80A85F84(EnTruUnkStruct* arg0, PlayState* play) {
         gSPDisplayList(POLY_XLU_DISP++, gKoumeDustModelDL);
         Matrix_Pop();
     }
-    CLOSE_DISPS(new_var);
+
+    CLOSE_DISPS(play->state.gfxCtx);
 }
 
 s32 func_80A86384(EnTruUnkStruct* arg0, Vec3f* arg1) {
