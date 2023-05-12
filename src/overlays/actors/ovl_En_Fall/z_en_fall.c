@@ -318,7 +318,7 @@ void EnFall_CrashingMoon_HandleGiantsCutscene(EnFall* this, PlayState* play) {
     if ((play->sceneId == SCENE_00KEIKOKU) && (gSaveContext.sceneLayer == 1) && (play->csCtx.scriptIndex == 0)) {
         switch (sGiantsCutsceneState) {
             case 0:
-                if (play->csCtx.state != 0) {
+                if (play->csCtx.state != CS_STATE_IDLE) {
                     sGiantsCutsceneState += 2;
                 }
                 break;
@@ -452,7 +452,7 @@ void EnFall_StoppedClosedMouthMoon_PerformCutsceneActions(EnFall* this, PlayStat
 }
 
 void EnFall_ClockTowerOrTitleScreenMoon_PerformCutsceneActions(EnFall* this, PlayState* play) {
-    if (play->csCtx.state != 0 && play->sceneId == SCENE_OKUJOU) {
+    if ((play->csCtx.state != CS_STATE_IDLE) && (play->sceneId == SCENE_OKUJOU)) {
         func_800B9010(&this->actor, NA_SE_EV_MOON_FALL - SFX_FLAG);
     }
 }
