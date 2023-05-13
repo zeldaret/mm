@@ -284,7 +284,7 @@ void func_80C1410C(EnJgameTsn* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     player->stateFlags1 |= PLAYER_STATE1_20;
-    Audio_PlaySubBgm(0x25);
+    Audio_PlaySubBgm(NA_BGM_TIMED_MINI_GAME);
     play->interfaceCtx.minigameState = MINIGAME_STATE_COUNTDOWN_SETUP_3;
     Interface_InitMinigame(play);
     SET_WEEKEVENTREG(WEEKEVENTREG_90_20);
