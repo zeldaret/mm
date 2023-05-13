@@ -135,7 +135,7 @@ void Fragment_Relocate(void* allocatedRamAddr, OverlayRelocationSection* ovlRelo
 }
 
 size_t Fragment_Load(uintptr_t vromStart, uintptr_t vromEnd, uintptr_t vramStart, void* allocatedRamAddr,
-                        size_t allocatedBytes) {
+                     size_t allocatedBytes) {
     size_t size = vromEnd - vromStart;
     void* end;
     s32 pad;
