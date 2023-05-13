@@ -77,7 +77,7 @@ void EnWeatherTag_Init(Actor* thisx, PlayState* play) {
             EnWeatherTag_SetupAction(this, func_80966A08);
             break;
         case WEATHERTAG_TYPE_UNK1:
-            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_52_20)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_STONE_TOWER_TEMPLE)) {
                 Actor_Kill(&this->actor);
             }
             EnWeatherTag_SetupAction(this, func_80966B08);
@@ -249,11 +249,11 @@ void func_80966B08(EnWeatherTag* this, PlayState* play) {
 // because it uses cutsecnes.. is this the clear ikana cutcsene?
 void func_80966BF4(EnWeatherTag* this, PlayState* play) {
     u8 changeLightNextConfig;
-    CsCmdActorAction* tmpAction;
+    CsCmdActorCue* cue;
 
-    if (Cutscene_CheckActorAction(play, 567)) {
-        tmpAction = play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 567)];
-        if ((play->csCtx.frames >= tmpAction->startFrame) && (tmpAction->action >= 2)) {
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_567)) {
+        cue = play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_567)];
+        if ((play->csCtx.curFrame >= cue->startFrame) && (cue->id >= 2)) {
             switch (gSaveContext.save.day) {
                 case 0:
                 case 1:
@@ -382,14 +382,13 @@ void func_80967060(EnWeatherTag* this, PlayState* play) {
 
 // type 4_3, start cutscene then die?
 void func_80967148(EnWeatherTag* this, PlayState* play) {
-    s16 tempCutscene;
+    s16 csId = this->actor.csId;
 
-    tempCutscene = this->actor.cutscene;
-    if (ActorCutscene_GetCanPlayNext(tempCutscene)) {
-        ActorCutscene_Start(tempCutscene, &this->actor);
+    if (CutsceneManager_IsNext(csId)) {
+        CutsceneManager_Start(csId, &this->actor);
         EnWeatherTag_SetupAction(this, EnWeatherTag_DoNothing);
     } else {
-        ActorCutscene_SetIntentToPlay(tempCutscene);
+        CutsceneManager_Queue(csId);
     }
 }
 
@@ -488,8 +487,8 @@ void EnWeatherTag_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
     if ((play->actorCtx.flags & ACTORCTX_FLAG_1) && (play->msgCtx.msgMode != 0) &&
         (play->msgCtx.currentTextId == 0x5E6) && !FrameAdvance_IsEnabled(&play->state) &&
-        (play->transitionTrigger == TRANS_TRIGGER_OFF) && (ActorCutscene_GetCurrentIndex() == -1) &&
-        (play->csCtx.state == 0)) {
+        (play->transitionTrigger == TRANS_TRIGGER_OFF) && (CutsceneManager_GetCurrentCsId() == CS_ID_NONE) &&
+        (play->csCtx.state == CS_STATE_IDLE)) {
 
         gSaveContext.save.time = ((void)0, gSaveContext.save.time) + (u16)R_TIME_SPEED;
         if (R_TIME_SPEED != 0) {

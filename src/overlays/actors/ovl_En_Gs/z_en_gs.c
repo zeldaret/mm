@@ -112,7 +112,7 @@ s8 func_80997A90(s16 arg0, s16 arg1) {
     if ((arg0 == 0) || ((arg0 != 1) && (arg0 != 2) && (arg0 == 3))) {
         phi_v1 = 0;
     } else {
-        phi_v1 = (gSaveContext.save.unk_EC4 >> (arg1 * 3)) & 7;
+        phi_v1 = (gSaveContext.save.saveInfo.unk_EA0 >> (arg1 * 3)) & 7;
     }
     return phi_v1;
 }
@@ -156,7 +156,7 @@ void EnGs_Init(Actor* thisx, PlayState* play) {
     this->unk_1F4 = this->unk_1FA;
     Math_Vec3f_Copy(&this->unk_1B0[0], &gOneVec3f);
     Math_Vec3f_Copy(&this->unk_1B0[1], &gOneVec3f);
-    SubS_FillCutscenesList(&this->actor, this->unk_212, ARRAY_COUNT(this->unk_212));
+    SubS_FillCutscenesList(&this->actor, this->csIdList, ARRAY_COUNT(this->csIdList));
     func_801A5080(0);
     if (this->actor.params == ENGS_1) {
         Actor_SetScale(&this->actor, 0.15f);
@@ -262,7 +262,8 @@ void func_80997E4C(EnGs* this, PlayState* play) {
 }
 
 void func_80997FF0(EnGs* this, PlayState* play) {
-    if (SubS_StartActorCutscene(&this->actor, play->playerActorCsIds[0], -1, SUBS_CUTSCENE_NORMAL)) {
+    if (SubS_StartCutscene(&this->actor, play->playerCsIds[PLAYER_CS_ID_ITEM_OCARINA], CS_ID_NONE,
+                           SUBS_CUTSCENE_NORMAL)) {
         func_80998040(this, play);
     }
 }
@@ -338,8 +339,8 @@ void func_8099807C(EnGs* this, PlayState* play) {
 }
 
 void func_80998300(EnGs* this, PlayState* play) {
-    if (this->actor.cutscene != -1) {
-        ActorCutscene_Stop(play->playerActorCsIds[0]);
+    if (this->actor.csId != CS_ID_NONE) {
+        CutsceneManager_Stop(play->playerCsIds[PLAYER_CS_ID_ITEM_OCARINA]);
     }
 }
 
@@ -372,7 +373,7 @@ void func_809984F4(EnGs* this, PlayState* play) {
         }
     } while (gossipStone != NULL);
 
-    func_800B7298(play, &this->actor, PLAYER_CSMODE_7);
+    func_800B7298(play, &this->actor, PLAYER_CSMODE_WAIT);
     this->actionFunc = func_809985B8;
 }
 
@@ -380,7 +381,7 @@ void func_809985B8(EnGs* this, PlayState* play) {
     EnGs* gossipStone;
     Vec3f sp38;
 
-    if (SubS_StartActorCutscene(&this->actor, this->unk_212[0], -1, SUBS_CUTSCENE_SET_UNK_LINK_FIELDS)) {
+    if (SubS_StartCutscene(&this->actor, this->csIdList[0], CS_ID_NONE, SUBS_CUTSCENE_WITH_PLAYER)) {
         Player* player = GET_PLAYER(play);
 
         Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_NEW);
@@ -388,8 +389,8 @@ void func_809985B8(EnGs* this, PlayState* play) {
         Math_Vec3f_Sum(&player->actor.world.pos, &sp38, &player->actor.world.pos);
         Math_Vec3f_Copy(&player->actor.prevPos, &player->actor.world.pos);
         this->unk_200 = 0.0f;
-        gSaveContext.save.unk_EC4 = ((u32)gSaveContext.save.unk_EC4 & ~(7 << (this->unk_198 * 3))) |
-                                    ((this->unk_194 & 7) << (this->unk_198 * 3));
+        gSaveContext.save.saveInfo.unk_EA0 = ((u32)gSaveContext.save.saveInfo.unk_EA0 & ~(7 << (this->unk_198 * 3))) |
+                                             ((this->unk_194 & 7) << (this->unk_198 * 3));
         gossipStone = NULL;
 
         do {
@@ -446,11 +447,11 @@ void func_8099874C(EnGs* this, PlayState* play) {
         if ((this->unk_19C == 5) && (this->unk_194 != 0)) {
             s32 i;
 
-            ActorCutscene_Stop(this->unk_212[0]);
+            CutsceneManager_Stop(this->csIdList[0]);
             phi_v0 = 1;
 
             for (i = 0; i < 4; i++) {
-                if (((gSaveContext.save.unk_EC4 >> (i * 3)) & 7) != (u32)this->unk_194) {
+                if (((gSaveContext.save.saveInfo.unk_EA0 >> (i * 3)) & 7) != (u32)this->unk_194) {
                     phi_v0 = 0;
                 }
             }
@@ -1012,7 +1013,7 @@ void EnGs_Update(Actor* thisx, PlayState* play) {
     } else if (func_800B8718(&this->actor, &play->state)) {
         this->unk_19A |= 0x200;
         this->collider.base.acFlags &= ~AC_HIT;
-        if (this->actor.cutscene != -1) {
+        if (this->actor.csId != CS_ID_NONE) {
             this->actionFunc = func_80997FF0;
         } else {
             func_80998040(this, play);

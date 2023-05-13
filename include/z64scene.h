@@ -177,9 +177,9 @@ typedef struct {
 
 typedef struct {
     /* 0x0 */ u8  code;
-    /* 0x1 */ u8  sceneCsCount;
+    /* 0x1 */ u8  scriptListCount;
     /* 0x4 */ void* segment;
-} SCmdCutsceneList; // size = 0x8
+} SCmdCsScriptList; // size = 0x8
 
 typedef struct {
     /* 0x0 */ u8  code;
@@ -202,7 +202,7 @@ typedef struct {
     /* 0x0 */ u8  code;
     /* 0x1 */ u8  num;
     /* 0x4 */ void* segment;
-} SCmdCutsceneActorList; // size = 0x8
+} SCmdCutsceneList; // size = 0x8
 
 typedef struct {
     /* 0x0 */ u8  code;
@@ -531,11 +531,11 @@ typedef union {
     /* Command: 0x14 */ SCmdEndMarker         endMarker;
     /* Command: 0x15 */ SCmdSoundSettings     soundSettings;
     /* Command: 0x16 */ SCmdEchoSettings      echoSettings;
-    /* Command: 0x17 */ SCmdCutsceneList      cutsceneList;
+    /* Command: 0x17 */ SCmdCsScriptList      scriptList;
     /* Command: 0x18 */ SCmdAltHeaders        altHeaders;
     /* Command: 0x19 */ SCmdRegionVisited     regionVisited;
     /* Command: 0x1A */ SCmdTextureAnimations textureAnimations;
-    /* Command: 0x1B */ SCmdCutsceneActorList cutsceneActorList;
+    /* Command: 0x1B */ SCmdCutsceneList      cutsceneList;
     /* Command: 0x1C */ SCmdMinimapSettings   minimapSettings;
     /* Command: 0x1D */ // Unused
     /* Command: 0x1E */ SCmdMinimapChests     minimapChests;
@@ -824,6 +824,15 @@ typedef enum {
 
 #define ENTR_LOAD_OPENING -1
 
+/*
+* Entrances used in cutscene destination. Includes scene layer that's immediately applied to `nextCutsceneIndex` and removed.
+* See `CutsceneScriptEntry.nextEntrance`
+* 0xFE00:  Index into sSceneEntranceTable (Scene)
+* 0x01F0:  Index into the scenes specific entrance table (Spawn)
+* 0x000F:  Index into the specific entrance table (Layer)
+*/
+#define CS_ENTRANCE(scene, spawn, layer) ((((ENTR_SCENE_##scene) & 0x7F) << 9) | (((spawn) & 0x1F) << 4) | ((layer) & 0xF))
+
 // SceneTableEntry draw configs
 typedef enum {
     /* 0 */ SCENE_DRAW_CFG_DEFAULT,
@@ -869,7 +878,7 @@ typedef enum {
     /* 0x14 */ SCENE_CMD_ID_END,
     /* 0x15 */ SCENE_CMD_ID_SOUND_SETTINGS,
     /* 0x16 */ SCENE_CMD_ID_ECHO_SETTINGS,
-    /* 0x17 */ SCENE_CMD_ID_CUTSCENE_LIST,
+    /* 0x17 */ SCENE_CMD_ID_CUTSCENE_SCRIPT_LIST,
     /* 0x18 */ SCENE_CMD_ID_ALTERNATE_HEADER_LIST,
     /* 0x19 */ SCENE_CMD_ID_SET_REGION_VISITED,
     /* 0x1A */ SCENE_CMD_ID_ANIMATED_MATERIAL_LIST,
@@ -954,26 +963,29 @@ typedef enum {
 #define SCENE_CMD_ECHO_SETTINGS(echo) \
     { SCENE_CMD_ID_ECHO_SETTINGS, 0, CMD_BBBB(0, 0, 0, echo) }
 
-#define SCENE_CMD_CUTSCENE_LIST(numCutscene, cutsceneList) \
-    { SCENE_CMD_ID_CUTSCENE_LIST, numCutscene, CMD_PTR(cutsceneList) }
+#define SCENE_CMD_CUTSCENE_SCRIPT_LIST(numEntries, scriptList) \
+    { SCENE_CMD_ID_CUTSCENE_SCRIPT_LIST, numEntries, CMD_PTR(scriptList) }
 
 #define SCENE_CMD_ALTERNATE_HEADER_LIST(alternateHeaderList) \
     { SCENE_CMD_ID_ALTERNATE_HEADER_LIST, 0, CMD_PTR(alternateHeaderList) }
 
-#define SCENE_CMD_MISC_SETTINGS SCENE_CMD_SET_REGION_VISITED // TODO: ZAPD Capatability
 #define SCENE_CMD_SET_REGION_VISITED() \
     { SCENE_CMD_ID_SET_REGION_VISITED, 0, CMD_W(0) }
 
 #define SCENE_CMD_ANIMATED_MATERIAL_LIST(matAnimList) \
     { SCENE_CMD_ID_ANIMATED_MATERIAL_LIST, 0, CMD_PTR(matAnimList) }
 
-#define SCENE_CMD_ACTOR_CUTSCENE_LIST(actorCutsceneCount, actorCutsceneList) \
-    { SCENE_CMD_ID_ACTOR_CUTSCENE_LIST, actorCutsceneCount, CMD_PTR(actorCutsceneList) }
+#define SCENE_CMD_ACTOR_CUTSCENE_LIST(numEntries, actorCutsceneList) \
+    { SCENE_CMD_ID_ACTOR_CUTSCENE_LIST, numEntries, CMD_PTR(actorCutsceneList) }
 
 #define SCENE_CMD_MINIMAP_INFO(minimapInfo) \
     { SCENE_CMD_ID_MINIMAP_INFO, 0, CMD_PTR(minimapInfo) }
 
 #define SCENE_CMD_MINIMAP_COMPASS_ICON_INFO(compassIconCount, compassIconInfo) \
     { SCENE_CMD_ID_MINIMAP_COMPASS_ICON_INFO, compassIconCount, CMD_PTR(compassIconInfo) }
+
+ // TODO: ZAPD Capatability
+#define SCENE_CMD_MISC_SETTINGS SCENE_CMD_SET_REGION_VISITED
+#define SCENE_CMD_CUTSCENE_LIST SCENE_CMD_CUTSCENE_SCRIPT_LIST
 
 #endif

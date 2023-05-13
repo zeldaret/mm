@@ -811,7 +811,7 @@ void KaleidoScope_Update(PlayState* play) {
                         } else {
                             play_sound(NA_SE_SY_PIECE_OF_HEART);
                             Play_SaveCycleSceneFlags(&play->state);
-                            gSaveContext.save.playerData.savedSceneId = play->sceneId;
+                            gSaveContext.save.saveInfo.playerData.savedSceneId = play->sceneId;
                             func_8014546C(sramCtx);
                             if (!gSaveContext.flashSaveAvailable) {
                                 pauseCtx->savePromptState = PAUSE_SAVEPROMPT_STATE_5;
@@ -1072,8 +1072,8 @@ void KaleidoScope_Update(PlayState* play) {
                     play_sound(NA_SE_SY_PIECE_OF_HEART);
                     pauseCtx->promptChoice = PAUSE_PROMPT_YES;
                     Play_SaveCycleSceneFlags(&play->state);
-                    gSaveContext.save.playerData.savedSceneId = play->sceneId;
-                    gSaveContext.save.playerData.health = 0x30;
+                    gSaveContext.save.saveInfo.playerData.savedSceneId = play->sceneId;
+                    gSaveContext.save.saveInfo.playerData.health = 0x30;
                     func_8014546C(sramCtx);
                     if (!gSaveContext.flashSaveAvailable) {
                         pauseCtx->state = PAUSE_STATE_GAMEOVER_8;
@@ -1146,15 +1146,15 @@ void KaleidoScope_Update(PlayState* play) {
                         func_80169FDC(&play->state);
                         gSaveContext.respawnFlag = -2;
                         gSaveContext.nextTransitionType = TRANS_TYPE_FADE_BLACK;
-                        gSaveContext.save.playerData.health = 0x30;
+                        gSaveContext.save.saveInfo.playerData.health = 0x30;
                         Audio_SetSpec(0xA);
                         gSaveContext.healthAccumulator = 0;
                         gSaveContext.magicState = MAGIC_STATE_IDLE;
                         gSaveContext.magicFlag = 0;
                         gSaveContext.magicCapacity = 0;
-                        gSaveContext.magicFillTarget = gSaveContext.save.playerData.magic;
-                        gSaveContext.save.playerData.magicLevel = 0;
-                        gSaveContext.save.playerData.magic = 0;
+                        gSaveContext.magicFillTarget = gSaveContext.save.saveInfo.playerData.magic;
+                        gSaveContext.save.saveInfo.playerData.magicLevel = 0;
+                        gSaveContext.save.saveInfo.playerData.magic = 0;
                     } else { // PAUSE_PROMPT_NO
                         STOP_GAMESTATE(&play->state);
                         SET_NEXT_GAMESTATE(&play->state, TitleSetup_Init, sizeof(TitleSetupState));

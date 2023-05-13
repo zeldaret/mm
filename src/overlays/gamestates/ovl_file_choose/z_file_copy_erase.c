@@ -456,18 +456,18 @@ void FileSelect_CopyWaitForFlashSave(GameState* thisx) {
         this->configMode = CM_COPY_ANIM_1;
 
         for (i = 0; i < 6; i++) {
-            this->newf[this->copyDestFileIndex][i] = gSaveContext.save.playerData.newf[i];
+            this->newf[this->copyDestFileIndex][i] = gSaveContext.save.saveInfo.playerData.newf[i];
         }
 
-        this->sotCount[this->copyDestFileIndex] = gSaveContext.save.playerData.sotCount;
+        this->sotCount[this->copyDestFileIndex] = gSaveContext.save.saveInfo.playerData.sotCount;
 
         for (i = 0; i < 8; i++) {
-            this->fileNames[this->copyDestFileIndex][i] = gSaveContext.save.playerData.playerName[i];
+            this->fileNames[this->copyDestFileIndex][i] = gSaveContext.save.saveInfo.playerData.playerName[i];
         }
 
-        this->healthCapacity[this->copyDestFileIndex] = gSaveContext.save.playerData.healthCapacity;
-        this->health[this->copyDestFileIndex] = gSaveContext.save.playerData.health;
-        this->defenseHearts[this->copyDestFileIndex] = gSaveContext.save.inventory.defenseHearts;
+        this->healthCapacity[this->copyDestFileIndex] = gSaveContext.save.saveInfo.playerData.healthCapacity;
+        this->health[this->copyDestFileIndex] = gSaveContext.save.saveInfo.playerData.health;
+        this->defenseHearts[this->copyDestFileIndex] = gSaveContext.save.saveInfo.inventory.defenseHearts;
     }
 }
 
@@ -1118,7 +1118,7 @@ void FileSelect_EraseWaitForFlashSave(GameState* thisx) {
     if (sramCtx->status == 0) {
         this->configMode = CM_ERASE_ANIM_1;
         for (i = 0; i < 6; i++) {
-            this->newf[this->selectedFileIndex][i] = gSaveContext.save.playerData.newf[i];
+            this->newf[this->selectedFileIndex][i] = gSaveContext.save.saveInfo.playerData.newf[i];
         }
     }
 }

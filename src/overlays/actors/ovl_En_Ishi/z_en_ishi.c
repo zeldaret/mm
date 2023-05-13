@@ -354,7 +354,7 @@ void func_8095E204(EnIshi* this, PlayState* play) {
     for (i = 0; i < 3; i++) {
         if (Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ACTOR_EN_INSECT, this->actor.world.pos.x,
                                           this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, 1,
-                                          this->actor.cutscene, this->actor.halfDaysBits, NULL) == NULL) {
+                                          this->actor.csId, this->actor.halfDaysBits, NULL) == NULL) {
             break;
         }
     }
@@ -386,7 +386,7 @@ void EnIshi_Init(Actor* thisx, PlayState* play) {
 
     Actor_ProcessInitChain(&this->actor, sInitChain[sp34]);
 
-    if (play->csCtx.state != 0) {
+    if (play->csCtx.state != CS_STATE_IDLE) {
         this->actor.uncullZoneForward += 1000.0f;
     }
 
@@ -660,7 +660,7 @@ void func_8095EBDC(EnIshi* this, PlayState* play) {
 
 void func_8095F060(EnIshi* this) {
     this->actor.flags |= ACTOR_FLAG_10;
-    ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+    CutsceneManager_Queue(this->actor.csId);
     this->actionFunc = func_8095F0A4;
 }
 
@@ -668,15 +668,15 @@ void func_8095F0A4(EnIshi* this, PlayState* play) {
     s32 pad;
     s32 sp28 = ENISHI_GET_1(&this->actor);
 
-    if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
+    if (CutsceneManager_IsNext(this->actor.csId)) {
+        CutsceneManager_StartWithPlayerCs(this->actor.csId, &this->actor);
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, D_8095F6D4[sp28], D_8095F6D0[sp28]);
         D_8095F6D8[sp28](&this->actor, play);
         D_8095F6E0[sp28](this, play);
         this->actor.draw = NULL;
         func_8095F180(this);
     } else {
-        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+        CutsceneManager_Queue(this->actor.csId);
     }
 }
 
@@ -685,9 +685,9 @@ void func_8095F180(EnIshi* this) {
 }
 
 void func_8095F194(EnIshi* this, PlayState* play) {
-    if (this->actor.cutscene < 0) {
+    if (this->actor.csId < 0) {
         Actor_Kill(&this->actor);
-    } else if (ActorCutscene_GetCurrentIndex() != this->actor.cutscene) {
+    } else if (CutsceneManager_GetCurrentCsId() != this->actor.csId) {
         Actor_Kill(&this->actor);
     }
 }

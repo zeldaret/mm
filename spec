@@ -470,7 +470,6 @@ beginseg
     include "build/data/code/z_eventmgr.bss.o"
     include "build/src/code/z_fcurve_data.o"
     include "build/src/code/z_fcurve_data_skelanime.o"
-    include "build/data/code/code_801BD830.data.o"
     include "build/src/code/z_fireobj.o"
     include "build/src/code/z_game_dlftbls.o"
     include "build/src/code/z_horse.o"
@@ -539,8 +538,8 @@ beginseg
     include "build/src/code/z_message_staff.o"
     include "build/src/code/z_player_call.o"
     include "build/src/code/z_shrink_window.o"
-    include "build/src/code/db_camera.o"
-    include "build/data/code/db_camera.bss.o"
+    include "build/src/code/cutscene_camera.o"
+    include "build/data/code/cutscene_camera.bss.o"
     include "build/src/code/z_kaleido_manager.o"
     include "build/src/code/z_kaleido_scope_call.o"
     include "build/src/code/z_fbdemo_dlftbls.o"
@@ -2962,11 +2961,7 @@ beginseg
     name "ovl_En_Tru"
     compress
     include "build/src/overlays/actors/ovl_En_Tru/z_en_tru.o"
-    #ifdef NON_MATCHING
-        include "build/src/overlays/actors/ovl_En_Tru/ovl_En_Tru_reloc.o"
-    #else
-        include "build/data/ovl_En_Tru/ovl_En_Tru.reloc.o"
-    #endif
+    include "build/src/overlays/actors/ovl_En_Tru/ovl_En_Tru_reloc.o"
 endseg
 
 beginseg

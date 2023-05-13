@@ -149,7 +149,7 @@ void BgLastBwall_Init(Actor* thisx, PlayState* play) {
 
     Actor_ProcessInitChain(&this->dyna.actor, D_80C18AC8);
     this->type = BGLASTBWALL_GET_TYPE(&this->dyna.actor);
-    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
     DynaPolyActor_LoadMesh(play, &this->dyna, D_80C18A48[this->type].colHeader);
     Collider_InitTris(play, &this->colliderTris);
     if (Flags_GetSwitch(play, BGLASTBWALL_GET_SWITCHFLAGS(&this->dyna.actor))) {
@@ -164,7 +164,7 @@ void BgLastBwall_Init(Actor* thisx, PlayState* play) {
 
     BgLastBwall_InitCollider(&sTrisInit, &this->dyna.actor.world.pos, &this->dyna.actor.shape.rot, &this->colliderTris,
                              D_80C18AC0[this->type]);
-    SubS_FillCutscenesList(&this->dyna.actor, this->cutscenes, ARRAY_COUNT(this->cutscenes));
+    SubS_FillCutscenesList(&this->dyna.actor, this->csIdList, ARRAY_COUNT(this->csIdList));
     func_80C187E4(this);
 }
 
@@ -239,13 +239,13 @@ void func_80C1886C(BgLastBwall* this, PlayState* play) {
 }
 
 void func_80C18884(BgLastBwall* this, PlayState* play) {
-    if (SubS_StartActorCutscene(&this->dyna.actor, this->cutscenes[0], -1, SUBS_CUTSCENE_SET_UNK_LINK_FIELDS)) {
+    if (SubS_StartCutscene(&this->dyna.actor, this->csIdList[0], CS_ID_NONE, SUBS_CUTSCENE_WITH_PLAYER)) {
         func_80C188C4(this, play);
     }
 }
 
 void func_80C188C4(BgLastBwall* this, PlayState* play) {
-    func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
     this->dyna.actor.draw = NULL;
     func_80C184EC(this, play);
     Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_WALL_BROKEN);

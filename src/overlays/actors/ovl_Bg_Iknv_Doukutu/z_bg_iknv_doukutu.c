@@ -51,9 +51,9 @@ void BgIknvDoukutu_Init(Actor* thisx, PlayState* play) {
     switch (BGIKNVDOUKUTU_GET_F(&this->dyna.actor)) {
         case BGIKNVDOUKUTU_F_0:
             this->actionFunc = func_80BD71BC;
-            this->csAction = 0x204;
+            this->cueType = CS_CMD_ACTOR_CUE_516;
             this->unk_160 = 1.0f;
-            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_14_04) || CHECK_WEEKEVENTREG(WEEKEVENTREG_52_20)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_14_04) || CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_STONE_TOWER_TEMPLE)) {
                 this->dyna.actor.draw = func_80BD7768;
                 this->actionFunc = func_80BD73D0;
                 play->envCtx.lightSettingOverride = 25;
@@ -65,7 +65,7 @@ void BgIknvDoukutu_Init(Actor* thisx, PlayState* play) {
         case BGIKNVDOUKUTU_F_1:
             Actor_SetScale(&this->dyna.actor, 1.0f);
             this->dyna.actor.draw = func_80BD7820;
-            this->csAction = 0x204;
+            this->cueType = CS_CMD_ACTOR_CUE_516;
             DynaPolyActor_Init(&this->dyna, 0);
             CollisionHeader_GetVirtual(&object_iknv_obj_Colheader_012788, &colHeader);
             this->dyna.bgId = DynaPoly_SetBgActor(play, &play->colCtx.dyna, &this->dyna.actor, colHeader);
@@ -75,7 +75,7 @@ void BgIknvDoukutu_Init(Actor* thisx, PlayState* play) {
             break;
 
         case BGIKNVDOUKUTU_F_2:
-            this->csAction = 0x204;
+            this->cueType = CS_CMD_ACTOR_CUE_516;
             this->dyna.actor.draw = func_80BD78C4;
             DynaPolyActor_Init(&this->dyna, 0);
             CollisionHeader_GetVirtual(&object_iknv_obj_Colheader_0117C8, &colHeader);
@@ -116,8 +116,8 @@ void func_80BD716C(BgIknvDoukutu* this, PlayState* play) {
 
 void func_80BD71BC(BgIknvDoukutu* this, PlayState* play) {
     play->envCtx.lightSettingOverride = 24;
-    if (Cutscene_CheckActorAction(play, this->csAction) &&
-        (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->csAction)]->action == 2)) {
+    if (Cutscene_IsCueInChannel(play, this->cueType) &&
+        (play->csCtx.actorCues[Cutscene_GetCueChannel(play, this->cueType)]->id == 2)) {
         this->actionFunc = func_80BD716C;
         this->dyna.actor.draw = func_80BD7538;
     }
@@ -135,8 +135,8 @@ void func_80BD7250(BgIknvDoukutu* this, PlayState* play) {
 }
 
 void func_80BD72BC(BgIknvDoukutu* this, PlayState* play) {
-    if (Cutscene_CheckActorAction(play, this->csAction) &&
-        (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->csAction)]->action == 3)) {
+    if (Cutscene_IsCueInChannel(play, this->cueType) &&
+        (play->csCtx.actorCues[Cutscene_GetCueChannel(play, this->cueType)]->id == 3)) {
         this->actionFunc = func_80BD7250;
     }
 
@@ -146,8 +146,8 @@ void func_80BD72BC(BgIknvDoukutu* this, PlayState* play) {
 }
 
 void func_80BD7360(BgIknvDoukutu* this, PlayState* play) {
-    if (Cutscene_CheckActorAction(play, this->csAction) &&
-        (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->csAction)]->action == 2)) {
+    if (Cutscene_IsCueInChannel(play, this->cueType) &&
+        (play->csCtx.actorCues[Cutscene_GetCueChannel(play, this->cueType)]->id == 2)) {
         this->actionFunc = func_80BD72BC;
     }
 }

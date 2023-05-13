@@ -102,19 +102,19 @@ void EnOwl_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     EnOwl* this = THIS;
     s32 i;
-    s16 cutscene = this->actor.cutscene;
+    s16 csId = this->actor.csId;
     s32 owlType;
     s32 switchFlag;
 
-    for (i = 0; i < ARRAY_COUNT(this->unk_400); i++) {
-        this->unk_400[i] = cutscene;
-        if (cutscene != -1) {
-            this->actor.cutscene = cutscene;
-            cutscene = ActorCutscene_GetAdditionalCutscene(this->actor.cutscene);
+    for (i = 0; i < ARRAY_COUNT(this->csIdList); i++) {
+        this->csIdList[i] = csId;
+        if (csId != CS_ID_NONE) {
+            this->actor.csId = csId;
+            csId = CutsceneManager_GetAdditionalCsId(this->actor.csId);
         }
     }
 
-    this->actor.cutscene = this->unk_400[0];
+    this->actor.csId = this->csIdList[0];
     Actor_ProcessInitChain(&this->actor, sInitChain);
     if (ENOWL_GET_TYPE(&this->actor) == ENOWL_GET_TYPE_30) {
         Actor_SetScale(&this->actor, 0.1f);
@@ -144,7 +144,7 @@ void EnOwl_Init(Actor* thisx, PlayState* play) {
     this->unk_409 = 4;
     this->unk_40B = this->unk_408 = 0;
     this->unk_40C = 4;
-    this->unk_406 = -1;
+    this->csIdIndex = -1;
     owlType = ENOWL_GET_TYPE(&this->actor);
     switchFlag = ENOWL_GET_SWITCHFLAG(&this->actor);
 
@@ -157,7 +157,7 @@ void EnOwl_Init(Actor* thisx, PlayState* play) {
             break;
 
         case ENOWL_GET_TYPE_2:
-            if (gSaveContext.save.inventory.items[ITEM_LENS] == ITEM_LENS) {
+            if (gSaveContext.save.saveInfo.inventory.items[ITEM_LENS] == ITEM_LENS) {
                 Actor_Kill(&this->actor);
                 return;
             }
@@ -315,11 +315,11 @@ void func_8095AC50(EnOwl* this, PlayState* play) {
 
 void func_8095ACEC(EnOwl* this) {
     this->actionFlags &= ~0x40;
-    if (this->unk_406 >= 0) {
-        if (ActorCutscene_GetCurrentIndex() == this->unk_400[this->unk_406]) {
-            ActorCutscene_Stop(this->unk_400[this->unk_406]);
+    if (this->csIdIndex >= 0) {
+        if (CutsceneManager_GetCurrentCsId() == this->csIdList[this->csIdIndex]) {
+            CutsceneManager_Stop(this->csIdList[this->csIdIndex]);
         }
-        this->unk_406 = -1;
+        this->csIdIndex = -1;
     }
 }
 
@@ -387,7 +387,7 @@ void func_8095AFEC(EnOwl* this, PlayState* play) {
     if (func_8095A978(this, play, 0xBF6, 200.0f, 100.0f)) {
         Audio_PlayFanfare(NA_BGM_OWL);
         this->actionFunc = func_8095AF2C;
-        this->unk_406 = 0;
+        this->csIdIndex = 0;
         this->actionFlags |= 0x40;
     }
 }
@@ -502,7 +502,7 @@ void func_8095B574(EnOwl* this, PlayState* play) {
         this->actionFunc = func_8095BA84;
         Audio_PlayFanfare(NA_BGM_OWL);
         this->actionFlags |= 0x40;
-        this->unk_406 = 2;
+        this->csIdIndex = 2;
     } else if (this->actor.xzDistToPlayer < 200.0f) {
         this->actor.flags |= ACTOR_FLAG_10000;
         func_800B8500(&this->actor, play, 200.0f, 400.0f, PLAYER_IA_NONE);
@@ -674,7 +674,7 @@ void func_8095BA84(EnOwl* this, PlayState* play) {
                         this->actor.flags &= ~ACTOR_FLAG_10000;
                         this->actor.home.rot.x = 0;
                         func_8095ACEC(this);
-                        this->unk_406 = 0;
+                        this->csIdIndex = 0;
                         this->actionFlags |= 0x40;
                         break;
 
@@ -714,7 +714,7 @@ void func_8095BE0C(EnOwl* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->actionFunc = func_8095BA84;
         Audio_PlayFanfare(NA_BGM_OWL);
-        this->unk_406 = 1;
+        this->csIdIndex = 1;
         this->actionFlags |= 0x40;
     } else if (this->actor.textId == 0xBF0) {
         if (this->actor.isTargeted) {
@@ -865,16 +865,16 @@ s32 func_8095C510(EnOwl* this) {
 
 void func_8095C568(EnOwl* this) {
     if (this->actionFlags & 0x40) {
-        if ((this->unk_406 < 0) || (this->unk_400[this->unk_406] < 0)) {
+        if ((this->csIdIndex < 0) || (this->csIdList[this->csIdIndex] < 0)) {
             this->actionFlags &= ~0x40;
-        } else if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-            ActorCutscene_Stop(0x7C);
-            ActorCutscene_SetIntentToPlay(this->unk_400[this->unk_406]);
-        } else if (ActorCutscene_GetCanPlayNext(this->unk_400[this->unk_406])) {
-            ActorCutscene_StartAndSetUnkLinkFields(this->unk_400[this->unk_406], &this->actor);
+        } else if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+            CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
+            CutsceneManager_Queue(this->csIdList[this->csIdIndex]);
+        } else if (CutsceneManager_IsNext(this->csIdList[this->csIdIndex])) {
+            CutsceneManager_StartWithPlayerCs(this->csIdList[this->csIdIndex], &this->actor);
             this->actionFlags &= ~0x40;
         } else {
-            ActorCutscene_SetIntentToPlay(this->unk_400[this->unk_406]);
+            CutsceneManager_Queue(this->csIdList[this->csIdIndex]);
         }
     }
 }

@@ -25,9 +25,9 @@ typedef struct EnZob {
     /* 0x2FC */ Vec3s unk_2FC;
     /* 0x302 */ s16 unk_302;
     /* 0x304 */ u16 unk_304;
-    /* 0x306 */ s16 unk_306[4];
-    /* 0x30E */ s16 unk_30E;
-    /* 0x310 */ s16 unk_310;
+    /* 0x306 */ s16 csIdList[4];
+    /* 0x30E */ s16 csIdIndex;
+    /* 0x310 */ s16 cueId;
     /* 0x312 */ s16 unk_312;
     /* 0x314 */ EnZobActionFunc actionFunc;
 } EnZob; // size = 0x318

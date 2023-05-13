@@ -174,7 +174,7 @@ typedef struct Actor {
     /* 0x01F */ s8 targetMode; // Controls how far the actor can be targeted from and how far it can stay locked on
     /* 0x020 */ s16 halfDaysBits; // Bitmask indicating which half-days this actor is allowed to not be killed(?) (TODO: not sure how to word this). If the current halfDayBit is not part of this mask then the actor is killed when spawning the setup actors
     /* 0x024 */ PosRot world; // Position/rotation in the world
-    /* 0x038 */ s8 cutscene;
+    /* 0x038 */ s8 csId; // ActorCutscene index, see `CutsceneId`
     /* 0x039 */ u8 audioFlags; // Another set of flags? Seems related to sfx or bgm
     /* 0x03C */ PosRot focus; // Target reticle focuses on this position. For player this represents head pos and rot
     /* 0x050 */ u16 sfxId; // Id of sound effect to play. Plays when value is set, then is cleared the following update cycle
@@ -229,15 +229,23 @@ typedef enum {
     /* 1 */ FOOT_RIGHT
 } ActorFootIndex;
 
+#define DYNA_TRANSFORM_POS (1 << 0) // Position of the actors on top follows the dynapoly actor's movement.
+#define DYNA_TRANSFORM_ROT_Y (1 << 1) // The Y rotation of the actors on top follows the dynapoly actor's Y rotation.
+
+#define DYNA_INTERACT_ACTOR_ON_TOP (1 << 0) // There is an actor standing on the collision of the dynapoly actor
+#define DYNA_INTERACT_PLAYER_ON_TOP (1 << 1) // The player actor is standing on the collision of the dynapoly actor
+#define DYNA_INTERACT_PLAYER_ABOVE (1 << 2) // The player is directly above the collision of the dynapoly actor (any distance above)
+#define DYNA_INTERACT_ACTOR_ON_SWITCH (1 << 3) // Like the ACTOR_ON_TOP flag but only actors with ACTOR_FLAG_CAN_PRESS_SWITCH
+#define DYNA_INTERACT_ACTOR_ON_HEAVY_SWITCH (1 << 4) // Like the ACTOR_ON_TOP flag but only actors with ACTOR_FLAG_CAN_PRESS_HEAVY_SWITCH
+
 typedef struct {
     /* 0x000 */ Actor actor;
     /* 0x144 */ s32 bgId;
     /* 0x148 */ f32 pushForce;
     /* 0x14C */ f32 unk14C;
     /* 0x150 */ s16 yRotation;
-    /* 0x154 */ u32 flags;
-    /* 0x158 */ u8 stateFlags;
-    /* 0x15A */ s16 pad15A;
+    /* 0x154 */ u32 transformFlags;
+    /* 0x158 */ u8 interactFlags;
 } DynaPolyActor; // size = 0x15C
 
 
@@ -528,8 +536,8 @@ typedef enum {
 #define ACTOR_FLAG_8000          (1 << 15)
 // 
 #define ACTOR_FLAG_10000         (1 << 16)
-// 
-#define ACTOR_FLAG_20000         (1 << 17)
+// actor can press and hold down heavy switches
+#define ACTOR_FLAG_CAN_PRESS_HEAVY_SWITCH  (1 << 17)
 // 
 #define ACTOR_FLAG_40000         (1 << 18)
 // 
@@ -546,8 +554,8 @@ typedef enum {
 #define ACTOR_FLAG_1000000       (1 << 24)
 // 
 #define ACTOR_FLAG_2000000       (1 << 25)
-// 
-#define ACTOR_FLAG_4000000       (1 << 26)
+// actor can press and hold down switches
+#define ACTOR_FLAG_CAN_PRESS_SWITCH (1 << 26)
 // Prevents locking on with Z targeting an actor even if Tatl is floating over it
 #define ACTOR_FLAG_CANT_LOCK_ON  (1 << 27)
 // 

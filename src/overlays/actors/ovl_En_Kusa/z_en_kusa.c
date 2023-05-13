@@ -329,7 +329,7 @@ void EnKusa_SpawnBugs(EnKusa* this, PlayState* play) {
     for (numBugs = 0; numBugs < 3; numBugs++) {
         Actor* bug = Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ACTOR_EN_INSECT, this->actor.world.pos.x,
                                                    this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, 1,
-                                                   this->actor.cutscene, this->actor.halfDaysBits, 0);
+                                                   this->actor.csId, this->actor.halfDaysBits, 0);
 
         if (bug == NULL) {
             break;
@@ -366,7 +366,7 @@ void EnKusa_Init(Actor* thisx, PlayState* play) {
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
 
-    if (play->csCtx.state != 0) {
+    if (play->csCtx.state != CS_STATE_IDLE) {
         this->actor.uncullZoneForward += 1000.0f;
     }
     EnKusa_InitCollider(&this->actor, play);

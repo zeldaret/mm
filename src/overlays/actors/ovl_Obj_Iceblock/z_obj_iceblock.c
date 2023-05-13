@@ -643,7 +643,7 @@ s32 func_80A24954(ObjIceblock* this, PlayState* play) {
 
 void func_80A24A48(ObjIceblock* this, PlayState* play) {
     if (!(this->unk_1B0 & 0x10) && !(this->collider.base.ocFlags1 & OC1_HIT)) {
-        func_800C6314(play, &play->colCtx.dyna, this->dyna.bgId);
+        DynaPoly_EnableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
         this->unk_1B0 |= 0x10;
     }
 }
@@ -921,9 +921,9 @@ void ObjIceblock_Init(Actor* thisx, PlayState* play) {
         this->dyna.actor.world.rot.y = this->dyna.actor.shape.rot.y;
     }
 
-    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
     DynaPolyActor_LoadMesh(play, &this->dyna, &gIceBlockCol);
-    func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->dyna.actor, &sCylinderInit);
 
@@ -971,13 +971,13 @@ void ObjIceBlock_SetupAttemptSpawnCutscene(ObjIceblock* this) {
 }
 
 void ObjIceBlock_AttemptSpawnCutscene(ObjIceblock* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
+    if (CutsceneManager_IsNext(this->dyna.actor.csId)) {
+        CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
         this->extendedDrawFunc = func_80A26BF8;
         this->spawnCutsceneTimer = 80;
         func_80A25824(this);
     } else {
-        ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+        CutsceneManager_Queue(this->dyna.actor.csId);
     }
 }
 
@@ -1209,7 +1209,7 @@ void func_80A25FD4(ObjIceblock* this, PlayState* play) {
         func_80A23370(this, sp2C);
         func_80A260E8(this);
         sp30 = false;
-        func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_7);
+        func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_WAIT);
         this->unk_1B0 |= 1;
     }
 
@@ -1255,7 +1255,7 @@ void func_80A26144(ObjIceblock* this, PlayState* play) {
 
     if ((this->unk_1B0 & 1) && (isBool || sp28 || (this->dyna.actor.xzDistToPlayer > 400.0f))) {
         this->unk_1B0 &= ~1;
-        func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_6);
+        func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_END);
     }
 
     if (isBool) {
@@ -1427,7 +1427,7 @@ void ObjIceblock_Update(Actor* thisx, PlayState* play) {
         }
     }
 
-    if (DynaPolyActor_IsInRidingMovingState(&this->dyna)) {
+    if (DynaPolyActor_IsPlayerOnTop(&this->dyna)) {
         if (this->unk_1B0 & 0x20) {
             this->unk_1B0 &= ~0x40;
         } else {
@@ -1454,7 +1454,7 @@ void ObjIceblock_Update(Actor* thisx, PlayState* play) {
         this->unk_1B0 &= ~0x100;
         if (this->unk_1B0 & 1) {
             this->unk_1B0 &= ~1;
-            func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_6);
+            func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_END);
         }
         func_80A266C4(this);
     }
@@ -1463,7 +1463,7 @@ void ObjIceblock_Update(Actor* thisx, PlayState* play) {
     if (this->spawnCutsceneTimer > 0) {
         this->spawnCutsceneTimer--;
         if (this->spawnCutsceneTimer == 0) {
-            ActorCutscene_Stop(this->dyna.actor.cutscene);
+            CutsceneManager_Stop(this->dyna.actor.csId);
         }
     }
 

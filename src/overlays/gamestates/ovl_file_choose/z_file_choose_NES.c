@@ -2028,7 +2028,7 @@ void FileSelect_LoadGame(GameState* thisx) {
     gSaveContext.hudVisibility = HUD_VISIBILITY_IDLE;
     gSaveContext.hudVisibilityTimer = 0;
 
-    gSaveContext.save.playerData.tatlTimer = 0;
+    gSaveContext.save.saveInfo.playerData.tatlTimer = 0;
 }
 
 void (*sSelectModeUpdateFuncs[])(GameState*) = {

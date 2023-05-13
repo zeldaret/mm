@@ -390,7 +390,7 @@ void Scene_CommandTimeSettings(PlayState* play, SceneCmd* cmd) {
     }
 
     // Increase time speed during first cycle
-    if ((gSaveContext.save.inventory.items[SLOT_OCARINA] == ITEM_NONE) && (play->envCtx.sceneTimeSpeed != 0)) {
+    if ((gSaveContext.save.saveInfo.inventory.items[SLOT_OCARINA] == ITEM_NONE) && (play->envCtx.sceneTimeSpeed != 0)) {
         play->envCtx.sceneTimeSpeed = 5;
     }
 
@@ -402,7 +402,7 @@ void Scene_CommandTimeSettings(PlayState* play, SceneCmd* cmd) {
     play->envCtx.sunPos.y = (Math_CosS(((void)0, gSaveContext.save.time) - CLOCK_TIME(12, 0)) * 120.0f) * 25.0f;
     play->envCtx.sunPos.z = (Math_CosS(((void)0, gSaveContext.save.time) - CLOCK_TIME(12, 0)) * 20.0f) * 25.0f;
 
-    if ((play->envCtx.sceneTimeSpeed == 0) && (gSaveContext.save.cutscene < 0xFFF0)) {
+    if ((play->envCtx.sceneTimeSpeed == 0) && (gSaveContext.save.cutsceneIndex < 0xFFF0)) {
         gSaveContext.skyboxTime = gSaveContext.save.time;
 
         if ((gSaveContext.skyboxTime >= CLOCK_TIME(4, 0)) && (gSaveContext.skyboxTime < CLOCK_TIME(6, 30))) {
@@ -470,15 +470,15 @@ void Scene_CommandAltHeaderList(PlayState* play, SceneCmd* cmd) {
     }
 }
 
-// SceneTableEntry Header Command 0x17: Cutscene List
-void Scene_CommandCutsceneList(PlayState* play, SceneCmd* cmd) {
-    play->csCtx.sceneCsCount = cmd->cutsceneList.sceneCsCount;
-    play->csCtx.sceneCsList = Lib_SegmentedToVirtual(cmd->cutsceneList.segment);
+// SceneTableEntry Header Command 0x17: Cutscene Script List
+void Scene_CommandCutsceneScriptList(PlayState* play, SceneCmd* cmd) {
+    play->csCtx.scriptListCount = cmd->scriptList.scriptListCount;
+    play->csCtx.scriptList = Lib_SegmentedToVirtual(cmd->scriptList.segment);
 }
 
-// SceneTableEntry Header Command 0x1B: Actor Cutscene List
-void Scene_CommandActorCutsceneList(PlayState* play, SceneCmd* cmd) {
-    ActorCutscene_Init(play, Lib_SegmentedToVirtual(cmd->cutsceneActorList.segment), cmd->cutsceneActorList.num);
+// SceneTableEntry Header Command 0x1B: Cutscene List
+void Scene_CommandCutsceneList(PlayState* play, SceneCmd* cmd) {
+    CutsceneManager_Init(play, Lib_SegmentedToVirtual(cmd->cutsceneList.segment), cmd->cutsceneList.num);
 }
 
 // SceneTableEntry Header Command 0x1C: Mini Maps
@@ -519,8 +519,8 @@ void Scene_CommandSetRegionVisitedFlag(PlayState* play, SceneCmd* cmd) {
     }
 
     if (i < REGION_MAX) {
-        gSaveContext.save.regionsVisited =
-            (gBitFlags[i] | gSaveContext.save.regionsVisited) | gSaveContext.save.regionsVisited;
+        gSaveContext.save.saveInfo.regionsVisited =
+            (gBitFlags[i] | gSaveContext.save.saveInfo.regionsVisited) | gSaveContext.save.saveInfo.regionsVisited;
     }
 }
 
@@ -560,11 +560,11 @@ void (*sSceneCmdHandlers[])(PlayState*, SceneCmd*) = {
     NULL,
     Scene_CommandSoundSettings,
     Scene_CommandEchoSetting,
-    Scene_CommandCutsceneList,
+    Scene_CommandCutsceneScriptList,
     Scene_CommandAltHeaderList,
     Scene_CommandSetRegionVisitedFlag,
     Scene_CommandAnimatedMaterials,
-    Scene_CommandActorCutsceneList,
+    Scene_CommandCutsceneList,
     Scene_CommandMiniMap,
     Scene_Command1D,
     Scene_CommandMiniMapCompassInfo,
@@ -601,7 +601,7 @@ u16 Entrance_Create(s32 scene, s32 spawn, s32 layer) {
 }
 
 /**
- * Creates an layer 0 entranace from the current entrance and the given spawn.
+ * Creates an layer 0 entrance from the current entrance and the given spawn.
  */
 u16 Entrance_CreateFromSpawn(s32 spawn) {
     return Entrance_Create((u32)gSaveContext.save.entrance >> 9, spawn, 0);

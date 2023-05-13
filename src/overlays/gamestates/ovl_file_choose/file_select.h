@@ -7,7 +7,7 @@
 // Slot offsets are also based on OoT SaveContext sizes, and contains incorrect sizes from MM
 // Macros appear to be remnant from OoT
 #define NO_FLASH_GET_NEWF(sramCtx, slotNum, index) \
-    (sramCtx->noFlashSaveBuf[gSramSlotOffsets[slotNum] + offsetof(SaveContext, save.playerData.newf[index])])
+    (sramCtx->noFlashSaveBuf[gSramSlotOffsets[slotNum] + offsetof(SaveContext, save.saveInfo.playerData.newf[index])])
 #define NO_FLASH_SLOT_OCCUPIED(sramCtx, slotNum)                                                  \
     ((NO_FLASH_GET_NEWF(sramCtx, slotNum, 0) == 'Z') || (NO_FLASH_GET_NEWF(sramCtx, slotNum, 1) == 'E') || \
      (NO_FLASH_GET_NEWF(sramCtx, slotNum, 2) == 'L') || (NO_FLASH_GET_NEWF(sramCtx, slotNum, 3) == 'D') || \

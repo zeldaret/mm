@@ -45,9 +45,9 @@ s32 func_80C07C80(s32 arg0) {
     s32 var_v1;
 
     if (!(arg0 & 1)) {
-        var_v1 = gSaveContext.save.unk_E88[arg0 >> 1] & 0xFFFF;
+        var_v1 = gSaveContext.save.saveInfo.unk_E64[arg0 >> 1] & 0xFFFF;
     } else {
-        var_v1 = (gSaveContext.save.unk_E88[arg0 >> 1] & 0xFFFF0000) >> 0x10;
+        var_v1 = (gSaveContext.save.saveInfo.unk_E64[arg0 >> 1] & 0xFFFF0000) >> 0x10;
     }
     return var_v1 + CLOCK_TIME(2, 30);
 }
@@ -172,18 +172,18 @@ void func_80C081C8(ObjUsiyane* this, PlayState* play) {
 }
 
 void func_80C082CC(ObjUsiyane* this, PlayState* play) {
-    this->unk_164 = -1;
+    this->cueId = -1;
 }
 
 void func_80C082E0(ObjUsiyane* this, PlayState* play) {
-    CsCmdActorAction* csAction;
+    CsCmdActorCue* cue;
 
-    if (Cutscene_CheckActorAction(play, 0x228)) {
-        this->unk_160 = Cutscene_GetActorActionIndex(play, 0x228);
-        csAction = play->csCtx.actorActions[this->unk_160];
-        if (this->unk_164 != csAction->action) {
-            this->unk_164 = csAction->action;
-            if (this->unk_164 == 2) {
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_552)) {
+        this->cueChannel = Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_552);
+        cue = play->csCtx.actorCues[this->cueChannel];
+        if (this->cueId != cue->id) {
+            this->cueId = cue->id;
+            if (this->cueId == 2) {
                 func_80C07F30(this, play);
                 this->actionFunc = func_80C081C8;
             }
