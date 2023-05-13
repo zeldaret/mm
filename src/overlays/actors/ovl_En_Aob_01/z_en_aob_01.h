@@ -8,8 +8,9 @@ struct EnAob01;
 
 typedef void (*EnAob01ActionFunc)(struct EnAob01*, PlayState*);
 
-// This needs to be kept in sync with the number of weekEventRegs used to store the text ID offsets
-// for the race dogs. In particular, there needs to be one weekEventReg for every two dogs.
+// This needs to be kept in sync with the number of weekEventRegs used to store the text ID offsets for
+// the race dogs. In particular, there needs to be one weekEventReg for every two dogs. This needs to be
+// an even number to ensure that all text ID offsets are created (see EnAob01_InitializeDogTextOffsets).
 #define RACEDOG_COUNT 14
 
 #define ENAOB01_GET_STARTING_DOG_PATH_INDEX(thisx) (((thisx)->params & 0x7E00) >> 9)

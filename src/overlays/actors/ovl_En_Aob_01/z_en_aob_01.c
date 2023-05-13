@@ -608,9 +608,9 @@ void EnAob01_BeforeRace_Talk(EnAob01* this, PlayState* play) {
     //! @bug: This block of code acts as a failsafe for when the player triggered this conversation by
     //! bumping into the racetrack owner while holding the dog and, at the same time, threw or dropped
     //! the dog frame-perfectly by pressing A. In this case, the code successfully returns the racetrack
-    //! owner to her idle state. Unfortunately, there is another way to let go of the dog besides pressing
-    //! A to drop or throw it; the player can also drop the dog by shielding. If this shield drop is done
-    //! frame-perfectly, then the below code will not function properly and will instead softlock the game.
+    //! owner to her idle state. Unfortunately, the player can also drop the dog by shielding. If this
+    //! shield drop is done frame-perfectly, then the below code will not function properly and will
+    //! instead softlock the game.
     if ((this->stateFlags & ENAOB01_FLAG_TALKING_TO_PLAYER_HOLDING_DOG) && !EnAob01_PlayerIsHoldingDog(this, play)) {
         if ((this->textId != 0) && (this->textId != 0x3535) && (this->textId != 0x3524) && (this->textId != 0x3548) &&
             (this->textId != 0x3549) && (this->textId != 0x354A)) {
@@ -730,7 +730,7 @@ s32 EnAob01_Race_FollowSelectedDog(EnAob01* this, PlayState* play) {
 
 /**
  * Returns true if the race should be ended, which can happen in either of the following circumstances:
- * - All 14 dogs have finished the race.
+ * - All `RACEDOG_COUNT` dogs have finished the race.
  * - At least 10 dogs have finished the race, and at least 500 frames have passed since the 10th place
  *   dog finished. This is controlled by the forceRaceEndTimer, which is set in EnAob01_Init.
  */
