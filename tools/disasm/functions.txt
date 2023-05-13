@@ -9722,7 +9722,7 @@
     0x80A1428C:("EnGo_ChangeToSnowballAnimation",),
     0x80A14324:("EnGo_ChangeToCoveringEarsAnimation",),
     0x80A143A8:("EnGo_ChangeToShiveringAnimation",),
-    0x80A14430:("EnGo_SetupStretcher",),
+    0x80A14430:("EnGo_SetupAthletic",),
     0x80A1449C:("EnGo_SetupSpectator",),
     0x80A144F4:("EnGo_SetupGatekeeper",),
     0x80A145AC:("EnGo_SetupGraveyardGoron",),

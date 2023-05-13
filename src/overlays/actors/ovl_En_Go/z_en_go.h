@@ -27,13 +27,13 @@ typedef s32 (*MsgEventFunc)(Actor*, PlayState*);
  * parameters for more details.
  */
 typedef struct EnGoEffect {
-    /* 0x00 */ u8 effectType;
+    /* 0x00 */ u8 type;
     /* 0x01 */ u8 alphaDenom;
     /* 0x02 */ u8 alphaNumer;
     /* 0x04 */ Vec3s rotVelocity;
     /* 0x0A */ Vec3s rotAngle;
-    /* 0x10 */ Vec3f position;
-    /* 0x1C */ Vec3f acceleration;
+    /* 0x10 */ Vec3f pos;
+    /* 0x1C */ Vec3f accel;
     /* 0x28 */ Vec3f velocity;
     /* 0x34 */ f32 scaleXY;
     /* 0x38 */ f32 scaleXYDelta;
@@ -42,13 +42,13 @@ typedef struct EnGoEffect {
 /**
  * Goron Type, identified by bits [3..0] of the actor's params
  *
- * - The ENGO_STRETCHER and ENGO_SPECTATOR types share the same subtype domain (EnGoRacetrackSubtype: [0,7])
+ * - The ENGO_ATHLETIC and ENGO_SPECTATOR types share the same subtype domain (EnGoRacetrackSubtype: [0,7])
  * - ENGO_GRAVEYARD types have their own subtype domain (EnGoGraveyardSubtype: [0,1])
  * - Others have no subtypes.
  */
 typedef enum EnGoType {
-    /* 0 */ ENGO_F_0 = 0,
-    /* 1 */ ENGO_STRETCHER,        // Racers stretching before the race
+    /* 0 */ ENGO_F_0,
+    /* 1 */ ENGO_ATHLETIC,         // Racers stretching before the race
     /* 2 */ ENGO_SPECTATOR,        // Spectators to the race
     /* 3 */ ENGO_GATEKEEPER,       // Gatekeeper to the Goron Shrine
     /* 4 */ ENGO_GRAVEYARD,        // Gravemaker and other
@@ -59,15 +59,15 @@ typedef enum EnGoType {
 } EnGoType;
 
 /**
- * Subtype for Gorons at the racetrack (ENGO_STRETCHER and ENGO_SPECTATOR)
+ * Subtype for Gorons at the racetrack (ENGO_ATHLETIC and ENGO_SPECTATOR)
  */
 typedef enum EnGoRacetrackSubtype {
-    /* 0 */ ENGO_STRETCHER_A = 0,
-    /* 1 */ ENGO_STRETCHER_B,
-    /* 2 */ ENGO_STRETCHER_C,
-    /* 3 */ ENGO_STRETCHER_D,
-    /* 4 */ ENGO_STRETCHER_HAMSTRINGSIT,
-    /* 5 */ ENGO_STRETCHER_HAMSTRINGSTAND,
+    /* 0 */ ENGO_ATHLETIC_A,
+    /* 1 */ ENGO_ATHLETIC_B,
+    /* 2 */ ENGO_ATHLETIC_C,
+    /* 3 */ ENGO_ATHLETIC_D,
+    /* 4 */ ENGO_ATHLETIC_HAMSTRINGSIT,
+    /* 5 */ ENGO_ATHLETIC_HAMSTRINGSTAND,
     /* 6 */ ENGO_SPECTATOR_CHEER,
     /* 7 */ ENGO_SPECTATOR_SHOUTING,
 } EnGoRacetrackSubtype;
@@ -76,7 +76,7 @@ typedef enum EnGoRacetrackSubtype {
  * Subtype for Gorons outside the Goron Graveyard (ENGO_GRAVEYARD)
  */
 typedef enum EnGoGraveyardSubtype {
-    /* 0 */ ENGO_GRAVEYARD_GRAVEMAKER = 0,
+    /* 0 */ ENGO_GRAVEYARD_GRAVEMAKER,
     /* 1 */ ENGO_GRAVEYARD_FROZEN,
 } EnGoGraveyardSubtype;
 
@@ -90,8 +90,8 @@ typedef struct EnGo {
     /* 0x1E0 */ ColliderCylinder unusedCylinder;
     /* 0x22C */ ColliderSphere colliderSphere;
     /* 0x284 */ Path* gatekeeperPath;
-    /* 0x288 */ s8 objIndexTaisou;
-    /* 0x289 */ s8 objIndexHakuginDemo;
+    /* 0x288 */ s8 taisouObjIndex;
+    /* 0x289 */ s8 hakuginDemoObjIndex;
     /* 0x28C */ s32 msgScriptResumePos;
     /* 0x290 */ Vec3f headPos;
     /* 0x29C */ Vec3f bodyPos;
@@ -103,7 +103,7 @@ typedef struct EnGo {
     /* 0x390 */ u16 actionFlags;
     /* 0x392 */ u16 lastTextId;
     /* 0x394 */ u8 springArrivalCueId;
-    /* 0x398 */ f32 currAnimPlaySpeed;
+    /* 0x398 */ f32 curAnimPlaySpeed;
     /* 0x39C */ f32 iceBlockScale;
     /* 0x3A0 */ f32 iceBlockAlpha;
     /* 0x3A4 */ f32 scaleFactor;
@@ -129,7 +129,7 @@ typedef struct EnGo {
     /* 0x3CE */ s16 limbRotTableY[3];
     /* 0x3D4 */ s16 surprisePhase;
     /* 0x3D8 */ MsgEventFunc msgEventFunc;
-    /* 0x3DC */ s32 currAnimIndex;
+    /* 0x3DC */ s32 curAnimIndex;
     /* 0x3E0 */ UNK_TYPE1 unk3E0[0x4];
     /* 0x3E4 */ s32 indexPathPoint;
     /* 0x3E8 */ s32 indexEffect;
@@ -137,7 +137,6 @@ typedef struct EnGo {
     /* 0x3F0 */ s32 springArrivalCutsceneActive;
     /* 0x3F4 */ s32 changedText;
     /* 0x3F8 */ EnGoEffect effectTable[ENGO_EFFECT_COUNT];
-
 } EnGo; // size = 0xB78
 
 #endif // Z_EN_GO_H
