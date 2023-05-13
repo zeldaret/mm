@@ -200,9 +200,9 @@
         <DList Name="gMajorasWrathSpinningTopDL" Offset="0x2F640" />
 
         <!-- Majora Title Cards -->
-        <Texture Name="gMajorasMaskTitleCardTex" OutName="majoras_mask_title_card" Format="i8" Width="128" Height="40" Offset="0x2F840" />
-        <Texture Name="gMajorasIncarnationTitleCardTex" OutName="majoras_incarnation_title_card" Format="i8" Width="128" Height="40" Offset="0x30C40" />
-        <Texture Name="gMajorasWrathTitleCardTex" OutName="majoras_wrath_title_card" Format="i8" Width="128" Height="40" Offset="0x32040" />
+        <Texture Name="gMajorasMaskTitleCardTex" OutName="majoras_mask_title_card" Format="ia8" Width="128" Height="40" Offset="0x2F840" />
+        <Texture Name="gMajorasIncarnationTitleCardTex" OutName="majoras_incarnation_title_card" Format="ia8" Width="128" Height="40" Offset="0x30C40" />
+        <Texture Name="gMajorasWrathTitleCardTex" OutName="majoras_wrath_title_card" Format="ia8" Width="128" Height="40" Offset="0x32040" />
 
         <!-- Majora's Wrath Limbs -->
         <Limb Name="gMajorasWrathRootLimb" Type="Standard" EnumName="MAJORAS_WRATH_LIMB_ROOT" Offset="0x33440" />

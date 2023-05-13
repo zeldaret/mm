@@ -52,15 +52,15 @@ void func_808A7968(ObjWturn* this, PlayState* play) {
 }
 
 void func_808A7A24(ObjWturn* this) {
-    ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+    CutsceneManager_Queue(this->actor.csId);
     this->actionFunc = func_808A7A5C;
 }
 
 void func_808A7A5C(ObjWturn* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
+    if (CutsceneManager_IsNext(this->actor.csId)) {
         func_808A7AAC(this, play);
     } else {
-        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+        CutsceneManager_Queue(this->actor.csId);
     }
 }
 
@@ -69,9 +69,9 @@ void func_808A7AAC(ObjWturn* this, PlayState* play) {
     Vec3f subCamEye;
     Vec3f subCamAt;
 
-    ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
+    CutsceneManager_StartWithPlayerCs(this->actor.csId, &this->actor);
     Play_EnableMotionBlur(140);
-    this->subCamId = ActorCutscene_GetCurrentSubCamId(this->actor.cutscene);
+    this->subCamId = CutsceneManager_GetCurrentSubCamId(this->actor.csId);
     func_800B7298(play, &this->actor, PLAYER_CSMODE_21);
     subCamAt.x = player->actor.focus.pos.x;
     subCamAt.z = player->actor.focus.pos.z;
@@ -97,7 +97,7 @@ void func_808A7C04(ObjWturn* this, PlayState* play) {
     this->actor.world.pos.y += this->actor.playerHeightRel;
     player->actor.shape.shadowAlpha = 0;
     func_800B7298(play, &this->actor, PLAYER_CSMODE_84);
-    func_800B8E58(player, NA_SE_VO_NAVY_ENEMY);
+    Player_PlaySfx(player, NA_SE_VO_NAVY_ENEMY);
     this->unk_14A = 0;
     Play_DisableMotionBlur();
     this->actionFunc = func_808A7C78;

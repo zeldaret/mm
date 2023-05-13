@@ -197,7 +197,7 @@ void Boss04_Init(Actor* thisx, PlayState* play2) {
     this->unk_6F0 = this->unk_6E0 + ((this->unk_6E4 - this->unk_6E0) * 0.5f);
     this->actor.world.pos.x = this->unk_6E8;
     this->actor.world.pos.z = this->unk_6F0;
-    Actor_UpdateBgCheckInfo(play, &this->actor, 35.0f, 60.0f, 60.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 35.0f, 60.0f, 60.0f, UPDBGCHECKINFO_FLAG_4);
 
     if ((KREG(64) != 0) || CHECK_EVENTINF(EVENTINF_60)) {
         func_809ECD00(this, play);
@@ -254,16 +254,16 @@ void func_809EC568(Boss04* this, PlayState* play) {
             this->unk_2D0 = 2000.0f;
             if ((player->stateFlags1 & PLAYER_STATE1_100000) && (this->actor.projectedPos.z > 0.0f) &&
                 (fabsf(this->actor.projectedPos.x) < 300.0f) && (fabsf(this->actor.projectedPos.y) < 300.0f)) {
-                if ((this->unk_704 >= 15) && (ActorCutscene_GetCurrentIndex() == -1)) {
+                if ((this->unk_704 >= 15) && (CutsceneManager_GetCurrentCsId() == CS_ID_NONE)) {
                     Actor* boss;
 
                     this->unk_708 = 10;
                     this->unk_704 = 0;
-                    Cutscene_Start(play, &play->csCtx);
+                    Cutscene_StartManual(play, &play->csCtx);
                     this->subCamId = Play_CreateSubCamera(play);
                     Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
                     Play_ChangeCameraStatus(play, this->subCamId, CAM_STATUS_ACTIVE);
-                    func_800B7298(play, &this->actor, PLAYER_CSMODE_7);
+                    func_800B7298(play, &this->actor, PLAYER_CSMODE_WAIT);
                     player->actor.world.pos.x = this->unk_6E8;
                     player->actor.world.pos.z = this->unk_6F0 + 410.0f;
                     player->actor.shape.rot.y = 0x7FFF;
@@ -289,7 +289,7 @@ void func_809EC568(Boss04* this, PlayState* play) {
 
         case 10:
             if (this->unk_704 == 3) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_EYEGOLE_DEMO_EYE);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_EYEGOLE_DEMO_EYE);
                 this->unk_74A = 1;
             }
             this->unk_2D0 = 10000.0f;
@@ -319,11 +319,11 @@ void func_809EC568(Boss04* this, PlayState* play) {
             }
 
         case 12:
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_ME_ATTACK - SFX_FLAG);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_ME_ATTACK - SFX_FLAG);
             Math_ApproachF(&this->subCamAt.x, this->actor.world.pos.x, 0.5f, 1000.0f);
             Math_ApproachF(&this->subCamAt.y, this->actor.world.pos.y, 0.5f, 1000.0f);
             Math_ApproachF(&this->subCamAt.z, this->actor.world.pos.z, 0.5f, 1000.0f);
-            if (this->actor.bgCheckFlags & 2) {
+            if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND_TOUCH) {
                 play_sound(NA_SE_IT_BIG_BOMB_EXPLOSION);
                 this->unk_6F4 = 15;
                 this->unk_708 = 13;
@@ -331,7 +331,7 @@ void func_809EC568(Boss04* this, PlayState* play) {
                 this->unk_2DA = 10;
                 Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->actor.world.pos.x, this->actor.world.pos.y,
                             this->actor.world.pos.z, 0, 0, 0, CLEAR_TAG_SPLASH);
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KONB_JUMP_LEV_OLD - SFX_FLAG);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_KONB_JUMP_LEV_OLD - SFX_FLAG);
                 this->subCamAtOscillator = 20;
             }
             break;
@@ -389,8 +389,8 @@ void func_809EC568(Boss04* this, PlayState* play) {
                 mainCam->at = this->subCamAt;
                 func_80169AFC(play, this->subCamId, 0);
                 this->subCamId = SUB_CAM_ID_DONE;
-                Cutscene_End(play, &play->csCtx);
-                func_800B7298(play, &this->actor, PLAYER_CSMODE_6);
+                Cutscene_StopManual(play, &play->csCtx);
+                func_800B7298(play, &this->actor, PLAYER_CSMODE_END);
                 Play_DisableMotionBlur();
                 SET_EVENTINF(EVENTINF_60);
             }
@@ -431,7 +431,7 @@ void func_809ECD18(Boss04* this, PlayState* play) {
 
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 10, 0x200);
     this->actor.world.pos.y = (this->actor.floorHeight + KREG(17) + 160.0f) + (Math_SinS(this->unk_1F4 * 512) * 10.0f);
-    Math_ApproachF(&this->actor.speedXZ, this->unk_6D4, 1.0f, 0.5f);
+    Math_ApproachF(&this->actor.speed, this->unk_6D4, 1.0f, 0.5f);
 
     if (this->unk_1F8 == 0) {
         this->unk_1F8 = Rand_ZeroFloat(100.0f) + 50.0f;
@@ -460,14 +460,14 @@ void func_809ECEF4(Boss04* this) {
     this->unk_1F8 = 0;
     this->unk_1F6 = 1;
     this->unk_1FA = 60;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actor.gravity = -3.0f;
 }
 
 void func_809ECF58(Boss04* this, PlayState* play) {
     Vec3f sp3C;
 
-    if ((this->unk_1FE == 14) || ((this->actor.bgCheckFlags & 8) && (this->unk_1F8 == 0))) {
+    if ((this->unk_1FE == 14) || ((this->actor.bgCheckFlags & BGCHECKFLAG_WALL) && (this->unk_1F8 == 0))) {
         this->unk_1F8 = 20;
         if ((Rand_ZeroOne() < 0.2f) && (this->unk_1FE == 0)) {
             this->actor.world.rot.y = this->actor.yawTowardsPlayer;
@@ -477,9 +477,9 @@ void func_809ECF58(Boss04* this, PlayState* play) {
             this->actor.world.rot.y = BINANG_ROT180((s16)Rand_ZeroFloat(8000.0f) + this->actor.world.rot.y);
         }
 
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
 
-        if (this->actor.bgCheckFlags & 8) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
             play_sound(NA_SE_IT_BIG_BOMB_EXPLOSION);
             func_800BC848(&this->actor, play, 15, 10);
             this->unk_6F4 = 15;
@@ -496,12 +496,12 @@ void func_809ECF58(Boss04* this, PlayState* play) {
     if (this->unk_6F4 == 0) {
         Math_ApproachS(&this->actor.shape.rot.y, this->actor.world.rot.y, 5, 0x1000);
         if (this->unk_1FA == 0) {
-            Math_ApproachF(&this->actor.speedXZ, 20.0f, 1.0f, 1.0f);
+            Math_ApproachF(&this->actor.speed, 20.0f, 1.0f, 1.0f);
             sp3C.x = this->actor.world.pos.x;
             sp3C.y = this->actor.floorHeight + 2.0f;
             sp3C.z = this->actor.world.pos.z;
             EffectSsGRipple_Spawn(play, &sp3C, 1400, 500, 0);
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_ME_ATTACK - SFX_FLAG);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_ME_ATTACK - SFX_FLAG);
         }
     }
 
@@ -517,10 +517,10 @@ void func_809ED224(Boss04* this) {
     this->actionFunc = func_809ED2A0;
     this->unk_1F8 = 60;
     this->unk_1FA = 100;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->unk_2D0 = 10000.0f;
     this->unk_2C8 = 200;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_ME_DEAD);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_ME_DEAD);
     this->actor.flags &= ~ACTOR_FLAG_1;
     Audio_RestorePrevBgm();
     this->unk_1F6 = 10;
@@ -569,7 +569,7 @@ void func_809ED45C(Boss04* this, PlayState* play) {
 
     if ((this->unk_1FE == 0) && (this->collider1.elements[0].info.bumperFlags & BUMP_HIT)) {
         this->collider1.elements[0].info.bumperFlags &= ~BUMP_HIT;
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_ME_DAMAGE);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_ME_DAMAGE);
         damage = this->actor.colChkInfo.damage;
         this->actor.colChkInfo.health = this->actor.colChkInfo.health - damage;
         if ((s8)this->actor.colChkInfo.health <= 0) {
@@ -709,7 +709,8 @@ void Boss04_Update(Actor* thisx, PlayState* play2) {
         Actor_MoveWithGravity(&this->actor);
         this->actor.world.pos.y -= 100.0f;
         this->actor.prevPos.y -= 100.0f;
-        Actor_UpdateBgCheckInfo(play, &this->actor, 100.0f, 120.0f, 200.0f, 5);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 100.0f, 120.0f, 200.0f,
+                                UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
         this->actor.world.pos.y += 100.0f;
         this->actor.prevPos.y += 100.0f;
     }
@@ -765,7 +766,7 @@ void Boss04_Update(Actor* thisx, PlayState* play2) {
     }
 
     if (this->unk_74A != 0) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_ME_EXIST - SFX_FLAG);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_ME_EXIST - SFX_FLAG);
     }
 }
 

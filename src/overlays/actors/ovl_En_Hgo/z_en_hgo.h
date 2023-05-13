@@ -24,7 +24,7 @@ typedef struct EnHgo {
     /* 0x310 */ s16 talkFlags;
     /* 0x312 */ s16 isInCutscene;
     /* 0x314 */ u16 textId;
-    /* 0x316 */ u16 csAction;
+    /* 0x316 */ u16 cueId;
 } EnHgo; // size = 0x318
 
 #endif // Z_EN_HGO_H

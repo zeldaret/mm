@@ -259,7 +259,7 @@ void EnRacedog_UpdateCollision(EnRacedog* this, PlayState* play) {
     this->collider.dim.pos.y = this->actor.world.pos.y;
     this->collider.dim.pos.z = this->actor.world.pos.z;
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 26.0f, 10.0f, 0.0f, 5);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 26.0f, 10.0f, 0.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
 }
 
 /**
@@ -288,7 +288,7 @@ s16 EnRacedog_GetYRotation(Path* path, s32 pointIndex, Vec3f* pos, f32* distSQ) 
     }
 
     *distSQ = SQ(diffX) + SQ(diffZ);
-    return RADF_TO_BINANG(Math_Atan2F_XY(diffZRand, diffXRand));
+    return RAD_TO_BINANG(Math_Atan2F_XY(diffZRand, diffXRand));
 }
 
 void EnRacedog_GetFloorRot(EnRacedog* this, Vec3f* floorRot) {
@@ -393,7 +393,7 @@ void EnRacedog_Race(EnRacedog* this, PlayState* play) {
     this->collider.dim.radius = 15;
     if (this->path != NULL) {
         yRotation = EnRacedog_GetYRotation(this->path, this->currentPoint, &this->actor.world.pos, &distSq);
-        if (this->actor.bgCheckFlags & 8) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
             yRotation = this->actor.wallYaw;
         }
 
@@ -443,9 +443,10 @@ void EnRacedog_UpdateTextId(EnRacedog* this) {
     // range of 0x3539 to 0x3546.
     if (this->index % 2) {
         sDogInfo[this->index].textId =
-            (((gSaveContext.save.weekEventReg[42 + (this->index / 2)]) & 0xF0) >> 4) + 0x3539;
+            (((gSaveContext.save.saveInfo.weekEventReg[42 + (this->index / 2)]) & 0xF0) >> 4) + 0x3539;
     } else {
-        sDogInfo[this->index].textId = ((gSaveContext.save.weekEventReg[42 + (this->index / 2)]) & 0x0F) + 0x3539;
+        sDogInfo[this->index].textId =
+            ((gSaveContext.save.saveInfo.weekEventReg[42 + (this->index / 2)]) & 0x0F) + 0x3539;
     }
 
     // As a sanity check, this makes sure the text ID is something in the expected range of 0x3539 to 0x3546.
@@ -515,16 +516,16 @@ void EnRacedog_UpdateSpeed(EnRacedog* this) {
         this->actor.shape.rot.y = this->actor.world.rot.y;
     }
 
-    Math_ApproachF(&this->actor.speedXZ, this->targetSpeed, 0.5f, 3.0f);
+    Math_ApproachF(&this->actor.speed, this->targetSpeed, 0.5f, 3.0f);
 
     // The dog that the player has selected has a slightly higher max speed than the other dogs.
     if (this->index == this->selectedDogIndex) {
-        if (this->actor.speedXZ > 7.5f) {
-            this->actor.speedXZ = 7.5f;
+        if (this->actor.speed > 7.5f) {
+            this->actor.speed = 7.5f;
         }
     } else {
-        if (this->actor.speedXZ > 7.0f) {
-            this->actor.speedXZ = 7.0f;
+        if (this->actor.speed > 7.0f) {
+            this->actor.speed = 7.0f;
         }
     }
 }
@@ -586,7 +587,7 @@ void EnRacedog_CheckForFinish(EnRacedog* this) {
         this->raceStatus == RACEDOG_RACE_STATUS_AFTER_POINT_11) {
         sNumberOfDogsFinished++;
         if (sNumberOfDogsFinished == 1) {
-            Audio_QueueSeqCmd(NA_BGM_HORSE_GOAL | 0x8000);
+            SEQCMD_PLAY_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 0, NA_BGM_HORSE_GOAL | SEQ_FLAG_ASYNC);
             play_sound(NA_SE_SY_START_SHOT);
         }
 
@@ -602,7 +603,7 @@ void EnRacedog_CheckForFinish(EnRacedog* this) {
  * to normal speed otherwise.
  */
 void EnRacedog_UpdateRunAnimationPlaySpeed(EnRacedog* this) {
-    if (this->actor.speedXZ < 3.0f) {
+    if (this->actor.speed < 3.0f) {
         sAnimationInfo[RACEDOG_ANIM_RUN].playSpeed = 0.9f;
     } else {
         sAnimationInfo[RACEDOG_ANIM_RUN].playSpeed = 1.0f;
@@ -660,7 +661,7 @@ s32 EnRacedog_IsOverFinishLine(EnRacedog* this, Vec2f* finishLineCoordinates) {
 
 void EnRacedog_SpawnFloorDustRing(EnRacedog* this, PlayState* play) {
     s16 curFrame = this->skelAnime.curFrame;
-    s16 mod = (this->actor.speedXZ > 6.0f) ? 2 : 3;
+    s16 mod = (this->actor.speed > 6.0f) ? 2 : 3;
     Vec3f pos;
 
     if (((this->index + curFrame) % mod) == 0) {
@@ -675,7 +676,7 @@ void EnRacedog_PlaySfxWalk(EnRacedog* this) {
     s16 curFrame = this->skelAnime.curFrame;
 
     if ((curFrame == 1) || (curFrame == 7)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_MONKEY_WALK);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_MONKEY_WALK);
     }
 }
 
@@ -701,7 +702,7 @@ void EnRacedog_Update(Actor* thisx, PlayState* play) {
         }
     }
 
-    if (!(this->actor.bgCheckFlags & 1)) {
+    if (!(this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
         this->skelAnime.curFrame = 0.0f;
     }
 

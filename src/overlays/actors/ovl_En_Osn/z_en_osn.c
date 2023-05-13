@@ -443,10 +443,11 @@ s32 EnOsn_GetInitialMaskText(EnOsn* this, PlayState* play) {
 s32 EnOsn_GetInitialText(EnOsn* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if ((gSaveContext.save.inventory.items[SLOT_OCARINA] != ITEM_NONE) && CHECK_QUEST_ITEM(QUEST_SONG_HEALING)) {
+    if ((gSaveContext.save.saveInfo.inventory.items[SLOT_OCARINA] != ITEM_NONE) &&
+        CHECK_QUEST_ITEM(QUEST_SONG_HEALING)) {
         if (this->stateFlags & OSN_STATE_SPECIAL_CONVERSTATION) {
             this->stateFlags |= OSN_STATE_END_CONVERSATION;
-            if ((gSaveContext.save.inventory.items[SLOT_OCARINA] != ITEM_NONE) &&
+            if ((gSaveContext.save.saveInfo.inventory.items[SLOT_OCARINA] != ITEM_NONE) &&
                 (INV_CONTENT(ITEM_MASK_DEKU) == ITEM_MASK_DEKU)) {
                 if ((gSaveContext.save.day == 3) && (gSaveContext.save.time >= CLOCK_TIME(5, 0)) &&
                     (gSaveContext.save.time < CLOCK_TIME(6, 0))) {
@@ -691,14 +692,14 @@ void EnOsn_HandleConversation(EnOsn* this, PlayState* play) {
 }
 
 void EnOsn_InitCutscene(EnOsn* this) {
-    this->cutscene = this->actor.cutscene;
-    if ((gSaveContext.save.inventory.items[SLOT_OCARINA] == ITEM_NONE) ||
+    this->csId = this->actor.csId;
+    if ((gSaveContext.save.saveInfo.inventory.items[SLOT_OCARINA] == ITEM_NONE) ||
         (INV_CONTENT(ITEM_MASK_DEKU) == ITEM_MASK_DEKU)) {
-        this->cutscene = ActorCutscene_GetAdditionalCutscene(this->cutscene);
+        this->csId = CutsceneManager_GetAdditionalCsId(this->csId);
 
-        if ((gSaveContext.save.inventory.items[SLOT_OCARINA] != ITEM_NONE) ||
+        if ((gSaveContext.save.saveInfo.inventory.items[SLOT_OCARINA] != ITEM_NONE) ||
             (INV_CONTENT(ITEM_MASK_DEKU) == ITEM_MASK_DEKU)) {
-            this->cutscene = ActorCutscene_GetAdditionalCutscene(this->cutscene);
+            this->csId = CutsceneManager_GetAdditionalCsId(this->csId);
         }
     }
 }
@@ -706,7 +707,7 @@ void EnOsn_InitCutscene(EnOsn* this) {
 void EnOsn_ChooseAction(EnOsn* this, PlayState* play) {
     u32 isFlagSet = Flags_GetSwitch(play, 0);
 
-    this->cutscene = this->actor.cutscene;
+    this->csId = this->actor.csId;
 
     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, OSN_ANIM_IDLE);
     if (!isFlagSet) {
@@ -719,7 +720,8 @@ void EnOsn_ChooseAction(EnOsn* this, PlayState* play) {
 void EnOsn_Idle(EnOsn* this, PlayState* play) {
     s16 yaw = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
 
-    if ((gSaveContext.save.inventory.items[SLOT_OCARINA] != ITEM_NONE) && !CHECK_QUEST_ITEM(QUEST_SONG_HEALING)) {
+    if ((gSaveContext.save.saveInfo.inventory.items[SLOT_OCARINA] != ITEM_NONE) &&
+        !CHECK_QUEST_ITEM(QUEST_SONG_HEALING)) {
         if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
             this->actionFunc = EnOsn_StartCutscene;
         } else if (((this->actor.xzDistToPlayer < 100.0f) || this->actor.isTargeted) && (yaw < 0x4000) &&
@@ -737,27 +739,27 @@ void EnOsn_Idle(EnOsn* this, PlayState* play) {
 }
 
 void EnOsn_StartCutscene(EnOsn* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
-        ActorCutscene_Start(this->cutscene, &this->actor);
+    if (CutsceneManager_IsNext(this->csId)) {
+        CutsceneManager_Start(this->csId, &this->actor);
         this->actionFunc = EnOsn_HandleCsAction;
     } else {
-        if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-            ActorCutscene_Stop(0x7C);
+        if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+            CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
         }
-        ActorCutscene_SetIntentToPlay(this->cutscene);
+        CutsceneManager_Queue(this->csId);
     }
 }
 
 void EnOsn_HandleCsAction(EnOsn* this, PlayState* play) {
     u8 pad;
-    s32 actionIndex;
+    s32 cueChannel;
 
-    if (Cutscene_CheckActorAction(play, 130)) {
-        actionIndex = Cutscene_GetActorActionIndex(play, 130);
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_130)) {
+        cueChannel = Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_130);
         this->shouldRotateHead = false;
-        if (this->csAction != play->csCtx.actorActions[actionIndex]->action) {
-            this->csAction = play->csCtx.actorActions[actionIndex]->action;
-            switch (play->csCtx.actorActions[actionIndex]->action) {
+        if (this->cueId != play->csCtx.actorCues[cueChannel]->id) {
+            this->cueId = play->csCtx.actorCues[cueChannel]->id;
+            switch (play->csCtx.actorCues[cueChannel]->id) {
                 case 1:
                     this->animIndex = OSN_ANIM_BOWING;
                     break;
@@ -850,8 +852,8 @@ void EnOsn_HandleCsAction(EnOsn* this, PlayState* play) {
         }
 
         if ((this->animIndex == OSN_ANIM_BELIEVE) && (play->sceneId == SCENE_SPOT00) &&
-            (gSaveContext.sceneLayer == 0xB) && (play->csCtx.frames == 400)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_VO_OMVO00);
+            (gSaveContext.sceneLayer == 0xB) && (play->csCtx.curFrame == 400)) {
+            Actor_PlaySfx(&this->actor, NA_SE_VO_OMVO00);
         }
 
         if (this->animIndex == OSN_ANIM_TURN_AROUND_START) {
@@ -870,12 +872,12 @@ void EnOsn_HandleCsAction(EnOsn* this, PlayState* play) {
             (((Animation_OnFrame(&this->skelAnime, 17.0f))) || (Animation_OnFrame(&this->skelAnime, 27.0f)) ||
              (Animation_OnFrame(&this->skelAnime, 37.0f)) || (Animation_OnFrame(&this->skelAnime, 47.0f)) ||
              (Animation_OnFrame(&this->skelAnime, 57.0f)) || (Animation_OnFrame(&this->skelAnime, 67.0f)))) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_OMENYA_WALK);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_OMENYA_WALK);
         }
-        Cutscene_ActorTranslateAndYaw(&this->actor, play, actionIndex);
+        Cutscene_ActorTranslateAndYaw(&this->actor, play, cueChannel);
     } else {
         this->shouldRotateHead = true;
-        this->csAction = 0x63;
+        this->cueId = 99;
         EnOsn_ChooseAction(this, play);
     }
 }

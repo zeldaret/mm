@@ -73,7 +73,7 @@ void DayTelop_Update(DayTelopState* this, GameState* thisx) {
     this->transitionCountdown--;
     if (this->transitionCountdown == 0) {
         if (gSaveContext.save.day < 9) {
-            gSaveContext.gameMode = 0;
+            gSaveContext.gameMode = GAMEMODE_NORMAL;
         } else {
             gSaveContext.nextCutsceneIndex = 0xFFF6;
             gSaveContext.save.day = 1;
@@ -213,11 +213,11 @@ void DayTelop_Noop(DayTelopState* this) {
 void DayTelop_LoadGraphics(DayTelopState* this) {
     size_t segmentSize = SEGMENT_ROM_SIZE(daytelop_static);
 
-    this->daytelopStaticFile = THA_AllocEndAlign16(&this->state.heap, segmentSize);
+    this->daytelopStaticFile = THA_AllocTailAlign16(&this->state.heap, segmentSize);
     DmaMgr_SendRequest0(this->daytelopStaticFile, SEGMENT_ROM_START(daytelop_static), segmentSize);
 
     segmentSize = SEGMENT_ROM_SIZE(icon_item_gameover_static);
-    this->gameoverStaticFile = THA_AllocEndAlign16(&this->state.heap, segmentSize);
+    this->gameoverStaticFile = THA_AllocTailAlign16(&this->state.heap, segmentSize);
     DmaMgr_SendRequest0(this->gameoverStaticFile, SEGMENT_ROM_START(icon_item_gameover_static), segmentSize);
 }
 

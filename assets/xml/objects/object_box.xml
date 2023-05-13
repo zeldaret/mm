@@ -48,6 +48,6 @@
         <Animation Name="gBoxBigChestOpenGoronAnim" Offset="0x7E54" /> <!-- Original name is "pg_Tbox" -->
         <Animation Name="gBoxBigChestOpenDekuAnim" Offset="0x7F30" /> <!-- Original name is "pn_Tbox" -->
         <Blob Name="object_box_zeroes_unk_00007F40" Size="0xA0" Offset="0x7F40" />
-        <Collision Name="gBoxChestCol" Offset="0x80E8" />
+        <Collision Name="gBoxChestCol" Offset="0x80E8" /> <!-- Original name is "takara_hako_bgdatainfo" -->
     </File>
 </Root>

@@ -9,6 +9,4 @@ typedef struct {
     /* 0x10 */ f32 scale;
 } EffectSsSbnInitParams; // size = 0x14
 
-extern const EffectSsInit Effect_Ss_Sbn_InitVars;
-
 #endif

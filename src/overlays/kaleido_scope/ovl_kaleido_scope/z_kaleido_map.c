@@ -53,7 +53,7 @@ void KaleidoScope_DrawDungeonStrayFairyCount(PlayState* play) {
                         1 << 10);
 
     // Get digits for current number of stray fairies collected
-    counterDigits[1] = gSaveContext.save.inventory.strayFairies[(void)0, gSaveContext.dungeonIndex];
+    counterDigits[1] = gSaveContext.save.saveInfo.inventory.strayFairies[(void)0, gSaveContext.dungeonIndex];
     counterDigits[0] = counterDigits[1] / 10;
     counterDigits[1] -= (s16)(counterDigits[0] * 10);
 
@@ -386,7 +386,7 @@ void KaleidoScope_UpdateDungeonCursor(PlayState* play) {
             } else if ((pauseCtx->cursorSpecialPos == 0) && (pauseCtx->stickAdjY > 30)) {
                 if (pauseCtx->cursorPoint[PAUSE_MAP] >= DUNGEON_FLOOR_INDEX_4) {
                     for (i = pauseCtx->cursorPoint[PAUSE_MAP] - (DUNGEON_FLOOR_INDEX_4 + 1); i >= 0; i--) {
-                        if ((gSaveContext.save.permanentSceneFlags[(void)0, gSaveContext.dungeonIndex].unk_14 &
+                        if ((gSaveContext.save.saveInfo.permanentSceneFlags[(void)0, gSaveContext.dungeonIndex].unk_14 &
                              gBitFlags[i]) ||
                             func_801090B0(FLOOR_INDEX_MAX - i)) {
                             pauseCtx->cursorPoint[PAUSE_MAP] = i + DUNGEON_FLOOR_INDEX_4;
@@ -407,7 +407,7 @@ void KaleidoScope_UpdateDungeonCursor(PlayState* play) {
                     (pauseCtx->cursorPoint[PAUSE_MAP] <= DUNGEON_FLOOR_INDEX_1)) {
                     for (i = pauseCtx->cursorPoint[PAUSE_MAP] - (DUNGEON_FLOOR_INDEX_4 - 1); i <= DUNGEON_FLOOR_INDEX_0;
                          i++) {
-                        if ((gSaveContext.save.permanentSceneFlags[(void)0, gSaveContext.dungeonIndex].unk_14 &
+                        if ((gSaveContext.save.saveInfo.permanentSceneFlags[(void)0, gSaveContext.dungeonIndex].unk_14 &
                              gBitFlags[i]) ||
                             func_801090B0(FLOOR_INDEX_MAX - i)) {
                             pauseCtx->cursorPoint[PAUSE_MAP] = i + DUNGEON_FLOOR_INDEX_4;
@@ -653,7 +653,7 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
     // Draw clouds over the world map
     // Iterate over cloud bits (n)
     for (n = 0; n < WORLD_MAP_NUM_CLOUDS; n++) {
-        if (!(((void)0, gSaveContext.save.worldMapCloudVisibility) & gBitFlags[n])) {
+        if (!(((void)0, gSaveContext.save.saveInfo.worldMapCloudVisibility) & gBitFlags[n])) {
 
             gSPVertex(POLY_OPA_DISP++, &pauseCtx->mapPageVtx[(QUAD_MAP_PAGE_WORLD_CLOUDS_FIRST + n) * 4], 4, 0);
 
@@ -686,7 +686,7 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
                        sWorldMapDotEnvColors[0][2], 0);
 
         if (R_PAUSE_DBG_MAP_CLOUD_ON) {
-            gSaveContext.save.worldMapCloudVisibility |= (u16)~0x8000;
+            gSaveContext.save.saveInfo.worldMapCloudVisibility |= (u16)~0x8000;
 
             // QUAD_MAP_PAGE_WORLD_REGION_FIRST
             pauseCtx->mapPageVtx[120].v.ob[0] = pauseCtx->mapPageVtx[122].v.ob[0] = R_PAUSE_DBG_MAP_CLOUD_X;
@@ -719,7 +719,7 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, pauseCtx->alpha);
 
         if (R_PAUSE_DBG_MAP_CLOUD_ON) {
-            gSaveContext.save.worldMapCloudVisibility |= (u16)~0x8000;
+            gSaveContext.save.saveInfo.worldMapCloudVisibility |= (u16)~0x8000;
 
             // QUAD_MAP_PAGE_WORLD_WARP_FIRST
             pauseCtx->mapPageVtx[164].v.ob[0] = pauseCtx->mapPageVtx[166].v.ob[0] = R_PAUSE_DBG_MAP_CLOUD_X;
