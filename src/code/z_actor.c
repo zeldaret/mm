@@ -4,7 +4,7 @@
  */
 
 #include "global.h"
-#include "load.h"
+#include "loadfragment.h"
 #include "z64quake.h"
 #include "z64rumble.h"
 #include "overlays/actors/ovl_En_Horse/z_en_horse.h"

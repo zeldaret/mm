@@ -1,6 +1,6 @@
 #include "global.h"
 #include "system_malloc.h"
-#include "load.h"
+#include "loadfragment.h"
 
 void Overlay_LoadGameState(GameStateOverlay* overlayEntry) {
     void* vramStart;

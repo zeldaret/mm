@@ -106,9 +106,9 @@ asm/non_matchings/boot/fault_drawer/FaultDrawer_SetInputCallback.s,FaultDrawer_S
 asm/non_matchings/boot/fault_drawer/FaultDrawer_Init.s,FaultDrawer_Init,0x800848B8,0x22
 asm/non_matchings/boot/boot_80084940/func_80084940.s,func_80084940,0x80084940,0xA
 asm/non_matchings/boot/boot_80084940/func_80084968.s,func_80084968,0x80084968,0xE
-asm/non_matchings/boot/loadfragment/Load_Relocate.s,Load_Relocate,0x800849A0,0x9B
-asm/non_matchings/boot/loadfragment/Load_LoadOverlay.s,Load_LoadOverlay,0x80084C0C,0x31
-asm/non_matchings/boot/loadfragment/Load_AllocateAndLoad.s,Load_AllocateAndLoad,0x80084CD0,0x38
+asm/non_matchings/boot/loadfragment/Fragment_Relocate.s,Fragment_Relocate,0x800849A0,0x9B
+asm/non_matchings/boot/loadfragment/Fragment_Load.s,Fragment_Load,0x80084C0C,0x31
+asm/non_matchings/boot/loadfragment/Fragment_AllocateAndLoad.s,Fragment_AllocateAndLoad,0x80084CD0,0x38
 asm/non_matchings/boot/loadfragment2/Overlay_Relocate.s,Overlay_Relocate,0x80084DB0,0x9B
 asm/non_matchings/boot/loadfragment2/Overlay_Load.s,Overlay_Load,0x8008501C,0x2B
 asm/non_matchings/boot/loadfragment2/Overlay_AllocateAndLoad.s,Overlay_AllocateAndLoad,0x800850C8,0x1A

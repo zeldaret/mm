@@ -6,7 +6,7 @@
  */
 #include "global.h"
 #include "system_malloc.h"
-#include "load.h"
+#include "loadfragment.h"
 
 s32 gOverlayLogSeverity = 2;
 

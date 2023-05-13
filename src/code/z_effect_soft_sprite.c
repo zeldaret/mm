@@ -1,5 +1,5 @@
 #include "global.h"
-#include "load.h"
+#include "loadfragment.h"
 
 EffectSsInfo sEffectSsInfo = { NULL, 0, 0 };
 

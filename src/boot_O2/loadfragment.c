@@ -11,7 +11,7 @@
  */
 #include "global.h"
 #include "system_malloc.h"
-#include "load.h"
+#include "loadfragment.h"
 
 s32 gLoadLogSeverity = 2;
 
@@ -44,7 +44,7 @@ s32 gLoadLogSeverity = 2;
  * @param ovlRelocs Overlay relocation section containing overlay section layout and runtime relocations.
  * @param vramStart Virtual RAM address that the overlay was compiled at.
  */
-void Load_Relocate(void* allocatedRamAddr, OverlayRelocationSection* ovlRelocs, uintptr_t vramStart) {
+void Fragment_Relocate(void* allocatedRamAddr, OverlayRelocationSection* ovlRelocs, uintptr_t vramStart) {
     u32 sections[RELOC_SECTION_MAX];
     u32* relocDataP;
     u32 reloc;
@@ -134,7 +134,7 @@ void Load_Relocate(void* allocatedRamAddr, OverlayRelocationSection* ovlRelocs, 
     }
 }
 
-size_t Load_LoadOverlay(uintptr_t vromStart, uintptr_t vromEnd, uintptr_t vramStart, void* allocatedRamAddr,
+size_t Fragment_Load(uintptr_t vromStart, uintptr_t vromEnd, uintptr_t vramStart, void* allocatedRamAddr,
                         size_t allocatedBytes) {
     size_t size = vromEnd - vromStart;
     void* end;
@@ -160,7 +160,7 @@ size_t Load_LoadOverlay(uintptr_t vromStart, uintptr_t vromEnd, uintptr_t vramSt
 
     if (gLoadLogSeverity >= 3) {}
 
-    Load_Relocate(allocatedRamAddr, ovlRelocs, vramStart);
+    Fragment_Relocate(allocatedRamAddr, ovlRelocs, vramStart);
 
     if (ovlRelocs->bssSize != 0) {
         if (gLoadLogSeverity >= 3) {}
@@ -175,7 +175,7 @@ size_t Load_LoadOverlay(uintptr_t vromStart, uintptr_t vromEnd, uintptr_t vramSt
     return allocatedBytes;
 }
 
-void* Load_AllocateAndLoad(uintptr_t vromStart, uintptr_t vromEnd, uintptr_t vramStart) {
+void* Fragment_AllocateAndLoad(uintptr_t vromStart, uintptr_t vromEnd, uintptr_t vramStart) {
     size_t size = vromEnd - vromStart;
     void* end;
     void* allocatedRamAddr;
@@ -215,7 +215,7 @@ void* Load_AllocateAndLoad(uintptr_t vromStart, uintptr_t vromEnd, uintptr_t vra
 
     if (gLoadLogSeverity >= 3) {}
 
-    Load_Relocate(allocatedRamAddr, ovlRelocs, vramStart);
+    Fragment_Relocate(allocatedRamAddr, ovlRelocs, vramStart);
 
     if (ovlRelocs->bssSize != 0) {
         if (gLoadLogSeverity >= 3) {}

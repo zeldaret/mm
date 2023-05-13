@@ -13,7 +13,7 @@
  */
 
 #include "global.h"
-#include "load.h"
+#include "loadfragment.h"
 
 void* TransitionOverlay_VramToRam(TransitionOverlay* overlayEntry, void* vramAddr) {
     void* loadedRamAddr = Lib_PhysicalToVirtual(overlayEntry->loadInfo.addr);
