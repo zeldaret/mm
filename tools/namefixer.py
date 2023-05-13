@@ -130,6 +130,7 @@ wordReplace = {
     "THA_AllocStart": "THA_AllocHead",
     "THA_AllocStart1": "THA_AllocHeadByte",
     "THA_AllocEnd": "THA_AllocTail",
+    "THA_AllocEndAlign16": "THA_AllocTailAlign16",
     "THA_AllocEndAlign": "THA_AllocTailAlign",
     "THA_GetSize": "THA_GetRemaining",
 

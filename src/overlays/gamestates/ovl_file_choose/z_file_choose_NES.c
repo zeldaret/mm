@@ -4,7 +4,7 @@
  * Description:
  */
 
-#include "file_select.h"
+#include "z_file_select.h"
 #include "overlays/gamestates/ovl_opening/z_opening.h"
 #include "z64rumble.h"
 #include "z64save.h"
@@ -41,7 +41,6 @@ s16 sWalletFirstDigit[] = {
     1, // tens (Default Wallet)
     0, // hundreds (Adult's Wallet)
     0, // hundreds (Giant's Wallet)
-    0, // hundreds (Tycoon´s Wallet)
 };
 
 void FileSelect_IncrementConfigMode(FileSelectState* this) {
@@ -131,7 +130,7 @@ void FileSelect_FadeInMenuElements(FileSelectState* this) {
     SramContext* sramCtx = &this->sramCtx;
     s16 i;
 
-    this->titleAlpha[0] += 20;
+    this->titleAlpha[FS_TITLE_CUR] += 20;
     this->windowAlpha += 16;
 
     for (i = 0; i < 3; i++) {
@@ -160,7 +159,7 @@ void FileSelect_FadeInMenuElements(FileSelectState* this) {
 }
 
 /**
- * Converts a numerical value to ones-tens-hundreds digits
+ * Converts a numerical value to hundreds-tens-ones digits
  */
 void FileSelect_SplitNumber(u16 value, u16* hundreds, u16* tens, u16* ones) {
     *hundreds = 0;
@@ -216,8 +215,8 @@ void FileSelect_FinishFadeIn(GameState* thisx) {
     this->controlsAlpha += 20;
     FileSelect_FadeInMenuElements(this);
 
-    if (this->titleAlpha[0] >= 255) {
-        this->titleAlpha[0] = 255;
+    if (this->titleAlpha[FS_TITLE_CUR] >= 255) {
+        this->titleAlpha[FS_TITLE_CUR] = 255;
         this->controlsAlpha = 255;
         this->windowAlpha = 200;
         this->configMode = CM_MAIN_MENU;
@@ -1177,14 +1176,14 @@ u8 sHealthToQuarterHeartCount[] = {
     0, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3,
 };
 s16 sFileSelRupeePrimColors[3][3] = {
-    { 200, 255, 100 },
-    { 170, 170, 255 },
-    { 255, 105, 105 },
+    { 200, 255, 100 }, // Default Wallet
+    { 170, 170, 255 }, // Adult's Wallet
+    { 255, 105, 105 }, // Tycoon´s Wallet
 };
 s16 sFileSelRupeeEnvColors[3][3] = {
-    { 0, 80, 0 },
-    { 10, 10, 80 },
-    { 40, 10, 0 },
+    { 0, 80, 0 },   // Default Wallet
+    { 10, 10, 80 }, // Adult's Wallet
+    { 40, 10, 0 },  // Tycoon´s Wallet
 };
 static s16 sHeartPrimColors[2][3] = {
     { 255, 70, 50 },
@@ -1496,7 +1495,7 @@ void FileSelect_DrawWindowContents(GameState* thisx) {
     gDPPipeSync(POLY_OPA_DISP++);
     gDPSetCombineLERP(POLY_OPA_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0, PRIMITIVE,
                       ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
-    gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, this->titleAlpha[0]);
+    gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, this->titleAlpha[FS_TITLE_CUR]);
     gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 0);
 
     gSPVertex(POLY_OPA_DISP++, &this->windowContentVtx[0], 4, 0);
@@ -1507,7 +1506,7 @@ void FileSelect_DrawWindowContents(GameState* thisx) {
 
     // draw next title label
     gDPPipeSync(POLY_OPA_DISP++);
-    gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, this->titleAlpha[1]);
+    gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, this->titleAlpha[FS_TITLE_NEXT]);
     gDPLoadTextureBlock(POLY_OPA_DISP++, sTitleLabels[this->nextTitleLabel], G_IM_FMT_IA, G_IM_SIZ_8b, 128, 16, 0,
                         G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
                         G_TX_NOLOD);
@@ -1795,8 +1794,8 @@ void FileSelect_FadeMainToSelect(GameState* thisx) {
         }
     }
 
-    this->titleAlpha[0] -= 255 / 4;
-    this->titleAlpha[1] += 255 / 4;
+    this->titleAlpha[FS_TITLE_CUR] -= 255 / 4;
+    this->titleAlpha[FS_TITLE_NEXT] += 255 / 4;
     this->actionTimer--;
 
     if (this->actionTimer == 0) {
@@ -1947,13 +1946,13 @@ void FileSelect_MoveSelectedFileToSlot(GameState* thisx) {
         }
     }
 
-    this->titleAlpha[0] -= 255 / 4;
-    this->titleAlpha[1] += 255 / 4;
+    this->titleAlpha[FS_TITLE_CUR] -= 255 / 4;
+    this->titleAlpha[FS_TITLE_NEXT] += 255 / 4;
     this->actionTimer--;
 
     if (this->actionTimer == 0) {
-        this->titleAlpha[0] = 255;
-        this->titleAlpha[1] = 0;
+        this->titleAlpha[FS_TITLE_CUR] = 255;
+        this->titleAlpha[FS_TITLE_NEXT] = 0;
         this->titleLabel = this->nextTitleLabel;
         this->actionTimer = 4;
         this->menuMode = FS_MENU_MODE_CONFIG;
@@ -2274,7 +2273,7 @@ void FileSelect_InitContext(GameState* thisx) {
     this->windowColor[1] = 150;
     this->windowColor[2] = 255;
 
-    this->windowAlpha = this->titleAlpha[0] = this->titleAlpha[1] = this->fileButtonAlpha[0] =
+    this->windowAlpha = this->titleAlpha[FS_TITLE_CUR] = this->titleAlpha[FS_TITLE_NEXT] = this->fileButtonAlpha[0] =
         this->fileButtonAlpha[1] = this->fileButtonAlpha[2] = this->nameBoxAlpha[0] = this->nameBoxAlpha[1] =
             this->nameBoxAlpha[2] = this->nameAlpha[0] = this->nameAlpha[1] = this->nameAlpha[2] =
                 this->connectorAlpha[0] = this->connectorAlpha[1] = this->connectorAlpha[2] = this->fileInfoAlpha[0] =

@@ -19,6 +19,6 @@ void SaveContext_Init(void) {
     gSaveContext.prevHudVisibility = HUD_VISIBILITY_ALL;
 
     gSaveContext.options.language = 1;
-    gSaveContext.options.audioSetting = FS_AUDIO_STEREO;
+    gSaveContext.options.audioSetting = SAVE_AUDIO_STEREO;
     gSaveContext.options.zTargetSetting = 0;
 }

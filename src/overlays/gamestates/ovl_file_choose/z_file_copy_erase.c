@@ -4,7 +4,7 @@
  * Description: Copying and Erasing Files
  */
 
-#include "file_select.h"
+#include "z_file_select.h"
 #include "z64rumble.h"
 
 // When choosing a file to copy or erase, the 6 main menu buttons are placed at these offsets
@@ -41,8 +41,8 @@ void FileSelect_SetupCopySource(GameState* thisx) {
     this->actionButtonAlpha[FS_BTN_ACTION_ERASE] -= 200 / 4;
     this->optionButtonAlpha -= 200 / 4;
     this->confirmButtonAlpha[FS_BTN_CONFIRM_QUIT] += 200 / 4;
-    this->titleAlpha[0] -= 255 / 4;
-    this->titleAlpha[1] += 255 / 4;
+    this->titleAlpha[FS_TITLE_CUR] -= 255 / 4;
+    this->titleAlpha[FS_TITLE_NEXT] += 255 / 4;
     this->actionTimer--;
 
     if (this->actionTimer == 0) {
@@ -54,8 +54,8 @@ void FileSelect_SetupCopySource(GameState* thisx) {
         this->confirmButtonAlpha[FS_BTN_CONFIRM_QUIT] = 200;
         this->titleLabel = this->nextTitleLabel;
 
-        this->titleAlpha[0] = 255;
-        this->titleAlpha[1] = 0;
+        this->titleAlpha[FS_TITLE_CUR] = 255;
+        this->titleAlpha[FS_TITLE_NEXT] = 0;
         this->buttonIndex = FS_BTN_COPY_QUIT;
         this->configMode++; // CM_SELECT_COPY_SOURCE
     }
@@ -103,6 +103,7 @@ void FileSelect_SelectCopySource(GameState* thisx) {
             play_sound(NA_SE_SY_FSEL_CURSOR);
             if (this->stickAdjY >= 30) {
                 this->buttonIndex--;
+                // Instead of removing File 3, an indexing hack was used to skip file 3
                 if (this->buttonIndex == FS_BTN_COPY_FILE_3) {
                     this->buttonIndex = FS_BTN_COPY_FILE_2;
                 }
@@ -111,6 +112,7 @@ void FileSelect_SelectCopySource(GameState* thisx) {
                 }
             } else {
                 this->buttonIndex++;
+                // Instead of removing File 3, an indexing hack was used to skip file 3
                 if (this->buttonIndex == FS_BTN_COPY_FILE_3) {
                     this->buttonIndex = FS_BTN_COPY_QUIT;
                 }
@@ -159,16 +161,16 @@ void FileSelect_SetupCopyDest1(GameState* thisx) {
         }
     }
 
-    this->titleAlpha[0] -= 255 / 4;
-    this->titleAlpha[1] += 255 / 4;
+    this->titleAlpha[FS_TITLE_CUR] -= 255 / 4;
+    this->titleAlpha[FS_TITLE_NEXT] += 255 / 4;
     this->nameBoxAlpha[this->buttonIndex] -= 200 / 4;
 
     this->actionTimer--;
     if (this->actionTimer == 0) {
         this->buttonYOffsets[this->buttonIndex] = D_8081424C[this->buttonIndex][this->buttonIndex];
         this->titleLabel = this->nextTitleLabel;
-        this->titleAlpha[0] = 255;
-        this->titleAlpha[1] = 0;
+        this->titleAlpha[FS_TITLE_CUR] = 255;
+        this->titleAlpha[FS_TITLE_NEXT] = 0;
         this->actionTimer = 4;
         this->configMode++; // CM_SETUP_COPY_DEST_2
     }
@@ -235,6 +237,7 @@ void FileSelect_SelectCopyDest(GameState* thisx) {
             play_sound(NA_SE_SY_FSEL_CURSOR);
             if (this->stickAdjY >= 30) {
                 this->buttonIndex--;
+                // Instead of removing File 3, an indexing hack was used to skip file 3
                 if (this->buttonIndex == FS_BTN_COPY_FILE_3) {
                     this->buttonIndex = FS_BTN_COPY_FILE_2;
                 }
@@ -243,6 +246,7 @@ void FileSelect_SelectCopyDest(GameState* thisx) {
                     if (this->buttonIndex < FS_BTN_COPY_FILE_1) {
                         this->buttonIndex = FS_BTN_COPY_QUIT;
                     }
+                    // Instead of removing File 3, an indexing hack was used to skip file 3
                     if (this->buttonIndex == FS_BTN_COPY_FILE_3) {
                         this->buttonIndex = FS_BTN_COPY_FILE_2;
                     }
@@ -257,6 +261,7 @@ void FileSelect_SelectCopyDest(GameState* thisx) {
                 if (this->buttonIndex == this->selectedFileIndex) {
                     this->buttonIndex++;
                 }
+                // Instead of removing File 3, an indexing hack was used to skip file 3
                 if (this->buttonIndex == FS_BTN_COPY_FILE_3) {
                     this->buttonIndex = FS_BTN_COPY_QUIT;
                 }
@@ -322,14 +327,14 @@ void FileSelect_ExitToCopySource2(GameState* thisx) {
         }
     }
 
-    this->titleAlpha[0] -= 255 / 4;
-    this->titleAlpha[1] += 255 / 4;
+    this->titleAlpha[FS_TITLE_CUR] -= 255 / 4;
+    this->titleAlpha[FS_TITLE_NEXT] += 255 / 4;
     this->actionTimer--;
 
     if (this->actionTimer == 0) {
         this->titleLabel = this->nextTitleLabel;
-        this->titleAlpha[0] = 255;
-        this->titleAlpha[1] = 0;
+        this->titleAlpha[FS_TITLE_CUR] = 255;
+        this->titleAlpha[FS_TITLE_NEXT] = 0;
         this->buttonIndex = FS_BTN_COPY_QUIT;
         this->configMode = CM_SELECT_COPY_SOURCE;
     }
@@ -347,8 +352,8 @@ void FileSelect_SetupCopyConfirm1(GameState* thisx) {
     s16 i;
     s32 yStep;
 
-    this->titleAlpha[0] -= 255 / 4;
-    this->titleAlpha[1] += 255 / 4;
+    this->titleAlpha[FS_TITLE_CUR] -= 255 / 4;
+    this->titleAlpha[FS_TITLE_NEXT] += 255 / 4;
 
     for (i = 0; i < 3; i++) {
         if ((i != this->copyDestFileIndex) && (i != this->selectedFileIndex)) {
@@ -377,8 +382,8 @@ void FileSelect_SetupCopyConfirm1(GameState* thisx) {
 
     if (this->actionTimer == 0) {
         this->titleLabel = this->nextTitleLabel;
-        this->titleAlpha[0] = 255;
-        this->titleAlpha[1] = 0;
+        this->titleAlpha[FS_TITLE_CUR] = 255;
+        this->titleAlpha[FS_TITLE_NEXT] = 0;
         this->actionTimer = 4;
         this->configMode++;
     }
@@ -459,7 +464,7 @@ void FileSelect_CopyWaitForFlashSave(GameState* thisx) {
             this->newf[this->copyDestFileIndex][i] = gSaveContext.save.saveInfo.playerData.newf[i];
         }
 
-        this->sotCount[this->copyDestFileIndex] = gSaveContext.save.saveInfo.playerData.sotCount;
+        this->threeDayResetCount[this->copyDestFileIndex] = gSaveContext.save.saveInfo.playerData.threeDayResetCount;
 
         for (i = 0; i < 8; i++) {
             this->fileNames[this->copyDestFileIndex][i] = gSaveContext.save.saveInfo.playerData.playerName[i];
@@ -481,8 +486,8 @@ void FileSelect_ReturnToCopyDest(GameState* thisx) {
     s16 i;
     s32 yStep;
 
-    this->titleAlpha[0] -= 255 / 4;
-    this->titleAlpha[1] += 255 / 4;
+    this->titleAlpha[FS_TITLE_CUR] -= 255 / 4;
+    this->titleAlpha[FS_TITLE_NEXT] += 255 / 4;
     this->confirmButtonAlpha[FS_BTN_CONFIRM_YES] -= 200 / 4;
 
     for (i = 0; i < 3; i++) {
@@ -513,8 +518,8 @@ void FileSelect_ReturnToCopyDest(GameState* thisx) {
 
     if (this->actionTimer == 0) {
         this->titleLabel = this->nextTitleLabel;
-        this->titleAlpha[0] = 255;
-        this->titleAlpha[1] = 0;
+        this->titleAlpha[FS_TITLE_CUR] = 255;
+        this->titleAlpha[FS_TITLE_NEXT] = 0;
         this->actionTimer = 4;
         this->buttonIndex = FS_BTN_COPY_QUIT;
         this->configMode = CM_SELECT_COPY_DEST;
@@ -528,13 +533,13 @@ void FileSelect_ReturnToCopyDest(GameState* thisx) {
 void FileSelect_CopyAnim1(GameState* thisx) {
     FileSelectState* this = (FileSelectState*)thisx;
 
-    this->titleAlpha[0] -= 255 / 4;
+    this->titleAlpha[FS_TITLE_CUR] -= 255 / 4;
     this->confirmButtonAlpha[FS_BTN_CONFIRM_YES] -= 200 / 4;
     this->confirmButtonAlpha[FS_BTN_CONFIRM_QUIT] -= 200 / 4;
     this->actionTimer--;
 
     if (this->actionTimer == 0) {
-        this->titleAlpha[0] = 0;
+        this->titleAlpha[FS_TITLE_CUR] = 0;
         this->actionTimer = 4;
         this->configMode++; // CM_COPY_ANIM_2
     }
@@ -550,7 +555,7 @@ void FileSelect_CopyAnim2(GameState* thisx) {
 
     this->fileInfoAlpha[this->copyDestFileIndex] += 200 / 4;
     this->nameAlpha[this->copyDestFileIndex] += 200 / 4;
-    this->titleAlpha[1] += 255 / 4;
+    this->titleAlpha[FS_TITLE_NEXT] += 255 / 4;
     yStep = ABS_ALT(this->fileNamesY[this->copyDestFileIndex] + 56) / this->actionTimer;
     this->fileNamesY[this->copyDestFileIndex] -= yStep;
 
@@ -563,8 +568,8 @@ void FileSelect_CopyAnim2(GameState* thisx) {
     if (this->actionTimer == 0) {
         this->actionTimer = 45;
         this->titleLabel = this->nextTitleLabel;
-        this->titleAlpha[0] = 255;
-        this->titleAlpha[1] = 0;
+        this->titleAlpha[FS_TITLE_CUR] = 255;
+        this->titleAlpha[FS_TITLE_NEXT] = 0;
         this->configMode++; // CM_COPY_ANIM_3
     }
 }
@@ -606,13 +611,13 @@ void FileSelect_CopyAnim4(GameState* thisx) {
     this->fileInfoAlpha[this->copyDestFileIndex] -= 200 / 4;
     this->nameBoxAlpha[this->selectedFileIndex] += 200 / 4;
     this->nameBoxAlpha[this->copyDestFileIndex] += 200 / 4;
-    this->titleAlpha[0] -= 255 / 4;
+    this->titleAlpha[FS_TITLE_CUR] -= 255 / 4;
     this->actionTimer--;
 
     if (this->actionTimer == 0) {
         this->fileNamesY[this->copyDestFileIndex] = this->buttonYOffsets[3] = 0;
         this->actionTimer = 4;
-        this->titleAlpha[0] = 0;
+        this->titleAlpha[FS_TITLE_CUR] = 0;
         this->configMode++;
     }
 }
@@ -656,7 +661,7 @@ void FileSelect_CopyAnim5(GameState* thisx) {
     this->actionButtonAlpha[FS_BTN_ACTION_COPY] += 200 / 4;
     this->actionButtonAlpha[FS_BTN_ACTION_ERASE] += 200 / 4;
     this->optionButtonAlpha += 200 / 4;
-    this->titleAlpha[1] += 255 / 4;
+    this->titleAlpha[FS_TITLE_NEXT] += 255 / 4;
     this->actionTimer--;
 
     if (this->actionTimer == 0) {
@@ -681,8 +686,8 @@ void FileSelect_CopyAnim5(GameState* thisx) {
         this->highlightPulseDir = 1;
         this->highlightTimer = 20;
         this->titleLabel = this->nextTitleLabel;
-        this->titleAlpha[0] = 255;
-        this->titleAlpha[1] = 0;
+        this->titleAlpha[FS_TITLE_CUR] = 255;
+        this->titleAlpha[FS_TITLE_NEXT] = 0;
         this->configMode = CM_MAIN_MENU;
     }
 }
@@ -708,16 +713,16 @@ void FileSelect_ExitCopyToMain(GameState* thisx) {
 
     this->actionButtonAlpha[FS_BTN_ACTION_COPY] += 200 / 4;
     this->confirmButtonAlpha[FS_BTN_CONFIRM_QUIT] -= 200 / 4;
-    this->titleAlpha[0] -= 255 / 4;
-    this->titleAlpha[1] += 255 / 4;
+    this->titleAlpha[FS_TITLE_CUR] -= 255 / 4;
+    this->titleAlpha[FS_TITLE_NEXT] += 255 / 4;
     this->actionTimer--;
 
     if (this->actionTimer == 0) {
         this->actionButtonAlpha[FS_BTN_ACTION_COPY] = 200;
         this->confirmButtonAlpha[FS_BTN_CONFIRM_QUIT] = 0;
         this->titleLabel = this->nextTitleLabel;
-        this->titleAlpha[0] = 255;
-        this->titleAlpha[1] = 0;
+        this->titleAlpha[FS_TITLE_CUR] = 255;
+        this->titleAlpha[FS_TITLE_NEXT] = 0;
         this->configMode = CM_MAIN_MENU;
     }
 
@@ -754,8 +759,8 @@ void FileSelect_SetupEraseSelect(GameState* thisx) {
             this->optionButtonAlpha = 0;
     }
 
-    this->titleAlpha[0] -= 255 / 4;
-    this->titleAlpha[1] += 255 / 4;
+    this->titleAlpha[FS_TITLE_CUR] -= 255 / 4;
+    this->titleAlpha[FS_TITLE_NEXT] += 255 / 4;
     this->actionTimer--;
 
     if (this->actionTimer == 0) {
@@ -766,8 +771,8 @@ void FileSelect_SetupEraseSelect(GameState* thisx) {
             this->optionButtonAlpha = 0;
         this->confirmButtonAlpha[FS_BTN_CONFIRM_QUIT] = 200;
         this->titleLabel = this->nextTitleLabel;
-        this->titleAlpha[0] = 255;
-        this->titleAlpha[1] = 0;
+        this->titleAlpha[FS_TITLE_CUR] = 255;
+        this->titleAlpha[FS_TITLE_NEXT] = 0;
         this->buttonIndex = FS_BTN_ERASE_QUIT;
         this->configMode++; // CM_ERASE_SELECT
     }
@@ -884,8 +889,8 @@ void FileSelect_SetupEraseConfirm1(GameState* thisx) {
             this->nameBoxAlpha[i] -= 200 / 4;
         }
     }
-    this->titleAlpha[0] -= 255 / 8;
-    this->titleAlpha[1] += 255 / 8;
+    this->titleAlpha[FS_TITLE_CUR] -= 255 / 8;
+    this->titleAlpha[FS_TITLE_NEXT] += 255 / 8;
 
     yStep = ABS_ALT(this->buttonYOffsets[this->buttonIndex] - D_8081426C[this->buttonIndex]) / this->actionTimer;
 
@@ -930,16 +935,16 @@ void FileSelect_SetupEraseConfirm2(GameState* thisx) {
     FileSelectState* this = (FileSelectState*)thisx;
 
     this->confirmButtonAlpha[FS_BTN_CONFIRM_YES] += 200 / 4;
-    this->titleAlpha[0] -= 255 / 8;
-    this->titleAlpha[1] += 255 / 8;
+    this->titleAlpha[FS_TITLE_CUR] -= 255 / 8;
+    this->titleAlpha[FS_TITLE_NEXT] += 255 / 8;
     this->fileInfoAlpha[this->buttonIndex] += 200 / 4;
     this->actionTimer--;
 
     if (this->actionTimer == 0) {
         this->actionTimer = 4;
         this->titleLabel = this->nextTitleLabel;
-        this->fileInfoAlpha[this->buttonIndex] = this->titleAlpha[0] = 255;
-        this->titleAlpha[1] = 0;
+        this->fileInfoAlpha[this->buttonIndex] = this->titleAlpha[FS_TITLE_CUR] = 255;
+        this->titleAlpha[FS_TITLE_NEXT] = 0;
         this->confirmButtonAlpha[FS_BTN_CONFIRM_YES] = 200;
         this->buttonIndex = FS_BTN_CONFIRM_QUIT;
         this->configMode = CM_ERASE_CONFIRM;
@@ -1038,8 +1043,8 @@ void FileSelect_ExitToEraseSelect2(GameState* thisx) {
         }
     }
 
-    this->titleAlpha[0] -= 255 / 4;
-    this->titleAlpha[1] += 255 / 4;
+    this->titleAlpha[FS_TITLE_CUR] -= 255 / 4;
+    this->titleAlpha[FS_TITLE_NEXT] += 255 / 4;
     this->actionTimer--;
 
     if (this->actionTimer == 0) {
@@ -1047,8 +1052,8 @@ void FileSelect_ExitToEraseSelect2(GameState* thisx) {
         this->actionTimer = 4;
         this->buttonIndex = FS_BTN_ERASE_QUIT;
         this->titleLabel = this->nextTitleLabel;
-        this->titleAlpha[0] = 255;
-        this->titleAlpha[1] = 0;
+        this->titleAlpha[FS_TITLE_CUR] = 255;
+        this->titleAlpha[FS_TITLE_NEXT] = 0;
         this->configMode = CM_ERASE_SELECT;
     }
 }
@@ -1069,8 +1074,8 @@ void FileSelect_EraseAnim1(GameState* thisx) {
         }
 
         if (this->actionTimer != 0) {
-            this->titleAlpha[0] -= 255 / 4;
-            this->titleAlpha[1] += 255 / 4;
+            this->titleAlpha[FS_TITLE_CUR] -= 255 / 4;
+            this->titleAlpha[FS_TITLE_NEXT] += 255 / 4;
             this->fileInfoAlpha[this->selectedFileIndex] -= 200 / 4;
             this->confirmButtonAlpha[FS_BTN_CONFIRM_YES] -= 200 / 4;
             this->confirmButtonAlpha[FS_BTN_CONFIRM_QUIT] -= 200 / 4;
@@ -1083,8 +1088,8 @@ void FileSelect_EraseAnim1(GameState* thisx) {
         if (this->actionTimer == 0) {
             this->configMode = CM_ERASE_ANIM_2;
             this->titleLabel = this->nextTitleLabel;
-            this->titleAlpha[0] = 255;
-            this->titleAlpha[1] = this->connectorAlpha[this->selectedFileIndex] = 0;
+            this->titleAlpha[FS_TITLE_CUR] = 255;
+            this->titleAlpha[FS_TITLE_NEXT] = this->connectorAlpha[this->selectedFileIndex] = 0;
 
             //! FAKE: there should be a better chained assignment
             this->confirmButtonAlpha[FS_BTN_CONFIRM_YES] = this->confirmButtonAlpha[FS_BTN_CONFIRM_QUIT] = 0;
@@ -1178,8 +1183,8 @@ void FileSelect_EraseAnim3(GameState* thisx) {
         this->fileButtonAlpha[this->selectedFileIndex] = 200;
     }
 
-    this->titleAlpha[0] -= 255 / 4;
-    this->titleAlpha[1] += 255 / 4;
+    this->titleAlpha[FS_TITLE_CUR] -= 255 / 4;
+    this->titleAlpha[FS_TITLE_NEXT] += 255 / 4;
     this->actionTimer--;
 
     if (this->actionTimer == 0) {
@@ -1190,8 +1195,8 @@ void FileSelect_EraseAnim3(GameState* thisx) {
         this->actionButtonAlpha[FS_BTN_ACTION_COPY] = 200;
         this->confirmButtonAlpha[FS_BTN_CONFIRM_YES] = this->confirmButtonAlpha[FS_BTN_CONFIRM_QUIT] = 0;
         this->titleLabel = this->nextTitleLabel;
-        this->titleAlpha[0] = 255;
-        this->titleAlpha[1] = 0;
+        this->titleAlpha[FS_TITLE_CUR] = 255;
+        this->titleAlpha[FS_TITLE_NEXT] = 0;
         this->configMode = CM_MAIN_MENU;
     }
 
@@ -1227,8 +1232,8 @@ void FileSelect_ExitEraseToMain(GameState* thisx) {
         this->confirmButtonAlpha[FS_BTN_CONFIRM_QUIT] = 0;
     }
 
-    this->titleAlpha[0] -= 255 / 4;
-    this->titleAlpha[1] += 255 / 4;
+    this->titleAlpha[FS_TITLE_CUR] -= 255 / 4;
+    this->titleAlpha[FS_TITLE_NEXT] += 255 / 4;
     this->actionTimer--;
 
     if (this->actionTimer == 0) {
@@ -1238,8 +1243,8 @@ void FileSelect_ExitEraseToMain(GameState* thisx) {
         this->actionButtonAlpha[FS_BTN_ACTION_COPY] = 200;
         this->confirmButtonAlpha[FS_BTN_CONFIRM_QUIT] = 0;
         this->titleLabel = this->nextTitleLabel;
-        this->titleAlpha[0] = 255;
-        this->titleAlpha[1] = 0;
+        this->titleAlpha[FS_TITLE_CUR] = 255;
+        this->titleAlpha[FS_TITLE_NEXT] = 0;
         this->configMode = CM_MAIN_MENU;
     }
 

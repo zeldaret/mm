@@ -11,10 +11,10 @@ struct PlayState;
 struct FileSelectState;
 
 typedef enum {
-    /* 0 */ FS_AUDIO_STEREO,
-    /* 1 */ FS_AUDIO_MONO,
-    /* 2 */ FS_AUDIO_HEADSET,
-    /* 3 */ FS_AUDIO_SURROUND
+    /* 0 */ SAVE_AUDIO_STEREO,
+    /* 1 */ SAVE_AUDIO_MONO,
+    /* 2 */ SAVE_AUDIO_HEADSET,
+    /* 3 */ SAVE_AUDIO_SURROUND
 } AudioOption;
 
 // TODO: properly name DOWN, RETURN and TOP
@@ -240,7 +240,7 @@ typedef struct SaveOptions {
 
 typedef struct SavePlayerData {
     /* 0x00 */ char newf[6];                          // "newf"               Will always be "ZELDA3 for a valid save
-    /* 0x06 */ u16 sotCount;                          // "savect"
+    /* 0x06 */ u16 threeDayResetCount;                          // "savect"
     /* 0x08 */ char playerName[8];                    // "player_name"
     /* 0x10 */ s16 healthCapacity;                    // "max_life"
     /* 0x12 */ s16 health;                            // "now_life"

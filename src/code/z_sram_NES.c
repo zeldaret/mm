@@ -1,6 +1,6 @@
 #include "prevent_bss_reordering.h"
 #include "global.h"
-#include "overlays/gamestates/ovl_file_choose/file_select.h"
+#include "overlays/gamestates/ovl_file_choose/z_file_select.h"
 
 void Sram_SyncWriteToFlash(SramContext* sramCtx, s32 curPage, s32 numPages);
 void func_80147314(SramContext* sramCtx, s32 fileNum);
@@ -415,9 +415,9 @@ void Sram_SaveEndOfCycle(PlayState* play) {
     gSaveContext.save.day = 0;
     gSaveContext.save.time = CLOCK_TIME(6, 0) - 1;
 
-    gSaveContext.save.saveInfo.playerData.sotCount++;
-    if (gSaveContext.save.saveInfo.playerData.sotCount > 999) {
-        gSaveContext.save.saveInfo.playerData.sotCount = 999;
+    gSaveContext.save.saveInfo.playerData.threeDayResetCount++;
+    if (gSaveContext.save.saveInfo.playerData.threeDayResetCount > 999) {
+        gSaveContext.save.saveInfo.playerData.threeDayResetCount = 999;
     }
 
     sceneId = Play_GetOriginalSceneId(play->sceneId);
@@ -744,7 +744,7 @@ void Sram_GenerateRandomSaveFields(void) {
 
 SavePlayerData sSaveDefaultPlayerData = {
     { '\0', '\0', '\0', '\0', '\0', '\0' },             // newf
-    0,                                                  // sotCount
+    0,                                                  // threeDayResetCount
     { 0x3E, 0x3E, 0x3E, 0x3E, 0x3E, 0x3E, 0x3E, 0x3E }, // playerName "        "
     0x30,                                               // healthCapacity
     0x30,                                               // health
@@ -845,7 +845,7 @@ void Sram_InitNewSave(void) {
 
 SavePlayerData sSaveDebugPlayerData = {
     { 'Z', 'E', 'L', 'D', 'A', '3' },                   // newf
-    0,                                                  // sotCount
+    0,                                                  // threeDayResetCount
     { 0x15, 0x12, 0x17, 0x14, 0x3E, 0x3E, 0x3E, 0x3E }, // playerName "LINK    "
     0x80,                                               // healthCapacity
     0x80,                                               // health
@@ -1335,7 +1335,7 @@ void func_801457CC(GameState* gameState, SramContext* sramCtx) {
                 }
 
                 if (!CHECK_NEWF(fileSelect->newf[sp76])) {
-                    fileSelect->sotCount[sp76] = gSaveContext.save.saveInfo.playerData.sotCount;
+                    fileSelect->threeDayResetCount[sp76] = gSaveContext.save.saveInfo.playerData.threeDayResetCount;
 
                     for (sp7A = 0; sp7A < ARRAY_COUNT(gSaveContext.save.saveInfo.playerData.playerName); sp7A++) {
                         fileSelect->fileNames[sp76][sp7A] = gSaveContext.save.saveInfo.playerData.playerName[sp7A];
@@ -1451,7 +1451,7 @@ void func_801457CC(GameState* gameState, SramContext* sramCtx) {
                     }
 
                     if (!CHECK_NEWF(fileSelect->newf[sp76])) {
-                        fileSelect->sotCount[sp76] = gSaveContext.save.saveInfo.playerData.sotCount;
+                        fileSelect->threeDayResetCount[sp76] = gSaveContext.save.saveInfo.playerData.threeDayResetCount;
 
                         for (sp7A = 0; sp7A < ARRAY_COUNT(gSaveContext.save.saveInfo.playerData.playerName); sp7A++) {
                             fileSelect->fileNames[sp76][sp7A] = gSaveContext.save.saveInfo.playerData.playerName[sp7A];
@@ -1514,7 +1514,7 @@ void func_801457CC(GameState* gameState, SramContext* sramCtx) {
                 if (phi_s2) {
                     gSaveContext.options.optionId = 0xA51D;
                     gSaveContext.options.language = 1;
-                    gSaveContext.options.audioSetting = FS_AUDIO_STEREO;
+                    gSaveContext.options.audioSetting = SAVE_AUDIO_STEREO;
                     gSaveContext.options.languageSetting = 0;
                     gSaveContext.options.zTargetSetting = 0;
                 } else {
@@ -1522,7 +1522,7 @@ void func_801457CC(GameState* gameState, SramContext* sramCtx) {
                     if (gSaveContext.options.optionId != 0xA51D) {
                         gSaveContext.options.optionId = 0xA51D;
                         gSaveContext.options.language = 1;
-                        gSaveContext.options.audioSetting = FS_AUDIO_STEREO;
+                        gSaveContext.options.audioSetting = SAVE_AUDIO_STEREO;
                         gSaveContext.options.languageSetting = 0;
                         gSaveContext.options.zTargetSetting = 0;
                     }
@@ -1568,7 +1568,8 @@ void Sram_CopySave(FileSelectState* fileSelect2, SramContext* sramCtx) {
     if (gSaveContext.flashSaveAvailable) {
         if (fileSelect->isOwlSave2[fileSelect->selectedFileIndex]) {
             func_80147414(sramCtx, fileSelect->selectedFileIndex, fileSelect->copyDestFileIndex);
-            fileSelect->sotCount2[fileSelect->copyDestFileIndex] = gSaveContext.save.saveInfo.playerData.sotCount;
+            fileSelect->threeDayResetCount2[fileSelect->copyDestFileIndex] =
+                gSaveContext.save.saveInfo.playerData.threeDayResetCount;
 
             for (i = 0; i < ARRAY_COUNT(gSaveContext.save.saveInfo.playerData.playerName); i++) {
                 fileSelect->fileNames2[fileSelect->copyDestFileIndex][i] =
@@ -1600,10 +1601,10 @@ void Sram_CopySave(FileSelectState* fileSelect2, SramContext* sramCtx) {
         // clear buffer
         bzero(sramCtx->saveBuf, SAVE_BUFFER_SIZE);
         // read to buffer
-        func_80185968(sramCtx->saveBuf, gFlashSaveStartPages[fileSelect->selectedFileIndex * 2],
+        func_80185968(&sramCtx->saveBuf[0], gFlashSaveStartPages[fileSelect->selectedFileIndex * 2],
                       gFlashSaveNumPages[fileSelect->selectedFileIndex * 2]);
-
         if (1) {}
+
         func_80185968(&sramCtx->saveBuf[0x2000], gFlashSaveStartPages[fileSelect->selectedFileIndex * 2 + 1],
                       gFlashSaveNumPages[fileSelect->selectedFileIndex * 2 + 1]);
         if (1) {}
@@ -1611,7 +1612,8 @@ void Sram_CopySave(FileSelectState* fileSelect2, SramContext* sramCtx) {
         // copy buffer to save context
         Lib_MemCpy(&gSaveContext.save, sramCtx->saveBuf, sizeof(Save));
 
-        fileSelect->sotCount[fileSelect->copyDestFileIndex] = gSaveContext.save.saveInfo.playerData.sotCount;
+        fileSelect->threeDayResetCount[fileSelect->copyDestFileIndex] =
+            gSaveContext.save.saveInfo.playerData.threeDayResetCount;
 
         for (i = 0; i < ARRAY_COUNT(gSaveContext.save.saveInfo.playerData.playerName); i++) {
             fileSelect->fileNames[fileSelect->copyDestFileIndex][i] =
@@ -1679,7 +1681,8 @@ void Sram_InitSave(FileSelectState* fileSelect2, SramContext* sramCtx) {
             fileSelect->newf[fileSelect->buttonIndex][i] = gSaveContext.save.saveInfo.playerData.newf[i];
         }
 
-        fileSelect->sotCount[fileSelect->buttonIndex] = gSaveContext.save.saveInfo.playerData.sotCount;
+        fileSelect->threeDayResetCount[fileSelect->buttonIndex] =
+            gSaveContext.save.saveInfo.playerData.threeDayResetCount;
 
         for (i = 0; i < ARRAY_COUNT(gSaveContext.save.saveInfo.playerData.playerName); i++) {
             fileSelect->fileNames[fileSelect->buttonIndex][i] = gSaveContext.save.saveInfo.playerData.playerName[i];

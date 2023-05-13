@@ -5,7 +5,7 @@
  */
 
 #include "prevent_bss_reordering.h"
-#include "file_select.h"
+#include "z_file_select.h"
 #include "z64rumble.h"
 #include "misc/title_static/title_static.h"
 #include "overlays/ovl_File_Choose/ovl_file_choose.h"
@@ -186,7 +186,7 @@ void FileSelect_SetNameEntryVtx(GameState* thisx) {
     gDPPipeSync(POLY_OPA_DISP++);
     gDPSetCombineLERP(POLY_OPA_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0, PRIMITIVE,
                       ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
-    gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, this->titleAlpha[0]);
+    gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, this->titleAlpha[FS_TITLE_CUR]);
 
     gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 0);
     gSPVertex(POLY_OPA_DISP++, this->keyboard2Vtx, 24, 0);
@@ -635,7 +635,7 @@ void FileSelect_UpdateKeyboardCursor(GameState* thisx) {
         this->kbdY--;
 
         if (this->kbdY < 0) {
-            // dont go to bottom row
+            // Don't go to bottom row
             if (this->kbdX < 8) {
                 this->kbdY = 4;
                 this->charIndex = (s32)(this->kbdX + 52);
@@ -779,7 +779,7 @@ void FileSelect_UpdateOptionsMenu(GameState* thisx) {
 
             // because audio setting is unsigned, can't check for < 0
             if (gSaveContext.options.audioSetting > 0xF0) {
-                gSaveContext.options.audioSetting = FS_AUDIO_SURROUND;
+                gSaveContext.options.audioSetting = SAVE_AUDIO_SURROUND;
             }
         } else {
             gSaveContext.options.zTargetSetting ^= 1;
@@ -789,8 +789,8 @@ void FileSelect_UpdateOptionsMenu(GameState* thisx) {
 
         if (sSelectedSetting == FS_SETTING_AUDIO) {
             gSaveContext.options.audioSetting++;
-            if (gSaveContext.options.audioSetting > FS_AUDIO_SURROUND) {
-                gSaveContext.options.audioSetting = FS_AUDIO_STEREO;
+            if (gSaveContext.options.audioSetting > SAVE_AUDIO_SURROUND) {
+                gSaveContext.options.audioSetting = SAVE_AUDIO_STEREO;
             }
         } else {
             gSaveContext.options.zTargetSetting ^= 1;
@@ -858,57 +858,57 @@ void FileSelect_DrawOptionsImpl(GameState* thisx) {
         { 0, 150, 150 },
     };
     FileSelectState* this = (FileSelectState*)thisx;
-    s16 cursorRed;
-    s16 cursorGreen;
-    s16 cursorBlue;
+    s16 cursorRedStep;
+    s16 cursorGreenStep;
+    s16 cursorBlueStep;
     s16 i;
     s16 j;
     s16 vtx;
 
     OPEN_DISPS(this->state.gfxCtx);
 
-    cursorRed = ABS_ALT(sCursorPrimRed - sCursorPrimColors[sCursorPulseDir][0]) / sCursorFlashTimer;
-    cursorGreen = ABS_ALT(sCursorPrimGreen - sCursorPrimColors[sCursorPulseDir][1]) / sCursorFlashTimer;
-    cursorBlue = ABS_ALT(sCursorPrimBlue - sCursorPrimColors[sCursorPulseDir][2]) / sCursorFlashTimer;
+    cursorRedStep = ABS_ALT(sCursorPrimRed - sCursorPrimColors[sCursorPulseDir][0]) / sCursorFlashTimer;
+    cursorGreenStep = ABS_ALT(sCursorPrimGreen - sCursorPrimColors[sCursorPulseDir][1]) / sCursorFlashTimer;
+    cursorBlueStep = ABS_ALT(sCursorPrimBlue - sCursorPrimColors[sCursorPulseDir][2]) / sCursorFlashTimer;
 
     if (sCursorPrimRed >= sCursorPrimColors[sCursorPulseDir][0]) {
-        sCursorPrimRed -= cursorRed;
+        sCursorPrimRed -= cursorRedStep;
     } else {
-        sCursorPrimRed += cursorRed;
+        sCursorPrimRed += cursorRedStep;
     }
 
     if (sCursorPrimGreen >= sCursorPrimColors[sCursorPulseDir][1]) {
-        sCursorPrimGreen -= cursorGreen;
+        sCursorPrimGreen -= cursorGreenStep;
     } else {
-        sCursorPrimGreen += cursorGreen;
+        sCursorPrimGreen += cursorGreenStep;
     }
 
     if (sCursorPrimBlue >= sCursorPrimColors[sCursorPulseDir][2]) {
-        sCursorPrimBlue -= cursorBlue;
+        sCursorPrimBlue -= cursorBlueStep;
     } else {
-        sCursorPrimBlue += cursorBlue;
+        sCursorPrimBlue += cursorBlueStep;
     }
 
-    cursorRed = ABS_ALT(sCursorEnvRed - sCursorEnvColors[sCursorPulseDir][0]) / sCursorFlashTimer;
-    cursorGreen = ABS_ALT(sCursorEnvGreen - sCursorEnvColors[sCursorPulseDir][1]) / sCursorFlashTimer;
-    cursorBlue = ABS_ALT(sCursorEnvBlue - sCursorEnvColors[sCursorPulseDir][2]) / sCursorFlashTimer;
+    cursorRedStep = ABS_ALT(sCursorEnvRed - sCursorEnvColors[sCursorPulseDir][0]) / sCursorFlashTimer;
+    cursorGreenStep = ABS_ALT(sCursorEnvGreen - sCursorEnvColors[sCursorPulseDir][1]) / sCursorFlashTimer;
+    cursorBlueStep = ABS_ALT(sCursorEnvBlue - sCursorEnvColors[sCursorPulseDir][2]) / sCursorFlashTimer;
 
     if (sCursorEnvRed >= sCursorEnvColors[sCursorPulseDir][0]) {
-        sCursorEnvRed -= cursorRed;
+        sCursorEnvRed -= cursorRedStep;
     } else {
-        sCursorEnvRed += cursorRed;
+        sCursorEnvRed += cursorRedStep;
     }
 
     if (sCursorEnvGreen >= sCursorEnvColors[sCursorPulseDir][1]) {
-        sCursorEnvGreen -= cursorGreen;
+        sCursorEnvGreen -= cursorGreenStep;
     } else {
-        sCursorEnvGreen += cursorGreen;
+        sCursorEnvGreen += cursorGreenStep;
     }
 
     if (sCursorEnvBlue >= sCursorEnvColors[sCursorPulseDir][2]) {
-        sCursorEnvBlue -= cursorBlue;
+        sCursorEnvBlue -= cursorBlueStep;
     } else {
-        sCursorEnvBlue += cursorBlue;
+        sCursorEnvBlue += cursorBlueStep;
     }
 
     if (--sCursorFlashTimer == 0) {
@@ -929,7 +929,7 @@ void FileSelect_DrawOptionsImpl(GameState* thisx) {
 
     // blue divider lines
     gDPPipeSync(POLY_OPA_DISP++);
-    gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 0, 255, 255, this->titleAlpha[0]);
+    gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 0, 255, 255, this->titleAlpha[FS_TITLE_CUR]);
     gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 0);
 
     gDPLoadTextureBlock_4b(POLY_OPA_DISP++, gFileSelOptionsDividerTex, G_IM_FMT_IA, 256, 2, 0,
@@ -961,16 +961,16 @@ void FileSelect_DrawOptionsImpl(GameState* thisx) {
     gDPPipeSync(POLY_OPA_DISP++);
     gDPSetCombineLERP(POLY_OPA_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0, PRIMITIVE,
                       ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
-    gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, this->titleAlpha[0]);
+    gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, this->titleAlpha[FS_TITLE_CUR]);
     gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 255);
 
     for (i = 0, vtx = 0; i < 5; i++, vtx += 4) {
         if (i == 4) {
             gDPPipeSync(POLY_OPA_DISP++);
-            if (gSaveContext.options.audioSetting == FS_AUDIO_SURROUND) {
+            if (gSaveContext.options.audioSetting == SAVE_AUDIO_SURROUND) {
                 gDPSetEnvColor(POLY_OPA_DISP++, 255, 255, 255, 255);
             } else {
-                gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 0, 0, 0, this->titleAlpha[0]);
+                gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 0, 0, 0, this->titleAlpha[FS_TITLE_CUR]);
                 gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 255);
             }
         }
@@ -985,7 +985,7 @@ void FileSelect_DrawOptionsImpl(GameState* thisx) {
     gDPSetCombineLERP(POLY_OPA_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0, PRIMITIVE,
                       ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
 
-    gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, this->titleAlpha[0]);
+    gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, this->titleAlpha[FS_TITLE_CUR]);
     gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 255);
     gSPVertex(POLY_OPA_DISP++, D_80813F30, 32, 0);
 
@@ -994,14 +994,14 @@ void FileSelect_DrawOptionsImpl(GameState* thisx) {
         if (i == gSaveContext.options.audioSetting) {
             if (sSelectedSetting == FS_SETTING_AUDIO) {
                 gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, sCursorPrimRed, sCursorPrimGreen, sCursorPrimBlue,
-                                this->titleAlpha[0]);
+                                this->titleAlpha[FS_TITLE_CUR]);
                 gDPSetEnvColor(POLY_OPA_DISP++, sCursorEnvRed, sCursorEnvGreen, sCursorEnvBlue, 255);
             } else {
-                gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, this->titleAlpha[0]);
+                gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, this->titleAlpha[FS_TITLE_CUR]);
                 gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 255);
             }
         } else {
-            gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 120, 120, 120, this->titleAlpha[0]);
+            gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 120, 120, 120, this->titleAlpha[FS_TITLE_CUR]);
             gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 255);
         }
 
@@ -1017,14 +1017,14 @@ void FileSelect_DrawOptionsImpl(GameState* thisx) {
         if (i == (gSaveContext.options.zTargetSetting + 4)) {
             if (sSelectedSetting == FS_SETTING_ZTARGET) {
                 gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, sCursorPrimRed, sCursorPrimGreen, sCursorPrimBlue,
-                                this->titleAlpha[0]);
+                                this->titleAlpha[FS_TITLE_CUR]);
                 gDPSetEnvColor(POLY_OPA_DISP++, sCursorEnvRed, sCursorEnvGreen, sCursorEnvBlue, 255);
             } else {
-                gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, this->titleAlpha[0]);
+                gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, this->titleAlpha[FS_TITLE_CUR]);
                 gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 255);
             }
         } else {
-            gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 120, 120, 120, this->titleAlpha[0]);
+            gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 120, 120, 120, this->titleAlpha[FS_TITLE_CUR]);
             gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 255);
         }
 
@@ -1040,14 +1040,14 @@ void FileSelect_DrawOptionsImpl(GameState* thisx) {
     gDPLoadTextureBlock_4b(POLY_OPA_DISP++, gFileSelBrightnessCheckTex, G_IM_FMT_IA, 96, 16, 0,
                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
                            G_TX_NOLOD);
-    gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 55, 55, 55, this->titleAlpha[0]);
+    gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 55, 55, 55, this->titleAlpha[FS_TITLE_CUR]);
     gDPSetEnvColor(POLY_OPA_DISP++, 40, 40, 40, 255);
     gSP1Quadrangle(POLY_OPA_DISP++, vtx, vtx + 2, vtx + 3, vtx + 1, 0);
 
     vtx += 4;
 
     gDPPipeSync(POLY_OPA_DISP++);
-    gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 30, 30, 30, this->titleAlpha[0]);
+    gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 30, 30, 30, this->titleAlpha[FS_TITLE_CUR]);
     gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 255);
     gSP1Quadrangle(POLY_OPA_DISP++, vtx, vtx + 2, vtx + 3, vtx + 1, 0);
 
