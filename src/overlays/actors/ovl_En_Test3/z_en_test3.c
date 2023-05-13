@@ -320,7 +320,7 @@ s32 func_80A3E898(EnTest3* this, PlayState* play) {
         Message_ContinueTextbox(play, textId);
     }
     if (textId == 0x296B) {
-        LinkAnimation_PlayOnceSetSpeed(play, &this->player.skelAnime, &gPlayerAnim_al_yareyare, 2.0f / 3.0f);
+        PlayerAnimation_PlayOnceSetSpeed(play, &this->player.skelAnime, &gPlayerAnim_al_yareyare, 2.0f / 3.0f);
     }
     return false;
 }
@@ -339,11 +339,11 @@ s32 func_80A3E97C(EnTest3* this, PlayState* play) {
 }
 
 s32 func_80A3E9DC(EnTest3* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->unk_D8D)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->unk_D8D, &this->player.actor);
+    if (CutsceneManager_IsNext(this->csId)) {
+        CutsceneManager_StartWithPlayerCs(this->csId, &this->player.actor);
         return true;
     } else {
-        ActorCutscene_SetIntentToPlay(this->unk_D8D);
+        CutsceneManager_Queue(this->csId);
         return false;
     }
 }
@@ -357,8 +357,8 @@ s32 func_80A3EA30(EnTest3* this, PlayState* play) {
         }
     }
     if (this->unk_D78->unk_1 != 0) {
-        ActorCutscene_Stop(0x7C);
-        ActorCutscene_SetIntentToPlay(this->unk_D8D);
+        CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
+        CutsceneManager_Queue(this->csId);
         play->msgCtx.msgMode = 0x44;
     }
     return false;
@@ -374,9 +374,9 @@ s32 func_80A3EAC4(EnTest3* this, PlayState* play) {
 s32 func_80A3EAF8(EnTest3* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         if (this->unk_D78->textId == 0x145F) {
-            ActorCutscene_Stop(this->unk_D8D);
-            this->unk_D8D = 0x7C;
-            ActorCutscene_SetIntentToPlay(this->unk_D8D);
+            CutsceneManager_Stop(this->csId);
+            this->csId = CS_ID_GLOBAL_TALK;
+            CutsceneManager_Queue(this->csId);
             this->player.targetedActor = &GET_PLAYER(play)->actor;
         }
         return 1;
@@ -452,7 +452,7 @@ void EnTest3_Init(Actor* thisx, PlayState* play2) {
     D_80A41D24 = true;
 
     this->player.actor.room = -1;
-    this->player.unk_A86 = -1;
+    this->player.csId = CS_ID_NONE;
     this->player.transformation = PLAYER_FORM_HUMAN;
     this->player.ageProperties = &sAgeProperties;
     this->player.heldItemAction = PLAYER_IA_NONE;
@@ -526,8 +526,8 @@ void func_80A3F0B0(EnTest3* this, PlayState* play) {
 }
 
 void func_80A3F114(EnTest3* this, PlayState* play) {
-    if (this->player.csMode != 0) {
-        play->startPlayerCutscene(play, &this->player, 6);
+    if (this->player.csMode != PLAYER_CSMODE_0) {
+        play->startPlayerCutscene(play, &this->player, PLAYER_CSMODE_END);
     }
 }
 
@@ -596,7 +596,7 @@ s32 func_80A3F384(EnTest3* this, PlayState* play) {
         this->player.doorType = 1;
         this->player.doorDirection = (offset.z >= 0.0f) ? 1.0f : -1.0f;
         this->player.doorActor = &door->dyna.actor;
-        this->player.unk_A86 = -1;
+        this->player.csId = CS_ID_NONE;
         return true;
     }
     return false;
@@ -616,7 +616,7 @@ void func_80A3F534(EnTest3* this, PlayState* play) {
     } else {
         this->unk_D78 = &D_80A41854[1];
     }
-    this->unk_D8D = this->player.actor.cutscene;
+    this->csId = this->player.actor.csId;
 }
 
 void func_80A3F5A4(EnTest3* this, PlayState* play) {
@@ -628,7 +628,7 @@ void func_80A3F5A4(EnTest3* this, PlayState* play) {
     } else {
         this->unk_D78 = &D_80A41854[12];
     }
-    this->unk_D8D = this->player.actor.cutscene;
+    this->csId = this->player.actor.csId;
 }
 
 s32 func_80A3F62C(EnTest3* this, PlayState* play, struct_80A41828* arg2, ScheduleOutput* scheduleOutput) {
@@ -666,8 +666,8 @@ s32 func_80A3F73C(EnTest3* this, PlayState* play) {
             this->unk_D90->stateFlags1 |= PLAYER_STATE1_20;
             func_800BC154(play, &play->actorCtx, &this->unk_D90->actor, 4);
             func_800BC154(play, &play->actorCtx, &this->player.actor, 2);
-            ActorCutscene_SetReturnCamera(this->subCamId);
-            play->startPlayerCutscene(play, &this->player, 7);
+            CutsceneManager_SetReturnCamera(this->subCamId);
+            play->startPlayerCutscene(play, &this->player, PLAYER_CSMODE_WAIT);
         }
         func_800B863C(&this->player.actor, play);
         if (this->unk_D88 == 3) {
@@ -689,7 +689,7 @@ s32 func_80A3F8D4(EnTest3* this, PlayState* play, struct_80A41828* arg2, Schedul
         ((postActor = func_80A3F2BC(play, this, ACTOR_EN_PM, ACTORCAT_NPC, 100.0f, 20.0f)) != NULL)) {
         this->player.actor.home.rot.y = Actor_WorldYawTowardActor(&this->player.actor, postActor);
     }
-    play->startPlayerCutscene(play, &this->player, 0x61);
+    play->startPlayerCutscene(play, &this->player, PLAYER_CSMODE_97);
     return true;
 }
 
@@ -736,7 +736,7 @@ s32 func_80A3FA58(EnTest3* this, PlayState* play) {
             return false;
         }
         if (this->unk_D8A == 90) {
-            play->startPlayerCutscene(play, &this->player, 0x15);
+            play->startPlayerCutscene(play, &this->player, PLAYER_CSMODE_21);
         }
     } else {
         this->unk_D8A++;
@@ -757,20 +757,20 @@ s32 func_80A3FBE8(EnTest3* this, PlayState* play) {
         if (!Play_InCsMode(play)) {
             D_80A41D20 = 1;
             this->unk_D78 = &D_80A41854[20];
-            this->unk_D8D = this->player.actor.cutscene;
+            this->csId = this->player.actor.csId;
             this->player.actor.textId = this->unk_D78->textId;
         }
     } else if (D_80A41D20 == 1) {
-        if (this->unk_D8D >= 0) {
+        if (this->csId >= 0) {
             if (func_80A3E9DC(this, play)) {
-                this->unk_D8D = -1;
+                this->csId = CS_ID_NONE;
                 Environment_StopTime();
             }
         } else if ((play->actorCtx.flags & ACTORCTX_FLAG_6) || (play->actorCtx.flags & ACTORCTX_FLAG_5)) {
-            this->unk_D8D = ActorCutscene_GetAdditionalCutscene(this->player.actor.cutscene);
+            this->csId = CutsceneManager_GetAdditionalCsId(this->player.actor.csId);
             SET_WEEKEVENTREG(WEEKEVENTREG_90_02);
             if (play->actorCtx.flags & ACTORCTX_FLAG_5) {
-                this->unk_D8D = ActorCutscene_GetAdditionalCutscene(this->unk_D8D);
+                this->csId = CutsceneManager_GetAdditionalCsId(this->csId);
             }
             SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 1);
             D_80A41D20 = 2;
@@ -778,7 +778,7 @@ s32 func_80A3FBE8(EnTest3* this, PlayState* play) {
             func_80A3F73C(this, play);
         }
     } else if ((D_80A41D20 == 2) && func_80A3E9DC(this, play)) {
-        ActorCutscene_SetReturnCamera(CAM_ID_MAIN);
+        CutsceneManager_SetReturnCamera(CAM_ID_MAIN);
         Environment_StartTime();
         if (((void)0, gSaveContext.save.time) > CLOCK_TIME(6, 0)) {
             func_800FE658(TIME_TO_MINUTES_ALT_F(fabsf((s16) - ((void)0, gSaveContext.save.time))));
@@ -793,7 +793,7 @@ s32 func_80A3FBE8(EnTest3* this, PlayState* play) {
 }
 
 s32 func_80A3FDE4(EnTest3* this, PlayState* play, struct_80A41828* arg2, ScheduleOutput* scheduleOutput) {
-    this->unk_D8D = ActorCutscene_GetAdditionalCutscene(this->player.actor.cutscene);
+    this->csId = CutsceneManager_GetAdditionalCsId(this->player.actor.csId);
     return true;
 }
 
@@ -813,7 +813,7 @@ s32 func_80A3FE20(EnTest3* this, PlayState* play) {
     } else if (D_80A41D64 == 1) {
         func_80A40230(this, play);
     } else if (D_80A41D64 == 2) {
-        ActorCutscene_Stop(this->unk_D8D);
+        CutsceneManager_Stop(this->csId);
         SET_WEEKEVENTREG(WEEKEVENTREG_90_02);
         D_80A41D64 = 3;
     }
@@ -835,9 +835,9 @@ s32 func_80A3FF10(EnTest3* this, PlayState* play, struct_80A41828* arg2, Schedul
         return true;
     } else {
         func_80A3F15C(this, play, arg2);
-        this->unk_D8D = this->player.actor.cutscene;
+        this->csId = this->player.actor.csId;
         if (play->roomCtx.curRoom.num == 2) {
-            this->unk_D8D = ActorCutscene_GetAdditionalCutscene(this->unk_D8D);
+            this->csId = CutsceneManager_GetAdditionalCsId(this->csId);
         }
         return true;
     }
@@ -856,7 +856,7 @@ s32 func_80A3FFD0(EnTest3* this, PlayState* play2) {
         }
     } else {
         SET_WEEKEVENTREG(WEEKEVENTREG_51_40);
-        play->startPlayerCutscene(play, &this->player, 0x6E);
+        play->startPlayerCutscene(play, &this->player, PLAYER_CSMODE_110);
     }
     return false;
 }
@@ -1032,7 +1032,7 @@ void func_80A409D4(EnTest3* this, PlayState* play) {
     if ((play->actorCtx.flags & ACTORCTX_FLAG_5) || (play->actorCtx.flags & ACTORCTX_FLAG_4)) {
         play->actorCtx.flags &= ~ACTORCTX_FLAG_4;
         func_80A3F0B0(this, play);
-        ActorCutscene_SetReturnCamera(CAM_ID_MAIN);
+        CutsceneManager_SetReturnCamera(CAM_ID_MAIN);
     } else {
         sEnTest3_Input = *CONTROLLER1(&play->state);
     }
@@ -1055,16 +1055,16 @@ void EnTest3_Update(Actor* thisx, PlayState* play2) {
     this->player.actor.draw = EnTest3_Draw;
     D_80A41D48 = false;
     this->player.actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_8);
-    if (Cutscene_CheckActorAction(play, 0x1FA) &&
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_506) &&
         !((this->player.actor.category == ACTORCAT_PLAYER) &&
           ((play->actorCtx.flags & ACTORCTX_FLAG_5) || (play->actorCtx.flags & ACTORCTX_FLAG_4)))) {
-        if (this->player.csMode != 5) {
-            play->startPlayerCutscene(play, &this->player, 5);
+        if (this->player.csMode != PLAYER_CSMODE_5) {
+            play->startPlayerCutscene(play, &this->player, PLAYER_CSMODE_5);
         }
         play->actorCtx.flags &= ~ACTORCTX_FLAG_4;
     } else if (this->player.actor.category == ACTORCAT_PLAYER) {
         func_80A409D4(this, play);
-    } else if (play->startPlayerCutscene(play, &this->player, 0)) {
+    } else if (play->startPlayerCutscene(play, &this->player, PLAYER_CSMODE_0)) {
         if (this->unk_D88 >= 7) {
             Vec3f worldPos;
 
@@ -1123,9 +1123,9 @@ s32 EnTest3_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f*
             *dList = NULL;
         }
         if (limbIndex == OBJECT_TEST3_LIMB_0B) {
-            rot->x += this->player.unk_AAC.z;
-            rot->y -= this->player.unk_AAC.y;
-            rot->z += this->player.unk_AAC.x;
+            rot->x += this->player.headLimbRot.z;
+            rot->y -= this->player.headLimbRot.y;
+            rot->z += this->player.headLimbRot.x;
         } else if (limbIndex == OBJECT_TEST3_LIMB_0A) {
             s32 requiredScopeTemp;
 
@@ -1133,12 +1133,12 @@ s32 EnTest3_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f*
                 Matrix_RotateZS(0x44C, MTXMODE_APPLY);
                 Matrix_RotateYS(this->player.unk_AA8, MTXMODE_APPLY);
             }
-            if (this->player.unk_AB2.y != 0) {
-                Matrix_RotateYS(this->player.unk_AB2.y, MTXMODE_APPLY);
+            if (this->player.upperLimbRot.y != 0) {
+                Matrix_RotateYS(this->player.upperLimbRot.y, MTXMODE_APPLY);
             }
-            Matrix_RotateXS(this->player.unk_AB2.x, MTXMODE_APPLY);
-            if (this->player.unk_AB2.z != 0) {
-                Matrix_RotateZS(this->player.unk_AB2.z, MTXMODE_APPLY);
+            Matrix_RotateXS(this->player.upperLimbRot.x, MTXMODE_APPLY);
+            if (this->player.upperLimbRot.z != 0) {
+                Matrix_RotateZS(this->player.upperLimbRot.z, MTXMODE_APPLY);
             }
         } else {
             func_80125500(play, &this->player, limbIndex, pos, rot);
@@ -1214,7 +1214,7 @@ void EnTest3_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList1, Gfx** dL
     } else if (limbIndex == OBJECT_TEST3_LIMB_15) {
         if (D_80A41D60 || CHECK_WEEKEVENTREG(WEEKEVENTREG_50_80) ||
             (INV_CONTENT(ITEM_PENDANT_OF_MEMORIES) == ITEM_PENDANT_OF_MEMORIES) ||
-            (this->player.getItemDrawId - 1 == GID_PENDANT_OF_MEMORIES)) {
+            (this->player.getItemDrawIdPlusOne - 1 == GID_PENDANT_OF_MEMORIES)) {
             D_80A41D60 = true;
         } else {
             OPEN_DISPS(play->state.gfxCtx);
@@ -1222,7 +1222,7 @@ void EnTest3_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList1, Gfx** dL
             CLOSE_DISPS(play->state.gfxCtx);
         }
     } else {
-        func_80128B74(play, &this->player, limbIndex);
+        Player_SetFeetPos(play, &this->player, limbIndex);
     }
 }
 
@@ -1295,7 +1295,7 @@ void EnTest3_Draw(Actor* thisx, PlayState* play2) {
     if (this->player.invincibilityTimer > 0) {
         POLY_OPA_DISP = Play_SetFog(play, POLY_OPA_DISP);
     }
-    if ((this->player.getItemDrawId - 1) != GID_NONE) {
+    if ((this->player.getItemDrawIdPlusOne - 1) != GID_NONE) {
         Player_DrawGetItem(play, &this->player);
     }
     CLOSE_DISPS(play->state.gfxCtx);

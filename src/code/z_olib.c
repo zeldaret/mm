@@ -254,19 +254,19 @@ void OLib_Vec3fDiff(PosRot* a, Vec3f* b, Vec3f* dest, s16 mode) {
     VecGeo geo;
 
     switch (mode) {
-        case OLIB_ADD_OFFSET:
+        case OLIB_DIFF_OFFSET:
             OLib_Vec3fDiffToVecGeo(&geo, &a->pos, b);
             geo.yaw -= a->rot.y;
             OLib_VecGeoToVec3f(dest, &geo);
             break;
 
-        case OLIB_ADD:
+        case OLIB_DIFF:
             dest->x = b->x - a->pos.x;
             dest->y = b->y - a->pos.y;
             dest->z = b->z - a->pos.z;
             break;
 
-        default: // OLIB_COPY
+        default: // OLIB_SUB_COPY
             *dest = *b;
             break;
     }
@@ -279,19 +279,19 @@ void OLib_Vec3fAdd(PosRot* a, Vec3f* b, Vec3f* dest, s16 mode) {
     VecGeo geo;
 
     switch (mode) {
-        case 1:
+        case OLIB_ADD_OFFSET:
             OLib_Vec3fToVecGeo(&geo, b);
             geo.yaw += a->rot.y;
             OLib_AddVecGeoToVec3f(dest, &a->pos, &geo);
             break;
 
-        case 2:
+        case OLIB_ADD:
             dest->x = a->pos.x + b->x;
             dest->y = a->pos.y + b->y;
             dest->z = a->pos.z + b->z;
             break;
 
-        default:
+        default: // OLIB_ADD_COPY
             *dest = *b;
             break;
     }

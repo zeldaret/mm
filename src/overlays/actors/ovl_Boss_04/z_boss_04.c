@@ -254,16 +254,16 @@ void func_809EC568(Boss04* this, PlayState* play) {
             this->unk_2D0 = 2000.0f;
             if ((player->stateFlags1 & PLAYER_STATE1_100000) && (this->actor.projectedPos.z > 0.0f) &&
                 (fabsf(this->actor.projectedPos.x) < 300.0f) && (fabsf(this->actor.projectedPos.y) < 300.0f)) {
-                if ((this->unk_704 >= 15) && (ActorCutscene_GetCurrentIndex() == -1)) {
+                if ((this->unk_704 >= 15) && (CutsceneManager_GetCurrentCsId() == CS_ID_NONE)) {
                     Actor* boss;
 
                     this->unk_708 = 10;
                     this->unk_704 = 0;
-                    Cutscene_Start(play, &play->csCtx);
+                    Cutscene_StartManual(play, &play->csCtx);
                     this->subCamId = Play_CreateSubCamera(play);
                     Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
                     Play_ChangeCameraStatus(play, this->subCamId, CAM_STATUS_ACTIVE);
-                    func_800B7298(play, &this->actor, PLAYER_CSMODE_7);
+                    func_800B7298(play, &this->actor, PLAYER_CSMODE_WAIT);
                     player->actor.world.pos.x = this->unk_6E8;
                     player->actor.world.pos.z = this->unk_6F0 + 410.0f;
                     player->actor.shape.rot.y = 0x7FFF;
@@ -389,8 +389,8 @@ void func_809EC568(Boss04* this, PlayState* play) {
                 mainCam->at = this->subCamAt;
                 func_80169AFC(play, this->subCamId, 0);
                 this->subCamId = SUB_CAM_ID_DONE;
-                Cutscene_End(play, &play->csCtx);
-                func_800B7298(play, &this->actor, PLAYER_CSMODE_6);
+                Cutscene_StopManual(play, &play->csCtx);
+                func_800B7298(play, &this->actor, PLAYER_CSMODE_END);
                 Play_DisableMotionBlur();
                 SET_EVENTINF(EVENTINF_60);
             }

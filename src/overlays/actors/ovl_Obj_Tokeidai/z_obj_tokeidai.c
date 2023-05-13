@@ -121,8 +121,8 @@ void ObjTokeidai_ExteriorGear_Init(ObjTokeidai* this, PlayState* play) {
     this->opaDList = gClockTowerExteriorGearDL;
     ObjTokeidai_SetupClockOrExteriorGear(this);
 
-    if (((play->sceneId == SCENE_CLOCKTOWER) && (gSaveContext.sceneLayer == 2) && (play->csCtx.currentCsIndex == 0)) ||
-        ((play->sceneId == SCENE_00KEIKOKU) && (gSaveContext.sceneLayer == 2) && (play->csCtx.currentCsIndex == 0))) {
+    if (((play->sceneId == SCENE_CLOCKTOWER) && (gSaveContext.sceneLayer == 2) && (play->csCtx.scriptIndex == 0)) ||
+        ((play->sceneId == SCENE_00KEIKOKU) && (gSaveContext.sceneLayer == 2) && (play->csCtx.scriptIndex == 0))) {
         ObjTokeidai_SetupTowerOpening(this);
     } else if ((CURRENT_DAY == 3 && gSaveContext.save.time < CLOCK_TIME(6, 0)) || CURRENT_DAY >= 4) {
         this->actionFunc = ObjTokeidai_ExteriorGear_OpenedIdle;
@@ -138,8 +138,8 @@ void ObjTokeidai_TowerClock_Init(ObjTokeidai* this, PlayState* play) {
     this->actor.draw = ObjTokeidai_Clock_Draw;
     ObjTokeidai_Clock_Init(this);
 
-    if (((play->sceneId == SCENE_CLOCKTOWER) && (gSaveContext.sceneLayer == 2) && (play->csCtx.currentCsIndex == 0)) ||
-        ((play->sceneId == SCENE_00KEIKOKU) && (gSaveContext.sceneLayer == 2) && (play->csCtx.currentCsIndex == 0))) {
+    if (((play->sceneId == SCENE_CLOCKTOWER) && (gSaveContext.sceneLayer == 2) && (play->csCtx.scriptIndex == 0)) ||
+        ((play->sceneId == SCENE_00KEIKOKU) && (gSaveContext.sceneLayer == 2) && (play->csCtx.scriptIndex == 0))) {
         ObjTokeidai_SetupTowerOpening(this);
     } else if ((CURRENT_DAY == 3 && gSaveContext.save.time < CLOCK_TIME(6, 0)) || CURRENT_DAY >= 4) {
         this->actor.world.pos.y += (this->actor.scale.y * 5191.0f) - 50.0f;
@@ -171,8 +171,8 @@ void ObjTokeidai_Counterweight_Init(ObjTokeidai* this, PlayState* play) {
         this->spotlightIntensity = 0;
     }
 
-    if (((play->sceneId == SCENE_CLOCKTOWER) && (gSaveContext.sceneLayer == 2) && (play->csCtx.currentCsIndex == 0)) ||
-        ((play->sceneId == SCENE_00KEIKOKU) && (gSaveContext.sceneLayer == 2) && (play->csCtx.currentCsIndex == 0))) {
+    if (((play->sceneId == SCENE_CLOCKTOWER) && (gSaveContext.sceneLayer == 2) && (play->csCtx.scriptIndex == 0)) ||
+        ((play->sceneId == SCENE_00KEIKOKU) && (gSaveContext.sceneLayer == 2) && (play->csCtx.scriptIndex == 0))) {
         this->spotlightIntensity = 0;
         ObjTokeidai_SetupTowerOpening(this);
 
@@ -329,8 +329,8 @@ void ObjTokeidai_ExteriorGear_Collapse(ObjTokeidai* this, PlayState* play) {
 }
 
 void ObjTokeidai_ExteriorGear_OpenedIdle(ObjTokeidai* this, PlayState* play) {
-    if (Cutscene_CheckActorAction(play, 132) &&
-        play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 132)]->action == 2) {
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_132) &&
+        play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_132)]->id == 2) {
         this->actionFunc = ObjTokeidai_ExteriorGear_Collapse;
         this->actor.speed = this->actor.scale.y * 5.0f;
         this->actor.velocity.y = 0.0f;
@@ -397,8 +397,8 @@ void ObjTokeidai_TowerClock_SlideOff(ObjTokeidai* this, PlayState* play) {
 }
 
 void ObjTokeidai_TowerClock_OpenedIdle(ObjTokeidai* this, PlayState* play) {
-    if (Cutscene_CheckActorAction(play, 132) &&
-        play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 132)]->action == 1) {
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_132) &&
+        (play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_132)]->id == 1)) {
         this->actionFunc = ObjTokeidai_TowerClock_SlideOff;
         this->slidingClockFaceAngle = 0;
         this->aerialClockFaceSpeed = -0xD;
@@ -415,8 +415,8 @@ void ObjTokeidai_Counterweight_Collapse(ObjTokeidai* this, PlayState* play) {
 }
 
 void ObjTokeidai_Counterweight_OpenedIdle(ObjTokeidai* this, PlayState* play) {
-    if (Cutscene_CheckActorAction(play, 132) &&
-        play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 132)]->action == 3) {
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_132) &&
+        (play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_132)]->id == 3)) {
         this->actionFunc = ObjTokeidai_Counterweight_Collapse;
         this->xRotation = 0;
         this->actor.velocity.y = 0.0f;
@@ -432,22 +432,20 @@ void ObjTokeidai_TerminaFieldWalls_Collapse(ObjTokeidai* this, PlayState* play) 
 }
 
 void ObjTokeidai_TerminaFieldWalls_Idle(ObjTokeidai* this, PlayState* play) {
-    if (Cutscene_CheckActorAction(play, 132) != 0 &&
-        play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 132)]->action == 1) {
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_132) &&
+        (play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_132)]->id == 1)) {
         this->actionFunc = ObjTokeidai_TerminaFieldWalls_Collapse;
     }
 }
 
 void ObjTokeidai_TowerOpening_EndCutscene(ObjTokeidai* this, PlayState* play) {
-    if (Cutscene_CheckActorAction(play, 132) != 0 &&
-        play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 132)]->action == 5) {
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_132) &&
+        (play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_132)]->id == 5)) {
         SET_WEEKEVENTREG(WEEKEVENTREG_08_40);
-        if (((play->sceneId == SCENE_CLOCKTOWER) && (gSaveContext.sceneLayer == 2) &&
-             (play->csCtx.currentCsIndex == 0)) ||
-            ((play->sceneId == SCENE_00KEIKOKU) && (gSaveContext.sceneLayer == 2) &&
-             (play->csCtx.currentCsIndex == 0))) {
+        if (((play->sceneId == SCENE_CLOCKTOWER) && (gSaveContext.sceneLayer == 2) && (play->csCtx.scriptIndex == 0)) ||
+            ((play->sceneId == SCENE_00KEIKOKU) && (gSaveContext.sceneLayer == 2) && (play->csCtx.scriptIndex == 0))) {
             Audio_SetCutsceneFlag(false);
-            gSaveContext.save.cutscene = 0;
+            gSaveContext.save.cutsceneIndex = 0;
             gSaveContext.nextCutsceneIndex = 0;
             gSaveContext.respawnFlag = 2;
             play->transitionTrigger = TRANS_TRIGGER_START;
@@ -587,8 +585,8 @@ void ObjTokeidai_TowerOpening_RaiseTower(ObjTokeidai* this, PlayState* play) {
 }
 
 void ObjTokeidai_TowerOpening_Start(ObjTokeidai* this, PlayState* play) {
-    if ((Cutscene_CheckActorAction(play, 132) &&
-         play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 132)]->action == 4) ||
+    if ((Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_132) &&
+         (play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_132)]->id == 4)) ||
         CHECK_WEEKEVENTREG(WEEKEVENTREG_08_40)) {
         this->actionFunc = ObjTokeidai_TowerOpening_RaiseTower;
     }
@@ -620,7 +618,7 @@ void ObjTokeidai_StaircaseToRooftop_Idle(ObjTokeidai* this, PlayState* play) {
 }
 
 s32 ObjTokeidai_IsPostFirstCycleFinalHours(ObjTokeidai* this, PlayState* play) {
-    if (gSaveContext.save.inventory.items[SLOT_OCARINA] == ITEM_NONE) {
+    if (gSaveContext.save.saveInfo.inventory.items[SLOT_OCARINA] == ITEM_NONE) {
         return false;
     }
     if (CURRENT_DAY == 3 && gSaveContext.save.time < CLOCK_TIME(6, 0)) {
@@ -691,14 +689,14 @@ void ObjTokeidai_TowerClock_Idle(ObjTokeidai* this, PlayState* play) {
         return;
     }
 
-    if (play->csCtx.state != 0) {
+    if (play->csCtx.state != CS_STATE_IDLE) {
         this->actor.home.rot.x = 1;
         this->clockTime += 3;
         this->actor.draw = ObjTokeidai_Clock_Draw;
     } else {
         if (!(play->actorCtx.flags & ACTORCTX_FLAG_1) &&
             OBJ_TOKEIDAI_TYPE(&this->actor) == OBJ_TOKEIDAI_TYPE_TOWER_CLOCK_TERMINA_FIELD &&
-            ActorCutscene_GetCurrentIndex() == -1) {
+            CutsceneManager_GetCurrentCsId() == CS_ID_NONE) {
             this->actor.draw = NULL;
         }
         this->clockTime = gSaveContext.save.time;
@@ -724,14 +722,14 @@ void ObjTokeidai_ExteriorGear_Idle(ObjTokeidai* this, PlayState* play) {
     if (ObjTokeidai_IsPostFirstCycleFinalHours(this, play)) {
         this->actor.draw = ObjTokeidai_ExteriorGear_Draw;
     } else {
-        if (play->csCtx.state != 0) {
+        if (play->csCtx.state != CS_STATE_IDLE) {
             this->actor.home.rot.x = 1;
             this->clockTime += 3;
             this->actor.draw = ObjTokeidai_ExteriorGear_Draw;
         } else {
             if (!(play->actorCtx.flags & ACTORCTX_FLAG_1) &&
                 (OBJ_TOKEIDAI_TYPE(&this->actor) == OBJ_TOKEIDAI_TYPE_EXTERIOR_GEAR_TERMINA_FIELD) &&
-                (ActorCutscene_GetCurrentIndex() == -1)) {
+                (CutsceneManager_GetCurrentCsId() == CS_ID_NONE)) {
                 this->actor.draw = NULL;
             }
             this->clockTime = gSaveContext.save.time;

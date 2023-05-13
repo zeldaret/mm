@@ -37,8 +37,8 @@ void EnWiz_SetupDead(EnWiz* this);
 void EnWiz_Dead(EnWiz* this, PlayState* play);
 
 // This number is almost-entirely arbirary, with the only requirement being
-// that cannot be a valid curPlatformIndex. Any negative number, or any number
-// larger than 10, would work just as well.
+// that it cannot be a valid curPlatformIndex. Any negative number, or any
+// number larger than 10, would work just as well.
 #define INITIAL_PLATFORM_INDEX 777
 
 typedef enum {
@@ -601,6 +601,9 @@ void EnWiz_SelectPlatform(EnWiz* this, PlayState* play) {
                 break;
 
             case EN_WIZ_FIGHT_STATE_SECOND_PHASE_CUTSCENE:
+                //! @bug: Setting the Wizrobe's position to the first platform *without* updating
+                //! this->curPlatformIndex can cause a bug later in EnWiz_Damaged. One way to fix
+                //! this is to set this->curPlatformIndex to 0 here.
                 Math_Vec3f_Copy(&this->actor.world.pos, &this->platforms[0]->world.pos);
                 for (i = 0, ghostAlpha = 128; i < this->platformCount; i++, ghostAlpha -= 10) {
                     Math_Vec3f_Copy(&this->ghostPos[i], &this->actor.world.pos);
@@ -668,13 +671,13 @@ void EnWiz_MoveGhosts(EnWiz* this) {
 }
 
 void EnWiz_StartIntroCutscene(EnWiz* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
-        ActorCutscene_StartAndSetFlag(this->actor.cutscene, &this->actor);
-        this->subCamId = ActorCutscene_GetCurrentSubCamId(this->actor.cutscene);
+    if (CutsceneManager_IsNext(this->actor.csId)) {
+        CutsceneManager_StartWithPlayerCsAndSetFlag(this->actor.csId, &this->actor);
+        this->subCamId = CutsceneManager_GetCurrentSubCamId(this->actor.csId);
         this->actor.flags |= ACTOR_FLAG_100000;
         EnWiz_SetupAppear(this, play);
     } else {
-        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+        CutsceneManager_Queue(this->actor.csId);
     }
 }
 
@@ -828,13 +831,13 @@ void EnWiz_Dance(EnWiz* this, PlayState* play) {
 }
 
 void EnWiz_SetupSecondPhaseCutscene(EnWiz* this, PlayState* play) {
-    s16 secondPhaseCutscene = ActorCutscene_GetAdditionalCutscene(this->actor.cutscene);
+    s16 secondPhaseCsId = CutsceneManager_GetAdditionalCsId(this->actor.csId);
 
-    if (!ActorCutscene_GetCanPlayNext(secondPhaseCutscene)) {
-        ActorCutscene_SetIntentToPlay(secondPhaseCutscene);
+    if (!CutsceneManager_IsNext(secondPhaseCsId)) {
+        CutsceneManager_Queue(secondPhaseCsId);
     } else {
-        ActorCutscene_StartAndSetFlag(secondPhaseCutscene, &this->actor);
-        this->subCamId = ActorCutscene_GetCurrentSubCamId(secondPhaseCutscene);
+        CutsceneManager_StartWithPlayerCsAndSetFlag(secondPhaseCsId, &this->actor);
+        this->subCamId = CutsceneManager_GetCurrentSubCamId(secondPhaseCsId);
         this->actor.flags |= ACTOR_FLAG_100000;
         EnWiz_ChangeAnim(this, EN_WIZ_ANIM_DANCE, false);
         this->action = EN_WIZ_ACTION_RUN_BETWEEN_PLATFORMS;
@@ -885,7 +888,7 @@ void EnWiz_SecondPhaseCutscene(EnWiz* this, PlayState* play) {
                     this->platformCount = 0;
                     this->fightState = EN_WIZ_FIGHT_STATE_SECOND_PHASE_GHOSTS_COPY_WIZROBE;
                     this->timer = 0;
-                    ActorCutscene_Stop(ActorCutscene_GetAdditionalCutscene(this->actor.cutscene));
+                    CutsceneManager_Stop(CutsceneManager_GetAdditionalCsId(this->actor.csId));
                     this->actor.flags &= ~ACTOR_FLAG_100000;
                     EnWiz_SetupDisappear(this);
                     return;
@@ -1037,7 +1040,7 @@ void EnWiz_Disappear(EnWiz* this, PlayState* play) {
 
         if ((this->introCutsceneState == EN_WIZ_INTRO_CS_DISAPPEAR) && (this->introCutsceneTimer == 0)) {
             this->introCutsceneState = EN_WIZ_INTRO_CS_END;
-            ActorCutscene_Stop(this->actor.cutscene);
+            CutsceneManager_Stop(this->actor.csId);
             this->actor.flags &= ~ACTOR_FLAG_100000;
         }
 
@@ -1120,6 +1123,17 @@ void EnWiz_Damaged(EnWiz* this, PlayState* play) {
         this->ghostRot[i].y += this->rotationalVelocity;
     }
 
+    //! @bug: When the Wizrobe is defeated, it is launched into the air by the code above, and the
+    //! last check in this conditional is intended to check that the Wizrobe is standing on its
+    //! platform before transitioning to a different state. However, when the fight is in the
+    //! EN_WIZ_FIGHT_STATE_SECOND_PHASE_CUTSCENE state, the Wizrobe will always appear on top of
+    //! the first platform, while its curPlatformIndex is allowed to randomly choose any other
+    //! platform in the room. If the Wizrobe is defeated in this state (which is possible with a
+    //! well-timed attack before the cutscene starts), and if the first platform is elevated above
+    //! other platforms in the room (as it is in the Secret Shrine), then it is possible for
+    //! this->platforms[this->curPlatformIndex]->world.pos.y to be under the floor compared to the
+    //! Wizrobe's current position, causing it to get stuck here and never actually die. This can
+    //! be fixed by addressing the bug in EnWiz_SelectPlatform.
     if ((this->timer == 1) ||
         ((this->actor.velocity.y < 0.0f) &&
          (this->actor.world.pos.y < (this->platforms[this->curPlatformIndex]->world.pos.y + 11.0f)))) {

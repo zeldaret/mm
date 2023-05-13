@@ -72,13 +72,13 @@ void EnCha_Destroy(Actor* thisx, PlayState* play) {
 
 void EnCha_Ring(EnCha* this, PlayState* play) {
     EnCha_Idle(this, play);
-    if (this->actor.cutscene == -1) {
+    if (this->actor.csId == CS_ID_NONE) {
         this->actionFunc = EnCha_Idle;
-    } else if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
+    } else if (CutsceneManager_IsNext(this->actor.csId)) {
+        CutsceneManager_StartWithPlayerCs(this->actor.csId, &this->actor);
         this->actionFunc = EnCha_Idle;
     } else {
-        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+        CutsceneManager_Queue(this->actor.csId);
     }
 }
 

@@ -115,7 +115,7 @@ void BgIkanaDharma_Init(Actor* thisx, PlayState* play2) {
             Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ACTOR_BG_IKANA_DHARMA, this->dyna.actor.world.pos.x,
                                           segmentY, this->dyna.actor.world.pos.z, this->dyna.actor.shape.rot.x,
                                           this->dyna.actor.shape.rot.y, this->dyna.actor.shape.rot.z,
-                                          BGIKANADHARMA_PARAMS(0, true, 0), this->dyna.actor.cutscene,
+                                          BGIKANADHARMA_PARAMS(0, true, 0), this->dyna.actor.csId,
                                           this->dyna.actor.halfDaysBits, NULL);
         }
 
@@ -173,16 +173,16 @@ void BgIkanaDharma_WaitForHit(BgIkanaDharma* this, PlayState* play) {
 }
 
 void BgIkanaDharma_SetupStartCutscene(BgIkanaDharma* this) {
-    ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+    CutsceneManager_Queue(this->dyna.actor.csId);
     this->actionFunc = BgIkanaDharma_StartCutscene;
 }
 
 void BgIkanaDharma_StartCutscene(BgIkanaDharma* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
+    if (CutsceneManager_IsNext(this->dyna.actor.csId)) {
+        CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
         BgIkanaDharma_SetupWaitForCutsceneToEnd(this);
     } else {
-        ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+        CutsceneManager_Queue(this->dyna.actor.csId);
     }
 }
 
@@ -200,7 +200,7 @@ void BgIkanaDharma_WaitForCutsceneToEnd(BgIkanaDharma* this, PlayState* play) {
                 sFirstHitBgIkanaDharma = NULL;
             }
 
-            ActorCutscene_Stop(this->dyna.actor.cutscene);
+            CutsceneManager_Stop(this->dyna.actor.csId);
         }
     }
 

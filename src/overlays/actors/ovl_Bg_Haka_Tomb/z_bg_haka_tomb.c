@@ -47,7 +47,7 @@ void BgHakaTomb_Init(Actor* thisx, PlayState* play) {
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
     DynaPolyActor_LoadMesh(play, &this->dyna, &object_haka_obj_Colheader_000EE8);
-    SubS_FillCutscenesList(&this->dyna.actor, this->cutscenes, ARRAY_COUNT(this->cutscenes));
+    SubS_FillCutscenesList(&this->dyna.actor, this->csIdList, ARRAY_COUNT(this->csIdList));
     func_80BD6624(this);
 }
 
@@ -61,15 +61,15 @@ void func_80BD6624(BgHakaTomb* this) {
     this->actionFunc = func_80BD66AC;
 }
 
-s32 func_80BD6638(s16* arg0, s16* arg1, s32 arg2) {
+s32 func_80BD6638(s16* csId, s16* csIdList, s32 numCutscenes) {
     s32 pad;
     s32 retVal = false;
     s32 i;
 
-    *arg0 = ActorCutscene_GetCurrentIndex();
-    if (*arg0 >= 0) {
-        for (i = 0; i < arg2; i++) {
-            if (*arg0 == arg1[i]) {
+    *csId = CutsceneManager_GetCurrentCsId();
+    if (*csId >= 0) {
+        for (i = 0; i < numCutscenes; i++) {
+            if (*csId == csIdList[i]) {
                 retVal = true;
                 break;
             }
@@ -80,12 +80,13 @@ s32 func_80BD6638(s16* arg0, s16* arg1, s32 arg2) {
 }
 
 void func_80BD66AC(BgHakaTomb* this, PlayState* play) {
-    s16 temp;
+    s16 csId;
 
     if (Flags_GetClear(play, this->dyna.actor.room)) {
         this->dyna.actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8);
     }
-    if (!func_80BD6638(&temp, this->cutscenes, 1) && (temp < 0) && Flags_GetClear(play, this->dyna.actor.room)) {
+    if (!func_80BD6638(&csId, this->csIdList, ARRAY_COUNT(this->csIdList)) && (csId < 0) &&
+        Flags_GetClear(play, this->dyna.actor.room)) {
         this->dyna.actor.flags |= ACTOR_FLAG_1;
         if (this->dyna.actor.isTargeted) {
             func_80BD6754(this);
@@ -100,7 +101,7 @@ void func_80BD6754(BgHakaTomb* this) {
 }
 
 void func_80BD6768(BgHakaTomb* this, PlayState* play) {
-    if (SubS_StartActorCutscene(&this->dyna.actor, this->cutscenes[0], -1, SUBS_CUTSCENE_SET_UNK_LINK_FIELDS)) {
+    if (SubS_StartCutscene(&this->dyna.actor, this->csIdList[0], CS_ID_NONE, SUBS_CUTSCENE_WITH_PLAYER)) {
         BgHakaTomb_SetupDoNothing(this);
     }
 }
