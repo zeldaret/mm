@@ -301,7 +301,7 @@ u32 Fault_WaitForInputImpl(void) {
                 return false;
             }
         } else {
-            if (pressedBtn == BTN_A || pressedBtn == BTN_DRIGHT) {
+            if ((pressedBtn == BTN_A) || (pressedBtn == BTN_DRIGHT)) {
                 return false;
             }
 
