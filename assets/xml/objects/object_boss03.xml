@@ -46,7 +46,7 @@
         <DList Name="gGyorgBubbleModelDL" Offset="0x7EB0" />
 
         <!-- Gyorg Title Card -->
-        <Texture Name="gGyorgTitleCardTex" OutName="gyorg_title_card" Format="i8" Width="128" Height="40" Offset="0x7EC8" />
+        <Texture Name="gGyorgTitleCardTex" OutName="gyorg_title_card" Format="ia8" Width="128" Height="40" Offset="0x7EC8" />
 
         <!-- Gyorg Limbs -->
         <Limb Name="gGyorgRootLimb" Type="Standard" EnumName="GYORG_LIMB_ROOT" Offset="0x92C8" />
