@@ -2126,7 +2126,7 @@
     0x801D0B70:("gKaleidoMgrOverlayTable","KaleidoMgrOverlay","",0x38),
     0x801D0BA8:("sKaleidoAreaPtr","void*","",0x4),
     0x801D0BAC:("gKaleidoMgrCurOvl","KaleidoMgrOverlay*","",0x4),
-    0x801D0BB0:("D_801D0BB0","UNK_TYPE4","",0x4),
+    0x801D0BB0:("gTransitionOverlayTable","UNK_TYPE4","",0x4),
     0x801D0C80:("D_801D0C80","UNK_TYPE1","",0x1),
     0x801D0CB0:("D_801D0CB0","UNK_TYPE1","",0x1),
     0x801D0CD8:("TransitionFade_InitVars","UNK_PTR","",0x4),

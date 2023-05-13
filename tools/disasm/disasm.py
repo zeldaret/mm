@@ -176,6 +176,8 @@ def proper_name(symbol, in_data=False, is_symbol=True):
         return variables_ast[0x809C46DC][0] + " + 0x14"
     elif symbol == 0x801EF66D:  # z_message_nes constant-folding stray fairy array
         return variables_ast[0x801EF670][0] + f" - 0x{0x801EF670 - 0x801EF66D:X}"
+    elif symbol == 0x801EF51D:  # z_message constant-folding stray fairy array
+        return variables_ast[0x801EF670][0] + f" - 0x{0x801EF670 - 0x801EF51D:X}"
     elif symbol == 0x801D0D7A:  # play_hireso constant-folding D_801D0D80 array
         return variables_ast[0x801D0D80][0] + f" - 0x{0x801D0D80 - 0x801D0D7A:X}"
     elif symbol == 0x801D11F4:  # play_hireso constant-folding D_801D1244 array
