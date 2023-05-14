@@ -88,7 +88,7 @@ void EnEncount1_SpawnActor(EnEncount1* this, PlayState* play) {
 
     if (((this->spawnActiveCount >= this->spawnActiveMax) ||
          ((this->spawnDistanceMax > 0.0f) && (this->spawnDistanceMax < this->actor.xzDistToPlayer)) ||
-         ((this->spawnTotalMax > 0) && (this->spawnTotalMax <= this->spawnTotal)))) {
+         ((this->spawnTotalMax > 0) && (this->spawnTotalMax <= this->spawnTotalCount)))) {
         return;
     }
 
@@ -150,7 +150,7 @@ void EnEncount1_SpawnActor(EnEncount1* this, PlayState* play) {
                            actorParams) != NULL) {
         this->spawnActiveCount++;
         if (this->spawnTotalMax > 0) {
-            this->spawnTotal++;
+            this->spawnTotalCount++;
         }
 
         if ((this->spawnActiveCount >= this->spawnActiveMax) && (this->spawnTimeMin != 0)) {

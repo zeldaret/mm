@@ -32,7 +32,7 @@ typedef struct EnEncount1 {
     /* 0x14C */ s16 spawnActiveMax;
     /* 0x14E */ s16 spawnActiveCount;
     /* 0x150 */ s16 type;
-    /* 0x152 */ s16 spawnTotal;
+    /* 0x152 */ s16 spawnTotalCount;
     /* 0x154 */ s16 spawnTotalMax;
     /* 0x156 */ s16 timer;
     /* 0x158 */ s16 spawnTimeMin;
