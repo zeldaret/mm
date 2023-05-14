@@ -121,7 +121,7 @@ void func_80A52604(EnDnq* this, PlayState* play) {
 s32 func_80A52648(EnDnq* this, PlayState* play) {
     s32 ret = false;
 
-    if (play->csCtx.state != 0) {
+    if (play->csCtx.state != CS_STATE_IDLE) {
         if (!(this->unk_37C & 0x20)) {
             this->picto.actor.flags &= ~ACTOR_FLAG_1;
             this->cueId = 255;

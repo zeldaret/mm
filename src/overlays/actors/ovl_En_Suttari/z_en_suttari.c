@@ -230,7 +230,7 @@ void EnSuttari_TriggerTransition(PlayState* play, u16 entrance) {
     play->transitionTrigger = TRANS_TRIGGER_START;
 }
 
-void EnSuttari_UpdateTime(void) {
+void EnSuttari_AdvanceTime(void) {
     gSaveContext.save.time = ((void)0, gSaveContext.save.time) + (u16)R_TIME_SPEED;
     gSaveContext.save.time = ((void)0, gSaveContext.save.time) + (u16)((void)0, gSaveContext.save.timeSpeedOffset);
 }
@@ -1484,7 +1484,7 @@ void EnSuttari_Update(Actor* thisx, PlayState* play) {
         func_80BAB4F0(this, play);
     }
     if (this->flags2 & 2) {
-        EnSuttari_UpdateTime();
+        EnSuttari_AdvanceTime();
     }
     if (this->unk428 != 0) {
         if (this->animIndex == 2 || this->animIndex == 6) {

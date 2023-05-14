@@ -9,6 +9,8 @@
 
 #define ENRACEDOG_PATH_INDEX_NONE 0x3F
 
+#define ENRACEDOG_PARAMS(index, path) ((index << 5) | (path))
+
 /**
  * The main point of this seems to be some very light anti-cheat detection. The dog
  * must progress through these statuses in a linear order to finish the race.

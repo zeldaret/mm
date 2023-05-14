@@ -249,7 +249,7 @@ s32 func_8092CAD0(EnDns* this, PlayState* play) {
 s32 func_8092CB98(EnDns* this, PlayState* play) {
     s32 phi_v1 = 0;
 
-    if (play->csCtx.state != 0) {
+    if (play->csCtx.state != CS_STATE_IDLE) {
         if (!(this->unk_2C6 & 0x80)) {
             this->cueType = EnDns_GetCueType(this);
             this->actor.flags &= ~ACTOR_FLAG_1;

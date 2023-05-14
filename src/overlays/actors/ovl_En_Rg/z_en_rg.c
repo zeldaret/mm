@@ -283,7 +283,7 @@ void func_80BF3FF8(EnRg* this) {
 }
 
 s32 func_80BF4024(EnRg* this, PlayState* play) {
-    if ((play->csCtx.state == 0) && (this->unk_334 == 1)) {
+    if ((play->csCtx.state == CS_STATE_IDLE) && (this->unk_334 == 1)) {
         if (Animation_OnFrame(&this->skelAnime, 2.0f)) {
             Actor_PlaySfx(&this->actor, NA_SE_EN_GOLON_CIRCLE);
         }

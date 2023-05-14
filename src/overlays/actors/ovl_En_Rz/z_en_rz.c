@@ -446,7 +446,7 @@ void func_80BFC078(EnRz* this, PlayState* play) {
         sp28.x = this->actor.projectedPos.x;
         sp28.y = this->actor.projectedPos.y;
         sp28.z = this->actor.projectedPos.z;
-        func_801A1FB4(3, &sp28, NA_BGM_ROSA_SISTERS, 900.0f);
+        func_801A1FB4(SEQ_PLAYER_BGM_SUB, &sp28, NA_BGM_ROSA_SISTERS, 900.0f);
     }
 }
 
@@ -547,7 +547,7 @@ void func_80BFC3F8(EnRz* this, PlayState* play) {
             bgmPos.x = this->actor.projectedPos.x;
             bgmPos.y = this->actor.projectedPos.y;
             bgmPos.z = this->actor.projectedPos.z;
-            func_801A1FB4(3, &bgmPos, NA_BGM_ROSA_SISTERS, 900.0f);
+            func_801A1FB4(SEQ_PLAYER_BGM_SUB, &bgmPos, NA_BGM_ROSA_SISTERS, 900.0f);
         }
     }
 }

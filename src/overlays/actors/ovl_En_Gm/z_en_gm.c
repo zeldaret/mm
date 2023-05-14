@@ -761,7 +761,7 @@ s32 func_8094EE84(EnGm* this, PlayState* play) {
 s32 func_8094EFC4(EnGm* this, PlayState* play) {
     s32 ret = false;
 
-    if (play->csCtx.state != 0) {
+    if (play->csCtx.state != CS_STATE_IDLE) {
         if (this->unk_3F8 == 0) {
             if ((play->sceneId == SCENE_MILK_BAR) && (gSaveContext.sceneLayer == 2)) {
                 func_8094E054(this, play, 0);

@@ -1,4 +1,3 @@
-#include "prevent_bss_reordering.h"
 #include "global.h"
 #include "buffers.h"
 #include "z64debug_display.h"
@@ -2342,6 +2341,3 @@ void Play_Init(GameState* thisx) {
     sBombersNotebookOpen = false;
     BombersNotebook_Init(&sBombersNotebook);
 }
-
-//! TODO: fake symbol, remove when BombersNotebook_Update is matching
-u16 D_801D0D78[] = { 0, 0, 0, 0 };
