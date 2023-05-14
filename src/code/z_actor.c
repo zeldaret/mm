@@ -2656,11 +2656,11 @@ void func_800B9D1C(Actor* actor) {
     if (sfxId) {}
 
     if (actor->audioFlags & 0x40) {
-        func_801A1FB4(3, &actor->projectedPos, NA_BGM_MUSIC_BOX_HOUSE, 1500.0f);
+        func_801A1FB4(SEQ_PLAYER_BGM_SUB, &actor->projectedPos, NA_BGM_MUSIC_BOX_HOUSE, 1500.0f);
     }
 
     if (actor->audioFlags & 0x20) {
-        func_801A1FB4(0, &actor->projectedPos, NA_BGM_KAMARO_DANCE, 900.0f);
+        func_801A1FB4(SEQ_PLAYER_BGM_MAIN, &actor->projectedPos, NA_BGM_KAMARO_DANCE, 900.0f);
     }
 }
 
