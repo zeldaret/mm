@@ -982,7 +982,7 @@ typedef struct Player {
     /* 0x151 */ u8 rightHandType;
     /* 0x152 */ u8 sheathType;
     /* 0x153 */ u8 currentMask; // PlayerMask enum
-    /* 0x154 */ s8 unk_154;
+    /* 0x154 */ s8 unk_154; // EquipSlot enum // Last pressed equip slot?
     /* 0x155 */ u8 prevMask;
     /* 0x158 */ Gfx** rightHandDLists;
     /* 0x15C */ Gfx** leftHandDLists;

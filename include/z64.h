@@ -80,11 +80,12 @@
 #define Z_PRIORITY_IRQMGR   18
 
 typedef enum {
-    /* 0 */ EQUIP_SLOT_B,
-    /* 1 */ EQUIP_SLOT_C_LEFT,
-    /* 2 */ EQUIP_SLOT_C_DOWN,
-    /* 3 */ EQUIP_SLOT_C_RIGHT,
-    /* 4 */ EQUIP_SLOT_A
+    /* -1 */ EQUIP_SLOT_NONE = -1,
+    /*  0 */ EQUIP_SLOT_B,
+    /*  1 */ EQUIP_SLOT_C_LEFT,
+    /*  2 */ EQUIP_SLOT_C_DOWN,
+    /*  3 */ EQUIP_SLOT_C_RIGHT,
+    /*  4 */ EQUIP_SLOT_A
 } EquipSlot;
 
 typedef struct {

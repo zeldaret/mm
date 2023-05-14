@@ -4315,7 +4315,7 @@
     0x8082F1AC:("func_8082F1AC",),
     0x8082F43C:("func_8082F43C",),
     0x8082F470:("func_8082F470",),
-    0x8082F524:("Player_ItemToActionParam",),
+    0x8082F524:("Player_ItemToItemAction",),
     0x8082F594:("func_8082F594",),
     0x8082F5A4:("func_8082F5A4",),
     0x8082F5C0:("func_8082F5C0",),
