@@ -3711,14 +3711,15 @@ void func_808304BC(Player* this, PlayState* play) {
 }
 
 // EN_ARROW ammo related?
-s32 func_808305BC(PlayState* play, Player* this, ItemId* item, s32* typeParam) {
+s32 func_808305BC(PlayState* play, Player* this, ItemId* item, ArrowType* typeParam) {
     if (this->heldItemAction == PLAYER_IA_NUT) {
         *item = ITEM_NUT;
-        *typeParam = (this->transformation == PLAYER_FORM_DEKU) ? 7 : 6;
+        *typeParam = (this->transformation == PLAYER_FORM_DEKU) ? ARROW_TYPE_DEKU_BUBBLE : ARROW_TYPE_6;
     } else {
         *item = ITEM_BOW;
-        *typeParam =
-            (this->stateFlags1 & PLAYER_STATE1_800000) ? ENARROW_1 : this->heldItemAction - PLAYER_IA_BOW + ENARROW_2;
+        *typeParam = (this->stateFlags1 & PLAYER_STATE1_800000)
+                         ? ARROW_TYPE_NORMAL_HORSE
+                         : (this->heldItemAction - PLAYER_IA_BOW + ARROW_TYPE_NORMAL);
     }
 
     if (this->transformation == PLAYER_FORM_DEKU) {
@@ -3747,10 +3748,10 @@ u16 D_8085CFB0[] = {
 };
 
 u8 sMagicArrowCosts[] = {
-    4, // ENARROW_3
-    4, // ENARROW_4
-    8, // ENARROW_5
-    2, // ENARROW_6
+    4, // ARROW_MAGIC_FIRE
+    4, // ARROW_MAGIC_ICE
+    8, // ARROW_MAGIC_LIGHT
+    2, // ARROW_MAGIC_3
 };
 
 // Draw bow or hookshot / first person items?
@@ -3767,8 +3768,8 @@ s32 func_808306F8(Player* this, PlayState* play) {
         if (this->unk_B28 >= 0) {
             s32 var_v1 = ABS_ALT(this->unk_B28);
             ItemId item;
-            s32 arrowType;
-            s32 magicArrowType;
+            ArrowType arrowType;
+            ArrowMagic magicArrowType;
 
             if (var_v1 != 2) {
                 Player_PlaySfx(this, D_8085CFB0[var_v1 - 1]);
@@ -3776,26 +3777,26 @@ s32 func_808306F8(Player* this, PlayState* play) {
 
             if (!Player_IsHoldingHookshot(this) && (func_808305BC(play, this, &item, &arrowType) > 0)) {
                 if (this->unk_B28 >= 0) {
-                    magicArrowType = arrowType - ENARROW_3;
+                    magicArrowType = ARROW_GET_MAGIC_FROM_TYPE(arrowType);
 
-                    if (((arrowType - ENARROW_3) >= (ENARROW_3 - ENARROW_3)) &&
-                        ((arrowType - ENARROW_3) <= (ENARROW_5 - ENARROW_3))) {
+                    if ((ARROW_GET_MAGIC_FROM_TYPE(arrowType) >= ARROW_MAGIC_FIRE) &&
+                        (ARROW_GET_MAGIC_FROM_TYPE(arrowType) <= ARROW_MAGIC_LIGHT)) {
                         if (((void)0, gSaveContext.save.saveInfo.playerData.magic) < sMagicArrowCosts[magicArrowType]) {
-                            arrowType = ENARROW_2;
+                            arrowType = ARROW_TYPE_NORMAL;
                             magicArrowType = -1;
                         }
-                    } else if ((arrowType == ENARROW_7) &&
+                    } else if ((arrowType == ARROW_TYPE_DEKU_BUBBLE) &&
                                (!CHECK_WEEKEVENTREG(WEEKEVENTREG_08_01) || (play->sceneId != SCENE_BOWLING))) {
-                        magicArrowType = ENARROW_3;
+                        magicArrowType = ARROW_MAGIC_3;
                     } else {
-                        magicArrowType = -1;
+                        magicArrowType = ARROW_MAGIC_INVALID;
                     }
 
                     this->heldActor = Actor_SpawnAsChild(
                         &play->actorCtx, &this->actor, play, ACTOR_EN_ARROW, this->actor.world.pos.x,
                         this->actor.world.pos.y, this->actor.world.pos.z, 0, this->actor.shape.rot.y, 0, arrowType);
 
-                    if ((this->heldActor != NULL) && (magicArrowType >= 0)) {
+                    if ((this->heldActor != NULL) && (magicArrowType > ARROW_MAGIC_INVALID)) {
                         Magic_Consume(play, sMagicArrowCosts[magicArrowType], MAGIC_CONSUME_NOW);
                     }
                 }
@@ -4033,9 +4034,9 @@ s32 func_80831194(PlayState* play, Player* this) {
     if (this->heldActor != NULL) {
         if (!Player_IsHoldingHookshot(this)) {
             ItemId item;
-            s32 sp30;
+            ArrowType arrowType;
 
-            func_808305BC(play, this, &item, &sp30);
+            func_808305BC(play, this, &item, &arrowType);
             if ((this->transformation != PLAYER_FORM_DEKU) && !(this->stateFlags3 & PLAYER_STATE3_400)) {
                 if (gSaveContext.minigameStatus == MINIGAME_STATUS_ACTIVE) {
                     if ((play->sceneId != SCENE_SYATEKI_MIZU) && (play->sceneId != SCENE_F01) &&
@@ -16514,7 +16515,7 @@ void func_80852B28(Player* this, PlayState* play) {
         if (Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ARROW, this->bodyPartsPos[PLAYER_BODYPART_RIGHT_HAND].x,
                         this->bodyPartsPos[PLAYER_BODYPART_RIGHT_HAND].y,
                         this->bodyPartsPos[PLAYER_BODYPART_RIGHT_HAND].z, 0xFA0, this->actor.shape.rot.y, 0,
-                        8) != NULL) {
+                        ARROW_TYPE_DEKU_NUT) != NULL) {
             Inventory_ChangeAmmo(ITEM_NUT, -1);
             this->unk_D57 = 4;
         }
@@ -18179,7 +18180,7 @@ void func_80856918(Player* this, PlayState* play) {
                 this->boomerangActor =
                     Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ARROW, this->bodyPartsPos[PLAYER_BODYPART_WAIST].x,
                                 this->bodyPartsPos[PLAYER_BODYPART_WAIST].y,
-                                this->bodyPartsPos[PLAYER_BODYPART_WAIST].z, -1, 0, 0, 8);
+                                this->bodyPartsPos[PLAYER_BODYPART_WAIST].z, -1, 0, 0, ARROW_TYPE_DEKU_NUT);
                 if (this->boomerangActor != NULL) {
                     this->boomerangActor->velocity.x = this->actor.velocity.x * 1.5f;
                     this->boomerangActor->velocity.z = this->actor.velocity.z * 1.5f;

@@ -1268,7 +1268,8 @@ void EnEgol_Update(Actor* thisx, PlayState* play) {
             // last argument is DMG_ZORA_BOOMERANG | DMG_HOOKSHOT | DMG_NORMAL_ARROW | DMG_FIRE_ARROW | DMG_ICE_ARROW |
             // DMG_LIGHT_ARROW | DMG_DEKU_BUBBLE
 
-            if ((projectile != NULL) && !((projectile->id == ACTOR_EN_ARROW) && (projectile->params == ENARROW_5))) {
+            if ((projectile != NULL) &&
+                !((projectile->id == ACTOR_EN_ARROW) && (projectile->params == ARROW_TYPE_LIGHT))) {
                 this->eyelidRotTarget = 0xFA0;
                 this->eyeShutTimer = 20;
                 if (this->action == EYEGORE_ACTION_LASER) {

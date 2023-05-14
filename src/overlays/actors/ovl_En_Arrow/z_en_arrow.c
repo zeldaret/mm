@@ -78,26 +78,26 @@ void EnArrow_Init(Actor* thisx, PlayState* play) {
     EnArrow* this = THIS;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    if (this->actor.params == -ENARROW_8) {
+    if (this->actor.params == -ARROW_TYPE_DEKU_NUT) {
         this->unk_263 = 1;
-        this->actor.params = ENARROW_8;
+        this->actor.params = ARROW_TYPE_DEKU_NUT;
     }
 
-    if (this->actor.params < ENARROW_6) {
+    if (this->actor.params < ARROW_TYPE_6) {
         SkelAnime_Init(play, &this->arrow.skelAnime, &gameplay_keep_Skel_014560, &gameplay_keep_Anim_0128BC,
                        this->arrow.jointTable, this->arrow.jointTable, 5);
-        if (this->actor.params < ENARROW_3) {
-            if (this->actor.params == ENARROW_1) {
+        if (this->actor.params < ARROW_TYPE_FIRE) {
+            if (this->actor.params == ARROW_TYPE_NORMAL_HORSE) {
                 D_8088C234.elemDuration = 4;
             } else {
                 D_8088C234.elemDuration = 16;
             }
             Effect_Add(play, &this->unk_240, EFFECT_BLURE2, 0, 0, &D_8088C234);
-        } else if (this->actor.params == ENARROW_3) {
+        } else if (this->actor.params == ARROW_TYPE_FIRE) {
             Effect_Add(play, &this->unk_240, EFFECT_BLURE2, 0, 0, &D_8088C258);
-        } else if (this->actor.params == ENARROW_4) {
+        } else if (this->actor.params == ARROW_TYPE_ICE) {
             Effect_Add(play, &this->unk_240, EFFECT_BLURE2, 0, 0, &D_8088C27C);
-        } else if (this->actor.params == ENARROW_5) {
+        } else if (this->actor.params == ARROW_TYPE_LIGHT) {
             Effect_Add(play, &this->unk_240, EFFECT_BLURE2, 0, 0, &D_8088C2A0);
         }
     }
@@ -105,20 +105,20 @@ void EnArrow_Init(Actor* thisx, PlayState* play) {
     Collider_InitQuad(play, &this->collider);
     Collider_SetQuad(play, &this->collider, &this->actor, &sQuadInit);
 
-    if (this->actor.params < ENARROW_6) {
+    if (this->actor.params < ARROW_TYPE_6) {
         this->collider.info.toucherFlags &= ~(TOUCH_SFX_WOOD | TOUCH_SFX_HARD);
         this->collider.info.toucherFlags |= 0;
     }
 
-    if (this->actor.params < ENARROW_0) {
+    if (this->actor.params < ARROW_TYPE_NORMAL_LIT) {
         this->collider.base.atFlags = (AT_TYPE_ENEMY | AT_ON);
     } else {
         this->collider.info.toucher.dmgFlags = Actor_GetArrowDmgFlags(this->actor.params);
-        if (this->actor.params == ENARROW_8) {
+        if (this->actor.params == ARROW_TYPE_DEKU_NUT) {
             this->collider.info.toucher.damage = 1;
         }
 
-        if (this->actor.params == ENARROW_7) {
+        if (this->actor.params == ARROW_TYPE_DEKU_BUBBLE) {
             Actor_SetScale(&this->actor, 1.0f);
         }
     }
@@ -128,7 +128,7 @@ void EnArrow_Init(Actor* thisx, PlayState* play) {
 void EnArrow_Destroy(Actor* thisx, PlayState* play) {
     EnArrow* this = THIS;
 
-    if (this->actor.params < ENARROW_6) {
+    if (this->actor.params < ARROW_TYPE_6) {
         Effect_Destroy(play, this->unk_240);
     }
 
@@ -138,7 +138,7 @@ void EnArrow_Destroy(Actor* thisx, PlayState* play) {
         this->unk_264->flags &= ~ACTOR_FLAG_8000;
     }
 
-    if ((this->actor.params >= ENARROW_3) && (this->actor.params < ENARROW_6) && (this->actor.child == NULL)) {
+    if (ARROW_IS_MAGICAL(this->actor.params) && (this->actor.child == NULL)) {
         Magic_Reset(play);
     }
 }
@@ -153,7 +153,7 @@ void func_8088A594(EnArrow* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (this->actor.parent != NULL) {
-        if (this->actor.params == ENARROW_7) {
+        if (this->actor.params == ARROW_TYPE_DEKU_BUBBLE) {
             if (Math_SmoothStepToF(&this->bubble.unk_144, 16.0f, 0.07f, 1.8f, 0.0f) > 0.5f) {
                 func_800B9010(&this->actor, NA_SE_PL_DEKUNUTS_BUBLE_BREATH - SFX_FLAG);
                 return;
@@ -166,8 +166,8 @@ void func_8088A594(EnArrow* this, PlayState* play) {
             }
         }
     } else {
-        if ((this->actor.params != ENARROW_8) && (player->unk_D57 == 0)) {
-            if (this->actor.params == ENARROW_7) {
+        if ((this->actor.params != ARROW_TYPE_DEKU_NUT) && (player->unk_D57 == 0)) {
+            if (this->actor.params == ARROW_TYPE_DEKU_BUBBLE) {
                 Magic_Reset(play);
             }
             Actor_Kill(&this->actor);
@@ -175,22 +175,22 @@ void func_8088A594(EnArrow* this, PlayState* play) {
         }
 
         switch (this->actor.params) {
-            case ENARROW_6:
+            case ARROW_TYPE_6:
                 Player_PlaySfx(player, NA_SE_IT_SLING_SHOT);
                 break;
 
-            case ENARROW_0:
-            case ENARROW_1:
-            case ENARROW_2:
+            case ARROW_TYPE_NORMAL_LIT:
+            case ARROW_TYPE_NORMAL_HORSE:
+            case ARROW_TYPE_NORMAL:
                 Player_PlaySfx(player, NA_SE_IT_ARROW_SHOT);
                 break;
 
-            case ENARROW_3:
-            case ENARROW_4:
-            case ENARROW_5:
+            case ARROW_TYPE_FIRE:
+            case ARROW_TYPE_ICE:
+            case ARROW_TYPE_LIGHT:
                 Player_PlaySfx(player, NA_SE_IT_MAGIC_ARROW_SHOT);
 
-            case ENARROW_7:
+            case ARROW_TYPE_DEKU_BUBBLE:
                 Player_PlaySfx(player, NA_SE_PL_DEKUNUTS_FIRE);
                 break;
         }
@@ -198,13 +198,13 @@ void func_8088A594(EnArrow* this, PlayState* play) {
         this->actionFunc = func_8088ACE0;
         Math_Vec3f_Copy(&this->unk_228, &this->actor.world.pos);
 
-        if (this->actor.params == ENARROW_7) {
+        if (this->actor.params == ARROW_TYPE_DEKU_BUBBLE) {
             this->bubble.unk_144 = CLAMP_MIN(this->bubble.unk_144, 3.5f);
             func_8088A514(this);
             this->unk_260 = 99;
             Magic_Reset(play);
-        } else if (this->actor.params >= ENARROW_6) {
-            if ((this->actor.params == ENARROW_8) && (this->actor.world.rot.x < 0)) {
+        } else if (this->actor.params >= ARROW_TYPE_6) {
+            if ((this->actor.params == ARROW_TYPE_DEKU_NUT) && (this->actor.world.rot.x < 0)) {
                 Actor_SetScale(&this->actor, 0.009f);
                 this->unk_260 = 40;
             } else {
@@ -295,14 +295,14 @@ void func_8088AA98(EnArrow* this, PlayState* play) {
         EffectSsGRipple_Spawn(play, &sp44, 100, 500, 4);
         EffectSsGRipple_Spawn(play, &sp44, 100, 500, 8);
 
-        if ((this->actor.params == ENARROW_4) || (this->actor.params == ENARROW_3)) {
-            if ((this->actor.params == ENARROW_4) && (func_8088B6B0 != this->actionFunc)) {
+        if ((this->actor.params == ARROW_TYPE_ICE) || (this->actor.params == ARROW_TYPE_FIRE)) {
+            if ((this->actor.params == ARROW_TYPE_ICE) && (func_8088B6B0 != this->actionFunc)) {
                 Actor_Spawn(&play->actorCtx, play, ACTOR_BG_ICEFLOE, sp44.x, sp44.y, sp44.z, 0, 0, 0, 300);
                 Actor_Kill(&this->actor);
                 return;
             }
 
-            this->actor.params = ENARROW_2;
+            this->actor.params = ARROW_TYPE_NORMAL;
             this->collider.info.toucher.dmgFlags = 0x20;
 
             if (this->actor.child != NULL) {
@@ -329,9 +329,9 @@ void func_8088ACE0(EnArrow* this, PlayState* play) {
     s32 sp50;
 
     if ((DECR(this->unk_260) == 0) ||
-        ((this->actor.params == ENARROW_7) &&
+        ((this->actor.params == ARROW_TYPE_DEKU_BUBBLE) &&
          ((this->unk_262 != 0) || (phi_a2 = (this->collider.base.atFlags & AT_HIT) != 0)))) {
-        if (this->actor.params == ENARROW_7) {
+        if (this->actor.params == ARROW_TYPE_DEKU_BUBBLE) {
             if (phi_a2 && (this->collider.info.atHitInfo->elemType != ELEMTYPE_UNK4) &&
                 (this->collider.base.atFlags & AT_BOUNCED)) {
                 if ((this->collider.base.at != NULL) && (this->collider.base.at->id != ACTOR_OBJ_SYOKUDAI)) {
@@ -361,18 +361,18 @@ void func_8088ACE0(EnArrow* this, PlayState* play) {
         return;
     }
 
-    sp50 =
-        (this->actor.params != ENARROW_0) && (this->actor.params < ENARROW_8) && (this->collider.base.atFlags & AT_HIT);
+    sp50 = (this->actor.params != ARROW_TYPE_NORMAL_LIT) && (this->actor.params < ARROW_TYPE_DEKU_NUT) &&
+           (this->collider.base.atFlags & AT_HIT);
 
     if (sp50 || (this->unk_262 != 0)) {
-        if (this->actor.params >= ENARROW_6) {
+        if (this->actor.params >= ARROW_TYPE_6) {
             if (sp50) {
                 this->actor.world.pos.x = (this->actor.world.pos.x + this->actor.prevPos.x) * 0.5f;
                 this->actor.world.pos.y = (this->actor.world.pos.y + this->actor.prevPos.y) * 0.5f;
                 this->actor.world.pos.z = (this->actor.world.pos.z + this->actor.prevPos.z) * 0.5f;
             }
 
-            if (this->actor.params == ENARROW_8) {
+            if (this->actor.params == ARROW_TYPE_DEKU_NUT) {
                 R_TRANS_FADE_FLASH_ALPHA_STEP = -1;
                 Actor_Spawn(&play->actorCtx, play, ACTOR_EN_M_FIRE1, this->actor.world.pos.x, this->actor.world.pos.y,
                             this->actor.world.pos.z, 0, 0, 0, this->actor.speed == 0.0f);
@@ -408,12 +408,12 @@ void func_8088ACE0(EnArrow* this, PlayState* play) {
             } else if (this->unk_262 != 0) {
                 this->actionFunc = func_8088B630;
                 Animation_PlayOnce(&this->arrow.skelAnime, &gameplay_keep_Anim_0128BC);
-                if (this->actor.params >= ENARROW_0) {
+                if (this->actor.params >= ARROW_TYPE_NORMAL_LIT) {
                     this->unk_260 = 60;
                 } else {
                     this->unk_260 = 20;
                 }
-                if ((this->actor.params >= ENARROW_3) && (this->actor.params < ENARROW_6)) {
+                if (ARROW_IS_MAGICAL(this->actor.params)) {
                     this->actor.draw = NULL;
                 }
                 Actor_PlaySfx(&this->actor, NA_SE_IT_ARROW_STICK_OBJ);
@@ -422,7 +422,7 @@ void func_8088ACE0(EnArrow* this, PlayState* play) {
         }
     } else {
         func_8088AA98(this, play);
-        if (this->actor.params == ENARROW_7) {
+        if (this->actor.params == ARROW_TYPE_DEKU_BUBBLE) {
             if (this->bubble.unk_149 == 0) {
                 sp78 = sqrtf(SQ(this->actor.speed) + SQ(this->actor.velocity.y));
                 sp74 = Math_SinS(this->actor.world.rot.y) * this->actor.speed;
@@ -473,7 +473,7 @@ void func_8088ACE0(EnArrow* this, PlayState* play) {
             this->actor.wallBgId = spA8;
         }
 
-        if (this->actor.params < ENARROW_6) {
+        if (this->actor.params < ARROW_TYPE_6) {
             this->actor.shape.rot.x = Math_Atan2S_XY(this->actor.speed, -this->actor.velocity.y);
         }
     }
@@ -540,21 +540,27 @@ void EnArrow_Update(Actor* thisx, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if ((this->unk_263 != 0) ||
-        ((this->actor.params >= ENARROW_0) && ((this->actor.params == ENARROW_7) || (player->unk_D57 != 0))) ||
+        ((this->actor.params >= ARROW_TYPE_NORMAL_LIT) &&
+         ((this->actor.params == ARROW_TYPE_DEKU_BUBBLE) || (player->unk_D57 != 0))) ||
         !Player_InBlockingCsMode(play, player)) {
         this->actionFunc(this, play);
     }
 
-    if ((this->actor.params >= ENARROW_3) && (this->actor.params < ENARROW_6)) {
-        s16 sp44[] = { ACTOR_ARROW_FIRE, ACTOR_ARROW_ICE, ACTOR_ARROW_LIGHT };
+    if (ARROW_IS_MAGICAL(this->actor.params)) {
+        s16 sp44[] = {
+            ACTOR_ARROW_FIRE,  // ARROW_MAGIC_FIRE
+            ACTOR_ARROW_ICE,   // ARROW_MAGIC_ICE
+            ACTOR_ARROW_LIGHT, // ARROW_MAGIC_LIGHT
+        };
 
         if (this->actor.child == NULL) {
-            Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, sp44[this->actor.params - ENARROW_3],
+            Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, sp44[ARROW_GET_MAGIC_FROM_TYPE(this->actor.params)],
                                this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, 0);
         }
-    } else if (this->actor.params == ENARROW_0) {
+    } else if (this->actor.params == ARROW_TYPE_NORMAL_LIT) {
         func_800B0EB0(play, &this->unk_234, &D_8088C2CC, &D_8088C2D8, &D_8088C2E4, &D_8088C2E8, 100, 0, 8);
     }
+
     Math_Vec3f_Copy(&this->actor.home.pos, &this->actor.prevPos);
 }
 
@@ -579,8 +585,8 @@ void func_8088B88C(PlayState* play, EnArrow* this, EnArrowUnkStruct* arg2) {
         }
         Matrix_MultVec3f(&sp4C[0], &sp40);
         Matrix_MultVec3f(&sp4C[1], &sp34);
-        if (this->actor.params < ENARROW_8) {
-            sp30 = this->actor.params < ENARROW_6;
+        if (this->actor.params < ARROW_TYPE_DEKU_NUT) {
+            sp30 = this->actor.params < ARROW_TYPE_6;
             if (this->unk_264 == NULL) {
                 sp30 &= func_80126440(play, &this->collider, &this->unk_244, &sp40, &sp34);
             } else if (sp30 && (sp40.x == this->unk_244.tip.x) && (sp40.y == this->unk_244.tip.y) &&
@@ -635,11 +641,11 @@ void EnArrow_Draw(Actor* thisx, PlayState* play) {
     EnArrow* this = THIS;
     s32 phi_v0;
 
-    if (this->actor.params < ENARROW_6) {
+    if (this->actor.params < ARROW_TYPE_6) {
         func_8012C28C(play->state.gfxCtx);
         SkelAnime_DrawLod(play, this->arrow.skelAnime.skeleton, this->arrow.skelAnime.jointTable, NULL, NULL,
                           &this->actor, this->actor.projectedPos.z < 160.0f ? 0 : 1);
-    } else if (this->actor.params == ENARROW_7) {
+    } else if (this->actor.params == ARROW_TYPE_DEKU_BUBBLE) {
         s32 spA4 = 255 - (s32)(this->bubble.unk_144 * 4.0f);
         f32 spA0 = (this->actor.speed * 0.1f) + 1.0f;
         f32 sp9C = (1.0f / spA0);
@@ -697,7 +703,7 @@ void EnArrow_Draw(Actor* thisx, PlayState* play) {
 
         gSPClearGeometryMode(POLY_XLU_DISP++, G_FOG | G_LIGHTING);
 
-        if (this->actor.params == ENARROW_6) {
+        if (this->actor.params == ARROW_TYPE_6) {
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, 255);
             gDPSetEnvColor(POLY_XLU_DISP++, 0, 255, 255, sp63);
             sp5C = 50.0f;
@@ -737,5 +743,6 @@ void EnArrow_Draw(Actor* thisx, PlayState* play) {
 
         CLOSE_DISPS(play->state.gfxCtx);
     }
+
     func_8088B88C(play, this, &D_8088C2EC[0]);
 }

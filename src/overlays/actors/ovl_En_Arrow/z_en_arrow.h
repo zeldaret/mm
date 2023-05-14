@@ -7,17 +7,29 @@ struct EnArrow;
 
 typedef void (*EnArrowActionFunc)(struct EnArrow*, PlayState*);
 
-enum {
-    /* 0 */ ENARROW_0, // Lit arrow
-    /* 1 */ ENARROW_1, // Horse arrow
-    /* 2 */ ENARROW_2, // Normal arrow
-    /* 3 */ ENARROW_3, // Fire arrow
-    /* 4 */ ENARROW_4, // Ice arrow
-    /* 5 */ ENARROW_5, // Light arrow
-    /* 6 */ ENARROW_6, // ?
-    /* 7 */ ENARROW_7, // Deku bubble
-    /* 8 */ ENARROW_8, // Deku Nut
-};
+typedef enum ArrowType {
+    /* 0 */ ARROW_TYPE_NORMAL_LIT, // Normal arrow lit on fire
+    /* 1 */ ARROW_TYPE_NORMAL_HORSE, // Normal arrow shot while riding a horse
+    /* 2 */ ARROW_TYPE_NORMAL,
+    /* 3 */ ARROW_TYPE_FIRE,
+    /* 4 */ ARROW_TYPE_ICE,
+    /* 5 */ ARROW_TYPE_LIGHT,
+    /* 6 */ ARROW_TYPE_6,
+    /* 7 */ ARROW_TYPE_DEKU_BUBBLE,
+    /* 8 */ ARROW_TYPE_DEKU_NUT,
+} ArrowType;
+
+#define ARROW_IS_MAGICAL(arrowType) (((arrowType) >= ARROW_TYPE_FIRE) && ((arrowType) <= ARROW_TYPE_LIGHT))
+#define ARROW_GET_MAGIC_FROM_TYPE(arrowType) (((s32)arrowType) - ARROW_TYPE_FIRE)
+
+typedef enum ArrowMagic {
+    /* -1 */ ARROW_MAGIC_INVALID = -1,
+    /*  0 */ ARROW_MAGIC_FIRE = ARROW_GET_MAGIC_FROM_TYPE(ARROW_TYPE_FIRE),
+    /*  1 */ ARROW_MAGIC_ICE = ARROW_GET_MAGIC_FROM_TYPE(ARROW_TYPE_ICE),
+    /*  2 */ ARROW_MAGIC_LIGHT = ARROW_GET_MAGIC_FROM_TYPE(ARROW_TYPE_LIGHT),
+    /*  3 */ ARROW_MAGIC_3 /* = ARROW_GET_MAGIC_FROM_TYPE(ARROW_TYPE_6) */
+} ArrowMagic;
+
 
 typedef struct {
     /* 0x144 */ SkelAnime skelAnime;
