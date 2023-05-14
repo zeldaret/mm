@@ -3,7 +3,7 @@
  * Overlay: ovl_En_Twig
  * Description: Beaver Race Ring
  */
-
+#include "prevent_bss_reordering.h"
 #include "z_en_twig.h"
 #include "objects/object_twig/object_twig.h"
 
