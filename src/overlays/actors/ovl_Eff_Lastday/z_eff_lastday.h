@@ -15,7 +15,7 @@ typedef struct EffLastday {
     /* 0x148 */ AnimatedMaterial* matAnim;
     /* 0x14C */ s16 step;
     /* 0x14E */ s16 alpha;
-    /* 0x150 */ s16 csActionCmd;
+    /* 0x150 */ s16 cueType;
     /* 0x154 */ EffLastdayActionFunc actionFunc;
 } EffLastday; // size = 0x158
 

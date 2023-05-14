@@ -44,8 +44,8 @@ typedef struct EnOwl {
     /* 0x3F4 */ Path* path;
     /* 0x3F8 */ s32 unk_3F8;
     /* 0x3FC */ s32 unk_3FC;
-    /* 0x400 */ s16 unk_400[3];
-    /* 0x406 */ s16 unk_406;
+    /* 0x400 */ s16 csIdList[3];
+    /* 0x406 */ s16 csIdIndex;
     /* 0x408 */ u8 unk_408;
     /* 0x409 */ u8 unk_409;
     /* 0x40A */ u8 unk_40A;

@@ -124,23 +124,23 @@ Actor* func_80C1D78C(PlayState* play) {
 
 void func_80C1D7FC(DmAh* this, PlayState* play) {
     s32 D_80C1DE00[] = { 0, 0, 0, 0, 0 };
-    u16 csAction;
-    s32 actionIndex;
+    u16 cueId;
+    s32 cueChannel;
 
-    if (play->csCtx.state != 0) {
+    if (play->csCtx.state != CS_STATE_IDLE) {
         if (!this->unk_29C) {
-            this->action = 0xFF;
+            this->cueId = 255;
             this->unk_29C = true;
             this->animationIndex2 = this->animationIndex;
         }
-        if (Cutscene_CheckActorAction(play, 0x232)) {
-            actionIndex = Cutscene_GetActorActionIndex(play, 0x232);
-            csAction = play->csCtx.actorActions[actionIndex]->action;
-            if (this->action != (u8)csAction) {
-                this->action = csAction;
-                func_80C1D410(this, D_80C1DE00[csAction]);
+        if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_562)) {
+            cueChannel = Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_562);
+            cueId = play->csCtx.actorCues[cueChannel]->id;
+            if (this->cueId != (u8)cueId) {
+                this->cueId = cueId;
+                func_80C1D410(this, D_80C1DE00[cueId]);
             }
-            Cutscene_ActorTranslateAndYaw(&this->actor, play, actionIndex);
+            Cutscene_ActorTranslateAndYaw(&this->actor, play, cueChannel);
         }
     } else if (this->unk_29C) {
         this->unk_29C = false;
