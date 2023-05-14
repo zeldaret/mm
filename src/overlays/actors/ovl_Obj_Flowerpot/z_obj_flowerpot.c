@@ -4,6 +4,7 @@
  * Description: Breakable Pot With Grass
  */
 
+#include "prevent_bss_reordering.h"
 #include "z_obj_flowerpot.h"
 #include "objects/object_flowerpot/object_flowerpot.h"
 
