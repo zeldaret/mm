@@ -10,6 +10,7 @@
 #include "z_en_syateki_man.h"
 #include "overlays/actors/ovl_En_Syateki_Crow/z_en_syateki_crow.h"
 #include "overlays/actors/ovl_En_Syateki_Dekunuts/z_en_syateki_dekunuts.h"
+#include "overlays/actors/ovl_En_Syateki_Okuta/z_en_syateki_okuta.h"
 #include "overlays/actors/ovl_En_Syateki_Wf/z_en_syateki_wf.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_CANT_LOCK_ON)
@@ -201,7 +202,7 @@ void EnSyatekiMan_Init(Actor* thisx, PlayState* play) {
     this->shootingGameState = SG_GAME_STATE_NONE;
     this->talkWaitTimer = 15;
     this->flagsIndex = 0;
-    this->perGameVar2.octorokHitType = SG_OCTO_HIT_TYPE_NONE;
+    this->perGameVar2.octorokHitType = EN_SYATEKI_OKUTA_TYPE_NONE;
     this->octorokFlags = 0;
     this->dekuScrubFlags = 0;
     this->guayFlags = 0;
@@ -1038,7 +1039,7 @@ void EnSyatekiMan_Swamp_RunGame(EnSyatekiMan* this, PlayState* play) {
         this->perGameVar1.guaySpawnTimer = 0;
         Actor_PlaySfx(&this->actor, NA_SE_SY_FOUND);
         this->guayFlags = sGuayFlagsPerWave[this->flagsIndex];
-        if (this->flagsIndex == 3) {
+        if (this->flagsIndex == ARRAY_COUNT(sGuayFlagsPerWave) - 1) {
             this->flagsIndex = 0;
         } else {
             this->flagsIndex++;
@@ -1227,7 +1228,7 @@ void EnSyatekiMan_Town_StartGame(EnSyatekiMan* this, PlayState* play) {
         this->score = 0;
         this->flagsIndex = 0;
         this->perGameVar1.octorokState = SG_OCTO_STATE_INITIAL;
-        this->perGameVar2.octorokHitType = SG_OCTO_HIT_TYPE_NONE;
+        this->perGameVar2.octorokHitType = EN_SYATEKI_OKUTA_TYPE_NONE;
         sGameStartTimer = 30;
         Interface_StartTimer(TIMER_ID_MINIGAME_1, 75);
         this->actor.draw = NULL;
@@ -1323,13 +1324,13 @@ void EnSyatekiMan_Town_RunGame(EnSyatekiMan* this, PlayState* play) {
             this->perGameVar1.octorokState = SG_OCTO_STATE_HIDING;
         }
 
-        if (this->perGameVar2.octorokHitType != SG_OCTO_HIT_TYPE_NONE) {
-            if (this->perGameVar2.octorokHitType == SG_OCTO_HIT_TYPE_BLUE) {
+        if (this->perGameVar2.octorokHitType != EN_SYATEKI_OKUTA_TYPE_NONE) {
+            if (this->perGameVar2.octorokHitType == EN_SYATEKI_OKUTA_TYPE_BLUE) {
                 gSaveContext.timerTimeLimits[TIMER_ID_MINIGAME_1] -= SECONDS_TO_TIMER_PRECISE(2, 50);
                 sModFromLosingTime = (sModFromLosingTime + 25) % 50;
             }
 
-            this->perGameVar2.octorokHitType = SG_OCTO_HIT_TYPE_NONE;
+            this->perGameVar2.octorokHitType = EN_SYATEKI_OKUTA_TYPE_NONE;
         }
 
         if (this->perGameVar1.octorokState == SG_OCTO_STATE_SPAWNING) {
@@ -1340,7 +1341,7 @@ void EnSyatekiMan_Town_RunGame(EnSyatekiMan* this, PlayState* play) {
         // that the player might have lost time from hitting Blue Octoroks, so we do something similar to
         // what was done with waveTimer above.
         if ((sModFromLosingTime == (timer % 50)) && (this->perGameVar1.octorokState >= SG_OCTO_STATE_INITIAL)) {
-            if (this->flagsIndex < 15) {
+            if (this->flagsIndex < ARRAY_COUNT(sOctorokFlagsPerWave)) {
                 this->octorokFlags = sOctorokFlagsPerWave[this->flagsIndex++];
                 Actor_PlaySfx(&this->actor, NA_SE_SY_FOUND);
                 this->perGameVar1.octorokState = SG_OCTO_STATE_SPAWNING;

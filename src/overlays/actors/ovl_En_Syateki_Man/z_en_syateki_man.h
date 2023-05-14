@@ -29,12 +29,6 @@ typedef enum {
 } ShootingGalleryOctorokState;
 
 typedef enum {
-    /* 0 */ SG_OCTO_HIT_TYPE_NONE,
-    /* 1 */ SG_OCTO_HIT_TYPE_RED,
-    /* 2 */ SG_OCTO_HIT_TYPE_BLUE
-} ShootingGalleryoctorokHitType;
-
-typedef enum {
     /* 0 */ SG_PATH_TYPE_CROW,
     /* 1 */ SG_PATH_TYPE_SCRUB_NORMAL,
     /* 2 */ SG_PATH_TYPE_WOLFOS,
