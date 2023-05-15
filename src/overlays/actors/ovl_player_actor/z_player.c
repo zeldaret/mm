@@ -3724,7 +3724,7 @@ s32 func_808305BC(PlayState* play, Player* this, ItemId* item, ArrowType* typePa
 
     if (this->transformation == PLAYER_FORM_DEKU) {
         return ((gSaveContext.save.saveInfo.playerData.magic >= 2) ||
-                ((CHECK_WEEKEVENTREG(WEEKEVENTREG_08_01)) && (play->sceneId == SCENE_BOWLING)))
+                (CHECK_WEEKEVENTREG(WEEKEVENTREG_08_01) && (play->sceneId == SCENE_BOWLING)))
                    ? 1
                    : 0;
     }
