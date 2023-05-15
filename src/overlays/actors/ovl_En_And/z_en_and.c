@@ -29,7 +29,7 @@ ActorInit En_And_InitVars = {
     (ActorFunc)EnAnd_Draw,
 };
 
-static AnimationInfoS sAnimationInfo[8] = {
+static AnimationInfoS sAnimationInfo[] = {
     { &gAndStaticAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
     { &gAndIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
     { &gAndWalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
@@ -136,8 +136,8 @@ void EnAnd_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
         overrideRot = false;
     }
 
-    if (limbIndex != OBJECT_AND_LIMB_TORSO) {
-        if (limbIndex == OBJECT_AND_LIMB_HEAD) {
+    switch (limbIndex) {
+        case OBJECT_AND_LIMB_HEAD:
             SubS_UpdateLimb(this->headRotZ + this->torsoRotZ + 0x4000,
                             this->headRotY + this->torsoRotY + this->actor.shape.rot.y + 0x4000, &this->headComputedPos,
                             &this->headComputedRot, stepRot, overrideRot);
@@ -148,17 +148,22 @@ void EnAnd_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
             Matrix_RotateXS(this->headComputedRot.x, MTXMODE_APPLY);
             Matrix_RotateZS(this->headComputedRot.z, MTXMODE_APPLY);
             Matrix_Push();
-        }
-    } else {
-        SubS_UpdateLimb(this->torsoRotZ + 0x4000, this->torsoRotY + this->actor.shape.rot.y + 0x4000,
-                        &this->torsoComputedPos, &this->torsoComputedRot, stepRot, overrideRot);
-        Matrix_Pop();
-        Matrix_Translate(this->torsoComputedPos.x, this->torsoComputedPos.y, this->torsoComputedPos.z, MTXMODE_NEW);
-        Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-        Matrix_RotateYS(this->torsoComputedRot.y, MTXMODE_APPLY);
-        Matrix_RotateXS(this->torsoComputedRot.x, MTXMODE_APPLY);
-        Matrix_RotateZS(this->torsoComputedRot.z, MTXMODE_APPLY);
-        Matrix_Push();
+            break;
+
+        case OBJECT_AND_LIMB_TORSO:
+            SubS_UpdateLimb(this->torsoRotZ + 0x4000, this->torsoRotY + this->actor.shape.rot.y + 0x4000,
+                            &this->torsoComputedPos, &this->torsoComputedRot, stepRot, overrideRot);
+            Matrix_Pop();
+            Matrix_Translate(this->torsoComputedPos.x, this->torsoComputedPos.y, this->torsoComputedPos.z, MTXMODE_NEW);
+            Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
+            Matrix_RotateYS(this->torsoComputedRot.y, MTXMODE_APPLY);
+            Matrix_RotateXS(this->torsoComputedRot.x, MTXMODE_APPLY);
+            Matrix_RotateZS(this->torsoComputedRot.z, MTXMODE_APPLY);
+            Matrix_Push();
+            break;
+
+        default:
+            break;
     }
 }
 
