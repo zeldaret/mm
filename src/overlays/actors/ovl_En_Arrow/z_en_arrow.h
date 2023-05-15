@@ -14,9 +14,9 @@ typedef enum ArrowType {
     /* 3 */ ARROW_TYPE_FIRE,
     /* 4 */ ARROW_TYPE_ICE,
     /* 5 */ ARROW_TYPE_LIGHT,
-    /* 6 */ ARROW_TYPE_6,
+    /* 6 */ ARROW_TYPE_SLINGSHOT,
     /* 7 */ ARROW_TYPE_DEKU_BUBBLE,
-    /* 8 */ ARROW_TYPE_DEKU_NUT,
+    /* 8 */ ARROW_TYPE_DEKU_NUT
 } ArrowType;
 
 #define ARROW_IS_MAGICAL(arrowType) (((arrowType) >= ARROW_TYPE_FIRE) && ((arrowType) <= ARROW_TYPE_LIGHT))
@@ -27,7 +27,7 @@ typedef enum ArrowMagic {
     /*  0 */ ARROW_MAGIC_FIRE = ARROW_GET_MAGIC_FROM_TYPE(ARROW_TYPE_FIRE),
     /*  1 */ ARROW_MAGIC_ICE = ARROW_GET_MAGIC_FROM_TYPE(ARROW_TYPE_ICE),
     /*  2 */ ARROW_MAGIC_LIGHT = ARROW_GET_MAGIC_FROM_TYPE(ARROW_TYPE_LIGHT),
-    /*  3 */ ARROW_MAGIC_3 /* = ARROW_GET_MAGIC_FROM_TYPE(ARROW_TYPE_6) */
+    /*  3 */ ARROW_MAGIC_DEKU_BUBBLE // Only used in Player. Does not map to ARROW_TYPE_SLINGSHOT
 } ArrowMagic;
 
 

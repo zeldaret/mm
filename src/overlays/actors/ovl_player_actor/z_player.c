@@ -3714,7 +3714,7 @@ void func_808304BC(Player* this, PlayState* play) {
 s32 func_808305BC(PlayState* play, Player* this, ItemId* item, ArrowType* typeParam) {
     if (this->heldItemAction == PLAYER_IA_NUT) {
         *item = ITEM_NUT;
-        *typeParam = (this->transformation == PLAYER_FORM_DEKU) ? ARROW_TYPE_DEKU_BUBBLE : ARROW_TYPE_6;
+        *typeParam = (this->transformation == PLAYER_FORM_DEKU) ? ARROW_TYPE_DEKU_BUBBLE : ARROW_TYPE_SLINGSHOT;
     } else {
         *item = ITEM_BOW;
         *typeParam = (this->stateFlags1 & PLAYER_STATE1_800000)
@@ -3751,7 +3751,7 @@ u8 sMagicArrowCosts[] = {
     4, // ARROW_MAGIC_FIRE
     4, // ARROW_MAGIC_ICE
     8, // ARROW_MAGIC_LIGHT
-    2, // ARROW_MAGIC_3
+    2, // ARROW_MAGIC_DEKU_BUBBLE
 };
 
 // Draw bow or hookshot / first person items?
@@ -3783,11 +3783,11 @@ s32 func_808306F8(Player* this, PlayState* play) {
                         (ARROW_GET_MAGIC_FROM_TYPE(arrowType) <= ARROW_MAGIC_LIGHT)) {
                         if (((void)0, gSaveContext.save.saveInfo.playerData.magic) < sMagicArrowCosts[magicArrowType]) {
                             arrowType = ARROW_TYPE_NORMAL;
-                            magicArrowType = -1;
+                            magicArrowType = ARROW_MAGIC_INVALID;
                         }
                     } else if ((arrowType == ARROW_TYPE_DEKU_BUBBLE) &&
                                (!CHECK_WEEKEVENTREG(WEEKEVENTREG_08_01) || (play->sceneId != SCENE_BOWLING))) {
-                        magicArrowType = ARROW_MAGIC_3;
+                        magicArrowType = ARROW_MAGIC_DEKU_BUBBLE;
                     } else {
                         magicArrowType = ARROW_MAGIC_INVALID;
                     }
