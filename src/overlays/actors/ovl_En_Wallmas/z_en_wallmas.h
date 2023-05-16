@@ -8,6 +8,8 @@
 #define WALLMASTER_GET_SWITCH_FLAG(thisx) (((thisx)->params >> 8) & 0xFF)
 #define WALLMASTER_IS_FROZEN(thisx) ((thisx)->params & 0x80)
 
+#define WALLMASTER_PARAMS(type, switchFlag, isFrozen) ((type) | (((switchFlag) << 8) & 0xFF) | (((isFrozen) << 7) & 0x80))
+
 /**
  * This type determines under what conditions the Wallmaster will drop from the ceiling.
  * - WALLMASTER_TYPE_TIMER_ONLY: These Wallmasters don't check for anything to determine
