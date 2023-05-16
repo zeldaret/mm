@@ -3899,7 +3899,7 @@ void Interface_DrawItemButtons(PlayState* play) {
     }
 
     if (interfaceCtx->tatlCalling && (play->pauseCtx.state == PAUSE_STATE_OFF) &&
-        (play->pauseCtx.debugEditor == DEBUG_EDITOR_NONE) && (play->csCtx.state == 0) &&
+        (play->pauseCtx.debugEditor == DEBUG_EDITOR_NONE) && (play->csCtx.state == CS_STATE_IDLE) &&
         (sPictoState == PICTO_BOX_STATE_OFF)) {
         if (sCUpInvisible == 0) {
             // C-Up Button Texture, Color & Label (Tatl Text)
