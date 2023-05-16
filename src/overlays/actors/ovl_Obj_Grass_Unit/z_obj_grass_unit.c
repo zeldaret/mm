@@ -1,7 +1,14 @@
 /*
  * File: z_obj_grass_unit.c
  * Overlay: ovl_Obj_Grass_Unit
- * Description: Spawner for circular patch of grass
+ * Description: Initializes a pattern of grass to be passed to an ObjGrass instance.
+ *
+ * ObjGrassUnit instances are intended to be spawned from room data so that just one ObjGrass instance manages the grass
+ * for that room. When a room with ObjGrassUnit spawns loads, it allocates ovl_Obj_Grass_Unit and creates N instances of
+ * ObjGrassUnit. The first instance processed initializes sGrassManager, then all instances live on that cycle pass type
+ * and position data to that ObjGrass instance before calling Actor_Kill. Since ovl_Obj_Grass_Unit uses
+ * ALLOCTYPE_NORMAL, it is deleted and loses the reference to the newly created ObjGrass. This allows for ObjGrassUnit
+ * spawned in a different room to be associated to a new ObjGrass instance.
  */
 
 #include "z_obj_grass_unit.h"
@@ -20,29 +27,26 @@ ActorInit Obj_Grass_Unit_InitVars = {
     (ActorFunc)Actor_Noop, (ActorFunc)Actor_Noop, (ActorFunc)NULL,
 };
 
-typedef struct {
-    f32 distance;
-    s16 rotY;
-} PolarCoord;
-
-static PolarCoord sGrassPatternCircle[] = {
+// Neat circular pattern with a single bush in the center
+static VecPolar sGrassPatternCircle[] = {
     { 0.0f, 0x0000 },  { 80.0f, 0x0000 }, { 80.0f, 0x2000 }, { 80.0f, 0x4000 }, { 80.0f, 0x6000 },
     { 80.0f, 0x8000 }, { 80.0f, 0xA000 }, { 80.0f, 0xC000 }, { 80.0f, 0xE000 },
 };
 
-PolarCoord sGrassPattern2[] = {
+// "Random" looking pattern
+static VecPolar sGrassPatternMixed[] = {
     { 40.0f, 0x0666 }, { 40.0f, 0x2CCC }, { 40.0f, 0x5999 }, { 40.0f, 0x8667 }, { 20.0f, 0xC000 }, { 80.0f, 0x1333 },
     { 80.0f, 0x4000 }, { 80.0f, 0x6CCC }, { 80.0f, 0x9334 }, { 80.0f, 0xACCD }, { 80.0f, 0xC667 }, { 60.0f, 0xE000 },
 };
 
 typedef struct {
-    s32 count;
-    PolarCoord* positions;
-} ObjGrassUnitPattern;
+    /* 0x0 */ s32 count;
+    /* 0x4 */ VecPolar* positions;
+} ObjGrassUnitPattern; // size = 0x8
 
 static ObjGrassUnitPattern sGrassPatterns[2] = {
     { ARRAY_COUNT(sGrassPatternCircle), sGrassPatternCircle },
-    { ARRAY_COUNT(sGrassPattern2), sGrassPattern2 },
+    { ARRAY_COUNT(sGrassPatternMixed), sGrassPatternMixed },
 };
 
 ObjGrass* sGrassManager = NULL;
@@ -98,14 +102,13 @@ void ObjGrassUnit_Init(Actor* this, PlayState* play2) {
     f32 homePosYSum;
     f32 tmp;
     s32 i;
-    PolarCoord* grassPos;
+    VecPolar* grassPos;
     CollisionPoly* poly;
     s32 bgId;
     ObjGrassElement* grassElem;
     ObjGrassUnitPattern* grassPattern;
-    s8 dropTable;
+    s8 dropTable = OBJGRASSUNIT_GET_DROPTABLE(this);
 
-    dropTable = ((s16)this->params >> 8) & 0x1F;
     if ((sGrassManager == NULL) && !ObjGrassUnit_SpawnObjGrass(this, play)) {
         Actor_Kill(this);
         return;
@@ -133,7 +136,7 @@ void ObjGrassUnit_Init(Actor* this, PlayState* play2) {
     homePosYSum = 0.0f;
     grassGroup = &grassManager->grassGroups[sGrassManager->activeGrassGroups];
     grassGroup->count = 0;
-    grassPattern = &sGrassPatterns[(this->params & 1)];
+    grassPattern = &sGrassPatterns[OBJGRASSUNIT_GET_PATTERN(this)];
 
     for (i = 0; i < grassPattern->count; i++) {
         grassElem = &grassGroup->elements[grassGroup->count];
@@ -150,7 +153,7 @@ void ObjGrassUnit_Init(Actor* this, PlayState* play2) {
             grassElem->rotY = (s16)(Rand_Next() >> 0x10);
             grassElem->dropTable = dropTable;
             if (ObjGrassUnit_IsUnderwater(play, &grassElem->pos)) {
-                grassElem->elem_flags |= 8;
+                grassElem->flags |= OBJ_GRASS_ELEM_UNDERWATER;
             }
             homePosYSum += grassElem->pos.y;
         }

@@ -1,7 +1,9 @@
 /*
  * File: z_obj_grass.c
  * Overlay: ovl_Obj_Grass
- * Description: "Master" instance of grass for unit spawned by Obj_Grass_Unit
+ * Description: Optimized manager for processing grass "spawned" by ObjGrassUnit
+ *
+ * Instances of ObjGrass must be spawned by ObjGrassUnit to function correctly.
  */
 
 #include "z_obj_grass.h"
@@ -20,7 +22,7 @@ void ObjGrass_Draw(Actor* thisx, PlayState* play);
 ObjGrassGroup* sNearestGrassGroups[4];
 f32 sNearestGrassGroupsDist[4];
 ObjGrassElement* sNearestGrassElements[OBJ_GRASS_NUM_COLLIDERS];
-f32 sNearestGrassElementsDist[OBJ_GRASS_NUM_COLLIDERS];
+f32 sNearestGrassElementsDistSq[OBJ_GRASS_NUM_COLLIDERS];
 
 #include "overlays/ovl_Obj_Grass/ovl_Obj_Grass.c"
 
@@ -67,17 +69,17 @@ static s16 sFragmentScales[] = { 108, 102, 96, 84, 66, 55, 42, 38 };
 
 s32 func_809A9110(PlayState* play, Vec3f* pos) {
     f32 w;
-    Vec3f sp20;
+    Vec3f projectedPos;
 
-    SkinMatrix_Vec3fMtxFMultXYZW(&play->viewProjectionMtxF, pos, &sp20, &w);
+    SkinMatrix_Vec3fMtxFMultXYZW(&play->viewProjectionMtxF, pos, &projectedPos, &w);
 
-    if ((play->projectionMtxFDiagonal.z * -130.13191f) < sp20.z) {
+    if ((play->projectionMtxFDiagonal.z * -130.13191f) < projectedPos.z) {
         if (w < 1.0f) {
             w = 1.0f;
         }
 
-        if (((fabsf(sp20.x) - (130.13191f * play->projectionMtxFDiagonal.x)) < w) &&
-            ((fabsf(sp20.y) - (130.13191f * play->projectionMtxFDiagonal.y)) < w)) {
+        if (((fabsf(projectedPos.x) - (130.13191f * play->projectionMtxFDiagonal.x)) < w) &&
+            ((fabsf(projectedPos.y) - (130.13191f * play->projectionMtxFDiagonal.y)) < w)) {
             return true;
         }
     }
@@ -173,7 +175,7 @@ void ObjGrass_Destroy(Actor* thisx, PlayState* play) {
     }
 }
 
-void func_809A9790(ObjGrass* this, PlayState* play) {
+void ObjGrass_ProcessColliders(ObjGrass* this, PlayState* play) {
     s32 i;
 
     for (i = 0; i < ARRAY_COUNT(this->grassElemColliders); i++) {
@@ -182,25 +184,25 @@ void func_809A9790(ObjGrass* this, PlayState* play) {
         if ((grassElem != NULL) && (this->grassElemColliders[i].collider.base.acFlags & AC_HIT)) {
             ObjGrass_SpawnFragments(&grassElem->pos, play);
             ObjGrass_DropCollectible(grassElem, play);
-            grassElem->elem_flags |= 4;
+            grassElem->flags |= OBJ_GRASS_ELEM_REMOVED;
             SoundSource_PlaySfxAtFixedWorldPos(play, &grassElem->pos, 20, NA_SE_EV_PLANT_BROKEN);
         }
     }
 }
 
-void func_809A983C(ObjGrass* this, PlayState* play) {
+void ObjGrass_UpdateGrass(ObjGrass* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     s32 i;
     s32 j;
     s32 x;
     s32 y;
-    f32 dist;
+    f32 distSq;
     ObjGrassGroup* grassGroup;
     s16 yaw;
 
     for (i = 0; i < ARRAY_COUNT(sNearestGrassElements); i++) {
         sNearestGrassElements[i] = NULL;
-        sNearestGrassElementsDist[i] = SQ(650.0f);
+        sNearestGrassElementsDistSq[i] = SQ(650.0f);
     }
 
     for (i = 0; i < ARRAY_COUNT(sNearestGrassGroups); i++) {
@@ -212,16 +214,16 @@ void func_809A983C(ObjGrass* this, PlayState* play) {
         grassGroup = &this->grassGroups[i];
 
         for (j = 0; j < grassGroup->count; j++) {
-            grassGroup->elements[j].elem_flags &= (u16)~2;
+            grassGroup->elements[j].flags &= (u16)~OBJ_GRASS_ELEM_ANIM;
         }
     }
 
     for (i = 0; i < this->activeGrassGroups; i++) {
         grassGroup = &this->grassGroups[i];
-        dist = Math3D_Vec3fDistSq(&grassGroup->homePos, &player->actor.world.pos);
+        distSq = Math3D_Vec3fDistSq(&grassGroup->homePos, &player->actor.world.pos);
 
         for (j = 0; j < ARRAY_COUNT(sNearestGrassGroupsDist); j++) {
-            if (dist < sNearestGrassGroupsDist[j]) {
+            if (distSq < sNearestGrassGroupsDist[j]) {
                 break;
             }
         }
@@ -232,7 +234,7 @@ void func_809A983C(ObjGrass* this, PlayState* play) {
                 sNearestGrassGroups[x + 1] = sNearestGrassGroups[x];
             }
 
-            sNearestGrassGroupsDist[j] = dist;
+            sNearestGrassGroupsDist[j] = distSq;
             sNearestGrassGroups[j] = grassGroup;
         }
     }
@@ -244,25 +246,25 @@ void func_809A983C(ObjGrass* this, PlayState* play) {
 
         if (grassGroup != NULL) {
             for (j = 0; j < grassGroup->count; j++) {
-                if (!(grassGroup->elements[j].elem_flags & 4)) {
-                    dist = Math3D_Vec3fDistSq(&grassGroup->elements[j].pos, &player->actor.world.pos);
+                if (!(grassGroup->elements[j].flags & OBJ_GRASS_ELEM_REMOVED)) {
+                    distSq = Math3D_Vec3fDistSq(&grassGroup->elements[j].pos, &player->actor.world.pos);
 
-                    for (x = 0; x < ARRAY_COUNT(sNearestGrassElementsDist); x++) {
-                        if (dist < sNearestGrassElementsDist[x]) {
+                    for (x = 0; x < ARRAY_COUNT(sNearestGrassElementsDistSq); x++) {
+                        if (distSq < sNearestGrassElementsDistSq[x]) {
                             break;
                         }
                     }
 
-                    if (x < ARRAY_COUNT(sNearestGrassElementsDist)) {
-                        for (y = ARRAY_COUNT(sNearestGrassElementsDist) - 2; y >= x; y--) {
-                            sNearestGrassElementsDist[y + 1] = sNearestGrassElementsDist[y];
+                    if (x < ARRAY_COUNT(sNearestGrassElementsDistSq)) {
+                        for (y = ARRAY_COUNT(sNearestGrassElementsDistSq) - 2; y >= x; y--) {
+                            sNearestGrassElementsDistSq[y + 1] = sNearestGrassElementsDistSq[y];
                             sNearestGrassElements[y + 1] = sNearestGrassElements[y];
                         }
 
-                        sNearestGrassElementsDist[x] = dist;
+                        sNearestGrassElementsDistSq[x] = distSq;
                         sNearestGrassElements[x] = &grassGroup->elements[j];
 
-                        if (dist < 2500.0f) {
+                        if (distSq < SQ(50.0f)) {
                             yaw = player->actor.shape.rot.y -
                                   Math_Vec3f_Yaw(&player->actor.world.pos, &grassGroup->elements[j].pos);
 
@@ -290,7 +292,7 @@ void func_809A983C(ObjGrass* this, PlayState* play) {
             grassCol->collider.dim.pos.z = grassElem->pos.z;
             CollisionCheck_SetAC(play, &play->colChkCtx, &grassCol->collider.base);
             CollisionCheck_SetOC(play, &play->colChkCtx, &grassCol->collider.base);
-            grassElem->elem_flags |= 2;
+            grassElem->flags |= OBJ_GRASS_ELEM_ANIM;
             grassCol->entity = grassElem;
         } else {
             grassCol->entity = NULL;
@@ -298,7 +300,7 @@ void func_809A983C(ObjGrass* this, PlayState* play) {
     }
 }
 
-void func_809A9DB8(ObjGrass* this) {
+void ObjGrass_CalcAnimationMatrices(ObjGrass* this) {
     s32 i;
     s32 pad;
     f32* ptr;
@@ -345,8 +347,8 @@ void func_809A9DB8(ObjGrass* this) {
     sp6C[6] = (temp_f26 - temp_f22) * temp_f22 * temp_f20 * temp_f16 * 0.0015f;
     sp6C[7] = (spA4 - temp_f20) * sp94 * sp90 * temp_f16 * 0.0015f;
 
-    for (i = 0; i < ARRAY_COUNT(this->unk_2F88); i++) {
-        ptr = &this->unk_2F88[i].mf[0][0];
+    for (i = 0; i < ARRAY_COUNT(this->distortionMtx); i++) {
+        ptr = &this->distortionMtx[i].mf[0][0];
 
         tempf1 = sp6C[(i + 0) & 7];
         tempf2 = sp6C[(i + 1) & 7];
@@ -379,9 +381,9 @@ void func_809A9DB8(ObjGrass* this) {
 void ObjGrass_Update(Actor* thisx, PlayState* play) {
     ObjGrass* this = THIS;
 
-    func_809A9790(this, play);
-    func_809A983C(this, play);
-    func_809A9DB8(this);
+    ObjGrass_ProcessColliders(this, play);
+    ObjGrass_UpdateGrass(this, play);
+    ObjGrass_CalcAnimationMatrices(this);
 }
 
 void ObjGrass_InitDraw(ObjGrass* this, PlayState* play) {
@@ -403,16 +405,17 @@ void ObjGrass_InitDraw(ObjGrass* this, PlayState* play) {
             for (j = 0; j < grassGroup->count; j++) {
                 grassElem = &grassGroup->elements[j];
 
-                if (grassElem->elem_flags & 4) {
+                if (grassElem->flags & OBJ_GRASS_ELEM_REMOVED) {
                     grassElem->alpha = 255;
-                    grassElem->elem_flags &= ~1;
+                    grassElem->flags &= ~OBJ_GRASS_ELEM_DRAW;
                 } else {
-                    grassElem->elem_flags |= 1;
+                    grassElem->flags |= OBJ_GRASS_ELEM_DRAW;
                     if (eyeDist < SQ(980.0f)) {
                         grassElem->alpha = 255;
                     } else {
                         distSq = Math3D_Vec3fDistSq(&grassElem->pos, &GET_ACTIVE_CAM(play)->eye);
-                        if ((distSq <= SQ(1080.0f)) || ((grassElem->elem_flags & 8) && (distSq < SQ(1180.0f)))) {
+                        if ((distSq <= SQ(1080.0f)) ||
+                            ((grassElem->flags & OBJ_GRASS_ELEM_UNDERWATER) && (distSq < SQ(1180.0f)))) {
                             grassElem->alpha = 255;
                         } else if (distSq >= SQ(1180.0f)) {
                             grassElem->alpha = 0;
@@ -435,7 +438,7 @@ void ObjGrass_DrawOpa(Actor* thisx, PlayState* play2) {
     ObjGrassGroup* grassGroup;
     s32 i;
     s32 j;
-    Vec3s sp70 = { 0, 0, 0 };
+    Vec3s rot = { 0, 0, 0 };
     ObjGrassElement* grassElem;
 
     OPEN_DISPS(play->state.gfxCtx);
@@ -456,12 +459,12 @@ void ObjGrass_DrawOpa(Actor* thisx, PlayState* play2) {
             for (j = 0; j < grassGroup->count; j++) {
                 grassElem = &grassGroup->elements[j];
 
-                if ((grassElem->elem_flags & 1) && (grassElem->alpha == 255)) {
-                    sp70.y = grassElem->rotY;
-                    Matrix_SetTranslateRotateYXZ(grassElem->pos.x, grassElem->pos.y, grassElem->pos.z, &sp70);
+                if ((grassElem->flags & OBJ_GRASS_ELEM_DRAW) && (grassElem->alpha == 255)) {
+                    rot.y = grassElem->rotY;
+                    Matrix_SetTranslateRotateYXZ(grassElem->pos.x, grassElem->pos.y, grassElem->pos.z, &rot);
                     Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-                    if (grassElem->elem_flags & 2) {
-                        ObjGrass_OverrideMatrixCurrent(&this->unk_2F88[j]);
+                    if (grassElem->flags & OBJ_GRASS_ELEM_ANIM) {
+                        ObjGrass_OverrideMatrixCurrent(&this->distortionMtx[j]);
                     }
 
                     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx),
@@ -496,7 +499,7 @@ void ObjGrass_DrawXlu(Actor* thisx, PlayState* play) {
             for (j = 0; j < grassGroup->count; j++) {
                 grassElem = &grassGroup->elements[j];
 
-                if ((grassElem->elem_flags & 1) && (grassElem->alpha > 0) && (grassElem->alpha < 255)) {
+                if ((grassElem->flags & OBJ_GRASS_ELEM_DRAW) && (grassElem->alpha > 0) && (grassElem->alpha < 255)) {
                     rot.y = grassElem->rotY;
                     Matrix_SetTranslateRotateYXZ(grassElem->pos.x, grassElem->pos.y, grassElem->pos.z, &rot);
                     Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);

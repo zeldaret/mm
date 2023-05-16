@@ -61,10 +61,10 @@ static ColliderCylinderInit sCylinderInit = {
     { 10, 44, 0, { 0, 0, 0 } },
 };
 
-s16 sRotSpeedXTarget = 0;
-s16 sRotSpeedX = 0;
-s16 sRotSpeedYTarget = 0;
-s16 sRotSpeedY = 0;
+static s16 sRotSpeedXTarget = 0;
+static s16 sRotSpeedX = 0;
+static s16 sRotSpeedYTarget = 0;
+static s16 sRotSpeedY = 0;
 
 static Vec3f sUnitDirections[] = {
     { 0.0f, 0.7071f, 0.7071f },
@@ -211,7 +211,7 @@ void ObjGrassCarry_Main(ObjGrassCarry* this, PlayState* play) {
     if (Actor_HasParent(&this->actor, play)) {
         ObjGrassCarry_SetupLiftedUp(this);
         if (this->grassElem != NULL) {
-            this->grassElem->elem_flags |= 4;
+            this->grassElem->flags |= OBJ_GRASS_ELEM_REMOVED;
         }
         this->actor.draw = ObjGrassCarry_Draw;
         this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
