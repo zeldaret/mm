@@ -2831,7 +2831,7 @@ void func_8082F1AC(PlayState* play, Player* this) {
                                   this->actor.world.pos.z + new_var, 100, 200, 255, 600);
 
         Player_PlaySfx(this, NA_SE_PL_ZORA_SPARK_BARRIER - SFX_FLAG);
-        func_800B648C(play, 1, 2, 100.0f, &this->actor.world.pos);
+        Actor_SetPlayerImpact(play, PLAYER_IMPACT_ZORA_BARRIER, 2, 100.0f, &this->actor.world.pos);
     }
 }
 
@@ -9750,7 +9750,8 @@ s32 func_808401F4(PlayState* play, Player* this) {
                                     func_8082DF2C(play);
                                     func_8083FE90(play, this, NA_SE_IT_HAMMER_HIT);
                                     if (this->transformation == PLAYER_FORM_GORON) {
-                                        func_800B648C(play, 2, 2, 100.0f, &this->actor.world.pos);
+                                        Actor_SetPlayerImpact(play, PLAYER_IMPACT_BONK, 2, 100.0f,
+                                                              &this->actor.world.pos);
                                         func_800C0094(poly, pos.x, pos.y, pos.z, &sp64);
                                         Matrix_MtxFToYXZRot(&sp64, &actorRot, true);
                                         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_TEST, pos.x, pos.y, pos.z,
@@ -9947,7 +9948,7 @@ s32 func_80840A30(PlayState* play, Player* this, f32* arg2, f32 arg3) {
                 this->linearVelocity = -this->linearVelocity;
                 Player_AddQuake(play, 33267, 3, 12);
                 Player_RequestRumble(play, this, 255, 20, 150, SQ(0));
-                func_800B648C(play, 2, 2, 100.0f, &this->actor.world.pos);
+                Actor_SetPlayerImpact(play, PLAYER_IMPACT_BONK, 2, 100.0f, &this->actor.world.pos);
                 Player_PlaySfx(this, NA_SE_PL_BODY_HIT);
                 Player_AnimSfx_PlayVoice(this, NA_SE_VO_LI_CLIMB_END);
                 return true;
@@ -18746,7 +18747,7 @@ void func_80857BE8(Player* this, PlayState* play) {
 
         if (this->unk_AE7 == 2) {
             Player_SetCylinderForAttack(this, DMG_GORON_POUND, 4, 60);
-            func_800B648C(play, 0, 2, 100.0f, &this->actor.world.pos);
+            Actor_SetPlayerImpact(play, PLAYER_IMPACT_GORON_GROUND_POUND, 2, 100.0f, &this->actor.world.pos);
         } else if (this->unk_B86[1] != 0) {
             Player_SetCylinderForAttack(this, DMG_GORON_SPIKES, 1, 25);
         } else {
