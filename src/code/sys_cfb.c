@@ -11,21 +11,21 @@ OSViMode* gActiveViMode;
 u16* gZBufferPtr;
 void* gWorkBuffer;
 u64* gGfxSPTaskOutputBufferPtr;
-void* gGfxSPTaskOutputBufferSize; // Actually points to the end of the task buffer
+void* gGfxSPTaskOutputBufferEnd;
 
 void* sCfbLoRes1;
 void* sCfbLoRes0;
 u16 (*gZBufferLoRes)[SCREEN_WIDTH * SCREEN_HEIGHT];
 u16 (*gWorkBufferLoRes)[SCREEN_WIDTH * SCREEN_HEIGHT];
 u64 (*gGfxSPTaskOutputBufferLoRes)[0x3000];
-void* gGfxSPTaskOutputBufferSizeLoRes; // Actually points to the end of the task buffer
+void* gGfxSPTaskOutputBufferEndLoRes;
 
 void* sCfbHiRes1;
 void* sCfbHiRes0;
 u16 (*gZBufferHiRes)[HIRES_BUFFER_WIDTH * HIRES_BUFFER_HEIGHT];
 u16 (*gWorkBufferHiRes)[HIRES_BUFFER_WIDTH * HIRES_BUFFER_HEIGHT];
 u64 (*gGfxSPTaskOutputBufferHiRes)[0x3000];
-void* gGfxSPTaskOutputBufferSizeHiRes; // Actually points to the end of the task buffer
+void* gGfxSPTaskOutputBufferEndHiRes;
 
 s16 gCfbWidth;
 s16 gCfbHeight;
@@ -40,7 +40,7 @@ void SysCfb_SetLoResMode(void) {
     gZBufferPtr = *gZBufferLoRes;
     gWorkBuffer = gWorkBufferLoRes;
     gGfxSPTaskOutputBufferPtr = *gGfxSPTaskOutputBufferLoRes;
-    gGfxSPTaskOutputBufferSize = gGfxSPTaskOutputBufferSizeLoRes;
+    gGfxSPTaskOutputBufferEnd = gGfxSPTaskOutputBufferEndLoRes;
     gCfbWidth = SCREEN_WIDTH;
     gCfbHeight = SCREEN_HEIGHT;
     gCfbLeftAdjust = 0;
@@ -57,7 +57,7 @@ void SysCfb_SetHiResMode(void) {
     gZBufferPtr = *gZBufferHiRes;
     gWorkBuffer = gWorkBufferHiRes;
     gGfxSPTaskOutputBufferPtr = *gGfxSPTaskOutputBufferHiRes;
-    gGfxSPTaskOutputBufferSize = gGfxSPTaskOutputBufferSizeHiRes;
+    gGfxSPTaskOutputBufferEnd = gGfxSPTaskOutputBufferEndHiRes;
     if (1) {}
     gCfbWidth = HIRES_BUFFER_WIDTH;
     gCfbHeight = HIRES_BUFFER_HEIGHT;

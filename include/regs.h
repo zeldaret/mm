@@ -65,7 +65,6 @@ extern RegEditor* gRegEditor;
 #define R_ENABLE_ARENA_DBG                SREG(0) // Same as OoT
 #define R_ROOM_IMAGE_NODRAW_FLAGS         SREG(25)
 #define R_UPDATE_RATE                     SREG(30)
-
 #define R_VI_MODE_EDIT_STATE              SREG(48)
 #define R_VI_MODE_EDIT_WIDTH              SREG(49)
 #define R_VI_MODE_EDIT_HEIGHT             SREG(50)
@@ -73,7 +72,6 @@ extern RegEditor* gRegEditor;
 #define R_VI_MODE_EDIT_LRY_ADJ            SREG(52)
 #define R_VI_MODE_EDIT_ULX_ADJ            SREG(53)
 #define R_VI_MODE_EDIT_LRX_ADJ            SREG(54)
-
 #define R_FB_FILTER_TYPE                  SREG(80)
 #define R_FB_FILTER_PRIM_COLOR(c)         SREG(81 + c)
 #define R_FB_FILTER_A                     SREG(84)

@@ -179,7 +179,7 @@ retry:
     task->dramStack = (u64*)gGfxSPTaskStack;
     task->dramStackSize = sizeof(gGfxSPTaskStack);
     task->outputBuff = gGfxSPTaskOutputBufferPtr;
-    task->outputBuffSize = gGfxSPTaskOutputBufferSize;
+    task->outputBuffSize = gGfxSPTaskOutputBufferEnd;
     task->dataPtr = (u64*)gGfxMasterDL;
     task->dataSize = 0;
     task->yieldDataPtr = (u64*)gGfxSPTaskYieldBuffer;
@@ -348,8 +348,8 @@ void Graph_ThreadEntry(void* arg) {
     gGfxSPTaskOutputBufferHiRes = gGfxSPTaskOutputBufferLoRes =
         SystemArena_Malloc(sizeof(*gGfxSPTaskOutputBufferLoRes));
 
-    gGfxSPTaskOutputBufferSizeLoRes = (u8*)gGfxSPTaskOutputBufferLoRes + sizeof(*gGfxSPTaskOutputBufferLoRes);
-    gGfxSPTaskOutputBufferSizeHiRes = (u8*)gGfxSPTaskOutputBufferHiRes + sizeof(*gGfxSPTaskOutputBufferHiRes);
+    gGfxSPTaskOutputBufferEndLoRes = (u8*)gGfxSPTaskOutputBufferLoRes + sizeof(*gGfxSPTaskOutputBufferLoRes);
+    gGfxSPTaskOutputBufferEndHiRes = (u8*)gGfxSPTaskOutputBufferHiRes + sizeof(*gGfxSPTaskOutputBufferHiRes);
 
     SysCfb_Init();
     Fault_SetFB(gWorkBuffer, SCREEN_WIDTH, SCREEN_HEIGHT);
