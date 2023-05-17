@@ -1,4 +1,3 @@
-#include "prevent_bss_reordering.h"
 #include "global.h"
 #include "buffers.h"
 #include "z64debug_display.h"
@@ -567,11 +566,13 @@ void Play_UpdateTransition(PlayState* this) {
 
                 if ((!(Entrance_GetTransitionFlags(this->nextEntrance + sceneLayer) & 0x8000) ||
                      ((this->nextEntrance == ENTRANCE(PATH_TO_MOUNTAIN_VILLAGE, 1)) &&
-                      !CHECK_WEEKEVENTREG(WEEKEVENTREG_33_80)) ||
+                      !CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_SNOWHEAD_TEMPLE)) ||
                      ((this->nextEntrance == ENTRANCE(ROAD_TO_SOUTHERN_SWAMP, 1)) &&
-                      !CHECK_WEEKEVENTREG(WEEKEVENTREG_20_02)) ||
-                     ((this->nextEntrance == ENTRANCE(TERMINA_FIELD, 2)) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80)) ||
-                     ((this->nextEntrance == ENTRANCE(ROAD_TO_IKANA, 1)) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_52_20))) &&
+                      !CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_WOODFALL_TEMPLE)) ||
+                     ((this->nextEntrance == ENTRANCE(TERMINA_FIELD, 2)) &&
+                      !CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_GREAT_BAY_TEMPLE)) ||
+                     ((this->nextEntrance == ENTRANCE(ROAD_TO_IKANA, 1)) &&
+                      !CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_STONE_TOWER_TEMPLE))) &&
                     (!func_800FE590(this) || (Entrance_GetSceneId(this->nextEntrance + sceneLayer) < 0) ||
                      (AudioSeq_GetActiveSeqId(SEQ_PLAYER_BGM_MAIN) != NA_BGM_FINAL_HOURS))) {
                     func_801A4058(20);
@@ -983,8 +984,8 @@ void Play_UpdateMain(PlayState* this) {
                     if (!this->haltAllActors) {
                         Actor_UpdateAll(this, &this->actorCtx);
                     }
-                    Cutscene_Update1(this, &this->csCtx);
-                    Cutscene_Update2(this, &this->csCtx);
+                    Cutscene_UpdateManual(this, &this->csCtx);
+                    Cutscene_UpdateScripted(this, &this->csCtx);
                     Effect_UpdateAll(this);
                     EffectSS_UpdateAllParticles(this);
                     EffFootmark_Update(this);
@@ -1266,7 +1267,7 @@ void Play_DrawMain(PlayState* this) {
                 goto PostWorldDraw;
             }
 
-            if (this->unk_18844 == 0) {
+            if (!this->unk_18844) {
                 if (1) {
                     if ((this->skyboxId != SKYBOX_NONE) && !this->envCtx.skyboxDisabled) {
                         if ((this->skyboxId == SKYBOX_NORMAL_SKY) || (this->skyboxId == SKYBOX_3)) {
@@ -1502,8 +1503,8 @@ void Play_Main(GameState* thisx) {
         *CONTROLLER1(&this->state) = input;
     }
 
-    ActorCutscene_Update();
-    ActorCutscene_ClearWaiting();
+    CutsceneManager_Update();
+    CutsceneManager_ClearWaiting();
 }
 
 s32 Play_InCsMode(PlayState* this) {
@@ -2016,37 +2017,47 @@ s32 Play_IsDebugCamEnabled(void) {
     return gDbgCamEnabled;
 }
 
-// A mapping from playerActorCsIds to sGlobalCamDataSettings indices.
-s16 D_801D0D64[] = { -3, -2, -4, -5, -7, -11, -8, -9, -6, -16 };
+// A mapping from playerCsIds to sGlobalCamDataSettings indices.
+s16 sPlayerCsIdToCsCamId[] = {
+    CS_CAM_ID_GLOBAL_ITEM_OCARINA,        // PLAYER_CS_ID_ITEM_OCARINA
+    CS_CAM_ID_GLOBAL_ITEM_GET,            // PLAYER_CS_ID_ITEM_GET
+    CS_CAM_ID_GLOBAL_ITEM_BOTTLE,         // PLAYER_CS_ID_ITEM_BOTTLE
+    CS_CAM_ID_GLOBAL_ITEM_SHOW,           // PLAYER_CS_ID_ITEM_SHOW
+    CS_CAM_ID_GLOBAL_WARP_PAD_MOON,       // PLAYER_CS_ID_WARP_PAD_MOON
+    CS_CAM_ID_GLOBAL_MASK_TRANSFORMATION, // PLAYER_CS_ID_MASK_TRANSFORMATION
+    CS_CAM_ID_GLOBAL_DEATH,               // PLAYER_CS_ID_DEATH
+    CS_CAM_ID_GLOBAL_REVIVE,              // PLAYER_CS_ID_REVIVE
+    CS_CAM_ID_GLOBAL_SONG_WARP,           // PLAYER_CS_ID_SONG_WARP
+    CS_CAM_ID_GLOBAL_WARP_PAD_ENTRANCE,   // PLAYER_CS_ID_WARP_PAD_ENTRANCE
+};
 
 // Used by Player
 /**
- * Extract the common actor cutscene ids used by Player from the scene and set the actor cutscene ids in
- * this->playerActorCsIds. If a playerActorCsId is not present in the scene, then that particular id is set
- * to -1. Otherwise, if there is an ActorCutscene where csCamSceneDataId matches the appropriate element of D_801D0D64,
- * set the corresponding playerActorCsId (and possibly change its priority for the zeroth one)
+ * Extract the common cutscene ids used by Player from the scene and set the cutscene ids in this->playerCsIds.
+ * If a playerCsId is not present in the scene, then that particular id is set to CS_ID_NONE.
+ * Otherwise, if there is an ActorCutscene where csCamId matches the appropriate element of sPlayerCsIdToCsCamId,
+ * set the corresponding playerActorCsId (and possibly change its priority for the zeroth one).
  */
-void Play_AssignPlayerActorCsIdsFromScene(GameState* thisx, s32 startActorCsId) {
+void Play_AssignPlayerCsIdsFromScene(GameState* thisx, s32 spawnCsId) {
     PlayState* this = (PlayState*)thisx;
     s32 i;
-    s16* curPlayerActorCsId = this->playerActorCsIds;
-    s16* phi_s1 = D_801D0D64;
+    s16* curPlayerCsId = this->playerCsIds;
+    s16* csCamId = sPlayerCsIdToCsCamId;
 
-    for (i = 0; i < ARRAY_COUNT(this->playerActorCsIds); i++, curPlayerActorCsId++, phi_s1++) {
-        ActorCutscene* actorCutscene;
-        s32 curActorCsId;
+    for (i = 0; i < ARRAY_COUNT(this->playerCsIds); i++, curPlayerCsId++, csCamId++) {
+        ActorCutscene* csEntry;
+        s32 curCsId;
 
-        *curPlayerActorCsId = -1;
+        *curPlayerCsId = CS_ID_NONE;
 
-        for (curActorCsId = startActorCsId; curActorCsId != -1; curActorCsId = actorCutscene->additionalCutscene) {
-            actorCutscene = ActorCutscene_GetCutscene(curActorCsId);
+        for (curCsId = spawnCsId; curCsId != CS_ID_NONE; curCsId = csEntry->additionalCsId) {
+            csEntry = CutsceneManager_GetCutsceneEntry(curCsId);
 
-            if (actorCutscene->csCamSceneDataId == *phi_s1) {
-                if ((actorCutscene->csCamSceneDataId == -3) &&
-                    (actorCutscene->priority == 700)) { // override ocarina cs priority
-                    actorCutscene->priority = 550;
+            if (csEntry->csCamId == *csCamId) {
+                if ((csEntry->csCamId == CS_CAM_ID_GLOBAL_ITEM_OCARINA) && (csEntry->priority == 700)) {
+                    csEntry->priority = 550;
                 }
-                *curPlayerActorCsId = curActorCsId;
+                *curPlayerCsId = curCsId;
                 break;
             }
         }
@@ -2101,7 +2112,7 @@ void Play_Init(GameState* thisx) {
         scene = ((void)0, gSaveContext.save.entrance) >> 9;
         spawn = (((void)0, gSaveContext.save.entrance) >> 4) & 0x1F;
 
-        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_33_80)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_SNOWHEAD_TEMPLE)) {
             if (scene == ENTR_SCENE_MOUNTAIN_VILLAGE_WINTER) {
                 scene = ENTR_SCENE_MOUNTAIN_VILLAGE_SPRING;
             } else if (scene == ENTR_SCENE_GORON_VILLAGE_WINTER) {
@@ -2115,7 +2126,7 @@ void Play_Init(GameState* thisx) {
             }
         }
 
-        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_20_02)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_WOODFALL_TEMPLE)) {
             if (scene == ENTR_SCENE_SOUTHERN_SWAMP_POISONED) {
                 scene = ENTR_SCENE_SOUTHERN_SWAMP_CLEARED;
             } else if (scene == ENTR_SCENE_WOODFALL) {
@@ -2123,11 +2134,11 @@ void Play_Init(GameState* thisx) {
             }
         }
 
-        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_52_20) && (scene == ENTR_SCENE_IKANA_CANYON)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_STONE_TOWER_TEMPLE) && (scene == ENTR_SCENE_IKANA_CANYON)) {
             gSaveContext.nextCutsceneIndex = 0xFFF2;
         }
 
-        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80) &&
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_GREAT_BAY_TEMPLE) &&
             ((scene == ENTR_SCENE_GREAT_BAY_COAST) || (scene == ENTR_SCENE_ZORA_CAPE))) {
             gSaveContext.nextCutsceneIndex = 0xFFF0;
         }
@@ -2180,15 +2191,15 @@ void Play_Init(GameState* thisx) {
     EffectSS_Init(this, 100);
     CollisionCheck_InitContext(this, &this->colChkCtx);
     AnimationContext_Reset(&this->animationCtx);
-    Cutscene_Init(this, &this->csCtx);
+    Cutscene_InitContext(this, &this->csCtx);
 
     if (gSaveContext.nextCutsceneIndex != 0xFFEF) {
-        gSaveContext.save.cutscene = gSaveContext.nextCutsceneIndex;
+        gSaveContext.save.cutsceneIndex = gSaveContext.nextCutsceneIndex;
         gSaveContext.nextCutsceneIndex = 0xFFEF;
     }
 
-    if (gSaveContext.save.cutscene == 0xFFFD) {
-        gSaveContext.save.cutscene = 0;
+    if (gSaveContext.save.cutsceneIndex == 0xFFFD) {
+        gSaveContext.save.cutsceneIndex = 0;
     }
 
     if (gSaveContext.nextDayTime != 0xFFFF) {
@@ -2205,13 +2216,13 @@ void Play_Init(GameState* thisx) {
     func_800EDDB0(this);
 
     if (((gSaveContext.gameMode != GAMEMODE_NORMAL) && (gSaveContext.gameMode != GAMEMODE_TITLE_SCREEN)) ||
-        (gSaveContext.save.cutscene >= 0xFFF0)) {
+        (gSaveContext.save.cutsceneIndex >= 0xFFF0)) {
         gSaveContext.unk_3DC0 = 0;
         Magic_Reset(this);
-        gSaveContext.sceneLayer = (gSaveContext.save.cutscene & 0xF) + 1;
+        gSaveContext.sceneLayer = (gSaveContext.save.cutsceneIndex & 0xF) + 1;
 
         // Set saved cutscene to 0 so it doesn't immediately play, but instead let the `CutsceneManager` handle it.
-        gSaveContext.save.cutscene = 0;
+        gSaveContext.save.cutsceneIndex = 0;
     } else {
         gSaveContext.sceneLayer = 0;
     }
@@ -2297,7 +2308,7 @@ void Play_Init(GameState* thisx) {
     D_801F6D4C->envColor.g = 0;
     D_801F6D4C->envColor.b = 0;
     D_801F6D4C->envColor.a = 0;
-    EnvFlags_UnsetAll(this);
+    CutsceneFlags_UnsetAll(this);
     THA_GetRemaining(&this->state.heap);
     zAllocSize = THA_GetRemaining(&this->state.heap);
     zAlloc = (uintptr_t)THA_AllocTailAlign16(&this->state.heap, zAllocSize);
@@ -2320,17 +2331,14 @@ void Play_Init(GameState* thisx) {
         Camera_ChangeActorCsCamIndex(&this->mainCamera, player->actor.params & 0xFF);
     }
 
-    func_800F15D8(&this->mainCamera);
+    CutsceneManager_StoreCamera(&this->mainCamera);
     Interface_SetSceneRestrictions(this);
     func_800FB758(this);
     gSaveContext.seqId = this->sequenceCtx.seqId;
     gSaveContext.ambienceId = this->sequenceCtx.ambienceId;
     AnimationContext_Update(this, &this->animationCtx);
-    func_800EDBE0(this);
+    Cutscene_HandleEntranceTriggers(this);
     gSaveContext.respawnFlag = 0;
     sBombersNotebookOpen = false;
     BombersNotebook_Init(&sBombersNotebook);
 }
-
-//! TODO: fake symbol, remove when BombersNotebook_Update is matching
-u16 D_801D0D78[] = { 0, 0, 0, 0 };

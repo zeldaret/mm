@@ -504,8 +504,8 @@ s32 func_808D99C8(EnSw* this, PlayState* play) {
         return false;
     }
 
-    if ((this->actor.xyzDistToPlayerSq < ((sREG(16) * 10) + 60000)) && (play->actorCtx.unk_1F4.timer != 0) &&
-        (play->actorCtx.unk_1F4.unk_00 == 0)) {
+    if ((this->actor.xyzDistToPlayerSq < ((sREG(16) * 10) + 60000)) && (play->actorCtx.playerImpact.timer != 0) &&
+        (play->actorCtx.playerImpact.type == PLAYER_IMPACT_GORON_GROUND_POUND)) {
         this->actor.colChkInfo.damage = 4;
         phi_v1 = true;
     }
@@ -1090,14 +1090,14 @@ void func_808DB100(EnSw* this, PlayState* play) {
 }
 
 void func_808DB25C(EnSw* this, PlayState* play) {
-    if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-        ActorCutscene_Stop(0x7C);
-    } else if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
+    if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+        CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
+    } else if (CutsceneManager_IsNext(this->actor.csId)) {
+        CutsceneManager_StartWithPlayerCs(this->actor.csId, &this->actor);
         func_808D9C18(this);
         this->actionFunc = func_808DB2E0;
     } else {
-        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+        CutsceneManager_Queue(this->actor.csId);
     }
 }
 

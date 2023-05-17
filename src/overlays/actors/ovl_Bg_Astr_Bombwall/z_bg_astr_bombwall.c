@@ -113,7 +113,7 @@ void BgAstrBombwall_Init(Actor* thisx, PlayState* play) {
         return;
     }
     BgAstrBombwall_InitCollider(&sTrisInit, &this->dyna.actor.world.pos, &this->dyna.actor.shape.rot, &this->collider);
-    SubS_FillCutscenesList(&this->dyna.actor, this->cutscenes, ARRAY_COUNT(this->cutscenes));
+    SubS_FillCutscenesList(&this->dyna.actor, this->csIdList, ARRAY_COUNT(this->csIdList));
     func_80C0A378(this);
 }
 
@@ -175,7 +175,7 @@ void func_80C0A400(BgAstrBombwall* this, PlayState* play) {
 }
 
 void func_80C0A418(BgAstrBombwall* this, PlayState* play) {
-    if (SubS_StartActorCutscene(&this->dyna.actor, this->cutscenes[0], -1, SUBS_CUTSCENE_SET_UNK_LINK_FIELDS)) {
+    if (SubS_StartCutscene(&this->dyna.actor, this->csIdList[0], CS_ID_NONE, SUBS_CUTSCENE_WITH_PLAYER)) {
         func_80C0A458(this, play);
     }
 }

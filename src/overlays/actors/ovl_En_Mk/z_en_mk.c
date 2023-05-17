@@ -76,7 +76,7 @@ s32 func_809592E0(EnMk* this, s16 index) {
 
 void EnMk_Init(Actor* thisx, PlayState* play) {
     EnMk* this = THIS;
-    s16 cs;
+    s16 csId;
     s32 i;
 
     this->actor.terminalVelocity = -4.0f;
@@ -101,16 +101,16 @@ void EnMk_Init(Actor* thisx, PlayState* play) {
         this->unk_27A |= 2;
     }
 
-    cs = this->actor.cutscene;
-    for (i = 0; i < ARRAY_COUNT(this->unk_276); i++) {
-        this->unk_276[i] = cs;
-        if (cs != -1) {
-            this->actor.cutscene = cs;
-            cs = ActorCutscene_GetAdditionalCutscene(this->actor.cutscene);
+    csId = this->actor.csId;
+    for (i = 0; i < ARRAY_COUNT(this->csIdList); i++) {
+        this->csIdList[i] = csId;
+        if (csId != CS_ID_NONE) {
+            this->actor.csId = csId;
+            csId = CutsceneManager_GetAdditionalCsId(this->actor.csId);
         }
     }
 
-    this->actor.cutscene = this->unk_276[0];
+    this->actor.csId = this->csIdList[0];
 }
 
 void EnMk_Destroy(Actor* thisx, PlayState* play) {
@@ -124,16 +124,16 @@ s32 func_80959524(PlayState* play) {
 }
 
 void func_8095954C(EnMk* this, PlayState* play) {
-    if (Cutscene_CheckActorAction(play, 0x7F)) {
-        Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetActorActionIndex(play, 0x7F));
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_127)) {
+        Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_127));
 
-        switch (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 0x7F)]->action) {
+        switch (play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_127)]->id) {
             case 1:
             case 2:
             case 3:
             case 4:
             case 5:
-                func_809592E0(this, play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 0x7F)]->action - 1);
+                func_809592E0(this, play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_127)]->id - 1);
                 break;
         }
     } else {
@@ -147,7 +147,7 @@ void func_80959624(EnMk* this, PlayState* play) {
     if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
         if (this->unk_27A & 4) {
             textId = 0xFB9;
-        } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80)) {
+        } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_GREAT_BAY_TEMPLE)) {
             textId = 0xFBC;
         } else {
             textId = 0xFBB;
@@ -212,7 +212,7 @@ void func_80959844(EnMk* this, PlayState* play) {
         switch (gSaveContext.save.playerForm) {
             case PLAYER_FORM_DEKU:
                 if (CHECK_WEEKEVENTREG(WEEKEVENTREG_19_10)) {
-                    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80)) {
+                    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_GREAT_BAY_TEMPLE)) {
                         textId = 0xFAF;
                     } else {
                         textId = 0xFAE;
@@ -224,7 +224,7 @@ void func_80959844(EnMk* this, PlayState* play) {
 
             case PLAYER_FORM_GORON:
                 if (CHECK_WEEKEVENTREG(WEEKEVENTREG_19_08)) {
-                    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80)) {
+                    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_GREAT_BAY_TEMPLE)) {
                         textId = 0xFAB;
                     } else {
                         textId = 0xFAA;
@@ -239,7 +239,7 @@ void func_80959844(EnMk* this, PlayState* play) {
                 if (func_80959524(play) > 0) {
                     textId = 0xFA7;
                 } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_19_04)) {
-                    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80)) {
+                    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_GREAT_BAY_TEMPLE)) {
                         textId = 0xFBF;
                     } else {
                         textId = 0xFA6;
@@ -283,7 +283,7 @@ void func_80959A24(EnMk* this, PlayState* play) {
                         break;
 
                     case 0xFA2:
-                        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80)) {
+                        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_GREAT_BAY_TEMPLE)) {
                             Message_CloseTextbox(play);
                             this->actionFunc = func_80959E18;
                         } else {
@@ -314,7 +314,7 @@ void func_80959A24(EnMk* this, PlayState* play) {
 
                     case 0xFA8:
                         SET_WEEKEVENTREG(WEEKEVENTREG_19_08);
-                        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80)) {
+                        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_GREAT_BAY_TEMPLE)) {
                             Message_ContinueTextbox(play, 0xFBD);
                         } else {
                             Message_ContinueTextbox(play, 0xFA9);
@@ -323,7 +323,7 @@ void func_80959A24(EnMk* this, PlayState* play) {
 
                     case 0xFAC:
                         SET_WEEKEVENTREG(WEEKEVENTREG_19_10);
-                        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80)) {
+                        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_GREAT_BAY_TEMPLE)) {
                             Message_ContinueTextbox(play, 0xFBE);
                         } else {
                             Message_ContinueTextbox(play, 0xFAD);
@@ -372,7 +372,7 @@ void func_80959C94(EnMk* this, PlayState* play) {
 void func_80959D28(EnMk* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
 
-    if ((play->csCtx.state == 0) && (this->actor.cutscene == -1)) {
+    if ((play->csCtx.state == CS_STATE_IDLE) && (this->actor.csId == CS_ID_NONE)) {
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_20_40)) {
             this->unk_27A &= ~1;
             this->actionFunc = func_80959774;
@@ -381,14 +381,14 @@ void func_80959D28(EnMk* this, PlayState* play) {
         } else {
             this->actionFunc = func_80959E18;
         }
-        this->actor.cutscene = this->unk_276[0];
+        this->actor.csId = this->csIdList[0];
     } else {
-        if (this->actor.cutscene != -1) {
-            if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
-                ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
-                this->actor.cutscene = -1;
+        if (this->actor.csId != CS_ID_NONE) {
+            if (CutsceneManager_IsNext(this->actor.csId)) {
+                CutsceneManager_StartWithPlayerCs(this->actor.csId, &this->actor);
+                this->actor.csId = CS_ID_NONE;
             } else {
-                ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+                CutsceneManager_Queue(this->actor.csId);
             }
         }
         func_8095954C(this, play);
@@ -412,13 +412,13 @@ void func_80959E18(EnMk* this, PlayState* play) {
         play->msgCtx.ocarinaMode = 4;
         this->actionFunc = func_80959D28;
         if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
-            this->actor.cutscene = this->unk_276[0];
+            this->actor.csId = this->csIdList[0];
             SET_WEEKEVENTREG(WEEKEVENTREG_20_40);
             Item_Give(play, ITEM_SONG_NOVA);
         } else {
-            this->actor.cutscene = this->unk_276[1];
+            this->actor.csId = this->csIdList[1];
         }
-        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+        CutsceneManager_Queue(this->actor.csId);
     } else if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         func_80959844(this, play);
         this->actionFunc = func_80959A24;
@@ -449,7 +449,7 @@ void EnMk_Update(Actor* thisx, PlayState* play) {
 
     this->actionFunc(this, play);
 
-    if ((this->unk_27A & 1) && !Cutscene_CheckActorAction(play, 0x7F)) {
+    if ((this->unk_27A & 1) && !Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_127)) {
         Actor_TrackPlayer(play, &this->actor, &this->unk_270, &sp38, this->actor.focus.pos);
     } else {
         Math_SmoothStepToS(&this->unk_270.x, 0, 6, 0x1838, 0x64);

@@ -461,7 +461,7 @@ s32 func_80B26F6C(EnKendoJs* this, PlayState* play) {
 
     switch (this->unk_288) {
         case 0x271D:
-            if (Player_GetMeleeWeaponHeld(player) != 0) {
+            if (Player_GetMeleeWeaponHeld(player) != PLAYER_MELEEWEAPON_NONE) {
                 Message_StartTextbox(play, 0x272A, &this->actor);
                 this->unk_288 = 0x272A;
                 return true;
@@ -680,9 +680,9 @@ void func_80B27774(EnKendoJs* this, PlayState* play) {
 }
 
 void func_80B2783C(EnKendoJs* this, PlayState* play) {
-    if (this->actor.cutscene != -1) {
+    if (this->actor.csId != CS_ID_NONE) {
         Camera_ChangeActorCsCamIndex(play->cameraPtrs[CAM_ID_MAIN],
-                                     ActorCutscene_GetCutscene(this->actor.cutscene)->csCamSceneDataId);
+                                     CutsceneManager_GetCutsceneEntry(this->actor.csId)->csCamId);
     }
 }
 

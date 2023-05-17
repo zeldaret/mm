@@ -2357,7 +2357,7 @@ s32 Camera_Normal1(Camera* camera) {
         camera->inputDir.x = spAC.pitch;
         camera->inputDir.y = spAC.yaw;
         camera->inputDir.z = 0;
-        if (gSaveContext.save.playerData.health < 17) {
+        if (gSaveContext.save.saveInfo.playerData.health < 17) {
             phi_v1_2 = (camera->play->state.frames << 0x18);
             phi_v1_2 = (s16)((phi_v1_2 >> 0x15) & 0xFD68);
             camera->inputDir.y += phi_v1_2;
@@ -2372,7 +2372,7 @@ s32 Camera_Normal1(Camera* camera) {
     // Everything below OLib_Vec3fDiffToVecSphGeo matches except stack pointers
     // )
 
-    phi_f2 = (gSaveContext.save.playerData.health <= 16) ? 0.8f : 1.0f;
+    phi_f2 = (gSaveContext.save.saveInfo.playerData.health <= 16) ? 0.8f : 1.0f;
     camera->fov = Camera_ScaledStepToCeilF(roData->unk_18 * phi_f2, camera->fov, camera->fovUpdateRate, 0.1f);
 
     if (roData->interfaceFlags & NORMAL1_FLAG_2) {
@@ -2381,7 +2381,7 @@ s32 Camera_Normal1(Camera* camera) {
                                                     (spD4 * spD4 * spD4 * 10000.0f),
                                                 camera->roll, 0.1f, 5);
     } else {
-        if (gSaveContext.save.playerData.health <= 16) {
+        if (gSaveContext.save.saveInfo.playerData.health <= 16) {
             phi_a0 = (Rand_ZeroOne() - 0.5f) * 100.0f * camera->speedRatio;
         } else {
             phi_a0 = 0.0f;
@@ -3969,7 +3969,7 @@ s32 Camera_Battle1(Camera* camera) {
     if (func_800CBAAC(camera) != 0) {
         phi_f12 = ((camera->play->state.frames & 8) != 0) ? roData->unk_20 - (roData->unk_20 * 0.5f) : roData->unk_20;
     } else {
-        phi_f12 = ((gSaveContext.save.playerData.health <= 16) ? 0.8f : 1.0f) * (sp78 - (sp78 * 0.05f * spEC));
+        phi_f12 = ((gSaveContext.save.saveInfo.playerData.health <= 16) ? 0.8f : 1.0f) * (sp78 - (sp78 * 0.05f * spEC));
     }
     camera->fov = Camera_ScaledStepToCeilF(phi_f12, camera->fov, camera->fovUpdateRate, 0.1f);
 
@@ -6693,7 +6693,7 @@ s32 Camera_Demo0(Camera* camera) {
     }
 
     if (rwData->timer == 0) {
-        ActorCutscene_Stop(0x7E);
+        CutsceneManager_Stop(0x7E);
     }
 
     return true;
@@ -6931,7 +6931,7 @@ s32 Camera_Special9(Camera* camera) {
     BgCamFuncData* bgCamFuncData;
 
     focalActorHeight = Camera_GetFocalActorHeight(camera);
-    actorCsId = ActorCutscene_GetCurrentIndex();
+    actorCsId = CutsceneManager_GetCurrentCsId();
 
     if ((actorCsId != -1) && (actorCsId != 0x7D)) {
         func_800E0348(camera);
@@ -7270,7 +7270,7 @@ void Camera_InitFocalActorSettings(Camera* camera, Actor* focalActor) {
     if (camera == &camera->play->mainCamera) {
         sCameraInterfaceFlags =
             CAM_INTERFACE_FLAGS(CAM_LETTERBOX_LARGE | CAM_LETTERBOX_INSTANT, CAM_HUD_VISIBILITY_NONE_ALT, 0);
-        func_800F15D8(camera);
+        CutsceneManager_StoreCamera(camera);
     } else {
         sCameraInterfaceFlags = CAM_INTERFACE_FLAGS(CAM_LETTERBOX_LARGE, CAM_HUD_VISIBILITY_NONE_ALT, 0);
     }
@@ -7379,7 +7379,7 @@ void Camera_EarthquakeDay3(Camera* camera) {
         0x1FC, // 8 Large Earthquakes between CLOCK_TIME(4, 30) to CLOCK_TIME(6, 00)
     };
 
-    if ((CURRENT_DAY == 3) && (ActorCutscene_GetCurrentIndex() == -1)) {
+    if ((CURRENT_DAY == 3) && (CutsceneManager_GetCurrentCsId() == -1)) {
         time = gSaveContext.save.time;
         timeSpeedOffset = gSaveContext.save.timeSpeedOffset;
 
@@ -8133,10 +8133,9 @@ s32 Camera_ResetActionFuncStateUnused(Camera* camera) {
 }
 
 /**
- * Unused Remnant of OoT
+ * Unused Remnant of OoT. `CutsceneCameraPoint` struct no longer exists.
  */
-s32 Camera_SetCsParams(Camera* camera, CutsceneCameraPoint* atPoints, CutsceneCameraPoint* eyePoints, Player* player,
-                       s16 relativeToPlayer) {
+s32 Camera_SetCsParams(Camera* camera, void* atPoints, void* eyePoints, Player* player, s16 relativeToPlayer) {
     return true;
 }
 

@@ -174,7 +174,7 @@ typedef struct Actor {
     /* 0x01F */ s8 targetMode; // Controls how far the actor can be targeted from and how far it can stay locked on
     /* 0x020 */ s16 halfDaysBits; // Bitmask indicating which half-days this actor is allowed to not be killed(?) (TODO: not sure how to word this). If the current halfDayBit is not part of this mask then the actor is killed when spawning the setup actors
     /* 0x024 */ PosRot world; // Position/rotation in the world
-    /* 0x038 */ s8 cutscene;
+    /* 0x038 */ s8 csId; // ActorCutscene index, see `CutsceneId`
     /* 0x039 */ u8 audioFlags; // Another set of flags? Seems related to sfx or bgm
     /* 0x03C */ PosRot focus; // Target reticle focuses on this position. For player this represents head pos and rot
     /* 0x050 */ u16 sfxId; // Id of sound effect to play. Plays when value is set, then is cleared the following update cycle
@@ -389,12 +389,18 @@ typedef struct {
     /* 0xE */ s16 intensity;
 } TitleCardContext; // size = 0x10
 
-typedef struct ActorContext_unk_1F4 {
-    /* 0x00 */ u8 unk_00;
+typedef enum {
+    /* 0 */ PLAYER_IMPACT_GORON_GROUND_POUND,
+    /* 1 */ PLAYER_IMPACT_ZORA_BARRIER,
+    /* 2 */ PLAYER_IMPACT_BONK // also activated by goron attack
+} PlayerImpactType;
+
+typedef struct PlayerImpact {
+    /* 0x00 */ u8 type;
     /* 0x01 */ u8 timer;
-    /* 0x04 */ f32 unk_04;
-    /* 0x08 */ Vec3f unk_08;
-} ActorContext_unk_1F4; // size = 0x14
+    /* 0x04 */ f32 dist;
+    /* 0x08 */ Vec3f pos;
+} PlayerImpact; // size = 0x14
 
 typedef struct ActorContext_unk_20C {
     /* 0x0 */ s16 id;
@@ -458,7 +464,7 @@ typedef struct ActorContext {
     /* 0x120 */ TargetContext targetContext;
     /* 0x1B8 */ ActorContextSceneFlags sceneFlags;
     /* 0x1E4 */ TitleCardContext titleCtxt;
-    /* 0x1F4 */ ActorContext_unk_1F4 unk_1F4;
+    /* 0x1F4 */ PlayerImpact playerImpact;
     /* 0x208 */ UNK_TYPE1 unk_208[0x4];
     /* 0x20C */ ActorContext_unk_20C unk_20C[8];
     /* 0x24C */ UNK_TYPE1 unk_24C[0x4];
