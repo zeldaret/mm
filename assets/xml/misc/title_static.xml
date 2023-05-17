@@ -124,7 +124,7 @@
 
         <Texture Name="gFileSelSaveXJPNTex" OutName="save_x_jpn" Format="i4" Width="32" Height="16" Offset="0x307F0"/>
 
-        <Texture Name="gFileSelMASKSENGTex" OutName="masks_eng" Format="i4" Width="32" Height="32" Offset="0x308F0"/>
+        <Texture Name="gFileSelMASKSENGTex" OutName="masks_eng" Format="i4" Width="64" Height="16" Offset="0x308F0"/>
 
         <Texture Name="gFileSel0QuarterHeartENGTex" OutName="0_quarter_heart" Format="ia8" Width="24" Height="16" Offset="0x30AF0"/>
         <Texture Name="gFileSel1QuarterHeartENGTex" OutName="1_quarter_heart" Format="ia8" Width="24" Height="16" Offset="0x30C70"/>

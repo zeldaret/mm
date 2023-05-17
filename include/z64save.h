@@ -240,7 +240,7 @@ typedef struct SaveOptions {
 
 typedef struct SavePlayerData {
     /* 0x00 */ char newf[6];                          // "newf"               Will always be "ZELDA3 for a valid save
-    /* 0x06 */ u16 threeDayResetCount;                          // "savect"
+    /* 0x06 */ u16 threeDayResetCount;                // "savect"
     /* 0x08 */ char playerName[8];                    // "player_name"
     /* 0x10 */ s16 healthCapacity;                    // "max_life"
     /* 0x12 */ s16 health;                            // "now_life"

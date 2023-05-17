@@ -25,7 +25,7 @@
 typedef enum {
     /* 0 */ FS_MENU_MODE_INIT,
     /* 1 */ FS_MENU_MODE_CONFIG,
-    /* 2 */ FS_MENU_MODE_SELECT,
+    /* 2 */ FS_MENU_MODE_SELECT
 } MenuMode;
 
 typedef enum {
@@ -73,7 +73,7 @@ typedef enum {
     /* 0x29 */ CM_OPTIONS_MENU,
     /* 0x2A */ CM_OPTIONS_WAIT_FOR_FLASH_SAVE,
     /* 0x2B */ CM_OPTIONS_TO_MAIN,
-    /* 0x2C */ CM_UNUSED_DELAY,
+    /* 0x2C */ CM_UNUSED_DELAY
 } ConfigMode;
 
 typedef enum {
@@ -84,24 +84,24 @@ typedef enum {
     /* 4 */ SM_FADE_OUT_FILE_INFO,
     /* 5 */ SM_MOVE_FILE_TO_SLOT,
     /* 6 */ SM_FADE_OUT,
-    /* 7 */ SM_LOAD_GAME,
+    /* 7 */ SM_LOAD_GAME
 } SelectMode;
 
 typedef enum {
-    /* 0 */ FS_TITLE_SELECT_FILE,    // "Please select a file."
-    /* 1 */ FS_TITLE_OPEN_FILE,      // "Open this file?"
-    /* 2 */ FS_TITLE_COPY_FROM,      // "Copy which file?"
-    /* 3 */ FS_TITLE_COPY_TO,        // "Copy to which file?"
-    /* 4 */ FS_TITLE_COPY_CONFIRM,   // "Are you sure?"
-    /* 5 */ FS_TITLE_COPY_COMPLETE,  // "File copied."
-    /* 6 */ FS_TITLE_ERASE_FILE,     // "Erase which file?"
-    /* 7 */ FS_TITLE_ERASE_CONFIRM,  // "Are you sure?"
-    /* 8 */ FS_TITLE_ERASE_COMPLETE, // "File erased."
+    /* 0 */ FS_TITLE_SELECT_FILE,   // "Please select a file."
+    /* 1 */ FS_TITLE_OPEN_FILE,     // "Open this file?"
+    /* 2 */ FS_TITLE_COPY_FROM,     // "Copy which file?"
+    /* 3 */ FS_TITLE_COPY_TO,       // "Copy to which file?"
+    /* 4 */ FS_TITLE_COPY_CONFIRM,  // "Are you sure?"
+    /* 5 */ FS_TITLE_COPY_COMPLETE, // "File copied."
+    /* 6 */ FS_TITLE_ERASE_FILE,    // "Erase which file?"
+    /* 7 */ FS_TITLE_ERASE_CONFIRM, // "Are you sure?"
+    /* 8 */ FS_TITLE_ERASE_COMPLETE // "File erased."
 } TitleLabel;
 
 typedef enum {
     /* 0 */ FS_TITLE_CUR,
-    /* 1 */ FS_TITLE_NEXT,
+    /* 1 */ FS_TITLE_NEXT
 } TitleIndex;
 
 typedef enum {
@@ -110,7 +110,7 @@ typedef enum {
     /*  1 */ FS_WARNING_NO_FILE_ERASE,  // "No file to erase."
     /*  2 */ FS_WARNING_NO_EMPTY_FILES, // "There is no empty file."
     /*  3 */ FS_WARNING_FILE_EMPTY,     // "This is an empty file."
-    /*  4 */ FS_WARNING_FILE_IN_USE,    // "This file is in use."
+    /*  4 */ FS_WARNING_FILE_IN_USE     // "This file is in use."
 } WarningLabel;
 
 typedef enum {
@@ -119,21 +119,21 @@ typedef enum {
     /* 2 */ FS_BTN_MAIN_FILE_3,
     /* 3 */ FS_BTN_MAIN_COPY,
     /* 4 */ FS_BTN_MAIN_ERASE,
-    /* 5 */ FS_BTN_MAIN_OPTIONS,
+    /* 5 */ FS_BTN_MAIN_OPTIONS
 } MainMenuButtonIndex;
 
 typedef enum {
     /* 0 */ FS_BTN_COPY_FILE_1,
     /* 1 */ FS_BTN_COPY_FILE_2,
     /* 2 */ FS_BTN_COPY_FILE_3,
-    /* 3 */ FS_BTN_COPY_QUIT,
+    /* 3 */ FS_BTN_COPY_QUIT
 } CopyMenuButtonIndex;
 
 typedef enum {
     /* 0 */ FS_BTN_ERASE_FILE_1,
     /* 1 */ FS_BTN_ERASE_FILE_2,
     /* 2 */ FS_BTN_ERASE_FILE_3,
-    /* 3 */ FS_BTN_ERASE_QUIT,
+    /* 3 */ FS_BTN_ERASE_QUIT
 } EraseMenuButtonIndex;
 
 typedef enum {
@@ -141,28 +141,28 @@ typedef enum {
     /* 1 */ FS_BTN_SELECT_FILE_2,
     /* 2 */ FS_BTN_SELECT_FILE_3,
     /* 3 */ FS_BTN_SELECT_YES,
-    /* 4 */ FS_BTN_SELECT_QUIT,
+    /* 4 */ FS_BTN_SELECT_QUIT
 } SelectMenuButtonIndex;
 
 typedef enum {
     /* 0 */ FS_BTN_CONFIRM_YES,
-    /* 1 */ FS_BTN_CONFIRM_QUIT,
+    /* 1 */ FS_BTN_CONFIRM_QUIT
 } ConfirmButtonIndex;
 
 typedef enum {
     /* 0 */ FS_BTN_ACTION_COPY,
-    /* 1 */ FS_BTN_ACTION_ERASE,
+    /* 1 */ FS_BTN_ACTION_ERASE
 } ActionButtonIndex;
 
 typedef enum {
     /* 0 */ FS_SETTING_AUDIO,
-    /* 1 */ FS_SETTING_ZTARGET,
+    /* 1 */ FS_SETTING_ZTARGET
 } SettingIndex;
 
 typedef enum {
     /* 0 */ FS_CHAR_PAGE_HIRA,
     /* 1 */ FS_CHAR_PAGE_KATA,
-    /* 2 */ FS_CHAR_PAGE_ENG,
+    /* 2 */ FS_CHAR_PAGE_ENG
 } CharPage;
 
 typedef enum {
@@ -171,7 +171,7 @@ typedef enum {
     /*  2 */ FS_KBD_BTN_ENG,
     /*  3 */ FS_KBD_BTN_BACKSPACE,
     /*  4 */ FS_KBD_BTN_END,
-    /* 99 */ FS_KBD_BTN_NONE = 99,
+    /* 99 */ FS_KBD_BTN_NONE = 99
 } KeyboardButton;
 
 typedef struct FileSelectState {
@@ -192,32 +192,19 @@ typedef struct FileSelectState {
     /* 0x243EC */ Vtx* nameEntryVtx;
     /* 0x243F0 */ Vtx* keyboard2Vtx;
     /* 0x243F4 */ u8 newf[4][6];
-    /* 0x2440C */ u16 threeDayResetCount[2];
-    /* 0x24410 */ u16 threeDayResetCount2[2];
-    /* 0x24414 */ char fileNames[2][8];
-    /* 0x24424 */ char fileNames2[2][8];
-    /* 0x24434 */ s16 healthCapacity[2];
-    /* 0x24438 */ u16 healthCapacity2[2];
-    /* 0x2443C */ s16 health[2];
-    /* 0x24440 */ s16 health2[2];
-    /* 0x24444 */ u32 questItems[2];
-    /* 0x2444C */ u32 questItems2[2];
-    /* 0x24454 */ s8 defenseHearts[2];
-    /* 0x24456 */ u8 defenseHearts2[2];
-    /* 0x24458 */ u16 time[2];
-    /* 0x2445C */ u16 time2[2];
-    /* 0x24460 */ s16 day[2];
-    /* 0x24464 */ s16 day2[2];
-    /* 0x24468 */ u8 isOwlSave[2];
-    /* 0x2446A */ u8 isOwlSave2[2];
-    /* 0x2446C */ s16 rupees[2];
-    /* 0x24470 */ s16 rupees2[2];
-    /* 0x24474 */ u8 walletUpgrades[2];
-    /* 0x24476 */ s8 walletUpgrades2[2];
-    /* 0x24478 */ u8 maskCount[2];
-    /* 0x2447A */ s8 maskCount2[2];
-    /* 0x2447C */ u8 heartPieceCount[2];
-    /* 0x2447E */ s8 heartPieceCount2[2];
+    /* 0x2440C */ u16 threeDayResetCount[4];
+    /* 0x24414 */ char fileNames[4][8];
+    /* 0x24434 */ s16 healthCapacity[4];
+    /* 0x2443C */ s16 health[4];
+    /* 0x24444 */ u32 questItems[4];
+    /* 0x24454 */ s8 defenseHearts[4];
+    /* 0x24458 */ u16 time[4];
+    /* 0x24460 */ s16 day[4];
+    /* 0x24468 */ u8 isOwlSave[4];
+    /* 0x2446C */ s16 rupees[4];
+    /* 0x24474 */ u8 walletUpgrades[4];
+    /* 0x24478 */ u8 maskCount[4];
+    /* 0x2447C */ u8 heartPieceCount[4];
     /* 0x24480 */ s16 buttonIndex; // enum will depend on `ConfigMode`
     /* 0x24482 */ s16 confirmButtonIndex; // see `ConfirmButtonIndex` enum
     /* 0x24484 */ s16 menuMode; // see `MenuMode` enum

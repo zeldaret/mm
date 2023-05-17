@@ -1060,7 +1060,7 @@ void FileSelect_ExitToEraseSelect2(GameState* thisx) {
 
 /**
  * Wait for an initial delay, then start fading out the selected file.
- * The actual file deletion occurs in this function
+ * The actual file deletion occurs in this function.
  * Update function for `CM_ERASE_ANIM_1`
  */
 void FileSelect_EraseAnim1(GameState* thisx) {

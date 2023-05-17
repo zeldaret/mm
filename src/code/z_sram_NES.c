@@ -1090,7 +1090,7 @@ void Sram_OpenSave(FileSelectState* fileSelect, SramContext* sramCtx) {
 
         if (gSaveContext.fileNum == 0xFF) {
             func_80185968(sramCtx->saveBuf, gFlashSaveStartPages[0], gFlashSaveNumPages[0]);
-        } else if (fileSelect->isOwlSave2[gSaveContext.fileNum]) {
+        } else if (fileSelect->isOwlSave[gSaveContext.fileNum + 2]) {
             phi_t1 = gSaveContext.fileNum + 2;
             phi_t1 *= 2;
 
@@ -1391,10 +1391,6 @@ void func_801457CC(GameState* gameState, SramContext* sramCtx) {
                 // Owl Save:
                 // sp76 = 3: main owl save
                 // sp76 = 4: backup owl save
-
-                //! Note: Here, sp76 is either 2 or 3, but most of these fileselect arrays using [sp76]
-                // are only of size 2. So either need `isOwlSave2[sp76 - 2]`
-                // or `isOwlSave[sp76]` with both `isOwlSave` and `isOwlSave2` merged into 1 array
                 fileSelect->isOwlSave[sp76] = 0;
 
                 if (!CHECK_NEWF(fileSelect->newf[sp76 - 2])) {
@@ -1546,9 +1542,9 @@ void Sram_EraseSave(FileSelectState* fileSelect2, SramContext* sramCtx, s32 file
     s32 pad;
 
     if (gSaveContext.flashSaveAvailable) {
-        if (fileSelect->isOwlSave2[fileNum]) {
+        if (fileSelect->isOwlSave[fileNum + 2]) {
             func_80147314(sramCtx, fileNum);
-            fileSelect->isOwlSave2[fileNum] = false;
+            fileSelect->isOwlSave[fileNum + 2] = false;
         }
         bzero(sramCtx->saveBuf, SAVE_BUFFER_SIZE);
         Lib_MemCpy(&gSaveContext, sramCtx->saveBuf, sizeof(Save));
@@ -1566,27 +1562,27 @@ void Sram_CopySave(FileSelectState* fileSelect2, SramContext* sramCtx) {
     s16 maskCount;
 
     if (gSaveContext.flashSaveAvailable) {
-        if (fileSelect->isOwlSave2[fileSelect->selectedFileIndex]) {
+        if (fileSelect->isOwlSave[fileSelect->selectedFileIndex + 2]) {
             func_80147414(sramCtx, fileSelect->selectedFileIndex, fileSelect->copyDestFileIndex);
-            fileSelect->threeDayResetCount2[fileSelect->copyDestFileIndex] =
+            fileSelect->threeDayResetCount[fileSelect->copyDestFileIndex + 2] =
                 gSaveContext.save.saveInfo.playerData.threeDayResetCount;
 
             for (i = 0; i < ARRAY_COUNT(gSaveContext.save.saveInfo.playerData.playerName); i++) {
-                fileSelect->fileNames2[fileSelect->copyDestFileIndex][i] =
+                fileSelect->fileNames[fileSelect->copyDestFileIndex + 2][i] =
                     gSaveContext.save.saveInfo.playerData.playerName[i];
             }
 
-            fileSelect->healthCapacity2[fileSelect->copyDestFileIndex] =
+            fileSelect->healthCapacity[fileSelect->copyDestFileIndex + 2] =
                 gSaveContext.save.saveInfo.playerData.healthCapacity;
-            fileSelect->health2[fileSelect->copyDestFileIndex] = gSaveContext.save.saveInfo.playerData.health;
-            fileSelect->defenseHearts2[fileSelect->copyDestFileIndex] =
+            fileSelect->health[fileSelect->copyDestFileIndex + 2] = gSaveContext.save.saveInfo.playerData.health;
+            fileSelect->defenseHearts[fileSelect->copyDestFileIndex + 2] =
                 gSaveContext.save.saveInfo.inventory.defenseHearts;
-            fileSelect->questItems2[fileSelect->copyDestFileIndex] = gSaveContext.save.saveInfo.inventory.questItems;
-            fileSelect->time2[fileSelect->copyDestFileIndex] = gSaveContext.save.time;
-            fileSelect->day2[fileSelect->copyDestFileIndex] = gSaveContext.save.day;
-            fileSelect->isOwlSave2[fileSelect->copyDestFileIndex] = gSaveContext.save.isOwlSave;
-            fileSelect->rupees2[fileSelect->copyDestFileIndex] = gSaveContext.save.saveInfo.playerData.rupees;
-            fileSelect->walletUpgrades2[fileSelect->copyDestFileIndex] = CUR_UPG_VALUE(UPG_WALLET);
+            fileSelect->questItems[fileSelect->copyDestFileIndex + 2] = gSaveContext.save.saveInfo.inventory.questItems;
+            fileSelect->time[fileSelect->copyDestFileIndex + 2] = gSaveContext.save.time;
+            fileSelect->day[fileSelect->copyDestFileIndex + 2] = gSaveContext.save.day;
+            fileSelect->isOwlSave[fileSelect->copyDestFileIndex + 2] = gSaveContext.save.isOwlSave;
+            fileSelect->rupees[fileSelect->copyDestFileIndex + 2] = gSaveContext.save.saveInfo.playerData.rupees;
+            fileSelect->walletUpgrades[fileSelect->copyDestFileIndex + 2] = CUR_UPG_VALUE(UPG_WALLET);
 
             for (i = 0, maskCount = 0; i < 24; i++) {
                 if (gSaveContext.save.saveInfo.inventory.items[i + 24] != ITEM_NONE) {
@@ -1594,8 +1590,8 @@ void Sram_CopySave(FileSelectState* fileSelect2, SramContext* sramCtx) {
                 }
             }
 
-            fileSelect->maskCount2[fileSelect->copyDestFileIndex] = maskCount;
-            fileSelect->heartPieceCount2[fileSelect->copyDestFileIndex] = GET_QUEST_HEART_PIECE_COUNT;
+            fileSelect->maskCount[fileSelect->copyDestFileIndex + 2] = maskCount;
+            fileSelect->heartPieceCount[fileSelect->copyDestFileIndex + 2] = GET_QUEST_HEART_PIECE_COUNT;
         }
 
         // clear buffer
@@ -1886,7 +1882,7 @@ void func_80147314(SramContext* sramCtx, s32 fileNum) {
     gSaveContext.save.saveInfo.playerData.newf[5] = '3';
 }
 
-// Used by `Sram_CopySave` with `isOwlSave2` set
+// Used by `Sram_CopySave` with `isOwlSave` set
 void func_80147414(SramContext* sramCtx, s32 fileNum, s32 arg2) {
     s32 pad;
 
