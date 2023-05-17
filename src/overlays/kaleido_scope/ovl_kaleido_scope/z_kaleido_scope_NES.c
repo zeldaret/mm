@@ -659,7 +659,7 @@ void KaleidoScope_DrawOwlWarpMapPage(PlayState* play) {
 
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 180, 180, 120, 255);
 
-    Matrix_RotateYF(-1.57f, MTXMODE_NEW); // (-M_PI / 2)
+    Matrix_RotateYF(-1.57f, MTXMODE_NEW);
     Matrix_Translate(0.0f, sPauseMenuVerticalOffset / 100.0f, -93.0f, MTXMODE_APPLY);
     Matrix_Scale(0.78f, 0.78f, 0.78f, MTXMODE_APPLY);
     Matrix_RotateXFApply(-pauseCtx->mapPageRoll / 100.0f);
