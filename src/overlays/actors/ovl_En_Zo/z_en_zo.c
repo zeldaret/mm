@@ -122,32 +122,33 @@ s32 EnZo_ChangeAnim(SkelAnime* skelAnime, s16 animIndex) {
 s32 EnZo_PlayWalkingSound(EnZo* this, PlayState* play) {
     u8 leftWasGrounded;
     u8 rightWasGrounded;
-    s32 waterSfxId;
+    SurfaceSfxOffset surfaceSfxOffset;
     u16 sfxId;
     u8 isFootGrounded;
 
     leftWasGrounded = this->isLeftFootGrounded;
     rightWasGrounded = this->isRightFootGrounded;
 
-    if (this->actor.bgCheckFlags & 0x20) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_WATER) {
         if (this->actor.depthInWater < 20.0f) {
-            waterSfxId = NA_SE_PL_WALK_WATER0 - SFX_FLAG;
+            surfaceSfxOffset = SURFACE_SFX_OFFSET_WATER_SHALLOW;
         } else {
-            waterSfxId = NA_SE_PL_WALK_WATER1 - SFX_FLAG;
+            surfaceSfxOffset = SURFACE_SFX_OFFSET_WATER_DEEP;
         }
-        sfxId = waterSfxId + SFX_FLAG;
+        sfxId = NA_SE_PL_WALK_GROUND + surfaceSfxOffset;
     } else {
-        sfxId = SurfaceType_GetSfx(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId) + SFX_FLAG;
+        sfxId = NA_SE_PL_WALK_GROUND +
+                SurfaceType_GetSfxOffset(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
     }
 
     this->isLeftFootGrounded = isFootGrounded = SubS_IsFloorAbove(play, &this->leftFootPos, -6.0f);
     if ((this->isLeftFootGrounded) && (!leftWasGrounded) && (isFootGrounded)) {
-        Actor_PlaySfxAtPos(&this->actor, sfxId);
+        Actor_PlaySfx(&this->actor, sfxId);
     }
 
     this->isRightFootGrounded = isFootGrounded = SubS_IsFloorAbove(play, &this->rightFootPos, -6.0f);
     if ((this->isRightFootGrounded) && (!rightWasGrounded) && (isFootGrounded)) {
-        Actor_PlaySfxAtPos(&this->actor, sfxId);
+        Actor_PlaySfx(&this->actor, sfxId);
     }
 
     return 0;
@@ -220,8 +221,8 @@ void EnZo_FollowPath(EnZo* this, PlayState* play) {
     s16 speed;
     Vec3f pos;
 
-    Math_SmoothStepToF(&this->actor.speedXZ, 1.0f, 0.4f, 1000.0f, 0.0f);
-    speed = this->actor.speedXZ * 400.0f;
+    Math_SmoothStepToF(&this->actor.speed, 1.0f, 0.4f, 1000.0f, 0.0f);
+    speed = this->actor.speed * 400.0f;
     if (SubS_CopyPointFromPath(this->path, this->waypoint, &pos) && SubS_MoveActorToPoint(&this->actor, &pos, speed)) {
         this->waypoint++;
         if (this->waypoint >= this->path->count) {
@@ -233,7 +234,7 @@ void EnZo_FollowPath(EnZo* this, PlayState* play) {
         EnZo_ChangeAnim(&this->skelAnime, 1);
         this->actionFunc = EnZo_TreadWater;
         this->actor.gravity = 0.0f;
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
     }
 }
 
@@ -280,7 +281,7 @@ void EnZo_Update(Actor* thisx, PlayState* play) {
     EnZo* this = THIS;
 
     this->actionFunc(this, play);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
     EnZo_LookAtPlayer(this, play);
     EnZo_PlayWalkingSound(this, play);
     EnZo_UpdateCollider(this, play);

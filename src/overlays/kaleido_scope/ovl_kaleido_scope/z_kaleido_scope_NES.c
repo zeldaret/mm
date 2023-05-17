@@ -107,80 +107,80 @@ TexturePtr sQuestPageBgTextures[] = {
 };
 
 s16 gVtxPageMapWorldQuadsWidth[VTX_PAGE_MAP_WORLD_QUADS] = {
-    80,  // mapPageVtx[60]  world map clouds Clock Town 1
-    64,  // mapPageVtx[64]  world map clouds Clock Town 2
-    64,  // mapPageVtx[68]  world map clouds Woodfall 1
-    64,  // mapPageVtx[72]  world map clouds Woodfall 2
-    16,  // mapPageVtx[76]  world map clouds Woodfall 3
-    64,  // mapPageVtx[80]  world map clouds Snowhead 1
-    112, // mapPageVtx[84]  world map clouds Snowhead 2
-    112, // mapPageVtx[88]  world map clouds Snowhead 3
-    48,  // mapPageVtx[92]  world map clouds Romani Ranch
-    64,  // mapPageVtx[96]  world map clouds Great Bay 1
-    64,  // mapPageVtx[100] world map clouds Great Bay 2
-    64,  // mapPageVtx[104] world map clouds Great Bay 3
-    64,  // mapPageVtx[108] world map clouds Great Bay 4
-    48,  // mapPageVtx[112] world map clouds Stone Tower 1
-    64,  // mapPageVtx[116] world map clouds Stone Tower 2
-    8,   // mapPageVtx[120] world map region Great Bay
-    8,   // mapPageVtx[124] world map region Zora Hall
-    8,   // mapPageVtx[128] world map region Romani Ranch
-    8,   // mapPageVtx[132] world map region Deku Palace
-    8,   // mapPageVtx[136] world map region Woodfall
-    8,   // mapPageVtx[140] world map region Clock Town
-    8,   // mapPageVtx[144] world map region Snowhead
-    8,   // mapPageVtx[148] world map region Ikana Graveyard
-    8,   // mapPageVtx[152] world map region Ikana Canyon
-    8,   // mapPageVtx[156] world map region Goron Village
-    8,   // mapPageVtx[160] world map region Stone Tower
-    24,  // mapPageVtx[164] world map owl warp Great Bay Coast
-    24,  // mapPageVtx[168] world map owl warp Zora Cape
-    24,  // mapPageVtx[172] world map owl warp Snowhead
-    24,  // mapPageVtx[176] world map owl warp Mountain Village
-    24,  // mapPageVtx[180] world map owl warp Clock Town
-    24,  // mapPageVtx[184] world map owl warp Milk Road
-    24,  // mapPageVtx[188] world map owl warp Woodfall
-    24,  // mapPageVtx[192] world map owl warp Southern Swamp
-    24,  // mapPageVtx[196] world map owl warp Ikana Canyon
-    24,  // mapPageVtx[200] world map owl warp Stone Tower
+    80,  // mapPageVtx[60]  clouds Clock Town 1
+    64,  // mapPageVtx[64]  clouds Clock Town 2
+    64,  // mapPageVtx[68]  clouds Woodfall 1
+    64,  // mapPageVtx[72]  clouds Woodfall 2
+    16,  // mapPageVtx[76]  clouds Woodfall 3
+    64,  // mapPageVtx[80]  clouds Snowhead 1
+    112, // mapPageVtx[84]  clouds Snowhead 2
+    112, // mapPageVtx[88]  clouds Snowhead 3
+    48,  // mapPageVtx[92]  clouds Romani Ranch
+    64,  // mapPageVtx[96]  clouds Great Bay 1
+    64,  // mapPageVtx[100] clouds Great Bay 2
+    64,  // mapPageVtx[104] clouds Great Bay 3
+    64,  // mapPageVtx[108] clouds Great Bay 4
+    48,  // mapPageVtx[112] clouds Stone Tower 1
+    64,  // mapPageVtx[116] clouds Stone Tower 2
+    8,   // mapPageVtx[120] region Great Bay
+    8,   // mapPageVtx[124] region Zora Hall
+    8,   // mapPageVtx[128] region Romani Ranch
+    8,   // mapPageVtx[132] region Deku Palace
+    8,   // mapPageVtx[136] region Woodfall
+    8,   // mapPageVtx[140] region Clock Town
+    8,   // mapPageVtx[144] region Snowhead
+    8,   // mapPageVtx[148] region Ikana Graveyard
+    8,   // mapPageVtx[152] region Ikana Canyon
+    8,   // mapPageVtx[156] region Goron Village
+    8,   // mapPageVtx[160] region Stone Tower
+    24,  // mapPageVtx[164] owl warp Great Bay Coast
+    24,  // mapPageVtx[168] owl warp Zora Cape
+    24,  // mapPageVtx[172] owl warp Snowhead
+    24,  // mapPageVtx[176] owl warp Mountain Village
+    24,  // mapPageVtx[180] owl warp Clock Town
+    24,  // mapPageVtx[184] owl warp Milk Road
+    24,  // mapPageVtx[188] owl warp Woodfall
+    24,  // mapPageVtx[192] owl warp Southern Swamp
+    24,  // mapPageVtx[196] owl warp Ikana Canyon
+    24,  // mapPageVtx[200] owl warp Stone Tower
 };
 s16 gVtxPageMapWorldQuadsHeight[VTX_PAGE_MAP_WORLD_QUADS] = {
-    40, // mapPageVtx[60] world map clouds Clock Town 1
-    31, // mapPageVtx[64] world map clouds Clock Town 2
-    53, // mapPageVtx[68] world map clouds Woodfall 1
-    53, // mapPageVtx[72] world map clouds Woodfall 2
-    53, // mapPageVtx[76] world map clouds Woodfall 3
-    52, // mapPageVtx[80] world map clouds Snowhead 1
-    35, // mapPageVtx[84] world map clouds Snowhead 2
-    35, // mapPageVtx[88] world map clouds Snowhead 3
-    32, // mapPageVtx[92] world map clouds Romani Ranch
-    64, // mapPageVtx[96] world map clouds Great Bay 1
-    64, // mapPageVtx[100] world map clouds Great Bay 2
-    64, // mapPageVtx[104] world map clouds Great Bay 3
-    64, // mapPageVtx[108] world map clouds Great Bay 4
-    82, // mapPageVtx[112] world map clouds Stone Tower 1
-    61, // mapPageVtx[116] world map clouds Stone Tower 2
-    8,  // mapPageVtx[120] world map region Great Bay
-    8,  // mapPageVtx[124] world map region Zora Hall
-    8,  // mapPageVtx[128] world map region Romani Ranch
-    8,  // mapPageVtx[132] world map region Deku Palace
-    8,  // mapPageVtx[136] world map region Woodfall
-    8,  // mapPageVtx[140] world map region Clock Town
-    8,  // mapPageVtx[144] world map region Snowhead
-    8,  // mapPageVtx[148] world map region Ikana Graveyard
-    8,  // mapPageVtx[152] world map region Ikana Canyon
-    8,  // mapPageVtx[156] world map region Goron Village
-    8,  // mapPageVtx[160] world map region Stone Tower
-    12, // mapPageVtx[164] world map owl warp Great Bay Coast
-    12, // mapPageVtx[168] world map owl warp Zora Cape
-    12, // mapPageVtx[172] world map owl warp Snowhead
-    12, // mapPageVtx[176] world map owl warp Mountain Village
-    12, // mapPageVtx[180] world map owl warp Clock Town
-    12, // mapPageVtx[184] world map owl warp Milk Road
-    12, // mapPageVtx[188] world map owl warp Woodfall
-    12, // mapPageVtx[192] world map owl warp Southern Swamp
-    12, // mapPageVtx[196] world map owl warp Ikana Canyon
-    12, // mapPageVtx[200] world map owl warp Stone Tower
+    40, // mapPageVtx[60]  clouds Clock Town 1
+    31, // mapPageVtx[64]  clouds Clock Town 2
+    53, // mapPageVtx[68]  clouds Woodfall 1
+    53, // mapPageVtx[72]  clouds Woodfall 2
+    53, // mapPageVtx[76]  clouds Woodfall 3
+    52, // mapPageVtx[80]  clouds Snowhead 1
+    35, // mapPageVtx[84]  clouds Snowhead 2
+    35, // mapPageVtx[88]  clouds Snowhead 3
+    32, // mapPageVtx[92]  clouds Romani Ranch
+    64, // mapPageVtx[96]  clouds Great Bay 1
+    64, // mapPageVtx[100] clouds Great Bay 2
+    64, // mapPageVtx[104] clouds Great Bay 3
+    64, // mapPageVtx[108] clouds Great Bay 4
+    82, // mapPageVtx[112] clouds Stone Tower 1
+    61, // mapPageVtx[116] clouds Stone Tower 2
+    8,  // mapPageVtx[120] region Great Bay
+    8,  // mapPageVtx[124] region Zora Hall
+    8,  // mapPageVtx[128] region Romani Ranch
+    8,  // mapPageVtx[132] region Deku Palace
+    8,  // mapPageVtx[136] region Woodfall
+    8,  // mapPageVtx[140] region Clock Town
+    8,  // mapPageVtx[144] region Snowhead
+    8,  // mapPageVtx[148] region Ikana Graveyard
+    8,  // mapPageVtx[152] region Ikana Canyon
+    8,  // mapPageVtx[156] region Goron Village
+    8,  // mapPageVtx[160] region Stone Tower
+    12, // mapPageVtx[164] owl warp Great Bay Coast
+    12, // mapPageVtx[168] owl warp Zora Cape
+    12, // mapPageVtx[172] owl warp Snowhead
+    12, // mapPageVtx[176] owl warp Mountain Village
+    12, // mapPageVtx[180] owl warp Clock Town
+    12, // mapPageVtx[184] owl warp Milk Road
+    12, // mapPageVtx[188] owl warp Woodfall
+    12, // mapPageVtx[192] owl warp Southern Swamp
+    12, // mapPageVtx[196] owl warp Ikana Canyon
+    12, // mapPageVtx[200] owl warp Stone Tower
 };
 
 s16 sGameOverPrimR = 0;
@@ -1638,7 +1638,7 @@ void KaleidoScope_UpdateOpening(PlayState* play) {
 
     if (pauseCtx->switchPageTimer == 64) {
         // Finished opening
-        func_80112C0C(play, 1);
+        Interface_UpdateButtonsAlt(play, 1);
 
         if (pauseCtx->cursorSpecialPos == 0) {
             gSaveContext.buttonStatus[EQUIP_SLOT_B] = D_801C6A98[pauseCtx->pageIndex][0];
@@ -1921,7 +1921,7 @@ void KaleidoScope_Update(PlayState* play) {
                         } else {
                             play_sound(NA_SE_SY_PIECE_OF_HEART);
                             Play_SaveCycleSceneFlags(&play->state);
-                            gSaveContext.save.playerData.savedSceneId = play->sceneId;
+                            gSaveContext.save.saveInfo.playerData.savedSceneId = play->sceneId;
                             func_8014546C(sramCtx);
                             if (gSaveContext.unk_3F3F == 0) {
                                 pauseCtx->savePromptState = PAUSE_SAVEPROMPT_STATE_5;
@@ -2072,7 +2072,7 @@ void KaleidoScope_Update(PlayState* play) {
             pauseCtx->promptChoice = PAUSE_PROMPT_YES;
             pauseCtx->state++;
             if (gameOverCtx->state == GAMEOVER_INACTIVE) {
-                pauseCtx->state++;
+                pauseCtx->state++; // GAMEOVER_DEATH_START
             }
             break;
 
@@ -2182,8 +2182,8 @@ void KaleidoScope_Update(PlayState* play) {
                     play_sound(NA_SE_SY_PIECE_OF_HEART);
                     pauseCtx->promptChoice = PAUSE_PROMPT_YES;
                     Play_SaveCycleSceneFlags(&play->state);
-                    gSaveContext.save.playerData.savedSceneId = play->sceneId;
-                    gSaveContext.save.playerData.health = 0x30;
+                    gSaveContext.save.saveInfo.playerData.savedSceneId = play->sceneId;
+                    gSaveContext.save.saveInfo.playerData.health = 0x30;
                     func_8014546C(sramCtx);
                     if (gSaveContext.unk_3F3F == 0) {
                         pauseCtx->state = PAUSE_STATE_GAMEOVER_8;
@@ -2255,15 +2255,15 @@ void KaleidoScope_Update(PlayState* play) {
                         func_80169FDC(&play->state);
                         gSaveContext.respawnFlag = -2;
                         gSaveContext.nextTransitionType = TRANS_TYPE_FADE_BLACK;
-                        gSaveContext.save.playerData.health = 0x30;
+                        gSaveContext.save.saveInfo.playerData.health = 0x30;
                         Audio_SetSpec(0xA);
                         gSaveContext.healthAccumulator = 0;
                         gSaveContext.magicState = MAGIC_STATE_IDLE;
                         gSaveContext.magicFlag = 0;
                         gSaveContext.magicCapacity = 0;
-                        gSaveContext.magicFillTarget = gSaveContext.save.playerData.magic;
-                        gSaveContext.save.playerData.magicLevel = 0;
-                        gSaveContext.save.playerData.magic = 0;
+                        gSaveContext.magicFillTarget = gSaveContext.save.saveInfo.playerData.magic;
+                        gSaveContext.save.saveInfo.playerData.magicLevel = 0;
+                        gSaveContext.save.saveInfo.playerData.magic = 0;
                     } else { // PAUSE_PROMPT_NO
                         STOP_GAMESTATE(&play->state);
                         SET_NEXT_GAMESTATE(&play->state, TitleSetup_Init, sizeof(TitleSetupState));
@@ -2450,7 +2450,7 @@ void KaleidoScope_Update(PlayState* play) {
             gSaveContext.buttonStatus[EQUIP_SLOT_C_RIGHT] = sUnpausedButtonStatus[EQUIP_SLOT_C_RIGHT];
             gSaveContext.buttonStatus[EQUIP_SLOT_A] = sUnpausedButtonStatus[EQUIP_SLOT_A];
 
-            func_80110038(play);
+            Interface_UpdateButtonsPart2(play);
             gSaveContext.hudVisibility = HUD_VISIBILITY_IDLE;
             Interface_SetHudVisibility(HUD_VISIBILITY_ALL);
             MsgEvent_SendNullTask();

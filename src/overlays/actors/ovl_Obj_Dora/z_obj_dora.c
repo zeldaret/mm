@@ -274,10 +274,10 @@ void ObjDora_UpdateCollision(ObjDora* this, PlayState* play) {
             case DORA_DMGEFF_STRONG:
             case DORA_DMGEFF_LIGHT:
                 if (this->actor.colChkInfo.damageEffect == DORA_DMGEFF_LIGHT) {
-                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_DORA_S);
+                    Actor_PlaySfx(&this->actor, NA_SE_EV_DORA_S);
                     this->lastGongHitType = DORA_HIT_LIGHT;
                 } else {
-                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_DORA_L);
+                    Actor_PlaySfx(&this->actor, NA_SE_EV_DORA_L);
                     this->lastGongHitType = DORA_HIT_STRONG;
                 }
 
@@ -285,10 +285,10 @@ void ObjDora_UpdateCollision(ObjDora* this, PlayState* play) {
                 ObjDora_SetupMoveGong(this);
 
                 if ((ObjDora_IsHalfHour(time) == true) && (this->rupeeDropTimer == 0)) {
-                    Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_TRE_BOX_APPEAR);
+                    Actor_PlaySfx(&this->actor, NA_SE_SY_TRE_BOX_APPEAR);
                     itemDrop = Item_DropCollectible(play, &this->actor.world.pos, ITEM00_RUPEE_BLUE);
                     itemDrop->world.rot.y = this->actor.world.rot.y;
-                    itemDrop->world.rot.y += (s32)(Rand_Centered() * 90.0f * (0x10000 / 360.0f));
+                    itemDrop->world.rot.y += (s32)DEG_TO_BINANG_ALT3(Rand_Centered() * 90.0f);
                     itemDrop->velocity.y = 5.0f;
                     itemDrop->gravity = -1.0f;
                     this->rupeeDropTimer = 40;
@@ -332,20 +332,20 @@ void ObjDora_Draw(Actor* thisx, PlayState* play) {
         Matrix_Push();
         Matrix_RotateXS(this->gongRotation.x, MTXMODE_APPLY);
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_OPA_DISP++, &gDoraGongDL);
+        gSPDisplayList(POLY_OPA_DISP++, &gDoraChainDL);
 
         Matrix_Translate(position.x, position.y + gongForceX, position.z + gongForceX, MTXMODE_APPLY);
         Matrix_RotateXS(this->gongRotation.z - this->gongRotation.x, MTXMODE_APPLY);
         Matrix_Translate(-position.x, -position.y, -position.z, MTXMODE_APPLY);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_OPA_DISP++, &gDoraChainDL);
+        gSPDisplayList(POLY_OPA_DISP++, &gDoraGongDL);
 
         Matrix_Pop();
     } else {
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_OPA_DISP++, &gDoraChainDL);
         gSPDisplayList(POLY_OPA_DISP++, &gDoraGongDL);
+        gSPDisplayList(POLY_OPA_DISP++, &gDoraChainDL);
     }
 
     CLOSE_DISPS(play->state.gfxCtx);

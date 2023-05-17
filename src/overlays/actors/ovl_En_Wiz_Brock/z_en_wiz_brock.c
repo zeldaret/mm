@@ -7,7 +7,7 @@
 #include "z_en_wiz_brock.h"
 #include "objects/object_wiz/object_wiz.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_8000000)
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_CANT_LOCK_ON)
 
 #define THIS ((EnWizBrock*)thisx)
 

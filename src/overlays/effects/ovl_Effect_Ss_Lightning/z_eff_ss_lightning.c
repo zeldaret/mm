@@ -31,7 +31,7 @@ TexturePtr sLightningTextures[] = {
     gEffLightning5Tex, gEffLightning6Tex, gEffLightning7Tex, gEffLightning8Tex,
 };
 
-const EffectSsInit Effect_Ss_Lightning_InitVars = {
+EffectSsInit Effect_Ss_Lightning_InitVars = {
     EFFECT_SS_LIGHTNING,
     EffectSsLightning_Init,
 };

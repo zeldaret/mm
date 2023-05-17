@@ -19,6 +19,4 @@ typedef struct {
     /* 0x2C */ s16 life;
 } EffectSsHahenInitParams; // size = 0x30
 
-extern const EffectSsInit Effect_Ss_Hahen_InitVars;
-
 #endif

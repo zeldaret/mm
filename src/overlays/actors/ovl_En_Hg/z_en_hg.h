@@ -15,12 +15,12 @@ typedef struct EnHg {
     /* 0x190 */ SkelAnime skelAnime;
     /* 0x1D4 */ EnHgActionFunc actionFunc;
     /* 0x1D8 */ MtxF mf;
-    /* 0x218 */ s32 cutsceneIndex;
+    /* 0x218 */ s32 csIdIndex;
     /* 0x21C */ s32 animIndex;
     /* 0x220 */ Vec3s jointTable[PAMELAS_FATHER_GIBDO_LIMB_MAX];
     /* 0x292 */ Vec3s morphTable[PAMELAS_FATHER_GIBDO_LIMB_MAX];
     /* 0x304 */ UNK_TYPE1 pad304[0xC];
-    /* 0x310 */ u16 cutscenes[4];
+    /* 0x310 */ u16 csIdList[4];
 } EnHg; // size = 0x318
 
 #endif // Z_EN_HG_H

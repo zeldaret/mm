@@ -62,9 +62,6 @@ s16 sQuestRemainsEnvBlue[] = {
     150, // Unused
 };
 
-#ifdef NON_EQUIVALENT
-// TODO: is actually NON_MATCHING, update once `z_kaleido_scope_NES.c` is decompiled
-// A single small regalloc at the first `Gfx_DrawTexQuadIA8` for the heart piece count (see `gItemIcons`)
 void KaleidoScope_DrawQuestStatus(PlayState* play) {
     static s16 sQuestRemainsColorTimer = 20;
     static s16 sQuestRemainsColorTimerIndex = 0;
@@ -135,6 +132,7 @@ void KaleidoScope_DrawQuestStatus(PlayState* play) {
     s16 k;
     s16 skullTokenDigits[3];
     u16 isDigitDrawn;
+    u32* questItemsPtr;
 
     OPEN_DISPS(play->state.gfxCtx);
 
@@ -321,7 +319,12 @@ void KaleidoScope_DrawQuestStatus(PlayState* play) {
         }
     }
 
-    if ((GET_SAVE_INVENTORY_QUEST_ITEMS >> QUEST_HEART_PIECE_COUNT) != 0) {
+    //! FAKE: Used to load `0xF0000000` early
+    if ((GET_SAVE_INVENTORY_QUEST_ITEMS & 0xF0000000) != 0) {}
+    questItemsPtr = &gSaveContext.save.saveInfo.inventory.questItems;
+    if (1) {}
+
+    if ((*questItemsPtr >> QUEST_HEART_PIECE_COUNT) != 0) {
         gDPPipeSync(POLY_OPA_DISP++);
         gDPSetCombineLERP(POLY_OPA_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0,
                           PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
@@ -548,34 +551,6 @@ void KaleidoScope_DrawQuestStatus(PlayState* play) {
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
-#else
-s16 sQuestRemainsColorTimer = 20;
-s16 sQuestRemainsColorTimerIndex = 0;
-s16 sQuestHpPrimRed = 0;
-s16 sQuestHpPrimGreen = 0;
-s16 sQuestHpPrimBlue = 0;
-s16 sQuestHpPrimAlpha = 0;
-s16 sQuestHpColorTimer = 20;
-s16 sQuestHpPrimColorTargetIndex = 0;
-TexturePtr sOcarinaButtonTextures[] = {
-    gOcarinaATex, gOcarinaCDownTex, gOcarinaCRightTex, gOcarinaCLeftTex, gOcarinaCUpTex,
-};
-s16 sQuestSongsPrimRed[] = {
-    150, 255, 100, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-};
-s16 sQuestSongsPrimGreen[] = {
-    255, 80, 150, 160, 100, 240, 255, 255, 255, 255, 255, 255,
-};
-s16 sQuestSongsPrimBlue[] = {
-    100, 40, 255, 0, 255, 100, 255, 255, 255, 255, 255, 255,
-};
-TexturePtr sQuestUpgradeTextures[][3] = {
-    { 0x08053000, 0x08054000, 0x08055000 },
-    { 0x08056000, 0x08057000, 0x08058000 },
-};
-u8 sQuestUpgrades[] = { UPG_QUIVER, UPG_BOMB_BAG };
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/KaleidoScope_DrawQuestStatus.s")
-#endif
 
 typedef enum {
     /* -3 */ CURSOR_TO_LEFT = -3, // Cursor on the "scroll to left page" position

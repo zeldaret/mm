@@ -187,7 +187,7 @@ void EnBox_ClipToGround(EnBox* this, PlayState* play) {
 void EnBox_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     EnBox* this = THIS;
-    s16 cutsceneIdx;
+    s16 csId;
     CollisionHeader* colHeader;
     f32 animFrame;
     f32 animFrameEnd;
@@ -213,7 +213,7 @@ void EnBox_Init(Actor* thisx, PlayState* play) {
         this->dyna.actor.world.rot.x = 0x7FFF;
         this->collectableFlag = 0;
     } else {
-        func_800C636C(play, &play->colCtx.dyna, this->dyna.bgId);
+        DynaPoly_DisableCeilingCollision(play, &play->colCtx.dyna, this->dyna.bgId);
         this->collectableFlag = (this->dyna.actor.world.rot.x & 0x7F);
         this->dyna.actor.world.rot.x = 0;
     }
@@ -228,7 +228,7 @@ void EnBox_Init(Actor* thisx, PlayState* play) {
         animFrame = animFrameEnd;
     } else if (((this->type == ENBOX_TYPE_BIG_SWITCH_FLAG_FALL) || (this->type == ENBOX_TYPE_SMALL_SWITCH_FLAG_FALL)) &&
                !Flags_GetSwitch(play, this->switchFlag)) {
-        func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+        DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
         if (Rand_ZeroOne() < 0.5f) {
             this->movementFlags |= ENBOX_MOVE_FALL_ANGLE_SIDE;
         }
@@ -240,7 +240,7 @@ void EnBox_Init(Actor* thisx, PlayState* play) {
     } else if (((this->type == ENBOX_TYPE_BIG_ROOM_CLEAR) || (this->type == ENBOX_TYPE_SMALL_ROOM_CLEAR)) &&
                !Flags_GetClear(play, this->dyna.actor.room)) {
         EnBox_SetupAction(this, EnBox_AppearOnRoomClear);
-        func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+        DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
         if (this->movementFlags & ENBOX_MOVE_0x80) {
             this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y + 50.0f;
         } else {
@@ -254,7 +254,7 @@ void EnBox_Init(Actor* thisx, PlayState* play) {
     } else if (((this->type == ENBOX_TYPE_BIG_SWITCH_FLAG) || (this->type == ENBOX_TYPE_SMALL_SWITCH_FLAG)) &&
                !Flags_GetSwitch(play, this->switchFlag)) {
         EnBox_SetupAction(this, EnBox_AppearSwitchFlag);
-        func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+        DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
         if (this->movementFlags & ENBOX_MOVE_0x80) {
             this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y + 50.0f;
         } else {
@@ -265,7 +265,7 @@ void EnBox_Init(Actor* thisx, PlayState* play) {
         this->dyna.actor.flags |= ACTOR_FLAG_10;
     } else {
         if ((this->type == ENBOX_TYPE_BIG_INVISIBLE) || (this->type == ENBOX_TYPE_SMALL_INVISIBLE)) {
-            this->dyna.actor.flags |= ACTOR_FLAG_80;
+            this->dyna.actor.flags |= ACTOR_FLAG_REACT_TO_LENS;
         }
         EnBox_SetupAction(this, EnBox_WaitOpen);
         this->movementFlags |= ENBOX_MOVE_IMMOBILE;
@@ -290,17 +290,17 @@ void EnBox_Init(Actor* thisx, PlayState* play) {
         Actor_SetFocus(&this->dyna.actor, 40.0f);
     }
 
-    this->cutsceneIdxA = -1;
-    this->cutsceneIdxB = -1;
-    cutsceneIdx = this->dyna.actor.cutscene;
+    this->csId1 = CS_ID_NONE;
+    this->csId2 = CS_ID_NONE;
+    csId = this->dyna.actor.csId;
 
-    while (cutsceneIdx != -1) {
-        if (func_800F2178(cutsceneIdx) == 1) {
-            this->cutsceneIdxB = cutsceneIdx;
+    while (csId != CS_ID_NONE) {
+        if (CutsceneManager_GetCutsceneCustomValue(csId) == 1) {
+            this->csId2 = csId;
         } else {
-            this->cutsceneIdxA = cutsceneIdx;
+            this->csId1 = csId;
         }
-        cutsceneIdx = ActorCutscene_GetAdditionalCutscene(cutsceneIdx);
+        csId = CutsceneManager_GetAdditionalCsId(csId);
     }
     func_80867BDC(&this->unk_1F4, play, &this->dyna.actor.home.pos);
 }
@@ -345,7 +345,7 @@ void EnBox_Fall(EnBox* this, PlayState* play) {
 
     this->alpha = 255;
     this->movementFlags &= ~ENBOX_MOVE_IMMOBILE;
-    if (this->dyna.actor.bgCheckFlags & 1) {
+    if (this->dyna.actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         this->movementFlags |= ENBOX_MOVE_UNUSED;
         if (this->movementFlags & ENBOX_MOVE_FALL_ANGLE_SIDE) {
             this->movementFlags &= ~ENBOX_MOVE_FALL_ANGLE_SIDE;
@@ -374,10 +374,10 @@ void EnBox_Fall(EnBox* this, PlayState* play) {
 }
 
 void EnBox_FallOnSwitchFlag(EnBox* this, PlayState* play) {
-    func_800B8C50(&this->dyna.actor, play);
+    Actor_SetClosestSecretDistance(&this->dyna.actor, play);
     if (this->unk_1A0 >= 0) {
         EnBox_SetupAction(this, EnBox_Fall);
-        func_800C6314(play, &play->colCtx.dyna, this->dyna.bgId);
+        DynaPoly_EnableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
     } else if (this->unk_1A0 >= -11) {
         this->unk_1A0++;
     } else if (Flags_GetSwitch(play, this->switchFlag)) {
@@ -386,34 +386,34 @@ void EnBox_FallOnSwitchFlag(EnBox* this, PlayState* play) {
 }
 
 void EnBox_AppearSwitchFlag(EnBox* this, PlayState* play) {
-    func_800B8C50(&this->dyna.actor, play);
+    Actor_SetClosestSecretDistance(&this->dyna.actor, play);
     if (Flags_GetSwitch(play, this->switchFlag)) {
-        if (ActorCutscene_GetCanPlayNext(this->cutsceneIdxA)) {
-            ActorCutscene_StartAndSetUnkLinkFields(this->cutsceneIdxA, &this->dyna.actor);
+        if (CutsceneManager_IsNext(this->csId1)) {
+            CutsceneManager_StartWithPlayerCs(this->csId1, &this->dyna.actor);
             EnBox_SetupAction(this, func_80868AFC);
             this->unk_1A0 = -30;
         } else {
-            ActorCutscene_SetIntentToPlay(this->cutsceneIdxA);
+            CutsceneManager_Queue(this->csId1);
         }
     }
 }
 
 void EnBox_AppearOnRoomClear(EnBox* this, PlayState* play) {
-    func_800B8C50(&this->dyna.actor, play);
+    Actor_SetClosestSecretDistance(&this->dyna.actor, play);
     if (Flags_GetClearTemp(play, this->dyna.actor.room)) {
-        if (ActorCutscene_GetCanPlayNext(this->cutsceneIdxA)) {
-            ActorCutscene_StartAndSetUnkLinkFields(this->cutsceneIdxA, &this->dyna.actor);
+        if (CutsceneManager_IsNext(this->csId1)) {
+            CutsceneManager_StartWithPlayerCs(this->csId1, &this->dyna.actor);
             Flags_SetClear(play, this->dyna.actor.room);
             EnBox_SetupAction(this, func_80868AFC);
             this->unk_1A0 = -30;
         } else {
-            ActorCutscene_SetIntentToPlay(this->cutsceneIdxA);
+            CutsceneManager_Queue(this->csId1);
         }
     }
 }
 
 void func_80868AFC(EnBox* this, PlayState* play) {
-    if ((func_800F22C4(this->cutsceneIdxA, &this->dyna.actor) != 0) || (this->unk_1A0 != 0)) {
+    if ((func_800F22C4(this->csId1, &this->dyna.actor) != 0) || (this->unk_1A0 != 0)) {
         EnBox_SetupAction(this, func_80868B74);
         this->unk_1A0 = 0;
         func_80867FBC(&this->unk_1F4, play, (this->movementFlags & ENBOX_MOVE_0x80) != 0);
@@ -422,7 +422,7 @@ void func_80868AFC(EnBox* this, PlayState* play) {
 }
 
 void func_80868B74(EnBox* this, PlayState* play) {
-    func_800C6314(play, &play->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_EnableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
     if (this->unk_1A0 < 0) {
         this->unk_1A0++;
     } else if (this->unk_1A0 < 40) {
@@ -432,7 +432,7 @@ void func_80868B74(EnBox* this, PlayState* play) {
             this->dyna.actor.world.pos.y += 1.25f;
         }
         this->unk_1A0++;
-        if ((this->cutsceneIdxA != -1) && ActorCutscene_GetCurrentIndex() == this->cutsceneIdxA) {
+        if ((this->csId1 != -1) && CutsceneManager_GetCurrentCsId() == this->csId1) {
             if (this->unk_1A0 == 2) {
                 func_800B724C(play, &this->dyna.actor, PLAYER_CSMODE_4);
             } else if (this->unk_1A0 == 22) {
@@ -445,7 +445,7 @@ void func_80868B74(EnBox* this, PlayState* play) {
         this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y;
     } else {
         EnBox_SetupAction(this, EnBox_WaitOpen);
-        ActorCutscene_Stop(this->dyna.actor.cutscene);
+        CutsceneManager_Stop(this->dyna.actor.csId);
     }
 }
 
@@ -460,8 +460,8 @@ void EnBox_WaitOpen(EnBox* this, PlayState* play) {
 
     this->alpha = 255;
     this->movementFlags |= ENBOX_MOVE_IMMOBILE;
-    if ((this->unk_1EC != 0) && ((this->cutsceneIdxB < 0) || (ActorCutscene_GetCurrentIndex() == this->cutsceneIdxB) ||
-                                 (ActorCutscene_GetCurrentIndex() == -1))) {
+    if ((this->unk_1EC != 0) && ((this->csId2 < 0) || (CutsceneManager_GetCurrentCsId() == this->csId2) ||
+                                 (CutsceneManager_GetCurrentCsId() == CS_ID_NONE))) {
         if (this->unk_1EC < 0) {
             animHeader = &gBoxChestOpenAnim;
             playbackSpeed = 1.5f;
@@ -508,7 +508,7 @@ void EnBox_WaitOpen(EnBox* this, PlayState* play) {
             if ((this->getItemId == GI_MASK_GIANT) && (INV_CONTENT(ITEM_MASK_GIANT) == ITEM_MASK_GIANT)) {
                 this->getItemId = GI_RECOVERY_HEART;
             }
-            Actor_PickUpNearby(&this->dyna.actor, play, -this->getItemId);
+            Actor_OfferGetItemNearby(&this->dyna.actor, play, -this->getItemId);
         }
         if (Flags_GetTreasure(play, ENBOX_GET_CHEST_FLAG(&this->dyna.actor))) {
             EnBox_SetupAction(this, EnBox_Open);
@@ -519,7 +519,7 @@ void EnBox_WaitOpen(EnBox* this, PlayState* play) {
 void EnBox_Open(EnBox* this, PlayState* play) {
     s32 pad;
 
-    this->dyna.actor.flags &= ~ACTOR_FLAG_80;
+    this->dyna.actor.flags &= ~ACTOR_FLAG_REACT_TO_LENS;
 
     if (SkelAnime_Update(&this->skelAnime)) {
         if (this->unk_1EC > 0) {
@@ -612,7 +612,8 @@ void EnBox_Update(Actor* thisx, PlayState* play) {
     }
     if (!(this->movementFlags & ENBOX_MOVE_IMMOBILE)) {
         Actor_MoveWithGravity(&this->dyna.actor);
-        Actor_UpdateBgCheckInfo(play, &this->dyna.actor, 0.0f, 0.0f, 0.0f, 0x1C);
+        Actor_UpdateBgCheckInfo(play, &this->dyna.actor, 0.0f, 0.0f, 0.0f,
+                                UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 | UPDBGCHECKINFO_FLAG_10);
     }
     Actor_SetFocus(&this->dyna.actor, 40.0f);
     if ((this->getItemId == GI_ICE_TRAP) && (this->actionFunc == EnBox_Open) && (this->skelAnime.curFrame > 45.0f) &&
@@ -698,7 +699,7 @@ void EnBox_Draw(Actor* thisx, PlayState* play) {
     }
     if (((this->alpha == 255) && (this->type != ENBOX_TYPE_BIG_INVISIBLE) &&
          (this->type != ENBOX_TYPE_SMALL_INVISIBLE)) ||
-        (!CHECK_FLAG_ALL(this->dyna.actor.flags, ACTOR_FLAG_80) &&
+        (!CHECK_FLAG_ALL(this->dyna.actor.flags, ACTOR_FLAG_REACT_TO_LENS) &&
          ((this->type == ENBOX_TYPE_BIG_INVISIBLE) || (this->type == ENBOX_TYPE_SMALL_INVISIBLE)))) {
         gDPPipeSync(POLY_OPA_DISP++);
         gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 255);

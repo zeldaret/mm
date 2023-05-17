@@ -1319,7 +1319,7 @@ typedef struct {
     /* 0x0C */ f32 unk_0C;
     /* 0x10 */ f32 unk_10;
     /* 0x14 */ f32 unk_14;
-    /* 0x18 */ VecSph unk_18; // sp18-1C-20--24-26-28 // CutsceneCameraPoint?
+    /* 0x18 */ VecSph unk_18;
     /* 0x20 */ s16 unk_20;
     /* 0x22 */ s16 timer;
 } Demo4ReadWriteData; // size = 0x24

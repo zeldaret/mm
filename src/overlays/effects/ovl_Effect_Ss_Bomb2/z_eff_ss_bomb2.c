@@ -26,7 +26,7 @@ void EffectSsBomb2_DrawFade(PlayState* play, u32 index, EffectSs* this);
 void EffectSsBomb2_DrawLayered(PlayState* play, u32 index, EffectSs* this);
 void EffectSsBomb2_Update(PlayState* play, u32 index, EffectSs* this);
 
-const EffectSsInit Effect_Ss_Bomb2_InitVars = {
+EffectSsInit Effect_Ss_Bomb2_InitVars = {
     EFFECT_SS_BOMB2,
     EffectSsBomb2_Init,
 };
