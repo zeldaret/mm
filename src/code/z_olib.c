@@ -266,7 +266,7 @@ void OLib_Vec3fDiff(PosRot* a, Vec3f* b, Vec3f* dest, s16 mode) {
             dest->z = b->z - a->pos.z;
             break;
 
-        default: // OLIB_SUB_COPY
+        default: // OLIB_DIFF_COPY
             *dest = *b;
             break;
     }
