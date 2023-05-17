@@ -890,8 +890,6 @@ s16 D_801EDBF0;
  *
  * @return pitchOffset resulting pitch adjustment
  */
-#ifdef NON_MATCHING
-// Matching: in-function bss
 s16 Camera_GetPitchAdjFromFloorHeightDiffs(Camera* camera, s16 viewYaw, s16 shouldInit) {
     static f32 sFloorYNear;
     static f32 sFloorYFar;
@@ -970,13 +968,6 @@ s16 Camera_GetPitchAdjFromFloorHeightDiffs(Camera* camera, s16 viewYaw, s16 shou
 
     return pitchNear + pitchFar;
 }
-#else
-f32 sFloorYNear;
-f32 sFloorYFar;
-CameraCollision sFarColChk;
-s16 Camera_GetPitchAdjFromFloorHeightDiffs(Camera* camera, s16 viewYaw, s16 shouldInit);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_GetPitchAdjFromFloorHeightDiffs.s")
-#endif
 
 f32 func_800CCCEC(Camera* camera, s16 reset) {
     static s32 D_801B9E5C = 0;
@@ -2405,6 +2396,8 @@ s32 Camera_Normal2(Camera* camera) {
     return Camera_Noop(camera);
 }
 
+#define NORMAL3_RW_FLAG (1 << 0)
+
 /**
  * Riding Epona and Zora
  */
@@ -2479,7 +2472,7 @@ s32 Camera_Normal3(Camera* camera) {
 
         camera->animState = 1;
         D_801EDC30[camera->camId].timer = 0;
-        rwData->flag = 1;
+        rwData->flag = NORMAL3_RW_FLAG;
     }
 
     if (rwData->distTimer != 0) {
@@ -2505,7 +2498,7 @@ s32 Camera_Normal3(Camera* camera) {
     camera->xzOffsetUpdateRate = Camera_ScaledStepToCeilF(0.05f, camera->xzOffsetUpdateRate, sp8C, 0.0001f);
     camera->fovUpdateRate = Camera_ScaledStepToCeilF(0.05f, camera->fovUpdateRate, sp8C, 0.0001f);
 
-    phi_v1_2 = Camera_GetPitchAdjFromFloorHeightDiffs(camera, BINANG_ROT180(sp70.yaw), rwData->flag & 1);
+    phi_v1_2 = Camera_GetPitchAdjFromFloorHeightDiffs(camera, BINANG_ROT180(sp70.yaw), rwData->flag & NORMAL3_RW_FLAG);
     temp_f2 = ((1.0f / roData->pitchUpdateRateInv) * 0.5f) * (1.0f - camera->speedRatio);
     rwData->curPitch =
         Camera_ScaledStepToCeilS(phi_v1_2, rwData->curPitch, ((1.0f / roData->pitchUpdateRateInv) * 0.5f) + temp_f2, 5);
@@ -2586,7 +2579,7 @@ s32 Camera_Normal3(Camera* camera) {
     }
 
     camera->atLerpStepScale = Camera_ClampLerpScale(camera, roData->maxAtLERPScale);
-    rwData->flag &= ~1;
+    rwData->flag &= ~NORMAL3_RW_FLAG;
 
     return 1;
 }
