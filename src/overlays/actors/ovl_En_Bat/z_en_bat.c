@@ -4,7 +4,6 @@
  * Description: Bad Bat
  */
 
-#include "prevent_bss_reordering.h"
 #include "z_en_bat.h"
 #include "objects/object_bat/object_bat.h"
 

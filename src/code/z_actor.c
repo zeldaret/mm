@@ -908,41 +908,38 @@ s32 func_800B6434(PlayState* play, TitleCardContext* titleCtx) {
     return true;
 }
 
-// ActorContext_1F4 Init
-void func_800B6468(PlayState* play) {
-    play->actorCtx.unk_1F4.timer = 0;
+void Actor_InitPlayerImpact(PlayState* play) {
+    play->actorCtx.playerImpact.timer = 0;
 }
 
-// ActorContext_1F4 Update
-void func_800B6474(PlayState* play) {
-    DECR(play->actorCtx.unk_1F4.timer);
+void Actor_UpdatePlayerImpact(PlayState* play) {
+    DECR(play->actorCtx.playerImpact.timer);
 }
 
-// ActorContext_1F4 setter something
-s32 func_800B648C(PlayState* play, s32 arg1, s32 timer, f32 arg3, Vec3f* arg4) {
-    if ((play->actorCtx.unk_1F4.timer != 0) && (arg3 < play->actorCtx.unk_1F4.unk_04)) {
+s32 Actor_SetPlayerImpact(PlayState* play, PlayerImpactType type, s32 timer, f32 dist, Vec3f* pos) {
+    if ((play->actorCtx.playerImpact.timer != 0) && (dist < play->actorCtx.playerImpact.dist)) {
         return false;
     }
 
-    play->actorCtx.unk_1F4.unk_00 = arg1;
-    play->actorCtx.unk_1F4.timer = timer;
-    play->actorCtx.unk_1F4.unk_04 = arg3;
-    Math_Vec3f_Copy(&play->actorCtx.unk_1F4.unk_08, arg4);
+    play->actorCtx.playerImpact.type = type;
+    play->actorCtx.playerImpact.timer = timer;
+    play->actorCtx.playerImpact.dist = dist;
+    Math_Vec3f_Copy(&play->actorCtx.playerImpact.pos, pos);
 
     return true;
 }
 
-// ActorContext_1F4 getter something
-f32 func_800B64FC(PlayState* play, f32 arg1, Vec3f* arg2, u32* arg3) {
-    f32 temp_f8;
+f32 Actor_GetPlayerImpact(PlayState* play, f32 range, Vec3f* pos, PlayerImpactType* type) {
+    f32 dist;
 
-    if ((play->actorCtx.unk_1F4.timer == 0) || (arg1 == 0.0f)) {
+    if ((play->actorCtx.playerImpact.timer == 0) || (range == 0.0f)) {
         return -1.0f;
     }
 
-    temp_f8 = Math_Vec3f_DistXYZ(&play->actorCtx.unk_1F4.unk_08, arg2) / arg1;
-    *arg3 = play->actorCtx.unk_1F4.unk_00;
-    return play->actorCtx.unk_1F4.unk_04 - temp_f8;
+    dist = Math_Vec3f_DistXYZ(&play->actorCtx.playerImpact.pos, pos) / range;
+    *type = play->actorCtx.playerImpact.type;
+
+    return play->actorCtx.playerImpact.dist - dist;
 }
 
 /**
@@ -2303,7 +2300,7 @@ void Actor_InitContext(PlayState* play, ActorContext* actorCtx, ActorEntry* acto
     actorCtx->sceneFlags.clearedRoom = cycleFlags->clearedRoom;
 
     TitleCard_ContextInit(&play->state, &actorCtx->titleCtxt);
-    func_800B6468(play);
+    Actor_InitPlayerImpact(play);
 
     actorCtx->absoluteSpace = NULL;
 
@@ -2559,7 +2556,7 @@ void Actor_UpdateAll(PlayState* play, ActorContext* actorCtx) {
     }
 
     TitleCard_Update(&play->state, &actorCtx->titleCtxt);
-    func_800B6474(play);
+    Actor_UpdatePlayerImpact(play);
     DynaPoly_UpdateBgActorTransforms(play, &play->colCtx.dyna);
 }
 
@@ -2656,11 +2653,11 @@ void func_800B9D1C(Actor* actor) {
     if (sfxId) {}
 
     if (actor->audioFlags & 0x40) {
-        func_801A1FB4(3, &actor->projectedPos, NA_BGM_MUSIC_BOX_HOUSE, 1500.0f);
+        func_801A1FB4(SEQ_PLAYER_BGM_SUB, &actor->projectedPos, NA_BGM_MUSIC_BOX_HOUSE, 1500.0f);
     }
 
     if (actor->audioFlags & 0x20) {
-        func_801A1FB4(0, &actor->projectedPos, NA_BGM_KAMARO_DANCE, 900.0f);
+        func_801A1FB4(SEQ_PLAYER_BGM_MAIN, &actor->projectedPos, NA_BGM_KAMARO_DANCE, 900.0f);
     }
 }
 
