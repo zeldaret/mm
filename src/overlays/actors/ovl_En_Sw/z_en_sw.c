@@ -504,8 +504,8 @@ s32 func_808D99C8(EnSw* this, PlayState* play) {
         return false;
     }
 
-    if ((this->actor.xyzDistToPlayerSq < ((sREG(16) * 10) + 60000)) && (play->actorCtx.unk_1F4.timer != 0) &&
-        (play->actorCtx.unk_1F4.unk_00 == 0)) {
+    if ((this->actor.xyzDistToPlayerSq < ((sREG(16) * 10) + 60000)) && (play->actorCtx.playerImpact.timer != 0) &&
+        (play->actorCtx.playerImpact.type == PLAYER_IMPACT_GORON_GROUND_POUND)) {
         this->actor.colChkInfo.damage = 4;
         phi_v1 = true;
     }
