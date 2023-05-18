@@ -7364,7 +7364,7 @@ s32 Camera_UpdateWater(Camera* camera) {
 void Camera_EarthquakeDay3(Camera* camera) {
     static s16 sEarthquakeTimer = 0;
     u16 time;
-    s16 quake;
+    s16 quakeIndex;
     s32 timeSpeedOffset;
     s16 sEarthquakeFreq[] = {
         0xFFC, // 1 Large Earthquake  between CLOCK_TIME(0, 00) to CLOCK_TIME(1, 30)
@@ -7381,12 +7381,12 @@ void Camera_EarthquakeDay3(Camera* camera) {
         // Times based on sEarthquakeFreq
         if ((time > CLOCK_TIME(0, 0)) && (time < CLOCK_TIME(6, 0)) && ((sEarthquakeFreq[time >> 12] & time) == 0) &&
             (Quake_GetNumActiveQuakes() < 2)) {
-            quake = Quake_Request(camera, QUAKE_TYPE_4);
-            if (quake != 0) {
-                Quake_SetSpeed(quake, 30000);
-                Quake_SetPerturbations(quake, (time >> 12) + 2, 1, 5, 60);
+            quakeIndex = Quake_Request(camera, QUAKE_TYPE_4);
+            if (quakeIndex != 0) {
+                Quake_SetSpeed(quakeIndex, 30000);
+                Quake_SetPerturbations(quakeIndex, (time >> 12) + 2, 1, 5, 60);
                 sEarthquakeTimer = ((time >> 10) - timeSpeedOffset) + 80;
-                Quake_SetDuration(quake, sEarthquakeTimer);
+                Quake_SetDuration(quakeIndex, sEarthquakeTimer);
             }
         }
 
@@ -7394,12 +7394,12 @@ void Camera_EarthquakeDay3(Camera* camera) {
         // Around CLOCK_TIME(17, 33) || Around CLOCK_TIME(20, 33) || Every 1024 frames (around every 51s)
         if (((((time + 0x4D2) & 0xDFFC) == 0xC000) || ((camera->play->state.frames % 1024) == 0)) &&
             (Quake_GetNumActiveQuakes() < 2)) {
-            quake = Quake_Request(camera, QUAKE_TYPE_3);
-            if (quake != 0) {
-                Quake_SetSpeed(quake, 16000);
-                Quake_SetPerturbations(quake, 1, 0, 0, time & 0x3F); // %64
+            quakeIndex = Quake_Request(camera, QUAKE_TYPE_3);
+            if (quakeIndex != 0) {
+                Quake_SetSpeed(quakeIndex, 16000);
+                Quake_SetPerturbations(quakeIndex, 1, 0, 0, time & 0x3F); // %64
                 sEarthquakeTimer = 120 - timeSpeedOffset;
-                Quake_SetDuration(quake, sEarthquakeTimer);
+                Quake_SetDuration(quakeIndex, sEarthquakeTimer);
             }
         }
 
@@ -7477,7 +7477,7 @@ Vec3s* Camera_Update(Vec3s* inputDir, Camera* camera) {
     f32 viewFov;
     DynaPolyActor* meshActor;
     PosRot focalActorPosRot;
-    ShakeInfo quake;
+    ShakeInfo camShake;
     Actor* focalActor = camera->focalActor;
     VecGeo sp3C;
     s16 bgCamIndex;
@@ -7670,20 +7670,20 @@ Vec3s* Camera_Update(Vec3s* inputDir, Camera* camera) {
      * This section is about updating view structs from the active camera,
      * which view uses to calculate the viewing/projection matrices
      */
-    numQuakesApplied = Quake_Update(camera, &quake);
+    numQuakesApplied = Quake_Update(camera, &camShake);
 
     bgId = numQuakesApplied; // required to match
 
     if (numQuakesApplied != 0) {
-        viewAt.x = camera->at.x + quake.atOffset.x;
-        viewAt.y = camera->at.y + quake.atOffset.y;
-        viewAt.z = camera->at.z + quake.atOffset.z;
-        viewEye.x = camera->eye.x + quake.eyeOffset.x;
-        viewEye.y = camera->eye.y + quake.eyeOffset.y;
-        viewEye.z = camera->eye.z + quake.eyeOffset.z;
+        viewAt.x = camera->at.x + camShake.atOffset.x;
+        viewAt.y = camera->at.y + camShake.atOffset.y;
+        viewAt.z = camera->at.z + camShake.atOffset.z;
+        viewEye.x = camera->eye.x + camShake.eyeOffset.x;
+        viewEye.y = camera->eye.y + camShake.eyeOffset.y;
+        viewEye.z = camera->eye.z + camShake.eyeOffset.z;
         OLib_Vec3fDiffToVecGeo(&sp3C, &viewEye, &viewAt);
-        Camera_CalcUpVec(&viewUp, sp3C.pitch, sp3C.yaw, camera->roll + quake.upRollOffset);
-        viewFov = camera->fov + CAM_BINANG_TO_DEG(quake.fovOffset);
+        Camera_CalcUpVec(&viewUp, sp3C.pitch, sp3C.yaw, camera->roll + camShake.upRollOffset);
+        viewFov = camera->fov + CAM_BINANG_TO_DEG(camShake.fovOffset);
     } else if (sIsFalse) {
         //! condition is impossible to achieve
         viewAt = camera->at;
@@ -7707,7 +7707,7 @@ Vec3s* Camera_Update(Vec3s* inputDir, Camera* camera) {
         camera->up = viewUp;
     }
 
-    camera->quakeOffset = quake.eyeOffset;
+    camera->quakeOffset = camShake.eyeOffset;
     View_SetScale(&camera->play->view, (OREG(67) * 0.01f) + 1.0f);
     camera->play->view.fovy = viewFov;
     View_LookAt(&camera->play->view, &viewEye, &viewAt, &viewUp);
@@ -8053,7 +8053,7 @@ s16 Camera_GetCamDirYaw(Camera* camera) {
 }
 
 s32 Camera_AddQuake(Camera* camera, s32 arg1, s16 y, s32 countdown) {
-    s16 quakeIndex = Quake_Request(camera, 3);
+    s16 quakeIndex = Quake_Request(camera, QUAKE_TYPE_3);
 
     if (quakeIndex == 0) {
         return false;
