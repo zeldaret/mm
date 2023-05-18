@@ -2114,9 +2114,9 @@ void Boss03_Update(Actor* thisx, PlayState* play2) {
     this->prevPlayerPos = player->actor.world.pos;
 
     if (this->waterHeight < this->actor.world.pos.y) {
-        Audio_SetUnderwaterReverb(false);
+        Audio_SetSfxUnderwaterReverb(false);
     } else {
-        Audio_SetUnderwaterReverb(true);
+        Audio_SetSfxUnderwaterReverb(true);
     }
 
     if (this->unk_280 != 0) {

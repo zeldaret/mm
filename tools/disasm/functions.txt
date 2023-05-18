@@ -3877,7 +3877,7 @@
     0x8019F300:("AudioSfx_ProcessSfxSettings",),
     0x8019F420:("Audio_PlaySfx_Underwater",),
     0x8019F4AC:("Audio_PlaySfx_WithSfxSettingsReverb",),
-    0x8019F540:("Audio_SetUnderwaterReverb",),
+    0x8019F540:("Audio_SetSfxUnderwaterReverb",),
     0x8019F570:("AudioSfx_LowerSfxSettingsReverb",),
     0x8019F5AC:("Audio_SetSyncedSfxFreqAndVolume",),
     0x8019F638:("Audio_PlaySfx_AtPosForMetalEffectsWithSyncedFreqAndVolume",),

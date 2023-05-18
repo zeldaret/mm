@@ -4245,7 +4245,7 @@ void Audio_PlaySfx_WithSfxSettingsReverb(Vec3f* pos, u16 sfxId) {
     }
 }
 
-void Audio_SetUnderwaterReverb(s8 isUnderwaterReverbActivated) {
+void Audio_SetSfxUnderwaterReverb(s8 isUnderwaterReverbActivated) {
     if (isUnderwaterReverbActivated) {
         gUnderwaterSfxReverbAdd = -0x80;
     } else {

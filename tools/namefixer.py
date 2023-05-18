@@ -239,7 +239,7 @@ wordReplace = {
     "func_801A3FB4": "Audio_PlaySfx_IfNotInCutscene",
     "func_801A4748": "Audio_PlaySfx_AtFixedPos",
     "func_801A479C": "Audio_PlaySfx_AtPosWithVolumeTransition",
-    "func_8019F540": "Audio_SetUnderwaterReverb",
+    "func_8019F540": "Audio_SetSfxUnderwaterReverb",
     "func_8019FD90": "Audio_SetSfxTimerLerpInterval",
     "func_8019FE74": "Audio_SetSfxVolumeTransition",
     "func_801A4428": "Audio_SetSfxReverbIndexExceptOcarinaBank",

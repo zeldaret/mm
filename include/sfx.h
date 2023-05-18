@@ -2386,7 +2386,7 @@ void Audio_PlaySfx_AtFixedPos(Vec3f* pos, u16 sfxId);
 void Audio_PlaySfx_AtPosWithVolumeTransition(Vec3f* pos, u16 sfxId, u16 duration);
 
 // Sfx helper functions
-void Audio_SetUnderwaterReverb(s8 isUnderwaterReverbActivated);
+void Audio_SetSfxUnderwaterReverb(s8 isUnderwaterReverbActivated);
 void Audio_SetSfxTimerLerpInterval(s8 timerLerpRange1, s8 timerLerpRange2);
 void Audio_SetSfxVolumeTransition(f32* volume, f32 volumeTarget, u16 duration);
 void Audio_SetSfxReverbIndexExceptOcarinaBank(u8 reverbIndex);
