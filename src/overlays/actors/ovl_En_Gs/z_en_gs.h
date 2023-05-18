@@ -53,8 +53,8 @@ typedef struct EnGs {
     /* 0x216 */ s16 unk_216;
     /* 0x218 */ s16 unk_218;
     /* 0x21A */ s16 unk_21A;
-    /* 0x21C */ s16 unk_21C;
-    /* 0x21E */ s16 unk_21E;
+    /* 0x21C */ s16 quakeY;
+    /* 0x21E */ s16 quakeDuration;
 } EnGs; // size = 0x220
 
 #endif // Z_EN_GS_H
