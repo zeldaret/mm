@@ -374,7 +374,7 @@ typedef struct {
     /* 0x00 */ Vec3f pos;
     /* 0x0C */ Vec3f norm;
     /* 0x18 */ CollisionPoly* poly;
-    /* 0x1C */ VecSph sphNorm;
+    /* 0x1C */ VecGeo geoNorm;
     /* 0x24 */ s32 bgId;
 } CameraCollision; // size = 0x28
 
@@ -1244,8 +1244,8 @@ typedef struct {
 
 typedef struct {
     /* 0x00 */ Vec3f unk_00;
-    /* 0x0C */ VecSph unk_0C;
-    /* 0x14 */ VecSph unk_14;
+    /* 0x0C */ VecGeo unk_0C;
+    /* 0x14 */ VecGeo unk_14;
     /* 0x1C */ s16 unk_1C;
 } Demo1ReadWriteData; // size = 0x20
 
@@ -1319,7 +1319,7 @@ typedef struct {
     /* 0x0C */ f32 unk_0C;
     /* 0x10 */ f32 unk_10;
     /* 0x14 */ f32 unk_14;
-    /* 0x18 */ VecSph unk_18;
+    /* 0x18 */ VecGeo unk_18;
     /* 0x20 */ s16 unk_20;
     /* 0x22 */ s16 timer;
 } Demo4ReadWriteData; // size = 0x24
@@ -1345,7 +1345,7 @@ typedef struct {
     /* 0x10 */ f32 unk_10;
     /* 0x14 */ f32 unk_14;
     /* 0x18 */ f32 unk_18;
-    /* 0x1C */ VecSph unk_1C;
+    /* 0x1C */ VecGeo unk_1C;
     /* 0x24 */ s16 unk_24;
     /* 0x26 */ s16 timer;
 } Demo5ReadWriteData; // size = 0x28
@@ -1367,8 +1367,8 @@ typedef struct {
 
 typedef struct {
     /* 0x00 */ f32 unk_00;
-    /* 0x04 */ VecSph subAtToEye;
-    /* 0x0C */ VecSph atToEye;
+    /* 0x04 */ VecGeo subAtToEye;
+    /* 0x0C */ VecGeo atToEye;
     /* 0x14 */ s16 unk_14;
     /* 0x16 */ s16 unk_16;
     /* 0x18 */ s16 unk_18;

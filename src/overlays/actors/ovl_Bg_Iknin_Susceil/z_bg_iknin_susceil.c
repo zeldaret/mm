@@ -69,19 +69,20 @@ void func_80C0A838(BgIkninSusceil* this, PlayState* play) {
     DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
 }
 
-void func_80C0A86C(BgIkninSusceil* this, PlayState* play, s16 verticalMag, s16 countdown, s32 arg4) {
+void BgIkninSusceil_RequestQuakeAndRumble(BgIkninSusceil* this, PlayState* play, s16 quakeY, s16 quakeDuration,
+                                          s32 rumbleType) {
     s32 pad;
-    s16 quakeIndex = Quake_Add(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
+    s16 quakeIndex = Quake_Request(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
 
     Quake_SetSpeed(quakeIndex, 31536);
-    Quake_SetQuakeValues(quakeIndex, verticalMag, 0, 0, 0);
-    Quake_SetCountdown(quakeIndex, countdown);
+    Quake_SetPerturbations(quakeIndex, quakeY, 0, 0, 0);
+    Quake_SetDuration(quakeIndex, quakeDuration);
 
-    if (arg4 == 1) {
+    if (rumbleType == 1) {
         Rumble_Request(SQ(100.0f), 255, 20, 150);
-    } else if (arg4 == 2) {
+    } else if (rumbleType == 2) {
         Rumble_Request(SQ(100.0f), 180, 20, 100);
-    } else if (arg4 == 3) {
+    } else if (rumbleType == 3) {
         Rumble_Request(SQ(100.0f), 120, 20, 10);
     }
 }
@@ -154,7 +155,7 @@ void func_80C0ABA8(BgIkninSusceil* this, PlayState* play) {
     this->dyna.actor.velocity.y *= 0.93f;
     this->dyna.actor.world.pos.y += this->dyna.actor.velocity.y;
     if (this->dyna.actor.world.pos.y <= this->dyna.actor.home.pos.y) {
-        func_80C0A86C(this, play, 4, 14, 1);
+        BgIkninSusceil_RequestQuakeAndRumble(this, play, 4, 14, 1);
         Flags_UnsetSwitch(play, SUSCEIL_GET_SWITCHFLAG(&this->dyna.actor));
         Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_BIGWALL_BOUND);
         func_80C0AC74(this);
@@ -197,7 +198,7 @@ void func_80C0AD64(BgIkninSusceil* this, PlayState* play) {
     this->dyna.actor.velocity.y *= 0.98f;
     if (Math_SmoothStepToF(&this->dyna.actor.world.pos.y, this->dyna.actor.home.pos.y + 365.0f, 0.5f,
                            this->dyna.actor.velocity.y, 1.0f) < 0.1f) {
-        func_80C0A86C(this, play, 1, 14, 3);
+        BgIkninSusceil_RequestQuakeAndRumble(this, play, 1, 14, 3);
         CutsceneManager_Stop(this->dyna.actor.csId);
         func_80C0AB14(this);
     } else {
@@ -216,7 +217,7 @@ void func_80C0AE5C(BgIkninSusceil* this, PlayState* play) {
     this->dyna.actor.velocity.y = CLAMP_MIN(this->dyna.actor.velocity.y, 1.0f);
     this->dyna.actor.world.pos.y = this->dyna.actor.world.pos.y + this->dyna.actor.velocity.y;
     if ((this->dyna.actor.home.pos.y + 365.0f) < this->dyna.actor.world.pos.y) {
-        func_80C0A86C(this, play, 3, 14, 2);
+        BgIkninSusceil_RequestQuakeAndRumble(this, play, 3, 14, 2);
         func_80C0AB14(this);
     }
 }

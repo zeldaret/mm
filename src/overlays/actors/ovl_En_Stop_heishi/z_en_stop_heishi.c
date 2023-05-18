@@ -195,7 +195,7 @@ void EnStopHeishi_UpdateHeadThirdDay(EnStopheishi* this) {
                 this->headTurnTimer1 = 50;
             }
         }
-    } else if ((this->headTurnTimer1 == 0) && (Quake_NumActiveQuakes() != 0) && (this->headTurnTimer2 >= 6)) {
+    } else if ((this->headTurnTimer1 == 0) && (Quake_GetNumActiveQuakes() != 0) && (this->headTurnTimer2 >= 6)) {
         this->headTurnTimer2 = 0;
     }
 }
