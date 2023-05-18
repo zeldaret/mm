@@ -111,7 +111,7 @@ void ShotSun_TriggerFairy(ShotSun* this, PlayState* play) {
         this->timer = 50;
         Actor_Spawn(&play->actorCtx, play, ACTOR_DEMO_KANKYO, this->actor.home.pos.x, this->actor.home.pos.y,
                     this->actor.home.pos.z, 0, 0, 0, 0x11);
-        Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_EV_TRE_BOX_APPEAR);
+        Audio_PlaySfx_AtPos(&this->actor.projectedPos, NA_SE_EV_TRE_BOX_APPEAR);
     } else {
         CutsceneManager_Queue(this->actor.csId);
     }
@@ -146,7 +146,7 @@ void ShotSun_UpdateHyliaSun(ShotSun* this, PlayState* play) {
     Vec3f spawnPos;
 
     if (this->collider.base.acFlags & AC_HIT) {
-        play_sound(NA_SE_SY_CORRECT_CHIME);
+        Audio_PlaySfx(NA_SE_SY_CORRECT_CHIME);
         if (1) {}
         if (INV_CONTENT(ITEM_ARROW_FIRE) == ITEM_NONE) {
             Actor_Spawn(&play->actorCtx, play, ACTOR_ITEM_ETCETERA, 700.0f, -800.0f, 7261.0f, 0, 0, 0,

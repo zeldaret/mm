@@ -612,7 +612,7 @@ void func_8095BA84(EnOwl* this, PlayState* play) {
                     case 0xBEC:
                         switch (play->msgCtx.choiceIndex) {
                             case 0:
-                                func_8019F208();
+                                Audio_PlaySfx_MessageDecide();
                                 if (CHECK_WEEKEVENTREG(WEEKEVENTREG_09_40)) {
                                     Message_ContinueTextbox(play, 0xBF4);
                                 } else {
@@ -622,7 +622,7 @@ void func_8095BA84(EnOwl* this, PlayState* play) {
                                 break;
 
                             case 1:
-                                func_8019F230();
+                                Audio_PlaySfx_MessageCancel();
                                 Message_ContinueTextbox(play, 0xBEF);
                                 break;
                         }
@@ -631,12 +631,12 @@ void func_8095BA84(EnOwl* this, PlayState* play) {
                     case 0xBF2:
                         switch (play->msgCtx.choiceIndex) {
                             case 0:
-                                func_8019F208();
+                                Audio_PlaySfx_MessageDecide();
                                 Message_ContinueTextbox(play, 0xBF4);
                                 return;
 
                             case 1:
-                                func_8019F230();
+                                Audio_PlaySfx_MessageCancel();
                                 Message_ContinueTextbox(play, 0xBF3);
                                 return;
                         }

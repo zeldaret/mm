@@ -24,11 +24,11 @@ void KaleidoScope_UpdatePrompt(PlayState* play) {
         // Move the prompt
         if ((pauseCtx->promptChoice == PAUSE_PROMPT_YES) && (relStickX >= 30)) {
             // Move right to the no prompt
-            play_sound(NA_SE_SY_CURSOR);
+            Audio_PlaySfx(NA_SE_SY_CURSOR);
             pauseCtx->promptChoice = PAUSE_PROMPT_NO;
         } else if ((pauseCtx->promptChoice != PAUSE_PROMPT_YES) && (relStickX <= -30)) {
             // Move left to the yes prompt
-            play_sound(NA_SE_SY_CURSOR);
+            Audio_PlaySfx(NA_SE_SY_CURSOR);
             pauseCtx->promptChoice = PAUSE_PROMPT_YES;
         }
 

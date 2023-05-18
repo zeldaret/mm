@@ -155,7 +155,7 @@ void func_8088A594(EnArrow* this, PlayState* play) {
     if (this->actor.parent != NULL) {
         if (this->actor.params == ENARROW_7) {
             if (Math_SmoothStepToF(&this->bubble.unk_144, 16.0f, 0.07f, 1.8f, 0.0f) > 0.5f) {
-                func_800B9010(&this->actor, NA_SE_PL_DEKUNUTS_BUBLE_BREATH - SFX_FLAG);
+                Actor_PlaySfx_Flagged(&this->actor, NA_SE_PL_DEKUNUTS_BUBLE_BREATH - SFX_FLAG);
                 return;
             }
 
@@ -449,7 +449,7 @@ void func_8088ACE0(EnArrow* this, PlayState* play) {
 
                 func_8088A514(this);
             }
-            func_800B9010(&this->actor, NA_SE_IT_DEKUNUTS_BUBLE_SHOT_LEVEL - SFX_FLAG);
+            Actor_PlaySfx_Flagged(&this->actor, NA_SE_IT_DEKUNUTS_BUBLE_SHOT_LEVEL - SFX_FLAG);
         } else if (this->unk_260 < 7) {
             this->actor.gravity = -0.4f;
         }

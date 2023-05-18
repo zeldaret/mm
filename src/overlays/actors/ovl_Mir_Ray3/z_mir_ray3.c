@@ -139,7 +139,7 @@ void MirRay3_Update(Actor* thisx, PlayState* play) {
     }
 
     if (this->unk_214 > 0.1f) {
-        func_800B8F98(&player->actor, NA_SE_IT_SHIELD_BEAM - SFX_FLAG);
+        Actor_PlaySfx_FlaggedCentered1(&player->actor, NA_SE_IT_SHIELD_BEAM - SFX_FLAG);
     }
 
     Math_ApproachZeroF(&this->unk_214, 1.0f, 0.1f);

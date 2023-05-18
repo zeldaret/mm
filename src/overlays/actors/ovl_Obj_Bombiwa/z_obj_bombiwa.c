@@ -345,7 +345,7 @@ void func_80939EF4(ObjBombiwa* this, PlayState* play) {
         Flags_SetSwitch(play, OBJBOMBIWA_GET_7F(&this->actor));
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 80, NA_SE_EV_WALL_BROKEN);
         if (OBJBOMBIWA_GET_8000(&this->actor)) {
-            play_sound(NA_SE_SY_CORRECT_CHIME);
+            Audio_PlaySfx(NA_SE_SY_CORRECT_CHIME);
         }
 
         if (params == OBJBOMBIWA_100_0) {

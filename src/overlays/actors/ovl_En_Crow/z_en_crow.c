@@ -542,7 +542,7 @@ void EnCrow_Update(Actor* thisx, PlayState* play) {
                 this->drawDmgEffFrozenSteamScale = this->drawDmgEffFrozenSteamScale;
             }
         } else if (!Math_StepToF(&this->drawDmgEffScale, 0.5f, 0.5f * 0.025f)) {
-            func_800B9010(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
+            Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
         }
     }
 }

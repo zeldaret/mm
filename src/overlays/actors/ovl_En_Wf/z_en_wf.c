@@ -1203,7 +1203,7 @@ void func_80992E0C(EnWf* this, PlayState* play) {
             func_800B3030(play, &sp60, &D_809942F0, &D_809942F0, 100, 0, 2);
         }
 
-        func_800B9010(&this->actor, NA_SE_EN_COMMON_EXTINCT_LEV - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_COMMON_EXTINCT_LEV - SFX_FLAG);
     }
 }
 
@@ -1532,7 +1532,7 @@ void EnWf_Update(Actor* thisx, PlayState* play) {
                 this->drawDmgEffScale = this->drawDmgEffScale;
             }
         } else if (!Math_StepToF(&this->drawDmgEffFrozenSteamScale, 0.75f, 0.01875f)) {
-            func_800B9010(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
+            Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
         }
     }
 }

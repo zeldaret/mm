@@ -284,14 +284,14 @@ void func_809543D4(BgIngate* this, PlayState* play) {
                     this->unk160 &= ~0x4;
                     this->actionFunc = func_809541B8;
                     Environment_StartTime();
-                    func_8019F208();
+                    Audio_PlaySfx_MessageDecide();
                 } else {
                     if (this->timePath != NULL) {
                         this->timePath = &play->setupPathList[this->timePath->unk1];
                     }
                     func_80953F14(this, play);
                     CLEAR_WEEKEVENTREG(WEEKEVENTREG_90_40);
-                    func_8019F230();
+                    Audio_PlaySfx_MessageCancel();
                 }
                 Message_CloseTextbox(play);
                 break;
@@ -299,13 +299,13 @@ void func_809543D4(BgIngate* this, PlayState* play) {
                 if (play->msgCtx.choiceIndex == 0) {
                     func_80953EA4(this, play);
                     CLEAR_WEEKEVENTREG(WEEKEVENTREG_90_40);
-                    func_8019F208();
+                    Audio_PlaySfx_MessageDecide();
                 } else {
                     func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_END);
                     this->unk160 &= ~0x4;
                     this->actionFunc = func_809541B8;
                     Environment_StartTime();
-                    func_8019F230();
+                    Audio_PlaySfx_MessageCancel();
                 }
                 Message_CloseTextbox(play);
                 break;

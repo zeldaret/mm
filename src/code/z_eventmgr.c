@@ -216,11 +216,11 @@ void CutsceneManager_End(void) {
 
     switch (csEntry->endSfx) {
         case CS_END_SFX_TRE_BOX_APPEAR:
-            play_sound(NA_SE_SY_TRE_BOX_APPEAR);
+            Audio_PlaySfx(NA_SE_SY_TRE_BOX_APPEAR);
             break;
 
         case CS_END_SFX_CORRECT_CHIME:
-            play_sound(NA_SE_SY_CORRECT_CHIME);
+            Audio_PlaySfx(NA_SE_SY_CORRECT_CHIME);
             break;
 
         default: // CS_END_SFX_NONE

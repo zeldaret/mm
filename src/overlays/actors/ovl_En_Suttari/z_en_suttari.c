@@ -450,7 +450,7 @@ void func_80BAAFDC(EnSuttari* this, PlayState* play) {
                                          SOLDERSRCHBALL_INVISIBLE);
         }
         if (this->playerDetected == true) {
-            play_sound(NA_SE_SY_FOUND);
+            Audio_PlaySfx(NA_SE_SY_FOUND);
             this->playerDetected = false;
             this->actor.speed = 0.0f;
             if (this->unk1F4[0] != 0) {
@@ -483,7 +483,7 @@ void func_80BAB1A0(EnSuttari* this, PlayState* play) {
                                          SOLDERSRCHBALL_INVISIBLE);
         }
         if (this->playerDetected == true) {
-            play_sound(NA_SE_SY_FOUND);
+            Audio_PlaySfx(NA_SE_SY_FOUND);
             this->playerDetected = false;
             this->actor.speed = 0.0f;
             if (this->unk1F4[0] != 0) {
@@ -1368,12 +1368,12 @@ void func_80BADA9C(EnSuttari* this, PlayState* play) {
     } else if ((talkstate == TEXT_STATE_CHOICE) && Message_ShouldAdvance(play)) {
         switch (play->msgCtx.choiceIndex) {
             case 0:
-                func_8019F208();
+                Audio_PlaySfx_MessageDecide();
                 this->flags1 |= 0x800;
                 func_80BAAB78(this, play);
                 break;
             case 1:
-                func_8019F230();
+                Audio_PlaySfx_MessageCancel();
                 func_80BAAB78(this, play);
                 break;
         }

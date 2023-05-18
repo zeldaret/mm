@@ -428,7 +428,7 @@ void DmStk_PlaySfxForIntroCutsceneFirstPart(DmStk* this, PlayState* play) {
  */
 void DmStk_PlaySfxForTitleCutscene(DmStk* this, PlayState* play) {
     if (play->csCtx.curFrame == 535) {
-        func_8019F128(NA_SE_EV_CLOCK_TOWER_BELL);
+        Audio_PlaySfx_2(NA_SE_EV_CLOCK_TOWER_BELL);
     }
 }
 
@@ -492,12 +492,12 @@ void DmStk_PlaySfxForObtainingMajorasMaskCutscene(DmStk* this, PlayState* play) 
 void DmStk_PlaySfxForCurseCutsceneFirstPart(DmStk* this, PlayState* play) {
     switch (play->csCtx.curFrame) {
         case 415:
-            func_801A479C(&this->actor.projectedPos, NA_SE_EN_STALKIDS_FLOAT, 100);
+            Audio_PlaySfx_AtPosWithVolumeTransition(&this->actor.projectedPos, NA_SE_EN_STALKIDS_FLOAT, 100);
             break;
 
         case 785:
-            func_8019F128(NA_SE_SY_STALKIDS_PSYCHO);
-            func_8019FE74(&gSfxVolume, 0.0f, 150);
+            Audio_PlaySfx_2(NA_SE_SY_STALKIDS_PSYCHO);
+            Audio_SetSfxVolumeTransition(&gSfxVolume, 0.0f, 150);
             break;
 
         case 560:
@@ -520,7 +520,7 @@ void DmStk_PlaySfxForCurseCutsceneSecondPart(DmStk* this, PlayState* play) {
 
     switch (play->csCtx.curFrame) {
         case 10:
-            func_801A479C(&this->actor.projectedPos, NA_SE_EN_STALKIDS_FLOAT, 50);
+            Audio_PlaySfx_AtPosWithVolumeTransition(&this->actor.projectedPos, NA_SE_EN_STALKIDS_FLOAT, 50);
             break;
 
         case 71:
@@ -532,7 +532,7 @@ void DmStk_PlaySfxForCurseCutsceneSecondPart(DmStk* this, PlayState* play) {
             break;
 
         case 650:
-            func_8019FE74(&gSfxVolume, 0.0f, 80);
+            Audio_SetSfxVolumeTransition(&gSfxVolume, 0.0f, 80);
             break;
 
         case 265:
@@ -573,7 +573,7 @@ void DmStk_PlaySfxForClockTowerIntroCutsceneVersion1(DmStk* this, PlayState* pla
 
     switch (play->csCtx.curFrame) {
         case 140:
-            func_801A479C(&this->actor.projectedPos, NA_SE_EN_STALKIDS_FLOAT, 80);
+            Audio_PlaySfx_AtPosWithVolumeTransition(&this->actor.projectedPos, NA_SE_EN_STALKIDS_FLOAT, 80);
             break;
 
         case 258:
@@ -762,7 +762,7 @@ void DmStk_PlaySfxForClockTowerIntroCutsceneVersion2(DmStk* this, PlayState* pla
 
     switch (play->csCtx.curFrame) {
         case 40:
-            func_801A479C(&this->actor.projectedPos, NA_SE_EN_STALKIDS_FLOAT, 80);
+            Audio_PlaySfx_AtPosWithVolumeTransition(&this->actor.projectedPos, NA_SE_EN_STALKIDS_FLOAT, 80);
             break;
 
         case 234:
@@ -805,7 +805,7 @@ void DmStk_PlaySfxForCutsceneAfterPlayingOathToOrder(DmStk* this, PlayState* pla
 
     switch (play->csCtx.curFrame) {
         case 64:
-            Audio_PlaySfxAtPos(&this->oathToOrderCutsceneVoicePos, NA_SE_EN_STAL06_SURPRISED);
+            Audio_PlaySfx_AtPos(&this->oathToOrderCutsceneVoicePos, NA_SE_EN_STAL06_SURPRISED);
             break;
 
         case 327:
@@ -825,11 +825,11 @@ void DmStk_PlaySfxForCutsceneAfterPlayingOathToOrder(DmStk* this, PlayState* pla
 
         case 486:
             Actor_PlaySfx(&this->actor, NA_SE_EN_STALKIDS_MASK_OFF);
-            Audio_PlaySfxAtPos(&this->oathToOrderCutsceneVoicePos, NA_SE_EN_STAL08_CRY_BIG);
+            Audio_PlaySfx_AtPos(&this->oathToOrderCutsceneVoicePos, NA_SE_EN_STAL08_CRY_BIG);
             break;
 
         case 496:
-            Audio_PlaySfxAtPos(&this->oathToOrderCutsceneVoicePos, NA_SE_EN_STAL09_SCREAM);
+            Audio_PlaySfx_AtPos(&this->oathToOrderCutsceneVoicePos, NA_SE_EN_STAL09_SCREAM);
             break;
 
         case 590:
@@ -841,7 +841,7 @@ void DmStk_PlaySfxForCutsceneAfterPlayingOathToOrder(DmStk* this, PlayState* pla
             break;
 
         case 594:
-            Audio_PlaySfxAtPos(&this->oathToOrderCutsceneVoicePos, NA_SE_EN_STAL24_SCREAM2);
+            Audio_PlaySfx_AtPos(&this->oathToOrderCutsceneVoicePos, NA_SE_EN_STAL24_SCREAM2);
             break;
     }
 
@@ -864,7 +864,7 @@ void DmStk_PlaySfxForCutsceneAfterPlayingOathToOrder(DmStk* this, PlayState* pla
     }
 
     if (play->csCtx.curFrame >= 290) {
-        func_8019F128(NA_SE_EV_KYOJIN_VOICE_SUCCESS - SFX_FLAG);
+        Audio_PlaySfx_2(NA_SE_EV_KYOJIN_VOICE_SUCCESS - SFX_FLAG);
     }
 }
 

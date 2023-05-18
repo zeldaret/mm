@@ -212,7 +212,7 @@ void func_808A2918(EnBoom* this, PlayState* play) {
     Actor_SetSpeeds(&this->actor, 12.0f);
     Actor_MoveWithGravity(&this->actor);
     func_808A24DC(this, play);
-    func_800B9010(&this->actor, NA_SE_IT_BOOMERANG_FLY - SFX_FLAG);
+    Actor_PlaySfx_Flagged(&this->actor, NA_SE_IT_BOOMERANG_FLY - SFX_FLAG);
 
     if ((this->collider.base.atFlags & AT_HIT) && (((this->collider.base.at->id == ACTOR_EN_ITEM00) &&
                                                     (this->collider.base.at->params != ITEM00_HEART_CONTAINER) &&

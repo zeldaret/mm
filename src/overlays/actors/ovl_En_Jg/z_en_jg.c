@@ -693,9 +693,9 @@ void EnJg_LullabyIntroCutsceneAction(EnJg* this, PlayState* play) {
 
         if (this->cutsceneAnimIndex == EN_JG_ANIM_TAKING_OUT_DRUM) {
             if (Animation_OnFrame(&this->skelAnime, 23.0f)) {
-                Audio_PlaySfxAtPos(&sSfxPos, NA_SE_EV_WOOD_BOUND_S);
+                Audio_PlaySfx_AtPos(&sSfxPos, NA_SE_EV_WOOD_BOUND_S);
             } else if (Animation_OnFrame(&this->skelAnime, 38.0f)) {
-                Audio_PlaySfxAtPos(&sSfxPos, NA_SE_EV_OBJECT_SLIDE);
+                Audio_PlaySfx_AtPos(&sSfxPos, NA_SE_EV_OBJECT_SLIDE);
             }
         }
     } else {
@@ -928,7 +928,7 @@ void EnJg_CheckIfTalkingToPlayerAndHandleFreezeTimer(EnJg* this, PlayState* play
         if ((this->freezeTimer <= 0) && (currentFrame == lastFrame)) {
             this->animIndex = EN_JG_ANIM_FROZEN_START;
             SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animIndex);
-            Audio_PlaySfxAtPos(&sSfxPos, NA_SE_EV_FREEZE_S);
+            Audio_PlaySfx_AtPos(&sSfxPos, NA_SE_EV_FREEZE_S);
             this->actionFunc = EnJg_Freeze;
         }
     }

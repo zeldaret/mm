@@ -181,7 +181,7 @@ void EnBomChu_WaitForRelease(EnBomChu* this, PlayState* play) {
 
         this->actor.shape.rot.y = player->actor.shape.rot.y;
         this->actor.flags |= ACTOR_FLAG_1;
-        func_800B8EF4(play, &this->actor);
+        Actor_PlaySfx_SurfaceBomb(play, &this->actor);
 
         this->isMoving = true;
         this->actor.speed = 8.0f;
@@ -313,7 +313,7 @@ void EnBomChu_Move(EnBomChu* this, PlayState* play) {
     }
 
     if (this->isMoving) {
-        func_800B8F98(&this->actor, NA_SE_IT_BOMBCHU_MOVE - SFX_FLAG);
+        Actor_PlaySfx_FlaggedCentered1(&this->actor, NA_SE_IT_BOMBCHU_MOVE - SFX_FLAG);
     }
 
     if (this->actor.speed != 0.0f) {

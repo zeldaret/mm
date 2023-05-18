@@ -411,9 +411,9 @@ void func_80A91690(EnTest6* this, PlayState* play) {
     this->unk_27A = 100;
     this->unk_286 = 0;
     if (ENTEST6_GET(&this->actor) == ENTEST6_25) {
-        play_sound(NA_SE_SY_TIME_CONTROL_SLOW);
+        Audio_PlaySfx(NA_SE_SY_TIME_CONTROL_SLOW);
     } else if (ENTEST6_GET(&this->actor) == ENTEST6_24) {
-        play_sound(NA_SE_SY_TIME_CONTROL_NORMAL);
+        Audio_PlaySfx(NA_SE_SY_TIME_CONTROL_NORMAL);
     }
 }
 
@@ -704,7 +704,7 @@ void func_80A92188(EnTest6* this, PlayState* play) {
         play->unk_18844 = false;
     }
 
-    func_800B8F98(&player->actor, NA_SE_PL_FLYING_AIR - SFX_FLAG);
+    Actor_PlaySfx_FlaggedCentered1(&player->actor, NA_SE_PL_FLYING_AIR - SFX_FLAG);
 
     switch (this->unk_27A) {
         case 119:

@@ -313,7 +313,7 @@ void EnMinislime_IceArrowDamage(EnMinislime* this, PlayState* play) {
 
     if (this->frozenTimer == 80) {
         this->frozenAlpha += 10;
-        func_800B9010(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
         if (this->frozenAlpha >= 200) {
             this->frozenAlpha = 200;
             this->frozenTimer--;
@@ -371,7 +371,7 @@ void EnMinislime_FireArrowDamage(EnMinislime* this, PlayState* play) {
         this->frozenAlpha = 10 * this->meltTimer;
     }
 
-    func_800B9010(&this->actor, NA_SE_EV_ICE_MELT_LEVEL - SFX_FLAG);
+    Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_ICE_MELT_LEVEL - SFX_FLAG);
     if (this->meltTimer == 0) {
         EnMinislime_SetupIdle(this);
     }
@@ -603,7 +603,7 @@ void EnMinislime_DefeatMelt(EnMinislime* this, PlayState* play) {
         EnMinislime_AddIceSmokeEffect(this, play);
     }
 
-    func_800B9010(&this->actor, NA_SE_EV_ICE_MELT_LEVEL - SFX_FLAG);
+    Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_ICE_MELT_LEVEL - SFX_FLAG);
     if (Math_StepToF(&this->actor.scale.y, 0.001f, 0.00075f)) {
         if ((this->actor.shape.shadowAlpha - 4) <= 0) {
             this->actor.shape.shadowAlpha = 0;

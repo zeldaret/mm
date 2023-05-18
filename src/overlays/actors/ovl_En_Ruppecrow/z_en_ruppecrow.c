@@ -599,7 +599,7 @@ void EnRuppecrow_FallToDespawn(EnRuppecrow* this, PlayState* play) {
         this->unk_2CC = (this->unk_2C8 + 1.0f) * 0.25f;
         this->unk_2CC = CLAMP_MAX(this->unk_2CC, 0.5f);
     } else if (!Math_StepToF(&this->iceSfxTimer, 0.5f, 0.0125f)) {
-        func_800B9010(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
     }
 
     this->actor.colorFilterTimer = 40;

@@ -425,11 +425,11 @@ void func_80A52018(Actor* thisx, PlayState* play) {
 void func_80A52074(EnDnk* this, PlayState* play) {
     switch (play->csCtx.curFrame) {
         case 80:
-            func_8019F128(NA_SE_EN_DEKNUTS_DANCE1);
+            Audio_PlaySfx_2(NA_SE_EN_DEKNUTS_DANCE1);
             break;
 
         case 123:
-            func_8019F128(NA_SE_EN_DEKNUTS_DANCE2);
+            Audio_PlaySfx_2(NA_SE_EN_DEKNUTS_DANCE2);
             break;
 
         case 438:
@@ -442,7 +442,7 @@ void func_80A52074(EnDnk* this, PlayState* play) {
     }
 
     if ((play->csCtx.curFrame >= 198) && (play->csCtx.curFrame < 438)) {
-        func_8019F128(NA_SE_EN_DEKNUTS_DANCE - SFX_FLAG);
+        Audio_PlaySfx_2(NA_SE_EN_DEKNUTS_DANCE - SFX_FLAG);
     }
 }
 

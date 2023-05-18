@@ -567,7 +567,7 @@ void func_80A224A4(ObjSkateblock* this, PlayState* play) {
         func_80A21D1C(this);
         sp28 = true;
     } else {
-        func_800B9010(&this->dyna.actor, NA_SE_PL_SLIP_ICE_LEVEL - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->dyna.actor, NA_SE_PL_SLIP_ICE_LEVEL - SFX_FLAG);
     }
 
     func_80A21CD8(this);

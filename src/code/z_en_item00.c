@@ -670,7 +670,7 @@ void EnItem00_Update(Actor* thisx, PlayState* play) {
     }
 
     if ((this->actor.params <= ITEM00_RUPEE_RED) || (this->actor.params == ITEM00_RUPEE_HUGE)) {
-        play_sound(NA_SE_SY_GET_RUPY);
+        Audio_PlaySfx(NA_SE_SY_GET_RUPY);
     } else if (getItemId != GI_NONE) {
         if (Actor_HasParent(&this->actor, play)) {
             Flags_SetCollectible(play, this->collectibleFlag);
@@ -678,7 +678,7 @@ void EnItem00_Update(Actor* thisx, PlayState* play) {
         }
         return;
     } else {
-        play_sound(NA_SE_SY_GET_ITEM);
+        Audio_PlaySfx(NA_SE_SY_GET_ITEM);
     }
 
     Flags_SetCollectible(play, this->collectibleFlag);

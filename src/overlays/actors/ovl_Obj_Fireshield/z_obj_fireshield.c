@@ -363,7 +363,7 @@ void ObjFireshield_Update(Actor* thisx, PlayState* play) {
             this->collider.dim.yShift = this->actor.home.pos.y - this->actor.world.pos.y;
         }
 
-        func_800B9010(&this->actor, NA_SE_EV_BURNING - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_BURNING - SFX_FLAG);
 
         if (player->transformation == PLAYER_FORM_GORON) {
             this->collider.info.toucher.damage = 0;

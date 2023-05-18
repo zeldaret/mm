@@ -307,7 +307,7 @@ void func_809A3BC0(ObjPzlblock* this, PlayState* play) {
             func_809A3D1C(this);
         }
     } else {
-        func_800B9010(&this->dyna.actor, NA_SE_EV_ROCK_SLIDE - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->dyna.actor, NA_SE_EV_ROCK_SLIDE - SFX_FLAG);
     }
 }
 

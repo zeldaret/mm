@@ -336,11 +336,11 @@ void EnMThunder_Charge(EnMThunder* this, PlayState* play) {
     }
 
     if (player->unk_B08[0] > 0.85f) {
-        func_8019F900(&player->actor.projectedPos, 2);
+        Audio_PlaySfx_SwordCharge(&player->actor.projectedPos, 2);
     } else if (player->unk_B08[0] > 0.15f) {
-        func_8019F900(&player->actor.projectedPos, 1);
+        Audio_PlaySfx_SwordCharge(&player->actor.projectedPos, 1);
     } else if (player->unk_B08[0] > 0.1f) {
-        func_8019F900(&player->actor.projectedPos, 0);
+        Audio_PlaySfx_SwordCharge(&player->actor.projectedPos, 0);
     }
 
     if (Play_InCsMode(play)) {

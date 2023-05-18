@@ -180,7 +180,7 @@ wordReplace = {
     "func_801A0238": "Audio_SetMainBgmVolume",
     "func_801A2C20": "Audio_StopSubBgm",
     "func_801A2BB8": "Audio_PlaySubBgm",
-    "func_8019F1C0": "Audio_PlaySfxAtPos",
+    "func_8019F1C0": "Audio_PlaySfx_AtPos",
     "func_801A5BD0": "AudioSfx_MuteBanks",
     "func_801A72CC": "AudioSfx_StopByPos",
     "Audio_StopSfxByPos": "AudioSfx_StopByPos",
