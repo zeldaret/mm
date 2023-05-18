@@ -1419,6 +1419,7 @@ s32 Camera_CalcAtForParallel(Camera* camera, VecGeo* arg1, f32 yOffset, f32 xzOf
     VecGeo focalActorAtOffsetTargetGeo;
 
     // Calculate the `focalActorAtOffsetTarget`
+    // @TODO: Only uses `PARALLEL1_FLAG_` flags, but may need separate flags for `CalcAt` system
     if (flags & 0x40) {
         focalActorAtOffsetTargetGeo.r = func_800CCCEC(camera, flags & 0x10);
         focalActorAtOffsetTargetGeo.yaw = focalActorPosRot->rot.y + 0x4000;
