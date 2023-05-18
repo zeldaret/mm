@@ -554,7 +554,7 @@ void EnBox_Open(EnBox* this, PlayState* play) {
                                      gSaveContext.save.playerForm == PLAYER_FORM_DEKU ? 15.0f : 90.0f)) {
             sfxId = NA_SE_EV_TBOX_OPEN;
         }
-        if (sfxId != 0) {
+        if (sfxId != NA_SE_NONE) {
             Audio_PlaySfx_AtPos(&this->dyna.actor.projectedPos, sfxId);
         }
         if (this->skelAnime.jointTable[3].z > 0) {

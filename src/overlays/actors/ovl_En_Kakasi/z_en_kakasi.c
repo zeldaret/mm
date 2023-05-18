@@ -771,10 +771,10 @@ void EnKakasi_PostSongLearnDialogue(EnKakasi* this, PlayState* play) {
         } else {
             this->talkState = TEXT_STATE_5;
             if (play->msgCtx.choiceIndex == 1) {
-                Audio_PlaySfx_MessageDecide(); // play 0x4808 sfx (decide) and calls AudioSfx_StopById
+                Audio_PlaySfx_MessageDecide();
                 this->picto.actor.textId = 0x164A;
             } else {
-                Audio_PlaySfx_MessageCancel(); // play 0x480A sfx (cancel) and calls AudioSfx_StopById
+                Audio_PlaySfx_MessageCancel();
                 this->picto.actor.textId = 0x1661;
             }
         }
