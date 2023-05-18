@@ -742,11 +742,11 @@ void EnBigslime_EndThrowMinislime(EnBigslime* this) {
 
 void EnBigslime_BreakIntoMinislime(EnBigslime* this, PlayState* play) {
     s32 i;
-    s16 quakeIndex = Quake_Add(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
+    s16 quakeIndex = Quake_Request(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
 
     Quake_SetSpeed(quakeIndex, 20000);
-    Quake_SetQuakeValues(quakeIndex, 15, 0, 0, 0);
-    Quake_SetCountdown(quakeIndex, 15);
+    Quake_SetPerturbations(quakeIndex, 15, 0, 0, 0);
+    Quake_SetDuration(quakeIndex, 15);
 
     Rumble_Request(this->actor.xyzDistToPlayerSq, 180, 20, 100);
 

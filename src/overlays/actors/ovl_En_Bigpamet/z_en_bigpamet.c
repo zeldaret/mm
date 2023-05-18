@@ -540,13 +540,13 @@ void func_80A287E8(EnBigpamet* this, PlayState* play) {
     }
 
     if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
-        quakeIndex = Quake_Add(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
+        quakeIndex = Quake_Request(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
 
         this->actor.velocity.y = this->unk_29E * 0.375f;
 
         Quake_SetSpeed(quakeIndex, 20000);
-        Quake_SetQuakeValues(quakeIndex, 15, 0, 0, 0);
-        Quake_SetCountdown(quakeIndex, 10);
+        Quake_SetPerturbations(quakeIndex, 15, 0, 0, 0);
+        Quake_SetDuration(quakeIndex, 10);
 
         Rumble_Request(this->actor.xyzDistToPlayerSq, 180, 20, 100);
 

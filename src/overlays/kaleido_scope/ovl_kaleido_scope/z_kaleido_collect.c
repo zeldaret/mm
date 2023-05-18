@@ -136,7 +136,7 @@ void KaleidoScope_DrawQuestStatus(PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    KaleidoScope_SetCursorVtx(pauseCtx, pauseCtx->cursorSlot[PAUSE_QUEST] * 4, pauseCtx->questVtx);
+    KaleidoScope_SetCursorVtxPos(pauseCtx, pauseCtx->cursorSlot[PAUSE_QUEST] * 4, pauseCtx->questVtx);
 
     gDPPipeSync(POLY_OPA_DISP++);
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, pauseCtx->alpha);
@@ -394,7 +394,7 @@ void KaleidoScope_DrawQuestStatus(PlayState* play) {
                         POLY_OPA_DISP, sOcarinaButtonTextures[sQuestSongPlayedOcarinaButtons[i]], 16, 16, 0);
                 }
             }
-        } else if (IS_PAUSE_MAIN_STATE_SAVE_PROMPT || (pauseCtx->mainState == PAUSE_MAIN_STATE_IDLE_CURSOR_ON_SONG)) {
+        } else if (IS_PAUSE_MAIN_STATE_SONG_PROMPT || (pauseCtx->mainState == PAUSE_MAIN_STATE_IDLE_CURSOR_ON_SONG)) {
             // Draw the buttons for playing a song
             sp1C8 = pauseCtx->ocarinaSongIndex;
             sp1CA = gOcarinaSongButtons[sp1C8].numButtons;
