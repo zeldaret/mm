@@ -4363,9 +4363,13 @@ void Audio_PlaySfx_SwordCharge(Vec3f* pos, u8 chargeLevel) {
                 AudioSfx_PlaySfx(NA_SE_PL_SWORD_CHARGE, pos, 4, &sCurChargeLevelSfxFreq, &gSfxDefaultFreqAndVolScale,
                                  &gSfxDefaultReverb);
                 break;
+
             case 2:
                 AudioSfx_PlaySfx(NA_SE_PL_SWORD_CHARGE, pos, 4, &sCurChargeLevelSfxFreq, &gSfxDefaultFreqAndVolScale,
                                  &gSfxDefaultReverb);
+                break;
+
+            default:
                 break;
         }
         sPrevChargeLevel = chargeLevel;
@@ -4417,10 +4421,14 @@ void Audio_PlaySfx_WaterWheel(Vec3f* pos, u16 sfxId) {
                 isWaterWheelSfxNotPlaying = true;
             }
             break;
+
         case NA_SE_EV_DUMMY_WATER_WHEEL_RR - SFX_FLAG:
             if (!AudioSfx_IsPlaying(NA_SE_EV_BIG_WATER_WHEEL_RR - SFX_FLAG)) {
                 isWaterWheelSfxNotPlaying = true;
             }
+            break;
+
+        default:
             break;
     }
 
