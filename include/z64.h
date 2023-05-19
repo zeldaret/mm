@@ -315,7 +315,7 @@ typedef struct {
     /* 0x28C */ f32 cursorY;
     /* 0x290 */ f32 cursorWidth;
     /* 0x294 */ f32 cursorHeight;
-    /* 0x298 */ f32 cursorShrinkRate; // TODO: test and verify
+    /* 0x298 */ f32 cursorShrinkRate;
     /* 0x29C */ s16 promptChoice; // save/continue choice: 0 = yes; 4 = no
     /* 0x29E */ s16 promptAlpha;
     /* 0x2A0 */ s16 ocarinaSongIndex;
@@ -326,7 +326,7 @@ typedef struct {
     /* 0x2B9 */ u8 itemDescriptionOn; // helpful description of item given through a message box
     /* 0x2BA */ s16 equipAnimScale; // scale of item icon while moving being equipped to c-button
     /* 0x2BC */ s16 equipAnimShrinkRate; // rate the scale is shrinking for the item icon while moving being equipped to c-button
-    /* 0x2BE */ s16 ocarinaButtonsY[5]; // TODO: test and verify
+    /* 0x2BE */ s16 ocarinaButtonsY[5];
     /* 0x2C8 */ u16 unk_2C8; // Uses PauseMenuPage enum for Owl Warp. Never set.
     /* 0x2CA */ s16 unk_2CA; // Uses OwlWarpId enum for Owl Warp. Never set.
 } PauseContext; // size = 0x2D0

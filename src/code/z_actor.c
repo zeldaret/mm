@@ -846,22 +846,15 @@ void TitleCard_Update(GameState* gameState, TitleCardContext* titleCtx) {
 }
 
 void TitleCard_Draw(GameState* gameState, TitleCardContext* titleCtx) {
-    s32 width;
-    s32 height;
-    s32 doubleWidth;
-    s32 titleX;
-    s32 doubleHeight;
-    s32 titleY;
-    s32 titleSecondY;
-    s32 textureLanguageOffset;
-
     if (titleCtx->alpha != 0) {
-        width = titleCtx->width;
-        height = titleCtx->height;
-        doubleWidth = width * 2;
-        doubleHeight = height * 2;
-        titleX = (titleCtx->x * 4) - doubleWidth;
-        titleY = (titleCtx->y * 4) - doubleHeight;
+        s32 width = titleCtx->width;
+        s32 height = titleCtx->height;
+        s32 doubleWidth = width * 2;
+        s32 titleX = (titleCtx->x * 4) - doubleWidth;
+        s32 doubleHeight = height * 2;
+        s32 titleY = (titleCtx->y * 4) - doubleHeight;
+        s32 titleSecondY;
+        s32 textureLanguageOffset;
 
         OPEN_DISPS(gameState->gfxCtx);
 
