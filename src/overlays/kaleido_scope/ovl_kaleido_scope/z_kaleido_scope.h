@@ -116,7 +116,6 @@ typedef enum {
     /* 3 */ DEBUG_EDITOR_EVENTS
 } DebugEditor;
 
-// TODO: Taken from OoT. Verify in MM
 typedef enum {
     /* 0 */ PAUSE_BG_PRERENDER_OFF,
     /* 1 */ PAUSE_BG_PRERENDER_SETUP, // The current frame is only drawn for the purpose of serving as the pause background.

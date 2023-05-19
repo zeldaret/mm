@@ -129,7 +129,7 @@ extern RegEditor* gRegEditor;
 #define R_THREE_DAY_CLOCK_Y_POS             XREG(43)
 #define R_THREE_DAY_CLOCK_SUN_MOON_CUTOFF   XREG(44)
 #define R_THREE_DAY_CLOCK_HOUR_DIGIT_CUTOFF XREG(45)
-#define R_PAUSE_DBG_MAP_CLOUD_ON            XREG(50) // TODO: Test these set of pause regs
+#define R_PAUSE_DBG_MAP_CLOUD_ON            XREG(50)
 #define R_PAUSE_DBG_MAP_CLOUD_X             XREG(52)
 #define R_PAUSE_DBG_MAP_CLOUD_Y             XREG(53)
 #define R_MOON_CRASH_TIMER_Y                XREG(80)

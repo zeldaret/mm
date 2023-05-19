@@ -142,7 +142,6 @@ void KaleidoSetup_Init(PlayState* play) {
     pauseCtx->unk_20C = 936.0f;
     pauseCtx->roll = -314.0f;
 
-    //! Note: Should likely be `R_REVERSE_FLOOR_INDEX + 4`
     pauseCtx->cursorPoint[PAUSE_MAP] = R_REVERSE_FLOOR_INDEX + (DUNGEON_FLOOR_INDEX_4 - 1);
 
     pauseCtx->cursorSpecialPos = PAUSE_CURSOR_PAGE_RIGHT;
