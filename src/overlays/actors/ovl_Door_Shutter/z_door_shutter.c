@@ -618,10 +618,10 @@ void func_808A1B48(DoorShutter* this, PlayState* play) {
         }
         Actor_PlaySfx(&this->door.dyna.actor, NA_SE_EV_BIGWALL_BOUND);
 
-        quakeIndex = Quake_Add(Play_GetCamera(play, CAM_ID_MAIN), QUAKE_TYPE_3);
+        quakeIndex = Quake_Request(Play_GetCamera(play, CAM_ID_MAIN), QUAKE_TYPE_3);
         Quake_SetSpeed(quakeIndex, -32536);
-        Quake_SetQuakeValues(quakeIndex, 2, 0, 0, 0);
-        Quake_SetCountdown(quakeIndex, 10);
+        Quake_SetPerturbations(quakeIndex, 2, 0, 0, 0);
+        Quake_SetDuration(quakeIndex, 10);
 
         Rumble_Request(this->door.dyna.actor.xyzDistToPlayerSq, 180, 20, 100);
 

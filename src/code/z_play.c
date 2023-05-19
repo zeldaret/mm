@@ -507,39 +507,39 @@ void Play_UpdateWaterCamera(PlayState* this, Camera* camera) {
         if (!sIsCameraUnderwater) {
             Camera_SetFlags(camera, CAM_STATE_UNDERWATER);
             sQuakeIndex = -1;
-            Distortion_SetType(DISTORTION_TYPE_UNDERWATER_ENTRY);
-            Distortion_SetCountdown(80);
+            Distortion_Request(DISTORTION_TYPE_UNDERWATER_ENTRY);
+            Distortion_SetDuration(80);
         }
 
         func_801A3EC0(0x20);
         func_800F6834(this, lightIndex);
 
-        if ((sQuakeIndex == -1) || (Quake_GetCountdown(sQuakeIndex) == 10)) {
-            s16 quakeIndex = Quake_Add(camera, QUAKE_TYPE_5);
+        if ((sQuakeIndex == -1) || (Quake_GetTimeLeft(sQuakeIndex) == 10)) {
+            s16 quakeIndex = Quake_Request(camera, QUAKE_TYPE_5);
 
             sQuakeIndex = quakeIndex;
             if (quakeIndex != 0) {
                 Quake_SetSpeed(sQuakeIndex, 550);
-                Quake_SetQuakeValues(sQuakeIndex, 1, 1, 180, 0);
-                Quake_SetCountdown(sQuakeIndex, 1000);
+                Quake_SetPerturbations(sQuakeIndex, 1, 1, 180, 0);
+                Quake_SetDuration(sQuakeIndex, 1000);
             }
         }
         if (player->stateFlags3 & PLAYER_STATE3_8000) {
-            Distortion_SetType(DISTORTION_TYPE_ZORA_SWIMMING);
-            Distortion_ClearType(DISTORTION_TYPE_NON_ZORA_SWIMMING);
+            Distortion_Request(DISTORTION_TYPE_ZORA_SWIMMING);
+            Distortion_RemoveRequest(DISTORTION_TYPE_NON_ZORA_SWIMMING);
         } else {
-            Distortion_SetType(DISTORTION_TYPE_NON_ZORA_SWIMMING);
-            Distortion_ClearType(DISTORTION_TYPE_ZORA_SWIMMING);
+            Distortion_Request(DISTORTION_TYPE_NON_ZORA_SWIMMING);
+            Distortion_RemoveRequest(DISTORTION_TYPE_ZORA_SWIMMING);
         }
     } else {
         if (sIsCameraUnderwater) {
             Camera_ClearFlags(camera, CAM_STATE_UNDERWATER);
         }
-        Distortion_ClearType(DISTORTION_TYPE_NON_ZORA_SWIMMING);
-        Distortion_ClearType(DISTORTION_TYPE_UNDERWATER_ENTRY);
-        Distortion_ClearType(DISTORTION_TYPE_ZORA_SWIMMING);
+        Distortion_RemoveRequest(DISTORTION_TYPE_NON_ZORA_SWIMMING);
+        Distortion_RemoveRequest(DISTORTION_TYPE_UNDERWATER_ENTRY);
+        Distortion_RemoveRequest(DISTORTION_TYPE_ZORA_SWIMMING);
         if (sQuakeIndex != 0) {
-            Quake_Remove(sQuakeIndex);
+            Quake_RemoveRequest(sQuakeIndex);
         }
         func_800F694C(this);
         func_801A3EC0(0);

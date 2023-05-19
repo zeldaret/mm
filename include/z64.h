@@ -262,11 +262,11 @@ typedef struct {
     /* 0x188 */ Vtx* questPageVtx;
     /* 0x18C */ Vtx* maskPageVtx;
     /* 0x190 */ Vtx* itemVtx;
-    /* 0x194 */ Vtx* mapVtx;
+    /* 0x194 */ Vtx* mapVtx; // inferred
     /* 0x198 */ Vtx* questVtx;
     /* 0x19C */ Vtx* maskVtx;
-    /* 0x1A0 */ Vtx* unk_1A0;
-    /* 0x1A4 */ Vtx* unk_1A4;
+    /* 0x1A0 */ Vtx* promptPageVtx;
+    /* 0x1A4 */ Vtx* infoPanelVtx;
     /* 0x1A8 */ Vtx* cursorVtx;
     /* 0x1AC */ OcarinaStaff* ocarinaStaff;
     /* 0x1B0 */ UNK_TYPE1 unk_1B0[0x20];
@@ -282,10 +282,10 @@ typedef struct {
     /* 0x206 */ u16 switchPageTimer;
     /* 0x208 */ u16 savePromptState;
     /* 0x20C */ f32 unk_20C;
-    /* 0x210 */ f32 itemPageRoll; // rotation (-z) of the item page into the screen 
-    /* 0x214 */ f32 mapPageRoll; // rotation (+x) of the map page into the screen 
-    /* 0x218 */ f32 questPageRoll; // rotation (+z) of the quest page into the screen 
-    /* 0x21C */ f32 maskPageRoll; // rotation (-z) of the mask page into the screen 
+    /* 0x210 */ f32 itemPageRoll; // rotation (-z) of the item page into the screen
+    /* 0x214 */ f32 mapPageRoll; // rotation (+x) of the map page into the screen
+    /* 0x218 */ f32 questPageRoll; // rotation (+z) of the quest page into the screen
+    /* 0x21C */ f32 maskPageRoll; // rotation (-z) of the mask page into the screen
     /* 0x220 */ f32 roll;
     /* 0x224 */ u16 alpha;
     /* 0x226 */ s16 offsetY;

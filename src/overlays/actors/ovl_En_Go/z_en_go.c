@@ -1047,16 +1047,16 @@ s32 func_80A13564(EnGo* this, f32 arg1, f32 arg2, s32 arg3) {
     return ret;
 }
 
-void func_80A136B8(PlayState* play, s16 speed, s16 verticalMag, s16 countdown) {
-    s16 quakeIndex = Quake_Add(Play_GetCamera(play, CAM_ID_MAIN), QUAKE_TYPE_3);
+void EnGo_RequestQuake(PlayState* play, s16 speed, s16 y, s16 duration) {
+    s16 quakeIndex = Quake_Request(Play_GetCamera(play, CAM_ID_MAIN), QUAKE_TYPE_3);
 
-    Quake_SetCountdown(quakeIndex, countdown);
+    Quake_SetDuration(quakeIndex, duration);
     Quake_SetSpeed(quakeIndex, speed);
-    Quake_SetQuakeValues(quakeIndex, verticalMag, 0, 0, 0);
+    Quake_SetPerturbations(quakeIndex, y, 0, 0, 0);
 }
 
 void func_80A13728(EnGo* this, PlayState* play) {
-    func_80A136B8(play, 27767, 7, 20);
+    EnGo_RequestQuake(play, 27767, 7, 20);
     play->actorCtx.unk2 = 4;
     Actor_Spawn(&play->actorCtx, play, ACTOR_EN_TEST, this->actor.world.pos.x, this->actor.world.pos.y,
                 this->actor.world.pos.z, 0, 0, 0, 0);
