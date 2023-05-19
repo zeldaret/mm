@@ -6,6 +6,8 @@
 
 #include "z_kaleido_scope.h"
 #include "overlays/gamestates/ovl_opening/z_opening.h"
+#include "interface/icon_item_gameover_static/icon_item_gameover_static.h"
+#include "interface/icon_item_jpn_static/icon_item_jpn_static.h"
 #include "z64view.h"
 #include "overlays/gamestates/ovl_opening/z_opening.h"
 #include "interface/icon_item_gameover_static/icon_item_gameover_static.h"
@@ -100,80 +102,80 @@ TexturePtr sQuestPageBgTextures[] = {
 };
 
 s16 gVtxPageMapWorldQuadsWidth[VTX_PAGE_MAP_WORLD_QUADS] = {
-    80,  // mapPageVtx[60]  QUAD_MAP_WORLD_CLOUDS_CLOCK_TOWN_1
-    64,  // mapPageVtx[64]  QUAD_MAP_WORLD_CLOUDS_CLOCK_TOWN_2
-    64,  // mapPageVtx[68]  QUAD_MAP_WORLD_CLOUDS_WOODFALL_1
-    64,  // mapPageVtx[72]  QUAD_MAP_WORLD_CLOUDS_WOODFALL_2
-    16,  // mapPageVtx[76]  QUAD_MAP_WORLD_CLOUDS_WOODFALL_3
-    64,  // mapPageVtx[80]  QUAD_MAP_WORLD_CLOUDS_SNOWHEAD_1
-    112, // mapPageVtx[84]  QUAD_MAP_WORLD_CLOUDS_SNOWHEAD_2
-    112, // mapPageVtx[88]  QUAD_MAP_WORLD_CLOUDS_SNOWHEAD_3
-    48,  // mapPageVtx[92]  QUAD_MAP_WORLD_CLOUDS_ROMANI_RANCH
-    64,  // mapPageVtx[96]  QUAD_MAP_WORLD_CLOUDS_GREAT_BAY_1
-    64,  // mapPageVtx[100] QUAD_MAP_WORLD_CLOUDS_GREAT_BAY_2
-    64,  // mapPageVtx[104] QUAD_MAP_WORLD_CLOUDS_GREAT_BAY_3
-    64,  // mapPageVtx[108] QUAD_MAP_WORLD_CLOUDS_GREAT_BAY_4
-    48,  // mapPageVtx[112] QUAD_MAP_WORLD_CLOUDS_STONE_TOWER_1
-    64,  // mapPageVtx[116] QUAD_MAP_WORLD_CLOUDS_STONE_TOWER_2
-    8,   // mapPageVtx[120] QUAD_MAP_REGION_GREAT_BAY
-    8,   // mapPageVtx[124] QUAD_MAP_REGION_ZORA_HALL
-    8,   // mapPageVtx[128] QUAD_MAP_REGION_ROMANI_RANCH
-    8,   // mapPageVtx[132] QUAD_MAP_REGION_DEKU_PALACE
-    8,   // mapPageVtx[136] QUAD_MAP_REGION_WOODFALL
-    8,   // mapPageVtx[140] QUAD_MAP_REGION_CLOCK_TOWN
-    8,   // mapPageVtx[144] QUAD_MAP_REGION_SNOWHEAD
-    8,   // mapPageVtx[148] QUAD_MAP_REGION_IKANA_GRAVEYARD
-    8,   // mapPageVtx[152] QUAD_MAP_REGION_IKANA_CANYON
-    8,   // mapPageVtx[156] QUAD_MAP_REGION_GORON_VILLAGE
-    8,   // mapPageVtx[160] QUAD_MAP_REGION_STONE_TOWER
-    24,  // mapPageVtx[164] QUAD_MAP_OWL_WARP_GREAT_BAY_COAST
-    24,  // mapPageVtx[168] QUAD_MAP_OWL_WARP_ZORA_CAPE
-    24,  // mapPageVtx[172] QUAD_MAP_OWL_WARP_SNOWHEAD
-    24,  // mapPageVtx[176] QUAD_MAP_OWL_WARP_MOUNTAIN_VILLAGE
-    24,  // mapPageVtx[180] QUAD_MAP_OWL_WARP_CLOCK_TOWN
-    24,  // mapPageVtx[184] QUAD_MAP_OWL_WARP_MILK_ROAD
-    24,  // mapPageVtx[188] QUAD_MAP_OWL_WARP_WOODFALL
-    24,  // mapPageVtx[192] QUAD_MAP_OWL_WARP_SOUTHERN_SWAMP
-    24,  // mapPageVtx[196] QUAD_MAP_OWL_WARP_IKANA_CANYON
-    24,  // mapPageVtx[200] QUAD_MAP_OWL_WARP_STONE_TOWER
+    80,  // mapPageVtx[60]  clouds Clock Town 1
+    64,  // mapPageVtx[64]  clouds Clock Town 2
+    64,  // mapPageVtx[68]  clouds Woodfall 1
+    64,  // mapPageVtx[72]  clouds Woodfall 2
+    16,  // mapPageVtx[76]  clouds Woodfall 3
+    64,  // mapPageVtx[80]  clouds Snowhead 1
+    112, // mapPageVtx[84]  clouds Snowhead 2
+    112, // mapPageVtx[88]  clouds Snowhead 3
+    48,  // mapPageVtx[92]  clouds Romani Ranch
+    64,  // mapPageVtx[96]  clouds Great Bay 1
+    64,  // mapPageVtx[100] clouds Great Bay 2
+    64,  // mapPageVtx[104] clouds Great Bay 3
+    64,  // mapPageVtx[108] clouds Great Bay 4
+    48,  // mapPageVtx[112] clouds Stone Tower 1
+    64,  // mapPageVtx[116] clouds Stone Tower 2
+    8,   // mapPageVtx[120] region Great Bay
+    8,   // mapPageVtx[124] region Zora Hall
+    8,   // mapPageVtx[128] region Romani Ranch
+    8,   // mapPageVtx[132] region Deku Palace
+    8,   // mapPageVtx[136] region Woodfall
+    8,   // mapPageVtx[140] region Clock Town
+    8,   // mapPageVtx[144] region Snowhead
+    8,   // mapPageVtx[148] region Ikana Graveyard
+    8,   // mapPageVtx[152] region Ikana Canyon
+    8,   // mapPageVtx[156] region Goron Village
+    8,   // mapPageVtx[160] region Stone Tower
+    24,  // mapPageVtx[164] owl warp Great Bay Coast
+    24,  // mapPageVtx[168] owl warp Zora Cape
+    24,  // mapPageVtx[172] owl warp Snowhead
+    24,  // mapPageVtx[176] owl warp Mountain Village
+    24,  // mapPageVtx[180] owl warp Clock Town
+    24,  // mapPageVtx[184] owl warp Milk Road
+    24,  // mapPageVtx[188] owl warp Woodfall
+    24,  // mapPageVtx[192] owl warp Southern Swamp
+    24,  // mapPageVtx[196] owl warp Ikana Canyon
+    24,  // mapPageVtx[200] owl warp Stone Tower
 };
 s16 gVtxPageMapWorldQuadsHeight[VTX_PAGE_MAP_WORLD_QUADS] = {
-    40, // mapPageVtx[60] QUAD_MAP_WORLD_CLOUDS_CLOCK_TOWN_1
-    31, // mapPageVtx[64] QUAD_MAP_WORLD_CLOUDS_CLOCK_TOWN_2
-    53, // mapPageVtx[68] QUAD_MAP_WORLD_CLOUDS_WOODFALL_1
-    53, // mapPageVtx[72] QUAD_MAP_WORLD_CLOUDS_WOODFALL_2
-    53, // mapPageVtx[76] QUAD_MAP_WORLD_CLOUDS_WOODFALL_3
-    52, // mapPageVtx[80] QUAD_MAP_WORLD_CLOUDS_SNOWHEAD_1
-    35, // mapPageVtx[84] QUAD_MAP_WORLD_CLOUDS_SNOWHEAD_2
-    35, // mapPageVtx[88] QUAD_MAP_WORLD_CLOUDS_SNOWHEAD_3
-    32, // mapPageVtx[92] QUAD_MAP_WORLD_CLOUDS_ROMANI_RANCH
-    64, // mapPageVtx[96] QUAD_MAP_WORLD_CLOUDS_GREAT_BAY_1
-    64, // mapPageVtx[100] QUAD_MAP_WORLD_CLOUDS_GREAT_BAY_2
-    64, // mapPageVtx[104] QUAD_MAP_WORLD_CLOUDS_GREAT_BAY_3
-    64, // mapPageVtx[108] QUAD_MAP_WORLD_CLOUDS_GREAT_BAY_4
-    82, // mapPageVtx[112] QUAD_MAP_WORLD_CLOUDS_STONE_TOWER_1
-    61, // mapPageVtx[116] QUAD_MAP_WORLD_CLOUDS_STONE_TOWER_2
-    8,  // mapPageVtx[120] QUAD_MAP_REGION_GREAT_BAY
-    8,  // mapPageVtx[124] QUAD_MAP_REGION_ZORA_HALL
-    8,  // mapPageVtx[128] QUAD_MAP_REGION_ROMANI_RANCH
-    8,  // mapPageVtx[132] QUAD_MAP_REGION_DEKU_PALACE
-    8,  // mapPageVtx[136] QUAD_MAP_REGION_WOODFALL
-    8,  // mapPageVtx[140] QUAD_MAP_REGION_CLOCK_TOWN
-    8,  // mapPageVtx[144] QUAD_MAP_REGION_SNOWHEAD
-    8,  // mapPageVtx[148] QUAD_MAP_REGION_IKANA_GRAVEYARD
-    8,  // mapPageVtx[152] QUAD_MAP_REGION_IKANA_CANYON
-    8,  // mapPageVtx[156] QUAD_MAP_REGION_GORON_VILLAGE
-    8,  // mapPageVtx[160] QUAD_MAP_REGION_STONE_TOWER
-    12, // mapPageVtx[164] QUAD_MAP_OWL_WARP_GREAT_BAY_COAST
-    12, // mapPageVtx[168] QUAD_MAP_OWL_WARP_ZORA_CAPE
-    12, // mapPageVtx[172] QUAD_MAP_OWL_WARP_SNOWHEAD
-    12, // mapPageVtx[176] QUAD_MAP_OWL_WARP_MOUNTAIN_VILLAGE
-    12, // mapPageVtx[180] QUAD_MAP_OWL_WARP_CLOCK_TOWN
-    12, // mapPageVtx[184] QUAD_MAP_OWL_WARP_MILK_ROAD
-    12, // mapPageVtx[188] QUAD_MAP_OWL_WARP_WOODFALL
-    12, // mapPageVtx[192] QUAD_MAP_OWL_WARP_SOUTHERN_SWAMP
-    12, // mapPageVtx[196] QUAD_MAP_OWL_WARP_IKANA_CANYON
-    12, // mapPageVtx[200] QUAD_MAP_OWL_WARP_STONE_TOWER
+    40, // mapPageVtx[60]  clouds Clock Town 1
+    31, // mapPageVtx[64]  clouds Clock Town 2
+    53, // mapPageVtx[68]  clouds Woodfall 1
+    53, // mapPageVtx[72]  clouds Woodfall 2
+    53, // mapPageVtx[76]  clouds Woodfall 3
+    52, // mapPageVtx[80]  clouds Snowhead 1
+    35, // mapPageVtx[84]  clouds Snowhead 2
+    35, // mapPageVtx[88]  clouds Snowhead 3
+    32, // mapPageVtx[92]  clouds Romani Ranch
+    64, // mapPageVtx[96]  clouds Great Bay 1
+    64, // mapPageVtx[100] clouds Great Bay 2
+    64, // mapPageVtx[104] clouds Great Bay 3
+    64, // mapPageVtx[108] clouds Great Bay 4
+    82, // mapPageVtx[112] clouds Stone Tower 1
+    61, // mapPageVtx[116] clouds Stone Tower 2
+    8,  // mapPageVtx[120] region Great Bay
+    8,  // mapPageVtx[124] region Zora Hall
+    8,  // mapPageVtx[128] region Romani Ranch
+    8,  // mapPageVtx[132] region Deku Palace
+    8,  // mapPageVtx[136] region Woodfall
+    8,  // mapPageVtx[140] region Clock Town
+    8,  // mapPageVtx[144] region Snowhead
+    8,  // mapPageVtx[148] region Ikana Graveyard
+    8,  // mapPageVtx[152] region Ikana Canyon
+    8,  // mapPageVtx[156] region Goron Village
+    8,  // mapPageVtx[160] region Stone Tower
+    12, // mapPageVtx[164] owl warp Great Bay Coast
+    12, // mapPageVtx[168] owl warp Zora Cape
+    12, // mapPageVtx[172] owl warp Snowhead
+    12, // mapPageVtx[176] owl warp Mountain Village
+    12, // mapPageVtx[180] owl warp Clock Town
+    12, // mapPageVtx[184] owl warp Milk Road
+    12, // mapPageVtx[188] owl warp Woodfall
+    12, // mapPageVtx[192] owl warp Southern Swamp
+    12, // mapPageVtx[196] owl warp Ikana Canyon
+    12, // mapPageVtx[200] owl warp Stone Tower
 };
 
 s16 sGameOverPrimR = 0;
@@ -1530,7 +1532,7 @@ s16 sVtxPageMapWorldQuadsX[VTX_PAGE_MAP_WORLD_QUADS] = {
     44,   // mapPageVtx[196] QUAD_MAP_OWL_WARP_IKANA_CANYON
     54,   // mapPageVtx[200] QUAD_MAP_OWL_WARP_STONE_TOWER
 };
-s16 sVtxPageSaveQuadsX[VTX_PAGE_SAVE_QUADS] = {
+s16 sVtxPagePromptQuadsX[VTX_PAGE_SAVE_QUADS] = {
     -76, // promptPageVtx[60] QUAD_PROMPT_MESSAGE
     -58, // promptPageVtx[64] QUAD_PROMPT_CURSOR_LEFT
     10,  // promptPageVtx[68] QUAD_PROMPT_CURSOR_RIGHT
@@ -1550,7 +1552,7 @@ s16 sVtxPageMapDungeonQuadsWidth[VTX_PAGE_MAP_DUNGEON_QUADS] = {
     24,  // mapPageVtx[80] QUAD_MAP_DUNGEON_UNUSED
 };
 s16 sVtxPageQuestQuadsWidth[CLAMP_MIN(VTX_PAGE_QUEST_QUADS, 1)] = { 0 };
-s16 sVtxPageSaveQuadsWidth[VTX_PAGE_SAVE_QUADS] = {
+s16 sVtxPagePromptQuadsWidth[VTX_PAGE_SAVE_QUADS] = {
     152, // promptPageVtx[60] QUAD_PROMPT_MESSAGE
     48,  // promptPageVtx[64] QUAD_PROMPT_CURSOR_LEFT
     48,  // promptPageVtx[68] QUAD_PROMPT_CURSOR_RIGHT
@@ -1609,7 +1611,7 @@ s16 sVtxPageMapWorldQuadsY[VTX_PAGE_MAP_WORLD_QUADS] = {
     -1,  // mapPageVtx[196] QUAD_MAP_OWL_WARP_IKANA_CANYON
     24,  // mapPageVtx[200] QUAD_MAP_OWL_WARP_STONE_TOWER
 };
-s16 sVtxPageSaveQuadsY[VTX_PAGE_SAVE_QUADS] = {
+s16 sVtxPagePromptQuadsY[VTX_PAGE_SAVE_QUADS] = {
     36, // promptPageVtx[60] QUAD_PROMPT_MESSAGE
     10, // promptPageVtx[64] QUAD_PROMPT_CURSOR_LEFT
     10, // promptPageVtx[68] QUAD_PROMPT_CURSOR_RIGHT
@@ -1629,7 +1631,7 @@ s16 sVtxPageMapDungeonQuadsHeight[] = {
     24, // mapPageVtx[80] QUAD_MAP_DUNGEON_UNUSED
 };
 s16 sVtxPageQuestQuadsHeight[CLAMP_MIN(VTX_PAGE_QUEST_QUADS, 1)] = { 0 };
-s16 sVtxPageSaveQuadsHeight[VTX_PAGE_SAVE_QUADS] = {
+s16 sVtxPagePromptQuadsHeight[VTX_PAGE_SAVE_QUADS] = {
     16, // promptPageVtx[60] QUAD_PROMPT_MESSAGE
     48, // promptPageVtx[64] QUAD_PROMPT_CURSOR_LEFT
     48, // promptPageVtx[68] QUAD_PROMPT_CURSOR_RIGHT
@@ -1643,7 +1645,7 @@ s16* sVtxPageQuadsX[VTX_PAGE_MAX] = {
     sVtxPageMapDungeonQuadsX, // VTX_PAGE_MAP_DUNGEON
     sVtxPageQuestQuadsX,      // VTX_PAGE_QUEST
     sVtxPageMapWorldQuadsX,   // VTX_PAGE_MAP_WORLD
-    sVtxPageSaveQuadsX,       // VTX_PAGE_PROMPT
+    sVtxPagePromptQuadsX,     // VTX_PAGE_PROMPT
 };
 
 s16* sVtxPageQuadsWidth[VTX_PAGE_MAX] = {
@@ -1652,7 +1654,7 @@ s16* sVtxPageQuadsWidth[VTX_PAGE_MAX] = {
     sVtxPageMapDungeonQuadsWidth, // VTX_PAGE_MAP_DUNGEON
     sVtxPageQuestQuadsWidth,      // VTX_PAGE_QUEST
     gVtxPageMapWorldQuadsWidth,   // VTX_PAGE_MAP_WORLD
-    sVtxPageSaveQuadsWidth,       // VTX_PAGE_PROMPT
+    sVtxPagePromptQuadsWidth,     // VTX_PAGE_PROMPT
 };
 
 s16* sVtxPageQuadsY[VTX_PAGE_MAX] = {
@@ -1661,7 +1663,7 @@ s16* sVtxPageQuadsY[VTX_PAGE_MAX] = {
     sVtxPageMapDungeonQuadsY, // VTX_PAGE_MAP_DUNGEON
     sVtxPageQuestQuadsY,      // VTX_PAGE_QUEST
     sVtxPageMapWorldQuadsY,   // VTX_PAGE_MAP_WORLD
-    sVtxPageSaveQuadsY,       // VTX_PAGE_PROMPT
+    sVtxPagePromptQuadsY,     // VTX_PAGE_PROMPT
 };
 
 s16* sVtxPageQuadsHeight[VTX_PAGE_MAX] = {
@@ -1670,7 +1672,7 @@ s16* sVtxPageQuadsHeight[VTX_PAGE_MAX] = {
     sVtxPageMapDungeonQuadsHeight, // VTX_PAGE_MAP_DUNGEON
     sVtxPageQuestQuadsHeight,      // VTX_PAGE_QUEST
     gVtxPageMapWorldQuadsHeight,   // VTX_PAGE_MAP_WORLD
-    sVtxPageSaveQuadsHeight,       // VTX_PAGE_PROMPT
+    sVtxPagePromptQuadsHeight,     // VTX_PAGE_PROMPT
 };
 
 s16 sVtxPageGameOverSaveQuadsY[VTX_PAGE_SAVE_QUADS] = {

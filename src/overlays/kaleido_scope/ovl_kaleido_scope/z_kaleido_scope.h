@@ -395,7 +395,6 @@ typedef enum {
     /* 5 */ QUAD_PROMPT_MAX
 } PromptQuad;
 
-
 // NES
 void KaleidoScope_MoveCursorToSpecialPos(PlayState* play, s16 cursorSpecialPos);
 void KaleidoScope_DrawTexQuadRGBA32(GraphicsContext* gfxCtx, TexturePtr texture, u16 width, u16 height, u16 point);
@@ -413,7 +412,7 @@ void KaleidoScope_DrawQuestStatus(PlayState* play);
 void KaleidoScope_UpdateQuestCursor(PlayState* play);
 
 // Item
-void KaleidoScope_SetCursorVtxPos(PauseContext* pauseCtx, u16 index, Vtx* vtx);
+void KaleidoScope_SetCursorVtxPos(PauseContext* pauseCtx, u16 vtxIndex, Vtx* vtx);
 void KaleidoScope_DrawItemSelect(PlayState* play);
 void KaleidoScope_UpdateItemCursor(PlayState* play);
 void KaleidoScope_UpdateItemEquip(PlayState* play);
