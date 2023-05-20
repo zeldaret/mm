@@ -346,15 +346,15 @@ void Fault_DrawCornerRec(u16 color) {
     Fault_DrawRec(22, 16, 8, 1, color);
 }
 
-void Fault_PrintFReg(s32 idx, f32* value) {
+void Fault_PrintFReg(s32 index, f32* value) {
     u32 raw = *(u32*)value;
     s32 v0 = ((raw & 0x7F800000) >> 0x17) - 0x7F;
 
     if ((v0 >= -0x7E && v0 < 0x80) || raw == 0) {
-        FaultDrawer_Printf("F%02d:%14.7e ", idx, *value);
+        FaultDrawer_Printf("F%02d:%14.7e ", index, *value);
     } else {
         // Print subnormal floats as their IEEE-754 hex representation
-        FaultDrawer_Printf("F%02d:  %08x(16) ", idx, raw);
+        FaultDrawer_Printf("F%02d:  %08x(16) ", index, raw);
     }
 }
 
@@ -402,7 +402,7 @@ void Fault_LogFPCSR(u32 value) {
 }
 
 void Fault_PrintThreadContext(OSThread* thread) {
-    __OSThreadContext* ctx;
+    __OSThreadContext* threadCtx;
     s16 causeStrIdx = _SHIFTR((u32)thread->context.cause, 2, 5);
 
     if (causeStrIdx == 23) { // Watchpoint
@@ -416,47 +416,47 @@ void Fault_PrintThreadContext(OSThread* thread) {
     FaultDrawer_SetCharPad(-2, 4);
     FaultDrawer_SetCursor(22, 20);
 
-    ctx = &thread->context;
+    threadCtx = &thread->context;
     FaultDrawer_Printf("THREAD:%d (%d:%s)\n", thread->id, causeStrIdx, sCpuExceptions[causeStrIdx]);
     FaultDrawer_SetCharPad(-1, 0);
 
-    FaultDrawer_Printf("PC:%08xH SR:%08xH VA:%08xH\n", (u32)ctx->pc, (u32)ctx->sr, (u32)ctx->badvaddr);
-    FaultDrawer_Printf("AT:%08xH V0:%08xH V1:%08xH\n", (u32)ctx->at, (u32)ctx->v0, (u32)ctx->v1);
-    FaultDrawer_Printf("A0:%08xH A1:%08xH A2:%08xH\n", (u32)ctx->a0, (u32)ctx->a1, (u32)ctx->a2);
-    FaultDrawer_Printf("A3:%08xH T0:%08xH T1:%08xH\n", (u32)ctx->a3, (u32)ctx->t0, (u32)ctx->t1);
-    FaultDrawer_Printf("T2:%08xH T3:%08xH T4:%08xH\n", (u32)ctx->t2, (u32)ctx->t3, (u32)ctx->t4);
-    FaultDrawer_Printf("T5:%08xH T6:%08xH T7:%08xH\n", (u32)ctx->t5, (u32)ctx->t6, (u32)ctx->t7);
-    FaultDrawer_Printf("S0:%08xH S1:%08xH S2:%08xH\n", (u32)ctx->s0, (u32)ctx->s1, (u32)ctx->s2);
-    FaultDrawer_Printf("S3:%08xH S4:%08xH S5:%08xH\n", (u32)ctx->s3, (u32)ctx->s4, (u32)ctx->s5);
-    FaultDrawer_Printf("S6:%08xH S7:%08xH T8:%08xH\n", (u32)ctx->s6, (u32)ctx->s7, (u32)ctx->t8);
-    FaultDrawer_Printf("T9:%08xH GP:%08xH SP:%08xH\n", (u32)ctx->t9, (u32)ctx->gp, (u32)ctx->sp);
-    FaultDrawer_Printf("S8:%08xH RA:%08xH LO:%08xH\n\n", (u32)ctx->s8, (u32)ctx->ra, (u32)ctx->lo);
+    FaultDrawer_Printf("PC:%08xH SR:%08xH VA:%08xH\n", (u32)threadCtx->pc, (u32)threadCtx->sr, (u32)threadCtx->badvaddr);
+    FaultDrawer_Printf("AT:%08xH V0:%08xH V1:%08xH\n", (u32)threadCtx->at, (u32)threadCtx->v0, (u32)threadCtx->v1);
+    FaultDrawer_Printf("A0:%08xH A1:%08xH A2:%08xH\n", (u32)threadCtx->a0, (u32)threadCtx->a1, (u32)threadCtx->a2);
+    FaultDrawer_Printf("A3:%08xH T0:%08xH T1:%08xH\n", (u32)threadCtx->a3, (u32)threadCtx->t0, (u32)threadCtx->t1);
+    FaultDrawer_Printf("T2:%08xH T3:%08xH T4:%08xH\n", (u32)threadCtx->t2, (u32)threadCtx->t3, (u32)threadCtx->t4);
+    FaultDrawer_Printf("T5:%08xH T6:%08xH T7:%08xH\n", (u32)threadCtx->t5, (u32)threadCtx->t6, (u32)threadCtx->t7);
+    FaultDrawer_Printf("S0:%08xH S1:%08xH S2:%08xH\n", (u32)threadCtx->s0, (u32)threadCtx->s1, (u32)threadCtx->s2);
+    FaultDrawer_Printf("S3:%08xH S4:%08xH S5:%08xH\n", (u32)threadCtx->s3, (u32)threadCtx->s4, (u32)threadCtx->s5);
+    FaultDrawer_Printf("S6:%08xH S7:%08xH T8:%08xH\n", (u32)threadCtx->s6, (u32)threadCtx->s7, (u32)threadCtx->t8);
+    FaultDrawer_Printf("T9:%08xH GP:%08xH SP:%08xH\n", (u32)threadCtx->t9, (u32)threadCtx->gp, (u32)threadCtx->sp);
+    FaultDrawer_Printf("S8:%08xH RA:%08xH LO:%08xH\n\n", (u32)threadCtx->s8, (u32)threadCtx->ra, (u32)threadCtx->lo);
 
-    Fault_PrintFPCR(ctx->fpcsr);
+    Fault_PrintFPCR(threadCtx->fpcsr);
     FaultDrawer_Printf("\n");
-    Fault_PrintFReg(0, &ctx->fp0.f.f_even);
-    Fault_PrintFReg(2, &ctx->fp2.f.f_even);
+    Fault_PrintFReg(0, &threadCtx->fp0.f.f_even);
+    Fault_PrintFReg(2, &threadCtx->fp2.f.f_even);
     FaultDrawer_Printf("\n");
-    Fault_PrintFReg(4, &ctx->fp4.f.f_even);
-    Fault_PrintFReg(6, &ctx->fp6.f.f_even);
+    Fault_PrintFReg(4, &threadCtx->fp4.f.f_even);
+    Fault_PrintFReg(6, &threadCtx->fp6.f.f_even);
     FaultDrawer_Printf("\n");
-    Fault_PrintFReg(8, &ctx->fp8.f.f_even);
-    Fault_PrintFReg(0xA, &ctx->fp10.f.f_even);
+    Fault_PrintFReg(8, &threadCtx->fp8.f.f_even);
+    Fault_PrintFReg(0xA, &threadCtx->fp10.f.f_even);
     FaultDrawer_Printf("\n");
-    Fault_PrintFReg(0xC, &ctx->fp12.f.f_even);
-    Fault_PrintFReg(0xE, &ctx->fp14.f.f_even);
+    Fault_PrintFReg(0xC, &threadCtx->fp12.f.f_even);
+    Fault_PrintFReg(0xE, &threadCtx->fp14.f.f_even);
     FaultDrawer_Printf("\n");
-    Fault_PrintFReg(0x10, &ctx->fp16.f.f_even);
-    Fault_PrintFReg(0x12, &ctx->fp18.f.f_even);
+    Fault_PrintFReg(0x10, &threadCtx->fp16.f.f_even);
+    Fault_PrintFReg(0x12, &threadCtx->fp18.f.f_even);
     FaultDrawer_Printf("\n");
-    Fault_PrintFReg(0x14, &ctx->fp20.f.f_even);
-    Fault_PrintFReg(0x16, &ctx->fp22.f.f_even);
+    Fault_PrintFReg(0x14, &threadCtx->fp20.f.f_even);
+    Fault_PrintFReg(0x16, &threadCtx->fp22.f.f_even);
     FaultDrawer_Printf("\n");
-    Fault_PrintFReg(0x18, &ctx->fp24.f.f_even);
-    Fault_PrintFReg(0x1A, &ctx->fp26.f.f_even);
+    Fault_PrintFReg(0x18, &threadCtx->fp24.f.f_even);
+    Fault_PrintFReg(0x1A, &threadCtx->fp26.f.f_even);
     FaultDrawer_Printf("\n");
-    Fault_PrintFReg(0x1C, &ctx->fp28.f.f_even);
-    Fault_PrintFReg(0x1E, &ctx->fp30.f.f_even);
+    Fault_PrintFReg(0x1C, &threadCtx->fp28.f.f_even);
+    Fault_PrintFReg(0x1E, &threadCtx->fp30.f.f_even);
     FaultDrawer_Printf("\n");
     FaultDrawer_SetCharPad(0, 0);
 
@@ -466,7 +466,7 @@ void Fault_PrintThreadContext(OSThread* thread) {
 }
 
 void osSyncPrintfThreadContext(OSThread* thread) {
-    __OSThreadContext* ctx;
+    __OSThreadContext* threadCtx;
     s16 causeStrIdx = _SHIFTR((u32)thread->context.cause, 2, 5);
 
     if (causeStrIdx == 23) { // Watchpoint
@@ -476,47 +476,47 @@ void osSyncPrintfThreadContext(OSThread* thread) {
         causeStrIdx = 17;
     }
 
-    ctx = &thread->context;
+    threadCtx = &thread->context;
     osSyncPrintf("\n");
     osSyncPrintf("THREAD ID:%d (%d:%s)\n", thread->id, causeStrIdx, sCpuExceptions[causeStrIdx]);
 
-    osSyncPrintf("PC:%08xH   SR:%08xH   VA:%08xH\n", (u32)ctx->pc, (u32)ctx->sr, (u32)ctx->badvaddr);
-    osSyncPrintf("AT:%08xH   V0:%08xH   V1:%08xH\n", (u32)ctx->at, (u32)ctx->v0, (u32)ctx->v1);
-    osSyncPrintf("A0:%08xH   A1:%08xH   A2:%08xH\n", (u32)ctx->a0, (u32)ctx->a1, (u32)ctx->a2);
-    osSyncPrintf("A3:%08xH   T0:%08xH   T1:%08xH\n", (u32)ctx->a3, (u32)ctx->t0, (u32)ctx->t1);
-    osSyncPrintf("T2:%08xH   T3:%08xH   T4:%08xH\n", (u32)ctx->t2, (u32)ctx->t3, (u32)ctx->t4);
-    osSyncPrintf("T5:%08xH   T6:%08xH   T7:%08xH\n", (u32)ctx->t5, (u32)ctx->t6, (u32)ctx->t7);
-    osSyncPrintf("S0:%08xH   S1:%08xH   S2:%08xH\n", (u32)ctx->s0, (u32)ctx->s1, (u32)ctx->s2);
-    osSyncPrintf("S3:%08xH   S4:%08xH   S5:%08xH\n", (u32)ctx->s3, (u32)ctx->s4, (u32)ctx->s5);
-    osSyncPrintf("S6:%08xH   S7:%08xH   T8:%08xH\n", (u32)ctx->s6, (u32)ctx->s7, (u32)ctx->t8);
-    osSyncPrintf("T9:%08xH   GP:%08xH   SP:%08xH\n", (u32)ctx->t9, (u32)ctx->gp, (u32)ctx->sp);
-    osSyncPrintf("S8:%08xH   RA:%08xH   LO:%08xH\n", (u32)ctx->s8, (u32)ctx->ra, (u32)ctx->lo);
+    osSyncPrintf("PC:%08xH   SR:%08xH   VA:%08xH\n", (u32)threadCtx->pc, (u32)threadCtx->sr, (u32)threadCtx->badvaddr);
+    osSyncPrintf("AT:%08xH   V0:%08xH   V1:%08xH\n", (u32)threadCtx->at, (u32)threadCtx->v0, (u32)threadCtx->v1);
+    osSyncPrintf("A0:%08xH   A1:%08xH   A2:%08xH\n", (u32)threadCtx->a0, (u32)threadCtx->a1, (u32)threadCtx->a2);
+    osSyncPrintf("A3:%08xH   T0:%08xH   T1:%08xH\n", (u32)threadCtx->a3, (u32)threadCtx->t0, (u32)threadCtx->t1);
+    osSyncPrintf("T2:%08xH   T3:%08xH   T4:%08xH\n", (u32)threadCtx->t2, (u32)threadCtx->t3, (u32)threadCtx->t4);
+    osSyncPrintf("T5:%08xH   T6:%08xH   T7:%08xH\n", (u32)threadCtx->t5, (u32)threadCtx->t6, (u32)threadCtx->t7);
+    osSyncPrintf("S0:%08xH   S1:%08xH   S2:%08xH\n", (u32)threadCtx->s0, (u32)threadCtx->s1, (u32)threadCtx->s2);
+    osSyncPrintf("S3:%08xH   S4:%08xH   S5:%08xH\n", (u32)threadCtx->s3, (u32)threadCtx->s4, (u32)threadCtx->s5);
+    osSyncPrintf("S6:%08xH   S7:%08xH   T8:%08xH\n", (u32)threadCtx->s6, (u32)threadCtx->s7, (u32)threadCtx->t8);
+    osSyncPrintf("T9:%08xH   GP:%08xH   SP:%08xH\n", (u32)threadCtx->t9, (u32)threadCtx->gp, (u32)threadCtx->sp);
+    osSyncPrintf("S8:%08xH   RA:%08xH   LO:%08xH\n", (u32)threadCtx->s8, (u32)threadCtx->ra, (u32)threadCtx->lo);
     osSyncPrintf("\n");
-    Fault_LogFPCSR(ctx->fpcsr);
+    Fault_LogFPCSR(threadCtx->fpcsr);
     osSyncPrintf("\n");
-    Fault_LogFReg(0, &ctx->fp0.f.f_even);
-    Fault_LogFReg(2, &ctx->fp2.f.f_even);
+    Fault_LogFReg(0, &threadCtx->fp0.f.f_even);
+    Fault_LogFReg(2, &threadCtx->fp2.f.f_even);
     osSyncPrintf("\n");
-    Fault_LogFReg(4, &ctx->fp4.f.f_even);
-    Fault_LogFReg(6, &ctx->fp6.f.f_even);
+    Fault_LogFReg(4, &threadCtx->fp4.f.f_even);
+    Fault_LogFReg(6, &threadCtx->fp6.f.f_even);
     osSyncPrintf("\n");
-    Fault_LogFReg(8, &ctx->fp8.f.f_even);
-    Fault_LogFReg(10, &ctx->fp10.f.f_even);
+    Fault_LogFReg(8, &threadCtx->fp8.f.f_even);
+    Fault_LogFReg(10, &threadCtx->fp10.f.f_even);
     osSyncPrintf("\n");
-    Fault_LogFReg(12, &ctx->fp12.f.f_even);
-    Fault_LogFReg(14, &ctx->fp14.f.f_even);
+    Fault_LogFReg(12, &threadCtx->fp12.f.f_even);
+    Fault_LogFReg(14, &threadCtx->fp14.f.f_even);
     osSyncPrintf("\n");
-    Fault_LogFReg(16, &ctx->fp16.f.f_even);
-    Fault_LogFReg(18, &ctx->fp18.f.f_even);
+    Fault_LogFReg(16, &threadCtx->fp16.f.f_even);
+    Fault_LogFReg(18, &threadCtx->fp18.f.f_even);
     osSyncPrintf("\n");
-    Fault_LogFReg(20, &ctx->fp20.f.f_even);
-    Fault_LogFReg(22, &ctx->fp22.f.f_even);
+    Fault_LogFReg(20, &threadCtx->fp20.f.f_even);
+    Fault_LogFReg(22, &threadCtx->fp22.f.f_even);
     osSyncPrintf("\n");
-    Fault_LogFReg(24, &ctx->fp24.f.f_even);
-    Fault_LogFReg(26, &ctx->fp26.f.f_even);
+    Fault_LogFReg(24, &threadCtx->fp24.f.f_even);
+    Fault_LogFReg(26, &threadCtx->fp26.f.f_even);
     osSyncPrintf("\n");
-    Fault_LogFReg(28, &ctx->fp28.f.f_even);
-    Fault_LogFReg(30, &ctx->fp30.f.f_even);
+    Fault_LogFReg(28, &threadCtx->fp28.f.f_even);
+    Fault_LogFReg(30, &threadCtx->fp30.f.f_even);
     osSyncPrintf("\n");
 }
 
@@ -543,7 +543,7 @@ void Fault_Wait5Seconds(void) {
 
     do {
         Fault_Sleep(1000 / 60);
-    } while ((osGetTime() - start) < OS_SEC_TO_CYCLES(5) + 1);
+    } while ((osGetTime() - start) <= OS_SEC_TO_CYCLES(5));
 
     sFaultInstance->autoScroll = true;
 }

@@ -28,7 +28,7 @@
 #define FAULT_COLOR(n) "\x1A" FAULT_COLOR_EXPAND_AND_STRINGIFY(FAULT_COLOR_ ## n)
 
 
-// Address at the end of Jumper Pak
+// Address at the end of "non-expansion" memory space
 #define FAULT_FB_ADDRESS (void*)((PHYS_TO_K0(0x400000) - SCREEN_HEIGHT * SCREEN_WIDTH * sizeof(u16)))
 
 typedef void (*FaultClientCallback)(void*, void*);
