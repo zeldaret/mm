@@ -372,7 +372,6 @@ void KaleidoScope_HandlePageToggles(PlayState* play, Input* input) {
     }
 
     if (pauseCtx->cursorSpecialPos == PAUSE_CURSOR_PAGE_LEFT) {
-        //
         if (pauseCtx->stickAdjX < -30) {
             pauseCtx->pageSwitchInputTimer++;
             // Switch the page to the left after a certain number of frames with held input or after a second press
