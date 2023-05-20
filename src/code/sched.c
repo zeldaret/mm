@@ -1,5 +1,3 @@
-#include "prevent_bss_reordering.h"
-
 #include "z64.h"
 #include "fault.h"
 #include "functions.h"
