@@ -353,7 +353,7 @@ void Fault_PrintFReg(s32 idx, f32* value) {
     if ((v0 >= -0x7E && v0 < 0x80) || raw == 0) {
         FaultDrawer_Printf("F%02d:%14.7e ", idx, *value);
     } else {
-        // Print subnormal floats as their ieee-754 hex representation
+        // Print subnormal floats as their IEEE-754 hex representation
         FaultDrawer_Printf("F%02d:  %08x(16) ", idx, raw);
     }
 }
