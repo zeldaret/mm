@@ -83,7 +83,7 @@ void EnArrow_Init(Actor* thisx, PlayState* play) {
         this->actor.params = ARROW_TYPE_DEKU_NUT;
     }
 
-    if (this->actor.params < ARROW_TYPE_SLINGSHOT) {
+    if (ARROW_IS_ARROW(this->actor.params)) {
         SkelAnime_Init(play, &this->arrow.skelAnime, &gameplay_keep_Skel_014560, &gameplay_keep_Anim_0128BC,
                        this->arrow.jointTable, this->arrow.jointTable, 5);
         if (this->actor.params < ARROW_TYPE_FIRE) {
@@ -105,7 +105,7 @@ void EnArrow_Init(Actor* thisx, PlayState* play) {
     Collider_InitQuad(play, &this->collider);
     Collider_SetQuad(play, &this->collider, &this->actor, &sQuadInit);
 
-    if (this->actor.params < ARROW_TYPE_SLINGSHOT) {
+    if (ARROW_IS_ARROW(this->actor.params)) {
         this->collider.info.toucherFlags &= ~(TOUCH_SFX_WOOD | TOUCH_SFX_HARD);
         this->collider.info.toucherFlags |= 0;
     }
@@ -128,7 +128,7 @@ void EnArrow_Init(Actor* thisx, PlayState* play) {
 void EnArrow_Destroy(Actor* thisx, PlayState* play) {
     EnArrow* this = THIS;
 
-    if (this->actor.params < ARROW_TYPE_SLINGSHOT) {
+    if (ARROW_IS_ARROW(this->actor.params)) {
         Effect_Destroy(play, this->unk_240);
     }
 
@@ -203,7 +203,7 @@ void func_8088A594(EnArrow* this, PlayState* play) {
             func_8088A514(this);
             this->unk_260 = 99;
             Magic_Reset(play);
-        } else if (this->actor.params >= ARROW_TYPE_SLINGSHOT) {
+        } else if (ARROW_IS_NON_ARROW(this->actor.params)) {
             if ((this->actor.params == ARROW_TYPE_DEKU_NUT) && (this->actor.world.rot.x < 0)) {
                 Actor_SetScale(&this->actor, 0.009f);
                 this->unk_260 = 40;
@@ -365,7 +365,7 @@ void func_8088ACE0(EnArrow* this, PlayState* play) {
            (this->collider.base.atFlags & AT_HIT);
 
     if (sp50 || (this->unk_262 != 0)) {
-        if (this->actor.params >= ARROW_TYPE_SLINGSHOT) {
+        if (ARROW_IS_NON_ARROW(this->actor.params)) {
             if (sp50) {
                 this->actor.world.pos.x = (this->actor.world.pos.x + this->actor.prevPos.x) * 0.5f;
                 this->actor.world.pos.y = (this->actor.world.pos.y + this->actor.prevPos.y) * 0.5f;
@@ -473,7 +473,7 @@ void func_8088ACE0(EnArrow* this, PlayState* play) {
             this->actor.wallBgId = spA8;
         }
 
-        if (this->actor.params < ARROW_TYPE_SLINGSHOT) {
+        if (ARROW_IS_ARROW(this->actor.params)) {
             this->actor.shape.rot.x = Math_Atan2S_XY(this->actor.speed, -this->actor.velocity.y);
         }
     }
@@ -586,7 +586,7 @@ void func_8088B88C(PlayState* play, EnArrow* this, EnArrowUnkStruct* arg2) {
         Matrix_MultVec3f(&sp4C[0], &sp40);
         Matrix_MultVec3f(&sp4C[1], &sp34);
         if (this->actor.params < ARROW_TYPE_DEKU_NUT) {
-            sp30 = this->actor.params < ARROW_TYPE_SLINGSHOT;
+            sp30 = ARROW_IS_ARROW(this->actor.params);
             if (this->unk_264 == NULL) {
                 sp30 &= func_80126440(play, &this->collider, &this->unk_244, &sp40, &sp34);
             } else if (sp30 && (sp40.x == this->unk_244.tip.x) && (sp40.y == this->unk_244.tip.y) &&
@@ -641,7 +641,7 @@ void EnArrow_Draw(Actor* thisx, PlayState* play) {
     EnArrow* this = THIS;
     s32 phi_v0;
 
-    if (this->actor.params < ARROW_TYPE_SLINGSHOT) {
+    if (ARROW_IS_ARROW(this->actor.params)) {
         func_8012C28C(play->state.gfxCtx);
         SkelAnime_DrawLod(play, this->arrow.skelAnime.skeleton, this->arrow.skelAnime.jointTable, NULL, NULL,
                           &this->actor, this->actor.projectedPos.z < 160.0f ? 0 : 1);

@@ -20,7 +20,9 @@ typedef enum ArrowType {
 } ArrowType;
 
 #define ARROW_IS_MAGICAL(arrowType) (((arrowType) >= ARROW_TYPE_FIRE) && ((arrowType) <= ARROW_TYPE_LIGHT))
-#define ARROW_GET_MAGIC_FROM_TYPE(arrowType) (((s32)arrowType) - ARROW_TYPE_FIRE)
+#define ARROW_GET_MAGIC_FROM_TYPE(arrowType) (s32)((arrowType) - ARROW_TYPE_FIRE)
+#define ARROW_IS_ARROW(arrowType) ((arrowType) < ARROW_TYPE_SLINGSHOT)
+#define ARROW_IS_NON_ARROW(arrowType) ((arrowType) >= ARROW_TYPE_SLINGSHOT)
 
 typedef enum ArrowMagic {
     /* -1 */ ARROW_MAGIC_INVALID = -1,
