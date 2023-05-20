@@ -4291,7 +4291,7 @@ void Audio_PlaySfx_AtPosForMetalEffectsWithSyncedFreqAndVolume(Vec3f* pos, u16 s
     f32 sp2C;
     f32 phi_f0;
     s32 phi_v0;
-    u16 metalSfxId = 0;
+    u16 metalSfxId = NA_SE_NONE;
 
     sp2C = Audio_SetSyncedSfxFreqAndVolume(freqVolParam);
     AudioSfx_PlaySfx(sfxId, pos, 4, &sSfxSyncedFreq, &sSfxSyncedVolume, &gSfxDefaultReverb);
@@ -4314,7 +4314,7 @@ void Audio_PlaySfx_AtPosForMetalEffectsWithSyncedFreqAndVolume(Vec3f* pos, u16 s
                 metalSfxId = NA_SE_PL_METALEFFECT_ADULT;
             }
 
-            if (metalSfxId != 0) {
+            if (metalSfxId != NA_SE_NONE) {
                 sSfxSyncedVolumeForMetalEffects = (sp2C * 0.7) + 0.3;
                 AudioSfx_PlaySfx(metalSfxId, pos, 4, &sSfxSyncedFreq, &sSfxSyncedVolumeForMetalEffects,
                                  &gSfxDefaultReverb);
@@ -4355,7 +4355,7 @@ void Audio_PlaySfx_Randomized(Vec3f* pos, u16 baseSfxId, u8 randLim) {
  * Plays increasingly high-pitched sword charging sfx as Player charges up the sword
  */
 void Audio_PlaySfx_SwordCharge(Vec3f* pos, u8 chargeLevel) {
-    chargeLevel &= 3;
+    chargeLevel %= 4U;
     if (chargeLevel != sPrevChargeLevel) {
         sCurChargeLevelSfxFreq = sChargeLevelsSfxFreq[chargeLevel];
         switch (chargeLevel) {
@@ -5447,14 +5447,17 @@ void Audio_ResetData(void);
 
 // used for z_obj_sound and z_en_gk
 void Audio_PlaySfx_AtFixedPos(Vec3f* pos, u16 sfxId) {
-    static f32 sSfxOriginalPos[] = { 0.0f, 0.0f, 0.0f };
+    static Vec3f sSfxOriginalPos[] = { 0.0f, 0.0f, 0.0f };
     s32 i;
+    f32* dstPos = (f32*)&sSfxOriginalPos;
+    f32* srcPos = (f32*)pos;
 
-    for (i = 0; i < ARRAY_COUNT(sSfxOriginalPos); i++) {
-        sSfxOriginalPos[i] = ((f32*)pos)[i];
+    // Vec3f copy
+    for (i = 0; i < 3; i++) {
+        dstPos[i] = srcPos[i];
     }
 
-    Audio_PlaySfx_AtPos((Vec3f*)sSfxOriginalPos, sfxId);
+    Audio_PlaySfx_AtPos(sSfxOriginalPos, sfxId);
 }
 
 void Audio_PlaySfx_AtPosWithVolumeTransition(Vec3f* pos, u16 sfxId, u16 duration) {
