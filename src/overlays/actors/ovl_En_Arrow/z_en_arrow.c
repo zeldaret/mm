@@ -203,7 +203,7 @@ void func_8088A594(EnArrow* this, PlayState* play) {
             func_8088A514(this);
             this->unk_260 = 99;
             Magic_Reset(play);
-        } else if (ARROW_IS_NON_ARROW(this->actor.params)) {
+        } else if (!ARROW_IS_ARROW(this->actor.params)) {
             if ((this->actor.params == ARROW_TYPE_DEKU_NUT) && (this->actor.world.rot.x < 0)) {
                 Actor_SetScale(&this->actor, 0.009f);
                 this->unk_260 = 40;
@@ -365,7 +365,7 @@ void func_8088ACE0(EnArrow* this, PlayState* play) {
            (this->collider.base.atFlags & AT_HIT);
 
     if (sp50 || (this->unk_262 != 0)) {
-        if (ARROW_IS_NON_ARROW(this->actor.params)) {
+        if (!ARROW_IS_ARROW(this->actor.params)) {
             if (sp50) {
                 this->actor.world.pos.x = (this->actor.world.pos.x + this->actor.prevPos.x) * 0.5f;
                 this->actor.world.pos.y = (this->actor.world.pos.y + this->actor.prevPos.y) * 0.5f;
