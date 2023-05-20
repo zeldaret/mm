@@ -46,14 +46,8 @@
 #include "vt.h"
 #include "stackcheck.h"
 
-// bss
-extern FaultMgr* sFaultInstance;
-extern f32 sFaultTimeTotal; // read but not set anywhere
-// extern u32 faultCustomOptions;
-// extern u32 faultCopyToLog;
-extern STACK(sFaultStack, 0x600);
-extern StackEntry sFaultStackInfo;
-extern FaultMgr gFaultMgr;
+FaultMgr* sFaultInstance;
+f32 sFaultTimeTotal; // read but not set anywhere
 
 // data
 const char* sCpuExceptions[] = {
@@ -917,8 +911,6 @@ void Fault_ProcessClients(void) {
     }
 }
 
-#ifdef NON_MATCHING
-// needs in-function static bss
 void Fault_SetOptionsFromController3(void) {
     static u32 faultCustomOptions;
     Input* input3 = &sFaultInstance->inputs[3];
@@ -953,10 +945,6 @@ void Fault_SetOptionsFromController3(void) {
         }
     }
 }
-#else
-void Fault_SetOptionsFromController3(void);
-#pragma GLOBAL_ASM("asm/non_matchings/boot/fault/Fault_SetOptionsFromController3.s")
-#endif
 
 void Fault_UpdatePad(void) {
     Fault_UpdatePadImpl();
@@ -1072,6 +1060,10 @@ void Fault_SetFrameBuffer(void* fb, u16 w, u16 h) {
     sFaultInstance->fb = fb;
     FaultDrawer_SetDrawerFrameBuffer(fb, w, h);
 }
+
+STACK(sFaultStack, 0x600);
+StackEntry sFaultStackInfo;
+FaultMgr gFaultMgr;
 
 void Fault_Init(void) {
     sFaultInstance = &gFaultMgr;
