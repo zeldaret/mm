@@ -25,7 +25,7 @@ void EnEncount2_InitEffects(EnEncount2* this, Vec3f* pos, s16 fadeDelay);
 void EnEncount2_UpdateEffects(EnEncount2* this, PlayState* play);
 void EnEncount2_DrawEffects(EnEncount2* this, PlayState* play);
 
-const ActorInit En_Encount2_InitVars = {
+ActorInit En_Encount2_InitVars = {
     ACTOR_EN_ENCOUNT2,
     ACTORCAT_PROP,
     FLAGS,
@@ -60,7 +60,7 @@ static ColliderJntSphInit sJntSphInit = {
         OC2_TYPE_1,
         COLSHAPE_JNTSPH,
     },
-    1,
+    ARRAY_COUNT(sJntSphElementsInit),
     sJntSphElementsInit,
 };
 
@@ -113,15 +113,15 @@ void EnEncount2_Init(Actor* thisx, PlayState* play) {
 
     this->dyna.actor.targetMode = 6;
     this->dyna.actor.colChkInfo.health = 1;
-    this->scale = 0.1;
-    this->switchFlag = GET_ENCOUNT2_SWITCH_FLAG(this);
+    this->scale = 0.1f;
+    this->switchFlag = ENCOUNT2_GET_SWITCH_FLAG(&this->dyna.actor);
 
     if (this->switchFlag == 0x7F) {
         this->switchFlag = -1;
     }
 
     if ((this->switchFlag >= 0) && (Flags_GetSwitch(play, this->switchFlag))) {
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
         return;
     }
 
@@ -137,6 +137,7 @@ void EnEncount2_Init(Actor* thisx, PlayState* play) {
 
 void EnEncount2_Destroy(Actor* thisx, PlayState* play) {
     EnEncount2* this = THIS;
+
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
     Collider_DestroyJntSph(play, &this->collider);
 }
@@ -170,7 +171,7 @@ void EnEncount2_Popped(EnEncount2* this, PlayState* play) {
         EnEncount2_InitEffects(this, &curPos, 10);
     }
 
-    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_MUJURA_BALLOON_BROKEN);
+    Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_MUJURA_BALLOON_BROKEN);
     this->deathTimer = 30;
     this->actionFunc = EnEncount2_Die;
 }
@@ -180,7 +181,7 @@ void EnEncount2_Die(EnEncount2* this, PlayState* play) {
         if (this->switchFlag >= 0) {
             Flags_SetSwitch(play, this->switchFlag);
         }
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
     }
 }
 
@@ -207,8 +208,8 @@ void EnEncount2_Update(Actor* thisx, PlayState* play) {
 void EnEncount2_Draw(Actor* thisx, PlayState* play) {
     EnEncount2* this = THIS;
     if (this->isPopped != true) {
-        Gfx_DrawDListOpa(play, object_fusen_DL_000A00);
-        Gfx_DrawDListOpa(play, object_fusen_DL_000D78);
+        Gfx_DrawDListOpa(play, gMajoraBalloonDL);
+        Gfx_DrawDListOpa(play, gMajoraBalloonKnotDL);
     }
     EnEncount2_DrawEffects(this, play);
 }
@@ -222,7 +223,7 @@ void EnEncount2_InitEffects(EnEncount2* this, Vec3f* pos, s16 fadeDelay) {
             sPtr->isEnabled = true;
             sPtr->pos = *pos;
             sPtr->alphaFadeDelay = fadeDelay;
-            sPtr->alpha = 0xFF;
+            sPtr->alpha = 255;
 
             sPtr->accel.x = (Rand_ZeroOne() - 0.5f) * 10.0f;
             sPtr->accel.y = (Rand_ZeroOne() - 0.5f) * 10.0f;
@@ -278,14 +279,14 @@ void EnEncount2_DrawEffects(EnEncount2* this, PlayState* play) {
             Matrix_Scale(sPtr->scale, sPtr->scale, sPtr->scale, MTXMODE_APPLY);
             POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 20);
             gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gSun1Tex));
-            gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_07AB10);
+            gSPDisplayList(POLY_XLU_DISP++, gSunSparkleMaterialDL);
             gDPPipeSync(POLY_XLU_DISP++);
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, 255);
             gDPSetEnvColor(POLY_XLU_DISP++, 250, 180, 255, sPtr->alpha);
             Matrix_Mult(&play->billboardMtxF, MTXMODE_APPLY);
-            Matrix_RotateZF(DEGTORAD(play->state.frames * 20.0f), MTXMODE_APPLY);
+            Matrix_RotateZF(DEG_TO_RAD(play->state.frames * 20.0f), MTXMODE_APPLY);
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_07AB58);
+            gSPDisplayList(POLY_XLU_DISP++, gSunSparkleModelDL);
         }
     }
     CLOSE_DISPS(gfxCtx);

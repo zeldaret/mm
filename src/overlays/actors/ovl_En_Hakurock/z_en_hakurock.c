@@ -32,7 +32,7 @@ void func_80B22750(EnHakurock* this, PlayState* play);
 void func_80B228F4(Actor* thisx, PlayState* play);
 void EnHakurock_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit En_Hakurock_InitVars = {
+ActorInit En_Hakurock_InitVars = {
     ACTOR_EN_HAKUROCK,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -165,7 +165,7 @@ void func_80B21EA4(EnHakurock* this, s32 arg1) {
 }
 
 void func_80B21FFC(EnHakurock* this) {
-    this->actor.bgCheckFlags &= ~1;
+    this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND;
     this->collider.base.atFlags &= ~AT_HIT;
     this->collider.base.ocFlags1 &= ~OC1_HIT;
     this->actor.draw = NULL;
@@ -186,7 +186,7 @@ void func_80B22040(EnHakurock* this, PlayState* play) {
 void func_80B220A8(EnHakurock* this) {
     this->actor.params = EN_HAKUROCK_TYPE_BOULDER;
     this->actor.draw = func_80B228F4;
-    this->actor.speedXZ = Rand_ZeroFloat(3.5f) + 2.5f;
+    this->actor.speed = Rand_ZeroFloat(3.5f) + 2.5f;
     this->actor.velocity.y = Rand_ZeroFloat(4.5f) + 18.0f;
     Actor_SetScale(&this->actor, (Rand_ZeroFloat(5.0f) + 15.0f) * 0.001f);
     this->actor.world.rot.y = ((s32)Rand_Next() >> 0x12) + this->actor.parent->shape.rot.y + 0x8000;
@@ -209,9 +209,9 @@ void func_80B221E8(EnHakurock* this, PlayState* play) {
     this->actor.shape.rot.y += 0x900;
     this->actor.shape.rot.z += 0xB00;
 
-    if (this->collider.base.atFlags & AT_HIT || ((this->counter == 0) && (this->collider.base.ocFlags1 & OC1_HIT)) ||
-        ((this->actor.bgCheckFlags & 1) && (this->actor.velocity.y < 0.0f))) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_ROCK_BROKEN);
+    if ((this->collider.base.atFlags & AT_HIT) || ((this->counter == 0) && (this->collider.base.ocFlags1 & OC1_HIT)) ||
+        ((this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) && (this->actor.velocity.y < 0.0f))) {
+        Actor_PlaySfx(&this->actor, NA_SE_EV_ROCK_BROKEN);
         func_80B21EA4(this, 0);
         func_80B21FFC(this);
     }
@@ -244,9 +244,9 @@ void func_80B2242C(EnHakurock* this, PlayState* play) {
     if ((this->collider.base.ocFlags1 & OC1_HIT) && (this->collider.base.oc == this->actor.parent)) {
         func_80B21EA4(this, 1);
         func_80B21FFC(this);
-    } else if ((this->actor.bgCheckFlags & 1)) {
+    } else if ((this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
         func_80B21EA4(this, 2);
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_OBJECT_STICK);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_OBJECT_STICK);
         func_80B224C0(this);
     }
 }
@@ -276,7 +276,8 @@ void func_80B22500(EnHakurock* this, PlayState* play) {
              (this->collider.base.oc->params == EN_HAKUROCK_TYPE_UNK_2))) {
             func_80B21EA4(this, 3);
             func_80B21FFC(this);
-        } else if ((&player->actor == this->collider.base.oc) && ((player->stateFlags3 & 0x81000) != 0) &&
+        } else if ((&player->actor == this->collider.base.oc) &&
+                   (player->stateFlags3 & (PLAYER_STATE3_1000 | PLAYER_STATE3_80000)) &&
                    (player->linearVelocity > 8.0f)) {
             player->unk_B08[0] = player->linearVelocity = -5.0f;
             player->unk_B08[1] += (player->linearVelocity * 0.05f);
@@ -322,7 +323,8 @@ void EnHakurock_Update(Actor* thisx, PlayState* play) {
     rockParams = this->actor.params;
     if ((rockParams == EN_HAKUROCK_TYPE_BOULDER) || (rockParams == EN_HAKUROCK_TYPE_UNK_2)) {
         Actor_MoveWithGravity(&this->actor);
-        Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, this->collider.dim.radius, 0.0f, 0x85);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, this->collider.dim.radius, 0.0f,
+                                UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_80);
         if (this->actor.floorHeight == BGCHECK_Y_MIN) {
             func_80B21FFC(this);
         } else {
@@ -352,7 +354,7 @@ void EnHakurock_Draw(Actor* thisx, PlayState* play) {
     func_8012C28C(play->state.gfxCtx);
     Matrix_Translate(-100.0f, 0.0f, 0.0f, MTXMODE_APPLY);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, object_boss_hakugin_DL_011100);
-    gSPDisplayList(POLY_OPA_DISP++, object_boss_hakugin_DL_011178);
+    gSPDisplayList(POLY_OPA_DISP++, gGohtStalactiteMaterialDL);
+    gSPDisplayList(POLY_OPA_DISP++, gGohtStalactiteModelDL);
     CLOSE_DISPS(play->state.gfxCtx);
 }

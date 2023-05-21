@@ -7,13 +7,13 @@
 #include "z_obj_armos.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_4000000)
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_CAN_PRESS_SWITCH)
 
 #define THIS ((ObjArmos*)thisx)
 
 void ObjArmos_Init(Actor* thisx, PlayState* play);
 void ObjArmos_Destroy(Actor* thisx, PlayState* play);
-void ObjArmos_Update(Actor* thisx, PlayState* play);
+void ObjArmos_Update(Actor* thisx, PlayState* play2);
 void ObjArmos_Draw(Actor* thisx, PlayState* play);
 
 void func_809A54B4(ObjArmos* this);
@@ -23,7 +23,7 @@ void func_809A562C(ObjArmos* this, PlayState* play);
 void func_809A57D8(ObjArmos* this);
 void func_809A57F4(ObjArmos* this, PlayState* play);
 
-const ActorInit Obj_Armos_InitVars = {
+ActorInit Obj_Armos_InitVars = {
     ACTOR_OBJ_ARMOS,
     ACTORCAT_PROP,
     FLAGS,
@@ -227,7 +227,7 @@ void ObjArmos_Destroy(Actor* thisx, PlayState* play) {
 
 void func_809A54B4(ObjArmos* this) {
     this->actionFunc = func_809A54E0;
-    this->unk_24C = 4;
+    this->updBgCheckInfoFlags = UPDBGCHECKINFO_FLAG_4;
     this->unk_266[1] = 0;
     this->unk_266[2] = 0;
     this->unk_266[3] = 0;
@@ -252,7 +252,7 @@ void func_809A54E0(ObjArmos* this, PlayState* play) {
             func_809A518C(this, sp20);
             func_809A5610(this);
         } else {
-            GET_PLAYER(play)->stateFlags2 &= ~0x10;
+            GET_PLAYER(play)->stateFlags2 &= ~PLAYER_STATE2_10;
             this->dyna.pushForce = 0.0f;
         }
     }
@@ -260,7 +260,7 @@ void func_809A54E0(ObjArmos* this, PlayState* play) {
 
 void func_809A5610(ObjArmos* this) {
     this->actionFunc = func_809A562C;
-    this->unk_24C = 5;
+    this->updBgCheckInfoFlags = UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4;
 }
 
 void func_809A562C(ObjArmos* this, PlayState* play) {
@@ -277,19 +277,19 @@ void func_809A562C(ObjArmos* this, PlayState* play) {
 
         if ((temp == OBJARMOS_ROT_7_4) || (temp == OBJARMOS_ROT_7_5) || (temp == OBJARMOS_ROT_7_6)) {
             if (!func_809A500C(this, this->unk_264) || func_809A4E00(this, play, 0x5A)) {
-                Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
+                Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
             }
         } else if (func_809A500C(this, this->unk_264)) {
             if (func_809A4E00(this, play, 0x5A)) {
-                Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
+                Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
             }
         } else {
-            Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
+            Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
             Flags_SetSwitch(play, OBJARMOS_GET_7F(&this->dyna.actor));
             sp20 = true;
         }
 
-        player->stateFlags2 &= ~0x10;
+        player->stateFlags2 &= ~PLAYER_STATE2_10;
         this->dyna.pushForce = 0.0f;
 
         if (!sp20) {
@@ -304,12 +304,12 @@ void func_809A562C(ObjArmos* this, PlayState* play) {
 
 void func_809A57D8(ObjArmos* this) {
     this->actionFunc = func_809A57F4;
-    this->unk_24C = 4;
+    this->updBgCheckInfoFlags = UPDBGCHECKINFO_FLAG_4;
 }
 
 void func_809A57F4(ObjArmos* this, PlayState* play) {
     if (fabsf(this->dyna.pushForce) > 0.1f) {
-        GET_PLAYER(play)->stateFlags2 &= ~0x10;
+        GET_PLAYER(play)->stateFlags2 &= ~PLAYER_STATE2_10;
         this->dyna.pushForce = 0.0f;
     }
 }
@@ -322,12 +322,12 @@ void ObjArmos_Update(Actor* thisx, PlayState* play2) {
     this->actionFunc(this, play);
     this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y;
 
-    if (this->unk_24C != 0) {
-        Actor_UpdateBgCheckInfo(play, &this->dyna.actor, 20.0f, 30.0f, 0.0f, this->unk_24C);
+    if (this->updBgCheckInfoFlags != 0) {
+        Actor_UpdateBgCheckInfo(play, &this->dyna.actor, 20.0f, 30.0f, 0.0f, this->updBgCheckInfoFlags);
 
-        if ((this->actionFunc == func_809A54E0) && (this->dyna.actor.bgCheckFlags & 1) &&
+        if ((this->actionFunc == func_809A54E0) && (this->dyna.actor.bgCheckFlags & BGCHECKFLAG_GROUND) &&
             (DynaPoly_GetActor(&play->colCtx, this->dyna.actor.floorBgId) == NULL)) {
-            this->unk_24C = 0;
+            this->updBgCheckInfoFlags = 0;
         }
 
         this->unk_250.x = (Math_SinS(this->dyna.actor.shape.rot.y) * -9.0f) + this->dyna.actor.world.pos.x;

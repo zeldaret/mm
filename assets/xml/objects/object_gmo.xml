@@ -11,6 +11,6 @@
         <Texture Name="gNejironEyeClosedTex" OutName="nejiron_eye_closed" Format="rgba16" Width="16" Height="32" Offset="0x1CC8" />
         <Limb Name="gNejironBodyLimb" Type="Standard" EnumName="NEJIRON_LIMB_BODY" Offset="0x20C8" />
         <Limb Name="gNejironEyeLimb" Type="Standard" EnumName="NEJIRON_LIMB_EYES" Offset="0x20D4" />
-        <Skeleton Name="gNejironSkel" Type="Normal" LimbType="Standard" LimbNone="NEJIRON_LIMB_NONE" LimbMax="NEJIRON_LIMB_MAX" EnumName="NejironLimbs" Offset="0x20E8" />
+        <Skeleton Name="gNejironSkel" Type="Normal" LimbType="Standard" LimbNone="NEJIRON_LIMB_NONE" LimbMax="NEJIRON_LIMB_MAX" EnumName="NejironLimb" Offset="0x20E8" />
     </File>
 </Root>

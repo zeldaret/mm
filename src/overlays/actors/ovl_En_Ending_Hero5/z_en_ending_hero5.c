@@ -19,7 +19,7 @@ void EnEndingHero5_Draw(Actor* thisx, PlayState* play);
 void func_80C23980(EnEndingHero5* this);
 void func_80C2399C(EnEndingHero5* this, PlayState* play);
 
-const ActorInit En_Ending_Hero5_InitVars = {
+ActorInit En_Ending_Hero5_InitVars = {
     ACTOR_EN_ENDING_HERO5,
     ACTORCAT_NPC,
     FLAGS,
@@ -62,7 +62,9 @@ void EnEndingHero5_Update(Actor* thisx, PlayState* play) {
 
     this->actionFunc(this, play);
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 50.0f, 0x1D);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 50.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                UPDBGCHECKINFO_FLAG_10);
 }
 
 Gfx* D_80C23BF0[] = { object_daiku_DL_0070C0, object_daiku_DL_006FB0, object_daiku_DL_006E80, object_daiku_DL_006D70,

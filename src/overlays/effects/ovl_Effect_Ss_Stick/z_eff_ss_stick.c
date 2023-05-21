@@ -16,7 +16,7 @@ u32 EffectSsStick_Init(PlayState* play, u32 index, EffectSs* this, void* initPar
 void EffectSsStick_Update(PlayState* play, u32 index, EffectSs* this);
 void EffectSsStick_Draw(PlayState* play, u32 index, EffectSs* this);
 
-const EffectSsInit Effect_Ss_Stick_InitVars = {
+EffectSsInit Effect_Ss_Stick_InitVars = {
     EFFECT_SS_STICK,
     EffectSsStick_Init,
 };
@@ -52,7 +52,7 @@ void EffectSsStick_Draw(PlayState* play, u32 index, EffectSs* this) {
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     func_8012C28C(gfxCtx);
     gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.status[this->rObjBankIndex].segment);
-    gSPSegment(POLY_OPA_DISP++, 0x0C, D_801C0850);
+    gSPSegment(POLY_OPA_DISP++, 0x0C, gCullBackDList);
     gSPDisplayList(POLY_OPA_DISP++, gDekuStickDL);
 
     CLOSE_DISPS(gfxCtx);

@@ -28,7 +28,7 @@ typedef struct EnSob1 {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
     /* 0x188 */ EnSob1ActionFunc actionFunc;
-    /* 0x18C */ EnSob1ActionFunc tmpActionFunc; // Used to restore back to correct browsing function
+    /* 0x18C */ EnSob1ActionFunc prevActionFunc; // Used to restore back to correct browsing function
     /* 0x190 */ EnSob1ActionFunc changeObjectFunc;
     /* 0x194 */ ColliderCylinder collider;
     /* 0x1E0 */ Path* path;
@@ -60,10 +60,10 @@ typedef struct EnSob1 {
     /* 0x39C */ u8 arrowAnimState;
     /* 0x39D */ u8 stickAnimState;
     /* 0x39E */ s16 cutsceneState;
-    /* 0x3A0 */ s16 cutscene;
-    /* 0x3A2 */ s16 lookFowardCutscene;
-    /* 0x3A4 */ s16 lookToShelfCutscene;
-    /* 0x3A6 */ s16 lookToShopkeeperCutscene;
+    /* 0x3A0 */ s16 csId;
+    /* 0x3A2 */ s16 lookFowardCsId;
+    /* 0x3A4 */ s16 lookToShelfCsId;
+    /* 0x3A6 */ s16 lookToShopkeeperCsId;
     /* 0x3A8 */ UNK_TYPE1 pad3A8[0x4];
     /* 0x3AC */ f32 shopItemSelectedTween;
     /* 0x3B0 */ UNK_TYPE1 pad3B0[0x4];
@@ -87,9 +87,5 @@ typedef enum {
     /* 1 */ ENSOB1_CUTSCENESTATE_WAITING,
     /* 2 */ ENSOB1_CUTSCENESTATE_PLAYING
 } EnSob1CutsceneState;
-
-//! @TODO: Add enum for objIndices index based on what the object is for
-
-extern const ActorInit En_Sob1_InitVars;
 
 #endif // Z_EN_SOB1_H

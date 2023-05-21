@@ -1,5 +1,8 @@
 #include "global.h"
+#include "z64shrink_window.h"
+#include "z64view.h"
 #include "message_data_static.h"
+#include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
 
 #if 0
 
@@ -96,14 +99,14 @@ s32 Message_ShouldAdvanceSilent(PlayState* play) {
     }
 }
 
-void func_801477B4(PlayState* play) {
+void Message_CloseTextbox(PlayState* play) {
     MessageContext* msgCtx = &play->msgCtx;
 
-    if (play->msgCtx.unk11F10 != 0) {
-        msgCtx->unk12023 = 2;
+    if (play->msgCtx.msgLength != 0) {
+        msgCtx->stateTimer = 2;
         msgCtx->msgMode = 0x43;
         msgCtx->unk12020 = 0;
-        play_sound(NA_SE_PL_WALK_GROUND - SFX_FLAG);
+        play_sound(NA_SE_NONE);
     }
 }
 
@@ -229,7 +232,7 @@ void func_8014CCB4(PlayState* play, s16* decodedBufPos, s32* offset, f32* arg3) 
     s32 k = *offset;
     f32 f = *arg3;
 
-    Font_LoadChar(play, 0x838B, k); // 0x838b = ル in JISX0213
+    Font_LoadChar(play, 0x838B, k); // 0x838B = ル in JISX0213
     k += FONT_CHAR_TEX_SIZE;
     msgCtx->decodedBuffer.wchar[t] = 0x838B;
     t += 1;
@@ -253,62 +256,38 @@ void func_8014CCB4(PlayState* play, s16* decodedBufPos, s32* offset, f32* arg3) 
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_8014D304.s")
 
-#ifdef NON_EQUIVALENT
-extern u16* D_801D0188;
-extern s16* D_801D0250;
+extern u16 D_801D0188[OWL_WARP_MAX][9];
+extern s16 D_801D0250[OWL_WARP_MAX];
 
 void func_8014D62C(PlayState* play, s32* arg1, f32* arg2, s16* arg3) {
-    f32 sp3C;
-    s16 temp_s0;
-    s16 temp_s1;
-    s16 temp_s1_2;
-    s16 temp_s6;
-    s32 temp_s2;
-    s32 temp_s2_2;
-    u16* temp_v0;
-    s16 phi_v0;
+    MessageContext* msgCtx = &play->msgCtx;
+    PauseContext* pauseCtx = &play->pauseCtx;
+    s16 stringLimit;
+    s16 temp_s1 = *arg3;
+    s32 temp_s2 = *arg1;
+    f32 sp3C = *arg2;
+    s16 owlWarpId;
     s16 phi_s0;
-    s16 phi_s1;
-    s32 phi_s2;
-    s16 phi_s1_2;
-    s32 phi_s2_2;
 
-    temp_s1 = *arg3;
-    temp_s2 = *arg1;
-    sp3C = *arg2;
-    if ((func_8010A0A4(play) != 0) || (play->sceneNum == 0x4F)) {
-        phi_v0 = 0xA;
+    if (func_8010A0A4(play) || (play->sceneId == SCENE_SECOM)) {
+        owlWarpId = OWL_WARP_ENTRANCE;
     } else {
-        phi_v0 = play->pauseCtx.unk_238[4];
+        owlWarpId = pauseCtx->cursorPoint[PAUSE_WORLD_MAP];
     }
-    temp_s6 = *(&D_801D0250 + (phi_v0 * 2));
-    phi_s0 = 0;
-    phi_s1_2 = temp_s1;
-    phi_s2_2 = temp_s2;
-    if ((s32)temp_s6 > 0) {
-        phi_s1 = temp_s1;
-        phi_s2 = temp_s2;
-        do {
-            temp_v0 = (phi_v0 * 0x12) + &D_801D0188 + (phi_s0 * 2);
-            (play + 0x4908 + (phi_s1 * 2))->decodedBuffer = (u16)*temp_v0;
-            Font_LoadChar(play, *temp_v0, phi_s2);
-            temp_s0 = phi_s0 + 1;
-            temp_s1_2 = phi_s1 + 1;
-            temp_s2_2 = phi_s2 + 0x80;
-            phi_s0 = temp_s0;
-            phi_s1 = temp_s1_2;
-            phi_s2 = temp_s2_2;
-            phi_s1_2 = temp_s1_2;
-            phi_s2_2 = temp_s2_2;
-        } while ((s32)temp_s0 < (s32)temp_s6);
+    stringLimit = D_801D0250[owlWarpId];
+
+    for (phi_s0 = 0; phi_s0 < stringLimit; phi_s0++, temp_s1++, temp_s2 += 0x80) {
+        msgCtx->decodedBuffer.wchar[temp_s1] = D_801D0188[owlWarpId][phi_s0];
+        Font_LoadChar(play, D_801D0188[owlWarpId][phi_s0], temp_s2);
     }
-    *arg3 = phi_s1_2 - 1;
-    *arg1 = phi_s2_2;
-    *arg2 = sp3C + ((f32)(temp_s6 - 1) * (16.0f * play->msgCtx.unk12098));
+
+    temp_s1--;
+    sp3C += (stringLimit - 1) * (16.0f * msgCtx->unk12098);
+
+    *arg3 = temp_s1;
+    *arg1 = temp_s2;
+    *arg2 = sp3C;
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_8014D62C.s")
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_8014D7B4.s")
 
@@ -325,53 +304,53 @@ void Message_StartTextbox(PlayState* play, u16 textId, Actor* Actor) {
     func_80150D08(play, textId);
     msgCtx->unkActor = Actor;
     msgCtx->msgMode = 1;
-    msgCtx->unk12023 = 0;
+    msgCtx->stateTimer = 0;
     msgCtx->unk12024 = 0;
     play->msgCtx.ocarinaMode = 0;
 }
 
-void func_80151938(PlayState* play, u16 textId) {
+void Message_ContinueTextbox(PlayState* play, u16 textId) {
     MessageContext* msgCtx = &play->msgCtx;
     InterfaceContext* interfaceCtx = &play->interfaceCtx;
 
-    msgCtx->unk11F10 = 0;
+    msgCtx->msgLength = 0;
     func_80150D08(play, textId);
     func_80150A84(play);
     msgCtx->msgMode = 5;
-    msgCtx->unk12023 = 8;
+    msgCtx->stateTimer = 8;
     msgCtx->unk12024 = 0;
 
     if (interfaceCtx->unk_222 == 0) {
         if (textId != 0x1B93) {
-            func_8011552C(play, 0x10);
+            func_8011552C(play, DO_ACTION_NEXT);
         } else if (textId != 0xF8) {
-            func_8011552C(play, 6);
+            func_8011552C(play, DO_ACTION_DECIDE);
         }
     }
     msgCtx->unk1203C = msgCtx->unk1203A;
 
-    if (play->pauseCtx.unk_1F0 != 0) {
+    if (play->pauseCtx.bombersNotebookOpen) {
         msgCtx->unk12004 = 0x22;
         msgCtx->unk12006 = 0x15E;
         func_80149C18(play);
-        msgCtx->unk12023 = 1;
+        msgCtx->stateTimer = 1;
     }
 }
 
 void func_80151A68(PlayState* play, u16 textId) {
     MessageContext* msgCtx = &play->msgCtx;
 
-    msgCtx->unk11F10 = 0;
+    msgCtx->msgLength = 0;
     func_80150D08(play, textId);
     func_80150A84(play);
     func_8015B198(play);
     msgCtx->msgMode = 0x45;
     msgCtx->unk12024 = 0;
     msgCtx->unk1203C = msgCtx->unk1203A = msgCtx->unk1201E = 0;
-    msgCtx->unk12023 = 0x1E;
+    msgCtx->stateTimer = 30;
 
     // Day/Dawn/Night.. Messages
-    if ((msgCtx->currentTextId >= 0x1BB2) && (msgCtx->currentTextId < 0x1BB7)) {
+    if ((msgCtx->currentTextId >= 0x1BB2) && (msgCtx->currentTextId <= 0x1BB6)) {
         XREG(74) = 0x6A;
         XREG(75) = 0;
         XREG(77) = 0x58;
@@ -382,7 +361,7 @@ void func_80151A68(PlayState* play, u16 textId) {
         XREG(77) = 0x3C;
         XREG(76) = 0x1C;
         msgCtx->unk11F1A[0] = msgCtx->unk11F1A[1] = msgCtx->unk11F1A[2] = 0;
-        Interface_ChangeAlpha(1);
+        Interface_SetHudVisibility(HUD_VISIBILITY_NONE);
     }
 }
 
@@ -391,12 +370,12 @@ void func_80151BB4(PlayState* play, u8 arg1) {
     u8 temp = arg1;
 
     if (CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
-        if ((gSaveContext.save.weekEventReg[D_801C6B28[arg1] >> 8] & (u8)D_801C6B28[arg1]) == 0) {
+        if (!CHECK_WEEKEVENTREG(D_801C6B28[arg1])) {
             msgCtx->unk120B2[msgCtx->unk120B1] = temp;
             msgCtx->unk120B1++;
         }
     } else if (arg1 >= 20) {
-        if ((gSaveContext.save.weekEventReg[D_801C6B28[arg1] >> 8] & (u8)D_801C6B28[arg1]) == 0) {
+        if (!CHECK_WEEKEVENTREG(D_801C6B28[arg1])) {
             msgCtx->unk120B2[msgCtx->unk120B1] = temp;
             msgCtx->unk120B1++;
         }
@@ -412,14 +391,11 @@ u32 func_80151C9C(PlayState* play) {
         }
         msgCtx->unk120B1--;
 
-        if ((gSaveContext.save.weekEventReg[D_801C6B28[msgCtx->unk120B2[msgCtx->unk120B1]] >> 8] &
-             (u8)D_801C6B28[msgCtx->unk120B2[msgCtx->unk120B1]]) == 0) {
-            gSaveContext.save.weekEventReg[D_801C6B28[msgCtx->unk120B2[msgCtx->unk120B1]] >> 8] =
-                ((void)0, gSaveContext.save.weekEventReg[D_801C6B28[msgCtx->unk120B2[msgCtx->unk120B1]] >> 8]) |
-                (u8)D_801C6B28[msgCtx->unk120B2[msgCtx->unk120B1]];
+        if (!CHECK_WEEKEVENTREG(D_801C6B28[msgCtx->unk120B2[msgCtx->unk120B1]])) {
+            SET_WEEKEVENTREG(D_801C6B28[msgCtx->unk120B2[msgCtx->unk120B1]]);
 
             if ((D_801C6AB8[msgCtx->unk120B2[msgCtx->unk120B1]] != 0) && CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
-                func_80151938(play, D_801C6AB8[msgCtx->unk120B2[msgCtx->unk120B1]]);
+                Message_ContinueTextbox(play, D_801C6AB8[msgCtx->unk120B2[msgCtx->unk120B1]]);
                 play_sound(NA_SE_SY_SCHEDULE_WRITE);
                 return true;
             }
@@ -439,13 +415,79 @@ void func_80152464(PlayState* play, u16 arg1) {
     func_80151DA4(play, arg1);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_message/Message_GetState.s")
+/**
+ * @return u8 A value of the TextState enum representing the current state of the on-screen message
+ */
+u8 Message_GetState(MessageContext* msgCtx) {
+    if (msgCtx->msgLength == 0) {
+        return TEXT_STATE_NONE;
+    }
+
+    if (msgCtx->msgMode == 0x42) {
+        if (msgCtx->unk11F14 != 0xFFFF) {
+            return TEXT_STATE_1;
+        }
+
+        if ((msgCtx->unk12020 == 0x10) || (msgCtx->unk12020 == 0x11)) {
+            return TEXT_STATE_CHOICE;
+        }
+        if ((msgCtx->unk12020 == 0x40) || (msgCtx->unk12020 == 0x42) || (msgCtx->unk12020 == 0x30)) {
+            return TEXT_STATE_5;
+        }
+        if (msgCtx->unk12020 == 0x41) {
+            return TEXT_STATE_16;
+        }
+        if ((msgCtx->unk12020 >= 0x50) && (msgCtx->unk12020 < 0x58)) {
+            return TEXT_STATE_3;
+        }
+        if ((msgCtx->unk12020 == 0x60) || (msgCtx->unk12020 == 0x61)) {
+            return TEXT_STATE_14;
+        }
+        if (msgCtx->unk12020 == 0x62) {
+            return TEXT_STATE_15;
+        }
+        if (msgCtx->unk12020 == 0x63) {
+            return TEXT_STATE_17;
+        }
+        if (msgCtx->unk12020 == 0x12) {
+            return TEXT_STATE_18;
+        }
+        return TEXT_STATE_DONE;
+    }
+
+    if (msgCtx->msgMode == 0x41) {
+        return TEXT_STATE_10;
+    }
+    if (msgCtx->msgMode == 0x1B) {
+        return TEXT_STATE_7;
+    }
+    if ((msgCtx->ocarinaMode == 3) || (msgCtx->msgMode == 0x37)) {
+        return TEXT_STATE_8;
+    }
+    if (msgCtx->msgMode == 0x20) {
+        return TEXT_STATE_9;
+    }
+    if ((msgCtx->msgMode == 0x21) || (msgCtx->msgMode == 0x3A)) {
+        return TEXT_STATE_11;
+    }
+    if (msgCtx->msgMode == 0x3D) {
+        return TEXT_STATE_12;
+    }
+    if (msgCtx->msgMode == 0x40) {
+        return TEXT_STATE_13;
+    }
+    if ((msgCtx->msgMode == 0x43) && (msgCtx->stateTimer == 1) && (msgCtx->unk120B1 == 0)) {
+        return TEXT_STATE_CLOSING;
+    }
+
+    return TEXT_STATE_3;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_8015268C.s")
 
 void func_80152C64(View* view) {
     SET_FULLSCREEN_VIEWPORT(view);
-    func_8013FBC8(view);
+    View_ApplyOrthoToOverlay(view);
 }
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80152CAC.s")
@@ -489,7 +531,7 @@ void func_80153E7C(PlayState* play, void* arg1) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_801541D4.s")
 
-void func_80156758(PlayState* play) {
+void Message_Draw(PlayState* play) {
     Gfx* nextDisplayList;
     Gfx* polyOpa;
     GraphicsContext* gfxCtx = play->state.gfxCtx;
@@ -509,7 +551,7 @@ void func_80156758(PlayState* play) {
     CLOSE_DISPS(gfxCtx);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_8015680C.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_message/Message_Update.s")
 
 void func_801586A4(PlayState* play) {
     play->msgCtx.messageEntryTableNes = D_801C6B98;
@@ -523,14 +565,14 @@ void Message_Init(PlayState* play) {
     func_801586A4(play);
     play->msgCtx.ocarinaMode = 0;
     messageCtx->msgMode = 0;
-    messageCtx->unk11F10 = 0;
+    messageCtx->msgLength = 0;
     messageCtx->currentTextId = 0;
     messageCtx->unk12020 = 0;
     messageCtx->choiceIndex = 0;
     messageCtx->ocarinaAction = messageCtx->unk11FF2 = 0;
     messageCtx->unk1201E = 0xFF;
     View_Init(&messageCtx->view, play->state.gfxCtx);
-    messageCtx->unk11EF8 = THA_AllocEndAlign16(&play->state.heap, 0x13C00);
+    messageCtx->unk11EF8 = THA_AllocTailAlign16(&play->state.heap, 0x13C00);
     font = &play->msgCtx.font;
     Font_LoadOrderedFont(&play->msgCtx.font);
     font->unk_11D88 = 0;

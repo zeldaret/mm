@@ -20,7 +20,7 @@ u32 EffectSsKFire_Init(PlayState* play, u32 index, EffectSs* this, void* initPar
 void EffectSsKFire_Update(PlayState* play, u32 index, EffectSs* this);
 void EffectSsKFire_Draw(PlayState* play, u32 index, EffectSs* this);
 
-const EffectSsInit Effect_Ss_K_Fire_InitVars = {
+EffectSsInit Effect_Ss_K_Fire_InitVars = {
     EFFECT_SS_K_FIRE,
     EffectSsKFire_Init,
 };
@@ -76,7 +76,7 @@ void EffectSsKFire_Draw(PlayState* play, u32 index, EffectSs* this) {
     }
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_XLU_DISP++, gGameplayKeepDrawFlameDL);
+    gSPDisplayList(POLY_XLU_DISP++, gEffFire1DL);
 
     CLOSE_DISPS(gfxCtx);
 }

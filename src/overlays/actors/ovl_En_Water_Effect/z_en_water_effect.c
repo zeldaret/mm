@@ -1,7 +1,15 @@
 /*
  * File: z_en_water_effect.c
  * Overlay: ovl_En_Water_Effect
- * Description: Water splashing effect (used for Gyorg)
+ * Description: Water/rock drop spawner and Gyorg water splashing effect
+ *
+ * This actor serves two purposes:
+ * - It can act as a "spawner" for either water drops or flaming rocks. This
+ *   spawner can be placed in the ceiling to drop these repeatedly.
+ * - It is also used to control various water splashing effects for the Gyorg
+ *   fight. Specifically, it handles the splashing that is caused when it
+ *   enters or exits the water, and it handles the shockwave that is created
+ *   when it rams the center platform.
  */
 
 #include "z_en_water_effect.h"
@@ -14,15 +22,15 @@
 
 void EnWaterEffect_Init(Actor* thisx, PlayState* play);
 void EnWaterEffect_Destroy(Actor* thisx, PlayState* play);
-void EnWaterEffect_Update(Actor* thisx, PlayState* play);
-void EnWaterEffect_Draw(Actor* thisx, PlayState* play);
+void EnWaterEffect_Update(Actor* thisx, PlayState* play2);
+void EnWaterEffect_Draw(Actor* thisx, PlayState* play2);
 
 void func_80A59C04(Actor* thisx, PlayState* play2);
 void func_80A5A184(Actor* thisx, PlayState* play2);
 void func_80A5A534(Actor* thisx, PlayState* play);
 void func_80A5A6B8(Actor* thisx, PlayState* play2);
 
-const ActorInit En_Water_Effect_InitVars = {
+ActorInit En_Water_Effect_InitVars = {
     ACTOR_EN_WATER_EFFECT,
     ACTORCAT_BOSS,
     FLAGS,
@@ -85,27 +93,30 @@ void EnWaterEffect_Init(Actor* thisx, PlayState* play) {
     this->actor.flags &= ~ACTOR_FLAG_1;
     this->unk_DC4 = Rand_ZeroFloat(100.0f);
 
-    if (this->actor.params == ENWATEREFFECT_1) {
+    if (this->actor.params == ENWATEREFFECT_TYPE_FALLING_ROCK_SPAWNER) {
         this->actor.update = func_80A59C04;
         this->actor.draw = func_80A5A184;
         this->unk_DC6 = Rand_ZeroFloat(100.0f) + 60.0f;
-    } else if ((this->actor.params == ENWATEREFFECT_777) || (this->actor.params == ENWATEREFFECT_778) ||
-               (this->actor.params == ENWATEREFFECT_779) || (this->actor.params == ENWATEREFFECT_780)) {
+    } else if ((this->actor.params == ENWATEREFFECT_TYPE_GYORG_RIPPLES) ||
+               (this->actor.params == ENWATEREFFECT_TYPE_GYORG_PRIMARY_SPRAY) ||
+               (this->actor.params == ENWATEREFFECT_TYPE_GYORG_SECONDARY_SPRAY) ||
+               (this->actor.params == ENWATEREFFECT_TYPE_GYORG_SHOCKWAVE)) {
         this->actor.update = func_80A5A534;
         this->actor.draw = func_80A5A6B8;
         this->actor.shape.rot.y = Rand_ZeroFloat(0x10000);
         Actor_SetScale(&this->actor, this->actor.shape.rot.z * 0.0002f);
 
-        if (this->actor.params == ENWATEREFFECT_777) {
+        if (this->actor.params == ENWATEREFFECT_TYPE_GYORG_RIPPLES) {
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_WATER_EFFECT, this->actor.world.pos.x, this->actor.world.pos.y,
-                        this->actor.world.pos.z, 0, 0, this->actor.shape.rot.z, 0x30A);
+                        this->actor.world.pos.z, 0, 0, this->actor.shape.rot.z, ENWATEREFFECT_TYPE_GYORG_PRIMARY_SPRAY);
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_WATER_EFFECT, this->actor.world.pos.x, this->actor.world.pos.y,
-                        this->actor.world.pos.z, 0, 0, this->actor.shape.rot.z, 0x30B);
-        } else if (this->actor.params == ENWATEREFFECT_778) {
+                        this->actor.world.pos.z, 0, 0, this->actor.shape.rot.z,
+                        ENWATEREFFECT_TYPE_GYORG_SECONDARY_SPRAY);
+        } else if (this->actor.params == ENWATEREFFECT_TYPE_GYORG_PRIMARY_SPRAY) {
             this->unk_DC4 = -3;
-        } else if (this->actor.params == ENWATEREFFECT_779) {
+        } else if (this->actor.params == ENWATEREFFECT_TYPE_GYORG_SECONDARY_SPRAY) {
             this->unk_DC4 = -6;
-        } else if (this->actor.params == ENWATEREFFECT_780) {
+        } else if (this->actor.params == ENWATEREFFECT_TYPE_GYORG_SHOCKWAVE) {
             this->unk_DC4 = 23;
         }
 
@@ -147,7 +158,7 @@ void EnWaterEffect_Update(Actor* thisx, PlayState* play2) {
         this->unk_DC4++;
         if ((this->unk_DC4 % 32) == 0) {
             if (Rand_ZeroOne() < 0.5f) {
-                Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 10.0f, 40.0f, 4);
+                Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 10.0f, 40.0f, UPDBGCHECKINFO_FLAG_4);
                 sp88.x = randPlusMinusPoint5Scaled(50.0f) + this->actor.world.pos.x;
                 sp88.y = this->actor.world.pos.y;
                 sp88.z = randPlusMinusPoint5Scaled(50.0f) + this->actor.world.pos.z;
@@ -285,7 +296,7 @@ void EnWaterEffect_Draw(Actor* thisx, PlayState* play2) {
             if (!phi_s4) {
                 POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 0);
 
-                gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gDust1Tex));
+                gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gEffDust1Tex));
                 gSPDisplayList(POLY_XLU_DISP++, object_water_effect_DL_004260);
                 gDPSetEnvColor(POLY_XLU_DISP++, 250, 250, 255, 0);
                 phi_s4++;
@@ -317,7 +328,7 @@ void EnWaterEffect_Draw(Actor* thisx, PlayState* play2) {
             if (!phi_s4) {
                 func_8012C448(gfxCtx);
 
-                gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gDust1Tex));
+                gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gEffDust1Tex));
                 gDPSetEnvColor(POLY_XLU_DISP++, 250, 250, 255, 0);
                 gSPDisplayList(POLY_XLU_DISP++, object_water_effect_DL_004260);
                 phi_s4++;
@@ -409,7 +420,7 @@ void func_80A59C04(Actor* thisx, PlayState* play2) {
         this->unk_DC4++;
         if (this->unk_DC6 == 0) {
             this->unk_DC6 = Rand_ZeroFloat(150.0f) + 100.0f;
-            Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 10.0f, 40.0f, 4);
+            Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 10.0f, 40.0f, UPDBGCHECKINFO_FLAG_4);
             sp74.x = randPlusMinusPoint5Scaled(50.0f) + this->actor.world.pos.x;
             sp74.y = this->actor.world.pos.y;
             sp74.z = randPlusMinusPoint5Scaled(50.0f) + this->actor.world.pos.z;
@@ -471,7 +482,7 @@ void func_80A59C04(Actor* thisx, PlayState* play2) {
                                 player->flameTimers[j] = Rand_S16Offset(0, 200);
                             }
                             player->isBurning = true;
-                            func_800B8E58(player, player->ageProperties->unk_92 + NA_SE_VO_LI_DEMO_DAMAGE);
+                            Player_PlaySfx(player, player->ageProperties->voiceSfxIdOffset + NA_SE_VO_LI_DEMO_DAMAGE);
                         }
                     }
 
@@ -559,7 +570,7 @@ void func_80A5A184(Actor* thisx, PlayState* play2) {
         }
     }
 
-    POLY_OPA_DISP = func_801660B8(play, POLY_OPA_DISP);
+    POLY_OPA_DISP = Play_SetFog(play, POLY_OPA_DISP);
 
     CLOSE_DISPS(gfxCtx);
 }
@@ -569,7 +580,7 @@ void func_80A5A534(Actor* thisx, PlayState* play) {
     s32 i;
 
     if (this->unk_E38 < 1.0f) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 
     this->unk_DC4++;
@@ -620,7 +631,8 @@ void func_80A5A6B8(Actor* thisx, PlayState* play2) {
     Matrix_Push();
     Matrix_Push();
 
-    if ((this->actor.params == ENWATEREFFECT_777) || (this->actor.params == ENWATEREFFECT_778)) {
+    if ((this->actor.params == ENWATEREFFECT_TYPE_GYORG_RIPPLES) ||
+        (this->actor.params == ENWATEREFFECT_TYPE_GYORG_PRIMARY_SPRAY)) {
         if (this->unk_E2C > 1.0f) {
             func_8012C2DC(play->state.gfxCtx);
             AnimatedMat_Draw(play, Lib_SegmentedToVirtual(object_water_effect_Matanimheader_000DE0));
@@ -648,7 +660,7 @@ void func_80A5A6B8(Actor* thisx, PlayState* play2) {
         Matrix_Pop();
     }
 
-    if ((this->unk_E34 > 1.0f) && (this->actor.params != ENWATEREFFECT_780)) {
+    if ((this->unk_E34 > 1.0f) && (this->actor.params != ENWATEREFFECT_TYPE_GYORG_SHOCKWAVE)) {
         func_8012C2DC(play->state.gfxCtx);
         AnimatedMat_Draw(play, Lib_SegmentedToVirtual(object_water_effect_Matanimheader_000E40));
         Matrix_Scale(this->unk_DC8[3].y, this->unk_DC8[3].z, this->unk_DC8[3].y, MTXMODE_APPLY);
@@ -660,7 +672,8 @@ void func_80A5A6B8(Actor* thisx, PlayState* play2) {
 
     Matrix_Pop();
 
-    if ((this->actor.params == ENWATEREFFECT_777) || (this->actor.params == ENWATEREFFECT_780)) {
+    if ((this->actor.params == ENWATEREFFECT_TYPE_GYORG_RIPPLES) ||
+        (this->actor.params == ENWATEREFFECT_TYPE_GYORG_SHOCKWAVE)) {
         func_8012C2DC(play->state.gfxCtx);
         AnimatedMat_Draw(play, Lib_SegmentedToVirtual(object_water_effect_Matanimheader_000E58));
         Matrix_Scale(this->unk_DC8[4].y, this->unk_DC8[4].z, this->unk_DC8[4].y, MTXMODE_APPLY);
@@ -670,7 +683,7 @@ void func_80A5A6B8(Actor* thisx, PlayState* play2) {
         gSPDisplayList(POLY_XLU_DISP++, object_water_effect_DL_000CD8);
     }
 
-    if (this->actor.params == ENWATEREFFECT_777) {
+    if (this->actor.params == ENWATEREFFECT_TYPE_GYORG_RIPPLES) {
         func_8012C2DC(play->state.gfxCtx);
 
         for (i = 0; i < ARRAY_COUNT(this->unk_144) / 2; i++, ptr++) {
@@ -678,7 +691,7 @@ void func_80A5A6B8(Actor* thisx, PlayState* play2) {
                 if (!phi_s4) {
                     func_8012C448(play->state.gfxCtx);
 
-                    gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gDust1Tex));
+                    gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gEffDust1Tex));
                     gDPSetEnvColor(POLY_XLU_DISP++, 250, 250, 255, 0);
                     gSPDisplayList(POLY_XLU_DISP++, object_water_effect_DL_004260);
                     phi_s4++;

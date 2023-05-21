@@ -26,13 +26,13 @@ typedef struct EnDragon {
     /* 0x188 */ Vec3s jointTable[DEEP_PYTHON_LIMB_MAX];
     /* 0x1E8 */ Vec3s morphTable[DEEP_PYTHON_LIMB_MAX];
     /* 0x248 */ EnDragonActionFunc actionFunc;
-    /* 0x24C */ s32 animationIndex;
+    /* 0x24C */ s32 animIndex;
     /* 0x250 */ s32 pythonIndex;
     /* 0x254 */ Vec3f jawPos;
     /* 0x260 */ Vec3f burrowEntrancePos; // Vertically and horizontally centered on the burrow opening. Set by Bg_Sinkai_Kabe
     /* 0x26C */ Vec3f playerGrabPosition;
-    /* 0x278 */ Vec3f cameraEye;
-    /* 0x278 */ Vec3f cameraAt;
+    /* 0x278 */ Vec3f subCamEye;
+    /* 0x278 */ Vec3f subCamAt;
     /* 0x290 */ Vec3f playerGrabPositionTemp;
     /* 0x29C */ Vec3f focusPos;
     /* 0x2A8 */ s16 jawZRotation;
@@ -47,10 +47,10 @@ typedef struct EnDragon {
     /* 0x2BA */ s16 action;
     /* 0x2BC */ UNK_TYPE1 unk_2BC[0x2];
     /* 0x2BE */ s16 state;
-    /* 0x2C0 */ s16 grabCutsceneIndex;
-    /* 0x2C2 */ s16 deathCutsceneIndex;
+    /* 0x2C0 */ s16 grabCsId;
+    /* 0x2C2 */ s16 deathCsId;
     /* 0x2C4 */ UNK_TYPE1 unk_2C4[0x4];
-    /* 0x2C8 */ s16 cameraId;
+    /* 0x2C8 */ s16 subCamId;
     /* 0x2CA */ s16 grabTimer; // Counts up from the time a grab starts until the time the actor begins attacking
     /* 0x2CC */ s16 unk_2CC; // Initialized, but never used
     /* 0x2CE */ UNK_TYPE1 unk_2CE[0x2];
@@ -60,7 +60,5 @@ typedef struct EnDragon {
     /* 0x2DC */ ColliderJntSph collider;
     /* 0x2FC */ ColliderJntSphElement colliderElements[8];
 } EnDragon; // size = 0x4FC
-
-extern const ActorInit En_Dragon_InitVars;
 
 #endif // Z_EN_DRAGON_H

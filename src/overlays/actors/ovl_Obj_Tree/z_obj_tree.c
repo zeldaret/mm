@@ -16,11 +16,11 @@ void ObjTree_Destroy(Actor* thisx, PlayState* play);
 void ObjTree_Update(Actor* thisx, PlayState* play);
 void ObjTree_Draw(Actor* thisx, PlayState* play);
 
-void ObTree_DoNothing(ObjTree* this, PlayState* play);
-void ObTree_SetupDoNothing(ObjTree* this);
-void ObTree_Sway(ObjTree* this, PlayState* play);
+void ObjTree_DoNothing(ObjTree* this, PlayState* play);
+void ObjTree_SetupDoNothing(ObjTree* this);
+void ObjTree_Sway(ObjTree* this, PlayState* play);
 
-const ActorInit Obj_Tree_InitVars = {
+ActorInit Obj_Tree_InitVars = {
     ACTOR_OBJ_TREE,
     ACTORCAT_PROP,
     FLAGS,
@@ -99,7 +99,7 @@ void ObjTree_Init(Actor* thisx, PlayState* play) {
         this->dyna.actor.uncullZoneForward = 4000.0f;
     } else {
         Actor_SetScale(&this->dyna.actor, 0.1f);
-        DynaPolyActor_Init(&this->dyna, 1);
+        DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
         CollisionHeader_GetVirtual(&object_tree_Colheader_001B2C, &colHeader);
         this->dyna.bgId = DynaPoly_SetBgActor(play, &play->colCtx.dyna, &this->dyna.actor, colHeader);
     }
@@ -115,7 +115,7 @@ void ObjTree_Init(Actor* thisx, PlayState* play) {
     this->swayAmplitude = 0.0f;
     this->swayAngle = 0;
     this->swayVelocity = 0;
-    ObTree_SetupDoNothing(this);
+    ObjTree_SetupDoNothing(this);
 }
 
 void ObjTree_Destroy(Actor* thisx, PlayState* play) {
@@ -130,24 +130,24 @@ void ObjTree_Destroy(Actor* thisx, PlayState* play) {
     Collider_DestroyCylinder(play, &this->collider);
 }
 
-void ObTree_SetupDoNothing(ObjTree* this) {
-    this->actionFunc = ObTree_DoNothing;
+void ObjTree_SetupDoNothing(ObjTree* this) {
+    this->actionFunc = ObjTree_DoNothing;
 }
 
-void ObTree_DoNothing(ObjTree* this, PlayState* play) {
+void ObjTree_DoNothing(ObjTree* this, PlayState* play) {
 }
 
-void ObTree_SetupSway(ObjTree* this) {
+void ObjTree_SetupSway(ObjTree* this) {
     this->timer = 0;
     this->swayAmplitude = 546.0f;
     this->swayVelocity = 35 * 0x10000 / 360;
-    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_TREE_SWING);
-    this->actionFunc = ObTree_Sway;
+    Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_TREE_SWING);
+    this->actionFunc = ObjTree_Sway;
 }
 
-void ObTree_Sway(ObjTree* this, PlayState* play) {
+void ObjTree_Sway(ObjTree* this, PlayState* play) {
     if (this->timer > 80) {
-        ObTree_SetupDoNothing(this);
+        ObjTree_SetupDoNothing(this);
         return;
     }
 
@@ -159,7 +159,7 @@ void ObTree_Sway(ObjTree* this, PlayState* play) {
     this->timer++;
 }
 
-void ObTree_UpdateCollision(ObjTree* this, PlayState* play) {
+void ObjTree_UpdateCollision(ObjTree* this, PlayState* play) {
     Collider_UpdateCylinder(&this->dyna.actor, &this->collider);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
 
@@ -167,7 +167,7 @@ void ObTree_UpdateCollision(ObjTree* this, PlayState* play) {
         CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
         if (this->dyna.actor.home.rot.y == 1) {
             this->dyna.actor.home.rot.y = 0;
-            ObTree_SetupSway(this);
+            ObjTree_SetupSway(this);
         }
     }
 }
@@ -176,7 +176,7 @@ void ObjTree_Update(Actor* thisx, PlayState* play) {
     ObjTree* this = THIS;
 
     this->actionFunc(this, play);
-    ObTree_UpdateCollision(this, play);
+    ObjTree_UpdateCollision(this, play);
 }
 
 void ObjTree_Draw(Actor* thisx, PlayState* play) {

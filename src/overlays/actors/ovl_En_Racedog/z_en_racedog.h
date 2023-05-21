@@ -6,6 +6,7 @@
 
 #define ENRACEDOG_GET_INDEX(thisx) (((thisx)->params & 0x3E0) >> 5)
 #define ENRACEDOG_GET_PATH(thisx) (((thisx)->params & 0xFC00) >> 10)
+#define ENRACEDOG_PARAMS(index, path) ((index << 5) | (path))
 
 /**
  * The main point of this seems to be some very light anti-cheat detection. The dog
@@ -50,7 +51,5 @@ typedef struct EnRacedog {
     /* 0x2C0 */ s32 selectionArrowGreenEnvColor;
     /* 0x2C4 */ f32 selectionArrowScale;
 } EnRacedog; // size = 0x2C8
-
-extern const ActorInit En_Racedog_InitVars;
 
 #endif // Z_EN_RACEDOG_H

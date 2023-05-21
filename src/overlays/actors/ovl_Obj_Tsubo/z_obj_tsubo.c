@@ -10,14 +10,14 @@
 #include "objects/object_tsubo/object_tsubo.h"
 #include "objects/object_racetsubo/object_racetsubo.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_800000 | ACTOR_FLAG_4000000)
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_800000 | ACTOR_FLAG_CAN_PRESS_SWITCH)
 
 #define THIS ((ObjTsubo*)thisx)
 
 void ObjTsubo_Init(Actor* thisx, PlayState* play);
-void ObjTsubo_Destroy(Actor* thisx, PlayState* play);
+void ObjTsubo_Destroy(Actor* thisx, PlayState* play2);
 void ObjTsubo_Update(Actor* thisx, PlayState* play);
-void ObjTsubo_Draw(Actor* thisx, PlayState* play);
+void ObjTsubo_Draw(Actor* thisx, PlayState* play2);
 
 void ObjTsubo_PotBreak1(ObjTsubo* this, PlayState* play);
 void ObjTsubo_RacePotBreak1(ObjTsubo* this, PlayState* play);
@@ -41,7 +41,7 @@ s16 D_80929504 = 0;
 s16 D_80929508 = 0;
 s16 D_8092950C = 0;
 
-const ActorInit Obj_Tsubo_InitVars = {
+ActorInit Obj_Tsubo_InitVars = {
     ACTOR_OBJ_TSUBO,
     ACTORCAT_PROP,
     FLAGS,
@@ -144,11 +144,11 @@ void ObjTsubo_SpawnGoldSkulltula(ObjTsubo* this, PlayState* play, s32 arg2) {
     if (func_809275C0(this, play)) {
         params = (OBJ_TSUBO_P001F(&this->actor) << 2) | 0xFF01;
         child = Actor_Spawn(&play->actorCtx, play, ACTOR_EN_SW, this->actor.world.pos.x, this->actor.world.pos.y,
-                            this->actor.world.pos.z, 0, (u32)Rand_Next() >> 0x10, 0, params);
+                            this->actor.world.pos.z, 0, Rand_Next() >> 0x10, 0, params);
         if (child != NULL) {
             child->parent = &this->actor;
             child->velocity.y = 0.0f;
-            child->speedXZ = 0.0f;
+            child->speed = 0.0f;
         }
     }
 }
@@ -162,11 +162,11 @@ void func_80927818(ObjTsubo* this, PlayState* play, s32 arg2) {
 }
 
 s32 ObjTsubo_IsSceneNotGohtOrTwinmold(ObjTsubo* this, PlayState* play) {
-    return (play->sceneNum != SCENE_HAKUGIN_BS) && (play->sceneNum != SCENE_INISIE_BS);
+    return (play->sceneId != SCENE_HAKUGIN_BS) && (play->sceneId != SCENE_INISIE_BS);
 }
 
 void func_8092788C(ObjTsubo* this, PlayState* play) {
-    if (!this->unk_197 && (play->roomCtx.currRoom.num != this->homeRoom)) {
+    if (!this->unk_197 && (play->roomCtx.curRoom.num != this->homeRoom)) {
         this->unk_197 = true;
     }
 }
@@ -190,20 +190,21 @@ void ObjTsubo_Init(Actor* thisx, PlayState* play) {
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->objBankIndex = Object_GetIndex(&play->objectCtx, sPotTypeData[type].objId);
     if (this->objBankIndex < 0) {
-        Actor_MarkForDeath(&this->actor);
-    } else {
-        this->actor.shape.shadowScale = 1.8f;
-        this->homeRoom = this->actor.room;
-        if ((type != OBJ_TSUBO_TYPE_3) && (sp2C != 2)) {
-            if (Item_CanDropBigFairy(play, OBJ_TSUBO_P003F(&this->actor), OBJ_TSUBO_PFE00(&this->actor))) {
-                this->unk_198 = true;
-            }
-        }
-        if ((type == OBJ_TSUBO_TYPE_3) || (sp2C != 2) || !func_809275C0(this, play)) {
-            this->unk_19A = -1;
-        }
-        func_80928914(this);
+        Actor_Kill(&this->actor);
+        return;
     }
+
+    this->actor.shape.shadowScale = 1.8f;
+    this->homeRoom = this->actor.room;
+    if ((type != OBJ_TSUBO_TYPE_3) && (sp2C != 2)) {
+        if (Item_CanDropBigFairy(play, OBJ_TSUBO_P003F(&this->actor), OBJ_TSUBO_PFE00(&this->actor))) {
+            this->unk_198 = true;
+        }
+    }
+    if ((type == OBJ_TSUBO_TYPE_3) || (sp2C != 2) || !func_809275C0(this, play)) {
+        this->unk_19A = -1;
+    }
+    func_80928914(this);
 }
 
 void ObjTsubo_Destroy(Actor* thisx, PlayState* play2) {
@@ -430,7 +431,7 @@ void func_80928914(ObjTsubo* this) {
 
 void func_80928928(ObjTsubo* this, PlayState* play) {
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 15.0f, 15.0f, 0.0f, 0x44);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 15.0f, 15.0f, 0.0f, UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_40);
     if (Object_IsLoaded(&play->objectCtx, this->objBankIndex)) {
         this->actor.objBankIndex = this->objBankIndex;
         func_809289B4(this);
@@ -466,13 +467,13 @@ void func_809289E4(ObjTsubo* this, PlayState* play) {
         func_80927818(this, play, 0);
         //! @bug: This function should only pass Player*: it uses *(this + 0x153), which is meant to be
         //! player->currentMask, but in this case is garbage in the collider
-        func_800B8E58((Player*)&this->actor, NA_SE_PL_PULL_UP_POT);
+        Player_PlaySfx((Player*)&this->actor, NA_SE_PL_PULL_UP_POT);
         func_80928D6C(this);
     } else if ((this->unk_19B != 0) ||
                (acHit && (this->cylinderCollider.info.acHitInfo->toucher.dmgFlags & 0x058BFFBC))) {
         typeData = &sPotTypeData[type];
         this->unk_19B = 0;
-        if ((this->actor.bgCheckFlags & 0x20) && (this->actor.depthInWater > 15.0f)) {
+        if ((this->actor.bgCheckFlags & BGCHECKFLAG_WATER) && (this->actor.depthInWater > 15.0f)) {
             typeData->breakPot3(this, play);
         } else {
             typeData->breakPot1(this, play);
@@ -485,20 +486,22 @@ void func_809289E4(ObjTsubo* this, PlayState* play) {
         func_80927818(this, play, 1);
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 20, NA_SE_EV_POT_BROKEN);
         if (ObjTsubo_IsSceneNotGohtOrTwinmold(this, play)) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         } else {
             func_809291DC(this);
         }
     } else {
         if (!this->unk_195) {
             Actor_MoveWithGravity(&this->actor);
-            Actor_UpdateBgCheckInfo(play, &this->actor, 15.0f, 15.0f, 0.0f, 0x44);
-            if ((this->actor.bgCheckFlags & 1) && (DynaPoly_GetActor(&play->colCtx, this->actor.floorBgId) == NULL)) {
+            Actor_UpdateBgCheckInfo(play, &this->actor, 15.0f, 15.0f, 0.0f,
+                                    UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_40);
+            if ((this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) &&
+                (DynaPoly_GetActor(&play->colCtx, this->actor.floorBgId) == NULL)) {
                 this->unk_195 = true;
                 this->actor.flags &= ~ACTOR_FLAG_10;
             }
         }
-        if ((this->actor.xzDistToPlayer < 800.0f) || (gSaveContext.save.entranceIndex == 0xD010)) {
+        if ((this->actor.xzDistToPlayer < 800.0f) || (gSaveContext.save.entrance == ENTRANCE(GORON_RACETRACK, 1))) {
             Collider_UpdateCylinder(&this->actor, &this->cylinderCollider);
             CollisionCheck_SetAC(play, &play->colChkCtx, &this->cylinderCollider.base);
             if (this->actor.xzDistToPlayer < 150.0f) {
@@ -507,8 +510,8 @@ void func_809289E4(ObjTsubo* this, PlayState* play) {
                     s16 yawDiff = this->actor.yawTowardsPlayer - GET_PLAYER(play)->actor.world.rot.y;
                     s32 absYawDiff = ABS_ALT(yawDiff);
 
-                    if (absYawDiff > DEGF_TO_BINANG(120.0f)) {
-                        Actor_PickUp(&this->actor, play, 0, 36.0f, 30.0f);
+                    if (absYawDiff > (0x10000 / 3)) {
+                        Actor_OfferGetItem(&this->actor, play, GI_NONE, 36.0f, 30.0f);
                     }
                 }
             }
@@ -527,10 +530,12 @@ void func_80928D80(ObjTsubo* this, PlayState* play) {
 
     func_8092788C(this, play);
     if (Actor_HasNoParent(&this->actor, play)) {
-        this->actor.room = play->roomCtx.currRoom.num;
+        this->actor.room = play->roomCtx.curRoom.num;
         Actor_MoveWithGravity(&this->actor);
-        this->actor.flags &= ~ACTOR_FLAG_4000000;
-        Actor_UpdateBgCheckInfo(play, &this->actor, 15.0f, 15.0f, 0.0f, 0xC5);
+        this->actor.flags &= ~ACTOR_FLAG_CAN_PRESS_SWITCH;
+        Actor_UpdateBgCheckInfo(play, &this->actor, 15.0f, 15.0f, 0.0f,
+                                UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_40 |
+                                    UPDBGCHECKINFO_FLAG_80);
         func_80928E74(this);
     } else {
         pos.x = this->actor.world.pos.x;
@@ -567,7 +572,8 @@ void func_80928F18(ObjTsubo* this, PlayState* play) {
         this->unk_194--;
     }
     typeData = &sPotTypeData[type];
-    if ((this->actor.bgCheckFlags & 0xB) || atHit || (this->unk_194 <= 0)) {
+    if ((this->actor.bgCheckFlags & (BGCHECKFLAG_GROUND | BGCHECKFLAG_GROUND_TOUCH | BGCHECKFLAG_WALL)) || atHit ||
+        (this->unk_194 <= 0)) {
         typeData->breakPot1(this, play);
         if (type == OBJ_TSUBO_TYPE_3) {
             func_8092762C(this, play);
@@ -576,11 +582,12 @@ void func_80928F18(ObjTsubo* this, PlayState* play) {
         }
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 20, NA_SE_EV_POT_BROKEN);
         if (ObjTsubo_IsSceneNotGohtOrTwinmold(this, play)) {
-            Actor_MarkForDeath(&this->actor);
-        } else {
-            func_809291DC(this);
+            Actor_Kill(&this->actor);
+            return;
         }
-    } else if (this->actor.bgCheckFlags & 0x40) {
+
+        func_809291DC(this);
+    } else if (this->actor.bgCheckFlags & BGCHECKFLAG_WATER_TOUCH) {
         typeData->breakPot2(this, play);
         if (type == OBJ_TSUBO_TYPE_3) {
             func_8092762C(this, play);
@@ -590,17 +597,20 @@ void func_80928F18(ObjTsubo* this, PlayState* play) {
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 20, NA_SE_EV_POT_BROKEN);
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 40, NA_SE_EV_DIVE_INTO_WATER_L);
         if (ObjTsubo_IsSceneNotGohtOrTwinmold(this, play)) {
-            Actor_MarkForDeath(&this->actor);
-        } else {
-            func_809291DC(this);
+            Actor_Kill(&this->actor);
+            return;
         }
+
+        func_809291DC(this);
     } else {
         Actor_MoveWithGravity(&this->actor);
         Math_StepToS(&D_80929504, D_80929500, 150);
         Math_StepToS(&D_8092950C, D_80929508, 150);
         this->actor.shape.rot.x += D_80929504;
         this->actor.shape.rot.y += D_8092950C;
-        Actor_UpdateBgCheckInfo(play, &this->actor, 15.0f, 15.0f, 0.0f, 0xC5);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 15.0f, 15.0f, 0.0f,
+                                UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_40 |
+                                    UPDBGCHECKINFO_FLAG_80);
         Collider_UpdateCylinder(&this->actor, &this->cylinderCollider);
         CollisionCheck_SetOC(play, &play->colChkCtx, &this->cylinderCollider.base);
         CollisionCheck_SetAT(play, &play->colChkCtx, &this->cylinderCollider.base);
@@ -618,7 +628,7 @@ void func_809291DC(ObjTsubo* this) {
     this->actor.shape.rot.x = this->actor.home.rot.x;
     this->actor.world.rot.x = this->actor.home.rot.x;
     this->actor.velocity.y = 0.0f;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actor.shape.rot.y = this->actor.home.rot.y;
     this->actor.world.rot.y = this->actor.home.rot.y;
     Actor_SetScale(&this->actor, 0.0f);
@@ -637,7 +647,7 @@ void func_8092926C(ObjTsubo* this, PlayState* play) {
     } else {
         scale = sPotTypeData[OBJ_TSUBO_GET_TYPE(&this->actor)].scale;
         if (Math_StepToF(&this->actor.scale.x, scale, scale * 0.1f)) {
-            this->actor.flags |= ACTOR_FLAG_4000000;
+            this->actor.flags |= ACTOR_FLAG_CAN_PRESS_SWITCH;
             func_809289B4(this);
         }
         this->actor.scale.z = this->actor.scale.y = this->actor.scale.x;
@@ -665,12 +675,12 @@ void ObjTsubo_Update(Actor* thisx, PlayState* play) {
     }
     if (!this->unk_197) {
         if (this->unk_198) {
-            play->actorCtx.unk5 |= 8;
+            play->actorCtx.flags |= ACTORCTX_FLAG_3;
             this->actor.flags |= ACTOR_FLAG_10;
         }
         if (this->unk_19A >= 0) {
             if (this->unk_19A == 0) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALGOLD_ROLL);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_STALGOLD_ROLL);
                 if (Rand_ZeroOne() < 0.1f) {
                     this->unk_19A = Rand_S16Offset(40, 80);
                 } else {

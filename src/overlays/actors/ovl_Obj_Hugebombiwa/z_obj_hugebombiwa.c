@@ -5,6 +5,7 @@
  */
 
 #include "z_obj_hugebombiwa.h"
+#include "z64quake.h"
 #include "z64rumble.h"
 #include "objects/object_bombiwa/object_bombiwa.h"
 
@@ -13,7 +14,7 @@
 #define THIS ((ObjHugebombiwa*)thisx)
 
 void ObjHugebombiwa_Init(Actor* thisx, PlayState* play);
-void ObjHugebombiwa_Destroy(Actor* thisx, PlayState* play);
+void ObjHugebombiwa_Destroy(Actor* thisx, PlayState* play2);
 void ObjHugebombiwa_Update(Actor* thisx, PlayState* play);
 void ObjHugebombiwa_Draw(Actor* thisx, PlayState* play);
 
@@ -27,7 +28,7 @@ void func_80A55310(ObjHugebombiwa* this);
 void func_80A55564(ObjHugebombiwa* this, PlayState* play);
 void func_80A55B34(Actor* thisx, PlayState* play);
 
-const ActorInit Obj_Hugebombiwa_InitVars = {
+ActorInit Obj_Hugebombiwa_InitVars = {
     ACTOR_OBJ_HUGEBOMBIWA,
     ACTORCAT_PROP,
     FLAGS,
@@ -292,13 +293,14 @@ void func_80A54600(PlayState* play, Vec3f* arg1, f32 arg2, f32 arg3) {
     }
 }
 
-void func_80A54980(ObjHugebombiwa* this, PlayState* play, s32 arg2) {
+void ObjHugebombiwa_RequestQuakeAndRumble(ObjHugebombiwa* this, PlayState* play, s32 quakeVerticalMag) {
     s32 pad[2];
-    s16 quake = Quake_Add(GET_ACTIVE_CAM(play), 3);
+    s16 quakeIndex = Quake_Request(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
 
-    Quake_SetSpeed(quake, 0x4E20);
-    Quake_SetQuakeValues(quake, arg2, 0, 0, 0);
-    Quake_SetCountdown(quake, 7);
+    Quake_SetSpeed(quakeIndex, 20000);
+    Quake_SetPerturbations(quakeIndex, quakeVerticalMag, 0, 0, 0);
+    Quake_SetDuration(quakeIndex, 7);
+
     Rumble_Request(this->actor.xyzDistToPlayerSq, 255, 20, 150);
 }
 
@@ -339,7 +341,7 @@ void ObjHugebombiwa_Init(Actor* thisx, PlayState* play) {
     Collider_InitCylinder(play, &this->collider);
 
     if (Flags_GetSwitch(play, ENHUGEBOMBIWA_GET_7F(&this->actor))) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -378,7 +380,7 @@ void func_80A54C04(ObjHugebombiwa* this, PlayState* play) {
     }
 
     if (func_80A54A0C(this)) {
-        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+        CutsceneManager_Queue(this->actor.csId);
         func_80A54CD8(this);
         return;
     }
@@ -405,12 +407,12 @@ void func_80A54CD8(ObjHugebombiwa* this) {
 void func_80A54CEC(ObjHugebombiwa* this, PlayState* play) {
     s32 pad;
 
-    if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
+    if (CutsceneManager_IsNext(this->actor.csId)) {
+        CutsceneManager_StartWithPlayerCs(this->actor.csId, &this->actor);
         Flags_SetSwitch(play, ENHUGEBOMBIWA_GET_7F(&this->actor));
         if (!(ENHUGEBOMBIWA_GET_100(&this->actor)) &&
-            ((play->sceneNum == SCENE_17SETUGEN) || (play->sceneNum == SCENE_17SETUGEN2))) {
-            gSaveContext.save.weekEventReg[19] |= 2;
+            ((play->sceneId == SCENE_17SETUGEN) || (play->sceneId == SCENE_17SETUGEN2))) {
+            SET_WEEKEVENTREG(WEEKEVENTREG_19_02);
         }
 
         if (!(ENHUGEBOMBIWA_GET_100(&this->actor))) {
@@ -427,7 +429,7 @@ void func_80A54CEC(ObjHugebombiwa* this, PlayState* play) {
             func_80A55310(this);
         }
     } else {
-        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+        CutsceneManager_Queue(this->actor.csId);
     }
 }
 
@@ -514,15 +516,15 @@ void func_80A55064(ObjHugebombiwa* this, PlayState* play) {
             ptr->unk_24 = 1;
             func_80A53E60(play, &ptr->unk_0C, ptr->unk_18, ptr->unk_00.y * 9.8f);
             if ((play->gameplayFrames % 4) == 0) {
-                func_80A54980(this, play, (s32)(Rand_ZeroOne() * 5.5f) + 1);
+                ObjHugebombiwa_RequestQuakeAndRumble(this, play, (s32)(Rand_ZeroOne() * 5.5f) + 1);
             }
         }
     }
 
     this->unk_4B2--;
     if ((this->unk_4B0 >= 20) || (this->unk_4B2 <= 0)) {
-        ActorCutscene_Stop(this->actor.cutscene);
-        Actor_MarkForDeath(&this->actor);
+        CutsceneManager_Stop(this->actor.csId);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -610,15 +612,15 @@ void func_80A55564(ObjHugebombiwa* this, PlayState* play) {
             ptr->unk_24 = 1;
             func_80A54600(play, &ptr->unk_0C, ptr->unk_18, ptr->unk_00.y * 10.1f);
             if ((play->gameplayFrames % 4) == 0) {
-                func_80A54980(this, play, (s32)(Rand_ZeroOne() * 5.5f) + 1);
+                ObjHugebombiwa_RequestQuakeAndRumble(this, play, (s32)(Rand_ZeroOne() * 5.5f) + 1);
             }
         }
     }
 
     this->unk_4B2--;
     if ((this->unk_4B0 >= 20) || (this->unk_4B2 <= 0)) {
-        ActorCutscene_Stop(this->actor.cutscene);
-        Actor_MarkForDeath(&this->actor);
+        CutsceneManager_Stop(this->actor.csId);
+        Actor_Kill(&this->actor);
     }
 }
 

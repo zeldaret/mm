@@ -4,6 +4,7 @@
  * Description:
  */
 
+#include "global.h"
 #include "z_fbdemo_wipe1.h"
 
 void* TransitionWipe1_Init(void* thisx);
@@ -17,7 +18,7 @@ void TransitionWipe1_SetEnvColor(void* thisx, u32 color);
 s32 TransitionWipe1_IsDone(void* thisx);
 
 #if 0
-const TransitionInit TransitionWipe1_InitVars = {
+TransitionInit TransitionWipe1_InitVars = {
     TransitionWipe1_Init,
     TransitionWipe1_Destroy,
     TransitionWipe1_Update,

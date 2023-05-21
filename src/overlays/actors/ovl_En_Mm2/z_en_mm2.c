@@ -18,7 +18,7 @@ void EnMm2_Draw(Actor* thisx, PlayState* play);
 void EnMm2_Reading(EnMm2* this, PlayState* play);
 void EnMm2_WaitForRead(EnMm2* this, PlayState* play);
 
-const ActorInit En_Mm2_InitVars = {
+ActorInit En_Mm2_InitVars = {
     ACTOR_EN_MM2,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -46,15 +46,17 @@ void EnMm2_Destroy(Actor* thisx, PlayState* play) {
  * Action function whilst Link is reading the letter.
  */
 void EnMm2_Reading(EnMm2* this, PlayState* play) {
-    u8 talkState = Message_GetState(&play->msgCtx);
+    switch (Message_GetState(&play->msgCtx)) {
+        case TEXT_STATE_5:
+            if (Message_ShouldAdvance(play)) {
+                Message_CloseTextbox(play);
+                this->actionFunc = EnMm2_WaitForRead;
+            }
+            break;
 
-    if (talkState != 2) {
-        if (talkState == 5 && Message_ShouldAdvance(play)) {
-            func_801477B4(play);
+        case TEXT_STATE_CLOSING:
             this->actionFunc = EnMm2_WaitForRead;
-        }
-    } else {
-        this->actionFunc = EnMm2_WaitForRead;
+            break;
     }
 }
 

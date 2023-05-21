@@ -18,7 +18,7 @@ void BgIkninside_Draw(Actor* thisx, PlayState* play);
 
 void func_80C072D0(BgIkninside* this, PlayState* play);
 
-const ActorInit Bg_Ikninside_InitVars = {
+ActorInit Bg_Ikninside_InitVars = {
     ACTOR_BG_IKNINSIDE,
     ACTORCAT_BG,
     FLAGS,
@@ -65,7 +65,7 @@ void BgIkninside_Init(Actor* thisx, PlayState* play) {
     Collider_InitAndSetCylinder(play, &this->collider, &this->dyna.actor, &sCylinderInit);
     Collider_UpdateCylinder(&this->dyna.actor, &this->collider);
     if (Flags_GetSwitch(play, DMIKNINSIDE_GET_SWITCH(thisx))) {
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
     }
 }
 
@@ -80,16 +80,16 @@ void func_80C07220(BgIkninside* this, PlayState* play) {
 }
 
 void func_80C07230(BgIkninside* this, PlayState* play) {
-    if (this->dyna.actor.cutscene == -1) {
+    if (this->dyna.actor.csId == CS_ID_NONE) {
         this->actionFunc = func_80C07220;
-    } else if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-        ActorCutscene_Stop(0x7C);
-        ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
-    } else if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
+    } else if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+        CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
+        CutsceneManager_Queue(this->dyna.actor.csId);
+    } else if (CutsceneManager_IsNext(this->dyna.actor.csId)) {
+        CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
         this->actionFunc = func_80C07220;
     } else {
-        ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+        CutsceneManager_Queue(this->dyna.actor.csId);
     }
 }
 
@@ -107,7 +107,7 @@ void func_80C072D0(BgIkninside* this, PlayState* play) {
         if ((this->collider.info.acHitInfo != NULL) && (this->collider.info.acHitInfo->toucher.dmgFlags & 0x80000000)) {
             for (i = 0; i < 20; i++) {
                 altitude = Rand_S16Offset(0x1800, 0x2800);
-                azimuth = (u32)Rand_Next() >> 0x10;
+                azimuth = Rand_Next() >> 0x10;
                 speed = Rand_ZeroFloat(3.0f) + 8.0f;
                 velocity.x = speed * Math_CosS(altitude) * Math_SinS(azimuth);
                 velocity.y = speed * Math_SinS(altitude) + Rand_ZeroFloat(5.0f);
@@ -121,7 +121,7 @@ void func_80C072D0(BgIkninside* this, PlayState* play) {
             Flags_SetSwitch(play, DMIKNINSIDE_GET_SWITCH(&this->dyna.actor));
             this->actionFunc = func_80C07230;
             this->dyna.actor.draw = NULL;
-            func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+            DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
         } else {
             this->timer = 20;
         }

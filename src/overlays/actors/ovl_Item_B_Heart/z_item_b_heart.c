@@ -1,9 +1,3 @@
-/*
- * File: z_item_b_heart.c
- * Overlay: ovl_Item_B_Heart
- * Description: Heart Container
- */
-
 #include "z_item_b_heart.h"
 #include "objects/object_gi_hearts/object_gi_hearts.h"
 
@@ -16,8 +10,7 @@ void ItemBHeart_Destroy(Actor* thisx, PlayState* play);
 void ItemBHeart_Update(Actor* thisx, PlayState* play);
 void ItemBHeart_Draw(Actor* thisx, PlayState* play);
 
-void func_808BCF54(ItemBHeart* this, PlayState* play);
-
+/*
 const ActorInit Item_B_Heart_InitVars = {
     ACTOR_ITEM_B_HEART,
     ACTORCAT_BOSS,
@@ -27,88 +20,16 @@ const ActorInit Item_B_Heart_InitVars = {
     (ActorFunc)ItemBHeart_Init,
     (ActorFunc)ItemBHeart_Destroy,
     (ActorFunc)ItemBHeart_Update,
-    (ActorFunc)ItemBHeart_Draw,
+    (ActorFunc)ItemBHeart_Draw
 };
+*/
 
-static InitChainEntry sInitChain[] = {
-    ICHAIN_VEC3F_DIV1000(scale, 0, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneScale, 800, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 800, ICHAIN_STOP),
-};
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Item_B_Heart/ItemBHeart_Init.s")
 
-void ItemBHeart_Init(Actor* thisx, PlayState* play) {
-    ItemBHeart* this = THIS;
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Item_B_Heart/ItemBHeart_Destroy.s")
 
-    if (Flags_GetCollectible(play, 0x1F)) {
-        Actor_MarkForDeath(&this->actor);
-        return;
-    }
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Item_B_Heart/ItemBHeart_Update.s")
 
-    Actor_ProcessInitChain(&this->actor, sInitChain);
-    ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.8f);
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Item_B_Heart/func_808BCF54.s")
 
-    if (this->actor.params == 0x23) {
-        this->unk_168 = 0.1f;
-    } else {
-        this->unk_168 = 1.0f;
-    }
-
-    this->actor.world.pos.y += (20.0f * this->unk_168);
-}
-
-void ItemBHeart_Destroy(Actor* thisx, PlayState* play) {
-}
-
-void ItemBHeart_Update(Actor* thisx, PlayState* play) {
-    ItemBHeart* this = THIS;
-
-    func_808BCF54(this, play);
-
-    if (!(this->unk_168 < 0.5f)) {
-        if (Actor_HasParent(&this->actor, play)) {
-            Flags_SetCollectible(play, 0x1F);
-            Actor_MarkForDeath(&this->actor);
-        } else {
-            Actor_PickUp(&this->actor, play, GI_HEART_CONTAINER, 30.0f, 80.0f);
-        }
-    }
-}
-
-void func_808BCF54(ItemBHeart* this, PlayState* play) {
-    this->actor.shape.rot.y += 0x400;
-    Math_ApproachF(&this->unk_164, 0.4f, 0.1f, 0.01f);
-    Actor_SetScale(&this->actor, this->unk_164 * this->unk_168);
-}
-
-void ItemBHeart_Draw(Actor* thisx, PlayState* play) {
-    ItemBHeart* this = THIS;
-    Actor* blueWarpActor;
-    u8 flag = false;
-
-    OPEN_DISPS(play->state.gfxCtx);
-
-    blueWarpActor = play->actorCtx.actorLists[ACTORCAT_ITEMACTION].first;
-
-    while (blueWarpActor != NULL) {
-        if ((blueWarpActor->id == ACTOR_DOOR_WARP1) && (blueWarpActor->projectedPos.z > this->actor.projectedPos.z)) {
-            flag = true;
-            break;
-        }
-        blueWarpActor = blueWarpActor->next;
-    }
-
-    if (flag || thisx->world.rot.y != 0) {
-        func_8012C2DC(play->state.gfxCtx);
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_XLU_DISP++, object_gi_hearts_DL_001290);
-        gSPDisplayList(POLY_XLU_DISP++, object_gi_hearts_DL_001470);
-    } else {
-        func_8012C28C(play->state.gfxCtx);
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_OPA_DISP++, object_gi_hearts_DL_001290);
-        gSPDisplayList(POLY_OPA_DISP++, object_gi_hearts_DL_001470);
-    }
-
-    CLOSE_DISPS(play->state.gfxCtx);
-}
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Item_B_Heart/ItemBHeart_Draw.s")

@@ -18,7 +18,7 @@ void EnZl4_Draw(Actor* thisx, PlayState* play);
 void func_809A1D0C(EnZl4* this, PlayState* play);
 
 #if 0
-const ActorInit En_Zl4_InitVars = {
+ActorInit En_Zl4_InitVars = {
     ACTOR_EN_ZL4,
     ACTORCAT_ITEMACTION,
     FLAGS,

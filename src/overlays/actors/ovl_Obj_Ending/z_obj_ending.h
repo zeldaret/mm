@@ -16,6 +16,4 @@ typedef struct ObjEnding {
     /* 0x148 */ AnimatedMaterial* animMat;
 } ObjEnding; // size = 0x14C
 
-extern const ActorInit Obj_Ending_InitVars;
-
 #endif // Z_OBJ_ENDING_H

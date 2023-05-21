@@ -21,7 +21,7 @@ void func_80943BC0(EnDaiku* this);
 void func_80943BDC(EnDaiku* this, PlayState* play);
 void func_809438F8(EnDaiku* this, PlayState* play);
 
-const ActorInit En_Daiku_InitVars = {
+ActorInit En_Daiku_InitVars = {
     ACTOR_EN_DAIKU,
     ACTORCAT_NPC,
     FLAGS,
@@ -57,6 +57,17 @@ static ColliderCylinderInit sCylinderInit = {
     { 20, 60, 0, { 0, 0, 0 } },
 };
 
+static AnimationHeader* sAnimations[] = {
+    &object_daiku_Anim_002FA0, &object_daiku_Anim_00ACD0, &object_daiku_Anim_00C92C,
+    &object_daiku_Anim_000C44, &object_daiku_Anim_00C234, &object_daiku_Anim_000600,
+    &object_daiku_Anim_001114, &object_daiku_Anim_00B690, &object_daiku_Anim_00BEAC,
+};
+
+static u8 sAnimationModes[] = {
+    ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE,
+    ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_ONCE,
+};
+
 void EnDaiku_Init(Actor* thisx, PlayState* play) {
     EnDaiku* this = THIS;
 
@@ -76,13 +87,12 @@ void EnDaiku_Init(Actor* thisx, PlayState* play) {
         this->collider.dim.radius = 30;
         this->collider.dim.height = 60;
         this->collider.dim.yShift = 0;
-        this->actor.flags |= ACTOR_FLAG_8000000;
-        if ((gSaveContext.save.weekEventReg[63] & 0x80) ||
-            ((gSaveContext.save.day == 3) && gSaveContext.save.isNight)) {
-            Actor_MarkForDeath(&this->actor);
+        this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_63_80) || ((gSaveContext.save.day == 3) && gSaveContext.save.isNight)) {
+            Actor_Kill(&this->actor);
         }
     } else if ((gSaveContext.save.day == 3) && gSaveContext.save.isNight) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 
     Math_Vec3f_Copy(&this->unk_26C, &this->actor.world.pos);
@@ -119,23 +129,14 @@ void EnDaiku_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void func_8094373C(EnDaiku* this, s32 arg1) {
-    static AnimationHeader* D_809440A4[] = {
-        &object_daiku_Anim_002FA0, &object_daiku_Anim_00ACD0, &object_daiku_Anim_00C92C,
-        &object_daiku_Anim_000C44, &object_daiku_Anim_00C234, &object_daiku_Anim_000600,
-        &object_daiku_Anim_001114, &object_daiku_Anim_00B690, &object_daiku_Anim_00BEAC,
-    };
-    static u8 D_809440C8[] = {
-        0, 0, 0, 0, 2, 0, 0, 2, 2,
-    };
-
-    this->unk_284 = Animation_GetLastFrame(D_809440A4[arg1]);
-    Animation_Change(&this->skelAnime, D_809440A4[arg1], 1.0f, 0.0f, this->unk_284, D_809440C8[arg1], -4.0f);
+    this->unk_284 = Animation_GetLastFrame(sAnimations[arg1]);
+    Animation_Change(&this->skelAnime, sAnimations[arg1], 1.0f, 0.0f, this->unk_284, sAnimationModes[arg1], -4.0f);
 }
 
 void func_809437C8(EnDaiku* this) {
     if ((this->unk_288 != -1) && (this->unk_258 != 0)) {
         if (!SubS_CopyPointFromPath(this->unk_258, this->unk_25C, &this->unk_26C)) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     }
 }
@@ -242,8 +243,8 @@ void func_80943BDC(EnDaiku* this, PlayState* play) {
         }
     }
 
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
-        func_801477B4(play);
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+        Message_CloseTextbox(play);
         func_80943820(this);
     }
 }
@@ -257,7 +258,7 @@ void EnDaiku_Update(Actor* thisx, PlayState* play) {
     }
 
     if ((this->unk_278 == ENDAIKU_PARAMS_FF_0) && (gSaveContext.save.day == 3) && (gSaveContext.save.isNight)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -277,7 +278,9 @@ void EnDaiku_Update(Actor* thisx, PlayState* play) {
     Actor_MoveWithGravity(&this->actor);
     Math_SmoothStepToS(&this->unk_260, this->unk_266, 1, 0xBB8, 0);
     Math_SmoothStepToS(&this->unk_25E, this->unk_264, 1, 0xBB8, 0);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 50.0f, 0x1D);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 50.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                UPDBGCHECKINFO_FLAG_10);
     this->actor.uncullZoneForward = 650.0f;
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);

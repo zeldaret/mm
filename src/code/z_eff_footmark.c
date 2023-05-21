@@ -1,14 +1,19 @@
-#include "global.h"
+#include "z64eff_footmark.h"
+#include "z64.h"
+#include "macros.h"
+#include "functions.h"
+
+#include "assets/code/eff_footmark/eff_footmark.c"
 
 void EffFootmark_Init(PlayState* play) {
     EffFootmark* footmark;
     s32 i;
 
-    for (footmark = play->footprintInfo, i = 0; i < 100; i++, footmark++) {
+    for (footmark = play->footprintInfo, i = 0; i < ARRAY_COUNT(play->footprintInfo); i++, footmark++) {
         footmark->actor = NULL;
-        footmark->location.x = 0;
-        footmark->location.y = 0;
-        footmark->location.z = 0;
+        footmark->pos.x = 0;
+        footmark->pos.y = 0;
+        footmark->pos.z = 0;
         footmark->flags = 0;
         footmark->id = 0;
         footmark->alpha = 0;
@@ -16,47 +21,45 @@ void EffFootmark_Init(PlayState* play) {
     }
 }
 
-void EffFootmark_Add(PlayState* play, MtxF* displayMatrix, Actor* actor, u8 id, Vec3f* location, u16 size, u8 red,
-                     u8 green, u8 blue, u16 alpha, u16 alphaChange, u16 fadeoutDelay) {
+void EffFootmark_Add(PlayState* play, MtxF* mf, Actor* actor, u8 id, Vec3f* pos, u16 size, u8 red, u8 green, u8 blue,
+                     u16 alpha, u16 alphaChange, u16 fadeOutDelay) {
     s32 i;
     EffFootmark* footmark;
     EffFootmark* destination = NULL;
     EffFootmark* oldest = NULL;
-    s32 isNew = 1;
+    s32 isNew = true;
 
-    for (footmark = play->footprintInfo, i = 0; i < 100; i++, footmark++) {
-        if (((actor == footmark->actor) && (footmark->id == id)) && ((footmark->flags & 1) == 0)) {
-            if (fabsf((footmark->location).x - location->x) <= 1) {
-                if (fabsf((footmark->location).z - location->z) <= 1) {
-                    isNew = 0;
+    for (footmark = play->footprintInfo, i = 0; i < ARRAY_COUNT(play->footprintInfo); i++, footmark++) {
+        if (((actor == footmark->actor) && (footmark->id == id)) && !(footmark->flags & FOOTMARK_FLAG_1)) {
+            if (fabsf(footmark->pos.x - pos->x) <= 1) {
+                if (fabsf(footmark->pos.z - pos->z) <= 1) {
+                    isNew = false;
                     break;
                 }
             }
 
-            // This footmark is being re-added at a new location. Let's mark this one to start fading out.
-            footmark->flags = 1;
+            // This footmark is being re-added at a new pos. Let's mark this one to start fading out.
+            footmark->flags = FOOTMARK_FLAG_1;
         }
 
         if (footmark->actor == NULL) {
             destination = footmark;
-        } else {
-            if (destination == NULL) {
-                if ((oldest != NULL && footmark->age > oldest->age) || (oldest == NULL)) {
-                    oldest = footmark;
-                }
+        } else if (destination == NULL) {
+            if (((oldest != NULL) && (footmark->age > oldest->age)) || (oldest == NULL)) {
+                oldest = footmark;
             }
         }
     }
 
-    if ((isNew) && ((destination != NULL || (oldest != NULL)))) {
+    if (isNew && ((destination != NULL) || (oldest != NULL))) {
         if (destination == NULL) {
             destination = oldest;
         }
-        Matrix_MtxFCopy(&destination->displayMatrix, displayMatrix);
+        Matrix_MtxFCopy(&destination->mf, mf);
         destination->actor = actor;
-        destination->location.x = location->x;
-        destination->location.y = location->y;
-        destination->location.z = location->z;
+        destination->pos.x = pos->x;
+        destination->pos.y = pos->y;
+        destination->pos.z = pos->z;
         destination->flags = 0;
         destination->id = id;
         destination->red = red;
@@ -65,7 +68,7 @@ void EffFootmark_Add(PlayState* play, MtxF* displayMatrix, Actor* actor, u8 id, 
         destination->alpha = alpha;
         destination->alphaChange = alphaChange;
         destination->size = size;
-        destination->fadeoutDelay = fadeoutDelay;
+        destination->fadeOutDelay = fadeOutDelay;
         destination->age = 0;
     }
 }
@@ -74,22 +77,24 @@ void EffFootmark_Update(PlayState* play) {
     EffFootmark* footmark;
     s32 i;
 
-    for (footmark = play->footprintInfo, i = 0; i < 100; i++, footmark++) {
-        if (footmark->actor != NULL) {
-            if ((footmark->flags & 1) == 1) {
-                if (footmark->age < 0xFFFFu) { // TODO replace with MAX_U16 or something
-                    footmark->age++;
-                }
+    for (footmark = play->footprintInfo, i = 0; i < ARRAY_COUNT(play->footprintInfo); i++, footmark++) {
+        if (footmark->actor == NULL) {
+            continue;
+        }
 
-                if (footmark->fadeoutDelay == 0) {
-                    if (footmark->alpha >= footmark->alphaChange + 0x1000) {
-                        footmark->alpha -= footmark->alphaChange;
-                    } else {
-                        footmark->actor = NULL;
-                    }
-                } else if (footmark->fadeoutDelay > 0) {
-                    footmark->fadeoutDelay--;
+        if (CHECK_FLAG_ALL(footmark->flags, FOOTMARK_FLAG_1)) {
+            if ((u32)footmark->age < UINT16_MAX) {
+                footmark->age++;
+            }
+
+            if (footmark->fadeOutDelay == 0) {
+                if (footmark->alpha >= footmark->alphaChange + 0x1000) {
+                    footmark->alpha -= footmark->alphaChange;
+                } else {
+                    footmark->actor = NULL;
                 }
+            } else if (footmark->fadeOutDelay > 0) {
+                footmark->fadeOutDelay--;
             }
         }
     }
@@ -102,11 +107,11 @@ void EffFootmark_Draw(PlayState* play) {
 
     func_8012C448(play->state.gfxCtx);
 
-    gSPDisplayList(gfxCtx->polyXlu.p++, D_801BC240);
+    gSPDisplayList(gfxCtx->polyXlu.p++, gEffFootprintMaterialDL);
 
-    for (footmark = play->footprintInfo, i = 0; i < 100; i++, footmark++) {
+    for (footmark = play->footprintInfo, i = 0; i < ARRAY_COUNT(play->footprintInfo); i++, footmark++) {
         if (footmark->actor != NULL) {
-            Matrix_Put(&footmark->displayMatrix);
+            Matrix_Put(&footmark->mf);
             Matrix_Scale(footmark->size * (1.0f / 0x100) * 0.7f, 1, footmark->size * (1.0f / 0x100), MTXMODE_APPLY);
 
             gSPMatrix(gfxCtx->polyXlu.p++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD);
@@ -114,7 +119,7 @@ void EffFootmark_Draw(PlayState* play) {
             gDPSetPrimColor(gfxCtx->polyXlu.p++, 0, 0, footmark->red, footmark->green, footmark->blue,
                             footmark->alpha >> 8);
 
-            gSPDisplayList(gfxCtx->polyXlu.p++, D_801BC288);
+            gSPDisplayList(gfxCtx->polyXlu.p++, gEffFootprintModelDL);
         }
     }
 }

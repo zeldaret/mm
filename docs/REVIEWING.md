@@ -1,6 +1,6 @@
 # Reviewing Pull Requests to the Majora's Mask Decompilation Project
 
-Thanks for helping us reverse engineer *The Legend of Zelda: Majora's Mask*! 
+Thanks for helping us reverse engineer *The Legend of Zelda: Majora's Mask*!
 We encourage all contributors to participate in code review: this is your codebase too!
 Every review submitted helps us keep code quality high and code merged in more quickly.
 
@@ -11,13 +11,11 @@ Most discussions happen on our [Discord Server](https://discord.zelda64.dev) whe
 
 Other links are available in the [CONTRIBUTING.md](CONTRIBUTING.md)
 
-
 ## Getting Started
 
 ### What should I know to take part in the review process?
 
-You should first famiiarise yourself with our [Contributing guide](CONTRIBUTING.md) and [Style guide](docs/STYLE.md). It is also recommended that you have already successfully submitted a merged pull request to understand how the process works before submitting a review.
-
+You should first famiiarise yourself with our [Contributing guide](CONTRIBUTING.md) and [Style guide](STYLE.md). It is also recommended that you have already successfully submitted a merged pull request to understand how the process works before submitting a review.
 
 ## Pull Requests (PRs)
 
@@ -29,6 +27,7 @@ You should first famiiarise yourself with our [Contributing guide](CONTRIBUTING.
 - If someone does not address your comments and expresses that a different way is better than yours, look for feedback from other contributors (we encourage discussing this sort of thing in Discord, since long GitHub conversations get hard to read). The project leads will have final say in these situations. All decisions are generally guided by a consensus of contributors.
 
 ### Reviewer Checklist
+
 - [ ] Jenkins build is successful.
   - [ ] `make` builds a matching ROM.
   - [ ] `format.sh` was run.

@@ -28,7 +28,7 @@ void func_80BC5830(EnPoComposer* this, PlayState* play);
 void func_80BC58E0(EnPoComposer* this, PlayState* play);
 
 #if 0
-const ActorInit En_Po_Composer_InitVars = {
+ActorInit En_Po_Composer_InitVars = {
     ACTOR_EN_PO_COMPOSER,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -58,7 +58,7 @@ static ColliderJntSphElementInit D_80BC67AC[1] = {
 // static ColliderJntSphInit sJntSphInit = {
 static ColliderJntSphInit D_80BC67D0 = {
     { COLTYPE_HIT3, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_JNTSPH, },
-    1, D_80BC67AC, // sJntSphElementsInit,
+    ARRAY_COUNT(sJntSphElementsInit), D_80BC67AC, // sJntSphElementsInit,
 };
 
 // sColChkInfoInit

@@ -7,7 +7,7 @@ struct EnMinifrog;
 
 typedef void (*EnMinifrogActionFunc)(struct EnMinifrog*, PlayState*);
 
-#define EN_MINIFROG_IS_RETURNED(this) ((((this)->actor.params)&0xF0) >> 4)
+#define EN_MINIFROG_IS_RETURNED(thisx) ((((thisx)->params) & 0xF0) >> 4)
 
 typedef enum {
     /* 0x00 */ MINIFROG_YELLOW,         // Mountain Village
@@ -37,7 +37,5 @@ typedef struct EnMinifrog {
     /* 0x2B6 */ u16 flags;
     /* 0x2B8 */ ColliderCylinder collider;
 } EnMinifrog; // size = 0x304
-
-extern const ActorInit En_Minifrog_InitVars;
 
 #endif // Z_EN_MINIFROG_H

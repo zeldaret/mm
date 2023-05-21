@@ -41,7 +41,7 @@ typedef struct {
     /* 0x1F */ u8 params;
 } MirRayDataEntry; // size = 0x20
 
-const ActorInit Mir_Ray_InitVars = {
+ActorInit Mir_Ray_InitVars = {
     ACTOR_MIR_RAY,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -98,7 +98,7 @@ static ColliderJntSphInit sJntSphInit = {
         OC2_NONE,
         COLSHAPE_JNTSPH,
     },
-    1,
+    ARRAY_COUNT(sJntSphElementsInit),
     sJntSphElementsInit,
 };
 
@@ -296,7 +296,7 @@ void MirRay_Init(Actor* thisx, PlayState* play) {
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
 
     if (MIRRAY_LOCATION(&this->actor) >= MIRRAY_MAX) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 
     this->sourcePt.x = dataEntry->sourcePoint.x;
@@ -483,8 +483,6 @@ void MirRay_RemoveSimilarReflections(MirRayShieldReflection* reflection) {
 }
 
 // Creates the reflected beam's collider (to interact with objects) and places and orients the shield images
-#ifdef NON_MATCHING
-// Beginning block re-ordered
 void MirRay_ReflectedBeam(MirRay* this, PlayState* play, MirRayShieldReflection* reflection) {
     Player* player = GET_PLAYER(play);
     s32 i;
@@ -498,8 +496,6 @@ void MirRay_ReflectedBeam(MirRay* this, PlayState* play, MirRayShieldReflection*
     f32 spE8[3];
     f32 normalVec[3];
     MtxF* shieldMtx = &player->shieldMf;
-    Vec3f vecA;
-    Vec3f vecC;
 
     spE8[0] = -(shieldMtx->xz * this->reflectRange) * this->reflectIntensity * 400.0f;
     spE8[1] = -(shieldMtx->yz * this->reflectRange) * this->reflectIntensity * 400.0f;
@@ -513,85 +509,86 @@ void MirRay_ReflectedBeam(MirRay* this, PlayState* play, MirRayShieldReflection*
     vecD.y = spE8[1] + vecB.y;
     vecD.z = spE8[2] + vecB.z;
 
-    vecA.x = vecB.x + (shieldMtx->xx * 300.0f);
-    vecA.y = vecB.y + (shieldMtx->yx * 300.0f);
-    vecA.z = vecB.z + (shieldMtx->zx * 300.0f);
+    {
+        Vec3f vecA;
+        Vec3f vecC;
 
-    vecC.x = vecD.x + (shieldMtx->xx * 300.0f);
-    vecC.y = vecD.y + (shieldMtx->yx * 300.0f);
-    vecC.z = vecD.z + (shieldMtx->zx * 300.0f);
+        vecA.x = vecB.x + (shieldMtx->xx * 300.0f);
+        vecA.y = vecB.y + (shieldMtx->yx * 300.0f);
+        vecA.z = vecB.z + (shieldMtx->zx * 300.0f);
 
-    Collider_SetQuadVertices(&this->collider2, &vecA, &vecB, &vecC, &vecD);
+        vecC.x = vecD.x + (shieldMtx->xx * 300.0f);
+        vecC.y = vecD.y + (shieldMtx->yx * 300.0f);
+        vecC.z = vecD.z + (shieldMtx->zx * 300.0f);
 
-    for (i = 0; i < 6; i++) {
-        if (reflection[i].reflectionPoly != NULL) {
-            normalVec[0] = COLPOLY_GET_NORMAL(reflection[i].reflectionPoly->normal.x);
-            normalVec[1] = COLPOLY_GET_NORMAL(reflection[i].reflectionPoly->normal.y);
-            normalVec[2] = COLPOLY_GET_NORMAL(reflection[i].reflectionPoly->normal.z);
+        Collider_SetQuadVertices(&this->collider2, &vecA, &vecB, &vecC, &vecD);
 
-            if (Math3D_LineSegVsPlane(normalVec[0], normalVec[1], normalVec[2], reflection[i].reflectionPoly->dist,
-                                      &vecB, &vecD, &sp118, 1)) {
+        for (i = 0; i < 6; i++) {
+            if (reflection[i].reflectionPoly != NULL) {
+                normalVec[0] = COLPOLY_GET_NORMAL(reflection[i].reflectionPoly->normal.x);
+                normalVec[1] = COLPOLY_GET_NORMAL(reflection[i].reflectionPoly->normal.y);
+                normalVec[2] = COLPOLY_GET_NORMAL(reflection[i].reflectionPoly->normal.z);
 
-                reflection[i].pos.x = sp118.x;
-                reflection[i].pos.y = sp118.y;
-                reflection[i].pos.z = sp118.z;
+                if (Math3D_LineSegVsPlane(normalVec[0], normalVec[1], normalVec[2], reflection[i].reflectionPoly->dist,
+                                          &vecB, &vecD, &sp118, 1)) {
 
-                temp_f0 = sqrtf(SQ(sp118.x - vecB.x) + SQ(sp118.y - vecB.y) + SQ(sp118.z - vecB.z));
+                    reflection[i].pos.x = sp118.x;
+                    reflection[i].pos.y = sp118.y;
+                    reflection[i].pos.z = sp118.z;
 
-                if (temp_f0 < (this->reflectIntensity * 600.0f)) {
-                    reflection[i].opacity = 200;
+                    temp_f0 = sqrtf(SQ(sp118.x - vecB.x) + SQ(sp118.y - vecB.y) + SQ(sp118.z - vecB.z));
+
+                    if (temp_f0 < (this->reflectIntensity * 600.0f)) {
+                        reflection[i].opacity = 200;
+                    } else {
+                        reflection[i].opacity = (s32)(800.0f - temp_f0);
+                    }
+
+                    reflection[i].opacity = (s32)(reflection[i].opacity * 1.275f);
+
+                    sp10C.x = (shieldMtx->xx * 100.0f) + vecB.x;
+                    sp10C.y = (shieldMtx->yx * 100.0f) + vecB.y;
+                    sp10C.z = (shieldMtx->zx * 100.0f) + vecB.z;
+
+                    sp100.x = (spE8[0] * 4.0f) + sp10C.x;
+                    sp100.y = (spE8[1] * 4.0f) + sp10C.y;
+                    sp100.z = (spE8[2] * 4.0f) + sp10C.z;
+
+                    reflection[i].mtx.xx = reflection[i].mtx.yy = reflection[i].mtx.zz = reflection[i].mtx.ww = 1.0f;
+
+                    reflection[i].mtx.yx = reflection[i].mtx.zx = reflection[i].mtx.wx = reflection[i].mtx.xy =
+                        reflection[i].mtx.zy = reflection[i].mtx.wy = reflection[i].mtx.xz = reflection[i].mtx.yz =
+                            reflection[i].mtx.wz = reflection[i].mtx.xw = reflection[i].mtx.yw = reflection[i].mtx.zw =
+                                0.0f;
+
+                    if (Math3D_LineSegVsPlane(normalVec[0], normalVec[1], normalVec[2],
+                                              reflection[i].reflectionPoly->dist, &sp10C, &sp100, &intersection, 1)) {
+                        reflection[i].mtx.xx = intersection.x - sp118.x;
+                        reflection[i].mtx.yx = intersection.y - sp118.y;
+                        reflection[i].mtx.zx = intersection.z - sp118.z;
+                    }
+
+                    sp10C.x = (shieldMtx->xy * 100.0f) + vecB.x;
+                    sp10C.y = (shieldMtx->yy * 100.0f) + vecB.y;
+                    sp10C.z = (shieldMtx->zy * 100.0f) + vecB.z;
+
+                    sp100.x = (spE8[0] * 4.0f) + sp10C.x;
+                    sp100.y = (spE8[1] * 4.0f) + sp10C.y;
+                    sp100.z = (spE8[2] * 4.0f) + sp10C.z;
+
+                    if (Math3D_LineSegVsPlane(normalVec[0], normalVec[1], normalVec[2],
+                                              reflection[i].reflectionPoly->dist, &sp10C, &sp100, &intersection, 1)) {
+                        reflection[i].mtx.xy = intersection.x - sp118.x;
+                        reflection[i].mtx.yy = intersection.y - sp118.y;
+                        reflection[i].mtx.zy = intersection.z - sp118.z;
+                    }
                 } else {
-                    reflection[i].opacity = (s32)(800.0f - temp_f0);
+                    reflection[i].reflectionPoly = NULL;
                 }
-
-                reflection[i].opacity = (s32)(reflection[i].opacity * 1.275f);
-
-                sp10C.x = (shieldMtx->xx * 100.0f) + vecB.x;
-                sp10C.y = (shieldMtx->yx * 100.0f) + vecB.y;
-                sp10C.z = (shieldMtx->zx * 100.0f) + vecB.z;
-
-                sp100.x = (spE8[0] * 4.0f) + sp10C.x;
-                sp100.y = (spE8[1] * 4.0f) + sp10C.y;
-                sp100.z = (spE8[2] * 4.0f) + sp10C.z;
-
-                reflection[i].mtx.xx = reflection[i].mtx.yy = reflection[i].mtx.zz = reflection[i].mtx.ww = 1.0f;
-
-                reflection[i].mtx.yx = reflection[i].mtx.zx = reflection[i].mtx.wx = reflection[i].mtx.xy =
-                    reflection[i].mtx.zy = reflection[i].mtx.wy = reflection[i].mtx.xz = reflection[i].mtx.yz =
-                        reflection[i].mtx.wz = reflection[i].mtx.xw = reflection[i].mtx.yw = reflection[i].mtx.zw =
-                            0.0f;
-
-                if (Math3D_LineSegVsPlane(normalVec[0], normalVec[1], normalVec[2], reflection[i].reflectionPoly->dist,
-                                          &sp10C, &sp100, &intersection, 1)) {
-                    reflection[i].mtx.xx = intersection.x - sp118.x;
-                    reflection[i].mtx.yx = intersection.y - sp118.y;
-                    reflection[i].mtx.zx = intersection.z - sp118.z;
-                }
-
-                sp10C.x = (shieldMtx->xy * 100.0f) + vecB.x;
-                sp10C.y = (shieldMtx->yy * 100.0f) + vecB.y;
-                sp10C.z = (shieldMtx->zy * 100.0f) + vecB.z;
-
-                sp100.x = (spE8[0] * 4.0f) + sp10C.x;
-                sp100.y = (spE8[1] * 4.0f) + sp10C.y;
-                sp100.z = (spE8[2] * 4.0f) + sp10C.z;
-
-                if (Math3D_LineSegVsPlane(normalVec[0], normalVec[1], normalVec[2], reflection[i].reflectionPoly->dist,
-                                          &sp10C, &sp100, &intersection, 1)) {
-                    reflection[i].mtx.xy = intersection.x - sp118.x;
-                    reflection[i].mtx.yy = intersection.y - sp118.y;
-                    reflection[i].mtx.zy = intersection.z - sp118.z;
-                }
-            } else {
-                reflection[i].reflectionPoly = NULL;
             }
         }
     }
 }
-#else
-void MirRay_ReflectedBeam(MirRay* this, PlayState* play, MirRayShieldReflection* reflection);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Mir_Ray/MirRay_ReflectedBeam.s")
-#endif
 
 void MirRay_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
@@ -602,7 +599,7 @@ void MirRay_Draw(Actor* thisx, PlayState* play) {
 
     this->reflectIntensity = 0.0f;
 
-    if (!D_808E3BF0 && !this->unLit && func_80124088(play)) {
+    if (!D_808E3BF0 && !this->unLit && Player_IsHoldingMirrorShield(play)) {
         Matrix_Mult(&player->shieldMf, MTXMODE_NEW);
         MirRay_SetIntensity(this, play);
 

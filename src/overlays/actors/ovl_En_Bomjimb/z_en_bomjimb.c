@@ -14,7 +14,7 @@
 
 void EnBomjimb_Init(Actor* thisx, PlayState* play);
 void EnBomjimb_Destroy(Actor* thisx, PlayState* play);
-void EnBomjimb_Update(Actor* thisx, PlayState* play);
+void EnBomjimb_Update(Actor* thisx, PlayState* play2);
 void EnBomjimb_Draw(Actor* thisx, PlayState* play);
 
 void func_80C01494(EnBomjimb* this);
@@ -40,7 +40,7 @@ void func_80C02DAC(EnBomjimb* this, PlayState* play);
 
 static Actor* D_80C03170 = NULL;
 
-const ActorInit En_Bomjimb_InitVars = {
+ActorInit En_Bomjimb_InitVars = {
     ACTOR_EN_BOMJIMB,
     ACTORCAT_NPC,
     FLAGS,
@@ -72,6 +72,22 @@ static ColliderCylinderInit sCylinderInit = {
     { 20, 30, 0, { 0, 0, 0 } },
 };
 
+static AnimationHeader* sAnimations[] = {
+    &gBomberIdleAnim,       &object_cs_Anim_00FAF4, &object_cs_Anim_0057C8, &object_cs_Anim_0053F4,
+    &object_cs_Anim_002044, &object_cs_Anim_01007C, &object_cs_Anim_00349C, &object_cs_Anim_004960,
+    &object_cs_Anim_005128, &object_cs_Anim_004C1C, &object_cs_Anim_002930, &object_cs_Anim_001A1C,
+    &object_cs_Anim_003EE4, &object_cs_Anim_00478C, &object_cs_Anim_00433C, &object_cs_Anim_0060E8,
+    &object_cs_Anim_001708, &object_cs_Anim_005DC4, &object_cs_Anim_0026B0, &object_cs_Anim_0036B0,
+    &object_cs_Anim_0031C4, &object_cs_Anim_010B68,
+};
+
+static u8 sAnimationModes[] = {
+    ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP,
+    ANIMMODE_ONCE, ANIMMODE_ONCE, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP,
+    ANIMMODE_ONCE, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_LOOP,
+    ANIMMODE_ONCE, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_LOOP, ANIMMODE_LOOP,
+};
+
 void EnBomjimb_Init(Actor* thisx, PlayState* play) {
     EnBomjimb* this = THIS;
 
@@ -99,48 +115,48 @@ void EnBomjimb_Init(Actor* thisx, PlayState* play) {
         this->unk_2C6 = ENBOMJIMB_F0_0;
     }
 
-    if ((gSaveContext.save.weekEventReg[73] & 0x10) || (gSaveContext.save.weekEventReg[85] & 2)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_73_10) || CHECK_WEEKEVENTREG(WEEKEVENTREG_85_02)) {
         switch (this->unk_2C8) {
             case ENBOMJIMB_F_0:
-                if (gSaveContext.save.weekEventReg[11] & 1) {
-                    Actor_MarkForDeath(&this->actor);
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_11_01)) {
+                    Actor_Kill(&this->actor);
                     return;
                 }
                 break;
 
             case ENBOMJIMB_F_1:
-                if (gSaveContext.save.weekEventReg[11] & 2) {
-                    Actor_MarkForDeath(&this->actor);
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_11_02)) {
+                    Actor_Kill(&this->actor);
                     return;
                 }
                 break;
 
             case ENBOMJIMB_F_2:
-                if (gSaveContext.save.weekEventReg[11] & 4) {
-                    Actor_MarkForDeath(&this->actor);
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_11_04)) {
+                    Actor_Kill(&this->actor);
                     return;
                 }
                 break;
 
             case ENBOMJIMB_F_3:
-                if (gSaveContext.save.weekEventReg[11] & 8) {
-                    Actor_MarkForDeath(&this->actor);
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_11_08)) {
+                    Actor_Kill(&this->actor);
                     return;
                 }
                 break;
 
             case ENBOMJIMB_F_4:
-                if (gSaveContext.save.weekEventReg[11] & 0x10) {
-                    Actor_MarkForDeath(&this->actor);
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_11_10)) {
+                    Actor_Kill(&this->actor);
                     return;
                 }
                 break;
         }
     }
 
-    if ((!(gSaveContext.save.weekEventReg[73] & 0x10) && !(gSaveContext.save.weekEventReg[85] & 2)) ||
-        (gSaveContext.save.weekEventReg[75] & 0x40)) {
-        Actor_MarkForDeath(&this->actor);
+    if ((!CHECK_WEEKEVENTREG(WEEKEVENTREG_73_10) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_85_02)) ||
+        CHECK_WEEKEVENTREG(WEEKEVENTREG_75_40)) {
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -159,42 +175,30 @@ void EnBomjimb_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void func_80C0113C(EnBomjimb* this, s32 arg1, f32 arg2) {
-    static AnimationHeader* sAnimations[] = {
-        &gBomberIdleAnim,       &object_cs_Anim_00FAF4, &object_cs_Anim_0057C8, &object_cs_Anim_0053F4,
-        &object_cs_Anim_002044, &object_cs_Anim_01007C, &object_cs_Anim_00349C, &object_cs_Anim_004960,
-        &object_cs_Anim_005128, &object_cs_Anim_004C1C, &object_cs_Anim_002930, &object_cs_Anim_001A1C,
-        &object_cs_Anim_003EE4, &object_cs_Anim_00478C, &object_cs_Anim_00433C, &object_cs_Anim_0060E8,
-        &object_cs_Anim_001708, &object_cs_Anim_005DC4, &object_cs_Anim_0026B0, &object_cs_Anim_0036B0,
-        &object_cs_Anim_0031C4, &object_cs_Anim_010B68,
-    };
-    static u8 D_80C03218[] = {
-        0, 0, 0, 0, 0, 0, 2, 2, 0, 0, 0, 0, 2, 0, 0, 0, 2, 0, 2, 0, 0, 2, 0, 0,
-    };
-
     this->unk_2DC = arg1;
     this->unk_2B8 = Animation_GetLastFrame(sAnimations[arg1]);
-    Animation_Change(&this->skelAnime, sAnimations[this->unk_2DC], arg2, 0.0f, this->unk_2B8, D_80C03218[this->unk_2DC],
-                     -4.0f);
+    Animation_Change(&this->skelAnime, sAnimations[this->unk_2DC], arg2, 0.0f, this->unk_2B8,
+                     sAnimationModes[this->unk_2DC], -4.0f);
 }
 
 void func_80C011CC(EnBomjimb* this) {
     if ((this->unk_2DC == 5) &&
         (Animation_OnFrame(&this->skelAnime, 9.0f) || Animation_OnFrame(&this->skelAnime, 10.0f) ||
          Animation_OnFrame(&this->skelAnime, 17.0f) || Animation_OnFrame(&this->skelAnime, 18.0f))) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BOMBERS_WALK);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_BOMBERS_WALK);
     }
 
     if ((this->unk_2DC == 19) &&
         (Animation_OnFrame(&this->skelAnime, 2.0f) || Animation_OnFrame(&this->skelAnime, 6.0f))) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BOMBERS_WALK);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_BOMBERS_WALK);
     }
 
     if ((this->unk_2DC == 18) && Animation_OnFrame(&this->skelAnime, 15.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BOMBERS_LAND);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_BOMBERS_LAND);
     }
 
     if ((this->unk_2DC == 7) && Animation_OnFrame(&this->skelAnime, 8.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BOMBERS_LAND);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_BOMBERS_LAND);
     }
 }
 
@@ -210,8 +214,8 @@ s32 func_80C012FC(EnBomjimb* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (!Play_InCsMode(play) && (this->actor.xzDistToPlayer < 40.0f) &&
-        (fabsf(player->actor.world.pos.y - this->actor.world.pos.y) < 50.0f) && (play->msgCtx.unk11F10 == 0)) {
-        this->actor.speedXZ = 0.0f;
+        (fabsf(player->actor.world.pos.y - this->actor.world.pos.y) < 50.0f) && (play->msgCtx.msgLength == 0)) {
+        this->actor.speed = 0.0f;
         func_80C02740(this, play);
         return true;
     }
@@ -329,7 +333,7 @@ void func_80C014E4(EnBomjimb* this, PlayState* play) {
             break;
     }
 
-    if (player->stateFlags3 != 0x1000000) {
+    if (player->stateFlags3 != PLAYER_STATE3_1000000) {
         phi_f0 = 200.0f;
 
         abs = ABS_ALT(BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.world.rot.y));
@@ -364,7 +368,7 @@ void func_80C01A24(EnBomjimb* this, PlayState* play) {
         if ((this->unk_2E4 != NULL) && (this->unk_2E4->update != NULL)) {
             ((EnNiw*)this->unk_2E4)->unk2BC.z = 90000.0f;
         }
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
         this->unk_2E4 = NULL;
         this->actor.gravity = -2.0f;
         func_80C02108(this);
@@ -376,10 +380,10 @@ void func_80C01A24(EnBomjimb* this, PlayState* play) {
     }
 
     if (this->unk_2C0 != 0) {
-        Math_ApproachF(&this->actor.speedXZ, 6.0f, 0.5f, 2.0f);
+        Math_ApproachF(&this->actor.speed, 6.0f, 0.5f, 2.0f);
     }
 
-    if ((this->unk_2C0 != 0) && !(this->actor.bgCheckFlags & 1)) {
+    if ((this->unk_2C0 != 0) && !(this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
         func_80C01B40(this);
     }
 }
@@ -391,13 +395,13 @@ void func_80C01B40(EnBomjimb* this) {
 }
 
 void func_80C01B74(EnBomjimb* this, PlayState* play) {
-    Math_ApproachF(&this->actor.speedXZ, 6.0f, 0.5f, 2.0f);
-    if ((this->collider.base.acFlags & AC_HIT) || (this->actor.bgCheckFlags & 1)) {
+    Math_ApproachF(&this->actor.speed, 6.0f, 0.5f, 2.0f);
+    if ((this->collider.base.acFlags & AC_HIT) || (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
         this->collider.base.acFlags &= ~AC_HIT;
         if ((this->unk_2E4 != NULL) && (this->unk_2E4->update != NULL)) {
             ((EnNiw*)this->unk_2E4)->unk2BC.z = 90000.0f;
         }
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
         this->unk_2E4 = NULL;
         this->actor.gravity = -2.0f;
         func_80C02108(this);
@@ -415,7 +419,7 @@ void func_80C01C18(EnBomjimb* this, PlayState* play) {
             this->unk_294.z = this->unk_2E4->world.pos.z;
         }
     }
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->unk_2CA = 2;
     this->actionFunc = func_80C01CD0;
 }
@@ -446,8 +450,8 @@ void func_80C01CD0(EnBomjimb* this, PlayState* play) {
         this->actor.draw = NULL;
     }
 
-    if ((this->unk_2C0 == 0) && (this->unk_2E4->bgCheckFlags & 1)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_PUT_DOWN_WOODBOX);
+    if ((this->unk_2C0 == 0) && (this->unk_2E4->bgCheckFlags & BGCHECKFLAG_GROUND)) {
+        Actor_PlaySfx(&this->actor, NA_SE_EV_PUT_DOWN_WOODBOX);
         this->unk_2C0 = 1;
     }
 
@@ -534,7 +538,7 @@ void func_80C0217C(EnBomjimb* this, PlayState* play) {
         return;
     }
 
-    if (player->stateFlags3 == 0x1000000) {
+    if (player->stateFlags3 == PLAYER_STATE3_1000000) {
         Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 1, 3000, 0);
         func_80C01494(this);
         return;
@@ -549,7 +553,7 @@ void func_80C0217C(EnBomjimb* this, PlayState* play) {
         return;
     }
 
-    Math_ApproachF(&this->actor.speedXZ, 8.0f, 0.5f, 2.0f);
+    Math_ApproachF(&this->actor.speed, 8.0f, 0.5f, 2.0f);
     Math_Vec3f_Copy(&sp74, &this->actor.world.pos);
 
     sp74.x += Math_SinS(this->actor.world.rot.y) * 50.0f;
@@ -607,7 +611,7 @@ void func_80C0217C(EnBomjimb* this, PlayState* play) {
 void func_80C0250C(EnBomjimb* this) {
     func_80C0113C(this, 15, 1.0f);
     this->unk_2D4 = 0;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->unk_2D6 = BINANG_ROT180(this->actor.yawTowardsPlayer);
     func_80C012E0(this);
     this->unk_2CA = 6;
@@ -627,7 +631,7 @@ void func_80C02570(EnBomjimb* this, PlayState* play) {
         this->unk_2D6 = BINANG_ROT180(this->actor.yawTowardsPlayer);
         func_80C0113C(this, 19, 2.0f);
         this->actionFunc = func_80C0217C;
-    } else if ((player->stateFlags3 == 0x1000000) || (this->actor.xzDistToPlayer > 410.0f)) {
+    } else if ((player->stateFlags3 == PLAYER_STATE3_1000000) || (this->actor.xzDistToPlayer > 410.0f)) {
         Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 1, 3000, 0);
         func_80C01494(this);
     }
@@ -636,7 +640,7 @@ void func_80C02570(EnBomjimb* this, PlayState* play) {
 void func_80C0267C(EnBomjimb* this) {
     func_80C012E0(this);
     func_80C0113C(this, 8, 1.0f);
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actor.world.rot.y = this->actor.yawTowardsPlayer;
     this->unk_2AE = 40;
     this->unk_2C2 = 0;
@@ -662,7 +666,7 @@ void func_80C02740(EnBomjimb* this, PlayState* play) {
     if ((player->transformation != PLAYER_FORM_DEKU) && (player->transformation != PLAYER_FORM_HUMAN)) {
         func_80C0113C(this, 17, 1.0f);
         Message_StartTextbox(play, 0x72E, &this->actor);
-        player->stateFlags1 |= 0x10000000;
+        player->stateFlags1 |= PLAYER_STATE1_10000000;
         player->actor.freezeTimer = 3;
         func_80C012E0(this);
         this->unk_2CA = 9;
@@ -670,11 +674,11 @@ void func_80C02740(EnBomjimb* this, PlayState* play) {
         return;
     }
 
-    if (((player->transformation == PLAYER_FORM_DEKU) && !(gSaveContext.save.weekEventReg[73] & 0x10)) ||
-        ((player->transformation == PLAYER_FORM_HUMAN) && !(gSaveContext.save.weekEventReg[85] & 2))) {
+    if (((player->transformation == PLAYER_FORM_DEKU) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_73_10)) ||
+        ((player->transformation == PLAYER_FORM_HUMAN) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_85_02))) {
         func_80C0113C(this, 17, 1.0f);
         Message_StartTextbox(play, 0x72E, &this->actor);
-        player->stateFlags1 |= 0x10000000;
+        player->stateFlags1 |= PLAYER_STATE1_10000000;
         player->actor.freezeTimer = 3;
         func_80C012E0(this);
         this->unk_2CA = 9;
@@ -682,47 +686,48 @@ void func_80C02740(EnBomjimb* this, PlayState* play) {
         return;
     }
 
-    Message_StartTextbox(play, D_80C03230[((void)0, gSaveContext.save.bombersCaughtNum)], &this->actor);
-    gSaveContext.save.bombersCaughtOrder[((void)0, gSaveContext.save.bombersCaughtNum)] = this->unk_2C8 + 1;
-    gSaveContext.save.bombersCaughtNum++;
+    Message_StartTextbox(play, D_80C03230[((void)0, gSaveContext.save.saveInfo.bombersCaughtNum)], &this->actor);
+    gSaveContext.save.saveInfo.bombersCaughtOrder[((void)0, gSaveContext.save.saveInfo.bombersCaughtNum)] =
+        this->unk_2C8 + 1;
+    gSaveContext.save.saveInfo.bombersCaughtNum++;
 
-    if (gSaveContext.save.bombersCaughtNum > 4) {
-        func_801A3098(0x922);
+    if (gSaveContext.save.saveInfo.bombersCaughtNum > 4) {
+        Audio_PlayFanfare(NA_BGM_GET_ITEM | 0x900);
     } else {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_PIECE_OF_HEART);
+        Actor_PlaySfx(&this->actor, NA_SE_SY_PIECE_OF_HEART);
     }
 
     switch (this->unk_2C8) {
         case ENBOMJIMB_F_0:
-            gSaveContext.save.weekEventReg[76] |= 1;
-            gSaveContext.save.weekEventReg[11] |= 1;
+            SET_WEEKEVENTREG(WEEKEVENTREG_76_01);
+            SET_WEEKEVENTREG(WEEKEVENTREG_11_01);
             break;
 
         case ENBOMJIMB_F_1:
-            gSaveContext.save.weekEventReg[76] |= 2;
-            gSaveContext.save.weekEventReg[11] |= 2;
+            SET_WEEKEVENTREG(WEEKEVENTREG_76_02);
+            SET_WEEKEVENTREG(WEEKEVENTREG_11_02);
             break;
 
         case ENBOMJIMB_F_2:
-            gSaveContext.save.weekEventReg[76] |= 4;
-            gSaveContext.save.weekEventReg[11] |= 4;
+            SET_WEEKEVENTREG(WEEKEVENTREG_76_04);
+            SET_WEEKEVENTREG(WEEKEVENTREG_11_04);
             break;
 
         case ENBOMJIMB_F_3:
-            gSaveContext.save.weekEventReg[76] |= 8;
-            gSaveContext.save.weekEventReg[11] |= 8;
+            SET_WEEKEVENTREG(WEEKEVENTREG_76_08);
+            SET_WEEKEVENTREG(WEEKEVENTREG_11_08);
             break;
 
         case ENBOMJIMB_F_4:
-            gSaveContext.save.weekEventReg[76] |= 0x10;
-            gSaveContext.save.weekEventReg[11] |= 0x10;
+            SET_WEEKEVENTREG(WEEKEVENTREG_76_10);
+            SET_WEEKEVENTREG(WEEKEVENTREG_11_10);
             break;
     }
 
     if (!Play_InCsMode(play)) {
         Player* player = GET_PLAYER(play);
 
-        player->stateFlags1 |= 0x10000000;
+        player->stateFlags1 |= PLAYER_STATE1_10000000;
         player->actor.freezeTimer = 3;
     }
     this->unk_2CA = 8;
@@ -745,7 +750,7 @@ void func_80C02A14(EnBomjimb* this, PlayState* play) {
         player->actor.freezeTimer = 3;
         if (this->unk_2E0 == 0) {
             if (Animation_OnFrame(&this->skelAnime, 7.0f)) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_HUMAN_BOUND);
+                Actor_PlaySfx(&this->actor, NA_SE_EV_HUMAN_BOUND);
                 this->unk_2E0 = 1;
             }
         }
@@ -755,13 +760,13 @@ void func_80C02A14(EnBomjimb* this, PlayState* play) {
         player->actor.freezeTimer = 3;
     }
 
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
-        func_801477B4(play);
-        if ((this->unk_2CA == 8) && (gSaveContext.save.bombersCaughtNum >= 5)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+        Message_CloseTextbox(play);
+        if ((this->unk_2CA == 8) && (gSaveContext.save.saveInfo.bombersCaughtNum >= 5)) {
             func_80C02CA4(this, play);
         } else {
             if (this->unk_2CA == 8) {
-                player->stateFlags1 &= ~0x10000000;
+                player->stateFlags1 &= ~PLAYER_STATE1_10000000;
             }
             func_80C01FD4(this);
         }
@@ -774,10 +779,10 @@ void func_80C02BCC(EnBomjimb* this, PlayState* play) {
     Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 1, 5000, 0);
     if (this->unk_2C0 == 0) {
         player->actor.freezeTimer = 3;
-        if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
-            func_801477B4(play);
+        if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+            Message_CloseTextbox(play);
             this->unk_2C0 = 1;
-            player->stateFlags1 &= ~0x10000000;
+            player->stateFlags1 &= ~PLAYER_STATE1_10000000;
         }
     } else if (this->actor.xzDistToPlayer > 200.0f) {
         func_80C01494(this);
@@ -786,19 +791,19 @@ void func_80C02BCC(EnBomjimb* this, PlayState* play) {
 
 void func_80C02CA4(EnBomjimb* this, PlayState* play) {
     if (BREG(13) == 0) {
-        play->nextEntranceIndex = play->setupExitList[this->unk_2B2];
+        play->nextEntrance = play->setupExitList[this->unk_2B2];
         gSaveContext.nextCutsceneIndex = 0;
         Scene_SetExitFade(play);
-        play->sceneLoadFlag = 0x14;
+        play->transitionTrigger = TRANS_TRIGGER_START;
     } else {
-        play->nextEntranceIndex = Entrance_CreateIndexFromSpawn(5);
+        play->nextEntrance = Entrance_CreateFromSpawn(5);
         gSaveContext.nextCutsceneIndex = 0;
-        play->sceneLoadFlag = 0x14;
-        play->unk_1887F = 0x56;
-        gSaveContext.nextTransition = 3;
+        play->transitionTrigger = TRANS_TRIGGER_START;
+        play->transitionType = TRANS_TYPE_86;
+        gSaveContext.nextTransitionType = TRANS_TYPE_FADE_WHITE;
     }
-    gSaveContext.save.weekEventReg[75] |= 0x40;
-    gSaveContext.save.weekEventReg[83] |= 4;
+    SET_WEEKEVENTREG(WEEKEVENTREG_75_40);
+    SET_WEEKEVENTREG(WEEKEVENTREG_83_04);
     this->actionFunc = func_80C02DAC;
 }
 
@@ -836,7 +841,7 @@ void EnBomjimb_Update(Actor* thisx, PlayState* play2) {
     if (this->unk_2CA == 0) {
         if ((this->unk_2E4 != NULL) && (this->unk_2E4->update != NULL)) {
             Math_Vec3f_Copy(&this->unk_2E4->world.pos, &this->actor.world.pos);
-            if (this->actor.bgCheckFlags & 1) {
+            if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
                 this->unk_2E4->world.pos.y = this->actor.world.pos.y + 35.0f;
             } else {
                 this->unk_2E4->world.pos.y = this->actor.world.pos.y + 25.0f;
@@ -854,7 +859,9 @@ void EnBomjimb_Update(Actor* thisx, PlayState* play2) {
         }
     }
 
-    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 50.0f, 0x1D);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 50.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                UPDBGCHECKINFO_FLAG_10);
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
 

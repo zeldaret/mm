@@ -65,7 +65,7 @@
         <Limb Name="gWallmasterThumbDistalLimb" Type="Standard" EnumName="WALLMASTER_LIMB_THUMB_DISTAL" Offset="0x8F44" />
 
         <!-- Wallmaster/Floormaster Skeleton-->
-        <Skeleton Name="gWallmasterSkel" Type="Flex" LimbType="Standard" LimbNone="WALLMASTER_LIMB_NONE" LimbMax="WALLMASTER_LIMB_MAX" EnumName="WallmasterLimbs" Offset="0x8FB0" />
+        <Skeleton Name="gWallmasterSkel" Type="Flex" LimbType="Standard" LimbNone="WALLMASTER_LIMB_NONE" LimbMax="WALLMASTER_LIMB_MAX" EnumName="WallmasterLimb" Offset="0x8FB0" />
         
         <Animation Name="gWallmasterStopWalkAnim" Offset="0x9244" /> <!-- Original name is "wm_move_wait" -->
         <Animation Name="gWallmasterHoverAnim" Offset="0x9520" /> <!-- Original name is "wm_success" -->

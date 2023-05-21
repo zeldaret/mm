@@ -1,15 +1,15 @@
 ﻿<Root>
     <File Name="object_dy_obj" Segment="6">
-        <Animation Name="object_dy_obj_Anim_00129C" Offset="0x129C" />
-        <Animation Name="object_dy_obj_Anim_002338" Offset="0x2338" />
-        <Animation Name="object_dy_obj_Anim_0027B0" Offset="0x27B0" />
-        <Animation Name="object_dy_obj_Anim_0045FC" Offset="0x45FC" />
-        <Animation Name="object_dy_obj_Anim_005238" Offset="0x5238" />
-        <Animation Name="object_dy_obj_Anim_005E20" Offset="0x5E20" />
-        <Animation Name="object_dy_obj_Anim_006DE4" Offset="0x6DE4" />
-        <Animation Name="object_dy_obj_Anim_008090" Offset="0x8090" />
-        <Animation Name="object_dy_obj_Anim_00C500" Offset="0xC500" />
-        <Animation Name="object_dy_obj_Anim_00D15C" Offset="0xD15C" />
+        <Animation Name="object_dy_obj_Anim_00129C" Offset="0x129C" /> <!-- Original name is "be_mahoukousi" -->
+        <Animation Name="object_dy_obj_Anim_002338" Offset="0x2338" /> <!-- Original name is "be_mahoukousi_loop" -->
+        <Animation Name="object_dy_obj_Anim_0027B0" Offset="0x27B0" /> <!-- Original name is "be_syutugen" -->
+        <Animation Name="object_dy_obj_Anim_0045FC" Offset="0x45FC" /> <!-- Original name is "be_utubuse" -->
+        <Animation Name="object_dy_obj_Anim_005238" Offset="0x5238" /> <!-- Original name is "be_utubuse_loop" -->
+        <Animation Name="object_dy_obj_Anim_005E20" Offset="0x5E20" /> <!-- Original name is "bigelf_denjyu" -->
+        <Animation Name="object_dy_obj_Anim_006DE4" Offset="0x6DE4" /> <!-- Original name is "bigelf_hakusyu" -->
+        <Animation Name="object_dy_obj_Anim_008090" Offset="0x8090" /> <!-- Original name is "bigelf_itemdasu" -->
+        <Animation Name="object_dy_obj_Anim_00C500" Offset="0xC500" /> <!-- Original name is "bigelf_syutugen" -->
+        <Animation Name="object_dy_obj_Anim_00D15C" Offset="0xD15C" /> <!-- Original name is "bigelf_udegumi" -->
         <DList Name="object_dy_obj_DL_00D1B0" Offset="0xD1B0" />
         <DList Name="object_dy_obj_DL_00D228" Offset="0xD228" />
         <Texture Name="object_dy_obj_Tex_00D240" OutName="tex_00D240" Format="i4" Width="32" Height="32" Offset="0xD240" />
@@ -18,7 +18,7 @@
         <Array Name="object_dy_obj_Vtx_00DD40" Count="27" Offset="0xDD40">
             <Vtx/>
         </Array>
-        <DList Name="object_dy_obj_DL_00DEF0" Offset="0xDEF0" />
+        <DList Name="object_dy_obj_DL_00DEF0" Offset="0xDEF0" /> <!-- Original name is "efc_g_fairly_modelT" -->
         <DList Name="object_dy_obj_DL_013810" Offset="0x13810" />
         <DList Name="object_dy_obj_DL_013928" Offset="0x13928" />
         <DList Name="object_dy_obj_DL_013CF8" Offset="0x13CF8" />
@@ -91,6 +91,6 @@
         <Limb Name="object_dy_obj_Standardlimb_01C824" Type="Standard" EnumName="OBJECT_DY_OBJ_LIMB_19" Offset="0x1C824" />
         <Limb Name="object_dy_obj_Standardlimb_01C830" Type="Standard" EnumName="OBJECT_DY_OBJ_LIMB_1A" Offset="0x1C830" />
         <Limb Name="object_dy_obj_Standardlimb_01C83C" Type="Standard" EnumName="OBJECT_DY_OBJ_LIMB_1B" Offset="0x1C83C" />
-        <Skeleton Name="object_dy_obj_Skel_01C8B4" Type="Flex" LimbType="Standard" LimbNone="OBJECT_DY_OBJ_LIMB_NONE" LimbMax="OBJECT_DY_OBJ_LIMB_MAX" EnumName="object_dy_obj_Limbs" Offset="0x1C8B4" />
+        <Skeleton Name="object_dy_obj_Skel_01C8B4" Type="Flex" LimbType="Standard" LimbNone="OBJECT_DY_OBJ_LIMB_NONE" LimbMax="OBJECT_DY_OBJ_LIMB_MAX" EnumName="ObjectDyObjLimb" Offset="0x1C8B4" />
     </File>
 </Root>

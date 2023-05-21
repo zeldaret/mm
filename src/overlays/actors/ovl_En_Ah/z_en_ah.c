@@ -25,7 +25,7 @@ static u8 D_80BD3DB0[] = {
     /* 0x08 */ SCHEDULE_CMD_RET_VAL_L(1),
     /* 0x0B */ SCHEDULE_CMD_CHECK_NOT_IN_DAY_S(2, 0x20 - 0x0F),
     /* 0x0F */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(21, 0, 23, 0, 0x1D - 0x15),
-    /* 0x15 */ SCHEDULE_CMD_CHECK_FLAG_S(0x32, 0x20, 0x1C - 0x19),
+    /* 0x15 */ SCHEDULE_CMD_CHECK_FLAG_S(WEEKEVENTREG_50_20, 0x1C - 0x19),
     /* 0x19 */ SCHEDULE_CMD_RET_VAL_L(1),
     /* 0x1C */ SCHEDULE_CMD_RET_NONE(),
     /* 0x1D */ SCHEDULE_CMD_RET_VAL_L(3),
@@ -47,7 +47,7 @@ s32 D_80BD3DF8[] = { 0x00330100, 0x050E28FE, 0x0C100E28, -0x03F3F000 };
 
 s32 D_80BD3E08[] = { 0x0E28FD0C, 0x0F29540C, 0x10000000 };
 
-const ActorInit En_Ah_InitVars = {
+ActorInit En_Ah_InitVars = {
     ACTOR_EN_AH,
     ACTORCAT_NPC,
     FLAGS,
@@ -81,7 +81,7 @@ static ColliderCylinderInit sCylinderInit = {
 
 static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
-static AnimationInfoS sAnimations[] = {
+static AnimationInfoS sAnimationInfo[] = {
     { &object_ah_Anim_001860, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
     { &object_ah_Anim_001860, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
     { &object_ah_Anim_002280, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
@@ -105,7 +105,7 @@ TexturePtr D_80BD3F14[] = {
     object_ah_Tex_006D70, object_ah_Tex_007570, object_ah_Tex_007D70, object_ah_Tex_007570, object_ah_Tex_008570,
 };
 
-s32 func_80BD2A30(EnAh* this, PlayState* play, u8 actorCat, s16 actorId) {
+Actor* func_80BD2A30(EnAh* this, PlayState* play, u8 actorCat, s16 actorId) {
     Actor* tempActor;
     Actor* foundActor = NULL;
 
@@ -146,7 +146,7 @@ s32 func_80BD2B0C(EnAh* this, s32 arg1) {
 
     if (phi_v1) {
         this->unk_300 = arg1;
-        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, arg1);
+        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, arg1);
         this->unk_2DC = this->skelAnime.playSpeed;
     }
     return ret;
@@ -307,7 +307,7 @@ s32 func_80BD3198(EnAh* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     u16 temp = play->msgCtx.currentTextId;
 
-    if (player->stateFlags1 & 0x40) {
+    if (player->stateFlags1 & PLAYER_STATE1_40) {
         if (this->unk_2DA != temp) {
             if (temp == 0x2954) {
                 this->unk_18C = func_80BD3118;
@@ -376,7 +376,7 @@ s32 func_80BD3320(EnAh* this, PlayState* play, u8 actorCat, s16 actorId) {
     return ret;
 }
 
-s32 func_80BD3374(EnAh* this, PlayState* play, ScheduleResult* arg2) {
+s32 func_80BD3374(EnAh* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     s32 pad;
 
     Math_Vec3f_Copy(&this->actor.world.pos, &D_80BD3EC4.pos);
@@ -388,7 +388,7 @@ s32 func_80BD3374(EnAh* this, PlayState* play, ScheduleResult* arg2) {
     return true;
 }
 
-s32 func_80BD33FC(EnAh* this, PlayState* play, ScheduleResult* arg2) {
+s32 func_80BD33FC(EnAh* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     s32 pad;
 
     Math_Vec3f_Copy(&this->actor.world.pos, &D_80BD3ED8.pos);
@@ -400,7 +400,7 @@ s32 func_80BD33FC(EnAh* this, PlayState* play, ScheduleResult* arg2) {
     return true;
 }
 
-s32 func_80BD3484(EnAh* this, PlayState* play, ScheduleResult* arg2) {
+s32 func_80BD3484(EnAh* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     s32 ret = false;
 
     if (func_80BD3320(this, play, ACTORCAT_NPC, ACTOR_EN_AN)) {
@@ -419,26 +419,26 @@ s32 func_80BD3484(EnAh* this, PlayState* play, ScheduleResult* arg2) {
     return ret;
 }
 
-s32 func_80BD3548(EnAh* this, PlayState* play, ScheduleResult* arg2) {
+s32 func_80BD3548(EnAh* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     s32 ret;
 
     this->unk_2D8 = 0;
 
-    switch (arg2->result) {
+    switch (scheduleOutput->result) {
         default:
             ret = false;
             break;
 
         case 1:
-            ret = func_80BD3374(this, play, arg2);
+            ret = func_80BD3374(this, play, scheduleOutput);
             break;
 
         case 2:
-            ret = func_80BD33FC(this, play, arg2);
+            ret = func_80BD33FC(this, play, scheduleOutput);
             break;
 
         case 3:
-            ret = func_80BD3484(this, play, arg2);
+            ret = func_80BD3484(this, play, scheduleOutput);
             break;
     }
     return ret;
@@ -472,7 +472,7 @@ void func_80BD3658(EnAh* this, PlayState* play) {
 }
 
 void func_80BD36B8(EnAh* this, PlayState* play) {
-    ScheduleResult sp18;
+    ScheduleOutput sp18;
 
     if (!Schedule_RunScript(play, D_80BD3DB0, &sp18) ||
         ((this->unk_1DC != sp18.result) && !func_80BD3548(this, play, &sp18))) {
@@ -512,7 +512,7 @@ void EnAh_Init(Actor* thisx, PlayState* play) {
     EnAh* this = THIS;
 
     if (func_80BD2A30(this, play, ACTORCAT_NPC, ACTOR_EN_AH)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -554,10 +554,10 @@ void EnAh_Update(Actor* thisx, PlayState* play) {
         radius = this->collider.dim.radius + 60;
         height = this->collider.dim.height + 10;
 
-        func_8013C964(&this->actor, play, radius, height, EXCH_ITEM_NONE, this->unk_2D8 & 7);
+        func_8013C964(&this->actor, play, radius, height, PLAYER_IA_NONE, this->unk_2D8 & 7);
         if (!(this->unk_2D8 & 0x10)) {
             Actor_MoveWithGravity(&this->actor);
-            Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, 4);
+            Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
         }
         func_80BD2BA4(this, play);
     }

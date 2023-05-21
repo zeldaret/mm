@@ -16,7 +16,7 @@ void ObjTokeiTobira_Update(Actor* thisx, PlayState* play);
 void ObjTokeiTobira_Draw(Actor* thisx, PlayState* play);
 
 #if 0
-const ActorInit Obj_Tokei_Tobira_InitVars = {
+ActorInit Obj_Tokei_Tobira_InitVars = {
     ACTOR_OBJ_TOKEI_TOBIRA,
     ACTORCAT_BG,
     FLAGS,

@@ -16,7 +16,7 @@
 
 void EnFish2_Init(Actor* thisx, PlayState* play);
 void EnFish2_Destroy(Actor* thisx, PlayState* play);
-void EnFish2_Update(Actor* thisx, PlayState* play);
+void EnFish2_Update(Actor* thisx, PlayState* play2);
 void EnFish2_Draw(Actor* thisx, PlayState* play);
 
 void func_80B28B5C(EnFish2* this);
@@ -49,7 +49,7 @@ static s32 D_80B2B2EC = 0;
 static s32 D_80B2B2F0 = 0;
 static Actor* D_80B2B2F4 = NULL;
 
-const ActorInit En_Fish2_InitVars = {
+ActorInit En_Fish2_InitVars = {
     ACTOR_EN_FISH2,
     ACTORCAT_PROP,
     FLAGS,
@@ -95,7 +95,7 @@ static ColliderJntSphInit sJntSphInit = {
         OC2_TYPE_1,
         COLSHAPE_JNTSPH,
     },
-    2,
+    ARRAY_COUNT(sJntSphElementsInit),
     sJntSphElementsInit,
 };
 
@@ -107,7 +107,9 @@ void func_80B28370(EnFish2* this, s32 arg0) {
         &object_fb_Anim_0013AC, &object_fb_Anim_0007D4, &object_fb_Anim_0006D8,
         &object_fb_Anim_0006D8, &object_fb_Anim_001174, &object_fb_Anim_000ACC,
     };
-    static u8 D_80B2B3A0[] = { 0, 0, 2, 2, 2, 2 };
+    static u8 D_80B2B3A0[] = {
+        ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_ONCE, ANIMMODE_ONCE, ANIMMODE_ONCE,
+    };
     f32 sp34;
 
     this->unk_2AC = arg0;
@@ -149,7 +151,7 @@ s32 func_80B28478(EnFish2* this) {
 void EnFish2_Init(Actor* thisx, PlayState* play) {
     EnFish2* this = THIS;
     s32 i;
-    s32 cs;
+    s32 csId;
 
     Math_Vec3f_Copy(&this->unk_324, &this->actor.home.pos);
     this->unk_344 = D_80B2B2F0;
@@ -161,36 +163,36 @@ void EnFish2_Init(Actor* thisx, PlayState* play) {
                            this->morphTable, 24);
         this->actor.colChkInfo.mass = MASS_IMMOVABLE;
         if (this->unk_344 == 0) {
-            if (gSaveContext.save.weekEventReg[81] & 0x10) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_81_10)) {
                 this->unk_2C0 = 1;
             }
 
-            if (gSaveContext.save.weekEventReg[81] & 0x20) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_81_20)) {
                 this->unk_2C0 = 2;
             }
 
-            if (gSaveContext.save.weekEventReg[81] & 0x40) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_81_40)) {
                 this->unk_2C0 = 3;
             }
         } else {
-            if (gSaveContext.save.weekEventReg[81] & 0x80) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_81_80)) {
                 this->unk_2C0 = 1;
             }
 
-            if (gSaveContext.save.weekEventReg[82] & 1) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_82_01)) {
                 this->unk_2C0 = 2;
             }
 
-            if (gSaveContext.save.weekEventReg[82] & 2) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_82_02)) {
                 this->unk_2C0 = 3;
             }
         }
-        cs = this->actor.cutscene;
+        csId = this->actor.csId;
         this->unk_330 = D_80B2B370[this->unk_2C0];
         i = 0;
 
         // clang-format off
-        while (cs != -1) { this->unk_2BA[i] = cs; cs = ActorCutscene_GetAdditionalCutscene(cs); i++; }
+        while (csId != CS_ID_NONE) { this->csIdList[i] = csId; csId = CutsceneManager_GetAdditionalCsId(csId); i++; }
         // clang-format on
 
         Collider_InitAndSetJntSph(play, &this->collider, &this->actor, &sJntSphInit, this->colliderElements);
@@ -209,7 +211,7 @@ void EnFish2_Init(Actor* thisx, PlayState* play) {
     } else if (this->actor.params != 0) {
         this->unk_2B4 = 10;
         this->actor.draw = NULL;
-        this->actor.flags |= ACTOR_FLAG_8000000;
+        this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
         this->actionFunc = func_80B2A01C;
     }
 }
@@ -233,7 +235,7 @@ void func_80B287F4(EnFish2* this, s32 arg1) {
         if (arg1 == 0) {
             this->unk_338 = 410.0f - this->unk_2C4;
         }
-        Math_ApproachF(&this->unk_350->speedXZ, (D_80B2B380[0] - this->unk_330) * this->unk_338, 0.1f, 0.4f);
+        Math_ApproachF(&this->unk_350->speed, (D_80B2B380[0] - this->unk_330) * this->unk_338, 0.1f, 0.4f);
     }
     Math_Vec3f_Copy(&sp2C, &this->unk_350->world.pos);
     this->unk_34A = Math_Vec3f_Yaw(&this->actor.world.pos, &sp2C);
@@ -375,14 +377,14 @@ void func_80B28C14(EnFish2* this, PlayState* play) {
     }
 
     if (this->unk_2B4 == 0) {
-        Math_ApproachF(&this->actor.speedXZ, (D_80B2B380[0] - this->unk_330) * 400.0f, 0.3f, 0.3f);
-        if (this->actor.speedXZ > 3.0f) {
-            this->actor.speedXZ = 3.0f;
-        } else if (this->actor.speedXZ < 1.5f) {
-            this->actor.speedXZ = 1.5f;
+        Math_ApproachF(&this->actor.speed, (D_80B2B380[0] - this->unk_330) * 400.0f, 0.3f, 0.3f);
+        if (this->actor.speed > 3.0f) {
+            this->actor.speed = 3.0f;
+        } else if (this->actor.speed < 1.5f) {
+            this->actor.speed = 1.5f;
         }
     } else {
-        Math_ApproachZeroF(&this->actor.speedXZ, 0.3f, 0.3f);
+        Math_ApproachZeroF(&this->actor.speed, 0.3f, 0.3f);
     }
 
     if ((D_80B2B2E8 == 0) && (D_80B2B2E0 != 2)) {
@@ -402,7 +404,7 @@ void func_80B28C14(EnFish2* this, PlayState* play) {
             } else if ((itemAction->update != NULL) && (itemAction->params == 0) &&
                        (fabsf(itemAction->world.pos.x - this->actor.world.pos.x) < 100.0f) &&
                        (fabsf(itemAction->world.pos.z - this->actor.world.pos.z) < 100.0f) &&
-                       (itemAction->bgCheckFlags & 0x20)) {
+                       (itemAction->bgCheckFlags & BGCHECKFLAG_WATER)) {
                 this->unk_350 = itemAction;
                 if (D_80B2B2E0 == 0) {
                     EnFish2* fish;
@@ -414,7 +416,7 @@ void func_80B28C14(EnFish2* this, PlayState* play) {
                     if (this->unk_354 != NULL) {
                         D_80B2B2E4 = 0;
                         D_80B2B2E0 = 1;
-                        fish->unk_2BA[0] = this->unk_2BA[0];
+                        fish->csIdList[0] = this->csIdList[0];
                         fish->unk_350 = this->unk_350;
                     }
                 }
@@ -433,8 +435,8 @@ void func_80B29128(EnFish2* this) {
 }
 
 void func_80B2913C(EnFish2* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
-        func_801477B4(play);
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+        Message_CloseTextbox(play);
         func_80B28B5C(this);
     }
 }
@@ -446,7 +448,7 @@ void func_80B29194(EnFish2* this) {
     }
 
     this->unk_2C4 = 0;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     if (this->unk_2C8 == 0) {
         this->unk_34C = 400;
         Math_Vec3f_Copy(&this->actor.world.pos, &this->unk_324);
@@ -461,12 +463,12 @@ void func_80B29194(EnFish2* this) {
 
 void func_80B29250(EnFish2* this, PlayState* play) {
     if (!func_80B28478(this)) {
-        Math_ApproachF(&this->actor.speedXZ, (D_80B2B380[0] - this->unk_330) * 1000.0f, 0.3f, 0.3f);
+        Math_ApproachF(&this->actor.speed, (D_80B2B380[0] - this->unk_330) * 1000.0f, 0.3f, 0.3f);
 
-        if (this->actor.speedXZ > 4.0f) {
-            this->actor.speedXZ = 4.0f;
-        } else if (this->actor.speedXZ < 2.0f) {
-            this->actor.speedXZ = 2.0f;
+        if (this->actor.speed > 4.0f) {
+            this->actor.speed = 4.0f;
+        } else if (this->actor.speed < 2.0f) {
+            this->actor.speed = 2.0f;
         }
 
         func_80B287F4(this, 0);
@@ -490,12 +492,12 @@ void func_80B293C4(EnFish2* this, PlayState* play) {
 
     if (func_80B28478(this) == 0) {
         func_80B287F4(this, 1);
-        Math_ApproachF(&this->actor.speedXZ, (*D_80B2B380 - this->unk_330) * 1000.0f, 0.3f, 0.3f);
+        Math_ApproachF(&this->actor.speed, (*D_80B2B380 - this->unk_330) * 1000.0f, 0.3f, 0.3f);
 
-        if (this->actor.speedXZ > 3.0f) {
-            this->actor.speedXZ = 3.0f;
-        } else if (this->actor.speedXZ < 1.0f) {
-            this->actor.speedXZ = 1.0f;
+        if (this->actor.speed > 3.0f) {
+            this->actor.speed = 3.0f;
+        } else if (this->actor.speed < 1.0f) {
+            this->actor.speed = 1.0f;
         }
 
         if (this->unk_2CC <= currentFrame) {
@@ -524,11 +526,11 @@ void func_80B2951C(EnFish2* this) {
     }
 
     this->unk_2B4 = 10;
-    this->actor.speedXZ = 3.0f;
-    Actor_MarkForDeath(this->unk_350);
+    this->actor.speed = 3.0f;
+    Actor_Kill(this->unk_350);
     this->unk_350 = NULL;
     D_80B2B2F4 = &this->actor;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DODO_M_EAT);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_DODO_M_EAT);
     this->actionFunc = func_80B295A4;
 }
 
@@ -540,7 +542,7 @@ void func_80B295A4(EnFish2* this, PlayState* play) {
 
     SkelAnime_Update(&this->skelAnime);
     Math_SmoothStepToS(&this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &play->view.eye), 1, 0x1388, 0);
-    Math_ApproachZeroF(&this->actor.speedXZ, 0.3f, 0.3f);
+    Math_ApproachZeroF(&this->actor.speed, 0.3f, 0.3f);
     if (this->unk_2B4 != 0) {
         Math_Vec3f_Copy(&sp60, &this->unk_318);
         sp60.x += randPlusMinusPoint5Scaled(100.0f);
@@ -574,7 +576,7 @@ void func_80B29778(EnFish2* this) {
     }
     this->actionFunc = func_80B297FC;
     this->unk_324.y = this->unk_2D4;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
 }
 
 void func_80B297FC(EnFish2* this, PlayState* play) {
@@ -603,7 +605,7 @@ void func_80B297FC(EnFish2* this, PlayState* play) {
             if ((fabsf(this->actor.world.pos.x - this->unk_324.x) < 2.0f) &&
                 (this->actor.world.pos.y < (this->unk_2D4 + 3.0f)) &&
                 (fabsf(this->actor.world.pos.z - this->unk_324.z) < 2.0f)) {
-                this->actor.speedXZ = 0.0f;
+                this->actor.speed = 0.0f;
                 this->unk_34A = BINANG_ROT180(this->actor.home.rot.y);
                 this->unk_2C4++;
                 this->actor.velocity.y = 0.0f;
@@ -617,18 +619,18 @@ void func_80B297FC(EnFish2* this, PlayState* play) {
                 this->unk_2C0++;
                 if (this->unk_344 == 0) {
                     if (this->unk_2C0 == 1) {
-                        gSaveContext.save.weekEventReg[81] |= 0x10;
+                        SET_WEEKEVENTREG(WEEKEVENTREG_81_10);
                     } else if (this->unk_2C0 == 2) {
-                        gSaveContext.save.weekEventReg[81] |= 0x20;
+                        SET_WEEKEVENTREG(WEEKEVENTREG_81_20);
                     } else if (this->unk_2C0 == 3) {
-                        gSaveContext.save.weekEventReg[81] |= 0x40;
+                        SET_WEEKEVENTREG(WEEKEVENTREG_81_40);
                     }
                 } else if (this->unk_2C0 == 1) {
-                    gSaveContext.save.weekEventReg[81] |= 0x80;
+                    SET_WEEKEVENTREG(WEEKEVENTREG_81_80);
                 } else if (this->unk_2C0 == 2) {
-                    gSaveContext.save.weekEventReg[82] |= 1;
+                    SET_WEEKEVENTREG(WEEKEVENTREG_82_01);
                 } else if (this->unk_2C0 == 3) {
-                    gSaveContext.save.weekEventReg[82] |= 2;
+                    SET_WEEKEVENTREG(WEEKEVENTREG_82_02);
                 }
 
                 if (this->unk_2B0 != 0) {
@@ -636,7 +638,7 @@ void func_80B297FC(EnFish2* this, PlayState* play) {
                 }
 
                 this->unk_2B6 = 4;
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_FISH_GROW_UP);
+                Actor_PlaySfx(&this->actor, NA_SE_EV_FISH_GROW_UP);
                 this->unk_2C4++;
             }
             break;
@@ -768,8 +770,8 @@ void func_80B29EE4(EnFish2* this, PlayState* play) {
         this->unk_2C4++;
     }
     this->unk_338 = 410.0f - this->unk_2C4;
-    Math_ApproachF(&this->actor.speedXZ, 2.0f, 0.3f, 0.3f);
-    Math_ApproachF(&this->unk_350->speedXZ, (D_80B2B380[0] - this->unk_330) * this->unk_338, 0.1f, 0.4f);
+    Math_ApproachF(&this->actor.speed, 2.0f, 0.3f, 0.3f);
+    Math_ApproachF(&this->unk_350->speed, (D_80B2B380[0] - this->unk_330) * this->unk_338, 0.1f, 0.4f);
     func_80B289DC(this, play);
     Math_Vec3f_Copy(&sp2C, &this->unk_350->world.pos);
     this->unk_34A = Math_Vec3f_Yaw(&this->actor.world.pos, &sp2C);
@@ -782,46 +784,46 @@ void func_80B29EE4(EnFish2* this, PlayState* play) {
 
 void func_80B2A01C(EnFish2* this, PlayState* play) {
     if (this->unk_2B4 == 0) {
-        if (!ActorCutscene_GetCanPlayNext(this->unk_2BA[0])) {
-            ActorCutscene_SetIntentToPlay(this->unk_2BA[0]);
+        if (!CutsceneManager_IsNext(this->csIdList[0])) {
+            CutsceneManager_Queue(this->csIdList[0]);
         } else {
             this->unk_2B4 = 15;
-            ActorCutscene_StartAndSetUnkLinkFields(this->unk_2BA[0], &this->actor);
+            CutsceneManager_StartWithPlayerCs(this->csIdList[0], &this->actor);
             this->actionFunc = func_80B2A094;
         }
     }
 }
 
 void func_80B2A094(EnFish2* this, PlayState* play) {
-    Vec3f sp2C;
+    Vec3f subCamEye;
 
     if (this->unk_2B4 == 0) {
         D_80B2B2E4 = 1;
     }
 
-    this->unk_2CA = ActorCutscene_GetCurrentCamera(this->unk_2BA[0]);
+    this->subCamId = CutsceneManager_GetCurrentSubCamId(this->csIdList[0]);
 
     if (D_80B2B2EC != 0) {
         D_80B2B2EC++;
         if (D_80B2B2EC > 200) {
-            Actor_MarkForDeath(&this->actor);
-            ActorCutscene_Stop(this->unk_2BA[0]);
+            Actor_Kill(&this->actor);
+            CutsceneManager_Stop(this->csIdList[0]);
             return;
         }
     }
 
     if ((this->unk_350 != NULL) && (this->unk_350->update != NULL)) {
-        Math_Vec3f_Copy(&sp2C, &this->unk_350->world.pos);
-        sp2C.x += Math_SinS(-0x3A98) * 110.0f;
-        sp2C.z += Math_CosS(-0x3A98) * 110.0f;
-        Math_Vec3f_Copy(&this->unk_2DC, &sp2C);
-        Math_Vec3f_Copy(&sp2C, &this->unk_350->world.pos);
-        sp2C.x += Math_SinS(-0x3A98) * 10.0f;
-        sp2C.z += Math_CosS(-0x3A98) * 10.0f;
-        Math_Vec3f_Copy(&this->unk_2E8, &sp2C);
+        Math_Vec3f_Copy(&subCamEye, &this->unk_350->world.pos);
+        subCamEye.x += Math_SinS(-0x3A98) * 110.0f;
+        subCamEye.z += Math_CosS(-0x3A98) * 110.0f;
+        Math_Vec3f_Copy(&this->subCamEye, &subCamEye);
+        Math_Vec3f_Copy(&subCamEye, &this->unk_350->world.pos);
+        subCamEye.x += Math_SinS(-0x3A98) * 10.0f;
+        subCamEye.z += Math_CosS(-0x3A98) * 10.0f;
+        Math_Vec3f_Copy(&this->subCamAt, &subCamEye);
     }
 
-    Play_CameraSetAtEye(play, this->unk_2CA, &this->unk_2E8, &this->unk_2DC);
+    Play_SetCameraAtEye(play, this->subCamId, &this->subCamAt, &this->subCamEye);
     if ((this->unk_350 == NULL) || (this->unk_350->update == NULL)) {
         this->unk_350 = NULL;
         this->unk_2B0++;
@@ -833,35 +835,35 @@ void func_80B2A094(EnFish2* this, PlayState* play) {
 }
 
 void func_80B2A23C(EnFish2* this, PlayState* play) {
-    Vec3f sp2C;
+    Vec3f subCamAt;
 
-    Math_Vec3f_Copy(&sp2C, &this->actor.world.pos);
+    Math_Vec3f_Copy(&subCamAt, &this->actor.world.pos);
     if (D_80B2B2E4 == 2) {
-        sp2C.x += (Math_SinS(-0x3A98) * 180.0f);
-        sp2C.y += 90.0f;
-        sp2C.z += Math_CosS(-0x3A98) * 180.0f;
-        Math_Vec3f_Copy(&this->unk_2DC, &sp2C);
-        Math_Vec3f_Copy(&sp2C, &this->actor.world.pos);
-        sp2C.y += 70.0f;
-        Math_Vec3f_Copy(&this->unk_2E8, &sp2C);
+        subCamAt.x += (Math_SinS(-0x3A98) * 180.0f);
+        subCamAt.y += 90.0f;
+        subCamAt.z += Math_CosS(-0x3A98) * 180.0f;
+        Math_Vec3f_Copy(&this->subCamEye, &subCamAt);
+        Math_Vec3f_Copy(&subCamAt, &this->actor.world.pos);
+        subCamAt.y += 70.0f;
+        Math_Vec3f_Copy(&this->subCamAt, &subCamAt);
     } else if (D_80B2B2F4 != NULL) {
-        Math_Vec3f_Copy(&sp2C, &D_80B2B2F4->world.pos);
-        sp2C.x += Math_SinS(-0x3A98) * 110.0f;
-        sp2C.z += Math_CosS(-0x3A98) * 110.0f;
-        Math_Vec3f_Copy(&this->unk_2DC, &sp2C);
-        Math_Vec3f_Copy(&sp2C, &D_80B2B2F4->world.pos);
-        sp2C.x += Math_SinS(-0x3A98) * 10.0f;
-        sp2C.z += Math_CosS(-0x3A98) * 10.0f;
-        Math_Vec3f_Copy(&this->unk_2E8, &sp2C);
+        Math_Vec3f_Copy(&subCamAt, &D_80B2B2F4->world.pos);
+        subCamAt.x += Math_SinS(-0x3A98) * 110.0f;
+        subCamAt.z += Math_CosS(-0x3A98) * 110.0f;
+        Math_Vec3f_Copy(&this->subCamEye, &subCamAt);
+        Math_Vec3f_Copy(&subCamAt, &D_80B2B2F4->world.pos);
+        subCamAt.x += Math_SinS(-0x3A98) * 10.0f;
+        subCamAt.z += Math_CosS(-0x3A98) * 10.0f;
+        Math_Vec3f_Copy(&this->subCamAt, &subCamAt);
     }
 
-    Play_CameraSetAtEye(play, this->unk_2CA, &this->unk_2E8, &this->unk_2DC);
+    Play_SetCameraAtEye(play, this->subCamId, &this->subCamAt, &this->subCamEye);
 
     if ((this->unk_2B4 == 0) && (D_80B2B2E4 == 3)) {
         D_80B2B2E0 = D_80B2B2EC = D_80B2B2E4 = 0;
         D_80B2B2F4 = NULL;
-        ActorCutscene_Stop(this->unk_2BA[0]);
-        Actor_MarkForDeath(&this->actor);
+        CutsceneManager_Stop(this->csIdList[0]);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -885,15 +887,15 @@ void func_80B2A498(EnFish2* this, PlayState* play) {
         temp_v0 = Actor_Spawn(&play->actorCtx, play, ACTOR_EN_COL_MAN, sp80.x, sp80.y, sp80.z, 0,
                               this->actor.world.rot.y, 0, 0);
         if (temp_v0 != NULL) {
-            temp_v0->speedXZ = 4.0f;
+            temp_v0->speed = 4.0f;
             temp_v0->velocity.y = 15.0f;
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_PIECE_OF_HEART);
-            gSaveContext.save.weekEventReg[81] &= (u8)~0x10;
-            gSaveContext.save.weekEventReg[81] &= (u8)~0x20;
-            gSaveContext.save.weekEventReg[81] &= (u8)~0x40;
-            gSaveContext.save.weekEventReg[81] &= (u8)~0x80;
-            gSaveContext.save.weekEventReg[82] &= (u8)~1;
-            gSaveContext.save.weekEventReg[82] &= (u8)~2;
+            Actor_PlaySfx(&this->actor, NA_SE_SY_PIECE_OF_HEART);
+            CLEAR_WEEKEVENTREG(WEEKEVENTREG_81_10);
+            CLEAR_WEEKEVENTREG(WEEKEVENTREG_81_20);
+            CLEAR_WEEKEVENTREG(WEEKEVENTREG_81_40);
+            CLEAR_WEEKEVENTREG(WEEKEVENTREG_81_80);
+            CLEAR_WEEKEVENTREG(WEEKEVENTREG_82_01);
+            CLEAR_WEEKEVENTREG(WEEKEVENTREG_82_02);
         }
     }
 
@@ -985,7 +987,8 @@ void EnFish2_Update(Actor* thisx, PlayState* play2) {
         this->unk_33C = 25.0f - ((this->unk_330 - 0.01f) * 1000.0f);
         Actor_SetScale(&this->actor, this->unk_330);
         Actor_MoveWithGravity(&this->actor);
-        Actor_UpdateBgCheckInfo(play, &this->actor, 0, 15.0f, 10.0f, 7);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 0, 15.0f, 10.0f,
+                                UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_2 | UPDBGCHECKINFO_FLAG_4);
 
         if (this->actor.params != 2) {
             this->unk_2D4 = this->actor.floorHeight + (this->unk_330 * 1000.0f);

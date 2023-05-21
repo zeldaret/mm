@@ -6,6 +6,7 @@
 
 #include "z_en_fu_mato.h"
 #include "overlays/actors/ovl_En_Fu/z_en_fu.h"
+#include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
 #include "objects/object_fu_mato/object_fu_mato.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
@@ -26,7 +27,7 @@ void func_80ACECFC(EnFuMato* this, PlayState* play);
 void func_80ACEFC4(EnFuMato* this);
 void func_80ACEFD8(EnFuMato* this, PlayState* play);
 
-const ActorInit En_Fu_Mato_InitVars = {
+ActorInit En_Fu_Mato_InitVars = {
     ACTOR_EN_FU_MATO,
     ACTORCAT_BG,
     FLAGS,
@@ -74,7 +75,7 @@ void EnFuMato_Init(Actor* thisx, PlayState* play) {
     Actor* actor = play->actorCtx.actorLists[ACTORCAT_NPC].first;
     EnFu* fu;
 
-    DynaPolyActor_Init(&this->dyna, 3);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS | DYNA_TRANSFORM_ROT_Y);
     CollisionHeader_GetVirtual(&object_fu_mato_Colheader_0023D4, &sp2C);
     this->dyna.bgId = DynaPoly_SetBgActor(play, &play->colCtx.dyna, &this->dyna.actor, sp2C);
     Actor_SetScale(&this->dyna.actor, 0.1f);
@@ -91,7 +92,7 @@ void EnFuMato_Init(Actor* thisx, PlayState* play) {
     }
 
     if (actor == NULL) {
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
         return;
     }
 
@@ -155,7 +156,7 @@ void func_80ACE51C(EnFuMato* this, PlayState* play) {
         }
     }
 
-    this->dyna.actor.speedXZ = 2.0f;
+    this->dyna.actor.speed = 2.0f;
     this->dyna.actor.shape.rot.y = Math_Vec3f_Yaw(&this->dyna.actor.world.pos, &this->dyna.actor.parent->world.pos);
     Actor_MoveWithGravity(&this->dyna.actor);
 
@@ -173,7 +174,7 @@ void func_80ACE680(EnFuMato* this) {
     this->unk_2FC.y = Rand_Next() & 0xFFF;
     this->unk_2FC.z = Rand_Next() & 0xFFF;
     this->unk_302 = 3;
-    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_WOODPLATE_BOUND);
+    Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_WOODPLATE_BOUND);
     this->actionFunc = func_80ACE718;
 }
 
@@ -184,14 +185,15 @@ void func_80ACE718(EnFuMato* this, PlayState* play) {
     this->dyna.actor.velocity.y += this->dyna.actor.gravity;
 
     Actor_UpdatePos(&this->dyna.actor);
-    Actor_UpdateBgCheckInfo(play, &this->dyna.actor, 15.0f, 30.0f, 60.0f, 5);
+    Actor_UpdateBgCheckInfo(play, &this->dyna.actor, 15.0f, 30.0f, 60.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
 
-    if ((this->dyna.actor.bgCheckFlags & 1) || (this->dyna.actor.world.pos.y < -500.0f)) {
+    if ((this->dyna.actor.bgCheckFlags & BGCHECKFLAG_GROUND) || (this->dyna.actor.world.pos.y < -500.0f)) {
         Vec3f sp3C = { 0.0f, 0.0f, 0.0f };
         Vec3f sp30 = { 0.0f, 2.0f, 0.0f };
 
         func_800B3030(play, &this->dyna.actor.world.pos, &sp3C, &sp30, 20, 40, 2);
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
     }
 }
 
@@ -239,8 +241,8 @@ void func_80ACE850(EnFuMato* this, PlayState* play) {
     }
 
     this->dyna.actor.freezeTimer = 2;
-    EffectSsHahen_SpawnBurst(play, &this->dyna.actor.world.pos, 13.0f, 0, 7, 8, 20, -1, 10, NULL);
-    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_WOODPLATE_BROKEN);
+    EffectSsHahen_SpawnBurst(play, &this->dyna.actor.world.pos, 13.0f, 0, 7, 8, 20, HAHEN_OBJECT_DEFAULT, 10, NULL);
+    Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_WOODPLATE_BROKEN);
     this->actionFunc = func_80ACECFC;
 }
 
@@ -328,8 +330,9 @@ void func_80ACECFC(EnFuMato* this, PlayState* play) {
     }
 
     if (this->unk_302 == 1) {
-        Actor_UpdateBgCheckInfo(play, &this->dyna.actor, 15.0f, 30.0f, 60.0f, 5);
-        if (this->dyna.actor.bgCheckFlags & 1) {
+        Actor_UpdateBgCheckInfo(play, &this->dyna.actor, 15.0f, 30.0f, 60.0f,
+                                UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
+        if (this->dyna.actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
             func_80ACEB2C(this);
         }
     }
@@ -351,7 +354,7 @@ void func_80ACEFD8(EnFuMato* this, PlayState* play) {
     Math_SmoothStepToF(&scale->x, 0.0f, 0.1f, 0.005f, 0.005f);
     scale->y = scale->z = scale->x;
     if (scale->x == 0.0f) {
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
     }
 }
 
@@ -367,7 +370,7 @@ s32 func_80ACF04C(EnFuMato* this, PlayState* play) {
         this->collider.base.acFlags &= ~AC_HIT;
         this->collider.base.ocFlags1 &= ~OC1_HIT;
 
-        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_SY_TRE_BOX_APPEAR);
+        Actor_PlaySfx(&this->dyna.actor, NA_SE_SY_TRE_BOX_APPEAR);
 
         fu->unk_548++;
         if ((fu->unk_542 == 2) || (gSaveContext.save.playerForm == PLAYER_FORM_DEKU)) {

@@ -24,7 +24,7 @@ void BgF40Switch_Press(BgF40Switch* this, PlayState* play);
 void BgF40Switch_WaitToPress(BgF40Switch* this, PlayState* play);
 void BgF40Switch_IdleUnpressed(BgF40Switch* this, PlayState* play);
 
-const ActorInit Bg_F40_Switch_InitVars = {
+ActorInit Bg_F40_Switch_InitVars = {
     ACTOR_BG_F40_SWITCH,
     ACTORCAT_SWITCH,
     FLAGS,
@@ -50,13 +50,13 @@ void BgF40Switch_CheckAll(BgF40Switch* this, PlayState* play) {
         s32 isPressed;
         Actor* actor;
         BgF40Switch* actorAsSwitch;
-        u32 inCsMode = Player_InCsMode(&play->state);
+        u32 inCsMode = Player_InCsMode(play);
 
         for (actor = play->actorCtx.actorLists[ACTORCAT_SWITCH].first; actor != NULL; actor = actor->next) {
             if (actor->id == ACTOR_BG_F40_SWITCH && actor->room == this->dyna.actor.room && actor->update != NULL) {
                 actorAsSwitch = (BgF40Switch*)actor;
                 actorAsSwitch->wasPressed = actorAsSwitch->isPressed;
-                isPressed = DynaPolyActor_IsInSwitchPressedState(&actorAsSwitch->dyna);
+                isPressed = DynaPolyActor_IsSwitchPressed(&actorAsSwitch->dyna);
                 if (actorAsSwitch->isPressed && actorAsSwitch->actionFunc == BgF40Switch_IdlePressed) {
                     // Switch is fully pressed - if there's nothing keeping it pressed, wait a short time before
                     // reverting to unpressed state.
@@ -112,7 +112,7 @@ void BgF40Switch_Init(Actor* thisx, PlayState* play) {
     this->dyna.actor.scale.y = 0.165f;
     this->actionFunc = BgF40Switch_IdleUnpressed;
     this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y + 1.0f;
-    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
     DynaPolyActor_LoadMesh(play, &this->dyna, &object_f40_switch_Colheader_000118);
     if (!sBgF40SwitchGlobalsInitialized) {
         sBgF40SwitchLastUpdateFrame = play->gameplayFrames;
@@ -129,7 +129,7 @@ void BgF40Switch_Destroy(Actor* thisx, PlayState* play) {
 void BgF40Switch_Unpress(BgF40Switch* this, PlayState* play) {
     this->dyna.actor.scale.y += 0.0495f;
     if (this->dyna.actor.scale.y >= 0.165f) {
-        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_IKANA_BLOCK_SWITCH);
+        Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_IKANA_BLOCK_SWITCH);
         this->actionFunc = BgF40Switch_IdleUnpressed;
         this->dyna.actor.scale.y = 0.165f;
     }
@@ -144,10 +144,10 @@ void BgF40Switch_IdlePressed(BgF40Switch* this, PlayState* play) {
 void BgF40Switch_Press(BgF40Switch* this, PlayState* play) {
     this->dyna.actor.scale.y -= 0.0495f;
     if (this->dyna.actor.scale.y <= 0.0165f) {
-        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_IKANA_BLOCK_SWITCH);
+        Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_IKANA_BLOCK_SWITCH);
         Rumble_Request(this->dyna.actor.xyzDistToPlayerSq, 120, 20, 10);
         if (this->isInitiator) {
-            ActorCutscene_Stop(this->dyna.actor.cutscene);
+            CutsceneManager_Stop(this->dyna.actor.csId);
             this->isInitiator = false;
         }
         this->actionFunc = BgF40Switch_IdlePressed;
@@ -157,19 +157,19 @@ void BgF40Switch_Press(BgF40Switch* this, PlayState* play) {
 }
 
 void BgF40Switch_WaitToPress(BgF40Switch* this, PlayState* play) {
-    if (!this->isInitiator || this->dyna.actor.cutscene == -1) {
+    if (!this->isInitiator || (this->dyna.actor.csId == CS_ID_NONE)) {
         this->actionFunc = BgF40Switch_Press;
         if (this->isInitiator) {
             Flags_SetSwitch(play, BGF40SWITCH_GET_SWITCHFLAG(&this->dyna.actor));
         }
-    } else if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
+    } else if (CutsceneManager_IsNext(this->dyna.actor.csId)) {
+        CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
         this->actionFunc = BgF40Switch_Press;
         if (this->isInitiator) {
             Flags_SetSwitch(play, BGF40SWITCH_GET_SWITCHFLAG(&this->dyna.actor));
         }
     } else {
-        ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+        CutsceneManager_Queue(this->dyna.actor.csId);
     }
 }
 

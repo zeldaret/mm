@@ -12,7 +12,7 @@
 #define THIS ((ObjBombiwa*)thisx)
 
 void ObjBombiwa_Init(Actor* thisx, PlayState* play);
-void ObjBombiwa_Destroy(Actor* thisx, PlayState* play);
+void ObjBombiwa_Destroy(Actor* thisx, PlayState* play2);
 void ObjBombiwa_Update(Actor* thisx, PlayState* play);
 
 s32 func_809393B0(Actor* thisx);
@@ -24,7 +24,7 @@ void func_8093A1F0(ObjBombiwa* this, PlayState* play);
 void func_8093A418(Actor* thisx, PlayState* play);
 void func_8093A608(Actor* thisx, PlayState* play);
 
-const ActorInit Obj_Bombiwa_InitVars = {
+ActorInit Obj_Bombiwa_InitVars = {
     ACTOR_OBJ_BOMBIWA,
     ACTORCAT_PROP,
     FLAGS,
@@ -183,7 +183,7 @@ void ObjBombiwa_Init(Actor* thisx, PlayState* play) {
     Collider_InitCylinder(play, &this->collider);
 
     if (Flags_GetSwitch(play, OBJBOMBIWA_GET_7F(&this->actor))) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -206,8 +206,11 @@ void ObjBombiwa_Init(Actor* thisx, PlayState* play) {
     func_80939EE0(this);
 }
 
-void ObjBombiwa_Destroy(Actor* thisx, PlayState* play) {
-    Collider_DestroyCylinder(play, &THIS->collider);
+void ObjBombiwa_Destroy(Actor* thisx, PlayState* play2) {
+    PlayState* play = play2;
+    ObjBombiwa* this = THIS;
+
+    Collider_DestroyCylinder(play, &this->collider);
 }
 
 void func_80939794(ObjBombiwa* this, PlayState* play) {
@@ -347,7 +350,7 @@ void func_80939EF4(ObjBombiwa* this, PlayState* play) {
 
         if (params == OBJBOMBIWA_100_0) {
             func_80939794(this, play);
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         } else {
             func_80939994(play, &this->actor.world.pos);
             this->actor.flags |= ACTOR_FLAG_10;
@@ -436,7 +439,7 @@ void func_8093A1F0(ObjBombiwa* this, PlayState* play) {
 
     this->unk_201--;
     if ((this->unk_200 >= 4) || (this->unk_201 <= 0)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 

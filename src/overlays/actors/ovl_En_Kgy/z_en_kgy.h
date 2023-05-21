@@ -2,6 +2,8 @@
 #define Z_EN_KGY_H
 
 #include "global.h"
+#include "overlays/actors/ovl_En_Kbt/z_en_kbt.h"
+#include "overlays/actors/ovl_Obj_Ice_Poly/z_obj_ice_poly.h"
 
 struct EnKgy;
 
@@ -23,8 +25,8 @@ typedef struct EnKgy {
     /* 0x2C0 */ Vec3f unk_2C0;
     /* 0x2CC */ Vec3s unk_2CC;
     /* 0x2D2 */ s16 unk_2D2;
-    /* 0x2D4 */ s16 unk_2D4[6];
-    /* 0x2E0 */ s16 unk_2E0;
+    /* 0x2D4 */ s16 csIdList[6];
+    /* 0x2E0 */ s16 csIdIndex;
     /* 0x2E2 */ s16 unk_2E2;
     /* 0x2E4 */ s16 unk_2E4;
     /* 0x2E6 */ s16 unk_2E6;
@@ -35,7 +37,5 @@ typedef struct EnKgy {
     /* 0x300 */ s16 unk_300;
     /* 0x304 */ EnKgyActionFunc actionFunc;
 } EnKgy; // size = 0x308
-
-extern const ActorInit En_Kgy_InitVars;
 
 #endif // Z_EN_KGY_H

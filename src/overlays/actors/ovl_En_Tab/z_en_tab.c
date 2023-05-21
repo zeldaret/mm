@@ -66,7 +66,7 @@ s32 D_80BE1A0C[] = {
     0x0C103012, 0x14FFEC06, 0x00920000, 0x1300920C, 0x10300034, 0x0100050E, 0x2B100C10, 0x0E2B110C, 0x10000000,
 };
 
-const ActorInit En_Tab_InitVars = {
+ActorInit En_Tab_InitVars = {
     ACTOR_EN_TAB,
     ACTORCAT_NPC,
     FLAGS,
@@ -261,16 +261,16 @@ void func_80BE09A8(EnTab* this, PlayState* play) {
 
 void func_80BE0A98(EnTab* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    s32 sp20 = Message_GetState(&play->msgCtx);
+    s32 talkState = Message_GetState(&play->msgCtx);
 
     this->unk_308 += (this->unk_304 != 0.0f) ? 40.0f : -40.0f;
     this->unk_308 = CLAMP(this->unk_308, 0.0f, 80.0f);
 
     Matrix_Translate(this->unk_308, 0.0f, 0.0f, MTXMODE_APPLY);
 
-    if ((&this->actor == player->targetActor) &&
-        ((play->msgCtx.currentTextId < 0xFF) || (play->msgCtx.currentTextId > 0x200)) && (sp20 == 3) &&
-        (this->unk_334 == 3)) {
+    if ((&this->actor == player->talkActor) &&
+        ((play->msgCtx.currentTextId < 0xFF) || (play->msgCtx.currentTextId > 0x200)) && (talkState == TEXT_STATE_3) &&
+        (this->prevTalkState == TEXT_STATE_3)) {
         if ((play->state.frames % 2) == 0) {
             if (this->unk_304 != 0.0f) {
                 this->unk_304 = 0.0f;
@@ -281,7 +281,7 @@ void func_80BE0A98(EnTab* this, PlayState* play) {
     } else {
         this->unk_304 = 0.0f;
     }
-    this->unk_334 = sp20;
+    this->prevTalkState = talkState;
 }
 
 s32 func_80BE0C04(EnTab* this, Actor* actor, f32 arg2) {
@@ -314,7 +314,7 @@ s32 func_80BE0C04(EnTab* this, Actor* actor, f32 arg2) {
 }
 
 s32 func_80BE0D38(EnTab* this, PlayState* play) {
-    return Interface_HasEmptyBottle();
+    return Inventory_HasEmptyBottle();
 }
 
 s32 func_80BE0D60(EnTab* this, PlayState* play) {
@@ -323,9 +323,9 @@ s32 func_80BE0D60(EnTab* this, PlayState* play) {
 
     this->unk_320++;
     if (this->unk_320 == 1) {
-        play->setPlayerTalkAnim(play, &gameplay_keep_Linkanim_00D568, 2);
+        play->setPlayerTalkAnim(play, &gPlayerAnim_link_demo_bikkuri, ANIMMODE_ONCE);
     } else if (this->unk_320 > 20) {
-        play->setPlayerTalkAnim(play, NULL, 0);
+        play->setPlayerTalkAnim(play, NULL, ANIMMODE_LOOP);
         this->unk_320 = 0;
         ret = true;
     }
@@ -366,7 +366,7 @@ s32* func_80BE0E04(EnTab* this, PlayState* play) {
     return NULL;
 }
 
-s32 func_80BE0F04(EnTab* this, PlayState* play, ScheduleResult* arg2) {
+s32 func_80BE0F04(EnTab* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     s32 ret = false;
     EnGm* sp28 = func_80BE04E0(this, play, ACTORCAT_NPC, ACTOR_EN_GM);
 
@@ -385,7 +385,7 @@ s32 func_80BE0F04(EnTab* this, PlayState* play, ScheduleResult* arg2) {
     return ret;
 }
 
-s32 func_80BE0FC4(EnTab* this, PlayState* play, ScheduleResult* arg2) {
+s32 func_80BE0FC4(EnTab* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     s32 pad;
 
     Math_Vec3f_Copy(&this->actor.world.pos, &D_80BE1B04);
@@ -399,18 +399,18 @@ s32 func_80BE0FC4(EnTab* this, PlayState* play, ScheduleResult* arg2) {
     return true;
 }
 
-s32 func_80BE1060(EnTab* this, PlayState* play, ScheduleResult* arg2) {
+s32 func_80BE1060(EnTab* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     s32 ret;
 
     this->unk_2FC = 0;
 
-    switch (arg2->result) {
+    switch (scheduleOutput->result) {
         case 1:
-            ret = func_80BE0F04(this, play, arg2);
+            ret = func_80BE0F04(this, play, scheduleOutput);
             break;
 
         case 2:
-            ret = func_80BE0FC4(this, play, arg2);
+            ret = func_80BE0FC4(this, play, scheduleOutput);
             break;
 
         default:
@@ -428,15 +428,14 @@ s32 func_80BE10BC(EnTab* this, PlayState* play) {
 
     switch (this->unk_1D8) {
         case 1:
-            if ((player->stateFlags1 & 0x40) && !(play->msgCtx.currentTextId <= 0x2B00) &&
+            if ((player->stateFlags1 & PLAYER_STATE1_40) && !(play->msgCtx.currentTextId <= 0x2B00) &&
                 (play->msgCtx.currentTextId < 0x2B08)) {
                 this->actor.child = &this->unk_1E4->actor;
                 this->unk_2FC |= 8;
             } else {
                 dist = Math_Vec3f_DistXYZ(&this->actor.world.pos, &this->unk_1E4->actor.world.pos);
 
-                if ((gSaveContext.save.weekEventReg[75] & 1) || (this->unk_1E4->actor.draw == NULL) ||
-                    !(dist < 160.0f)) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_75_01) || (this->unk_1E4->actor.draw == NULL) || !(dist < 160.0f)) {
                     tempActor = &GET_PLAYER(play)->actor;
                     this->actor.child = tempActor;
                 } else {
@@ -472,9 +471,9 @@ void func_80BE1224(EnTab* this, PlayState* play) {
 }
 
 void func_80BE127C(EnTab* this, PlayState* play) {
-    ScheduleResult sp18;
+    ScheduleOutput sp18;
 
-    this->unk_31A = REG(15) + ((void)0, gSaveContext.save.daySpeed);
+    this->unk_31A = R_TIME_SPEED + ((void)0, gSaveContext.save.timeSpeedOffset);
 
     if (!Schedule_RunScript(play, D_80BE18D0, &sp18) ||
         ((this->unk_1D8 != sp18.result) && !func_80BE1060(this, play, &sp18))) {
@@ -552,9 +551,9 @@ void EnTab_Update(Actor* thisx, PlayState* play) {
         radius = this->collider.dim.radius + this->unk_30C;
         height = this->collider.dim.height + 10;
 
-        func_8013C964(&this->actor, play, radius, height, EXCH_ITEM_NONE, this->unk_2FC & 7);
+        func_8013C964(&this->actor, play, radius, height, PLAYER_IA_NONE, this->unk_2FC & 7);
         Actor_MoveWithGravity(&this->actor);
-        Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, 4);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
         func_80BE0620(this, play);
     }
 }
@@ -581,7 +580,7 @@ void EnTab_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
     }
 }
 
-void EnTab_TransformDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
+void EnTab_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
     EnTab* this = THIS;
     s32 rotStep;
     s32 overrideStep;
@@ -624,7 +623,7 @@ void EnTab_Draw(Actor* thisx, PlayState* play) {
 
         SkelAnime_DrawTransformFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                        this->skelAnime.dListCount, EnTab_OverrideLimbDraw, EnTab_PostLimbDraw,
-                                       EnTab_TransformDraw, &this->actor);
+                                       EnTab_TransformLimbDraw, &this->actor);
 
         CLOSE_DISPS(play->state.gfxCtx);
     }

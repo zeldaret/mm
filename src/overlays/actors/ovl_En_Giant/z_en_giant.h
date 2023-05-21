@@ -47,9 +47,9 @@ typedef struct EnGiant {
     /* 0x144 */ SkelAnime skelAnime;
     /* 0x188 */ Vec3s jointTable[GIANT_LIMB_MAX];
     /* 0x1E8 */ Vec3s morphTable[GIANT_LIMB_MAX];
-    /* 0x248 */ s16 animationId;
-    /* 0x24A */ u16 actorActionCommand;
-    /* 0x24C */ u16 csAction;
+    /* 0x248 */ s16 animIndex;
+    /* 0x24A */ u16 cueType;
+    /* 0x24C */ u16 cueId;
     /* 0x24E */ s16 alpha;
     /* 0x250 */ u16 sfxId;
     /* 0x254 */ MtxF headDrawMtxF;
@@ -57,7 +57,5 @@ typedef struct EnGiant {
     /* 0x296 */ s16 blinkTimer;
     /* 0x298 */ EnGiantActionFunc actionFunc;
 } EnGiant; // size = 0x29C
-
-extern const ActorInit En_Giant_InitVars;
 
 #endif // Z_EN_GIANT_H

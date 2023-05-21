@@ -19,7 +19,7 @@ void EnZo_FollowPath(EnZo* this, PlayState* play);
 void EnZo_TreadWater(EnZo* this, PlayState* play);
 void EnZo_DoNothing(EnZo* this, PlayState* play);
 
-const ActorInit En_Zo_InitVars = {
+ActorInit En_Zo_InitVars = {
     ACTOR_EN_ZO,
     ACTORCAT_NPC,
     FLAGS,
@@ -88,7 +88,7 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(0, 0),
 };
 
-static AnimationInfoS sAnimations[] = {
+static AnimationInfoS sAnimationInfo[] = {
     { &gZoraIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
     { &gZoraIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
     { &gZoraSurfacingAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
@@ -102,19 +102,19 @@ s8 sBodyParts[] = { -1, 1, 12, 13, 14, 9, 10, 11, 0, 6, 7, 8, 3, 4, 5, 2, -1, -1
 s8 sParentBodyParts[] = { 0, 0, 0, 0, 3, 4, 0, 6, 7, 0, 9, 10, 0, 12, 13 };
 u8 sShadowSizes[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
-s32 EnZo_SetAnimation(SkelAnime* skelAnime, s16 index) {
+s32 EnZo_ChangeAnim(SkelAnime* skelAnime, s16 animIndex) {
     s16 frameCount;
     s32 didChange = false;
 
-    if ((index >= 0) && (index < ARRAY_COUNT(sAnimations))) {
+    if ((animIndex >= 0) && (animIndex < ARRAY_COUNT(sAnimationInfo))) {
         didChange = true;
-        frameCount = sAnimations[index].frameCount;
+        frameCount = sAnimationInfo[animIndex].frameCount;
         if (frameCount < 0) {
-            frameCount = Animation_GetLastFrame(sAnimations[index].animation);
+            frameCount = Animation_GetLastFrame(sAnimationInfo[animIndex].animation);
         }
-        Animation_Change(skelAnime, sAnimations[index].animation, sAnimations[index].playSpeed,
-                         sAnimations[index].startFrame, frameCount, sAnimations[index].mode,
-                         sAnimations[index].morphFrames);
+        Animation_Change(skelAnime, sAnimationInfo[animIndex].animation, sAnimationInfo[animIndex].playSpeed,
+                         sAnimationInfo[animIndex].startFrame, frameCount, sAnimationInfo[animIndex].mode,
+                         sAnimationInfo[animIndex].morphFrames);
     }
     return didChange;
 }
@@ -122,32 +122,33 @@ s32 EnZo_SetAnimation(SkelAnime* skelAnime, s16 index) {
 s32 EnZo_PlayWalkingSound(EnZo* this, PlayState* play) {
     u8 leftWasGrounded;
     u8 rightWasGrounded;
-    s32 waterSfxId;
+    SurfaceSfxOffset surfaceSfxOffset;
     u16 sfxId;
     u8 isFootGrounded;
 
     leftWasGrounded = this->isLeftFootGrounded;
     rightWasGrounded = this->isRightFootGrounded;
 
-    if (this->actor.bgCheckFlags & 0x20) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_WATER) {
         if (this->actor.depthInWater < 20.0f) {
-            waterSfxId = NA_SE_PL_WALK_WATER0 - SFX_FLAG;
+            surfaceSfxOffset = SURFACE_SFX_OFFSET_WATER_SHALLOW;
         } else {
-            waterSfxId = NA_SE_PL_WALK_WATER1 - SFX_FLAG;
+            surfaceSfxOffset = SURFACE_SFX_OFFSET_WATER_DEEP;
         }
-        sfxId = waterSfxId + SFX_FLAG;
+        sfxId = NA_SE_PL_WALK_GROUND + surfaceSfxOffset;
     } else {
-        sfxId = SurfaceType_GetSfx(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId) + SFX_FLAG;
+        sfxId = NA_SE_PL_WALK_GROUND +
+                SurfaceType_GetSfxOffset(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
     }
 
     this->isLeftFootGrounded = isFootGrounded = SubS_IsFloorAbove(play, &this->leftFootPos, -6.0f);
     if ((this->isLeftFootGrounded) && (!leftWasGrounded) && (isFootGrounded)) {
-        Actor_PlaySfxAtPos(&this->actor, sfxId);
+        Actor_PlaySfx(&this->actor, sfxId);
     }
 
     this->isRightFootGrounded = isFootGrounded = SubS_IsFloorAbove(play, &this->rightFootPos, -6.0f);
     if ((this->isRightFootGrounded) && (!rightWasGrounded) && (isFootGrounded)) {
-        Actor_PlaySfxAtPos(&this->actor, sfxId);
+        Actor_PlaySfx(&this->actor, sfxId);
     }
 
     return 0;
@@ -185,7 +186,7 @@ void EnZo_LookAtPlayer(EnZo* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     if (SubS_AngleDiffLessEqual(this->actor.shape.rot.y, 0x2710, this->actor.yawTowardsPlayer)) {
         point.x = player->actor.world.pos.x;
-        point.y = player->bodyPartsPos[7].y + 3.0f;
+        point.y = player->bodyPartsPos[PLAYER_BODYPART_HEAD].y + 3.0f;
         point.z = player->actor.world.pos.z;
         SubS_TrackPoint(&point, &this->actor.focus.pos, &this->actor.shape.rot, &this->trackTarget, &this->headRot,
                         &this->upperBodyRot, &sTrackOptions);
@@ -205,11 +206,11 @@ void EnZo_LookAtPlayer(EnZo* this, PlayState* play) {
 }
 
 void EnZo_Walk(EnZo* this, PlayState* play) {
-    if (ENZO_GET_PATH(&this->actor) != ENZO_NO_PATH) {
-        EnZo_SetAnimation(&this->skelAnime, 6);
+    if (ENZO_GET_PATH(&this->actor) != 0x3F) {
+        EnZo_ChangeAnim(&this->skelAnime, 6);
     }
 
-    if (ENZO_GET_PATH(&this->actor) != ENZO_NO_PATH) {
+    if (ENZO_GET_PATH(&this->actor) != 0x3F) {
         this->actionFunc = EnZo_FollowPath;
     } else {
         this->actionFunc = EnZo_DoNothing;
@@ -220,8 +221,8 @@ void EnZo_FollowPath(EnZo* this, PlayState* play) {
     s16 speed;
     Vec3f pos;
 
-    Math_SmoothStepToF(&this->actor.speedXZ, 1.0f, 0.4f, 1000.0f, 0.0f);
-    speed = this->actor.speedXZ * 400.0f;
+    Math_SmoothStepToF(&this->actor.speed, 1.0f, 0.4f, 1000.0f, 0.0f);
+    speed = this->actor.speed * 400.0f;
     if (SubS_CopyPointFromPath(this->path, this->waypoint, &pos) && SubS_MoveActorToPoint(&this->actor, &pos, speed)) {
         this->waypoint++;
         if (this->waypoint >= this->path->count) {
@@ -230,10 +231,10 @@ void EnZo_FollowPath(EnZo* this, PlayState* play) {
     }
 
     if (this->actor.depthInWater > 60.0f) {
-        EnZo_SetAnimation(&this->skelAnime, 1);
+        EnZo_ChangeAnim(&this->skelAnime, 1);
         this->actionFunc = EnZo_TreadWater;
         this->actor.gravity = 0.0f;
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
     }
 }
 
@@ -257,13 +258,13 @@ void EnZo_Init(Actor* thisx, PlayState* play) {
 
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &gZoraSkel, NULL, this->jointTable, this->morphTable, ZORA_LIMB_MAX);
-    EnZo_SetAnimation(&this->skelAnime, 0);
+    EnZo_ChangeAnim(&this->skelAnime, 0);
 
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
 
-    this->path = SubS_GetPathByIndex(play, ENZO_GET_PATH(&this->actor), ENZO_NO_PATH);
+    this->path = SubS_GetPathByIndex(play, ENZO_GET_PATH(&this->actor), 0x3F);
     Actor_SetScale(&this->actor, 0.01f);
 
     this->actionFunc = EnZo_Walk;
@@ -280,7 +281,7 @@ void EnZo_Update(Actor* thisx, PlayState* play) {
     EnZo* this = THIS;
 
     this->actionFunc(this, play);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
     EnZo_LookAtPlayer(this, play);
     EnZo_PlayWalkingSound(this, play);
     EnZo_UpdateCollider(this, play);

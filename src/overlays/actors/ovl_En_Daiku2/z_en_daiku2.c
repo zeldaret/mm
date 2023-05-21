@@ -32,7 +32,7 @@ void func_80BE71D8(EnDaiku2* this, PlayState* play);
 void func_80BE7504(EnDaiku2* this, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3, f32 arg4, s16 arg5);
 void func_80BE7718(EnDaiku2* this, PlayState* play);
 
-const ActorInit En_Daiku2_InitVars = {
+ActorInit En_Daiku2_InitVars = {
     ACTOR_EN_DAIKU2,
     ACTORCAT_NPC,
     FLAGS,
@@ -71,7 +71,7 @@ static ColliderCylinderInit sCylinderInit = {
 void func_80BE61D0(EnDaiku2* this) {
     if ((this->unk_27A != -1) && (this->unk_258 != 0)) {
         if (!SubS_CopyPointFromPath(this->unk_258, this->unk_25C, &this->unk_268)) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     }
 }
@@ -93,7 +93,7 @@ void EnDaiku2_Init(Actor* thisx, PlayState* play) {
     Actor_SetScale(&this->actor, 0.01f);
     if (!this->unk_280) {
         if (day == 3) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             return;
         }
 
@@ -105,7 +105,7 @@ void EnDaiku2_Init(Actor* thisx, PlayState* play) {
             Math_Vec3f_Copy(&this->actor.world.pos, &this->unk_268);
         }
     } else if (day != 3) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -127,7 +127,8 @@ void func_80BE6408(EnDaiku2* this, s32 arg1) {
         &object_daiku_Anim_001A24, &object_daiku_Anim_002134, &object_daiku_Anim_00D328,
     };
     static u8 D_80BE7958[] = {
-        0, 0, 0, 0, 2, 0, 0, 0, 0, 2, 0,
+        ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_LOOP,
+        ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_LOOP,
     };
     f32 sp34 = 1.0f;
 
@@ -166,7 +167,7 @@ void func_80BE65B4(EnDaiku2* this, PlayState* play) {
     switch (gSaveContext.save.day - 1) {
         case 0:
             this->unk_28A = 0;
-            if (gSaveContext.save.weekEventReg[64] & 2) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_64_02)) {
                 this->unk_28A = 6;
             }
             func_80BE6408(this, 8);
@@ -174,7 +175,7 @@ void func_80BE65B4(EnDaiku2* this, PlayState* play) {
 
         case 1:
             this->unk_28A = 2;
-            if (gSaveContext.save.weekEventReg[64] & 4) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_64_04)) {
                 this->unk_28A = 7;
             }
             func_80BE6408(this, 8);
@@ -233,7 +234,7 @@ void func_80BE66E4(EnDaiku2* this, PlayState* play) {
 
     func_800B8614(&this->actor, play, 80.0f);
     if ((this->unk_276 == 8) && Animation_OnFrame(&this->skelAnime, 6.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_ROCK_BROKEN);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_ROCK_BROKEN);
 
         for (i = 0; i < 10; i++) {
             Math_Vec3f_Copy(&sp70, &this->actor.world.pos);
@@ -263,7 +264,8 @@ void func_80BE66E4(EnDaiku2* this, PlayState* play) {
                 func_80BE6408(this, 10);
             } else if ((this->unk_276 == 10) && (this->unk_284 <= sp9C)) {
                 this->unk_284 = Animation_GetLastFrame(&object_daiku_Anim_002134);
-                Animation_Change(&this->skelAnime, &object_daiku_Anim_002134, -1.0f, this->unk_284, 0.0f, 2, -4.0f);
+                Animation_Change(&this->skelAnime, &object_daiku_Anim_002134, -1.0f, this->unk_284, 0.0f, ANIMMODE_ONCE,
+                                 -4.0f);
                 this->unk_276 = 11;
             } else if ((this->unk_276 == 11) && (sp9C <= 0.0f)) {
                 func_80BE6408(this, 8);
@@ -292,10 +294,10 @@ void func_80BE6B40(EnDaiku2* this, PlayState* play) {
 
 void func_80BE6BC0(EnDaiku2* this, PlayState* play) {
     Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 1, 0xBB8, 0x0);
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         s32 day = gSaveContext.save.day - 1;
 
-        func_801477B4(play);
+        Message_CloseTextbox(play);
 
         if (this->unk_288 == 2) {
             this->actionFunc = func_80BE6D40;
@@ -303,15 +305,15 @@ void func_80BE6BC0(EnDaiku2* this, PlayState* play) {
             this->actionFunc = func_80BE6EF0;
         } else if ((this->unk_28A == 0) || (this->unk_28A == 2)) {
             this->unk_28A++;
-            func_80151938(play, sTextIds[this->unk_28A]);
+            Message_ContinueTextbox(play, sTextIds[this->unk_28A]);
         } else {
             switch (day) {
                 case 0:
-                    gSaveContext.save.weekEventReg[64] |= 2;
+                    SET_WEEKEVENTREG(WEEKEVENTREG_64_02);
                     break;
 
                 case 1:
-                    gSaveContext.save.weekEventReg[64] |= 4;
+                    SET_WEEKEVENTREG(WEEKEVENTREG_64_04);
                     break;
             }
             func_80BE65B4(this, play);
@@ -451,7 +453,9 @@ void EnDaiku2_Update(Actor* thisx, PlayState* play) {
     Actor_SetFocus(&this->actor, 65.0f);
     Actor_MoveWithGravity(&this->actor);
     Math_ApproachF(&this->unk_260, this->unk_264, 0.3f, 2.0f);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 50.0f, 0x1D);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 50.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                UPDBGCHECKINFO_FLAG_10);
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
     func_80BE7600(this, play);

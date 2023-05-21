@@ -2,17 +2,22 @@
 #define Z_EN_FALL2_H
 
 #include "global.h"
+#include "assets/objects/object_fall2/object_fall2.h"
 
 struct EnFall2;
 
 typedef void (*EnFall2ActionFunc)(struct EnFall2*, PlayState*);
 
 typedef struct EnFall2 {
-    /* 0x0000 */ Actor actor;
-    /* 0x0144 */ char unk_144[0x1A4];
-    /* 0x02E8 */ EnFall2ActionFunc actionFunc;
+    /* 0x000 */ Actor actor;
+    /* 0x144 */ SkeletonInfo skeletonInfo;
+    /* 0x174 */ Vec3s unk174[30];
+    /* 0x228 */ Vec3s unk228[30];
+    /* 0x2DC */ AnimatedMaterial* unk2DC;
+    /* 0x2E0 */ f32 alphaLevel;
+    /* 0x2E4 */ s16 cueId;
+    /* 0x2E6 */ u16 cueType;
+    /* 0x2E8 */ EnFall2ActionFunc actionFunc;
 } EnFall2; // size = 0x2EC
-
-extern const ActorInit En_Fall2_InitVars;
 
 #endif // Z_EN_FALL2_H

@@ -5,7 +5,7 @@
 
 struct ObjMuPict;
 
-#define UNK_ACTOR_PARAM ((this->actor.params & 0xF000) >> 0xC)
+#define OBJMUPICT_GET_F000(thisx) (((thisx)->params & 0xF000) >> 0xC)
 
 typedef void (*ObjMuPictActionFunc)(struct ObjMuPict*, PlayState*);
 
@@ -16,7 +16,5 @@ typedef struct ObjMuPict {
     /* 0x14A */ s16 unk14A;
     /* 0x14C */ u16 textId;
 } ObjMuPict; // size = 0x150
-
-extern const ActorInit Obj_Mu_Pict_InitVars;
 
 #endif // Z_OBJ_MU_PICT_H

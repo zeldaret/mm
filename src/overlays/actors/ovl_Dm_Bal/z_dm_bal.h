@@ -18,11 +18,9 @@ typedef struct DmBal {
     /* 0x19C */ Vec3s morphTable[OBJECT_BAL_LIMB_MAX];
     /* 0x328 */ UNK_TYPE1 pad_328[12];
     /* 0x334 */ s16 timer;
-    /* 0x336 */ s16 unk_336;
+    /* 0x336 */ s16 keepEyesShut;
     /* 0x338 */ s16 unk_338;
     /* 0x33A */ s16 unk_33A;
 } DmBal; /* size = 0x33C */
-
-extern const ActorInit Dm_Bal_InitVars;
 
 #endif // Z_DM_BAL_H

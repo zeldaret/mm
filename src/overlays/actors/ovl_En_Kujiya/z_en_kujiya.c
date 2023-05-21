@@ -9,7 +9,7 @@
 #include "z_en_kujiya.h"
 #include "objects/object_kujiya/object_kujiya.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_8000000)
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_CANT_LOCK_ON)
 
 #define THIS ((EnKujiya*)thisx)
 
@@ -34,7 +34,7 @@ void EnKujiya_TurnToOpen(EnKujiya* this, PlayState* play);
 void EnKujiya_SetupTurnToClosed(EnKujiya* this);
 void EnKujiya_TurnToClosed(EnKujiya* this, PlayState* play);
 
-const ActorInit En_Kujiya_InitVars = {
+ActorInit En_Kujiya_InitVars = {
     ACTOR_EN_KUJIYA,
     ACTORCAT_NPC,
     FLAGS,
@@ -46,13 +46,13 @@ const ActorInit En_Kujiya_InitVars = {
     (ActorFunc)EnKujiya_Draw,
 };
 
-#define CHECK_LOTTERY_NUMBERS                                                     \
-    (((u32)((void)0, gSaveContext.save.lotteryCodes[CURRENT_DAY - 1][0]) ==       \
-      ((((void)0, gSaveContext.save.lotteryCodeGuess & 0xFFFF) & 0xF00) >> 8)) && \
-     ((u32)((void)0, gSaveContext.save.lotteryCodes[CURRENT_DAY - 1][1]) ==       \
-      ((((void)0, gSaveContext.save.lotteryCodeGuess & 0xFFFF) & 0xF0) >> 4)) &&  \
-     ((u32)((void)0, gSaveContext.save.lotteryCodes[CURRENT_DAY - 1][2]) ==       \
-      (((void)0, gSaveContext.save.lotteryCodeGuess & 0xFFFF) & 0xF)))
+#define CHECK_LOTTERY_NUMBERS                                                              \
+    (((u32)((void)0, gSaveContext.save.saveInfo.lotteryCodes[CURRENT_DAY - 1][0]) ==       \
+      ((((void)0, gSaveContext.save.saveInfo.lotteryCodeGuess & 0xFFFF) & 0xF00) >> 8)) && \
+     ((u32)((void)0, gSaveContext.save.saveInfo.lotteryCodes[CURRENT_DAY - 1][1]) ==       \
+      ((((void)0, gSaveContext.save.saveInfo.lotteryCodeGuess & 0xFFFF) & 0xF0) >> 4)) &&  \
+     ((u32)((void)0, gSaveContext.save.saveInfo.lotteryCodes[CURRENT_DAY - 1][2]) ==       \
+      (((void)0, gSaveContext.save.saveInfo.lotteryCodeGuess & 0xFFFF) & 0xF)))
 
 void EnKujiya_Init(Actor* thisx, PlayState* play) {
     EnKujiya* this = THIS;
@@ -111,13 +111,13 @@ void EnKujiya_Wait(EnKujiya* this, PlayState* play) {
 void EnKujiya_HandlePlayerChoice(EnKujiya* this, PlayState* play) {
     if (Message_ShouldAdvance(play)) {
         if (play->msgCtx.choiceIndex == 0) { // Buy
-            if (gSaveContext.save.playerData.rupees < 10) {
+            if (gSaveContext.save.saveInfo.playerData.rupees < 10) {
                 play_sound(NA_SE_SY_ERROR);
                 Message_StartTextbox(play, 0x2B62, &this->actor);
                 this->textId = 0x2B62; // Not enough Rupees
             } else {
                 func_8019F208();
-                func_801159EC(-10);
+                Rupees_ChangeBy(-10);
                 Message_StartTextbox(play, 0x2B5F, &this->actor);
                 this->textId = 0x2B5F; // Enter number
             }
@@ -147,7 +147,7 @@ void EnKujiya_ChooseNextDialogue(EnKujiya* this, PlayState* play) {
 
             case 0x2B60:
                 EnKujiya_SetBoughtTicket();
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 EnKujiya_SetupTurnToClosed(this);
                 break;
 
@@ -169,7 +169,7 @@ void EnKujiya_ChooseNextDialogue(EnKujiya* this, PlayState* play) {
                 break;
 
             case 0x2B66:
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 EnKujiya_SetupGivePrize(this);
                 EnKujiya_GivePrize(this, play);
                 break;
@@ -183,24 +183,24 @@ void EnKujiya_SetupTalk(EnKujiya* this) {
 
 void EnKujiya_Talk(EnKujiya* this, PlayState* play) {
     switch (Message_GetState(&play->msgCtx)) {
-        case 0:
+        case TEXT_STATE_NONE:
             break;
 
-        case 4:
+        case TEXT_STATE_CHOICE:
             EnKujiya_HandlePlayerChoice(this, play);
             break;
 
-        case 5:
+        case TEXT_STATE_5:
             EnKujiya_ChooseNextDialogue(this, play);
             break;
 
-        case 6:
+        case TEXT_STATE_DONE:
             if (Message_ShouldAdvance(play)) {
                 EnKujiya_SetupWait(this);
             }
             break;
 
-        case 17:
+        case TEXT_STATE_17:
             if (Message_ShouldAdvance(play)) {
                 Inventory_SaveLotteryCodeGuess(play);
                 Message_StartTextbox(play, 0x2B60, &this->actor);
@@ -218,7 +218,7 @@ void EnKujiya_GivePrize(EnKujiya* this, PlayState* play) {
     if (Actor_HasParent(&this->actor, play)) {
         EnKujiya_SetupFinishGivePrize(this);
     } else {
-        Actor_PickUp(&this->actor, play, GI_RUPEE_PURPLE, 500.0f, 100.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_RUPEE_PURPLE, 500.0f, 100.0f);
     }
 }
 
@@ -227,7 +227,7 @@ void EnKujiya_SetupFinishGivePrize(EnKujiya* this) {
 }
 
 void EnKujiya_FinishGivePrize(EnKujiya* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == 6) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_DONE) && Message_ShouldAdvance(play)) {
         EnKujiya_SetupWait(this);
     }
 }
@@ -235,19 +235,19 @@ void EnKujiya_FinishGivePrize(EnKujiya* this, PlayState* play) {
 s32 EnKujiya_CheckBoughtTicket(void) {
     switch (CURRENT_DAY) {
         case 1:
-            if (gSaveContext.save.weekEventReg[33] & 0x10) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_33_10)) {
                 return true;
             }
             break;
 
         case 2:
-            if (gSaveContext.save.weekEventReg[33] & 0x20) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_33_20)) {
                 return true;
             }
             break;
 
         case 3:
-            if (gSaveContext.save.weekEventReg[33] & 0x40) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_33_40)) {
                 return true;
             }
             break;
@@ -258,15 +258,15 @@ s32 EnKujiya_CheckBoughtTicket(void) {
 void EnKujiya_SetBoughtTicket(void) {
     switch (CURRENT_DAY) {
         case 1:
-            gSaveContext.save.weekEventReg[33] |= 0x10;
+            SET_WEEKEVENTREG(WEEKEVENTREG_33_10);
             break;
 
         case 2:
-            gSaveContext.save.weekEventReg[33] |= 0x20;
+            SET_WEEKEVENTREG(WEEKEVENTREG_33_20);
             break;
 
         case 3:
-            gSaveContext.save.weekEventReg[33] |= 0x40;
+            SET_WEEKEVENTREG(WEEKEVENTREG_33_40);
             break;
     }
 }
@@ -277,15 +277,15 @@ void EnKujiya_SetBoughtTicket(void) {
 void EnKujiya_UnsetBoughtTicket(void) {
     switch (CURRENT_DAY) {
         case 1:
-            gSaveContext.save.weekEventReg[33] &= (u8)~0x10;
+            CLEAR_WEEKEVENTREG(WEEKEVENTREG_33_10);
             break;
 
         case 2:
-            gSaveContext.save.weekEventReg[33] &= (u8)~0x20;
+            CLEAR_WEEKEVENTREG(WEEKEVENTREG_33_20);
             break;
 
         case 3:
-            gSaveContext.save.weekEventReg[33] &= (u8)~0x40;
+            CLEAR_WEEKEVENTREG(WEEKEVENTREG_33_40);
             break;
     }
 }
@@ -296,18 +296,18 @@ void EnKujiya_SetupTurnToOpen(EnKujiya* this) {
 }
 
 void EnKujiya_TurnToOpen(EnKujiya* this, PlayState* play) {
-    if (this->actor.cutscene != -1) {
-        if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
-            ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
+    if (this->actor.csId != CS_ID_NONE) {
+        if (CutsceneManager_IsNext(this->actor.csId)) {
+            CutsceneManager_StartWithPlayerCs(this->actor.csId, &this->actor);
         } else {
-            ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+            CutsceneManager_Queue(this->actor.csId);
         }
     }
 
     if (!Math_SmoothStepToS(&this->actor.shape.rot.y, 0x7555, 0xA, 0x16C, 0x16C)) {
         if (this->timer > 20) {
-            if (ActorCutscene_GetCurrentIndex() == this->actor.cutscene) {
-                ActorCutscene_Stop(this->actor.cutscene);
+            if (CutsceneManager_GetCurrentCsId() == this->actor.csId) {
+                CutsceneManager_Stop(this->actor.csId);
             }
             EnKujiya_SetupWait(this);
         } else {
@@ -324,18 +324,18 @@ void EnKujiya_SetupTurnToClosed(EnKujiya* this) {
 }
 
 void EnKujiya_TurnToClosed(EnKujiya* this, PlayState* play) {
-    if (this->actor.cutscene != -1) {
-        if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
-            ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
+    if (this->actor.csId != CS_ID_NONE) {
+        if (CutsceneManager_IsNext(this->actor.csId)) {
+            CutsceneManager_StartWithPlayerCs(this->actor.csId, &this->actor);
         } else {
-            ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+            CutsceneManager_Queue(this->actor.csId);
         }
     }
 
     if (!Math_SmoothStepToS(&this->actor.shape.rot.y, 0, 0xA, 0x16C, 0x16C)) {
         if (this->timer > 20) {
-            if (ActorCutscene_GetCurrentIndex() == this->actor.cutscene) {
-                ActorCutscene_Stop(this->actor.cutscene);
+            if (CutsceneManager_GetCurrentCsId() == this->actor.csId) {
+                CutsceneManager_Stop(this->actor.csId);
             }
             EnKujiya_SetupWait(this);
         } else {
