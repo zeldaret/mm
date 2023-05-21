@@ -4729,8 +4729,7 @@ beginseg
     name "ovl_En_Kitan"
     compress
     include "build/src/overlays/actors/ovl_En_Kitan/z_en_kitan.o"
-    include "build/data/ovl_En_Kitan/ovl_En_Kitan.data.o"
-    include "build/data/ovl_En_Kitan/ovl_En_Kitan.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Kitan/ovl_En_Kitan_reloc.o"
 endseg
 
 beginseg
