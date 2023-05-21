@@ -1093,7 +1093,7 @@ ObjUmPathState ObjUm_UpdatePath(ObjUm* this, PlayState* play) {
 
     if (this->donkey != NULL) {
         this->dyna.actor.world.rot.y = Math_Vec3f_Yaw(&this->dyna.actor.world.pos, &sp50);
-        func_800F415C(&this->donkey->actor, &sp50, 0x190);
+        Horse_RotateToPoint(&this->donkey->actor, &sp50, 0x190);
 
         if (1) {}
 
