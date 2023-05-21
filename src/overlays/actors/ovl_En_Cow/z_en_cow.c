@@ -5,6 +5,7 @@
  */
 
 #include "z_en_cow.h"
+#include "z64horse.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
 

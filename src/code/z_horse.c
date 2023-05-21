@@ -1,3 +1,4 @@
+#include "z64horse.h"
 #include "global.h"
 #include "overlays/actors/ovl_Bg_Umajump/z_bg_umajump.h"
 #include "overlays/actors/ovl_En_Horse/z_en_horse.h"
@@ -12,7 +13,7 @@ s32 func_800F3940(PlayState* play) {
             break;
         }
 
-        if (actor->params == 2) {
+        if (actor->params == BG_UMAJUMP_TYPE_2) {
             return ((BgUmajump*)actor)->objectIndex;
         }
     }
@@ -21,41 +22,40 @@ s32 func_800F3940(PlayState* play) {
 }
 
 // unused
-s32 func_800F39B4(PlayState* play, s32 arg1, s32 arg2, Vec3s* arg3, s16* arg4) {
-    Path* path = &play->setupPathList[arg1];
+s32 func_800F39B4(PlayState* play, s32 pathIndex, s32 pointIndex, Vec3s* dst, s16* arg4) {
+    Path* path = &play->setupPathList[pathIndex];
     Vec3s* points;
-    s32 count;
+    s32 count = path->count;
 
-    count = path->count;
-    arg3->x = 0;
-    arg3->y = 0;
-    arg3->z = 0;
+    dst->x = 0;
+    dst->y = 0;
+    dst->z = 0;
     *arg4 = 0;
 
     if (count == 0) {
-        return 0;
+        return false;
     }
-    if (arg2 >= count) {
-        return 0;
+    if (pointIndex >= count) {
+        return false;
     }
 
     points = Lib_SegmentedToVirtual(path->points);
-    points += arg2;
+    points += pointIndex;
 
-    arg3->x = points->x;
-    arg3->y = points->y;
-    arg3->z = points->z;
+    dst->x = points->x;
+    dst->y = points->y;
+    dst->z = points->z;
     *arg4 = 0;
-    return 1;
+
+    return true;
 }
 
-typedef struct {
-    /* 0x0 */ s16 sceneNum;
-    /* 0x2 */ s16 sceneSetupIndex;
+typedef struct struct_801BDAA8 {
+    /* 0x0 */ s16 sceneId;
+    /* 0x2 */ s16 sceneLayerMinusOne;
 } struct_801BDAA8; // size = 0x4
 
-// extern struct_801BDAA8 sValidScenes[];
-struct_801BDAA8 D_801BDA70[] = {
+struct_801BDAA8 sHorseValidScenes[] = {
     { SCENE_00KEIKOKU, 0 },      // Termina Field
     { SCENE_24KEMONOMITI, 0 },   // Road to southern swap
     { SCENE_F01, 0 },            // Romani ranch
@@ -69,11 +69,11 @@ struct_801BDAA8 D_801BDA70[] = {
     { SCENE_13HUBUKINOMITI, 0 }, // Path to Mountain Village
 };
 
-s32 func_800F3A64(s16 sceneNum) {
+s32 func_800F3A64(s16 sceneId) {
     s32 i;
 
-    for (i = 0; i < ARRAY_COUNT(D_801BDA70); i++) {
-        if (sceneNum == D_801BDA70[i].sceneNum) {
+    for (i = 0; i < ARRAY_COUNT(sHorseValidScenes); i++) {
+        if (sceneId == sHorseValidScenes[i].sceneId) {
             return true;
         }
     }
@@ -94,10 +94,10 @@ s32 D_801BDAA0 = false;
 s32 D_801BDAA4 = false;
 
 struct_801BDAA8 D_801BDAA8[] = {
-    { SCENE_00KEIKOKU, 4 },      // Termina Field - First Cycle
-    { SCENE_30GYOSON, 0 },       // Great Bay Coast - Post-Gyorg
-    { SCENE_31MISAKI, 0 },       // Zora Cape - Post-Gyorg
-    { SCENE_13HUBUKINOMITI, 0 }, // Path to Mountain Village - Post-Goht
+    { SCENE_00KEIKOKU, 5 - 1 },      // Termina Field - First Cycle
+    { SCENE_30GYOSON, 1 - 1 },       // Great Bay Coast - Post-Gyorg
+    { SCENE_31MISAKI, 1 - 1 },       // Zora Cape - Post-Gyorg
+    { SCENE_13HUBUKINOMITI, 1 - 1 }, // Path to Mountain Village - Post-Goht
 };
 
 s32 func_800F3B68(PlayState* play, Player* player) {
@@ -108,14 +108,15 @@ s32 func_800F3B68(PlayState* play, Player* player) {
     }
 
     for (i = 0; i < ARRAY_COUNT(D_801BDAA8); i++) {
-        if ((D_801BDAA8[i].sceneNum == play->sceneId) &&
-            (gSaveContext.sceneLayer == (D_801BDAA8[i].sceneSetupIndex + 1))) {
+        if ((D_801BDAA8[i].sceneId == play->sceneId) &&
+            (gSaveContext.sceneLayer == D_801BDAA8[i].sceneLayerMinusOne + 1)) {
             return true;
         }
     }
     return false;
 }
 
+// Horse_SpawnOverworld?
 void func_800F3C44(PlayState* play, Player* player) {
     if (!func_800F3B68(play, player)) {
         return;
@@ -134,6 +135,7 @@ void func_800F3C44(PlayState* play, Player* player) {
         if (yIntersect == BGCHECK_Y_MIN) {
             yIntersect = player->actor.world.pos.y;
         }
+
         player->rideActor = Actor_Spawn(&play->actorCtx, play, ACTOR_EN_HORSE, player->actor.world.pos.x, yIntersect,
                                         player->actor.world.pos.z, player->actor.shape.rot.x, player->actor.shape.rot.y,
                                         player->actor.shape.rot.z, ENHORSE_PARAMS(ENHORSE_PARAM_4000, ENHORSE_11));
@@ -149,22 +151,23 @@ void func_800F3C44(PlayState* play, Player* player) {
         }
     } else if ((play->sceneId == SCENE_F01) && !CHECK_QUEST_ITEM(QUEST_SONG_EPONA)) {
         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_HORSE, -1420.0f, 257.0f, -1285.0f, 0, 0x2AAA, 0, ENHORSE_PARAMS(ENHORSE_PARAM_4000, ENHORSE_1));
-    } else if (CHECK_QUEST_ITEM(QUEST_SONG_EPONA) && (func_800F3A64(play->sceneId))) {
+    } else if (CHECK_QUEST_ITEM(QUEST_SONG_EPONA) && func_800F3A64(play->sceneId)) {
         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_HORSE, player->actor.world.pos.x, player->actor.world.pos.y,
                     player->actor.world.pos.z, 0, player->actor.shape.rot.y, 0, ENHORSE_PARAMS(ENHORSE_PARAM_4000, ENHORSE_2));
     }
 }
 
+// Horse_SpawnMinigame?
 void func_800F3ED4(PlayState* play, Player* player) {
-    if ((play->sceneId == SCENE_KOEPONARACE) && ((gSaveContext.save.saveInfo.weekEventReg[92] & 7) == 1)) {
+    if ((play->sceneId == SCENE_KOEPONARACE) && (GET_WEEKEVENTREG_HORSE_RACE_STATE == WEEKEVENTREG_HORSE_RACE_STATE_START)) {
         player->rideActor =
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_HORSE, -1262.0f, -106.0f, 470.0f, 0, 0x7FFF, 0, ENHORSE_PARAMS(ENHORSE_PARAM_4000, ENHORSE_13));
         Actor_MountHorse(play, player, player->rideActor);
         Actor_SetCameraHorseSetting(play, player);
     } else if ((play->sceneId == SCENE_KOEPONARACE) &&
-               ((((gSaveContext.save.saveInfo.weekEventReg[92] & 7) == 3)) || ((gSaveContext.save.saveInfo.weekEventReg[92] & 7) == 2))) {
+               (((GET_WEEKEVENTREG_HORSE_RACE_STATE == WEEKEVENTREG_HORSE_RACE_STATE_3)) || (GET_WEEKEVENTREG_HORSE_RACE_STATE == WEEKEVENTREG_HORSE_RACE_STATE_2))) {
         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_HORSE, -1741.0f, -106.0f, -641.0f, 0, -0x4FA4, 0, ENHORSE_PARAMS(ENHORSE_PARAM_4000, ENHORSE_1));
-    } else if ((gSaveContext.save.entrance == 0x6400) && (Cutscene_GetSceneLayer(play) != 0) &&
+    } else if ((gSaveContext.save.entrance == ENTRANCE(ROMANI_RANCH, 0)) && (Cutscene_GetSceneLayer(play) != 0) &&
                (player->transformation == PLAYER_FORM_HUMAN)) {
         player->rideActor =
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_HORSE, -1106.0f, 260.0f, -1185.0f, 0, 0x13, 0, ENHORSE_PARAMS(ENHORSE_PARAM_4000, ENHORSE_7));
@@ -175,16 +178,23 @@ void func_800F3ED4(PlayState* play, Player* player) {
 
 // Horse_Spawn?
 void func_800F40A0(PlayState* play, Player* player) {
-    if (((play->sceneId == SCENE_KOEPONARACE) && ((gSaveContext.save.saveInfo.weekEventReg[92] & 7) == 1)) ||
-        ((play->sceneId == SCENE_F01) &&
-         (((gSaveContext.sceneLayer == 1)) || (gSaveContext.sceneLayer == 5)) &&
-         (player->transformation == PLAYER_FORM_HUMAN)) ||
-        ((play->sceneId == SCENE_KOEPONARACE) &&
-         ((((gSaveContext.save.saveInfo.weekEventReg[92] & 7) == 3)) || ((gSaveContext.save.saveInfo.weekEventReg[92] & 7) == 2)))) {
+    if (
+            ((play->sceneId == SCENE_KOEPONARACE) && (GET_WEEKEVENTREG_HORSE_RACE_STATE == WEEKEVENTREG_HORSE_RACE_STATE_START))
+        ||
+            ((play->sceneId == SCENE_F01) &&
+            (((gSaveContext.sceneLayer == 1)) || (gSaveContext.sceneLayer == 5)) &&
+            (player->transformation == PLAYER_FORM_HUMAN))
+         ||
+            ((play->sceneId == SCENE_KOEPONARACE) &&
+            (((GET_WEEKEVENTREG_HORSE_RACE_STATE == WEEKEVENTREG_HORSE_RACE_STATE_3)) || (GET_WEEKEVENTREG_HORSE_RACE_STATE == WEEKEVENTREG_HORSE_RACE_STATE_2)))
+        ) {
+        // Gorman Track and horse state is either STATE_START, STATE_2 or STATE_3
+        // or Romani Ranch, Player is Human and scene layer is either 1 or 5
         func_800F3ED4(play, player);
     } else {
         func_800F3C44(play, player);
     }
+
     D_801BDAA0 = false;
 }
 

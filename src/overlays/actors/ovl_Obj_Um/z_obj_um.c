@@ -5,6 +5,7 @@
  */
 
 #include "z_obj_um.h"
+#include "z64horse.h"
 #include "overlays/actors/ovl_En_In/z_en_in.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
@@ -835,7 +836,7 @@ s32 func_80B795A0(PlayState* play, ObjUm* this, s32 arg2) {
                 SET_WEEKEVENTREG(WEEKEVENTREG_31_80);
                 play->nextEntrance = ENTRANCE(ROMANI_RANCH, 11);
                 if (player->stateFlags1 & PLAYER_STATE1_800000) {
-                    D_801BDAA0 = 1;
+                    D_801BDAA0 = true;
                 }
                 play->transitionType = TRANS_TYPE_64;
                 gSaveContext.nextTransitionType = TRANS_TYPE_FADE_WHITE;

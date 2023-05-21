@@ -5,6 +5,7 @@
  */
 
 #include "z_en_in.h"
+#include "z64horse.h"
 #include "objects/object_in/object_in.h"
 #include "overlays/actors/ovl_En_Horse_Game_Check/z_en_horse_game_check.h"
 

@@ -947,7 +947,7 @@
     0x801BD904:("sFireObjLightParams","FireObjLightParams","[1]",0x08),
     0x801BD910:("gGameStateOverlayTable","GameStateOverlay","[7]",0x150),
     0x801BDA60:("gGraphNumGameStates","UNK_TYPE4","",0x4),
-    0x801BDA70:("D_801BDA70","struct_801BDAA8","[11]",0x2C),
+    0x801BDA70:("sHorseValidScenes","struct_801BDAA8","[11]",0x2C),
     0x801BDA9C:("D_801BDA9C","s32","",0x4),
     0x801BDAA0:("D_801BDAA0","s32","",0x4),
     0x801BDAA4:("D_801BDAA4","s32","",0x4),

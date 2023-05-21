@@ -5,6 +5,7 @@
  */
 
 #include "z_en_horse_link_child.h"
+#include "z64horse.h"
 #include "objects/object_horse_link_child/object_horse_link_child.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_2000000)

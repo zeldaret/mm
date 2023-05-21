@@ -5,6 +5,7 @@
  */
 
 #include "z_en_horse.h"
+#include "z64horse.h"
 #include "z64rumble.h"
 #include "overlays/actors/ovl_En_In/z_en_in.h"
 #include "overlays/actors/ovl_Obj_Um/z_obj_um.h"
@@ -594,15 +595,15 @@ s32 EnHorse_Spawn(EnHorse* this, PlayState* play) {
     f32 minDist = 1.0e+38;
     Player* player = GET_PLAYER(play);
     Vec3f spawnPos;
-    s32 pathIdx = func_800F3940(play);
+    s32 pathIndex = func_800F3940(play);
     s32 pathCount;
     Vec3s* pathPoints;
 
-    if (pathIdx == -1) {
+    if (pathIndex == -1) {
         return false;
     }
 
-    path = &play->setupPathList[pathIdx];
+    path = &play->setupPathList[pathIndex];
     pathCount = path->count;
     pathPoints = Lib_SegmentedToVirtual(path->points);
 

@@ -5,6 +5,7 @@
  */
 
 #include "z_en_horse_game_check.h"
+#include "z64horse.h"
 #include "objects/object_horse_game_check/object_horse_game_check.h"
 
 #define FLAGS (ACTOR_FLAG_10)
