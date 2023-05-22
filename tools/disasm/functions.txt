@@ -3181,7 +3181,7 @@
     0x8017544C:("PadMgr_RumbleSetSingle",),
     0x80175474:("PadMgr_RumbleSet",),
     0x801754C0:("PadMgr_ControllerHasRumblePak",),
-    0x801754E0:("PadMgr_CalcStickEdges",),
+    0x801754E0:("PadMgr_AdjustInput",),
     0x801757A4:("PadMgr_UpdateInputs",),
     0x801759BC:("PadMgr_InitVoice",),
     0x80175AE0:("PadMgr_UpdateConnections",),

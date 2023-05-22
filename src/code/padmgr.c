@@ -208,7 +208,6 @@ void PadMgr_UpdateRumble(void) {
     s32 ret;
     OSMesgQueue* serialEventQueue = PadMgr_AcquireSerialEventQueue();
     s32 triedRumbleComm = false;
-    s32 motorStart = MOTOR_START; // required for matching?
 
     for (i = 0; i < MAXCONTROLLERS; i++) {
         if (sPadMgrInstance->ctrlrType[i] == PADMGR_CONT_NORMAL) {
@@ -217,9 +216,9 @@ void PadMgr_UpdateRumble(void) {
                 if (sPadMgrInstance->pakType[i] == CONT_PAK_RUMBLE) {
                     if (sPadMgrInstance->rumbleEnable[i]) {
                         if (sPadMgrInstance->rumbleTimer[i] < 3) {
-                            // This should be the osMotorStart macro, however the temporary variable motorStart is
-                            // currently required for matching
-                            if (__osMotorAccess(&sPadMgrInstance->rumblePfs[i], motorStart) != 0) {
+                            // Rumble pak start
+
+                            if (osMotorStart(&sPadMgrInstance->rumblePfs[i]) != 0) {
                                 // error
                                 sPadMgrInstance->pakType[i] = CONT_PAK_NONE;
                             } else {
@@ -230,6 +229,7 @@ void PadMgr_UpdateRumble(void) {
                     } else {
                         if (sPadMgrInstance->rumbleTimer[i] != 0) {
                             // Rumble Pak stop
+
                             if (osMotorStop(&sPadMgrInstance->rumblePfs[i]) != 0) {
                                 // error
                                 sPadMgrInstance->pakType[i] = CONT_PAK_NONE;
@@ -350,9 +350,6 @@ void PadMgr_AdjustInput(Input* input) {
     s8 curY = input->cur.stick_y;
 
     if (CHECK_BTN_ANY(input->press.button, BTN_RESET) || input->press.stick_x == 0) {
-        goto dummy;
-    dummy:;
-
         input->press.stick_x = 61;
         input->press.errno = -61;
         input->press.stick_y = 63;
@@ -417,14 +414,17 @@ void PadMgr_AdjustInput(Input* input) {
         newY = 0.0f;
     }
 
-    magnitude = sqrtf(SQ(newX) + SQ(newY));
-    if (magnitude > 1.0f) {
-        magnitude = 1.0f;
+    if (1) {
+        s32 pad;
+
+        magnitude = sqrtf(SQ(newX) + SQ(newY));
+        if (magnitude > 1.0f) {
+            magnitude = 1.0f;
+        }
+        angle = Math_Atan2F_XY(curY, -curX);
+        newX = -sinf(angle) * magnitude;
+        newY = cosf(angle) * magnitude;
     }
-    angle = Math_Atan2F_XY(curY, -curX);
-    newX = -sinf(angle) * magnitude;
-    newY = cosf(angle) * magnitude;
-dummy2:;
     input->rel.stick_x = newX * 60.5f;
     input->rel.stick_y = newY * 60.5f;
 }

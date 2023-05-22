@@ -328,7 +328,7 @@
     0x8009CD50:("sRandFloat","f32","",0x4),
     0x8009CD60:("sArenaLockMsg","OSMesg","[1]",0x4),
     0x8009CD70:("tmp_task","OSTask","",0x40),
-    0x8009CDB0:("osPifBuffers","OSPifRam","[4]",0x100),
+    0x8009CDB0:("__MotorDataBuf","OSPifRam","[4]",0x100),
     0x8009CEB0:("siAccessBuf","OSMesg","[1]",0x4),
     0x8009CEB8:("__osSiAccessQueue","OSMesgQueue","",0x18),
     0x8009CED0:("__osContPifRam","OSPifRam","",0x40),

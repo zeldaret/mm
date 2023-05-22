@@ -2695,7 +2695,7 @@ asm/non_matchings/code/padmgr/PadMgr_RumblePause.s,PadMgr_RumblePause,0x80175434
 asm/non_matchings/code/padmgr/PadMgr_RumbleSetSingle.s,PadMgr_RumbleSetSingle,0x8017544C,0xA
 asm/non_matchings/code/padmgr/PadMgr_RumbleSet.s,PadMgr_RumbleSet,0x80175474,0x13
 asm/non_matchings/code/padmgr/PadMgr_ControllerHasRumblePak.s,PadMgr_ControllerHasRumblePak,0x801754C0,0x8
-asm/non_matchings/code/padmgr/PadMgr_CalcStickEdges.s,PadMgr_CalcStickEdges,0x801754E0,0xB1
+asm/non_matchings/code/padmgr/PadMgr_AdjustInput.s,PadMgr_AdjustInput,0x801754E0,0xB1
 asm/non_matchings/code/padmgr/PadMgr_UpdateInputs.s,PadMgr_UpdateInputs,0x801757A4,0x86
 asm/non_matchings/code/padmgr/PadMgr_InitVoice.s,PadMgr_InitVoice,0x801759BC,0x49
 asm/non_matchings/code/padmgr/PadMgr_UpdateConnections.s,PadMgr_UpdateConnections,0x80175AE0,0x68
