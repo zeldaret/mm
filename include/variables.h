@@ -812,9 +812,6 @@ extern u32 cfbIdx[3];
 extern s32 gScreenWidth;
 extern s32 gScreenHeight;
 extern u32 startHeapSize;
-extern PadMgr* padmgrContext;
-// extern UNK_TYPE4 controllerInputsCaptured;
-// extern UNK_TYPE4 D_801D1538;
 extern UNK_PTR D_801D1540;
 // extern f32 sFactorialTbl[13];
 extern Vec3f gZeroVec3f;
@@ -2441,7 +2438,6 @@ extern u32 gSegments[NUM_SEGMENTS];
 extern SchedContext gSchedContext;
 
 extern OSThread gGraphThread;
-extern PadMgr gPadMgr;
 
 extern FaultClient sSchedFaultClient;
 extern OSTime sRSPGFXStartTime;
@@ -2647,7 +2643,7 @@ extern s32 D_801FD120;
 // extern UNK_TYPE1 D_801FD598;
 // extern UNK_TYPE1 D_801FD5A0;
 // extern UNK_TYPE1 D_801FD5A4;
-// extern UNK_TYPE1 D_801FD5B8;
+extern OSVoiceHandle gVoiceHandle;
 // extern UNK_TYPE1 D_801FD5C4;
 // extern UNK_TYPE1 D_801FD5C8;
 // extern UNK_TYPE1 D_801FD5E8;

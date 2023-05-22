@@ -88,6 +88,7 @@
 #define BTN_CUP         0x0008
 #define BTN_R           0x0010
 #define BTN_L           0x0020
+#define BTN_RESET       0x0080
 #define BTN_DRIGHT      0x0100
 #define BTN_DLEFT       0x0200
 #define BTN_DDOWN       0x0400
@@ -152,12 +153,5 @@ extern u8 __osContLastPoll;
 extern u8 __osMaxControllers;
 // extern OSMesgQueue D_8009CF38;
 // extern OSMesg D_8009CF50;
-
-typedef struct {
-    /* 0x00 */ OSContPad cur;
-    /* 0x06 */ OSContPad prev;
-    /* 0x0C */ OSContPad press; // X/Y store delta from last frame
-    /* 0x12 */ OSContPad rel; // X/Y store adjusted
-} Input; // size = 0x18
 
 #endif
