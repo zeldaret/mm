@@ -5787,10 +5787,10 @@ s32 func_8083562C(PlayState* play, Player* this, CollisionPoly* poly, s32 bgId) 
                     }
 
                     if (this->stateFlags1 & PLAYER_STATE1_800000) {
-                        if (D_801BDAA0 != 0) {
-                            D_801BDAA0 = 0;
+                        if (D_801BDAA0) {
+                            D_801BDAA0 = false;
                         } else {
-                            D_801BDA9C = 1;
+                            D_801BDA9C = true;
                         }
                     }
                 }
@@ -15781,7 +15781,7 @@ void func_808505D0(Player* this, PlayState* play) {
 
         this->stateFlags1 &= ~PLAYER_STATE1_800000;
         this->actor.parent = NULL;
-        D_801BDA9C = 0;
+        D_801BDA9C = false;
 
         if (CHECK_QUEST_ITEM(QUEST_SONG_EPONA) || (DREG(1) != 0)) {
             gSaveContext.save.saveInfo.horseData.sceneId = play->sceneId;
