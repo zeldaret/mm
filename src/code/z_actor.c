@@ -1362,8 +1362,8 @@ s32 func_800B7200(Player* player) {
     return (player->stateFlags1 & (PLAYER_STATE1_80 | PLAYER_STATE1_20000000)) || (player->csMode != PLAYER_CSMODE_0);
 }
 
-void func_800B722C(PlayState* play, Player* player) {
-    func_800F40A0(play, player);
+void Actor_SpawnHorse(PlayState* play, Player* player) {
+    Horse_Spawn(play, player);
 }
 
 s32 func_800B724C(PlayState* play, Actor* actor, u8 csMode) {
@@ -2309,7 +2309,7 @@ void Actor_InitContext(PlayState* play, ActorContext* actorCtx, ActorEntry* acto
     Actor_TargetContextInit(&actorCtx->targetContext, actorCtx->actorLists[ACTORCAT_PLAYER].first, play);
     Actor_InitHalfDaysBit(actorCtx);
     Fault_AddClient(&sActorFaultClient, (void*)Actor_PrintLists, actorCtx, NULL);
-    func_800B722C(play, (Player*)actorCtx->actorLists[ACTORCAT_PLAYER].first);
+    Actor_SpawnHorse(play, (Player*)actorCtx->actorLists[ACTORCAT_PLAYER].first);
 }
 
 /**

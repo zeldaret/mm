@@ -1287,7 +1287,7 @@ void func_808F5A34(EnIn* this, PlayState* play) {
 }
 
 void func_808F5A94(EnIn* this, PlayState* play) {
-    if (func_800F41E4(play, &play->actorCtx)) {
+    if (Horse_IsNotInactive(play, &play->actorCtx)) {
         if (gSaveContext.save.day == 3) {
             func_808F5728(play, this, 7, &this->unk48C);
         } else {
@@ -1303,7 +1303,7 @@ void func_808F5A94(EnIn* this, PlayState* play) {
 }
 
 void func_808F5B58(EnIn* this, PlayState* play) {
-    if (func_800F41E4(play, &play->actorCtx)) {
+    if (Horse_IsNotInactive(play, &play->actorCtx)) {
         if ((Player_GetMask(play) == PLAYER_MASK_CIRCUS_LEADER && CHECK_WEEKEVENTREG(WEEKEVENTREG_63_40)) ||
             CHECK_WEEKEVENTREG(WEEKEVENTREG_56_08)) {
             if (gSaveContext.save.day == 3) {

@@ -116,8 +116,7 @@ s32 func_800F3B68(PlayState* play, Player* player) {
     return false;
 }
 
-// Horse_SpawnOverworld?
-void func_800F3C44(PlayState* play, Player* player) {
+void Horse_SpawnOverworld(PlayState* play, Player* player) {
     if (!func_800F3B68(play, player)) {
         return;
     }
@@ -156,8 +155,7 @@ void func_800F3C44(PlayState* play, Player* player) {
     }
 }
 
-// Horse_SpawnMinigame?
-void func_800F3ED4(PlayState* play, Player* player) {
+void Horse_SpawnMinigame(PlayState* play, Player* player) {
     if ((play->sceneId == SCENE_KOEPONARACE) && (GET_WEEKEVENTREG_HORSE_RACE_STATE == WEEKEVENTREG_HORSE_RACE_STATE_START)) {
         player->rideActor =
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_HORSE, -1262.0f, -106.0f, 470.0f, 0, 0x7FFF, 0, ENHORSE_PARAMS(ENHORSE_PARAM_4000, ENHORSE_13));
@@ -175,8 +173,7 @@ void func_800F3ED4(PlayState* play, Player* player) {
     }
 }
 
-// Horse_Spawn?
-void func_800F40A0(PlayState* play, Player* player) {
+void Horse_Spawn(PlayState* play, Player* player) {
     if (
             ((play->sceneId == SCENE_KOEPONARACE) && (GET_WEEKEVENTREG_HORSE_RACE_STATE == WEEKEVENTREG_HORSE_RACE_STATE_START))
         ||
@@ -189,9 +186,9 @@ void func_800F40A0(PlayState* play, Player* player) {
         ) {
         // Gorman Track and horse state is either STATE_START, STATE_2 or STATE_3
         // or Romani Ranch, Player is Human and scene layer is either 1 or 5
-        func_800F3ED4(play, player);
+        Horse_SpawnMinigame(play, player);
     } else {
-        func_800F3C44(play, player);
+        Horse_SpawnOverworld(play, player);
     }
 
     D_801BDAA0 = false;
@@ -211,7 +208,7 @@ void Horse_RotateToPoint(Actor* actor, Vec3f* pos, s16 turnAmount) {
     actor->shape.rot.y = actor->world.rot.y;
 }
 
-s32 func_800F41E4(PlayState* play, ActorContext* actorCtx) {
+s32 Horse_IsNotInactive(PlayState* play, ActorContext* actorCtx) {
     Actor* bgActor = actorCtx->actorLists[ACTORCAT_BG].first;
 
     if (bgActor != NULL) {
