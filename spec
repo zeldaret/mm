@@ -3591,7 +3591,6 @@ beginseg
     name "ovl_Bg_Tobira01"
     compress
     include "build/src/overlays/actors/ovl_Bg_Tobira01/z_bg_tobira01.o"
-    include "build/data/ovl_Bg_Tobira01/ovl_Bg_Tobira01.data.o"
     include "build/data/ovl_Bg_Tobira01/ovl_Bg_Tobira01.reloc.o"
 endseg
 
