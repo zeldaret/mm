@@ -1566,7 +1566,7 @@ typedef struct Camera {
     /* 0x0DC */ f32 dist;
     /* 0x0E0 */ f32 speedRatio;
     /* 0x0E4 */ Vec3f focalActorAtOffset; // Offset between the camera's at Pos and the focalActor's Pos
-    /* 0x0F0 */ Vec3f focalActorPosOffset; // Offset between the focalActor's Pos and the camera's focalActor's Pos from the previous frame
+    /* 0x0F0 */ Vec3f unk_0F0; // Offset between the focalActor's Pos and the camera's focalActor's Pos from the previous frame
     /* 0x0FC */ f32 fov;
     /* 0x100 */ f32 atLerpStepScale;
     /* 0x104 */ f32 focalActorFloorHeight;
