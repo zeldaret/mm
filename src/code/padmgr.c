@@ -64,7 +64,7 @@ u8 PadMgr_GetValidControllersMask(void) {
  * calls to `PadMgr_RumbleSetSingle`. The callback may be passed a single user-provided argument.
  *
  * @param callback callback to run before rumble state is updated for the current VI
- * @param arg the argument to pass to the calback
+ * @param arg the argument to pass to the callback
  *
  * @see PadMgr_RumbleSetSingle
  * @see PadMgr_UnsetRumbleRetraceCallback
@@ -98,7 +98,7 @@ void PadMgr_UnsetRumbleRetraceCallback(void (*callback)(void*), void* arg) {
  *
  * @param callback callback to run as soon as new inputs are obtained
  * @param arg the argument to pass to the callback
- * 
+ *
  * @see PadMgr_UnsetInputRetraceCallback
  */
 void PadMgr_SetInputRetraceCallback(void (*callback)(void*), void* arg) {
@@ -252,8 +252,7 @@ void PadMgr_UpdateRumble(void) {
         i = sPadMgrRetraceCount % MAXCONTROLLERS;
 
         if (sPadMgrInstance->ctrlrType[i] == PADMGR_CONT_NORMAL &&
-            (sPadMgrInstance->padStatus[i].status & CONT_CARD_ON) &&
-            sPadMgrInstance->pakType[i] != CONT_PAK_RUMBLE) {
+            (sPadMgrInstance->padStatus[i].status & CONT_CARD_ON) && sPadMgrInstance->pakType[i] != CONT_PAK_RUMBLE) {
             ret = osMotorInit(serialEventQueue, &sPadMgrInstance->rumblePfs[i], i);
 
             if (ret == 0) {
