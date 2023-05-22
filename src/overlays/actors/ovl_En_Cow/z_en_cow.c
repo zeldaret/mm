@@ -131,7 +131,7 @@ void EnCow_Init(Actor* thisx, PlayState* play) {
             this->animationCycle = 0;
             this->actor.targetMode = 6;
 
-            D_801BDAA4 = false;
+            gHorsePlayedEponasSong = false;
             func_801A5080(4);
             break;
         case EN_COW_TYPE_TAIL:
@@ -265,13 +265,13 @@ void EnCow_Talk(EnCow* this, PlayState* play) {
 
 void EnCow_Idle(EnCow* this, PlayState* play) {
     if ((play->msgCtx.ocarinaMode == 0) || (play->msgCtx.ocarinaMode == 4)) {
-        if (D_801BDAA4) {
+        if (gHorsePlayedEponasSong) {
             if (this->flags & EN_COW_FLAG_WONT_GIVE_MILK) {
                 this->flags &= ~EN_COW_FLAG_WONT_GIVE_MILK;
-                D_801BDAA4 = false;
+                gHorsePlayedEponasSong = false;
             } else if ((this->actor.xzDistToPlayer < 150.0f) &&
                        ABS_ALT(BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.shape.rot.y)) < 25000) {
-                D_801BDAA4 = false;
+                gHorsePlayedEponasSong = false;
                 this->actionFunc = EnCow_Talk;
                 this->actor.flags |= ACTOR_FLAG_10000;
                 func_800B8614(&this->actor, play, 170.0f);

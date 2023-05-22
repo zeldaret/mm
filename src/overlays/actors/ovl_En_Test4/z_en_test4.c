@@ -405,9 +405,9 @@ void func_80A42AB8(EnTest4* this, PlayState* play) {
 
                         if ((rideActor->type == HORSE_TYPE_EPONA) || (rideActor->type == HORSE_TYPE_2)) {
                             if (CURRENT_DAY < 3) {
-                                D_801BDA9C = true;
+                                gHorseIsMounted = true;
                             } else {
-                                D_801BDA9C = false;
+                                gHorseIsMounted = false;
                             }
                         }
                     }

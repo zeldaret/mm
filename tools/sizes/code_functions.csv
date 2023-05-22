@@ -1199,8 +1199,8 @@ asm/non_matchings/code/z_fireobj/FireObj_SetState2.s,FireObj_SetState2,0x800F37F
 asm/non_matchings/code/z_fireobj/FireObj_Update.s,FireObj_Update,0x800F3820,0x48
 asm/non_matchings/code/z_horse/func_800F3940.s,func_800F3940,0x800F3940,0x1D
 asm/non_matchings/code/z_horse/func_800F39B4.s,func_800F39B4,0x800F39B4,0x2C
-asm/non_matchings/code/z_horse/func_800F3A64.s,func_800F3A64,0x800F3A64,0x32
-asm/non_matchings/code/z_horse/func_800F3B2C.s,func_800F3B2C,0x800F3B2C,0xF
+asm/non_matchings/code/z_horse/Horse_IsValidSpawn.s,Horse_IsValidSpawn,0x800F3A64,0x32
+asm/non_matchings/code/z_horse/Horse_ResetHorseData.s,Horse_ResetHorseData,0x800F3B2C,0xF
 asm/non_matchings/code/z_horse/func_800F3B68.s,func_800F3B68,0x800F3B68,0x37
 asm/non_matchings/code/z_horse/func_800F3C44.s,func_800F3C44,0x800F3C44,0xA4
 asm/non_matchings/code/z_horse/func_800F3ED4.s,func_800F3ED4,0x800F3ED4,0x73

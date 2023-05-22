@@ -418,7 +418,7 @@ void func_808DF560(EnHorseLinkChild* this) {
         this->unk_148 = 1;
     }
 
-    D_801BDAA4 = false;
+    gHorsePlayedEponasSong = false;
     Animation_Change(&this->skin.skelAnime, D_808DFEC0[this->unk_148], func_808DE728(this), 0.0f,
                      Animation_GetLastFrame(D_808DFEC0[this->unk_148]), ANIMMODE_ONCE, 0.0f);
 }
@@ -426,8 +426,8 @@ void func_808DF560(EnHorseLinkChild* this) {
 void func_808DF620(EnHorseLinkChild* this, PlayState* play) {
     s16 sp36;
 
-    if (D_801BDAA4) {
-        D_801BDAA4 = false;
+    if (gHorsePlayedEponasSong) {
+        gHorsePlayedEponasSong = false;
         Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_EV_KID_HORSE_NEIGH);
         func_808DF788(this);
         return;

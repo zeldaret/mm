@@ -741,6 +741,10 @@ wordReplace = {
 
     "func_80102544": "LightContext_SetFog",
 
+    "func_800F3A64": "Horse_IsValidSpawn",
+    "func_800F3B2C": "Horse_ResetHorseData",
+    "func_800F415C": "Horse_RotateToPoint",
+
     # Structs
     "ActorAnimationEntry": "AnimationInfo",
     "ActorAnimationEntryS": "AnimationInfoS",
@@ -978,6 +982,9 @@ wordReplace = {
     "D_801D15BC": "gZeroVec3s",
     "D_801D1DE0": "gIdentityMtx",
     "D_801D1E20": "gIdentityMtxF",
+
+    "D_801BDA9C": "gHorseIsMounted",
+    "D_801BDAA4": "gHorsePlayedEponasSong",
 
     # Macros
     "CUR_EQUIP_VALUE_VOID": "GET_CUR_EQUIP_VALUE",

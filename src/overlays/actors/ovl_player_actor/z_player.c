@@ -5,6 +5,7 @@
  */
 
 #include "global.h"
+#include "z64horse.h"
 #include "z64quake.h"
 #include "z64rumble.h"
 #include "z64shrink_window.h"

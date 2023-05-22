@@ -550,7 +550,7 @@ void Sram_SaveEndOfCycle(PlayState* play) {
     gSaveContext.jinxTimer = 0;
     gSaveContext.rupeeAccumulator = 0;
 
-    func_800F3B2C(play);
+    Horse_ResetHorseData(play);
 }
 
 void Sram_IncrementDay(void) {
@@ -981,7 +981,7 @@ void Sram_ResetSaveFromMoonCrash(SramContext* sramCtx) {
     }
 
     D_801BDAA0 = true;
-    D_801BDA9C = false;
+    gHorseIsMounted = false;
     gSaveContext.powderKegTimer = 0;
     gSaveContext.unk_1014 = 0;
     gSaveContext.jinxTimer = 0;

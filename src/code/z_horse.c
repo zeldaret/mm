@@ -69,7 +69,7 @@ struct_801BDAA8 sHorseValidScenes[] = {
     { SCENE_13HUBUKINOMITI, 0 }, // Path to Mountain Village
 };
 
-s32 func_800F3A64(s16 sceneId) {
+s32 Horse_IsValidSpawn(s16 sceneId) {
     s32 i;
 
     for (i = 0; i < ARRAY_COUNT(sHorseValidScenes); i++) {
@@ -81,7 +81,7 @@ s32 func_800F3A64(s16 sceneId) {
     return false;
 }
 
-void func_800F3B2C(PlayState* play) {
+void Horse_ResetHorseData(PlayState* play) {
     gSaveContext.save.saveInfo.horseData.sceneId = SCENE_F01;
     gSaveContext.save.saveInfo.horseData.pos.x = -1420;
     gSaveContext.save.saveInfo.horseData.pos.y = 257;
@@ -89,9 +89,9 @@ void func_800F3B2C(PlayState* play) {
     gSaveContext.save.saveInfo.horseData.yaw = 0x2AAA;
 }
 
-s32 D_801BDA9C = false;
+s32 gHorseIsMounted = false;
 s32 D_801BDAA0 = false;
-s32 D_801BDAA4 = false;
+s32 gHorsePlayedEponasSong = false;
 
 struct_801BDAA8 D_801BDAA8[] = {
     { SCENE_00KEIKOKU, 5 - 1 },      // Termina Field - First Cycle
@@ -122,14 +122,13 @@ void func_800F3C44(PlayState* play, Player* player) {
         return;
     }
 
-    if (D_801BDA9C && CHECK_QUEST_ITEM(QUEST_SONG_EPONA)) {
+    if (gHorseIsMounted && CHECK_QUEST_ITEM(QUEST_SONG_EPONA)) {
         s32 pad;
-        Vec3f pos;
+        Vec3f pos = player->actor.world.pos;
         f32 yIntersect;
         CollisionPoly* poly;
         s32 pad2[3];
 
-        pos = player->actor.world.pos;
         pos.y += 5.0f;
         yIntersect = BgCheck_EntityRaycastFloor1(&play->colCtx, &poly, &pos);
         if (yIntersect == BGCHECK_Y_MIN) {
@@ -142,16 +141,16 @@ void func_800F3C44(PlayState* play, Player* player) {
         Actor_MountHorse(play, player, player->rideActor);
         Actor_SetCameraHorseSetting(play, player);
     } else if ((play->sceneId == gSaveContext.save.saveInfo.horseData.sceneId) && CHECK_QUEST_ITEM(QUEST_SONG_EPONA)) {
-        if (func_800F3A64(gSaveContext.save.saveInfo.horseData.sceneId)) {
+        if (Horse_IsValidSpawn(gSaveContext.save.saveInfo.horseData.sceneId)) {
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_HORSE, gSaveContext.save.saveInfo.horseData.pos.x,
                         gSaveContext.save.saveInfo.horseData.pos.y, gSaveContext.save.saveInfo.horseData.pos.z, 0,
                         gSaveContext.save.saveInfo.horseData.yaw, 0, ENHORSE_PARAMS(ENHORSE_PARAM_4000, ENHORSE_1));
         } else {
-            func_800F3B2C(play);
+            Horse_ResetHorseData(play);
         }
     } else if ((play->sceneId == SCENE_F01) && !CHECK_QUEST_ITEM(QUEST_SONG_EPONA)) {
         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_HORSE, -1420.0f, 257.0f, -1285.0f, 0, 0x2AAA, 0, ENHORSE_PARAMS(ENHORSE_PARAM_4000, ENHORSE_1));
-    } else if (CHECK_QUEST_ITEM(QUEST_SONG_EPONA) && func_800F3A64(play->sceneId)) {
+    } else if (CHECK_QUEST_ITEM(QUEST_SONG_EPONA) && Horse_IsValidSpawn(play->sceneId)) {
         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_HORSE, player->actor.world.pos.x, player->actor.world.pos.y,
                     player->actor.world.pos.z, 0, player->actor.shape.rot.y, 0, ENHORSE_PARAMS(ENHORSE_PARAM_4000, ENHORSE_2));
     }
