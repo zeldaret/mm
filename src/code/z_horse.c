@@ -148,42 +148,44 @@ void Horse_SpawnOverworld(PlayState* play, Player* player) {
             Horse_ResetHorseData(play);
         }
     } else if ((play->sceneId == SCENE_F01) && !CHECK_QUEST_ITEM(QUEST_SONG_EPONA)) {
-        Actor_Spawn(&play->actorCtx, play, ACTOR_EN_HORSE, -1420.0f, 257.0f, -1285.0f, 0, 0x2AAA, 0, ENHORSE_PARAMS(ENHORSE_PARAM_4000, ENHORSE_1));
+        Actor_Spawn(&play->actorCtx, play, ACTOR_EN_HORSE, -1420.0f, 257.0f, -1285.0f, 0, 0x2AAA, 0,
+                    ENHORSE_PARAMS(ENHORSE_PARAM_4000, ENHORSE_1));
     } else if (CHECK_QUEST_ITEM(QUEST_SONG_EPONA) && Horse_IsValidSpawn(play->sceneId)) {
         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_HORSE, player->actor.world.pos.x, player->actor.world.pos.y,
-                    player->actor.world.pos.z, 0, player->actor.shape.rot.y, 0, ENHORSE_PARAMS(ENHORSE_PARAM_4000, ENHORSE_2));
+                    player->actor.world.pos.z, 0, player->actor.shape.rot.y, 0,
+                    ENHORSE_PARAMS(ENHORSE_PARAM_4000, ENHORSE_2));
     }
 }
 
 void Horse_SpawnMinigame(PlayState* play, Player* player) {
-    if ((play->sceneId == SCENE_KOEPONARACE) && (GET_WEEKEVENTREG_HORSE_RACE_STATE == WEEKEVENTREG_HORSE_RACE_STATE_START)) {
-        player->rideActor =
-            Actor_Spawn(&play->actorCtx, play, ACTOR_EN_HORSE, -1262.0f, -106.0f, 470.0f, 0, 0x7FFF, 0, ENHORSE_PARAMS(ENHORSE_PARAM_4000, ENHORSE_13));
+    if ((play->sceneId == SCENE_KOEPONARACE) &&
+        (GET_WEEKEVENTREG_HORSE_RACE_STATE == WEEKEVENTREG_HORSE_RACE_STATE_START)) {
+        player->rideActor = Actor_Spawn(&play->actorCtx, play, ACTOR_EN_HORSE, -1262.0f, -106.0f, 470.0f, 0, 0x7FFF, 0,
+                                        ENHORSE_PARAMS(ENHORSE_PARAM_4000, ENHORSE_13));
         Actor_MountHorse(play, player, player->rideActor);
         Actor_SetCameraHorseSetting(play, player);
     } else if ((play->sceneId == SCENE_KOEPONARACE) &&
-               (((GET_WEEKEVENTREG_HORSE_RACE_STATE == WEEKEVENTREG_HORSE_RACE_STATE_3)) || (GET_WEEKEVENTREG_HORSE_RACE_STATE == WEEKEVENTREG_HORSE_RACE_STATE_2))) {
-        Actor_Spawn(&play->actorCtx, play, ACTOR_EN_HORSE, -1741.0f, -106.0f, -641.0f, 0, -0x4FA4, 0, ENHORSE_PARAMS(ENHORSE_PARAM_4000, ENHORSE_1));
+               (((GET_WEEKEVENTREG_HORSE_RACE_STATE == WEEKEVENTREG_HORSE_RACE_STATE_3)) ||
+                (GET_WEEKEVENTREG_HORSE_RACE_STATE == WEEKEVENTREG_HORSE_RACE_STATE_2))) {
+        Actor_Spawn(&play->actorCtx, play, ACTOR_EN_HORSE, -1741.0f, -106.0f, -641.0f, 0, -0x4FA4, 0,
+                    ENHORSE_PARAMS(ENHORSE_PARAM_4000, ENHORSE_1));
     } else if ((gSaveContext.save.entrance == ENTRANCE(ROMANI_RANCH, 0)) && (Cutscene_GetSceneLayer(play) != 0) &&
                (player->transformation == PLAYER_FORM_HUMAN)) {
-        player->rideActor =
-            Actor_Spawn(&play->actorCtx, play, ACTOR_EN_HORSE, -1106.0f, 260.0f, -1185.0f, 0, 0x13, 0, ENHORSE_PARAMS(ENHORSE_PARAM_4000, ENHORSE_7));
+        player->rideActor = Actor_Spawn(&play->actorCtx, play, ACTOR_EN_HORSE, -1106.0f, 260.0f, -1185.0f, 0, 0x13, 0,
+                                        ENHORSE_PARAMS(ENHORSE_PARAM_4000, ENHORSE_7));
         Actor_MountHorse(play, player, player->rideActor);
         Actor_SetCameraHorseSetting(play, player);
     }
 }
 
 void Horse_Spawn(PlayState* play, Player* player) {
-    if (
-            ((play->sceneId == SCENE_KOEPONARACE) && (GET_WEEKEVENTREG_HORSE_RACE_STATE == WEEKEVENTREG_HORSE_RACE_STATE_START))
-        ||
-            ((play->sceneId == SCENE_F01) &&
-            (((gSaveContext.sceneLayer == 1)) || (gSaveContext.sceneLayer == 5)) &&
-            (player->transformation == PLAYER_FORM_HUMAN))
-         ||
-            ((play->sceneId == SCENE_KOEPONARACE) &&
-            (((GET_WEEKEVENTREG_HORSE_RACE_STATE == WEEKEVENTREG_HORSE_RACE_STATE_3)) || (GET_WEEKEVENTREG_HORSE_RACE_STATE == WEEKEVENTREG_HORSE_RACE_STATE_2)))
-        ) {
+    if (((play->sceneId == SCENE_KOEPONARACE) &&
+         (GET_WEEKEVENTREG_HORSE_RACE_STATE == WEEKEVENTREG_HORSE_RACE_STATE_START)) ||
+        ((play->sceneId == SCENE_F01) && (((gSaveContext.sceneLayer == 1)) || (gSaveContext.sceneLayer == 5)) &&
+         (player->transformation == PLAYER_FORM_HUMAN)) ||
+        ((play->sceneId == SCENE_KOEPONARACE) &&
+         (((GET_WEEKEVENTREG_HORSE_RACE_STATE == WEEKEVENTREG_HORSE_RACE_STATE_3)) ||
+          (GET_WEEKEVENTREG_HORSE_RACE_STATE == WEEKEVENTREG_HORSE_RACE_STATE_2)))) {
         // Gorman Track and horse state is either STATE_START, STATE_2 or STATE_3
         // or Romani Ranch, Player is Human and scene layer is either 1 or 5
         Horse_SpawnMinigame(play, player);
