@@ -20,13 +20,13 @@ typedef enum {
     /* 5 */ PADMGR_CONT_VOICE,
 
     /*-1 */ PADMGR_CONT_UNK = 0xFF
-} PadMgrCtrlrId;
+} ControllerDeviceType;
 
 typedef enum {
     /* 0 */ CONT_PAK_NONE,
     /* 1 */ CONT_PAK_RUMBLE,
     /* 2 */ CONT_PAK_OTHER
-} PadMgrCtrlrPakId;
+} ControllerPakType;
 
 typedef struct {
     /* 0x000 */ u8 validCtrlrsMask;
