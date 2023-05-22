@@ -33,6 +33,7 @@ void BgTobira01_Action(BgTobira01* this, PlayState* play) {
     Player* sp1C = GET_PLAYER(play);
     s16 actorCutscene = this->dyna.actor.csId;
     s16 tempDoorYPosition;
+
     if (this->cutscenePlayed != 0) {
         if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
             CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
@@ -47,7 +48,7 @@ void BgTobira01_Action(BgTobira01* this, PlayState* play) {
                (play->actorCtx.playerImpact.timer != 0) && (play->actorCtx.playerImpact.type == 0) &&
                (SurfaceType_GetSceneExitIndex(&play->colCtx, sp1C->actor.floorPoly, sp1C->actor.floorBgId) == 6)) {
         this->cutscenePlayed = 1;
-        this->unused = 0;
+        this->unk16C = 0;
     }
 
     tempDoorYPosition = this->doorYPositionTick;
@@ -57,11 +58,11 @@ void BgTobira01_Action(BgTobira01* this, PlayState* play) {
         this->doorYPositionTick -= 1;
     }
 
-    this->doorYPositionTick = CLAMP(this->doorYPositionTick, 0, 60);
+    this->doorYPositionTick = CLAMP(this->doorYPositionTick, DOOR_POS_MIN, DOOR_POS_MAX);
     if (tempDoorYPosition != this->doorYPositionTick) {
         Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_STONEDOOR_OPEN_S - SFX_FLAG);
         this->dyna.actor.world.pos.y =
-            (this->yPosition = (this->doorYPositionTick * 1.6666666f) + this->dyna.actor.home.pos.y);
+            (this->yPosition = (this->doorYPositionTick * (5.0f / 3.0f)) + this->dyna.actor.home.pos.y);
         this->isNight = 0xB4;
     }
 
@@ -73,6 +74,7 @@ void BgTobira01_Action(BgTobira01* this, PlayState* play) {
 
 void BgTobira01_Init(Actor* thisx, PlayState* play) {
     BgTobira01* this = THIS;
+
     DynaPolyActor_Init((DynaPolyActor*)this, 1);
     DynaPolyActor_LoadMesh(play, (DynaPolyActor*)this, &gGoronDoorCol);
     gSaveContext.save.saveInfo.weekEventReg[88] &= 0xBF;
