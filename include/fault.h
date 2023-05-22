@@ -59,7 +59,7 @@ void Fault_Init(void);
 // Fatal Errors
 
 void Fault_AddHungupAndCrashImpl(const char* exp1, const char* exp2);
-void Fault_AddHungupAndCrash(const char* filename, u32 line);
+void Fault_AddHungupAndCrash(const char* file, s32 line);
 
 // Client Registration
 

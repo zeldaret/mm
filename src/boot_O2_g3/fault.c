@@ -1114,11 +1114,11 @@ void Fault_AddHungupAndCrashImpl(const char* exp1, const char* exp2) {
 
 /**
  * Like `Fault_AddHungupAndCrashImpl`, however provides a fixed message containing
- * filename and line number
+ * file and line number
  */
-void Fault_AddHungupAndCrash(const char* filename, u32 line) {
-    char msg[256];
+void Fault_AddHungupAndCrash(const char* file, s32 line) {
+    char msg[0x100];
 
-    sprintf(msg, "HungUp %s:%d", filename, line);
+    sprintf(msg, "HungUp %s:%d", file, line);
     Fault_AddHungupAndCrashImpl(msg, NULL);
 }
