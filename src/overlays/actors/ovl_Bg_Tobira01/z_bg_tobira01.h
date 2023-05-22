@@ -5,16 +5,16 @@
 
 struct BgTobira01;
 
-typedef void (*updateFunc)(struct BgTobira01*, PlayState*);
+typedef void (*TobiraActionFunction)(struct BgTobira01*, PlayState*);
 
 typedef struct BgTobira01 {
     /* 0x000 */ DynaPolyActor dyna;
-    /* 0x15C */ updateFunc unk15C;
-    /* 0x160 */ s16 unk160;
-    /* 0x162 */ s16 unk162;
-    /* 0x164 */ f32 unk164;
-    /* 0x168 */ s32 unk168;
-    /* 0x16C */ s32 unk16C;
+    /* 0x15C */ TobiraActionFunction actionFunction;
+    /* 0x160 */ s16 doorYPositionTick;
+    /* 0x162 */ s16 isNight;
+    /* 0x164 */ f32 yPosition;
+    /* 0x168 */ s32 cutscenePlayed;
+    /* 0x16C */ s32 unused;
 } BgTobira01; // size = 0x170
 
 #endif // Z_BG_TOBIRA01_H
