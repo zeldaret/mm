@@ -3,7 +3,7 @@
 #include "overlays/actors/ovl_Bg_Umajump/z_bg_umajump.h"
 #include "overlays/actors/ovl_En_Horse/z_en_horse.h"
 
-s32 func_800F3940(PlayState* play) {
+s32 Horse_GetJumpingFencePathIndex(PlayState* play) {
     Actor* actor;
 
     for (actor = NULL;; actor = actor->next) {
@@ -14,7 +14,7 @@ s32 func_800F3940(PlayState* play) {
         }
 
         if (actor->params == BG_UMAJUMP_TYPE_2) {
-            return ((BgUmajump*)actor)->objectIndex;
+            return ((BgUmajump*)actor)->pathIndex;
         }
     }
 
@@ -22,7 +22,7 @@ s32 func_800F3940(PlayState* play) {
 }
 
 // unused
-s32 func_800F39B4(PlayState* play, s32 pathIndex, s32 pointIndex, Vec3s* dst, s16* arg4) {
+s32 Horse_CopyPointFromPathList(PlayState* play, s32 pathIndex, s32 pointIndex, Vec3s* dst, s16* arg4) {
     Path* path = &play->setupPathList[pathIndex];
     Vec3s* points;
     s32 count = path->count;
@@ -50,12 +50,12 @@ s32 func_800F39B4(PlayState* play, s32 pathIndex, s32 pointIndex, Vec3s* dst, s1
     return true;
 }
 
-typedef struct struct_801BDAA8 {
+typedef struct HorseValidScene {
     /* 0x0 */ s16 sceneId;
     /* 0x2 */ s16 sceneLayerMinusOne;
-} struct_801BDAA8; // size = 0x4
+} HorseValidScene; // size = 0x4
 
-struct_801BDAA8 sHorseValidScenes[] = {
+HorseValidScene sHorseValidScenes[] = {
     { SCENE_00KEIKOKU, 0 },      // Termina Field
     { SCENE_24KEMONOMITI, 0 },   // Road to southern swap
     { SCENE_F01, 0 },            // Romani ranch
@@ -93,23 +93,25 @@ s32 gHorseIsMounted = false;
 s32 D_801BDAA0 = false;
 s32 gHorsePlayedEponasSong = false;
 
-struct_801BDAA8 D_801BDAA8[] = {
+HorseValidScene sHorseValidSceneLayers[] = {
     { SCENE_00KEIKOKU, 5 - 1 },      // Termina Field - First Cycle
     { SCENE_30GYOSON, 1 - 1 },       // Great Bay Coast - Post-Gyorg
     { SCENE_31MISAKI, 1 - 1 },       // Zora Cape - Post-Gyorg
     { SCENE_13HUBUKINOMITI, 1 - 1 }, // Path to Mountain Village - Post-Goht
 };
 
-s32 func_800F3B68(PlayState* play, Player* player) {
+s32 Horse_IsValidSceneLayer(PlayState* play, Player* player) {
     s32 i;
 
+    // Layer 0 is normal gameplay
     if (gSaveContext.sceneLayer == 0) {
         return true;
     }
 
-    for (i = 0; i < ARRAY_COUNT(D_801BDAA8); i++) {
-        if ((D_801BDAA8[i].sceneId == play->sceneId) &&
-            (gSaveContext.sceneLayer == D_801BDAA8[i].sceneLayerMinusOne + 1)) {
+    // Layers above 0 are usually cutscenes, but some of them are actually natural playable layers
+    for (i = 0; i < ARRAY_COUNT(sHorseValidSceneLayers); i++) {
+        if ((sHorseValidSceneLayers[i].sceneId == play->sceneId) &&
+            (gSaveContext.sceneLayer == sHorseValidSceneLayers[i].sceneLayerMinusOne + 1)) {
             return true;
         }
     }
@@ -117,7 +119,7 @@ s32 func_800F3B68(PlayState* play, Player* player) {
 }
 
 void Horse_SpawnOverworld(PlayState* play, Player* player) {
-    if (!func_800F3B68(play, player)) {
+    if (!Horse_IsValidSceneLayer(play, player)) {
         return;
     }
 
@@ -165,7 +167,7 @@ void Horse_SpawnMinigame(PlayState* play, Player* player) {
         Actor_MountHorse(play, player, player->rideActor);
         Actor_SetCameraHorseSetting(play, player);
     } else if ((play->sceneId == SCENE_KOEPONARACE) &&
-               (((GET_WEEKEVENTREG_HORSE_RACE_STATE == WEEKEVENTREG_HORSE_RACE_STATE_3)) ||
+               ((GET_WEEKEVENTREG_HORSE_RACE_STATE == WEEKEVENTREG_HORSE_RACE_STATE_3) ||
                 (GET_WEEKEVENTREG_HORSE_RACE_STATE == WEEKEVENTREG_HORSE_RACE_STATE_2))) {
         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_HORSE, -1741.0f, -106.0f, -641.0f, 0, -0x4FA4, 0,
                     ENHORSE_PARAMS(ENHORSE_PARAM_4000, ENHORSE_1));

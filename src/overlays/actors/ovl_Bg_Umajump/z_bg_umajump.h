@@ -3,8 +3,8 @@
 
 #include "global.h"
 
-#define BG_UMAJUMP_GET_OBJECT_INDEX(thisx) (((thisx)->params >> 8) & 0xFF)
-#define BG_UMAJUMP_GET_FF(thisx) ((thisx)->params & 0xFF)
+#define BG_UMAJUMP_GET_PATH_INDEX(thisx) (((thisx)->params >> 8) & 0xFF)
+#define BG_UMAJUMP_GET_TYPE(thisx) ((thisx)->params & 0xFF)
 
 typedef enum {
     BG_UMAJUMP_TYPE_1 = 1,
@@ -25,6 +25,7 @@ typedef struct BgUmajump {
     /* 0x160 */ union {
                     s32 objectIndex;
                     s32 rotationTimer; // y rotation
+                    s32 pathIndex;
                 };
     /* 0x164 */ s32 hasSoundPlayed;
     /* 0x168 */ Actor* horse;

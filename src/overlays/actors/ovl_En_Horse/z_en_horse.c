@@ -595,7 +595,7 @@ s32 EnHorse_Spawn(EnHorse* this, PlayState* play) {
     f32 minDist = 1.0e+38;
     Player* player = GET_PLAYER(play);
     Vec3f spawnPos;
-    s32 pathIndex = func_800F3940(play);
+    s32 pathIndex = Horse_GetJumpingFencePathIndex(play);
     s32 pathCount;
     Vec3s* pathPoints;
 

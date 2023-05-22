@@ -5,8 +5,8 @@
 #include "z64.h"
 
 
-s32 func_800F3940(PlayState* play);
-s32 func_800F39B4(PlayState* play, s32 pathIndex, s32 pointIndex, Vec3s* dst, s16* arg4);
+s32 Horse_GetJumpingFencePathIndex(PlayState* play);
+s32 Horse_CopyPointFromPathList(PlayState* play, s32 pathIndex, s32 pointIndex, Vec3s* dst, s16* arg4);
 s32 Horse_IsValidSpawn(s16 sceneId);
 void Horse_ResetHorseData(PlayState* play);
 void Horse_Spawn(PlayState* play, Player* player);

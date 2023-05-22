@@ -951,7 +951,7 @@
     0x801BDA9C:("gHorseIsMounted","s32","",0x4),
     0x801BDAA0:("D_801BDAA0","s32","",0x4),
     0x801BDAA4:("gHorsePlayedEponasSong","s32","",0x4),
-    0x801BDAA8:("D_801BDAA8","struct_801BDAA8","[4]",0x10),
+    0x801BDAA8:("sHorseValidSceneLayers","struct_801BDAA8","[4]",0x10),
     0x801BDAC0:("D_801BDAC0","UNK_TYPE4","",0x4),
     0x801BDAC4:("D_801BDAC4","UNK_TYPE4","",0x4),
     0x801BDAC8:("D_801BDAC8","UNK_TYPE4","",0x4),
