@@ -449,11 +449,13 @@ void PadMgr_UpdateInputs(void) {
                     // No error, copy inputs
                     input->cur = *pad;
                     break;
-                case (CHNL_ERR_OVERRUN >> 4):
+
+                case CHNL_ERR_OVERRUN >> 4:
                     // Overrun error, reuse previous inputs
                     input->cur = input->prev;
                     break;
-                case (CHNL_ERR_NORESP >> 4):
+
+                case CHNL_ERR_NORESP >> 4:
                     // No response error, take inputs as 0
                     input->cur.button = 0;
                     input->cur.stick_x = 0;
@@ -466,6 +468,7 @@ void PadMgr_UpdateInputs(void) {
                         sPadMgrInstance->rumbleTimer[i] = 0xFF;
                     }
                     break;
+
                 default:
                     // Unknown error response
                     Fault_AddHungupAndCrash("../padmgr.c", 1098);
@@ -524,7 +527,7 @@ void PadMgr_InitVoice(void) {
             }
         }
     }
-    // If sVoiceInitStatus is still 1 after the first attempt to initialize a VRU, don't try again
+    // If sVoiceInitStatus is still VOICE_INIT_TRY after the first attempt to initialize a VRU, don't try again
     if (sVoiceInitStatus == VOICE_INIT_TRY) {
         sVoiceInitStatus = VOICE_INIT_FAILED;
     }
@@ -548,12 +551,14 @@ void PadMgr_UpdateConnections(void) {
                         sPadMgrInstance->ctrlrType[i] = PADMGR_CONT_NORMAL;
                     }
                     break;
+
                 case CONT_TYPE_MOUSE:
                     // N64 Mouse
                     if (sPadMgrInstance->ctrlrType[i] == PADMGR_CONT_NONE) {
                         sPadMgrInstance->ctrlrType[i] = PADMGR_CONT_MOUSE;
                     }
                     break;
+
                 case CONT_TYPE_VOICE:
                     // Voice Recognition Unit
                     if (sPadMgrInstance->ctrlrType[i] == PADMGR_CONT_NONE) {
@@ -561,6 +566,7 @@ void PadMgr_UpdateConnections(void) {
                         sPadMgrInstance->pakType[i] = CONT_PAK_NONE;
                     }
                     break;
+
                 default:
                     // Other/Unrecognized
                     if (sPadMgrInstance->ctrlrType[i] == PADMGR_CONT_NONE) {
@@ -569,6 +575,7 @@ void PadMgr_UpdateConnections(void) {
                         sprintf(msg, "知らない種類のコントローラ(%04x)を認識しました",
                                 sPadMgrInstance->padStatus[i].type);
                     }
+                    // Missing break required for matching
             }
         } else if (sPadMgrInstance->ctrlrType[i] != PADMGR_CONT_NONE) {
             // Plugged controller errored
@@ -666,8 +673,8 @@ void PadMgr_HandlePreNMI(void) {
  * currently copying the old inputs potentially resulting in a mix of newly polled and old inputs being used.
  * It is preferable to use `PadMgr_GetInput` or `PadMgr_GetInput2`.
  *
- * @param inputs   Array of Input of length MAXCONTROLLERS to copy inputs into
- * @param gamePoll True if polling inputs for updating the game state
+ * @param inputs      Array of Input of length MAXCONTROLLERS to copy inputs into
+ * @param gameRequest True if polling inputs for updating the game state
  */
 void PadMgr_GetInputNoLock(Input* inputs, s32 gameRequest) {
     s32 i;
@@ -742,9 +749,11 @@ void PadMgr_ThreadEntry() {
                 case OS_SC_RETRACE_MSG:
                     actionBits |= PADMGR_RETRACE_MSG;
                     break;
+
                 case OS_SC_PRE_NMI_MSG:
                     actionBits |= PADMGR_PRE_NMI_MSG;
                     break;
+
                 case OS_SC_NMI_MSG:
                     actionBits |= PADMGR_NMI_MSG;
                     break;

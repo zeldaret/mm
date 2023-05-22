@@ -13,13 +13,12 @@ typedef struct {
 } Input; // size = 0x18
 
 typedef enum {
-    /* 0 */ PADMGR_CONT_NONE,
-    /* 1 */ PADMGR_CONT_NORMAL,
-    /* 3 */ PADMGR_CONT_MOUSE = 3,
-    /* 4 */ PADMGR_CONT_VOICE_PLUGGED, // VRU plugged but not initialized
-    /* 5 */ PADMGR_CONT_VOICE,
-
-    /*-1 */ PADMGR_CONT_UNK = 0xFF
+    /*  0 */ PADMGR_CONT_NONE,
+    /*  1 */ PADMGR_CONT_NORMAL,
+    /*  3 */ PADMGR_CONT_MOUSE = 3,
+    /*  4 */ PADMGR_CONT_VOICE_PLUGGED, // VRU plugged but not initialized
+    /*  5 */ PADMGR_CONT_VOICE,
+    /* -1 */ PADMGR_CONT_UNK = 0xFF
 } ControllerDeviceType;
 
 typedef enum {
