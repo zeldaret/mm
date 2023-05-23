@@ -118,7 +118,7 @@ typedef struct {
 
 typedef struct {
     /* 0x00 */ int unk0;
-    /* 0x04 */ void* unk4;
+    /* 0x04 */ s32 unk4;
     /* 0x08 */ void* addr;
     /* 0x0C */ s32 pageNum;
     /* 0x10 */ s32 pageCount;

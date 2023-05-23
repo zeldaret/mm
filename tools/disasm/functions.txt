@@ -3445,9 +3445,15 @@
     0x80185460:("func_80185460",),
     0x80185660:("Slowly_Main",),
     0x801856FC:("Slowly_ThreadEntry",),
+<<<<<<< HEAD
     0x8018571C:("Slowly_Init",),
     0x801857A0:("Slowly_Destroy",),
     0x801857C0:("func_801857C0",),
+=======
+    0x8018571C:("Slowly_Start",),
+    0x801857A0:("Slowly_Stop",),
+    0x801857C0:("SysFlashrom_FlashIsGood",),
+>>>>>>> 59017bcd (WIP)
     0x801857D0:("SysFlashrom_GetVendorStr",),
     0x80185864:("SysFlashrom_CheckFlashType",),
     0x80185908:("SysFlashrom_InitFlash",),

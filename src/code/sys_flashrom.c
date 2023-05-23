@@ -4,8 +4,8 @@
 #include "system_malloc.h"
 
 OSMesgQueue sFlashromMesgQueue;
-OSMesg sFlashromMesg;
-s32 D_801FBE2C;
+OSMesg sFlashromMesg[1];
+s32 sFlashromFlashIsGood;
 s32 sFlashromVendor;
 
 u8 sSysFlashromStack[0x1000];
@@ -14,8 +14,8 @@ OSThread sSysFlashromThread;
 s80185D40 D_801FD008;
 OSMesg D_801FD034;
 
-s32 func_801857C0(void) {
-    return D_801FBE2C;
+s32 SysFlashrom_FlashIsGood(void) {
+    return sFlashromFlashIsGood;
 }
 
 const char* SysFlashrom_GetVendorStr(void) {
@@ -39,7 +39,7 @@ s32 SysFlashrom_CheckFlashType(void) {
     u32 flashType;
     u32 flashVendor;
 
-    if (func_801857C0() == 0) {
+    if (!SysFlashrom_FlashIsGood()) {
         return -1;
     }
     osFlashReadId(&flashType, &flashVendor);
@@ -56,11 +56,11 @@ s32 SysFlashrom_CheckFlashType(void) {
 }
 
 s32 SysFlashrom_InitFlash(void) {
-    osCreateMesgQueue(&sFlashromMesgQueue, &sFlashromMesg, 1);
+    osCreateMesgQueue(&sFlashromMesgQueue, sFlashromMesg, ARRAY_COUNT(sFlashromMesg));
     osFlashInit();
-    D_801FBE2C = 1;
-    if (SysFlashrom_CheckFlashType() != 0) {
-        D_801FBE2C = 0;
+    sFlashromFlashIsGood = true;
+    if (SysFlashrom_CheckFlashType()) {
+        sFlashromFlashIsGood = false;
         return -1;
     }
     return 0;
@@ -69,7 +69,7 @@ s32 SysFlashrom_InitFlash(void) {
 s32 SysFlashrom_ReadData(void* addr, s32 pageNum, s32 pageCount) {
     OSIoMesg msg;
 
-    if (func_801857C0() == 0) {
+    if (!SysFlashrom_FlashIsGood()) {
         return -1;
     }
     osInvalDCache(addr, pageCount * 128);
@@ -79,7 +79,7 @@ s32 SysFlashrom_ReadData(void* addr, s32 pageNum, s32 pageCount) {
 }
 
 s32 SysFlashrom_ErasePage(u32 page) {
-    if (func_801857C0() == 0) {
+    if (!SysFlashrom_FlashIsGood()) {
         return -1;
     }
     return osFlashSectorErase(page);
@@ -92,7 +92,7 @@ s32 SysFlashrom_WriteData(u8* addr, u32 pageNum, s32 pageCount) {
     s32 temp_v0;
     s32 i;
 
-    if (func_801857C0() == 0) {
+    if (!SysFlashrom_FlashIsGood()) {
         return -1;
     }
     if (pageNum & 0x7F) {
@@ -121,7 +121,7 @@ s32 SysFlashrom_AttemptWrite(void* addr, s32 pageNum, s32 pageCount) {
     s32 temp_v0_2;
     s32 i;
 
-    if (func_801857C0() == 0) {
+    if (!SysFlashrom_FlashIsGood()) {
         return -1;
     }
     osWritebackDCache(addr, pageCount * 128);
@@ -165,7 +165,7 @@ s32 func_80185C24(void* addr, u32 pageNum, u32 pageCount) {
     size_t size;
     s32 ret;
 
-    if (func_801857C0() == 0) {
+    if (!SysFlashrom_FlashIsGood()) {
         return -1;
     }
     size = pageCount * 128;
@@ -212,48 +212,46 @@ void SysFlashrom_ThreadEntry(void* arg) {
 
 #ifdef NON_MATCHING
 // Data ordering
-void SysFlashrom_CreateRequest(u8* arg0, u32 arg1, u32 arg2) {
-    if (func_801857C0() != 0) {
-        D_801FD008.unk0 = 1;
-        D_801FD008.addr = arg0;
-        D_801FD008.pageNum = arg1;
-        D_801FD008.pageCount = arg2;
-        osCreateMesgQueue(&D_801FD008.messageQueue, &D_801FD034, 1);
-        StackCheck_Init(&sSysFlashromStackEntry, sSysFlashromStack, sSysFlashromStack + sizeof(sSysFlashromStack), 0,
+void SysFlashrom_CreateRequest(u8* addr, u32 pageNum, u32 pageCount) {
+    if (SysFlashrom_FlashIsGood() != 0) {
+        sFlashromRequest.unk0 = 1;
+        sFlashromRequest.addr = addr;
+        sFlashromRequest.pageNum = pageNum;
+        sFlashromRequest.pageCount = pageCount;
+        osCreateMesgQueue(&sFlashromRequest.messageQueue, D_801FD034, ARRAY_COUNT(D_801FD034));
+        StackCheck_Init(&sys_flashromStackEntry, sys_flashromStack, sys_flashromStack + sizeof(sys_flashromStack), 0,
                         0x100, "sys_flashrom");
-        osCreateThread(&sSysFlashromThread, 0xD, SysFlashrom_ThreadEntry, &D_801FD008,
-                       sSysFlashromStack + sizeof(sSysFlashromStack), 0xD);
-        osStartThread(&sSysFlashromThread);
+        osCreateThread(&sys_flashromOSThread, 0xD, SysFlashrom_ThreadEntry, &sFlashromRequest,
+                       sys_flashromStack + sizeof(sys_flashromStack), 0xD);
+        osStartThread(&sys_flashromOSThread);
     }
 }
 #else
-void SysFlashrom_CreateRequest(u8* arg0, u32 arg1, u32 arg2);
+void SysFlashrom_CreateRequest(u8* addr, u32 pageNum, u32 pageCount);
 #pragma GLOBAL_ASM("asm/non_matchings/code/sys_flashrom/SysFlashrom_CreateRequest.s")
 #endif
 
-#ifdef NON_MATCHING
 s32 func_80185EC4(void) {
-    if (func_801857C0() == 0) {
+    OSMesgQueue* queue = &sFlashromRequest.messageQueue;
+    
+    if (!SysFlashrom_FlashIsGood()) {
         return -1;
     }
-    return (D_801FD008.messageQueue.msgCount <= D_801FD008.messageQueue.validCount);
+    return (queue->msgCount <= queue->validCount);
 }
-#else
-s32 func_80185EC4(void);
-#pragma GLOBAL_ASM("asm/non_matchings/code/sys_flashrom/func_80185EC4.s")
-#endif
 
 s32 SysFlashrom_DestroyThread(void) {
-    if (func_801857C0() == 0) {
+    if (!SysFlashrom_FlashIsGood()) {
         return -1;
     }
-    osRecvMesg(&D_801FD008.messageQueue, NULL, OS_MESG_BLOCK);
+    osRecvMesg(&sFlashromRequest.messageQueue, NULL, OS_MESG_BLOCK);
     osDestroyThread(&sSysFlashromThread);
     StackCheck_Cleanup(&sSysFlashromStackEntry);
-    return D_801FD008.unk4;
+    return sFlashromRequest.unk4;
 }
 
-void func_80185F64(void* arg0, s32 arg1, s32 arg2) {
-    SysFlashrom_CreateRequest(arg0, arg1, arg2);
+void func_80185F64(void* addr, u32 pageNum, u32 pageCount) {
+    SysFlashrom_CreateRequest(addr, pageNum, pageCount);
     SysFlashrom_DestroyThread();
 }
+
