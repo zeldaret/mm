@@ -15,7 +15,7 @@
 
 #define DEFINE_SCENE_UNSET(_enumValue) { 0 },
 
-SceneTableEntry gSceneTable[] = {
+SceneTableEntry gSceneTable[SCENE_MAX] = {
 #include "tables/scene_table.h"
 };
 
