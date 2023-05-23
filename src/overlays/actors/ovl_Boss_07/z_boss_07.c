@@ -5,6 +5,7 @@
  */
 
 #include "z_boss_07.h"
+#include "z64shrink_window.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -233,7 +234,7 @@ static DamageTable D_80A07A00 = {
     /* Powder Keg     */ DMG_ENTRY(2, 0xB),
 };
 
-const ActorInit Boss_07_InitVars = {
+ActorInit Boss_07_InitVars = {
     ACTOR_BOSS_07,
     ACTORCAT_BOSS,
     FLAGS,
@@ -296,7 +297,7 @@ static ColliderJntSphElementInit D_80A07A40[11] = {
 // static ColliderJntSphInit sJntSphInit = {
 static ColliderJntSphInit D_80A07BCC = {
     { COLTYPE_HIT3, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_PLAYER, OC2_TYPE_1, COLSHAPE_JNTSPH, },
-    11, D_80A07A40, // sJntSphElementsInit,
+    ARRAY_COUNT(sJntSphElementsInit), D_80A07A40, // sJntSphElementsInit,
 };
 
 // static ColliderCylinderInit sCylinderInit = {
@@ -317,7 +318,7 @@ static ColliderJntSphElementInit D_80A07C08[1] = {
 // static ColliderJntSphInit sJntSphInit = {
 static ColliderJntSphInit D_80A07C2C = {
     { COLTYPE_HIT3, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_PLAYER, OC2_TYPE_1, COLSHAPE_JNTSPH, },
-    1, D_80A07C08, // sJntSphElementsInit,
+    ARRAY_COUNT(sJntSphElementsInit), D_80A07C08, // sJntSphElementsInit,
 };
 
 // static ColliderQuadInit sQuadInit = {
@@ -385,7 +386,7 @@ static ColliderJntSphElementInit D_80A07CDC[11] = {
 // static ColliderJntSphInit sJntSphInit = {
 static ColliderJntSphInit D_80A07E68 = {
     { COLTYPE_HIT3, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_PLAYER, OC2_TYPE_1, COLSHAPE_JNTSPH, },
-    11, D_80A07CDC, // sJntSphElementsInit,
+    ARRAY_COUNT(sJntSphElementsInit), D_80A07CDC, // sJntSphElementsInit,
 };
 
 // static ColliderCylinderInit sCylinderInit = {

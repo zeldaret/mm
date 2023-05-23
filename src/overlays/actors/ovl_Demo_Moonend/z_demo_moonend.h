@@ -20,6 +20,4 @@ typedef struct DemoMoonend {
     /* 0x02E0 */ DemoMoonendActionFunc actionFunc;
 } DemoMoonend; // size = 0x2E4
 
-extern const ActorInit Demo_Moonend_InitVars;
-
 #endif // Z_DEMO_MOONEND_H

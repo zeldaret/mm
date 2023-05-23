@@ -21,7 +21,7 @@ void FireArrow_Fly(ArrowFire* this, PlayState* play);
 
 #include "overlays/ovl_Arrow_fire/ovl_Arrow_Fire.c"
 
-const ActorInit Arrow_Fire_InitVars = {
+ActorInit Arrow_Fire_InitVars = {
     ACTOR_ARROW_FIRE,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -81,7 +81,7 @@ void ArrowFire_Init(Actor* thisx, PlayState* play) {
 void ArrowFire_Destroy(Actor* thisx, PlayState* play) {
     ArrowFire* this = THIS;
 
-    func_80115D5C(&play->state);
+    Magic_Reset(play);
     Collider_DestroyQuad(play, &this->collider1);
     Collider_DestroyQuad(play, &this->collider2);
 }
@@ -90,7 +90,7 @@ void FireArrow_ChargeAndWait(ArrowFire* this, PlayState* play) {
     EnArrow* arrow = (EnArrow*)this->actor.parent;
 
     if ((arrow == NULL) || (arrow->actor.update == NULL)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
     if (this->radius < 10) {
@@ -156,7 +156,7 @@ void FireArrow_Hit(ArrowFire* this, PlayState* play) {
     }
     if (this->timer == 0) {
         this->timer = 255;
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
     if (this->timer >= 13) {
@@ -171,7 +171,7 @@ void FireArrow_Fly(ArrowFire* this, PlayState* play) {
     s32 pad2;
 
     if ((arrow == NULL) || (arrow->actor.update == NULL)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -186,7 +186,7 @@ void FireArrow_Fly(ArrowFire* this, PlayState* play) {
 
     FireArrow_Lerp(&this->firedPos, &this->actor.world.pos, 0.05f);
     if (arrow->unk_261 & 1) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_EXPLOSION_FRAME);
+        Actor_PlaySfx(&this->actor, NA_SE_IT_EXPLOSION_FRAME);
         ArrowFire_SetupAction(this, FireArrow_Hit);
         this->timer = 32;
         this->alpha = 255;
@@ -194,7 +194,7 @@ void FireArrow_Fly(ArrowFire* this, PlayState* play) {
     }
     if (arrow->unk_260 < 34) {
         if (this->alpha < 35) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             return;
         }
         this->alpha -= 25;
@@ -205,7 +205,7 @@ void ArrowFire_Update(Actor* thisx, PlayState* play) {
     ArrowFire* this = (ArrowFire*)thisx;
 
     if ((play->msgCtx.msgMode == 0xE) || (play->msgCtx.msgMode == 0x12)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
     this->actionFunc(this, play);

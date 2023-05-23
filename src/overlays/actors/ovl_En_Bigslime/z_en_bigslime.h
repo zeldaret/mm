@@ -66,7 +66,7 @@ typedef struct EnBigslime {
     /* 0x02B4 */ u8 shockwaveAlpha;
     /* 0x02B5 */ u8 gekkoDrawDmgEffType;
     /* 0x02B6 */ s16 gekkoYaw;
-    /* 0x02B8 */ s16 cutscene;
+    /* 0x02B8 */ s16 csId;
     /* 0x02BA */ union { // multi-use timer
                     s16 idleTimer;
                     s16 noticeTimer;
@@ -124,7 +124,5 @@ typedef struct EnBigslime {
     /* 0x0A50 */ AnimatedMaterial* iceShardTexAnim;
     /* 0x0A54 */ EnBigslimeIceShardEffect iceShardEffect[BIGSLIME_NUM_ICE_SHARD]; // 312 = 162 (bigslime) + 10 * 15 (minislime)
 } EnBigslime; // size = 0x3634
-
-extern const ActorInit En_Bigslime_InitVars;
 
 #endif // Z_EN_BIGSLIME_H

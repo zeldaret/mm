@@ -15,6 +15,27 @@ typedef enum {
     /* 4 */ ENIN_BLUE_SHIRT
 } EnInType;
 
+typedef enum {
+    /*  0 */ ENIN_ANIM_0,
+    /*  1 */ ENIN_ANIM_1,
+    /*  2 */ ENIN_ANIM_2,
+    /*  3 */ ENIN_ANIM_3,
+    /*  4 */ ENIN_ANIM_4,
+    /*  5 */ ENIN_ANIM_5,
+    /*  6 */ ENIN_ANIM_6,
+    /*  7 */ ENIN_ANIM_7,
+    /*  8 */ ENIN_ANIM_8,
+    /*  9 */ ENIN_ANIM_9,
+    /* 10 */ ENIN_ANIM_10,
+    /* 11 */ ENIN_ANIM_11,
+    /* 12 */ ENIN_ANIM_12,
+    /* 13 */ ENIN_ANIM_13,
+    /* 14 */ ENIN_ANIM_14,
+    /* 15 */ ENIN_ANIM_15,
+    /* 16 */ ENIN_ANIM_16,
+    /* 17 */ ENIN_ANIM_17,
+} EnInAnimation;
+
 #define ENIN_GET_TYPE(thisx) ((thisx)->params & 0x1FF)
 #define ENIN_GET_PATH(thisx) (((thisx)->params & 0x7E00) >> 9) // Only used with ENIN_UNK_TYPE
 
@@ -25,7 +46,7 @@ typedef struct EnIn {
     /* 0x18C */ ColliderJntSph colliderJntSph;
     /* 0x1AC */ ColliderJntSphElement colliderJntSphElement;
     /* 0x1EC */ ColliderCylinder colliderCylinder;
-    /* 0x238 */ char unk238[0x4];
+    /* 0x238 */ UNK_TYPE1 unk238[0x4];
     /* 0x23C */ u8 unk23C;
     /* 0x23D */ u8 unk23D;
     /* 0x240 */ Path* path;
@@ -39,19 +60,19 @@ typedef struct EnIn {
     /* 0x352 */ Vec3s trackTarget;
     /* 0x358 */ Vec3s headRot;
     /* 0x35E */ Vec3s torsoRot;
-    /* 0x364 */ char unk364[0x12];
+    /* 0x364 */ UNK_TYPE1 unk364[0x12];
     /* 0x376 */ s16 unk376[20];
     /* 0x39E */ s16 unk39E[20];
-    /* 0x3C6 */ char unk3C6[0xBC];
+    /* 0x3C6 */ UNK_TYPE1 unk3C6[0xBC];
     /* 0x482 */ s16 unk482;
     /* 0x484 */ s16 unk484;
     /* 0x486 */ s16 unk486;
     /* 0x488 */ s16 unk488;
     /* 0x48A */ u16 unk48A;
     /* 0x48C */ s32 unk48C;
-    /* 0x490 */ char unk490[0x4];
+    /* 0x490 */ UNK_TYPE1 unk490[0x4];
     /* 0x494 */ s32 unk494;
-    /* 0x498 */ char unk498[0xC];
+    /* 0x498 */ UNK_TYPE1 unk498[0xC];
     /* 0x4A4 */ struct EnIn* unk4A4;
     /* 0x4A8 */ s32 unk4A8;
     /* 0x4AC */ s32 unk4AC;
@@ -59,9 +80,7 @@ typedef struct EnIn {
     /* 0x4B4 */ Vec3f unk4B4;
     /* 0x4C0 */ f32 unk4C0;
     /* 0x4C0 */ f32 unk4C4;
-    /* 0x4C0 */ s32 unk4C8;
+    /* 0x4C0 */ s32 prevTalkState;
 } EnIn; // size = 0x4CC
-
-extern const ActorInit En_In_InitVars;
 
 #endif // Z_EN_IN_H

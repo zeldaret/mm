@@ -6,6 +6,7 @@
 
 #include "prevent_bss_reordering.h"
 #include "z_boss_06.h"
+#include "z64shrink_window.h"
 #include "overlays/actors/ovl_En_Knight/z_en_knight.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 #include "objects/object_knight/object_knight.h"
@@ -17,7 +18,7 @@
 void Boss06_Init(Actor* thisx, PlayState* play);
 void Boss06_Destroy(Actor* thisx, PlayState* play);
 void Boss06_Update(Actor* thisx, PlayState* play);
-void Boss06_Draw(Actor* thisx, PlayState* play);
+void Boss06_Draw(Actor* thisx, PlayState* play2);
 
 void func_809F24A8(Boss06* this);
 void func_809F24C8(Boss06* this, PlayState* play);
@@ -28,11 +29,11 @@ void func_809F2E34(Boss06* this, PlayState* play);
 void func_809F2ED0(Boss06* this, PlayState* play);
 void func_809F2EE8(Boss06* this, PlayState* play);
 
-static Vec3f D_809F4370[128];
-static EnKnight* D_809F4970;
-static s32 D_809F4974;
-static s32 D_809F4978;
-static s32 D_809F497C;
+Vec3f D_809F4370[128];
+EnKnight* D_809F4970;
+s32 D_809F4974;
+s32 D_809F4978;
+s32 D_809F497C;
 
 static DamageTable sDamageTable = {
     /* Deku Nut       */ DMG_ENTRY(0, 0xF),
@@ -69,7 +70,7 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(0, 0xF),
 };
 
-const ActorInit Boss_06_InitVars = {
+ActorInit Boss_06_InitVars = {
     ACTOR_BOSS_06,
     ACTORCAT_BOSS,
     FLAGS,
@@ -101,7 +102,7 @@ static ColliderCylinderInit sCylinderInit = {
     { 90, 140, 10, { 0, 0, 0 } },
 };
 
-static Vec3f D_809F40EC[] = {
+Vec3f D_809F40EC[] = {
     { 1081.0f, 235.0f, 3224.0f },
     { 676.0f, 235.0f, 3224.0f },
 };
@@ -135,7 +136,7 @@ void Boss06_Init(Actor* thisx, PlayState* play) {
     D_809F4970 = (EnKnight*)this->actor.parent;
     this->actor.colChkInfo.damageTable = &sDamageTable;
 
-    if ((KREG(64) != 0) || (gSaveContext.eventInf[5] & 0x80)) {
+    if ((KREG(64) != 0) || CHECK_EVENTINF(EVENTINF_57)) {
         this->actionFunc = func_809F2E14;
     } else {
         this->actionFunc = func_809F2B64;
@@ -182,7 +183,7 @@ void func_809F24A8(Boss06* this) {
 }
 
 #ifdef NON_MATCHING
-// Weird loading of 1
+// The 1 constant from the switch branch is reused in case 2 for some reason.
 void func_809F24C8(Boss06* this, PlayState* play) {
     s16 sp4E = 0;
     Player* player = GET_PLAYER(play);
@@ -194,15 +195,15 @@ void func_809F24C8(Boss06* this, PlayState* play) {
 
     switch (this->unk_1C9) {
         case 0:
-            if (ActorCutscene_GetCurrentIndex() != -1) {
+            if (CutsceneManager_GetCurrentCsId() != CS_ID_NONE) {
                 break;
             }
 
-            Cutscene_Start(play, &play->csCtx);
-            func_800B7298(play, &this->actor, 7);
-            this->unk_A00 = Play_CreateSubCamera(play);
-            Play_CameraChangeStatus(play, CAM_ID_MAIN, 1);
-            Play_CameraChangeStatus(play, this->unk_A00, 7);
+            Cutscene_StartManual(play, &play->csCtx);
+            func_800B7298(play, &this->actor, PLAYER_CSMODE_WAIT);
+            this->subCamId = Play_CreateSubCamera(play);
+            Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
+            Play_ChangeCameraStatus(play, this->subCamId, CAM_STATUS_ACTIVE);
             D_809F4970->unk_151 = 1;
             this->unk_1C9 = 1;
             this->unk_1C8 = 1;
@@ -212,7 +213,7 @@ void func_809F24C8(Boss06* this, PlayState* play) {
             temp_s0 = play->actorCtx.actorLists[ACTORCAT_ITEMACTION].first;
             while (temp_s0 != NULL) {
                 if (temp_s0->id == ACTOR_EN_ARROW) {
-                    Actor_MarkForDeath(temp_s0);
+                    Actor_Kill(temp_s0);
                 }
                 temp_s0 = temp_s0->next;
             }
@@ -220,7 +221,7 @@ void func_809F24C8(Boss06* this, PlayState* play) {
         case 1:
             if (this->unk_1CA >= 10) {
                 Math_ApproachF(&this->unk_1E4, 30.0f, 0.2f, 1.0f);
-                play->envCtx.fillScreen = 1;
+                play->envCtx.fillScreen = true;
                 play->envCtx.screenFillColor[2] = 0;
                 play->envCtx.screenFillColor[1] = 0;
                 play->envCtx.screenFillColor[0] = 0;
@@ -233,37 +234,37 @@ void func_809F24C8(Boss06* this, PlayState* play) {
             }
 
             if (this->unk_1CA >= 60) {
-                play->envCtx.fillScreen = 0;
+                play->envCtx.fillScreen = false;
                 this->unk_1C8 = 0;
                 this->unk_1DC = 0.0f;
                 this->unk_1D8 = 0.0f;
                 if (this->unk_1CA == 60) {
                     D_809F4970->unk_154++;
-                    func_800B7298(play, &this->actor, 0x84);
+                    func_800B7298(play, &this->actor, PLAYER_CSMODE_132);
                     player->actor.shape.rot.y = 0;
                     player->actor.world.rot.y = player->actor.shape.rot.y;
                 }
 
-                this->unk_A04.x = player->actor.world.pos.x + 20.0f;
-                this->unk_A04.y = player->actor.world.pos.y + 20.0f;
-                this->unk_A04.z = player->actor.world.pos.z + 30.0f;
+                this->subCamEye.x = player->actor.world.pos.x + 20.0f;
+                this->subCamEye.y = player->actor.world.pos.y + 20.0f;
+                this->subCamEye.z = player->actor.world.pos.z + 30.0f;
 
-                this->unk_A10.x = player->actor.world.pos.x;
-                this->unk_A10.y = player->actor.world.pos.y + 26.0f;
-                this->unk_A10.z = player->actor.world.pos.z;
+                this->subCamAt.x = player->actor.world.pos.x;
+                this->subCamAt.y = player->actor.world.pos.y + 26.0f;
+                this->subCamAt.z = player->actor.world.pos.z;
 
                 if (this->unk_1CA >= 75) {
                     temp_v0_2 = play->actorCtx.actorLists[ACTORCAT_BOSS].first;
                     while (temp_v0_2 != NULL) {
                         if ((temp_v0_2->id == ACTOR_EN_KNIGHT) && (&D_809F4970->actor == temp_v0_2) &&
                             (D_809F4970->unk_680 != 0)) {
-                            this->unk_A04.x = 1307.0f;
-                            this->unk_A04.y = 142.0f;
-                            this->unk_A04.z = 2897.0f;
+                            this->subCamEye.x = 1307.0f;
+                            this->subCamEye.y = 142.0f;
+                            this->subCamEye.z = 2897.0f;
 
-                            this->unk_A10.x = 1376.0f;
-                            this->unk_A10.y = 132.0f;
-                            this->unk_A10.z = 2860.0f;
+                            this->subCamAt.x = 1376.0f;
+                            this->subCamAt.y = 132.0f;
+                            this->subCamAt.z = 2860.0f;
 
                             if (this->unk_1CA == 75) {
                                 D_809F4970->unk_148 = 1;
@@ -291,25 +292,25 @@ void func_809F24C8(Boss06* this, PlayState* play) {
                                        this->actor.world.pos.y - 200.0f, this->actor.world.pos.z - 170.0f, 15, 0, 0, 1);
 
                     if (ENBOSS06_GET_PARAMS(&this->actor) == 0) {
-                        this->unk_A04.x = this->actor.world.pos.x - 200.0f;
+                        this->subCamEye.x = this->actor.world.pos.x - 200.0f;
                     } else {
-                        this->unk_A04.x = this->actor.world.pos.x + 200.0f;
+                        this->subCamEye.x = this->actor.world.pos.x + 200.0f;
                     }
-                    this->unk_A04.y = (this->actor.world.pos.y - 200.0f) + 100.0f;
-                    this->unk_A04.z = this->actor.world.pos.z - 200.0f;
+                    this->subCamEye.y = (this->actor.world.pos.y - 200.0f) + 100.0f;
+                    this->subCamEye.z = this->actor.world.pos.z - 200.0f;
 
-                    this->unk_A10.x = this->actor.world.pos.x;
-                    this->unk_A10.y = this->actor.world.pos.y + 80.0f;
-                    this->unk_A10.z = this->actor.world.pos.z;
+                    this->subCamAt.x = this->actor.world.pos.x;
+                    this->subCamAt.y = this->actor.world.pos.y + 80.0f;
+                    this->subCamAt.z = this->actor.world.pos.z;
                 }
             } else {
-                this->unk_A10.z = this->actor.world.pos.z;
-                this->unk_A04.y = this->actor.world.pos.y + 60.0f;
-                this->unk_A04.x = this->actor.world.pos.x;
+                this->subCamEye.x = this->actor.world.pos.x;
+                this->subCamEye.y = this->actor.world.pos.y + 60.0f;
+                this->subCamEye.z = this->actor.world.pos.z - 210.0f;
 
-                this->unk_A04.z = this->actor.world.pos.z - 210.0f;
-                this->unk_A10.y = this->actor.world.pos.y + 80.0f;
-                this->unk_A10.x = this->actor.world.pos.x;
+                this->subCamAt.x = this->actor.world.pos.x;
+                this->subCamAt.y = this->actor.world.pos.y + 80.0f;
+                this->subCamAt.z = this->actor.world.pos.z;
             }
             break;
 
@@ -317,30 +318,30 @@ void func_809F24C8(Boss06* this, PlayState* play) {
             child = this->actor.child;
 
             if (this->unk_1CA == 1) {
-                this->unk_A1C.x = fabsf(this->unk_A10.x - child->world.pos.x);
-                this->unk_A1C.y = fabsf(this->unk_A10.y - child->world.pos.y);
-                this->unk_A1C.z = fabsf(this->unk_A10.z - child->world.pos.z);
+                this->unk_A1C.x = fabsf(this->subCamAt.x - child->world.pos.x);
+                this->unk_A1C.y = fabsf(this->subCamAt.y - child->world.pos.y);
+                this->unk_A1C.z = fabsf(this->subCamAt.z - child->world.pos.z);
             }
 
-            Math_ApproachF(&this->unk_A10.x, child->world.pos.x, 0.15f, this->unk_A1C.x * this->unk_A28);
-            Math_ApproachF(&this->unk_A10.y, child->world.pos.y, 0.15f, this->unk_A1C.y * this->unk_A28);
-            Math_ApproachF(&this->unk_A10.z, child->world.pos.z, 0.15f, this->unk_A1C.z * this->unk_A28);
+            Math_ApproachF(&this->subCamAt.x, child->world.pos.x, 0.15f, this->unk_A1C.x * this->unk_A28);
+            Math_ApproachF(&this->subCamAt.y, child->world.pos.y, 0.15f, this->unk_A1C.y * this->unk_A28);
+            Math_ApproachF(&this->subCamAt.z, child->world.pos.z, 0.15f, this->unk_A1C.z * this->unk_A28);
             Math_ApproachF(&this->unk_A28, 1.0f, 1.0f, 0.001f);
 
             if (this->unk_1CA > 80) {
                 func_809F2ED0(this, play);
-                func_80169AFC(play, this->unk_A00, 0);
-                this->unk_A00 = 0;
-                Cutscene_End(play, &play->csCtx);
-                func_800B7298(play, &this->actor, 6);
+                func_80169AFC(play, this->subCamId, 0);
+                this->subCamId = SUB_CAM_ID_DONE;
+                Cutscene_StopManual(play, &play->csCtx);
+                func_800B7298(play, &this->actor, PLAYER_CSMODE_END);
                 D_809F4970->unk_151 = 0;
             }
             break;
     }
 
-    if (this->unk_A00 != 0) {
-        ShrinkWindow_SetLetterboxTarget(27);
-        Play_CameraSetAtEye(play, this->unk_A00, &this->unk_A10, &this->unk_A04);
+    if (this->subCamId != SUB_CAM_ID_DONE) {
+        ShrinkWindow_Letterbox_SetSizeTarget(27);
+        Play_SetCameraAtEye(play, this->subCamId, &this->subCamAt, &this->subCamEye);
     }
 }
 #else
@@ -381,7 +382,7 @@ void func_809F2C44(Boss06* this, PlayState* play) {
     }
 
     if (D_809F4970->unk_153 == 2) {
-        Actor_MarkForDeath(this->actor.child);
+        Actor_Kill(this->actor.child);
         this->actor.child = NULL;
         func_809F2E14(this, play);
     }
@@ -625,7 +626,7 @@ void Boss06_Draw(Actor* thisx, PlayState* play2) {
 
                     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
                               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-                    gSPDisplayList(POLY_XLU_DISP++, gGameplayKeepDrawFlameDL);
+                    gSPDisplayList(POLY_XLU_DISP++, gEffFire1DL);
 
                     Matrix_Pop();
                 }
@@ -641,7 +642,7 @@ void Boss06_Draw(Actor* thisx, PlayState* play2) {
         Matrix_Translate(this->actor.world.pos.x + this->unk_1B0, this->actor.world.pos.y + 84.0f + this->unk_1B4,
                          (this->actor.world.pos.z - 2.0f) + spE0, MTXMODE_NEW);
 
-        gSPDisplayList(POLY_XLU_DISP++, gLightOrb1DL);
+        gSPDisplayList(POLY_XLU_DISP++, gLightOrbMaterial1DL);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, (u8)((140.0f * sp68) + 115.0f), temp_s2);
         gDPSetEnvColor(POLY_XLU_DISP++, 255, 205, (u8)((100.0f * sp68) + 65.0f), 128);
 
@@ -649,7 +650,7 @@ void Boss06_Draw(Actor* thisx, PlayState* play2) {
         Matrix_RotateZS(play->gameplayFrames * 64, MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_XLU_DISP++, gLightOrbVtxDL);
+        gSPDisplayList(POLY_XLU_DISP++, gLightOrbModelDL);
     }
 
     CLOSE_DISPS(play->state.gfxCtx);

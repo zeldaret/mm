@@ -9,10 +9,8 @@ typedef void (*EnTanron6ActionFunc)(struct EnTanron6*, PlayState*);
 
 typedef struct EnTanron6 {
     /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0xBC];
+    /* 0x144 */ UNK_TYPE1 unk_144[0xBC];
     /* 0x200 */ EnTanron6ActionFunc actionFunc;
 } EnTanron6; // size = 0x204
-
-extern const ActorInit En_Tanron6_InitVars;
 
 #endif // Z_EN_TANRON6_H

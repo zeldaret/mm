@@ -15,7 +15,7 @@ void BgInibsMovebg_Init(Actor* thisx, PlayState* play);
 void BgInibsMovebg_Destroy(Actor* thisx, PlayState* play);
 void BgInibsMovebg_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit Bg_Inibs_Movebg_InitVars = {
+ActorInit Bg_Inibs_Movebg_InitVars = {
     ACTOR_BG_INIBS_MOVEBG,
     ACTORCAT_BG,
     FLAGS,
@@ -27,9 +27,9 @@ const ActorInit Bg_Inibs_Movebg_InitVars = {
     (ActorFunc)BgInibsMovebg_Draw,
 };
 
-Gfx* D_80B96560[] = { object_inibs_object_DL_0062D8, object_inibs_object_DL_001DC0 };
-Gfx* D_80B96568[] = { object_inibs_object_DL_006140, object_inibs_object_DL_001C10 };
-AnimatedMaterial* D_80B96570[] = { object_inibs_object_Matanimheader_006858, object_inibs_object_Matanimheader_002598 };
+Gfx* sOpaDLists[] = { gTwinmoldArenaNormalModeSandDL, gTwinmoldArenaGiantModeSandDL };
+Gfx* sXluDLists[] = { gTwinmoldArenaNormalModeCenterPlatformDL, gTwinmoldArenaGiantModeCenterPlatformDL };
+AnimatedMaterial* sSandTexAnims[] = { gTwinmoldArenaNormalModeSandTexAnim, gTwinmoldArenaGiantModeSandTexAnim };
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 1000, ICHAIN_STOP),
@@ -39,11 +39,11 @@ void BgInibsMovebg_Init(Actor* thisx, PlayState* play) {
     BgInibsMovebg* this = THIS;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
 
-    this->unk_15C = D_80B96560[BGINIBSMOVEBG_GET_F(thisx)];
-    this->unk_160 = D_80B96568[BGINIBSMOVEBG_GET_F(thisx)];
-    this->unk_164 = D_80B96570[BGINIBSMOVEBG_GET_F(thisx)];
+    this->opaDList = sOpaDLists[BG_INIBS_MOVEBG_GET_MODE(thisx)];
+    this->xluDList = sXluDLists[BG_INIBS_MOVEBG_GET_MODE(thisx)];
+    this->sandTexAnim = sSandTexAnims[BG_INIBS_MOVEBG_GET_MODE(thisx)];
 }
 
 void BgInibsMovebg_Destroy(Actor* thisx, PlayState* play) {
@@ -54,23 +54,22 @@ void BgInibsMovebg_Destroy(Actor* thisx, PlayState* play) {
 
 void BgInibsMovebg_Draw(Actor* thisx, PlayState* play) {
     BgInibsMovebg* this = THIS;
+    AnimatedMaterial* sandTexAnim;
+    Gfx* opaDList;
+    Gfx* xluDList;
 
-    AnimatedMaterial* animMat;
-    Gfx* dl1;
-    Gfx* dl2;
-
-    animMat = this->unk_164;
-    if (animMat != NULL) {
-        AnimatedMat_Draw(play, Lib_SegmentedToVirtual(this->unk_164));
+    sandTexAnim = this->sandTexAnim;
+    if (sandTexAnim != NULL) {
+        AnimatedMat_Draw(play, Lib_SegmentedToVirtual(this->sandTexAnim));
     }
 
-    dl1 = this->unk_15C;
-    if (dl1 != NULL) {
-        Gfx_DrawDListOpa(play, this->unk_15C);
+    opaDList = this->opaDList;
+    if (opaDList != NULL) {
+        Gfx_DrawDListOpa(play, this->opaDList);
     }
 
-    dl2 = this->unk_160;
-    if (dl2 != NULL) {
-        Gfx_DrawDListXlu(play, this->unk_160);
+    xluDList = this->xluDList;
+    if (xluDList != NULL) {
+        Gfx_DrawDListXlu(play, this->xluDList);
     }
 }

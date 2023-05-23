@@ -1,7 +1,7 @@
 /*
  * File: z_bg_dblue_waterfall.c
  * Overlay: ovl_Bg_Dblue_Waterfall
- * Description: Great Bay Temple - Freezable Geyser
+ * Description: Great Bay Temple - Freezable Waterfall
  */
 
 #include "z_bg_dblue_waterfall.h"
@@ -25,7 +25,7 @@ void func_80B84BCC(BgDblueWaterfall* this, PlayState* play);
 void func_80B84EF0(BgDblueWaterfall* this, PlayState* play);
 void func_80B84F20(BgDblueWaterfall* this, PlayState* play);
 
-const ActorInit Bg_Dblue_Waterfall_InitVars = {
+ActorInit Bg_Dblue_Waterfall_InitVars = {
     ACTOR_BG_DBLUE_WATERFALL,
     ACTORCAT_PROP,
     FLAGS,
@@ -223,7 +223,7 @@ void func_80B841A0(BgDblueWaterfall* this, PlayState* play) {
             EffectSsGSplash_Spawn(play, &sp94, NULL, NULL, 0, 250);
         }
 
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_REFLECTION_WATER);
+        Actor_PlaySfx(&this->actor, NA_SE_IT_REFLECTION_WATER);
     }
 }
 
@@ -344,7 +344,7 @@ void BgDblueWaterfall_Init(Actor* thisx, PlayState* play) {
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     Collider_UpdateCylinder(&this->actor, &this->collider);
 
-    this->unk_190 = Lib_SegmentedToVirtual(object_dblue_object_Matanimheader_00B448);
+    this->unk_190 = Lib_SegmentedToVirtual(gGreatBayTempleObjectWaterfallTexAnim);
 
     Actor_SetFocus(&this->actor, -100.0f);
     func_80B84568(this, play);
@@ -423,13 +423,13 @@ void func_80B84928(BgDblueWaterfall* this, PlayState* play) {
             if (sp30 != 0) {
                 func_80B83EA4(this, play);
                 if (this->collider.info.acHitInfo->toucher.dmgFlags & 0x800) {
-                    this->unk_1A4 = this->actor.cutscene;
+                    this->csId = this->actor.csId;
                     func_80B84AD4(this, play);
                 }
             } else {
                 func_80B841A0(this, play);
                 if (this->collider.info.acHitInfo->toucher.dmgFlags & 0x1000) {
-                    this->unk_1A4 = ActorCutscene_GetAdditionalCutscene(this->actor.cutscene);
+                    this->csId = CutsceneManager_GetAdditionalCsId(this->actor.csId);
                     func_80B84AD4(this, play);
                 }
             }
@@ -448,9 +448,9 @@ void func_80B84AEC(BgDblueWaterfall* this, PlayState* play) {
     s32 pad;
     s32 sp20;
 
-    if (ActorCutscene_GetCanPlayNext(this->unk_1A4)) {
+    if (CutsceneManager_IsNext(this->csId)) {
         sp20 = func_80B83D04(this, play);
-        ActorCutscene_StartAndSetUnkLinkFields(this->unk_1A4, &this->actor);
+        CutsceneManager_StartWithPlayerCs(this->csId, &this->actor);
         this->unk_1A3 = true;
         if (sp20) {
             func_80B83D94(this, play);
@@ -460,7 +460,7 @@ void func_80B84AEC(BgDblueWaterfall* this, PlayState* play) {
             func_80B84B9C(this, play);
         }
     } else {
-        ActorCutscene_SetIntentToPlay(this->unk_1A4);
+        CutsceneManager_Queue(this->csId);
     }
 }
 
@@ -533,7 +533,7 @@ void func_80B84BCC(BgDblueWaterfall* this, PlayState* play) {
         func_800B9010(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
     } else {
         if (this->unk_1A3) {
-            ActorCutscene_Stop(this->unk_1A4);
+            CutsceneManager_Stop(this->csId);
         }
         func_80B8484C(this, play);
     }
@@ -572,7 +572,7 @@ void func_80B84F20(BgDblueWaterfall* this, PlayState* play) {
         func_800B9010(&this->actor, NA_SE_EV_ICE_MELT_LEVEL - SFX_FLAG);
     } else {
         if (this->unk_1A3) {
-            ActorCutscene_Stop(this->unk_1A4);
+            CutsceneManager_Stop(this->csId);
         }
         func_80B8484C(this, play);
     }
@@ -600,30 +600,30 @@ void BgDblueWaterfall_Draw(Actor* thisx, PlayState* play) {
         AnimatedMat_Draw(play, this->unk_190);
 
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x8A, 255, 255, 255, sp38);
-        gSPDisplayList(POLY_XLU_DISP++, object_dblue_object_DL_00B280);
+        gSPDisplayList(POLY_XLU_DISP++, gGreatBayTempleObjectWaterfallDL);
     }
 
     if (this->unk_19F > 0) {
         if (this->unk_19F < 255) {
             gSPSegment(POLY_XLU_DISP++, 0x09, D_801AEF88);
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x9B, 255, 255, 255, this->unk_19F);
-            gSPDisplayList(POLY_XLU_DISP++, object_dblue_object_DL_003358);
+            gSPDisplayList(POLY_XLU_DISP++, gGreatBayTempleObjectIceStalactiteDL);
         } else {
             func_8012C28C(play->state.gfxCtx);
 
             gSPSegment(POLY_OPA_DISP++, 0x09, D_801AEFA0);
             gDPSetPrimColor(POLY_OPA_DISP++, 0, 0x9B, 255, 255, 255, 255);
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_OPA_DISP++, object_dblue_object_DL_003358);
+            gSPDisplayList(POLY_OPA_DISP++, gGreatBayTempleObjectIceStalactiteDL);
         }
 
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0xFF, 255, 255, 255, this->unk_19F);
-        gSPDisplayList(POLY_XLU_DISP++, object_dblue_object_DL_003250);
+        gSPDisplayList(POLY_XLU_DISP++, gGreatBayTempleObjectIceStalactiteRimDL);
     }
 
     if (this->unk_1A0 > 0) {
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0xFF, 255, 255, 255, this->unk_1A0);
-        gSPDisplayList(POLY_XLU_DISP++, object_dblue_object_DL_003770);
+        gSPDisplayList(POLY_XLU_DISP++, gGreatBayTempleObjectFrozenWaterfallDL);
     }
 
     CLOSE_DISPS(play->state.gfxCtx);

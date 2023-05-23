@@ -35,9 +35,9 @@ void func_808B07A8(EnAm* this, PlayState* play);
 void func_808B0820(EnAm* this);
 void func_808B0894(EnAm* this, PlayState* play);
 void func_808B0B4C(EnAm* this, PlayState* play);
-void EnAm_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* actor);
+void EnAm_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
 
-const ActorInit En_Am_InitVars = {
+ActorInit En_Am_InitVars = {
     ACTOR_EN_AM,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -128,7 +128,7 @@ static CollisionCheckInfoInit sColChkInfoInit = { 1, 23, 98, MASS_HEAVY };
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 14, ICHAIN_CONTINUE),
-    ICHAIN_S8(hintId, 19, ICHAIN_CONTINUE),
+    ICHAIN_S8(hintId, TATL_HINT_ID_ARMOS, ICHAIN_CONTINUE),
     ICHAIN_F32_DIV1000(gravity, -4000, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 2000, ICHAIN_STOP),
 };
@@ -198,14 +198,14 @@ void EnAm_SpawnEffects(EnAm* this, PlayState* play) {
         effectPos.z = randPlusMinusPoint5Scaled(65.0f) + this->actor.world.pos.z;
         EffectSsKirakira_SpawnSmall(play, &effectPos, &sVelocity, &sAccel, &D_808B1118, &D_808B111C);
     }
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_AMOS_WALK);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_AMOS_WALK);
     Actor_SpawnFloorDustRing(play, &this->actor, &this->actor.world.pos, 4.0f, 3, 8.0f, 300, 15, 0);
 }
 
 void func_808AFF9C(EnAm* this) {
     f32 lastFrame = Animation_GetLastFrame(&gArmosPushedBackAnim);
 
-    Animation_Change(&this->skelAnime, &gArmosPushedBackAnim, 0.0f, lastFrame, lastFrame, 0, 0.0f);
+    Animation_Change(&this->skelAnime, &gArmosPushedBackAnim, 0.0f, lastFrame, lastFrame, ANIMMODE_LOOP, 0.0f);
     this->enemyCollider.info.bumper.dmgFlags = 0x80000088;
     this->interactCollider.info.bumper.dmgFlags = 0x77CFFF77;
     if (this->actor.colChkInfo.health != 0) {
@@ -231,8 +231,8 @@ void EnAm_RemoveEnemyTexture(EnAm* this, PlayState* play) {
 }
 
 void EnAm_WakeUp(EnAm* this) {
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_AMOS_WAVE);
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_AMOS_VOICE);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_AMOS_WAVE);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_AMOS_VOICE);
     this->returnHomeTimer = 300;
     this->actionFunc = EnAm_ApplyEnemyTexture;
 }
@@ -265,22 +265,22 @@ void EnAm_ApplyEnemyTexture(EnAm* this, PlayState* play) {
 
 void func_808B0208(EnAm* this, PlayState* play) {
     // If the armos is against a wall, rotate and turn away from it
-    if ((this->actor.speedXZ > 0.0f) && (this->actor.bgCheckFlags & 8)) {
+    if ((this->actor.speed > 0.0f) && (this->actor.bgCheckFlags & BGCHECKFLAG_WALL)) {
         this->actor.world.rot.y = (this->actor.wallYaw * 2) - this->actor.world.rot.y;
-        this->actor.world.pos.x += this->actor.speedXZ * Math_SinS(this->actor.world.rot.y);
-        this->actor.world.pos.z += this->actor.speedXZ * Math_CosS(this->actor.world.rot.y);
+        this->actor.world.pos.x += this->actor.speed * Math_SinS(this->actor.world.rot.y);
+        this->actor.world.pos.z += this->actor.speed * Math_CosS(this->actor.world.rot.y);
     }
     SkelAnime_Update(&this->skelAnime);
     if (Animation_OnFrame(&this->skelAnime, 8.0f) != 0) {
-        this->actor.speedXZ = this->speed;
+        this->actor.speed = this->speed;
         this->actor.velocity.y = 12.0f;
     } else if (this->skelAnime.curFrame > 11.0f) {
-        if (!(this->actor.bgCheckFlags & 1)) {
+        if (!(this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
             this->skelAnime.curFrame = 11.0f;
         } else {
             Math_ScaledStepToS(&this->actor.world.rot.y, this->armosYaw, 0x1F40);
-            this->actor.speedXZ = 0.0f;
-            if (this->actor.bgCheckFlags & 2) {
+            this->actor.speed = 0.0f;
+            if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND_TOUCH) {
                 EnAm_SpawnEffects(this, play);
             }
         }
@@ -293,7 +293,7 @@ void func_808B0208(EnAm* this, PlayState* play) {
 void func_808B0358(EnAm* this) {
     Animation_PlayLoopSetSpeed(&this->skelAnime, &gArmosHopAnim, 4.0f);
     this->explodeTimer = 3;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->speed = 6.0f;
     this->actionFunc = func_808B03C0;
@@ -302,12 +302,12 @@ void func_808B0358(EnAm* this) {
 void func_808B03C0(EnAm* this, PlayState* play) {
     this->armosYaw = this->actor.yawTowardsPlayer;
     func_808B0208(this, play);
-    if (this->actor.bgCheckFlags & 2) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND_TOUCH) {
         this->explodeTimer--;
     }
     if (this->explodeTimer == 0) {
         func_808B0640(this);
-    } else if ((this->returnHomeTimer == 0) || Actor_XZDistanceToPoint(&this->actor, &this->actor.home.pos) > 240.0f) {
+    } else if ((this->returnHomeTimer == 0) || Actor_WorldDistXZToPoint(&this->actor, &this->actor.home.pos) > 240.0f) {
         func_808B0460(this);
     }
 }
@@ -315,7 +315,7 @@ void func_808B03C0(EnAm* this, PlayState* play) {
 void func_808B0460(EnAm* this) {
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->speed = 0.0f;
-    this->armosYaw = Actor_YawToPoint(&this->actor, &this->actor.home.pos);
+    this->armosYaw = Actor_WorldYawTowardPoint(&this->actor, &this->actor.home.pos);
     this->actionFunc = func_808B04A8;
 }
 
@@ -334,7 +334,7 @@ void func_808B04E4(EnAm* this) {
 
 void func_808B0508(EnAm* this, PlayState* play) {
     func_808B0208(this, play);
-    if (!(this->actor.bgCheckFlags & 1)) {
+    if (!(this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
         Math_StepToF(&this->actor.world.pos.x, this->actor.home.pos.x, 2.0f);
         Math_StepToF(&this->actor.world.pos.z, this->actor.home.pos.z, 2.0f);
     }
@@ -345,15 +345,15 @@ void func_808B0508(EnAm* this, PlayState* play) {
 
 void func_808B057C(EnAm* this) {
     this->speed = 6.0f;
-    this->armosYaw = Actor_YawToPoint(&this->actor, &this->actor.home.pos);
+    this->armosYaw = Actor_WorldYawTowardPoint(&this->actor, &this->actor.home.pos);
     this->explodeTimer = 1;
     this->actionFunc = func_808B05C8;
 }
 
 void func_808B05C8(EnAm* this, PlayState* play) {
-    this->armosYaw = Actor_YawToPoint(&this->actor, &this->actor.home.pos);
+    this->armosYaw = Actor_WorldYawTowardPoint(&this->actor, &this->actor.home.pos);
     func_808B0208(this, play);
-    if (Actor_XZDistanceToPoint(&this->actor, &this->actor.home.pos) < 8.0f) {
+    if (Actor_WorldDistXZToPoint(&this->actor, &this->actor.home.pos) < 8.0f) {
         func_808B04E4(this);
     }
 }
@@ -372,7 +372,7 @@ void func_808B066C(EnAm* this, PlayState* play) {
         this->armosYaw = this->actor.yawTowardsPlayer;
         func_808B0208(this, play);
         if (this->armosYaw == this->actor.shape.rot.y) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_AMOS_VOICE);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_AMOS_VOICE);
             func_808B0358(this);
         }
     }
@@ -380,18 +380,19 @@ void func_808B066C(EnAm* this, PlayState* play) {
 
 void EnAm_TakeDamage(EnAm* this, PlayState* play) {
     Animation_Change(&this->skelAnime, &gArmosTakeDamageAnim, 1.0f, 4.0f,
-                     Animation_GetLastFrame(&gArmosTakeDamageAnim) - 6, 2, 0.0f);
+                     Animation_GetLastFrame(&gArmosTakeDamageAnim) - 6, ANIMMODE_ONCE, 0.0f);
     func_800BE504(&this->actor, &this->enemyCollider);
-    this->actor.speedXZ = 6.0f;
-    Actor_SetColorFilter(&this->actor, 0x4000, 0xFF, 0, Animation_GetLastFrame(&gArmosTakeDamageAnim) - 10);
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_EYEGOLE_DAMAGE);
+    this->actor.speed = 6.0f;
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA,
+                         Animation_GetLastFrame(&gArmosTakeDamageAnim) - 10);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_EYEGOLE_DAMAGE);
     this->enemyCollider.base.acFlags &= ~AC_ON;
     this->textureBlend = 255;
     this->actionFunc = func_808B07A8;
 }
 
 void func_808B07A8(EnAm* this, PlayState* play) {
-    Math_StepToF(&this->actor.speedXZ, 0.0f, 0.5f);
+    Math_StepToF(&this->actor.speed, 0.0f, 0.5f);
     if (SkelAnime_Update(&this->skelAnime)) {
         if (this->actor.colChkInfo.health == 0) {
             func_808B0820(this);
@@ -407,7 +408,7 @@ void func_808B0820(EnAm* this) {
     this->explodeTimer = 64;
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->actor.flags |= ACTOR_FLAG_10;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->speed = 6.0f;
     this->actionFunc = func_808B0894;
 }
@@ -426,7 +427,7 @@ void func_808B0894(EnAm* this, PlayState* play) {
         if (bomb != NULL) {
             bomb->timer = 0;
         }
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_EYEGOLE_DEAD);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_EYEGOLE_DEAD);
         Item_DropCollectibleRandom(play, &this->actor, &this->actor.world.pos, 0xB0);
 
         for (i = 0; i < 8; i++) {
@@ -437,10 +438,10 @@ void func_808B0894(EnAm* this, PlayState* play) {
             func_800B0EB0(play, &dustPos, &gZeroVec3f, &gZeroVec3f, &D_808B1120, &D_808B1124, 200, 45, 12);
         }
     } else if (this->explodeTimer == 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     } else if (!(this->explodeTimer & 3)) {
-        Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 4);
+        Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 4);
     }
     if (this->actor.world.rot.z < 0x1F40) {
         this->actor.world.rot.z += 0x320;
@@ -449,14 +450,14 @@ void func_808B0894(EnAm* this, PlayState* play) {
 }
 
 void func_808B0AD0(EnAm* this, PlayState* play) {
-    Animation_Change(&this->skelAnime, &gArmosPushedBackAnim, 1.0f, 0.0f, 8.0f, 2, 0.0f);
+    Animation_Change(&this->skelAnime, &gArmosPushedBackAnim, 1.0f, 0.0f, 8.0f, ANIMMODE_ONCE, 0.0f);
     this->actor.world.rot.y = this->actor.yawTowardsPlayer;
-    this->actor.speedXZ = -6.0f;
+    this->actor.speed = -6.0f;
     this->actionFunc = func_808B0B4C;
 }
 
 void func_808B0B4C(EnAm* this, PlayState* play) {
-    Math_StepToF(&this->actor.speedXZ, 0.0f, 0.5f);
+    Math_StepToF(&this->actor.speed, 0.0f, 0.5f);
     if (SkelAnime_Update(&this->skelAnime)) {
         func_808B0358(this);
     }
@@ -508,7 +509,9 @@ void EnAm_Update(Actor* thisx, PlayState* play) {
     }
     this->actionFunc(this, play);
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 30.0f, 100.0f, 0x1D);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 30.0f, 100.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                UPDBGCHECKINFO_FLAG_10);
     Actor_SetFocus(&this->actor, 64.0f);
     Collider_UpdateCylinder(&this->actor, &this->enemyCollider);
     Collider_UpdateCylinder(&this->actor, &this->interactCollider);

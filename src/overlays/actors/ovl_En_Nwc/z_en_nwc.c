@@ -41,7 +41,7 @@ enum EnNiwState {
     /*  4 */ NWC_STATE_RUNNING,          // running from the player after failed breman march
 };
 
-const ActorInit En_Nwc_InitVars = {
+ActorInit En_Nwc_InitVars = {
     ACTOR_EN_NWC,
     ACTORCAT_PROP,
     FLAGS,
@@ -64,15 +64,14 @@ void EnNwc_Init(Actor* thisx, PlayState* play) {
     niwObjectIndex = Object_GetIndex(&play->objectCtx, OBJECT_NIW);
     if (niwObjectIndex < 0) {
         // niw object does not exist, we need it for tranformation, despawn
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
-    if (gSaveContext.save.weekEventReg[25] & 8) {
-        // if breman mask was already used, replace with adult EnNiw
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_25_08)) {
         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_NIW, this->actor.world.pos.x, this->actor.world.pos.y,
                     this->actor.world.pos.z, 0, this->actor.world.rot.y, 0, NIW_TYPE_REGULAR);
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -147,7 +146,7 @@ s32 EnNwc_PlayerReleasedBremanMarch(EnNwc* this, PlayState* play) {
         return false;
     }
 
-    if (player->stateFlags3 & 0x20000000) { // breman mask march
+    if (player->stateFlags3 & PLAYER_STATE3_20000000) {
         return false;
     }
 
@@ -165,8 +164,7 @@ s32 EnNwc_IsFound(EnNwc* this, PlayState* play) {
         return false;
     }
 
-    if (player->stateFlags3 & 0x20000000 && // breman mask march
-        this->actor.xzDistToPlayer < 100.0f) {
+    if ((player->stateFlags3 & PLAYER_STATE3_20000000) && this->actor.xzDistToPlayer < 100.0f) {
         return true;
     }
 
@@ -174,7 +172,7 @@ s32 EnNwc_IsFound(EnNwc* this, PlayState* play) {
 }
 
 void EnNwc_ChangeState(EnNwc* this, s16 newState) {
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     switch (newState) {
         case NWC_STATE_CHECK_BREMAN:
             this->stateTimer = 10;
@@ -211,7 +209,7 @@ void EnNwc_ChangeState(EnNwc* this, s16 newState) {
  *     If previously checking for breman -> select random (NWC_STATE_TURNING, NWC_STATE_HOPPING_FORWARD)
  */
 void EnNwc_ToggleState(EnNwc* this) {
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     if (this->state != NWC_STATE_CHECK_BREMAN) {
         EnNwc_ChangeState(this, NWC_STATE_CHECK_BREMAN);
     } else {
@@ -236,19 +234,20 @@ void EnNwc_CheckFound(EnNwc* this, PlayState* play) {
         }
 
         EnNwc_ChangeState(this, NWC_STATE_FOLLOWING);
-        func_801A0868(&D_801DB4A4, NA_SE_SY_CHICK_JOIN_CHIME, currentChickCount);
+        func_801A0868(&gSfxDefaultPos, NA_SE_SY_CHICK_JOIN_CHIME, currentChickCount);
     }
 }
 
 void EnNwc_LoadNiwSkeleton(EnNwc* this, PlayState* play) {
     if (Object_IsLoaded(&play->objectCtx, this->niwObjectIndex)) {
-        gSegments[6] = PHYSICAL_TO_VIRTUAL(play->objectCtx.status[this->niwObjectIndex].segment);
+        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[this->niwObjectIndex].segment);
 
         SkelAnime_InitFlex(play, &this->niwSkeleton, &gNiwSkeleton, &gNiwIdleAnim, this->jointTable, this->morphTable,
                            NIW_LIMB_MAX);
-        Animation_Change(&this->niwSkeleton, &gNiwIdleAnim, 1.0f, 0.0f, Animation_GetLastFrame(&gNiwIdleAnim), 0, 0.0f);
+        Animation_Change(&this->niwSkeleton, &gNiwIdleAnim, 1.0f, 0.0f, Animation_GetLastFrame(&gNiwIdleAnim),
+                         ANIMMODE_LOOP, 0.0f);
 
-        gSegments[6] = PHYSICAL_TO_VIRTUAL(play->objectCtx.status[this->nwcObjectIndex].segment);
+        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[this->nwcObjectIndex].segment);
         this->state = NWC_STATE_NIW_LOADED;
         EnNwc_ToggleState(this);
     }
@@ -277,7 +276,7 @@ void EnNwc_Follow(EnNwc* this, PlayState* play) {
         s16 targetUpperBodyRot = 0;
         s16 targetFootRot = 0;
 
-        if (this->actor.speedXZ > 0.0f) {
+        if (this->actor.speed > 0.0f) {
             if (this->stateTimer & 4) {
                 targetFootRot = 0x1B58;
                 targetUpperBodyRot = -0x2710;
@@ -294,7 +293,7 @@ void EnNwc_Follow(EnNwc* this, PlayState* play) {
             this->actor.velocity.y = 2.0f; // hop up and down
         }
         if ((this->stateTimer & 0x1B) == 24) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CHICK_SONG);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_CHICK_SONG);
         }
     }
 
@@ -307,13 +306,13 @@ void EnNwc_Follow(EnNwc* this, PlayState* play) {
             this->grog->actor.home.rot.x += 2; // increment grog's adult tranformation counter
             EnNwc_SpawnDust(this, play);
             Actor_SetScale(&this->actor, 0.002f);
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CHICK_TO_CHICKEN);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_CHICK_TO_CHICKEN);
         }
     }
 
     Math_Vec3f_Diff(&chickCoords[this->actor.home.rot.z], &this->actor.world.pos, &targetVector);
     if (SQXZ(targetVector) < SQ(5.0f)) { // too close to keep moving, stop
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
 
         // first nwc in the line follows player, the rest follow the previous one
         if (this->actor.home.rot.z == 1) {
@@ -330,7 +329,7 @@ void EnNwc_Follow(EnNwc* this, PlayState* play) {
         } else if (this->randomRot < -0x1388) {
             this->randomRot = -0x1388;
         }
-        this->actor.speedXZ = 2.0f;
+        this->actor.speed = 2.0f;
         newRotY = Math_Vec3f_Yaw(&this->actor.world.pos, &chickCoords[this->actor.home.rot.z]) + this->randomRot;
     }
 
@@ -357,9 +356,9 @@ void EnNwc_Follow(EnNwc* this, PlayState* play) {
     }
 
     if (this->grog->actor.home.rot.x >= 20) { // all chicks have turned into adult cucco, stop and crow
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CHICKEN_CRY_M);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_CHICKEN_CRY_M);
         this->actionFunc = EnNwc_CrowAtTheEnd;
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
         Actor_SetScale(&this->actor, 0.01f);
     }
 }
@@ -379,14 +378,14 @@ void EnNwc_HopForward(EnNwc* this, PlayState* play) {
         this->actor.velocity.y = 2.0f; // hop up and down
     }
     if ((this->stateTimer & 0xB) == 8) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CHICK_SONG);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_CHICK_SONG);
     }
 
     // they only move forward while off the ground, which gives the visual of them hopping to move
-    if (this->actor.bgCheckFlags & 0x1) { // touching floor
-        this->actor.speedXZ = 0.0f;
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
+        this->actor.speed = 0.0f;
     } else {
-        this->actor.speedXZ = 2.0f;
+        this->actor.speed = 2.0f;
     }
 }
 
@@ -405,11 +404,11 @@ void EnNwc_RunAway(EnNwc* this, PlayState* play) {
         this->actor.velocity.y = 2.0f; // hop up and down
     }
     if ((this->stateTimer & 0xB) == 8) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CHICK_SONG);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_CHICK_SONG);
     }
 
-    this->actor.speedXZ = 2.0f;
-    if (this->actor.bgCheckFlags & 0x8) { // touching wall
+    this->actor.speed = 2.0f;
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
         EnNwc_ToggleState(this);
     }
 }
@@ -430,11 +429,11 @@ void EnNwc_Turn(EnNwc* this, PlayState* play) {
     }
 
     if ((this->stateTimer & 0xB) == 8) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CHICK_SONG);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_CHICK_SONG);
     }
 
     // they only rotate when off the ground, giving the visual that they turn by hopping
-    if (!(this->actor.bgCheckFlags & 0x1)) { // NOT touching floor
+    if (!(this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
         Math_SmoothStepToS(&this->actor.shape.rot.y, this->fallingRotY, 0xA, 0x1000, 0x800);
         this->actor.world.rot.y = this->actor.shape.rot.y;
     }
@@ -458,7 +457,7 @@ void EnNwc_Update(Actor* thisx, PlayState* play) {
     EnNwc* this = THIS;
 
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 10.0f, 10.0f, 5);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 10.0f, 10.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
     this->actionFunc(this, play);
     if (this->hasGrownUp & 1) {
         this->actor.objBankIndex = this->niwObjectIndex;

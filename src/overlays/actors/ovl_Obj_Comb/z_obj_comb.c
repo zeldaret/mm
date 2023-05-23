@@ -12,7 +12,7 @@
 #define THIS ((ObjComb*)thisx)
 
 void ObjComb_Init(Actor* thisx, PlayState* play);
-void ObjComb_Destroy(Actor* thisx, PlayState* play);
+void ObjComb_Destroy(Actor* thisx, PlayState* play2);
 void ObjComb_Update(Actor* thisx, PlayState* play);
 void ObjComb_Draw(Actor* thisx, PlayState* play);
 
@@ -22,7 +22,7 @@ void func_8098DEA0(ObjComb* this, PlayState* play);
 void func_8098E098(ObjComb* this);
 void func_8098E0B8(ObjComb* this, PlayState* play);
 
-const ActorInit Obj_Comb_InitVars = {
+ActorInit Obj_Comb_InitVars = {
     ACTOR_OBJ_COMB,
     ACTORCAT_PROP,
     FLAGS,
@@ -57,7 +57,7 @@ static ColliderJntSphInit sJntSphInit = {
         OC2_TYPE_2,
         COLSHAPE_JNTSPH,
     },
-    1,
+    ARRAY_COUNT(sJntSphElementsInit),
     sJntSphElementsInit,
 };
 
@@ -303,10 +303,10 @@ void func_8098D99C(ObjComb* this, PlayState* play) {
             temp_v0->parent = &this->actor;
             if (this->actionFunc == func_8098DC60) {
                 temp_v0->velocity.y = 8.0f;
-                temp_v0->speedXZ = 2.0f;
+                temp_v0->speed = 2.0f;
             } else {
                 temp_v0->velocity.y = 10.0f;
-                temp_v0->speedXZ = 2.0f;
+                temp_v0->speed = 2.0f;
             }
             this->unk_1B6 = 1;
             play_sound(NA_SE_SY_TRE_BOX_APPEAR);
@@ -334,8 +334,8 @@ void ObjComb_Init(Actor* thisx, PlayState* play) {
     Actor_ProcessInitChain(&this->actor, sInitChain);
     Collider_InitJntSph(play, &this->collider);
 
-    if ((sp2C == 1) && OBJCOMB_GET_10(&this->actor) && (gSaveContext.save.weekEventReg[83] & 2)) {
-        Actor_MarkForDeath(&this->actor);
+    if ((sp2C == 1) && OBJCOMB_GET_10(&this->actor) && CHECK_WEEKEVENTREG(WEEKEVENTREG_83_02)) {
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -352,8 +352,11 @@ void ObjComb_Init(Actor* thisx, PlayState* play) {
     func_8098DC44(this);
 }
 
-void ObjComb_Destroy(Actor* thisx, PlayState* play) {
-    Collider_DestroyJntSph(play, &THIS->collider);
+void ObjComb_Destroy(Actor* thisx, PlayState* play2) {
+    PlayState* play = play2;
+    ObjComb* this = THIS;
+
+    Collider_DestroyJntSph(play, &this->collider);
 }
 
 void func_8098DC44(ObjComb* this) {
@@ -380,7 +383,7 @@ void func_8098DC60(ObjComb* this, PlayState* play) {
         if (this->collider.elements->info.acHitInfo->toucher.dmgFlags & 0x0182C29C) {
             func_8098CEAC(this, play);
             func_8098DA74(this, play);
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         } else {
             s32 dmgFlags = this->collider.elements->info.acHitInfo->toucher.dmgFlags;
 
@@ -403,7 +406,7 @@ void func_8098DC60(ObjComb* this, PlayState* play) {
     } else {
         if (this->unk_1B8 >= 0) {
             if (this->unk_1B8 == 0) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALGOLD_ROLL);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_STALGOLD_ROLL);
                 if (Rand_ZeroOne() < 0.1f) {
                     this->unk_1B8 = Rand_S16Offset(40, 80);
                 } else {
@@ -428,15 +431,15 @@ void func_8098DE58(ObjComb* this) {
     this->unk_1B4 = 100;
     this->actor.terminalVelocity = -20.0f;
     this->actor.gravity = -1.5f;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actionFunc = func_8098DEA0;
 }
 
 void func_8098DEA0(ObjComb* this, PlayState* play) {
     this->unk_1B4--;
-    if ((this->actor.bgCheckFlags & 1) || (this->unk_1B4 <= 0)) {
+    if ((this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) || (this->unk_1B4 <= 0)) {
         func_8098DA74(this, play);
-        if ((this->actor.bgCheckFlags & 0x20) && (this->actor.depthInWater > 30.0f)) {
+        if ((this->actor.bgCheckFlags & BGCHECKFLAG_WATER) && (this->actor.depthInWater > 30.0f)) {
             func_8098D47C(this, play);
         } else {
             func_8098D19C(this, play);
@@ -444,11 +447,11 @@ void func_8098DEA0(ObjComb* this, PlayState* play) {
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 40, NA_SE_EV_HONEYCOMB_BROKEN);
         func_8098E098(this);
     } else {
-        if (this->actor.bgCheckFlags & 0x40) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_WATER_TOUCH) {
             func_8098D6E0(this, play);
         }
 
-        if (this->actor.bgCheckFlags & 0x20) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_WATER) {
             this->actor.gravity = -0.5f;
             this->actor.velocity.y *= 0.8f;
             this->unk_1AE >>= 1;
@@ -472,7 +475,7 @@ void func_8098DEA0(ObjComb* this, PlayState* play) {
         Actor_MoveWithGravity(&this->actor);
         this->actor.shape.rot.x += this->unk_1AE;
         this->actor.shape.rot.y += this->unk_1B0;
-        Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 12.0f, 0.0f, 5);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 12.0f, 0.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
         CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
     }
 }
@@ -486,13 +489,13 @@ void func_8098E098(ObjComb* this) {
 void func_8098E0B8(ObjComb* this, PlayState* play) {
     this->unk_1B4--;
     if (this->unk_1B4 <= 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
-    if ((this->unk_1B4 == 10) && (this->unk_1B6 != 0) && (this->unk_1B5 == 2) && (this->actor.cutscene >= 0)) {
-        if (ActorCutscene_GetCurrentIndex() == this->actor.cutscene) {
-            func_800B7298(play, &this->actor, 4);
+    if ((this->unk_1B4 == 10) && (this->unk_1B6 != 0) && (this->unk_1B5 == 2) && (this->actor.csId >= 0)) {
+        if (CutsceneManager_GetCurrentCsId() == this->actor.csId) {
+            func_800B7298(play, &this->actor, PLAYER_CSMODE_4);
         }
     }
 }
@@ -515,34 +518,34 @@ void ObjComb_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
 
     if (this->actor.update == NULL) {
-        if ((this->unk_1B5 == 2) && (func_800F2138(this->actor.cutscene) == -1)) {
-            ActorCutscene_Stop(this->actor.cutscene);
+        if ((this->unk_1B5 == 2) && (CutsceneManager_GetCutsceneScriptIndex(this->actor.csId) == -1)) {
+            CutsceneManager_Stop(this->actor.csId);
             this->unk_1B5 = 0;
         }
     } else {
         if (this->unk_1B5 != 0) {
             Actor_SetFocus(&this->actor, 0.0f);
             if (this->unk_1B5 == 1) {
-                if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
-                    ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
-                    if (this->actor.cutscene >= 0) {
-                        func_800B7298(play, &this->actor, 1);
+                if (CutsceneManager_IsNext(this->actor.csId)) {
+                    CutsceneManager_StartWithPlayerCs(this->actor.csId, &this->actor);
+                    if (this->actor.csId >= 0) {
+                        func_800B7298(play, &this->actor, PLAYER_CSMODE_1);
                     }
 
                     if (((OBJCOMB_GET_8000(&this->actor) | OBJCOMB_GET_80(&this->actor)) == 1) &&
                         OBJCOMB_GET_10(&this->actor)) {
-                        gSaveContext.save.weekEventReg[83] |= 2;
+                        SET_WEEKEVENTREG(WEEKEVENTREG_83_02);
                     }
 
                     this->unk_1B5 = 2;
                 } else {
-                    ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+                    CutsceneManager_Queue(this->actor.csId);
                 }
             }
         }
 
         if (this->unk_1B7 != 0) {
-            play->actorCtx.unk5 |= 8;
+            play->actorCtx.flags |= ACTORCTX_FLAG_3;
             this->actor.flags |= ACTOR_FLAG_10;
         }
     }

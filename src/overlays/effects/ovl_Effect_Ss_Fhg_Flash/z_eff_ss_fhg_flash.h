@@ -23,7 +23,11 @@ typedef enum {
 typedef enum {
     /* 0x00 */ FHGFLASH_SHOCK_NO_ACTOR,
     /* 0x01 */ FHGFLASH_SHOCK_PLAYER,
-    /* 0x02 */ FHGFLASH_SHOCK_PG
+    /* 0x02 */ FHGFLASH_SHOCK_GOHT_2,
+    /* 0x03 */ FHGFLASH_SHOCK_GOHT_3,
+    /* 0x04 */ FHGFLASH_SHOCK_GOHT_4,
+    /* 0x05 */ FHGFLASH_SHOCK_GOHT_5,
+    /* 0x06 */ FHGFLASH_SHOCK_GOHT_6
 } FhgFlashLightningParam;
 
 typedef struct {
@@ -31,11 +35,9 @@ typedef struct {
     /* 0x0C */ Vec3f velocity;
     /* 0x18 */ Vec3f accel;
     /* 0x24 */ s16 scale;
-    /* 0x26 */ u8 param;
+    /* 0x26 */ u8 params;
     /* 0x28 */ Actor* actor;
     /* 0x2C */ u8 type;
 } EffectSsFhgFlashInitParams; // size = 0x30
-
-extern const EffectSsInit Effect_Ss_Fhg_Flash_InitVars;
 
 #endif

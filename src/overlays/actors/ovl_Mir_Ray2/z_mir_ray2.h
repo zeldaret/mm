@@ -5,11 +5,18 @@
 
 struct MirRay2;
 
+#define MIRRAY2_GET_F(thisx) ((thisx)->params & 0xF)
+#define MIRRAY2_GET_SWITCH_FLAGS(thisx) (((thisx)->params & 0xFE00) >> 9)
+
 typedef struct MirRay2 {
     /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x7C];
+    /* 0x144 */ ColliderJntSph collider;
+    /* 0x164 */ ColliderJntSphElement elements;
+    /* 0x1A4 */ u16 unk1A4;
+    /* 0x1A6 */ s16 radius;
+    /* 0x1A8 */ f32 range;
+    /* 0x1AC */ LightNode* light;
+    /* 0x1B0 */ LightInfo lightInfo;
 } MirRay2; // size = 0x1C0
-
-extern const ActorInit Mir_Ray2_InitVars;
 
 #endif // Z_MIR_RAY2_H

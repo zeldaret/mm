@@ -85,7 +85,7 @@ s32 D_80BDFF24[] = {
     0x11390411, 0x390819FF, 0xB10E2B3C, 0x2D00080C, 0x19FFA700,
 };
 
-const ActorInit En_Al_InitVars = {
+ActorInit En_Al_InitVars = {
     ACTOR_EN_AL,
     ACTORCAT_NPC,
     FLAGS,
@@ -119,7 +119,7 @@ static ColliderCylinderInit sCylinderInit = {
 
 static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
-static AnimationInfoS sAnimations[] = {
+static AnimationInfoS sAnimationInfo[] = {
     { &object_al_Anim_000C54, 1.0f, 0, -1, 0, -4 }, { &object_al_Anim_00DBE0, 1.0f, 0, -1, 0, 0 },
     { &object_al_Anim_00DBE0, 1.0f, 0, -1, 0, -4 }, { &object_al_Anim_00ACA0, 1.0f, 0, -1, 2, 0 },
     { &object_al_Anim_00ACA0, -1.0f, 0, -1, 2, 0 }, { &object_al_Anim_00CA28, 1.0f, 0, -1, 0, -4 },
@@ -129,8 +129,9 @@ static AnimationInfoS sAnimations[] = {
 Vec3f D_80BE0070 = { 1000.0f, 0.0f, 0.0f };
 
 Gfx* D_80BE007C[] = {
-    object_al_DL_006598, object_al_DL_005920, object_al_DL_005878,
-    object_al_DL_0057D0, object_al_DL_005728, object_al_DL_005680,
+    gMadameAromaShawlMiddleDL,           gMadameAromaShawlUpperDL,
+    gMadameAromaShawlLeftLowerMiddleDL,  gMadameAromaShawlLeftLowerDL,
+    gMadameAromaShawlRightLowerMiddleDL, gMadameAromaShawlRightLowerDL,
 };
 
 Actor* func_80BDE1A0(EnAl* this, PlayState* play, u8 arg0, s16 arg1) {
@@ -177,7 +178,7 @@ s32 func_80BDE27C(EnAl* this, s32 arg1) {
 
     if (phi_v1) {
         this->unk_4F8 = arg1;
-        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, arg1);
+        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, arg1);
         this->unk_4C8 = this->skelAnime.playSpeed;
     }
 
@@ -199,7 +200,7 @@ Actor* func_80BDE384(EnAl* this, PlayState* play) {
 
     switch (this->unk_35C) {
         case 2:
-            if (!(gSaveContext.save.weekEventReg[89] & 8) && (gSaveContext.save.weekEventReg[85] & 0x80)) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_89_08) && CHECK_WEEKEVENTREG(WEEKEVENTREG_85_80)) {
                 actor = func_80BDE1A0(this, play, ACTORCAT_NPC, ACTOR_EN_PM);
             } else {
                 actor = &GET_PLAYER(play)->actor;
@@ -218,30 +219,30 @@ Actor* func_80BDE384(EnAl* this, PlayState* play) {
     return actor;
 }
 
-s32 func_80BDE408(EnAl* this, s16 arg1) {
+s32 func_80BDE408(EnAl* this, s16 csId) {
     s32 ret = false;
 
-    if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-        ActorCutscene_Stop(0x7C);
-        ActorCutscene_SetIntentToPlay(arg1);
-    } else if (ActorCutscene_GetCanPlayNext(arg1)) {
-        ActorCutscene_StartAndSetUnkLinkFields(arg1, &this->actor);
+    if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+        CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
+        CutsceneManager_Queue(csId);
+    } else if (CutsceneManager_IsNext(csId)) {
+        CutsceneManager_StartWithPlayerCs(csId, &this->actor);
         ret = true;
     } else {
-        ActorCutscene_SetIntentToPlay(arg1);
+        CutsceneManager_Queue(csId);
     }
     return ret;
 }
 
-s16 func_80BDE484(EnAl* this, s32 arg1) {
-    s16 cs = this->actor.cutscene;
+s16 func_80BDE484(EnAl* this, s32 numCutscenes) {
+    s16 csId = this->actor.csId;
     s32 i;
 
-    for (i = 0; i < arg1; i++) {
-        cs = ActorCutscene_GetAdditionalCutscene(cs);
+    for (i = 0; i < numCutscenes; i++) {
+        csId = CutsceneManager_GetAdditionalCsId(csId);
     }
 
-    return cs;
+    return csId;
 }
 
 s32 func_80BDE4E0(EnAl* this, s16* arg1, s16 arg2) {
@@ -256,7 +257,7 @@ s32 func_80BDE4E0(EnAl* this, s16* arg1, s16 arg2) {
     }
 
     if (arg2 == *arg1) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CHAIR_ROLL);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_CHAIR_ROLL);
         func_80BDE27C(this, 3);
         this->unk_4E8 = 0;
         (*arg1)++;
@@ -291,7 +292,7 @@ s32 func_80BDE678(EnAl* this, s16* arg1, s16 arg2) {
     }
 
     if (arg2 == *arg1) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CHAIR_ROLL);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_CHAIR_ROLL);
         func_80BDE27C(this, 4);
         this->unk_4E8 = 0;
         (*arg1)++;
@@ -316,13 +317,13 @@ s32 func_80BDE678(EnAl* this, s16* arg1, s16 arg2) {
 
 s32 func_80BDE7FC(EnAl* this, PlayState* play) {
     s32 pad;
-    s16 sp2A = func_80BDE484(this, 0);
+    s16 csId = func_80BDE484(this, 0);
     s32 pad2;
     s32 sp20 = false;
 
     switch (this->unk_4E6) {
         case 0:
-            if (!func_80BDE408(this, sp2A)) {
+            if (!func_80BDE408(this, csId)) {
                 break;
             }
 
@@ -331,7 +332,8 @@ s32 func_80BDE7FC(EnAl* this, PlayState* play) {
         case 6:
         case 8:
             if ((this->actor.child != NULL) && (this->actor.child->update != NULL)) {
-                Camera_SetTargetActor(Play_GetCamera(play, ActorCutscene_GetCurrentCamera(sp2A)), this->actor.child);
+                Camera_SetTargetActor(Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(csId)),
+                                      this->actor.child);
             }
             this->unk_4E6++;
             sp20 = true;
@@ -341,13 +343,13 @@ s32 func_80BDE7FC(EnAl* this, PlayState* play) {
         case 3:
         case 5:
         case 7:
-            Camera_SetTargetActor(Play_GetCamera(play, ActorCutscene_GetCurrentCamera(sp2A)), &this->actor);
+            Camera_SetTargetActor(Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(csId)), &this->actor);
             this->unk_4E6++;
             sp20 = true;
             break;
 
         case 9:
-            ActorCutscene_Stop(sp2A);
+            CutsceneManager_Stop(csId);
             this->unk_4E6++;
             sp20 = true;
             break;
@@ -409,7 +411,7 @@ s32 func_80BDEA14(EnAl* this, PlayState* play) {
     switch (this->unk_4E6) {
         case 0:
         case 1:
-            if ((gSaveContext.save.weekEventReg[75] & 2)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_75_02)) {
                 sp18 = true;
             } else if (func_80BDE4E0(this, &this->unk_4E6, 0)) {
                 sp18 = true;
@@ -450,7 +452,7 @@ s32* func_80BDEABC(EnAl* this, PlayState* play) {
             return D_80BDFE84;
 
         case 2:
-            if (!(gSaveContext.save.weekEventReg[89] & 8) && (gSaveContext.save.weekEventReg[85] & 0x80)) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_89_08) && CHECK_WEEKEVENTREG(WEEKEVENTREG_85_80)) {
                 this->unk_4EC = func_80BDE7FC;
                 return D_80BDFCBC;
             }
@@ -574,7 +576,7 @@ s32 func_80BDF064(EnAl* this, PlayState* play) {
     Actor* sp1C = func_80BDE1A0(this, play, 4, 0xA4);
     Actor* temp_v0 = func_80BDE1A0(this, play, 4, 0x234);
 
-    if (player->stateFlags1 & 0x40) {
+    if (player->stateFlags1 & PLAYER_STATE1_40) {
         this->unk_4C2 |= 0x400;
         if (this->unk_4C4 != sp22) {
             switch (sp22) {
@@ -634,7 +636,7 @@ s32 func_80BDF064(EnAl* this, PlayState* play) {
     return false;
 }
 
-s32 func_80BDF244(EnAl* this, PlayState* play, ScheduleResult* arg2) {
+s32 func_80BDF244(EnAl* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     s32 ret = false;
     Actor* sp20 = func_80BDE1A0(this, play, ACTORCAT_NPC, ACTOR_EN_GM);
     Actor* temp_v0 = func_80BDE1A0(this, play, ACTORCAT_NPC, ACTOR_EN_TOTO);
@@ -649,16 +651,16 @@ s32 func_80BDF244(EnAl* this, PlayState* play, ScheduleResult* arg2) {
     return ret;
 }
 
-s32 func_80BDF308(EnAl* this, PlayState* play, ScheduleResult* arg2) {
+s32 func_80BDF308(EnAl* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     SubS_UpdateFlags(&this->unk_4C2, 3, 7);
 
-    switch (arg2->result) {
+    switch (scheduleOutput->result) {
         case 1:
             func_80BDE27C(this, 0);
             break;
 
         case 2:
-            this->unk_4F0 = EXCH_ITEM_NONE;
+            this->unk_4F0 = PLAYER_IA_NONE;
             this->unk_4EA = 0;
             func_80BDE27C(this, 2);
             break;
@@ -666,23 +668,23 @@ s32 func_80BDF308(EnAl* this, PlayState* play, ScheduleResult* arg2) {
     return true;
 }
 
-s32 func_80BDF390(EnAl* this, PlayState* play, ScheduleResult* arg2) {
+s32 func_80BDF390(EnAl* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     s32 ret;
 
     this->actor.flags |= ACTOR_FLAG_1;
     this->actor.targetMode = 0;
-    this->unk_4F0 = EXCH_ITEM_NONE;
+    this->unk_4F0 = PLAYER_IA_NONE;
     this->unk_4C2 = 0;
     this->unk_4D4 = 40.0f;
 
-    switch (arg2->result) {
+    switch (scheduleOutput->result) {
         case 3:
-            ret = func_80BDF244(this, play, arg2);
+            ret = func_80BDF244(this, play, scheduleOutput);
             break;
 
         case 1:
         case 2:
-            ret = func_80BDF308(this, play, arg2);
+            ret = func_80BDF308(this, play, scheduleOutput);
             break;
 
         default:
@@ -698,15 +700,15 @@ void func_80BDF414(EnAl* this, PlayState* play) {
     switch (this->unk_4EA) {
         case 0:
         case 1:
-            if (!(gSaveContext.save.weekEventReg[89] & 8)) {
-                if (gSaveContext.save.weekEventReg[85] & 0x80) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_89_08)) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_85_80)) {
                     func_80BDE4E0(this, &this->unk_4EA, 0);
                 }
             }
             break;
 
         case 2:
-            if (gSaveContext.save.weekEventReg[89] & 8) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_89_08)) {
                 this->unk_4EA++;
             }
             break;
@@ -745,9 +747,9 @@ void func_80BDF578(EnAl* this, PlayState* play) {
 }
 
 void func_80BDF5E8(EnAl* this, PlayState* play) {
-    ScheduleResult sp20;
+    ScheduleOutput sp20;
 
-    this->unk_4E0 = REG(15) + ((void)0, gSaveContext.save.daySpeed);
+    this->unk_4E0 = R_TIME_SPEED + ((void)0, gSaveContext.save.timeSpeedOffset);
     if (!Schedule_RunScript(play, D_80BDFC70, &sp20) ||
         ((this->unk_35C != sp20.result) && !func_80BDF390(this, play, &sp20))) {
         this->actor.shape.shadowDraw = NULL;
@@ -780,7 +782,8 @@ void EnAl_Init(Actor* thisx, PlayState* play) {
     EnAl* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_al_Skel_00A0D8, NULL, this->jointTable, this->morphTable, 27);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gMadameAromaSkel, NULL, this->jointTable, this->morphTable,
+                       MADAME_AROMA_LIMB_MAX);
     this->unk_4F8 = -1;
     func_80BDE27C(this, 1);
     Collider_InitAndSetCylinder(play, &this->unk_310, &this->actor, &sCylinderInit);
@@ -817,16 +820,16 @@ void EnAl_Update(Actor* thisx, PlayState* play) {
 
 s32 EnAl_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     switch (limbIndex) {
-        case 3:
-        case 11:
-        case 12:
-        case 13:
-        case 14:
-        case 15:
+        case MADAME_AROMA_LIMB_SHAWL_MIDDLE:
+        case MADAME_AROMA_LIMB_SHAWL_UPPER:
+        case MADAME_AROMA_LIMB_SHAWL_LEFT_LOWER_MIDDLE:
+        case MADAME_AROMA_LIMB_SHAWL_LEFT_LOWER:
+        case MADAME_AROMA_LIMB_SHAWL_RIGHT_LOWER_MIDDLE:
+        case MADAME_AROMA_LIMB_SHAWL_RIGHT_LOWER:
             *dList = NULL;
             break;
 
-        case 16:
+        case MADAME_AROMA_LIMB_HEAD:
             break;
     }
     return false;
@@ -836,31 +839,31 @@ void EnAl_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
     EnAl* this = THIS;
 
     switch (limbIndex) {
-        case 3:
+        case MADAME_AROMA_LIMB_SHAWL_MIDDLE:
             Matrix_Get(&this->unk_190[0]);
             break;
 
-        case 11:
+        case MADAME_AROMA_LIMB_SHAWL_UPPER:
             Matrix_Get(&this->unk_190[1]);
             break;
 
-        case 12:
+        case MADAME_AROMA_LIMB_SHAWL_LEFT_LOWER_MIDDLE:
             Matrix_Get(&this->unk_190[2]);
             break;
 
-        case 13:
+        case MADAME_AROMA_LIMB_SHAWL_LEFT_LOWER:
             Matrix_Get(&this->unk_190[3]);
             break;
 
-        case 14:
+        case MADAME_AROMA_LIMB_SHAWL_RIGHT_LOWER_MIDDLE:
             Matrix_Get(&this->unk_190[4]);
             break;
 
-        case 15:
+        case MADAME_AROMA_LIMB_SHAWL_RIGHT_LOWER:
             Matrix_Get(&this->unk_190[5]);
             break;
 
-        case 16:
+        case MADAME_AROMA_LIMB_HEAD:
             Matrix_MultVec3f(&D_80BE0070, &this->actor.focus.pos);
             Math_Vec3s_Copy(&this->actor.focus.rot, &this->actor.world.rot);
             break;

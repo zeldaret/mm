@@ -28,7 +28,7 @@ void func_8086F57C(EnOkuta* this, PlayState* play);
 void func_8086F694(EnOkuta* this, PlayState* play);
 
 #if 0
-const ActorInit En_Okuta_InitVars = {
+ActorInit En_Okuta_InitVars = {
     ACTOR_EN_OKUTA,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -95,7 +95,7 @@ static DamageTable D_80870900 = {
 
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80870920[] = {
-    ICHAIN_S8(hintId, 66, ICHAIN_CONTINUE),
+    ICHAIN_S8(hintId, TATL_HINT_ID_OCTOROK, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 6500, ICHAIN_STOP),
 };
 

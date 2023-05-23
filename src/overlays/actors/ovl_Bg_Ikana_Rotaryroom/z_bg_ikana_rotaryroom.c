@@ -5,8 +5,10 @@
  */
 
 #include "z_bg_ikana_rotaryroom.h"
+#include "z64quake.h"
 #include "overlays/actors/ovl_Bg_Ikana_Block/z_bg_ikana_block.h"
 #include "overlays/actors/ovl_En_Torch2/z_en_torch2.h"
+#include "overlays/actors/ovl_En_Water_Effect/z_en_water_effect.h"
 #include "objects/object_ikana_obj/object_ikana_obj.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
@@ -32,7 +34,7 @@ void func_80B81BA0(Actor* thisx, PlayState* play);
 void func_80B81DAC(BgIkanaRotaryroom* this);
 void func_80B81DC8(Actor* thisx, PlayState* play);
 
-const ActorInit Bg_Ikana_Rotaryroom_InitVars = {
+ActorInit Bg_Ikana_Rotaryroom_InitVars = {
     ACTOR_BG_IKANA_ROTARYROOM,
     ACTORCAT_BG,
     FLAGS,
@@ -78,7 +80,7 @@ static ColliderJntSphInit sJntSphInit1 = {
         OC2_NONE,
         COLSHAPE_JNTSPH,
     },
-    2,
+    ARRAY_COUNT(sJntSphElementsInit1),
     sJntSphElementsInit1,
 };
 
@@ -105,7 +107,7 @@ static ColliderJntSphInit sJntSphInit2 = {
         OC2_NONE,
         COLSHAPE_JNTSPH,
     },
-    1,
+    ARRAY_COUNT(sJntSphElementsInit2),
     sJntSphElementsInit2,
 };
 
@@ -177,7 +179,7 @@ void func_80B80440(BgIkanaRotaryroom* this, PlayState* play) {
     this->unk_204.unk_00 = Actor_SpawnAsChildAndCutscene(
         &play->actorCtx, play, ACTOR_BG_IKANA_BLOCK, sp50.x, sp50.y, sp50.z, this->dyna.actor.shape.rot.x,
         this->dyna.actor.shape.rot.y, this->dyna.actor.shape.rot.z, -1,
-        ActorCutscene_GetAdditionalCutscene(this->dyna.actor.cutscene), this->dyna.actor.unk20, NULL);
+        CutsceneManager_GetAdditionalCsId(this->dyna.actor.csId), this->dyna.actor.halfDaysBits, NULL);
     Matrix_Pop();
 }
 
@@ -513,7 +515,7 @@ void func_80B81010(BgIkanaRotaryroom* this, PlayState* play) {
     CollisionPoly* sp7C;
     s32 sp78;
 
-    if (ActorCutscene_GetCurrentIndex() == this->dyna.actor.cutscene) {
+    if (CutsceneManager_GetCurrentCsId() == this->dyna.actor.csId) {
         phi_s7 = true;
 
         for (i = 0; i < ARRAY_COUNT(this->unk_3E0); i++) {
@@ -580,7 +582,7 @@ void func_80B81234(BgIkanaRotaryroom* this, PlayState* play) {
     CollisionPoly* sp40;
     s32 sp3C;
 
-    if (ActorCutscene_GetCurrentIndex() == this->dyna.actor.cutscene) {
+    if (CutsceneManager_GetCurrentCsId() == this->dyna.actor.csId) {
         if (player == NULL) {
             return;
         }
@@ -644,12 +646,12 @@ void func_80B81234(BgIkanaRotaryroom* this, PlayState* play) {
 void func_80B814B8(BgIkanaRotaryroom* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (ActorCutscene_GetCurrentIndex() == this->dyna.actor.cutscene) {
-        if (player->actor.bgCheckFlags & 0x100) {
-            func_800B8E58(player, NA_SE_VO_LI_DAMAGE_S + player->ageProperties->unk_92);
+    if (CutsceneManager_GetCurrentCsId() == this->dyna.actor.csId) {
+        if (player->actor.bgCheckFlags & BGCHECKFLAG_CRUSHED) {
+            Player_PlaySfx(player, NA_SE_VO_LI_DAMAGE_S + player->ageProperties->voiceSfxIdOffset);
             func_80169EFC(&play->state);
-            func_800B8E58(player, NA_SE_VO_LI_TAKEN_AWAY + player->ageProperties->unk_92);
-            play->unk_18845 = 1;
+            Player_PlaySfx(player, NA_SE_VO_LI_TAKEN_AWAY + player->ageProperties->voiceSfxIdOffset);
+            play->haltAllActors = true;
             play_sound(NA_SE_OC_ABYSS);
             this->actionFunc = NULL;
         }
@@ -679,7 +681,8 @@ void func_80B81570(BgIkanaRotaryroom* this, PlayState* play) {
         sp70.y += this->dyna.actor.world.pos.y;
         sp70.z += this->dyna.actor.world.pos.z;
 
-        Actor_Spawn(&play->actorCtx, play, ACTOR_EN_WATER_EFFECT, sp70.x, sp70.y, sp70.z, 0, 0, 0, 1);
+        Actor_Spawn(&play->actorCtx, play, ACTOR_EN_WATER_EFFECT, sp70.x, sp70.y, sp70.z, 0, 0, 0,
+                    ENWATEREFFECT_TYPE_FALLING_ROCK_SPAWNER);
     }
 
     Matrix_Pop();
@@ -711,7 +714,7 @@ void BgIkanaRotaryroom_Init(Actor* thisx, PlayState* play) {
         this->dyna.actor.shape.rot.x = 0;
     }
 
-    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
     DynaPolyActor_LoadMesh(play, &this->dyna, D_80B82218[sp34]);
 
     Collider_InitJntSph(play, &this->collider);
@@ -788,14 +791,14 @@ void func_80B819DC(BgIkanaRotaryroom* this) {
 void func_80B819F0(Actor* thisx, PlayState* play) {
     BgIkanaRotaryroom* this = THIS;
 
-    if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
-        if (this->dyna.actor.cutscene >= 0) {
-            func_800B7298(play, &this->dyna.actor, 7);
+    if (CutsceneManager_IsNext(this->dyna.actor.csId)) {
+        CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
+        if (this->dyna.actor.csId >= 0) {
+            func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_WAIT);
         }
         func_80B81A64(this);
     } else {
-        ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+        CutsceneManager_Queue(this->dyna.actor.csId);
     }
 }
 
@@ -829,11 +832,11 @@ void func_80B81A80(Actor* thisx, PlayState* play) {
 
         func_80B81B84(this);
     } else if (this->unk_584 == 15) {
-        s16 sp26 = Quake_Add(GET_ACTIVE_CAM(play), 3);
+        s16 quakeIndex = Quake_Request(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
 
-        Quake_SetSpeed(sp26, 0x7B30);
-        Quake_SetQuakeValues(sp26, 6, 0, 100, 0);
-        Quake_SetCountdown(sp26, 22);
+        Quake_SetSpeed(quakeIndex, 31536);
+        Quake_SetPerturbations(quakeIndex, 6, 0, 100, 0);
+        Quake_SetDuration(quakeIndex, 22);
     }
 }
 
@@ -856,11 +859,11 @@ void func_80B81BA0(Actor* thisx, PlayState* play) {
     thisx->shape.rot.x += 0x1F4;
 
     if (!(this->unk_584 & 7)) {
-        s16 quake = Quake_Add(GET_ACTIVE_CAM(play), 3);
+        s16 quakeIndex = Quake_Request(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
 
-        Quake_SetSpeed(quake, 0x7B30);
-        Quake_SetQuakeValues(quake, (s32)(Rand_ZeroOne() * 2.5f) + 3, 0, 10, 0);
-        Quake_SetCountdown(quake, 15);
+        Quake_SetSpeed(quakeIndex, 31536);
+        Quake_SetPerturbations(quakeIndex, (s32)(Rand_ZeroOne() * 2.5f) + 3, 0, 10, 0);
+        Quake_SetDuration(quakeIndex, 15);
     }
 
     if (Flags_GetSwitch(play, BGIKANAROTARYROOM_GET_FE(&this->dyna.actor))) {
@@ -923,14 +926,14 @@ void func_80B81DC8(Actor* thisx, PlayState* play) {
     this->unk_584--;
 
     if (this->unk_584 <= 0) {
-        ActorCutscene_Stop(this->dyna.actor.cutscene);
+        CutsceneManager_Stop(this->dyna.actor.csId);
         func_80B818B4(this);
     } else if (this->unk_584 == 19) {
-        s16 quake = Quake_Add(GET_ACTIVE_CAM(play), 3);
+        s16 quakeIndex = Quake_Request(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
 
-        Quake_SetSpeed(quake, 0x4E20);
-        Quake_SetQuakeValues(quake, 5, 0, 40, 60);
-        Quake_SetCountdown(quake, 17);
+        Quake_SetSpeed(quakeIndex, 20000);
+        Quake_SetPerturbations(quakeIndex, 5, 0, 40, 60);
+        Quake_SetDuration(quakeIndex, 17);
     }
 }
 

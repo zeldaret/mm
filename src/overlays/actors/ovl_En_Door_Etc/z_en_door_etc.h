@@ -5,14 +5,21 @@
 
 struct EnDoorEtc;
 
+#define ENDOORETC_GET_SWITCHFLAG(thisx) ((thisx)->params & 0x7F)
+
 typedef void (*EnDoorEtcActionFunc)(struct EnDoorEtc*, PlayState*);
 
 typedef struct EnDoorEtc {
-    /* 0x0000 */ Actor actor;
-    /* 0x0144 */ char unk_144[0xB4];
-    /* 0x01F8 */ EnDoorEtcActionFunc actionFunc;
+    /* 0x000 */ Actor actor;
+    /* 0x144 */ char pad_144[0x5D];
+    /* 0x1A1 */ u8 unk_1A1;
+    /* 0x1A2 */ s8 objectIndex;
+    /* 0x1A3 */ u8 dListIndex; // Never read, inferred from ovl_En_Door
+    /* 0x1A4 */ s16 angle;
+    /* 0x1A6 */ s16 timer;
+    /* 0x1A8 */ ColliderCylinder collider;
+    /* 0x1F4 */ u8 unk_1F4;
+    /* 0x1F8 */ EnDoorEtcActionFunc actionFunc;
 } EnDoorEtc; // size = 0x1FC
-
-extern const ActorInit En_Door_Etc_InitVars;
 
 #endif // Z_EN_DOOR_ETC_H

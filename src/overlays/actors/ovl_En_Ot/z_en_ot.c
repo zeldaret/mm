@@ -5,7 +5,6 @@
  */
 
 #include "z_en_ot.h"
-#include "prevent_bss_reordering.h"
 #include "objects/object_ot/object_ot.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
@@ -59,11 +58,11 @@ EnOtUnkStruct* func_80B5DF58(EnOtUnkStruct* arg0, u8 arg1, Vec3f* arg2, Vec3s* a
 void func_80B5E078(PlayState* play, EnOtUnkStruct* arg1, s32 arg2);
 void func_80B5E1D8(PlayState* play, EnOtUnkStruct* arg1, s32 arg2);
 
-static EnOt* D_80B5E880;
-static EnOt* D_80B5E884;
-static EnOt* D_80B5E888;
+EnOt* D_80B5E880;
+EnOt* D_80B5E884;
+EnOt* D_80B5E888;
 
-const ActorInit En_Ot_InitVars = {
+ActorInit En_Ot_InitVars = {
     ACTOR_EN_OT,
     ACTORCAT_NPC,
     FLAGS,
@@ -141,7 +140,7 @@ void EnOt_Init(Actor* thisx, PlayState* play) {
     this->unk_33C = ENOT_GET_C000(&this->actor);
     if (this->unk_33C == 0) {
         D_80B5E880 = this;
-        this->actor.flags |= ACTOR_FLAG_8000000;
+        this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
         this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_8);
         this->actor.update = func_80B5DB6C;
         this->actor.draw = NULL;
@@ -162,8 +161,8 @@ void EnOt_Init(Actor* thisx, PlayState* play) {
     this->actor.shape.rot.z = 0;
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->actor.gravity = 0.0f;
-    SubS_FillCutscenesList(&this->actor, this->cutscenes, ARRAY_COUNT(this->cutscenes));
-    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 0, &this->animIdx);
+    SubS_FillCutscenesList(&this->actor, this->csIdList, ARRAY_COUNT(this->csIdList));
+    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 0, &this->animIndex);
     this->skelAnime.curFrame = Rand_ZeroOne() * this->skelAnime.endFrame;
     this->lightNode = LightContext_InsertLight(play, &play->lightCtx, &this->lightInfo);
     this->unk_744.r = 255;
@@ -180,7 +179,7 @@ void EnOt_Init(Actor* thisx, PlayState* play) {
                     this->actor.world.pos.y = BgCheck_EntityRaycastFloor3(&play->colCtx, &this->actor.floorPoly, &bgId,
                                                                           &this->actor.world.pos) +
                                               50.0f;
-                    if (gSaveContext.save.weekEventReg[84] & 0x10) {
+                    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_84_10)) {
                         Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_NEW);
                         Matrix_MultVecZ(52.519997f, &sp64);
                         Math_Vec3f_Sum(&this->actor.world.pos, &sp64, &sp64);
@@ -195,13 +194,13 @@ void EnOt_Init(Actor* thisx, PlayState* play) {
                             this->unk_394.y = this->actor.world.pos.y;
                             this->unk_394.z = (this->actor.world.pos.z + this->unk_360->actor.world.pos.z) * 0.5f;
                             Math_Vec3f_Copy(&this->unk_360->unk_394, &this->unk_394);
-                            if (gSaveContext.save.weekEventReg[32] & 1) {
+                            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_32_01)) {
                                 func_80B5C244(this, play);
                             } else {
                                 func_80B5C684(this, play);
                             }
                         } else {
-                            Actor_MarkForDeath(&this->actor);
+                            Actor_Kill(&this->actor);
                         }
                     } else if ((D_80B5E888 != NULL) && (D_80B5E888->unk_32C & 1)) {
                         this->unk_360 = D_80B5E888;
@@ -219,7 +218,7 @@ void EnOt_Init(Actor* thisx, PlayState* play) {
                     break;
 
                 case 1:
-                    Actor_MarkForDeath(&this->actor);
+                    Actor_Kill(&this->actor);
                     break;
             }
             break;
@@ -230,7 +229,7 @@ void EnOt_Init(Actor* thisx, PlayState* play) {
             switch (this->unk_344) {
                 case 0:
                     Actor_SetScale(&this->actor, 0.0f);
-                    if (!(gSaveContext.save.weekEventReg[13] & 1)) {
+                    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_13_01)) {
                         Actor_SetScale(&this->actor, 0.0f);
                         func_80B5C910(this, play);
                     } else {
@@ -250,8 +249,8 @@ void EnOt_Init(Actor* thisx, PlayState* play) {
 
                 case 1:
                     Actor_SetScale(&this->actor, 0.012999999f);
-                    if (gSaveContext.save.weekEventReg[84] & 0x10) {
-                        if (gSaveContext.save.weekEventReg[32] & 1) {
+                    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_84_10)) {
+                        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_32_01)) {
                             func_80B5C244(this, play);
                         } else {
                             func_80B5C684(this, play);
@@ -264,8 +263,8 @@ void EnOt_Init(Actor* thisx, PlayState* play) {
             break;
 
         case 3:
-            if (!(gSaveContext.save.weekEventReg[26] & 8)) {
-                this->actor.flags |= ACTOR_FLAG_8000000;
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_26_08)) {
+                this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
                 this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_8);
                 Actor_SetScale(&this->actor, 0.0064999997f);
                 this->collider.dim.radius *= 0.5f;
@@ -274,7 +273,7 @@ void EnOt_Init(Actor* thisx, PlayState* play) {
                 this->actor.update = func_80B5DAEC;
                 func_80B5C634(this, play);
             } else {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
             }
             break;
     }
@@ -300,21 +299,21 @@ void func_80B5BB38(Color_RGB8* arg0, Color_RGB8* arg1, f32 arg2) {
 }
 
 void func_80B5BDA8(EnOt* this, PlayState* play) {
-    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 1, &this->animIdx);
-    SubS_FillCutscenesList(&this->actor, this->cutscenes, ARRAY_COUNT(this->cutscenes));
+    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 1, &this->animIndex);
+    SubS_FillCutscenesList(&this->actor, this->csIdList, ARRAY_COUNT(this->csIdList));
     this->actionFunc = func_80B5BE04;
 }
 
 void func_80B5BE04(EnOt* this, PlayState* play) {
     switch (this->unk_388) {
         case 0:
-            if (SubS_StartActorCutscene(&this->actor, this->cutscenes[2], -1, SUBS_CUTSCENE_SET_UNK_LINK_FIELDS)) {
+            if (SubS_StartCutscene(&this->actor, this->csIdList[2], CS_ID_NONE, SUBS_CUTSCENE_WITH_PLAYER)) {
                 func_80B5BF60(this, play);
             }
             break;
 
         case 1:
-            if (SubS_StartActorCutscene(&this->actor, this->cutscenes[3], -1, SUBS_CUTSCENE_SET_UNK_LINK_FIELDS)) {
+            if (SubS_StartCutscene(&this->actor, this->csIdList[3], CS_ID_NONE, SUBS_CUTSCENE_WITH_PLAYER)) {
                 func_80B5BF60(this, play);
             }
             break;
@@ -322,22 +321,22 @@ void func_80B5BE04(EnOt* this, PlayState* play) {
 }
 
 void func_80B5BE88(EnOt* this, PlayState* play) {
-    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 1, &this->animIdx);
+    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 1, &this->animIndex);
     this->actionFunc = func_80B5BED4;
 }
 
 void func_80B5BED4(EnOt* this, PlayState* play) {
-    func_800BE33C(&this->actor.world.pos, &this->unk_360->actor.world.pos, &this->actor.world.rot, 0);
-    Math_SmoothStepToS(&this->actor.shape.rot.y, Actor_YawBetweenActors(&this->actor, &this->unk_360->actor), 3, 0xE38,
-                       0x38E);
-    this->actor.speedXZ = 3.5f;
+    func_800BE33C(&this->actor.world.pos, &this->unk_360->actor.world.pos, &this->actor.world.rot, false);
+    Math_SmoothStepToS(&this->actor.shape.rot.y, Actor_WorldYawTowardActor(&this->actor, &this->unk_360->actor), 3,
+                       0xE38, 0x38E);
+    this->actor.speed = 3.5f;
     this->actor.world.pos.y = this->unk_360->actor.world.pos.y;
     Actor_MoveWithoutGravityReverse(&this->actor);
 }
 
 void func_80B5BF60(EnOt* this, PlayState* play) {
     this->unk_32C |= 0x40;
-    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 0, &this->animIdx);
+    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 0, &this->animIndex);
     this->actionFunc = func_80B5BFB8;
 }
 
@@ -349,10 +348,10 @@ void func_80B5BFB8(EnOt* this, PlayState* play) {
         Math_StepToF(&this->actor.world.pos.y, temp_f0, 2.0f);
     }
 
-    Math_SmoothStepToS(&this->actor.shape.rot.y, Actor_YawBetweenActors(&this->actor, &this->unk_360->actor), 3, 0xE38,
-                       0x38E);
+    Math_SmoothStepToS(&this->actor.shape.rot.y, Actor_WorldYawTowardActor(&this->actor, &this->unk_360->actor), 3,
+                       0xE38, 0x38E);
 
-    if (Actor_DistanceBetweenActors(&this->actor, &this->unk_360->actor) <= 52.519997f) {
+    if (Actor_WorldDistXYZToActor(&this->actor, &this->unk_360->actor) <= 52.519997f) {
         this->unk_73C = 50;
         Matrix_RotateYS(this->actor.world.rot.y, MTXMODE_NEW);
         Matrix_MultVecZ(52.519997f, &sp34);
@@ -376,13 +375,13 @@ void func_80B5BFB8(EnOt* this, PlayState* play) {
 }
 
 void func_80B5C154(EnOt* this, PlayState* play) {
-    if (gSaveContext.save.weekEventReg[32] & 1) {
-        this->unk_38C = GI_RUPEE_RED;
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_32_01)) {
+        this->getItemId = GI_RUPEE_RED;
     } else {
-        this->unk_38C = GI_HEART_PIECE;
-        gSaveContext.save.weekEventReg[32] |= 1;
+        this->getItemId = GI_HEART_PIECE;
+        SET_WEEKEVENTREG(WEEKEVENTREG_32_01);
     }
-    Actor_PickUp(&this->actor, play, this->unk_38C, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
+    Actor_OfferGetItem(&this->actor, play, this->getItemId, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
     this->actionFunc = func_80B5C1CC;
 }
 
@@ -392,7 +391,8 @@ void func_80B5C1CC(EnOt* this, PlayState* play) {
         func_80B5C244(this, play);
         func_80B5C244(this->unk_360, play);
     } else {
-        Actor_PickUp(&this->actor, play, this->unk_38C, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
+        Actor_OfferGetItem(&this->actor, play, this->getItemId, this->actor.xzDistToPlayer,
+                           this->actor.playerHeightRel);
     }
 }
 
@@ -401,7 +401,7 @@ void func_80B5C244(EnOt* this, PlayState* play) {
 }
 
 void func_80B5C25C(EnOt* this, PlayState* play) {
-    this->unk_390 = Actor_YawBetweenActors(&this->actor, &this->unk_360->actor);
+    this->unk_390 = Actor_WorldYawTowardActor(&this->actor, &this->unk_360->actor);
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->unk_390, 3, 0xE38, 0x38E);
     if (BINANG_SUB(BINANG_ROT180(this->unk_360->actor.shape.rot.y), this->actor.shape.rot.y) < 0x38E) {
         this->unk_32C |= 0x80;
@@ -410,11 +410,11 @@ void func_80B5C25C(EnOt* this, PlayState* play) {
     if ((this->unk_33C == 2) && (this->unk_32C & 0x80) && (this->unk_360->unk_32C & 0x80)) {
         this->unk_32C |= 0x100;
         this->unk_360->unk_32C |= 0x100;
-        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 2, &this->animIdx);
-        SubS_ChangeAnimationBySpeedInfo(&this->unk_360->skelAnime, sAnimations, 2, &this->unk_360->animIdx);
-        this->actor.flags |= ACTOR_FLAG_8000000;
+        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 2, &this->animIndex);
+        SubS_ChangeAnimationBySpeedInfo(&this->unk_360->skelAnime, sAnimations, 2, &this->unk_360->animIndex);
+        this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
         this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_8);
-        this->unk_360->actor.flags |= ACTOR_FLAG_8000000;
+        this->unk_360->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
         this->unk_360->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_8);
         func_80B5C9A8(this->unk_360, play);
         func_80B5C3B8(this, play);
@@ -450,7 +450,7 @@ void func_80B5C3D8(EnOt* this, PlayState* play) {
 
     Math_Vec3f_Copy(&this->actor.world.pos, &this->unk_348);
     Math_Vec3f_Copy(&this->unk_360->actor.world.pos, &this->unk_360->unk_348);
-    temp = Actor_YawBetweenActors(&this->actor, &this->unk_360->actor);
+    temp = Actor_WorldYawTowardActor(&this->actor, &this->unk_360->actor);
     this->actor.shape.rot.y = temp;
     this->unk_360->actor.shape.rot.y = BINANG_ROT180(temp);
 
@@ -482,14 +482,14 @@ void func_80B5C634(EnOt* this, PlayState* play) {
 }
 
 void func_80B5C64C(EnOt* this, PlayState* play) {
-    if (gSaveContext.save.weekEventReg[26] & 8) {
-        Actor_MarkForDeath(&this->actor);
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_26_08)) {
+        Actor_Kill(&this->actor);
     }
 }
 
 void func_80B5C684(EnOt* this, PlayState* play) {
-    this->actor.speedXZ = 0.0f;
-    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 0, &this->animIdx);
+    this->actor.speed = 0.0f;
+    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 0, &this->animIndex);
     this->actionFunc = func_80B5C6DC;
 }
 
@@ -499,20 +499,20 @@ void func_80B5C6DC(EnOt* this, PlayState* play) {
     s16 sp3E;
     Vec3f sp30;
 
-    sp3E = Actor_YawToPoint(&player->actor, &this->unk_394);
+    sp3E = Actor_WorldYawTowardPoint(&player->actor, &this->unk_394);
     Matrix_RotateYS(BINANG_ADD(sp3E, 0x4000), MTXMODE_NEW);
     if (this->unk_33C == 2) {
         Matrix_MultVecZ(26.259998f, &sp30);
     } else {
         if (this->unk_73C == 0) {
-            gSaveContext.save.weekEventReg[84] |= 0x10;
+            SET_WEEKEVENTREG(WEEKEVENTREG_84_10);
             switch (this->unk_388) {
                 case 0:
-                    ActorCutscene_Stop(this->cutscenes[2]);
+                    CutsceneManager_Stop(this->csIdList[2]);
                     break;
 
                 case 1:
-                    ActorCutscene_Stop(this->cutscenes[3]);
+                    CutsceneManager_Stop(this->csIdList[3]);
                     break;
             }
             this->unk_73C = -1;
@@ -527,7 +527,7 @@ void func_80B5C6DC(EnOt* this, PlayState* play) {
     Math_SmoothStepToF(&this->actor.world.pos.x, this->unk_348.x, 1.0f, 2.0f, 0.01f);
     Math_SmoothStepToF(&this->actor.world.pos.z, this->unk_348.z, 1.0f, 2.0f, 0.01f);
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 3, 0xE38, 0x38E);
-    if ((gSaveContext.save.weekEventReg[84] & 0x10) && (this->unk_33C == 1)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_84_10) && (this->unk_33C == 1)) {
         this->actor.textId = 0;
         this->unk_384 = 1;
         if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
@@ -535,7 +535,7 @@ void func_80B5C6DC(EnOt* this, PlayState* play) {
             this->unk_360->unk_3A0 = this->unk_3A0;
             func_80B5C9A8(this, play);
             func_80B5D114(this, play);
-        } else if ((player->actor.bgCheckFlags & 1) && !func_801242B4(player) &&
+        } else if ((player->actor.bgCheckFlags & BGCHECKFLAG_GROUND) && !func_801242B4(player) &&
                    (this->actor.xzDistToPlayer < 130.0f)) {
             func_800B8614(&this->actor, play, 130.0f);
         }
@@ -555,8 +555,8 @@ void func_80B5C910(EnOt* this, PlayState* play) {
 
 void func_80B5C950(EnOt* this, PlayState* play) {
     if (this->unk_32C & 8) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SEAHORSE_OUT_BOTTLE);
-        gSaveContext.save.weekEventReg[25] |= 4;
+        Actor_PlaySfx(&this->actor, NA_SE_EV_SEAHORSE_OUT_BOTTLE);
+        SET_WEEKEVENTREG(WEEKEVENTREG_25_04);
         func_80B5CAD0(this, play);
     }
 }
@@ -576,7 +576,7 @@ void func_80B5C9D0(EnOt* this, PlayState* play) {
     this->actor.world.rot.x = this->actor.world.rot.x;
     this->actor.world.rot.y = this->actor.world.rot.y;
     this->actor.world.rot.z = this->actor.world.rot.z;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SEAHORSE_OUT_BOTTLE);
+    Actor_PlaySfx(&this->actor, NA_SE_EV_SEAHORSE_OUT_BOTTLE);
     this->actionFunc = func_80B5CA30;
 }
 
@@ -591,7 +591,7 @@ void func_80B5CA30(EnOt* this, PlayState* play) {
 }
 
 void func_80B5CAD0(EnOt* this, PlayState* play) {
-    SubS_FillCutscenesList(&this->actor, this->cutscenes, ARRAY_COUNT(this->cutscenes) / 2);
+    SubS_FillCutscenesList(&this->actor, this->csIdList, ARRAY_COUNT(this->csIdList) / 2);
     this->actionFunc = func_80B5CB0C;
 }
 
@@ -606,7 +606,7 @@ void func_80B5CB0C(EnOt* this, PlayState* play) {
 
 void func_80B5CBA0(EnOt* this, PlayState* play) {
     this->actor.flags |= ACTOR_FLAG_10000;
-    func_800B8500(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel, 0);
+    func_800B8500(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel, PLAYER_IA_NONE);
     this->actionFunc = func_80B5CBEC;
 }
 
@@ -617,7 +617,7 @@ void func_80B5CBEC(EnOt* this, PlayState* play) {
     } else {
         Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 3, 0xE38, 0x38E);
         this->actor.world.rot.y = this->actor.shape.rot.y;
-        func_800B8500(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel, 0);
+        func_800B8500(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel, PLAYER_IA_NONE);
     }
 }
 
@@ -626,16 +626,16 @@ void func_80B5CC88(EnOt* this, PlayState* play) {
 }
 
 void func_80B5CCA0(EnOt* this, PlayState* play) {
-    if (SubS_StartActorCutscene(&this->actor, this->cutscenes[0], 0x7C, SUBS_CUTSCENE_NORMAL)) {
+    if (SubS_StartCutscene(&this->actor, this->csIdList[0], CS_ID_GLOBAL_TALK, SUBS_CUTSCENE_NORMAL)) {
         Player* player = GET_PLAYER(play);
 
-        player->stateFlags2 |= 0x20000000;
+        player->stateFlags2 |= PLAYER_STATE2_20000000;
         func_80B5CCF4(this, play);
     }
 }
 
 void func_80B5CCF4(EnOt* this, PlayState* play) {
-    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 0, &this->animIdx);
+    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 0, &this->animIndex);
     this->actionFunc = func_80B5CD40;
 }
 
@@ -644,29 +644,29 @@ void func_80B5CD40(EnOt* this, PlayState* play) {
     s32 temp;
 
     switch (Message_GetState(&play->msgCtx)) {
-        case 0:
+        case TEXT_STATE_NONE:
             temp = Math_SmoothStepToS(&this->actor.shape.rot.y,
                                       BINANG_ROT180(Camera_GetCamDirYaw(GET_ACTIVE_CAM(play))), 3, 0xE38, 0x38E);
             this->actor.world.rot.y = this->actor.shape.rot.y;
             if (1) {}
             if (!temp) {
-                gSaveContext.save.weekEventReg[23] |= 0x10;
+                SET_WEEKEVENTREG(WEEKEVENTREG_23_10);
                 Message_StartTextbox(play, 0x1069, NULL);
             }
             break;
 
-        case 1:
-        case 2:
-        case 3:
+        case TEXT_STATE_1:
+        case TEXT_STATE_CLOSING:
+        case TEXT_STATE_3:
             break;
 
-        case 4:
-        case 5:
-        case 6:
+        case TEXT_STATE_CHOICE:
+        case TEXT_STATE_5:
+        case TEXT_STATE_DONE:
             if (Message_ShouldAdvance(play) && (play->msgCtx.currentTextId == 0x1069)) {
                 this->unk_32C |= 4;
-                ActorCutscene_Stop(this->cutscenes[0]);
-                player->stateFlags2 &= ~0x20000000;
+                CutsceneManager_Stop(this->csIdList[0]);
+                player->stateFlags2 &= ~PLAYER_STATE2_20000000;
                 func_80B5CE6C(this, play);
             }
             break;
@@ -676,7 +676,7 @@ void func_80B5CD40(EnOt* this, PlayState* play) {
 void func_80B5CE6C(EnOt* this, PlayState* play) {
     this->unk_384 = 0;
     this->unk_32C |= 0x20;
-    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 0, &this->animIdx);
+    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 0, &this->animIndex);
     this->actionFunc = func_80B5CEC8;
 }
 
@@ -693,15 +693,16 @@ void func_80B5CEC8(EnOt* this, PlayState* play) {
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 3, 0xE38, 0x38E);
     if (this->unk_32C & 0x800) {
         this->actor.flags |= ACTOR_FLAG_10000;
-        func_800B8500(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel, 0);
+        func_800B8500(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel, PLAYER_IA_NONE);
     } else {
         this->actor.flags &= ~ACTOR_FLAG_10000;
-        if ((player->actor.bgCheckFlags & 1) && !func_801242B4(player) && (this->actor.xzDistToPlayer < 130.0f)) {
+        if ((player->actor.bgCheckFlags & BGCHECKFLAG_GROUND) && !func_801242B4(player) &&
+            (this->actor.xzDistToPlayer < 130.0f)) {
             func_800B8614(&this->actor, play, 130.0f);
         }
     }
 
-    if (!(gSaveContext.save.weekEventReg[84] & 0x10) && (ENOT_GET_C000(&this->actor) == 1)) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_84_10) && (ENOT_GET_C000(&this->actor) == 1)) {
         if ((fabsf(this->actor.xzDistToPlayer) <= 130.0f) && (fabsf(this->actor.playerHeightRel) <= 130.0f)) {
             player->unk_B2B = 29;
         }
@@ -731,7 +732,7 @@ void func_80B5CEC8(EnOt* this, PlayState* play) {
 }
 
 void func_80B5D114(EnOt* this, PlayState* play) {
-    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 0, &this->animIdx);
+    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 0, &this->animIndex);
     this->actionFunc = func_80B5D160;
 }
 
@@ -740,10 +741,10 @@ void func_80B5D160(EnOt* this, PlayState* play) {
     s32 temp;
 
     switch (Message_GetState(&play->msgCtx)) {
-        case 0:
+        case TEXT_STATE_NONE:
             temp = Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 3, 0xE38, 0x38E);
             this->actor.world.rot.y = this->actor.shape.rot.y;
-            if (!temp) {
+            if (temp == 0) {
                 switch (this->unk_384) {
                     case 0:
                         if ((this->unk_33C != 1) && (this->unk_33C == 2)) {
@@ -754,7 +755,7 @@ void func_80B5D160(EnOt* this, PlayState* play) {
                                     phi_a1 = 0x1069;
                                 }
                             } else if (Flags_GetSwitch(play, ENOT_GET_3F80(&this->actor))) {
-                                if (gSaveContext.save.weekEventReg[23] & 0x10) {
+                                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_23_10)) {
                                     phi_a1 = 0x106C;
                                 } else {
                                     phi_a1 = 0x106B;
@@ -778,14 +779,14 @@ void func_80B5D160(EnOt* this, PlayState* play) {
             }
             break;
 
-        case 1:
-        case 2:
-        case 3:
+        case TEXT_STATE_1:
+        case TEXT_STATE_CLOSING:
+        case TEXT_STATE_3:
             break;
 
-        case 4:
-        case 5:
-        case 6:
+        case TEXT_STATE_CHOICE:
+        case TEXT_STATE_5:
+        case TEXT_STATE_DONE:
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
                     default:
@@ -803,12 +804,12 @@ void func_80B5D160(EnOt* this, PlayState* play) {
                         break;
 
                     case 0x10A5:
-                        func_801477B4(play);
+                        Message_CloseTextbox(play);
                         func_80B5CE6C(this, play);
                         break;
 
                     case 0x106D:
-                        func_801477B4(play);
+                        Message_CloseTextbox(play);
                         func_80B5C154(this, play);
                         break;
                 }
@@ -820,11 +821,11 @@ void func_80B5D160(EnOt* this, PlayState* play) {
 s32 EnOt_ActorPathing_Move(PlayState* play, ActorPathing* actorPath) {
     Actor* thisx = actorPath->actor;
     EnOt* this = (EnOt*)thisx;
-    f32 sp24 = Math_CosS(-thisx->world.rot.x) * thisx->speedXZ;
+    f32 sp24 = Math_CosS(-thisx->world.rot.x) * thisx->speed;
     f32 sp20 = gFramerateDivisorHalf;
 
     thisx->velocity.x = Math_SinS(thisx->world.rot.y) * sp24;
-    thisx->velocity.y = Math_SinS(-thisx->world.rot.x) * thisx->speedXZ;
+    thisx->velocity.y = Math_SinS(-thisx->world.rot.x) * thisx->speed;
     thisx->velocity.z = Math_CosS(thisx->world.rot.y) * sp24;
 
     this->unk_330.x += (thisx->velocity.x * sp20) + thisx->colChkInfo.displacement.x;
@@ -846,7 +847,7 @@ s32 EnOt_ActorPathing_UpdateActorInfo(PlayState* play, ActorPathing* actorPath) 
     s32 sp34;
 
     thisx->gravity = 0.0f;
-    Math_SmoothStepToF(&thisx->speedXZ, 10.0f, 0.8f, 2.0f, 0.0f);
+    Math_SmoothStepToF(&thisx->speed, 10.0f, 0.8f, 2.0f, 0.0f);
 
     sp50.x = actorPath->curPoint.x - thisx->world.pos.x;
     sp50.y = actorPath->curPoint.y - thisx->world.pos.y;
@@ -857,10 +858,10 @@ s32 EnOt_ActorPathing_UpdateActorInfo(PlayState* play, ActorPathing* actorPath) 
     sp44.z = actorPath->curPoint.z - actorPath->prevPoint.z;
 
     temp = Math3D_Parallel(&sp50, &sp44);
-    if ((actorPath->distSqToCurPointXZ < SQ(thisx->speedXZ)) || (temp <= 0.0f)) {
+    if ((actorPath->distSqToCurPointXZ < SQ(thisx->speed)) || (temp <= 0.0f)) {
         ret = true;
     } else {
-        temp = SQ(thisx->speedXZ) / actorPath->distSqToCurPoint;
+        temp = SQ(thisx->speed) / actorPath->distSqToCurPoint;
         sp34 = ABS(actorPath->rotToCurPoint.x - thisx->world.rot.x);
         sp2C = (s32)(sp34 * temp) + 0xAAA;
 
@@ -885,9 +886,9 @@ void func_80B5D648(EnOt* this, PlayState* play) {
     this->actorPath.pointOffset.y = 0.0f;
     this->actorPath.pointOffset.z = 0.0f;
     this->actor.gravity = 0.0f;
-    this->actor.speedXZ = 0.0f;
-    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 1, &this->animIdx);
-    this->actor.flags |= ACTOR_FLAG_8000000;
+    this->actor.speed = 0.0f;
+    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 1, &this->animIndex);
+    this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
     this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_8);
     Flags_SetSwitch(play, ENOT_GET_3F80(&this->actor));
     this->actionFunc = func_80B5D750;
@@ -915,7 +916,7 @@ void func_80B5D750(EnOt* this, PlayState* play) {
     }
 
     if ((this->unk_32C & 1) && (this->actor.xzDistToPlayer <= 180.0f)) {
-        this->actor.flags &= ~ACTOR_FLAG_8000000;
+        this->actor.flags &= ~ACTOR_FLAG_CANT_LOCK_ON;
         this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8);
         if (D_80B5E884 != 0) {
             func_80B5C9A8(this, play);
@@ -929,12 +930,12 @@ void EnOt_Update(Actor* thisx, PlayState* play) {
     s32 pad;
     EnOt* this = THIS;
 
-    if ((this->animIdx == 1) && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SEAHORSE_SWIM);
+    if ((this->animIndex == 1) && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
+        Actor_PlaySfx(&this->actor, NA_SE_EV_SEAHORSE_SWIM);
     }
 
     this->actionFunc(this, play);
-    if (this->actor.bgCheckFlags & 0x20) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_WATER) {
         if (DECR(this->unk_354) == 0) {
             if (this->actor.flags & ACTOR_FLAG_40) {
                 s32 i;
@@ -947,7 +948,7 @@ void EnOt_Update(Actor* thisx, PlayState* play) {
         }
     }
 
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 10.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 10.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
 
     if (this->actor.world.pos.y <= this->actor.floorHeight + 50.0f) {
         this->actor.world.pos.y = this->actor.floorHeight + 50.0f;
@@ -985,20 +986,20 @@ void func_80B5DB6C(Actor* thisx, PlayState* play) {
     EnOt* this = THIS;
     Player* player = GET_PLAYER(play);
 
-    if (!(gSaveContext.save.weekEventReg[84] & 0x10) && !(this->unk_32C & 8)) {
-        if (gSaveContext.save.weekEventReg[25] & 4) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_84_10) && !(this->unk_32C & 8)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_25_04)) {
             Vec3f sp50;
 
             func_80B5B2E0(play, &this->actor.world.pos, ENOT_GET_7F(&this->actor), &sp50, &this->unk_340);
             if (Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ACTOR_EN_OT, sp50.x, sp50.y, sp50.z, 0,
                                               this->actor.shape.rot.y, 1, ENOT_GET_3FFF(&this->actor) | 0x8000,
-                                              this->actor.cutscene, this->actor.unk20, NULL) != NULL) {
+                                              this->actor.csId, this->actor.halfDaysBits, NULL) != NULL) {
                 this->unk_32C |= 8;
             }
         } else if (D_80B5E888 != NULL) {
             s32 sp4C = false;
 
-            if (gSaveContext.save.weekEventReg[13] & 1) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_13_01)) {
                 if (!SurfaceType_IsHorseBlocked(&play->colCtx, player->actor.floorPoly, player->actor.floorBgId)) {
                     sp4C = true;
                 }
@@ -1010,7 +1011,7 @@ void func_80B5DB6C(Actor* thisx, PlayState* play) {
                 temp->unk_32C |= 8;
                 temp->unk_346 = ENOT_GET_7F(&this->actor);
                 temp->actor.params = this->actor.params;
-                temp->actor.cutscene = this->actor.cutscene;
+                temp->actor.csId = this->actor.csId;
                 this->unk_32C |= 8;
             }
         } else if (SurfaceType_IsHorseBlocked(&play->colCtx, player->actor.floorPoly, player->actor.floorBgId)) {
@@ -1137,7 +1138,7 @@ void func_80B5E1D8(PlayState* play, EnOtUnkStruct* arg1, s32 arg2) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    POLY_OPA_DISP = func_801660B8(play, POLY_OPA_DISP);
+    POLY_OPA_DISP = Play_SetFog(play, POLY_OPA_DISP);
     POLY_OPA_DISP = func_8012C724(POLY_OPA_DISP);
 
     for (i = 0; i < arg2; i++, arg1++) {
@@ -1152,7 +1153,7 @@ void func_80B5E1D8(PlayState* play, EnOtUnkStruct* arg1, s32 arg2) {
             Matrix_RotateYS(BINANG_ROT180(Camera_GetCamDirYaw(GET_ACTIVE_CAM(play))), MTXMODE_APPLY);
             Matrix_Scale(arg1->unk_04, arg1->unk_04, arg1->unk_04, MTXMODE_APPLY);
 
-            gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(gameplay_keep_Tex_05E6F0));
+            gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(gDropRecoveryHeartTex));
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_OPA_DISP++, object_ot_DL_000078);
         }

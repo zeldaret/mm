@@ -33,7 +33,7 @@ void func_80B04B48(ObjSnowball* this, PlayState* play);
 void func_80B04B60(ObjSnowball* this, PlayState* play);
 void func_80B04D34(Actor* thisx, PlayState* play);
 
-const ActorInit Obj_Snowball_InitVars = {
+ActorInit Obj_Snowball_InitVars = {
     ACTOR_OBJ_SNOWBALL,
     ACTORCAT_PROP,
     FLAGS,
@@ -68,7 +68,7 @@ static ColliderJntSphInit sJntSphInit = {
         OC2_TYPE_2,
         COLSHAPE_JNTSPH,
     },
-    1,
+    ARRAY_COUNT(sJntSphElementsInit),
     sJntSphElementsInit,
 };
 
@@ -106,7 +106,7 @@ void func_80B02CD0(ObjSnowball* this, PlayState* play) {
 
     Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ptr->unk_00, this->actor.home.pos.x, this->actor.home.pos.y,
                                   this->actor.home.pos.z, this->actor.home.rot.x, 0, this->actor.home.rot.z,
-                                  ptr->unk_02, -1, this->actor.unk20, NULL);
+                                  ptr->unk_02, CS_ID_NONE, this->actor.halfDaysBits, NULL);
 }
 
 void func_80B02D58(ObjSnowball* this, PlayState* play) {
@@ -123,8 +123,8 @@ void func_80B02DB0(ObjSnowball* this, PlayState* play) {
 
     Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ptr->unk_00, this->actor.home.pos.x, this->actor.home.pos.y,
                                   this->actor.home.pos.z, this->actor.home.rot.x, 0, this->actor.home.rot.z,
-                                  this->actor.params | ptr->unk_02,
-                                  ActorCutscene_GetAdditionalCutscene(this->actor.cutscene), this->actor.unk20, NULL);
+                                  this->actor.params | ptr->unk_02, CutsceneManager_GetAdditionalCsId(this->actor.csId),
+                                  this->actor.halfDaysBits, NULL);
 }
 
 void func_80B02E54(ObjSnowball* this, PlayState* play) {
@@ -132,7 +132,7 @@ void func_80B02E54(ObjSnowball* this, PlayState* play) {
 
     Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ptr->unk_00, this->actor.home.pos.x, this->actor.home.pos.y,
                                   this->actor.home.pos.z, this->actor.home.rot.x, 0, this->actor.home.rot.z,
-                                  this->actor.params | ptr->unk_02, -1, this->actor.unk20, NULL);
+                                  this->actor.params | ptr->unk_02, CS_ID_NONE, this->actor.halfDaysBits, NULL);
 }
 
 void func_80B02EE4(ObjSnowball* this, PlayState* play) {
@@ -440,7 +440,7 @@ void func_80B03FF8(ObjSnowball* this, PlayState* play) {
         sp18->unk_04(this, play);
     }
 
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SNOWBALL_BROKEN);
+    Actor_PlaySfx(&this->actor, NA_SE_EV_SNOWBALL_BROKEN);
 
     if (rotY == 5) {
         Flags_SetSwitch(play, OBJSNOWBALL_GET_3F(&this->actor));
@@ -510,7 +510,7 @@ void ObjSnowball_Init(Actor* thisx, PlayState* play) {
     func_80B04338(this, play);
 
     if ((sp40 == 5) && Flags_GetSwitch(play, OBJSNOWBALL_GET_3F(&this->actor))) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -549,7 +549,7 @@ void func_80B04350(ObjSnowball* this, PlayState* play) {
             this->unk_20A = 0;
         }
 
-        if (this->actor.cutscene < 0) {
+        if (this->actor.csId < 0) {
             func_80B03FF8(this, play);
             if (this->unk_20A == 0) {
                 func_80B04608(this, play);
@@ -571,7 +571,7 @@ void func_80B04350(ObjSnowball* this, PlayState* play) {
             } else {
                 this->unk_209 = 10;
             }
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_REFLECTION_SNOW);
+            Actor_PlaySfx(&this->actor, NA_SE_IT_REFLECTION_SNOW);
         }
     }
 
@@ -584,13 +584,13 @@ void func_80B04350(ObjSnowball* this, PlayState* play) {
 }
 
 void func_80B04540(ObjSnowball* this, PlayState* play) {
-    ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+    CutsceneManager_Queue(this->actor.csId);
     this->actionFunc = func_80B0457C;
 }
 
 void func_80B0457C(ObjSnowball* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
+    if (CutsceneManager_IsNext(this->actor.csId)) {
+        CutsceneManager_StartWithPlayerCs(this->actor.csId, &this->actor);
         func_80B03FF8(this, play);
         this->unk_20B = 1;
         if (this->unk_20A == 0) {
@@ -599,7 +599,7 @@ void func_80B0457C(ObjSnowball* this, PlayState* play) {
             func_80B046E4(this, play);
         }
     } else {
-        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+        CutsceneManager_Queue(this->actor.csId);
     }
 }
 
@@ -615,13 +615,13 @@ void func_80B04648(ObjSnowball* this, PlayState* play) {
     this->unk_208--;
     if (this->unk_208 <= 0) {
         if (this->unk_20B != 0) {
-            ActorCutscene_Stop(this->actor.cutscene);
+            CutsceneManager_Stop(this->actor.csId);
         }
 
         if (this->actor.home.rot.y == 1) {
             func_80B04B48(this, play);
         } else {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     } else if (this->unk_208 == 0x2D) {
         func_80B03688(this, play);
@@ -719,13 +719,13 @@ void func_80B047C0(ObjSnowball* this, PlayState* play) {
 
     if ((this->unk_208 <= 0) || ((this->unk_1A8[0].unk_2D & 1) && (this->unk_1A8[1].unk_2D & 1))) {
         if (this->unk_20B != 0) {
-            ActorCutscene_Stop(this->actor.cutscene);
+            CutsceneManager_Stop(this->actor.csId);
         }
 
         if (this->actor.home.rot.y == 1) {
             func_80B04B48(this, play);
         } else {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     } else {
         for (i = 0; i < ARRAY_COUNT(this->unk_1A8); i++) {

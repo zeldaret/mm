@@ -2,10 +2,10 @@
 
 u8 sYaz0DataBuffer[0x400];
 u8* sYaz0CurDataEnd;
-u32 sYaz0CurRomStart;
+uintptr_t sYaz0CurRomStart;
 u32 sYaz0CurSize;
 u8* sYaz0MaxPtr;
-u8* D_8009BE20;
+void* gYaz0DecompressDstEnd;
 
 void* Yaz0_FirstDMA() {
     u32 pad0;
@@ -117,12 +117,12 @@ s32 Yaz0_DecompressImpl(u8* src, u8* dst) {
         bitIdx--;
     } while (dst != dstEnd);
 
-    D_8009BE20 = dstEnd;
+    gYaz0DecompressDstEnd = dstEnd;
 
     return 0;
 }
 
-void Yaz0_Decompress(u32 romStart, void* dst, size_t size) {
+void Yaz0_Decompress(uintptr_t romStart, void* dst, size_t size) {
     s32 status;
     u32 pad;
     char sp80[0x50];

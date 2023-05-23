@@ -19,7 +19,7 @@ void ObjKibako2_Draw(Actor* thisx, PlayState* play);
 void ObjKibako2_Idle(ObjKibako2* this, PlayState* play);
 void ObjKibako2_Kill(ObjKibako2* this, PlayState* play);
 
-const ActorInit Obj_Kibako2_InitVars = {
+ActorInit Obj_Kibako2_InitVars = {
     ACTOR_OBJ_KIBAKO2,
     ACTORCAT_BG,
     FLAGS,
@@ -128,13 +128,13 @@ void ObjKibako2_SpawnSkulltula(ObjKibako2* this, PlayState* play) {
         if (skulltula != NULL) {
             skulltula->parent = &this->dyna.actor;
             skulltula->velocity.y = 13.0f;
-            skulltula->speedXZ = 0.0f;
+            skulltula->speed = 0.0f;
         }
     }
 }
 
 void ObjKibako2_SpawnContents(ObjKibako2* this, PlayState* play) {
-    if (KIBAKO2_CONTENTS(&this->dyna.actor) == CONTENTS_COLLECTIBLE) {
+    if (KIBAKO2_CONTENTS(&this->dyna.actor) == OBJKIBAKO2_CONTENTS_COLLECTIBLE) {
         ObjKibako2_SpawnCollectible(this, play);
     } else {
         ObjKibako2_SpawnSkulltula(this, play);
@@ -157,14 +157,14 @@ void ObjKibako2_Init(Actor* thisx, PlayState* play) {
     this->dyna.actor.shape.rot.z = 0;
     this->dyna.actor.world.rot.x = 0;
     this->dyna.actor.shape.rot.x = 0;
-    if (contents == CONTENTS_COLLECTIBLE) {
+    if (contents == OBJKIBAKO2_CONTENTS_COLLECTIBLE) {
         if (Item_CanDropBigFairy(play, KIBAKO2_COLLECTIBLE_ID(&this->dyna.actor),
                                  KIBAKO2_COLLECTIBLE_FLAG(&this->dyna.actor))) {
             this->unk_1AC = 1;
             this->dyna.actor.flags |= ACTOR_FLAG_10;
         }
     }
-    if ((contents != CONTENTS_SKULLTULA) || !ObjKibako2_ContainsSkulltula(this, play)) {
+    if ((contents != OBJKIBAKO2_CONTENTS_SKULLTULA) || !ObjKibako2_ContainsSkulltula(this, play)) {
         this->skulltulaNoiseTimer = -1;
     }
     this->actionFunc = ObjKibako2_Idle;
@@ -211,7 +211,7 @@ void ObjKibako2_Idle(ObjKibako2* this, PlayState* play) {
         ObjKibako2_Break(this, play);
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->dyna.actor.world.pos, 20, NA_SE_EV_WOODBOX_BREAK);
         this->dyna.actor.flags |= ACTOR_FLAG_10;
-        func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+        DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
         this->dyna.actor.draw = NULL;
         this->actionFunc = ObjKibako2_Kill;
     } else if (this->dyna.actor.xzDistToPlayer < 600.0f) {
@@ -221,19 +221,19 @@ void ObjKibako2_Idle(ObjKibako2* this, PlayState* play) {
 
 void ObjKibako2_Kill(ObjKibako2* this, PlayState* play) {
     ObjKibako2_SpawnContents(this, play);
-    Actor_MarkForDeath(&this->dyna.actor);
+    Actor_Kill(&this->dyna.actor);
 }
 
 void ObjKibako2_Update(Actor* thisx, PlayState* play) {
     ObjKibako2* this = THIS;
 
     if (this->unk_1AC != 0) {
-        play->actorCtx.unk5 |= 8;
+        play->actorCtx.flags |= ACTORCTX_FLAG_3;
     }
 
     if (this->skulltulaNoiseTimer >= 0) {
         if (this->skulltulaNoiseTimer == 0) {
-            Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EN_STALGOLD_ROLL);
+            Actor_PlaySfx(&this->dyna.actor, NA_SE_EN_STALGOLD_ROLL);
             if (Rand_ZeroOne() < 0.1f) {
                 this->skulltulaNoiseTimer = Rand_S16Offset(40, 80);
             } else {

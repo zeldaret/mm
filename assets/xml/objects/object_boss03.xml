@@ -46,7 +46,7 @@
         <DList Name="gGyorgBubbleModelDL" Offset="0x7EB0" />
 
         <!-- Gyorg Title Card -->
-        <Texture Name="gGyorgTitleCardTex" OutName="gyorg_title_card" Format="i8" Width="128" Height="40" Offset="0x7EC8" />
+        <Texture Name="gGyorgTitleCardTex" OutName="gyorg_title_card" Format="ia8" Width="128" Height="40" Offset="0x7EC8" />
 
         <!-- Gyorg Limbs -->
         <Limb Name="gGyorgRootLimb" Type="Standard" EnumName="GYORG_LIMB_ROOT" Offset="0x92C8" />
@@ -65,7 +65,7 @@
         <Limb Name="gGyorgJawLimb" Type="Standard" EnumName="GYORG_LIMB_JAW" Offset="0x9364" />
 
         <!-- Gyorg Skeleton-->
-        <Skeleton Name="gGyorgSkel" Type="Flex" LimbType="Standard" LimbNone="GYORG_LIMB_NONE" LimbMax="GYORG_LIMB_MAX" EnumName="GyorgLimbs" Offset="0x93A8" />
+        <Skeleton Name="gGyorgSkel" Type="Flex" LimbType="Standard" LimbNone="GYORG_LIMB_NONE" LimbMax="GYORG_LIMB_MAX" EnumName="GyorgLimb" Offset="0x93A8" />
 
         <!-- Gyorg Animations -->
         <Animation Name="gGyorgFloppingAnim" Offset="0x9554" /> <!-- Original name is "bus_dead" -->
@@ -130,7 +130,7 @@
         <Limb Name="gGyorgSmallFishHeadLimb" Type="Standard" EnumName="GYORG_SMALL_FISH_LIMB_HEAD" Offset="0xD9F0" />
 
         <!-- Small Fishes Skeleton -->
-        <Skeleton Name="gGyorgSmallFishSkel" Type="Flex" LimbType="Standard" LimbNone="GYORG_SMALL_FISH_LIMB_NONE" LimbMax="GYORG_SMALL_FISH_LIMB_MAX" EnumName="GyorgSmallFishLimbs" Offset="0xDA20" />
+        <Skeleton Name="gGyorgSmallFishSkel" Type="Flex" LimbType="Standard" LimbNone="GYORG_SMALL_FISH_LIMB_NONE" LimbMax="GYORG_SMALL_FISH_LIMB_MAX" EnumName="GyorgSmallFishLimb" Offset="0xDA20" />
 
         <!-- Small Fishes Animation -->
         <Animation Name="gGyorgSmallFishSwimAnim" Offset="0xDAAC" /> <!-- Original name is "minibus_b_swim" -->

@@ -3,46 +3,54 @@
 
 #include "ultra64.h"
 
-/*
-  Schedule is a subsystem that acts as a way to make decisions based on the
-  time and scene (and a limited selection of items). It is utilized by writing
-  a script that is encoded into bytecode and ran, returning the result in a
-  struct. The returned result can be a value or a encoded time value.
+/**
+ *   Schedule is a subsystem that acts as a way to make decisions based on the
+ * time and scene (and a limited selection of items). It is utilized by writing
+ * a script that is encoded into bytecode and run, returning the result in a
+ * struct. The returned result can be a value or a encoded time value.
+ *
+ * The scripts contain 2 kinds of instructions:
+ * - Checks with branches (relative offsets, either 1-byte offsets (short, *_S),
+ *                         or 2-byte offsets (long, *_L))
+ * - Returns
+ *
+ * Scripts are stored as u8[]. They are built using the macros are the bottom of
+ * this file. The scheduledis.py script can be used to convert any scripts in
+ * actor data into the macros.
+ */
 
-  The scripts contain 2 kinds of instructions:
-  - Checks with branches (relative offsets, either 1-byte offsets (short, *_S),
-                          or 2-byte offsets (long, *_L))
-  - Returns
-
-  Scripts are stored as u8[]. They are built using the macros are the bottom of
-  this file. The scheduledis.py script can be used to convert any scripts in
-  actor data into the macros.
-*/
+/**
+ * Actors that use this system generally create 3 functions to interact with it.
+ *
+ * - FollowSchedule: The action function an actor sets to follow the schedule.
+ * - ProcessScheduleOutput: Holds the logic of processing the output received by running the schedule script, called by FollowSchedule
+ * - HandleSchedule: Holds the actual logic of how to actually follow the schedule based on the processed output, called by FollowSchedule
+ */
 
 // Macro to convert the time format used in the save struct into the format used in Schedule
-#define SCHEDULE_CONVERT_TIME(time) ((time) - 0x10000 / 360 * 90)
+#define SCHEDULE_CONVERT_TIME(time) ((u16)((time) - 0x10000 / 360 * 90))
 #define SCHEDULE_TIME_NOW SCHEDULE_CONVERT_TIME(gSaveContext.save.time)
 
 typedef enum {
-    /* 00 */ SCHEDULE_CMD_ID_CHECK_FLAG_S,         // Checks if a weekEventReg flag is set and branches if so, short range branch
-    /* 01 */ SCHEDULE_CMD_ID_CHECK_FLAG_L,         // Checks if a weekEventReg flag is set and branches if so, long range branch
-    /* 02 */ SCHEDULE_CMD_ID_CHECK_TIME_RANGE_S,   // Checks if the current time is within the range of the two provided times and branches if so, short range branch
-    /* 03 */ SCHEDULE_CMD_ID_CHECK_TIME_RANGE_L,   // Checks if the current time is within the range of the two provided times and branches if so, long range branch
-    /* 04 */ SCHEDULE_CMD_ID_RET_VAL_L,            // Ends script and returns 2-byte value (Note: bugged as the return value size is only 1 byte in the struct)
-    /* 05 */ SCHEDULE_CMD_ID_RET_NONE,             // Ends script without returning anything
-    /* 06 */ SCHEDULE_CMD_ID_RET_EMPTY,            // Ends script and indicates return without changing existing value
-    /* 07 */ SCHEDULE_CMD_ID_NOP,                  // No-Op
-    /* 08 */ SCHEDULE_CMD_ID_CHECK_MISC_S,         // Special check based on items or masks and branches if check passes, short range branch
-    /* 09 */ SCHEDULE_CMD_ID_RET_VAL_S,            // Ends script and returns byte value
-    /* 10 */ SCHEDULE_CMD_ID_CHECK_NOT_IN_SCENE_S, // Checks if the current scene is not SceneNum and branches if so, short range branch
-    /* 11 */ SCHEDULE_CMD_ID_CHECK_NOT_IN_SCENE_L, // Checks if the current scene is not SceneNum and branches if so, long range branch
-    /* 12 */ SCHEDULE_CMD_ID_CHECK_NOT_IN_DAY_S,   // Checks if the current day is not Day and branches if so, short range branch
-    /* 13 */ SCHEDULE_CMD_ID_CHECK_NOT_IN_DAY_L,   // Checks if the current day is not Day and branches if so, long range branch
-    /* 14 */ SCHEDULE_CMD_ID_RET_TIME,             // Returns 2 time values
-    /* 15 */ SCHEDULE_CMD_ID_CHECK_BEFORE_TIME_S,  // Branches if the current time is less than the command time, short range branch
-    /* 16 */ SCHEDULE_CMD_ID_CHECK_BEFORE_TIME_L,  // Branches if the current time is less than the command time, long range branch
-    /* 17 */ SCHEDULE_CMD_ID_BRANCH_S,             // Always branch, short range branch
-    /* 18 */ SCHEDULE_CMD_ID_BRANCH_L,             // Always branch, long range branch
+    /* 0x00 */ SCHEDULE_CMD_ID_CHECK_FLAG_S,         // Checks if a weekEventReg flag is set and branches if so, short range branch
+    /* 0x01 */ SCHEDULE_CMD_ID_CHECK_FLAG_L,         // Checks if a weekEventReg flag is set and branches if so, long range branch
+    /* 0x02 */ SCHEDULE_CMD_ID_CHECK_TIME_RANGE_S,   // Checks if the current time is within the range of the two provided times and branches if so, short range branch
+    /* 0x03 */ SCHEDULE_CMD_ID_CHECK_TIME_RANGE_L,   // Checks if the current time is within the range of the two provided times and branches if so, long range branch
+    /* 0x04 */ SCHEDULE_CMD_ID_RET_VAL_L,            // Ends script and returns 2-byte value (Note: bugged as the return value size is only 1 byte in the struct)
+    /* 0x05 */ SCHEDULE_CMD_ID_RET_NONE,             // Ends script without returning anything
+    /* 0x06 */ SCHEDULE_CMD_ID_RET_EMPTY,            // Ends script and indicates return without changing existing value
+    /* 0x07 */ SCHEDULE_CMD_ID_NOP,                  // No-Op
+    /* 0x08 */ SCHEDULE_CMD_ID_CHECK_MISC_S,         // Special check based on items or masks and branches if check passes, short range branch
+    /* 0x09 */ SCHEDULE_CMD_ID_RET_VAL_S,            // Ends script and returns byte value
+    /* 0x0A */ SCHEDULE_CMD_ID_CHECK_NOT_IN_SCENE_S, // Checks if the current scene is not SceneId and branches if so, short range branch
+    /* 0x0B */ SCHEDULE_CMD_ID_CHECK_NOT_IN_SCENE_L, // Checks if the current scene is not SceneId and branches if so, long range branch
+    /* 0x0C */ SCHEDULE_CMD_ID_CHECK_NOT_IN_DAY_S,   // Checks if the current day is not Day and branches if so, short range branch
+    /* 0x0D */ SCHEDULE_CMD_ID_CHECK_NOT_IN_DAY_L,   // Checks if the current day is not Day and branches if so, long range branch
+    /* 0x0E */ SCHEDULE_CMD_ID_RET_TIME,             // Returns 2 time values
+    /* 0x0F */ SCHEDULE_CMD_ID_CHECK_BEFORE_TIME_S,  // Branches if the current time is less than the command time, short range branch
+    /* 0x10 */ SCHEDULE_CMD_ID_CHECK_BEFORE_TIME_L,  // Branches if the current time is less than the command time, long range branch
+    /* 0x11 */ SCHEDULE_CMD_ID_BRANCH_S,             // Always branch, short range branch
+    /* 0x12 */ SCHEDULE_CMD_ID_BRANCH_L,             // Always branch, long range branch
 } ScheduleCommandId;
 
 typedef enum {
@@ -56,7 +64,7 @@ typedef struct {
     /* 0x4 */ s32 time0;
     /* 0x8 */ s32 time1;
     /* 0xC */ s32 hasResult;
-} ScheduleResult; // size = 0x10
+} ScheduleOutput; // size = 0x10
 
 typedef struct {
     /* 0x0 */ u8 cmd;
@@ -122,15 +130,15 @@ typedef struct {
 
 typedef struct {
     /* 0x0 */ ScheduleCmdBase base;
-    /* 0x1 */ u8 sceneH;
-    /* 0x2 */ u8 sceneL;
+    /* 0x1 */ u8 sceneIdH;
+    /* 0x2 */ u8 sceneIdL;
     /* 0x3 */ s8 offset;
 } ScheduleCmdCheckNotInSceneS; // size = 0x4
 
 typedef struct {
     /* 0x0 */ ScheduleCmdBase base;
-    /* 0x1 */ u8 sceneH;
-    /* 0x2 */ u8 sceneL;
+    /* 0x1 */ u8 sceneIdH;
+    /* 0x2 */ u8 sceneIdL;
     /* 0x3 */ u8 offsetH;
     /* 0x4 */ u8 offsetL;
 } ScheduleCmdCheckNotInSceneL; // size = 0x5
@@ -188,11 +196,11 @@ typedef struct {
 #define SCHEDULE_PACK_S16(val) \
     ((val) >> 8) & 0xFF, (val) & 0xFF
 
-#define SCHEDULE_CMD_CHECK_FLAG_S(index, mask, offset) \
-    SCHEDULE_CMD_ID_CHECK_FLAG_S, (index), (mask), (offset)
+#define SCHEDULE_CMD_CHECK_FLAG_S(flag, offset) \
+    SCHEDULE_CMD_ID_CHECK_FLAG_S, SCHEDULE_PACK_S16(flag), (offset)
 
-#define SCHEDULE_CMD_CHECK_FLAG_L(index, mask, offset) \
-    SCHEDULE_CMD_ID_CHECK_FLAG_L, (index), (mask), SCHEDULE_PACK_S16(offset)
+#define SCHEDULE_CMD_CHECK_FLAG_L(flag, offset) \
+    SCHEDULE_CMD_ID_CHECK_FLAG_L, SCHEDULE_PACK_S16(flag), SCHEDULE_PACK_S16(offset)
 
 #define SCHEDULE_CMD_CHECK_TIME_RANGE_S(startHr, startMin, endHr, endMin, offset) \
     SCHEDULE_CMD_ID_CHECK_TIME_RANGE_S, (startHr), (startMin), (endHr), (endMin), (offset)

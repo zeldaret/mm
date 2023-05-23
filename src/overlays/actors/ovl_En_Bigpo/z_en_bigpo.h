@@ -30,12 +30,12 @@ typedef struct EnBigpo {
     /* 0x188 */ Vec3s jointTable[ENBIGPO_LIMBCOUNT];
     /* 0x1C4 */ Vec3s morphTable[ENBIGPO_LIMBCOUNT];
     /* 0x200 */ EnBigPoActionFunc actionFunc;
-    /* 0x204 */ u8 unkBool204; // need to know what func_801A2E54 does to know what this is
+    /* 0x204 */ u8 storePrevBgm;
     /* 0x206 */ s16 idleTimer; // frame counter
     /* 0x208 */ s16 unk208; // facing rotY?
     /* 0x20A */ s16 rotVelocity;
     /* 0x20C */ s16 unk20C; // is this counting the number of frames the player is ztargeting them?
-    /* 0x20E */ s16 cutsceneSubCamId;
+    /* 0x20E */ s16 subCamId;
     /* 0x210 */ s16 switchFlags;
     /* 0x212 */ s16 hoverHeightCycleTimer; // sin wave up and down bobbing
     /* 0x214 */ f32 fireRadius; // distance from center during conjunction cutscene
@@ -64,6 +64,6 @@ enum EnBigpoType {
   /* 5 */ ENBIGPO_UNK5,
 };
 
-#define GET_BIGPO_SWITCHFLAGS(thisx) ((u8)(thisx->params >> 0x8)) 
+#define BIGPO_GET_SWITCHFLAGS(thisx) (u8)((thisx)->params >> 0x8) 
 
 #endif // Z_EN_BIGPO_H

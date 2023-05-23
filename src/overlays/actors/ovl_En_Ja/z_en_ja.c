@@ -50,7 +50,7 @@ s32 D_80BC366C[] = {
     0x0E29440C, 0x170E2945, 0x0C180E29, 0x460C170E, 0x29470C09, 0x0000180E, 0x293B0C09, 0x00001000,
 };
 
-const ActorInit En_Ja_InitVars = {
+ActorInit En_Ja_InitVars = {
     ACTOR_EN_JA,
     ACTORCAT_NPC,
     FLAGS,
@@ -89,7 +89,7 @@ static ColliderCylinderInit sCylinderInit = {
 
 static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
-static AnimationInfoS sAnimations[] = {
+static AnimationInfoS sAnimationInfo[] = {
     { &object_boj_Anim_002734, 1.0f, 0, -1, 0, 0 },  { &object_boj_Anim_0033B0, 1.0f, 0, -1, 0, 0 },
     { &object_boj_Anim_002734, 1.0f, 0, -1, 0, -4 }, { &object_boj_Anim_0033B0, 1.0f, 0, -1, 0, -4 },
     { &object_boj_Anim_004078, 1.0f, 0, -1, 0, 0 },  { &object_boj_Anim_005CE4, 1.0f, 0, -1, 0, 0 },
@@ -105,7 +105,7 @@ s32 func_80BC192C(EnJa* this, s32 arg1) {
 
     if (arg1 != this->unk_36C) {
         this->unk_36C = arg1;
-        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, arg1);
+        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, arg1);
         this->unk_344 = this->skelAnime.playSpeed;
     }
 
@@ -177,7 +177,7 @@ s32 func_80BC1B60(EnJa* this, PlayState* play) {
     this->unk_35A = CLAMP(this->unk_35A, -0x1C70, 0x1C70);
 
     if (this->unk_1D8.player->actor.id == ACTOR_PLAYER) {
-        sp40.y = this->unk_1D8.player->bodyPartsPos[7].y + 3.0f;
+        sp40.y = this->unk_1D8.player->bodyPartsPos[PLAYER_BODYPART_HEAD].y + 3.0f;
     } else {
         Math_Vec3f_Copy(&sp40, &this->unk_1D8.player->actor.focus.pos);
     }
@@ -216,11 +216,11 @@ s32 func_80BC1D70(EnJa* this, PlayState* play) {
 
 void func_80BC1E40(EnJa* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    s32 sp20 = Message_GetState(&play->msgCtx);
+    s32 talkState = Message_GetState(&play->msgCtx);
     f32 phi_f0;
 
-    if (((play->msgCtx.currentTextId < 0xFF) || (play->msgCtx.currentTextId > 0x200)) && (sp20 == 3) &&
-        (this->unk_374 == 3) && (&this->actor == player->targetActor)) {
+    if (((play->msgCtx.currentTextId < 0xFF) || (play->msgCtx.currentTextId > 0x200)) && (talkState == TEXT_STATE_3) &&
+        (this->prevTalkState == TEXT_STATE_3) && (&this->actor == player->talkActor)) {
         if ((play->state.frames % 2) == 0) {
             if (this->unk_348 != 0.0f) {
                 this->unk_348 = 0.0f;
@@ -236,10 +236,10 @@ void func_80BC1E40(EnJa* this, PlayState* play) {
     this->unk_34C = CLAMP(this->unk_34C, 0.0f, 120.0f);
 
     Matrix_Translate(this->unk_34C, 0.0f, 0.0f, MTXMODE_APPLY);
-    this->unk_374 = sp20;
+    this->prevTalkState = talkState;
 }
 
-s32 func_80BC1FC8(EnJa* this, PlayState* play, ScheduleResult* arg2) {
+s32 func_80BC1FC8(EnJa* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     s32 ret = false;
 
     if (func_80BC1AE0(this, play)) {
@@ -252,7 +252,7 @@ s32 func_80BC1FC8(EnJa* this, PlayState* play, ScheduleResult* arg2) {
     return ret;
 }
 
-s32 func_80BC203C(EnJa* this, PlayState* play, ScheduleResult* arg2) {
+s32 func_80BC203C(EnJa* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     s32 ret = false;
 
     if (func_80BC1AE0(this, play)) {
@@ -269,19 +269,19 @@ s32 func_80BC203C(EnJa* this, PlayState* play, ScheduleResult* arg2) {
     return ret;
 }
 
-s32 func_80BC20D0(EnJa* this, PlayState* play, ScheduleResult* arg2) {
+s32 func_80BC20D0(EnJa* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     s32 ret = false;
 
     this->unk_340 = 0;
 
-    switch (arg2->result) {
+    switch (scheduleOutput->result) {
         case 1:
-            ret = func_80BC1FC8(this, play, arg2);
-            if (ret == 1) {}
+            ret = func_80BC1FC8(this, play, scheduleOutput);
+            if (ret == true) {}
             break;
 
         case 2:
-            ret = func_80BC203C(this, play, arg2);
+            ret = func_80BC203C(this, play, scheduleOutput);
             break;
     }
     return ret;
@@ -299,9 +299,9 @@ void func_80BC2150(EnJa* this, PlayState* play) {
 }
 
 void func_80BC21A8(EnJa* this, PlayState* play) {
-    ScheduleResult sp18;
+    ScheduleOutput sp18;
 
-    this->unk_35C = REG(15) + ((void)0, gSaveContext.save.daySpeed);
+    this->unk_35C = R_TIME_SPEED + ((void)0, gSaveContext.save.timeSpeedOffset);
     if (!Schedule_RunScript(play, D_80BC35F0, &sp18) ||
         ((this->unk_1D8.unk_00 != sp18.result) && !func_80BC20D0(this, play, &sp18))) {
         this->actor.shape.shadowDraw = NULL;
@@ -385,11 +385,11 @@ void EnJa_Update(Actor* thisx, PlayState* play) {
 
         radius = this->collider.dim.radius + 30;
         height = this->collider.dim.height + 10;
-        func_8013C964(&this->actor, play, radius, height, EXCH_ITEM_NONE, this->unk_340 & 7);
+        func_8013C964(&this->actor, play, radius, height, PLAYER_IA_NONE, this->unk_340 & 7);
 
         if (this->unk_1D8.unk_00 != 2) {
             Actor_MoveWithGravity(&this->actor);
-            Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, 4);
+            Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
         }
         func_80BC1984(this, play);
     }

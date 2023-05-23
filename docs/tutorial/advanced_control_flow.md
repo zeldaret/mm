@@ -26,7 +26,7 @@ void func_809527F8(EnMs* this, PlayState* play);
 void func_809529AC(EnMs* this, PlayState* play);
 void func_80952A1C(EnMs* this, PlayState* play);
 
-const ActorInit En_Ms_InitVars = {
+ActorInit En_Ms_InitVars = {
     ACTOR_EN_MS,
     ACTORCAT_NPC,
     FLAGS,
@@ -67,7 +67,7 @@ void EnMs_Init(Actor* thisx, PlayState* play) {
     Actor_SetScale(&this->actor, 0.015f);
     this->actor.colChkInfo.mass = 0xFF;
     this->actionFunc = func_80952734;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actor.velocity.y = 0.0f;
     this->actor.gravity = -1.0f;
 }
@@ -81,7 +81,7 @@ void EnMs_Destroy(Actor* thisx, PlayState* play) {
 void func_80952734(EnMs* this, PlayState* play) {
     s16 temp_v1 = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
 
-    if (gSaveContext.save.inventory.items[10] == ITEM_NONE) {
+    if (gSaveContext.save.saveInfo.inventory.items[10] == ITEM_NONE) {
         this->actor.textId = 0x92E;
     } else {
         this->actor.textId = 0x932;
@@ -107,13 +107,13 @@ void func_809529AC(EnMs* this, PlayState* play) {
         func_800B8500(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel, 0);
         this->actionFunc = func_80952A1C;
     } else {
-        Actor_PickUp(&this->actor, play, 0x35, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
+        Actor_OfferGetItem(&this->actor, play, 0x35, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
     }
 }
 
 void func_80952A1C(EnMs* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-        func_80151938(play, 0x936U);
+        Message_ContinueTextbox(play, 0x936U);
         this->actionFunc = func_809527F8;
     } else {
         func_800B8500(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel, -1);
@@ -167,8 +167,8 @@ void func_809527F8(EnMs* this, PlayState* play) {
             return;
         }
         if (Message_ShouldAdvance(play) != 0) {
-            func_801477B4(play);
-            Actor_PickUp((Actor *) this, play, 0x35, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
+            Message_CloseTextbox(play);
+            Actor_OfferGetItem((Actor *) this, play, 0x35, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
             this->actionFunc = func_809529AC;
             return;
         }
@@ -182,24 +182,24 @@ void func_809527F8(EnMs* this, PlayState* play) {
 
             }
             func_8019F230();
-            func_80151938(play, 0x934U);
+            Message_ContinueTextbox(play, 0x934U);
             // Duplicate return node #17. Try simplifying control flow for better match
             return;
         }
-        func_801477B4(play);
-        if ((s32) gSaveContext.save.playerData.rupees < 0xA) {
+        Message_CloseTextbox(play);
+        if ((s32) gSaveContext.save.saveInfo.playerData.rupees < 0xA) {
             play_sound(0x4806U);
-            func_80151938(play, 0x935U);
+            Message_ContinueTextbox(play, 0x935U);
             return;
         }
-        if ((s32) gSaveContext.save.inventory.ammo[gItemSlots[0xA]] >= 0x14) {
+        if ((s32) gSaveContext.save.saveInfo.inventory.ammo[gItemSlots[0xA]] >= 0x14) {
             play_sound(0x4806U);
-            func_80151938(play, 0x937U);
+            Message_ContinueTextbox(play, 0x937U);
             return;
         }
         func_8019F208();
-        Actor_PickUp((Actor *) this, play, 0x35, 90.0f, 10.0f);
-        func_801159EC(-0xA);
+        Actor_OfferGetItem((Actor *) this, play, 0x35, 90.0f, 10.0f);
+        Rupees_ChangeBy(-0xA);
         this->actionFunc = func_809529AC;
     }
 }
@@ -220,8 +220,7 @@ which is long, messy, and contains some rather nasty-looking control flow, inclu
         }
 ```
 
-If you read the OoT tutorial, you'll know these nested negated ifs all using the same variable are a good indicator that there's a switch. The problem is working out how to write it. 
-
+If you read the OoT tutorial, you'll know these nested negated ifs all using the same variable are a good indicator that there's a switch. The problem is working out how to write it.
 
 ## Goto-only mode
 
@@ -257,8 +256,8 @@ block_5:
     if (Message_ShouldAdvance(play) == 0) {
         goto block_17;
     }
-    func_801477B4(play);
-    Actor_PickUp((Actor *) this, play, 0x35, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
+    Message_CloseTextbox(play);
+    Actor_OfferGetItem((Actor *) this, play, 0x35, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
     this->actionFunc = func_809529AC;
     return;
 block_7:
@@ -274,35 +273,36 @@ block_7:
     }
     goto block_16;
 block_11:
-    func_801477B4(play);
-    if ((s32) gSaveContext.save.playerData.rupees >= 0xA) {
+    Message_CloseTextbox(play);
+    if ((s32) gSaveContext.save.saveInfo.playerData.rupees >= 0xA) {
         goto block_13;
     }
     play_sound(0x4806U);
-    func_80151938(play, 0x935U);
+    Message_ContinueTextbox(play, 0x935U);
     return;
 block_13:
-    if ((s32) gSaveContext.save.inventory.ammo[gItemSlots[0xA]] < 0x14) {
+    if ((s32) gSaveContext.save.saveInfo.inventory.ammo[gItemSlots[0xA]] < 0x14) {
         goto block_15;
     }
     play_sound(0x4806U);
-    func_80151938(play, 0x937U);
+    Message_ContinueTextbox(play, 0x937U);
     return;
 block_15:
     func_8019F208();
-    Actor_PickUp((Actor *) this, play, 0x35, 90.0f, 10.0f);
-    func_801159EC(-0xA);
+    Actor_OfferGetItem((Actor *) this, play, 0x35, 90.0f, 10.0f);
+    Rupees_ChangeBy(-0xA);
     this->actionFunc = func_809529AC;
     return;
 block_16:
     func_8019F230();
-    func_80151938(play, 0x934U);
+    Message_ContinueTextbox(play, 0x934U);
 block_17:
     return;
 }
 ```
 
 which in many ways looks worse: you can see why the use of gotos in code is strongly discouraged. However, if you throw this in `diff.py`, you'll find it's rather closer than you'd have thought. Goto-only mode has the advantages that
+
 - code is always in the right order: mips2c has not had to reorder anything to get the ifs to work out
 - it is often possible to get quite close with gotos, then start removing them, checking the matching status at each point. This is usually easier than trying to puzzle out the way it's trying to jump out of an `if ( || )` or similar.
 - if you're trying to keep track of where you are in the code, the gotos mean that it is closer to the assembly in the first place.
@@ -312,11 +312,11 @@ which in many ways looks worse: you can see why the use of gotos in code is stro
 The simplest sort of block label to eliminate is one that is only used once, and where the corresponding goto jumps over a simple block of code with no extra internal control flow structure. There are two obvious examples of this here, the first being
 
 ```C
-    if ((s32) gSaveContext.save.playerData.rupees >= 0xA) {
+    if ((s32) gSaveContext.save.saveInfo.playerData.rupees >= 0xA) {
         goto block_13;
     }
     play_sound(0x4806U);
-    func_80151938(play, 0x935U);
+    Message_ContinueTextbox(play, 0x935U);
     return;
 block_13:
 ```
@@ -324,9 +324,9 @@ block_13:
 Currently, this says to jump over the code block `play_sound...` if the condition in the if is satisfied. In non-goto terms, this means that the block should be run if the condition is *not* satisfied. This also illustrates a general property of goto-only mode: you have to reverse the senses of all of the ifs. Therefore the appropriate approach is to swap the if round, put the code block inside, and remove the goto and the label:
 
 ```C
-    if (gSaveContext.save.playerData.rupees < 0xA) {
+    if (gSaveContext.save.saveInfo.playerData.rupees < 0xA) {
         play_sound(0x4806U);
-        func_80151938(play, 0x935U);
+        Message_ContinueTextbox(play, 0x935U);
         return;
     }
 ```
@@ -359,8 +359,8 @@ block_5:
     if (Message_ShouldAdvance(play) == 0) {
         goto block_17;
     }
-    func_801477B4(play);
-    Actor_PickUp((Actor *) this, play, 0x35, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
+    Message_CloseTextbox(play);
+    Actor_OfferGetItem((Actor *) this, play, 0x35, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
     this->actionFunc = func_809529AC;
     return;
 block_7:
@@ -376,34 +376,33 @@ block_7:
     }
     goto block_16;
 block_11:
-    func_801477B4(play);
+    Message_CloseTextbox(play);
     
-    if (gSaveContext.save.playerData.rupees < 0xA) {
+    if (gSaveContext.save.saveInfo.playerData.rupees < 0xA) {
         play_sound(0x4806U);
-        func_80151938(play, 0x935U);
+        Message_ContinueTextbox(play, 0x935U);
         return;
     }
-    if (gSaveContext.save.inventory.ammo[gItemSlots[0xA]] >= 0x14) {
+    if (gSaveContext.save.saveInfo.inventory.ammo[gItemSlots[0xA]] >= 0x14) {
         play_sound(0x4806U);
-        func_80151938(play, 0x937U);
+        Message_ContinueTextbox(play, 0x937U);
         return;
     }
 
     func_8019F208();
-    Actor_PickUp((Actor *) this, play, 0x35, 90.0f, 10.0f);
-    func_801159EC(-0xA);
+    Actor_OfferGetItem((Actor *) this, play, 0x35, 90.0f, 10.0f);
+    Rupees_ChangeBy(-0xA);
     this->actionFunc = func_809529AC;
     return;
 block_16:
     func_8019F230();
-    func_80151938(play, 0x934U);
+    Message_ContinueTextbox(play, 0x934U);
 block_17:
     return;
 }
 ```
 
 We can't apply this rule any more, so we need to move on to the next: `block_17` just contains a `return`. So we can replace it by `return` everywhere it appears.
-
 
 ```C
 void func_809527F8(EnMs* this, PlayState* play) {
@@ -429,8 +428,8 @@ block_5:
     if (Message_ShouldAdvance(play) == 0) {
         return;
     }
-    func_801477B4(play);
-    Actor_PickUp((Actor *) this, play, 0x35, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
+    Message_CloseTextbox(play);
+    Actor_OfferGetItem((Actor *) this, play, 0x35, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
     this->actionFunc = func_809529AC;
     return;
 block_7:
@@ -446,27 +445,27 @@ block_7:
     }
     goto block_16;
 block_11:
-    func_801477B4(play);
+    Message_CloseTextbox(play);
     
-    if (gSaveContext.save.playerData.rupees < 0xA) {
+    if (gSaveContext.save.saveInfo.playerData.rupees < 0xA) {
         play_sound(0x4806U);
-        func_80151938(play, 0x935U);
+        Message_ContinueTextbox(play, 0x935U);
         return;
     }
-    if (gSaveContext.save.inventory.ammo[gItemSlots[0xA]] >= 0x14) {
+    if (gSaveContext.save.saveInfo.inventory.ammo[gItemSlots[0xA]] >= 0x14) {
         play_sound(0x4806U);
-        func_80151938(play, 0x937U);
+        Message_ContinueTextbox(play, 0x937U);
         return;
     }
 
     func_8019F208();
-    Actor_PickUp((Actor *) this, play, 0x35, 90.0f, 10.0f);
-    func_801159EC(-0xA);
+    Actor_OfferGetItem((Actor *) this, play, 0x35, 90.0f, 10.0f);
+    Rupees_ChangeBy(-0xA);
     this->actionFunc = func_809529AC;
     return;
 block_16:
     func_8019F230();
-    func_80151938(play, 0x934U);   
+    Message_ContinueTextbox(play, 0x934U);   
 }
 ```
 
@@ -486,6 +485,7 @@ Now let's start thinking about switches. A good indicator of a switch in goto-on
 ```
 
 because
+
 - there are multiple ifs that are simple numeric comparisons of the same argument
 - the goto blocks are in the same order as the ifs
 - there is one last goto at the end that triggers if none of the ifs does: this sounds an awful lot like a `default`!
@@ -495,22 +495,22 @@ So let us rewrite the entire second half as a switch:
 ```C
     switch (play->msgCtx.choiceIndex) {
         case 0:
-            func_801477B4(play);
+            Message_CloseTextbox(play);
             
-            if (gSaveContext.save.playerData.rupees < 0xA) {
+            if (gSaveContext.save.saveInfo.playerData.rupees < 0xA) {
                 play_sound(0x4806U);
-                func_80151938(play, 0x935U);
+                Message_ContinueTextbox(play, 0x935U);
                 return;
             }
-            if (gSaveContext.save.inventory.ammo[gItemSlots[0xA]] >= 0x14) {
+            if (gSaveContext.save.saveInfo.inventory.ammo[gItemSlots[0xA]] >= 0x14) {
                 play_sound(0x4806U);
-                func_80151938(play, 0x937U);
+                Message_ContinueTextbox(play, 0x937U);
                 return;
             }
 
             func_8019F208();
-            Actor_PickUp((Actor *) this, play, 0x35, 90.0f, 10.0f);
-            func_801159EC(-0xA);
+            Actor_OfferGetItem((Actor *) this, play, 0x35, 90.0f, 10.0f);
+            Rupees_ChangeBy(-0xA);
             this->actionFunc = func_809529AC;
             return;
             break;
@@ -518,30 +518,31 @@ So let us rewrite the entire second half as a switch:
         case 1:
         default:
             func_8019F230();
-            func_80151938(play, 0x934U);
+            Message_ContinueTextbox(play, 0x934U);
             break;
     }
 ```
 
-There's a couple of other obvious things here: 
+There's a couple of other obvious things here:
+
 - the last `return` in `case 0` is unnecessary since there is no other code after the switch, so breaking is equivalent to the return`
 - a common pattern everywhere, a sequence of ifs with returns as the last thing inside is the same as an if-else chain, so we can rewrite these as
 
 ```C
     switch (play->msgCtx.choiceIndex) {
         case 0:
-            func_801477B4(play);
+            Message_CloseTextbox(play);
             
-            if (gSaveContext.save.playerData.rupees < 0xA) {
+            if (gSaveContext.save.saveInfo.playerData.rupees < 0xA) {
                 play_sound(0x4806U);
-                func_80151938(play, 0x935U);
-            } else if (gSaveContext.save.inventory.ammo[gItemSlots[0xA]] >= 0x14) {
+                Message_ContinueTextbox(play, 0x935U);
+            } else if (gSaveContext.save.saveInfo.inventory.ammo[gItemSlots[0xA]] >= 0x14) {
                 play_sound(0x4806U);
-                func_80151938(play, 0x937U);
+                Message_ContinueTextbox(play, 0x937U);
             } else {
                 func_8019F208();
-                Actor_PickUp((Actor *) this, play, 0x35, 90.0f, 10.0f);
-                func_801159EC(-0xA);
+                Actor_OfferGetItem((Actor *) this, play, 0x35, 90.0f, 10.0f);
+                Rupees_ChangeBy(-0xA);
                 this->actionFunc = func_809529AC;
             }
             break;
@@ -549,7 +550,7 @@ There's a couple of other obvious things here:
         case 1:
         default:
             func_8019F230();
-            func_80151938(play, 0x934U);
+            Message_ContinueTextbox(play, 0x934U);
             break;
     }
 ```
@@ -587,26 +588,26 @@ block_5:
     if (Message_ShouldAdvance(play) == 0) {
         return;
     }
-    func_801477B4(play);
-    Actor_PickUp((Actor *) this, play, 0x35, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
+    Message_CloseTextbox(play);
+    Actor_OfferGetItem((Actor *) this, play, 0x35, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
     this->actionFunc = func_809529AC;
     return;
 block_7:
     if (Message_ShouldAdvance(play) != 0) {
         switch (play->msgCtx.choiceIndex) {
             case 0:
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 
-                if (gSaveContext.save.playerData.rupees < 0xA) {
+                if (gSaveContext.save.saveInfo.playerData.rupees < 0xA) {
                     play_sound(0x4806U);
-                    func_80151938(play, 0x935U);
-                } else if (gSaveContext.save.inventory.ammo[gItemSlots[0xA]] >= 0x14) {
+                    Message_ContinueTextbox(play, 0x935U);
+                } else if (gSaveContext.save.saveInfo.inventory.ammo[gItemSlots[0xA]] >= 0x14) {
                     play_sound(0x4806U);
-                    func_80151938(play, 0x937U);
+                    Message_ContinueTextbox(play, 0x937U);
                 } else {
                     func_8019F208();
-                    Actor_PickUp((Actor *) this, play, 0x35, 90.0f, 10.0f);
-                    func_801159EC(-0xA);
+                    Actor_OfferGetItem((Actor *) this, play, 0x35, 90.0f, 10.0f);
+                    Rupees_ChangeBy(-0xA);
                     this->actionFunc = func_809529AC;
                 }
                 break;
@@ -614,7 +615,7 @@ block_7:
             case 1:
             default:
                 func_8019F230();
-                func_80151938(play, 0x934U);
+                Message_ContinueTextbox(play, 0x934U);
                 break;
         }
     }
@@ -622,6 +623,7 @@ block_7:
 ```
 
 Now, the top of the function also looks like a switch:
+
 ```C
     temp_v0 = Message_GetState(&play->msgCtx);
     if (temp_v0 == 4) {
@@ -650,8 +652,8 @@ void func_809527F8(EnMs* this, PlayState* play) {
             if (Message_ShouldAdvance(play) == 0) {
                 return;
             }
-            func_801477B4(play);
-            Actor_PickUp((Actor *) this, play, 0x35, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
+            Message_CloseTextbox(play);
+            Actor_OfferGetItem((Actor *) this, play, 0x35, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
             this->actionFunc = func_809529AC;
             break;
 
@@ -659,18 +661,18 @@ void func_809527F8(EnMs* this, PlayState* play) {
             if (Message_ShouldAdvance(play) != 0) {
                 switch (play->msgCtx.choiceIndex) {
                     case 0:
-                        func_801477B4(play);
+                        Message_CloseTextbox(play);
 
-                        if (gSaveContext.save.playerData.rupees < 0xA) {
+                        if (gSaveContext.save.saveInfo.playerData.rupees < 0xA) {
                             play_sound(0x4806U);
-                            func_80151938(play, 0x935U);
-                        } else if (gSaveContext.save.inventory.ammo[gItemSlots[0xA]] >= 0x14) {
+                            Message_ContinueTextbox(play, 0x935U);
+                        } else if (gSaveContext.save.saveInfo.inventory.ammo[gItemSlots[0xA]] >= 0x14) {
                             play_sound(0x4806U);
-                            func_80151938(play, 0x937U);
+                            Message_ContinueTextbox(play, 0x937U);
                         } else {
                             func_8019F208();
-                            Actor_PickUp((Actor *) this, play, 0x35, 90.0f, 10.0f);
-                            func_801159EC(-0xA);
+                            Actor_OfferGetItem((Actor *) this, play, 0x35, 90.0f, 10.0f);
+                            Rupees_ChangeBy(-0xA);
                             this->actionFunc = func_809529AC;
                         }
                         break;
@@ -678,7 +680,7 @@ void func_809527F8(EnMs* this, PlayState* play) {
                     case 1:
                     default:
                         func_8019F230();
-                        func_80151938(play, 0x934U);
+                        Message_ContinueTextbox(play, 0x934U);
                         break;
                 }
             }
@@ -701,8 +703,8 @@ void func_809527F8(EnMs* this, PlayState* play) {
 
         case 5:
             if (Message_ShouldAdvance(play) != 0) {
-                func_801477B4(play);
-                Actor_PickUp((Actor *) this, play, 0x35, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
+                Message_CloseTextbox(play);
+                Actor_OfferGetItem((Actor *) this, play, 0x35, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
                 this->actionFunc = func_809529AC;
             }
             break;
@@ -711,18 +713,18 @@ void func_809527F8(EnMs* this, PlayState* play) {
             if (Message_ShouldAdvance(play) != 0) {
                 switch (play->msgCtx.choiceIndex) {
                     case 0:
-                        func_801477B4(play);
+                        Message_CloseTextbox(play);
 
-                        if (gSaveContext.save.playerData.rupees < 0xA) {
+                        if (gSaveContext.save.saveInfo.playerData.rupees < 0xA) {
                             play_sound(0x4806U);
-                            func_80151938(play, 0x935U);
-                        } else if (gSaveContext.save.inventory.ammo[gItemSlots[0xA]] >= 0x14) {
+                            Message_ContinueTextbox(play, 0x935U);
+                        } else if (gSaveContext.save.saveInfo.inventory.ammo[gItemSlots[0xA]] >= 0x14) {
                             play_sound(0x4806U);
-                            func_80151938(play, 0x937U);
+                            Message_ContinueTextbox(play, 0x937U);
                         } else {
                             func_8019F208();
-                            Actor_PickUp((Actor *) this, play, 0x35, 90.0f, 10.0f);
-                            func_801159EC(-0xA);
+                            Actor_OfferGetItem((Actor *) this, play, 0x35, 90.0f, 10.0f);
+                            Rupees_ChangeBy(-0xA);
                             this->actionFunc = func_809529AC;
                         }
                         break;
@@ -730,7 +732,7 @@ void func_809527F8(EnMs* this, PlayState* play) {
                     case 1:
                     default:
                         func_8019F230();
-                        func_80151938(play, 0x934U);
+                        Message_ContinueTextbox(play, 0x934U);
                         break;
                 }
             }
@@ -742,6 +744,6 @@ void func_809527F8(EnMs* this, PlayState* play) {
 }
 ```
 
-And this matches! 
+And this matches!
 
 We will not document this now, although even with so few function named it seems pretty clear that it's to do with buying beans (and indeed, Magic Beans cost 10 Rupees and have Get Item ID `0x35`) You might like to try to match this function without using goto-only mode, to compare. It is also an interesting exercise to see what each elimination does to the diff: sometimes it will stray surprisingly far for a small change.

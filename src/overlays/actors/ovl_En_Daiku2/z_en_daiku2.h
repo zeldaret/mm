@@ -7,9 +7,9 @@ struct EnDaiku2;
 
 typedef void (*EnDaiku2ActionFunc)(struct EnDaiku2*, PlayState*);
 
-#define ENDAIKU2_GET_7F(thisx) ((thisx)->params & 0x7F);
-#define ENDAIKU2_GET_1F80(thisx) (((thisx)->params >> 7) & 0x3F);
-#define ENDAIKU2_GET_8000(thisx) (((thisx)->params >> 15) & 0x1);
+#define ENDAIKU2_GET_7F(thisx) ((thisx)->params & 0x7F)
+#define ENDAIKU2_GET_1F80(thisx) (((thisx)->params >> 7) & 0x3F)
+#define ENDAIKU2_GET_8000(thisx) (((thisx)->params >> 15) & 0x1)
 
 enum {
     /*  -1 */ ENDAIKU2_GET_7F_MINUS1 = -1,
@@ -52,7 +52,5 @@ typedef struct EnDaiku2 {
     /* 0x28C */ EnDaiku2Effect effects[EN_DAIKU2_EFFECT_COUNT];
     /* 0xD7C */ ColliderCylinder collider;
 } EnDaiku2; // size = 0xDC8
-
-extern const ActorInit En_Daiku2_InitVars;
 
 #endif // Z_EN_DAIKU2_H

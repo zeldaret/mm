@@ -1,8 +1,8 @@
 ﻿<Root>
     <File Name="object_fr" Segment="6">
-        <Animation Name="object_fr_Anim_0007BC" Offset="0x7BC" />
-        <Animation Name="object_fr_Anim_0011C0" Offset="0x11C0" />
-        <Animation Name="object_fr_Anim_001534" Offset="0x1534" />
+        <Animation Name="object_fr_Anim_0007BC" Offset="0x7BC" /> <!-- Original name is "Jump" -->
+        <Animation Name="object_fr_Anim_0011C0" Offset="0x11C0" /> <!-- Original name is "swing" -->
+        <Animation Name="object_fr_Anim_001534" Offset="0x1534" /> <!-- Original name is "wait" -->
         <Texture Name="object_fr_Tex_001550" OutName="tex_001550" Format="rgba16" Width="32" Height="32" Offset="0x1550" />
         <!-- <Blob Name="object_fr_Blob_001D50" Size="0x1D50" Offset="0x1D50" /> -->
         <Texture Name="object_fr_Tex_003AA0" OutName="tex_003AA0" Format="i8" Width="16" Height="16" Offset="0x3AA0" />
@@ -62,6 +62,6 @@
         <Limb Name="object_fr_Standardlimb_00B4B8" Type="Standard" EnumName="OBJECT_FR_LIMB_15" Offset="0xB4B8" />
         <Limb Name="object_fr_Standardlimb_00B4C4" Type="Standard" EnumName="OBJECT_FR_LIMB_16" Offset="0xB4C4" />
         <Limb Name="object_fr_Standardlimb_00B4D0" Type="Standard" EnumName="OBJECT_FR_LIMB_17" Offset="0xB4D0" />
-        <Skeleton Name="object_fr_Skel_00B538" Type="Flex" LimbType="Standard" LimbNone="OBJECT_FR_LIMB_NONE" LimbMax="OBJECT_FR_LIMB_MAX" EnumName="object_fr_Limbs" Offset="0xB538" />
+        <Skeleton Name="object_fr_Skel_00B538" Type="Flex" LimbType="Standard" LimbNone="OBJECT_FR_LIMB_NONE" LimbMax="OBJECT_FR_LIMB_MAX" EnumName="ObjectFrLimb" Offset="0xB538" />
     </File>
 </Root>

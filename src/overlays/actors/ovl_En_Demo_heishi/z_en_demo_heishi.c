@@ -5,7 +5,6 @@
  */
 
 #include "z_en_demo_heishi.h"
-#include "objects/object_sdn/object_sdn.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
 
@@ -16,7 +15,7 @@ void EnDemoheishi_Destroy(Actor* thisx, PlayState* play);
 void EnDemoheishi_Update(Actor* thisx, PlayState* play);
 void EnDemoheishi_Draw(Actor* thisx, PlayState* play);
 
-void EnDemoheishi_ChangeAnimation(EnDemoheishi* this, s32 animIndex);
+void EnDemoheishi_ChangeAnim(EnDemoheishi* this, s32 animIndex);
 void EnDemoheishi_SetupIdle(EnDemoheishi* this);
 void EnDemoheishi_Idle(EnDemoheishi* this, PlayState* play);
 void EnDemoheishi_SetupTalk(EnDemoheishi* this);
@@ -24,14 +23,14 @@ void EnDemoheishi_Talk(EnDemoheishi* this, PlayState* play);
 s32 EnDemoheishi_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
 
 typedef enum {
-    /*  0 */ DEMOHEISHI_ANIMATION_STAND_HAND_ON_HIP,
-    /*  1 */ DEMOHEISHI_ANIMATION_CHEER_WITH_SPEAR,
-    /*  2 */ DEMOHEISHI_ANIMATION_WAVE,
-    /*  3 */ DEMOHEISHI_ANIMATION_SIT_AND_REACH,
-    /*  4 */ DEMOHEISHI_ANIMATION_STAND_UP
-} EnDemoheishiAnimationIndex;
+    /*  0 */ DEMOHEISHI_ANIM_STAND_HAND_ON_HIP,
+    /*  1 */ DEMOHEISHI_ANIM_CHEER_WITH_SPEAR,
+    /*  2 */ DEMOHEISHI_ANIM_WAVE,
+    /*  3 */ DEMOHEISHI_ANIM_SIT_AND_REACH,
+    /*  4 */ DEMOHEISHI_ANIM_STAND_UP
+} EnDemoheishiAnimation;
 
-const ActorInit En_Demo_heishi_InitVars = {
+ActorInit En_Demo_heishi_InitVars = {
     ACTOR_EN_DEMO_HEISHI,
     ACTORCAT_NPC,
     FLAGS,
@@ -69,8 +68,8 @@ void EnDemoheishi_Init(Actor* thisx, PlayState* play) {
     EnDemoheishi* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 25.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &gSoldierSkeleton, &gSoldierWave, this->jointTable, this->morphTable,
-                       17);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gSoldierSkel, &gSoldierWave, this->jointTable, this->morphTable,
+                       SOLDIER_LIMB_MAX);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->actor.targetMode = 6;
     this->actor.gravity = -3.0f;
@@ -84,19 +83,19 @@ void EnDemoheishi_Destroy(Actor* thisx, PlayState* play) {
     Collider_DestroyCylinder(play, &this->colliderCylinder);
 }
 
-void EnDemoheishi_ChangeAnimation(EnDemoheishi* this, s32 animIndex) {
+void EnDemoheishi_ChangeAnim(EnDemoheishi* this, s32 animIndex) {
     static AnimationHeader* sAnimations[] = {
         &gSoldierStandHandOnHip, &gSoldierCheerWithSpear, &gSoldierWave, &gSoldierSitAndReach, &gSoldierStandUp,
     };
-    static u8 sAnimModes[] = {
+    static u8 sAnimationModes[] = {
         ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_LOOP,
-        ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP
+        ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP,
     };
 
     this->animIndex = animIndex;
     this->frameCount = Animation_GetLastFrame(sAnimations[animIndex]);
     Animation_Change(&this->skelAnime, sAnimations[this->animIndex], 1.0f, 0.0f, this->frameCount,
-                     sAnimModes[this->animIndex], -10.0f);
+                     sAnimationModes[this->animIndex], -10.0f);
 }
 
 void EnDemoheishi_SetHeadRotation(EnDemoheishi* this) {
@@ -115,7 +114,7 @@ void EnDemoheishi_SetHeadRotation(EnDemoheishi* this) {
 }
 
 void EnDemoheishi_SetupIdle(EnDemoheishi* this) {
-    EnDemoheishi_ChangeAnimation(this, DEMOHEISHI_ANIMATION_STAND_HAND_ON_HIP);
+    EnDemoheishi_ChangeAnim(this, DEMOHEISHI_ANIM_STAND_HAND_ON_HIP);
     this->textIdIndex = 0;
     this->actor.textId = sTextIds[this->textIdIndex];
     this->isTalking = false;
@@ -126,7 +125,7 @@ void EnDemoheishi_Idle(EnDemoheishi* this, PlayState* play) {
     s32 absYawDiff;
     s16 yawDiff;
 
-    this->actor.flags &= ~ACTOR_FLAG_8000000;
+    this->actor.flags &= ~ACTOR_FLAG_CANT_LOCK_ON;
     yawDiff = this->actor.yawTowardsPlayer - this->actor.world.rot.y;
     absYawDiff = ABS_ALT(yawDiff);
 
@@ -143,8 +142,8 @@ void EnDemoheishi_SetupTalk(EnDemoheishi* this) {
 }
 
 void EnDemoheishi_Talk(EnDemoheishi* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
-        func_801477B4(play);
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+        Message_CloseTextbox(play);
         EnDemoheishi_SetupIdle(this);
     }
 }
@@ -161,7 +160,9 @@ void EnDemoheishi_Update(Actor* thisx, PlayState* play) {
     this->actor.shape.rot.y = this->actor.world.rot.y;
     this->actionFunc(this, play);
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 50.0f, 0x1D);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 50.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                UPDBGCHECKINFO_FLAG_10);
     Actor_SetScale(&this->actor, 0.01f);
     EnDemoheishi_SetHeadRotation(this);
 
@@ -175,7 +176,7 @@ void EnDemoheishi_Update(Actor* thisx, PlayState* play) {
 s32 EnDemoheishi_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnDemoheishi* this = THIS;
 
-    if (limbIndex == DEMOHEISHI_LIMB_HEAD) {
+    if (limbIndex == SOLDIER_LIMB_HEAD) {
         rot->x += this->headRotX;
         rot->y += this->headRotY;
         rot->z += this->headRotZ;

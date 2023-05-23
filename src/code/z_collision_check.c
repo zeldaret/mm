@@ -23,16 +23,24 @@ Vec3f D_801EE0D8;
 TriNorm D_801EE0E8[2];
 TriNorm D_801EE150;
 TriNorm D_801EE188;
+
+#ifndef NON_MATCHING
 Vec3f D_801EE1C0;
 Vec3f D_801EE1D0;
 Vec3f D_801EE1E0;
 Vec3f D_801EE1F0;
 EffectSparkInit D_801EE200;
+#endif
+
 TriNorm D_801EE6C8;
 TriNorm D_801EE700;
+
+#ifndef NON_MATCHING
 EffectSparkInit D_801EE738;
 EffectSparkInit D_801EEC00;
 EffectSparkInit D_801EF0C8;
+#endif
+
 TriNorm D_801EF590;
 TriNorm D_801EF5C8;
 TriNorm D_801EF600;
@@ -1516,28 +1524,28 @@ void CollisionCheck_HitSolid(PlayState* play, ColliderInfo* info, Collider* coll
     s32 flags = info->toucherFlags & TOUCH_SFX_NONE;
 
     if (flags == TOUCH_SFX_NORMAL && collider->colType != COLTYPE_METAL) {
-        EffectSsHitMark_SpawnFixedScale(play, 0, hitPos);
+        EffectSsHitmark_SpawnFixedScale(play, 0, hitPos);
         if (collider->actor == NULL) {
             play_sound(NA_SE_IT_SHIELD_BOUND);
         } else {
             Audio_PlaySfxAtPos(&collider->actor->projectedPos, NA_SE_IT_SHIELD_BOUND);
         }
     } else if (flags == TOUCH_SFX_NORMAL) {
-        EffectSsHitMark_SpawnFixedScale(play, 3, hitPos);
+        EffectSsHitmark_SpawnFixedScale(play, 3, hitPos);
         if (collider->actor == NULL) {
             CollisionCheck_SpawnShieldParticlesMetal(play, hitPos);
         } else {
             CollisionCheck_SpawnShieldParticlesMetalSound(play, hitPos, &collider->actor->projectedPos);
         }
     } else if (flags == TOUCH_SFX_HARD) {
-        EffectSsHitMark_SpawnFixedScale(play, 0, hitPos);
+        EffectSsHitmark_SpawnFixedScale(play, 0, hitPos);
         if (collider->actor == NULL) {
             play_sound(NA_SE_IT_SHIELD_BOUND);
         } else {
             Audio_PlaySfxAtPos(&collider->actor->projectedPos, NA_SE_IT_SHIELD_BOUND);
         }
     } else if (flags == TOUCH_SFX_WOOD) {
-        EffectSsHitMark_SpawnFixedScale(play, 1, hitPos);
+        EffectSsHitmark_SpawnFixedScale(play, 1, hitPos);
         if (collider->actor == NULL) {
             play_sound(NA_SE_IT_REFLECTION_WOOD);
         } else {
@@ -1603,13 +1611,13 @@ void CollisionCheck_HitEffects(PlayState* play, Collider* at, ColliderInfo* atIn
                 CollisionCheck_SpawnShieldParticlesWood(play, hitPos, &at->actor->projectedPos);
             }
         } else if (sHitInfo[ac->colType].effect != HIT_NONE) {
-            EffectSsHitMark_SpawnFixedScale(play, sHitInfo[ac->colType].effect, hitPos);
+            EffectSsHitmark_SpawnFixedScale(play, sHitInfo[ac->colType].effect, hitPos);
             if (!(acInfo->bumperFlags & BUMP_NO_SWORD_SFX)) {
                 CollisionCheck_SwordHitAudio(at, acInfo);
             }
         }
     } else {
-        EffectSsHitMark_SpawnFixedScale(play, 0, hitPos);
+        EffectSsHitmark_SpawnFixedScale(play, 0, hitPos);
         if (ac->actor == NULL) {
             play_sound(NA_SE_IT_SHIELD_BOUND);
         } else {
@@ -3836,7 +3844,7 @@ void CollisionCheck_SpawnShieldParticles(PlayState* play, Vec3f* v) {
         35.0f,
         30.0f,
         8,
-        { 0, 0, 0, 0, 128, 255, 0, 300 },
+        { 0, 0, 0, { 0, 128, 255 }, 0, 300 },
         1,
     };
     s32 effectIndex;
@@ -3891,7 +3899,7 @@ void CollisionCheck_SpawnShieldParticlesWood(PlayState* play, Vec3f* v, Vec3f* p
         35.0f,
         30.0f,
         8,
-        { 0, 0, 0, 0, 128, 255, 0, 300 },
+        { 0, 0, 0, { 0, 128, 255 }, 0, 300 },
         0,
     };
     s32 effectIndex;

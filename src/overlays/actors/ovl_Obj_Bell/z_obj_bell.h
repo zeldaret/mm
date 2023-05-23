@@ -14,12 +14,10 @@ typedef struct ObjBell {
     /* 0x210 */ s16 unk_210;
     /* 0x212 */ s16 unk_212;
     /* 0x214 */ s16 unk_214;
-    /* 0x216 */ char unk_216[0x06];
+    /* 0x216 */ UNK_TYPE1 unk_216[0x06];
     /* 0x21C */ f32 unk_21C; // bell speed?
     /* 0x220 */ f32 unk_220;
-    /* 0x224 */ char unk_224[0x04];
+    /* 0x224 */ UNK_TYPE1 unk_224[0x04];
 } ObjBell; // size = 0x228
-
-extern const ActorInit Obj_Bell_InitVars;
 
 #endif // Z_OBJ_BELL_H

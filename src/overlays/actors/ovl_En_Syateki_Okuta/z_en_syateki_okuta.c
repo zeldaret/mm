@@ -7,7 +7,7 @@
 #include "z_en_syateki_okuta.h"
 #include "overlays/actors/ovl_En_Syateki_Man/z_en_syateki_man.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_8000000)
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_CANT_LOCK_ON)
 
 #define THIS ((EnSyatekiOkuta*)thisx)
 
@@ -28,7 +28,7 @@ void func_80A36504(EnSyatekiOkuta* this, PlayState* play);
 void func_80A365EC(EnSyatekiOkuta* this, PlayState* play);
 void func_80A36CB0(EnSyatekiOkuta* this);
 
-const ActorInit En_Syateki_Okuta_InitVars = {
+ActorInit En_Syateki_Okuta_InitVars = {
     ACTOR_EN_SYATEKI_OKUTA,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -60,7 +60,7 @@ static ColliderCylinderInit sCylinderInit = {
     { 20, 40, -30, { 0, 0, 0 } },
 };
 
-static AnimationInfo sAnimations[] = {
+static AnimationInfo sAnimationInfo[] = {
     { &gOctorokShootAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
     { &gOctorokDieAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
     { &gOctorokHideAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
@@ -72,7 +72,7 @@ static AnimationInfo sAnimations[] = {
 #include "assets/overlays/ovl_En_Syateki_Okuta/ovl_En_Syateki_Okuta.c"
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_S8(hintId, 66, ICHAIN_CONTINUE),
+    ICHAIN_S8(hintId, TATL_HINT_ID_OCTOROK, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 6500, ICHAIN_STOP),
 };
 
@@ -105,7 +105,7 @@ void EnSyatekiOkuta_Init(Actor* thisx, PlayState* play) {
     if (!(WaterBox_GetSurface1_2(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &ySurface,
                                  &waterbox)) ||
         (ySurface <= this->actor.floorHeight)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     } else {
         this->actor.world.pos.y = this->actor.home.pos.y = ySurface;
     }
@@ -137,7 +137,7 @@ s32 func_80A361F4(EnSyatekiOkuta* this) {
 
     temp_v1 = EN_SYATEKI_OKUTA_GET_F(&this->actor);
     if ((temp_v1 == 1) || (temp_v1 == 4)) {
-        temp_a0 = syatekiMan->unk_190;
+        temp_a0 = syatekiMan->octorokFlags;
         temp_a1 = (temp_v1 * 2) + 6;
 
         if ((temp_a0 >> temp_a1) & 3) {
@@ -185,7 +185,7 @@ void func_80A36350(EnSyatekiOkuta* this, PlayState* play) {
 void func_80A36360(EnSyatekiOkuta* this) {
     this->actor.draw = EnSyatekiOkuta_Draw;
     this->unk_2AA = 0;
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 4);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 4);
     this->actionFunc = func_80A363B4;
 }
 
@@ -195,7 +195,7 @@ void func_80A363B4(EnSyatekiOkuta* this, PlayState* play) {
             return;
         } else {
             func_80A361B0(this, play);
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_OCTAROCK_JUMP);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_OCTAROCK_JUMP);
         }
     }
 
@@ -205,27 +205,27 @@ void func_80A363B4(EnSyatekiOkuta* this, PlayState* play) {
 }
 
 void func_80A36444(EnSyatekiOkuta* this) {
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 3);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 3);
     this->actionFunc = func_80A36488;
 }
 
 void func_80A36488(EnSyatekiOkuta* this, PlayState* play) {
     EnSyatekiMan* syatekiMan = (EnSyatekiMan*)this->actor.parent;
 
-    if (syatekiMan->unk_26C >= 0x46) {
+    if (syatekiMan->perGameVar1.octorokState >= SG_OCTO_STATE_INITIAL) {
         func_80A364C0(this);
     }
 }
 
 void func_80A364C0(EnSyatekiOkuta* this) {
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 2);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 2);
     this->actionFunc = func_80A36504;
 }
 
 void func_80A36504(EnSyatekiOkuta* this, PlayState* play) {
     if (Animation_OnFrame(&this->skelAnime, 4.0f)) {
         func_80A361B0(this, play);
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DAIOCTA_LAND);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_DAIOCTA_LAND);
     } else if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         func_80A362F8(this);
     }
@@ -235,10 +235,10 @@ void func_80A3657C(EnSyatekiOkuta* this) {
     this->unk_2A4 = 0;
     this->unk_2AA = 300;
     if (this->unk_2A6 == 1) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_OCTAROCK_DEAD1);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_OCTAROCK_DEAD1);
     }
 
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 1);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 1);
     this->actionFunc = func_80A365EC;
 }
 
@@ -261,7 +261,7 @@ void func_80A365EC(EnSyatekiOkuta* this, PlayState* play) {
             sp84.y = -0.5f;
             sp84.z = 0.0f;
             func_80A36148(&sp78, &sp84, -20, play);
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_OCTAROCK_DEAD2);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_OCTAROCK_DEAD2);
         }
 
         this->unk_2A4++;
@@ -285,7 +285,7 @@ void func_80A365EC(EnSyatekiOkuta* this, PlayState* play) {
                 sp84.y = Rand_ZeroOne() * 7.0f;
                 sp84.z = (Rand_ZeroOne() - 0.5f) * 7.0f;
                 EffectSsDtBubble_SpawnCustomColor(play, &this->actor.world.pos, &sp84, &D_80A37B98, &D_80A37BA4,
-                                                  &D_80A37BA8, Rand_S16Offset(100, 50), 25, 0);
+                                                  &D_80A37BA8, Rand_S16Offset(100, 50), 25, false);
             }
 
             func_80A362F8(this);
@@ -341,9 +341,10 @@ void func_80A36AF8(EnSyatekiOkuta* this, PlayState* play) {
     EnSyatekiMan* syatekiMan = (EnSyatekiMan*)this->actor.parent;
     s16 temp_v1_2;
 
-    if ((this->actionFunc != func_80A36488) && (this->actionFunc != func_80A363B4) && (syatekiMan->unk_26A == 1) &&
-        (syatekiMan->unk_26C == 0)) {
-        temp_v1_2 = (syatekiMan->unk_190 >> (EN_SYATEKI_OKUTA_GET_F(&this->actor) * 2)) & 3;
+    if ((this->actionFunc != func_80A36488) && (this->actionFunc != func_80A363B4) &&
+        (syatekiMan->shootingGameState == SG_GAME_STATE_RUNNING) &&
+        (syatekiMan->perGameVar1.octorokState == SG_OCTO_STATE_SPAWNING)) {
+        temp_v1_2 = (syatekiMan->octorokFlags >> (EN_SYATEKI_OKUTA_GET_F(&this->actor) * 2)) & 3;
         if (temp_v1_2 > 0) {
             Actor_SetScale(&this->actor, 0.01f);
             this->unk_2A6 = temp_v1_2;
@@ -368,13 +369,13 @@ void EnSyatekiOkuta_Update(Actor* thisx, PlayState* play) {
     if (func_80A36A90(this, play)) {
         syatekiMan = (EnSyatekiMan*)this->actor.parent;
         if (this->unk_2A6 == 1) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_TRE_BOX_APPEAR);
-            play->interfaceCtx.unk_25C++;
-            syatekiMan->unk_280++;
-            syatekiMan->unk_26E = 1;
+            Actor_PlaySfx(&this->actor, NA_SE_SY_TRE_BOX_APPEAR);
+            play->interfaceCtx.minigamePoints++;
+            syatekiMan->score++;
+            syatekiMan->perGameVar2.octorokHitType = SG_OCTO_HIT_TYPE_RED;
         } else {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_ERROR);
-            syatekiMan->unk_26E = 2;
+            Actor_PlaySfx(&this->actor, NA_SE_SY_ERROR);
+            syatekiMan->perGameVar2.octorokHitType = SG_OCTO_HIT_TYPE_BLUE;
         }
 
         func_80A3657C(this);

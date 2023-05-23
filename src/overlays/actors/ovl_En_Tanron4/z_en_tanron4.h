@@ -28,6 +28,4 @@ typedef struct EnTanron4 {
 #define SEAGULL_CLONE -1
 #define SEAGULL_FOLLOW_ACTOR 100
 
-extern const ActorInit En_Tanron4_InitVars;
-
 #endif // Z_EN_TANRON4_H

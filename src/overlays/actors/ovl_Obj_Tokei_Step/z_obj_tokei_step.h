@@ -19,10 +19,8 @@ typedef struct ObjTokeiStepPanel {
 
 typedef struct ObjTokeiStep {
     /* 0x000 */ DynaPolyActor dyna;
-    /* 0x15c */ ObjTokeiStepFunc actionFunc;
+    /* 0x15C */ ObjTokeiStepFunc actionFunc;
     /* 0x160 */ ObjTokeiStepPanel panels[7];
 } ObjTokeiStep; // size = 0x1EC
-
-extern const ActorInit Obj_Tokei_Step_InitVars;
 
 #endif // Z_OBJ_TOKEI_STEP_H

@@ -5,7 +5,6 @@
  */
 
 #include "z_dm_nb.h"
-#include "objects/object_nb/object_nb.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
 
@@ -16,7 +15,7 @@ void DmNb_Destroy(Actor* thisx, PlayState* play);
 void DmNb_Update(Actor* thisx, PlayState* play);
 void DmNb_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit Dm_Nb_InitVars = {
+ActorInit Dm_Nb_InitVars = {
     ACTOR_DM_NB,
     ACTORCAT_NPC,
     FLAGS,
@@ -28,37 +27,39 @@ const ActorInit Dm_Nb_InitVars = {
     (ActorFunc)DmNb_Draw,
 };
 
-static AnimationInfoS D_80C1E200[] = { { &object_nb_Anim_000990, 1.0f, 0, -1, ANIMMODE_LOOP, 0 } };
+static AnimationInfoS sAnimationInfo[] = {
+    { &gNbIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+};
 
 s32 func_80C1DED0(DmNb* this, s32 arg1) {
     s32 ret = false;
 
     if (arg1 != this->unk1F0) {
         this->unk1F0 = arg1;
-        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, D_80C1E200, arg1);
+        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, arg1);
     }
     return ret;
 }
 
 void func_80C1DF18(DmNb* this, PlayState* play) {
     s32 sp2C[] = { 0, 0, 0, 0, 0 };
-    u16 actionUnk0;
-    s32 actionIndex;
+    u16 cueId;
+    s32 cueChannel;
 
-    if (play->csCtx.state != 0) {
+    if (play->csCtx.state != CS_STATE_IDLE) {
         if (this->unk1F8 == 0) {
-            this->unk1EC = 0xFF;
+            this->cueId = 255;
             this->unk1F8 = 1;
             this->unk1F4 = this->unk1F0;
         }
-        if (Cutscene_CheckActorAction(play, 562)) {
-            actionIndex = Cutscene_GetActorActionIndex(play, 562);
-            actionUnk0 = play->csCtx.actorActions[actionIndex]->action;
-            if (this->unk1EC != (actionUnk0 & 0xFF)) {
-                this->unk1EC = actionUnk0;
-                func_80C1DED0(this, sp2C[actionUnk0]);
+        if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_562)) {
+            cueChannel = Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_562);
+            cueId = play->csCtx.actorCues[cueChannel]->id;
+            if (this->cueId != (u8)cueId) {
+                this->cueId = cueId;
+                func_80C1DED0(this, sp2C[cueId]);
             }
-            Cutscene_ActorTranslateAndYaw(&this->actor, play, actionIndex);
+            Cutscene_ActorTranslateAndYaw(&this->actor, play, cueChannel);
         }
     } else if (this->unk1F8 != 0) {
         this->unk1F8 = 0;
@@ -70,7 +71,7 @@ void DmNb_Init(Actor* thisx, PlayState* play) {
     DmNb* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_nb_Skel_008C40, NULL, this->jointTable, this->morphTable, 8);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gNbSkel, NULL, this->jointTable, this->morphTable, NB_LIMB_MAX);
     this->unk1F0 = -1;
     func_80C1DED0(this, 0);
     this->actor.flags &= ~ACTOR_FLAG_1;
@@ -86,7 +87,7 @@ void DmNb_Update(Actor* thisx, PlayState* play) {
 
     this->actionFunc(this, play);
     SkelAnime_Update(&this->skelAnime);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
 }
 
 void DmNb_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
