@@ -505,7 +505,7 @@ void Play_UpdateWaterCamera(PlayState* this, Camera* camera) {
     sIsCameraUnderwater = camera->stateFlags & CAM_STATE_UNDERWATER;
     if (Play_GetWaterSurface(this, &camera->eye, &lightIndex) != BGCHECK_Y_MIN) {
         if (!sIsCameraUnderwater) {
-            Camera_SetFlags(camera, CAM_STATE_UNDERWATER);
+            Camera_SetStateFlag(camera, CAM_STATE_UNDERWATER);
             sQuakeIndex = -1;
             Distortion_Request(DISTORTION_TYPE_UNDERWATER_ENTRY);
             Distortion_SetDuration(80);
@@ -533,7 +533,7 @@ void Play_UpdateWaterCamera(PlayState* this, Camera* camera) {
         }
     } else {
         if (sIsCameraUnderwater) {
-            Camera_ClearFlags(camera, CAM_STATE_UNDERWATER);
+            Camera_UnsetStateFlag(camera, CAM_STATE_UNDERWATER);
         }
         Distortion_RemoveRequest(DISTORTION_TYPE_NON_ZORA_SWIMMING);
         Distortion_RemoveRequest(DISTORTION_TYPE_UNDERWATER_ENTRY);
@@ -1681,11 +1681,11 @@ s32 Play_SetCameraAtEye(PlayState* this, s16 camId, Vec3f* at, Vec3f* eye) {
     camera->dist = Math3D_Distance(at, eye);
 
     if (camera->focalActor != NULL) {
-        camera->atActorOffset.x = at->x - camera->focalActor->world.pos.x;
-        camera->atActorOffset.y = at->y - camera->focalActor->world.pos.y;
-        camera->atActorOffset.z = at->z - camera->focalActor->world.pos.z;
+        camera->focalActorAtOffset.x = at->x - camera->focalActor->world.pos.x;
+        camera->focalActorAtOffset.y = at->y - camera->focalActor->world.pos.y;
+        camera->focalActorAtOffset.z = at->z - camera->focalActor->world.pos.z;
     } else {
-        camera->atActorOffset.x = camera->atActorOffset.y = camera->atActorOffset.z = 0.0f;
+        camera->focalActorAtOffset.x = camera->focalActorAtOffset.y = camera->focalActorAtOffset.z = 0.0f;
     }
 
     camera->atLerpStepScale = 0.01f;
@@ -1710,11 +1710,11 @@ s32 Play_SetCameraAtEyeUp(PlayState* this, s16 camId, Vec3f* at, Vec3f* eye, Vec
     camera->dist = Math3D_Distance(at, eye);
 
     if (camera->focalActor != NULL) {
-        camera->atActorOffset.x = at->x - camera->focalActor->world.pos.x;
-        camera->atActorOffset.y = at->y - camera->focalActor->world.pos.y;
-        camera->atActorOffset.z = at->z - camera->focalActor->world.pos.z;
+        camera->focalActorAtOffset.x = at->x - camera->focalActor->world.pos.x;
+        camera->focalActorAtOffset.y = at->y - camera->focalActor->world.pos.y;
+        camera->focalActorAtOffset.z = at->z - camera->focalActor->world.pos.z;
     } else {
-        camera->atActorOffset.x = camera->atActorOffset.y = camera->atActorOffset.z = 0.0f;
+        camera->focalActorAtOffset.x = camera->focalActorAtOffset.y = camera->focalActorAtOffset.z = 0.0f;
     }
 
     camera->atLerpStepScale = 0.01f;
@@ -1748,13 +1748,13 @@ void Play_CopyCamera(PlayState* this, s16 destCamId, s16 srcCamId) {
     Camera_Copy(this->cameraPtrs[destCamId1], this->cameraPtrs[srcCamId2]);
 }
 
-// Same as Play_ChangeCameraSetting but also calls Camera_InitPlayerSettings
+// Same as Play_ChangeCameraSetting but also calls Camera_InitFocalActorSettings
 s32 func_80169A50(PlayState* this, s16 camId, Player* player, s16 setting) {
     Camera* camera;
     s16 camIdx = (camId == CAM_ID_NONE) ? this->activeCamId : camId;
 
     camera = this->cameraPtrs[camIdx];
-    Camera_InitPlayerSettings(camera, player);
+    Camera_InitFocalActorSettings(camera, &player->actor);
     return Camera_ChangeSetting(camera, setting);
 }
 
@@ -2179,7 +2179,8 @@ void Play_Init(GameState* thisx) {
     this->cameraPtrs[CAM_ID_MAIN]->uid = CAM_ID_MAIN;
     this->activeCamId = CAM_ID_MAIN;
 
-    func_800DFF18(&this->mainCamera, 0x7F);
+    Camera_OverwriteStateFlags(&this->mainCamera, CAM_STATE_0 | CAM_STATE_CHECK_WATER | CAM_STATE_2 | CAM_STATE_3 |
+                                                      CAM_STATE_4 | CAM_STATE_DISABLE_MODE_CHANGE | CAM_STATE_6);
     Sram_Alloc(&this->state, &this->sramCtx);
     Regs_InitData(this);
     Message_Init(this);
@@ -2323,11 +2324,11 @@ void Play_Init(GameState* thisx) {
 
     player = GET_PLAYER(this);
 
-    Camera_InitPlayerSettings(&this->mainCamera, player);
+    Camera_InitFocalActorSettings(&this->mainCamera, &player->actor);
     gDbgCamEnabled = false;
 
     if (PLAYER_GET_BG_CAM_INDEX(&player->actor) != 0xFF) {
-        Camera_ChangeDataIdx(&this->mainCamera, PLAYER_GET_BG_CAM_INDEX(&player->actor));
+        Camera_ChangeActorCsCamIndex(&this->mainCamera, PLAYER_GET_BG_CAM_INDEX(&player->actor));
     }
 
     CutsceneManager_StoreCamera(&this->mainCamera);

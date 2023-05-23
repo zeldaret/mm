@@ -732,7 +732,7 @@ typedef enum PlayerCsMode {
 #define PLAYER_STATE1_1          (1 << 0)
 // 
 #define PLAYER_STATE1_2          (1 << 1)
-// 
+// Climbing ledge
 #define PLAYER_STATE1_4          (1 << 2)
 // 
 #define PLAYER_STATE1_8          (1 << 3)
@@ -752,7 +752,7 @@ typedef enum PlayerCsMode {
 #define PLAYER_STATE1_400        (1 << 10)
 // 
 #define PLAYER_STATE1_800        (1 << 11)
-// 
+// charging spin attack
 #define PLAYER_STATE1_1000       (1 << 12)
 // 
 #define PLAYER_STATE1_2000       (1 << 13)
@@ -786,7 +786,7 @@ typedef enum PlayerCsMode {
 #define PLAYER_STATE1_8000000    (1 << 27)
 // 
 #define PLAYER_STATE1_10000000   (1 << 28)
-// 
+// Time is stopped but Link & NPC animations continue
 #define PLAYER_STATE1_20000000   (1 << 29)
 // 
 #define PLAYER_STATE1_40000000   (1 << 30)
@@ -816,7 +816,7 @@ typedef enum PlayerCsMode {
 #define PLAYER_STATE2_200        (1 << 9)
 // 
 #define PLAYER_STATE2_400        (1 << 10)
-// 
+// Diving
 #define PLAYER_STATE2_800        (1 << 11)
 // 
 #define PLAYER_STATE2_1000       (1 << 12)
@@ -828,7 +828,7 @@ typedef enum PlayerCsMode {
 #define PLAYER_STATE2_8000       (1 << 15)
 // 
 #define PLAYER_STATE2_10000      (1 << 16)
-// 
+// A non-magic spin attack
 #define PLAYER_STATE2_20000      (1 << 17)
 // 
 #define PLAYER_STATE2_40000      (1 << 18)
@@ -876,7 +876,7 @@ typedef enum PlayerCsMode {
 #define PLAYER_STATE3_40         (1 << 6)
 // 
 #define PLAYER_STATE3_80         (1 << 7)
-// Related to form Deku
+// Deku flower dive
 #define PLAYER_STATE3_100        (1 << 8)
 // 
 #define PLAYER_STATE3_200        (1 << 9)

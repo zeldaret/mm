@@ -478,8 +478,8 @@ void EnTest3_Init(Actor* thisx, PlayState* play2) {
     if (play->sceneId == SCENE_SECOM) {
         this->subCamId = Play_CreateSubCamera(play);
         subCam = Play_GetCamera(play, this->subCamId);
-        Camera_InitPlayerSettings(subCam, &this->player);
-        Camera_SetFlags(subCam, CAM_STATE_0 | CAM_STATE_6);
+        Camera_InitFocalActorSettings(subCam, &this->player.actor);
+        Camera_SetStateFlag(subCam, CAM_STATE_0 | CAM_STATE_6);
         Play_ChangeCameraStatus(play, this->subCamId, CAM_STATUS_WAIT);
     }
 
