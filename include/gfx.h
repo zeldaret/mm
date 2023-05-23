@@ -28,14 +28,14 @@ typedef struct {
 #define GFXPOOL_TAIL_MAGIC 0x5678
 
 typedef struct GfxPool {
-    /* 0x00000 */ u16 headMagic; // 1234
+    /* 0x00000 */ u16 headMagic; // GFXPOOL_HEAD_MAGIC
     /* 0x00008 */ GfxMasterList master;
-    /* 0x00308 */ Gfx polyXluBuffer[2048];
-    /* 0x04308 */ Gfx overlayBuffer[1024];
-    /* 0x06308 */ Gfx workBuffer[64];
-    /* 0x06508 */ Gfx debugBuffer[64];
-    /* 0x06708 */ Gfx polyOpaBuffer[13184];
-    /* 0x20308 */ u16 tailMagic; // 5678
+    /* 0x00308 */ Gfx polyXluBuffer[0x800];
+    /* 0x04308 */ Gfx overlayBuffer[0x400];
+    /* 0x06308 */ Gfx workBuffer[0x40];
+    /* 0x06508 */ Gfx debugBuffer[0x40];
+    /* 0x06708 */ Gfx polyOpaBuffer[0x3380];
+    /* 0x20308 */ u16 tailMagic; // GFXPOOL_TAIL_MAGIC
 } GfxPool; // size = 0x20310
 
 typedef struct GraphicsContext {
