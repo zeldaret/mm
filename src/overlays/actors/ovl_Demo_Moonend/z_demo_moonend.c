@@ -34,10 +34,7 @@ const ActorInit Demo_Moonend_InitVars = {
 };
 
 extern UNK_TYPE D_06001214;
-extern UNK_TYPE D_0600B540;
 extern UNK_TYPE D_0600B5A0;
-extern UNK_TYPE D_060129F0;
-extern Gfx D_06010C40[];
 
 void DemoMoonend_Init(Actor* thisx, PlayState* play) {
     DemoMoonend* this = THIS;
@@ -49,17 +46,17 @@ void DemoMoonend_Init(Actor* thisx, PlayState* play) {
         Actor_SetScale(&this->actor, 0.05f);
         Actor_SetScale(&this->actor, 6.0f);
         this->actor.draw = NULL;
-        this->actorActionCmd = 0x22E;
+        this->cueType = 0x22E;
         this->actionFunc = func_80C17B60;
     } else {
         Actor_SetScale(&this->actor, 0.095f);
-        func_80183430(&this->skelInfo, &D_0600B5A0, &D_06001214, this->unk_174, &this->unk_228[0].x, NULL);
-        func_801834A8(&this->skelInfo, &D_06001214);
-        this->actorActionCmd = 0x230;
+        func_80183430(&this->skeletonInfo, &D_0600B5A0, &D_06001214, this->jointTable, this->morphTable, NULL);
+        func_801834A8(&this->skeletonInfo, &D_06001214);
+        this->cueType = 0x230;
         this->actionFunc = func_80C17C48;
         this->actor.home.rot.z = 0;
         this->actor.draw = NULL;
-        this->skelInfo.frameCtrl.unk_C = 0.6666667f;
+        this->skeletonInfo.frameCtrl.unk_C = 0.6666667f;
     }
 }
 
@@ -67,7 +64,7 @@ void DemoMoonend_Destroy(Actor* thisx, PlayState* play) {
     DemoMoonend* this = THIS;
 
     if (DEMOMOONEND_GET_PARAMS_F(thisx) != 1) {
-        func_8018349C(&this->skelInfo);
+        func_8018349C(&this->skeletonInfo);
     }
 }
 
@@ -75,14 +72,14 @@ void DemoMoonend_Idle(DemoMoonend* this, PlayState* play) {
 }
 
 void func_80C17B60(DemoMoonend* this, PlayState* play) {
-    u16 action;
+    u16 cueId;
 
-    if (Cutscene_IsCueInChannel(play, this->actorActionCmd)) {
-        action = play->csCtx.actorCues[Cutscene_GetCueChannel(play, this->actorActionCmd)]->id;
-        Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetCueChannel(play, this->actorActionCmd));
-        if (this->actorAction != action) {
-            this->actorAction = action;
-            switch (this->actorAction) {
+    if (Cutscene_IsCueInChannel(play, this->cueType)) {
+        cueId = play->csCtx.actorCues[Cutscene_GetCueChannel(play, this->cueType)]->id;
+        Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetCueChannel(play, this->cueType));
+        if (this->cueId != cueId) {
+            this->cueId = cueId;
+            switch (this->cueId) {
                 case 1:
                     this->actor.draw = NULL;
                     break;
@@ -91,44 +88,43 @@ void func_80C17B60(DemoMoonend* this, PlayState* play) {
                     break;
             }
         }
-        if (this->actorAction == 2) {
-            func_800B9010(&this->actor, 0x21B2);
+        if (this->cueId == 2) {
+            func_800B9010(&this->actor, NA_SE_EV_RAINBOW - SFX_FLAG);
         }
     } else {
         this->actor.draw = NULL;
     }
 }
 
-#if 0
 void func_80C17C48(DemoMoonend* this, PlayState* play) {
-    u16 action;
+    u16 cueId;
 
-    if (func_80183DE0(&this->skelInfo)) {
+    if (func_80183DE0(&this->skeletonInfo)) {
         this->actor.home.rot.z = 0;
     }
-    if (Cutscene_IsCueInChannel(play, this->actorActionCmd)) {
-        action = play->csCtx.actorCues[Cutscene_GetCueChannel(play, this->actorActionCmd)]->id;
-        Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetCueChannel(play, this->actorActionCmd));
+    if (Cutscene_IsCueInChannel(play, this->cueType)) {
+        cueId = play->csCtx.actorCues[Cutscene_GetCueChannel(play, this->cueType)]->id;
+        Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetCueChannel(play, this->cueType));
 
-        if (this->actorAction != action) {
-            this->actorAction = action;
-            switch (this->actorAction) {
+        if (this->cueId != cueId) {
+            this->cueId = cueId;
+            switch (this->cueId) {
                 case 1:
                     this->actor.draw = DemoMoonend_Draw;
-                    func_801834A8(&this->skelInfo, &D_06001214);
-                    this->skelInfo.frameCtrl.unk_C = 0.0f;
+                    func_801834A8(&this->skeletonInfo, &D_06001214);
+                    this->skeletonInfo.frameCtrl.unk_C = 0.0f;
                     break;
                 case 2:
                     this->actor.draw = DemoMoonend_Draw;
-                    func_801834A8(&this->skelInfo, &D_06001214);
-                    this->skelInfo.frameCtrl.unk_C = 0.6666667f;
+                    func_801834A8(&this->skeletonInfo, &D_06001214);
+                    this->skeletonInfo.frameCtrl.unk_C = 0.6666667f;
                     Actor_PlaySfx(&this->actor, NA_SE_EV_MOON_EXPLOSION);
                     this->actor.home.rot.z = 1;
                     break;
             }
         }
         if (this->actor.home.rot.z != 0) {
-            func_800B9010(&this->actor, 0x2159);
+            func_800B9010(&this->actor, NA_SE_EV_EARTHQUAKE_LAST2 - SFX_FLAG);
         }
     } else {
         this->actor.draw = NULL;
@@ -141,21 +137,18 @@ void func_80C17C48(DemoMoonend* this, PlayState* play) {
             case 50:
                 Actor_PlaySfx(&this->actor, NA_SE_EN_MOON_SCREAM2);
                 return;
-            case 100: /* switch 1 */
+            case 100:
                 Actor_PlaySfx(&this->actor, NA_SE_EN_MOON_SCREAM3);
                 return;
-            case 150: /* switch 1 */
+            case 150:
                 Actor_PlaySfx(&this->actor, NA_SE_EN_MOON_SCREAM2);
                 return;
-            case 200: /* switch 1 */
+            case 200:
                 Actor_PlaySfx(&this->actor, NA_SE_EN_MOON_SCREAM4);
                 break;
         }
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Demo_Moonend/func_80C17C48.s")
-#endif
 
 void DemoMoonend_Update(Actor* thisx, PlayState* play) {
     DemoMoonend* this = THIS;
@@ -169,7 +162,7 @@ s32 func_80C17E70(PlayState* play, SkeletonInfo* skeletonInfo, s32 limbIndex, Gf
 
     if (limbIndex == 2) {
         Matrix_Push();
-        Matrix_RotateYS(Camera_GetCamDirYaw(play->cameraPtrs[play->activeCamId]) + 0x8000, MTXMODE_APPLY);
+        Matrix_RotateYS(Camera_GetCamDirYaw(GET_ACTIVE_CAM(play)) + 0x8000, MTXMODE_APPLY);
     }
 
     return true;
@@ -186,32 +179,28 @@ s32 func_80C17EE0(PlayState* play, SkeletonInfo* skeleton, s32 limbIndex, Gfx** 
     return 1;
 }
 
-#if 0
 void DemoMoonend_Draw(Actor* thisx, PlayState* play) {
     DemoMoonend* this = THIS;
     Mtx* mtx;
 
-    AnimatedMat_Draw(play, (AnimatedMaterial*)Lib_SegmentedToVirtual(&D_0600B540));
+    AnimatedMat_Draw(play, (AnimatedMaterial*)Lib_SegmentedToVirtual(object_moonend_Matanimheader_00B540));
 
-    mtx = GRAPH_ALLOC(play->state.gfxCtx, ALIGN16(this->skelInfo.unk_18->unk_1 * sizeof(Mtx)));
+    mtx = GRAPH_ALLOC(play->state.gfxCtx, this->skeletonInfo.unk_18->unk_1 * sizeof(Mtx));
 
     if (mtx != NULL) {
         func_8012C2DC(play->state.gfxCtx);
         func_8012C28C(play->state.gfxCtx);
-        func_8018450C(play, &this->skelInfo, mtx, func_80C17E70, func_80C17EE0, &this->actor);
+        func_8018450C(play, &this->skeletonInfo, mtx, func_80C17E70, func_80C17EE0, &this->actor);
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Demo_Moonend/DemoMoonend_Draw.s")
-#endif
 
 void func_80C17FCC(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     func_8012C2DC(play->state.gfxCtx);
-    AnimatedMat_DrawXlu(play, Lib_SegmentedToVirtual(&D_060129F0));
+    AnimatedMat_DrawXlu(play, Lib_SegmentedToVirtual(object_moonend_Matanimheader_0129F0));
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_XLU_DISP++, D_06010C40);
+    gSPDisplayList(POLY_XLU_DISP++, object_moonend_DL_010C40);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }

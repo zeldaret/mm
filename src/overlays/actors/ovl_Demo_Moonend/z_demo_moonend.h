@@ -12,11 +12,11 @@ typedef void (*DemoMoonendActionFunc)(struct DemoMoonend*, PlayState*);
 
 typedef struct DemoMoonend {
     /* 0x0000 */ Actor actor;
-    /* 0x0144 */ SkeletonInfo skelInfo;
-    /* 0x0174 */ Vec3s unk_174[30];
-    /* 0x0228 */ Vec3s unk_228[30];
-    /* 0x02DC */ u16 actorActionCmd;
-    /* 0x02DE */ u16 actorAction;
+    /* 0x0144 */ SkeletonInfo skeletonInfo;
+    /* 0x0174 */ Vec3s jointTable[30];
+    /* 0x0228 */ Vec3s morphTable[30];
+    /* 0x02DC */ u16 cueType;
+    /* 0x02DE */ u16 cueId;
     /* 0x02E0 */ DemoMoonendActionFunc actionFunc;
 } DemoMoonend; // size = 0x2E4
 
