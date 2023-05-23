@@ -1,7 +1,7 @@
 /**
  * Scene Table
  *
- * DEFINE_SCENE should be used for most scenes
+ * DEFINE_SCENE should be used for non-empty scenes
  *    - Argument 0: Name of the scene segment in spec
  *    - Argument 1: Enum value for this scene
  *    - Argument 2: Title card's text id, or zero for no title card
