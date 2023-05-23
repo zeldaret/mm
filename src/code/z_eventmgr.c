@@ -404,13 +404,13 @@ s16 CutsceneManager_Start(s16 csId, Actor* actor) {
             if (CutsceneManager_FindEntranceCsId() != csId) {
                 func_800E0348(retCam);
             } else {
-                Camera_ClearFlags(retCam, CAM_STATE_2);
+                Camera_UnsetStateFlag(retCam, CAM_STATE_2);
             }
         }
 
         memcpy(subCam, retCam, sizeof(Camera));
         subCam->camId = sCutsceneMgr.subCamId;
-        Camera_ClearFlags(subCam, CAM_STATE_6 | CAM_STATE_0);
+        Camera_UnsetStateFlag(subCam, CAM_STATE_6 | CAM_STATE_0);
 
         Play_ChangeCameraStatus(sCutsceneMgr.play, sCutsceneMgr.retCamId, CAM_STATUS_WAIT);
         Play_ChangeCameraStatus(sCutsceneMgr.play, sCutsceneMgr.subCamId, CAM_STATUS_ACTIVE);
@@ -424,7 +424,7 @@ s16 CutsceneManager_Start(s16 csId, Actor* actor) {
             sCutsceneMgr.length = csEntry->length;
         } else {
             if (csEntry->csCamId != CS_CAM_ID_NONE) {
-                Camera_ChangeDataIdx(subCam, csEntry->csCamId);
+                Camera_ChangeActorCsCamIndex(subCam, csEntry->csCamId);
             } else {
                 Camera_ChangeSetting(subCam, CAM_SET_FREE0);
             }

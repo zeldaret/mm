@@ -87,12 +87,32 @@ typedef struct {
     /* 0x0C */ Vec3f b;
 } LineSegment; // size = 0x18
 
-// Defines a point in the spherical coordinate system
 typedef struct {
-    /* 0x0 */ f32 r;       // radius
-    /* 0x4 */ s16 pitch;   // polar (zenith) angle
-    /* 0x6 */ s16 yaw;     // azimuthal angle
-} VecSph; // size = 0x8
+    /* 0x0 */ f32 r; // radius
+    /* 0x4 */ s16 pitch; // depends on coordinate system. See below.
+    /* 0x6 */ s16 yaw; // azimuthal angle
+} VecSphGeo; // size = 0x8
+
+// Defines a point in the spherical coordinate system.
+// Pitch is 0 along the positive y-axis (up)
+typedef VecSphGeo VecSph;
+
+// Defines a point in the geographic coordinate system.
+// Pitch is 0 along the xz-plane (horizon)
+typedef VecSphGeo VecGeo;
+
+// To be used with OLib_Vec3fAdd()
+typedef enum {
+    /* 0 */ OLIB_ADD_COPY, // Copy `b` to dest
+    /* 1 */ OLIB_ADD_OFFSET, // Add `a` and `b` to dest, and also add the yaw of `a` to the dest
+    /* 2 */ OLIB_ADD, // Add `a` and `b` to dest
+} OlibVec3fAdd;
+
+typedef enum {
+    /* 0 */ OLIB_DIFF_COPY, // Copy `b` to dest
+    /* 1 */ OLIB_DIFF_OFFSET, // Sub `a` and `b` to dest, and also subs the yaw of `a` to the dest
+    /* 2 */ OLIB_DIFF, // Sub `a` and `b` to dest
+} OlibVec3fDiff;
 
 typedef float MtxF_t[4][4];
 typedef union {

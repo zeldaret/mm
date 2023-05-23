@@ -358,7 +358,7 @@ void Room_DrawImageSingle(PlayState* play, Room* room, u32 flags) {
 
 RoomShapeImageMultiBgEntry* Room_GetImageMultiBgEntry(RoomShapeImageMulti* roomShapeImageMulti, PlayState* play) {
     Camera* activeCam = GET_ACTIVE_CAM(play);
-    s32 bgCamIndex = activeCam->bgCamDataId;
+    s32 bgCamIndex = activeCam->bgCamIndex;
     s16 overrideBgCamIndex;
     Player* player;
     RoomShapeImageMultiBgEntry* bgEntry;
