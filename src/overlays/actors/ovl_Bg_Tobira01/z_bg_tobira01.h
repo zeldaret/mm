@@ -7,9 +7,6 @@ struct BgTobira01;
 
 typedef void (*TobiraActionFunction)(struct BgTobira01*, PlayState*);
 
-#define DOOR_POS_MIN 0
-#define DOOR_POS_MAX 60
-
 typedef struct BgTobira01 {
     /* 0x000 */ DynaPolyActor dyna;
     /* 0x15C */ TobiraActionFunction actionFunction;

@@ -30,35 +30,35 @@ const ActorInit Bg_Tobira01_InitVars = {
 };
 
 void BgTobira01_Action(BgTobira01* this, PlayState* play) {
-    Player* sp1C = GET_PLAYER(play);
+    Player* player = GET_PLAYER(play);
     s16 actorCutscene = this->dyna.actor.csId;
     s16 tempDoorYPosition;
 
     if (this->cutscenePlayed != 0) {
         if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
             CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
-        } else if (CutsceneManager_IsNext(actorCutscene) != 0) {
+        } else if (CutsceneManager_IsNext(actorCutscene)) {
             CutsceneManager_StartWithPlayerCs(actorCutscene, &this->dyna.actor);
-            gSaveContext.save.saveInfo.weekEventReg[88] |= 0x40;
+            SET_WEEKEVENTREG(WEEKEVENTREG_88_40);
             this->cutscenePlayed = 0;
         } else {
             CutsceneManager_Queue(actorCutscene);
         }
-    } else if (!(gSaveContext.save.saveInfo.weekEventReg[88] & 0x40) && (this->doorYPositionTick == 0) &&
+    } else if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_88_40)) && (this->doorYPositionTick == 0) &&
                (play->actorCtx.playerImpact.timer != 0) && (play->actorCtx.playerImpact.type == 0) &&
-               (SurfaceType_GetSceneExitIndex(&play->colCtx, sp1C->actor.floorPoly, sp1C->actor.floorBgId) == 6)) {
+               (SurfaceType_GetSceneExitIndex(&play->colCtx, player->actor.floorPoly, player->actor.floorBgId) == 6)) {
         this->cutscenePlayed = 1;
         this->unk16C = 0;
     }
 
     tempDoorYPosition = this->doorYPositionTick;
-    if (gSaveContext.save.saveInfo.weekEventReg[88] & 0x40) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_88_40)) {
         this->doorYPositionTick += 1;
     } else {
         this->doorYPositionTick -= 1;
     }
 
-    this->doorYPositionTick = CLAMP(this->doorYPositionTick, DOOR_POS_MIN, DOOR_POS_MAX);
+    this->doorYPositionTick = CLAMP(this->doorYPositionTick, 0, 60);
     if (tempDoorYPosition != this->doorYPositionTick) {
         Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_STONEDOOR_OPEN_S - SFX_FLAG);
         this->dyna.actor.world.pos.y =
@@ -66,7 +66,7 @@ void BgTobira01_Action(BgTobira01* this, PlayState* play) {
         this->isNight = 0xB4;
     }
 
-    if (!(sp1C->stateFlags1 & 0x40) && (gSaveContext.save.saveInfo.weekEventReg[88] & 0x40) &&
+    if (!(player->stateFlags1 & PLAYER_STATE1_40) && (CHECK_WEEKEVENTREG(WEEKEVENTREG_88_40)) &&
         DECR(this->isNight) == 0) {
         gSaveContext.save.saveInfo.weekEventReg[88] &= 0xBF;
     }
@@ -75,8 +75,8 @@ void BgTobira01_Action(BgTobira01* this, PlayState* play) {
 void BgTobira01_Init(Actor* thisx, PlayState* play) {
     BgTobira01* this = THIS;
 
-    DynaPolyActor_Init((DynaPolyActor*)this, 1);
-    DynaPolyActor_LoadMesh(play, (DynaPolyActor*)this, &gGoronDoorCol);
+    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_LoadMesh(play, &this->dyna, &gGoronDoorCol);
     gSaveContext.save.saveInfo.weekEventReg[88] &= 0xBF;
     Actor_SetScale(&this->dyna.actor, 1.0f);
     this->isNight = gSaveContext.save.isNight;
@@ -86,11 +86,13 @@ void BgTobira01_Init(Actor* thisx, PlayState* play) {
 
 void BgTobira01_Destroy(Actor* thisx, PlayState* play) {
     BgTobira01* this = THIS;
+
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
 
 void BgTobira01_Update(Actor* thisx, PlayState* play) {
     BgTobira01* this = THIS;
+
     this->actionFunction(this, play);
 }
 
