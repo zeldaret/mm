@@ -24,6 +24,7 @@
 #include "sfx.h"
 #include "message_data_static.h"
 
+#include "gfx.h"
 #include "gfxprint.h"
 #include "sys_matrix.h"
 #include "tha.h"
@@ -106,89 +107,6 @@ typedef struct {
     /* 0x4 */ void* start;
     /* 0x8 */ void* end;
 } PolygonType2; // size = 0xC
-
-typedef struct {
-    /* 0x000 */ Gfx taskStart[9];
-    /* 0x048 */ Gfx clearZBuffer[8];       // original name: clear_zb_dl
-    /* 0x088 */ Gfx clearFrameBuffer[5];   // original name: clear_fb_dl
-    /* 0x0B0 */ Gfx setupBuffers[6];       // setup framebuffer and zbuffer
-    /* 0x0E0 */ Gfx unk_E0[12];            // unused
-    /* 0x140 */ Gfx syncSegments[17];
-    /* 0x1C8 */ Gfx setScissor[2];
-    /* 0x1D8 */ Gfx unk_1D8[25];           // unused
-    /* 0x2A0 */ Gfx disps[5];
-    /* 0x2C8 */ Gfx clearFillRect[3];      // fillrect for clearing buffers
-    /* 0x2E0 */ Gfx fillRect[3];           // fillrect for general purpose
-    /* 0x2F8 */ Gfx debugDisp[1];
-} GfxMasterList; // size = 0x300
-
-#define GFXPOOL_HEAD_MAGIC 0x1234
-#define GFXPOOL_TAIL_MAGIC 0x5678
-
-typedef struct {
-    /* 0x00000 */ u16 headMagic; // 1234
-    /* 0x00008 */ GfxMasterList master;
-    /* 0x00308 */ Gfx polyXluBuffer[2048];
-    /* 0x04308 */ Gfx overlayBuffer[1024];
-    /* 0x06308 */ Gfx workBuffer[64];
-    /* 0x06508 */ Gfx debugBuffer[64];
-    /* 0x06708 */ Gfx polyOpaBuffer[13184];
-    /* 0x20308 */ u16 tailMagic; // 5678
-} GfxPool; // size = 0x20310
-
-typedef struct GraphicsContext {
-    /* 0x000 */ Gfx*        polyOpaBuffer;  // Pointer to "Zelda 0"
-    /* 0x004 */ Gfx*        polyXluBuffer;  // Pointer to "Zelda 1"
-    /* 0x008 */ char        unk_8[0x8];     // Unused, could this be pointers to "Zelda 2" / "Zelda 3"
-    /* 0x010 */ Gfx*        overlayBuffer;  // Pointer to "Zelda 4"
-    /* 0x014 */ u32         unk_14;
-    /* 0x018 */ char        unk_18[0x20];
-    /* 0x038 */ OSMesg      msgBuff[8];
-    /* 0x058 */ OSMesgQueue* schedMsgQ;
-    /* 0x05C */ OSMesgQueue queue;
-    /* 0x074 */ char        unk_74[0x04];
-    /* 0x078 */ OSScTask    task;
-    /* 0x0E0 */ char        unk_E0[0xD0];
-    /* 0x1B0 */ Gfx*        workBuffer;
-    /* 0x1B4 */ TwoHeadGfxArena work;
-    /* 0x1C4 */ Gfx*        debugBuffer;
-    /* 0x1C8 */ TwoHeadGfxArena debug;
-    /* 0x1D8 */ char        unk_1D8[0xAC];
-    /* 0x284 */ OSViMode*   viMode;
-    /* 0x288 */ void*       zbuffer;
-    /* 0x28C */ char        unk_28C[0x1C];
-    /* 0x2A8 */ TwoHeadGfxArena overlay;    // "Zelda 4"
-    /* 0x2B8 */ TwoHeadGfxArena polyOpa;    // "Zelda 0"
-    /* 0x2C8 */ TwoHeadGfxArena polyXlu;    // "Zelda 1"
-    /* 0x2D8 */ u32         gfxPoolIdx;
-    /* 0x2DC */ u16*        curFrameBuffer;
-    /* 0x2E0 */ char        unk_2E0[0x4];
-    /* 0x2E4 */ u32         viConfigFeatures;
-    /* 0x2E8 */ char        unk_2E8[0x2];
-    /* 0x2EA */ u8          updateViMode;
-    /* 0x2EB */ u8          framebufferIndex;
-    /* 0x2EC */ void        (*callback)(struct GraphicsContext*, u32);
-    /* 0x2F0 */ u32         callbackArg;
-    /* 0x2F4 */ f32         xScale;
-    /* 0x2F8 */ f32         yScale;
-    /* 0x2FC */ GfxMasterList* masterList;
-} GraphicsContext; // size = 0x300
-
-typedef enum IRQ_MSG_TYPE {
-    IRQ_VERTICAL_RETRACE_MSG = 0x1,
-    IRQ_PRENMI_2_MSG = 0x3,
-    IRQ_PRENMI_1_MSG = 0x4
-} IRQ_MSG_TYPE;
-
-typedef enum IRQ_TYPE {
-    IRQ_VERTICAL_RETRACE = 0x29A,
-    IRQ_SP = 0x29B,
-    IRQ_DP = 0x29C,
-    IRQ_PRENMI_1 = 0x29D,
-    IRQ_PRENMI_2 = 0x29F,
-    IRQ_PRENMI_3 = 0x2A0,
-    IRQ_PRENMI_4 = 0x2A1
-} IRQ_TYPE;
 
 typedef struct {
     /* 0x00 */ u32 resetting;
