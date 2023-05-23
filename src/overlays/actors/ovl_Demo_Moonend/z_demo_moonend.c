@@ -53,7 +53,7 @@ void DemoMoonend_Init(Actor* thisx, PlayState* play) {
         this->actionFunc = func_80C17C48;
         this->actor.home.rot.z = 0;
         this->actor.draw = NULL;
-        this->skeletonInfo.frameCtrl.unk_C = 0.6666667f;
+        this->skeletonInfo.frameCtrl.unk_C = 2.0f / 3.0f;
     }
 }
 
@@ -114,7 +114,7 @@ void func_80C17C48(DemoMoonend* this, PlayState* play) {
                 case 2:
                     this->actor.draw = DemoMoonend_Draw;
                     func_801834A8(&this->skeletonInfo, &object_moonend_Blob_001214);
-                    this->skeletonInfo.frameCtrl.unk_C = 0.6666667f;
+                    this->skeletonInfo.frameCtrl.unk_C = 2.0f / 3.0f;
                     Actor_PlaySfx(&this->actor, NA_SE_EV_MOON_EXPLOSION);
                     this->actor.home.rot.z = 1;
                     break;
