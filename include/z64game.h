@@ -2,6 +2,7 @@
 #define Z64_GAME_H
 
 #include "ultra64.h"
+#include "libc/stdbool.h"
 #include "libc/stdint.h"
 #include "io/controller.h"
 #include "tha.h"
@@ -81,5 +82,22 @@ extern s32 gFramerateDivisor;
 extern f32 gFramerateDivisorF;
 extern f32 gFramerateDivisorHalf;
 extern f32 gFramerateDivisorThird;
+
+
+#define STOP_GAMESTATE(curState)     \
+    do {                             \
+        GameState* state = curState; \
+                                     \
+        state->running = false;      \
+    } while(0)
+
+#define SET_NEXT_GAMESTATE(curState, nextInit, nextSize) \
+    do {                                                 \
+        GameState* state = curState;                     \
+                                                         \
+        (state)->init = nextInit;                        \
+        (state)->size = nextSize;                        \
+    } while (0)
+
 
 #endif

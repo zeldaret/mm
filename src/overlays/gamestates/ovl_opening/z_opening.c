@@ -5,8 +5,11 @@
  */
 
 #include "z_opening.h"
+#include "z64save.h"
 #include "z64shrink_window.h"
 #include "z64view.h"
+#include "regs.h"
+#include "global.h"
 
 void TitleSetup_SetupTitleScreen(TitleSetupState* this) {
     static s32 sOpeningEntrances[] = { ENTRANCE(CUTSCENE, 0), ENTRANCE(CUTSCENE, 1) };

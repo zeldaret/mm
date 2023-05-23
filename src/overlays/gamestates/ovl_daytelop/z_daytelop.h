@@ -8,7 +8,6 @@ typedef struct {
     /* 0x000 */ GameState state;
     /* 0x0A4 */ void* daytelopStaticFile;
     /* 0x0A8 */ void* gameoverStaticFile;
-    /* 0x0AC */ UNK_TYPE1 unk_AC[0x4];
     /* 0x0B0 */ View view;
     /* 0x218 */ UNK_TYPE1 unk_218[0x28];
     /* 0x240 */ s16 transitionCountdown;

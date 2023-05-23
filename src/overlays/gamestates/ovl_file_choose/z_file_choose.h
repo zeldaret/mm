@@ -5,6 +5,7 @@
 #include "z64message.h"
 #include "z64skybox.h"
 #include "z64view.h"
+#include "global.h"
 
 
 typedef struct FileSelectState {

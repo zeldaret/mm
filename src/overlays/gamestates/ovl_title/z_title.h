@@ -3,6 +3,7 @@
 
 #include "z64game.h"
 #include "z64view.h"
+#include "global.h"
 
 typedef struct {
     /* 0x000 */ GameState state;
