@@ -7,6 +7,8 @@
 #include "alignment.h"
 
 
+struct GameState;
+
 typedef struct {
     /* 0x000 */ Gfx taskStart[9];
     /* 0x048 */ Gfx clearZBuffer[8];       // original name: clear_zb_dl
@@ -73,6 +75,92 @@ typedef struct GraphicsContext {
     /* 0x2F8 */ f32         yScale;
     /* 0x2FC */ GfxMasterList* masterList;
 } GraphicsContext; // size = 0x300
+
+
+Gfx* Gfx_SetFog(Gfx* gfx, s32 r, s32 g, s32 b, s32 a, s32 n, s32 f);
+Gfx* Gfx_SetFogWithSync(Gfx* gfx, s32 r, s32 g, s32 b, s32 a, s32 n, s32 f);
+Gfx* Gfx_SetFog2(Gfx* gfx, s32 r, s32 g, s32 b, s32 a, s32 n, s32 f);
+Gfx* Gfx_CallSetupDLImpl(Gfx* gfx, u32 i);
+Gfx* Gfx_CallSetupDL(Gfx* gfx, u32 i);
+void Gfx_CallSetupDLAtPtr(Gfx** gfxp, u32 i);
+Gfx* func_8012BFC4(Gfx* gfx);
+Gfx* func_8012BFEC(Gfx* gfx);
+Gfx* func_8012C014(Gfx* gfx);
+void func_8012C058(GraphicsContext* gfxCtx);
+void func_8012C080(GraphicsContext* gfxCtx);
+void func_8012C0A8(GraphicsContext* gfxCtx);
+void func_8012C0D0(GraphicsContext* gfxCtx);
+void func_8012C0F8(GraphicsContext* gfxCtx);
+void func_8012C120(GraphicsContext* gfxCtx);
+void func_8012C148(GraphicsContext* gfxCtx);
+void func_8012C170(GraphicsContext* gfxCtx);
+Gfx* func_8012C198(Gfx* gfx);
+void func_8012C1C0(GraphicsContext* gfxCtx);
+Gfx* func_8012C1EC(Gfx* gfx);
+void func_8012C214(GraphicsContext* gfxCtx);
+void func_8012C240(GraphicsContext* gfxCtx);
+void func_8012C268(struct GameState* gameState);
+void func_8012C28C(GraphicsContext* gfxCtx);
+Gfx* func_8012C2B4(Gfx* gfx);
+void func_8012C2DC(GraphicsContext* gfxCtx);
+Gfx* func_8012C304(Gfx* gfx);
+void func_8012C32C(GraphicsContext* gfxCtx);
+void func_8012C354(GraphicsContext* gfxCtx);
+void func_8012C37C(GraphicsContext* gfxCtx);
+Gfx* func_8012C3A4(Gfx* gfx);
+Gfx* func_8012C3CC(Gfx* gfx);
+void func_8012C3F4(GraphicsContext* gfxCtx);
+void func_8012C420(GraphicsContext* gfxCtx);
+void func_8012C448(GraphicsContext* gfxCtx);
+void func_8012C470(GraphicsContext* gfxCtx);
+Gfx* func_8012C498(Gfx* gfx);
+void func_8012C4C0(GraphicsContext* gfxCtx);
+void func_8012C4E8(GraphicsContext* gfxCtx);
+void func_8012C510(GraphicsContext* gfxCtx);
+void func_8012C538(GraphicsContext* gfxCtx);
+void func_8012C560(GraphicsContext* gfxCtx);
+void func_8012C588(GraphicsContext* gfxCtx);
+void func_8012C5B0(GraphicsContext* gfxCtx);
+void func_8012C5D8(GraphicsContext* gfxCtx);
+Gfx* func_8012C600(Gfx* gfx);
+void func_8012C628(GraphicsContext* gfxCtx);
+void func_8012C654(GraphicsContext* gfxCtx);
+void func_8012C680(Gfx** gfxp);
+void func_8012C6AC(GraphicsContext* gfxCtx);
+void func_8012C6D4(GraphicsContext* gfxCtx);
+void func_8012C6FC(GraphicsContext* gfxCtx);
+Gfx* func_8012C724(Gfx* gfx);
+Gfx* func_8012C74C(Gfx* gfx);
+Gfx* func_8012C774(Gfx* gfx);
+Gfx* func_8012C7B8(Gfx* gfx);
+Gfx* func_8012C7FC(Gfx* gfx);
+Gfx* func_8012C840(Gfx* gfx);
+Gfx* func_8012C868(Gfx* gfx);
+void func_8012C8AC(GraphicsContext* gfxCtx);
+void func_8012C8D4(GraphicsContext* gfxCtx);
+void func_8012C8FC(GraphicsContext* gfxCtx);
+void func_8012C924(GraphicsContext* gfxCtx);
+void func_8012C94C(GraphicsContext* gfxCtx);
+void func_8012C974(GraphicsContext* gfxCtx);
+void func_8012C9BC(GraphicsContext* gfxCtx);
+void func_8012C9E4(GraphicsContext* gfxCtx);
+void func_8012CA0C(Gfx** gfxp);
+void func_8012CA38(GraphicsContext* gfxCtx);
+Gfx* Gfx_BranchTexScroll(Gfx** gfxp, u32 x, u32 y, s32 width, s32 height);
+void func_8012CB04(Gfx** gfxp, u32 x, u32 y);
+Gfx* func_8012CB28(GraphicsContext* gfxCtx, u32 x, u32 y);
+Gfx* Gfx_TexScroll(GraphicsContext* gfxCtx, u32 x, u32 y, s32 width, s32 height);
+Gfx* Gfx_TwoTexScroll(GraphicsContext* gfxCtx, s32 tile1, u32 x1, u32 y1, s32 width1, s32 height1, s32 tile2, u32 x2, u32 y2, s32 width2, s32 height2);
+Gfx* Gfx_TwoTexScrollEnvColor(GraphicsContext* gfxCtx, s32 tile1, u32 x1, u32 y1, s32 width1, s32 height1, s32 tile2, u32 x2, u32 y2, s32 width2, s32 height2, s32 r, s32 g, s32 b, s32 a);
+Gfx* Gfx_EnvColor(GraphicsContext* gfxCtx, s32 r, s32 g, s32 b, s32 a);
+Gfx* Gfx_PrimColor(GraphicsContext* gfxCtx, s32 lodfrac, s32 r, s32 g, s32 b, s32 a);
+void func_8012CF0C(GraphicsContext* gfxCtx, s32 clearFb, s32 clearZb, u8 r, u8 g, u8 b);
+void func_8012D374(GraphicsContext* gfxCtx, u8 r, u8 g, u8 b);
+void func_8012D40C(f32* param_1, f32* param_2, s16* param_3);
+
+
+extern Gfx sSetupDL[73 * 6];
+extern Gfx gEmptyDL[];
 
 
 #define WORK_DISP __gfxCtx->work.p
