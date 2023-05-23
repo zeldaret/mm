@@ -33,9 +33,6 @@ const ActorInit Demo_Moonend_InitVars = {
     (ActorFunc)DemoMoonend_Draw,
 };
 
-extern UNK_TYPE D_06001214;
-extern UNK_TYPE D_0600B5A0;
-
 void DemoMoonend_Init(Actor* thisx, PlayState* play) {
     DemoMoonend* this = THIS;
 
@@ -50,8 +47,8 @@ void DemoMoonend_Init(Actor* thisx, PlayState* play) {
         this->actionFunc = func_80C17B60;
     } else {
         Actor_SetScale(&this->actor, 0.095f);
-        func_80183430(&this->skeletonInfo, &D_0600B5A0, &D_06001214, this->jointTable, this->morphTable, NULL);
-        func_801834A8(&this->skeletonInfo, &D_06001214);
+        func_80183430(&this->skeletonInfo, &object_moonend_Blob_00B5A0, &object_moonend_Blob_001214, this->jointTable, this->morphTable, NULL);
+        func_801834A8(&this->skeletonInfo, &object_moonend_Blob_001214);
         this->cueType = 0x230;
         this->actionFunc = func_80C17C48;
         this->actor.home.rot.z = 0;
@@ -111,12 +108,12 @@ void func_80C17C48(DemoMoonend* this, PlayState* play) {
             switch (this->cueId) {
                 case 1:
                     this->actor.draw = DemoMoonend_Draw;
-                    func_801834A8(&this->skeletonInfo, &D_06001214);
+                    func_801834A8(&this->skeletonInfo, &object_moonend_Blob_001214);
                     this->skeletonInfo.frameCtrl.unk_C = 0.0f;
                     break;
                 case 2:
                     this->actor.draw = DemoMoonend_Draw;
-                    func_801834A8(&this->skeletonInfo, &D_06001214);
+                    func_801834A8(&this->skeletonInfo, &object_moonend_Blob_001214);
                     this->skeletonInfo.frameCtrl.unk_C = 0.6666667f;
                     Actor_PlaySfx(&this->actor, NA_SE_EV_MOON_EXPLOSION);
                     this->actor.home.rot.z = 1;
