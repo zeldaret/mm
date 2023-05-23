@@ -4000,7 +4000,7 @@ s32 func_80830FD4(PlayState* play) {
 s32 func_80831010(Player* this, PlayState* play) {
     if ((this->unk_AA5 == PLAYER_UNKAA5_0) || (this->unk_AA5 == PLAYER_UNKAA5_3)) {
         if (func_8082FBE8(this) || (this->targetedActor != NULL) ||
-            (func_800DF86C(Play_GetCamera(play, CAM_ID_MAIN), 0xD) == 0)) {
+            (Camera_CheckValidMode(Play_GetCamera(play, CAM_ID_MAIN), CAM_MODE_BOWARROW) == 0)) {
             return true;
         }
         this->unk_AA5 = PLAYER_UNKAA5_3;
@@ -4223,7 +4223,7 @@ void func_808317C4(Player* this) {
 
 s32 func_80831814(Player* this, PlayState* play, PlayerUnkAA5 arg2) {
     if (!(this->stateFlags1 & (PLAYER_STATE1_4 | PLAYER_STATE1_800 | PLAYER_STATE1_2000 | PLAYER_STATE1_4000))) {
-        if (func_800DF86C(Play_GetCamera(play, CAM_ID_MAIN), 6) != 0) {
+        if (Camera_CheckValidMode(Play_GetCamera(play, CAM_ID_MAIN), CAM_MODE_FIRSTPERSON) != 0) {
             if ((this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) ||
                 (func_801242B4(this) && (this->actor.depthInWater < this->ageProperties->unk_2C))) {
                 this->unk_AA5 = arg2;
