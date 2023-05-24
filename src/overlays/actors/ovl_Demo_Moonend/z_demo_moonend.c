@@ -43,14 +43,14 @@ void DemoMoonend_Init(Actor* thisx, PlayState* play) {
         Actor_SetScale(&this->actor, 0.05f);
         Actor_SetScale(&this->actor, 6.0f);
         this->actor.draw = NULL;
-        this->cueType = 0x22E;
+        this->cueType = CS_CMD_ACTOR_CUE_558;
         this->actionFunc = func_80C17B60;
     } else {
         Actor_SetScale(&this->actor, 0.095f);
         func_80183430(&this->skeletonInfo, &object_moonend_Blob_00B5A0, &object_moonend_Blob_001214, this->jointTable,
                       this->morphTable, NULL);
         func_801834A8(&this->skeletonInfo, &object_moonend_Blob_001214);
-        this->cueType = 0x230;
+        this->cueType = CS_CMD_ACTOR_CUE_560;
         this->actionFunc = func_80C17C48;
         this->actor.home.rot.z = 0;
         this->actor.draw = NULL;
@@ -81,8 +81,12 @@ void func_80C17B60(DemoMoonend* this, PlayState* play) {
                 case 1:
                     this->actor.draw = NULL;
                     break;
+
                 case 2:
                     this->actor.draw = func_80C17FCC;
+                    break;
+                
+                default:
                     break;
             }
         }
@@ -112,12 +116,16 @@ void func_80C17C48(DemoMoonend* this, PlayState* play) {
                     func_801834A8(&this->skeletonInfo, &object_moonend_Blob_001214);
                     this->skeletonInfo.frameCtrl.unk_C = 0.0f;
                     break;
+
                 case 2:
                     this->actor.draw = DemoMoonend_Draw;
                     func_801834A8(&this->skeletonInfo, &object_moonend_Blob_001214);
                     this->skeletonInfo.frameCtrl.unk_C = 2.0f / 3.0f;
                     Actor_PlaySfx(&this->actor, NA_SE_EV_MOON_EXPLOSION);
                     this->actor.home.rot.z = 1;
+                    break;
+
+                default:
                     break;
             }
         }
@@ -131,18 +139,25 @@ void func_80C17C48(DemoMoonend* this, PlayState* play) {
         switch (play->csCtx.curFrame) {
             case 5:
                 Actor_PlaySfx(&this->actor, NA_SE_EN_MOON_SCREAM1);
-                return;
+                break;
+
             case 50:
                 Actor_PlaySfx(&this->actor, NA_SE_EN_MOON_SCREAM2);
-                return;
+                break;
+
             case 100:
                 Actor_PlaySfx(&this->actor, NA_SE_EN_MOON_SCREAM3);
-                return;
+                break;
+
             case 150:
                 Actor_PlaySfx(&this->actor, NA_SE_EN_MOON_SCREAM2);
-                return;
+                break;
+
             case 200:
                 Actor_PlaySfx(&this->actor, NA_SE_EN_MOON_SCREAM4);
+                break;
+            
+            default:
                 break;
         }
     }
@@ -174,7 +189,7 @@ s32 func_80C17EE0(PlayState* play, SkeletonInfo* skeleton, s32 limbIndex, Gfx** 
         Matrix_Pop();
     }
 
-    return 1;
+    return true;
 }
 
 void DemoMoonend_Draw(Actor* thisx, PlayState* play) {
