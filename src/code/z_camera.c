@@ -42,6 +42,8 @@
  *          -Y                      +Z                      -Y
  *
  */
+
+#include "prevent_bss_reordering.h"
 #include "global.h"
 #include "z64quake.h"
 #include "z64shrink_window.h"

@@ -3,6 +3,37 @@
 #include "libc/math.h"
 #include "macros.h"
 
+extern Vec3f Math3D_GetSphVsTriIntersectPoint_sphereCenter;
+extern Linef Math3D_TriVsSphIntersect_triTestLine;
+extern Vec3f Math3D_TriVsSphIntersect_sphereCenter;
+extern Vec3f Math3D_TriVsSphIntersect_sphPlanePos;
+extern Sphere16 topSphere;
+extern Sphere16 bottomSphere;
+extern Vec3f cylIntersectA;
+extern Vec3f cylIntersectB;
+extern Vec3f abDiff;
+extern Vec3f acDiff;
+extern Cylinderf cylf;
+extern Spheref sphf;
+extern Cylinderf caf;
+extern Cylinderf cbf;
+extern Vec3f triVtx0;
+extern Vec3f triVtx1;
+extern Vec3f triVtx2;
+extern Vec3f Math3D_LineVsCube_intersectPoint;
+extern Vec3f D_801FBD20;
+extern Vec3f D_801FBD30;
+extern Vec3f D_801FBD40;
+extern Vec3f D_801FBD50;
+extern Vec3f Math3D_DefPlane_normal;
+extern Vec3f Math3D_TriChkLineSegParaXIntersect_planePos;
+extern InfiniteLine planeIntersectLine;
+extern Linef planeIntersectSeg;
+extern Vec3f Math3D_TriChkLineSegParaZIntersect_planePos;
+extern InfiniteLine Math3D_PlaneVsPlaneVsLineClosestPoint_planeIntersect;
+extern Vec3f sphLinePerpendicularPoint;
+extern Vec3f v0v1Center;
+
 f32 Math3D_Normalize(Vec3f* vec) {
     f32 magnitude = Math3D_Vec3fMagnitude(vec);
 
