@@ -85,7 +85,7 @@ void func_80C17B60(DemoMoonend* this, PlayState* play) {
                 case 2:
                     this->actor.draw = func_80C17FCC;
                     break;
-                
+
                 default:
                     break;
             }
@@ -156,7 +156,7 @@ void func_80C17C48(DemoMoonend* this, PlayState* play) {
             case 200:
                 Actor_PlaySfx(&this->actor, NA_SE_EN_MOON_SCREAM4);
                 break;
-            
+
             default:
                 break;
         }
