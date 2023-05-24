@@ -1439,22 +1439,19 @@ s32 EnGo_HandleGatekeeperPoundCutscene(EnGo* this, f32 initialVelocity, f32 maxD
     return isFinished;
 }
 
-/**
- * Create the quake caused by the gatekeeper's pound.
- */
-void EnGo_AddGatekeeperPoundQuake(PlayState* play, s16 speed, s16 verticalMag, s16 countdown) {
-    s16 quakeIndex = Quake_Add(Play_GetCamera(play, CAM_ID_MAIN), QUAKE_TYPE_3);
+void EnGo_RequestQuake(PlayState* play, s16 speed, s16 y, s16 duration) {
+    s16 quakeIndex = Quake_Request(Play_GetCamera(play, CAM_ID_MAIN), QUAKE_TYPE_3);
 
-    Quake_SetCountdown(quakeIndex, countdown);
+    Quake_SetDuration(quakeIndex, duration);
     Quake_SetSpeed(quakeIndex, speed);
-    Quake_SetQuakeValues(quakeIndex, verticalMag, 0, 0, 0);
+    Quake_SetPerturbations(quakeIndex, y, 0, 0, 0);
 }
 
 /**
  * Create the visual effects caused by the gatekeeper's pound.
  */
 void EnGo_CreateGatekeeperPoundEffects(EnGo* this, PlayState* play) {
-    EnGo_AddGatekeeperPoundQuake(play, 27767, 7, 20);
+    EnGo_RequestQuake(play, 27767, 7, 20);
     play->actorCtx.unk2 = 4;
     Actor_Spawn(&play->actorCtx, play, ACTOR_EN_TEST, this->actor.world.pos.x, this->actor.world.pos.y,
                 this->actor.world.pos.z, 0, 0, 0, 0);
