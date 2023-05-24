@@ -4,11 +4,10 @@
  * Description: Bad Bat
  */
 
-#include "prevent_bss_reordering.h"
 #include "z_en_bat.h"
 #include "objects/object_bat/object_bat.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_1000 | ACTOR_FLAG_4000)
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_IGNORE_QUAKE | ACTOR_FLAG_4000)
 
 #define THIS ((EnBat*)thisx)
 

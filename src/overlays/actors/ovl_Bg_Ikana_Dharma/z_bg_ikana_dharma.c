@@ -228,11 +228,11 @@ void BgIkanaDharma_Update(Actor* thisx, PlayState* play) {
             Actor_MoveWithGravity(&this->dyna.actor);
             Actor_UpdateBgCheckInfo(play, &this->dyna.actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
             if (this->dyna.actor.bgCheckFlags & BGCHECKFLAG_GROUND_TOUCH) {
-                s16 quakeIndex = Quake_Add(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
+                s16 quakeIndex = Quake_Request(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
 
                 Quake_SetSpeed(quakeIndex, 21536);
-                Quake_SetQuakeValues(quakeIndex, 4, 0, 0, 0);
-                Quake_SetCountdown(quakeIndex, 12);
+                Quake_SetPerturbations(quakeIndex, 4, 0, 0, 0);
+                Quake_SetDuration(quakeIndex, 12);
 
                 Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
             }
