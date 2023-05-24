@@ -1190,7 +1190,7 @@ typedef struct {
     /* 0x00 */ Vec3f unk_00;
     /* 0x0C */ Vec3f unk_0C;
     /* 0x18 */ f32 unk_18;
-    /* 0x1C */ Linef unk_1C;
+    /* 0x1C */ InfiniteLine unk_1C;
     /* 0x34 */ Vec3s unk_34;
     /* 0x3A */ s16 unk_3A;
     /* 0x3C */ s16 timer;

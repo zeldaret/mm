@@ -483,8 +483,8 @@ s32 func_80B78764(ObjUm* this, PlayState* play, EnHorse* bandit1, EnHorse* bandi
         func_80B781DC(this, bandit1, bandit2, play);
     }
 
-    Math3D_LineSplitRatio(&bandit1->unk_540, &this->unk_360[bandit1->unk_550], 1.0f - ((f32)bandit1->unk_55C / bandit1->unk_560),
-                &sp30);
+    Math3D_LineSplitRatio(&bandit1->unk_540, &this->unk_360[bandit1->unk_550],
+                          1.0f - ((f32)bandit1->unk_55C / bandit1->unk_560), &sp30);
     bandit1->banditPosition = sp30;
     bandit1->unk_588 = this->dyna.actor.shape.rot.y;
 

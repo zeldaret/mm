@@ -521,6 +521,7 @@ wordReplace = {
     "Math3D_Parallel": "Math3D_Cos",
     "Math3D_AngleBetweenVectors": "Math3D_CosOut",
     "func_80179A44": "Math3D_LineClosestToPoint",
+    "func_8017A438": "Math3D_SphCubeVsTriCube",
     "Math3D_XZLengthSquared": "Math3D_Dist1DSq",
     "Math3D_XZLength": "Math3D_Dist1D",
     "Math3D_XZDistanceSquared": "Math3D_Dist2DSq",

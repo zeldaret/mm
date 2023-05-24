@@ -363,8 +363,8 @@ s32 CollisionPoly_CheckYIntersect(CollisionPoly* poly, Vec3s* vtxList, f32 x, f3
     nx = COLPOLY_GET_NORMAL(poly->normal.x);
     ny = COLPOLY_GET_NORMAL(poly->normal.y);
     nz = COLPOLY_GET_NORMAL(poly->normal.z);
-    return Math3D_TriChkPointParaYNoRangeCheckIntersectInsideTri(&D_801EDA18[0], &D_801EDA18[1], &D_801EDA18[2], nx, ny, nz,
-                                                      poly->dist, z, x, yIntersect, checkDist);
+    return Math3D_TriChkPointParaYNoRangeCheckIntersectInsideTri(&D_801EDA18[0], &D_801EDA18[1], &D_801EDA18[2], nx, ny,
+                                                                 nz, poly->dist, z, x, yIntersect, checkDist);
 }
 
 s32 CollisionPoly_CheckYIntersectApprox2(CollisionPoly* poly, Vec3s* vtxList, f32 x, f32 z, f32* yIntersect) {
@@ -439,7 +439,7 @@ s32 CollisionPoly_LineVsPoly(BgLineVsPolyTest* a0) {
                                      a0->planeIntersect->x, 0.0f, a0->checkDist, sPlane.normal.y)) ||
         ((fabsf(sPlane.normal.z) > 0.5f) &&
          Math3D_TriChkPointParaZImpl(&sPolyVerts[0], &sPolyVerts[1], &sPolyVerts[2], a0->planeIntersect->x,
-                                       a0->planeIntersect->y, 0.0f, a0->checkDist, sPlane.normal.z))) {
+                                     a0->planeIntersect->y, 0.0f, a0->checkDist, sPlane.normal.z))) {
         return true;
     }
     return false;
