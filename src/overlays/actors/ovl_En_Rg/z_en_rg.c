@@ -614,7 +614,7 @@ void func_80BF4AB8(EnRg* this, PlayState* play) {
 }
 
 s32 func_80BF4D64(Vec3f* arg0) {
-    return Math3D_XZBoundCheck(-1261.0f, -901.0f, -1600.0f, -1520.0f, arg0->x, arg0->z);
+    return Math3D_PointInSquare2D(-1261.0f, -901.0f, -1600.0f, -1520.0f, arg0->x, arg0->z);
 }
 
 s32 func_80BF4DA8(EnRg* this) {

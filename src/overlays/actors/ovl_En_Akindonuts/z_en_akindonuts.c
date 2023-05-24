@@ -179,7 +179,7 @@ s32 func_80BECD10(EnAkindonuts* this, Path* path, s32 arg2) {
         phi_f14 = sp5C[idx + 1].z - sp5C[idx - 1].z;
     }
 
-    func_8017B7F8(&sp30, RAD_TO_BINANG(func_80086B30(phi_f12, phi_f14)), &sp44, &sp40, &sp3C);
+    Math3D_RotateXZPlane(&sp30, RAD_TO_BINANG(func_80086B30(phi_f12, phi_f14)), &sp44, &sp40, &sp3C);
     if (((this->actor.world.pos.x * sp44) + (sp40 * this->actor.world.pos.z) + sp3C) > 0.0f) {
         sp50 = true;
     }

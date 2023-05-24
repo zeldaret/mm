@@ -69,7 +69,7 @@ static Vec3f sCheckpointPositions[] = {
  * The range extends a little bit beyond the finish line's in-game visual.
  */
 s32 EnMttag_IsInFinishLine(Vec3f* pos) {
-    return Math3D_XZBoundCheck(-1261.0f, -901.0f, -1600.0f, -1520.0f, pos->x, pos->z);
+    return Math3D_PointInSquare2D(-1261.0f, -901.0f, -1600.0f, -1520.0f, pos->x, pos->z);
 }
 
 /**
@@ -78,11 +78,11 @@ s32 EnMttag_IsInFinishLine(Vec3f* pos) {
  */
 s32 EnMttag_CheckPlayerCheatStatus(Vec3f* pos) {
     if (!CHECK_EVENTINF(EVENTINF_10)) {
-        if (Math3D_XZBoundCheck(-466.0f, -386.0f, -687.0f, 193.0f, pos->x, pos->z)) {
+        if (Math3D_PointInSquare2D(-466.0f, -386.0f, -687.0f, 193.0f, pos->x, pos->z)) {
             // The race hasn't started yet, but the player is beyond the starting line.
             return GORON_RACE_CHEAT_FALSE_START;
         }
-    } else if (Math3D_XZBoundCheck(-1127.0f, -1007.0f, -867.0f, -787.0f, pos->x, pos->z)) {
+    } else if (Math3D_PointInSquare2D(-1127.0f, -1007.0f, -867.0f, -787.0f, pos->x, pos->z)) {
         // The goal is actually quite close to the start, just behind a large wall.
         // This checks if the player is in an area "behind" the goal that is not accessible
         // in normal play; it can only be reached by climbing the wall somehow. Perhaps they

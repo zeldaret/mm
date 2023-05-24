@@ -602,11 +602,11 @@ void func_80A69ADC(Actor* thisx) {
     s32 pad2;
 
     if (this->unk_358 < 1.0f) {
-        sp44 = Math3D_SignedDistanceFromPlane(
+        sp44 = Math3D_PlaneF(
             this->unk_310.x, this->unk_310.y, this->unk_310.z,
             func_80A69AA8(this->unk_310.x, this->unk_310.y, this->unk_310.z, &this->actor.world.pos),
             &bean->dyna.actor.world.pos);
-        sp40 = Math3D_SignedDistanceFromPlane(
+        sp40 = Math3D_PlaneF(
             this->unk_328.x, this->unk_328.y, this->unk_328.z,
             func_80A69AA8(this->unk_328.x, this->unk_328.y, this->unk_328.z, &this->actor.world.pos),
             &bean->dyna.actor.world.pos);
@@ -648,11 +648,11 @@ void func_80A69D3C(EnMushi2* this) {
     f32 sp38;
 
     if ((this->unk_34C != NULL) && (this->unk_358 > 0.999f)) {
-        sp40 = Math3D_SignedDistanceFromPlane(
+        sp40 = Math3D_PlaneF(
             this->unk_310.x, this->unk_310.y, this->unk_310.z,
             func_80A69AA8(this->unk_310.x, this->unk_310.y, this->unk_310.z, &this->actor.world.pos),
             &this->unk_34C->dyna.actor.world.pos);
-        sp3C = Math3D_SignedDistanceFromPlane(
+        sp3C = Math3D_PlaneF(
             this->unk_328.x, this->unk_328.y, this->unk_328.z,
             func_80A69AA8(this->unk_328.x, this->unk_328.y, this->unk_328.z, &this->actor.world.pos),
             &this->unk_34C->dyna.actor.world.pos);

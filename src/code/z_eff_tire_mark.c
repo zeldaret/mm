@@ -57,8 +57,8 @@ void func_800AE930(CollisionContext* colCtx, EffectTireMark* this, Vec3f* pos, f
         sp48.y = spB8.y;
         sp48.z = spB8.z;
 
-        if ((Math3D_LineVsLineClosestTwoPoints(&sp84, &sp90, &sp54, &sp60, &sp6C, &sp30) != 0) &&
-            (Math3D_LineVsLineClosestTwoPoints(&sp84, &sp90, &sp3C, &sp48, &sp78, &sp30) != 0)) {
+        if ((Math3D_LineSegMakePerpLineSeg(&sp84, &sp90, &sp54, &sp60, &sp6C, &sp30) != 0) &&
+            (Math3D_LineSegMakePerpLineSeg(&sp84, &sp90, &sp3C, &sp48, &sp78, &sp30) != 0)) {
             if (!(spAC->flags & 2)) {
                 spAC->flags |= 1;
             }

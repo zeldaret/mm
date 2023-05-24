@@ -400,7 +400,7 @@ s32 func_80B783E0(ObjUm* this, PlayState* play, s32 banditIndex, EnHorse* bandit
 
     temp_a1 = Math_Atan2S(phi_f12, phi_f14);
 
-    func_8017B7F8(&sp50, temp_a1, &sp4C, &sp48, &sp44);
+    Math3D_RotateXZPlane(&sp50, temp_a1, &sp4C, &sp48, &sp44);
     if (((bandit->actor.world.pos.x * sp4C) + (sp48 * bandit->actor.world.pos.z) + sp44) > 0.0f) {
         bandit->curRaceWaypoint++;
         if (bandit->curRaceWaypoint >= sp68) {
@@ -483,7 +483,7 @@ s32 func_80B78764(ObjUm* this, PlayState* play, EnHorse* bandit1, EnHorse* bandi
         func_80B781DC(this, bandit1, bandit2, play);
     }
 
-    Math3D_Lerp(&bandit1->unk_540, &this->unk_360[bandit1->unk_550], 1.0f - ((f32)bandit1->unk_55C / bandit1->unk_560),
+    Math3D_LineSplitRatio(&bandit1->unk_540, &this->unk_360[bandit1->unk_550], 1.0f - ((f32)bandit1->unk_55C / bandit1->unk_560),
                 &sp30);
     bandit1->banditPosition = sp30;
     bandit1->unk_588 = this->dyna.actor.shape.rot.y;
@@ -1070,7 +1070,7 @@ ObjUmPathState ObjUm_UpdatePath(ObjUm* this, PlayState* play) {
 
     angle = Math_Atan2S(xDiff, zDiff);
 
-    func_8017B7F8(&sp50, angle, &sp4C, &sp48, &sp44);
+    Math3D_RotateXZPlane(&sp50, angle, &sp4C, &sp48, &sp44);
     if (((this->dyna.actor.world.pos.x * sp4C) + (sp48 * this->dyna.actor.world.pos.z) + sp44) > 0.0f) {
         this->pointIndex++;
 

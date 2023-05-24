@@ -2,56 +2,6 @@
 #include "libc/stdbool.h"
 #include "libc/math.h"
 
-#define Math3D_FindPointOnPlaneIntersect func_80179B34
-#define Math3D_PlaneVsPlaneNewLine func_80179B94
-#define Math3D_LineSegMakePerpLineSeg Math3D_LineVsLineClosestTwoPoints
-#define Math3D_Plane func_8017B9D8
-#define Math3D_TriLineIntersect func_8017D404
-#define Math3D_CylOutsideCylDist Math3D_ColCylinderCylinderAmountAndDistance
-#define Math3D_CylOutsideCyl Math3D_ColCylinderCylinderAmount
-#define Math3D_SphVsCylOverlapCenterDist Math3D_ColSphereCylinderDistanceAndAmount
-#define Math3D_CylTriVsIntersect Math3D_ColCylinderTri
-#define Math3D_CylVsTri func_8017F1A0
-#define Math3D_SphVsSph Math3D_SphVsSph
-#define Math3D_SphVsSphOverlap Math3D_ColSphereSphereIntersect
-#define Math3D_SphVsSphOverlapCenter Math3D_ColSphereSphereIntersectAndDistance
-#define Math3D_SphVsCylOverlapDist Math3D_ColSphereCylinderDistance
-#define Math3D_CylVsLineSeg func_8017E350
-#define Math3D_TriVsSphIntersect Math3D_ColSphereTri
-#define Math3D_PointOnDirectedLine Math3D_ScaleAndAdd
-#define Math3D_LineSplitRatio Math3D_Lerp
-#define Math3D_PlaneVsPlaneVsLineClosestPoint func_80179D74
-#define Math3D_PointInCyl func_8017E294
-#define Math3D_Vec3fReflect func_80179F64
-#define Math3D_PointInSquare2D Math3D_XZBoundCheck
-#define Math3D_RotateXZPlane func_8017B7F8
-#define Math3D_DefPlane Math3D_UnitNormalVector
-#define Math3D_PlaneF Math3D_SignedDistanceFromPlane
-#define Math3D_Plane func_8017B9D8
-#define Math3D_DistPlaneToPos Math3D_DistPlaneToPos
-#define Math3D_TriChkPointParaYImpl Math3D_TriChkPointParaYDist
-#define Math3D_TriChkPointParaYDeterminate func_8017BD98
-#define Math3D_TriChkPointParaYSlopedY func_8017BDE0
-#define Math3D_TriChkPointParaY func_8017BF8C
-#define Math3D_TriChkPointParaYDist_ func_8017C17C
-#define Math3D_TriChkPointParaYImplNoCheckRange func_8017C1F0
-#define Math3D_TriChkPointParaYNoRangeCheckIntersectInsideTri Math3D_TriChkPointParaYIntersectInsideTri2
-#define Math3D_TriChkPointParaXImpl Math3D_TriChkPointParaXDist
-#define Math3D_TriChkPointParaXDeterminate func_8017C808
-#define Math3D_TriChkPointParaX func_8017C904
-#define Math3D_TriChkLineSegParaXDist func_8017CB08
-#define Math3D_TriChkPointParaZImpl Math3D_TriChkLineSegParaZDist
-#define Math3D_TriChkPointParaZDeterminate func_8017CEA8
-#define Math3D_TriChkPointParaZ func_8017CFA4
-#define Math3D_TriChkLineSegParaZDist_ func_8017D1AC
-#define Math3D_LineSegFindPlaneIntersect func_8017D220
-#define Math3D_TriLineIntersect func_8017D404
-#define Math3D_TriNorm Math3D_TriSetCoords
-#define Math3D_PointInSph Math3D_IsPointInSphere
-#define Math3D_PointDistToLine2D_ func_8017D814
-#define Math3D_TriVsTriIntersect Math3d_ColTriTri
-#define Math3D_GetSphVsTriIntersectPoint func_8017DD34
-
 f32 Math3D_Normalize(Vec3f* vec) {
     f32 magnitude = Math3D_Vec3fMagnitude(vec);
 
@@ -100,7 +50,7 @@ s32 Math3D_PlaneVsLineSegClosestPoint(f32 planeAA, f32 planeAB, f32 planeAC, f32
 /**
  * Finds the two points on lines A and B where the lines are closest together.
  */
-s32 Math3D_LineVsLineClosestTwoPoints(Vec3f* lineAPointA, Vec3f* lineAPointB, Vec3f* lineBPointA, Vec3f* lineBPointB,
+s32 Math3D_LineSegMakePerpLineSeg(Vec3f* lineAPointA, Vec3f* lineAPointB, Vec3f* lineBPointA, Vec3f* lineBPointB,
                                       Vec3f* lineAClosestToB, Vec3f* lineBClosestToA) {
     f32 sqMag;
     f32 scaleB;
@@ -246,7 +196,7 @@ s32 Math3D_PlaneVsPlaneVsLineClosestPoint(f32 planeAA, f32 planeAB, f32 planeAC,
     return true;
 }
 #else
-#pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/func_80179D74.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/Math3D_PlaneVsPlaneVsLineClosestPoint.s")
 #endif
 
 /**
@@ -974,7 +924,7 @@ void Math3D_DefPlane(Vec3f* va, Vec3f* vb, Vec3f* vc, f32* nx, f32* ny, f32* nz,
     }
 }
 #else
-#pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/Math3D_UnitNormalVector.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/Math3D_DefPlane.s")
 #endif
 
 f32 Math3D_PlaneF(f32 nx, f32 ny, f32 nz, f32 originDist, Vec3f* pointOnPlane) {
@@ -1526,7 +1476,8 @@ s32 func_8017D7C0(f32 x0, f32 y0, f32 x1, f32 y1, f32 x2, f32 y2, f32* lineLenSq
     return Math3D_PointDistToLine2D(x0, y0, x1, y1, x2, y2, &perpX, &perpY, lineLenSq);
 }
 
-s32 Math3D_PointDistToLine2D_(f32 x0, f32 y0, Vec3f* p1, Vec3f* p2, f32* lineLenSq) {
+// Math3D_PointDistToLine2D_
+s32 func_8017D814(f32 x0, f32 y0, Vec3f* p1, Vec3f* p2, f32* lineLenSq) {
     f32 perpendicularRatio;
     f32 xDiff = p2->x - p1->x;
     f32 yDiff = p2->y - p1->y;
@@ -1672,7 +1623,7 @@ void Math3D_GetSphVsTriIntersectPoint(Sphere16* sphere, TriNorm* tri, Vec3f* int
     Math3D_LineSplitRatio(&sphereCenter, &v0v1Center, splitRatio, intersectPoint);
 }
 #else
-#pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/func_8017DD34.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/Math3D_GetSphVsTriIntersectPoint.s")
 #endif
 
 #ifdef NON_MATCHING
@@ -1762,7 +1713,7 @@ s32 Math3D_TriVsSphIntersect(Sphere16* sphere, TriNorm* tri, Vec3f* intersectPoi
     return false;
 }
 #else
-#pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/Math3D_ColSphereTri.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/Math3D_TriVsSphIntersect.s")
 #endif
 
 s32 Math3D_PointInCyl(Cylinder16* cyl, Vec3f* point) {
@@ -1964,7 +1915,7 @@ s32 Math3D_CylVsLineSeg(Cylinder16* cyl, Vec3f* linePointA, Vec3f* linePointB, V
     return count;
 }
 #else
-#pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/func_8017E350.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/Math3D_CylVsLineSeg.s")
 #endif
 
 #ifdef NON_MATCHING
@@ -2062,7 +2013,7 @@ s32 Math3D_CylTriVsIntersect(Cylinder16* cyl, TriNorm* tri, Vec3f* intersect) {
     return false;
 }
 #else
-#pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/Math3D_ColCylinderTri.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/Math3D_CylTriVsIntersect.s")
 #endif
 
 s32 Math3D_CylVsTri(Cylinder16* cyl, TriNorm* tri) {
@@ -2153,7 +2104,7 @@ s32 Math3D_SphVsCylOverlapCenterDist(Sphere16* sph, Cylinder16* cyl, f32* overla
     return false;
 }
 #else
-#pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/Math3D_ColSphereCylinderDistanceAndAmount.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/Math3D_SphVsCylOverlapCenterDist.s")
 #endif
 
 s32 Math3D_CylOutsideCyl(Cylinder16* ca, Cylinder16* cb, f32* deadSpace) {
@@ -2195,7 +2146,7 @@ s32 Math3D_CylOutsideCylDist(Cylinder16* ca, Cylinder16* cb, f32* deadSpace, f32
     return true;
 }
 #else
-#pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/Math3D_ColCylinderCylinderAmountAndDistance.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/Math3D_CylOutsideCylDist.s")
 #endif
 
 s32 Math3D_TriVsTriIntersect(TriNorm* ta, TriNorm* tb, Vec3f* intersect) {

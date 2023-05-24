@@ -327,7 +327,7 @@ void func_8087B7C0(EnHorse* this, PlayState* play, Path* path) {
         phi_f14 = spA0[this->curRaceWaypoint + 1].z - spA0[this->curRaceWaypoint - 1].z;
     }
 
-    func_8017B7F8(&sp8C, Math_Atan2S(phi_f12, phi_f14), &sp7C, &sp78, &sp74);
+    Math3D_RotateXZPlane(&sp8C, Math_Atan2S(phi_f12, phi_f14), &sp7C, &sp78, &sp74);
 
     if (((this->actor.world.pos.x * sp7C) + (sp78 * this->actor.world.pos.z) + sp74) > 0.0f) {
         this->curRaceWaypoint++;
@@ -2809,7 +2809,7 @@ s32 EnHorse_UpdateHbaRaceInfo(EnHorse* this, PlayState* play, RaceInfo* raceInfo
     f32 d;
 
     EnHorse_RaceWaypointPos(raceInfo->waypoints, this->curRaceWaypoint, &pos);
-    func_8017B7F8(&pos, raceInfo->waypoints[this->curRaceWaypoint].angle, &px, &pz, &d);
+    Math3D_RotateXZPlane(&pos, raceInfo->waypoints[this->curRaceWaypoint].angle, &px, &pz, &d);
 
     if ((this->curRaceWaypoint >= (raceInfo->numWaypoints - 1)) &&
         (Math3D_Vec3f_DistXYZ(&pos, &this->actor.world.pos) < DREG(8))) {

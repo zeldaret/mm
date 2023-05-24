@@ -1847,13 +1847,13 @@ void Camera_CalcDefaultSwing(Camera* camera, VecGeo* arg1, VecGeo* arg2, f32 arg
             //! FAKE:
         dummy:;
             swing->unk_64 = 0;
-        } else if ((sp88 = Math3D_SignedDistanceFromPlane(swing->eyeAtColChk.norm.x, swing->eyeAtColChk.norm.y,
+        } else if ((sp88 = Math3D_PlaneF(swing->eyeAtColChk.norm.x, swing->eyeAtColChk.norm.y,
                                                           swing->eyeAtColChk.norm.z, swing->eyeAtColChk.poly->dist,
                                                           at)) > 0.0f) {
             swing->unk_64 = 0;
         } else if ((sp88 = OLib_Vec3fDist(eye, &swing->eyeAtColChk.pos)) < 10.0f) {
             swing->unk_64 = 0;
-        } else if ((sp88 = Math3D_SignedDistanceFromPlane(swing->atEyeColChk.norm.x, swing->atEyeColChk.norm.y,
+        } else if ((sp88 = Math3D_PlaneF(swing->atEyeColChk.norm.x, swing->atEyeColChk.norm.y,
                                                           swing->atEyeColChk.norm.z, swing->atEyeColChk.poly->dist,
                                                           eye)) > 0.0f) {
             swing->unk_64 = 0;

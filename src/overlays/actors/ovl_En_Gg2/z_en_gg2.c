@@ -310,7 +310,7 @@ s32 func_80B3B648(EnGg2* this, Path* path, s32 arg2_) {
         phi_f14 = points[arg2 + 1].z - points[arg2 - 1].z;
     }
 
-    func_8017B7F8(&sp30, RAD_TO_BINANG(func_80086B30(phi_f12, phi_f14)), &sp44, &sp40, &sp3C);
+    Math3D_RotateXZPlane(&sp30, RAD_TO_BINANG(func_80086B30(phi_f12, phi_f14)), &sp44, &sp40, &sp3C);
 
     if (((this->actor.world.pos.x * sp44) + (sp40 * this->actor.world.pos.z) + sp3C) > 0.0f) {
         ret = true;

@@ -916,7 +916,7 @@ s32 func_80ADCE4C(EnSellnuts* this, Path* path, s32 arg2) {
         pointY = points[var + 1].z - points[var - 1].z;
     }
 
-    func_8017B7F8(&sp30, RAD_TO_BINANG(func_80086B30(pointX, pointY)), &sp44, &sp40, &sp3C);
+    Math3D_RotateXZPlane(&sp30, RAD_TO_BINANG(func_80086B30(pointX, pointY)), &sp44, &sp40, &sp3C);
     if (((this->actor.world.pos.x * sp44) + (sp40 * this->actor.world.pos.z) + sp3C) > 0.0f) {
         ret = true;
     }

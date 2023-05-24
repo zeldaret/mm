@@ -577,7 +577,7 @@ s32 SubS_HasReachedPoint(Actor* actor, Path* path, s32 pointIndex) {
         diffZ = points[index + 1].z - points[index - 1].z;
     }
 
-    func_8017B7F8(&point, RAD_TO_BINANG(func_80086B30(diffX, diffZ)), &px, &pz, &d);
+    Math3D_RotateXZPlane(&point, RAD_TO_BINANG(func_80086B30(diffX, diffZ)), &px, &pz, &d);
     if (((px * actor->world.pos.x) + (pz * actor->world.pos.z) + d) > 0.0f) {
         reached = true;
     }
