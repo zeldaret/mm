@@ -47,7 +47,8 @@ void DemoMoonend_Init(Actor* thisx, PlayState* play) {
         this->actionFunc = func_80C17B60;
     } else {
         Actor_SetScale(&this->actor, 0.095f);
-        func_80183430(&this->skeletonInfo, &object_moonend_Blob_00B5A0, &object_moonend_Blob_001214, this->jointTable, this->morphTable, NULL);
+        func_80183430(&this->skeletonInfo, &object_moonend_Blob_00B5A0, &object_moonend_Blob_001214, this->jointTable,
+                      this->morphTable, NULL);
         func_801834A8(&this->skeletonInfo, &object_moonend_Blob_001214);
         this->cueType = 0x230;
         this->actionFunc = func_80C17C48;
