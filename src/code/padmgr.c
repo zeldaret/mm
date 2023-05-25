@@ -39,9 +39,9 @@
 #define PADMGR_NMI_MSG (1 << 2)
 
 typedef enum {
-    VOICE_INIT_FAILED, // voice initialization failed
-    VOICE_INIT_TRY,    // try to initialize voice
-    VOICE_INIT_SUCCESS // voice initialized
+    /* 0 */ VOICE_INIT_FAILED,  // voice initialization failed
+    /* 1 */ VOICE_INIT_TRY,     // try to initialize voice
+    /* 2 */ VOICE_INIT_SUCCESS  // voice initialized
 } VoiceInitStatus;
 
 PadMgr* sPadMgrInstance = &gPadMgr;
@@ -83,7 +83,7 @@ void PadMgr_SetRumbleRetraceCallback(void (*callback)(void*), void* arg) {
  * @see PadMgr_SetRumbleRetraceCallback
  */
 void PadMgr_UnsetRumbleRetraceCallback(void (*callback)(void*), void* arg) {
-    if (sPadMgrInstance->rumbleRetraceCallback == callback && sPadMgrInstance->rumbleRetraceArg == arg) {
+    if ((sPadMgrInstance->rumbleRetraceCallback == callback) && (sPadMgrInstance->rumbleRetraceArg == arg)) {
         sPadMgrInstance->rumbleRetraceCallback = NULL;
         sPadMgrInstance->rumbleRetraceArg = NULL;
     }
@@ -115,7 +115,7 @@ void PadMgr_SetInputRetraceCallback(void (*callback)(void*), void* arg) {
  * @see PadMgr_SetInputRetraceCallback
  */
 void PadMgr_UnsetInputRetraceCallback(void (*callback)(void*), void* arg) {
-    if (sPadMgrInstance->inputRetraceCallback == callback && sPadMgrInstance->inputRetraceArg == arg) {
+    if ((sPadMgrInstance->inputRetraceCallback == callback) && (sPadMgrInstance->inputRetraceArg == arg)) {
         sPadMgrInstance->inputRetraceCallback = NULL;
         sPadMgrInstance->inputRetraceArg = NULL;
     }
@@ -251,8 +251,8 @@ void PadMgr_UpdateRumble(void) {
         // known to be an initialized a rumble pak
         i = sPadMgrRetraceCount % MAXCONTROLLERS;
 
-        if (sPadMgrInstance->ctrlrType[i] == PADMGR_CONT_NORMAL &&
-            (sPadMgrInstance->padStatus[i].status & CONT_CARD_ON) && sPadMgrInstance->pakType[i] != CONT_PAK_RUMBLE) {
+        if ((sPadMgrInstance->ctrlrType[i] == PADMGR_CONT_NORMAL) &&
+            (sPadMgrInstance->padStatus[i].status & CONT_CARD_ON) && (sPadMgrInstance->pakType[i] != CONT_PAK_RUMBLE)) {
             ret = osMotorInit(serialEventQueue, &sPadMgrInstance->rumblePfs[i], i);
 
             if (ret == 0) {
@@ -285,9 +285,9 @@ void PadMgr_RumbleStop(void) {
     OSMesgQueue* serialEventQueue = PadMgr_AcquireSerialEventQueue();
     s32 i;
 
-    for (i = 0; i != MAXCONTROLLERS; i++) {
-        if (sPadMgrInstance->ctrlrType[i] == PADMGR_CONT_NORMAL &&
-            osMotorInit(serialEventQueue, &sPadMgrInstance->rumblePfs[i], i) == 0) {
+    for (i = 0; i < MAXCONTROLLERS; i++) {
+        if ((sPadMgrInstance->ctrlrType[i] == PADMGR_CONT_NORMAL) &&
+            (osMotorInit(serialEventQueue, &sPadMgrInstance->rumblePfs[i], i) == 0)) {
             // If there is a rumble pak attached to this controller, stop it
             osMotorStop(&sPadMgrInstance->rumblePfs[i]);
         }
@@ -349,7 +349,7 @@ void PadMgr_AdjustInput(Input* input) {
     s8 curX = input->cur.stick_x;
     s8 curY = input->cur.stick_y;
 
-    if (CHECK_BTN_ANY(input->press.button, BTN_RESET) || input->press.stick_x == 0) {
+    if (CHECK_BTN_ANY(input->press.button, BTN_RESET) || (input->press.stick_x == 0)) {
         input->press.stick_x = 61;
         input->press.errno = -61;
         input->press.stick_y = 63;
