@@ -2866,6 +2866,7 @@ void Player_DrawCircusLeadersMask(PlayState* play, Player* player) {
 
         Matrix_MultVec3f(&D_801C0B90[i], &D_801F59B0[i]);
 
+        //! FAKE
         if (1) {}
 
         D_801F59B0[i].y += -10.0f * scaleY;
