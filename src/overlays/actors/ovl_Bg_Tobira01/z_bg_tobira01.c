@@ -68,7 +68,7 @@ void BgTobira01_Action(BgTobira01* this, PlayState* play) {
 
     if (!(player->stateFlags1 & PLAYER_STATE1_40) && (CHECK_WEEKEVENTREG(WEEKEVENTREG_88_40)) &&
         DECR(this->isNight) == 0) {
-        gSaveContext.save.saveInfo.weekEventReg[88] &= 0xBF;
+        CLEAR_WEEKEVENTREG(WEEKEVENTREG_88_40);
     }
 }
 
@@ -77,7 +77,7 @@ void BgTobira01_Init(Actor* thisx, PlayState* play) {
 
     DynaPolyActor_Init(&this->dyna, 1);
     DynaPolyActor_LoadMesh(play, &this->dyna, &gGoronDoorCol);
-    gSaveContext.save.saveInfo.weekEventReg[88] &= 0xBF;
+    CLEAR_WEEKEVENTREG(WEEKEVENTREG_88_40);
     Actor_SetScale(&this->dyna.actor, 1.0f);
     this->isNight = gSaveContext.save.isNight;
     this->doorYPositionTick = 0;
