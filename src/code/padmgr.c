@@ -39,9 +39,9 @@
 #define PADMGR_NMI_MSG (1 << 2)
 
 typedef enum {
-    /* 0 */ VOICE_INIT_FAILED,  // voice initialization failed
-    /* 1 */ VOICE_INIT_TRY,     // try to initialize voice
-    /* 2 */ VOICE_INIT_SUCCESS  // voice initialized
+    /* 0 */ VOICE_INIT_FAILED, // voice initialization failed
+    /* 1 */ VOICE_INIT_TRY,    // try to initialize voice
+    /* 2 */ VOICE_INIT_SUCCESS // voice initialized
 } VoiceInitStatus;
 
 PadMgr* sPadMgrInstance = &gPadMgr;
