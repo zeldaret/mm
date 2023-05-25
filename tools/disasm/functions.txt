@@ -4464,7 +4464,7 @@
     0x808381F8:("func_808381F8",),
     0x8083827C:("func_8083827C",),
     0x8083868C:("func_8083868C",),
-    0x80838760:("Player_StopCurrentActorCutscene",),
+    0x80838760:("Player_StopCutscene",),
     0x808387A0:("func_808387A0",),
     0x80838830:("func_80838830",),
     0x808388B8:("func_808388B8",),
