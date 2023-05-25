@@ -6312,12 +6312,12 @@ s32 func_80836DC0(PlayState* play, Player* this) {
     return false;
 }
 
-void Player_AddQuake(PlayState* play, u16 quakeSpeed, s16 verticalMag, s16 countdown) {
-    s16 quakeIndex = Quake_Request(Play_GetCamera(play, CAM_ID_MAIN), QUAKE_TYPE_3);
+void Player_RequestQuake(PlayState* play, u16 speed, s16 y, s16 duration) {
+    s16 index = Quake_Request(Play_GetCamera(play, CAM_ID_MAIN), QUAKE_TYPE_3);
 
-    Quake_SetSpeed(quakeIndex, quakeSpeed);
-    Quake_SetPerturbations(quakeIndex, verticalMag, 0, 0, 0);
-    Quake_SetDuration(quakeIndex, countdown);
+    Quake_SetSpeed(index, speed);
+    Quake_SetPerturbations(index, y, 0, 0, 0);
+    Quake_SetDuration(index, duration);
 }
 
 FallImpactInfo sFallImpactInfos[] = {
@@ -6364,7 +6364,7 @@ s32 func_80836F10(PlayState* play, Player* this) {
         }
 
         func_80833998(this, 40);
-        Player_AddQuake(play, 32967, 2, 30);
+        Player_RequestQuake(play, 32967, 2, 30);
         Player_RequestRumble(play, this, entry->sourceIntensity, entry->decayTimer, entry->decayStep, SQ(0));
 
         return index + 1;
@@ -9621,7 +9621,7 @@ s32 func_8083FE38(Player* this, PlayState* play) {
 
 // Player_RumbleAndPlaySfx?
 void func_8083FE90(PlayState* play, Player* this, u16 sfxId) {
-    Player_AddQuake(play, 27767, 7, 20);
+    Player_RequestQuake(play, 27767, 7, 20);
     Player_RequestRumble(play, this, 255, 20, 150, SQ(0));
     Player_PlaySfx(this, sfxId);
 }
@@ -9947,7 +9947,7 @@ s32 func_80840A30(PlayState* play, Player* this, f32* arg2, f32 arg3) {
                 }
 
                 this->linearVelocity = -this->linearVelocity;
-                Player_AddQuake(play, 33267, 3, 12);
+                Player_RequestQuake(play, 33267, 3, 12);
                 Player_RequestRumble(play, this, 255, 20, 150, SQ(0));
                 Actor_SetPlayerImpact(play, PLAYER_IMPACT_BONK, 2, 100.0f, &this->actor.world.pos);
                 Player_PlaySfx(this, NA_SE_PL_BODY_HIT);

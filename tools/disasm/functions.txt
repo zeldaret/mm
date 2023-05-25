@@ -4442,7 +4442,7 @@
     0x80836C70:("func_80836C70",),
     0x80836D8C:("func_80836D8C",),
     0x80836DC0:("func_80836DC0",),
-    0x80836EA0:("Player_AddQuake",),
+    0x80836EA0:("Player_RequestQuake",),
     0x80836F10:("func_80836F10",),
     0x808370D4:("func_808370D4",),
     0x80837134:("func_80837134",),
