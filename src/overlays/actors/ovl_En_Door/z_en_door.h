@@ -24,7 +24,7 @@ typedef enum EnDoorType {
 } EnDoorType;
 
 typedef struct EnDoor {
-    /* 0x000 */ KnobDoorActor door;
+    /* 0x000 */ KnobDoorActor knobDoor;
     /* 0x1A4 */ u8 doorType;
     /* 0x1A5 */ u8 switchFlag;
     /* 0x1A6 */ u8 unk_1A6;

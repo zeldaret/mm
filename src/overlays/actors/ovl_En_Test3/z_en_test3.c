@@ -589,13 +589,13 @@ s32 func_80A3F384(EnTest3* this, PlayState* play) {
     EnDoor* door = (EnDoor*)func_80A3F2BC(play, this, ACTOR_EN_DOOR, ACTORCAT_DOOR, 55.0f, 20.0f);
     Vec3f offset;
 
-    if ((door != NULL) && !door->door.playOpenAnim &&
-        ((player->doorType == PLAYER_DOORTYPE_NONE) || (&door->door.dyna.actor != player->doorActor)) &&
-        Actor_ActorAIsFacingActorB(&this->player.actor, &door->door.dyna.actor, 0x3000)) {
-        Actor_OffsetOfPointInActorCoords(&door->door.dyna.actor, &offset, &this->player.actor.world.pos);
+    if ((door != NULL) && !door->knobDoor.playOpenAnim &&
+        ((player->doorType == PLAYER_DOORTYPE_NONE) || (&door->knobDoor.dyna.actor != player->doorActor)) &&
+        Actor_ActorAIsFacingActorB(&this->player.actor, &door->knobDoor.dyna.actor, 0x3000)) {
+        Actor_OffsetOfPointInActorCoords(&door->knobDoor.dyna.actor, &offset, &this->player.actor.world.pos);
         this->player.doorType = PLAYER_DOORTYPE_HANDLE;
         this->player.doorDirection = (offset.z >= 0.0f) ? 1.0f : -1.0f;
-        this->player.doorActor = &door->door.dyna.actor;
+        this->player.doorActor = &door->knobDoor.dyna.actor;
         this->player.csId = CS_ID_NONE;
         return true;
     }

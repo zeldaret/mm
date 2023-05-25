@@ -14888,8 +14888,8 @@ void func_8084E034(Player* this, PlayState* play) {
         Player_StopCutscene(this);
         play->func_18780(this, play);
     } else if (sp38 && PlayerAnimation_OnFrame(&this->skelAnime, 15.0f)) {
-        s16 doorRot =
-            (this->doorDirection < 0) ? doorActor->door.dyna.actor.world.rot.x : doorActor->door.dyna.actor.world.rot.z;
+        s16 doorRot = (this->doorDirection < 0) ? doorActor->knobDoor.dyna.actor.world.rot.x
+                                                : doorActor->knobDoor.dyna.actor.world.rot.z;
 
         if (doorRot != 0) {
             func_808354A4(play, doorRot - 1, false);

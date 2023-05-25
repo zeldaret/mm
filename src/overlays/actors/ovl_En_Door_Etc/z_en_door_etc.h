@@ -11,7 +11,7 @@ struct EnDoorEtc;
 typedef void (*EnDoorEtcActionFunc)(struct EnDoorEtc*, PlayState*);
 
 typedef struct EnDoorEtc {
-    /* 0x000 */ KnobDoorActor door;
+    /* 0x000 */ KnobDoorActor knobDoor;
     /* 0x1A4 */ s16 angle;
     /* 0x1A6 */ s16 timer;
     /* 0x1A8 */ ColliderCylinder collider;

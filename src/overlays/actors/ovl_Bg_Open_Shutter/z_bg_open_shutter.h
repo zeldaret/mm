@@ -9,7 +9,7 @@ struct BgOpenShutter;
 typedef void (*BgOpenShutterActionFunc)(struct BgOpenShutter*, PlayState*);
 
 typedef struct BgOpenShutter {
-    /* 0x000 */ SlidingDoorActor door;
+    /* 0x000 */ SlidingDoorActor slidingDoor;
     /* 0x160 */ BgOpenShutterActionFunc actionFunc;
     /* 0x164 */ s32 unk_164;
 } BgOpenShutter; // size = 0x168
