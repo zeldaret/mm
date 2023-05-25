@@ -6313,11 +6313,11 @@ s32 func_80836DC0(PlayState* play, Player* this) {
 }
 
 void Player_RequestQuake(PlayState* play, u16 speed, s16 y, s16 duration) {
-    s16 index = Quake_Request(Play_GetCamera(play, CAM_ID_MAIN), QUAKE_TYPE_3);
+    s16 quakeIndex = Quake_Request(Play_GetCamera(play, CAM_ID_MAIN), QUAKE_TYPE_3);
 
-    Quake_SetSpeed(index, speed);
-    Quake_SetPerturbations(index, y, 0, 0, 0);
-    Quake_SetDuration(index, duration);
+    Quake_SetSpeed(quakeIndex, speed);
+    Quake_SetPerturbations(quakeIndex, y, 0, 0, 0);
+    Quake_SetDuration(quakeIndex, duration);
 }
 
 FallImpactInfo sFallImpactInfos[] = {
