@@ -9619,8 +9619,7 @@ s32 func_8083FE38(Player* this, PlayState* play) {
     return func_80838A90(this, play) || func_808391D8(this, play) || func_8083D23C(this, play);
 }
 
-// Player_RumbleAndPlaySfx?
-void func_8083FE90(PlayState* play, Player* this, u16 sfxId) {
+void Player_RequestQuakeAndRumble(PlayState* play, Player* this, u16 sfxId) {
     Player_RequestQuake(play, 27767, 7, 20);
     Player_RequestRumble(play, this, 255, 20, 150, SQ(0));
     Player_PlaySfx(this, sfxId);
@@ -9749,7 +9748,7 @@ s32 func_808401F4(PlayState* play, Player* this) {
                                     DynaPolyActor* temp_v0;
 
                                     func_8082DF2C(play);
-                                    func_8083FE90(play, this, NA_SE_IT_HAMMER_HIT);
+                                    Player_RequestQuakeAndRumble(play, this, NA_SE_IT_HAMMER_HIT);
                                     if (this->transformation == PLAYER_FORM_GORON) {
                                         Actor_SetPlayerImpact(play, PLAYER_IMPACT_BONK, 2, 100.0f,
                                                               &this->actor.world.pos);
@@ -18366,7 +18365,7 @@ void func_80857AEC(PlayState* play, Player* this) {
         if (this->unk_B86[1] == 0) {
             if (this->unk_AE7 == 1) {
                 this->unk_AE7 = 2;
-                func_8083FE90(play, this, NA_SE_PL_GORON_PUNCH);
+                Player_RequestQuakeAndRumble(play, this, NA_SE_PL_GORON_PUNCH);
                 play->actorCtx.unk2 = 4;
                 EffectSsBlast_SpawnWhiteShockwave(play, &this->actor.world.pos, &gZeroVec3f, &gZeroVec3f);
                 this->unk_AE8 = 0;

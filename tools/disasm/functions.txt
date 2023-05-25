@@ -4571,7 +4571,7 @@
     0x8083FCF0:("func_8083FCF0",),
     0x8083FD80:("func_8083FD80",),
     0x8083FE38:("func_8083FE38",),
-    0x8083FE90:("func_8083FE90",),
+    0x8083FE90:("Player_RequestQuakeAndRumble",),
     0x8083FEF4:("func_8083FEF4",),
     0x8083FF30:("func_8083FF30",),
     0x8083FFEC:("func_8083FFEC",),
