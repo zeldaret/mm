@@ -158,19 +158,19 @@ s32 FaultDrawer_ColorToPrintColor(u16 color) {
 }
 
 void FaultDrawer_UpdatePrintColor(void) {
-    s32 idx;
+    s32 index;
 
     if (sFaultDrawerInstance->osSyncPrintfEnabled) {
         osSyncPrintf(VT_RST);
 
-        idx = FaultDrawer_ColorToPrintColor(sFaultDrawerInstance->foreColor);
-        if (idx >= 0 && idx < 8) {
-            osSyncPrintf(VT_SGR("3%d"), idx);
+        index = FaultDrawer_ColorToPrintColor(sFaultDrawerInstance->foreColor);
+        if ((index >= 0) && (index < 8)) {
+            osSyncPrintf(VT_SGR("3%d"), index);
         }
 
-        idx = FaultDrawer_ColorToPrintColor(sFaultDrawerInstance->backColor);
-        if (idx >= 0 && idx < 8) {
-            osSyncPrintf(VT_SGR("4%d"), idx);
+        index = FaultDrawer_ColorToPrintColor(sFaultDrawerInstance->backColor);
+        if ((index >= 0) && (index < 8)) {
+            osSyncPrintf(VT_SGR("4%d"), index);
         }
     }
 }
