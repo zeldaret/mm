@@ -1,3 +1,3 @@
-#include "global.h"
+#include "buffers.h"
 
 GfxPool gGfxPools[2];

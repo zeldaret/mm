@@ -128,7 +128,7 @@ void ObjKibako2_SpawnSkulltula(ObjKibako2* this, PlayState* play) {
         if (skulltula != NULL) {
             skulltula->parent = &this->dyna.actor;
             skulltula->velocity.y = 13.0f;
-            skulltula->speedXZ = 0.0f;
+            skulltula->speed = 0.0f;
         }
     }
 }
@@ -211,7 +211,7 @@ void ObjKibako2_Idle(ObjKibako2* this, PlayState* play) {
         ObjKibako2_Break(this, play);
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->dyna.actor.world.pos, 20, NA_SE_EV_WOODBOX_BREAK);
         this->dyna.actor.flags |= ACTOR_FLAG_10;
-        func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+        DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
         this->dyna.actor.draw = NULL;
         this->actionFunc = ObjKibako2_Kill;
     } else if (this->dyna.actor.xzDistToPlayer < 600.0f) {
@@ -233,7 +233,7 @@ void ObjKibako2_Update(Actor* thisx, PlayState* play) {
 
     if (this->skulltulaNoiseTimer >= 0) {
         if (this->skulltulaNoiseTimer == 0) {
-            Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EN_STALGOLD_ROLL);
+            Actor_PlaySfx(&this->dyna.actor, NA_SE_EN_STALGOLD_ROLL);
             if (Rand_ZeroOne() < 0.1f) {
                 this->skulltulaNoiseTimer = Rand_S16Offset(40, 80);
             } else {

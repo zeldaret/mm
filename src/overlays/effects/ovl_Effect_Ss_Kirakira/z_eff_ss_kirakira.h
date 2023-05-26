@@ -17,6 +17,4 @@ typedef struct {
     /* 0x38 */ u8 updateMode;
 } EffectSsKirakiraInitParams; // size = 0x3C
 
-extern const EffectSsInit Effect_Ss_Kirakira_InitVars;
-
 #endif

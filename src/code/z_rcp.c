@@ -778,19 +778,19 @@ Gfx* Gfx_SetFog(Gfx* gfx, s32 r, s32 g, s32 b, s32 a, s32 n, s32 f) {
 
     if (n >= 997) {
         if (n >= 1000) {
-            gSPFogFactor(gfx + 1, 0, 0); // gSPFogPosition(gfx++, ?, ?)
+            gSPFogFactor(&gfx[1], 0, 0); // gSPFogPosition(gfx++, ?, ?)
         } else {
-            gSPFogFactor(gfx + 1, 0x7FFF, 0x8100); // gSPFogPosition(gfx++, ?, ?)
+            gSPFogFactor(&gfx[1], 0x7FFF, 0x8100); // gSPFogPosition(gfx++, ?, ?)
         }
     } else {
         if (n < 0) {
-            gSPFogFactor(gfx + 1, 0, 255); // gSPFogPosition(gfx++, ?, ?)
+            gSPFogFactor(&gfx[1], 0, 255); // gSPFogPosition(gfx++, ?, ?)
         } else {
-            gSPFogPosition(gfx + 1, n, f);
+            gSPFogPosition(&gfx[1], n, f);
         }
     }
 
-    return gfx + 2;
+    return &gfx[2];
 }
 
 Gfx* Gfx_SetFogWithSync(Gfx* gfx, s32 r, s32 g, s32 b, s32 a, s32 n, s32 f) {
@@ -1299,7 +1299,7 @@ void func_8012CF0C(GraphicsContext* gfxCtx, s32 clearFb, s32 clearZb, u8 r, u8 g
 }
 
 void func_8012D374(GraphicsContext* gfxCtx, u8 r, u8 g, u8 b) {
-    if ((R_PAUSE_BG_PRERENDER_STATE <= PAUSE_BG_PRERENDER_SETUP) && (D_801F6D10 < 2)) {
+    if ((R_PAUSE_BG_PRERENDER_STATE <= PAUSE_BG_PRERENDER_SETUP) && (gTransitionTileState <= TRANS_TILE_SETUP)) {
         func_8012CF0C(gfxCtx, true, true, r, g, b);
     } else {
         func_8012CF0C(gfxCtx, false, false, r, g, b);

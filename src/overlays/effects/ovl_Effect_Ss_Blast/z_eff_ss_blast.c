@@ -26,7 +26,7 @@ u32 EffectSsBlast_Init(PlayState* play, u32 index, EffectSs* this, void* initPar
 void EffectSsBlast_Update(PlayState* play, u32 index, EffectSs* this);
 void EffectSsBlast_Draw(PlayState* play, u32 index, EffectSs* this);
 
-const EffectSsInit Effect_Ss_Blast_InitVars = {
+EffectSsInit Effect_Ss_Blast_InitVars = {
     EFFECT_SS_BLAST,
     EffectSsBlast_Init,
 };
@@ -70,7 +70,7 @@ void EffectSsBlast_Draw(PlayState* play, u32 index, EffectSs* this) {
 
     func_8012C2DC(play->state.gfxCtx);
     gDPSetEnvColor(POLY_XLU_DISP++, this->rEnvColorR, this->rEnvColorG, this->rEnvColorB, this->rEnvColorA);
-    func_801691F0(play, &mf, &this->pos);
+    Play_GetFloorSurface(play, &mf, &this->pos);
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, this->rPrimColorR, this->rPrimColorG, this->rPrimColorB, this->rPrimColorA);
     Matrix_Put(&mf);
     Matrix_Scale(radius, radius, radius, MTXMODE_APPLY);

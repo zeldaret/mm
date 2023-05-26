@@ -75,7 +75,7 @@ void BgLadder_Init(Actor* thisx, PlayState* play) {
     } else {
         // Otherwise, the ladder doesn't draw; wait for the flag to be set
         this->alpha = 5;
-        func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+        DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
         this->dyna.actor.draw = NULL;
         this->action = BgLadder_Wait;
     }
@@ -90,20 +90,20 @@ void BgLadder_Destroy(Actor* thisx, PlayState* play) {
 void BgLadder_Wait(BgLadder* this, PlayState* play) {
     // Wait for the flag to be set, then trigger the cutscene
     if (Flags_GetSwitch(play, this->switchFlag)) {
-        ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+        CutsceneManager_Queue(this->dyna.actor.csId);
         this->action = BgLadder_StartCutscene;
     }
 }
 
 void BgLadder_StartCutscene(BgLadder* this, PlayState* play) {
     // Trigger the cutscene, then make the ladder fade in
-    if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
+    if (CutsceneManager_IsNext(this->dyna.actor.csId)) {
+        CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
         this->dyna.actor.draw = BgLadder_Draw;
-        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_SECRET_LADDER_APPEAR);
+        Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_SECRET_LADDER_APPEAR);
         this->action = BgLadder_FadeIn;
     } else {
-        ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+        CutsceneManager_Queue(this->dyna.actor.csId);
     }
 }
 
@@ -112,8 +112,8 @@ void BgLadder_FadeIn(BgLadder* this, PlayState* play) {
     this->alpha += 5;
     if (this->alpha >= 255) {
         this->alpha = 255;
-        ActorCutscene_Stop(this->dyna.actor.cutscene);
-        func_800C6314(play, &play->colCtx.dyna, this->dyna.bgId);
+        CutsceneManager_Stop(this->dyna.actor.csId);
+        DynaPoly_EnableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
         this->dyna.actor.flags &= ~ACTOR_FLAG_10; // always update = off
         this->action = BgLadder_DoNothing;
     }

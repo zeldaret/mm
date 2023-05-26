@@ -92,7 +92,7 @@ void BgOpenShutter_Init(Actor* thisx, PlayState* play) {
     BgOpenShutter* this = THIS;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
     DynaPolyActor_LoadMesh(play, &this->dyna, &object_open_obj_Colheader_001640);
     this->actionFunc = func_80ACAD88;
 }
@@ -111,7 +111,7 @@ void func_80ACAD88(BgOpenShutter* this, PlayState* play) {
     if (this->unk_15C != 0) {
         Player* player = GET_PLAYER(play);
 
-        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_SLIDE_DOOR_OPEN);
+        Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_SLIDE_DOOR_OPEN);
         Camera_ChangeDoorCam(play->cameraPtrs[CAM_ID_MAIN], &this->dyna.actor, player->unk_3BA, 0.0f, 12, 15, 10);
         this->unk_164 = 0;
         this->actionFunc = func_80ACAE5C;
@@ -136,7 +136,7 @@ void func_80ACAE5C(BgOpenShutter* this, PlayState* play) {
         this->unk_164++;
     }
     if (this->unk_164 >= 10) {
-        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_SLIDE_DOOR_CLOSE);
+        Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_SLIDE_DOOR_CLOSE);
         this->actionFunc = func_80ACAEF0;
     }
 }
@@ -149,12 +149,12 @@ void func_80ACAEF0(BgOpenShutter* this, PlayState* play) {
     if (Math_StepToF(&this->dyna.actor.world.pos.y, this->dyna.actor.home.pos.y, this->dyna.actor.velocity.y)) {
         this->dyna.actor.floorHeight = this->dyna.actor.home.pos.y;
         Actor_SpawnFloorDustRing(play, &this->dyna.actor, &this->dyna.actor.world.pos, 60.0f, 10, 8.0f, 500, 10, true);
-        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_BIGWALL_BOUND);
+        Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_BIGWALL_BOUND);
 
-        quakeIndex = Quake_Add(Play_GetCamera(play, CAM_ID_MAIN), QUAKE_TYPE_3);
+        quakeIndex = Quake_Request(Play_GetCamera(play, CAM_ID_MAIN), QUAKE_TYPE_3);
         Quake_SetSpeed(quakeIndex, -32536);
-        Quake_SetQuakeValues(quakeIndex, 2, 0, 0, 0);
-        Quake_SetCountdown(quakeIndex, 10);
+        Quake_SetPerturbations(quakeIndex, 2, 0, 0, 0);
+        Quake_SetDuration(quakeIndex, 10);
 
         Rumble_Request(this->dyna.actor.xyzDistToPlayerSq, 180, 20, 100);
 
@@ -166,20 +166,20 @@ void func_80ACAEF0(BgOpenShutter* this, PlayState* play) {
 void BgOpenShutter_Update(Actor* thisx, PlayState* play2) {
     BgOpenShutter* this = THIS;
     PlayState* play = play2;
-    s32 index;
+    s32 cueChannel;
 
-    if (Cutscene_CheckActorAction(play, 0x7C)) {
-        index = Cutscene_GetActorActionIndex(play, 0x7C);
-        if (play->csCtx.actorActions[index]->action == BGOPENSHUTTER_DOOR_OPEN) {
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_124)) {
+        cueChannel = Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_124);
+        if (play->csCtx.actorCues[cueChannel]->id == BGOPENSHUTTER_DOOR_OPEN) {
             if (this->actionFunc == func_80ACAD88) {
-                Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_SLIDE_DOOR_OPEN);
+                Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_SLIDE_DOOR_OPEN);
                 this->actionFunc = func_80ACAE5C;
                 this->dyna.actor.velocity.y = 0.0f;
             }
             this->unk_164 = 0;
-        } else if (play->csCtx.actorActions[index]->action == BGOPENSHUTTER_DOOR_CLOSED) {
+        } else if (play->csCtx.actorCues[cueChannel]->id == BGOPENSHUTTER_DOOR_CLOSED) {
             if (this->actionFunc == func_80ACAE5C) {
-                Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_SLIDE_DOOR_CLOSE);
+                Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_SLIDE_DOOR_CLOSE);
                 this->actionFunc = func_80ACAEF0;
             }
         }

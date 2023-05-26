@@ -39,7 +39,7 @@ static Color_RGBA8 sEnvColors[] = {
     { 150, 150, 150, 0 },
 };
 
-const EffectSsInit Effect_Ss_Dt_Bubble_InitVars = {
+EffectSsInit Effect_Ss_Dt_Bubble_InitVars = {
     EFFECT_SS_DT_BUBBLE,
     EffectSsDtBubble_Init,
 };

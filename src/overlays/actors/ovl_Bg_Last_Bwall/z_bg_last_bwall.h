@@ -22,7 +22,7 @@ typedef struct BgLastBwall {
     /* 0x160 */ ColliderTris colliderTris;
     /* 0x180 */ ColliderTrisElement colliderTrisElement[2];
     /* 0x238 */ u8 type;
-    /* 0x23A */ s16 cutscenes[1];
+    /* 0x23A */ s16 csIdList[1];
 } BgLastBwall; // size = 0x23C
 
 #endif // Z_BG_LAST_BWALL_H

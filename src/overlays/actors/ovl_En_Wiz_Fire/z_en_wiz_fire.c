@@ -8,7 +8,7 @@
 #include "overlays/actors/ovl_En_Wiz/z_en_wiz.h"
 #include "objects/object_wiz/object_wiz.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_8000000)
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_CANT_LOCK_ON)
 
 #define THIS ((EnWizFire*)thisx)
 
@@ -206,15 +206,15 @@ void EnWiz_MoveMagicProjectile(EnWizFire* this, PlayState* play) {
     Math_ApproachF(&this->scale, this->targetScale, 0.2f, 0.01f);
 
     if (this->wallCheckTimer == 0) {
-        if ((this->actor.bgCheckFlags & 8) && (this->type == EN_WIZ_FIRE_TYPE_MAGIC_PROJECTILE) && (this->timer != 0) &&
-            (this->actor.bgCheckFlags & 8)) {
+        if ((this->actor.bgCheckFlags & BGCHECKFLAG_WALL) && (this->type == EN_WIZ_FIRE_TYPE_MAGIC_PROJECTILE) &&
+            (this->timer != 0) && (this->actor.bgCheckFlags & BGCHECKFLAG_WALL)) {
             sPoolHitByIceArrow = false;
             this->timer = 0;
             this->targetScale = 0.0f;
         }
     }
 
-    if ((this->actor.bgCheckFlags & 1) && (this->poolTimer == 0)) {
+    if ((this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) && (this->poolTimer == 0)) {
         s32 i;
         s16 arcingProjectileRotY;
         s32 pad;
@@ -260,13 +260,13 @@ void EnWiz_MoveMagicProjectile(EnWizFire* this, PlayState* play) {
                         arcingProjectileRotY += BINANG_ADD((s32)randPlusMinusPoint5Scaled(0x1000), 0x3333);
                     }
 
-                    Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_BOMB_EXPLOSION);
+                    Actor_PlaySfx(&this->actor, NA_SE_IT_BOMB_EXPLOSION);
                     this->poolTimer = Rand_S16Offset(70, 30);
                     if (this->poolTimer != 0) {
-                        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_WIZ_EXP - SFX_FLAG);
+                        Actor_PlaySfx(&this->actor, NA_SE_EN_WIZ_EXP - SFX_FLAG);
                     }
                 } else if (this->poolTimer != 0) {
-                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
+                    Actor_PlaySfx(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
                 }
 
                 Math_Vec3f_Copy(&this->actor.velocity, &gZeroVec3f);
@@ -291,7 +291,7 @@ void EnWiz_MoveMagicProjectile(EnWizFire* this, PlayState* play) {
         }
 
         if (Player_HasMirrorShieldEquipped(play) && (this->collider.base.atFlags & AT_BOUNCED)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_SHIELD_REFLECT_MG);
+            Actor_PlaySfx(&this->actor, NA_SE_IT_SHIELD_REFLECT_MG);
             this->collider.base.atFlags &= ~(AT_TYPE_ENEMY | AT_BOUNCED | AT_HIT);
             this->collider.base.atFlags |= AT_TYPE_PLAYER;
             this->collider.info.toucher.dmgFlags = 0x20;
@@ -351,7 +351,7 @@ void EnWiz_SmallFlame(EnWizFire* this, PlayState* play) {
     }
 
     if (this->timer != 0) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BURN_OUT - SFX_FLAG);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_BURN_OUT - SFX_FLAG);
     }
 }
 
@@ -392,7 +392,7 @@ void EnWiz_Pool(EnWizFire* this, PlayState* play) {
             this->collider.dim.height = 30;
             this->collider.dim.yShift = 15;
             EnWizFire_InitializeEffect(this, &pos, &accel);
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
             return;
         }
 
@@ -426,7 +426,7 @@ void EnWiz_Pool(EnWizFire* this, PlayState* play) {
 
     if (this->isIceType == true) {
         Math_ApproachZeroF(&this->poolScale, 0.046f, 0.001f);
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
 
         if (!this->shouldPoolFadeOut) {
             if ((this->actor.parent != NULL) && (this->actor.parent->id == ACTOR_EN_WIZ) && (this->poolScale < 0.05f)) {
@@ -573,7 +573,9 @@ void EnWizFire_Update(Actor* thisx, PlayState* play2) {
     DECR(this->steamSpawnTimer);
     DECR(this->poolTimer);
 
-    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 5.0f, 10, 0x1D);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 5.0f, 10,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                UPDBGCHECKINFO_FLAG_10);
 
     if ((this->hitByIceArrow || sPoolHitByIceArrow) && (this->steamSpawnTimer == 0)) {
         Vec3f accel;
@@ -625,7 +627,7 @@ void EnWizFire_Update(Actor* thisx, PlayState* play2) {
     if (this->collider.base.atFlags & AT_HIT) {
         this->collider.base.atFlags &= ~AT_HIT;
         if (this->type == EN_WIZ_FIRE_TYPE_MAGIC_PROJECTILE) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_WIZ_LAUGH2);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_WIZ_LAUGH2);
             if (player->invincibilityTimer > 0) {
                 player->invincibilityTimer += 40;
                 if (this->isIceType) {

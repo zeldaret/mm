@@ -73,12 +73,12 @@
         <!-- Corridor -->
         <DList Name="gClockTowerCorridorFoliageDL" Offset="0x129D0" />
         <DList Name="gClockTowerCorridorDL" Offset="0x12DA0" /> <!-- Original name is "w2_hineri_model" ("twist; spin") -->
-        <Collision Name="gClockTowerCorridorCol" Offset="0x142E8" />
+        <Collision Name="gClockTowerCorridorCol" Offset="0x142E8" /> <!-- Original name is "w2_hineri_bgdatainfo" -->
         
         <!-- Organ -->
         <DList Name="gClockTowerOrganPipesDL" Offset="0x15F30" /> <!-- Original name is "w2_piano_modelT" -->
         <DList Name="gClockTowerOrganDL" Offset="0x160A0" /> <!-- Original name is "w2_piano_model" -->
-        <Collision Name="gClockTowerOrganCol" Offset="0x16E70" />
+        <Collision Name="gClockTowerOrganCol" Offset="0x16E70" /> <!-- Original name is "w2_piano_bgdatainfo" -->
         
         <!-- CenterCog -->
         <DList Name="gClockTowerEmpty2DL" Offset="0x17010" /> <!-- Original name is "w2_shaft_modelT" -->
@@ -86,15 +86,15 @@
         
         <!-- StoneDoorMain -->
         <DList Name="gClockTowerStoneDoorMainDL" Offset="0x17220" /> <!-- Original name is "w2_shatter_higashi_model" ("higashi" = "east") -->
-        <Collision Name="gClockTowerStoneDoorMainCol" Offset="0x17410" />
+        <Collision Name="gClockTowerStoneDoorMainCol" Offset="0x17410" /> <!-- Original name is "w2_shatter_higashi_bgdatainfo" -->
         
         <!-- StoneDoor -->
         <DList Name="gClockTowerStoneDoorDL" Offset="0x174E0" /> <!-- Original name is "w2_shatter_nishi_model" ("nishi" = "west") -->
-        <Collision Name="gClockTowerStoneDoorCol" Offset="0x17650" />
+        <Collision Name="gClockTowerStoneDoorCol" Offset="0x17650" /> <!-- Original name is "w2_shatter_nishi_bgdatainfo" -->
         
         <!-- WaterWheel -->
         <DList Name="gClockTowerEmpty3DL" Offset="0x18110" /> <!-- Original name is "w2_suisha_modelT" ("water wheel") -->
         <DList Name="gClockTowerWaterWheelDL" Offset="0x18118" /> <!-- Original name is "w2_suisha_model" -->
-        <Collision Name="gClockTowerWaterWheelCol" Offset="0x18588" />
+        <Collision Name="gClockTowerWaterWheelCol" Offset="0x18588" /> <!-- Original name is "w2_suisha_bgdatainfo" -->
     </File>
 </Root>

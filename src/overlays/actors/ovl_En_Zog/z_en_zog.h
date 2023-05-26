@@ -27,11 +27,11 @@ typedef struct EnZog {
     /* 0x300 */ s16 unk_300;
     /* 0x302 */ s16 unk_302;
     /* 0x304 */ s16 unk_304;
-    /* 0x306 */ s16 unk_306;
+    /* 0x306 */ s16 cueId;
     /* 0x308 */ s16 unk_308;
     /* 0x30A */ u16 unk_30A;
-    /* 0x30C */ s16 unk_30C[7];
-    /* 0x31A */ s16 unk_31A;
+    /* 0x30C */ s16 csIdList[7];
+    /* 0x31A */ s16 csIdIndex;
     /* 0x31C */ s16 unk_31C;
     /* 0x31E */ s16 unk_31E;
     /* 0x320 */ s16 unk_320;

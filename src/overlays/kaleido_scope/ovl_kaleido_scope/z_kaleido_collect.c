@@ -62,9 +62,6 @@ s16 sQuestRemainsEnvBlue[] = {
     150, // Unused
 };
 
-#ifdef NON_EQUIVALENT
-// TODO: is actually NON_MATCHING, update once `z_kaleido_scope_NES.c` is decompiled
-// A single small regalloc at the first `Gfx_DrawTexQuadIA8` for the heart piece count (see `gItemIcons`)
 void KaleidoScope_DrawQuestStatus(PlayState* play) {
     static s16 sQuestRemainsColorTimer = 20;
     static s16 sQuestRemainsColorTimerIndex = 0;
@@ -135,10 +132,11 @@ void KaleidoScope_DrawQuestStatus(PlayState* play) {
     s16 k;
     s16 skullTokenDigits[3];
     u16 isDigitDrawn;
+    u32* questItemsPtr;
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    KaleidoScope_SetCursorVtx(pauseCtx, pauseCtx->cursorSlot[PAUSE_QUEST] * 4, pauseCtx->questVtx);
+    KaleidoScope_SetCursorVtxPos(pauseCtx, pauseCtx->cursorSlot[PAUSE_QUEST] * 4, pauseCtx->questVtx);
 
     gDPPipeSync(POLY_OPA_DISP++);
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, pauseCtx->alpha);
@@ -321,7 +319,12 @@ void KaleidoScope_DrawQuestStatus(PlayState* play) {
         }
     }
 
-    if ((GET_SAVE_INVENTORY_QUEST_ITEMS >> QUEST_HEART_PIECE_COUNT) != 0) {
+    //! FAKE: Used to load `0xF0000000` early
+    if ((GET_SAVE_INVENTORY_QUEST_ITEMS & 0xF0000000) != 0) {}
+    questItemsPtr = &gSaveContext.save.saveInfo.inventory.questItems;
+    if (1) {}
+
+    if ((*questItemsPtr >> QUEST_HEART_PIECE_COUNT) != 0) {
         gDPPipeSync(POLY_OPA_DISP++);
         gDPSetCombineLERP(POLY_OPA_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0,
                           PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
@@ -391,7 +394,7 @@ void KaleidoScope_DrawQuestStatus(PlayState* play) {
                         POLY_OPA_DISP, sOcarinaButtonTextures[sQuestSongPlayedOcarinaButtons[i]], 16, 16, 0);
                 }
             }
-        } else if (IS_PAUSE_MAIN_STATE_SAVE_PROMPT || (pauseCtx->mainState == PAUSE_MAIN_STATE_IDLE_CURSOR_ON_SONG)) {
+        } else if (IS_PAUSE_MAIN_STATE_SONG_PROMPT || (pauseCtx->mainState == PAUSE_MAIN_STATE_IDLE_CURSOR_ON_SONG)) {
             // Draw the buttons for playing a song
             sp1C8 = pauseCtx->ocarinaSongIndex;
             sp1CA = gOcarinaSongButtons[sp1C8].numButtons;
@@ -548,36 +551,6 @@ void KaleidoScope_DrawQuestStatus(PlayState* play) {
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
-#else
-s16 sQuestRemainsColorTimer = 20;
-s16 sQuestRemainsColorTimerIndex = 0;
-s16 sQuestHpPrimRed = 0;
-s16 sQuestHpPrimGreen = 0;
-s16 sQuestHpPrimBlue = 0;
-s16 sQuestHpPrimAlpha = 0;
-s16 sQuestHpColorTimer = 20;
-s16 sQuestHpPrimColorTargetIndex = 0;
-TexturePtr sOcarinaButtonTextures[] = {
-    gOcarinaATex, gOcarinaCDownTex, gOcarinaCRightTex, gOcarinaCLeftTex, gOcarinaCUpTex,
-};
-s16 sQuestSongsPrimRed[] = {
-    150, 255, 100, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-};
-s16 sQuestSongsPrimGreen[] = {
-    255, 80, 150, 160, 100, 240, 255, 255, 255, 255, 255, 255,
-};
-s16 sQuestSongsPrimBlue[] = {
-    100, 40, 255, 0, 255, 100, 255, 255, 255, 255, 255, 255,
-};
-
-// TODO: TexturePtr
-uintptr_t sQuestUpgradeTextures[][3] = {
-    { 0x08053000, 0x08054000, 0x08055000 },
-    { 0x08056000, 0x08057000, 0x08058000 },
-};
-u8 sQuestUpgrades[] = { UPG_QUIVER, UPG_BOMB_BAG };
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/KaleidoScope_DrawQuestStatus.s")
-#endif
 
 typedef enum {
     /* -3 */ CURSOR_TO_LEFT = -3, // Cursor on the "scroll to left page" position
@@ -652,7 +625,7 @@ void KaleidoScope_UpdateQuestCursor(PlayState* play) {
                     KaleidoScope_MoveCursorToSpecialPos(play, PAUSE_CURSOR_PAGE_LEFT);
                     pauseCtx->mainState = PAUSE_MAIN_STATE_IDLE;
                     if (interfaceCtx->unk_212 == 6) {
-                        func_8011552C(play, 0x15);
+                        func_8011552C(play, DO_ACTION_INFO);
                     }
                     return;
                 } else {
@@ -836,7 +809,7 @@ void KaleidoScope_UpdateQuestCursor(PlayState* play) {
                         pauseCtx->mainState = PAUSE_MAIN_STATE_IDLE_CURSOR_ON_SONG;
 
                         if (interfaceCtx->unk_212 != 6) {
-                            func_8011552C(play, 6);
+                            func_8011552C(play, DO_ACTION_DECIDE);
                         }
 
                         // Stop receiving input to play a song as mentioned above
@@ -849,7 +822,7 @@ void KaleidoScope_UpdateQuestCursor(PlayState* play) {
                         }
                     } else {
                         if (interfaceCtx->unk_212 != 6) {
-                            func_8011552C(play, 6);
+                            func_8011552C(play, DO_ACTION_DECIDE);
                         }
                         if (gSaveContext.buttonStatus[EQUIP_SLOT_A] != BTN_DISABLED) {
                             gSaveContext.buttonStatus[EQUIP_SLOT_A] = BTN_DISABLED;
@@ -860,11 +833,11 @@ void KaleidoScope_UpdateQuestCursor(PlayState* play) {
                 } else {
                     if ((cursor == QUEST_BOMBERS_NOTEBOOK) && (pauseCtx->cursorItem[PAUSE_QUEST] != PAUSE_ITEM_NONE)) {
                         if (interfaceCtx->unk_212 != 6) {
-                            func_8011552C(play, 6);
+                            func_8011552C(play, DO_ACTION_DECIDE);
                         }
                         pauseCtx->cursorColorSet = PAUSE_CURSOR_COLOR_SET_BLUE;
                     } else if (interfaceCtx->unk_212 == 6) {
-                        func_8011552C(play, 0x15);
+                        func_8011552C(play, DO_ACTION_INFO);
                     }
 
                     if ((pauseCtx->cursorItem[PAUSE_QUEST] != PAUSE_ITEM_NONE) && (msgCtx->msgLength == 0)) {

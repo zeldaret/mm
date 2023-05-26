@@ -424,11 +424,10 @@ beginseg
     name "code"
     compress
     after "dmadata"
-    include "build/src/code/z_en_a_keep.o"
     include "build/data/code/aspMain.data.o"
     include "build/data/code/gspS2DEX2.fifo.data.o"
     include "build/data/code/njpgdspMain.data.o"
-    include "build/data/code/code_801ADE60.data.o"
+    include "build/src/code/z_en_a_keep.o"
     include "build/data/code/code_801E3FA0.bss.o"
     include "build/src/code/z_en_item00.o"
     include "build/src/code/z_eff_blure.o"
@@ -459,12 +458,9 @@ beginseg
     include "build/src/code/z_debug.o"
     include "build/src/code/z_debug_display.o"
     include "build/src/code/z_debug_mode.o"
-    include "build/data/code/z_debug_mode.data.o"
-    include "build/data/code/z_debug_mode.bss.o"
     include "build/src/code/z_demo.o"
     include "build/src/code/z_draw.o"
     include "build/src/code/z_eff_footmark.o"
-    include "build/data/code/z_eff_footmark.data.o"
     include "build/src/code/z_sound_source.o"
     include "build/src/code/z_elf_message.o"
     include "build/src/code/z_en_hy_code.o"
@@ -474,7 +470,6 @@ beginseg
     include "build/data/code/z_eventmgr.bss.o"
     include "build/src/code/z_fcurve_data.o"
     include "build/src/code/z_fcurve_data_skelanime.o"
-    include "build/data/code/code_801BD830.data.o"
     include "build/src/code/z_fireobj.o"
     include "build/src/code/z_game_dlftbls.o"
     include "build/src/code/z_horse.o"
@@ -509,12 +504,11 @@ beginseg
     include "build/src/code/z_rcp.o"
     pad_text
     include "build/src/code/z_room.o"
-    include "build/data/code/z_room.data.o"
     include "build/src/code/code_8012EC80.o"
     pad_text
     include "build/data/code/code_801C2410.data.o"
     include "build/src/code/z_scene.o"
-    include "build/data/code/code_801C2730.data.o"
+    include "build/src/code/object_table.o"
     include "build/src/code/z_scene_proc.o"
     include "build/src/code/z_scene_table.o"
     include "build/src/code/z_schedule.o"
@@ -528,10 +522,11 @@ beginseg
     include "build/src/code/z_rumble.o"
     include "build/src/code/z_view.o"
     include "build/src/code/z_vimode.o"
-    include "build/data/code/z_vimode.data.o"
+    include "build/src/code/code_80140CE0.o"
+    include "build/data/code/code_80140CE0.data.o"
     include "build/src/code/code_80140E80.o"
     include "build/src/code/z_vismono.o"
-    include "build/src/code/code_801420C0.o"
+    include "build/src/code/z_viszbuf.o"
     include "build/src/code/z_vr_box.o"
     include "build/src/code/z_vr_box_draw.o"
     include "build/src/code/z_sram_NES.o"
@@ -543,27 +538,24 @@ beginseg
     include "build/src/code/z_message_staff.o"
     include "build/src/code/z_player_call.o"
     include "build/src/code/z_shrink_window.o"
-    include "build/src/code/db_camera.o"
-    include "build/data/code/db_camera.bss.o"
+    include "build/src/code/cutscene_camera.o"
+    include "build/data/code/cutscene_camera.bss.o"
     include "build/src/code/z_kaleido_manager.o"
     include "build/src/code/z_kaleido_scope_call.o"
     include "build/src/code/z_fbdemo_dlftbls.o"
     include "build/src/code/z_fbdemo.o"
-    include "build/data/code/z_fbdemo.data.o"
     include "build/src/code/z_fbdemo_fade.o"
     include "build/src/code/z_fbdemo_circle.o"
     include "build/src/code/z_overlay.o"
     include "build/src/code/z_play.o"
-    include "build/data/code/z_play.data.o"
-    include "build/data/code/z_play.bss.o"
     include "build/src/code/z_play_hireso.o"
     include "build/data/code/z_play_hireso.data.o"
     include "build/src/code/PreRender.o"
     include "build/data/code/PreRender.bss.o"
     include "build/src/code/TwoHeadGfxArena.o"
     include "build/src/code/TwoHeadArena.o"
-    include "build/src/code/code_80172BC0.o"
-    include "build/src/code/audioMgr.o"
+    include "build/src/code/audio_stop_all_sfx.o"
+    include "build/src/code/audio_thread_manager.o"
     include "build/src/code/title_setup.o"
     include "build/src/code/game.o"
     include "build/data/code/game.bss.o"
@@ -575,14 +567,14 @@ beginseg
     include "build/data/code/main.data.o"
     include "build/data/code/main.bss.o"
     include "build/src/code/padmgr.o"
-    include "build/data/code/padmgr.data.o"
     include "build/src/code/sched.o"
     include "build/src/code/speed_meter.o"
     include "build/data/code/speed_meter.data.o"
     include "build/data/code/speed_meter.bss.o"
+    include "build/src/code/su_mtx.o"
+    include "build/src/code/sys_cfb.o"
     include "build/data/code/sys_cfb.bss.o"
     include "build/src/code/sys_cmpdma.o"
-    include "build/data/code/sys_cmpdma.bss.o"
     include "build/src/code/sys_initial_check.o"
     include "build/src/code/sys_math.o"
     include "build/src/code/sys_math3d.o"
@@ -603,35 +595,33 @@ beginseg
     pad_text
     pad_text
     pad_text
-    include "build/src/code/audio/audio_data.o"
-    include "build/src/code/audio/audio_synthesis.o"
-    include "build/src/code/audio/audio_heap.o"
+    include "build/src/audio/lib/data.o"
+    include "build/src/audio/lib/synthesis.o"
+    include "build/src/audio/lib/heap.o"
     include "build/data/code/audio_heap.bss.o"
-    include "build/src/code/audio/audio_load.o"
-    include "build/src/code/audio/code_80192BE0.o"
-    include "build/data/code/code_80192BE0.data.o"
-    include "build/src/code/audio/audio_dcache.o"
-    include "build/src/code/audio/aisetnextbuf.o"
-    include "build/src/code/audio/audio_playback.o"
-    include "build/src/code/audio/audio_effects.o"
-    include "build/src/code/audio/audio_seqplayer.o"
+    include "build/src/audio/lib/load.o"
+    include "build/src/audio/lib/thread.o"
+    include "build/src/audio/lib/dcache.o"
+    include "build/src/audio/lib/aisetnextbuf.o"
+    include "build/src/audio/lib/playback.o"
+    include "build/src/audio/lib/effects.o"
+    include "build/src/audio/lib/seqplayer.o"
     include "build/data/code/audio_dramStack.data.o"
     include "build/asm/code/code_8019AE40.text.o" // handwritten
     pad_text
     include "build/asm/code/code_8019AEC0.text.o" // handwritten
-    include "build/src/code/audio/code_8019AF00.o"
-    include "build/src/code/audio/code_801A4EB0.o"
-    include "build/data/code/code_801A4EB0.data.o"
-    include "build/src/code/audio/code_801A51F0.o"
-    include "build/data/code/code_801A51F0.data.o"
-    include "build/data/code/code_801A51F0.bss.o"
+    include "build/src/audio/code_8019AF00.o"
+    include "build/src/audio/voice_external.o"
+    include "build/data/code/voice_external.data.o"
+    include "build/src/audio/voice_internal.o"
+    include "build/data/code/voice_internal.data.o"
+    include "build/data/code/voice_internal.bss.o"
     pad_text
-    include "build/src/code/audio/audio_sfx_params.o"
-    include "build/src/code/audio/code_801A5BD0.o"
-    include "build/src/code/audio/code_801A7B10.o"
-    include "build/data/code/code_801A7B10.data.o"
-    include "build/data/code/code_801A7B10.bss.o"
-    include "build/src/code/audio/audio_init_params.o"
+    include "build/src/audio/sfx_params.o"
+    include "build/src/audio/sfx.o"
+    include "build/src/audio/sequence.o"
+    include "build/data/code/sequence.bss.o"
+    include "build/src/audio/session_config.o"
     include "build/src/code/jpegutils.o"
     include "build/src/code/jpegdecoder.o"
     include_data_with_rodata "build/src/code/z_game_over.o"
@@ -965,8 +955,7 @@ beginseg
     name "ovl_En_Dekubaba"
     compress
     include "build/src/overlays/actors/ovl_En_Dekubaba/z_en_dekubaba.o"
-    include "build/data/ovl_En_Dekubaba/ovl_En_Dekubaba.data.o"
-    include "build/data/ovl_En_Dekubaba/ovl_En_Dekubaba.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Dekubaba/ovl_En_Dekubaba_reloc.o"
 endseg
 
 beginseg
@@ -1008,7 +997,8 @@ beginseg
     name "ovl_Item_B_Heart"
     compress
     include "build/src/overlays/actors/ovl_Item_B_Heart/z_item_b_heart.o"
-    include "build/src/overlays/actors/ovl_Item_B_Heart/ovl_Item_B_Heart_reloc.o"
+    include "build/data/ovl_Item_B_Heart/ovl_Item_B_Heart.data.o"
+    include "build/data/ovl_Item_B_Heart/ovl_Item_B_Heart.reloc.o"
 endseg
 
 beginseg
@@ -1043,7 +1033,8 @@ beginseg
     name "ovl_Bg_Keikoku_Spr"
     compress
     include "build/src/overlays/actors/ovl_Bg_Keikoku_Spr/z_bg_keikoku_spr.o"
-    include "build/src/overlays/actors/ovl_Bg_Keikoku_Spr/ovl_Bg_Keikoku_Spr_reloc.o"
+    include "build/data/ovl_Bg_Keikoku_Spr/ovl_Bg_Keikoku_Spr.data.o"
+    include "build/data/ovl_Bg_Keikoku_Spr/ovl_Bg_Keikoku_Spr.reloc.o"
 endseg
 
 beginseg
@@ -1979,8 +1970,7 @@ beginseg
     name "ovl_En_Si"
     compress
     include "build/src/overlays/actors/ovl_En_Si/z_en_si.o"
-    include "build/data/ovl_En_Si/ovl_En_Si.data.o"
-    include "build/data/ovl_En_Si/ovl_En_Si.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Si/ovl_En_Si_reloc.o"
 endseg
 
 beginseg
@@ -2123,7 +2113,8 @@ beginseg
     name "ovl_Door_Spiral"
     compress
     include "build/src/overlays/actors/ovl_Door_Spiral/z_door_spiral.o"
-    include "build/src/overlays/actors/ovl_Door_Spiral/ovl_Door_Spiral_reloc.o"
+    include "build/data/ovl_Door_Spiral/ovl_Door_Spiral.data.o"
+    include "build/data/ovl_Door_Spiral/ovl_Door_Spiral.reloc.o"
 endseg
 
 beginseg
@@ -2151,7 +2142,8 @@ beginseg
     name "ovl_Obj_Boyo"
     compress
     include "build/src/overlays/actors/ovl_Obj_Boyo/z_obj_boyo.o"
-    include "build/src/overlays/actors/ovl_Obj_Boyo/ovl_Obj_Boyo_reloc.o"
+    include "build/data/ovl_Obj_Boyo/ovl_Obj_Boyo.data.o"
+    include "build/data/ovl_Obj_Boyo/ovl_Obj_Boyo.reloc.o"
 endseg
 
 beginseg
@@ -2564,9 +2556,7 @@ beginseg
     name "ovl_En_Slime"
     compress
     include "build/src/overlays/actors/ovl_En_Slime/z_en_slime.o"
-    include "build/data/ovl_En_Slime/ovl_En_Slime.data.o"
-    include "build/data/ovl_En_Slime/ovl_En_Slime.bss.o"
-    include "build/data/ovl_En_Slime/ovl_En_Slime.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Slime/ovl_En_Slime_reloc.o"
 endseg
 
 beginseg
@@ -2971,11 +2961,7 @@ beginseg
     name "ovl_En_Tru"
     compress
     include "build/src/overlays/actors/ovl_En_Tru/z_en_tru.o"
-    #ifdef NON_MATCHING
-        include "build/src/overlays/actors/ovl_En_Tru/ovl_En_Tru_reloc.o"
-    #else
-        include "build/data/ovl_En_Tru/ovl_En_Tru.reloc.o"
-    #endif
+    include "build/src/overlays/actors/ovl_En_Tru/ovl_En_Tru_reloc.o"
 endseg
 
 beginseg
@@ -3344,7 +3330,8 @@ beginseg
     name "ovl_Bg_Lotus"
     compress
     include "build/src/overlays/actors/ovl_Bg_Lotus/z_bg_lotus.o"
-    include "build/src/overlays/actors/ovl_Bg_Lotus/ovl_Bg_Lotus_reloc.o"
+    include "build/data/ovl_Bg_Lotus/ovl_Bg_Lotus.data.o"
+    include "build/data/ovl_Bg_Lotus/ovl_Bg_Lotus.reloc.o"
 endseg
 
 beginseg
@@ -3431,8 +3418,7 @@ beginseg
     name "ovl_En_Stop_heishi"
     compress
     include "build/src/overlays/actors/ovl_En_Stop_heishi/z_en_stop_heishi.o"
-    include "build/data/ovl_En_Stop_heishi/ovl_En_Stop_heishi.data.o"
-    include "build/data/ovl_En_Stop_heishi/ovl_En_Stop_heishi.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Stop_heishi/ovl_En_Stop_heishi_reloc.o"
 endseg
 
 beginseg
@@ -3604,7 +3590,8 @@ beginseg
     name "ovl_Bg_Tobira01"
     compress
     include "build/src/overlays/actors/ovl_Bg_Tobira01/z_bg_tobira01.o"
-    include "build/src/overlays/actors/ovl_Bg_Tobira01/ovl_Bg_Tobira01_reloc.o"
+    include "build/data/ovl_Bg_Tobira01/ovl_Bg_Tobira01.data.o"
+    include "build/data/ovl_Bg_Tobira01/ovl_Bg_Tobira01.reloc.o"
 endseg
 
 beginseg
@@ -3822,7 +3809,9 @@ beginseg
     name "ovl_En_Invadepoh"
     compress
     include "build/src/overlays/actors/ovl_En_Invadepoh/z_en_invadepoh.o"
-    include "build/src/overlays/actors/ovl_En_Invadepoh/ovl_En_Invadepoh_reloc.o"
+    include "build/data/ovl_En_Invadepoh/ovl_En_Invadepoh.data.o"
+    include "build/data/ovl_En_Invadepoh/ovl_En_Invadepoh.bss.o"
+    include "build/data/ovl_En_Invadepoh/ovl_En_Invadepoh.reloc.o"
 endseg
 
 beginseg
@@ -4026,8 +4015,7 @@ beginseg
     name "ovl_En_Ge2"
     compress
     include "build/src/overlays/actors/ovl_En_Ge2/z_en_ge2.o"
-    include "build/data/ovl_En_Ge2/ovl_En_Ge2.data.o"
-    include "build/data/ovl_En_Ge2/ovl_En_Ge2.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Ge2/ovl_En_Ge2_reloc.o"
 endseg
 
 beginseg
@@ -4210,8 +4198,7 @@ beginseg
     name "ovl_En_Zod"
     compress
     include "build/src/overlays/actors/ovl_En_Zod/z_en_zod.o"
-    include "build/data/ovl_En_Zod/ovl_En_Zod.data.o"
-    include "build/data/ovl_En_Zod/ovl_En_Zod.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Zod/ovl_En_Zod_reloc.o"
 endseg
 
 beginseg
@@ -4896,8 +4883,7 @@ beginseg
     name "ovl_En_And"
     compress
     include "build/src/overlays/actors/ovl_En_And/z_en_and.o"
-    include "build/data/ovl_En_And/ovl_En_And.data.o"
-    include "build/data/ovl_En_And/ovl_En_And.reloc.o"
+    include "build/src/overlays/actors/ovl_En_And/ovl_En_And_reloc.o"
 endseg
 
 beginseg

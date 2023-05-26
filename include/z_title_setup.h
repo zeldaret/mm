@@ -1,5 +1,5 @@
-#ifndef Z64_TITLE_SETUP_H
-#define Z64_TITLE_SETUP_H
+#ifndef Z64TITLE_SETUP_H
+#define Z64TITLE_SETUP_H
 
 #include "global.h"
 
