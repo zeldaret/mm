@@ -602,7 +602,7 @@ void EnBaba_Talk(EnBaba* this, PlayState* play) {
                 play->msgCtx.stateTimer = 4;
                 if (this->stateFlags & BOMB_SHOP_LADY_STATE_AUTOTALK) {
                     if (CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
-                        if (play->msgCtx.bombersNotebookNewEventQueueSize == 0) {
+                        if (play->msgCtx.bombersNotebookEventQueueCount == 0) {
                             SET_WEEKEVENTREG(WEEKEVENTREG_81_02);
                             EnBaba_TriggerTransition(play, ENTRANCE(NORTH_CLOCK_TOWN, 7));
                             return;
@@ -625,7 +625,7 @@ void EnBaba_Talk(EnBaba* this, PlayState* play) {
             }
         }
     } else if (talkState == TEXT_STATE_DONE) {
-        if (Message_ShouldAdvance(play) && (play->msgCtx.bombersNotebookNewEventQueueSize == 0)) {
+        if (Message_ShouldAdvance(play) && (play->msgCtx.bombersNotebookEventQueueCount == 0)) {
             SET_WEEKEVENTREG(WEEKEVENTREG_81_02);
             EnBaba_TriggerTransition(play, ENTRANCE(NORTH_CLOCK_TOWN, 7));
         }

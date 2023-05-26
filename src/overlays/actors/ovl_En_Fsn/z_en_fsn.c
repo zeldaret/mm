@@ -1009,7 +1009,7 @@ void EnFsn_GiveItem(EnFsn* this, PlayState* play) {
 
 void EnFsn_SetupResumeInteraction(EnFsn* this, PlayState* play) {
     if (CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
-        if (play->msgCtx.bombersNotebookNewEventQueueSize == 0) {
+        if (play->msgCtx.bombersNotebookEventQueueCount == 0) {
             EnFsn_HandleSetupResumeInteraction(this, play);
         }
     } else {
@@ -1189,7 +1189,7 @@ void EnFsn_SetupEndInteraction(EnFsn* this, PlayState* play) {
 
     if (((talkState == TEXT_STATE_5) || (talkState == TEXT_STATE_DONE)) && Message_ShouldAdvance(play)) {
         if (CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
-            if (play->msgCtx.bombersNotebookNewEventQueueSize == 0) {
+            if (play->msgCtx.bombersNotebookEventQueueCount == 0) {
                 EnFsn_EndInteraction(this, play);
             } else {
                 play->msgCtx.msgMode = 0x43;
@@ -1261,7 +1261,7 @@ void EnFsn_AskCanBuyMore(EnFsn* this, PlayState* play) {
         }
     } else if (((talkState == TEXT_STATE_5) || (talkState == TEXT_STATE_DONE)) && Message_ShouldAdvance(play)) {
         if (CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
-            if (play->msgCtx.bombersNotebookNewEventQueueSize == 0) {
+            if (play->msgCtx.bombersNotebookEventQueueCount == 0) {
                 EnFsn_EndInteraction(this, play);
             } else {
                 play->msgCtx.msgMode = 0x43;
@@ -1308,7 +1308,7 @@ void EnFsn_AskCanBuyAterRunningOutOfItems(EnFsn* this, PlayState* play) {
         }
     } else if (((talkState == TEXT_STATE_5) || (talkState == TEXT_STATE_DONE)) && Message_ShouldAdvance(play)) {
         if (CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
-            if (play->msgCtx.bombersNotebookNewEventQueueSize == 0) {
+            if (play->msgCtx.bombersNotebookEventQueueCount == 0) {
                 EnFsn_EndInteraction(this, play);
             } else {
                 play->msgCtx.msgMode = 0x43;

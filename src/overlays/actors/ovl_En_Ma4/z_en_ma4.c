@@ -642,7 +642,7 @@ void EnMa4_DialogueHandler(EnMa4* this, PlayState* play) {
 
         case TEXT_STATE_DONE: // End conversation
             if (Message_ShouldAdvance(play)) {
-                if ((play->msgCtx.bombersNotebookNewEventQueueSize == 0) || !CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
+                if ((play->msgCtx.bombersNotebookEventQueueCount == 0) || !CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
                     EnMa4_SetupWait(this);
                 }
             }

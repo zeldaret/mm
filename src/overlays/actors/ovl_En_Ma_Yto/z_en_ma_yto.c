@@ -1073,7 +1073,7 @@ void EnMaYto_PostMilkRunWaitDialogueEnd(EnMaYto* this, PlayState* play) {
         }
     }
 
-    if (Message_GetState(&play->msgCtx) == TEXT_STATE_NONE && play->msgCtx.bombersNotebookNewEventQueueSize == 0) {
+    if (Message_GetState(&play->msgCtx) == TEXT_STATE_NONE && play->msgCtx.bombersNotebookEventQueueCount == 0) {
         EnMaYto_SetupPostMilkRunEnd(this);
     }
 }

@@ -2554,7 +2554,7 @@ asm/non_matchings/code/z_play/Play_IsDebugCamEnabled.s,Play_IsDebugCamEnabled,0x
 asm/non_matchings/code/z_play/func_8016A178.s,func_8016A178,0x8016A178,0x3C
 asm/non_matchings/code/z_play/Play_FillScreen.s,Play_FillScreen,0x8016A268,0x18
 asm/non_matchings/code/z_play/Play_Init.s,Play_Init,0x8016A2C8,0x252
-asm/non_matchings/code/z_play_hireso/BombersNotebook_TextureRectangle.s,BombersNotebook_TextureRectangle,0x8016AC10,0x83
+asm/non_matchings/code/z_play_hireso/BombersNotebook_DrawScisTexRect.s,BombersNotebook_DrawScisTexRect,0x8016AC10,0x83
 asm/non_matchings/code/z_play_hireso/BombersNotebook_DrawHeaders.s,BombersNotebook_DrawHeaders,0x8016AE1C,0x117
 asm/non_matchings/code/z_play_hireso/BombersNotebook_DrawColumns.s,BombersNotebook_DrawColumns,0x8016B278,0x8E
 asm/non_matchings/code/z_play_hireso/BombersNotebook_DrawEntries.s,BombersNotebook_DrawEntries,0x8016B4B0,0x3A5

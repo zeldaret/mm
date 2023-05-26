@@ -3040,7 +3040,7 @@
     0x8016A178:("Play_AssignPlayerCsIdsFromScene",),
     0x8016A268:("Play_FillScreen",),
     0x8016A2C8:("Play_Init",),
-    0x8016AC10:("BombersNotebook_TextureRectangle",),
+    0x8016AC10:("BombersNotebook_DrawScisTexRect",),
     0x8016AE1C:("BombersNotebook_DrawHeaders",),
     0x8016B278:("BombersNotebook_DrawColumns",),
     0x8016B4B0:("BombersNotebook_DrawEntries",),

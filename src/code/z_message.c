@@ -8,7 +8,7 @@
 #define DEFINE_PERSON(_enum, _photo, _description, _metEnum, metMessage, _metFlag) metMessage,
 #define DEFINE_EVENT(_enum, _icon, _colorFlag, _description, completedMessage, _completedFlag) completedMessage,
 
-u16 sBombersNotebookEventMessages[] = {
+u16 sBombersNotebookEventMessages[BOMBERS_NOTEBOOK_EVENT_MAX] = {
 #include "tables/bombers_notebook/person_table.h"
 #include "tables/bombers_notebook/event_table.h"
 };
@@ -19,7 +19,7 @@ u16 sBombersNotebookEventMessages[] = {
 #define DEFINE_PERSON(_enum, _photo, _description, _metEnum, _metMessage, metFlag) metFlag,
 #define DEFINE_EVENT(_enum, _icon, _colorFlag, _description, _completedMessage, completedFlag) completedFlag,
 
-u16 gBombersNotebookWeekEventFlags[] = {
+u16 gBombersNotebookWeekEventFlags[BOMBERS_NOTEBOOK_EVENT_MAX] = {
 #include "tables/bombers_notebook/person_table.h"
 #include "tables/bombers_notebook/event_table.h"
 };
@@ -41,8 +41,6 @@ s32 D_801D02F8[15] = { 0,1,2,3,4,0,1,0,0,0,0,0,1,1,0 };
 
 #endif
 
-extern u16 sBombersNotebookEventMessages[];
-extern u16 gBombersNotebookWeekEventFlags[];
 extern s16 D_801D02D8[];
 extern s32 D_801D02F8[];
 extern s16 D_801F6B0C;
@@ -391,14 +389,14 @@ void Message_BombersNotebookQueueEvent(PlayState* play, u8 event) {
 
     if (CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
         if (!CHECK_WEEKEVENTREG(gBombersNotebookWeekEventFlags[event])) {
-            msgCtx->bombersNotebookNewEventQueue[msgCtx->bombersNotebookNewEventQueueSize] = event;
-            msgCtx->bombersNotebookNewEventQueueSize++;
+            msgCtx->bombersNotebookEventQueue[msgCtx->bombersNotebookEventQueueCount] = event;
+            msgCtx->bombersNotebookEventQueueCount++;
         }
     } else if (event >= BOMBERS_NOTEBOOK_PERSON_MAX) {
         // Non MET events are processed even if the player does not have the notebook yet
         if (!CHECK_WEEKEVENTREG(gBombersNotebookWeekEventFlags[event])) {
-            msgCtx->bombersNotebookNewEventQueue[msgCtx->bombersNotebookNewEventQueueSize] = event;
-            msgCtx->bombersNotebookNewEventQueueSize++;
+            msgCtx->bombersNotebookEventQueue[msgCtx->bombersNotebookEventQueueCount] = event;
+            msgCtx->bombersNotebookEventQueueCount++;
         }
     }
 }
@@ -407,22 +405,22 @@ u32 func_80151C9C(PlayState* play) {
     MessageContext* msgCtx = &play->msgCtx;
 
     while (true) {
-        if (msgCtx->bombersNotebookNewEventQueueSize == 0) {
+        if (msgCtx->bombersNotebookEventQueueCount == 0) {
             return false;
         }
-        msgCtx->bombersNotebookNewEventQueueSize--;
+        msgCtx->bombersNotebookEventQueueCount--;
 
         if (!CHECK_WEEKEVENTREG(gBombersNotebookWeekEventFlags
-                                    [msgCtx->bombersNotebookNewEventQueue[msgCtx->bombersNotebookNewEventQueueSize]])) {
+                                    [msgCtx->bombersNotebookEventQueue[msgCtx->bombersNotebookEventQueueCount]])) {
             SET_WEEKEVENTREG(gBombersNotebookWeekEventFlags
-                                 [msgCtx->bombersNotebookNewEventQueue[msgCtx->bombersNotebookNewEventQueueSize]]);
+                                 [msgCtx->bombersNotebookEventQueue[msgCtx->bombersNotebookEventQueueCount]]);
 
             if ((sBombersNotebookEventMessages
-                     [msgCtx->bombersNotebookNewEventQueue[msgCtx->bombersNotebookNewEventQueueSize]] != 0) &&
+                     [msgCtx->bombersNotebookEventQueue[msgCtx->bombersNotebookEventQueueCount]] != 0) &&
                 CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
                 Message_ContinueTextbox(
                     play, sBombersNotebookEventMessages
-                              [msgCtx->bombersNotebookNewEventQueue[msgCtx->bombersNotebookNewEventQueueSize]]);
+                              [msgCtx->bombersNotebookEventQueue[msgCtx->bombersNotebookEventQueueCount]]);
                 play_sound(NA_SE_SY_SCHEDULE_WRITE);
                 return true;
             }
@@ -503,7 +501,7 @@ u8 Message_GetState(MessageContext* msgCtx) {
     if (msgCtx->msgMode == 0x40) {
         return TEXT_STATE_13;
     }
-    if ((msgCtx->msgMode == 0x43) && (msgCtx->stateTimer == 1) && (msgCtx->bombersNotebookNewEventQueueSize == 0)) {
+    if ((msgCtx->msgMode == 0x43) && (msgCtx->stateTimer == 1) && (msgCtx->bombersNotebookEventQueueCount == 0)) {
         return TEXT_STATE_CLOSING;
     }
 
