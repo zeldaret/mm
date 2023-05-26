@@ -6,6 +6,7 @@
 #include "libc/stdint.h"
 #include "io/controller.h"
 #include "tha.h"
+#include "padmgr.h"
 
 struct GraphicsContext;
 struct GameState;
