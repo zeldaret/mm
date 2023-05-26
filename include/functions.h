@@ -2228,11 +2228,11 @@ void func_8018450C(PlayState* play, SkeletonInfo* skeleton, Mtx* mtx, OverrideKe
 // char* func_801857D0(void);
 // void SysFlashrom_CheckFlashType(void);
 s32 SysFlashrom_InitFlash(void);
-s32 SysFlashrom_ReadData(void* addr, s32 pageNum, s32 pageCount);
-void SysFlashrom_CreateRequest(u8* arg0, u32 arg1, u32 arg2);
-s32 SysFlashrom_IsQueueFull(void);
-s32 SysFlashrom_DestroyThread(void);
-void func_80185F64(void* addr, u32 pageNum, u32 pageCount);
+s32 SysFlashrom_ReadData(void* addr, u32 pageNum, u32 pageCount);
+void SysFlashrom_WriteDataAsync(u8* addr, u32 pageNum, u32 pageCount);
+s32 SysFlashrom_IsBusy(void);
+s32 SysFlashrom_AwaitResult(void);
+void SysFlashrom_WriteDataSync(void* addr, u32 pageNum, u32 pageCount);
 s32 func_80185F90(u32 param_1);
 u32 osFlashGetAddr(u32 pageNum);
 OSPiHandle* osFlashReInit(u8 latency, u8 pulse, u8 pageSize, u8 relDuration, u32 start);

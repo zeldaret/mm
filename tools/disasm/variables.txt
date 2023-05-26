@@ -4195,7 +4195,7 @@
     0x801FBE04:("sCurrentMatrix","MtxF*","",0x4),
     0x801FBE10:("sFlashromMesgQueue","UNK_TYPE1","",0x1),
     0x801FBE28:("sFlashromMesg","UNK_TYPE1","",0x1),
-    0x801FBE2C:("sFlashromFlashIsGood","UNK_TYPE1","",0x1),
+    0x801FBE2C:("sFlashromIsInit","UNK_TYPE1","",0x1),
     0x801FBE30:("sFlashromVendor","UNK_TYPE4","",0x4),
     0x801FBE38:("sSysFlashromStack","u8","[4096]",0x1000),
     0x801FCE38:("sSysFlashromStackInfo","StackEntry","",0x1c),
