@@ -1,11 +1,11 @@
 #ifndef Z64_FILE_CHOOSE_H
 #define Z64_FILE_CHOOSE_H
 
+#include "global.h"
 #include "z64game.h"
 #include "z64message.h"
 #include "z64skybox.h"
 #include "z64view.h"
-#include "global.h"
 
 
 typedef struct FileSelectState {

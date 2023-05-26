@@ -1,9 +1,9 @@
 #ifndef Z64_TITLE_H
 #define Z64_TITLE_H
 
+#include "global.h"
 #include "z64game.h"
 #include "z64view.h"
-#include "global.h"
 
 typedef struct {
     /* 0x000 */ GameState state;

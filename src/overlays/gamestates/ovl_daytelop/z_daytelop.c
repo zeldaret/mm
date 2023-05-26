@@ -4,12 +4,12 @@
  * Description: "Dawn of ... day" screen
  */
 
+#include "global.h"
 #include "z_daytelop.h"
 #include "z64save.h"
 #include "z64shrink_window.h"
 #include "misc/daytelop_static/daytelop_static.h"
 #include "interface/icon_item_gameover_static/icon_item_gameover_static.h"
-#include "global.h"
 
 // unused
 UNK_TYPE D_808158E0[] = {
