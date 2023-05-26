@@ -259,7 +259,7 @@ void Fault_Sleep(u32 msec) {
 }
 
 void Fault_PadCallback(Input* input) {
-    Padmgr_GetInput2(input, false);
+    PadMgr_GetInput2(input, false);
 }
 
 void Fault_UpdatePadImpl(void) {
@@ -558,7 +558,7 @@ void Fault_WaitForButtonCombo(void) {
         do {
             Fault_Sleep(1000 / 60);
             Fault_UpdatePadImpl();
-        } while (!CHECK_BTN_ALL(input->press.button, 0x80));
+        } while (!CHECK_BTN_ALL(input->press.button, BTN_RESET));
     } while (!CHECK_BTN_ALL(input->cur.button, BTN_DLEFT | BTN_L | BTN_R | BTN_CRIGHT));
 }
 
@@ -920,8 +920,8 @@ void Fault_SetOptionsFromController3(void) {
     uintptr_t ra;
     uintptr_t sp;
 
-    // 0x80 is the "neutral reset". Corresponds to holding L+R and pressing S
-    if (CHECK_BTN_ALL(input3->press.button, 0x80)) {
+    // BTN_RESET is the "neutral reset". Corresponds to holding L+R and pressing S
+    if (CHECK_BTN_ALL(input3->press.button, BTN_RESET)) {
         faultCustomOptions = !faultCustomOptions;
     }
 
