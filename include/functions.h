@@ -2224,17 +2224,11 @@ void func_8018450C(PlayState* play, SkeletonInfo* skeleton, Mtx* mtx, OverrideKe
 // void func_801850A0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
 // void func_801853C8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
 // void func_80185460(void);
-<<<<<<< HEAD
-
 // void func_801857C0(void);
 // char* func_801857D0(void);
 // void SysFlashrom_CheckFlashType(void);
-=======
-//void Slowly_Main(SlowlyTask* slowly);
-//void Slowly_ThreadEntry(SlowlyTask* slowly);
-void Slowly_Start(SlowlyTask* slowly, void* stack, void (*callback)(), void* callbackArg0, void* callbackArg1);
-void Slowly_Stop(SlowlyTask* slowly);
->>>>>>> 59017bcd (WIP)
+void Slowly_Main(SlowlyTask* slowly);
+void Slowly_ThreadEntry(SlowlyTask* slowly);
 s32 SysFlashrom_InitFlash(void);
 s32 SysFlashrom_ReadData(void* addr, s32 pageNum, s32 pageCount);
 void SysFlashrom_CreateRequest(u8* arg0, u32 arg1, u32 arg2);
