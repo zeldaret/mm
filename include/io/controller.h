@@ -123,7 +123,7 @@
 #define CONT_ADDR_CRC_ER        0x04
 #define CONT_EEPROM_BUSY        0x80
 
-// Accesory detection
+// Accessory detection
 #define CONT_ADDR_DETECT    0x8000
 // Rumble
 #define CONT_ADDR_RUMBLE    0xC000
