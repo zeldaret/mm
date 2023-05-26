@@ -55,7 +55,7 @@ typedef struct GraphicsContext {
     /* 0x1B4 */ TwoHeadGfxArena work;
     /* 0x1C4 */ Gfx*        debugBuffer;
     /* 0x1C8 */ TwoHeadGfxArena debug;
-    /* 0x1D8 */ char        unk_1D8[0xAC];
+    /* 0x1D8 */ UNK_TYPE1 unk_1D8[0xAC];
     /* 0x284 */ OSViMode*   viMode;
     /* 0x288 */ void*       zbuffer;
     /* 0x28C */ char        unk_28C[0x1C];
