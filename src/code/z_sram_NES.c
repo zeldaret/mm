@@ -1666,7 +1666,7 @@ void func_80147020(SramContext* sramCtx) {
 
 void func_80147068(SramContext* sramCtx) {
     if (sramCtx->status == 2) {
-        if (func_80185EC4() != 0) {     // if task running
+        if (SysFlashrom_IsQueueFull() != 0) {     // if task running
             if (SysFlashrom_DestroyThread() == 0) { // wait for task done
                 // task success
                 sramCtx->status = 4;
@@ -1695,7 +1695,7 @@ void func_80147150(SramContext* sramCtx) {
 
 void func_80147198(SramContext* sramCtx) {
     if (sramCtx->status == 7) {
-        if (func_80185EC4() != 0) {     // Is task running
+        if (SysFlashrom_IsQueueFull() != 0) {     // Is task running
             if (SysFlashrom_DestroyThread() == 0) { // Wait for task done
                 SysFlashrom_CreateRequest(sramCtx->saveBuf, sramCtx->curPage + 0x80, sramCtx->numPages);
                 sramCtx->status = 8;
@@ -1705,7 +1705,7 @@ void func_80147198(SramContext* sramCtx) {
             }
         }
     } else if (sramCtx->status == 8) {
-        if (func_80185EC4() != 0) {     // Is task running
+        if (SysFlashrom_IsQueueFull() != 0) {     // Is task running
             if (SysFlashrom_DestroyThread() == 0) { // Wait for task done
                 sramCtx->status = 4;
             } else {

@@ -2974,7 +2974,7 @@ asm/non_matchings/code/sys_flashrom/func_80185BE4.s,func_80185BE4,0x80185BE4,0x1
 asm/non_matchings/code/sys_flashrom/func_80185C24.s,func_80185C24,0x80185C24,0x47
 asm/non_matchings/code/sys_flashrom/SysFlashrom_ThreadEntry.s,SysFlashrom_ThreadEntry,0x80185D40,0x27
 asm/non_matchings/code/sys_flashrom/SysFlashrom_CreateRequest.s,SysFlashrom_CreateRequest,0x80185DDC,0x3A
-asm/non_matchings/code/sys_flashrom/func_80185EC4.s,func_80185EC4,0x80185EC4,0x10
+asm/non_matchings/code/sys_flashrom/SysFlashrom_IsQueueFull.s,SysFlashrom_IsQueueFull,0x80185EC4,0x10
 asm/non_matchings/code/sys_flashrom/SysFlashrom_DestroyThread.s,SysFlashrom_DestroyThread,0x80185F04,0x18
 asm/non_matchings/code/sys_flashrom/func_80185F64.s,func_80185F64,0x80185F64,0xB
 asm/non_matchings/code/code_80185F90/func_80185F90.s,func_80185F90,0x80185F90,0x26
