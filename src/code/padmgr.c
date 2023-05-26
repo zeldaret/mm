@@ -30,8 +30,8 @@
  * `osContStartReadData` to receiving the data. By running this on a separate thread to the game state, work can be
  * done while waiting for this operation to complete.
  */
+
 #include "global.h"
-#include "io/controller.h"
 #include "ultra64/os_motor.h"
 
 #define PADMGR_RETRACE_MSG (1 << 0)
