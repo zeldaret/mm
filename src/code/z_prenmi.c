@@ -48,7 +48,7 @@ void PreNMI_Init(GameState* thisx) {
     this->state.main = PreNMI_Main;
     this->state.destroy = PreNMI_Destroy;
     this->timer = 30;
-    this->unkA8 = 10;
+    this->unk_A8 = 10;
 
     Game_SetFramerateDivisor(&this->state, 1);
 }
