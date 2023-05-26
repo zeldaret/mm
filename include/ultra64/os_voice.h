@@ -23,7 +23,7 @@ typedef struct OSVoiceData {
 } OSVoiceData; // size = 0x1E
 
 
-s32 osVoiceInit(OSMesgQueue *, OSVoiceHandle *, int);
+s32 osVoiceInit(OSMesgQueue* mq, OSVoiceHandle* handle, int channel);
 s32 osVoiceCheckWord(u8 *data);
 s32 osVoiceClearDictionary(OSVoiceHandle *, u8);
 s32 osVoiceControlGain(OSVoiceHandle *, s32, s32);

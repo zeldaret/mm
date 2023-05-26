@@ -129,7 +129,7 @@ void func_801736DC(GraphicsContext* gfxCtx) {
 }
 
 void Game_UpdateInput(GameState* gameState) {
-    Padmgr_GetInput(gameState->input, 1);
+    PadMgr_GetInput(gameState->input, true);
 }
 
 void Game_Update(GameState* gameState) {
