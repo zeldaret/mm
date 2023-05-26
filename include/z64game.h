@@ -53,7 +53,7 @@ typedef struct GameState {
     /* 0x9B */ u8 running; // If 0, switch to next game state
     /* 0x9C */ u32 frames;
     /* 0xA0 */ u8 padA0[0x2];
-    /* 0xA2 */ u8 framerateDivisor; // game speed?
+    /* 0xA2 */ u8 framerateDivisor;
     /* 0xA3 */ u8 unk_A3;
 } GameState; // size = 0xA4
 
