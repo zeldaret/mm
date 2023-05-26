@@ -579,7 +579,6 @@ beginseg
     include "build/src/code/sys_initial_check.o"
     include "build/src/code/sys_math.o"
     include "build/src/code/sys_math3d.o"
-    include "build/data/code/sys_math3d.bss.o"
     include "build/data/code/code_801D15B0.data.o"
     include "build/src/code/sys_math_atan.o"
     include "build/src/code/sys_matrix.o"
