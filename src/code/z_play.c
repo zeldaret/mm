@@ -505,41 +505,41 @@ void Play_UpdateWaterCamera(PlayState* this, Camera* camera) {
     sIsCameraUnderwater = camera->stateFlags & CAM_STATE_UNDERWATER;
     if (Play_GetWaterSurface(this, &camera->eye, &lightIndex) != BGCHECK_Y_MIN) {
         if (!sIsCameraUnderwater) {
-            Camera_SetFlags(camera, CAM_STATE_UNDERWATER);
+            Camera_SetStateFlag(camera, CAM_STATE_UNDERWATER);
             sQuakeIndex = -1;
-            Distortion_SetType(DISTORTION_TYPE_UNDERWATER_ENTRY);
-            Distortion_SetCountdown(80);
+            Distortion_Request(DISTORTION_TYPE_UNDERWATER_ENTRY);
+            Distortion_SetDuration(80);
         }
 
         func_801A3EC0(0x20);
         func_800F6834(this, lightIndex);
 
-        if ((sQuakeIndex == -1) || (Quake_GetCountdown(sQuakeIndex) == 10)) {
-            s16 quakeIndex = Quake_Add(camera, QUAKE_TYPE_5);
+        if ((sQuakeIndex == -1) || (Quake_GetTimeLeft(sQuakeIndex) == 10)) {
+            s16 quakeIndex = Quake_Request(camera, QUAKE_TYPE_5);
 
             sQuakeIndex = quakeIndex;
             if (quakeIndex != 0) {
                 Quake_SetSpeed(sQuakeIndex, 550);
-                Quake_SetQuakeValues(sQuakeIndex, 1, 1, 180, 0);
-                Quake_SetCountdown(sQuakeIndex, 1000);
+                Quake_SetPerturbations(sQuakeIndex, 1, 1, 180, 0);
+                Quake_SetDuration(sQuakeIndex, 1000);
             }
         }
         if (player->stateFlags3 & PLAYER_STATE3_8000) {
-            Distortion_SetType(DISTORTION_TYPE_ZORA_SWIMMING);
-            Distortion_ClearType(DISTORTION_TYPE_NON_ZORA_SWIMMING);
+            Distortion_Request(DISTORTION_TYPE_ZORA_SWIMMING);
+            Distortion_RemoveRequest(DISTORTION_TYPE_NON_ZORA_SWIMMING);
         } else {
-            Distortion_SetType(DISTORTION_TYPE_NON_ZORA_SWIMMING);
-            Distortion_ClearType(DISTORTION_TYPE_ZORA_SWIMMING);
+            Distortion_Request(DISTORTION_TYPE_NON_ZORA_SWIMMING);
+            Distortion_RemoveRequest(DISTORTION_TYPE_ZORA_SWIMMING);
         }
     } else {
         if (sIsCameraUnderwater) {
-            Camera_ClearFlags(camera, CAM_STATE_UNDERWATER);
+            Camera_UnsetStateFlag(camera, CAM_STATE_UNDERWATER);
         }
-        Distortion_ClearType(DISTORTION_TYPE_NON_ZORA_SWIMMING);
-        Distortion_ClearType(DISTORTION_TYPE_UNDERWATER_ENTRY);
-        Distortion_ClearType(DISTORTION_TYPE_ZORA_SWIMMING);
+        Distortion_RemoveRequest(DISTORTION_TYPE_NON_ZORA_SWIMMING);
+        Distortion_RemoveRequest(DISTORTION_TYPE_UNDERWATER_ENTRY);
+        Distortion_RemoveRequest(DISTORTION_TYPE_ZORA_SWIMMING);
         if (sQuakeIndex != 0) {
-            Quake_Remove(sQuakeIndex);
+            Quake_RemoveRequest(sQuakeIndex);
         }
         func_800F694C(this);
         func_801A3EC0(0);
@@ -566,13 +566,15 @@ void Play_UpdateTransition(PlayState* this) {
 
                 if ((!(Entrance_GetTransitionFlags(this->nextEntrance + sceneLayer) & 0x8000) ||
                      ((this->nextEntrance == ENTRANCE(PATH_TO_MOUNTAIN_VILLAGE, 1)) &&
-                      !CHECK_WEEKEVENTREG(WEEKEVENTREG_33_80)) ||
+                      !CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_SNOWHEAD_TEMPLE)) ||
                      ((this->nextEntrance == ENTRANCE(ROAD_TO_SOUTHERN_SWAMP, 1)) &&
-                      !CHECK_WEEKEVENTREG(WEEKEVENTREG_20_02)) ||
-                     ((this->nextEntrance == ENTRANCE(TERMINA_FIELD, 2)) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80)) ||
-                     ((this->nextEntrance == ENTRANCE(ROAD_TO_IKANA, 1)) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_52_20))) &&
+                      !CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_WOODFALL_TEMPLE)) ||
+                     ((this->nextEntrance == ENTRANCE(TERMINA_FIELD, 2)) &&
+                      !CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_GREAT_BAY_TEMPLE)) ||
+                     ((this->nextEntrance == ENTRANCE(ROAD_TO_IKANA, 1)) &&
+                      !CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_STONE_TOWER_TEMPLE))) &&
                     (!func_800FE590(this) || (Entrance_GetSceneId(this->nextEntrance + sceneLayer) < 0) ||
-                     (Audio_GetActiveSequence(SEQ_PLAYER_BGM_MAIN) != NA_BGM_FINAL_HOURS))) {
+                     (AudioSeq_GetActiveSeqId(SEQ_PLAYER_BGM_MAIN) != NA_BGM_FINAL_HOURS))) {
                     func_801A4058(20);
                     gSaveContext.seqId = (u8)NA_BGM_DISABLED;
                     gSaveContext.ambienceId = AMBIENCE_ID_DISABLED;
@@ -585,7 +587,7 @@ void Play_UpdateTransition(PlayState* this) {
                 }
 
                 if (func_800FE590(this) && (Entrance_GetSceneId(this->nextEntrance + sceneLayer) >= 0) &&
-                    (Audio_GetActiveSequence(SEQ_PLAYER_BGM_MAIN) == NA_BGM_FINAL_HOURS)) {
+                    (AudioSeq_GetActiveSeqId(SEQ_PLAYER_BGM_MAIN) == NA_BGM_FINAL_HOURS)) {
                     func_801A41C8(20);
                 }
             }
@@ -689,10 +691,10 @@ void Play_UpdateTransition(PlayState* this) {
                         D_801D0D54 = false;
                     }
 
-                    if (gSaveContext.gameMode == 4) {
+                    if (gSaveContext.gameMode == GAMEMODE_OWL_SAVE) {
                         STOP_GAMESTATE(&this->state);
                         SET_NEXT_GAMESTATE(&this->state, TitleSetup_Init, sizeof(TitleSetupState));
-                    } else if (gSaveContext.gameMode != 2) {
+                    } else if (gSaveContext.gameMode != GAMEMODE_FILE_SELECT) {
                         STOP_GAMESTATE(&this->state);
                         SET_NEXT_GAMESTATE(&this->state, Play_Init, sizeof(PlayState));
                         gSaveContext.save.entrance = this->nextEntrance;
@@ -700,7 +702,7 @@ void Play_UpdateTransition(PlayState* this) {
                         if (gSaveContext.minigameStatus == MINIGAME_STATUS_ACTIVE) {
                             gSaveContext.minigameStatus = MINIGAME_STATUS_END;
                         }
-                    } else { // 2
+                    } else { // GAMEMODE_FILE_SELECT
                         STOP_GAMESTATE(&this->state);
                         SET_NEXT_GAMESTATE(&this->state, FileSelect_Init, sizeof(FileSelectState));
                     }
@@ -946,7 +948,7 @@ void Play_UpdateMain(PlayState* this) {
         }
         Play_UpdateTransition(this);
         if (gTransitionTileState != TRANS_TILE_READY) {
-            if ((gSaveContext.gameMode == 0) &&
+            if ((gSaveContext.gameMode == GAMEMODE_NORMAL) &&
                 (((this->msgCtx.msgMode == 0)) ||
                  ((this->msgCtx.currentTextId == 0xFF) && (this->msgCtx.msgMode == 0x42) &&
                   (this->msgCtx.unk12020 == 0x41)) ||
@@ -982,8 +984,8 @@ void Play_UpdateMain(PlayState* this) {
                     if (!this->haltAllActors) {
                         Actor_UpdateAll(this, &this->actorCtx);
                     }
-                    Cutscene_Update1(this, &this->csCtx);
-                    Cutscene_Update2(this, &this->csCtx);
+                    Cutscene_UpdateManual(this, &this->csCtx);
+                    Cutscene_UpdateScripted(this, &this->csCtx);
                     Effect_UpdateAll(this);
                     EffectSS_UpdateAllParticles(this);
                     EffFootmark_Update(this);
@@ -992,8 +994,8 @@ void Play_UpdateMain(PlayState* this) {
                 Rumble_SetUpdateEnabled(false);
             }
 
-            Room_nop8012D510(this, &this->roomCtx.curRoom, &input[1], 0);
-            Room_nop8012D510(this, &this->roomCtx.prevRoom, &input[1], 1);
+            Room_Noop(this, &this->roomCtx.curRoom, &input[1], 0);
+            Room_Noop(this, &this->roomCtx.prevRoom, &input[1], 1);
             Skybox_Update(&this->skyboxCtx);
 
             if ((this->pauseCtx.state != 0) || (this->pauseCtx.debugEditor != DEBUG_EDITOR_NONE)) {
@@ -1076,7 +1078,7 @@ void Play_PostWorldDraw(PlayState* this) {
         KaleidoScopeCall_Draw(this);
     }
 
-    if (gSaveContext.gameMode == 0) {
+    if (gSaveContext.gameMode == GAMEMODE_NORMAL) {
         Interface_Draw(this);
     }
 
@@ -1127,7 +1129,7 @@ void Play_DrawMain(PlayState* this) {
     }
 
     if ((R_PAUSE_BG_PRERENDER_STATE <= PAUSE_BG_PRERENDER_SETUP) && (gTransitionTileState <= TRANS_TILE_SETUP)) {
-        if (this->skyboxCtx.skyboxShouldDraw || (this->roomCtx.curRoom.mesh->type0.type == 1)) {
+        if (this->skyboxCtx.skyboxShouldDraw || (this->roomCtx.curRoom.roomShape->base.type == ROOM_SHAPE_TYPE_IMAGE)) {
             func_8012CF0C(gfxCtx, false, true, 0, 0, 0);
         } else {
             func_8012CF0C(gfxCtx, true, true, this->lightCtx.fogColor.r, this->lightCtx.fogColor.g,
@@ -1265,7 +1267,7 @@ void Play_DrawMain(PlayState* this) {
                 goto PostWorldDraw;
             }
 
-            if (this->unk_18844 == 0) {
+            if (!this->unk_18844) {
                 if (1) {
                     if ((this->skyboxId != SKYBOX_NONE) && !this->envCtx.skyboxDisabled) {
                         if ((this->skyboxId == SKYBOX_NORMAL_SKY) || (this->skyboxId == SKYBOX_3)) {
@@ -1501,8 +1503,8 @@ void Play_Main(GameState* thisx) {
         *CONTROLLER1(&this->state) = input;
     }
 
-    ActorCutscene_Update();
-    ActorCutscene_ClearWaiting();
+    CutsceneManager_Update();
+    CutsceneManager_ClearWaiting();
 }
 
 s32 Play_InCsMode(PlayState* this) {
@@ -1545,7 +1547,7 @@ void Play_GetFloorSurface(PlayState* this, MtxF* mtx, Vec3f* pos) {
 
 void* Play_LoadFile(PlayState* this, RomFile* entry) {
     size_t size = entry->vromEnd - entry->vromStart;
-    void* allocp = THA_AllocEndAlign16(&this->state.heap, size);
+    void* allocp = THA_AllocTailAlign16(&this->state.heap, size);
 
     DmaMgr_SendRequest0(allocp, entry->vromStart, size);
 
@@ -1573,7 +1575,7 @@ void Play_InitScene(PlayState* this, s32 spawn) {
     Door_InitContext(&this->state, &this->doorCtx);
     Room_Init(this, &this->roomCtx);
     gSaveContext.worldMapArea = 0;
-    Scene_ProcessHeader(this, this->sceneSegment);
+    Scene_ExecuteCommands(this, this->sceneSegment);
     Play_InitEnvironment(this, this->skyboxId);
 }
 
@@ -1679,11 +1681,11 @@ s32 Play_SetCameraAtEye(PlayState* this, s16 camId, Vec3f* at, Vec3f* eye) {
     camera->dist = Math3D_Distance(at, eye);
 
     if (camera->focalActor != NULL) {
-        camera->atActorOffset.x = at->x - camera->focalActor->world.pos.x;
-        camera->atActorOffset.y = at->y - camera->focalActor->world.pos.y;
-        camera->atActorOffset.z = at->z - camera->focalActor->world.pos.z;
+        camera->focalActorAtOffset.x = at->x - camera->focalActor->world.pos.x;
+        camera->focalActorAtOffset.y = at->y - camera->focalActor->world.pos.y;
+        camera->focalActorAtOffset.z = at->z - camera->focalActor->world.pos.z;
     } else {
-        camera->atActorOffset.x = camera->atActorOffset.y = camera->atActorOffset.z = 0.0f;
+        camera->focalActorAtOffset.x = camera->focalActorAtOffset.y = camera->focalActorAtOffset.z = 0.0f;
     }
 
     camera->atLerpStepScale = 0.01f;
@@ -1708,11 +1710,11 @@ s32 Play_SetCameraAtEyeUp(PlayState* this, s16 camId, Vec3f* at, Vec3f* eye, Vec
     camera->dist = Math3D_Distance(at, eye);
 
     if (camera->focalActor != NULL) {
-        camera->atActorOffset.x = at->x - camera->focalActor->world.pos.x;
-        camera->atActorOffset.y = at->y - camera->focalActor->world.pos.y;
-        camera->atActorOffset.z = at->z - camera->focalActor->world.pos.z;
+        camera->focalActorAtOffset.x = at->x - camera->focalActor->world.pos.x;
+        camera->focalActorAtOffset.y = at->y - camera->focalActor->world.pos.y;
+        camera->focalActorAtOffset.z = at->z - camera->focalActor->world.pos.z;
     } else {
-        camera->atActorOffset.x = camera->atActorOffset.y = camera->atActorOffset.z = 0.0f;
+        camera->focalActorAtOffset.x = camera->focalActorAtOffset.y = camera->focalActorAtOffset.z = 0.0f;
     }
 
     camera->atLerpStepScale = 0.01f;
@@ -1746,13 +1748,13 @@ void Play_CopyCamera(PlayState* this, s16 destCamId, s16 srcCamId) {
     Camera_Copy(this->cameraPtrs[destCamId1], this->cameraPtrs[srcCamId2]);
 }
 
-// Same as Play_ChangeCameraSetting but also calls Camera_InitPlayerSettings
+// Same as Play_ChangeCameraSetting but also calls Camera_InitFocalActorSettings
 s32 func_80169A50(PlayState* this, s16 camId, Player* player, s16 setting) {
     Camera* camera;
     s16 camIdx = (camId == CAM_ID_NONE) ? this->activeCamId : camId;
 
     camera = this->cameraPtrs[camIdx];
-    Camera_InitPlayerSettings(camera, player);
+    Camera_InitFocalActorSettings(camera, &player->actor);
     return Camera_ChangeSetting(camera, setting);
 }
 
@@ -1940,11 +1942,10 @@ void func_80169FDC(GameState* thisx) {
     func_80169F78(thisx);
 }
 
-// Used by Kankyo to determine how to change the lighting, e.g. for game over.
-s32 func_80169FFC(GameState* thisx) {
+s32 Play_CamIsNotFixed(GameState* thisx) {
     PlayState* this = (PlayState*)thisx;
 
-    return this->roomCtx.curRoom.mesh->type0.type != 1;
+    return this->roomCtx.curRoom.roomShape->base.type != ROOM_SHAPE_TYPE_IMAGE;
 }
 
 s32 FrameAdvance_IsEnabled(GameState* thisx) {
@@ -2016,37 +2017,47 @@ s32 Play_IsDebugCamEnabled(void) {
     return gDbgCamEnabled;
 }
 
-// A mapping from playerActorCsIds to sGlobalCamDataSettings indices.
-s16 D_801D0D64[] = { -3, -2, -4, -5, -7, -11, -8, -9, -6, -16 };
+// A mapping from playerCsIds to sGlobalCamDataSettings indices.
+s16 sPlayerCsIdToCsCamId[] = {
+    CS_CAM_ID_GLOBAL_ITEM_OCARINA,        // PLAYER_CS_ID_ITEM_OCARINA
+    CS_CAM_ID_GLOBAL_ITEM_GET,            // PLAYER_CS_ID_ITEM_GET
+    CS_CAM_ID_GLOBAL_ITEM_BOTTLE,         // PLAYER_CS_ID_ITEM_BOTTLE
+    CS_CAM_ID_GLOBAL_ITEM_SHOW,           // PLAYER_CS_ID_ITEM_SHOW
+    CS_CAM_ID_GLOBAL_WARP_PAD_MOON,       // PLAYER_CS_ID_WARP_PAD_MOON
+    CS_CAM_ID_GLOBAL_MASK_TRANSFORMATION, // PLAYER_CS_ID_MASK_TRANSFORMATION
+    CS_CAM_ID_GLOBAL_DEATH,               // PLAYER_CS_ID_DEATH
+    CS_CAM_ID_GLOBAL_REVIVE,              // PLAYER_CS_ID_REVIVE
+    CS_CAM_ID_GLOBAL_SONG_WARP,           // PLAYER_CS_ID_SONG_WARP
+    CS_CAM_ID_GLOBAL_WARP_PAD_ENTRANCE,   // PLAYER_CS_ID_WARP_PAD_ENTRANCE
+};
 
 // Used by Player
 /**
- * Extract the common actor cutscene ids used by Player from the scene and set the actor cutscene ids in
- * this->playerActorCsIds. If a playerActorCsId is not present in the scene, then that particular id is set
- * to -1. Otherwise, if there is an ActorCutscene where csCamSceneDataId matches the appropriate element of D_801D0D64,
- * set the corresponding playerActorCsId (and possibly change its priority for the zeroth one)
+ * Extract the common cutscene ids used by Player from the scene and set the cutscene ids in this->playerCsIds.
+ * If a playerCsId is not present in the scene, then that particular id is set to CS_ID_NONE.
+ * Otherwise, if there is an ActorCutscene where csCamId matches the appropriate element of sPlayerCsIdToCsCamId,
+ * set the corresponding playerActorCsId (and possibly change its priority for the zeroth one).
  */
-void Play_AssignPlayerActorCsIdsFromScene(GameState* thisx, s32 startActorCsId) {
+void Play_AssignPlayerCsIdsFromScene(GameState* thisx, s32 spawnCsId) {
     PlayState* this = (PlayState*)thisx;
     s32 i;
-    s16* curPlayerActorCsId = this->playerActorCsIds;
-    s16* phi_s1 = D_801D0D64;
+    s16* curPlayerCsId = this->playerCsIds;
+    s16* csCamId = sPlayerCsIdToCsCamId;
 
-    for (i = 0; i < ARRAY_COUNT(this->playerActorCsIds); i++, curPlayerActorCsId++, phi_s1++) {
-        ActorCutscene* actorCutscene;
-        s32 curActorCsId;
+    for (i = 0; i < ARRAY_COUNT(this->playerCsIds); i++, curPlayerCsId++, csCamId++) {
+        ActorCutscene* csEntry;
+        s32 curCsId;
 
-        *curPlayerActorCsId = -1;
+        *curPlayerCsId = CS_ID_NONE;
 
-        for (curActorCsId = startActorCsId; curActorCsId != -1; curActorCsId = actorCutscene->additionalCutscene) {
-            actorCutscene = ActorCutscene_GetCutscene(curActorCsId);
+        for (curCsId = spawnCsId; curCsId != CS_ID_NONE; curCsId = csEntry->additionalCsId) {
+            csEntry = CutsceneManager_GetCutsceneEntry(curCsId);
 
-            if (actorCutscene->csCamSceneDataId == *phi_s1) {
-                if ((actorCutscene->csCamSceneDataId == -3) &&
-                    (actorCutscene->priority == 700)) { // override ocarina cs priority
-                    actorCutscene->priority = 550;
+            if (csEntry->csCamId == *csCamId) {
+                if ((csEntry->csCamId == CS_CAM_ID_GLOBAL_ITEM_OCARINA) && (csEntry->priority == 700)) {
+                    csEntry->priority = 550;
                 }
-                *curPlayerActorCsId = curActorCsId;
+                *curPlayerCsId = curCsId;
                 break;
             }
         }
@@ -2101,7 +2112,7 @@ void Play_Init(GameState* thisx) {
         scene = ((void)0, gSaveContext.save.entrance) >> 9;
         spawn = (((void)0, gSaveContext.save.entrance) >> 4) & 0x1F;
 
-        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_33_80)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_SNOWHEAD_TEMPLE)) {
             if (scene == ENTR_SCENE_MOUNTAIN_VILLAGE_WINTER) {
                 scene = ENTR_SCENE_MOUNTAIN_VILLAGE_SPRING;
             } else if (scene == ENTR_SCENE_GORON_VILLAGE_WINTER) {
@@ -2115,7 +2126,7 @@ void Play_Init(GameState* thisx) {
             }
         }
 
-        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_20_02)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_WOODFALL_TEMPLE)) {
             if (scene == ENTR_SCENE_SOUTHERN_SWAMP_POISONED) {
                 scene = ENTR_SCENE_SOUTHERN_SWAMP_CLEARED;
             } else if (scene == ENTR_SCENE_WOODFALL) {
@@ -2123,11 +2134,11 @@ void Play_Init(GameState* thisx) {
             }
         }
 
-        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_52_20) && (scene == ENTR_SCENE_IKANA_CANYON)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_STONE_TOWER_TEMPLE) && (scene == ENTR_SCENE_IKANA_CANYON)) {
             gSaveContext.nextCutsceneIndex = 0xFFF2;
         }
 
-        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80) &&
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_GREAT_BAY_TEMPLE) &&
             ((scene == ENTR_SCENE_GREAT_BAY_COAST) || (scene == ENTR_SCENE_ZORA_CAPE))) {
             gSaveContext.nextCutsceneIndex = 0xFFF0;
         }
@@ -2168,7 +2179,8 @@ void Play_Init(GameState* thisx) {
     this->cameraPtrs[CAM_ID_MAIN]->uid = CAM_ID_MAIN;
     this->activeCamId = CAM_ID_MAIN;
 
-    func_800DFF18(&this->mainCamera, 0x7F);
+    Camera_OverwriteStateFlags(&this->mainCamera, CAM_STATE_0 | CAM_STATE_CHECK_WATER | CAM_STATE_2 | CAM_STATE_3 |
+                                                      CAM_STATE_4 | CAM_STATE_DISABLE_MODE_CHANGE | CAM_STATE_6);
     Sram_Alloc(&this->state, &this->sramCtx);
     Regs_InitData(this);
     Message_Init(this);
@@ -2179,15 +2191,15 @@ void Play_Init(GameState* thisx) {
     EffectSS_Init(this, 100);
     CollisionCheck_InitContext(this, &this->colChkCtx);
     AnimationContext_Reset(&this->animationCtx);
-    Cutscene_Init(this, &this->csCtx);
+    Cutscene_InitContext(this, &this->csCtx);
 
     if (gSaveContext.nextCutsceneIndex != 0xFFEF) {
-        gSaveContext.save.cutscene = gSaveContext.nextCutsceneIndex;
+        gSaveContext.save.cutsceneIndex = gSaveContext.nextCutsceneIndex;
         gSaveContext.nextCutsceneIndex = 0xFFEF;
     }
 
-    if (gSaveContext.save.cutscene == 0xFFFD) {
-        gSaveContext.save.cutscene = 0;
+    if (gSaveContext.save.cutsceneIndex == 0xFFFD) {
+        gSaveContext.save.cutsceneIndex = 0;
     }
 
     if (gSaveContext.nextDayTime != 0xFFFF) {
@@ -2203,13 +2215,14 @@ void Play_Init(GameState* thisx) {
 
     func_800EDDB0(this);
 
-    if (((gSaveContext.gameMode != 0) && (gSaveContext.gameMode != 1)) || (gSaveContext.save.cutscene >= 0xFFF0)) {
+    if (((gSaveContext.gameMode != GAMEMODE_NORMAL) && (gSaveContext.gameMode != GAMEMODE_TITLE_SCREEN)) ||
+        (gSaveContext.save.cutsceneIndex >= 0xFFF0)) {
         gSaveContext.unk_3DC0 = 0;
         Magic_Reset(this);
-        gSaveContext.sceneLayer = (gSaveContext.save.cutscene & 0xF) + 1;
+        gSaveContext.sceneLayer = (gSaveContext.save.cutsceneIndex & 0xF) + 1;
 
         // Set saved cutscene to 0 so it doesn't immediately play, but instead let the `CutsceneManager` handle it.
-        gSaveContext.save.cutscene = 0;
+        gSaveContext.save.cutsceneIndex = 0;
     } else {
         gSaveContext.sceneLayer = 0;
     }
@@ -2264,7 +2277,7 @@ void Play_Init(GameState* thisx) {
     this->haltAllActors = false;
     this->unk_18844 = false;
 
-    if (gSaveContext.gameMode != 1) {
+    if (gSaveContext.gameMode != GAMEMODE_TITLE_SCREEN) {
         if (gSaveContext.nextTransitionType == TRANS_NEXT_TYPE_DEFAULT) {
             this->transitionType =
                 (Entrance_GetTransitionFlags(((void)0, gSaveContext.save.entrance) + sceneLayer) >> 7) & 0x7F;
@@ -2295,39 +2308,37 @@ void Play_Init(GameState* thisx) {
     D_801F6D4C->envColor.g = 0;
     D_801F6D4C->envColor.b = 0;
     D_801F6D4C->envColor.a = 0;
-    EnvFlags_UnsetAll(this);
-    THA_GetSize(&this->state.heap);
-    zAllocSize = THA_GetSize(&this->state.heap);
-    zAlloc = (uintptr_t)THA_AllocEndAlign16(&this->state.heap, zAllocSize);
+    CutsceneFlags_UnsetAll(this);
+    THA_GetRemaining(&this->state.heap);
+    zAllocSize = THA_GetRemaining(&this->state.heap);
+    zAlloc = (uintptr_t)THA_AllocTailAlign16(&this->state.heap, zAllocSize);
     ZeldaArena_Init(((zAlloc + 8) & ~0xF), (zAllocSize - ((zAlloc + 8) & ~0xF)) + zAlloc); //! @bug: Incorrect ALIGN16s
     Actor_InitContext(this, &this->actorCtx, this->linkActorEntry);
 
     while (!Room_HandleLoadCallbacks(this, &this->roomCtx)) {}
 
-    if ((CURRENT_DAY != 0) && ((this->roomCtx.curRoom.unk3 == 1) || (this->roomCtx.curRoom.unk3 == 5))) {
+    if ((CURRENT_DAY != 0) && ((this->roomCtx.curRoom.behaviorType1 == ROOM_BEHAVIOR_TYPE1_1) ||
+                               (this->roomCtx.curRoom.behaviorType1 == ROOM_BEHAVIOR_TYPE1_5))) {
         Actor_Spawn(&this->actorCtx, this, ACTOR_EN_TEST4, 0.0f, 0.0f, 0.0f, 0, 0, 0, 0);
     }
 
     player = GET_PLAYER(this);
 
-    Camera_InitPlayerSettings(&this->mainCamera, player);
+    Camera_InitFocalActorSettings(&this->mainCamera, &player->actor);
     gDbgCamEnabled = false;
 
     if ((player->actor.params & 0xFF) != 0xFF) {
-        Camera_ChangeDataIdx(&this->mainCamera, player->actor.params & 0xFF);
+        Camera_ChangeActorCsCamIndex(&this->mainCamera, player->actor.params & 0xFF);
     }
 
-    func_800F15D8(&this->mainCamera);
+    CutsceneManager_StoreCamera(&this->mainCamera);
     Interface_SetSceneRestrictions(this);
     func_800FB758(this);
     gSaveContext.seqId = this->sequenceCtx.seqId;
     gSaveContext.ambienceId = this->sequenceCtx.ambienceId;
     AnimationContext_Update(this, &this->animationCtx);
-    func_800EDBE0(this);
+    Cutscene_HandleEntranceTriggers(this);
     gSaveContext.respawnFlag = 0;
     sBombersNotebookOpen = false;
     BombersNotebook_Init(&sBombersNotebook);
 }
-
-//! TODO: fake symbol, remove when BombersNotebook_Update is matching
-u16 D_801D0D78[] = { 0, 0, 0, 0 };

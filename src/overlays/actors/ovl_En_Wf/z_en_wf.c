@@ -367,7 +367,7 @@ void func_809907D4(EnWf* this) {
     this->collider3.base.colType = COLTYPE_HIT3;
     this->unk_2A0 = 80;
     this->actor.flags &= ~ACTOR_FLAG_400;
-    Actor_SetColorFilter(&this->actor, 0x4000, 0xFF, 0, 80);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 80);
 }
 
 void func_80990854(EnWf* this, PlayState* play) {
@@ -471,14 +471,15 @@ void func_80990C6C(EnWf* this, PlayState* play, s32 arg2) {
     static Color_RGBA8 D_809942EC = { 255, 255, 255, 255 };
     s32 i;
     Vec3f sp88;
-    u32 temp_v0;
+    FloorType floorType;
     Color_RGBA8* phi_s1;
     s16 phi_s6;
 
     if (this->actor.floorPoly != NULL) {
-        temp_v0 = func_800C99D4(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
-        if (temp_v0 != 5) {
-            if ((temp_v0 == 15) || (temp_v0 == 14)) {
+        floorType = SurfaceType_GetFloorType(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
+
+        if (floorType != FLOOR_TYPE_5) {
+            if ((floorType == FLOOR_TYPE_15) || (floorType == FLOOR_TYPE_14)) {
                 phi_s1 = &D_809942EC;
                 phi_s6 = Rand_ZeroFloat(150.0f) + 350.0f;
                 arg2 += 2;
@@ -1424,12 +1425,12 @@ void func_8099386C(EnWf* this, PlayState* play) {
 
             if (this->actor.colChkInfo.damageEffect == 1) {
                 this->unk_2A0 = 40;
-                Actor_SetColorFilter(&this->actor, 0, 0x78, 0, 40);
+                Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 120, COLORFILTER_BUFFLAG_OPA, 40);
                 Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_FREEZE);
                 func_809923B0(this);
             } else if (this->actor.colChkInfo.damageEffect == 5) {
                 this->unk_2A0 = 40;
-                Actor_SetColorFilter(&this->actor, 0, 0xFF, 0, 40);
+                Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 255, COLORFILTER_BUFFLAG_OPA, 40);
                 this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_SMALL;
                 this->drawDmgEffScale = 0.75f;
                 this->drawDmgEffAlpha = 2.0f;
@@ -1456,7 +1457,7 @@ void func_8099386C(EnWf* this, PlayState* play) {
                                 CLEAR_TAG_LARGE_LIGHT_RAYS);
                 }
 
-                Actor_SetColorFilter(&this->actor, 0x4000, 0xFF, 0, 8);
+                Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 8);
                 if (this->actor.colChkInfo.health == 0) {
                     func_80992D6C(this);
                 } else {
@@ -1485,7 +1486,9 @@ void EnWf_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
 
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 32.0f, 30.0f, 60.0f, 0x1D);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 32.0f, 30.0f, 60.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                UPDBGCHECKINFO_FLAG_10);
     func_80993738(this, play);
 
     if (this->actor.bgCheckFlags & (BGCHECKFLAG_GROUND | BGCHECKFLAG_GROUND_TOUCH)) {

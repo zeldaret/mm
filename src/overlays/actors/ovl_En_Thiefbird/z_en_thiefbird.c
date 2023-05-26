@@ -7,7 +7,7 @@
 #include "prevent_bss_reordering.h"
 #include "z_en_thiefbird.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_200 | ACTOR_FLAG_1000 | ACTOR_FLAG_80000000)
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_200 | ACTOR_FLAG_IGNORE_QUAKE | ACTOR_FLAG_80000000)
 
 #define THIS ((EnThiefbird*)thisx)
 
@@ -223,10 +223,10 @@ s32 func_80C10B0C(EnThiefbird* this, PlayState* play) {
     s16 itemId2 = 0;
 
     for (; slotId < 24; slotId++) {
-        if ((gSaveContext.save.inventory.items[slotId] >= ITEM_BOTTLE) &&
-            (gSaveContext.save.inventory.items[slotId] <= ITEM_POTION_BLUE)) {
+        if ((gSaveContext.save.saveInfo.inventory.items[slotId] >= ITEM_BOTTLE) &&
+            (gSaveContext.save.saveInfo.inventory.items[slotId] <= ITEM_POTION_BLUE)) {
             isItemFound = true;
-            itemId2 = gSaveContext.save.inventory.items[slotId];
+            itemId2 = gSaveContext.save.saveInfo.inventory.items[slotId];
             break;
         }
     }
@@ -343,7 +343,7 @@ s32 func_80C10E98(PlayState* play) {
         spAC = 0;
     }
 
-    sp98 = (gSaveContext.save.playerData.rupees / 4) * 3;
+    sp98 = (gSaveContext.save.saveInfo.playerData.rupees / 4) * 3;
     phi_s0_2 = sp98 / 50;
     sp5C = (-spB0 - spAC);
     sp5C += 8;
@@ -457,7 +457,7 @@ void func_80C11454(EnThiefbird* this) {
     this->drawDmgEffFrozenSteamScale = 0.75f;
     this->drawDmgEffAlpha = 1.0f;
     this->actor.flags &= ~ACTOR_FLAG_200;
-    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 80);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 80);
 }
 
 void func_80C114C0(EnThiefbird* this, PlayState* play) {
@@ -607,7 +607,7 @@ void func_80C11C60(EnThiefbird* this) {
     this->unk_18E = 40;
     this->actor.velocity.y = 0.0f;
     Actor_PlaySfx(&this->actor, NA_SE_EN_THIEFBIRD_DEAD);
-    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 40);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 40);
     this->collider.base.acFlags &= ~AC_ON;
     this->actor.flags |= ACTOR_FLAG_10;
     this->unk_192 = 0x1C00;
@@ -682,13 +682,13 @@ void func_80C11F6C(EnThiefbird* this, PlayState* play) {
     }
 
     if (this->actor.colChkInfo.damageEffect == 5) {
-        Actor_SetColorFilter(&this->actor, 0, 255, 0, 40);
+        Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 255, COLORFILTER_BUFFLAG_OPA, 40);
         Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_FREEZE);
     } else if (this->actor.colChkInfo.damageEffect == 1) {
-        Actor_SetColorFilter(&this->actor, 0, 255, 0, 40);
+        Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 255, COLORFILTER_BUFFLAG_OPA, 40);
         Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_FREEZE);
     } else {
-        Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 40);
+        Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 40);
         Actor_PlaySfx(&this->actor, NA_SE_EN_THIEFBIRD_DAMAGE);
     }
 
@@ -1020,7 +1020,8 @@ void EnThiefbird_Update(Actor* thisx, PlayState* play2) {
         Actor_MoveWithGravity(&this->actor);
     }
 
-    Actor_UpdateBgCheckInfo(play, &this->actor, 25.0f, 25.0f, 50.0f, 7);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 25.0f, 25.0f, 50.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_2 | UPDBGCHECKINFO_FLAG_4);
     if (this->actionFunc == func_80C1193C) {
         CollisionCheck_SetAT(play, &play->colChkCtx, &this->collider.base);
     }

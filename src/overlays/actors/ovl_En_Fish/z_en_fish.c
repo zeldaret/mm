@@ -264,7 +264,7 @@ void func_8091DEE4(EnFish* this) {
     this->actor.gravity = 0.0f;
     this->actor.terminalVelocity = 0.0f;
     this->unk_240 = Rand_S16Offset(5, D_8091FACC[this->unk_278]);
-    this->unk_248 = 0;
+    this->updBgCheckInfoFlags = 0;
     this->unk_26E = 400;
     this->unk_272 = 400;
     this->unk_268 = 0;
@@ -314,7 +314,7 @@ void func_8091E070(EnFish* this) {
         phi_a1 = D_8091FAD4[this->unk_278];
     }
     this->unk_240 = Rand_S16Offset(15, phi_a1);
-    this->unk_248 = 0;
+    this->updBgCheckInfoFlags = 0;
     this->unk_26E = 400;
     this->unk_272 = 400;
     this->unk_26C = 0;
@@ -361,7 +361,7 @@ void func_8091E2E0(EnFish* this) {
     this->actor.gravity = 0.0f;
     this->actor.terminalVelocity = 0.0f;
     this->unk_240 = Rand_S16Offset(10, 40);
-    this->unk_248 = 0;
+    this->updBgCheckInfoFlags = 0;
     this->unk_26E = 400;
     this->unk_272 = 400;
     this->unk_268 = 0;
@@ -440,7 +440,7 @@ void func_8091E5EC(EnFish* this) {
     this->unk_26C = 0;
     func_8091D660(this);
     this->unk_240 = Rand_S16Offset(10, 30);
-    this->unk_248 = 0;
+    this->updBgCheckInfoFlags = 0;
     this->unkFunc = func_8091E658;
 }
 
@@ -493,7 +493,7 @@ void func_8091E810(EnFish* this) {
     this->actor.terminalVelocity = -10.0f;
     this->actor.shape.yOffset = 0.0f;
     func_8091D6C4(this);
-    this->unk_248 = 5;
+    this->updBgCheckInfoFlags = UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4;
     this->unkFunc = func_8091E880;
     this->unk_24C = 0.0f;
     this->unk_240 = 300;
@@ -551,7 +551,7 @@ void func_8091E9A4(EnFish* this) {
     this->actor.shape.yOffset = 300.0f;
     func_8091D6C4(this);
     this->unkFunc = func_8091EAF0;
-    this->unk_248 = 5;
+    this->updBgCheckInfoFlags = UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4;
     this->unk_24C = 0.0f;
     if (sp24 && (this->actor.draw != NULL)) {
         Actor_PlaySfx(&this->actor, NA_SE_EV_FISH_LEAP);
@@ -612,7 +612,7 @@ void func_8091ECF4(EnFish* this) {
     this->unk_240 = 200;
     func_8091D660(this);
     this->unkFunc = func_8091ED70;
-    this->unk_248 = 5;
+    this->updBgCheckInfoFlags = UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4;
     this->unk_24C = 0.0f;
 }
 
@@ -677,7 +677,7 @@ void func_8091EF30(EnFish* this) {
     this->unk_240 = 15;
     this->unk_279 = 10;
     this->unkFunc = func_8091EFE8;
-    this->unk_248 = 5;
+    this->updBgCheckInfoFlags = UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4;
     this->unk_24C = 0.0f;
 }
 
@@ -772,7 +772,7 @@ void func_8091F344(EnFish* this) {
     this->actor.gravity = 0.0f;
     this->actor.terminalVelocity = 0.0f;
     this->unk_240 = Rand_S16Offset(5, 35);
-    this->unk_248 = 1;
+    this->updBgCheckInfoFlags = UPDBGCHECKINFO_FLAG_1;
     this->unk_268 = 0;
     this->unk_26C = 0;
     this->unk_26E = 1500;
@@ -856,7 +856,7 @@ void func_8091F5A4(Actor* thisx, PlayState* play) {
         SkelAnime_Update(&this->skelAnime);
         func_8091D7C4(this);
         Actor_MoveWithGravity(&this->actor);
-        if (this->unk_248 != 0) {
+        if (this->updBgCheckInfoFlags != 0) {
             u32 temp = (play->sceneId != SCENE_LABO);
 
             phi_f0 = BREG(1) + 10.0f;
@@ -864,7 +864,7 @@ void func_8091F5A4(Actor* thisx, PlayState* play) {
             if (temp) {
                 phi_f0 = 6.0f;
             }
-            Actor_UpdateBgCheckInfo(play, &this->actor, 17.5f, phi_f0, 0.0f, this->unk_248);
+            Actor_UpdateBgCheckInfo(play, &this->actor, 17.5f, phi_f0, 0.0f, this->updBgCheckInfoFlags);
         }
 
         if ((this->actor.xzDistToPlayer < 70.0f) && (this->unkFunc != func_8091EFE8)) {
@@ -888,7 +888,7 @@ void func_8091F5A4(Actor* thisx, PlayState* play) {
 
             func_8091D904(this);
         } else if (func_8091DDF4(this, play)) {
-            Actor_PickUp(&this->actor, play, GI_MAX, 80.0f, 25.0f);
+            Actor_OfferGetItem(&this->actor, play, GI_MAX, 80.0f, 25.0f);
         }
     }
 }

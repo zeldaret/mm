@@ -3613,31 +3613,31 @@ CameraSetting sCameraSettings[] = {
 };
 
 s16 sGlobalCamDataSettings[] = {
-    /* -25 */ CAM_SET_ELEGY_SHELL,
-    /* -24 */ CAM_SET_SIDED,
-    /* -23 */ CAM_SET_BOAT_CRUISE,
-    /* -22 */ CAM_SET_NONE,
-    /* -21 */ CAM_SET_SUBJECTD,
-    /* -20 */ CAM_SET_NORMALD,
-    /* -19 */ CAM_SET_NONE,
-    /* -18 */ CAM_SET_NONE,
-    /* -17 */ CAM_SET_NONE,
-    /* -16 */ CAM_SET_WARP_PAD_ENTRANCE,
-    /* -15 */ CAM_SET_ATTENTION,
-    /* -14 */ CAM_SET_CONNECT0,
-    /* -13 */ CAM_SET_REMOTEBOMB,
-    /* -12 */ CAM_SET_NONE,
-    /* -11 */ CAM_SET_MASK_TRANSFORMATION,
-    /* -10 */ CAM_SET_LONG_CHEST_OPENING,
-    /*  -9 */ CAM_SET_REBIRTH,
-    /*  -8 */ CAM_SET_DEATH,
-    /*  -7 */ CAM_SET_WARP_PAD_MOON,
-    /*  -6 */ CAM_SET_NAVI,
-    /*  -5 */ CAM_SET_ITEM3,
-    /*  -4 */ CAM_SET_ITEM2,
-    /*  -3 */ CAM_SET_ITEM1,
-    /*  -2 */ CAM_SET_ITEM0,
-    /*  -1 */ CAM_SET_STOP0,
+    /* -25 */ CAM_SET_ELEGY_SHELL,         // CS_CAM_ID_GLOBAL_ELEGY
+    /* -24 */ CAM_SET_SIDED,               // CS_CAM_ID_GLOBAL_SIDED
+    /* -23 */ CAM_SET_BOAT_CRUISE,         // CS_CAM_ID_GLOBAL_BOAT_CRUISE
+    /* -22 */ CAM_SET_NONE,                // CS_CAM_ID_GLOBAL_N16
+    /* -21 */ CAM_SET_SUBJECTD,            // CS_CAM_ID_GLOBAL_SUBJECTD
+    /* -20 */ CAM_SET_NORMALD,             // CS_CAM_ID_GLOBAL_NORMALD
+    /* -19 */ CAM_SET_NONE,                // CS_CAM_ID_GLOBAL_N13
+    /* -18 */ CAM_SET_NONE,                // CS_CAM_ID_GLOBAL_N12
+    /* -17 */ CAM_SET_NONE,                // CS_CAM_ID_GLOBAL_N11
+    /* -16 */ CAM_SET_WARP_PAD_ENTRANCE,   // CS_CAM_ID_GLOBAL_WARP_PAD_ENTRANCE
+    /* -15 */ CAM_SET_ATTENTION,           // CS_CAM_ID_GLOBAL_ATTENTION
+    /* -14 */ CAM_SET_CONNECT0,            // CS_CAM_ID_GLOBAL_CONNECT
+    /* -13 */ CAM_SET_REMOTEBOMB,          // CS_CAM_ID_GLOBAL_REMOTE_BOMB
+    /* -12 */ CAM_SET_NONE,                // CS_CAM_ID_GLOBAL_N0C
+    /* -11 */ CAM_SET_MASK_TRANSFORMATION, // CS_CAM_ID_GLOBAL_MASK_TRANSFORMATION
+    /* -10 */ CAM_SET_LONG_CHEST_OPENING,  // CS_CAM_ID_GLOBAL_LONG_CHEST_OPENING
+    /*  -9 */ CAM_SET_REBIRTH,             // CS_CAM_ID_GLOBAL_REVIVE
+    /*  -8 */ CAM_SET_DEATH,               // CS_CAM_ID_GLOBAL_DEATH
+    /*  -7 */ CAM_SET_WARP_PAD_MOON,       // CS_CAM_ID_GLOBAL_WARP_PAD_MOON
+    /*  -6 */ CAM_SET_NAVI,                // CS_CAM_ID_GLOBAL_SONG_WARP
+    /*  -5 */ CAM_SET_ITEM3,               // CS_CAM_ID_GLOBAL_ITEM_SHOW
+    /*  -4 */ CAM_SET_ITEM2,               // CS_CAM_ID_GLOBAL_ITEM_BOTTLE
+    /*  -3 */ CAM_SET_ITEM1,               // CS_CAM_ID_GLOBAL_ITEM_OCARINA
+    /*  -2 */ CAM_SET_ITEM0,               // CS_CAM_ID_GLOBAL_ITEM_GET
+    /*  -1 */ CAM_SET_STOP0,               // CS_CAM_ID_NONE
     /*   0 */ CAM_SET_NONE,
 };
 
@@ -3795,12 +3795,12 @@ s32 sCameraHudVisibility = 2;
 s32 sCameraLetterboxSize = 32;
 s32 sCameraNegOne = -1;
 
-// VecSph yaw data
+// VecGeo yaw data
 s16 D_801B9E18[] = {
     0x0AAA, 0xF556, 0x1555, 0xEAAB, 0x2AAA, 0xD556, 0x3FFF, 0xC001, 0x5555, 0xAAAB, 0x6AAA, 0x9556, 0x7FFF, 0x0000,
 };
 
-// VecSph pitch data
+// VecGeo pitch data
 s16 D_801B9E34[] = {
     0x0000, 0x02C6, 0x058C, 0x0000, 0x0000, 0xFD3A, 0x0000, 0x0852, 0x0000, 0x0000, 0x0B18, 0x02C6, 0xFA74, 0x0000,
 };

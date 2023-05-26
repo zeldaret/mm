@@ -37,6 +37,6 @@ UNK_TYPE func_801A51F0(UNK_TYPE arg0) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/voice_internal/func_801A5808.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/voice_internal/func_801A5A10.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/voice_internal/AudioVoice_ResetData.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/voice_internal/func_801A5A1C.s")

@@ -148,13 +148,13 @@ void EnSth_Init(Actor* thisx, PlayState* play) {
             }
             this->actor.textId = 0;
             if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_MASK_OF_TRUTH) ||
-                !CHECK_WEEKEVENTREG(WEEKEVENTREG_SWAMP_SPIDER_HOUSE_TALKED)) {
+                !CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_SWAMP_SPIDER_HOUSE_MAN)) {
                 this->sthFlags |= STH_FLAG_DRAW_MASK_OF_TRUTH;
             }
             break;
 
         case STH_TYPE_MOON_LOOKING: // South Clock Town
-            if ((gSaveContext.save.skullTokenCount & 0xFFFF) >= SPIDER_HOUSE_TOKENS_REQUIRED) {
+            if ((gSaveContext.save.saveInfo.skullTokenCount & 0xFFFF) >= SPIDER_HOUSE_TOKENS_REQUIRED) {
                 Actor_Kill(&this->actor);
                 return;
             }
@@ -236,7 +236,7 @@ void EnSth_HandlePanicConversation(EnSth* this, PlayState* play) {
 
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         this->actionFunc = EnSth_PanicIdle;
-        func_801477B4(play);
+        Message_CloseTextbox(play);
     }
 }
 
@@ -328,7 +328,7 @@ void EnSth_GiveOceansideSpiderHouseReward(EnSth* this, PlayState* play) {
             EnSth_ChangeAnim(this, STH_ANIM_WAIT);
         }
     } else {
-        Actor_PickUp(&this->actor, play, STH_GI_ID(&this->actor), 10000.0f, 500.0f);
+        Actor_OfferGetItem(&this->actor, play, STH_GI_ID(&this->actor), 10000.0f, 500.0f);
     }
 }
 
@@ -351,17 +351,17 @@ void EnSth_HandleOceansideSpiderHouseConversation(EnSth* this, PlayState* play) 
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
                     case 0x1134: // (does not exist)
-                        func_80151938(play, play->msgCtx.currentTextId + 1);
+                        Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                         break;
 
-                    case 0x1132:                     // Heard noise, came in to see
-                    case 0x113A:                     // Had no idea there was a basement here
-                    case 0x113F:                     // Heard noise... I never thought I'd find a place like this
-                        func_80151938(play, 0x1133); // did you find this place?
+                    case 0x1132: // Heard noise, came in to see
+                    case 0x113A: // Had no idea there was a basement here
+                    case 0x113F: // Heard noise... I never thought I'd find a place like this
+                        Message_ContinueTextbox(play, 0x1133); // did you find this place?
                         break;
 
-                    case 0x1133:                     // did you find this place?
-                        func_80151938(play, 0x1136); // I want to buy this place from you
+                    case 0x1133:                               // did you find this place?
+                        Message_ContinueTextbox(play, 0x1136); // I want to buy this place from you
                         EnSth_ChangeAnim(this, STH_ANIM_PLEAD);
                         break;
 
@@ -397,23 +397,23 @@ void EnSth_HandleOceansideSpiderHouseConversation(EnSth* this, PlayState* play) 
                                 STH_GI_ID(&this->actor) = GI_RUPEE_RED;
                                 break;
                         }
-                        func_801477B4(play);
+                        Message_CloseTextbox(play);
                         this->actionFunc = EnSth_GiveOceansideSpiderHouseReward;
                         EnSth_GiveOceansideSpiderHouseReward(this, play);
                         break;
 
-                    case 0x113C:                     // (Second day) I am giving you my life savings
-                        func_80151938(play, 0x113B); // If only I had gotten here yesterday...
+                    case 0x113C:                               // (Second day) I am giving you my life savings
+                        Message_ContinueTextbox(play, 0x113B); // If only I had gotten here yesterday...
                         break;
 
-                    case 0x1141:                     // (Final day) This is all I have
-                        func_80151938(play, 0x1140); // If only I had gotten here two days ago...
+                    case 0x1141:                               // (Final day) This is all I have
+                        Message_ContinueTextbox(play, 0x1140); // If only I had gotten here two days ago...
                         EnSth_ChangeAnim(this, STH_ANIM_WAIT);
                         break;
 
                     default:
                         this->actionFunc = EnSth_OceansideSpiderHouseIdle;
-                        func_801477B4(play);
+                        Message_CloseTextbox(play);
                         this->sthFlags |= STH_FLAG_OCEANSIDE_SPIDER_HOUSE_GREET;
                         break;
                 }
@@ -443,7 +443,7 @@ void EnSth_HandleMoonLookingConversation(EnSth* this, PlayState* play) {
 
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         this->actionFunc = EnSth_MoonLookingIdle;
-        func_801477B4(play);
+        Message_CloseTextbox(play);
     }
     this->headRot.x = -0x1388;
 }
@@ -479,7 +479,7 @@ void EnSth_GetInitialSwampSpiderHouseText(EnSth* this, PlayState* play) {
         nextTextId = 0x90F; // (does not exist)
         EnSth_ChangeAnim(this, STH_ANIM_TALK);
     } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_MASK_OF_TRUTH)) {
-        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_SWAMP_SPIDER_HOUSE_TALKED)) {
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_SWAMP_SPIDER_HOUSE_MAN)) {
             nextTextId = 0x91B; // As soon as I calm down, getting rid of it
         } else {
             nextTextId = 0x918; // I've had enough of this, going home
@@ -525,8 +525,8 @@ void EnSth_SwampSpiderHouseGiveMask(EnSth* this, PlayState* play) {
     } else {
         this->sthFlags &= ~STH_FLAG_DRAW_MASK_OF_TRUTH;
         // This flag is used to keep track if the player has already spoken to the actor, triggering secondary dialogue.
-        SET_WEEKEVENTREG(WEEKEVENTREG_SWAMP_SPIDER_HOUSE_TALKED);
-        Actor_PickUp(&this->actor, play, GI_MASK_TRUTH, 10000.0f, 50.0f);
+        SET_WEEKEVENTREG(WEEKEVENTREG_TALKED_SWAMP_SPIDER_HOUSE_MAN);
+        Actor_OfferGetItem(&this->actor, play, GI_MASK_TRUTH, 10000.0f, 50.0f);
     }
 }
 
@@ -539,13 +539,13 @@ void EnSth_HandleSwampSpiderHouseConversation(EnSth* this, PlayState* play) {
         switch (play->msgCtx.currentTextId) {
             case 0x90C: // (does not exist)
                 EnSth_ChangeAnim(this, STH_ANIM_TALK);
-                func_80151938(play, play->msgCtx.currentTextId + 1);
+                Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                 break;
 
             case 0x916: // I have been saved! I thought I was doomed
             case 0x919: // I have been saved! I thought I was doomed (duplicate)
                 EnSth_ChangeAnim(this, STH_ANIM_WAIT);
-                func_80151938(play, play->msgCtx.currentTextId + 1);
+                Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                 break;
 
             case 0x8FC: // (does not exist)
@@ -553,20 +553,20 @@ void EnSth_HandleSwampSpiderHouseConversation(EnSth* this, PlayState* play) {
             case 0x900: // (does not exist)
             case 0x90A: // (does not exist)
             case 0x90D: // (does not exist)
-                func_80151938(play, play->msgCtx.currentTextId + 1);
+                Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                 break;
 
             case 0x901: // (does not exist)
             case 0x90B: // (does not exist)
             case 0x917: // Someone gave me this mask and said it would make me rich, Take it
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 this->actionFunc = EnSth_SwampSpiderHouseGiveMask;
                 EnSth_SwampSpiderHouseGiveMask(this, play);
                 break;
 
             case 0x91A: // Someone gave me this mask and said it would make me rich, getting rid of it
                 SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_MASK_OF_TRUTH);
-                CLEAR_WEEKEVENTREG(WEEKEVENTREG_SWAMP_SPIDER_HOUSE_TALKED);
+                CLEAR_WEEKEVENTREG(WEEKEVENTREG_TALKED_SWAMP_SPIDER_HOUSE_MAN);
 
             case 0x902: // (does not exist)
             case 0x903: // (does not exist)
@@ -578,7 +578,7 @@ void EnSth_HandleSwampSpiderHouseConversation(EnSth* this, PlayState* play) {
 
             default:
                 this->actor.flags &= ~ACTOR_FLAG_10000;
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 this->actionFunc = EnSth_SwampSpiderHouseIdle;
                 break;
         }
@@ -677,7 +677,7 @@ void EnSth_Update(Actor* thisx, PlayState* play) {
     Actor_MoveWithGravity(&this->actor);
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
 
     this->actionFunc(this, play);
 

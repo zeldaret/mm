@@ -281,14 +281,14 @@ void ObjDora_UpdateCollision(ObjDora* this, PlayState* play) {
                     this->lastGongHitType = DORA_HIT_STRONG;
                 }
 
-                func_800BC848(&this->actor, play, 5, 10);
+                Actor_RequestQuakeAndRumble(&this->actor, play, 5, 10);
                 ObjDora_SetupMoveGong(this);
 
                 if ((ObjDora_IsHalfHour(time) == true) && (this->rupeeDropTimer == 0)) {
                     Actor_PlaySfx(&this->actor, NA_SE_SY_TRE_BOX_APPEAR);
                     itemDrop = Item_DropCollectible(play, &this->actor.world.pos, ITEM00_RUPEE_BLUE);
                     itemDrop->world.rot.y = this->actor.world.rot.y;
-                    itemDrop->world.rot.y += (s32)(Rand_Centered() * 90.0f * (0x10000 / 360.0f));
+                    itemDrop->world.rot.y += (s32)DEG_TO_BINANG_ALT3(Rand_Centered() * 90.0f);
                     itemDrop->velocity.y = 5.0f;
                     itemDrop->gravity = -1.0f;
                     this->rupeeDropTimer = 40;

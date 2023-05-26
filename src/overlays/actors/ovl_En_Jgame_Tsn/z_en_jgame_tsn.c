@@ -231,15 +231,15 @@ void func_80C13F88(EnJgameTsn* this) {
 }
 
 void func_80C13F9C(EnJgameTsn* this, PlayState* play) {
-    if (this->actor.cutscene != -1) {
-        if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
-            ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
+    if (this->actor.csId != CS_ID_NONE) {
+        if (CutsceneManager_IsNext(this->actor.csId)) {
+            CutsceneManager_StartWithPlayerCs(this->actor.csId, &this->actor);
             func_80C14030(this);
         } else {
-            if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-                ActorCutscene_Stop(0x7C);
+            if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+                CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
             }
-            ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+            CutsceneManager_Queue(this->actor.csId);
         }
     } else {
         func_80C14030(this);
@@ -268,8 +268,8 @@ void func_80C14044(EnJgameTsn* this, PlayState* play) {
 
         case TEXT_STATE_DONE:
             if (Message_ShouldAdvance(play)) {
-                if (ActorCutscene_GetCurrentIndex() == this->actor.cutscene) {
-                    ActorCutscene_Stop(this->actor.cutscene);
+                if (CutsceneManager_GetCurrentCsId() == this->actor.csId) {
+                    CutsceneManager_Stop(this->actor.csId);
                 }
                 func_80C13B74(this);
             }
@@ -284,7 +284,7 @@ void func_80C1410C(EnJgameTsn* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     player->stateFlags1 |= PLAYER_STATE1_20;
-    func_801A2BB8(0x25);
+    Audio_PlaySubBgm(NA_BGM_TIMED_MINI_GAME);
     play->interfaceCtx.minigameState = MINIGAME_STATE_COUNTDOWN_SETUP_3;
     Interface_InitMinigame(play);
     SET_WEEKEVENTREG(WEEKEVENTREG_90_20);
@@ -341,7 +341,7 @@ void func_80C14230(EnJgameTsn* this, PlayState* play) {
         this->unk_300 = 0x109F;
         player->stateFlags1 |= PLAYER_STATE1_20;
         *this->unk_208[this->unk_218] &= ~OBJLUPYGAMELIFT_IGNITE_FIRE;
-        func_801A2C20();
+        Audio_StopSubBgm();
         func_80C14030(this);
     } else if ((player->actor.bgCheckFlags & BGCHECKFLAG_WATER_TOUCH) ||
                (player->actor.bgCheckFlags & BGCHECKFLAG_WATER)) {
@@ -350,7 +350,7 @@ void func_80C14230(EnJgameTsn* this, PlayState* play) {
         this->unk_300 = 0x10A0;
         player->stateFlags1 |= PLAYER_STATE1_20;
         *this->unk_208[this->unk_218] &= ~OBJLUPYGAMELIFT_IGNITE_FIRE;
-        func_801A2C20();
+        Audio_StopSubBgm();
         func_80C14030(this);
     }
 
@@ -359,7 +359,7 @@ void func_80C14230(EnJgameTsn* this, PlayState* play) {
         this->unk_300 = 0x10A1;
         player->stateFlags1 |= PLAYER_STATE1_20;
         *this->unk_208[this->unk_218] &= ~OBJLUPYGAMELIFT_IGNITE_FIRE;
-        func_801A2C20();
+        Audio_StopSubBgm();
         func_80C14030(this);
     }
 }
@@ -386,9 +386,9 @@ void func_80C14554(EnJgameTsn* this, PlayState* play) {
         }
         func_80C145FC(this);
     } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_82_10)) {
-        Actor_PickUp(&this->actor, play, GI_RUPEE_PURPLE, 500.0f, 100.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_RUPEE_PURPLE, 500.0f, 100.0f);
     } else {
-        Actor_PickUp(&this->actor, play, GI_HEART_PIECE, 500.0f, 100.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_HEART_PIECE, 500.0f, 100.0f);
     }
 }
 
@@ -402,14 +402,14 @@ void func_80C14610(EnJgameTsn* this, PlayState* play) {
         this->unk_300 = 0x10A4;
         func_80C14030(this);
     } else {
-        func_800B85E0(&this->actor, play, 200.0f, -1);
+        func_800B85E0(&this->actor, play, 200.0f, PLAYER_IA_MINUS1);
     }
 }
 
 void func_80C14684(EnJgameTsn* this, PlayState* play) {
     if (Message_ShouldAdvance(play)) {
         if (play->msgCtx.choiceIndex == 0) {
-            if (gSaveContext.save.playerData.rupees >= 20) {
+            if (gSaveContext.save.saveInfo.playerData.rupees >= 20) {
                 Message_StartTextbox(play, 0x109E, &this->actor);
                 this->unk_300 = 0x109E;
                 Rupees_ChangeBy(-20);
@@ -468,10 +468,10 @@ void func_80C147B4(EnJgameTsn* this, PlayState* play) {
                 break;
 
             case 0x109E:
-                if (ActorCutscene_GetCurrentIndex() == this->actor.cutscene) {
-                    ActorCutscene_Stop(this->actor.cutscene);
+                if (CutsceneManager_GetCurrentCsId() == this->actor.csId) {
+                    CutsceneManager_Stop(this->actor.csId);
                 }
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 func_80C1476C(this, play);
                 func_80C1410C(this, play);
                 break;
@@ -479,7 +479,7 @@ void func_80C147B4(EnJgameTsn* this, PlayState* play) {
             case 0x109F:
             case 0x10A0:
             case 0x10A1:
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 gSaveContext.minigameStatus = MINIGAME_STATUS_END;
                 gSaveContext.timerStates[TIMER_ID_MINIGAME_2] = TIMER_STATE_STOP;
                 CLEAR_WEEKEVENTREG(WEEKEVENTREG_90_20);
@@ -487,7 +487,7 @@ void func_80C147B4(EnJgameTsn* this, PlayState* play) {
                 break;
 
             case 0x10A3:
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 func_80C14540(this);
                 func_80C14554(this, play);
                 break;

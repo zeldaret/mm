@@ -420,7 +420,7 @@ void func_80932C98(EnFz* this, PlayState* play) {
 
                 case 15:
                     Actor_ApplyDamage(&this->actor);
-                    Actor_SetColorFilter(&this->actor, 0x4000, 0xFF, 0x2000, 8);
+                    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_XLU, 8);
                     if (this->actor.colChkInfo.health != 0) {
                         Actor_PlaySfx(&this->actor, NA_SE_EN_FREEZAD_DAMAGE);
                         sp3C.x = this->actor.world.pos.x;
@@ -824,7 +824,7 @@ void EnFz_Update(Actor* thisx, PlayState* play) {
     Math_StepToF(&this->actor.speed, this->unk_BBC, 0.2f);
     Actor_MoveWithGravity(&this->actor);
     if (this->unk_BCC != 0) {
-        Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 20.0f, 5);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 20.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
     }
 
     D_809347AC[this->unk_BD6](this);

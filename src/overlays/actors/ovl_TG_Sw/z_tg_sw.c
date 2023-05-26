@@ -34,18 +34,17 @@ ActorInit TG_Sw_InitVars = {
 void TGSw_ActionDecider(TGSw* this, PlayState* play) {
     f32 scaledAbsoluteRotZ;
     f32 scaledAbsoluteRotY;
-    u8 unk1F4;
+    PlayerImpactType playerImpactType;
 
-    // Maybe actorCtx Debug Flag?
-    if (play->actorCtx.unk1F5 != 0) {
+    if (play->actorCtx.playerImpact.timer != 0) {
         scaledAbsoluteRotY = ABS_ALT(this->actor.world.rot.y) * 4.0f;
         scaledAbsoluteRotZ = ABS_ALT(this->actor.world.rot.z) * 4.0f;
 
         if ((scaledAbsoluteRotZ < this->actor.xzDistToPlayer) || (scaledAbsoluteRotY < this->actor.playerHeightRel)) {
             return;
         }
-        unk1F4 = play->actorCtx.unk1F4;
-        if (unk1F4 == 2 || unk1F4 == 0) {
+        playerImpactType = play->actorCtx.playerImpact.type;
+        if ((playerImpactType == PLAYER_IMPACT_BONK) || (playerImpactType == PLAYER_IMPACT_GORON_GROUND_POUND)) {
             this->actionFunc = TGSw_ActionExecuteOneShot;
         }
     }
@@ -91,7 +90,7 @@ void TGSw_ActionExecuteOneShot(TGSw* this, PlayState* play) {
 void TGSw_Init(Actor* thisx, PlayState* play) {
     TGSw* this = THIS;
 
-    this->actor.cutscene = this->actor.world.rot.z;
+    this->actor.csId = this->actor.world.rot.z;
     this->actionFunc = TGSw_ActionDecider;
 }
 

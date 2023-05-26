@@ -11,6 +11,4 @@ typedef struct {
     /* 0x28 */ s16 scale;
 } EffectEnIceBlockInitParams; // size = 0x2C
 
-extern const EffectSsInit Effect_En_Ice_Block_InitVars;
-
 #endif

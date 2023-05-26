@@ -102,19 +102,19 @@ void EnOwl_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     EnOwl* this = THIS;
     s32 i;
-    s16 cutscene = this->actor.cutscene;
+    s16 csId = this->actor.csId;
     s32 owlType;
     s32 switchFlag;
 
-    for (i = 0; i < ARRAY_COUNT(this->unk_400); i++) {
-        this->unk_400[i] = cutscene;
-        if (cutscene != -1) {
-            this->actor.cutscene = cutscene;
-            cutscene = ActorCutscene_GetAdditionalCutscene(this->actor.cutscene);
+    for (i = 0; i < ARRAY_COUNT(this->csIdList); i++) {
+        this->csIdList[i] = csId;
+        if (csId != CS_ID_NONE) {
+            this->actor.csId = csId;
+            csId = CutsceneManager_GetAdditionalCsId(this->actor.csId);
         }
     }
 
-    this->actor.cutscene = this->unk_400[0];
+    this->actor.csId = this->csIdList[0];
     Actor_ProcessInitChain(&this->actor, sInitChain);
     if (ENOWL_GET_TYPE(&this->actor) == ENOWL_GET_TYPE_30) {
         Actor_SetScale(&this->actor, 0.1f);
@@ -144,7 +144,7 @@ void EnOwl_Init(Actor* thisx, PlayState* play) {
     this->unk_409 = 4;
     this->unk_40B = this->unk_408 = 0;
     this->unk_40C = 4;
-    this->unk_406 = -1;
+    this->csIdIndex = -1;
     owlType = ENOWL_GET_TYPE(&this->actor);
     switchFlag = ENOWL_GET_SWITCHFLAG(&this->actor);
 
@@ -157,7 +157,7 @@ void EnOwl_Init(Actor* thisx, PlayState* play) {
             break;
 
         case ENOWL_GET_TYPE_2:
-            if (gSaveContext.save.inventory.items[ITEM_LENS] == ITEM_LENS) {
+            if (gSaveContext.save.saveInfo.inventory.items[ITEM_LENS] == ITEM_LENS) {
                 Actor_Kill(&this->actor);
                 return;
             }
@@ -292,7 +292,7 @@ void func_8095ABA8(EnOwl* this) {
 
 void func_8095ABF0(EnOwl* this, PlayState* play) {
     if (Actor_TextboxIsClosing(&this->actor, play)) {
-        Audio_QueueSeqCmd(0x110000FF);
+        SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_FANFARE, 0);
         func_8095AAD0(this, play);
         this->actor.flags &= ~ACTOR_FLAG_10000;
     }
@@ -301,7 +301,7 @@ void func_8095ABF0(EnOwl* this, PlayState* play) {
 // Unused?
 void func_8095AC50(EnOwl* this, PlayState* play) {
     if (Actor_TextboxIsClosing(&this->actor, play)) {
-        Audio_QueueSeqCmd(0x110000FF);
+        SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_FANFARE, 0);
         if ((this->unk_3DA % 64) == 0) {
             func_8095AAD0(this, play);
         } else {
@@ -315,11 +315,11 @@ void func_8095AC50(EnOwl* this, PlayState* play) {
 
 void func_8095ACEC(EnOwl* this) {
     this->actionFlags &= ~0x40;
-    if (this->unk_406 >= 0) {
-        if (ActorCutscene_GetCurrentIndex() == this->unk_400[this->unk_406]) {
-            ActorCutscene_Stop(this->unk_400[this->unk_406]);
+    if (this->csIdIndex >= 0) {
+        if (CutsceneManager_GetCurrentCsId() == this->csIdList[this->csIdIndex]) {
+            CutsceneManager_Stop(this->csIdList[this->csIdIndex]);
         }
-        this->unk_406 = -1;
+        this->csIdIndex = -1;
     }
 }
 
@@ -327,12 +327,12 @@ void func_8095AD54(EnOwl* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_CHOICE) && Message_ShouldAdvance(play)) {
         switch (play->msgCtx.choiceIndex) {
             case OWL_REPEAT:
-                func_80151938(play, 0x7D1);
+                Message_ContinueTextbox(play, 0x7D1);
                 this->actionFunc = func_8095AE00;
                 break;
 
             case OWL_OK:
-                func_80151938(play, 0x7D3);
+                Message_ContinueTextbox(play, 0x7D3);
                 this->actionFunc = func_8095ABF0;
                 break;
         }
@@ -341,14 +341,14 @@ void func_8095AD54(EnOwl* this, PlayState* play) {
 
 void func_8095AE00(EnOwl* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-        func_80151938(play, 0x7D2);
+        Message_ContinueTextbox(play, 0x7D2);
         this->actionFunc = func_8095AD54;
     }
 }
 
 void func_8095AE60(EnOwl* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-        func_80151938(play, 0x7D1);
+        Message_ContinueTextbox(play, 0x7D1);
         this->actionFunc = func_8095AE00;
     }
 }
@@ -367,10 +367,10 @@ void func_8095AF2C(EnOwl* this, PlayState* play) {
             if (Message_ShouldAdvance(play)) {
                 if (play->msgCtx.currentTextId == 0xBFE) {
                     func_8095ACEC(this);
-                    func_801477B4(play);
+                    Message_CloseTextbox(play);
                     this->actionFunc = func_8095ABF0;
                 } else {
-                    func_80151938(play, play->msgCtx.currentTextId + 1);
+                    Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                 }
             }
             break;
@@ -387,7 +387,7 @@ void func_8095AFEC(EnOwl* this, PlayState* play) {
     if (func_8095A978(this, play, 0xBF6, 200.0f, 100.0f)) {
         Audio_PlayFanfare(NA_BGM_OWL);
         this->actionFunc = func_8095AF2C;
-        this->unk_406 = 0;
+        this->csIdIndex = 0;
         this->actionFlags |= 0x40;
     }
 }
@@ -502,7 +502,7 @@ void func_8095B574(EnOwl* this, PlayState* play) {
         this->actionFunc = func_8095BA84;
         Audio_PlayFanfare(NA_BGM_OWL);
         this->actionFlags |= 0x40;
-        this->unk_406 = 2;
+        this->csIdIndex = 2;
     } else if (this->actor.xzDistToPlayer < 200.0f) {
         this->actor.flags |= ACTOR_FLAG_10000;
         func_800B8500(&this->actor, play, 200.0f, 400.0f, PLAYER_IA_NONE);
@@ -614,16 +614,16 @@ void func_8095BA84(EnOwl* this, PlayState* play) {
                             case 0:
                                 func_8019F208();
                                 if (CHECK_WEEKEVENTREG(WEEKEVENTREG_09_40)) {
-                                    func_80151938(play, 0xBF4);
+                                    Message_ContinueTextbox(play, 0xBF4);
                                 } else {
                                     SET_WEEKEVENTREG(WEEKEVENTREG_09_40);
-                                    func_80151938(play, 0xBED);
+                                    Message_ContinueTextbox(play, 0xBED);
                                 }
                                 break;
 
                             case 1:
                                 func_8019F230();
-                                func_80151938(play, 0xBEF);
+                                Message_ContinueTextbox(play, 0xBEF);
                                 break;
                         }
                         break;
@@ -632,12 +632,12 @@ void func_8095BA84(EnOwl* this, PlayState* play) {
                         switch (play->msgCtx.choiceIndex) {
                             case 0:
                                 func_8019F208();
-                                func_80151938(play, 0xBF4);
+                                Message_ContinueTextbox(play, 0xBF4);
                                 return;
 
                             case 1:
                                 func_8019F230();
-                                func_80151938(play, 0xBF3);
+                                Message_ContinueTextbox(play, 0xBF3);
                                 return;
                         }
                         break;
@@ -650,22 +650,22 @@ void func_8095BA84(EnOwl* this, PlayState* play) {
                 switch (play->msgCtx.currentTextId) {
                     case 0xBEA:
                         SET_WEEKEVENTREG(WEEKEVENTREG_09_20);
-                        func_80151938(play, 0xBEB);
+                        Message_ContinueTextbox(play, 0xBEB);
                         break;
 
                     case 0xBEB:
                     case 0xBF0:
-                        func_80151938(play, 0xBEC);
+                        Message_ContinueTextbox(play, 0xBEC);
                         break;
 
                     case 0xBED:
                     case 0xBF4:
-                        func_80151938(play, 0xBEE);
+                        Message_ContinueTextbox(play, 0xBEE);
                         break;
 
                     case 0xBEE:
-                        func_801477B4(play);
-                        Audio_QueueSeqCmd(0x110000FF);
+                        Message_CloseTextbox(play);
+                        SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_FANFARE, 0);
                         EnOwl_ChangeMode(this, func_8095B9FC, func_8095C484, &this->skelAnime1, &object_owl_Anim_00CB94,
                                          0.0f);
                         this->eyeTexIndex = 0;
@@ -674,14 +674,14 @@ void func_8095BA84(EnOwl* this, PlayState* play) {
                         this->actor.flags &= ~ACTOR_FLAG_10000;
                         this->actor.home.rot.x = 0;
                         func_8095ACEC(this);
-                        this->unk_406 = 0;
+                        this->csIdIndex = 0;
                         this->actionFlags |= 0x40;
                         break;
 
                     case 0xBEF:
                     case 0xBF3:
-                        func_801477B4(play);
-                        Audio_QueueSeqCmd(0x110000FF);
+                        Message_CloseTextbox(play);
+                        SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_FANFARE, 0);
                         func_8095ACEC(this);
                         this->actor.flags &= ~ACTOR_FLAG_10000;
                         this->actor.textId = 0xBF0;
@@ -689,12 +689,12 @@ void func_8095BA84(EnOwl* this, PlayState* play) {
                         break;
 
                     case 0xBF1:
-                        func_80151938(play, 0xBF2);
+                        Message_ContinueTextbox(play, 0xBF2);
                         break;
 
                     case 0xBF5:
-                        func_801477B4(play);
-                        Audio_QueueSeqCmd(0x110000FF);
+                        Message_CloseTextbox(play);
+                        SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_FANFARE, 0);
                         this->actor.flags &= ~ACTOR_FLAG_10000;
                         EnOwl_ChangeMode(this, func_8095B3DC, func_8095C484, &this->skelAnime1, &object_owl_Anim_00CB94,
                                          0.0f);
@@ -714,7 +714,7 @@ void func_8095BE0C(EnOwl* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->actionFunc = func_8095BA84;
         Audio_PlayFanfare(NA_BGM_OWL);
-        this->unk_406 = 1;
+        this->csIdIndex = 1;
         this->actionFlags |= 0x40;
     } else if (this->actor.textId == 0xBF0) {
         if (this->actor.isTargeted) {
@@ -865,16 +865,16 @@ s32 func_8095C510(EnOwl* this) {
 
 void func_8095C568(EnOwl* this) {
     if (this->actionFlags & 0x40) {
-        if ((this->unk_406 < 0) || (this->unk_400[this->unk_406] < 0)) {
+        if ((this->csIdIndex < 0) || (this->csIdList[this->csIdIndex] < 0)) {
             this->actionFlags &= ~0x40;
-        } else if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-            ActorCutscene_Stop(0x7C);
-            ActorCutscene_SetIntentToPlay(this->unk_400[this->unk_406]);
-        } else if (ActorCutscene_GetCanPlayNext(this->unk_400[this->unk_406])) {
-            ActorCutscene_StartAndSetUnkLinkFields(this->unk_400[this->unk_406], &this->actor);
+        } else if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+            CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
+            CutsceneManager_Queue(this->csIdList[this->csIdIndex]);
+        } else if (CutsceneManager_IsNext(this->csIdList[this->csIdIndex])) {
+            CutsceneManager_StartWithPlayerCs(this->csIdList[this->csIdIndex], &this->actor);
             this->actionFlags &= ~0x40;
         } else {
-            ActorCutscene_SetIntentToPlay(this->unk_400[this->unk_406]);
+            CutsceneManager_Queue(this->csIdList[this->csIdIndex]);
         }
     }
 }
@@ -894,7 +894,7 @@ void EnOwl_Update(Actor* thisx, PlayState* play) {
 
     this->actionFunc(this, play);
     func_8095C568(this);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 10.0f, 10.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 10.0f, 10.0f, UPDBGCHECKINFO_FLAG_4);
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
     if (this->actor.update != NULL) {
@@ -1077,7 +1077,7 @@ void func_8095CCF4(Actor* thisx, PlayState* play) {
     }
 
     this->actor.world.pos.y -= 1.0f;
-    Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 10.0f, 10.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 10.0f, 10.0f, UPDBGCHECKINFO_FLAG_4);
     if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         this->unk_3DA = (this->unk_3DA >> 3) * 7;
         if (this->unk_3DC > 0) {

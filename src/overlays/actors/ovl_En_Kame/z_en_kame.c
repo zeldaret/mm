@@ -170,7 +170,7 @@ void func_80AD6F9C(EnKame* this) {
     this->collider.base.colType = COLTYPE_HIT3;
     this->unk_2A2 = 80;
     this->actor.flags &= ~ACTOR_FLAG_400;
-    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 80);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 80);
 }
 
 void func_80AD7018(EnKame* this, PlayState* play) {
@@ -289,11 +289,12 @@ void func_80AD75A8(EnKame* this, PlayState* play) {
 
     if ((this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) && (this->actor.speed >= 3.0f)) {
         if ((play->gameplayFrames % 2) == 0) {
-            u32 temp_v0 = func_800C9BB8(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
+            SurfaceMaterial surfaceMaterial =
+                SurfaceType_GetMaterial(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
 
-            if ((temp_v0 == 0) || (temp_v0 == 1)) {
+            if ((surfaceMaterial == SURFACE_MATERIAL_DIRT) || (surfaceMaterial == SURFACE_MATERIAL_SAND)) {
                 func_800B1210(play, &this->actor.world.pos, &D_80AD8E5C, &gZeroVec3f, 550, 100);
-            } else if (temp_v0 == 14) {
+            } else if (surfaceMaterial == SURFACE_MATERIAL_SNOW) {
                 func_800B0DE0(play, &this->actor.world.pos, &D_80AD8E5C, &gZeroVec3f, &D_80AD8E54, &D_80AD8E58, 550,
                               100);
             }
@@ -523,10 +524,10 @@ void func_80AD7FF8(EnKame* this, PlayState* play) {
 }
 
 void func_80AD8060(EnKame* this) {
-    s16 sp36 = Animation_GetLastFrame(&object_tl_Anim_0008B4);
+    s16 lastFrame = Animation_GetLastFrame(&object_tl_Anim_0008B4);
 
-    Animation_Change(&this->skelAnime1, &object_tl_Anim_0008B4, 1.0f, 0.0f, sp36, ANIMMODE_ONCE, -3.0f);
-    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, sp36);
+    Animation_Change(&this->skelAnime1, &object_tl_Anim_0008B4, 1.0f, 0.0f, lastFrame, ANIMMODE_ONCE, -3.0f);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, lastFrame);
     Actor_PlaySfx(&this->actor, NA_SE_EN_PAMET_DAMAGE);
     this->collider.base.acFlags &= ~AC_ON;
     this->actionFunc = func_80AD810C;
@@ -540,7 +541,7 @@ void func_80AD810C(EnKame* this, PlayState* play) {
 
 void func_80AD8148(EnKame* this, PlayState* play) {
     Animation_PlayLoop(&this->skelAnime1, &object_tl_Anim_000AF4);
-    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 20);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 20);
     this->collider.base.acFlags &= ~AC_ON;
     this->collider.base.atFlags &= ~AT_ON;
     this->collider.base.atFlags &= ~(AC_HARD | AC_HIT);
@@ -571,7 +572,7 @@ void func_80AD825C(EnKame* this, PlayState* play) {
         if (this->unk_29E == 1) {
             this->actor.colorFilterTimer = 100;
         } else if (this->actor.colorFilterTimer == 0) {
-            Actor_SetColorFilter(&this->actor, 0xC000, 255, 0, 100);
+            Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_NONE, 255, COLORFILTER_BUFFLAG_OPA, 100);
         }
         this->actor.shape.rot.x += Rand_S16Offset(0x700, 0x1400);
         this->actor.shape.rot.y += (s16)Rand_ZeroFloat(5120.0f);
@@ -643,7 +644,7 @@ void func_80AD84C0(EnKame* this, PlayState* play) {
         } else if (!(this->collider.base.acFlags & AC_HARD)) {
             if (this->actor.colChkInfo.damageEffect == 5) {
                 this->unk_2A2 = 40;
-                Actor_SetColorFilter(&this->actor, 0, 255, 0, 40);
+                Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 255, COLORFILTER_BUFFLAG_OPA, 40);
                 Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_FREEZE);
                 this->drawDmgEffScale = 0.6f;
                 this->drawDmgEffAlpha = 2.0f;
@@ -651,7 +652,7 @@ void func_80AD84C0(EnKame* this, PlayState* play) {
                 func_80AD7FA4(this);
             } else if (this->actor.colChkInfo.damageEffect == 1) {
                 this->unk_2A2 = 40;
-                Actor_SetColorFilter(&this->actor, 0, 255, 0, 40);
+                Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 255, COLORFILTER_BUFFLAG_OPA, 40);
                 Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_FREEZE);
                 func_80AD7FA4(this);
             } else if (this->actor.colChkInfo.damageEffect == 3) {
@@ -716,7 +717,9 @@ void EnKame_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
 
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 40.0f, 60.0f, 40.0f, 0x1F);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 40.0f, 60.0f, 40.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_2 | UPDBGCHECKINFO_FLAG_4 |
+                                UPDBGCHECKINFO_FLAG_8 | UPDBGCHECKINFO_FLAG_10);
 
     if (this->actor.shape.shadowDraw != NULL) {
         Actor_SetFocus(&this->actor, 25.0f);

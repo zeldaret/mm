@@ -92,7 +92,7 @@ void BgOpenShutter_Init(Actor* thisx, PlayState* play) {
     BgOpenShutter* this = THIS;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
     DynaPolyActor_LoadMesh(play, &this->dyna, &object_open_obj_Colheader_001640);
     this->actionFunc = func_80ACAD88;
 }
@@ -151,10 +151,10 @@ void func_80ACAEF0(BgOpenShutter* this, PlayState* play) {
         Actor_SpawnFloorDustRing(play, &this->dyna.actor, &this->dyna.actor.world.pos, 60.0f, 10, 8.0f, 500, 10, true);
         Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_BIGWALL_BOUND);
 
-        quakeIndex = Quake_Add(Play_GetCamera(play, CAM_ID_MAIN), QUAKE_TYPE_3);
+        quakeIndex = Quake_Request(Play_GetCamera(play, CAM_ID_MAIN), QUAKE_TYPE_3);
         Quake_SetSpeed(quakeIndex, -32536);
-        Quake_SetQuakeValues(quakeIndex, 2, 0, 0, 0);
-        Quake_SetCountdown(quakeIndex, 10);
+        Quake_SetPerturbations(quakeIndex, 2, 0, 0, 0);
+        Quake_SetDuration(quakeIndex, 10);
 
         Rumble_Request(this->dyna.actor.xyzDistToPlayerSq, 180, 20, 100);
 
@@ -166,18 +166,18 @@ void func_80ACAEF0(BgOpenShutter* this, PlayState* play) {
 void BgOpenShutter_Update(Actor* thisx, PlayState* play2) {
     BgOpenShutter* this = THIS;
     PlayState* play = play2;
-    s32 index;
+    s32 cueChannel;
 
-    if (Cutscene_CheckActorAction(play, 0x7C)) {
-        index = Cutscene_GetActorActionIndex(play, 0x7C);
-        if (play->csCtx.actorActions[index]->action == BGOPENSHUTTER_DOOR_OPEN) {
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_124)) {
+        cueChannel = Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_124);
+        if (play->csCtx.actorCues[cueChannel]->id == BGOPENSHUTTER_DOOR_OPEN) {
             if (this->actionFunc == func_80ACAD88) {
                 Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_SLIDE_DOOR_OPEN);
                 this->actionFunc = func_80ACAE5C;
                 this->dyna.actor.velocity.y = 0.0f;
             }
             this->unk_164 = 0;
-        } else if (play->csCtx.actorActions[index]->action == BGOPENSHUTTER_DOOR_CLOSED) {
+        } else if (play->csCtx.actorCues[cueChannel]->id == BGOPENSHUTTER_DOOR_CLOSED) {
             if (this->actionFunc == func_80ACAE5C) {
                 Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_SLIDE_DOOR_CLOSE);
                 this->actionFunc = func_80ACAEF0;

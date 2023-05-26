@@ -6,7 +6,7 @@
 
 #include "z_en_okarina_tag.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_2000000 | ACTOR_FLAG_8000000)
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_2000000 | ACTOR_FLAG_CANT_LOCK_ON)
 
 #define THIS ((EnOkarinaTag*)thisx)
 
@@ -81,7 +81,7 @@ void func_8093E518(EnOkarinaTag* this, PlayState* play) {
     var_v1 = this->unk14A;
     if (var_v1 == 6) {
         var_v1 = 0xA;
-        if (gSaveContext.save.unk_F65 == 0) {
+        if (gSaveContext.save.saveInfo.unk_F41 == 0) {
             return;
         }
     }

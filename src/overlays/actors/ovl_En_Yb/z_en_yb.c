@@ -68,7 +68,10 @@ static ColliderCylinderInit sCylinderInit = {
 //  assumption: draw uses two different skeleton functions, might be incompatible
 static AnimationHeader* gYbUnusedAnimations[] = { &object_yb_Anim_000200 };
 
-static LinkAnimationHeader* gLinkAnimations[] = { &gPlayerAnim_link_normal_wait_free, &gPlayerAnim_alink_dance_loop };
+static PlayerAnimationHeader* gPlayerAnimations[] = {
+    &gPlayerAnim_link_normal_wait_free,
+    &gPlayerAnim_alink_dance_loop,
+};
 
 static Vec3f D_80BFB2E8 = { 0.0f, 0.5f, 0.0f };
 
@@ -78,7 +81,7 @@ static Vec3f D_80BFB300 = { 500.0f, -500.0f, 0.0f };
 
 void EnYb_Init(Actor* thisx, PlayState* play) {
     EnYb* this = THIS;
-    s16 tempCutscene;
+    s16 csId;
     s32 i;
 
     Actor_SetScale(&this->actor, 0.01f);
@@ -99,17 +102,17 @@ void EnYb_Init(Actor* thisx, PlayState* play) {
 
     EnYb_ChangeAnim(play, this, 2, ANIMMODE_LOOP, 0.0f);
 
-    tempCutscene = this->actor.cutscene;
-    for (i = 0; i < ARRAY_COUNT(this->cutscenes); i++) {
-        this->cutscenes[i] = tempCutscene;
-        if (tempCutscene != -1) {
-            this->actor.cutscene = tempCutscene;
-            tempCutscene = ActorCutscene_GetAdditionalCutscene(this->actor.cutscene);
+    csId = this->actor.csId;
+    for (i = 0; i < ARRAY_COUNT(this->csIdList); i++) {
+        this->csIdList[i] = csId;
+        if (csId != CS_ID_NONE) {
+            this->actor.csId = csId;
+            csId = CutsceneManager_GetAdditionalCsId(this->actor.csId);
         }
     }
 
-    this->cutsceneIndex = -1;
-    this->actor.cutscene = this->cutscenes[0];
+    this->csIdIndex = -1;
+    this->actor.csId = this->csIdList[0];
 
     // between midnight and morning start spawned
     if (gSaveContext.save.time < CLOCK_TIME(6, 0)) {
@@ -168,17 +171,17 @@ void EnYb_ActorShadowFunc(Actor* thisx, Lights* mapper, PlayState* play) {
 
 void EnYb_ChangeAnim(PlayState* play, EnYb* this, s16 animIndex, u8 animMode, f32 morphFrames) {
     if (animIndex >= 0 && animIndex < 3) {
-        if (animIndex != this->animIndex || animMode != ANIMMODE_LOOP) {
+        if ((animIndex != this->animIndex) || (animMode != ANIMMODE_LOOP)) {
             if (animIndex > 0) {
                 if (animMode == ANIMMODE_LOOP) {
-                    LinkAnimation_Change(play, &this->skelAnime, gLinkAnimations[animIndex - 1], 1.0f, 0.0f,
-                                         Animation_GetLastFrame(gLinkAnimations[animIndex - 1]), ANIMMODE_LOOP,
-                                         morphFrames);
+                    PlayerAnimation_Change(play, &this->skelAnime, gPlayerAnimations[animIndex - 1], 1.0f, 0.0f,
+                                           Animation_GetLastFrame(gPlayerAnimations[animIndex - 1]), ANIMMODE_LOOP,
+                                           morphFrames);
                 } else {
                     // unused case, (only called once with animMode = ANIMMODE_LOOP)
-                    LinkAnimation_Change(play, &this->skelAnime, gLinkAnimations[animIndex - 1], 1.0f, 0.0f,
-                                         Animation_GetLastFrame(gLinkAnimations[animIndex - 1]), ANIMMODE_LOOP,
-                                         morphFrames);
+                    PlayerAnimation_Change(play, &this->skelAnime, gPlayerAnimations[animIndex - 1], 1.0f, 0.0f,
+                                           Animation_GetLastFrame(gPlayerAnimations[animIndex - 1]), ANIMMODE_LOOP,
+                                           morphFrames);
                 }
             } else {
                 // unused case, (only called once with animIndex = 2)
@@ -207,22 +210,22 @@ void EnYb_UpdateAnimation(EnYb* this, PlayState* play) {
     if (this->animIndex <= 0) {
         SkelAnime_Update(&this->skelAnime);
     } else {
-        LinkAnimation_Update(play, &this->skelAnime);
+        PlayerAnimation_Update(play, &this->skelAnime);
     }
 }
 
 void EnYb_FinishTeachingCutscene(EnYb* this) {
-    if (this->cutsceneIndex != -1) {
-        if (ActorCutscene_GetCurrentIndex() == this->cutscenes[this->cutsceneIndex]) {
-            ActorCutscene_Stop(this->cutscenes[this->cutsceneIndex]);
+    if (this->csIdIndex != -1) {
+        if (CutsceneManager_GetCurrentCsId() == this->csIdList[this->csIdIndex]) {
+            CutsceneManager_Stop(this->csIdList[this->csIdIndex]);
         }
-        this->cutsceneIndex = -1;
+        this->csIdIndex = -1;
     }
 }
 
-void EnYb_ChangeCutscene(EnYb* this, s16 cutsceneId) {
+void EnYb_ChangeCutscene(EnYb* this, s16 csIdIndex) {
     EnYb_FinishTeachingCutscene(this);
-    this->cutsceneIndex = cutsceneId;
+    this->csIdIndex = csIdIndex;
 }
 
 /**
@@ -276,7 +279,7 @@ void EnYb_ReceiveMask(EnYb* this, PlayState* play) {
         this->actor.flags |= ACTOR_FLAG_10000;
         func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
     } else {
-        Actor_PickUp(&this->actor, play, GI_MASK_KAMARO, 10000.0f, 100.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_MASK_KAMARO, 10000.0f, 100.0f);
     }
     EnYb_EnableProximityMusic(this);
 }
@@ -289,27 +292,27 @@ void EnYb_Talk(EnYb* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         switch (play->msgCtx.currentTextId) {
             case 0x147D: // I am counting on you
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 this->actionFunc = EnYb_Disappear;
                 SET_WEEKEVENTREG(WEEKEVENTREG_82_04);
                 break;
             case 0x147C: // Spread my dance across the world
                 if (Player_GetMask(play) == PLAYER_MASK_KAMARO) {
-                    func_801477B4(play);
+                    Message_CloseTextbox(play);
                     this->actionFunc = EnYb_Idle;
 
                 } else if (INV_CONTENT(ITEM_MASK_KAMARO) == ITEM_MASK_KAMARO) {
-                    func_80151938(play, 0x147D); // I am counting on you
+                    Message_ContinueTextbox(play, 0x147D); // I am counting on you
                     func_80BFA2FC(play);
 
                 } else {
-                    func_801477B4(play);
+                    Message_CloseTextbox(play);
                     this->actionFunc = EnYb_ReceiveMask;
                     EnYb_ReceiveMask(this, play);
                 }
                 break;
             default:
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 this->actionFunc = EnYb_Idle;
                 break;
         }
@@ -406,21 +409,21 @@ void EnYb_Update(Actor* thisx, PlayState* play) {
     }
     if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_1)) {
         Actor_MoveWithGravity(&this->actor);
-        Actor_UpdateBgCheckInfo(play, &this->actor, 40.0f, 25.0f, 40.0f, 5);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 40.0f, 25.0f, 40.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
     }
 
     this->actionFunc(this, play);
 
-    if (this->cutsceneIndex != -1 && ActorCutscene_GetCurrentIndex() != this->cutscenes[this->cutsceneIndex]) {
-        if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-            ActorCutscene_Stop(0x7C);
-            ActorCutscene_SetIntentToPlay(this->cutscenes[this->cutsceneIndex]);
-        } else if (ActorCutscene_GetCanPlayNext(this->cutscenes[this->cutsceneIndex])) {
-            if (this->cutsceneIndex == 0) {
-                ActorCutscene_StartAndSetUnkLinkFields(this->cutscenes[this->cutsceneIndex], &this->actor);
+    if ((this->csIdIndex != -1) && (CutsceneManager_GetCurrentCsId() != this->csIdList[this->csIdIndex])) {
+        if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+            CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
+            CutsceneManager_Queue(this->csIdList[this->csIdIndex]);
+        } else if (CutsceneManager_IsNext(this->csIdList[this->csIdIndex])) {
+            if (this->csIdIndex == 0) {
+                CutsceneManager_StartWithPlayerCs(this->csIdList[this->csIdIndex], &this->actor);
             }
         } else {
-            ActorCutscene_SetIntentToPlay(this->cutscenes[this->cutsceneIndex]);
+            CutsceneManager_Queue(this->csIdList[this->csIdIndex]);
         }
     }
 }

@@ -7,7 +7,7 @@
 #include "z_en_bat.h"
 #include "objects/object_bat/object_bat.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_1000 | ACTOR_FLAG_4000)
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_IGNORE_QUAKE | ACTOR_FLAG_4000)
 
 #define THIS ((EnBat*)thisx)
 
@@ -164,8 +164,8 @@ void EnBat_Init(Actor* thisx, PlayState* play) {
                 &play->actorCtx, play, ACTOR_EN_BAT, thisx->world.pos.x + randPlusMinusPoint5Scaled(200.0f),
                 thisx->world.pos.y + randPlusMinusPoint5Scaled(100.0f),
                 thisx->world.pos.z + randPlusMinusPoint5Scaled(200.0f), randPlusMinusPoint5Scaled(0x2000),
-                0xFFFF * Rand_ZeroOne(), 0, BAD_BAT_PARAMS(this->switchFlag, this->paramFlags, 0), -1, thisx->unk20,
-                NULL);
+                0xFFFF * Rand_ZeroOne(), 0, BAD_BAT_PARAMS(this->switchFlag, this->paramFlags, 0), CS_ID_NONE,
+                thisx->halfDaysBits, NULL);
             BAD_BAT_GET_NUMBER_TO_SPAWN(thisx)--;
         }
     }
@@ -340,7 +340,7 @@ void EnBat_SetupDie(EnBat* this, PlayState* play) {
         this->drawDmgEffScale = 0.45f;
     }
 
-    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 40);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 40);
 
     if (this->actor.flags & ACTOR_FLAG_8000) {
         this->actor.speed = 0.0f;
@@ -400,8 +400,9 @@ void EnBat_SetupStunned(EnBat* this) {
         this->actor.speed = 0.0f;
         this->actor.world.pos.y += 13.0f;
     }
+
     Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_FREEZE);
-    Actor_SetColorFilter(&this->actor, 0, 255, 0, this->timer);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 255, COLORFILTER_BUFFLAG_OPA, this->timer);
     this->actionFunc = EnBat_Stunned;
 }
 
@@ -478,13 +479,15 @@ void EnBat_Update(Actor* thisx, PlayState* play) {
         }
 
         if (this->actionFunc == EnBat_DiveAttack) {
-            Actor_UpdateBgCheckInfo(play, &this->actor, 12.0f, 15.0f, 50.0f, 5);
+            Actor_UpdateBgCheckInfo(play, &this->actor, 12.0f, 15.0f, 50.0f,
+                                    UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
         } else if ((this->actionFunc != EnBat_FlyIdle) ||
                    ((this->actor.xzDistToPlayer < 400.0f) && (this->actor.projectedPos.z > 0.0f))) {
             if (this->paramFlags & BAD_BAT_PARAMFLAG_0) {
-                Actor_UpdateBgCheckInfo(play, &this->actor, 12.0f, 15.0f, 50.0f, 5);
+                Actor_UpdateBgCheckInfo(play, &this->actor, 12.0f, 15.0f, 50.0f,
+                                        UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
             } else {
-                Actor_UpdateBgCheckInfo(play, &this->actor, 12.0f, 15.0f, 50.0f, 4);
+                Actor_UpdateBgCheckInfo(play, &this->actor, 12.0f, 15.0f, 50.0f, UPDBGCHECKINFO_FLAG_4);
             }
         } else {
             Math_Vec3f_Copy(&this->actor.prevPos, &prevPos);

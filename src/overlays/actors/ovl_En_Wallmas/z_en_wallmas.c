@@ -191,8 +191,8 @@ void EnWallmas_Destroy(Actor* thisx, PlayState* play) {
     if (this->actor.parent != NULL) {
         EnEncount1* encount1 = (EnEncount1*)this->actor.parent;
 
-        if ((encount1->actor.update != NULL) && (encount1->unk_14E > 0)) {
-            encount1->unk_14E--;
+        if ((encount1->actor.update != NULL) && (encount1->spawnActiveCount > 0)) {
+            encount1->spawnActiveCount--;
         }
     }
 }
@@ -205,7 +205,7 @@ void EnWallmas_Freeze(EnWallmas* this) {
     this->collider.base.colType = 3;
     this->timer = 80;
     this->actor.flags &= ~ACTOR_FLAG_400;
-    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 80);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 80);
 }
 
 void EnWallmas_ThawIfFrozen(EnWallmas* this, PlayState* play) {
@@ -397,7 +397,7 @@ void EnWallmas_SetupDamage(EnWallmas* this, s32 arg1) {
         func_800BE504(&this->actor, &this->collider);
     }
 
-    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 20);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 20);
     this->actor.speed = 5.0f;
     this->actor.velocity.y = 10.0f;
     this->actionFunc = EnWallmas_Damage;
@@ -583,12 +583,12 @@ void EnWallmas_UpdateDamage(EnWallmas* this, PlayState* play) {
                     EnWallmas_SetupStun(this);
                 } else if (this->actor.colChkInfo.damageEffect == WALLMASTER_DMGEFF_STUN) {
                     this->timer = 40;
-                    Actor_SetColorFilter(&this->actor, 0, 255, 0, 40);
+                    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 255, COLORFILTER_BUFFLAG_OPA, 40);
                     Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_FREEZE);
                     EnWallmas_SetupStun(this);
                 } else if (this->actor.colChkInfo.damageEffect == WALLMASTER_DMGEFF_ZORA_MAGIC) {
                     this->timer = 40;
-                    Actor_SetColorFilter(&this->actor, 0, 255, 0, 40);
+                    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 255, COLORFILTER_BUFFLAG_OPA, 40);
                     Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_FREEZE);
                     this->drawDmgEffScale = 0.55f;
                     this->drawDmgEffAlpha = 2.0f;
@@ -629,7 +629,9 @@ void EnWallmas_Update(Actor* thisx, PlayState* play) {
         }
 
         if (this->actionFunc != EnWallmas_Drop) {
-            Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 25.0f, 0.0f, 0x1D);
+            Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 25.0f, 0.0f,
+                                    UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                        UPDBGCHECKINFO_FLAG_10);
         }
 
         if ((this->actionFunc != EnWallmas_Die) && (this->actionFunc != EnWallmas_Drop)) {

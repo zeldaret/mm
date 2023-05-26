@@ -525,9 +525,9 @@ void EnTalkGibud_SetupStunned(EnTalkGibud* this) {
     this->actor.world.rot.y = this->actor.shape.rot.y;
 
     if (this->drawDmgEffTimer != 0) {
-        Actor_SetColorFilter(&this->actor, 0, 0xC8, 0, 0x28);
+        Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 200, COLORFILTER_BUFFLAG_OPA, 40);
     } else {
-        Actor_SetColorFilter(&this->actor, 0, 0xC8, 0, 0x28);
+        Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 200, COLORFILTER_BUFFLAG_OPA, 40);
     }
 
     this->actionFunc = EnTalkGibud_Stunned;
@@ -752,7 +752,7 @@ void EnTalkGibud_CheckPresentedItem(EnTalkGibud* this, PlayState* play) {
                 default:
                     break;
             }
-            func_801477B4(play);
+            Message_CloseTextbox(play);
         } else if (this->itemAction <= PLAYER_IA_MINUS1) {
             Message_StartTextbox(play, 0x1389, &this->actor);
             this->textId = 0x1389;
@@ -824,7 +824,7 @@ void EnTalkGibud_Talk(EnTalkGibud* this, PlayState* play) {
                     if (!requestedItem->isBottledItem) {
                         Inventory_ChangeAmmo(requestedItem->item, -requestedItem->amount);
                     } else {
-                        Player_UpdateBottleHeld(play, player, ITEM_BOTTLE, PLAYER_IA_BOTTLE);
+                        Player_UpdateBottleHeld(play, player, ITEM_BOTTLE, PLAYER_IA_BOTTLE_EMPTY);
                     }
                     player->stateFlags1 |= PLAYER_STATE1_20;
                     player->stateFlags1 |= PLAYER_STATE1_20000000;
@@ -1018,7 +1018,7 @@ void EnTalkGibud_UpdateDamage(EnTalkGibud* this, PlayState* play) {
 
         switch (this->actor.colChkInfo.damageEffect) {
             case EN_TALK_GIBUD_DMGEFF_DAMAGE:
-                Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 8);
+                Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 8);
                 if (player->unk_ADC != 0) {
                     this->unk_3F7 = player->unk_ADD;
                 }
@@ -1039,7 +1039,7 @@ void EnTalkGibud_UpdateDamage(EnTalkGibud* this, PlayState* play) {
                 break;
 
             case EN_TALK_GIBUD_DMGEFF_FIRE_ARROW:
-                Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 8);
+                Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 8);
                 if (this->actor.colChkInfo.health == 0) {
                     EnTalkGibud_SetupDead(this);
                 } else {
@@ -1051,7 +1051,7 @@ void EnTalkGibud_UpdateDamage(EnTalkGibud* this, PlayState* play) {
                 break;
 
             case EN_TALK_GIBUD_DMGEFF_LIGHT_ARROW:
-                Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 8);
+                Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 8);
                 if (this->actor.colChkInfo.health == 0) {
                     EnTalkGibud_SetupDead(this);
                 } else {
@@ -1111,7 +1111,9 @@ void EnTalkGibud_MoveGrabbedPlayerAwayFromWall(EnTalkGibud* this, PlayState* pla
     Player* player = GET_PLAYER(play);
     Vec3f targetPos;
 
-    Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 20.0f, 35.0f, 29);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 20.0f, 35.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                UPDBGCHECKINFO_FLAG_10);
     if (this->actionFunc == EnTalkGibud_Grab && this->grabState == EN_TALK_GIBUD_GRAB_START &&
         (this->actor.bgCheckFlags & BGCHECKFLAG_WALL)) {
         targetPos = player->actor.world.pos;

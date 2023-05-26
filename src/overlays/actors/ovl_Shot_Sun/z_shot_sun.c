@@ -61,7 +61,7 @@ void ShotSun_Init(Actor* thisx, PlayState* play) {
         this->actor.flags |= ACTOR_FLAG_10;
         this->actor.flags |= ACTOR_FLAG_2000000;
         this->actionFunc = ShotSun_UpdateForOcarina;
-        this->actor.flags |= ACTOR_FLAG_8000000;
+        this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
     } else {
         Collider_InitCylinder(play, &this->collider);
         Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
@@ -87,7 +87,7 @@ void ShotSun_SpawnFairy(ShotSun* this, PlayState* play2) {
     if (this->timer > 0) {
         this->timer--;
     } else {
-        ActorCutscene_Stop(this->actor.cutscene);
+        CutsceneManager_Stop(this->actor.csId);
         switch (params) {
             case SHOTSUN_FAIRY_SPAWNER_SUNS:
                 fairyType = ENELF_TYPE_7;
@@ -103,9 +103,9 @@ void ShotSun_SpawnFairy(ShotSun* this, PlayState* play2) {
 }
 
 void ShotSun_TriggerFairy(ShotSun* this, PlayState* play) {
-    if ((this->actor.cutscene == -1) || ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
-        if (this->actor.cutscene != -1) {
-            ActorCutscene_Start(this->actor.cutscene, &this->actor);
+    if ((this->actor.csId == CS_ID_NONE) || CutsceneManager_IsNext(this->actor.csId)) {
+        if (this->actor.csId != CS_ID_NONE) {
+            CutsceneManager_Start(this->actor.csId, &this->actor);
         }
         this->actionFunc = ShotSun_SpawnFairy;
         this->timer = 50;
@@ -113,7 +113,7 @@ void ShotSun_TriggerFairy(ShotSun* this, PlayState* play) {
                     this->actor.home.pos.z, 0, 0, 0, 0x11);
         Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_EV_TRE_BOX_APPEAR);
     } else {
-        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+        CutsceneManager_Queue(this->actor.csId);
     }
 }
 

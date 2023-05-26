@@ -232,7 +232,7 @@ void func_80ABB590(EnGuardNuts* this, PlayState* play) {
         if (Message_ShouldAdvance(play)) {
             if (D_80ABBE38[this->guardTextIndex] != 1) {
                 if (D_80ABBE38[this->guardTextIndex] == 2) {
-                    func_801477B4(play);
+                    Message_CloseTextbox(play);
                     D_80ABBE20 = 2;
                     SET_WEEKEVENTREG(WEEKEVENTREG_12_40);
                     EnGuardNuts_Burrow(this, play);
@@ -247,11 +247,11 @@ void func_80ABB590(EnGuardNuts* this, PlayState* play) {
             } else if (this->guardTextIndex != 3) {
                 this->targetHeadPos.x = 0;
                 this->targetHeadPos.y = this->targetHeadPos.x;
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 this->state = GUARD_NUTS_UNK_STATE;
                 this->actionFunc = EnGuardNuts_Unburrow;
             } else {
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 EnGuardNuts_SetupWait(this);
             }
         }
@@ -276,7 +276,7 @@ void EnGuardNuts_Burrow(EnGuardNuts* this, PlayState* play) {
     digPos.y = this->actor.floorHeight;
     EffectSsHahen_SpawnBurst(play, &digPos, 4.0f, 0, 10, 3, 15, HAHEN_OBJECT_DEFAULT, 10, NULL);
     this->targetHeadPos.y = 0;
-    this->actor.flags |= ACTOR_FLAG_8000000;
+    this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
     this->targetHeadPos.x = this->targetHeadPos.y;
     Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_DOWN);
     Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_UP);
@@ -311,7 +311,7 @@ void EnGuardNuts_Unburrow(EnGuardNuts* this, PlayState* play) {
             if (this->guardTextIndex == 9) {
                 this->hasCompletedConversation = true;
             }
-            this->actor.flags &= ~ACTOR_FLAG_8000000;
+            this->actor.flags &= ~ACTOR_FLAG_CANT_LOCK_ON;
             EnGuardNuts_SetupWait(this);
         }
     }
@@ -345,7 +345,9 @@ void EnGuardNuts_Update(Actor* thisx, PlayState* play) {
     }
 
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 60.0f, 0x1D);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 60.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                UPDBGCHECKINFO_FLAG_10);
     if ((this->state != GUARD_NUTS_BURROWED_STATE) && (this->state != GUARD_NUTS_UNK_STATE)) {
         Collider_UpdateCylinder(&this->actor, &this->collider);
         CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);

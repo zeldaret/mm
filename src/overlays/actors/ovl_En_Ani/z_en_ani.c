@@ -220,10 +220,10 @@ void EnAni_FallToGround(EnAni* this, PlayState* play) {
         Animation_Change(&this->skelAnime, &gAniLandingThenStandingUpAnim, 1.0f, 0.0f, 16.0f, ANIMMODE_ONCE, 0.0f);
         this->stateFlags |= ANI_STATE_WRITHING;
 
-        quakeIndex = Quake_Add(play->cameraPtrs[CAM_ID_MAIN], QUAKE_TYPE_3);
+        quakeIndex = Quake_Request(play->cameraPtrs[CAM_ID_MAIN], QUAKE_TYPE_3);
         Quake_SetSpeed(quakeIndex, 27000);
-        Quake_SetQuakeValues(quakeIndex, 7, 0, 0, 0);
-        Quake_SetCountdown(quakeIndex, 20);
+        Quake_SetPerturbations(quakeIndex, 7, 0, 0, 0);
+        Quake_SetDuration(quakeIndex, 20);
 
         Actor_PlaySfx(&this->actor, NA_SE_IT_HAMMER_HIT);
     }
@@ -291,7 +291,7 @@ void EnAni_Update(Actor* thisx, PlayState* play) {
     }
 
     Actor_UpdatePos(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
     this->actionFunc(this, play);
     if (this->actor.xzDistToPlayer < 100.0f && !(this->stateFlags & ANI_STATE_CLIMBING)) {
         Actor_TrackPlayer(play, &this->actor, &this->headRot, &this->chestRot, this->actor.focus.pos);
@@ -305,15 +305,15 @@ void EnAni_Update(Actor* thisx, PlayState* play) {
 
     this->blinkFunc(this);
     if (this->stateFlags & ANI_STATE_FALLING) {
-        if (this->actor.cutscene == -1) {
+        if (this->actor.csId == CS_ID_NONE) {
             this->stateFlags &= ~ANI_STATE_FALLING;
-        } else if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
-            ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
-            this->actor.cutscene = ActorCutscene_GetAdditionalCutscene(this->actor.cutscene);
-            Camera_SetToTrackActor(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(this->actor.cutscene)),
-                                   &this->actor);
+        } else if (CutsceneManager_IsNext(this->actor.csId)) {
+            CutsceneManager_StartWithPlayerCs(this->actor.csId, &this->actor);
+            this->actor.csId = CutsceneManager_GetAdditionalCsId(this->actor.csId);
+            Camera_SetFocalActor(Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(this->actor.csId)),
+                                 &this->actor);
         } else {
-            ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+            CutsceneManager_Queue(this->actor.csId);
         }
     }
 }

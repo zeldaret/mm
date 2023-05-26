@@ -194,7 +194,7 @@ void EnBbfall_Freeze(EnBbfall* this) {
     this->timer = 80;
     this->drawDmgEffAlpha = 1.0f;
     this->actor.flags &= ~ACTOR_FLAG_200;
-    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 80);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 80);
 }
 
 void EnBbfall_Thaw(EnBbfall* this, PlayState* play) {
@@ -211,9 +211,9 @@ void EnBbfall_Thaw(EnBbfall* this, PlayState* play) {
  */
 s32 EnBbfall_IsTouchingLava(EnBbfall* this, PlayState* play) {
     if (!SurfaceType_IsWallDamage(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId)) {
-        u32 floorType = func_800C99D4(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
+        FloorType floorType = SurfaceType_GetFloorType(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
 
-        if ((floorType == 2) || (floorType == 3) || (floorType == 9)) {
+        if ((floorType == FLOOR_TYPE_2) || (floorType == FLOOR_TYPE_3) || (floorType == FLOOR_TYPE_9)) {
             return true;
         }
     }
@@ -482,17 +482,17 @@ void EnBbfall_SetupDamage(EnBbfall* this) {
     func_800BE5CC(&this->actor, &this->collider, 0);
 
     if (this->actor.colChkInfo.damageEffect == EN_BBFALL_DMGEFF_ZORA_MAGIC) {
-        Actor_SetColorFilter(&this->actor, 0, 255, 0, 40);
+        Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 255, COLORFILTER_BUFFLAG_OPA, 40);
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_LARGE;
         this->drawDmgEffAlpha = 2.0f;
         this->drawDmgEffScale = 0.4f;
     } else if (this->actor.colChkInfo.damageEffect == EN_BBFALL_DMGEFF_STUN) {
-        Actor_SetColorFilter(&this->actor, 0, 255, 0, 20);
+        Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 255, COLORFILTER_BUFFLAG_OPA, 20);
         this->actor.speed = 0.0f;
     } else if (this->actor.colChkInfo.damageEffect == EN_BBFALL_DMGEFF_HOOKSHOT) {
         this->actor.speed = 0.0f;
     } else {
-        Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 20);
+        Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 20);
         this->actor.speed = 7.0f;
     }
 
@@ -600,7 +600,8 @@ void EnBbfall_Update(Actor* thisx, PlayState* play) {
     if (this->actionFunc != EnBbfall_Dead) {
         Actor_MoveWithGravity(&this->actor);
         if (this->isBgCheckCollisionEnabled) {
-            Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 25.0f, 20.0f, 7);
+            Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 25.0f, 20.0f,
+                                    UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_2 | UPDBGCHECKINFO_FLAG_4);
         }
 
         for (i = ARRAY_COUNT(this->flamePos) - 1; i >= 2; i--) {

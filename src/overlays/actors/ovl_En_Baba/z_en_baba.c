@@ -638,7 +638,7 @@ void EnBaba_GiveBlastMask(EnBaba* this, PlayState* play) {
         this->stateFlags |= BOMB_SHOP_LADY_STATE_GAVE_BLAST_MASK;
         this->actionFunc = EnBaba_GaveBlastMask;
     } else {
-        Actor_PickUp(&this->actor, play, GI_MASK_BLAST, 300.0f, 300.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_MASK_BLAST, 300.0f, 300.0f);
     }
 }
 
@@ -699,7 +699,7 @@ void EnBaba_KnockedOver(EnBaba* this, PlayState* play) {
         }
     } else {
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_79_40) && (DECR(this->sakonDeadTimer) == 0)) {
-            Audio_QueueSeqCmd(0x101400FF);
+            SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 20);
             EnBaba_TriggerTransition(play, ENTRANCE(NORTH_CLOCK_TOWN, 7));
         } else {
             Actor_MoveWithGravity(&this->actor);
@@ -748,7 +748,7 @@ void EnBaba_Update(Actor* thisx, PlayState* play) {
 
     this->actionFunc(this, play);
 
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
     EnBaba_UpdateModel(this, play);
 }
 

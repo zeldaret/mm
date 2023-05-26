@@ -181,7 +181,7 @@ void EnZog_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     EnZog* this = THIS;
     s32 i;
-    s16 cs;
+    s16 csId;
 
     if (!D_80B95E10) {
         for (i = 0; i < ARRAY_COUNT(D_80B958AC); i++) {
@@ -206,7 +206,7 @@ void EnZog_Init(Actor* thisx, PlayState* play) {
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
 
     if ((ENZOG_GET_F(&this->actor) != ENZOG_F_2) && (INV_CONTENT(ITEM_MASK_ZORA) == ITEM_MASK_ZORA) &&
-        ((play->csCtx.currentCsIndex != 2) || (gSaveContext.sceneLayer != 0) || (play->sceneId != SCENE_30GYOSON))) {
+        ((play->csCtx.scriptIndex != 2) || (gSaveContext.sceneLayer != 0) || (play->sceneId != SCENE_30GYOSON))) {
         Actor_Kill(&this->actor);
         return;
     }
@@ -219,7 +219,7 @@ void EnZog_Init(Actor* thisx, PlayState* play) {
     this->unk_30A = 0;
     this->unk_31C = 2;
     this->unk_31E = 0;
-    this->unk_31A = -1;
+    this->csIdIndex = -1;
     this->unk_322 = 100;
 
     Math_Vec3f_Copy(&this->unk_2F0, &this->actor.world.pos);
@@ -245,13 +245,13 @@ void EnZog_Init(Actor* thisx, PlayState* play) {
     this->unk_304 = 0;
     this->unk_2FE = this->unk_2FC;
     this->unk_300 = this->unk_302;
-    cs = this->actor.cutscene;
+    csId = this->actor.csId;
 
-    for (i = 0; i < ARRAY_COUNT(this->unk_30C); i++) {
-        this->unk_30C[i] = cs;
-        if (cs != -1) {
-            this->actor.cutscene = cs;
-            cs = ActorCutscene_GetAdditionalCutscene(this->actor.cutscene);
+    for (i = 0; i < ARRAY_COUNT(this->csIdList); i++) {
+        this->csIdList[i] = csId;
+        if (csId != CS_ID_NONE) {
+            this->actor.csId = csId;
+            csId = CutsceneManager_GetAdditionalCsId(this->actor.csId);
         }
     }
 
@@ -331,17 +331,17 @@ void func_80B93A48(EnZog* this, PlayState* play) {
 
 void func_80B93B44(EnZog* this) {
     if (!(this->unk_30A & 4)) {
-        if (this->unk_31A != -1) {
-            ActorCutscene_Stop(this->unk_30C[this->unk_31A]);
+        if (this->csIdIndex != -1) {
+            CutsceneManager_Stop(this->csIdList[this->csIdIndex]);
         }
     }
-    this->unk_31A = -1;
+    this->csIdIndex = -1;
     this->unk_30A &= ~4;
 }
 
-void func_80B93BA8(EnZog* this, s16 arg1) {
+void func_80B93BA8(EnZog* this, s16 csIdIndex) {
     func_80B93B44(this);
-    this->unk_31A = arg1;
+    this->csIdIndex = csIdIndex;
     this->unk_30A |= 4;
 }
 
@@ -401,10 +401,10 @@ void func_80B93DE8(Vec3f* arg0, PlayState* play, s32 arg2) {
 }
 
 s32 func_80B93EA0(EnZog* this, PlayState* play) {
-    s16 sp3E;
+    s16 cueId;
 
     if (SkelAnime_Update(&this->skelAnime)) {
-        switch (this->unk_306) {
+        switch (this->cueId) {
             case 2:
             case 3:
                 Animation_PlayLoop(&this->skelAnime, *D_80B958F0);
@@ -458,13 +458,13 @@ s32 func_80B93EA0(EnZog* this, PlayState* play) {
         SkelAnime_Update(&this->skelAnime);
     }
 
-    if (Cutscene_CheckActorAction(play, 471)) {
-        sp3E = play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 471)]->action;
-        Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetActorActionIndex(play, 471));
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_471)) {
+        cueId = play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_471)]->id;
+        Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_471));
 
-        switch (this->unk_306) {
+        switch (this->cueId) {
             case 2:
-                if (play->csCtx.frames == 60) {
+                if (play->csCtx.curFrame == 60) {
                     Actor_PlaySfx(&this->actor, NA_SE_EV_JUMP_SAND);
                 }
                 break;
@@ -497,10 +497,10 @@ s32 func_80B93EA0(EnZog* this, PlayState* play) {
                 break;
         }
 
-        if (this->unk_306 != sp3E) {
-            this->unk_306 = sp3E;
+        if (this->cueId != cueId) {
+            this->cueId = cueId;
 
-            switch (this->unk_306) {
+            switch (this->cueId) {
                 case 1:
                     func_80B939C0(this, 7, ANIMMODE_LOOP);
                     this->unk_31C = 2;
@@ -593,7 +593,7 @@ void func_80B943A0(EnZog* this, PlayState* play) {
 void func_80B943C0(EnZog* this, PlayState* play) {
     if (!(this->unk_30A & 4)) {
         this->actionFunc = func_80B943A0;
-        this->unk_306 = -1;
+        this->cueId = -1;
     }
 }
 
@@ -613,7 +613,7 @@ void func_80B943EC(EnZog* this, PlayState* play) {
 void func_80B94470(EnZog* this, PlayState* play) {
     if (Message_GetState(&play->msgCtx) == TEXT_STATE_5) {
         if (Message_ShouldAdvance(play) && (play->msgCtx.currentTextId == 0x103C)) {
-            func_801477B4(play);
+            Message_CloseTextbox(play);
             this->actionFunc = func_80B9451C;
             this->unk_300 = this->unk_302 = 0;
             this->unk_31C = 2;
@@ -657,7 +657,7 @@ void func_80B946B4(EnZog* this, PlayState* play) {
     func_80B93A48(this, play);
     if (!(this->unk_30A & 4)) {
         this->actionFunc = func_80B9461C;
-        this->unk_306 = -1;
+        this->cueId = -1;
     }
 }
 
@@ -675,7 +675,7 @@ void func_80B946FC(EnZog* this, PlayState* play) {
 
                     case 1:
                         func_8019F230();
-                        func_80151938(play, 0x1014);
+                        Message_ContinueTextbox(play, 0x1014);
                         break;
                 }
             }
@@ -685,20 +685,20 @@ void func_80B946FC(EnZog* this, PlayState* play) {
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
                     case 0x1008:
-                        func_80151938(play, play->msgCtx.currentTextId + 1);
+                        Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                         break;
 
                     case 0x1009:
                         this->unk_300 = 4;
-                        func_80151938(play, play->msgCtx.currentTextId + 1);
+                        Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                         break;
 
                     case 0x1014:
-                        func_80151938(play, play->msgCtx.currentTextId + 1);
+                        Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                         break;
 
                     case 0x1015:
-                        func_801477B4(play);
+                        Message_CloseTextbox(play);
                         this->actionFunc = func_80B948A8;
                         this->unk_300 = this->unk_302 = 0;
                         this->unk_31C = 2;
@@ -781,15 +781,15 @@ void func_80B94A00(EnZog* this, PlayState* play) {
 
     if ((this->unk_304 == 4) &&
         (Animation_OnFrame(&this->skelAnime, 136.0f) || Animation_OnFrame(&this->skelAnime, 155.0f))) {
-        Actor_PlaySfx(&this->actor, NA_SE_PL_WALK_WATER0);
+        Actor_PlaySfx(&this->actor, NA_SE_PL_WALK_GROUND + SURFACE_SFX_OFFSET_WATER_SHALLOW);
     }
 
     if ((this->unk_304 == 5) &&
         (Animation_OnFrame(&this->skelAnime, 12.0f) || Animation_OnFrame(&this->skelAnime, 37.0f))) {
         if (this->actor.depthInWater > 0.0f) {
-            Actor_PlaySfx(&this->actor, NA_SE_PL_WALK_WATER0);
+            Actor_PlaySfx(&this->actor, NA_SE_PL_WALK_GROUND + SURFACE_SFX_OFFSET_WATER_SHALLOW);
         } else {
-            Actor_PlaySfx(&this->actor, NA_SE_PL_WALK_SAND);
+            Actor_PlaySfx(&this->actor, NA_SE_PL_WALK_GROUND + SURFACE_SFX_OFFSET_SAND);
         }
     }
 }
@@ -834,11 +834,11 @@ void func_80B94D0C(EnZog* this, PlayState* play) {
             case 0x1004:
             case 0x1005:
             case 0x1006:
-                func_80151938(play, play->msgCtx.currentTextId + 1);
+                Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                 break;
 
             case 0x1007:
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 this->actionFunc = func_80B94E34;
                 this->unk_300 = 5;
                 this->unk_320 = 0;
@@ -883,7 +883,7 @@ void func_80B94E34(EnZog* this, PlayState* play) {
     }
 
     if (ABS_ALT(this->actor.yawTowardsPlayer - this->actor.world.rot.y) > 0x5000) {
-        Actor_PickUp(&this->actor, play, GI_NONE, 60.0f, 40.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_NONE, 60.0f, 40.0f);
     }
 
     if (this->unk_324 > 0) {
@@ -956,8 +956,8 @@ void EnZog_Update(Actor* thisx, PlayState* play) {
     EnZog* this = THIS;
 
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 10.0f, 10.0f, 5);
-    if (Cutscene_CheckActorAction(play, 0x1D7) && (ENZOG_GET_F(&this->actor) != ENZOG_F_2)) {
+    Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 10.0f, 10.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_471) && (ENZOG_GET_F(&this->actor) != ENZOG_F_2)) {
         this->actionFunc = func_80B9461C;
         this->actor.shape.yOffset = 0.0f;
     }
@@ -982,18 +982,18 @@ void EnZog_Update(Actor* thisx, PlayState* play) {
     this->actor.focus.pos.y += 30.0f;
 
     if (this->unk_30A & 4) {
-        if (this->unk_31A == -1) {
+        if (this->csIdIndex == -1) {
             this->unk_30A &= ~4;
-        } else if (this->unk_30C[this->unk_31A] == -1) {
+        } else if (this->csIdList[this->csIdIndex] == CS_ID_NONE) {
             this->unk_30A &= ~4;
-        } else if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-            ActorCutscene_Stop(0x7C);
-            ActorCutscene_SetIntentToPlay(this->unk_30C[this->unk_31A]);
-        } else if (ActorCutscene_GetCanPlayNext(this->unk_30C[this->unk_31A])) {
-            ActorCutscene_StartAndSetUnkLinkFields(this->unk_30C[this->unk_31A], &this->actor);
+        } else if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+            CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
+            CutsceneManager_Queue(this->csIdList[this->csIdIndex]);
+        } else if (CutsceneManager_IsNext(this->csIdList[this->csIdIndex])) {
+            CutsceneManager_StartWithPlayerCs(this->csIdList[this->csIdIndex], &this->actor);
             this->unk_30A &= ~4;
         } else {
-            ActorCutscene_SetIntentToPlay(this->unk_30C[this->unk_31A]);
+            CutsceneManager_Queue(this->csIdList[this->csIdIndex]);
         }
     }
 }

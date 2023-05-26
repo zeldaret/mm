@@ -352,7 +352,7 @@ s32 func_808D9440(PlayState* play, Vec3f* posA, Vec3f* posB, Vec3f* posResult, C
     s32 ret = false;
 
     if (BgCheck_EntityLineTest1(&play->colCtx, posA, posB, posResult, outPoly, true, true, true, true, bgId) &&
-        !(func_800C9A4C(&play->colCtx, *outPoly, *bgId) & 0x30)) {
+        !(SurfaceType_GetWallFlags(&play->colCtx, *outPoly, *bgId) & (WALL_FLAG_4 | WALL_FLAG_5))) {
         ret = true;
     }
     return ret;
@@ -504,8 +504,8 @@ s32 func_808D99C8(EnSw* this, PlayState* play) {
         return false;
     }
 
-    if ((this->actor.xyzDistToPlayerSq < ((sREG(16) * 10) + 60000)) && (play->actorCtx.unk1F5 != 0) &&
-        (play->actorCtx.unk1F4 == 0)) {
+    if ((this->actor.xyzDistToPlayerSq < ((sREG(16) * 10) + 60000)) && (play->actorCtx.playerImpact.timer != 0) &&
+        (play->actorCtx.playerImpact.type == PLAYER_IMPACT_GORON_GROUND_POUND)) {
         this->actor.colChkInfo.damage = 4;
         phi_v1 = true;
     }
@@ -717,19 +717,20 @@ s32 func_808DA08C(EnSw* this, PlayState* play) {
             }
             this->unk_458 = 20;
             this->unk_45A = 0;
-            Actor_SetColorFilter(&this->actor, 0x4000, 200, 0, this->unk_458);
+            Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 200, COLORFILTER_BUFFLAG_OPA, this->unk_458);
             ret = true;
         } else if (this->actor.colChkInfo.damageEffect == 1) {
             if (this->unk_45A == 0) {
                 Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_FREEZE);
                 this->unk_45A = 40;
-                Actor_SetColorFilter(&this->actor, 0, 200, 0, this->unk_45A);
+                Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 200, COLORFILTER_BUFFLAG_OPA,
+                                     this->unk_45A);
             }
         } else {
             Actor_PlaySfx(&this->actor, NA_SE_EN_STALTU_DAMAGE);
             this->unk_458 = 20;
             this->unk_45A = 0;
-            Actor_SetColorFilter(&this->actor, 0x4000, 200, 0, this->unk_458);
+            Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 200, COLORFILTER_BUFFLAG_OPA, this->unk_458);
         }
     }
     return ret;
@@ -895,7 +896,7 @@ void func_808DA89C(EnSw* this, PlayState* play) {
         }
 
         Actor_MoveWithGravity(&this->actor);
-        Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, 4);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
     }
 }
 
@@ -1089,14 +1090,14 @@ void func_808DB100(EnSw* this, PlayState* play) {
 }
 
 void func_808DB25C(EnSw* this, PlayState* play) {
-    if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-        ActorCutscene_Stop(0x7C);
-    } else if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
+    if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+        CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
+    } else if (CutsceneManager_IsNext(this->actor.csId)) {
+        CutsceneManager_StartWithPlayerCs(this->actor.csId, &this->actor);
         func_808D9C18(this);
         this->actionFunc = func_808DB2E0;
     } else {
-        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+        CutsceneManager_Queue(this->actor.csId);
     }
 }
 
@@ -1129,7 +1130,7 @@ void func_808DB2E0(EnSw* this, PlayState* play) {
     Actor_SetScale(&this->actor, this->actor.scale.x);
     this->actor.velocity.y += this->actor.gravity;
     Actor_UpdatePos(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
 }
 
 void EnSw_Init(Actor* thisx, PlayState* play) {

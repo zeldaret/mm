@@ -58,7 +58,7 @@ typedef struct EnKaizoku {
     /* 0x2D0 */ s16 unk_2D0;
     /* 0x2D2 */ s16 swordState;
     /* 0x2D4 */ s16 exitIndex;
-    /* 0x2D6 */ s16 unk_2D6;
+    /* 0x2D6 */ s16 csId;
     /* 0x2D8 */ u8 unk_2D8;
     /* 0x2D9 */ u8 unk_2D9;
     /* 0x2DC */ f32 frameCount;

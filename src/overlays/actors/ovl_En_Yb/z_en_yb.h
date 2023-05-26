@@ -20,8 +20,8 @@ typedef struct EnYb {
     /* 0x410 */ u16 playerOcarinaOut;
     /* 0x412 */ s16 animIndex;
     /* 0x414 */ s16 alpha;
-    /* 0x416 */ s16 cutscenes[2];
-    /* 0x41A */ s16 cutsceneIndex;
+    /* 0x416 */ s16 csIdList[2];
+    /* 0x41A */ s16 csIdIndex;
     /* 0x41C */ s16 teachingCutsceneTimer;
     /* 0x420 */ EnYbActionFunc actionFunc;
 } EnYb; // size = 0x424

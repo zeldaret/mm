@@ -8,6 +8,7 @@
 #include "buffers.h"
 #include "CIC6105.h"
 #include "stack.h"
+#include "stackcheck.h"
 
 extern OSMesgQueue sSiIntMsgQ;
 extern OSMesg sSiIntMsgBuf[1];
@@ -26,7 +27,6 @@ extern StackEntry sSchedStackInfo;
 extern StackEntry sAudioStackInfo;
 extern StackEntry sPadMgrStackInfo;
 extern AudioMgr sAudioMgr;
-extern PadMgr gPadMgr;
 
 void Main(void* arg) {
     intptr_t fb;
@@ -47,7 +47,7 @@ void Main(void* arg) {
     startHeapSize = fb - sysHeap;
     SystemArena_Init(sysHeap, startHeapSize);
 
-    GameInfo_Init();
+    Regs_Init();
 
     R_ENABLE_ARENA_DBG = 0;
 

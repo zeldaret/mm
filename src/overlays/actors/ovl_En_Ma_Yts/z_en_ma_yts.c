@@ -235,7 +235,7 @@ void EnMaYts_Init(Actor* thisx, PlayState* play) {
         this->collider.dim.radius = 40;
     }
 
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 0x4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
     Actor_SetScale(&this->actor, 0.01f);
 
     this->interactInfo.talkState = NPC_TALK_STATE_IDLE;
@@ -377,16 +377,16 @@ void EnMaYts_SetupEndCreditsHandler(EnMaYts* this) {
     this->actionFunc = EnMaYts_EndCreditsHandler;
 }
 
-static u16 D_80B8E32C = 99;
+static u16 sCueId = 99;
 void EnMaYts_EndCreditsHandler(EnMaYts* this, PlayState* play) {
-    if (Cutscene_CheckActorAction(play, 120)) {
-        s32 actionIndex = Cutscene_GetActorActionIndex(play, 120);
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_120)) {
+        s32 cueChannel = Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_120);
 
-        if (play->csCtx.frames == play->csCtx.actorActions[actionIndex]->startFrame) {
-            if (play->csCtx.actorActions[actionIndex]->action != D_80B8E32C) {
-                D_80B8E32C = play->csCtx.actorActions[actionIndex]->action;
+        if (play->csCtx.curFrame == play->csCtx.actorCues[cueChannel]->startFrame) {
+            if (sCueId != play->csCtx.actorCues[cueChannel]->id) {
+                sCueId = play->csCtx.actorCues[cueChannel]->id;
                 this->endCreditsFlag = 0;
-                switch (play->csCtx.actorActions[actionIndex]->action) {
+                switch (play->csCtx.actorCues[cueChannel]->id) {
                     case 1:
                         this->hasBow = true;
                         EnMaYts_ChangeAnim(this, 0);
@@ -410,14 +410,14 @@ void EnMaYts_EndCreditsHandler(EnMaYts* this, PlayState* play) {
             }
         }
 
-        Cutscene_ActorTranslateAndYaw(&this->actor, play, actionIndex);
-        if ((D_80B8E32C == 2) && (this->endCreditsFlag == 0) &&
+        Cutscene_ActorTranslateAndYaw(&this->actor, play, cueChannel);
+        if ((sCueId == 2) && (this->endCreditsFlag == 0) &&
             Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
             this->endCreditsFlag++;
             EnMaYts_ChangeAnim(this, 5);
         }
     } else {
-        D_80B8E32C = 99;
+        sCueId = 99;
         this->hasBow = true;
     }
 }

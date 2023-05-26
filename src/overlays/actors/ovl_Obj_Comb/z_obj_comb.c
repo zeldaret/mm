@@ -475,7 +475,7 @@ void func_8098DEA0(ObjComb* this, PlayState* play) {
         Actor_MoveWithGravity(&this->actor);
         this->actor.shape.rot.x += this->unk_1AE;
         this->actor.shape.rot.y += this->unk_1B0;
-        Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 12.0f, 0.0f, 5);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 12.0f, 0.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
         CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
     }
 }
@@ -493,8 +493,8 @@ void func_8098E0B8(ObjComb* this, PlayState* play) {
         return;
     }
 
-    if ((this->unk_1B4 == 10) && (this->unk_1B6 != 0) && (this->unk_1B5 == 2) && (this->actor.cutscene >= 0)) {
-        if (ActorCutscene_GetCurrentIndex() == this->actor.cutscene) {
+    if ((this->unk_1B4 == 10) && (this->unk_1B6 != 0) && (this->unk_1B5 == 2) && (this->actor.csId >= 0)) {
+        if (CutsceneManager_GetCurrentCsId() == this->actor.csId) {
             func_800B7298(play, &this->actor, PLAYER_CSMODE_4);
         }
     }
@@ -518,17 +518,17 @@ void ObjComb_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
 
     if (this->actor.update == NULL) {
-        if ((this->unk_1B5 == 2) && (func_800F2138(this->actor.cutscene) == -1)) {
-            ActorCutscene_Stop(this->actor.cutscene);
+        if ((this->unk_1B5 == 2) && (CutsceneManager_GetCutsceneScriptIndex(this->actor.csId) == -1)) {
+            CutsceneManager_Stop(this->actor.csId);
             this->unk_1B5 = 0;
         }
     } else {
         if (this->unk_1B5 != 0) {
             Actor_SetFocus(&this->actor, 0.0f);
             if (this->unk_1B5 == 1) {
-                if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
-                    ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
-                    if (this->actor.cutscene >= 0) {
+                if (CutsceneManager_IsNext(this->actor.csId)) {
+                    CutsceneManager_StartWithPlayerCs(this->actor.csId, &this->actor);
+                    if (this->actor.csId >= 0) {
                         func_800B7298(play, &this->actor, PLAYER_CSMODE_1);
                     }
 
@@ -539,7 +539,7 @@ void ObjComb_Update(Actor* thisx, PlayState* play) {
 
                     this->unk_1B5 = 2;
                 } else {
-                    ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+                    CutsceneManager_Queue(this->actor.csId);
                 }
             }
         }

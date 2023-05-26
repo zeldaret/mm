@@ -8,7 +8,7 @@
 #include "overlays/actors/ovl_En_Wiz/z_en_wiz.h"
 #include "objects/object_wiz/object_wiz.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_8000000)
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_CANT_LOCK_ON)
 
 #define THIS ((EnWizFire*)thisx)
 
@@ -573,7 +573,9 @@ void EnWizFire_Update(Actor* thisx, PlayState* play2) {
     DECR(this->steamSpawnTimer);
     DECR(this->poolTimer);
 
-    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 5.0f, 10, 0x1D);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 5.0f, 10,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                UPDBGCHECKINFO_FLAG_10);
 
     if ((this->hitByIceArrow || sPoolHitByIceArrow) && (this->steamSpawnTimer == 0)) {
         Vec3f accel;

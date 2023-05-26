@@ -73,7 +73,7 @@ weekEventReg = {
     ( 8 << 8) | 0x04: "WEEKEVENTREG_08_04",
     ( 8 << 8) | 0x08: "WEEKEVENTREG_08_08",
     ( 8 << 8) | 0x10: "WEEKEVENTREG_08_10",
-    ( 8 << 8) | 0x20: "WEEKEVENTREG_08_20",
+    ( 8 << 8) | 0x20: "WEEKEVENTREG_RECEIVED_DOGGY_RACETRACK_HEART_PIECE",
     ( 8 << 8) | 0x40: "WEEKEVENTREG_08_40",
     ( 8 << 8) | 0x80: "WEEKEVENTREG_08_80",
     ( 9 << 8) | 0x01: "WEEKEVENTREG_09_01",
@@ -165,7 +165,7 @@ weekEventReg = {
     (19 << 8) | 0x40: "WEEKEVENTREG_19_40",
     (19 << 8) | 0x80: "WEEKEVENTREG_19_80",
     (20 << 8) | 0x01: "WEEKEVENTREG_20_01",
-    (20 << 8) | 0x02: "WEEKEVENTREG_20_02",
+    (20 << 8) | 0x02: "WEEKEVENTREG_CLEARED_WOODFALL_TEMPLE",
     (20 << 8) | 0x04: "WEEKEVENTREG_20_04",
     (20 << 8) | 0x08: "WEEKEVENTREG_20_08",
     (20 << 8) | 0x10: "WEEKEVENTREG_20_10",
@@ -275,11 +275,11 @@ weekEventReg = {
     (33 << 8) | 0x10: "WEEKEVENTREG_33_10",
     (33 << 8) | 0x20: "WEEKEVENTREG_33_20",
     (33 << 8) | 0x40: "WEEKEVENTREG_33_40",
-    (33 << 8) | 0x80: "WEEKEVENTREG_33_80",
+    (33 << 8) | 0x80: "WEEKEVENTREG_CLEARED_SNOWHEAD_TEMPLE",
     (34 << 8) | 0x01: "WEEKEVENTREG_34_01",
     (34 << 8) | 0x02: "WEEKEVENTREG_34_02",
     (34 << 8) | 0x04: "WEEKEVENTREG_34_04",
-    (34 << 8) | 0x08: "WEEKEVENTREG_SWAMP_SPIDER_HOUSE_TALKED",
+    (34 << 8) | 0x08: "WEEKEVENTREG_TALKED_SWAMP_SPIDER_HOUSE_MAN",
     (34 << 8) | 0x10: "WEEKEVENTREG_34_10",
     (34 << 8) | 0x20: "WEEKEVENTREG_34_20",
     (34 << 8) | 0x40: "WEEKEVENTREG_RECEIVED_MASK_OF_TRUTH",
@@ -425,7 +425,7 @@ weekEventReg = {
     (52 << 8) | 0x04: "WEEKEVENTREG_52_04",
     (52 << 8) | 0x08: "WEEKEVENTREG_52_08",
     (52 << 8) | 0x10: "WEEKEVENTREG_52_10",
-    (52 << 8) | 0x20: "WEEKEVENTREG_52_20",
+    (52 << 8) | 0x20: "WEEKEVENTREG_CLEARED_STONE_TOWER_TEMPLE",
     (52 << 8) | 0x40: "WEEKEVENTREG_52_40",
     (52 << 8) | 0x80: "WEEKEVENTREG_52_80",
     (53 << 8) | 0x01: "WEEKEVENTREG_53_01",
@@ -451,7 +451,7 @@ weekEventReg = {
     (55 << 8) | 0x10: "WEEKEVENTREG_55_10",
     (55 << 8) | 0x20: "WEEKEVENTREG_55_20",
     (55 << 8) | 0x40: "WEEKEVENTREG_55_40",
-    (55 << 8) | 0x80: "WEEKEVENTREG_55_80",
+    (55 << 8) | 0x80: "WEEKEVENTREG_CLEARED_GREAT_BAY_TEMPLE",
     (56 << 8) | 0x01: "WEEKEVENTREG_56_01",
     (56 << 8) | 0x02: "WEEKEVENTREG_56_02",
     (56 << 8) | 0x04: "WEEKEVENTREG_56_04",
@@ -508,8 +508,8 @@ weekEventReg = {
     (62 << 8) | 0x20: "WEEKEVENTREG_62_20",
     (62 << 8) | 0x40: "WEEKEVENTREG_62_40",
     (62 << 8) | 0x80: "WEEKEVENTREG_62_80",
-    (63 << 8) | 0x01: "WEEKEVENTREG_63_01",
-    (63 << 8) | 0x02: "WEEKEVENTREG_63_02",
+    (63 << 8) | 0x01: "WEEKEVENTREG_KICKOUT_WAIT",
+    (63 << 8) | 0x02: "WEEKEVENTREG_KICKOUT_TIME_PASSED",
     (63 << 8) | 0x04: "WEEKEVENTREG_63_04",
     (63 << 8) | 0x08: "WEEKEVENTREG_63_08",
     (63 << 8) | 0x10: "WEEKEVENTREG_63_10",
@@ -523,12 +523,12 @@ weekEventReg = {
     (64 << 8) | 0x10: "WEEKEVENTREG_64_10",
     (64 << 8) | 0x20: "WEEKEVENTREG_64_20",
     (64 << 8) | 0x40: "WEEKEVENTREG_64_40",
-    (64 << 8) | 0x80: "WEEKEVENTREG_64_80",
-    (65 << 8) | 0x01: "WEEKEVENTREG_65_01",
-    (65 << 8) | 0x02: "WEEKEVENTREG_65_02",
-    (65 << 8) | 0x04: "WEEKEVENTREG_65_04",
-    (65 << 8) | 0x08: "WEEKEVENTREG_65_08",
-    (65 << 8) | 0x10: "WEEKEVENTREG_65_10",
+    (64 << 8) | 0x80: "WEEKEVENTREG_TALKED_DOGGY_RACETRACK_OWNER_DAY_1",
+    (65 << 8) | 0x01: "WEEKEVENTREG_TALKED_DOGGY_RACETRACK_OWNER_NIGHT_1",
+    (65 << 8) | 0x02: "WEEKEVENTREG_TALKED_DOGGY_RACETRACK_OWNER_DAY_2",
+    (65 << 8) | 0x04: "WEEKEVENTREG_TALKED_DOGGY_RACETRACK_OWNER_NIGHT_2",
+    (65 << 8) | 0x08: "WEEKEVENTREG_TALKED_DOGGY_RACETRACK_OWNER_DAY_3",
+    (65 << 8) | 0x10: "WEEKEVENTREG_TALKED_DOGGY_RACETRACK_OWNER_NIGHT_3",
     (65 << 8) | 0x20: "WEEKEVENTREG_65_20",
     (65 << 8) | 0x40: "WEEKEVENTREG_65_40",
     (65 << 8) | 0x80: "WEEKEVENTREG_65_80",
@@ -843,20 +843,20 @@ def applyChange(fileContents: str, compiledRegex: re.Pattern, callback) -> str:
 
 
 def updateCheck(fileContents: str) -> str:
-    # gSaveContext.save.weekEventReg[86] & 2
-    checkRegex = re.compile(rf"gSaveContext.save.weekEventReg\[(?P<index>{NUMBER_PATTERN})\]\s*\&\s*(?P<mask>{NUMBER_PATTERN})")
+    # gSaveContext.save.saveInfo.weekEventReg[86] & 2
+    checkRegex = re.compile(rf"gSaveContext.save.saveInfo.weekEventReg\[(?P<index>{NUMBER_PATTERN})\]\s*\&\s*(?P<mask>{NUMBER_PATTERN})")
 
     return applyChange(fileContents, checkRegex, getCheckMacro)
 
 def updateSet(fileContents: str) -> str:
-    # gSaveContext.save.weekEventReg[51] |= 0x10
-    setRegex = re.compile(rf"gSaveContext.save.weekEventReg\[(?P<index>{NUMBER_PATTERN})\]\s*\|=\s*(?P<mask>{NUMBER_PATTERN})")
+    # gSaveContext.save.saveInfo.weekEventReg[51] |= 0x10
+    setRegex = re.compile(rf"gSaveContext.save.saveInfo.weekEventReg\[(?P<index>{NUMBER_PATTERN})\]\s*\|=\s*(?P<mask>{NUMBER_PATTERN})")
 
     return applyChange(fileContents, setRegex, getSetMacro)
 
 def updateClear(fileContents: str) -> str:
-    # gSaveContext.save.weekEventReg[85] &= (u8)~0x80
-    clearRegex = re.compile(rf"gSaveContext.save.weekEventReg\[(?P<index>{NUMBER_PATTERN})\]\s*\&=\s*(\(u8\))?~(?P<mask>{NUMBER_PATTERN})")
+    # gSaveContext.save.saveInfo.weekEventReg[85] &= (u8)~0x80
+    clearRegex = re.compile(rf"gSaveContext.save.saveInfo.weekEventReg\[(?P<index>{NUMBER_PATTERN})\]\s*\&=\s*(\(u8\))?~(?P<mask>{NUMBER_PATTERN})")
 
     return applyChange(fileContents, clearRegex, getClearMacro)
 
