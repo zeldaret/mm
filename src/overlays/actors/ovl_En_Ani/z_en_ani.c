@@ -310,8 +310,8 @@ void EnAni_Update(Actor* thisx, PlayState* play) {
         } else if (CutsceneManager_IsNext(this->actor.csId)) {
             CutsceneManager_StartWithPlayerCs(this->actor.csId, &this->actor);
             this->actor.csId = CutsceneManager_GetAdditionalCsId(this->actor.csId);
-            Camera_SetToTrackActor(Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(this->actor.csId)),
-                                   &this->actor);
+            Camera_SetFocalActor(Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(this->actor.csId)),
+                                 &this->actor);
         } else {
             CutsceneManager_Queue(this->actor.csId);
         }
