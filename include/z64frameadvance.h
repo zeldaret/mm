@@ -1,8 +1,7 @@
 #ifndef Z64FRAMEADVANCE_H
 #define Z64FRAMEADVANCE_H
 
-#include "ultra64.h"
-#include "io/controller.h"
+#include "padmgr.h"
 
 typedef struct FrameAdvanceContext {
     /* 0x0 */ s32 enabled;

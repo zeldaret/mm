@@ -61,13 +61,13 @@ void ObjTokeiStep_SetSysMatrix(ObjTokeiStepPanel* panel) {
     mtx->zw = panel->pos.z;
 }
 
-void ObjTokeiStep_AddQuake(ObjTokeiStep* this, PlayState* play) {
+void ObjTokeiStep_RequestQuakeAndRumble(ObjTokeiStep* this, PlayState* play) {
     s32 pad[2];
-    s16 quakeIndex = Quake_Add(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
+    s16 quakeIndex = Quake_Request(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
 
     Quake_SetSpeed(quakeIndex, 20000);
-    Quake_SetQuakeValues(quakeIndex, 1, 0, 0, 0);
-    Quake_SetCountdown(quakeIndex, 7);
+    Quake_SetPerturbations(quakeIndex, 1, 0, 0, 0);
+    Quake_SetDuration(quakeIndex, 7);
 
     Rumble_Request(this->dyna.actor.xyzDistToPlayerSq, 120, 20, 10);
 }
@@ -180,7 +180,7 @@ s32 ObjTokeiStep_OpenProcess(ObjTokeiStep* this, PlayState* play) {
                     }
                     if (panel->numBounces == 1) {
                         ObjTokeiStep_SpawnDust(this2, panel, play);
-                        ObjTokeiStep_AddQuake(this2, play);
+                        ObjTokeiStep_RequestQuakeAndRumble(this2, play);
                     }
                 }
             }

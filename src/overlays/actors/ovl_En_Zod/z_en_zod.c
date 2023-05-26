@@ -387,7 +387,7 @@ void EnZod_PlayDrumsSequence(EnZod* this, PlayState* play) {
     seqPos.y = this->actor.projectedPos.y;
     seqPos.z = this->actor.projectedPos.z;
 
-    func_801A1FB4(3, &seqPos, NA_BGM_DRUMS_PLAY, 700.0f);
+    func_801A1FB4(SEQ_PLAYER_BGM_SUB, &seqPos, NA_BGM_DRUMS_PLAY, 700.0f);
 }
 
 void func_80BAFA44(EnZod* this, PlayState* play) {

@@ -14,6 +14,7 @@
 #include "osint.h"
 #include "os.h"
 #include "irqmgr.h"
+#include "padmgr.h"
 #include "scheduler.h"
 #include "xstdio.h"
 
@@ -262,11 +263,11 @@ typedef struct {
     /* 0x188 */ Vtx* questPageVtx;
     /* 0x18C */ Vtx* maskPageVtx;
     /* 0x190 */ Vtx* itemVtx;
-    /* 0x194 */ Vtx* mapVtx;
+    /* 0x194 */ Vtx* mapVtx; // inferred
     /* 0x198 */ Vtx* questVtx;
     /* 0x19C */ Vtx* maskVtx;
-    /* 0x1A0 */ Vtx* unk_1A0;
-    /* 0x1A4 */ Vtx* unk_1A4;
+    /* 0x1A0 */ Vtx* promptPageVtx;
+    /* 0x1A4 */ Vtx* infoPanelVtx;
     /* 0x1A8 */ Vtx* cursorVtx;
     /* 0x1AC */ OcarinaStaff* ocarinaStaff;
     /* 0x1B0 */ UNK_TYPE1 unk_1B0[0x20];
@@ -282,10 +283,10 @@ typedef struct {
     /* 0x206 */ u16 switchPageTimer;
     /* 0x208 */ u16 savePromptState;
     /* 0x20C */ f32 unk_20C;
-    /* 0x210 */ f32 itemPageRoll; // rotation (-z) of the item page into the screen 
-    /* 0x214 */ f32 mapPageRoll; // rotation (+x) of the map page into the screen 
-    /* 0x218 */ f32 questPageRoll; // rotation (+z) of the quest page into the screen 
-    /* 0x21C */ f32 maskPageRoll; // rotation (-z) of the mask page into the screen 
+    /* 0x210 */ f32 itemPageRoll; // rotation (-z) of the item page into the screen
+    /* 0x214 */ f32 mapPageRoll; // rotation (+x) of the map page into the screen
+    /* 0x218 */ f32 questPageRoll; // rotation (+z) of the quest page into the screen
+    /* 0x21C */ f32 maskPageRoll; // rotation (-z) of the mask page into the screen
     /* 0x220 */ f32 roll;
     /* 0x224 */ u16 alpha;
     /* 0x226 */ s16 offsetY;
@@ -482,7 +483,7 @@ typedef struct {
     /* 0x7D8 */ FaultClient* clients;
     /* 0x7DC */ FaultAddrConvClient* addrConvClients;
     /* 0x7E0 */ UNK_TYPE1 pad7E0[0x4];
-    /* 0x7E4 */ Input padInput[4];
+    /* 0x7E4 */ Input padInput[MAXCONTROLLERS];
     /* 0x844 */ void* fb;
 } FaultThreadStruct; // size = 0x848
 
@@ -523,7 +524,7 @@ typedef struct GameState {
     /* 0x08 */ GameStateFunc destroy;
     /* 0x0C */ GameStateFunc init; // Usually the current game state's init, though after stopping, the graph thread will look here to determine the next game state to load.
     /* 0x10 */ size_t size;
-    /* 0x14 */ Input input[4];
+    /* 0x14 */ Input input[MAXCONTROLLERS];
     /* 0x74 */ TwoHeadArena heap;
     /* 0x84 */ GameAlloc alloc;
     /* 0x98 */ UNK_TYPE1 pad98[0x3];
@@ -541,34 +542,6 @@ typedef void (*ColChkBloodFunc)(struct PlayState*, Collider*, Vec3f*);
 typedef void (*ColChkApplyFunc)(struct PlayState*, CollisionCheckContext*, Collider*);
 typedef void (*ColChkVsFunc)(struct PlayState*, CollisionCheckContext*, Collider*, Collider*);
 typedef s32 (*ColChkLineFunc)(struct PlayState*, CollisionCheckContext*, Collider*, Vec3f*, Vec3f*);
-
-typedef struct {
-    /* 0x000 */ u8 controllers; // bit 0 is set if controller 1 is plugged in, etc.
-    /* 0x001 */ UNK_TYPE1 pad1[0x13];
-    /* 0x014 */ OSContStatus statuses[4];
-    /* 0x024 */ UNK_TYPE4 unk24;
-    /* 0x028 */ OSMesg lockMesg[1];
-    /* 0x02C */ OSMesg interrupts[8];
-    /* 0x04C */ OSMesgQueue sSiIntMsgQ;
-    /* 0x064 */ OSMesgQueue lock;
-    /* 0x07C */ OSMesgQueue irqmgrCallbackQueue;
-    /* 0x094 */ IrqMgrClient irqmgrCallbackQueueNode;
-    /* 0x09C */ IrqMgr* irqmgr;
-    /* 0x0A0 */ OSThread thread;
-    /* 0x250 */ Input input[4];
-    /* 0x2B0 */ OSContPad controllerState1[4];
-    /* 0x2C8 */ u8 maxNumControllers;
-    /* 0x2C9 */ UNK_TYPE1 pad2C9[0x1B3];
-    /* 0x47C */ u8 unk47C;
-    /* 0x47D */ u8 unk47D;
-    /* 0x47E */ u8 hasStopped;
-    /* 0x47F */ UNK_TYPE1 pad47F[0x1];
-} PadMgr; // size = 0x480
-
-#define OS_SC_RETRACE_MSG       1
-#define OS_SC_DONE_MSG          2
-#define OS_SC_NMI_MSG           3 // name is made up, 3 is OS_SC_RDP_DONE_MSG in the original sched.c
-#define OS_SC_PRE_NMI_MSG       4
 
 typedef struct {
     /* 0x000 */ IrqMgr* irqMgr;
