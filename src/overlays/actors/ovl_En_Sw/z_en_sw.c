@@ -901,13 +901,13 @@ void func_808DA89C(EnSw* this, PlayState* play) {
 }
 
 void func_808DAA60(EnSw* this, PlayState* play) {
-    Vec3s* sp44;
+    Vec3s* points;
     s16 temp_v0;
     s16 sp40;
     Vec3f sp34;
     f32 temp_f16;
 
-    sp44 = Lib_SegmentedToVirtual(this->path->points);
+    points = Lib_SegmentedToVirtual(this->path->points);
     sp40 = 0;
 
     if (DECR(this->unk_454) == 0) {
@@ -915,13 +915,13 @@ void func_808DAA60(EnSw* this, PlayState* play) {
             temp_f16 = this->skelAnime.endFrame - this->skelAnime.curFrame;
             sp40 = 80.0f * temp_f16;
             if (this->unk_45E == 0) {
-                Math_Vec3s_ToVec3f(&sp34, &sp44[this->unk_4A0]);
+                Math_Vec3s_ToVec3f(&sp34, &points[this->unk_4A0]);
                 func_808D9894(this, &sp34);
                 temp_v0 = Math_Atan2S_XY(sp34.z, sp34.x);
                 if (ABS_ALT(temp_v0) < sp40) {
                     this->skelAnime.curFrame = 0.0f;
                     Actor_PlaySfx(&this->actor, NA_SE_EN_STALWALL_DASH);
-                    Math_Vec3s_ToVec3f(&this->unk_374, &sp44[this->unk_4A0]);
+                    Math_Vec3s_ToVec3f(&this->unk_374, &points[this->unk_4A0]);
                     this->actionFunc = func_808DACF4;
                     this->unk_414 = 0.0f;
                     sp40 = ABS_ALT(temp_v0);

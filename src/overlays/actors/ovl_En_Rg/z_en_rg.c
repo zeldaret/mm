@@ -373,11 +373,11 @@ s32 func_80BF43FC(EnRg* this) {
     f32 sp88;
     f32 sp84;
     f32 phi_f20 = 0.0f;
-    s32 temp_s7 = ENRG_GET_PATH_INDEX(&this->actor);
+    s32 pathIndex = ENRG_GET_PATH_INDEX(&this->actor);
     s32 phi_s4 = -1;
     s32 temp_s5 = this->unk_344;
     s16 phi_s6 = 0;
-    s32 phi_s0 = D_80BF57E4[this->unk_344][temp_s7];
+    s32 phi_s0 = D_80BF57E4[this->unk_344][pathIndex];
 
     do {
         SubS_CopyPointFromPathCheckBounds(this->path, phi_s0 - 1, &sp9C);
@@ -390,7 +390,7 @@ s32 func_80BF43FC(EnRg* this) {
             phi_s4 = phi_s0;
         }
         phi_s0++;
-    } while ((temp_s5 != 18) && (phi_s0 < D_80BF57E4[temp_s5 + 1][temp_s7]));
+    } while ((temp_s5 != 18) && (phi_s0 < D_80BF57E4[temp_s5 + 1][pathIndex]));
 
     return phi_s4;
 }

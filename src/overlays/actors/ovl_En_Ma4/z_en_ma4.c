@@ -291,7 +291,7 @@ void EnMa4_RunInCircles(EnMa4* this, PlayState* play) {
             }
         }
 
-        if (this->waypointIndex < this->pathPointsCount - 1) {
+        if (this->waypointIndex < (this->pathPointsCount - 1)) {
             this->waypointIndex++;
         } else {
             this->waypointIndex = 0;
