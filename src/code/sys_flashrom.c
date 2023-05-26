@@ -3,16 +3,18 @@
 #include "stackcheck.h"
 #include "system_malloc.h"
 
+#include "prevent_bss_reordering.h"
+
 OSMesgQueue sFlashromMesgQueue;
 OSMesg sFlashromMesg[1];
 s32 sFlashromFlashIsGood;
 s32 sFlashromVendor;
 
 u8 sSysFlashromStack[0x1000];
-StackEntry sSysFlashromStackEntry;
+StackEntry sSysFlashromStackInfo;
 OSThread sSysFlashromThread;
-s80185D40 D_801FD008;
-OSMesg D_801FD034;
+s80185D40 sFlashromRequest;
+OSMesg D_801FD034[1];
 
 s32 SysFlashrom_FlashIsGood(void) {
     return sFlashromFlashIsGood;
@@ -219,11 +221,11 @@ void SysFlashrom_CreateRequest(u8* addr, u32 pageNum, u32 pageCount) {
         sFlashromRequest.pageNum = pageNum;
         sFlashromRequest.pageCount = pageCount;
         osCreateMesgQueue(&sFlashromRequest.messageQueue, D_801FD034, ARRAY_COUNT(D_801FD034));
-        StackCheck_Init(&sys_flashromStackEntry, sys_flashromStack, sys_flashromStack + sizeof(sys_flashromStack), 0,
+        StackCheck_Init(&sSysFlashromStackInfo, sSysFlashromStack, sSysFlashromStack + sizeof(sSysFlashromStack), 0,
                         0x100, "sys_flashrom");
-        osCreateThread(&sys_flashromOSThread, 0xD, SysFlashrom_ThreadEntry, &sFlashromRequest,
-                       sys_flashromStack + sizeof(sys_flashromStack), 0xD);
-        osStartThread(&sys_flashromOSThread);
+        osCreateThread(&sSysFlashromThread, 0xD, SysFlashrom_ThreadEntry, &sFlashromRequest,
+                       sSysFlashromStack + sizeof(sSysFlashromStack), 0xD);
+        osStartThread(&sSysFlashromThread);
     }
 }
 #else
@@ -246,7 +248,7 @@ s32 SysFlashrom_DestroyThread(void) {
     }
     osRecvMesg(&sFlashromRequest.messageQueue, NULL, OS_MESG_BLOCK);
     osDestroyThread(&sSysFlashromThread);
-    StackCheck_Cleanup(&sSysFlashromStackEntry);
+    StackCheck_Cleanup(&sSysFlashromStackInfo);
     return sFlashromRequest.unk4;
 }
 
