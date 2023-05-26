@@ -35,42 +35,128 @@
 // extern Vec3f D_801FBDD8;
 // extern Vec3f D_801FBDE8;
 
-static Vec3f D_801FBC68;
-static Vec3f D_801FBC78;
+// Partial structs taken from "prevent_bss_reordering.h"
+struct Dummy100 {
+    int x;
+};
+struct Dummy101 {
+    int x;
+};
+struct Dummy102 {
+    int x;
+};
+struct Dummy103 {
+    int x;
+};
+struct Dummy104 {
+    int x;
+};
+struct Dummy105 {
+    int x;
+};
+struct Dummy106 {
+    int x;
+};
+struct Dummy107 {
+    int x;
+};
+struct Dummy108 {
+    int x;
+};
+struct Dummy109 {
+    int x;
+};
+struct Dummy110 {
+    int x;
+};
+struct Dummy111 {
+    int x;
+};
+struct Dummy112 {
+    int x;
+};
+struct Dummy113 {
+    int x;
+};
+struct Dummy114 {
+    int x;
+};
+struct Dummy115 {
+    int x;
+};
+struct Dummy116 {
+    int x;
+};
+struct Dummy117 {
+    int x;
+};
+struct Dummy118 {
+    int x;
+};
+struct Dummy119 {
+    int x;
+};
+struct Dummy120 {
+    int x;
+};
+struct Dummy121 {
+    int x;
+};
+struct Dummy122 {
+    int x;
+};
+struct Dummy123 {
+    int x;
+};
+struct Dummy124 {
+    int x;
+};
+struct Dummy125 {
+    int x;
+};
+struct Dummy126 {
+    int x;
+};
+struct Dummy127 {
+    int x;
+};
+// struct Dummy128 { int x; };
+// struct Dummy129 { int x; };
+// struct Dummy130 { int x; };
+// struct Dummy131 { int x; };
+// struct Dummy132 { int x; };
+// struct Dummy133 { int x; };
+// struct Dummy134 { int x; };
+// struct Dummy135 { int x; };
+// struct Dummy136 { int x; };
+// struct Dummy137 { int x; };
+// struct Dummy138 { int x; };
+// struct Dummy139 { int x; };
+// struct Dummy140 { int x; };
+// struct Dummy141 { int x; };
+// struct Dummy142 { int x; };
+// struct Dummy143 { int x; };
+// struct Dummy144 { int x; };
+// struct Dummy145 { int x; };
+// struct Dummy146 { int x; };
+// struct Dummy147 { int x; };
+// struct Dummy148 { int x; };
+// struct Dummy149 { int x; };
+// struct Dummy150 { int x; };
+// struct Dummy151 { int x; };
+// struct Dummy152 { int x; };
+// struct Dummy153 { int x; };
+// struct Dummy154 { int x; };
+// struct Dummy155 { int x; };
+// struct Dummy156 { int x; };
+// struct Dummy157 { int x; };
+// struct Dummy158 { int x; };
+// struct Dummy159 { int x; };
+// struct Dummy160 { int x; };
+// struct Dummy161 { int x; };
+// struct Dummy162 { int x; };
+typedef int Dummy163;
 
-
-// extern Vec3f dummy0;
-// extern Vec3f dummy1;
-// extern Vec3f dummy2;
-// extern Vec3f dummy3;
-// extern Vec3f dummy4;
-// extern Vec3f dummy5;
-// extern Vec3f dummy6;
-// extern Vec3f dummy7;
-// extern Vec3f dummy8;
-// extern Vec3f dummy9;
-// extern Vec3f dummy10;
-// extern Vec3f dummy11;
-// extern Vec3f dummy12;
-// extern Vec3f dummy13;
-// extern Vec3f dummy14;
-// extern Vec3f dummy15;
-// extern Vec3f dummy16;
-// extern Vec3f dummy17;
-// extern Vec3f dummy18;
-// extern Vec3f dummy19;
-// extern Vec3f dummy20;
-// extern Vec3f dummy21;
-// extern Vec3f dummy22;
-// extern Vec3f dummy23;
-// extern Vec3f dummy24;
-// extern Vec3f dummy25;
-// extern Vec3f dummy26;
-// extern Vec3f dummy27;
-// extern Vec3f dummy28;
-// extern Vec3f dummy29;
-
-#ifdef NON_MATCHING
 f32 Math3D_Normalize(Vec3f* vec) {
     f32 magnitude = Math3D_Vec3fMagnitude(vec);
 
@@ -83,9 +169,6 @@ f32 Math3D_Normalize(Vec3f* vec) {
     vec->z *= 1.0f / magnitude;
     return magnitude;
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/Math3D_Normalize.s")
-#endif
 
 // #ifdef NON_MATCHING
 // in-function static bss
@@ -109,8 +192,7 @@ s32 Math3D_PlaneVsLineSegClosestPoint(f32 planeAA, f32 planeAB, f32 planeAC, f32
     D_801FBD98.b.z = (D_801FBD80.dir.z * 100.0f) + D_801FBD80.point.z;
 
     // closestPoint is a point on planeIntersect, sp34 is a point on linePointA, linePointB
-    if (!Math3D_LineSegMakePerpLineSeg(&D_801FBD98.a, &D_801FBD98.b, linePointA, linePointB, closestPoint,
-                                       &sp34)) {
+    if (!Math3D_LineSegMakePerpLineSeg(&D_801FBD98.a, &D_801FBD98.b, linePointA, linePointB, closestPoint, &sp34)) {
         return false;
     }
     return true;
@@ -592,6 +674,9 @@ f32 Math3D_DistXYZ16toF(Vec3s* a, Vec3f* b) {
     return Math3D_Vec3fMagnitude(&diff);
 }
 
+static Vec3f D_801FBC68;
+static Vec3f D_801FBC78;
+
 /**
  * Gets the Z portion of the cross product of vectors `a - (`dx`,`dy`,z) and `b` - (`dx`,`dy`,z)
  */
@@ -624,6 +709,7 @@ void Math3D_Vec3f_Cross(Vec3f* a, Vec3f* b, Vec3f* ret) {
 
 // #ifdef NON_MATCHING
 // in-function static bss
+
 void Math3D_SurfaceNorm(Vec3f* va, Vec3f* vb, Vec3f* vc, Vec3f* normal) {
     Math_Vec3f_Diff(vb, va, &D_801FBC68);
     Math_Vec3f_Diff(vc, va, &D_801FBC78);
@@ -795,7 +881,8 @@ s32 Math3D_LineVsCube(Vec3f* min, Vec3f* max, Vec3f* a, Vec3f* b) {
     D_801FBD00.x = min->x;
     D_801FBD00.y = max->y;
     D_801FBD00.z = max->z;
-    if (Math3D_TriLineIntersect(&D_801FBCE0, &D_801FBCF0, &D_801FBD00, -1.0f, 0.0f, 0.0f, min->x, a, b, &D_801FBD10, 0)) {
+    if (Math3D_TriLineIntersect(&D_801FBCE0, &D_801FBCF0, &D_801FBD00, -1.0f, 0.0f, 0.0f, min->x, a, b, &D_801FBD10,
+                                0)) {
         return true;
     }
 
@@ -805,7 +892,8 @@ s32 Math3D_LineVsCube(Vec3f* min, Vec3f* max, Vec3f* a, Vec3f* b) {
     D_801FBD00.x = min->x;
     D_801FBD00.y = max->y;
     D_801FBD00.z = min->z;
-    if (Math3D_TriLineIntersect(&D_801FBCE0, &D_801FBCF0, &D_801FBD00, -1.0f, 0.0f, 0.0f, min->x, a, b, &D_801FBD10, 0)) {
+    if (Math3D_TriLineIntersect(&D_801FBCE0, &D_801FBCF0, &D_801FBD00, -1.0f, 0.0f, 0.0f, min->x, a, b, &D_801FBD10,
+                                0)) {
         return true;
     }
 
@@ -819,7 +907,8 @@ s32 Math3D_LineVsCube(Vec3f* min, Vec3f* max, Vec3f* a, Vec3f* b) {
     D_801FBD00.x = max->x;
     D_801FBD00.y = max->y;
     D_801FBD00.z = max->z;
-    if (Math3D_TriLineIntersect(&D_801FBCE0, &D_801FBCF0, &D_801FBD00, 0.0f, 0.0f, 1.0f, -max->z, a, b, &D_801FBD10, 0)) {
+    if (Math3D_TriLineIntersect(&D_801FBCE0, &D_801FBCF0, &D_801FBD00, 0.0f, 0.0f, 1.0f, -max->z, a, b, &D_801FBD10,
+                                0)) {
         return true;
     }
     D_801FBCE0.x = max->x;
@@ -829,27 +918,30 @@ s32 Math3D_LineVsCube(Vec3f* min, Vec3f* max, Vec3f* a, Vec3f* b) {
     //! @bug trVtx1.y should be D_801FBD00.y, prevents a tri on the cube from being checked.
     D_801FBCF0.y = min->y;
     D_801FBD00.z = max->z;
-    if (Math3D_TriLineIntersect(&D_801FBCE0, &D_801FBCF0, &D_801FBD00, 0.0f, 0.0f, 1.0f, -max->z, a, b, &D_801FBD10, 0)) {
+    if (Math3D_TriLineIntersect(&D_801FBCE0, &D_801FBCF0, &D_801FBD00, 0.0f, 0.0f, 1.0f, -max->z, a, b, &D_801FBD10,
+                                0)) {
         return true;
     }
 
     // face 3
-    D_801FBCE0.x = min->x;
-    D_801FBCE0.y = max->y;
-    D_801FBCE0.z = min->z;
-    D_801FBD00.x = min->x;
-    D_801FBD00.y = max->y;
-    D_801FBD00.z = max->z;
-    if (Math3D_TriLineIntersect(&D_801FBCE0, &D_801FBCF0, &D_801FBD00, 0.0f, 1.0f, 0.0f, -max->y, a, b, &D_801FBD10, 0)) {
-        return true;
-    }
-    D_801FBCE0.x = max->x;
-    D_801FBCE0.y = max->y;
-    D_801FBCE0.z = min->z;
     D_801FBCF0.x = min->x;
     D_801FBCF0.y = max->y;
     D_801FBCF0.z = min->z;
-    if (Math3D_TriLineIntersect(&D_801FBCE0, &D_801FBCF0, &D_801FBD00, 0.0f, 1.0f, 0.0f, -max->y, a, b, &D_801FBD10, 0)) {
+    D_801FBD00.x = min->x;
+    D_801FBD00.y = max->y;
+    D_801FBD00.z = max->z;
+    if (Math3D_TriLineIntersect(&D_801FBCE0, &D_801FBCF0, &D_801FBD00, 0.0f, 1.0f, 0.0f, -max->y, a, b, &D_801FBD10,
+                                0)) {
+        return true;
+    }
+    D_801FBCF0.x = max->x;
+    D_801FBCF0.y = max->y;
+    D_801FBCF0.z = min->z;
+    D_801FBD00.x = min->x;
+    D_801FBD00.y = max->y;
+    D_801FBD00.z = min->z;
+    if (Math3D_TriLineIntersect(&D_801FBCE0, &D_801FBCF0, &D_801FBD00, 0.0f, 1.0f, 0.0f, -max->y, a, b, &D_801FBD10,
+                                0)) {
         return true;
     }
 
@@ -863,38 +955,42 @@ s32 Math3D_LineVsCube(Vec3f* min, Vec3f* max, Vec3f* a, Vec3f* b) {
     D_801FBD00.x = max->x;
     D_801FBD00.y = max->y;
     D_801FBD00.z = min->z;
-    if (Math3D_TriLineIntersect(&D_801FBCE0, &D_801FBCF0, &D_801FBD00, 0.0f, 0.0f, -1.0f, min->z, a, b, &D_801FBD10, 0)) {
+    if (Math3D_TriLineIntersect(&D_801FBCE0, &D_801FBCF0, &D_801FBD00, 0.0f, 0.0f, -1.0f, min->z, a, b, &D_801FBD10,
+                                0)) {
         return true;
     }
-    D_801FBCE0.x = max->x;
-    D_801FBCE0.y = max->y;
-    D_801FBCE0.z = min->z;
+    D_801FBCF0.x = max->x;
+    D_801FBCF0.y = max->y;
+    D_801FBCF0.z = min->z;
+    D_801FBD00.x = max->x;
+    D_801FBD00.y = min->y;
+    D_801FBD00.z = min->z;
+
+    // face 5
+    if (Math3D_TriLineIntersect(&D_801FBCE0, &D_801FBCF0, &D_801FBD00, 0.0f, 0.0f, -1.0f, min->z, a, b, &D_801FBD10,
+                                0)) {
+        return true;
+    }
     D_801FBCF0.x = max->x;
     D_801FBCF0.y = min->y;
     D_801FBCF0.z = min->z;
-
-    // face 5
-    if (Math3D_TriLineIntersect(&D_801FBCE0, &D_801FBCF0, &D_801FBD00, 0.0f, 0.0f, -1.0f, min->z, a, b, &D_801FBD10, 0)) {
+    D_801FBD00.x = max->x;
+    D_801FBD00.y = min->y;
+    D_801FBD00.z = max->z;
+    if (Math3D_TriLineIntersect(&D_801FBCE0, &D_801FBCF0, &D_801FBD00, 0.0f, -1.0f, 0.0f, min->y, a, b, &D_801FBD10,
+                                0)) {
         return true;
     }
-    D_801FBCE0.x = max->x;
-    D_801FBCE0.y = min->y;
-    D_801FBCE0.z = min->z;
     D_801FBCF0.x = max->x;
     D_801FBCF0.y = min->y;
     D_801FBCF0.z = max->z;
-    if (Math3D_TriLineIntersect(&D_801FBCE0, &D_801FBCF0, &D_801FBD00, 0.0f, -1.0f, 0.0f, min->y, a, b, &D_801FBD10, 0)) {
-        return true;
-    }
-    D_801FBCE0.x = max->x;
-    D_801FBCE0.y = min->y;
-    D_801FBCE0.z = max->z;
-    D_801FBCF0.x = min->x;
-    D_801FBCF0.y = min->y;
-    D_801FBCF0.z = max->z;
+    D_801FBD00.x = min->x;
+    D_801FBD00.y = min->y;
+    D_801FBD00.z = max->z;
 
     // face 6
-    if (Math3D_TriLineIntersect(&D_801FBCE0, &D_801FBCF0, &D_801FBD00, 0.0f, -1.0f, 0.0f, min->y, a, b, &D_801FBD10, 0)) {
+    if (Math3D_TriLineIntersect(&D_801FBCE0, &D_801FBCF0, &D_801FBD00, 0.0f, -1.0f, 0.0f, min->y, a, b, &D_801FBD10,
+                                0)) {
         return true;
     }
     D_801FBCE0.x = max->x;
@@ -906,16 +1002,18 @@ s32 Math3D_LineVsCube(Vec3f* min, Vec3f* max, Vec3f* a, Vec3f* b) {
     D_801FBD00.x = max->x;
     D_801FBD00.y = max->y;
     D_801FBD00.z = min->z;
-    if (Math3D_TriLineIntersect(&D_801FBCE0, &D_801FBCF0, &D_801FBD00, 1.0f, 0.0f, 0.0f, -max->x, a, b, &D_801FBD10, 0)) {
+    if (Math3D_TriLineIntersect(&D_801FBCE0, &D_801FBCF0, &D_801FBD00, 1.0f, 0.0f, 0.0f, -max->x, a, b, &D_801FBD10,
+                                0)) {
         return true;
     }
-    D_801FBCE0.x = max->x;
-    D_801FBCE0.y = min->y;
-    D_801FBCE0.z = max->z;
     D_801FBCF0.x = max->x;
     D_801FBCF0.y = min->y;
-    D_801FBCF0.z = min->z;
-    if (Math3D_TriLineIntersect(&D_801FBCE0, &D_801FBCF0, &D_801FBD00, 1.0f, 0.0f, 0.0f, -max->x, a, b, &D_801FBD10, 0)) {
+    D_801FBCF0.z = max->z;
+    D_801FBD00.x = max->x;
+    D_801FBD00.y = min->y;
+    D_801FBD00.z = min->z;
+    if (Math3D_TriLineIntersect(&D_801FBCE0, &D_801FBCF0, &D_801FBD00, 1.0f, 0.0f, 0.0f, -max->x, a, b, &D_801FBD10,
+                                0)) {
         return true;
     }
 
@@ -1790,8 +1888,8 @@ s32 Math3D_TriVsSphIntersect(Sphere16* sphere, TriNorm* tri, Vec3f* intersectPoi
             Math3D_GetSphVsTriIntersectPoint(sphere, tri, intersectPoint);
             return true;
         }
-    } else if (Math3D_TriChkPointParaZDeterminate(&tri->vtx[0], &tri->vtx[1], &tri->vtx[2], D_801FBC28.x,
-                                                  D_801FBC28.y, 0.0f, tri->plane.normal.z)) {
+    } else if (Math3D_TriChkPointParaZDeterminate(&tri->vtx[0], &tri->vtx[1], &tri->vtx[2], D_801FBC28.x, D_801FBC28.y,
+                                                  0.0f, tri->plane.normal.z)) {
         Math3D_GetSphVsTriIntersectPoint(sphere, tri, intersectPoint);
         return true;
     }
