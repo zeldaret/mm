@@ -945,15 +945,15 @@ void Sram_ResetSaveFromMoonCrash(SramContext* sramCtx) {
 
     bzero(sramCtx->saveBuf, SAVE_BUFFER_SIZE);
 
-    if (SysFlashrom_ReadData(sramCtx->saveBuf, D_801C67C8[gSaveContext.fileNum * 2], D_801C67F0[gSaveContext.fileNum * 2]) !=
-        0) {
+    if (SysFlashrom_ReadData(sramCtx->saveBuf, D_801C67C8[gSaveContext.fileNum * 2],
+                             D_801C67F0[gSaveContext.fileNum * 2]) != 0) {
         SysFlashrom_ReadData(sramCtx->saveBuf, D_801C67C8[gSaveContext.fileNum * 2 + 1],
-                      D_801C67F0[gSaveContext.fileNum * 2 + 1]);
+                             D_801C67F0[gSaveContext.fileNum * 2 + 1]);
     }
     Lib_MemCpy(&gSaveContext.save, sramCtx->saveBuf, sizeof(Save));
     if (CHECK_NEWF(gSaveContext.save.saveInfo.playerData.newf)) {
         SysFlashrom_ReadData(sramCtx->saveBuf, D_801C67C8[gSaveContext.fileNum * 2 + 1],
-                      D_801C67F0[gSaveContext.fileNum * 2 + 1]);
+                             D_801C67F0[gSaveContext.fileNum * 2 + 1]);
         Lib_MemCpy(&gSaveContext, sramCtx->saveBuf, sizeof(Save));
     }
     gSaveContext.save.cutsceneIndex = cutsceneIndex;
@@ -1476,11 +1476,12 @@ void func_80146628(FileSelectState* fileSelect2, SramContext* sramCtx) {
         // clear buffer
         bzero(sramCtx->saveBuf, SAVE_BUFFER_SIZE);
         // read to buffer
-        SysFlashrom_ReadData(sramCtx->saveBuf, D_801C67C8[fileSelect->unk_2448E * 2], D_801C67F0[fileSelect->unk_2448E * 2]);
+        SysFlashrom_ReadData(sramCtx->saveBuf, D_801C67C8[fileSelect->unk_2448E * 2],
+                             D_801C67F0[fileSelect->unk_2448E * 2]);
 
         if (1) {}
         SysFlashrom_ReadData(&sramCtx->saveBuf[0x2000], D_801C67C8[fileSelect->unk_2448E * 2 + 1],
-                      D_801C67F0[fileSelect->unk_2448E * 2 + 1]);
+                             D_801C67F0[fileSelect->unk_2448E * 2 + 1]);
         if (1) {}
 
         // copy buffer to save context
@@ -1666,7 +1667,7 @@ void func_80147020(SramContext* sramCtx) {
 
 void func_80147068(SramContext* sramCtx) {
     if (sramCtx->status == 2) {
-        if (SysFlashrom_IsQueueFull() != 0) {     // if task running
+        if (SysFlashrom_IsQueueFull() != 0) {       // if task running
             if (SysFlashrom_DestroyThread() == 0) { // wait for task done
                 // task success
                 sramCtx->status = 4;
@@ -1695,7 +1696,7 @@ void func_80147150(SramContext* sramCtx) {
 
 void func_80147198(SramContext* sramCtx) {
     if (sramCtx->status == 7) {
-        if (SysFlashrom_IsQueueFull() != 0) {     // Is task running
+        if (SysFlashrom_IsQueueFull() != 0) {       // Is task running
             if (SysFlashrom_DestroyThread() == 0) { // Wait for task done
                 SysFlashrom_CreateRequest(sramCtx->saveBuf, sramCtx->curPage + 0x80, sramCtx->numPages);
                 sramCtx->status = 8;
@@ -1705,7 +1706,7 @@ void func_80147198(SramContext* sramCtx) {
             }
         }
     } else if (sramCtx->status == 8) {
-        if (SysFlashrom_IsQueueFull() != 0) {     // Is task running
+        if (SysFlashrom_IsQueueFull() != 0) {       // Is task running
             if (SysFlashrom_DestroyThread() == 0) { // Wait for task done
                 sramCtx->status = 4;
             } else {
