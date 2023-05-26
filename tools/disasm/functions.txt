@@ -45,7 +45,7 @@
     0x80081830:("CIC6105_PrintRomInfo",),
     0x8008189C:("CIC6105_AddRomInfoFaultPage",),
     0x800818D0:("CIC6105_RemoveRomInfoFaultPage",),
-    0x800818F4:("func_800818F4",),
+    0x800818F4:("CIC6105_Init",),
     0x80081920:("__osSyncVPrintf",),
     0x8008193C:("osSyncPrintf",),
     0x80081958:("rmonPrintf",),

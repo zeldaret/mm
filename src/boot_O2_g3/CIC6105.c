@@ -22,14 +22,14 @@ void CIC6105_PrintRomInfo(void) {
 }
 
 void CIC6105_AddRomInfoFaultPage(void) {
-    Fault_AddClient(&sRomInfoFaultClient, CIC6105_PrintRomInfo, 0, 0);
+    Fault_AddClient(&sRomInfoFaultClient, CIC6105_PrintRomInfo, NULL, NULL);
 }
 
 void CIC6105_RemoveRomInfoFaultPage(void) {
     Fault_RemoveClient(&sRomInfoFaultClient);
 }
 
-void func_800818F4(void) {
+void CIC6105_Init(void) {
     D_8009BE30 = IO_READ(CIC_ADDRESS_1);
     D_8009BE34 = IO_READ(CIC_ADDRESS_2);
 }
