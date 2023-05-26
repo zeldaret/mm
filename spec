@@ -351,6 +351,7 @@ endseg
 beginseg
     name "icon_item_static_test"
     include "build/baserom/icon_item_static_test.o"
+    number 8
 endseg
 
 beginseg

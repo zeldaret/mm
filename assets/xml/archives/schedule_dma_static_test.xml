@@ -1,0 +1,28 @@
+<Root>
+    <File Name="schedule_dma_static_test.unarchive">
+        <Blob Name="schedule_dma_static_test_Blob_000000" Size="0x0800" Offset="0x0" />
+        <Blob Name="schedule_dma_static_test_Blob_000800" Size="0x0800" Offset="0x800" />
+        <Blob Name="schedule_dma_static_test_Blob_001000" Size="0x0800" Offset="0x1000" />
+        <Blob Name="schedule_dma_static_test_Blob_001800" Size="0x0800" Offset="0x1800" />
+        <Blob Name="schedule_dma_static_test_Blob_002000" Size="0x0800" Offset="0x2000" />
+        <Blob Name="schedule_dma_static_test_Blob_002800" Size="0x0800" Offset="0x2800" />
+        <Blob Name="schedule_dma_static_test_Blob_003000" Size="0x0800" Offset="0x3000" />
+        <Blob Name="schedule_dma_static_test_Blob_003800" Size="0x0800" Offset="0x3800" />
+        <Blob Name="schedule_dma_static_test_Blob_004000" Size="0x0800" Offset="0x4000" />
+        <Blob Name="schedule_dma_static_test_Blob_004800" Size="0x0800" Offset="0x4800" />
+        <Blob Name="schedule_dma_static_test_Blob_005000" Size="0x0800" Offset="0x5000" />
+        <Blob Name="schedule_dma_static_test_Blob_005800" Size="0x0800" Offset="0x5800" />
+        <Blob Name="schedule_dma_static_test_Blob_006000" Size="0x0800" Offset="0x6000" />
+        <Blob Name="schedule_dma_static_test_Blob_006800" Size="0x0800" Offset="0x6800" />
+        <Blob Name="schedule_dma_static_test_Blob_007000" Size="0x0800" Offset="0x7000" />
+        <Blob Name="schedule_dma_static_test_Blob_007800" Size="0x0800" Offset="0x7800" />
+        <Blob Name="schedule_dma_static_test_Blob_008000" Size="0x0800" Offset="0x8000" />
+        <Blob Name="schedule_dma_static_test_Blob_008800" Size="0x0800" Offset="0x8800" />
+        <Blob Name="schedule_dma_static_test_Blob_009000" Size="0x0800" Offset="0x9000" />
+        <Blob Name="schedule_dma_static_test_Blob_009800" Size="0x0800" Offset="0x9800" />
+        <Blob Name="schedule_dma_static_test_Blob_00A000" Size="0x0800" Offset="0xA000" />
+        <Blob Name="schedule_dma_static_test_Blob_00A800" Size="0x0400" Offset="0xA800" />
+        <Blob Name="schedule_dma_static_test_Blob_00AC00" Size="0x02A0" Offset="0xAC00" />
+        <Blob Name="schedule_dma_static_test_Blob_00AEA0" Size="0x0380" Offset="0xAEA0" />
+    </File>
+</Root>

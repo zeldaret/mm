@@ -12,6 +12,8 @@ from pathlib import Path
 import struct
 
 
+PRINT_XML = False
+
 @dataclasses.dataclass
 class ArchiveMeta:
     start: int
@@ -54,17 +56,36 @@ def extractArchive(archivePath: Path, outPath: Path):
 
     archivesOffsets = getOffsetsList(archiveBytes)
 
+    if PRINT_XML:
+        print('<Root>')
+        print(f'    <File Name="{outPath.stem}">')
+
     with outPath.open("wb") as out:
+        currentOffset = 0
         for meta in archivesOffsets:
             decompressedBytes = libyaz0.decompress(archiveBytes[meta.start:meta.end])
+            decompressedSize = len(decompressedBytes)
             out.write(decompressedBytes)
+
+            if PRINT_XML:
+                print(f'        <Blob Name="{archivePath.stem}_Blob_{currentOffset:06X}" Size="0x{decompressedSize:04X}" Offset="0x{currentOffset:X}" />')
+
+            currentOffset += decompressedSize
+
+    if PRINT_XML:
+        print(f'    </File>')
+        print('</Root>')
 
 
 def main():
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(description="MM archives extractor")
     parser.add_argument("-v", "--version", help="version to process", default="mm.us.rev1")
+    parser.add_argument("--xml", help="Generate xml to stdout", action="store_true")
 
     args = parser.parse_args()
+
+    global PRINT_XML
+    PRINT_XML = args.xml
 
     archivesCsvPath = Path(f"tools/filelists/{args.version}/archives.csv")
 
@@ -74,7 +95,7 @@ def main():
             archiveName = line.strip().split(",")[1]
             archivePath = Path(f"baserom/{archiveName}")
 
-            extractedPath = Path(str(archivePath) + "_extracted")
+            extractedPath = Path(str(archivePath) + ".unarchive")
             print(f"Extracting '{archivePath}' -> '{extractedPath}'")
             extractArchive(archivePath, extractedPath)
             # print()

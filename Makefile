@@ -303,6 +303,7 @@ setup:
 	$(MAKE) -C tools
 	python3 tools/fixbaserom.py
 	python3 tools/extract_baserom.py
+	python3 tools/extract_archives.py
 
 assets:
 	python3 extract_assets.py -j $(N_THREADS)
