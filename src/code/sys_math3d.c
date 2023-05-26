@@ -1780,8 +1780,6 @@ s32 Math3D_PointInCyl(Cylinder16* cyl, Vec3f* point) {
     }
 }
 
-#ifdef NON_MATCHING
-// fracA and fracB are init to 0 but this causes problems everywhere
 s32 Math3D_CylVsLineSeg(Cylinder16* cyl, Vec3f* linePointA, Vec3f* linePointB, Vec3f* intersectA, Vec3f* intersectB) {
     Vec3f cylToPtA;
     Vec3f cylToPtB;
@@ -1789,7 +1787,7 @@ s32 Math3D_CylVsLineSeg(Cylinder16* cyl, Vec3f* linePointA, Vec3f* linePointB, V
     f32 fracA;
     f32 fracB;
     f32 fracBase;
-    f32 zero = 0.0f;
+    f32 zero;
     f32 pad;
     f32 cylRadiusSq;
     f32 radSqDiff;
@@ -1799,10 +1797,19 @@ s32 Math3D_CylVsLineSeg(Cylinder16* cyl, Vec3f* linePointA, Vec3f* linePointB, V
     s32 sideIntB;
     s32 intBeyondA;
     s32 intBeyondB;
-    s32 intFlags = 0;
+    s32 intFlags;
     Vec3f intPts[4];
     s32 count;
     s32 i;
+
+    fracA = 0.0f;
+    fracB = 0.0f;
+
+//! FAKE:
+dummy:;
+
+    zero = 0.0f;
+    intFlags = 0;
 
     if (Math3D_PointInCyl(cyl, linePointA) && Math3D_PointInCyl(cyl, linePointB)) {
         // both points are in the cylinder
@@ -1966,9 +1973,6 @@ s32 Math3D_CylVsLineSeg(Cylinder16* cyl, Vec3f* linePointA, Vec3f* linePointB, V
     }
     return count;
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/Math3D_CylVsLineSeg.s")
-#endif
 
 #ifdef NON_MATCHING
 // in-function static bss
