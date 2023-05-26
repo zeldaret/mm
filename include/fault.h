@@ -6,6 +6,7 @@
 #include "libc/stdarg.h"
 #include "libc/stdint.h"
 #include "io/controller.h"
+#include "padmgr.h"
 #include "stack.h"
 
 // These are the same as the 3-bit ansi color codes

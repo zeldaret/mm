@@ -1002,6 +1002,8 @@ wordReplace = {
     "D_801D1DE0": "gIdentityMtx",
     "D_801D1E20": "gIdentityMtxF",
 
+    "gFaultStruct": "gFaultMgr",
+
     # Macros
     "CUR_EQUIP_VALUE_VOID": "GET_CUR_EQUIP_VALUE",
     "CUR_UPG_VALUE_VOID": "GET_CUR_UPG_VALUE",
