@@ -87,12 +87,10 @@ s32 SysFlashrom_ErasePage(u32 page) {
     return osFlashSectorErase(page);
 }
 
-#ifdef NON_MATCHING
-// Stack, Regalloc, reorderings
-s32 SysFlashrom_WriteData(u8* addr, u32 pageNum, s32 pageCount) {
+s32 SysFlashrom_WriteData(u8* addr, u32 pageNum, u32 pageCount) {
     OSIoMesg sp40;
-    s32 temp_v0;
-    s32 i;
+    s32 result;
+    u32 i;
 
     if (!SysFlashrom_FlashIsGood()) {
         return -1;
@@ -101,26 +99,20 @@ s32 SysFlashrom_WriteData(u8* addr, u32 pageNum, s32 pageCount) {
         Fault_AddHungupAndCrash("../sys_flashrom.c", 275);
     }
     osWritebackDCache(addr, pageCount * 128);
-    for (i = 0; i != pageCount; i++, pageNum++) {
+    for (i = 0; i != pageCount; i++) {
         osFlashWriteBuffer(&sp40, 0, addr + i * 128, &sFlashromMesgQueue);
         osRecvMesg(&sFlashromMesgQueue, NULL, OS_MESG_BLOCK);
-        if (pageNum) {}
-        temp_v0 = osFlashWriteArray(pageNum);
-        if (temp_v0 != 0) {
-            return temp_v0;
+        result = osFlashWriteArray(i + pageNum);
+        if (result != 0) {
+            return result;
         }
     }
     return 0;
 }
-#else
-s32 SysFlashrom_WriteData(u8* addr, u32 pageNum, s32 pageCount);
-#pragma GLOBAL_ASM("asm/non_matchings/code/sys_flashrom/SysFlashrom_WriteData.s")
-#endif
 
 // TODO Remove Goto
 s32 SysFlashrom_AttemptWrite(void* addr, s32 pageNum, s32 pageCount) {
-    s32 temp_v0;
-    s32 temp_v0_2;
+    s32 result;
     s32 i;
 
     if (!SysFlashrom_FlashIsGood()) {
@@ -128,23 +120,23 @@ s32 SysFlashrom_AttemptWrite(void* addr, s32 pageNum, s32 pageCount) {
     }
     osWritebackDCache(addr, pageCount * 128);
     i = 0;
-loop_3:
+failRetry:
     /*while(1)*/ {
-        temp_v0 = SysFlashrom_ErasePage(pageNum);
-        if (temp_v0 != 0) {
+        result = SysFlashrom_ErasePage(pageNum);
+        if (result != 0) {
             if (i < 3) {
                 i += 1;
-                goto loop_3;
+                goto failRetry;
             }
-            return temp_v0;
+            return result;
         }
-        temp_v0_2 = SysFlashrom_WriteData(addr, pageNum, pageCount);
-        if (temp_v0_2 != 0) {
+        result = SysFlashrom_WriteData(addr, pageNum, pageCount);
+        if (result != 0) {
             if (i < 3) {
                 i += 1;
-                goto loop_3;
+                goto failRetry;
             }
-            return temp_v0_2;
+            return result;
         }
     }
     return 0;
@@ -179,6 +171,7 @@ s32 func_80185C24(void* addr, u32 pageNum, u32 pageCount) {
         if (bcmp(data, addr, size) == 0) {
             ret = 0;
         } else {
+            //! @bug Will attempt to write regardless of the result of the function call.
             if (func_80185BE4(data, addr, pageCount) != 0) {
                 ret = SysFlashrom_AttemptWrite(addr, pageNum, pageCount);
             } else {
@@ -212,26 +205,21 @@ void SysFlashrom_ThreadEntry(void* arg) {
     }
 }
 
-#ifdef NON_MATCHING
-// Data ordering
 void SysFlashrom_CreateRequest(u8* addr, u32 pageNum, u32 pageCount) {
+    s80185D40* req = &sFlashromRequest;
     if (SysFlashrom_FlashIsGood() != 0) {
-        sFlashromRequest.unk0 = 1;
-        sFlashromRequest.addr = addr;
-        sFlashromRequest.pageNum = pageNum;
-        sFlashromRequest.pageCount = pageCount;
-        osCreateMesgQueue(&sFlashromRequest.messageQueue, D_801FD034, ARRAY_COUNT(D_801FD034));
+        req->unk0 = 1;
+        req->addr = addr;
+        req->pageNum = pageNum;
+        req->pageCount = pageCount;
+        osCreateMesgQueue(&req->messageQueue, D_801FD034, ARRAY_COUNT(D_801FD034));
         StackCheck_Init(&sSysFlashromStackInfo, sSysFlashromStack, sSysFlashromStack + sizeof(sSysFlashromStack), 0,
                         0x100, "sys_flashrom");
-        osCreateThread(&sSysFlashromThread, 0xD, SysFlashrom_ThreadEntry, &sFlashromRequest,
+        osCreateThread(&sSysFlashromThread, 0xD, SysFlashrom_ThreadEntry, req,
                        sSysFlashromStack + sizeof(sSysFlashromStack), 0xD);
         osStartThread(&sSysFlashromThread);
     }
 }
-#else
-void SysFlashrom_CreateRequest(u8* addr, u32 pageNum, u32 pageCount);
-#pragma GLOBAL_ASM("asm/non_matchings/code/sys_flashrom/SysFlashrom_CreateRequest.s")
-#endif
 
 s32 func_80185EC4(void) {
     OSMesgQueue* queue = &sFlashromRequest.messageQueue;
@@ -239,7 +227,7 @@ s32 func_80185EC4(void) {
     if (!SysFlashrom_FlashIsGood()) {
         return -1;
     }
-    return (queue->msgCount <= queue->validCount);
+    return queue->msgCount <= queue->validCount;
 }
 
 s32 SysFlashrom_DestroyThread(void) {
