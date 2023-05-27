@@ -425,8 +425,8 @@ s32 func_80C056D4(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s
 }
 
 void EnBombers2_Draw(Actor* thisx, PlayState* play) {
-
     EnBombers2* this = THIS;
+
     OPEN_DISPS(play->state.gfxCtx);
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
