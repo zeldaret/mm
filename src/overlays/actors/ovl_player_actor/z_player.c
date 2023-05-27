@@ -12141,7 +12141,7 @@ void Player_Draw(Actor* thisx, PlayState* play) {
         OPEN_DISPS(play->state.gfxCtx);
 
         Matrix_Push();
-        func_8012C268(play);
+        func_8012C268(&play->state);
         spEC = true;
         if (this->stateFlags3 & PLAYER_STATE3_40000) {
             Matrix_SetTranslateRotateYXZ(this->unk_AF0[0].x, this->unk_AF0[0].y, this->unk_AF0[0].z, &gZeroVec3s);
@@ -12178,7 +12178,7 @@ void Player_Draw(Actor* thisx, PlayState* play) {
         OPEN_DISPS(play->state.gfxCtx);
 
         if (!spEC) {
-            func_8012C268(play);
+            func_8012C268(&play->state);
         }
 
         func_8012C2DC(play->state.gfxCtx);
