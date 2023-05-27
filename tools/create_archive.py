@@ -158,22 +158,33 @@ def Yaz0Encode(src: bytearray) -> bytearray:
 
 
 
+def readFileAsBytearray(filepath: Path) -> bytearray:
+    with filepath.open(mode="rb") as f:
+        return bytearray(f.read())
+
+
+
 @dataclasses.dataclass
 class Symbol:
     name: str
     offset: int
     size: int
 
-def getDataFromElf(inPath: Path) -> tuple[bytearray, list[Symbol]]:
+def getDataFromElf(elfPath: Path) -> tuple[bytearray, list[Symbol], int]:
     uncompressedData = bytearray()
     symbolList: list[Symbol] = []
+    dataOffset = -1
 
-    with inPath.open("rb") as elfFile:
+    with elfPath.open("rb") as elfFile:
         elf = ELFFile(elfFile)
         for section in elf.iter_sections():
             if section.name == ".data":
                 assert len(uncompressedData) == 0
                 uncompressedData.extend(section.data())
+                # print(section.header)
+                assert len(uncompressedData) == section["sh_size"]
+                dataOffset = section["sh_offset"]
+                # exit()
             elif section.name == ".symtab":
                 assert isinstance(section, SymbolTableSection)
                 for sym in section.iter_symbols():
@@ -182,7 +193,7 @@ def getDataFromElf(inPath: Path) -> tuple[bytearray, list[Symbol]]:
                     if sym["st_info"]["type"] != "STT_OBJECT":
                         continue
                     symbolList.append(Symbol(sym.name, sym["st_value"], sym["st_size"]))
-    return uncompressedData, symbolList
+    return uncompressedData, symbolList, dataOffset
 
 
 def printArchive(archive: bytearray):
@@ -232,28 +243,29 @@ def createArchive(uncompressedData: bytearray, symbolList: list[Symbol]) -> byte
     return archive
 
 
-def invokeCommand(cmd: str):
-    # print(cmd)
-    try:
-        subprocess.check_call(cmd, shell=True)
-    except subprocess.CalledProcessError as e:
-        # Return the same error code if the invoked program fails
-        exit(e.returncode)
-
 
 def main():
     parser = argparse.ArgumentParser(description="")
     parser.add_argument("in_file")
-    parser.add_argument("out_file")
-    parser.add_argument("--binutils-prefix", default="mips-linux-gnu-")
+    parser.add_argument("out_bin")
+    parser.add_argument("out_sym")
 
     args = parser.parse_args()
 
     inPath = Path(args.in_file)
-    outPath = Path(args.out_file)
-    binutils_prefix = args.binutils_prefix
+    outBinPath = Path(args.out_bin)
+    outSymPath = Path(args.out_sym)
 
-    uncompressedData, symbolList = getDataFromElf(inPath)
+    # Delete output files if they already exists
+    outBinPath.unlink(missing_ok=True)
+    outSymPath.unlink(missing_ok=True)
+
+    elfBytes = readFileAsBytearray(inPath)
+
+    uncompressedData, symbolList, dataOffset = getDataFromElf(inPath)
+    assert len(uncompressedData) > 0
+    assert len(symbolList) > 0
+    assert dataOffset > 0
 
     # This should always be sorted in ascending order, but just to be sure
     symbolList.sort(key=lambda x: x.offset)
@@ -261,21 +273,13 @@ def main():
     archive = createArchive(uncompressedData, symbolList)
 
     # Write the compressed archive file as a raw binary
-    binPath = outPath.with_suffix(".bin")
-    binPath.write_bytes(archive)
+    outBinPath.write_bytes(archive)
 
-    # Delete output elf file if it already exists
-    outPath.unlink(missing_ok=True)
+    # zero out data
+    for i in range(dataOffset, dataOffset+len(uncompressedData)):
+        elfBytes[i] = 0
 
-    # Make an elf file from the raw archive binary file
-    invokeCommand(f"{binutils_prefix}objcopy -I binary -O elf32-big {binPath} {outPath}")
-
-    # Strip dummy symbols automatically genreated by objcopy
-    invokeCommand(f"{binutils_prefix}objcopy -I elf32-big --strip-all {outPath}")
-
-    for sym in symbolList:
-        invokeCommand(f"{binutils_prefix}objcopy -I elf32-big --add-symbol {sym.name}=.data:0x{sym.offset:X} {outPath}")
-
+    outSymPath.write_bytes(elfBytes)
 
 
 if __name__ == "__main__":

@@ -348,8 +348,8 @@ build/assets/%.o: assets/%.c
 	$(RM_MDEBUG)
 
 build/assets/archives/%.archive.o: build/assets/archives/%.o
-	python3 tools/create_archive.py --binutils-prefix $(MIPS_BINUTILS_PREFIX) $< $@
-
+	python3 tools/create_archive.py $< $(@:.archive.o=.archive.bin) $(@:.archive.o=.symbols.o)
+	$(OBJCOPY) -I binary -O elf32-big $(@:.archive.o=.archive.bin) $@
 
 build/baserom/%.o: baserom/%
 	$(OBJCOPY) -I binary -O elf32-big $< $@

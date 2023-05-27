@@ -280,13 +280,15 @@ endseg
 beginseg
     name "icon_item_static_old"
     romalign 0x1000
-    include "build/baserom/icon_item_static_old.o"
+    include "build/assets/archives/icon_item_static_test/icon_item_static_test.symbols.o"
+    number 8
 endseg
 
 beginseg
     name "icon_item_24_static_old"
     romalign 0x1000
-    include "build/baserom/icon_item_24_static_old.o"
+    include "build/assets/archives/icon_item_24_static_test/icon_item_24_static_test.symbols.o"
+    number 9
 endseg
 
 beginseg
@@ -362,13 +364,15 @@ endseg
 
 beginseg
     name "schedule_dma_static_old"
-    include "build/baserom/schedule_dma_static_old.o"
+    include "build/assets/archives/schedule_dma_static_test/schedule_dma_static_test.symbols.o"
+    number 7
 endseg
 
 beginseg
     name "schedule_dma_static_test"
     increment 0x1000
     include "build/assets/archives/schedule_dma_static_test/schedule_dma_static_test.archive.o"
+    number 7
 endseg
 
 beginseg

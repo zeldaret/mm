@@ -1,5 +1,5 @@
 <Root>
-    <File Name="schedule_dma_static_test.unarchive">
+    <File Name="schedule_dma_static_test.unarchive" Segment="7">
         <Blob Name="schedule_dma_static_test_Blob_000000" Size="0x0800" Offset="0x0" />
         <Blob Name="schedule_dma_static_test_Blob_000800" Size="0x0800" Offset="0x800" />
         <Blob Name="schedule_dma_static_test_Blob_001000" Size="0x0800" Offset="0x1000" />
