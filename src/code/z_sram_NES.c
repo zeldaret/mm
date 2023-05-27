@@ -1614,7 +1614,7 @@ void Sram_Alloc(GameState* gameState, SramContext* sramCtx) {
 void func_80146EBC(SramContext* sramCtx, s32 curPage, s32 numPages) {
     sramCtx->curPage = curPage;
     sramCtx->numPages = numPages;
-    func_80185F64(sramCtx->saveBuf, curPage, numPages);
+    SysFlashrom_WriteDataSync(sramCtx->saveBuf, curPage, numPages);
 }
 
 /**
@@ -1627,7 +1627,7 @@ void Sram_SaveSpecialEnterClockTown(PlayState* play) {
     gSaveContext.save.isFirstCycle = true;
     gSaveContext.save.isOwlSave = false;
     func_80145698(sramCtx);
-    func_80185F64(sramCtx->saveBuf, D_801C67C8[gSaveContext.fileNum * 2], D_801C6818[gSaveContext.fileNum * 2]);
+    SysFlashrom_WriteDataSync(sramCtx->saveBuf, D_801C67C8[gSaveContext.fileNum * 2], D_801C6818[gSaveContext.fileNum * 2]);
 }
 
 /**
@@ -1648,7 +1648,7 @@ void Sram_SaveSpecialNewDay(PlayState* play) {
     gSaveContext.save.day = day;
     gSaveContext.save.time = time;
     gSaveContext.save.cutsceneIndex = cutsceneIndex;
-    func_80185F64(play->sramCtx.saveBuf, D_801C67C8[gSaveContext.fileNum * 2], D_801C67F0[gSaveContext.fileNum * 2]);
+    SysFlashrom_WriteDataSync(play->sramCtx.saveBuf, D_801C67C8[gSaveContext.fileNum * 2], D_801C67F0[gSaveContext.fileNum * 2]);
 }
 
 void func_80147008(SramContext* sramCtx, u32 curPage, u32 numPages) {
@@ -1659,7 +1659,7 @@ void func_80147008(SramContext* sramCtx, u32 curPage, u32 numPages) {
 
 void func_80147020(SramContext* sramCtx) {
     // async flash write
-    SysFlashrom_CreateRequest(sramCtx->saveBuf, sramCtx->curPage, sramCtx->numPages);
+    SysFlashrom_WriteDataAsync(sramCtx->saveBuf, sramCtx->curPage, sramCtx->numPages);
 
     sramCtx->unk_18 = osGetTime();
     sramCtx->status = 2;
@@ -1667,8 +1667,8 @@ void func_80147020(SramContext* sramCtx) {
 
 void func_80147068(SramContext* sramCtx) {
     if (sramCtx->status == 2) {
-        if (SysFlashrom_IsQueueFull() != 0) {       // if task running
-            if (SysFlashrom_DestroyThread() == 0) { // wait for task done
+        if (SysFlashrom_IsBusy() != 0) {       // if task running
+            if (SysFlashrom_AwaitResult() == 0) { // wait for task done
                 // task success
                 sramCtx->status = 4;
             } else {
@@ -1688,7 +1688,7 @@ void func_80147138(SramContext* sramCtx, s32 curPage, s32 numPages) {
 }
 
 void func_80147150(SramContext* sramCtx) {
-    SysFlashrom_CreateRequest(sramCtx->saveBuf, sramCtx->curPage, sramCtx->numPages);
+    SysFlashrom_WriteDataAsync(sramCtx->saveBuf, sramCtx->curPage, sramCtx->numPages);
 
     sramCtx->unk_18 = osGetTime();
     sramCtx->status = 7;
@@ -1696,18 +1696,18 @@ void func_80147150(SramContext* sramCtx) {
 
 void func_80147198(SramContext* sramCtx) {
     if (sramCtx->status == 7) {
-        if (SysFlashrom_IsQueueFull() != 0) {       // Is task running
-            if (SysFlashrom_DestroyThread() == 0) { // Wait for task done
-                SysFlashrom_CreateRequest(sramCtx->saveBuf, sramCtx->curPage + 0x80, sramCtx->numPages);
+        if (SysFlashrom_IsBusy() != 0) {       // Is task running
+            if (SysFlashrom_AwaitResult() == 0) { // Wait for task done
+                SysFlashrom_WriteDataAsync(sramCtx->saveBuf, sramCtx->curPage + 0x80, sramCtx->numPages);
                 sramCtx->status = 8;
             } else {
-                SysFlashrom_CreateRequest(sramCtx->saveBuf, sramCtx->curPage + 0x80, sramCtx->numPages);
+                SysFlashrom_WriteDataAsync(sramCtx->saveBuf, sramCtx->curPage + 0x80, sramCtx->numPages);
                 sramCtx->status = 8;
             }
         }
     } else if (sramCtx->status == 8) {
-        if (SysFlashrom_IsQueueFull() != 0) {       // Is task running
-            if (SysFlashrom_DestroyThread() == 0) { // Wait for task done
+        if (SysFlashrom_IsBusy() != 0) {       // Is task running
+            if (SysFlashrom_AwaitResult() == 0) { // Wait for task done
                 sramCtx->status = 4;
             } else {
                 sramCtx->status = 4;
