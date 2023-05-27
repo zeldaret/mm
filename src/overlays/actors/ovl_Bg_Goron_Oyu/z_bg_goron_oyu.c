@@ -183,10 +183,12 @@ void BgGoronOyu_Update(Actor* thisx, PlayState* play) {
 
 void BgGoronOyu_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
+
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     AnimatedMat_Draw(play, Lib_SegmentedToVirtual(object_oyu_Matanimheader_000968));
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_XLU_DISP++, &object_oyu_DL_000158);
     gSPDisplayList(POLY_XLU_DISP++, &object_oyu_DL_000080);
+
     CLOSE_DISPS(play->state.gfxCtx);
 }

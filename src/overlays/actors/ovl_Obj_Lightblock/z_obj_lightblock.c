@@ -193,6 +193,7 @@ void ObjLightblock_Draw(Actor* thisx, PlayState* play) {
     ObjLightblock* this = THIS;
 
     OPEN_DISPS(play->state.gfxCtx);
+
     if (this->alpha < 255) {
         Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         gSPSegment(POLY_XLU_DISP++, 0x08, D_801AEF88);
@@ -206,5 +207,6 @@ void ObjLightblock_Draw(Actor* thisx, PlayState* play) {
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0x80, 255, 255, 255, 255);
         gSPDisplayList(POLY_OPA_DISP++, object_lightblock_DL_000178);
     }
+
     CLOSE_DISPS(play->state.gfxCtx);
 }

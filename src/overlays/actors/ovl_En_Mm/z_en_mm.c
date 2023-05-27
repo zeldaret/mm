@@ -211,6 +211,7 @@ void EnMm_Draw(Actor* thisx, PlayState* play) {
     EnMm* this = THIS;
 
     OPEN_DISPS(play->state.gfxCtx);
+
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     if (this->unk_190 != 0) {
         s16 rotY = this->actor.world.rot.y - this->actor.shape.rot.y;
@@ -221,5 +222,6 @@ void EnMm_Draw(Actor* thisx, PlayState* play) {
     }
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_055628);
+
     CLOSE_DISPS(play->state.gfxCtx);
 }

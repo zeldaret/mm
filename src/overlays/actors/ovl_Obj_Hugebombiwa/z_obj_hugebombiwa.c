@@ -697,6 +697,7 @@ void func_80A55B34(Actor* thisx, PlayState* play) {
     }
 
     OPEN_DISPS(play->state.gfxCtx);
+
     gfx = POLY_OPA_DISP;
 
     gSPDisplayList(gfx++, &gSetupDL[6 * SETUPDL_25]);

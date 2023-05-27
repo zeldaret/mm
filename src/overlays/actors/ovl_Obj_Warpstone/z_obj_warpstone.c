@@ -168,6 +168,7 @@ void ObjWarpstone_Draw(Actor* thisx, PlayState* play2) {
     Gfx_DrawDListOpa(play, sOwlStatueDLs[this->modelIndex]);
     if (this->dyna.actor.home.rot.x != 0) {
         OPEN_DISPS(play->state.gfxCtx);
+
         Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         Matrix_Translate(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y + 34.0f,
                          this->dyna.actor.world.pos.z, MTXMODE_NEW);
@@ -186,6 +187,7 @@ void ObjWarpstone_Draw(Actor* thisx, PlayState* play2) {
         Matrix_RotateZF(BINANG_TO_RAD_ALT2(~((play->gameplayFrames * 1200) & 0xFFFF)), MTXMODE_APPLY);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, gEffFlash1DL);
+
         CLOSE_DISPS(play->state.gfxCtx);
     }
 }

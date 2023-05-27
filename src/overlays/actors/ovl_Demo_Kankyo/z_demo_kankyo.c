@@ -598,6 +598,7 @@ void DemoKankyo_DrawMoonAndGiant(Actor* thisx, PlayState* play2) {
         GraphicsContext* gfxCtx = play->state.gfxCtx;
 
         OPEN_DISPS(gfxCtx);
+
         Gfx_SetupDL25_Xlu(gfxCtx);
 
         for (i = 0; i < play->envCtx.unk_F2[3]; i++) {

@@ -190,6 +190,7 @@ void EnTg_Draw(Actor* thisx, PlayState* play) {
     Matrix_Pop();
 
     OPEN_DISPS(play->state.gfxCtx);
+
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     gDPPipeSync(POLY_OPA_DISP++);

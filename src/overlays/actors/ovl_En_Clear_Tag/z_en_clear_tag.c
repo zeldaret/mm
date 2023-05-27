@@ -807,6 +807,7 @@ void EnClearTag_DrawEffects(Actor* thisx, PlayState* play) {
     EnClearTagEffect* firstEffect = this->effect;
 
     OPEN_DISPS(gfxCtx);
+
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 

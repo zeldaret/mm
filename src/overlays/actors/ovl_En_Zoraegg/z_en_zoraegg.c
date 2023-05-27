@@ -697,6 +697,7 @@ void func_80B32F04(Actor* thisx, PlayState* play) {
                  this->actor.scale.z * (((sp7C + 1.0f) * 0.1f) + 9.0f), MTXMODE_APPLY);
 
     OPEN_DISPS(play->state.gfxCtx);
+
     gfx = POLY_XLU_DISP;
     gfx = Gfx_SetupDL20_NoCD(gfx);
 

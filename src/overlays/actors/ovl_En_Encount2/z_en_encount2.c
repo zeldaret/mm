@@ -270,6 +270,7 @@ void EnEncount2_DrawEffects(EnEncount2* this, PlayState* play) {
     GraphicsContext* gfxCtx = play->state.gfxCtx;
 
     OPEN_DISPS(gfxCtx);
+
     sPtr = this->effects;
     Gfx_SetupDL25_Opa(gfxCtx);
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);
@@ -289,5 +290,6 @@ void EnEncount2_DrawEffects(EnEncount2* this, PlayState* play) {
             gSPDisplayList(POLY_XLU_DISP++, gSunSparkleModelDL);
         }
     }
+
     CLOSE_DISPS(gfxCtx);
 }

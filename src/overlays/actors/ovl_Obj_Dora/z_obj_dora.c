@@ -321,6 +321,7 @@ void ObjDora_Draw(Actor* thisx, PlayState* play) {
     f32 gongForceX;
 
     OPEN_DISPS(play->state.gfxCtx);
+
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     if (this->actionFunc == ObjDora_MoveGong) {

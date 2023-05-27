@@ -347,6 +347,7 @@ void EnZo_Draw(Actor* thisx, PlayState* play) {
     TexturePtr eyeTextures[] = { gZoraEyeOpenTex, gZoraEyeHalfTex, gZoraEyeClosedTex };
 
     OPEN_DISPS(play->state.gfxCtx);
+
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     gDPPipeSync(POLY_OPA_DISP++);
@@ -370,5 +371,6 @@ void EnZo_Draw(Actor* thisx, PlayState* play) {
     }
 
     SubS_DrawShadowTex(&this->actor, &play->state, shadowTex);
+
     CLOSE_DISPS(play->state.gfxCtx);
 }

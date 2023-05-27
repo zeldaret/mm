@@ -374,6 +374,7 @@ void ObjChan_Draw(Actor* thisx, PlayState* play) {
     Gfx* xlu;
 
     OPEN_DISPS(play->state.gfxCtx);
+
     Matrix_RotateYS(this->rotation, MTXMODE_APPLY);
 
     opa = Gfx_CallSetupDL(POLY_OPA_DISP, SETUPDL_25);
@@ -401,10 +402,12 @@ void ObjChan_DrawPot(Actor* thisx, PlayState* play) {
     Gfx* dl;
 
     OPEN_DISPS(play->state.gfxCtx);
+
     dl = Gfx_CallSetupDL(POLY_OPA_DISP, SETUPDL_25);
     gSPMatrix(&dl[0], Matrix_NewMtx(play->state.gfxCtx), G_MTX_LOAD);
     gSPDisplayList(&dl[1], object_obj_chan_DL_002358);
     POLY_OPA_DISP = &dl[2];
+
     CLOSE_DISPS(play->state.gfxCtx);
 
     if (this->stateFlags & OBJCHAN_STATE_ON_FIRE) {

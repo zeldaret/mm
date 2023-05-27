@@ -87,6 +87,7 @@ void EnEndingHero5_Draw(Actor* thisx, PlayState* play) {
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);
+
     OPEN_DISPS(play->state.gfxCtx);
 
     switch (this->unk25C) {

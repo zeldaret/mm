@@ -279,6 +279,7 @@ void ObjTokeiStep_DrawOpen(Actor* thisx, PlayState* play) {
     Gfx* gfx;
 
     OPEN_DISPS(play->state.gfxCtx);
+
     gfx = POLY_OPA_DISP;
     gSPDisplayList(gfx++, &gSetupDL[6 * SETUPDL_25]);
 
@@ -289,5 +290,6 @@ void ObjTokeiStep_DrawOpen(Actor* thisx, PlayState* play) {
         gSPDisplayList(gfx++, gClocktowerPanelDL);
     }
     POLY_OPA_DISP = gfx;
+
     CLOSE_DISPS(play->state.gfxCtx);
 }

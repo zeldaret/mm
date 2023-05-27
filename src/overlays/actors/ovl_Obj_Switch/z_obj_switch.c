@@ -968,12 +968,14 @@ void ObjSwitch_DrawFloorSwitch(ObjSwitch* this, PlayState* play) {
         Gfx* opa;
 
         OPEN_DISPS(play->state.gfxCtx);
+
         opa = POLY_OPA_DISP;
         gSPDisplayList(opa++, &gSetupDL[6 * SETUPDL_25]);
         gSPMatrix(opa++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gDPSetPrimColor(opa++, 0, 0x80, this->color.r, this->color.g, this->color.b, 255);
         gSPDisplayList(opa++, gFloorSwitch1DL);
         POLY_OPA_DISP = opa;
+
         CLOSE_DISPS(play->state.gfxCtx);
     } else {
         Gfx_DrawDListOpa(play, sFloorSwitchDL[OBJ_SWITCH_GET_SUBTYPE(&this->dyna.actor)]);

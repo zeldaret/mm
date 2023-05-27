@@ -1161,6 +1161,7 @@ void EnTite_Draw(Actor* thisx, PlayState* play) {
     Gfx* gfx;
 
     OPEN_DISPS(play->state.gfxCtx);
+
     gfx = POLY_OPA_DISP;
 
     gSPDisplayList(&gfx[0], &gSetupDL[6 * SETUPDL_25]);

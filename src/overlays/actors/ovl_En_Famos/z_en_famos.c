@@ -829,6 +829,7 @@ void EnFamos_DrawDebris(EnFamos* this, PlayState* play) {
         EnFamosRock* rock;
 
         OPEN_DISPS(play->state.gfxCtx);
+
         dispOpa = POLY_OPA_DISP;
 
         gSPDisplayList(&dispOpa[0], &gSetupDL[6 * SETUPDL_25]);

@@ -87,6 +87,7 @@ void EnEndingHero_Draw(Actor* thisx, PlayState* play) {
     s32 index = 0;
 
     OPEN_DISPS(play->state.gfxCtx);
+
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 

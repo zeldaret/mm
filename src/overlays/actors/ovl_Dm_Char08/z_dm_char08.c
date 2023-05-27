@@ -1093,6 +1093,7 @@ void DmChar08_Draw(Actor* thisx, PlayState* play) {
     DmChar08* this = THIS;
 
     OPEN_DISPS(play->state.gfxCtx);
+
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sBigTurtleEyeTextures[this->eyeIndex]));
@@ -1119,5 +1120,6 @@ void DmChar08_Draw(Actor* thisx, PlayState* play) {
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, gTurtleAsleepDL);
     }
+
     CLOSE_DISPS(play->state.gfxCtx);
 }

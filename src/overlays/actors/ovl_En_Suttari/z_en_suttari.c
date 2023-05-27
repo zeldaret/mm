@@ -1544,8 +1544,11 @@ void EnSuttari_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* 
                     }
                 } else {
                     Gfx_SetupDL25_Opa(play->state.gfxCtx);
+
                     OPEN_DISPS(play->state.gfxCtx);
+
                     gSPDisplayList(POLY_OPA_DISP++, gBombShopBagDL);
+
                     CLOSE_DISPS(play->state.gfxCtx);
                 }
             }

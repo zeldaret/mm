@@ -563,6 +563,7 @@ void EnAm_Draw(Actor* thisx, PlayState* play) {
     EnAm* this = THIS;
 
     OPEN_DISPS(play->state.gfxCtx);
+
     gfx = POLY_OPA_DISP;
     gSPDisplayList(&gfx[0], &gSetupDL[6 * SETUPDL_25]);
     gDPSetEnvColor(&gfx[1], 0, 0, 0, this->textureBlend);
@@ -571,5 +572,6 @@ void EnAm_Draw(Actor* thisx, PlayState* play) {
                       &this->actor);
     Actor_DrawDamageEffects(play, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), this->drawDmgEffScale, 0.0f,
                             this->drawDmgEffAlpha, ACTOR_DRAW_DMGEFF_LIGHT_ORBS);
+
     CLOSE_DISPS(play->state.gfxCtx);
 }

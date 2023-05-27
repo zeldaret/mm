@@ -129,6 +129,7 @@ void DayTelop_Draw(DayTelopState* this) {
     GraphicsContext* gfxCtx = this->state.gfxCtx;
 
     OPEN_DISPS(gfxCtx);
+
     Gfx_SetupDL39_Opa(this->state.gfxCtx);
 
     if (gSaveContext.save.day >= 9) {

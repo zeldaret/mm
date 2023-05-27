@@ -324,6 +324,7 @@ void EnHoll_Draw(Actor* thisx, PlayState* play) {
 
     if (this->alpha != 0) {
         OPEN_DISPS(play->state.gfxCtx);
+
         if (this->alpha == 255) {
             dList = POLY_OPA_DISP;
             setupDListIndex = SETUPDL_37;
@@ -343,6 +344,7 @@ void EnHoll_Draw(Actor* thisx, PlayState* play) {
         } else {
             POLY_XLU_DISP = dList;
         }
+
         CLOSE_DISPS(play->state.gfxCtx);
     }
 }

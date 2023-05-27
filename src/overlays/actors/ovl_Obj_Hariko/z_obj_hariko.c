@@ -90,6 +90,7 @@ void ObjHariko_Draw(Actor* thisx, PlayState* play) {
     ObjHariko* this = THIS;
 
     OPEN_DISPS(play->state.gfxCtx);
+
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     Matrix_Push();
@@ -101,5 +102,6 @@ void ObjHariko_Draw(Actor* thisx, PlayState* play) {
     gSPDisplayList(POLY_OPA_DISP++, gHarikoFaceDL);
 
     Matrix_Pop();
+
     CLOSE_DISPS(play->state.gfxCtx);
 }

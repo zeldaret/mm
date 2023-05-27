@@ -1002,6 +1002,7 @@ void EnNiw_DrawFeathers(EnNiw* this, PlayState* play) {
     s16 i;
 
     OPEN_DISPS(gfxCtx);
+
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     for (i = 0; i < ARRAY_COUNT(this->feathers); i++, feather++) {

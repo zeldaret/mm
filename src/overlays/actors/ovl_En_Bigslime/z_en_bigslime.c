@@ -2884,6 +2884,7 @@ void EnBigslime_SetSysMatrix(Vec3f* pos, PlayState* play, Gfx* shadowDList, f32 
     zx = 1.0f - (yDistMinY * (1.0f / 1550.0f));
 
     OPEN_DISPS(play->state.gfxCtx);
+
     POLY_OPA_DISP = Gfx_CallSetupDL(POLY_OPA_DISP, SETUPDL_44);
     sysMatrix->xx = zx;
     sysMatrix->yy = 1.0f;
@@ -2907,6 +2908,7 @@ void EnBigslime_SetSysMatrix(Vec3f* pos, PlayState* play, Gfx* shadowDList, f32 
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 0, 0, 0, (u8)(alpha * zx));
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, shadowDList);
+
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
@@ -2936,6 +2938,7 @@ void EnBigslime_DrawMinislime(EnBigslime* this, PlayState* play2) {
     }
 
     OPEN_DISPS(play->state.gfxCtx);
+
     for (i = 0; i < MINISLIME_NUM_SPAWN; i++) {
         minislime = this->minislime[indices[i]];
         lights = LightContext_NewLights(&play->lightCtx, play->state.gfxCtx);
@@ -2963,6 +2966,7 @@ void EnBigslime_DrawMinislime(EnBigslime* this, PlayState* play2) {
                                 minislime->actor.scale.y * 400.0f, minislime->actor.shape.rot.y,
                                 minislime->actor.shape.shadowAlpha * (175.0f / 255.0f));
     }
+
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
@@ -2982,6 +2986,7 @@ void EnBigslime_DrawBigslime(Actor* thisx, PlayState* play) {
 
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     func_800B8118(&this->actor, play, 0);
+
     OPEN_DISPS(play->state.gfxCtx);
 
     // Draw Bigslime
@@ -3018,6 +3023,7 @@ void EnBigslime_DrawBigslime(Actor* thisx, PlayState* play) {
             gSPDisplayList(POLY_XLU_DISP++, gBigslimeBubbleDL);
         }
     }
+
     CLOSE_DISPS(play->state.gfxCtx);
 
     EnBigslime_SetSysMatrix(&this->actor.world.pos, play, gBigslimeShadowDL, this->vtxScaleX, this->vtxScaleZ,
