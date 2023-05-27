@@ -7,7 +7,6 @@ from __future__ import annotations
 
 import argparse
 import dataclasses
-# import libyaz0
 from pathlib import Path
 import struct
 import subprocess
@@ -40,7 +39,7 @@ def simpleEnc(src: bytearray, pos: int) -> tuple[int, int]:
 
         while j < end:
             if src[i + j] != src[j + pos]:
-                break;
+                break
             j += 1
 
         if j > numBytes:
@@ -48,7 +47,7 @@ def simpleEnc(src: bytearray, pos: int) -> tuple[int, int]:
             matchPos = i
 
     if numBytes == 2:
-        numBytes = 1;
+        numBytes = 1
 
     return numBytes, matchPos
 
@@ -56,33 +55,25 @@ numBytes1 = 0
 matchPos = 0
 prevFlag = 0
 
-# a lookahead encoding scheme for ngc Yaz0
 def nintendoEnc(src: bytearray, pos: int) -> tuple[int, int]:
     global numBytes1
     global matchPos
     global prevFlag
     numBytes = 1
 
-    # if prevFlag is set, it means that the previous position
-    # was determined by look-ahead try.
-    # so just use it. this is not the best optimization,
-    # but nintendo's choice for speed.
     if prevFlag == 1:
-        prevFlag = 0;
+        prevFlag = 0
         return numBytes1, matchPos
 
-    prevFlag = 0;
-    numBytes, matchPos = simpleEnc(src, pos);
-    pMatchPos = matchPos;
+    prevFlag = 0
+    numBytes, matchPos = simpleEnc(src, pos)
+    pMatchPos = matchPos
 
-    # if this position is RLE encoded, then compare to copying 1 byte and next position(pos+1) encoding
     if numBytes >= 3:
-        numBytes1, matchPos = simpleEnc(src, pos + 1);
-        # if the next position encoding is +2 longer than current position, choose it.
-        # this does not guarantee the best optimization, but fairly good optimization with speed.
+        numBytes1, matchPos = simpleEnc(src, pos + 1)
         if numBytes1 >= numBytes + 2:
-            numBytes = 1;
-            prevFlag = 1;
+            numBytes = 1
+            prevFlag = 1
 
     return numBytes, pMatchPos
 
@@ -107,30 +98,29 @@ def Yaz0Encode(src: bytearray) -> bytearray:
     currCodeByte = 0 # a bitfield, set bits meaning copy, unset meaning RLE
 
     while srcPos < len(src):
+        numBytes, matchPos = nintendoEnc(src, srcPos)
 
-        numBytes, matchPos = nintendoEnc(src, srcPos);
         if numBytes < 3:
             # straight copy
-            buf[bufPos] = src[srcPos];
+            buf[bufPos] = src[srcPos]
             bufPos += 1
             srcPos += 1
             # set flag for straight copy
-            currCodeByte |= (0x80 >> validBitCount);
+            currCodeByte |= (0x80 >> validBitCount)
         else:
             # RLE part
-            dist = srcPos - matchPos - 1;
-            # byte1, byte2, byte3;
+            dist = srcPos - matchPos - 1
 
             if (numBytes >= 0x12): # 3 byte encoding
-                byte1 = 0 | (dist >> 8);
-                byte2 = dist & 0xFF;
+                byte1 = 0 | (dist >> 8)
+                byte2 = dist & 0xFF
                 buf[bufPos] = byte1
                 bufPos += 1
                 buf[bufPos] = byte2
                 bufPos += 1
                 # maximum runlength for 3 byte encoding
                 if (numBytes > MAX_RUNLEN):
-                    numBytes = MAX_RUNLEN;
+                    numBytes = MAX_RUNLEN
                 byte3 = numBytes - 0x12
                 buf[bufPos] = byte3
                 bufPos += 1
@@ -141,7 +131,7 @@ def Yaz0Encode(src: bytearray) -> bytearray:
                 bufPos += 1
                 buf[bufPos] = byte2
                 bufPos += 1
-            srcPos += numBytes;
+            srcPos += numBytes
 
         validBitCount += 1
 
@@ -149,21 +139,20 @@ def Yaz0Encode(src: bytearray) -> bytearray:
         if validBitCount == 8:
             dst.append(currCodeByte)
             for j in range(bufPos):
-                # TODO: extend
                 dst.append(buf[j])
 
-            currCodeByte = 0;
-            validBitCount = 0;
-            bufPos = 0;
+            currCodeByte = 0
+            validBitCount = 0
+            bufPos = 0
 
     if validBitCount > 0:
         dst.append(currCodeByte)
         for j in range(bufPos):
             dst.append(buf[j])
 
-        currCodeByte = 0;
-        validBitCount = 0;
-        bufPos = 0;
+        currCodeByte = 0
+        validBitCount = 0
+        bufPos = 0
 
     return dst
 
@@ -175,7 +164,25 @@ class Symbol:
     offset: int
     size: int
 
-    # compressedData: bytearray = bytearray()
+def getDataFromElf(inPath: Path) -> tuple[bytearray, list[Symbol]]:
+    uncompressedData = bytearray()
+    symbolList: list[Symbol] = []
+
+    with inPath.open("rb") as elfFile:
+        elf = ELFFile(elfFile)
+        for section in elf.iter_sections():
+            if section.name == ".data":
+                assert len(uncompressedData) == 0
+                uncompressedData.extend(section.data())
+            elif section.name == ".symtab":
+                assert isinstance(section, SymbolTableSection)
+                for sym in section.iter_symbols():
+                    if sym["st_shndx"] == "SHN_UNDEF":
+                        continue
+                    if sym["st_info"]["type"] != "STT_OBJECT":
+                        continue
+                    symbolList.append(Symbol(sym.name, sym["st_value"], sym["st_size"]))
+    return uncompressedData, symbolList
 
 
 def printArchive(archive: bytearray):
@@ -190,17 +197,12 @@ def printArchive(archive: bytearray):
 def createArchive(uncompressedData: bytearray, symbolList: list[Symbol]) -> bytearray:
     archive = bytearray()
 
-    # for sym in symbolList:
-    #     sym.compressedData = bytearray(libyaz0.compress(uncompressedData[sym.offset:sym.offset + sym.size]))
-
     firstEntryOffset = (len(symbolList) + 1) * 4
 
     # Fill with zeroes until the compressed data start
     archive.extend([0]*firstEntryOffset)
 
     writeWordAsBytes(archive, 0, firstEntryOffset)
-
-    # libyaz0.compress()
 
     offset = len(archive)
 
@@ -225,9 +227,6 @@ def createArchive(uncompressedData: bytearray, symbolList: list[Symbol]) -> byte
     while len(archive) % 0x10 != 0:
         archive.extend([0])
 
-    # for i in range(4, firstEntryOffset-4, 4):
-    #
-
     # printArchive(archive)
 
     return archive
@@ -238,9 +237,8 @@ def invokeCommand(cmd: str):
     try:
         subprocess.check_call(cmd, shell=True)
     except subprocess.CalledProcessError as e:
-        # Return the same error code for the wrapper if z64compress fails
+        # Return the same error code if the invoked program fails
         exit(e.returncode)
-
 
 
 def main():
@@ -253,44 +251,27 @@ def main():
 
     inPath = Path(args.in_file)
     outPath = Path(args.out_file)
+    binutils_prefix = args.binutils_prefix
 
-    uncompressedData = bytearray()
-    symbolList: list[Symbol] = []
-
-    with open(inPath, "rb") as elf_file:
-        elf = ELFFile(elf_file)
-        for section in elf.iter_sections():
-            if section.name == ".data":
-                assert len(uncompressedData) == 0
-                # print(section)
-                uncompressedData.extend(section.data())
-                # print()
-            elif section.name == ".symtab":
-                # print(section)
-                assert isinstance(section, SymbolTableSection)
-                for sym in section.iter_symbols():
-                    if sym["st_shndx"] == "SHN_UNDEF":
-                        continue
-                    if sym["st_info"]["type"] != "STT_OBJECT":
-                        continue
-                    # print(sym, sym.name, sym.entry)
-                    symbolList.append(Symbol(sym.name, sym["st_value"], sym["st_size"]))
-                # print()
+    uncompressedData, symbolList = getDataFromElf(inPath)
 
     # This should always be sorted in ascending order, but just to be sure
     symbolList.sort(key=lambda x: x.offset)
 
     archive = createArchive(uncompressedData, symbolList)
-    binPath = outPath.with_suffix(".bin")
 
+    # Write the compressed archive file as a raw binary
+    binPath = outPath.with_suffix(".bin")
     binPath.write_bytes(archive)
 
+    # Delete output elf file if it already exists
     outPath.unlink(missing_ok=True)
 
-    binutils_prefix = args.binutils_prefix
+    # Make an elf file from the raw archive binary file
     invokeCommand(f"{binutils_prefix}objcopy -I binary -O elf32-big {binPath} {outPath}")
 
-    # invokeCommand(f"{binutils_prefix}objcopy -I elf32-big --strip-all {outPath}")
+    # Strip dummy symbols automatically genreated by objcopy
+    invokeCommand(f"{binutils_prefix}objcopy -I elf32-big --strip-all {outPath}")
 
     for sym in symbolList:
         invokeCommand(f"{binutils_prefix}objcopy -I elf32-big --add-symbol {sym.name}=.data:0x{sym.offset:X} {outPath}")
