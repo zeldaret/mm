@@ -19,7 +19,7 @@ void ArrowFire_Draw(Actor* thisx, PlayState* play);
 void FireArrow_ChargeAndWait(ArrowFire* this, PlayState* play);
 void FireArrow_Fly(ArrowFire* this, PlayState* play);
 
-#include "overlays/ovl_Arrow_fire/ovl_Arrow_Fire.c"
+#include "overlays/ovl_Arrow_Fire/ovl_Arrow_Fire.c"
 
 ActorInit Arrow_Fire_InitVars = {
     ACTOR_ARROW_FIRE,
