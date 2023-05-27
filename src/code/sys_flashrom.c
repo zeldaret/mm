@@ -3,6 +3,8 @@
 #include "stackcheck.h"
 #include "system_malloc.h"
 
+#include "prevent_bss_reordering.h"
+
 OSMesgQueue sFlashromMesgQueue;
 OSMesg sFlashromMesg[1];
 s32 sFlashromIsInit;
@@ -49,7 +51,7 @@ s32 SysFlashrom_CheckFlashType(void) {
     }
     osFlashReadId(&flashType, &flashVendor);
     sFlashromVendor = flashVendor;
-    if (flashType == FLASH_MAGIC) {
+    if (flashType == FLASH_TYPE_MAGIC) {
         if ((flashVendor == FLASH_VERSION_MX_PROTO_A) || (flashVendor == FLASH_VERSION_MX_A) ||
             (flashVendor == FLASH_VERSION_MX_C) || (flashVendor == FLASH_VERSION_MEI) ||
             (flashVendor == FLASH_VERSION_MX_B_AND_D)) {
