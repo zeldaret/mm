@@ -184,9 +184,11 @@ C_FILES       := $(foreach dir,$(SRC_DIRS) $(ASSET_BIN_DIRS_C_FILES),$(wildcard 
 S_FILES       := $(shell grep -F "build/asm" spec | sed 's/.*build\/// ; s/\.o\".*/.s/') \
                  $(shell grep -F "build/data" spec | sed 's/.*build\/// ; s/\.o\".*/.s/')
 BASEROM_FILES := $(shell grep -F "build/baserom" spec | sed 's/.*build\/// ; s/\.o\".*//')
+ARCHIVES_O    := $(shell grep -F ".archive.o" spec | sed 's/.*include "// ; s/\.o\".*/.o/')
 O_FILES       := $(foreach f,$(S_FILES:.s=.o),build/$f) \
                  $(foreach f,$(C_FILES:.c=.o),build/$f) \
-                 $(foreach f,$(BASEROM_FILES),build/$f.o)
+                 $(foreach f,$(BASEROM_FILES),build/$f.o) \
+                 $(ARCHIVES_O)
 
 OVL_RELOC_FILES := $(shell $(CPP) $(CPPFLAGS) $(SPEC) | grep -o '[^"]*_reloc.o' )
 
@@ -345,6 +347,10 @@ build/assets/%.o: assets/%.c
 	$(OBJCOPY_BIN)
 	$(RM_MDEBUG)
 
+build/assets/archives/%.archive.o: build/assets/archives/%.o
+	python3 tools/create_archive.py --binutils-prefix $(MIPS_BINUTILS_PREFIX) $< $@
+
+
 build/baserom/%.o: baserom/%
 	$(OBJCOPY) -I binary -O elf32-big $< $@
 
@@ -393,3 +399,6 @@ build/assets/%.jpg.inc.c: assets/%.jpg
 	$(ZAPD) bren -eh -i $< -o $@
 
 -include $(DEP_FILES)
+
+# Print target for debugging
+print-% : ; $(info $* is a $(flavor $*) variable set to [$($*)]) @true

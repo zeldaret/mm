@@ -1,5 +1,6 @@
 #include "global.h"
 #include "interface/parameter_static/parameter_static.h"
+#include "assets/archives/icon_item_static_test/icon_item_static_test.h"
 
 // Bit Flag array in which gBitFlags[n] is (1 << n)
 u32 gBitFlags[] = {
@@ -97,122 +98,122 @@ u32 gGsFlagsShift[] = {
 
 // TODO: use symbols for these icon textures once textures are properly in C
 TexturePtr gItemIcons[] = {
-    0x08000000,        // ITEM_OCARINA
-    0x08001000,        // ITEM_BOW
-    0x08002000,        // ITEM_ARROW_FIRE
-    0x08003000,        // ITEM_ARROW_ICE
-    0x08004000,        // ITEM_ARROW_LIGHT
-    0x08005000,        // ITEM_OCARINA_FAIRY
-    0x08006000,        // ITEM_BOMB
-    0x08007000,        // ITEM_BOMBCHU
-    0x08008000,        // ITEM_STICK
-    0x08009000,        // ITEM_NUT
-    0x0800A000,        // ITEM_MAGIC_BEANS
-    0x0800B000,        // ITEM_SLINGSHOT
-    0x0800C000,        // ITEM_POWDER_KEG
-    0x0800D000,        // ITEM_PICTO_BOX
-    0x0800E000,        // ITEM_LENS
-    0x0800F000,        // ITEM_HOOKSHOT
-    0x08010000,        // ITEM_SWORD_GREAT_FAIRY
-    0x08011000,        // ITEM_LONGSHOT
-    0x08012000,        // ITEM_BOTTLE
-    0x08013000,        // ITEM_POTION_RED
-    0x08014000,        // ITEM_POTION_GREEN
-    0x08015000,        // ITEM_POTION_BLUE
-    0x08016000,        // ITEM_FAIRY
-    0x08017000,        // ITEM_DEKU_PRINCESS
-    0x08018000,        // ITEM_MILK_BOTTLE
-    0x08019000,        // ITEM_MILK_HALF
-    0x0801A000,        // ITEM_FISH
-    0x0801B000,        // ITEM_BUG
-    0x0801C000,        // ITEM_BLUE_FIRE
-    0x0801D000,        // ITEM_POE
-    0x0801E000,        // ITEM_BIG_POE
-    0x0801F000,        // ITEM_SPRING_WATER
-    0x08020000,        // ITEM_HOT_SPRING_WATER
-    0x08021000,        // ITEM_ZORA_EGG
-    0x08022000,        // ITEM_GOLD_DUST
-    0x08023000,        // ITEM_MUSHROOM
-    0x08024000,        // ITEM_SEAHORSE
-    0x08025000,        // ITEM_CHATEAU
-    0x08026000,        // ITEM_HYLIAN_LOACH
-    0x08027000,        // ITEM_OBABA_DRINK
-    0x08028000,        // ITEM_MOON_TEAR
-    0x08029000,        // ITEM_DEED_LAND
-    0x0802A000,        // ITEM_DEED_SWAMP
-    0x0802B000,        // ITEM_DEED_MOUNTAIN
-    0x0802C000,        // ITEM_DEED_OCEAN
-    0x0802D000,        // ITEM_ROOM_KEY
-    0x0802E000,        // ITEM_LETTER_MAMA
-    0x0802F000,        // ITEM_LETTER_TO_KAFEI
-    0x08030000,        // ITEM_PENDANT_OF_MEMORIES
-    0x08031000,        // ITEM_TINGLE_MAP
-    0x08032000,        // ITEM_MASK_DEKU
-    0x08033000,        // ITEM_MASK_GORON
-    0x08034000,        // ITEM_MASK_ZORA
-    0x08035000,        // ITEM_MASK_FIERCE_DEITY
-    0x08036000,        // ITEM_MASK_TRUTH
-    0x08037000,        // ITEM_MASK_KAFEIS_MASK
-    0x08038000,        // ITEM_MASK_ALL_NIGHT
-    0x08039000,        // ITEM_MASK_BUNNY
-    0x0803A000,        // ITEM_MASK_KEATON
-    0x0803B000,        // ITEM_MASK_GARO
-    0x0803C000,        // ITEM_MASK_ROMANI
-    0x0803D000,        // ITEM_MASK_CIRCUS_LEADER
-    0x0803E000,        // ITEM_MASK_POSTMAN
-    0x0803F000,        // ITEM_MASK_COUPLE
-    0x08040000,        // ITEM_MASK_GREAT_FAIRY
-    0x08041000,        // ITEM_MASK_GIBDO
-    0x08042000,        // ITEM_MASK_DON_GERO
-    0x08043000,        // ITEM_MASK_KAMARO
-    0x08044000,        // ITEM_MASK_CAPTAIN
-    0x08045000,        // ITEM_MASK_STONE
-    0x08046000,        // ITEM_MASK_BREMEN
-    0x08047000,        // ITEM_MASK_BLAST
-    0x08048000,        // ITEM_MASK_SCENTS
-    0x08049000,        // ITEM_MASK_GIANT
-    0x0804A000,        // ITEM_BOW_ARROW_FIRE
-    0x0804B000,        // ITEM_BOW_ARROW_ICE
-    0x0804C000,        // ITEM_BOW_ARROW_LIGHT
-    0x0804D000,        // ITEM_SWORD_KOKIRI
-    0x0804E000,        // ITEM_SWORD_RAZOR
-    0x0804F000,        // ITEM_SWORD_GILDED
-    0x08050000,        // ITEM_SWORD_DEITY
-    0x08051000,        // ITEM_SHIELD_HERO
-    0x08052000,        // ITEM_SHIELD_MIRROR
-    0x08053000,        // ITEM_QUIVER_30
-    0x08054000,        // ITEM_QUIVER_40
-    0x08055000,        // ITEM_QUIVER_50
-    0x08056000,        // ITEM_BOMB_BAG_20
-    0x08057000,        // ITEM_BOMB_BAG_30
-    0x08058000,        // ITEM_BOMB_BAG_40
-    0x08059000,        // ITEM_WALLET_DEFAULT
-    0x0805A000,        // ITEM_WALLET_ADULT
-    0x0805B000,        // ITEM_WALLET_GIANT
-    0x0805C000,        // ITEM_FISHING_ROD
-    0x0805D000,        // ITEM_REMAINS_ODOLWA
-    0x0805E000,        // ITEM_REMAINS_GOHT
-    0x0805F000,        // ITEM_REMAINS_GYORG
-    0x08060000,        // ITEM_REMAINS_TWINMOLD
-    0x08062000,        // ITEM_SONG_SONATA
-    0x08062000,        // ITEM_SONG_LULLABY
-    0x08062000,        // ITEM_SONG_NOVA
-    0x08062000,        // ITEM_SONG_ELEGY
-    0x08062000,        // ITEM_SONG_OATH
-    0x08062000,        // ITEM_SONG_SARIA
-    0x08062000,        // ITEM_SONG_TIME
-    0x08062000,        // ITEM_SONG_HEALING
-    0x08062000,        // ITEM_SONG_EPONA
-    0x08062000,        // ITEM_SONG_SOARING
-    0x08062000,        // ITEM_SONG_STORMS
-    0x08062000,        // ITEM_SONG_SUN
-    0x08061000,        // ITEM_BOMBERS_NOTEBOOK
+    icon_item_static_test_Blob_000000,        // ITEM_OCARINA
+    icon_item_static_test_Blob_001000,        // ITEM_BOW
+    icon_item_static_test_Blob_002000,        // ITEM_ARROW_FIRE
+    icon_item_static_test_Blob_003000,        // ITEM_ARROW_ICE
+    icon_item_static_test_Blob_004000,        // ITEM_ARROW_LIGHT
+    icon_item_static_test_Blob_005000,        // ITEM_OCARINA_FAIRY
+    icon_item_static_test_Blob_006000,        // ITEM_BOMB
+    icon_item_static_test_Blob_007000,        // ITEM_BOMBCHU
+    icon_item_static_test_Blob_008000,        // ITEM_STICK
+    icon_item_static_test_Blob_009000,        // ITEM_NUT
+    icon_item_static_test_Blob_00A000,        // ITEM_MAGIC_BEANS
+    icon_item_static_test_Blob_00B000,        // ITEM_SLINGSHOT
+    icon_item_static_test_Blob_00C000,        // ITEM_POWDER_KEG
+    icon_item_static_test_Blob_00D000,        // ITEM_PICTO_BOX
+    icon_item_static_test_Blob_00E000,        // ITEM_LENS
+    icon_item_static_test_Blob_00F000,        // ITEM_HOOKSHOT
+    icon_item_static_test_Blob_010000,        // ITEM_SWORD_GREAT_FAIRY
+    icon_item_static_test_Blob_011000,        // ITEM_LONGSHOT
+    icon_item_static_test_Blob_012000,        // ITEM_BOTTLE
+    icon_item_static_test_Blob_013000,        // ITEM_POTION_RED
+    icon_item_static_test_Blob_014000,        // ITEM_POTION_GREEN
+    icon_item_static_test_Blob_015000,        // ITEM_POTION_BLUE
+    icon_item_static_test_Blob_016000,        // ITEM_FAIRY
+    icon_item_static_test_Blob_017000,        // ITEM_DEKU_PRINCESS
+    icon_item_static_test_Blob_018000,        // ITEM_MILK_BOTTLE
+    icon_item_static_test_Blob_019000,        // ITEM_MILK_HALF
+    icon_item_static_test_Blob_01A000,        // ITEM_FISH
+    icon_item_static_test_Blob_01B000,        // ITEM_BUG
+    icon_item_static_test_Blob_01C000,        // ITEM_BLUE_FIRE
+    icon_item_static_test_Blob_01D000,        // ITEM_POE
+    icon_item_static_test_Blob_01E000,        // ITEM_BIG_POE
+    icon_item_static_test_Blob_01F000,        // ITEM_SPRING_WATER
+    icon_item_static_test_Blob_020000,        // ITEM_HOT_SPRING_WATER
+    icon_item_static_test_Blob_021000,        // ITEM_ZORA_EGG
+    icon_item_static_test_Blob_022000,        // ITEM_GOLD_DUST
+    icon_item_static_test_Blob_023000,        // ITEM_MUSHROOM
+    icon_item_static_test_Blob_024000,        // ITEM_SEAHORSE
+    icon_item_static_test_Blob_025000,        // ITEM_CHATEAU
+    icon_item_static_test_Blob_026000,        // ITEM_HYLIAN_LOACH
+    icon_item_static_test_Blob_027000,        // ITEM_OBABA_DRINK
+    icon_item_static_test_Blob_028000,        // ITEM_MOON_TEAR
+    icon_item_static_test_Blob_029000,        // ITEM_DEED_LAND
+    icon_item_static_test_Blob_02A000,        // ITEM_DEED_SWAMP
+    icon_item_static_test_Blob_02B000,        // ITEM_DEED_MOUNTAIN
+    icon_item_static_test_Blob_02C000,        // ITEM_DEED_OCEAN
+    icon_item_static_test_Blob_02D000,        // ITEM_ROOM_KEY
+    icon_item_static_test_Blob_02E000,        // ITEM_LETTER_MAMA
+    icon_item_static_test_Blob_02F000,        // ITEM_LETTER_TO_KAFEI
+    icon_item_static_test_Blob_030000,        // ITEM_PENDANT_OF_MEMORIES
+    icon_item_static_test_Blob_031000,        // ITEM_TINGLE_MAP
+    icon_item_static_test_Blob_032000,        // ITEM_MASK_DEKU
+    icon_item_static_test_Blob_033000,        // ITEM_MASK_GORON
+    icon_item_static_test_Blob_034000,        // ITEM_MASK_ZORA
+    icon_item_static_test_Blob_035000,        // ITEM_MASK_FIERCE_DEITY
+    icon_item_static_test_Blob_036000,        // ITEM_MASK_TRUTH
+    icon_item_static_test_Blob_037000,        // ITEM_MASK_KAFEIS_MASK
+    icon_item_static_test_Blob_038000,        // ITEM_MASK_ALL_NIGHT
+    icon_item_static_test_Blob_039000,        // ITEM_MASK_BUNNY
+    icon_item_static_test_Blob_03A000,        // ITEM_MASK_KEATON
+    icon_item_static_test_Blob_03B000,        // ITEM_MASK_GARO
+    icon_item_static_test_Blob_03C000,        // ITEM_MASK_ROMANI
+    icon_item_static_test_Blob_03D000,        // ITEM_MASK_CIRCUS_LEADER
+    icon_item_static_test_Blob_03E000,        // ITEM_MASK_POSTMAN
+    icon_item_static_test_Blob_03F000,        // ITEM_MASK_COUPLE
+    icon_item_static_test_Blob_040000,        // ITEM_MASK_GREAT_FAIRY
+    icon_item_static_test_Blob_041000,        // ITEM_MASK_GIBDO
+    icon_item_static_test_Blob_042000,        // ITEM_MASK_DON_GERO
+    icon_item_static_test_Blob_043000,        // ITEM_MASK_KAMARO
+    icon_item_static_test_Blob_044000,        // ITEM_MASK_CAPTAIN
+    icon_item_static_test_Blob_045000,        // ITEM_MASK_STONE
+    icon_item_static_test_Blob_046000,        // ITEM_MASK_BREMEN
+    icon_item_static_test_Blob_047000,        // ITEM_MASK_BLAST
+    icon_item_static_test_Blob_048000,        // ITEM_MASK_SCENTS
+    icon_item_static_test_Blob_049000,        // ITEM_MASK_GIANT
+    icon_item_static_test_Blob_04A000,        // ITEM_BOW_ARROW_FIRE
+    icon_item_static_test_Blob_04B000,        // ITEM_BOW_ARROW_ICE
+    icon_item_static_test_Blob_04C000,        // ITEM_BOW_ARROW_LIGHT
+    icon_item_static_test_Blob_04D000,        // ITEM_SWORD_KOKIRI
+    icon_item_static_test_Blob_04E000,        // ITEM_SWORD_RAZOR
+    icon_item_static_test_Blob_04F000,        // ITEM_SWORD_GILDED
+    icon_item_static_test_Blob_050000,        // ITEM_SWORD_DEITY
+    icon_item_static_test_Blob_051000,        // ITEM_SHIELD_HERO
+    icon_item_static_test_Blob_052000,        // ITEM_SHIELD_MIRROR
+    icon_item_static_test_Blob_053000,        // ITEM_QUIVER_30
+    icon_item_static_test_Blob_054000,        // ITEM_QUIVER_40
+    icon_item_static_test_Blob_055000,        // ITEM_QUIVER_50
+    icon_item_static_test_Blob_056000,        // ITEM_BOMB_BAG_20
+    icon_item_static_test_Blob_057000,        // ITEM_BOMB_BAG_30
+    icon_item_static_test_Blob_058000,        // ITEM_BOMB_BAG_40
+    icon_item_static_test_Blob_059000,        // ITEM_WALLET_DEFAULT
+    icon_item_static_test_Blob_05A000,        // ITEM_WALLET_ADULT
+    icon_item_static_test_Blob_05B000,        // ITEM_WALLET_GIANT
+    icon_item_static_test_Blob_05C000,        // ITEM_FISHING_ROD
+    icon_item_static_test_Blob_05D000,        // ITEM_REMAINS_ODOLWA
+    icon_item_static_test_Blob_05E000,        // ITEM_REMAINS_GOHT
+    icon_item_static_test_Blob_05F000,        // ITEM_REMAINS_GYORG
+    icon_item_static_test_Blob_060000,        // ITEM_REMAINS_TWINMOLD
+    icon_item_static_test_Blob_062000,        // ITEM_SONG_SONATA
+    icon_item_static_test_Blob_062000,        // ITEM_SONG_LULLABY
+    icon_item_static_test_Blob_062000,        // ITEM_SONG_NOVA
+    icon_item_static_test_Blob_062000,        // ITEM_SONG_ELEGY
+    icon_item_static_test_Blob_062000,        // ITEM_SONG_OATH
+    icon_item_static_test_Blob_062000,        // ITEM_SONG_SARIA
+    icon_item_static_test_Blob_062000,        // ITEM_SONG_TIME
+    icon_item_static_test_Blob_062000,        // ITEM_SONG_HEALING
+    icon_item_static_test_Blob_062000,        // ITEM_SONG_EPONA
+    icon_item_static_test_Blob_062000,        // ITEM_SONG_SOARING
+    icon_item_static_test_Blob_062000,        // ITEM_SONG_STORMS
+    icon_item_static_test_Blob_062000,        // ITEM_SONG_SUN
+    icon_item_static_test_Blob_061000,        // ITEM_BOMBERS_NOTEBOOK
     0x09000000,        // ITEM_SKULL_TOKEN
     0x09000900,        // ITEM_HEART_CONTAINER
     0x09001200,        // ITEM_HEART_PIECE
-    0x08062000,        //
-    0x08062000,        //
-    0x08062000,        // ITEM_SONG_LULLABY_INTRO
+    icon_item_static_test_Blob_062000,        //
+    icon_item_static_test_Blob_062000,        //
+    icon_item_static_test_Blob_062000,        // ITEM_SONG_LULLABY_INTRO
     0x09003600,        // ITEM_KEY_BOSS
     0x09004800,        // ITEM_COMPASS
     0x09003F00,        // ITEM_DUNGEON_MAP
@@ -220,9 +221,9 @@ TexturePtr gItemIcons[] = {
     0x09005A00,        // ITEM_KEY_SMALL
     0x09006300,        // ITEM_MAGIC_SMALL
     0x09006C00,        // ITEM_MAGIC_LARGE
-    0x08062180,        // ITEM_HEART_PIECE_2
-    0x08062A80,        // ITEM_INVALID_1
-    0x08063380,        // ITEM_INVALID_2
+    icon_item_static_test_Blob_062180,        // ITEM_HEART_PIECE_2
+    icon_item_static_test_Blob_062A80,        // ITEM_INVALID_1
+    icon_item_static_test_Blob_063380,        // ITEM_INVALID_2
     gOcarinaCUpTex,    // ITEM_INVALID_3
     gOcarinaCDownTex,  // ITEM_INVALID_4
     gOcarinaCLeftTex,  // ITEM_INVALID_5

@@ -330,33 +330,33 @@ endseg
 
 beginseg
     name "map_i_static"
-    include "build/baserom/map_i_static.o"
+    include "build/assets/archives/map_i_static/map_i_static.archive.o"
 endseg
 
 beginseg
     name "map_grand_static"
-    include "build/baserom/map_grand_static.o"
+    include "build/assets/archives/map_grand_static/map_grand_static.archive.o"
 endseg
 
 beginseg
     name "item_name_static"
-    include "build/baserom/item_name_static.o"
+    include "build/assets/archives/item_name_static/item_name_static.archive.o"
 endseg
 
 beginseg
     name "map_name_static"
-    include "build/baserom/map_name_static.o"
+    include "build/assets/archives/map_name_static/map_name_static.archive.o"
 endseg
 
 beginseg
     name "icon_item_static_test"
-    include "build/baserom/icon_item_static_test.o"
+    include "build/assets/archives/icon_item_static_test/icon_item_static_test.archive.o"
     number 8
 endseg
 
 beginseg
     name "icon_item_24_static_test"
-    include "build/baserom/icon_item_24_static_test.o"
+    include "build/assets/archives/icon_item_24_static_test/icon_item_24_static_test.archive.o"
 endseg
 
 beginseg
@@ -367,7 +367,7 @@ endseg
 beginseg
     name "schedule_dma_static_test"
     increment 0x1000
-    include "build/baserom/schedule_dma_static_test.o"
+    include "build/assets/archives/schedule_dma_static_test/schedule_dma_static_test.archive.o"
 endseg
 
 beginseg
