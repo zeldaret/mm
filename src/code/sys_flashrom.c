@@ -100,7 +100,7 @@ s32 SysFlashrom_ExecWrite(void* addr, u32 pageNum, u32 pageCount) {
         return -1;
     }
     // Ensure the page is always aligned to a sector boundary.
-    if ((pageNum % FLASH_PAGE_SIZE) == 0) {
+    if ((pageNum % FLASH_PAGE_SIZE) != 0) {
         Fault_AddHungupAndCrash("../sys_flashrom.c", 275);
     }
     osWritebackDCache(addr, pageCount * FLASH_PAGE_SIZE);
@@ -155,7 +155,7 @@ s32 SysFlashrom_NeedsToErase(void* data, void* addr, u32 pageCount) {
             return false;
         }
     }
-    return false;
+    return true;
 }
 
 s32 SysFlashrom_WriteData(void* addr, u32 pageNum, u32 pageCount) {
