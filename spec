@@ -357,6 +357,7 @@ endseg
 beginseg
     name "icon_item_24_static_test"
     include "build/assets/archives/icon_item_24_static_test/icon_item_24_static_test.archive.o"
+    number 9
 endseg
 
 beginseg

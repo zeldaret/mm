@@ -1,6 +1,7 @@
 #include "global.h"
 #include "interface/parameter_static/parameter_static.h"
-#include "assets/archives/icon_item_static_test/icon_item_static_test.h"
+#include "archives/icon_item_static_test/icon_item_static_test.h"
+#include "archives/icon_item_24_static_test/icon_item_24_static_test.h"
 
 // Bit Flag array in which gBitFlags[n] is (1 << n)
 u32 gBitFlags[] = {
@@ -96,7 +97,6 @@ u32 gGsFlagsShift[] = {
     24,
 };
 
-// TODO: use symbols for these icon textures once textures are properly in C
 TexturePtr gItemIcons[] = {
     icon_item_static_test_Blob_000000,        // ITEM_OCARINA
     icon_item_static_test_Blob_001000,        // ITEM_BOW
@@ -208,19 +208,19 @@ TexturePtr gItemIcons[] = {
     icon_item_static_test_Blob_062000,        // ITEM_SONG_STORMS
     icon_item_static_test_Blob_062000,        // ITEM_SONG_SUN
     icon_item_static_test_Blob_061000,        // ITEM_BOMBERS_NOTEBOOK
-    0x09000000,        // ITEM_SKULL_TOKEN
-    0x09000900,        // ITEM_HEART_CONTAINER
-    0x09001200,        // ITEM_HEART_PIECE
+    icon_item_24_static_test_Blob_000000,        // ITEM_SKULL_TOKEN
+    icon_item_24_static_test_Blob_000900,        // ITEM_HEART_CONTAINER
+    icon_item_24_static_test_Blob_001200,        // ITEM_HEART_PIECE
     icon_item_static_test_Blob_062000,        //
     icon_item_static_test_Blob_062000,        //
     icon_item_static_test_Blob_062000,        // ITEM_SONG_LULLABY_INTRO
-    0x09003600,        // ITEM_KEY_BOSS
-    0x09004800,        // ITEM_COMPASS
-    0x09003F00,        // ITEM_DUNGEON_MAP
-    0x09005100,        // ITEM_STRAY_FAIRIES
-    0x09005A00,        // ITEM_KEY_SMALL
-    0x09006300,        // ITEM_MAGIC_SMALL
-    0x09006C00,        // ITEM_MAGIC_LARGE
+    icon_item_24_static_test_Blob_003600,        // ITEM_KEY_BOSS
+    icon_item_24_static_test_Blob_004800,        // ITEM_COMPASS
+    icon_item_24_static_test_Blob_003F00,        // ITEM_DUNGEON_MAP
+    icon_item_24_static_test_Blob_005100,        // ITEM_STRAY_FAIRIES
+    icon_item_24_static_test_Blob_005A00,        // ITEM_KEY_SMALL
+    icon_item_24_static_test_Blob_006300,        // ITEM_MAGIC_SMALL
+    icon_item_24_static_test_Blob_006C00,        // ITEM_MAGIC_LARGE
     icon_item_static_test_Blob_062180,        // ITEM_HEART_PIECE_2
     icon_item_static_test_Blob_062A80,        // ITEM_INVALID_1
     icon_item_static_test_Blob_063380,        // ITEM_INVALID_2

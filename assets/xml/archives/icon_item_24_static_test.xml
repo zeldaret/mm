@@ -1,5 +1,5 @@
 <Root>
-    <File Name="icon_item_24_static_test.unarchive">
+    <File Name="icon_item_24_static_test.unarchive" Segment="9">
         <Blob Name="icon_item_24_static_test_Blob_000000" Size="0x0900" Offset="0x0" />
         <Blob Name="icon_item_24_static_test_Blob_000900" Size="0x0900" Offset="0x900" />
         <Blob Name="icon_item_24_static_test_Blob_001200" Size="0x0900" Offset="0x1200" />
