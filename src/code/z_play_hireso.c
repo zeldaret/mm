@@ -357,8 +357,8 @@ void BombersNotebook_DrawHeaders(Gfx** gfxP) {
 
 // Each column/day gets subdivided into 4 sub columns, the first 2 sub columns use 1 color, the last 2 another
 s16 sBombersNotebookColumnColors[][2][3] = {
-    { { 165, 183, 195 }, { 140, 158, 170 } }, // Column 2
-    { { 197, 195, 172 }, { 172, 170, 147 } }, // Column 1
+    { { 165, 183, 195 }, { 140, 158, 170 } }, // Column 1
+    { { 197, 195, 172 }, { 172, 170, 147 } }, // Column 2
     { { 223, 190, 200 }, { 190, 165, 175 } }, // Column 3
 };
 
