@@ -143,7 +143,7 @@ void func_80B22FA8(EnHanabiStruct* arg0, PlayState* play2) {
 
     func_8012C2DC(play->state.gfxCtx);
 
-    POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 20);
+    POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, SETUPDL_20);
 
     gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gSun1Tex));
     gSPDisplayList(POLY_XLU_DISP++, gSunSparkleMaterialDL);

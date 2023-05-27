@@ -1784,7 +1784,7 @@ void EnAz_Draw(Actor* thisx, PlayState* play2) {
     EnAz* this = THIS;
 
     OPEN_DISPS(play->state.gfxCtx);
-    POLY_OPA_DISP = Gfx_CallSetupDL(POLY_OPA_DISP, 0x19);
+    POLY_OPA_DISP = Gfx_CallSetupDL(POLY_OPA_DISP, SETUPDL_25);
     CLOSE_DISPS(play->state.gfxCtx);
 
     if (this->unk_374 & 2) {

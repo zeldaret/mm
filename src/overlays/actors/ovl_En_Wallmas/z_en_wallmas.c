@@ -668,7 +668,7 @@ void EnWallmas_DrawShadow(EnWallmas* this, PlayState* play) {
 
         gfx = POLY_OPA_DISP;
 
-        gSPDisplayList(&gfx[0], &sSetupDL[6 * 44]);
+        gSPDisplayList(&gfx[0], &gSetupDL[6 * SETUPDL_44]);
         gDPSetPrimColor(&gfx[1], 0, 0, 0, 0, 0, 255);
         func_800C0094(this->actor.floorPoly, this->actor.world.pos.x, this->actor.floorHeight, this->actor.world.pos.z,
                       &mf);

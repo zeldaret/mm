@@ -524,7 +524,7 @@ void EnMkk_Draw(Actor* thisx, PlayState* play) {
         if (this->alpha == 255) {
             primColors = &D_80A4F7C4[this->primColorSelect];
             gfx = POLY_OPA_DISP;
-            gSPDisplayList(&gfx[0], &sSetupDL[6 * 25]);
+            gSPDisplayList(&gfx[0], &gSetupDL[6 * SETUPDL_25]);
             gDPSetPrimColor(&gfx[1], 0, 0xFF, primColors->r, primColors->g, primColors->b, primColors->a);
             gSPSegment(&gfx[2], 0x08, D_801AEFA0);
             gSPMatrix(&gfx[3], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -532,7 +532,7 @@ void EnMkk_Draw(Actor* thisx, PlayState* play) {
             POLY_OPA_DISP = &gfx[5];
         }
         gfx = POLY_XLU_DISP;
-        gSPDisplayList(&gfx[0], &sSetupDL[6 * 25]);
+        gSPDisplayList(&gfx[0], &gSetupDL[6 * SETUPDL_25]);
         gDPSetEnvColor(&gfx[1], 255, 255, 255, this->alpha);
         gSPDisplayList(&gfx[2], dLists->unk0);
         Matrix_ReplaceRotation(&play->billboardMtxF);
@@ -576,7 +576,7 @@ void func_80A4F4C8(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     gfx = POLY_XLU_DISP;
-    gSPDisplayList(&gfx[0], &sSetupDL[6 * 25]);
+    gSPDisplayList(&gfx[0], &gSetupDL[6 * SETUPDL_25]);
     gDPSetEnvColor(&gfx[1], 255, 255, 255, this->alpha);
     gSPDisplayList(&gfx[2], dLists->unk0);
     Matrix_ReplaceRotation(&play->billboardMtxF);

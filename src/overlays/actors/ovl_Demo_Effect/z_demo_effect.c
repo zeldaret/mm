@@ -284,7 +284,7 @@ void func_808CDFF8(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(gfxCtx);
 
-    POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 25);
+    POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, SETUPDL_25);
 
     Matrix_Scale(2.0f, 2.0f, 2.0f, MTXMODE_APPLY);
     SkelCurve_Draw(&this->actor, play, &this->skelCurve, func_808CDE78, NULL, 1, &this->actor);

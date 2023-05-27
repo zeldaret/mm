@@ -461,7 +461,7 @@ void EnFg_DrawDust(PlayState* play, EnFgEffectDust* dustEffect) {
     for (i = 0; i < 10; i++, dustEffect++) {
         if (dustEffect->type) {
             if (!firstDone) {
-                POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 0);
+                POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, SETUPDL_0);
                 gSPDisplayList(POLY_XLU_DISP++, object_fr_DL_00B328);
                 gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0, 0);
                 firstDone = true;

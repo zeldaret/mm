@@ -496,7 +496,7 @@ void BgSpdweb_Draw(Actor* thisx, PlayState* play) {
 
     gfx = POLY_XLU_DISP;
 
-    gSPDisplayList(&gfx[0], &sSetupDL[6 * 25]);
+    gSPDisplayList(&gfx[0], &gSetupDL[6 * SETUPDL_25]);
 
     if (thisx->params == BGSPDWEB_FF_1) {
         gSPMatrix(&gfx[1], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

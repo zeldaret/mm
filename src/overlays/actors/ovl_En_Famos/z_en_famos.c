@@ -831,7 +831,7 @@ void EnFamos_DrawDebris(EnFamos* this, PlayState* play) {
         OPEN_DISPS(play->state.gfxCtx);
         dispOpa = POLY_OPA_DISP;
 
-        gSPDisplayList(&dispOpa[0], &sSetupDL[6 * 0x19]);
+        gSPDisplayList(&dispOpa[0], &gSetupDL[6 * SETUPDL_25]);
 
         gDPSetPrimColor(&dispOpa[1], 0, 0x80, 255, 255, 255, 255);
 

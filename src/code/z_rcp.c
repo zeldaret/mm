@@ -1,8 +1,8 @@
 #include "global.h"
 #include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
 
-Gfx sSetupDL[438] = {
-    /* 0x00 */
+Gfx gSetupDL[6 * SETUPDL_MAX] = {
+    /* SETUPDL_0 */
     gsDPPipeSync(),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
     gsDPSetCombineLERP(PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, PRIMITIVE, 0, TEXEL0, 0, 0, 0, 0, COMBINED, 0, 0, 0,
@@ -13,7 +13,7 @@ Gfx sSetupDL[438] = {
     gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_CULL_BACK | G_FOG | G_SHADING_SMOOTH),
     gsSPEndDisplayList(),
 
-    /* 0x01 */
+    /* SETUPDL_1 */
     gsDPPipeSync(),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPSetCombineMode(G_CC_SHADE, G_CC_PASS2),
@@ -23,7 +23,7 @@ Gfx sSetupDL[438] = {
     gsSPLoadGeometryMode(G_SHADE | G_CULL_BACK | G_FOG | G_LIGHTING | G_SHADING_SMOOTH),
     gsSPEndDisplayList(),
 
-    /* 0x02 */
+    /* SETUPDL_2 */
     gsDPPipeSync(),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),
@@ -33,7 +33,7 @@ Gfx sSetupDL[438] = {
     gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_CULL_BACK | G_LIGHTING | G_SHADING_SMOOTH),
     gsSPEndDisplayList(),
 
-    /* 0x03 */
+    /* SETUPDL_3 */
     gsDPPipeSync(),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPSetCombineMode(G_CC_SHADE, G_CC_PASS2),
@@ -43,7 +43,7 @@ Gfx sSetupDL[438] = {
     gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_CULL_BACK | G_FOG | G_LIGHTING | G_SHADING_SMOOTH),
     gsSPEndDisplayList(),
 
-    /* 0x04 */
+    /* SETUPDL_4 */
     gsDPPipeSync(),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPSetCombineLERP(PRIMITIVE, 0, SHADE, 0, 0, 0, 0, PRIMITIVE, PRIMITIVE, 0, SHADE, 0, 0, 0, 0, PRIMITIVE),
@@ -53,7 +53,7 @@ Gfx sSetupDL[438] = {
     gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_CULL_BACK | G_LIGHTING | G_SHADING_SMOOTH),
     gsSPEndDisplayList(),
 
-    /* 0x05 */
+    /* SETUPDL_5 */
     gsDPPipeSync(),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
     gsDPSetCombineMode(G_CC_MODULATEI_PRIM, G_CC_MODULATEI_PRIM),
@@ -63,7 +63,7 @@ Gfx sSetupDL[438] = {
     gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_CULL_BACK | G_LIGHTING | G_SHADING_SMOOTH),
     gsSPEndDisplayList(),
 
-    /* 0x06 */
+    /* SETUPDL_6 */
     gsDPPipeSync(),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
     gsDPSetCombineMode(G_CC_DECALRGBA, G_CC_PASS2),
@@ -73,7 +73,7 @@ Gfx sSetupDL[438] = {
     gsSPLoadGeometryMode(G_SHADE | G_FOG | G_LIGHTING | G_SHADING_SMOOTH),
     gsSPEndDisplayList(),
 
-    /* 0x07 */
+    /* SETUPDL_7 */
     gsDPPipeSync(),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
     gsDPSetCombineMode(G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM),
@@ -83,7 +83,7 @@ Gfx sSetupDL[438] = {
     gsSPLoadGeometryMode(G_SHADE | G_LIGHTING | G_SHADING_SMOOTH),
     gsSPEndDisplayList(),
 
-    /* 0x08 */
+    /* SETUPDL_8 */
     gsDPPipeSync(),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),
@@ -93,7 +93,7 @@ Gfx sSetupDL[438] = {
     gsSPLoadGeometryMode(G_SHADE | G_CULL_BACK | G_LIGHTING | G_SHADING_SMOOTH),
     gsSPEndDisplayList(),
 
-    /* 0x09 */
+    /* SETUPDL_9 */
     gsDPPipeSync(),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
     gsDPSetCombineMode(G_CC_MODULATEIA, G_CC_MODULATEIA2),
@@ -103,7 +103,7 @@ Gfx sSetupDL[438] = {
     gsSPLoadGeometryMode(G_SHADE | G_FOG | G_LIGHTING | G_SHADING_SMOOTH),
     gsSPEndDisplayList(),
 
-    /* 0x0A */
+    /* SETUPDL_10 */
     gsDPPipeSync(),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
     gsDPSetCombineMode(G_CC_MODULATEIDECALA, G_CC_MODULATEIDECALA),
@@ -113,7 +113,7 @@ Gfx sSetupDL[438] = {
     gsSPLoadGeometryMode(G_SHADE | G_CULL_BACK | G_LIGHTING | G_SHADING_SMOOTH),
     gsSPEndDisplayList(),
 
-    /* 0x0B */
+    /* SETUPDL_11 */
     gsDPPipeSync(),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
     gsDPSetCombineMode(G_CC_MODULATEIDECALA, G_CC_MODULATEIA_PRIM2),
@@ -123,7 +123,7 @@ Gfx sSetupDL[438] = {
     gsSPLoadGeometryMode(G_SHADE | G_CULL_BACK | G_FOG | G_LIGHTING | G_SHADING_SMOOTH),
     gsSPEndDisplayList(),
 
-    /* 0x0C */
+    /* SETUPDL_12 */
     gsDPPipeSync(),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
     gsDPSetCombineMode(G_CC_MODULATEI_PRIM, G_CC_MODULATEI_PRIM),
@@ -133,7 +133,7 @@ Gfx sSetupDL[438] = {
     gsSPLoadGeometryMode(G_SHADE | G_CULL_BACK | G_LIGHTING | G_SHADING_SMOOTH),
     gsSPEndDisplayList(),
 
-    /* 0x0D */
+    /* SETUPDL_13 */
     gsDPPipeSync(),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
     gsDPSetCombineMode(G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM),
@@ -143,7 +143,7 @@ Gfx sSetupDL[438] = {
     gsSPLoadGeometryMode(G_SHADE | G_CULL_BACK | G_LIGHTING | G_SHADING_SMOOTH),
     gsSPEndDisplayList(),
 
-    /* 0x0E */
+    /* SETUPDL_14 */
     gsDPPipeSync(),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
     gsDPSetCombineMode(G_CC_DECALRGBA, G_CC_DECALRGBA),
@@ -153,7 +153,7 @@ Gfx sSetupDL[438] = {
     gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_LIGHTING | G_SHADING_SMOOTH),
     gsSPEndDisplayList(),
 
-    /* 0x0F */
+    /* SETUPDL_15 */
     gsDPPipeSync(),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
     gsDPSetCombineMode(G_CC_DECALRGBA, G_CC_PASS2),
@@ -163,7 +163,7 @@ Gfx sSetupDL[438] = {
     gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_FOG | G_LIGHTING | G_SHADING_SMOOTH),
     gsSPEndDisplayList(),
 
-    /* 0x10 */
+    /* SETUPDL_16 */
     gsDPPipeSync(),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
     gsDPSetCombineMode(G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM2),
@@ -173,7 +173,7 @@ Gfx sSetupDL[438] = {
     gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_FOG | G_LIGHTING | G_SHADING_SMOOTH),
     gsSPEndDisplayList(),
 
-    /* 0x11 */
+    /* SETUPDL_17 */
     gsDPPipeSync(),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
     gsDPSetCombineMode(G_CC_MODULATEIDECALA, G_CC_MODULATEIDECALA),
@@ -183,7 +183,7 @@ Gfx sSetupDL[438] = {
     gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_LIGHTING | G_SHADING_SMOOTH),
     gsSPEndDisplayList(),
 
-    /* 0x12 */
+    /* SETUPDL_18 */
     gsDPPipeSync(),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
     gsDPSetCombineMode(G_CC_MODULATEIDECALA, G_CC_PASS2),
@@ -193,7 +193,7 @@ Gfx sSetupDL[438] = {
     gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_CULL_BACK | G_FOG | G_LIGHTING | G_SHADING_SMOOTH),
     gsSPEndDisplayList(),
 
-    /* 0x13 */
+    /* SETUPDL_19 */
     gsDPPipeSync(),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
     gsDPSetCombineMode(G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM),
@@ -205,7 +205,7 @@ Gfx sSetupDL[438] = {
     gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_LIGHTING | G_SHADING_SMOOTH),
     gsSPEndDisplayList(),
 
-    /* 0x14 */
+    /* SETUPDL_20 */
     gsDPPipeSync(),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
     gsDPSetCombineMode(G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM),
@@ -215,7 +215,7 @@ Gfx sSetupDL[438] = {
     gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_SHADING_SMOOTH),
     gsSPEndDisplayList(),
 
-    /* 0x15 */
+    /* SETUPDL_21 */
     gsDPPipeSync(),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
     gsDPSetCombineMode(G_CC_MODULATEIA, G_CC_MODULATEIA),
@@ -225,7 +225,7 @@ Gfx sSetupDL[438] = {
     gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_LIGHTING | G_SHADING_SMOOTH),
     gsSPEndDisplayList(),
 
-    /* 0x16 */
+    /* SETUPDL_22 */
     gsDPPipeSync(),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
     gsDPSetCombineMode(G_CC_MODULATEIA, G_CC_MODULATEIA2),
@@ -235,7 +235,7 @@ Gfx sSetupDL[438] = {
     gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_LIGHTING | G_SHADING_SMOOTH),
     gsSPEndDisplayList(),
 
-    /* 0x17 */
+    /* SETUPDL_23 */
     gsDPPipeSync(),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
     gsDPSetCombineMode(G_CC_MODULATEIDECALA, G_CC_MODULATEIDECALA),
@@ -245,7 +245,7 @@ Gfx sSetupDL[438] = {
     gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_CULL_BACK | G_LIGHTING | G_SHADING_SMOOTH),
     gsSPEndDisplayList(),
 
-    /* 0x18 */
+    /* SETUPDL_24 */
     gsDPPipeSync(),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
     gsDPSetCombineMode(G_CC_MODULATEIDECALA, G_CC_MODULATEIA2),
@@ -255,7 +255,7 @@ Gfx sSetupDL[438] = {
     gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_CULL_BACK | G_FOG | G_LIGHTING | G_SHADING_SMOOTH),
     gsSPEndDisplayList(),
 
-    /* 0x19 */
+    /* SETUPDL_25 */
     gsDPPipeSync(),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
     gsDPSetCombineMode(G_CC_MODULATEIDECALA, G_CC_MODULATEIA_PRIM2),
@@ -265,7 +265,7 @@ Gfx sSetupDL[438] = {
     gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_CULL_BACK | G_FOG | G_LIGHTING | G_SHADING_SMOOTH),
     gsSPEndDisplayList(),
 
-    /* 0x1A */
+    /* SETUPDL_26 */
     gsDPPipeSync(),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
     gsDPSetCombineMode(G_CC_MODULATEIDECALA, G_CC_MODULATEIA_PRIM2),
@@ -275,7 +275,7 @@ Gfx sSetupDL[438] = {
     gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_CULL_BACK | G_LIGHTING | G_SHADING_SMOOTH),
     gsSPEndDisplayList(),
 
-    /* 0x1B */
+    /* SETUPDL_27 */
     gsDPPipeSync(),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
     gsDPSetCombineMode(G_CC_MODULATEI_PRIM, G_CC_MODULATEI_PRIM),
@@ -285,7 +285,7 @@ Gfx sSetupDL[438] = {
     gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_CULL_BACK | G_SHADING_SMOOTH),
     gsSPEndDisplayList(),
 
-    /* 0x1C */
+    /* SETUPDL_28 */
     gsDPPipeSync(),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
     gsDPSetCombineMode(G_CC_MODULATEIDECALA_PRIM, G_CC_MODULATEIDECALA_PRIM),
@@ -295,7 +295,7 @@ Gfx sSetupDL[438] = {
     gsSPLoadGeometryMode(G_SHADE | G_SHADING_SMOOTH),
     gsSPEndDisplayList(),
 
-    /* 0x1D */
+    /* SETUPDL_29 */
     gsDPPipeSync(),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
     gsDPSetCombineLERP(TEXEL0, 0, SHADE, 0, TEXEL0, 0, SHADE, 0, NOISE, 0, COMBINED, 0, 0, 0, 0, COMBINED),
@@ -305,7 +305,7 @@ Gfx sSetupDL[438] = {
     gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_CULL_BACK | G_LIGHTING | G_SHADING_SMOOTH),
     gsSPEndDisplayList(),
 
-    /* 0x1E */
+    /* SETUPDL_30 */
     gsDPPipeSync(),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPSetCombineMode(G_CC_PRIMITIVE, G_CC_PRIMITIVE),
@@ -315,7 +315,7 @@ Gfx sSetupDL[438] = {
     gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_SHADING_SMOOTH),
     gsSPEndDisplayList(),
 
-    /* 0x1F */
+    /* SETUPDL_31 */
     gsDPPipeSync(),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
     gsDPSetCombineMode(G_CC_HILITERGBA, G_CC_HILITERGBA),
@@ -325,7 +325,7 @@ Gfx sSetupDL[438] = {
     gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_CULL_BACK | G_LIGHTING | G_TEXTURE_GEN | G_SHADING_SMOOTH),
     gsSPEndDisplayList(),
 
-    /* 0x20 */
+    /* SETUPDL_32 */
     gsDPPipeSync(),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
     gsDPSetCombineMode(G_CC_HILITERGBA, G_CC_HILITERGBA),
@@ -336,7 +336,7 @@ Gfx sSetupDL[438] = {
                          G_SHADING_SMOOTH),
     gsSPEndDisplayList(),
 
-    /* 0x21 */
+    /* SETUPDL_33 */
     gsDPPipeSync(),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
     gsDPSetCombineLERP(TEXEL0, 0, PRIMITIVE, SHADE, 1, 0, TEXEL0, SHADE, ENVIRONMENT, COMBINED, TEXEL0, COMBINED,
@@ -348,7 +348,7 @@ Gfx sSetupDL[438] = {
                          G_SHADING_SMOOTH),
     gsSPEndDisplayList(),
 
-    /* 0x22 */
+    /* SETUPDL_34 */
     gsDPPipeSync(),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
     gsDPSetCombineMode(G_CC_DECALRGB, G_CC_DECALRGB),
@@ -358,7 +358,7 @@ Gfx sSetupDL[438] = {
     gsSPLoadGeometryMode(G_SHADE | G_SHADING_SMOOTH),
     gsSPEndDisplayList(),
 
-    /* 0x23 */
+    /* SETUPDL_35 */
     gsDPPipeSync(),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
     gsDPSetCombineMode(G_CC_DECALRGBA, G_CC_DECALRGBA),
@@ -368,7 +368,7 @@ Gfx sSetupDL[438] = {
     gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_CULL_BACK | G_SHADING_SMOOTH),
     gsSPEndDisplayList(),
 
-    /* 0x24 */
+    /* SETUPDL_36 */
     gsDPPipeSync(),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),
@@ -378,7 +378,7 @@ Gfx sSetupDL[438] = {
     gsSPLoadGeometryMode(G_SHADE | G_SHADING_SMOOTH),
     gsSPEndDisplayList(),
 
-    /* 0x25 */
+    /* SETUPDL_37 */
     gsDPPipeSync(),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPSetCombineLERP(PRIMITIVE, 0, SHADE, 0, 0, 0, 0, PRIMITIVE, 0, 0, 0, COMBINED, 0, 0, 0, COMBINED),
@@ -388,7 +388,7 @@ Gfx sSetupDL[438] = {
     gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_CULL_BACK | G_FOG | G_LIGHTING | G_SHADING_SMOOTH),
     gsSPEndDisplayList(),
 
-    /* 0x26 */
+    /* SETUPDL_38 */
     gsDPPipeSync(),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),
@@ -398,7 +398,7 @@ Gfx sSetupDL[438] = {
     gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_SHADING_SMOOTH),
     gsSPEndDisplayList(),
 
-    /* 0x27 */
+    /* SETUPDL_39 */
     gsDPPipeSync(),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
     gsDPSetCombineMode(G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM),
@@ -408,7 +408,7 @@ Gfx sSetupDL[438] = {
     gsSPLoadGeometryMode(G_SHADING_SMOOTH),
     gsSPEndDisplayList(),
 
-    /* 0x28 */
+    /* SETUPDL_40 */
     gsDPPipeSync(),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
     gsDPSetCombineLERP(TEXEL1, TEXEL0, PRIMITIVE_ALPHA, TEXEL0, TEXEL1, TEXEL0, PRIMITIVE, TEXEL0, 0, 0, 0, COMBINED, 0,
@@ -419,7 +419,7 @@ Gfx sSetupDL[438] = {
     gsSPLoadGeometryMode(G_SHADE | G_CULL_FRONT | G_SHADING_SMOOTH),
     gsSPEndDisplayList(),
 
-    /* 0x29 */
+    /* SETUPDL_41 */
     gsDPPipeSync(),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
     gsDPSetCombineMode(G_CC_MODULATEIA, G_CC_MODULATEIA),
@@ -429,7 +429,7 @@ Gfx sSetupDL[438] = {
     gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_SHADING_SMOOTH),
     gsSPEndDisplayList(),
 
-    /* 0x2A */
+    /* SETUPDL_42 */
     gsDPPipeSync(),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
     gsDPSetCombineMode(G_CC_MODULATEIDECALA, G_CC_MODULATEIDECALA),
@@ -439,7 +439,7 @@ Gfx sSetupDL[438] = {
     gsSPLoadGeometryMode(G_SHADE | G_CULL_BACK | G_SHADING_SMOOTH),
     gsSPEndDisplayList(),
 
-    /* 0x2B */
+    /* SETUPDL_43 */
     gsDPPipeSync(),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
     gsDPSetCombineMode(G_CC_MODULATEIDECALA_PRIM, G_CC_MODULATEIDECALA_PRIM),
@@ -449,7 +449,7 @@ Gfx sSetupDL[438] = {
     gsSPLoadGeometryMode(G_SHADE | G_SHADING_SMOOTH),
     gsSPEndDisplayList(),
 
-    /* 0x2C */
+    /* SETUPDL_44 */
     gsDPPipeSync(),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
     gsDPSetCombineMode(G_CC_MODULATEIA_PRIM, G_CC_PASS2),
@@ -459,7 +459,7 @@ Gfx sSetupDL[438] = {
     gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_CULL_BACK | G_FOG | G_SHADING_SMOOTH),
     gsSPEndDisplayList(),
 
-    /* 0x2D */
+    /* SETUPDL_45 */
     gsDPPipeSync(),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
     gsDPSetCombineLERP(0, 0, 0, PRIMITIVE, 0, 0, 0, TEXEL0, 0, 0, 0, PRIMITIVE, 0, 0, 0, TEXEL0),
@@ -469,7 +469,7 @@ Gfx sSetupDL[438] = {
     gsSPLoadGeometryMode(G_SHADE | G_SHADING_SMOOTH),
     gsSPEndDisplayList(),
 
-    /* 0x2E */
+    /* SETUPDL_46 */
     gsDPPipeSync(),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
     gsDPSetCombineLERP(0, 0, 0, PRIMITIVE, 0, 0, 0, TEXEL0, 0, 0, 0, PRIMITIVE, 0, 0, 0, TEXEL0),
@@ -479,7 +479,7 @@ Gfx sSetupDL[438] = {
     gsSPLoadGeometryMode(G_SHADE | G_SHADING_SMOOTH),
     gsSPEndDisplayList(),
 
-    /* 0x2F */
+    /* SETUPDL_47 */
     gsDPPipeSync(),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
     gsDPSetCombineMode(G_CC_MODULATEI_PRIM, G_CC_MODULATEI_PRIM),
@@ -489,7 +489,7 @@ Gfx sSetupDL[438] = {
     gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_SHADING_SMOOTH),
     gsSPEndDisplayList(),
 
-    /* 0x30 */
+    /* SETUPDL_48 */
     gsDPPipeSync(),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPSetCombineMode(G_CC_PRIMITIVE, G_CC_PRIMITIVE),
@@ -499,7 +499,7 @@ Gfx sSetupDL[438] = {
     gsSPLoadGeometryMode(G_SHADE | G_CULL_BACK | G_SHADING_SMOOTH),
     gsSPEndDisplayList(),
 
-    /* 0x31 */
+    /* SETUPDL_49 */
     gsDPPipeSync(),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPSetCombineLERP(PRIMITIVE, 0, SHADE, 0, 0, 0, 0, PRIMITIVE, PRIMITIVE, 0, SHADE, 0, 0, 0, 0, PRIMITIVE),
@@ -509,7 +509,7 @@ Gfx sSetupDL[438] = {
     gsSPLoadGeometryMode(G_SHADE | G_CULL_BACK | G_LIGHTING | G_SHADING_SMOOTH),
     gsSPEndDisplayList(),
 
-    /* 0x32 */
+    /* SETUPDL_50 */
     gsDPPipeSync(),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
     gsDPSetCombineMode(G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM),
@@ -519,7 +519,7 @@ Gfx sSetupDL[438] = {
     gsSPLoadGeometryMode(G_CULL_BACK),
     gsSPEndDisplayList(),
 
-    /* 0x33 */
+    /* SETUPDL_51 */
     gsDPPipeSync(),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
     gsDPSetCombineMode(G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM),
@@ -529,7 +529,7 @@ Gfx sSetupDL[438] = {
     gsSPLoadGeometryMode(G_CULL_BACK),
     gsSPEndDisplayList(),
 
-    /* 0x34 */
+    /* SETUPDL_52 */
     gsDPPipeSync(),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
     gsDPSetCombineMode(G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM),
@@ -539,7 +539,7 @@ Gfx sSetupDL[438] = {
     gsSPLoadGeometryMode(G_CULL_BACK),
     gsSPEndDisplayList(),
 
-    /* 0x35 */
+    /* SETUPDL_53 */
     gsDPPipeSync(),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
     gsDPSetCombineLERP(TEXEL1, TEXEL0, ENV_ALPHA, TEXEL0, TEXEL1, TEXEL0, ENVIRONMENT, TEXEL0, PRIMITIVE, ENVIRONMENT,
@@ -550,7 +550,7 @@ Gfx sSetupDL[438] = {
     gsSPLoadGeometryMode(G_CULL_BACK),
     gsSPEndDisplayList(),
 
-    /* 0x36 */
+    /* SETUPDL_54 */
     gsDPPipeSync(),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
     gsDPSetCombineLERP(TEXEL1, TEXEL0, ENV_ALPHA, TEXEL0, TEXEL1, TEXEL0, ENVIRONMENT, TEXEL0, PRIMITIVE, ENVIRONMENT,
@@ -561,7 +561,7 @@ Gfx sSetupDL[438] = {
     gsSPLoadGeometryMode(G_CULL_BACK),
     gsSPEndDisplayList(),
 
-    /* 0x37 */
+    /* SETUPDL_55 */
     gsDPPipeSync(),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
     gsDPSetCombineLERP(TEXEL1, TEXEL0, ENV_ALPHA, TEXEL0, TEXEL1, TEXEL0, ENVIRONMENT, TEXEL0, PRIMITIVE, ENVIRONMENT,
@@ -572,7 +572,7 @@ Gfx sSetupDL[438] = {
     gsSPLoadGeometryMode(G_CULL_BACK),
     gsSPEndDisplayList(),
 
-    /* 0x38 */
+    /* SETUPDL_56 */
     gsDPPipeSync(),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
     gsDPSetCombineMode(G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM),
@@ -582,7 +582,7 @@ Gfx sSetupDL[438] = {
     gsSPLoadGeometryMode(G_SHADE | G_CULL_BACK | G_SHADING_SMOOTH),
     gsSPEndDisplayList(),
 
-    /* 0x39 */
+    /* SETUPDL_57 */
     gsDPPipeSync(),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPSetCombineMode(G_CC_PRIMITIVE, G_CC_PRIMITIVE),
@@ -592,7 +592,7 @@ Gfx sSetupDL[438] = {
     gsSPLoadGeometryMode(G_SHADING_SMOOTH),
     gsSPEndDisplayList(),
 
-    /* 0x3A */
+    /* SETUPDL_58 */
     gsDPPipeSync(),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPSetCombineLERP(PRIMITIVE, 0, SHADE, 0, PRIMITIVE, 0, SHADE, 0, PRIMITIVE, 0, SHADE, 0, PRIMITIVE, 0, SHADE, 0),
@@ -602,7 +602,7 @@ Gfx sSetupDL[438] = {
     gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_CULL_BACK | G_SHADING_SMOOTH),
     gsSPEndDisplayList(),
 
-    /* 0x3B */
+    /* SETUPDL_59 */
     gsDPPipeSync(),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
     gsDPSetCombineLERP(TEXEL0, 0, PRIMITIVE, SHADE, 1, 0, TEXEL0, SHADE, ENVIRONMENT, COMBINED, TEXEL0, COMBINED,
@@ -613,7 +613,7 @@ Gfx sSetupDL[438] = {
     gsSPLoadGeometryMode(G_SHADE | G_CULL_BACK | G_LIGHTING | G_TEXTURE_GEN | G_TEXTURE_GEN_LINEAR | G_SHADING_SMOOTH),
     gsSPEndDisplayList(),
 
-    /* 0x3C */
+    /* SETUPDL_60 */
     gsDPPipeSync(),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
     gsDPSetCombineLERP(PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, PRIMITIVE, 0, TEXEL0, 0, PRIMITIVE, ENVIRONMENT,
@@ -624,7 +624,7 @@ Gfx sSetupDL[438] = {
     gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_CULL_BACK | G_SHADING_SMOOTH),
     gsSPEndDisplayList(),
 
-    /* 0x3D */
+    /* SETUPDL_61 */
     gsDPPipeSync(),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
     gsDPSetCombineLERP(PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, PRIMITIVE, 0, TEXEL0, 0, PRIMITIVE, ENVIRONMENT,
@@ -635,7 +635,7 @@ Gfx sSetupDL[438] = {
     gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_CULL_BACK | G_SHADING_SMOOTH),
     gsSPEndDisplayList(),
 
-    /* 0x3E */
+    /* SETUPDL_62 */
     gsDPPipeSync(),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
     gsDPSetCombineMode(G_CC_MODULATEIDECALA, G_CC_MODULATEIA_PRIM2),
@@ -645,7 +645,7 @@ Gfx sSetupDL[438] = {
     gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_CULL_BACK | G_FOG | G_LIGHTING | G_SHADING_SMOOTH),
     gsSPEndDisplayList(),
 
-    /* 0x3F */
+    /* SETUPDL_63 */
     gsDPPipeSync(),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
     gsDPSetCombineMode(G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM),
@@ -657,7 +657,7 @@ Gfx sSetupDL[438] = {
     gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_SHADING_SMOOTH),
     gsSPEndDisplayList(),
 
-    /* 0x40 */
+    /* SETUPDL_64 */
     gsDPPipeSync(),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPSetCombineMode(G_CC_DECALRGBA, G_CC_PASS2),
@@ -667,7 +667,7 @@ Gfx sSetupDL[438] = {
     gsSPLoadGeometryMode(G_SHADE | G_SHADING_SMOOTH),
     gsSPEndDisplayList(),
 
-    /* 0x41 */
+    /* SETUPDL_65 */
     gsDPPipeSync(),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
     gsDPSetCombineMode(G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM),
@@ -677,7 +677,7 @@ Gfx sSetupDL[438] = {
     gsSPLoadGeometryMode(G_SHADE | G_SHADING_SMOOTH),
     gsSPEndDisplayList(),
 
-    /* 0x42 */
+    /* SETUPDL_66 */
     gsDPPipeSync(),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
     gsDPSetCombineMode(G_CC_DECALRGBA, G_CC_DECALRGBA),
@@ -688,7 +688,7 @@ Gfx sSetupDL[438] = {
     gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_SHADING_SMOOTH),
     gsSPEndDisplayList(),
 
-    /* 0x43 */
+    /* SETUPDL_67 */
     gsDPPipeSync(),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
     gsDPSetCombineMode(G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM),
@@ -699,7 +699,7 @@ Gfx sSetupDL[438] = {
     gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_SHADING_SMOOTH),
     gsSPEndDisplayList(),
 
-    /* 0x44 */
+    /* SETUPDL_68 */
     gsDPPipeSync(),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
     gsDPSetCombineMode(G_CC_DECALRGBA, G_CC_DECALRGBA),
@@ -711,7 +711,7 @@ Gfx sSetupDL[438] = {
     gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_SHADING_SMOOTH),
     gsSPEndDisplayList(),
 
-    /* 0x45 */
+    /* SETUPDL_69 */
     gsDPPipeSync(),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
     gsDPSetCombineMode(G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM),
@@ -723,7 +723,7 @@ Gfx sSetupDL[438] = {
     gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_SHADING_SMOOTH),
     gsSPEndDisplayList(),
 
-    /* 0x46 */
+    /* SETUPDL_70 */
     gsDPPipeSync(),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
     gsDPSetCombineMode(G_CC_DECALRGBA, G_CC_DECALRGBA),
@@ -734,7 +734,7 @@ Gfx sSetupDL[438] = {
     gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_FOG | G_SHADING_SMOOTH),
     gsSPEndDisplayList(),
 
-    /* 0x47 */
+    /* SETUPDL_71 */
     gsDPPipeSync(),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
     gsDPSetCombineMode(G_CC_MODULATEIDECALA, G_CC_MODULATEIA_PRIM2),
@@ -744,7 +744,7 @@ Gfx sSetupDL[438] = {
     gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_CULL_BACK | G_FOG | G_LIGHTING | G_SHADING_SMOOTH),
     gsSPEndDisplayList(),
 
-    /* 0x48 */
+    /* SETUPDL_72 */
     gsDPPipeSync(),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
     gsDPSetCombineMode(G_CC_MODULATEIDECALA, G_CC_MODULATEIA_PRIM2),
@@ -815,7 +815,7 @@ Gfx* Gfx_SetFog2(Gfx* gfx, s32 r, s32 g, s32 b, s32 a, s32 n, s32 f) {
 }
 
 Gfx* Gfx_CallSetupDLImpl(Gfx* gfx, u32 i) {
-    gSPDisplayList(gfx++, &sSetupDL[6 * i]);
+    gSPDisplayList(gfx++, &gSetupDL[6 * i]);
     return gfx;
 }
 
@@ -828,55 +828,55 @@ void Gfx_CallSetupDLAtPtr(Gfx** gfxp, u32 i) {
 }
 
 Gfx* func_8012BFC4(Gfx* gfx) {
-    gSPDisplayList(gfx++, &sSetupDL[6 * 0x39]);
+    gSPDisplayList(gfx++, &gSetupDL[6 * SETUPDL_57]);
     return gfx;
 }
 
 Gfx* func_8012BFEC(Gfx* gfx) {
-    gSPDisplayList(gfx++, &sSetupDL[6 * 0x39]);
+    gSPDisplayList(gfx++, &gSetupDL[6 * SETUPDL_57]);
     return gfx;
 }
 
 Gfx* func_8012C014(Gfx* gfx) {
-    gSPDisplayList(gfx++, &sSetupDL[6 * 0x34]);
+    gSPDisplayList(gfx++, &gSetupDL[6 * SETUPDL_52]);
     gDPSetColorDither(gfx++, G_CD_DISABLE);
     return gfx;
 }
 
 void func_8012C058(GraphicsContext* gfxCtx) {
-    gSPDisplayList(gfxCtx->polyOpa.p++, &sSetupDL[6 * 0x3A]);
+    gSPDisplayList(gfxCtx->polyOpa.p++, &gSetupDL[6 * SETUPDL_58]);
 }
 
 void func_8012C080(GraphicsContext* gfxCtx) {
-    gSPDisplayList(gfxCtx->polyOpa.p++, &sSetupDL[6 * 0x39]);
+    gSPDisplayList(gfxCtx->polyOpa.p++, &gSetupDL[6 * SETUPDL_57]);
 }
 
 void func_8012C0A8(GraphicsContext* gfxCtx) {
-    gSPDisplayList(gfxCtx->polyOpa.p++, &sSetupDL[6 * 0x32]);
+    gSPDisplayList(gfxCtx->polyOpa.p++, &gSetupDL[6 * SETUPDL_50]);
 }
 
 void func_8012C0D0(GraphicsContext* gfxCtx) {
-    gSPDisplayList(gfxCtx->polyOpa.p++, &sSetupDL[6 * 0x33]);
+    gSPDisplayList(gfxCtx->polyOpa.p++, &gSetupDL[6 * SETUPDL_51]);
 }
 
 void func_8012C0F8(GraphicsContext* gfxCtx) {
-    gSPDisplayList(gfxCtx->polyXlu.p++, &sSetupDL[6 * 0x34]);
+    gSPDisplayList(gfxCtx->polyXlu.p++, &gSetupDL[6 * SETUPDL_52]);
 }
 
 void func_8012C120(GraphicsContext* gfxCtx) {
-    gSPDisplayList(gfxCtx->polyOpa.p++, &sSetupDL[6 * 0x35]);
+    gSPDisplayList(gfxCtx->polyOpa.p++, &gSetupDL[6 * SETUPDL_53]);
 }
 
 void func_8012C148(GraphicsContext* gfxCtx) {
-    gSPDisplayList(gfxCtx->polyOpa.p++, &sSetupDL[6 * 0x36]);
+    gSPDisplayList(gfxCtx->polyOpa.p++, &gSetupDL[6 * SETUPDL_54]);
 }
 
 void func_8012C170(GraphicsContext* gfxCtx) {
-    gSPDisplayList(gfxCtx->polyXlu.p++, &sSetupDL[6 * 0x37]);
+    gSPDisplayList(gfxCtx->polyXlu.p++, &gSetupDL[6 * SETUPDL_55]);
 }
 
 Gfx* func_8012C198(Gfx* gfx) {
-    gSPDisplayList(gfx++, &sSetupDL[6 * 0x1A]);
+    gSPDisplayList(gfx++, &gSetupDL[6 * SETUPDL_26]);
     return gfx;
 }
 
@@ -885,7 +885,7 @@ void func_8012C1C0(GraphicsContext* gfxCtx) {
 }
 
 Gfx* func_8012C1EC(Gfx* gfx) {
-    gSPDisplayList(gfx++, &sSetupDL[6 * 0x17]);
+    gSPDisplayList(gfx++, &gSetupDL[6 * SETUPDL_23]);
     return gfx;
 }
 
@@ -894,7 +894,7 @@ void func_8012C214(GraphicsContext* gfxCtx) {
 }
 
 void func_8012C240(GraphicsContext* gfxCtx) {
-    gSPDisplayList(gfxCtx->polyXlu.p++, &sSetupDL[6 * 0x19]);
+    gSPDisplayList(gfxCtx->polyXlu.p++, &gSetupDL[6 * SETUPDL_25]);
 }
 
 void func_8012C268(GameState* gameState) {
@@ -902,42 +902,42 @@ void func_8012C268(GameState* gameState) {
 }
 
 void func_8012C28C(GraphicsContext* gfxCtx) {
-    gSPDisplayList(gfxCtx->polyOpa.p++, &sSetupDL[6 * 0x19]);
+    gSPDisplayList(gfxCtx->polyOpa.p++, &gSetupDL[6 * SETUPDL_25]);
 }
 
 Gfx* func_8012C2B4(Gfx* gfx) {
-    gSPDisplayList(gfx++, &sSetupDL[6 * 0x47]);
+    gSPDisplayList(gfx++, &gSetupDL[6 * SETUPDL_71]);
     return gfx;
 }
 
 void func_8012C2DC(GraphicsContext* gfxCtx) {
-    gSPDisplayList(gfxCtx->polyXlu.p++, &sSetupDL[6 * 0x19]);
+    gSPDisplayList(gfxCtx->polyXlu.p++, &gSetupDL[6 * SETUPDL_25]);
 }
 
 Gfx* func_8012C304(Gfx* gfx) {
-    gSPDisplayList(gfx++, &sSetupDL[6 * 0x48]);
+    gSPDisplayList(gfx++, &gSetupDL[6 * SETUPDL_72]);
     return gfx;
 }
 
 void func_8012C32C(GraphicsContext* gfxCtx) {
-    gSPDisplayList(gfxCtx->polyOpa.p++, &sSetupDL[6 * 0x1F]);
+    gSPDisplayList(gfxCtx->polyOpa.p++, &gSetupDL[6 * SETUPDL_31]);
 }
 
 void func_8012C354(GraphicsContext* gfxCtx) {
-    gSPDisplayList(gfxCtx->polyOpa.p++, &sSetupDL[6 * 0x20]);
+    gSPDisplayList(gfxCtx->polyOpa.p++, &gSetupDL[6 * SETUPDL_32]);
 }
 
 void func_8012C37C(GraphicsContext* gfxCtx) {
-    gSPDisplayList(gfxCtx->polyOpa.p++, &sSetupDL[6 * 0x21]);
+    gSPDisplayList(gfxCtx->polyOpa.p++, &gSetupDL[6 * SETUPDL_33]);
 }
 
 Gfx* func_8012C3A4(Gfx* gfx) {
-    gSPDisplayList(gfx++, &sSetupDL[6 * 0x40]);
+    gSPDisplayList(gfx++, &gSetupDL[6 * SETUPDL_64]);
     return gfx;
 }
 
 Gfx* func_8012C3CC(Gfx* gfx) {
-    gSPDisplayList(gfx++, &sSetupDL[6 * 0x22]);
+    gSPDisplayList(gfx++, &gSetupDL[6 * SETUPDL_34]);
     return gfx;
 }
 
@@ -946,56 +946,56 @@ void func_8012C3F4(GraphicsContext* gfxCtx) {
 }
 
 void func_8012C420(GraphicsContext* gfxCtx) {
-    gSPDisplayList(gfxCtx->polyOpa.p++, &sSetupDL[6 * 0x23]);
+    gSPDisplayList(gfxCtx->polyOpa.p++, &gSetupDL[6 * SETUPDL_35]);
 }
 
 void func_8012C448(GraphicsContext* gfxCtx) {
-    gSPDisplayList(gfxCtx->polyXlu.p++, &sSetupDL[6 * 0x2C]);
+    gSPDisplayList(gfxCtx->polyXlu.p++, &gSetupDL[6 * SETUPDL_44]);
 }
 
 void func_8012C470(GraphicsContext* gfxCtx) {
-    gSPDisplayList(gfxCtx->polyOpa.p++, &sSetupDL[6 * 0x24]);
+    gSPDisplayList(gfxCtx->polyOpa.p++, &gSetupDL[6 * SETUPDL_36]);
 }
 
 Gfx* func_8012C498(Gfx* gfx) {
-    gSPDisplayList(gfx++, &sSetupDL[6 * 0x1C]);
+    gSPDisplayList(gfx++, &gSetupDL[6 * SETUPDL_28]);
     return gfx;
 }
 
 void func_8012C4C0(GraphicsContext* gfxCtx) {
-    gSPDisplayList(gfxCtx->polyOpa.p++, &sSetupDL[6 * 0x1C]);
+    gSPDisplayList(gfxCtx->polyOpa.p++, &gSetupDL[6 * SETUPDL_28]);
 }
 
 void func_8012C4E8(GraphicsContext* gfxCtx) {
-    gSPDisplayList(gfxCtx->polyOpa.p++, &sSetupDL[6 * 0x2B]);
+    gSPDisplayList(gfxCtx->polyOpa.p++, &gSetupDL[6 * SETUPDL_43]);
 }
 
 void func_8012C510(GraphicsContext* gfxCtx) {
-    gSPDisplayList(gfxCtx->polyOpa.p++, &sSetupDL[6 * 0x2D]);
+    gSPDisplayList(gfxCtx->polyOpa.p++, &gSetupDL[6 * SETUPDL_45]);
 }
 
 void func_8012C538(GraphicsContext* gfxCtx) {
-    gSPDisplayList(gfxCtx->overlay.p++, &sSetupDL[6 * 0x2E]);
+    gSPDisplayList(gfxCtx->overlay.p++, &gSetupDL[6 * SETUPDL_46]);
 }
 
 void func_8012C560(GraphicsContext* gfxCtx) {
-    gSPDisplayList(gfxCtx->polyXlu.p++, &sSetupDL[6 * 0x26]);
+    gSPDisplayList(gfxCtx->polyXlu.p++, &gSetupDL[6 * SETUPDL_38]);
 }
 
 void func_8012C588(GraphicsContext* gfxCtx) {
-    gSPDisplayList(gfxCtx->polyXlu.p++, &sSetupDL[6 * 0x4]);
+    gSPDisplayList(gfxCtx->polyXlu.p++, &gSetupDL[6 * SETUPDL_4]);
 }
 
 void func_8012C5B0(GraphicsContext* gfxCtx) {
-    gSPDisplayList(gfxCtx->polyOpa.p++, &sSetupDL[6 * 0x25]);
+    gSPDisplayList(gfxCtx->polyOpa.p++, &gSetupDL[6 * SETUPDL_37]);
 }
 
 void func_8012C5D8(GraphicsContext* gfxCtx) {
-    gSPDisplayList(gfxCtx->polyOpa.p++, &sSetupDL[6 * 0x2]);
+    gSPDisplayList(gfxCtx->polyOpa.p++, &gSetupDL[6 * SETUPDL_2]);
 }
 
 Gfx* func_8012C600(Gfx* gfx) {
-    gSPDisplayList(gfx++, &sSetupDL[6 * 0x27]);
+    gSPDisplayList(gfx++, &gSetupDL[6 * SETUPDL_39]);
     return gfx;
 }
 
@@ -1009,102 +1009,102 @@ void func_8012C654(GraphicsContext* gfxCtx) {
 
 void func_8012C680(Gfx** gfxp) {
     Gfx* gfx = *gfxp;
-    gSPDisplayList(gfx++, &sSetupDL[6 * 0x27]);
+    gSPDisplayList(gfx++, &gSetupDL[6 * SETUPDL_39]);
     *gfxp = gfx;
 }
 
 void func_8012C6AC(GraphicsContext* gfxCtx) {
-    gSPDisplayList(gfxCtx->polyOpa.p++, &sSetupDL[6 * 0x28]);
+    gSPDisplayList(gfxCtx->polyOpa.p++, &gSetupDL[6 * SETUPDL_40]);
 }
 
 void func_8012C6D4(GraphicsContext* gfxCtx) {
-    gSPDisplayList(gfxCtx->polyOpa.p++, &sSetupDL[6 * 0x29]);
+    gSPDisplayList(gfxCtx->polyOpa.p++, &gSetupDL[6 * SETUPDL_41]);
 }
 
 void func_8012C6FC(GraphicsContext* gfxCtx) {
-    gSPDisplayList(gfxCtx->polyXlu.p++, &sSetupDL[6 * 0x2F]);
+    gSPDisplayList(gfxCtx->polyXlu.p++, &gSetupDL[6 * SETUPDL_47]);
 }
 
 Gfx* func_8012C724(Gfx* gfx) {
-    gSPDisplayList(gfx++, &sSetupDL[6 * 0x42]);
+    gSPDisplayList(gfx++, &gSetupDL[6 * SETUPDL_66]);
     return gfx;
 }
 
 Gfx* func_8012C74C(Gfx* gfx) {
-    gSPDisplayList(gfx++, &sSetupDL[6 * 0x43]);
+    gSPDisplayList(gfx++, &gSetupDL[6 * SETUPDL_67]);
     return gfx;
 }
 
 Gfx* func_8012C774(Gfx* gfx) {
-    gSPDisplayList(gfx++, &sSetupDL[6 * 0x44]);
+    gSPDisplayList(gfx++, &gSetupDL[6 * SETUPDL_68]);
     gDPSetColorDither(gfx++, G_CD_DISABLE);
     return gfx;
 }
 
 Gfx* func_8012C7B8(Gfx* gfx) {
-    gSPDisplayList(gfx++, &sSetupDL[6 * 0x45]);
+    gSPDisplayList(gfx++, &gSetupDL[6 * SETUPDL_69]);
     gDPSetColorDither(gfx++, G_CD_DISABLE);
     return gfx;
 }
 
 Gfx* func_8012C7FC(Gfx* gfx) {
-    gSPDisplayList(gfx++, &sSetupDL[6 * 0x41]);
+    gSPDisplayList(gfx++, &gSetupDL[6 * SETUPDL_65]);
     gDPSetColorDither(gfx++, G_CD_DISABLE);
     return gfx;
 }
 
 Gfx* func_8012C840(Gfx* gfx) {
-    gSPDisplayList(gfx++, &sSetupDL[6 * 0x46]);
+    gSPDisplayList(gfx++, &gSetupDL[6 * SETUPDL_70]);
     return gfx;
 }
 
 Gfx* func_8012C868(Gfx* gfx) {
-    gSPDisplayList(gfx++, &sSetupDL[6 * 0x14]);
+    gSPDisplayList(gfx++, &gSetupDL[6 * SETUPDL_20]);
     gDPSetColorDither(gfx++, G_CD_DISABLE);
     return gfx;
 }
 
 void func_8012C8AC(GraphicsContext* gfxCtx) {
-    gSPDisplayList(gfxCtx->polyOpa.p++, &sSetupDL[6 * 0x2A]);
+    gSPDisplayList(gfxCtx->polyOpa.p++, &gSetupDL[6 * SETUPDL_42]);
 }
 
 void func_8012C8D4(GraphicsContext* gfxCtx) {
-    gSPDisplayList(gfxCtx->overlay.p++, &sSetupDL[6 * 0x2A]);
+    gSPDisplayList(gfxCtx->overlay.p++, &gSetupDL[6 * SETUPDL_42]);
 }
 
 void func_8012C8FC(GraphicsContext* gfxCtx) {
-    gSPDisplayList(gfxCtx->polyOpa.p++, &sSetupDL[6 * 0x30]);
+    gSPDisplayList(gfxCtx->polyOpa.p++, &gSetupDL[6 * SETUPDL_48]);
 }
 
 void func_8012C924(GraphicsContext* gfxCtx) {
-    gSPDisplayList(gfxCtx->polyXlu.p++, &sSetupDL[6 * 0x31]);
+    gSPDisplayList(gfxCtx->polyXlu.p++, &gSetupDL[6 * SETUPDL_49]);
 }
 
 void func_8012C94C(GraphicsContext* gfxCtx) {
-    gSPDisplayList(gfxCtx->polyXlu.p++, &sSetupDL[6 * 0x1B]);
+    gSPDisplayList(gfxCtx->polyXlu.p++, &gSetupDL[6 * SETUPDL_27]);
 }
 
 void func_8012C974(GraphicsContext* gfxCtx) {
-    gSPDisplayList(gfxCtx->polyXlu.p++, &sSetupDL[6 * 0x3C]);
+    gSPDisplayList(gfxCtx->polyXlu.p++, &gSetupDL[6 * SETUPDL_60]);
     gDPSetColorDither(gfxCtx->polyXlu.p++, G_CD_DISABLE);
 }
 
 void func_8012C9BC(GraphicsContext* gfxCtx) {
-    gSPDisplayList(gfxCtx->polyXlu.p++, &sSetupDL[6 * 0x3D]);
+    gSPDisplayList(gfxCtx->polyXlu.p++, &gSetupDL[6 * SETUPDL_61]);
 }
 
 void func_8012C9E4(GraphicsContext* gfxCtx) {
-    gSPDisplayList(gfxCtx->polyOpa.p++, &sSetupDL[6 * 0x38]);
+    gSPDisplayList(gfxCtx->polyOpa.p++, &gSetupDL[6 * SETUPDL_56]);
 }
 
 void func_8012CA0C(Gfx** gfxp) {
     Gfx* gfx = *gfxp;
-    gSPDisplayList(gfx++, &sSetupDL[6 * 0x38]);
+    gSPDisplayList(gfx++, &gSetupDL[6 * SETUPDL_56]);
     *gfxp = gfx;
 }
 
 void func_8012CA38(GraphicsContext* gfxCtx) {
-    gSPDisplayList(gfxCtx->polyOpa.p++, &sSetupDL[6 * 0x3B]);
+    gSPDisplayList(gfxCtx->polyOpa.p++, &gSetupDL[6 * SETUPDL_59]);
 }
 
 Gfx* Gfx_BranchTexScroll(Gfx** gfxp, u32 x, u32 y, s32 width, s32 height) {

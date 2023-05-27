@@ -513,7 +513,7 @@ void EnVm_Draw(Actor* thisx, PlayState* play) {
 
     gfx = POLY_OPA_DISP;
 
-    gSPDisplayList(&gfx[0], &sSetupDL[6 * 25]);
+    gSPDisplayList(&gfx[0], &gSetupDL[6 * SETUPDL_25]);
 
     POLY_OPA_DISP = &gfx[1];
 
@@ -523,7 +523,7 @@ void EnVm_Draw(Actor* thisx, PlayState* play) {
     if (this->unk_210 == 2) {
         gfx = POLY_XLU_DISP;
 
-        gSPDisplayList(&gfx[0], &sSetupDL[6 * 60]);
+        gSPDisplayList(&gfx[0], &gSetupDL[6 * SETUPDL_60]);
         gDPSetColorDither(&gfx[1], G_CD_DISABLE);
 
         Matrix_Translate(this->unk_234.x, this->unk_234.y + 10.0f, this->unk_234.z, MTXMODE_NEW);

@@ -1031,7 +1031,7 @@ void EnOt_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    POLY_OPA_DISP = Gfx_CallSetupDL(POLY_OPA_DISP, 25);
+    POLY_OPA_DISP = Gfx_CallSetupDL(POLY_OPA_DISP, SETUPDL_25);
     POLY_XLU_DISP = func_8012C2B4(POLY_XLU_DISP);
 
     CLOSE_DISPS(play->state.gfxCtx);

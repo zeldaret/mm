@@ -76,7 +76,7 @@ void ActorShadow_Draw(Actor* actor, Lights* lights, PlayState* play, Gfx* dlist,
 
             OPEN_DISPS(play->state.gfxCtx);
 
-            POLY_OPA_DISP = Gfx_CallSetupDL(POLY_OPA_DISP, 0x2C);
+            POLY_OPA_DISP = Gfx_CallSetupDL(POLY_OPA_DISP, SETUPDL_44);
 
             gDPSetCombineLERP(POLY_OPA_DISP++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, COMBINED, 0, 0, 0,
                               COMBINED);
@@ -218,7 +218,7 @@ void ActorShadow_DrawFeet(Actor* actor, Lights* mapper, PlayState* play) {
 
         OPEN_DISPS(play->state.gfxCtx);
 
-        POLY_OPA_DISP = Gfx_CallSetupDL(POLY_OPA_DISP, 0x2C);
+        POLY_OPA_DISP = Gfx_CallSetupDL(POLY_OPA_DISP, SETUPDL_44);
         actor->shape.feetFloorFlags = 0;
         spB8 = 2;
 
@@ -360,7 +360,7 @@ void func_800B4B50(Actor* actor, Lights* mapper, PlayState* play) {
 
             OPEN_DISPS(play->state.gfxCtx);
 
-            POLY_OPA_DISP = Gfx_CallSetupDL(POLY_OPA_DISP, 0x2C);
+            POLY_OPA_DISP = Gfx_CallSetupDL(POLY_OPA_DISP, SETUPDL_44);
 
             func_800C0094(actor->floorPoly, actor->world.pos.x, actor->floorHeight, actor->world.pos.z, &sp94);
             temp_f22 = (f32)actor->shape.shadowAlpha * (1.0f - (spEC * (1.0f / 30.0f)));
@@ -522,7 +522,7 @@ void Actor_DrawZTarget(TargetContext* targetCtx, PlayState* play) {
             Target_SetPos(targetCtx, targetCtx->unk4C, projectedPos.x, projectedPos.y, projectedPos.z);
 
             if ((!(player->stateFlags1 & PLAYER_STATE1_40)) || (actor != player->targetedActor)) {
-                OVERLAY_DISP = Gfx_CallSetupDL(OVERLAY_DISP, 0x39);
+                OVERLAY_DISP = Gfx_CallSetupDL(OVERLAY_DISP, SETUPDL_57);
 
                 for (spB0 = 0, spAC = targetCtx->unk4C; spB0 < spB8; spB0++, spAC = (spAC + 1) % 3) {
                     entry = &targetCtx->unk50[spAC];
@@ -564,7 +564,7 @@ void Actor_DrawZTarget(TargetContext* targetCtx, PlayState* play) {
         if ((actor != NULL) && !(actor->flags & ACTOR_FLAG_CANT_LOCK_ON)) {
             TatlColor* color = &sTatlColorList[actor->category];
 
-            POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 0x07);
+            POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, SETUPDL_7);
 
             Matrix_Translate(actor->focus.pos.x,
                              actor->focus.pos.y + (actor->targetArrowOffset * actor->scale.y) + 17.0f,
@@ -3768,7 +3768,7 @@ void func_800BC620(Vec3f* pos, Vec3f* scale, u8 alpha, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    POLY_OPA_DISP = Gfx_CallSetupDL(POLY_OPA_DISP, 0x2C);
+    POLY_OPA_DISP = Gfx_CallSetupDL(POLY_OPA_DISP, SETUPDL_44);
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 0, 0, 0, alpha);
 
     adjustedPos.x = pos->x;

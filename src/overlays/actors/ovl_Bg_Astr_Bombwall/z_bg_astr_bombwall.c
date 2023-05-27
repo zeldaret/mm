@@ -203,7 +203,7 @@ void BgAstrBombwall_Draw(Actor* thixs, PlayState* play) {
 
         OPEN_DISPS(play->state.gfxCtx);
         opa = POLY_OPA_DISP;
-        gSPDisplayList(&opa[0], &sSetupDL[25 * 6]);
+        gSPDisplayList(&opa[0], &gSetupDL[6 * SETUPDL_25]);
         gSPMatrix(&opa[1], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPSetGeometryMode(&opa[2], G_LIGHTING_POSITIONAL);
         gSPDisplayList(&opa[3], object_astr_obj_DL_002380);
@@ -215,7 +215,7 @@ void BgAstrBombwall_Draw(Actor* thixs, PlayState* play) {
 
         OPEN_DISPS(play->state.gfxCtx);
         xlu = POLY_XLU_DISP;
-        gSPDisplayList(&xlu[0], &sSetupDL[25 * 6]);
+        gSPDisplayList(&xlu[0], &gSetupDL[6 * SETUPDL_25]);
         gSPMatrix(&xlu[1], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPSetGeometryMode(&xlu[2], G_LIGHTING_POSITIONAL);
         gSPDisplayList(&xlu[3], object_astr_obj_DL_0022E0);

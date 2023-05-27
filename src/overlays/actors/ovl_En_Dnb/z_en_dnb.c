@@ -268,7 +268,7 @@ s32 func_80A50950(EnDnbUnkStruct* arg0, PlayState* play2) {
     for (i = 0; i < 256; i++, arg0++) {
         if (arg0->isEnabled == 1) {
             if (!isGfxSetup) {
-                POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 0);
+                POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, SETUPDL_0);
                 gSPDisplayList(POLY_XLU_DISP++, object_hanareyama_obj_DL_000000);
                 gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 255, 0);
                 isGfxSetup = true;

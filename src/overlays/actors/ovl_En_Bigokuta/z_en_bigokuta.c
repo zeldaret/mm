@@ -660,7 +660,7 @@ void EnBigokuta_Draw(Actor* thisx, PlayState* play) {
     if ((this->actionFunc != EnBigokuta_PlayDeathEffects) || (this->timer != 0)) {
         Scene_SetRenderModeXlu(play, 0, 1);
         gfx = POLY_OPA_DISP;
-        gSPDisplayList(&gfx[0], &sSetupDL[6 * 25]);
+        gSPDisplayList(&gfx[0], &gSetupDL[6 * SETUPDL_25]);
         gDPSetEnvColor(&gfx[1], 255, 255, 255, 255);
         POLY_OPA_DISP =
             SkelAnime_DrawFlex(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
@@ -668,7 +668,7 @@ void EnBigokuta_Draw(Actor* thisx, PlayState* play) {
     } else {
         Scene_SetRenderModeXlu(play, 1, 2);
         gfx = POLY_XLU_DISP;
-        gSPDisplayList(&gfx[0], &sSetupDL[6 * 25]);
+        gSPDisplayList(&gfx[0], &gSetupDL[6 * SETUPDL_25]);
         gDPSetEnvColor(&gfx[1], 0, 0, 0, (this->picto.actor.scale.y * 7727.273f));
         POLY_XLU_DISP =
             SkelAnime_DrawFlex(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
