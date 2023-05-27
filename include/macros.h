@@ -77,26 +77,6 @@
 #define ALIGN64(val) (((val) + 0x3F) & ~0x3F)
 #define ALIGN256(val) (((val) + 0xFF) & ~0xFF)
 
-extern GraphicsContext* __gfxCtx;
-
-#define WORK_DISP __gfxCtx->work.p
-#define POLY_OPA_DISP __gfxCtx->polyOpa.p
-#define POLY_XLU_DISP __gfxCtx->polyXlu.p
-#define OVERLAY_DISP __gfxCtx->overlay.p
-#define DEBUG_DISP __gfxCtx->debug.p
-
-// __gfxCtx shouldn't be used directly.
-// Use the DISP macros defined above when writing to display buffers.
-#define OPEN_DISPS(gfxCtx)                  \
-    {                                       \
-        GraphicsContext* __gfxCtx = gfxCtx; \
-        s32 __dispPad
-
-#define CLOSE_DISPS(gfxCtx) \
-    (void)0;                \
-    }                       \
-    (void)0
-
 /**
  * `x` vertex x
  * `y` vertex y
@@ -113,23 +93,6 @@ extern GraphicsContext* __gfxCtx;
 
 #define VTX_T(x, y, z, s, t, cr, cg, cb, a) \
     { { x, y, z }, 0, { s, t }, { cr, cg, cb, a }, }
-
-#define GRAPH_ALLOC(gfxCtx, size) ((void*)((gfxCtx)->polyOpa.d = (Gfx*)((u8*)(gfxCtx)->polyOpa.d - ALIGN16(size))))
-
-// Custom gbi macro
-#define gDPSetTileCustom(pkt, fmt, siz, width, height, pal, cms, cmt, masks, maskt, shifts, shiftt)                    \
-    {                                                                                                                  \
-        gDPPipeSync(pkt);                                                                                              \
-        gDPTileSync(pkt);                                                                                              \
-        gDPSetTile(pkt, fmt, siz, (((width)*siz##_TILE_BYTES) + 7) >> 3, 0, G_TX_LOADTILE, 0, cmt, maskt, shiftt, cms, \
-                   masks, shifts);                                                                                     \
-        gDPTileSync(pkt);                                                                                              \
-        gDPSetTile(pkt, fmt, siz, (((width)*siz##_TILE_BYTES) + 7) >> 3, 0, G_TX_RENDERTILE, pal, cmt, maskt, shiftt,  \
-                   cms, masks, shifts);                                                                                \
-        gDPSetTileSize(pkt, G_TX_RENDERTILE, 0, 0, ((width)-1) << G_TEXTURE_IMAGE_FRAC,                                \
-                       ((height)-1) << G_TEXTURE_IMAGE_FRAC);                                                          \
-    }                                                                                                                  \
-    (void)0
 
 #define SQ(x) ((x) * (x))
 #define ABS(x) ((x) >= 0 ? (x) : -(x))
