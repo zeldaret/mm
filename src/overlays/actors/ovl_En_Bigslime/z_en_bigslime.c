@@ -2941,7 +2941,7 @@ void EnBigslime_DrawMinislime(EnBigslime* this, PlayState* play2) {
         lights = LightContext_NewLights(&play->lightCtx, play->state.gfxCtx);
         Lights_BindAll(lights, play->lightCtx.listHead, &minislime->actor.world.pos, play);
         Lights_Draw(lights, play->state.gfxCtx);
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         func_800B8118(&minislime->actor, play, 0);
         Matrix_SetTranslateRotateYXZ(minislime->actor.world.pos.x, minislime->actor.world.pos.y,
                                      minislime->actor.world.pos.z, &minislime->actor.shape.rot);
@@ -2980,7 +2980,7 @@ void EnBigslime_DrawBigslime(Actor* thisx, PlayState* play) {
     MtxF* billboardMtxF;
     s32 i;
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     func_800B8118(&this->actor, play, 0);
     OPEN_DISPS(play->state.gfxCtx);
 
@@ -3070,7 +3070,7 @@ void EnBigslime_DrawGekko(Actor* thisx, PlayState* play) {
     EnBigslime* this = THIS;
     s32 pad;
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     if (this->actionFunc == EnBigslime_DamageGekko) {
         func_800AE434(play, &gekkoDamageColor, this->damageSpinTimer, 20);
     } else if ((this->actionFunc == EnBigslime_CutsceneDefeat) || (this->actionFunc == EnBigslime_GekkoDespawn)) {
@@ -3123,7 +3123,7 @@ void EnBigslime_DrawShatteringEffects(EnBigslime* this, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     // Draw Shockwave
     if (this->shockwaveAlpha > 0) {

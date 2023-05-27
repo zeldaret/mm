@@ -858,7 +858,7 @@ void EnFamos_DrawDebris(EnFamos* this, PlayState* play) {
 void EnFamos_Draw(Actor* thisx, PlayState* play) {
     EnFamos* this = THIS;
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     if (this->actionFunc != EnFamos_DeathFade) {
         AnimatedMat_Draw(play, sEmblemAnimatedMats[this->animatedMaterialIndex]);
         SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, EnFamos_OverrideLimbDraw,

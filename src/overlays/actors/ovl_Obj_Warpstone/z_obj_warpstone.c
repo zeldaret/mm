@@ -168,7 +168,7 @@ void ObjWarpstone_Draw(Actor* thisx, PlayState* play2) {
     Gfx_DrawDListOpa(play, sOwlStatueDLs[this->modelIndex]);
     if (this->dyna.actor.home.rot.x != 0) {
         OPEN_DISPS(play->state.gfxCtx);
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         Matrix_Translate(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y + 34.0f,
                          this->dyna.actor.world.pos.z, MTXMODE_NEW);
         Matrix_Mult(&play->billboardMtxF, MTXMODE_APPLY);

@@ -1435,7 +1435,7 @@ void EnSGoro_DrawUnrolled(EnSGoro* this, PlayState* play) {
     s32 pad;
 
     OPEN_DISPS(play->state.gfxCtx);
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     gSPSegment(POLY_OPA_DISP++, 0x8, Lib_SegmentedToVirtual(sEyeTextures[this->eyeTexIndex]));
     gDPPipeSync(POLY_OPA_DISP++);
@@ -1449,7 +1449,7 @@ void EnSGoro_DrawUnrolled(EnSGoro* this, PlayState* play) {
 
 void EnSGoro_DrawRolledUp(EnSGoro* this, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y + this->actor.shape.yOffset,
                      this->actor.world.pos.z, MTXMODE_NEW);

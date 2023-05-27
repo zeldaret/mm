@@ -249,8 +249,8 @@ void EnBombal_DrawEffects(EnBombal* this, PlayState* play) {
 
     OPEN_DISPS(gfxCtx);
 
-    func_8012C28C(gfxCtx);
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     for (i = 0; i < ARRAY_COUNT(this->effects); i++, sPtr++) {
         if (sPtr->isEnabled != 0) {

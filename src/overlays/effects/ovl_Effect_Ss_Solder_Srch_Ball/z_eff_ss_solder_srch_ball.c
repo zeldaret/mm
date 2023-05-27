@@ -46,8 +46,8 @@ void EffectSsSolderSrchBall_Draw(PlayState* play, u32 index, EffectSs* this) {
     GraphicsContext* gfxCtx = play->state.gfxCtx;
     f32 scale = this->rgScale / 100.0f;
 
-    func_8012C28C(gfxCtx);
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     OPEN_DISPS(gfxCtx);
 

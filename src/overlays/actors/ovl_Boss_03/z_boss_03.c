@@ -2263,7 +2263,7 @@ void Boss03_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     if (!this->unk_2D5) {
         if ((this->unk_25E % 2) != 0) {
@@ -2394,8 +2394,8 @@ void Boss03_DrawEffects(PlayState* play) {
 
     OPEN_DISPS(gfxCtx);
 
-    func_8012C2DC(play->state.gfxCtx);
-    func_8012C28C(gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(gfxCtx);
 
     for (i = 0; i < GYORG_EFFECT_COUNT; i++, eff++) {
         if (eff->type == GYORG_EFFECT_BUBBLE) {
@@ -2460,7 +2460,7 @@ void Boss03_DrawEffects(PlayState* play) {
     for (i = 0; i < GYORG_EFFECT_COUNT; i++, eff++) {
         if (eff->type == GYORG_EFFECT_WET_SPOT) {
             if (!flag) {
-                func_8012C448(gfxCtx);
+                Gfx_SetupDL44_Xlu(gfxCtx);
 
                 gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gEffDust1Tex));
                 gDPSetEnvColor(POLY_XLU_DISP++, 250, 250, 255, 0);
@@ -2597,7 +2597,7 @@ void Boss03_SeaweedDraw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     gSPSegment(POLY_OPA_DISP++, 0x0D, mtx);
 

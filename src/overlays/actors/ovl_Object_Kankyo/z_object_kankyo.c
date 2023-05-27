@@ -699,7 +699,7 @@ void func_808DDE9C(Actor* thisx, PlayState* play2) {
     if (player->actor.floorHeight < play->view.eye.y) {
         for (i = 0; i < end; i++) {
             if (!phi_s5) {
-                func_8012C2DC(play->state.gfxCtx);
+                Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
                 gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 255, 255);
                 gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, 100);

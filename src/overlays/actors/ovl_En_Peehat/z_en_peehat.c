@@ -925,7 +925,7 @@ void EnPeehat_Draw(Actor* thisx, PlayState* play) {
     Vec3f sp40;
     s32 i;
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, EnPeehat_OverrideLimbDraw,
                       (this->actor.params == 0) ? EnPeehat_PostLimbDraw : NULL, &this->actor);

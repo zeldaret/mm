@@ -1451,7 +1451,7 @@ void EnEgol_Draw(Actor* thisx, PlayState* play2) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     if (this->action != EYEGORE_ACTION_DEAD) {
         AnimatedMat_Draw(play, Lib_SegmentedToVirtual(gEyegoreEyeLaserTexAnim));
         SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
@@ -1476,7 +1476,7 @@ void EnEgol_Draw(Actor* thisx, PlayState* play2) {
         gSPDisplayList(POLY_OPA_DISP++, gEyegoreLaserDL);
     }
     if (((this->action == EYEGORE_ACTION_LASER) && (this->laserState >= EYEGORE_LASER_FIRE)) || this->chargingLaser) {
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         gSPDisplayList(POLY_XLU_DISP++, gLightOrbMaterial1DL);
         if (!this->chargingLaser) {
             s32 i;
@@ -1599,7 +1599,7 @@ void EnEgol_DrawEffects(EnEgol* this, PlayState* play) {
 
     OPEN_DISPS(gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     for (i = 0; i < ARRAY_COUNT(this->effects); i++, effect++) {
         if (effect->isActive) {
             Matrix_Push();

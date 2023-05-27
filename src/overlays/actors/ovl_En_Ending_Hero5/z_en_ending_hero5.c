@@ -85,8 +85,8 @@ void EnEndingHero5_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec
 void EnEndingHero5_Draw(Actor* thisx, PlayState* play) {
     EnEndingHero5* this = THIS;
 
-    func_8012C28C(play->state.gfxCtx);
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     OPEN_DISPS(play->state.gfxCtx);
 
     switch (this->unk25C) {

@@ -255,12 +255,12 @@ void func_80A851C8(Actor* thisx, PlayState* play) {
         AnimatedMat_Draw(play, Lib_SegmentedToVirtual(animMat));
     }
     if (opaDList != NULL) {
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, opaDList);
     }
     if (xluDList != NULL) {
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, xluDList);
     }
@@ -285,7 +285,7 @@ void func_80A85304(Actor* thisx, PlayState* play) {
     }
 
     OPEN_DISPS(play->state.gfxCtx);
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     for (i = 0; i < ARRAY_COUNT(sp6C); i++) {
         index = sp6C[i];
         AnimatedMat_Draw(play, Lib_SegmentedToVirtual(info->animMat[index]));

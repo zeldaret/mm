@@ -1806,7 +1806,7 @@ void EnAz_Draw(Actor* thisx, PlayState* play2) {
         Matrix_RotateZS(this->actor.shape.rot.z, MTXMODE_APPLY);
         Matrix_RotateXS(this->unk_39E, MTXMODE_APPLY);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         if (this->unk_374 & 2) {
             s32 i;
             Vec3f sp98;

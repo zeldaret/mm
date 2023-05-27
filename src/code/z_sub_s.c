@@ -994,7 +994,7 @@ void SubS_DrawShadowTex(Actor* actor, GameState* gameState, u8* tex) {
 
     OPEN_DISPS(gfxCtx);
 
-    func_8012C28C(gfxCtx);
+    Gfx_SetupDL25_Opa(gfxCtx);
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 0, 0, 0, 100);
     gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 0);
     Matrix_Translate(actor->world.pos.x, 0.0f, actor->world.pos.z, MTXMODE_NEW);

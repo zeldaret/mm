@@ -211,7 +211,7 @@ void EnMm_Draw(Actor* thisx, PlayState* play) {
     EnMm* this = THIS;
 
     OPEN_DISPS(play->state.gfxCtx);
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     if (this->unk_190 != 0) {
         s16 rotY = this->actor.world.rot.y - this->actor.shape.rot.y;
 

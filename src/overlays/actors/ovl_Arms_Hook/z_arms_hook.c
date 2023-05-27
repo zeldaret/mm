@@ -314,7 +314,7 @@ void ArmsHook_Draw(Actor* thisx, PlayState* play) {
             Matrix_MultVec3f(&D_808C1C4C, &sp50);
         }
         func_80126440(play, &this->collider, &this->weaponInfo, &sp5C, &sp50);
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
         func_80122868(play, player);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

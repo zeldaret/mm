@@ -627,7 +627,7 @@ void EnTsn_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C5B0(play->state.gfxCtx);
+    Gfx_SetupDL37_Opa(play->state.gfxCtx);
 
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80AE11C8[this->unk_22E]));
     gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(D_80AE11C8[this->unk_22E]));

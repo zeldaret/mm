@@ -998,7 +998,7 @@ void func_80B2F37C(Actor* thisx, PlayState* play) {
 
         POLY_OPA_DISP = &gfx[4];
     } else {
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
         gSPSegment(
             POLY_XLU_DISP++, 0x08,

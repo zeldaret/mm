@@ -242,7 +242,7 @@ void func_80A11144(EnGoStruct* ptr, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     for (i = 0; i < 32; i++, ptr++) {
 
@@ -319,7 +319,7 @@ void func_80A115B4(EnGoStruct* ptr, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     for (i = 0; i < 32; i++, ptr++) {
         if ((ptr->unk_00 >= 4) && (ptr->unk_00 < 7)) {
@@ -455,7 +455,7 @@ void func_80A11EC0(EnGoStruct* ptr, PlayState* play, Gfx* arg2, Gfx* arg3, u8 ar
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     for (i = 0; i < 16; i++, ptr++) {
         if (ptr->unk_00 == arg4) {
@@ -1071,7 +1071,7 @@ void func_80A137C0(EnGo* this, PlayState* play, f32 arg2, f32 arg3) {
 
         OPEN_DISPS(play->state.gfxCtx);
 
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
         Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
         Matrix_Scale(arg2 * 0.7f, arg2 * 0.8f, arg2, MTXMODE_APPLY);
@@ -1950,7 +1950,7 @@ void func_80A15B80(EnGo* this, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y + this->actor.shape.yOffset,
                      this->actor.world.pos.z, MTXMODE_NEW);
@@ -2068,7 +2068,7 @@ void func_80A15FEC(Actor* thisx, PlayState* play) {
     if (!(this->unk_390 & 0x300)) {
         OPEN_DISPS(play->state.gfxCtx);
 
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
         gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80A1670C[this->unk_3BE]));
 

@@ -598,7 +598,7 @@ void DemoKankyo_DrawMoonAndGiant(Actor* thisx, PlayState* play2) {
         GraphicsContext* gfxCtx = play->state.gfxCtx;
 
         OPEN_DISPS(gfxCtx);
-        func_8012C2DC(gfxCtx);
+        Gfx_SetupDL25_Xlu(gfxCtx);
 
         for (i = 0; i < play->envCtx.unk_F2[3]; i++) {
             worldPos.x = this->effects[i].posBase.x + this->effects[i].posOffset.x;

@@ -990,7 +990,7 @@ void ObjSwitch_DrawVisibleEyeSwitch(ObjSwitch* this, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPSegment(POLY_OPA_DISP++, 0x08, sEyeSwitchTextures[subType][this->eyeTexIndex]);
     gSPDisplayList(POLY_OPA_DISP++, sEyeSwitchDL[subType]);
@@ -1004,7 +1004,7 @@ void ObjSwitch_DrawInvisibleEyeSwitch(ObjSwitch* this, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPSegment(POLY_XLU_DISP++, 0x08, sEyeSwitchTextures[subType][this->eyeTexIndex]);
     gSPDisplayList(POLY_XLU_DISP++, sEyeSwitchDL[subType]);
@@ -1027,8 +1027,8 @@ void ObjSwitch_DrawCrystalSwitch(ObjSwitch* this, PlayState* play) {
 
     func_800B8118(&this->dyna.actor, play, 0);
     AnimatedMat_DrawStep(play, sCrystalSwitchAnimatedMat, this->crystalAnimTimer);
-    func_8012C28C(play->state.gfxCtx);
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, gCrystalSwitchBaseDL);

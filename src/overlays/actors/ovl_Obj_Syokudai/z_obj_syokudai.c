@@ -293,7 +293,7 @@ void ObjSyokudai_Draw(Actor* thisx, PlayState* play) {
     f32 flameScale;
 
     OPEN_DISPS(play->state.gfxCtx);
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, sDLists[OBJ_SYOKUDAI_GET_TYPE(thisx)]);
     if (this->snuffTimer != OBJ_SYOKUDAI_SNUFF_OUT) {
@@ -307,7 +307,7 @@ void ObjSyokudai_Draw(Actor* thisx, PlayState* play) {
             flameScale = (f32)this->snuffTimer / OBJ_SYOKUDAI_SNUFF_DEFAULT;
         }
         flameScale *= 0.0027f;
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         gSPSegment(POLY_XLU_DISP++, 0x08,
                    Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, 0, 0x20, 0x40, 1, 0,
                                     (this->flameTexScroll * -OBJ_SYOKUDAI_SNUFF_DEFAULT) & 0x1FF, 0x20, 0x80));

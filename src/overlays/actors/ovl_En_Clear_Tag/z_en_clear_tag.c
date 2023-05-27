@@ -807,8 +807,8 @@ void EnClearTag_DrawEffects(Actor* thisx, PlayState* play) {
     EnClearTagEffect* firstEffect = this->effect;
 
     OPEN_DISPS(gfxCtx);
-    func_8012C28C(play->state.gfxCtx);
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     // Draw all Debris effects.
     for (i = 0; i < ARRAY_COUNT(this->effect); i++, effect++) {
@@ -981,7 +981,7 @@ void EnClearTag_DrawEffects(Actor* thisx, PlayState* play) {
             gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 255, 200);
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, 200);
             gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(sWaterSplashTextures[effect->actionTimer]));
-            func_8012C9BC(gfxCtx);
+            Gfx_SetupDL61_Xlu(gfxCtx);
             gSPClearGeometryMode(POLY_XLU_DISP++, G_CULL_BACK);
             isMaterialApplied++;
 

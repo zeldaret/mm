@@ -274,7 +274,7 @@ void ObjAqua_Draw(Actor* thisx, PlayState* play) {
     s32 actionFuncTemp = this->actionFunc == func_80ACBDFC;
 
     OPEN_DISPS(play->state.gfxCtx);
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     framesTemp = ((play->gameplayFrames & 0x7FFFFFFF) * -0xA) & 0x1FF;
     if (actionFuncTemp) {
         framesTemp >>= 1;

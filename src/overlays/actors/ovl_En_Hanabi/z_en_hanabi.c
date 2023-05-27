@@ -141,7 +141,7 @@ void func_80B22FA8(EnHanabiStruct* arg0, PlayState* play2) {
 
     OPEN_DISPS(gfxCtx);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, SETUPDL_20);
 

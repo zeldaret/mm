@@ -869,7 +869,7 @@ void TitleCard_Draw(GameState* gameState, TitleCardContext* titleCtx) {
 
         spB4 = spB8 + (height * 4);
 
-        OVERLAY_DISP = func_8012C014(OVERLAY_DISP);
+        OVERLAY_DISP = Gfx_SetupDL52_NoCD(OVERLAY_DISP);
 
         gDPSetPrimColor(OVERLAY_DISP++, 0, 0, (u8)titleCtx->intensity, (u8)titleCtx->intensity, (u8)titleCtx->intensity,
                         (u8)titleCtx->alpha);
@@ -4372,7 +4372,7 @@ Gfx* func_800BD9A0(GraphicsContext* gfxCtx) {
 void func_800BD9E0(PlayState* play, SkelAnime* skelAnime, OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw,
                    Actor* actor, s16 alpha) {
     OPEN_DISPS(play->state.gfxCtx);
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, alpha);
     gSPSegment(POLY_OPA_DISP++, 0x0C, gEmptyDL);
@@ -4385,7 +4385,7 @@ void func_800BD9E0(PlayState* play, SkelAnime* skelAnime, OverrideLimbDraw overr
 void func_800BDAA0(PlayState* play, SkelAnime* skelAnime, OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw,
                    Actor* actor, s16 alpha) {
     OPEN_DISPS(play->state.gfxCtx);
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0, alpha);
     gSPSegment(POLY_XLU_DISP++, 0x0C, func_800BD9A0(play->state.gfxCtx));
@@ -4653,7 +4653,7 @@ void Actor_DrawDamageEffects(PlayState* play, Actor* actor, Vec3f limbPos[], s16
 
         OPEN_DISPS(play->state.gfxCtx);
 
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
         switch (type) {
             case ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX:

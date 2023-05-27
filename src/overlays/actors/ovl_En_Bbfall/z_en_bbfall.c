@@ -724,7 +724,7 @@ void EnBbfall_Draw(Actor* thisx, PlayState* play2) {
                       EnBbfall_PostLimbDraw, &this->actor);
 
     if (this->flameOpacity > 0) {
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         Matrix_RotateYS(((Camera_GetCamDirYaw(GET_ACTIVE_CAM(play)) - this->actor.shape.rot.y) + 0x8000),
                         MTXMODE_APPLY);
         Matrix_Scale(this->flameScaleX, this->flameScaleY, 1.0f, MTXMODE_APPLY);

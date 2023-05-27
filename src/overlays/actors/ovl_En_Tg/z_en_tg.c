@@ -190,7 +190,7 @@ void EnTg_Draw(Actor* thisx, PlayState* play) {
     Matrix_Pop();
 
     OPEN_DISPS(play->state.gfxCtx);
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     gDPPipeSync(POLY_OPA_DISP++);
     gSPSegment(POLY_OPA_DISP++, 0x08, Gfx_EnvColor(play->state.gfxCtx, 0, 50, 160, 0));
@@ -260,7 +260,7 @@ void EnTg_DrawHearts(PlayState* play, EnTgHeartEffect* effect, s32 numEffects) {
     OPEN_DISPS(play->state.gfxCtx);
 
     POLY_OPA_DISP = Play_SetFog(play, POLY_OPA_DISP);
-    POLY_OPA_DISP = func_8012C724(POLY_OPA_DISP);
+    POLY_OPA_DISP = Gfx_SetupDL66(POLY_OPA_DISP);
 
     for (i = 0; i < numEffects; i++, effect++) {
         if (effect->isEnabled == true) {

@@ -136,7 +136,7 @@ void EnStream_Draw(Actor* thisx, PlayState* play) {
     Gfx* gfx;
 
     OPEN_DISPS(play->state.gfxCtx);
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     gfx = POLY_XLU_DISP;
     gSPMatrix(&gfx[0], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     multipliedFrames = frames * 20;

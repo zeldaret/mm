@@ -1330,7 +1330,7 @@ void EnBigpo_DrawScoopSoul(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     gSPSegment(POLY_XLU_DISP++, 0x08,
                Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, 0, 0x20, 0x40, 1, 0, (play->gameplayFrames * -15) % 512, 0x20,
@@ -1418,7 +1418,7 @@ void EnBigpo_DrawCircleFlames(Actor* thisx, PlayState* play) {
     mtfxPtr = Matrix_GetCurrent();
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     Matrix_RotateYS(BINANG_ROT180(Camera_GetCamDirYaw(GET_ACTIVE_CAM(play))), MTXMODE_NEW);
     if (this->actionFunc == EnBigpo_SpawnCutsceneStage6) {
         Matrix_Scale(0.01f, 0.01f, 0.01f, MTXMODE_APPLY);
@@ -1458,7 +1458,7 @@ void EnBigpo_RevealedFire(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     gSPSegment(POLY_XLU_DISP++, 0x08,
                Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, 0, 0x20, 0x40, 1, 0, (play->gameplayFrames * -20) % 512, 0x20,

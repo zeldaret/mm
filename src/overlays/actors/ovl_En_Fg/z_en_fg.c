@@ -403,7 +403,7 @@ void EnFg_Draw(Actor* thisx, PlayState* play) {
     Matrix_Pop();
 
     OPEN_DISPS(play->state.gfxCtx);
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     gDPPipeSync(POLY_OPA_DISP++);
     gDPSetEnvColor(POLY_OPA_DISP++, envColor[this->actor.params].r, envColor[this->actor.params].g,
                    envColor[this->actor.params].b, envColor[this->actor.params].a);
@@ -456,7 +456,7 @@ void EnFg_DrawDust(PlayState* play, EnFgEffectDust* dustEffect) {
     s16 firstDone = false;
 
     OPEN_DISPS(play->state.gfxCtx);
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     for (i = 0; i < 10; i++, dustEffect++) {
         if (dustEffect->type) {

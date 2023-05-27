@@ -169,7 +169,7 @@ void DemoTreLgt_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(gfxCtx);
     if (this->action == DEMO_TRE_LGT_ACTION_ANIMATE) {
-        func_8012C2DC(gfxCtx);
+        Gfx_SetupDL25_Xlu(gfxCtx);
         gDPSetEnvColor(POLY_XLU_DISP++, 200, 255, 0, 0);
         SkelCurve_Draw(&this->actor, play, &this->skelCurve, DemoTreLgt_OverrideLimbDraw, NULL, 1, &this->actor);
     }

@@ -658,7 +658,7 @@ void EnDoor_Draw(Actor* thisx, PlayState* play) {
         if ((this->unk_1A4 == 7) && (this->switchFlag == 0)) {
             Gfx_DrawDListOpa(play, gameplay_keep_DL_0221B8);
         } else {
-            func_8012C28C(play->state.gfxCtx);
+            Gfx_SetupDL25_Opa(play->state.gfxCtx);
         }
         SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, EnDoor_OverrideLimbDraw, NULL,
                           &this->dyna.actor);

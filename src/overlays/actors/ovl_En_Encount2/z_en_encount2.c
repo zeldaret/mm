@@ -271,8 +271,8 @@ void EnEncount2_DrawEffects(EnEncount2* this, PlayState* play) {
 
     OPEN_DISPS(gfxCtx);
     sPtr = this->effects;
-    func_8012C28C(gfxCtx);
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     for (i = 0; i < ARRAY_COUNT(this->effects); i++, sPtr++) {
         if (sPtr->isEnabled) {
             Matrix_Translate(sPtr->pos.x, sPtr->pos.y, sPtr->pos.z, MTXMODE_NEW);

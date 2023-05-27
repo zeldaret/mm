@@ -448,7 +448,7 @@ void EnHg_Draw(Actor* thisx, PlayState* play) {
     EnHg* this = THIS;
 
     OPEN_DISPS(play->state.gfxCtx);
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnHg_OverrideLimbDraw, EnHg_PostLimbDraw, &this->actor);
     Matrix_Put(&this->mf);

@@ -628,7 +628,7 @@ void EnMinifrog_Draw(Actor* thisx, PlayState* play) {
     Color_RGBA8* envColor;
 
     OPEN_DISPS(play->state.gfxCtx);
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     envColor = &sEnMinifrogColor[this->frogIndex];
     gSPSegment(POLY_OPA_DISP++, 0x08, D_808A4D74[0]);
     gSPSegment(POLY_OPA_DISP++, 0x09, D_808A4D74[0]);

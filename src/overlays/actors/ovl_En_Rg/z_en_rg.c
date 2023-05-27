@@ -164,7 +164,7 @@ void func_80BF3920(EnRgStruct* ptr, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     for (i = 0; i < 32; i++, ptr++) {
         if ((ptr->unk_00 >= 4) && (ptr->unk_00 < 7)) {
@@ -804,7 +804,7 @@ void EnRg_Update(Actor* thisx, PlayState* play) {
 void func_80BF547C(EnRg* this, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y + this->actor.shape.yOffset,
                      this->actor.world.pos.z, MTXMODE_NEW);
     Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_APPLY);
@@ -856,7 +856,7 @@ void EnRg_Draw(Actor* thisx, PlayState* play) {
     if (!(this->unk_310 & 0x10)) {
         OPEN_DISPS(play->state.gfxCtx);
 
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
         gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80BF59F8[this->unk_31E]));
 

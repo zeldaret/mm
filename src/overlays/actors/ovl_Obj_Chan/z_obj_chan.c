@@ -381,7 +381,7 @@ void ObjChan_Draw(Actor* thisx, PlayState* play) {
     gSPDisplayList(&opa[1], object_obj_chan_DL_000AF0);
     POLY_OPA_DISP = &opa[2];
 
-    xlu = func_8012C2B4(POLY_XLU_DISP);
+    xlu = Gfx_SetupDL71(POLY_XLU_DISP);
     gSPMatrix(&xlu[0], Matrix_NewMtx(play->state.gfxCtx), G_MTX_LOAD);
     gSPDisplayList(&xlu[1], object_obj_chan_DL_000A10);
     POLY_XLU_DISP = &xlu[2];
@@ -425,7 +425,7 @@ void ObjChan_DrawFire(ObjChan* this, PlayState* play) {
                  sObjChanFlameSize[OBJCHAN_SUBTYPE(&this->actor)].y * this->flameSize, 1.0f, MTXMODE_APPLY);
     Matrix_Translate(0.0f, sObjChanFlameYOffset[OBJCHAN_SUBTYPE(&this->actor)], 0.0f, MTXMODE_APPLY);
 
-    dl = func_8012C2B4(POLY_XLU_DISP);
+    dl = Gfx_SetupDL71(POLY_XLU_DISP);
     gSPMatrix(&dl[0], Matrix_NewMtx(play->state.gfxCtx), G_MTX_LOAD);
     gSPSegment(&dl[1], 0x08, Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, 0, 32, 64, 1, 0, -sp4C * 20, 32, 128));
     gDPSetPrimColor(&dl[2], 128, 128, 255, 255, 0, 255);

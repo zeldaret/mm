@@ -938,7 +938,7 @@ void EffectBlure_Draw(void* thisx, GraphicsContext* gfxCtx) {
 
     if (this->numElements != 0) {
         if (this->flags == 0) {
-            func_8012C560(gfxCtx);
+            Gfx_SetupDL38_Xlu(gfxCtx);
             gDPPipeSync(POLY_XLU_DISP++);
 
             vtx = GRAPH_ALLOC(gfxCtx, 32 * sizeof(Vtx));

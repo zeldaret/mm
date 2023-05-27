@@ -1154,7 +1154,7 @@ void func_80C13354(EnThiefbird* this, PlayState* play2) {
 void EnThiefbird_Draw(Actor* thisx, PlayState* play) {
     EnThiefbird* this = THIS;
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnThiefbird_OverrideLimbDraw, EnThiefbird_PostLimbDraw, &this->actor);
     if (this->actor.colorFilterTimer > 0) {
