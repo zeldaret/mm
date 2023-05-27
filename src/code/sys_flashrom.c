@@ -22,14 +22,19 @@ const char* SysFlashrom_GetVendorStr(void) {
     switch (sFlashromVendor) {
         case FLASH_VERSION_MX_PROTO_A:
             return "PROTO A";
+
         case FLASH_VERSION_MX_A:
             return "A";
+
         case FLASH_VERSION_MX_C:
             return "C";
+
         case FLASH_VERSION_MEI:
             return "D(NEW)";
+
         case FLASH_VERSION_MX_B_AND_D:
             return "B or D";
+
         default:
             return "UNKNOWN";
     }
@@ -95,7 +100,7 @@ s32 SysFlashrom_ExecWrite(void* addr, u32 pageNum, u32 pageCount) {
         return -1;
     }
     // Ensure the page is always aligned to a sector boundary.
-    if (pageNum % FLASH_PAGE_SIZE) {
+    if ((pageNum % FLASH_PAGE_SIZE) == 0) {
         Fault_AddHungupAndCrash("../sys_flashrom.c", 275);
     }
     osWritebackDCache(addr, pageCount * FLASH_PAGE_SIZE);
@@ -147,10 +152,10 @@ s32 SysFlashrom_NeedsToErase(void* data, void* addr, u32 pageCount) {
 
     for (i = 0; i < pageCount * FLASH_PAGE_SIZE; i += 4) {
         if ((*(s32*)data & *(s32*)addr) != *(s32*)addr) {
-            return 0;
+            return false;
         }
     }
-    return 1;
+    return false;
 }
 
 s32 SysFlashrom_WriteData(void* addr, u32 pageNum, u32 pageCount) {
@@ -171,7 +176,7 @@ s32 SysFlashrom_WriteData(void* addr, u32 pageNum, u32 pageCount) {
             ret = 0;
         } else {
             // Will always erase the sector even if it wouldn't normally need to.
-            if (SysFlashrom_NeedsToErase(data, addr, pageCount) != 0) {
+            if (SysFlashrom_NeedsToErase(data, addr, pageCount)) {
                 ret = SysFlashrom_AttemptWrite(addr, pageNum, pageCount);
             } else {
                 ret = SysFlashrom_AttemptWrite(addr, pageNum, pageCount);
@@ -192,11 +197,13 @@ s32 SysFlashrom_WriteData(void* addr, u32 pageNum, u32 pageCount) {
 
 void SysFlashrom_ThreadEntry(void* arg) {
     FlashromRequest* req = (FlashromRequest*)arg;
+
     switch (req->requestType) {
         case FLASHROM_REQUEST_WRITE:
             req->response = SysFlashrom_WriteData(req->addr, req->pageNum, req->pageCount);
             osSendMesg(&req->messageQueue, req->response, OS_MESG_BLOCK);
             break;
+
         case FLASHROM_REQUEST_READ:
             req->response = SysFlashrom_ReadData(req->addr, req->pageNum, req->pageCount);
             osSendMesg(&req->messageQueue, req->response, OS_MESG_BLOCK);
