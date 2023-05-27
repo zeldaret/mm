@@ -1627,7 +1627,8 @@ void Sram_SaveSpecialEnterClockTown(PlayState* play) {
     gSaveContext.save.isFirstCycle = true;
     gSaveContext.save.isOwlSave = false;
     func_80145698(sramCtx);
-    SysFlashrom_WriteDataSync(sramCtx->saveBuf, D_801C67C8[gSaveContext.fileNum * 2], D_801C6818[gSaveContext.fileNum * 2]);
+    SysFlashrom_WriteDataSync(sramCtx->saveBuf, D_801C67C8[gSaveContext.fileNum * 2],
+                              D_801C6818[gSaveContext.fileNum * 2]);
 }
 
 /**
@@ -1648,7 +1649,8 @@ void Sram_SaveSpecialNewDay(PlayState* play) {
     gSaveContext.save.day = day;
     gSaveContext.save.time = time;
     gSaveContext.save.cutsceneIndex = cutsceneIndex;
-    SysFlashrom_WriteDataSync(play->sramCtx.saveBuf, D_801C67C8[gSaveContext.fileNum * 2], D_801C67F0[gSaveContext.fileNum * 2]);
+    SysFlashrom_WriteDataSync(play->sramCtx.saveBuf, D_801C67C8[gSaveContext.fileNum * 2],
+                              D_801C67F0[gSaveContext.fileNum * 2]);
 }
 
 void func_80147008(SramContext* sramCtx, u32 curPage, u32 numPages) {
@@ -1667,7 +1669,7 @@ void func_80147020(SramContext* sramCtx) {
 
 void func_80147068(SramContext* sramCtx) {
     if (sramCtx->status == 2) {
-        if (SysFlashrom_IsBusy() != 0) {       // if task running
+        if (SysFlashrom_IsBusy() != 0) {          // if task running
             if (SysFlashrom_AwaitResult() == 0) { // wait for task done
                 // task success
                 sramCtx->status = 4;
@@ -1696,7 +1698,7 @@ void func_80147150(SramContext* sramCtx) {
 
 void func_80147198(SramContext* sramCtx) {
     if (sramCtx->status == 7) {
-        if (SysFlashrom_IsBusy() != 0) {       // Is task running
+        if (SysFlashrom_IsBusy() != 0) {          // Is task running
             if (SysFlashrom_AwaitResult() == 0) { // Wait for task done
                 SysFlashrom_WriteDataAsync(sramCtx->saveBuf, sramCtx->curPage + 0x80, sramCtx->numPages);
                 sramCtx->status = 8;
@@ -1706,7 +1708,7 @@ void func_80147198(SramContext* sramCtx) {
             }
         }
     } else if (sramCtx->status == 8) {
-        if (SysFlashrom_IsBusy() != 0) {       // Is task running
+        if (SysFlashrom_IsBusy() != 0) {          // Is task running
             if (SysFlashrom_AwaitResult() == 0) { // Wait for task done
                 sramCtx->status = 4;
             } else {
