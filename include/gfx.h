@@ -2,9 +2,10 @@
 #define GFX_H
 
 #include "ultra64.h"
-#include "PR/sched.h"
+#include "ultra64/sched.h"
 #include "thga.h"
 #include "alignment.h"
+#include "unk.h"
 
 struct GameState;
 
