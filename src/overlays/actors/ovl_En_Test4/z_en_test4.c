@@ -4,7 +4,6 @@
  * Description: Three-Day Events
  */
 
-#include "prevent_bss_reordering.h"
 #include "z_en_test4.h"
 #include "overlays/gamestates/ovl_daytelop/z_daytelop.h"
 #include "overlays/actors/ovl_En_Horse/z_en_horse.h"
