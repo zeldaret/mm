@@ -746,7 +746,7 @@ wordReplace = {
     "func_800F3B2C": "Horse_ResetHorseData",
     "func_800F40A0": "Horse_Spawn",
     "func_800F415C": "Horse_RotateToPoint",
-    "func_800F41E4": "Horse_IsNotInactive",
+    "func_800F41E4": "Horse_IsActive",
 
     "Padmgr_GetControllerBitmask": "PadMgr_GetValidControllersMask",
     "func_80174F24": "PadMgr_SetRumbleRetraceCallback",

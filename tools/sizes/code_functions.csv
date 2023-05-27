@@ -1206,7 +1206,7 @@ asm/non_matchings/code/z_horse/Horse_SpawnOverworld.s,Horse_SpawnOverworld,0x800
 asm/non_matchings/code/z_horse/Horse_SpawnMinigame.s,Horse_SpawnMinigame,0x800F3ED4,0x73
 asm/non_matchings/code/z_horse/Horse_Spawn.s,Horse_Spawn,0x800F40A0,0x2F
 asm/non_matchings/code/z_horse/Horse_RotateToPoint.s,Horse_RotateToPoint,0x800F415C,0x22
-asm/non_matchings/code/z_horse/Horse_IsNotInactive.s,Horse_IsNotInactive,0x800F41E4,0x2F
+asm/non_matchings/code/z_horse/Horse_IsActive.s,Horse_IsActive,0x800F41E4,0x2F
 asm/non_matchings/code/z_jpeg/Jpeg_ScheduleDecoderTask.s,Jpeg_ScheduleDecoderTask,0x800F42A0,0x47
 asm/non_matchings/code/z_jpeg/Jpeg_CopyToZbuffer.s,Jpeg_CopyToZbuffer,0x800F43BC,0x4E
 asm/non_matchings/code/z_jpeg/Jpeg_GetUnalignedU16.s,Jpeg_GetUnalignedU16,0x800F44F4,0x13

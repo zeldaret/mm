@@ -1692,7 +1692,7 @@
     0x800F3ED4:("Horse_SpawnMinigame",),
     0x800F40A0:("Horse_Spawn",),
     0x800F415C:("Horse_RotateToPoint",),
-    0x800F41E4:("Horse_IsNotInactive",),
+    0x800F41E4:("Horse_IsActive",),
     0x800F42A0:("Jpeg_ScheduleDecoderTask",),
     0x800F43BC:("Jpeg_CopyToZbuffer",),
     0x800F44F4:("Jpeg_GetUnalignedU16",),

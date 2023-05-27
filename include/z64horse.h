@@ -11,7 +11,7 @@ s32 Horse_IsValidSpawn(s16 sceneId);
 void Horse_ResetHorseData(PlayState* play);
 void Horse_Spawn(PlayState* play, Player* player);
 void Horse_RotateToPoint(Actor* actor, Vec3f* pos, s16 turnAmount);
-s32 Horse_IsNotInactive(PlayState* play, ActorContext* actorCtx);
+s32 Horse_IsActive(PlayState* play, ActorContext* actorCtx);
 
 
 extern s32 gHorseIsMounted;

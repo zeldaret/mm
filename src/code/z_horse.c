@@ -212,7 +212,7 @@ void Horse_RotateToPoint(Actor* actor, Vec3f* pos, s16 turnAmount) {
     actor->shape.rot.y = actor->world.rot.y;
 }
 
-s32 Horse_IsNotInactive(PlayState* play, ActorContext* actorCtx) {
+s32 Horse_IsActive(PlayState* play, ActorContext* actorCtx) {
     Actor* bgActor = actorCtx->actorLists[ACTORCAT_BG].first;
 
     if (bgActor != NULL) {
