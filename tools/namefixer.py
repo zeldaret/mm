@@ -839,7 +839,7 @@ wordReplace = {
     "gSaveContext.equips.buttonItems": "gSaveContext.save.equips.buttonItems",
     "gSaveContext.unk_48C8": "gSaveContext.dungeonIndex",
     "gSaveContext.save.saveInfo.playerData.magicAcquired": "gSaveContext.save.saveInfo.playerData.isMagicAcquired",
-    "gSaveContext.save.playerDatadoubleMagic": "gSaveContext.save.saveInfo.playerData.isDoubleMagicAcquired",
+    "gSaveContext.save.playerData.doubleMagic": "gSaveContext.save.saveInfo.playerData.isDoubleMagicAcquired",
     "gSaveContext.unk_3F28": "gSaveContext.magicState",
     "gSaveContext.unk_3F30": "gSaveContext.magicFillTarget",
     "gSaveContext.unk_3F2C": "gSaveContext.magicFlag",
