@@ -3194,8 +3194,7 @@ beginseg
     name "ovl_fbdemo_wipe1"
     compress
     include "build/src/overlays/fbdemos/ovl_fbdemo_wipe1/z_fbdemo_wipe1.o"
-    include "build/data/ovl_fbdemo_wipe1/ovl_fbdemo_wipe1.data.o"
-    include "build/data/ovl_fbdemo_wipe1/ovl_fbdemo_wipe1.reloc.o"
+    include "build/src/overlays/fbdemos/ovl_fbdemo_wipe1/ovl_fbdemo_wipe1_reloc.o"
 endseg
 
 beginseg
