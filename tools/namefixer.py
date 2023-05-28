@@ -18,7 +18,7 @@ simpleReplace = {
 wordReplace = {
     # Functions
     "Actor_GetSwitchFlag": "Flags_GetSwitch",
-    "Math_FAtan2F": "Math_Atan2S_XY",
+    # "Math_FAtan2F": "Math_Atan2S_XY", // All old Math_FAtan2F should be renamed, so func_80086B30 can be renamed to Math_FAtan2F
     "Math_Acot2F": "Math_Atan2F_XY",
     "atan_flip": "Math_Atan2F_XY",
     "atans": "Math_Atan2S",
@@ -784,6 +784,28 @@ wordReplace = {
 
     "func_80102544": "LightContext_SetFog",
 
+    "Padmgr_GetControllerBitmask": "PadMgr_GetValidControllersMask",
+    "func_80174F24": "PadMgr_SetRumbleRetraceCallback",
+    "func_80174F44": "PadMgr_UnsetRumbleRetraceCallback",
+    "func_80174F7C": "PadMgr_SetInputRetraceCallback",
+    "func_80174F9C": "PadMgr_UnsetInputRetraceCallback",
+    "Padmgr_GetEventCallback": "PadMgr_AcquireSerialEventQueue",
+    "func_80175008": "PadMgr_VoiceAcquireSerialEventQueue",
+    "Padmgr_SetEventCallback": "PadMgr_ReleaseSerialEventQueue",
+    "func_8017506C": "PadMgr_VoiceReleaseSerialEventQueue",
+    "Padmgr_Lock": "PadMgr_LockPadData",
+    "Padmgr_Unlock": "PadMgr_UnlockPadData",
+    "func_801750FC": "PadMgr_UpdateRumble",
+    "func_80175364": "PadMgr_RumbleStop",
+    "func_80175434": "PadMgr_RumblePause",
+    "func_8017544C": "PadMgr_RumbleSetSingle",
+    "Padmgr_ParseState": "PadMgr_UpdateInputs",
+    "func_801759BC": "PadMgr_InitVoice",
+    "func_80175AE0": "PadMgr_UpdateConnections",
+    "Padmgr_Update": "PadMgr_HandleRetrace",
+    "Padmgr_Stop": "PadMgr_HandlePreNMI",
+    "func_80175E68": "PadMgr_GetInputNoLock",
+
     # Structs
     "ActorAnimationEntry": "AnimationInfo",
     "ActorAnimationEntryS": "AnimationInfoS",
@@ -850,9 +872,8 @@ wordReplace = {
     "gSaveContext.permanentSceneFlags": "gSaveContext.save.saveInfo.permanentSceneFlags",
     "gSaveContext.bomberCode": "gSaveContext.save.saveInfo.bomberCode",
     "gSaveContext.skullTokenCount": "gSaveContext.save.saveInfo.skullTokenCount",
-    "gSaveContext.cutscene": "gSaveContext.save.saveInfo.cutsceneIndex",
-    "gSaveContext.save.cutscene": "gSaveContext.save.saveInfo.cutsceneIndex",
-    "gSaveContext.save.saveInfo.cutscene": "gSaveContext.save.saveInfo.cutsceneIndex",
+    "gSaveContext.cutscene": "gSaveContext.save.cutsceneIndex",
+    "gSaveContext.save.cutscene": "gSaveContext.save.cutsceneIndex",
     "gSaveContext.health": "gSaveContext.save.saveInfo.playerData.health",
     "gSaveContext.equips": "gSaveContext.save.saveInfo.equips",
     "gSaveContext.unk_1016": "gSaveContext.jinxTimer",
@@ -860,7 +881,7 @@ wordReplace = {
     "gSaveContext.equips.buttonItems": "gSaveContext.save.equips.buttonItems",
     "gSaveContext.unk_48C8": "gSaveContext.dungeonIndex",
     "gSaveContext.save.saveInfo.playerData.magicAcquired": "gSaveContext.save.saveInfo.playerData.isMagicAcquired",
-    "gSaveContext.save.playerDatadoubleMagic": "gSaveContext.save.saveInfo.playerData.isDoubleMagicAcquired",
+    "gSaveContext.save.playerData.doubleMagic": "gSaveContext.save.saveInfo.playerData.isDoubleMagicAcquired",
     "gSaveContext.unk_3F28": "gSaveContext.magicState",
     "gSaveContext.unk_3F30": "gSaveContext.magicFillTarget",
     "gSaveContext.unk_3F2C": "gSaveContext.magicFlag",

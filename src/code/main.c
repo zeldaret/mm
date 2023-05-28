@@ -26,7 +26,6 @@ extern StackEntry sSchedStackInfo;
 extern StackEntry sAudioStackInfo;
 extern StackEntry sPadMgrStackInfo;
 extern AudioMgr sAudioMgr;
-extern PadMgr gPadMgr;
 
 void Main(void* arg) {
     intptr_t fb;
