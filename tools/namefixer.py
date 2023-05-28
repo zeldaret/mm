@@ -18,7 +18,7 @@ simpleReplace = {
 wordReplace = {
     # Functions
     "Actor_GetSwitchFlag": "Flags_GetSwitch",
-    # "Math_FAtan2F": "Math_Atan2S_XY",
+    # "Math_FAtan2F": "Math_Atan2S_XY", // All old Math_FAtan2F should be renamed, so func_80086B30 can be renamed to Math_FAtan2F
     "Math_Acot2F": "Math_Atan2F_XY",
     "atan_flip": "Math_Atan2F_XY",
     "atans": "Math_Atan2S",
@@ -840,7 +840,7 @@ wordReplace = {
     "gSaveContext.equips.buttonItems": "gSaveContext.save.equips.buttonItems",
     "gSaveContext.unk_48C8": "gSaveContext.dungeonIndex",
     "gSaveContext.save.saveInfo.playerData.magicAcquired": "gSaveContext.save.saveInfo.playerData.isMagicAcquired",
-    "gSaveContext.save.playerDatadoubleMagic": "gSaveContext.save.saveInfo.playerData.isDoubleMagicAcquired",
+    "gSaveContext.save.playerData.doubleMagic": "gSaveContext.save.saveInfo.playerData.isDoubleMagicAcquired",
     "gSaveContext.unk_3F28": "gSaveContext.magicState",
     "gSaveContext.unk_3F30": "gSaveContext.magicFillTarget",
     "gSaveContext.unk_3F2C": "gSaveContext.magicFlag",
