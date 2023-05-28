@@ -1440,15 +1440,8 @@ typedef enum {
  * gSaveContext.eventInf
  */
 
-// gSaveContext.eventInf[0] is used to dog race information
-// #define EVENTINF_00 0x00
-// #define EVENTINF_01 0x01
-// #define EVENTINF_02 0x02
-// #define EVENTINF_03 0x03
-// #define EVENTINF_04 0x04
-// #define EVENTINF_05 0x05
-// #define EVENTINF_06 0x06
-// #define EVENTINF_07 0x07
+// gSaveContext.eventInf[0] is used to dog race information (8 entries)
+// EVENTINF_00 to EVENTINF_07
 
 #define EVENTINF_10 0x10
 #define EVENTINF_11 0x11
@@ -1465,7 +1458,8 @@ typedef enum {
 #define EVENTINF_24 0x24
 #define EVENTINF_25 0x25
 #define EVENTINF_26 0x26
-#define EVENTINF_NEW_DAY 0x27
+// The next day. Must be triggered with respawnFlag -4 or -99
+#define EVENTINF_TRIGGER_DAYTELOP 0x27
 #define EVENTINF_30 0x30
 
 // EVENTINF_31 is used to track if Player is within range of EnGakufu (2D Song Buttons Appearing on Wall)
@@ -1492,7 +1486,8 @@ typedef enum {
 #define EVENTINF_47 0x47
 #define EVENTINF_50 0x50
 #define EVENTINF_51 0x51
-#define EVENTINF_52 0x52
+// Determines whether the Halfday Cutscene will be played or skipped
+#define EVENTINF_USE_HALFDAY_CS 0x52
 #define EVENTINF_53 0x53
 #define EVENTINF_54 0x54
 #define EVENTINF_55 0x55
@@ -1509,11 +1504,14 @@ typedef enum {
 #define EVENTINF_65 0x65
 #define EVENTINF_66 0x66
 #define EVENTINF_67 0x67
+
+// Tracks which ammo is lost during the three day reset
 #define EVENTINF_THREEDAYRESET_HAS_RUPEES 0x70
 #define EVENTINF_THREEDAYRESET_HAS_BOMB_AMMO 0x71
 #define EVENTINF_THREEDAYRESET_HAS_NUT_AMMO 0x72
 #define EVENTINF_THREEDAYRESET_HAS_STICK_AMMO 0x73
 #define EVENTINF_THREEDAYRESET_HAS_ARROW_AMMO 0x74
+
 #define EVENTINF_75 0x75
 #define EVENTINF_76 0x76
 #define EVENTINF_77 0x77

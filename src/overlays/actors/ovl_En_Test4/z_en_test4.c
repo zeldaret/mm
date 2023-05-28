@@ -296,16 +296,16 @@ void EnTest4_Init(Actor* thisx, PlayState* play) {
 
     sCsIdList[0] = csId;
     if (csId >= 0) {
-        ActorCutscene* actorCutscene = CutsceneManager_GetCutsceneEntry(sCsIdList[0]);
+        ActorCutscene* csEntry = CutsceneManager_GetCutsceneEntry(sCsIdList[0]);
 
-        SET_EVENTINF(EVENTINF_52);
-        sCsIdList[1] = actorCutscene->additionalCsId;
+        SET_EVENTINF(EVENTINF_USE_HALFDAY_CS);
+        sCsIdList[1] = csEntry->additionalCsId;
     } else {
-        CLEAR_EVENTINF(EVENTINF_52);
+        CLEAR_EVENTINF(EVENTINF_USE_HALFDAY_CS);
         sCsIdList[1] = sCsIdList[0];
     }
 
-    if (sIsLoaded || (CHECK_EVENTINF(EVENTINF_NEW_DAY))) {
+    if (sIsLoaded || (CHECK_EVENTINF(EVENTINF_TRIGGER_DAYTELOP))) {
         Actor_Kill(&this->actor);
     } else {
         sIsLoaded = true;
@@ -413,7 +413,7 @@ void func_80A42AB8(EnTest4* this, PlayState* play) {
                     }
 
                     gSaveContext.respawnFlag = -4;
-                    SET_EVENTINF(EVENTINF_NEW_DAY);
+                    SET_EVENTINF(EVENTINF_TRIGGER_DAYTELOP);
                     Actor_Kill(&this->actor);
                 }
             }

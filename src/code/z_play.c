@@ -2086,8 +2086,8 @@ void Play_Init(GameState* thisx) {
     s32 scene;
 
     if ((gSaveContext.respawnFlag == -4) || (gSaveContext.respawnFlag == -0x63)) {
-        if (CHECK_EVENTINF(EVENTINF_NEW_DAY)) {
-            CLEAR_EVENTINF(EVENTINF_NEW_DAY);
+        if (CHECK_EVENTINF(EVENTINF_TRIGGER_DAYTELOP)) {
+            CLEAR_EVENTINF(EVENTINF_TRIGGER_DAYTELOP);
             STOP_GAMESTATE(&this->state);
             SET_NEXT_GAMESTATE(&this->state, DayTelop_Init, sizeof(DayTelopState));
             return;

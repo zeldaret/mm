@@ -819,7 +819,7 @@ void EnTest6_DoubleSoTCutscene(EnTest6* this, PlayState* play) {
 
         case 1:
             EnTest6_DisableMotionBlur();
-            if (CHECK_EVENTINF(EVENTINF_52)) {
+            if (CHECK_EVENTINF(EVENTINF_USE_HALFDAY_CS)) {
                 this->cueId = SOTCS_CUEID_DOUBLE_5;
             }
             break;
@@ -1086,7 +1086,7 @@ void EnTest6_SharedSoTCutscene(EnTest6* this, PlayState* play) {
                 play->transitionType = TRANS_TYPE_FADE_BLACK;
                 if ((gSaveContext.save.time > CLOCK_TIME(18, 0)) || (gSaveContext.save.time < CLOCK_TIME(6, 0))) {
                     gSaveContext.respawnFlag = -0x63;
-                    SET_EVENTINF(EVENTINF_NEW_DAY);
+                    SET_EVENTINF(EVENTINF_TRIGGER_DAYTELOP);
                 } else {
                     gSaveContext.respawnFlag = 2;
                 }
