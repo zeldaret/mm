@@ -603,440 +603,623 @@ s16 D_80814638[] = {
 s16 D_80814644[] = { 88, 104, 120, 944 };
 s16 D_8081464C[] = { 940, 944 };
 s16 D_80814650[] = { 940, 944 };
-// sp98 in particular is non-equivalent (some lines temporarily commented out to improve score).
-// Unsure how to manage the offsets for it
-#ifdef NON_EQUIVALENT
+
+/*
+ * fileSelect->windowContentVtx[0]    -> Title Label (4)
+ *
+ * fileSelect->windowContentVtx[4]    -> File 1 InfoBox (28)
+ * fileSelect->windowContentVtx[32]   -> File 2 InfoBox (28)
+ * fileSelect->windowContentVtx[60]   -> File 3 InfoBox (28)
+ *
+ * ** FILE 1 **
+ *
+ * fileSelect->windowContentVtx[88]   -> File Button
+ * fileSelect->windowContentVtx[92]   -> File Name Box
+ * fileSelect->windowContentVtx[96]   -> Connectors
+ * fileSelect->windowContentVtx[100]  -> Blank Button (Owl Save)
+ *
+ * ** FILE 2 **
+ *
+ * fileSelect->windowContentVtx[104]  -> Repeat of File 1 above
+ *
+ * ** FILE 3 **
+ *
+ * fileSelect->windowContentVtx[120]  -> Repeat of File 1 above
+ *
+ * ** FILE 1 Info **
+ *
+ * fileSelect->windowContentVtx[136]  -> File Name (32)
+ * fileSelect->windowContentVtx[168]  -> File Name Shadow (32)
+ * fileSelect->windowContentVtx[200]  -> Rupee Digits (12)
+ * fileSelect->windowContentVtx[212]  -> Rupee Digits Shadow (12)
+ * fileSelect->windowContentVtx[224]  -> Mask Count (8)
+ * fileSelect->windowContentVtx[232]  -> Mask Count Shadow (8)
+ * fileSelect->windowContentVtx[240]  -> Hearts (80)
+ * fileSelect->windowContentVtx[320]  -> Remains (16)
+ * fileSelect->windowContentVtx[336]  -> Rupee Icon (4)
+ * fileSelect->windowContentVtx[340]  -> Heart Piece Count (4)
+ * fileSelect->windowContentVtx[344]  -> Mask Text (8)
+ * fileSelect->windowContentVtx[352]  -> Owl Save Icon (4)
+ * fileSelect->windowContentVtx[356]  -> Day Text (8)
+ * fileSelect->windowContentVtx[364]  -> Time Digits (20)
+ * fileSelect->windowContentVtx[384]  -> Time Digits Shadow (20)
+ *
+ * ** FILE 2 Info **
+ *
+ * fileSelect->windowContentVtx[404]  -> Repeat of File 1 above
+ *
+ * ** FILE 3 Info **
+ *
+ * fileSelect->windowContentVtx[672]  -> Repeat of File 1 above
+ *
+ * fileSelect->windowContentVtx[940]  -> Action buttons (copy/erase/yes/quit)
+ * fileSelect->windowContentVtx[944]  -> Action buttons (copy/erase/yes/quit)
+ * fileSelect->windowContentVtx[948]  -> Option Button
+ * fileSelect->windowContentVtx[952]  -> Highlight over currently selected button
+ * fileSelect->windowContentVtx[956]  -> Warning labels
+ */
+
+#ifdef NON_MATCHING
+// regalloc at the beginning is fixed by removing FAKE: labelled code
 void FileSelect_SetWindowContentVtx(GameState* thisx) {
     FileSelectState* this = (FileSelectState*)thisx;
-    u16 i;
+    u16 vtxId;
     s16 j;
     s16 index;
     s16 spAC;
+    s16 i; // a3
     u16 spA4[3];
     u16* ptr;
-    s32 sp9C;
-    s32 sp98;
-    s16* new_var;
-    s16 var_a3;
-    s32 var_s1;
+    s32 posY;    // sp9C
+    s32 relPosY; // sp98
+    s32 tempPosY;
+    s32 posX; // s1
     s32 temp_t5;
 
-    this->windowContentVtx = GRAPH_ALLOC(this->state.gfxCtx, 0x3C00);
+    this->windowContentVtx = GRAPH_ALLOC(this->state.gfxCtx, 960 * sizeof(Vtx));
 
-    for (i = 0; i < 0x3C0; i += 4) {
-        this->windowContentVtx[i + 0].v.ob[0] = this->windowContentVtx[i + 2].v.ob[0] = 0x12C;
+    // Initialize all windowContentVtx
+    for (vtxId = 0; vtxId < 960; vtxId += 4) {
+        // x-coord (left)
+        this->windowContentVtx[vtxId + 0].v.ob[0] = this->windowContentVtx[vtxId + 2].v.ob[0] = 0x12C;
+        // x-coord (right)
+        this->windowContentVtx[vtxId + 1].v.ob[0] = this->windowContentVtx[vtxId + 3].v.ob[0] =
+            this->windowContentVtx[vtxId + 0].v.ob[0] + 16;
 
-        this->windowContentVtx[i + 1].v.ob[0] = this->windowContentVtx[i + 3].v.ob[0] =
-            this->windowContentVtx[i + 0].v.ob[0] + 0x10;
+        // y-coord (top)
+        this->windowContentVtx[vtxId + 0].v.ob[1] = this->windowContentVtx[vtxId + 1].v.ob[1] = 0;
+        // y-coord (bottom)
+        this->windowContentVtx[vtxId + 2].v.ob[1] = this->windowContentVtx[vtxId + 3].v.ob[1] =
+            this->windowContentVtx[vtxId + 0].v.ob[1] - 16;
 
-        this->windowContentVtx[i + 0].v.ob[1] = this->windowContentVtx[i + 1].v.ob[1] = 0;
+        // z-coordinate
+        this->windowContentVtx[vtxId + 0].v.ob[2] = this->windowContentVtx[vtxId + 1].v.ob[2] =
+            this->windowContentVtx[vtxId + 2].v.ob[2] = this->windowContentVtx[vtxId + 3].v.ob[2] = 0;
 
-        this->windowContentVtx[i + 2].v.ob[1] = this->windowContentVtx[i + 3].v.ob[1] =
-            this->windowContentVtx[i + 0].v.ob[1] - 0x10;
+        //! FAKE:
+        if (index && index && index) {}
 
-        this->windowContentVtx[i + 0].v.ob[2] = this->windowContentVtx[i + 1].v.ob[2] =
-            this->windowContentVtx[i + 2].v.ob[2] = this->windowContentVtx[i + 3].v.ob[2] = 0;
+        // flag
+        this->windowContentVtx[vtxId + 0].v.flag = this->windowContentVtx[vtxId + 1].v.flag =
+            this->windowContentVtx[vtxId + 2].v.flag = this->windowContentVtx[vtxId + 3].v.flag = 0;
 
-        this->windowContentVtx[i + 0].v.flag = this->windowContentVtx[i + 1].v.flag =
-            this->windowContentVtx[i + 2].v.flag = this->windowContentVtx[i + 3].v.flag = 0;
+        // texture coordinates
+        this->windowContentVtx[vtxId + 0].v.tc[0] = this->windowContentVtx[vtxId + 0].v.tc[1] =
+            this->windowContentVtx[vtxId + 1].v.tc[1] = this->windowContentVtx[vtxId + 2].v.tc[0] = 0;
+        this->windowContentVtx[vtxId + 1].v.tc[0] = this->windowContentVtx[vtxId + 2].v.tc[1] =
+            this->windowContentVtx[vtxId + 3].v.tc[0] = this->windowContentVtx[vtxId + 3].v.tc[1] = 0x200;
 
-        this->windowContentVtx[i + 0].v.tc[0] = this->windowContentVtx[i + 0].v.tc[1] =
-            this->windowContentVtx[i + 1].v.tc[1] = this->windowContentVtx[i + 2].v.tc[0] = 0;
-
-        this->windowContentVtx[i + 1].v.tc[0] = this->windowContentVtx[i + 2].v.tc[1] =
-            this->windowContentVtx[i + 3].v.tc[0] = this->windowContentVtx[i + 3].v.tc[1] = 0x200;
-
-        this->windowContentVtx[i + 0].v.cn[0] = this->windowContentVtx[i + 1].v.cn[0] =
-            this->windowContentVtx[i + 2].v.cn[0] = this->windowContentVtx[i + 3].v.cn[0] =
-                this->windowContentVtx[i + 0].v.cn[1] = this->windowContentVtx[i + 1].v.cn[1] =
-                    this->windowContentVtx[i + 2].v.cn[1] = this->windowContentVtx[i + 3].v.cn[1] =
-                        this->windowContentVtx[i + 0].v.cn[2] = this->windowContentVtx[i + 1].v.cn[2] =
-                            this->windowContentVtx[i + 2].v.cn[2] = this->windowContentVtx[i + 3].v.cn[2] =
-                                this->windowContentVtx[i + 0].v.cn[3] = this->windowContentVtx[i + 1].v.cn[3] =
-                                    this->windowContentVtx[i + 2].v.cn[3] = this->windowContentVtx[i + 3].v.cn[3] =
-                                        0xFF;
+        // alpha
+        this->windowContentVtx[vtxId + 0].v.cn[0] = this->windowContentVtx[vtxId + 1].v.cn[0] =
+            this->windowContentVtx[vtxId + 2].v.cn[0] = this->windowContentVtx[vtxId + 3].v.cn[0] =
+                this->windowContentVtx[vtxId + 0].v.cn[1] = this->windowContentVtx[vtxId + 1].v.cn[1] =
+                    this->windowContentVtx[vtxId + 2].v.cn[1] = this->windowContentVtx[vtxId + 3].v.cn[1] =
+                        this->windowContentVtx[vtxId + 0].v.cn[2] = this->windowContentVtx[vtxId + 1].v.cn[2] =
+                            this->windowContentVtx[vtxId + 2].v.cn[2] = this->windowContentVtx[vtxId + 3].v.cn[2] =
+                                this->windowContentVtx[vtxId + 0].v.cn[3] = this->windowContentVtx[vtxId + 1].v.cn[3] =
+                                    this->windowContentVtx[vtxId + 2].v.cn[3] =
+                                        this->windowContentVtx[vtxId + 3].v.cn[3] = 255;
     }
 
+    /** Title Label **/
+
+    // x-coord (left)
     this->windowContentVtx[0].v.ob[0] = this->windowContentVtx[2].v.ob[0] = this->windowPosX;
+    // x-coord (right)
     this->windowContentVtx[1].v.ob[0] = this->windowContentVtx[3].v.ob[0] = this->windowContentVtx[0].v.ob[0] + 0x80;
+    // y-coord (top)
     this->windowContentVtx[0].v.ob[1] = this->windowContentVtx[1].v.ob[1] = 0x48;
+    // y-coord (bottom)
     this->windowContentVtx[2].v.ob[1] = this->windowContentVtx[3].v.ob[1] = this->windowContentVtx[0].v.ob[1] - 0x10;
+    // texture coordinates
     this->windowContentVtx[1].v.tc[0] = this->windowContentVtx[3].v.tc[0] = 0x1000;
 
-    for (i = 4, var_a3 = 0; var_a3 < 3; var_a3++) {
-        var_s1 = this->windowPosX - 6;
+    /** File InfoBox **/
 
-        for (j = 0; j < 7; j++, i += 4) {
-            this->windowContentVtx[i + 0].v.ob[0] = this->windowContentVtx[i + 2].v.ob[0] = var_s1;
+    // Loop through 3 files
+    for (vtxId = 4, i = 0; i < 3; i++) {
+        posX = this->windowPosX - 6;
 
-            this->windowContentVtx[i + 1].v.ob[0] = this->windowContentVtx[i + 3].v.ob[0] =
-                this->windowContentVtx[i + 0].v.ob[0] + sFileInfoBoxPartWidths[j];
+        // Loop through 7 textures
+        for (j = 0; j < 7; j++, vtxId += 4) {
+            // x-coord (left)
+            this->windowContentVtx[vtxId + 0].v.ob[0] = this->windowContentVtx[vtxId + 2].v.ob[0] = posX;
+            // x-coord (right)
+            this->windowContentVtx[vtxId + 1].v.ob[0] = this->windowContentVtx[vtxId + 3].v.ob[0] =
+                this->windowContentVtx[vtxId + 0].v.ob[0] + sFileInfoBoxPartWidths[j];
 
-            this->windowContentVtx[i + 0].v.ob[1] = this->windowContentVtx[i + 1].v.ob[1] =
-                this->fileNamesY[var_a3] + 0x2C;
+            // y-coord(top)
+            this->windowContentVtx[vtxId + 0].v.ob[1] = this->windowContentVtx[vtxId + 1].v.ob[1] =
+                this->fileNamesY[i] + 0x2C;
+            // y-coord (bottom)
+            this->windowContentVtx[vtxId + 2].v.ob[1] = this->windowContentVtx[vtxId + 3].v.ob[1] =
+                this->windowContentVtx[vtxId + 0].v.ob[1] - 0x38;
 
-            this->windowContentVtx[i + 2].v.ob[1] = this->windowContentVtx[i + 3].v.ob[1] =
-                this->windowContentVtx[i + 0].v.ob[1] - 0x38;
+            // texture coordinates
+            this->windowContentVtx[vtxId + 1].v.tc[0] = this->windowContentVtx[vtxId + 3].v.tc[0] =
+                sFileInfoBoxPartWidths[j] << 5;
+            this->windowContentVtx[vtxId + 2].v.tc[1] = this->windowContentVtx[vtxId + 3].v.tc[1] = 0x700;
 
-            this->windowContentVtx[i + 1].v.tc[0] = this->windowContentVtx[i + 3].v.tc[0] = sFileInfoBoxPartWidths[j]
-                                                                                            << 5;
-
-            this->windowContentVtx[i + 2].v.tc[1] = this->windowContentVtx[i + 3].v.tc[1] = 0x700;
-
-            var_s1 += sFileInfoBoxPartWidths[j];
+            // Update X position
+            posX += sFileInfoBoxPartWidths[j];
         }
     }
 
-    var_s1 = this->windowPosX - 6;
-    sp9C = 0x2C;
+    // File Buttons
 
-    for (j = 0; j < 3; j++, i += 16, sp9C -= 0x10) {
-        this->windowContentVtx[i + 0].v.ob[0] = this->windowContentVtx[i + 2].v.ob[0] = var_s1;
+    posX = this->windowPosX - 6;
+    posY = 44;
 
-        this->windowContentVtx[i + 1].v.ob[0] = this->windowContentVtx[i + 3].v.ob[0] =
-            this->windowContentVtx[i + 0].v.ob[0] + 0x40;
+    // Loop through 3 files
+    for (j = 0; j < 3; j++, vtxId += 16, posY -= 0x10) {
 
-        this->windowContentVtx[i + 0].v.ob[1] = this->windowContentVtx[i + 1].v.ob[1] = this->buttonYOffsets[j] + sp9C;
+        /* File Button */
 
-        this->windowContentVtx[i + 2].v.ob[1] = this->windowContentVtx[i + 3].v.ob[1] =
-            this->windowContentVtx[i + 0].v.ob[1] - 0x10;
+        // x-coord (left)
+        this->windowContentVtx[vtxId + 0].v.ob[0] = this->windowContentVtx[vtxId + 2].v.ob[0] = posX;
+        // x-coord (right)
+        this->windowContentVtx[vtxId + 1].v.ob[0] = this->windowContentVtx[vtxId + 3].v.ob[0] =
+            this->windowContentVtx[vtxId + 0].v.ob[0] + 0x40;
 
-        this->windowContentVtx[i + 1].v.tc[0] = this->windowContentVtx[i + 3].v.tc[0] = 0x800;
+        // y-coord(top)
+        this->windowContentVtx[vtxId + 0].v.ob[1] = this->windowContentVtx[vtxId + 1].v.ob[1] =
+            this->buttonYOffsets[j] + posY;
+        // y-coord (bottom)
+        this->windowContentVtx[vtxId + 2].v.ob[1] = this->windowContentVtx[vtxId + 3].v.ob[1] =
+            this->windowContentVtx[vtxId + 0].v.ob[1] - 0x10;
 
-        this->windowContentVtx[i + 4].v.ob[0] = this->windowContentVtx[i + 6].v.ob[0] = var_s1 + 0x40;
+        // texture coordinates
+        this->windowContentVtx[vtxId + 1].v.tc[0] = this->windowContentVtx[vtxId + 3].v.tc[0] = 0x800;
 
-        this->windowContentVtx[i + 5].v.ob[0] = this->windowContentVtx[i + 7].v.ob[0] =
-            this->windowContentVtx[i + 4].v.ob[0] + 0x6C;
+        /* File Name Box */
 
-        this->windowContentVtx[i + 4].v.ob[1] = this->windowContentVtx[i + 5].v.ob[1] = this->buttonYOffsets[j] + sp9C;
+        // x-coord (left)
+        this->windowContentVtx[vtxId + 4].v.ob[0] = this->windowContentVtx[vtxId + 6].v.ob[0] = posX + 0x40;
+        // x-coord (right)
+        this->windowContentVtx[vtxId + 5].v.ob[0] = this->windowContentVtx[vtxId + 7].v.ob[0] =
+            this->windowContentVtx[vtxId + 4].v.ob[0] + 0x6C;
 
-        this->windowContentVtx[i + 6].v.ob[1] = this->windowContentVtx[i + 7].v.ob[1] =
-            this->windowContentVtx[i + 4].v.ob[1] - 0x10;
+        // y-coord(top)
+        this->windowContentVtx[vtxId + 4].v.ob[1] = this->windowContentVtx[vtxId + 5].v.ob[1] =
+            this->buttonYOffsets[j] + posY;
+        // y-coord (bottom)
+        this->windowContentVtx[vtxId + 6].v.ob[1] = this->windowContentVtx[vtxId + 7].v.ob[1] =
+            this->windowContentVtx[vtxId + 4].v.ob[1] - 0x10;
 
-        this->windowContentVtx[i + 5].v.tc[0] = this->windowContentVtx[i + 7].v.tc[0] = 0xD80;
+        // texture coordinates
+        this->windowContentVtx[vtxId + 5].v.tc[0] = this->windowContentVtx[vtxId + 7].v.tc[0] = 0xD80;
 
-        this->windowContentVtx[i + 8].v.ob[0] = this->windowContentVtx[i + 10].v.ob[0] = var_s1 + 0x34;
+        /* Connectors */
 
-        this->windowContentVtx[i + 9].v.ob[0] = this->windowContentVtx[i + 11].v.ob[0] =
-            this->windowContentVtx[i + 8].v.ob[0] + 0x18;
+        // x-coord (left)
+        this->windowContentVtx[vtxId + 8].v.ob[0] = this->windowContentVtx[vtxId + 10].v.ob[0] = posX + 0x34;
+        // x-coord (right)
+        this->windowContentVtx[vtxId + 9].v.ob[0] = this->windowContentVtx[vtxId + 11].v.ob[0] =
+            this->windowContentVtx[vtxId + 8].v.ob[0] + 0x18;
 
-        this->windowContentVtx[i + 8].v.ob[1] = this->windowContentVtx[i + 9].v.ob[1] = this->buttonYOffsets[j] + sp9C;
+        // y-coord(top)
+        this->windowContentVtx[vtxId + 8].v.ob[1] = this->windowContentVtx[vtxId + 9].v.ob[1] =
+            this->buttonYOffsets[j] + posY;
+        // y-coord (bottom)
+        this->windowContentVtx[vtxId + 10].v.ob[1] = this->windowContentVtx[vtxId + 11].v.ob[1] =
+            this->windowContentVtx[vtxId + 8].v.ob[1] - 0x10;
 
-        this->windowContentVtx[i + 10].v.ob[1] = this->windowContentVtx[i + 11].v.ob[1] =
-            this->windowContentVtx[i + 8].v.ob[1] - 0x10;
+        // texture coordinates
+        this->windowContentVtx[vtxId + 9].v.tc[0] = this->windowContentVtx[vtxId + 11].v.tc[0] = 0x300;
 
-        this->windowContentVtx[i + 9].v.tc[0] = this->windowContentVtx[i + 11].v.tc[0] = 0x300;
+        /* Blank Button (Owl Save) */
 
-        this->windowContentVtx[i + 12].v.ob[0] = this->windowContentVtx[i + 14].v.ob[0] = var_s1 + 0xA9;
+        // x-coord (left)
+        this->windowContentVtx[vtxId + 12].v.ob[0] = this->windowContentVtx[vtxId + 14].v.ob[0] = posX + 0xA9;
+        // x-coord (right)
+        this->windowContentVtx[vtxId + 13].v.ob[0] = this->windowContentVtx[vtxId + 15].v.ob[0] =
+            this->windowContentVtx[vtxId + 12].v.ob[0] + 0x34;
 
-        this->windowContentVtx[i + 13].v.ob[0] = this->windowContentVtx[i + 15].v.ob[0] =
-            this->windowContentVtx[i + 12].v.ob[0] + 0x34;
+        // y-coord(top)
+        this->windowContentVtx[vtxId + 12].v.ob[1] = this->windowContentVtx[vtxId + 13].v.ob[1] =
+            this->buttonYOffsets[j] + posY;
+        // y-coord (bottom)
+        this->windowContentVtx[vtxId + 14].v.ob[1] = this->windowContentVtx[vtxId + 15].v.ob[1] =
+            this->windowContentVtx[vtxId + 12].v.ob[1] - 0x10;
 
-        this->windowContentVtx[i + 12].v.ob[1] = this->windowContentVtx[i + 13].v.ob[1] =
-            this->buttonYOffsets[j] + sp9C;
-
-        this->windowContentVtx[i + 14].v.ob[1] = this->windowContentVtx[i + 15].v.ob[1] =
-            this->windowContentVtx[i + 12].v.ob[1] - 0x10;
-
-        this->windowContentVtx[i + 13].v.tc[0] = this->windowContentVtx[i + 15].v.tc[0] = 0x680;
+        // texture coordinates
+        this->windowContentVtx[vtxId + 13].v.tc[0] = this->windowContentVtx[vtxId + 15].v.tc[0] = 0x680;
     }
 
-    sp9C = 0x2C;
+    posY = 44;
 
-    for (j = 0; j < 3; j++, sp9C -= 16) {
+    // Loop through 3 files
+    for (j = 0; j < 3; j++, posY -= 16) {
         if (!gSaveContext.flashSaveAvailable) {
+            // Should skip vtxId
+            // vtxId += 268;
             continue;
         }
 
+        // Account for owl-save offset
+
         spAC = j;
-        if (this->isOwlSave[j + 2] != 0) {
+        if (this->isOwlSave[j + 2]) {
             spAC = j + 2;
         }
 
-        var_s1 = this->windowPosX - 6;
+        /* File name */
+
+        posX = this->windowPosX - 6;
 
         if ((this->configMode == 0x10) && (j == this->copyDestFileIndex)) {
-            sp98 = this->fileNamesY[j] + 0x2C;
+            relPosY = this->fileNamesY[j] + 0x2C;
         } else if (((this->configMode == 0x11) || (this->configMode == 0x12)) && (j == this->copyDestFileIndex)) {
-            sp98 = this->buttonYOffsets[j] + sp9C;
+            relPosY = this->buttonYOffsets[j] + posY;
         } else {
-            sp98 = sp9C + this->buttonYOffsets[j] + this->fileNamesY[j];
+            relPosY = posY + this->buttonYOffsets[j] + this->fileNamesY[j];
         }
 
-        // sp98 -= 2;
+        tempPosY = relPosY - 2;
 
-        for (var_a3 = 0; var_a3 < 8; var_a3++, i += 4) {
+        // Loop through 8 characters of file name
+        for (i = 0; i < 8; i++, vtxId += 4) {
 
-            index = this->fileNames[j][var_a3];
+            index = this->fileNames[j][i];
 
-            this->windowContentVtx[i + 0].v.ob[0] = this->windowContentVtx[i + 2].v.ob[0] =
-                D_80814280[index] + var_s1 + 0x4E;
+            /* File Name */
 
-            this->windowContentVtx[i + 1].v.ob[0] = this->windowContentVtx[i + 3].v.ob[0] =
-                this->windowContentVtx[i + 0].v.ob[0] + 0xB;
+            // x-coord (left)
+            this->windowContentVtx[vtxId + 0].v.ob[0] = this->windowContentVtx[vtxId + 2].v.ob[0] =
+                D_80814280[index] + posX + 0x4E;
+            // x-coord (right)
+            this->windowContentVtx[vtxId + 1].v.ob[0] = this->windowContentVtx[vtxId + 3].v.ob[0] =
+                this->windowContentVtx[vtxId + 0].v.ob[0] + 0xB;
 
-            this->windowContentVtx[i + 0].v.ob[1] = this->windowContentVtx[i + 1].v.ob[1] = sp98;
+            // y-coord(top)
+            this->windowContentVtx[vtxId + 0].v.ob[1] = this->windowContentVtx[vtxId + 1].v.ob[1] = tempPosY;
+            // y-coord (bottom)
+            this->windowContentVtx[vtxId + 2].v.ob[1] = this->windowContentVtx[vtxId + 3].v.ob[1] =
+                this->windowContentVtx[vtxId + 0].v.ob[1] - 0xC;
 
-            this->windowContentVtx[i + 2].v.ob[1] = this->windowContentVtx[i + 3].v.ob[1] =
-                this->windowContentVtx[i + 0].v.ob[1] - 0xC;
+            /* File Name Shadow */
 
-            this->windowContentVtx[i + 32].v.ob[0] = this->windowContentVtx[i + 34].v.ob[0] =
-                D_80814280[index] + var_s1 + 0x4F;
+            // x-coord (left)
+            this->windowContentVtx[vtxId + 32].v.ob[0] = this->windowContentVtx[vtxId + 34].v.ob[0] =
+                D_80814280[index] + posX + 0x4F;
+            // x-coord (right)
+            this->windowContentVtx[vtxId + 33].v.ob[0] = this->windowContentVtx[vtxId + 35].v.ob[0] =
+                this->windowContentVtx[vtxId + 32].v.ob[0] + 0xB;
 
-            var_s1 += 0xA;
+            // y-coord(top)
+            this->windowContentVtx[vtxId + 32].v.ob[1] = this->windowContentVtx[vtxId + 33].v.ob[1] = tempPosY - 1;
+            // y-coord (bottom)
+            this->windowContentVtx[vtxId + 34].v.ob[1] = this->windowContentVtx[vtxId + 35].v.ob[1] =
+                this->windowContentVtx[vtxId + 32].v.ob[1] - 0xC;
 
-            this->windowContentVtx[i + 33].v.ob[0] = this->windowContentVtx[i + 35].v.ob[0] =
-                this->windowContentVtx[i + 32].v.ob[0] + 0xB;
-
-            this->windowContentVtx[i + 32].v.ob[1] = this->windowContentVtx[i + 33].v.ob[1] = sp98 - 1;
-
-            this->windowContentVtx[i + 34].v.ob[1] = this->windowContentVtx[i + 35].v.ob[1] =
-                this->windowContentVtx[i + 32].v.ob[1] - 0xC;
+            // Update X position
+            posX += 10;
         }
+        // Account for the shadow
+        vtxId += 32;
 
-        var_s1 = this->windowPosX + 14;
-        i += 32;
+        /* Rupee Digits */
+
+        posX = this->windowPosX + 14;
+        tempPosY = relPosY - 0x18;
+
         FileSelect_SplitNumber(this->rupees[spAC], &spA4[0], &spA4[1], &spA4[2]);
 
-        sp98 -= 0x18;
+        index = sWalletFirstDigit[this->walletUpgrades[spAC]];
 
-        index = this->walletUpgrades[spAC];
+        ptr = &spA4[index];
 
-        ptr = &spA4[sWalletFirstDigit[index]];
+        for (i = 0; i < 3; i++, vtxId += 4, ptr++) {
 
-        for (var_a3 = 0; var_a3 < 3; var_a3++, i += 4, ptr++) {
+            /* Rupee Digits */
 
-            this->windowContentVtx[i + 0].v.ob[0] = this->windowContentVtx[i + 2].v.ob[0] = D_80814280[*ptr] + var_s1;
+            // x-coord (left)
+            this->windowContentVtx[vtxId + 0].v.ob[0] = this->windowContentVtx[vtxId + 2].v.ob[0] =
+                D_80814280[*ptr] + posX;
+            // x-coord (right)
+            this->windowContentVtx[vtxId + 1].v.ob[0] = this->windowContentVtx[vtxId + 3].v.ob[0] =
+                this->windowContentVtx[vtxId + 0].v.ob[0] + D_80814628[i];
 
-            this->windowContentVtx[i + 1].v.ob[0] = this->windowContentVtx[i + 3].v.ob[0] =
-                this->windowContentVtx[i + 0].v.ob[0] + D_80814628[var_a3];
+            // y-coord(top)
+            this->windowContentVtx[vtxId + 0].v.ob[1] = this->windowContentVtx[vtxId + 1].v.ob[1] = tempPosY;
+            // y-coord (bottom)
+            this->windowContentVtx[vtxId + 2].v.ob[1] = this->windowContentVtx[vtxId + 3].v.ob[1] =
+                this->windowContentVtx[vtxId + 0].v.ob[1] - D_80814630[i];
 
-            this->windowContentVtx[i + 0].v.ob[1] = this->windowContentVtx[i + 1].v.ob[1] = sp98;
+            /* Rupee Digits Shadow */
 
-            this->windowContentVtx[i + 2].v.ob[1] = this->windowContentVtx[i + 3].v.ob[1] =
-                this->windowContentVtx[i + 0].v.ob[1] - D_80814630[var_a3];
+            // x-coord (left)
+            this->windowContentVtx[vtxId + 12].v.ob[0] = this->windowContentVtx[vtxId + 14].v.ob[0] =
+                this->windowContentVtx[vtxId + 0].v.ob[0] + 1;
+            // x-coord (right)
+            this->windowContentVtx[vtxId + 13].v.ob[0] = this->windowContentVtx[vtxId + 15].v.ob[0] =
+                this->windowContentVtx[vtxId + 12].v.ob[0] + D_80814628[i];
 
-            this->windowContentVtx[i + 12].v.ob[0] = this->windowContentVtx[i + 14].v.ob[0] =
-                this->windowContentVtx[i + 0].v.ob[0] + 1;
+            // y-coord(top)
+            this->windowContentVtx[vtxId + 12].v.ob[1] = this->windowContentVtx[vtxId + 13].v.ob[1] = tempPosY - 1;
+            // y-coord (bottom)
+            this->windowContentVtx[vtxId + 14].v.ob[1] = this->windowContentVtx[vtxId + 15].v.ob[1] =
+                this->windowContentVtx[vtxId + 12].v.ob[1] - D_80814630[i];
 
-            this->windowContentVtx[i + 13].v.ob[0] = this->windowContentVtx[i + 15].v.ob[0] =
-                this->windowContentVtx[i + 12].v.ob[0] + D_80814628[var_a3];
-
-            this->windowContentVtx[i + 12].v.ob[1] = this->windowContentVtx[i + 13].v.ob[1] = sp98 - 1;
-
-            this->windowContentVtx[i + 14].v.ob[1] = this->windowContentVtx[i + 15].v.ob[1] =
-                this->windowContentVtx[i + 12].v.ob[1] - D_80814630[var_a3];
-
-            var_s1 += D_80814620[var_a3];
+            // Update X position
+            posX += D_80814620[i];
         }
 
-        i += 12;
-        var_s1 = this->windowPosX + 42;
+        // Account for the shadow
+        vtxId += 12;
+
+        /* Mask Count */
+
+        posX = this->windowPosX + 42;
+        tempPosY = relPosY - 0x2A;
 
         FileSelect_SplitNumber(this->maskCount[spAC], &spA4[0], &spA4[1], &spA4[2]);
 
-        sp98 -= 0x2A;
+        for (i = 1; i < 3; i++, vtxId += 4) {
 
-        for (var_a3 = 1; var_a3 < 3; var_a3++, i += 4) {
+            /* Mask Count */
 
-            this->windowContentVtx[i + 0].v.ob[0] = this->windowContentVtx[i + 2].v.ob[0] =
-                D_80814280[spA4[var_a3]] + var_s1;
+            // x-coord (left)
+            this->windowContentVtx[vtxId + 0].v.ob[0] = this->windowContentVtx[vtxId + 2].v.ob[0] =
+                D_80814280[spA4[i]] + posX;
+            // x-coord (right)
+            this->windowContentVtx[vtxId + 1].v.ob[0] = this->windowContentVtx[vtxId + 3].v.ob[0] =
+                this->windowContentVtx[vtxId + 0].v.ob[0] + D_80814628[i];
 
-            this->windowContentVtx[i + 1].v.ob[0] = this->windowContentVtx[i + 3].v.ob[0] =
-                this->windowContentVtx[i + 0].v.ob[0] + D_80814628[var_a3];
+            // y-coord(top)
+            this->windowContentVtx[vtxId + 0].v.ob[1] = this->windowContentVtx[vtxId + 1].v.ob[1] = tempPosY;
+            // y-coord (bottom)
+            this->windowContentVtx[vtxId + 2].v.ob[1] = this->windowContentVtx[vtxId + 3].v.ob[1] =
+                this->windowContentVtx[vtxId + 0].v.ob[1] - D_80814630[i];
 
-            this->windowContentVtx[i + 0].v.ob[1] = this->windowContentVtx[i + 1].v.ob[1] = sp98;
+            /* Mask Count Shadow */
 
-            this->windowContentVtx[i + 2].v.ob[1] = this->windowContentVtx[i + 3].v.ob[1] =
-                this->windowContentVtx[i + 0].v.ob[1] - D_80814630[var_a3];
+            // x-coord (left)
+            this->windowContentVtx[vtxId + 8].v.ob[0] = this->windowContentVtx[vtxId + 10].v.ob[0] =
+                this->windowContentVtx[vtxId + 0].v.ob[0] + 1;
+            // x-coord (right)
+            this->windowContentVtx[vtxId + 9].v.ob[0] = this->windowContentVtx[vtxId + 11].v.ob[0] =
+                this->windowContentVtx[vtxId + 8].v.ob[0] + D_80814628[i];
 
-            this->windowContentVtx[i + 8].v.ob[0] = this->windowContentVtx[i + 10].v.ob[0] =
-                this->windowContentVtx[i + 0].v.ob[0] + 1;
+            // y-coord(top)
+            this->windowContentVtx[vtxId + 8].v.ob[1] = this->windowContentVtx[vtxId + 9].v.ob[1] = tempPosY - 1;
+            // y-coord (bottom)
+            this->windowContentVtx[vtxId + 10].v.ob[1] = this->windowContentVtx[vtxId + 11].v.ob[1] =
+                this->windowContentVtx[vtxId + 8].v.ob[1] - D_80814630[i];
 
-            // TODO: Fake new_var
-            this->windowContentVtx[i + 9].v.ob[0] = this->windowContentVtx[i + 11].v.ob[0] =
-                (*(new_var = &this->windowContentVtx[i + 8].v.ob[0])) + D_80814628[var_a3];
-
-            this->windowContentVtx[i + 8].v.ob[1] = this->windowContentVtx[i + 9].v.ob[1] = sp98 - 1;
-
-            this->windowContentVtx[i + 10].v.ob[1] = this->windowContentVtx[i + 11].v.ob[1] =
-                this->windowContentVtx[i + 8].v.ob[1] - D_80814630[var_a3];
-
-            var_s1 += D_80814620[var_a3];
+            // Update X position
+            posX += D_80814620[i];
         }
 
-        i += 8;
-        var_s1 = this->windowPosX + 0x3F;
+        // Account for the shadow
+        vtxId += 8;
 
-        sp98 -= 0x10;
-        for (var_a3 = 0; var_a3 < 20; var_a3++, i += 4, var_s1 += 9) {
+        /* Hearts */
 
-            this->windowContentVtx[i + 0].v.ob[0] = this->windowContentVtx[i + 2].v.ob[0] = var_s1;
+        posX = this->windowPosX + 63;
+        tempPosY = relPosY - 0x10;
 
-            this->windowContentVtx[i + 1].v.ob[0] = this->windowContentVtx[i + 3].v.ob[0] =
-                this->windowContentVtx[i + 0].v.ob[0] + 0xA;
+        // Loop through 20 hearts
+        for (i = 0; i < 20; i++, vtxId += 4, posX += 9) {
+            // x-coord (left)
+            this->windowContentVtx[vtxId + 0].v.ob[0] = this->windowContentVtx[vtxId + 2].v.ob[0] = posX;
+            // x-coord (right)
+            this->windowContentVtx[vtxId + 1].v.ob[0] = this->windowContentVtx[vtxId + 3].v.ob[0] =
+                this->windowContentVtx[vtxId + 0].v.ob[0] + 0xA;
 
-            this->windowContentVtx[i + 0].v.ob[1] = this->windowContentVtx[i + 1].v.ob[1] = sp98;
+            // y-coord(top)
+            this->windowContentVtx[vtxId + 0].v.ob[1] = this->windowContentVtx[vtxId + 1].v.ob[1] = tempPosY;
+            // y-coord (bottom)
+            this->windowContentVtx[vtxId + 2].v.ob[1] = this->windowContentVtx[vtxId + 3].v.ob[1] =
+                this->windowContentVtx[vtxId + 0].v.ob[1] - 0xA;
 
-            this->windowContentVtx[i + 2].v.ob[1] = this->windowContentVtx[i + 3].v.ob[1] =
-                this->windowContentVtx[i + 0].v.ob[1] - 0xA;
-
-            if (var_a3 == 9) {
-                var_s1 = this->windowPosX + 54;
-                sp98 -= 8;
+            // New row of hearts next iteration
+            if (i == 9) {
+                posX = this->windowPosX + (63 - 9);
+                tempPosY -= 8;
             }
         }
 
-        var_s1 = this->windowPosX + 64;
-        sp98 -= 0x20;
+        /* Quest Remains */
 
-        var_a3 = 0;
-        for (; var_a3 < 4; var_a3++, i += 4, var_s1 += 0x18) {
+        posX = this->windowPosX + 64;
+        tempPosY = relPosY - 0x20;
 
-            this->windowContentVtx[i + 0].v.ob[0] = this->windowContentVtx[i + 2].v.ob[0] = var_s1;
+        // Loop through 4 Remains
+        for (i = 0; i < 4; i++, vtxId += 4, posX += 0x18) {
+            // x-coord (left)
+            this->windowContentVtx[vtxId + 0].v.ob[0] = this->windowContentVtx[vtxId + 2].v.ob[0] = posX;
+            // x-coord (right)
+            this->windowContentVtx[vtxId + 1].v.ob[0] = this->windowContentVtx[vtxId + 3].v.ob[0] =
+                this->windowContentVtx[vtxId + 0].v.ob[0] + 0x14;
 
-            this->windowContentVtx[i + 1].v.ob[0] = this->windowContentVtx[i + 3].v.ob[0] =
-                this->windowContentVtx[i + 0].v.ob[0] + 0x14;
+            // y-coord(top)
+            this->windowContentVtx[vtxId + 0].v.ob[1] = this->windowContentVtx[vtxId + 1].v.ob[1] = tempPosY;
+            // y-coord (bottom)
+            this->windowContentVtx[vtxId + 2].v.ob[1] = this->windowContentVtx[vtxId + 3].v.ob[1] =
+                this->windowContentVtx[vtxId + 0].v.ob[1] - 0x14;
 
-            this->windowContentVtx[i + 0].v.ob[1] = this->windowContentVtx[i + 1].v.ob[1] = sp98;
-
-            this->windowContentVtx[i + 2].v.ob[1] = this->windowContentVtx[i + 3].v.ob[1] =
-                this->windowContentVtx[i + 0].v.ob[1] - 0x14;
-
-            this->windowContentVtx[i + 1].v.tc[0] = this->windowContentVtx[i + 2].v.tc[1] =
-                this->windowContentVtx[i + 3].v.tc[0] = this->windowContentVtx[i + 3].v.tc[1] = 0x400;
+            // texture coordinates
+            this->windowContentVtx[vtxId + 1].v.tc[0] = this->windowContentVtx[vtxId + 2].v.tc[1] =
+                this->windowContentVtx[vtxId + 3].v.tc[0] = this->windowContentVtx[vtxId + 3].v.tc[1] = 0x400;
         }
 
-        this->windowContentVtx[i + 0].v.ob[0] = this->windowContentVtx[i + 2].v.ob[0] = this->windowPosX - 1;
+        /* Rupee Icon */
 
-        this->windowContentVtx[i + 1].v.ob[0] = this->windowContentVtx[i + 3].v.ob[0] =
-            this->windowContentVtx[i + 0].v.ob[0] + 0x10;
+        // posX = this->windowPosX - 1;
+        tempPosY = relPosY - 0x15;
 
-        this->windowContentVtx[i + 0].v.ob[1] = this->windowContentVtx[i + 1].v.ob[1] = sp98;
+        // x-coord (left)
+        this->windowContentVtx[vtxId + 0].v.ob[0] = this->windowContentVtx[vtxId + 2].v.ob[0] = this->windowPosX - 1;
+        // x-coord (right)
+        this->windowContentVtx[vtxId + 1].v.ob[0] = this->windowContentVtx[vtxId + 3].v.ob[0] =
+            this->windowContentVtx[vtxId + 0].v.ob[0] + 0x10;
 
-        // sp98 -= 0x15;
-        this->windowContentVtx[i + 2].v.ob[1] = this->windowContentVtx[i + 3].v.ob[1] =
-            this->windowContentVtx[i + 0].v.ob[1] - 0x10;
+        // y-coord(top)
+        this->windowContentVtx[vtxId + 0].v.ob[1] = this->windowContentVtx[vtxId + 1].v.ob[1] = tempPosY;
+        // y-coord (bottom)
+        this->windowContentVtx[vtxId + 2].v.ob[1] = this->windowContentVtx[vtxId + 3].v.ob[1] =
+            this->windowContentVtx[vtxId + 0].v.ob[1] - 0x10;
 
-        this->windowContentVtx[i + 1].v.tc[0] = this->windowContentVtx[i + 3].v.tc[0] = 0x200;
-        this->windowContentVtx[i + 2].v.tc[1] = this->windowContentVtx[i + 3].v.tc[1] = 0x200;
+        // texture coordinates
+        this->windowContentVtx[vtxId + 1].v.tc[0] = this->windowContentVtx[vtxId + 3].v.tc[0] = 0x200;
+        this->windowContentVtx[vtxId + 2].v.tc[1] = this->windowContentVtx[vtxId + 3].v.tc[1] = 0x200;
 
-        i += 4;
+        vtxId += 4;
 
-        this->windowContentVtx[i + 0].v.ob[0] = this->windowContentVtx[i + 2].v.ob[0] = this->windowPosX + 0x27;
+        /* Heart Piece Count */
 
-        this->windowContentVtx[i + 1].v.ob[0] = this->windowContentVtx[i + 3].v.ob[0] =
-            this->windowContentVtx[i + 0].v.ob[0] + 0x18;
+        // posX = this->windowPosX + 0x27;
+        tempPosY = relPosY - 0x15;
 
-        this->windowContentVtx[i + 0].v.ob[1] = this->windowContentVtx[i + 1].v.ob[1] = sp98;
+        // x-coord (left)
+        this->windowContentVtx[vtxId + 0].v.ob[0] = this->windowContentVtx[vtxId + 2].v.ob[0] = this->windowPosX + 0x27;
+        // x-coord (right)
+        this->windowContentVtx[vtxId + 1].v.ob[0] = this->windowContentVtx[vtxId + 3].v.ob[0] =
+            this->windowContentVtx[vtxId + 0].v.ob[0] + 0x18;
 
-        this->windowContentVtx[i + 2].v.ob[1] = this->windowContentVtx[i + 3].v.ob[1] =
-            this->windowContentVtx[i + 0].v.ob[1] - 0x10;
+        // y-coord(top)
+        this->windowContentVtx[vtxId + 0].v.ob[1] = this->windowContentVtx[vtxId + 1].v.ob[1] = tempPosY;
+        // y-coord (bottom)
+        this->windowContentVtx[vtxId + 2].v.ob[1] = this->windowContentVtx[vtxId + 3].v.ob[1] =
+            this->windowContentVtx[vtxId + 0].v.ob[1] - 0x10;
 
-        this->windowContentVtx[i + 1].v.tc[0] = this->windowContentVtx[i + 3].v.tc[0] = 0x300;
-        this->windowContentVtx[i + 2].v.tc[1] = this->windowContentVtx[i + 3].v.tc[1] = 0x200;
+        // texture coordinates
+        this->windowContentVtx[vtxId + 1].v.tc[0] = this->windowContentVtx[vtxId + 3].v.tc[0] = 0x300;
+        this->windowContentVtx[vtxId + 2].v.tc[1] = this->windowContentVtx[vtxId + 3].v.tc[1] = 0x200;
 
-        i += 4;
+        vtxId += 4;
 
-        sp98 -= 0x27;
-        this->windowContentVtx[i + 0].v.ob[0] = this->windowContentVtx[i + 2].v.ob[0] = this->windowPosX - 10;
+        /* Mask Text */
 
-        this->windowContentVtx[i + 1].v.ob[0] = this->windowContentVtx[i + 3].v.ob[0] =
-            this->windowContentVtx[i + 0].v.ob[0] + 0x40;
+        // posX = this->windowPosX - 10;
+        tempPosY = relPosY - 0x27;
 
-        this->windowContentVtx[i + 0].v.ob[1] = this->windowContentVtx[i + 1].v.ob[1] = sp98;
+        this->windowContentVtx[vtxId + 0].v.ob[0] = this->windowContentVtx[vtxId + 2].v.ob[0] = this->windowPosX - 10;
 
-        this->windowContentVtx[i + 2].v.ob[1] = this->windowContentVtx[i + 3].v.ob[1] =
-            this->windowContentVtx[i + 0].v.ob[1] - 0x10;
+        this->windowContentVtx[vtxId + 1].v.ob[0] = this->windowContentVtx[vtxId + 3].v.ob[0] =
+            this->windowContentVtx[vtxId + 0].v.ob[0] + 0x40;
 
-        sp98--;
+        this->windowContentVtx[vtxId + 0].v.ob[1] = this->windowContentVtx[vtxId + 1].v.ob[1] = tempPosY;
 
-        this->windowContentVtx[i + 1].v.tc[0] = this->windowContentVtx[i + 3].v.tc[0] = 0x800;
-        this->windowContentVtx[i + 2].v.tc[1] = this->windowContentVtx[i + 3].v.tc[1] = 0x200;
+        this->windowContentVtx[vtxId + 2].v.ob[1] = this->windowContentVtx[vtxId + 3].v.ob[1] =
+            this->windowContentVtx[vtxId + 0].v.ob[1] - 0x10;
 
-        this->windowContentVtx[i + 4].v.ob[0] = this->windowContentVtx[i + 6].v.ob[0] =
-            this->windowContentVtx[i + 0].v.ob[0] + 1;
+        this->windowContentVtx[vtxId + 1].v.tc[0] = this->windowContentVtx[vtxId + 3].v.tc[0] = 0x800;
+        this->windowContentVtx[vtxId + 2].v.tc[1] = this->windowContentVtx[vtxId + 3].v.tc[1] = 0x200;
 
-        this->windowContentVtx[i + 5].v.ob[0] = this->windowContentVtx[i + 7].v.ob[0] =
-            this->windowContentVtx[i + 4].v.ob[0] + 0x40;
+        this->windowContentVtx[vtxId + 4].v.ob[0] = this->windowContentVtx[vtxId + 6].v.ob[0] =
+            this->windowContentVtx[vtxId + 0].v.ob[0] + 1;
 
-        this->windowContentVtx[i + 4].v.ob[1] = this->windowContentVtx[i + 5].v.ob[1] = sp98;
+        this->windowContentVtx[vtxId + 5].v.ob[0] = this->windowContentVtx[vtxId + 7].v.ob[0] =
+            this->windowContentVtx[vtxId + 4].v.ob[0] + 0x40;
 
-        this->windowContentVtx[i + 6].v.ob[1] = this->windowContentVtx[i + 7].v.ob[1] =
-            this->windowContentVtx[i + 4].v.ob[1] - 0x10;
+        this->windowContentVtx[vtxId + 4].v.ob[1] = this->windowContentVtx[vtxId + 5].v.ob[1] = tempPosY - 1;
 
-        this->windowContentVtx[i + 5].v.tc[0] = this->windowContentVtx[i + 7].v.tc[0] = 0x800;
-        this->windowContentVtx[i + 6].v.tc[1] = this->windowContentVtx[i + 7].v.tc[1] = 0x200;
+        this->windowContentVtx[vtxId + 6].v.ob[1] = this->windowContentVtx[vtxId + 7].v.ob[1] =
+            this->windowContentVtx[vtxId + 4].v.ob[1] - 0x10;
 
-        i += 8;
+        this->windowContentVtx[vtxId + 5].v.tc[0] = this->windowContentVtx[vtxId + 7].v.tc[0] = 0x800;
+        this->windowContentVtx[vtxId + 6].v.tc[1] = this->windowContentVtx[vtxId + 7].v.tc[1] = 0x200;
 
-        var_s1 = this->windowPosX + 0xA3;
+        vtxId += 8;
+
+        /* Owl Save Icon */
+
+        posX = this->windowPosX + 0xA3;
 
         if ((this->configMode == 0x10) && (j == this->copyDestFileIndex)) {
-            sp98 = this->fileNamesY[j] + 0x2C;
+            tempPosY = this->fileNamesY[j] + 0x2C;
         } else if (((this->configMode == 0x11) || (this->configMode == 0x12)) && (j == this->copyDestFileIndex)) {
-            sp98 = this->buttonYOffsets[j] + sp9C;
+            tempPosY = this->buttonYOffsets[j] + posY;
         } else {
-            sp98 = sp9C + this->buttonYOffsets[j] + this->fileNamesY[j];
+            tempPosY = posY + this->buttonYOffsets[j] + this->fileNamesY[j];
         }
 
-        this->windowContentVtx[i + 0].v.ob[0] = this->windowContentVtx[i + 2].v.ob[0] = var_s1 + 0xE;
+        this->windowContentVtx[vtxId + 0].v.ob[0] = this->windowContentVtx[vtxId + 2].v.ob[0] = posX + 0xE;
 
-        this->windowContentVtx[i + 1].v.ob[0] = this->windowContentVtx[i + 3].v.ob[0] =
-            this->windowContentVtx[i + 0].v.ob[0] + 0x18;
+        this->windowContentVtx[vtxId + 1].v.ob[0] = this->windowContentVtx[vtxId + 3].v.ob[0] =
+            this->windowContentVtx[vtxId + 0].v.ob[0] + 0x18;
 
-        this->windowContentVtx[i + 0].v.ob[1] = this->windowContentVtx[i + 1].v.ob[1] = sp98 - 2;
+        this->windowContentVtx[vtxId + 0].v.ob[1] = this->windowContentVtx[vtxId + 1].v.ob[1] = tempPosY - 2;
 
-        this->windowContentVtx[i + 2].v.ob[1] = this->windowContentVtx[i + 3].v.ob[1] =
-            this->windowContentVtx[i + 0].v.ob[1] - 0xC;
+        this->windowContentVtx[vtxId + 2].v.ob[1] = this->windowContentVtx[vtxId + 3].v.ob[1] =
+            this->windowContentVtx[vtxId + 0].v.ob[1] - 0xC;
 
-        this->windowContentVtx[i + 1].v.tc[0] = this->windowContentVtx[i + 3].v.tc[0] = 0x300;
-        this->windowContentVtx[i + 2].v.tc[1] = this->windowContentVtx[i + 3].v.tc[1] = 0x180;
+        this->windowContentVtx[vtxId + 1].v.tc[0] = this->windowContentVtx[vtxId + 3].v.tc[0] = 0x300;
+        this->windowContentVtx[vtxId + 2].v.tc[1] = this->windowContentVtx[vtxId + 3].v.tc[1] = 0x180;
 
-        i += 4;
+        vtxId += 4;
 
-        for (var_a3 = 0; var_a3 < 2; var_a3++, i += 4) {
+        /* Day Text */
 
-            this->windowContentVtx[i + 0].v.ob[0] = this->windowContentVtx[i + 2].v.ob[0] = var_s1 + var_a3 + 2;
+        for (i = 0; i < 2; i++, vtxId += 4) {
 
-            this->windowContentVtx[i + 1].v.ob[0] = this->windowContentVtx[i + 3].v.ob[0] =
-                this->windowContentVtx[i + 0].v.ob[0] + 0x30;
+            this->windowContentVtx[vtxId + 0].v.ob[0] = this->windowContentVtx[vtxId + 2].v.ob[0] = 2 + posX + i;
 
-            this->windowContentVtx[i + 0].v.ob[1] = this->windowContentVtx[i + 1].v.ob[1] = sp98 - var_a3 - 0x12;
+            this->windowContentVtx[vtxId + 1].v.ob[0] = this->windowContentVtx[vtxId + 3].v.ob[0] =
+                this->windowContentVtx[vtxId + 0].v.ob[0] + 0x30;
 
-            this->windowContentVtx[i + 2].v.ob[1] = this->windowContentVtx[i + 3].v.ob[1] =
-                this->windowContentVtx[i + 0].v.ob[1] - 0x18;
+            this->windowContentVtx[vtxId + 0].v.ob[1] = this->windowContentVtx[vtxId + 1].v.ob[1] = tempPosY - i - 0x12;
 
-            this->windowContentVtx[i + 1].v.tc[0] = this->windowContentVtx[i + 3].v.tc[0] = 0x600;
+            this->windowContentVtx[vtxId + 2].v.ob[1] = this->windowContentVtx[vtxId + 3].v.ob[1] =
+                this->windowContentVtx[vtxId + 0].v.ob[1] - 0x18;
 
-            this->windowContentVtx[i + 2].v.tc[1] = this->windowContentVtx[i + 3].v.tc[1] = 0x300;
+            this->windowContentVtx[vtxId + 1].v.tc[0] = this->windowContentVtx[vtxId + 3].v.tc[0] = 0x600;
+
+            this->windowContentVtx[vtxId + 2].v.tc[1] = this->windowContentVtx[vtxId + 3].v.tc[1] = 0x300;
         }
 
-        var_s1 += 6;
-        temp_t5 = i;
-        for (var_a3 = 0; var_a3 < 5; var_a3++, i += 4, var_s1 += 8) {
+        /* Time Digits */
 
-            this->windowContentVtx[i + 0].v.ob[0] = this->windowContentVtx[i + 2].v.ob[0] = var_s1;
+        posX += 6;
+        temp_t5 = vtxId;
 
-            this->windowContentVtx[i + 1].v.ob[0] = this->windowContentVtx[i + 3].v.ob[0] =
-                this->windowContentVtx[i + 0].v.ob[0] + 0xC;
+        for (i = 0; i < 5; i++, vtxId += 4, posX += 8) {
 
-            this->windowContentVtx[i + 0].v.ob[1] = this->windowContentVtx[i + 1].v.ob[1] = sp98 - 0x2A;
+            this->windowContentVtx[vtxId + 0].v.ob[0] = this->windowContentVtx[vtxId + 2].v.ob[0] = posX;
 
-            this->windowContentVtx[i + 2].v.ob[1] = this->windowContentVtx[i + 3].v.ob[1] =
-                this->windowContentVtx[i + 0].v.ob[1] - 0xC;
+            this->windowContentVtx[vtxId + 1].v.ob[0] = this->windowContentVtx[vtxId + 3].v.ob[0] =
+                this->windowContentVtx[vtxId + 0].v.ob[0] + 0xC;
 
-            this->windowContentVtx[i + 0x14].v.ob[0] = this->windowContentVtx[i + 0x16].v.ob[0] = var_s1 + 1;
+            this->windowContentVtx[vtxId + 0].v.ob[1] = this->windowContentVtx[vtxId + 1].v.ob[1] = tempPosY - 0x2A;
 
-            this->windowContentVtx[i + 0x15].v.ob[0] = this->windowContentVtx[i + 0x17].v.ob[0] =
-                this->windowContentVtx[i + 0x14].v.ob[0] + 0xC;
+            this->windowContentVtx[vtxId + 2].v.ob[1] = this->windowContentVtx[vtxId + 3].v.ob[1] =
+                this->windowContentVtx[vtxId + 0].v.ob[1] - 0xC;
 
-            this->windowContentVtx[i + 0x14].v.ob[1] = this->windowContentVtx[i + 0x15].v.ob[1] = sp98 - 0x2B;
+            this->windowContentVtx[vtxId + 0x14].v.ob[0] = this->windowContentVtx[vtxId + 0x16].v.ob[0] = posX + 1;
 
-            this->windowContentVtx[i + 0x16].v.ob[1] = this->windowContentVtx[i + 0x17].v.ob[1] =
-                this->windowContentVtx[i + 0x14].v.ob[1] - 0xC;
+            this->windowContentVtx[vtxId + 0x15].v.ob[0] = this->windowContentVtx[vtxId + 0x17].v.ob[0] =
+                this->windowContentVtx[vtxId + 0x14].v.ob[0] + 0xC;
+
+            this->windowContentVtx[vtxId + 0x14].v.ob[1] = this->windowContentVtx[vtxId + 0x15].v.ob[1] =
+                tempPosY - 0x2B;
+
+            this->windowContentVtx[vtxId + 0x16].v.ob[1] = this->windowContentVtx[vtxId + 0x17].v.ob[1] =
+                this->windowContentVtx[vtxId + 0x14].v.ob[1] - 0xC;
         }
 
+        // Adjust the colon to the right
         this->windowContentVtx[temp_t5 + 8].v.ob[0] = this->windowContentVtx[temp_t5 + 10].v.ob[0] =
             this->windowContentVtx[temp_t5 + 8].v.ob[0] + 3;
 
@@ -1049,41 +1232,42 @@ void FileSelect_SetWindowContentVtx(GameState* thisx) {
         this->windowContentVtx[temp_t5 + 0x1D].v.ob[0] = this->windowContentVtx[temp_t5 + 0x1F].v.ob[0] =
             this->windowContentVtx[temp_t5 + 0x1C].v.ob[0] + 0xC;
 
-        i += 20;
+        vtxId += 20;
     }
 
-    var_s1 = this->windowPosX - 6;
-    sp9C = -0xC;
+    posX = this->windowPosX - 6;
+    posY = -0xC;
 
-    for (j = 0; j < 2; j++, i += 4, sp9C -= 0x10) {
+    for (j = 0; j < 2; j++, vtxId += 4, posY -= 0x10) {
 
-        this->windowContentVtx[i + 0].v.ob[0] = this->windowContentVtx[i + 2].v.ob[0] = var_s1;
+        this->windowContentVtx[vtxId + 0].v.ob[0] = this->windowContentVtx[vtxId + 2].v.ob[0] = posX;
 
-        this->windowContentVtx[i + 1].v.ob[0] = this->windowContentVtx[i + 3].v.ob[0] =
-            this->windowContentVtx[i + 0].v.ob[0] + 0x40;
+        this->windowContentVtx[vtxId + 1].v.ob[0] = this->windowContentVtx[vtxId + 3].v.ob[0] =
+            this->windowContentVtx[vtxId + 0].v.ob[0] + 0x40;
 
-        this->windowContentVtx[i + 0].v.ob[1] = this->windowContentVtx[i + 1].v.ob[1] =
-            this->buttonYOffsets[j + 3] + sp9C;
+        this->windowContentVtx[vtxId + 0].v.ob[1] = this->windowContentVtx[vtxId + 1].v.ob[1] =
+            this->buttonYOffsets[j + 3] + posY;
 
-        this->windowContentVtx[i + 2].v.ob[1] = this->windowContentVtx[i + 3].v.ob[1] =
-            this->windowContentVtx[i + 0].v.ob[1] - 0x10;
+        this->windowContentVtx[vtxId + 2].v.ob[1] = this->windowContentVtx[vtxId + 3].v.ob[1] =
+            this->windowContentVtx[vtxId + 0].v.ob[1] - 0x10;
 
-        this->windowContentVtx[i + 1].v.tc[0] = this->windowContentVtx[i + 3].v.tc[0] = 0x800;
+        this->windowContentVtx[vtxId + 1].v.tc[0] = this->windowContentVtx[vtxId + 3].v.tc[0] = 0x800;
     }
 
-    this->windowContentVtx[i + 0].v.ob[0] = this->windowContentVtx[i + 2].v.ob[0] = var_s1;
+    this->windowContentVtx[vtxId + 0].v.ob[0] = this->windowContentVtx[vtxId + 2].v.ob[0] = posX;
 
-    this->windowContentVtx[i + 1].v.ob[0] = this->windowContentVtx[i + 3].v.ob[0] =
-        this->windowContentVtx[i + 0].v.ob[0] + 0x40;
+    this->windowContentVtx[vtxId + 1].v.ob[0] = this->windowContentVtx[vtxId + 3].v.ob[0] =
+        this->windowContentVtx[vtxId + 0].v.ob[0] + 0x40;
 
-    this->windowContentVtx[i + 0].v.ob[1] = this->windowContentVtx[i + 1].v.ob[1] = this->buttonYOffsets[5] - 0x34;
+    this->windowContentVtx[vtxId + 0].v.ob[1] = this->windowContentVtx[vtxId + 1].v.ob[1] =
+        this->buttonYOffsets[5] - 0x34;
 
-    this->windowContentVtx[i + 2].v.ob[1] = this->windowContentVtx[i + 3].v.ob[1] =
-        this->windowContentVtx[i + 0].v.ob[1] - 0x10;
+    this->windowContentVtx[vtxId + 2].v.ob[1] = this->windowContentVtx[vtxId + 3].v.ob[1] =
+        this->windowContentVtx[vtxId + 0].v.ob[1] - 0x10;
 
-    this->windowContentVtx[i + 1].v.tc[0] = this->windowContentVtx[i + 3].v.tc[0] = 0x800;
+    this->windowContentVtx[vtxId + 1].v.tc[0] = this->windowContentVtx[vtxId + 3].v.tc[0] = 0x800;
 
-    i += 4;
+    vtxId += 4;
 
     if (((this->menuMode == FS_MENU_MODE_CONFIG) && (this->configMode >= 2)) ||
         ((this->menuMode == FS_MENU_MODE_SELECT) && (this->selectMode == 3))) {
@@ -1099,34 +1283,34 @@ void FileSelect_SetWindowContentVtx(GameState* thisx) {
             j = D_80814650[this->confirmButtonIndex];
         }
 
-        this->windowContentVtx[i + 0].v.ob[0] = this->windowContentVtx[i + 2].v.ob[0] = this->windowPosX - 0xA;
+        this->windowContentVtx[vtxId + 0].v.ob[0] = this->windowContentVtx[vtxId + 2].v.ob[0] = this->windowPosX - 0xA;
 
-        this->windowContentVtx[i + 1].v.ob[0] = this->windowContentVtx[i + 3].v.ob[0] =
-            this->windowContentVtx[i + 0].v.ob[0] + 0x48;
+        this->windowContentVtx[vtxId + 1].v.ob[0] = this->windowContentVtx[vtxId + 3].v.ob[0] =
+            this->windowContentVtx[vtxId + 0].v.ob[0] + 0x48;
 
-        this->windowContentVtx[i + 0].v.ob[1] = this->windowContentVtx[i + 1].v.ob[1] =
+        this->windowContentVtx[vtxId + 0].v.ob[1] = this->windowContentVtx[vtxId + 1].v.ob[1] =
             this->windowContentVtx[j].v.ob[1] + 4;
 
-        this->windowContentVtx[i + 2].v.ob[1] = this->windowContentVtx[i + 3].v.ob[1] =
-            this->windowContentVtx[i + 0].v.ob[1] - 0x18;
+        this->windowContentVtx[vtxId + 2].v.ob[1] = this->windowContentVtx[vtxId + 3].v.ob[1] =
+            this->windowContentVtx[vtxId + 0].v.ob[1] - 0x18;
 
-        this->windowContentVtx[i + 1].v.tc[0] = this->windowContentVtx[i + 3].v.tc[0] = 0x900;
+        this->windowContentVtx[vtxId + 1].v.tc[0] = this->windowContentVtx[vtxId + 3].v.tc[0] = 0x900;
 
-        this->windowContentVtx[i + 2].v.tc[1] = this->windowContentVtx[i + 3].v.tc[1] = 0x300;
+        this->windowContentVtx[vtxId + 2].v.tc[1] = this->windowContentVtx[vtxId + 3].v.tc[1] = 0x300;
     }
 
-    this->windowContentVtx[i + 4].v.ob[0] = this->windowContentVtx[i + 6].v.ob[0] = this->windowPosX + 0x3A;
+    this->windowContentVtx[vtxId + 4].v.ob[0] = this->windowContentVtx[vtxId + 6].v.ob[0] = this->windowPosX + 0x3A;
 
-    this->windowContentVtx[i + 5].v.ob[0] = this->windowContentVtx[i + 7].v.ob[0] =
-        this->windowContentVtx[i + 4].v.ob[0] + 0x80;
+    this->windowContentVtx[vtxId + 5].v.ob[0] = this->windowContentVtx[vtxId + 7].v.ob[0] =
+        this->windowContentVtx[vtxId + 4].v.ob[0] + 0x80;
 
-    this->windowContentVtx[i + 4].v.ob[1] = this->windowContentVtx[i + 5].v.ob[1] =
+    this->windowContentVtx[vtxId + 4].v.ob[1] = this->windowContentVtx[vtxId + 5].v.ob[1] =
         this->windowContentVtx[D_80814638[this->warningButtonIndex]].v.ob[1];
 
-    this->windowContentVtx[i + 6].v.ob[1] = this->windowContentVtx[i + 7].v.ob[1] =
-        this->windowContentVtx[i + 4].v.ob[1] - 0x10;
+    this->windowContentVtx[vtxId + 6].v.ob[1] = this->windowContentVtx[vtxId + 7].v.ob[1] =
+        this->windowContentVtx[vtxId + 4].v.ob[1] - 0x10;
 
-    this->windowContentVtx[i + 5].v.tc[0] = this->windowContentVtx[i + 7].v.tc[0] = 0x1000;
+    this->windowContentVtx[vtxId + 5].v.tc[0] = this->windowContentVtx[vtxId + 7].v.tc[0] = 0x1000;
 }
 #else
 void FileSelect_SetWindowContentVtx(GameState* thisx);

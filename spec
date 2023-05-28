@@ -671,7 +671,11 @@ beginseg
     include "build/src/overlays/gamestates/ovl_file_choose/z_file_copy_erase.o"
     include "build/src/overlays/gamestates/ovl_file_choose/z_file_nameset_NES.o"
     include "build/src/overlays/gamestates/ovl_file_choose/z_file_choose_NES.o"
-    include "build/data/ovl_file_choose/ovl_file_choose.reloc.o"
+    #ifdef NON_MATCHING
+        include "build/src/overlays/gamestates/ovl_file_choose/ovl_file_choose_reloc.o"
+    #else 
+        include "build/data/ovl_file_choose/ovl_file_choose.reloc.o"
+    #endif
 endseg
 
 beginseg

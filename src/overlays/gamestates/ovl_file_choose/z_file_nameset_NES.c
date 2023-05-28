@@ -8,7 +8,7 @@
 #include "z_file_select.h"
 #include "z64rumble.h"
 #include "misc/title_static/title_static.h"
-#include "overlays/ovl_File_Choose/ovl_file_choose.h"
+#include "overlays/ovl_file_choose/ovl_file_choose.h"
 
 void FileSelect_DrawTexQuadI4(GraphicsContext* gfxCtx, TexturePtr texture, s16 point) {
     OPEN_DISPS(gfxCtx);

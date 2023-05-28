@@ -1,7 +1,7 @@
 #include "z_file_select.h"
 
 // Vtx Data
-#include "overlays/ovl_File_Choose/ovl_file_choose.c"
+#include "overlays/ovl_file_choose/ovl_file_choose.c"
 
 u8 D_808141F0[] = {
     // Row 0
