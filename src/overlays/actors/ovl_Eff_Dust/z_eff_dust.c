@@ -268,7 +268,8 @@ void func_80919768(Actor* thisx, PlayState* play2) {
     sp92 = Math_Vec3f_Yaw(&activeCamEye, &thisx->world.pos);
 
     OPEN_DISPS(gfxCtx);
-    func_8012C28C(gfxCtx);
+
+    Gfx_SetupDL25_Opa(gfxCtx);
 
     gDPPipeSync(POLY_XLU_DISP++);
 
@@ -318,7 +319,7 @@ void func_809199FC(Actor* thisx, PlayState* play2) {
     Player* player = GET_PLAYER(play);
 
     OPEN_DISPS(gfxCtx);
-    func_8012C28C(gfxCtx);
+    Gfx_SetupDL25_Opa(gfxCtx);
 
     gDPPipeSync(POLY_XLU_DISP++);
 

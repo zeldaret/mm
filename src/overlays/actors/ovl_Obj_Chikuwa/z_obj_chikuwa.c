@@ -199,7 +199,7 @@ void ObjChikuwa_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     if (this->unk_2A0 < this->unk_29C) {
         for (i = 0; i < this->unk_29C; i++) {

@@ -1575,7 +1575,7 @@ void EnWf_Draw(Actor* thisx, PlayState* play) {
     if (this->actionFunc != func_80990F50) {
         OPEN_DISPS(play->state.gfxCtx);
 
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
         if (this->actor.params == 0) {
             gSPSegment(POLY_OPA_DISP++, 0x08, sNormalEyeTextures[this->eyeIndex]);

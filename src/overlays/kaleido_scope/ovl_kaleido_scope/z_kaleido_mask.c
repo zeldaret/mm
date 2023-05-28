@@ -198,7 +198,7 @@ void KaleidoScope_DrawMaskSelect(PlayState* play) {
 
     KaleidoScope_SetCursorVtxPos(pauseCtx, pauseCtx->cursorSlot[PAUSE_MASK] * 4, pauseCtx->maskVtx);
 
-    func_8012C8AC(play->state.gfxCtx);
+    Gfx_SetupDL42_Opa(play->state.gfxCtx);
 
     // Draw a white box around the items that are equipped on the C buttons
     // Loop over c-buttons (i) and vtx offset (j)

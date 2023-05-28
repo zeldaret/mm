@@ -139,7 +139,7 @@ void func_8091C178(EnButte* this, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C240(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu2(play->state.gfxCtx);
     sp48 = Math_SinS(D_8091D3A0) * 250.0f;
     sp48 = CLAMP(sp48, 0, 255);
 
@@ -446,7 +446,7 @@ void EnButte_Draw(Actor* thisx, PlayState* play) {
     EnButte* this = THIS;
 
     if (this->unk_250 != 0) {
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
         SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, NULL, NULL, NULL);
     }
 
