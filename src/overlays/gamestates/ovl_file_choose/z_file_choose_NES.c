@@ -1362,12 +1362,12 @@ u8 sHealthToQuarterHeartCount[] = {
 s16 sFileSelRupeePrimColors[3][3] = {
     { 200, 255, 100 }, // Default Wallet
     { 170, 170, 255 }, // Adult's Wallet
-    { 255, 105, 105 }, // Tycoon´s Wallet
+    { 255, 105, 105 }, // Giant's Wallet
 };
 s16 sFileSelRupeeEnvColors[3][3] = {
     { 0, 80, 0 },   // Default Wallet
     { 10, 10, 80 }, // Adult's Wallet
-    { 40, 10, 0 },  // Tycoon´s Wallet
+    { 40, 10, 0 },  // Giant's Wallet
 };
 static s16 sHeartPrimColors[2][3] = {
     { 255, 70, 50 },
