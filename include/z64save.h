@@ -1440,7 +1440,7 @@ typedef enum {
  * gSaveContext.eventInf
  */
 
-// gSaveContext.eventInf[0] is used to dog race information (8 entries)
+// gSaveContext.eventInf[0] is used for dog race information (8 entries)
 // EVENTINF_00 to EVENTINF_07
 
 #define EVENTINF_10 0x10
@@ -1506,11 +1506,11 @@ typedef enum {
 #define EVENTINF_67 0x67
 
 // Tracks which ammo is lost during the three day reset
-#define EVENTINF_THREEDAYRESET_HAS_RUPEES 0x70
-#define EVENTINF_THREEDAYRESET_HAS_BOMB_AMMO 0x71
-#define EVENTINF_THREEDAYRESET_HAS_NUT_AMMO 0x72
-#define EVENTINF_THREEDAYRESET_HAS_STICK_AMMO 0x73
-#define EVENTINF_THREEDAYRESET_HAS_ARROW_AMMO 0x74
+#define EVENTINF_THREEDAYRESET_LOST_RUPEES 0x70
+#define EVENTINF_THREEDAYRESET_LOST_BOMB_AMMO 0x71
+#define EVENTINF_THREEDAYRESET_LOST_NUT_AMMO 0x72
+#define EVENTINF_THREEDAYRESET_LOST_STICK_AMMO 0x73
+#define EVENTINF_THREEDAYRESET_LOST_ARROW_AMMO 0x74
 
 #define EVENTINF_75 0x75
 #define EVENTINF_76 0x76

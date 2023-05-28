@@ -63,7 +63,7 @@ ActorInit En_Test6_InitVars = {
     (ActorFunc)EnTest6_Draw,
 };
 
-CutsceneData sDoubleSotCsCamData[] = {
+CutsceneData sDoubleSoTCsCamData[] = {
     // Header
     CS_CAM_SPLINE(13, 424, 0, 100),
 
@@ -116,7 +116,7 @@ CutsceneData sDoubleSotCsCamData[] = {
     CS_CAM_END()
 };
 
-TexturePtr sSoTAmmoDropTextures[] = {
+TexturePtr sSoTCsAmmoDropTextures[] = {
     NULL,              // SOTCS_AMMO_DROP_NONE
     gDropArrows2Tex,   // SOTCS_AMMO_DROP_ARROWS
     gDropBombTex,      // SOTCS_AMMO_DROP_BOMB
@@ -147,7 +147,7 @@ void EnTest6_SetupCutscene(EnTest6* this, PlayState* play) {
     this->actor.home.pos = player->actor.world.pos;
     this->actor.home.rot = player->actor.shape.rot;
 
-    switch (SOT_CS_GET_OCARINA_MODE(&this->actor)) {
+    switch (SOTCS_GET_OCARINA_MODE(&this->actor)) {
         case OCARINA_MODE_APPLY_INV_SOT_FAST:
         case OCARINA_MODE_APPLY_INV_SOT_SLOW:
             EnTest6_SetupInvertedSoTCutscene(this, play);
@@ -163,7 +163,7 @@ void EnTest6_SetupCutscene(EnTest6* this, PlayState* play) {
             ammoFlags = 0;
             yOffset = -900.0f;
 
-            if (CHECK_EVENTINF(EVENTINF_THREEDAYRESET_HAS_RUPEES)) {
+            if (CHECK_EVENTINF(EVENTINF_THREEDAYRESET_LOST_RUPEES)) {
                 for (i = 0; i < 6; i++) {
                     sSoTCsAmmoDrops[(s32)(Rand_ZeroOne() * ARRAY_COUNT(sSoTCsAmmoDrops))].type =
                         SOTCS_AMMO_DROP_RUPEE_GREEN;
@@ -174,7 +174,7 @@ void EnTest6_SetupCutscene(EnTest6* this, PlayState* play) {
                 ammoFlags |= SOTCS_AMMO_FLAG_RUPEE;
             }
 
-            if (CHECK_EVENTINF(EVENTINF_THREEDAYRESET_HAS_ARROW_AMMO)) {
+            if (CHECK_EVENTINF(EVENTINF_THREEDAYRESET_LOST_ARROW_AMMO)) {
                 sSoTCsAmmoDrops[(s32)(Rand_ZeroOne() * ARRAY_COUNT(sSoTCsAmmoDrops))].type = SOTCS_AMMO_DROP_ARROWS;
                 sSoTCsAmmoDrops[(s32)(Rand_ZeroOne() * ARRAY_COUNT(sSoTCsAmmoDrops))].type = SOTCS_AMMO_DROP_ARROWS;
                 if (!(ammoFlags & SOTCS_AMMO_FLAG_RUPEE)) {
@@ -184,7 +184,7 @@ void EnTest6_SetupCutscene(EnTest6* this, PlayState* play) {
                 ammoFlags |= SOTCS_AMMO_FLAG_ARROW;
             }
 
-            if (CHECK_EVENTINF(EVENTINF_THREEDAYRESET_HAS_BOMB_AMMO)) {
+            if (CHECK_EVENTINF(EVENTINF_THREEDAYRESET_LOST_BOMB_AMMO)) {
                 sSoTCsAmmoDrops[(s32)(Rand_ZeroOne() * ARRAY_COUNT(sSoTCsAmmoDrops))].type = SOTCS_AMMO_DROP_BOMB;
                 sSoTCsAmmoDrops[(s32)(Rand_ZeroOne() * ARRAY_COUNT(sSoTCsAmmoDrops))].type = SOTCS_AMMO_DROP_BOMB;
                 if (!(ammoFlags & SOTCS_AMMO_FLAG_RUPEE)) {
@@ -194,7 +194,7 @@ void EnTest6_SetupCutscene(EnTest6* this, PlayState* play) {
                 ammoFlags |= SOTCS_AMMO_FLAG_BOMB;
             }
 
-            if (CHECK_EVENTINF(EVENTINF_THREEDAYRESET_HAS_NUT_AMMO)) {
+            if (CHECK_EVENTINF(EVENTINF_THREEDAYRESET_LOST_NUT_AMMO)) {
                 sSoTCsAmmoDrops[(s32)(Rand_ZeroOne() * ARRAY_COUNT(sSoTCsAmmoDrops))].type = SOTCS_AMMO_DROP_DEKU_NUT;
                 if (!(ammoFlags & (SOTCS_AMMO_FLAG_ARROW | SOTCS_AMMO_FLAG_BOMB | SOTCS_AMMO_FLAG_RUPEE))) {
                     sSoTCsAmmoDrops[(s32)(Rand_ZeroOne() * ARRAY_COUNT(sSoTCsAmmoDrops))].type =
@@ -203,7 +203,7 @@ void EnTest6_SetupCutscene(EnTest6* this, PlayState* play) {
                 ammoFlags |= SOTCS_AMMO_FLAG_NUT;
             }
 
-            if (CHECK_EVENTINF(EVENTINF_THREEDAYRESET_HAS_STICK_AMMO)) {
+            if (CHECK_EVENTINF(EVENTINF_THREEDAYRESET_LOST_STICK_AMMO)) {
                 sSoTCsAmmoDrops[(s32)(Rand_ZeroOne() * ARRAY_COUNT(sSoTCsAmmoDrops))].type = SOTCS_AMMO_DROP_DEKU_STICK;
                 if (!(ammoFlags & (SOTCS_AMMO_FLAG_ARROW | SOTCS_AMMO_FLAG_BOMB | SOTCS_AMMO_FLAG_RUPEE))) {
                     sSoTCsAmmoDrops[(s32)(Rand_ZeroOne() * ARRAY_COUNT(sSoTCsAmmoDrops))].type =
@@ -259,7 +259,7 @@ void EnTest6_DrawAmmoDropDefault(EnTest6* this, PlayState* play, SoTCsAmmoDrops*
         POLY_OPA_DISP = Play_SetFog(play, POLY_OPA_DISP);
         POLY_OPA_DISP = func_8012C724(POLY_OPA_DISP);
 
-        gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sSoTAmmoDropTextures[ammoDrop->type]));
+        gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sSoTCsAmmoDropTextures[ammoDrop->type]));
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, gItemDropDL);
     }
@@ -314,7 +314,7 @@ void EnTest6_DrawAmmoDropRupee(EnTest6* this, PlayState* play, SoTCsAmmoDrops* a
         Matrix_Mult(&play->billboardMtxF, MTXMODE_APPLY);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sSoTAmmoDropTextures[ammoDrop->type]));
+        gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sSoTCsAmmoDropTextures[ammoDrop->type]));
         gSPDisplayList(POLY_OPA_DISP++, gRupeeDL);
     }
 
@@ -347,9 +347,9 @@ void EnTest6_Init(Actor* thisx, PlayState* play2) {
     EnTest6* this = THIS;
     s32 i;
 
-    if (((SOT_CS_GET_OCARINA_MODE(&this->actor) == OCARINA_MODE_APPLY_INV_SOT_FAST) ||
-         (SOT_CS_GET_OCARINA_MODE(&this->actor) == OCARINA_MODE_APPLY_INV_SOT_SLOW) ||
-         (SOT_CS_GET_OCARINA_MODE(&this->actor) == OCARINA_MODE_APPLY_DOUBLE_SOT)) &&
+    if (((SOTCS_GET_OCARINA_MODE(&this->actor) == OCARINA_MODE_APPLY_INV_SOT_FAST) ||
+         (SOTCS_GET_OCARINA_MODE(&this->actor) == OCARINA_MODE_APPLY_INV_SOT_SLOW) ||
+         (SOTCS_GET_OCARINA_MODE(&this->actor) == OCARINA_MODE_APPLY_DOUBLE_SOT)) &&
         (play->playerCsIds[PLAYER_CS_ID_SONG_WARP] == CS_ID_NONE)) {
         Actor_Kill(&this->actor);
         return;
@@ -402,7 +402,7 @@ void EnTest6_Destroy(Actor* thisx, PlayState* play2) {
 }
 
 void EnTest6_StartCutscene(EnTest6* this, PlayState* play) {
-    switch (SOT_CS_GET_OCARINA_MODE(&this->actor)) {
+    switch (SOTCS_GET_OCARINA_MODE(&this->actor)) {
         case OCARINA_MODE_APPLY_INV_SOT_FAST:
         case OCARINA_MODE_APPLY_INV_SOT_SLOW:
             if (!CutsceneManager_IsNext(play->playerCsIds[PLAYER_CS_ID_SONG_WARP])) {
@@ -438,9 +438,9 @@ void EnTest6_SetupInvertedSoTCutscene(EnTest6* this, PlayState* play) {
     this->timer = 100;
     this->screenFillAlpha = 0;
 
-    if (SOT_CS_GET_OCARINA_MODE(&this->actor) == OCARINA_MODE_APPLY_INV_SOT_SLOW) {
+    if (SOTCS_GET_OCARINA_MODE(&this->actor) == OCARINA_MODE_APPLY_INV_SOT_SLOW) {
         play_sound(NA_SE_SY_TIME_CONTROL_SLOW);
-    } else if (SOT_CS_GET_OCARINA_MODE(&this->actor) == OCARINA_MODE_APPLY_INV_SOT_FAST) {
+    } else if (SOTCS_GET_OCARINA_MODE(&this->actor) == OCARINA_MODE_APPLY_INV_SOT_FAST) {
         play_sound(NA_SE_SY_TIME_CONTROL_NORMAL);
     }
 }
@@ -457,11 +457,11 @@ void EnTest6_StopInvertedSoTCutscene(EnTest6* this, PlayState* play) {
     Actor_Kill(&this->actor);
 }
 
-Color_RGB8 sInvSoTFogColor = { 230, 230, 220 };
-Color_RGB8 sInvSoTAmbientColor = { 120, 120, 100 };
-Color_RGB8 sInvSoTDiffuseColor = { 0, 0, 0 };
-s16 sInvSoTFogNear = 500;
-s16 sInvSoTFogFar = 1500;
+Color_RGB8 sInvSoTCsFogColor = { 230, 230, 220 };
+Color_RGB8 sInvSoTCsAmbientColor = { 120, 120, 100 };
+Color_RGB8 sInvSoTCsDiffuseColor = { 0, 0, 0 };
+s16 sInvSoTCsFogNear = 500;
+s16 sInvSoTCsFogFar = 1500;
 
 void EnTest6_InvertedSoTCutscene(EnTest6* this, PlayState* play) {
     Input* input = CONTROLLER1(&play->state);
@@ -491,14 +491,14 @@ void EnTest6_InvertedSoTCutscene(EnTest6* this, PlayState* play) {
 
         case SOTCS_CUEID_INV_SETUP_CLOCKS:
             this->invSotEnvLerp += this->speed;
-            Environment_LerpAmbientColor(play, &sInvSoTAmbientColor, this->invSotEnvLerp);
-            Environment_LerpDiffuseColor(play, &sInvSoTDiffuseColor, this->invSotEnvLerp);
-            Environment_LerpFogColor(play, &sInvSoTFogColor, this->invSotEnvLerp);
-            Environment_LerpFog(play, sInvSoTFogNear, sInvSoTFogFar, this->invSotEnvLerp);
+            Environment_LerpAmbientColor(play, &sInvSoTCsAmbientColor, this->invSotEnvLerp);
+            Environment_LerpDiffuseColor(play, &sInvSoTCsDiffuseColor, this->invSotEnvLerp);
+            Environment_LerpFogColor(play, &sInvSoTCsFogColor, this->invSotEnvLerp);
+            Environment_LerpFog(play, sInvSoTCsFogNear, sInvSoTCsFogFar, this->invSotEnvLerp);
 
             if (this->timer == 90) {
                 this->alpha = 0;
-                if (SOT_CS_GET_OCARINA_MODE(&this->actor) == OCARINA_MODE_APPLY_INV_SOT_FAST) {
+                if (SOTCS_GET_OCARINA_MODE(&this->actor) == OCARINA_MODE_APPLY_INV_SOT_FAST) {
                     this->clockAngle = 0x200;
                     this->clockDist = 0.0f;
                     sp4C = -100.0f;
@@ -545,15 +545,16 @@ void EnTest6_InvertedSoTCutscene(EnTest6* this, PlayState* play) {
                 this->alpha -= 25;
             }
 
-            Environment_LerpAmbientColor(play, &sInvSoTAmbientColor, this->invSotEnvLerp);
-            Environment_LerpDiffuseColor(play, &sInvSoTDiffuseColor, this->invSotEnvLerp);
-            Environment_LerpFogColor(play, &sInvSoTFogColor, this->invSotEnvLerp);
-            Environment_LerpFog(play, sInvSoTFogNear + this->alpha, sInvSoTFogFar + this->alpha, this->invSotEnvLerp);
+            Environment_LerpAmbientColor(play, &sInvSoTCsAmbientColor, this->invSotEnvLerp);
+            Environment_LerpDiffuseColor(play, &sInvSoTCsDiffuseColor, this->invSotEnvLerp);
+            Environment_LerpFogColor(play, &sInvSoTCsFogColor, this->invSotEnvLerp);
+            Environment_LerpFog(play, sInvSoTCsFogNear + this->alpha, sInvSoTCsFogFar + this->alpha,
+                                this->invSotEnvLerp);
 
             this->clockYaw -= this->clockAngle;
             clockYaw = this->clockYaw;
 
-            if (SOT_CS_GET_OCARINA_MODE(&this->actor) == OCARINA_MODE_APPLY_INV_SOT_FAST) {
+            if (SOTCS_GET_OCARINA_MODE(&this->actor) == OCARINA_MODE_APPLY_INV_SOT_FAST) {
                 this->clockAngle += 8;
                 this->clockDist += this->speed;
             } else {
@@ -577,7 +578,7 @@ void EnTest6_InvertedSoTCutscene(EnTest6* this, PlayState* play) {
                     (*this->particles)[i].x += 2.0f * ((2.0f * Rand_ZeroOne()) - 1.0f);
 
                     // Fall or rise depending on slow-down or speed-up
-                    if (SOT_CS_GET_OCARINA_MODE(&this->actor) == OCARINA_MODE_APPLY_INV_SOT_FAST) {
+                    if (SOTCS_GET_OCARINA_MODE(&this->actor) == OCARINA_MODE_APPLY_INV_SOT_FAST) {
                         // Rise up
                         (*this->particles)[i].y += 1.0f;
                     } else {
@@ -603,17 +604,17 @@ void EnTest6_InvertedSoTCutscene(EnTest6* this, PlayState* play) {
 
         case SOTCS_CUEID_INV_END:
             this->invSotEnvLerp -= this->speed;
-            Environment_LerpAmbientColor(play, &sInvSoTAmbientColor, this->invSotEnvLerp);
-            Environment_LerpDiffuseColor(play, &sInvSoTDiffuseColor, this->invSotEnvLerp);
-            Environment_LerpFogColor(play, &sInvSoTFogColor, this->invSotEnvLerp);
-            Environment_LerpFog(play, sInvSoTFogNear, sInvSoTFogFar, this->invSotEnvLerp);
+            Environment_LerpAmbientColor(play, &sInvSoTCsAmbientColor, this->invSotEnvLerp);
+            Environment_LerpDiffuseColor(play, &sInvSoTCsDiffuseColor, this->invSotEnvLerp);
+            Environment_LerpFogColor(play, &sInvSoTCsFogColor, this->invSotEnvLerp);
+            Environment_LerpFog(play, sInvSoTCsFogNear, sInvSoTCsFogFar, this->invSotEnvLerp);
             break;
 
         default:
             break;
     }
 
-    // Update Player Cs Animation
+    // Update Player Cutscene Animation
     if (this->screenFillAlpha != 0) {
         func_800B7298(play, NULL, PLAYER_CSMODE_WAIT);
     } else {
@@ -676,9 +677,9 @@ void EnTest6_InvertedSoTCutscene(EnTest6* this, PlayState* play) {
                (CHECK_BTN_ALL(input->press.button, BTN_A) || CHECK_BTN_ALL(input->press.button, BTN_B))) {
         this->screenFillAlpha = 1;
 
-        if (SOT_CS_GET_OCARINA_MODE(&this->actor) == OCARINA_MODE_APPLY_INV_SOT_SLOW) {
+        if (SOTCS_GET_OCARINA_MODE(&this->actor) == OCARINA_MODE_APPLY_INV_SOT_SLOW) {
             AudioSfx_StopById(NA_SE_SY_TIME_CONTROL_SLOW);
-        } else if (SOT_CS_GET_OCARINA_MODE(&this->actor) == OCARINA_MODE_APPLY_INV_SOT_FAST) {
+        } else if (SOTCS_GET_OCARINA_MODE(&this->actor) == OCARINA_MODE_APPLY_INV_SOT_FAST) {
             AudioSfx_StopById(NA_SE_SY_TIME_CONTROL_NORMAL);
         }
     }
@@ -713,11 +714,11 @@ void EnTest6_StopDoubleSoTCutscene(EnTest6* this, PlayState* play) {
 
 static Vec3f sSubCamUp = { 0.0f, 1.0f, 0.0f };
 
-Color_RGB8 sDoubleSoTFogColor = { 225, 230, 225 };
-Color_RGB8 sDoubleSoTAmbientColor = { 120, 120, 100 };
-Color_RGB8 sDoubleSoTDiffuseColor = { 0, 0, 0 };
-s16 sDoubleSoTFogNear = 940;
-s16 sDoubleSoTFogFar = 2000;
+Color_RGB8 sDoubleSoTCsFogColor = { 225, 230, 225 };
+Color_RGB8 sDoubleSoTCsAmbientColor = { 120, 120, 100 };
+Color_RGB8 sDoubleSoTCsDiffuseColor = { 0, 0, 0 };
+s16 sDoubleSoTCsFogNear = 940;
+s16 sDoubleSoTCsFogFar = 2000;
 
 void EnTest6_DoubleSoTCutscene(EnTest6* this, PlayState* play) {
     Input* input = CONTROLLER1(&play->state);
@@ -750,26 +751,26 @@ void EnTest6_DoubleSoTCutscene(EnTest6* this, PlayState* play) {
     }
 
     if (this->timer == 115) {
-        Environment_LerpAmbientColor(play, &sDoubleSoTAmbientColor, 1.0f);
-        Environment_LerpDiffuseColor(play, &sDoubleSoTDiffuseColor, 1.0f);
-        Environment_LerpFogColor(play, &sDoubleSoTFogColor, 1.0f);
-        Environment_LerpFog(play, sDoubleSoTFogNear, sDoubleSoTFogFar, 1.0f);
+        Environment_LerpAmbientColor(play, &sDoubleSoTCsAmbientColor, 1.0f);
+        Environment_LerpDiffuseColor(play, &sDoubleSoTCsDiffuseColor, 1.0f);
+        Environment_LerpFogColor(play, &sDoubleSoTCsFogColor, 1.0f);
+        Environment_LerpFog(play, sDoubleSoTCsFogNear, sDoubleSoTCsFogFar, 1.0f);
         play->unk_18844 = true;
     }
 
     if (this->timer == 15) {
-        Environment_LerpAmbientColor(play, &sDoubleSoTAmbientColor, 0.0f);
-        Environment_LerpDiffuseColor(play, &sDoubleSoTDiffuseColor, 0.0f);
-        Environment_LerpFogColor(play, &sDoubleSoTFogColor, 0.0f);
-        Environment_LerpFog(play, sDoubleSoTFogNear, sDoubleSoTFogFar, 0.0f);
+        Environment_LerpAmbientColor(play, &sDoubleSoTCsAmbientColor, 0.0f);
+        Environment_LerpDiffuseColor(play, &sDoubleSoTCsDiffuseColor, 0.0f);
+        Environment_LerpFogColor(play, &sDoubleSoTCsFogColor, 0.0f);
+        Environment_LerpFog(play, sDoubleSoTCsFogNear, sDoubleSoTCsFogFar, 0.0f);
         play->unk_18844 = false;
     }
 
     if (this->screenFillAlpha >= 20) {
-        Environment_LerpAmbientColor(play, &sDoubleSoTAmbientColor, this->doubleSotEnvLerp);
-        Environment_LerpDiffuseColor(play, &sDoubleSoTDiffuseColor, this->doubleSotEnvLerp);
-        Environment_LerpFogColor(play, &sDoubleSoTFogColor, this->doubleSotEnvLerp);
-        Environment_LerpFog(play, sDoubleSoTFogNear, sDoubleSoTFogFar, this->doubleSotEnvLerp);
+        Environment_LerpAmbientColor(play, &sDoubleSoTCsAmbientColor, this->doubleSotEnvLerp);
+        Environment_LerpDiffuseColor(play, &sDoubleSoTCsDiffuseColor, this->doubleSotEnvLerp);
+        Environment_LerpFogColor(play, &sDoubleSoTCsFogColor, this->doubleSotEnvLerp);
+        Environment_LerpFog(play, sDoubleSoTCsFogNear, sDoubleSoTCsFogFar, this->doubleSotEnvLerp);
         play->unk_18844 = false;
     }
 
@@ -841,7 +842,7 @@ void EnTest6_DoubleSoTCutscene(EnTest6* this, PlayState* play) {
     }
 
     if ((this->timer <= 115) && (this->timer >= 16)) {
-        CutsceneCamera_UpdateSplines((u8*)sDoubleSotCsCamData, &this->csCamInfo);
+        CutsceneCamera_UpdateSplines((u8*)sDoubleSoTCsCamData, &this->csCamInfo);
     } else if (this->timer < 16) {
         subCamId = CutsceneManager_GetCurrentSubCamId(play->playerCsIds[PLAYER_CS_ID_SONG_WARP]);
 

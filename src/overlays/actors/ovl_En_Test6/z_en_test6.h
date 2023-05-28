@@ -7,7 +7,7 @@ struct EnTest6;
 
 typedef void (*EnTest6ActionFunc)(struct EnTest6*, PlayState*);
 
-#define SOT_CS_GET_OCARINA_MODE(thisx) ((thisx)->params)
+#define SOTCS_GET_OCARINA_MODE(thisx) ((thisx)->params)
 
 // Double Sot Cs:
 // Cues from `SPOT00CutsceneData_009710`
@@ -18,7 +18,7 @@ typedef void (*EnTest6ActionFunc)(struct EnTest6*, PlayState*);
 
 // CueIds are a mix of cues externally from data above and internally based on a certain state
 
-typedef enum SotCsCueId {
+typedef enum SoTCsCueId {
     /* 0x00 */ SOTCS_CUEID_NONE,
     /* 0x01 */ SOTCS_CUEID_DOUBLE_1, // frames 11-44, 82-98, 99-100
     /* 0x02 */ SOTCS_CUEID_DOUBLE_0, // frames 10-11
@@ -34,12 +34,12 @@ typedef enum SotCsCueId {
     /* 0x5D */ SOTCS_CUEID_INV_UNUSED = 93,
     /* 0x5F */ SOTCS_CUEID_INV_CLOCKS = 95,
     /* 0x63 */ SOTCS_CUEID_INV_END = 99
-} SotCsCueId;
+} SoTCsCueId;
 
 typedef struct {
-    /* 0x00 */ LightNode* node;
-    /* 0x04 */ LightInfo info;
-} EnTest6Light; // size = 0x14
+    /* 0x0 */ LightNode* node;
+    /* 0x4 */ LightInfo info;
+} SoTCsLight; // size = 0x14
 
 #define SOTCS_INV_NUM_CLOCKS 6
 #define SOTCS_DOUBLE_NUM_CLOCKS 51
@@ -56,7 +56,7 @@ typedef struct EnTest6 {
     /* 0x158 */ f32 clockDistSpeed; // Radial Speed
     /* 0x15C */ f32 invSotEnvLerp;
     /* 0x160 */ f32 doubleSotEnvLerp;
-    /* 0x164 */ EnTest6Light lights[2];
+    /* 0x164 */ SoTCsLight lights[2];
     /* 0x18C */ CutsceneCamera csCamInfo;
     /* 0x20C */ Vec3f clockPos[SOTCS_INV_NUM_CLOCKS];
     /* 0x254 */ Vec3f (*particles)[SOTCS_NUM_PARTICLES];
