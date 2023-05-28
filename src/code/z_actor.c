@@ -234,8 +234,9 @@ void ActorShadow_DrawFeet(Actor* actor, Lights* mapper, PlayState* play) {
                 if (distToFloor <= 10.0f) {
                     actor->shape.feetFloorFlags |= spB8;
 
-                    if ((actor->depthInWater < 0.0f) && (bgId == 0x32) && ((actor->shape.unk_17 & spB8) != 0)) {
-                        if (func_800C9C24(&play->colCtx, poly, bgId, 1)) {
+                    if ((actor->depthInWater < 0.0f) && (bgId == BGCHECK_SCENE) && (actor->shape.unk_17 & spB8)) {
+                        if (SurfaceType_HasMaterialProperty(&play->colCtx, poly, bgId,
+                                                            MATERIAL_PROPERTY_SOFT_IMPRINT)) {
                             SkinMatrix_MtxFCopy(&sp13C, &spFC);
                             SkinMatrix_MulYRotation(&spFC, actor->shape.rot.y);
                             EffFootmark_Add(play, &spFC, actor, i, feetPosPtr, (actor->shape.shadowScale * 0.3f),
@@ -907,41 +908,38 @@ s32 func_800B6434(PlayState* play, TitleCardContext* titleCtx) {
     return true;
 }
 
-// ActorContext_1F4 Init
-void func_800B6468(PlayState* play) {
-    play->actorCtx.unk_1F4.timer = 0;
+void Actor_InitPlayerImpact(PlayState* play) {
+    play->actorCtx.playerImpact.timer = 0;
 }
 
-// ActorContext_1F4 Update
-void func_800B6474(PlayState* play) {
-    DECR(play->actorCtx.unk_1F4.timer);
+void Actor_UpdatePlayerImpact(PlayState* play) {
+    DECR(play->actorCtx.playerImpact.timer);
 }
 
-// ActorContext_1F4 setter something
-s32 func_800B648C(PlayState* play, s32 arg1, s32 timer, f32 arg3, Vec3f* arg4) {
-    if ((play->actorCtx.unk_1F4.timer != 0) && (arg3 < play->actorCtx.unk_1F4.unk_04)) {
+s32 Actor_SetPlayerImpact(PlayState* play, PlayerImpactType type, s32 timer, f32 dist, Vec3f* pos) {
+    if ((play->actorCtx.playerImpact.timer != 0) && (dist < play->actorCtx.playerImpact.dist)) {
         return false;
     }
 
-    play->actorCtx.unk_1F4.unk_00 = arg1;
-    play->actorCtx.unk_1F4.timer = timer;
-    play->actorCtx.unk_1F4.unk_04 = arg3;
-    Math_Vec3f_Copy(&play->actorCtx.unk_1F4.unk_08, arg4);
+    play->actorCtx.playerImpact.type = type;
+    play->actorCtx.playerImpact.timer = timer;
+    play->actorCtx.playerImpact.dist = dist;
+    Math_Vec3f_Copy(&play->actorCtx.playerImpact.pos, pos);
 
     return true;
 }
 
-// ActorContext_1F4 getter something
-f32 func_800B64FC(PlayState* play, f32 arg1, Vec3f* arg2, u32* arg3) {
-    f32 temp_f8;
+f32 Actor_GetPlayerImpact(PlayState* play, f32 range, Vec3f* pos, PlayerImpactType* type) {
+    f32 dist;
 
-    if ((play->actorCtx.unk_1F4.timer == 0) || (arg1 == 0.0f)) {
+    if ((play->actorCtx.playerImpact.timer == 0) || (range == 0.0f)) {
         return -1.0f;
     }
 
-    temp_f8 = Math_Vec3f_DistXYZ(&play->actorCtx.unk_1F4.unk_08, arg2) / arg1;
-    *arg3 = play->actorCtx.unk_1F4.unk_00;
-    return play->actorCtx.unk_1F4.unk_04 - temp_f8;
+    dist = Math_Vec3f_DistXYZ(&play->actorCtx.playerImpact.pos, pos) / range;
+    *type = play->actorCtx.playerImpact.type;
+
+    return play->actorCtx.playerImpact.dist - dist;
 }
 
 /**
@@ -1370,13 +1368,13 @@ void func_800B722C(GameState* gameState, Player* player) {
 s32 func_800B724C(PlayState* play, Actor* actor, u8 csMode) {
     Player* player = GET_PLAYER(play);
 
-    if ((player->csMode == PLAYER_CSMODE_5) || ((csMode == PLAYER_CSMODE_6) && (player->csMode == PLAYER_CSMODE_0))) {
+    if ((player->csMode == PLAYER_CSMODE_5) || ((csMode == PLAYER_CSMODE_END) && (player->csMode == PLAYER_CSMODE_0))) {
         return false;
     }
 
     player->csMode = csMode;
     player->unk_398 = actor;
-    player->unk_3BA = 0;
+    player->doorBgCamIndex = 0;
     return true;
 }
 
@@ -1384,7 +1382,7 @@ s32 func_800B7298(PlayState* play, Actor* actor, u8 csMode) {
     Player* player = GET_PLAYER(play);
 
     if (func_800B724C(play, actor, csMode)) {
-        player->unk_3BA = 1;
+        player->doorBgCamIndex = 1;
         return true;
     }
     return false;
@@ -1502,12 +1500,12 @@ void Actor_GetSlopeDirection(CollisionPoly* floorPoly, Vec3f* slopeNormal, s16* 
     *downwardSlopeYaw = Math_Atan2S_XY(slopeNormal->z, slopeNormal->x);
 }
 
-s32 func_800B761C(Actor* actor, f32 arg1, s32 arg2) {
+s32 func_800B761C(Actor* actor, f32 arg1, s32 updBgCheckInfoFlags) {
     if (actor->bgCheckFlags & BGCHECKFLAG_GROUND) {
         actor->bgCheckFlags &= ~BGCHECKFLAG_GROUND;
         actor->bgCheckFlags |= BGCHECKFLAG_GROUND_LEAVE;
 
-        if ((actor->velocity.y < 0.0f) && (arg2 & 0x10)) {
+        if ((actor->velocity.y < 0.0f) && (updBgCheckInfoFlags & UPDBGCHECKINFO_FLAG_10)) {
             actor->velocity.y = 0.0f;
         }
         return false;
@@ -1516,16 +1514,16 @@ s32 func_800B761C(Actor* actor, f32 arg1, s32 arg2) {
     return true;
 }
 
-s32 func_800B7678(PlayState* play, Actor* actor, Vec3f* pos, s32 flags) {
+s32 func_800B7678(PlayState* play, Actor* actor, Vec3f* pos, s32 updBgCheckInfoFlags) {
     f32 distToFloor;
     s32 bgId;
 
-    pos->y += (flags & 0x800) ? 10.0f : 50.0f;
+    pos->y += (updBgCheckInfoFlags & UPDBGCHECKINFO_FLAG_800) ? 10.0f : 50.0f;
 
     actor->floorHeight = BgCheck_EntityRaycastFloor5_2(play, &play->colCtx, &actor->floorPoly, &bgId, actor, pos);
     actor->bgCheckFlags &= ~(BGCHECKFLAG_GROUND_TOUCH | BGCHECKFLAG_GROUND_LEAVE | BGCHECKFLAG_GROUND_STRICT);
     if (actor->floorHeight <= BGCHECK_Y_MIN) {
-        return func_800B761C(actor, BGCHECK_Y_MIN, flags);
+        return func_800B761C(actor, BGCHECK_Y_MIN, updBgCheckInfoFlags);
     }
 
     distToFloor = actor->floorHeight - actor->world.pos.y;
@@ -1551,47 +1549,47 @@ s32 func_800B7678(PlayState* play, Actor* actor, Vec3f* pos, s32 flags) {
         if (actor->velocity.y <= 0.0f) {
             if (!(actor->bgCheckFlags & BGCHECKFLAG_GROUND)) {
                 actor->bgCheckFlags |= BGCHECKFLAG_GROUND_TOUCH;
-            } else if ((flags & 8) && (actor->gravity < 0.0f)) {
+            } else if ((updBgCheckInfoFlags & UPDBGCHECKINFO_FLAG_8) && (actor->gravity < 0.0f)) {
                 actor->velocity.y = -4.0f;
-            } else if (!(flags & 0x100)) {
+            } else if (!(updBgCheckInfoFlags & UPDBGCHECKINFO_FLAG_100)) {
                 actor->velocity.y = 0.0f;
             }
 
             actor->bgCheckFlags |= BGCHECKFLAG_GROUND;
-            BgCheck2_AttachToMesh(&play->colCtx, actor, (s32)actor->floorBgId);
+            DynaPolyActor_AttachCarriedActor(&play->colCtx, actor, actor->floorBgId);
         }
     } else {
-        return func_800B761C(actor, distToFloor, flags);
+        return func_800B761C(actor, distToFloor, updBgCheckInfoFlags);
     }
 
     return true;
 }
 
 void Actor_UpdateBgCheckInfo(PlayState* play, Actor* actor, f32 wallCheckHeight, f32 wallCheckRadius,
-                             f32 ceilingCheckHeight, u32 flags) {
+                             f32 ceilingCheckHeight, u32 updBgCheckInfoFlags) {
     f32 sp94 = actor->world.pos.y - actor->prevPos.y;
     s32 pad;
     Vec3f pos;
 
     if ((actor->floorBgId != BGCHECK_SCENE) && (actor->bgCheckFlags & BGCHECKFLAG_GROUND)) {
-        BgCheck2_UpdateActorAttachedToMesh(&play->colCtx, actor->floorBgId, actor);
+        DynaPolyActor_TransformCarriedActor(&play->colCtx, actor->floorBgId, actor);
     }
 
-    if (flags & 1) {
+    if (updBgCheckInfoFlags & UPDBGCHECKINFO_FLAG_1) {
         s32 bgId;
 
         actor->bgCheckFlags &= ~BGCHECKFLAG_PLAYER_1000;
-        if ((!(flags & 0x80) &&
+        if ((!(updBgCheckInfoFlags & UPDBGCHECKINFO_FLAG_80) &&
              (BgCheck_EntitySphVsWall3(&play->colCtx, &pos, &actor->world.pos, &actor->prevPos, wallCheckRadius,
                                        &actor->wallPoly, &bgId, actor, wallCheckHeight))) ||
-            ((flags & 0x80) &&
+            ((updBgCheckInfoFlags & UPDBGCHECKINFO_FLAG_80) &&
              (BgCheck_EntitySphVsWall4(&play->colCtx, &pos, &actor->world.pos, &actor->prevPos, wallCheckRadius,
                                        &actor->wallPoly, &bgId, actor, wallCheckHeight)))) {
             CollisionPoly* sp7C = actor->wallPoly;
 
             actor->bgCheckFlags |= BGCHECKFLAG_WALL;
-            if ((flags & 0x200) && (actor->bgCheckFlags & BGCHECKFLAG_PLAYER_1000) && ((s32)sp7C->normal.y > 0) &&
-                (sqrtf(SQXYZ(actor->colChkInfo.displacement)) < 10.0f)) {
+            if ((updBgCheckInfoFlags & UPDBGCHECKINFO_FLAG_200) && (actor->bgCheckFlags & BGCHECKFLAG_PLAYER_1000) &&
+                ((s32)sp7C->normal.y > 0) && (sqrtf(SQXYZ(actor->colChkInfo.displacement)) < 10.0f)) {
                 actor->bgCheckFlags &= ~BGCHECKFLAG_WALL;
             } else if (actor->bgCheckFlags & BGCHECKFLAG_WALL) {
                 Math_Vec3f_Copy(&actor->world.pos, &pos);
@@ -1606,7 +1604,7 @@ void Actor_UpdateBgCheckInfo(PlayState* play, Actor* actor, f32 wallCheckHeight,
 
     pos.x = actor->world.pos.x;
     pos.z = actor->world.pos.z;
-    if (flags & 2) {
+    if (updBgCheckInfoFlags & UPDBGCHECKINFO_FLAG_2) {
         f32 y;
 
         pos.y = actor->prevPos.y + 4.0f;
@@ -1618,12 +1616,12 @@ void Actor_UpdateBgCheckInfo(PlayState* play, Actor* actor, f32 wallCheckHeight,
             actor->bgCheckFlags &= ~BGCHECKFLAG_CEILING;
         }
     }
-    if (flags & 4) {
+    if (updBgCheckInfoFlags & UPDBGCHECKINFO_FLAG_4) {
         WaterBox* waterbox;
         f32 y;
 
         pos.y = actor->prevPos.y;
-        func_800B7678(play, actor, &pos, flags);
+        func_800B7678(play, actor, &pos, updBgCheckInfoFlags);
         y = actor->world.pos.y;
 
         if (WaterBox_GetSurface1(play, &play->colCtx, actor->world.pos.x, actor->world.pos.z, &y, &waterbox)) {
@@ -1632,7 +1630,7 @@ void Actor_UpdateBgCheckInfo(PlayState* play, Actor* actor, f32 wallCheckHeight,
                 actor->bgCheckFlags &= ~(BGCHECKFLAG_WATER | BGCHECKFLAG_WATER_TOUCH);
             } else if (!(actor->bgCheckFlags & BGCHECKFLAG_WATER)) {
                 actor->bgCheckFlags |= (BGCHECKFLAG_WATER | BGCHECKFLAG_WATER_TOUCH);
-                if (!(flags & 0x40)) {
+                if (!(updBgCheckInfoFlags & UPDBGCHECKINFO_FLAG_40)) {
                     Vec3f sp64;
 
                     sp64.x = actor->world.pos.x;
@@ -1652,7 +1650,7 @@ void Actor_UpdateBgCheckInfo(PlayState* play, Actor* actor, f32 wallCheckHeight,
         }
     }
 
-    if (flags & 0x400) {
+    if (updBgCheckInfoFlags & UPDBGCHECKINFO_FLAG_400) {
         WaterBox* waterbox;
         f32 y = actor->world.pos.y;
 
@@ -1663,7 +1661,7 @@ void Actor_UpdateBgCheckInfo(PlayState* play, Actor* actor, f32 wallCheckHeight,
                 actor->bgCheckFlags &= ~(BGCHECKFLAG_WATER | BGCHECKFLAG_WATER_TOUCH);
             } else if (!(actor->bgCheckFlags & BGCHECKFLAG_WATER)) {
                 actor->bgCheckFlags |= (BGCHECKFLAG_WATER | BGCHECKFLAG_WATER_TOUCH);
-                if (!(flags & 0x40)) {
+                if (!(updBgCheckInfoFlags & UPDBGCHECKINFO_FLAG_40)) {
                     Vec3f sp50;
 
                     sp50.x = actor->world.pos.x;
@@ -1879,7 +1877,7 @@ s32 func_800B8500(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, Player
     player->talkActorDistance = actor->xzDistToPlayer;
     player->exchangeItemId = exchangeItemId;
 
-    ActorCutscene_SetIntentToPlay(0x7C);
+    CutsceneManager_Queue(CS_ID_GLOBAL_TALK);
     return true;
 }
 
@@ -2031,7 +2029,7 @@ s32 Actor_OfferGetItem(Actor* actor, PlayState* play, GetItemId getItemId, f32 x
     if (!(player->stateFlags1 &
           (PLAYER_STATE1_80 | PLAYER_STATE1_1000 | PLAYER_STATE1_2000 | PLAYER_STATE1_4000 | PLAYER_STATE1_40000 |
            PLAYER_STATE1_80000 | PLAYER_STATE1_100000 | PLAYER_STATE1_200000)) &&
-        Player_GetExplosiveHeld(player) < 0) {
+        (Player_GetExplosiveHeld(player) <= PLAYER_EXPLOSIVE_NONE)) {
         if ((actor->xzDistToPlayer <= xzRange) && (fabsf(actor->playerHeightRel) <= fabsf(yRange))) {
             if ((getItemId == GI_MASK_CIRCUS_LEADER || getItemId == GI_PENDANT_OF_MEMORIES ||
                  getItemId == GI_DEED_LAND ||
@@ -2047,7 +2045,7 @@ s32 Actor_OfferGetItem(Actor* actor, PlayState* play, GetItemId getItemId, f32 x
                     player->getItemDirection = absYawDiff;
 
                     if ((getItemId > GI_NONE) && (getItemId < GI_MAX)) {
-                        ActorCutscene_SetIntentToPlay(play->playerActorCsIds[1]);
+                        CutsceneManager_Queue(play->playerCsIds[PLAYER_CS_ID_ITEM_GET]);
                     }
 
                     return true;
@@ -2122,7 +2120,7 @@ s32 Actor_SetRideActor(PlayState* play, Actor* horse, s32 mountSide) {
            PLAYER_STATE1_40000 | PLAYER_STATE1_80000 | PLAYER_STATE1_100000 | PLAYER_STATE1_200000))) {
         player->rideActor = horse;
         player->mountSide = mountSide;
-        ActorCutscene_SetIntentToPlay(0x7C);
+        CutsceneManager_Queue(CS_ID_GLOBAL_TALK);
         return true;
     }
 
@@ -2183,20 +2181,20 @@ void Actor_PlaySfx(Actor* actor, u16 sfxId) {
 }
 
 void func_800B8EF4(PlayState* play, Actor* actor) {
-    u32 sfxId;
+    SurfaceSfxOffset surfaceSfxOffset;
 
     if (actor->bgCheckFlags & BGCHECKFLAG_WATER) {
         if (actor->depthInWater < 20.0f) {
-            sfxId = NA_SE_PL_WALK_WATER0 - SFX_FLAG;
+            surfaceSfxOffset = SURFACE_SFX_OFFSET_WATER_SHALLOW;
         } else {
-            sfxId = NA_SE_PL_WALK_WATER1 - SFX_FLAG;
+            surfaceSfxOffset = SURFACE_SFX_OFFSET_WATER_DEEP;
         }
     } else {
-        sfxId = SurfaceType_GetSfx(&play->colCtx, actor->floorPoly, actor->floorBgId);
+        surfaceSfxOffset = SurfaceType_GetSfxOffset(&play->colCtx, actor->floorPoly, actor->floorBgId);
     }
 
     Audio_PlaySfxAtPos(&actor->projectedPos, NA_SE_EV_BOMB_BOUND);
-    Audio_PlaySfxAtPos(&actor->projectedPos, sfxId + SFX_FLAG);
+    Audio_PlaySfxAtPos(&actor->projectedPos, NA_SE_PL_WALK_GROUND + surfaceSfxOffset);
 }
 
 void func_800B8F98(Actor* actor, u16 sfxId) {
@@ -2248,7 +2246,7 @@ void func_800B9098(Actor* actor) {
 }
 
 s32 func_800B90AC(PlayState* play, Actor* actor, CollisionPoly* polygon, s32 bgId, Vec3f* arg4) {
-    if (func_800C99D4(&play->colCtx, polygon, bgId) == 8) {
+    if (SurfaceType_GetFloorType(&play->colCtx, polygon, bgId) == FLOOR_TYPE_8) {
         return true;
     }
 
@@ -2302,7 +2300,7 @@ void Actor_InitContext(PlayState* play, ActorContext* actorCtx, ActorEntry* acto
     actorCtx->sceneFlags.clearedRoom = cycleFlags->clearedRoom;
 
     TitleCard_ContextInit(&play->state, &actorCtx->titleCtxt);
-    func_800B6468(play);
+    Actor_InitPlayerImpact(play);
 
     actorCtx->absoluteSpace = NULL;
 
@@ -2425,7 +2423,7 @@ Actor* Actor_UpdateActor(UpdateActor_Params* params) {
                 }
 
                 actor->update(actor, play);
-                BgCheck_ResetFlagsIfLoadedActor(play, &play->colCtx.dyna, actor);
+                DynaPoly_UnsetAllInteractFlags(play, &play->colCtx.dyna, actor);
             }
 
             CollisionCheck_ResetDamage(&actor->colChkInfo);
@@ -2515,7 +2513,7 @@ void Actor_UpdateAll(PlayState* play, ActorContext* actorCtx) {
         }
 
         if (i == ACTORCAT_BG) {
-            DynaPoly_Setup(play, &play->colCtx.dyna);
+            DynaPoly_UpdateContext(play, &play->colCtx.dyna);
         }
     }
 
@@ -2558,7 +2556,7 @@ void Actor_UpdateAll(PlayState* play, ActorContext* actorCtx) {
     }
 
     TitleCard_Update(&play->state, &actorCtx->titleCtxt);
-    func_800B6474(play);
+    Actor_UpdatePlayerImpact(play);
     DynaPoly_UpdateBgActorTransforms(play, &play->colCtx.dyna);
 }
 
@@ -2576,7 +2574,7 @@ void Actor_Draw(PlayState* play, Actor* actor) {
                    (actor->flags & (ACTOR_FLAG_10000000 | ACTOR_FLAG_400000)) ? NULL : &actor->world.pos, play);
     Lights_Draw(light, play->state.gfxCtx);
 
-    if (actor->flags & ACTOR_FLAG_1000) {
+    if (actor->flags & ACTOR_FLAG_IGNORE_QUAKE) {
         Matrix_SetTranslateRotateYXZ(actor->world.pos.x + play->mainCamera.quakeOffset.x,
                                      actor->world.pos.y +
                                          ((actor->shape.yOffset * actor->scale.y) + play->mainCamera.quakeOffset.y),
@@ -2655,11 +2653,11 @@ void func_800B9D1C(Actor* actor) {
     if (sfxId) {}
 
     if (actor->audioFlags & 0x40) {
-        func_801A1FB4(3, &actor->projectedPos, NA_BGM_MUSIC_BOX_HOUSE, 1500.0f);
+        func_801A1FB4(SEQ_PLAYER_BGM_SUB, &actor->projectedPos, NA_BGM_MUSIC_BOX_HOUSE, 1500.0f);
     }
 
     if (actor->audioFlags & 0x20) {
-        func_801A1FB4(0, &actor->projectedPos, NA_BGM_KAMARO_DANCE, 900.0f);
+        func_801A1FB4(SEQ_PLAYER_BGM_MAIN, &actor->projectedPos, NA_BGM_KAMARO_DANCE, 900.0f);
     }
 }
 
@@ -3125,8 +3123,8 @@ void Actor_FreeOverlay(ActorOverlay* entry) {
 
 Actor* Actor_Spawn(ActorContext* actorCtx, PlayState* play, s16 actorId, f32 posX, f32 posY, f32 posZ, s16 rotX,
                    s16 rotY, s16 rotZ, s32 params) {
-    return Actor_SpawnAsChildAndCutscene(actorCtx, play, actorId, posX, posY, posZ, rotX, rotY, rotZ, params, -1,
-                                         HALFDAYBIT_ALL, NULL);
+    return Actor_SpawnAsChildAndCutscene(actorCtx, play, actorId, posX, posY, posZ, rotX, rotY, rotZ, params,
+                                         CS_ID_NONE, HALFDAYBIT_ALL, NULL);
 }
 
 ActorInit* Actor_LoadOverlay(ActorContext* actorCtx, s16 index) {
@@ -3170,7 +3168,7 @@ ActorInit* Actor_LoadOverlay(ActorContext* actorCtx, s16 index) {
 }
 
 Actor* Actor_SpawnAsChildAndCutscene(ActorContext* actorCtx, PlayState* play, s16 index, f32 x, f32 y, f32 z, s16 rotX,
-                                     s16 rotY, s16 rotZ, s32 params, u32 cutscene, u32 halfDaysBits, Actor* parent) {
+                                     s16 rotY, s16 rotZ, s32 params, u32 csId, u32 halfDaysBits, Actor* parent) {
     s32 pad;
     Actor* actor;
     ActorInit* actorInit;
@@ -3236,10 +3234,10 @@ Actor* Actor_SpawnAsChildAndCutscene(ActorContext* actorCtx, PlayState* play, s1
     actor->home.rot.y = rotY;
     actor->home.rot.z = rotZ;
     actor->params = params & 0xFFFF;
-    actor->cutscene = (cutscene & 0x7F);
+    actor->csId = csId & 0x7F;
 
-    if (actor->cutscene == 0x7F) {
-        actor->cutscene = -1;
+    if (actor->csId == 0x7F) {
+        actor->csId = CS_ID_NONE;
     }
 
     if (halfDaysBits != 0) {
@@ -3262,8 +3260,8 @@ Actor* Actor_SpawnAsChildAndCutscene(ActorContext* actorCtx, PlayState* play, s1
 
 Actor* Actor_SpawnAsChild(ActorContext* actorCtx, Actor* parent, PlayState* play, s16 actorId, f32 posX, f32 posY,
                           f32 posZ, s16 rotX, s16 rotY, s16 rotZ, s32 params) {
-    return Actor_SpawnAsChildAndCutscene(actorCtx, play, actorId, posX, posY, posZ, rotX, rotY, rotZ, params, -1,
-                                         parent->halfDaysBits, parent);
+    return Actor_SpawnAsChildAndCutscene(actorCtx, play, actorId, posX, posY, posZ, rotX, rotY, rotZ, params,
+                                         CS_ID_NONE, parent->halfDaysBits, parent);
 }
 
 void Actor_SpawnTransitionActors(PlayState* play, ActorContext* actorCtx) {
@@ -3394,7 +3392,7 @@ void func_800BB604(GameState* gameState, ActorContext* actorCtx, Player* player,
 
                 if ((actor != targetedActor) || (actor->flags & ACTOR_FLAG_80000)) {
                     temp_f0_2 = func_800B82EC(actor, player, D_801ED8DC);
-                    phi_s2_2 = (actor->flags & 1) != 0;
+                    phi_s2_2 = (actor->flags & ACTOR_FLAG_1) != 0;
                     if (phi_s2_2) {
                         phi_s2_2 = temp_f0_2 < D_801ED8C8;
                     }
@@ -3492,49 +3490,50 @@ void Enemy_StartFinishingBlow(PlayState* play, Actor* actor) {
 }
 
 // blinking routine
-s16 func_800BBAC0(s16 arg0[2], s16 arg1, s16 arg2, s16 arg3) {
-    if (DECR(arg0[1]) == 0) {
-        arg0[1] = Rand_S16Offset(arg1, arg2);
+s16 func_800BBAC0(BlinkInfo* info, s16 arg1, s16 arg2, s16 arg3) {
+    if (DECR(info->blinkTimer) == 0) {
+        info->blinkTimer = Rand_S16Offset(arg1, arg2);
     }
 
-    if (arg0[1] - arg3 > 0) {
-        arg0[0] = 0;
-    } else if ((arg0[1] - arg3 >= -1) || (arg0[1] < 2)) {
-        arg0[0] = 1;
+    if (info->blinkTimer - arg3 > 0) {
+        info->eyeTexIndex = 0;
+    } else if ((info->blinkTimer - arg3 >= -1) || (info->blinkTimer < 2)) {
+        info->eyeTexIndex = 1;
     } else {
-        arg0[0] = 2;
+        info->eyeTexIndex = 2;
     }
 
-    return arg0[0];
+    return info->eyeTexIndex;
 }
 
 // blinking routine
-s16 func_800BBB74(s16 arg0[2], s16 arg1, s16 arg2, s16 arg3) {
-    if (DECR(arg0[1]) == 0) {
-        arg0[1] = Rand_S16Offset(arg1, arg2);
+s16 func_800BBB74(BlinkInfo* info, s16 arg1, s16 arg2, s16 arg3) {
+    if (DECR(info->blinkTimer) == 0) {
+        info->blinkTimer = Rand_S16Offset(arg1, arg2);
     }
 
-    if (arg0[1] - arg3 > 0) {
-        arg0[0] = 0;
-    } else if (arg0[1] - arg3 == 0) {
-        arg0[0] = 1;
+    if (info->blinkTimer - arg3 > 0) {
+        info->eyeTexIndex = 0;
+    } else if (info->blinkTimer - arg3 == 0) {
+        info->eyeTexIndex = 1;
     } else {
-        arg0[0] = 2;
+        info->eyeTexIndex = 2;
     }
 
-    return arg0[0];
+    return info->eyeTexIndex;
 }
 
 // unused blinking routine
-s16 func_800BBC20(s16 arg0[2], s16 arg1, s16 arg2, s16 arg3) {
-    if (DECR(arg0[1]) == 0) {
-        arg0[1] = Rand_S16Offset(arg1, arg2);
-        arg0[0]++;
-        if ((arg0[0] % 3) == 0) {
-            arg0[0] = (s32)(Rand_ZeroOne() * arg3) * 3;
+s16 func_800BBC20(BlinkInfo* info, s16 arg1, s16 arg2, s16 arg3) {
+    if (DECR(info->blinkTimer) == 0) {
+        info->blinkTimer = Rand_S16Offset(arg1, arg2);
+        info->eyeTexIndex++;
+        if ((info->eyeTexIndex % 3) == 0) {
+            info->eyeTexIndex = (s32)(Rand_ZeroOne() * arg3) * 3;
         }
     }
-    return arg0[0];
+
+    return info->eyeTexIndex;
 }
 
 void Actor_SpawnBodyParts(Actor* actor, PlayState* play, s32 partParams, Gfx** dList) {
@@ -3616,15 +3615,15 @@ void func_800BC154(PlayState* play, ActorContext* actorCtx, Actor* actor, u8 act
 
 // Damage flags for EnArrow
 u32 sArrowDmgFlags[] = {
-    DMG_FIRE_ARROW,   // ENARROW_0
-    DMG_NORMAL_ARROW, // ENARROW_1
-    DMG_NORMAL_ARROW, // ENARROW_2
-    DMG_FIRE_ARROW,   // ENARROW_3
-    DMG_ICE_ARROW,    // ENARROW_4
-    DMG_LIGHT_ARROW,  // ENARROW_5
-    DMG_DEKU_NUT,     // ENARROW_6
-    DMG_DEKU_BUBBLE,  // ENARROW_7
-    DMG_DEKU_NUT,     // ENARROW_8
+    DMG_FIRE_ARROW,   // ARROW_TYPE_NORMAL_LIT
+    DMG_NORMAL_ARROW, // ARROW_TYPE_NORMAL_HORSE
+    DMG_NORMAL_ARROW, // ARROW_TYPE_NORMAL
+    DMG_FIRE_ARROW,   // ARROW_TYPE_FIRE
+    DMG_ICE_ARROW,    // ARROW_TYPE_ICE
+    DMG_LIGHT_ARROW,  // ARROW_TYPE_LIGHT
+    DMG_DEKU_NUT,     // ARROW_TYPE_SLINGSHOT
+    DMG_DEKU_BUBBLE,  // ARROW_TYPE_DEKU_BUBBLE
+    DMG_DEKU_NUT,     // ARROW_TYPE_DEKU_NUT
 };
 
 u32 Actor_GetArrowDmgFlags(s32 params) {
@@ -3726,7 +3725,7 @@ s16 Actor_TestFloorInDirection(Actor* actor, PlayState* play, f32 distance, s16 
     actor->world.pos.x += dx;
     actor->world.pos.z += dz;
 
-    Actor_UpdateBgCheckInfo(play, actor, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
     Math_Vec3f_Copy(&actor->world.pos, &actorPos);
 
     ret = actor->bgCheckFlags & BGCHECKFLAG_GROUND;
@@ -3793,30 +3792,29 @@ void func_800BC620(Vec3f* pos, Vec3f* scale, u8 alpha, PlayState* play) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-void Actor_AddQuake(PlayState* play, s16 verticalMag, s16 countdown) {
-    s16 quakeIndex = Quake_Add(&play->mainCamera, QUAKE_TYPE_3);
+void Actor_RequestQuake(PlayState* play, s16 y, s16 duration) {
+    s16 quakeIndex = Quake_Request(&play->mainCamera, QUAKE_TYPE_3);
 
     Quake_SetSpeed(quakeIndex, 20000);
-    Quake_SetQuakeValues(quakeIndex, verticalMag, 0, 0, 0);
-    Quake_SetCountdown(quakeIndex, countdown);
+    Quake_SetPerturbations(quakeIndex, y, 0, 0, 0);
+    Quake_SetDuration(quakeIndex, duration);
 }
 
-void Actor_AddQuakeWithSpeed(PlayState* play, s16 verticalMag, s16 countdown, s16 speed) {
-    s16 quakeIndex = Quake_Add(&play->mainCamera, QUAKE_TYPE_3);
+void Actor_RequestQuakeWithSpeed(PlayState* play, s16 y, s16 duration, s16 speed) {
+    s16 quakeIndex = Quake_Request(&play->mainCamera, QUAKE_TYPE_3);
 
     Quake_SetSpeed(quakeIndex, speed);
-    Quake_SetQuakeValues(quakeIndex, verticalMag, 0, 0, 0);
-    Quake_SetCountdown(quakeIndex, countdown);
+    Quake_SetPerturbations(quakeIndex, y, 0, 0, 0);
+    Quake_SetDuration(quakeIndex, duration);
 }
 
-// Actor_RequestRumble?
-void func_800BC848(Actor* actor, PlayState* play, s16 y, s16 countdown) {
-    if (y >= 5) {
+void Actor_RequestQuakeAndRumble(Actor* actor, PlayState* play, s16 quakeY, s16 quakeDuration) {
+    if (quakeY >= 5) {
         Rumble_Request(actor->xyzDistToPlayerSq, 255, 20, 150);
     } else {
         Rumble_Request(actor->xyzDistToPlayerSq, 180, 20, 100);
     }
-    Actor_AddQuake(play, y, countdown);
+    Actor_RequestQuake(play, quakeY, quakeDuration);
 }
 
 typedef struct {
@@ -4403,7 +4401,7 @@ s16 func_800BDB6C(Actor* actor, PlayState* play, s16 arg2, f32 arg3) {
     Player* player = GET_PLAYER(play);
     f32 phi_f2;
 
-    if ((play->csCtx.state != CS_STATE_0) || gDbgCamEnabled) {
+    if ((play->csCtx.state != CS_STATE_IDLE) || gDbgCamEnabled) {
         phi_f2 = Math_Vec3f_DistXYZ(&actor->world.pos, &play->view.eye) * 0.25f;
     } else {
         phi_f2 = Math_Vec3f_DistXYZ(&actor->world.pos, &player->actor.world.pos);
@@ -4479,7 +4477,7 @@ s32 func_800BE184(PlayState* play, Actor* actor, f32 xzDist, s16 arg3, s16 arg4,
     s16 phi_v0 = BINANG_SUB(BINANG_ROT180(actor->yawTowardsPlayer), player->actor.shape.rot.y);
     s16 temp_t0 = actor->yawTowardsPlayer - arg5;
 
-    if ((actor->xzDistToPlayer <= xzDist) && (player->meleeWeaponState != 0)) {
+    if ((actor->xzDistToPlayer <= xzDist) && (player->meleeWeaponState != PLAYER_MELEE_WEAPON_STATE_0)) {
         if ((arg4 >= ABS_ALT(phi_v0)) && (arg3 >= ABS_ALT(temp_t0))) {
             return true;
         }

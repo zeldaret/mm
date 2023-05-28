@@ -536,7 +536,9 @@ void EnPr_Update(Actor* thisx, PlayState* play) {
         }
     }
 
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 30.0f, 20.0f, 0x1D);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 30.0f, 20.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                UPDBGCHECKINFO_FLAG_10);
     Math_Vec3s_Copy(&this->actor.shape.rot, &this->actor.world.rot);
 
     if (this->unk_206 != 7) {

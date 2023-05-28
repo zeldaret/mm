@@ -843,7 +843,7 @@ void EnSlime_SpawnIceBlock(EnSlime* this, PlayState* play) {
             Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_OBJ_ICEBLOCK, this->actor.world.pos.x,
                                this->actor.world.pos.y + 30.0f, this->actor.world.pos.z, 0, 0, 0, 0);
         if (this->actor.child != NULL) {
-            this->actor.child->cutscene = this->actor.cutscene;
+            this->actor.child->csId = this->actor.csId;
             EnSlime_SetupIceBlock(this);
         } else {
             this->actor.colorFilterTimer = 0;

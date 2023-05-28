@@ -244,7 +244,7 @@ void EnBba01_Update(Actor* thisx, PlayState* play) {
 
     EnBba01_TestIsTalking(this, play);
     this->enHy.actionFunc(&this->enHy, play);
-    Actor_UpdateBgCheckInfo(play, &this->enHy.actor, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->enHy.actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
     EnBba01_UpdateModel(this, play);
     func_809CC270(this, play);
 }

@@ -61,10 +61,10 @@ void func_80B3C2B0(ObjGhaka* this) {
 void func_80B3C2C4(ObjGhaka* this, PlayState* play) {
     if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_20_20)) {
         Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ACTOR_BG_GORON_OYU, 0.0f, 25.0f, 261.0f, 0, 0, 0, 0,
-                                      this->dyna.actor.cutscene, this->dyna.actor.halfDaysBits, 0);
+                                      this->dyna.actor.csId, this->dyna.actor.halfDaysBits, 0);
     } else {
-        Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ACTOR_BG_GORON_OYU, 0.0f, 25.0f, 261.0f, 0, 0, 0, 1, -1,
-                                      this->dyna.actor.halfDaysBits, 0);
+        Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ACTOR_BG_GORON_OYU, 0.0f, 25.0f, 261.0f, 0, 0, 0, 1,
+                                      CS_ID_NONE, this->dyna.actor.halfDaysBits, 0);
     }
 }
 
@@ -154,10 +154,10 @@ void ObjGhaka_Init(Actor* thisx, PlayState* play) {
 
     Actor_ProcessInitChain(&this->dyna.actor, D_80B3C96C);
     Actor_SetScale(&this->dyna.actor, 0.1f);
-    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
     CollisionHeader_GetVirtual(&object_ghaka_Colheader_003CD0, &colHeader);
     this->dyna.bgId = DynaPoly_SetBgActor(play, &play->colCtx.dyna, &this->dyna.actor, colHeader);
-    Actor_UpdateBgCheckInfo(play, &this->dyna.actor, 0.0f, 0.0f, 0.0f, 0x4);
+    Actor_UpdateBgCheckInfo(play, &this->dyna.actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
     if (this->dyna.actor.floorPoly == 0) {
         Actor_Kill(&this->dyna.actor);
     }

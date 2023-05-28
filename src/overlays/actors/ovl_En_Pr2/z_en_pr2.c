@@ -151,7 +151,7 @@ void EnPr2_Init(Actor* thisx, PlayState* play) {
                 Actor* parent = this->actor.parent;
 
                 if (parent->update != NULL) {
-                    this->unk_1C8 = ((EnEncount1*)parent)->unk_15A;
+                    this->unk_1C8 = ((EnEncount1*)parent)->pathIndex;
                     this->path = SubS_GetPathByIndex(play, this->unk_1C8, 0x3F);
                     this->unk_208 = parent->world.rot.z * 20.0f;
                     if (this->unk_208 < 20.0f) {
@@ -171,7 +171,9 @@ void EnPr2_Init(Actor* thisx, PlayState* play) {
         func_80A751B4(this);
     }
 
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 20.0f, 20.0f, 0x1D);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 20.0f, 20.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                UPDBGCHECKINFO_FLAG_10);
 
     if (!(this->actor.bgCheckFlags & (BGCHECKFLAG_WATER | BGCHECKFLAG_WATER_TOUCH))) {
         Actor_Kill(&this->actor);
@@ -188,8 +190,8 @@ void EnPr2_Destroy(Actor* thisx, PlayState* play) {
     if (this->actor.parent != NULL) {
         EnEncount1* encount1 = (EnEncount1*)this->actor.parent;
 
-        if ((encount1->actor.update != NULL) && (encount1->unk_14E > 0)) {
-            encount1->unk_14E--;
+        if ((encount1->actor.update != NULL) && (encount1->spawnActiveCount > 0)) {
+            encount1->spawnActiveCount--;
         }
     }
 }
@@ -661,7 +663,9 @@ void EnPr2_Update(Actor* thisx, PlayState* play) {
     Actor_SetFocus(&this->actor, 10.0f);
     func_80A755D8(this, play);
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0, 10.0f, 20.0f, 0x1F);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0, 10.0f, 20.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_2 | UPDBGCHECKINFO_FLAG_4 |
+                                UPDBGCHECKINFO_FLAG_8 | UPDBGCHECKINFO_FLAG_10);
 
     if (this->unk_1D6) {
         s32 i;

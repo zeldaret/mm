@@ -28,13 +28,13 @@ typedef struct EnPamera {
     /* 0x312 */ s16 unk_312;
     /* 0x314 */ s16 unk_314;
     /* 0x316 */ s16 unk_316;
-    /* 0x318 */ s16 cutscenes[2];
+    /* 0x318 */ s16 csIdList[2];
     /* 0x31C */ s16 hideInisdeTimer;
     /* 0x31E */ s16 unk_31E;
     /* 0x320 */ UNK_TYPE1 unk_320[0x2];
     /* 0x322 */ s16 unk_322;
     /* 0x324 */ u16 unk_324;
-    /* 0x326 */ u16 unk_326;
+    /* 0x326 */ u16 cueId;
 } EnPamera; // size = 0x328
 
 #endif // Z_EN_PAMERA_H

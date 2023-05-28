@@ -191,8 +191,8 @@ void EnWallmas_Destroy(Actor* thisx, PlayState* play) {
     if (this->actor.parent != NULL) {
         EnEncount1* encount1 = (EnEncount1*)this->actor.parent;
 
-        if ((encount1->actor.update != NULL) && (encount1->unk_14E > 0)) {
-            encount1->unk_14E--;
+        if ((encount1->actor.update != NULL) && (encount1->spawnActiveCount > 0)) {
+            encount1->spawnActiveCount--;
         }
     }
 }
@@ -629,7 +629,9 @@ void EnWallmas_Update(Actor* thisx, PlayState* play) {
         }
 
         if (this->actionFunc != EnWallmas_Drop) {
-            Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 25.0f, 0.0f, 0x1D);
+            Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 25.0f, 0.0f,
+                                    UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                        UPDBGCHECKINFO_FLAG_10);
         }
 
         if ((this->actionFunc != EnWallmas_Die) && (this->actionFunc != EnWallmas_Drop)) {

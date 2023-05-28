@@ -279,8 +279,8 @@ void func_80B22500(EnHakurock* this, PlayState* play) {
         } else if ((&player->actor == this->collider.base.oc) &&
                    (player->stateFlags3 & (PLAYER_STATE3_1000 | PLAYER_STATE3_80000)) &&
                    (player->linearVelocity > 8.0f)) {
-            player->unk_B08[0] = player->linearVelocity = -5.0f;
-            player->unk_B08[1] += (player->linearVelocity * 0.05f);
+            player->unk_B08 = player->linearVelocity = -5.0f;
+            player->unk_B0C += (player->linearVelocity * 0.05f);
             player->actor.velocity.y = 5.0f;
             player->currentYaw = player->actor.world.rot.y;
             player->actor.home.rot.y = player->actor.world.rot.y;
@@ -323,7 +323,8 @@ void EnHakurock_Update(Actor* thisx, PlayState* play) {
     rockParams = this->actor.params;
     if ((rockParams == EN_HAKUROCK_TYPE_BOULDER) || (rockParams == EN_HAKUROCK_TYPE_UNK_2)) {
         Actor_MoveWithGravity(&this->actor);
-        Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, this->collider.dim.radius, 0.0f, 0x85);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, this->collider.dim.radius, 0.0f,
+                                UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_80);
         if (this->actor.floorHeight == BGCHECK_Y_MIN) {
             func_80B21FFC(this);
         } else {

@@ -189,13 +189,13 @@ void ObjLightswitch_SetAction(ObjLightswitch* this, ObjLightswitchSetupFunc setu
 }
 
 void ObjLightswitch_PlayCinema(ObjLightswitch* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
+    if (CutsceneManager_IsNext(this->actor.csId)) {
+        CutsceneManager_StartWithPlayerCs(this->actor.csId, &this->actor);
         ObjLightswitch_UpdateSwitchFlags(this, play, this->switchFlagSetType);
         this->cutsceneTimer = 50;
         this->setupFunc(this);
     } else {
-        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+        CutsceneManager_Queue(this->actor.csId);
     }
 }
 
@@ -351,7 +351,7 @@ void ObjLightswitch_Update(Actor* thisx, PlayState* play) {
     if ((this->cutsceneTimer > 0) && ((s32)this->actionFunc != (s32)ObjLightswitch_PlayCinema)) {
         this->cutsceneTimer--;
         if (this->cutsceneTimer == 0) {
-            ActorCutscene_Stop(this->actor.cutscene);
+            CutsceneManager_Stop(this->actor.csId);
         }
     }
 

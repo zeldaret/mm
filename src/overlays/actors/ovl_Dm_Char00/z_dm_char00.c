@@ -150,7 +150,7 @@ void func_80AA5580(SkelAnime* skelAnime, AnimationInfo* animation, u16 idx) {
 
 void func_80AA561C(DmChar00* this, PlayState* play) {
     if (DMCHAR00_GET(&this->actor) == DMCHAR00_0) {
-        switch (play->csCtx.frames + 20) {
+        switch (play->csCtx.curFrame + 20) {
             case 503:
             case 926:
             case 979:
@@ -169,7 +169,7 @@ void func_80AA561C(DmChar00* this, PlayState* play) {
                 break;
         }
     } else {
-        switch (play->csCtx.frames + 20) {
+        switch (play->csCtx.curFrame + 20) {
             case 503:
             case 926:
             case 979:
@@ -188,14 +188,14 @@ void func_80AA561C(DmChar00* this, PlayState* play) {
 }
 
 void func_80AA5720(DmChar00* this, PlayState* play) {
-    if ((DMCHAR00_GET(&this->actor) == DMCHAR00_0) && (play->csCtx.frames == 505)) {
+    if ((DMCHAR00_GET(&this->actor) == DMCHAR00_0) && (play->csCtx.curFrame == 505)) {
         Actor_PlaySfx(&this->actor, NA_SE_EV_SPOT_LIGHT_OPEN);
     }
 }
 
 void func_80AA575C(DmChar00* this, PlayState* play) {
     if (DMCHAR00_GET(&this->actor) == DMCHAR00_0) {
-        switch (play->csCtx.frames) {
+        switch (play->csCtx.curFrame) {
             case 474:
             case 489:
             case 495:
@@ -227,24 +227,24 @@ void func_80AA575C(DmChar00* this, PlayState* play) {
                 Actor_PlaySfx(&this->actor, NA_SE_EV_BELL_BRAKE);
                 break;
         }
-    } else if (play->csCtx.frames == 660) {
+    } else if (play->csCtx.curFrame == 660) {
         Actor_PlaySfx(&this->actor, NA_SE_EV_MONDO_SURPRISE);
     }
 }
 
 void func_80AA5890(DmChar00* this, PlayState* play) {
-    if ((DMCHAR00_GET(&this->actor) == DMCHAR00_0) && (play->csCtx.frames == 20)) {
+    if ((DMCHAR00_GET(&this->actor) == DMCHAR00_0) && (play->csCtx.curFrame == 20)) {
         Actor_PlaySfx(&this->actor, NA_SE_EV_WHITE_FAIRY_DASH);
     }
 }
 
 void func_80AA58CC(DmChar00* this, PlayState* play) {
     if (DMCHAR00_GET(&this->actor) == DMCHAR00_0) {
-        if (play->csCtx.frames == 568) {
+        if (play->csCtx.curFrame == 568) {
             Actor_PlaySfx(&this->actor, NA_SE_EV_FAIRY_SURPRISE);
         }
     } else {
-        switch (play->csCtx.frames) {
+        switch (play->csCtx.curFrame) {
             case 375:
             case 479:
                 Actor_PlaySfx(&this->actor, NA_SE_EV_BLACK_FAIRY_DASH);
@@ -262,11 +262,11 @@ void func_80AA5950(DmChar00* this, PlayState* play) {
 
 void func_80AA5960(DmChar00* this, PlayState* play) {
     if (DMCHAR00_GET(&this->actor) == DMCHAR00_0) {
-        if (play->csCtx.frames == 280) {
+        if (play->csCtx.curFrame == 280) {
             Actor_PlaySfx(&this->actor, NA_SE_EV_FAIRY_SURPRISE);
         }
     } else {
-        switch (play->csCtx.frames) {
+        switch (play->csCtx.curFrame) {
             case 87:
             case 190:
                 Actor_PlaySfx(&this->actor, NA_SE_EV_BLACK_FAIRY_DASH);
@@ -281,7 +281,7 @@ void func_80AA5960(DmChar00* this, PlayState* play) {
 
 void func_80AA59E4(DmChar00* this, PlayState* play) {
     if (DMCHAR00_GET(&this->actor) == DMCHAR00_0) {
-        switch (play->csCtx.frames) {
+        switch (play->csCtx.curFrame) {
             case 125:
                 Actor_PlaySfx(&this->actor, NA_SE_EV_WHITE_FAIRY_DASH);
                 break;
@@ -291,14 +291,14 @@ void func_80AA59E4(DmChar00* this, PlayState* play) {
                 Actor_PlaySfx(&this->actor, NA_SE_SY_WHITE_OUT_INTO_MOON);
                 break;
         }
-    } else if (play->csCtx.frames == 125) {
+    } else if (play->csCtx.curFrame == 125) {
         Actor_PlaySfx(&this->actor, NA_SE_EV_BLACK_FAIRY_DASH);
     }
 }
 
 void func_80AA5A6C(DmChar00* this, PlayState* play) {
     if (DMCHAR00_GET(&this->actor) == DMCHAR00_0) {
-        switch (play->csCtx.frames) {
+        switch (play->csCtx.curFrame) {
             case 44:
                 Actor_PlaySfx(&this->actor, NA_SE_EV_WHITE_FAIRY_DASH);
                 break;
@@ -308,14 +308,14 @@ void func_80AA5A6C(DmChar00* this, PlayState* play) {
                 Actor_PlaySfx(&this->actor, NA_SE_SY_WHITE_OUT_INTO_MOON);
                 break;
         }
-    } else if (play->csCtx.frames == 44) {
+    } else if (play->csCtx.curFrame == 44) {
         Actor_PlaySfx(&this->actor, NA_SE_EV_BLACK_FAIRY_DASH);
     }
 }
 
 void func_80AA5AF4(DmChar00* this, PlayState* play) {
     if (DMCHAR00_GET(&this->actor) == DMCHAR00_0) {
-        switch (play->csCtx.frames) {
+        switch (play->csCtx.curFrame) {
             case 352:
             case 401:
                 Actor_PlaySfx(&this->actor, NA_SE_EV_WHITE_FAIRY_DASH);
@@ -330,7 +330,7 @@ void func_80AA5AF4(DmChar00* this, PlayState* play) {
                 break;
         }
     } else {
-        switch (play->csCtx.frames) {
+        switch (play->csCtx.curFrame) {
             case 362:
             case 401:
                 Actor_PlaySfx(&this->actor, NA_SE_EV_BLACK_FAIRY_DASH);
@@ -341,7 +341,7 @@ void func_80AA5AF4(DmChar00* this, PlayState* play) {
                 break;
         }
 
-        if ((play->csCtx.frames >= 500) && (play->csCtx.frames < 602)) {
+        if ((play->csCtx.curFrame >= 500) && (play->csCtx.curFrame < 602)) {
             Actor_PlaySfx(&this->actor, NA_SE_EV_FAIRY_SHIVER - SFX_FLAG);
         }
     }
@@ -349,7 +349,7 @@ void func_80AA5AF4(DmChar00* this, PlayState* play) {
 
 void func_80AA5BF8(DmChar00* this, PlayState* play) {
     if (DMCHAR00_GET(&this->actor) == DMCHAR00_0) {
-        switch (play->csCtx.frames) {
+        switch (play->csCtx.curFrame) {
             case 762:
                 Actor_PlaySfx(&this->actor, NA_SE_EV_WHITE_FAIRY_SHOT_DASH);
                 break;
@@ -358,7 +358,7 @@ void func_80AA5BF8(DmChar00* this, PlayState* play) {
                 break;
         }
     } else {
-        switch (play->csCtx.frames) {
+        switch (play->csCtx.curFrame) {
             case 762:
                 Actor_PlaySfx(&this->actor, NA_SE_EV_BLACK_FAIRY_SHOT_DASH);
                 break;
@@ -375,14 +375,14 @@ void func_80AA5BF8(DmChar00* this, PlayState* play) {
 }
 
 void func_80AA5CD4(DmChar00* this, PlayState* play) {
-    if ((DMCHAR00_GET(&this->actor) != DMCHAR00_0) && (play->csCtx.frames == 467)) {
+    if ((DMCHAR00_GET(&this->actor) != DMCHAR00_0) && (play->csCtx.curFrame == 467)) {
         Actor_PlaySfx(&this->actor, NA_SE_EV_BLACK_FAIRY_DASH);
     }
 }
 
 void func_80AA5D10(DmChar00* this, PlayState* play) {
     if (DMCHAR00_GET(&this->actor) == DMCHAR00_0) {
-        switch (play->csCtx.frames) {
+        switch (play->csCtx.curFrame) {
             case 8:
                 Actor_PlaySfx(&this->actor, NA_SE_EV_FAIRY_SURPRISE);
                 break;
@@ -396,7 +396,7 @@ void func_80AA5D10(DmChar00* this, PlayState* play) {
 
 void func_80AA5D6C(DmChar00* this, PlayState* play) {
     if (DMCHAR00_GET(&this->actor) == DMCHAR00_0) {
-        switch (play->csCtx.frames) {
+        switch (play->csCtx.curFrame) {
             case 2:
             case 166:
                 Actor_PlaySfx(&this->actor, NA_SE_EV_WHITE_FAIRY_DASH);
@@ -411,7 +411,7 @@ void func_80AA5D6C(DmChar00* this, PlayState* play) {
 
 void func_80AA5DC8(DmChar00* this, PlayState* play) {
     if (DMCHAR00_GET(&this->actor) == DMCHAR00_0) {
-        switch (play->csCtx.frames) {
+        switch (play->csCtx.curFrame) {
             case 233:
             case 415:
             case 593:
@@ -427,7 +427,7 @@ void func_80AA5DC8(DmChar00* this, PlayState* play) {
 
 void func_80AA5E2C(DmChar00* this, PlayState* play) {
     if (DMCHAR00_GET(&this->actor) == DMCHAR00_1) {
-        switch (play->csCtx.frames) {
+        switch (play->csCtx.curFrame) {
             case 32:
                 Actor_PlaySfx(&this->actor, NA_SE_EV_WHITE_FAIRY_DASH);
                 break;
@@ -448,7 +448,7 @@ void func_80AA5E2C(DmChar00* this, PlayState* play) {
 }
 
 void func_80AA5EBC(DmChar00* this, PlayState* play) {
-    if (play->csCtx.state != 0) {
+    if (play->csCtx.state != CS_STATE_IDLE) {
         switch (play->sceneId) {
             case SCENE_LOST_WOODS:
                 if (gSaveContext.sceneLayer == 1) {
@@ -458,11 +458,11 @@ void func_80AA5EBC(DmChar00* this, PlayState* play) {
 
             case SCENE_OPENINGDAN:
                 if (gSaveContext.sceneLayer == 0) {
-                    if (play->csCtx.currentCsIndex == 0) {
+                    if (play->csCtx.scriptIndex == 0) {
                         func_80AA5720(this, play);
-                    } else if (play->csCtx.currentCsIndex == 1) {
+                    } else if (play->csCtx.scriptIndex == 1) {
                         func_80AA575C(this, play);
-                    } else if (play->csCtx.currentCsIndex == 2) {
+                    } else if (play->csCtx.scriptIndex == 2) {
                         func_80AA5890(this, play);
                     }
                 }
@@ -470,17 +470,17 @@ void func_80AA5EBC(DmChar00* this, PlayState* play) {
 
             case SCENE_OKUJOU:
                 if (gSaveContext.sceneLayer == 0) {
-                    if (play->csCtx.currentCsIndex == 0) {
+                    if (play->csCtx.scriptIndex == 0) {
                         func_80AA58CC(this, play);
-                    } else if (play->csCtx.currentCsIndex == 1) {
+                    } else if (play->csCtx.scriptIndex == 1) {
                         func_80AA5950(this, play);
-                    } else if (play->csCtx.currentCsIndex == 2) {
+                    } else if (play->csCtx.scriptIndex == 2) {
                         func_80AA5960(this, play);
                     }
                 } else if (gSaveContext.sceneLayer == 2) {
-                    if (play->csCtx.currentCsIndex == 0) {
+                    if (play->csCtx.scriptIndex == 0) {
                         func_80AA59E4(this, play);
-                    } else if (play->csCtx.currentCsIndex == 1) {
+                    } else if (play->csCtx.scriptIndex == 1) {
                         func_80AA5A6C(this, play);
                     }
                 }
@@ -488,34 +488,34 @@ void func_80AA5EBC(DmChar00* this, PlayState* play) {
 
             case SCENE_00KEIKOKU:
                 if (gSaveContext.sceneLayer == 3) {
-                    if (play->csCtx.currentCsIndex == 0) {
+                    if (play->csCtx.scriptIndex == 0) {
                         func_80AA5AF4(this, play);
-                    } else if (play->csCtx.currentCsIndex == 2) {
+                    } else if (play->csCtx.scriptIndex == 2) {
                         func_80AA5E2C(this, play);
                     }
                 } else if (gSaveContext.sceneLayer == 7) {
-                    if (play->csCtx.currentCsIndex == 0) {
+                    if (play->csCtx.scriptIndex == 0) {
                         func_80AA5BF8(this, play);
-                    } else if (play->csCtx.currentCsIndex == 1) {
+                    } else if (play->csCtx.scriptIndex == 1) {
                         func_80AA5CD4(this, play);
                     }
                 }
                 break;
 
             case SCENE_MITURIN:
-                if ((gSaveContext.sceneLayer == 0) && (play->csCtx.currentCsIndex == 1)) {
+                if ((gSaveContext.sceneLayer == 0) && (play->csCtx.scriptIndex == 1)) {
                     func_80AA5DC8(this, play);
                 }
                 break;
 
             case SCENE_INSIDETOWER:
-                if ((gSaveContext.sceneLayer == 0) && (play->csCtx.currentCsIndex == 0)) {
+                if ((gSaveContext.sceneLayer == 0) && (play->csCtx.scriptIndex == 0)) {
                     func_80AA5D10(this, play);
                 }
                 break;
 
             case SCENE_PIRATE:
-                if ((gSaveContext.sceneLayer == 0) && (play->csCtx.currentCsIndex == 0)) {
+                if ((gSaveContext.sceneLayer == 0) && (play->csCtx.scriptIndex == 0)) {
                     func_80AA5D6C(this, play);
                 }
                 break;
@@ -535,7 +535,7 @@ void DmChar00_Init(Actor* thisx, PlayState* play) {
     this->unk_250 = D_80AA77D8[DMCHAR00_GET(thisx)];
 
     thisx->targetArrowOffset = 3000.0f;
-    this->unk_260 = 99;
+    this->cueId = 99;
     this->unk_262 = DMCHAR00_GET_F800(thisx);
 
     ActorShape_Init(&thisx->shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
@@ -551,18 +551,18 @@ void DmChar00_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void func_80AA62FC(DmChar00* this, PlayState* play) {
-    u16 sp26 = DMCHAR00_GET(&this->actor) + 113;
-    s32 temp_v0;
+    u16 cueType = CS_CMD_ACTOR_CUE_113 + DMCHAR00_GET(&this->actor);
+    s32 cueChannel;
     s32 pad;
 
-    if (Cutscene_CheckActorAction(play, sp26)) {
-        temp_v0 = Cutscene_GetActorActionIndex(play, sp26);
+    if (Cutscene_IsCueInChannel(play, cueType)) {
+        cueChannel = Cutscene_GetCueChannel(play, cueType);
 
-        if (play->csCtx.frames == play->csCtx.actorActions[temp_v0]->startFrame) {
-            if (this->unk_260 != play->csCtx.actorActions[temp_v0]->action) {
-                this->unk_260 = play->csCtx.actorActions[temp_v0]->action;
+        if (play->csCtx.curFrame == play->csCtx.actorCues[cueChannel]->startFrame) {
+            if (this->cueId != play->csCtx.actorCues[cueChannel]->id) {
+                this->cueId = play->csCtx.actorCues[cueChannel]->id;
 
-                switch (play->csCtx.actorActions[temp_v0]->action) {
+                switch (play->csCtx.actorCues[cueChannel]->id) {
                     case 0x1:
                         this->unk_261 = 0;
                         break;
@@ -786,9 +786,9 @@ void func_80AA62FC(DmChar00* this, PlayState* play) {
                 func_80AA5580(&this->skelAnime, &sAnimationInfo[this->unk_261], 0);
             }
         }
-        Cutscene_ActorTranslateAndYaw(&this->actor, play, temp_v0);
+        Cutscene_ActorTranslateAndYaw(&this->actor, play, cueChannel);
     } else {
-        this->unk_260 = 99;
+        this->cueId = 99;
     }
 
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
@@ -853,7 +853,7 @@ void func_80AA62FC(DmChar00* this, PlayState* play) {
 void func_80AA67F8(DmChar00* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if ((play->csCtx.state == 0) && (gSaveContext.sceneLayer == 0) && (play->csCtx.currentCsIndex == 1)) {
+    if ((play->csCtx.state == CS_STATE_IDLE) && (gSaveContext.sceneLayer == 0) && (play->csCtx.scriptIndex == 1)) {
         if (this->unk_261 != 42) {
             this->unk_261 = 42;
             func_80AA5580(&this->skelAnime, &sAnimationInfo[this->unk_261], 0);
@@ -914,9 +914,9 @@ void DmChar00_Draw(Actor* thisx, PlayState* play2) {
     s32 pad;
     Gfx* gfx = GRAPH_ALLOC(play->state.gfxCtx, 4 * sizeof(Gfx));
 
-    if ((play->csCtx.state == 0) &&
+    if ((play->csCtx.state == CS_STATE_IDLE) &&
         ((play->sceneId != SCENE_OPENINGDAN) || (gSaveContext.sceneLayer != 0) || (play->roomCtx.curRoom.num != 0) ||
-         (play->csCtx.currentCsIndex != 1) || (DMCHAR00_GET(&this->actor) != DMCHAR00_0))) {
+         (play->csCtx.scriptIndex != 1) || (DMCHAR00_GET(&this->actor) != DMCHAR00_0))) {
         return;
     }
 

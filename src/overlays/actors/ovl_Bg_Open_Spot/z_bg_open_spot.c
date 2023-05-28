@@ -47,13 +47,13 @@ void BgOpenSpot_Destroy(Actor* thisx, PlayState* play) {
 
 void BgOpenSpot_Update(Actor* thisx, PlayState* play) {
     BgOpenSpot* this = THIS;
-    u32 action;
+    u32 cueId;
 
-    if (Cutscene_CheckActorAction(play, 0x7D)) {
-        action = play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 0x7D)]->action;
-        if (action == 1) {
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_125)) {
+        cueId = play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_125)]->id;
+        if (cueId == 1) {
             this->actor.draw = NULL;
-        } else if (action == 2) {
+        } else if (cueId == 2) {
             this->actor.draw = BgOpenSpot_Draw;
         }
     }

@@ -176,13 +176,13 @@ s32 func_80B3E5DC(EnDai* this, s32 arg1) {
 s32 func_80B3E69C(EnDai* this, PlayState* play) {
     s32 ret = false;
 
-    if ((play->csCtx.state != CS_STATE_0) && (play->sceneId == SCENE_12HAKUGINMAE) &&
-        (play->csCtx.currentCsIndex == 0) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_30_01)) {
+    if ((play->csCtx.state != CS_STATE_IDLE) && (play->sceneId == SCENE_12HAKUGINMAE) &&
+        (play->csCtx.scriptIndex == 0) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_30_01)) {
         if (!(this->unk_1CE & 0x10)) {
             Flags_SetSwitch(play, 20);
             this->unk_1CE |= (0x80 | 0x10);
             this->unk_1CE &= ~(0x100 | 0x20);
-            this->unk_1CC = 0xFF;
+            this->cueId = 255;
             this->unk_1DC = 0;
             this->unk_1CD = 0;
             this->unk_1F0 = D_80B3FBF0;
@@ -240,7 +240,7 @@ static s32 D_80B3FC8C[] = {
     0x920C0F0C, 0x930C1211, 0x5520100E, 0x0C940C12, 0x10000000,
 };
 
-s16 func_80B3E8BC(EnDai* this, s32 arg1) {
+s16 func_80B3E8BC(EnDai* this, s32 cueId) {
     static f32 D_80B3FCB4[] = {
         1.0f, 6.0f, 16.0f, 19.0f, 46.0f, 48.0f, 50.0f, 52.0f, 54.0f, 1.0f, 6.0f, 36.0f,
     };
@@ -256,10 +256,10 @@ s16 func_80B3E8BC(EnDai* this, s32 arg1) {
     s32 i;
     s32 end;
 
-    if (arg1 == 3) {
+    if (cueId == 3) {
         end = 9;
         i = 0;
-    } else if (arg1 == 4) {
+    } else if (cueId == 4) {
         end = 12;
         i = 9;
     } else {
@@ -402,12 +402,12 @@ s32 func_80B3ED88(EnDai* this) {
 }
 
 void func_80B3EE8C(EnDai* this, PlayState* play) {
-    s16 cutscene = this->actor.cutscene;
+    s16 csId = this->actor.csId;
 
-    if (ActorCutscene_GetCanPlayNext(cutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(cutscene, &this->actor);
+    if (CutsceneManager_IsNext(csId)) {
+        CutsceneManager_StartWithPlayerCs(csId, &this->actor);
     } else {
-        ActorCutscene_SetIntentToPlay(cutscene);
+        CutsceneManager_Queue(csId);
     }
 }
 
@@ -445,15 +445,15 @@ void func_80B3F044(EnDai* this, PlayState* play) {
     static s32 D_80B3FE38[] = {
         0, 0, 6, 7, 8,
     };
-    s32 sp2C = 0;
-    s32 sp28;
+    s32 cueChannel = 0;
+    s32 cueId;
 
-    if (Cutscene_CheckActorAction(play, 472)) {
-        sp2C = Cutscene_GetActorActionIndex(play, 472);
-        sp28 = play->csCtx.actorActions[sp2C]->action;
-        if (this->unk_1CC != (u8)sp28) {
-            func_80B3E5DC(this, D_80B3FE38[sp28]);
-            switch (sp28) {
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_472)) {
+        cueChannel = Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_472);
+        cueId = play->csCtx.actorCues[cueChannel]->id;
+        if (this->cueId != (u8)cueId) {
+            func_80B3E5DC(this, D_80B3FE38[cueId]);
+            switch (cueId) {
                 case 1:
                     this->unk_1E0 = 0.0f;
                     break;
@@ -467,10 +467,10 @@ void func_80B3F044(EnDai* this, PlayState* play) {
                     break;
             }
         }
-        this->unk_1CC = sp28;
+        this->cueId = cueId;
     }
 
-    switch (this->unk_1CC) {
+    switch (this->cueId) {
         case 1:
             this->unk_1E0 += 1.0f;
             if (this->unk_1E0 < 30.0f) {
@@ -481,20 +481,20 @@ void func_80B3F044(EnDai* this, PlayState* play) {
             break;
 
         case 2:
-            if (play->csCtx.frames == 360) {
+            if (play->csCtx.curFrame == 360) {
                 Actor_PlaySfx(&this->actor, NA_SE_EN_DAIGOLON_SLEEP3 - SFX_FLAG);
             }
             if (Animation_OnFrame(&this->skelAnime, 43.0f)) {
                 Actor_PlaySfx(&this->actor, NA_SE_EV_GORON_BOUND_1);
             }
-            this->unk_1D6 = func_80B3E8BC(this, this->unk_1CC);
+            this->unk_1D6 = func_80B3E8BC(this, this->cueId);
             break;
 
         case 3:
             if (Animation_OnFrame(&this->skelAnime, 6.0f)) {
                 Actor_PlaySfx(&this->actor, NA_SE_EN_DAIGOLON_SLEEP1);
             }
-            this->unk_1D6 = func_80B3E8BC(this, this->unk_1CC);
+            this->unk_1D6 = func_80B3E8BC(this, this->cueId);
             break;
 
         case 4:
@@ -504,11 +504,11 @@ void func_80B3F044(EnDai* this, PlayState* play) {
             if (Animation_OnFrame(&this->skelAnime, 35.0f)) {
                 Actor_PlaySfx(&this->actor, NA_SE_EV_GORON_BOUND_0);
             }
-            this->unk_1D6 = func_80B3E8BC(this, this->unk_1CC);
+            this->unk_1D6 = func_80B3E8BC(this, this->cueId);
             break;
     }
 
-    Cutscene_ActorTranslateAndYaw(&this->actor, play, sp2C);
+    Cutscene_ActorTranslateAndYaw(&this->actor, play, cueChannel);
 }
 
 void EnDai_Init(Actor* thisx, PlayState* play) {
@@ -525,7 +525,7 @@ void EnDai_Init(Actor* thisx, PlayState* play) {
     this->unk_1CE = 0;
     this->unk_1D6 = 0;
 
-    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_33_80)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_SNOWHEAD_TEMPLE)) {
         SubS_UpdateFlags(&this->unk_1CE, 3, 7);
         this->unk_1CE |= 0x80;
         this->unk_1CD = 0xFF;

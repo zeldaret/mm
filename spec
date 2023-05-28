@@ -470,7 +470,6 @@ beginseg
     include "build/data/code/z_eventmgr.bss.o"
     include "build/src/code/z_fcurve_data.o"
     include "build/src/code/z_fcurve_data_skelanime.o"
-    include "build/data/code/code_801BD830.data.o"
     include "build/src/code/z_fireobj.o"
     include "build/src/code/z_game_dlftbls.o"
     include "build/src/code/z_horse.o"
@@ -527,7 +526,7 @@ beginseg
     include "build/data/code/code_80140CE0.data.o"
     include "build/src/code/code_80140E80.o"
     include "build/src/code/z_vismono.o"
-    include "build/src/code/code_801420C0.o"
+    include "build/src/code/z_viszbuf.o"
     include "build/src/code/z_vr_box.o"
     include "build/src/code/z_vr_box_draw.o"
     include "build/src/code/z_sram_NES.o"
@@ -539,8 +538,8 @@ beginseg
     include "build/src/code/z_message_staff.o"
     include "build/src/code/z_player_call.o"
     include "build/src/code/z_shrink_window.o"
-    include "build/src/code/db_camera.o"
-    include "build/data/code/db_camera.bss.o"
+    include "build/src/code/cutscene_camera.o"
+    include "build/data/code/cutscene_camera.bss.o"
     include "build/src/code/z_kaleido_manager.o"
     include "build/src/code/z_kaleido_scope_call.o"
     include "build/src/code/z_fbdemo_dlftbls.o"
@@ -568,7 +567,6 @@ beginseg
     include "build/data/code/main.data.o"
     include "build/data/code/main.bss.o"
     include "build/src/code/padmgr.o"
-    include "build/data/code/padmgr.data.o"
     include "build/src/code/sched.o"
     include "build/src/code/speed_meter.o"
     include "build/data/code/speed_meter.data.o"
@@ -702,9 +700,7 @@ beginseg
     name "ovl_player_actor"
     compress
     include "build/src/overlays/actors/ovl_player_actor/z_player.o"
-    include "build/data/ovl_player_actor/ovl_player_actor.data.o"
-    include "build/data/ovl_player_actor/ovl_player_actor.bss.o"
-    include "build/data/ovl_player_actor/ovl_player_actor.reloc.o"
+    include "build/src/overlays/actors/ovl_player_actor/ovl_player_actor_reloc.o"
 endseg
 
 beginseg
@@ -2963,11 +2959,7 @@ beginseg
     name "ovl_En_Tru"
     compress
     include "build/src/overlays/actors/ovl_En_Tru/z_en_tru.o"
-    #ifdef NON_MATCHING
-        include "build/src/overlays/actors/ovl_En_Tru/ovl_En_Tru_reloc.o"
-    #else
-        include "build/data/ovl_En_Tru/ovl_En_Tru.reloc.o"
-    #endif
+    include "build/src/overlays/actors/ovl_En_Tru/ovl_En_Tru_reloc.o"
 endseg
 
 beginseg
@@ -3200,8 +3192,7 @@ beginseg
     name "ovl_fbdemo_wipe1"
     compress
     include "build/src/overlays/fbdemos/ovl_fbdemo_wipe1/z_fbdemo_wipe1.o"
-    include "build/data/ovl_fbdemo_wipe1/ovl_fbdemo_wipe1.data.o"
-    include "build/data/ovl_fbdemo_wipe1/ovl_fbdemo_wipe1.reloc.o"
+    include "build/src/overlays/fbdemos/ovl_fbdemo_wipe1/ovl_fbdemo_wipe1_reloc.o"
 endseg
 
 beginseg
@@ -3596,8 +3587,7 @@ beginseg
     name "ovl_Bg_Tobira01"
     compress
     include "build/src/overlays/actors/ovl_Bg_Tobira01/z_bg_tobira01.o"
-    include "build/data/ovl_Bg_Tobira01/ovl_Bg_Tobira01.data.o"
-    include "build/data/ovl_Bg_Tobira01/ovl_Bg_Tobira01.reloc.o"
+    include "build/src/overlays/actors/ovl_Bg_Tobira01/ovl_Bg_Tobira01_reloc.o"
 endseg
 
 beginseg
@@ -4889,8 +4879,7 @@ beginseg
     name "ovl_En_And"
     compress
     include "build/src/overlays/actors/ovl_En_And/z_en_and.o"
-    include "build/data/ovl_En_And/ovl_En_And.data.o"
-    include "build/data/ovl_En_And/ovl_En_And.reloc.o"
+    include "build/src/overlays/actors/ovl_En_And/ovl_En_And_reloc.o"
 endseg
 
 beginseg

@@ -366,7 +366,9 @@ void EnAttackNiw_Update(Actor* thisx, PlayState* play) {
 
     this->actionFunc(this, play);
 
-    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 60.0f, 0x1D);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 60.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                UPDBGCHECKINFO_FLAG_10);
 
     if (this->actionFunc == EnAttackNiw_EnterViewFromOffscreen) {
         Actor_MoveWithoutGravity(&this->actor);

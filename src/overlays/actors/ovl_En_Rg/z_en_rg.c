@@ -283,7 +283,7 @@ void func_80BF3FF8(EnRg* this) {
 }
 
 s32 func_80BF4024(EnRg* this, PlayState* play) {
-    if ((play->csCtx.state == 0) && (this->unk_334 == 1)) {
+    if ((play->csCtx.state == CS_STATE_IDLE) && (this->unk_334 == 1)) {
         if (Animation_OnFrame(&this->skelAnime, 2.0f)) {
             Actor_PlaySfx(&this->actor, NA_SE_EN_GOLON_CIRCLE);
         }
@@ -589,8 +589,8 @@ void func_80BF4AB8(EnRg* this, PlayState* play) {
                 this->unk_326 = 0x28;
                 if (player->stateFlags3 & PLAYER_STATE3_1000) {
                     player->linearVelocity *= 0.5f;
-                    player->unk_B08[0] = player->linearVelocity;
-                    player->unk_B08[1] += player->linearVelocity * 0.05f;
+                    player->unk_B08 = player->linearVelocity;
+                    player->unk_B0C += player->linearVelocity * 0.05f;
                     if (BINANG_SUB(this->actor.yawTowardsPlayer, player->currentYaw) > 0) {
                         player->currentYaw += 0x2000;
                     } else {
@@ -786,7 +786,9 @@ void EnRg_Update(Actor* thisx, PlayState* play) {
         func_80BF4024(this, play);
     }
 
-    Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 20.0f, 0.0f, 0x1D);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 20.0f, 0.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                UPDBGCHECKINFO_FLAG_10);
 
     if (this->actor.floorHeight <= BGCHECK_Y_MIN) {
         Math_Vec3f_Copy(&this->actor.world.pos, &this->actor.prevPos);

@@ -146,7 +146,7 @@ void BgDkjailIvy_WaitForCut(BgDkjailIvy* this, PlayState* play) {
     if (this->collider.base.acFlags & AC_HIT) {
         this->collider.base.acFlags &= ~AC_HIT;
         this->dyna.actor.flags |= ACTOR_FLAG_10;
-        ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+        CutsceneManager_Queue(this->dyna.actor.csId);
         BgDkjailIvy_SetupCutscene(this);
     } else {
         CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
@@ -158,16 +158,16 @@ void BgDkjailIvy_SetupCutscene(BgDkjailIvy* this) {
 }
 
 void BgDkjailIvy_BeginCutscene(BgDkjailIvy* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
+    if (CutsceneManager_IsNext(this->dyna.actor.csId)) {
+        CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
         this->fadeOutTimer = 50;
-        func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+        DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
         Flags_SetSwitch(play, BG_DKJAIL_GET_SWITCH(&this->dyna.actor));
         BgDkjailIvy_IvyCutEffects(this, play);
         Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_GRASS_WALL_BROKEN);
         BgDkjailIvy_SetupFadeOut(this);
     } else {
-        ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+        CutsceneManager_Queue(this->dyna.actor.csId);
     }
 }
 

@@ -17,6 +17,8 @@
 #define ARRAY_COUNT(arr) (s32)(sizeof(arr) / sizeof(arr[0]))
 #define ARRAY_COUNTU(arr) (u32)(sizeof(arr) / sizeof(arr[0]))
 
+#define ARRAY_COUNT_2D(arr) (ARRAY_COUNT(arr) * ARRAY_COUNT(arr[0]))
+
 // TODO: After uintptr_t cast change should have an AVOID_UB target that just toggles the KSEG0 bit in the address rather than add/sub 0x80000000
 #define PHYSICAL_TO_VIRTUAL(addr) ((uintptr_t)(addr) + RDRAM_CACHED)
 #define VIRTUAL_TO_PHYSICAL(addr) (uintptr_t)((u8*)(addr) - RDRAM_CACHED)
@@ -60,7 +62,7 @@
 #define CUR_CAPACITY(upg) CAPACITY(upg, CUR_UPG_VALUE(upg))
 
 // To be used with `Magic_Add`, but ensures enough magic is added to fill the magic bar to capacity
-#define MAGIC_FILL_TO_CAPACITY (((void)0, gSaveContext.magicFillTarget) + (gSaveContext.save.playerData.isDoubleMagicAcquired + 1) * MAGIC_NORMAL_METER)
+#define MAGIC_FILL_TO_CAPACITY (((void)0, gSaveContext.magicFillTarget) + (gSaveContext.save.saveInfo.playerData.isDoubleMagicAcquired + 1) * MAGIC_NORMAL_METER)
 
 #define CONTROLLER1(gameState) (&(gameState)->input[0])
 #define CONTROLLER2(gameState) (&(gameState)->input[1])
@@ -76,26 +78,6 @@
 #define ALIGN16(val) (((val) + 0xF) & ~0xF)
 #define ALIGN64(val) (((val) + 0x3F) & ~0x3F)
 #define ALIGN256(val) (((val) + 0xFF) & ~0xFF)
-
-extern GraphicsContext* __gfxCtx;
-
-#define WORK_DISP __gfxCtx->work.p
-#define POLY_OPA_DISP __gfxCtx->polyOpa.p
-#define POLY_XLU_DISP __gfxCtx->polyXlu.p
-#define OVERLAY_DISP __gfxCtx->overlay.p
-#define DEBUG_DISP __gfxCtx->debug.p
-
-// __gfxCtx shouldn't be used directly.
-// Use the DISP macros defined above when writing to display buffers.
-#define OPEN_DISPS(gfxCtx)                  \
-    {                                       \
-        GraphicsContext* __gfxCtx = gfxCtx; \
-        s32 __dispPad
-
-#define CLOSE_DISPS(gfxCtx) \
-    (void)0;                \
-    }                       \
-    (void)0
 
 /**
  * `x` vertex x
@@ -113,23 +95,6 @@ extern GraphicsContext* __gfxCtx;
 
 #define VTX_T(x, y, z, s, t, cr, cg, cb, a) \
     { { x, y, z }, 0, { s, t }, { cr, cg, cb, a }, }
-
-#define GRAPH_ALLOC(gfxCtx, size) ((void*)((gfxCtx)->polyOpa.d = (Gfx*)((u8*)(gfxCtx)->polyOpa.d - ALIGN16(size))))
-
-// Custom gbi macro
-#define gDPSetTileCustom(pkt, fmt, siz, width, height, pal, cms, cmt, masks, maskt, shifts, shiftt)                    \
-    {                                                                                                                  \
-        gDPPipeSync(pkt);                                                                                              \
-        gDPTileSync(pkt);                                                                                              \
-        gDPSetTile(pkt, fmt, siz, (((width)*siz##_TILE_BYTES) + 7) >> 3, 0, G_TX_LOADTILE, 0, cmt, maskt, shiftt, cms, \
-                   masks, shifts);                                                                                     \
-        gDPTileSync(pkt);                                                                                              \
-        gDPSetTile(pkt, fmt, siz, (((width)*siz##_TILE_BYTES) + 7) >> 3, 0, G_TX_RENDERTILE, pal, cmt, maskt, shiftt,  \
-                   cms, masks, shifts);                                                                                \
-        gDPSetTileSize(pkt, G_TX_RENDERTILE, 0, 0, ((width)-1) << G_TEXTURE_IMAGE_FRAC,                                \
-                       ((height)-1) << G_TEXTURE_IMAGE_FRAC);                                                          \
-    }                                                                                                                  \
-    (void)0
 
 #define SQ(x) ((x) * (x))
 #define ABS(x) ((x) >= 0 ? (x) : -(x))

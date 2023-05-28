@@ -448,7 +448,7 @@ void Boss03_Init(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     Vec3f sp70;
 
-    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_GREAT_BAY_TEMPLE)) {
         Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_DOOR_WARP1, 0.0f, PLATFORM_HEIGHT, 200.0f, 0, 0,
                            0, ENDOORWARP1_FF_1);
         Actor_Spawn(&play->actorCtx, play, ACTOR_ITEM_B_HEART, 0.0f, PLATFORM_HEIGHT, 0.0f, 0, 0, 0, 0);
@@ -1050,7 +1050,7 @@ void Boss03_Charge(Boss03* this, PlayState* play) {
         // Attack platform
         if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
             play_sound(NA_SE_IT_BIG_BOMB_EXPLOSION);
-            func_800BC848(&this->actor, play, 20, 15);
+            Actor_RequestQuakeAndRumble(&this->actor, play, 20, 15);
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_WATER_EFFECT, 0.0f, this->waterHeight, 0.0f, 0, 0, 0x96,
                         ENWATEREFFECT_TYPE_GYORG_SHOCKWAVE);
 
@@ -1145,8 +1145,8 @@ void Boss03_IntroCutscene(Boss03* this, PlayState* play) {
     switch (this->csState) {
         case 0:
             if (player->actor.world.pos.y < 1350.0f) {
-                Cutscene_Start(play, &play->csCtx);
-                func_800B7298(play, &this->actor, PLAYER_CSMODE_7);
+                Cutscene_StartManual(play, &play->csCtx);
+                func_800B7298(play, &this->actor, PLAYER_CSMODE_WAIT);
                 this->subCamId = Play_CreateSubCamera(play);
                 Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
                 Play_ChangeCameraStatus(play, this->subCamId, CAM_STATUS_ACTIVE);
@@ -1367,8 +1367,8 @@ void Boss03_IntroCutscene(Boss03* this, PlayState* play) {
                 mainCam->at = this->subCamAt;
 
                 func_80169AFC(play, this->subCamId, 0);
-                Cutscene_End(play, &play->csCtx);
-                func_800B7298(play, &this->actor, PLAYER_CSMODE_6);
+                Cutscene_StopManual(play, &play->csCtx);
+                func_800B7298(play, &this->actor, PLAYER_CSMODE_END);
                 this->subCamId = SUB_CAM_ID_DONE;
 
                 func_809E344C(this, play);
@@ -1444,8 +1444,8 @@ void Boss03_DeathCutscene(Boss03* this, PlayState* play) {
 
     switch (this->csState) {
         case 0:
-            if (ActorCutscene_GetCurrentIndex() == -1) {
-                Cutscene_Start(play, &play->csCtx);
+            if (CutsceneManager_GetCurrentCsId() == CS_ID_NONE) {
+                Cutscene_StartManual(play, &play->csCtx);
                 func_800B7298(play, &this->actor, PLAYER_CSMODE_1);
                 this->subCamId = Play_CreateSubCamera(play);
                 Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
@@ -1626,8 +1626,8 @@ void Boss03_DeathCutscene(Boss03* this, PlayState* play) {
                 mainCam->at = this->subCamAt;
                 func_80169AFC(play, this->subCamId, 0);
                 this->subCamId = SUB_CAM_ID_DONE;
-                Cutscene_End(play, &play->csCtx);
-                func_800B7298(play, &this->actor, PLAYER_CSMODE_6);
+                Cutscene_StopManual(play, &play->csCtx);
+                func_800B7298(play, &this->actor, PLAYER_CSMODE_END);
                 this->csState = 3;
                 Play_DisableMotionBlur();
                 Boss03_PlayUnderwaterSfx(&this->actor.projectedPos, NA_SE_EN_KONB_INIT_OLD);
@@ -1659,8 +1659,8 @@ void Boss03_SpawnSmallFishesCutscene(Boss03* this, PlayState* play) {
     this->csTimer++;
     switch (this->csState) {
         case 0:
-            if (ActorCutscene_GetCurrentIndex() == -1) {
-                Cutscene_Start(play, &play->csCtx);
+            if (CutsceneManager_GetCurrentCsId() == CS_ID_NONE) {
+                Cutscene_StartManual(play, &play->csCtx);
                 func_800B7298(play, &this->actor, PLAYER_CSMODE_1);
                 this->subCamId = Play_CreateSubCamera(play);
                 Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
@@ -1721,8 +1721,8 @@ void Boss03_SpawnSmallFishesCutscene(Boss03* this, PlayState* play) {
 
                         func_80169AFC(play, this->subCamId, 0);
                         this->subCamId = SUB_CAM_ID_DONE;
-                        Cutscene_End(play, &play->csCtx);
-                        func_800B7298(play, &this->actor, PLAYER_CSMODE_6);
+                        Cutscene_StopManual(play, &play->csCtx);
+                        func_800B7298(play, &this->actor, PLAYER_CSMODE_END);
 
                         func_809E344C(this, play);
                         this->workTimer[WORK_TIMER_UNK1_A] = 50;
@@ -1773,7 +1773,7 @@ void Boss03_Stunned(Boss03* this, PlayState* play) {
         Actor_MoveWithGravity(&this->actor);
         if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND_TOUCH) {
             play_sound(NA_SE_IT_WALL_HIT_HARD);
-            func_800BC848(&this->actor, play, 10, 10);
+            Actor_RequestQuakeAndRumble(&this->actor, play, 10, 10);
         }
     } else {
         Math_ApproachS(&this->actor.shape.rot.z, -0x6000, 0xA, 0x900);
@@ -1842,16 +1842,16 @@ void Boss03_UpdateCollision(Boss03* this, PlayState* play) {
         for (i = 0; i < ARRAY_COUNT(sHeadJntSphElementsInit); i++) {
             if (this->headCollider.elements[i].info.toucherFlags & TOUCH_HIT) {
                 this->headCollider.elements[i].info.toucherFlags &= ~TOUCH_HIT;
-                player->unk_B84 = this->actor.shape.rot.y;
-                player->unk_B80 = 20.0f;
+                player->pushedYaw = this->actor.shape.rot.y;
+                player->pushedSpeed = 20.0f;
             }
         }
 
         for (i = 0; i < ARRAY_COUNT(sBodyJntSphElementsInit); i++) {
             if (this->bodyCollider.elements[i].info.toucherFlags & TOUCH_HIT) {
                 this->bodyCollider.elements[i].info.toucherFlags &= ~TOUCH_HIT;
-                player->unk_B84 = this->actor.shape.rot.y;
-                player->unk_B80 = 20.0f;
+                player->pushedYaw = this->actor.shape.rot.y;
+                player->pushedSpeed = 20.0f;
             }
         }
     }
@@ -1993,7 +1993,8 @@ void Boss03_Update(Actor* thisx, PlayState* play2) {
             Math_ApproachS(&this->actor.shape.rot.z, 0, 0xA, 0x800);
             this->actor.world.pos.y -= 100.0f;
             this->actor.prevPos.y -= 100.0f;
-            Actor_UpdateBgCheckInfo(play, &this->actor, 50.0f, 150.0f, 100.0f, 5);
+            Actor_UpdateBgCheckInfo(play, &this->actor, 50.0f, 150.0f, 100.0f,
+                                    UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
             this->actor.world.pos.y += 100.0f;
             this->actor.prevPos.y += 100.0f;
         }
@@ -2439,7 +2440,7 @@ void Boss03_DrawEffects(PlayState* play) {
             Matrix_Translate(eff->pos.x, eff->pos.y, eff->pos.z, MTXMODE_NEW);
 
             if (eff->type == GYORG_EFFECT_DROPLET) {
-                Matrix_RotateYF(Camera_GetInputDirYaw(GET_ACTIVE_CAM(play)) * (M_PI / 0x8000), MTXMODE_APPLY);
+                Matrix_RotateYF(BINANG_TO_RAD(Camera_GetInputDirYaw(GET_ACTIVE_CAM(play))), MTXMODE_APPLY);
             } else { // GYORG_EFFECT_SPLASH
                 Matrix_ReplaceRotation(&play->billboardMtxF);
             }

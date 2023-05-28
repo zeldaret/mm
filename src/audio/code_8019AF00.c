@@ -2058,11 +2058,11 @@ const char sAudioOcarinaUnusedText6[] = "last key step is too short !!! %d:%d %d
 const char sAudioOcarinaUnusedText7[] = "check is over!!! %d %d %d\n";
 
 void AudioOcarina_ReadControllerInput(void) {
-    Input inputs[4];
+    Input inputs[MAXCONTROLLERS];
     Input* input = &inputs[0];
     u32 ocarinaInputButtonPrev = sOcarinaInputButtonCur;
 
-    Padmgr_GetInput2(inputs, 0);
+    PadMgr_GetInput2(inputs, false);
     sOcarinaInputButtonCur = input->cur.button;
     sOcarinaInputButtonPrev = ocarinaInputButtonPrev;
     sOcarinaInputStickRel.x = input->rel.stick_x;
@@ -3357,7 +3357,7 @@ void AudioOcarina_Update(void) {
 
 #define OCARINA_INSTRUMENT_OOT_MAX 7
 
-void AudioOcarina_PlayLongScarecrowAfterCredits(void) {
+void AudioOcarina_PlayLongScarecrowSong(void) {
     static u8 sScarecrowAfterCreditsState = 0;
     static u8 sScarecrowAfterCreditsIntrumentId = OCARINA_INSTRUMENT_DEFAULT;
     static u16 sScarecrowAfterCreditsTimer = 1200;

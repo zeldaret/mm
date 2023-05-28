@@ -203,7 +203,8 @@ void func_80AFE25C(EnColMan* this, PlayState* play) {
                         CLEAR_TAG_SMALL_EXPLOSION);
         } else {
             EnBom* bomb = (EnBom*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOM, this->actor.world.pos.x,
-                                              this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, 0);
+                                              this->actor.world.pos.y, this->actor.world.pos.z,
+                                              BOMB_EXPLOSIVE_TYPE_BOMB, 0, 0, BOMB_TYPE_BODY);
 
             if (bomb != NULL) {
                 bomb->timer = 0;
@@ -222,7 +223,9 @@ void EnColMan_Update(Actor* thisx, PlayState* play) {
     Actor_SetScale(&this->actor, this->scale);
     this->actionFunc(this, play);
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 30.0f, 30.0f, 0x1F);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 30.0f, 30.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_2 | UPDBGCHECKINFO_FLAG_4 |
+                                UPDBGCHECKINFO_FLAG_8 | UPDBGCHECKINFO_FLAG_10);
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
 }

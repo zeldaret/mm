@@ -143,16 +143,16 @@ void ObjSyokudai_Update(Actor* thisx, PlayState* play2) {
     s32 pad1;
 
     if (this->pendingAction != OBJ_SYOKUDAI_PENDING_ACTION_NONE) {
-        if (ActorCutscene_GetCurrentIndex() != thisx->cutscene) {
-            if (ActorCutscene_GetCanPlayNext(thisx->cutscene) != 0) {
-                ActorCutscene_StartAndSetUnkLinkFields(thisx->cutscene, thisx);
+        if (CutsceneManager_GetCurrentCsId() != thisx->csId) {
+            if (CutsceneManager_IsNext(thisx->csId)) {
+                CutsceneManager_StartWithPlayerCs(thisx->csId, thisx);
                 if (this->pendingAction >= OBJ_SYOKUDAI_PENDING_ACTION_CUTSCENE_AND_SWITCH) {
                     Flags_SetSwitch(play, switchFlag);
                 }
             } else {
-                ActorCutscene_SetIntentToPlay(thisx->cutscene);
+                CutsceneManager_Queue(thisx->csId);
             }
-        } else if (func_800F22C4(thisx->cutscene, thisx) != 0) {
+        } else if (func_800F22C4(thisx->csId, thisx) != 0) {
             this->snuffTimer = OBJ_SYOKUDAI_SNUFF_NEVER;
             this->pendingAction = OBJ_SYOKUDAI_PENDING_ACTION_NONE;
         }
@@ -171,6 +171,7 @@ void ObjSyokudai_Update(Actor* thisx, PlayState* play2) {
         } else {
             s32 interaction = OBJ_SYOKUDAI_INTERACTION_NONE;
             u32 flameColliderHurtboxDmgFlags = 0;
+
             player = GET_PLAYER(play);
 
             if (OBJ_SYOKUDAI_GET_START_LIT(thisx)) {
@@ -240,7 +241,7 @@ void ObjSyokudai_Update(Actor* thisx, PlayState* play2) {
                     if (groupSize == 0) {
                         if ((type == OBJ_SYOKUDAI_TYPE_NO_SWITCH) && (switchFlag == 0x7F)) {
                             this->snuffTimer = OBJ_SYOKUDAI_SNUFF_NEVER;
-                        } else if (thisx->cutscene >= 0) {
+                        } else if (thisx->csId >= 0) {
                             this->pendingAction = OBJ_SYOKUDAI_PENDING_ACTION_CUTSCENE_AND_SWITCH;
                         } else {
                             Flags_SetSwitch(play, switchFlag);

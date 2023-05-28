@@ -61,13 +61,13 @@ void ObjTokeiStep_SetSysMatrix(ObjTokeiStepPanel* panel) {
     mtx->zw = panel->pos.z;
 }
 
-void ObjTokeiStep_AddQuake(ObjTokeiStep* this, PlayState* play) {
+void ObjTokeiStep_RequestQuakeAndRumble(ObjTokeiStep* this, PlayState* play) {
     s32 pad[2];
-    s16 quakeIndex = Quake_Add(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
+    s16 quakeIndex = Quake_Request(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
 
     Quake_SetSpeed(quakeIndex, 20000);
-    Quake_SetQuakeValues(quakeIndex, 1, 0, 0, 0);
-    Quake_SetCountdown(quakeIndex, 7);
+    Quake_SetPerturbations(quakeIndex, 1, 0, 0, 0);
+    Quake_SetDuration(quakeIndex, 7);
 
     Rumble_Request(this->dyna.actor.xyzDistToPlayerSq, 120, 20, 10);
 }
@@ -180,7 +180,7 @@ s32 ObjTokeiStep_OpenProcess(ObjTokeiStep* this, PlayState* play) {
                     }
                     if (panel->numBounces == 1) {
                         ObjTokeiStep_SpawnDust(this2, panel, play);
-                        ObjTokeiStep_AddQuake(this2, play);
+                        ObjTokeiStep_RequestQuakeAndRumble(this2, play);
                     }
                 }
             }
@@ -195,7 +195,7 @@ void ObjTokeiStep_Init(Actor* thisx, PlayState* play) {
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, 0);
-    if ((play->sceneId == SCENE_CLOCKTOWER) && (gSaveContext.sceneLayer == 2) && (play->csCtx.currentCsIndex == 0)) {
+    if ((play->sceneId == SCENE_CLOCKTOWER) && (gSaveContext.sceneLayer == 2) && (play->csCtx.scriptIndex == 0)) {
         DynaPolyActor_LoadMesh(play, &this->dyna, &gClocktowerPanelCol);
         ObjTokeiStep_InitSteps(this);
         ObjTokeiStep_SetupBeginOpen(this);
@@ -221,12 +221,12 @@ void ObjTokeiStep_SetupBeginOpen(ObjTokeiStep* this) {
 }
 
 void ObjTokeiStep_BeginOpen(ObjTokeiStep* this, PlayState* play) {
-    CsCmdActorAction* action;
+    CsCmdActorCue* cue;
 
-    if (Cutscene_CheckActorAction(play, 134)) {
-        action = play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 134)];
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_134)) {
+        cue = play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_134)];
 
-        if ((action->startFrame == play->csCtx.frames) && (action->action != 0)) {
+        if ((cue->startFrame == play->csCtx.curFrame) && (cue->id != 0)) {
             this->dyna.actor.draw = ObjTokeiStep_DrawOpen;
             ObjTokeiStep_SetupOpen(this);
         }
@@ -247,7 +247,7 @@ void ObjTokeiStep_SetupOpen(ObjTokeiStep* this) {
 
 void ObjTokeiStep_Open(ObjTokeiStep* this, PlayState* play) {
     if (ObjTokeiStep_OpenProcess(this, play)) {
-        func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+        DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
         ObjTokeiStep_SetupDoNothingOpen(this);
     }
 }

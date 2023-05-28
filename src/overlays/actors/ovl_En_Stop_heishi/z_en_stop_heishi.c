@@ -195,7 +195,7 @@ void EnStopHeishi_UpdateHeadThirdDay(EnStopheishi* this) {
                 this->headTurnTimer1 = 50;
             }
         }
-    } else if ((this->headTurnTimer1 == 0) && (Quake_NumActiveQuakes() != 0) && (this->headTurnTimer2 >= 6)) {
+    } else if ((this->headTurnTimer1 == 0) && (Quake_GetNumActiveQuakes() != 0) && (this->headTurnTimer2 >= 6)) {
         this->headTurnTimer2 = 0;
     }
 }
@@ -545,7 +545,9 @@ void EnStopheishi_Update(Actor* thisx, PlayState* play) {
     Math_SmoothStepToS(&this->headRotZ, this->pitchToPlayer, 1, 0x7D0, 0);
     this->actionFunc(this, play);
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 50.0f, 0x1D);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 50.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                UPDBGCHECKINFO_FLAG_10);
     Actor_SetScale(&this->actor, 0.01f);
     this->actor.uncullZoneForward = 500.0f;
     Math_Vec3f_Copy(&this->actor.focus.pos, &this->headWorldPos);

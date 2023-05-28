@@ -155,7 +155,7 @@ void EnTanron2_Init(Actor* thisx, PlayState* play) {
         this->unk_14C = -this->unk_14C;
     }
 
-    Actor_UpdateBgCheckInfo(play, &this->actor, 35.0f, 60.0f, 60.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 35.0f, 60.0f, 60.0f, UPDBGCHECKINFO_FLAG_4);
     this->actor.floorHeight += 20.0f;
     this->unk_148 = Rand_ZeroFloat(32.0f);
 }

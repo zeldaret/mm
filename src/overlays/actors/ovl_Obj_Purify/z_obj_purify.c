@@ -113,7 +113,7 @@ s32 ObjPurify_IsPurified(ObjPurify* this) {
             return true;
         }
     } else {
-        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_20_02)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_WOODFALL_TEMPLE)) {
             return true;
         }
     }

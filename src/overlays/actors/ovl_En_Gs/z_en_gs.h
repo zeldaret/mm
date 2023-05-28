@@ -49,12 +49,12 @@ typedef struct EnGs {
     /* 0x208 */ s32 unk_208;
     /* 0x20C */ s32 unk_20C;
     /* 0x210 */ u16 unk_210;
-    /* 0x212 */ s16 unk_212[2];
+    /* 0x212 */ s16 csIdList[2];
     /* 0x216 */ s16 unk_216;
     /* 0x218 */ s16 unk_218;
     /* 0x21A */ s16 unk_21A;
-    /* 0x21C */ s16 unk_21C;
-    /* 0x21E */ s16 unk_21E;
+    /* 0x21C */ s16 quakeY;
+    /* 0x21E */ s16 quakeDuration;
 } EnGs; // size = 0x220
 
 #endif // Z_EN_GS_H

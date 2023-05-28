@@ -100,10 +100,9 @@ void func_80A5B160(EnKusa2* this, PlayState* play) {
 
     if (this->unk_194[0] == NULL) {
         ptr = this->unk_194;
-        actor = (EnKusa2*)Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ACTOR_EN_KUSA2, this->actor.world.pos.x,
-                                                        this->actor.world.pos.y, this->actor.world.pos.z, 0,
-                                                        Rand_Next() >> 0x10, 0, 1, this->actor.cutscene,
-                                                        this->actor.halfDaysBits, NULL);
+        actor = (EnKusa2*)Actor_SpawnAsChildAndCutscene(
+            &play->actorCtx, play, ACTOR_EN_KUSA2, this->actor.world.pos.x, this->actor.world.pos.y,
+            this->actor.world.pos.z, 0, Rand_Next() >> 0x10, 0, 1, this->actor.csId, this->actor.halfDaysBits, NULL);
         *ptr = actor;
 
         if (*ptr != NULL) {
@@ -119,7 +118,7 @@ void func_80A5B160(EnKusa2* this, PlayState* play) {
             actor = (EnKusa2*)Actor_SpawnAsChildAndCutscene(
                 &play->actorCtx, play, ACTOR_EN_KUSA2, (Math_SinS(temp_s1) * 80.0f) + this->actor.world.pos.x,
                 this->actor.world.pos.y, (Math_CosS(temp_s1) * 80.0f) + this->actor.world.pos.z, 0, Rand_Next() >> 0x10,
-                0, 1, this->actor.cutscene, this->actor.halfDaysBits, NULL);
+                0, 1, this->actor.csId, this->actor.halfDaysBits, NULL);
             *ptr = actor;
             if (*ptr != NULL) {
                 (*ptr)->actor.room = this->actor.room;
@@ -160,7 +159,7 @@ void func_80A5B3BC(EnKusa2* this) {
 void func_80A5B490(EnKusa2* this, PlayState* play) {
     Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ACTOR_EN_KITAN, this->actor.world.pos.x,
                                   this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0,
-                                  ENKUSA2_GET_7F00(&this->actor) << 9, this->actor.cutscene, this->actor.halfDaysBits,
+                                  ENKUSA2_GET_7F00(&this->actor) << 9, this->actor.csId, this->actor.halfDaysBits,
                                   NULL);
 }
 
@@ -271,7 +270,8 @@ s32 func_80A5BA58(EnKusa2* this, PlayState* play) {
 }
 
 void func_80A5BAFC(EnKusa2* this, PlayState* play) {
-    Actor_UpdateBgCheckInfo(play, &this->actor, 15.0f, 35.0f, 0.0f, 0x45);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 15.0f, 35.0f, 0.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_40);
 }
 
 void func_80A5BB40(EnKusa2* this, PlayState* play, s32 arg2) {

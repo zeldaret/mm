@@ -129,7 +129,7 @@ void EnMThunder_Init(Actor* thisx, PlayState* play) {
     this->isCharging = false;
 
     if (player->stateFlags2 & PLAYER_STATE2_20000) {
-        if (!gSaveContext.save.playerData.isMagicAcquired || (gSaveContext.magicState != MAGIC_STATE_IDLE) ||
+        if (!gSaveContext.save.saveInfo.playerData.isMagicAcquired || (gSaveContext.magicState != MAGIC_STATE_IDLE) ||
             ((ENMTHUNDER_GET_MAGIC_COST(&this->actor) != 0) &&
              !Magic_Consume(play, ENMTHUNDER_GET_MAGIC_COST(&this->actor), MAGIC_CONSUME_NOW))) {
             AudioSfx_PlaySfx(NA_SE_IT_ROLLING_CUT, &player->actor.projectedPos, 4, &gSfxDefaultFreqAndVolScale,
@@ -144,7 +144,7 @@ void EnMThunder_Init(Actor* thisx, PlayState* play) {
         this->isCharging = false;
 
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_23_02)) {
-            player->unk_B08[0] = 1.0f;
+            player->unk_B08 = 1.0f;
             this->collider.info.toucher.damage = sDamages[this->type + ENMTHUNDER_TYPE_MAX];
             this->subtype = ENMTHUNDER_SUBTYPE_SPIN_GREAT;
             if (this->type == ENMTHUNDER_TYPE_GREAT_FAIRY_SWORD) {
@@ -155,7 +155,7 @@ void EnMThunder_Init(Actor* thisx, PlayState* play) {
                 this->scaleTarget = 3;
             }
         } else {
-            player->unk_B08[0] = 0.5f;
+            player->unk_B08 = 0.5f;
             this->collider.info.toucher.damage = sDamages[this->type];
             this->subtype = ENMTHUNDER_SUBTYPE_SPIN_REGULAR;
             if (this->type == ENMTHUNDER_TYPE_GREAT_FAIRY_SWORD) {
@@ -229,11 +229,11 @@ void EnMThunder_Charge(EnMThunder* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     Actor* child = this->actor.child;
 
-    this->unk1B0 = player->unk_B08[0];
+    this->unk1B0 = player->unk_B08;
     this->actor.world.pos = player->bodyPartsPos[0];
     this->actor.shape.rot.y = player->actor.shape.rot.y + 0x8000;
 
-    if (!this->isCharging && (player->unk_B08[0] >= 0.1f)) {
+    if (!this->isCharging && (player->unk_B08 >= 0.1f)) {
         if ((gSaveContext.magicState != MAGIC_STATE_IDLE) ||
             ((ENMTHUNDER_GET_MAGIC_COST(&this->actor) != 0) &&
              !Magic_Consume(play, ENMTHUNDER_GET_MAGIC_COST(&this->actor), MAGIC_CONSUME_WAIT_PREVIEW))) {
@@ -247,8 +247,8 @@ void EnMThunder_Charge(EnMThunder* this, PlayState* play) {
         this->isCharging = true;
     }
 
-    if (player->unk_B08[0] >= 0.1f) {
-        Rumble_Request(0.0f, (s32)(player->unk_B08[0] * 150.0f), 2, (s32)(player->unk_B08[0] * 150.0f));
+    if (player->unk_B08 >= 0.1f) {
+        Rumble_Request(0.0f, (s32)(player->unk_B08 * 150.0f), 2, (s32)(player->unk_B08 * 150.0f));
     }
 
     if (player->stateFlags2 & PLAYER_STATE2_20000) {
@@ -256,8 +256,8 @@ void EnMThunder_Charge(EnMThunder* this, PlayState* play) {
             child->parent = NULL;
         }
 
-        if (player->unk_B08[0] <= 0.15f) {
-            if ((player->unk_B08[0] >= 0.1f) && (player->meleeWeaponAnimation >= PLAYER_MWA_SPIN_ATTACK_1H)) {
+        if (player->unk_B08 <= 0.15f) {
+            if ((player->unk_B08 >= 0.1f) && (player->meleeWeaponAnimation >= PLAYER_MWA_SPIN_ATTACK_1H)) {
                 AudioSfx_PlaySfx(NA_SE_IT_ROLLING_CUT, &player->actor.projectedPos, 4, &gSfxDefaultFreqAndVolScale,
                                  &gSfxDefaultFreqAndVolScale, &gSfxDefaultReverb);
                 AudioSfx_PlaySfx(NA_SE_IT_SWORD_SWING_HARD, &player->actor.projectedPos, 4, &gSfxDefaultFreqAndVolScale,
@@ -273,7 +273,7 @@ void EnMThunder_Charge(EnMThunder* this, PlayState* play) {
             gSaveContext.magicState = MAGIC_STATE_CONSUME_SETUP;
         }
 
-        if (player->unk_B08[0] < 0.85f) {
+        if (player->unk_B08 < 0.85f) {
             this->collider.info.toucher.damage = sDamages[this->type];
             this->subtype = ENMTHUNDER_SUBTYPE_SPIN_REGULAR;
             if (this->type == ENMTHUNDER_TYPE_GREAT_FAIRY_SWORD) {
@@ -320,26 +320,26 @@ void EnMThunder_Charge(EnMThunder* this, PlayState* play) {
         return;
     }
 
-    if (player->unk_B08[0] > 0.15f) {
+    if (player->unk_B08 > 0.15f) {
         this->chargingAlpha = 255;
         if (this->actor.child == NULL) {
             Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EFF_DUST, this->actor.world.pos.x,
                                this->actor.world.pos.y, this->actor.world.pos.z, 0, this->actor.shape.rot.y, 0,
                                EFF_DUST_TYPE_SPIN_ATTACK_CHARGE);
         }
-        this->adjustLightsArg1 += (((player->unk_B08[0] - 0.15f) * 1.5f) - this->adjustLightsArg1) * 0.5f;
-    } else if (player->unk_B08[0] > .1f) {
-        this->chargingAlpha = (s32)((player->unk_B08[0] - .1f) * 255.0f * 20.0f);
-        this->lightColorFrac = (player->unk_B08[0] - .1f) * 10.0f;
+        this->adjustLightsArg1 += (((player->unk_B08 - 0.15f) * 1.5f) - this->adjustLightsArg1) * 0.5f;
+    } else if (player->unk_B08 > .1f) {
+        this->chargingAlpha = (s32)((player->unk_B08 - .1f) * 255.0f * 20.0f);
+        this->lightColorFrac = (player->unk_B08 - .1f) * 10.0f;
     } else {
         this->chargingAlpha = 0;
     }
 
-    if (player->unk_B08[0] > 0.85f) {
+    if (player->unk_B08 > 0.85f) {
         func_8019F900(&player->actor.projectedPos, 2);
-    } else if (player->unk_B08[0] > 0.15f) {
+    } else if (player->unk_B08 > 0.15f) {
         func_8019F900(&player->actor.projectedPos, 1);
-    } else if (player->unk_B08[0] > 0.1f) {
+    } else if (player->unk_B08 > 0.1f) {
         func_8019F900(&player->actor.projectedPos, 0);
     }
 
@@ -540,7 +540,7 @@ void EnMThunder_Draw(Actor* thisx, PlayState* play2) {
             break;
     }
 
-    Matrix_Mult(&player->mf_CC4, MTXMODE_NEW);
+    Matrix_Mult(&player->leftHandMf, MTXMODE_NEW);
 
     if (this->type == ENMTHUNDER_TYPE_GILDED_SWORD) {
         Matrix_Translate(0.0f, 220.0f, 0.0f, MTXMODE_APPLY);

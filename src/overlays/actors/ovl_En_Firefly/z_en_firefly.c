@@ -8,7 +8,7 @@
 #include "overlays/actors/ovl_Obj_Syokudai/z_obj_syokudai.h"
 #include "objects/object_firefly/object_firefly.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_1000 | ACTOR_FLAG_4000)
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_IGNORE_QUAKE | ACTOR_FLAG_4000)
 
 #define THIS ((EnFirefly*)thisx)
 
@@ -703,7 +703,8 @@ void EnFirefly_Update(Actor* thisx, PlayState* play2) {
         }
     }
 
-    Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 10.0f, 15.0f, 7);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 10.0f, 15.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_2 | UPDBGCHECKINFO_FLAG_4);
     this->collider.dim.worldSphere.center.x = this->actor.world.pos.x;
     this->collider.dim.worldSphere.center.y = (s32)this->actor.world.pos.y + 10;
     this->collider.dim.worldSphere.center.z = this->actor.world.pos.z;

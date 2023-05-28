@@ -90,7 +90,7 @@ OBJCOPY    := $(MIPS_BINUTILS_PREFIX)objcopy
 OBJDUMP    := $(MIPS_BINUTILS_PREFIX)objdump
 ASM_PROC   := python3 tools/asm-processor/build.py
 
-ASM_PROC_FLAGS := --input-enc=utf-8 --output-enc=euc-jp
+ASM_PROC_FLAGS := --input-enc=utf-8 --output-enc=euc-jp --convert-statics=global-with-filename
 
 IINC       := -Iinclude -Isrc -Iassets -Ibuild -I.
 
@@ -102,7 +102,7 @@ endif
 
 # Check code syntax with host compiler
 ifneq ($(RUN_CC_CHECK),0)
-  CHECK_WARNINGS := -Wall -Wextra -Wno-format-security -Wno-unknown-pragmas -Wno-unused-parameter -Wno-unused-variable -Wno-missing-braces -Wno-int-conversion -Wno-unused-but-set-variable -Wno-unused-label
+  CHECK_WARNINGS := -Wall -Wextra -Wno-format-security -Wno-unknown-pragmas -Wno-unused-parameter -Wno-unused-variable -Wno-missing-braces -Wno-int-conversion -Wno-unused-but-set-variable -Wno-unused-label -Wno-sign-compare -Wno-tautological-compare
   CC_CHECK   := gcc -fno-builtin -fsyntax-only -funsigned-char -fdiagnostics-color -std=gnu89 -D _LANGUAGE_C -D NON_MATCHING $(IINC) -nostdinc $(CHECK_WARNINGS)
   ifneq ($(WERROR), 0)
     CC_CHECK += -Werror

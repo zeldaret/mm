@@ -92,7 +92,7 @@ void EnMm3_Init(Actor* thisx, PlayState* play) {
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, NULL, &sColChkInfoInit);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
     this->actor.parent = NULL;
     this->actor.targetMode = 0;
     this->unk_1DC = 1;
@@ -148,7 +148,7 @@ void func_80A6F3B4(EnMm3* this, PlayState* play) {
             case 0x278E:
                 if (play->msgCtx.choiceIndex == 0) {
                     if (this->unk_2B2 & 0x20) {
-                        if (gSaveContext.save.playerData.rupees >= play->msgCtx.unk1206C) {
+                        if (gSaveContext.save.saveInfo.playerData.rupees >= play->msgCtx.unk1206C) {
                             func_8019F208();
                             Message_StartTextbox(play, 0x2790, &this->actor);
                             this->unk_2B4 = 0x2790;
@@ -174,7 +174,7 @@ void func_80A6F3B4(EnMm3* this, PlayState* play) {
 
             case 0x279A:
                 if (play->msgCtx.choiceIndex == 0) {
-                    if (gSaveContext.save.playerData.rupees >= play->msgCtx.unk1206C) {
+                    if (gSaveContext.save.saveInfo.playerData.rupees >= play->msgCtx.unk1206C) {
                         func_8019F208();
                         Message_StartTextbox(play, 0x2790, &this->actor);
                         this->unk_2B4 = 0x2790;

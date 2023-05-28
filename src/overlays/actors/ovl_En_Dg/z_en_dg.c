@@ -5,12 +5,11 @@
  */
 
 #include "z_en_dg.h"
+#include "overlays/actors/ovl_En_Aob_01/z_en_aob_01.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_800000)
 
 #define THIS ((EnDg*)thisx)
-
-//! TODO: this file require macros for its uses of weekEventReg
 
 void EnDg_Init(Actor* thisx, PlayState* play);
 void EnDg_Destroy(Actor* thisx, PlayState* play);
@@ -237,7 +236,7 @@ void EnDg_UpdateCollision(EnDg* this, PlayState* play) {
         Collider_ResetCylinderOC(play, &this->collider.base);
     }
 
-    Actor_UpdateBgCheckInfo(play, &this->actor, 26.0f, 10.0f, 0.0f, 5);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 26.0f, 10.0f, 0.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
 }
 
 void EnDg_GetFloorRot(EnDg* this, Vec3f* floorRot) {
@@ -281,7 +280,7 @@ s32 EnDg_HasReachedPoint(EnDg* this, Path* path, s32 pointIndex) {
         diffZ = points[currentPoint + 1].z - points[currentPoint - 1].z;
     }
 
-    func_8017B7F8(&point, RADF_TO_BINANG(func_80086B30(diffX, diffZ)), &px, &pz, &d);
+    func_8017B7F8(&point, RAD_TO_BINANG(func_80086B30(diffX, diffZ)), &px, &pz, &d);
 
     if (((this->actor.world.pos.x * px) + (pz * this->actor.world.pos.z) + d) > 0.0f) {
         reached = true;
@@ -310,7 +309,7 @@ s16 EnDg_GetYRotation(Path* path, s32 index, Vec3f* pos, f32* distSq) {
 
     *distSq = SQ(diffX) + SQ(diffZ);
 
-    return RADF_TO_BINANG(Math_Atan2F_XY(diffZ, diffX));
+    return RAD_TO_BINANG(Math_Atan2F_XY(diffZ, diffX));
 }
 
 /**
@@ -417,20 +416,13 @@ void EnDg_SetupIdleMove(EnDg* this, PlayState* play) {
 
 /**
  * Updates the text ID in sRacetrackDogInfo based on what was set in the weekEventRegs by
- * En_Aob_01. This makes it sp the proper message can be displayed when the player picks up
+ * En_Aob_01. This makes it so the proper message can be displayed when the player picks up
  * the dog with the Mask of Truth equipped.
  */
 void EnDg_UpdateTextId(EnDg* this) {
-    if (this->index < 14) {
-        // Assuming that the weekEventRegs haven't been tampered with, then this will produce a text ID in
-        // the range of 0x3538 to 0x3545.
-        if (this->index % 2) {
-            sRacetrackDogInfo[this->index].textId =
-                0x3538 + ((gSaveContext.save.weekEventReg[42 + (this->index / 2)] & 0xF0) >> 4);
-        } else {
-            sRacetrackDogInfo[this->index].textId =
-                0x3538 + (gSaveContext.save.weekEventReg[42 + (this->index / 2)] & 0x0F);
-        }
+    if (this->index < RACEDOG_COUNT) {
+        // This will produce a text ID in the range of 0x3538 to 0x3545.
+        sRacetrackDogInfo[this->index].textId = GET_WEEKEVENTREG_DOG_RACE_TEXT(this->index, 0x3538);
     } else {
         Actor_Kill(&this->actor);
     }

@@ -1186,9 +1186,10 @@ void EnDekubaba_Update(Actor* thisx, PlayState* play) {
 
     if (this->actionFunc == EnDekubaba_PrunedSomersaultDie) {
         Actor_MoveWithGravity(&this->actor);
-        Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, this->size * 15.0f, 10.0f, 5);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, this->size * 15.0f, 10.0f,
+                                UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
     } else if (this->actionFunc != EnDekubaba_DeadStickDrop) {
-        Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
         if (this->boundFloor == NULL) {
             this->boundFloor = this->actor.floorPoly;
         }

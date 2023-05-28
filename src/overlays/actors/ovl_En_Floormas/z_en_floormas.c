@@ -176,7 +176,7 @@ void EnFloormas_Init(Actor* thisx, PlayState* play2) {
 
     this->actor.parent = Actor_SpawnAsChildAndCutscene(
         &play->actorCtx, play, ACTOR_EN_FLOORMAS, this->actor.world.pos.x, this->actor.world.pos.y,
-        this->actor.world.pos.z, 0, 0, 0, params + 0x10, -1, this->actor.halfDaysBits, NULL);
+        this->actor.world.pos.z, 0, 0, 0, params + 0x10, CS_ID_NONE, this->actor.halfDaysBits, NULL);
     if (this->actor.parent == NULL) {
         Actor_Kill(&this->actor);
         return;
@@ -184,7 +184,7 @@ void EnFloormas_Init(Actor* thisx, PlayState* play2) {
 
     this->actor.child = Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ACTOR_EN_FLOORMAS, this->actor.world.pos.x,
                                                       this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0,
-                                                      params + 0x10, -1, this->actor.halfDaysBits, NULL);
+                                                      params + 0x10, CS_ID_NONE, this->actor.halfDaysBits, NULL);
     if (this->actor.child == NULL) {
         Actor_Kill(this->actor.parent);
         Actor_Kill(&this->actor);
@@ -1104,7 +1104,9 @@ void EnFloormas_Update(Actor* thisx, PlayState* play) {
                 Actor_MoveWithGravity(&this->actor);
             }
 
-            Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, this->actor.scale.x * 3000.0f, 0.0f, 0x1D);
+            Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, this->actor.scale.x * 3000.0f, 0.0f,
+                                    UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                        UPDBGCHECKINFO_FLAG_10);
             Collider_UpdateCylinder(&this->actor, &this->collider);
             if (this->actionFunc == func_808D1650) {
                 this->actor.flags |= ACTOR_FLAG_1000000;

@@ -660,8 +660,9 @@ void func_80898654(EnPeehat* this) {
 
 void func_808986A4(EnPeehat* this, PlayState* play) {
     if (this->unk_2B0 == 5) {
-        EnBom* bomb = (EnBom*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOM, this->actor.world.pos.x,
-                                          this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0x602, 0);
+        EnBom* bomb =
+            (EnBom*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOM, this->actor.world.pos.x, this->actor.world.pos.y,
+                                this->actor.world.pos.z, BOMB_EXPLOSIVE_TYPE_BOMB, 0, 0x602, BOMB_TYPE_BODY);
 
         if (bomb != NULL) {
             bomb->timer = 0;
@@ -750,7 +751,7 @@ void EnPeehat_Update(Actor* thisx, PlayState* play2) {
         func_8089874C(this, play);
     }
     Actor_MoveWithGravity(thisx);
-    Actor_UpdateBgCheckInfo(play, thisx, 25.0f, 30.0f, 30.0f, 5);
+    Actor_UpdateBgCheckInfo(play, thisx, 25.0f, 30.0f, 30.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
 
     this->actionFunc(this, play);
 

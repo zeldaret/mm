@@ -147,7 +147,8 @@ void EnTite_Init(Actor* thisx, PlayState* play) {
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
     Collider_InitAndSetSphere(play, &this->collider, &this->actor, &sSphereInit);
     this->collider.dim.worldSphere.radius = sSphereInit.dim.modelSphere.radius;
-    this->unk_2C0 = 0x1D;
+    this->updBgCheckInfoFlags =
+        UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 | UPDBGCHECKINFO_FLAG_10;
 
     if (!D_80896B60) {
         for (i = 0; i < ARRAY_COUNT(D_80896B24); i++) {
@@ -178,7 +179,7 @@ void EnTite_Init(Actor* thisx, PlayState* play) {
     }
 
     if (this->actor.params == ENTITE_MINUS_2) {
-        this->unk_2C0 |= 0x40;
+        this->updBgCheckInfoFlags |= UPDBGCHECKINFO_FLAG_40;
         this->actor.colChkInfo.health = 3;
     }
 }
@@ -196,7 +197,7 @@ void func_80893A18(EnTite* this) {
 
 s32 func_80893A34(EnTite* this, PlayState* play) {
     if ((this->actor.params == ENTITE_MINUS_2) && (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) &&
-        (func_800C99D4(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId) == 5)) {
+        (SurfaceType_GetFloorType(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId) == FLOOR_TYPE_5)) {
         return true;
     }
     return false;
@@ -239,13 +240,14 @@ void func_80893BCC(EnTite* this, PlayState* play) {
     s32 j;
 
     if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND_TOUCH) {
-        u32 surface = func_800C9BB8(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
+        SurfaceMaterial surfaceMaterial =
+            SurfaceType_GetMaterial(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
 
-        if ((surface == COLPOLY_SURFACE_GROUND) || (surface == COLPOLY_SURFACE_SAND)) {
+        if ((surfaceMaterial == SURFACE_MATERIAL_DIRT) || (surfaceMaterial == SURFACE_MATERIAL_SAND)) {
             for (i = 5; i < ARRAY_COUNT(this->limbPos); i++) {
                 func_800BBFB0(play, &this->limbPos[i], 1.0f, 2, 80, 15, 1);
             }
-        } else if (surface == COLPOLY_SURFACE_SNOW) {
+        } else if (surfaceMaterial == SURFACE_MATERIAL_SNOW) {
             Vec3f* ptr;
 
             for (i = 5; i < ARRAY_COUNT(this->limbPos); i++) {
@@ -1062,7 +1064,7 @@ void EnTite_Update(Actor* thisx, PlayState* play) {
 
     if (this->actionFunc != func_808951B8) {
         Actor_MoveWithGravity(&this->actor);
-        Actor_UpdateBgCheckInfo(play, &this->actor, 25.0f, 40.0f, 20.0f, this->unk_2C0);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 25.0f, 40.0f, 20.0f, this->updBgCheckInfoFlags);
         func_808963B4(this, play);
         if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
             func_800BE3D0(&this->actor, this->actor.shape.rot.y, &this->actor.shape.rot);

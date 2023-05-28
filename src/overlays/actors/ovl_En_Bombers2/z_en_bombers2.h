@@ -27,7 +27,7 @@ typedef struct EnBombers2 {
     /* 0x2A8 */ s32 unk_2A8;
     /* 0x2AC */ u8 unk_2AC;
     /* 0x2AE */ s16 animIndex;
-    /* 0x2B0 */ s16 cutscene;
+    /* 0x2B0 */ s16 csId;
     /* 0x2B2 */ s16 unk_2B2;
     /* 0x2B4 */ s16 unk_2B4;
     /* 0x2B6 */ s16 unk_2B6;

@@ -7,7 +7,7 @@
 #include "z_en_po_sisters.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_1000 | ACTOR_FLAG_4000)
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_IGNORE_QUAKE | ACTOR_FLAG_4000)
 
 #define THIS ((EnPoSisters*)thisx)
 
@@ -243,7 +243,8 @@ void EnPoSisters_MatchPlayerXZ(EnPoSisters* this, PlayState* play) {
     f32 dist;
 
     if (this->megCloneId == POE_SISTERS_MEG_REAL || this->actionFunc != EnPoSisters_DamageFlinch) {
-        if ((player->meleeWeaponState == 0 || player->meleeWeaponAnimation >= PLAYER_MWA_SPIN_ATTACK_1H) &&
+        if ((player->meleeWeaponState == PLAYER_MELEE_WEAPON_STATE_0 ||
+             player->meleeWeaponAnimation >= PLAYER_MWA_SPIN_ATTACK_1H) &&
             ((player->actor.world.pos.y - player->actor.floorHeight) < 1.0f)) {
             Math_StepToF(&this->megDistToPlayer, 110.0f, 3.0f);
         } else {
@@ -978,7 +979,7 @@ void EnPoSisters_Update(Actor* thisx, PlayState* play) {
     Actor_MoveWithGravity(&this->actor);
 
     if (this->poSisterFlags & POE_SISTERS_FLAG_UPDATE_BGCHECK_INFO) {
-        Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 0.0f, 5);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 0.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
     } else {
         checkPos.x = this->actor.world.pos.x;
         checkPos.y = this->actor.world.pos.y + 10.0f;

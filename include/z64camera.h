@@ -90,18 +90,18 @@
 #define CAM_BEHAVIOR_SETTING_2 (1 << 4)
 // Mode (0x2, 0x20)
 #define CAM_BEHAVIOR_MODE_1 (1 << 1)
-#define CAM_BEHAVIOR_MODE_2 (1 << 5)
+#define CAM_BEHAVIOR_MODE_VALID (1 << 5)
 // bgCam (0x4, 0x40)
 #define CAM_BEHAVIOR_BGCAM_1 (1 << 2)
 #define CAM_BEHAVIOR_BGCAM_2 (1 << 6)
 
 // Camera stateFlags. Variety of generic flags
 #define CAM_STATE_0 (1 << 0) // Must be set for the camera from changing settings based on the bg surface
-#define CAM_STATE_1 (1 << 1)
+#define CAM_STATE_CHECK_WATER (1 << 1)
 #define CAM_STATE_2 (1 << 2)
 #define CAM_STATE_3 (1 << 3)
 #define CAM_STATE_4 (1 << 4)
-#define CAM_STATE_5 (1 << 5)
+#define CAM_STATE_DISABLE_MODE_CHANGE (1 << 5)
 #define CAM_STATE_6 (1 << 6)
 #define CAM_STATE_7 (1 << 7)
 #define CAM_STATE_UNDERWATER (1 << 8)
@@ -110,7 +110,7 @@
 #define CAM_STATE_11 (1 << 11)
 #define CAM_STATE_12 (1 << 12)
 #define CAM_STATE_13 (1 << 13)
-#define CAM_STATE_14 (1 << 14)
+#define CAM_STATE_INITIALIZED (1 << 14)
 #define CAM_STATE_15 ((s16)(1 << 15))
 
 // Camera viewFlags. Set params related to view
@@ -340,13 +340,13 @@ typedef enum {
 } CameraFuncType;
 
 typedef enum {
-    /* 0x00 */ CAM_DATA_00,
+    /* 0x00 */ CAM_DATA_Y_OFFSET,
     /* 0x01 */ CAM_DATA_01,
     /* 0x02 */ CAM_DATA_02,
-    /* 0x03 */ CAM_DATA_03,
+    /* 0x03 */ CAM_DATA_PITCH_TARGET,
     /* 0x04 */ CAM_DATA_04,
     /* 0x05 */ CAM_DATA_05,
-    /* 0x06 */ CAM_DATA_06,
+    /* 0x06 */ CAM_DATA_YAW_DIFF_RANGE,
     /* 0x07 */ CAM_DATA_FOV,
     /* 0x08 */ CAM_DATA_08,
     /* 0x09 */ CAM_DATA_INTERFACE_FLAGS,
@@ -374,7 +374,7 @@ typedef struct {
     /* 0x00 */ Vec3f pos;
     /* 0x0C */ Vec3f norm;
     /* 0x18 */ CollisionPoly* poly;
-    /* 0x1C */ VecSph sphNorm;
+    /* 0x1C */ VecGeo geoNorm;
     /* 0x24 */ s32 bgId;
 } CameraCollision; // size = 0x28
 
@@ -405,13 +405,13 @@ typedef struct {
  */
 
 #define CAM_FUNCDATA_NORM1(yOffset, data01, data02, pitchTarget, eyeStepScale, posStepScale, yawDiffRange, fov, data08, interfaceFlags) \
-    { yOffset,      CAM_DATA_00 }, \
+    { yOffset,      CAM_DATA_Y_OFFSET }, \
     { data01,       CAM_DATA_01 }, \
     { data02,       CAM_DATA_02 }, \
-    { pitchTarget,  CAM_DATA_03 }, \
+    { pitchTarget,  CAM_DATA_PITCH_TARGET }, \
     { eyeStepScale, CAM_DATA_04 }, \
     { posStepScale, CAM_DATA_05 }, \
-    { yawDiffRange, CAM_DATA_06 }, \
+    { yawDiffRange, CAM_DATA_YAW_DIFF_RANGE }, \
     { fov,          CAM_DATA_FOV }, \
     { data08,       CAM_DATA_08 }, \
     { interfaceFlags, CAM_DATA_INTERFACE_FLAGS }
@@ -462,10 +462,10 @@ typedef struct {
 // Unused Camera RemoteBomb Setting
 
 #define CAM_FUNCDATA_NORM2(yOffset, data01, data02, pitchTarget, data04, fov, data08, interfaceFlags) \
-    { yOffset,     CAM_DATA_00 }, \
+    { yOffset,     CAM_DATA_Y_OFFSET }, \
     { data01,      CAM_DATA_01 }, \
     { data02,      CAM_DATA_02 }, \
-    { pitchTarget, CAM_DATA_03 }, \
+    { pitchTarget, CAM_DATA_PITCH_TARGET }, \
     { data04,      CAM_DATA_04 }, \
     { fov,         CAM_DATA_FOV }, \
     { data08,      CAM_DATA_08 }, \
@@ -480,10 +480,10 @@ typedef struct {
  */
 
 #define CAM_FUNCDATA_NORM3(yOffset, data01, data02, pitchTarget, eyeStepScale, posStepScale, fov, data08, interfaceFlags) \
-    { yOffset,      CAM_DATA_00 }, \
+    { yOffset,      CAM_DATA_Y_OFFSET }, \
     { data01,       CAM_DATA_01 }, \
     { data02,       CAM_DATA_02 }, \
-    { pitchTarget,  CAM_DATA_03 }, \
+    { pitchTarget,  CAM_DATA_PITCH_TARGET }, \
     { eyeStepScale, CAM_DATA_04 }, \
     { posStepScale, CAM_DATA_05 }, \
     { fov,          CAM_DATA_FOV }, \
@@ -530,12 +530,12 @@ typedef struct {
  */
 
 #define CAM_FUNCDATA_NORM0(yOffset, data01, data02, data21, data04, yawDiffRange, fov, data08, interfaceFlags) \
-    { yOffset,      CAM_DATA_00 }, \
+    { yOffset,      CAM_DATA_Y_OFFSET }, \
     { data01,       CAM_DATA_01 }, \
     { data02,       CAM_DATA_02 }, \
     { data21,       CAM_DATA_21 }, \
     { data04,       CAM_DATA_04 }, \
-    { yawDiffRange, CAM_DATA_06 }, \
+    { yawDiffRange, CAM_DATA_YAW_DIFF_RANGE }, \
     { fov,          CAM_DATA_FOV }, \
     { data08,       CAM_DATA_08 }, \
     { interfaceFlags, CAM_DATA_INTERFACE_FLAGS }
@@ -581,10 +581,10 @@ typedef struct {
  */
 
 #define CAM_FUNCDATA_PARA1(yOffset, data01, data02, pitchTarget, data10, data04, data05, fov, data08, interfaceFlags, data11, data12) \
-    { yOffset,      CAM_DATA_00 }, \
+    { yOffset,      CAM_DATA_Y_OFFSET }, \
     { data01,       CAM_DATA_01 }, \
     { data02,       CAM_DATA_02 }, \
-    { pitchTarget,  CAM_DATA_03 }, \
+    { pitchTarget,  CAM_DATA_PITCH_TARGET }, \
     { data10,       CAM_DATA_10 }, \
     { data04,       CAM_DATA_04 }, \
     { data05,       CAM_DATA_05 }, \
@@ -596,10 +596,10 @@ typedef struct {
 
 // Same as above but with extra unused entry
 #define CAM_FUNCDATA_PARA1_ALT(yOffset, data01, data02, pitchTarget, data10, data04, data05, fov, data08, interfaceFlags, data11, data12, data18) \
-    { yOffset,      CAM_DATA_00 }, \
+    { yOffset,      CAM_DATA_Y_OFFSET }, \
     { data01,       CAM_DATA_01 }, \
     { data02,       CAM_DATA_02 }, \
-    { pitchTarget,  CAM_DATA_03 }, \
+    { pitchTarget,  CAM_DATA_PITCH_TARGET }, \
     { data10,       CAM_DATA_10 }, \
     { data04,       CAM_DATA_04 }, \
     { data05,       CAM_DATA_05 }, \
@@ -662,10 +662,10 @@ typedef struct {
 // Unused Camera Maze Setting
 
 #define CAM_FUNCDATA_PARA2(yOffset, data02, data01, pitchTarget, data04, fov, data08, interfaceFlags) \
-    { yOffset,     CAM_DATA_00 }, \
+    { yOffset,     CAM_DATA_Y_OFFSET }, \
     { data02,      CAM_DATA_02 }, \
     { data01,      CAM_DATA_01 }, \
-    { pitchTarget, CAM_DATA_03 }, \
+    { pitchTarget, CAM_DATA_PITCH_TARGET }, \
     { data04,      CAM_DATA_04 }, \
     { fov,         CAM_DATA_FOV }, \
     { data08,      CAM_DATA_08 }, \
@@ -680,7 +680,7 @@ typedef struct {
  */
 
 #define CAM_FUNCDATA_JUMP2(yOffset, data01, data02, data20, data04, data05, fov, data08, interfaceFlags) \
-    { yOffset,     CAM_DATA_00 }, \
+    { yOffset,     CAM_DATA_Y_OFFSET }, \
     { data01,      CAM_DATA_01 }, \
     { data02,      CAM_DATA_02 }, \
     { data20,      CAM_DATA_20 }, \
@@ -729,13 +729,13 @@ typedef struct {
  */
 
 #define CAM_FUNCDATA_JUMP3(yOffset, data01, data02, pitchTarget, data04, data05, yawDiffRange, fov, data08, interfaceFlags) \
-    { yOffset,      CAM_DATA_00 }, \
+    { yOffset,      CAM_DATA_Y_OFFSET }, \
     { data01,       CAM_DATA_01 }, \
     { data02,       CAM_DATA_02 }, \
-    { pitchTarget,  CAM_DATA_03 }, \
+    { pitchTarget,  CAM_DATA_PITCH_TARGET }, \
     { data04,       CAM_DATA_04 }, \
     { data05,       CAM_DATA_05 }, \
-    { yawDiffRange, CAM_DATA_06 }, \
+    { yawDiffRange, CAM_DATA_YAW_DIFF_RANGE }, \
     { fov,          CAM_DATA_FOV }, \
     { data08,       CAM_DATA_08 }, \
     { interfaceFlags, CAM_DATA_INTERFACE_FLAGS }
@@ -785,7 +785,7 @@ typedef struct {
  */
 
 #define CAM_FUNCDATA_BATT1(yOffset, data01, data02, data13, data14, data15, data16, data17, fov, data08, interfaceFlags, data11, data18) \
-    { yOffset, CAM_DATA_00 }, \
+    { yOffset, CAM_DATA_Y_OFFSET }, \
     { data01,  CAM_DATA_01 }, \
     { data02,  CAM_DATA_02 }, \
     { data13,  CAM_DATA_13 }, \
@@ -845,7 +845,7 @@ typedef struct {
  */
 
 #define CAM_FUNCDATA_KEEP1(yOffset, data01, data02, data13, data14, data15, data16, data17, fov, data08, interfaceFlags, data11) \
-    { yOffset, CAM_DATA_00 }, \
+    { yOffset, CAM_DATA_Y_OFFSET }, \
     { data01,  CAM_DATA_01 }, \
     { data02,  CAM_DATA_02 }, \
     { data13,  CAM_DATA_13 }, \
@@ -902,7 +902,7 @@ typedef struct {
  */
 
 #define CAM_FUNCDATA_KEEP3(yOffset, data01, data02, data13, data14, data15, data16, data17, fov, data08, timer, interfaceFlags, data18) \
-    { yOffset, CAM_DATA_00 }, \
+    { yOffset, CAM_DATA_Y_OFFSET }, \
     { data01,  CAM_DATA_01 }, \
     { data02,  CAM_DATA_02 }, \
     { data13,  CAM_DATA_13 }, \
@@ -957,9 +957,9 @@ typedef struct {
  */
 
 #define CAM_FUNCDATA_KEEP4(yOffset, data01, pitchTarget, data10, data18, fov, interfaceFlags, data04, timer) \
-    { yOffset,     CAM_DATA_00 }, \
+    { yOffset,     CAM_DATA_Y_OFFSET }, \
     { data01,      CAM_DATA_01 }, \
-    { pitchTarget, CAM_DATA_03 }, \
+    { pitchTarget, CAM_DATA_PITCH_TARGET }, \
     { data10,      CAM_DATA_10 }, \
     { data18,      CAM_DATA_18 }, \
     { fov,         CAM_DATA_FOV }, \
@@ -1008,7 +1008,7 @@ typedef struct {
  */
 
 #define CAM_FUNCDATA_FIXD1(yOffset, data04, fov, interfaceFlags) \
-    { yOffset,     CAM_DATA_00 }, \
+    { yOffset,     CAM_DATA_Y_OFFSET }, \
     { data04,      CAM_DATA_04 }, \
     { fov,         CAM_DATA_FOV }, \
     { interfaceFlags, CAM_DATA_INTERFACE_FLAGS }
@@ -1040,7 +1040,7 @@ typedef struct {
  */
 
 #define CAM_FUNCDATA_FIXD2(yOffset, data01, data02, data04, data05, fov, interfaceFlags) \
-    { yOffset,     CAM_DATA_00 }, \
+    { yOffset,     CAM_DATA_Y_OFFSET }, \
     { data01,      CAM_DATA_01 }, \
     { data02,      CAM_DATA_02 }, \
     { data04,      CAM_DATA_04 }, \
@@ -1097,7 +1097,7 @@ typedef struct {
  */
 
 #define CAM_FUNCDATA_SUBJ1(yOffset, data01, data02, data04, data19, data17, data18, fov, interfaceFlags) \
-    { yOffset, CAM_DATA_00 }, \
+    { yOffset, CAM_DATA_Y_OFFSET }, \
     { data01,  CAM_DATA_01 }, \
     { data02,  CAM_DATA_02 }, \
     { data04,  CAM_DATA_04 }, \
@@ -1140,7 +1140,7 @@ typedef struct {
  */
 
 #define CAM_FUNCDATA_UNIQ2(yOffset, data01, fov, interfaceFlags) \
-    { yOffset,     CAM_DATA_00 }, \
+    { yOffset,     CAM_DATA_Y_OFFSET }, \
     { data01,      CAM_DATA_01 }, \
     { fov,         CAM_DATA_FOV }, \
     { interfaceFlags, CAM_DATA_INTERFACE_FLAGS }
@@ -1175,7 +1175,7 @@ typedef struct {
  */
 
 #define CAM_FUNCDATA_UNIQ0(yOffset, data04, interfaceFlags) \
-    { yOffset,     CAM_DATA_00 }, \
+    { yOffset,     CAM_DATA_Y_OFFSET }, \
     { data04,      CAM_DATA_04 }, \
     { interfaceFlags, CAM_DATA_INTERFACE_FLAGS }
 
@@ -1244,8 +1244,8 @@ typedef struct {
 
 typedef struct {
     /* 0x00 */ Vec3f unk_00;
-    /* 0x0C */ VecSph unk_0C;
-    /* 0x14 */ VecSph unk_14;
+    /* 0x0C */ VecGeo unk_0C;
+    /* 0x14 */ VecGeo unk_14;
     /* 0x1C */ s16 unk_1C;
 } Demo1ReadWriteData; // size = 0x20
 
@@ -1319,7 +1319,7 @@ typedef struct {
     /* 0x0C */ f32 unk_0C;
     /* 0x10 */ f32 unk_10;
     /* 0x14 */ f32 unk_14;
-    /* 0x18 */ VecSph unk_18; // sp18-1C-20--24-26-28 // CutsceneCameraPoint?
+    /* 0x18 */ VecGeo unk_18;
     /* 0x20 */ s16 unk_20;
     /* 0x22 */ s16 timer;
 } Demo4ReadWriteData; // size = 0x24
@@ -1345,7 +1345,7 @@ typedef struct {
     /* 0x10 */ f32 unk_10;
     /* 0x14 */ f32 unk_14;
     /* 0x18 */ f32 unk_18;
-    /* 0x1C */ VecSph unk_1C;
+    /* 0x1C */ VecGeo unk_1C;
     /* 0x24 */ s16 unk_24;
     /* 0x26 */ s16 timer;
 } Demo5ReadWriteData; // size = 0x28
@@ -1367,8 +1367,8 @@ typedef struct {
 
 typedef struct {
     /* 0x00 */ f32 unk_00;
-    /* 0x04 */ VecSph subAtToEye;
-    /* 0x0C */ VecSph atToEye;
+    /* 0x04 */ VecGeo subAtToEye;
+    /* 0x0C */ VecGeo atToEye;
     /* 0x14 */ s16 unk_14;
     /* 0x16 */ s16 unk_16;
     /* 0x18 */ s16 unk_18;
@@ -1387,10 +1387,10 @@ typedef struct {
  */
 
 #define CAM_FUNCDATA_SPEC5(yOffset, eyeDist, minDistForRot, fov, atMaxLERPScale, timerInit, pitch, interfaceFlags) \
-    { yOffset,        CAM_DATA_00 }, \
+    { yOffset,        CAM_DATA_Y_OFFSET }, \
     { eyeDist,        CAM_DATA_01 }, \
     { minDistForRot,  CAM_DATA_02 }, \
-    { fov,            CAM_DATA_03 }, \
+    { fov,            CAM_DATA_PITCH_TARGET }, \
     { atMaxLERPScale, CAM_DATA_FOV }, \
     { timerInit,      CAM_DATA_08 }, \
     { pitch,          CAM_DATA_12 }, \
@@ -1446,7 +1446,7 @@ typedef struct {
  */
 
 #define CAM_FUNCDATA_SPEC8(yOffset, eyeStepScale, posStepScale, fov, spiralDoorCsLength, interfaceFlags) \
-    { yOffset,            CAM_DATA_00 }, \
+    { yOffset,            CAM_DATA_Y_OFFSET }, \
     { eyeStepScale,       CAM_DATA_04 }, \
     { posStepScale,       CAM_DATA_05 }, \
     { fov,                CAM_DATA_FOV }, \
@@ -1483,7 +1483,7 @@ typedef struct {
  */
 
 #define CAM_FUNCDATA_SPEC9(yOffset, fov, interfaceFlags) \
-    { yOffset, CAM_DATA_00 }, \
+    { yOffset, CAM_DATA_Y_OFFSET }, \
     { fov,     CAM_DATA_FOV }, \
     { interfaceFlags, CAM_DATA_INTERFACE_FLAGS }
 
@@ -1565,11 +1565,11 @@ typedef struct Camera {
     /* 0x0D8 */ f32 xzSpeed;
     /* 0x0DC */ f32 dist;
     /* 0x0E0 */ f32 speedRatio;
-    /* 0x0E4 */ Vec3f atActorOffset;
-    /* 0x0F0 */ Vec3f focalActorOffset;
+    /* 0x0E4 */ Vec3f focalActorAtOffset; // Offset between the camera's at Pos and the focalActor's Pos
+    /* 0x0F0 */ Vec3f unk_0F0; // Offset between the focalActor's Pos and the camera's focalActor's Pos from the previous frame
     /* 0x0FC */ f32 fov;
     /* 0x100 */ f32 atLerpStepScale;
-    /* 0x104 */ f32 playerFloorHeight;
+    /* 0x104 */ f32 focalActorFloorHeight;
     /* 0x108 */ Vec3f floorNorm;
     /* 0x114 */ f32 waterYPos;
     /* 0x118 */ s32 waterPrevBgCamDataId;
@@ -1588,11 +1588,11 @@ typedef struct Camera {
     /* 0x142 */ s16 setting;
     /* 0x144 */ s16 mode;
     /* 0x146 */ s16 bgId;
-    /* 0x148 */ s16 bgCamDataId;
+    /* 0x148 */ s16 bgCamIndex;
     /* 0x14A */ s16 behaviorFlags;
     /* 0x14C */ s16 stateFlags;
     /* 0x14E */ s16 childCamId;
-    /* 0x150 */ s16 doorTimer1; // a door timer used when door cam is indexed from bgCamDataId
+    /* 0x150 */ s16 doorTimer1; // a door timer used when door cam is indexed from bgCamIndex
     /* 0x152 */ s16 unk152;
     /* 0x154 */ s16 prevSetting;
     /* 0x156 */ s16 nextCamSceneDataId;
@@ -1600,8 +1600,8 @@ typedef struct Camera {
     /* 0x15A */ s16 roll;
     /* 0x15C */ s16 viewFlags;
     /* 0x15E */ s16 animState; // Determines the current state of the current camera behavior function
-    /* 0x160 */ s16 unk160;
-    /* 0x162 */ s16 doorTimer2; // a door timer used when door cam is indexed from bgCamDataId
+    /* 0x160 */ s16 timer; // Unused remnant of OoT: originally destoryed subCamera when timer ran out
+    /* 0x162 */ s16 doorTimer2; // a door timer used when door cam is indexed from bgCamIndex
     /* 0x164 */ s16 camId;
     /* 0x166 */ s16 prevBgCamDataId;
     /* 0x168 */ s16 unk168;

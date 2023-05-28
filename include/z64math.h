@@ -87,12 +87,32 @@ typedef struct {
     /* 0x0C */ Vec3f b;
 } LineSegment; // size = 0x18
 
-// Defines a point in the spherical coordinate system
 typedef struct {
-    /* 0x0 */ f32 r;       // radius
-    /* 0x4 */ s16 pitch;   // polar (zenith) angle
-    /* 0x6 */ s16 yaw;     // azimuthal angle
-} VecSph; // size = 0x8
+    /* 0x0 */ f32 r; // radius
+    /* 0x4 */ s16 pitch; // depends on coordinate system. See below.
+    /* 0x6 */ s16 yaw; // azimuthal angle
+} VecSphGeo; // size = 0x8
+
+// Defines a point in the spherical coordinate system.
+// Pitch is 0 along the positive y-axis (up)
+typedef VecSphGeo VecSph;
+
+// Defines a point in the geographic coordinate system.
+// Pitch is 0 along the xz-plane (horizon)
+typedef VecSphGeo VecGeo;
+
+// To be used with OLib_Vec3fAdd()
+typedef enum {
+    /* 0 */ OLIB_ADD_COPY, // Copy `b` to dest
+    /* 1 */ OLIB_ADD_OFFSET, // Add `a` and `b` to dest, and also add the yaw of `a` to the dest
+    /* 2 */ OLIB_ADD, // Add `a` and `b` to dest
+} OlibVec3fAdd;
+
+typedef enum {
+    /* 0 */ OLIB_DIFF_COPY, // Copy `b` to dest
+    /* 1 */ OLIB_DIFF_OFFSET, // Sub `a` and `b` to dest, and also subs the yaw of `a` to the dest
+    /* 2 */ OLIB_DIFF, // Sub `a` and `b` to dest
+} OlibVec3fDiff;
 
 #define LERPIMP(v0, v1, t) ((v0) + (((v1) - (v0)) * (t)))
 #define F32_LERP(v0, v1, t) ((1.0f - (t)) * (f32)(v0) + (t) * (f32)(v1))
@@ -114,13 +134,28 @@ typedef struct {
 
 #define IS_ZERO(f) (fabsf(f) < 0.008f)
 
+// Casting a float to an integer, when the float value is larger than what the integer type can hold,
+// leads to undefined behavior. For example (f32)0x8000 doesn't fit in a s16, so it cannot be cast to s16.
+// This isn't an issue with IDO, but is one with for example GCC.
+// A partial workaround is to cast to s32 then s16, hoping all binang values used will fit a s32.
+#define TRUNCF_BINANG(f) (s16)(s32)(f)
+
 // Angle conversion macros
-#define DEG_TO_BINANG(degrees) (s16)((degrees) * (0x8000 / 180.0f))
-#define RADF_TO_BINANG(radf) (s16)((radf) * (0x8000 / M_PI))
-#define RADF_TO_DEGF(radf) ((radf) * (180.0f / M_PI))
-#define DEGF_TO_RADF(degf) ((degf) * (M_PI / 180.0f))
-#define BINANG_TO_RAD(binang) ((f32)binang * (M_PI / 0x8000))
-#define BINANG_TO_RAD_ALT(binang) (((f32)binang / 0x8000) * M_PI)
+#define DEG_TO_RAD(degrees) ((degrees) * (M_PI / 180.0f))
+#define DEG_TO_BINANG(degrees) TRUNCF_BINANG((degrees) * (0x8000 / 180.0f))
+#define DEG_TO_BINANG_ALT(degrees) TRUNCF_BINANG(((degrees) / 180.0f) * 0x8000)
+#define DEG_TO_BINANG_ALT2(degrees) TRUNCF_BINANG(((degrees) * 0x10000) / 360.0f)
+#define DEG_TO_BINANG_ALT3(degrees) ((degrees) * (0x8000 / 180.0f))
+
+#define RAD_TO_DEG(radians) ((radians) * (180.0f / M_PI))
+#define RAD_TO_BINANG(radians) TRUNCF_BINANG((radians) * (0x8000 / M_PI))
+#define RAD_TO_BINANG_ALT(radians) TRUNCF_BINANG(((radians) / M_PI) * 0x8000)
+#define RAD_TO_BINANG_ALT2(radians) TRUNCF_BINANG(((radians) * 0x8000) / M_PI)
+
+#define BINANG_TO_DEG(binang) ((f32)(binang) * (180.0f / 0x8000))
+#define BINANG_TO_RAD(binang) ((f32)(binang) * (M_PI / 0x8000))
+#define BINANG_TO_RAD_ALT(binang) (((f32)(binang) / 0x8000) * M_PI)
+#define BINANG_TO_RAD_ALT2(binang) (((f32)(binang) * M_PI) / 0x8000)
 
 // Angle arithmetic macros
 #define BINANG_ROT180(angle) ((s16)(angle + 0x8000))

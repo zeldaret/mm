@@ -124,11 +124,11 @@ void EnBombers_Init(Actor* thisx, PlayState* play) {
                     this->actor.world.pos.z, 0, this->actor.world.rot.y, 0, 0);
 
                 if (bomBowlMan != NULL) {
-                    s32 cs = this->actor.cutscene;
+                    s32 csId = this->actor.csId;
                     s32 i = 0;
 
                     // clang-format off
-                    while (cs != -1) { bomBowlMan->unk_2CC[i] = cs; cs = ActorCutscene_GetAdditionalCutscene(cs); i++; }
+                    while (csId != CS_ID_NONE) { bomBowlMan->csIdList[i] = csId; csId = CutsceneManager_GetAdditionalCsId(csId); i++; }
                     // clang-format on
 
                     CLEAR_WEEKEVENTREG(WEEKEVENTREG_76_01);
@@ -487,7 +487,9 @@ void EnBombers_Update(Actor* thisx, PlayState* play) {
         }
     }
 
-    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 50.0f, 0x1D);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 50.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                UPDBGCHECKINFO_FLAG_10);
     this->actor.uncullZoneForward = 500.0f;
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);

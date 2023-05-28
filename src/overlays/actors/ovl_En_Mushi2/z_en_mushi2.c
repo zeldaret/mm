@@ -178,7 +178,7 @@ void func_80A68A78(EnMushi2* this, PlayState* play) {
         Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ACTOR_EN_MUSHI2, this->actor.world.pos.x,
                                       this->actor.world.pos.y, this->actor.world.pos.z, this->actor.shape.rot.x,
                                       this->actor.shape.rot.y + (D_80A6B998 + i)->unk_02, this->actor.shape.rot.z,
-                                      (D_80A6B998 + i)->unk_00, this->actor.cutscene, this->actor.halfDaysBits, NULL);
+                                      (D_80A6B998 + i)->unk_00, this->actor.csId, this->actor.halfDaysBits, NULL);
     }
 }
 
@@ -439,7 +439,8 @@ void func_80A69388(EnMushi2* this) {
 }
 
 void func_80A69424(EnMushi2* this, PlayState* play) {
-    Actor_UpdateBgCheckInfo(play, &this->actor, 8.0f, 9.0f, 0.0f, 0x45);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 8.0f, 9.0f, 0.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_40);
 }
 
 s32 func_80A69468(EnMushi2* this, PlayState* play) {
@@ -1088,8 +1089,9 @@ void func_80A6B0D8(EnMushi2* this, PlayState* play) {
         s32 sp44 = 0;
 
         if (this->poly != NULL) {
-            u32 temp_v0 = func_800C99D4(&play->colCtx, this->poly, this->polyBgId);
-            if ((temp_v0 == 5) || (temp_v0 == 14) || (temp_v0 == 15)) {
+            FloorType floorType = SurfaceType_GetFloorType(&play->colCtx, this->poly, this->polyBgId);
+
+            if ((floorType == FLOOR_TYPE_5) || (floorType == FLOOR_TYPE_14) || (floorType == FLOOR_TYPE_15)) {
                 sp44 = 1;
             }
         }
@@ -1159,7 +1161,7 @@ void EnMushi2_Update(Actor* thisx, PlayState* play) {
     if ((temp != BGCHECK_SCENE) &&
         ((this->actionFunc == func_80A6A5C0) || (this->actionFunc == func_80A6A824) ||
          (this->actionFunc == func_80A6A9E4) || (this->actionFunc == func_80A6B0D8)) &&
-        BgCheck2_UpdateActorAttachedToMesh(&play->colCtx, temp, &this->actor)) {
+        DynaPolyActor_TransformCarriedActor(&play->colCtx, temp, &this->actor)) {
         func_80A68F24(this);
     }
 

@@ -386,12 +386,14 @@ void func_808CCCF0(EnVm* this, PlayState* play) {
     this->unk_216 += 0x5DC;
     this->unk_218 += 0x9C4;
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 20.0f, 40.0f, 7);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 20.0f, 40.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_2 | UPDBGCHECKINFO_FLAG_4);
 
     this->unk_214--;
     if (this->unk_214 == 1) {
-        EnBom* bomb = (EnBom*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOM, this->actor.world.pos.x,
-                                          this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0x6FF, 0);
+        EnBom* bomb =
+            (EnBom*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOM, this->actor.world.pos.x, this->actor.world.pos.y,
+                                this->actor.world.pos.z, BOMB_EXPLOSIVE_TYPE_BOMB, 0, 0x6FF, BOMB_TYPE_BODY);
 
         if (bomb != NULL) {
             bomb->timer = 0;

@@ -16,7 +16,6 @@ void BgTobira01_Destroy(Actor* thisx, PlayState* play);
 void BgTobira01_Update(Actor* thisx, PlayState* play);
 void BgTobira01_Draw(Actor* thisx, PlayState* play);
 
-#if 0
 ActorInit Bg_Tobira01_InitVars = {
     /**/ ACTOR_BG_TOBIRA01,
     /**/ ACTORCAT_PROP,
@@ -28,14 +27,80 @@ ActorInit Bg_Tobira01_InitVars = {
     /**/ BgTobira01_Update,
     /**/ BgTobira01_Draw,
 };
-#endif
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Tobira01/func_80B12430.s")
+void BgTobira01_Action(BgTobira01* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
+    s16 csId = this->dyna.actor.csId;
+    s16 prevPosYTick;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Tobira01/BgTobira01_Init.s")
+    if (this->cutsceneRequested) {
+        if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+            CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
+        } else if (CutsceneManager_IsNext(csId)) {
+            CutsceneManager_StartWithPlayerCs(csId, &this->dyna.actor);
+            SET_WEEKEVENTREG(WEEKEVENTREG_88_40);
+            this->cutsceneRequested = false;
+        } else {
+            CutsceneManager_Queue(csId);
+        }
+    } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_88_40) && (this->posYTick == 0) &&
+               (play->actorCtx.playerImpact.timer != 0) &&
+               (play->actorCtx.playerImpact.type == PLAYER_IMPACT_GORON_GROUND_POUND) &&
+               (SurfaceType_GetSceneExitIndex(&play->colCtx, player->actor.floorPoly, player->actor.floorBgId) == 6)) {
+        this->cutsceneRequested = true;
+        this->unk16C = 0;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Tobira01/BgTobira01_Destroy.s")
+    prevPosYTick = this->posYTick;
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_88_40)) {
+        this->posYTick++;
+    } else {
+        this->posYTick--;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Tobira01/BgTobira01_Update.s")
+    this->posYTick = CLAMP(this->posYTick, 0, 60);
+    if (prevPosYTick != this->posYTick) {
+        Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_STONEDOOR_OPEN_S - SFX_FLAG);
+        this->dyna.actor.world.pos.y = this->posY = (this->posYTick * (5.0f / 3.0f)) + this->dyna.actor.home.pos.y;
+        this->timer = 180;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Tobira01/BgTobira01_Draw.s")
+    if (!(player->stateFlags1 & PLAYER_STATE1_40) && CHECK_WEEKEVENTREG(WEEKEVENTREG_88_40) &&
+        (DECR(this->timer) == 0)) {
+        CLEAR_WEEKEVENTREG(WEEKEVENTREG_88_40);
+    }
+}
+
+void BgTobira01_Init(Actor* thisx, PlayState* play) {
+    BgTobira01* this = THIS;
+
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
+    DynaPolyActor_LoadMesh(play, &this->dyna, &gGoronDoorCol);
+    CLEAR_WEEKEVENTREG(WEEKEVENTREG_88_40);
+    Actor_SetScale(&this->dyna.actor, 1.0f);
+    this->timer = gSaveContext.save.isNight;
+    this->posYTick = 0;
+    this->actionFunc = BgTobira01_Action;
+}
+
+void BgTobira01_Destroy(Actor* thisx, PlayState* play) {
+    BgTobira01* this = THIS;
+
+    DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
+}
+
+void BgTobira01_Update(Actor* thisx, PlayState* play) {
+    BgTobira01* this = THIS;
+
+    this->actionFunc(this, play);
+}
+
+void BgTobira01_Draw(Actor* thisx, PlayState* play) {
+    OPEN_DISPS(play->state.gfxCtx);
+
+    func_8012C28C(play->state.gfxCtx);
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(POLY_OPA_DISP++, gGoronDoorDL);
+
+    CLOSE_DISPS(play->state.gfxCtx);
+}

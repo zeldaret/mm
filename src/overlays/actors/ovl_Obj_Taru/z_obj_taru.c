@@ -279,7 +279,7 @@ void func_80B9C07C(ObjTaru* this, PlayState* play) {
             this->actionFunc = func_80B9C1A0;
         } else {
             this->dyna.actor.flags |= ACTOR_FLAG_10;
-            func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+            DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
             this->dyna.actor.draw = NULL;
             this->actionFunc = func_80B9C174;
         }
@@ -296,14 +296,14 @@ void func_80B9C174(ObjTaru* this, PlayState* play) {
 }
 
 void func_80B9C1A0(ObjTaru* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
+    if (CutsceneManager_IsNext(this->dyna.actor.csId)) {
+        CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
         Flags_SetSwitch(play, OBJ_TARU_GET_7F(&this->dyna.actor));
         Actor_Kill(&this->dyna.actor);
         return;
     }
 
-    ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+    CutsceneManager_Queue(this->dyna.actor.csId);
 }
 
 void ObjTaru_Update(Actor* thisx, PlayState* play) {

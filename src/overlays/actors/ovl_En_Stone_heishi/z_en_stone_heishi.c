@@ -347,7 +347,7 @@ void EnStoneheishi_DrinkBottleProcess(EnStoneheishi* this, PlayState* play) {
                 if ((this->timer < 10) && (this->bottleDisplay != EN_STONE_BOTTLE_EMPTY)) {
                     this->bottleDisplay = EN_STONE_BOTTLE_EMPTY;
                     Actor_PlaySfx(&this->actor, NA_SE_VO_NP_DRINK);
-                    Player_UpdateBottleHeld(play, GET_PLAYER(play), ITEM_BOTTLE, PLAYER_IA_BOTTLE);
+                    Player_UpdateBottleHeld(play, GET_PLAYER(play), ITEM_BOTTLE, PLAYER_IA_BOTTLE_EMPTY);
                 }
             } else {
                 this->drinkBottleState++;
@@ -433,7 +433,9 @@ void EnStoneheishi_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
 
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 50.0f, 0x1D);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 50.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                UPDBGCHECKINFO_FLAG_10);
     Actor_SetScale(&this->actor, 0.01f);
 
     if ((CHECK_WEEKEVENTREG(WEEKEVENTREG_41_40) || (play->actorCtx.lensMaskSize == 100)) &&

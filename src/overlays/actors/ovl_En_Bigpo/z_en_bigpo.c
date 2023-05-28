@@ -8,7 +8,7 @@
 #include "objects/object_bigpo/object_bigpo.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_200 | ACTOR_FLAG_1000)
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_200 | ACTOR_FLAG_IGNORE_QUAKE)
 
 #define THIS ((EnBigpo*)thisx)
 
@@ -293,22 +293,22 @@ void EnBigpo_WellWaitForProximity(EnBigpo* this, PlayState* play) {
 }
 
 void EnBigpo_SetupSpawnCutscene(EnBigpo* this) {
-    ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+    CutsceneManager_Queue(this->actor.csId);
     this->actionFunc = EnBigpo_WaitCutsceneQueue;
 }
 
 void EnBigpo_WaitCutsceneQueue(EnBigpo* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
-        ActorCutscene_Start(this->actor.cutscene, &this->actor);
-        func_800B724C(play, &this->actor, PLAYER_CSMODE_7);
-        this->subCamId = ActorCutscene_GetCurrentSubCamId(this->actor.cutscene);
+    if (CutsceneManager_IsNext(this->actor.csId)) {
+        CutsceneManager_Start(this->actor.csId, &this->actor);
+        func_800B724C(play, &this->actor, PLAYER_CSMODE_WAIT);
+        this->subCamId = CutsceneManager_GetCurrentSubCamId(this->actor.csId);
         if (this->actor.params == ENBIGPO_REGULAR) { // and SUMMONED, got switched earlier
             EnBigpo_SpawnCutsceneStage1(this, play);
         } else { // ENBIGPO_REVEALEDFIRE
             EnBigpo_SetupFlameCirclePositions(this, play);
         }
     } else {
-        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+        CutsceneManager_Queue(this->actor.csId);
     }
 }
 
@@ -464,14 +464,14 @@ void EnBigpo_SpawnCutsceneStage8(EnBigpo* this, PlayState* play) {
             dampe = SubS_FindActor(play, NULL, ACTORCAT_NPC, ACTOR_EN_TK);
             if (dampe != NULL) {
                 // if dampe exists, switch to viewing his running away cutscene
-                dampe->params = this->actor.cutscene;
+                dampe->params = this->actor.csId;
             } else {
-                ActorCutscene_Stop(this->actor.cutscene);
+                CutsceneManager_Stop(this->actor.csId);
             }
         } else { // ENBIGPO_REGULAR
-            ActorCutscene_Stop(this->actor.cutscene);
+            CutsceneManager_Stop(this->actor.csId);
         }
-        func_800B724C(play, &this->actor, PLAYER_CSMODE_6);
+        func_800B724C(play, &this->actor, PLAYER_CSMODE_END);
         EnBigpo_SetupIdleFlying(this); // setup idle flying
     }
 }
@@ -1174,7 +1174,7 @@ void EnBigpo_Update(Actor* thisx, PlayState* play) {
         Actor_MoveWithGravity(&this->actor);
     }
     if (this->actionFunc == EnBigpo_LanternFalling) {
-        Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 27.0f, 60.0f, 4);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 27.0f, 60.0f, UPDBGCHECKINFO_FLAG_4);
     }
 
     if (this->actor.draw == EnBigpo_DrawScoopSoul) {

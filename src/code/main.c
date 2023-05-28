@@ -7,6 +7,7 @@
 #include "global.h"
 #include "buffers.h"
 #include "stack.h"
+#include "stackcheck.h"
 
 extern OSMesgQueue sSiIntMsgQ;
 extern OSMesg sSiIntMsgBuf[1];
@@ -25,7 +26,6 @@ extern StackEntry sSchedStackInfo;
 extern StackEntry sAudioStackInfo;
 extern StackEntry sPadMgrStackInfo;
 extern AudioMgr sAudioMgr;
-extern PadMgr gPadMgr;
 
 void Main(void* arg) {
     intptr_t fb;

@@ -171,7 +171,7 @@ void EnGamelupy_Update(Actor* thisx, PlayState* play) {
 
     this->actionFunc(this, play);
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 32.0f, 30.0f, 0.0f, 0xC);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 32.0f, 30.0f, 0.0f, UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8);
     func_80AF6B40(this, play);
 }
 

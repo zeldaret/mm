@@ -61,7 +61,7 @@ void ObjBoat_Init(Actor* thisx, PlayState* play) {
     Vec3f sp24;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    DynaPolyActor_Init(&this->dyna, 3);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS | DYNA_TRANSFORM_ROT_Y);
     DynaPolyActor_LoadMesh(play, &this->dyna, &object_kaizoku_obj_Colheader_009A88);
     if (thisx->params < 0) {
         this->dyna.actor.update = ObjBoat_UpdateCutscene;
@@ -95,14 +95,14 @@ void ObjBoat_Update(Actor* thisx, PlayState* play) {
     s32 pad;
     ObjBoat* this = THIS;
     Player* player = GET_PLAYER(play);
-    s32 temp = DynaPolyActor_IsInRidingMovingState(&this->dyna);
+    s32 isPlayerOnTop = DynaPolyActor_IsPlayerOnTop(&this->dyna);
     f32 speedTarget = 0.0f;
     s16 yawTarget = this->dyna.actor.shape.rot.y;
     Vec3f nextPoint;
 
-    if (temp || ((DynaPolyActor_IsInRidingFallingState(&this->dyna)))) {
+    if (isPlayerOnTop || DynaPolyActor_IsActorOnTop(&this->dyna)) {
         if ((this->timer == 0) &&
-            (OBJBOAT_GET_4000(thisx) || (temp && (this->curPointIndex == this->lastPointIndex)))) {
+            (OBJBOAT_GET_4000(thisx) || (isPlayerOnTop && (this->curPointIndex == this->lastPointIndex)))) {
             this->direction = -this->direction;
             if (this->direction > 0) {
                 this->lastPointIndex = this->maxPointIndex;
@@ -151,29 +151,29 @@ void ObjBoat_UpdateCutscene(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     ObjBoat* this = THIS;
 
-    if (Cutscene_CheckActorAction(play, 511)) {
-        CsCmdActorAction* actionIndex = play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 511)];
-        if (this->csAction != actionIndex->action) {
-            this->dyna.actor.shape.rot.x = actionIndex->urot.x;
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_511)) {
+        CsCmdActorCue* cue = play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_511)];
 
-            if (actionIndex->action != 1) {
+        if (this->cueId != cue->id) {
+            this->dyna.actor.shape.rot.x = cue->rot.x;
+            if (cue->id != 1) {
                 Path* path = &play->setupPathList[OBJBOAT_GET_PATH(&this->dyna.actor)];
 
-                if (actionIndex->action == 3) {
+                if (cue->id == 3) {
                     path = &play->setupPathList[path->unk1];
                 }
 
                 this->maxPointIndex = path->count;
                 this->points = Lib_SegmentedToVirtual(path->points);
                 Math_Vec3s_ToVec3f(&this->dyna.actor.world.pos, this->points);
-                this->dyna.actor.speed = actionIndex->urot.z * (45.0f / 0x2000);
+                this->dyna.actor.speed = cue->rot.z * (45.0f / 0x2000);
                 this->points++;
                 this->curPointIndex = 1;
             }
 
-            this->csAction = actionIndex->action;
+            this->cueId = cue->id;
         } else {
-            if (actionIndex->action != 1) {
+            if (cue->id != 1) {
                 Vec3f posTarget;
                 f32 distRemaining;
 
@@ -185,9 +185,9 @@ void ObjBoat_UpdateCutscene(Actor* thisx, PlayState* play2) {
                 }
             }
 
-            if (actionIndex->action != 3) {
+            if (cue->id != 3) {
                 ObjBoat_SetRotations(this);
-                if (actionIndex->action == 2) {
+                if (cue->id == 2) {
                     func_800B9010(&this->dyna.actor, NA_SE_EV_PIRATE_SHIP - SFX_FLAG);
                 }
             } else {

@@ -148,13 +148,13 @@ void EnSth_Init(Actor* thisx, PlayState* play) {
             }
             this->actor.textId = 0;
             if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_MASK_OF_TRUTH) ||
-                !CHECK_WEEKEVENTREG(WEEKEVENTREG_SWAMP_SPIDER_HOUSE_TALKED)) {
+                !CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_SWAMP_SPIDER_HOUSE_MAN)) {
                 this->sthFlags |= STH_FLAG_DRAW_MASK_OF_TRUTH;
             }
             break;
 
         case STH_TYPE_MOON_LOOKING: // South Clock Town
-            if ((gSaveContext.save.skullTokenCount & 0xFFFF) >= SPIDER_HOUSE_TOKENS_REQUIRED) {
+            if ((gSaveContext.save.saveInfo.skullTokenCount & 0xFFFF) >= SPIDER_HOUSE_TOKENS_REQUIRED) {
                 Actor_Kill(&this->actor);
                 return;
             }
@@ -479,7 +479,7 @@ void EnSth_GetInitialSwampSpiderHouseText(EnSth* this, PlayState* play) {
         nextTextId = 0x90F; // (does not exist)
         EnSth_ChangeAnim(this, STH_ANIM_TALK);
     } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_MASK_OF_TRUTH)) {
-        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_SWAMP_SPIDER_HOUSE_TALKED)) {
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_SWAMP_SPIDER_HOUSE_MAN)) {
             nextTextId = 0x91B; // As soon as I calm down, getting rid of it
         } else {
             nextTextId = 0x918; // I've had enough of this, going home
@@ -525,7 +525,7 @@ void EnSth_SwampSpiderHouseGiveMask(EnSth* this, PlayState* play) {
     } else {
         this->sthFlags &= ~STH_FLAG_DRAW_MASK_OF_TRUTH;
         // This flag is used to keep track if the player has already spoken to the actor, triggering secondary dialogue.
-        SET_WEEKEVENTREG(WEEKEVENTREG_SWAMP_SPIDER_HOUSE_TALKED);
+        SET_WEEKEVENTREG(WEEKEVENTREG_TALKED_SWAMP_SPIDER_HOUSE_MAN);
         Actor_OfferGetItem(&this->actor, play, GI_MASK_TRUTH, 10000.0f, 50.0f);
     }
 }
@@ -566,7 +566,7 @@ void EnSth_HandleSwampSpiderHouseConversation(EnSth* this, PlayState* play) {
 
             case 0x91A: // Someone gave me this mask and said it would make me rich, getting rid of it
                 SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_MASK_OF_TRUTH);
-                CLEAR_WEEKEVENTREG(WEEKEVENTREG_SWAMP_SPIDER_HOUSE_TALKED);
+                CLEAR_WEEKEVENTREG(WEEKEVENTREG_TALKED_SWAMP_SPIDER_HOUSE_MAN);
 
             case 0x902: // (does not exist)
             case 0x903: // (does not exist)
@@ -677,7 +677,7 @@ void EnSth_Update(Actor* thisx, PlayState* play) {
     Actor_MoveWithGravity(&this->actor);
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
 
     this->actionFunc(this, play);
 

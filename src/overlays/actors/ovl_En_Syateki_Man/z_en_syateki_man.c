@@ -327,7 +327,7 @@ void EnSyatekiMan_Swamp_HandleChoice(EnSyatekiMan* this, PlayState* play) {
                 // You don't have a bow!
                 Message_StartTextbox(play, 0xA30, &this->actor);
                 this->prevTextId = 0xA30;
-            } else if (gSaveContext.save.playerData.rupees < 20) {
+            } else if (gSaveContext.save.saveInfo.playerData.rupees < 20) {
                 play_sound(NA_SE_SY_ERROR);
 
                 // You don't have enough rupees!
@@ -627,7 +627,7 @@ void EnSyatekiMan_Town_HandleChoice(EnSyatekiMan* this, PlayState* play) {
                     Message_StartTextbox(play, 0x3FA, &this->actor);
                     this->prevTextId = 0x3FA;
                 }
-            } else if (gSaveContext.save.playerData.rupees < 20) {
+            } else if (gSaveContext.save.saveInfo.playerData.rupees < 20) {
                 play_sound(NA_SE_SY_ERROR);
                 if (CURRENT_DAY != 3) {
                     // You don't have a enough rupees!

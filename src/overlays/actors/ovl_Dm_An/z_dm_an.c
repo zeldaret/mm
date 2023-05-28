@@ -195,28 +195,28 @@ void func_80C1C958(DmAn* this, PlayState* play) {
 
 void func_80C1CAB0(DmAn* this, PlayState* play) {
     s32 sp28[] = { 0, 0, 12, 2, 4, 6, 8, 10, 11, 3 };
-    u16 action;
-    s32 sp20;
+    u16 cueId;
+    s32 cueChannel;
 
-    if (play->csCtx.state != 0) {
+    if (play->csCtx.state != CS_STATE_IDLE) {
         if (this->unk_2D0 == 0) {
-            this->unk_2B0 = 255;
+            this->cueId = 255;
             this->unk_2D0 = 1;
             this->unk_2D4 = 0;
             this->unk_2CC = this->unk_2C8;
         }
 
-        if (Cutscene_CheckActorAction(play, 0x22D)) {
-            sp20 = Cutscene_GetActorActionIndex(play, 0x22D);
-            action = play->csCtx.actorActions[sp20]->action;
+        if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_557)) {
+            cueChannel = Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_557);
+            cueId = play->csCtx.actorCues[cueChannel]->id;
 
-            if (this->unk_2B0 != (action & 0xFF)) {
-                this->unk_2B0 = action;
+            if (this->cueId != (u8)cueId) {
+                this->cueId = cueId;
                 this->unk_2D4 = 1;
-                func_80C1C4D8(this, play, sp28[action]);
+                func_80C1C4D8(this, play, sp28[cueId]);
             }
 
-            switch (this->unk_2B0) {
+            switch (this->cueId) {
                 case 2:
                 case 4:
                 case 5:
@@ -230,7 +230,7 @@ void func_80C1CAB0(DmAn* this, PlayState* play) {
                     }
                     break;
             }
-            Cutscene_ActorTranslateAndYaw(&this->actor, play, sp20);
+            Cutscene_ActorTranslateAndYaw(&this->actor, play, cueChannel);
         }
     } else if (this->unk_2D0 != 0) {
         this->unk_2D0 = 0;
@@ -264,7 +264,7 @@ void DmAn_Update(Actor* thisx, PlayState* play) {
         func_80C1C410(this, play);
         func_80C1C5B4(this);
     }
-    Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
 }
 
 Vec3f D_80C1D2C8 = { 450.0f, 700.0f, -760.0f };

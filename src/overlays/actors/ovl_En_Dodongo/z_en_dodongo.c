@@ -358,7 +358,7 @@ void func_80876930(EnDodongo* this, PlayState* play, Vec3f* arg2) {
     s16 temp2;
     f32 temp3;
 
-    if (func_800C9BB8(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId) == COLPOLY_SURFACE_SNOW) {
+    if (SurfaceType_GetMaterial(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId) == SURFACE_MATERIAL_SNOW) {
         sp80 = &D_8087932C;
         sp7C = &D_80879330;
     } else {
@@ -914,7 +914,8 @@ void func_808787B0(EnDodongo* this, PlayState* play) {
     if (SkelAnime_Update(&this->skelAnime)) {
         if (this->timer == 0) {
             EnBom* bomb = (EnBom*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOM, this->actor.world.pos.x,
-                                              this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, 0);
+                                              this->actor.world.pos.y, this->actor.world.pos.z,
+                                              BOMB_EXPLOSIVE_TYPE_BOMB, 0, 0, BOMB_TYPE_BODY);
             if (bomb != NULL) {
                 bomb->timer = 0;
             }
@@ -1024,7 +1025,9 @@ void EnDodongo_Update(Actor* thisx, PlayState* play2) {
     EnDodongo_UpdateDamage(this, play);
     this->actionFunc(this, play);
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 75.0f, 60.0f, 70.0f, 0x1D);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 75.0f, 60.0f, 70.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                UPDBGCHECKINFO_FLAG_10);
     if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND_TOUCH) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_GERUDOFT_DOWN);
     }

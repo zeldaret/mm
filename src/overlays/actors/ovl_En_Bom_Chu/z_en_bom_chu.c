@@ -177,7 +177,7 @@ void EnBomChu_WaitForRelease(EnBomChu* this, PlayState* play) {
     } else if (Actor_HasNoParent(&this->actor, play)) {
         player = GET_PLAYER(play);
         Math_Vec3f_Copy(&this->actor.world.pos, &player->actor.world.pos);
-        Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
 
         this->actor.shape.rot.y = player->actor.shape.rot.y;
         this->actor.flags |= ACTOR_FLAG_1;
@@ -193,7 +193,7 @@ void EnBomChu_WaitForRelease(EnBomChu* this, PlayState* play) {
 s32 EnBomChu_IsOnCollisionPoly(PlayState* play, Vec3f* posA, Vec3f* posB, Vec3f* posResult, CollisionPoly** poly,
                                s32* bgId) {
     if ((BgCheck_EntityLineTest1(&play->colCtx, posA, posB, posResult, poly, true, true, true, true, bgId)) &&
-        (!(func_800C9A4C(&play->colCtx, *poly, *bgId) & 0x30))) {
+        !(SurfaceType_GetWallFlags(&play->colCtx, *poly, *bgId) & (WALL_FLAG_4 | WALL_FLAG_5))) {
         return true;
     }
 
@@ -326,7 +326,7 @@ void EnBomChu_Explode(EnBomChu* this, PlayState* play) {
     s32 i;
 
     bomb = (EnBom*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOM, this->actor.world.pos.x, this->actor.world.pos.y,
-                               this->actor.world.pos.z, 0, 0, 0, 0);
+                               this->actor.world.pos.z, BOMB_EXPLOSIVE_TYPE_BOMB, 0, 0, BOMB_TYPE_BODY);
 
     this->shouldTimerCountDown = true;
     this->isMoving = false;
@@ -408,7 +408,7 @@ void EnBomChu_HandleNonSceneCollision(EnBomChu* this, PlayState* play) {
     Math_Vec3f_Copy(&originalWorldPos, &this->actor.world.pos);
     Math_Vec3f_Copy(&originalAxisUp, &this->axisUp);
     yaw = this->actor.shape.rot.y;
-    BgCheck2_UpdateActorAttachedToMesh(&play->colCtx, this->actor.floorBgId, &this->actor);
+    DynaPolyActor_TransformCarriedActor(&play->colCtx, this->actor.floorBgId, &this->actor);
 
     if (yaw != this->actor.shape.rot.y) {
         yaw = this->actor.shape.rot.y - yaw;

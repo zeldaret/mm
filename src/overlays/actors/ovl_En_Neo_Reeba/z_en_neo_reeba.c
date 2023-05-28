@@ -604,7 +604,7 @@ void EnNeoReeba_UpdatePosition(EnNeoReeba* this, PlayState* play) {
 
         Math_ApproachZeroF(&this->velToTarget.x, 1.0f, 2.0f);
         Math_ApproachZeroF(&this->velToTarget.z, 1.0f, 2.0f);
-        Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 40.0f, 40.0f, 5);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 40.0f, 40.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
     }
 }
 

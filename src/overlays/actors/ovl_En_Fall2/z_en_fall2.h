@@ -15,8 +15,8 @@ typedef struct EnFall2 {
     /* 0x228 */ Vec3s unk228[30];
     /* 0x2DC */ AnimatedMaterial* unk2DC;
     /* 0x2E0 */ f32 alphaLevel;
-    /* 0x2E4 */ s16 csActorAction;
-    /* 0x2E6 */ u16 csActionIndex;
+    /* 0x2E4 */ s16 cueId;
+    /* 0x2E6 */ u16 cueType;
     /* 0x2E8 */ EnFall2ActionFunc actionFunc;
 } EnFall2; // size = 0x2EC
 

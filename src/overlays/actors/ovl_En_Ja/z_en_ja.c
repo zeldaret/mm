@@ -389,7 +389,7 @@ void EnJa_Update(Actor* thisx, PlayState* play) {
 
         if (this->unk_1D8.unk_00 != 2) {
             Actor_MoveWithGravity(&this->actor);
-            Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, 4);
+            Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
         }
         func_80BC1984(this, play);
     }

@@ -225,7 +225,7 @@ void EnHs_SceneTransitToBunnyHoodDialogue(EnHs* this, PlayState* play) {
 
 void func_80953354(EnHs* this, PlayState* play) {
     if (!Play_InCsMode(play)) {
-        func_800B7298(play, &this->actor, PLAYER_CSMODE_7);
+        func_800B7298(play, &this->actor, PLAYER_CSMODE_WAIT);
         this->actionFunc = EnHs_SceneTransitToBunnyHoodDialogue;
     }
 }
@@ -282,7 +282,7 @@ void EnHs_Update(Actor* thisx, PlayState* play) {
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
 
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
 
     if (SkelAnime_Update(&this->skelAnime)) {
         this->skelAnime.curFrame = 0.0f;

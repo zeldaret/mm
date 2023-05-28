@@ -187,7 +187,7 @@ void BgKin2Fence_HandleMaskCode(BgKin2Fence* this, PlayState* play) {
     if (this->collider.base.acFlags & AC_HIT) {
         hitMask = BgKin2Fence_CheckHitMask(this);
         if (hitMask >= 0) {
-            nextMask = (s8)gSaveContext.save.spiderHouseMaskOrder[this->masksHit];
+            nextMask = (s8)gSaveContext.save.saveInfo.spiderHouseMaskOrder[this->masksHit];
             if (hitMask == nextMask) {
                 play_sound(NA_SE_SY_TRE_BOX_APPEAR);
                 this->masksHit += 1;
@@ -217,13 +217,13 @@ void BgKin2Fence_SetupPlayOpenCutscene(BgKin2Fence* this) {
 }
 
 void BgKin2Fence_PlayOpenCutscene(BgKin2Fence* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
+    if (CutsceneManager_IsNext(this->dyna.actor.csId)) {
+        CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
         Flags_SetSwitch(play, this->dyna.actor.params & 0x7F);
         BgKin2Fence_SetupWaitBeforeOpen(this);
         return;
     }
-    ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+    CutsceneManager_Queue(this->dyna.actor.csId);
 }
 
 void BgKin2Fence_SetupWaitBeforeOpen(BgKin2Fence* this) {

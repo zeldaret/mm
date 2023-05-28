@@ -125,7 +125,7 @@ void EnKendoJs_Init(Actor* thisx, PlayState* play) {
         Actor_Kill(&this->actor);
     }
 
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
 
     if (ENKENDOJS_GET_FF(&this->actor) != ENKENDOJS_FF_1) {
         Path* path = &play->setupPathList[ENKENDOJS_GET_FF00(&this->actor)];
@@ -224,7 +224,7 @@ void func_80B26758(EnKendoJs* this, PlayState* play) {
                     Message_StartTextbox(play, 0x272C, &this->actor);
                     this->unk_288 = 0x272C;
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 2);
-                } else if (gSaveContext.save.playerData.rupees < play->msgCtx.unk1206C) {
+                } else if (gSaveContext.save.saveInfo.playerData.rupees < play->msgCtx.unk1206C) {
                     play_sound(NA_SE_SY_ERROR);
                     Message_StartTextbox(play, 0x2718, &this->actor);
                     this->unk_288 = 0x2718;
@@ -242,7 +242,7 @@ void func_80B26758(EnKendoJs* this, PlayState* play) {
                     Message_StartTextbox(play, 0x272C, &this->actor);
                     this->unk_288 = 0x272C;
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 2);
-                } else if (gSaveContext.save.playerData.rupees < play->msgCtx.unk12070) {
+                } else if (gSaveContext.save.saveInfo.playerData.rupees < play->msgCtx.unk12070) {
                     play_sound(NA_SE_SY_ERROR);
                     Message_StartTextbox(play, 0x2718, &this->actor);
                     this->unk_288 = 0x2718;
@@ -359,8 +359,8 @@ s32 func_80B26BF8(EnKendoJs* this, PlayState* play) {
                 return 0;
             }
 
-            if ((player->meleeWeaponState != 0) || (player->stateFlags3 & PLAYER_STATE3_8000000) ||
-                (player->stateFlags2 & PLAYER_STATE2_80000)) {
+            if ((player->meleeWeaponState != PLAYER_MELEE_WEAPON_STATE_0) ||
+                (player->stateFlags3 & PLAYER_STATE3_8000000) || (player->stateFlags2 & PLAYER_STATE2_80000)) {
                 return 1;
             }
             break;
@@ -370,7 +370,8 @@ s32 func_80B26BF8(EnKendoJs* this, PlayState* play) {
                 return 0;
             }
 
-            if ((player->meleeWeaponState != 0) || (player->stateFlags2 & PLAYER_STATE2_80000)) {
+            if ((player->meleeWeaponState != PLAYER_MELEE_WEAPON_STATE_0) ||
+                (player->stateFlags2 & PLAYER_STATE2_80000)) {
                 return 1;
             }
             break;
@@ -380,8 +381,8 @@ s32 func_80B26BF8(EnKendoJs* this, PlayState* play) {
                 return 0;
             }
 
-            if ((player->meleeWeaponState != 0) || (player->stateFlags3 & PLAYER_STATE3_8000000) ||
-                (player->stateFlags2 & PLAYER_STATE2_80000)) {
+            if ((player->meleeWeaponState != PLAYER_MELEE_WEAPON_STATE_0) ||
+                (player->stateFlags3 & PLAYER_STATE3_8000000) || (player->stateFlags2 & PLAYER_STATE2_80000)) {
                 return 1;
             }
             this->unk_28E = 0;
@@ -461,7 +462,7 @@ s32 func_80B26F6C(EnKendoJs* this, PlayState* play) {
 
     switch (this->unk_288) {
         case 0x271D:
-            if (Player_GetMeleeWeaponHeld(player) != 0) {
+            if (Player_GetMeleeWeaponHeld(player) != PLAYER_MELEEWEAPON_NONE) {
                 Message_StartTextbox(play, 0x272A, &this->actor);
                 this->unk_288 = 0x272A;
                 return true;
@@ -680,9 +681,9 @@ void func_80B27774(EnKendoJs* this, PlayState* play) {
 }
 
 void func_80B2783C(EnKendoJs* this, PlayState* play) {
-    if (this->actor.cutscene != -1) {
-        Camera_ChangeDataIdx(play->cameraPtrs[CAM_ID_MAIN],
-                             ActorCutscene_GetCutscene(this->actor.cutscene)->csCamSceneDataId);
+    if (this->actor.csId != CS_ID_NONE) {
+        Camera_ChangeActorCsCamIndex(play->cameraPtrs[CAM_ID_MAIN],
+                                     CutsceneManager_GetCutsceneEntry(this->actor.csId)->csCamId);
     }
 }
 

@@ -74,7 +74,7 @@ void ObjHariko_BobHead(ObjHariko* this, PlayState* play) {
 }
 
 void ObjHariko_CheckForQuakes(ObjHariko* this) {
-    if (Quake_NumActiveQuakes() != 0) {
+    if (Quake_GetNumActiveQuakes() != 0) {
         ObjHariko_SetupBobHead(this);
     }
 }

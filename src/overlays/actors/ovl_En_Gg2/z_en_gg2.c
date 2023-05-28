@@ -204,7 +204,7 @@ void func_80B3B120(EnGg2* this, PlayState* play) {
 void func_80B3B21C(EnGg2* this, PlayState* play) {
     this->actor.speed = 0.0f;
     if ((this->actor.xzDistToPlayer < 100.0f) && CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_REACT_TO_LENS)) {
-        this->unk_2E4 = ActorCutscene_GetAdditionalCutscene(this->unk_2E4);
+        this->csId = CutsceneManager_GetAdditionalCsId(this->csId);
         this->actionFunc = func_80B3B5D4;
     }
 }
@@ -274,14 +274,14 @@ void func_80B3B4B0(EnGg2* this, PlayState* play) {
 }
 
 void func_80B3B5D4(EnGg2* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->unk_2E4)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->unk_2E4, &this->actor);
+    if (CutsceneManager_IsNext(this->csId)) {
+        CutsceneManager_StartWithPlayerCs(this->csId, &this->actor);
         this->actionFunc = func_80B3AE60;
     } else {
-        if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-            ActorCutscene_Stop(0x7C);
+        if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+            CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
         }
-        ActorCutscene_SetIntentToPlay(this->unk_2E4);
+        CutsceneManager_Queue(this->csId);
     }
 }
 
@@ -310,7 +310,7 @@ s32 func_80B3B648(EnGg2* this, Path* path, s32 arg2_) {
         phi_f14 = points[arg2 + 1].z - points[arg2 - 1].z;
     }
 
-    func_8017B7F8(&sp30, RADF_TO_BINANG(func_80086B30(phi_f12, phi_f14)), &sp44, &sp40, &sp3C);
+    func_8017B7F8(&sp30, RAD_TO_BINANG(func_80086B30(phi_f12, phi_f14)), &sp44, &sp40, &sp3C);
 
     if (((this->actor.world.pos.x * sp44) + (sp40 * this->actor.world.pos.z) + sp3C) > 0.0f) {
         ret = true;
@@ -376,7 +376,7 @@ void EnGg2_Init(Actor* thisx, PlayState* play2) {
     this->unk_2F2 = 0;
     this->unk_2F4 = 0;
     this->unk_2F6 = 0;
-    this->unk_2E4 = this->actor.cutscene;
+    this->csId = this->actor.csId;
     this->unk_2EC = 20;
     this->unk_2EA = 0;
 

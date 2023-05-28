@@ -2,6 +2,7 @@
 #include "global.h"
 #include "stack.h"
 #include "vt.h"
+#include "stackcheck.h"
 
 extern FaultThreadStruct* sFaultContext;
 extern f32 D_8009BE54;
@@ -203,7 +204,7 @@ void Fault_Sleep(u32 duration) {
 }
 
 void Fault_PadCallback(Input* input) {
-    Padmgr_GetInput2(input, 0);
+    PadMgr_GetInput2(input, false);
 }
 
 void Fault_UpdatePadImpl() {
@@ -473,7 +474,7 @@ void Fault_WaitForButtonCombo(void) {
         do {
             Fault_Sleep(0x10);
             Fault_UpdatePadImpl();
-        } while (!CHECK_BTN_ALL(input->press.button, 0x80));
+        } while (!CHECK_BTN_ALL(input->press.button, BTN_RESET));
     } while (!CHECK_BTN_ALL(input->cur.button, BTN_DLEFT | BTN_L | BTN_R | BTN_CRIGHT));
 }
 
@@ -762,7 +763,7 @@ void Fault_SetOptionsFromController3(void) {
     u32 graphRA;
     u32 graphSP;
 
-    if (CHECK_BTN_ALL(input3->press.button, 0x80)) {
+    if (CHECK_BTN_ALL(input3->press.button, BTN_RESET)) {
         faultCustomOptions = !faultCustomOptions;
     }
 
@@ -801,8 +802,8 @@ void Fault_ThreadEntry(void* arg) {
     u32 pad;
     OSThread* faultedThread;
 
-    osSetEventMesg(10, &sFaultContext->queue, (OSMesg)1);
-    osSetEventMesg(12, &sFaultContext->queue, (OSMesg)2);
+    osSetEventMesg(OS_EVENT_CPU_BREAK, &sFaultContext->queue, (OSMesg)1);
+    osSetEventMesg(OS_EVENT_FAULT, &sFaultContext->queue, (OSMesg)2);
     while (1) {
         do {
             osRecvMesg(&sFaultContext->queue, &msg, OS_MESG_BLOCK);

@@ -442,7 +442,7 @@ void func_8091B984(EnInsect* this, PlayState* play) {
 
 void EnInsect_Update(Actor* thisx, PlayState* play) {
     EnInsect* this = THIS;
-    s32 phi_v0;
+    s32 updBgCheckInfoFlags;
 
     if ((this->actor.child != NULL) && (this->actor.child->update == NULL) && (&this->actor != this->actor.child)) {
         this->actor.child = NULL;
@@ -470,14 +470,14 @@ void EnInsect_Update(Actor* thisx, PlayState* play) {
             }
         }
 
-        phi_v0 = 0;
+        updBgCheckInfoFlags = 0;
         if (this->unk_30C & 1) {
-            phi_v0 = 4;
+            updBgCheckInfoFlags = UPDBGCHECKINFO_FLAG_4;
         }
 
-        if (phi_v0 != 0) {
-            phi_v0 |= 0x40;
-            Actor_UpdateBgCheckInfo(play, &this->actor, 8.0f, 5.0f, 0.0f, phi_v0);
+        if (updBgCheckInfoFlags != 0) {
+            updBgCheckInfoFlags |= UPDBGCHECKINFO_FLAG_40;
+            Actor_UpdateBgCheckInfo(play, &this->actor, 8.0f, 5.0f, 0.0f, updBgCheckInfoFlags);
         }
 
         if (Actor_HasParent(&this->actor, play)) {

@@ -185,14 +185,14 @@ void EnZot_Init(Actor* thisx, PlayState* play2) {
             func_80B96BEC(this, 2, ANIMMODE_LOOP);
             this->actor.colChkInfo.cylRadius = 0;
             this->actor.shape.yOffset = -1400.0f;
-            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80)) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_GREAT_BAY_TEMPLE)) {
                 Actor_Kill(&this->actor);
             }
             break;
 
         case 18:
             this->actionFunc = func_80B99384;
-            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80)) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_GREAT_BAY_TEMPLE)) {
                 Actor_Kill(&this->actor);
             }
             break;
@@ -220,7 +220,8 @@ void EnZot_Init(Actor* thisx, PlayState* play2) {
             break;
     }
 
-    if ((ENZOT_GET_1F(thisx) >= 2) && (ENZOT_GET_1F(thisx) < 11) && CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80)) {
+    if ((ENZOT_GET_1F(thisx) >= 2) && (ENZOT_GET_1F(thisx) < 11) &&
+        CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_GREAT_BAY_TEMPLE)) {
         Actor_Kill(&this->actor);
     }
 }
@@ -467,7 +468,7 @@ void func_80B973BC(EnZot* this, PlayState* play) {
                 break;
 
             case 0x1275:
-                if (gSaveContext.save.playerData.rupees < 10) {
+                if (gSaveContext.save.saveInfo.playerData.rupees < 10) {
                     Message_ContinueTextbox(play, 0x1277);
                 } else {
                     Message_ContinueTextbox(play, 0x1278);
@@ -488,8 +489,8 @@ void func_80B973BC(EnZot* this, PlayState* play) {
                 this->actor.flags &= ~ACTOR_FLAG_10000;
                 this->actor.textId = 0;
                 this->actionFunc = func_80B97708;
-                if ((this->actor.cutscene != -1) && !(this->unk_2F2 & 1)) {
-                    ActorCutscene_Stop(this->actor.cutscene);
+                if ((this->actor.csId != CS_ID_NONE) && !(this->unk_2F2 & 1)) {
+                    CutsceneManager_Stop(this->actor.csId);
                 }
                 this->unk_2F2 &= ~1;
                 break;
@@ -497,16 +498,16 @@ void func_80B973BC(EnZot* this, PlayState* play) {
     }
 
     if (this->unk_2F2 & 1) {
-        if (this->actor.cutscene == -1) {
+        if (this->actor.csId == CS_ID_NONE) {
             this->unk_2F2 &= ~1;
-        } else if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-            ActorCutscene_Stop(0x7C);
-            ActorCutscene_SetIntentToPlay(this->actor.cutscene);
-        } else if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
-            ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
+        } else if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+            CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
+            CutsceneManager_Queue(this->actor.csId);
+        } else if (CutsceneManager_IsNext(this->actor.csId)) {
+            CutsceneManager_StartWithPlayerCs(this->actor.csId, &this->actor);
             this->unk_2F2 &= ~1;
         } else {
-            ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+            CutsceneManager_Queue(this->actor.csId);
         }
     }
 }
@@ -1316,7 +1317,7 @@ void EnZot_Update(Actor* thisx, PlayState* play) {
     Actor_MoveWithGravity(&this->actor);
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 15.0f, 30.0f, 5);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 15.0f, 30.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
 
     this->unk_2F2 &= ~0x40;
     if (SkelAnime_Update(&this->skelAnime) && (this->unk_2F0 != 0)) {

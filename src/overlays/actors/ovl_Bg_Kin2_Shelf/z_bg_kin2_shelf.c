@@ -207,7 +207,7 @@ void BgKin2Shelf_Init(Actor* thisx, PlayState* play) {
         this->dyna.actor.flags |= ACTOR_FLAG_10000000;
     }
 
-    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
     DynaPolyActor_LoadMesh(play, &this->dyna, D_80B70780[sp24]);
     func_80B700A8(this);
 }

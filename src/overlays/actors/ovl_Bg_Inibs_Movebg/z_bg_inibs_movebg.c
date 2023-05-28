@@ -39,7 +39,7 @@ void BgInibsMovebg_Init(Actor* thisx, PlayState* play) {
     BgInibsMovebg* this = THIS;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
 
     this->opaDList = sOpaDLists[BG_INIBS_MOVEBG_GET_MODE(thisx)];
     this->xluDList = sXluDLists[BG_INIBS_MOVEBG_GET_MODE(thisx)];

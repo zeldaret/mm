@@ -471,14 +471,15 @@ void func_80990C6C(EnWf* this, PlayState* play, s32 arg2) {
     static Color_RGBA8 D_809942EC = { 255, 255, 255, 255 };
     s32 i;
     Vec3f sp88;
-    u32 temp_v0;
+    FloorType floorType;
     Color_RGBA8* phi_s1;
     s16 phi_s6;
 
     if (this->actor.floorPoly != NULL) {
-        temp_v0 = func_800C99D4(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
-        if (temp_v0 != 5) {
-            if ((temp_v0 == 15) || (temp_v0 == 14)) {
+        floorType = SurfaceType_GetFloorType(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
+
+        if (floorType != FLOOR_TYPE_5) {
+            if ((floorType == FLOOR_TYPE_15) || (floorType == FLOOR_TYPE_14)) {
                 phi_s1 = &D_809942EC;
                 phi_s6 = Rand_ZeroFloat(150.0f) + 350.0f;
                 arg2 += 2;
@@ -615,7 +616,8 @@ void func_80991280(EnWf* this, PlayState* play) {
 
     if (!func_8099408C(play, this) && !func_80990948(play, this, 0)) {
         phi_v1 = ABS_ALT(BINANG_SUB(player->actor.shape.rot.y, this->actor.shape.rot.y));
-        if ((this->actor.xzDistToPlayer < 80.0f) && (player->meleeWeaponState != 0) && (phi_v1 >= 0x1F40)) {
+        if ((this->actor.xzDistToPlayer < 80.0f) && (player->meleeWeaponState != PLAYER_MELEE_WEAPON_STATE_0) &&
+            (phi_v1 >= 0x1F40)) {
             this->actor.shape.rot.y = this->actor.yawTowardsPlayer;
             this->actor.world.rot.y = this->actor.yawTowardsPlayer;
             func_80991948(this);
@@ -665,7 +667,8 @@ void func_8099149C(EnWf* this, PlayState* play) {
 
         sp28 = ABS_ALT(BINANG_SUB(player->actor.shape.rot.y, this->actor.shape.rot.y));
 
-        if ((this->actor.xzDistToPlayer < (150.0f + sp2C)) && (player->meleeWeaponState != 0) && (sp28 >= 0x1F40)) {
+        if ((this->actor.xzDistToPlayer < (150.0f + sp2C)) &&
+            (player->meleeWeaponState != PLAYER_MELEE_WEAPON_STATE_0) && (sp28 >= 0x1F40)) {
             this->actor.shape.rot.y = this->actor.yawTowardsPlayer;
             this->actor.world.rot.y = this->actor.yawTowardsPlayer;
             if (Rand_ZeroOne() > 0.7f) {
@@ -1485,7 +1488,9 @@ void EnWf_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
 
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 32.0f, 30.0f, 60.0f, 0x1D);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 32.0f, 30.0f, 60.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                UPDBGCHECKINFO_FLAG_10);
     func_80993738(this, play);
 
     if (this->actor.bgCheckFlags & (BGCHECKFLAG_GROUND | BGCHECKFLAG_GROUND_TOUCH)) {
