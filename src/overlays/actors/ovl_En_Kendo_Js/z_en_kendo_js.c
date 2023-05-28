@@ -359,8 +359,8 @@ s32 func_80B26BF8(EnKendoJs* this, PlayState* play) {
                 return 0;
             }
 
-            if ((player->meleeWeaponState != 0) || (player->stateFlags3 & PLAYER_STATE3_8000000) ||
-                (player->stateFlags2 & PLAYER_STATE2_80000)) {
+            if ((player->meleeWeaponState != PLAYER_MELEE_WEAPON_STATE_0) ||
+                (player->stateFlags3 & PLAYER_STATE3_8000000) || (player->stateFlags2 & PLAYER_STATE2_80000)) {
                 return 1;
             }
             break;
@@ -370,7 +370,8 @@ s32 func_80B26BF8(EnKendoJs* this, PlayState* play) {
                 return 0;
             }
 
-            if ((player->meleeWeaponState != 0) || (player->stateFlags2 & PLAYER_STATE2_80000)) {
+            if ((player->meleeWeaponState != PLAYER_MELEE_WEAPON_STATE_0) ||
+                (player->stateFlags2 & PLAYER_STATE2_80000)) {
                 return 1;
             }
             break;
@@ -380,8 +381,8 @@ s32 func_80B26BF8(EnKendoJs* this, PlayState* play) {
                 return 0;
             }
 
-            if ((player->meleeWeaponState != 0) || (player->stateFlags3 & PLAYER_STATE3_8000000) ||
-                (player->stateFlags2 & PLAYER_STATE2_80000)) {
+            if ((player->meleeWeaponState != PLAYER_MELEE_WEAPON_STATE_0) ||
+                (player->stateFlags3 & PLAYER_STATE3_8000000) || (player->stateFlags2 & PLAYER_STATE2_80000)) {
                 return 1;
             }
             this->unk_28E = 0;
@@ -681,8 +682,8 @@ void func_80B27774(EnKendoJs* this, PlayState* play) {
 
 void func_80B2783C(EnKendoJs* this, PlayState* play) {
     if (this->actor.csId != CS_ID_NONE) {
-        Camera_ChangeDataIdx(play->cameraPtrs[CAM_ID_MAIN],
-                             CutsceneManager_GetCutsceneEntry(this->actor.csId)->csCamId);
+        Camera_ChangeActorCsCamIndex(play->cameraPtrs[CAM_ID_MAIN],
+                                     CutsceneManager_GetCutsceneEntry(this->actor.csId)->csCamId);
     }
 }
 

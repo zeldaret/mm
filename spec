@@ -567,7 +567,6 @@ beginseg
     include "build/data/code/main.data.o"
     include "build/data/code/main.bss.o"
     include "build/src/code/padmgr.o"
-    include "build/data/code/padmgr.data.o"
     include "build/src/code/sched.o"
     include "build/src/code/speed_meter.o"
     include "build/data/code/speed_meter.data.o"
@@ -701,9 +700,7 @@ beginseg
     name "ovl_player_actor"
     compress
     include "build/src/overlays/actors/ovl_player_actor/z_player.o"
-    include "build/data/ovl_player_actor/ovl_player_actor.data.o"
-    include "build/data/ovl_player_actor/ovl_player_actor.bss.o"
-    include "build/data/ovl_player_actor/ovl_player_actor.reloc.o"
+    include "build/src/overlays/actors/ovl_player_actor/ovl_player_actor_reloc.o"
 endseg
 
 beginseg
@@ -3195,8 +3192,7 @@ beginseg
     name "ovl_fbdemo_wipe1"
     compress
     include "build/src/overlays/fbdemos/ovl_fbdemo_wipe1/z_fbdemo_wipe1.o"
-    include "build/data/ovl_fbdemo_wipe1/ovl_fbdemo_wipe1.data.o"
-    include "build/data/ovl_fbdemo_wipe1/ovl_fbdemo_wipe1.reloc.o"
+    include "build/src/overlays/fbdemos/ovl_fbdemo_wipe1/ovl_fbdemo_wipe1_reloc.o"
 endseg
 
 beginseg
@@ -3591,8 +3587,7 @@ beginseg
     name "ovl_Bg_Tobira01"
     compress
     include "build/src/overlays/actors/ovl_Bg_Tobira01/z_bg_tobira01.o"
-    include "build/data/ovl_Bg_Tobira01/ovl_Bg_Tobira01.data.o"
-    include "build/data/ovl_Bg_Tobira01/ovl_Bg_Tobira01.reloc.o"
+    include "build/src/overlays/actors/ovl_Bg_Tobira01/ovl_Bg_Tobira01_reloc.o"
 endseg
 
 beginseg

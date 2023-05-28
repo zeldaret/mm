@@ -532,8 +532,8 @@ typedef enum {
 #define ACTOR_FLAG_400           (1 << 10)
 // 
 #define ACTOR_FLAG_800           (1 << 11)
-// 
-#define ACTOR_FLAG_1000          (1 << 12)
+// Actor will not shake when a quake occurs
+#define ACTOR_FLAG_IGNORE_QUAKE  (1 << 12)
 // 
 #define ACTOR_FLAG_2000          (1 << 13)
 // 
@@ -738,6 +738,11 @@ typedef struct NpcInteractInfo {
     /* 0x18 */ Vec3f trackPos;
     /* 0x24 */ UNK_TYPE1 unk_24[0x4];
 } NpcInteractInfo; // size = 0x28
+
+typedef struct BlinkInfo {
+    /* 0x0 */ s16 eyeTexIndex;
+    /* 0x2 */ s16 blinkTimer;
+} BlinkInfo; // size = 0x4
 
 extern TargetRangeParams gTargetRanges[];
 extern s16 D_801AED48[8];

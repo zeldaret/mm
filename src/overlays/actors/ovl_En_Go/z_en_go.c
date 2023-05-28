@@ -6,6 +6,7 @@
 
 #include "z_en_go.h"
 #include "z64quake.h"
+#include "overlays/actors/ovl_En_Bom/z_en_bom.h"
 #include "objects/object_oF1d_map/object_oF1d_map.h"
 #include "objects/object_hakugin_demo/object_hakugin_demo.h"
 #include "objects/object_taisou/object_taisou.h"
@@ -1046,16 +1047,16 @@ s32 func_80A13564(EnGo* this, f32 arg1, f32 arg2, s32 arg3) {
     return ret;
 }
 
-void func_80A136B8(PlayState* play, s16 speed, s16 verticalMag, s16 countdown) {
-    s16 quakeIndex = Quake_Add(Play_GetCamera(play, CAM_ID_MAIN), QUAKE_TYPE_3);
+void EnGo_RequestQuake(PlayState* play, s16 speed, s16 y, s16 duration) {
+    s16 quakeIndex = Quake_Request(Play_GetCamera(play, CAM_ID_MAIN), QUAKE_TYPE_3);
 
-    Quake_SetCountdown(quakeIndex, countdown);
+    Quake_SetDuration(quakeIndex, duration);
     Quake_SetSpeed(quakeIndex, speed);
-    Quake_SetQuakeValues(quakeIndex, verticalMag, 0, 0, 0);
+    Quake_SetPerturbations(quakeIndex, y, 0, 0, 0);
 }
 
 void func_80A13728(EnGo* this, PlayState* play) {
-    func_80A136B8(play, 27767, 7, 20);
+    EnGo_RequestQuake(play, 27767, 7, 20);
     play->actorCtx.unk2 = 4;
     Actor_Spawn(&play->actorCtx, play, ACTOR_EN_TEST, this->actor.world.pos.x, this->actor.world.pos.y,
                 this->actor.world.pos.z, 0, 0, 0, 0);
@@ -1249,7 +1250,8 @@ s32 func_80A13E80(EnGo* this, PlayState* play) {
                 func_80A12C48(this, play, 1);
                 Lib_Vec3f_TranslateAndRotateY(&this->actor.world.pos, this->actor.shape.rot.y, &D_80A166A4, &sp48);
                 gSaveContext.powderKegTimer = 2400;
-                Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOM, sp48.x, sp48.y, sp48.z, 1, 0, 0, 0);
+                Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOM, sp48.x, sp48.y, sp48.z, BOMB_EXPLOSIVE_TYPE_POWDER_KEG,
+                            0, 0, BOMB_TYPE_BODY);
                 func_80A134B0(this, play, 1);
                 this->unk_3C2 = 0;
                 this->unk_3C0++;

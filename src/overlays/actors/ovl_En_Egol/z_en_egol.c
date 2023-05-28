@@ -328,19 +328,19 @@ void EnEgol_FootstepEffects(EnEgol* this, PlayState* play, f32 leftFootFrame, f3
     if (Animation_OnFrame(&this->skelAnime, leftFootFrame) || Animation_OnFrame(&this->skelAnime, rightFootFrame)) {
         Vec3f spawnPos;
         Player* player = GET_PLAYER(play);
-        s32 quakeSize;
+        s32 quakeYOffset;
         s32 pad;
 
         Actor_PlaySfx(&this->actor, NA_SE_EN_EYEGOLE_WALK);
-        quakeSize = 4 - (s32)(fabsf(player->actor.world.pos.y - this->actor.world.pos.y) * 0.02f);
-        if (quakeSize > 4) {
-            quakeSize = 4;
-        } else if (quakeSize < 1) {
-            quakeSize = 1;
+        quakeYOffset = 4 - (s32)(fabsf(player->actor.world.pos.y - this->actor.world.pos.y) * 0.02f);
+        if (quakeYOffset > 4) {
+            quakeYOffset = 4;
+        } else if (quakeYOffset < 1) {
+            quakeYOffset = 1;
         }
 
         if (player->stateFlags3 != PLAYER_STATE3_1000000) {
-            func_800BC848(&this->actor, play, quakeSize, 2);
+            Actor_RequestQuakeAndRumble(&this->actor, play, quakeYOffset, 2);
         }
         if (Animation_OnFrame(&this->skelAnime, leftFootFrame)) {
             Math_Vec3f_Copy(&spawnPos, &this->leftFootPos);
@@ -755,7 +755,7 @@ void EnEgol_Laser(EnEgol* this, PlayState* play) {
                 f32 nz;
                 s32 pad3;
                 s32 i;
-                s32 quakeSize;
+                s32 quakeYOffset;
                 Player* player = GET_PLAYER(play);
 
                 nx = COLPOLY_GET_NORMAL(colPoly->normal.x);
@@ -773,14 +773,14 @@ void EnEgol_Laser(EnEgol* this, PlayState* play) {
                 if ((this->actor.world.pos.y - 50.0f) <= player->actor.world.pos.y) {
                     EnEgol_SpawnEffect(this, &hitPos, &rotToNorm, 100, 0.02f, EYEGORE_EFFECT_IMPACT);
                 }
-                quakeSize = 4 - (s32)(fabsf(player->actor.world.pos.y - this->actor.world.pos.y) * 0.02f);
-                if (quakeSize > 4) {
-                    quakeSize = 4;
-                } else if (quakeSize < 1) {
-                    quakeSize = 1;
+                quakeYOffset = 4 - (s32)(fabsf(player->actor.world.pos.y - this->actor.world.pos.y) * 0.02f);
+                if (quakeYOffset > 4) {
+                    quakeYOffset = 4;
+                } else if (quakeYOffset < 1) {
+                    quakeYOffset = 1;
                 }
                 if (player->stateFlags3 != PLAYER_STATE3_1000000) {
-                    func_800BC848(&this->actor, play, quakeSize, 2);
+                    Actor_RequestQuakeAndRumble(&this->actor, play, quakeYOffset, 2);
                 }
                 Actor_PlaySfx(&this->actor, NA_SE_EV_EXPLOSION);
                 func_800B31BC(play, &hitPos, 40, -2, 255, 20);
@@ -880,16 +880,16 @@ void EnEgol_Slam(EnEgol* this, PlayState* play) {
         Player* player = GET_PLAYER(play);
         Vec3f spawnPos;
         f32 dyToPlayer = fabsf(player->actor.world.pos.y - this->actor.world.pos.y);
-        s32 quakeSize;
+        s32 quakeYOffset;
 
         Actor_PlaySfx(&this->actor, NA_SE_EV_EXPLOSION);
-        quakeSize = 4 - (s32)(dyToPlayer * 0.02f);
-        if (quakeSize > 4) {
-            quakeSize = 4;
-        } else if (quakeSize < 1) {
-            quakeSize = 1;
+        quakeYOffset = 4 - (s32)(dyToPlayer * 0.02f);
+        if (quakeYOffset > 4) {
+            quakeYOffset = 4;
+        } else if (quakeYOffset < 1) {
+            quakeYOffset = 1;
         }
-        func_800BC848(&this->actor, play, quakeSize, 2);
+        Actor_RequestQuakeAndRumble(&this->actor, play, quakeYOffset, 2);
         if (this->actor.floorBgId == BGCHECK_SCENE) {
             Math_Vec3f_Copy(&spawnPos, &this->actor.world.pos);
             spawnPos.x += Math_SinS(this->actor.world.rot.y) * 60.0f;
@@ -1064,7 +1064,7 @@ void EnEgol_Death(EnEgol* this, PlayState* play) {
     this->subCamAt.y = 60.0f;
     this->subCamAt.z = 260.0f;
     Math_Vec3f_Copy(&atOffset, &this->subCamAt);
-    OLib_DbCameraVec3fSum(&this->actor.world, &atOffset, &this->subCamAt, 1);
+    OLib_Vec3fAdd(&this->actor.world, &atOffset, &this->subCamAt, OLIB_ADD_OFFSET);
     this->subCamEye.x = this->actor.world.pos.x;
     this->subCamEye.y = this->actor.world.pos.y + 70.0f;
     this->subCamEye.z = this->actor.world.pos.z;
@@ -1080,7 +1080,7 @@ void EnEgol_Death(EnEgol* this, PlayState* play) {
     } else {
         if (Animation_OnFrame(&this->skelAnime, 46.0f)) {
             Actor_PlaySfx(&this->actor, NA_SE_EV_EXPLOSION);
-            func_800BC848(&this->actor, play, 10, 5);
+            Actor_RequestQuakeAndRumble(&this->actor, play, 10, 5);
         }
         if ((curFrame >= this->animEndFrame) && (this->action != EYEGORE_ACTION_DEAD)) {
             s32 i;
@@ -1268,7 +1268,8 @@ void EnEgol_Update(Actor* thisx, PlayState* play) {
             // last argument is DMG_ZORA_BOOMERANG | DMG_HOOKSHOT | DMG_NORMAL_ARROW | DMG_FIRE_ARROW | DMG_ICE_ARROW |
             // DMG_LIGHT_ARROW | DMG_DEKU_BUBBLE
 
-            if ((projectile != NULL) && !((projectile->id == ACTOR_EN_ARROW) && (projectile->params == ENARROW_5))) {
+            if ((projectile != NULL) &&
+                !((projectile->id == ACTOR_EN_ARROW) && (projectile->params == ARROW_TYPE_LIGHT))) {
                 this->eyelidRotTarget = 0xFA0;
                 this->eyeShutTimer = 20;
                 if (this->action == EYEGORE_ACTION_LASER) {

@@ -1050,7 +1050,7 @@ void Boss03_Charge(Boss03* this, PlayState* play) {
         // Attack platform
         if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
             play_sound(NA_SE_IT_BIG_BOMB_EXPLOSION);
-            func_800BC848(&this->actor, play, 20, 15);
+            Actor_RequestQuakeAndRumble(&this->actor, play, 20, 15);
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_WATER_EFFECT, 0.0f, this->waterHeight, 0.0f, 0, 0, 0x96,
                         ENWATEREFFECT_TYPE_GYORG_SHOCKWAVE);
 
@@ -1773,7 +1773,7 @@ void Boss03_Stunned(Boss03* this, PlayState* play) {
         Actor_MoveWithGravity(&this->actor);
         if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND_TOUCH) {
             play_sound(NA_SE_IT_WALL_HIT_HARD);
-            func_800BC848(&this->actor, play, 10, 10);
+            Actor_RequestQuakeAndRumble(&this->actor, play, 10, 10);
         }
     } else {
         Math_ApproachS(&this->actor.shape.rot.z, -0x6000, 0xA, 0x900);
@@ -1842,16 +1842,16 @@ void Boss03_UpdateCollision(Boss03* this, PlayState* play) {
         for (i = 0; i < ARRAY_COUNT(sHeadJntSphElementsInit); i++) {
             if (this->headCollider.elements[i].info.toucherFlags & TOUCH_HIT) {
                 this->headCollider.elements[i].info.toucherFlags &= ~TOUCH_HIT;
-                player->unk_B84 = this->actor.shape.rot.y;
-                player->unk_B80 = 20.0f;
+                player->pushedYaw = this->actor.shape.rot.y;
+                player->pushedSpeed = 20.0f;
             }
         }
 
         for (i = 0; i < ARRAY_COUNT(sBodyJntSphElementsInit); i++) {
             if (this->bodyCollider.elements[i].info.toucherFlags & TOUCH_HIT) {
                 this->bodyCollider.elements[i].info.toucherFlags &= ~TOUCH_HIT;
-                player->unk_B84 = this->actor.shape.rot.y;
-                player->unk_B80 = 20.0f;
+                player->pushedYaw = this->actor.shape.rot.y;
+                player->pushedSpeed = 20.0f;
             }
         }
     }

@@ -7,7 +7,7 @@
 #include "z_en_po_sisters.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_1000 | ACTOR_FLAG_4000)
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_IGNORE_QUAKE | ACTOR_FLAG_4000)
 
 #define THIS ((EnPoSisters*)thisx)
 
@@ -243,7 +243,8 @@ void EnPoSisters_MatchPlayerXZ(EnPoSisters* this, PlayState* play) {
     f32 dist;
 
     if (this->megCloneId == POE_SISTERS_MEG_REAL || this->actionFunc != EnPoSisters_DamageFlinch) {
-        if ((player->meleeWeaponState == 0 || player->meleeWeaponAnimation >= PLAYER_MWA_SPIN_ATTACK_1H) &&
+        if ((player->meleeWeaponState == PLAYER_MELEE_WEAPON_STATE_0 ||
+             player->meleeWeaponAnimation >= PLAYER_MWA_SPIN_ATTACK_1H) &&
             ((player->actor.world.pos.y - player->actor.floorHeight) < 1.0f)) {
             Math_StepToF(&this->megDistToPlayer, 110.0f, 3.0f);
         } else {
