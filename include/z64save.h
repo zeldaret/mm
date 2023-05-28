@@ -345,7 +345,7 @@ typedef struct SaveContext {
     /* 0x3DB8 */ u16 entranceSound;                     // "player_wipe_door_SE"
     /* 0x3DBA */ u8 unk_3DBA;                           // "player_wipe_item"
     /* 0x3DBB */ u8 retainWeatherMode;                  // "next_walk"
-    /* 0x3DBC */ s16 dogParams;                         // "dog_flag"
+    /* 0x3DBC */ s16 dogParams;                         // OoT leftover. "dog_flag"
     /* 0x3DBE */ u8 envHazardTextTriggerFlags;          // "guide_status"
     /* 0x3DBF */ u8 showTitleCard;                      // "name_display"
     /* 0x3DC0 */ s16 nayrusLoveTimer;                   // remnant of OoT, "shield_magic_timer"
