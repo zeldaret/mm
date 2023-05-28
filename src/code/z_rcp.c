@@ -891,7 +891,7 @@ Gfx* Gfx_SetFog2(Gfx* gfx, s32 r, s32 g, s32 b, s32 a, s32 n, s32 f) {
 }
 
 Gfx* Gfx_SetupDLImpl(Gfx* gfx, u32 i) {
-    s32 dListIndex = 6 * i;
+    s32 dListIndex = i * ARRAY_COUNT(gSetupDLs[i]);
 
     // Equivalent to gSPDisplayList(gfx++, gSetupDLs[i])
     gSPDisplayList(gfx++, &((Gfx*)gSetupDLs)[dListIndex]);
