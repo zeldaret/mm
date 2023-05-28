@@ -830,7 +830,7 @@ typedef struct {
 } OptionsMenuTextureInfo; // size = 0x8
 
 OptionsMenuTextureInfo gOptionsMenuHeaders[] = {
-    { gFileSelOptionsENGTex, 128, 16 },          { gFileSelSOUNDENGTex, 64, 16 },
+    { gFileSelOptionsENGTex, 128, 16 },          { gFileSelSoundENGTex, 64, 16 },
     { gFileSelTargetingENGTex, 64, 16 },         { gFileSelCheckBrightnessENGTex, 96, 16 },
     { gFileSelDolbySurroundLogoENGTex, 48, 17 },
 };

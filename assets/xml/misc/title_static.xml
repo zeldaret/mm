@@ -21,27 +21,16 @@
         <Texture Name="gFileSelFileErasedENGTex" OutName="file_erased_eng" Format="ia8" Width="128" Height="16" Offset="0x6980"/>
 
         <Texture Name="gFileSelOptionsENGTex" OutName="options_eng" Format="ia8" Width="128" Height="16" Offset="0x7180"/>
-
         <Texture Name="gFileSelNameENGTex" OutName="name_eng" Format="ia8" Width="56" Height="16" Offset="0x7980"/>
-
         <Texture Name="gFileSelSurroundENGTex" OutName="surround_eng" Format="ia8" Width="48" Height="16" Offset="0x7D00"/>
-
         <Texture Name="gFileSelHeadsetENGTex" OutName="headset_eng" Format="ia8" Width="48" Height="16" Offset="0x8000"/>
-
         <Texture Name="gFileSelMonoENGTex" OutName="mono_eng" Format="ia8" Width="48" Height="16" Offset="0x8300"/>
-
-        <Texture Name="gFileSelSOUNDENGTex" OutName="SOUND_eng" Format="ia8" Width="64" Height="16" Offset="0x8600"/>
-
+        <Texture Name="gFileSelSoundENGTex" OutName="sound_eng" Format="ia8" Width="64" Height="16" Offset="0x8600"/>
         <Texture Name="gFileSelStereoENGTex" OutName="stereo_eng" Format="ia8" Width="48" Height="16" Offset="0x8A00"/>
-
         <Texture Name="gFileSelTargetingENGTex" OutName="targeting_eng" Format="ia8" Width="64" Height="16" Offset="0x8D00"/>
-
         <Texture Name="gFileSelSwitchENGTex" OutName="switch_eng" Format="ia8" Width="48" Height="16" Offset="0x9100"/>
-
         <Texture Name="gFileSelHoldENGTex" OutName="hold_eng" Format="ia8" Width="48" Height="16" Offset="0x9400"/>
-
         <Texture Name="gFileSelCheckBrightnessENGTex" OutName="check_brightness_eng" Format="ia8" Width="96" Height="16" Offset="0x9700"/>
-
         <Texture Name="gFileSelDolbySurroundLogoENGTex" OutName="dolby_surround_logo_eng" Format="i8" Width="48" Height="17" Offset="0x9D00"/>
 
         <Texture Name="gFileSelDecideCancelENGTex" OutName="decide_cancel_eng" Format="ia8" Width="144" Height="16" Offset="0xA030"/>
@@ -76,11 +65,8 @@
         <Texture Name="gFileSelFile3ButtonENGTex" OutName="file_3_button_eng" Format="ia16" Width="64" Height="16" Offset="0x1FFB0"/>
 
         <Texture Name="gFileSelYesButtonENGTex" OutName="yes_button_eng" Format="ia16" Width="64" Height="16" Offset="0x207B0"/>
-
         <Texture Name="gFileSelEraseButtonENGTex" OutName="erase_button_eng" Format="ia16" Width="64" Height="16" Offset="0x20FB0"/>
-
         <Texture Name="gFileSelENDButtonENGTex" OutName="end_button_eng" Format="ia16" Width="44" Height="16" Offset="0x217B0"/>
-
         <Texture Name="gFileSelBackspaceButtonTex" OutName="backspace_button" Format="ia16" Width="28" Height="16" Offset="0x21D30"/>
 
         <Texture Name="gFileSelFileNameBoxTex" OutName="file_name_box" Format="ia16" Width="108" Height="16" Offset="0x220B0"/>
