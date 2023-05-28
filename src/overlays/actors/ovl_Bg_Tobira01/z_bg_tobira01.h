@@ -5,7 +5,7 @@
 
 struct BgTobira01;
 
-typedef void (*BgTobira01ActionFunc )(struct BgTobira01*, PlayState*);
+typedef void (*BgTobira01ActionFunc)(struct BgTobira01*, PlayState*);
 
 typedef struct BgTobira01 {
     /* 0x000 */ DynaPolyActor dyna;
@@ -16,6 +16,5 @@ typedef struct BgTobira01 {
     /* 0x168 */ s32 cutsceneRequested;
     /* 0x16C */ s32 unk16C;
 } BgTobira01; // size = 0x170
-
 
 #endif // Z_BG_TOBIRA01_H

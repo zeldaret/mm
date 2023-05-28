@@ -15,7 +15,6 @@ void BgTobira01_Init(Actor* thisx, PlayState* play);
 void BgTobira01_Destroy(Actor* thisx, PlayState* play);
 void BgTobira01_Update(Actor* thisx, PlayState* play);
 void BgTobira01_Draw(Actor* thisx, PlayState* play);
-void BgTobira01_Listen(BgTobira01* this, PlayState* play);
 
 const ActorInit Bg_Tobira01_InitVars = {
     ACTOR_BG_TOBIRA01,
@@ -32,7 +31,7 @@ const ActorInit Bg_Tobira01_InitVars = {
 void BgTobira01_Action(BgTobira01* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     s16 csId = this->dyna.actor.csId;
-    s16 tempPosY;
+    s16 prevPosYTick;
 
     if (this->cutsceneRequested) {
         if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
@@ -52,7 +51,7 @@ void BgTobira01_Action(BgTobira01* this, PlayState* play) {
         this->unk16C = 0;
     }
 
-    tempPosY = this->posYTick;
+    prevPosYTick = this->posYTick;
     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_88_40)) {
         this->posYTick++;
     } else {
@@ -60,13 +59,14 @@ void BgTobira01_Action(BgTobira01* this, PlayState* play) {
     }
 
     this->posYTick = CLAMP(this->posYTick, 0, 60);
-    if (tempPosY != this->posYTick) {
+    if (prevPosYTick != this->posYTick) {
         Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_STONEDOOR_OPEN_S - SFX_FLAG);
         this->dyna.actor.world.pos.y = this->posY = (this->posYTick * (5.0f / 3.0f)) + this->dyna.actor.home.pos.y;
         this->timer = 180;
     }
 
-    if (!(player->stateFlags1 & PLAYER_STATE1_40) && CHECK_WEEKEVENTREG(WEEKEVENTREG_88_40) && DECR(this->timer) == 0) {
+    if (!(player->stateFlags1 & PLAYER_STATE1_40) && CHECK_WEEKEVENTREG(WEEKEVENTREG_88_40) &&
+        (DECR(this->timer) == 0)) {
         CLEAR_WEEKEVENTREG(WEEKEVENTREG_88_40);
     }
 }
@@ -74,7 +74,7 @@ void BgTobira01_Action(BgTobira01* this, PlayState* play) {
 void BgTobira01_Init(Actor* thisx, PlayState* play) {
     BgTobira01* this = THIS;
 
-    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
     DynaPolyActor_LoadMesh(play, &this->dyna, &gGoronDoorCol);
     CLEAR_WEEKEVENTREG(WEEKEVENTREG_88_40);
     Actor_SetScale(&this->dyna.actor, 1.0f);
