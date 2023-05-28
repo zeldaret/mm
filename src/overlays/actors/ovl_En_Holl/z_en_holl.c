@@ -332,7 +332,7 @@ void EnHoll_Draw(Actor* thisx, PlayState* play) {
             dList = POLY_XLU_DISP;
             setupDListIndex = SETUPDL_0;
         }
-        dList = Gfx_CallSetupDL(dList, setupDListIndex);
+        dList = Gfx_SetupDL(dList, setupDListIndex);
         if (this->playerSide == EN_HOLL_BEHIND) {
             Matrix_RotateYF(M_PI, MTXMODE_APPLY);
         }

@@ -550,7 +550,7 @@ void func_808DD3C8(Actor* thisx, PlayState* play2) {
                 gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 255, 255);
                 gSPClearGeometryMode(POLY_XLU_DISP++, G_LIGHTING);
 
-                POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, SETUPDL_0);
+                POLY_XLU_DISP = Gfx_SetupDL(POLY_XLU_DISP, SETUPDL_0);
 
                 gDPSetRenderMode(POLY_XLU_DISP++, G_RM_FOG_SHADE_A, G_RM_ZB_CLD_SURF2);
                 gSPSetGeometryMode(POLY_XLU_DISP++, G_FOG);
@@ -632,7 +632,7 @@ void func_808DD970(Actor* thisx, PlayState* play2) {
             gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gEffDust5Tex));
             gSPClearGeometryMode(POLY_XLU_DISP++, G_LIGHTING);
 
-            POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, SETUPDL_0);
+            POLY_XLU_DISP = Gfx_SetupDL(POLY_XLU_DISP, SETUPDL_0);
 
             gDPSetRenderMode(POLY_XLU_DISP++, G_RM_FOG_SHADE_A, G_RM_ZB_CLD_SURF2);
             gSPSetGeometryMode(POLY_XLU_DISP++, G_FOG);
@@ -666,7 +666,7 @@ void func_808DDE9C(Actor* thisx, PlayState* play2) {
     if (end) {
         gDPPipeSync(POLY_XLU_DISP++);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 150, 255, 255, 25);
-        POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, SETUPDL_20);
+        POLY_XLU_DISP = Gfx_SetupDL(POLY_XLU_DISP, SETUPDL_20);
     }
 
     for (i = 0; i < end; i++) {

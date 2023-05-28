@@ -281,7 +281,7 @@ void ObjTokeiStep_DrawOpen(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     gfx = POLY_OPA_DISP;
-    gSPDisplayList(gfx++, &gSetupDL[6 * SETUPDL_25]);
+    gSPDisplayList(gfx++, &gSetupDLs[SETUPDL_25]);
 
     for (i = 0; i < ARRAY_COUNT(this->panels); i++) {
         panel = &this->panels[i];

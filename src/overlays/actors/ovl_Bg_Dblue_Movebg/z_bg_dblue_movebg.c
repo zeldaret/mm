@@ -778,7 +778,7 @@ void BgDblueMovebg_Draw(Actor* thisx, PlayState* play2) {
         }
 
         if ((this->opaDList != NULL) || (this->unk_160 == 6)) {
-            gfx2 = Gfx_CallSetupDL(POLY_OPA_DISP, SETUPDL_25);
+            gfx2 = Gfx_SetupDL(POLY_OPA_DISP, SETUPDL_25);
 
             gSPMatrix(&gfx2[0], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 

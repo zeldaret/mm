@@ -926,7 +926,7 @@ void EnPoh_Draw(Actor* thisx, PlayState* play) {
     if ((this->unk_197 == 255) || (this->unk_197 == 0)) {
         gfx = POLY_OPA_DISP;
 
-        gSPDisplayList(&gfx[0], &gSetupDL[6 * SETUPDL_25]);
+        gSPDisplayList(&gfx[0], &gSetupDLs[SETUPDL_25]);
         gDPSetEnvColor(&gfx[1], this->unk_194, this->unk_195, this->unk_196, this->unk_197);
         gSPSegment(&gfx[2], 0x08, D_801AEFA0);
 
@@ -937,7 +937,7 @@ void EnPoh_Draw(Actor* thisx, PlayState* play) {
     } else {
         gfx = POLY_XLU_DISP;
 
-        gSPDisplayList(&gfx[0], &gSetupDL[6 * SETUPDL_25]);
+        gSPDisplayList(&gfx[0], &gSetupDLs[SETUPDL_25]);
         gDPSetEnvColor(&gfx[1], 255, 255, 255, this->unk_197);
         gSPSegment(&gfx[2], 0x08, D_801AEF88);
 
@@ -945,7 +945,7 @@ void EnPoh_Draw(Actor* thisx, PlayState* play) {
                                        EnPoh_OverrideLimbDraw, EnPoh_PostLimbDraw, &this->actor, &gfx[3]);
 
         gfx = POLY_OPA_DISP;
-        gSPDisplayList(gfx++, &gSetupDL[6 * SETUPDL_25]);
+        gSPDisplayList(gfx++, &gSetupDLs[SETUPDL_25]);
     }
 
     gDPPipeSync(&gfx[0]);
@@ -986,7 +986,7 @@ void func_80B2F37C(Actor* thisx, PlayState* play) {
     if (this->actionFunc == func_80B2DD2C) {
         gfx = POLY_OPA_DISP;
 
-        gSPDisplayList(&gfx[0], &gSetupDL[6 * SETUPDL_25]);
+        gSPDisplayList(&gfx[0], &gSetupDLs[SETUPDL_25]);
         gDPSetEnvColor(&gfx[1], this->unk_198, this->unk_199, this->unk_19A, 255);
 
         func_80B2C910(&sp7C, play);

@@ -1128,7 +1128,7 @@ void func_80C13354(EnThiefbird* this, PlayState* play2) {
     OPEN_DISPS(play->state.gfxCtx);
 
     gfx = POLY_OPA_DISP;
-    gSPDisplayList(&gfx[0], &gSetupDL[6 * SETUPDL_25]);
+    gSPDisplayList(&gfx[0], &gSetupDLs[SETUPDL_25]);
     gSPDisplayList(&gfx[1], gTakkuriFeatherMaterialDL);
     gfx = &gfx[2];
 

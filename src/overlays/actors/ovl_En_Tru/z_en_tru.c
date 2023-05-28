@@ -305,7 +305,7 @@ void func_80A85F84(EnTruUnkStruct* arg0, PlayState* play) {
         }
 
         if (!flag) {
-            POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, SETUPDL_0);
+            POLY_XLU_DISP = Gfx_SetupDL(POLY_XLU_DISP, SETUPDL_0);
             gSPDisplayList(POLY_XLU_DISP++, gKoumeDustMaterialDL);
             flag = true;
         }

@@ -665,7 +665,7 @@ void ObjHugebombiwa_Draw(Actor* thisx, PlayState* play) {
         EnHugebombiwaStruct* ptr;
         Gfx* gfx = POLY_OPA_DISP;
 
-        gSPDisplayList(gfx++, &gSetupDL[6 * SETUPDL_25]);
+        gSPDisplayList(gfx++, &gSetupDLs[SETUPDL_25]);
 
         for (i = 0; i < ARRAY_COUNT(this->unk_190); i++) {
             ptr = &this->unk_190[i];
@@ -700,7 +700,7 @@ void func_80A55B34(Actor* thisx, PlayState* play) {
 
     gfx = POLY_OPA_DISP;
 
-    gSPDisplayList(gfx++, &gSetupDL[6 * SETUPDL_25]);
+    gSPDisplayList(gfx++, &gSetupDLs[SETUPDL_25]);
 
     for (i = 0; i < ARRAY_COUNT(this->unk_190); i++) {
         ptr = &this->unk_190[i];

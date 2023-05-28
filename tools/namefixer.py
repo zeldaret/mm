@@ -764,6 +764,7 @@ wordReplace = {
     "Padmgr_Stop": "PadMgr_HandlePreNMI",
     "func_80175E68": "PadMgr_GetInputNoLock",
 
+    "Gfx_CallSetupDL": "Gfx_SetupDL",
     "func_8012BFC4": "Gfx_SetupDL57",
     "func_8012BFEC": "Gfx_SetupDL57_b",
     "func_8012C014": "Gfx_SetupDL52_NoCD",
@@ -1064,7 +1065,7 @@ wordReplace = {
     "D_801D15BC": "gZeroVec3s",
     "D_801D1DE0": "gIdentityMtx",
     "D_801D1E20": "gIdentityMtxF",
-    "sSetupDL": "gSetupDL",
+    "sSetupDL": "gSetupDLs",
 
     # Macros
     "CUR_EQUIP_VALUE_VOID": "GET_CUR_EQUIP_VALUE",

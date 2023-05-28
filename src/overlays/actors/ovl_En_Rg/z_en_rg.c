@@ -169,7 +169,7 @@ void func_80BF3920(EnRgStruct* ptr, PlayState* play) {
     for (i = 0; i < 32; i++, ptr++) {
         if ((ptr->unk_00 >= 4) && (ptr->unk_00 < 7)) {
             if (!phi_fp) {
-                POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, SETUPDL_0);
+                POLY_XLU_DISP = Gfx_SetupDL(POLY_XLU_DISP, SETUPDL_0);
                 gSPDisplayList(POLY_XLU_DISP++, gGoronDustMaterialDL);
                 phi_fp = true;
             }

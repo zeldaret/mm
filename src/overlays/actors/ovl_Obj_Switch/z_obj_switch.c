@@ -970,7 +970,7 @@ void ObjSwitch_DrawFloorSwitch(ObjSwitch* this, PlayState* play) {
         OPEN_DISPS(play->state.gfxCtx);
 
         opa = POLY_OPA_DISP;
-        gSPDisplayList(opa++, &gSetupDL[6 * SETUPDL_25]);
+        gSPDisplayList(opa++, &gSetupDLs[SETUPDL_25]);
         gSPMatrix(opa++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gDPSetPrimColor(opa++, 0, 0x80, this->color.r, this->color.g, this->color.b, 255);
         gSPDisplayList(opa++, gFloorSwitch1DL);

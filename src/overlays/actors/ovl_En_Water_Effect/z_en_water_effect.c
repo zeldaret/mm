@@ -294,7 +294,7 @@ void EnWaterEffect_Draw(Actor* thisx, PlayState* play2) {
     for (i = 0; i < ARRAY_COUNT(this->unk_144) / 2; i++, ptr++) {
         if ((ptr->unk_00 == 1) || (ptr->unk_00 == 2)) {
             if (!phi_s4) {
-                POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, SETUPDL_0);
+                POLY_XLU_DISP = Gfx_SetupDL(POLY_XLU_DISP, SETUPDL_0);
 
                 gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gEffDust1Tex));
                 gSPDisplayList(POLY_XLU_DISP++, object_water_effect_DL_004260);

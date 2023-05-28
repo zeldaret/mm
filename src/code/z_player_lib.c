@@ -1854,7 +1854,7 @@ void Player_DrawHookshotReticle(PlayState* play, Player* player, f32 hookshotDis
 
             OPEN_DISPS(play->state.gfxCtx);
 
-            OVERLAY_DISP = Gfx_CallSetupDL(OVERLAY_DISP, SETUPDL_7);
+            OVERLAY_DISP = Gfx_SetupDL(OVERLAY_DISP, SETUPDL_7);
 
             SkinMatrix_Vec3fMtxFMultXYZW(&play->viewProjectionMtxF, &pos, &sp58, &sp54);
 

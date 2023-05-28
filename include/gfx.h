@@ -155,9 +155,9 @@ typedef struct GraphicsContext {
 Gfx* Gfx_SetFog(Gfx* gfx, s32 r, s32 g, s32 b, s32 a, s32 n, s32 f);
 Gfx* Gfx_SetFogWithSync(Gfx* gfx, s32 r, s32 g, s32 b, s32 a, s32 n, s32 f);
 Gfx* Gfx_SetFog2(Gfx* gfx, s32 r, s32 g, s32 b, s32 a, s32 n, s32 f);
-Gfx* Gfx_CallSetupDLImpl(Gfx* gfx, u32 i);
-Gfx* Gfx_CallSetupDL(Gfx* gfx, u32 i);
-void Gfx_CallSetupDLAtPtr(Gfx** gfxp, u32 i);
+Gfx* Gfx_SetupDLImpl(Gfx* gfx, u32 i);
+Gfx* Gfx_SetupDL(Gfx* gfx, u32 i);
+void Gfx_SetupDLAtPtr(Gfx** gfxp, u32 i);
 Gfx* Gfx_SetupDL57(Gfx* gfx);
 Gfx* Gfx_SetupDL57_b(Gfx* gfx);
 Gfx* Gfx_SetupDL52_NoCD(Gfx* gfx);
@@ -233,7 +233,7 @@ void func_8012CF0C(GraphicsContext* gfxCtx, s32 clearFb, s32 clearZb, u8 r, u8 g
 void func_8012D374(GraphicsContext* gfxCtx, u8 r, u8 g, u8 b);
 void func_8012D40C(f32* param_1, f32* param_2, s16* param_3);
 
-extern Gfx gSetupDL[SETUPDL_MAX * 6];
+extern Gfx gSetupDLs[SETUPDL_MAX][6];
 extern Gfx gEmptyDL[];
 
 #define WORK_DISP __gfxCtx->work.p

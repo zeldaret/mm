@@ -1828,9 +1828,9 @@ asm/non_matchings/code/z_quake/Quake_GetNumActiveQuakes.s,Quake_GetNumActiveQuak
 asm/non_matchings/code/z_rcp/Gfx_SetFog.s,Gfx_SetFog,0x8012BC50,0x4F
 asm/non_matchings/code/z_rcp/Gfx_SetFogWithSync.s,Gfx_SetFogWithSync,0x8012BD8C,0x5F
 asm/non_matchings/code/z_rcp/Gfx_SetFog2.s,Gfx_SetFog2,0x8012BF08,0xD
-asm/non_matchings/code/z_rcp/Gfx_CallSetupDLImpl.s,Gfx_CallSetupDLImpl,0x8012BF3C,0xF
-asm/non_matchings/code/z_rcp/Gfx_CallSetupDL.s,Gfx_CallSetupDL,0x8012BF78,0x8
-asm/non_matchings/code/z_rcp/Gfx_CallSetupDLAtPtr.s,Gfx_CallSetupDLAtPtr,0x8012BF98,0xB
+asm/non_matchings/code/z_rcp/Gfx_SetupDLImpl.s,Gfx_SetupDLImpl,0x8012BF3C,0xF
+asm/non_matchings/code/z_rcp/Gfx_SetupDL.s,Gfx_SetupDL,0x8012BF78,0x8
+asm/non_matchings/code/z_rcp/Gfx_SetupDLAtPtr.s,Gfx_SetupDLAtPtr,0x8012BF98,0xB
 asm/non_matchings/code/z_rcp/Gfx_SetupDL57.s,Gfx_SetupDL57,0x8012BFC4,0xA
 asm/non_matchings/code/z_rcp/Gfx_SetupDL57_b.s,Gfx_SetupDL57_b,0x8012BFEC,0xA
 asm/non_matchings/code/z_rcp/Gfx_SetupDL52_NoCD.s,Gfx_SetupDL52_NoCD,0x8012C014,0x11

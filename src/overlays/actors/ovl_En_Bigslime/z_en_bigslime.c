@@ -2885,7 +2885,7 @@ void EnBigslime_SetSysMatrix(Vec3f* pos, PlayState* play, Gfx* shadowDList, f32 
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    POLY_OPA_DISP = Gfx_CallSetupDL(POLY_OPA_DISP, SETUPDL_44);
+    POLY_OPA_DISP = Gfx_SetupDL(POLY_OPA_DISP, SETUPDL_44);
     sysMatrix->xx = zx;
     sysMatrix->yy = 1.0f;
     sysMatrix->zz = zx;
