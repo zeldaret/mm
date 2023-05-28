@@ -301,7 +301,7 @@ void FileSelect_DrawKeyboard(GameState* thisx) {
 
     OPEN_DISPS(this->state.gfxCtx);
 
-    func_8012C8AC(this->state.gfxCtx);
+    Gfx_SetupDL42_Opa(this->state.gfxCtx);
     gDPSetCycleType(POLY_OPA_DISP++, G_CYC_2CYCLE);
     gDPSetRenderMode(POLY_OPA_DISP++, G_RM_PASS, G_RM_XLU_SURF2);
     gDPSetCombineLERP(POLY_OPA_DISP++, 0, 0, 0, PRIMITIVE, TEXEL1, TEXEL0, PRIM_LOD_FRAC, TEXEL0, 0, 0, 0, COMBINED, 0,
@@ -395,7 +395,7 @@ void FileSelect_DrawNameEntry(GameState* thisx) {
 
     FileSelect_DrawKeyboard(&this->state);
     gDPPipeSync(POLY_OPA_DISP++);
-    func_8012C8AC(this->state.gfxCtx);
+    Gfx_SetupDL42_Opa(this->state.gfxCtx);
 
     gDPSetCombineLERP(POLY_OPA_DISP++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, PRIMITIVE, TEXEL0, 0,
                       PRIMITIVE, 0);

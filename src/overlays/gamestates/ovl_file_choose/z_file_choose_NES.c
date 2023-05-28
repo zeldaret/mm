@@ -90,7 +90,7 @@ void FileSelect_InitModeUpdate(GameState* thisx) {
 void FileSelect_InitModeDraw(GameState* thisx) {
     FileSelectState* this = (FileSelectState*)thisx;
 
-    func_8012C628(this->state.gfxCtx);
+    Gfx_SetupDL39_Opa(this->state.gfxCtx);
     FileSelect_Noop2(this);
 }
 
@@ -1850,7 +1850,7 @@ void FileSelect_ConfigModeDraw(GameState* thisx) {
 
     gDPPipeSync(POLY_OPA_DISP++);
 
-    func_8012C8AC(this->state.gfxCtx);
+    Gfx_SetupDL42_Opa(this->state.gfxCtx);
     FileSelect_SetView(this, 0.0f, 0.0f, 64.0f);
     FileSelect_SetWindowVtx(&this->state);
     FileSelect_SetWindowContentVtx(&this->state);
@@ -2238,7 +2238,7 @@ void FileSelect_SelectModeDraw(GameState* thisx) {
 
     gDPPipeSync(POLY_OPA_DISP++);
 
-    func_8012C8AC(this->state.gfxCtx);
+    Gfx_SetupDL42_Opa(this->state.gfxCtx);
     FileSelect_SetView(this, 0.0f, 0.0f, 64.0f);
     FileSelect_SetWindowVtx(&this->state);
     FileSelect_SetWindowContentVtx(&this->state);
@@ -2388,7 +2388,7 @@ void FileSelect_Main(GameState* thisx) {
     FileSelect_UpdateAndDrawSkybox(this);
     gFileSelectDrawFuncs[this->menuMode](&this->state);
 
-    func_8012C628(this->state.gfxCtx);
+    Gfx_SetupDL39_Opa(this->state.gfxCtx);
 
     gDPSetCombineLERP(POLY_OPA_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0, PRIMITIVE,
                       ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
