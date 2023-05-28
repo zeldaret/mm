@@ -1164,7 +1164,7 @@ void EnTite_Draw(Actor* thisx, PlayState* play) {
 
     gfx = POLY_OPA_DISP;
 
-    gSPDisplayList(&gfx[0], &gSetupDLs[SETUPDL_25]);
+    gSPDisplayList(&gfx[0], gSetupDLs[SETUPDL_25]);
 
     if (this->actor.params == ENTITE_MINUS_2) {
         gSPSegment(&gfx[1], 0x08, D_80896B24[0][0]);

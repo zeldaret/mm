@@ -10,7 +10,7 @@ void Gfx_DrawDListOpa(PlayState* play, Gfx* dlist) {
 
     dl = POLY_OPA_DISP;
 
-    gSPDisplayList(&dl[0], &gSetupDLs[SETUPDL_25]);
+    gSPDisplayList(&dl[0], gSetupDLs[SETUPDL_25]);
     gSPMatrix(&dl[1], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(&dl[2], dlist);
 
@@ -29,7 +29,7 @@ void Gfx_DrawDListXlu(PlayState* play, Gfx* dlist) {
 
     dl = POLY_XLU_DISP;
 
-    gSPDisplayList(&dl[0], &gSetupDLs[SETUPDL_25]);
+    gSPDisplayList(&dl[0], gSetupDLs[SETUPDL_25]);
     gSPMatrix(&dl[1], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(&dl[2], dlist);
 
