@@ -515,8 +515,8 @@ void EnSyatekiOkuta_Draw(Actor* thisx, PlayState* play) {
 
     SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, EnSyatekiOkuta_OverrideLimbDraw, NULL,
                       &this->actor);
-    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     if (this->actionFunc == EnSyatekiOkuta_Die) {
         Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y + 30.0f, this->actor.world.pos.z + 20.0f,
                          MTXMODE_NEW);
