@@ -126,12 +126,12 @@ TexturePtr sSoTAmmoDropTextures[] = {
     gRupeeBlueTex,     // SOTCS_AMMO_DROP_RUPEE_BLUE
 };
 
-typedef enum SoTDrawType {
+typedef enum SoTCsDrawType {
     /*  0 */ SOTCS_DRAW_DOUBLE_SOT,
     /*  1 */ SOTCS_DRAW_RESET_CYCLE_SOT,
     /*  2 */ SOTCS_DRAW_INVERTED_SOT,
     /* 99 */ SOTCS_DRAW_TYPE_NONE = 99
-} SoTDrawType;
+} SoTCsDrawType;
 
 #define SOTCS_AMMO_FLAG_RUPEE (1 << 0)
 #define SOTCS_AMMO_FLAG_BOMB (1 << 1)
@@ -1196,7 +1196,7 @@ void EnTest6_SharedSoTCutscene(EnTest6* this, PlayState* play) {
 }
 
 /**
- * Draws SOTCS_RESET_NUM_CLOCKS clocks and ammo drops
+ * Draws clocks in a double spiral above and below player
  */
 void EnTest6_DrawThreeDayResetSoTCutscene(EnTest6* this, PlayState* play) {
     s16 clock1Yaw;
@@ -1211,7 +1211,7 @@ void EnTest6_DrawThreeDayResetSoTCutscene(EnTest6* this, PlayState* play) {
     clockPos.y = 0.0f;
 
     clock1Yaw = this->clockAngle;
-    clock2Yaw = (s32)(Math_SinS(play->state.frames) * 12000.0f) + clock1Yaw + 0x4E20;
+    clock2Yaw = clock1Yaw + DEG_TO_BINANG(109.865) + (s32)(Math_SinS(play->state.frames) * 12000.0f);
     angle = (play->state.frames & 0x3C) * 1024;
     angle *= this->clockSpeed / 200.0f;
     this->clockAngle += (s16)this->clockSpeed;
@@ -1265,7 +1265,7 @@ void EnTest6_DrawThreeDayResetSoTCutscene(EnTest6* this, PlayState* play) {
 }
 
 /**
- * Draws 51 clocks
+ * Draws clocks in a ring that spins around player
  */
 void EnTest6_DrawDoubleSoTCutscene(EnTest6* this, PlayState* play) {
     s32 pad1[2];
@@ -1283,7 +1283,8 @@ void EnTest6_DrawDoubleSoTCutscene(EnTest6* this, PlayState* play) {
     this->clockRingRotZ = this->clockAngle * 2;
 
     // The `& 0x3C` ensures the clock only turns once every 4 frames.
-    // Each turn rotates the clock 22.5 degrees
+    // Each turn rotates the clock 22.5 degrees (0x10000 / 64 * 4)
+    // clockNormalAngle = (play->state.frames & 0x3C) * ((0x10000 / 64 * 4) / 4);
     clockNormalAngle = (play->state.frames & 0x3C) * (DEG_TO_BINANG(22.5f) / 4);
     clockRotX = this->clockAngle + DEG_TO_BINANG(90);
 
@@ -1344,7 +1345,8 @@ void EnTest6_DrawDoubleSoTCutscene(EnTest6* this, PlayState* play) {
 }
 
 /**
- * Draws 6 clocks and black particles
+ * Draws clocks flat on the ground.
+ * Also draws black particles that raise or fall to indicate if time is speeding up or slowing down
  */
 void EnTest6_DrawInvertedSoTCutscene(EnTest6* this, PlayState* play2) {
     PlayState* play = play2;
@@ -1383,7 +1385,7 @@ void EnTest6_DrawInvertedSoTCutscene(EnTest6* this, PlayState* play2) {
 
             // Draw black particles
             if (this->particles != NULL) {
-                for (i = 0; i < ARRAY_COUNT(this->particles[0]); i++) {
+                for (i = 0; i < SOTCS_NUM_PARTICLES; i++) {
                     flashScale = Rand_ZeroOne() * 0.0025f;
                     Matrix_Translate((*this->particles)[i].x, (*this->particles)[i].y, (*this->particles)[i].z,
                                      MTXMODE_NEW);
