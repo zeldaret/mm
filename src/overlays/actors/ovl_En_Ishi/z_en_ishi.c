@@ -386,7 +386,7 @@ void EnIshi_Init(Actor* thisx, PlayState* play) {
 
     Actor_ProcessInitChain(&this->actor, sInitChain[sp34]);
 
-    if (play->csCtx.state != 0) {
+    if (play->csCtx.state != CS_STATE_IDLE) {
         this->actor.uncullZoneForward += 1000.0f;
     }
 
@@ -597,11 +597,11 @@ void func_8095EBDC(EnIshi* this, PlayState* play) {
         }
 
         if (sp70 == 1) {
-            s16 quakeIndex = Quake_Add(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
+            s16 quakeIndex = Quake_Request(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
 
             Quake_SetSpeed(quakeIndex, 17232);
-            Quake_SetQuakeValues(quakeIndex, 3, 0, 0, 0);
-            Quake_SetCountdown(quakeIndex, 7);
+            Quake_SetPerturbations(quakeIndex, 3, 0, 0, 0);
+            Quake_SetDuration(quakeIndex, 7);
 
             Rumble_Request(this->actor.xyzDistToPlayerSq, 255, 20, 150);
         }

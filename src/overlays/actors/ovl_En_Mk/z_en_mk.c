@@ -372,7 +372,7 @@ void func_80959C94(EnMk* this, PlayState* play) {
 void func_80959D28(EnMk* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
 
-    if ((play->csCtx.state == 0) && (this->actor.csId == CS_ID_NONE)) {
+    if ((play->csCtx.state == CS_STATE_IDLE) && (this->actor.csId == CS_ID_NONE)) {
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_20_40)) {
             this->unk_27A &= ~1;
             this->actionFunc = func_80959774;

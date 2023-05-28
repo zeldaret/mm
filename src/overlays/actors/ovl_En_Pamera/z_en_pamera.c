@@ -244,8 +244,8 @@ void func_80BD8758(EnPamera* this, PlayState* play) {
     if (this->hideInisdeTimer++ > 1800) {
         if (CutsceneManager_IsNext(this->csIdList[0]) && (this->csIdList[0] != -1)) {
             CutsceneManager_StartWithPlayerCs(this->csIdList[0], &this->actor);
-            Camera_SetToTrackActor(Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(this->csIdList[0])),
-                                   &this->actor);
+            Camera_SetFocalActor(Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(this->csIdList[0])),
+                                 &this->actor);
             this->actor.speed = 1.5f;
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 1);
             this->actor.shape.rot.y = this->actor.home.rot.y;
@@ -431,8 +431,8 @@ void func_80BD90AC(EnPamera* this, PlayState* play) {
           (Math_Vec3f_DistXZ(&this->actor.home.pos, &player->actor.world.pos) < 200.0f)))) {
         if ((CutsceneManager_IsNext(this->csIdList[1])) && ((this->csIdList[1] != -1))) {
             CutsceneManager_StartWithPlayerCs(this->csIdList[1], &this->actor);
-            Camera_SetToTrackActor(Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(this->csIdList[1])),
-                                   &this->actor);
+            Camera_SetFocalActor(Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(this->csIdList[1])),
+                                 &this->actor);
             EnPamera_LookDownWell(this);
         } else if (this->csIdList[1] != -1) {
             CutsceneManager_Queue(this->csIdList[1]);
@@ -732,7 +732,7 @@ s32 func_80BD9CB8(EnPamera* this, PlayState* play) {
         this->setupFunc(this, play);
         return 1;
     }
-    if ((play->csCtx.state == 0) && CHECK_WEEKEVENTREG(WEEKEVENTREG_75_20)) {
+    if ((play->csCtx.state == CS_STATE_IDLE) && CHECK_WEEKEVENTREG(WEEKEVENTREG_75_20)) {
         if ((this->actionFunc != func_80BD994C) && (this->actionFunc != EnPamera_HandleDialogue)) {
             this->actor.shape.rot.y = this->actor.world.rot.y;
             func_80BD9904(this);

@@ -389,12 +389,18 @@ typedef struct {
     /* 0xE */ s16 intensity;
 } TitleCardContext; // size = 0x10
 
-typedef struct ActorContext_unk_1F4 {
-    /* 0x00 */ u8 unk_00;
+typedef enum {
+    /* 0 */ PLAYER_IMPACT_GORON_GROUND_POUND,
+    /* 1 */ PLAYER_IMPACT_ZORA_BARRIER,
+    /* 2 */ PLAYER_IMPACT_BONK // also activated by goron attack
+} PlayerImpactType;
+
+typedef struct PlayerImpact {
+    /* 0x00 */ u8 type;
     /* 0x01 */ u8 timer;
-    /* 0x04 */ f32 unk_04;
-    /* 0x08 */ Vec3f unk_08;
-} ActorContext_unk_1F4; // size = 0x14
+    /* 0x04 */ f32 dist;
+    /* 0x08 */ Vec3f pos;
+} PlayerImpact; // size = 0x14
 
 typedef struct ActorContext_unk_20C {
     /* 0x0 */ s16 id;
@@ -458,7 +464,7 @@ typedef struct ActorContext {
     /* 0x120 */ TargetContext targetContext;
     /* 0x1B8 */ ActorContextSceneFlags sceneFlags;
     /* 0x1E4 */ TitleCardContext titleCtxt;
-    /* 0x1F4 */ ActorContext_unk_1F4 unk_1F4;
+    /* 0x1F4 */ PlayerImpact playerImpact;
     /* 0x208 */ UNK_TYPE1 unk_208[0x4];
     /* 0x20C */ ActorContext_unk_20C unk_20C[8];
     /* 0x24C */ UNK_TYPE1 unk_24C[0x4];
@@ -526,8 +532,8 @@ typedef enum {
 #define ACTOR_FLAG_400           (1 << 10)
 // 
 #define ACTOR_FLAG_800           (1 << 11)
-// 
-#define ACTOR_FLAG_1000          (1 << 12)
+// Actor will not shake when a quake occurs
+#define ACTOR_FLAG_IGNORE_QUAKE  (1 << 12)
 // 
 #define ACTOR_FLAG_2000          (1 << 13)
 // 

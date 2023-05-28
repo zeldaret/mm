@@ -897,8 +897,8 @@ void func_8012C240(GraphicsContext* gfxCtx) {
     gSPDisplayList(gfxCtx->polyXlu.p++, &sSetupDL[6 * 0x19]);
 }
 
-void func_8012C268(PlayState* play) {
-    func_8012C28C(play->state.gfxCtx);
+void func_8012C268(GameState* gameState) {
+    func_8012C28C(gameState->gfxCtx);
 }
 
 void func_8012C28C(GraphicsContext* gfxCtx) {

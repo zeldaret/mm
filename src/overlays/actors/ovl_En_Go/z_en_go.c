@@ -710,7 +710,7 @@ s32 func_80A12868(EnGo* this, PlayState* play) {
 }
 
 s32 func_80A12954(EnGo* this, PlayState* play) {
-    if ((ENGO_GET_F(&this->actor) == ENGO_F_4) && (play->csCtx.state != 0) && (this->actor.draw != NULL) &&
+    if ((ENGO_GET_F(&this->actor) == ENGO_F_4) && (play->csCtx.state != CS_STATE_IDLE) && (this->actor.draw != NULL) &&
         (play->sceneId == SCENE_10YUKIYAMANOMURA2) && (gSaveContext.sceneLayer == 1) &&
         (play->csCtx.scriptIndex == 0)) {
         if (this->unk_3F0 == 0) {
@@ -756,7 +756,7 @@ s32 func_80A12A64(EnGo* this, PlayState* play) {
 }
 
 s32 func_80A12B78(EnGo* this, PlayState* play) {
-    if (play->csCtx.state == 0) {
+    if (play->csCtx.state == CS_STATE_IDLE) {
         if (this->unk_3DC == 4) {
             if (Animation_OnFrame(&this->skelAnime, 2.0f)) {
                 Actor_PlaySfx(&this->actor, NA_SE_EN_GOLON_CIRCLE);
@@ -1046,16 +1046,16 @@ s32 func_80A13564(EnGo* this, f32 arg1, f32 arg2, s32 arg3) {
     return ret;
 }
 
-void func_80A136B8(PlayState* play, s16 speed, s16 verticalMag, s16 countdown) {
-    s16 quakeIndex = Quake_Add(Play_GetCamera(play, CAM_ID_MAIN), QUAKE_TYPE_3);
+void EnGo_RequestQuake(PlayState* play, s16 speed, s16 y, s16 duration) {
+    s16 quakeIndex = Quake_Request(Play_GetCamera(play, CAM_ID_MAIN), QUAKE_TYPE_3);
 
-    Quake_SetCountdown(quakeIndex, countdown);
+    Quake_SetDuration(quakeIndex, duration);
     Quake_SetSpeed(quakeIndex, speed);
-    Quake_SetQuakeValues(quakeIndex, verticalMag, 0, 0, 0);
+    Quake_SetPerturbations(quakeIndex, y, 0, 0, 0);
 }
 
 void func_80A13728(EnGo* this, PlayState* play) {
-    func_80A136B8(play, 27767, 7, 20);
+    EnGo_RequestQuake(play, 27767, 7, 20);
     play->actorCtx.unk2 = 4;
     Actor_Spawn(&play->actorCtx, play, ACTOR_EN_TEST, this->actor.world.pos.x, this->actor.world.pos.y,
                 this->actor.world.pos.z, 0, 0, 0, 0);

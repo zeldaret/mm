@@ -29,7 +29,7 @@ typedef struct {
     /* 0x03 */ u8 flags3;
 } RestrictionFlags;
 
-Input sPostmanTimerInput[4];
+Input sPostmanTimerInput[MAXCONTROLLERS];
 
 #define RESTRICTIONS_TABLE_END 0xFF
 
@@ -887,10 +887,10 @@ void Interface_SetVertices(PlayState* play) {
 
 s32 sPostmanTimerInputBtnAPressed = false;
 
-void Interface_PostmanTimerCallback(s32 arg0) {
+void Interface_PostmanTimerCallback(void* arg) {
     s32 btnAPressed;
 
-    func_80175E68(&sPostmanTimerInput[0], 0);
+    PadMgr_GetInputNoLock(sPostmanTimerInput, false);
     btnAPressed = CHECK_BTN_ALL(sPostmanTimerInput[0].cur.button, BTN_A);
     if ((btnAPressed != sPostmanTimerInputBtnAPressed) && btnAPressed) {
         gSaveContext.postmanTimerStopOsTime = osGetTime();
@@ -4003,7 +4003,7 @@ void Interface_DrawItemButtons(PlayState* play) {
     }
 
     if (interfaceCtx->tatlCalling && (play->pauseCtx.state == PAUSE_STATE_OFF) &&
-        (play->pauseCtx.debugEditor == DEBUG_EDITOR_NONE) && (play->csCtx.state == 0) &&
+        (play->pauseCtx.debugEditor == DEBUG_EDITOR_NONE) && (play->csCtx.state == CS_STATE_IDLE) &&
         (sPictoState == PICTO_BOX_STATE_OFF)) {
         if (sCUpInvisible == 0) {
             // C-Up Button Texture, Color & Label (Tatl Text)
@@ -5654,7 +5654,7 @@ void Interface_DrawTimers(PlayState* play) {
                         }
                         gSaveContext.timerStates[TIMER_ID_POSTMAN] = TIMER_STATE_POSTMAN_COUNTING;
                         sPostmanTimerInputBtnAPressed = true;
-                        func_80174F7C(Interface_PostmanTimerCallback, NULL);
+                        PadMgr_SetInputRetraceCallback(Interface_PostmanTimerCallback, NULL);
                         break;
 
                     case TIMER_STATE_POSTMAN_STOP:
@@ -5663,7 +5663,7 @@ void Interface_DrawTimers(PlayState* play) {
                             postmanTimerStopOsTime - ((void)0, gSaveContext.timerStartOsTimes[TIMER_ID_POSTMAN]) -
                             ((void)0, gSaveContext.timerPausedOsTimes[TIMER_ID_POSTMAN]));
                         gSaveContext.timerStates[TIMER_ID_POSTMAN] = TIMER_STATE_POSTMAN_END;
-                        func_80174F9C(Interface_PostmanTimerCallback, NULL);
+                        PadMgr_UnsetInputRetraceCallback(Interface_PostmanTimerCallback, NULL);
                         break;
 
                     case TIMER_STATE_POSTMAN_COUNTING:
@@ -7211,7 +7211,7 @@ void Interface_Update(PlayState* play) {
 
 void Interface_Destroy(PlayState* play) {
     Map_Destroy(play);
-    func_80174F9C(Interface_PostmanTimerCallback, NULL);
+    PadMgr_UnsetInputRetraceCallback(Interface_PostmanTimerCallback, NULL);
 }
 
 void Interface_Init(PlayState* play) {
