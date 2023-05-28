@@ -234,7 +234,7 @@ void EnCne01_Update(Actor* thisx, PlayState* play) {
 
     EnCne01_TestIsTalking(this, play);
     this->enHy.actionFunc(&this->enHy, play);
-    Actor_UpdateBgCheckInfo(play, &this->enHy.actor, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->enHy.actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
     EnCne01_UpdateModel(this, play);
     func_809CB4A0(this, play);
 }

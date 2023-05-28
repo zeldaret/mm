@@ -133,37 +133,38 @@ s32 func_80B3CA20(EnDnp* this) {
     if ((this->animIndex == EN_DNP_ANIM_CUTSCENE_HURRY) || (this->animIndex == EN_DNP_ANIM_RUN)) {
         if (Animation_OnFrame(&this->skelAnime, 1.0f) || Animation_OnFrame(&this->skelAnime, 5.0f) ||
             Animation_OnFrame(&this->skelAnime, 9.0f) || Animation_OnFrame(&this->skelAnime, 13.0f)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DEKUHIME_TURN);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_DEKUHIME_TURN);
         }
     } else if ((this->animIndex == EN_DNP_ANIM_GLARE_START) || (this->animIndex == EN_DNP_ANIM_TURN_AROUND)) {
         if (Animation_OnFrame(&this->skelAnime, 1.0f)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DEKUHIME_TURN);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_DEKUHIME_TURN);
         }
     } else if (this->animIndex == EN_DNP_ANIM_GREETING) {
         if (Animation_OnFrame(&this->skelAnime, 7.0f)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DEKUHIME_GREET);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_DEKUHIME_GREET);
         }
         if (Animation_OnFrame(&this->skelAnime, 22.0f)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DEKUHIME_GREET2);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_DEKUHIME_GREET2);
         }
     } else if (this->animIndex == EN_DNP_ANIM_BOW) {
         if (Animation_OnFrame(&this->skelAnime, 9.0f)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DEKUHIME_GREET);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_DEKUHIME_GREET);
         }
         if (Animation_OnFrame(&this->skelAnime, 18.0f)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DEKUHIME_GREET2);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_DEKUHIME_GREET2);
         }
     } else if ((this->animIndex == EN_DNP_ANIM_UNUSED_WALK) && (this->animIndex == EN_DNP_ANIM_WALK)) {
+        //! @bug: Impossible to reach, && should be an ||
         if (Animation_OnFrame(&this->skelAnime, 7.0f) || Animation_OnFrame(&this->skelAnime, 15.0f)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DEKUHIME_WALK);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_DEKUHIME_WALK);
         }
     } else if (this->animIndex == EN_DNP_ANIM_JUMP) {
         if (Animation_OnFrame(&this->skelAnime, 17.0f)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DEKUHIME_WALK);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_DEKUHIME_WALK);
         }
     } else if (this->animIndex == EN_DNP_ANIM_BOUNCE_LOOP) {
         if (Animation_OnFrame(&this->skelAnime, 3.0f)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DEKUHIME_WALK);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_DEKUHIME_WALK);
         }
     }
 
@@ -217,7 +218,8 @@ s32 func_80B3CDA4(EnDnp* this, PlayState* play) {
     pitch = Math_Vec3f_Pitch(&sp3C, &sp30);
 
     //! FAKE
-    if (1) {};
+    if (1) {}
+
     Math_SmoothStepToS(&this->unk_330, pitch, 3, 0x2AA8, 0x1);
 
     return 1;
@@ -263,11 +265,11 @@ s32 func_80B3CF60(EnDnp* this, PlayState* play) {
 s32 func_80B3D044(EnDnp* this, PlayState* play) {
     s32 ret = false;
 
-    if (play->csCtx.state != 0) {
+    if (play->csCtx.state != CS_STATE_IDLE) {
         if (!(this->unk_322 & 0x200)) {
             this->unk_322 |= (0x200 | 0x10);
             this->actor.flags &= ~ACTOR_FLAG_1;
-            this->unk_324 = 0xFF;
+            this->cueId = 255;
         }
         SubS_UpdateFlags(&this->unk_322, 0, 7);
         this->actionFunc = func_80B3D11C;
@@ -290,20 +292,19 @@ void func_80B3D11C(EnDnp* this, PlayState* play) {
         EN_DNP_ANIM_ANGRY_START, EN_DNP_ANIM_JUMP,          EN_DNP_ANIM_BOUNCE_START,
         EN_DNP_ANIM_GLARE_START, EN_DNP_ANIM_BOW,
     };
-    s32 temp_v0;
-    s32 val;
+    s32 cueChannel;
+    s32 cueId;
 
-    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_29_40) && (play->sceneId == SCENE_MITURIN) &&
-        (play->csCtx.currentCsIndex == 0)) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_29_40) && (play->sceneId == SCENE_MITURIN) && (play->csCtx.scriptIndex == 0)) {
         this->unk_322 |= 0x20;
         SET_WEEKEVENTREG(WEEKEVENTREG_29_40);
     }
 
-    if (Cutscene_CheckActorAction(play, 101)) {
-        temp_v0 = Cutscene_GetActorActionIndex(play, 101);
-        val = play->csCtx.actorActions[temp_v0]->action;
-        if (this->unk_324 != (u8)val) {
-            EnDnp_ChangeAnim(this, sCsAnimations[val]);
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_101)) {
+        cueChannel = Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_101);
+        cueId = play->csCtx.actorCues[cueChannel]->id;
+        if (this->cueId != (u8)cueId) {
+            EnDnp_ChangeAnim(this, sCsAnimations[cueId]);
             if (this->animIndex == EN_DNP_ANIM_CUTSCENE_IDLE) {
                 this->unk_322 |= 8;
             } else {
@@ -311,7 +312,7 @@ void func_80B3D11C(EnDnp* this, PlayState* play) {
             }
 
             if (this->animIndex == EN_DNP_ANIM_ANGRY_START) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_VO_DHVO04);
+                Actor_PlaySfx(&this->actor, NA_SE_VO_DHVO04);
             }
 
             if (this->animIndex == EN_DNP_ANIM_GLARE_START) {
@@ -321,14 +322,14 @@ void func_80B3D11C(EnDnp* this, PlayState* play) {
             }
         }
 
-        this->unk_324 = val;
+        this->cueId = cueId;
         if (((this->animIndex == EN_DNP_ANIM_THINK_START) || (this->animIndex == EN_DNP_ANIM_ARMS_TOGETHER_START) ||
              (this->animIndex == EN_DNP_ANIM_LAUGH_START) || (this->animIndex == EN_DNP_ANIM_ANGRY_START) ||
              (this->animIndex == EN_DNP_ANIM_BOUNCE_START) || (this->animIndex == EN_DNP_ANIM_GLARE_START)) &&
             Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
             EnDnp_ChangeAnim(this, this->animIndex + 1);
         }
-        Cutscene_ActorTranslateAndYaw(&this->actor, play, temp_v0);
+        Cutscene_ActorTranslateAndYaw(&this->actor, play, cueChannel);
     }
 }
 
@@ -370,7 +371,7 @@ void func_80B3D3F8(EnDnp* this, PlayState* play) {
 }
 
 void func_80B3D47C(EnDnp* this, PlayState* play) {
-    if (this->actor.bgCheckFlags & 1) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         Math_SmoothStepToF(&this->actor.scale.x, 0.0085f, 0.1f, 0.01f, 0.001f);
         if ((s32)(this->actor.scale.x * 10000.0f) >= 85) {
             this->actor.flags |= ACTOR_FLAG_1;
@@ -385,11 +386,11 @@ void func_80B3D47C(EnDnp* this, PlayState* play) {
 }
 
 void func_80B3D558(EnDnp* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
+    if (CutsceneManager_IsNext(this->actor.csId)) {
+        CutsceneManager_StartWithPlayerCs(this->actor.csId, &this->actor);
         SET_WEEKEVENTREG(WEEKEVENTREG_23_20);
     } else {
-        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+        CutsceneManager_Queue(this->actor.csId);
     }
 }
 
@@ -413,7 +414,7 @@ void EnDnp_Init(Actor* thisx, PlayState* play) {
         SubS_UpdateFlags(&this->unk_322, 0, 7);
         this->actor.shape.rot.x = 0;
         this->actor.world.rot.x = this->actor.shape.rot.x;
-        this->actor.cutscene = 0x10;
+        this->actor.csId = 16;
         this->actionFunc = func_80B3D47C;
     } else if (((EN_DNP_GET_TYPE(&this->actor) == EN_DNP_TYPE_WOODFALL_TEMPLE) &&
                 !Inventory_HasItemInBottle(ITEM_DEKU_PRINCESS) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_23_20)) ||
@@ -455,11 +456,11 @@ void EnDnp_Update(Actor* thisx, PlayState* play) {
         func_80B3CD1C(this);
         func_80B3CEC0(this, play);
         Actor_MoveWithGravity(&this->actor);
-        Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, 4);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
         sp2C = this->collider.dim.radius + 50;
         sp28 = this->collider.dim.height + 30;
         if ((this->unk_322 & 0x400) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_23_20)) {
-            Actor_PickUp(&this->actor, play, GI_MAX, sp2C, sp28);
+            Actor_OfferGetItem(&this->actor, play, GI_MAX, sp2C, sp28);
         }
         func_8013C964(&this->actor, play, sp2C, sp28, PLAYER_IA_NONE, this->unk_322 & 7);
         Actor_SetFocus(&this->actor, 30.0f);

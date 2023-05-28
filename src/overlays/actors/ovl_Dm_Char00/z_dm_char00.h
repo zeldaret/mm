@@ -23,7 +23,7 @@ typedef struct DmChar00 {
     /* 0x23C */ DmChar00ActionFunc actionFunc;
     /* 0x240 */ Color_RGBAf unk_240;
     /* 0x250 */ Color_RGBAf unk_250;
-    /* 0x260 */ u8 unk_260;
+    /* 0x260 */ u8 cueId;
     /* 0x261 */ u8 unk_261;
     /* 0x262 */ u16 unk_262;
 } DmChar00; // size = 0x264

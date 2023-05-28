@@ -6,7 +6,7 @@
 
 #include "z_en_raf.h"
 
-#define FLAGS (ACTOR_FLAG_8000000)
+#define FLAGS (ACTOR_FLAG_CANT_LOCK_ON)
 
 #define THIS ((EnRaf*)thisx)
 
@@ -310,7 +310,7 @@ void EnRaf_Idle(EnRaf* this, PlayState* play) {
     if (this->timer == 0) {
         if ((player->transformation != PLAYER_FORM_DEKU) &&
             (this->dyna.actor.xzDistToPlayer < (BREG(48) + 80.0f) && (player->invincibilityTimer == 0) &&
-             DynaPolyActor_IsInRidingMovingState(&this->dyna) && !(player->stateFlags1 & PLAYER_STATE1_8000000) &&
+             DynaPolyActor_IsPlayerOnTop(&this->dyna) && !(player->stateFlags1 & PLAYER_STATE1_8000000) &&
              play->grabPlayer(play, player))) {
             player->actor.parent = &this->dyna.actor;
             this->grabTarget = EN_RAF_GRAB_TARGET_PLAYER;
@@ -360,7 +360,7 @@ void EnRaf_Idle(EnRaf* this, PlayState* play) {
 void EnRaf_SetupGrab(EnRaf* this) {
     EnRaf_ChangeAnim(this, EN_RAF_ANIM_CLOSE);
     this->petalScaleType = EN_RAF_PETAL_SCALE_TYPE_GRAB;
-    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EN_SUISEN_DRINK);
+    Actor_PlaySfx(&this->dyna.actor, NA_SE_EN_SUISEN_DRINK);
     this->action = EN_RAF_ACTION_GRAB;
     this->actionFunc = EnRaf_Grab;
 }
@@ -426,11 +426,15 @@ void EnRaf_Chew(EnRaf* this, PlayState* play) {
             this->chewCount++;
         }
 
-        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EN_SUISEN_EAT);
+        Actor_PlaySfx(&this->dyna.actor, NA_SE_EN_SUISEN_EAT);
         switch (this->grabTarget) {
             case EN_RAF_GRAB_TARGET_PLAYER:
                 play->damagePlayer(play, -2);
-                func_800B8E58((Player*)this, player->ageProperties->voiceSfxIdOffset + NA_SE_VO_LI_DAMAGE_S);
+
+                //! @bug: This function should only pass Player*: it uses *(this + 0x153), which is meant to be
+                //! player->currentMask, but in this case is padding in `DynaPolyActor`
+                Player_PlaySfx((Player*)&this->dyna.actor,
+                               player->ageProperties->voiceSfxIdOffset + NA_SE_VO_LI_DAMAGE_S);
                 CollisionCheck_GreenBlood(play, NULL, &player->actor.world.pos);
                 if ((this->chewCount > (BREG(53) + 5)) || !(player->stateFlags2 & PLAYER_STATE2_80)) {
                     player->actor.freezeTimer = 10;
@@ -478,7 +482,7 @@ void EnRaf_Throw(EnRaf* this, PlayState* play) {
     if (Animation_OnFrame(&this->skelAnime, 10.0f)) {
         player->actor.freezeTimer = 0;
         player->actor.parent = NULL;
-        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EN_SUISEN_THROW);
+        Actor_PlaySfx(&this->dyna.actor, NA_SE_EN_SUISEN_THROW);
         func_800B8D50(play, &this->dyna.actor, BREG(55) + 3.0f, this->playerRotYWhenGrabbed + 0x8000, BREG(56) + 10.0f,
                       0);
     } else if (curFrame < 10.0f) {
@@ -508,8 +512,8 @@ void EnRaf_Explode(EnRaf* this, PlayState* play) {
     explosionPos.y += 10.0f;
     Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, explosionPos.x, explosionPos.y, explosionPos.z, 0, 0, 0,
                 CLEAR_TAG_SMALL_EXPLOSION);
-    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_IT_BOMB_EXPLOSION);
-    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EN_SUISEN_DEAD);
+    Actor_PlaySfx(&this->dyna.actor, NA_SE_IT_BOMB_EXPLOSION);
+    Actor_PlaySfx(&this->dyna.actor, NA_SE_EN_SUISEN_DEAD);
     if (this->switchFlag >= 0) {
         Flags_SetSwitch(play, this->switchFlag);
     }
@@ -706,11 +710,11 @@ void EnRaf_Update(Actor* thisx, PlayState* play) {
         return;
     }
 
-    if (DynaPolyActor_IsInRidingMovingState(&this->dyna)) {
+    if (DynaPolyActor_IsPlayerOnTop(&this->dyna)) {
         if ((this->heightDiffFromPlayer > -0.1f) && !this->isCurrentlyInRidingMovingState) {
             this->heightDiffFromPlayer = -20.0f;
             this->isCurrentlyInRidingMovingState = true;
-            Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EN_COMMON_WATER_MID);
+            Actor_PlaySfx(&this->dyna.actor, NA_SE_EN_COMMON_WATER_MID);
         }
     } else {
         this->isCurrentlyInRidingMovingState = false;

@@ -20,7 +20,7 @@ typedef struct ObjNozoki {
     /* 0x15C */ u8 unk_15C;
     /* 0x15D */ u8 unk_15D;
     /* 0x15E */ s8 unk_15E;
-    /* 0x15F */ s8 unk_15F;
+    /* 0x15F */ s8 csId;
     /* 0x160 */ ObjNozokiActionFunc actionFunc;
 } ObjNozoki; // size = 0x164
 

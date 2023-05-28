@@ -52,7 +52,7 @@ void EnLight_Init(Actor* thisx, PlayState* play) {
     EnLight* this = THIS;
 
     if (!ENLIGHT_GET_4000(&this->actor)) {
-        if ((gSaveContext.gameMode == 3) || ENLIGHT_GET_2000(&this->actor)) {
+        if ((gSaveContext.gameMode == GAMEMODE_END_CREDITS) || ENLIGHT_GET_2000(&this->actor)) {
             Lights_PointNoGlowSetInfo(&this->lightInfo, this->actor.world.pos.x,
                                       ((this->actor.params < 0) ? 1 : 40) + (s32)this->actor.world.pos.y,
                                       this->actor.world.pos.z, 255, 255, 180, -1);
@@ -112,7 +112,7 @@ void EnLight_Update(Actor* thisx, PlayState* play) {
     func_80865BF8(this, play);
 
     if ((this->actor.params >= 0) && !ENLIGHT_GET_4000(&this->actor)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_TORCH - SFX_FLAG);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_TORCH - SFX_FLAG);
     }
 }
 
@@ -156,7 +156,7 @@ void func_80865F38(Actor* thisx, PlayState* play) {
     func_80865BF8(this, play);
 
     if ((this->actor.params >= 0) && (sp2C == true)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_TORCH - SFX_FLAG);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_TORCH - SFX_FLAG);
     }
 }
 

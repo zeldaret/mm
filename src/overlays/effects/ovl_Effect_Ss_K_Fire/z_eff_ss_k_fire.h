@@ -11,6 +11,4 @@ typedef struct {
     /* 0x26 */ u8 type;
 } EffectSsKFireInitParams; // size = 0x28
 
-extern const EffectSsInit Effect_Ss_K_Fire_InitVars;
-
 #endif

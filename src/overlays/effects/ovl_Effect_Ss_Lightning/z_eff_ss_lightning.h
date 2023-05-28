@@ -13,6 +13,4 @@ typedef struct {
     /* 0x1A */ s16 numBolts;
 } EffectSsLightningInitParams; // size = 0x1C
 
-extern const EffectSsInit Effect_Ss_Lightning_InitVars;
-
 #endif

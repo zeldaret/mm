@@ -100,11 +100,11 @@ void EnGe2_Init(Actor* thisx, PlayState* play) {
     this->picto.actor.targetMode = 6;
     this->stateFlags = 0;
     this->detectedStatus = GERUDO_PURPLE_DETECTION_UNDETECTED;
-    this->csAction = -1;
+    this->cueId = -1;
 
     this->picto.actor.terminalVelocity = -9.0f;
     this->picto.actor.gravity = -1.0f;
-    this->picto.actor.speedXZ = 1.5f;
+    this->picto.actor.speed = 1.5f;
 
     this->actionFunc = EnGe2_Walk;
     this->picto.validationFunc = EnGe2_ValidatePictograph;
@@ -121,7 +121,7 @@ void EnGe2_Init(Actor* thisx, PlayState* play) {
             Animation_Change(&this->skelAnime, &gGerudoPurpleLookingAboutAnim, 1.0f, 0.0f,
                              Animation_GetLastFrame(&gGerudoPurpleLookingAboutAnim), 0, 0.0f);
             this->actionFunc = EnGe2_GuardStationary;
-            this->picto.actor.speedXZ = 0.0f;
+            this->picto.actor.speed = 0.0f;
             this->picto.actor.uncullZoneForward = 4000.0f;
             break;
 
@@ -263,7 +263,7 @@ void EnGe2_SetupBlownAwayPath(EnGe2* this, PlayState* play) {
 
             this->picto.actor.world.rot.y = Math_Vec3f_Yaw(&this->picto.actor.world.pos, &nextPoint);
             this->picto.actor.world.rot.x = Math_Vec3f_Pitch(&this->picto.actor.world.pos, &nextPoint);
-            this->picto.actor.speedXZ = 15.0f;
+            this->picto.actor.speed = 15.0f;
         }
     } else {
         this->path = NULL;
@@ -328,7 +328,7 @@ s32 EnGe2_FollowPathWithoutGravity(EnGe2* this) {
     pitchTarget = Math_Vec3f_Pitch(&this->picto.actor.world.pos, &point);
     Math_SmoothStepToS(&this->picto.actor.world.rot.y, yawTarget, 0xA, 0x3E8, 0x64);
     Math_SmoothStepToS(&this->picto.actor.world.rot.x, pitchTarget, 6, 0x7D0, 0xC8);
-    this->picto.actor.speedXZ = 15.0f;
+    this->picto.actor.speed = 15.0f;
 
     Actor_MoveWithoutGravityReverse(&this->picto.actor);
 
@@ -358,9 +358,9 @@ void EnGe2_SpawnEffects(EnGe2* this, PlayState* play) {
 
 void EnGe2_Scream(EnGe2* this) {
     if ((s32)Rand_ZeroFloat(2.0f) == 0) {
-        Actor_PlaySfxAtPos(&this->picto.actor, NA_SE_VO_FPVO00);
+        Actor_PlaySfx(&this->picto.actor, NA_SE_VO_FPVO00);
     } else {
-        Actor_PlaySfxAtPos(&this->picto.actor, NA_SE_VO_FPVO01);
+        Actor_PlaySfx(&this->picto.actor, NA_SE_VO_FPVO01);
     }
 }
 
@@ -392,7 +392,7 @@ void EnGe2_CapturePlayer(EnGe2* this, PlayState* play) {
 }
 
 void EnGe2_SetupCapturePlayer(EnGe2* this) {
-    this->picto.actor.speedXZ = 0.0f;
+    this->picto.actor.speed = 0.0f;
     this->actionFunc = EnGe2_CapturePlayer;
     Animation_Change(&this->skelAnime, &gGerudoPurpleLookingAboutAnim, 1.0f, 0.0f,
                      Animation_GetLastFrame(&gGerudoPurpleLookingAboutAnim), 0, -8.0f);
@@ -405,7 +405,7 @@ void EnGe2_Charge(EnGe2* this, PlayState* play) {
 
     if (this->picto.actor.xzDistToPlayer < 50.0f) {
         EnGe2_SetupCapturePlayer(this);
-    } else if (!(this->picto.actor.bgCheckFlags & 1)) {
+    } else if (!(this->picto.actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
         this->picto.actor.world.pos = this->picto.actor.prevPos;
         EnGe2_SetupCapturePlayer(this);
     }
@@ -417,7 +417,7 @@ void EnGe2_Charge(EnGe2* this, PlayState* play) {
     }
 
     if (Animation_OnFrame(&this->skelAnime, 2.0f) || Animation_OnFrame(&this->skelAnime, 6.0f)) {
-        Actor_PlaySfxAtPos(&this->picto.actor, NA_SE_EV_PIRATE_WALK);
+        Actor_PlaySfx(&this->picto.actor, NA_SE_EV_PIRATE_WALK);
     }
 }
 
@@ -430,7 +430,7 @@ void EnGe2_SetupCharge(EnGe2* this, PlayState* play) {
         Animation_Change(&this->skelAnime, &gGerudoPurpleChargingAnim, 1.0f, 0.0f,
                          Animation_GetLastFrame(&gGerudoPurpleChargingAnim), 0, -8.0f);
         this->timer = 50;
-        this->picto.actor.speedXZ = 4.0f;
+        this->picto.actor.speed = 4.0f;
         this->actionFunc = EnGe2_Charge;
     }
 }
@@ -439,7 +439,7 @@ void EnGe2_SetupLookAround(EnGe2* this) {
     Animation_Change(&this->skelAnime, &gGerudoPurpleLookingAboutAnim, 1.0f, 0.0f,
                      Animation_GetLastFrame(&gGerudoPurpleLookingAboutAnim), 0, -8.0f);
     this->timer = 60;
-    this->picto.actor.speedXZ = 0.0f;
+    this->picto.actor.speed = 0.0f;
     this->actionFunc = EnGe2_LookAround;
 }
 
@@ -479,20 +479,20 @@ void EnGe2_PatrolDuties(EnGe2* this, PlayState* play) {
     f32 visionRange = gSaveContext.save.isNight ? 200.0f : 280.0f;
 
     if (player->csMode == 0x1A) {
-        this->picto.actor.speedXZ = 0.0f;
+        this->picto.actor.speed = 0.0f;
         this->actionFunc = EnGe2_SetupCharge;
         Animation_Change(&this->skelAnime, &gGerudoPurpleLookingAboutAnim, 1.0f, 0.0f,
                          Animation_GetLastFrame(&gGerudoPurpleLookingAboutAnim), 0, -8.0f);
         this->stateFlags |= GERUDO_PURPLE_STATE_CAPTURING;
     } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_80_08)) {
-        this->picto.actor.speedXZ = 0.0f;
+        this->picto.actor.speed = 0.0f;
         this->actionFunc = EnGe2_TurnToPlayerFast;
         Animation_Change(&this->skelAnime, &gGerudoPurpleLookingAboutAnim, 1.0f, 0.0f,
                          Animation_GetLastFrame(&gGerudoPurpleLookingAboutAnim), 0, -8.0f);
     } else if (EnGe2_LookForPlayer(play, &this->picto.actor, &this->picto.actor.focus.pos,
                                    this->picto.actor.shape.rot.y, 0x1800, visionRange, this->verticalDetectRange)) {
         if ((GERUDO_PURPLE_GET_EXIT(&this->picto.actor) != GERUDO_PURPLE_EXIT_NONE) && !Play_InCsMode(play)) {
-            this->picto.actor.speedXZ = 0.0f;
+            this->picto.actor.speed = 0.0f;
             func_800B7298(play, &this->picto.actor, 0x1A);
             func_801000A4(NA_SE_SY_FOUND);
             Message_StartTextbox(play, 0x1194, &this->picto.actor);
@@ -504,16 +504,16 @@ void EnGe2_PatrolDuties(EnGe2* this, PlayState* play) {
         if ((this->collider.info.acHitInfo != NULL) &&
             (this->collider.info.acHitInfo->toucher.dmgFlags & DMG_DEKU_NUT)) {
             Actor_SetColorFilter(&this->picto.actor, 0, 120, 0, 400);
-            this->picto.actor.speedXZ = 0.0f;
+            this->picto.actor.speed = 0.0f;
             this->actionFunc = EnGe2_Stunned;
             this->stateFlags |= GERUDO_PURPLE_STATE_STUNNED;
         } else {
             Animation_Change(&this->skelAnime, &gGerudoPurpleFallingToGroundAnim, 1.0f, 0.0f,
                              Animation_GetLastFrame(&gGerudoPurpleFallingToGroundAnim), 2, -8.0f);
             this->timer = 200;
-            this->picto.actor.speedXZ = 0.0f;
+            this->picto.actor.speed = 0.0f;
             this->actionFunc = EnGe2_KnockedOut;
-            Actor_PlaySfxAtPos(&this->picto.actor, NA_SE_EN_PIRATE_DEAD);
+            Actor_PlaySfx(&this->picto.actor, NA_SE_EN_PIRATE_DEAD);
             this->picto.actor.flags &= ~ACTOR_FLAG_1;
             this->stateFlags |= GERUDO_PURPLE_STATE_KO;
         }
@@ -566,7 +566,7 @@ void EnGe2_LookAround(EnGe2* this, PlayState* play) {
 
 void EnGe2_Walk(EnGe2* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
-    this->picto.actor.speedXZ = 1.5f;
+    this->picto.actor.speed = 1.5f;
 
     switch (EnGe2_FollowPath(this)) {
         case GERUDO_PURPLE_PATHSTATUS_END:
@@ -592,33 +592,34 @@ void EnGe2_Walk(EnGe2* this, PlayState* play) {
 
 void EnGe2_PerformCutsceneActions(EnGe2* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
-    if (Cutscene_CheckActorAction(play, 476)) {
-        s16 csAction = play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 476)]->action;
-        if (this->csAction != csAction) {
-            this->csAction = csAction;
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_476)) {
+        s16 cueId = play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_476)]->id;
 
-            switch (csAction) {
-                case ENGE2_CSACTION_BEEHIVE_PATROL:
+        if (this->cueId != cueId) {
+            this->cueId = cueId;
+
+            switch (cueId) {
+                case ENGE2_CUEID_BEEHIVE_PATROL:
                     Animation_Change(&this->skelAnime, &gGerudoPurpleLookingAboutAnim, 1.0f, 0.0f,
                                      Animation_GetLastFrame(&gGerudoPurpleLookingAboutAnim), 0, -8.0f);
                     EnGe2_GetNextPath(this, play);
                     break;
 
-                case ENGE2_CSACTION_BEEHIVE_RUN_AWAY:
+                case ENGE2_CUEID_BEEHIVE_RUN_AWAY:
                     Animation_Change(&this->skelAnime, &gGerudoPurpleRunningAwayCutsceneAnim, 1.0f, 0.0f,
                                      Animation_GetLastFrame(&gGerudoPurpleRunningAwayCutsceneAnim), 0, -5.0f);
                     this->screamTimer = (s32)(Rand_ZeroFloat(10.0f) + 20.0f);
                     break;
 
-                case ENGE2_CSACTION_BEEHIVE_EXIT:
+                case ENGE2_CUEID_BEEHIVE_EXIT:
                     Actor_Kill(&this->picto.actor);
                     break;
 
-                case ENGE2_CSACTION_GBT_ENTR_STAND_STILL:
+                case ENGE2_CUEID_GBT_ENTR_STAND_STILL:
                     Animation_Change(&this->skelAnime, &gGerudoPurpleGreatBayCutsceneAnim, 0.0f, 0.0f, 0.0f, 2, 0.0f);
                     break;
 
-                case ENGE2_CSACTION_GBT_ENTR_BLOWN_AWAY:
+                case ENGE2_CUEID_GBT_ENTR_BLOWN_AWAY:
                     Animation_Change(&this->skelAnime, &gGerudoPurpleGreatBayCutsceneAnim, 0.0f, 1.0f, 1.0f, 2, 0.0f);
                     EnGe2_SetupBlownAwayPath(this, play);
                     this->stateFlags |= GERUDO_PURPLE_STATE_DISABLE_MOVEMENT;
@@ -631,13 +632,13 @@ void EnGe2_PerformCutsceneActions(EnGe2* this, PlayState* play) {
         }
     }
 
-    switch (this->csAction) {
-        case ENGE2_CSACTION_BEEHIVE_RUN_AWAY:
+    switch (this->cueId) {
+        case ENGE2_CUEID_BEEHIVE_RUN_AWAY:
             EnGe2_FollowPath(this);
-            this->picto.actor.speedXZ = 5.0f;
+            this->picto.actor.speed = 5.0f;
 
             if (Animation_OnFrame(&this->skelAnime, 2.0f) || Animation_OnFrame(&this->skelAnime, 6.0f)) {
-                Actor_PlaySfxAtPos(&this->picto.actor, NA_SE_EV_PIRATE_WALK);
+                Actor_PlaySfx(&this->picto.actor, NA_SE_EV_PIRATE_WALK);
             }
 
             if (this->screamTimer > 0) {
@@ -648,7 +649,7 @@ void EnGe2_PerformCutsceneActions(EnGe2* this, PlayState* play) {
             }
             break;
 
-        case ENGE2_CSACTION_GBT_ENTR_BLOWN_AWAY:
+        case ENGE2_CUEID_GBT_ENTR_BLOWN_AWAY:
             if ((this->curPointIndex < this->path->count) && EnGe2_FollowPathWithoutGravity(this)) {
                 this->curPointIndex++;
             }
@@ -699,16 +700,17 @@ void EnGe2_Update(Actor* thisx, PlayState* play) {
     if (!(this->stateFlags & GERUDO_PURPLE_STATE_DISABLE_MOVEMENT)) {
         Actor_MoveWithGravity(&this->picto.actor);
     }
-    Actor_UpdateBgCheckInfo(play, &this->picto.actor, 40.0f, 25.0f, 40.0f, 5);
+    Actor_UpdateBgCheckInfo(play, &this->picto.actor, 40.0f, 25.0f, 40.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
     Collider_UpdateCylinder(&this->picto.actor, &this->collider);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
 
-    if (Cutscene_CheckActorAction(play, 476)) {
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_476)) {
         this->actionFunc = EnGe2_PerformCutsceneActions;
         this->stateFlags &= ~GERUDO_PURPLE_STATE_KO;
         this->stateFlags &= ~GERUDO_PURPLE_STATE_PATH_REVERSE;
         this->picto.actor.flags |= ACTOR_FLAG_20;
-        this->picto.actor.speedXZ = 0.0f;
+        this->picto.actor.speed = 0.0f;
     }
 
     this->actionFunc(this, play);

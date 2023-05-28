@@ -1,5 +1,7 @@
 #include "prevent_bss_reordering.h"
 #include "global.h"
+#include "stack.h"
+#include "stackcheck.h"
 
 u32 sDmaMgrDmaBuffSize = 0x2000;
 
@@ -8,7 +10,7 @@ u16 numDmaEntries;
 OSMesgQueue sDmaMgrMsgQueue;
 OSMesg sDmaMgrMsgs[32];
 OSThread sDmaMgrThread;
-u8 sDmaMgrStack[0x500];
+STACK(sDmaMgrStack, 0x500);
 
 s32 DmaMgr_DmaRomToRam(uintptr_t rom, void* ram, size_t size) {
     OSIoMesg ioMsg;
@@ -226,8 +228,8 @@ void DmaMgr_Start(void) {
     }
 
     osCreateMesgQueue(&sDmaMgrMsgQueue, sDmaMgrMsgs, ARRAY_COUNT(sDmaMgrMsgs));
-    StackCheck_Init(&sDmaMgrStackInfo, sDmaMgrStack, sDmaMgrStack + sizeof(sDmaMgrStack), 0, 0x100, "dmamgr");
-    osCreateThread(&sDmaMgrThread, Z_THREAD_ID_DMAMGR, DmaMgr_ThreadEntry, NULL, sDmaMgrStack + sizeof(sDmaMgrStack),
+    StackCheck_Init(&sDmaMgrStackInfo, sDmaMgrStack, STACK_TOP(sDmaMgrStack), 0, 0x100, "dmamgr");
+    osCreateThread(&sDmaMgrThread, Z_THREAD_ID_DMAMGR, DmaMgr_ThreadEntry, NULL, STACK_TOP(sDmaMgrStack),
                    Z_PRIORITY_DMAMGR);
 
     osStartThread(&sDmaMgrThread);

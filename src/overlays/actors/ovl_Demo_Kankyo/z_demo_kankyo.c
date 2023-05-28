@@ -444,7 +444,8 @@ void DemoKankyo_Init(Actor* thisx, PlayState* play) {
     for (i = 0; i < ARRAY_COUNT(this->effects); i++) { this->effects[i].state = DEMO_KANKYO_STATE_INIT; }
     // clang-format on
 
-    if (1) {};
+    //! FAKE:
+    if (1) {}
 
     switch (this->actor.params) {
         case DEMO_KANKYO_TYPE_LOSTWOODS:
@@ -571,7 +572,7 @@ void DemoKakyo_DrawLostWoodsSparkle(Actor* thisx, PlayState* play2) {
                 }
 
                 Matrix_Mult(&play->billboardMtxF, MTXMODE_APPLY);
-                Matrix_RotateZF(DEGF_TO_RADF(play->state.frames * 20.0f), MTXMODE_APPLY);
+                Matrix_RotateZF(DEG_TO_RAD(play->state.frames * 20.0f), MTXMODE_APPLY);
 
                 gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
                           G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -643,7 +644,7 @@ void DemoKankyo_DrawMoonAndGiant(Actor* thisx, PlayState* play2) {
 
                 Matrix_Mult(&play->billboardMtxF, MTXMODE_APPLY);
 
-                Matrix_RotateZF(DEGF_TO_RADF(play->state.frames * 20.0f), MTXMODE_APPLY);
+                Matrix_RotateZF(DEG_TO_RAD(play->state.frames * 20.0f), MTXMODE_APPLY);
 
                 gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
                           G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
