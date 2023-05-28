@@ -34,7 +34,6 @@
 
 #define ENGO_DUST_STEAM_LIFETIME 16 // Lifetime in frames of the Dust and Steam effects.
 
-#define ENGO_FLAG_NONE 0
 #define ENGO_FLAG_ENGAGED (1 << 3)
 #define ENGO_FLAG_FACE_TARGET (1 << 4)
 #define ENGO_FLAG_EYES_OPEN (1 << 5)
@@ -59,13 +58,13 @@ typedef enum EnGoEyeTexture {
     /* 1 */ ENGO_EYETEX_HALF,
     /* 2 */ ENGO_EYETEX_CLOSED,
     /* 3 */ ENGO_EYETEX_HALF2,
-    /* 4 */ ENGO_EYETEX_CLOSED2,
+    /* 4 */ ENGO_EYETEX_CLOSED2
 } EnGoEyeTexture;
 
 typedef enum EnGoSleepState {
     /* -1 */ ENGO_ASLEEP_NEG = -1,
     /*  0 */ ENGO_AWAKE,
-    /*  1 */ ENGO_ASLEEP_POS,
+    /*  1 */ ENGO_ASLEEP_POS
 } EnGoSleepState;
 
 typedef enum EnGoEffectType {
@@ -78,7 +77,7 @@ typedef enum EnGoEffectType {
     /* 5 */ ENGO_EFFECT_DUST2,
     /* 6 */ ENGO_EFFECT_DUST3,
     /* 7 */ ENGO_EFFECT_STEAM_MIN,
-    /* 7 */ ENGO_EFFECT_STEAM = ENGO_EFFECT_STEAM_MIN,
+    /* 7 */ ENGO_EFFECT_STEAM = ENGO_EFFECT_STEAM_MIN
 } EnGoEffectType;
 
 typedef enum EnGoAnimationIndex {
@@ -107,7 +106,7 @@ typedef enum EnGoAnimationIndex {
     /*  18 */ ENGO_ANIM_SHOW = ENGO_ANIM_SPRING_MIN,
     /*  19 */ ENGO_ANIM_SHOW_LOOPED,
     /*  20 */ ENGO_ANIM_LOOK_AROUND,
-    /*  21 */ ENGO_ANIM_LOOK_AROUND_LOOPED,
+    /*  21 */ ENGO_ANIM_LOOK_AROUND_LOOPED
 } EnGoAnimationIndex;
 
 EnGoEffect* EnGo_InitSteam(EnGoEffect effect[], Vec3f pos, Vec3f accel, Vec3f velocity, f32 scale, f32 deltaScale,
@@ -340,7 +339,7 @@ static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 typedef enum {
     /* 0x0 */ ENGO_DMGEFF_NONE,
     /* 0x2 */ ENGO_DMGEFF_FIRE = 0x2,
-    /* 0xF */ ENGO_DMGEFF_BREAK = 0xF,
+    /* 0xF */ ENGO_DMGEFF_BREAK = 0xF
 } EnGoDamageEffect;
 
 static DamageTable sDamageTable = {
@@ -1521,28 +1520,25 @@ s32 EnGo_HandleOpenShrineCutscene(Actor* thisx, PlayState* play) {
     switch (this->cutsceneState) {
         case 0:
             this->csId = CutsceneManager_GetAdditionalCsId(this->actor.csId);
-            if (EnGo_ChangeCutscene(this, this->csId)) {
-                this->gatekeeperAnimState = 1;
-                this->cutsceneState = 1;
-            } else {
+            if (!EnGo_ChangeCutscene(this, this->csId)) {
                 break;
             }
-
+            this->gatekeeperAnimState = 1;
+            this->cutsceneState = 1;
+            // fallthrough
         case 1:
-            if (CutsceneManager_GetCurrentCsId() != this->csId) {
-                this->csId = CutsceneManager_GetAdditionalCsId(this->csId);
-                this->cutsceneState = 2;
-            } else {
+            if (CutsceneManager_GetCurrentCsId() == this->csId) {
                 break;
             }
-
+            this->csId = CutsceneManager_GetAdditionalCsId(this->csId);
+            this->cutsceneState = 2;
+            // fallthrough
         case 2:
-            if (EnGo_ChangeCutscene(this, this->csId)) {
-                this->cutsceneState = 3;
-            } else {
+            if (!EnGo_ChangeCutscene(this, this->csId)) {
                 break;
             }
-
+            this->cutsceneState = 3;
+            // fallthrough
         case 3:
             if (CutsceneManager_IsNext(CS_ID_GLOBAL_TALK)) {
                 CutsceneManager_StartWithPlayerCs(CS_ID_GLOBAL_TALK, NULL);
@@ -1550,6 +1546,9 @@ s32 EnGo_HandleOpenShrineCutscene(Actor* thisx, PlayState* play) {
             } else if (CutsceneManager_GetCurrentCsId() == this->csId) {
                 CutsceneManager_Queue(CS_ID_GLOBAL_TALK);
             }
+            // fallthrough
+        default:
+            break;
     }
 
     switch (this->gatekeeperAnimState) {
@@ -1627,6 +1626,9 @@ s32 EnGo_HandleOpenShrineCutscene(Actor* thisx, PlayState* play) {
                 ret = true;
             }
             break;
+
+        default:
+            break;
     }
 
     Actor_MoveWithGravity(&this->actor);
@@ -1682,6 +1684,9 @@ s32 EnGo_HandleGivePowderKegCutscene(Actor* thisx, PlayState* play) {
                 this->cutsceneDelayTimer++;
             }
             break;
+
+        default:
+            break;
     }
 
     return ret;
@@ -1724,7 +1729,7 @@ void EnGo_ChangeToStretchingAnimation(EnGo* this, PlayState* play) {
     this->actor.flags &= ~ACTOR_FLAG_1;
     Actor_SetScale(&this->actor, this->scaleFactor);
     this->sleepState = ENGO_AWAKE;
-    this->actionFlags = ENGO_FLAG_NONE;
+    this->actionFlags = 0;
     this->actionFlags |= (ENGO_FLAG_LOST_ATTENTION | ENGO_FLAG_EYES_OPEN);
     this->actor.gravity = 0.0f;
 }
@@ -1748,7 +1753,7 @@ void EnGo_ChangeToSpectatingAnimation(EnGo* this, PlayState* play) {
     this->actor.flags &= ~ACTOR_FLAG_1;
     Actor_SetScale(&this->actor, this->scaleFactor);
     this->sleepState = ENGO_AWAKE;
-    this->actionFlags = ENGO_FLAG_NONE;
+    this->actionFlags = 0;
     this->actionFlags |= ENGO_FLAG_LOST_ATTENTION;
     this->actionFlags |= ENGO_FLAG_EYES_OPEN;
     this->actor.gravity = 0.0f;
@@ -1769,7 +1774,7 @@ void EnGo_ChangeToFrozenAnimation(EnGo* this, PlayState* play) {
     this->sleepState = ENGO_AWAKE;
     this->iceBlockScale = (this->scaleFactor / 0.01f) * 0.9f;
     this->eyeTexIndex = ENGO_EYETEX_CLOSED;
-    this->actionFlags = ENGO_FLAG_NONE;
+    this->actionFlags = 0;
     this->actionFlags |= ENGO_FLAG_LOST_ATTENTION;
     this->actionFlags |= ENGO_FLAG_FROZEN;
     this->iceBlockAlpha = 100.0f;
@@ -1793,7 +1798,7 @@ void EnGo_ChangeToSnowballAnimation(EnGo* this, PlayState* play) {
         this->actor.shape.rot.y = yawToPathPoint;
         this->actor.world.rot.y = yawToPathPoint;
     }
-    this->actionFlags = ENGO_FLAG_NONE;
+    this->actionFlags = 0;
     this->actionFlags |= ENGO_FLAG_SNOWBALLED;
     this->actor.shape.yOffset = ENGO_SNOWBALL_Y_OFFSET;
     this->actor.gravity = -1.0f;
@@ -1807,7 +1812,7 @@ void EnGo_ChangeToSnowballAnimation(EnGo* this, PlayState* play) {
 void EnGo_ChangeToCoveringEarsAnimation(EnGo* this, PlayState* play) {
     EnGo_ChangeAnim(this, play, ENGO_ANIM_COVEREARS);
     Actor_SetScale(&this->actor, this->scaleFactor);
-    this->actionFlags = ENGO_FLAG_NONE;
+    this->actionFlags = 0;
     this->actor.gravity = -1.0f;
     SubS_UpdateFlags(&this->actionFlags, 3, 7);
     this->sleepState = ENGO_AWAKE;
@@ -1826,7 +1831,7 @@ void EnGo_ChangeToCoveringEarsAnimation(EnGo* this, PlayState* play) {
 void EnGo_ChangeToShiveringAnimation(EnGo* this, PlayState* play) {
     EnGo_ChangeAnim(this, play, ENGO_ANIM_SHIVER);
     Actor_SetScale(&this->actor, this->scaleFactor);
-    this->actionFlags = ENGO_FLAG_NONE;
+    this->actionFlags = 0;
     this->actor.gravity = -1.0f;
     SubS_UpdateFlags(&this->actionFlags, 3, 7);
     this->sleepState = ENGO_AWAKE;
@@ -1940,7 +1945,7 @@ void EnGo_SetupMedigoron(EnGo* this, PlayState* play) {
     Actor_SetScale(&this->actor, this->scaleFactor);
     this->actor.flags &= ~ACTOR_FLAG_1;
     this->actor.targetMode = 3;
-    this->actionFlags = ENGO_FLAG_NONE;
+    this->actionFlags = 0;
     this->actor.gravity = -1.0f;
     SubS_UpdateFlags(&this->actionFlags, 3, 7);
     this->actionFlags |= ENGO_FLAG_LOST_ATTENTION;
@@ -2039,6 +2044,9 @@ void EnGo_Idle(EnGo* this, PlayState* play) {
 
                 case ENGO_GRAVEYARD_FROZEN:
                     EnGo_FrozenIdle(this, play);
+                    break;
+
+                default:
                     break;
             }
         } else if (ENGO_GET_TYPE(&this->actor) == ENGO_ATHLETIC) {
@@ -2189,6 +2197,9 @@ void EnGo_HandleSpringArrivalCutscene(EnGo* this, PlayState* play) {
         case ENGO_GRAVEYARD_FROZEN:
             cueType = CS_CMD_ACTOR_CUE_129;
             break;
+
+        default:
+            break;
     }
 
     if ((cueType == CS_CMD_ACTOR_CUE_128) || (cueType == CS_CMD_ACTOR_CUE_129)) {
@@ -2199,7 +2210,7 @@ void EnGo_HandleSpringArrivalCutscene(EnGo* this, PlayState* play) {
             if (this->springArrivalCueId != (u8)cueId) {
                 this->springArrivalCueId = cueId;
                 EnGo_ChangeAnim(this, play, animationIndices[cueId]);
-                this->actionFlags = ENGO_FLAG_NONE;
+                this->actionFlags = 0;
                 this->actionFlags |= ENGO_FLAG_EYES_OPEN;
                 this->eyeTexIndex = ENGO_EYETEX_OPEN;
                 this->iceBlockScale = 0.0f;
@@ -2214,6 +2225,9 @@ void EnGo_HandleSpringArrivalCutscene(EnGo* this, PlayState* play) {
                     case 5:
                     case 6:
                         EnGo_ChangeToFrozenAnimation(this, play);
+                        break;
+
+                    default:
                         break;
                 }
             }
@@ -2243,6 +2257,9 @@ void EnGo_HandleSpringArrivalCutscene(EnGo* this, PlayState* play) {
                         EnGo_ChangeToShiveringAnimation(this, play);
                     }
                     break;
+
+                default:
+                    break;
             }
 
             if (cueType == 128) {
@@ -2268,6 +2285,9 @@ void EnGo_HandleSpringArrivalCutscene(EnGo* this, PlayState* play) {
                     case 490:
                         Actor_PlaySfx(&this->actor, NA_SE_EN_GOLON_VOICE_EATFULL);
                         break;
+
+                    default:
+                        break;
                 }
             } else if (cueType == 129) {
                 switch (play->csCtx.curFrame) {
@@ -2286,6 +2306,9 @@ void EnGo_HandleSpringArrivalCutscene(EnGo* this, PlayState* play) {
 
                     case 480:
                         Actor_PlaySfx(&this->actor, NA_SE_EN_GOLON_VOICE_EATFULL);
+                        break;
+
+                    default:
                         break;
                 }
             }
@@ -2390,6 +2413,9 @@ s32* EnGo_GetMsgEventScript(EnGo* this, PlayState* play) {
 
             case ENGO_ATHLETIC_HAMSTRINGSTAND:
                 return sMsgScriptGoronAthleticHamstring;
+
+            default:
+                break;
         }
     }
 
@@ -2620,6 +2646,9 @@ void EnGo_TransfromLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
             Matrix_RotateXS(this->bodyRot.x, MTXMODE_APPLY);
             Matrix_RotateZS(this->bodyRot.z, MTXMODE_APPLY);
             Matrix_Push();
+            break;
+
+        default:
             break;
     }
 }
