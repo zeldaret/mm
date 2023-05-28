@@ -27,7 +27,7 @@ glabel func_809529AC
 /* 0003D8 809529F8 C484009C */  lwc1        $f4, 0x9c($a0)
 /* 0003DC 809529FC 8C870098 */  lw          $a3, 0x98($a0)
 /* 0003E0 80952A00 24060035 */  addiu       $a2, $zero, 0x35
-/* 0003E4 80952A04 0C02E287 */  jal         Actor_PickUp
+/* 0003E4 80952A04 0C02E287 */  jal         Actor_OfferGetItem
 /* 0003E8 80952A08 E7A40010 */   swc1       $f4, 0x10($sp)
 .L80952A0C:
 /* 0003EC 80952A0C 8FBF001C */  lw          $ra, 0x1c($sp)
@@ -46,7 +46,7 @@ void func_809529AC(EnMs* this, PlayState* play) {
         func_800B8500(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel, 0);
         this->actionFunc = func_80952A1C;
     } else {
-        Actor_PickUp(&this->actor, play, 0x35, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
+        Actor_OfferGetItem(&this->actor, play, 0x35, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
     }
 }
 ```

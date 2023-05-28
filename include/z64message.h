@@ -34,7 +34,7 @@ typedef enum TextState {
 
 #define FONT_CHAR_TEX_WIDTH 16
 #define FONT_CHAR_TEX_HEIGHT 16
-//! @TODO: Make this use `sizeof(AnyFontTextureSymbol)`
+//! TODO: Make this use `sizeof(AnyFontTextureSymbol)`
 #define FONT_CHAR_TEX_SIZE ((16 * 16) / 2) // 16x16 I4 texture
 
 // TODO: should Font be in its own header or is it fine to have it here?
@@ -67,7 +67,7 @@ typedef struct MessageContext {
     /* 0x00168 */ Font font;
     /* 0x11EF8 */ UNK_PTR unk11EF8;
     /* 0x11EFC */ UNK_TYPE1 unk11EFC[0x4];
-    /* 0x11F00 */ struct OcarinaStaff* unk11F00;
+    /* 0x11F00 */ struct OcarinaStaff* ocarinaStaff;
     /* 0x11F04 */ u16 currentTextId;
     /* 0x11F06 */ UNK_TYPE1 unk11F06[0x2];
     /* 0x11F08 */ u16 unk11F08;

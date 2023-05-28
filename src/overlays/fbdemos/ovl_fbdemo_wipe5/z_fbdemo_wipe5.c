@@ -4,6 +4,7 @@
  * Description:
  */
 
+#include "global.h"
 #include "z_fbdemo_wipe5.h"
 
 #define THIS ((TransitionWipe5*)thisx)
@@ -126,7 +127,7 @@ void TransitionWipe5_SetType(void* thisx, s32 type) {
     if (type & 0x80) {
         this->unk_11 = 0;
         this->unk_12 = type & 1;
-    } else if (type == 1) {
+    } else if (type == TRANS_INSTANCE_TYPE_FILL_OUT) {
         this->unk_10 = 1;
     } else {
         this->unk_10 = 0;

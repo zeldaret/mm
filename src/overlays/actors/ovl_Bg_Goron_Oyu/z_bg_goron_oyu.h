@@ -15,7 +15,7 @@ typedef struct BgGoronOyu {
     /* 0x168 */ Vec3f waterBoxPos;
     /* 0x174 */ f32 waterBoxXLength;
     /* 0x178 */ f32 waterBoxZLength;
-    /* 0x17C */ s16 initialActorCutscene;
+    /* 0x17C */ s16 initCsId;
     /* 0x17E */ u16 unk_17E;
 } BgGoronOyu; // size = 0x180
 

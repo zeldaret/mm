@@ -92,7 +92,7 @@ void func_8092C5C0(EnDns* this) {
     if (((this->animIndex == EN_DNS_ANIM_WALK_1) || (this->animIndex == EN_DNS_ANIM_WALK_2) ||
          (this->animIndex == EN_DNS_ANIM_RUN_START) || (this->animIndex == EN_DNS_ANIM_RUN_LOOP)) &&
         (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 3.0f))) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_WALK);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_WALK);
     }
 }
 
@@ -205,19 +205,19 @@ s32* func_8092C9BC(EnDns* this, PlayState* play) {
     return 0;
 }
 
-s32 func_8092CA74(EnDns* this) {
+s32 EnDns_GetCueType(EnDns* this) {
     switch (ENDNS_GET_7(&this->actor)) {
         case ENDNS_GET_7_0:
-            return 465;
+            return CS_CMD_ACTOR_CUE_465;
 
         case ENDNS_GET_7_1:
-            return 466;
+            return CS_CMD_ACTOR_CUE_466;
 
         case ENDNS_GET_7_2:
-            return 467;
+            return CS_CMD_ACTOR_CUE_467;
 
         case ENDNS_GET_7_3:
-            return 468;
+            return CS_CMD_ACTOR_CUE_468;
     }
 
     return 0;
@@ -249,13 +249,13 @@ s32 func_8092CAD0(EnDns* this, PlayState* play) {
 s32 func_8092CB98(EnDns* this, PlayState* play) {
     s32 phi_v1 = 0;
 
-    if (play->csCtx.state != 0) {
+    if (play->csCtx.state != CS_STATE_IDLE) {
         if (!(this->unk_2C6 & 0x80)) {
-            this->unk_2C8 = func_8092CA74(this);
+            this->cueType = EnDns_GetCueType(this);
             this->actor.flags &= ~ACTOR_FLAG_1;
             SubS_UpdateFlags(&this->unk_2C6, 0, 7);
             this->unk_2C6 |= 0x80;
-            this->unk_1D8 = 0xFF;
+            this->cueId = 255;
         }
         phi_v1 = 1;
     } else if (this->unk_2C6 & 0x80) {
@@ -272,7 +272,8 @@ s32 func_8092CC68(PlayState* play) {
     s32 ret = false;
     s16 bgId;
 
-    if (!Play_InCsMode(play) && (player->actor.bgCheckFlags & 1) && (player->transformation != PLAYER_FORM_DEKU)) {
+    if (!Play_InCsMode(play) && (player->actor.bgCheckFlags & BGCHECKFLAG_GROUND) &&
+        (player->transformation != PLAYER_FORM_DEKU)) {
         bgId = player->actor.floorBgId;
         if (SurfaceType_GetSceneExitIndex(&play->colCtx, player->actor.floorPoly, bgId) != 4) {
             ret = true;
@@ -315,7 +316,7 @@ s32 func_8092CE38(EnDns* this) {
         this->unk_2C6 &= ~0x200;
         this->skelAnime.curFrame = 0.0f;
         if (this->unk_2D2 == 2) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_JUMP);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_JUMP);
         }
         this->unk_2D2++;
         if (this->unk_2D2 >= 3) {
@@ -328,7 +329,7 @@ s32 func_8092CE38(EnDns* this) {
                 this->actor.world.rot.y = BINANG_ROT180(this->actor.world.rot.y);
                 this->unk_2E4 = 0.0f;
                 this->actor.shape.rot.y = this->actor.world.rot.y;
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_JUMP);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_JUMP);
             } else if (this->skelAnime.curFrame < 13.0f) {
                 frame = this->skelAnime.curFrame;
                 this->actor.shape.rot.y = this->actor.world.rot.y;
@@ -339,7 +340,7 @@ s32 func_8092CE38(EnDns* this) {
         } else {
             if (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 6.0f) ||
                 Animation_OnFrame(&this->skelAnime, 13.0f)) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_WALK);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_WALK);
             }
 
             if (this->skelAnime.curFrame > 7.0f) {
@@ -440,8 +441,8 @@ void func_8092D330(EnDns* this, PlayState* play) {
         play->nextEntrance = ENTRANCE(DEKU_PALACE, 1);
         gSaveContext.nextCutsceneIndex = 0;
         play->transitionTrigger = TRANS_TRIGGER_START;
-        play->transitionType = TRANS_TYPE_03;
-        gSaveContext.nextTransitionType = TRANS_TYPE_03;
+        play->transitionType = TRANS_TYPE_FADE_WHITE;
+        gSaveContext.nextTransitionType = TRANS_TYPE_FADE_WHITE;
     }
 }
 
@@ -478,15 +479,15 @@ void func_8092D5E8(EnDns* this, PlayState* play) {
         EN_DNS_ANIM_SURPRISE_START,
         EN_DNS_ANIM_RUN_START,
     };
-    s32 temp_v0;
-    u32 temp_v1;
+    s32 cueChannel;
+    u32 cueId;
 
-    if (Cutscene_CheckActorAction(play, this->unk_2C8)) {
-        temp_v0 = Cutscene_GetActorActionIndex(play, this->unk_2C8);
-        temp_v1 = play->csCtx.actorActions[temp_v0]->action;
-        if (this->unk_1D8 != (u8)temp_v1) {
-            func_8092C63C(this, D_8092DE0C[temp_v1]);
-            this->unk_1D8 = temp_v1;
+    if (Cutscene_IsCueInChannel(play, this->cueType)) {
+        cueChannel = Cutscene_GetCueChannel(play, this->cueType);
+        cueId = play->csCtx.actorCues[cueChannel]->id;
+        if (this->cueId != (u8)cueId) {
+            func_8092C63C(this, D_8092DE0C[cueId]);
+            this->cueId = cueId;
         }
 
         if (((this->animIndex == EN_DNS_ANIM_SURPRISE_START) || (this->animIndex == EN_DNS_ANIM_RUN_START)) &&
@@ -494,7 +495,7 @@ void func_8092D5E8(EnDns* this, PlayState* play) {
             func_8092C63C(this, this->animIndex + 1);
         }
 
-        Cutscene_ActorTranslateAndYaw(&this->actor, play, temp_v0);
+        Cutscene_ActorTranslateAndYaw(&this->actor, play, cueChannel);
     }
 }
 
@@ -549,7 +550,7 @@ void EnDns_Update(Actor* thisx, PlayState* play) {
         SkelAnime_Update(&this->skelAnime);
         func_8092C934(this);
         func_8092C86C(this, play);
-        Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, 4);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
         func_8013C964(&this->actor, play, 80.0f, 40.0f, PLAYER_IA_NONE, this->unk_2C6 & 7);
         Actor_SetFocus(&this->actor, 34.0f);
         func_8092C6FC(this, play);

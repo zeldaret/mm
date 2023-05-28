@@ -211,7 +211,7 @@ typedef struct PermanentSceneFlags {
     /* 0x08 */ u32 switch1;
     /* 0x0C */ u32 clearedRoom;
     /* 0x10 */ u32 collectible;
-    /* 0x14 */ u32 unk_14; // varies based on scene. For dungeons, floors visited. 
+    /* 0x14 */ u32 unk_14; // varies based on scene. For dungeons, floors visited.
     /* 0x18 */ u32 rooms;
 } PermanentSceneFlags; // size = 0x1C
 
@@ -252,68 +252,72 @@ typedef struct SavePlayerData {
     /* 0x26 */ s16 savedSceneId;                      // "scene_data_ID"
 } SavePlayerData; // size = 0x28
 
+typedef struct SaveInfo {
+    /* 0x000 */ SavePlayerData playerData;
+    /* 0x028 */ ItemEquips equips;
+    /* 0x04C */ Inventory inventory;
+    /* 0x0D4 */ PermanentSceneFlags permanentSceneFlags[120];
+    /* 0xDF4 */ UNK_TYPE1 unk_DF4[0x54];
+    /* 0xE48 */ u32 dekuPlaygroundHighScores[3];
+    /* 0xE54 */ u32 pictoFlags0;                       // Flags set by `PictoActor`s if pictograph is valid
+    /* 0xE58 */ u32 pictoFlags1;                       // Flags set by Snap_ValidatePictograph() to record errors; volatile since that function is run many times in succession
+    /* 0xE5C */ u32 unk_E5C;
+    /* 0xE60 */ u32 unk_E60;
+    /* 0xE64 */ u32 unk_E64[7];                        // Invadepoh flags
+    /* 0xE80 */ u32 scenesVisible[7];                  // tingle maps and clouded regions on pause map. Stores scenes bitwise for up to 224 scenes even though there are not that many scenes
+    /* 0xE9C */ u32 skullTokenCount;                   // upper 16 bits store Swamp skulls, lower 16 bits store Ocean skulls
+    /* 0xEA0 */ u32 unk_EA0;                           // Gossic stone heart piece flags
+    /* 0xEA4 */ u32 unk_EA4;
+    /* 0xEA8 */ u32 unk_EA8[2];                        // Related to blue warps
+    /* 0xEB0 */ u32 stolenItems;                       // Items stolen by Takkuri and given to Curiosity Shop Man
+    /* 0xEB4 */ u32 unk_EB4;
+    /* 0xEB8 */ u32 bankRupees;
+    /* 0xEBC */ u32 unk_EBC;
+    /* 0xEC0 */ u32 unk_EC0;                           // Fishing flags
+    /* 0xEC4 */ u32 unk_EC4;
+    /* 0xEC8 */ u32 horseBackBalloonHighScore;
+    /* 0xECC */ u32 lotteryCodeGuess;                  // Lottery code chosen by player (only uses lower three hex digits)
+    /* 0xED0 */ u32 shootingGalleryHighScores;         // High scores for both shooting galleries. Town uses lower 16 bits, Swamp uses higher 16 bits.
+    /* 0xED4 */ u8 weekEventReg[100];                  // "week_event_reg"
+    /* 0xF38 */ u32 regionsVisited;                    // "area_arrival"
+    /* 0xF3C */ u32 worldMapCloudVisibility;           // "cloud_clear"
+    /* 0xF40 */ u8 unk_F40;                            // "oca_rec_flag"                   has scarecrows song
+    /* 0xF41 */ u8 unk_F41;                            // "oca_rec_flag8"                  scarecrows song set?
+    /* 0xF42 */ u8 scarecrowSpawnSong[128];
+    /* 0xFC2 */ s8 bombersCaughtNum;                   // "aikotoba_index"
+    /* 0xFC3 */ s8 bombersCaughtOrder[5];              // "aikotoba_table"
+    /* 0xFC8 */ s8 lotteryCodes[3][3];                 // "numbers_table", Preset lottery codes
+    /* 0xFD1 */ s8 spiderHouseMaskOrder[6];            // "kinsta_color_table"
+    /* 0xFD7 */ s8 bomberCode[5];                      // "bombers_aikotoba_table"
+    /* 0xFDC */ HorseData horseData;
+    /* 0xFE6 */ u16 checksum;                          // "check_sum"
+} SaveInfo; // size = 0xFE8
+
 typedef struct Save {
-    /* 0x0000 */ u32 entrance;                          // "scene_no"
-    /* 0x0004 */ u8 equippedMask;                       // "player_mask"
-    /* 0x0005 */ u8 isFirstCycle;                       // "opening_flag"
-    /* 0x0006 */ u8 unk_06;
-    /* 0x0007 */ u8 linkAge;                            // "link_age"
-    /* 0x0008 */ s32 cutscene;                          // "day_time"
-    /* 0x000C */ u16 time;                              // "zelda_time"
-    /* 0x000E */ u16 owlSaveLocation;
-    /* 0x0010 */ s32 isNight;                           // "asahiru_fg"
-    /* 0x0014 */ s32 timeSpeedOffset;                   // "change_zelda_time"
-    /* 0x0018 */ s32 day;                               // "totalday"
-    /* 0x001C */ s32 daysElapsed;                       // "eventday"
-    /* 0x0020 */ u8 playerForm;                         // "player_character"
-    /* 0x0021 */ u8 snowheadCleared;                    // "spring_flag"
-    /* 0x0022 */ u8 hasTatl;                            // "bell_flag"
-    /* 0x0023 */ u8 isOwlSave;
-    /* 0x0024 */ SavePlayerData playerData;
-    /* 0x004C */ ItemEquips equips;
-    /* 0x0070 */ Inventory inventory;
-    /* 0x00F8 */ PermanentSceneFlags permanentSceneFlags[120];
-    /* 0x0E18 */ u8 unk_E18[0x54];
-    /* 0x0E6C */ u32 dekuPlaygroundHighScores[3];
-    /* 0x0E78 */ u32 pictoFlags0;                       // Flags set by `PictoActor`s if pictograph is valid
-    /* 0x0E7C */ u32 pictoFlags1;                       // Flags set by Snap_ValidatePictograph() to record errors; volatile since that function is run many times in succession
-    /* 0x0E80 */ u32 unk_E80;
-    /* 0x0E84 */ u32 unk_E84;
-    /* 0x0E88 */ u32 unk_E88[7];                        // Invadepoh flags
-    /* 0x0EA4 */ u32 scenesVisible[7];                  // tingle maps and clouded regions on pause map. Stores scenes bitwise for up to 224 scenes even though there are not that many scenes
-    /* 0x0EC0 */ u32 skullTokenCount;                   // upper 16 bits store Swamp skulls, lower 16 bits store Ocean skulls
-    /* 0x0EC4 */ u32 unk_EC4;                           // Gossic stone heart piece flags
-    /* 0x0EC8 */ u32 unk_EC8;
-    /* 0x0ECC */ u32 unk_ECC[2];                        // Related to blue warps
-    /* 0x0ED4 */ u32 stolenItems;                       // Items stolen by Takkuri and given to Curiosity Shop Man
-    /* 0x0ED8 */ u32 unk_DD8;
-    /* 0x0EDC */ u32 bankRupees;
-    /* 0x0EE0 */ u32 unk_EE0;
-    /* 0x0EE4 */ u32 unk_EE4;                           // Fishing flags
-    /* 0x0EE8 */ u32 unk_EE8;
-    /* 0x0EEC */ u32 horseBackBalloonHighScore;
-    /* 0x0EF0 */ u32 lotteryCodeGuess;                  // Lottery code chosen by player (only uses lower three hex digits)
-    /* 0x0EF4 */ u32 shootingGalleryHighScores;         // High scores for both shooting galleries. Town uses lower 16 bits, Swamp uses higher 16 bits.
-    /* 0x0EF8 */ u8 weekEventReg[100];                  // "week_event_reg"
-    /* 0x0F5C */ u32 regionsVisited;                    // "area_arrival"
-    /* 0x0F60 */ u32 worldMapCloudVisibility;           // "cloud_clear"
-    /* 0x0F64 */ u8 unk_F64;                            // "oca_rec_flag"                   has scarecrows song
-    /* 0x0F65 */ u8 unk_F65;                            // "oca_rec_flag8"                  scarecrows song set?
-    /* 0x0F66 */ u8 scarecrowSpawnSong[128];
-    /* 0x0FE6 */ s8 bombersCaughtNum;                   // "aikotoba_index"
-    /* 0x0FE7 */ s8 bombersCaughtOrder[5];              // "aikotoba_table"
-    /* 0x0FEC */ s8 lotteryCodes[3][3];                 // "numbers_table", Preset lottery codes
-    /* 0x0FF5 */ s8 spiderHouseMaskOrder[6];            // "kinsta_color_table"
-    /* 0x0FFB */ s8 bomberCode[5];                      // "bombers_aikotoba_table"
-    /* 0x1000 */ HorseData horseData;
-    /* 0x100A */ u16 checksum;                          // "check_sum"
+    /* 0x00 */ s32 entrance;                            // "scene_no"
+    /* 0x04 */ u8 equippedMask;                         // "player_mask"
+    /* 0x05 */ u8 isFirstCycle;                         // "opening_flag"
+    /* 0x06 */ u8 unk_06;
+    /* 0x07 */ u8 linkAge;                              // "link_age"
+    /* 0x08 */ s32 cutsceneIndex;                       // "day_time"
+    /* 0x0C */ u16 time;                                // "zelda_time"
+    /* 0x0E */ u16 owlSaveLocation;
+    /* 0x10 */ s32 isNight;                             // "asahiru_fg"
+    /* 0x14 */ s32 timeSpeedOffset;                     // "change_zelda_time"
+    /* 0x18 */ s32 day;                                 // "totalday"
+    /* 0x1C */ s32 daysElapsed;                         // "eventday"
+    /* 0x20 */ u8 playerForm;                           // "player_character"
+    /* 0x21 */ u8 snowheadCleared;                      // "spring_flag"
+    /* 0x22 */ u8 hasTatl;                              // "bell_flag"
+    /* 0x23 */ u8 isOwlSave;
+    /* 0x24 */ SaveInfo saveInfo;
 } Save; // size = 0x100C
 
 typedef struct SaveContext {
     /* 0x0000 */ Save save;
     /* 0x100C */ u8 eventInf[8];                        // "event_inf"
     /* 0x1014 */ u8 unk_1014;                           // "stone_set_flag"
-    /* 0x1015 */ u8 unk_1015;
+    /* 0x1015 */ u8 bButtonStatus;
     /* 0x1016 */ u16 jinxTimer;
     /* 0x1018 */ s16 rupeeAccumulator;                  // "lupy_udct"
     /* 0x101A */ u8 bottleTimerStates[BOTTLE_MAX]; // See the `BottleTimerState` enum. "bottle_status"
@@ -406,6 +410,14 @@ typedef enum SunsSongState {
     /* 3 */ SUNSSONG_SPECIAL // time does not advance, but signals the song was played. used for freezing redeads
 } SunsSongState;
 
+typedef enum {
+    /* 0 */ GAMEMODE_NORMAL,
+    /* 1 */ GAMEMODE_TITLE_SCREEN,
+    /* 2 */ GAMEMODE_FILE_SELECT,
+    /* 3 */ GAMEMODE_END_CREDITS,
+    /* 4 */ GAMEMODE_OWL_SAVE
+} GameMode;
+
 // linkAge still exists in MM, but is always set to 0 (always adult)
 // There are remnants of these macros from OOT, but they are essentially useless
 #define LINK_IS_CHILD (gSaveContext.save.linkAge == 1)
@@ -421,42 +433,42 @@ typedef enum SunsSongState {
 #define GET_PLAYER_FORM ((void)0, gSaveContext.save.playerForm)
 
 #define SLOT(item) gItemSlots[item]
-#define AMMO(item) gSaveContext.save.inventory.ammo[SLOT(item)]
-#define INV_CONTENT(item) gSaveContext.save.inventory.items[SLOT(item)]
-#define GET_INV_CONTENT(item) ((void)0, gSaveContext.save.inventory.items)[SLOT(item)]
+#define AMMO(item) gSaveContext.save.saveInfo.inventory.ammo[SLOT(item)]
+#define INV_CONTENT(item) gSaveContext.save.saveInfo.inventory.items[SLOT(item)]
+#define GET_INV_CONTENT(item) ((void)0, gSaveContext.save.saveInfo.inventory.items)[SLOT(item)]
 
 #define CUR_FORM ((gSaveContext.save.playerForm == PLAYER_FORM_HUMAN) ? 0 : gSaveContext.save.playerForm)
 
-#define GET_SAVE_EQUIPS_EQUIPMENT ((void)0, gSaveContext.save.equips.equipment)
-#define GET_SAVE_INVENTORY_UPGRADES ((void)0, gSaveContext.save.inventory.upgrades)
-#define GET_SAVE_INVENTORY_QUEST_ITEMS ((void)0, gSaveContext.save.inventory.questItems)
+#define GET_SAVE_EQUIPS_EQUIPMENT ((void)0, gSaveContext.save.saveInfo.equips.equipment)
+#define GET_SAVE_INVENTORY_UPGRADES ((void)0, gSaveContext.save.saveInfo.inventory.upgrades)
+#define GET_SAVE_INVENTORY_QUEST_ITEMS ((void)0, gSaveContext.save.saveInfo.inventory.questItems)
 
 #define GET_CUR_EQUIP_VALUE(equip) ((GET_SAVE_EQUIPS_EQUIPMENT & gEquipMasks[equip]) >> gEquipShifts[equip])
 
-#define CUR_UPG_VALUE(upg) ((gSaveContext.save.inventory.upgrades & gUpgradeMasks[upg]) >> gUpgradeShifts[upg])
+#define CUR_UPG_VALUE(upg) ((gSaveContext.save.saveInfo.inventory.upgrades & gUpgradeMasks[upg]) >> gUpgradeShifts[upg])
 #define GET_CUR_UPG_VALUE(upg) ((GET_SAVE_INVENTORY_UPGRADES & gUpgradeMasks[upg]) >> gUpgradeShifts[upg])
 
-#define SET_EQUIP_VALUE(equip, value) (gSaveContext.save.equips.equipment = ((GET_SAVE_EQUIPS_EQUIPMENT & gEquipNegMasks[equip]) | (u16)((u16)(value) << gEquipShifts[equip])))
+#define SET_EQUIP_VALUE(equip, value) (gSaveContext.save.saveInfo.equips.equipment = ((GET_SAVE_EQUIPS_EQUIPMENT & gEquipNegMasks[equip]) | (u16)((u16)(value) << gEquipShifts[equip])))
 
-#define BUTTON_ITEM_EQUIP(form, button) (gSaveContext.save.equips.buttonItems[form][button])
+#define BUTTON_ITEM_EQUIP(form, button) (gSaveContext.save.saveInfo.equips.buttonItems[form][button])
 #define CUR_FORM_EQUIP(button) BUTTON_ITEM_EQUIP(CUR_FORM, button)
 
-#define C_SLOT_EQUIP(form, button) (gSaveContext.save.equips.cButtonSlots[form][button])
+#define C_SLOT_EQUIP(form, button) (gSaveContext.save.saveInfo.equips.cButtonSlots[form][button])
 #define CHECK_QUEST_ITEM(item) (GET_SAVE_INVENTORY_QUEST_ITEMS & gBitFlags[item])
-#define SET_QUEST_ITEM(item) (gSaveContext.save.inventory.questItems = (GET_SAVE_INVENTORY_QUEST_ITEMS | gBitFlags[item]))
-#define REMOVE_QUEST_ITEM(item) (gSaveContext.save.inventory.questItems = (GET_SAVE_INVENTORY_QUEST_ITEMS & (-1 - gBitFlags[item])))
+#define SET_QUEST_ITEM(item) (gSaveContext.save.saveInfo.inventory.questItems = (GET_SAVE_INVENTORY_QUEST_ITEMS | gBitFlags[item]))
+#define REMOVE_QUEST_ITEM(item) (gSaveContext.save.saveInfo.inventory.questItems = (GET_SAVE_INVENTORY_QUEST_ITEMS & (-1 - gBitFlags[item])))
 
 #define GET_QUEST_HEART_PIECE_COUNT ((GET_SAVE_INVENTORY_QUEST_ITEMS & 0xF0000000) >> QUEST_HEART_PIECE_COUNT)
 #define EQ_MAX_QUEST_HEART_PIECE_COUNT ((GET_SAVE_INVENTORY_QUEST_ITEMS & 0xF0000000) == (4 << QUEST_HEART_PIECE_COUNT))
 #define LEQ_MAX_QUEST_HEART_PIECE_COUNT ((GET_SAVE_INVENTORY_QUEST_ITEMS & 0xF0000000) <= (4 << QUEST_HEART_PIECE_COUNT))
-#define INCREMENT_QUEST_HEART_PIECE_COUNT (gSaveContext.save.inventory.questItems += (1 << QUEST_HEART_PIECE_COUNT))
-#define DECREMENT_QUEST_HEART_PIECE_COUNT (gSaveContext.save.inventory.questItems -= (1 << QUEST_HEART_PIECE_COUNT))
-#define RESET_HEART_PIECE_COUNT (gSaveContext.save.inventory.questItems ^= (4 << QUEST_HEART_PIECE_COUNT))
+#define INCREMENT_QUEST_HEART_PIECE_COUNT (gSaveContext.save.saveInfo.inventory.questItems += (1 << QUEST_HEART_PIECE_COUNT))
+#define DECREMENT_QUEST_HEART_PIECE_COUNT (gSaveContext.save.saveInfo.inventory.questItems -= (1 << QUEST_HEART_PIECE_COUNT))
+#define RESET_HEART_PIECE_COUNT (gSaveContext.save.saveInfo.inventory.questItems ^= (4 << QUEST_HEART_PIECE_COUNT))
 
-#define CHECK_DUNGEON_ITEM(item, dungeonIndex) (gSaveContext.save.inventory.dungeonItems[(void)0, dungeonIndex] & gBitFlags[item])
-#define CHECK_DUNGEON_ITEM2(item, dungeonIndex) (gSaveContext.save.inventory.dungeonItems[dungeonIndex] & gBitFlags[item])
-#define SET_DUNGEON_ITEM(item, dungeonIndex) (gSaveContext.save.inventory.dungeonItems[(void)0, dungeonIndex] |= (u8)gBitFlags[item])
-#define DUNGEON_KEY_COUNT(dungeonIndex) (gSaveContext.save.inventory.dungeonKeys[(void)0, dungeonIndex])
+#define CHECK_DUNGEON_ITEM(item, dungeonIndex) (gSaveContext.save.saveInfo.inventory.dungeonItems[(void)0, dungeonIndex] & gBitFlags[item])
+#define CHECK_DUNGEON_ITEM2(item, dungeonIndex) (gSaveContext.save.saveInfo.inventory.dungeonItems[dungeonIndex] & gBitFlags[item])
+#define SET_DUNGEON_ITEM(item, dungeonIndex) (gSaveContext.save.saveInfo.inventory.dungeonItems[(void)0, dungeonIndex] |= (u8)gBitFlags[item])
+#define DUNGEON_KEY_COUNT(dungeonIndex) (gSaveContext.save.saveInfo.inventory.dungeonKeys[(void)0, dungeonIndex])
 
 #define GET_CUR_FORM_BTN_ITEM(btn) ((u8)((btn) == EQUIP_SLOT_B ? BUTTON_ITEM_EQUIP(CUR_FORM, btn) : BUTTON_ITEM_EQUIP(0, btn)))
 #define GET_CUR_FORM_BTN_SLOT(btn) ((u8)((btn) == EQUIP_SLOT_B ? C_SLOT_EQUIP(CUR_FORM, btn) : C_SLOT_EQUIP(0, btn)))
@@ -484,56 +496,63 @@ typedef enum SunsSongState {
 
 #define STOLEN_ITEM_NONE (0)
 
-#define STOLEN_ITEM_1 ((gSaveContext.save.stolenItems & 0xFF000000) >> 0x18)
-#define STOLEN_ITEM_2 ((gSaveContext.save.stolenItems & 0x00FF0000) >> 0x10)
+#define STOLEN_ITEM_1 ((gSaveContext.save.saveInfo.stolenItems & 0xFF000000) >> 0x18)
+#define STOLEN_ITEM_2 ((gSaveContext.save.saveInfo.stolenItems & 0x00FF0000) >> 0x10)
 
 #define SET_STOLEN_ITEM_1(itemId) \
-    (gSaveContext.save.stolenItems = (gSaveContext.save.stolenItems & ~0xFF000000) | ((itemId & 0xFF) << 0x18))
+    (gSaveContext.save.saveInfo.stolenItems = (gSaveContext.save.saveInfo.stolenItems & ~0xFF000000) | ((itemId & 0xFF) << 0x18))
 #define SET_STOLEN_ITEM_2(itemId) \
-    (gSaveContext.save.stolenItems = (gSaveContext.save.stolenItems & ~0x00FF0000) | ((itemId & 0xFF) << 0x10))
+    (gSaveContext.save.saveInfo.stolenItems = (gSaveContext.save.saveInfo.stolenItems & ~0x00FF0000) | ((itemId & 0xFF) << 0x10))
 
-#define GET_TOWN_SHOOTING_GALLERY_HIGH_SCORE() ((s32)(gSaveContext.save.shootingGalleryHighScores & 0xFFFF))
-#define GET_SWAMP_SHOOTING_GALLERY_HIGH_SCORE() ((s32)((gSaveContext.save.shootingGalleryHighScores & 0xFFFF0000) >> 0x10))
-#define SET_TOWN_SHOOTING_GALLERY_HIGH_SCORE(score) (gSaveContext.save.shootingGalleryHighScores = (gSaveContext.save.shootingGalleryHighScores & 0xFFFF0000) | ((u16)(score)))
-#define SET_SWAMP_SHOOTING_GALLERY_HIGH_SCORE(score) (gSaveContext.save.shootingGalleryHighScores = ((gSaveContext.save.shootingGalleryHighScores) & 0xFFFF) | ((u16)(score) << 0x10))
+#define GET_TOWN_SHOOTING_GALLERY_HIGH_SCORE() ((s32)(gSaveContext.save.saveInfo.shootingGalleryHighScores & 0xFFFF))
+#define GET_SWAMP_SHOOTING_GALLERY_HIGH_SCORE() ((s32)((gSaveContext.save.saveInfo.shootingGalleryHighScores & 0xFFFF0000) >> 0x10))
+#define SET_TOWN_SHOOTING_GALLERY_HIGH_SCORE(score) (gSaveContext.save.saveInfo.shootingGalleryHighScores = (gSaveContext.save.saveInfo.shootingGalleryHighScores & 0xFFFF0000) | ((u16)(score)))
+#define SET_SWAMP_SHOOTING_GALLERY_HIGH_SCORE(score) (gSaveContext.save.saveInfo.shootingGalleryHighScores = ((gSaveContext.save.saveInfo.shootingGalleryHighScores) & 0xFFFF) | ((u16)(score) << 0x10))
 
 /**
- * gSaveContext.save.weekEventReg
+ * gSaveContext.save.saveInfo.weekEventReg
  */
 
 #define PACK_WEEKEVENTREG_FLAG(index, mask) (((index) << 8) | (mask))
 
 #define WEEKEVENTREG_00_01 PACK_WEEKEVENTREG_FLAG(0, 0x01)
-#define WEEKEVENTREG_00_02 PACK_WEEKEVENTREG_FLAG(0, 0x02)
-#define WEEKEVENTREG_00_04 PACK_WEEKEVENTREG_FLAG(0, 0x04)
-#define WEEKEVENTREG_00_08 PACK_WEEKEVENTREG_FLAG(0, 0x08)
-#define WEEKEVENTREG_00_10 PACK_WEEKEVENTREG_FLAG(0, 0x10)
-#define WEEKEVENTREG_00_20 PACK_WEEKEVENTREG_FLAG(0, 0x20)
-#define WEEKEVENTREG_00_40 PACK_WEEKEVENTREG_FLAG(0, 0x40)
-#define WEEKEVENTREG_00_80 PACK_WEEKEVENTREG_FLAG(0, 0x80)
-#define WEEKEVENTREG_01_01 PACK_WEEKEVENTREG_FLAG(1, 0x01)
-#define WEEKEVENTREG_01_02 PACK_WEEKEVENTREG_FLAG(1, 0x02)
-#define WEEKEVENTREG_01_04 PACK_WEEKEVENTREG_FLAG(1, 0x04)
-#define WEEKEVENTREG_01_08 PACK_WEEKEVENTREG_FLAG(1, 0x08)
-#define WEEKEVENTREG_01_10 PACK_WEEKEVENTREG_FLAG(1, 0x10)
-#define WEEKEVENTREG_01_20 PACK_WEEKEVENTREG_FLAG(1, 0x20)
-#define WEEKEVENTREG_01_40 PACK_WEEKEVENTREG_FLAG(1, 0x40)
-#define WEEKEVENTREG_01_80 PACK_WEEKEVENTREG_FLAG(1, 0x80)
-#define WEEKEVENTREG_02_01 PACK_WEEKEVENTREG_FLAG(2, 0x01)
-#define WEEKEVENTREG_02_02 PACK_WEEKEVENTREG_FLAG(2, 0x02)
-#define WEEKEVENTREG_02_04 PACK_WEEKEVENTREG_FLAG(2, 0x04)
-#define WEEKEVENTREG_02_08 PACK_WEEKEVENTREG_FLAG(2, 0x08)
-#define WEEKEVENTREG_02_10 PACK_WEEKEVENTREG_FLAG(2, 0x10)
-#define WEEKEVENTREG_02_20 PACK_WEEKEVENTREG_FLAG(2, 0x20)
-#define WEEKEVENTREG_02_40 PACK_WEEKEVENTREG_FLAG(2, 0x40)
-#define WEEKEVENTREG_02_80 PACK_WEEKEVENTREG_FLAG(2, 0x80)
-#define WEEKEVENTREG_03_01 PACK_WEEKEVENTREG_FLAG(3, 0x01)
-#define WEEKEVENTREG_03_02 PACK_WEEKEVENTREG_FLAG(3, 0x02)
-#define WEEKEVENTREG_03_04 PACK_WEEKEVENTREG_FLAG(3, 0x04)
-#define WEEKEVENTREG_03_08 PACK_WEEKEVENTREG_FLAG(3, 0x08)
-#define WEEKEVENTREG_03_10 PACK_WEEKEVENTREG_FLAG(3, 0x10)
-#define WEEKEVENTREG_03_20 PACK_WEEKEVENTREG_FLAG(3, 0x20)
-#define WEEKEVENTREG_03_40 PACK_WEEKEVENTREG_FLAG(3, 0x40)
+
+/* Entrance cutscenes watched */
+
+#define WEEKEVENTREG_ENTERED_TERMINA_FIELD               PACK_WEEKEVENTREG_FLAG(0, 0x02)
+#define WEEKEVENTREG_ENTERED_IKANA_GRAVEYARD             PACK_WEEKEVENTREG_FLAG(0, 0x04)
+#define WEEKEVENTREG_ENTERED_ROMANI_RANCH                PACK_WEEKEVENTREG_FLAG(0, 0x08)
+#define WEEKEVENTREG_ENTERED_GORMAN_TRACK                PACK_WEEKEVENTREG_FLAG(0, 0x10)
+#define WEEKEVENTREG_ENTERED_MOUNTAIN_VILLAGE_WINTER     PACK_WEEKEVENTREG_FLAG(0, 0x20)
+#define WEEKEVENTREG_ENTERED_GORON_SHRINE                PACK_WEEKEVENTREG_FLAG(0, 0x40)
+#define WEEKEVENTREG_ENTERED_SNOWHEAD                    PACK_WEEKEVENTREG_FLAG(0, 0x80)
+#define WEEKEVENTREG_ENTERED_SOUTHERN_SWAMP_POISONED     PACK_WEEKEVENTREG_FLAG(1, 0x01)
+#define WEEKEVENTREG_ENTERED_WOODFALL                    PACK_WEEKEVENTREG_FLAG(1, 0x02)
+#define WEEKEVENTREG_ENTERED_DEKU_PALACE                 PACK_WEEKEVENTREG_FLAG(1, 0x04)
+#define WEEKEVENTREG_ENTERED_GREAT_BAY_COAST             PACK_WEEKEVENTREG_FLAG(1, 0x08)
+#define WEEKEVENTREG_ENTERED_PIRATES_FORTRESS            PACK_WEEKEVENTREG_FLAG(1, 0x10)
+#define WEEKEVENTREG_ENTERED_ZORA_HALL                   PACK_WEEKEVENTREG_FLAG(1, 0x20)
+#define WEEKEVENTREG_ENTERED_WATERFALL_RAPIDS            PACK_WEEKEVENTREG_FLAG(1, 0x40)
+#define WEEKEVENTREG_ENTERED_IKANA_CANYON                PACK_WEEKEVENTREG_FLAG(1, 0x80)
+// Attached to the scene but unused. Entrance cutscene is instead triggered by `ACTOR_OBJ_DEMO`
+#define WEEKEVENTREG_ENTERED_IKANA_CASTLE                PACK_WEEKEVENTREG_FLAG(2, 0x01)
+#define WEEKEVENTREG_ENTERED_STONE_TOWER                 PACK_WEEKEVENTREG_FLAG(2, 0x02)
+#define WEEKEVENTREG_ENTERED_STONE_TOWER_INVERTED        PACK_WEEKEVENTREG_FLAG(2, 0x04)
+#define WEEKEVENTREG_ENTERED_EAST_CLOCK_TOWN             PACK_WEEKEVENTREG_FLAG(2, 0x08)
+#define WEEKEVENTREG_ENTERED_WEST_CLOCK_TOWN             PACK_WEEKEVENTREG_FLAG(2, 0x10)
+#define WEEKEVENTREG_ENTERED_NORTH_CLOCK_TOWN            PACK_WEEKEVENTREG_FLAG(2, 0x20)
+#define WEEKEVENTREG_ENTERED_WOODFALL_TEMPLE             PACK_WEEKEVENTREG_FLAG(2, 0x40)
+#define WEEKEVENTREG_ENTERED_SNOWHEAD_TEMPLE             PACK_WEEKEVENTREG_FLAG(2, 0x80)
+// Attached to the scene but unused. Entrance cutscene is instead triggered by `ACTOR_OBJ_DEMO`
+#define WEEKEVENTREG_ENTERED_PIRATES_FORTRESS_EXTERIOR   PACK_WEEKEVENTREG_FLAG(3, 0x01)
+#define WEEKEVENTREG_ENTERED_STONE_TOWER_TEMPLE          PACK_WEEKEVENTREG_FLAG(3, 0x02)
+#define WEEKEVENTREG_ENTERED_STONE_TOWER_TEMPLE_INVERTED PACK_WEEKEVENTREG_FLAG(3, 0x04)
+// Unused as no cutscene is attached to this script
+#define WEEKEVENTREG_ENTERED_THE_MOON                    PACK_WEEKEVENTREG_FLAG(3, 0x08)
+#define WEEKEVENTREG_ENTERED_MOON_DEKU_TRIAL             PACK_WEEKEVENTREG_FLAG(3, 0x10)
+#define WEEKEVENTREG_ENTERED_MOON_GORON_TRIAL            PACK_WEEKEVENTREG_FLAG(3, 0x20)
+#define WEEKEVENTREG_ENTERED_MOON_ZORA_TRIAL             PACK_WEEKEVENTREG_FLAG(3, 0x40)
+
 #define WEEKEVENTREG_03_80 PACK_WEEKEVENTREG_FLAG(3, 0x80)
 #define WEEKEVENTREG_04_01 PACK_WEEKEVENTREG_FLAG(4, 0x01)
 #define WEEKEVENTREG_04_02 PACK_WEEKEVENTREG_FLAG(4, 0x02)
@@ -566,14 +585,21 @@ typedef enum SunsSongState {
 #define WEEKEVENTREG_07_10 PACK_WEEKEVENTREG_FLAG(7, 0x10)
 #define WEEKEVENTREG_07_20 PACK_WEEKEVENTREG_FLAG(7, 0x20)
 #define WEEKEVENTREG_07_40 PACK_WEEKEVENTREG_FLAG(7, 0x40)
-#define WEEKEVENTREG_07_80 PACK_WEEKEVENTREG_FLAG(7, 0x80)
+
+// Entrance cutscene watched to the prison where the deku princess is kept. Also set in door_warp1.c
+#define WEEKEVENTREG_ENTERED_WOODFALL_TEMPLE_PRISON PACK_WEEKEVENTREG_FLAG(7, 0x80)
+
+// Related to Honey & Darling minigame
 #define WEEKEVENTREG_08_01 PACK_WEEKEVENTREG_FLAG(8, 0x01)
 #define WEEKEVENTREG_08_02 PACK_WEEKEVENTREG_FLAG(8, 0x02)
 #define WEEKEVENTREG_08_04 PACK_WEEKEVENTREG_FLAG(8, 0x04)
 #define WEEKEVENTREG_08_08 PACK_WEEKEVENTREG_FLAG(8, 0x08)
 #define WEEKEVENTREG_08_10 PACK_WEEKEVENTREG_FLAG(8, 0x10)
-#define WEEKEVENTREG_08_20 PACK_WEEKEVENTREG_FLAG(8, 0x20)
+#define WEEKEVENTREG_RECEIVED_DOGGY_RACETRACK_HEART_PIECE PACK_WEEKEVENTREG_FLAG(8, 0x20)
+
+// Related to final hours
 #define WEEKEVENTREG_08_40 PACK_WEEKEVENTREG_FLAG(8, 0x40)
+
 #define WEEKEVENTREG_08_80 PACK_WEEKEVENTREG_FLAG(8, 0x80)
 #define WEEKEVENTREG_09_01 PACK_WEEKEVENTREG_FLAG(9, 0x01)
 #define WEEKEVENTREG_09_02 PACK_WEEKEVENTREG_FLAG(9, 0x02)
@@ -615,9 +641,18 @@ typedef enum SunsSongState {
 #define WEEKEVENTREG_13_04 PACK_WEEKEVENTREG_FLAG(13, 0x04)
 #define WEEKEVENTREG_13_08 PACK_WEEKEVENTREG_FLAG(13, 0x08)
 #define WEEKEVENTREG_13_10 PACK_WEEKEVENTREG_FLAG(13, 0x10)
-#define WEEKEVENTREG_13_20 PACK_WEEKEVENTREG_FLAG(13, 0x20)
-#define WEEKEVENTREG_13_40 PACK_WEEKEVENTREG_FLAG(13, 0x40)
-#define WEEKEVENTREG_13_80 PACK_WEEKEVENTREG_FLAG(13, 0x80)
+
+// This flag marks that the player has finished the Oceanside Spider House and has exited.
+// Used to identify if EnSth should be moved deeper into the house.
+// This does NOT flag:
+//   A) that the player has completed the house (Inventory_GetSkullTokenCount(play->sceneId))
+//   B) that the player has collected a reward (WEEKEVENTREG_OCEANSIDE_SPIDER_HOUSE_COLLECTED_REWARD)
+//   C) that the player has collected the wallet (WEEKEVENTREG_RECEIVED_OCEANSIDE_WALLET_UPGRADE)
+#define WEEKEVENTREG_OCEANSIDE_SPIDER_HOUSE_BUYER_MOVED_IN PACK_WEEKEVENTREG_FLAG(13, 0x20)
+
+#define WEEKEVENTREG_RECEIVED_OCEANSIDE_WALLET_UPGRADE PACK_WEEKEVENTREG_FLAG(13, 0x40)
+// You only get a wallet if completed on Day 1: repeat gets silver rupee, other days get less
+#define WEEKEVENTREG_OCEANSIDE_SPIDER_HOUSE_COLLECTED_REWARD PACK_WEEKEVENTREG_FLAG(13, 0x80)
 
 // PlayedMilkMinigame
 // Attempted Cremia Cart Ride
@@ -673,7 +708,7 @@ typedef enum SunsSongState {
 #define WEEKEVENTREG_20_01 PACK_WEEKEVENTREG_FLAG(20, 0x01)
 
 // woodfall temple purification cutscene watched
-#define WEEKEVENTREG_20_02 PACK_WEEKEVENTREG_FLAG(20, 0x02)
+#define WEEKEVENTREG_CLEARED_WOODFALL_TEMPLE PACK_WEEKEVENTREG_FLAG(20, 0x02)
 
 #define WEEKEVENTREG_20_04 PACK_WEEKEVENTREG_FLAG(20, 0x04)
 #define WEEKEVENTREG_20_08 PACK_WEEKEVENTREG_FLAG(20, 0x08)
@@ -786,6 +821,9 @@ typedef enum SunsSongState {
 #define WEEKEVENTREG_31_10 PACK_WEEKEVENTREG_FLAG(31, 0x10)
 #define WEEKEVENTREG_31_20 PACK_WEEKEVENTREG_FLAG(31, 0x20)
 
+//! @note: entrance cutscenes defined in `CutsceneEntry` can not use
+//! any of the below weekEventFlags due to bitpacking
+
 // Cremia asked the player to accompany her to town
 #define WEEKEVENTREG_31_40 PACK_WEEKEVENTREG_FLAG(31, 0x40)
 // Player is playing the Milk Run
@@ -814,16 +852,16 @@ typedef enum SunsSongState {
 #define WEEKEVENTREG_33_40 PACK_WEEKEVENTREG_FLAG(33, 0x40)
 
 // Mountain village is unfrozen
-#define WEEKEVENTREG_33_80 PACK_WEEKEVENTREG_FLAG(33, 0x80)
+#define WEEKEVENTREG_CLEARED_SNOWHEAD_TEMPLE PACK_WEEKEVENTREG_FLAG(33, 0x80)
 // Spoken to MINIFROG_YELLOW
 #define WEEKEVENTREG_34_01 PACK_WEEKEVENTREG_FLAG(34, 0x01)
 
 #define WEEKEVENTREG_34_02 PACK_WEEKEVENTREG_FLAG(34, 0x02)
 #define WEEKEVENTREG_34_04 PACK_WEEKEVENTREG_FLAG(34, 0x04)
-#define WEEKEVENTREG_34_08 PACK_WEEKEVENTREG_FLAG(34, 0x08)
+#define WEEKEVENTREG_TALKED_SWAMP_SPIDER_HOUSE_MAN PACK_WEEKEVENTREG_FLAG(34, 0x08)
 #define WEEKEVENTREG_34_10 PACK_WEEKEVENTREG_FLAG(34, 0x10)
 #define WEEKEVENTREG_34_20 PACK_WEEKEVENTREG_FLAG(34, 0x20)
-#define WEEKEVENTREG_34_40 PACK_WEEKEVENTREG_FLAG(34, 0x40)
+#define WEEKEVENTREG_RECEIVED_MASK_OF_TRUTH PACK_WEEKEVENTREG_FLAG(34, 0x40)
 
 // Cremia did Milk Run alone. Player didn't interact or didn't accept the ride
 #define WEEKEVENTREG_34_80 PACK_WEEKEVENTREG_FLAG(34, 0x80)
@@ -887,62 +925,11 @@ typedef enum SunsSongState {
 #define WEEKEVENTREG_41_20 PACK_WEEKEVENTREG_FLAG(41, 0x20)
 #define WEEKEVENTREG_41_40 PACK_WEEKEVENTREG_FLAG(41, 0x40)
 #define WEEKEVENTREG_41_80 PACK_WEEKEVENTREG_FLAG(41, 0x80)
-#define WEEKEVENTREG_42_01 PACK_WEEKEVENTREG_FLAG(42, 0x01)
-#define WEEKEVENTREG_42_02 PACK_WEEKEVENTREG_FLAG(42, 0x02)
-#define WEEKEVENTREG_42_04 PACK_WEEKEVENTREG_FLAG(42, 0x04)
-#define WEEKEVENTREG_42_08 PACK_WEEKEVENTREG_FLAG(42, 0x08)
-#define WEEKEVENTREG_42_10 PACK_WEEKEVENTREG_FLAG(42, 0x10)
-#define WEEKEVENTREG_42_20 PACK_WEEKEVENTREG_FLAG(42, 0x20)
-#define WEEKEVENTREG_42_40 PACK_WEEKEVENTREG_FLAG(42, 0x40)
-#define WEEKEVENTREG_42_80 PACK_WEEKEVENTREG_FLAG(42, 0x80)
-#define WEEKEVENTREG_43_01 PACK_WEEKEVENTREG_FLAG(43, 0x01)
-#define WEEKEVENTREG_43_02 PACK_WEEKEVENTREG_FLAG(43, 0x02)
-#define WEEKEVENTREG_43_04 PACK_WEEKEVENTREG_FLAG(43, 0x04)
-#define WEEKEVENTREG_43_08 PACK_WEEKEVENTREG_FLAG(43, 0x08)
-#define WEEKEVENTREG_43_10 PACK_WEEKEVENTREG_FLAG(43, 0x10)
-#define WEEKEVENTREG_43_20 PACK_WEEKEVENTREG_FLAG(43, 0x20)
-#define WEEKEVENTREG_43_40 PACK_WEEKEVENTREG_FLAG(43, 0x40)
-#define WEEKEVENTREG_43_80 PACK_WEEKEVENTREG_FLAG(43, 0x80)
-#define WEEKEVENTREG_44_01 PACK_WEEKEVENTREG_FLAG(44, 0x01)
-#define WEEKEVENTREG_44_02 PACK_WEEKEVENTREG_FLAG(44, 0x02)
-#define WEEKEVENTREG_44_04 PACK_WEEKEVENTREG_FLAG(44, 0x04)
-#define WEEKEVENTREG_44_08 PACK_WEEKEVENTREG_FLAG(44, 0x08)
-#define WEEKEVENTREG_44_10 PACK_WEEKEVENTREG_FLAG(44, 0x10)
-#define WEEKEVENTREG_44_20 PACK_WEEKEVENTREG_FLAG(44, 0x20)
-#define WEEKEVENTREG_44_40 PACK_WEEKEVENTREG_FLAG(44, 0x40)
-#define WEEKEVENTREG_44_80 PACK_WEEKEVENTREG_FLAG(44, 0x80)
-#define WEEKEVENTREG_45_01 PACK_WEEKEVENTREG_FLAG(45, 0x01)
-#define WEEKEVENTREG_45_02 PACK_WEEKEVENTREG_FLAG(45, 0x02)
-#define WEEKEVENTREG_45_04 PACK_WEEKEVENTREG_FLAG(45, 0x04)
-#define WEEKEVENTREG_45_08 PACK_WEEKEVENTREG_FLAG(45, 0x08)
-#define WEEKEVENTREG_45_10 PACK_WEEKEVENTREG_FLAG(45, 0x10)
-#define WEEKEVENTREG_45_20 PACK_WEEKEVENTREG_FLAG(45, 0x20)
-#define WEEKEVENTREG_45_40 PACK_WEEKEVENTREG_FLAG(45, 0x40)
-#define WEEKEVENTREG_45_80 PACK_WEEKEVENTREG_FLAG(45, 0x80)
-#define WEEKEVENTREG_46_01 PACK_WEEKEVENTREG_FLAG(46, 0x01)
-#define WEEKEVENTREG_46_02 PACK_WEEKEVENTREG_FLAG(46, 0x02)
-#define WEEKEVENTREG_46_04 PACK_WEEKEVENTREG_FLAG(46, 0x04)
-#define WEEKEVENTREG_46_08 PACK_WEEKEVENTREG_FLAG(46, 0x08)
-#define WEEKEVENTREG_46_10 PACK_WEEKEVENTREG_FLAG(46, 0x10)
-#define WEEKEVENTREG_46_20 PACK_WEEKEVENTREG_FLAG(46, 0x20)
-#define WEEKEVENTREG_46_40 PACK_WEEKEVENTREG_FLAG(46, 0x40)
-#define WEEKEVENTREG_46_80 PACK_WEEKEVENTREG_FLAG(46, 0x80)
-#define WEEKEVENTREG_47_01 PACK_WEEKEVENTREG_FLAG(47, 0x01)
-#define WEEKEVENTREG_47_02 PACK_WEEKEVENTREG_FLAG(47, 0x02)
-#define WEEKEVENTREG_47_04 PACK_WEEKEVENTREG_FLAG(47, 0x04)
-#define WEEKEVENTREG_47_08 PACK_WEEKEVENTREG_FLAG(47, 0x08)
-#define WEEKEVENTREG_47_10 PACK_WEEKEVENTREG_FLAG(47, 0x10)
-#define WEEKEVENTREG_47_20 PACK_WEEKEVENTREG_FLAG(47, 0x20)
-#define WEEKEVENTREG_47_40 PACK_WEEKEVENTREG_FLAG(47, 0x40)
-#define WEEKEVENTREG_47_80 PACK_WEEKEVENTREG_FLAG(47, 0x80)
-#define WEEKEVENTREG_48_01 PACK_WEEKEVENTREG_FLAG(48, 0x01)
-#define WEEKEVENTREG_48_02 PACK_WEEKEVENTREG_FLAG(48, 0x02)
-#define WEEKEVENTREG_48_04 PACK_WEEKEVENTREG_FLAG(48, 0x04)
-#define WEEKEVENTREG_48_08 PACK_WEEKEVENTREG_FLAG(48, 0x08)
-#define WEEKEVENTREG_48_10 PACK_WEEKEVENTREG_FLAG(48, 0x10)
-#define WEEKEVENTREG_48_20 PACK_WEEKEVENTREG_FLAG(48, 0x20)
-#define WEEKEVENTREG_48_40 PACK_WEEKEVENTREG_FLAG(48, 0x40)
-#define WEEKEVENTREG_48_80 PACK_WEEKEVENTREG_FLAG(48, 0x80)
+
+// Used for storing the text ID offsets for the dogs in the Doggy Racetrack (56 entries)
+// The number of weekEventRegs used needs to be kept in sync with RACEDOG_COUNT in z_en_aob_01.h
+// PACK_WEEKEVENTREG_FLAG(42, 0x01) to PACK_WEEKEVENTREG_FLAG(48, 0x80)
+
 #define WEEKEVENTREG_49_01 PACK_WEEKEVENTREG_FLAG(49, 0x01)
 #define WEEKEVENTREG_49_02 PACK_WEEKEVENTREG_FLAG(49, 0x02)
 #define WEEKEVENTREG_49_04 PACK_WEEKEVENTREG_FLAG(49, 0x04)
@@ -976,10 +963,7 @@ typedef enum SunsSongState {
 #define WEEKEVENTREG_52_04 PACK_WEEKEVENTREG_FLAG(52, 0x04)
 #define WEEKEVENTREG_52_08 PACK_WEEKEVENTREG_FLAG(52, 0x08)
 #define WEEKEVENTREG_52_10 PACK_WEEKEVENTREG_FLAG(52, 0x10)
-
-// cleared Stone Tower Temple
-#define WEEKEVENTREG_52_20 PACK_WEEKEVENTREG_FLAG(52, 0x20)
-
+#define WEEKEVENTREG_CLEARED_STONE_TOWER_TEMPLE PACK_WEEKEVENTREG_FLAG(52, 0x20)
 #define WEEKEVENTREG_52_40 PACK_WEEKEVENTREG_FLAG(52, 0x40)
 #define WEEKEVENTREG_52_80 PACK_WEEKEVENTREG_FLAG(52, 0x80)
 #define WEEKEVENTREG_53_01 PACK_WEEKEVENTREG_FLAG(53, 0x01)
@@ -1010,7 +994,7 @@ typedef enum SunsSongState {
 #define WEEKEVENTREG_55_40 PACK_WEEKEVENTREG_FLAG(55, 0x40)
 
 // Gyorg has been defeated
-#define WEEKEVENTREG_55_80 PACK_WEEKEVENTREG_FLAG(55, 0x80)
+#define WEEKEVENTREG_CLEARED_GREAT_BAY_TEMPLE PACK_WEEKEVENTREG_FLAG(55, 0x80)
 
 #define WEEKEVENTREG_56_01 PACK_WEEKEVENTREG_FLAG(56, 0x01)
 #define WEEKEVENTREG_56_02 PACK_WEEKEVENTREG_FLAG(56, 0x02)
@@ -1071,8 +1055,12 @@ typedef enum SunsSongState {
 #define WEEKEVENTREG_62_20 PACK_WEEKEVENTREG_FLAG(62, 0x20)
 #define WEEKEVENTREG_62_40 PACK_WEEKEVENTREG_FLAG(62, 0x40)
 #define WEEKEVENTREG_62_80 PACK_WEEKEVENTREG_FLAG(62, 0x80)
-#define WEEKEVENTREG_63_01 PACK_WEEKEVENTREG_FLAG(63, 0x01)
-#define WEEKEVENTREG_63_02 PACK_WEEKEVENTREG_FLAG(63, 0x02)
+
+// See `EnTimeTag_KickOut_WaitForTime` and `EnTimeTag_KickOut_WaitForTrigger`
+#define WEEKEVENTREG_KICKOUT_WAIT PACK_WEEKEVENTREG_FLAG(63, 0x01)
+// See `EnTimeTag_KickOut_WaitForTime` and `EnTimeTag_KickOut_WaitForTrigger`
+#define WEEKEVENTREG_KICKOUT_TIME_PASSED PACK_WEEKEVENTREG_FLAG(63, 0x02)
+
 #define WEEKEVENTREG_63_04 PACK_WEEKEVENTREG_FLAG(63, 0x04)
 #define WEEKEVENTREG_63_08 PACK_WEEKEVENTREG_FLAG(63, 0x08)
 #define WEEKEVENTREG_63_10 PACK_WEEKEVENTREG_FLAG(63, 0x10)
@@ -1089,12 +1077,12 @@ typedef enum SunsSongState {
 #define WEEKEVENTREG_64_10 PACK_WEEKEVENTREG_FLAG(64, 0x10)
 #define WEEKEVENTREG_64_20 PACK_WEEKEVENTREG_FLAG(64, 0x20)
 #define WEEKEVENTREG_64_40 PACK_WEEKEVENTREG_FLAG(64, 0x40)
-#define WEEKEVENTREG_64_80 PACK_WEEKEVENTREG_FLAG(64, 0x80)
-#define WEEKEVENTREG_65_01 PACK_WEEKEVENTREG_FLAG(65, 0x01)
-#define WEEKEVENTREG_65_02 PACK_WEEKEVENTREG_FLAG(65, 0x02)
-#define WEEKEVENTREG_65_04 PACK_WEEKEVENTREG_FLAG(65, 0x04)
-#define WEEKEVENTREG_65_08 PACK_WEEKEVENTREG_FLAG(65, 0x08)
-#define WEEKEVENTREG_65_10 PACK_WEEKEVENTREG_FLAG(65, 0x10)
+#define WEEKEVENTREG_TALKED_DOGGY_RACETRACK_OWNER_DAY_1 PACK_WEEKEVENTREG_FLAG(64, 0x80)
+#define WEEKEVENTREG_TALKED_DOGGY_RACETRACK_OWNER_NIGHT_1 PACK_WEEKEVENTREG_FLAG(65, 0x01)
+#define WEEKEVENTREG_TALKED_DOGGY_RACETRACK_OWNER_DAY_2 PACK_WEEKEVENTREG_FLAG(65, 0x02)
+#define WEEKEVENTREG_TALKED_DOGGY_RACETRACK_OWNER_NIGHT_2 PACK_WEEKEVENTREG_FLAG(65, 0x04)
+#define WEEKEVENTREG_TALKED_DOGGY_RACETRACK_OWNER_DAY_3 PACK_WEEKEVENTREG_FLAG(65, 0x08)
+#define WEEKEVENTREG_TALKED_DOGGY_RACETRACK_OWNER_NIGHT_3 PACK_WEEKEVENTREG_FLAG(65, 0x10)
 #define WEEKEVENTREG_65_20 PACK_WEEKEVENTREG_FLAG(65, 0x20)
 #define WEEKEVENTREG_65_40 PACK_WEEKEVENTREG_FLAG(65, 0x40)
 #define WEEKEVENTREG_65_80 PACK_WEEKEVENTREG_FLAG(65, 0x80)
@@ -1219,7 +1207,10 @@ typedef enum SunsSongState {
 #define WEEKEVENTREG_80_01 PACK_WEEKEVENTREG_FLAG(80, 0x01)
 #define WEEKEVENTREG_80_02 PACK_WEEKEVENTREG_FLAG(80, 0x02)
 #define WEEKEVENTREG_80_04 PACK_WEEKEVENTREG_FLAG(80, 0x04)
+
+// Aveil has spotted Player
 #define WEEKEVENTREG_80_08 PACK_WEEKEVENTREG_FLAG(80, 0x08)
+
 #define WEEKEVENTREG_80_10 PACK_WEEKEVENTREG_FLAG(80, 0x10)
 #define WEEKEVENTREG_80_20 PACK_WEEKEVENTREG_FLAG(80, 0x20)
 #define WEEKEVENTREG_80_40 PACK_WEEKEVENTREG_FLAG(80, 0x40)
@@ -1238,13 +1229,17 @@ typedef enum SunsSongState {
 // check if already healed Kamaro the Dancing Ghost
 #define WEEKEVENTREG_82_04 PACK_WEEKEVENTREG_FLAG(82, 0x04)
 
+// Related to Swordsman's log minigame
 #define WEEKEVENTREG_82_08 PACK_WEEKEVENTREG_FLAG(82, 0x08)
 #define WEEKEVENTREG_82_10 PACK_WEEKEVENTREG_FLAG(82, 0x10)
 #define WEEKEVENTREG_82_20 PACK_WEEKEVENTREG_FLAG(82, 0x20)
 #define WEEKEVENTREG_82_40 PACK_WEEKEVENTREG_FLAG(82, 0x40)
 #define WEEKEVENTREG_82_80 PACK_WEEKEVENTREG_FLAG(82, 0x80)
 #define WEEKEVENTREG_83_01 PACK_WEEKEVENTREG_FLAG(83, 0x01)
+
+// Knocked the Gerudo beehive down
 #define WEEKEVENTREG_83_02 PACK_WEEKEVENTREG_FLAG(83, 0x02)
+
 #define WEEKEVENTREG_83_04 PACK_WEEKEVENTREG_FLAG(83, 0x04)
 #define WEEKEVENTREG_83_08 PACK_WEEKEVENTREG_FLAG(83, 0x08)
 #define WEEKEVENTREG_83_10 PACK_WEEKEVENTREG_FLAG(83, 0x10)
@@ -1258,6 +1253,7 @@ typedef enum SunsSongState {
 #define WEEKEVENTREG_84_10 PACK_WEEKEVENTREG_FLAG(84, 0x10)
 
 // Unconfirmed: "Obtained Fierce Deity's Mask?"
+// Also related to moon child
 #define WEEKEVENTREG_84_20 PACK_WEEKEVENTREG_FLAG(84, 0x20)
 
 #define WEEKEVENTREG_84_40 PACK_WEEKEVENTREG_FLAG(84, 0x40)
@@ -1322,6 +1318,8 @@ typedef enum SunsSongState {
 #define WEEKEVENTREG_90_04 PACK_WEEKEVENTREG_FLAG(90, 0x04)
 #define WEEKEVENTREG_90_08 PACK_WEEKEVENTREG_FLAG(90, 0x08)
 #define WEEKEVENTREG_90_10 PACK_WEEKEVENTREG_FLAG(90, 0x10)
+
+// Related to Fishermans's jumping minigame
 #define WEEKEVENTREG_90_20 PACK_WEEKEVENTREG_FLAG(90, 0x20)
 #define WEEKEVENTREG_90_40 PACK_WEEKEVENTREG_FLAG(90, 0x40)
 #define WEEKEVENTREG_90_80 PACK_WEEKEVENTREG_FLAG(90, 0x80)
@@ -1334,10 +1332,8 @@ typedef enum SunsSongState {
 #define WEEKEVENTREG_91_40 PACK_WEEKEVENTREG_FLAG(91, 0x40)
 #define WEEKEVENTREG_91_80 PACK_WEEKEVENTREG_FLAG(91, 0x80)
 
-// RACE_FLAGS
-//#define WEEKEVENTREG_92_01 PACK_WEEKEVENTREG_FLAG(92, 0x01)
-//#define WEEKEVENTREG_92_02 PACK_WEEKEVENTREG_FLAG(92, 0x02)
-//#define WEEKEVENTREG_92_04 PACK_WEEKEVENTREG_FLAG(92, 0x04)
+// HORSE_RACE_STATE (3 entries)
+// WEEKEVENTREG_92_01 to WEEKEVENTREG_92_04
 
 #define WEEKEVENTREG_92_08 PACK_WEEKEVENTREG_FLAG(92, 0x08)
 #define WEEKEVENTREG_92_10 PACK_WEEKEVENTREG_FLAG(92, 0x10)
@@ -1401,7 +1397,7 @@ typedef enum SunsSongState {
 #define WEEKEVENTREG_99_40 PACK_WEEKEVENTREG_FLAG(99, 0x40)
 #define WEEKEVENTREG_99_80 PACK_WEEKEVENTREG_FLAG(99, 0x80)
 
-#define WEEKEVENTREG(index) (gSaveContext.save.weekEventReg[(index)])
+#define WEEKEVENTREG(index) (gSaveContext.save.saveInfo.weekEventReg[(index)])
 #define GET_WEEKEVENTREG(index) ((void)0, WEEKEVENTREG(index))
 
 #define CHECK_WEEKEVENTREG(flag) (WEEKEVENTREG((flag) >> 8) & ((flag) & 0xFF))
@@ -1409,31 +1405,52 @@ typedef enum SunsSongState {
 #define SET_WEEKEVENTREG(flag) (WEEKEVENTREG((flag) >> 8) = GET_WEEKEVENTREG((flag) >> 8) | ((flag) & 0xFF))
 #define CLEAR_WEEKEVENTREG(flag) (WEEKEVENTREG((flag) >> 8) = GET_WEEKEVENTREG((flag) >> 8) & (u8)~((flag) & 0xFF))
 
-#define WEEKEVENTREG_RACE_FLAG_END 0
-#define WEEKEVENTREG_RACE_FLAG_START 1
-#define WEEKEVENTREG_RACE_FLAG_2 2
-#define WEEKEVENTREG_RACE_FLAG_3 3
-#define WEEKEVENTREG_RACE_FLAG_4 4
-#define WEEKEVENTREG_RACE_FLAGS 7
+typedef enum {
+    /* 0 */ WEEKEVENTREG_HORSE_RACE_STATE_END,
+    /* 1 */ WEEKEVENTREG_HORSE_RACE_STATE_START,
+    /* 2 */ WEEKEVENTREG_HORSE_RACE_STATE_2,
+    /* 3 */ WEEKEVENTREG_HORSE_RACE_STATE_3,
+    /* 4 */ WEEKEVENTREG_HORSE_RACE_STATE_4,
+    /* 7 */ WEEKEVENTREG_HORSE_RACE_STATE_MAX = 7
+} WeekEventRegHorseRaceState;
 
-#define GET_WEEKEVENTREG_RACE_FLAGS (WEEKEVENTREG(92) & WEEKEVENTREG_RACE_FLAGS)
+#define GET_WEEKEVENTREG_HORSE_RACE_STATE (WEEKEVENTREG(92) & WEEKEVENTREG_HORSE_RACE_STATE_MAX)
 
-#define SET_WEEKEVENTREG_RACE_FLAGS(flag)             \
-    WEEKEVENTREG(92) &= (u8)~WEEKEVENTREG_RACE_FLAGS; \
-    WEEKEVENTREG(92) = WEEKEVENTREG(92) | (u8)((WEEKEVENTREG(92) & ~WEEKEVENTREG_RACE_FLAGS) | (flag))
+#define SET_WEEKEVENTREG_HORSE_RACE_STATE(state)                                                                       \
+    {                                                                                                                  \
+        WEEKEVENTREG(92) &= (u8)~WEEKEVENTREG_HORSE_RACE_STATE_MAX;                                                    \
+        WEEKEVENTREG(92) = WEEKEVENTREG(92) | (u8)((WEEKEVENTREG(92) & ~WEEKEVENTREG_HORSE_RACE_STATE_MAX) | (state)); \
+    }                                                                                                                  \
+    (void)0
+
+#define GET_WEEKEVENTREG_DOG_RACE_TEXT(index, baseTextId)                         \
+    (index % 2) ? (baseTextId + (((WEEKEVENTREG(42 + (index / 2))) & 0xF0) >> 4)) \
+                : (baseTextId + ((WEEKEVENTREG(42 + (index / 2))) & 0x0F));
+
+#define SET_WEEKEVENTREG_DOG_RACE_TEXT_OFFSETS(index, packedOffsets)                    \
+    {                                                                                   \
+        WEEKEVENTREG(42 + index) = ((void)0, WEEKEVENTREG(42 + index)) | packedOffsets; \
+    }
+
+#define CLEAR_WEEKEVENTREG_DOG_RACE_TEXT_OFFSETS(index) \
+    {                                                   \
+        WEEKEVENTREG(42 + index) = 0;                   \
+    }
 
 /**
  * gSaveContext.eventInf
  */
 
-#define EVENTINF_00 0x00
-#define EVENTINF_01 0x01
-#define EVENTINF_02 0x02
-#define EVENTINF_03 0x03
-#define EVENTINF_04 0x04
-#define EVENTINF_05 0x05
-#define EVENTINF_06 0x06
-#define EVENTINF_07 0x07
+// gSaveContext.eventInf[0] is used to dog race information
+// #define EVENTINF_00 0x00
+// #define EVENTINF_01 0x01
+// #define EVENTINF_02 0x02
+// #define EVENTINF_03 0x03
+// #define EVENTINF_04 0x04
+// #define EVENTINF_05 0x05
+// #define EVENTINF_06 0x06
+// #define EVENTINF_07 0x07
+
 #define EVENTINF_10 0x10
 #define EVENTINF_11 0x11
 #define EVENTINF_12 0x12
@@ -1458,11 +1475,15 @@ typedef enum SunsSongState {
 #define EVENTINF_32 0x32
 
 #define EVENTINF_33 0x33
+
+// Related to Deku playground minigame
 #define EVENTINF_34 0x34
 #define EVENTINF_35 0x35
 #define EVENTINF_36 0x36
 #define EVENTINF_37 0x37
 #define EVENTINF_40 0x40
+
+// Related to swamp boat (non-minigame)?
 #define EVENTINF_41 0x41
 #define EVENTINF_42 0x42
 #define EVENTINF_43 0x43
@@ -1503,6 +1524,25 @@ typedef enum SunsSongState {
 #define CLEAR_EVENTINF(flag) (gSaveContext.eventInf[(flag) >> 4] &= (u8)~(1 << ((flag) & 0xF)))
 #define CLEAR_EVENTINF_ALT(flag) (gSaveContext.eventInf[(flag) >> 4] &= ~(1 << ((flag) & 0xF)))
 
+typedef enum {
+    /* 0 */ EVENTINF_DOG_RACE_STATE_NOT_STARTED,
+    /* 2 */ EVENTINF_DOG_RACE_STATE_STARTED = 2,
+    /* 3 */ EVENTINF_DOG_RACE_STATE_ENDED,
+    /* 7 */ EVENTINF_DOG_RACE_STATE_MAX = 7
+} EventInfDogRaceState;
+
+#define GET_EVENTINF_DOG_RACE_STATE (gSaveContext.eventInf[0] & EVENTINF_DOG_RACE_STATE_MAX)
+#define SET_EVENTINF_DOG_RACE_STATE(state) \
+    (gSaveContext.eventInf[0] = ((gSaveContext.eventInf[0] & (u8)~EVENTINF_DOG_RACE_STATE_MAX) | (state)))
+
+#define GET_EVENTINF_DOG_RACE_SELECTED_DOG_INDEX ((gSaveContext.eventInf[0] & (u8)~EVENTINF_DOG_RACE_STATE_MAX) >> 3)
+#define SET_EVENTINF_DOG_RACE_SELECTED_DOG_INDEX(selectedDogIndex) \
+    (gSaveContext.eventInf[0] = (gSaveContext.eventInf[0] & EVENTINF_DOG_RACE_STATE_MAX) | (selectedDogIndex << 3))
+
+// This is exactly the same as the selected dog index; they never need both of them at the same time.
+#define GET_EVENTINF_DOG_RACE_RACE_STANDING ((gSaveContext.eventInf[0] & (u8)~EVENTINF_DOG_RACE_STATE_MAX) >> 3)
+#define SET_EVENTINF_DOG_RACE_RACE_STANDING(raceStanding) \
+    (gSaveContext.eventInf[0] = (gSaveContext.eventInf[0] & EVENTINF_DOG_RACE_STATE_MAX) | (raceStanding << 3))
 
 typedef enum {
     /* 0 */ DUNGEON_INDEX_WOODFALL_TEMPLE,
@@ -1518,7 +1558,7 @@ void Sram_IncrementDay(void);
 u16 Sram_CalcChecksum(void* data, size_t count);
 void Sram_InitNewSave(void);
 void Sram_InitDebugSave(void);
-void func_80144A94(SramContext* sramCtx);
+void Sram_ResetSaveFromMoonCrash(SramContext* sramCtx);
 void Sram_OpenSave(struct FileSelectState* fileSelect, SramContext* sramCtx);
 void func_8014546C(SramContext* sramCtx);
 void func_801457CC(struct FileSelectState* fileSelect, SramContext* sramCtx);

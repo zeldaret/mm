@@ -130,7 +130,8 @@ s32 EnRuppecrow_UpdateCollision(EnRuppecrow* this, PlayState* play) {
     this->collider.elements->dim.worldSphere.center.z = this->actor.world.pos.z;
 
     CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 12.0f, 25.0f, 50.0f, 0x07);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 12.0f, 25.0f, 50.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_2 | UPDBGCHECKINFO_FLAG_4);
 
     return true;
 }
@@ -162,7 +163,7 @@ s32 EnRuppecrow_ReachedPointClockwise(EnRuppecrow* this, Path* path, s32 pointIn
         }
     }
 
-    func_8017B7F8(&point, RADF_TO_BINANG(func_80086B30(diffX, diffZ)), &px, &pz, &d);
+    func_8017B7F8(&point, RAD_TO_BINANG(func_80086B30(diffX, diffZ)), &px, &pz, &d);
     if (((this->actor.world.pos.x * px) + (pz * this->actor.world.pos.z) + d) > 0.0f) {
         reached = true;
     }
@@ -197,7 +198,7 @@ s32 EnRuppecrow_ReachedPointCounterClockwise(EnRuppecrow* this, Path* path, s32 
         }
     }
 
-    func_8017B7F8(&point, RADF_TO_BINANG(func_80086B30(diffX, diffZ)), &px, &pz, &d);
+    func_8017B7F8(&point, RAD_TO_BINANG(func_80086B30(diffX, diffZ)), &px, &pz, &d);
     if (((this->actor.world.pos.x * px) + (pz * this->actor.world.pos.z) + d) > 0.0f) {
         reached = true;
     }
@@ -282,7 +283,7 @@ void EnRuppecrow_SpawnRupee(EnRuppecrow* this, PlayState* play) {
             this->rupees[rupeeIndex] = rupee;
             this->rupees[rupeeIndex]->actor.gravity = -5.0f;
             this->rupees[rupeeIndex]->actor.velocity.y = 0.0f;
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_RUPY_FALL);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_RUPY_FALL);
             rupee = this->rupees[rupeeIndex];
             rupee->unk152 = 60;
             this->rupees[rupeeIndex]->actor.flags |= ACTOR_FLAG_10;
@@ -293,7 +294,7 @@ void EnRuppecrow_SpawnRupee(EnRuppecrow* this, PlayState* play) {
             this->rupees[rupeeIndex] = rupee;
             this->rupees[rupeeIndex]->actor.gravity = -5.0f;
             this->rupees[rupeeIndex]->actor.velocity.y = 0.0f;
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_RUPY_FALL);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_RUPY_FALL);
             rupee = this->rupees[rupeeIndex];
             rupee->unk152 = 60;
             this->rupees[rupeeIndex]->actor.flags |= ACTOR_FLAG_10;
@@ -305,7 +306,7 @@ void EnRuppecrow_SpawnRupee(EnRuppecrow* this, PlayState* play) {
         this->rupees[rupeeIndex] = rupee;
         this->rupees[rupeeIndex]->actor.gravity = -5.0f;
         this->rupees[rupeeIndex]->actor.velocity.y = 0.0f;
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_RUPY_FALL);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_RUPY_FALL);
         rupee = this->rupees[rupeeIndex];
         rupee->unk152 = 60;
         this->rupees[rupeeIndex]->actor.flags |= ACTOR_FLAG_10;
@@ -316,7 +317,7 @@ void EnRuppecrow_SpawnRupee(EnRuppecrow* this, PlayState* play) {
         this->rupees[rupeeIndex] = rupee;
         this->rupees[rupeeIndex]->actor.gravity = -5.0f;
         this->rupees[rupeeIndex]->actor.velocity.y = 0.0f;
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_RUPY_FALL);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_RUPY_FALL);
         rupee = this->rupees[rupeeIndex];
         rupee->unk152 = 60;
         this->rupees[rupeeIndex]->actor.flags |= ACTOR_FLAG_10;
@@ -329,7 +330,7 @@ void EnRuppecrow_UpdatePosition(EnRuppecrow* this, PlayState* play) {
     Vec3s nextPointDirection;
 
     EnRuppecrow_GetPointDirection(this->path, this->currentPoint, &this->actor.world, &nextPointDirection);
-    if (this->actor.bgCheckFlags & 0x8) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
         nextPointDirection.y = this->actor.wallYaw;
     }
 
@@ -438,18 +439,18 @@ void EnRuppecrow_UpdateSpeed(EnRuppecrow* this, PlayState* play) {
 void EnRuppecrow_HandleDeath(EnRuppecrow* this) {
     f32 scale;
 
-    this->actor.speedXZ *= Math_CosS(this->actor.world.rot.x);
+    this->actor.speed *= Math_CosS(this->actor.world.rot.x);
     this->actor.velocity.y = 0.0f;
     Animation_Change(&this->skelAnime, &gGuayFlyAnim, 0.4f, 0.0f, 0.0f, ANIMMODE_LOOP_INTERP, -3.0f);
 
     this->actor.shape.yOffset = 0.0f;
     this->actor.targetArrowOffset = 0.0f;
-    this->actor.bgCheckFlags &= ~0x1;
+    this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND;
 
     scale = this->actor.scale.x * 100.0f;
     this->actor.world.pos.y += 20.0f * scale;
 
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KAICHO_DEAD);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_KAICHO_DEAD);
 
     this->unk_2CC = 0.5f;
     if (this->actor.colChkInfo.damageEffect == 0x3) {
@@ -464,9 +465,9 @@ void EnRuppecrow_HandleDeath(EnRuppecrow* this) {
         this->unk_2C8 = 5.0f;
     }
 
-    Actor_SetColorFilter(&this->actor, 0x4000, 0xFF, 0x0, 0x28);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 40);
     if (this->actor.flags & ACTOR_FLAG_8000) {
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
     }
 
     this->collider.base.acFlags &= ~AC_ON;
@@ -492,7 +493,7 @@ void EnRuppecrow_HandleSong(EnRuppecrow* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     EnRuppecrow_UpdatePosition(this, play);
-    if (this->actor.xzDistToPlayer < 1000.0f && EnRuppecrow_CheckPlayedMatchingSong(play)) {
+    if ((this->actor.xzDistToPlayer < 1000.0f) && EnRuppecrow_CheckPlayedMatchingSong(play)) {
         // If Link is in front, the guay will turn around and go the other way
         if (Actor_IsFacingPlayer(&this->actor, 0x4000)) {
             this->isGoingCounterClockwise |= 1;
@@ -503,14 +504,14 @@ void EnRuppecrow_HandleSong(EnRuppecrow* this, PlayState* play) {
             }
         }
 
-        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+        CutsceneManager_Queue(this->actor.csId);
         this->actionFunc = EnRuppecrow_HandleSongCutscene;
     }
 
     if (player->stateFlags2 & PLAYER_STATE2_8000000) {
-        Math_ApproachF(&this->actor.speedXZ, 0.0f, 0.1f, 1.0f);
+        Math_ApproachF(&this->actor.speed, 0.0f, 0.1f, 1.0f);
     } else {
-        Math_ApproachF(&this->actor.speedXZ, 6.0f, 0.1f, 0.1f);
+        Math_ApproachF(&this->actor.speed, 6.0f, 0.1f, 0.1f);
     }
 
     Actor_MoveWithoutGravity(&this->actor);
@@ -518,19 +519,19 @@ void EnRuppecrow_HandleSong(EnRuppecrow* this, PlayState* play) {
     this->actor.shape.yOffset = Math_SinS(this->yOffset) * 500.0f;
 
     if ((play->state.frames % 43) == 0) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KAICHO_CRY);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_KAICHO_CRY);
     }
 }
 
 void EnRuppecrow_HandleSongCutscene(EnRuppecrow* this, PlayState* play) {
     EnRuppecrow_UpdatePosition(this, play);
 
-    if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
-        ActorCutscene_Start(this->actor.cutscene, &this->actor);
+    if (CutsceneManager_IsNext(this->actor.csId)) {
+        CutsceneManager_Start(this->actor.csId, &this->actor);
         EnRuppecrow_UpdateSpeed(this, play);
         this->actionFunc = EnRuppecrow_FlyWhileDroppingRupees;
     } else {
-        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+        CutsceneManager_Queue(this->actor.csId);
     }
 
     Actor_MoveWithoutGravity(&this->actor);
@@ -546,16 +547,16 @@ void EnRuppecrow_FlyWhileDroppingRupees(EnRuppecrow* this, PlayState* play) {
         //! @bug: Source of the "Termina Field Guay Glitch"; guay will no longer fall if killed after this point
         this->actor.gravity = 0.0f;
 
-        Math_ApproachF(&this->actor.speedXZ, 6.0f, 0.2f, 0.5f);
+        Math_ApproachF(&this->actor.speed, 6.0f, 0.2f, 0.5f);
         Math_ApproachF(&this->actor.velocity.y, 3.0f, 0.2f, 0.5f);
 
         this->actionFunc = EnRuppecrow_FlyToDespawn;
         this->skelAnime.playSpeed = 1.0f;
         Actor_MoveWithGravity(&this->actor);
     } else {
-        if (ActorCutscene_GetCurrentIndex() != this->actor.cutscene) {
+        if (CutsceneManager_GetCurrentCsId() != this->actor.csId) {
             EnRuppecrow_UpdateSpeed(this, play);
-            Math_ApproachF(&this->actor.speedXZ, this->speedModifier, 0.2f, 0.5f);
+            Math_ApproachF(&this->actor.speed, this->speedModifier, 0.2f, 0.5f);
         }
 
         Actor_MoveWithoutGravity(&this->actor);
@@ -563,17 +564,17 @@ void EnRuppecrow_FlyWhileDroppingRupees(EnRuppecrow* this, PlayState* play) {
         this->actor.shape.yOffset = Math_SinS(this->yOffset) * 500.0f;
 
         if ((play->state.frames % 43) == 0) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KAICHO_CRY);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_KAICHO_CRY);
         }
     }
 }
 
 void EnRuppecrow_FlyToDespawn(EnRuppecrow* this, PlayState* play) {
-    if (this->actor.bgCheckFlags & 0x8) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
         this->actor.world.rot.y *= -0x1;
     }
 
-    Math_ApproachF(&this->actor.speedXZ, this->speedModifier, 0.1f, 0.1f);
+    Math_ApproachF(&this->actor.speed, this->speedModifier, 0.1f, 0.1f);
     Math_ApproachF(&this->actor.velocity.y, 3.0f, 0.2f, 0.5f);
 
     if (this->actor.world.pos.y > 1000.0f || this->actor.xzDistToPlayer > 2000.0f) {
@@ -585,13 +586,13 @@ void EnRuppecrow_FlyToDespawn(EnRuppecrow* this, PlayState* play) {
         Actor_MoveWithGravity(&this->actor);
 
         if ((play->state.frames % 43) == 0) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KAICHO_CRY);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_KAICHO_CRY);
         }
     }
 }
 
 void EnRuppecrow_FallToDespawn(EnRuppecrow* this, PlayState* play) {
-    Math_StepToF(&this->actor.speedXZ, 0.0f, 0.5f);
+    Math_StepToF(&this->actor.speed, 0.0f, 0.5f);
 
     if (this->currentEffect != ENRUPPECROW_EFFECT_ICE) {
         Math_StepToF(&this->unk_2C8, 0.0f, 0.05f);
@@ -608,7 +609,7 @@ void EnRuppecrow_FallToDespawn(EnRuppecrow* this, PlayState* play) {
             this->actor.shape.rot.z += 0x1780;
         }
 
-        if (this->actor.bgCheckFlags & 0x1 || this->actor.floorHeight == BGCHECK_Y_MIN) {
+        if ((this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) || (this->actor.floorHeight == BGCHECK_Y_MIN)) {
             EnRuppecrow_ShatterIce(this, play);
             func_800B3030(play, &this->actor.world.pos, &gZeroVec3f, &gZeroVec3f, (this->actor.scale.x * 10000.0f), 0x0,
                           0x0);

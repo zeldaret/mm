@@ -19,7 +19,7 @@ void ArrowFire_Draw(Actor* thisx, PlayState* play);
 void FireArrow_ChargeAndWait(ArrowFire* this, PlayState* play);
 void FireArrow_Fly(ArrowFire* this, PlayState* play);
 
-#include "overlays/ovl_Arrow_fire/ovl_Arrow_Fire.c"
+#include "overlays/ovl_Arrow_Fire/ovl_Arrow_Fire.c"
 
 ActorInit Arrow_Fire_InitVars = {
     ACTOR_ARROW_FIRE,
@@ -186,7 +186,7 @@ void FireArrow_Fly(ArrowFire* this, PlayState* play) {
 
     FireArrow_Lerp(&this->firedPos, &this->actor.world.pos, 0.05f);
     if (arrow->unk_261 & 1) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_EXPLOSION_FRAME);
+        Actor_PlaySfx(&this->actor, NA_SE_IT_EXPLOSION_FRAME);
         ArrowFire_SetupAction(this, FireArrow_Hit);
         this->timer = 32;
         this->alpha = 255;

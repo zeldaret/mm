@@ -174,7 +174,7 @@ void EnMaYto_Init(Actor* thisx, PlayState* play) {
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &sColChkInfoInit2);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
 
     if (EnMaYto_TryFindRomani(this, play) == 1) {
         EnMaYto_SetupKeepLookingForRomani(this);
@@ -944,7 +944,7 @@ void EnMaYto_AfterMilkRunChooseNextDialogue(EnMaYto* this, PlayState* play) {
                 break;
 
             case 0x33C2:
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 EnMaYto_SetupPostMilkRunGiveReward(this);
                 EnMaYto_PostMilkRunGiveReward(this, play);
                 break;
@@ -960,10 +960,10 @@ void EnMaYto_PostMilkRunGiveReward(EnMaYto* this, PlayState* play) {
     if (Actor_HasParent(&this->actor, play)) {
         EnMaYto_SetupPostMilkRunExplainReward(this);
     } else if (INV_CONTENT(ITEM_MASK_ROMANI) == ITEM_MASK_ROMANI) {
-        Actor_PickUp(&this->actor, play, GI_RUPEE_HUGE, 500.0f, 100.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_RUPEE_HUGE, 500.0f, 100.0f);
         this->unk310 = 2;
     } else {
-        Actor_PickUp(&this->actor, play, GI_MASK_ROMANI, 500.0f, 100.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_MASK_ROMANI, 500.0f, 100.0f);
         this->unk310 = 1;
     }
 }
@@ -1005,14 +1005,14 @@ void EnMaYto_SetupBeginWarmFuzzyFeelingCs(EnMaYto* this) {
 }
 
 void EnMaYto_BeginWarmFuzzyFeelingCs(EnMaYto* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
-        ActorCutscene_Start(this->actor.cutscene, &this->actor);
+    if (CutsceneManager_IsNext(this->actor.csId)) {
+        CutsceneManager_Start(this->actor.csId, &this->actor);
         EnMaYto_SetupWarmFuzzyFeelingCs(this);
     } else {
-        if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-            ActorCutscene_Stop(0x7C);
+        if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+            CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
         }
-        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+        CutsceneManager_Queue(this->actor.csId);
     }
 }
 
@@ -1021,20 +1021,20 @@ void EnMaYto_SetupWarmFuzzyFeelingCs(EnMaYto* this) {
     this->actionFunc = EnMaYto_WarmFuzzyFeelingCs;
 }
 
-static u16 D_80B915F0 = 99;
+static u16 sCueId = 99;
 
 void EnMaYto_WarmFuzzyFeelingCs(EnMaYto* this, PlayState* play) {
-    if (Cutscene_CheckActorAction(play, 556)) {
-        s32 csActionIndex = Cutscene_GetActorActionIndex(play, 556);
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_556)) {
+        s32 cueChannel = Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_556);
 
-        if (play->csCtx.frames == play->csCtx.actorActions[csActionIndex]->startFrame) {
-            u16 action = play->csCtx.actorActions[csActionIndex]->action;
+        if (play->csCtx.curFrame == play->csCtx.actorCues[cueChannel]->startFrame) {
+            u16 cueId = play->csCtx.actorCues[cueChannel]->id;
 
             if (1) {}
 
-            if (action != D_80B915F0) {
-                D_80B915F0 = action;
-                switch (action) {
+            if (cueId != sCueId) {
+                sCueId = cueId;
+                switch (cueId) {
                     case 1:
                         EnMaYto_ChangeAnim(this, 0);
                         break;
@@ -1051,13 +1051,13 @@ void EnMaYto_WarmFuzzyFeelingCs(EnMaYto* this, PlayState* play) {
             }
         }
 
-        Cutscene_ActorTranslateAndYaw(&this->actor, play, csActionIndex);
-        if (D_80B915F0 == 2 && this->skelAnime.animation == &gCremiaHugStartAnim &&
+        Cutscene_ActorTranslateAndYaw(&this->actor, play, cueChannel);
+        if (sCueId == 2 && this->skelAnime.animation == &gCremiaHugStartAnim &&
             Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
             EnMaYto_ChangeAnim(this, 20);
         }
     } else {
-        D_80B915F0 = 99;
+        sCueId = 99;
     }
 }
 
@@ -1068,8 +1068,8 @@ void EnMaYto_SetupPostMilkRunWaitDialogueEnd(EnMaYto* this) {
 void EnMaYto_PostMilkRunWaitDialogueEnd(EnMaYto* this, PlayState* play) {
     if (Message_GetState(&play->msgCtx) == TEXT_STATE_DONE || Message_GetState(&play->msgCtx) == TEXT_STATE_5) {
         if (Message_ShouldAdvance(play) && Message_GetState(&play->msgCtx) == TEXT_STATE_5) {
-            func_800B7298(play, &this->actor, PLAYER_CSMODE_7);
-            func_801477B4(play);
+            func_800B7298(play, &this->actor, PLAYER_CSMODE_WAIT);
+            Message_CloseTextbox(play);
         }
     }
 
@@ -1091,7 +1091,7 @@ void EnMaYto_PostMilkRunEnd(EnMaYto* this, PlayState* play) {
     gSaveContext.nextCutsceneIndex = 0;
     play->transitionTrigger = TRANS_TRIGGER_START;
     play->transitionType = TRANS_TYPE_80;
-    gSaveContext.nextTransitionType = TRANS_TYPE_03;
+    gSaveContext.nextTransitionType = TRANS_TYPE_FADE_WHITE;
 }
 
 void EnMaYto_DefaultStartDialogue(EnMaYto* this, PlayState* play) {
@@ -1268,29 +1268,29 @@ void EnMaYto_ChangeAnim(EnMaYto* this, s32 animIndex) {
 
 void func_80B90C78(EnMaYto* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    s16 flag;
+    s16 trackingMode;
 
     SkelAnime_Update(&this->skelAnime);
-    flag = this->unk31E == 2 ? true : false;
+    trackingMode = (this->unk31E == 2) ? NPC_TRACKING_NONE : NPC_TRACKING_PLAYER_AUTO_TURN;
 
     if (this->unk31E == 0) {
-        this->unk_1D8.unk_18 = player->actor.world.pos;
-        this->unk_1D8.unk_14 = 0.0f;
+        this->interactInfo.trackPos = player->actor.world.pos;
+        this->interactInfo.yOffset = 0.0f;
     } else if (this->unk31E == 1) {
-        Math_Vec3f_StepTo(&this->unk_1D8.unk_18, &this->actor.child->world.pos, 8.0f);
-        this->unk_1D8.unk_14 = 0.0f;
+        Math_Vec3f_StepTo(&this->interactInfo.trackPos, &this->actor.child->world.pos, 8.0f);
+        this->interactInfo.yOffset = 0.0f;
     }
 
     if (this->unk320 == 0) {
         if (this->actionFunc == EnMaYto_WarmFuzzyFeelingCs) {
-            this->unk_1D8.unk_08.y = 0;
-            this->unk_1D8.unk_08.x = 0;
+            this->interactInfo.headRot.y = 0;
+            this->interactInfo.headRot.x = 0;
         } else {
-            func_800BD888(&this->actor, &this->unk_1D8, 0xD, flag);
+            Npc_TrackPoint(&this->actor, &this->interactInfo, 13, trackingMode);
         }
     } else {
-        Math_SmoothStepToS(&this->unk_1D8.unk_08.y, 0, 3, 0x71C, 0xB6);
-        Math_SmoothStepToS(&this->unk_1D8.unk_08.x, 0x18E3, 5, 0x71C, 0xB6);
+        Math_SmoothStepToS(&this->interactInfo.headRot.y, 0, 3, 0x71C, 0xB6);
+        Math_SmoothStepToS(&this->interactInfo.headRot.x, 0x18E3, 5, 0x71C, 0xB6);
     }
 
     EnMaYto_UpdateEyes(this);
@@ -1423,26 +1423,26 @@ void EnMaYto_Update(Actor* thisx, PlayState* play) {
 
 s32 EnMaYto_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnMaYto* this = THIS;
-    Vec3s sp4;
+    Vec3s limbRot;
 
     if (limbIndex == CREMIA_LIMB_HEAD) {
-        sp4 = this->unk_1D8.unk_08;
+        limbRot = this->interactInfo.headRot;
 
-        rot->x += sp4.y;
-        rot->z += sp4.x;
+        rot->x += limbRot.y;
+        rot->z += limbRot.x;
     } else if (limbIndex == CREMIA_LIMB_TORSO) {
-        if (this->skelAnime.animation != &gCremiaSittingPetCowAnim &&
-            this->skelAnime.animation != &gCremiaSittingLookDownAnim) {
-            sp4 = this->unk_1D8.unk_0E;
+        if ((this->skelAnime.animation != &gCremiaSittingPetCowAnim) &&
+            (this->skelAnime.animation != &gCremiaSittingLookDownAnim)) {
+            limbRot = this->interactInfo.torsoRot;
 
-            rot->x += sp4.y;
-            if (this->skelAnime.animation == &gCremiaIdleAnim || this->skelAnime.animation == &gCremiaSittingAnim ||
-                this->skelAnime.animation == &gCremiaSittingLookDownAnim) {
-                rot->z += sp4.x;
+            rot->x += limbRot.y;
+            if ((this->skelAnime.animation == &gCremiaIdleAnim) || (this->skelAnime.animation == &gCremiaSittingAnim) ||
+                (this->skelAnime.animation == &gCremiaSittingLookDownAnim)) {
+                rot->z += limbRot.x;
             }
         }
     }
-    return 0;
+    return false;
 }
 
 void EnMaYto_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {

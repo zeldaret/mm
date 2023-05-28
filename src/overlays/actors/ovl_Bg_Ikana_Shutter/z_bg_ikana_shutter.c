@@ -106,12 +106,12 @@ void func_80BD5878(BgIkanaShutter* this) {
 }
 
 void func_80BD5894(BgIkanaShutter* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
+    if (CutsceneManager_IsNext(this->dyna.actor.csId)) {
+        CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
         func_80BD58F0(this);
         return;
     }
-    ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+    CutsceneManager_Queue(this->dyna.actor.csId);
 }
 
 void func_80BD58F0(BgIkanaShutter* this) {
@@ -151,10 +151,10 @@ void func_80BD5A18(BgIkanaShutter* this, PlayState* play) {
     this->dyna.actor.velocity.y *= 0.978f;
     this->dyna.actor.world.pos.y += this->dyna.actor.velocity.y;
     if (this->dyna.actor.world.pos.y <= this->dyna.actor.home.pos.y) {
-        quakeIndex = Quake_Add(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
+        quakeIndex = Quake_Request(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
         Quake_SetSpeed(quakeIndex, 21536);
-        Quake_SetQuakeValues(quakeIndex, 4, 0, 0, 0);
-        Quake_SetCountdown(quakeIndex, 12);
+        Quake_SetPerturbations(quakeIndex, 4, 0, 0, 0);
+        Quake_SetDuration(quakeIndex, 12);
 
         func_80BD5828(this);
     }
@@ -177,13 +177,13 @@ void func_80BD5B44(BgIkanaShutter* this) {
 }
 
 void func_80BD5B60(BgIkanaShutter* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
+    if (CutsceneManager_IsNext(this->dyna.actor.csId)) {
+        CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
         Flags_SetClear(play, this->dyna.actor.room);
         func_80BD5BC4(this);
         return;
     }
-    ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+    CutsceneManager_Queue(this->dyna.actor.csId);
 }
 
 void func_80BD5BC4(BgIkanaShutter* this) {

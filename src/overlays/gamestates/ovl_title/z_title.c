@@ -111,7 +111,7 @@ void ConsoleLogo_Draw(GameState* thisx) {
                             1 << 10, 1 << 10);
     }
 
-    func_800FC444(this->state.gfxCtx, 0, 0, 0, this->coverAlpha, 2);
+    Environment_FillScreen(this->state.gfxCtx, 0, 0, 0, this->coverAlpha, 2);
 
     sTitleRotation += 300;
 
@@ -132,7 +132,7 @@ void ConsoleLogo_Main(GameState* thisx) {
     if (this->exit) {
         gSaveContext.seqId = (u8)NA_BGM_DISABLED;
         gSaveContext.ambienceId = AMBIENCE_ID_DISABLED;
-        gSaveContext.gameMode = 1;
+        gSaveContext.gameMode = GAMEMODE_TITLE_SCREEN;
 
         STOP_GAMESTATE(&this->state);
         SET_NEXT_GAMESTATE(&this->state, TitleSetup_Init, sizeof(TitleSetupState));
@@ -153,7 +153,7 @@ void ConsoleLogo_Init(GameState* thisx) {
     ConsoleLogoState* this = (ConsoleLogoState*)thisx;
     uintptr_t segmentSize = SEGMENT_ROM_SIZE(nintendo_rogo_static);
 
-    this->staticSegment = THA_AllocEndAlign16(&this->state.heap, segmentSize);
+    this->staticSegment = THA_AllocTailAlign16(&this->state.heap, segmentSize);
     DmaMgr_SendRequest0(this->staticSegment, SEGMENT_ROM_START(nintendo_rogo_static), segmentSize);
 
     Game_SetFramerateDivisor(&this->state, 1);
@@ -165,7 +165,7 @@ void ConsoleLogo_Init(GameState* thisx) {
     this->state.destroy = ConsoleLogo_Destroy;
     this->exit = false;
 
-    if (!(Padmgr_GetControllerBitmask() & 1)) {
+    if (!(PadMgr_GetValidControllersMask() & 1)) {
         gSaveContext.fileNum = 0xFEDC;
     } else {
         gSaveContext.fileNum = 0xFF;

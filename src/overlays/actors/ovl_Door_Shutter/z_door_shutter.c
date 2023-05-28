@@ -309,20 +309,20 @@ s32 func_808A0E28(DoorShutter* this, PlayState* play) {
 
 void func_808A0F88(DoorShutter* this, PlayState* play) {
     if (Flags_GetClear(play, this->actor.room) || Flags_GetClearTemp(play, this->actor.room)) {
-        this->unk_160 = this->actor.cutscene;
+        this->csId = this->actor.csId;
         if (this->doorType == 7) {
-            if (this->unk_160 != -1) {
-                this->unk_160 = ActorCutscene_GetAdditionalCutscene(this->unk_160);
+            if (this->csId != CS_ID_NONE) {
+                this->csId = CutsceneManager_GetAdditionalCsId(this->csId);
             }
         }
 
-        if (ActorCutscene_GetCanPlayNext(this->unk_160)) {
-            ActorCutscene_StartAndSetUnkLinkFields(this->unk_160, &this->actor);
+        if (CutsceneManager_IsNext(this->csId)) {
+            CutsceneManager_StartWithPlayerCs(this->csId, &this->actor);
             Flags_SetClear(play, this->actor.room);
             DoorShutter_SetupAction(this, func_808A1784);
             this->unk_167 = -1;
         } else {
-            ActorCutscene_SetIntentToPlay(this->unk_160);
+            CutsceneManager_Queue(this->csId);
         }
     } else if (func_808A0E28(this, play)) {
         Player* player = GET_PLAYER(play);
@@ -344,10 +344,10 @@ void func_808A1090(DoorShutter* this, PlayState* play) {
         if (this->unk_166 != 0) {
             Flags_SetSwitch(play, DOORSHUTTER_GET_7F(&this->actor));
             if (this->doorType != 5) {
-                gSaveContext.save.inventory.dungeonKeys[gSaveContext.mapIndex]--;
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CHAIN_KEY_UNLOCK);
+                gSaveContext.save.saveInfo.inventory.dungeonKeys[gSaveContext.mapIndex]--;
+                Actor_PlaySfx(&this->actor, NA_SE_EV_CHAIN_KEY_UNLOCK);
             } else {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CHAIN_KEY_UNLOCK_B);
+                Actor_PlaySfx(&this->actor, NA_SE_EV_CHAIN_KEY_UNLOCK_B);
             }
         }
     } else {
@@ -367,7 +367,7 @@ void func_808A1090(DoorShutter* this, PlayState* play) {
             }
 
             if (this->doorType == 6) {
-                if (gSaveContext.save.playerData.healthCapacity < (DOORSHUTTER_GET_1F(&this->actor) * 0x10)) {
+                if (gSaveContext.save.saveInfo.playerData.healthCapacity < (DOORSHUTTER_GET_1F(&this->actor) * 0x10)) {
                     player->doorType = PLAYER_DOORTYPE_TALKING;
                     this->actor.textId = 0x14FC;
                 }
@@ -415,7 +415,7 @@ s32 func_808A1340(DoorShutter* this, PlayState* play) {
     if (this->actor.velocity.y == 0.0f) {
         func_808A1288(this, play);
         if (this->unk_163 != 7) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SLIDE_DOOR_OPEN);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_SLIDE_DOOR_OPEN);
         }
     }
 
@@ -448,12 +448,12 @@ s32 func_808A1478(DoorShutter* this, PlayState* play, f32 arg2) {
 
     if (temp == this->unk_168) {
         if (arg2 == 1.0f) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_METALDOOR_CLOSE);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_METALDOOR_CLOSE);
         } else {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_METALDOOR_OPEN);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_METALDOOR_OPEN);
         }
 
-        if ((this->unk_160 != -1) && (ActorCutscene_GetCurrentIndex() == this->unk_160)) {
+        if ((this->csId != CS_ID_NONE) && (CutsceneManager_GetCurrentCsId() == this->csId)) {
             func_800B724C(play, &this->actor, PLAYER_CSMODE_1);
         }
     }
@@ -467,13 +467,13 @@ s32 func_808A1478(DoorShutter* this, PlayState* play, f32 arg2) {
 void func_808A1548(DoorShutter* this, PlayState* play) {
     if (func_808A1478(this, play, 1.0f)) {
         if (Flags_GetSwitch(play, DOORSHUTTER_GET_7F(&this->actor))) {
-            this->unk_160 = this->actor.cutscene;
-            if (ActorCutscene_GetCanPlayNext(this->unk_160)) {
-                ActorCutscene_StartAndSetUnkLinkFields(this->unk_160, &this->actor);
+            this->csId = this->actor.csId;
+            if (CutsceneManager_IsNext(this->csId)) {
+                CutsceneManager_StartWithPlayerCs(this->csId, &this->actor);
                 DoorShutter_SetupAction(this, func_808A1784);
                 this->unk_167 = -1;
             } else {
-                ActorCutscene_SetIntentToPlay(this->unk_160);
+                CutsceneManager_Queue(this->csId);
             }
         } else if (func_808A0E28(this, play)) {
             Player* player = GET_PLAYER(play);
@@ -497,7 +497,7 @@ void func_808A1618(DoorShutter* this, PlayState* play) {
 void func_808A1684(DoorShutter* this, PlayState* play) {
     f32 phi_f0;
 
-    if ((DECR(this->unk_166) == 0) && (play->roomCtx.unk31 == 0) && func_808A1340(this, play)) {
+    if ((DECR(this->unk_166) == 0) && (play->roomCtx.status == 0) && func_808A1340(this, play)) {
         if (this->doorType == 5) {
             phi_f0 = 20.0f;
         } else {
@@ -511,7 +511,7 @@ void func_808A1684(DoorShutter* this, PlayState* play) {
                 if (DoorShutter_SetupDoor(this, play)) {
                     this->actor.velocity.y = 30.0f;
                 }
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SLIDE_DOOR_CLOSE);
+                Actor_PlaySfx(&this->actor, NA_SE_EV_SLIDE_DOOR_CLOSE);
             }
             DoorShutter_SetupAction(this, func_808A1B48);
         }
@@ -520,7 +520,7 @@ void func_808A1684(DoorShutter* this, PlayState* play) {
 
 void func_808A1784(DoorShutter* this, PlayState* play) {
     if (this->unk_167 != 0) {
-        if (func_800F22C4(this->unk_160, &this->actor)) {
+        if (func_800F22C4(this->csId, &this->actor) != 0) {
             if (this->unk_167 < 0) {
                 if ((play->state.frames % 2) != 0) {
                     this->unk_167++;
@@ -568,9 +568,9 @@ void func_808A1884(DoorShutter* this, PlayState* play) {
 
     if (DoorShutter_SetupDoor(this, play) && !(player->stateFlags1 & PLAYER_STATE1_800)) {
         DoorShutter_SetupAction(this, func_808A1C50);
-        if (ActorCutscene_GetCurrentIndex() == 0x7D) {
+        if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_DOOR) {
             func_801226E0(play, ((void)0, gSaveContext.respawn[RESPAWN_MODE_DOWN].data));
-            player->unk_A86 = -1;
+            player->csId = CS_ID_NONE;
             func_800B7298(play, NULL, PLAYER_CSMODE_115);
         }
     }
@@ -607,12 +607,12 @@ void func_808A1B48(DoorShutter* this, PlayState* play) {
             this->actor.floorHeight = this->actor.home.pos.y;
             Actor_SpawnFloorDustRing(play, &this->actor, &this->actor.world.pos, 45.0f, 10, 8.0f, 500, 10, 0);
         }
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BIGWALL_BOUND);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_BIGWALL_BOUND);
 
-        quakeIndex = Quake_Add(Play_GetCamera(play, CAM_ID_MAIN), QUAKE_TYPE_3);
+        quakeIndex = Quake_Request(Play_GetCamera(play, CAM_ID_MAIN), QUAKE_TYPE_3);
         Quake_SetSpeed(quakeIndex, -32536);
-        Quake_SetQuakeValues(quakeIndex, 2, 0, 0, 0);
-        Quake_SetCountdown(quakeIndex, 10);
+        Quake_SetPerturbations(quakeIndex, 2, 0, 0, 0);
+        Quake_SetDuration(quakeIndex, 10);
 
         Rumble_Request(this->actor.xyzDistToPlayerSq, 180, 20, 100);
 
@@ -623,7 +623,7 @@ void func_808A1B48(DoorShutter* this, PlayState* play) {
 void func_808A1C50(DoorShutter* this, PlayState* play) {
     if (this->unk_167++ > 30) {
         if (GET_PLAYER(play)->csMode == PLAYER_CSMODE_115) {
-            func_800B7298(play, NULL, PLAYER_CSMODE_6);
+            func_800B7298(play, NULL, PLAYER_CSMODE_END);
         }
         DoorShutter_SetupDoor(this, play);
     }
@@ -651,7 +651,7 @@ s32 func_808A1D68(DoorShutter* this, PlayState* play) {
         return true;
     }
 
-    temp_a0 = BINANG_SUB(Actor_YawToPoint(&this->actor, &play->view.eye), this->actor.shape.rot.y);
+    temp_a0 = BINANG_SUB(Actor_WorldYawTowardPoint(&this->actor, &play->view.eye), this->actor.shape.rot.y);
     temp_a1 = BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.shape.rot.y);
 
     temp_a0 = ABS_ALT(temp_a0);

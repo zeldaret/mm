@@ -227,8 +227,8 @@ s32 func_80AE65F4(EnShn* this, PlayState* play) {
 
 s32 func_80AE6704(Actor* thisx, PlayState* play) {
     static s32 sPictographFlags[] = {
-        PICTOGRAPH_0,      PICTOGRAPH_MONKEY,    PICTOGRAPH_BIG_OCTO,
-        PICTOGRAPH_TINGLE, PICTOGRAPH_DEKU_KING, PICTOGRAPH_IN_SWAMP,
+        PICTO_VALID_0,      PICTO_VALID_MONKEY,    PICTO_VALID_BIG_OCTO,
+        PICTO_VALID_TINGLE, PICTO_VALID_DEKU_KING, PICTO_VALID_IN_SWAMP,
     };
     EnShn* this = THIS;
     s32 ret = 0;
@@ -259,12 +259,12 @@ s32 func_80AE6704(Actor* thisx, PlayState* play) {
 
         case 6:
             CLEAR_WEEKEVENTREG(WEEKEVENTREG_90_40);
-            func_800B7298(play, &this->actor, PLAYER_CSMODE_7);
+            func_800B7298(play, &this->actor, PLAYER_CSMODE_WAIT);
             play->nextEntrance = ENTRANCE(SOUTHERN_SWAMP_POISONED, 6);
             gSaveContext.nextCutsceneIndex = 0;
             play->transitionTrigger = TRANS_TRIGGER_START;
-            play->transitionType = TRANS_TYPE_03;
-            gSaveContext.nextTransitionType = TRANS_TYPE_07;
+            play->transitionType = TRANS_TYPE_FADE_WHITE;
+            gSaveContext.nextTransitionType = TRANS_TYPE_FADE_WHITE_SLOW;
             this->unk_2C6++;
             break;
     }

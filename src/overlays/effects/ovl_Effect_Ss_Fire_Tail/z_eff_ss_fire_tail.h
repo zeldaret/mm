@@ -16,6 +16,4 @@ typedef struct {
     /* 0x30 */ s32 life;
 } EffectSsFireTailInitParams; // size = 0x34
 
-extern const EffectSsInit Effect_Ss_Fire_Tail_InitVars;
-
 #endif

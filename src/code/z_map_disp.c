@@ -38,7 +38,7 @@ extern TexturePtr D_0C000000;
 
 void MapDisp_GetIMapTexture(void* dst, s32 iMapId) {
     if (func_80109A98(iMapId) != 0) {
-        func_80178E3C(SEGMENT_ROM_START(map_i_static), iMapId, dst, func_80109A98(iMapId));
+        CmpDma_LoadFile(SEGMENT_ROM_START(map_i_static), iMapId, dst, func_80109A98(iMapId));
     }
 }
 
@@ -527,8 +527,8 @@ void MapDisp_Init(PlayState* play) {
     if (!Map_IsInBossArea(play)) {
         D_801BEC1C = play->numRooms;
     }
-    D_801BEBB8.unk28 = THA_AllocEndAlign16(&play->state.heap, 0x4000);
-    D_801BEBB8.unk2C = THA_AllocEndAlign16(&play->state.heap, 0x4000);
+    D_801BEBB8.unk28 = THA_AllocTailAlign16(&play->state.heap, 0x4000);
+    D_801BEBB8.unk2C = THA_AllocTailAlign16(&play->state.heap, 0x4000);
     func_80104C80(play);
     if (!Map_IsInBossArea(play)) {
         D_801BEBB8.unk30 = 0;
@@ -538,12 +538,12 @@ void MapDisp_Init(PlayState* play) {
         D_801BEBB8.unk38 = (s16)(s32)((f32)D_801BEBB8.unk30 + ((f32)D_801BEBB8.unk34 * 0.5f));
         D_801BEBB8.unk3A = (s16)(s32)((f32)D_801BEBB8.unk32 + ((f32)D_801BEBB8.unk36 * 0.5f));
     }
-    D_801BEBB8.unk3C = THA_AllocEndAlign16(&play->state.heap, D_801BEC1C * sizeof(s16));
+    D_801BEBB8.unk3C = THA_AllocTailAlign16(&play->state.heap, D_801BEC1C * sizeof(s16));
 
     for (i = 0; i < D_801BEC1C; i++) {
         func_80102E90(play, &D_801BEBB8.unk3C[i]);
     }
-    D_801BEBB8.unk48 = THA_AllocEndAlign16(&play->state.heap, 32 * sizeof(s16));
+    D_801BEBB8.unk48 = THA_AllocTailAlign16(&play->state.heap, 32 * sizeof(s16));
 
     for (i = 0; i < 32; i++) {
         D_801BEBB8.unk48[i] = -0x7FFF;
@@ -886,7 +886,7 @@ void func_80105C40(s16 room) {
                         D_801BEBB8.unk10 = D_801BEBB8.unk28;
                     }
                     if (func_801096D4(temp_s0->mapId) != 0) {
-                        func_80178E3C(SEGMENT_ROM_START(map_grand_static), temp_s0->mapId - 0x100,
+                        CmpDma_LoadFile(SEGMENT_ROM_START(map_grand_static), temp_s0->mapId - 0x100,
                                       (s32)D_801BEBB8.unk10, func_801096D4(temp_s0->mapId));
                     }
                     break;
@@ -1262,7 +1262,7 @@ void func_80106D5C(PlayState* play, s32 arg1, s32 arg2, s32 arg3, s32 arg4, f32 
                                                        G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP,
                                                        G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
                             }
-                        } else if (gSaveContext.save
+                        } else if (gSaveContext.save.saveInfo
                                        .permanentSceneFlags[Play_GetOriginalSceneId(func_80106D08(play->sceneId))]
                                        .rooms &
                                    (1 << var_s2)) {
@@ -1481,11 +1481,11 @@ void func_80108124(PlayState* play, s32 arg1, s32 arg2, s32 arg3, s32 arg4, f32 
                     roomA = D_801F53B0[i].sides[0].room;
                     roomB = D_801F53B0[i].sides[1].room;
                     if (CHECK_DUNGEON_ITEM(2, gSaveContext.mapIndex) || (roomA < 0) ||
-                        (gSaveContext.save.permanentSceneFlags[Play_GetOriginalSceneId(func_80106D08(play->sceneId))]
+                        (gSaveContext.save.saveInfo.permanentSceneFlags[Play_GetOriginalSceneId(func_80106D08(play->sceneId))]
                              .rooms &
                          (1 << roomA)) ||
                         (roomB < 0) ||
-                        (gSaveContext.save.permanentSceneFlags[Play_GetOriginalSceneId(func_80106D08(play->sceneId))]
+                        (gSaveContext.save.saveInfo.permanentSceneFlags[Play_GetOriginalSceneId(func_80106D08(play->sceneId))]
                              .rooms &
                          (1 << roomB))) {
                         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, pauseCtx->alpha);
@@ -1607,7 +1607,7 @@ void func_80108AF8(PlayState* play) {
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 200, pauseCtx->alpha);
 
         for (var_s1 = 0; var_s1 < D_801BEBB8.unk40; var_s1++) {
-            if ((gSaveContext.save.permanentSceneFlags[Play_GetOriginalSceneId(func_80106D08(play->sceneId))].unk_14 &
+            if ((gSaveContext.save.saveInfo.permanentSceneFlags[Play_GetOriginalSceneId(func_80106D08(play->sceneId))].unk_14 &
                  gBitFlags[4 - var_s1]) ||
                 CHECK_DUNGEON_ITEM2(2, spB4)) {
                 gDPLoadTextureBlock(POLY_OPA_DISP++, func_80108A10(D_801BEBB8.unk44 + var_s1), G_IM_FMT_IA, G_IM_SIZ_8b,

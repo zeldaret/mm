@@ -47,9 +47,9 @@
 #define CLOCK_TIME_MINUTE  (CLOCK_TIME(0, 1))
 #define DAY_LENGTH (CLOCK_TIME(24, 0))
 
+#define TIME_TO_HOURS_F(time) ((time) * (24.0f / 0x10000))
 #define TIME_TO_MINUTES_F(time) ((time) * ((24.0f * 60.0f) / 0x10000)) // 0.021972656f
 #define TIME_TO_MINUTES_ALT_F(time) ((time) / (0x10000 / (24.0f * 60.0f)))
-
 #define TIME_TO_SECONDS_F(time) ((time) * ((24.0f * 60.0f * 60.0f) / 0x10000))
 
 #define CLOCK_TIME_F(hr, min) (((hr) * 60.0f + (min)) * (0x10000 / (24.0f * 60.0f)))
@@ -60,7 +60,7 @@
 #define CUR_CAPACITY(upg) CAPACITY(upg, CUR_UPG_VALUE(upg))
 
 // To be used with `Magic_Add`, but ensures enough magic is added to fill the magic bar to capacity
-#define MAGIC_FILL_TO_CAPACITY (((void)0, gSaveContext.magicFillTarget) + (gSaveContext.save.playerData.isDoubleMagicAcquired + 1) * MAGIC_NORMAL_METER)
+#define MAGIC_FILL_TO_CAPACITY (((void)0, gSaveContext.magicFillTarget) + (gSaveContext.save.saveInfo.playerData.isDoubleMagicAcquired + 1) * MAGIC_NORMAL_METER)
 
 #define CONTROLLER1(gameState) (&(gameState)->input[0])
 #define CONTROLLER2(gameState) (&(gameState)->input[1])
@@ -76,26 +76,6 @@
 #define ALIGN16(val) (((val) + 0xF) & ~0xF)
 #define ALIGN64(val) (((val) + 0x3F) & ~0x3F)
 #define ALIGN256(val) (((val) + 0xFF) & ~0xFF)
-
-extern GraphicsContext* __gfxCtx;
-
-#define WORK_DISP __gfxCtx->work.p
-#define POLY_OPA_DISP __gfxCtx->polyOpa.p
-#define POLY_XLU_DISP __gfxCtx->polyXlu.p
-#define OVERLAY_DISP __gfxCtx->overlay.p
-#define DEBUG_DISP __gfxCtx->debug.p
-
-// __gfxCtx shouldn't be used directly.
-// Use the DISP macros defined above when writing to display buffers.
-#define OPEN_DISPS(gfxCtx)                  \
-    {                                       \
-        GraphicsContext* __gfxCtx = gfxCtx; \
-        s32 __dispPad
-
-#define CLOSE_DISPS(gfxCtx) \
-    (void)0;                \
-    }                       \
-    (void)0
 
 /**
  * `x` vertex x
@@ -114,23 +94,6 @@ extern GraphicsContext* __gfxCtx;
 #define VTX_T(x, y, z, s, t, cr, cg, cb, a) \
     { { x, y, z }, 0, { s, t }, { cr, cg, cb, a }, }
 
-#define GRAPH_ALLOC(gfxCtx, size) ((void*)((gfxCtx)->polyOpa.d = (Gfx*)((u8*)(gfxCtx)->polyOpa.d - ALIGN16(size))))
-
-// Custom gbi macro
-#define gDPSetTileCustom(pkt, fmt, siz, width, height, pal, cms, cmt, masks, maskt, shifts, shiftt)                    \
-    {                                                                                                                  \
-        gDPPipeSync(pkt);                                                                                              \
-        gDPTileSync(pkt);                                                                                              \
-        gDPSetTile(pkt, fmt, siz, (((width)*siz##_TILE_BYTES) + 7) >> 3, 0, G_TX_LOADTILE, 0, cmt, maskt, shiftt, cms, \
-                   masks, shifts);                                                                                     \
-        gDPTileSync(pkt);                                                                                              \
-        gDPSetTile(pkt, fmt, siz, (((width)*siz##_TILE_BYTES) + 7) >> 3, 0, G_TX_RENDERTILE, pal, cmt, maskt, shiftt,  \
-                   cms, masks, shifts);                                                                                \
-        gDPSetTileSize(pkt, G_TX_RENDERTILE, 0, 0, ((width)-1) << G_TEXTURE_IMAGE_FRAC,                                \
-                       ((height)-1) << G_TEXTURE_IMAGE_FRAC);                                                          \
-    }                                                                                                                  \
-    (void)0
-
 #define SQ(x) ((x) * (x))
 #define ABS(x) ((x) >= 0 ? (x) : -(x))
 #define ABS_ALT(x) ((x) < 0 ? -(x) : (x))
@@ -140,14 +103,19 @@ extern GraphicsContext* __gfxCtx;
 #define CLAMP_MAX(x, max) ((x) > (max) ? (max) : (x))
 #define CLAMP_MIN(x, min) ((x) < (min) ? (min) : (x))
 
+#define RGBA16_GET_R(pixel) (((pixel) >> 11) & 0x1F)
+#define RGBA16_GET_G(pixel) (((pixel) >> 6) & 0x1F)
+#define RGBA16_GET_B(pixel) (((pixel) >> 1) & 0x1F)
+
 #define ROUND(x) (s32)(((x) >= 0.0) ? ((x) + 0.5) : ((x) - 0.5))
 
-#define SWAP(type, a, b)  \
-    {                     \
-        type _temp = (a); \
-        (a) = (b);        \
-        (b) = _temp;      \
-    }
+#define SWAP(type, a, b)    \
+    {                       \
+        type _temp = (a);   \
+        (a) = (b);          \
+        (b) = _temp;        \
+    }                       \
+    (void)0
 
 #define OVERLAY_RELOCATION_OFFSET(overlayEntry) ((uintptr_t)((overlayEntry)->vramStart) - (uintptr_t)((overlayEntry)->loadedRamAddr))
 #define VRAM_PTR_SIZE(entry) ((uintptr_t)((entry)->vramEnd) - (uintptr_t)((entry)->vramStart))

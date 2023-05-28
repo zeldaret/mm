@@ -4,8 +4,9 @@
  * Description:
  */
 
+#include "global.h"
 #include "z_fbdemo_triforce.h"
-#include "assets/objects/object_fbdemo_triforce/ovl_fbdemo_triforce.c"
+#include "assets/overlays/ovl_fbdemo_triforce/ovl_fbdemo_triforce.c"
 
 void* TransitionTriforce_Init(void* thisx);
 void TransitionTriforce_Destroy(void* thisx);
@@ -30,8 +31,11 @@ void TransitionTriforce_Start(void* thisx) {
         case STATE_SPIRAL_IN_FAST:
             this->transPos = 1.0f;
             return;
+
+        default:
+            this->transPos = 0.03f;
+            return;
     }
-    this->transPos = 0.03f;
 }
 
 void* TransitionTriforce_Init(void* thisx) {
@@ -43,7 +47,7 @@ void* TransitionTriforce_Init(void* thisx) {
     this->transPos = 1.0f;
     this->state = STATE_SPIRAL_IN_FAST;
     this->step = 0.015f;
-    this->fadeType = TYPE_TRANSPARENT_TRIFORCE;
+    this->type = TRANS_INSTANCE_TYPE_FILL_OUT;
     return this;
 }
 
@@ -76,7 +80,7 @@ void TransitionTriforce_SetColor(void* thisx, u32 color) {
 void TransitionTriforce_SetType(void* thisx, s32 type) {
     TransitionTriforce* this = (TransitionTriforce*)thisx;
 
-    this->fadeType = type;
+    this->type = type;
 }
 
 void TransitionTriforce_SetState(void* thisx, s32 state) {
@@ -98,36 +102,42 @@ void TransitionTriforce_Draw(void* thisx, Gfx** gfxP) {
     guRotate(&modelView[1], rotation, 0.0f, 0.0f, 1.0f);
     guTranslate(&modelView[2], 0.0f, 0.0f, 0.0f);
     gDPPipeSync(gfx++);
-    gSPDisplayList(gfx++, sTriforceWipeDL);
+    gSPDisplayList(gfx++, sTransTriforceDL);
     gDPSetColor(gfx++, G_SETPRIMCOLOR, this->color.rgba);
     gDPSetCombineMode(gfx++, G_CC_PRIMITIVE, G_CC_PRIMITIVE);
     gSPMatrix(gfx++, &this->projection, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
     gSPMatrix(gfx++, &modelView[0], G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPMatrix(gfx++, &modelView[1], G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
     gSPMatrix(gfx++, &modelView[2], G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
-    gSPVertex(gfx++, &sTriforceWipeVtx, ARRAY_COUNT(sTriforceWipeVtx), 0);
+    gSPVertex(gfx++, &sTransTriforceVtx, ARRAY_COUNT(sTransTriforceVtx), 0);
     if (!TransitionTriforce_IsDone(this)) {
-        switch (this->fadeType) {
-            case TYPE_TRANSPARENT_TRIFORCE:
+        switch (this->type) {
+            case TRANS_INSTANCE_TYPE_FILL_OUT:
                 gSP2Triangles(gfx++, 0, 4, 5, 0, 4, 1, 3, 0);
                 gSP1Triangle(gfx++, 5, 3, 2, 0);
                 break;
 
-            case TYPE_FILLED_TRIFORCE:
+            case TRANS_INSTANCE_TYPE_FILL_IN:
                 gSP2Triangles(gfx++, 3, 4, 5, 0, 0, 2, 6, 0);
                 gSP2Triangles(gfx++, 0, 6, 7, 0, 1, 0, 7, 0);
                 gSP2Triangles(gfx++, 1, 7, 8, 0, 1, 8, 9, 0);
                 gSP2Triangles(gfx++, 1, 9, 2, 0, 2, 9, 6, 0);
                 break;
+
+            default:
+                break;
         }
 
     } else {
-        switch (this->fadeType) {
-            case TYPE_TRANSPARENT_TRIFORCE:
+        switch (this->type) {
+            case TRANS_INSTANCE_TYPE_FILL_OUT:
                 break;
 
-            case TYPE_FILLED_TRIFORCE:
+            case TRANS_INSTANCE_TYPE_FILL_IN:
                 gSP1Quadrangle(gfx++, 6, 7, 8, 9, 0);
+                break;
+
+            default:
                 break;
         }
     }
@@ -142,6 +152,7 @@ s32 TransitionTriforce_IsDone(void* thisx) {
         return this->transPos <= 0.03f;
     } else if ((this->state == STATE_SPIRAL_OUT_SLOW) || (this->state == STATE_SPIRAL_OUT_FAST)) {
         return (this->transPos >= 1.0f);
+    } else {
+        return false;
     }
-    return false;
 }

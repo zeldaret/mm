@@ -436,12 +436,12 @@ void func_80B13940(ObjDhouse* this, PlayState* play2) {
 
     if (Flags_GetSwitch(play, OBJDHOUSE_GET_7F(&this->dyna.actor))) {
         sp20 = true;
-        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_EXPLSION_LONG);
+        Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_EXPLSION_LONG);
     }
 
     if (sp20) {
         func_80B12A88(&this->dyna.actor);
-        func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+        DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
         this->dyna.actor.draw = func_80B13C08;
         this->dyna.actor.flags |= ACTOR_FLAG_20;
         func_80B139D8(this);
@@ -458,20 +458,20 @@ void func_80B139F4(ObjDhouse* this, PlayState* play) {
     s16 quakeIndex;
 
     if (this->unk_1370 == 117) {
-        quakeIndex = Quake_Add(camera, QUAKE_TYPE_3);
+        quakeIndex = Quake_Request(camera, QUAKE_TYPE_3);
         Quake_SetSpeed(quakeIndex, 20000);
-        Quake_SetQuakeValues(quakeIndex, 8, 0, 0, 0);
-        Quake_SetCountdown(quakeIndex, 17);
+        Quake_SetPerturbations(quakeIndex, 8, 0, 0, 0);
+        Quake_SetDuration(quakeIndex, 17);
     } else if (this->unk_1370 == 105) {
-        quakeIndex = Quake_Add(camera, QUAKE_TYPE_3);
+        quakeIndex = Quake_Request(camera, QUAKE_TYPE_3);
         Quake_SetSpeed(quakeIndex, 20000);
-        Quake_SetQuakeValues(quakeIndex, 7, 0, 0, 0);
-        Quake_SetCountdown(quakeIndex, 20);
+        Quake_SetPerturbations(quakeIndex, 7, 0, 0, 0);
+        Quake_SetDuration(quakeIndex, 20);
     } else if (this->unk_1370 == 90) {
-        quakeIndex = Quake_Add(camera, QUAKE_TYPE_3);
+        quakeIndex = Quake_Request(camera, QUAKE_TYPE_3);
         Quake_SetSpeed(quakeIndex, 20000);
-        Quake_SetQuakeValues(quakeIndex, 5, 0, 0, 0);
-        Quake_SetCountdown(quakeIndex, 62);
+        Quake_SetPerturbations(quakeIndex, 5, 0, 0, 0);
+        Quake_SetDuration(quakeIndex, 62);
     }
 
     this->unk_1370--;
