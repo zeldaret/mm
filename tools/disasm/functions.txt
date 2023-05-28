@@ -3072,7 +3072,7 @@
     0x80170B28:("PreRender_RestoreFramebuffer",),
     0x80170B4C:("PreRender_AntiAliasFilter",),
     0x8017160C:("PreRender_ApplyAntiAliasingFilter",),
-    0x801716C4:("func_801716C4",),
+    0x801716C4:("PreRender_Get5bMedian9",),
     0x801717F8:("func_801717F8",),
     0x80171F4C:("PreRender_ApplyFilters",),
     0x80171FA8:("PreRender_ApplyFiltersSlowlyInit",),

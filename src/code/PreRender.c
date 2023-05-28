@@ -574,55 +574,64 @@ void PreRender_ApplyAntiAliasingFilter(PreRender* this) {
     }
 }
 
-// TODO: Could args be `windowR`,`windowG`,`windowB` from OoT's PreRender_DivotFilter()
-u32 func_801716C4(u8* arg0, u8* arg1, u8* arg2) {
-    u8 sp28[8 * 4];
-    u32 var_s0;
-    u32 var_s1;
+/**
+ * Selects the median value from 9 different 5-bit pixels:
+ * px1[0], px1[1], px1[2], px2[0], px2[1], px2[2], px3[0], px3[1], px3[2]
+ * all args are expected to be an array of 3 different 5-bit values
+ */
+u32 PreRender_Get5bMedian9(u8* px1, u8* px2, u8* px3) {
+    u8 pxBitCount[32]; // Stores the count for each of the possible 32-bit pixel values
+    u32 pxCount;       // Pixel count
+    s32 pxMed;         // Pixel median value
 
-    *(s32*)(&sp28[0 * 4]) = 0;
-    *(s32*)(&sp28[1 * 4]) = 0;
-    *(s32*)(&sp28[2 * 4]) = 0;
-    *(s32*)(&sp28[3 * 4]) = 0;
-    *(s32*)(&sp28[4 * 4]) = 0;
-    *(s32*)(&sp28[5 * 4]) = 0;
-    *(s32*)(&sp28[6 * 4]) = 0;
-    *(s32*)(&sp28[7 * 4]) = 0;
+    // Initialize count to 0 in groups of 4 bits
+    *(s32*)(&pxBitCount[0]) = 0;
+    *(s32*)(&pxBitCount[4]) = 0;
+    *(s32*)(&pxBitCount[8]) = 0;
+    *(s32*)(&pxBitCount[12]) = 0;
+    *(s32*)(&pxBitCount[16]) = 0;
+    *(s32*)(&pxBitCount[20]) = 0;
+    *(s32*)(&pxBitCount[24]) = 0;
+    *(s32*)(&pxBitCount[28]) = 0;
 
-    sp28[arg0[0]]++;
-    sp28[arg0[1]]++;
-    sp28[arg0[2]]++;
+    // Increment the count that contains the pixel vaules
+    pxBitCount[px1[0]]++;
+    pxBitCount[px1[1]]++;
+    pxBitCount[px1[2]]++;
 
-    sp28[arg1[0]]++;
-    sp28[arg1[1]]++;
-    sp28[arg1[2]]++;
+    pxBitCount[px2[0]]++;
+    pxBitCount[px2[1]]++;
+    pxBitCount[px2[2]]++;
 
-    sp28[arg2[0]]++;
-    sp28[arg2[1]]++;
-    sp28[arg2[2]]++;
+    pxBitCount[px3[0]]++;
+    pxBitCount[px3[1]]++;
+    pxBitCount[px3[2]]++;
 
-    var_s0 = 0;
-    var_s1 = 0;
+    // Loop through the 32 bits until 5 values are found, then return that bit value.
+    // Note that the median of 9 is the 5th value.
+    pxCount = 0;
+    pxMed = 0;
     while (true) {
-        var_s0 += sp28[var_s1];
-        if (var_s0 >= 5) {
+        pxCount += pxBitCount[pxMed];
+        if (pxCount >= 5) {
+            // the median is found
             break;
         }
-        var_s1++;
+        pxMed++;
     }
 
-    return var_s1;
+    return pxMed;
 }
 
 #ifdef NON_EQUIVALENT
 void func_801717F8(PreRender* this) {
-    u8 **temp_v0;
+    u8** temp_v0;
     s32 temp_s1;
 
-    u8 **spDC;
+    u8** spDC;
     u8* spD8;
     u8* spD4;
-    u8 *spD0;
+    u8* spD0;
     u8* spCC;
     u8* spC8;
     u8* spC4;
@@ -634,7 +643,6 @@ void func_801717F8(PreRender* this) {
 
     Color_RGBA16 spB0;
     Color_RGBA16 spAC;
-
 
     s32 sp80;
     s32 sp70;
@@ -648,8 +656,13 @@ void func_801717F8(PreRender* this) {
     u8** temp_v1;
 
     u16 temp_s6 = this->width;
-    u8 *sp10 = alloca(temp_s6 * 10);
+    u8* sp10 = alloca(temp_s6 * 10);
     u16 t0 = this->height;
+
+    // Debug Rom
+    // if (temp_s6 > 320) {
+    //     __assert("wd <= 320", "../PreRender.c");
+    // }
 
     spD0 = &sp10[temp_s6 * 0];
     spD4 = &sp10[temp_s6 * 1];
@@ -679,7 +692,7 @@ void func_801717F8(PreRender* this) {
         s4 += 1;
     }
 
-    //spDC = &sp10[0];
+    // spDC = &sp10[0];
 
     for (s4 = 1; s4 < t0 - 1; s4++) {
         var_a2 = &this->cvgSave[temp_s6 * s4];
@@ -693,7 +706,8 @@ void func_801717F8(PreRender* this) {
             spCC[s0] = spB0.g;
             spC0[s0] = spB0.b;
 
-            temp_s5[s0] = (( var_a2[s0] >> 5) == 7);
+            // checking for full coverage
+            temp_s5[s0] = ((var_a2[s0] >> 5) == 7);
 
             s0 += 1;
         }
@@ -701,14 +715,16 @@ void func_801717F8(PreRender* this) {
         for (s0 = 1; s0 < temp_s6 - 1; s0++) {
             temp_s1 = s0 - 1;
 
-            if ((temp_s5[s0 - 1] != 0) && (temp_s5[s0] != 0) && (temp_s5[s0+1] != 0)) {
+            if ((temp_s5[s0 - 1] != 0) && (temp_s5[s0] != 0) && (temp_s5[s0 + 1] != 0)) {
                 continue;
             }
-                spAC.r = (func_801716C4(spD0 + temp_s1, spD4 + temp_s1, spD8 + temp_s1));
-                spAC.g = (func_801716C4(spC4 + temp_s1, spC8 + temp_s1, spCC + temp_s1)) ;
-                spAC.b = (func_801716C4(spB8 + temp_s1, spBC + temp_s1, spC0 + temp_s1))    ;
-                spAC.a = 1;
-                this->fbufSave[s0 + s4 * this->width] = spAC.rgba;
+
+            spAC.r = (PreRender_Get5bMedian9(spD0 + temp_s1, spD4 + temp_s1, spD8 + temp_s1));
+            spAC.g = (PreRender_Get5bMedian9(spC4 + temp_s1, spC8 + temp_s1, spCC + temp_s1));
+            spAC.b = (PreRender_Get5bMedian9(spB8 + temp_s1, spBC + temp_s1, spC0 + temp_s1));
+            spAC.a = 1;
+
+            this->fbufSave[s0 + s4 * this->width] = spAC.rgba;
         }
 
         spD0 = spD4;
