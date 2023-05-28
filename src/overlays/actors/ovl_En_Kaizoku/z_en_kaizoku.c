@@ -902,7 +902,8 @@ void func_80B872F4(EnKaizoku* this, PlayState* play) {
     if ((this->lookTimer == 0) && !func_80B85858(this, play) && !func_80B85A00(this, play, false)) {
         s16 yawDiff = this->picto.actor.yawTowardsPlayer - this->picto.actor.shape.rot.y;
 
-        if ((this->picto.actor.xzDistToPlayer < 100.0f) && (player->meleeWeaponState != 0) && (yawDiff >= 0x1F40)) {
+        if ((this->picto.actor.xzDistToPlayer < 100.0f) && (player->meleeWeaponState != PLAYER_MELEE_WEAPON_STATE_0) &&
+            (yawDiff >= 0x1F40)) {
             this->picto.actor.shape.rot.y = this->picto.actor.world.rot.y = this->picto.actor.yawTowardsPlayer;
             func_80B88CD8(this);
         } else if (Actor_IsFacingPlayer(&this->picto.actor, 0xBB8)) {
@@ -1285,7 +1286,8 @@ void func_80B88378(EnKaizoku* this, PlayState* play) {
 
         this->skelAnime.playSpeed = 1.0f;
         sp2A = ABS_ALT(player->actor.shape.rot.y - this->picto.actor.shape.rot.y);
-        if (this->picto.actor.xzDistToPlayer < 150.0f && player->meleeWeaponState != 0 && sp2A >= 0x2000) {
+        if ((this->picto.actor.xzDistToPlayer < 150.0f) && (player->meleeWeaponState != PLAYER_MELEE_WEAPON_STATE_0) &&
+            (sp2A >= 0x2000)) {
             this->picto.actor.shape.rot.y = this->picto.actor.world.rot.y = this->picto.actor.yawTowardsPlayer;
             if (Rand_ZeroOne() > 0.7f) {
                 func_80B88CD8(this);
@@ -1938,8 +1940,8 @@ void func_80B89A08(EnKaizoku* this, PlayState* play) {
             pos.z = this->bodyCollider.info.bumper.hitPos.z;
 
             if (player->transformation != PLAYER_FORM_HUMAN) {
-                player->unk_B84 = this->picto.actor.yawTowardsPlayer;
-                player->unk_B80 = 15.0f;
+                player->pushedYaw = this->picto.actor.yawTowardsPlayer;
+                player->pushedSpeed = 15.0f;
             }
 
             this->bodyCollider.base.acFlags &= ~AC_HIT;

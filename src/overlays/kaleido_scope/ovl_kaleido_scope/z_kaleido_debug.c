@@ -605,7 +605,7 @@ void KaleidoScope_DrawInventoryEditor(PlayState* play) {
     KaleidoScope_DrawDigit(play, gSaveContext.save.saveInfo.playerData.doubleDefense, 44, 202);
 
     // Magic
-    //! @bug should be gSaveContext.save.saveInfo.playerData.doubleMagic
+    //! @bug should be gSaveContext.save.saveInfo.playerData.isDoubleMagicAcquired
     KaleidoScope_DrawDigit(play, gSaveContext.save.saveInfo.playerData.doubleDefense, 75, 202);
 
     // Lottery

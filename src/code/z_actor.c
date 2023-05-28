@@ -1374,7 +1374,7 @@ s32 func_800B724C(PlayState* play, Actor* actor, u8 csMode) {
 
     player->csMode = csMode;
     player->unk_398 = actor;
-    player->unk_3BA = 0;
+    player->doorBgCamIndex = 0;
     return true;
 }
 
@@ -1382,7 +1382,7 @@ s32 func_800B7298(PlayState* play, Actor* actor, u8 csMode) {
     Player* player = GET_PLAYER(play);
 
     if (func_800B724C(play, actor, csMode)) {
-        player->unk_3BA = 1;
+        player->doorBgCamIndex = 1;
         return true;
     }
     return false;
@@ -3490,49 +3490,50 @@ void Enemy_StartFinishingBlow(PlayState* play, Actor* actor) {
 }
 
 // blinking routine
-s16 func_800BBAC0(s16 arg0[2], s16 arg1, s16 arg2, s16 arg3) {
-    if (DECR(arg0[1]) == 0) {
-        arg0[1] = Rand_S16Offset(arg1, arg2);
+s16 func_800BBAC0(BlinkInfo* info, s16 arg1, s16 arg2, s16 arg3) {
+    if (DECR(info->blinkTimer) == 0) {
+        info->blinkTimer = Rand_S16Offset(arg1, arg2);
     }
 
-    if (arg0[1] - arg3 > 0) {
-        arg0[0] = 0;
-    } else if ((arg0[1] - arg3 >= -1) || (arg0[1] < 2)) {
-        arg0[0] = 1;
+    if (info->blinkTimer - arg3 > 0) {
+        info->eyeTexIndex = 0;
+    } else if ((info->blinkTimer - arg3 >= -1) || (info->blinkTimer < 2)) {
+        info->eyeTexIndex = 1;
     } else {
-        arg0[0] = 2;
+        info->eyeTexIndex = 2;
     }
 
-    return arg0[0];
+    return info->eyeTexIndex;
 }
 
 // blinking routine
-s16 func_800BBB74(s16 arg0[2], s16 arg1, s16 arg2, s16 arg3) {
-    if (DECR(arg0[1]) == 0) {
-        arg0[1] = Rand_S16Offset(arg1, arg2);
+s16 func_800BBB74(BlinkInfo* info, s16 arg1, s16 arg2, s16 arg3) {
+    if (DECR(info->blinkTimer) == 0) {
+        info->blinkTimer = Rand_S16Offset(arg1, arg2);
     }
 
-    if (arg0[1] - arg3 > 0) {
-        arg0[0] = 0;
-    } else if (arg0[1] - arg3 == 0) {
-        arg0[0] = 1;
+    if (info->blinkTimer - arg3 > 0) {
+        info->eyeTexIndex = 0;
+    } else if (info->blinkTimer - arg3 == 0) {
+        info->eyeTexIndex = 1;
     } else {
-        arg0[0] = 2;
+        info->eyeTexIndex = 2;
     }
 
-    return arg0[0];
+    return info->eyeTexIndex;
 }
 
 // unused blinking routine
-s16 func_800BBC20(s16 arg0[2], s16 arg1, s16 arg2, s16 arg3) {
-    if (DECR(arg0[1]) == 0) {
-        arg0[1] = Rand_S16Offset(arg1, arg2);
-        arg0[0]++;
-        if ((arg0[0] % 3) == 0) {
-            arg0[0] = (s32)(Rand_ZeroOne() * arg3) * 3;
+s16 func_800BBC20(BlinkInfo* info, s16 arg1, s16 arg2, s16 arg3) {
+    if (DECR(info->blinkTimer) == 0) {
+        info->blinkTimer = Rand_S16Offset(arg1, arg2);
+        info->eyeTexIndex++;
+        if ((info->eyeTexIndex % 3) == 0) {
+            info->eyeTexIndex = (s32)(Rand_ZeroOne() * arg3) * 3;
         }
     }
-    return arg0[0];
+
+    return info->eyeTexIndex;
 }
 
 void Actor_SpawnBodyParts(Actor* actor, PlayState* play, s32 partParams, Gfx** dList) {
@@ -3614,15 +3615,15 @@ void func_800BC154(PlayState* play, ActorContext* actorCtx, Actor* actor, u8 act
 
 // Damage flags for EnArrow
 u32 sArrowDmgFlags[] = {
-    DMG_FIRE_ARROW,   // ENARROW_0
-    DMG_NORMAL_ARROW, // ENARROW_1
-    DMG_NORMAL_ARROW, // ENARROW_2
-    DMG_FIRE_ARROW,   // ENARROW_3
-    DMG_ICE_ARROW,    // ENARROW_4
-    DMG_LIGHT_ARROW,  // ENARROW_5
-    DMG_DEKU_NUT,     // ENARROW_6
-    DMG_DEKU_BUBBLE,  // ENARROW_7
-    DMG_DEKU_NUT,     // ENARROW_8
+    DMG_FIRE_ARROW,   // ARROW_TYPE_NORMAL_LIT
+    DMG_NORMAL_ARROW, // ARROW_TYPE_NORMAL_HORSE
+    DMG_NORMAL_ARROW, // ARROW_TYPE_NORMAL
+    DMG_FIRE_ARROW,   // ARROW_TYPE_FIRE
+    DMG_ICE_ARROW,    // ARROW_TYPE_ICE
+    DMG_LIGHT_ARROW,  // ARROW_TYPE_LIGHT
+    DMG_DEKU_NUT,     // ARROW_TYPE_SLINGSHOT
+    DMG_DEKU_BUBBLE,  // ARROW_TYPE_DEKU_BUBBLE
+    DMG_DEKU_NUT,     // ARROW_TYPE_DEKU_NUT
 };
 
 u32 Actor_GetArrowDmgFlags(s32 params) {
@@ -4480,7 +4481,7 @@ s32 func_800BE184(PlayState* play, Actor* actor, f32 xzDist, s16 arg3, s16 arg4,
     s16 phi_v0 = BINANG_SUB(BINANG_ROT180(actor->yawTowardsPlayer), player->actor.shape.rot.y);
     s16 temp_t0 = actor->yawTowardsPlayer - arg5;
 
-    if ((actor->xzDistToPlayer <= xzDist) && (player->meleeWeaponState != 0)) {
+    if ((actor->xzDistToPlayer <= xzDist) && (player->meleeWeaponState != PLAYER_MELEE_WEAPON_STATE_0)) {
         if ((arg4 >= ABS_ALT(phi_v0)) && (arg3 >= ABS_ALT(temp_t0))) {
             return true;
         }

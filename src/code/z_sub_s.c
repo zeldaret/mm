@@ -15,7 +15,7 @@ Vec3f gOneVec3f = { 1.0f, 1.0f, 1.0f };
 s32 D_801C5DBC[] = { 0, 1 }; // Unused
 
 /**
- * Finds the first EnDoor instance with unk_1A4 == 5 and the specified switchFlag.
+ * Finds the first EnDoor instance with doorType == ENDOOR_TYPE_5 and the specified switchFlag.
  */
 EnDoor* SubS_FindDoor(PlayState* play, s32 switchFlag) {
     Actor* actor = NULL;
@@ -29,7 +29,7 @@ EnDoor* SubS_FindDoor(PlayState* play, s32 switchFlag) {
             break;
         }
 
-        if ((door->unk_1A4 == 5) && (door->switchFlag == (u8)switchFlag)) {
+        if ((door->doorType == ENDOOR_TYPE_5) && (door->switchFlag == (u8)switchFlag)) {
             break;
         }
 

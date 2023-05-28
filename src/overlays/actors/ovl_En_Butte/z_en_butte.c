@@ -416,7 +416,7 @@ void EnButte_Update(Actor* thisx, PlayState* play) {
     this->unk_258 += 0x600;
 
     if (ENBUTTE_GET_1(&this->actor) == ENBUTTE_1) {
-        if (GET_PLAYER(play)->meleeWeaponState == 0) {
+        if (GET_PLAYER(play)->meleeWeaponState == PLAYER_MELEE_WEAPON_STATE_0) {
             if (this->unk_252 > 0) {
                 this->unk_252--;
             }

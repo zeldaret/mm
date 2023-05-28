@@ -84,8 +84,7 @@ BgBreakwallStruct D_808B8140[] = {
       func_808B77D0, NULL },
     { OBJECT_IKNINSIDE_OBJ, NULL, object_ikninside_obj_DL_00AEC0, object_ikninside_obj_Matanimheader_00BCB8, NULL,
       func_808B751C, func_808B7A10, func_808B7D34 },
-    { OBJECT_SPOT11_OBJ, object_spot11_obj_DL_0013F0, NULL, NULL, &object_spot11_obj_Colheader_001EB8, func_808B736C,
-      func_808B77D0, NULL },
+    { OBJECT_SPOT11_OBJ, gWoodStepDL, NULL, NULL, &gWoodStepCol, func_808B736C, func_808B77D0, NULL },
 };
 
 static InitChainEntry sInitChain[] = {

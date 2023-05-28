@@ -214,7 +214,7 @@ void func_80BA383C(EnToto* this, PlayState* play) {
         }
         Animation_PlayOnce(&this->skelAnime, D_80BA5078[this->unk2B4]);
     }
-    func_800BBB74(this->unk260, 0x14, 0x50, 3);
+    func_800BBB74(&this->blinkInfo, 20, 80, 3);
 }
 
 void func_80BA3930(EnToto* this, PlayState* play) {
@@ -316,7 +316,7 @@ void func_80BA3D38(EnToto* this, PlayState* play) {
     this->text = ENTOTO_WEEK_EVENT_FLAGS ? D_80BA50BC : D_80BA5088;
     func_80BA4C0C(this, play);
     play->actorCtx.flags |= ACTORCTX_FLAG_5;
-    this->unk260[0] = 0;
+    this->blinkInfo.eyeTexIndex = 0;
 }
 
 void func_80BA3DBC(EnToto* this, PlayState* play) {
@@ -586,6 +586,7 @@ s32 func_80BA47E0(EnToto* this, PlayState* play) {
     for (i = 0; i < ARRAY_COUNT(D_80BA50DC); i++) {
         if (gSaveContext.save.playerForm != (i + 1) && (D_80BA5128[i] & this->unk2B3)) {
             Math_Vec3s_ToVec3f(&spawnPos, &D_80BA50DC[i].unk6);
+
             Actor_Spawn(&play->actorCtx, play, ACTOR_PLAYER, spawnPos.x, spawnPos.y, spawnPos.z, i + 2, 0, 0,
                         PLAYER_PARAMS(0xFF, PLAYER_INITMODE_F) | 0xFFFFF000);
         }
@@ -728,7 +729,7 @@ void EnToto_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
-    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sp4C[this->unk260[0]]));
+    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sp4C[this->blinkInfo.eyeTexIndex]));
     Scene_SetRenderModeXlu(play, 0, 1);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, NULL,
                           NULL, &this->actor);

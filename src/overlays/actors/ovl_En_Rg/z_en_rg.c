@@ -589,8 +589,8 @@ void func_80BF4AB8(EnRg* this, PlayState* play) {
                 this->unk_326 = 0x28;
                 if (player->stateFlags3 & PLAYER_STATE3_1000) {
                     player->linearVelocity *= 0.5f;
-                    player->unk_B08[0] = player->linearVelocity;
-                    player->unk_B08[1] += player->linearVelocity * 0.05f;
+                    player->unk_B08 = player->linearVelocity;
+                    player->unk_B0C += player->linearVelocity * 0.05f;
                     if (BINANG_SUB(this->actor.yawTowardsPlayer, player->currentYaw) > 0) {
                         player->currentYaw += 0x2000;
                     } else {

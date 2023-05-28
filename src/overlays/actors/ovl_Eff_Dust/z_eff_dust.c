@@ -327,7 +327,7 @@ void func_809199FC(Actor* thisx, PlayState* play2) {
     distanceTraveled = this->distanceTraveled;
 
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, 255);
-    if (player->unk_B08[0] >= 0.85f) {
+    if (player->unk_B08 >= 0.85f) {
         gDPSetEnvColor(POLY_XLU_DISP++, 255, 0, 0, 0);
     } else {
         gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 255, 0);
@@ -340,7 +340,7 @@ void func_809199FC(Actor* thisx, PlayState* play2) {
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, (*distanceTraveled * 255.0f));
 
             aux = 1.0f - SQ(*distanceTraveled);
-            Matrix_Mult(&player->mf_CC4, MTXMODE_NEW);
+            Matrix_Mult(&player->leftHandMf, MTXMODE_NEW);
             Matrix_Translate(initialPositions->x * ((this->dx * aux) + (1.0f - this->dx)),
                              (initialPositions->y * (1.0f - *distanceTraveled)) + 320.0f,
                              (initialPositions->z * (1.0f - *distanceTraveled)) + -20.0f, MTXMODE_APPLY);
