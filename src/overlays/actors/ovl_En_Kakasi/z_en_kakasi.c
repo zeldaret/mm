@@ -609,7 +609,7 @@ void EnKakasi_TeachingSong(EnKakasi* this, PlayState* play) {
         this->subCamEyeNext.z = D_80971DCC[this->unk190].z;
 
         Math_Vec3f_Copy(&tempVec, &this->subCamEyeNext);
-        OLib_DbCameraVec3fSum(&this->picto.actor.home, &tempVec, &this->subCamEyeNext, 1);
+        OLib_Vec3fAdd(&this->picto.actor.home, &tempVec, &this->subCamEyeNext, OLIB_ADD_OFFSET);
         Math_Vec3f_Copy(&this->subCamAtNext, &this->unk22C);
         Math_Vec3f_Copy(&this->subCamEye, &this->subCamEyeNext);
         Math_Vec3f_Copy(&this->subCamAt, &this->subCamAtNext);
@@ -722,7 +722,7 @@ void EnKakasi_PostSongLearnDialogue(EnKakasi* this, PlayState* play) {
         this->subCamEyeNext.y = D_80971FA0[this->unk190].y;
         this->subCamEyeNext.z = D_80971FA0[this->unk190].z;
         Math_Vec3f_Copy(&vec3fCopy, &this->subCamEyeNext);
-        OLib_DbCameraVec3fSum(&this->picto.actor.home, &vec3fCopy, &this->subCamEyeNext, 1);
+        OLib_Vec3fAdd(&this->picto.actor.home, &vec3fCopy, &this->subCamEyeNext, OLIB_ADD_OFFSET);
         this->subCamAtNext.x = D_80971FE8[this->unk190].x + this->unk22C.x;
         this->subCamAtNext.y = D_80971FE8[this->unk190].y + this->unk22C.y;
         this->subCamAtNext.z = D_80971FE8[this->unk190].z + this->unk22C.z;
@@ -831,7 +831,7 @@ void EnKakasi_DancingNightAway(EnKakasi* this, PlayState* play) {
     this->subCamEyeNext.y = D_80971E38[this->unk190].y;
     this->subCamEyeNext.z = D_80971E38[this->unk190].z;
     Math_Vec3f_Copy(&localVec3f, &this->subCamEyeNext);
-    OLib_DbCameraVec3fSum(&this->picto.actor.home, &localVec3f, &this->subCamEyeNext, 1);
+    OLib_Vec3fAdd(&this->picto.actor.home, &localVec3f, &this->subCamEyeNext, OLIB_ADD_OFFSET);
 
     if (1) {}
     this->subCamAtNext.x = D_80971EEC[this->unk190].x + this->unk22C.x;
@@ -978,7 +978,7 @@ void EnKakasi_DiggingAway(EnKakasi* this, PlayState* play) {
         this->subCamEyeNext.z = D_80972030.z;
 
         Math_Vec3f_Copy(&tempunk238, &this->subCamEyeNext);
-        OLib_DbCameraVec3fSum(&this->picto.actor.home, &tempunk238, &this->subCamEyeNext, 1);
+        OLib_Vec3fAdd(&this->picto.actor.home, &tempunk238, &this->subCamEyeNext, OLIB_ADD_OFFSET);
         this->subCamAtNext.x = ((f32)D_8097203C.x) + this->unk22C.x; // cast req
         this->subCamAtNext.y = ((f32)D_8097203C.y) + this->unk22C.y;
         this->subCamAtNext.z = ((f32)D_8097203C.z) + this->unk22C.z;
@@ -1122,7 +1122,7 @@ void EnKakasi_Update(Actor* thisx, PlayState* play) {
         if (this->unk1BC.x != 0.0f || this->unk1BC.z != 0.0f) {
             Math_Vec3f_Copy(&this->picto.actor.focus.pos, &this->unk1BC);
             this->picto.actor.focus.pos.y += 10.0f;
-            if (this->subCamId == CAM_ID_MAIN) {
+            if (this->subCamId == SUB_CAM_ID_DONE) {
                 Math_Vec3s_Copy(&this->picto.actor.focus.rot, &this->picto.actor.world.rot);
             } else {
                 Math_Vec3s_Copy(&this->picto.actor.focus.rot, &this->picto.actor.home.rot);
