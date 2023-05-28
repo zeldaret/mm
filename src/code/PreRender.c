@@ -614,7 +614,7 @@ u32 func_801716C4(u8* arg0, u8* arg1, u8* arg2) {
     return var_s1;
 }
 
-#if 0
+#ifdef NON_EQUIVALENT
 void func_801717F8(PreRender* this) {
     u8 **temp_v0;
     s32 temp_s1;
