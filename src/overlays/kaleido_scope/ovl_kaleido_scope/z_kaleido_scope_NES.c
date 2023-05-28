@@ -237,7 +237,7 @@ s16 sPauseCursorRightX = 0;
 
 s16 D_8082B920 = 10;
 
-s16 D_8082B924[] = { 20, 4, 20, 10 };
+s16 sPauseLRCursorColorTimerInit[] = { 20, 4, 20, 10 };
 
 // Unused remnant of OoT
 u8 gAreaGsFlags[] = {
@@ -808,7 +808,7 @@ void KaleidoScope_DrawInfoPanel(PlayState* play) {
         sPauseLRCursorGreen = sPauseLRCursorColorTargets[sPauseLRCursorColorIndex][1];
         sPauseLRCursorBlue = sPauseLRCursorColorTargets[sPauseLRCursorColorIndex][2];
         sPauseLRCursorAlpha = sPauseLRCursorColorTargets[sPauseLRCursorColorIndex][3];
-        sPauseLRCursorColorTimer = D_8082B924[0];
+        sPauseLRCursorColorTimer = sPauseLRCursorColorTimerInit[0];
         sPauseLRCursorColorIndex ^= 1;
     }
 
@@ -1259,7 +1259,7 @@ void KaleidoScope_DrawOwlWarpInfoPanel(PlayState* play) {
         sPauseLRCursorGreen = sPauseLRCursorColorTargets[sPauseLRCursorColorIndex][1];
         sPauseLRCursorBlue = sPauseLRCursorColorTargets[sPauseLRCursorColorIndex][2];
         sPauseLRCursorAlpha = sPauseLRCursorColorTargets[sPauseLRCursorColorIndex][3];
-        sPauseLRCursorColorTimer = D_8082B924[0];
+        sPauseLRCursorColorTimer = sPauseLRCursorColorTimerInit[0];
         sPauseLRCursorColorIndex ^= 1;
     }
 
@@ -2623,7 +2623,7 @@ void KaleidoScope_DrawCursor(PlayState* play) {
 }
 
 void KaleidoScope_DrawGameOver(PlayState* play) {
-    static s16 D_8082BE84 = 0;
+    static s16 sGameOverUlt = 0;
     GraphicsContext* gfxCtx = play->state.gfxCtx;
 
     OPEN_DISPS(gfxCtx);
@@ -2638,7 +2638,7 @@ void KaleidoScope_DrawGameOver(PlayState* play) {
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 80, sGameOverPrimR, sGameOverPrimG, sGameOverPrimB, sGameOverPrimAlpha);
     gDPSetEnvColor(POLY_OPA_DISP++, sGameOverEnvR, sGameOverEnvG, sGameOverEnvB, 255);
 
-    D_8082BE84 -= 2;
+    sGameOverUlt -= 2;
 
     gDPLoadTextureBlock(POLY_OPA_DISP++, gGameOverP1Tex, G_IM_FMT_IA, G_IM_SIZ_8b, 64, 32, 0, G_TX_NOMIRROR | G_TX_WRAP,
                         G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
@@ -2646,7 +2646,7 @@ void KaleidoScope_DrawGameOver(PlayState* play) {
     gDPLoadMultiBlock(POLY_OPA_DISP++, gGameOverMaskTex, 256, 1, G_IM_FMT_IA, G_IM_SIZ_8b, 64, 32, 0,
                       G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, 5, G_TX_NOLOD, G_TX_NOLOD);
 
-    gDPSetTileSize(POLY_OPA_DISP++, 1, 0, D_8082BE84 & 0x7F, 252, (D_8082BE84 & 0x7F) + 0x7C);
+    gDPSetTileSize(POLY_OPA_DISP++, 1, 0, sGameOverUlt & 0x7F, 252, (sGameOverUlt & 0x7F) + 124);
 
     gSPTextureRectangle(POLY_OPA_DISP++, 0x100, sGameOverRectPosY << 2, 0x200, (sGameOverRectPosY + 32) << 2,
                         G_TX_RENDERTILE, 0, 0, 1 << 10, 1 << 10);
@@ -2860,7 +2860,7 @@ void KaleidoScope_Update(PlayState* play) {
             size0 = SEGMENT_ROM_SIZE(icon_item_static_old);
             CmpDma_LoadAllFiles((uintptr_t)SEGMENT_ROM_START(icon_item_static_test), pauseCtx->iconItemSegment, size0);
 
-            gSegments[0x08] = PHYSICAL_TO_VIRTUAL(pauseCtx->iconItemSegment);
+            gSegments[0x08] = VIRTUAL_TO_PHYSICAL(pauseCtx->iconItemSegment);
 
             for (itemId = 0; itemId <= ITEM_BOW_ARROW_FIRE; itemId++) {
                 if (!gPlayerFormItemRestrictions[(void)0, gSaveContext.save.playerForm][(s32)itemId]) {
