@@ -1265,10 +1265,10 @@ asm/non_matchings/code/z_kankyo/Environment_FillScreen.s,Environment_FillScreen,
 asm/non_matchings/code/z_kankyo/Environment_DrawSandstorm.s,Environment_DrawSandstorm,0x800FC64C,0x31A
 asm/non_matchings/code/z_kankyo/func_800FD2B4.s,func_800FD2B4,0x800FD2B4,0xA1
 asm/non_matchings/code/z_kankyo/func_800FD538.s,func_800FD538,0x800FD538,0x19
-asm/non_matchings/code/z_kankyo/func_800FD59C.s,func_800FD59C,0x800FD59C,0x11
-asm/non_matchings/code/z_kankyo/func_800FD5E0.s,func_800FD5E0,0x800FD5E0,0x1D
-asm/non_matchings/code/z_kankyo/func_800FD654.s,func_800FD654,0x800FD654,0x11
-asm/non_matchings/code/z_kankyo/func_800FD698.s,func_800FD698,0x800FD698,0x22
+asm/non_matchings/code/z_kankyo/Environment_LerpAmbientColor.s,Environment_LerpAmbientColor,0x800FD59C,0x11
+asm/non_matchings/code/z_kankyo/Environment_LerpDiffuseColor.s,Environment_LerpDiffuseColor,0x800FD5E0,0x1D
+asm/non_matchings/code/z_kankyo/Environment_LerpFogColor.s,Environment_LerpFogColor,0x800FD654,0x11
+asm/non_matchings/code/z_kankyo/Environment_LerpFog.s,Environment_LerpFog,0x800FD698,0x22
 asm/non_matchings/code/z_kankyo/get_days_elapsed.s,get_days_elapsed,0x800FD720,0x4
 asm/non_matchings/code/z_kankyo/reset_days_elapsed.s,reset_days_elapsed,0x800FD730,0x4
 asm/non_matchings/code/z_kankyo/get_current_day.s,get_current_day,0x800FD740,0x4

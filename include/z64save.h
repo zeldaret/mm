@@ -1465,7 +1465,7 @@ typedef enum {
 #define EVENTINF_24 0x24
 #define EVENTINF_25 0x25
 #define EVENTINF_26 0x26
-#define EVENTINF_27 0x27
+#define EVENTINF_NEW_DAY 0x27
 #define EVENTINF_30 0x30
 
 // EVENTINF_31 is used to track if Player is within range of EnGakufu (2D Song Buttons Appearing on Wall)
@@ -1509,11 +1509,11 @@ typedef enum {
 #define EVENTINF_65 0x65
 #define EVENTINF_66 0x66
 #define EVENTINF_67 0x67
-#define EVENTINF_70 0x70
-#define EVENTINF_71 0x71
-#define EVENTINF_72 0x72
-#define EVENTINF_73 0x73
-#define EVENTINF_74 0x74
+#define EVENTINF_THREEDAYRESET_HAS_RUPEES 0x70
+#define EVENTINF_THREEDAYRESET_HAS_BOMB_AMMO 0x71
+#define EVENTINF_THREEDAYRESET_HAS_NUT_AMMO 0x72
+#define EVENTINF_THREEDAYRESET_HAS_STICK_AMMO 0x73
+#define EVENTINF_THREEDAYRESET_HAS_ARROW_AMMO 0x74
 #define EVENTINF_75 0x75
 #define EVENTINF_76 0x76
 #define EVENTINF_77 0x77

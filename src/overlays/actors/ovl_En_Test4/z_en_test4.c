@@ -305,7 +305,7 @@ void EnTest4_Init(Actor* thisx, PlayState* play) {
         sCsIdList[1] = sCsIdList[0];
     }
 
-    if (sIsLoaded || (CHECK_EVENTINF(EVENTINF_27))) {
+    if (sIsLoaded || (CHECK_EVENTINF(EVENTINF_NEW_DAY))) {
         Actor_Kill(&this->actor);
     } else {
         sIsLoaded = true;
@@ -413,7 +413,7 @@ void func_80A42AB8(EnTest4* this, PlayState* play) {
                     }
 
                     gSaveContext.respawnFlag = -4;
-                    SET_EVENTINF(EVENTINF_27);
+                    SET_EVENTINF(EVENTINF_NEW_DAY);
                     Actor_Kill(&this->actor);
                 }
             }

@@ -399,38 +399,38 @@ void Sram_SaveEndOfCycle(PlayState* play) {
         gSaveContext.eventInf[i] = 0;
     }
 
-    CLEAR_EVENTINF(EVENTINF_70);
-    CLEAR_EVENTINF(EVENTINF_71);
-    CLEAR_EVENTINF(EVENTINF_72);
-    CLEAR_EVENTINF(EVENTINF_73);
-    CLEAR_EVENTINF(EVENTINF_74);
+    CLEAR_EVENTINF(EVENTINF_THREEDAYRESET_HAS_RUPEES);
+    CLEAR_EVENTINF(EVENTINF_THREEDAYRESET_HAS_BOMB_AMMO);
+    CLEAR_EVENTINF(EVENTINF_THREEDAYRESET_HAS_NUT_AMMO);
+    CLEAR_EVENTINF(EVENTINF_THREEDAYRESET_HAS_STICK_AMMO);
+    CLEAR_EVENTINF(EVENTINF_THREEDAYRESET_HAS_ARROW_AMMO);
 
     if (gSaveContext.save.saveInfo.playerData.rupees != 0) {
-        SET_EVENTINF(EVENTINF_70);
+        SET_EVENTINF(EVENTINF_THREEDAYRESET_HAS_RUPEES);
     }
 
     if (INV_CONTENT(ITEM_BOMB) == ITEM_BOMB) {
         item = INV_CONTENT(ITEM_BOMB);
         if (AMMO(item) != 0) {
-            SET_EVENTINF(EVENTINF_71);
+            SET_EVENTINF(EVENTINF_THREEDAYRESET_HAS_BOMB_AMMO);
         }
     }
     if (INV_CONTENT(ITEM_NUT) == ITEM_NUT) {
         item = INV_CONTENT(ITEM_NUT);
         if (AMMO(item) != 0) {
-            SET_EVENTINF(EVENTINF_72);
+            SET_EVENTINF(EVENTINF_THREEDAYRESET_HAS_NUT_AMMO);
         }
     }
     if (INV_CONTENT(ITEM_STICK) == ITEM_STICK) {
         item = INV_CONTENT(ITEM_STICK);
         if (AMMO(item) != 0) {
-            SET_EVENTINF(EVENTINF_73);
+            SET_EVENTINF(EVENTINF_THREEDAYRESET_HAS_STICK_AMMO);
         }
     }
     if (INV_CONTENT(ITEM_BOW) == ITEM_BOW) {
         item = INV_CONTENT(ITEM_BOW);
         if (AMMO(item) != 0) {
-            SET_EVENTINF(EVENTINF_74);
+            SET_EVENTINF(EVENTINF_THREEDAYRESET_HAS_ARROW_AMMO);
         }
     }
 
@@ -1057,7 +1057,7 @@ void Sram_OpenSave(FileSelectState* fileSelect, SramContext* sramCtx) {
         if (gSaveContext.save.isFirstCycle) {
             gSaveContext.save.entrance = ENTRANCE(SOUTH_CLOCK_TOWN, 0);
             gSaveContext.save.day = 0;
-            gSaveContext.save.time = 0x3FFF;
+            gSaveContext.save.time = CLOCK_TIME(6, 0) - 1;
         } else {
             gSaveContext.save.entrance = ENTRANCE(CUTSCENE, 0);
             gSaveContext.nextCutsceneIndex = 0;
