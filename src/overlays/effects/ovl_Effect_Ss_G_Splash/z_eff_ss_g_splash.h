@@ -3,6 +3,12 @@
 
 #include "global.h"
 
+typedef enum EffSsGSplashType {
+    /* 0 */ EFFSSGSPLASH_TYPE_0,
+    /* 1 */ EFFSSGSPLASH_TYPE_1,
+    /* 2 */ EFFSSGSPLASH_TYPE_2
+} EffSsGSplashType;
+
 typedef struct {
     /* 0x00 */ Vec3f pos;
     /* 0x0C */ u8 type;
