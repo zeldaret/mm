@@ -783,9 +783,9 @@ typedef struct {
     /* 0x18 */ f32 unk_18;
     /* 0x1C */ f32 unk_1C;
     /* 0x2A */ f32 unk_20;
-    /* 0x24 */ s16 unk_24;
+    /* 0x24 */ s16 curFrame;
     /* 0x26 */ s16 unk_26;
-    /* 0x28 */ s16 unk_28;
+    /* 0x28 */ s16 duration;
     /* 0x2A */ s16 numEntries;
     /* 0x1E */ u8 curPoint;
     /* 0x2D */ u8 unk_2D;
