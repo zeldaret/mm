@@ -184,7 +184,7 @@ C_FILES       := $(foreach dir,$(SRC_DIRS) $(ASSET_BIN_DIRS_C_FILES),$(wildcard 
 S_FILES       := $(shell grep -F "build/asm" spec | sed 's/.*build\/// ; s/\.o\".*/.s/') \
                  $(shell grep -F "build/data" spec | sed 's/.*build\/// ; s/\.o\".*/.s/')
 BASEROM_FILES := $(shell grep -F "build/baserom" spec | sed 's/.*build\/// ; s/\.o\".*//')
-ARCHIVES_O    := $(shell grep -F ".archive.o" spec | sed 's/.*include "// ; s/\.o\".*/.o/')
+ARCHIVES_O    := $(shell grep -F ".yar.o" spec | sed 's/.*include "// ; s/\.o\".*/.o/')
 O_FILES       := $(foreach f,$(S_FILES:.s=.o),build/$f) \
                  $(foreach f,$(C_FILES:.c=.o),build/$f) \
                  $(foreach f,$(BASEROM_FILES),build/$f.o) \
@@ -347,9 +347,9 @@ build/assets/%.o: assets/%.c
 	$(OBJCOPY_BIN)
 	$(RM_MDEBUG)
 
-build/assets/archives/%.archive.o: build/assets/archives/%.o
-	tools/buildtools/makeyar $< $(@:.archive.o=.archive.bin) $(@:.archive.o=.symbols.o)
-	$(OBJCOPY) -I binary -O elf32-big $(@:.archive.o=.archive.bin) $@
+build/assets/archives/%.yar.o: build/assets/archives/%.o
+	tools/buildtools/makeyar $< $(@:.yar.o=.yar.bin) $(@:.yar.o=.symbols.o)
+	$(OBJCOPY) -I binary -O elf32-big $(@:.yar.o=.yar.bin) $@
 
 build/baserom/%.o: baserom/%
 	$(OBJCOPY) -I binary -O elf32-big $< $@

@@ -41,7 +41,6 @@ def getOffsetsList(archiveBytes: bytearray) -> list[ArchiveMeta]:
     while offset < firstEntryOffset - 4:
         entry = readBytesAsWord(archiveBytes, offset)
         nextEntry = readBytesAsWord(archiveBytes, offset + 4)
-        # print(f"0x{entry:04X}")
         entryStart = entry + firstEntryOffset
         entryEnd = nextEntry + firstEntryOffset
         archivesOffsets.append(ArchiveMeta(entryStart, entryEnd))
@@ -89,7 +88,6 @@ def main():
 
     archivesCsvPath = Path(f"tools/filelists/{args.version}/archives.csv")
 
-    # archivesNames: list[Path] = []
     with archivesCsvPath.open() as f:
         for line in f:
             archiveName = line.strip().split(",")[1]
@@ -98,9 +96,6 @@ def main():
             extractedPath = Path(str(archivePath) + ".unarchive")
             print(f"Extracting '{archivePath}' -> '{extractedPath}'")
             extractArchive(archivePath, extractedPath)
-            # print()
-            # archivesNames.append()
-
 
 if __name__ == "__main__":
     main()

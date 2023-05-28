@@ -332,33 +332,33 @@ endseg
 
 beginseg
     name "map_i_static"
-    include "build/assets/archives/map_i_static/map_i_static.archive.o"
+    include "build/assets/archives/map_i_static/map_i_static.yar.o"
 endseg
 
 beginseg
     name "map_grand_static"
-    include "build/assets/archives/map_grand_static/map_grand_static.archive.o"
+    include "build/assets/archives/map_grand_static/map_grand_static.yar.o"
 endseg
 
 beginseg
     name "item_name_static"
-    include "build/assets/archives/item_name_static/item_name_static.archive.o"
+    include "build/assets/archives/item_name_static/item_name_static.yar.o"
 endseg
 
 beginseg
     name "map_name_static"
-    include "build/assets/archives/map_name_static/map_name_static.archive.o"
+    include "build/assets/archives/map_name_static/map_name_static.yar.o"
 endseg
 
 beginseg
     name "icon_item_static_yar"
-    include "build/assets/archives/icon_item_static/icon_item_static_yar.archive.o"
+    include "build/assets/archives/icon_item_static/icon_item_static_yar.yar.o"
     number 8
 endseg
 
 beginseg
     name "icon_item_24_static_yar"
-    include "build/assets/archives/icon_item_24_static/icon_item_24_static_yar.archive.o"
+    include "build/assets/archives/icon_item_24_static/icon_item_24_static_yar.yar.o"
     number 9
 endseg
 
@@ -371,7 +371,7 @@ endseg
 beginseg
     name "schedule_dma_static_yar"
     increment 0x1000
-    include "build/assets/archives/schedule_dma_static/schedule_dma_static_yar.archive.o"
+    include "build/assets/archives/schedule_dma_static/schedule_dma_static_yar.yar.o"
     number 7
 endseg
 
