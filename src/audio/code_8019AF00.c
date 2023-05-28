@@ -4273,7 +4273,7 @@ f32 Audio_SetSyncedSfxFreqAndVolume(f32 freqVolParam) {
         sSfxSyncedFreq = 1.1f;
     } else {
         ret = freqVolParam / 6.0f;
-        sSfxSyncedVolume = ret * (1 - 0.775f) + 0.775f;
+        sSfxSyncedVolume = ret * (1.0f - 0.775f) + 0.775f;
         sSfxSyncedFreq = (ret * 0.2f) + 0.9f;
     }
 
