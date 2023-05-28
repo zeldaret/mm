@@ -422,8 +422,9 @@ void func_808B0894(EnAm* this, PlayState* play) {
     this->armosYaw = this->actor.yawTowardsPlayer;
     func_808B0208(this, play);
     if (this->explodeTimer == 1) {
-        EnBom* bomb = (EnBom*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOM, this->actor.world.pos.x,
-                                          this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 2, 0);
+        EnBom* bomb =
+            (EnBom*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOM, this->actor.world.pos.x, this->actor.world.pos.y,
+                                this->actor.world.pos.z, BOMB_EXPLOSIVE_TYPE_BOMB, 0, 2, BOMB_TYPE_BODY);
         if (bomb != NULL) {
             bomb->timer = 0;
         }
