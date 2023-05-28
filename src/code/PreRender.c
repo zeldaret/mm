@@ -580,7 +580,7 @@ void PreRender_ApplyAntiAliasingFilter(PreRender* this) {
  * all args are expected to be an array of 3 different 5-bit values
  */
 u32 PreRender_Get5bMedian9(u8* px1, u8* px2, u8* px3) {
-    u8 pxBitCount[32]; // Stores the count for each of the possible 32-bit pixel values
+    u8 pxBitCount[32]; // Stores the count for each of the possible 32 5-bit pixel values
     u32 pxCount;       // Pixel count
     s32 pxMed;         // Pixel median value
 
@@ -594,7 +594,7 @@ u32 PreRender_Get5bMedian9(u8* px1, u8* px2, u8* px3) {
     *(s32*)(&pxBitCount[24]) = 0;
     *(s32*)(&pxBitCount[28]) = 0;
 
-    // Increment the count that contains the pixel vaules
+    // Increment the count that contains the pixel values
     pxBitCount[px1[0]]++;
     pxBitCount[px1[1]]++;
     pxBitCount[px1[2]]++;
@@ -608,7 +608,7 @@ u32 PreRender_Get5bMedian9(u8* px1, u8* px2, u8* px3) {
     pxBitCount[px3[2]]++;
 
     // Loop through the 32 bits until 5 values are found, then return that bit value.
-    // Note that the median of 9 is the 5th value.
+    // Note that the median of 9 is the 5th sequential value.
     pxCount = 0;
     pxMed = 0;
     while (true) {
