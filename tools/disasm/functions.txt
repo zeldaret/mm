@@ -11971,7 +11971,7 @@
     0x80AC6740:("TransitionWipe3_Start",),
     0x80AC687C:("TransitionWipe3_Init",),
     0x80AC68A8:("TransitionWipe3_Destroy",),
-    0x80AC68B4:("func_80AC68B4",),
+    0x80AC68B4:("TransitionWipe3_UpdateScrollY",),
     0x80AC68E0:("TransitionWipe3_Update",),
     0x80AC69F8:("TransitionWipe3_Draw",),
     0x80AC6BE4:("TransitionWipe3_IsDone",),
