@@ -1971,7 +1971,7 @@ void func_809DD934(Boss02* this, PlayState* play) {
                 temp_a0_5->scale.z *= phi_f0_2;
 
                 if (temp_a0_5->id == ACTOR_ITEM_B_HEART) {
-                    ((ItemBHeart*)temp_a0_5)->unitScale *= phi_f0_2;
+                    ((ItemBHeart*)temp_a0_5)->baseScale *= phi_f0_2;
                 }
             }
             temp_a0_5 = temp_a0_5->next;

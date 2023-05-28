@@ -47,25 +47,25 @@ void ItemBHeart_Init(Actor* thisx, PlayState* play) {
     Actor_ProcessInitChain(&this->actor, sInitChain);
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.8f);
     if (this->actor.params == BHEART_PARAM_SMALL) {
-        this->unitScale = BHEART_SCALE_SMALL;
+        this->baseScale = BHEART_SCALE_SMALL;
     } else {
-        this->unitScale = BHEART_SCALE_NORMAL;
+        this->baseScale = BHEART_SCALE_NORMAL;
     }
-    this->actor.world.pos.y += 20.0f * this->unitScale;
+    this->actor.world.pos.y += 20.0f * this->baseScale;
 }
 
 void ItemBHeart_Destroy(Actor* thisx, PlayState* play) {
 }
 
 /**
- * Adjusts size and handles collection (if of proper unitScale)
+ * Adjusts size and handles collection (if of proper baseScale)
  */
 void ItemBHeart_Update(Actor* thisx, PlayState* play) {
     ItemBHeart* this = THIS;
 
     ItemBHeart_UpdateModel(this, play);
 
-    if (!(this->unitScale < BHEART_SCALE_MIN_COLLECTIBLE)) {
+    if (!(this->baseScale < BHEART_SCALE_MIN_COLLECTIBLE)) {
         if (Actor_HasParent(&this->actor, play)) {
             Flags_SetCollectible(play, 0x1F);
             Actor_Kill(&this->actor);
@@ -81,7 +81,7 @@ void ItemBHeart_Update(Actor* thisx, PlayState* play) {
 void ItemBHeart_UpdateModel(ItemBHeart* this, PlayState* play) {
     this->actor.shape.rot.y += 0x400;
     Math_ApproachF(&this->variableScale, 0.4f, 0.1f, 0.01f);
-    Actor_SetScale(&this->actor, this->variableScale * this->unitScale);
+    Actor_SetScale(&this->actor, this->variableScale * this->baseScale);
 }
 
 /**
