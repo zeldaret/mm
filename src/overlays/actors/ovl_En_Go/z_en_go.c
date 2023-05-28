@@ -819,9 +819,8 @@ s32 EnGo_IsFallingAsleep(EnGo* this, PlayState* play) {
     if (((player->transformation == PLAYER_FORM_GORON) && (play->msgCtx.ocarinaMode == 3) &&
          (play->msgCtx.lastPlayedSong == OCARINA_SONG_GORON_LULLABY) && (this->sleepState == ENGO_AWAKE) &&
          (this->actor.xzDistToPlayer < 400.0f)) ||
-        (!CHECK_WEEKEVENTREG(WEEKEVENTREG_22_04) && // Elder's son has been calmed
-         (play->sceneId == SCENE_16GORON_HOUSE) && (gSaveContext.sceneLayer == 0) && (this->sleepState == ENGO_AWAKE) &&
-         (play->csCtx.scriptIndex == 1))) {
+        (!CHECK_WEEKEVENTREG(WEEKEVENTREG_22_04) && (play->sceneId == SCENE_16GORON_HOUSE) &&
+         (gSaveContext.sceneLayer == 0) && (this->sleepState == ENGO_AWAKE) && (play->csCtx.scriptIndex == 1))) {
         isFallingAsleep = true;
     }
     return isFallingAsleep;
@@ -1296,8 +1295,7 @@ void EnGo_GravemakerIdle(EnGo* this, PlayState* play) {
     if ((fabsf(this->actor.playerHeightRel) > 20.0f) || (this->actor.xzDistToPlayer > 300.0f)) {
         SubS_UpdateFlags(&this->actionFlags, 3, 7);
     } else if ((player->transformation != PLAYER_FORM_GORON) || (ABS_ALT(deltaYaw) >= 0x1C70) ||
-               CHECK_WEEKEVENTREG(WEEKEVENTREG_21_04) || // Spoke to gravemaker as Goron
-               CHECK_WEEKEVENTREG(WEEKEVENTREG_21_08)) { // Thawed frozen graveyard Goron
+               CHECK_WEEKEVENTREG(WEEKEVENTREG_21_04) || CHECK_WEEKEVENTREG(WEEKEVENTREG_21_08)) {
         SubS_UpdateFlags(&this->actionFlags, 3, 7);
     } else {
         SubS_UpdateFlags(&this->actionFlags, 4, 7);
@@ -1308,7 +1306,7 @@ void EnGo_GravemakerIdle(EnGo* this, PlayState* play) {
  * Idle action function for the Goron frozen at the Goron Graveyard
  */
 void EnGo_FrozenIdle(EnGo* this, PlayState* play) {
-    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_21_08)) { // Thawed frozen graveyard Goron
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_21_08)) {
         SubS_UpdateFlags(&this->actionFlags, 3, 7);
     } else {
         SubS_UpdateFlags(&this->actionFlags, 4, 7);
@@ -1349,8 +1347,8 @@ Actor* EnGo_FindGravemaker(EnGo* this, PlayState* play) {
  * The Medigoron's collider radius is greater when it needs to be able to drop the Powder Keg in front of the player.
  */
 void EnGo_UpdateMedigoronColliderRadius(EnGo* this, PlayState* play, s32 isGivenPowderKeg) {
-    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_18_80) || // Has Powder Keg Privileges
-        (play->actorCtx.flags & ACTORCTX_FLAG_0)  // Same check occurs in Powder Keg ammo check MsgScript Command
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_18_80) ||
+        (play->actorCtx.flags & ACTORCTX_FLAG_0) // Same check occurs in Powder Keg ammo check MsgScript Command
         || isGivenPowderKeg) {
         this->colliderSphere.dim.modelSphere.radius = 300;
     } else {
@@ -1585,7 +1583,7 @@ s32 EnGo_HandleOpenShrineCutscene(Actor* thisx, PlayState* play) {
                 EnGo_CreateGatekeeperPoundEffects(this, play);
                 this->gatekeeperAnimState++;
                 this->cutsceneDelayTimer = 0;
-                SET_WEEKEVENTREG(WEEKEVENTREG_88_40); // Gatekeeper has Opened Shrine
+                SET_WEEKEVENTREG(WEEKEVENTREG_88_40);
             }
             break;
 
@@ -1605,19 +1603,19 @@ s32 EnGo_HandleOpenShrineCutscene(Actor* thisx, PlayState* play) {
             if (this->cutsceneState >= 65) {
                 switch (player->transformation) {
                     case PLAYER_FORM_HUMAN:
-                        SET_WEEKEVENTREG(WEEKEVENTREG_88_80); // Gatekeeper has opened shrine for Human form.
+                        SET_WEEKEVENTREG(WEEKEVENTREG_88_80);
                         break;
 
                     case PLAYER_FORM_GORON:
-                        SET_WEEKEVENTREG(WEEKEVENTREG_89_04); // Gatekeeper has opened shrine for Goron form.
+                        SET_WEEKEVENTREG(WEEKEVENTREG_89_04);
                         break;
 
                     case PLAYER_FORM_ZORA:
-                        SET_WEEKEVENTREG(WEEKEVENTREG_89_02); // Gatekeeper has opened shrine for Zora form.
+                        SET_WEEKEVENTREG(WEEKEVENTREG_89_02);
                         break;
 
                     case PLAYER_FORM_DEKU:
-                        SET_WEEKEVENTREG(WEEKEVENTREG_89_01); // Gatekeeper has opened shrine for Deku form.
+                        SET_WEEKEVENTREG(WEEKEVENTREG_89_01);
                         break;
 
                     default:
@@ -1904,9 +1902,9 @@ void EnGo_SetupGatekeeper(EnGo* this, PlayState* play) {
  */
 void EnGo_SetupGraveyardGoron(EnGo* this, PlayState* play) {
     if ((ENGO_GET_SUBTYPE(&this->actor) == ENGO_GRAVEYARD_FROZEN) &&
-        (((play->sceneId == SCENE_10YUKIYAMANOMURA2) && // Snow mountain village
-          (gSaveContext.sceneLayer == 1) && (play->csCtx.scriptIndex == 0)) ||
-         !CHECK_WEEKEVENTREG(WEEKEVENTREG_21_08))) { // Thawed frozen graveyard Goron
+        (((play->sceneId == SCENE_10YUKIYAMANOMURA2) && (gSaveContext.sceneLayer == 1) &&
+          (play->csCtx.scriptIndex == 0)) ||
+         !CHECK_WEEKEVENTREG(WEEKEVENTREG_21_08))) {
         this->actor.child = EnGo_FindGravemaker(this, play);
         this->actor.child->child = &this->actor;
         EnGo_ChangeToFrozenAnimation(this, play);
@@ -1923,7 +1921,7 @@ void EnGo_SetupGraveyardGoron(EnGo* this, PlayState* play) {
  * There are three, but they all behave the same way aside from dialog.
  */
 void EnGo_SetupShrineGoron(EnGo* this, PlayState* play) {
-    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_22_04)) { // Elder's son has been calmed
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_22_04)) {
         EnGo_ChangeToCoveringEarsAnimation(this, play);
         this->actionFunc = EnGo_Idle;
     } else {
@@ -2093,8 +2091,7 @@ void EnGo_Sleep(EnGo* this, PlayState* play) {
             this->actionFlags &= ~ENGO_FLAG_ROLLED_UP;
             this->actionFlags |= ENGO_FLAG_UNROLLING;
             this->actor.shape.yOffset = ENGO_STANDING_Y_OFFSET;
-        } else if ((this->sleepState != ENGO_AWAKE) &&
-                   CHECK_WEEKEVENTREG(WEEKEVENTREG_22_04)) { // Elder's son has been calmed
+        } else if ((this->sleepState != ENGO_AWAKE) && CHECK_WEEKEVENTREG(WEEKEVENTREG_22_04)) {
             // While asleep, rhythmicallly snore and change shape to show breathing.
             this->actor.scale.x = this->scaleFactor - (Math_SinS(this->snorePhase) * (0.1f * ENGO_NORMAL_SCALE));
             this->actor.scale.y = this->scaleFactor + (Math_SinS(this->snorePhase) * (0.1f * ENGO_NORMAL_SCALE));
