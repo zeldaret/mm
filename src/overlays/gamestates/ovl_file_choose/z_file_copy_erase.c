@@ -103,7 +103,7 @@ void FileSelect_SelectCopySource(GameState* thisx) {
             play_sound(NA_SE_SY_FSEL_CURSOR);
             if (this->stickAdjY >= 30) {
                 this->buttonIndex--;
-                // Instead of removing File 3, an indexing hack was used to skip file 3
+                // Instead of removing File 3 entirely, the index is manually adjusted to skip it
                 if (this->buttonIndex == FS_BTN_COPY_FILE_3) {
                     this->buttonIndex = FS_BTN_COPY_FILE_2;
                 }
@@ -112,7 +112,7 @@ void FileSelect_SelectCopySource(GameState* thisx) {
                 }
             } else {
                 this->buttonIndex++;
-                // Instead of removing File 3, an indexing hack was used to skip file 3
+                // Instead of removing File 3 entirely, the index is manually adjusted to skip it
                 if (this->buttonIndex == FS_BTN_COPY_FILE_3) {
                     this->buttonIndex = FS_BTN_COPY_QUIT;
                 }
@@ -237,7 +237,7 @@ void FileSelect_SelectCopyDest(GameState* thisx) {
             play_sound(NA_SE_SY_FSEL_CURSOR);
             if (this->stickAdjY >= 30) {
                 this->buttonIndex--;
-                // Instead of removing File 3, an indexing hack was used to skip file 3
+                // Instead of removing File 3 entirely, the index is manually adjusted to skip it
                 if (this->buttonIndex == FS_BTN_COPY_FILE_3) {
                     this->buttonIndex = FS_BTN_COPY_FILE_2;
                 }
@@ -246,7 +246,7 @@ void FileSelect_SelectCopyDest(GameState* thisx) {
                     if (this->buttonIndex < FS_BTN_COPY_FILE_1) {
                         this->buttonIndex = FS_BTN_COPY_QUIT;
                     }
-                    // Instead of removing File 3, an indexing hack was used to skip file 3
+                    // Instead of removing File 3 entirely, the index is manually adjusted to skip it
                     if (this->buttonIndex == FS_BTN_COPY_FILE_3) {
                         this->buttonIndex = FS_BTN_COPY_FILE_2;
                     }
@@ -261,7 +261,7 @@ void FileSelect_SelectCopyDest(GameState* thisx) {
                 if (this->buttonIndex == this->selectedFileIndex) {
                     this->buttonIndex++;
                 }
-                // Instead of removing File 3, an indexing hack was used to skip file 3
+                // Instead of removing File 3 entirely, the index is manually adjusted to skip it
                 if (this->buttonIndex == FS_BTN_COPY_FILE_3) {
                     this->buttonIndex = FS_BTN_COPY_QUIT;
                 }

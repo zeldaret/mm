@@ -39,8 +39,8 @@ s16 sFileSelectSkyboxRotation = 0;
 
 s16 sWalletFirstDigit[] = {
     1, // tens (Default Wallet)
-    0, // hundreds (Adult's Wallet)
-    0, // hundreds (Giant's Wallet)
+    0, // hundreds (Adult Wallet)
+    0, // hundreds (Giant Wallet)
 };
 
 void FileSelect_IncrementConfigMode(FileSelectState* this) {
@@ -1361,13 +1361,13 @@ u8 sHealthToQuarterHeartCount[] = {
 };
 s16 sFileSelRupeePrimColors[3][3] = {
     { 200, 255, 100 }, // Default Wallet
-    { 170, 170, 255 }, // Adult's Wallet
-    { 255, 105, 105 }, // Giant's Wallet
+    { 170, 170, 255 }, // Adult Wallet
+    { 255, 105, 105 }, // Giant Wallet
 };
 s16 sFileSelRupeeEnvColors[3][3] = {
     { 0, 80, 0 },   // Default Wallet
-    { 10, 10, 80 }, // Adult's Wallet
-    { 40, 10, 0 },  // Giant's Wallet
+    { 10, 10, 80 }, // Adult Wallet
+    { 40, 10, 0 },  // Giant Wallet
 };
 static s16 sHeartPrimColors[2][3] = {
     { 255, 70, 50 },
