@@ -363,7 +363,7 @@ void EnTest6_Init(Actor* thisx, PlayState* play2) {
 
     this->screenFillAlpha = 0;
     this->cueId = SOTCS_CUEID_NONE;
-    this->clockYaw = 0;
+    this->invSoTClockYaw = 0;
     this->drawType = SOTCS_DRAW_TYPE_NONE;
 
     EnTest6_SetupCutscene(this, play);
@@ -485,7 +485,7 @@ void EnTest6_InvertedSoTCutscene(EnTest6* this, PlayState* play) {
             this->invSotEnvLerp = 0.0f;
             this->speed = 0.1f;
             this->alpha = 0;
-            this->clockYaw = 0;
+            this->invSoTClockYaw = 0;
             this->cueId = SOTCS_CUEID_INV_SETUP_CLOCKS;
             break;
 
@@ -510,20 +510,20 @@ void EnTest6_InvertedSoTCutscene(EnTest6* this, PlayState* play) {
                 this->speed = 1.0f;
 
                 for (i = 0; i < SOTCS_INV_NUM_CLOCKS; i++) {
-                    this->clockPos[i].x = player->actor.world.pos.x;
-                    this->clockPos[i].y = player->actor.world.pos.y;
-                    this->clockPos[i].z = player->actor.world.pos.z;
+                    this->invSoTClockPos[i].x = player->actor.world.pos.x;
+                    this->invSoTClockPos[i].y = player->actor.world.pos.y;
+                    this->invSoTClockPos[i].z = player->actor.world.pos.z;
                 }
 
-                this->particles = ZeldaArena_Malloc(sizeof(Vec3f) * SOTCS_NUM_PARTICLES);
-                if (this->particles != NULL) {
-                    for (i = 0; i < ARRAY_COUNT(this->particles[0]); i++) {
-                        (*this->particles)[i].x = (((2.0f * Rand_ZeroOne()) - 1.0f) * 40.0f) + subCam->eye.x +
-                                                  ((subCam->at.x - subCam->eye.x) * 0.2f);
-                        (*this->particles)[i].y = (((2.0f * Rand_ZeroOne()) - 1.0f) * 120.0f) + subCam->eye.y +
-                                                  ((subCam->at.y - subCam->eye.y) * 0.2f) + sp4C;
-                        (*this->particles)[i].z = (((2.0f * Rand_ZeroOne()) - 1.0f) * 40.0f) + subCam->eye.z +
-                                                  ((subCam->at.z - subCam->eye.z) * 0.2f);
+                this->invSoTParticles = ZeldaArena_Malloc(sizeof(Vec3f) * SOTCS_NUM_PARTICLES);
+                if (this->invSoTParticles != NULL) {
+                    for (i = 0; i < ARRAY_COUNT(this->invSoTParticles[0]); i++) {
+                        (*this->invSoTParticles)[i].x = (((2.0f * Rand_ZeroOne()) - 1.0f) * 40.0f) + subCam->eye.x +
+                                                        ((subCam->at.x - subCam->eye.x) * 0.2f);
+                        (*this->invSoTParticles)[i].y = (((2.0f * Rand_ZeroOne()) - 1.0f) * 120.0f) + subCam->eye.y +
+                                                        ((subCam->at.y - subCam->eye.y) * 0.2f) + sp4C;
+                        (*this->invSoTParticles)[i].z = (((2.0f * Rand_ZeroOne()) - 1.0f) * 40.0f) + subCam->eye.z +
+                                                        ((subCam->at.z - subCam->eye.z) * 0.2f);
                     }
                 }
 
@@ -551,8 +551,8 @@ void EnTest6_InvertedSoTCutscene(EnTest6* this, PlayState* play) {
             Environment_LerpFog(play, sInvSoTCsFogNear + this->alpha, sInvSoTCsFogFar + this->alpha,
                                 this->invSotEnvLerp);
 
-            this->clockYaw -= this->clockAngle;
-            clockYaw = this->clockYaw;
+            this->invSoTClockYaw -= this->clockAngle;
+            clockYaw = this->invSoTClockYaw;
 
             if (SOTCS_GET_OCARINA_MODE(&this->actor) == OCARINA_MODE_APPLY_INV_SOT_FAST) {
                 this->clockAngle += 8;
@@ -567,26 +567,26 @@ void EnTest6_InvertedSoTCutscene(EnTest6* this, PlayState* play) {
                 if (player) {}
 
                 clockYaw += 0x10000 / SOTCS_INV_NUM_CLOCKS;
-                this->clockPos[i].x = player->actor.world.pos.x + (Math_SinS(clockYaw) * this->clockDist);
-                this->clockPos[i].y = player->actor.world.pos.y;
-                this->clockPos[i].z = player->actor.world.pos.z + (Math_CosS(clockYaw) * this->clockDist);
+                this->invSoTClockPos[i].x = player->actor.world.pos.x + (Math_SinS(clockYaw) * this->clockDist);
+                this->invSoTClockPos[i].y = player->actor.world.pos.y;
+                this->invSoTClockPos[i].z = player->actor.world.pos.z + (Math_CosS(clockYaw) * this->clockDist);
             }
 
-            if (this->particles != NULL) {
-                for (i = 0; i < ARRAY_COUNT(this->particles[0]); i++) {
+            if (this->invSoTParticles != NULL) {
+                for (i = 0; i < ARRAY_COUNT(this->invSoTParticles[0]); i++) {
                     // Wiggle in the x-direction
-                    (*this->particles)[i].x += 2.0f * ((2.0f * Rand_ZeroOne()) - 1.0f);
+                    (*this->invSoTParticles)[i].x += 2.0f * ((2.0f * Rand_ZeroOne()) - 1.0f);
 
                     // Fall or rise depending on slow-down or speed-up
                     if (SOTCS_GET_OCARINA_MODE(&this->actor) == OCARINA_MODE_APPLY_INV_SOT_FAST) {
                         // Rise up
-                        (*this->particles)[i].y += 1.0f;
+                        (*this->invSoTParticles)[i].y += 1.0f;
                     } else {
                         // Fall down
-                        (*this->particles)[i].y -= 1.0f;
+                        (*this->invSoTParticles)[i].y -= 1.0f;
                     }
                     // Wiggle in the z-direction
-                    (*this->particles)[i].z += 2.0f * ((2.0f * Rand_ZeroOne()) - 1.0f);
+                    (*this->invSoTParticles)[i].z += 2.0f * ((2.0f * Rand_ZeroOne()) - 1.0f);
                 }
             }
 
@@ -595,8 +595,8 @@ void EnTest6_InvertedSoTCutscene(EnTest6* this, PlayState* play) {
                 EnTest6_DisableMotionBlur();
                 Distortion_RemoveRequest(DISTORTION_TYPE_SONG_OF_TIME);
                 play->unk_18844 = false;
-                if (this->particles != NULL) {
-                    ZeldaArena_Free(this->particles);
+                if (this->invSoTParticles != NULL) {
+                    ZeldaArena_Free(this->invSoTParticles);
                 }
                 this->cueId = SOTCS_CUEID_INV_END;
             }
@@ -653,9 +653,9 @@ void EnTest6_InvertedSoTCutscene(EnTest6* this, PlayState* play) {
         subCamAt.y = subCam->at.y + (((player->actor.focus.pos.y - subCam->at.y) - 20.0f) * sp4C);
         subCamAt.z = subCam->at.z + ((player->actor.world.pos.z - subCam->at.z) * sp4C);
 
-        sp54.x = (Math_SinS(player->actor.world.rot.y) * 80.0f) + subCamAt.x;
+        sp54.x = subCamAt.x + (Math_SinS(player->actor.world.rot.y) * 80.0f);
         sp54.y = subCamAt.y + 20.0f;
-        sp54.z = (Math_CosS(player->actor.world.rot.y) * 80.0f) + subCamAt.z;
+        sp54.z = subCamAt.z + (Math_CosS(player->actor.world.rot.y) * 80.0f);
         sp4C *= 0.75f;
 
         VEC3F_LERPIMPDST(&subCamEye, &subCam->eye, &sp54, sp4C);
@@ -945,7 +945,7 @@ void EnTest6_SharedSoTCutscene(EnTest6* this, PlayState* play) {
 
             case SOTCS_CUEID_DOUBLE_0:
                 this->drawType = SOTCS_DRAW_DOUBLE_SOT;
-                this->clockYaw = 0;
+                this->counter = 0;
                 this->clockAngle = 0;
                 player->actor.shape.shadowDraw = NULL;
 
@@ -1026,7 +1026,7 @@ void EnTest6_SharedSoTCutscene(EnTest6* this, PlayState* play) {
 
             case SOTCS_CUEID_RESET_0:
                 this->drawType = SOTCS_DRAW_RESET_CYCLE_SOT;
-                this->clockYaw = 0;
+                this->counter = 0;
                 this->clockAngle = 0;
                 player->actor.shape.shadowDraw = NULL;
 
@@ -1098,7 +1098,7 @@ void EnTest6_SharedSoTCutscene(EnTest6* this, PlayState* play) {
         switch (this->cueId) {
             case SOTCS_CUEID_DOUBLE_0:
                 this->drawType = SOTCS_DRAW_DOUBLE_SOT;
-                this->clockYaw = 0;
+                this->counter = 0;
                 this->clockAngle = 0;
                 player->actor.shape.shadowDraw = NULL;
                 this->clockColorGray = 38;
@@ -1130,7 +1130,7 @@ void EnTest6_SharedSoTCutscene(EnTest6* this, PlayState* play) {
 
             case SOTCS_CUEID_RESET_0:
                 this->drawType = SOTCS_DRAW_RESET_CYCLE_SOT;
-                this->clockYaw = 0;
+                this->counter = 0;
                 this->clockAngle = 0;
                 player->actor.shape.shadowDraw = NULL;
                 this->clockSpeed = 100.0f;
@@ -1193,7 +1193,7 @@ void EnTest6_SharedSoTCutscene(EnTest6* this, PlayState* play) {
             }
         }
     }
-    this->clockYaw++;
+    this->counter++;
 }
 
 /**
@@ -1369,11 +1369,12 @@ void EnTest6_DrawInvertedSoTCutscene(EnTest6* this, PlayState* play2) {
             this->gfx = POLY_XLU_DISP;
 
             // Draw clocks
-            for (i = 0; i < ARRAY_COUNT(this->clockPos); i++) {
-                Matrix_Translate(this->clockPos[i].x, this->clockPos[i].y, this->clockPos[i].z, MTXMODE_NEW);
+            for (i = 0; i < ARRAY_COUNT(this->invSoTClockPos); i++) {
+                Matrix_Translate(this->invSoTClockPos[i].x, this->invSoTClockPos[i].y, this->invSoTClockPos[i].z,
+                                 MTXMODE_NEW);
                 Matrix_Scale(0.3f, 0.3f, 0.3f, MTXMODE_APPLY);
                 Matrix_RotateXS(-0x4000, MTXMODE_APPLY);
-                Matrix_RotateZS(this->clockYaw, MTXMODE_APPLY);
+                Matrix_RotateZS(this->invSoTClockYaw, MTXMODE_APPLY);
 
                 gSPMatrix(this->gfx++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
                 gDPSetPrimColor(this->gfx++, 0, 0xFF, 28, 28, 28, 255);
@@ -1385,11 +1386,11 @@ void EnTest6_DrawInvertedSoTCutscene(EnTest6* this, PlayState* play2) {
             }
 
             // Draw black particles
-            if (this->particles != NULL) {
+            if (this->invSoTParticles != NULL) {
                 for (i = 0; i < SOTCS_NUM_PARTICLES; i++) {
                     flashScale = Rand_ZeroOne() * 0.0025f;
-                    Matrix_Translate((*this->particles)[i].x, (*this->particles)[i].y, (*this->particles)[i].z,
-                                     MTXMODE_NEW);
+                    Matrix_Translate((*this->invSoTParticles)[i].x, (*this->invSoTParticles)[i].y,
+                                     (*this->invSoTParticles)[i].z, MTXMODE_NEW);
                     Matrix_Scale(flashScale, flashScale, flashScale, MTXMODE_APPLY);
 
                     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 128, 128, 128, this->alpha >> 1);
@@ -1397,7 +1398,7 @@ void EnTest6_DrawInvertedSoTCutscene(EnTest6* this, PlayState* play2) {
 
                     func_8012C2DC(play->state.gfxCtx);
                     Matrix_Mult(&play->billboardMtxF, MTXMODE_APPLY);
-                    Matrix_RotateZS(this->clockYaw + (i << 2), MTXMODE_APPLY);
+                    Matrix_RotateZS(this->invSoTClockYaw + (i << 2), MTXMODE_APPLY);
 
                     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
                               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

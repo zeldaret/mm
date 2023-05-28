@@ -1458,7 +1458,7 @@ typedef enum {
 #define EVENTINF_24 0x24
 #define EVENTINF_25 0x25
 #define EVENTINF_26 0x26
-// The next day. Must be triggered with respawnFlag -4 or -99
+// "Dawn of ... day". Must be triggered with respawnFlag -4 or -99
 #define EVENTINF_TRIGGER_DAYTELOP 0x27
 #define EVENTINF_30 0x30
 

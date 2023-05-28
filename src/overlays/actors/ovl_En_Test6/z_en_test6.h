@@ -58,14 +58,17 @@ typedef struct EnTest6 {
     /* 0x160 */ f32 doubleSotEnvLerp;
     /* 0x164 */ SoTCsLight lights[2];
     /* 0x18C */ CutsceneCamera csCamInfo;
-    /* 0x20C */ Vec3f clockPos[SOTCS_INV_NUM_CLOCKS];
-    /* 0x254 */ Vec3f (*particles)[SOTCS_NUM_PARTICLES];
+    /* 0x20C */ Vec3f invSoTClockPos[SOTCS_INV_NUM_CLOCKS];
+    /* 0x254 */ Vec3f (*invSoTParticles)[SOTCS_NUM_PARTICLES];
     /* 0x258 */ Vec3f subCamAt;
     /* 0x264 */ Vec3f subCamEye;
     /* 0x270 */ f32 subCamFov;
     /* 0x274 */ s16 cueId;
     /* 0x276 */ s16 drawType;
-    /* 0x278 */ s16 clockYaw;
+    /* 0x278 */ union {
+            s16 invSoTClockYaw; // For inverted SoT cutscene.
+            s16 counter; // For double/reset Sot cutscenes. Increments every frame, unused.
+        };
     /* 0x27A */ s16 timer;
     /* 0x27C */ s16 clockAngle;
     /* 0x27E */ s16 clockRingRotZ;
