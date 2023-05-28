@@ -364,14 +364,14 @@ typedef struct BlureColors {
     /* 0xC */ u8 p2EndColor[4];
 } BlureColors; // size = 0x10
 
-typedef void (*PlayerCueInterpretor)(PlayState*, Player*, CsCmdActorCue*);
+typedef void (*PlayerCueInterpreter)(PlayState*, Player*, CsCmdActorCue*);
 
 typedef struct struct_8085DA94 {
     /* 0x0 */ s8 type;
     /* 0x4 */ union {
         void* ptr; // Do not use, required in the absence of designated initialisors
         PlayerAnimationHeader* anim;
-        PlayerCueInterpretor func;
+        PlayerCueInterpreter func;
         AnimSfxEntry* entry;
     };
 } struct_8085DA94; // size = 0x8
@@ -558,7 +558,7 @@ void func_8082DC28(Player* this) {
 
 void func_8082DC38(Player* this) {
     this->stateFlags2 &= ~PLAYER_STATE2_20000;
-    this->meleeWeaponState = 0;
+    this->meleeWeaponState = PLAYER_MELEE_WEAPON_STATE_0;
     this->meleeWeaponInfo[2].active = false;
     this->meleeWeaponInfo[1].active = false;
     this->meleeWeaponInfo[0].active = false;
@@ -2037,12 +2037,12 @@ s32 func_8082ECCC(Player* this) {
     return this->stateFlags1 & PLAYER_STATE1_1000000;
 }
 
+#define CHEST_ANIM_SHORT 0
+#define CHEST_ANIM_LONG 1
+
 // TODO: consider what to do with the NONEs: cannot use a zero-argument macro like OoT since the text id is involved.
 #define GET_ITEM(itemId, objectId, drawId, textId, field, chestAnim) \
     { itemId, field, (chestAnim != CHEST_ANIM_SHORT ? 1 : -1) * (drawId + 1), textId, objectId }
-
-#define CHEST_ANIM_SHORT 0
-#define CHEST_ANIM_LONG 1
 
 #define GIFIELD_GET_DROP_TYPE(field) ((field)&0x1F)
 #define GIFIELD_20 (1 << 5)
@@ -2883,7 +2883,7 @@ s8 sItemItemActions[] = {
     PLAYER_IA_PICTO_BOX,               // ITEM_PICTO_BOX,
     PLAYER_IA_LENS,                    // ITEM_LENS,
     PLAYER_IA_HOOKSHOT,                // ITEM_HOOKSHOT,
-    PLAYER_IA_SWORD_GREAT_FAIRY,       // ITEM_SWORD_GREAT_FAIRY,
+    PLAYER_IA_SWORD_TWO_HANDED,        // ITEM_SWORD_GREAT_FAIRY,
     PLAYER_IA_PICTO_BOX,               // ITEM_LONGSHOT, // OoT Leftover
     PLAYER_IA_BOTTLE_EMPTY,            // ITEM_BOTTLE,
     PLAYER_IA_BOTTLE_POTION_RED,       // ITEM_POTION_RED,
@@ -2947,7 +2947,7 @@ s8 sItemItemActions[] = {
     PLAYER_IA_SWORD_KOKIRI,            // ITEM_SWORD_KOKIRI,
     PLAYER_IA_SWORD_RAZOR,             // ITEM_SWORD_RAZOR,
     PLAYER_IA_SWORD_GILDED,            // ITEM_SWORD_GILDED,
-    PLAYER_IA_SWORD_GREAT_FAIRY,       // ITEM_SWORD_DEITY,
+    PLAYER_IA_SWORD_TWO_HANDED,        // ITEM_SWORD_DEITY,
 };
 
 PlayerItemAction Player_ItemToItemAction(Player* this, ItemId item) {
@@ -2990,7 +2990,7 @@ PlayerFuncAC4 D_8085C9F0[PLAYER_IA_MAX] = {
     func_808487B8, // PLAYER_IA_SWORD_KOKIRI
     func_808487B8, // PLAYER_IA_SWORD_RAZOR
     func_808487B8, // PLAYER_IA_SWORD_GILDED
-    func_808487B8, // PLAYER_IA_SWORD_GREAT_FAIRY
+    func_808487B8, // PLAYER_IA_SWORD_TWO_HANDED
     func_80848780, // PLAYER_IA_STICK
     func_80848780, // PLAYER_IA_ZORA_FINS
     func_80848B6C, // PLAYER_IA_BOW
@@ -3077,7 +3077,7 @@ void (*D_8085CB3C[PLAYER_IA_MAX])(PlayState*, Player*) = {
     func_8082F594,         // PLAYER_IA_SWORD_KOKIRI
     func_8082F594,         // PLAYER_IA_SWORD_RAZOR
     func_8082F594,         // PLAYER_IA_SWORD_GILDED
-    func_8082F594,         // PLAYER_IA_SWORD_GREAT_FAIRY
+    func_8082F594,         // PLAYER_IA_SWORD_TWO_HANDED
     func_8082F5A4,         // PLAYER_IA_STICK
     func_8082F8A0,         // PLAYER_IA_ZORA_FINS
     func_8082F5C0,         // PLAYER_IA_BOW
@@ -3434,11 +3434,11 @@ void Player_OverrideBlureColors(PlayState* play, Player* this, s32 colorType, s3
     blure1->elemDuration = elemDuration;
 }
 
-void func_8082FA5C(PlayState* play, Player* this, s32 meleeWeaponState) {
+void func_8082FA5C(PlayState* play, Player* this, PlayerMeleeWeaponState meleeWeaponState) {
     u16 voiceSfxId;
     u16 itemSfxId;
 
-    if (this->meleeWeaponState == 0) {
+    if (this->meleeWeaponState == PLAYER_MELEE_WEAPON_STATE_0) {
         voiceSfxId = NA_SE_VO_LI_SWORD_N;
         if (this->transformation == PLAYER_FORM_GORON) {
             itemSfxId = NA_SE_IT_GORON_PUNCH_SWING;
@@ -3453,8 +3453,8 @@ void func_8082FA5C(PlayState* play, Player* this, s32 meleeWeaponState) {
                 if (this->unk_ADD >= 3) {
                     voiceSfxId = NA_SE_VO_LI_SWORD_L;
                 } else {
-                    itemSfxId = (this->heldItemAction == PLAYER_IA_SWORD_GREAT_FAIRY) ? NA_SE_IT_HAMMER_SWING
-                                                                                      : NA_SE_IT_SWORD_SWING;
+                    itemSfxId = (this->heldItemAction == PLAYER_IA_SWORD_TWO_HANDED) ? NA_SE_IT_HAMMER_SWING
+                                                                                     : NA_SE_IT_SWORD_SWING;
                 }
             }
         }
@@ -3601,7 +3601,7 @@ void func_8082FE0C(Player* this, PlayState* play) {
         EquipSlot i = func_8082FDC4();
 
         i = ((i >= EQUIP_SLOT_A) && (this->transformation == PLAYER_FORM_FIERCE_DEITY) &&
-             (this->heldItemAction != PLAYER_IA_SWORD_GREAT_FAIRY))
+             (this->heldItemAction != PLAYER_IA_SWORD_TWO_HANDED))
                 ? EQUIP_SLOT_B
                 : i;
 
@@ -4980,7 +4980,7 @@ MeleeWeaponDamageInfo D_8085D09C[PLAYER_MELEEWEAPON_MAX] = {
     { DMG_SWORD, 4, 8, 1, 2 },       // PLAYER_MELEEWEAPON_SWORD_KOKIRI
     { DMG_SWORD, 4, 8, 2, 4 },       // PLAYER_MELEEWEAPON_SWORD_RAZOR
     { DMG_SWORD, 4, 8, 3, 6 },       // PLAYER_MELEEWEAPON_SWORD_GILDED
-    { DMG_SWORD, 4, 8, 4, 8 },       // PLAYER_MELEEWEAPON_SWORD_GREAT_FAIRY
+    { DMG_SWORD, 4, 8, 4, 8 },       // PLAYER_MELEEWEAPON_SWORD_TWO_HANDED
     { DMG_DEKU_STICK, 0, 0, 2, 4 },  // PLAYER_MELEEWEAPON_STICK
     { DMG_ZORA_PUNCH, 1, 2, 0, 0 },  // PLAYER_MELEEWEAPON_ZORA_FINS
 };
@@ -5399,6 +5399,7 @@ s32 func_80834600(Player* this, PlayState* play) {
                (this->actor.bgCheckFlags & BGCHECKFLAG_CRUSHED) || (sPlayerCurrentFloorType == FLOOR_TYPE_9) ||
                (this->stateFlags2 & PLAYER_STATE2_80000000)) {
         Player_AnimSfx_PlayVoice(this, NA_SE_VO_LI_DAMAGE_S);
+
         if (var_v0) {
             func_80169FDC(&play->state);
             func_808345C8();
@@ -5407,6 +5408,7 @@ s32 func_80834600(Player* this, PlayState* play) {
             func_80169EFC(&play->state);
             func_808345C8();
         }
+
         Player_AnimSfx_PlayVoice(this, NA_SE_VO_LI_TAKEN_AWAY);
         play->haltAllActors = true;
         play_sound(NA_SE_OC_ABYSS);
@@ -5445,16 +5447,18 @@ s32 func_80834600(Player* this, PlayState* play) {
                 Player_AnimationPlayOnce(play, this, D_8085CFDC[Player_IsHoldingTwoHandedWeapon(this)]);
             }
         }
+
         if (!(this->stateFlags1 & (PLAYER_STATE1_4 | PLAYER_STATE1_2000 | PLAYER_STATE1_4000 | PLAYER_STATE1_200000))) {
             this->linearVelocity = -18.0f;
             this->currentYaw = this->actor.shape.rot.y;
         }
-        return 0;
+
+        return false;
     } else if ((this->unk_D6B != 0) || (this->invincibilityTimer > 0) || (this->stateFlags1 & PLAYER_STATE1_4000000) ||
                (this->csMode != PLAYER_CSMODE_0) || (this->meleeWeaponQuads[0].base.atFlags & AT_HIT) ||
                (this->meleeWeaponQuads[1].base.atFlags & AT_HIT) || (this->cylinder.base.atFlags & AT_HIT) ||
                (this->shieldCylinder.base.atFlags & AT_HIT)) {
-        return 0;
+        return false;
     } else if (this->cylinder.base.acFlags & AC_HIT) {
         Actor* sp60 = this->cylinder.base.ac;
         s32 var_a2_2;
@@ -5473,7 +5477,7 @@ s32 func_80834600(Player* this, PlayState* play) {
         } else if (this->actor.colChkInfo.acHitEffect == 9) {
             var_a2_2 = 1;
             if (func_80834534(play, this)) {
-                return 1;
+                return true;
             }
 
         } else if (((this->actor.colChkInfo.acHitEffect == 4) && (this->currentMask != PLAYER_MASK_GIANT)) ||
@@ -5482,12 +5486,12 @@ s32 func_80834600(Player* this, PlayState* play) {
         } else {
             var_a2_2 = 0;
             if (func_8083456C(play, this)) {
-                return 1;
+                return true;
             }
         }
         func_80833B18(play, this, var_a2_2, 4.0f, 5.0f, Actor_WorldYawTowardActor(sp60, &this->actor), 20);
     } else if (this->invincibilityTimer != 0) {
-        return 0;
+        return false;
     } else {
         s32 sp58 = func_808340AC(sPlayerCurrentFloorType);
         u32 sp54 = SurfaceType_IsWallDamage(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
@@ -5513,17 +5517,17 @@ s32 func_80834600(Player* this, PlayState* play) {
             this->actor.colChkInfo.damage = 4;
             func_80833B18(play, this, (var_v1_2 == BGCHECK_SCENE) ? 0 : 1, 4.0f, 5.0f,
                           (var_a1 != 0) ? this->actor.wallYaw : this->actor.shape.rot.y, 20);
-            return 1;
+            return true;
         }
     }
 
     //! FAKE?
     if (0) {
     label:
-        return 0;
+        return false;
     }
 
-    return 1;
+    return true;
 }
 
 void func_80834CD0(Player* this, f32 arg1, u16 sfxId) {
@@ -6032,11 +6036,12 @@ PlayerAnimationHeader* D_8085D124[] = {
 };
 
 /**
+ * PLAYER_DOORTYPE_TALKING: EnDoorEtc
  * PLAYER_DOORTYPE_HANDLE: EnDoor
  * PLAYER_DOORTYPE_FAKE:
  * PLAYER_DOORTYPE_PROXIMITY: EnDoor
  */
-void Player_Door_Default(PlayState* play, Player* this, Actor* door) {
+void Player_Door_Knob(PlayState* play, Player* this, Actor* door) {
     s32 temp = this->transformation - 1;
     PlayerAnimationHeader* anim;
     f32 temp_fv0; // sp5C
@@ -6146,7 +6151,7 @@ s32 func_808365DC(Player* this, PlayState* play) {
             } else if (this->doorType == PLAYER_DOORTYPE_SLIDING) {
                 Player_Door_Sliding(play, this, doorActor);
             } else {
-                Player_Door_Default(play, this, doorActor);
+                Player_Door_Knob(play, this, doorActor);
             }
 
             if (this->actor.category == ACTORCAT_PLAYER) {
@@ -6377,7 +6382,7 @@ s32 func_80836F10(PlayState* play, Player* this) {
 
         Player_RequestRumble(play, this, fallDistance, fallDistance * 0.1f, fallDistance, SQ(0));
         if (sPlayerCurrentFloorType == FLOOR_TYPE_6) {
-            //! bug unreachable code: When sPlayerCurrentFloorType is equal to FLOOR_TYPE_6 then fallDistance is
+            //! @bug unreachable code: When sPlayerCurrentFloorType is equal to FLOOR_TYPE_6 then fallDistance is
             //! ignored (set to zero), so the previous check based on said variable will always fail, producing this
             //! current check to always be false.
             Player_AnimSfx_PlayVoice(this, NA_SE_VO_LI_CLIMB_END);
@@ -6824,7 +6829,7 @@ void func_8083827C(Player* this, PlayState* play) {
             return;
         }
 
-        if ((sPlayerPrevFloorProperty == FLOOR_PROPERTY_7) || (this->meleeWeaponState != 0) ||
+        if ((sPlayerPrevFloorProperty == FLOOR_PROPERTY_7) || (this->meleeWeaponState != PLAYER_MELEE_WEAPON_STATE_0) ||
             ((this->skelAnime.moveFlags & ANIM_FLAG_8) && func_808381F8(play, this))) {
             Math_Vec3f_Copy(&this->actor.world.pos, &this->actor.prevPos);
             if (this->linearVelocity > 0.0f) {
@@ -6844,7 +6849,7 @@ void func_8083827C(Player* this, PlayState* play) {
             (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND_LEAVE)) {
             if (!(this->stateFlags1 & PLAYER_STATE1_8000000)) {
                 if ((sPlayerPrevFloorProperty != FLOOR_PROPERTY_6) && (sPlayerPrevFloorProperty != FLOOR_PROPERTY_9) &&
-                    (D_80862B18 > 20.0f) && (this->meleeWeaponState == 0)) {
+                    (D_80862B18 > 20.0f) && (this->meleeWeaponState == PLAYER_MELEE_WEAPON_STATE_0)) {
                     if ((ABS_ALT(temp_t0) < 0x2000) && (this->linearVelocity > 3.0f)) {
                         if (!(this->stateFlags1 & PLAYER_STATE1_800)) {
                             if (((this->transformation == PLAYER_FORM_ZORA) &&
@@ -7008,7 +7013,7 @@ u8 D_8085D1A4[PLAYER_IA_MAX] = {
     GI_SWORD_KOKIRI,        // PLAYER_IA_SWORD_KOKIRI
     GI_SWORD_RAZOR,         // PLAYER_IA_SWORD_RAZOR
     GI_SWORD_GILDED,        // PLAYER_IA_SWORD_GILDED
-    GI_SWORD_GREAT_FAIRY,   // PLAYER_IA_SWORD_GREAT_FAIRY
+    GI_SWORD_GREAT_FAIRY,   // PLAYER_IA_SWORD_TWO_HANDED
     GI_STICKS_1,            // PLAYER_IA_STICK
     GI_SWORD_KOKIRI,        // PLAYER_IA_ZORA_FINS
     GI_QUIVER_30,           // PLAYER_IA_BOW
@@ -9593,7 +9598,9 @@ s32 func_8083FCF0(PlayState* play, Player* this, f32 arg2, f32 arg3, f32 arg4) {
         func_8082DC38(this);
     } else if (arg2 <= this->skelAnime.curFrame) {
         this->stateFlags3 |= PLAYER_STATE3_2000000;
-        func_8082FA5C(play, this, (arg3 <= this->skelAnime.curFrame) ? 1 : -1);
+        func_8082FA5C(play, this,
+                      (arg3 <= this->skelAnime.curFrame) ? PLAYER_MELEE_WEAPON_STATE_1
+                                                         : PLAYER_MELEE_WEAPON_STATE_MINUS_1);
         return true;
     }
     return false;
@@ -9707,7 +9714,7 @@ void func_808400CC(PlayState* play, Player* this) {
 }
 
 s32 func_808401F4(PlayState* play, Player* this) {
-    if (this->meleeWeaponState > 0) {
+    if (this->meleeWeaponState >= PLAYER_MELEE_WEAPON_STATE_1) {
         s32 temp_v0_3;
 
         if (this->meleeWeaponAnimation < PLAYER_MWA_SPIN_ATTACK_1H) {
@@ -13990,7 +13997,7 @@ void func_8084B5C0(Player* this, PlayState* play) {
         if (this->unk_AE7 != 0) {
             if (!func_808401F4(play, this)) {
                 if (this->skelAnime.curFrame < 2.0f) {
-                    func_8082FA5C(play, this, 1);
+                    func_8082FA5C(play, this, PLAYER_MELEE_WEAPON_STATE_1);
                 }
             } else {
                 this->unk_AE8 = 1;
@@ -14435,7 +14442,7 @@ void func_8084CB58(Player* this, PlayState* play) {
             this->meleeWeaponAnimation += 3;
             func_80833864(play, this, this->meleeWeaponAnimation);
             this->unk_ADD = 3;
-            this->meleeWeaponState = 0;
+            this->meleeWeaponState = PLAYER_MELEE_WEAPON_STATE_0;
             Player_AnimSfx_PlayFloorLand(this);
         }
     }
@@ -15801,7 +15808,7 @@ void func_808505D0(Player* this, PlayState* play) {
 }
 
 s32 func_80850734(PlayState* play, Player* this) {
-    if ((this->transformation == PLAYER_STRENGTH_ZORA) && (this->windSpeed == 0.0f) &&
+    if ((this->transformation == PLAYER_FORM_ZORA) && (this->windSpeed == 0.0f) &&
         (this->currentBoots < PLAYER_BOOTS_ZORA_UNDERWATER) && CHECK_BTN_ALL(sPlayerControlInput->cur.button, BTN_A)) {
         func_8083B850(play, this);
         this->stateFlags2 |= PLAYER_STATE2_400;
@@ -18381,7 +18388,7 @@ void func_80857AEC(PlayState* play, Player* this) {
     }
 }
 
-// At least Goron rolling
+// Goron rolling related
 void func_80857BE8(Player* this, PlayState* play) {
     if (func_80833058(play, this, D_8085D050, 0)) {
         return;

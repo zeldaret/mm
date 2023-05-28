@@ -4429,7 +4429,7 @@
     0x80835DF8:("func_80835DF8",),
     0x80835EAC:("Player_Door_Staircase",),
     0x8083604C:("Player_Door_Sliding",),
-    0x80836258:("Player_Door_Default",),
+    0x80836258:("Player_Door_Knob",),
     0x808365DC:("func_808365DC",),
     0x80836888:("func_80836888",),
     0x8083692C:("func_8083692C",),

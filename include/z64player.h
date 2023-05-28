@@ -60,7 +60,7 @@ typedef enum PlayerItemAction {
     /* 0x03 */ PLAYER_IA_SWORD_KOKIRI = PLAYER_IA_SWORD_MIN,
     /* 0x04 */ PLAYER_IA_SWORD_RAZOR,
     /* 0x05 */ PLAYER_IA_SWORD_GILDED,
-    /* 0x06 */ PLAYER_IA_SWORD_GREAT_FAIRY,
+    /* 0x06 */ PLAYER_IA_SWORD_TWO_HANDED,
     /* 0x07 */ PLAYER_IA_STICK,
     /* 0x08 */ PLAYER_IA_ZORA_FINS,
     /* 0x09 */ PLAYER_IA_BOW,
@@ -164,7 +164,7 @@ typedef enum PlayerMeleeWeapon {
     /* 1 */ PLAYER_MELEEWEAPON_SWORD_KOKIRI = GET_MELEE_WEAPON_FROM_IA(PLAYER_IA_SWORD_KOKIRI),
     /* 2 */ PLAYER_MELEEWEAPON_SWORD_RAZOR = GET_MELEE_WEAPON_FROM_IA(PLAYER_IA_SWORD_RAZOR),
     /* 3 */ PLAYER_MELEEWEAPON_SWORD_GILDED = GET_MELEE_WEAPON_FROM_IA(PLAYER_IA_SWORD_GILDED),
-    /* 4 */ PLAYER_MELEEWEAPON_SWORD_GREAT_FAIRY = GET_MELEE_WEAPON_FROM_IA(PLAYER_IA_SWORD_GREAT_FAIRY),
+    /* 4 */ PLAYER_MELEEWEAPON_SWORD_TWO_HANDED = GET_MELEE_WEAPON_FROM_IA(PLAYER_IA_SWORD_TWO_HANDED),
     /* 5 */ PLAYER_MELEEWEAPON_STICK = GET_MELEE_WEAPON_FROM_IA(PLAYER_IA_STICK),
     /* 6 */ PLAYER_MELEEWEAPON_ZORA_FINS = GET_MELEE_WEAPON_FROM_IA(PLAYER_IA_ZORA_FINS),
     /* 7 */ PLAYER_MELEEWEAPON_MAX
@@ -251,7 +251,7 @@ typedef enum PlayerSword {
     /*  0 */ PLAYER_SWORD_KOKIRI = GET_SWORD_FROM_IA(PLAYER_IA_SWORD_KOKIRI),
     /*  1 */ PLAYER_SWORD_RAZOR = GET_SWORD_FROM_IA(PLAYER_IA_SWORD_RAZOR),
     /*  2 */ PLAYER_SWORD_GILDED = GET_SWORD_FROM_IA(PLAYER_IA_SWORD_GILDED),
-    /*  3 */ PLAYER_SWORD_GREAT_FAIRY = GET_SWORD_FROM_IA(PLAYER_IA_SWORD_GREAT_FAIRY),
+    /*  3 */ PLAYER_SWORD_TWO_HANDED = GET_SWORD_FROM_IA(PLAYER_IA_SWORD_TWO_HANDED),
     /*  4 */ PLAYER_SWORD_MAX
 } PlayerSword;
 
@@ -293,6 +293,12 @@ typedef enum PlayerMeleeWeaponAnimation {
     /* 33 */ PLAYER_MWA_BIG_SPIN_2H,           // Fully-charged two-handed spin
     /* 34 */ PLAYER_MWA_MAX
 } PlayerMeleeWeaponAnimation;
+
+typedef enum PlayerMeleeWeaponState {
+    /* -1 */ PLAYER_MELEE_WEAPON_STATE_MINUS_1 = -1,
+    /*  0 */ PLAYER_MELEE_WEAPON_STATE_0,
+    /*  1 */ PLAYER_MELEE_WEAPON_STATE_1
+} PlayerMeleeWeaponState;
 
 typedef enum PlayerDoorType {
     /* -1 */ PLAYER_DOORTYPE_TALKING = -1, // Displays a message instead of opening
@@ -545,8 +551,8 @@ typedef struct PlayerAgeProperties {
     /* 0x98 */ f32 unk_98;
     /* 0x9C */ f32 unk_9C;
     /* 0xA0 */ PlayerAnimationHeader* openChestAnim;
-    /* 0xA4 */ PlayerAnimationHeader* unk_A4;
-    /* 0xA8 */ PlayerAnimationHeader* unk_A8;
+    /* 0xA4 */ PlayerAnimationHeader* unk_A4; // OoT leftovers to interact with the Master Sword
+    /* 0xA8 */ PlayerAnimationHeader* unk_A8; // OoT leftovers to interact with the Master Sword
     /* 0xAC */ PlayerAnimationHeader* unk_AC;
     /* 0xB0 */ PlayerAnimationHeader* unk_B0;
     /* 0xB4 */ PlayerAnimationHeader* unk_B4[4];
@@ -1095,7 +1101,7 @@ typedef struct Player {
     /* 0xADA */ s8 meleeWeaponAnimation;
     /* 0xADB */ s8 meleeWeaponState;
     /* 0xADC */ s8 unk_ADC;
-    /* 0xADD */ s8 unk_ADD;
+    /* 0xADD */ s8 unk_ADD; // Some sort of combo counter
     /* 0xADE */ u8 unk_ADE;
     /* 0xADF */ s8 unk_ADF[4]; // Circular buffer used for testing for triggering a quickspin
     /* 0xAE3 */ s8 unk_AE3[4]; // Circular buffer used for ?

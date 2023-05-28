@@ -659,7 +659,7 @@ u8 sActionModelGroups[PLAYER_IA_MAX] = {
     PLAYER_MODELGROUP_ONE_HAND_SWORD, // PLAYER_IA_SWORD_KOKIRI
     PLAYER_MODELGROUP_ONE_HAND_SWORD, // PLAYER_IA_SWORD_RAZOR
     PLAYER_MODELGROUP_ONE_HAND_SWORD, // PLAYER_IA_SWORD_GILDED
-    PLAYER_MODELGROUP_TWO_HAND_SWORD, // PLAYER_IA_SWORD_GREAT_FAIRY
+    PLAYER_MODELGROUP_TWO_HAND_SWORD, // PLAYER_IA_SWORD_TWO_HANDED
     PLAYER_MODELGROUP_STICK,          // PLAYER_IA_STICK
     PLAYER_MODELGROUP_ZORA_FINS,      // PLAYER_IA_ZORA_FINS
     PLAYER_MODELGROUP_BOW,            // PLAYER_IA_BOW
@@ -1446,7 +1446,7 @@ PlayerMeleeWeapon Player_GetMeleeWeaponHeld(Player* player) {
 
 s32 Player_IsHoldingTwoHandedWeapon(Player* player) {
     // Relies on the itemActions for two-handed weapons being contiguous.
-    if ((player->heldItemAction >= PLAYER_IA_SWORD_GREAT_FAIRY) && (player->heldItemAction <= PLAYER_IA_STICK)) {
+    if ((player->heldItemAction >= PLAYER_IA_SWORD_TWO_HANDED) && (player->heldItemAction <= PLAYER_IA_STICK)) {
         return true;
     }
 
@@ -2553,14 +2553,16 @@ void func_8012669C(PlayState* play, Player* player, Vec3f* arg2, Vec3f* arg3) {
     Matrix_MultVec3f(arg2, &sp3C);
     Matrix_MultVec3f(arg3, &sp30);
 
-    if (player->meleeWeaponState != 0) {
+    if (player->meleeWeaponState != PLAYER_MELEE_WEAPON_STATE_0) {
         if (func_80126440(play, NULL, &player->meleeWeaponInfo[0], &sp3C, &sp30) &&
             (player->transformation != PLAYER_FORM_GORON) && (!(player->stateFlags1 & PLAYER_STATE1_400000))) {
             EffectBlure_AddVertex(Effect_GetByIndex(player->meleeWeaponEffectIndex[0]), &player->meleeWeaponInfo[0].tip,
                                   &player->meleeWeaponInfo[0].base);
         }
-        if ((player->meleeWeaponState > 0) && ((player->meleeWeaponAnimation < PLAYER_MWA_SPIN_ATTACK_1H) ||
-                                               (player->stateFlags2 & PLAYER_STATE2_20000))) {
+
+        if ((player->meleeWeaponState >= PLAYER_MELEE_WEAPON_STATE_1) &&
+            ((player->meleeWeaponAnimation < PLAYER_MWA_SPIN_ATTACK_1H) ||
+             (player->stateFlags2 & PLAYER_STATE2_20000))) {
             Matrix_MultVec3f(&arg2[1], &sp3C);
             Matrix_MultVec3f(&arg3[1], &sp30);
             func_80126440(play, &player->meleeWeaponQuads[0], &player->meleeWeaponInfo[1], &sp3C, &sp30);
@@ -2715,7 +2717,7 @@ void func_80126BD0(PlayState* play, Player* player, s32 arg2) {
 
             gSPDisplayList(POLY_OPA_DISP++, D_801C0AB4[arg2]);
 
-            if (player->meleeWeaponState != 0) {
+            if (player->meleeWeaponState != PLAYER_MELEE_WEAPON_STATE_0) {
                 if ((((player->meleeWeaponAnimation == PLAYER_MWA_ZORA_PUNCH_LEFT)) && (arg2 == 0)) ||
                     ((player->meleeWeaponAnimation == PLAYER_MWA_ZORA_PUNCH_COMBO) && (arg2 != 0))) {
                     func_8012669C(play, player, D_801C0A00, D_801C09DC);
@@ -3414,7 +3416,7 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
                     3000.0f, // PLAYER_MELEEWEAPON_SWORD_KOKIRI
                     3000.0f, // PLAYER_MELEEWEAPON_SWORD_RAZOR
                     4000.0f, // PLAYER_MELEEWEAPON_SWORD_GILDED
-                    5500.0f, // PLAYER_MELEEWEAPON_SWORD_GREAT_FAIRY
+                    5500.0f, // PLAYER_MELEEWEAPON_SWORD_TWO_HANDED
                     -1.0f,   // PLAYER_MELEEWEAPON_STICK
                     2500.0f, // PLAYER_MELEEWEAPON_ZORA_FINS
                 };
@@ -3422,7 +3424,7 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
                 if ((player->transformation == PLAYER_FORM_FIERCE_DEITY) ||
                     ((player->transformation != PLAYER_FORM_ZORA) &&
                      ((player->itemAction == PLAYER_IA_STICK) ||
-                      ((player->meleeWeaponState != 0) &&
+                      ((player->meleeWeaponState != PLAYER_MELEE_WEAPON_STATE_0) &&
                        (player->meleeWeaponAnimation != PLAYER_MWA_GORON_PUNCH_RIGHT) &&
                        (player->meleeWeaponAnimation != PLAYER_MWA_GORON_PUNCH_BUTT))))) {
                     if (player->itemAction == PLAYER_IA_STICK) {
@@ -3519,7 +3521,7 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
                         Player_DrawHookshotReticle(play, player, 77600.0f);
                     }
                 }
-            } else if (player->meleeWeaponState != 0) {
+            } else if (player->meleeWeaponState != PLAYER_MELEE_WEAPON_STATE_0) {
                 if (player->meleeWeaponAnimation == PLAYER_MWA_GORON_PUNCH_RIGHT) {
                     func_80126B8C(play, player);
                 }
@@ -3813,7 +3815,7 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
                                   &player->meleeWeaponInfo[0].base);
         }
     } else if (limbIndex == PLAYER_LIMB_RIGHT_SHIN) {
-        if (player->meleeWeaponState != 0) {
+        if (player->meleeWeaponState != PLAYER_MELEE_WEAPON_STATE_0) {
             if ((player->meleeWeaponAnimation == PLAYER_MWA_ZORA_PUNCH_KICK) ||
                 (player->meleeWeaponAnimation == PLAYER_MWA_ZORA_JUMPKICK_START) ||
                 (player->meleeWeaponAnimation == PLAYER_MWA_ZORA_JUMPKICK_FINISH)) {
@@ -3821,7 +3823,7 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
             }
         }
     } else if (limbIndex == PLAYER_LIMB_WAIST) {
-        if (player->meleeWeaponState != 0) {
+        if (player->meleeWeaponState != PLAYER_MELEE_WEAPON_STATE_0) {
             if (player->meleeWeaponAnimation == PLAYER_MWA_GORON_PUNCH_BUTT) {
                 Math_Vec3f_Copy(&player->unk_AF0[1], &player->meleeWeaponInfo[0].base);
                 func_8012669C(play, player, D_801C0A90, D_801C0A6C);
