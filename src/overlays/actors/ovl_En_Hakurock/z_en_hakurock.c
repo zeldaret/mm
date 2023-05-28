@@ -279,8 +279,8 @@ void func_80B22500(EnHakurock* this, PlayState* play) {
         } else if ((&player->actor == this->collider.base.oc) &&
                    (player->stateFlags3 & (PLAYER_STATE3_1000 | PLAYER_STATE3_80000)) &&
                    (player->linearVelocity > 8.0f)) {
-            player->unk_B08[0] = player->linearVelocity = -5.0f;
-            player->unk_B08[1] += (player->linearVelocity * 0.05f);
+            player->unk_B08 = player->linearVelocity = -5.0f;
+            player->unk_B0C += (player->linearVelocity * 0.05f);
             player->actor.velocity.y = 5.0f;
             player->currentYaw = player->actor.world.rot.y;
             player->actor.home.rot.y = player->actor.world.rot.y;

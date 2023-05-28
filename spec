@@ -700,9 +700,7 @@ beginseg
     name "ovl_player_actor"
     compress
     include "build/src/overlays/actors/ovl_player_actor/z_player.o"
-    include "build/data/ovl_player_actor/ovl_player_actor.data.o"
-    include "build/data/ovl_player_actor/ovl_player_actor.bss.o"
-    include "build/data/ovl_player_actor/ovl_player_actor.reloc.o"
+    include "build/src/overlays/actors/ovl_player_actor/ovl_player_actor_reloc.o"
 endseg
 
 beginseg

@@ -321,8 +321,8 @@ void func_80B84610(BgDblueWaterfall* this, PlayState* play) {
     player->actor.world.pos.x += sp34.x;
     player->actor.world.pos.z += sp34.z;
     if (this && this && this) {}
-    player->unk_B80 = 8.0f;
-    player->unk_B84 = this->actor.yawTowardsPlayer;
+    player->pushedSpeed = 8.0f;
+    player->pushedYaw = this->actor.yawTowardsPlayer;
 }
 
 static InitChainEntry sInitChain[] = {

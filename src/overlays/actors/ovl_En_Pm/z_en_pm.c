@@ -1242,7 +1242,7 @@ s32 func_80AF9008(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
         this->timePath = SubS_GetAdditionalPath(play, sp55, D_80AFB430[scheduleOutput->result]);
     }
 
-    if ((door != NULL) && (door->dyna.actor.update != NULL)) {
+    if ((door != NULL) && (door->knobDoor.dyna.actor.update != NULL)) {
         if (this->timePath != 0) {
             sp4C = Lib_SegmentedToVirtual(this->timePath->points);
             Math_Vec3s_ToVec3f(&sp40, &sp4C[0]);
@@ -1251,7 +1251,7 @@ s32 func_80AF9008(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
             Math_Vec3f_Copy(&this->unk_278, &sp34);
             this->actor.world.rot.y = Math_Vec3f_Yaw(&sp40, &sp34);
             Math_Vec3f_Copy(&this->actor.world.pos, &sp40);
-            temp = this->actor.world.rot.y - door->dyna.actor.shape.rot.y;
+            temp = this->actor.world.rot.y - door->knobDoor.dyna.actor.shape.rot.y;
             if (ABS_ALT(temp) <= 0x4000) {
                 this->unk_260 = -0x4B;
             } else {
@@ -1704,7 +1704,7 @@ s32 func_80AF9D04(EnPm* this, PlayState* play) {
     f32 temp;
 
     if (!SubS_InCsMode(play) && (this->timePathTimeSpeed != 0)) {
-        if ((door != NULL) && (door->dyna.actor.update != NULL)) {
+        if ((door != NULL) && (door->knobDoor.dyna.actor.update != NULL)) {
             if (((f32)this->unk_36E / this->unk_36C) <= 0.9f) {
                 door->unk_1A7 = this->unk_260;
             } else {
