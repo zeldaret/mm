@@ -319,7 +319,7 @@ void KaleidoScope_UpdateDungeonCursor(PlayState* play) {
             if (pauseCtx->stickAdjX > 30) {
                 pauseCtx->cursorShrinkRate = 4.0f;
                 if (pauseCtx->cursorSpecialPos == PAUSE_CURSOR_PAGE_LEFT) {
-                    func_80821A04(play);
+                    KaleidoScope_MoveCursorFromSpecialPos(play);
                     pauseCtx->cursorXIndex[PAUSE_MAP] = 0;
                     pauseCtx->cursorSlot[PAUSE_MAP] = pauseCtx->unk_256;
                     pauseCtx->cursorPoint[PAUSE_MAP] = pauseCtx->unk_256;
@@ -347,7 +347,7 @@ void KaleidoScope_UpdateDungeonCursor(PlayState* play) {
             } else if (pauseCtx->stickAdjX < -30) {
                 pauseCtx->cursorShrinkRate = 4.0f;
                 if (pauseCtx->cursorSpecialPos == PAUSE_CURSOR_PAGE_RIGHT) {
-                    func_80821A04(play);
+                    KaleidoScope_MoveCursorFromSpecialPos(play);
                     pauseCtx->cursorXIndex[PAUSE_MAP] = 1;
                     pauseCtx->cursorPoint[PAUSE_MAP] = DUNGEON_MAP;
                     if (!CHECK_DUNGEON_ITEM(DUNGEON_MAP, gSaveContext.dungeonIndex)) {

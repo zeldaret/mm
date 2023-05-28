@@ -451,7 +451,7 @@ void KaleidoScope_UpdateItemCursor(PlayState* play) {
             }
         } else if (pauseCtx->cursorSpecialPos == PAUSE_CURSOR_PAGE_LEFT) {
             if (pauseCtx->stickAdjX > 30) {
-                func_80821A04(play);
+                KaleidoScope_MoveCursorFromSpecialPos(play);
                 cursorYIndex = 0;
                 cursorXIndex = 0;
                 cursorPoint = 0; // top row, left column (SLOT_OCARINA)
@@ -489,7 +489,7 @@ void KaleidoScope_UpdateItemCursor(PlayState* play) {
             }
         } else { // PAUSE_CURSOR_PAGE_RIGHT
             if (pauseCtx->stickAdjX < -30) {
-                func_80821A04(play);
+                KaleidoScope_MoveCursorFromSpecialPos(play);
                 cursorXIndex = 5;
                 cursorPoint = 5; // top row, right columne (SLOT_TRADE_DEED)
                 cursorYIndex = 0;

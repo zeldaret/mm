@@ -237,7 +237,7 @@ s16 sPauseCursorRightX = 0;
 
 s16 D_8082B920 = 10;
 
-s16 sPauseLRCursorColorTimerInit[] = { 20, 4, 20, 10 };
+s16 sPauseLRCursorColorTimerInits[] = { 20, 4, 20, 10 };
 
 // Unused remnant of OoT
 u8 gAreaGsFlags[] = {
@@ -248,15 +248,15 @@ u8 gAreaGsFlags[] = {
 // TODO: Also applies to owl warps
 s16 sGameOverRectPosY = 66;
 
-void func_80821900(void* segment, u32 texIndex) {
+void Kaleido_LoadMapNameStatic(void* segment, u32 texIndex) {
     CmpDma_LoadFile(SEGMENT_ROM_START(map_name_static), texIndex, segment, 0x400);
 }
 
-void func_8082192C(void* segment, u32 texIndex) {
+void Kaleido_LoadMapNameStaticLarge(void* segment, u32 texIndex) {
     CmpDma_LoadFile(SEGMENT_ROM_START(map_name_static), texIndex, segment, 0xA00);
 }
 
-void func_80821958(void* segment, u32 texIndex) {
+void Kaleido_LoadItemNameStatic(void* segment, u32 texIndex) {
     CmpDma_LoadFile(SEGMENT_ROM_START(item_name_static), texIndex, segment, 0x400);
 }
 
@@ -279,7 +279,7 @@ void KaleidoScope_MoveCursorToSpecialPos(PlayState* play, s16 cursorSpecialPos) 
     Interface_SetHudVisibility(HUD_VISIBILITY_ALL);
 }
 
-void func_80821A04(PlayState* play) {
+void KaleidoScope_MoveCursorFromSpecialPos(PlayState* play) {
     PauseContext* pauseCtx = &play->pauseCtx;
 
     pauseCtx->nameDisplayTimer = 0;
@@ -808,7 +808,7 @@ void KaleidoScope_DrawInfoPanel(PlayState* play) {
         sPauseLRCursorGreen = sPauseLRCursorColorTargets[sPauseLRCursorColorIndex][1];
         sPauseLRCursorBlue = sPauseLRCursorColorTargets[sPauseLRCursorColorIndex][2];
         sPauseLRCursorAlpha = sPauseLRCursorColorTargets[sPauseLRCursorColorIndex][3];
-        sPauseLRCursorColorTimer = sPauseLRCursorColorTimerInit[0];
+        sPauseLRCursorColorTimer = sPauseLRCursorColorTimerInits[0];
         sPauseLRCursorColorIndex ^= 1;
     }
 
@@ -1130,9 +1130,9 @@ void KaleidoScope_UpdateNamePanel(PlayState* play) {
 
         if (pauseCtx->namedItem != PAUSE_ITEM_NONE) {
             if ((pauseCtx->pageIndex == PAUSE_MAP) && !sInDungeonScene) {
-                func_80821900(pauseCtx->nameSegment, namedItem);
+                Kaleido_LoadMapNameStatic(pauseCtx->nameSegment, namedItem);
             } else {
-                func_80821958(pauseCtx->nameSegment, namedItem);
+                Kaleido_LoadItemNameStatic(pauseCtx->nameSegment, namedItem);
             }
             pauseCtx->nameDisplayTimer = 0;
         }
@@ -1259,7 +1259,7 @@ void KaleidoScope_DrawOwlWarpInfoPanel(PlayState* play) {
         sPauseLRCursorGreen = sPauseLRCursorColorTargets[sPauseLRCursorColorIndex][1];
         sPauseLRCursorBlue = sPauseLRCursorColorTargets[sPauseLRCursorColorIndex][2];
         sPauseLRCursorAlpha = sPauseLRCursorColorTargets[sPauseLRCursorColorIndex][3];
-        sPauseLRCursorColorTimer = sPauseLRCursorColorTimerInit[0];
+        sPauseLRCursorColorTimer = sPauseLRCursorColorTimerInits[0];
         sPauseLRCursorColorIndex ^= 1;
     }
 
@@ -1416,9 +1416,9 @@ void KaleidoScope_UpdateOwlWarpNamePanel(PlayState* play) {
 
         if (pauseCtx->namedItem != PAUSE_ITEM_NONE) {
             if ((pauseCtx->pageIndex == PAUSE_MAP) && !sInDungeonScene) {
-                func_80821900(pauseCtx->nameSegment, texIndex);
+                Kaleido_LoadMapNameStatic(pauseCtx->nameSegment, texIndex);
             } else {
-                func_80821958(pauseCtx->nameSegment, texIndex);
+                Kaleido_LoadItemNameStatic(pauseCtx->nameSegment, texIndex);
             }
             pauseCtx->nameDisplayTimer = 0;
         }
@@ -2897,7 +2897,7 @@ void KaleidoScope_Update(PlayState* play) {
             pauseCtx->nameSegment = (void*)ALIGN16((uintptr_t)pauseCtx->iconItemLangSegment + size2);
             func_8011552C(play, DO_ACTION_INFO);
             if (((void)0, gSaveContext.worldMapArea) < 0x16) {
-                func_8082192C(pauseCtx->nameSegment + 0x400, ((void)0, gSaveContext.worldMapArea));
+                Kaleido_LoadMapNameStaticLarge(pauseCtx->nameSegment + 0x400, ((void)0, gSaveContext.worldMapArea));
             }
 
             pauseCtx->iconItemVtxSegment = (void*)ALIGN16((uintptr_t)pauseCtx->nameSegment + 0xA00);
@@ -3148,7 +3148,7 @@ void KaleidoScope_Update(PlayState* play) {
                             (pauseCtx->cursorSpecialPos == PAUSE_CURSOR_PAGE_RIGHT)) {
                             KaleidoScope_MoveCursorToSpecialPos(play, pauseCtx->cursorSpecialPos);
                         } else {
-                            func_80821A04(play);
+                            KaleidoScope_MoveCursorFromSpecialPos(play);
                         }
                     }
                     break;
@@ -3446,7 +3446,7 @@ void KaleidoScope_Update(PlayState* play) {
             pauseCtx->nameSegment = (void*)ALIGN16((uintptr_t)pauseCtx->iconItemLangSegment + size2);
             func_8011552C(play, DO_ACTION_WARP);
             worldMapCursorPoint = pauseCtx->cursorPoint[PAUSE_WORLD_MAP];
-            func_80821900(pauseCtx->nameSegment, worldMapCursorPoint);
+            Kaleido_LoadMapNameStatic(pauseCtx->nameSegment, worldMapCursorPoint);
 
             pauseCtx->iconItemVtxSegment = (void*)ALIGN16((uintptr_t)pauseCtx->nameSegment + 0xA00);
             DmaMgr_SendRequest0(pauseCtx->iconItemVtxSegment, SEGMENT_ROM_START(icon_item_vtx_static),

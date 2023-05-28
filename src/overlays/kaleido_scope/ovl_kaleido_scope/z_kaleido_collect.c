@@ -13,7 +13,7 @@ extern TexturePtr D_08061000; // gBombersNotebookIconTex
 extern TexturePtr D_08062000; // gSongNoteIconTex
 
 s16 sQuestRemainsColorTimerInit[] = { 120, 60, 2, 80 };
-s16 sQuestHpColorTimerInit[] = { 20, 4, 20, 10 };
+s16 sQuestHpColorTimerInits[] = { 20, 4, 20, 10 };
 s16 sQuestSongPlayedOcarinaButtonsNum = 0;
 u8 sQuestSongPlayedOcarinaButtons[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 s16 sQuestSongPlayedOcarinaButtonsAlpha[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
@@ -313,7 +313,7 @@ void KaleidoScope_DrawQuestStatus(PlayState* play) {
         sQuestHpPrimGreen = sQuestHpPrimColorTargets[sQuestHpPrimColorTargetIndex][1];
         sQuestHpPrimBlue = sQuestHpPrimColorTargets[sQuestHpPrimColorTargetIndex][2];
         sQuestHpPrimAlpha = sQuestHpPrimColorTargets[sQuestHpPrimColorTargetIndex][3];
-        sQuestHpColorTimer = sQuestHpColorTimerInit[sQuestHpPrimColorTargetIndex];
+        sQuestHpColorTimer = sQuestHpColorTimerInits[sQuestHpPrimColorTargetIndex];
         if (++sQuestHpPrimColorTargetIndex > 3) {
             sQuestHpPrimColorTargetIndex = 0;
         }
@@ -907,7 +907,7 @@ void KaleidoScope_UpdateQuestCursor(PlayState* play) {
                     AudioOcarina_SetInstrument(OCARINA_INSTRUMENT_OFF);
                 }
 
-                func_80821A04(play);
+                KaleidoScope_MoveCursorFromSpecialPos(play);
 
                 pauseCtx->cursorPoint[PAUSE_QUEST] = QUEST_BOMBERS_NOTEBOOK;
                 if (CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
@@ -925,7 +925,7 @@ void KaleidoScope_UpdateQuestCursor(PlayState* play) {
                 AudioOcarina_SetInstrument(OCARINA_INSTRUMENT_OFF);
             }
 
-            func_80821A04(play);
+            KaleidoScope_MoveCursorFromSpecialPos(play);
 
             pauseCtx->cursorPoint[PAUSE_QUEST] = QUEST_REMAINS_GOHT;
             if (CHECK_QUEST_ITEM(pauseCtx->cursorPoint[PAUSE_QUEST])) {
