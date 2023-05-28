@@ -18,7 +18,7 @@ void Room_DrawNormal(PlayState* play, Room* room, u32 flags) {
     if (flags & ROOM_DRAW_OPA) {
         func_800BCBF4(&sZeroVec, play);
         gSPSegment(POLY_OPA_DISP++, 0x03, room->segment);
-        func_8012C268(play);
+        func_8012C268(&play->state);
         gSPMatrix(POLY_OPA_DISP++, &gIdentityMtx, G_MTX_MODELVIEW | G_MTX_LOAD);
     }
 
@@ -85,7 +85,7 @@ void Room_DrawCullable(PlayState* play, Room* room, u32 flags) {
         if (play->roomCtx.unk74 != NULL) {
             gSPSegment(POLY_OPA_DISP++, 0x06, play->roomCtx.unk74);
         }
-        func_8012C268(play);
+        func_8012C268(&play->state);
         gSPMatrix(POLY_OPA_DISP++, &gIdentityMtx, G_MTX_MODELVIEW | G_MTX_LOAD);
     }
 
@@ -357,7 +357,7 @@ void Room_DrawImageSingle(PlayState* play, Room* room, u32 flags) {
 
 RoomShapeImageMultiBgEntry* Room_GetImageMultiBgEntry(RoomShapeImageMulti* roomShapeImageMulti, PlayState* play) {
     Camera* activeCam = GET_ACTIVE_CAM(play);
-    s32 bgCamIndex = activeCam->bgCamDataId;
+    s32 bgCamIndex = activeCam->bgCamIndex;
     s16 overrideBgCamIndex;
     Player* player;
     RoomShapeImageMultiBgEntry* bgEntry;

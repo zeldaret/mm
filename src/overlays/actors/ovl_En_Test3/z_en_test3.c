@@ -478,8 +478,8 @@ void EnTest3_Init(Actor* thisx, PlayState* play2) {
     if (play->sceneId == SCENE_SECOM) {
         this->subCamId = Play_CreateSubCamera(play);
         subCam = Play_GetCamera(play, this->subCamId);
-        Camera_InitPlayerSettings(subCam, &this->player);
-        Camera_SetFlags(subCam, CAM_STATE_0 | CAM_STATE_6);
+        Camera_InitFocalActorSettings(subCam, &this->player.actor);
+        Camera_SetStateFlag(subCam, CAM_STATE_0 | CAM_STATE_6);
         Play_ChangeCameraStatus(play, this->subCamId, CAM_STATUS_WAIT);
     }
 
@@ -1257,7 +1257,7 @@ void EnTest3_Draw(Actor* thisx, PlayState* play2) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C268(play);
+    func_8012C268(&play->state);
     if (this->player.invincibilityTimer > 0) {
         s32 temp2; // Must exist for stack order. Could hold the result of CLAMP instead.
 

@@ -1122,7 +1122,7 @@ void EnKakasi_Update(Actor* thisx, PlayState* play) {
         if (this->unk1BC.x != 0.0f || this->unk1BC.z != 0.0f) {
             Math_Vec3f_Copy(&this->picto.actor.focus.pos, &this->unk1BC);
             this->picto.actor.focus.pos.y += 10.0f;
-            if (this->subCamId == CAM_ID_MAIN) {
+            if (this->subCamId == SUB_CAM_ID_DONE) {
                 Math_Vec3s_Copy(&this->picto.actor.focus.rot, &this->picto.actor.world.rot);
             } else {
                 Math_Vec3s_Copy(&this->picto.actor.focus.rot, &this->picto.actor.home.rot);
