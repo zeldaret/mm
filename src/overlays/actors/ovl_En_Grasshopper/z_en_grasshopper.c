@@ -1007,7 +1007,7 @@ void EnGrasshopper_Draw(Actor* thisx, PlayState* play) {
     u8* shadowTex = GRAPH_ALLOC(play->state.gfxCtx, SUBS_SHADOW_TEX_SIZE);
     u8* shadowTexIter;
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, NULL, EnGrasshopper_PostLimbDraw,
                       &this->actor);
     if ((this->type != EN_GRASSHOPPER_TYPE_WOODFALL_TEMPLE_FINAL_ROOM) &&
@@ -1134,7 +1134,7 @@ void EnGrasshopper_DrawEffects(EnGrasshopper* this, PlayState* play) {
 
             if (mtx != NULL) {
                 gSPMatrix(POLY_XLU_DISP++, mtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-                func_8012C9BC(play->state.gfxCtx);
+                Gfx_SetupDL61_Xlu(play->state.gfxCtx);
                 gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(sLightningTextures[effect->lightningIndex]));
                 gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, 255);
                 gDPSetEnvColor(POLY_XLU_DISP++, 200, 255, 255, 255);

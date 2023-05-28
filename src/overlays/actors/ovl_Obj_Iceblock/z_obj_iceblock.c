@@ -1527,7 +1527,7 @@ void func_80A26BF8(ObjIceblock* this, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     sp70.z = 0;
 
     for (i = 0; i < ARRAY_COUNT(this->unk_1B4); i++) {

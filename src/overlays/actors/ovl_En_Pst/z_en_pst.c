@@ -436,7 +436,7 @@ void EnPst_Draw(Actor* thisx, PlayState* play) {
     EnPst* this = THIS;
 
     if (this->scheduleResult != POSTBOX_SCH_NONE) {
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
         SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                               EnPst_OverrideLimbDraw, NULL, &this->actor);
     }

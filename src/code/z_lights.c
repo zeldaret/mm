@@ -414,7 +414,7 @@ void Lights_DrawGlow(PlayState* play) {
     if (light != NULL) {
         OPEN_DISPS(play->state.gfxCtx);
 
-        dl = func_8012C7FC(POLY_XLU_DISP);
+        dl = Gfx_SetupDL65_NoCD(POLY_XLU_DISP);
 
         gDPSetDither(dl++, G_CD_NOISE);
 

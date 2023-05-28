@@ -345,7 +345,7 @@ void KaleidoScope_DrawInventoryEditor(PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C628(play->state.gfxCtx);
+    Gfx_SetupDL39_Opa(play->state.gfxCtx);
 
     gDPSetRenderMode(POLY_OPA_DISP++, G_RM_XLU_SURF, G_RM_XLU_SURF2);
     gDPSetCombineMode(POLY_OPA_DISP++, G_CC_PRIMITIVE, G_CC_PRIMITIVE);
