@@ -189,9 +189,9 @@ def proper_name(symbol, in_data=False, is_symbol=True):
     # bg_ikana_mirror symbol with large addend folded into %lo
     elif symbol == 0x80B80248:
         return variables_ast[0x80B801A8][0] + f" + 0x{0x80B80248 - 0x80B801A8:X}"
-    # player symbol with very large addend folded into %lo, since we don't know the real symbol just use the first data symbol for now
+    # player symbol with very large addend folded into %lo
     elif symbol == 0x8084D2FC:
-        return variables_ast[0x8085B9F0][0] + f" - 0x{0x8085B9F0 - 0x8084D2FC:X}"
+        return variables_ast[0x8085D0FA][0] + f" - 0x{0x8085D0FA - 0x8084D2FC:X}"
     # OS_K0_TO_PHYSICAL on rspS2DEX text and data symbols
     elif symbol == 0x001ABAB0 or symbol == 0x001E3BB0:
         return variables_ast[symbol + 0x80000000][0] + " - 0x80000000"

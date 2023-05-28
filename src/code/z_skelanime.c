@@ -1943,7 +1943,7 @@ void SkelAnime_UpdateTranslation(SkelAnime* skelAnime, Vec3f* diff, s16 angle) {
     skelAnime->jointTable->x = skelAnime->baseTransl.x;
     skelAnime->prevTransl.z = skelAnime->jointTable->z;
     skelAnime->jointTable->z = skelAnime->baseTransl.z;
-    if (skelAnime->moveFlags & ANIM_FLAG_UPDATEY) {
+    if (skelAnime->moveFlags & ANIM_FLAG_UPDATE_Y) {
         if (skelAnime->moveFlags & ANIM_FLAG_NOMOVE) {
             diff->y = 0.0f;
         } else {
