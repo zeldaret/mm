@@ -371,8 +371,8 @@ void BombersNotebook_DrawColumns(Gfx** gfxP) {
 
 TexturePtr sBombersNotebookEventIconTextures[] = {
     gBombersNotebookEntryIconExclamationPointTex,
-    schedule_dma_static_yar_Blob_00AC00,
-    schedule_dma_static_yar_Blob_00AEA0,
+    gBombersNotebookEntryIconMaskTex,
+    gBombersNotebookEntryIconRibbonTex,
 };
 s16 sBombersNotebookEntryIconColors[][3] = {
     { 255, 255, 0 },
@@ -550,7 +550,7 @@ void BombersNotebook_DrawEntries(Gfx** gfxP, s32 row, u32 rectTop) {
     *gfxP = gfx;
 }
 
-#define DEFINE_PERSON(_enum, photo, _description, _metEnum, _metMessage, _metFlag) &photo,
+#define DEFINE_PERSON(_enum, photo, _description, _metEnum, _metMessage, _metFlag) photo,
 
 TexturePtr sBombersNotebookPhotoTextures[] = {
 #include "tables/bombers_notebook/person_table.h"
