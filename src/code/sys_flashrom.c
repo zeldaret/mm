@@ -1,9 +1,9 @@
+#include "prevent_bss_reordering.h"
 #include "global.h"
 #include "stack.h"
 #include "stackcheck.h"
 #include "system_malloc.h"
 
-#include "prevent_bss_reordering.h"
 
 OSMesgQueue sFlashromMesgQueue;
 OSMesg sFlashromMesg[1];
