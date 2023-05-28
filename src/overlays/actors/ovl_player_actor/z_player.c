@@ -10895,7 +10895,7 @@ void func_80843178(PlayState* play, Player* this) {
         s16 temp_v1_3;
         f32 sp9C;
 
-        D_8085D358.y = 17.800001f;
+        D_8085D358.y = 178.0f * 0.1f;
         D_8085D358.z = this->ageProperties->unk_38 + 10.0f;
 
         if (func_80835D58(play, this, &D_8085D358, &spA8, &spA4, &D_80862B30)) {
@@ -10950,7 +10950,7 @@ void func_80843178(PlayState* play, Player* this) {
                 temp_fv0_5 = BgCheck_EntityRaycastFloor5(&play->colCtx, &sp84, &sp7C, &this->actor, &sp70);
 
                 this->wallHeight = temp_fv0_5 - this->actor.world.pos.y;
-                if ((this->wallHeight < 17.800001f) ||
+                if ((this->wallHeight < 178.0f * 0.1f) ||
                     ((BgCheck_EntityCheckCeiling(&play->colCtx, &sp68, &this->actor.world.pos,
                                                  (temp_fv0_5 - this->actor.world.pos.y) + 20.0f, &sp80, &sp7C,
                                                  &this->actor) != 0))) {
@@ -11978,6 +11978,8 @@ void Player_Update(Actor* thisx, PlayState* play) {
     s32 pad2;
 
     this->stateFlags3 &= ~PLAYER_STATE3_10;
+
+    // This block is a leftover dog-following mechanic from OoT
     if (gSaveContext.dogParams < 0) {
         if (Object_GetIndex(&play->objectCtx, OBJECT_DOG) < 0) {
             gSaveContext.dogParams = 0;
