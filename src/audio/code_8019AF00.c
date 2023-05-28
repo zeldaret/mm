@@ -4273,7 +4273,7 @@ f32 Audio_SetSyncedSfxFreqAndVolume(f32 freqVolParam) {
         sSfxSyncedFreq = 1.1f;
     } else {
         ret = freqVolParam / 6.0f;
-        sSfxSyncedVolume = (ret * 0.22500002f) + 0.775f;
+        sSfxSyncedVolume = ret * (1 - 0.775f) + 0.775f;
         sSfxSyncedFreq = (ret * 0.2f) + 0.9f;
     }
 
@@ -4290,7 +4290,7 @@ f32 Audio_SetSyncedSfxFreqAndVolume(f32 freqVolParam) {
 void Audio_PlaySfx_AtPosForMetalEffectsWithSyncedFreqAndVolume(Vec3f* pos, u16 sfxId, f32 freqVolParam) {
     f32 sp2C;
     f32 phi_f0;
-    s32 phi_v0;
+    u8 phi_v0;
     u16 metalSfxId = NA_SE_NONE;
 
     sp2C = Audio_SetSyncedSfxFreqAndVolume(freqVolParam);
@@ -4303,7 +4303,7 @@ void Audio_PlaySfx_AtPosForMetalEffectsWithSyncedFreqAndVolume(Vec3f* pos, u16 s
         sp2C = 1.0f;
     } else {
         phi_f0 = 1.1f;
-        phi_v0 = gAudioCtx.audioRandom & 1 & 0xFF;
+        phi_v0 = gAudioCtx.audioRandom & 1;
     }
 
     if (phi_f0 < freqVolParam) {
