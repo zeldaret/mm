@@ -6,7 +6,7 @@
 
 #include "global.h"
 #include "z_fbdemo_triforce.h"
-#include "assets/objects/object_fbdemo_triforce/ovl_fbdemo_triforce.c"
+#include "assets/overlays/ovl_fbdemo_triforce/ovl_fbdemo_triforce.c"
 
 void* TransitionTriforce_Init(void* thisx);
 void TransitionTriforce_Destroy(void* thisx);
