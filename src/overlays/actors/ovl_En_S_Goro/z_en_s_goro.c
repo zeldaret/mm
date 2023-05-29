@@ -235,7 +235,7 @@ u16 EnSGoro_ShrineGoron_NextTextId(EnSGoro* this, PlayState* play) {
 
     switch (EN_S_GORO_GET_MAIN_TYPE(&this->actor)) {
         case EN_S_GORO_TYPE_SHRINE_WINTER_A:
-            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_CALMED_GORON_ELDER_SON)) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_CALMED_GORON_ELDERS_SON)) {
                 if (player->transformation == PLAYER_FORM_GORON) {
                     if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_36_02)) {
                         switch (this->textId) {
@@ -302,7 +302,7 @@ u16 EnSGoro_ShrineGoron_NextTextId(EnSGoro* this, PlayState* play) {
             break;
 
         case EN_S_GORO_TYPE_SHRINE_WINTER_B:
-            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_CALMED_GORON_ELDER_SON)) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_CALMED_GORON_ELDERS_SON)) {
                 if (player->transformation == PLAYER_FORM_GORON) {
                     if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_36_40)) {
                         switch (this->textId) {
@@ -367,7 +367,7 @@ u16 EnSGoro_ShrineGoron_NextTextId(EnSGoro* this, PlayState* play) {
             break;
 
         case EN_S_GORO_TYPE_SHRINE_WINTER_C:
-            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_CALMED_GORON_ELDER_SON)) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_CALMED_GORON_ELDERS_SON)) {
                 if (player->transformation == PLAYER_FORM_GORON) {
                     if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_37_02)) {
                         switch (this->textId) {
@@ -771,7 +771,7 @@ void EnSGoro_UpdateSleeping(EnSGoro* this, PlayState* play) {
                 Actor_PlaySfx(&this->actor, NA_SE_EN_GOLON_SNORE1);
             }
         }
-    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CALMED_GORON_ELDER_SON)) {
+    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CALMED_GORON_ELDERS_SON)) {
         this->actionFlags &= ~EN_S_GORO_ACTIONFLAG_SUPPRESS_SNORE;
     }
 
@@ -842,7 +842,7 @@ s32 EnSGoro_CheckGKBehavior(EnSGoro* this, PlayState* play) {
         return false;
     }
     if ((!(this->actionFlags & EN_S_GORO_ACTIONFLAG_GKQUIET_ACKNOWLEDGED)) &&
-        ((((EnGk*)this->otherGoron)->unk_1E4 & 0x80) || CHECK_WEEKEVENTREG(WEEKEVENTREG_CALMED_GORON_ELDER_SON))) {
+        ((((EnGk*)this->otherGoron)->unk_1E4 & 0x80) || CHECK_WEEKEVENTREG(WEEKEVENTREG_CALMED_GORON_ELDERS_SON))) {
 
         this->actionFlags |= EN_S_GORO_ACTIONFLAG_GKQUIET_ACKNOWLEDGED;
         this->animInfoIndex = EN_S_GORO_ANIM_ROLLUP;
@@ -1026,7 +1026,7 @@ void EnSGoro_SetupAction(EnSGoro* this, PlayState* play) {
     if (Object_IsLoaded(&play->objectCtx, this->loadedObjIndex)) {
         this->actionFlags = 0;
         if (EN_S_GORO_OFTYPE_WSHRINE) {
-            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CALMED_GORON_ELDER_SON)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CALMED_GORON_ELDERS_SON)) {
                 this->actionFlags |= EN_S_GORO_ACTIONFLAG_GKQUIET_ACKNOWLEDGED;
                 this->actionFlags |= EN_S_GORO_ACTIONFLAG_EYESOPEN;
                 this->animInfoIndex = EN_S_GORO_ANIM_SHIVER_A;

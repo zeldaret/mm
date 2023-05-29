@@ -820,7 +820,7 @@ s32 EnGo_IsFallingAsleep(EnGo* this, PlayState* play) {
     if (((player->transformation == PLAYER_FORM_GORON) && (play->msgCtx.ocarinaMode == 3) &&
          (play->msgCtx.lastPlayedSong == OCARINA_SONG_GORON_LULLABY) && (this->sleepState == ENGO_AWAKE) &&
          (this->actor.xzDistToPlayer < 400.0f)) ||
-        (!CHECK_WEEKEVENTREG(WEEKEVENTREG_CALMED_GORON_ELDER_SON) && (play->sceneId == SCENE_16GORON_HOUSE) &&
+        (!CHECK_WEEKEVENTREG(WEEKEVENTREG_CALMED_GORON_ELDERS_SON) && (play->sceneId == SCENE_16GORON_HOUSE) &&
          (gSaveContext.sceneLayer == 0) && (this->sleepState == ENGO_AWAKE) && (play->csCtx.scriptIndex == 1))) {
         isFallingAsleep = true;
     }
@@ -1923,7 +1923,7 @@ void EnGo_SetupGraveyardGoron(EnGo* this, PlayState* play) {
  * There are three, but they all behave the same way aside from dialog.
  */
 void EnGo_SetupShrineGoron(EnGo* this, PlayState* play) {
-    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_CALMED_GORON_ELDER_SON)) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_CALMED_GORON_ELDERS_SON)) {
         EnGo_ChangeToCoveringEarsAnimation(this, play);
         this->actionFunc = EnGo_Idle;
     } else {
@@ -2093,7 +2093,7 @@ void EnGo_Sleep(EnGo* this, PlayState* play) {
             this->actionFlags &= ~ENGO_FLAG_ROLLED_UP;
             this->actionFlags |= ENGO_FLAG_UNROLLING;
             this->actor.shape.yOffset = ENGO_STANDING_Y_OFFSET;
-        } else if ((this->sleepState != ENGO_AWAKE) && CHECK_WEEKEVENTREG(WEEKEVENTREG_CALMED_GORON_ELDER_SON)) {
+        } else if ((this->sleepState != ENGO_AWAKE) && CHECK_WEEKEVENTREG(WEEKEVENTREG_CALMED_GORON_ELDERS_SON)) {
             // While asleep, rhythmicallly snore and change shape to show breathing.
             this->actor.scale.x = this->scaleFactor - (Math_SinS(this->snorePhase) * (0.1f * ENGO_NORMAL_SCALE));
             this->actor.scale.y = this->scaleFactor + (Math_SinS(this->snorePhase) * (0.1f * ENGO_NORMAL_SCALE));
