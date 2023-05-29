@@ -252,7 +252,7 @@ void EnMa4_RunInCircles(EnMa4* this, PlayState* play) {
     s32 pad;
     s16 sp2E;
 
-    if (sAnimIndex != 9 && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
+    if ((sAnimIndex != 9) && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         if (sAnimIndex == 3) {
             if (D_80AC0250 < 3) {
                 D_80AC0250++;
@@ -268,7 +268,7 @@ void EnMa4_RunInCircles(EnMa4* this, PlayState* play) {
         }
     }
 
-    if (sAnimIndex == 13 && Animation_OnFrame(&this->skelAnime, 37.0f)) {
+    if ((sAnimIndex == 13) && Animation_OnFrame(&this->skelAnime, 37.0f)) {
         Actor_PlaySfx(&this->actor, NA_SE_EV_ROMANI_BOW_FLICK);
     }
 
@@ -291,7 +291,7 @@ void EnMa4_RunInCircles(EnMa4* this, PlayState* play) {
             }
         }
 
-        if (this->pathIndex < this->pathPointsCount - 1) {
+        if (this->pathIndex < (this->pathPointsCount - 1)) {
             this->pathIndex++;
         } else {
             this->pathIndex = 0;
@@ -1063,7 +1063,9 @@ void EnMa4_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
     } else if (limbIndex == ROMANI_LIMB_LEFT_HAND) {
         if (this->hasBow == true) {
             OPEN_DISPS(play->state.gfxCtx);
+
             gSPDisplayList(POLY_OPA_DISP++, gRomaniBowDL);
+
             CLOSE_DISPS(play->state.gfxCtx);
         }
     }
@@ -1073,6 +1075,7 @@ void EnMa4_Draw(Actor* thisx, PlayState* play) {
     EnMa4* this = THIS;
 
     OPEN_DISPS(play->state.gfxCtx);
+
     if (this->type == MA4_TYPE_ALIENS_WON) {
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, gRomaniWoodenBoxDL);

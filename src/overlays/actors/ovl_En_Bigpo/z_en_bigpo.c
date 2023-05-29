@@ -1415,6 +1415,7 @@ void EnBigpo_DrawCircleFlames(Actor* thisx, PlayState* play) {
     s32 i;
 
     mtfxPtr = Matrix_GetCurrent();
+
     OPEN_DISPS(play->state.gfxCtx);
 
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);

@@ -1483,6 +1483,7 @@ void EnMaYto_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
 
     OPEN_DISPS(play->state.gfxCtx);
+
     if ((this->type == MA_YTO_TYPE_BARN) && CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01)) {
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, gCremiaWoodenBoxDL);

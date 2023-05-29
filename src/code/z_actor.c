@@ -475,6 +475,7 @@ void Actor_DrawZTarget(TargetContext* targetCtx, PlayState* play) {
         Actor* actor = targetCtx->targetedActor;
 
         OPEN_DISPS(play->state.gfxCtx);
+
         if (targetCtx->unk48 != 0) {
             TargetContextEntry* entry;
             s16 alpha = 255;

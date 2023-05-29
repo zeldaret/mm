@@ -535,7 +535,9 @@ void EnMaYts_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* ro
     } else if (limbIndex == ROMANI_LIMB_LEFT_HAND) {
         if (this->hasBow == true) {
             OPEN_DISPS(play->state.gfxCtx);
+
             gSPDisplayList(POLY_OPA_DISP++, gRomaniBowDL);
+
             CLOSE_DISPS(play->state.gfxCtx);
         }
     }

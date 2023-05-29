@@ -517,6 +517,7 @@ void func_808DD3C8(Actor* thisx, PlayState* play2) {
     }
 
     OPEN_DISPS(play->state.gfxCtx);
+
     spB4 = false;
 
     if (this->actor.params == 3) {

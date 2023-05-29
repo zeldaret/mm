@@ -658,6 +658,7 @@ void EnDoor_Draw(Actor* thisx, PlayState* play) {
 
     if (this->knobDoor.dyna.actor.objBankIndex == this->knobDoor.requiredObjBankIndex) {
         OPEN_DISPS(play->state.gfxCtx);
+
         if ((this->doorType == ENDOOR_TYPE_7) && (this->switchFlag == 0)) {
             Gfx_DrawDListOpa(play, gameplay_keep_DL_0221B8);
         } else {
@@ -675,6 +676,7 @@ void EnDoor_Draw(Actor* thisx, PlayState* play) {
         if (this->unk_1A6) {
             Actor_DrawDoorLock(play, this->unk_1A6, 0);
         }
+
         CLOSE_DISPS(play->state.gfxCtx);
     }
 }
