@@ -456,7 +456,7 @@ void EnBjt_Draw(Actor* thisx, PlayState* play) {
     EnBjt* this = THIS;
 
     if (this->scheduleResult != TOILET_HAND_SCH_NONE) {
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
         SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                               NULL, NULL, &this->actor);
     }

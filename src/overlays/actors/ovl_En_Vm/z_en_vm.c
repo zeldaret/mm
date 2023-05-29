@@ -391,8 +391,9 @@ void func_808CCCF0(EnVm* this, PlayState* play) {
 
     this->unk_214--;
     if (this->unk_214 == 1) {
-        EnBom* bomb = (EnBom*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOM, this->actor.world.pos.x,
-                                          this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0x6FF, 0);
+        EnBom* bomb =
+            (EnBom*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOM, this->actor.world.pos.x, this->actor.world.pos.y,
+                                this->actor.world.pos.z, BOMB_EXPLOSIVE_TYPE_BOMB, 0, 0x6FF, BOMB_TYPE_BODY);
 
         if (bomb != NULL) {
             bomb->timer = 0;
@@ -513,7 +514,7 @@ void EnVm_Draw(Actor* thisx, PlayState* play) {
 
     gfx = POLY_OPA_DISP;
 
-    gSPDisplayList(&gfx[0], &sSetupDL[6 * 25]);
+    gSPDisplayList(&gfx[0], gSetupDLs[SETUPDL_25]);
 
     POLY_OPA_DISP = &gfx[1];
 
@@ -523,7 +524,7 @@ void EnVm_Draw(Actor* thisx, PlayState* play) {
     if (this->unk_210 == 2) {
         gfx = POLY_XLU_DISP;
 
-        gSPDisplayList(&gfx[0], &sSetupDL[6 * 60]);
+        gSPDisplayList(&gfx[0], gSetupDLs[SETUPDL_60]);
         gDPSetColorDither(&gfx[1], G_CD_DISABLE);
 
         Matrix_Translate(this->unk_234.x, this->unk_234.y + 10.0f, this->unk_234.z, MTXMODE_NEW);

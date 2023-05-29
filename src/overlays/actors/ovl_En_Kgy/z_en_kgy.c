@@ -1134,7 +1134,7 @@ void func_80B43074(EnKgy* this, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     func_800B8050(&this->actor, play, 0);
     Matrix_Push();
     Matrix_Translate(-800.0f, 3100.0f, 8400.0f, MTXMODE_APPLY);
@@ -1166,7 +1166,7 @@ void func_80B43074(EnKgy* this, PlayState* play) {
 void EnKgy_Draw(Actor* thisx, PlayState* play) {
     EnKgy* this = THIS;
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     if (this->unk_29C & 1) {
         func_80B43074(this, play);
     }

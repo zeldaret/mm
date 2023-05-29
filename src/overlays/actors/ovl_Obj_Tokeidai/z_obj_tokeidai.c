@@ -791,13 +791,13 @@ void ObjTokeidai_Draw(Actor* thisx, PlayState* play) {
 
     if (this->opaDList != NULL) {
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
         gSPDisplayList(POLY_OPA_DISP++, this->opaDList);
     }
 
     if (this->xluDList != NULL) {
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         gSPDisplayList(POLY_XLU_DISP++, this->xluDList);
     }
 
@@ -809,7 +809,7 @@ void ObjTokeidai_Clock_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     Matrix_Translate(0.0f, this->yTranslation, 0.0f, MTXMODE_APPLY);
     Matrix_Translate(0.0f, 0.0f, -1791.0f, MTXMODE_APPLY);
     Matrix_RotateXS(-this->xRotation, MTXMODE_APPLY);
@@ -862,12 +862,12 @@ void ObjTokeidai_Counterweight_Draw(Actor* thisx, PlayState* play) {
 
     // Draws the counterweight
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     gSPDisplayList(POLY_OPA_DISP++, this->opaDList);
 
     // Draws the spotlight
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 255, 255, 235, 180, (s32)(this->spotlightIntensity * 2.55f));
     gSPDisplayList(POLY_XLU_DISP++, this->xluDList);
 
@@ -887,7 +887,7 @@ void ObjTokeidai_ExteriorGear_Draw(Actor* thisx, PlayState* play) {
     Matrix_Translate(0.0f, 0.0f, 1791.0f, MTXMODE_APPLY);
     Matrix_RotateZS(this->minuteRingOrExteriorGearRotation, MTXMODE_APPLY);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     gSPDisplayList(POLY_OPA_DISP++, gClockTowerExteriorGearDL);
 
     CLOSE_DISPS(play->state.gfxCtx);

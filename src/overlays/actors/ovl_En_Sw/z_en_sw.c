@@ -1296,7 +1296,7 @@ void EnSw_Draw(Actor* thisx, PlayState* play) {
         if (ENSW_GET_3(&this->actor)) {
             func_800B8050(&this->actor, play, MTXMODE_NEW);
         }
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
         Matrix_RotateXS(-0x3C72, MTXMODE_APPLY);
         SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, EnSw_OverrideLimbDraw, NULL,
                           &this->actor);

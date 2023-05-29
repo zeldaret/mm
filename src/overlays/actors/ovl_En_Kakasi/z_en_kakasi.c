@@ -1153,7 +1153,7 @@ void EnKakasi_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* r
 
 void EnKakasi_Draw(Actor* thisx, PlayState* play) {
     EnKakasi* this = THIS;
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawFlexOpa(play, this->skelanime.skeleton, this->skelanime.jointTable, this->skelanime.dListCount, NULL,
                           EnKakasi_PostLimbDraw, &this->picto.actor);
 }

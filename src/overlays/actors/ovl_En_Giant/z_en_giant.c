@@ -509,7 +509,7 @@ void EnGiant_Draw(Actor* thisx, PlayState* play) {
         OPEN_DISPS(play->state.gfxCtx);
 
         if (this->alpha >= 255) {
-            func_8012C28C(play->state.gfxCtx);
+            Gfx_SetupDL25_Opa(play->state.gfxCtx);
             gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sFaceTextures[this->faceIndex]));
             gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 255);
             Scene_SetRenderModeXlu(play, 0, 1);
@@ -517,10 +517,10 @@ void EnGiant_Draw(Actor* thisx, PlayState* play) {
                                   this->skelAnime.dListCount, NULL, EnGiant_PostLimbDrawOpa, thisx);
         } else if (this->alpha > 0) {
             if (this->alpha >= 129) {
-                func_8012C2B4(POLY_XLU_DISP++);
+                Gfx_SetupDL71(POLY_XLU_DISP++);
                 Scene_SetRenderModeXlu(play, 2, 2);
             } else {
-                func_8012C304(POLY_XLU_DISP++);
+                Gfx_SetupDL72(POLY_XLU_DISP++);
                 Scene_SetRenderModeXlu(play, 1, 2);
             }
             gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(sFaceTextures[this->faceIndex]));

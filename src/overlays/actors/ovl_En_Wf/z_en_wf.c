@@ -616,7 +616,8 @@ void func_80991280(EnWf* this, PlayState* play) {
 
     if (!func_8099408C(play, this) && !func_80990948(play, this, 0)) {
         phi_v1 = ABS_ALT(BINANG_SUB(player->actor.shape.rot.y, this->actor.shape.rot.y));
-        if ((this->actor.xzDistToPlayer < 80.0f) && (player->meleeWeaponState != 0) && (phi_v1 >= 0x1F40)) {
+        if ((this->actor.xzDistToPlayer < 80.0f) && (player->meleeWeaponState != PLAYER_MELEE_WEAPON_STATE_0) &&
+            (phi_v1 >= 0x1F40)) {
             this->actor.shape.rot.y = this->actor.yawTowardsPlayer;
             this->actor.world.rot.y = this->actor.yawTowardsPlayer;
             func_80991948(this);
@@ -666,7 +667,8 @@ void func_8099149C(EnWf* this, PlayState* play) {
 
         sp28 = ABS_ALT(BINANG_SUB(player->actor.shape.rot.y, this->actor.shape.rot.y));
 
-        if ((this->actor.xzDistToPlayer < (150.0f + sp2C)) && (player->meleeWeaponState != 0) && (sp28 >= 0x1F40)) {
+        if ((this->actor.xzDistToPlayer < (150.0f + sp2C)) &&
+            (player->meleeWeaponState != PLAYER_MELEE_WEAPON_STATE_0) && (sp28 >= 0x1F40)) {
             this->actor.shape.rot.y = this->actor.yawTowardsPlayer;
             this->actor.world.rot.y = this->actor.yawTowardsPlayer;
             if (Rand_ZeroOne() > 0.7f) {
@@ -1573,7 +1575,7 @@ void EnWf_Draw(Actor* thisx, PlayState* play) {
     if (this->actionFunc != func_80990F50) {
         OPEN_DISPS(play->state.gfxCtx);
 
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
         if (this->actor.params == 0) {
             gSPSegment(POLY_OPA_DISP++, 0x08, sNormalEyeTextures[this->eyeIndex]);

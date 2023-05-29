@@ -258,7 +258,7 @@ s32 func_808CDE78(PlayState* play, SkelCurve* skelCurve, s32 limbIndex, Actor* t
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 170, 255, 255, 255);
     gDPSetEnvColor(POLY_XLU_DISP++, this->envXluColor[0], this->envXluColor[1], this->envXluColor[2], 255);
@@ -284,7 +284,7 @@ void func_808CDFF8(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(gfxCtx);
 
-    POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 25);
+    POLY_XLU_DISP = Gfx_SetupDL(POLY_XLU_DISP, SETUPDL_25);
 
     Matrix_Scale(2.0f, 2.0f, 2.0f, MTXMODE_APPLY);
     SkelCurve_Draw(&this->actor, play, &this->skelCurve, func_808CDE78, NULL, 1, &this->actor);
@@ -299,7 +299,7 @@ void func_808CE078(Actor* thisx, PlayState* play2) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 255, 255, 255, 255);
     gDPSetEnvColor(POLY_XLU_DISP++, this->envXluColor[0], this->envXluColor[1], this->envXluColor[2], 255);

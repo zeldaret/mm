@@ -23,7 +23,7 @@ void Skybox_SetColors(SkyboxContext* skyboxCtx, u8 primR, u8 primG, u8 primB, u8
 void Skybox_Draw(SkyboxContext* skyboxCtx, GraphicsContext* gfxCtx, s16 skyboxId, s16 blend, f32 x, f32 y, f32 z) {
     OPEN_DISPS(gfxCtx);
 
-    func_8012C6AC(gfxCtx);
+    Gfx_SetupDL40_Opa(gfxCtx);
 
     gSPSegment(POLY_OPA_DISP++, 0x0B, skyboxCtx->paletteStaticSegment);
     gSPTexture(POLY_OPA_DISP++, 0x8000, 0x8000, 0, G_TX_RENDERTILE, G_ON);

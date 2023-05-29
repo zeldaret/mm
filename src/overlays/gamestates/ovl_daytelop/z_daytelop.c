@@ -129,7 +129,8 @@ void DayTelop_Draw(DayTelopState* this) {
     GraphicsContext* gfxCtx = this->state.gfxCtx;
 
     OPEN_DISPS(gfxCtx);
-    func_8012C628(this->state.gfxCtx);
+
+    Gfx_SetupDL39_Opa(this->state.gfxCtx);
 
     if (gSaveContext.save.day >= 9) {
         // Draw a white screen
@@ -139,7 +140,7 @@ void DayTelop_Draw(DayTelopState* this) {
         gDPFillRectangle(POLY_OPA_DISP++, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
     }
 
-    func_8012C628(this->state.gfxCtx);
+    Gfx_SetupDL39_Opa(this->state.gfxCtx);
 
     gDPSetRenderMode(POLY_OPA_DISP++, G_RM_OPA_SURF, G_RM_OPA_SURF2);
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, 255);

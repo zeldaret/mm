@@ -1069,7 +1069,7 @@ void EnMa4_Draw(Actor* thisx, PlayState* play) {
         gSPDisplayList(POLY_OPA_DISP++, gRomaniWoodenBoxDL);
     }
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     gSPSegment(POLY_OPA_DISP++, 0x08, SEGMENTED_TO_VIRTUAL(sEyeTextures[this->eyeTexIndex]));
     gSPSegment(POLY_OPA_DISP++, 0x09, SEGMENTED_TO_VIRTUAL(sMouthTextures[this->mouthTexIndex]));

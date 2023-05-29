@@ -726,8 +726,9 @@ Actor* Actor_SpawnAsChildAndCutscene(ActorContext* actorCtx, PlayState* play, s1
 Actor* Actor_SpawnAsChild(ActorContext* actorCtx, Actor* parent, PlayState* play, s16 actorId, f32 posX, f32 posY, f32 posZ, s16 rotX, s16 rotY, s16 rotZ, s32 params);
 void Actor_SpawnTransitionActors(PlayState* play, ActorContext* actorCtx);
 void Enemy_StartFinishingBlow(PlayState* play, Actor* actor);
-s16 func_800BBAC0(s16 arg0[2], s16 arg1, s16 arg2, s16 arg3);
-s16 func_800BBB74(s16 arg0[2], s16 arg1, s16 arg2, s16 arg3);
+s16 func_800BBAC0(BlinkInfo* info, s16 arg1, s16 arg2, s16 arg3);
+s16 func_800BBB74(BlinkInfo* info, s16 arg1, s16 arg2, s16 arg3);
+s16 func_800BBC20(BlinkInfo* info, s16 arg1, s16 arg2, s16 arg3);
 void Actor_SpawnBodyParts(Actor* actor, PlayState* play, s32 partParams, Gfx** dList);
 void Actor_SpawnFloorDustRing(PlayState* play, Actor* actor, Vec3f* posXZ, f32 radius, s32 countMinusOne, f32 randAccelWeight, s16 scale, s16 scaleStep, u8 useLighting);
 void func_800BBFB0(PlayState* play, Vec3f* position, f32 arg2, s32 arg3, s16 arg4, s16 scaleStep, u8 arg6);

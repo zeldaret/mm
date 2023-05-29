@@ -1349,7 +1349,7 @@ void Boss02_Twinmold_Draw(Actor* thisx, PlayState* play2) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     if (this->actor.params == 0) {
         gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(gTwinmoldRedSkinTex));
@@ -1521,8 +1521,8 @@ void Boss02_DrawEffects(PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     for (i = 0; i < ARRAY_COUNT(sEffects); i++, effect++) {
         if (effect->type == TWINMOLD_EFFECT_SAND) {

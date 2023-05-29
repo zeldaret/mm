@@ -1543,9 +1543,12 @@ void EnSuttari_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* 
                         Matrix_MtxFToYXZRot(curState, &bombBag->shape.rot, false);
                     }
                 } else {
-                    func_8012C28C(play->state.gfxCtx);
+                    Gfx_SetupDL25_Opa(play->state.gfxCtx);
+
                     OPEN_DISPS(play->state.gfxCtx);
+
                     gSPDisplayList(POLY_OPA_DISP++, gBombShopBagDL);
+
                     CLOSE_DISPS(play->state.gfxCtx);
                 }
             }
@@ -1568,7 +1571,7 @@ void EnSuttari_Draw(Actor* thisx, PlayState* play) {
     if (this->flags1 & 0x80) {
         OPEN_DISPS(play->state.gfxCtx);
 
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
         gSPSegment(POLY_OPA_DISP++, 0x08, Gfx_EnvColor(play->state.gfxCtx, 255, 255, 255, 0));
         gSPSegment(POLY_OPA_DISP++, 0x09, Gfx_EnvColor(play->state.gfxCtx, 55, 55, 255, 0));
         gDPPipeSync(POLY_OPA_DISP++);
@@ -1576,7 +1579,7 @@ void EnSuttari_Draw(Actor* thisx, PlayState* play) {
                                        this->skelAnime.dListCount, EnSuttari_OverrideLimbDraw, EnSuttari_PostLimbDraw,
                                        EnSuttari_TransformLimbDraw, &this->actor);
         if (this->flags1 & 0x80) {
-            func_8012C2DC(play->state.gfxCtx);
+            Gfx_SetupDL25_Xlu(play->state.gfxCtx);
             pos = this->actor.world.pos;
             scale.x = 0.2f;
             scale.y = 0.2f;

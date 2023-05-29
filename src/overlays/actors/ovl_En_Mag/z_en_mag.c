@@ -554,7 +554,7 @@ void EnMag_DrawImageRGBA32(Gfx** gfxp, s16 centerX, s16 centerY, TexturePtr sour
     s32 pad;
     s32 i;
 
-    func_8012CA0C(&gfx);
+    Gfx_SetupDL56_Ptr(&gfx);
 
     curTexture = source;
     rectLeft = centerX - (width / 2);
@@ -709,7 +709,7 @@ void EnMag_DrawInner(Actor* thisx, PlayState* play, Gfx** gfxp) {
     // Set segment 6 to the object, since this will be read by OVERLAY_DISP where it is not set by default.
     gSPSegment(gfx++, 0x06, play->objectCtx.status[this->actor.objBankIndex].segment);
 
-    func_8012C680(&gfx);
+    Gfx_SetupDL39_Ptr(&gfx);
 
     // Mask appearing effects
     gDPPipeSync(gfx++);
@@ -736,7 +736,7 @@ void EnMag_DrawInner(Actor* thisx, PlayState* play, Gfx** gfxp) {
         }
     }
 
-    func_8012C680(&gfx);
+    Gfx_SetupDL39_Ptr(&gfx);
 
     if (this->majorasMaskAlpha != 0) {
         gDPSetCombineLERP(gfx++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0, PRIMITIVE,
@@ -774,7 +774,7 @@ void EnMag_DrawInner(Actor* thisx, PlayState* play, Gfx** gfxp) {
     }
 
     if (this->subtitleAlpha != 0) {
-        func_8012C680(&gfx);
+        Gfx_SetupDL39_Ptr(&gfx);
 
         gDPSetAlphaCompare(gfx++, G_AC_NONE);
         gDPSetCombineMode(gfx++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
@@ -792,7 +792,7 @@ void EnMag_DrawInner(Actor* thisx, PlayState* play, Gfx** gfxp) {
                             SUBTITLE_TEX_LEFT, SUBTITLE_TEX_TOP);
     }
 
-    func_8012C680(&gfx);
+    Gfx_SetupDL39_Ptr(&gfx);
 
     gDPSetAlphaCompare(gfx++, G_AC_NONE);
     gDPSetCombineMode(gfx++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
@@ -808,7 +808,7 @@ void EnMag_DrawInner(Actor* thisx, PlayState* play, Gfx** gfxp) {
     EnMag_DrawTextureI8(&gfx, gTitleScreenMajorasMaskSubtitleTex, SUBTITLE_TEX_WIDTH, SUBTITLE_TEX_HEIGHT,
                         SUBTITLE_TEX_LEFT, SUBTITLE_TEX_TOP);
 
-    func_8012C680(&gfx);
+    Gfx_SetupDL39_Ptr(&gfx);
 
     gDPSetAlphaCompare(gfx++, G_AC_NONE);
     gDPSetCombineMode(gfx++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
@@ -833,7 +833,7 @@ void EnMag_DrawInner(Actor* thisx, PlayState* play, Gfx** gfxp) {
                             THE_LEGEND_OF_TEX_LEFT, THE_LEGEND_OF_TEX_TOP);
     }
 
-    func_8012C680(&gfx);
+    Gfx_SetupDL39_Ptr(&gfx);
 
     if (this->copyrightAlpha != 0) {
         gDPSetAlphaCompare(gfx++, G_AC_NONE);

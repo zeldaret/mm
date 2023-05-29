@@ -384,7 +384,7 @@ void ObjFireshield_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 255, 220, 0, this->unk_1A6);
     gDPSetEnvColor(POLY_XLU_DISP++, 255, 0, 0, 0);
