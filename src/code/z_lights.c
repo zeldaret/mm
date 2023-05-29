@@ -360,12 +360,9 @@ Lights* Lights_New(GraphicsContext* gfxCtx, u8 ambientR, u8 ambientG, u8 ambient
 
     lights = GRAPH_ALLOC(gfxCtx, sizeof(Lights));
 
-    lights->l.a.l.col[0] = ambientR;
-    lights->l.a.l.colc[0] = ambientR;
-    lights->l.a.l.col[1] = ambientG;
-    lights->l.a.l.colc[1] = ambientG;
-    lights->l.a.l.col[2] = ambientB;
-    lights->l.a.l.colc[2] = ambientB;
+    lights->l.a.l.col[0] = lights->l.a.l.colc[0] = ambientR;
+    lights->l.a.l.col[1] = lights->l.a.l.colc[1] = ambientG;
+    lights->l.a.l.col[2] = lights->l.a.l.colc[2] = ambientB;
     lights->enablePosLights = false;
     lights->numLights = 0;
 
@@ -394,7 +391,7 @@ void Lights_GlowCheck(PlayState* play) {
                 s32 screenPosX = PROJECTED_TO_SCREEN_X(projectedPos, invW);
                 s32 screenPosY = PROJECTED_TO_SCREEN_Y(projectedPos, invW);
                 s32 wZ = (s32)((projectedPos.z * invW) * 16352.0f) + 16352;
-                s32 zBuf = func_80178A94(screenPosX, screenPosY);
+                s32 zBuf = SysCfb_GetZBufferInt(screenPosX, screenPosY);
 
                 if (wZ < zBuf) {
                     params->drawGlow = 1;
