@@ -63,6 +63,11 @@ def getOffsetsList(archiveBytes: bytearray) -> list[ArchiveMeta]:
 def extractArchive(archivePath: Path, outPath: Path):
     archiveBytes = readFileAsBytearray(archivePath)
 
+    if readBytesAsWord(archiveBytes, 0) == 0:
+        # Empty file, ignore it
+        return
+
+    print(f"Extracting '{archivePath}' -> '{outPath}'")
     archivesOffsets = getOffsetsList(archiveBytes)
 
     if PRINT_XML:
@@ -104,7 +109,6 @@ def main():
             archivePath = Path(f"baserom/{archiveName}")
 
             extractedPath = Path(str(archivePath) + ".unarchive")
-            print(f"Extracting '{archivePath}' -> '{extractedPath}'")
             extractArchive(archivePath, extractedPath)
 
 if __name__ == "__main__":

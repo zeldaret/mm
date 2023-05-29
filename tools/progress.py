@@ -203,12 +203,12 @@ for line in map_file:
         file_size = int(line_split[2], 16)
         obj_file = line_split[3].strip()
         objFileSplit = obj_file.split("/")
+        objFileName = objFileSplit[-1].split(".o")[0]
 
         fileData = {"name": obj_file, "vram": obj_vram, "size": file_size, "section": section, "symbols": []}
         mapFileList.append(fileData)
 
         if (section == ".text"):
-            objFileName = objFileSplit[-1].split(".o")[0]
             srcCat = obj_file.split("/")[2]
             if srcCat in srcCategoriesFixer:
                 srcCat = srcCategoriesFixer[srcCat]
@@ -228,6 +228,8 @@ for line in map_file:
             if obj_file.startswith("build/assets/"):
                 assetCat = obj_file.split("/")[2]
                 if assetCat in assetsTracker:
+                    if ".symbols" in objFileName:
+                        continue
                     assetsTracker[assetCat]["currentSize"] += file_size
                 else:
                     eprint(f"Found file '{obj_file}' in unknown asset category '{assetCat}'")
