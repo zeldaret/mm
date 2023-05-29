@@ -3319,7 +3319,7 @@ void func_808848C8(EnHorse* this, PlayState* play) {
 
     EnHorse_PlayWalkingSound(this);
     this->actor.speed = 4.0f;
-    Horse_RotateToPoint(&this->actor, &sp24, 2000);
+    Horse_RotateToPoint(&this->actor, &sp24, 0x7D0);
     this->skin.skelAnime.playSpeed = this->actor.speed * 0.75f;
     SkelAnime_Update(&this->skin.skelAnime);
     if (Math3D_Distance(&sp24, &this->actor.world.pos) < 30.0f) {
