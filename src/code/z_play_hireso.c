@@ -1083,7 +1083,7 @@ void BombersNotebook_Draw(BombersNotebook* this, GraphicsContext* gfxCtx) {
     if (this->loadState == BOMBERS_NOTEBOOK_LOAD_STATE_DONE) {
         gSPSegment(gfx++, 0x07, this->scheduleDmaSegment);
         gSPSegment(gfx++, 0x08, this->scheduleSegment);
-        gfx = func_8012C600(gfx);
+        gfx = Gfx_SetupDL39(gfx);
         gDPSetCombineLERP(gfx++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0, PRIMITIVE,
                           ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
         gDPSetRenderMode(gfx++, G_RM_OPA_SURF, G_RM_OPA_SURF2);
