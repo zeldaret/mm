@@ -44,7 +44,7 @@ typedef enum {
 typedef enum {
     /* 0 */ TRANS_WIPE3_SPEED_SLOW,
     /* 1 */ TRANS_WIPE3_SPEED_FAST
-}TransitionWipe3Speed;
+} TransitionWipe3Speed;
 
 typedef enum {
     /* 0 */ TRANS_WIPE3_COLOR_BLACK,
