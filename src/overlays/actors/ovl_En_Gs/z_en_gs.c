@@ -5,6 +5,7 @@
  */
 
 #include "z_en_gs.h"
+#include "overlays/actors/ovl_En_Bom/z_en_bom.h"
 #include "objects/object_gs/object_gs.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
@@ -871,7 +872,7 @@ s32 func_809995A4(EnGs* this, PlayState* play) {
 
         if (this->actor.playerHeightRel < -12000.0f) {
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOM, this->actor.world.pos.x, this->actor.world.pos.y,
-                        this->actor.world.pos.z, 0, this->actor.world.rot.y, 0, 0);
+                        this->actor.world.pos.z, BOMB_EXPLOSIVE_TYPE_BOMB, this->actor.world.rot.y, 0, BOMB_TYPE_BODY);
             Actor_Kill(&this->actor);
             sp7C = 0;
         }
@@ -1069,7 +1070,7 @@ void EnGs_Draw(Actor* thisx, PlayState* play) {
 
     frames = play->gameplayFrames;
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     Matrix_Push();
 
     if (this->unk_19A & 1) {
@@ -1091,7 +1092,7 @@ void EnGs_Draw(Actor* thisx, PlayState* play) {
     Matrix_Pop();
 
     if (this->unk_19A & 2) {
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         Matrix_ReplaceRotation(&play->billboardMtxF);
         Matrix_Scale(0.05f, -0.05f, 1.0f, MTXMODE_APPLY);
 

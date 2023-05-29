@@ -1078,8 +1078,8 @@ void EnFish2_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* ro
 void EnFish2_Draw(Actor* thisx, PlayState* play) {
     EnFish2* this = THIS;
 
-    func_8012C28C(play->state.gfxCtx);
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnFish2_OverrideLimbDraw, EnFish2_PostLimbDraw, &this->actor);
     func_80B2B180(this, play);
@@ -1157,7 +1157,7 @@ void func_80B2B180(EnFish2* this, PlayState* play) {
     OPEN_DISPS(gfxCtx);
 
     ptr = &this->unk_3F8[0];
-    func_8012C28C(gfxCtx);
+    Gfx_SetupDL25_Opa(gfxCtx);
 
     for (i = 0; i < ARRAY_COUNT(this->unk_3F8); i++, ptr++) {
         if (ptr->unk_00) {

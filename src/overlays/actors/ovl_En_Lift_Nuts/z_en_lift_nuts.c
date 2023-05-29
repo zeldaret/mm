@@ -1009,7 +1009,7 @@ void EnLiftNuts_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s*
 void EnLiftNuts_Draw(Actor* thisx, PlayState* play) {
     EnLiftNuts* this = THIS;
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnLiftNuts_OverrideLimbDraw, EnLiftNuts_PostLimbDraw, thisx);
 }
