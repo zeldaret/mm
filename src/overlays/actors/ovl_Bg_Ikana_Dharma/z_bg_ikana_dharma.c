@@ -160,7 +160,7 @@ void BgIkanaDharma_WaitForHit(BgIkanaDharma* this, PlayState* play) {
         this->dyna.actor.speed = 20.0f;
         Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_DARUMA_VANISH);
         BgIkanaDharma_SetupStartCutscene(this);
-    } else if (((this->dyna.actor.flags & ACTOR_FLAG_40) == ACTOR_FLAG_40) && (sFirstHitBgIkanaDharma == NULL) &&
+    } else if (CHECK_FLAG_ALL(this->dyna.actor.flags, ACTOR_FLAG_40) && (sFirstHitBgIkanaDharma == NULL) &&
                (this->dyna.actor.xzDistToPlayer < 420.0f)) {
         tempAngle1 = BINANG_SUB(this->dyna.actor.yawTowardsPlayer, player->actor.shape.rot.y);
         tempAngle1 = ABS_ALT(tempAngle1);
