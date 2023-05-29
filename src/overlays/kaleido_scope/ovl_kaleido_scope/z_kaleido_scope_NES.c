@@ -237,7 +237,7 @@ s16 sPauseCursorRightX = 0;
 
 s16 D_8082B920 = 10;
 
-s16 sPauseLRCursorColorTimerInits[] = { 20, 4, 20, 10 };
+s16 sPauseZRCursorColorTimerInits[] = { 20, 4, 20, 10 };
 
 // Unused remnant of OoT
 u8 gAreaGsFlags[] = {
@@ -748,16 +748,16 @@ TexturePtr D_8082B9A8[] = {
     gPauseToSelectItemENGTex,
 };
 void KaleidoScope_DrawInfoPanel(PlayState* play) {
-    static s16 sPauseLRCursorColorTargets[][4] = {
+    static s16 sPauseZRCursorColorTargets[][4] = {
         { 180, 210, 255, 220 },
         { 100, 100, 150, 220 },
     };
-    static s16 sPauseLRCursorColorTimer = 20;
-    static s16 sPauseLRCursorColorIndex = 0;
-    static s16 sPauseLRCursorRed;
-    static s16 sPauseLRCursorGreen;
-    static s16 sPauseLRCursorBlue;
-    static s16 sPauseLRCursorAlpha;
+    static s16 sPauseZRCursorColorTimer = 20;
+    static s16 sPauseZRCursorColorIndex = 0;
+    static s16 sPauseZRCursorRed;
+    static s16 sPauseZRCursorGreen;
+    static s16 sPauseZRCursorBlue;
+    static s16 sPauseZRCursorAlpha;
     PauseContext* pauseCtx = &play->pauseCtx;
     s16 stepR;
     s16 stepG;
@@ -770,46 +770,46 @@ void KaleidoScope_DrawInfoPanel(PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     stepR =
-        ABS_ALT(sPauseLRCursorRed - sPauseLRCursorColorTargets[sPauseLRCursorColorIndex][0]) / sPauseLRCursorColorTimer;
-    stepG = ABS_ALT(sPauseLRCursorGreen - sPauseLRCursorColorTargets[sPauseLRCursorColorIndex][1]) /
-            sPauseLRCursorColorTimer;
-    stepB = ABS_ALT(sPauseLRCursorBlue - sPauseLRCursorColorTargets[sPauseLRCursorColorIndex][2]) /
-            sPauseLRCursorColorTimer;
-    stepA = ABS_ALT(sPauseLRCursorAlpha - sPauseLRCursorColorTargets[sPauseLRCursorColorIndex][3]) /
-            sPauseLRCursorColorTimer;
+        ABS_ALT(sPauseZRCursorRed - sPauseZRCursorColorTargets[sPauseZRCursorColorIndex][0]) / sPauseZRCursorColorTimer;
+    stepG = ABS_ALT(sPauseZRCursorGreen - sPauseZRCursorColorTargets[sPauseZRCursorColorIndex][1]) /
+            sPauseZRCursorColorTimer;
+    stepB = ABS_ALT(sPauseZRCursorBlue - sPauseZRCursorColorTargets[sPauseZRCursorColorIndex][2]) /
+            sPauseZRCursorColorTimer;
+    stepA = ABS_ALT(sPauseZRCursorAlpha - sPauseZRCursorColorTargets[sPauseZRCursorColorIndex][3]) /
+            sPauseZRCursorColorTimer;
 
-    if (sPauseLRCursorRed >= sPauseLRCursorColorTargets[sPauseLRCursorColorIndex][0]) {
-        sPauseLRCursorRed -= stepR;
+    if (sPauseZRCursorRed >= sPauseZRCursorColorTargets[sPauseZRCursorColorIndex][0]) {
+        sPauseZRCursorRed -= stepR;
     } else {
-        sPauseLRCursorRed += stepR;
+        sPauseZRCursorRed += stepR;
     }
 
-    if (sPauseLRCursorGreen >= sPauseLRCursorColorTargets[sPauseLRCursorColorIndex][1]) {
-        sPauseLRCursorGreen -= stepG;
+    if (sPauseZRCursorGreen >= sPauseZRCursorColorTargets[sPauseZRCursorColorIndex][1]) {
+        sPauseZRCursorGreen -= stepG;
     } else {
-        sPauseLRCursorGreen += stepG;
+        sPauseZRCursorGreen += stepG;
     }
 
-    if (sPauseLRCursorBlue >= sPauseLRCursorColorTargets[sPauseLRCursorColorIndex][2]) {
-        sPauseLRCursorBlue -= stepB;
+    if (sPauseZRCursorBlue >= sPauseZRCursorColorTargets[sPauseZRCursorColorIndex][2]) {
+        sPauseZRCursorBlue -= stepB;
     } else {
-        sPauseLRCursorBlue += stepB;
+        sPauseZRCursorBlue += stepB;
     }
 
-    if (sPauseLRCursorAlpha >= sPauseLRCursorColorTargets[sPauseLRCursorColorIndex][3]) {
-        sPauseLRCursorAlpha -= stepA;
+    if (sPauseZRCursorAlpha >= sPauseZRCursorColorTargets[sPauseZRCursorColorIndex][3]) {
+        sPauseZRCursorAlpha -= stepA;
     } else {
-        sPauseLRCursorAlpha += stepA;
+        sPauseZRCursorAlpha += stepA;
     }
 
-    sPauseLRCursorColorTimer--;
-    if (sPauseLRCursorColorTimer == 0) {
-        sPauseLRCursorRed = sPauseLRCursorColorTargets[sPauseLRCursorColorIndex][0];
-        sPauseLRCursorGreen = sPauseLRCursorColorTargets[sPauseLRCursorColorIndex][1];
-        sPauseLRCursorBlue = sPauseLRCursorColorTargets[sPauseLRCursorColorIndex][2];
-        sPauseLRCursorAlpha = sPauseLRCursorColorTargets[sPauseLRCursorColorIndex][3];
-        sPauseLRCursorColorTimer = sPauseLRCursorColorTimerInits[0];
-        sPauseLRCursorColorIndex ^= 1;
+    sPauseZRCursorColorTimer--;
+    if (sPauseZRCursorColorTimer == 0) {
+        sPauseZRCursorRed = sPauseZRCursorColorTargets[sPauseZRCursorColorIndex][0];
+        sPauseZRCursorGreen = sPauseZRCursorColorTargets[sPauseZRCursorColorIndex][1];
+        sPauseZRCursorBlue = sPauseZRCursorColorTargets[sPauseZRCursorColorIndex][2];
+        sPauseZRCursorAlpha = sPauseZRCursorColorTargets[sPauseZRCursorColorIndex][3];
+        sPauseZRCursorColorTimer = sPauseZRCursorColorTimerInits[0];
+        sPauseZRCursorColorIndex ^= 1;
     }
 
     y = pauseCtx->infoPanelOffsetY - 76;
@@ -912,14 +912,14 @@ void KaleidoScope_DrawInfoPanel(PlayState* play) {
 
     if ((pauseCtx->cursorSpecialPos == PAUSE_CURSOR_PAGE_LEFT) &&
         (!pauseCtx->mainState || (pauseCtx->mainState == PAUSE_MAIN_STATE_UNK))) {
-        gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 150, 140, 90, sPauseLRCursorAlpha);
+        gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 150, 140, 90, sPauseZRCursorAlpha);
     }
 
-    gSPDisplayList(POLY_OPA_DISP++, gLButtonIconDL);
+    gSPDisplayList(POLY_OPA_DISP++, gZButtonIconDL);
 
     if ((pauseCtx->cursorSpecialPos == PAUSE_CURSOR_PAGE_RIGHT) &&
         (!pauseCtx->mainState || (pauseCtx->mainState == PAUSE_MAIN_STATE_UNK))) {
-        gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 150, 140, 90, sPauseLRCursorAlpha);
+        gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 150, 140, 90, sPauseZRCursorAlpha);
     }
 
     gSPDisplayList(POLY_OPA_DISP++, gRButtonIconDL);
@@ -1199,16 +1199,16 @@ void KaleidoScope_DrawOwlWarpMapPage(PlayState* play) {
 }
 
 void KaleidoScope_DrawOwlWarpInfoPanel(PlayState* play) {
-    static s16 sPauseLRCursorColorTargets[][4] = {
+    static s16 sPauseZRCursorColorTargets[][4] = {
         { 180, 210, 255, 220 },
         { 100, 100, 150, 220 },
     };
-    static s16 sPauseLRCursorColorTimer = 20;
-    static s16 sPauseLRCursorColorIndex = 0;
-    static s16 sPauseLRCursorRed;
-    static s16 sPauseLRCursorGreen;
-    static s16 sPauseLRCursorBlue;
-    static s16 sPauseLRCursorAlpha;
+    static s16 sPauseZRCursorColorTimer = 20;
+    static s16 sPauseZRCursorColorIndex = 0;
+    static s16 sPauseZRCursorRed;
+    static s16 sPauseZRCursorGreen;
+    static s16 sPauseZRCursorBlue;
+    static s16 sPauseZRCursorAlpha;
     PauseContext* pauseCtx = &play->pauseCtx;
     s16 stepR;
     s16 stepG;
@@ -1221,46 +1221,46 @@ void KaleidoScope_DrawOwlWarpInfoPanel(PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     stepR =
-        ABS_ALT(sPauseLRCursorRed - sPauseLRCursorColorTargets[sPauseLRCursorColorIndex][0]) / sPauseLRCursorColorTimer;
-    stepG = ABS_ALT(sPauseLRCursorGreen - sPauseLRCursorColorTargets[sPauseLRCursorColorIndex][1]) /
-            sPauseLRCursorColorTimer;
-    stepB = ABS_ALT(sPauseLRCursorBlue - sPauseLRCursorColorTargets[sPauseLRCursorColorIndex][2]) /
-            sPauseLRCursorColorTimer;
-    stepA = ABS_ALT(sPauseLRCursorAlpha - sPauseLRCursorColorTargets[sPauseLRCursorColorIndex][3]) /
-            sPauseLRCursorColorTimer;
+        ABS_ALT(sPauseZRCursorRed - sPauseZRCursorColorTargets[sPauseZRCursorColorIndex][0]) / sPauseZRCursorColorTimer;
+    stepG = ABS_ALT(sPauseZRCursorGreen - sPauseZRCursorColorTargets[sPauseZRCursorColorIndex][1]) /
+            sPauseZRCursorColorTimer;
+    stepB = ABS_ALT(sPauseZRCursorBlue - sPauseZRCursorColorTargets[sPauseZRCursorColorIndex][2]) /
+            sPauseZRCursorColorTimer;
+    stepA = ABS_ALT(sPauseZRCursorAlpha - sPauseZRCursorColorTargets[sPauseZRCursorColorIndex][3]) /
+            sPauseZRCursorColorTimer;
 
-    if (sPauseLRCursorRed >= sPauseLRCursorColorTargets[sPauseLRCursorColorIndex][0]) {
-        sPauseLRCursorRed -= stepR;
+    if (sPauseZRCursorRed >= sPauseZRCursorColorTargets[sPauseZRCursorColorIndex][0]) {
+        sPauseZRCursorRed -= stepR;
     } else {
-        sPauseLRCursorRed += stepR;
+        sPauseZRCursorRed += stepR;
     }
 
-    if (sPauseLRCursorGreen >= sPauseLRCursorColorTargets[sPauseLRCursorColorIndex][1]) {
-        sPauseLRCursorGreen -= stepG;
+    if (sPauseZRCursorGreen >= sPauseZRCursorColorTargets[sPauseZRCursorColorIndex][1]) {
+        sPauseZRCursorGreen -= stepG;
     } else {
-        sPauseLRCursorGreen += stepG;
+        sPauseZRCursorGreen += stepG;
     }
 
-    if (sPauseLRCursorBlue >= sPauseLRCursorColorTargets[sPauseLRCursorColorIndex][2]) {
-        sPauseLRCursorBlue -= stepB;
+    if (sPauseZRCursorBlue >= sPauseZRCursorColorTargets[sPauseZRCursorColorIndex][2]) {
+        sPauseZRCursorBlue -= stepB;
     } else {
-        sPauseLRCursorBlue += stepB;
+        sPauseZRCursorBlue += stepB;
     }
 
-    if (sPauseLRCursorAlpha >= sPauseLRCursorColorTargets[sPauseLRCursorColorIndex][3]) {
-        sPauseLRCursorAlpha -= stepA;
+    if (sPauseZRCursorAlpha >= sPauseZRCursorColorTargets[sPauseZRCursorColorIndex][3]) {
+        sPauseZRCursorAlpha -= stepA;
     } else {
-        sPauseLRCursorAlpha += stepA;
+        sPauseZRCursorAlpha += stepA;
     }
 
-    sPauseLRCursorColorTimer--;
-    if (sPauseLRCursorColorTimer == 0) {
-        sPauseLRCursorRed = sPauseLRCursorColorTargets[sPauseLRCursorColorIndex][0];
-        sPauseLRCursorGreen = sPauseLRCursorColorTargets[sPauseLRCursorColorIndex][1];
-        sPauseLRCursorBlue = sPauseLRCursorColorTargets[sPauseLRCursorColorIndex][2];
-        sPauseLRCursorAlpha = sPauseLRCursorColorTargets[sPauseLRCursorColorIndex][3];
-        sPauseLRCursorColorTimer = sPauseLRCursorColorTimerInits[0];
-        sPauseLRCursorColorIndex ^= 1;
+    sPauseZRCursorColorTimer--;
+    if (sPauseZRCursorColorTimer == 0) {
+        sPauseZRCursorRed = sPauseZRCursorColorTargets[sPauseZRCursorColorIndex][0];
+        sPauseZRCursorGreen = sPauseZRCursorColorTargets[sPauseZRCursorColorIndex][1];
+        sPauseZRCursorBlue = sPauseZRCursorColorTargets[sPauseZRCursorColorIndex][2];
+        sPauseZRCursorAlpha = sPauseZRCursorColorTargets[sPauseZRCursorColorIndex][3];
+        sPauseZRCursorColorTimer = sPauseZRCursorColorTimerInits[0];
+        sPauseZRCursorColorIndex ^= 1;
     }
 
     y = pauseCtx->infoPanelOffsetY - 76;

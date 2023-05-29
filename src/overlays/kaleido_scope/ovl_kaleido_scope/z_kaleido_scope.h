@@ -310,7 +310,7 @@ typedef enum {
  * 
  * infoPanelVtx[0] name panel left texture
  * infoPanelVtx[4] name panel right texture
- * infoPanelVtx[8] L Button icon
+ * infoPanelVtx[8] Z Button icon
  * infoPanelVtx[12] R Button icon
  * infoPanelVtx[16] A button icon (or name segment)
  * infoPanelVtx[20] pause-to-decide texture

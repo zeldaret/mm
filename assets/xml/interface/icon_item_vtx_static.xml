@@ -1,7 +1,7 @@
 <Root>
     <File Name="icon_item_vtx_static" Segment="11">
         <DList Name="gItemNamePanelDL" Offset="0x0"/>
-        <DList Name="gLButtonIconDL" Offset="0x90"/>
+        <DList Name="gZButtonIconDL" Offset="0x90"/>
         <DList Name="gRButtonIconDL" Offset="0xE0"/>
         <DList Name="gCButtonIconsDL" Offset="0x130"/>
         <DList Name="gAButtonIconDL" Offset="0x188"/>
