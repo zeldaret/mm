@@ -846,7 +846,7 @@ void EnFz_Draw(Actor* thisx, PlayState* play) {
 
     if (this->unk_BD7 != 0) {
         func_800B8118(&this->actor, play, 0);
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
         gSPSegment(POLY_XLU_DISP++, 0x08,
                    Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, play->state.frames % 128, 0x20, 0x20, 1, 0,
@@ -993,7 +993,7 @@ void func_80934464(EnFz* this, PlayState* play) {
 
     OPEN_DISPS(gfxCtx);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     gDPSetColorDither(POLY_XLU_DISP++, G_CD_BAYER);
     gDPSetAlphaDither(POLY_XLU_DISP++, G_AD_PATTERN);

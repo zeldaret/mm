@@ -783,7 +783,7 @@ void EnItem00_DrawRupee(EnItem00* this, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     func_800B8050(&this->actor, play, 0);
 
     if (this->actor.params <= ITEM00_RUPEE_RED) {
@@ -834,7 +834,7 @@ void EnItem00_DrawSprite(EnItem00* this, PlayState* play) {
         }
     }
 
-    POLY_OPA_DISP = func_8012C724(POLY_OPA_DISP);
+    POLY_OPA_DISP = Gfx_SetupDL66(POLY_OPA_DISP);
 
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sItemDropTextures[texIndex]));
 
@@ -851,7 +851,7 @@ void EnItem00_DrawHeartContainer(EnItem00* this, PlayState* play) {
     if (Object_GetIndex(&play->objectCtx, OBJECT_GI_HEARTS) == this->actor.objBankIndex) {
         OPEN_DISPS(play->state.gfxCtx);
 
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         Matrix_Scale(20.0f, 20.0f, 20.0f, MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_MODELVIEW | G_MTX_LOAD);
@@ -868,7 +868,7 @@ void EnItem00_DrawHeartPiece(EnItem00* this, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     func_800B8118(&this->actor, play, 0);
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_MODELVIEW | G_MTX_LOAD);

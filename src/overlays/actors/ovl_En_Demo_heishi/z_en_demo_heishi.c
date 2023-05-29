@@ -188,7 +188,7 @@ s32 EnDemoheishi_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, V
 void EnDemoheishi_Draw(Actor* thisx, PlayState* play) {
     EnDemoheishi* this = THIS;
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnDemoheishi_OverrideLimbDraw, NULL, &this->actor);
 }

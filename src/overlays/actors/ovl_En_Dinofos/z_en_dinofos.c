@@ -438,8 +438,9 @@ s32 func_8089AE00(EnDinofos* this, PlayState* play) {
         return true;
     }
 
-    if ((this->actor.xzDistToPlayer < 100.0f) && (player->meleeWeaponState != 0) && this->actor.isTargeted &&
-        (Rand_ZeroOne() < 0.5f) && func_8089A968(this) && Player_IsFacingActor(&this->actor, 0x2000, play)) {
+    if ((this->actor.xzDistToPlayer < 100.0f) && (player->meleeWeaponState != PLAYER_MELEE_WEAPON_STATE_0) &&
+        this->actor.isTargeted && (Rand_ZeroOne() < 0.5f) && func_8089A968(this) &&
+        Player_IsFacingActor(&this->actor, 0x2000, play)) {
         if (Rand_ZeroOne() < 0.5f) {
             func_8089C024(this, 2);
         } else {
@@ -1474,7 +1475,7 @@ void EnDinofos_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     if (this->unk_288 == 255) {
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
         func_800B8050(&this->actor, play, 0);
 
         gSPSegment(POLY_OPA_DISP++, 0x08, D_8089E33C[this->unk_289]);
@@ -1485,7 +1486,7 @@ void EnDinofos_Draw(Actor* thisx, PlayState* play) {
             SkelAnime_DrawFlex(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                                func_8089DC4C, func_8089DC84, &this->actor, POLY_OPA_DISP);
     } else {
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         func_800B8118(&this->actor, play, 0);
 
         gSPSegment(POLY_XLU_DISP++, 0x08, D_8089E33C[this->unk_289]);

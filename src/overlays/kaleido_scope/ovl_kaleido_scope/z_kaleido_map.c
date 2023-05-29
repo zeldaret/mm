@@ -191,7 +191,7 @@ void KaleidoScope_DrawDungeonMap(PlayState* play) {
                         sStrayFairyIconAlphaScaleTimer = 15;
                     }
 
-                    func_8012C8AC(play->state.gfxCtx);
+                    Gfx_SetupDL42_Opa(play->state.gfxCtx);
 
                     gDPSetCombineLERP(POLY_OPA_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0,
                                       PRIMITIVE, 0, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE,
@@ -230,7 +230,7 @@ void KaleidoScope_DrawDungeonMap(PlayState* play) {
                     POLY_OPA_DISP =
                         Gfx_DrawTexQuad4b(POLY_OPA_DISP, gStrayFairyGlowingCircleIconTex, G_IM_FMT_I, 32, 24, 0);
                     KaleidoScope_SetView(pauseCtx, pauseCtx->eye.x, pauseCtx->eye.y, pauseCtx->eye.z);
-                    func_8012C628(play->state.gfxCtx);
+                    Gfx_SetupDL39_Opa(play->state.gfxCtx);
 
                     gDPPipeSync(POLY_OPA_DISP++);
 
@@ -254,7 +254,7 @@ void KaleidoScope_DrawDungeonMap(PlayState* play) {
                                         sStrayFairyIconRectS[sStrayFairyIconIndex], 0, 1 << 10, 1 << 10);
 
                     KaleidoScope_DrawDungeonStrayFairyCount(play);
-                    func_8012C8AC(play->state.gfxCtx);
+                    Gfx_SetupDL42_Opa(play->state.gfxCtx);
                 }
             }
         } else if (CHECK_DUNGEON_ITEM(i, gSaveContext.dungeonIndex)) {
@@ -277,7 +277,7 @@ void KaleidoScope_DrawDungeonMap(PlayState* play) {
         if ((pauseCtx->state == PAUSE_STATE_MAIN) && (pauseCtx->state != PAUSE_STATE_SAVEPROMPT) &&
             !IS_PAUSE_STATE_GAMEOVER) {
 
-            func_8012C628(play->state.gfxCtx);
+            Gfx_SetupDL39_Opa(play->state.gfxCtx);
 
             gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, pauseCtx->alpha);
 
@@ -294,7 +294,7 @@ void KaleidoScope_DrawDungeonMap(PlayState* play) {
 
             gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, pauseCtx->alpha);
 
-            func_8012C8AC(play->state.gfxCtx);
+            Gfx_SetupDL42_Opa(play->state.gfxCtx);
         }
     }
 
@@ -558,7 +558,7 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
         // Each loaded chunk must have `size <= TMEM_SIZE / 2`
         // because the texture is color-indexed, so the TLUT uses the other half of TMEM.
 
-        func_8012C628(play->state.gfxCtx);
+        Gfx_SetupDL39_Opa(play->state.gfxCtx);
 
         gDPSetTextureFilter(POLY_OPA_DISP++, G_TF_POINT);
         gDPLoadTLUT_pal256(POLY_OPA_DISP++, gWorldMapImageTLUT);
@@ -579,7 +579,7 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
                                 0, 1 << 10, 1 << 10);
         }
 
-        func_8012C8AC(play->state.gfxCtx);
+        Gfx_SetupDL42_Opa(play->state.gfxCtx);
 
     } else {
         // Draw the world map angled
@@ -638,7 +638,7 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
         gSP1Quadrangle(POLY_OPA_DISP++, j, j + 2, j + 3, j + 1, 0);
     }
 
-    func_8012C8AC(play->state.gfxCtx);
+    Gfx_SetupDL42_Opa(play->state.gfxCtx);
 
     gDPPipeSync(POLY_OPA_DISP++);
 
@@ -670,7 +670,7 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
         gDPFillRectangle(POLY_OPA_DISP++, 50, 62, 270, 190);
     }
 
-    func_8012C8AC(play->state.gfxCtx);
+    Gfx_SetupDL42_Opa(play->state.gfxCtx);
 
     if (!IS_PAUSE_STATE_OWLWARP) {
         // Browsing the world map regions on the pause menu
@@ -809,7 +809,7 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
         // Draw Player's face at the current region
         if (n != REGION_MAX) {
             KaleidoScope_SetView(pauseCtx, pauseCtx->eye.x, pauseCtx->eye.y, pauseCtx->eye.z);
-            func_8012C628(play->state.gfxCtx);
+            Gfx_SetupDL39_Opa(play->state.gfxCtx);
 
             gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, pauseCtx->alpha);
 
