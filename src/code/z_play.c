@@ -359,10 +359,10 @@ void Play_Destroy(GameState* thisx) {
 
     if (sBombersNotebookOpen) {
         MsgEvent_SendNullTask();
-        func_80178750();
-        gfxCtx->curFrameBuffer = SysCfb_GetFbPtr(gfxCtx->framebufferIndex % 2);
+        SysCfb_SetLoResMode();
+        gfxCtx->curFrameBuffer = SysCfb_GetFramebuffer(gfxCtx->framebufferIndex % 2);
         gfxCtx->zbuffer = SysCfb_GetZBuffer();
-        gfxCtx->viMode = D_801FBB88;
+        gfxCtx->viMode = gActiveViMode;
         gfxCtx->viConfigFeatures = gViConfigFeatures;
         gfxCtx->xScale = gViConfigXScale;
         gfxCtx->yScale = gViConfigYScale;
@@ -1243,7 +1243,7 @@ void Play_DrawMain(PlayState* this) {
             goto PostWorldDraw;
         }
 
-        PreRender_SetValues(&this->pauseBgPreRender, D_801FBBCC, D_801FBBCE, gfxCtx->curFrameBuffer, gfxCtx->zbuffer);
+        PreRender_SetValues(&this->pauseBgPreRender, gCfbWidth, gCfbHeight, gfxCtx->curFrameBuffer, gfxCtx->zbuffer);
 
         if (R_PAUSE_BG_PRERENDER_STATE == PAUSE_BG_PRERENDER_PROCESS) {
             MsgEvent_SendNullTask();
@@ -1443,24 +1443,24 @@ void Play_Draw(PlayState* this) {
         GraphicsContext* gfxCtx2 = this->state.gfxCtx;
 
         if (sBombersNotebookOpen) {
-            if (D_801FBBD4 != 1) {
+            if (gSysCfbHiResEnabled != 1) {
                 MsgEvent_SendNullTask();
-                func_80178818();
-                gfxCtx2->curFrameBuffer = SysCfb_GetFbPtr(gfxCtx2->framebufferIndex % 2);
+                SysCfb_SetHiResMode();
+                gfxCtx2->curFrameBuffer = SysCfb_GetFramebuffer(gfxCtx2->framebufferIndex % 2);
                 gfxCtx2->zbuffer = SysCfb_GetZBuffer();
-                gfxCtx2->viMode = D_801FBB88;
+                gfxCtx2->viMode = gActiveViMode;
                 gfxCtx2->viConfigFeatures = gViConfigFeatures;
                 gfxCtx2->xScale = gViConfigXScale;
                 gfxCtx2->yScale = gViConfigYScale;
                 gfxCtx2->updateViMode = true;
             }
         } else {
-            if (D_801FBBD4 != 0) {
+            if (gSysCfbHiResEnabled != 0) {
                 MsgEvent_SendNullTask();
-                func_80178750();
-                gfxCtx2->curFrameBuffer = SysCfb_GetFbPtr(gfxCtx2->framebufferIndex % 2);
+                SysCfb_SetLoResMode();
+                gfxCtx2->curFrameBuffer = SysCfb_GetFramebuffer(gfxCtx2->framebufferIndex % 2);
                 gfxCtx2->zbuffer = SysCfb_GetZBuffer();
-                gfxCtx2->viMode = D_801FBB88;
+                gfxCtx2->viMode = gActiveViMode;
                 gfxCtx2->viConfigFeatures = gViConfigFeatures;
                 gfxCtx2->xScale = gViConfigXScale;
                 gfxCtx2->yScale = gViConfigYScale;
@@ -2253,10 +2253,10 @@ void Play_Init(GameState* thisx) {
     R_PICTO_PHOTO_STATE = PICTO_PHOTO_STATE_OFF;
 
     PreRender_Init(&this->pauseBgPreRender);
-    PreRender_SetValuesSave(&this->pauseBgPreRender, D_801FBBCC, D_801FBBCE, NULL, NULL, NULL);
-    PreRender_SetValues(&this->pauseBgPreRender, D_801FBBCC, D_801FBBCE, NULL, NULL);
+    PreRender_SetValuesSave(&this->pauseBgPreRender, gCfbWidth, gCfbHeight, NULL, NULL, NULL);
+    PreRender_SetValues(&this->pauseBgPreRender, gCfbWidth, gCfbHeight, NULL, NULL);
 
-    this->unk_18E64 = D_801FBB90;
+    this->unk_18E64 = gWorkBuffer;
     this->pictoPhotoI8 = gPictoPhotoI8;
     this->unk_18E68 = D_80784600;
     this->unk_18E58 = D_80784600;
