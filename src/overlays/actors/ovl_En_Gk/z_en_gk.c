@@ -1233,7 +1233,7 @@ void EnGk_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     if ((ENGK_GET_F(&this->actor) == ENGK_F_0) && CHECK_WEEKEVENTREG(WEEKEVENTREG_CALMED_GORON_ELDER_SON)) {
         Matrix_RotateXS(-0x4000, MTXMODE_APPLY);
@@ -1242,7 +1242,7 @@ void EnGk_Draw(Actor* thisx, PlayState* play) {
         gSPDisplayList(POLY_OPA_DISP++, object_gk_DL_006688);
         gSPDisplayList(POLY_OPA_DISP++, object_gk_DL_006680);
 
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
         pos = this->actor.world.pos;
         scale.x = 0.2f;
@@ -1258,7 +1258,7 @@ void EnGk_Draw(Actor* thisx, PlayState* play) {
                                        EnGk_TransformLimbDraw, &this->actor);
 
         if (ENGK_GET_F(&this->actor) != ENGK_F_2) {
-            func_8012C2DC(play->state.gfxCtx);
+            Gfx_SetupDL25_Xlu(play->state.gfxCtx);
             if ((this->unk_2E4 == 0) || (this->unk_2E4 == 1) || (this->unk_2E4 == 2) || (this->unk_2E4 == 3) ||
                 (this->unk_2E4 == 4)) {
                 pos.x = this->actor.world.pos.x - 15.0f;

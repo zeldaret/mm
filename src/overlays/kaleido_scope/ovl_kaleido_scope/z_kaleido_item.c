@@ -252,7 +252,7 @@ void KaleidoScope_DrawItemSelect(PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C8AC(play->state.gfxCtx);
+    Gfx_SetupDL42_Opa(play->state.gfxCtx);
 
     // Draw a white box around the items that are equipped on the C buttons
     // Loop over c-buttons (i) and vtx offset (j)
@@ -319,7 +319,7 @@ void KaleidoScope_DrawItemSelect(PlayState* play) {
         if ((pauseCtx->state == PAUSE_STATE_MAIN) &&
             ((pauseCtx->mainState == PAUSE_MAIN_STATE_IDLE) || (pauseCtx->mainState == PAUSE_MAIN_STATE_EQUIP_ITEM)) &&
             (pauseCtx->state != PAUSE_STATE_SAVEPROMPT) && !IS_PAUSE_STATE_GAMEOVER) {
-            func_8012C628(play->state.gfxCtx);
+            Gfx_SetupDL39_Opa(play->state.gfxCtx);
             gDPSetCombineMode(POLY_OPA_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
 
             // Loop over slots (i) and ammoIndex (j)
@@ -332,7 +332,7 @@ void KaleidoScope_DrawItemSelect(PlayState* play) {
                     j++;
                 }
             }
-            func_8012C8AC(play->state.gfxCtx);
+            Gfx_SetupDL42_Opa(play->state.gfxCtx);
         }
     }
 

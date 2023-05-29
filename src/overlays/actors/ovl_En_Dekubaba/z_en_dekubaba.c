@@ -1319,7 +1319,7 @@ void EnDekubaba_DrawShadow(EnDekubaba* this, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C448(play->state.gfxCtx);
+    Gfx_SetupDL44_Xlu(play->state.gfxCtx);
 
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 0, 0, 0, 255);
 
@@ -1347,7 +1347,7 @@ void EnDekubaba_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     Math_Vec3f_Copy(&this->bodyPartsPos[0], &this->actor.world.pos);
 
     if (this->actionFunc != EnDekubaba_DeadStickDrop) {

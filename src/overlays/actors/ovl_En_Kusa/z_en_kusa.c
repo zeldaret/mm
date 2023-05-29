@@ -715,7 +715,7 @@ void EnKusa_DrawBush(Actor* thisx, PlayState* play2) {
         OPEN_DISPS(play->state.gfxCtx);
 
         alpha = (1300.0f - this->actor.projectedPos.z) * 2.55f;
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, alpha);

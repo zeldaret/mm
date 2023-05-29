@@ -14,6 +14,7 @@
  */
 #include "z_en_go.h"
 #include "z64quake.h"
+#include "overlays/actors/ovl_En_Bom/z_en_bom.h"
 #include "objects/object_hakugin_demo/object_hakugin_demo.h"
 #include "objects/object_taisou/object_taisou.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
@@ -460,7 +461,7 @@ void EnGo_DrawSteam(EnGoEffect effect[ENGO_EFFECT_COUNT], PlayState* play2) {
     f32 alpha;
 
     OPEN_DISPS(play->state.gfxCtx);
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     for (i = 0; i < ENGO_EFFECT_COUNT; i++, effect++) {
         if (effect->type != ENGO_EFFECT_STEAM) {
             continue;
@@ -553,14 +554,14 @@ void EnGo_DrawDust(EnGoEffect effect[ENGO_EFFECT_COUNT], PlayState* play2) {
     f32 alpha;
 
     OPEN_DISPS(play->state.gfxCtx);
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     for (i = 0; i < ENGO_EFFECT_COUNT; i++, effect++) {
         if ((effect->type < ENGO_EFFECT_DUST_MIN) || (effect->type >= ENGO_EFFECT_STEAM_MIN)) {
             continue;
         }
 
         if (!isMaterialSet) {
-            POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 0);
+            POLY_XLU_DISP = Gfx_SetupDL(POLY_XLU_DISP, SETUPDL_0);
             gSPDisplayList(POLY_XLU_DISP++, gGoronDustMaterialDL);
             isMaterialSet = true;
         }
@@ -721,7 +722,7 @@ void EnGo_DrawSnow(EnGoEffect effect[ENGO_SNOW_EFFECT_COUNT], PlayState* play, G
     u8 isMaterialSet = false;
 
     OPEN_DISPS(play->state.gfxCtx);
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     for (i = 0; i < ENGO_SNOW_EFFECT_COUNT; i++, effect++) {
         if (effect->type != effectType) {
             continue;
@@ -1468,7 +1469,7 @@ void EnGo_DrawIceBlockWhenFrozen(EnGo* this, PlayState* play, f32 scale, f32 alp
 
         OPEN_DISPS(play->state.gfxCtx);
 
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
         Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
         Matrix_Scale(scale * 0.7f, scale * 0.8f, scale, MTXMODE_APPLY);
@@ -1666,7 +1667,7 @@ s32 EnGo_HandleGivePowderKegCutscene(Actor* thisx, PlayState* play) {
                                               &powderKegSpawnPos);
                 gSaveContext.powderKegTimer = 2400;
                 Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOM, powderKegSpawnPos.x, powderKegSpawnPos.y,
-                            powderKegSpawnPos.z, 1, 0, 0, 0);
+                            powderKegSpawnPos.z, BOMB_EXPLOSIVE_TYPE_POWDER_KEG, 0, 0, BOMB_TYPE_BODY);
                 EnGo_UpdateMedigoronColliderRadius(this, play, true);
                 this->cutsceneDelayTimer = 0;
                 this->cutsceneState++;
@@ -2540,7 +2541,7 @@ void EnGo_Draw_NoSkeleton(EnGo* this, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y + this->actor.shape.yOffset,
                      this->actor.world.pos.z, MTXMODE_NEW);
@@ -2660,7 +2661,7 @@ void EnGo_Draw(Actor* thisx, PlayState* play) {
     if (!(this->actionFlags & (ENGO_FLAG_SNOWBALLED | ENGO_FLAG_ROLLED_UP))) {
         OPEN_DISPS(play->state.gfxCtx);
 
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
         gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyeTextures[this->eyeTexIndex]));
 

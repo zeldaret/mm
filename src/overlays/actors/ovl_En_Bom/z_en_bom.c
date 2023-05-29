@@ -348,7 +348,7 @@ void EnBom_Explode(EnBom* this, PlayState* play) {
 
     this->collider2.elements->dim.worldSphere.radius = D_80872E8C[this->isPowderKeg];
     if (this->timer == 7) {
-        this->collider2.base.atFlags &= ~OC1_TYPE_1;
+        this->collider2.base.atFlags &= ~AT_TYPE_ENEMY;
     }
 
     if (this->actor.params == BOMB_TYPE_EXPLOSION) {
@@ -616,7 +616,7 @@ void EnBom_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     if (this->actor.params == BOMB_TYPE_BODY) {
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
         Collider_UpdateSpheres(0, &this->collider2);
 
