@@ -213,7 +213,7 @@ typedef struct FileSelectState {
     /* 0x2448A */ s16 nextConfigMode; // see `ConfigMode` enum
     /* 0x2448C */ s16 selectMode; // see `SelectMode` enum
     /* 0x2448E */ s16 selectedFileIndex;
-    /* 0x24490 */ UNK_TYPE1 pad24490[0x1];
+    /* 0x24490 */ UNK_TYPE1 pad24490[0x2];
     /* 0x24492 */ s16 fileNamesY[3];
     /* 0x24498 */ s16 actionTimer;
     /* 0x2449A */ s16 buttonYOffsets[6];
