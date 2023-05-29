@@ -1224,7 +1224,7 @@ s32 EnBigpo_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f*
                              Gfx** gfx) {
     EnBigpo* this = THIS;
     // not fully invisible
-    if (!((this->mainColor.a != 0) && (limbIndex != 7)) ||
+    if ((this->mainColor.a == 0) || (limbIndex == 7) ||
         ((this->actionFunc == EnBigpo_BurnAwayDeath) && (this->idleTimer >= 2))) {
         *dList = NULL;
     }

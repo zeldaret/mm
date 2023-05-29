@@ -297,7 +297,7 @@ void EnNwc_Follow(EnNwc* this, PlayState* play) {
         Math_SmoothStepToS(&this->upperBodyRotY, targetUpperBodyRot, 2, 0x1B58, 0x3E8);
 
     } else { // NOT grown up
-        if (((this->stateTimer & 3) == 3) && (this->stateTimer & 20)) {
+        if (((this->stateTimer & 3) == 3) && ((this->stateTimer & 0x14) != 0)) {
             this->actor.velocity.y = 2.0f; // hop up and down
         }
         if ((this->stateTimer & 0x1B) == 24) {

@@ -427,7 +427,7 @@ s32 func_80BA415C(EnToto* this, PlayState* play) {
         } else {
             func_8019F208();
         }
-        return ((play->msgCtx.choiceIndex != 0) ? 0 : this->text->unk1) + 1; // Possible msg MACRO
+        return ((play->msgCtx.choiceIndex != 0) ? 0 : this->text->unk1) + 1;
     }
     return 0;
 }

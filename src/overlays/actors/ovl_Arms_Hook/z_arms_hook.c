@@ -243,7 +243,7 @@ void ArmsHook_Shoot(ArmsHook* this, PlayState* play) {
         sp60.z = this->unk1EC.z - (this->unk1E0.z - this->unk1EC.z);
         if (BgCheck_EntityLineTest1(&play->colCtx, &sp60, &this->unk1E0, &posResult, &poly, true, true, true, true,
                                     &bgId) &&
-            ((func_800B90AC(play, &this->actor, poly, bgId, &posResult) == 0) ||
+            (!func_800B90AC(play, &this->actor, poly, bgId, &posResult) ||
              BgCheck_ProjectileLineTest(&play->colCtx, &sp60, &this->unk1E0, &posResult, &poly, true, true, true, true,
                                         &bgId))) {
             f32 nx = COLPOLY_GET_NORMAL(poly->normal.x);

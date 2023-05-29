@@ -190,12 +190,12 @@ void Lights_BindDirectional(Lights* lights, LightParams* params, void* unused) {
  * available in the Lights group. This is at most 7 slots for a new group, but could be less.
  */
 void Lights_BindAll(Lights* lights, LightNode* listHead, Vec3f* refPos, PlayState* play) {
-    static LightsPosBindFunc posBindFuncs[] = {
+    static LightsPosBindFunc sPosBindFuncs[] = {
         Lights_BindPoint,
         (LightsPosBindFunc)Lights_BindDirectional,
         Lights_BindPoint,
     };
-    static LightsBindFunc dirBindFuncs[] = {
+    static LightsBindFunc sDirBindFuncs[] = {
         Lights_BindPointWithReference,
         (LightsBindFunc)Lights_BindDirectional,
         Lights_BindPointWithReference,
@@ -204,12 +204,12 @@ void Lights_BindAll(Lights* lights, LightNode* listHead, Vec3f* refPos, PlayStat
     if (listHead != NULL) {
         if ((refPos == NULL) && (lights->enablePosLights == 1)) {
             do {
-                posBindFuncs[listHead->info->type](lights, &listHead->info->params, play);
+                sPosBindFuncs[listHead->info->type](lights, &listHead->info->params, play);
                 listHead = listHead->next;
             } while (listHead != NULL);
         } else {
             do {
-                dirBindFuncs[listHead->info->type](lights, &listHead->info->params, refPos);
+                sDirBindFuncs[listHead->info->type](lights, &listHead->info->params, refPos);
                 listHead = listHead->next;
             } while (listHead != NULL);
         }
