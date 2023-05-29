@@ -4,7 +4,6 @@
 #include "stackcheck.h"
 #include "system_malloc.h"
 
-
 OSMesgQueue sFlashromMesgQueue;
 OSMesg sFlashromMesg[1];
 s32 sFlashromIsInit;
