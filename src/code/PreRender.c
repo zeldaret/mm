@@ -580,39 +580,39 @@ void PreRender_ApplyAntiAliasingFilter(PreRender* this) {
  * all args are expected to be an array of 3 different 5-bit values
  */
 u32 PreRender_Get5bMedian9(u8* px1, u8* px2, u8* px3) {
-    u8 pxBitCount[32]; // Stores the count for each of the possible 32 5-bit pixel values
+    u8 pxValCount[32]; // Stores the count for each of the possible 32 5-bit pixel values
     u32 pxCount;       // Pixel count
     s32 pxMed;         // Pixel median value
 
     // Initialize count to 0 in groups of 4 bits
-    *(s32*)(&pxBitCount[0]) = 0;
-    *(s32*)(&pxBitCount[4]) = 0;
-    *(s32*)(&pxBitCount[8]) = 0;
-    *(s32*)(&pxBitCount[12]) = 0;
-    *(s32*)(&pxBitCount[16]) = 0;
-    *(s32*)(&pxBitCount[20]) = 0;
-    *(s32*)(&pxBitCount[24]) = 0;
-    *(s32*)(&pxBitCount[28]) = 0;
+    *(s32*)(&pxValCount[0]) = 0;
+    *(s32*)(&pxValCount[4]) = 0;
+    *(s32*)(&pxValCount[8]) = 0;
+    *(s32*)(&pxValCount[12]) = 0;
+    *(s32*)(&pxValCount[16]) = 0;
+    *(s32*)(&pxValCount[20]) = 0;
+    *(s32*)(&pxValCount[24]) = 0;
+    *(s32*)(&pxValCount[28]) = 0;
 
     // Increment the count that contains the pixel values
-    pxBitCount[px1[0]]++;
-    pxBitCount[px1[1]]++;
-    pxBitCount[px1[2]]++;
+    pxValCount[px1[0]]++;
+    pxValCount[px1[1]]++;
+    pxValCount[px1[2]]++;
 
-    pxBitCount[px2[0]]++;
-    pxBitCount[px2[1]]++;
-    pxBitCount[px2[2]]++;
+    pxValCount[px2[0]]++;
+    pxValCount[px2[1]]++;
+    pxValCount[px2[2]]++;
 
-    pxBitCount[px3[0]]++;
-    pxBitCount[px3[1]]++;
-    pxBitCount[px3[2]]++;
+    pxValCount[px3[0]]++;
+    pxValCount[px3[1]]++;
+    pxValCount[px3[2]]++;
 
     // Loop through the 32 bits until 5 values are found, then return that bit value.
     // Note that the median of 9 is the 5th sequential value.
     pxCount = 0;
     pxMed = 0;
     while (true) {
-        pxCount += pxBitCount[pxMed];
+        pxCount += pxValCount[pxMed];
         if (pxCount >= 5) {
             // the median is found
             break;
@@ -624,119 +624,116 @@ u32 PreRender_Get5bMedian9(u8* px1, u8* px2, u8* px3) {
 }
 
 #ifdef NON_EQUIVALENT
-void func_801717F8(PreRender* this) {
-    u8** temp_v0;
-    s32 temp_s1;
+void PreRender_DivotFilter(PreRender* this) {
+    u8* redRow2;
+    u8* redRow1;
+    u8* redRow0;
+    u8* greenRow2;
+    u8* greenRow1;
+    u8* greenRow0;
+    u8* blueRow2;
+    u8* blueRow1;
+    u8* blueRow0;
 
-    u8** spDC;
-    u8* spD8;
-    u8* spD4;
-    u8* spD0;
-    u8* spCC;
-    u8* spC8;
-    u8* spC4;
-    u8* spC0;
-    u8* spBC;
-    u8* spB8;
+    u8* cvgFull;
 
-    s32 temp_t1;
+    Color_RGBA16 inPx;
+    Color_RGBA16 outPx;
 
-    Color_RGBA16 spB0;
-    Color_RGBA16 spAC;
+    s32 x;
+    s32 y;
 
-    s32 sp80;
-    s32 sp70;
+    u16 width = this->width;
+    u16 height = this->height;
 
-    s32 s0;
-    u16* var_v0;
-    s32 s4; // x
-    u8* var_a2;
-    u8* temp_s5;
-    u8** temp_a0;
-    u8** temp_v1;
-
-    u16 temp_s6 = this->width;
-    u8* sp10 = alloca(temp_s6 * 10);
-    u16 t0 = this->height;
+    u8* buffer = alloca(width * 10);
 
     // Debug Rom
-    // if (temp_s6 > 320) {
+    // if (width > 320) {
     //     __assert("wd <= 320", "../PreRender.c");
     // }
 
-    spD0 = &sp10[temp_s6 * 0];
-    spD4 = &sp10[temp_s6 * 1];
-    spD8 = &sp10[temp_s6 * 2];
-    spC4 = &sp10[temp_s6 * 3];
-    spC8 = &sp10[temp_s6 * 4];
-    spCC = &sp10[temp_s6 * 5];
-    spB8 = &sp10[temp_s6 * 6];
-    spBC = &sp10[temp_s6 * 7];
-    spC0 = &sp10[temp_s6 * 8];
-    temp_s5 = &sp10[temp_s6 * 9];
+    redRow0 = &buffer[width * 0];
+    redRow1 = &buffer[width * 1];
+    redRow2 = &buffer[width * 2];
 
-    s4 = 0;
-    while (s4 < 2U) {
-        temp_v0 = &(&spD0)[s4];
-        temp_v1 = &(&spC4)[s4];
-        temp_a0 = &(&spB8)[s4];
+    greenRow0 = &buffer[width * 3];
+    greenRow1 = &buffer[width * 4];
+    greenRow2 = &buffer[width * 5];
 
-        for (s0 = 0; s0 < temp_s6; s0++) {
-            spB0.rgba = this->fbufSave[s0 + s4 * this->width];
+    blueRow0 = &buffer[width * 6];
+    blueRow1 = &buffer[width * 7];
+    blueRow2 = &buffer[width * 8];
 
-            (*temp_v0)[s0] = spB0.r;
-            (*temp_v1)[s0] = spB0.g;
-            (*temp_a0)[s0] = spB0.b;
+    cvgFull = &buffer[width * 9];
+
+    // Fill line buffers for first 2 rows
+    for (y = 0; y < 2; y++) {
+        u8** redRow = &(&redRow0)[y];
+        u8** greenRow = &(&greenRow0)[y];
+        u8** blueRow = &(&blueRow0)[y];
+
+        for (x = 0; x < width; x++) {
+            inPx.rgba = this->fbufSave[x + y * this->width];
+
+            (*redRow)[x] = inPx.r;
+            (*greenRow)[x] = inPx.g;
+            (*blueRow)[x] = inPx.b;
         }
-
-        s4 += 1;
     }
 
-    // spDC = &sp10[0];
+    // For each row in the image, except first and last
+    for (y = 1; y < height - 1; y++) {
+        // Find start of pixels and coverage for current line (bug? this should probably be fetching the NEXT line, but
+        // really the divot filter only cares about individual lines so it's already wrong)
+        u8* lineCvg = &this->cvgSave[width * y];
+        u16* linePx = &this->fbufSave[width * y];
 
-    for (s4 = 1; s4 < t0 - 1; s4++) {
-        var_a2 = &this->cvgSave[temp_s6 * s4];
-        var_v0 = &this->fbufSave[temp_s6 * s4];
+        // Obtain next row from current line, current line becomes the bottom row?? (weird, you would expect this to
+        // sample the NEXT line?)
+        for (x = 0; x < width; x++) {
+            inPx.rgba = linePx[x];
 
-        s0 = 0;
-        while (s0 < temp_s6) {
-            spB0.rgba = var_v0[s0];
-
-            spD8[s0] = spB0.r;
-            spCC[s0] = spB0.g;
-            spC0[s0] = spB0.b;
+            redRow2[x] = inPx.r;
+            greenRow2[x] = inPx.g;
+            blueRow2[x] = inPx.b;
 
             // checking for full coverage
-            temp_s5[s0] = ((var_a2[s0] >> 5) == 7);
-
-            s0 += 1;
+            cvgFull[x] = (lineCvg[x] >> 5) == 7;
         }
 
-        for (s0 = 1; s0 < temp_s6 - 1; s0++) {
-            temp_s1 = s0 - 1;
+        for (x = 1; x < width - 1; x++) {
+            s32 xStart = x - 1;
 
-            if ((temp_s5[s0 - 1] != 0) && (temp_s5[s0] != 0) && (temp_s5[s0 + 1] != 0)) {
+            // if the coverage of the three adjacent pixels on the current line are not all fully covered
+            if (cvgFull[x - 1] && cvgFull[x] && cvgFull[x + 1]) {
                 continue;
             }
 
-            spAC.r = (PreRender_Get5bMedian9(spD0 + temp_s1, spD4 + temp_s1, spD8 + temp_s1));
-            spAC.g = (PreRender_Get5bMedian9(spC4 + temp_s1, spC8 + temp_s1, spCC + temp_s1));
-            spAC.b = (PreRender_Get5bMedian9(spB8 + temp_s1, spBC + temp_s1, spC0 + temp_s1));
-            spAC.a = 1;
+            // find median value in 3x3 square for each (r,g,b), replaces the pixel marked by X:
+            //  * * *
+            //  * * *
+            //  * X *
+            outPx.r = PreRender_Get5bMedian9(&redRow0[xStart], &redRow1[xStart], &redRow2[xStart]);
+            outPx.g = PreRender_Get5bMedian9(&greenRow0[xStart], &greenRow1[xStart], &greenRow2[xStart]);
+            outPx.b = PreRender_Get5bMedian9(&blueRow0[xStart], &blueRow1[xStart], &blueRow2[xStart]);
+            outPx.a = 1;
 
-            this->fbufSave[s0 + s4 * this->width] = spAC.rgba;
+            this->fbufSave[x + y * this->width] = outPx.rgba;
         }
 
-        spD0 = spD4;
-        spC4 = spC8;
-        spB8 = spBC;
-        spD4 = spD8;
-        spC8 = spCC;
-        spBC = spC0;
+        // Shuffle row 1 -> 0
+        redRow0 = redRow1;
+        greenRow0 = greenRow1;
+        blueRow0 = blueRow1;
+        // Shuffle row 2 -> 1
+        redRow1 = redRow2;
+        greenRow1 = greenRow2;
+        blueRow1 = blueRow2;
     }
 }
 #else
-#pragma GLOBAL_ASM("asm/non_matchings/code/PreRender/func_801717F8.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/PreRender/PreRender_DivotFilter.s")
 #endif
 
 /**
@@ -748,7 +745,7 @@ void PreRender_ApplyFilters(PreRender* this) {
     } else {
         this->unk_4D = 1;
         PreRender_ApplyAntiAliasingFilter(this);
-        func_801717F8(this);
+        PreRender_DivotFilter(this);
         this->unk_4D = 2;
     }
 }

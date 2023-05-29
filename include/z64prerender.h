@@ -54,7 +54,7 @@ void PreRender_RestoreFramebuffer(PreRender* this, Gfx** gfxp);
 void PreRender_AntiAliasFilter(PreRender* this, s32 x, s32 y);
 void PreRender_ApplyAntiAliasingFilter(PreRender* this);
 u32 PreRender_Get5bMedian9(u8* px1, u8* px2, u8* px3);
-void func_801717F8(PreRender* this);
+void PreRender_DivotFilter(PreRender* this);
 void PreRender_ApplyFilters(PreRender* this);
 void PreRender_ApplyFiltersSlowlyInit(PreRender* this);
 void PreRender_ApplyFiltersSlowlyDestroy(PreRender* this);

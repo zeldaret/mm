@@ -2587,7 +2587,7 @@ asm/non_matchings/code/PreRender/PreRender_RestoreFramebuffer.s,PreRender_Restor
 asm/non_matchings/code/PreRender/PreRender_AntiAliasFilter.s,PreRender_AntiAliasFilter,0x80170B4C,0x2B0
 asm/non_matchings/code/PreRender/PreRender_ApplyAntiAliasingFilter.s,PreRender_ApplyAntiAliasingFilter,0x8017160C,0x2E
 asm/non_matchings/code/PreRender/PreRender_Get5bMedian9.s,PreRender_Get5bMedian9,0x801716C4,0x4D
-asm/non_matchings/code/PreRender/func_801717F8.s,func_801717F8,0x801717F8,0x1D5
+asm/non_matchings/code/PreRender/PreRender_DivotFilter.s,PreRender_DivotFilter,0x801717F8,0x1D5
 asm/non_matchings/code/PreRender/PreRender_ApplyFilters.s,PreRender_ApplyFilters,0x80171F4C,0x17
 asm/non_matchings/code/PreRender/PreRender_ApplyFiltersSlowlyInit.s,PreRender_ApplyFiltersSlowlyInit,0x80171FA8,0x34
 asm/non_matchings/code/PreRender/PreRender_ApplyFiltersSlowlyDestroy.s,PreRender_ApplyFiltersSlowlyDestroy,0x80172078,0x13
