@@ -10,9 +10,9 @@ typedef struct {
     /* 0x004 */ u32 scrollX;
     /* 0x00C */ s32 scrollY;
     /* 0x010 */ s32 wipeSpeed;
-    /* 0x014 */ u8 unk_14;
-    /* 0x015 */ u8 unk_15;
-    /* 0x016 */ u8 unk_16;
+    /* 0x014 */ u8 dir;
+    /* 0x015 */ u8 colorType;
+    /* 0x016 */ u8 speedType;
     /* 0x017 */ u8 texIndex;
     /* 0x018 */ u8 isDone;
     /* 0x019 */ u8 frame;
