@@ -103,12 +103,10 @@ HorseValidScene sHorseValidSceneLayers[] = {
 s32 Horse_IsValidSceneLayer(PlayState* play, Player* player) {
     s32 i;
 
-    // Layer 0 is normal gameplay
     if (gSaveContext.sceneLayer == 0) {
         return true;
     }
 
-    // Layers above 0 are usually cutscenes, but some of them are actually natural playable layers
     for (i = 0; i < ARRAY_COUNT(sHorseValidSceneLayers); i++) {
         if ((sHorseValidSceneLayers[i].sceneId == play->sceneId) &&
             (gSaveContext.sceneLayer == sHorseValidSceneLayers[i].sceneLayerMinusOne + 1)) {
