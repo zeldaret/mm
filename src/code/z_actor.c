@@ -2390,11 +2390,11 @@ Actor* Actor_UpdateActor(UpdateActor_Params* params) {
         if (!Object_IsLoaded(&play->objectCtx, actor->objBankIndex)) {
             Actor_Kill(actor);
         } else if ((params->requiredActorFlag && !(actor->flags & params->requiredActorFlag)) ||
-                   ((((!params->requiredActorFlag) != 0)) &&
+                   (((!params->requiredActorFlag) != 0) &&
                     (!(actor->flags & ACTOR_FLAG_100000) ||
                      ((actor->category == ACTORCAT_EXPLOSIVES) && (params->player->stateFlags1 & PLAYER_STATE1_200))) &&
-                    params->canFreezeCategory && (actor != params->talkActor) &&
-                    ((actor != params->player->heldActor)) && (actor->parent != &params->player->actor))) {
+                    params->canFreezeCategory && (actor != params->talkActor) && (actor != params->player->heldActor) &&
+                    (actor->parent != &params->player->actor))) {
             CollisionCheck_ResetDamage(&actor->colChkInfo);
         } else {
             Math_Vec3f_Copy(&actor->prevPos, &actor->world.pos);
