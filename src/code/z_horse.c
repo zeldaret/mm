@@ -1,5 +1,5 @@
-#include "z64horse.h"
 #include "global.h"
+#include "z64horse.h"
 #include "overlays/actors/ovl_Bg_Umajump/z_bg_umajump.h"
 #include "overlays/actors/ovl_En_Horse/z_en_horse.h"
 
