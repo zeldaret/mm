@@ -5,7 +5,7 @@
 extern u16 gFramebufferHiRes0[HIRES_BUFFER_WIDTH][HIRES_BUFFER_HEIGHT];
 extern u16 gFramebufferHiRes1[HIRES_BUFFER_WIDTH][HIRES_BUFFER_HEIGHT];
 
-OSViMode sNotebookViMode;
+OSViMode sNotebookViMode; // placeholder name
 void* gFramebuffers[2];
 OSViMode* gActiveViMode;
 u16* gZBufferPtr;
