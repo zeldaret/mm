@@ -19,6 +19,8 @@
 #define ARRAY_COUNT(arr) (s32)(sizeof(arr) / sizeof(arr[0]))
 #define ARRAY_COUNTU(arr) (u32)(sizeof(arr) / sizeof(arr[0]))
 
+#define ARRAY_COUNT_2D(arr) (ARRAY_COUNT(arr) * ARRAY_COUNT(arr[0]))
+
 // TODO: After uintptr_t cast change should have an AVOID_UB target that just toggles the KSEG0 bit in the address rather than add/sub 0x80000000
 #define PHYSICAL_TO_VIRTUAL(addr) ((uintptr_t)(addr) + RDRAM_CACHED)
 #define VIRTUAL_TO_PHYSICAL(addr) (uintptr_t)((u8*)(addr) - RDRAM_CACHED)

@@ -82,11 +82,12 @@
 #define Z_PRIORITY_IRQMGR   18
 
 typedef enum {
-    /* 0 */ EQUIP_SLOT_B,
-    /* 1 */ EQUIP_SLOT_C_LEFT,
-    /* 2 */ EQUIP_SLOT_C_DOWN,
-    /* 3 */ EQUIP_SLOT_C_RIGHT,
-    /* 4 */ EQUIP_SLOT_A
+    /* -1 */ EQUIP_SLOT_NONE = -1,
+    /*  0 */ EQUIP_SLOT_B,
+    /*  1 */ EQUIP_SLOT_C_LEFT,
+    /*  2 */ EQUIP_SLOT_C_DOWN,
+    /*  3 */ EQUIP_SLOT_C_RIGHT,
+    /*  4 */ EQUIP_SLOT_A
 } EquipSlot;
 
 typedef struct {
@@ -199,7 +200,7 @@ typedef struct {
     /* 0x204 */ u16 pageIndex;
     /* 0x206 */ u16 switchPageTimer;
     /* 0x208 */ u16 savePromptState;
-    /* 0x20C */ f32 unk_20C;
+    /* 0x20C */ f32 unk_20C; // set to 936.0f, unused remnant from OoT
     /* 0x210 */ f32 itemPageRoll; // rotation (-z) of the item page into the screen
     /* 0x214 */ f32 mapPageRoll; // rotation (+x) of the map page into the screen
     /* 0x218 */ f32 questPageRoll; // rotation (+z) of the quest page into the screen
@@ -215,7 +216,7 @@ typedef struct {
     /* 0x24C */ s16 cursorYIndex[5];
     /* 0x256 */ s16 unk_256; // Uses DungeonItem enum
     /* 0x258 */ s16 cursorSpecialPos;
-    /* 0x25A */ s16 pageSwitchTimer;
+    /* 0x25A */ s16 pageSwitchInputTimer; // Used to introduce a delay before switching page when arriving on the "scroll left/right" positions while holding stick left/right.
     /* 0x25C */ u16 namedItem;
     /* 0x25E */ u16 cursorItem[5];
     /* 0x268 */ u16 cursorSlot[5];
@@ -226,15 +227,15 @@ typedef struct {
     /* 0x27A */ s16 equipAnimY;
     /* 0x27C */ s16 equipAnimAlpha;
     /* 0x27E */ s16 infoPanelOffsetY;
-    /* 0x280 */ u16 unk_280;
+    /* 0x280 */ u16 nameDisplayTimer;
     /* 0x282 */ u16 nameColorSet;
     /* 0x284 */ s16 cursorColorSet;
-    /* 0x286 */ s16 unk_286;
-    /* 0x288 */ f32 unk_288;
-    /* 0x28C */ f32 unk_28C;
-    /* 0x290 */ f32 unk_290;
-    /* 0x294 */ f32 unk_294;
-    /* 0x298 */ f32 unk_298;
+    /* 0x286 */ s16 cursorSpinPhase;
+    /* 0x288 */ f32 cursorX;
+    /* 0x28C */ f32 cursorY;
+    /* 0x290 */ f32 cursorWidth;
+    /* 0x294 */ f32 cursorHeight;
+    /* 0x298 */ f32 cursorShrinkRate;
     /* 0x29C */ s16 promptChoice; // save/continue choice: 0 = yes; 4 = no
     /* 0x29E */ s16 promptAlpha;
     /* 0x2A0 */ s16 ocarinaSongIndex;
@@ -517,7 +518,7 @@ typedef struct PlayState {
     /* 0x18770 */ void (*unk_18770)(struct PlayState* play, Player* player);
     /* 0x18774 */ s32 (*startPlayerFishing)(struct PlayState* play);
     /* 0x18778 */ s32 (*grabPlayer)(struct PlayState* play, Player* player);
-    /* 0x1877C */ s32 (*startPlayerCutscene)(struct PlayState* play, Player* player, s32 mode);
+    /* 0x1877C */ s32 (*startPlayerCutscene)(struct PlayState* play, Player* player, PlayerCsMode csMode);
     /* 0x18780 */ void (*func_18780)(Player* player, struct PlayState* play);
     /* 0x18784 */ s32 (*damagePlayer)(struct PlayState* play, s32 damage);
     /* 0x18788 */ void (*talkWithPlayer)(struct PlayState* play, Actor* actor);

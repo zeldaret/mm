@@ -69,13 +69,13 @@ EnDoor* EnHy_FindNearestDoor(Actor* actor, PlayState* play) {
     do {
         doorIter = SubS_FindActor(play, doorIter, ACTORCAT_DOOR, ACTOR_EN_DOOR);
         door = (EnDoor*)doorIter;
-        dist = Actor_WorldDistXYZToActor(actor, &door->dyna.actor);
+        dist = Actor_WorldDistXYZToActor(actor, &door->knobDoor.dyna.actor);
         if (!isSetup || (dist < minDist)) {
             nearestDoor = door;
             minDist = dist;
             isSetup = true;
         }
-        doorIter = door->dyna.actor.next;
+        doorIter = door->knobDoor.dyna.actor.next;
     } while (doorIter != NULL);
 
     if (1) {}
@@ -134,16 +134,16 @@ void func_800F0BB4(EnHy* enHy, PlayState* play, EnDoor* door, s16 arg3, s16 arg4
     Vec3f offset;
     f32 phi_f0;
 
-    Actor_OffsetOfPointInActorCoords(&door->dyna.actor, &offset, &enHy->actor.world.pos);
+    Actor_OffsetOfPointInActorCoords(&door->knobDoor.dyna.actor, &offset, &enHy->actor.world.pos);
     phi_f0 = (offset.z >= 0.0f) ? 1.0f : -1.0f;
     animIndex = ((s8)phi_f0 < 0) ? 0 : 2;
     EnHy_ChangeObjectAndAnim(enHy, play, (animIndex == 0) ? arg3 : arg4);
     enHy->skelAnime.baseTransl = *enHy->skelAnime.jointTable;
     enHy->skelAnime.prevTransl = *enHy->skelAnime.jointTable;
-    enHy->skelAnime.moveFlags |= (ANIM_FLAG_UPDATEY | ANIM_FLAG_1);
+    enHy->skelAnime.moveFlags |= (ANIM_FLAG_UPDATE_Y | ANIM_FLAG_1);
     AnimationContext_SetMoveActor(play, &enHy->actor, &enHy->skelAnime, 1.0f);
-    door->unk_1A1 = 1;
-    door->animIndex = animIndex;
+    door->knobDoor.playOpenAnim = true;
+    door->knobDoor.animIndex = animIndex;
 }
 
 s32 func_800F0CE4(EnHy* enHy, PlayState* play, ActorFunc draw, s16 arg3, s16 arg4, f32 arg5) {
@@ -157,7 +157,7 @@ s32 func_800F0CE4(EnHy* enHy, PlayState* play, ActorFunc draw, s16 arg3, s16 arg
         if (door != NULL) {
             ret = true;
             func_800F0BB4(enHy, play, door, arg3, arg4);
-            yaw = Math_Vec3f_Yaw(&enHy->actor.world.pos, &door->dyna.actor.world.pos);
+            yaw = Math_Vec3f_Yaw(&enHy->actor.world.pos, &door->knobDoor.dyna.actor.world.pos);
             enHy->actor.world.pos.x += arg5 * Math_SinS(yaw);
             enHy->actor.world.pos.z += arg5 * Math_CosS(yaw);
             enHy->actor.world.rot.y = -yaw;
@@ -179,7 +179,7 @@ s32 func_800F0DD4(EnHy* enHy, PlayState* play, s16 arg2, s16 arg3) {
         if (door != NULL) {
             ret = true;
             func_800F0BB4(enHy, play, door, arg2, arg3);
-            enHy->actor.shape.rot.y = Math_Vec3f_Yaw(&enHy->actor.world.pos, &door->dyna.actor.world.pos);
+            enHy->actor.shape.rot.y = Math_Vec3f_Yaw(&enHy->actor.world.pos, &door->knobDoor.dyna.actor.world.pos);
             enHy->actor.world.rot.y = enHy->actor.shape.rot.y;
             enHy->actor.gravity = 0.0f;
             enHy->actor.flags &= ~ACTOR_FLAG_1;

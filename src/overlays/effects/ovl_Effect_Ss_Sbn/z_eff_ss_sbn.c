@@ -135,7 +135,7 @@ void EffectSsSbn_DrawSliding(PlayState* play, u32 index, EffectSs* this) {
     OPEN_DISPS(gfxCtx);
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    func_8012C2DC(gfxCtx);
+    Gfx_SetupDL25_Xlu(gfxCtx);
     gDPSetRenderMode(POLY_XLU_DISP++, G_RM_FOG_SHADE_A, G_RM_ZB_XLU_DECAL2);
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255, 255, 255, this->rAlpha);
 
@@ -175,7 +175,7 @@ void EffectSsSbn_Draw(PlayState* play, u32 index, EffectSs* this) {
     OPEN_DISPS(gfxCtx);
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    func_8012C2DC(gfxCtx);
+    Gfx_SetupDL25_Xlu(gfxCtx);
     gDPSetRenderMode(POLY_XLU_DISP++, G_RM_FOG_SHADE_A, G_RM_ZB_XLU_DECAL2);
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255, 255, 255, this->rAlpha);
 
