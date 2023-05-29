@@ -4,6 +4,7 @@
  * Description: Seahorse
  */
 
+#include "prevent_bss_reordering.h"
 #include "z_en_ot.h"
 #include "objects/object_ot/object_ot.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
@@ -1031,8 +1032,8 @@ void EnOt_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    POLY_OPA_DISP = Gfx_CallSetupDL(POLY_OPA_DISP, 25);
-    POLY_XLU_DISP = func_8012C2B4(POLY_XLU_DISP);
+    POLY_OPA_DISP = Gfx_SetupDL(POLY_OPA_DISP, SETUPDL_25);
+    POLY_XLU_DISP = Gfx_SetupDL71(POLY_XLU_DISP);
 
     CLOSE_DISPS(play->state.gfxCtx);
 
@@ -1044,7 +1045,7 @@ void EnOt_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    gfx = func_8012C7FC(POLY_XLU_DISP);
+    gfx = Gfx_SetupDL65_NoCD(POLY_XLU_DISP);
 
     gDPSetDither(&gfx[0], G_CD_NOISE);
     gDPSetCombineLERP(&gfx[1], 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE,
@@ -1139,7 +1140,7 @@ void func_80B5E1D8(PlayState* play, EnOtUnkStruct* arg1, s32 arg2) {
     OPEN_DISPS(play->state.gfxCtx);
 
     POLY_OPA_DISP = Play_SetFog(play, POLY_OPA_DISP);
-    POLY_OPA_DISP = func_8012C724(POLY_OPA_DISP);
+    POLY_OPA_DISP = Gfx_SetupDL66(POLY_OPA_DISP);
 
     for (i = 0; i < arg2; i++, arg1++) {
         if (arg1->unk_00) {

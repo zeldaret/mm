@@ -350,7 +350,7 @@ void func_809A5960(ObjArmos* this, PlayState* play) {
                                  (Math_CosS(this->dyna.actor.shape.rot.y) * -9.0f) + this->dyna.actor.world.pos.z,
                                  &this->dyna.actor.shape.rot);
     Matrix_Scale(0.014f, 0.014f, 0.014f, MTXMODE_APPLY);
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 0);
 
@@ -366,7 +366,7 @@ void func_809A5A3C(ObjArmos* this, PlayState* play) {
     if (this->dyna.actor.floorPoly != NULL) {
         OPEN_DISPS(play->state.gfxCtx);
 
-        func_8012C448(play->state.gfxCtx);
+        Gfx_SetupDL44_Xlu(play->state.gfxCtx);
 
         gDPSetCombineLERP(POLY_XLU_DISP++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, COMBINED, 0, 0, 0,
                           COMBINED);

@@ -6,6 +6,8 @@
 
 #define EN_GRASSHOPPER_GET_TYPE(thisx) ((thisx)->params)
 
+#define EN_GRASSHOPPER_PARAMS(type) (type)
+
 struct EnGrasshopper;
 
 typedef void (*EnGrasshopperActionFunc)(struct EnGrasshopper*, PlayState*);

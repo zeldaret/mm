@@ -479,7 +479,7 @@ void EnGg2_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_REACT_TO_LENS) || (this->unk_2F0 == 1)) {
         gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(D_80B3C0AC[this->unk_2EA]));

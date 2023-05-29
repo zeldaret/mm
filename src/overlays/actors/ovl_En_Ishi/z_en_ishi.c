@@ -597,11 +597,11 @@ void func_8095EBDC(EnIshi* this, PlayState* play) {
         }
 
         if (sp70 == 1) {
-            s16 quakeIndex = Quake_Add(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
+            s16 quakeIndex = Quake_Request(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
 
             Quake_SetSpeed(quakeIndex, 17232);
-            Quake_SetQuakeValues(quakeIndex, 3, 0, 0, 0);
-            Quake_SetCountdown(quakeIndex, 7);
+            Quake_SetPerturbations(quakeIndex, 3, 0, 0, 0);
+            Quake_SetDuration(quakeIndex, 7);
 
             Rumble_Request(this->actor.xyzDistToPlayerSq, 255, 20, 150);
         }
@@ -710,7 +710,7 @@ void func_8095F210(EnIshi* this, PlayState* play) {
     if (this->actor.projectedPos.z < 1300.0f) {
         OPEN_DISPS(play->state.gfxCtx);
 
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
         sp28 = (1300.0f - this->actor.projectedPos.z) * 2.55f;
 
@@ -730,7 +730,7 @@ void func_8095F36C(EnIshi* this, PlayState* play) {
     if ((this->actor.projectedPos.z <= 2150.0f) || ((this->unk_197 & 1) && (this->actor.projectedPos.z < 2250.0f))) {
         this->actor.shape.shadowAlpha = 160;
 
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
         gSPSegment(POLY_OPA_DISP++, 0x08, D_801AEFA0);
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -741,7 +741,7 @@ void func_8095F36C(EnIshi* this, PlayState* play) {
 
         this->actor.shape.shadowAlpha = sp20 * 0.627451f;
 
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
         gSPSegment(POLY_XLU_DISP++, 0x08, D_801AEF88);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

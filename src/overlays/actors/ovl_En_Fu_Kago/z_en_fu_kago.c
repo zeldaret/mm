@@ -364,7 +364,7 @@ void func_80AD0340(EnFuKago* this, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     for (i = 0; i < ARRAY_COUNT(D_80AD061C); i++, ptr++) {
         Matrix_Push();
@@ -390,7 +390,7 @@ void EnFuKago_Draw(Actor* thisx, PlayState* play) {
     if (this->unk_33A == 0) {
         OPEN_DISPS(play->state.gfxCtx);
 
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, object_fu_mato_DL_0006A0);

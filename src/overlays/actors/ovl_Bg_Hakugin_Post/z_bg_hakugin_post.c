@@ -522,10 +522,10 @@ void func_80A9C058(BgHakuginPost* this, PlayState* play, BgHakuginPostUnkStruct*
                 sp44.z = this->dyna.actor.home.pos.z + unkStruct1->unk_14.z;
                 Rumble_Request(Math3D_Vec3fDistSq(&sp44, &GET_PLAYER(play)->actor.world.pos), 255, 20, 150);
 
-                quakeIndex = Quake_Add(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
+                quakeIndex = Quake_Request(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
                 Quake_SetSpeed(quakeIndex, 20000);
-                Quake_SetQuakeValues(quakeIndex, 7, 0, 0, 0);
-                Quake_SetCountdown(quakeIndex, 12);
+                Quake_SetPerturbations(quakeIndex, 7, 0, 0, 0);
+                Quake_SetDuration(quakeIndex, 12);
 
                 if (this->unk_179 <= 0) {
                     func_8019F128(NA_SE_EV_STONEDOOR_STOP);
@@ -537,7 +537,7 @@ void func_80A9C058(BgHakuginPost* this, PlayState* play, BgHakuginPostUnkStruct*
     }
 }
 
-void func_80A9C18C(BgHakuginPost* this, PlayState* play) {
+void BgHakuginPost_RequestQuakeAndRumble(BgHakuginPost* this, PlayState* play) {
     s32 pad;
     Player* player = GET_PLAYER(play);
     Camera* activeCam = GET_ACTIVE_CAM(play);
@@ -547,10 +547,10 @@ void func_80A9C18C(BgHakuginPost* this, PlayState* play) {
                                             this->dyna.actor.home.pos.x, this->dyna.actor.home.pos.z),
                    255, 20, 150);
 
-    quakeIndex = Quake_Add(activeCam, QUAKE_TYPE_3);
+    quakeIndex = Quake_Request(activeCam, QUAKE_TYPE_3);
     Quake_SetSpeed(quakeIndex, 17232);
-    Quake_SetQuakeValues(quakeIndex, 6, 0, 0, 0);
-    Quake_SetCountdown(quakeIndex, 20);
+    Quake_SetPerturbations(quakeIndex, 6, 0, 0, 0);
+    Quake_SetDuration(quakeIndex, 20);
 }
 
 void func_80A9C228(BgHakuginPost* this, PlayState* play, BgHakuginPostUnkStruct* unkStruct) {
@@ -798,7 +798,7 @@ void func_80A9CD14(BgHakuginPost* this, PlayState* play) {
     temp_f12 = CLAMP_MAX(temp_f12, 40.0f);
     this->unk_16C += temp_f12;
     if (this->unk_168 <= this->unk_16C) {
-        func_80A9C18C(this, play);
+        BgHakuginPost_RequestQuakeAndRumble(this, play);
         func_8019F128(NA_SE_EV_STONEDOOR_STOP);
         func_80A9CE00(this);
     } else {
@@ -876,7 +876,7 @@ void func_80A9D0B4(BgHakuginPost* this, PlayState* play) {
         func_80A9C634(this, play);
         func_80A9B160(&D_80A9E028, play);
         this->unk_16C = this->unk_164;
-        func_80A9C18C(this, play);
+        BgHakuginPost_RequestQuakeAndRumble(this, play);
         func_8019F128(NA_SE_EV_STONEDOOR_STOP);
         func_80A9CC84(this);
     } else {
@@ -1012,7 +1012,7 @@ void func_80A9D61C(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     Matrix_SetTranslateRotateYXZ(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
                                  this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
     Matrix_Scale(0.1f, 0.1f, 0.1f, MTXMODE_APPLY);

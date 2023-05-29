@@ -62,11 +62,11 @@ void EffectSsFhgFlash_Draw(PlayState* play, u32 index, EffectSs* this) {
     Matrix_Translate(this->pos.x, this->pos.y, this->pos.z, MTXMODE_NEW);
     Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
     if (this->rParams != FHGFLASH_SHOCK_NO_ACTOR) {
-        func_8012C448(play->state.gfxCtx);
+        Gfx_SetupDL44_Xlu(play->state.gfxCtx);
         Matrix_RotateXS(this->rXZRot, MTXMODE_APPLY);
         gDPSetRenderMode(POLY_XLU_DISP++, G_RM_PASS, G_RM_AA_ZB_XLU_DECAL2);
     } else {
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         Matrix_ReplaceRotation(&play->billboardMtxF);
         gDPSetRenderMode(POLY_XLU_DISP++, G_RM_PASS, G_RM_AA_ZB_XLU_SURF2);
     }

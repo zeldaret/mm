@@ -16,7 +16,7 @@ s16 sOcarinaButtonFlashTimer = 12;
 s16 sOcarinaButtonFlashColorIndex = 1;
 s16 D_801C6A94 = 0;
 
-u8 D_801C6A98[][5] = {
+u8 gPageSwitchNextButtonStatus[][5] = {
     { BTN_ENABLED, BTN_ENABLED, BTN_DISABLED, BTN_ENABLED, BTN_ENABLED },
     { BTN_ENABLED, BTN_ENABLED, BTN_DISABLED, BTN_ENABLED, BTN_ENABLED },
     { BTN_ENABLED, BTN_DISABLED, BTN_DISABLED, BTN_ENABLED, BTN_ENABLED },
@@ -3400,7 +3400,7 @@ void Message_DisplayOcarinaStaffImpl(PlayState* play, u16 ocarinaAction) {
 
     sLastPlayedSong = 0xFF;
     msgCtx->lastPlayedSong = 0xFF;
-    msgCtx->lastOcarinaButtonIndex = 0xFF;
+    msgCtx->lastOcarinaButtonIndex = OCARINA_BTN_INVALID;
     noStop = false;
     msgCtx->ocarinaAction = ocarinaAction;
 
@@ -3865,7 +3865,7 @@ void Message_DrawOcarinaButtons(PlayState* play, Gfx** gfxP) {
     if ((play->msgCtx.msgMode >= MSGMODE_OCARINA_PLAYING) && (msgCtx->msgMode <= MSGMODE_40)) {
         if ((msgCtx->ocarinaAction != OCARINA_ACTION_FREE_PLAY) &&
             (msgCtx->ocarinaAction != OCARINA_ACTION_CHECK_NOTIME)) {
-            func_8012C680(&gfx);
+            Gfx_SetupDL39_Ptr(&gfx);
 
             gDPSetCombineLERP(gfx++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0, PRIMITIVE,
                               ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
@@ -3964,7 +3964,7 @@ void Message_DrawSceneTitleCard(PlayState* play, Gfx** gfxP) {
     Gfx* gfx;
 
     gfx = *gfxP;
-    func_8012C680(&gfx);
+    Gfx_SetupDL39_Ptr(&gfx);
 
     gDPSetCombineLERP(gfx++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0, PRIMITIVE,
                       ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
@@ -4042,7 +4042,7 @@ void Message_DrawMain(PlayState* play, Gfx** gfxP) {
     if (msgCtx->msgLength != 0) {
         if (!msgCtx->textIsCredits) {
             Message_SetView(&msgCtx->view);
-            func_8012C680(&gfx);
+            Gfx_SetupDL39_Ptr(&gfx);
             if (msgCtx->ocarinaAction != OCARINA_ACTION_37) {
                 if ((msgCtx->msgMode != MSGMODE_18) && (msgCtx->msgMode != MSGMODE_39) &&
                     (msgCtx->msgMode != MSGMODE_3C) && (msgCtx->msgMode != MSGMODE_3F) &&
@@ -4055,7 +4055,7 @@ void Message_DrawMain(PlayState* play, Gfx** gfxP) {
                 }
             }
         }
-        func_8012C680(&gfx);
+        Gfx_SetupDL39_Ptr(&gfx);
         gDPSetAlphaCompare(gfx++, G_AC_NONE);
         gDPSetCombineLERP(gfx++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE,
                           0);
@@ -5654,7 +5654,7 @@ void Message_Update(PlayState* play) {
                 Message_CloseTextbox(play);
                 msgCtx->msgMode = MSGMODE_SCARECROW_SPAWN_RECORDING_FAILED;
             } else {
-                msgCtx->lastOcarinaButtonIndex = 0xFF;
+                msgCtx->lastOcarinaButtonIndex = OCARINA_BTN_INVALID;
             }
             break;
 

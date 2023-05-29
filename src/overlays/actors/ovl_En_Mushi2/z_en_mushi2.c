@@ -1236,6 +1236,6 @@ void EnMushi2_Draw(Actor* thisx, PlayState* play) {
     EnMushi2* this = THIS;
 
     func_80A687A0(this);
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, NULL, NULL, NULL);
 }

@@ -46,14 +46,14 @@ void EffectSsSolderSrchBall_Draw(PlayState* play, u32 index, EffectSs* this) {
     GraphicsContext* gfxCtx = play->state.gfxCtx;
     f32 scale = this->rgScale / 100.0f;
 
-    func_8012C28C(gfxCtx);
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     OPEN_DISPS(gfxCtx);
 
     Matrix_Translate(this->pos.x, this->pos.y, this->pos.z, MTXMODE_NEW);
     Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
-    POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 20);
+    POLY_XLU_DISP = Gfx_SetupDL(POLY_XLU_DISP, SETUPDL_20);
     gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gSun1Tex));
     gSPDisplayList(POLY_XLU_DISP++, gSunSparkleMaterialDL);
     gDPPipeSync(POLY_XLU_DISP++);

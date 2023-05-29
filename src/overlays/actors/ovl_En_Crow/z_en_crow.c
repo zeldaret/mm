@@ -6,7 +6,7 @@
 
 #include "z_en_crow.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_1000 | ACTOR_FLAG_4000)
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_IGNORE_QUAKE | ACTOR_FLAG_4000)
 
 #define THIS ((EnCrow*)thisx)
 
@@ -574,7 +574,7 @@ void EnCrow_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot
 void EnCrow_Draw(Actor* thisx, PlayState* play) {
     EnCrow* this = THIS;
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnCrow_OverrideLimbDraw, EnCrow_PostLimbDraw, &this->actor);
     Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, ARRAY_COUNT(this->bodyPartsPos),

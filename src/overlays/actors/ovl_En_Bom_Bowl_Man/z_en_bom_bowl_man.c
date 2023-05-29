@@ -678,8 +678,8 @@ void EnBomBowlMan_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_809C6214[this->unk_2F0]));
     gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(D_809C6220[this->unk_2F4]));

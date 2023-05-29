@@ -725,7 +725,7 @@ void EnDragon_Dead(EnDragon* this, PlayState* play) {
 
 void EnDragon_UpdateDamage(EnDragon* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    u32 sp30;
+    PlayerImpactType playerImpactType;
 
     if (this->action == DEEP_PYTHON_ACTION_EXTEND) {
         if ((this->collider.elements[2].info.bumperFlags & BUMP_HIT) ||
@@ -753,7 +753,8 @@ void EnDragon_UpdateDamage(EnDragon* this, PlayState* play) {
 
     if ((this->action == DEEP_PYTHON_ACTION_EXTEND) && (this->grabWaitTimer == 0) &&
         (player->invincibilityTimer == 0) && (this->collider.elements[0].info.ocElemFlags & OCELEM_HIT) &&
-        (!(func_800B64FC(play, 1000.0f, &this->actor.world.pos, &sp30) >= 0.0f) || (sp30 != 1))) {
+        !((Actor_GetPlayerImpact(play, 1000.0f, &this->actor.world.pos, &playerImpactType) >= 0.0f) &&
+          (playerImpactType == PLAYER_IMPACT_ZORA_BARRIER))) {
         this->actor.speed = 0.0f;
         this->action = DEEP_PYTHON_ACTION_GRAB;
         this->actor.flags |= ACTOR_FLAG_100000;
@@ -834,8 +835,8 @@ void EnDragon_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* r
 void EnDragon_Draw(Actor* thisx, PlayState* play) {
     EnDragon* this = THIS;
 
-    func_8012C28C(play->state.gfxCtx);
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnDragon_OverrideLimbDraw, EnDragon_PostLimbDraw, &this->actor);
 }

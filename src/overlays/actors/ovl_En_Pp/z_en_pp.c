@@ -1573,8 +1573,8 @@ void EnPp_Draw(Actor* thisx, PlayState* play) {
     f32 scale;
     f32 alpha;
 
-    func_8012C2DC(play->state.gfxCtx);
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnPp_OverrideLimbDraw, EnPp_PostLimbDraw, &this->actor);
 
@@ -1611,7 +1611,7 @@ void EnPp_Draw(Actor* thisx, PlayState* play) {
         if ((this->action != EN_PP_ACTION_MASK_DETACH) && (this->action < EN_PP_ACTION_DEAD)) {
             OPEN_DISPS(play->state.gfxCtx);
 
-            func_8012C448(play->state.gfxCtx);
+            Gfx_SetupDL44_Xlu(play->state.gfxCtx);
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 0, 0, 0, 255);
 
             Math_Vec3f_Copy(&pos, &this->actor.world.pos);

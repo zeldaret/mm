@@ -244,8 +244,8 @@ void func_80BD8758(EnPamera* this, PlayState* play) {
     if (this->hideInisdeTimer++ > 1800) {
         if (CutsceneManager_IsNext(this->csIdList[0]) && (this->csIdList[0] != -1)) {
             CutsceneManager_StartWithPlayerCs(this->csIdList[0], &this->actor);
-            Camera_SetToTrackActor(Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(this->csIdList[0])),
-                                   &this->actor);
+            Camera_SetFocalActor(Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(this->csIdList[0])),
+                                 &this->actor);
             this->actor.speed = 1.5f;
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 1);
             this->actor.shape.rot.y = this->actor.home.rot.y;
@@ -431,8 +431,8 @@ void func_80BD90AC(EnPamera* this, PlayState* play) {
           (Math_Vec3f_DistXZ(&this->actor.home.pos, &player->actor.world.pos) < 200.0f)))) {
         if ((CutsceneManager_IsNext(this->csIdList[1])) && ((this->csIdList[1] != -1))) {
             CutsceneManager_StartWithPlayerCs(this->csIdList[1], &this->actor);
-            Camera_SetToTrackActor(Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(this->csIdList[1])),
-                                   &this->actor);
+            Camera_SetFocalActor(Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(this->csIdList[1])),
+                                 &this->actor);
             EnPamera_LookDownWell(this);
         } else if (this->csIdList[1] != -1) {
             CutsceneManager_Queue(this->csIdList[1]);
@@ -556,12 +556,14 @@ void EnPamera_Draw(Actor* thisx, PlayState* play) {
     EnPamera* this = THIS;
 
     OPEN_DISPS(play->state.gfxCtx);
-    func_8012C28C(play->state.gfxCtx);
+
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     gSPSegment(POLY_OPA_DISP++, 0x08, SEGMENTED_TO_VIRTUAL(D_80BDA604[this->unk_312]));
     gSPSegment(POLY_OPA_DISP++, 0x09, SEGMENTED_TO_VIRTUAL(D_80BDA610[this->unk_314]));
     gSPSegment(POLY_OPA_DISP++, 0x0A, SEGMENTED_TO_VIRTUAL(D_80BDA5FC[this->unk_310]));
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnPamera_OverrideLimbDraw, EnPamera_PostLimbDraw, &this->actor);
+
     CLOSE_DISPS(play->state.gfxCtx);
 }
 

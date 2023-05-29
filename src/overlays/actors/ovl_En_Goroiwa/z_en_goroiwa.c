@@ -451,11 +451,11 @@ s32 func_8093F6F8(EnGoroiwa* this, PlayState* play) {
     if ((this->actor.velocity.y < 0.0f) && (this->actor.world.pos.y <= sp7C)) {
         if (this->unk_1CA == 0) {
             if (this->actor.xzDistToPlayer < 400.0f) {
-                s16 quakeIndex = Quake_Add(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
+                s16 quakeIndex = Quake_Request(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
 
                 Quake_SetSpeed(quakeIndex, 17232);
-                Quake_SetQuakeValues(quakeIndex, 3, 0, 0, 0);
-                Quake_SetCountdown(quakeIndex, 7);
+                Quake_SetPerturbations(quakeIndex, 3, 0, 0, 0);
+                Quake_SetDuration(quakeIndex, 7);
             }
 
             this->unk_1C4 = 0.0f;
@@ -1575,7 +1575,7 @@ void func_80942B1C(EnGoroiwa* this, PlayState* play) {
             if ((ptr->unk_28 != 0) && (ptr->unk_2C > 0)) {
                 OPEN_DISPS(play->state.gfxCtx);
 
-                func_8012C448(play->state.gfxCtx);
+                Gfx_SetupDL44_Xlu(play->state.gfxCtx);
 
                 gDPSetCombineLERP(POLY_XLU_DISP++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, COMBINED, 0, 0,
                                   0, COMBINED);

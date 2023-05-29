@@ -293,13 +293,13 @@ void func_80A54600(PlayState* play, Vec3f* arg1, f32 arg2, f32 arg3) {
     }
 }
 
-void ObjHugebombiwa_AddQuake(ObjHugebombiwa* this, PlayState* play, s32 quakeVerticalMag) {
+void ObjHugebombiwa_RequestQuakeAndRumble(ObjHugebombiwa* this, PlayState* play, s32 quakeVerticalMag) {
     s32 pad[2];
-    s16 quakeIndex = Quake_Add(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
+    s16 quakeIndex = Quake_Request(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
 
     Quake_SetSpeed(quakeIndex, 20000);
-    Quake_SetQuakeValues(quakeIndex, quakeVerticalMag, 0, 0, 0);
-    Quake_SetCountdown(quakeIndex, 7);
+    Quake_SetPerturbations(quakeIndex, quakeVerticalMag, 0, 0, 0);
+    Quake_SetDuration(quakeIndex, 7);
 
     Rumble_Request(this->actor.xyzDistToPlayerSq, 255, 20, 150);
 }
@@ -516,7 +516,7 @@ void func_80A55064(ObjHugebombiwa* this, PlayState* play) {
             ptr->unk_24 = 1;
             func_80A53E60(play, &ptr->unk_0C, ptr->unk_18, ptr->unk_00.y * 9.8f);
             if ((play->gameplayFrames % 4) == 0) {
-                ObjHugebombiwa_AddQuake(this, play, (s32)(Rand_ZeroOne() * 5.5f) + 1);
+                ObjHugebombiwa_RequestQuakeAndRumble(this, play, (s32)(Rand_ZeroOne() * 5.5f) + 1);
             }
         }
     }
@@ -612,7 +612,7 @@ void func_80A55564(ObjHugebombiwa* this, PlayState* play) {
             ptr->unk_24 = 1;
             func_80A54600(play, &ptr->unk_0C, ptr->unk_18, ptr->unk_00.y * 10.1f);
             if ((play->gameplayFrames % 4) == 0) {
-                ObjHugebombiwa_AddQuake(this, play, (s32)(Rand_ZeroOne() * 5.5f) + 1);
+                ObjHugebombiwa_RequestQuakeAndRumble(this, play, (s32)(Rand_ZeroOne() * 5.5f) + 1);
             }
         }
     }
@@ -639,21 +639,21 @@ void ObjHugebombiwa_Draw(Actor* thisx, PlayState* play) {
 
     if ((this->actionFunc == func_80A54C04) || (this->actionFunc == func_80A54CEC)) {
         if (this->actor.projectedPos.z <= 4300.0f) {
-            func_8012C28C(play->state.gfxCtx);
+            Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
             gSPSegment(POLY_OPA_DISP++, 0x08, D_801AEFA0);
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gDPSetPrimColor(POLY_OPA_DISP++, 0, 0xFF, 255, 255, 255, 255);
             gSPDisplayList(POLY_OPA_DISP++, object_bombiwa_DL_002F60);
 
-            func_8012C2DC(play->state.gfxCtx);
+            Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_XLU_DISP++, object_bombiwa_DL_003110);
 
         } else if (this->actor.projectedPos.z < 4500.0f) {
             sp38 = (4500.0f - this->actor.projectedPos.z) * 1.275f;
-            func_8012C2DC(play->state.gfxCtx);
+            Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
             gSPSegment(POLY_XLU_DISP++, 0x08, D_801AEF88);
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -665,7 +665,7 @@ void ObjHugebombiwa_Draw(Actor* thisx, PlayState* play) {
         EnHugebombiwaStruct* ptr;
         Gfx* gfx = POLY_OPA_DISP;
 
-        gSPDisplayList(gfx++, &sSetupDL[6 * 25]);
+        gSPDisplayList(gfx++, gSetupDLs[SETUPDL_25]);
 
         for (i = 0; i < ARRAY_COUNT(this->unk_190); i++) {
             ptr = &this->unk_190[i];
@@ -697,9 +697,10 @@ void func_80A55B34(Actor* thisx, PlayState* play) {
     }
 
     OPEN_DISPS(play->state.gfxCtx);
+
     gfx = POLY_OPA_DISP;
 
-    gSPDisplayList(gfx++, &sSetupDL[6 * 25]);
+    gSPDisplayList(gfx++, gSetupDLs[SETUPDL_25]);
 
     for (i = 0; i < ARRAY_COUNT(this->unk_190); i++) {
         ptr = &this->unk_190[i];

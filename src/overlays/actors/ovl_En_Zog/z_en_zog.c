@@ -1049,11 +1049,11 @@ void EnZog_Draw(Actor* thisx, PlayState* play) {
     if (this->unk_30A & 8) {
         if (this->unk_322 > 128) {
             gfx = POLY_XLU_DISP++;
-            func_8012C2B4(gfx);
+            Gfx_SetupDL71(gfx);
             Scene_SetRenderModeXlu(play, 2, 2);
         } else {
             gfx = POLY_XLU_DISP++;
-            func_8012C304(gfx);
+            Gfx_SetupDL72(gfx);
             Scene_SetRenderModeXlu(play, 1, 2);
         }
 
@@ -1068,7 +1068,7 @@ void EnZog_Draw(Actor* thisx, PlayState* play) {
             SkelAnime_DrawFlex(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                                NULL, func_80B95598, &this->actor, POLY_XLU_DISP);
     } else {
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
         Scene_SetRenderModeXlu(play, 0, 1);
 
         gfx = POLY_OPA_DISP;

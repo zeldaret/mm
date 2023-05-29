@@ -355,7 +355,7 @@ void func_80B0FD8C(EnGb2* this, PlayState* play) {
 }
 
 void func_80B0FE18(PlayState* play) {
-    func_800FD750(0x38);
+    func_800FD750(NA_BGM_MINI_BOSS);
     play->nextEntrance = ENTRANCE(GHOST_HUT, 1);
     play->transitionType = TRANS_TYPE_64;
     gSaveContext.nextTransitionType = TRANS_TYPE_64;
@@ -1007,7 +1007,7 @@ void EnGb2_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     if (this->unk_28A == 255) {
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
         gDPSetEnvColor(POLY_OPA_DISP++, 255, 255, 255, 255);
 
@@ -1016,7 +1016,7 @@ void EnGb2_Draw(Actor* thisx, PlayState* play) {
             SkelAnime_DrawFlex(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                                EnGb2_OverrideLimbDraw, EnGb2_PostLimbDraw, &this->actor, POLY_OPA_DISP);
     } else {
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
         gDPSetEnvColor(POLY_OPA_DISP++, 255, 255, 255, this->unk_28A);
 

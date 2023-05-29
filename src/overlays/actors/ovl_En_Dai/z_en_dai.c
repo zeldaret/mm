@@ -62,7 +62,7 @@ void func_80B3E168(EnDaiEffect* effect, PlayState* play2) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     for (i = 0; i < EN_DAI_EFFECT_COUNT; i++, effect++) {
         if (effect->isEnabled == true) {
@@ -649,7 +649,7 @@ void func_80B3F78C(EnDai* this, PlayState* play) {
         this->unk_1CE &= ~0x40;
     }
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     OPEN_DISPS(play->state.gfxCtx);
 
@@ -683,7 +683,7 @@ void func_80B3F920(EnDai* this, PlayState* play) {
 
     this->unk_1CE |= 0x40;
     if (this->unk_1CD == 0xFF) {
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
         OPEN_DISPS(play->state.gfxCtx);
 
@@ -701,7 +701,7 @@ void func_80B3F920(EnDai* this, PlayState* play) {
 
         CLOSE_DISPS(play->state.gfxCtx);
     } else {
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
         OPEN_DISPS(play->state.gfxCtx);
 
