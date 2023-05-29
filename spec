@@ -36,7 +36,7 @@ beginseg
     include "build/data/boot/gfxprint.data.o"
     include "build/src/boot_O2/mtxuty-cvt.o"
     include "build/src/boot_O2/assert.o"
-    include "build/src/boot_O2/boot_800862E0.o"
+    include "build/src/boot_O2/system_heap.o"
     include "build/src/boot_O2/padsetup.o"
     include "build/src/boot_O2/boot_80086760.o"
     include "build/asm/boot/fp.text.o"
@@ -325,7 +325,8 @@ beginseg
     name "icon_item_vtx_static"
     compress
     romalign 0x1000
-    include "build/baserom/icon_item_vtx_static.o"
+    include "build/assets/interface/icon_item_vtx_static/icon_item_vtx_static.o"
+    number 11
 endseg
 
 beginseg
@@ -692,8 +693,7 @@ beginseg
     include "build/src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_mask.o"
     include "build/src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_prompt.o"
     include "build/src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.o"
-    include "build/data/ovl_kaleido_scope/ovl_kaleido_scope.bss.o"
-    include "build/data/ovl_kaleido_scope/ovl_kaleido_scope.reloc.o"
+    include "build/src/overlays/kaleido_scope/ovl_kaleido_scope/ovl_kaleido_scope_reloc.o"
 endseg
 
 beginseg

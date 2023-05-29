@@ -600,7 +600,7 @@ extern UNK_PTR D_801C5CB0;
 // extern UNK_TYPE2 D_801C6A8C;
 // extern UNK_TYPE2 D_801C6A90;
 // extern UNK_TYPE2 D_801C6A94;
-extern u8 D_801C6A98[5][5];
+extern u8 gPageSwitchNextButtonStatus[6][5];
 // extern UNK_TYPE1 D_801CED40;
 // extern UNK_TYPE2 D_801CFC78;
 // extern UNK_TYPE1 D_801CFC7A;
