@@ -642,7 +642,7 @@ void EnArrow_Draw(Actor* thisx, PlayState* play) {
     s32 phi_v0;
 
     if (ARROW_IS_ARROW(this->actor.params)) {
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
         SkelAnime_DrawLod(play, this->arrow.skelAnime.skeleton, this->arrow.skelAnime.jointTable, NULL, NULL,
                           &this->actor, this->actor.projectedPos.z < 160.0f ? 0 : 1);
     } else if (this->actor.params == ARROW_TYPE_DEKU_BUBBLE) {
@@ -699,7 +699,7 @@ void EnArrow_Draw(Actor* thisx, PlayState* play) {
 
         OPEN_DISPS(play->state.gfxCtx);
 
-        func_8012C240(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu2(play->state.gfxCtx);
 
         gSPClearGeometryMode(POLY_XLU_DISP++, G_FOG | G_LIGHTING);
 
@@ -735,7 +735,7 @@ void EnArrow_Draw(Actor* thisx, PlayState* play) {
     } else if (this->actor.velocity.y != 0.0f) {
         OPEN_DISPS(play->state.gfxCtx);
 
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
         Matrix_Mult(&play->billboardMtxF, MTXMODE_APPLY);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

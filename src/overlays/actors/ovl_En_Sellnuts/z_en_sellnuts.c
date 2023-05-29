@@ -1138,7 +1138,7 @@ void EnSellnuts_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) 
 void EnSellnuts_Draw(Actor* thisx, PlayState* play) {
     EnSellnuts* this = THIS;
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawTransformFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                    this->skelAnime.dListCount, EnSellnuts_OverrideLimbDraw, EnSellnuts_PostLimbDraw,
                                    EnSellnuts_TransformLimbDraw, &this->actor);

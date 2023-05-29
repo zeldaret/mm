@@ -369,7 +369,7 @@ void func_80BB5AAC(EnTanron1* this, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     for (i = 0; i < this->actor.params; i++, ptr++) {
         if (ptr->unk_24 == 1) {

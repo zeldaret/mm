@@ -1182,7 +1182,7 @@ void EnSnowman_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* 
 void EnSnowman_Draw(Actor* thisx, PlayState* play) {
     EnSnowman* this = THIS;
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, NULL,
                           EnSnowman_PostLimbDraw, &this->actor);
     Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, ARRAY_COUNT(this->bodyPartsPos),
@@ -1192,7 +1192,7 @@ void EnSnowman_Draw(Actor* thisx, PlayState* play) {
 void EnSnowman_DrawSnowPile(Actor* thisx, PlayState* play) {
     EnSnowman* this = THIS;
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawFlexOpa(play, this->snowPileSkelAnime.skeleton, this->snowPileSkelAnime.jointTable,
                           this->snowPileSkelAnime.dListCount, NULL, NULL, &this->actor);
 }

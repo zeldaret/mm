@@ -810,7 +810,7 @@ void EnBaba_Draw(Actor* thisx, PlayState* play) {
     if (this->stateFlags & BOMB_SHOP_LADY_STATE_VISIBLE) {
         OPEN_DISPS(play->state.gfxCtx);
 
-        func_8012C5B0(play->state.gfxCtx);
+        Gfx_SetupDL37_Opa(play->state.gfxCtx);
 
         gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(gBbaEyeTex));
 
@@ -821,7 +821,7 @@ void EnBaba_Draw(Actor* thisx, PlayState* play) {
         if (this->stateFlags & BOMB_SHOP_LADY_STATE_DRAW_SHADOW) {
             if ((this->animIndex == BOMB_SHOP_LADY_ANIM_KNOCKED_OVER) ||
                 (this->animIndex == BOMB_SHOP_LADY_ANIM_LYING_DOWN)) {
-                func_8012C2DC(play->state.gfxCtx);
+                Gfx_SetupDL25_Xlu(play->state.gfxCtx);
                 pos.x = this->actor.world.pos.x + 20.0f;
                 pos.y = this->actor.world.pos.y;
                 pos.z = this->actor.world.pos.z + 20.0f;

@@ -281,7 +281,7 @@ s32 EnBaisen_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f
 void EnBaisen_Draw(Actor* thisx, PlayState* play) {
     EnBaisen* this = THIS;
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnBaisen_OverrideLimbDraw, NULL, &this->actor);
 }

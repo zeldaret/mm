@@ -668,7 +668,7 @@ void EnRuppecrow_Update(Actor* thisx, PlayState* play) {
 void EnRuppecrow_Draw(Actor* thisx, PlayState* play) {
     EnRuppecrow* this = THIS;
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, NULL,
                           NULL, &this->actor);
 }

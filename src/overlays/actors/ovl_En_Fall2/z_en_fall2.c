@@ -153,13 +153,13 @@ void EnFall2_Draw(Actor* thisx, PlayState* play) {
     Mtx* mtx;
 
     if (!(this->alphaLevel <= 0.0f)) {
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         AnimatedMat_DrawXlu(play, Lib_SegmentedToVirtual(object_fall2_Matanimheader_008840));
 
         mtx = GRAPH_ALLOC(play->state.gfxCtx, this->skeletonInfo.unk_18->unk_1 * sizeof(Mtx));
 
         if (mtx != NULL) {
-            func_8012C2DC(play->state.gfxCtx);
+            Gfx_SetupDL25_Xlu(play->state.gfxCtx);
             Matrix_RotateYS((s16)(Camera_GetCamDirYaw(GET_ACTIVE_CAM(play)) + 0x8000), MTXMODE_APPLY);
             func_8018450C(play, &this->skeletonInfo, mtx, NULL, NULL, &this->actor);
         }

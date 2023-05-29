@@ -284,7 +284,7 @@ void EnBee_Update(Actor* thisx, PlayState* play) {
 void EnBee_Draw(Actor* thisx, PlayState* play) {
     EnBee* this = THIS;
 
-    func_8012C28C(play->state.gfxCtx);
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, NULL, NULL, &this->actor);
 }

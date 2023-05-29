@@ -1188,7 +1188,7 @@ void EnFloormas_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     if (this->collider.base.colType == COLTYPE_HARD) {
         func_800AE2A0(play, &D_808D3958, this->unk_190 % 40, 40);
     }
@@ -1213,7 +1213,7 @@ void func_808D3754(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     if (this->collider.base.colType == COLTYPE_HARD) {
         func_800AE5E4(play, &D_808D3958, this->unk_190 % 40, 40);
     }

@@ -1131,7 +1131,7 @@ void EnSkb_Draw(Actor* thisx, PlayState* play) {
     EnSkb* this = THIS;
 
     this->limbCount = 0;
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, EnSkb_OverrideLimbDraw,
                       EnSkb_PostLimbDraw, &this->actor);
     if (this->drawDmgEffTimer > 0) {

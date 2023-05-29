@@ -790,7 +790,7 @@ void func_80A292A8(EnBigpamet* this, PlayState* play) {
     if (this->unk_2A2 > 0) {
         OPEN_DISPS(play->state.gfxCtx);
 
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0x80, 255, 255, 255, 255);
         gDPSetEnvColor(POLY_OPA_DISP++, 255, 255, 255, 255);
@@ -834,7 +834,7 @@ void EnBigpamet_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     gSPSegment(POLY_OPA_DISP++, 0x08, D_80A29754[this->unk_29C]);
 
@@ -874,7 +874,7 @@ void EnBigpamet_PostLimbDraw1(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s
 void func_80A2966C(Actor* thisx, PlayState* play) {
     EnBigpamet* this = THIS;
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawFlexOpa(play, this->skelAnime1.skeleton, this->skelAnime1.jointTable, this->skelAnime1.dListCount,
                           EnBigpamet_OverrideLimbDraw1, EnBigpamet_PostLimbDraw1, &this->actor);
     func_80A292A8(this, play);

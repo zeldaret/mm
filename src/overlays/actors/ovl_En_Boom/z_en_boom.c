@@ -336,7 +336,7 @@ void EnBoom_Draw(Actor* thisx, PlayState* play) {
         EffectBlure_AddVertex(Effect_GetByIndex(this->effectIndex), &sp4C, &sp40);
     }
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     Matrix_RotateYS(this->unk_1CD * 0x2EE0, MTXMODE_APPLY);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

@@ -487,7 +487,7 @@ void func_80C173B4(Actor* thisx, PlayState* play) {
     mtx = GRAPH_ALLOC(play->state.gfxCtx, this->unk_144.unk_18->unk_1 * sizeof(Mtx));
 
     if (mtx != NULL) {
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         Matrix_Mult(&play->billboardMtxF, MTXMODE_APPLY);
         func_8018450C(play, &this->unk_144, mtx, (void*)func_80C170F8, 0, &this->actor);
     }
@@ -514,7 +514,7 @@ void DemoSyoten_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     if (this->unk_3E4 & 4) {
         Matrix_RotateZS(-this->actor.shape.rot.z, MTXMODE_APPLY);
@@ -553,7 +553,7 @@ void func_80C17690(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     Matrix_RotateYS(BINANG_ROT180(Camera_GetCamDirYaw(GET_ACTIVE_CAM(play))), MTXMODE_APPLY);
 
     if (this->unk_3E4 & 8) {

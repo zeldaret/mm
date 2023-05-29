@@ -2884,7 +2884,8 @@ void EnBigslime_SetSysMatrix(Vec3f* pos, PlayState* play, Gfx* shadowDList, f32 
     zx = 1.0f - (yDistMinY * (1.0f / 1550.0f));
 
     OPEN_DISPS(play->state.gfxCtx);
-    POLY_OPA_DISP = Gfx_CallSetupDL(POLY_OPA_DISP, 0x2C);
+
+    POLY_OPA_DISP = Gfx_SetupDL(POLY_OPA_DISP, SETUPDL_44);
     sysMatrix->xx = zx;
     sysMatrix->yy = 1.0f;
     sysMatrix->zz = zx;
@@ -2907,6 +2908,7 @@ void EnBigslime_SetSysMatrix(Vec3f* pos, PlayState* play, Gfx* shadowDList, f32 
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 0, 0, 0, (u8)(alpha * zx));
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, shadowDList);
+
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
@@ -2936,12 +2938,13 @@ void EnBigslime_DrawMinislime(EnBigslime* this, PlayState* play2) {
     }
 
     OPEN_DISPS(play->state.gfxCtx);
+
     for (i = 0; i < MINISLIME_NUM_SPAWN; i++) {
         minislime = this->minislime[indices[i]];
         lights = LightContext_NewLights(&play->lightCtx, play->state.gfxCtx);
         Lights_BindAll(lights, play->lightCtx.listHead, &minislime->actor.world.pos, play);
         Lights_Draw(lights, play->state.gfxCtx);
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         func_800B8118(&minislime->actor, play, 0);
         Matrix_SetTranslateRotateYXZ(minislime->actor.world.pos.x, minislime->actor.world.pos.y,
                                      minislime->actor.world.pos.z, &minislime->actor.shape.rot);
@@ -2963,6 +2966,7 @@ void EnBigslime_DrawMinislime(EnBigslime* this, PlayState* play2) {
                                 minislime->actor.scale.y * 400.0f, minislime->actor.shape.rot.y,
                                 minislime->actor.shape.shadowAlpha * (175.0f / 255.0f));
     }
+
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
@@ -2980,8 +2984,9 @@ void EnBigslime_DrawBigslime(Actor* thisx, PlayState* play) {
     MtxF* billboardMtxF;
     s32 i;
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     func_800B8118(&this->actor, play, 0);
+
     OPEN_DISPS(play->state.gfxCtx);
 
     // Draw Bigslime
@@ -3018,6 +3023,7 @@ void EnBigslime_DrawBigslime(Actor* thisx, PlayState* play) {
             gSPDisplayList(POLY_XLU_DISP++, gBigslimeBubbleDL);
         }
     }
+
     CLOSE_DISPS(play->state.gfxCtx);
 
     EnBigslime_SetSysMatrix(&this->actor.world.pos, play, gBigslimeShadowDL, this->vtxScaleX, this->vtxScaleZ,
@@ -3070,7 +3076,7 @@ void EnBigslime_DrawGekko(Actor* thisx, PlayState* play) {
     EnBigslime* this = THIS;
     s32 pad;
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     if (this->actionFunc == EnBigslime_DamageGekko) {
         func_800AE434(play, &gekkoDamageColor, this->damageSpinTimer, 20);
     } else if ((this->actionFunc == EnBigslime_CutsceneDefeat) || (this->actionFunc == EnBigslime_GekkoDespawn)) {
@@ -3123,7 +3129,7 @@ void EnBigslime_DrawShatteringEffects(EnBigslime* this, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     // Draw Shockwave
     if (this->shockwaveAlpha > 0) {

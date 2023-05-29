@@ -36,7 +36,7 @@ beginseg
     include "build/data/boot/gfxprint.data.o"
     include "build/src/boot_O2/mtxuty-cvt.o"
     include "build/src/boot_O2/assert.o"
-    include "build/src/boot_O2/boot_800862E0.o"
+    include "build/src/boot_O2/system_heap.o"
     include "build/src/boot_O2/padsetup.o"
     include "build/src/boot_O2/boot_80086760.o"
     include "build/asm/boot/fp.text.o"
@@ -995,8 +995,7 @@ beginseg
     name "ovl_Item_B_Heart"
     compress
     include "build/src/overlays/actors/ovl_Item_B_Heart/z_item_b_heart.o"
-    include "build/data/ovl_Item_B_Heart/ovl_Item_B_Heart.data.o"
-    include "build/data/ovl_Item_B_Heart/ovl_Item_B_Heart.reloc.o"
+    include "build/src/overlays/actors/ovl_Item_B_Heart/ovl_Item_B_Heart_reloc.o"
 endseg
 
 beginseg

@@ -486,10 +486,10 @@ void EnWood02_Draw(Actor* thisx, PlayState* play) {
         red = green = blue = 255;
     }
 
-    func_8012C2DC(gfxCtx);
+    Gfx_SetupDL25_Xlu(gfxCtx);
 
     if ((thisx->params == WOOD_LEAF_GREEN) || (thisx->params == WOOD_LEAF_YELLOW)) {
-        func_8012C28C(gfxCtx);
+        Gfx_SetupDL25_Opa(gfxCtx);
 
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, red, green, blue, 127);
 
@@ -501,7 +501,7 @@ void EnWood02_Draw(Actor* thisx, PlayState* play) {
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, D_808C4D70[this->drawType & 0xF]);
     } else {
-        func_8012C2DC(gfxCtx);
+        Gfx_SetupDL25_Xlu(gfxCtx);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, D_808C4D54[this->drawType & 0xF]);

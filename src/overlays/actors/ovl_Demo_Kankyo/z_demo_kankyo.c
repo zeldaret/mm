@@ -506,7 +506,7 @@ void DemoKakyo_DrawLostWoodsSparkle(Actor* thisx, PlayState* play2) {
     if (!(play->cameraPtrs[CAM_ID_MAIN]->stateFlags & CAM_STATE_UNDERWATER)) {
         OPEN_DISPS(play->state.gfxCtx);
 
-        POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 20);
+        POLY_XLU_DISP = Gfx_SetupDL(POLY_XLU_DISP, SETUPDL_20);
 
         gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gSun1Tex));
         gSPDisplayList(POLY_XLU_DISP++, gSunSparkleMaterialDL);
@@ -598,7 +598,8 @@ void DemoKankyo_DrawMoonAndGiant(Actor* thisx, PlayState* play2) {
         GraphicsContext* gfxCtx = play->state.gfxCtx;
 
         OPEN_DISPS(gfxCtx);
-        func_8012C2DC(gfxCtx);
+
+        Gfx_SetupDL25_Xlu(gfxCtx);
 
         for (i = 0; i < play->envCtx.unk_F2[3]; i++) {
             worldPos.x = this->effects[i].posBase.x + this->effects[i].posOffset.x;

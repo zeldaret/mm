@@ -436,7 +436,7 @@ void EnShn_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
 void EnShn_Draw(Actor* thisx, PlayState* play) {
     EnShn* this = THIS;
 
-    func_8012C5B0(play->state.gfxCtx);
+    Gfx_SetupDL37_Opa(play->state.gfxCtx);
     SkelAnime_DrawTransformFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                    this->skelAnime.dListCount, EnShn_OverrideLimbDraw, EnShn_PostLimbDraw,
                                    EnShn_TransformLimbDraw, &this->actor);

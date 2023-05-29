@@ -458,10 +458,10 @@ void EnYb_Draw(Actor* thisx, PlayState* play) {
     if (this->alpha != 0) {
         if (this->alpha < 255) {
             if (this->alpha > 128) {
-                func_8012C2B4(POLY_XLU_DISP++);
+                Gfx_SetupDL71(POLY_XLU_DISP++);
                 Scene_SetRenderModeXlu(play, 2, 2);
             } else {
-                func_8012C304(POLY_XLU_DISP++);
+                Gfx_SetupDL72(POLY_XLU_DISP++);
                 Scene_SetRenderModeXlu(play, 1, 2);
             }
             gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0, this->alpha);
@@ -473,7 +473,7 @@ void EnYb_Draw(Actor* thisx, PlayState* play) {
                                    this->skelAnime.dListCount, NULL, EnYb_PostLimbDrawXlu, &this->actor, POLY_XLU_DISP);
 
         } else {
-            func_8012C28C(play->state.gfxCtx);
+            Gfx_SetupDL25_Opa(play->state.gfxCtx);
             Scene_SetRenderModeXlu(play, 0, 1);
             SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                   this->skelAnime.dListCount, NULL, EnYb_PostLimbDrawOpa, &this->actor);

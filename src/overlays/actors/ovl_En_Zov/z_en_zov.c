@@ -563,7 +563,7 @@ void EnZov_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     phi_a1 = 0;
     curFrame = this->skelAnime.curFrame;
     phi_v1 = this->unk_2EC;

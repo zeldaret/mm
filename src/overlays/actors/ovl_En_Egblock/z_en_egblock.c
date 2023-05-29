@@ -110,7 +110,7 @@ void EnEgblock_Draw(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     EnEgblock* this = THIS;
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     if (this->inactive != true) {
         OPEN_DISPS(play->state.gfxCtx);
@@ -193,7 +193,7 @@ void EnEgblock_DrawEffects(EnEgblock* this, PlayState* play) {
 
     OPEN_DISPS(gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     for (i = 0; i < ARRAY_COUNT(this->effects); i++, effect++) {
         if (effect->isActive) {

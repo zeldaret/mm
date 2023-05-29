@@ -133,8 +133,8 @@ void EnEndingHero6_Draw(Actor* thisx, PlayState* play) {
     if (this->isIdle == 1) {
         OPEN_DISPS(play->state.gfxCtx);
 
-        func_8012C28C(play->state.gfxCtx);
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
         if (this->objectIndex >= 0 && Object_IsLoaded(&play->objectCtx, this->objectIndex)) {
             gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.status[this->objectIndex].segment);

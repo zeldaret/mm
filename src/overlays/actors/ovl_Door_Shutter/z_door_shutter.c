@@ -689,7 +689,7 @@ void DoorShutter_Draw(Actor* thisx, PlayState* play) {
 
         OPEN_DISPS(play->state.gfxCtx);
 
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
         if (this->unk_164 == 7) {
             Matrix_Translate(0.0f, 64.96f, 0.0f, MTXMODE_APPLY);

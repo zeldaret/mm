@@ -370,7 +370,7 @@ void ObjLightSwitch_DrawOpa(ObjLightswitch* this, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     gDPSetEnvColor(POLY_OPA_DISP++, (u8)(this->colorR >> 6), (u8)(this->colorG >> 6),
                    ((void)0, (u8)(this->colorB >> 6)), (u8)(this->colorAlpha >> 6));
     gSPSegment(POLY_OPA_DISP++, 0x09, D_801AEFA0);
@@ -406,7 +406,7 @@ void ObjLightSwitch_DrawXlu(ObjLightswitch* this, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     gDPSetEnvColor(POLY_XLU_DISP++, (u8)(this->colorR >> 6), (u8)(this->colorG >> 6),
                    ((void)0, (u8)(this->colorB >> 6)), (u8)(this->colorAlpha >> 6));
     gSPSegment(POLY_XLU_DISP++, 0x09, D_801AEF88);

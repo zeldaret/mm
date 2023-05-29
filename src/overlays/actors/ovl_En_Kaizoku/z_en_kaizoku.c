@@ -2134,8 +2134,8 @@ void EnKaizoku_Draw(Actor* thisx, PlayState* play) {
     f32 drawDmgEffAlpha;
     EnKaizoku* this = THIS;
 
-    func_8012C2DC(play->state.gfxCtx);
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     OPEN_DISPS(play->state.gfxCtx);
 

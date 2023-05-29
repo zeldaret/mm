@@ -2033,10 +2033,10 @@ void DmStk_Draw(Actor* thisx, PlayState* play) {
         OPEN_DISPS(play->state.gfxCtx);
 
         this->alpha = this->alpha;
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
         if (this->alpha < 255) {
-            func_8012C2DC(play->state.gfxCtx);
+            Gfx_SetupDL25_Xlu(play->state.gfxCtx);
             Scene_SetRenderModeXlu(play, 1, 2);
 
             gDPPipeSync(POLY_XLU_DISP++);

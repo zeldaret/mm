@@ -341,7 +341,7 @@ void ObjEtcetera_DrawIdle(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     gSPDisplayList(POLY_OPA_DISP++, this->dList);
 
     CLOSE_DISPS(play->state.gfxCtx);
@@ -355,6 +355,6 @@ void ObjEtcetera_DrawIdle(Actor* thisx, PlayState* play) {
 void ObjEtcetera_DrawAnimated(Actor* thisx, PlayState* play) {
     ObjEtcetera* this = THIS;
 
-    func_8012C5B0(play->state.gfxCtx);
+    Gfx_SetupDL37_Opa(play->state.gfxCtx);
     SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, NULL, NULL, &this->dyna.actor);
 }

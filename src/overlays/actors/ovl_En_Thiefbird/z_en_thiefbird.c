@@ -1128,7 +1128,7 @@ void func_80C13354(EnThiefbird* this, PlayState* play2) {
     OPEN_DISPS(play->state.gfxCtx);
 
     gfx = POLY_OPA_DISP;
-    gSPDisplayList(&gfx[0], &sSetupDL[6 * 25]);
+    gSPDisplayList(&gfx[0], gSetupDLs[SETUPDL_25]);
     gSPDisplayList(&gfx[1], gTakkuriFeatherMaterialDL);
     gfx = &gfx[2];
 
@@ -1154,7 +1154,7 @@ void func_80C13354(EnThiefbird* this, PlayState* play2) {
 void EnThiefbird_Draw(Actor* thisx, PlayState* play) {
     EnThiefbird* this = THIS;
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnThiefbird_OverrideLimbDraw, EnThiefbird_PostLimbDraw, &this->actor);
     if (this->actor.colorFilterTimer > 0) {

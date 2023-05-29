@@ -725,7 +725,7 @@ void EnRacedog_DrawSelectionArrow(EnRacedog* this, PlayState* play) {
     if (shouldDrawSelectionArrow) {
         OPEN_DISPS(play->state.gfxCtx);
 
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
         EnRacedog_UpdateSelectionArrow(this);
         Matrix_SetTranslateRotateYXZ(this->actor.world.pos.x, this->actor.world.pos.y + 40.0f, this->actor.world.pos.z,
                                      &rotation);
@@ -766,7 +766,7 @@ void EnRacedog_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     gDPPipeSync(POLY_OPA_DISP++);
 

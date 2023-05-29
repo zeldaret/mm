@@ -125,7 +125,7 @@ void EnPart_Draw(Actor* thisx, PlayState* play) {
     if (this->actor.params > ENPART_TYPE_0) {
         Matrix_RotateZF(this->zRot, MTXMODE_APPLY);
     }
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     func_800B8050(&this->actor, play, 0);
     if (this->actor.params == ENPART_TYPE_15) {
         gSPSegment(POLY_OPA_DISP++, 0x0C, gEmptyDL);

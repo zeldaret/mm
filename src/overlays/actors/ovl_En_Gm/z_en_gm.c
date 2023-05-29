@@ -1832,7 +1832,7 @@ void EnGm_Draw(Actor* thisx, PlayState* play) {
     if ((this->unk_258 != 0) && (this->unk_262 >= 0)) {
         OPEN_DISPS(play->state.gfxCtx);
 
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
         gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80951E30[this->unk_3CE]));
 

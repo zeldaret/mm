@@ -67,7 +67,7 @@ void DebugDisplay_DrawObjects(PlayState* play) {
 void DebugDisplay_DrawSpriteI8(DebugDispObject* dispObj, void* texture, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C6FC(play->state.gfxCtx);
+    Gfx_SetupDL47_Xlu(play->state.gfxCtx);
 
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, dispObj->color.r, dispObj->color.g, dispObj->color.b, dispObj->color.a);
     Matrix_Translate(dispObj->pos.x, dispObj->pos.y, dispObj->pos.z, MTXMODE_NEW);
@@ -90,7 +90,7 @@ Lights1 sDebugDisplayLight1 = gdSPDefLights1(128, 128, 128, 255, 255, 255, 73, 7
 void DebugDisplay_DrawPolygon(DebugDispObject* dispObj, void* dList, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C588(play->state.gfxCtx);
+    Gfx_SetupDL4_Xlu(play->state.gfxCtx);
 
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, dispObj->color.r, dispObj->color.g, dispObj->color.b, dispObj->color.a);
 
@@ -113,7 +113,7 @@ void DebugDisplay_DrawPath(PlayState* play, Path* path) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C560(play->state.gfxCtx);
+    Gfx_SetupDL38_Xlu(play->state.gfxCtx);
     gSPMatrix(POLY_XLU_DISP++, &gIdentityMtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_XLU_DISP++, DebugDisplay_PathDisplayList(play->state.gfxCtx, path));
 

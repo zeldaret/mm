@@ -151,7 +151,7 @@ void EnElfbub_Draw(Actor* thisx, PlayState* play2) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     Matrix_Translate(0.0f, 0.0f, 1.0f, MTXMODE_APPLY);
     Matrix_ReplaceRotation(&play->billboardMtxF);

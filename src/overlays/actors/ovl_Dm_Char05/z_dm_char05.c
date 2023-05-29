@@ -611,7 +611,7 @@ void func_80AAD998(Actor* thisx, PlayState* play) {
             (play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_109)]->id != 1)) {
             OPEN_DISPS(play->state.gfxCtx);
 
-            func_8012C28C(play->state.gfxCtx);
+            Gfx_SetupDL25_Opa(play->state.gfxCtx);
             POLY_OPA_DISP = Gfx_SetFog(POLY_OPA_DISP, this->unk_19C, this->unk_1A0, this->unk_1A4, this->unk_1A8,
                                        this->unk_1AC, this->unk_1B0);
             SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, DmChar05_OverrideLimbDraw,
@@ -630,7 +630,7 @@ void func_80AADA90(Actor* thisx, PlayState* play) {
     if (this->unk_18E == 0) {
         if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_473) &&
             (play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_473)]->id != 1)) {
-            func_8012C28C(play->state.gfxCtx);
+            Gfx_SetupDL25_Opa(play->state.gfxCtx);
             SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, DmChar05_OverrideLimbDraw,
                               DmChar05_PostLimbDraw, &this->actor);
         }
@@ -645,7 +645,7 @@ void func_80AADB4C(Actor* thisx, PlayState* play) {
     if (this->unk_18E == 0) {
         if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_518) &&
             (play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_518)]->id != 1)) {
-            func_8012C28C(play->state.gfxCtx);
+            Gfx_SetupDL25_Opa(play->state.gfxCtx);
             SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                   this->skelAnime.dListCount, NULL, NULL, &this->actor);
         }
@@ -663,7 +663,7 @@ void func_80AADC00(Actor* thisx, PlayState* play) {
         cueChannel = Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_559);
 
         if ((play->csCtx.actorCues[cueChannel]->id != 1) && (play->csCtx.actorCues[cueChannel]->id != 4)) {
-            func_8012C28C(play->state.gfxCtx);
+            Gfx_SetupDL25_Opa(play->state.gfxCtx);
             SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, DmChar05_OverrideLimbDraw,
                               DmChar05_PostLimbDraw, &this->actor);
         }

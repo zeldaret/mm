@@ -658,8 +658,8 @@ void EnWizFire_DrawIcePool(EnWizFire* this, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     if ((this->type == EN_WIZ_FIRE_TYPE_MAGIC_PROJECTILE) && (this->action == EN_WIZ_FIRE_ACTION_POOL)) {
-        func_8012C28C(play->state.gfxCtx);
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         Matrix_Translate(this->actor.world.pos.x, this->actor.floorHeight, this->actor.world.pos.z, MTXMODE_NEW);
         Matrix_Scale(this->poolScale, this->poolScale, this->poolScale, MTXMODE_APPLY);
 
@@ -691,8 +691,8 @@ void EnWizFire_DrawFirePoolAndFlame(EnWizFire* this, PlayState* play2) {
     OPEN_DISPS(play->state.gfxCtx);
 
     if ((this->type == EN_WIZ_FIRE_TYPE_MAGIC_PROJECTILE) && (this->action == EN_WIZ_FIRE_ACTION_POOL)) {
-        func_8012C28C(play->state.gfxCtx);
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
         Matrix_Push();
         Matrix_Translate(this->actor.world.pos.x, this->actor.floorHeight, this->actor.world.pos.z, MTXMODE_NEW);
@@ -754,8 +754,8 @@ void EnWizFire_Draw(Actor* thisx, PlayState* play2) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     Matrix_Push();
 
     for (i = ARRAY_COUNT(this->magicProjectilePos) - 1; i >= this->lowestUsedIndex; i--) {
@@ -875,8 +875,8 @@ void EnWizFire_DrawEffects(EnWizFire* this, PlayState* play) {
 
     OPEN_DISPS(gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     materialFlag = false;
     for (i = 0; i < ARRAY_COUNT(this->effects); i++, effect++) {

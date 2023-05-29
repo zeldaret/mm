@@ -564,13 +564,15 @@ void EnAm_Draw(Actor* thisx, PlayState* play) {
     EnAm* this = THIS;
 
     OPEN_DISPS(play->state.gfxCtx);
+
     gfx = POLY_OPA_DISP;
-    gSPDisplayList(&gfx[0], &sSetupDL[6 * 25]);
+    gSPDisplayList(&gfx[0], gSetupDLs[SETUPDL_25]);
     gDPSetEnvColor(&gfx[1], 0, 0, 0, this->textureBlend);
     POLY_OPA_DISP = &gfx[2];
     SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, NULL, EnAm_PostLimbDraw,
                       &this->actor);
     Actor_DrawDamageEffects(play, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), this->drawDmgEffScale, 0.0f,
                             this->drawDmgEffAlpha, ACTOR_DRAW_DMGEFF_LIGHT_ORBS);
+
     CLOSE_DISPS(play->state.gfxCtx);
 }

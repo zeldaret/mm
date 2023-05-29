@@ -1190,7 +1190,7 @@ void EnTalkGibud_Draw(Actor* thisx, PlayState* play) {
 
     this->limbIndex = 0;
     if (this->actor.shape.shadowAlpha == 255) {
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
         gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, this->actor.shape.shadowAlpha);
         gSPSegment(POLY_OPA_DISP++, 0x08, D_801AEFA0);
@@ -1199,7 +1199,7 @@ void EnTalkGibud_Draw(Actor* thisx, PlayState* play) {
             SkelAnime_DrawFlex(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                                EnTalkGibud_OverrideLimbDraw, EnTalkGibud_PostLimbDraw, &this->actor, POLY_OPA_DISP);
     } else {
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
         gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0, this->actor.shape.shadowAlpha);
         gSPSegment(POLY_XLU_DISP++, 0x08, D_801AEF88);
