@@ -2422,6 +2422,7 @@ extern volatile OSTime sRSPOtherTotalTime;
 // extern UNK_TYPE1 D_801FBB18;
 extern volatile OSTime gRDPTotalTime;
 // extern UNK_TYPE1 D_801FBB28;
+
 extern OSViMode sNotebookViMode;
 extern void* gFramebuffers[2];
 extern OSViMode* gActiveViMode;
@@ -2446,6 +2447,7 @@ extern s16 gCfbHeight;
 extern s16 gCfbLeftAdjust;
 extern s16 gCfbUpperAdjust;
 extern u8 gSysCfbHiResEnabled;
+
 extern Vec3f D_801FBBF0;
 extern LineSegment Math3D_ColSphereTri_line;
 extern Vec3f Math3D_ColSphereTri_point;
