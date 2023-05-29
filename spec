@@ -325,7 +325,8 @@ beginseg
     name "icon_item_vtx_static"
     compress
     romalign 0x1000
-    include "build/baserom/icon_item_vtx_static.o"
+    include "build/assets/interface/icon_item_vtx_static/icon_item_vtx_static.o"
+    number 11
 endseg
 
 beginseg
@@ -522,8 +523,7 @@ beginseg
     include "build/src/code/z_rumble.o"
     include "build/src/code/z_view.o"
     include "build/src/code/z_vimode.o"
-    include "build/src/code/code_80140CE0.o"
-    include "build/data/code/code_80140CE0.data.o"
+    include "build/src/code/z_viscvg.o"
     include "build/src/code/code_80140E80.o"
     include "build/src/code/z_vismono.o"
     include "build/src/code/z_viszbuf.o"
@@ -573,7 +573,6 @@ beginseg
     include "build/data/code/speed_meter.bss.o"
     include "build/src/code/su_mtx.o"
     include "build/src/code/sys_cfb.o"
-    include "build/data/code/sys_cfb.bss.o"
     include "build/src/code/sys_cmpdma.o"
     include "build/src/code/sys_initial_check.o"
     include "build/src/code/sys_math.o"
@@ -692,8 +691,7 @@ beginseg
     include "build/src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_mask.o"
     include "build/src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_prompt.o"
     include "build/src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.o"
-    include "build/data/ovl_kaleido_scope/ovl_kaleido_scope.bss.o"
-    include "build/data/ovl_kaleido_scope/ovl_kaleido_scope.reloc.o"
+    include "build/src/overlays/kaleido_scope/ovl_kaleido_scope/ovl_kaleido_scope_reloc.o"
 endseg
 
 beginseg

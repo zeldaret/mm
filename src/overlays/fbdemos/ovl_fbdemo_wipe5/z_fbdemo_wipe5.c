@@ -81,7 +81,7 @@ void TransitionWipe5_Draw(void* thisx, Gfx** gfxP) {
     Gfx* gfx = *gfxP;
     s32 width = gScreenWidth;
     s32 height = gScreenHeight;
-    void* sp50 = D_801FBB90;
+    void* workBuffer = gWorkBuffer;
     TransitionWipe5* this = THIS;
     s32 alpha = (1.0f - this->unk_0C) * 255.0f;
 
@@ -92,7 +92,7 @@ void TransitionWipe5_Draw(void* thisx, Gfx** gfxP) {
                         G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_CONV | G_TF_POINT | G_TT_NONE | G_TL_TILE |
                             G_TD_CLAMP | G_TP_NONE | G_CYC_COPY | G_PM_NPRIMITIVE,
                         G_AC_NONE | G_ZS_PIXEL | G_RM_NOOP | G_RM_NOOP2);
-        func_8014116C(&gfx, D_0F000000, sp50, width, height, 1);
+        func_8014116C(&gfx, D_0F000000, workBuffer, width, height, 1);
     } else {
         if (alpha == 255) {
             gDPSetOtherMode(gfx++,
@@ -108,7 +108,7 @@ void TransitionWipe5_Draw(void* thisx, Gfx** gfxP) {
         gDPSetEnvColor(gfx++, 255, 255, 255, alpha);
         gDPSetCombineLERP(gfx++, TEXEL0, 0, ENVIRONMENT, 0, 0, 0, 0, ENVIRONMENT, TEXEL0, 0, ENVIRONMENT, 0, 0, 0, 0,
                           ENVIRONMENT);
-        func_8014116C(&gfx, sp50, D_0F000000, width, height, 0);
+        func_8014116C(&gfx, workBuffer, D_0F000000, width, height, 0);
     }
     gDPPipeSync(gfx++);
     gSPLoadUcode(gfx++, SysUcode_GetUCode(), SysUcode_GetUCodeData());

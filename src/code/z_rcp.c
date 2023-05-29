@@ -1459,7 +1459,7 @@ void func_8012CF0C(GraphicsContext* gfxCtx, s32 clearFb, s32 clearZb, u8 r, u8 g
 
     gSPDisplayList(&masterGfx[0], D_0E000000.syncSegments);
     gSPDisplayList(&masterGfx[1], sFillSetupDL);
-    gDPSetColorImage(&masterGfx[2], G_IM_FMT_RGBA, G_IM_SIZ_16b, D_801FBBCC, D_0F000000);
+    gDPSetColorImage(&masterGfx[2], G_IM_FMT_RGBA, G_IM_SIZ_16b, gCfbWidth, D_0F000000);
     if (zbuffer != NULL) {
         gDPSetDepthImage(&masterGfx[3], zbuffer);
     } else {
@@ -1471,7 +1471,7 @@ void func_8012CF0C(GraphicsContext* gfxCtx, s32 clearFb, s32 clearZb, u8 r, u8 g
 
     masterGfx = gGfxMasterDL->setScissor;
 
-    gDPSetScissor(&masterGfx[0], G_SC_NON_INTERLACE, 0, 0, D_801FBBCC, D_801FBBCE);
+    gDPSetScissor(&masterGfx[0], G_SC_NON_INTERLACE, 0, 0, gCfbWidth, gCfbHeight);
     gSPEndDisplayList(&masterGfx[1]);
 
     // Clear Z-Buffer
@@ -1481,13 +1481,13 @@ void func_8012CF0C(GraphicsContext* gfxCtx, s32 clearFb, s32 clearZb, u8 r, u8 g
     if (zbuffer == NULL) {
         gSPEndDisplayList(&masterGfx[0]);
     } else {
-        gDPSetColorImage(&masterGfx[0], G_IM_FMT_RGBA, G_IM_SIZ_16b, D_801FBBCC, zbuffer);
+        gDPSetColorImage(&masterGfx[0], G_IM_FMT_RGBA, G_IM_SIZ_16b, gCfbWidth, zbuffer);
         gDPPipeSync(&masterGfx[1]);
         gDPSetCycleType(&masterGfx[2], G_CYC_FILL);
         gDPSetRenderMode(&masterGfx[3], G_RM_NOOP, G_RM_NOOP2);
         gDPSetFillColor(&masterGfx[4], (GPACK_RGBA5551(255, 255, 240, 0) << 16) | GPACK_RGBA5551(255, 255, 240, 0));
         gSPDisplayList(&masterGfx[5], D_0E000000.clearFillRect);
-        gDPSetColorImage(&masterGfx[6], G_IM_FMT_RGBA, G_IM_SIZ_16b, D_801FBBCC, D_0F000000);
+        gDPSetColorImage(&masterGfx[6], G_IM_FMT_RGBA, G_IM_SIZ_16b, gCfbWidth, D_0F000000);
         gSPEndDisplayList(&masterGfx[7]);
     }
 
@@ -1495,7 +1495,7 @@ void func_8012CF0C(GraphicsContext* gfxCtx, s32 clearFb, s32 clearZb, u8 r, u8 g
 
     masterGfx = gGfxMasterDL->clearFrameBuffer;
 
-    gDPSetColorImage(&masterGfx[0], G_IM_FMT_RGBA, G_IM_SIZ_16b, D_801FBBCC, D_0F000000);
+    gDPSetColorImage(&masterGfx[0], G_IM_FMT_RGBA, G_IM_SIZ_16b, gCfbWidth, D_0F000000);
     gDPSetCycleType(&masterGfx[1], G_CYC_FILL);
     gDPSetRenderMode(&masterGfx[2], G_RM_NOOP, G_RM_NOOP2);
     gDPSetFillColor(&masterGfx[3], (GPACK_RGBA5551(r, g, b, 1) << 16) | GPACK_RGBA5551(r, g, b, 1));
@@ -1505,7 +1505,7 @@ void func_8012CF0C(GraphicsContext* gfxCtx, s32 clearFb, s32 clearZb, u8 r, u8 g
 
     masterGfx = gGfxMasterDL->clearFillRect;
 
-    gDPFillRectangle(&masterGfx[0], 0, 0, D_801FBBCC - 1, D_801FBBCE - 1);
+    gDPFillRectangle(&masterGfx[0], 0, 0, gCfbWidth - 1, gCfbHeight - 1);
     gDPPipeSync(&masterGfx[1]);
     gSPEndDisplayList(&masterGfx[2]);
 
@@ -1513,7 +1513,7 @@ void func_8012CF0C(GraphicsContext* gfxCtx, s32 clearFb, s32 clearZb, u8 r, u8 g
 
     masterGfx = gGfxMasterDL->fillRect;
 
-    gDPFillRectangle(&masterGfx[0], 0, 0, D_801FBBCC, D_801FBBCE);
+    gDPFillRectangle(&masterGfx[0], 0, 0, gCfbWidth, gCfbHeight);
     gDPPipeSync(&masterGfx[1]);
     gSPEndDisplayList(&masterGfx[2]);
 

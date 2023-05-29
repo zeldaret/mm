@@ -2421,7 +2421,7 @@ void Interface_UpdateButtonsPart1(PlayState* play) {
             // Related to pictograph
             if (sPictoState == PICTO_BOX_STATE_LENS) {
                 if (!(play->actorCtx.flags & ACTORCTX_FLAG_PICTO_BOX_ON)) {
-                    Play_CompressI8ToI5((play->pictoPhotoI8 != NULL) ? play->pictoPhotoI8 : D_801FBB90,
+                    Play_CompressI8ToI5((play->pictoPhotoI8 != NULL) ? play->pictoPhotoI8 : gWorkBuffer,
                                         (u8*)((void)0, gSaveContext.pictoPhotoI5),
                                         PICTO_PHOTO_WIDTH * PICTO_PHOTO_HEIGHT);
                     interfaceCtx->unk_222 = interfaceCtx->unk_224 = 0;
@@ -2460,7 +2460,7 @@ void Interface_UpdateButtonsPart1(PlayState* play) {
                     Interface_SetHudVisibility(HUD_VISIBILITY_ALL);
                     sPictoState = PICTO_BOX_STATE_OFF;
                     if (sPictoPhotoBeingTaken) {
-                        Play_CompressI8ToI5((play->pictoPhotoI8 != NULL) ? play->pictoPhotoI8 : D_801FBB90,
+                        Play_CompressI8ToI5((play->pictoPhotoI8 != NULL) ? play->pictoPhotoI8 : gWorkBuffer,
                                             (u8*)((void)0, gSaveContext.pictoPhotoI5),
                                             PICTO_PHOTO_WIDTH * PICTO_PHOTO_HEIGHT);
                         Snap_RecordPictographedActors(play);
@@ -2493,7 +2493,7 @@ void Interface_UpdateButtonsPart1(PlayState* play) {
                 sPictoState = PICTO_BOX_STATE_LENS;
             } else {
                 Play_DecompressI5ToI8((u8*)((void)0, gSaveContext.pictoPhotoI5),
-                                      (play->pictoPhotoI8 != NULL) ? play->pictoPhotoI8 : D_801FBB90,
+                                      (play->pictoPhotoI8 != NULL) ? play->pictoPhotoI8 : gWorkBuffer,
                                       PICTO_PHOTO_WIDTH * PICTO_PHOTO_HEIGHT);
                 play->haltAllActors = true;
                 sPictoState = PICTO_BOX_STATE_SETUP_PHOTO;
@@ -6631,7 +6631,7 @@ void Interface_Draw(PlayState* play) {
     // Draw pictograph photo
     if (sPictoState >= PICTO_BOX_STATE_SETUP_PHOTO) {
         if (!(play->actorCtx.flags & ACTORCTX_FLAG_PICTO_BOX_ON)) {
-            Play_CompressI8ToI5((play->pictoPhotoI8 != NULL) ? play->pictoPhotoI8 : D_801FBB90,
+            Play_CompressI8ToI5((play->pictoPhotoI8 != NULL) ? play->pictoPhotoI8 : gWorkBuffer,
                                 (u8*)gSaveContext.pictoPhotoI5, PICTO_PHOTO_WIDTH * PICTO_PHOTO_HEIGHT);
 
             interfaceCtx->unk_222 = interfaceCtx->unk_224 = 0;
@@ -6667,7 +6667,7 @@ void Interface_Draw(PlayState* play) {
             for (sp2CC = 0; sp2CC < (PICTO_PHOTO_HEIGHT / 8); sp2CC++, pictoRectTop += 8) {
                 pictoRectLeft = PICTO_PHOTO_TOPLEFT_X;
                 gDPLoadTextureBlock(OVERLAY_DISP++,
-                                    (u8*)((play->pictoPhotoI8 != NULL) ? play->pictoPhotoI8 : D_801FBB90) +
+                                    (u8*)((play->pictoPhotoI8 != NULL) ? play->pictoPhotoI8 : gWorkBuffer) +
                                         (0x500 * sp2CC),
                                     G_IM_FMT_I, G_IM_SIZ_8b, PICTO_PHOTO_WIDTH, 8, 0, G_TX_NOMIRROR | G_TX_WRAP,
                                     G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
