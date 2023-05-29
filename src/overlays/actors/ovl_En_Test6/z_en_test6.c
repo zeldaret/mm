@@ -240,7 +240,7 @@ void func_80A90D34(EnTest6* this, PlayState* play, EnTest6Struct* ptr) {
         Matrix_Translate(ptr->unk_08 * ptr->unk_04, ptr->unk_0C, ptr->unk_10 * ptr->unk_04, MTXMODE_NEW);
         Matrix_Scale(ptr->unk_04 * 0.02f, ptr->unk_04 * 0.02f, ptr->unk_04 * 0.02f, MTXMODE_APPLY);
         POLY_OPA_DISP = Play_SetFog(play, POLY_OPA_DISP);
-        POLY_OPA_DISP = func_8012C724(POLY_OPA_DISP);
+        POLY_OPA_DISP = Gfx_SetupDL66(POLY_OPA_DISP);
 
         gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80A9402C[ptr->unk_00]));
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -255,7 +255,7 @@ void func_80A90D34(EnTest6* this, PlayState* play, EnTest6Struct* ptr) {
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 210, 210, 230, 128);
     gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 255, 0);
@@ -282,7 +282,7 @@ void func_80A90FC0(EnTest6* this, PlayState* play, EnTest6Struct* ptr) {
     OPEN_DISPS(play->state.gfxCtx);
 
     if (gfxHead != NULL) {
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
         gDPSetTileSize(gfx++, 1, sp70->h.x1 & 0xFFFF, sp70->h.y1 & 0xFFFF, (sp70->h.x1 + 60) & 0xFFFF,
                        (sp70->h.y1 + 60) & 0xFFFF);
@@ -307,7 +307,7 @@ void func_80A90FC0(EnTest6* this, PlayState* play, EnTest6Struct* ptr) {
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 220, 220, 230, 192);
     gDPSetEnvColor(POLY_XLU_DISP++, 128, 128, 128, 0);
@@ -425,7 +425,7 @@ void func_80A916F0(EnTest6* this, PlayState* play) {
     CutsceneManager_Stop(play->playerCsIds[PLAYER_CS_ID_SONG_WARP]);
     func_800B7298(play, NULL, PLAYER_CSMODE_END);
     EnTest6_DisableMotionBlur();
-    Distortion_ClearType(DISTORTION_TYPE_5);
+    Distortion_RemoveRequest(DISTORTION_TYPE_SONG_OF_TIME);
     Actor_Kill(&this->actor);
 }
 
@@ -491,8 +491,8 @@ void func_80A91760(EnTest6* this, PlayState* play) {
                     }
                 }
                 EnTest6_EnableMotionBlur(120);
-                Distortion_SetType(DISTORTION_TYPE_5);
-                Distortion_SetCountdown(80);
+                Distortion_Request(DISTORTION_TYPE_SONG_OF_TIME);
+                Distortion_SetDuration(80);
                 play->unk_18844 = true;
                 this->cueId = 95;
             }
@@ -546,7 +546,7 @@ void func_80A91760(EnTest6* this, PlayState* play) {
             if (this->unk_27A == 10) {
                 this->unk_14C = 0.1f;
                 EnTest6_DisableMotionBlur();
-                Distortion_ClearType(DISTORTION_TYPE_5);
+                Distortion_RemoveRequest(DISTORTION_TYPE_SONG_OF_TIME);
                 play->unk_18844 = false;
                 if (this->unk_254 != NULL) {
                     ZeldaArena_Free(this->unk_254);
@@ -646,7 +646,7 @@ void func_80A92118(EnTest6* this, PlayState* play) {
     CutsceneManager_Stop(play->playerCsIds[PLAYER_CS_ID_SONG_WARP]);
     func_800B7298(play, NULL, PLAYER_CSMODE_END);
     EnTest6_DisableMotionBlur();
-    Distortion_ClearType(DISTORTION_TYPE_5);
+    Distortion_RemoveRequest(DISTORTION_TYPE_SONG_OF_TIME);
     Actor_Kill(&this->actor);
 }
 
@@ -713,8 +713,8 @@ void func_80A92188(EnTest6* this, PlayState* play) {
 
         case 115:
             EnTest6_EnableMotionBlur(20);
-            Distortion_SetType(DISTORTION_TYPE_5);
-            Distortion_SetCountdown(90);
+            Distortion_Request(DISTORTION_TYPE_SONG_OF_TIME);
+            Distortion_SetDuration(90);
             this->cueId = 2;
             break;
 
@@ -744,7 +744,7 @@ void func_80A92188(EnTest6* this, PlayState* play) {
         case 14:
         case 15:
             EnTest6_EnableMotionBlur(50);
-            Distortion_ClearType(DISTORTION_TYPE_5);
+            Distortion_RemoveRequest(DISTORTION_TYPE_SONG_OF_TIME);
             this->cueId = 0;
             break;
 
@@ -1295,7 +1295,7 @@ void func_80A939E8(EnTest6* this, PlayState* play2) {
                     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 128, 128, 128, this->unk_282 >> 1);
                     gDPSetEnvColor(POLY_XLU_DISP++, 230, 230, 180, this->unk_282);
 
-                    func_8012C2DC(play->state.gfxCtx);
+                    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
                     Matrix_Mult(&play->billboardMtxF, MTXMODE_APPLY);
                     Matrix_RotateZS(this->unk_278 + (i << 2), MTXMODE_APPLY);
 

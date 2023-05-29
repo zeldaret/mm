@@ -220,10 +220,10 @@ void EnAni_FallToGround(EnAni* this, PlayState* play) {
         Animation_Change(&this->skelAnime, &gAniLandingThenStandingUpAnim, 1.0f, 0.0f, 16.0f, ANIMMODE_ONCE, 0.0f);
         this->stateFlags |= ANI_STATE_WRITHING;
 
-        quakeIndex = Quake_Add(play->cameraPtrs[CAM_ID_MAIN], QUAKE_TYPE_3);
+        quakeIndex = Quake_Request(play->cameraPtrs[CAM_ID_MAIN], QUAKE_TYPE_3);
         Quake_SetSpeed(quakeIndex, 27000);
-        Quake_SetQuakeValues(quakeIndex, 7, 0, 0, 0);
-        Quake_SetCountdown(quakeIndex, 20);
+        Quake_SetPerturbations(quakeIndex, 7, 0, 0, 0);
+        Quake_SetDuration(quakeIndex, 20);
 
         Actor_PlaySfx(&this->actor, NA_SE_IT_HAMMER_HIT);
     }
@@ -310,8 +310,8 @@ void EnAni_Update(Actor* thisx, PlayState* play) {
         } else if (CutsceneManager_IsNext(this->actor.csId)) {
             CutsceneManager_StartWithPlayerCs(this->actor.csId, &this->actor);
             this->actor.csId = CutsceneManager_GetAdditionalCsId(this->actor.csId);
-            Camera_SetToTrackActor(Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(this->actor.csId)),
-                                   &this->actor);
+            Camera_SetFocalActor(Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(this->actor.csId)),
+                                 &this->actor);
         } else {
             CutsceneManager_Queue(this->actor.csId);
         }
@@ -345,7 +345,7 @@ void EnAni_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     Matrix_Translate(0.0f, 0.0f, -1000.0f, MTXMODE_APPLY);
-    func_8012C5B0(play->state.gfxCtx);
+    Gfx_SetupDL37_Opa(play->state.gfxCtx);
 
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyeTextures[this->eyeState]));
 

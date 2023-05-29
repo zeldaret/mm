@@ -81,7 +81,7 @@ void ConsoleLogo_Draw(GameState* thisx) {
     gSPSetLights1(POLY_OPA_DISP++, sTitleLights);
 
     ConsoleLogo_RenderView(this, 0.0f, 150.0f, 300.0f);
-    func_8012C28C(this->state.gfxCtx);
+    Gfx_SetupDL25_Opa(this->state.gfxCtx);
     Matrix_Translate(-53.0f, -5.0f, 0.0f, MTXMODE_NEW);
     Matrix_Scale(1.0f, 1.0f, 1.0f, MTXMODE_APPLY);
     Matrix_RotateZYX(0, sTitleRotation, 0, MTXMODE_APPLY);
@@ -89,7 +89,7 @@ void ConsoleLogo_Draw(GameState* thisx) {
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(this->state.gfxCtx), G_MTX_LOAD);
     gSPDisplayList(POLY_OPA_DISP++, gNintendo64LogoNDL);
 
-    func_8012C628(this->state.gfxCtx);
+    Gfx_SetupDL39_Opa(this->state.gfxCtx);
 
     gDPPipeSync(POLY_OPA_DISP++);
     gDPSetCycleType(POLY_OPA_DISP++, G_CYC_2CYCLE);
@@ -165,7 +165,7 @@ void ConsoleLogo_Init(GameState* thisx) {
     this->state.destroy = ConsoleLogo_Destroy;
     this->exit = false;
 
-    if (!(Padmgr_GetControllerBitmask() & 1)) {
+    if (!(PadMgr_GetValidControllersMask() & 1)) {
         gSaveContext.fileNum = 0xFEDC;
     } else {
         gSaveContext.fileNum = 0xFF;

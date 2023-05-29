@@ -4,11 +4,10 @@
  * Description: Bad Bat
  */
 
-#include "prevent_bss_reordering.h"
 #include "z_en_bat.h"
 #include "objects/object_bat/object_bat.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_1000 | ACTOR_FLAG_4000)
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_IGNORE_QUAKE | ACTOR_FLAG_4000)
 
 #define THIS ((EnBat*)thisx)
 
@@ -531,7 +530,7 @@ void EnBat_Draw(Actor* thisx, PlayState* play) {
 
         gfx = POLY_OPA_DISP;
 
-        gSPDisplayList(&gfx[0], &sSetupDL[6 * 25]);
+        gSPDisplayList(&gfx[0], gSetupDLs[SETUPDL_25]);
         gSPMatrix(&gfx[1], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(&gfx[2], gBadBatSetupDL);
         gSPDisplayList(&gfx[3], gBadBatBodyDL);

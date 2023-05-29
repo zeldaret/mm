@@ -987,7 +987,7 @@ void MapSelect_DrawMenu(MapSelectState* this) {
 
     OPEN_DISPS(gfxCtx);
 
-    func_8012C4C0(gfxCtx);
+    Gfx_SetupDL28_Opa(gfxCtx);
 
     printer = alloca(sizeof(GfxPrint));
     GfxPrint_Init(printer);
@@ -1009,7 +1009,7 @@ void MapSelect_DrawLoadingScreen(MapSelectState* this) {
 
     OPEN_DISPS(gfxCtx);
 
-    func_8012C4C0(gfxCtx);
+    Gfx_SetupDL28_Opa(gfxCtx);
 
     GfxPrint_Init(&printer);
     GfxPrint_Open(&printer, POLY_OPA_DISP);

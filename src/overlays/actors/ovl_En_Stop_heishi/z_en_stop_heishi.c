@@ -195,7 +195,7 @@ void EnStopHeishi_UpdateHeadThirdDay(EnStopheishi* this) {
                 this->headTurnTimer1 = 50;
             }
         }
-    } else if ((this->headTurnTimer1 == 0) && (Quake_NumActiveQuakes() != 0) && (this->headTurnTimer2 >= 6)) {
+    } else if ((this->headTurnTimer1 == 0) && (Quake_GetNumActiveQuakes() != 0) && (this->headTurnTimer2 >= 6)) {
         this->headTurnTimer2 = 0;
     }
 }
@@ -579,7 +579,7 @@ void EnStopheishi_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3
 void EnStopheishi_Draw(Actor* thisx, PlayState* play) {
     EnStopheishi* this = THIS;
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnStopheishi_OverrideLimbDraw, EnStopheishi_PostLimbDraw, &this->actor);
 }

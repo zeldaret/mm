@@ -1052,7 +1052,7 @@ void Boss03_Charge(Boss03* this, PlayState* play) {
         // Attack platform
         if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
             play_sound(NA_SE_IT_BIG_BOMB_EXPLOSION);
-            func_800BC848(&this->actor, play, 20, 15);
+            Actor_RequestQuakeAndRumble(&this->actor, play, 20, 15);
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_WATER_EFFECT, 0.0f, this->waterHeight, 0.0f, 0, 0, 0x96,
                         ENWATEREFFECT_TYPE_GYORG_SHOCKWAVE);
 
@@ -1775,7 +1775,7 @@ void Boss03_Stunned(Boss03* this, PlayState* play) {
         Actor_MoveWithGravity(&this->actor);
         if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND_TOUCH) {
             play_sound(NA_SE_IT_WALL_HIT_HARD);
-            func_800BC848(&this->actor, play, 10, 10);
+            Actor_RequestQuakeAndRumble(&this->actor, play, 10, 10);
         }
     } else {
         Math_ApproachS(&this->actor.shape.rot.z, -0x6000, 0xA, 0x900);
@@ -1844,16 +1844,16 @@ void Boss03_UpdateCollision(Boss03* this, PlayState* play) {
         for (i = 0; i < ARRAY_COUNT(sHeadJntSphElementsInit); i++) {
             if (this->headCollider.elements[i].info.toucherFlags & TOUCH_HIT) {
                 this->headCollider.elements[i].info.toucherFlags &= ~TOUCH_HIT;
-                player->unk_B84 = this->actor.shape.rot.y;
-                player->unk_B80 = 20.0f;
+                player->pushedYaw = this->actor.shape.rot.y;
+                player->pushedSpeed = 20.0f;
             }
         }
 
         for (i = 0; i < ARRAY_COUNT(sBodyJntSphElementsInit); i++) {
             if (this->bodyCollider.elements[i].info.toucherFlags & TOUCH_HIT) {
                 this->bodyCollider.elements[i].info.toucherFlags &= ~TOUCH_HIT;
-                player->unk_B84 = this->actor.shape.rot.y;
-                player->unk_B80 = 20.0f;
+                player->pushedYaw = this->actor.shape.rot.y;
+                player->pushedSpeed = 20.0f;
             }
         }
     }
@@ -2265,7 +2265,7 @@ void Boss03_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     if (!this->unk_2D5) {
         if ((this->unk_25E % 2) != 0) {
@@ -2396,8 +2396,8 @@ void Boss03_DrawEffects(PlayState* play) {
 
     OPEN_DISPS(gfxCtx);
 
-    func_8012C2DC(play->state.gfxCtx);
-    func_8012C28C(gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(gfxCtx);
 
     for (i = 0; i < GYORG_EFFECT_COUNT; i++, eff++) {
         if (eff->type == GYORG_EFFECT_BUBBLE) {
@@ -2428,7 +2428,7 @@ void Boss03_DrawEffects(PlayState* play) {
         if ((eff->type == GYORG_EFFECT_DROPLET) || (eff->type == GYORG_EFFECT_SPLASH)) {
 
             if (!flag) {
-                POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 0);
+                POLY_XLU_DISP = Gfx_SetupDL(POLY_XLU_DISP, SETUPDL_0);
 
                 gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gEffDust1Tex));
                 gSPDisplayList(POLY_XLU_DISP++, object_water_effect_DL_004260);
@@ -2462,7 +2462,7 @@ void Boss03_DrawEffects(PlayState* play) {
     for (i = 0; i < GYORG_EFFECT_COUNT; i++, eff++) {
         if (eff->type == GYORG_EFFECT_WET_SPOT) {
             if (!flag) {
-                func_8012C448(gfxCtx);
+                Gfx_SetupDL44_Xlu(gfxCtx);
 
                 gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gEffDust1Tex));
                 gDPSetEnvColor(POLY_XLU_DISP++, 250, 250, 255, 0);
@@ -2599,7 +2599,7 @@ void Boss03_SeaweedDraw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     gSPSegment(POLY_OPA_DISP++, 0x0D, mtx);
 

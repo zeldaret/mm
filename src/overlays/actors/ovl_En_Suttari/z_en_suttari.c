@@ -230,7 +230,7 @@ void EnSuttari_TriggerTransition(PlayState* play, u16 entrance) {
     play->transitionTrigger = TRANS_TRIGGER_START;
 }
 
-void EnSuttari_UpdateTime(void) {
+void EnSuttari_AdvanceTime(void) {
     gSaveContext.save.time = ((void)0, gSaveContext.save.time) + (u16)R_TIME_SPEED;
     gSaveContext.save.time = ((void)0, gSaveContext.save.time) + (u16)((void)0, gSaveContext.save.timeSpeedOffset);
 }
@@ -1483,7 +1483,7 @@ void EnSuttari_Update(Actor* thisx, PlayState* play) {
         func_80BAB4F0(this, play);
     }
     if (this->flags2 & 2) {
-        EnSuttari_UpdateTime();
+        EnSuttari_AdvanceTime();
     }
     if (this->unk428 != 0) {
         if (this->animIndex == 2 || this->animIndex == 6) {
@@ -1543,9 +1543,12 @@ void EnSuttari_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* 
                         Matrix_MtxFToYXZRot(curState, &bombBag->shape.rot, false);
                     }
                 } else {
-                    func_8012C28C(play->state.gfxCtx);
+                    Gfx_SetupDL25_Opa(play->state.gfxCtx);
+
                     OPEN_DISPS(play->state.gfxCtx);
+
                     gSPDisplayList(POLY_OPA_DISP++, gBombShopBagDL);
+
                     CLOSE_DISPS(play->state.gfxCtx);
                 }
             }
@@ -1568,7 +1571,7 @@ void EnSuttari_Draw(Actor* thisx, PlayState* play) {
     if (this->flags1 & 0x80) {
         OPEN_DISPS(play->state.gfxCtx);
 
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
         gSPSegment(POLY_OPA_DISP++, 0x08, Gfx_EnvColor(play->state.gfxCtx, 255, 255, 255, 0));
         gSPSegment(POLY_OPA_DISP++, 0x09, Gfx_EnvColor(play->state.gfxCtx, 55, 55, 255, 0));
         gDPPipeSync(POLY_OPA_DISP++);
@@ -1576,7 +1579,7 @@ void EnSuttari_Draw(Actor* thisx, PlayState* play) {
                                        this->skelAnime.dListCount, EnSuttari_OverrideLimbDraw, EnSuttari_PostLimbDraw,
                                        EnSuttari_TransformLimbDraw, &this->actor);
         if (this->flags1 & 0x80) {
-            func_8012C2DC(play->state.gfxCtx);
+            Gfx_SetupDL25_Xlu(play->state.gfxCtx);
             pos = this->actor.world.pos;
             scale.x = 0.2f;
             scale.y = 0.2f;

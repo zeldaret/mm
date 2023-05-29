@@ -1224,10 +1224,10 @@ void EnPametfrog_SetupSnapperSpawn(EnPametfrog* this, PlayState* play) {
     // Zooms in on Snapper spawn point
     Play_SetCameraAtEye(play, this->subCamId, &subCamAt, &subCamEye);
 
-    this->quakeIndex = Quake_Add(GET_ACTIVE_CAM(play), QUAKE_TYPE_6);
+    this->quakeIndex = Quake_Request(GET_ACTIVE_CAM(play), QUAKE_TYPE_6);
     Quake_SetSpeed(this->quakeIndex, 18000);
-    Quake_SetQuakeValues(this->quakeIndex, 2, 0, 0, 0);
-    Quake_SetCountdown(this->quakeIndex, 15);
+    Quake_SetPerturbations(this->quakeIndex, 2, 0, 0, 0);
+    Quake_SetDuration(this->quakeIndex, 15);
 
     Rumble_Request(this->actor.xyzDistToPlayerSq, 120, 20, 10);
 
@@ -1249,12 +1249,12 @@ void EnPametfrog_SnapperSpawn(EnPametfrog* this, PlayState* play) {
 void EnPametfrog_SetupTransitionGekkoSnapper(EnPametfrog* this, PlayState* play) {
     this->actor.params = GEKKO_GET_SNAPPER;
 
-    Quake_Remove(this->quakeIndex);
+    Quake_RemoveRequest(this->quakeIndex);
 
-    this->quakeIndex = Quake_Add(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
+    this->quakeIndex = Quake_Request(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
     Quake_SetSpeed(this->quakeIndex, 20000);
-    Quake_SetQuakeValues(this->quakeIndex, 17, 0, 0, 0);
-    Quake_SetCountdown(this->quakeIndex, 12);
+    Quake_SetPerturbations(this->quakeIndex, 17, 0, 0, 0);
+    Quake_SetDuration(this->quakeIndex, 12);
 
     Rumble_Request(this->actor.xyzDistToPlayerSq, 255, 20, 150);
 
@@ -1424,7 +1424,7 @@ void EnPametfrog_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s
 void EnPametfrog_Draw(Actor* thisx, PlayState* play) {
     EnPametfrog* this = THIS;
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     Matrix_RotateYS(this->spinYaw, MTXMODE_APPLY);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, NULL,
                           EnPametfrog_PostLimbDraw, &this->actor);

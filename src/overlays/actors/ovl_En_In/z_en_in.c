@@ -336,7 +336,7 @@ void func_808F38F8(EnIn* this, PlayState* play) {
 }
 
 void func_808F395C(EnIn* this, PlayState* play) {
-    if (this->unk4B0 == WEEKEVENTREG_RACE_FLAG_END) {
+    if (this->unk4B0 == WEEKEVENTREG_HORSE_RACE_STATE_END) {
         this->actionFunc = func_808F5A94;
     }
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
@@ -352,30 +352,30 @@ void func_808F39DC(EnIn* this, PlayState* play) {
     u16 textId = 0;
 
     if (gSaveContext.save.day != 3) {
-        switch (GET_WEEKEVENTREG_RACE_FLAGS) {
-            case WEEKEVENTREG_RACE_FLAG_2:
+        switch (GET_WEEKEVENTREG_HORSE_RACE_STATE) {
+            case WEEKEVENTREG_HORSE_RACE_STATE_2:
                 textId = 0x347A;
                 break;
-            case WEEKEVENTREG_RACE_FLAG_3:
+            case WEEKEVENTREG_HORSE_RACE_STATE_3:
                 textId = 0x3476;
                 break;
         }
-        SET_WEEKEVENTREG_RACE_FLAGS(WEEKEVENTREG_RACE_FLAG_END);
+        SET_WEEKEVENTREG_HORSE_RACE_STATE(WEEKEVENTREG_HORSE_RACE_STATE_END);
     } else {
-        switch (GET_WEEKEVENTREG_RACE_FLAGS) {
-            case WEEKEVENTREG_RACE_FLAG_2:
+        switch (GET_WEEKEVENTREG_HORSE_RACE_STATE) {
+            case WEEKEVENTREG_HORSE_RACE_STATE_2:
                 textId = 0x349D;
                 break;
-            case WEEKEVENTREG_RACE_FLAG_3:
+            case WEEKEVENTREG_HORSE_RACE_STATE_3:
                 textId = 0x3499;
                 break;
         }
-        SET_WEEKEVENTREG_RACE_FLAGS(WEEKEVENTREG_RACE_FLAG_END);
+        SET_WEEKEVENTREG_HORSE_RACE_STATE(WEEKEVENTREG_HORSE_RACE_STATE_END);
     }
     this->actor.flags |= ACTOR_FLAG_10000;
     this->actor.textId = textId;
     this->actionFunc = func_808F395C;
-    if (this->unk4B0 == WEEKEVENTREG_RACE_FLAG_2) {
+    if (this->unk4B0 == WEEKEVENTREG_HORSE_RACE_STATE_2) {
         Actor_PlaySfx(&this->actor, NA_SE_VO_IN_LOST);
     } else {
         Actor_PlaySfx(&this->actor, NA_SE_VO_IN_JOY0);
@@ -635,7 +635,7 @@ s32 func_808F4270(PlayState* play, EnIn* this, s32 arg2, MessageContext* msgCtx,
 s32 func_808F43E0(EnIn* this) {
     this->unk48C = 0;
     this->actor.textId = 0;
-    SET_WEEKEVENTREG_RACE_FLAGS(WEEKEVENTREG_RACE_FLAG_END);
+    SET_WEEKEVENTREG_HORSE_RACE_STATE(WEEKEVENTREG_HORSE_RACE_STATE_END);
     return 0;
 }
 
@@ -817,7 +817,7 @@ s32 func_808F4414(PlayState* play, EnIn* this, s32 arg2) {
                     func_80151BB4(play, 0x11);
                     break;
                 case 0x3475:
-                    SET_WEEKEVENTREG_RACE_FLAGS(WEEKEVENTREG_RACE_FLAG_START);
+                    SET_WEEKEVENTREG_HORSE_RACE_STATE(WEEKEVENTREG_HORSE_RACE_STATE_START);
                     func_800FD750(NA_BGM_HORSE);
                     play->nextEntrance = ENTRANCE(GORMAN_TRACK, 5);
                     play->transitionType = TRANS_TYPE_FADE_WHITE_FAST;
@@ -1064,7 +1064,7 @@ s32 func_808F4414(PlayState* play, EnIn* this, s32 arg2) {
                     ret = false;
                     break;
                 case 0x3475:
-                    SET_WEEKEVENTREG_RACE_FLAGS(WEEKEVENTREG_RACE_FLAG_START);
+                    SET_WEEKEVENTREG_HORSE_RACE_STATE(WEEKEVENTREG_HORSE_RACE_STATE_START);
                     func_800FD750(NA_BGM_HORSE);
                     play->nextEntrance = ENTRANCE(GORMAN_TRACK, 5);
                     play->transitionType = TRANS_TYPE_FADE_WHITE_FAST;
@@ -1322,7 +1322,7 @@ void func_808F5B58(EnIn* this, PlayState* play) {
 }
 
 void func_808F5C98(EnIn* this, PlayState* play) {
-    if (this->unk4B0 == WEEKEVENTREG_RACE_FLAG_END) {
+    if (this->unk4B0 == WEEKEVENTREG_HORSE_RACE_STATE_END) {
         this->actionFunc = func_808F5B58;
     }
     if ((Player_GetMask(play) == PLAYER_MASK_CIRCUS_LEADER && CHECK_WEEKEVENTREG(WEEKEVENTREG_63_40)) ||
@@ -1334,7 +1334,7 @@ void func_808F5C98(EnIn* this, PlayState* play) {
         }
     }
     if (this->unk4A8 == 2) {
-        if (this->unk4B0 == WEEKEVENTREG_RACE_FLAG_2) {
+        if (this->unk4B0 == WEEKEVENTREG_HORSE_RACE_STATE_2) {
             Actor_PlaySfx(&this->actor, NA_SE_VO_IN_LOST);
         } else {
             Actor_PlaySfx(&this->actor, NA_SE_VO_IN_JOY0);
@@ -1366,7 +1366,7 @@ void EnIn_Init(Actor* thisx, PlayState* play) {
     this->unk48C = 0;
     this->unk4AC = 0;
     type = ENIN_GET_TYPE(thisx);
-    this->unk4B0 = GET_WEEKEVENTREG_RACE_FLAGS;
+    this->unk4B0 = GET_WEEKEVENTREG_HORSE_RACE_STATE;
     if (type == ENIN_HORSE_RIDER_BLUE_SHIRT || type == ENIN_BLUE_SHIRT) {
         this->unk4AC |= 8;
     }
@@ -1387,8 +1387,8 @@ void EnIn_Init(Actor* thisx, PlayState* play) {
         this->path = SubS_GetPathByIndex(play, ENIN_GET_PATH(&this->actor), 0x3F);
         this->unk23D = 0;
         if (type == ENIN_YELLOW_SHIRT || type == ENIN_BLUE_SHIRT) {
-            if ((GET_WEEKEVENTREG_RACE_FLAGS == WEEKEVENTREG_RACE_FLAG_2) ||
-                (GET_WEEKEVENTREG_RACE_FLAGS == WEEKEVENTREG_RACE_FLAG_3)) {
+            if ((GET_WEEKEVENTREG_HORSE_RACE_STATE == WEEKEVENTREG_HORSE_RACE_STATE_2) ||
+                (GET_WEEKEVENTREG_HORSE_RACE_STATE == WEEKEVENTREG_HORSE_RACE_STATE_3)) {
                 CLEAR_WEEKEVENTREG(WEEKEVENTREG_56_08);
                 this->unk4A8 = 0;
                 this->unk4AC |= 2;
@@ -1396,12 +1396,12 @@ void EnIn_Init(Actor* thisx, PlayState* play) {
                 this->unk23C = 0;
                 D_801BDAA0 = 0;
 
-                if (GET_WEEKEVENTREG_RACE_FLAGS == WEEKEVENTREG_RACE_FLAG_2) {
+                if (GET_WEEKEVENTREG_HORSE_RACE_STATE == WEEKEVENTREG_HORSE_RACE_STATE_2) {
                     EnIn_ChangeAnim(&this->skelAnime, ENIN_ANIM_6);
                 } else {
                     EnIn_ChangeAnim(&this->skelAnime, ENIN_ANIM_4);
                 }
-                if (GET_WEEKEVENTREG_RACE_FLAGS == WEEKEVENTREG_RACE_FLAG_2) {
+                if (GET_WEEKEVENTREG_HORSE_RACE_STATE == WEEKEVENTREG_HORSE_RACE_STATE_2) {
                     this->skelAnime.curFrame = ((Rand_ZeroOne() * 0.6f) + 0.2f) * this->skelAnime.endFrame;
                 }
                 if (this->unk4AC & 8) {
@@ -1410,7 +1410,7 @@ void EnIn_Init(Actor* thisx, PlayState* play) {
                     this->actionFunc = func_808F5C98;
                 }
             } else {
-                if (GET_WEEKEVENTREG_RACE_FLAGS != WEEKEVENTREG_RACE_FLAG_START) {
+                if (GET_WEEKEVENTREG_HORSE_RACE_STATE != WEEKEVENTREG_HORSE_RACE_STATE_START) {
                     CLEAR_WEEKEVENTREG(WEEKEVENTREG_56_08);
                     this->unk23C = 0;
                     this->unk4AC |= 2;
@@ -1615,9 +1615,11 @@ void EnIn_Draw(Actor* thisx, PlayState* play) {
     EnIn* this = THIS;
 
     OPEN_DISPS(play->state.gfxCtx);
-    func_8012C28C(play->state.gfxCtx);
+
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     gDPPipeSync(POLY_OPA_DISP++);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnIn_OverrideLimbDraw, EnIn_PostLimbDraw, &this->actor);
+
     CLOSE_DISPS(play->state.gfxCtx);
 }

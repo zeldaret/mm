@@ -8,7 +8,7 @@
 #include "overlays/actors/ovl_Obj_Syokudai/z_obj_syokudai.h"
 #include "objects/object_firefly/object_firefly.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_1000 | ACTOR_FLAG_4000)
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_IGNORE_QUAKE | ACTOR_FLAG_4000)
 
 #define THIS ((EnFirefly*)thisx)
 
@@ -828,7 +828,7 @@ void EnFirefly_Draw(Actor* thisx, PlayState* play) {
         gfx = POLY_OPA_DISP;
     }
 
-    gSPDisplayList(gfx, &sSetupDL[6 * 25]);
+    gSPDisplayList(gfx, gSetupDLs[SETUPDL_25]);
 
     if (this->currentType == KEESE_FIRE) {
         gDPSetEnvColor(&gfx[1], 0, 0, 0, 0);

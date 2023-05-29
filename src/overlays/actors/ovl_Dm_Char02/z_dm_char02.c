@@ -185,7 +185,7 @@ void DmChar02_Draw(Actor* thisx, PlayState* play) {
     }
 
     if (shouldDraw) {
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
         SkelAnime_DrawTransformFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                        this->skelAnime.dListCount, DmChar02_OverrideLimbDraw, DmChar02_PostLimbDraw,
                                        DmChar02_TransformLimbDraw, &this->actor);

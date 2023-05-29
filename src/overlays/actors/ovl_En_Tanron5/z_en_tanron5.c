@@ -350,7 +350,7 @@ void EnTanron5_Update(Actor* thisx, PlayState* play2) {
 
                 this->actor.shape.rot.y += phi_v0;
                 Actor_PlaySfx(&this->actor, NA_SE_IT_BIG_BOMB_EXPLOSION);
-                func_800BC848(&this->actor, play, 4, 4);
+                Actor_RequestQuakeAndRumble(&this->actor, play, 4, 4);
                 this->unk_1A0++;
             } else {
                 Vec3f sp90;
@@ -483,7 +483,7 @@ void EnTanron5_Draw(Actor* thisx, PlayState* play) {
     if ((-500.0f * D_80BE5DD0) < this->actor.projectedPos.z) {
         OPEN_DISPS(play->state.gfxCtx);
 
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, this->unk_148);
@@ -506,14 +506,14 @@ void func_80BE5C10(Actor* thisx, PlayState* play) {
     if (((-500.0f * D_80BE5DD0) < this->actor.projectedPos.z) && phi_v0) {
         OPEN_DISPS(play->state.gfxCtx);
 
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
         if (this->unk_1A0 == 0) {
             texture = gDropArrows1Tex;
         } else {
             texture = gDropMagicLargeTex;
         }
 
-        POLY_OPA_DISP = func_8012C724(POLY_OPA_DISP);
+        POLY_OPA_DISP = Gfx_SetupDL66(POLY_OPA_DISP);
 
         gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(texture));
 

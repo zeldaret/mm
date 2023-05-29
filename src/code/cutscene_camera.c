@@ -119,23 +119,23 @@ u8 CutsceneCamera_ProcessSpline(CutsceneCamera* csCamera) {
 
     switch (csCamera->atCmd[csCamera->eyeInterp.curPoint].relativeTo) {
         case CS_CAM_REL_2:
-            OLib_DbCameraVec3fDiff(&player->actor.world, &csCamera->camera->at, &csCamera->camera->at, 2);
+            OLib_Vec3fDiff(&player->actor.world, &csCamera->camera->at, &csCamera->camera->at, OLIB_DIFF);
             break;
 
         case CS_CAM_REL_3:
-            OLib_DbCameraVec3fDiff(&player->actor.world, &csCamera->camera->at, &csCamera->camera->at, 1);
+            OLib_Vec3fDiff(&player->actor.world, &csCamera->camera->at, &csCamera->camera->at, OLIB_DIFF_OFFSET);
             break;
 
         case CS_CAM_REL_1:
-            OLib_DbCameraVec3fDiff(&player->actor.world, &csCamera->camera->at, &csCamera->camera->at, 1);
+            OLib_Vec3fDiff(&player->actor.world, &csCamera->camera->at, &csCamera->camera->at, OLIB_DIFF_OFFSET);
             break;
 
         case CS_CAM_REL_4:
-            OLib_DbCameraVec3fDiff(&target->world, &csCamera->camera->at, &csCamera->camera->at, 1);
+            OLib_Vec3fDiff(&target->world, &csCamera->camera->at, &csCamera->camera->at, OLIB_DIFF_OFFSET);
             break;
 
         case CS_CAM_REL_5:
-            OLib_DbCameraVec3fDiff(&target->world, &csCamera->camera->at, &csCamera->camera->at, 2);
+            OLib_Vec3fDiff(&target->world, &csCamera->camera->at, &csCamera->camera->at, OLIB_DIFF);
             break;
 
         default: // CS_CAM_REL_0
@@ -147,24 +147,24 @@ u8 CutsceneCamera_ProcessSpline(CutsceneCamera* csCamera) {
 
     switch (csCamera->atCmd[csCamera->eyeInterp.curPoint].relativeTo) {
         case CS_CAM_REL_2:
-            OLib_DbCameraVec3fSum(&player->actor.world, &csCamera->camera->at, &csCamera->camera->at, 2);
+            OLib_Vec3fAdd(&player->actor.world, &csCamera->camera->at, &csCamera->camera->at, OLIB_ADD);
             break;
 
         case CS_CAM_REL_3:
-            OLib_DbCameraVec3fSum(&player->actor.world, &csCamera->camera->at, &csCamera->camera->at, 1);
+            OLib_Vec3fAdd(&player->actor.world, &csCamera->camera->at, &csCamera->camera->at, OLIB_ADD_OFFSET);
             csCamera->camera->at.y += func_80163660(&player->actor);
             break;
 
         case CS_CAM_REL_1:
-            OLib_DbCameraVec3fSum(&player->actor.world, &csCamera->camera->at, &csCamera->camera->at, 1);
+            OLib_Vec3fAdd(&player->actor.world, &csCamera->camera->at, &csCamera->camera->at, OLIB_ADD_OFFSET);
             break;
 
         case CS_CAM_REL_4:
-            OLib_DbCameraVec3fSum(&target->world, &csCamera->camera->at, &csCamera->camera->at, 1);
+            OLib_Vec3fAdd(&target->world, &csCamera->camera->at, &csCamera->camera->at, OLIB_ADD_OFFSET);
             break;
 
         case CS_CAM_REL_5:
-            OLib_DbCameraVec3fSum(&target->world, &csCamera->camera->at, &csCamera->camera->at, 2);
+            OLib_Vec3fAdd(&target->world, &csCamera->camera->at, &csCamera->camera->at, OLIB_ADD);
             break;
 
         default: // CS_CAM_REL_0
@@ -189,23 +189,23 @@ u8 CutsceneCamera_ProcessSpline(CutsceneCamera* csCamera) {
 
     switch (csCamera->eyeCmd[csCamera->atInterp.curPoint].relativeTo) {
         case CS_CAM_REL_2:
-            OLib_DbCameraVec3fDiff(&player->actor.world, &csCamera->camera->eye, &csCamera->camera->eye, 2);
+            OLib_Vec3fDiff(&player->actor.world, &csCamera->camera->eye, &csCamera->camera->eye, OLIB_DIFF);
             break;
 
         case CS_CAM_REL_3:
-            OLib_DbCameraVec3fDiff(&player->actor.world, &csCamera->camera->eye, &csCamera->camera->eye, 1);
+            OLib_Vec3fDiff(&player->actor.world, &csCamera->camera->eye, &csCamera->camera->eye, OLIB_DIFF_OFFSET);
             break;
 
         case CS_CAM_REL_1:
-            OLib_DbCameraVec3fDiff(&player->actor.world, &csCamera->camera->eye, &csCamera->camera->eye, 1);
+            OLib_Vec3fDiff(&player->actor.world, &csCamera->camera->eye, &csCamera->camera->eye, OLIB_DIFF_OFFSET);
             break;
 
         case CS_CAM_REL_4:
-            OLib_DbCameraVec3fDiff(&target->world, &csCamera->camera->eye, &csCamera->camera->eye, 1);
+            OLib_Vec3fDiff(&target->world, &csCamera->camera->eye, &csCamera->camera->eye, OLIB_DIFF_OFFSET);
             break;
 
         case CS_CAM_REL_5:
-            OLib_DbCameraVec3fDiff(&target->world, &csCamera->camera->eye, &csCamera->camera->eye, 2);
+            OLib_Vec3fDiff(&target->world, &csCamera->camera->eye, &csCamera->camera->eye, OLIB_DIFF);
             break;
 
         default: // CS_CAM_REL_0
@@ -217,24 +217,24 @@ u8 CutsceneCamera_ProcessSpline(CutsceneCamera* csCamera) {
 
     switch (csCamera->eyeCmd[csCamera->atInterp.curPoint].relativeTo) {
         case CS_CAM_REL_2:
-            OLib_DbCameraVec3fSum(&player->actor.world, &csCamera->camera->eye, &csCamera->camera->eye, 2);
+            OLib_Vec3fAdd(&player->actor.world, &csCamera->camera->eye, &csCamera->camera->eye, OLIB_ADD);
             break;
 
         case CS_CAM_REL_3:
-            OLib_DbCameraVec3fSum(&player->actor.world, &csCamera->camera->eye, &csCamera->camera->eye, 1);
+            OLib_Vec3fAdd(&player->actor.world, &csCamera->camera->eye, &csCamera->camera->eye, OLIB_ADD_OFFSET);
             csCamera->camera->eye.y += func_80163660(&player->actor);
             break;
 
         case CS_CAM_REL_1:
-            OLib_DbCameraVec3fSum(&player->actor.world, &csCamera->camera->eye, &csCamera->camera->eye, 1);
+            OLib_Vec3fAdd(&player->actor.world, &csCamera->camera->eye, &csCamera->camera->eye, OLIB_ADD_OFFSET);
             break;
 
         case CS_CAM_REL_4:
-            OLib_DbCameraVec3fSum(&target->world, &csCamera->camera->eye, &csCamera->camera->eye, 1);
+            OLib_Vec3fAdd(&target->world, &csCamera->camera->eye, &csCamera->camera->eye, OLIB_ADD_OFFSET);
             break;
 
         case CS_CAM_REL_5:
-            OLib_DbCameraVec3fSum(&target->world, &csCamera->camera->eye, &csCamera->camera->eye, 2);
+            OLib_Vec3fAdd(&target->world, &csCamera->camera->eye, &csCamera->camera->eye, OLIB_ADD);
             break;
 
         default: // CS_CAM_REL_0

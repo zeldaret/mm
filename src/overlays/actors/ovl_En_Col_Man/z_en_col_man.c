@@ -203,7 +203,8 @@ void func_80AFE25C(EnColMan* this, PlayState* play) {
                         CLEAR_TAG_SMALL_EXPLOSION);
         } else {
             EnBom* bomb = (EnBom*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOM, this->actor.world.pos.x,
-                                              this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, 0);
+                                              this->actor.world.pos.y, this->actor.world.pos.z,
+                                              BOMB_EXPLOSIVE_TYPE_BOMB, 0, 0, BOMB_TYPE_BODY);
 
             if (bomb != NULL) {
                 bomb->timer = 0;
@@ -233,45 +234,56 @@ void func_80AFE414(Actor* thisx, PlayState* play) {
     EnColMan* this = THIS;
 
     OPEN_DISPS(play->state.gfxCtx);
-    func_8012C2DC(play->state.gfxCtx);
+
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     func_800B8118(&this->actor, play, 0);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_XLU_DISP++, gHeartPieceInteriorDL);
+
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
 void func_80AFE4AC(Actor* thisx, PlayState* play) {
     EnColMan* this = THIS;
 
-    func_8012C2DC(play->state.gfxCtx);
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
+
     OPEN_DISPS(play->state.gfxCtx);
+
     POLY_OPA_DISP = Play_SetFog(play, POLY_OPA_DISP);
-    POLY_OPA_DISP = func_8012C724(POLY_OPA_DISP);
+    POLY_OPA_DISP = Gfx_SetupDL66(POLY_OPA_DISP);
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(gDropRecoveryHeartTex));
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, gItemDropDL);
+
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
 void func_80AFE584(Actor* thisx, PlayState* play) {
-    func_8012C2DC(play->state.gfxCtx);
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
+
     OPEN_DISPS(play->state.gfxCtx);
+
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0x80, 255, 255, 255, 255);
     gDPSetEnvColor(POLY_OPA_DISP++, 255, 255, 255, 255);
     gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_06AB30);
+
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
 void func_80AFE650(Actor* thisx, PlayState* play) {
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
+
     OPEN_DISPS(play->state.gfxCtx);
+
     POLY_OPA_DISP = Play_SetFog(play, POLY_OPA_DISP);
-    POLY_OPA_DISP = func_8012C724(POLY_OPA_DISP);
+    POLY_OPA_DISP = Gfx_SetupDL66(POLY_OPA_DISP);
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(gDropBombTex));
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, gItemDropDL);
+
     CLOSE_DISPS(play->state.gfxCtx);
 }

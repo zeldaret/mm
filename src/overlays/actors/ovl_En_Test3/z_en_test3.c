@@ -478,8 +478,8 @@ void EnTest3_Init(Actor* thisx, PlayState* play2) {
     if (play->sceneId == SCENE_SECOM) {
         this->subCamId = Play_CreateSubCamera(play);
         subCam = Play_GetCamera(play, this->subCamId);
-        Camera_InitPlayerSettings(subCam, &this->player);
-        Camera_SetFlags(subCam, CAM_STATE_0 | CAM_STATE_6);
+        Camera_InitFocalActorSettings(subCam, &this->player.actor);
+        Camera_SetStateFlag(subCam, CAM_STATE_0 | CAM_STATE_6);
         Play_ChangeCameraStatus(play, this->subCamId, CAM_STATUS_WAIT);
     }
 
@@ -589,13 +589,13 @@ s32 func_80A3F384(EnTest3* this, PlayState* play) {
     EnDoor* door = (EnDoor*)func_80A3F2BC(play, this, ACTOR_EN_DOOR, ACTORCAT_DOOR, 55.0f, 20.0f);
     Vec3f offset;
 
-    if ((door != NULL) && (door->unk_1A1 == 0) &&
-        ((player->doorType == 0) || (&door->dyna.actor != player->doorActor)) &&
-        Actor_ActorAIsFacingActorB(&this->player.actor, &door->dyna.actor, 0x3000)) {
-        Actor_OffsetOfPointInActorCoords(&door->dyna.actor, &offset, &this->player.actor.world.pos);
-        this->player.doorType = 1;
+    if ((door != NULL) && !door->knobDoor.playOpenAnim &&
+        ((player->doorType == PLAYER_DOORTYPE_NONE) || (&door->knobDoor.dyna.actor != player->doorActor)) &&
+        Actor_ActorAIsFacingActorB(&this->player.actor, &door->knobDoor.dyna.actor, 0x3000)) {
+        Actor_OffsetOfPointInActorCoords(&door->knobDoor.dyna.actor, &offset, &this->player.actor.world.pos);
+        this->player.doorType = PLAYER_DOORTYPE_HANDLE;
         this->player.doorDirection = (offset.z >= 0.0f) ? 1.0f : -1.0f;
-        this->player.doorActor = &door->dyna.actor;
+        this->player.doorActor = &door->knobDoor.dyna.actor;
         this->player.csId = CS_ID_NONE;
         return true;
     }
@@ -1103,7 +1103,7 @@ s32 EnTest3_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f*
             pos->z *= this->player.ageProperties->unk_08;
         }
         if (!(this->player.skelAnime.moveFlags & ANIM_FLAG_4) ||
-            (this->player.skelAnime.moveFlags & ANIM_FLAG_UPDATEY)) {
+            (this->player.skelAnime.moveFlags & ANIM_FLAG_UPDATE_Y)) {
             pos->y *= this->player.ageProperties->unk_08;
         }
         pos->y -= this->player.unk_AB8;
@@ -1176,8 +1176,8 @@ void EnTest3_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList1, Gfx** dL
             leftHandActor->world.rot.y = this->player.actor.shape.rot.y + this->player.leftHandWorld.rot.y;
             leftHandActor->shape.rot.y = leftHandActor->world.rot.y;
         } else {
-            Matrix_Get(&this->player.mf_CC4);
-            Matrix_MtxFToYXZRot(&this->player.mf_CC4, &this->player.leftHandWorld.rot, false);
+            Matrix_Get(&this->player.leftHandMf);
+            Matrix_MtxFToYXZRot(&this->player.leftHandMf, &this->player.leftHandWorld.rot, false);
             func_80126B8C(play, &this->player);
         }
 
@@ -1257,7 +1257,7 @@ void EnTest3_Draw(Actor* thisx, PlayState* play2) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C268(play);
+    func_8012C268(&play->state);
     if (this->player.invincibilityTimer > 0) {
         s32 temp2; // Must exist for stack order. Could hold the result of CLAMP instead.
 

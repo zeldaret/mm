@@ -284,7 +284,7 @@ void func_80C1410C(EnJgameTsn* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     player->stateFlags1 |= PLAYER_STATE1_20;
-    Audio_PlaySubBgm(0x25);
+    Audio_PlaySubBgm(NA_BGM_TIMED_MINI_GAME);
     play->interfaceCtx.minigameState = MINIGAME_STATE_COUNTDOWN_SETUP_3;
     Interface_InitMinigame(play);
     SET_WEEKEVENTREG(WEEKEVENTREG_90_20);
@@ -636,7 +636,7 @@ void EnJgameTsn_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C5B0(play->state.gfxCtx);
+    Gfx_SetupDL37_Opa(play->state.gfxCtx);
 
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80C150A4[this->unk_21C]));
     gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(D_80C150A4[this->unk_21C]));

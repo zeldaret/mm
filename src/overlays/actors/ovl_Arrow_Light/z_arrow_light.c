@@ -196,7 +196,7 @@ void ArrowLight_Draw(Actor* thisx, PlayState* play) {
         Matrix_RotateZS(transform->shape.rot.z, MTXMODE_APPLY);
         Matrix_Scale(0.01f, 0.01f, 0.01f, MTXMODE_APPLY);
         if (this->screenFillIntensity > 0.0f) {
-            POLY_XLU_DISP = func_8012BFC4(POLY_XLU_DISP);
+            POLY_XLU_DISP = Gfx_SetupDL57(POLY_XLU_DISP);
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, (s32)(this->screenFillIntensity * 30.0f) & 0xFF,
                             (s32)(40.0f * this->screenFillIntensity) & 0xFF, 0,
                             (s32)(150.0f * this->screenFillIntensity) & 0xFF);
@@ -205,7 +205,7 @@ void ArrowLight_Draw(Actor* thisx, PlayState* play) {
             gSPDisplayList(POLY_XLU_DISP++, D_0E000000.fillRect);
         }
 
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
         gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 255, 255, 170, this->alpha);
         gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 0, 128);

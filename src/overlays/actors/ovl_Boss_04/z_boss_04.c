@@ -481,7 +481,7 @@ void func_809ECF58(Boss04* this, PlayState* play) {
 
         if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
             play_sound(NA_SE_IT_BIG_BOMB_EXPLOSION);
-            func_800BC848(&this->actor, play, 15, 10);
+            Actor_RequestQuakeAndRumble(&this->actor, play, 15, 10);
             this->unk_6F4 = 15;
             sp3C.x = this->actor.focus.pos.x;
             sp3C.y = this->actor.focus.pos.y;
@@ -818,7 +818,7 @@ void Boss04_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     if (this->unk_200 & 1) {
         POLY_OPA_DISP = Gfx_SetFog(POLY_OPA_DISP, 255, 0, 0, 255, 900, 1099);
@@ -832,7 +832,7 @@ void Boss04_Draw(Actor* thisx, PlayState* play) {
     POLY_OPA_DISP = Play_SetFog(play, POLY_OPA_DISP);
 
     if (this->actionFunc != func_809EC568) {
-        func_8012C448(play->state.gfxCtx);
+        Gfx_SetupDL44_Xlu(play->state.gfxCtx);
 
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 0, 0, 0, 150);
         gSPDisplayList(POLY_XLU_DISP++, gWartShadowMaterialDL);

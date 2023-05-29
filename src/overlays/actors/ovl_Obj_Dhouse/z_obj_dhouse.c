@@ -458,20 +458,20 @@ void func_80B139F4(ObjDhouse* this, PlayState* play) {
     s16 quakeIndex;
 
     if (this->unk_1370 == 117) {
-        quakeIndex = Quake_Add(camera, QUAKE_TYPE_3);
+        quakeIndex = Quake_Request(camera, QUAKE_TYPE_3);
         Quake_SetSpeed(quakeIndex, 20000);
-        Quake_SetQuakeValues(quakeIndex, 8, 0, 0, 0);
-        Quake_SetCountdown(quakeIndex, 17);
+        Quake_SetPerturbations(quakeIndex, 8, 0, 0, 0);
+        Quake_SetDuration(quakeIndex, 17);
     } else if (this->unk_1370 == 105) {
-        quakeIndex = Quake_Add(camera, QUAKE_TYPE_3);
+        quakeIndex = Quake_Request(camera, QUAKE_TYPE_3);
         Quake_SetSpeed(quakeIndex, 20000);
-        Quake_SetQuakeValues(quakeIndex, 7, 0, 0, 0);
-        Quake_SetCountdown(quakeIndex, 20);
+        Quake_SetPerturbations(quakeIndex, 7, 0, 0, 0);
+        Quake_SetDuration(quakeIndex, 20);
     } else if (this->unk_1370 == 90) {
-        quakeIndex = Quake_Add(camera, QUAKE_TYPE_3);
+        quakeIndex = Quake_Request(camera, QUAKE_TYPE_3);
         Quake_SetSpeed(quakeIndex, 20000);
-        Quake_SetQuakeValues(quakeIndex, 5, 0, 0, 0);
-        Quake_SetCountdown(quakeIndex, 62);
+        Quake_SetPerturbations(quakeIndex, 5, 0, 0, 0);
+        Quake_SetDuration(quakeIndex, 62);
     }
 
     this->unk_1370--;
@@ -505,7 +505,7 @@ void func_80B13C08(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, object_dhouse_DL_004928);

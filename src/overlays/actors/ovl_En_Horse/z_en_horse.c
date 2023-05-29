@@ -108,18 +108,6 @@ typedef struct {
     RaceWaypoint* waypoints;
 } RaceInfo;
 
-typedef enum {
-    /* 0 */ ENHORSE_ANIM_IDLE,
-    /* 1 */ ENHORSE_ANIM_WHINNY,
-    /* 2 */ ENHORSE_ANIM_STOPPING,
-    /* 3 */ ENHORSE_ANIM_REARING,
-    /* 4 */ ENHORSE_ANIM_WALK,
-    /* 5 */ ENHORSE_ANIM_TROT,
-    /* 6 */ ENHORSE_ANIM_GALLOP,
-    /* 7 */ ENHORSE_ANIM_LOW_JUMP,
-    /* 8 */ ENHORSE_ANIM_HIGH_JUMP
-} EnHorseAnimation;
-
 static AnimationHeader* sEponaAnimations[] = {
     &object_horse_link_child_Anim_006D44, &object_horse_link_child_Anim_007468, &object_horse_link_child_Anim_005F64,
     &object_horse_link_child_Anim_004DE8, &object_horse_link_child_Anim_007D50, &object_horse_link_child_Anim_0043AC,
@@ -792,7 +780,8 @@ void EnHorse_Init(Actor* thisx, PlayState* play2) {
         this->stateFlags = 0;
     }
 
-    if (((play->sceneId == SCENE_KOEPONARACE) && (GET_WEEKEVENTREG_RACE_FLAGS == WEEKEVENTREG_RACE_FLAG_START)) ||
+    if (((play->sceneId == SCENE_KOEPONARACE) &&
+         (GET_WEEKEVENTREG_HORSE_RACE_STATE == WEEKEVENTREG_HORSE_RACE_STATE_START)) ||
         ((gSaveContext.save.entrance == ENTRANCE(ROMANI_RANCH, 0)) && (Cutscene_GetSceneLayer(play) != 0))) {
         this->stateFlags |= ENHORSE_FLAG_25;
     }
@@ -2471,7 +2460,7 @@ void func_808819D8(EnHorse* this, PlayState* play) {
         func_8088168C(this);
     }
 
-    if (GET_WEEKEVENTREG_RACE_FLAGS == WEEKEVENTREG_RACE_FLAG_3) {
+    if (GET_WEEKEVENTREG_HORSE_RACE_STATE == WEEKEVENTREG_HORSE_RACE_STATE_3) {
         this->rider->unk488 = 7;
     } else {
         EnHorse_SetIngoAnimation(this->animIndex, this->skin.skelAnime.curFrame, this->unk_394 & 1,
@@ -4682,7 +4671,7 @@ void EnHorse_Draw(Actor* thisx, PlayState* play) {
     EnHorse* this = THIS;
 
     if (!(this->stateFlags & ENHORSE_INACTIVE) && (this->actor.update != func_8087D540)) {
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
         this->stateFlags |= ENHORSE_DRAW;
         if (!(this->unk_1EC & 1)) {
             if (this->stateFlags & ENHORSE_JUMPING) {

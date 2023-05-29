@@ -29,7 +29,7 @@ typedef struct {
     /* 0x03 */ u8 flags3;
 } RestrictionFlags;
 
-Input sPostmanTimerInput[4];
+Input sPostmanTimerInput[MAXCONTROLLERS];
 
 #define RESTRICTIONS_TABLE_END 0xFF
 
@@ -887,10 +887,10 @@ void Interface_SetVertices(PlayState* play) {
 
 s32 sPostmanTimerInputBtnAPressed = false;
 
-void Interface_PostmanTimerCallback(s32 arg0) {
+void Interface_PostmanTimerCallback(void* arg) {
     s32 btnAPressed;
 
-    func_80175E68(&sPostmanTimerInput[0], 0);
+    PadMgr_GetInputNoLock(sPostmanTimerInput, false);
     btnAPressed = CHECK_BTN_ALL(sPostmanTimerInput[0].cur.button, BTN_A);
     if ((btnAPressed != sPostmanTimerInputBtnAPressed) && btnAPressed) {
         gSaveContext.postmanTimerStopOsTime = osGetTime();
@@ -3850,7 +3850,7 @@ void Magic_DrawMeter(PlayState* play) {
             magicBarY = 34; // one row of hearts
         }
 
-        func_8012C654(play->state.gfxCtx);
+        Gfx_SetupDL39_Overlay(play->state.gfxCtx);
 
         gDPSetEnvColor(OVERLAY_DISP++, 100, 50, 50, 255);
 
@@ -4287,7 +4287,7 @@ void Interface_DrawAButton(PlayState* play) {
         aAlpha = 100;
     }
 
-    func_8012C8D4(play->state.gfxCtx);
+    Gfx_SetupDL42_Overlay(play->state.gfxCtx);
 
     Interface_SetPerspectiveView(play, 25 + R_A_BTN_Y_OFFSET, 70 + R_A_BTN_Y_OFFSET, 192, 237);
 
@@ -4362,7 +4362,7 @@ void Interface_DrawPauseMenuEquippingIcons(PlayState* play) {
                                                   (pauseCtx->mainState == PAUSE_MAIN_STATE_EQUIP_MASK))) {
         // Inventory Equip Effects
         gSPSegment(OVERLAY_DISP++, 0x08, pauseCtx->iconItemSegment);
-        func_8012C8D4(play->state.gfxCtx);
+        Gfx_SetupDL42_Overlay(play->state.gfxCtx);
         gDPSetCombineMode(OVERLAY_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
         gDPSetAlphaCompare(OVERLAY_DISP++, G_AC_THRESHOLD);
         gSPMatrix(OVERLAY_DISP++, &gIdentityMtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -4525,7 +4525,7 @@ void Interface_DrawClock(PlayState* play) {
 
                 if ((play->pauseCtx.state == PAUSE_STATE_OFF) && (play->pauseCtx.debugEditor == DEBUG_EDITOR_NONE)) {
 
-                    func_8012C654(play->state.gfxCtx);
+                    Gfx_SetupDL39_Overlay(play->state.gfxCtx);
 
                     /**
                      * Draw Clock's Hour Lines
@@ -4556,7 +4556,7 @@ void Interface_DrawClock(PlayState* play) {
 
                     if (((CURRENT_DAY >= 4) || ((CURRENT_DAY == 3) && (((void)0, gSaveContext.save.time) >= 5) &&
                                                 (((void)0, gSaveContext.save.time) < CLOCK_TIME(6, 0))))) {
-                        func_8012C8D4(play->state.gfxCtx);
+                        Gfx_SetupDL42_Overlay(play->state.gfxCtx);
                         gSPMatrix(OVERLAY_DISP++, &gIdentityMtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
                     } else {
                         /**
@@ -4667,7 +4667,7 @@ void Interface_DrawClock(PlayState* play) {
                         timeInSeconds = TIME_TO_SECONDS_F(gSaveContext.save.time);
                         timeInSeconds -= ((s16)(timeInSeconds / 3600.0f)) * 3600.0f;
 
-                        func_8012C8D4(play->state.gfxCtx);
+                        Gfx_SetupDL42_Overlay(play->state.gfxCtx);
 
                         gSPMatrix(OVERLAY_DISP++, &gIdentityMtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
@@ -4864,7 +4864,7 @@ void Interface_DrawClock(PlayState* play) {
                             sp1E6 = 255;
                         }
 
-                        func_8012C654(play->state.gfxCtx);
+                        Gfx_SetupDL39_Overlay(play->state.gfxCtx);
 
                         /**
                          * Draws Final-Hours Clock's Frame
@@ -5499,7 +5499,7 @@ void Interface_DrawPerfectLetters(PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C8D4(play->state.gfxCtx);
+    Gfx_SetupDL42_Overlay(play->state.gfxCtx);
 
     gSPMatrix(OVERLAY_DISP++, &gIdentityMtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gDPSetCombineLERP(OVERLAY_DISP++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, PRIMITIVE, TEXEL0, 0,
@@ -5654,7 +5654,7 @@ void Interface_DrawTimers(PlayState* play) {
                         }
                         gSaveContext.timerStates[TIMER_ID_POSTMAN] = TIMER_STATE_POSTMAN_COUNTING;
                         sPostmanTimerInputBtnAPressed = true;
-                        func_80174F7C(Interface_PostmanTimerCallback, NULL);
+                        PadMgr_SetInputRetraceCallback(Interface_PostmanTimerCallback, NULL);
                         break;
 
                     case TIMER_STATE_POSTMAN_STOP:
@@ -5663,7 +5663,7 @@ void Interface_DrawTimers(PlayState* play) {
                             postmanTimerStopOsTime - ((void)0, gSaveContext.timerStartOsTimes[TIMER_ID_POSTMAN]) -
                             ((void)0, gSaveContext.timerPausedOsTimes[TIMER_ID_POSTMAN]));
                         gSaveContext.timerStates[TIMER_ID_POSTMAN] = TIMER_STATE_POSTMAN_END;
-                        func_80174F9C(Interface_PostmanTimerCallback, NULL);
+                        PadMgr_UnsetInputRetraceCallback(Interface_PostmanTimerCallback, NULL);
                         break;
 
                     case TIMER_STATE_POSTMAN_COUNTING:
@@ -6136,7 +6136,7 @@ void Interface_DrawMinigameIcons(PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C654(play->state.gfxCtx);
+    Gfx_SetupDL39_Overlay(play->state.gfxCtx);
 
     if ((play->pauseCtx.state == PAUSE_STATE_OFF) && (play->pauseCtx.debugEditor == DEBUG_EDITOR_NONE)) {
         // Carrots rendering if the action corresponds to riding a horse
@@ -6311,7 +6311,7 @@ void Interface_Draw(PlayState* play) {
         // Draw Grandma's Story
         if (interfaceCtx->storyDmaStatus == STORY_DMA_DONE) {
             gSPSegment(OVERLAY_DISP++, 0x07, interfaceCtx->storySegment);
-            func_8012C628(play->state.gfxCtx);
+            Gfx_SetupDL39_Opa(play->state.gfxCtx);
 
             gDPSetTextureFilter(POLY_OPA_DISP++, G_TF_POINT);
             gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 255, 255, 255, pauseCtx->alpha);
@@ -6336,7 +6336,7 @@ void Interface_Draw(PlayState* play) {
 
         LifeMeter_Draw(play);
 
-        func_8012C654(play->state.gfxCtx);
+        Gfx_SetupDL39_Overlay(play->state.gfxCtx);
 
         // Draw Rupee Icon
         gDPSetPrimColor(OVERLAY_DISP++, 0, 0, sRupeeCounterIconPrimColors[CUR_UPG_VALUE(UPG_WALLET)].r,
@@ -6521,7 +6521,7 @@ void Interface_Draw(PlayState* play) {
             Actor_DrawZTarget(&play->actorCtx.targetContext, play);
         }
 
-        func_8012C654(play->state.gfxCtx);
+        Gfx_SetupDL39_Overlay(play->state.gfxCtx);
 
         Interface_DrawItemButtons(play);
 
@@ -6553,7 +6553,7 @@ void Interface_Draw(PlayState* play) {
 
                     interfaceCtx->actionVtx[40 + 2].v.tc[1] = interfaceCtx->actionVtx[40 + 3].v.tc[1] = 32 << 5;
 
-                    func_8012C8D4(play->state.gfxCtx);
+                    Gfx_SetupDL42_Overlay(play->state.gfxCtx);
 
                     gDPSetCombineMode(OVERLAY_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
                     gDPSetAlphaCompare(OVERLAY_DISP++, G_AC_THRESHOLD);
@@ -6588,7 +6588,7 @@ void Interface_Draw(PlayState* play) {
     // Draw pictograph focus icons
     if (sPictoState == PICTO_BOX_STATE_LENS) {
 
-        func_8012C654(play->state.gfxCtx);
+        Gfx_SetupDL39_Overlay(play->state.gfxCtx);
 
         gDPSetAlphaCompare(OVERLAY_DISP++, G_AC_THRESHOLD);
         gDPSetRenderMode(OVERLAY_DISP++, G_RM_XLU_SURF, G_RM_XLU_SURF2);
@@ -6656,7 +6656,7 @@ void Interface_Draw(PlayState* play) {
             gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 200, 200, 200, 250);
             gDPFillRectangle(OVERLAY_DISP++, 70, 22, 251, 151);
 
-            func_8012C654(play->state.gfxCtx);
+            Gfx_SetupDL39_Overlay(play->state.gfxCtx);
 
             gDPSetRenderMode(OVERLAY_DISP++, G_RM_OPA_SURF, G_RM_OPA_SURF2);
             gDPSetCombineMode(OVERLAY_DISP++, G_CC_MODULATEI_PRIM, G_CC_MODULATEI_PRIM);
@@ -7211,7 +7211,7 @@ void Interface_Update(PlayState* play) {
 
 void Interface_Destroy(PlayState* play) {
     Map_Destroy(play);
-    func_80174F9C(Interface_PostmanTimerCallback, NULL);
+    PadMgr_UnsetInputRetraceCallback(Interface_PostmanTimerCallback, NULL);
 }
 
 void Interface_Init(PlayState* play) {

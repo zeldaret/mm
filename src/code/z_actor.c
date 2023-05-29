@@ -76,7 +76,7 @@ void ActorShadow_Draw(Actor* actor, Lights* lights, PlayState* play, Gfx* dlist,
 
             OPEN_DISPS(play->state.gfxCtx);
 
-            POLY_OPA_DISP = Gfx_CallSetupDL(POLY_OPA_DISP, 0x2C);
+            POLY_OPA_DISP = Gfx_SetupDL(POLY_OPA_DISP, SETUPDL_44);
 
             gDPSetCombineLERP(POLY_OPA_DISP++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, COMBINED, 0, 0, 0,
                               COMBINED);
@@ -218,7 +218,7 @@ void ActorShadow_DrawFeet(Actor* actor, Lights* mapper, PlayState* play) {
 
         OPEN_DISPS(play->state.gfxCtx);
 
-        POLY_OPA_DISP = Gfx_CallSetupDL(POLY_OPA_DISP, 0x2C);
+        POLY_OPA_DISP = Gfx_SetupDL(POLY_OPA_DISP, SETUPDL_44);
         actor->shape.feetFloorFlags = 0;
         spB8 = 2;
 
@@ -360,7 +360,7 @@ void func_800B4B50(Actor* actor, Lights* mapper, PlayState* play) {
 
             OPEN_DISPS(play->state.gfxCtx);
 
-            POLY_OPA_DISP = Gfx_CallSetupDL(POLY_OPA_DISP, 0x2C);
+            POLY_OPA_DISP = Gfx_SetupDL(POLY_OPA_DISP, SETUPDL_44);
 
             func_800C0094(actor->floorPoly, actor->world.pos.x, actor->floorHeight, actor->world.pos.z, &sp94);
             temp_f22 = (f32)actor->shape.shadowAlpha * (1.0f - (spEC * (1.0f / 30.0f)));
@@ -522,7 +522,7 @@ void Actor_DrawZTarget(TargetContext* targetCtx, PlayState* play) {
             Target_SetPos(targetCtx, targetCtx->unk4C, projectedPos.x, projectedPos.y, projectedPos.z);
 
             if ((!(player->stateFlags1 & PLAYER_STATE1_40)) || (actor != player->targetedActor)) {
-                OVERLAY_DISP = Gfx_CallSetupDL(OVERLAY_DISP, 0x39);
+                OVERLAY_DISP = Gfx_SetupDL(OVERLAY_DISP, SETUPDL_57);
 
                 for (spB0 = 0, spAC = targetCtx->unk4C; spB0 < spB8; spB0++, spAC = (spAC + 1) % 3) {
                     entry = &targetCtx->unk50[spAC];
@@ -564,7 +564,7 @@ void Actor_DrawZTarget(TargetContext* targetCtx, PlayState* play) {
         if ((actor != NULL) && !(actor->flags & ACTOR_FLAG_CANT_LOCK_ON)) {
             TatlColor* color = &sTatlColorList[actor->category];
 
-            POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 0x07);
+            POLY_XLU_DISP = Gfx_SetupDL(POLY_XLU_DISP, SETUPDL_7);
 
             Matrix_Translate(actor->focus.pos.x,
                              actor->focus.pos.y + (actor->targetArrowOffset * actor->scale.y) + 17.0f,
@@ -869,7 +869,7 @@ void TitleCard_Draw(GameState* gameState, TitleCardContext* titleCtx) {
 
         spB4 = spB8 + (height * 4);
 
-        OVERLAY_DISP = func_8012C014(OVERLAY_DISP);
+        OVERLAY_DISP = Gfx_SetupDL52_NoCD(OVERLAY_DISP);
 
         gDPSetPrimColor(OVERLAY_DISP++, 0, 0, (u8)titleCtx->intensity, (u8)titleCtx->intensity, (u8)titleCtx->intensity,
                         (u8)titleCtx->alpha);
@@ -908,41 +908,38 @@ s32 func_800B6434(PlayState* play, TitleCardContext* titleCtx) {
     return true;
 }
 
-// ActorContext_1F4 Init
-void func_800B6468(PlayState* play) {
-    play->actorCtx.unk_1F4.timer = 0;
+void Actor_InitPlayerImpact(PlayState* play) {
+    play->actorCtx.playerImpact.timer = 0;
 }
 
-// ActorContext_1F4 Update
-void func_800B6474(PlayState* play) {
-    DECR(play->actorCtx.unk_1F4.timer);
+void Actor_UpdatePlayerImpact(PlayState* play) {
+    DECR(play->actorCtx.playerImpact.timer);
 }
 
-// ActorContext_1F4 setter something
-s32 func_800B648C(PlayState* play, s32 arg1, s32 timer, f32 arg3, Vec3f* arg4) {
-    if ((play->actorCtx.unk_1F4.timer != 0) && (arg3 < play->actorCtx.unk_1F4.unk_04)) {
+s32 Actor_SetPlayerImpact(PlayState* play, PlayerImpactType type, s32 timer, f32 dist, Vec3f* pos) {
+    if ((play->actorCtx.playerImpact.timer != 0) && (dist < play->actorCtx.playerImpact.dist)) {
         return false;
     }
 
-    play->actorCtx.unk_1F4.unk_00 = arg1;
-    play->actorCtx.unk_1F4.timer = timer;
-    play->actorCtx.unk_1F4.unk_04 = arg3;
-    Math_Vec3f_Copy(&play->actorCtx.unk_1F4.unk_08, arg4);
+    play->actorCtx.playerImpact.type = type;
+    play->actorCtx.playerImpact.timer = timer;
+    play->actorCtx.playerImpact.dist = dist;
+    Math_Vec3f_Copy(&play->actorCtx.playerImpact.pos, pos);
 
     return true;
 }
 
-// ActorContext_1F4 getter something
-f32 func_800B64FC(PlayState* play, f32 arg1, Vec3f* arg2, u32* arg3) {
-    f32 temp_f8;
+f32 Actor_GetPlayerImpact(PlayState* play, f32 range, Vec3f* pos, PlayerImpactType* type) {
+    f32 dist;
 
-    if ((play->actorCtx.unk_1F4.timer == 0) || (arg1 == 0.0f)) {
+    if ((play->actorCtx.playerImpact.timer == 0) || (range == 0.0f)) {
         return -1.0f;
     }
 
-    temp_f8 = Math_Vec3f_DistXYZ(&play->actorCtx.unk_1F4.unk_08, arg2) / arg1;
-    *arg3 = play->actorCtx.unk_1F4.unk_00;
-    return play->actorCtx.unk_1F4.unk_04 - temp_f8;
+    dist = Math_Vec3f_DistXYZ(&play->actorCtx.playerImpact.pos, pos) / range;
+    *type = play->actorCtx.playerImpact.type;
+
+    return play->actorCtx.playerImpact.dist - dist;
 }
 
 /**
@@ -1377,7 +1374,7 @@ s32 func_800B724C(PlayState* play, Actor* actor, u8 csMode) {
 
     player->csMode = csMode;
     player->unk_398 = actor;
-    player->unk_3BA = 0;
+    player->doorBgCamIndex = 0;
     return true;
 }
 
@@ -1385,7 +1382,7 @@ s32 func_800B7298(PlayState* play, Actor* actor, u8 csMode) {
     Player* player = GET_PLAYER(play);
 
     if (func_800B724C(play, actor, csMode)) {
-        player->unk_3BA = 1;
+        player->doorBgCamIndex = 1;
         return true;
     }
     return false;
@@ -2303,7 +2300,7 @@ void Actor_InitContext(PlayState* play, ActorContext* actorCtx, ActorEntry* acto
     actorCtx->sceneFlags.clearedRoom = cycleFlags->clearedRoom;
 
     TitleCard_ContextInit(&play->state, &actorCtx->titleCtxt);
-    func_800B6468(play);
+    Actor_InitPlayerImpact(play);
 
     actorCtx->absoluteSpace = NULL;
 
@@ -2559,7 +2556,7 @@ void Actor_UpdateAll(PlayState* play, ActorContext* actorCtx) {
     }
 
     TitleCard_Update(&play->state, &actorCtx->titleCtxt);
-    func_800B6474(play);
+    Actor_UpdatePlayerImpact(play);
     DynaPoly_UpdateBgActorTransforms(play, &play->colCtx.dyna);
 }
 
@@ -2577,7 +2574,7 @@ void Actor_Draw(PlayState* play, Actor* actor) {
                    (actor->flags & (ACTOR_FLAG_10000000 | ACTOR_FLAG_400000)) ? NULL : &actor->world.pos, play);
     Lights_Draw(light, play->state.gfxCtx);
 
-    if (actor->flags & ACTOR_FLAG_1000) {
+    if (actor->flags & ACTOR_FLAG_IGNORE_QUAKE) {
         Matrix_SetTranslateRotateYXZ(actor->world.pos.x + play->mainCamera.quakeOffset.x,
                                      actor->world.pos.y +
                                          ((actor->shape.yOffset * actor->scale.y) + play->mainCamera.quakeOffset.y),
@@ -2656,11 +2653,11 @@ void func_800B9D1C(Actor* actor) {
     if (sfxId) {}
 
     if (actor->audioFlags & 0x40) {
-        func_801A1FB4(3, &actor->projectedPos, NA_BGM_MUSIC_BOX_HOUSE, 1500.0f);
+        func_801A1FB4(SEQ_PLAYER_BGM_SUB, &actor->projectedPos, NA_BGM_MUSIC_BOX_HOUSE, 1500.0f);
     }
 
     if (actor->audioFlags & 0x20) {
-        func_801A1FB4(0, &actor->projectedPos, NA_BGM_KAMARO_DANCE, 900.0f);
+        func_801A1FB4(SEQ_PLAYER_BGM_MAIN, &actor->projectedPos, NA_BGM_KAMARO_DANCE, 900.0f);
     }
 }
 
@@ -3493,49 +3490,50 @@ void Enemy_StartFinishingBlow(PlayState* play, Actor* actor) {
 }
 
 // blinking routine
-s16 func_800BBAC0(s16 arg0[2], s16 arg1, s16 arg2, s16 arg3) {
-    if (DECR(arg0[1]) == 0) {
-        arg0[1] = Rand_S16Offset(arg1, arg2);
+s16 func_800BBAC0(BlinkInfo* info, s16 arg1, s16 arg2, s16 arg3) {
+    if (DECR(info->blinkTimer) == 0) {
+        info->blinkTimer = Rand_S16Offset(arg1, arg2);
     }
 
-    if (arg0[1] - arg3 > 0) {
-        arg0[0] = 0;
-    } else if ((arg0[1] - arg3 >= -1) || (arg0[1] < 2)) {
-        arg0[0] = 1;
+    if (info->blinkTimer - arg3 > 0) {
+        info->eyeTexIndex = 0;
+    } else if ((info->blinkTimer - arg3 >= -1) || (info->blinkTimer < 2)) {
+        info->eyeTexIndex = 1;
     } else {
-        arg0[0] = 2;
+        info->eyeTexIndex = 2;
     }
 
-    return arg0[0];
+    return info->eyeTexIndex;
 }
 
 // blinking routine
-s16 func_800BBB74(s16 arg0[2], s16 arg1, s16 arg2, s16 arg3) {
-    if (DECR(arg0[1]) == 0) {
-        arg0[1] = Rand_S16Offset(arg1, arg2);
+s16 func_800BBB74(BlinkInfo* info, s16 arg1, s16 arg2, s16 arg3) {
+    if (DECR(info->blinkTimer) == 0) {
+        info->blinkTimer = Rand_S16Offset(arg1, arg2);
     }
 
-    if (arg0[1] - arg3 > 0) {
-        arg0[0] = 0;
-    } else if (arg0[1] - arg3 == 0) {
-        arg0[0] = 1;
+    if (info->blinkTimer - arg3 > 0) {
+        info->eyeTexIndex = 0;
+    } else if (info->blinkTimer - arg3 == 0) {
+        info->eyeTexIndex = 1;
     } else {
-        arg0[0] = 2;
+        info->eyeTexIndex = 2;
     }
 
-    return arg0[0];
+    return info->eyeTexIndex;
 }
 
 // unused blinking routine
-s16 func_800BBC20(s16 arg0[2], s16 arg1, s16 arg2, s16 arg3) {
-    if (DECR(arg0[1]) == 0) {
-        arg0[1] = Rand_S16Offset(arg1, arg2);
-        arg0[0]++;
-        if ((arg0[0] % 3) == 0) {
-            arg0[0] = (s32)(Rand_ZeroOne() * arg3) * 3;
+s16 func_800BBC20(BlinkInfo* info, s16 arg1, s16 arg2, s16 arg3) {
+    if (DECR(info->blinkTimer) == 0) {
+        info->blinkTimer = Rand_S16Offset(arg1, arg2);
+        info->eyeTexIndex++;
+        if ((info->eyeTexIndex % 3) == 0) {
+            info->eyeTexIndex = (s32)(Rand_ZeroOne() * arg3) * 3;
         }
     }
-    return arg0[0];
+
+    return info->eyeTexIndex;
 }
 
 void Actor_SpawnBodyParts(Actor* actor, PlayState* play, s32 partParams, Gfx** dList) {
@@ -3617,15 +3615,15 @@ void func_800BC154(PlayState* play, ActorContext* actorCtx, Actor* actor, u8 act
 
 // Damage flags for EnArrow
 u32 sArrowDmgFlags[] = {
-    DMG_FIRE_ARROW,   // ENARROW_0
-    DMG_NORMAL_ARROW, // ENARROW_1
-    DMG_NORMAL_ARROW, // ENARROW_2
-    DMG_FIRE_ARROW,   // ENARROW_3
-    DMG_ICE_ARROW,    // ENARROW_4
-    DMG_LIGHT_ARROW,  // ENARROW_5
-    DMG_DEKU_NUT,     // ENARROW_6
-    DMG_DEKU_BUBBLE,  // ENARROW_7
-    DMG_DEKU_NUT,     // ENARROW_8
+    DMG_FIRE_ARROW,   // ARROW_TYPE_NORMAL_LIT
+    DMG_NORMAL_ARROW, // ARROW_TYPE_NORMAL_HORSE
+    DMG_NORMAL_ARROW, // ARROW_TYPE_NORMAL
+    DMG_FIRE_ARROW,   // ARROW_TYPE_FIRE
+    DMG_ICE_ARROW,    // ARROW_TYPE_ICE
+    DMG_LIGHT_ARROW,  // ARROW_TYPE_LIGHT
+    DMG_DEKU_NUT,     // ARROW_TYPE_SLINGSHOT
+    DMG_DEKU_BUBBLE,  // ARROW_TYPE_DEKU_BUBBLE
+    DMG_DEKU_NUT,     // ARROW_TYPE_DEKU_NUT
 };
 
 u32 Actor_GetArrowDmgFlags(s32 params) {
@@ -3771,7 +3769,7 @@ void func_800BC620(Vec3f* pos, Vec3f* scale, u8 alpha, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    POLY_OPA_DISP = Gfx_CallSetupDL(POLY_OPA_DISP, 0x2C);
+    POLY_OPA_DISP = Gfx_SetupDL(POLY_OPA_DISP, SETUPDL_44);
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 0, 0, 0, alpha);
 
     adjustedPos.x = pos->x;
@@ -3794,30 +3792,29 @@ void func_800BC620(Vec3f* pos, Vec3f* scale, u8 alpha, PlayState* play) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-void Actor_AddQuake(PlayState* play, s16 verticalMag, s16 countdown) {
-    s16 quakeIndex = Quake_Add(&play->mainCamera, QUAKE_TYPE_3);
+void Actor_RequestQuake(PlayState* play, s16 y, s16 duration) {
+    s16 quakeIndex = Quake_Request(&play->mainCamera, QUAKE_TYPE_3);
 
     Quake_SetSpeed(quakeIndex, 20000);
-    Quake_SetQuakeValues(quakeIndex, verticalMag, 0, 0, 0);
-    Quake_SetCountdown(quakeIndex, countdown);
+    Quake_SetPerturbations(quakeIndex, y, 0, 0, 0);
+    Quake_SetDuration(quakeIndex, duration);
 }
 
-void Actor_AddQuakeWithSpeed(PlayState* play, s16 verticalMag, s16 countdown, s16 speed) {
-    s16 quakeIndex = Quake_Add(&play->mainCamera, QUAKE_TYPE_3);
+void Actor_RequestQuakeWithSpeed(PlayState* play, s16 y, s16 duration, s16 speed) {
+    s16 quakeIndex = Quake_Request(&play->mainCamera, QUAKE_TYPE_3);
 
     Quake_SetSpeed(quakeIndex, speed);
-    Quake_SetQuakeValues(quakeIndex, verticalMag, 0, 0, 0);
-    Quake_SetCountdown(quakeIndex, countdown);
+    Quake_SetPerturbations(quakeIndex, y, 0, 0, 0);
+    Quake_SetDuration(quakeIndex, duration);
 }
 
-// Actor_RequestRumble?
-void func_800BC848(Actor* actor, PlayState* play, s16 y, s16 countdown) {
-    if (y >= 5) {
+void Actor_RequestQuakeAndRumble(Actor* actor, PlayState* play, s16 quakeY, s16 quakeDuration) {
+    if (quakeY >= 5) {
         Rumble_Request(actor->xyzDistToPlayerSq, 255, 20, 150);
     } else {
         Rumble_Request(actor->xyzDistToPlayerSq, 180, 20, 100);
     }
-    Actor_AddQuake(play, y, countdown);
+    Actor_RequestQuake(play, quakeY, quakeDuration);
 }
 
 typedef struct {
@@ -4376,26 +4373,30 @@ Gfx* func_800BD9A0(GraphicsContext* gfxCtx) {
 void func_800BD9E0(PlayState* play, SkelAnime* skelAnime, OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw,
                    Actor* actor, s16 alpha) {
     OPEN_DISPS(play->state.gfxCtx);
-    func_8012C28C(play->state.gfxCtx);
+
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, alpha);
     gSPSegment(POLY_OPA_DISP++, 0x0C, gEmptyDL);
 
     POLY_OPA_DISP = SkelAnime_DrawFlex(play, skelAnime->skeleton, skelAnime->jointTable, skelAnime->dListCount,
                                        overrideLimbDraw, postLimbDraw, actor, POLY_OPA_DISP);
+
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
 void func_800BDAA0(PlayState* play, SkelAnime* skelAnime, OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw,
                    Actor* actor, s16 alpha) {
     OPEN_DISPS(play->state.gfxCtx);
-    func_8012C2DC(play->state.gfxCtx);
+
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0, alpha);
     gSPSegment(POLY_XLU_DISP++, 0x0C, func_800BD9A0(play->state.gfxCtx));
 
     POLY_XLU_DISP = SkelAnime_DrawFlex(play, skelAnime->skeleton, skelAnime->jointTable, skelAnime->dListCount,
                                        overrideLimbDraw, postLimbDraw, actor, POLY_XLU_DISP);
+
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
@@ -4480,7 +4481,7 @@ s32 func_800BE184(PlayState* play, Actor* actor, f32 xzDist, s16 arg3, s16 arg4,
     s16 phi_v0 = BINANG_SUB(BINANG_ROT180(actor->yawTowardsPlayer), player->actor.shape.rot.y);
     s16 temp_t0 = actor->yawTowardsPlayer - arg5;
 
-    if ((actor->xzDistToPlayer <= xzDist) && (player->meleeWeaponState != 0)) {
+    if ((actor->xzDistToPlayer <= xzDist) && (player->meleeWeaponState != PLAYER_MELEE_WEAPON_STATE_0)) {
         if ((arg4 >= ABS_ALT(phi_v0)) && (arg3 >= ABS_ALT(temp_t0))) {
             return true;
         }
@@ -4657,7 +4658,7 @@ void Actor_DrawDamageEffects(PlayState* play, Actor* actor, Vec3f limbPos[], s16
 
         OPEN_DISPS(play->state.gfxCtx);
 
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
         switch (type) {
             case ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX:
