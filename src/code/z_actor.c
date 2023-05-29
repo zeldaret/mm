@@ -2705,7 +2705,7 @@ void Actor_DrawLensActors(PlayState* play, s32 numLensActors, Actor** lensActors
         spA4 = play->unk_18E68;
 
         if (dbgVar2) {
-            PreRender_SetValues(&play->pauseBgPreRender, D_801FBBCC, D_801FBBCE, gfxCtx->curFrameBuffer, zbuffer);
+            PreRender_SetValues(&play->pauseBgPreRender, gCfbWidth, gCfbHeight, gfxCtx->curFrameBuffer, zbuffer);
 
             gfxTemp = gfx;
             func_80170200(&play->pauseBgPreRender, &gfxTemp, zbuffer, spA4);
