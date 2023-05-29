@@ -176,7 +176,7 @@ void EnSob1_SetupAction(EnSob1* this, EnSob1ActionFunc action) {
 s32 EnSob1_TestItemSelected(PlayState* play) {
     MessageContext* msgCtx = &play->msgCtx;
 
-    if (msgCtx->unk12020 == 0x10 || msgCtx->unk12020 == 0x11) {
+    if ((msgCtx->unk12020 == 0x10) || (msgCtx->unk12020 == 0x11)) {
         return CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_A);
     }
     return CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_A) ||
@@ -188,7 +188,7 @@ u16 EnSob1_GetTalkOption(EnSob1* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (this->shopType == BOMB_SHOP) {
-        if (gSaveContext.save.day == 1 && gSaveContext.save.time >= CLOCK_TIME(6, 00)) {
+        if ((gSaveContext.save.day == 1) && (gSaveContext.save.time >= CLOCK_TIME(6, 00))) {
             return 0x648;
         } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_33_08)) {
             return 0x649;
@@ -199,10 +199,13 @@ u16 EnSob1_GetTalkOption(EnSob1* this, PlayState* play) {
         switch (player->transformation) {
             case PLAYER_FORM_DEKU:
                 return 0x12D8;
+
             case PLAYER_FORM_GORON:
                 return 0x12D9;
+
             case PLAYER_FORM_ZORA:
                 return 0x12DA;
+
             default:
                 return 0x12D7;
         }
@@ -405,6 +408,7 @@ void EnSob1_Init(Actor* thisx, PlayState* play) {
         case ZORA_SHOP:
             this->shopType = ZORA_SHOP;
             break;
+
         case GORON_SHOP:
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_SNOWHEAD_TEMPLE)) {
                 this->shopType = GORON_SHOP_SPRING;
@@ -412,9 +416,11 @@ void EnSob1_Init(Actor* thisx, PlayState* play) {
                 this->shopType = GORON_SHOP;
             }
             break;
+
         case BOMB_SHOP:
             this->shopType = BOMB_SHOP;
             break;
+
         default:
             Actor_Kill(&this->actor);
             return;
@@ -579,10 +585,10 @@ void EnSob1_UpdateJoystickInputState(PlayState* play, EnSob1* this) {
     s8 stickY = CONTROLLER1(&play->state)->rel.stick_y;
 
     if (this->stickAccumX == 0) {
-        if (stickX > 30 || stickX < -30) {
+        if ((stickX > 30) || (stickX < -30)) {
             this->stickAccumX = stickX;
         }
-    } else if (stickX <= 30 && stickX >= -30) {
+    } else if ((stickX <= 30) && (stickX >= -30)) {
         this->stickAccumX = 0;
     } else if ((this->stickAccumX * stickX) < 0) { // Stick has swapped directions
         this->stickAccumX = stickX;
@@ -595,10 +601,10 @@ void EnSob1_UpdateJoystickInputState(PlayState* play, EnSob1* this) {
         }
     }
     if (this->stickAccumY == 0) {
-        if (stickY > 30 || stickY < -30) {
+        if ((stickY > 30) || (stickY < -30)) {
             this->stickAccumY = stickY;
         }
-    } else if (stickY <= 30 && stickY >= -30) {
+    } else if ((stickY <= 30) && (stickY >= -30)) {
         this->stickAccumY = 0;
     } else if ((this->stickAccumY * stickY) < 0) { // Stick has swapped directions
         this->stickAccumY = stickY;
@@ -646,6 +652,7 @@ s32 EnSob1_FacingShopkeeperDialogResult(EnSob1* this, PlayState* play) {
             func_8019F208();
             EnSob1_TalkToShopkeeper(play, this);
             return true;
+
         case 1:
             func_8019F230();
             if (this->shopType == BOMB_SHOP) {
@@ -986,6 +993,7 @@ void EnSob1_HandleCanBuyItem(PlayState* play, EnSob1* this) {
             this->shopItemSelectedTween = 0.0f;
             item->boughtFunc(play, item);
             break;
+
         case CANBUY_RESULT_SUCCESS_2:
             func_8019F208();
             item->buyFunc(play, item);
@@ -1002,37 +1010,48 @@ void EnSob1_HandleCanBuyItem(PlayState* play, EnSob1* this) {
             this->shopItemSelectedTween = 0.0f;
             item->boughtFunc(play, item);
             break;
+
         case CANBUY_RESULT_NO_ROOM:
             play_sound(NA_SE_SY_ERROR);
             EnSob1_SetupCannotBuy(play, this, sNoRoomTextIds[this->shopType]);
             break;
+
         case CANBUY_RESULT_NEED_EMPTY_BOTTLE:
             play_sound(NA_SE_SY_ERROR);
             EnSob1_SetupCannotBuy(play, this, sNeedEmptyBottleTextIds[this->shopType]);
             break;
+
         case CANBUY_RESULT_NEED_RUPEES:
             play_sound(NA_SE_SY_ERROR);
             EnSob1_SetupCannotBuy(play, this, sNeedRupeesTextIds[this->shopType]);
             break;
+
         case CANBUY_RESULT_CANNOT_GET_NOW:
             play_sound(NA_SE_SY_ERROR);
             EnSob1_SetupCannotBuy(play, this, sCannotGetNowTextIds[this->shopType]);
             break;
+
         case CANBUY_RESULT_CANNOT_GET_NOW_2:
             play_sound(NA_SE_SY_ERROR);
             EnSob1_SetupCannotBuy(play, this, sCannotGetNow2TextIds[this->shopType]);
             break;
+
         case CANBUY_RESULT_NO_ROOM_2:
             play_sound(NA_SE_SY_ERROR);
             EnSob1_SetupCannotBuy(play, this, sNoRoom2TextIds[this->shopType]);
             break;
+
         case CANBUY_RESULT_ALREADY_HAVE:
             play_sound(NA_SE_SY_ERROR);
             EnSob1_SetupCannotBuy(play, this, 0x658);
             break;
+
         case CANBUY_RESULT_HAVE_BETTER:
             play_sound(NA_SE_SY_ERROR);
             EnSob1_SetupCannotBuy(play, this, 0x659);
+            break;
+
+        default:
             break;
     }
 }
@@ -1047,6 +1066,7 @@ void EnSob1_SelectItem(EnSob1* this, PlayState* play) {
                 case 0:
                     EnSob1_HandleCanBuyItem(play, this);
                     break;
+
                 case 1:
                     func_8019F230();
                     this->actionFunc = this->prevActionFunc;
@@ -1179,11 +1199,11 @@ void EnSob1_UpdateItemSelectedProperty(EnSob1* this) {
     for (i = 0; i < ARRAY_COUNT(this->items); i++, items++) {
         item = *items;
         if (item != NULL) {
-            if (this->actionFunc != EnSob1_SelectItem && this->actionFunc != EnSob1_CannotBuy &&
-                this->drawCursor == 0) {
+            if ((this->actionFunc != EnSob1_SelectItem) && (this->actionFunc != EnSob1_CannotBuy) &&
+                (this->drawCursor == 0)) {
                 item->isSelected = false;
             } else {
-                item->isSelected = this->cursorIndex == i ? true : false;
+                item->isSelected = (this->cursorIndex == i) ? true : false;
             }
         }
     }
@@ -1330,10 +1350,10 @@ void EnSob1_ChangeObject(EnSob1* this, PlayState* play) {
 
 s32 EnSob1_AreObjectsLoaded(EnSob1* this, PlayState* play) {
     if (Object_IsLoaded(&play->objectCtx, this->mainObjIndex)) {
-        if (this->unusedObjIndex >= 0 && !Object_IsLoaded(&play->objectCtx, this->unusedObjIndex)) {
+        if ((this->unusedObjIndex >= 0) && !Object_IsLoaded(&play->objectCtx, this->unusedObjIndex)) {
             return false;
         }
-        if (this->shopkeeperAnimObjIndex >= 0 && !Object_IsLoaded(&play->objectCtx, this->shopkeeperAnimObjIndex)) {
+        if ((this->shopkeeperAnimObjIndex >= 0) && !Object_IsLoaded(&play->objectCtx, this->shopkeeperAnimObjIndex)) {
             return false;
         }
         return true;

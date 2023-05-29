@@ -156,7 +156,7 @@ void func_80BDB2B8(EnHiddenNuts* this, PlayState* play) {
         this->unk_20A = 0;
     }
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state) != 0) {
+    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         func_80BDB580(this);
         return;
     }

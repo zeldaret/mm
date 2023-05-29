@@ -114,6 +114,7 @@ s32 EnGiant_IsImprisoned(EnGiant* this) {
                 return true;
             }
             break;
+
         case GIANT_TYPE_MOUNTAIN_TERMINA_FIELD:
         case GIANT_TYPE_MOUNTAIN_CLOCK_TOWER_SUCCESS:
         case GIANT_TYPE_MOUNTAIN_GIANTS_CHAMBER_AND_ENDING:
@@ -122,6 +123,7 @@ s32 EnGiant_IsImprisoned(EnGiant* this) {
                 return true;
             }
             break;
+
         case GIANT_TYPE_OCEAN_TERMINA_FIELD:
         case GIANT_TYPE_OCEAN_CLOCK_TOWER_SUCCESS:
         case GIANT_TYPE_OCEAN_GIANTS_CHAMBER_AND_ENDING:
@@ -130,6 +132,7 @@ s32 EnGiant_IsImprisoned(EnGiant* this) {
                 return true;
             }
             break;
+
         case GIANT_TYPE_CANYON_TERMINA_FIELD:
         case GIANT_TYPE_CANYON_CLOCK_TOWER_SUCCESS:
         case GIANT_TYPE_CANYON_GIANTS_CHAMBER_AND_ENDING:
@@ -137,6 +140,9 @@ s32 EnGiant_IsImprisoned(EnGiant* this) {
             if (!CHECK_QUEST_ITEM(QUEST_REMAINS_TWINMOLD)) {
                 return true;
             }
+            break;
+
+        default:
             break;
     }
 
@@ -229,11 +235,13 @@ void EnGiant_Init(Actor* thisx, PlayState* play) {
             case 10:
                 this->sfxId = NA_SE_EV_KYOJIN_GRATITUDE2 - SFX_FLAG;
                 break;
+
             case 1:
             case 2:
             case 3:
                 this->sfxId = NA_SE_EV_KYOJIN_GRATITUDE1 - SFX_FLAG;
                 break;
+
             default:
                 this->sfxId = NA_SE_EV_KYOJIN_GRATITUDE0 - SFX_FLAG;
                 break;
@@ -361,25 +369,34 @@ void EnGiant_PlayAndUpdateAnimation(EnGiant* this) {
             case GIANT_CUE_ID_LOOKING_UP:
                 EnGiant_ChangeToStartOrLoopAnimation(this, GIANT_ANIM_LOOK_UP_START);
                 break;
+
             case GIANT_CUE_ID_RAISING_ARMS:
                 EnGiant_ChangeToStartOrLoopAnimation(this, GIANT_ANIM_RAISED_ARMS_START);
                 break;
+
             case GIANT_CUE_ID_STRUGGLING:
                 EnGiant_ChangeToStartOrLoopAnimation(this, GIANT_ANIM_STRUGGLE_START);
                 break;
+
             case GIANT_CUE_ID_FALLING_OVER:
                 // Unused
                 EnGiant_ChangeToStartOrLoopAnimation(this, GIANT_ANIM_FALLING_OVER);
                 break;
+
             case GIANT_CUE_ID_TALKING:
                 EnGiant_ChangeAnim(this, GIANT_ANIM_BIG_CALL_LOOP);
                 break;
+
             case GIANT_CUE_ID_DONE_TALKING:
             case GIANT_CUE_ID_PLAYER_LEARNED_OATH_TO_ORDER:
                 EnGiant_ChangeAnim(this, GIANT_ANIM_IDLE_LOOP);
                 break;
+
             case GIANT_CUE_ID_TEACHING_OATH_TO_ORDER:
                 EnGiant_ChangeAnim(this, GIANT_ANIM_SMALL_CALL_LOOP);
+                break;
+
+            default:
                 break;
         }
         SkelAnime_Update(&this->skelAnime);
@@ -387,21 +404,21 @@ void EnGiant_PlayAndUpdateAnimation(EnGiant* this) {
 }
 
 void EnGiant_PlaySound(EnGiant* this) {
-    if (this->actor.draw != NULL && this->alpha > 0) {
-        if (this->animIndex == GIANT_ANIM_WALKING_LOOP &&
+    if ((this->actor.draw != NULL) && (this->alpha > 0)) {
+        if ((this->animIndex == GIANT_ANIM_WALKING_LOOP) &&
             (Animation_OnFrame(&this->skelAnime, 40.0f) || Animation_OnFrame(&this->skelAnime, 100.0f))) {
             Actor_PlaySfx(&this->actor, NA_SE_EV_KYOJIN_WALK);
         }
-        if (this->animIndex == GIANT_ANIM_FALLING_OVER && Animation_OnFrame(&this->skelAnime, 40.0f)) {
+        if ((this->animIndex == GIANT_ANIM_FALLING_OVER) && Animation_OnFrame(&this->skelAnime, 40.0f)) {
             Actor_PlaySfx(&this->actor, NA_SE_EV_KYOJIN_VOICE_FAIL);
         }
-        if (this->sfxId != 0xFFFF &&
-            ((this->animIndex == GIANT_ANIM_BIG_CALL_START && this->skelAnime.curFrame >= 18.0f) ||
-             this->animIndex == GIANT_ANIM_BIG_CALL_LOOP)) {
+        if ((this->sfxId != 0xFFFF) &&
+            (((this->animIndex == GIANT_ANIM_BIG_CALL_START) && (this->skelAnime.curFrame >= 18.0f)) ||
+             (this->animIndex == GIANT_ANIM_BIG_CALL_LOOP))) {
             func_800B9010(&this->actor, this->sfxId);
         }
-        if ((this->animIndex == GIANT_ANIM_SMALL_CALL_START && this->skelAnime.curFrame >= 18.0f) ||
-            this->animIndex == GIANT_ANIM_SMALL_CALL_LOOP) {
+        if ((this->animIndex == GIANT_ANIM_SMALL_CALL_START && (this->skelAnime.curFrame >= 18.0f)) ||
+            (this->animIndex == GIANT_ANIM_SMALL_CALL_LOOP)) {
             func_800B9010(&this->actor, NA_SE_EV_KYOJIN_SIGN - SFX_FLAG);
         }
     }

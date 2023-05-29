@@ -338,7 +338,7 @@ Lights* Lights_NewAndDraw(GraphicsContext* gfxCtx, u8 ambientR, u8 ambientG, u8 
     lights->l.a.l.col[0] = lights->l.a.l.colc[0] = ambientR;
     lights->l.a.l.col[1] = lights->l.a.l.colc[1] = ambientG;
     lights->l.a.l.col[2] = lights->l.a.l.colc[2] = ambientB;
-    lights->enablePosLights = 0;
+    lights->enablePosLights = false;
     lights->numLights = numLights;
 
     for (i = 0; i < numLights; i++) {
@@ -366,7 +366,7 @@ Lights* Lights_New(GraphicsContext* gfxCtx, u8 ambientR, u8 ambientG, u8 ambient
     lights->l.a.l.colc[1] = ambientG;
     lights->l.a.l.col[2] = ambientB;
     lights->l.a.l.colc[2] = ambientB;
-    lights->enablePosLights = 0;
+    lights->enablePosLights = false;
     lights->numLights = 0;
 
     return lights;

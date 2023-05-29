@@ -546,7 +546,7 @@ void func_808A650C(EnSt* this) {
 }
 
 s32 func_808A6580(EnSt* this, PlayState* play) {
-    Player* sp3C = GET_PLAYER(play);
+    Player* player = GET_PLAYER(play);
     s32 ret = false;
     s32 i;
 
@@ -666,7 +666,7 @@ s32 func_808A6580(EnSt* this, PlayState* play) {
         if ((this->unk_316 == 0) && (this->unk_314 == 0) && (this->unk_312 == 0) &&
             !(this->collider1.base.atFlags & AT_BOUNCED) && (this->actor.colChkInfo.health != 0)) {
             play->damagePlayer(play, -8);
-            Actor_PlaySfx(&sp3C->actor, NA_SE_PL_BODY_HIT);
+            Actor_PlaySfx(&player->actor, NA_SE_PL_BODY_HIT);
             func_800B8D98(play, &this->actor, 4.0f, this->actor.yawTowardsPlayer, 6.0f);
             this->unk_316 = 10;
             this->unk_18C |= 1;

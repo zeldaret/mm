@@ -345,7 +345,7 @@ void EnMa4_Wait(EnMa4* this, PlayState* play) {
         }
     }
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state) != 0) {
+    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         EnMa4_StartDialogue(this, play);
         EnMa4_SetupDialogueHandler(this);
     } else if (this->type != MA4_TYPE_ALIENS_WON || ABS_ALT(yaw) < 0x4000) {
@@ -483,6 +483,9 @@ void EnMa4_HandlePlayerChoice(EnMa4* this, PlayState* play) {
                     func_80151BB4(play, 5);
                 }
                 break;
+
+            default:
+                break;
         }
     }
 }
@@ -614,6 +617,9 @@ void EnMa4_ChooseNextDialogue(EnMa4* this, PlayState* play) {
                     this->textId = 0x3359;
                 }
                 break;
+
+            default:
+                break;
         }
     }
 }
@@ -629,9 +635,6 @@ void EnMa4_SetupDialogueHandler(EnMa4* this) {
 
 void EnMa4_DialogueHandler(EnMa4* this, PlayState* play) {
     switch (Message_GetState(&play->msgCtx)) {
-        default:
-            break;
-
         case TEXT_STATE_CHOICE: // Player answered a question
             EnMa4_HandlePlayerChoice(this, play);
             break;
@@ -651,6 +654,9 @@ void EnMa4_DialogueHandler(EnMa4* this, PlayState* play) {
         case TEXT_STATE_1:
         case TEXT_STATE_CLOSING:
         case TEXT_STATE_3:
+            break;
+
+        default:
             break;
     }
 
@@ -818,12 +824,15 @@ void EnMa4_EponasSongCs(EnMa4* this, PlayState* play) {
                         this->hasBow = false;
                         EnMa4_ChangeAnim(this, 4);
                         break;
+
+                    default:
+                        break;
                 }
             }
         }
 
         Cutscene_ActorTranslateAndYaw(&this->actor, play, cueChannel);
-        if (sCueId == 2 && this->animTimer == 0 && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
+        if ((sCueId == 2) && (this->animTimer == 0) && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
             EnMa4_ChangeAnim(this, 7);
         }
     } else {
@@ -845,7 +854,7 @@ void EnMa4_EndEponasSongCs(EnMa4* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     this->actor.flags |= ACTOR_FLAG_10000;
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state) != 0) {
+    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         player->stateFlags1 &= ~PLAYER_STATE1_20;
         Message_StartTextbox(play, 0x334C, &this->actor);
         this->textId = 0x334C;

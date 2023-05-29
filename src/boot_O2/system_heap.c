@@ -61,7 +61,7 @@ void* SystemHeap_RunBlockFunc8(void* blk, size_t nBlk, size_t blkSize, BlockFunc
         blk = SystemHeap_Malloc(nBlk * blkSize);
     }
 
-    if (blk != NULL && blockFunc != NULL) {
+    if ((blk != NULL) && (blockFunc != NULL)) {
         uintptr_t pos = blk;
 
         for (; pos < (uintptr_t)blk + (nBlk * blkSize); pos += (blkSize & ~0)) {
