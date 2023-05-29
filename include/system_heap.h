@@ -2,7 +2,7 @@
 #define SYSTEM_HEAP_H
 
 #include "libc/stddef.h"
-#include "PR/ultratypes.h"
+#include "ultra64/ultratypes.h"
 
 void* SystemHeap_Malloc(size_t size);
 void SystemHeap_Free(void* ptr);
