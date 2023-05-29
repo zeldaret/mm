@@ -2317,7 +2317,7 @@ void Interface_UpdateButtonsPart1(PlayState* play) {
             // Related to pictograph
             if (sPictoState == PICTO_BOX_STATE_LENS) {
                 if (!(play->actorCtx.flags & ACTORCTX_FLAG_PICTO_BOX_ON)) {
-                    Play_CompressI8ToI5((play->pictoPhotoI8 != NULL) ? play->pictoPhotoI8 : D_801FBB90,
+                    Play_CompressI8ToI5((play->pictoPhotoI8 != NULL) ? play->pictoPhotoI8 : gWorkBuffer,
                                         (u8*)((void)0, gSaveContext.pictoPhotoI5),
                                         PICTO_PHOTO_WIDTH * PICTO_PHOTO_HEIGHT);
                     interfaceCtx->unk_222 = interfaceCtx->unk_224 = 0;
@@ -2356,7 +2356,7 @@ void Interface_UpdateButtonsPart1(PlayState* play) {
                     Interface_SetHudVisibility(HUD_VISIBILITY_ALL);
                     sPictoState = PICTO_BOX_STATE_OFF;
                     if (sPictoPhotoBeingTaken) {
-                        Play_CompressI8ToI5((play->pictoPhotoI8 != NULL) ? play->pictoPhotoI8 : D_801FBB90,
+                        Play_CompressI8ToI5((play->pictoPhotoI8 != NULL) ? play->pictoPhotoI8 : gWorkBuffer,
                                             (u8*)((void)0, gSaveContext.pictoPhotoI5),
                                             PICTO_PHOTO_WIDTH * PICTO_PHOTO_HEIGHT);
                         Snap_RecordPictographedActors(play);
@@ -2389,7 +2389,7 @@ void Interface_UpdateButtonsPart1(PlayState* play) {
                 sPictoState = PICTO_BOX_STATE_LENS;
             } else {
                 Play_DecompressI5ToI8((u8*)((void)0, gSaveContext.pictoPhotoI5),
-                                      (play->pictoPhotoI8 != NULL) ? play->pictoPhotoI8 : D_801FBB90,
+                                      (play->pictoPhotoI8 != NULL) ? play->pictoPhotoI8 : gWorkBuffer,
                                       PICTO_PHOTO_WIDTH * PICTO_PHOTO_HEIGHT);
                 play->haltAllActors = true;
                 sPictoState = PICTO_BOX_STATE_SETUP_PHOTO;
@@ -3746,7 +3746,7 @@ void Magic_DrawMeter(PlayState* play) {
             magicBarY = 34; // one row of hearts
         }
 
-        func_8012C654(play->state.gfxCtx);
+        Gfx_SetupDL39_Overlay(play->state.gfxCtx);
 
         gDPSetEnvColor(OVERLAY_DISP++, 100, 50, 50, 255);
 
@@ -4183,7 +4183,7 @@ void Interface_DrawAButton(PlayState* play) {
         aAlpha = 100;
     }
 
-    func_8012C8D4(play->state.gfxCtx);
+    Gfx_SetupDL42_Overlay(play->state.gfxCtx);
 
     Interface_SetPerspectiveView(play, 25 + R_A_BTN_Y_OFFSET, 70 + R_A_BTN_Y_OFFSET, 192, 237);
 
@@ -4258,7 +4258,7 @@ void Interface_DrawPauseMenuEquippingIcons(PlayState* play) {
                                                   (pauseCtx->mainState == PAUSE_MAIN_STATE_EQUIP_MASK))) {
         // Inventory Equip Effects
         gSPSegment(OVERLAY_DISP++, 0x08, pauseCtx->iconItemSegment);
-        func_8012C8D4(play->state.gfxCtx);
+        Gfx_SetupDL42_Overlay(play->state.gfxCtx);
         gDPSetCombineMode(OVERLAY_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
         gDPSetAlphaCompare(OVERLAY_DISP++, G_AC_THRESHOLD);
         gSPMatrix(OVERLAY_DISP++, &gIdentityMtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -4421,7 +4421,7 @@ void Interface_DrawClock(PlayState* play) {
 
                 if ((play->pauseCtx.state == PAUSE_STATE_OFF) && (play->pauseCtx.debugEditor == DEBUG_EDITOR_NONE)) {
 
-                    func_8012C654(play->state.gfxCtx);
+                    Gfx_SetupDL39_Overlay(play->state.gfxCtx);
 
                     /**
                      * Draw Clock's Hour Lines
@@ -4452,7 +4452,7 @@ void Interface_DrawClock(PlayState* play) {
 
                     if (((CURRENT_DAY >= 4) || ((CURRENT_DAY == 3) && (((void)0, gSaveContext.save.time) >= 5) &&
                                                 (((void)0, gSaveContext.save.time) < CLOCK_TIME(6, 0))))) {
-                        func_8012C8D4(play->state.gfxCtx);
+                        Gfx_SetupDL42_Overlay(play->state.gfxCtx);
                         gSPMatrix(OVERLAY_DISP++, &gIdentityMtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
                     } else {
                         /**
@@ -4563,7 +4563,7 @@ void Interface_DrawClock(PlayState* play) {
                         timeInSeconds = TIME_TO_SECONDS_F(gSaveContext.save.time);
                         timeInSeconds -= ((s16)(timeInSeconds / 3600.0f)) * 3600.0f;
 
-                        func_8012C8D4(play->state.gfxCtx);
+                        Gfx_SetupDL42_Overlay(play->state.gfxCtx);
 
                         gSPMatrix(OVERLAY_DISP++, &gIdentityMtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
@@ -4760,7 +4760,7 @@ void Interface_DrawClock(PlayState* play) {
                             sp1E6 = 255;
                         }
 
-                        func_8012C654(play->state.gfxCtx);
+                        Gfx_SetupDL39_Overlay(play->state.gfxCtx);
 
                         /**
                          * Draws Final-Hours Clock's Frame
@@ -5395,7 +5395,7 @@ void Interface_DrawPerfectLetters(PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C8D4(play->state.gfxCtx);
+    Gfx_SetupDL42_Overlay(play->state.gfxCtx);
 
     gSPMatrix(OVERLAY_DISP++, &gIdentityMtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gDPSetCombineLERP(OVERLAY_DISP++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, PRIMITIVE, TEXEL0, 0,
@@ -6032,7 +6032,7 @@ void Interface_DrawMinigameIcons(PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C654(play->state.gfxCtx);
+    Gfx_SetupDL39_Overlay(play->state.gfxCtx);
 
     if ((play->pauseCtx.state == PAUSE_STATE_OFF) && (play->pauseCtx.debugEditor == DEBUG_EDITOR_NONE)) {
         // Carrots rendering if the action corresponds to riding a horse
@@ -6207,7 +6207,7 @@ void Interface_Draw(PlayState* play) {
         // Draw Grandma's Story
         if (interfaceCtx->storyDmaStatus == STORY_DMA_DONE) {
             gSPSegment(OVERLAY_DISP++, 0x07, interfaceCtx->storySegment);
-            func_8012C628(play->state.gfxCtx);
+            Gfx_SetupDL39_Opa(play->state.gfxCtx);
 
             gDPSetTextureFilter(POLY_OPA_DISP++, G_TF_POINT);
             gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 255, 255, 255, pauseCtx->alpha);
@@ -6232,7 +6232,7 @@ void Interface_Draw(PlayState* play) {
 
         LifeMeter_Draw(play);
 
-        func_8012C654(play->state.gfxCtx);
+        Gfx_SetupDL39_Overlay(play->state.gfxCtx);
 
         // Draw Rupee Icon
         gDPSetPrimColor(OVERLAY_DISP++, 0, 0, sRupeeCounterIconPrimColors[CUR_UPG_VALUE(UPG_WALLET)].r,
@@ -6417,7 +6417,7 @@ void Interface_Draw(PlayState* play) {
             Actor_DrawZTarget(&play->actorCtx.targetContext, play);
         }
 
-        func_8012C654(play->state.gfxCtx);
+        Gfx_SetupDL39_Overlay(play->state.gfxCtx);
 
         Interface_DrawItemButtons(play);
 
@@ -6449,7 +6449,7 @@ void Interface_Draw(PlayState* play) {
 
                     interfaceCtx->actionVtx[40 + 2].v.tc[1] = interfaceCtx->actionVtx[40 + 3].v.tc[1] = 32 << 5;
 
-                    func_8012C8D4(play->state.gfxCtx);
+                    Gfx_SetupDL42_Overlay(play->state.gfxCtx);
 
                     gDPSetCombineMode(OVERLAY_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
                     gDPSetAlphaCompare(OVERLAY_DISP++, G_AC_THRESHOLD);
@@ -6484,7 +6484,7 @@ void Interface_Draw(PlayState* play) {
     // Draw pictograph focus icons
     if (sPictoState == PICTO_BOX_STATE_LENS) {
 
-        func_8012C654(play->state.gfxCtx);
+        Gfx_SetupDL39_Overlay(play->state.gfxCtx);
 
         gDPSetAlphaCompare(OVERLAY_DISP++, G_AC_THRESHOLD);
         gDPSetRenderMode(OVERLAY_DISP++, G_RM_XLU_SURF, G_RM_XLU_SURF2);
@@ -6527,7 +6527,7 @@ void Interface_Draw(PlayState* play) {
     // Draw pictograph photo
     if (sPictoState >= PICTO_BOX_STATE_SETUP_PHOTO) {
         if (!(play->actorCtx.flags & ACTORCTX_FLAG_PICTO_BOX_ON)) {
-            Play_CompressI8ToI5((play->pictoPhotoI8 != NULL) ? play->pictoPhotoI8 : D_801FBB90,
+            Play_CompressI8ToI5((play->pictoPhotoI8 != NULL) ? play->pictoPhotoI8 : gWorkBuffer,
                                 (u8*)gSaveContext.pictoPhotoI5, PICTO_PHOTO_WIDTH * PICTO_PHOTO_HEIGHT);
 
             interfaceCtx->unk_222 = interfaceCtx->unk_224 = 0;
@@ -6552,7 +6552,7 @@ void Interface_Draw(PlayState* play) {
             gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 200, 200, 200, 250);
             gDPFillRectangle(OVERLAY_DISP++, 70, 22, 251, 151);
 
-            func_8012C654(play->state.gfxCtx);
+            Gfx_SetupDL39_Overlay(play->state.gfxCtx);
 
             gDPSetRenderMode(OVERLAY_DISP++, G_RM_OPA_SURF, G_RM_OPA_SURF2);
             gDPSetCombineMode(OVERLAY_DISP++, G_CC_MODULATEI_PRIM, G_CC_MODULATEI_PRIM);
@@ -6563,7 +6563,7 @@ void Interface_Draw(PlayState* play) {
             for (sp2CC = 0; sp2CC < (PICTO_PHOTO_HEIGHT / 8); sp2CC++, pictoRectTop += 8) {
                 pictoRectLeft = PICTO_PHOTO_TOPLEFT_X;
                 gDPLoadTextureBlock(OVERLAY_DISP++,
-                                    (u8*)((play->pictoPhotoI8 != NULL) ? play->pictoPhotoI8 : D_801FBB90) +
+                                    (u8*)((play->pictoPhotoI8 != NULL) ? play->pictoPhotoI8 : gWorkBuffer) +
                                         (0x500 * sp2CC),
                                     G_IM_FMT_I, G_IM_SIZ_8b, PICTO_PHOTO_WIDTH, 8, 0, G_TX_NOMIRROR | G_TX_WRAP,
                                     G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);

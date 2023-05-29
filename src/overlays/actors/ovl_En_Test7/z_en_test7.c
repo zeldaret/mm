@@ -331,7 +331,7 @@ void func_80AF14FC(PlayState* play2, EnTest7Struct2* arg1) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C1C0(play->state.gfxCtx);
+    Gfx_SetupDL26_Opa(play->state.gfxCtx);
 
     Matrix_Push();
 

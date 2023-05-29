@@ -218,8 +218,8 @@ void DmChar09_Draw(Actor* thisx, PlayState* play) {
     DmChar09* this = THIS;
 
     if ((play->csCtx.state != CS_STATE_IDLE) && this->unk_22E) {
-        func_8012C28C(play->state.gfxCtx);
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, DmChar09_OverrideLimbDraw, NULL,
                           &this->actor);
     }
