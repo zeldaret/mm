@@ -10,7 +10,7 @@ s32 Horse_CopyPointFromPathList(PlayState* play, s32 pathIndex, s32 pointIndex, 
 s32 Horse_IsValidSpawn(s16 sceneId);
 void Horse_ResetHorseData(PlayState* play);
 void Horse_Spawn(PlayState* play, Player* player);
-void Horse_RotateToPoint(Actor* actor, Vec3f* pos, s16 turnAmount);
+void Horse_RotateToPoint(Actor* actor, Vec3f* pos, s16 turnYaw);
 s32 Horse_IsActive(PlayState* play, ActorContext* actorCtx);
 
 

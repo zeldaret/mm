@@ -196,13 +196,13 @@ void Horse_Spawn(PlayState* play, Player* player) {
     D_801BDAA0 = false;
 }
 
-void Horse_RotateToPoint(Actor* actor, Vec3f* pos, s16 turnAmount) {
+void Horse_RotateToPoint(Actor* actor, Vec3f* pos, s16 turnYaw) {
     s16 yaw = Math_Vec3f_Yaw(&actor->world.pos, pos) - actor->world.rot.y;
 
-    if (turnAmount < yaw) {
-        actor->world.rot.y += turnAmount;
-    } else if (yaw < -turnAmount) {
-        actor->world.rot.y -= turnAmount;
+    if (turnYaw < yaw) {
+        actor->world.rot.y += turnYaw;
+    } else if (yaw < -turnYaw) {
+        actor->world.rot.y -= turnYaw;
     } else {
         actor->world.rot.y += yaw;
     }

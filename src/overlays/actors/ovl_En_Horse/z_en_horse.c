@@ -279,8 +279,8 @@ void EnHorse_RaceWaypointPos(RaceWaypoint* waypoints, s32 idx, Vec3f* pos) {
     pos->z = waypoints[idx].z;
 }
 
-void EnHorse_RotateToPoint(EnHorse* this, PlayState* play, Vec3f* pos, s16 turnAmount) {
-    Horse_RotateToPoint(&this->actor, pos, turnAmount);
+void EnHorse_RotateToPoint(EnHorse* this, PlayState* play, Vec3f* pos, s16 turnYaw) {
+    Horse_RotateToPoint(&this->actor, pos, turnYaw);
 }
 
 void func_8087B7C0(EnHorse* this, PlayState* play, Path* path) {
