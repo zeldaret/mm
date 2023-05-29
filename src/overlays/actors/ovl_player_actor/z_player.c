@@ -14843,7 +14843,7 @@ void func_8084D820(Player* this, PlayState* play) {
                 if (play->unk_1887C != 0) {
                     play->func_18780(this, play);
                     Player_SetAction(play, this, func_80854430, 0);
-                    if (play->sceneId == 0x45) {
+                    if (play->sceneId == SCENE_20SICHITAI) {
                         play->unk_1887C = 0;
                     }
                 } else if (!func_808391D8(this, play)) {
