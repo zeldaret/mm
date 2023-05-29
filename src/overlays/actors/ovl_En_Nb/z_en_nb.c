@@ -789,7 +789,7 @@ void EnNb_Draw(Actor* thisx, PlayState* play) {
     EnNb* this = THIS;
 
     if (this->scheduleResult != EN_NB_SCH_NONE) {
-        func_8012C5B0(play->state.gfxCtx);
+        Gfx_SetupDL37_Opa(play->state.gfxCtx);
         SkelAnime_DrawTransformFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                        this->skelAnime.dListCount, EnNb_OverrideLimbDraw, EnNb_PostLimbDraw,
                                        EnNb_TransformLimbDraw, &this->actor);

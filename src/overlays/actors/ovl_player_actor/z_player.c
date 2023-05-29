@@ -12190,7 +12190,7 @@ void Player_Draw(Actor* thisx, PlayState* play) {
             func_8012C268(&play->state);
         }
 
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
         func_800B8050(&this->actor, play, 0);
         func_800B8118(&this->actor, play, 0);
