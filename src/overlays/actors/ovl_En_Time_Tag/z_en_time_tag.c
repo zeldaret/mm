@@ -186,7 +186,7 @@ void EnTimeTag_Diary_AfterOcarina(EnTimeTag* this, PlayState* play) {
 }
 
 void EnTimeTag_Diary_TeachEvanSongSnippets(EnTimeTag* this, PlayState* play) {
-    if ((play->msgCtx.ocarinaStaff->state == 0) && (play->msgCtx.msgMode == 0x1B)) {
+    if ((play->msgCtx.ocarinaStaff->state == 0) && (play->msgCtx.msgMode == MSGMODE_SONG_DEMONSTRATION_DONE)) {
         TIMETAG_DIARY_TIMER(&this->actor) = 5;
         this->actionFunc = EnTimeTag_Diary_AfterOcarina;
         play->msgCtx.msgLength = 0;

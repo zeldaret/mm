@@ -260,15 +260,13 @@ typedef struct MessageContext {
     /* 0x11F0A */ u8 textBoxType;
     /* 0x11F0B */ u8 textBoxPos;
     /* 0x11F0C */ u8 unk11F0C;
-    /* 0x11F0B */ UNK_TYPE1 unk11F0D[0x3];
     /* 0x11F10 */ s32 msgLength;
     /* 0x11F14 */ u16 nextTextId;
     /* 0x11F16 */ u16 itemId;
     /* 0x11F18 */ u8 unk11F18;
-    /* 0x11F19 */ UNK_TYPE1 unk11F19[0x1];
     /* 0x11F1A */ s16 unk11F1A[3];
     /* 0x11F20 */ UNK_TYPE1 unk11F20[0x2];
-    /* 0x11F22 */ u8 msgMode; // TODO: MessageMode enum
+    /* 0x11F22 */ u8 msgMode;
     /* 0x11F23 */ UNK_TYPE1 unk11F23;
     /* 0x11F24 */ union {
         char schar[200];
@@ -287,7 +285,7 @@ typedef struct MessageContext {
     /* 0x12004 */ s16 textboxXTarget;
     /* 0x12006 */ s16 textboxYTarget;
     /* 0x12008 */ s16 unk12008;
-    /* 0x1200A */ UNK_TYPE2 unk1200A;
+    /* 0x1200A */ s16 unk1200A;
     /* 0x1200C */ s16 unk1200C;
     /* 0x1200E */ s16 unk1200E;
     /* 0x12010 */ s16 unk12010;
@@ -320,7 +318,6 @@ typedef struct MessageContext {
     /* 0x12044 */ s16 unk12044;
     /* 0x12046 */ s16 blockSunsSong;
     /* 0x12048 */ u8 lastOcarinaButtonIndex;
-    /* 0x12049 */ UNK_TYPE1 unk12049[0x1];
     /* 0x1204A */ s16 ocarinaButtonsPosY[0x5];
     /* 0x12054 */ s16 unk12054[6]; // First, second and third digits in lottery code guess
     /* 0x1205A */ UNK_TYPE1 unk12060[0x8];
@@ -333,15 +330,13 @@ typedef struct MessageContext {
     /* 0x1207C */ s32 bankRupees;
     /* 0x12080 */ struct MessageTableEntry* messageEntryTable;
     /* 0x12084 */ struct MessageTableEntry* messageEntryTableNes;
-    /* 0x12088 */ UNK_TYPE4 unk12088;
+    /* 0x12088 */ UNK_TYPE1 unk12088[0x4];
     /* 0x1208C */ struct MessageTableEntry* messageTableStaff;
     /* 0x12090 */ s16 textIsCredits;
     /* 0x12092 */ s16 messageHasSetSfx;
     /* 0x12094 */ u8 textboxSkipped;
-    /* 0x12095 */ UNK_TYPE1 unk12095[0x3];
     /* 0x12098 */ f32 textCharScale;
     /* 0x1209C */ s16 textFade;
-    /* 0x1209E */ UNK_TYPE1 unk1209E[0x2];
     /* 0x120A0 */ s32 ocarinaAvailableSongs;
     /* 0x120A4 */ s16 stickAdjX;
     /* 0x120A6 */ s16 stickAdjY;
@@ -352,7 +347,7 @@ typedef struct MessageContext {
     /* 0x120B0 */ u8 ocarinaSongEffectActive;
     /* 0x120B1 */ u8 bombersNotebookNewEventQueueSize;
     /* 0x120B2 */ u8 bombersNotebookNewEventQueue[0xA];
-    /* 0x120BC */ u16 unk_120BC; // HudVisibility enum
+    /* 0x120BC */ u16 hudVisibility;
     /* 0x120BE */ s16 unk120BE;
     /* 0x120C0 */ s16 unk120C0;
     /* 0x120C2 */ s16 unk120C2;
@@ -368,5 +363,8 @@ typedef struct MessageContext {
     /* 0x120D8 */ s16 unk120D8;
     /* 0x120DA */ UNK_TYPE1 unk_120DA[0x6];
 } MessageContext; // size = 0x120E0
+
+extern u8 gPageSwitchNextButtonStatus[6][5];
+extern s16 gOcarinaSongItemMap[];
 
 #endif

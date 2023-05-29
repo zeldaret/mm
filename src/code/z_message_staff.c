@@ -493,7 +493,7 @@ void Message_DecodeCredits(PlayState* play) {
 
         if ((curChar == 4) || (curChar == 7) || (curChar == 0xC) || (curChar == 0xB) || (curChar == 2)) {
             // Textbox decoding ends with any of the above text control characters
-            msgCtx->msgMode = 6;
+            msgCtx->msgMode = MSGMODE_TEXT_DISPLAYING;
             msgCtx->textDrawPos = 1;
             msgCtx->unk11FFA = msgCtx->textboxY + 8;
 

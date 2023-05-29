@@ -1795,7 +1795,7 @@ void Interface_UpdateButtonsPart2(PlayState* play) {
     if (CHECK_EVENTINF(EVENTINF_41)) {
         // Related to swamp boat (non-minigame)?
         for (i = EQUIP_SLOT_C_LEFT; i <= EQUIP_SLOT_C_RIGHT; i++) {
-            if ((GET_CUR_FORM_BTN_ITEM(i) != ITEM_PICTO_BOX) || (msgCtx->msgMode != 0)) {
+            if ((GET_CUR_FORM_BTN_ITEM(i) != ITEM_PICTO_BOX) || (msgCtx->msgMode != MSGMODE_NONE)) {
                 if (gSaveContext.buttonStatus[i] == BTN_ENABLED) {
                     restoreHudVisibility = true;
                 }
@@ -4012,7 +4012,7 @@ void Interface_DrawItemButtons(PlayState* play) {
             if ((gSaveContext.hudVisibility == HUD_VISIBILITY_NONE) ||
                 (gSaveContext.hudVisibility == HUD_VISIBILITY_NONE_ALT) ||
                 (gSaveContext.hudVisibility == HUD_VISIBILITY_A_HEARTS_MAGIC_WITH_OVERWRITE) ||
-                (msgCtx->msgMode != 0)) {
+                (msgCtx->msgMode != MSGMODE_NONE)) {
                 temp = 0;
             } else if (player->stateFlags1 & PLAYER_STATE1_200000) {
                 temp = 70;

@@ -360,7 +360,7 @@ s32 func_80A3EA30(EnTest3* this, PlayState* play) {
     if (this->unk_D78->unk_1 != 0) {
         CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
         CutsceneManager_Queue(this->csId);
-        play->msgCtx.msgMode = 0x44;
+        play->msgCtx.msgMode = MSGMODE_PAUSED;
     }
     return false;
 }
@@ -392,7 +392,7 @@ s32 func_80A3EB8C(EnTest3* this, PlayState* play) {
         if (hideoutObject != NULL) {
             this->player.targetedActor = hideoutObject;
         }
-        play->msgCtx.msgMode = 0x44;
+        play->msgCtx.msgMode = MSGMODE_PAUSED;
         return 1;
     }
     return 0;

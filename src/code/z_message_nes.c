@@ -994,7 +994,7 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, u16 textDrawPos) {
                     msgCtx->textColorR = sp12E;
                     msgCtx->textColorG = sp12C;
                     msgCtx->textColorB = sp12A;
-                } else if (msgCtx->msgMode >= 0x4D) {
+                } else if (msgCtx->msgMode >= MSGMODE_OWL_SAVE_0) {
                     if ((i < (msgCtx->decodedTextLen - 6)) || (i >= (msgCtx->decodedTextLen - 4))) {
                         Message_DrawTextChar(play, &font->charBuf[font->unk_11D88][charTexIndex], &gfx);
                     }
@@ -1134,7 +1134,7 @@ void Message_DecodeNES(PlayState* play) {
 
         if ((curChar == 0x10) || (curChar == 0x12) || (curChar == 0x1B) || (curChar == 0x1C) || (curChar == 0x1D) ||
             (curChar == 0x19) || (curChar == 0xE0) || (curChar == 0xBF) || (curChar == 0x15) || (curChar == 0x1A)) {
-            msgCtx->msgMode = 6;
+            msgCtx->msgMode = MSGMODE_TEXT_DISPLAYING;
             msgCtx->textDrawPos = 1;
             if (msgCtx->textBoxType == 3) {
                 msgCtx->unk11FFA = msgCtx->textboxY + 2;

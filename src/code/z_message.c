@@ -2128,7 +2128,7 @@ void Message_Decode(PlayState* play) {
                 (curChar == 0x103) || (curChar == 0x230) || (curChar == 0x500) || (curChar == 0x240) ||
                 (curChar == 0x104)) {
 
-                msgCtx->msgMode = 6;
+                msgCtx->msgMode = MSGMODE_TEXT_DISPLAYING;
                 msgCtx->textDrawPos = 1;
                 msgCtx->unk11FFA = msgCtx->textboxY + 6;
                 msgCtx->unk11F1A[spD2] = 0;
@@ -3031,8 +3031,8 @@ void Message_OpenText(PlayState* play, u16 textId) {
     }
 
     if (textId == 0xFF) {
-        func_80115844(play, 0x12);
-        play->msgCtx.unk_120BC = gSaveContext.hudVisibility;
+        func_80115844(play, DO_ACTION_STOP);
+        play->msgCtx.hudVisibility = gSaveContext.hudVisibility;
         Interface_SetHudVisibility(HUD_VISIBILITY_A_B_C);
         gSaveContext.save.unk_06 = 20;
     } else if ((textId == 0x579) || (textId == 0x8D8)) {
@@ -3462,7 +3462,7 @@ void Message_DisplayOcarinaStaffImpl(PlayState* play, u16 ocarinaAction) {
     msgCtx->textboxColorAlphaCurrent = msgCtx->textboxColorAlphaTarget;
 
     if (!noStop) {
-        func_80115844(play, 0x12);
+        func_80115844(play, DO_ACTION_STOP);
         noStop = gSaveContext.hudVisibility;
         Interface_SetHudVisibility(HUD_VISIBILITY_B_ALT);
         gSaveContext.hudVisibility = noStop;
@@ -5496,7 +5496,7 @@ void Message_Update(PlayState* play) {
                             Message_CloseTextbox(play);
                             play->msgCtx.ocarinaMode = OCARINA_MODE_END;
                             gSaveContext.prevHudVisibility = HUD_VISIBILITY_A_B;
-                            func_80115844(play, 0x12);
+                            func_80115844(play, DO_ACTION_STOP);
                             Game_SetFramerateDivisor(&play->state, 2);
                             if (ShrinkWindow_Letterbox_GetSizeTarget() != 0) {
                                 ShrinkWindow_Letterbox_SetSizeTarget(0);
