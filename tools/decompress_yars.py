@@ -3,6 +3,16 @@
 # SPDX-FileCopyrightText: © 2023 ZeldaRET
 # SPDX-License-Identifier: MIT
 
+# yar (Yaz0 ARchive) decompressor
+#
+# This program decompresses every raw yar binary file listed in
+# `tools/filelists/{version}/archives.csv` to a corresponding
+# `baserom/{file}.unarchive` raw file.
+#
+# It works by decompressing every Yaz0 block and appending them one by one into
+# a new raw binary file so it can be processed normally by other tools.
+
+
 from __future__ import annotations
 
 import argparse

@@ -117,6 +117,7 @@ MKLDSCRIPT := tools/buildtools/mkldscript
 YAZ0       := tools/buildtools/yaz0
 ZAPD       := tools/ZAPD/ZAPD.out
 FADO       := tools/fado/fado.elf
+MAKEYAR    := tools/buildtools/makeyar
 
 OPTFLAGS := -O2 -g3
 ASFLAGS := -march=vr4300 -32 -Iinclude
@@ -305,7 +306,7 @@ setup:
 	$(MAKE) -C tools
 	python3 tools/fixbaserom.py
 	python3 tools/extract_baserom.py
-	python3 tools/extract_archives.py
+	python3 tools/decompress_yars.py
 
 assets:
 	python3 extract_assets.py -j $(N_THREADS)
@@ -348,7 +349,7 @@ build/assets/%.o: assets/%.c
 	$(RM_MDEBUG)
 
 build/assets/archives/%.yar.o: build/assets/archives/%.o
-	tools/buildtools/makeyar $< $(@:.yar.o=.yar.bin) $(@:.yar.o=.symbols.o)
+	$(MAKEYAR) $< $(@:.yar.o=.yar.bin) $(@:.yar.o=.symbols.o)
 	$(OBJCOPY) -I binary -O elf32-big $(@:.yar.o=.yar.bin) $@
 
 build/baserom/%.o: baserom/%
