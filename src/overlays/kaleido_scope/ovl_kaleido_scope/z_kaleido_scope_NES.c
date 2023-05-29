@@ -267,7 +267,7 @@ void KaleidoScope_MoveCursorToSpecialPos(PlayState* play, s16 cursorSpecialPos) 
     pauseCtx->cursorSpecialPos = cursorSpecialPos;
     pauseCtx->pageSwitchInputTimer = 0;
 
-    play_sound(NA_SE_SY_DECIDE);
+    Audio_PlaySfx(NA_SE_SY_DECIDE);
 
     gSaveContext.buttonStatus[EQUIP_SLOT_B] = BTN_ENABLED;
     gSaveContext.buttonStatus[EQUIP_SLOT_C_LEFT] = BTN_DISABLED;
@@ -285,7 +285,7 @@ void KaleidoScope_MoveCursorFromSpecialPos(PlayState* play) {
     pauseCtx->nameDisplayTimer = 0;
     pauseCtx->cursorSpecialPos = 0;
 
-    play_sound(NA_SE_SY_CURSOR);
+    Audio_PlaySfx(NA_SE_SY_CURSOR);
 
     pauseCtx->cursorShrinkRate = 4.0f;
 
@@ -321,11 +321,11 @@ void KaleidoScope_SwitchPage(PauseContext* pauseCtx, u8 direction) {
 
     if (direction == SWITCH_PAGE_LEFT) {
         pauseCtx->nextPageMode = (pauseCtx->pageIndex * 2) + 1;
-        play_sound(NA_SE_SY_WIN_SCROLL_LEFT);
+        Audio_PlaySfx(NA_SE_SY_WIN_SCROLL_LEFT);
         pauseCtx->cursorSpecialPos = PAUSE_CURSOR_PAGE_RIGHT;
     } else { // SWITCH_PAGE_RIGHT
         pauseCtx->nextPageMode = pauseCtx->pageIndex * 2;
-        play_sound(NA_SE_SY_WIN_SCROLL_RIGHT);
+        Audio_PlaySfx(NA_SE_SY_WIN_SCROLL_RIGHT);
         pauseCtx->cursorSpecialPos = PAUSE_CURSOR_PAGE_LEFT;
     }
 
