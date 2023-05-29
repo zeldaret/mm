@@ -849,17 +849,12 @@ void TitleCard_Draw(GameState* gameState, TitleCardContext* titleCtx) {
     if (titleCtx->alpha != 0) {
         s32 width = titleCtx->width;
         s32 height = titleCtx->height;
-        s32 unk1;
-        s32 spC0;
-        s32 sp38;
-        s32 spB8;
-        s32 spB4;
-        s32 temp;
-
-        temp = width * 2;
-        spC0 = (titleCtx->x * 4) - temp;
-        spB8 = (titleCtx->y * 4) - (height * 2);
-        sp38 = width * 2;
+        s32 doubleWidth = width * 2;
+        s32 titleX = (titleCtx->x * 4) - doubleWidth;
+        s32 doubleHeight = height * 2;
+        s32 titleY = (titleCtx->y * 4) - doubleHeight;
+        s32 titleSecondY;
+        s32 textureLanguageOffset;
 
         OPEN_DISPS(gameState->gfxCtx);
 
@@ -867,29 +862,30 @@ void TitleCard_Draw(GameState* gameState, TitleCardContext* titleCtx) {
             height = TMEM_SIZE / width;
         }
 
-        spB4 = spB8 + (height * 4);
+        titleSecondY = titleY + (height * 4);
 
         OVERLAY_DISP = Gfx_SetupDL52_NoCD(OVERLAY_DISP);
 
         gDPSetPrimColor(OVERLAY_DISP++, 0, 0, (u8)titleCtx->intensity, (u8)titleCtx->intensity, (u8)titleCtx->intensity,
                         (u8)titleCtx->alpha);
 
-        gDPLoadTextureBlock(OVERLAY_DISP++, (s32*)titleCtx->texture, G_IM_FMT_IA, G_IM_SIZ_8b, width, height, 0,
+        gDPLoadTextureBlock(OVERLAY_DISP++, titleCtx->texture, G_IM_FMT_IA, G_IM_SIZ_8b, width, height, 0,
                             G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
                             G_TX_NOLOD);
 
-        gSPTextureRectangle(OVERLAY_DISP++, spC0, spB8, ((sp38 * 2) + spC0) - 4, spB8 + (height * 4) - 1,
+        gSPTextureRectangle(OVERLAY_DISP++, titleX, titleY, ((doubleWidth * 2) + titleX) - 4, titleY + (height * 4) - 1,
                             G_TX_RENDERTILE, 0, 0, 1 << 10, 1 << 10);
 
         height = titleCtx->height - height;
 
+        // If texture is bigger than 0x1000, display the rest
         if (height > 0) {
-            gDPLoadTextureBlock(OVERLAY_DISP++, (s32)titleCtx->texture + 0x1000, G_IM_FMT_IA, G_IM_SIZ_8b, width,
+            gDPLoadTextureBlock(OVERLAY_DISP++, (uintptr_t)titleCtx->texture + 0x1000, G_IM_FMT_IA, G_IM_SIZ_8b, width,
                                 height, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK,
                                 G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
-            gSPTextureRectangle(OVERLAY_DISP++, spC0, spB4, ((sp38 * 2) + spC0) - 4, spB4 + (height * 4) - 1,
-                                G_TX_RENDERTILE, 0, 0, 1 << 10, 1 << 10);
+            gSPTextureRectangle(OVERLAY_DISP++, titleX, titleSecondY, ((doubleWidth * 2) + titleX) - 4,
+                                titleSecondY + (height * 4) - 1, G_TX_RENDERTILE, 0, 0, 1 << 10, 1 << 10);
         }
 
         CLOSE_DISPS(gameState->gfxCtx);
@@ -2709,7 +2705,7 @@ void Actor_DrawLensActors(PlayState* play, s32 numLensActors, Actor** lensActors
         spA4 = play->unk_18E68;
 
         if (dbgVar2) {
-            PreRender_SetValues(&play->pauseBgPreRender, D_801FBBCC, D_801FBBCE, gfxCtx->curFrameBuffer, zbuffer);
+            PreRender_SetValues(&play->pauseBgPreRender, gCfbWidth, gCfbHeight, gfxCtx->curFrameBuffer, zbuffer);
 
             gfxTemp = gfx;
             func_80170200(&play->pauseBgPreRender, &gfxTemp, zbuffer, spA4);
