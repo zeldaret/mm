@@ -3,6 +3,8 @@
  *
  * Functions used to process and relocate dynamically loadable code segments (overlays).
  *
+ * @note:
+ *     These are for specific fragment overlays with the .ovl file extension
  */
 #include "global.h"
 #include "system_malloc.h"

@@ -4,7 +4,7 @@
  * Functions used to process and relocate dynamically loadable code segments (overlays).
  *
  * @note:
- *  These are completly unused in favor of the functions in `loadfragment2.c`.
+ *  These are completly unused in favor of the fragment overlay functions in `loadfragment2.c`.
  *
  *  The main difference between them seems to be the lack of vramEnd arguments here.
  *  Instead they are calculated on the fly.
