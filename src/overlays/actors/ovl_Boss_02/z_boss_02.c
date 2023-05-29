@@ -553,7 +553,7 @@ void Boss02_Init(Actor* thisx, PlayState* play) {
     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_STONE_TOWER_TEMPLE) && (this->actor.params == TWINMOLD_RED)) {
         sBlueWarp = (DoorWarp1*)Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_DOOR_WARP1, 0.0f, 60.0f,
                                                    0.0f, 0, 0, 0, 1);
-        Actor_Spawn(&play->actorCtx, play, ACTOR_ITEM_B_HEART, 0.0f, 30.0f, -150.0f, 0, 1, 0, 0);
+        Actor_Spawn(&play->actorCtx, play, ACTOR_ITEM_B_HEART, 0.0f, 30.0f, -150.0f, 0, 1, 0, BHEART_PARAM_NORMAL);
     }
 
     this->actor.targetMode = 10;
@@ -1971,7 +1971,7 @@ void func_809DD934(Boss02* this, PlayState* play) {
                 temp_a0_5->scale.z *= phi_f0_2;
 
                 if (temp_a0_5->id == ACTOR_ITEM_B_HEART) {
-                    ((ItemBHeart*)temp_a0_5)->unk_168 *= phi_f0_2;
+                    ((ItemBHeart*)temp_a0_5)->baseScale *= phi_f0_2;
                 }
             }
             temp_a0_5 = temp_a0_5->next;
@@ -2210,10 +2210,12 @@ void func_809DEAC4(Boss02* this, PlayState* play) {
 
                     this->unk_1D7E = 0;
                     if (!sIsInGiantMode) {
-                        Actor_Spawn(&play->actorCtx, play, ACTOR_ITEM_B_HEART, 0.0f, 30.0f, -150.0f, 0, 1, 0, 0);
+                        Actor_Spawn(&play->actorCtx, play, ACTOR_ITEM_B_HEART, 0.0f, 30.0f, -150.0f, 0, 1, 0,
+                                    BHEART_PARAM_NORMAL);
                         phi_f0 = 60.0f;
                     } else {
-                        Actor_Spawn(&play->actorCtx, play, ACTOR_ITEM_B_HEART, 0.0f, 3153.0f, -15.0f, 0, 1, 0, 35);
+                        Actor_Spawn(&play->actorCtx, play, ACTOR_ITEM_B_HEART, 0.0f, 3153.0f, -15.0f, 0, 1, 0,
+                                    BHEART_PARAM_SMALL);
                         phi_f0 = 3155.0f;
                     }
                     sBlueWarp = (DoorWarp1*)Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_DOOR_WARP1,
