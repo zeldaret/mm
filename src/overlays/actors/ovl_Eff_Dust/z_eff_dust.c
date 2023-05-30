@@ -105,7 +105,7 @@ void EffDust_Destroy(Actor* thisx, PlayState* play) {
 
 void func_80918D64(EffDust* this, PlayState* play) {
     s16 theta;
-    s16 fi;
+    s16 phi;
     s32 i;
     s32 j;
     f32* distanceTraveled = this->distanceTraveled;
@@ -122,10 +122,10 @@ void func_80918D64(EffDust* this, PlayState* play) {
             i = this->index & 0x3F;
             if (this->distanceTraveled[i] >= 1.0f) {
                 // Spherical coordinate system.
-                fi = Rand_CenteredFloat(0x10000);
+                phi = Rand_CenteredFloat(0x10000);
                 theta = Rand_ZeroFloat(0x1000);
-                this->initialPositions[i].x = -(f32)this->actor.home.rot.z * Math_CosS(fi) * Math_CosS(theta);
-                this->initialPositions[i].y = -(f32)this->actor.home.rot.z * Math_SinS(fi) * Math_CosS(theta);
+                this->initialPositions[i].x = -(f32)this->actor.home.rot.z * Math_CosS(phi) * Math_CosS(theta);
+                this->initialPositions[i].y = -(f32)this->actor.home.rot.z * Math_SinS(phi) * Math_CosS(theta);
                 this->initialPositions[i].z = -(f32)this->actor.home.rot.z * Math_SinS(theta);
                 this->distanceTraveled[i] = 0.0f;
                 this->index++;
@@ -136,7 +136,7 @@ void func_80918D64(EffDust* this, PlayState* play) {
 
 void func_80918FE4(EffDust* this, PlayState* play) {
     s16 theta;
-    s16 fi;
+    s16 phi;
     f32* distanceTraveled = this->distanceTraveled;
     s32 i;
     s32 j;
@@ -152,11 +152,11 @@ void func_80918FE4(EffDust* this, PlayState* play) {
         i = this->index & 0x3F;
         if (this->distanceTraveled[i] >= 1.0f) {
             // Spherical coordinate system.
-            fi = Rand_CenteredFloat(0x10000);
+            phi = Rand_CenteredFloat(0x10000);
             theta = Rand_ZeroFloat(0x2000);
-            this->initialPositions[i].x = 400.0f * Math_CosS(fi) * Math_CosS(theta);
+            this->initialPositions[i].x = 400.0f * Math_CosS(phi) * Math_CosS(theta);
             this->initialPositions[i].y = 400.0f * Math_SinS(theta);
-            this->initialPositions[i].z = 400.0f * Math_SinS(fi) * Math_CosS(theta);
+            this->initialPositions[i].z = 400.0f * Math_SinS(phi) * Math_CosS(theta);
             this->distanceTraveled[i] = 0.0f;
             this->index++;
         }
