@@ -16,7 +16,7 @@ void BgF40Swlift_Destroy(Actor* thisx, PlayState* play);
 void BgF40Swlift_Update(Actor* thisx, PlayState* play2);
 void BgF40Swlift_Draw(Actor* thisx, PlayState* play);
 
-static s32 sParams[4] = { 0xFF, 0xFF, 0xFF, 0xFF };
+static s32 sSwitchFlags[4] = { 0xFF, 0xFF, 0xFF, 0xFF };
 static s32 sHeights[4];
 
 const ActorInit Bg_F40_Swlift_InitVars = {
@@ -38,18 +38,19 @@ static InitChainEntry sInitChain[] = {
 };
 
 void BgF40Swlift_Init(Actor* thisx, PlayState* play) {
-    s32 index;
     BgF40Swlift* this = THIS;
+    s32 index;
+    s32 pad;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    DynaPolyActor_Init((DynaPolyActor*)this, 1);
-    index = BG_F40_GET_SWITCHFLAG(this);
+    DynaPolyActor_Init(&this->dyna, 1);
+    index = BG_F40_SWLIFT_GET_INDEX(thisx);
     if ((index < 0) || (index >= 5)) { //! @bug An index greater than 3 will cause an out of bounds array access.
         Actor_Kill(&this->dyna.actor);
     } else {
         sHeights[index] = this->dyna.actor.world.pos.y;
-        sParams[index] = BG_F40_SWLIFT_GET_PARAMS(this);
-        if (index) {
+        sSwitchFlags[index] = BG_F40_SWLIFT_GET_SWITCHFLAG(thisx);
+        if (index != 0) {
             Actor_Kill(&this->dyna.actor);
         } else {
             DynaPolyActor_LoadMesh(play, &this->dyna, &gUnusedStoneTowerVerticallyOscillatingPlatformCol);
@@ -68,8 +69,8 @@ void BgF40Swlift_Update(Actor* thisx, PlayState* play2) {
     BgF40Swlift* this = THIS;
     s32 i;
 
-    for (i = 1; i < ARRAY_COUNT(sParams); i++) {
-        if ((sParams[i] == 0xFF) || (Flags_GetSwitch(play, sParams[i]) == 0)) {
+    for (i = 1; i < ARRAY_COUNT(sSwitchFlags); i++) {
+        if ((sSwitchFlags[i] == 0xFF) || (Flags_GetSwitch(play, sSwitchFlags[i]) == 0)) {
             break;
         }
     }
@@ -101,11 +102,12 @@ void BgF40Swlift_Update(Actor* thisx, PlayState* play2) {
         }
         this->timer--;
         this->dyna.actor.world.pos.y =
-            sHeights[this->dyna.actor.params] + (sin_rad(((f32)this->timer) * (M_PI / 24.0f)) * 5.0f);
+            sHeights[this->dyna.actor.params] + (sin_rad(this->timer * (M_PI / 24.0f)) * 5.0f);
     }
 }
 
 void BgF40Swlift_Draw(Actor* thisx, PlayState* play) {
     BgF40Swlift* this = THIS;
+
     Gfx_DrawDListOpa(play, gUnusedStoneTowerVerticallyOscillatingPlatformDL);
 }

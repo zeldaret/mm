@@ -14,8 +14,8 @@
         <DList Name="gStoneTowerEmpty1DL" Offset="0x3B00" />
         <DList Name="gUnusedStoneTowerVerticallyOscillatingPlatformDL" Offset="0x3B08" />
         <Collision Name="gUnusedStoneTowerVerticallyOscillatingPlatformCol" Offset="0x3E80" />
-        <DList Name="gStoneTowerEmpty2DL" Offset="0x4030" />
         
+        <DList Name="gStoneTowerEmpty2DL" Offset="0x4030" />
         <DList Name="gUnusedStoneTowerTempleSquareElevatorDL" Offset="0x4038" />
         <Collision Name="gUnusedStoneTowerTempleSquareElevatorCol" Offset="0x4240" />
         
