@@ -71,6 +71,7 @@ void DemoMoonend_DoNothing(DemoMoonend* this, PlayState* play) {
 void func_80C17B60(DemoMoonend* this, PlayState* play) {
     if (Cutscene_IsCueInChannel(play, this->cueType)) {
         u16 cueId = play->csCtx.actorCues[Cutscene_GetCueChannel(play, this->cueType)]->id;
+
         Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetCueChannel(play, this->cueType));
         if (this->cueId != cueId) {
             this->cueId = cueId;
@@ -96,13 +97,12 @@ void func_80C17B60(DemoMoonend* this, PlayState* play) {
 }
 
 void func_80C17C48(DemoMoonend* this, PlayState* play) {
-    u16 cueId;
-
     if (func_80183DE0(&this->skeletonInfo)) {
         this->actor.home.rot.z = 0;
     }
     if (Cutscene_IsCueInChannel(play, this->cueType)) {
-        cueId = play->csCtx.actorCues[Cutscene_GetCueChannel(play, this->cueType)]->id;
+        u16 cueId = play->csCtx.actorCues[Cutscene_GetCueChannel(play, this->cueType)]->id;
+
         Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetCueChannel(play, this->cueType));
 
         if (this->cueId != cueId) {
