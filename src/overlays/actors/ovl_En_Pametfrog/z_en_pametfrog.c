@@ -306,7 +306,7 @@ s32 func_8086A2CC(EnPametfrog* this, CollisionPoly* floorPoly) {
         return false;
     }
 
-    rotation = func_80086C48(arg0);
+    rotation = Math_FAcosF(arg0);
     if (rotation < 0.0001f) {
         return false;
     }

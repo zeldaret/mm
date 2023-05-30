@@ -1799,7 +1799,7 @@ void Player_AdjustSingleLeg(PlayState* play, Player* player, SkelAnime* skelAnim
         temp_f20 = sp74 - SQ(sp58);
         temp_f20 = (temp_f20 < 0.0f) ? 0.0f : sqrtf(temp_f20);
 
-        sp4C = func_80086B30(temp_f20, sp58);
+        sp4C = Math_FAtan2F(temp_f20, sp58);
         distance = sqrtf(SQ(diffX) + SQ(yIntersect - sp90.y) + SQ(diffZ));
         sp58 = (SQ(distance) + sp70) / (2.0f * distance);
         sp54 = distance - sp58;
@@ -1807,8 +1807,8 @@ void Player_AdjustSingleLeg(PlayState* play, Player* player, SkelAnime* skelAnim
         temp_f20 = sp74 - SQ(sp58);
         temp_f20 = (temp_f20 < 0.0f) ? 0.0f : sqrtf(temp_f20);
 
-        sp48 = func_80086B30(temp_f20, sp58);
-        phi_t1 = (M_PI - (func_80086B30(sp54, temp_f20) + ((M_PI / 2.0f) - sp48))) * (0x8000 / M_PI);
+        sp48 = Math_FAtan2F(temp_f20, sp58);
+        phi_t1 = (M_PI - (Math_FAtan2F(sp54, temp_f20) + ((M_PI / 2.0f) - sp48))) * (0x8000 / M_PI);
         phi_t1 = -skelAnime->jointTable[shinLimbIndex].z + phi_t1;
         temp_f8 = (sp48 - sp4C) * (0x8000 / M_PI);
 

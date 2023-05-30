@@ -135,8 +135,8 @@ void func_80954960(EnKanban* this) {
         ny = COLPOLY_GET_NORMAL(this->actor.floorPoly->normal.y);
         nz = COLPOLY_GET_NORMAL(this->actor.floorPoly->normal.z);
 
-        this->floorRot.x = -func_80086B30(-nz * ny, 1.0f);
-        this->floorRot.z = func_80086B30(-nx * ny, 1.0f);
+        this->floorRot.x = -Math_FAtan2F(-nz * ny, 1.0f);
+        this->floorRot.z = Math_FAtan2F(-nx * ny, 1.0f);
     }
 }
 

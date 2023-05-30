@@ -875,7 +875,7 @@ void func_800CC938(Camera* camera) {
  * Calculates the angle between points `from` and `to`
  */
 s16 Camera_CalcXZAngle(Vec3f* to, Vec3f* from) {
-    return CAM_DEG_TO_BINANG(RAD_TO_DEG(func_80086B30(from->x - to->x, from->z - to->z)));
+    return CAM_DEG_TO_BINANG(RAD_TO_DEG(Math_FAtan2F(from->x - to->x, from->z - to->z)));
 }
 
 // BSS
@@ -964,8 +964,8 @@ s16 Camera_GetPitchAdjFromFloorHeightDiffs(Camera* camera, s16 viewYaw, s16 shou
     floorYDiffNear = (sFloorYNear - camera->focalActorFloorHeight) * 0.8f;
     floorYDiffFar = (sFloorYFar - camera->focalActorFloorHeight) * (20.0f * 0.01f);
 
-    pitchNear = CAM_DEG_TO_BINANG(RAD_TO_DEG(func_80086B30(floorYDiffNear, nearDist)));
-    pitchFar = CAM_DEG_TO_BINANG(RAD_TO_DEG(func_80086B30(floorYDiffFar, farDist)));
+    pitchNear = CAM_DEG_TO_BINANG(RAD_TO_DEG(Math_FAtan2F(floorYDiffNear, nearDist)));
+    pitchFar = CAM_DEG_TO_BINANG(RAD_TO_DEG(Math_FAtan2F(floorYDiffFar, farDist)));
 
     return pitchNear + pitchFar;
 }
@@ -1459,7 +1459,7 @@ s32 Camera_CalcAtForParallel(Camera* camera, VecGeo* arg1, f32 yOffset, f32 xzOf
 
         // Math_FTanF
         // Get the height based on 80% of the fov
-        fovHeight = func_80086760(DEG_TO_RAD(camera->fov * (0.8f * 0.5f))) * eyeAtDistXZ;
+        fovHeight = Math_FTanF(DEG_TO_RAD(camera->fov * (0.8f * 0.5f))) * eyeAtDistXZ;
 
         if (deltaY > fovHeight) {
             //! FAKE
@@ -1539,8 +1539,8 @@ s32 Camera_CalcAtForFriendlyLockOn(Camera* camera, VecGeo* eyeAtDir, Vec3f* targ
             deltaY = focalActorPosRot->pos.y - *yPosOffset;
             sp50 = OLib_Vec3fDistXZ(at, &camera->eye);
             phi_f16 = sp50;
-            func_80086B30(deltaY, sp50);
-            fovHeight = func_80086760(DEG_TO_RAD(camera->fov * 0.4f)) * phi_f16;
+            Math_FAtan2F(deltaY, sp50);
+            fovHeight = Math_FTanF(DEG_TO_RAD(camera->fov * 0.4f)) * phi_f16;
 
             if (fovHeight < deltaY) {
                 *yPosOffset += deltaY - fovHeight;
@@ -1552,7 +1552,7 @@ s32 Camera_CalcAtForFriendlyLockOn(Camera* camera, VecGeo* eyeAtDir, Vec3f* targ
             focalActorAtOffsetTarget.y -= deltaY;
         } else {
             deltaY = focalActorPosRot->pos.y - *yPosOffset;
-            temp_f0_6 = func_80086B30(deltaY, OLib_Vec3fDistXZ(at, &camera->eye));
+            temp_f0_6 = Math_FAtan2F(deltaY, OLib_Vec3fDistXZ(at, &camera->eye));
 
             if (temp_f0_6 > 0.34906584f) { // (M_PI / 9)
                 phi_f16 = 1.0f - Math_SinF(temp_f0_6 - 0.34906584f);
@@ -1625,10 +1625,10 @@ s32 Camera_CalcAtForEnemyLockOn(Camera* camera, f32* arg1, s32 arg2, f32 yOffset
         new_var2 = *arg1;
         sp4C = new_var2;
         deltaY = focalActorPosRot->pos.y - *arg6;
-        temp_f0_3 = func_80086B30(deltaY, sp4C);
+        temp_f0_3 = Math_FAtan2F(deltaY, sp4C);
 
         if (!(flags & 0x80)) {
-            fovHeight = func_80086760(DEG_TO_RAD(camera->fov * 0.4f)) * sp4C;
+            fovHeight = Math_FTanF(DEG_TO_RAD(camera->fov * 0.4f)) * sp4C;
 
             if (fovHeight < deltaY) {
                 *arg6 += deltaY - fovHeight;

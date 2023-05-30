@@ -1838,9 +1838,9 @@ void EnFishing_DrawLureAndLine(PlayState* play, Vec3f* linePos, Vec3f* lineRot) 
         dy = sLurePos.y - sRodTipPos.y;
         dz = sLurePos.z - sRodTipPos.z;
 
-        ry = func_80086B30(dx, dz);
+        ry = Math_FAtan2F(dx, dz);
         dist = sqrtf(SQ(dx) + SQ(dz));
-        rx = -func_80086B30(dy, dist);
+        rx = -Math_FAtan2F(dy, dist);
 
         dist = sqrtf(SQ(dx) + SQ(dy) + SQ(dz)) * 0.001f;
 
@@ -1865,9 +1865,9 @@ void EnFishing_DrawLureAndLine(PlayState* play, Vec3f* linePos, Vec3f* lineRot) 
                 dy = D_80917218.y - (linePos + i)->y;
                 dz = D_80917218.z - (linePos + i)->z;
 
-                ry = func_80086B30(dx, dz);
+                ry = Math_FAtan2F(dx, dz);
                 dist = sqrtf(SQ(dx) + SQ(dz));
-                rx = -func_80086B30(dy, dist);
+                rx = -Math_FAtan2F(dy, dist);
 
                 dist = sqrtf(SQ(dx) + SQ(dy) + SQ(dz)) * 0.001f;
 
