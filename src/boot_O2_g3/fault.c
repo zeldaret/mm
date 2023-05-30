@@ -42,6 +42,7 @@
 
 #include "fault_internal.h"
 #include "fault.h"
+#include "prevent_bss_reordering.h"
 #include "global.h"
 #include "vt.h"
 #include "stackcheck.h"
