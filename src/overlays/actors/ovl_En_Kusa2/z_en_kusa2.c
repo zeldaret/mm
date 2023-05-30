@@ -4,7 +4,6 @@
  * Description: Keaton grass
  */
 
-#include "prevent_bss_reordering.h"
 #include "z_en_kusa2.h"
 #include "objects/gameplay_field_keep/gameplay_field_keep.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
@@ -1323,7 +1322,7 @@ void func_80A5E6F0(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     for (i = 0; i < ARRAY_COUNT(D_80A5F1C0.unk_0480); i++) {
         EnKusa2UnkBssSubStruct2* s = &D_80A5F1C0.unk_0480[i];
@@ -1343,7 +1342,7 @@ void func_80A5E6F0(Actor* thisx, PlayState* play) {
 void func_80A5E80C(PlayState* play, s32 arg1) {
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, arg1);

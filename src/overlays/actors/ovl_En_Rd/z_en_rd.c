@@ -1338,7 +1338,7 @@ void EnRd_Draw(Actor* thisx, PlayState* play) {
     this->limbIndex = 0;
 
     if (this->alpha == 255) {
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
         gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, this->alpha);
         gSPSegment(POLY_OPA_DISP++, 0x08, D_801AEFA0);
@@ -1349,7 +1349,7 @@ void EnRd_Draw(Actor* thisx, PlayState* play) {
 
         func_800BC620(&pos, &sScale, 255, play);
     } else {
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
         gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0, this->alpha);
         gSPSegment(POLY_XLU_DISP++, 0x08, D_801AEF88);

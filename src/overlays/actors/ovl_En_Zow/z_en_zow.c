@@ -182,7 +182,7 @@ void func_80BDC830(EnZowStruct* ptr, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
     u8 flag = false;
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     for (i = 0; i < 15; i++, ptr++) {
         if (ptr->unk_00 == 1) {
@@ -213,7 +213,7 @@ void func_80BDC9DC(EnZowStruct* ptr, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
     u8 flag = false;
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     for (i = 0; i < 15; i++, ptr++) {
         if (ptr->unk_00 == 3) {
@@ -244,7 +244,7 @@ void func_80BDCB84(EnZowStruct* ptr, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
     u8 flag = false;
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     for (i = 0; i < 15; i++, ptr++) {
         if (ptr->unk_00 == 2) {
@@ -629,7 +629,7 @@ void EnZow_Draw(Actor* thisx, PlayState* play) {
         OPEN_DISPS(play->state.gfxCtx);
 
         if (this->unk_2CE >= 255) {
-            func_8012C28C(play->state.gfxCtx);
+            Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
             gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 255);
             gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sp54[this->unk_2C4]));

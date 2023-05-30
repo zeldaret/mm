@@ -156,7 +156,7 @@ void func_80A50510(EnDnb* this, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     for (i = 0; i < ARRAY_COUNT(this->effects); i++) {
         Matrix_Push();
@@ -180,7 +180,7 @@ void func_80A5063C(EnDnb* this, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     for (i = 0; i < ARRAY_COUNT(this->effects); i++) {
         Matrix_Push();
@@ -263,12 +263,12 @@ s32 func_80A50950(EnDnbUnkStruct* arg0, PlayState* play2) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     for (i = 0; i < 256; i++, arg0++) {
         if (arg0->isEnabled == 1) {
             if (!isGfxSetup) {
-                POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 0);
+                POLY_XLU_DISP = Gfx_SetupDL(POLY_XLU_DISP, SETUPDL_0);
                 gSPDisplayList(POLY_XLU_DISP++, object_hanareyama_obj_DL_000000);
                 gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 255, 0);
                 isGfxSetup = true;

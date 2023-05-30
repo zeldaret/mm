@@ -491,11 +491,11 @@ s32 func_80B37B78(EnMaruta* this, PlayState* play) {
     s16 temp_v1 = BINANG_SUB(this->actor.yawTowardsPlayer, 0x8000);
 
     temp_v1 = BINANG_SUB(temp_v1, player->actor.shape.rot.y);
-    if ((ABS_ALT(temp_v1) < 0x1555) ||
-        ((player->meleeWeaponState != 0) && ((player->meleeWeaponAnimation == PLAYER_MWA_RIGHT_SLASH_1H) ||
-                                             (player->meleeWeaponAnimation == PLAYER_MWA_RIGHT_COMBO_1H) ||
-                                             (player->meleeWeaponAnimation == PLAYER_MWA_SPIN_ATTACK_1H) ||
-                                             (player->meleeWeaponAnimation == PLAYER_MWA_BIG_SPIN_1H)))) {
+    if ((ABS_ALT(temp_v1) < 0x1555) || ((player->meleeWeaponState != PLAYER_MELEE_WEAPON_STATE_0) &&
+                                        ((player->meleeWeaponAnimation == PLAYER_MWA_RIGHT_SLASH_1H) ||
+                                         (player->meleeWeaponAnimation == PLAYER_MWA_RIGHT_COMBO_1H) ||
+                                         (player->meleeWeaponAnimation == PLAYER_MWA_SPIN_ATTACK_1H) ||
+                                         (player->meleeWeaponAnimation == PLAYER_MWA_BIG_SPIN_1H)))) {
         return true;
     }
     return false;
@@ -700,7 +700,7 @@ void EnMaruta_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     if (this->unk_210 == 0) {
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

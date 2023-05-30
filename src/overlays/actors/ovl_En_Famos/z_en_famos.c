@@ -489,7 +489,7 @@ void EnFamos_SetupChase(EnFamos* this) {
 void EnFamos_Chase(EnFamos* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     Vec3f abovePlayerPos;
-    u32 surfaceType;
+    FloorProperty surfaceType;
 
     EnFamos_UpdateBobbingHeight(this);
     Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0x800);
@@ -502,7 +502,7 @@ void EnFamos_Chase(EnFamos* this, PlayState* play) {
 
     surfaceType = SurfaceType_GetFloorProperty2(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
     if ((this->actor.xzDistToPlayer < 30.0f) && (this->actor.floorHeight > BGCHECK_Y_MIN) && // close enough
-        (surfaceType != 0xC && surfaceType != 0xD)) {
+        (surfaceType != FLOOR_PROPERTY_12 && surfaceType != FLOOR_PROPERTY_13)) {
         EnFamos_SetupAttackAim(this);
 
     } else if ((Player_GetMask(play) == PLAYER_MASK_STONE) ||
@@ -689,9 +689,9 @@ void EnFamos_DeathExplosion(EnFamos* this, PlayState* play) {
     this->actor.world.pos.x = randPlusMinusPoint5Scaled(5.0f) + this->targetDest.x;
     this->actor.world.pos.z = randPlusMinusPoint5Scaled(5.0f) + this->targetDest.z;
     if (this->stateTimer == 1) {
-        EnBom* explosion =
-            (EnBom*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOM, this->actor.world.pos.x,
-                                this->actor.world.pos.y + 40.0f, this->actor.world.pos.z, 0, 0, 0, BOMB_TYPE_BODY);
+        EnBom* explosion = (EnBom*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOM, this->actor.world.pos.x,
+                                               this->actor.world.pos.y + 40.0f, this->actor.world.pos.z,
+                                               BOMB_EXPLOSIVE_TYPE_BOMB, 0, 0, BOMB_TYPE_BODY);
         if (explosion != NULL) {
             explosion->timer = 0; // instant explosion
         }
@@ -829,9 +829,10 @@ void EnFamos_DrawDebris(EnFamos* this, PlayState* play) {
         EnFamosRock* rock;
 
         OPEN_DISPS(play->state.gfxCtx);
+
         dispOpa = POLY_OPA_DISP;
 
-        gSPDisplayList(&dispOpa[0], &sSetupDL[6 * 0x19]);
+        gSPDisplayList(&dispOpa[0], gSetupDLs[SETUPDL_25]);
 
         gDPSetPrimColor(&dispOpa[1], 0, 0x80, 255, 255, 255, 255);
 
@@ -858,7 +859,7 @@ void EnFamos_DrawDebris(EnFamos* this, PlayState* play) {
 void EnFamos_Draw(Actor* thisx, PlayState* play) {
     EnFamos* this = THIS;
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     if (this->actionFunc != EnFamos_DeathFade) {
         AnimatedMat_Draw(play, sEmblemAnimatedMats[this->animatedMaterialIndex]);
         SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, EnFamos_OverrideLimbDraw,

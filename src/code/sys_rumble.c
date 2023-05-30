@@ -24,12 +24,12 @@ void RumbleManager_Update(RumbleManager* rumbleMgr) {
 
         if (D_801D1E70) {
             for (i = 0; i < MAXCONTROLLERS; i++) {
-                func_8017544C(i, false);
+                PadMgr_RumbleSetSingle(i, false);
             }
         }
 
         D_801D1E70 = rumbleMgr->updateEnabled;
-        func_80175434();
+        PadMgr_RumblePause();
 
         return;
     }
@@ -39,7 +39,7 @@ void RumbleManager_Update(RumbleManager* rumbleMgr) {
     // Start up the manager by wiping old requests
     if (rumbleMgr->state == RUMBLEMANAGER_STATE_INITIAL) {
         for (i = 0; i < MAXCONTROLLERS; i++) {
-            func_8017544C(i, false);
+            PadMgr_RumbleSetSingle(i, false);
         }
 
         for (i = 0; i < RUMBLE_REQUEST_BUFFER_SIZE; i++) {
@@ -59,7 +59,7 @@ void RumbleManager_Update(RumbleManager* rumbleMgr) {
 
         rumbleMgr->state = RUMBLEMANAGER_STATE_RUNNING;
 
-        func_80175434();
+        PadMgr_RumblePause();
     }
 
     if (rumbleMgr->state != RUMBLEMANAGER_STATE_WIPE) {
@@ -146,7 +146,7 @@ void RumbleManager_Update(RumbleManager* rumbleMgr) {
         rumbleMgr->overrideDecayStep = 0;
         rumbleMgr->overrideAccumulator = 0;
 
-        func_80175434();
+        PadMgr_RumblePause();
     }
 }
 

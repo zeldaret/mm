@@ -8,6 +8,7 @@
 #include "buffers.h"
 #include "stack.h"
 #include "stackcheck.h"
+#include "system_heap.h"
 
 extern OSMesgQueue sSiIntMsgQ;
 extern OSMesg sSiIntMsgBuf[1];
@@ -26,7 +27,6 @@ extern StackEntry sSchedStackInfo;
 extern StackEntry sAudioStackInfo;
 extern StackEntry sPadMgrStackInfo;
 extern AudioMgr sAudioMgr;
-extern PadMgr gPadMgr;
 
 void Main(void* arg) {
     intptr_t fb;
@@ -45,7 +45,7 @@ void Main(void* arg) {
     sysHeap = gSystemHeap;
     fb = 0x80780000;
     startHeapSize = fb - sysHeap;
-    SystemArena_Init(sysHeap, startHeapSize);
+    SystemHeap_Init(sysHeap, startHeapSize);
 
     Regs_Init();
 
