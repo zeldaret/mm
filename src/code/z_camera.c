@@ -1457,7 +1457,6 @@ s32 Camera_CalcAtForParallel(Camera* camera, VecGeo* arg1, f32 yOffset, f32 xzOf
         deltaY = focalActorPosRot->pos.y - *focalActorPosY;
         eyeAtDistXZ = OLib_Vec3fDistXZ(at, &camera->eye);
 
-        // Math_FTanF
         // Get the height based on 80% of the fov
         fovHeight = Math_FTanF(DEG_TO_RAD(camera->fov * (0.8f * 0.5f))) * eyeAtDistXZ;
 
