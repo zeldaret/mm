@@ -2,7 +2,14 @@
 #include "system_malloc.h"
 #include "z64debug_text.h"
 #include "z64rumble.h"
+#include "z64vimode.h"
 #include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
+
+extern UNK_TYPE1 D_801F7FF0;
+extern struct_801F8010 D_801F8010;
+extern VisZbuf sVisZbuf;
+extern VisMono sMonoColors;
+extern ViMode D_801F8048;
 
 s32 gFramerateDivisor = 1;
 f32 gFramerateDivisorF = 1.0f;

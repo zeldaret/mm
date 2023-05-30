@@ -2389,11 +2389,6 @@ extern BombersNotebook sBombersNotebook;
 extern u8 sBombersNotebookOpen;
 extern u8 sMotionBlurStatus;
 
-extern UNK_TYPE1 D_801F7FF0;
-extern struct_801F8010 D_801F8010;
-extern VisZbuf sVisZbuf;
-extern VisMono sMonoColors;
-extern ViMode D_801F8048;
 extern FaultAddrConvClient sGraphFaultAddrConvClient;
 extern FaultClient sGraphFaultClient;
 extern GfxMasterList* gGfxMasterDL;

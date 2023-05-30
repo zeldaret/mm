@@ -1,4 +1,5 @@
 #include "global.h"
+#include "z64vimode.h"
 #include "ultra64/viint.h"
 
 typedef struct {
