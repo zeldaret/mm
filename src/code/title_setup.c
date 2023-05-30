@@ -48,7 +48,7 @@ void Setup_SetRegs(void) {
 }
 
 void Setup_InitImpl(SetupState* this) {
-    func_80185908();
+    SysFlashrom_InitFlash();
     SaveContext_Init();
     Setup_SetRegs();
 
