@@ -56,7 +56,7 @@ void TransitionWipe3_Start(void* thisx) {
     TransitionWipe3* this = THIS;
 
     this->isDone = false;
-    this->curTexture = sTransWipe3Textures[this->texIndex & 7];
+    this->curTexture = sTransWipe3Textures[this->texIndex % ARRAY_COUNTU(sTransWipe3Textures)];
     if (this->speedType == TRANS_WIPE3_SPEED_SLOW) {
         this->wipeSpeed = 20;
     } else {
