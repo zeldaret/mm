@@ -2067,13 +2067,7 @@ void CmpDma_LoadAllFiles(uintptr_t segmentVrom, void* dst, size_t size);
 // void Check_DrawRegionLockErrorMessage(void);
 void Check_ExpansionPak(void);
 void Check_RegionIsSupported(void);
-f32 Math_FactorialF(f32 n);
-f32 Math_Factorial(s32 n);
-f32 Math_PowF(f32 base, s32 exp);
-f32 Math_SinF(f32 rad);
-f32 Math_CosF(f32 rad);
-f32 Rand_ZeroFloat(f32 scale);
-f32 Rand_CenteredFloat(f32 scale);
+
 f32 Math3D_Normalize(Vec3f* vec);
 s32 Math3D_PlaneVsLineSegClosestPoint(f32 planeAA, f32 planeAB, f32 planeAC, f32 planeADist, f32 planeBA, f32 planeBB, f32 planeBC, f32 planeBDist, Vec3f* linePointA, Vec3f* linePointB, Vec3f* closestPoint);
 s32 func_80179798(Vec3f* param_1, Vec3f* param_2, Vec3f* param_3, Vec3f* param_4, Vec3f* param_5, Vec3f* param_6);

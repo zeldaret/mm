@@ -168,4 +168,12 @@ typedef enum {
 #define SQXYZ(vec) ((vec.x) * (vec.x) + (vec.y) * (vec.y) + (vec.z) * (vec.z))
 #define DOTXYZ(vec1, vec2) ((vec1.x) * (vec2.x) + (vec1.y) * (vec2.y) + (vec1.z) * (vec2.z))
 
+f32 Math_FactorialF(f32 n);
+f32 Math_Factorial(s32 n);
+f32 Math_PowF(f32 base, s32 exp);
+f32 Math_SinF(f32 rad);
+f32 Math_CosF(f32 rad);
+f32 Rand_ZeroFloat(f32 scale);
+f32 Rand_CenteredFloat(f32 scale);
+
 #endif
