@@ -5,7 +5,6 @@
  */
 
 #include "z_demo_moonend.h"
-#include "objects/object_moonend/object_moonend.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -70,10 +69,8 @@ void DemoMoonend_Idle(DemoMoonend* this, PlayState* play) {
 }
 
 void func_80C17B60(DemoMoonend* this, PlayState* play) {
-    u16 cueId;
-
     if (Cutscene_IsCueInChannel(play, this->cueType)) {
-        cueId = play->csCtx.actorCues[Cutscene_GetCueChannel(play, this->cueType)]->id;
+        u16 cueId = play->csCtx.actorCues[Cutscene_GetCueChannel(play, this->cueType)]->id;
         Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetCueChannel(play, this->cueType));
         if (this->cueId != cueId) {
             this->cueId = cueId;
@@ -201,8 +198,8 @@ void DemoMoonend_Draw(Actor* thisx, PlayState* play) {
     mtx = GRAPH_ALLOC(play->state.gfxCtx, this->skeletonInfo.unk_18->unk_1 * sizeof(Mtx));
 
     if (mtx != NULL) {
-        func_8012C2DC(play->state.gfxCtx);
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
         func_8018450C(play, &this->skeletonInfo, mtx, func_80C17E70, func_80C17EE0, &this->actor);
     }
 }
@@ -210,7 +207,7 @@ void DemoMoonend_Draw(Actor* thisx, PlayState* play) {
 void func_80C17FCC(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     AnimatedMat_DrawXlu(play, Lib_SegmentedToVirtual(object_moonend_Matanimheader_0129F0));
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_XLU_DISP++, object_moonend_DL_010C40);
