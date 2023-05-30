@@ -478,7 +478,7 @@ void EnNiw_Thrown(EnNiw* this, PlayState* play) {
             return;
         }
         this->unk2EC = 1;
-        this->hoppingTimer = 80; // hop timer
+        this->hoppingTimer = 80;
         this->actor.speed = 0.0f;
         this->actor.velocity.y = 4.0f;
     } else {
