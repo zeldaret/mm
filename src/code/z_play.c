@@ -19,6 +19,7 @@ u8 sMotionBlurStatus;
 #include "variables.h"
 #include "macros.h"
 #include "buffers.h"
+#include "sys_cfb.h"
 #include "z64debug_display.h"
 #include "z64quake.h"
 #include "z64rumble.h"

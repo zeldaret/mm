@@ -2027,14 +2027,6 @@ void Mtx_SetTranslateScaleMtx(Mtx* mtx, f32 scaleX, f32 scaleY, f32 scaleZ, f32 
 void Mtx_SetRotationMtx(Mtx* mtx, s32 angle, f32 axisX, f32 axisY, f32 axisZ);
 void Mtx_SetTranslationRotationScaleMtx(Mtx* mtx, f32 scaleX, f32 scaleY, f32 scaleZ, s32 angle, f32 axisX, f32 axisY, f32 axisZ,f32 translateX, f32 translateY, f32 translateZ);
 
-void SysCfb_SetLoResMode(void);
-void SysCfb_SetHiResMode(void);
-void SysCfb_Init(void);
-void* SysCfb_GetFramebuffer(s32 index);
-void* SysCfb_GetZBuffer(void);
-void* SysCfb_GetWorkBuffer(void);
-u16 SysCfb_GetZBufferPixel(s32 x, s32 y);
-s32 SysCfb_GetZBufferInt(s32 x, s32 y);
 void CmpDma_LoadFile(uintptr_t segmentVrom, s32 id, void* dst, size_t size);
 void CmpDma_LoadAllFiles(uintptr_t segmentVrom, void* dst, size_t size);
 // void Check_WriteRGBA16Pixel(u16* buffer, u32 x, u32 y, u32 value);

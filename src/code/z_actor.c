@@ -4,6 +4,7 @@
  */
 
 #include "global.h"
+#include "sys_cfb.h"
 #include "z64load.h"
 #include "z64quake.h"
 #include "z64rumble.h"

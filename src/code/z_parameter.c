@@ -1,4 +1,5 @@
 #include "global.h"
+#include "sys_cfb.h"
 #include "z64snap.h"
 #include "z64view.h"
 #include "interface/parameter_static/parameter_static.h"

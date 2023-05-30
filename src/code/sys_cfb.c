@@ -1,5 +1,7 @@
 #include "prevent_bss_reordering.h"
 #include "global.h"
+#include "sys_cfb.h"
+#include "libc/stdbool.h"
 #include "buffers.h"
 #include "system_malloc.h"
 #include "z64vimode.h"

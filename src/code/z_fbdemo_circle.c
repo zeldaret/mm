@@ -1,4 +1,5 @@
 #include "global.h"
+#include "sys_cfb.h"
 
 typedef enum {
     /* 0 */ TRANS_CIRCLE_DIR_IN,
