@@ -79,7 +79,6 @@ f32 Rand_ZeroFloat(f32 scale) {
     return Rand_ZeroOne() * scale;
 }
 
-// Rename to Rand_CenteredFloat
 /**
  * Returns a pseudo-random floating-point number between (- scale / 2) and (scale / 2). Originally in z_actor in OoT.
  */
