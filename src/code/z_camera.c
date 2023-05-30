@@ -1555,9 +1555,9 @@ s32 Camera_CalcAtForFriendlyLockOn(Camera* camera, VecGeo* eyeAtDir, Vec3f* targ
             temp_f0_6 = func_80086B30(deltaY, OLib_Vec3fDistXZ(at, &camera->eye));
 
             if (temp_f0_6 > 0.34906584f) { // (M_PI / 9)
-                phi_f16 = 1.0f - sin_rad(temp_f0_6 - 0.34906584f);
+                phi_f16 = 1.0f - Math_SinF(temp_f0_6 - 0.34906584f);
             } else if (temp_f0_6 < -0.17453292f) { // (M_PI / 18)
-                phi_f16 = 1.0f - sin_rad(-0.17453292f - temp_f0_6);
+                phi_f16 = 1.0f - Math_SinF(-0.17453292f - temp_f0_6);
             } else {
                 phi_f16 = 1.0f;
             }
@@ -1641,9 +1641,9 @@ s32 Camera_CalcAtForEnemyLockOn(Camera* camera, f32* arg1, s32 arg2, f32 yOffset
             focalActorAtOffsetTarget.y -= deltaY;
         } else {
             if (temp_f0_3 > 0.34906584f) { // (M_PI / 9)
-                phi_f14 = 1.0f - sin_rad(temp_f0_3 - 0.34906584f);
+                phi_f14 = 1.0f - Math_SinF(temp_f0_3 - 0.34906584f);
             } else if (temp_f0_3 < -0.17453292f) { // (M_PI / 18)
-                phi_f14 = 1.0f - sin_rad(-0.17453292f - temp_f0_3);
+                phi_f14 = 1.0f - Math_SinF(-0.17453292f - temp_f0_3);
             } else {
                 phi_f14 = 1.0f;
             }
@@ -6344,7 +6344,7 @@ s32 Camera_Demo4(Camera* camera) {
             // Camera rolls left and right
             if (rwData->timer >= 12) {
                 rwData->unk_0C = (rwData->timer - 12) * 10.384615f;
-                sin = sin_rad(DEG_TO_RAD(rwData->unk_0C));
+                sin = Math_SinF(DEG_TO_RAD(rwData->unk_0C));
                 rwData->unk_0C = ((rwData->unk_10 < 0.0f) ? -1.0f : 1.0f) * sin;
                 if (rwData->timer == 12) {
                     Distortion_Request(DISTORTION_TYPE_MASK_TRANSFORM_1);
@@ -6516,7 +6516,7 @@ s32 Camera_Demo5(Camera* camera) {
             // Camera zooms out while rolling back and forth
             rwData->unk_0C = rwData->timer * (180.0f / 23.0f);
             sp58 = DEG_TO_RAD(rwData->unk_0C);
-            sin = sin_rad(sp58);
+            sin = Math_SinF(sp58);
             rwData->unk_0C = ((rwData->unk_10 < 0.0f) ? -1.0f : 1.0f) * sin;
             new_var = (46 - rwData->timer) * (5.0f / 46.0f);
             focalActorFocus.pos.x = (Math_SinS(rwData->unk_24) * new_var * rwData->unk_0C) + focalActorPosRot->pos.x;

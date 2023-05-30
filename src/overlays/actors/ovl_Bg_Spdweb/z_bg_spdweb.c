@@ -240,7 +240,7 @@ void func_809CE234(BgSpdweb* this, PlayState* play) {
         spA8.y = this->dyna.actor.world.pos.y;
 
         for (i = 0; i < 6; i++) {
-            temp_s0 = (s32)randPlusMinusPoint5Scaled(10240.0f) + phi_s2;
+            temp_s0 = (s32)Rand_CenteredFloat(10240.0f) + phi_s2;
             temp_f24 = Math_SinS(temp_s0);
             temp_f22 = Math_CosS(temp_s0);
 
@@ -323,7 +323,8 @@ void func_809CE4C8(BgSpdweb* this, PlayState* play) {
         this->unk_162--;
     }
 
-    this->dyna.actor.world.pos.y = (sin_rad(this->unk_162 * (M_PI / 6)) * this->unk_164) + this->dyna.actor.home.pos.y;
+    this->dyna.actor.world.pos.y =
+        (Math_SinF(this->unk_162 * (M_PI / 6)) * this->unk_164) + this->dyna.actor.home.pos.y;
     Math_ApproachZeroF(&this->unk_164, 1.0f, 0.8f);
 
     if (this->unk_162 == 4) {
@@ -388,7 +389,7 @@ void func_809CE830(BgSpdweb* this, PlayState* play) {
         spC4.z = this->dyna.actor.world.pos.z + 90.0f * sinQ * cosF1;
 
         for (i = 0; i < 6; i++) {
-            temp_s0 = (s32)randPlusMinusPoint5Scaled(0x2800) + temp_s3;
+            temp_s0 = (s32)Rand_CenteredFloat(0x2800) + temp_s3;
             sinF2 = Math_SinS(temp_s0);
             cosF2 = Math_CosS(temp_s0);
 

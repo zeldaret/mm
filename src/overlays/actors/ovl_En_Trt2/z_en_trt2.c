@@ -499,9 +499,9 @@ void func_80AD434C(EnTrt2* this, PlayState* play) {
             Vec3f sp5C = { 0.0f, 0.5f, 0.0f };
 
             for (i = (s32)this->skelAnime.animLength - (s32)this->skelAnime.curFrame; i >= 0; i -= 2) {
-                sp68.x = randPlusMinusPoint5Scaled(60.0f) + this->actor.world.pos.x;
-                sp68.z = randPlusMinusPoint5Scaled(60.0f) + this->actor.world.pos.z;
-                sp68.y = randPlusMinusPoint5Scaled(50.0f) + (this->actor.world.pos.y + 20.0f);
+                sp68.x = Rand_CenteredFloat(60.0f) + this->actor.world.pos.x;
+                sp68.z = Rand_CenteredFloat(60.0f) + this->actor.world.pos.z;
+                sp68.y = Rand_CenteredFloat(50.0f) + (this->actor.world.pos.y + 20.0f);
                 func_800B3030(play, &sp68, &sp5C, &sp5C, 100, 0, 3);
             }
 
@@ -639,9 +639,9 @@ f32 func_80AD49B8(Path* path, s32 arg1, Vec3f* arg2, Vec3s* arg3) {
 void func_80AD4A78(EnTrt2* this, PlayState* play) {
     Vec3f sp34;
 
-    sp34.x = randPlusMinusPoint5Scaled(15.0f) + this->actor.world.pos.x;
+    sp34.x = Rand_CenteredFloat(15.0f) + this->actor.world.pos.x;
     sp34.y = this->actor.world.pos.y;
-    sp34.z = randPlusMinusPoint5Scaled(15.0f) + this->actor.world.pos.z;
+    sp34.z = Rand_CenteredFloat(15.0f) + this->actor.world.pos.z;
     Actor_SpawnFloorDustRing(play, &this->actor, &sp34, 50.0f, 0, 2.0f, 0, 0, 0);
 }
 

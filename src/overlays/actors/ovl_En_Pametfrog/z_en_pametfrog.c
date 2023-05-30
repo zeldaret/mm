@@ -523,7 +523,7 @@ void EnPametfrog_FallOffSnapper(EnPametfrog* this, PlayState* play) {
         this->timer--;
     }
 
-    sin = sin_rad(this->timer * (M_PI / 3)) * ((0.02f * (this->timer * (1.0f / 6.0f))) + 0.005f) + 1.0f;
+    sin = Math_SinF(this->timer * (M_PI / 3)) * ((0.02f * (this->timer * (1.0f / 6.0f))) + 0.005f) + 1.0f;
     EnPametfrog_ShakeCamera(this, play, 300.0f * sin, 100.0f * sin);
     if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         EnPametfrog_StopCutscene(this, play);
@@ -966,9 +966,9 @@ void EnPametfrog_SetupSpawnFrog(EnPametfrog* this, PlayState* play) {
     Flags_SetClearTemp(play, play->roomCtx.curRoom.num);
 
     for (i = 0; i < 25; i++) {
-        vel.x = randPlusMinusPoint5Scaled(5.0f);
+        vel.x = Rand_CenteredFloat(5.0f);
         vel.y = Rand_ZeroFloat(3.0f) + 4.0f;
-        vel.z = randPlusMinusPoint5Scaled(5.0f);
+        vel.z = Rand_CenteredFloat(5.0f);
         EffectSsHahen_Spawn(play, &this->actor.world.pos, &vel, &sAccel, 0, Rand_S16Offset(12, 3), HAHEN_OBJECT_DEFAULT,
                             10, 0);
     }
@@ -981,7 +981,7 @@ void EnPametfrog_SpawnFrog(EnPametfrog* this, PlayState* play) {
     f32 magShake;
 
     this->timer--;
-    magShake = (sin_rad(this->timer * (M_PI / 5)) * ((0.04f * (this->timer * 0.1f)) + 0.02f)) + 1.0f;
+    magShake = (Math_SinF(this->timer * (M_PI / 5)) * ((0.04f * (this->timer * 0.1f)) + 0.02f)) + 1.0f;
     EnPametfrog_ShakeCamera(this, play, 75.0f * magShake, 10.0f * magShake);
     if (this->timer == 0) {
         EnPametfrog_StopCutscene(this, play);

@@ -107,9 +107,9 @@ void func_80B22E0C(EnHanabiStruct* arg0) {
             arg0->unk_20.y *= arg0->unk_14.x;
             arg0->unk_20.y -= 1.0f;
 
-            arg0->unk_20.x += randPlusMinusPoint5Scaled(0.8f);
-            arg0->unk_20.y += randPlusMinusPoint5Scaled(0.8f);
-            arg0->unk_20.z += randPlusMinusPoint5Scaled(0.8f);
+            arg0->unk_20.x += Rand_CenteredFloat(0.8f);
+            arg0->unk_20.y += Rand_CenteredFloat(0.8f);
+            arg0->unk_20.z += Rand_CenteredFloat(0.8f);
 
             if (arg0->unk_01 > 0) {
                 arg0->unk_01--;
@@ -286,7 +286,7 @@ void func_80B236C8(EnHanabi* this, PlayState* play) {
         }
 
         sp34.x += sp30 * Math_SinS(this->actor.home.rot.y);
-        sp34.y += randPlusMinusPoint5Scaled(300.0f);
+        sp34.y += Rand_CenteredFloat(300.0f);
         sp34.z += sp30 * Math_CosS(this->actor.home.rot.y);
 
         if (this->actor.home.rot.x >= 0x259) {

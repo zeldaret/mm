@@ -171,8 +171,8 @@ void func_809C42A8(EnEncount4* this, PlayState* play) {
     if (this->unk_14C != 0) {
         yRot += 0x8000;
     }
-    pos.x += Math_SinS(yRot) * (40.0f + randPlusMinusPoint5Scaled(40.0f));
-    pos.z += Math_CosS(yRot) * (40.0f + randPlusMinusPoint5Scaled(40.0f));
+    pos.x += Math_SinS(yRot) * (40.0f + Rand_CenteredFloat(40.0f));
+    pos.z += Math_CosS(yRot) * (40.0f + Rand_CenteredFloat(40.0f));
     if (Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_SKB, pos.x, pos.y, pos.z, 0, 0, 0,
                            ENSKB_PARAMS_0) != NULL) {
         this->unk_14C++;

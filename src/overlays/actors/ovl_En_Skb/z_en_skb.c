@@ -165,10 +165,10 @@ void func_809947B0(PlayState* play, EnSkb* this, Vec3f* inPos) {
     s32 pad;
 
     pos.y = this->actor.floorHeight;
-    pos.x = (sin_rad(sp40) * 15.0f) + inPos->x;
-    pos.z = (cos_rad(sp40) * 15.0f) + inPos->z;
-    accel.x = randPlusMinusPoint5Scaled(1.0f);
-    accel.z = randPlusMinusPoint5Scaled(1.0f);
+    pos.x = (Math_SinF(sp40) * 15.0f) + inPos->x;
+    pos.z = (Math_CosF(sp40) * 15.0f) + inPos->z;
+    accel.x = Rand_CenteredFloat(1.0f);
+    accel.z = Rand_CenteredFloat(1.0f);
     velocity.y += (Rand_ZeroOne() - 0.5f) * 4.0f;
     EffectSsHahen_Spawn(play, &pos, &velocity, &accel, 0, ((Rand_ZeroOne() * 5.0f) + 12.0f) * 0.8f,
                         HAHEN_OBJECT_DEFAULT, 10, NULL);
@@ -579,7 +579,7 @@ void func_80995A8C(EnSkb* this, PlayState* play) {
     }
 
     if ((this->unk_3D8 != 0) && ((play->gameplayFrames % 16) == 0)) {
-        this->unk_3DA = randPlusMinusPoint5Scaled(50000.0f);
+        this->unk_3DA = Rand_CenteredFloat(50000.0f);
     }
 
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer + this->unk_3DA, 1, 0x2EE, 0);

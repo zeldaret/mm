@@ -814,9 +814,9 @@ s32 func_809995A4(EnGs* this, PlayState* play) {
         Vec3f sp60;
 
         for (i = 0; i < 3; i++) {
-            sp60.x = randPlusMinusPoint5Scaled(15.0f);
+            sp60.x = Rand_CenteredFloat(15.0f);
             sp60.y = Rand_ZeroFloat(-1.0f);
-            sp60.z = randPlusMinusPoint5Scaled(15.0f);
+            sp60.z = Rand_CenteredFloat(15.0f);
 
             sp6C.x = this->actor.world.pos.x + (2.0f * sp60.x);
             sp6C.y = this->actor.world.pos.y + 7.0f;

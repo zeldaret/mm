@@ -494,8 +494,8 @@ void EnClearTag_Init(Actor* thisx, PlayState* play) {
                         vel.z = cosf(i * (33.0f / 40.0f)) * i * .5f;
                         vel.y = Rand_ZeroFloat(8.0f) + 7.0f;
 
-                        vel.x += randPlusMinusPoint5Scaled(0.5f);
-                        vel.z += randPlusMinusPoint5Scaled(0.5f);
+                        vel.x += Rand_CenteredFloat(0.5f);
+                        vel.z += Rand_CenteredFloat(0.5f);
 
                         accel.x = 0.0f;
                         accel.y = -1.0f;

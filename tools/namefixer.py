@@ -96,6 +96,10 @@ wordReplace = {
     "Matrix_InsertRotationAroundUnitVector_f": "Matrix_RotateAxisF",
     "Matrix_InsertRotationAroundUnitVector_s": "Matrix_RotateAxisS",
 
+    "sin_rad": "Math_SinF",
+    "cos_rad": "Math_CosF",
+    "randPlusMinusPoint5Scaled": "Rand_CenteredFloat",
+
     "func_800B78B8": "Actor_UpdateBgCheckInfo",
     "func_80123D50": "Player_UpdateBottleHeld",
     "func_8012403C": "Player_GetMask",

@@ -503,9 +503,9 @@ void func_80BAB374(EnSuttari* this, PlayState* play) {
     Vec3f sp38;
 
     if ((curFrame % 3) == 0) {
-        sp38.x = randPlusMinusPoint5Scaled(15.0f) + this->actor.world.pos.x;
+        sp38.x = Rand_CenteredFloat(15.0f) + this->actor.world.pos.x;
         sp38.y = this->actor.world.pos.y;
-        sp38.z = randPlusMinusPoint5Scaled(15.0f) + this->actor.world.pos.z;
+        sp38.z = Rand_CenteredFloat(15.0f) + this->actor.world.pos.z;
         Actor_SpawnFloorDustRing(play, &this->actor, &sp38, 10.0f, 0, 2.0f, 0, 0, 0);
     }
 }
