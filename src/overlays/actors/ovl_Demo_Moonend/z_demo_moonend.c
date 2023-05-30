@@ -15,7 +15,7 @@ void DemoMoonend_Destroy(Actor* thisx, PlayState* play);
 void DemoMoonend_Update(Actor* thisx, PlayState* play);
 void DemoMoonend_Draw(Actor* thisx, PlayState* play);
 
-void DemoMoonend_Idle(DemoMoonend* this, PlayState* play);
+void DemoMoonend_DoNothing(DemoMoonend* this, PlayState* play);
 void func_80C17B60(DemoMoonend* this, PlayState* play);
 void func_80C17C48(DemoMoonend* this, PlayState* play);
 void func_80C17FCC(Actor* thisx, PlayState* play);
@@ -36,7 +36,7 @@ void DemoMoonend_Init(Actor* thisx, PlayState* play) {
     DemoMoonend* this = THIS;
 
     Actor_SetScale(&this->actor, 0.1f);
-    this->actionFunc = DemoMoonend_Idle;
+    this->actionFunc = DemoMoonend_DoNothing;
 
     if (DEMOMOONEND_GET_PARAMS_F(thisx) == 1) {
         Actor_SetScale(&this->actor, 0.05f);
@@ -65,7 +65,7 @@ void DemoMoonend_Destroy(Actor* thisx, PlayState* play) {
     }
 }
 
-void DemoMoonend_Idle(DemoMoonend* this, PlayState* play) {
+void DemoMoonend_DoNothing(DemoMoonend* this, PlayState* play) {
 }
 
 void func_80C17B60(DemoMoonend* this, PlayState* play) {
