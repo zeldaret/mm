@@ -77,7 +77,7 @@ void TransitionWipe3_Start(void* thisx) {
             func_8019F128(NA_SE_OC_SECRET_WARP_OUT);
         }
     }
-    guPerspective(&this->projection, &this->normal, 60.0f, 1.3333334f, 10.0f, 12800.0f, 1.0f);
+    guPerspective(&this->projection, &this->normal, 60.0f, 4.0f / 3.0f, 10.0f, 12800.0f, 1.0f);
     guLookAt(&this->lookAt, 0.0f, 0.0f, 400.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
 }
 
