@@ -585,10 +585,6 @@ extern SceneTableEntry gSceneTable[SCENE_MAX];
 extern UNK_PTR D_801C5C50;
 // extern UNK_TYPE1 D_801C5C9C;
 extern UNK_PTR D_801C5CB0;
-// extern UNK_TYPE1 D_801C5DD0;
-// extern UNK_TYPE1 D_801C5DE0;
-// extern UNK_TYPE1 D_801C5DF0;
-// extern UNK_TYPE1 D_801C5E00;
 
 // extern UNK_TYPE1 D_801C6A70;
 // extern UNK_TYPE2 D_801C6A74;

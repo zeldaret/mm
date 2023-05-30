@@ -1,4 +1,5 @@
 #include "global.h"
+#include "z64viscvg.h"
 
 Gfx D_801C5DD0[] = {
     gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_CONV | G_TF_POINT | G_TT_NONE | G_TL_TILE |

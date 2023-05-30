@@ -1724,9 +1724,6 @@ void SkinMatrix_SetYRotation(MtxF* mf, s16 a);
 void SkinMatrix_MulYRotation(MtxF* mf, s16 a);
 void SkinMatrix_SetZRotation(MtxF* mf, s16 a);
 
-void VisCvg_Init(struct_801F8010* this);
-void VisCvg_Destroy(struct_801F8010* this);
-void VisCvg_Draw(struct_801F8010* this, Gfx** gfxp);
 void func_80140E80(Struct_80140E80* arg0);
 void func_80140EA0(Struct_80140E80* arg0);
 // void func_80140EAC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);

@@ -612,13 +612,6 @@ typedef struct {
 } Struct_80140E80; // size = 0x14
 
 typedef struct {
-    /* 0x0 */ u32 type;
-    /* 0x4 */ u32 setScissor;
-    /* 0x8 */ Color_RGBA8_u32 color;
-    /* 0xC */ Color_RGBA8 envColor;
-} struct_801F8010; // size = 0x10
-
-typedef struct {
     /* 0x0 */ u32 useRgba;
     /* 0x4 */ u32 setScissor;
     /* 0x8 */ Color_RGBA8_u32 primColor;
