@@ -9,7 +9,7 @@
 #include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
 
 extern UNK_TYPE1 D_801F7FF0;
-extern struct_801F8010 D_801F8010;
+extern VisCvg D_801F8010;
 extern VisZbuf sVisZbuf;
 extern VisMono sMonoColors;
 extern ViMode D_801F8048;

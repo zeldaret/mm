@@ -2374,17 +2374,8 @@ extern void (*sKaleidoScopeUpdateFunc)(PlayState* play);
 extern void (*sKaleidoScopeDrawFunc)(PlayState* play);
 extern FaultAddrConvClient sKaleidoMgrFaultAddrConvClient;
 
-// extern s16 sTransitionFillTimer;
-// extern Input D_801F6C18;
-// extern TransitionTile sTransitionTile;
 extern s32 gTransitionTileState;
-// extern VisMono sVisMono;
 extern Color_RGBA8_u32 gVisMonoColor;
-// extern Struct_80140E80 D_801F6D38;
-// extern Struct_80140E80* D_801F6D4C;
-// extern BombersNotebook sBombersNotebook;
-// extern u8 sBombersNotebookOpen;
-// extern u8 sMotionBlurStatus;
 
 extern FaultAddrConvClient sGraphFaultAddrConvClient;
 extern FaultClient sGraphFaultClient;
