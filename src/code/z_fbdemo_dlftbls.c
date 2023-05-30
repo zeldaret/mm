@@ -1,29 +1,37 @@
 #include "global.h"
-#include "initvars.h"
-#include "overlays/fbdemos/ovl_fbdemo_triforce/z_fbdemo_triforce.h"
-#include "overlays/fbdemos/ovl_fbdemo_wipe1/z_fbdemo_wipe1.h"
-#include "overlays/fbdemos/ovl_fbdemo_wipe3/z_fbdemo_wipe3.h"
-#include "overlays/fbdemos/ovl_fbdemo_wipe4/z_fbdemo_wipe4.h"
-#include "overlays/fbdemos/ovl_fbdemo_wipe5/z_fbdemo_wipe5.h"
 
-#define TRANSITION_OVERLAY(name, filename)                                                                       \
-    {                                                                                                            \
-        { 0, 0 }, SEGMENT_START(ovl_##filename), SEGMENT_END(ovl_##filename), SEGMENT_ROM_START(ovl_##filename), \
-            SEGMENT_ROM_END(ovl_##filename), &name##_InitVars, sizeof(name)                                      \
-    }
+// InitVars and Linker symbol declarations (used in the table below)
+#define DEFINE_TRANSITION(_enumValue, structName, _instanceName, name) \
+    extern TransitionInit structName##_InitVars;                       \
+    DECLARE_OVERLAY_SEGMENT(name)
 
-#define TRANSITION_OVERLAY_INTERNAL(name) \
-    { { 0, 0 }, NULL, NULL, 0, 0, &name##_InitVars, sizeof(name) }
+#define DEFINE_TRANSITION_INTERNAL(_enumValue, structName, _instanceName) extern TransitionInit structName##_InitVars;
 
-#define TRANSITION_OVERLAY_UNSET \
-    { 0 }
+#include "tables/transition_table.h"
+
+#undef DEFINE_TRANSITION
+#undef DEFINE_TRANSITION_INTERNAL
+
+#define DEFINE_TRANSITION(_enumValue, structName, _instanceName, name) \
+    {                                                                  \
+        { 0, 0 },                                                      \
+        SEGMENT_START(ovl_##name),                                     \
+        SEGMENT_END(ovl_##name),                                       \
+        SEGMENT_ROM_START(ovl_##name),                                 \
+        SEGMENT_ROM_END(ovl_##name),                                   \
+        &structName##_InitVars,                                        \
+        sizeof(structName),                                            \
+    },
+
+#define DEFINE_TRANSITION_INTERNAL(_enumValue, structName, _instanceName) \
+    { { 0, 0 }, NULL, NULL, 0, 0, &structName##_InitVars, sizeof(structName) },
 
 TransitionOverlay gTransitionOverlayTable[] = {
-    TRANSITION_OVERLAY_INTERNAL(TransitionFade),       TRANSITION_OVERLAY(TransitionTriforce, fbdemo_triforce),
-    TRANSITION_OVERLAY(TransitionWipe1, fbdemo_wipe1), TRANSITION_OVERLAY(TransitionWipe3, fbdemo_wipe3),
-    TRANSITION_OVERLAY(TransitionWipe4, fbdemo_wipe4), TRANSITION_OVERLAY_INTERNAL(TransitionCircle),
-    TRANSITION_OVERLAY(TransitionWipe5, fbdemo_wipe5),
+#include "tables/transition_table.h"
 };
+
+#undef DEFINE_TRANSITION
+#undef DEFINE_TRANSITION_INTERNAL
 
 void Transition_Init(TransitionContext* transitionCtx) {
     TransitionOverlay* overlayEntry;

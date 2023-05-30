@@ -151,13 +151,15 @@ void EnHoll_VisibleIdle(EnHoll* this, PlayState* play) {
     f32 playerDistFromCentralPlane;
 
     if (this->type == EN_HOLL_TYPE_DEFAULT) {
-        u32 actorCtxBitmask = (play->actorCtx.unkC & 0x2AA) >> 1 | (play->actorCtx.unkC & 0x155);
+        u32 halfDaysBit =
+            ((play->actorCtx.halfDaysBit & HALFDAYBIT_DAWNS) >> 1) | (play->actorCtx.halfDaysBit & HALFDAYBIT_NIGHTS);
         u32 zActorBitmask = D_801AED48[EN_HOLL_GET_Z_ACTOR_BITMASK_INDEX(&this->actor)];
 
-        if (!(actorCtxBitmask & zActorBitmask)) {
+        if (!(halfDaysBit & zActorBitmask)) {
             Actor_Kill(&this->actor);
             return;
         }
+
         if (this == sInstancePlayingSound) {
             func_800B9010(&this->actor, NA_SE_EV_INVISIBLE_MONKEY - SFX_FLAG);
         }
@@ -180,7 +182,7 @@ void EnHoll_VisibleIdle(EnHoll* this, PlayState* play) {
             u32 enHollId = EN_HOLL_GET_ID(&this->actor);
 
             if (sLoadingPlaneDistance < playerDistFromCentralPlane) {
-                if ((play->roomCtx.prevRoom.num >= 0) && (play->roomCtx.unk31 == 0)) {
+                if ((play->roomCtx.prevRoom.num >= 0) && (play->roomCtx.status == 0)) {
                     this->actor.room = play->doorCtx.transitionActorList[enHollId].sides[this->playerSide].room;
                     if (play->roomCtx.prevRoom.num == this->actor.room) {
                         EnHoll_ChangeRooms(play);
@@ -218,7 +220,7 @@ void EnHoll_VisibleIdle(EnHoll* this, PlayState* play) {
 
 void EnHoll_TransparentIdle(EnHoll* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    s32 useViewEye = gDbgCamEnabled || play->csCtx.state != 0;
+    s32 useViewEye = gDbgCamEnabled || (play->csCtx.state != CS_STATE_IDLE);
     Vec3f transformedPlayerPos;
     f32 enHollTop;
     f32 playerDistFromCentralPlane;
@@ -296,7 +298,7 @@ void EnHoll_VerticalIdle(EnHoll* this, PlayState* play) {
 }
 
 void EnHoll_RoomTransitionIdle(EnHoll* this, PlayState* play) {
-    if (play->roomCtx.unk31 == 0) {
+    if (play->roomCtx.status == 0) {
         func_8012EBF8(play, &play->roomCtx);
         if (play->bgCoverAlpha == 0) {
             this->bgCoverAlphaActive = false;
@@ -317,30 +319,32 @@ void EnHoll_Update(Actor* thisx, PlayState* play) {
 
 void EnHoll_Draw(Actor* thisx, PlayState* play) {
     EnHoll* this = THIS;
-    Gfx* dl;
-    u32 dlIndex;
+    Gfx* dList;
+    u32 setupDListIndex;
 
     if (this->alpha != 0) {
         OPEN_DISPS(play->state.gfxCtx);
+
         if (this->alpha == 255) {
-            dl = POLY_OPA_DISP;
-            dlIndex = 37;
+            dList = POLY_OPA_DISP;
+            setupDListIndex = SETUPDL_37;
         } else {
-            dl = POLY_XLU_DISP;
-            dlIndex = 0;
+            dList = POLY_XLU_DISP;
+            setupDListIndex = SETUPDL_0;
         }
-        dl = Gfx_CallSetupDL(dl, dlIndex);
+        dList = Gfx_SetupDL(dList, setupDListIndex);
         if (this->playerSide == EN_HOLL_BEHIND) {
             Matrix_RotateYF(M_PI, MTXMODE_APPLY);
         }
-        gSPMatrix(dl++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gDPSetPrimColor(dl++, 0, 0, 0, 0, 0, this->alpha);
-        gSPDisplayList(dl++, gEnHollCentralPlaneDL);
+        gSPMatrix(dList++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gDPSetPrimColor(dList++, 0, 0, 0, 0, 0, this->alpha);
+        gSPDisplayList(dList++, gEnHollCentralPlaneDL);
         if (this->alpha == 255) {
-            POLY_OPA_DISP = dl;
+            POLY_OPA_DISP = dList;
         } else {
-            POLY_XLU_DISP = dl;
+            POLY_XLU_DISP = dList;
         }
+
         CLOSE_DISPS(play->state.gfxCtx);
     }
 }

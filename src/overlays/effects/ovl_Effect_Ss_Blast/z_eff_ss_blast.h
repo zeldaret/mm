@@ -15,6 +15,4 @@ typedef struct {
     /* 0x32 */ s16 life;
 } EffectSsBlastInitParams; // size = 0x34
 
-extern const EffectSsInit Effect_Ss_Blast_InitVars;
-
 #endif

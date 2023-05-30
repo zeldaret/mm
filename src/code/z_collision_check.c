@@ -1,4 +1,3 @@
-#include "prevent_bss_reordering.h"
 #include "global.h"
 
 Vec3f D_801EDE00;
@@ -24,16 +23,24 @@ Vec3f D_801EE0D8;
 TriNorm D_801EE0E8[2];
 TriNorm D_801EE150;
 TriNorm D_801EE188;
+
+#ifndef NON_MATCHING
 Vec3f D_801EE1C0;
 Vec3f D_801EE1D0;
 Vec3f D_801EE1E0;
 Vec3f D_801EE1F0;
 EffectSparkInit D_801EE200;
+#endif
+
 TriNorm D_801EE6C8;
 TriNorm D_801EE700;
+
+#ifndef NON_MATCHING
 EffectSparkInit D_801EE738;
 EffectSparkInit D_801EEC00;
 EffectSparkInit D_801EF0C8;
+#endif
+
 TriNorm D_801EF590;
 TriNorm D_801EF5C8;
 TriNorm D_801EF600;
@@ -3837,7 +3844,7 @@ void CollisionCheck_SpawnShieldParticles(PlayState* play, Vec3f* v) {
         35.0f,
         30.0f,
         8,
-        { 0, 0, 0, 0, 128, 255, 0, 300 },
+        { 0, 0, 0, { 0, 128, 255 }, 0, 300 },
         1,
     };
     s32 effectIndex;
@@ -3892,7 +3899,7 @@ void CollisionCheck_SpawnShieldParticlesWood(PlayState* play, Vec3f* v, Vec3f* p
         35.0f,
         30.0f,
         8,
-        { 0, 0, 0, 0, 128, 255, 0, 300 },
+        { 0, 0, 0, { 0, 128, 255 }, 0, 300 },
         0,
     };
     s32 effectIndex;

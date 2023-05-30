@@ -93,11 +93,11 @@ void EnStream_SuckPlayer(EnStream* this, PlayState* play) {
                                  this->actor.scale.y) != EN_STREAM_PLAYER_OUTSIDE_RANGE) {
         xzDist = sqrtf(SQ(posDifference.x) + SQ(posDifference.z));
         yDistWithOffset = player->actor.world.pos.y - (this->actor.world.pos.y - 90.0f);
-        player->unk_B84 = Math_Atan2S(-posDifference.x, -posDifference.z);
+        player->pushedYaw = Math_Atan2S(-posDifference.x, -posDifference.z);
         if (xzDist > 3.0f) {
-            Math_SmoothStepToF(&player->unk_B80, 3.0f, 0.5f, xzDist, 0.0f);
+            Math_SmoothStepToF(&player->pushedSpeed, 3.0f, 0.5f, xzDist, 0.0f);
         } else {
-            player->unk_B80 = 0.0f;
+            player->pushedSpeed = 0.0f;
             Math_SmoothStepToF(&player->actor.world.pos.x, this->actor.world.pos.x, 0.5f, 3.0f, 0.0f);
             Math_SmoothStepToF(&player->actor.world.pos.z, this->actor.world.pos.z, 0.5f, 3.0f, 0.0f);
         }
@@ -136,7 +136,8 @@ void EnStream_Draw(Actor* thisx, PlayState* play) {
     Gfx* gfx;
 
     OPEN_DISPS(play->state.gfxCtx);
-    func_8012C2DC(play->state.gfxCtx);
+
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     gfx = POLY_XLU_DISP;
     gSPMatrix(&gfx[0], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     multipliedFrames = frames * 20;
@@ -145,5 +146,6 @@ void EnStream_Draw(Actor* thisx, PlayState* play) {
                                 -multipliedFrames, 64, 64));
     gSPDisplayList(&gfx[2], gWaterVortexDL);
     POLY_XLU_DISP = &gfx[3];
+
     CLOSE_DISPS(play->state.gfxCtx);
 }

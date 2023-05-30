@@ -246,7 +246,7 @@ void func_808A54B0(EnSt* this, PlayState* play) {
 
         gSPSegment(POLY_XLU_DISP++, 0x06, play->objectCtx.status[this->unk_2C0].segment);
 
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
         Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_APPLY);
         Matrix_Scale(0.06f, 0.12f, 0.06f, MTXMODE_APPLY);
@@ -348,7 +348,7 @@ s16 func_808A5BEC(EnSt* this) {
     } else {
         ret = this->actor.yawTowardsPlayer;
         if (DECR(this->unk_30E) == 0) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALTU_ROLL);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_STALTU_ROLL);
             this->unk_18C ^= 2;
             this->unk_310 = 8;
             if (this->unk_18C & 1) {
@@ -456,7 +456,7 @@ void func_808A60E0(EnSt* this) {
 
     if (sp1C == 1.0f) {
         SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, animIndex);
-        Actor_PlaySfxAtPos(&this->actor, sfxId);
+        Actor_PlaySfx(&this->actor, sfxId);
     }
 
     this->unk_2D4 = (1.0f - sp1C) * sp20 * this->unk_2C8;
@@ -587,23 +587,26 @@ s32 func_808A6580(EnSt* this, PlayState* play) {
         } else if (func_808A61F4(this)) {
             switch (this->actor.colChkInfo.damageEffect) {
                 case 1:
-                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
+                    Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_FREEZE);
                     this->unk_312 = 40;
-                    Actor_SetColorFilter(&this->actor, 0, 200, 0, this->unk_312);
+                    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 200, COLORFILTER_BUFFLAG_OPA,
+                                         this->unk_312);
                     break;
 
                 case 5:
                     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_SMALL;
                     this->unk_312 = 40;
                     func_808A576C(this);
-                    Actor_SetColorFilter(&this->actor, 0, 200, 0, this->unk_312);
+                    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 200, COLORFILTER_BUFFLAG_OPA,
+                                         this->unk_312);
                     break;
 
                 default:
-                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALTU_DAMAGE);
+                    Actor_PlaySfx(&this->actor, NA_SE_EN_STALTU_DAMAGE);
                     this->unk_314 = 20;
                     this->unk_312 = 0;
-                    Actor_SetColorFilter(&this->actor, 0x4000, 200, 0, this->unk_314);
+                    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 200, COLORFILTER_BUFFLAG_OPA,
+                                         this->unk_314);
                     SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 1);
                     this->unk_18C |= 8;
                     this->actionFunc = func_808A6D84;
@@ -652,7 +655,7 @@ s32 func_808A6580(EnSt* this, PlayState* play) {
             }
             this->unk_314 = 20;
             this->unk_312 = 0;
-            Actor_SetColorFilter(&this->actor, 0x4000, 200, 0, this->unk_314);
+            Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 200, COLORFILTER_BUFFLAG_OPA, this->unk_314);
             ret = true;
         }
         this->unk_310 = 0;
@@ -663,7 +666,7 @@ s32 func_808A6580(EnSt* this, PlayState* play) {
         if ((this->unk_316 == 0) && (this->unk_314 == 0) && (this->unk_312 == 0) &&
             !(this->collider1.base.atFlags & AT_BOUNCED) && (this->actor.colChkInfo.health != 0)) {
             play->damagePlayer(play, -8);
-            Actor_PlaySfxAtPos(&sp3C->actor, NA_SE_PL_BODY_HIT);
+            Actor_PlaySfx(&sp3C->actor, NA_SE_PL_BODY_HIT);
             func_800B8D98(play, &this->actor, 4.0f, this->actor.yawTowardsPlayer, 6.0f);
             this->unk_316 = 10;
             this->unk_18C |= 1;
@@ -699,7 +702,7 @@ void func_808A6A78(EnSt* this, PlayState* play) {
         CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
 
         if (ENST_GET_1C0(&this->actor) == ENST_1C0_1) {
-            this->actor.flags |= ACTOR_FLAG_80;
+            this->actor.flags |= ACTOR_FLAG_REACT_TO_LENS;
         }
 
         Actor_SetScale(&this->actor, 0.04f);
@@ -776,15 +779,15 @@ void func_808A6E24(EnSt* this, PlayState* play) {
         this->unk_2CC = 0.0f;
         this->unk_2D4 = 0.0f;
     } else {
-        if (this->actor.bgCheckFlags & 1) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
             this->actor.shape.yOffset = 400.0f;
             this->actor.world.rot.x = 0x4000;
             this->actor.shape.rot.x = this->actor.world.rot.x;
             this->unk_2D0 = this->actor.velocity.y = fabsf(this->actor.velocity.y) * 0.6f;
-            this->actor.speedXZ = 0.0f;
+            this->actor.speed = 0.0f;
 
             if ((s32)this->unk_2D0 != 0) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_EYEGOLE_ATTACK);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_EYEGOLE_ATTACK);
             } else {
                 this->actor.velocity.y = 0.0f;
                 this->actionFunc = func_808A701C;
@@ -864,8 +867,8 @@ void EnSt_Update(Actor* thisx, PlayState* play) {
         return;
     }
 
-    if (!(this->actor.flags & ACTOR_FLAG_80) && func_808A6A3C(this)) {
-        this->actor.flags |= ACTOR_FLAG_80;
+    if (!(this->actor.flags & ACTOR_FLAG_REACT_TO_LENS) && func_808A6A3C(this)) {
+        this->actor.flags |= ACTOR_FLAG_REACT_TO_LENS;
     }
 
     if (func_808A6580(this, play)) {
@@ -875,7 +878,7 @@ void EnSt_Update(Actor* thisx, PlayState* play) {
         if (this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
             SkelAnime_Update(&this->skelAnime);
         }
-        Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, 5);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
     } else if (this->unk_312 < 20) {
         s16 idx = (this->unk_312 % 2) ? -1 : 1;
 
@@ -921,11 +924,11 @@ void func_808A7478(Actor* thisx, PlayState* play) {
         OPEN_DISPS(play->state.gfxCtx);
 
         if (func_808A6A3C(this)) {
-            func_8012C2DC(play->state.gfxCtx);
+            Gfx_SetupDL25_Xlu(play->state.gfxCtx);
             POLY_XLU_DISP = SkelAnime_Draw(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                            EnSt_OverrideLimbDraw, NULL, &this->actor, POLY_XLU_DISP);
         } else {
-            func_8012C28C(play->state.gfxCtx);
+            Gfx_SetupDL25_Opa(play->state.gfxCtx);
             POLY_OPA_DISP = SkelAnime_Draw(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                            EnSt_OverrideLimbDraw, NULL, &this->actor, POLY_OPA_DISP);
         }

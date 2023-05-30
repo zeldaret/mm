@@ -77,7 +77,7 @@ static InitChainEntry sInitChain[] = {
 };
 
 void func_80A4CA90(ObjFireshield* this) {
-    if (this->actor.cutscene >= 0) {
+    if (this->actor.csId >= 0) {
         this->actionFunc = func_80A4CABC;
     } else {
         this->actionFunc = func_80A4CC54;
@@ -87,17 +87,17 @@ void func_80A4CA90(ObjFireshield* this) {
 void func_80A4CABC(ObjFireshield* this) {
     s32 pad;
 
-    if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
+    if (CutsceneManager_IsNext(this->actor.csId)) {
         s32 sp18 = OBJFIRESHIELD_GET_7F(&this->actor);
         s32 temp_a0 = (sp18 & ~0x1F) >> 5;
 
-        ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
+        CutsceneManager_StartWithPlayerCs(this->actor.csId, &this->actor);
         this->actionFunc = func_80A4CB7C;
         this->unk_194 = 20;
         D_80A4D884[temp_a0] |= 1 << (sp18 & 0x1F);
         D_80A4D894[temp_a0] |= 1 << (sp18 & 0x1F);
     } else {
-        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+        CutsceneManager_Queue(this->actor.csId);
     }
 }
 
@@ -113,7 +113,7 @@ void func_80A4CB7C(ObjFireshield* this) {
         return;
     }
 
-    ActorCutscene_Stop(this->actor.cutscene);
+    CutsceneManager_Stop(this->actor.csId);
     this->actionFunc = func_80A4CD28;
     D_80A4D894[(sp18 & ~0x1F) >> 5] &= ~(1 << (sp18 & 0x1F));
 }
@@ -384,7 +384,7 @@ void ObjFireshield_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 255, 220, 0, this->unk_1A6);
     gDPSetEnvColor(POLY_XLU_DISP++, 255, 0, 0, 0);

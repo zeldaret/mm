@@ -67,7 +67,7 @@ static ColliderCylinderInit sCylinderInit = {
 void EnScRuppe_UpdateCollision(EnScRuppe* this, PlayState* play) {
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 32.0f, 30.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 32.0f, 30.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
 }
 
 s32 func_80BD697C(s16 ruppeIndex) {
@@ -116,7 +116,7 @@ void func_80BD6A8C(EnScRuppe* this, PlayState* play) {
     if (this->collider.base.ocFlags1 & OC1_HIT) {
         this->ruppeDisplayTime = 0;
         this->actor.gravity = 0.0f;
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_GET_RUPY);
+        Actor_PlaySfx(&this->actor, NA_SE_SY_GET_RUPY);
         Rupees_ChangeBy(sRupeeInfo[this->ruppeIndex].amount);
         this->actionFunc = func_80BD6B18;
     }
@@ -156,7 +156,7 @@ void EnScRuppe_Init(Actor* thisx, PlayState* play) {
     if ((this->ruppeIndex < RUPEE_GREEN) || (this->ruppeIndex >= RUPEE_UNUSED)) {
         this->ruppeIndex = RUPEE_GREEN;
     }
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actionFunc = func_80BD6A8C;
     this->actor.gravity = -0.5f;
     this->actor.shape.yOffset = 700.0f;
@@ -181,7 +181,7 @@ void EnScRuppe_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     func_800B8050(&this->actor, play, 0);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sRupeeInfo[this->ruppeIndex].tex));

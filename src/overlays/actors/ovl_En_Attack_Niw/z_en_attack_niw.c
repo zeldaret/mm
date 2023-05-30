@@ -213,7 +213,7 @@ void EnAttackNiw_EnterViewFromOffscreen(EnAttackNiw* this, PlayState* play) {
     Vec3f flightTarget;
     s32 pad;
 
-    this->actor.speedXZ = 10.0f;
+    this->actor.speed = 10.0f;
 
     // randomTargetCenterOffset is set in _Init, only needs to be set once
     // but the view is moving, so now we need to re-calculate the spot in space
@@ -236,7 +236,7 @@ void EnAttackNiw_EnterViewFromOffscreen(EnAttackNiw* this, PlayState* play) {
     Actor_SetFocus(&this->actor, this->targetHeight);
     Actor_GetScreenPos(play, &this->actor, &posX, &posY);
 
-    if (this->actor.bgCheckFlags & 8) { // touching a wall
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
         this->targetRotY = this->actor.yawTowardsPlayer;
         this->targetRotX = this->actor.world.rot.x - 3000.0f;
         this->hopTimer = 0;
@@ -255,7 +255,7 @@ void EnAttackNiw_EnterViewFromOffscreen(EnAttackNiw* this, PlayState* play) {
     } else if (((this->actor.projectedPos.z > 0.0f) && (fabsf(flightTarget.x - this->actor.world.pos.x) < 50.0f) &&
                 (fabsf(flightTarget.y - this->actor.world.pos.y) < 50.0f) &&
                 (fabsf(flightTarget.z - this->actor.world.pos.z) < 50.0f)) ||
-               (this->actor.bgCheckFlags & 1)) { // touching ground or with close distance of target
+               (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
         // reset state
         this->hopTimer = 0;
         this->unkTimer250 = this->hopTimer;
@@ -286,7 +286,7 @@ void EnAttackNiw_AimAtPlayer(EnAttackNiw* this, PlayState* play) {
         return;
     }
 
-    if (this->actor.bgCheckFlags & 1) { // touching floor
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         if (this->hopTimer == 0) {
             this->hopTimer = 3;
             this->actor.velocity.y = 3.5f;
@@ -314,19 +314,18 @@ void EnAttackNiw_AimAtPlayer(EnAttackNiw* this, PlayState* play) {
     Math_SmoothStepToS(&this->actor.world.rot.y, this->targetRotY, 2, this->rotStep, 0);
     Math_SmoothStepToS(&this->actor.world.rot.x, this->targetRotX, 2, this->rotStep, 0);
     Math_ApproachF(&this->rotStep, 10000.0f, 1.0f, 1000.0f);
-    Math_ApproachF(&this->actor.speedXZ, this->targetXZSpeed, 0.9f, 1.0f);
+    Math_ApproachF(&this->actor.speed, this->targetXZSpeed, 0.9f, 1.0f);
 
-    if (this->actor.gravity == -2.0f && this->unkTimer25A == 0 &&
-        (this->actor.bgCheckFlags & 8 || this->randomAngleChangeTimer == 0)) {
+    if ((this->actor.gravity == -2.0f) && (this->unkTimer25A == 0) &&
+        ((this->actor.bgCheckFlags & BGCHECKFLAG_WALL) || (this->randomAngleChangeTimer == 0))) {
         this->targetXZSpeed = 0.0f;
         this->actor.gravity = 0.0f;
         this->rotStep = 0.0f;
         this->targetRotX = this->actor.world.rot.x - 5000.0f;
         this->actionFunc = EnAttackNiw_FlyAway;
 
-    } else if (this->actor.bgCheckFlags & 1) { // touching floor
+    } else if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         EnAttackNiw_AnimateWingHead(this, play, NIW_ANIM_PECKING_SLOW_FORFLAPPING);
-
     } else {
         EnAttackNiw_AnimateWingHead(this, play, NIW_ANIM_PECKING_AND_WAVING);
     }
@@ -367,7 +366,9 @@ void EnAttackNiw_Update(Actor* thisx, PlayState* play) {
 
     this->actionFunc(this, play);
 
-    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 60.0f, 0x1D);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 60.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                UPDBGCHECKINFO_FLAG_10);
 
     if (this->actionFunc == EnAttackNiw_EnterViewFromOffscreen) {
         Actor_MoveWithoutGravity(&this->actor);
@@ -380,8 +381,7 @@ void EnAttackNiw_Update(Actor* thisx, PlayState* play) {
         return;
     }
 
-    if ((this->actor.bgCheckFlags & 0x20) && // on or below water
-        (this->actionFunc != EnAttackNiw_FlyAway)) {
+    if ((this->actor.bgCheckFlags & BGCHECKFLAG_WATER) && (this->actionFunc != EnAttackNiw_FlyAway)) {
         Math_Vec3f_Copy(&splashPos, &this->actor.world.pos);
         splashPos.y += this->actor.depthInWater;
         EffectSsGSplash_Spawn(play, &splashPos, NULL, NULL, 0, 400);
@@ -408,12 +408,12 @@ void EnAttackNiw_Update(Actor* thisx, PlayState* play) {
 
         if (this->crySfxTimer == 0) {
             this->crySfxTimer = 30;
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CHICKEN_CRY_A);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_CHICKEN_CRY_A);
         }
 
         if (this->flutterSfxTimer == 0) {
             this->flutterSfxTimer = 7;
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_CHICKEN_FLUTTER);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_CHICKEN_FLUTTER);
         }
     }
 }
@@ -446,7 +446,7 @@ s32 EnAttackNiw_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Ve
 void EnAttackNiw_Draw(Actor* thisx, PlayState* play) {
     EnAttackNiw* this = THIS;
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnAttackNiw_OverrideLimbDraw, NULL, &this->actor);
 }

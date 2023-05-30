@@ -134,7 +134,7 @@ void func_80AF3ADC(ObjLightblock* this, PlayState* play) {
     }
 
     if (this->collisionCounter >= 8) {
-        ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+        CutsceneManager_Queue(this->dyna.actor.csId);
         func_80AF3B8C(this);
     } else {
         CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
@@ -146,13 +146,13 @@ void func_80AF3B8C(ObjLightblock* this) {
 }
 
 void func_80AF3BA0(ObjLightblock* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
+    if (CutsceneManager_IsNext(this->dyna.actor.csId)) {
+        CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
         Flags_SetSwitch(play, LIGHTBLOCK_DESTROYED(&this->dyna.actor));
         func_80AF3910(this, play);
         func_80AF3C18(this);
     } else {
-        ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+        CutsceneManager_Queue(this->dyna.actor.csId);
     }
 }
 
@@ -162,12 +162,12 @@ void func_80AF3C18(ObjLightblock* this) {
 }
 
 void func_80AF3C34(ObjLightblock* this, PlayState* play) {
-    s8 temp_a0;
+    s8 csId;
 
     this->timer--;
     if (this->timer <= 0) {
-        temp_a0 = this->dyna.actor.cutscene;
-        ActorCutscene_Stop(temp_a0);
+        csId = this->dyna.actor.csId;
+        CutsceneManager_Stop(csId);
         Actor_Kill(&this->dyna.actor);
         return;
     }
@@ -178,7 +178,7 @@ void func_80AF3C34(ObjLightblock* this, PlayState* play) {
         } else {
             this->alpha = 0;
             this->dyna.actor.draw = NULL;
-            func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+            DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
         }
     }
 }
@@ -193,18 +193,20 @@ void ObjLightblock_Draw(Actor* thisx, PlayState* play) {
     ObjLightblock* this = THIS;
 
     OPEN_DISPS(play->state.gfxCtx);
+
     if (this->alpha < 255) {
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         gSPSegment(POLY_XLU_DISP++, 0x08, D_801AEF88);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255, 255, 255, this->alpha);
         gSPDisplayList(POLY_XLU_DISP++, object_lightblock_DL_000178);
     } else {
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
         gSPSegment(POLY_OPA_DISP++, 0x08, D_801AEFA0);
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0x80, 255, 255, 255, 255);
         gSPDisplayList(POLY_OPA_DISP++, object_lightblock_DL_000178);
     }
+
     CLOSE_DISPS(play->state.gfxCtx);
 }

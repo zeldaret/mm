@@ -16,7 +16,7 @@ void BgTobira01_Destroy(Actor* thisx, PlayState* play);
 void BgTobira01_Update(Actor* thisx, PlayState* play);
 void BgTobira01_Draw(Actor* thisx, PlayState* play);
 
-ActorInit Bg_Tobira01_InitVars = {
+const ActorInit Bg_Tobira01_InitVars = {
     ACTOR_BG_TOBIRA01,
     ACTORCAT_PROP,
     FLAGS,
@@ -28,74 +28,69 @@ ActorInit Bg_Tobira01_InitVars = {
     (ActorFunc)BgTobira01_Draw,
 };
 
-void BgTobira01_Open(BgTobira01* this, PlayState* play) {
+void BgTobira01_Action(BgTobira01* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    s16 cutsceneId = this->dyna.actor.cutscene;
-    s16 prevTimer;
+    s16 csId = this->dyna.actor.csId;
+    s16 prevPosYTick;
 
-    if (this->playCutscene) {
-        if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-            ActorCutscene_Stop(0x7C);
-        } else if (ActorCutscene_GetCanPlayNext(cutsceneId)) {
-            ActorCutscene_StartAndSetUnkLinkFields(cutsceneId, &this->dyna.actor);
+    if (this->cutsceneRequested) {
+        if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+            CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
+        } else if (CutsceneManager_IsNext(csId)) {
+            CutsceneManager_StartWithPlayerCs(csId, &this->dyna.actor);
             SET_WEEKEVENTREG(WEEKEVENTREG_88_40);
-            this->playCutscene = false;
+            this->cutsceneRequested = false;
         } else {
-            ActorCutscene_SetIntentToPlay(cutsceneId);
+            CutsceneManager_Queue(csId);
         }
-    } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_88_40) && (this->timer == 0) && (play->actorCtx.unk1F5 != 0) &&
-               (play->actorCtx.unk1F4 == 0) &&
+    } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_88_40) && (this->posYTick == 0) &&
+               (play->actorCtx.playerImpact.timer != 0) &&
+               (play->actorCtx.playerImpact.type == PLAYER_IMPACT_GORON_GROUND_POUND) &&
                (SurfaceType_GetSceneExitIndex(&play->colCtx, player->actor.floorPoly, player->actor.floorBgId) == 6)) {
-        this->playCutscene = true;
-        this->unk_16C = 0; // this variable is not used anywhere else
+        this->cutsceneRequested = true;
+        this->unk16C = 0;
     }
 
-    prevTimer = this->timer;
-
+    prevPosYTick = this->posYTick;
     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_88_40)) {
-        this->timer++;
+        this->posYTick++;
     } else {
-        this->timer--;
-    };
+        this->posYTick--;
+    }
 
-    this->timer = CLAMP(this->timer, 0, 60);
-
-    if (this->timer != prevTimer) {
-        if (1) {}
-        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_STONEDOOR_OPEN_S - SFX_FLAG);
-        this->dyna.actor.world.pos.y = (this->yOffset = (this->timer * (5.0f / 3.0f)) + this->dyna.actor.home.pos.y);
-        this->timer2 = 180;
+    this->posYTick = CLAMP(this->posYTick, 0, 60);
+    if (prevPosYTick != this->posYTick) {
+        Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_STONEDOOR_OPEN_S - SFX_FLAG);
+        this->dyna.actor.world.pos.y = this->posY = (this->posYTick * (5.0f / 3.0f)) + this->dyna.actor.home.pos.y;
+        this->timer = 180;
     }
 
     if (!(player->stateFlags1 & PLAYER_STATE1_40) && CHECK_WEEKEVENTREG(WEEKEVENTREG_88_40) &&
-        (DECR(this->timer2) == 0)) {
+        (DECR(this->timer) == 0)) {
         CLEAR_WEEKEVENTREG(WEEKEVENTREG_88_40);
     }
 }
 
 void BgTobira01_Init(Actor* thisx, PlayState* play) {
     BgTobira01* this = THIS;
-    s32 pad;
 
-    DynaPolyActor_Init(&this->dyna, 1);
-    DynaPolyActor_LoadMesh(play, &this->dyna, &object_spot11_obj_Colheader_0011C0);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
+    DynaPolyActor_LoadMesh(play, &this->dyna, &gGoronDoorCol);
     CLEAR_WEEKEVENTREG(WEEKEVENTREG_88_40);
     Actor_SetScale(&this->dyna.actor, 1.0f);
-    this->timer2 = gSaveContext.save.isNight;
-    this->timer = 0;
-    this->actionFunc = BgTobira01_Open;
+    this->timer = gSaveContext.save.isNight;
+    this->posYTick = 0;
+    this->actionFunc = BgTobira01_Action;
 }
 
 void BgTobira01_Destroy(Actor* thisx, PlayState* play) {
     BgTobira01* this = THIS;
-    s32 pad;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
 
 void BgTobira01_Update(Actor* thisx, PlayState* play) {
     BgTobira01* this = THIS;
-    s32 pad;
 
     this->actionFunc(this, play);
 }
@@ -103,9 +98,9 @@ void BgTobira01_Update(Actor* thisx, PlayState* play) {
 void BgTobira01_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, object_spot11_obj_DL_000088);
+    gSPDisplayList(POLY_OPA_DISP++, gGoronDoorDL);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }

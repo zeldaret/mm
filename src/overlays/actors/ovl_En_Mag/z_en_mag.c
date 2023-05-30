@@ -239,7 +239,7 @@ void EnMag_Update(Actor* thisx, PlayState* play) {
                 CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_A) ||
                 CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_B)) {
 
-                if (!EnvFlags_Get(play, 4)) {
+                if (!CutsceneFlags_Get(play, 4)) {
                     play_sound(NA_SE_SY_PIECE_OF_HEART);
                     this->state = MAG_STATE_CALLED;
                     this->unk11F00 = 0;
@@ -383,16 +383,16 @@ void EnMag_Update(Actor* thisx, PlayState* play) {
                             CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_B)) {
                             if (play->transitionTrigger != TRANS_TRIGGER_START) {
                                 Audio_SetCutsceneFlag(false);
-                                D_801BB12C++;
-                                if (D_801BB12C >= 2) {
-                                    D_801BB12C = 0;
+                                gOpeningEntranceIndex++;
+                                if (gOpeningEntranceIndex >= 2) {
+                                    gOpeningEntranceIndex = 0;
                                 }
                                 play_sound(NA_SE_SY_PIECE_OF_HEART);
-                                gSaveContext.gameMode = 2; // Go to FileChoose
+                                gSaveContext.gameMode = GAMEMODE_FILE_SELECT;
                                 play->transitionTrigger = TRANS_TRIGGER_START;
                                 play->transitionType = TRANS_TYPE_FADE_BLACK;
                                 play->nextEntrance = ENTRANCE(CUTSCENE, 0);
-                                gSaveContext.save.cutscene = 0;
+                                gSaveContext.save.cutsceneIndex = 0;
                                 gSaveContext.sceneLayer = 0;
                             }
                             this->unk11F54 = 15;
@@ -438,12 +438,12 @@ void EnMag_Update(Actor* thisx, PlayState* play) {
     }
 
     if (this->state == MAG_STATE_INITIAL) {
-        if (EnvFlags_Get(play, 3)) {
+        if (CutsceneFlags_Get(play, 3)) {
             this->unk11F02 = 40;
             this->state = MAG_STATE_FADE_IN_MASK_EFFECTS;
         }
     } else if (this->state < MAG_STATE_FADE_OUT) {
-        if (EnvFlags_Get(play, 4)) {
+        if (CutsceneFlags_Get(play, 4)) {
             this->state = MAG_STATE_FADE_OUT;
         }
     }
@@ -554,7 +554,7 @@ void EnMag_DrawImageRGBA32(Gfx** gfxp, s16 centerX, s16 centerY, TexturePtr sour
     s32 pad;
     s32 i;
 
-    func_8012CA0C(&gfx);
+    Gfx_SetupDL56_Ptr(&gfx);
 
     curTexture = source;
     rectLeft = centerX - (width / 2);
@@ -709,7 +709,7 @@ void EnMag_DrawInner(Actor* thisx, PlayState* play, Gfx** gfxp) {
     // Set segment 6 to the object, since this will be read by OVERLAY_DISP where it is not set by default.
     gSPSegment(gfx++, 0x06, play->objectCtx.status[this->actor.objBankIndex].segment);
 
-    func_8012C680(&gfx);
+    Gfx_SetupDL39_Ptr(&gfx);
 
     // Mask appearing effects
     gDPPipeSync(gfx++);
@@ -736,7 +736,7 @@ void EnMag_DrawInner(Actor* thisx, PlayState* play, Gfx** gfxp) {
         }
     }
 
-    func_8012C680(&gfx);
+    Gfx_SetupDL39_Ptr(&gfx);
 
     if (this->majorasMaskAlpha != 0) {
         gDPSetCombineLERP(gfx++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0, PRIMITIVE,
@@ -774,7 +774,7 @@ void EnMag_DrawInner(Actor* thisx, PlayState* play, Gfx** gfxp) {
     }
 
     if (this->subtitleAlpha != 0) {
-        func_8012C680(&gfx);
+        Gfx_SetupDL39_Ptr(&gfx);
 
         gDPSetAlphaCompare(gfx++, G_AC_NONE);
         gDPSetCombineMode(gfx++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
@@ -792,7 +792,7 @@ void EnMag_DrawInner(Actor* thisx, PlayState* play, Gfx** gfxp) {
                             SUBTITLE_TEX_LEFT, SUBTITLE_TEX_TOP);
     }
 
-    func_8012C680(&gfx);
+    Gfx_SetupDL39_Ptr(&gfx);
 
     gDPSetAlphaCompare(gfx++, G_AC_NONE);
     gDPSetCombineMode(gfx++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
@@ -808,7 +808,7 @@ void EnMag_DrawInner(Actor* thisx, PlayState* play, Gfx** gfxp) {
     EnMag_DrawTextureI8(&gfx, gTitleScreenMajorasMaskSubtitleTex, SUBTITLE_TEX_WIDTH, SUBTITLE_TEX_HEIGHT,
                         SUBTITLE_TEX_LEFT, SUBTITLE_TEX_TOP);
 
-    func_8012C680(&gfx);
+    Gfx_SetupDL39_Ptr(&gfx);
 
     gDPSetAlphaCompare(gfx++, G_AC_NONE);
     gDPSetCombineMode(gfx++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
@@ -833,7 +833,7 @@ void EnMag_DrawInner(Actor* thisx, PlayState* play, Gfx** gfxp) {
                             THE_LEGEND_OF_TEX_LEFT, THE_LEGEND_OF_TEX_TOP);
     }
 
-    func_8012C680(&gfx);
+    Gfx_SetupDL39_Ptr(&gfx);
 
     if (this->copyrightAlpha != 0) {
         gDPSetAlphaCompare(gfx++, G_AC_NONE);

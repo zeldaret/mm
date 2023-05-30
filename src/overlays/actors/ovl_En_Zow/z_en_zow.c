@@ -182,7 +182,7 @@ void func_80BDC830(EnZowStruct* ptr, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
     u8 flag = false;
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     for (i = 0; i < 15; i++, ptr++) {
         if (ptr->unk_00 == 1) {
@@ -213,7 +213,7 @@ void func_80BDC9DC(EnZowStruct* ptr, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
     u8 flag = false;
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     for (i = 0; i < 15; i++, ptr++) {
         if (ptr->unk_00 == 3) {
@@ -244,7 +244,7 @@ void func_80BDCB84(EnZowStruct* ptr, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
     u8 flag = false;
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     for (i = 0; i < 15; i++, ptr++) {
         if (ptr->unk_00 == 2) {
@@ -357,7 +357,7 @@ void func_80BDD1E0(EnZow* this, PlayState* play) {
     u16 phi_a1;
 
     if (ENZOW_GET_F(&this->actor) == ENZOW_F_1) {
-        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_GREAT_BAY_TEMPLE)) {
             if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
                 if (CHECK_WEEKEVENTREG(WEEKEVENTREG_78_04)) {
                     phi_a1 = 0x12FD;
@@ -384,7 +384,7 @@ void func_80BDD1E0(EnZow* this, PlayState* play) {
             SET_WEEKEVENTREG(WEEKEVENTREG_78_10);
             phi_a1 = 0x12FF;
         }
-    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80)) {
+    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_GREAT_BAY_TEMPLE)) {
         if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
             phi_a1 = 0x12EC;
         } else {
@@ -405,7 +405,7 @@ void func_80BDD1E0(EnZow* this, PlayState* play) {
 
 void func_80BDD350(EnZow* this, PlayState* play) {
     if (this->unk_2CA & 2) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_DIVE_WATER);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_DIVE_WATER);
         func_80BDCDA8(this, this->unk_2D0);
         this->actor.flags &= ~ACTOR_FLAG_1;
         this->skelAnime.playSpeed = 0.0f;
@@ -420,7 +420,7 @@ void func_80BDD350(EnZow* this, PlayState* play) {
         }
     }
 
-    if ((this->actor.bgCheckFlags & 1) || (this->actor.depthInWater > 180.0f)) {
+    if ((this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) || (this->actor.depthInWater > 180.0f)) {
         this->actor.velocity.y = 0.0f;
         this->actionFunc = func_80BDD79C;
     }
@@ -477,11 +477,11 @@ void func_80BDD570(EnZow* this, PlayState* play) {
                     case 0x12FB:
                     case 0x12FD:
                     case 0x12FF:
-                        func_80151938(play, play->msgCtx.currentTextId + 1);
+                        Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                         break;
 
                     default:
-                        func_801477B4(play);
+                        Message_CloseTextbox(play);
                         break;
                 }
             }
@@ -511,7 +511,7 @@ void func_80BDD6BC(EnZow* this, PlayState* play) {
     }
 
     if (this->actor.depthInWater < 54.0f) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_OUT_OF_WATER);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_OUT_OF_WATER);
         func_80BDCDA8(this, this->unk_2D0);
         func_80BDD04C(this, 1, ANIMMODE_ONCE);
         this->actor.flags |= ACTOR_FLAG_1;
@@ -547,7 +547,7 @@ void EnZow_Update(Actor* thisx, PlayState* play) {
     Actor_MoveWithGravity(&this->actor);
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 15.0f, 30.0f, 5);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 15.0f, 30.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
 
     if (this->unk_2CE != 0) {
         this->unk_2CA &= ~2;
@@ -629,7 +629,7 @@ void EnZow_Draw(Actor* thisx, PlayState* play) {
         OPEN_DISPS(play->state.gfxCtx);
 
         if (this->unk_2CE >= 255) {
-            func_8012C28C(play->state.gfxCtx);
+            Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
             gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 255);
             gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sp54[this->unk_2C4]));

@@ -10,14 +10,17 @@ struct ObjBoat;
 
 typedef struct ObjBoat {
     /* 0x000 */ DynaPolyActor dyna;
-    /* 0x15C */ u8 unk_15C;
-    /* 0x15D */ s8 unk_15D;
-    /* 0x15E */ u8 unk_15E;
-    /* 0x15F */ u8 unk_15F;
-    /* 0x160 */ s16 unk_160;
+    /* 0x15C */ u8 curPointIndex;
+    /* 0x15D */ s8 direction; // To follow the path
+    /* 0x15E */ u8 lastPointIndex; // max point if direction is negative, first point if forwards
+    /* 0x15F */ union {
+        u8 timer;
+        u8 cueId;
+    };
+    /* 0x160 */ s16 angle; // Angle used to set rotations
     /* 0x162 */ UNK_TYPE1 pad_162;
-    /* 0x163 */ u8 unk_163;
-    /* 0x164 */ Vec3s* unk_164;
+    /* 0x163 */ u8 maxPointIndex; // point at the other end from 0
+    /* 0x164 */ Vec3s* points;
 } ObjBoat; // size = 0x168
 
 #endif // Z_OBJ_BOAT_H

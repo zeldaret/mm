@@ -219,7 +219,7 @@ void EnItem00_Init(Actor* thisx, PlayState* play) {
     this->unk152 = 15;
     this->unk14C = 35;
 
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actor.velocity.y = 0.0f;
     this->actor.gravity = 0.0f;
 
@@ -299,7 +299,7 @@ void EnItem00_Init(Actor* thisx, PlayState* play) {
     }
 
     if ((getItemId != GI_NONE) && !Actor_HasParent(&this->actor, play)) {
-        Actor_PickUp(&this->actor, play, getItemId, 50.0f, 20.0f);
+        Actor_OfferGetItem(&this->actor, play, getItemId, 50.0f, 20.0f);
     }
 
     this->actionFunc = func_800A6A40;
@@ -346,7 +346,7 @@ void func_800A640C(EnItem00* this, PlayState* play) {
         this->actor.shape.yOffset = (Math_SinS(this->actor.shape.rot.y) * 150.0f) + 850.0f;
     }
 
-    Math_SmoothStepToF(&this->actor.speedXZ, 0.0f, 1.0f, 0.5f, 0.0f);
+    Math_SmoothStepToF(&this->actor.speed, 0.0f, 1.0f, 0.5f, 0.0f);
 
     if (this->unk14C == 0) {
         if ((this->actor.params != ITEM00_SMALL_KEY) && (this->actor.params != ITEM00_HEART_PIECE) &&
@@ -362,7 +362,7 @@ void func_800A640C(EnItem00* this, PlayState* play) {
         }
     }
 
-    if ((this->actor.gravity != 0.0f) && !(this->actor.bgCheckFlags & 1)) {
+    if ((this->actor.gravity != 0.0f) && !(this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
         this->actionFunc = func_800A6650;
     }
 }
@@ -387,12 +387,12 @@ void func_800A6650(EnItem00* this, PlayState* play) {
         EffectSsKirakira_SpawnSmall(play, &pos, &sEffectVelocity, &sEffectAccel, &sEffectPrimColor, &sEffectEnvColor);
     }
 
-    if (this->actor.bgCheckFlags & 3) {
+    if (this->actor.bgCheckFlags & (BGCHECKFLAG_GROUND | BGCHECKFLAG_GROUND_TOUCH)) {
         if (this->actor.velocity.y > -2.0f) {
             this->actionFunc = func_800A640C;
         } else {
             this->actor.velocity.y = this->actor.velocity.y * -0.8f;
-            this->actor.bgCheckFlags &= ~1;
+            this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND;
         }
     }
 }
@@ -406,7 +406,7 @@ void func_800A6780(EnItem00* this, PlayState* play) {
 
     if (this->actor.params == ITEM00_RECOVERY_HEART) {
         if (this->actor.velocity.y < 0.0f) {
-            this->actor.speedXZ = 0.0f;
+            this->actor.speed = 0.0f;
             this->actor.gravity = -0.4f;
             if (this->actor.velocity.y < -1.5f) {
                 this->actor.velocity.y = -1.5f;
@@ -444,10 +444,10 @@ void func_800A6780(EnItem00* this, PlayState* play) {
         EffectSsKirakira_SpawnSmall(play, &pos, &sEffectVelocity, &sEffectAccel, &sEffectPrimColor, &sEffectEnvColor);
     }
 
-    if (this->actor.bgCheckFlags & 3) {
+    if (this->actor.bgCheckFlags & (BGCHECKFLAG_GROUND | BGCHECKFLAG_GROUND_TOUCH)) {
         this->actionFunc = func_800A640C;
         this->actor.shape.rot.z = 0;
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
     }
 }
 
@@ -456,7 +456,7 @@ void func_800A6A40(EnItem00* this, PlayState* play) {
 
     if (this->getItemId != GI_NONE) {
         if (!Actor_HasParent(&this->actor, play)) {
-            Actor_PickUp(&this->actor, play, this->getItemId, 50.0f, 80.0f);
+            Actor_OfferGetItem(&this->actor, play, this->getItemId, 50.0f, 80.0f);
             this->unk152++;
         } else {
             this->getItemId = GI_NONE;
@@ -507,7 +507,9 @@ void EnItem00_Update(Actor* thisx, PlayState* play) {
 
     if (this->actor.gravity != 0.0f) {
         Actor_MoveWithGravity(&this->actor);
-        Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 15.0f, 15.0f, 0x1D);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 15.0f, 15.0f,
+                                UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                    UPDBGCHECKINFO_FLAG_10);
 
         if (this->actor.floorHeight <= BGCHECK_Y_MIN) {
             Actor_Kill(&this->actor);
@@ -646,7 +648,7 @@ void EnItem00_Update(Actor* thisx, PlayState* play) {
 
     if (getItemId != GI_NONE) {
         if (!Actor_HasParent(&this->actor, play)) {
-            Actor_PickUp(&this->actor, play, getItemId, 50.0f, 20.0f);
+            Actor_OfferGetItem(&this->actor, play, getItemId, 50.0f, 20.0f);
         }
     }
 
@@ -684,7 +686,7 @@ void EnItem00_Update(Actor* thisx, PlayState* play) {
     this->unk152 = 15;
     this->unk14C = 35;
     this->actor.shape.rot.z = 0;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actor.velocity.y = 0.0f;
     this->actor.gravity = 0.0f;
 
@@ -781,7 +783,7 @@ void EnItem00_DrawRupee(EnItem00* this, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     func_800B8050(&this->actor, play, 0);
 
     if (this->actor.params <= ITEM00_RUPEE_RED) {
@@ -832,7 +834,7 @@ void EnItem00_DrawSprite(EnItem00* this, PlayState* play) {
         }
     }
 
-    POLY_OPA_DISP = func_8012C724(POLY_OPA_DISP);
+    POLY_OPA_DISP = Gfx_SetupDL66(POLY_OPA_DISP);
 
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sItemDropTextures[texIndex]));
 
@@ -849,7 +851,7 @@ void EnItem00_DrawHeartContainer(EnItem00* this, PlayState* play) {
     if (Object_GetIndex(&play->objectCtx, OBJECT_GI_HEARTS) == this->actor.objBankIndex) {
         OPEN_DISPS(play->state.gfxCtx);
 
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         Matrix_Scale(20.0f, 20.0f, 20.0f, MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_MODELVIEW | G_MTX_LOAD);
@@ -866,7 +868,7 @@ void EnItem00_DrawHeartPiece(EnItem00* this, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     func_800B8118(&this->actor, play, 0);
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_MODELVIEW | G_MTX_LOAD);
@@ -883,12 +885,13 @@ s16 func_800A7650(s16 dropId) {
           (dropId == ITEM00_ARROWS_50)) &&
          (INV_CONTENT(ITEM_BOW) == ITEM_NONE)) ||
         (((dropId == ITEM00_MAGIC_LARGE) || (dropId == ITEM00_MAGIC_SMALL)) &&
-         (gSaveContext.save.playerData.magicLevel == 0))) {
+         (gSaveContext.save.saveInfo.playerData.magicLevel == 0))) {
         return ITEM00_NO_DROP;
     }
 
     if (dropId == ITEM00_RECOVERY_HEART) {
-        if (((void)0, gSaveContext.save.playerData.healthCapacity) == ((void)0, gSaveContext.save.playerData.health)) {
+        if (((void)0, gSaveContext.save.saveInfo.playerData.healthCapacity) ==
+            ((void)0, gSaveContext.save.saveInfo.playerData.health)) {
             return ITEM00_RUPEE_GREEN;
         }
     }
@@ -951,7 +954,7 @@ Actor* Item_DropCollectible(PlayState* play, Vec3f* spawnPos, u32 params) {
                 } else {
                     spawnedActor->velocity.y = -2.0f;
                 }
-                spawnedActor->speedXZ = 2.0f;
+                spawnedActor->speed = 2.0f;
                 spawnedActor->gravity = -0.9f;
                 spawnedActor->world.rot.y = randPlusMinusPoint5Scaled(0x10000);
                 Actor_SetScale(spawnedActor, 0.0f);
@@ -1002,7 +1005,7 @@ Actor* Item_DropCollectible2(PlayState* play, Vec3f* spawnPos, s32 params) {
             if (spawnedActor != NULL) {
                 if (param8000 == 0) {
                     spawnedActor->velocity.y = 0.0f;
-                    spawnedActor->speedXZ = 0.0f;
+                    spawnedActor->speed = 0.0f;
                     if (param10000 != 0) {
                         spawnedActor->gravity = 0.0f;
                     } else {
@@ -1128,16 +1131,17 @@ void Item_DropCollectibleRandom(PlayState* play, Actor* fromActor, Vec3f* spawnP
 
         if (fromActor != NULL) {
             dropFlag = fromActor->dropFlag;
-            if (dropFlag != 0) {
-                if (fromActor->dropFlag & 1) {
+
+            if (dropFlag != DROPFLAG_NONE) {
+                if (fromActor->dropFlag & DROPFLAG_1) {
                     params = 0x10;
                     dropId = ITEM00_ARROWS_30;
                     dropQuantity = 1;
-                } else if (fromActor->dropFlag & 2) {
+                } else if (fromActor->dropFlag & DROPFLAG_2) {
                     params = 0x10;
                     dropId = ITEM00_RECOVERY_HEART;
                     dropQuantity = 1;
-                } else if (fromActor->dropFlag & 0x20) {
+                } else if (fromActor->dropFlag & DROPFLAG_20) {
                     dropId = ITEM00_RUPEE_PURPLE;
                     dropQuantity = 1;
                 }
@@ -1145,27 +1149,29 @@ void Item_DropCollectibleRandom(PlayState* play, Actor* fromActor, Vec3f* spawnP
         }
 
         if (dropId == ITEM00_FLEXIBLE) {
-            if (gSaveContext.save.playerData.health <= 0x10) {
+            if (gSaveContext.save.saveInfo.playerData.health <= 0x10) {
                 Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ELF, spawnPos->x, spawnPos->y + 40.0f, spawnPos->z, 0, 0, 0,
                             2);
                 SoundSource_PlaySfxAtFixedWorldPos(play, spawnPos, 40, NA_SE_EV_BUTTERFRY_TO_FAIRY);
                 return;
             }
 
-            if (gSaveContext.save.playerData.health <= 0x30) {
+            if (gSaveContext.save.saveInfo.playerData.health <= 0x30) {
                 params = 0x10;
                 dropId = ITEM00_RECOVERY_HEART;
                 dropQuantity = 3;
-            } else if (gSaveContext.save.playerData.health <= 0x50) {
+            } else if (gSaveContext.save.saveInfo.playerData.health <= 0x50) {
                 params = 0x10;
                 dropId = ITEM00_RECOVERY_HEART;
                 dropQuantity = 1;
-            } else if ((gSaveContext.save.playerData.magicLevel != 0) && (gSaveContext.save.playerData.magic == 0)) {
+            } else if ((gSaveContext.save.saveInfo.playerData.magicLevel != 0) &&
+                       (gSaveContext.save.saveInfo.playerData.magic == 0)) {
                 params = 0xD0;
                 dropId = ITEM00_MAGIC_LARGE;
                 dropQuantity = 1;
-            } else if ((gSaveContext.save.playerData.magicLevel != 0) &&
-                       ((gSaveContext.save.playerData.magicLevel >> 1) >= gSaveContext.save.playerData.magic)) {
+            } else if ((gSaveContext.save.saveInfo.playerData.magicLevel != 0) &&
+                       ((gSaveContext.save.saveInfo.playerData.magicLevel >> 1) >=
+                        gSaveContext.save.saveInfo.playerData.magic)) {
                 params = 0xD0;
                 dropId = ITEM00_MAGIC_LARGE;
                 dropQuantity = 1;
@@ -1177,7 +1183,7 @@ void Item_DropCollectibleRandom(PlayState* play, Actor* fromActor, Vec3f* spawnP
                 params = 0xB0;
                 dropId = ITEM00_BOMBS_A;
                 dropQuantity = 1;
-            } else if (gSaveContext.save.playerData.rupees < 11) {
+            } else if (gSaveContext.save.saveInfo.playerData.rupees < 11) {
                 params = 0xA0;
                 dropId = ITEM00_RUPEE_RED;
                 dropQuantity = 1;
@@ -1195,7 +1201,7 @@ void Item_DropCollectibleRandom(PlayState* play, Actor* fromActor, Vec3f* spawnP
                                                               spawnPos->y, spawnPos->z, 0, 0, 0, dropId);
                         if ((spawnedActor != 0) && (dropId != (u8)ITEM00_NO_DROP)) {
                             spawnedActor->actor.velocity.y = 8.0f;
-                            spawnedActor->actor.speedXZ = 2.0f;
+                            spawnedActor->actor.speed = 2.0f;
                             spawnedActor->actor.gravity = -0.9f;
                             spawnedActor->actor.world.rot.y = Rand_ZeroOne() * 40000.0f;
                             Actor_SetScale(&spawnedActor->actor, 0.0f);

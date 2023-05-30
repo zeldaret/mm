@@ -8,7 +8,7 @@
 #include "objects/gameplay_dangeon_keep/gameplay_dangeon_keep.h"
 #include "objects/object_secom_obj/object_secom_obj.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_4000000)
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_CAN_PRESS_SWITCH)
 
 #define THIS ((ObjPzlblock*)thisx)
 
@@ -244,7 +244,7 @@ void func_809A3A48(ObjPzlblock* this) {
     this->unk_16E[2] = 0;
     this->unk_16E[3] = 0;
     this->unk_16E[0] = 0;
-    this->unk_160 = 4;
+    this->updBgCheckInfoFlags = UPDBGCHECKINFO_FLAG_4;
 }
 
 void func_809A3A74(ObjPzlblock* this, PlayState* play) {
@@ -275,7 +275,7 @@ void func_809A3A74(ObjPzlblock* this, PlayState* play) {
 
 void func_809A3BA4(ObjPzlblock* this) {
     this->actionFunc = func_809A3BC0;
-    this->unk_160 = 5;
+    this->updBgCheckInfoFlags = UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4;
 }
 
 void func_809A3BC0(ObjPzlblock* this, PlayState* play) {
@@ -287,14 +287,14 @@ void func_809A3BC0(ObjPzlblock* this, PlayState* play) {
 
         if ((params == 4) || (params == 5) || (params == 6)) {
             if (!func_809A35EC(this, this->unk_16C) || func_809A33E0(this, play, 0x5A)) {
-                Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
+                Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
             }
         } else if (func_809A35EC(this, this->unk_16C)) {
             if (func_809A33E0(this, play, 0x5A)) {
-                Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
+                Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
             }
         } else {
-            Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
+            Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
             Flags_SetSwitch(play, OBJPZLBLOCK_GET_7F(&this->dyna.actor));
             sp20 = 1;
         }
@@ -313,7 +313,7 @@ void func_809A3BC0(ObjPzlblock* this, PlayState* play) {
 
 void func_809A3D1C(ObjPzlblock* this) {
     this->actionFunc = func_809A3D38;
-    this->unk_160 = 4;
+    this->updBgCheckInfoFlags = UPDBGCHECKINFO_FLAG_4;
 }
 
 void func_809A3D38(ObjPzlblock* this, PlayState* play) {
@@ -328,7 +328,7 @@ void ObjPzlblock_Update(Actor* thisx, PlayState* play) {
     ObjPzlblock* this = THIS;
 
     this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y;
-    Actor_UpdateBgCheckInfo(play, &this->dyna.actor, 15.0f, 30.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->dyna.actor, 15.0f, 30.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
 
     if (Object_IsLoaded(&play->objectCtx, this->unk_17A)) {
         ObjPzlblockStruct* sp2C = &D_809A4060[OBJPZLBLOCK_GET_1000(&this->dyna.actor)];
@@ -348,11 +348,12 @@ void func_809A3E58(Actor* thisx, PlayState* play) {
 
     this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y;
 
-    if (this->unk_160 != 0) {
-        Actor_UpdateBgCheckInfo(play, &this->dyna.actor, 15.0f, 30.0f, 0.0f, this->unk_160);
+    if (this->updBgCheckInfoFlags != 0) {
+        Actor_UpdateBgCheckInfo(play, &this->dyna.actor, 15.0f, 30.0f, 0.0f, this->updBgCheckInfoFlags);
         if (((this->actionFunc == func_809A3A74) || (this->actionFunc == func_809A3D38)) &&
-            (this->dyna.actor.bgCheckFlags & 1) && !DynaPoly_GetActor(&play->colCtx, this->dyna.actor.floorBgId)) {
-            this->unk_160 = 0;
+            (this->dyna.actor.bgCheckFlags & BGCHECKFLAG_GROUND) &&
+            !DynaPoly_GetActor(&play->colCtx, this->dyna.actor.floorBgId)) {
+            this->updBgCheckInfoFlags = 0;
         }
     }
 }
@@ -363,7 +364,7 @@ void func_809A3F0C(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, sp28->r, sp28->g, sp28->b, 255);

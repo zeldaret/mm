@@ -52,7 +52,7 @@ void func_80C22DEC(EnBh* this, PlayState* play) {
     s16 yRot;
     s16 zRot;
 
-    this->actor.speedXZ = 3.0f;
+    this->actor.speed = 3.0f;
     xDiff = this->pos.x - this->actor.world.pos.x;
     yDiff = this->pos.y - this->actor.world.pos.y;
     zDiff = this->pos.z - this->actor.world.pos.z;
@@ -114,7 +114,7 @@ void EnBh_Update(Actor* thisx, PlayState* play) {
 void EnBh_Draw(Actor* thisx, PlayState* play) {
     EnBh* this = THIS;
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     Matrix_RotateZS(this->unk1E2, MTXMODE_APPLY);
     SkelAnime_DrawFlexOpa(play, this->skelanime.skeleton, this->skelanime.jointTable, this->skelanime.dListCount, NULL,
                           NULL, &this->actor);

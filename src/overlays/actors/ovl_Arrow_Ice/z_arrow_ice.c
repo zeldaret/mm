@@ -160,7 +160,7 @@ void ArrowIce_Fly(ArrowIce* this, PlayState* play) {
     ArrowIce_LerpFiredPosition(&this->firedPos, &this->actor.world.pos, 0.05f);
 
     if (arrow->unk_261 & 1) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_EXPLOSION_ICE);
+        Actor_PlaySfx(&this->actor, NA_SE_IT_EXPLOSION_ICE);
         ArrowIce_SetupAction(this, ArrowIce_Hit);
         this->timer = 32;
         this->alpha = 255;
@@ -204,7 +204,7 @@ void ArrowIce_Draw(Actor* thisx, PlayState* play) {
 
         // Draw blue effect over the screen when arrow hits
         if (this->blueingEffectMagnitude > 0.0f) {
-            POLY_XLU_DISP = func_8012BFC4(POLY_XLU_DISP);
+            POLY_XLU_DISP = Gfx_SetupDL57(POLY_XLU_DISP);
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 0, (s32)(this->blueingEffectMagnitude * 10.0f) & 0xFF,
                             (s32)(50.0f * this->blueingEffectMagnitude) & 0xFF,
                             (s32)(150.0f * this->blueingEffectMagnitude) & 0xFF);
@@ -214,7 +214,7 @@ void ArrowIce_Draw(Actor* thisx, PlayState* play) {
         }
 
         // Draw ice on the arrow
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 170, 255, 255, (s32)(this->alpha * 0.5f) & 0xFF);
         gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 255, 128);
         Matrix_RotateZYX(0x4000, 0, 0, MTXMODE_APPLY);

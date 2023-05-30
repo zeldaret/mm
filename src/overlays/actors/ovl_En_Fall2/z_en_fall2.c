@@ -44,7 +44,7 @@ void EnFall2_Init(Actor* thisx, PlayState* play) {
     this->unk2DC = Lib_SegmentedToVirtual(object_fall2_Matanimheader_008840);
     Actor_SetScale(&this->actor, 0.02f);
     this->actionFunc = func_80C1B9D4;
-    this->csActionIndex = 0x231;
+    this->cueType = CS_CMD_ACTOR_CUE_561;
     this->alphaLevel = 0.0f;
 }
 
@@ -92,13 +92,13 @@ void EnFall2_DoNothing(EnFall2* this, PlayState* play) {
 
 void func_80C1B8B4(EnFall2* this) {
     this->actor.draw = EnFall2_Draw;
-    if (this->csActorAction == 1) {
+    if (this->cueId == 1) {
         Actor_SetScale(&this->actor, 0.02f);
     }
 }
 
 void func_80C1B8F0(EnFall2* this) {
-    switch (this->csActorAction) {
+    switch (this->cueId) {
         case 1:
             if (this->alphaLevel < 1.0f) {
                 this->alphaLevel += 1.0f / 30.0f;
@@ -125,12 +125,10 @@ void func_80C1B8F0(EnFall2* this) {
 
 void func_80C1B9D4(EnFall2* this, PlayState* play) {
     func_80183DE0(&this->skeletonInfo);
-    if (Cutscene_CheckActorAction(play, this->csActionIndex)) {
-        Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetActorActionIndex(play, this->csActionIndex));
-        if (this->csActorAction !=
-            play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->csActionIndex)]->action) {
-            this->csActorAction =
-                play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->csActionIndex)]->action;
+    if (Cutscene_IsCueInChannel(play, this->cueType)) {
+        Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetCueChannel(play, this->cueType));
+        if (this->cueId != play->csCtx.actorCues[Cutscene_GetCueChannel(play, this->cueType)]->id) {
+            this->cueId = play->csCtx.actorCues[Cutscene_GetCueChannel(play, this->cueType)]->id;
             func_80C1B8B4(this);
         }
         func_80C1B8F0(this);
@@ -155,13 +153,13 @@ void EnFall2_Draw(Actor* thisx, PlayState* play) {
     Mtx* mtx;
 
     if (!(this->alphaLevel <= 0.0f)) {
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         AnimatedMat_DrawXlu(play, Lib_SegmentedToVirtual(object_fall2_Matanimheader_008840));
 
         mtx = GRAPH_ALLOC(play->state.gfxCtx, this->skeletonInfo.unk_18->unk_1 * sizeof(Mtx));
 
         if (mtx != NULL) {
-            func_8012C2DC(play->state.gfxCtx);
+            Gfx_SetupDL25_Xlu(play->state.gfxCtx);
             Matrix_RotateYS((s16)(Camera_GetCamDirYaw(GET_ACTIVE_CAM(play)) + 0x8000), MTXMODE_APPLY);
             func_8018450C(play, &this->skeletonInfo, mtx, NULL, NULL, &this->actor);
         }

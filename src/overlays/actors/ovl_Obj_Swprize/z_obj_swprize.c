@@ -64,7 +64,7 @@ void func_80C253D0(ObjSwprize* this, PlayState* play) {
             if (collectible != NULL) {
                 if (sp78.y < 0.98f) {
                     collectible->velocity.y = (sp78.y + 1.0f) * 4.0f;
-                    collectible->speedXZ = (2.0f * (1.0f - fabsf(sp78.y))) + 2.0f;
+                    collectible->speed = (2.0f * (1.0f - fabsf(sp78.y))) + 2.0f;
                     collectible->world.rot.y = Math_Atan2S_XY(sp78.z, sp78.x) + D_80C257F8[i];
                 } else {
                     collectible->world.rot.y = i * (0x10000 / 3);
@@ -75,7 +75,7 @@ void func_80C253D0(ObjSwprize* this, PlayState* play) {
         collectible = Item_DropCollectible(play, &thisx->world.pos, temp_s0);
         if ((collectible != NULL) && (sp78.y < 0.98f)) {
             collectible->velocity.y = (sp78.y + 1.0f) * 4.0f;
-            collectible->speedXZ = (2.0f * (1.0f - fabsf(sp78.y))) + 2.0f;
+            collectible->speed = (2.0f * (1.0f - fabsf(sp78.y))) + 2.0f;
             collectible->world.rot.y = Math_Atan2S_XY(sp78.z, sp78.x);
         }
     }
@@ -109,12 +109,12 @@ void func_80C25698(ObjSwprize* this) {
 }
 
 void func_80C256AC(ObjSwprize* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
+    if (CutsceneManager_IsNext(this->actor.csId)) {
+        CutsceneManager_StartWithPlayerCs(this->actor.csId, &this->actor);
         func_80C253D0(this, play);
         func_80C25710(this);
     } else {
-        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+        CutsceneManager_Queue(this->actor.csId);
     }
 }
 
@@ -127,7 +127,7 @@ void func_80C2572C(ObjSwprize* this, PlayState* play) {
     if (this->timer > 0) {
         this->timer--;
         if (this->timer == 0) {
-            ActorCutscene_Stop(this->actor.cutscene);
+            CutsceneManager_Stop(this->actor.csId);
             ObjSwprize_SetupDoNothing(this);
         }
     }

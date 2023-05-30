@@ -73,7 +73,7 @@ void DayTelop_Update(DayTelopState* this, GameState* thisx) {
     this->transitionCountdown--;
     if (this->transitionCountdown == 0) {
         if (gSaveContext.save.day < 9) {
-            gSaveContext.gameMode = 0;
+            gSaveContext.gameMode = GAMEMODE_NORMAL;
         } else {
             gSaveContext.nextCutsceneIndex = 0xFFF6;
             gSaveContext.save.day = 1;
@@ -129,7 +129,8 @@ void DayTelop_Draw(DayTelopState* this) {
     GraphicsContext* gfxCtx = this->state.gfxCtx;
 
     OPEN_DISPS(gfxCtx);
-    func_8012C628(this->state.gfxCtx);
+
+    Gfx_SetupDL39_Opa(this->state.gfxCtx);
 
     if (gSaveContext.save.day >= 9) {
         // Draw a white screen
@@ -139,7 +140,7 @@ void DayTelop_Draw(DayTelopState* this) {
         gDPFillRectangle(POLY_OPA_DISP++, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
     }
 
-    func_8012C628(this->state.gfxCtx);
+    Gfx_SetupDL39_Opa(this->state.gfxCtx);
 
     gDPSetRenderMode(POLY_OPA_DISP++, G_RM_OPA_SURF, G_RM_OPA_SURF2);
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, 255);
@@ -213,11 +214,11 @@ void DayTelop_Noop(DayTelopState* this) {
 void DayTelop_LoadGraphics(DayTelopState* this) {
     size_t segmentSize = SEGMENT_ROM_SIZE(daytelop_static);
 
-    this->daytelopStaticFile = THA_AllocEndAlign16(&this->state.heap, segmentSize);
+    this->daytelopStaticFile = THA_AllocTailAlign16(&this->state.heap, segmentSize);
     DmaMgr_SendRequest0(this->daytelopStaticFile, SEGMENT_ROM_START(daytelop_static), segmentSize);
 
     segmentSize = SEGMENT_ROM_SIZE(icon_item_gameover_static);
-    this->gameoverStaticFile = THA_AllocEndAlign16(&this->state.heap, segmentSize);
+    this->gameoverStaticFile = THA_AllocTailAlign16(&this->state.heap, segmentSize);
     DmaMgr_SendRequest0(this->gameoverStaticFile, SEGMENT_ROM_START(icon_item_gameover_static), segmentSize);
 }
 

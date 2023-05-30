@@ -81,7 +81,7 @@ void ConsoleLogo_Draw(GameState* thisx) {
     gSPSetLights1(POLY_OPA_DISP++, sTitleLights);
 
     ConsoleLogo_RenderView(this, 0.0f, 150.0f, 300.0f);
-    func_8012C28C(this->state.gfxCtx);
+    Gfx_SetupDL25_Opa(this->state.gfxCtx);
     Matrix_Translate(-53.0f, -5.0f, 0.0f, MTXMODE_NEW);
     Matrix_Scale(1.0f, 1.0f, 1.0f, MTXMODE_APPLY);
     Matrix_RotateZYX(0, sTitleRotation, 0, MTXMODE_APPLY);
@@ -89,7 +89,7 @@ void ConsoleLogo_Draw(GameState* thisx) {
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(this->state.gfxCtx), G_MTX_LOAD);
     gSPDisplayList(POLY_OPA_DISP++, gNintendo64LogoNDL);
 
-    func_8012C628(this->state.gfxCtx);
+    Gfx_SetupDL39_Opa(this->state.gfxCtx);
 
     gDPPipeSync(POLY_OPA_DISP++);
     gDPSetCycleType(POLY_OPA_DISP++, G_CYC_2CYCLE);
@@ -132,7 +132,7 @@ void ConsoleLogo_Main(GameState* thisx) {
     if (this->exit) {
         gSaveContext.seqId = (u8)NA_BGM_DISABLED;
         gSaveContext.ambienceId = AMBIENCE_ID_DISABLED;
-        gSaveContext.gameMode = 1;
+        gSaveContext.gameMode = GAMEMODE_TITLE_SCREEN;
 
         STOP_GAMESTATE(&this->state);
         SET_NEXT_GAMESTATE(&this->state, TitleSetup_Init, sizeof(TitleSetupState));
@@ -153,7 +153,7 @@ void ConsoleLogo_Init(GameState* thisx) {
     ConsoleLogoState* this = (ConsoleLogoState*)thisx;
     uintptr_t segmentSize = SEGMENT_ROM_SIZE(nintendo_rogo_static);
 
-    this->staticSegment = THA_AllocEndAlign16(&this->state.heap, segmentSize);
+    this->staticSegment = THA_AllocTailAlign16(&this->state.heap, segmentSize);
     DmaMgr_SendRequest0(this->staticSegment, SEGMENT_ROM_START(nintendo_rogo_static), segmentSize);
 
     Game_SetFramerateDivisor(&this->state, 1);
@@ -165,7 +165,7 @@ void ConsoleLogo_Init(GameState* thisx) {
     this->state.destroy = ConsoleLogo_Destroy;
     this->exit = false;
 
-    if (!(Padmgr_GetControllerBitmask() & 1)) {
+    if (!(PadMgr_GetValidControllersMask() & 1)) {
         gSaveContext.fileNum = 0xFEDC;
     } else {
         gSaveContext.fileNum = 0xFF;

@@ -27,7 +27,7 @@ u32 EffectSsFireTail_Init(PlayState* play, u32 index, EffectSs* this, void* init
 void EffectSsFireTail_Update(PlayState* play, u32 index, EffectSs* this);
 void EffectSsFireTail_Draw(PlayState* play, u32 index, EffectSs* this);
 
-const EffectSsInit Effect_Ss_Fire_Tail_InitVars = {
+EffectSsInit Effect_Ss_Fire_Tail_InitVars = {
     EFFECT_SS_FIRE_TAIL,
     EffectSsFireTail_Init,
 };
@@ -107,7 +107,7 @@ void EffectSsFireTail_Draw(PlayState* play, u32 index, EffectSs* this) {
     temp2 = Math_SinS(yawDiff);
     dist = Math_Vec3f_DistXZ(&scale, &this->vec) / (this->rReg10 * 0.1f);
     Matrix_RotateYS(Camera_GetCamDirYaw(GET_ACTIVE_CAM(play)) + 0x8000, MTXMODE_APPLY);
-    Matrix_RotateZF(DEGF_TO_RADF(temp2 * this->rReg2 * dist), MTXMODE_APPLY);
+    Matrix_RotateZF(DEG_TO_RAD(temp2 * this->rReg2 * dist), MTXMODE_APPLY);
     temp2 = 1.0f - ((f32)(this->life + 1) / this->rLifespan);
     temp2 = 1.0f - SQ(temp2);
     scale.x = scale.y = scale.z = temp2 * (this->rScale * (0.001f * 0.01f));
@@ -121,7 +121,7 @@ void EffectSsFireTail_Draw(PlayState* play, u32 index, EffectSs* this) {
     Matrix_Scale(1.0f, temp1, 1.0f / temp1, MTXMODE_APPLY);
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, this->rPrimColorR, this->rPrimColorG, this->rPrimColorB, 255);
     gDPSetEnvColor(POLY_XLU_DISP++, this->rEnvColorR, this->rEnvColorG, this->rEnvColorB, 0);
     gSPSegment(

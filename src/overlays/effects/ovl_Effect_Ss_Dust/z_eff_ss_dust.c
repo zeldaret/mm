@@ -28,7 +28,7 @@ void EffectSsDust_Update(PlayState* play, u32 index, EffectSs* this);
 void EffectSsDust_UpdateFire(PlayState* play, u32 index, EffectSs* this);
 void EffectSsDust_Draw(PlayState* play, u32 index, EffectSs* this);
 
-const EffectSsInit Effect_Ss_Dust_InitVars = {
+EffectSsInit Effect_Ss_Dust_InitVars = {
     EFFECT_SS_DUST,
     EffectSsDust_Init,
 };
@@ -107,7 +107,7 @@ void EffectSsDust_Draw(PlayState* play, u32 index, EffectSs* this) {
         gSPMatrix(POLY_XLU_DISP++, mtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gDPPipeSync(POLY_XLU_DISP++);
         gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(sDustTextures[this->rTexIndex]));
-        POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 0);
+        POLY_XLU_DISP = Gfx_SetupDL(POLY_XLU_DISP, SETUPDL_0);
         gDPPipeSync(POLY_XLU_DISP++);
 
         if (this->rDrawFlags & DUST_DRAWFLAG1) {
