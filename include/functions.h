@@ -1734,16 +1734,6 @@ void func_8014116C(Gfx** gfxP, u16* arg1, u16* workBuffer, s32 width, s32 height
 // void func_8014151C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
 // void func_80141678(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
 void func_80141778(Struct_80140E80* arg0, Gfx** gfxp, void* unk_18E60, GraphicsContext* gfxCtx);
-void VisMono_Init(VisMono* this);
-void VisMono_Destroy(VisMono* this);
-// void VisMono_DesaturateTLUT(u16* tlut);
-// void VisMono_DesaturateDList(Gfx* gfx);
-void VisMono_Draw(VisMono* this, Gfx** gfxp);
-// void VisMono_DrawOld(VisMono* this);
-
-void VisZbuf_Init(VisZbuf* this);
-void VisZbuf_Destroy(VisZbuf* this);
-void VisZbuf_Draw(VisZbuf* this, Gfx** gfxP, void* zbuffer);
 
 // void func_80147520(void);
 void func_80147564(PlayState* play);

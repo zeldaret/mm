@@ -12,7 +12,7 @@ typedef enum {
     /* 3 */ VI_MODE_EDIT_STATE_3  // active, more adjustments, print comparison with NTSC LAN1 mode
 } ViModeEditState;
 
-typedef struct {
+typedef struct ViMode {
     /* 0x00 */ OSViMode customViMode;
     /* 0x50 */ s32 viHeight;
     /* 0x54 */ s32 viWidth;

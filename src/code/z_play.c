@@ -1,4 +1,23 @@
-#include "global.h"
+#include "z64.h"
+#include "regs.h"
+#include "functions.h"
+#include "z64vismono.h"
+
+// Variables are put before most headers as a hacky way to bypass bss reordering
+s16 sTransitionFillTimer;
+Input D_801F6C18;
+TransitionTile sTransitionTile;
+s32 gTransitionTileState;
+VisMono sVisMono;
+Color_RGBA8_u32 gVisMonoColor;
+Struct_80140E80 D_801F6D38;
+Struct_80140E80* D_801F6D4C;
+BombersNotebook sBombersNotebook;
+u8 sBombersNotebookOpen;
+u8 sMotionBlurStatus;
+
+#include "variables.h"
+#include "macros.h"
 #include "buffers.h"
 #include "z64debug_display.h"
 #include "z64quake.h"
@@ -12,18 +31,6 @@
 
 s32 gDbgCamEnabled = false;
 u8 D_801D0D54 = false;
-
-s16 sTransitionFillTimer;
-Input D_801F6C18;
-TransitionTile sTransitionTile;
-s32 gTransitionTileState;
-VisMono sVisMono;
-Color_RGBA8_u32 gVisMonoColor;
-Struct_80140E80 D_801F6D38;
-Struct_80140E80* D_801F6D4C;
-BombersNotebook sBombersNotebook;
-u8 sBombersNotebookOpen;
-u8 sMotionBlurStatus;
 
 typedef enum {
     /* 0 */ MOTION_BLUR_OFF,

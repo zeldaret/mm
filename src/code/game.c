@@ -4,6 +4,8 @@
 #include "z64rumble.h"
 #include "z64vimode.h"
 #include "z64viscvg.h"
+#include "z64vismono.h"
+#include "z64viszbuf.h"
 #include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
 
 extern UNK_TYPE1 D_801F7FF0;

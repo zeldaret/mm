@@ -2,6 +2,7 @@
 #include "global.h"
 #include "buffers.h"
 #include "system_malloc.h"
+#include "z64vimode.h"
 
 extern u16 gFramebufferHiRes0[HIRES_BUFFER_WIDTH][HIRES_BUFFER_HEIGHT];
 extern u16 gFramebufferHiRes1[HIRES_BUFFER_WIDTH][HIRES_BUFFER_HEIGHT];

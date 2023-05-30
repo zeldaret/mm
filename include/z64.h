@@ -612,22 +612,6 @@ typedef struct {
 } Struct_80140E80; // size = 0x14
 
 typedef struct {
-    /* 0x0 */ u32 useRgba;
-    /* 0x4 */ u32 setScissor;
-    /* 0x8 */ Color_RGBA8_u32 primColor;
-    /* 0xC */ Color_RGBA8_u32 envColor;
-} VisZbuf; // size = 0x10
-
-typedef struct {
-    /* 0x00 */ u32 unk_00;
-    /* 0x04 */ u32 setScissor;
-    /* 0x08 */ Color_RGBA8_u32 primColor;
-    /* 0x0C */ Color_RGBA8_u32 envColor;
-    /* 0x10 */ u16* tlut;
-    /* 0x14 */ Gfx* dList;
-} VisMono; // size = 0x18
-
-typedef struct {
     /* 0x0 */ u8* value;
     /* 0x4 */ const char* name;
 } FlagSetEntry; // size = 0x8

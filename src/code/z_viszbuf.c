@@ -1,4 +1,6 @@
 #include "global.h"
+#include "z64viszbuf.h"
+#include "libc/stdbool.h"
 
 #define VISZBUF_ZBUFFRAG_HEIGHT (TMEM_SIZE / (gCfbWidth * G_IM_SIZ_16b_BYTES))
 
