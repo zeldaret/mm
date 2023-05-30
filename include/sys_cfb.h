@@ -13,21 +13,18 @@ void* SysCfb_GetWorkBuffer(void);
 u16 SysCfb_GetZBufferPixel(s32 x, s32 y);
 s32 SysCfb_GetZBufferInt(s32 x, s32 y);
 
-extern OSViMode sNotebookViMode;
 extern void* gFramebuffers[2];
 extern OSViMode* gActiveViMode;
 extern u16* gZBufferPtr;
 extern void* gWorkBuffer;
 extern u64* gGfxSPTaskOutputBufferPtr;
 extern void* gGfxSPTaskOutputBufferEnd;
-extern void* sCfbLoRes1;
-extern void* sCfbLoRes0;
+
 extern u16 (*gZBufferLoRes)[SCREEN_WIDTH * SCREEN_HEIGHT];
 extern u16 (*gWorkBufferLoRes)[SCREEN_WIDTH * SCREEN_HEIGHT];
 extern u64 (*gGfxSPTaskOutputBufferLoRes)[0x3000];
 extern void* gGfxSPTaskOutputBufferEndLoRes;
-extern void* sCfbHiRes1;
-extern void* sCfbHiRes0;
+
 extern u16 (*gZBufferHiRes)[HIRES_BUFFER_WIDTH * HIRES_BUFFER_HEIGHT];
 extern u16 (*gWorkBufferHiRes)[HIRES_BUFFER_WIDTH * HIRES_BUFFER_HEIGHT];
 extern u64 (*gGfxSPTaskOutputBufferHiRes)[0x3000];

@@ -12,7 +12,7 @@
 extern UNK_TYPE1 D_801F7FF0;
 extern VisCvg sVisCvg;
 extern VisZbuf sVisZbuf;
-extern VisMono sMonoColors;
+extern VisMono sVisMono;
 extern ViMode sViMode;
 
 s32 gFramerateDivisor = 1;
@@ -55,16 +55,16 @@ void GameState_SetFBFilter(Gfx** gfx, void* zbuffer) {
         sVisZbuf.envColor.a = R_FB_FILTER_A;
         VisZbuf_Draw(&sVisZbuf, &dlist, zbuffer);
     } else if (R_FB_FILTER_TYPE == 7) {
-        sMonoColors.unk_00 = 0;
-        sMonoColors.primColor.r = R_FB_FILTER_PRIM_COLOR(0);
-        sMonoColors.primColor.g = R_FB_FILTER_PRIM_COLOR(1);
-        sMonoColors.primColor.b = R_FB_FILTER_PRIM_COLOR(2);
-        sMonoColors.primColor.a = R_FB_FILTER_A;
-        sMonoColors.envColor.r = R_FB_FILTER_ENV_COLOR(0);
-        sMonoColors.envColor.g = R_FB_FILTER_ENV_COLOR(1);
-        sMonoColors.envColor.b = R_FB_FILTER_ENV_COLOR(2);
-        sMonoColors.envColor.a = R_FB_FILTER_A;
-        VisMono_Draw(&sMonoColors, &dlist);
+        sVisMono.unk_00 = 0;
+        sVisMono.primColor.r = R_FB_FILTER_PRIM_COLOR(0);
+        sVisMono.primColor.g = R_FB_FILTER_PRIM_COLOR(1);
+        sVisMono.primColor.b = R_FB_FILTER_PRIM_COLOR(2);
+        sVisMono.primColor.a = R_FB_FILTER_A;
+        sVisMono.envColor.r = R_FB_FILTER_ENV_COLOR(0);
+        sVisMono.envColor.g = R_FB_FILTER_ENV_COLOR(1);
+        sVisMono.envColor.b = R_FB_FILTER_ENV_COLOR(2);
+        sVisMono.envColor.a = R_FB_FILTER_A;
+        VisMono_Draw(&sVisMono, &dlist);
     }
 
     *gfx = dlist;
@@ -223,7 +223,7 @@ void GameState_Init(GameState* gameState, GameStateFunc init, GraphicsContext* g
 
         VisCvg_Init(&sVisCvg);
         VisZbuf_Init(&sVisZbuf);
-        VisMono_Init(&sMonoColors);
+        VisMono_Init(&sVisMono);
         ViMode_Init(&sViMode);
         func_801773A0(&D_801F7FF0);
         Rumble_Init();
@@ -245,7 +245,7 @@ void GameState_Destroy(GameState* gameState) {
     func_801773C4(&D_801F7FF0);
     VisCvg_Destroy(&sVisCvg);
     VisZbuf_Destroy(&sVisZbuf);
-    VisMono_Destroy(&sMonoColors);
+    VisMono_Destroy(&sVisMono);
     ViMode_Destroy(&sViMode);
     THA_Destroy(&gameState->heap);
     GameAlloc_Cleanup(&gameState->alloc);

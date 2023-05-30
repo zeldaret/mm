@@ -8,7 +8,7 @@ s16 sTransitionFillTimer;
 Input D_801F6C18;
 TransitionTile sTransitionTile;
 s32 gTransitionTileState;
-VisMono sVisMono;
+static VisMono sVisMono;
 Color_RGBA8_u32 gVisMonoColor;
 Struct_80140E80 D_801F6D38;
 Struct_80140E80* D_801F6D4C;
