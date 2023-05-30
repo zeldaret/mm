@@ -10,10 +10,10 @@
 #include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
 
 extern UNK_TYPE1 D_801F7FF0;
-extern VisCvg D_801F8010;
+extern VisCvg sVisCvg;
 extern VisZbuf sVisZbuf;
 extern VisMono sMonoColors;
-extern ViMode D_801F8048;
+extern ViMode sViMode;
 
 s32 gFramerateDivisor = 1;
 f32 gFramerateDivisorF = 1.0f;
@@ -37,12 +37,12 @@ void GameState_SetFBFilter(Gfx** gfx, void* zbuffer) {
     Gfx* dlist = *gfx;
 
     if ((R_FB_FILTER_TYPE > 0) && (R_FB_FILTER_TYPE < 5)) {
-        D_801F8010.type = R_FB_FILTER_TYPE;
-        D_801F8010.color.r = R_FB_FILTER_PRIM_COLOR(0);
-        D_801F8010.color.g = R_FB_FILTER_PRIM_COLOR(1);
-        D_801F8010.color.b = R_FB_FILTER_PRIM_COLOR(2);
-        D_801F8010.color.a = R_FB_FILTER_A;
-        VisCvg_Draw(&D_801F8010, &dlist);
+        sVisCvg.type = R_FB_FILTER_TYPE;
+        sVisCvg.color.r = R_FB_FILTER_PRIM_COLOR(0);
+        sVisCvg.color.g = R_FB_FILTER_PRIM_COLOR(1);
+        sVisCvg.color.b = R_FB_FILTER_PRIM_COLOR(2);
+        sVisCvg.color.a = R_FB_FILTER_A;
+        VisCvg_Draw(&sVisCvg, &dlist);
     } else if ((R_FB_FILTER_TYPE == 5) || (R_FB_FILTER_TYPE == 6)) {
         sVisZbuf.useRgba = (R_FB_FILTER_TYPE == 6);
         sVisZbuf.primColor.r = R_FB_FILTER_PRIM_COLOR(0);
@@ -221,10 +221,10 @@ void GameState_Init(GameState* gameState, GameStateFunc init, GraphicsContext* g
 
         init(gameState);
 
-        VisCvg_Init(&D_801F8010);
+        VisCvg_Init(&sVisCvg);
         VisZbuf_Init(&sVisZbuf);
         VisMono_Init(&sMonoColors);
-        ViMode_Init(&D_801F8048);
+        ViMode_Init(&sViMode);
         func_801773A0(&D_801F7FF0);
         Rumble_Init();
 
@@ -243,10 +243,10 @@ void GameState_Destroy(GameState* gameState) {
 
     Rumble_Destroy();
     func_801773C4(&D_801F7FF0);
-    VisCvg_Destroy(&D_801F8010);
+    VisCvg_Destroy(&sVisCvg);
     VisZbuf_Destroy(&sVisZbuf);
     VisMono_Destroy(&sMonoColors);
-    ViMode_Destroy(&D_801F8048);
+    ViMode_Destroy(&sViMode);
     THA_Destroy(&gameState->heap);
     GameAlloc_Cleanup(&gameState->alloc);
 }
