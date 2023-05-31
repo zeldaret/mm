@@ -4830,7 +4830,6 @@ void Interface_DrawClock(PlayState* play) {
 
                         // digits for seconds
                         finalHoursClockSlots[6] = 0;
-
                         finalHoursClockSlots[7] =
                             timeUntilMoonCrash - (u32)((finalHoursClockSlots[2] * ((f32)0x10000 / 24)) +
                                                        (finalHoursClockSlots[5] * ((f32)0x10000 / (24 * 60))));
