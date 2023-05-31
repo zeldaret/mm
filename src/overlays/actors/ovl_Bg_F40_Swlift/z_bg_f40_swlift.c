@@ -53,7 +53,7 @@ void BgF40Swlift_Init(Actor* thisx, PlayState* play) {
         if (index != 0) {
             Actor_Kill(&this->dyna.actor);
         } else {
-            DynaPolyActor_LoadMesh(play, &this->dyna, &gUnusedStoneTowerVerticallyOscillatingPlatformCol);
+            DynaPolyActor_LoadMesh(play, &this->dyna, &gStoneTowerVerticallyOscillatingPlatformCol);
             this->dyna.actor.params = 0;
         }
     }
@@ -70,7 +70,7 @@ void BgF40Swlift_Update(Actor* thisx, PlayState* play2) {
     s32 i;
 
     for (i = 1; i < ARRAY_COUNT(sSwitchFlags); i++) {
-        if ((sSwitchFlags[i] == 0xFF) || (Flags_GetSwitch(play, sSwitchFlags[i]) == 0)) {
+        if ((sSwitchFlags[i] == 0xFF) || !Flags_GetSwitch(play, sSwitchFlags[i])) {
             break;
         }
     }
@@ -80,21 +80,21 @@ void BgF40Swlift_Update(Actor* thisx, PlayState* play2) {
         f32 heightOffset;
 
         this->dyna.actor.params = -1;
-        heightOffset = (((f32)sHeights[i]) - this->dyna.actor.world.pos.y) * 0.1f;
+        heightOffset = (sHeights[i] - this->dyna.actor.world.pos.y) * 0.1f;
         if (heightOffset > 0.0f) {
             heightOffset = CLAMP(heightOffset, 0.5f, 15.0f);
         } else {
             heightOffset = CLAMP(heightOffset, -15.0f, -0.5f);
         }
 
-        if ((Math_StepToF(&this->dyna.actor.speedXZ, heightOffset, 1.0f) != 0) && (fabsf(heightOffset) <= 0.5f)) {
-            if (Math_StepToF(&this->dyna.actor.world.pos.y, (f32)sHeights[i], fabsf(this->dyna.actor.speedXZ)) != 0) {
+        if ((Math_StepToF(&this->dyna.actor.speed, heightOffset, 1.0f) != 0) && (fabsf(heightOffset) <= 0.5f)) {
+            if (Math_StepToF(&this->dyna.actor.world.pos.y, sHeights[i], fabsf(this->dyna.actor.speed)) != 0) {
                 this->dyna.actor.params = i;
                 this->timer = 48;
-                this->dyna.actor.speedXZ = 0.0f;
+                this->dyna.actor.speed = 0.0f;
             }
         } else {
-            this->dyna.actor.world.pos.y += this->dyna.actor.speedXZ;
+            this->dyna.actor.world.pos.y += this->dyna.actor.speed;
         }
     } else {
         if (this->timer == 0) {
@@ -109,5 +109,5 @@ void BgF40Swlift_Update(Actor* thisx, PlayState* play2) {
 void BgF40Swlift_Draw(Actor* thisx, PlayState* play) {
     BgF40Swlift* this = THIS;
 
-    Gfx_DrawDListOpa(play, gUnusedStoneTowerVerticallyOscillatingPlatformDL);
+    Gfx_DrawDListOpa(play, gStoneTowerVerticallyOscillatingPlatformDL);
 }

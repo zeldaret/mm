@@ -42,7 +42,7 @@ void BgF40Flift_Init(Actor* thisx, PlayState* play) {
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, 1);
-    DynaPolyActor_LoadMesh(play, &this->dyna, &gUnusedStoneTowerTempleSquareElevatorCol);
+    DynaPolyActor_LoadMesh(play, &this->dyna, &gStoneTowerTempleSquareElevatorCol);
     this->dyna.actor.params = 1;
     this->actionFunc = func_808D75F0;
 }
@@ -91,5 +91,5 @@ void BgF40Flift_Update(Actor* thisx, PlayState* play) {
 }
 
 void BgF40Flift_Draw(Actor* thisx, PlayState* play) {
-    Gfx_DrawDListOpa(play, gUnusedStoneTowerTempleSquareElevatorDL);
+    Gfx_DrawDListOpa(play, gStoneTowerTempleSquareElevatorDL);
 }
