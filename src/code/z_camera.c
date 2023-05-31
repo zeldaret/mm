@@ -42,6 +42,7 @@
  *          -Y                      +Z                      -Y
  *
  */
+
 #include "global.h"
 #include "z64quake.h"
 #include "z64shrink_window.h"

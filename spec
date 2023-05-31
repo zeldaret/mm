@@ -588,7 +588,6 @@ beginseg
     include "build/src/code/c_keyframe.o"
     include "build/src/code/sys_slowly.o"
     include "build/src/code/sys_flashrom.o"
-    include "build/data/code/sys_flashrom.bss.o"
     include "build/asm/code/code_80185F90.text.o" // handwritten
     include "build/src/libultra/flash/osFlash.o"
     pad_text
@@ -1120,11 +1119,7 @@ beginseg
     name "ovl_Object_Kankyo"
     compress
     include "build/src/overlays/actors/ovl_Object_Kankyo/z_object_kankyo.o"
-#ifdef NON_MATCHING
     include "build/src/overlays/actors/ovl_Object_Kankyo/ovl_Object_Kankyo_reloc.o"
-#else
-    include "build/data/ovl_Object_Kankyo/ovl_Object_Kankyo.reloc.o"
-#endif
 endseg
 
 beginseg
@@ -1524,11 +1519,7 @@ beginseg
     name "ovl_En_Kanban"
     compress
     include "build/src/overlays/actors/ovl_En_Kanban/z_en_kanban.o"
-#ifdef NON_MATCHING
     include "build/src/overlays/actors/ovl_En_Kanban/ovl_En_Kanban_reloc.o"
-#else
-    include "build/data/ovl_En_Kanban/ovl_En_Kanban.reloc.o"
-#endif
 endseg
 
 beginseg
@@ -3196,8 +3187,7 @@ beginseg
     name "ovl_fbdemo_wipe3"
     compress
     include "build/src/overlays/fbdemos/ovl_fbdemo_wipe3/z_fbdemo_wipe3.o"
-    include "build/data/ovl_fbdemo_wipe3/ovl_fbdemo_wipe3.data.o"
-    include "build/data/ovl_fbdemo_wipe3/ovl_fbdemo_wipe3.reloc.o"
+    include "build/src/overlays/fbdemos/ovl_fbdemo_wipe3/ovl_fbdemo_wipe3_reloc.o"
 endseg
 
 beginseg
@@ -4854,8 +4844,7 @@ beginseg
     name "ovl_Demo_Moonend"
     compress
     include "build/src/overlays/actors/ovl_Demo_Moonend/z_demo_moonend.o"
-    include "build/data/ovl_Demo_Moonend/ovl_Demo_Moonend.data.o"
-    include "build/data/ovl_Demo_Moonend/ovl_Demo_Moonend.reloc.o"
+    include "build/src/overlays/actors/ovl_Demo_Moonend/ovl_Demo_Moonend_reloc.o"
 endseg
 
 beginseg

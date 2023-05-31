@@ -4,6 +4,7 @@
  * Description: Soaring effects (wings, sphere, etc)
  */
 
+#include "prevent_bss_reordering.h"
 #include "z_en_test7.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 

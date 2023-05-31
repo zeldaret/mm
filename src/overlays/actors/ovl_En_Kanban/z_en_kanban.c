@@ -198,20 +198,16 @@ void func_80954BE8(EnKanban* this, PlayState* play) {
     }
 }
 
-#ifdef NON_MATCHING
-// Lots of branch likely stuff
 void EnKanban_Update(Actor* thisx, PlayState* play) {
-    // PlayState* play = play2;
     u8 bounced = false;
-    s32 pad;
     EnKanban* this = THIS;
+    s32 pad;
+    FloorType floorType;
+    f32 phi_f0;
     Player* player = GET_PLAYER(play);
     Vec3f offset;
     EnKanban* piece;
     EnKanban* signpost;
-    FloorType floorType;
-    f32 phi_f0;
-    s32 pad2;
 
     this->frameCount++;
 
@@ -423,8 +419,8 @@ void EnKanban_Update(Actor* thisx, PlayState* play) {
             f32 tempY;
             f32 tempZ;
             f32 tempWaterDepth;
+            s32 pad2;
             u16 bgCheckFlags;
-            u8 onGround;
 
             if (this->unk_198 != 0) {
                 this->actor.velocity.y = -2.0f;
@@ -452,103 +448,103 @@ void EnKanban_Update(Actor* thisx, PlayState* play) {
             this->actor.bgCheckFlags = bgCheckFlags;
             this->actor.depthInWater = tempWaterDepth;
 
-            if (1) {}
+            if (1) {
+                u8 onGround = (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND);
 
-            onGround = (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND);
-
-            if (this->spinXFlag != 0) {
-                this->spinRot.x += this->spinVel.x;
-                this->spinVel.x -= 0x800;
-                if ((this->spinRot.x <= 0) && onGround) {
-                    this->spinRot.x = 0;
-                    this->spinVel.x = 0;
-                }
-            } else {
-                this->spinRot.x -= this->spinVel.x;
-                this->spinVel.x -= 0x800;
-                if ((this->spinRot.x >= 0) && onGround) {
-                    this->spinRot.x = 0;
-                    this->spinVel.x = 0;
-                }
-            }
-
-            if (this->spinVel.x < -0xC00) {
-                this->spinVel.x = -0xC00;
-            }
-
-            if (this->spinZFlag != 0) {
-                this->spinRot.z += this->spinVel.z;
-                this->spinVel.z -= 0x800;
-                if ((this->spinRot.z <= 0) && onGround) {
-                    this->spinRot.z = 0;
-                    this->spinVel.z = 0;
-                }
-            } else {
-                this->spinRot.z -= this->spinVel.z;
-                this->spinVel.z -= 0x800;
-                if ((this->spinRot.z >= 0) && onGround) {
-                    this->spinRot.z = 0;
-                    this->spinVel.z = 0;
-                }
-            }
-
-            if (this->spinVel.z < -0xC00) {
-                this->spinVel.z = -0xC00;
-            }
-
-            if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
-                if (!(this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
-                    Actor_PlaySfx(&this->actor, NA_SE_EV_WOODPLATE_BOUND);
-                }
-                this->actor.speed *= -0.5f;
-            }
-
-            if (this->actor.bgCheckFlags & BGCHECKFLAG_WATER_TOUCH) {
-                this->actionState = ENKANBAN_WATER;
-                Actor_PlaySfx(&this->actor, NA_SE_EV_BOMB_DROP_WATER);
-                this->bounceX = this->bounceZ = 0;
-                this->actor.world.pos.y += this->actor.depthInWater;
-                EffectSsGSplash_Spawn(play, &this->actor.world.pos, NULL, NULL, 0, (this->partCount * 20) + 300);
-                EffectSsGRipple_Spawn(play, &this->actor.world.pos, 150, 650, 0);
-                EffectSsGRipple_Spawn(play, &this->actor.world.pos, 300, 800, 5);
-                this->actor.velocity.y = 0.0f;
-                this->actor.gravity = 0.0f;
-                break;
-            }
-
-            if (onGround) {
-                floorType = SurfaceType_GetFloorType(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
-
-                if ((floorType == FLOOR_TYPE_15) || (floorType == FLOOR_TYPE_14)) {
-                    this->unk_197 = 1;
-                } else if (floorType == FLOOR_TYPE_5) {
-                    this->unk_197 = -1;
-                }
-
-                if (this->bounceCount <= 0) {
-                    this->bounceCount++;
-                    if (this->unk_197 != 0) {
-                        this->actor.velocity.y = 0.0f;
-                    } else {
-                        this->actor.velocity.y *= -0.3f;
-                        this->actor.world.rot.y += (s16)randPlusMinusPoint5Scaled(0x4000);
+                if (this->spinXFlag != 0) {
+                    this->spinRot.x += this->spinVel.x;
+                    this->spinVel.x -= 0x800;
+                    if ((this->spinRot.x <= 0) && onGround) {
+                        this->spinRot.x = 0;
+                        this->spinVel.x = 0;
                     }
-                    bounced = true;
                 } else {
-                    this->actor.velocity.y = 0.0f;
+                    this->spinRot.x -= this->spinVel.x;
+                    this->spinVel.x -= 0x800;
+                    if ((this->spinRot.x >= 0) && onGround) {
+                        this->spinRot.x = 0;
+                        this->spinVel.x = 0;
+                    }
                 }
 
-                if (this->unk_197 != 0) {
-                    if (this->unk_197 > 0) {
-                        this->actor.speed = 0.0f;
-                    } else if ((this->floorRot.x > 0.1f) || (this->floorRot.z > 0.1f)) {
-                        this->airTimer = 10;
-                        if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
-                            this->actionState = ENKANBAN_GROUND;
-                            this->actor.speed = 0.0f;
-                            goto nextCase;
+                if (this->spinVel.x < -0xC00) {
+                    this->spinVel.x = -0xC00;
+                }
+
+                if (this->spinZFlag != 0) {
+                    this->spinRot.z += this->spinVel.z;
+                    this->spinVel.z -= 0x800;
+                    if ((this->spinRot.z <= 0) && onGround) {
+                        this->spinRot.z = 0;
+                        this->spinVel.z = 0;
+                    }
+                } else {
+                    this->spinRot.z -= this->spinVel.z;
+                    this->spinVel.z -= 0x800;
+                    if ((this->spinRot.z >= 0) && onGround) {
+                        this->spinRot.z = 0;
+                        this->spinVel.z = 0;
+                    }
+                }
+
+                if (this->spinVel.z < -0xC00) {
+                    this->spinVel.z = -0xC00;
+                }
+
+                if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
+                    if (!(this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
+                        Actor_PlaySfx(&this->actor, NA_SE_EV_WOODPLATE_BOUND);
+                    }
+                    this->actor.speed *= -0.5f;
+                }
+
+                if (this->actor.bgCheckFlags & BGCHECKFLAG_WATER_TOUCH) {
+                    this->actionState = ENKANBAN_WATER;
+                    Actor_PlaySfx(&this->actor, NA_SE_EV_BOMB_DROP_WATER);
+                    this->bounceX = this->bounceZ = 0;
+                    this->actor.world.pos.y += this->actor.depthInWater;
+                    EffectSsGSplash_Spawn(play, &this->actor.world.pos, NULL, NULL, 0, (this->partCount * 20) + 300);
+                    EffectSsGRipple_Spawn(play, &this->actor.world.pos, 150, 650, 0);
+                    EffectSsGRipple_Spawn(play, &this->actor.world.pos, 300, 800, 5);
+                    this->actor.velocity.y = 0.0f;
+                    this->actor.gravity = 0.0f;
+                    break;
+                }
+
+                if (onGround) {
+                    floorType = SurfaceType_GetFloorType(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
+
+                    if ((floorType == FLOOR_TYPE_15) || (floorType == FLOOR_TYPE_14)) {
+                        this->unk_197 = 1;
+                    } else if (floorType == FLOOR_TYPE_5) {
+                        this->unk_197 = -1;
+                    }
+
+                    if (this->bounceCount <= 0) {
+                        this->bounceCount++;
+                        if (this->unk_197 != 0) {
+                            this->actor.velocity.y = 0.0f;
                         } else {
-                            Vec3f spC8;
+                            this->actor.velocity.y *= -0.3f;
+                            this->actor.world.rot.y += (s16)randPlusMinusPoint5Scaled(0x4000);
+                        }
+                        bounced = true;
+                    } else {
+                        this->actor.velocity.y = 0.0f;
+                    }
+
+                    if (this->unk_197 != 0) {
+                        Vec3f spC8;
+
+                        if (this->unk_197 > 0) {
+                            this->actor.speed = 0.0f;
+                        } else if ((this->floorRot.x > 0.1f) || (this->floorRot.z > 0.1f)) {
+                            this->airTimer = 10;
+                            if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
+                                this->actionState = ENKANBAN_GROUND;
+                                this->actor.speed = 0.0f;
+                                goto nextCase;
+                            }
 
                             Matrix_RotateXFNew(this->floorRot.x);
                             Matrix_RotateZF(this->floorRot.z, MTXMODE_APPLY);
@@ -558,67 +554,67 @@ void EnKanban_Update(Actor* thisx, PlayState* play) {
                             this->actor.world.rot.y = Math_Atan2S(spC8.x, spC8.z);
                             this->unk_198 = 1;
                             this->actor.speed = sqrtf(SQXZ(this->actor.velocity));
+                        } else {
+                            this->unk_198 = 0;
+                            Math_ApproachZeroF(&this->actor.speed, 1, 0.1f);
                         }
                     } else {
-                        this->unk_198 = 0;
-                        Math_ApproachZeroF(&this->actor.speed, 1, 0.1f);
+                        this->actor.speed *= 0.7f;
                     }
+
+                    if (this->spinRot.x == 0) {
+                        if (this->bounceX != 0) {
+                            bounced = true;
+                            if (this->unk_197 != 0) {
+                                this->spinRot.x = 0;
+                                this->bounceX = 0;
+                            } else {
+                                this->spinVel.x = this->bounceX << 9;
+                                if (this->bounceX != 0) {
+                                    this->bounceX -= 5;
+                                    if (this->bounceX <= 0) {
+                                        this->bounceX = 0;
+                                    }
+                                }
+
+                                if (Rand_ZeroOne() < 0.5f) {
+                                    this->spinXFlag = 1;
+                                } else {
+                                    this->spinXFlag = 0;
+                                }
+                            }
+                        }
+                    }
+
+                    if (this->spinRot.z == 0) {
+                        if (this->bounceZ != 0) {
+                            bounced = 1;
+                            if (this->unk_197 != 0) {
+                                this->spinRot.z = 0;
+                                this->bounceZ = 0;
+                            } else {
+                                this->spinVel.z = this->bounceZ << 9;
+                                if (this->bounceZ != 0) {
+                                    this->bounceZ -= 5;
+                                    if (this->bounceZ <= 0) {
+                                        this->bounceZ = 0;
+                                    }
+                                }
+
+                                if (Rand_ZeroOne() < 0.5f) {
+                                    this->spinZFlag = 1;
+                                } else {
+                                    this->spinZFlag = 0;
+                                }
+                            }
+                        }
+                    }
+
+                    Math_ApproachS(&this->actor.shape.rot.x, this->direction << 0xE, 1, 0x2000);
                 } else {
-                    this->actor.speed *= 0.7f;
+                    this->actor.shape.rot.y += this->spinVel.y;
+                    this->actor.shape.rot.x += this->direction * 0x7D0;
                 }
-
-                if (this->spinRot.x == 0) {
-                    if (this->bounceX != 0) {
-                        bounced = true;
-                        if (this->unk_197 != 0) {
-                            this->spinRot.x = 0;
-                            this->bounceX = 0;
-                        } else {
-                            this->spinVel.x = this->bounceX << 9;
-                            if (this->bounceX != 0) {
-                                this->bounceX -= 5;
-                                if (this->bounceX <= 0) {
-                                    this->bounceX = 0;
-                                }
-                            }
-
-                            if (Rand_ZeroOne() < 0.5f) {
-                                this->spinXFlag = 1;
-                            } else {
-                                this->spinXFlag = 0;
-                            }
-                        }
-                    }
-                }
-
-                if (this->spinRot.z == 0) {
-                    if (this->bounceZ != 0) {
-                        bounced = 1;
-                        if (this->unk_197 != 0) {
-                            this->spinRot.z = 0;
-                            this->bounceZ = 0;
-                        } else {
-                            this->spinVel.z = this->bounceZ << 9;
-                            if (this->bounceZ != 0) {
-                                this->bounceZ -= 5;
-                                if (this->bounceZ <= 0) {
-                                    this->bounceZ = 0;
-                                }
-                            }
-
-                            if (Rand_ZeroOne() < 0.5f) {
-                                this->spinZFlag = 1;
-                            } else {
-                                this->spinZFlag = 0;
-                            }
-                        }
-                    }
-                }
-
-                Math_ApproachS(&this->actor.shape.rot.x, this->direction << 0xE, 1, 0x2000);
-            } else {
-                this->actor.shape.rot.y += this->spinVel.y;
-                this->actor.shape.rot.x += this->direction * 0x7D0;
             }
 
             if (bounced) {
@@ -630,15 +626,16 @@ void EnKanban_Update(Actor* thisx, PlayState* play) {
             }
 
             if (bounced && (this->unk_197 >= 0)) {
+                static Color_RGBA8 D_80957548 = { 185, 140, 70, 255 };
+                static Color_RGBA8 D_8095754C = { 255, 255, 255, 255 };
                 s16 dustCount;
                 s16 j;
                 Vec3f velocity = { 0.0f, 0.0f, 0.0f };
-                static Color_RGBA8 D_80957548 = { 185, 140, 70, 255 };
-                static Color_RGBA8 D_8095754C = { 255, 255, 255, 255 };
                 Vec3f accel;
                 Vec3f pos;
                 Color_RGBA8 primColor;
                 Color_RGBA8 envColor;
+                s32 pad3;
 
                 if (this->unk_197 != 0) {
                     primColor = D_8095754C;
@@ -667,10 +664,10 @@ void EnKanban_Update(Actor* thisx, PlayState* play) {
                 this->actionState = ENKANBAN_GROUND;
             }
         }
-
+        nextCase:
+        // fallthrough
         case ENKANBAN_GROUND:
         case ENKANBAN_WATER:
-        nextCase:
             signpost = (EnKanban*)this->actor.parent;
 
             if (signpost->partFlags == 0xFFFF) {
@@ -839,6 +836,9 @@ void EnKanban_Update(Actor* thisx, PlayState* play) {
                         Audio_PlaySfx(NA_SE_SY_TRE_BOX_APPEAR);
                     }
                     break;
+
+                default:
+                    break;
             }
             break;
 
@@ -883,14 +883,11 @@ void EnKanban_Update(Actor* thisx, PlayState* play) {
             }
             break;
         }
+
+        default:
+            break;
     }
 }
-#else
-static Vec3f D_8095753C = { 0.0f, 0.0f, 0.0f };
-static Color_RGBA8 D_80957548 = { 185, 140, 70, 255 };
-static Color_RGBA8 D_8095754C = { 255, 255, 255, 255 };
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Kanban/EnKanban_Update.s")
-#endif
 
 static Gfx* sDisplayLists[] = {
     object_kanban_DL_000CB0, object_kanban_DL_000DB8, object_kanban_DL_000E78, object_kanban_DL_000F38,
