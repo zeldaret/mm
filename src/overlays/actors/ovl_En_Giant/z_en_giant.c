@@ -417,7 +417,7 @@ void EnGiant_PlaySound(EnGiant* this) {
              (this->animIndex == GIANT_ANIM_BIG_CALL_LOOP))) {
             func_800B9010(&this->actor, this->sfxId);
         }
-        if ((this->animIndex == GIANT_ANIM_SMALL_CALL_START && (this->skelAnime.curFrame >= 18.0f)) ||
+        if (((this->animIndex == GIANT_ANIM_SMALL_CALL_START) && (this->skelAnime.curFrame >= 18.0f)) ||
             (this->animIndex == GIANT_ANIM_SMALL_CALL_LOOP)) {
             func_800B9010(&this->actor, NA_SE_EV_KYOJIN_SIGN - SFX_FLAG);
         }
