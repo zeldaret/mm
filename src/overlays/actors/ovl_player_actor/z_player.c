@@ -3994,8 +3994,8 @@ s32 func_80830F9C(PlayState* play) {
 
 s32 func_80830FD4(PlayState* play) {
     return (play->unk_1887C != 0) &&
-           (play->unk_1887C < 0 || CHECK_BTN_ANY(sPlayerControlInput->cur.button,
-                                                 BTN_CRIGHT | BTN_CLEFT | BTN_CDOWN | BTN_CUP | BTN_B | BTN_A));
+           ((play->unk_1887C < 0) || CHECK_BTN_ANY(sPlayerControlInput->cur.button,
+                                                   BTN_CRIGHT | BTN_CLEFT | BTN_CDOWN | BTN_CUP | BTN_B | BTN_A));
 }
 
 s32 func_80831010(Player* this, PlayState* play) {

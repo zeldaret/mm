@@ -3867,7 +3867,6 @@ void Interface_DrawItemButtons(PlayState* play) {
     OVERLAY_DISP = Gfx_DrawTexRectIA8_DropShadow(OVERLAY_DISP, gButtonBackgroundTex, 0x20, 0x20, D_801BF9D4[0],
                                                  D_801BF9DC[0], D_801BFAF4[0], D_801BFAF4[0], D_801BF9E4[0] * 2,
                                                  D_801BF9E4[0] * 2, 100, 255, 120, interfaceCtx->bAlpha);
-    if (1) {}
     gDPPipeSync(OVERLAY_DISP++);
 
     // C-Left Button Color & Texture

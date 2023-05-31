@@ -547,7 +547,7 @@ void Sram_GenerateRandomSaveFields(void) {
 
     do {
         randBombers = Rand_S16Offset(0, 6);
-    } while (randBombers <= 0 || randBombers >= 6);
+    } while ((randBombers <= 0) || (randBombers >= 6));
 
     gSaveContext.save.saveInfo.bomberCode[0] = randBombers;
 
@@ -557,7 +557,7 @@ void Sram_GenerateRandomSaveFields(void) {
 
         do {
             randBombers = Rand_S16Offset(0, 6);
-        } while (randBombers <= 0 || randBombers >= 6);
+        } while ((randBombers <= 0) || (randBombers >= 6));
 
         sp2A = 0;
         do {

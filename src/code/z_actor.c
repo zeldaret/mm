@@ -694,7 +694,7 @@ void func_800B5814(TargetContext* targetCtx, Player* player, Actor* actor, GameS
  * Tests if current scene switch flag is set.
  */
 s32 Flags_GetSwitch(PlayState* play, s32 flag) {
-    if (flag >= 0 && flag < 0x80) {
+    if ((flag >= 0) && (flag < 0x80)) {
         return play->actorCtx.sceneFlags.switches[(flag & ~0x1F) >> 5] & (1 << (flag & 0x1F));
     }
     return 0;
@@ -704,7 +704,7 @@ s32 Flags_GetSwitch(PlayState* play, s32 flag) {
  * Sets current scene switch flag.
  */
 void Flags_SetSwitch(PlayState* play, s32 flag) {
-    if (flag >= 0 && flag < 0x80) {
+    if ((flag >= 0) && (flag < 0x80)) {
         play->actorCtx.sceneFlags.switches[(flag & ~0x1F) >> 5] |= 1 << (flag & 0x1F);
     }
 }
@@ -713,7 +713,7 @@ void Flags_SetSwitch(PlayState* play, s32 flag) {
  * Unsets current scene switch flag.
  */
 void Flags_UnsetSwitch(PlayState* play, s32 flag) {
-    if (flag >= 0 && flag < 0x80) {
+    if ((flag >= 0) && (flag < 0x80)) {
         play->actorCtx.sceneFlags.switches[(flag & ~0x1F) >> 5] &= ~(1 << (flag & 0x1F));
     }
 }
@@ -792,7 +792,7 @@ void Flags_UnsetClearTemp(PlayState* play, s32 roomNumber) {
  * Tests if current scene collectible flag is set.
  */
 s32 Flags_GetCollectible(PlayState* play, s32 flag) {
-    if (flag > 0 && flag < 0x80) {
+    if ((flag > 0) && (flag < 0x80)) {
         return play->actorCtx.sceneFlags.collectible[(flag & ~0x1F) >> 5] & (1 << (flag & 0x1F));
     }
     return 0;
@@ -802,7 +802,7 @@ s32 Flags_GetCollectible(PlayState* play, s32 flag) {
  * Sets current scene collectible flag.
  */
 void Flags_SetCollectible(PlayState* play, s32 flag) {
-    if (flag > 0 && flag < 0x80) {
+    if ((flag > 0) && (flag < 0x80)) {
         play->actorCtx.sceneFlags.collectible[(flag & ~0x1F) >> 5] |= 1 << (flag & 0x1F);
     }
 }
@@ -3267,12 +3267,12 @@ void Actor_SpawnTransitionActors(PlayState* play, ActorContext* actorCtx) {
 
     for (i = 0; i < numTransitionActors; transitionActorList++, i++) {
         if (transitionActorList->id >= 0) {
-            if ((transitionActorList->sides[0].room >= 0 &&
-                 (play->roomCtx.curRoom.num == transitionActorList->sides[0].room ||
-                  play->roomCtx.prevRoom.num == transitionActorList->sides[0].room)) ||
-                (transitionActorList->sides[1].room >= 0 &&
-                 (play->roomCtx.curRoom.num == transitionActorList->sides[1].room ||
-                  play->roomCtx.prevRoom.num == transitionActorList->sides[1].room))) {
+            if (((transitionActorList->sides[0].room >= 0) &&
+                 ((play->roomCtx.curRoom.num == transitionActorList->sides[0].room) ||
+                  (play->roomCtx.prevRoom.num == transitionActorList->sides[0].room))) ||
+                ((transitionActorList->sides[1].room >= 0) &&
+                 ((play->roomCtx.curRoom.num == transitionActorList->sides[1].room) ||
+                  (play->roomCtx.prevRoom.num == transitionActorList->sides[1].room)))) {
                 s16 rotY = DEG_TO_BINANG((transitionActorList->rotY >> 7) & 0x1FF);
 
                 if (Actor_SpawnAsChildAndCutscene(actorCtx, play, transitionActorList->id & 0x1FFF,

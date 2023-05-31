@@ -150,7 +150,7 @@ s32 EnIn_ChangeAnim(SkelAnime* skelAnime, s16 animIndex) {
     s16 frameCount;
     s32 ret = false;
 
-    if (animIndex >= 0 && animIndex < 18) {
+    if ((animIndex >= 0) && (animIndex < 18)) {
         ret = true;
         frameCount = sAnimationInfo[animIndex].frameCount;
         if (frameCount < 0) {

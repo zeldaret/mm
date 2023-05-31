@@ -790,7 +790,7 @@ DamageTable sDamageTablePresets[] = {
  * is out of range.
  */
 DamageTable* DamageTable_Get(s32 index) {
-    if (index < 0 || index > ARRAY_COUNT(sDamageTablePresets) - 1) {
+    if ((index < 0) || (index > (ARRAY_COUNT(sDamageTablePresets) - 1))) {
         return NULL;
     }
 
