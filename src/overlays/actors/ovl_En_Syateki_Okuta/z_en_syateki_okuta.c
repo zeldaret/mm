@@ -138,6 +138,12 @@ void EnSyatekiOkuta_SpawnSplash(EnSyatekiOkuta* this, PlayState* play) {
     EffectSsGSplash_Spawn(play, &this->actor.home.pos, NULL, NULL, 0, 800);
 }
 
+/*
+    static const s32 D_809C94D0[] = {
+        0x00000111, 0x00000650, 0x00010025, 0x00011011, 0x00000984, 0x00004050, 0x00010211, 0x00022015,
+        0x00026984, 0x00012852, 0x00011999, 0x00022895, 0x0000056A, 0x0002A451, 0x00004115,
+    };
+*/
 s32 func_80A361F4(EnSyatekiOkuta* this) {
     s32 temp_a0;
     s32 temp_a1;
