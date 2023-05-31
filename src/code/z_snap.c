@@ -80,7 +80,7 @@ s32 Snap_RecordPictographedActors(PlayState* play) {
             // If actor is recordable, run its validity function and record if valid
             pictoActor = (PictoActor*)actor;
             if (pictoActor->validationFunc != NULL) {
-                if ((pictoActor->validationFunc)(play, actor) == 0) {
+                if (pictoActor->validationFunc(play, actor) == 0) {
                     validCount++;
                 }
             }

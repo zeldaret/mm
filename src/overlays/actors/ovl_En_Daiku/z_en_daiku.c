@@ -198,7 +198,7 @@ void func_809438F8(EnDaiku* this, PlayState* play) {
 
     if (this->unk_278 == ENDAIKU_PARAMS_FF_3) {
         f32 xzDist;
-        f32 abs;
+        f32 yawDiff;
 
         Math_ApproachF(&this->actor.world.pos.x, this->unk_26C.x, 0.5f,
                        fabsf(2.0f * Math_SinS(this->actor.world.rot.y)));
@@ -207,8 +207,8 @@ void func_809438F8(EnDaiku* this, PlayState* play) {
         Math_SmoothStepToS(&this->actor.world.rot.y, this->unk_282, 1, 0x7D0, 0xA);
 
         xzDist = sqrtf(SQ(this->actor.world.pos.x - this->unk_26C.x) + SQ(this->actor.world.pos.z - this->unk_26C.z));
-        abs = fabsf(this->actor.world.rot.y - this->unk_282);
-        if ((xzDist < 4.0f) && (this->unk_258 != NULL) && (abs < 10.0f)) {
+        yawDiff = fabsf(this->actor.world.rot.y - this->unk_282);
+        if ((xzDist < 4.0f) && (this->unk_258 != NULL) && (yawDiff < 10.0f)) {
             this->unk_25C++;
             if (this->unk_25C >= this->unk_258->count) {
                 this->unk_25C = 0;
