@@ -4806,9 +4806,7 @@ void Interface_DrawClock(PlayState* play) {
                                                          80, 13, 0, 0, 0, 1 << 10, 1 << 10);
 
                         timeUntilMoonCrash = TIME_UNTIL_MOON_CRASH;
-
                         timeInMinutes = TIME_TO_MINUTES_F(timeUntilMoonCrash);
-                        // temp =
 
                         // digits for hours
                         finalHoursClockSlots[0] = 0;
