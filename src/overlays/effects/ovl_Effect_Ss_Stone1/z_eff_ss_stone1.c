@@ -15,7 +15,7 @@ u32 EffectSsStone1_Init(PlayState* play, u32 index, EffectSs* this, void* initPa
 void EffectSsStone1_Update(PlayState* play, u32 index, EffectSs* this);
 void EffectSsStone1_Draw(PlayState* play, u32 index, EffectSs* this);
 
-const EffectSsInit Effect_Ss_Stone1_InitVars = {
+EffectSsInit Effect_Ss_Stone1_InitVars = {
     EFFECT_SS_STONE1,
     EffectSsStone1_Init,
 };
@@ -65,7 +65,7 @@ void EffectSsStone1_Draw(PlayState* play, u32 index, EffectSs* this) {
     Matrix_Translate(this->pos.x, this->pos.y, this->pos.z, MTXMODE_NEW);
     Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    func_8012C9BC(gfxCtx);
+    Gfx_SetupDL61_Xlu(gfxCtx);
     gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(drawParams->texture));
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, drawParams->primColor.r, drawParams->primColor.g, drawParams->primColor.b,
                     255);
@@ -77,6 +77,6 @@ void EffectSsStone1_Draw(PlayState* play, u32 index, EffectSs* this) {
 
 void EffectSsStone1_Update(PlayState* play, u32 index, EffectSs* this) {
     if ((this->life == 6) && (this->rReg0 != 0)) {
-        iREG(50) = 0;
+        R_TRANS_FADE_FLASH_ALPHA_STEP = 0;
     }
 }

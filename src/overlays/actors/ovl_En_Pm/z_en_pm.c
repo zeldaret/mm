@@ -789,43 +789,43 @@ Actor* func_80AF8040(EnPm* this, PlayState* play) {
     return actor;
 }
 
-s32 func_80AF80F4(EnPm* this, s16 arg1) {
+s32 func_80AF80F4(EnPm* this, s16 csId) {
     s32 ret = false;
 
-    if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-        ActorCutscene_Stop(0x7C);
-        ActorCutscene_SetIntentToPlay(arg1);
-    } else if (ActorCutscene_GetCanPlayNext(arg1)) {
-        ActorCutscene_StartAndSetUnkLinkFields(arg1, &this->actor);
+    if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+        CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
+        CutsceneManager_Queue(csId);
+    } else if (CutsceneManager_IsNext(csId)) {
+        CutsceneManager_StartWithPlayerCs(csId, &this->actor);
         ret = true;
     } else {
-        ActorCutscene_SetIntentToPlay(arg1);
+        CutsceneManager_Queue(csId);
     }
     return ret;
 }
 
-s16 func_80AF8170(EnPm* this, s32 arg1) {
+s16 func_80AF8170(EnPm* this, s32 numCutscenes) {
     s32 i;
-    s16 cs = -1;
+    s16 csId = CS_ID_NONE;
 
     if ((this->actor.child != NULL) && (this->actor.child->update != NULL)) {
-        cs = this->actor.child->cutscene;
+        csId = this->actor.child->csId;
 
-        for (i = 0; i < arg1; i++) {
-            cs = ActorCutscene_GetAdditionalCutscene(cs);
+        for (i = 0; i < numCutscenes; i++) {
+            csId = CutsceneManager_GetAdditionalCsId(csId);
         }
     }
-    return cs;
+    return csId;
 }
 
 s32 func_80AF81E8(EnPm* this, PlayState* play) {
     s32 pad;
-    s16 sp2A = func_80AF8170(this, 0);
+    s16 csId = func_80AF8170(this, 0);
     s32 ret = false;
 
     switch (this->unk_378) {
         case 0:
-            if (!func_80AF80F4(this, sp2A)) {
+            if (!func_80AF80F4(this, csId)) {
                 break;
             }
 
@@ -833,7 +833,8 @@ s32 func_80AF81E8(EnPm* this, PlayState* play) {
         case 4:
         case 6:
             if ((this->actor.child != NULL) && (this->actor.child->update != NULL)) {
-                Camera_SetTargetActor(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(sp2A)), this->actor.child);
+                Camera_SetTargetActor(Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(csId)),
+                                      this->actor.child);
             }
             this->unk_378++;
             ret = true;
@@ -843,16 +844,16 @@ s32 func_80AF81E8(EnPm* this, PlayState* play) {
         case 3:
         case 5:
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_86_08) && (this->unk_378 == 3)) {
-                ActorCutscene_Stop(sp2A);
+                CutsceneManager_Stop(csId);
             } else {
-                Camera_SetTargetActor(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(sp2A)), &this->actor);
+                Camera_SetTargetActor(Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(csId)), &this->actor);
             }
             this->unk_378++;
             ret = true;
             break;
 
         case 7:
-            ActorCutscene_Stop(sp2A);
+            CutsceneManager_Stop(csId);
             this->unk_378++;
             ret = true;
             break;
@@ -862,12 +863,12 @@ s32 func_80AF81E8(EnPm* this, PlayState* play) {
 
 s32 func_80AF8348(EnPm* this, PlayState* play) {
     s32 pad;
-    s16 sp2A = func_80AF8170(this, 0);
+    s16 csId = func_80AF8170(this, 0);
     s32 ret = false;
 
     switch (this->unk_378) {
         case 0:
-            if (!func_80AF80F4(this, sp2A)) {
+            if (!func_80AF80F4(this, csId)) {
                 break;
             }
 
@@ -875,7 +876,7 @@ s32 func_80AF8348(EnPm* this, PlayState* play) {
         case 4:
         case 6:
         case 8:
-            Camera_SetTargetActor(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(sp2A)), &this->actor);
+            Camera_SetTargetActor(Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(csId)), &this->actor);
             this->unk_378++;
             ret = true;
             break;
@@ -885,14 +886,15 @@ s32 func_80AF8348(EnPm* this, PlayState* play) {
         case 5:
         case 7:
             if ((this->actor.child != NULL) && (this->actor.child->update != NULL)) {
-                Camera_SetTargetActor(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(sp2A)), this->actor.child);
+                Camera_SetTargetActor(Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(csId)),
+                                      this->actor.child);
             }
             this->unk_378++;
             ret = true;
             break;
 
         case 9:
-            ActorCutscene_Stop(sp2A);
+            CutsceneManager_Stop(csId);
             this->unk_378++;
             ret = true;
             break;
@@ -1017,20 +1019,20 @@ s32 func_80AF86F0(EnPm* this, PlayState* play) {
 s32 func_80AF87C4(EnPm* this, PlayState* play) {
     s32 ret = false;
 
-    if ((play->csCtx.state != 0) && (play->sceneId == SCENE_00KEIKOKU) && (gSaveContext.sceneLayer == 9) &&
+    if ((play->csCtx.state != CS_STATE_IDLE) && (play->sceneId == SCENE_00KEIKOKU) && (gSaveContext.sceneLayer == 9) &&
         (play->curSpawn == 1)) {
         if (!this->unk_380) {
             func_80AF7E98(this, 0);
             this->unk_258 = 255;
             this->unk_380 = true;
-            this->actor.speedXZ = 4.0f;
+            this->actor.speed = 4.0f;
             this->actor.gravity = -1.0f;
         }
         ret = true;
     } else if (this->unk_380) {
         this->unk_258 = 0;
         this->unk_380 = false;
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
     }
     return ret;
 }
@@ -1240,7 +1242,7 @@ s32 func_80AF9008(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
         this->timePath = SubS_GetAdditionalPath(play, sp55, D_80AFB430[scheduleOutput->result]);
     }
 
-    if ((door != NULL) && (door->dyna.actor.update != NULL)) {
+    if ((door != NULL) && (door->knobDoor.dyna.actor.update != NULL)) {
         if (this->timePath != 0) {
             sp4C = Lib_SegmentedToVirtual(this->timePath->points);
             Math_Vec3s_ToVec3f(&sp40, &sp4C[0]);
@@ -1249,7 +1251,7 @@ s32 func_80AF9008(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
             Math_Vec3f_Copy(&this->unk_278, &sp34);
             this->actor.world.rot.y = Math_Vec3f_Yaw(&sp40, &sp34);
             Math_Vec3f_Copy(&this->actor.world.pos, &sp40);
-            temp = this->actor.world.rot.y - door->dyna.actor.shape.rot.y;
+            temp = this->actor.world.rot.y - door->knobDoor.dyna.actor.shape.rot.y;
             if (ABS_ALT(temp) <= 0x4000) {
                 this->unk_260 = -0x4B;
             } else {
@@ -1311,7 +1313,7 @@ s32 func_80AF91E8(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
         this->unk_356 &= ~8;
         this->unk_356 &= ~0x10;
         if (this->unk_258 == 27) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_ROOM_CARTAIN);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_ROOM_CARTAIN);
             Flags_UnsetSwitch(play, 0);
         }
 
@@ -1431,7 +1433,7 @@ s32 func_80AF95E8(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
 
         switch (scheduleOutput->result) {
             case 27:
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_ROOM_CARTAIN);
+                Actor_PlaySfx(&this->actor, NA_SE_EV_ROOM_CARTAIN);
                 Flags_SetSwitch(play, 0);
                 this->unk_36C = 20;
                 SubS_UpdateFlags(&this->unk_356, 3, 7);
@@ -1702,7 +1704,7 @@ s32 func_80AF9D04(EnPm* this, PlayState* play) {
     f32 temp;
 
     if (!SubS_InCsMode(play) && (this->timePathTimeSpeed != 0)) {
-        if ((door != NULL) && (door->dyna.actor.update != NULL)) {
+        if ((door != NULL) && (door->knobDoor.dyna.actor.update != NULL)) {
             if (((f32)this->unk_36E / this->unk_36C) <= 0.9f) {
                 door->unk_1A7 = this->unk_260;
             } else {
@@ -1717,7 +1719,7 @@ s32 func_80AF9D04(EnPm* this, PlayState* play) {
         Lib_Vec3f_TranslateAndRotateY(&this->unk_26C, this->actor.world.rot.y, &sp38, &this->actor.world.pos);
         this->unk_36E += this->timePathTimeSpeed;
         if (Animation_OnFrame(&this->skelAnime, 3.0f) || Animation_OnFrame(&this->skelAnime, 8.0f)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_POSTMAN_WALK);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_POSTMAN_WALK);
         }
     }
     return false;
@@ -1774,7 +1776,7 @@ s32 func_80AF9E7C(EnPm* this, PlayState* play) {
         this->timePathTargetPos = timePathTargetPos;
     } else if ((this->unk_258 != 91) &&
                (Animation_OnFrame(&this->skelAnime, 3.0f) || Animation_OnFrame(&this->skelAnime, 8.0f))) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_POSTMAN_WALK);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_POSTMAN_WALK);
     }
 
     if ((this->unk_356 & 0x10) && (this->unk_258 == 90)) {
@@ -1820,7 +1822,7 @@ s32 func_80AFA170(EnPm* this, PlayState* play) {
             }
 
             if ((this->unk_384 == 11) && Animation_OnFrame(&this->skelAnime, 8.0f)) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_POSTMACHINE_HIT_OPEN);
+                Actor_PlaySfx(&this->actor, NA_SE_EV_POSTMACHINE_HIT_OPEN);
             }
 
             if (this->unk_258 == 19) {
@@ -1865,7 +1867,7 @@ s32 func_80AFA334(EnPm* this, PlayState* play) {
         case 21:
         case 22:
             if (Animation_OnFrame(&this->skelAnime, 0.0f)) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_VO_NP_SLEEP_OUT);
+                Actor_PlaySfx(&this->actor, NA_SE_VO_NP_SLEEP_OUT);
             }
             break;
 
@@ -2042,9 +2044,9 @@ void func_80AFA5FC(EnPm* this, PlayState* play) {
 
 void func_80AFA724(EnPm* this, PlayState* play) {
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
     if (Animation_OnFrame(&this->skelAnime, 3.0f) || Animation_OnFrame(&this->skelAnime, 8.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_POSTMAN_WALK);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_POSTMAN_WALK);
     }
 }
 
@@ -2089,7 +2091,7 @@ void EnPm_Update(Actor* thisx, PlayState* play) {
             func_80AF8AC8(this);
             func_8013C964(&this->actor, play, this->unk_368, 30.0f, this->unk_394, this->unk_356 & 7);
             Actor_MoveWithGravity(&this->actor);
-            Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, 4);
+            Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
             func_80AF7F68(this, play);
         }
     }
@@ -2112,7 +2114,7 @@ void EnPm_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
 
     switch (limbIndex) {
         case 15:
-            if (ActorCutscene_GetCurrentIndex() == -1) {
+            if (CutsceneManager_GetCurrentCsId() == CS_ID_NONE) {
                 Matrix_MultVec3f(&gZeroVec3f, &this->actor.focus.pos);
                 Math_Vec3s_Copy(&this->actor.focus.rot, &this->actor.world.rot);
             }
@@ -2179,7 +2181,7 @@ void EnPm_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
 
     if (this->unk_258 != 0) {
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
         OPEN_DISPS(play->state.gfxCtx);
 

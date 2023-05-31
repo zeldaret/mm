@@ -178,7 +178,7 @@ void EnFg_Idle(EnFg* this, PlayState* play) {
     switch (EnFg_GetDamageEffect(this)) {
         case FG_DMGEFFECT_DEKUSTICK:
             this->actor.flags &= ~ACTOR_FLAG_1;
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_FROG_CRY_1);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_FROG_CRY_1);
             this->skelAnime.playSpeed = 0.0f;
             this->actor.shape.shadowDraw = NULL;
             this->actor.scale.x *= 1.5f;
@@ -204,7 +204,7 @@ void EnFg_Idle(EnFg* this, PlayState* play) {
             break;
         case FG_DMGEFFECT_EXPLOSION:
             this->actor.flags &= ~ACTOR_FLAG_1;
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_FROG_CRY_0);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_FROG_CRY_0);
             if (1) {}
             this->actor.params = FG_BLACK;
             this->skelAnime.playSpeed = 0.0f;
@@ -212,7 +212,7 @@ void EnFg_Idle(EnFg* this, PlayState* play) {
             this->actor.world.rot.y = Math_Vec3f_Yaw(&ac->world.pos, &this->actor.world.pos);
             this->actor.shape.rot = this->actor.world.rot;
             this->actor.velocity.y = 10.0f;
-            this->actor.speedXZ = 3.0f;
+            this->actor.speed = 3.0f;
             this->actor.gravity = -0.8f;
             this->bounceCounter = 1;
             this->timer = 0;
@@ -220,7 +220,7 @@ void EnFg_Idle(EnFg* this, PlayState* play) {
             break;
         default:
             if (DECR(this->timer) == 0) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_FROG_JUMP);
+                Actor_PlaySfx(&this->actor, NA_SE_EV_FROG_JUMP);
                 EnFg_ChangeAnim(&this->skelAnime, 3);
                 this->actor.velocity.y = 10.0f;
                 this->timer = Rand_S16Offset(30, 30);
@@ -255,7 +255,7 @@ void EnFg_Jump(EnFg* this, PlayState* play) {
             break;
         case FG_DMGEFFECT_EXPLOSION:
             this->actor.flags &= ~ACTOR_FLAG_1;
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_FROG_CRY_0);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_FROG_CRY_0);
             EnFg_ChangeAnim(&this->skelAnime, 0);
             this->actor.params = FG_BLACK;
             this->skelAnime.playSpeed = 0.0f;
@@ -263,7 +263,7 @@ void EnFg_Jump(EnFg* this, PlayState* play) {
             this->actor.world.rot.y = Math_Vec3f_Yaw(&ac->world.pos, &this->actor.world.pos);
             this->actor.shape.rot = this->actor.world.rot;
             this->actor.velocity.y = 10.0f;
-            this->actor.speedXZ = 3.0f;
+            this->actor.speed = 3.0f;
             this->actor.gravity = -0.8f;
             this->bounceCounter = 1;
             this->timer = 0;
@@ -275,7 +275,7 @@ void EnFg_Jump(EnFg* this, PlayState* play) {
                 this->skelAnime.playSpeed = 0.0f;
             }
 
-            if ((this->actor.velocity.y <= 0.0f) && (this->actor.bgCheckFlags & 1)) {
+            if ((this->actor.velocity.y <= 0.0f) && (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
                 EnFg_ChangeAnim(&this->skelAnime, 0);
                 this->actionFunc = EnFg_Idle;
                 this->actor.velocity.y = 0.0f;
@@ -289,7 +289,7 @@ void EnFg_DoNothing(EnFg* this, PlayState* play) {
 }
 
 void EnFg_Knockback(EnFg* this, PlayState* play) {
-    if ((this->actor.velocity.y <= 0.0f) && (this->actor.bgCheckFlags & 1)) {
+    if ((this->actor.velocity.y <= 0.0f) && (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
         this->bounceCounter++;
         if (this->bounceCounter < 4) {
             this->actor.shape.rot.x += 0x1000;
@@ -298,7 +298,7 @@ void EnFg_Knockback(EnFg* this, PlayState* play) {
             this->actionFunc = EnFg_DoNothing;
         }
     } else {
-        if (this->actor.bgCheckFlags & 8) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
             this->actor.world.rot.y = this->actor.wallYaw;
             this->actor.shape.rot = this->actor.world.rot;
         }
@@ -338,14 +338,15 @@ void EnFg_Update(Actor* thisx, PlayState* play) {
     s32 flagSet;
 
     flag = this->actor.flags;
-    flagSet = ((flag & 0x2000) == 0x2000);
+    flagSet = CHECK_FLAG_ALL(flag, ACTOR_FLAG_2000);
     if (1) {}
     if (!flagSet) {
-        flagSet = ((flag & 0x8000) == 0x8000);
+        flagSet = CHECK_FLAG_ALL(flag, ACTOR_FLAG_8000);
         if (1) {}
         if (!flagSet) {
             this->actionFunc(this, play);
-            Actor_UpdateBgCheckInfo(play, &this->actor, BASE_REG(16, 0), BASE_REG(16, 1), 0.0f, 0x5);
+            Actor_UpdateBgCheckInfo(play, &this->actor, sREG(0), sREG(1), 0.0f,
+                                    UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
         }
     }
 
@@ -402,7 +403,8 @@ void EnFg_Draw(Actor* thisx, PlayState* play) {
     Matrix_Pop();
 
     OPEN_DISPS(play->state.gfxCtx);
-    func_8012C28C(play->state.gfxCtx);
+
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     gDPPipeSync(POLY_OPA_DISP++);
     gDPSetEnvColor(POLY_OPA_DISP++, envColor[this->actor.params].r, envColor[this->actor.params].g,
                    envColor[this->actor.params].b, envColor[this->actor.params].a);
@@ -410,6 +412,7 @@ void EnFg_Draw(Actor* thisx, PlayState* play) {
     gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(object_fr_Tex_0059A0));
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnFg_OverrideLimbDraw, EnFg_PostLimbDraw, &this->actor);
+
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
@@ -455,12 +458,12 @@ void EnFg_DrawDust(PlayState* play, EnFgEffectDust* dustEffect) {
     s16 firstDone = false;
 
     OPEN_DISPS(play->state.gfxCtx);
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     for (i = 0; i < 10; i++, dustEffect++) {
         if (dustEffect->type) {
             if (!firstDone) {
-                POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 0);
+                POLY_XLU_DISP = Gfx_SetupDL(POLY_XLU_DISP, SETUPDL_0);
                 gSPDisplayList(POLY_XLU_DISP++, object_fr_DL_00B328);
                 gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0, 0);
                 firstDone = true;

@@ -19,7 +19,7 @@ typedef struct DmAh {
     /* 0x1B0 */ Vec3s morphTable[OBJECT_AH_LIMB_MAX];
     /* 0x216 */ Vec3s jointTable[OBJECT_AH_LIMB_MAX];
     /* 0x27C */ u16 unk_27C;
-    /* 0x27E */ u8 action;
+    /* 0x27E */ u8 cueId;
     /* 0x280 */ Actor* unk_280;
     /* 0x284 */ s16 unk_284;
     /* 0x286 */ s16 unk_286;

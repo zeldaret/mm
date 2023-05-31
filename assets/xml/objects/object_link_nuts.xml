@@ -40,10 +40,10 @@
         <DList Name="object_link_nuts_DL_008860" Offset="0x8860" />
         <DList Name="object_link_nuts_DL_008908" Offset="0x8908" />
         <DList Name="object_link_nuts_DL_0089F0" Offset="0x89F0" />
-        <DList Name="object_link_nuts_DL_008AA0" Offset="0x8AA0" />
+        <DList Name="gLinkDekuClosedFlowerDL" Offset="0x8AA0" />
         <DList Name="object_link_nuts_DL_008AB8" Offset="0x8AB8" />
         <DList Name="object_link_nuts_DL_008BA0" Offset="0x8BA0" />
-        <DList Name="object_link_nuts_DL_008C50" Offset="0x8C50" />
+        <DList Name="gLinkDekuOpenFlowerDL" Offset="0x8C50" />
         <Texture Name="object_link_nuts_Tex_008C68" OutName="tex_008C68" Format="rgba16" Width="16" Height="16" Offset="0x8C68" />
         <Texture Name="object_link_nuts_Tex_008E68" OutName="tex_008E68" Format="rgba16" Width="16" Height="16" Offset="0x8E68" />
         <Texture Name="object_link_nuts_Tex_009068" OutName="tex_009068" Format="rgba16" Width="8" Height="8" Offset="0x9068" />

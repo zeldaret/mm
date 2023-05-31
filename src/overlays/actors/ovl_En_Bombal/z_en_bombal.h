@@ -23,7 +23,7 @@ typedef struct EnBombal {
     /* 0x144 */ EnBombalActionFunc actionFunc;
     /* 0x148 */ s16 timer;
     /* 0x14A */ s16 isPopped;
-    /* 0x14C */ s16 cutscene;
+    /* 0x14C */ s16 csId;
     /* 0x150 */ f32 scale;
     /* 0x154 */ f32 oscillationAngle;
     /* 0x158 */ ColliderCylinder collider;

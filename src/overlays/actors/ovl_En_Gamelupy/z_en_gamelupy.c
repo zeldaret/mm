@@ -126,7 +126,7 @@ void func_80AF6994(EnGamelupy* this) {
 
 void func_80AF69A8(EnGamelupy* this, PlayState* play) {
     if (this->collider.base.ocFlags1 & OC1_HIT) {
-        *this->unk_198 += 0x32;
+        *this->unk_198 += 50;
         if (this->rupeeIndex == 1) {
             Rupees_ChangeBy(5);
         } else {
@@ -140,7 +140,7 @@ void func_80AF69A8(EnGamelupy* this, PlayState* play) {
 void func_80AF6A38(EnGamelupy* this) {
     this->unk_19C = 0;
     this->actor.gravity = 0.0f;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_GET_RUPY);
+    Actor_PlaySfx(&this->actor, NA_SE_SY_GET_RUPY);
     this->actionFunc = func_80AF6A78;
 }
 
@@ -171,7 +171,7 @@ void EnGamelupy_Update(Actor* thisx, PlayState* play) {
 
     this->actionFunc(this, play);
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 32.0f, 30.0f, 0.0f, 0xC);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 32.0f, 30.0f, 0.0f, UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8);
     func_80AF6B40(this, play);
 }
 
@@ -181,7 +181,7 @@ void EnGamelupy_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     func_800B8050(&this->actor, play, 0);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sRupeeTextures[this->rupeeIndex]));

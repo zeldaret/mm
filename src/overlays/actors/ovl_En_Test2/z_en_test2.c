@@ -12,7 +12,7 @@
 #include "objects/object_meganeana_obj/object_meganeana_obj.h"
 #include "objects/object_haka_obj/object_haka_obj.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_80)
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_REACT_TO_LENS)
 
 #define THIS ((EnTest2*)thisx)
 
@@ -96,7 +96,7 @@ void EnTest2_Update(Actor* thisx, PlayState* play) {
             Actor_SetObjectDependency(play, &this->actor);
             this->animMat = Lib_SegmentedToVirtual(modelInfo->animMat);
         }
-        if (play->roomCtx.curRoom.unk5) {
+        if (play->roomCtx.curRoom.lensMode != LENS_MODE_HIDE_ACTORS) {
             this->actor.update = EnTest2_UpdateForLens;
         } else {
             this->actor.update = Actor_Noop;
@@ -108,9 +108,9 @@ void EnTest2_UpdateForLens(Actor* thisx, PlayState* play) {
     EnTest2* this = THIS;
 
     if (play->actorCtx.lensMaskSize == LENS_MASK_ACTIVE_SIZE) {
-        this->actor.flags |= ACTOR_FLAG_80;
+        this->actor.flags |= ACTOR_FLAG_REACT_TO_LENS;
     } else {
-        this->actor.flags &= ~ACTOR_FLAG_80;
+        this->actor.flags &= ~ACTOR_FLAG_REACT_TO_LENS;
     }
 }
 
@@ -122,10 +122,10 @@ void EnTest2_Draw(Actor* thisx, PlayState* play) {
     if (this->animMat != NULL) {
         AnimatedMat_Draw(play, this->animMat);
     }
-    if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_80)) {
+    if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_REACT_TO_LENS)) {
         OPEN_DISPS(play->state.gfxCtx);
 
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
         if (dList != NULL) {

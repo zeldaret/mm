@@ -7,7 +7,7 @@
 #include "z_obj_visiblock.h"
 #include "objects/object_visiblock/object_visiblock.h"
 
-#define FLAGS (ACTOR_FLAG_80)
+#define FLAGS (ACTOR_FLAG_REACT_TO_LENS)
 
 #define THIS ((ObjVisiblock*)thisx)
 

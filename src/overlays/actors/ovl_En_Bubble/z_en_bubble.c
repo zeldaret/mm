@@ -247,10 +247,10 @@ void EnBubble_Fly(EnBubble* this, PlayState* play) {
         this->velocityFromBounce.y = this->bounceDirection.y * bounceSpeed;
         this->velocityFromBounce.z = this->bounceDirection.z * bounceSpeed;
         this->yVelocity = 0.0f;
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_AWA_BOUND);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_AWA_BOUND);
         this->modelRotSpeed = 128.0f;
         this->modelEllipticity = 0.48f;
-    } else if ((this->actor.bgCheckFlags & 0x20) && (bounceDirection.y < 0.0f)) {
+    } else if ((this->actor.bgCheckFlags & BGCHECKFLAG_WATER) && (bounceDirection.y < 0.0f)) {
         normal.x = normal.z = 0.0f;
         normal.y = 1.0f;
         EnBubble_Vec3fNormalizedReflect(&bounceDirection, &normal, &bounceDirection);
@@ -266,7 +266,7 @@ void EnBubble_Fly(EnBubble* this, PlayState* play) {
         this->velocityFromBounce.y = (this->bounceDirection.y * bounceSpeed);
         this->velocityFromBounce.z = (this->bounceDirection.z * bounceSpeed);
         this->yVelocity = 0.0f;
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_AWA_BOUND);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_AWA_BOUND);
         this->modelRotSpeed = 128.0f;
         this->modelEllipticity = 0.48f;
     }
@@ -392,7 +392,8 @@ void EnBubble_Update(Actor* thisx, PlayState* play) {
     EnBubble* this = (EnBubble*)thisx;
 
     Actor_UpdatePos(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 16.0f, 16.0f, 0.0f, 7);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 16.0f, 16.0f, 0.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_2 | UPDBGCHECKINFO_FLAG_4);
     this->actionFunc(this, play);
     Actor_SetFocus(&this->actor, this->actor.shape.yOffset);
 }
@@ -404,14 +405,14 @@ void EnBubble_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     if (this->actionFunc != EnBubble_Disappear) {
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         Math_SmoothStepToF(&this->modelRotSpeed, 16.0f, 0.2f, 1000.0f, 0.0f);
         Math_SmoothStepToF(&this->modelEllipticity, 0.08f, 0.2f, 1000.0f, 0.0f);
         Matrix_ReplaceRotation(&play->billboardMtxF);
         Matrix_Scale(this->modelWidth + 1.0f, this->modelHeight + 1.0f, 1.0f, MTXMODE_APPLY);
-        Matrix_RotateZF(DEGF_TO_RADF((f32)play->state.frames) * this->modelRotSpeed, MTXMODE_APPLY);
+        Matrix_RotateZF(DEG_TO_RAD((f32)play->state.frames) * this->modelRotSpeed, MTXMODE_APPLY);
         Matrix_Scale(this->modelEllipticity + 1.0f, 1.0f, 1.0f, MTXMODE_APPLY);
-        Matrix_RotateZF(DEGF_TO_RADF(-(f32)play->state.frames) * this->modelRotSpeed, MTXMODE_APPLY);
+        Matrix_RotateZF(DEG_TO_RAD(-(f32)play->state.frames) * this->modelRotSpeed, MTXMODE_APPLY);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
         gSPDisplayList(POLY_XLU_DISP++, gBubbleDL);

@@ -92,7 +92,7 @@ void ObjChan_Init(Actor* thisx, PlayState* play) {
     Actor_ProcessInitChain(&this->actor, sInitChain);
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sObjChanCylinderInit);
-    SubS_FillCutscenesList(&this->actor, this->cutscenes, ARRAY_COUNT(this->cutscenes));
+    SubS_FillCutscenesList(&this->actor, this->csIdList, ARRAY_COUNT(this->csIdList));
     switch (OBJCHAN_SUBTYPE(&this->actor)) {
         case OBJCHAN_SUBTYPE_CHANDELIER:
             this->rotation = this->actor.shape.rot.y;
@@ -117,16 +117,16 @@ u32 func_80BB9A1C(ObjChan* this, f32 arg1) {
     f32 sp20;
 
     sp20 = Math_SinS(this->unk1D4) * this->unk1D0;
-    temp_f6 = (Math_CosS(this->unk1D4) * 0.03834952f * this->unk1D0) + arg1;
+    temp_f6 = (Math_CosS(this->unk1D4) * (400 * M_PI / 0x8000) * this->unk1D0) + arg1;
     if (temp_f6 != 0.0f) {
-        this->unk1D4 = RADF_TO_BINANG(func_80086B30(sp20 * 0.03834952f, temp_f6));
+        this->unk1D4 = RAD_TO_BINANG(func_80086B30(sp20 * (400 * M_PI / 0x8000), temp_f6));
     } else if (sp20 >= 0.0f) {
         this->unk1D4 = 0x4000;
     } else {
         this->unk1D4 = -0x4000;
     }
     if (Math_CosS(this->unk1D4) != 0.0f) {
-        this->unk1D0 = (temp_f6 / (Math_CosS(this->unk1D4) * 0.03834952f));
+        this->unk1D0 = (temp_f6 / (Math_CosS(this->unk1D4) * (400 * M_PI / 0x8000)));
     } else {
         this->unk1D0 = sp20;
     }
@@ -150,7 +150,7 @@ void ObjChan_CalculatePotPosition(Vec3f* childPosOut, Vec3s* childRotOut, Vec3f*
     childRotOut->y += childAngle;
 }
 
-//! @TODO: Possibly takes actor and recasts
+//! TODO: Possibly takes actor and recasts
 void ObjChan_InitChandelier(ObjChan* this2, PlayState* play) {
     ObjChan* this = this2;
     s32 i;
@@ -175,14 +175,15 @@ void ObjChan_InitChandelier(ObjChan* this2, PlayState* play) {
 
     for (i = 0; i < 5; i++) {
         ObjChan_CalculatePotPosition(&childPos, &childRot, &this->actor.world.pos, &this->actor.shape.rot,
-                                     (s32)(i * 360.0f / 5.0f * (65536.0f / 360.0f)) + this->rotation);
-        temp_v0 = (ObjChan*)Actor_SpawnAsChildAndCutscene(
-            &play->actorCtx, play, ACTOR_OBJ_CHAN, childPos.x, childPos.y, childPos.z, childRot.x, childRot.y,
-            childRot.z, (this->actor.params & 0xFFF) | 0x1000, this->actor.cutscene, this->actor.unk20, &this->actor);
+                                     (s32)DEG_TO_BINANG_ALT3(i * 360.0f / 5.0f) + this->rotation);
+        temp_v0 = (ObjChan*)Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ACTOR_OBJ_CHAN, childPos.x, childPos.y,
+                                                          childPos.z, childRot.x, childRot.y, childRot.z,
+                                                          (this->actor.params & 0xFFF) | 0x1000, this->actor.csId,
+                                                          this->actor.halfDaysBits, &this->actor);
         if (temp_v0 != NULL) {
             this->pots[i] = temp_v0;
             temp_v0->myPotIndex = i;
-            temp_v0->actor.cutscene = this->actor.cutscene;
+            temp_v0->actor.csId = this->actor.csId;
         } else {
             Actor_Kill(&this->actor);
         }
@@ -209,7 +210,7 @@ void ObjChan_InitChandelier(ObjChan* this2, PlayState* play) {
     this->actionFunc = ObjChan_ChandelierAction;
 }
 
-//! @TODO: More descriptive name than Action?
+//! TODO: More descriptive name than Action?
 void ObjChan_ChandelierAction(ObjChan* this2, PlayState* play) {
     ObjChan* this = this2;
     ObjChan* temp;
@@ -231,13 +232,13 @@ void ObjChan_ChandelierAction(ObjChan* this2, PlayState* play) {
     }
     this->actor.shape.rot.z = (Math_SinS(this->unk1D4) * this->unk1D0);
     if ((this->stateFlags & OBJCHAN_STATE_START_CUTSCENE) &&
-        SubS_StartActorCutscene(&this->actor, this->cutscenes[0], -1, SUBS_CUTSCENE_SET_UNK_LINK_FIELDS)) {
+        SubS_StartCutscene(&this->actor, this->csIdList[0], CS_ID_NONE, SUBS_CUTSCENE_WITH_PLAYER)) {
         this->stateFlags |= OBJCHAN_STATE_CUTSCENE;
         this->stateFlags &= ~OBJCHAN_STATE_START_CUTSCENE;
     }
     if ((this->stateFlags & OBJCHAN_STATE_CUTSCENE) && this->rotationSpeed == OBJCHAN_ROTATION_SPEED) {
         this->stateFlags &= ~OBJCHAN_STATE_CUTSCENE;
-        ActorCutscene_Stop(this->cutscenes[0]);
+        CutsceneManager_Stop(this->csIdList[0]);
     }
     Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_NEW);
     Matrix_RotateXS(this->actor.shape.rot.x, MTXMODE_APPLY);
@@ -250,7 +251,7 @@ void ObjChan_ChandelierAction(ObjChan* this2, PlayState* play) {
         temp = this->pots[i];
         if (temp != NULL) {
             ObjChan_CalculatePotPosition(&sp60, &sp58, &this->actor.world.pos, &this->actor.shape.rot,
-                                         (s32)(i * 360.0f / 5.0f * (65536.0f / 360.0f)) + this->rotation);
+                                         (s32)DEG_TO_BINANG_ALT3(i * 360.0f / 5.0f) + this->rotation);
             Math_Vec3f_Copy(&temp->actor.world.pos, &sp60);
             Math_Vec3s_Copy(&temp->actor.shape.rot, &this->actor.shape.rot);
             temp->actor.shape.rot.y = this->rotation;
@@ -314,7 +315,7 @@ void ObjChan_PotAction(ObjChan* this, PlayState* play) {
                 SET_WEEKEVENTREG(WEEKEVENTREG_37_10);
                 Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ACTOR_EN_MM, this->actor.world.pos.x,
                                               this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, 0x8000,
-                                              this->actor.cutscene, this->actor.unk20, NULL);
+                                              this->actor.csId, this->actor.halfDaysBits, NULL);
             }
         }
         Actor_Kill(&this->actor);
@@ -373,14 +374,15 @@ void ObjChan_Draw(Actor* thisx, PlayState* play) {
     Gfx* xlu;
 
     OPEN_DISPS(play->state.gfxCtx);
+
     Matrix_RotateYS(this->rotation, MTXMODE_APPLY);
 
-    opa = Gfx_CallSetupDL(POLY_OPA_DISP, 0x19);
+    opa = Gfx_SetupDL(POLY_OPA_DISP, SETUPDL_25);
     gSPMatrix(&opa[0], Matrix_NewMtx(play->state.gfxCtx), G_MTX_LOAD);
     gSPDisplayList(&opa[1], object_obj_chan_DL_000AF0);
     POLY_OPA_DISP = &opa[2];
 
-    xlu = func_8012C2B4(POLY_XLU_DISP);
+    xlu = Gfx_SetupDL71(POLY_XLU_DISP);
     gSPMatrix(&xlu[0], Matrix_NewMtx(play->state.gfxCtx), G_MTX_LOAD);
     gSPDisplayList(&xlu[1], object_obj_chan_DL_000A10);
     POLY_XLU_DISP = &xlu[2];
@@ -400,10 +402,12 @@ void ObjChan_DrawPot(Actor* thisx, PlayState* play) {
     Gfx* dl;
 
     OPEN_DISPS(play->state.gfxCtx);
-    dl = Gfx_CallSetupDL(POLY_OPA_DISP, 0x19);
+
+    dl = Gfx_SetupDL(POLY_OPA_DISP, SETUPDL_25);
     gSPMatrix(&dl[0], Matrix_NewMtx(play->state.gfxCtx), G_MTX_LOAD);
     gSPDisplayList(&dl[1], object_obj_chan_DL_002358);
     POLY_OPA_DISP = &dl[2];
+
     CLOSE_DISPS(play->state.gfxCtx);
 
     if (this->stateFlags & OBJCHAN_STATE_ON_FIRE) {
@@ -424,7 +428,7 @@ void ObjChan_DrawFire(ObjChan* this, PlayState* play) {
                  sObjChanFlameSize[OBJCHAN_SUBTYPE(&this->actor)].y * this->flameSize, 1.0f, MTXMODE_APPLY);
     Matrix_Translate(0.0f, sObjChanFlameYOffset[OBJCHAN_SUBTYPE(&this->actor)], 0.0f, MTXMODE_APPLY);
 
-    dl = func_8012C2B4(POLY_XLU_DISP);
+    dl = Gfx_SetupDL71(POLY_XLU_DISP);
     gSPMatrix(&dl[0], Matrix_NewMtx(play->state.gfxCtx), G_MTX_LOAD);
     gSPSegment(&dl[1], 0x08, Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, 0, 32, 64, 1, 0, -sp4C * 20, 32, 128));
     gDPSetPrimColor(&dl[2], 128, 128, 255, 255, 0, 255);

@@ -58,7 +58,7 @@ void EffectSs_DrawGEffect(PlayState* play, EffectSs* this, TexturePtr texture) {
     if (mtx != NULL) {
         gSPMatrix(POLY_XLU_DISP++, mtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(texture));
-        func_8012C9BC(gfxCtx);
+        Gfx_SetupDL61_Xlu(gfxCtx);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, this->rgPrimColorR, this->rgPrimColorG, this->rgPrimColorB,
                         this->rgPrimColorA);
         gDPSetEnvColor(POLY_XLU_DISP++, this->rgEnvColorR, this->rgEnvColorG, this->rgEnvColorB, this->rgEnvColorA);
@@ -805,7 +805,7 @@ void EffectSsEnIce_SpawnFlying(PlayState* play, Actor* actor, Vec3f* pos, Color_
     initParams.scale = scale;
 
     if (actor != NULL) {
-        Actor_PlaySfxAtPos(actor, NA_SE_PL_FREEZE_S);
+        Actor_PlaySfx(actor, NA_SE_PL_FREEZE_S);
     }
 
     EffectSs_Spawn(play, EFFECT_SS_EN_ICE, 80, &initParams);
@@ -897,7 +897,7 @@ void EffectSsEnFire_SpawnVec3f(PlayState* play, Actor* actor, Vec3f* pos, s16 sc
     initParams.bodyPart = bodyPart;
 
     if (actor != NULL) {
-        Actor_PlaySfxAtPos(actor, NA_SE_EV_FLAME_IGNITION);
+        Actor_PlaySfx(actor, NA_SE_EV_FLAME_IGNITION);
     }
 
     EffectSs_Spawn(play, EFFECT_SS_EN_FIRE, 128, &initParams);
@@ -917,7 +917,7 @@ void EffectSsEnFire_SpawnVec3s(PlayState* play, Actor* actor, Vec3s* pos, s16 sc
     initParams.bodyPart = bodyPart;
 
     if (actor != NULL) {
-        Actor_PlaySfxAtPos(actor, NA_SE_EV_FLAME_IGNITION);
+        Actor_PlaySfx(actor, NA_SE_EV_FLAME_IGNITION);
     }
 
     EffectSs_Spawn(play, EFFECT_SS_EN_FIRE, 128, &initParams);

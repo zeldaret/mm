@@ -177,14 +177,14 @@ void EnBomChu_WaitForRelease(EnBomChu* this, PlayState* play) {
     } else if (Actor_HasNoParent(&this->actor, play)) {
         player = GET_PLAYER(play);
         Math_Vec3f_Copy(&this->actor.world.pos, &player->actor.world.pos);
-        Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
 
         this->actor.shape.rot.y = player->actor.shape.rot.y;
         this->actor.flags |= ACTOR_FLAG_1;
         func_800B8EF4(play, &this->actor);
 
         this->isMoving = true;
-        this->actor.speedXZ = 8.0f;
+        this->actor.speed = 8.0f;
         this->movingSpeed = 8.0f;
         EnBomChu_SetupMove(this);
     }
@@ -193,7 +193,7 @@ void EnBomChu_WaitForRelease(EnBomChu* this, PlayState* play) {
 s32 EnBomChu_IsOnCollisionPoly(PlayState* play, Vec3f* posA, Vec3f* posB, Vec3f* posResult, CollisionPoly** poly,
                                s32* bgId) {
     if ((BgCheck_EntityLineTest1(&play->colCtx, posA, posB, posResult, poly, true, true, true, true, bgId)) &&
-        (!(func_800C9A4C(&play->colCtx, *poly, *bgId) & 0x30))) {
+        !(SurfaceType_GetWallFlags(&play->colCtx, *poly, *bgId) & (WALL_FLAG_4 | WALL_FLAG_5))) {
         return true;
     }
 
@@ -233,7 +233,7 @@ void EnBomChu_Move(EnBomChu* this, PlayState* play) {
     bgIdUpDown = bgIdSide = BGCHECK_SCENE;
     isFloorPolyValid = false;
 
-    this->actor.speedXZ = this->movingSpeed;
+    this->actor.speed = this->movingSpeed;
     lineLength = 2.0f * this->movingSpeed;
 
     if ((this->timer == 0) || (this->collider.base.acFlags & AC_HIT) || (this->collider.base.ocFlags1 & OC1_HIT)) {
@@ -259,7 +259,7 @@ void EnBomChu_Move(EnBomChu* this, PlayState* play) {
             isFloorPolyValid = EnBomChu_UpdateFloorPoly(this, polySide, play);
             Math_Vec3f_Copy(&this->actor.world.pos, &posSide);
             this->actor.floorBgId = bgIdSide;
-            this->actor.speedXZ = 0.0f;
+            this->actor.speed = 0.0f;
         } else {
             if (this->actor.floorPoly != polyUpDown) {
                 isFloorPolyValid = EnBomChu_UpdateFloorPoly(this, polyUpDown, play);
@@ -269,7 +269,7 @@ void EnBomChu_Move(EnBomChu* this, PlayState* play) {
             this->actor.floorBgId = bgIdUpDown;
         }
     } else {
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
         lineLength *= 3.0f;
         Math_Vec3f_Copy(&posA, &posB);
 
@@ -316,8 +316,8 @@ void EnBomChu_Move(EnBomChu* this, PlayState* play) {
         func_800B8F98(&this->actor, NA_SE_IT_BOMBCHU_MOVE - SFX_FLAG);
     }
 
-    if (this->actor.speedXZ != 0.0f) {
-        this->movingSpeed = this->actor.speedXZ;
+    if (this->actor.speed != 0.0f) {
+        this->movingSpeed = this->actor.speed;
     }
 }
 
@@ -326,7 +326,7 @@ void EnBomChu_Explode(EnBomChu* this, PlayState* play) {
     s32 i;
 
     bomb = (EnBom*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOM, this->actor.world.pos.x, this->actor.world.pos.y,
-                               this->actor.world.pos.z, 0, 0, 0, 0);
+                               this->actor.world.pos.z, BOMB_EXPLOSIVE_TYPE_BOMB, 0, 0, BOMB_TYPE_BODY);
 
     this->shouldTimerCountDown = true;
     this->isMoving = false;
@@ -336,7 +336,7 @@ void EnBomChu_Explode(EnBomChu* this, PlayState* play) {
     }
 
     this->timer = 1;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
 
     if (this->actor.depthInWater > 0.0f) {
         for (i = 0; i < 40; i++) {
@@ -408,7 +408,7 @@ void EnBomChu_HandleNonSceneCollision(EnBomChu* this, PlayState* play) {
     Math_Vec3f_Copy(&originalWorldPos, &this->actor.world.pos);
     Math_Vec3f_Copy(&originalAxisUp, &this->axisUp);
     yaw = this->actor.shape.rot.y;
-    BgCheck2_UpdateActorAttachedToMesh(&play->colCtx, this->actor.floorBgId, &this->actor);
+    DynaPolyActor_TransformCarriedActor(&play->colCtx, this->actor.floorBgId, &this->actor);
 
     if (yaw != this->actor.shape.rot.y) {
         yaw = this->actor.shape.rot.y - yaw;
@@ -441,7 +441,7 @@ void EnBomChu_HandleNonSceneCollision(EnBomChu* this, PlayState* play) {
         isFloorPolyValid = EnBomChu_UpdateFloorPoly(this, poly, play);
         Math_Vec3f_Copy(&this->actor.world.pos, &originalWorldPos);
         this->actor.floorBgId = bgId;
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
 
         if (isFloorPolyValid) {
             EnBomChu_UpdateRotation(this);
@@ -512,23 +512,23 @@ void EnBomChu_Update(Actor* thisx, PlayState* play) {
             this->actor.depthInWater = waterY - this->actor.world.pos.y;
 
             if (this->actor.depthInWater < 0.0f) {
-                if (this->actor.bgCheckFlags & 0x20) {
+                if (this->actor.bgCheckFlags & BGCHECKFLAG_WATER) {
                     EnBomChu_SpawnRipplesAndSplashes(this, play, waterY, true);
                 }
 
-                this->actor.bgCheckFlags &= ~0x20;
+                this->actor.bgCheckFlags &= ~BGCHECKFLAG_WATER;
                 return;
             }
 
-            if (!(this->actor.bgCheckFlags & 0x20) && (this->timer != 120)) {
+            if (!(this->actor.bgCheckFlags & BGCHECKFLAG_WATER) && (this->timer != 120)) {
                 EnBomChu_SpawnRipplesAndSplashes(this, play, waterY, true);
             } else {
                 EffectSsBubble_Spawn(play, &this->actor.world.pos, 0.0f, 3.0f, 15.0f, 0.25f);
             }
 
-            this->actor.bgCheckFlags |= 0x20;
+            this->actor.bgCheckFlags |= BGCHECKFLAG_WATER;
         } else {
-            this->actor.bgCheckFlags &= ~0x20;
+            this->actor.bgCheckFlags &= ~BGCHECKFLAG_WATER;
             this->actor.depthInWater = BGCHECK_Y_MIN;
         }
     }
@@ -542,7 +542,7 @@ void EnBomChu_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     func_800B8050(&this->actor, play, 0);
 
     if (this->timer >= 40) {

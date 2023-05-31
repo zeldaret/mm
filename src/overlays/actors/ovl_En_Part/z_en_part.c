@@ -52,7 +52,7 @@ void func_80865390(EnPart* this, PlayState* play) {
             this->actor.world.rot.y = this->actor.parent->shape.rot.y + 0x8000;
             this->unk146 = 100;
             this->actor.velocity.y = 7.0f;
-            this->actor.speedXZ = 2.0f;
+            this->actor.speed = 2.0f;
             this->actor.gravity = -1.0f;
             break;
     }
@@ -125,7 +125,7 @@ void EnPart_Draw(Actor* thisx, PlayState* play) {
     if (this->actor.params > ENPART_TYPE_0) {
         Matrix_RotateZF(this->zRot, MTXMODE_APPLY);
     }
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     func_800B8050(&this->actor, play, 0);
     if (this->actor.params == ENPART_TYPE_15) {
         gSPSegment(POLY_OPA_DISP++, 0x0C, gEmptyDL);

@@ -52,10 +52,10 @@ void ObjKinoko_Update(Actor* thisx, PlayState* play) {
             Actor_Kill(thisx);
             return;
         }
-        Actor_PickUp(thisx, play, GI_MAX, 20.0f, 10.0f);
-        if (Math_SmoothStepToF(&thisx->speedXZ, 0.0f, 0.04f, 2.0f, 0.5f) < 0.5f) {
+        Actor_OfferGetItem(thisx, play, GI_MAX, 20.0f, 10.0f);
+        if (Math_SmoothStepToF(&thisx->speed, 0.0f, 0.04f, 2.0f, 0.5f) < 0.5f) {
             thisx->scale.x = 0.0f;
-            thisx->speedXZ = 110.0f;
+            thisx->speed = 110.0f;
             thisx->velocity.x = 0.2f;
         }
         if (Math_SmoothStepToF(&thisx->scale.x, thisx->velocity.x, 0.04f, 0.004f, 0.001f) <
@@ -73,10 +73,10 @@ void ObjKinoko_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     gfx = POLY_XLU_DISP;
-    gDPSetPrimColor(&gfx[0], 0, 0, 169, 63, 186, (u8)thisx->speedXZ);
+    gDPSetPrimColor(&gfx[0], 0, 0, 169, 63, 186, (u8)thisx->speed);
     gDPSetEnvColor(&gfx[1], 110, 44, 200, 100);
     gDPSetRenderMode(&gfx[2], G_RM_PASS, G_RM_ZB_CLD_SURF2);
     gSPMatrix(&gfx[3], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

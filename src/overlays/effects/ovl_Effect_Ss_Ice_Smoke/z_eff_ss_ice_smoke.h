@@ -10,6 +10,4 @@ typedef struct {
     /* 0x24 */ s16 scale;
 } EffectSsIceSmokeInitParams; // size = 0x28
 
-extern const EffectSsInit Effect_Ss_Ice_Smoke_InitVars;
-
 #endif

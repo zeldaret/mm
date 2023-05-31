@@ -18,7 +18,7 @@ enum {
 typedef struct BgIknvDoukutu {
     /* 0x000 */ DynaPolyActor dyna;
     /* 0x15C */ s16 unk_15C; // set and not used
-    /* 0x15E */ u16 csAction;
+    /* 0x15E */ u16 cueType;
     /* 0x160 */ f32 unk_160;
     /* 0x164 */ BgIknvDoukutuActionFunc actionFunc;
 } BgIknvDoukutu;// size = 0x168
