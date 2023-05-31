@@ -89,7 +89,7 @@ void func_80C17B60(DemoMoonend* this, PlayState* play) {
             }
         }
         if (this->cueId == 2) {
-            func_800B9010(&this->actor, NA_SE_EV_RAINBOW - SFX_FLAG);
+            Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_RAINBOW - SFX_FLAG);
         }
     } else {
         this->actor.draw = NULL;
@@ -127,7 +127,7 @@ void func_80C17C48(DemoMoonend* this, PlayState* play) {
             }
         }
         if (this->actor.home.rot.z != 0) {
-            func_800B9010(&this->actor, NA_SE_EV_EARTHQUAKE_LAST2 - SFX_FLAG);
+            Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_EARTHQUAKE_LAST2 - SFX_FLAG);
         }
     } else {
         this->actor.draw = NULL;
