@@ -4447,8 +4447,9 @@ void Interface_DrawClock(PlayState* play) {
             OVERLAY_DISP = Gfx_DrawTexRect4b(OVERLAY_DISP, gThreeDayClockBorderTex, 4, 64, 50, 96, 168, 128, 50, 1, 6,
                                              0, 1 << 10, 1 << 10);
 
-            if (((CURRENT_DAY >= 4) || ((CURRENT_DAY == 3) && (((void)0, gSaveContext.save.time) >= 5) &&
-                                        (((void)0, gSaveContext.save.time) < CLOCK_TIME(6, 0))))) {
+            if (((CURRENT_DAY >= 4) ||
+                 ((CURRENT_DAY == 3) && (((void)0, gSaveContext.save.time) >= (CLOCK_TIME(0, 0) + 5)) &&
+                  (((void)0, gSaveContext.save.time) < CLOCK_TIME(6, 0))))) {
                 Gfx_SetupDL42_Overlay(play->state.gfxCtx);
                 gSPMatrix(OVERLAY_DISP++, &gIdentityMtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             } else {
@@ -4660,7 +4661,7 @@ void Interface_DrawClock(PlayState* play) {
             /**
              * Draws Three-Day Clock's Hour Digit Above the Sun
              */
-            sp1CC = gSaveContext.save.time * 0.000096131f;
+            sp1CC = gSaveContext.save.time * 0.000096131f; // (2.0f * 3.15f / 0x10000)
 
             // Rotates Three-Day Clock's Hour Digit To Above the Sun
             Matrix_Translate(0.0f, R_THREE_DAY_CLOCK_Y_POS / 10.0f, 0.0f, MTXMODE_NEW);
@@ -4708,8 +4709,9 @@ void Interface_DrawClock(PlayState* play) {
             gSPDisplayList(OVERLAY_DISP++, D_0E000000.setScissor);
 
             // Final Hours
-            if ((CURRENT_DAY >= 4) || ((CURRENT_DAY == 3) && (((void)0, gSaveContext.save.time) >= 5) &&
-                                       (((void)0, gSaveContext.save.time) < CLOCK_TIME(6, 0)))) {
+            if ((CURRENT_DAY >= 4) ||
+                ((CURRENT_DAY == 3) && (((void)0, gSaveContext.save.time) >= (CLOCK_TIME(0, 0) + 5)) &&
+                 (((void)0, gSaveContext.save.time) < CLOCK_TIME(6, 0)))) {
                 if (((void)0, gSaveContext.save.time) >= CLOCK_TIME(5, 0)) {
                     // The Final Hours clock will flash red
 
