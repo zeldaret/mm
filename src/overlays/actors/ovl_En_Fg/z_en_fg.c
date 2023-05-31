@@ -493,5 +493,6 @@ void EnFg_DrawDust(PlayState* play, EnFgEffectDust* dustEffect) {
         gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(sDustTextures[index]));
         gSPDisplayList(POLY_XLU_DISP++, object_fr_DL_00B338);
     }
+
     CLOSE_DISPS(play->state.gfxCtx);
 }
