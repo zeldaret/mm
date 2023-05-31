@@ -3,6 +3,7 @@
  * Description:
  */
 
+#include "prevent_bss_reordering.h"
 #include "global.h"
 #include "z64load.h"
 #include "z64quake.h"
@@ -15,21 +16,21 @@
 #include "objects/object_bdoor/object_bdoor.h"
 
 // bss
-extern FaultClient sActorFaultClient; // 2 funcs
-extern CollisionPoly* D_801ED8B0;     // 1 func
-extern s32 D_801ED8B4;                // 2 funcs
-extern Actor* D_801ED8B8;             // 2 funcs
-extern Actor* D_801ED8BC;             // 2 funcs
-extern Actor* D_801ED8C0;             // 2 funcs
-extern Actor* D_801ED8C4;             // 2 funcs
-extern f32 D_801ED8C8;                // 2 funcs
-extern f32 sBgmEnemyDistSq;           // 2 funcs
-extern f32 D_801ED8D0;                // 2 funcs
-extern s32 D_801ED8D4;                // 2 funcs
-extern s32 D_801ED8D8;                // 2 funcs
-extern s16 D_801ED8DC;                // 2 funcs
-extern Mtx D_801ED8E0;                // 1 func
-extern Actor* D_801ED920;             // 2 funcs. 1 out of z_actor
+FaultClient sActorFaultClient; // 2 funcs
+CollisionPoly* D_801ED8B0;     // 1 func
+s32 D_801ED8B4;                // 2 funcs
+Actor* D_801ED8B8;             // 2 funcs
+Actor* D_801ED8BC;             // 2 funcs
+Actor* D_801ED8C0;             // 2 funcs
+Actor* D_801ED8C4;             // 2 funcs
+f32 D_801ED8C8;                // 2 funcs
+f32 sBgmEnemyDistSq;           // 2 funcs
+f32 D_801ED8D0;                // 2 funcs
+s32 D_801ED8D4;                // 2 funcs
+s32 D_801ED8D8;                // 2 funcs
+s16 D_801ED8DC;                // 2 funcs
+Mtx D_801ED8E0;                // 1 func
+Actor* D_801ED920;             // 2 funcs. 1 out of z_actor
 
 // Internal forward declarations
 void Actor_KillAllOnHalfDayChange(PlayState* play, ActorContext* actorCtx);

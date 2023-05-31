@@ -749,4 +749,6 @@ extern s16 D_801AED48[8];
 extern Gfx D_801AEF88[];
 extern Gfx D_801AEFA0[];
 
+extern Actor* D_801ED920;
+
 #endif
