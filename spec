@@ -3195,8 +3195,7 @@ beginseg
     name "ovl_fbdemo_wipe3"
     compress
     include "build/src/overlays/fbdemos/ovl_fbdemo_wipe3/z_fbdemo_wipe3.o"
-    include "build/data/ovl_fbdemo_wipe3/ovl_fbdemo_wipe3.data.o"
-    include "build/data/ovl_fbdemo_wipe3/ovl_fbdemo_wipe3.reloc.o"
+    include "build/src/overlays/fbdemos/ovl_fbdemo_wipe3/ovl_fbdemo_wipe3_reloc.o"
 endseg
 
 beginseg
@@ -4853,8 +4852,7 @@ beginseg
     name "ovl_Demo_Moonend"
     compress
     include "build/src/overlays/actors/ovl_Demo_Moonend/z_demo_moonend.o"
-    include "build/data/ovl_Demo_Moonend/ovl_Demo_Moonend.data.o"
-    include "build/data/ovl_Demo_Moonend/ovl_Demo_Moonend.reloc.o"
+    include "build/src/overlays/actors/ovl_Demo_Moonend/ovl_Demo_Moonend_reloc.o"
 endseg
 
 beginseg
