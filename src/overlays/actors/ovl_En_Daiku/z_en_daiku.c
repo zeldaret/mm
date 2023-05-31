@@ -197,7 +197,8 @@ void func_809438F8(EnDaiku* this, PlayState* play) {
     }
 
     if (this->unk_278 == ENDAIKU_PARAMS_FF_3) {
-        f32 sq, abs;
+        f32 sq;
+        f32 abs;
 
         Math_ApproachF(&this->actor.world.pos.x, this->unk_26C.x, 0.5f,
                        fabsf(2.0f * Math_SinS(this->actor.world.rot.y)));
