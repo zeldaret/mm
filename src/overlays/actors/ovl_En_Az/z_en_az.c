@@ -72,7 +72,7 @@ typedef enum {
     /* 10 */ BEAVER_ANIM_TALK_TO_RIGHT,
     /* 11 */ BEAVER_ANIM_BOW,
     /* 12 */ BEAVER_ANIM_IDLE_FACE_LEFT,
-    /* 13 */ BEAVER_ANIM_IDLE_FACE_RIGHT,
+    /* 13 */ BEAVER_ANIM_IDLE_FACE_RIGHT
 } BeaverAnimation;
 
 static AnimationSpeedInfo sAnimationInfo[] = {

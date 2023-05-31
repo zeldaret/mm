@@ -50,14 +50,14 @@ typedef enum {
     /* 2 */ EN_AOB01_ANIM_LAUGH_LOOP,
     /* 3 */ EN_AOB01_ANIM_SURPRISE_START,
     /* 4 */ EN_AOB01_ANIM_SURPRISE_LOOP,
-    /* 5 */ EN_AOB01_ANIM_IDLE_2,
+    /* 5 */ EN_AOB01_ANIM_IDLE_2
 } EnAob01Animation;
 
 typedef enum {
     /* 0 */ EN_AOB01_EYE_OPEN,
     /* 1 */ EN_AOB01_EYE_HALF,
     /* 2 */ EN_AOB01_EYE_CLOSED,
-    /* 3 */ EN_AOB01_EYE_MAX,
+    /* 3 */ EN_AOB01_EYE_MAX
 } EnAob01EyeTexture;
 
 static AnimationInfo sAnimationInfo[] = {

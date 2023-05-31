@@ -13,13 +13,13 @@ typedef void (*EnBomActionFunc)(struct EnBom*, PlayState*);
 
 typedef enum BombType {
     /* 0 */ BOMB_TYPE_BODY,
-    /* 1 */ BOMB_TYPE_EXPLOSION,
+    /* 1 */ BOMB_TYPE_EXPLOSION
 } BombType;
 
 // Passed via x rotation
 typedef enum EnBomExplosiveType {
     /* 0 */ BOMB_EXPLOSIVE_TYPE_BOMB,
-    /* 1 */ BOMB_EXPLOSIVE_TYPE_POWDER_KEG,
+    /* 1 */ BOMB_EXPLOSIVE_TYPE_POWDER_KEG
 } EnBomExplosiveType;
 
 typedef struct EnBom {

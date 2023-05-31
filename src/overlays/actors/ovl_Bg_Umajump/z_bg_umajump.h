@@ -7,12 +7,12 @@
 #define BG_UMAJUMP_GET_FF(thisx) ((thisx)->params & 0xFF)
 
 typedef enum {
-    BG_UMAJUMP_TYPE_1 = 1,
-    BG_UMAJUMP_TYPE_2,
-    BG_UMAJUMP_TYPE_3,
-    BG_UMAJUMP_TYPE_4,
-    BG_UMAJUMP_TYPE_5,
-    BG_UMAJUMP_TYPE_6,
+    /* 1 */ BG_UMAJUMP_TYPE_1 = 1,
+    /* 2 */ BG_UMAJUMP_TYPE_2,
+    /* 3 */ BG_UMAJUMP_TYPE_3,
+    /* 4 */ BG_UMAJUMP_TYPE_4,
+    /* 5 */ BG_UMAJUMP_TYPE_5,
+    /* 6 */ BG_UMAJUMP_TYPE_6
 } BgUmaJumpType;
 
 struct BgUmajump;

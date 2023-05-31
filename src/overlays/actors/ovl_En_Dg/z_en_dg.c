@@ -62,7 +62,7 @@ ActorInit En_Dg_InitVars = {
 typedef enum {
     /* 0 */ DOG_GRAB_STATE_NONE,
     /* 1 */ DOG_GRAB_STATE_HELD,
-    /* 2 */ DOG_GRAB_STATE_THROWN_OR_SITTING_AFTER_THROW,
+    /* 2 */ DOG_GRAB_STATE_THROWN_OR_SITTING_AFTER_THROW
 } DogGrabState;
 
 typedef enum {
@@ -74,7 +74,7 @@ typedef enum {
     /* 5 */ DOG_BEHAVIOR_ZORA_WAIT,
     /* 6 */ DOG_BEHAVIOR_DEKU,
     /* 7 */ DOG_BEHAVIOR_DEKU_WAIT,
-    /* 8 */ DOG_BEHAVIOR_DEFAULT,
+    /* 8 */ DOG_BEHAVIOR_DEFAULT
 } DogBehavior;
 
 static u8 sIsAnyDogHeld = false;
@@ -85,10 +85,10 @@ static s16 sBremenMaskFollowerIndex = ENDG_INDEX_NO_BREMEN_MASK_FOLLOWER;
  * Stores the state for the dogs milling about at the Doggy Racetrack.
  */
 typedef struct {
-    s16 color;  // The dog's color, which is used as an index into sBaseSpeeds
-    s16 index;  // The dog's index within sDogInfo
-    s16 textId; // The ID of the text to display when the dog is picked up
-} RacetrackDogInfo;
+    /* 0x0 */ s16 color;  // The dog's color, which is used as an index into sBaseSpeeds
+    /* 0x2 */ s16 index;  // The dog's index within sDogInfo
+    /* 0x4 */ s16 textId; // The ID of the text to display when the dog is picked up
+} RacetrackDogInfo;       // size = 0x6
 
 /**
  * A table of RacetrackDogInfo for every dog at the Doggy Racetrack. Note that the textId values

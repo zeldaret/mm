@@ -39,7 +39,7 @@ void func_80C00168(EnBomjima* this, PlayState* play);
 void func_80C00234(EnBomjima* this);
 void func_80C00284(EnBomjima* this, PlayState* play);
 
-typedef enum EN_BOMJIMA_ACTION {
+typedef enum EnBomjimaAction {
     /* 0 */ EN_BOMJIMA_ACTION_0,
     /* 1 */ EN_BOMJIMA_ACTION_1,
     /* 2 */ EN_BOMJIMA_ACTION_2,
@@ -47,8 +47,8 @@ typedef enum EN_BOMJIMA_ACTION {
     /* 4 */ EN_BOMJIMA_ACTION_4,
     /* 5 */ EN_BOMJIMA_ACTION_5,
     /* 6 */ EN_BOMJIMA_ACTION_6,
-    /* 7 */ EN_BOMJIMA_ACTION_7,
-} EN_BOMJIMA_ACTION;
+    /* 7 */ EN_BOMJIMA_ACTION_7
+} EnBomjimaAction;
 
 static s32 D_80C009F0 = 0;
 static s32 D_80C009F4 = 0;

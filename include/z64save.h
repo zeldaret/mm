@@ -80,7 +80,7 @@ typedef enum {
     /*  5 */ TIMER_ID_ENV_HAZARD, // environmental hazard timer (underwater or hot room)
     /*  6 */ TIMER_ID_GORON_RACE_UNUSED,
     /*  7 */ TIMER_ID_MAX,
-    /* 99 */ TIMER_ID_NONE = 99,
+    /* 99 */ TIMER_ID_NONE = 99
 } TimerId;
 
 typedef enum {
@@ -1547,7 +1547,7 @@ typedef enum {
     /* 0 */ DUNGEON_INDEX_WOODFALL_TEMPLE,
     /* 1 */ DUNGEON_INDEX_SNOWHEAD_TEMPLE,
     /* 2 */ DUNGEON_INDEX_GREAT_BAY_TEMPLE,
-    /* 3 */ DUNGEON_INDEX_STONE_TOWER_TEMPLE, // Also applies to Inverted Stone Tower Temple
+    /* 3 */ DUNGEON_INDEX_STONE_TOWER_TEMPLE // Also applies to Inverted Stone Tower Temple
 } DungeonIndex;
 
 void Sram_ActivateOwl(u8 owlId);

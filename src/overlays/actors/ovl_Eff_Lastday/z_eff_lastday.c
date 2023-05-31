@@ -22,10 +22,10 @@ void func_80BEBEB8(EffLastday* this, PlayState* play);
 void func_80BEBF78(EffLastday* this, PlayState* play);
 
 typedef enum EffLastDayAction {
-    /* 0x0 */ EFFLASTDAY_ACTION_NONE,
-    /* 0x1 */ EFFLASTDAY_ACTION_1,
-    /* 0x2 */ EFFLASTDAY_ACTION_2,
-    /* 0x3 */ EFFLASTDAY_ACTION_3
+    /* 0 */ EFFLASTDAY_ACTION_NONE,
+    /* 1 */ EFFLASTDAY_ACTION_1,
+    /* 2 */ EFFLASTDAY_ACTION_2,
+    /* 3 */ EFFLASTDAY_ACTION_3
 } EffLastDayAction;
 
 ActorInit Eff_Lastday_InitVars = {

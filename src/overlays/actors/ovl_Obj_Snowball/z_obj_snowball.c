@@ -73,10 +73,10 @@ static ColliderJntSphInit sJntSphInit = {
 };
 
 typedef struct {
-    /* 0x00 */ s16 unk_00;
-    /* 0x02 */ s16 unk_02;
-    /* 0x04 */ ObjSnowballActionFunc unk_04;
-} ObjSnowballStruct2;
+    /* 0x0 */ s16 unk_00;
+    /* 0x2 */ s16 unk_02;
+    /* 0x4 */ ObjSnowballActionFunc unk_04;
+} ObjSnowballStruct2; // size = 0x8
 
 static ObjSnowballStruct2 D_80B04F84[] = {
     { -1, 0, func_80B02D58 },

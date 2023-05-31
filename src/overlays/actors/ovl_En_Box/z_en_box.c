@@ -73,7 +73,7 @@ static InitChainEntry sInitChain[] = {
 };
 
 typedef struct {
-    f32 data[5];
+    /* 0x0 */ f32 data[5];
 } EnBox_PlaybackSpeed; // 0x14
 
 static EnBox_PlaybackSpeed sPlaybackSpeed = { { 1.5f, 1.0f, 1.5f, 1.0f, 1.5f } };

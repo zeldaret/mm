@@ -9,7 +9,7 @@ typedef void (*BgFireWallActionFunc)(struct BgFireWall*, PlayState*);
 
 typedef enum {
     /* 0 */ BGFIREWALL_PARAMS_0,
-    /* 1 */ BGFIREWALL_PARAMS_1,
+    /* 1 */ BGFIREWALL_PARAMS_1
 } BgFireWallParams;
 
 typedef struct BgFireWall {

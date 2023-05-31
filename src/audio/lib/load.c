@@ -80,10 +80,10 @@ typedef enum {
 #define OS_MESG_PRI_HIGH 1
 
 typedef struct {
-    u16 numInstruments;
-    u16 numDrums;
-    u16 numSfx;
-} UnloadedFonts;
+    /* 0x0 */ u16 numInstruments;
+    /* 0x2 */ u16 numDrums;
+    /* 0x4 */ u16 numSfx;
+} UnloadedFonts; // size = 0x6
 
 OSMesgQueue sScriptLoadQueue;
 OSMesg sScriptLoadMesgBuf[0x10];

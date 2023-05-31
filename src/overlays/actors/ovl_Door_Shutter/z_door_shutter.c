@@ -101,8 +101,8 @@ static InitChainEntry sInitChain[] = {
 };
 
 typedef struct {
-    /* 0x00 */ s16 sceneId;
-    /* 0x02 */ u8 index;
+    /* 0x0 */ s16 sceneId;
+    /* 0x2 */ u8 index;
 } ShutterSceneInfo; // size = 0x4
 
 ShutterSceneInfo D_808A2258[] = {
@@ -115,9 +115,9 @@ ShutterSceneInfo D_808A2258[] = {
 };
 
 typedef struct {
-    /* 0x00 */ s16 dungeonSceneId;
-    /* 0x02 */ s16 bossSceneId;
-    /* 0x04 */ u8 index;
+    /* 0x0 */ s16 dungeonSceneId;
+    /* 0x2 */ s16 bossSceneId;
+    /* 0x4 */ u8 index;
 } BossDoorInfo; // size = 0x6
 
 BossDoorInfo D_808A22A0[] = {

@@ -10,8 +10,8 @@ s32 __osFlashVersion;
 UNK_TYPE1 D_801FD0FC[0x14];
 
 typedef enum {
-    FLASH_OLD,
-    FLASH_NEW,
+    /* 0 */ FLASH_OLD,
+    /* 1 */ FLASH_NEW
 } FlashVersion;
 
 u32 osFlashGetAddr(u32 pageNum) {

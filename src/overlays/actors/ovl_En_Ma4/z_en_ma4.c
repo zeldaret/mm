@@ -44,14 +44,14 @@ void EnMa4_InitFaceExpression(EnMa4* this);
 typedef enum {
     /* 0 */ MA4_TYPE_DAY1,
     /* 1 */ MA4_TYPE_ALIENS_DEFEATED,
-    /* 2 */ MA4_TYPE_ALIENS_WON,
+    /* 2 */ MA4_TYPE_ALIENS_WON
 } EnMa4Type;
 
 typedef enum {
     /* 0 */ MA4_STATE_DEFAULT,
     /* 1 */ MA4_STATE_HORSEBACKGAME,
     /* 2 */ MA4_STATE_AFTERHORSEBACKGAME,
-    /* 3 */ MA4_STATE_AFTERDESCRIBETHEMCS,
+    /* 3 */ MA4_STATE_AFTERDESCRIBETHEMCS
 } EnMa4State;
 
 ActorInit En_Ma4_InitVars = {

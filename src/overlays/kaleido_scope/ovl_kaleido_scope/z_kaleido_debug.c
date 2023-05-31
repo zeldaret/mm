@@ -37,7 +37,7 @@ typedef struct {
     /* 0x0 */ s16 screenX;
     /* 0x2 */ s16 screenY;
     /* 0x4 */ s16 width;
-} SectionPosition; // size = 0x6;
+} SectionPosition; // size = 0x6
 
 // clang-format off
 SectionPosition sSectionPositions[] = {

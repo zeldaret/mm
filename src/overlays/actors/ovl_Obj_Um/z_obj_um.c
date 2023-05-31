@@ -1631,9 +1631,9 @@ void ObjUm_DefaultAnim(ObjUm* this, PlayState* play) {
 }
 
 typedef struct {
-    /* 0x00 */ AnimationHeader* anim;
-    /* 0x04 */ s32 doesMove; // `true` if the animation is intended to be used while the actor is moving
-} struct_80B7C25C;           // size = 0x08
+    /* 0x0 */ AnimationHeader* anim;
+    /* 0x4 */ s32 doesMove; // `true` if the animation is intended to be used while the actor is moving
+} struct_80B7C25C;          // size = 0x8
 
 struct_80B7C25C sUmAnims[] = {
     { &gUmTrotAnim, true },      // OBJ_UM_ANIM_TROT

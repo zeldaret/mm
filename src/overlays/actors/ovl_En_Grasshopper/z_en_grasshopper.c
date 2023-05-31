@@ -52,18 +52,18 @@ typedef enum {
     /*  7 */ EN_GRASSHOPPER_ACTION_WAIT_AFTER_ATTACK,
     /*  8 */ EN_GRASSHOPPER_ACTION_DAMAGED,
     /*  9 */ EN_GRASSHOPPER_ACTION_DEAD,
-    /* 10 */ EN_GRASSHOPPER_ACTION_FALL,
+    /* 10 */ EN_GRASSHOPPER_ACTION_FALL
 } EnGrasshopperAction;
 
 typedef enum {
     /* 0 */ EN_GRASSHOPPER_DECISION_ATTACK,
     /* 1 */ EN_GRASSHOPPER_DECISION_FLY,
-    /* 2 */ EN_GRASSHOPPER_DECISION_ROAM_IN_CIRCLES, // Never used in the final game
+    /* 2 */ EN_GRASSHOPPER_DECISION_ROAM_IN_CIRCLES // Never used in the final game
 } EnGrasshopperNextAction;
 
 typedef enum {
     /* 0 */ EN_GRASSHOPPER_BANK_STATE_BANKING,
-    /* 1 */ EN_GRASSHOPPER_BANK_STATE_DONE,
+    /* 1 */ EN_GRASSHOPPER_BANK_STATE_DONE
 } EnGrasshopperBankState;
 
 typedef enum {
@@ -74,7 +74,7 @@ typedef enum {
     /* 4 */ EN_GRASSHOPPER_ANIM_HOVER,
     /* 5 */ EN_GRASSHOPPER_ANIM_DAMAGE,
     /* 6 */ EN_GRASSHOPPER_ANIM_DEAD,
-    /* 7 */ EN_GRASSHOPPER_ANIM_FALL,
+    /* 7 */ EN_GRASSHOPPER_ANIM_FALL
 } EnGrasshopperAnim;
 
 static s32 sOccupiedIndices[] = {
@@ -99,7 +99,7 @@ typedef enum {
     /* 0x3 */ EN_GRASSHOPPER_DMGEFF_FREEZE,     // Damages and freezes the Dragonfly in ice
     /* 0x4 */ EN_GRASSHOPPER_DMGEFF_LIGHT_ORB,  // Damages and surrounds the Dragonfly with light orbs
     /* 0xE */ EN_GRASSHOPPER_DMGEFF_HOOK = 0xE, // If hit by the Hookshot, it pulls the Dragonfly towards the player
-    /* 0xF */ EN_GRASSHOPPER_DMGEFF_NONE,       // Deals regular damage with no extra effect
+    /* 0xF */ EN_GRASSHOPPER_DMGEFF_NONE        // Deals regular damage with no extra effect
 } EnDragonflyDamageEffect;
 
 static DamageTable sDamageTable = {

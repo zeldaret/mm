@@ -11,7 +11,7 @@ typedef enum {
     /* 3 */ DOG_COLOR_BEIGE,
     /* 4 */ DOG_COLOR_BROWN,
     /* 5 */ DOG_COLOR_BLUE,
-    /* 6 */ DOG_COLOR_GOLD,
+    /* 6 */ DOG_COLOR_GOLD
 } DogColors;
 
 struct EnDg;

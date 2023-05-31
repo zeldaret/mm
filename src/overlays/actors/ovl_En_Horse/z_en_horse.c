@@ -91,22 +91,22 @@ void EnHorse_StickDirection(Vec2f* curStick, f32* stickMag, s16* angle);
 s32 EnHorse_GetMountSide(EnHorse* this, PlayState* play);
 
 typedef struct {
-    s32 cueId;
-    s32 csFuncIdx;
-} CsActionEntry;
+    /* 0x0 */ s32 cueId;
+    /* 0x4 */ s32 csFuncIdx;
+} CsActionEntry; // size = 0x8
 
 typedef struct {
-    s16 x;
-    s16 y;
-    s16 z;
-    s16 speed;
-    s16 angle;
-} RaceWaypoint;
+    /* 0x0 */ s16 x;
+    /* 0x2 */ s16 y;
+    /* 0x4 */ s16 z;
+    /* 0x6 */ s16 speed;
+    /* 0x8 */ s16 angle;
+} RaceWaypoint; // size = 0xA
 
 typedef struct {
-    s32 numWaypoints;
-    RaceWaypoint* waypoints;
-} RaceInfo;
+    /* 0x0 */ s32 numWaypoints;
+    /* 0x4 */ RaceWaypoint* waypoints;
+} RaceInfo; // size = 0x8
 
 static AnimationHeader* sEponaAnimations[] = {
     &object_horse_link_child_Anim_006D44, &object_horse_link_child_Anim_007468, &object_horse_link_child_Anim_005F64,

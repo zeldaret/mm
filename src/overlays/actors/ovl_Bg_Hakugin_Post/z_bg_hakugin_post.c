@@ -52,9 +52,9 @@ ActorInit Bg_Hakugin_Post_InitVars = {
 };
 
 typedef struct {
-    f32 unk_00;
-    u8 unk_04;
-} BgHakuginPostUnkStruct3;
+    /* 0x0 */ f32 unk_00;
+    /* 0x4 */ u8 unk_04;
+} BgHakuginPostUnkStruct3; // size = 0x8
 
 static BgHakuginPostUnkStruct3 D_80A9D880[] = {
     { 1200.0f, false }, { 600.0f, false }, { 900.0f, false }, { 870.0f, false },

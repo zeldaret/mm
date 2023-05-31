@@ -38,7 +38,7 @@ typedef enum {
     /* 2 */ TURTLE_EYEMODE_CLOSED,
     /* 3 */ TURTLE_EYEMODE_LOOK_STRAIGHT,
     /* 4 */ TURTLE_EYEMODE_UNUSED,
-    /* 5 */ TURTLE_EYEMODE_LOOK_RIGHT,
+    /* 5 */ TURTLE_EYEMODE_LOOK_RIGHT
 } EyeMode;
 
 typedef enum {
@@ -48,7 +48,7 @@ typedef enum {
     /* 3 */ TURTLE_ANIM_SPEAK1,
     /* 4 */ TURTLE_ANIM_COUGH,
     /* 5 */ TURTLE_ANIM_SPEAK2,
-    /* 6 */ TURTLE_ANIM_YAWN,
+    /* 6 */ TURTLE_ANIM_YAWN
 } TurtleAnimation;
 
 ActorInit Dm_Char08_InitVars = {
