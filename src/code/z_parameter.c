@@ -4686,6 +4686,7 @@ void Interface_DrawClock(PlayState* play) {
             /**
              * Draws Three-Day Clock's Hour Digit Above the Moon
              */
+
             // Rotates Three-Day Clock's Hour Digit To Above the Moon
             Matrix_Translate(0.0f, R_THREE_DAY_CLOCK_Y_POS / 10.0f, 0.0f, MTXMODE_NEW);
             Matrix_Scale(1.0f, 1.0f, 1.0f, MTXMODE_APPLY);
