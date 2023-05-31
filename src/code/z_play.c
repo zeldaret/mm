@@ -8,7 +8,7 @@ s16 sTransitionFillTimer;
 Input D_801F6C18;
 TransitionTile sTransitionTile;
 s32 gTransitionTileState;
-static VisMono sVisMono;
+VisMono sPlayVisMono;
 Color_RGBA8_u32 gVisMonoColor;
 Struct_80140E80 D_801F6D38;
 Struct_80140E80* D_801F6D4C;
@@ -411,7 +411,7 @@ void Play_Destroy(GameState* thisx) {
 
     ShrinkWindow_Destroy();
     TransitionFade_Destroy(&this->unk_18E48);
-    VisMono_Destroy(&sVisMono);
+    VisMono_Destroy(&sPlayVisMono);
     func_80140EA0(D_801F6D4C);
     D_801F6D4C = NULL;
 
@@ -1232,8 +1232,8 @@ void Play_DrawMain(PlayState* this) {
             TransitionFade_Draw(&this->unk_18E48, &sp218);
 
             if (gVisMonoColor.a != 0) {
-                sVisMono.primColor.rgba = gVisMonoColor.rgba;
-                VisMono_Draw(&sVisMono, &sp218);
+                sPlayVisMono.primColor.rgba = gVisMonoColor.rgba;
+                VisMono_Draw(&sPlayVisMono, &sp218);
             }
 
             gSPEndDisplayList(sp218++);
@@ -2301,7 +2301,7 @@ void Play_Init(GameState* thisx) {
     TransitionFade_SetType(&this->unk_18E48, 3);
     TransitionFade_SetColor(&this->unk_18E48, RGBA8(160, 160, 160, 255));
     TransitionFade_Start(&this->unk_18E48);
-    VisMono_Init(&sVisMono);
+    VisMono_Init(&sPlayVisMono);
 
     gVisMonoColor.a = 0;
     D_801F6D4C = &D_801F6D38;
