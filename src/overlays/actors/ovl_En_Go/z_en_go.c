@@ -1296,8 +1296,8 @@ void EnGo_GravemakerIdle(EnGo* this, PlayState* play) {
     if ((fabsf(this->actor.playerHeightRel) > 20.0f) || (this->actor.xzDistToPlayer > 300.0f)) {
         SubS_UpdateFlags(&this->actionFlags, 3, 7);
     } else if ((player->transformation != PLAYER_FORM_GORON) || (ABS_ALT(deltaYaw) >= 0x1C70) ||
-               CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_TO_GORON_GRAVEMAKER_AS_GORON) ||
-               CHECK_WEEKEVENTREG(WEEKEVENTREG_THAWED_GRAVEYARD_GORON)) {
+               CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_GORON_GRAVEMAKER_AS_GORON) ||
+               CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_THAWED_GRAVEYARD_GORON)) {
         SubS_UpdateFlags(&this->actionFlags, 3, 7);
     } else {
         SubS_UpdateFlags(&this->actionFlags, 4, 7);
@@ -1308,7 +1308,7 @@ void EnGo_GravemakerIdle(EnGo* this, PlayState* play) {
  * Idle action function for the Goron frozen at the Goron Graveyard
  */
 void EnGo_FrozenIdle(EnGo* this, PlayState* play) {
-    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_THAWED_GRAVEYARD_GORON)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_THAWED_GRAVEYARD_GORON)) {
         SubS_UpdateFlags(&this->actionFlags, 3, 7);
     } else {
         SubS_UpdateFlags(&this->actionFlags, 4, 7);
@@ -1349,7 +1349,7 @@ Actor* EnGo_FindGravemaker(EnGo* this, PlayState* play) {
  * The Medigoron's collider radius is greater when it needs to be able to drop the Powder Keg in front of the player.
  */
 void EnGo_UpdateMedigoronColliderRadius(EnGo* this, PlayState* play, s32 isGivenPowderKeg) {
-    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_HAS_POWERDERKEG_PRIVILEGES) ||
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_HAS_POWDERKEG_PRIVILEGES) ||
         (play->actorCtx.flags & ACTORCTX_FLAG_0) // Same check occurs in Powder Keg ammo check MsgScript Command
         || isGivenPowderKeg) {
         this->colliderSphere.dim.modelSphere.radius = 300;
@@ -1906,7 +1906,7 @@ void EnGo_SetupGraveyardGoron(EnGo* this, PlayState* play) {
     if ((ENGO_GET_SUBTYPE(&this->actor) == ENGO_GRAVEYARD_FROZEN) &&
         (((play->sceneId == SCENE_10YUKIYAMANOMURA2) && (gSaveContext.sceneLayer == 1) &&
           (play->csCtx.scriptIndex == 0)) ||
-         !CHECK_WEEKEVENTREG(WEEKEVENTREG_THAWED_GRAVEYARD_GORON))) {
+         !CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_THAWED_GRAVEYARD_GORON))) {
         this->actor.child = EnGo_FindGravemaker(this, play);
         this->actor.child->child = &this->actor;
         EnGo_ChangeToFrozenAnimation(this, play);
