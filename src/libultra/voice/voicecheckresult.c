@@ -1,5 +1,5 @@
 /**
- * file voicecheckresult.c
+ * File: voicecheckresult.c
  */
 #include "ultra64/controller_voice.h"
 #include "io/controller.h"

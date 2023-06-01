@@ -1,5 +1,5 @@
 /**
- * file voicecheckwork.c
+ * File: voicecheckwork.c
  *
  * Checks whether or not a word can be registered in the dictionary
  */

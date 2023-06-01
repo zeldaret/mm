@@ -1,5 +1,5 @@
 /**
- * file: voiceinit.c
+ * File: voiceinit.c
  *
  * Initializes Voice Recognition System control structure and hardware
  */

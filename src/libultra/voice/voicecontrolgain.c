@@ -1,5 +1,5 @@
 /**
- * file: voicecontrolgain.c
+ * File: voicecontrolgain.c
  *
  * Adjusts the input gain of the Voice Recognition System
  */

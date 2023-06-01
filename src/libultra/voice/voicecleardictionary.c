@@ -1,5 +1,5 @@
 /**
- * file: voicecleardictionary.c
+ * File: voicecleardictionary.c
  *
  * Initializes Voice Recognition System word registration dictionary.
  *

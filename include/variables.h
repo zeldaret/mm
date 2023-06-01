@@ -303,7 +303,6 @@ extern OSTask tmp_task;
 extern OSMesg siAccessBuf[1];
 extern OSMesgQueue __osSiAccessQueue;
 
-// extern UNK_TYPE4 D_8009CF70;
 extern OSThread __osThreadSave;
 extern OSPiHandle D_8009D130;
 extern OSPiHandle D_8009D1A8;

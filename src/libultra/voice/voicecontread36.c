@@ -1,5 +1,5 @@
 /**
- * voicecontread36.c
+ * File: voicecontread36.c
  */
 
 #include "ultra64/controller_voice.h"
