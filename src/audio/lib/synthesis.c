@@ -500,12 +500,12 @@ Acmd* AudioSynth_SaveResampledReverbSamples(Acmd* cmd, SynthesisReverb* reverb, 
     aResample(cmd++, reverb->resampleFlags, entry->saveResamplePitch, reverb->leftSaveResampleBuf);
 
     cmd = AudioSynth_SaveResampledReverbSamplesImpl(cmd, DMEM_WET_SCRATCH, entry->size,
-                                                    &reverb->leftReverbBuf[entry->startPos]);
+                                                    (uintptr_t)&reverb->leftReverbBuf[entry->startPos]);
 
     if (entry->wrappedSize != 0) {
         // Ring buffer wrapped
         cmd = AudioSynth_SaveResampledReverbSamplesImpl(cmd, entry->size + DMEM_WET_SCRATCH, entry->wrappedSize,
-                                                        reverb->leftReverbBuf);
+                                                        (uintptr_t)reverb->leftReverbBuf);
     }
 
     // Right Resample
@@ -514,12 +514,12 @@ Acmd* AudioSynth_SaveResampledReverbSamples(Acmd* cmd, SynthesisReverb* reverb, 
     aResample(cmd++, reverb->resampleFlags, entry->saveResamplePitch, reverb->rightSaveResampleBuf);
 
     cmd = AudioSynth_SaveResampledReverbSamplesImpl(cmd, DMEM_WET_SCRATCH, entry->size,
-                                                    &reverb->rightReverbBuf[entry->startPos]);
+                                                    (uintptr_t)&reverb->rightReverbBuf[entry->startPos]);
 
     if (entry->wrappedSize != 0) {
         // Ring buffer wrapped
         cmd = AudioSynth_SaveResampledReverbSamplesImpl(cmd, entry->size + DMEM_WET_SCRATCH, entry->wrappedSize,
-                                                        reverb->rightReverbBuf);
+                                                        (uintptr_t)reverb->rightReverbBuf);
     }
 
     return cmd;
@@ -716,16 +716,16 @@ Acmd* AudioSynth_SaveReverbSamples(Acmd* cmd, SynthesisReverb* reverb, s16 updat
 
         if (entry->size != 0) {
             cmd = AudioSynth_SaveResampledReverbSamplesImpl(cmd, DMEM_WET_LEFT_CH, entry->size,
-                                                            &reverb->leftReverbBuf[entry->startPos]);
+                                                            (uintptr_t)&reverb->leftReverbBuf[entry->startPos]);
             cmd = AudioSynth_SaveResampledReverbSamplesImpl(cmd, DMEM_WET_RIGHT_CH, entry->size,
-                                                            &reverb->rightReverbBuf[entry->startPos]);
+                                                            (uintptr_t)&reverb->rightReverbBuf[entry->startPos]);
         }
 
         if (entry->wrappedSize != 0) {
             cmd = AudioSynth_SaveResampledReverbSamplesImpl(cmd, entry->size + DMEM_WET_LEFT_CH, entry->wrappedSize,
-                                                            reverb->leftReverbBuf);
+                                                            (uintptr_t)reverb->leftReverbBuf);
             cmd = AudioSynth_SaveResampledReverbSamplesImpl(cmd, entry->size + DMEM_WET_RIGHT_CH, entry->wrappedSize,
-                                                            reverb->rightReverbBuf);
+                                                            (uintptr_t)reverb->rightReverbBuf);
         }
     }
 
@@ -1110,7 +1110,8 @@ Acmd* AudioSynth_ProcessSample(s32 noteIndex, NoteSampleState* sampleState, Note
                     case CODEC_REVERB:
                         reverbAddrSrc = (void*)0xFFFFFFFF;
                         if (gAudioCustomReverbFunction != NULL) {
-                            reverbAddrSrc = gAudioCustomReverbFunction(sample, numSamplesToLoadAdj, flags, noteIndex);
+                            reverbAddrSrc =
+                                (void*)gAudioCustomReverbFunction(sample, numSamplesToLoadAdj, flags, noteIndex);
                         }
 
                         if (reverbAddrSrc == (void*)0xFFFFFFFF) {
@@ -1170,7 +1171,7 @@ Acmd* AudioSynth_ProcessSample(s32 noteIndex, NoteSampleState* sampleState, Note
                     } else {
                         // This medium is not in ram, so dma the requested sample into ram
                         samplesToLoadAddr =
-                            AudioLoad_DmaSampleData(sampleAddr + (zeroOffset + sampleAddrOffset),
+                            AudioLoad_DmaSampleData((uintptr_t)(sampleAddr + (zeroOffset + sampleAddrOffset)),
                                                     ALIGN16((numFramesToDecode * frameSize) + SAMPLES_PER_FRAME), flags,
                                                     &synthState->sampleDmaIndex, sample->medium);
                     }

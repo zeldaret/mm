@@ -211,7 +211,6 @@ build/src/libultra/flash/%.o: OPTFLAGS := -g
 build/src/libultra/flash/%.o: MIPS_VERSION := -mips1
 
 build/src/audio/%.o: OPTFLAGS := -O2
-build/src/audio/%.o: CHECK_WARNINGS += -Wno-int-conversion
 
 build/assets/%.o: OPTFLAGS := -O1
 build/assets/%.o: ASM_PROC_FLAGS := 
