@@ -4618,8 +4618,7 @@ beginseg
     name "ovl_Eff_Stk"
     compress
     include "build/src/overlays/actors/ovl_Eff_Stk/z_eff_stk.o"
-    include "build/data/ovl_Eff_Stk/ovl_Eff_Stk.data.o"
-    include "build/data/ovl_Eff_Stk/ovl_Eff_Stk.reloc.o"
+    include "build/src/overlays/actors/ovl_Eff_Stk/ovl_Eff_Stk_reloc.o"
 endseg
 
 beginseg
