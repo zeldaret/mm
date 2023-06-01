@@ -10,12 +10,12 @@ typedef void (*EnDaikuActionFunc)(struct EnDaiku*, PlayState*);
 #define ENDAIKU_GET_FF(thisx) ((thisx)->params & 0xFF)
 #define ENDAIKU_GET_FF00(thisx) (((thisx)->params >> 8) & 0xFF)
 
-enum {
-    /* 0x0 */ ENDAIKU_PARAMS_FF_0,
-    /* 0x1 */ ENDAIKU_PARAMS_FF_1,
-    /* 0x2 */ ENDAIKU_PARAMS_FF_2,
-    /* 0x3 */ ENDAIKU_PARAMS_FF_3,
-};
+typedef enum {
+    /* 0 */ ENDAIKU_PARAMS_FF_0,
+    /* 1 */ ENDAIKU_PARAMS_FF_1,
+    /* 2 */ ENDAIKU_PARAMS_FF_2,
+    /* 3 */ ENDAIKU_PARAMS_FF_3
+} EnDaikuParam;
 
 typedef struct EnDaiku {
     /* 0x000 */ Actor actor;

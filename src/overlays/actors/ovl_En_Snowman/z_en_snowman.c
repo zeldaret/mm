@@ -58,7 +58,7 @@ typedef enum {
     // Indicates that either this Eeno is shrinking having been absorbed by another Eeno, or that
     // this Eeno is a fully-combined large Eeno and is done trying to combine with other split
     // Eenos. In both cases, this Eeno cannot be absorbed by any other Eeno.
-    /* 3 */ EN_SNOWMAN_COMBINE_STATE_BEING_ABSORBED_OR_DONE,
+    /* 3 */ EN_SNOWMAN_COMBINE_STATE_BEING_ABSORBED_OR_DONE
 } EnSnowmanCombineState;
 
 ActorInit En_Snowman_InitVars = {
@@ -119,7 +119,7 @@ typedef enum {
     /* 0x2 */ EN_SNOWMAN_DMGEFF_MELT,
     /* 0x4 */ EN_SNOWMAN_DMGEFF_LIGHT_ORB = 0x4,
     /* 0x5 */ EN_SNOWMAN_DMGEFF_ELECTRIC_STUN,
-    /* 0xF */ EN_SNOWMAN_DMGEFF_HOOKSHOT = 0xF, // Damages small Eenos, pulls the player towards large Eenos
+    /* 0xF */ EN_SNOWMAN_DMGEFF_HOOKSHOT = 0xF // Damages small Eenos, pulls the player towards large Eenos
 } EnTalkGibudDamageEffect;
 
 static DamageTable sDamageTable = {

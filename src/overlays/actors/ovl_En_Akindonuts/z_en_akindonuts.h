@@ -12,10 +12,10 @@ typedef void (*EnAkindonutsUnkFunc)(struct EnAkindonuts*, PlayState*);
 #define ENAKINDONUTS_GET_4(thisx) (((thisx)->params & 4) >> 2)
 #define ENAKINDONUTS_GET_FC00(thisx) (((thisx)->params & 0xFC00) >> 0xA)
 
-enum {
+typedef enum {
     /* 1 */ ENAKINDONUTS_3_1 = 1,
-    /* 2 */ ENAKINDONUTS_3_2,
-};
+    /* 2 */ ENAKINDONUTS_3_2
+} EnAkindonutsParam;
 
 typedef struct EnAkindonuts {
     /* 0x000 */ Actor actor;

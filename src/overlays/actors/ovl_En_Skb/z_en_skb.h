@@ -10,7 +10,7 @@ typedef void (*EnSkbActionFunc)(struct EnSkb*, PlayState*);
 #define ENSKB_GET_F0(thisx) (((thisx)->params >> 4) & 0xF)
 
 typedef enum {
-    /* 0 */ ENSKB_PARAMS_0,
+    /* 0 */ ENSKB_PARAMS_0
 } EnSkbParams;
 
 typedef struct EnSkb {

@@ -32,14 +32,14 @@ void EnNwc_DrawAdultBody(Actor* thisx, PlayState* play);
 s32 EnNwc_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
 EnHs* EnNwc_FindGrog(PlayState* play);
 
-enum EnNiwState {
+typedef enum EnNiwState {
     /* -1 */ NWC_STATE_NIW_LOADED = -1,  // set after loading object_niw
     /*  0 */ NWC_STATE_CHECK_BREMAN = 0, // checking for breman mask
     /*  1 */ NWC_STATE_TURNING,          // turning to face a new direction to explore
     /*  2 */ NWC_STATE_HOPPING_FORWARD,  // hopping to go explore
     /*  3 */ NWC_STATE_FOLLOWING,        // following the player
-    /*  4 */ NWC_STATE_RUNNING,          // running from the player after failed breman march
-};
+    /*  4 */ NWC_STATE_RUNNING           // running from the player after failed breman march
+} EnNiwState;
 
 ActorInit En_Nwc_InitVars = {
     ACTOR_EN_NWC,

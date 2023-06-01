@@ -20,7 +20,7 @@ enum {
     /* 5 */ ENGO_F_5,
     /* 6 */ ENGO_F_6,
     /* 7 */ ENGO_F_7,
-    /* 8 */ ENGO_F_8,
+    /* 8 */ ENGO_F_8
 };
 
 enum {
@@ -29,7 +29,7 @@ enum {
     /* 2 */ ENGO_70_2,
     /* 3 */ ENGO_70_3,
     /* 4 */ ENGO_70_4,
-    /* 5 */ ENGO_70_5,
+    /* 5 */ ENGO_70_5
 };
 
 typedef struct {

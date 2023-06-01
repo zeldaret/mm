@@ -28,10 +28,10 @@ typedef struct EnAni {
     /* 0x2FC */ EnAniActionFunc actionFunc;
 } EnAni; // size = 0x300
 
-enum EnAniType {
-  /* else */ ANI_TYPE_STANDING,         // unfinshed and unused
-  /* 1    */ ANI_TYPE_TREE_HANGING = 1,
-};
+typedef enum EnAniType {
+  /* 0 */ ANI_TYPE_STANDING, // unfinshed and unused
+  /* 1 */ ANI_TYPE_TREE_HANGING = 1
+} EnAniType;
 
 #define ANI_GET_TYPE(thisx) ((thisx)->params & 0xFF) 
 

@@ -159,7 +159,7 @@ typedef enum {
     /* 0xC */ EN_TALK_GIBUD_DMGEFF_ZORA_MAGIC = 0xC,  // Stuns and applies an electric effect
     /* 0xD */ EN_TALK_GIBUD_DMGEFF_RECOIL,            // Deals no damage, but displays hit mark and recoil animation
     /* 0xE */ EN_TALK_GIBUD_DMGEFF_LIGHT_RAY,         // Instantly kills a Redead on contact
-    /* 0xF */ EN_TALK_GIBUD_DMGEFF_DAMAGE,            // Deals damage and plays the damage animation
+    /* 0xF */ EN_TALK_GIBUD_DMGEFF_DAMAGE             // Deals damage and plays the damage animation
 } EnTalkGibudDamageEffect;
 
 static DamageTable sDamageTable = {

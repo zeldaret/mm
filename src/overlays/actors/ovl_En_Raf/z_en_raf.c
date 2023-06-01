@@ -40,7 +40,7 @@ typedef enum {
     /* 2 */ EN_RAF_ANIM_CHEW,
     /* 3 */ EN_RAF_ANIM_SPIT,
     /* 4 */ EN_RAF_ANIM_CONVULSE,
-    /* 5 */ EN_RAF_ANIM_DEATH,
+    /* 5 */ EN_RAF_ANIM_DEATH
 } EnRafAnimation;
 
 typedef enum {
@@ -51,7 +51,7 @@ typedef enum {
     /* 4 */ EN_RAF_ACTION_EXPLODE,
     /* 5 */ EN_RAF_ACTION_CONVULSE,
     /* 6 */ EN_RAF_ACTION_DISSOLVE,
-    /* 7 */ EN_RAF_ACTION_DORMANT,
+    /* 7 */ EN_RAF_ACTION_DORMANT
 } EnRafAction;
 
 typedef enum {

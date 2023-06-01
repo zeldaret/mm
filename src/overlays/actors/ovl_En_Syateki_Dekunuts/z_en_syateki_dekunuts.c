@@ -36,7 +36,7 @@ void EnSyatekiDekunuts_Dead(EnSyatekiDekunuts* this, PlayState* play);
 
 typedef enum {
     /* 0 */ EN_SYATEKI_DEKUNUTS_HEADDRESS_TYPE_NORMAL,
-    /* 1 */ EN_SYATEKI_DEKUNUTS_HEADDRESS_TYPE_FLIPPED_UP,
+    /* 1 */ EN_SYATEKI_DEKUNUTS_HEADDRESS_TYPE_FLIPPED_UP
 } EnSyatekiDekunutsHeaddressType;
 
 ActorInit En_Syateki_Dekunuts_InitVars = {
@@ -80,7 +80,7 @@ typedef enum {
     /* 3 */ EN_SYATEKI_DEKUNUTS_ANIM_LOOK_AROUND,
     /* 4 */ EN_SYATEKI_DEKUNUTS_ANIM_DAMAGE,
     /* 5 */ EN_SYATEKI_DEKUNUTS_ANIM_DIE,
-    /* 6 */ EN_SYATEKI_DEKUNUTS_ANIM_UNBURROW, // unused
+    /* 6 */ EN_SYATEKI_DEKUNUTS_ANIM_UNBURROW // unused
 } EnSyatekiDekunutsAnimation;
 
 static AnimationInfo sAnimationInfo[] = {

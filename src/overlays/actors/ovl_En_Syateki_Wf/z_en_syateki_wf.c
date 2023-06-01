@@ -120,7 +120,7 @@ typedef enum {
     /* 3 */ EN_SYATEKI_WF_ANIM_LAND,
     /* 4 */ EN_SYATEKI_WF_ANIM_BACKFLIP, // unused
     /* 5 */ EN_SYATEKI_WF_ANIM_DAMAGED,
-    /* 6 */ EN_SYATEKI_WF_ANIM_REAR_UP_FALL_OVER,
+    /* 6 */ EN_SYATEKI_WF_ANIM_REAR_UP_FALL_OVER
 } EnSyatekiWfAnimation;
 
 static AnimationInfo sAnimationInfo[] = {

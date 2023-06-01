@@ -101,7 +101,7 @@ typedef enum {
     /* 0x1 */ POE_SISTERS_DMGEFF_UNKDMG12, // set in DamageTable, but unused
     /* 0x4 */ POE_SISTERS_DMGEFF_LIGHTARROWS = 0x4,
     /* 0xE */ POE_SISTERS_DMGEFF_SPINATTACK = 0xE,
-    /* 0xF */ POE_SISTERS_DMGEFF_DEKUNUT = 0xF,
+    /* 0xF */ POE_SISTERS_DMGEFF_DEKUNUT
 } PoeSisterDamageEffect;
 
 static DamageTable sDamageTable = {

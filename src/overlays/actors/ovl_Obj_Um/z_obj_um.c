@@ -1030,7 +1030,7 @@ typedef enum ObjUmPathState {
     /* 1 */ OBJUM_PATH_STATE_1,
     /* 2 */ OBJUM_PATH_STATE_FINISH,
     /* 3 */ OBJUM_PATH_STATE_3,
-    /* 4 */ OBJUM_PATH_STATE_4,
+    /* 4 */ OBJUM_PATH_STATE_4
 } ObjUmPathState;
 
 ObjUmPathState ObjUm_UpdatePath(ObjUm* this, PlayState* play) {

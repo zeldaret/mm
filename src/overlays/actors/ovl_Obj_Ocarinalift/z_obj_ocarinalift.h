@@ -25,8 +25,8 @@ typedef struct ObjOcarinalift {
 } ObjOcarinalift; // size = 0x178
 
 typedef enum ObjOcarinaliftParams {
-    /* 0x0 */ OBJOCARINALIFT_PARAMSC_0,
-    /* 0x1 */ OBJOCARINALIFT_PARAMSC_1
+    /* 0 */ OBJOCARINALIFT_PARAMSC_0,
+    /* 1 */ OBJOCARINALIFT_PARAMSC_1
 } ObjOcarinaliftParams;
 
 #endif // Z_OBJ_OCARINALIFT_H

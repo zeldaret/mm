@@ -23,12 +23,12 @@ void EnTanron4_FlyNearActor(EnTanron4* this, PlayState* play);
 
 typedef enum {
     /* 0 */ SEAGULL_FLY_FLAP,
-    /* 1 */ SEAGULL_FLY_GLIDE,
+    /* 1 */ SEAGULL_FLY_GLIDE
 } SeagullFlyState;
 
 typedef enum {
     /* 0 */ SEAGULL_TIMER_FLY_STATE,
-    /* 1 */ SEAGULL_TIMER_CHOOSE_TARGET,
+    /* 1 */ SEAGULL_TIMER_CHOOSE_TARGET
 } SeagullTimers;
 
 ActorInit En_Tanron4_InitVars = {

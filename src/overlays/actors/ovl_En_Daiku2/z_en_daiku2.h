@@ -11,11 +11,11 @@ typedef void (*EnDaiku2ActionFunc)(struct EnDaiku2*, PlayState*);
 #define ENDAIKU2_GET_1F80(thisx) (((thisx)->params >> 7) & 0x3F)
 #define ENDAIKU2_GET_8000(thisx) (((thisx)->params >> 15) & 0x1)
 
-enum {
+typedef enum {
     /*  -1 */ ENDAIKU2_GET_7F_MINUS1 = -1,
     /*   0 */ ENDAIKU2_GET_7F_0,
-    /* 127 */ ENDAIKU2_GET_7F_127 = 127,
-};
+    /* 127 */ ENDAIKU2_GET_7F_127 = 127
+} EnDaiku2Param;
 
 typedef struct EnDaiku2Effect {
     /* 0x00 */ u8 isEnabled;

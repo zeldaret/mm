@@ -55,14 +55,14 @@ typedef struct EnBigpo {
 
 // well ver is regular, dampe basement ver is summoned
 // on spawn, 3/possible fires are turned into chosenfire
-enum EnBigpoType {
+typedef enum EnBigpoType {
   /* 0 */ ENBIGPO_REGULAR,
   /* 1 */ ENBIGPO_SUMMONED,
   /* 2 */ ENBIGPO_POSSIBLEFIRE,
   /* 3 */ ENBIGPO_CHOSENFIRE,
   /* 4 */ ENBIGPO_REVEALEDFIRE,
-  /* 5 */ ENBIGPO_UNK5,
-};
+  /* 5 */ ENBIGPO_UNK5
+} EnBigpoType;
 
 #define BIGPO_GET_SWITCHFLAGS(thisx) (u8)((thisx)->params >> 0x8) 
 

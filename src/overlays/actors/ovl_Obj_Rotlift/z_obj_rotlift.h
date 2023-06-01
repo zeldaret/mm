@@ -10,7 +10,7 @@
 
 typedef enum {
     /* 0 */ OBJROTLIFT_TYPE_PLATFORMS,
-    /* 1 */ OBJROTLIFT_TYPE_SPIKES,
+    /* 1 */ OBJROTLIFT_TYPE_SPIKES
 } ObjRotliftType;
 
 struct ObjRotlift;

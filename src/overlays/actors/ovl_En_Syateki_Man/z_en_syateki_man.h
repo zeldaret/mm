@@ -18,20 +18,20 @@ typedef enum {
     /* 4 */ SG_GAME_STATE_ONE_MORE_GAME,    // The player failed to get a new high score (Town) and/or perfect score (Swamp and Town).
     /* 5 */ SG_GAME_STATE_GIVING_BONUS,     // The player gets bonus points at the end of the Swamp game if they get a perfect score.
     /* 6 */ SG_GAME_STATE_ENDED,            // The player got a new high score and/or perfect score (Town), or the game is over (Swamp).
-    /* 7 */ SG_GAME_STATE_MOVING_PLAYER,    // The player is automatically moving towards the spot to play the game.
+    /* 7 */ SG_GAME_STATE_MOVING_PLAYER     // The player is automatically moving towards the spot to play the game.
 } ShootingGalleryGameState;
 
 typedef enum {
     /*  0 */ SG_OCTO_STATE_SPAWNING,
     /*  1 */ SG_OCTO_STATE_SPAWNED,
     /* 70 */ SG_OCTO_STATE_INITIAL = 70,
-    /* 80 */ SG_OCTO_STATE_HIDING = 80,
+    /* 80 */ SG_OCTO_STATE_HIDING = 80
 } ShootingGalleryOctorokState;
 
 typedef enum {
     /* 0 */ SG_OCTO_HIT_TYPE_NONE,
     /* 1 */ SG_OCTO_HIT_TYPE_RED,
-    /* 2 */ SG_OCTO_HIT_TYPE_BLUE,
+    /* 2 */ SG_OCTO_HIT_TYPE_BLUE
 } ShootingGalleryoctorokHitType;
 
 typedef struct EnSyatekiMan {
