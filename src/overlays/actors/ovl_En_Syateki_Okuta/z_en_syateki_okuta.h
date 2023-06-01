@@ -4,17 +4,32 @@
 #include "global.h"
 #include "objects/object_okuta/object_okuta.h"
 
-#define EN_SYATEKI_OKUTA_GET_F(thisx) ((thisx)->params & 0xF)
+typedef enum {
+    /* 0 */ SG_OCTO_TYPE_NONE,
+    /* 1 */ SG_OCTO_TYPE_RED,
+    /* 2 */ SG_OCTO_TYPE_BLUE,
+} ShootingGalleryOctorokType;
+
+typedef enum {
+    /* 0 */ SG_OCTO_ROW_BACK,
+    /* 1 */ SG_OCTO_ROW_CENTER,
+    /* 2 */ SG_OCTO_ROW_FRONT,
+} ShootingGalleryOctorokRow;
+
+typedef enum {
+    /* 0 */ SG_OCTO_COL_LEFT,
+    /* 1 */ SG_OCTO_COL_CENTER,
+    /* 2 */ SG_OCTO_COL_RIGHT,
+} ShootingGalleryOctorokColumn;
+
+#define SG_OCTO_GET_INDEX(thisx) ((thisx)->params & 0xF)
+#define SG_OCTO_GET_TYPE(octorokFlags, index) (((octorokFlags) >> ((index) * 2)) & 3)
+#define SG_OCTO_INDEX_FOR_POS(row, column) (((row) * 3) + (column))
+#define SG_OCTO_INDEX_DIRECTLY_IN_FRONT(index) ((index) + 3)
 
 struct EnSyatekiOkuta;
 
 typedef void (*EnSyatekiOkutaActionFunc)(struct EnSyatekiOkuta*, PlayState*);
-
-typedef enum {
-    /* 0 */ EN_SYATEKI_OKUTA_TYPE_NONE,
-    /* 1 */ EN_SYATEKI_OKUTA_TYPE_RED,
-    /* 2 */ EN_SYATEKI_OKUTA_TYPE_BLUE,
-} EnSyatekiOkutaType;
 
 typedef struct EnSyatekiOkuta {
     /* 0x000 */ Actor actor;

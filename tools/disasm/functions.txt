@@ -10219,7 +10219,7 @@
     0x80A3611C:("EnSyatekiOkuta_Destroy",),
     0x80A36148:("EnSyatekiOkuta_SpawnDust",),
     0x80A361B0:("EnSyatekiOkuta_SpawnSplash",),
-    0x80A361F4:("func_80A361F4",),
+    0x80A361F4:("EnSyatekiOkuta_IsHiddenByAnotherOctorok",),
     0x80A36260:("func_80A36260",),
     0x80A362A8:("func_80A362A8",),
     0x80A362F8:("func_80A362F8",),

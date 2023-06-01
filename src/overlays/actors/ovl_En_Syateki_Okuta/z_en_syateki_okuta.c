@@ -61,13 +61,13 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 typedef enum {
-    /* 0 */ EN_SYATEKI_OKUTA_ANIM_SHOOT, // unused
-    /* 1 */ EN_SYATEKI_OKUTA_ANIM_DIE,
-    /* 2 */ EN_SYATEKI_OKUTA_ANIM_HIDE,
-    /* 3 */ EN_SYATEKI_OKUTA_ANIM_FLOAT,
-    /* 4 */ EN_SYATEKI_OKUTA_ANIM_APPEAR,
-    /* 5 */ EN_SYATEKI_OKUTA_ANIM_HIT, // unused
-} EnSyatekiOkutaAnimation;
+    /* 0 */ SG_OCTO_ANIM_SHOOT, // unused
+    /* 1 */ SG_OCTO_ANIM_DIE,
+    /* 2 */ SG_OCTO_ANIM_HIDE,
+    /* 3 */ SG_OCTO_ANIM_FLOAT,
+    /* 4 */ SG_OCTO_ANIM_APPEAR,
+    /* 5 */ SG_OCTO_ANIM_HIT, // unused
+} ShootingGalleryOctorokAnimation;
 
 static AnimationInfo sAnimationInfo[] = {
     { &gOctorokShootAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
@@ -139,27 +139,27 @@ void EnSyatekiOkuta_SpawnSplash(EnSyatekiOkuta* this, PlayState* play) {
 }
 
 /*
-    static const s32 D_809C94D0[] = {
-        0x00000111, 0x00000650, 0x00010025, 0x00011011, 0x00000984, 0x00004050, 0x00010211, 0x00022015,
-        0x00026984, 0x00012852, 0x00011999, 0x00022895, 0x0000056A, 0x0002A451, 0x00004115,
-    };
-*/
-s32 func_80A361F4(EnSyatekiOkuta* this) {
-    s32 temp_a0;
-    s32 temp_a1;
-    s32 temp_v1;
+ * Returns true if this Octorok is hidden (in other words, if it's in the center
+ * column and has another Octorok in front of it), false otherwise.
+ */
+s32 EnSyatekiOkuta_IsHiddenByAnotherOctorok(EnSyatekiOkuta* this) {
     EnSyatekiMan* syatekiMan = (EnSyatekiMan*)this->actor.parent;
+    s32 index = SG_OCTO_GET_INDEX(&this->actor);
 
-    temp_v1 = EN_SYATEKI_OKUTA_GET_F(&this->actor);
-    if ((temp_v1 == 1) || (temp_v1 == 4)) {
-        temp_a0 = syatekiMan->octorokFlags;
-        temp_a1 = (temp_v1 * 2) + 6;
-
-        if ((temp_a0 >> temp_a1) & 3) {
+    // Only the Octoroks in the center column can be obscured by another Octorok. The Octoroks in the
+    // left and right columns are always visible, since the player looks at them from an angle.
+    // Additionally, the Octorok in the front row is always visible, even if it's in the center column.
+    if ((index == SG_OCTO_INDEX_FOR_POS(SG_OCTO_ROW_BACK, SG_OCTO_COL_CENTER)) ||
+        (index == SG_OCTO_INDEX_FOR_POS(SG_OCTO_ROW_CENTER, SG_OCTO_COL_CENTER))) {
+        // Checks to see if this Octorok is hidden by an Octorok immediately in front of it.
+        if (SG_OCTO_GET_TYPE(syatekiMan->octorokFlags, SG_OCTO_INDEX_DIRECTLY_IN_FRONT(index)) != SG_OCTO_TYPE_NONE) {
             return true;
         }
 
-        if ((temp_a1 == 8) && ((temp_a0 >> 0xE) & 3)) {
+        // If this Octorok is in the back row, it can also be hidden by an Octorok in the front row.
+        if ((index == SG_OCTO_INDEX_FOR_POS(SG_OCTO_ROW_BACK, SG_OCTO_COL_CENTER)) &&
+            (SG_OCTO_GET_TYPE(syatekiMan->octorokFlags, SG_OCTO_INDEX_FOR_POS(SG_OCTO_ROW_FRONT, SG_OCTO_COL_CENTER)) !=
+             SG_OCTO_TYPE_NONE)) {
             return true;
         }
     }
@@ -200,13 +200,13 @@ void func_80A36350(EnSyatekiOkuta* this, PlayState* play) {
 void EnSyatekiOkuta_SetupAppear(EnSyatekiOkuta* this) {
     this->actor.draw = EnSyatekiOkuta_Draw;
     this->circleOrCrossAlpha = 0;
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_SYATEKI_OKUTA_ANIM_APPEAR);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, SG_OCTO_ANIM_APPEAR);
     this->actionFunc = EnSyatekiOkuta_Appear;
 }
 
 void EnSyatekiOkuta_Appear(EnSyatekiOkuta* this, PlayState* play) {
     if ((Animation_OnFrame(&this->skelAnime, 2.0f)) || (Animation_OnFrame(&this->skelAnime, 15.0f))) {
-        if (!func_80A361F4(this)) {
+        if (!EnSyatekiOkuta_IsHiddenByAnotherOctorok(this)) {
             EnSyatekiOkuta_SpawnSplash(this, play);
             Actor_PlaySfx(&this->actor, NA_SE_EN_OCTAROCK_JUMP);
         } else {
@@ -222,7 +222,7 @@ void EnSyatekiOkuta_Appear(EnSyatekiOkuta* this, PlayState* play) {
 }
 
 void EnSyatekiOkuta_SetupFloat(EnSyatekiOkuta* this) {
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_SYATEKI_OKUTA_ANIM_FLOAT);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, SG_OCTO_ANIM_FLOAT);
     this->actionFunc = EnSyatekiOkuta_Float;
 }
 
@@ -238,7 +238,7 @@ void EnSyatekiOkuta_Float(EnSyatekiOkuta* this, PlayState* play) {
 }
 
 void EnSyatekiOkuta_SetupHide(EnSyatekiOkuta* this) {
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_SYATEKI_OKUTA_ANIM_HIDE);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, SG_OCTO_ANIM_HIDE);
     this->actionFunc = EnSyatekiOkuta_Hide;
 }
 
@@ -254,11 +254,11 @@ void EnSyatekiOkuta_Hide(EnSyatekiOkuta* this, PlayState* play) {
 void EnSyatekiOkuta_SetupDie(EnSyatekiOkuta* this) {
     this->deathTimer = 0;
     this->circleOrCrossAlpha = 300;
-    if (this->type == EN_SYATEKI_OKUTA_TYPE_RED) {
+    if (this->type == SG_OCTO_TYPE_RED) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_OCTAROCK_DEAD1);
     }
 
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_SYATEKI_OKUTA_ANIM_DIE);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, SG_OCTO_ANIM_DIE);
     this->actionFunc = EnSyatekiOkuta_Die;
 }
 
@@ -322,7 +322,7 @@ void EnSyatekiOkuta_UpdateCollision(EnSyatekiOkuta* this, PlayState* play) {
     this->collider.dim.radius = sCylinderInit.dim.radius * this->actor.scale.x * 100.0f;
 
     if (this->actionFunc == EnSyatekiOkuta_Appear) {
-        if ((this->type == EN_SYATEKI_OKUTA_TYPE_BLUE) && func_80A361F4(this)) {
+        if ((this->type == SG_OCTO_TYPE_BLUE) && EnSyatekiOkuta_IsHiddenByAnotherOctorok(this)) {
             return;
         }
 
@@ -331,7 +331,7 @@ void EnSyatekiOkuta_UpdateCollision(EnSyatekiOkuta* this, PlayState* play) {
         }
     }
 
-    if (this->type == EN_SYATEKI_OKUTA_TYPE_RED) {
+    if (this->type == SG_OCTO_TYPE_RED) {
         this->collider.dim.radius += 10;
         this->collider.dim.height += 15;
     }
@@ -364,8 +364,8 @@ void EnSyatekiOkuta_CheckForSignal(EnSyatekiOkuta* this, PlayState* play) {
     if ((this->actionFunc != EnSyatekiOkuta_Float) && (this->actionFunc != EnSyatekiOkuta_Appear) &&
         (syatekiMan->shootingGameState == SG_GAME_STATE_RUNNING) &&
         (syatekiMan->perGameVar1.octorokState == SG_OCTO_STATE_SPAWNING)) {
-        type = (syatekiMan->octorokFlags >> (EN_SYATEKI_OKUTA_GET_F(&this->actor) * 2)) & 3;
-        if (type > EN_SYATEKI_OKUTA_TYPE_NONE) {
+        type = SG_OCTO_GET_TYPE(syatekiMan->octorokFlags, SG_OCTO_GET_INDEX(&this->actor));
+        if (type > SG_OCTO_TYPE_NONE) {
             Actor_SetScale(&this->actor, 0.01f);
             this->type = type;
             EnSyatekiOkuta_SetupAppear(this);
@@ -388,14 +388,14 @@ void EnSyatekiOkuta_Update(Actor* thisx, PlayState* play) {
 
     if (EnSyatekiOkuta_CheckCollision(this, play)) {
         syatekiMan = (EnSyatekiMan*)this->actor.parent;
-        if (this->type == EN_SYATEKI_OKUTA_TYPE_RED) {
+        if (this->type == SG_OCTO_TYPE_RED) {
             Actor_PlaySfx(&this->actor, NA_SE_SY_TRE_BOX_APPEAR);
             play->interfaceCtx.minigamePoints++;
             syatekiMan->score++;
-            syatekiMan->perGameVar2.octorokHitType = EN_SYATEKI_OKUTA_TYPE_RED;
+            syatekiMan->perGameVar2.octorokHitType = SG_OCTO_TYPE_RED;
         } else {
             Actor_PlaySfx(&this->actor, NA_SE_SY_ERROR);
-            syatekiMan->perGameVar2.octorokHitType = EN_SYATEKI_OKUTA_TYPE_BLUE;
+            syatekiMan->perGameVar2.octorokHitType = SG_OCTO_TYPE_BLUE;
         }
 
         EnSyatekiOkuta_SetupDie(this);
@@ -513,7 +513,7 @@ void EnSyatekiOkuta_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
-    if (this->type == EN_SYATEKI_OKUTA_TYPE_RED) {
+    if (this->type == SG_OCTO_TYPE_RED) {
         gSPSegment(POLY_OPA_DISP++, 0x08, D_801AEFA0);
     } else {
         gSPSegment(POLY_OPA_DISP++, 0x08, gShootingGalleryOctorokBlueMaterialDL);
@@ -535,7 +535,7 @@ void EnSyatekiOkuta_Draw(Actor* thisx, PlayState* play) {
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-        if (this->type == EN_SYATEKI_OKUTA_TYPE_BLUE) {
+        if (this->type == SG_OCTO_TYPE_BLUE) {
             gSPDisplayList(POLY_XLU_DISP++, gShootingGalleryOctorokCrossDL);
         } else {
             gSPDisplayList(POLY_XLU_DISP++, gShootingGalleryOctorokCircleDL);
