@@ -4381,7 +4381,7 @@ void Interface_DrawClock(PlayState* play) {
          (gSaveContext.gameMode == GAMEMODE_END_CREDITS)) &&
         !FrameAdvance_IsEnabled(&play->state) && !Environment_IsTimeStopped() && (gSaveContext.save.day <= 3)) {
         /**
-         * Changes Clock's transparancy depending if Player is moving or not and possibly other things
+         * Section: Changes Clock's transparancy depending if Player is moving or not and possibly other things
          */
         if (gSaveContext.hudVisibility == HUD_VISIBILITY_ALL) {
             if (func_801234D4(play)) {
@@ -4421,7 +4421,7 @@ void Interface_DrawClock(PlayState* play) {
             Gfx_SetupDL39_Overlay(play->state.gfxCtx);
 
             /**
-             * Draw Clock's Hour Lines
+             * Section: Draw Clock's Hour Lines
              */
             gDPSetAlphaCompare(OVERLAY_DISP++, G_AC_THRESHOLD);
             gDPSetRenderMode(OVERLAY_DISP++, G_RM_XLU_SURF, G_RM_XLU_SURF2);
@@ -4433,7 +4433,7 @@ void Interface_DrawClock(PlayState* play) {
                                              6, 0, 1 << 10, 1 << 10);
 
             /**
-             * Draw Clock's Border
+             * Section: Draw Clock's Border
              */
             gDPPipeSync(OVERLAY_DISP++);
             gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 255, 255, 255, sThreeDayClockAlpha);
@@ -4454,7 +4454,7 @@ void Interface_DrawClock(PlayState* play) {
                 gSPMatrix(OVERLAY_DISP++, &gIdentityMtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             } else {
                 /**
-                 * Draw Three-Day Clock's Diamond
+                 * Section: Draw Three-Day Clock's Diamond
                  */
                 gDPPipeSync(OVERLAY_DISP++);
 
@@ -4544,7 +4544,7 @@ void Interface_DrawClock(PlayState* play) {
                                                   1 << 10, 1 << 10);
 
                 /**
-                 * Draw Three-Day Clock's Day-Number over Diamond
+                 * Section: Draw Three-Day Clock's Day-Number over Diamond
                  */
                 gDPPipeSync(OVERLAY_DISP++);
                 gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 255, 255, 155, sThreeDayClockAlpha);
@@ -4553,7 +4553,7 @@ void Interface_DrawClock(PlayState* play) {
                                                   48, 27, 1 << 10, 1 << 10);
 
                 /**
-                 * Draw Three-Day Clock's Star (for the Minute Tracker)
+                 * Section: Draw Three-Day Clock's Star (for the Minute Tracker)
                  */
                 gDPPipeSync(OVERLAY_DISP++);
 
@@ -4602,7 +4602,7 @@ void Interface_DrawClock(PlayState* play) {
             }
 
             /**
-             * Cuts off Three-Day Clock's Sun and Moon when they dip below the clock
+             * Section: Cuts off Three-Day Clock's Sun and Moon when they dip below the clock
              */
             gDPPipeSync(OVERLAY_DISP++);
             gDPSetScissorFrac(OVERLAY_DISP++, G_SC_NON_INTERLACE, 400, 620, 880,
@@ -4616,7 +4616,7 @@ void Interface_DrawClock(PlayState* play) {
             }
 
             /**
-             * Draw Three-Day Clock's Sun (for the Day-Time Hours Tracker)
+             * Section: Draw Three-Day Clock's Sun (for the Day-Time Hours Tracker)
              */
             time = gSaveContext.save.time;
             sp1D8 = Math_SinS(time) * -40.0f;
@@ -4635,7 +4635,7 @@ void Interface_DrawClock(PlayState* play) {
             OVERLAY_DISP = Gfx_DrawTexQuadIA8(OVERLAY_DISP, gThreeDayClockSunHourTex, 24, 24, 0);
 
             /**
-             * Draw Three-Day Clock's Moon (for the Night-Time Hours Tracker)
+             * Section: Draw Three-Day Clock's Moon (for the Night-Time Hours Tracker)
              */
             sp1D8 = Math_SinS(time) * 40.0f;
             temp_f14 = Math_CosS(time) * 34.0f;
@@ -4652,14 +4652,14 @@ void Interface_DrawClock(PlayState* play) {
             OVERLAY_DISP = Gfx_DrawTexQuadIA8(OVERLAY_DISP, gThreeDayClockMoonHourTex, 24, 24, 0);
 
             /**
-             * Cuts off Three-Day Clock's Hour Digits when they dip below the clock
+             * Section: Cuts off Three-Day Clock's Hour Digits when they dip below the clock
              */
             gDPPipeSync(OVERLAY_DISP++);
             gDPSetScissorFrac(OVERLAY_DISP++, G_SC_NON_INTERLACE, 400, 620, 880,
                               R_THREE_DAY_CLOCK_HOUR_DIGIT_CUTOFF * 4.0f);
 
             /**
-             * Draws Three-Day Clock's Hour Digit Above the Sun
+             * Section: Draws Three-Day Clock's Hour Digit Above the Sun
              */
             sp1CC = gSaveContext.save.time * 0.000096131f; // (2.0f * 3.15f / 0x10000)
 
@@ -4684,7 +4684,7 @@ void Interface_DrawClock(PlayState* play) {
             gSP1Quadrangle(OVERLAY_DISP++, 4, 6, 7, 5, 0);
 
             /**
-             * Draws Three-Day Clock's Hour Digit Above the Moon
+             * Section: Draws Three-Day Clock's Hour Digit Above the Moon
              */
 
             // Rotates Three-Day Clock's Hour Digit To Above the Moon
@@ -4779,7 +4779,7 @@ void Interface_DrawClock(PlayState* play) {
                 Gfx_SetupDL39_Overlay(play->state.gfxCtx);
 
                 /**
-                 * Draws Final-Hours Clock's Frame
+                 * Section: Draws Final-Hours Clock's Frame
                  */
                 gSPMatrix(OVERLAY_DISP++, &gIdentityMtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
                 gDPSetAlphaCompare(OVERLAY_DISP++, G_AC_THRESHOLD);
@@ -4831,7 +4831,7 @@ void Interface_DrawClock(PlayState* play) {
                 finalHoursClockSlots[2] = finalHoursClockSlots[5] = 10;
 
                 /**
-                 * Draws Final-Hours Clock's Digits
+                 * Section: Draws Final-Hours Clock's Digits
                  */
                 gDPPipeSync(OVERLAY_DISP++);
                 gDPSetPrimColor(OVERLAY_DISP++, 0, 0, sFinalHoursClockDigitsRed, 0, 0, sp1E6);
