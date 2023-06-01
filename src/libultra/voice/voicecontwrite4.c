@@ -1,4 +1,11 @@
-#include "global.h"
+/**
+ * File: voicecontwrite4.c
+ */
+
+#include "ultra64/controller_voice.h"
+#include "io/controller.h"
+#include "functions.h"
+#include "variables.h"
 
 #define WRITE4FORMAT(p) ((__OSVoiceWrite4Format*)(ptr))
 

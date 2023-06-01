@@ -1,6 +1,12 @@
-#include "global.h"
+/**
+ * File: voicestartreaddata.c
+ *
+ * Start voice recognition by the Voice Recognition System
+ */
 
-// Start voice recognition by the Voice Recognition System
+#include "ultra64/controller_voice.h"
+#include "io/controller.h"
+
 s32 osVoiceStartReadData(OSVoiceHandle* hd) {
     s32 errorCode;
     u8 status;
@@ -15,7 +21,7 @@ s32 osVoiceStartReadData(OSVoiceHandle* hd) {
         return CONT_ERR_VOICE_NO_RESPONSE;
     }
 
-    if (hd->mode != 0) {
+    if (hd->mode != VOICE_HANDLE_MODE_0) {
         return CONT_ERR_INVALID;
     }
 
@@ -34,7 +40,7 @@ s32 osVoiceStartReadData(OSVoiceHandle* hd) {
         if (errorCode & 0xFF00) {
             errorCode = CONT_ERR_INVALID;
         } else {
-            hd->mode = 1;
+            hd->mode = VOICE_HANDLE_MODE_1;
         }
     }
 

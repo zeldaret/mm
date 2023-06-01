@@ -1,6 +1,12 @@
-#include "global.h"
+/**
+ * File: voicegetreaddata.c
+ *
+ * Gets voice recognition result from the Voice Recognition System
+ */
 
-// Gets voice recognition result from the Voice Recognition System
+#include "ultra64/controller_voice.h"
+#include "io/controller.h"
+
 s32 osVoiceGetReadData(OSVoiceHandle* hd, OSVoiceData* result) {
     static u8 sHandleStatus;
     s32 errorCode;
@@ -9,7 +15,7 @@ s32 osVoiceGetReadData(OSVoiceHandle* hd, OSVoiceData* result) {
     u8 data[36];
 
     switch (hd->mode) {
-        case 1:
+        case VOICE_HANDLE_MODE_1:
             errorCode = __osVoiceGetStatus(hd->mq, hd->channel, &status);
             if (errorCode != 0) {
                 return errorCode;
@@ -30,8 +36,8 @@ s32 osVoiceGetReadData(OSVoiceHandle* hd, OSVoiceData* result) {
                 return CONT_ERR_NOT_READY;
             }
             // fallthrough
-        case 2:
-            hd->mode = 2;
+        case VOICE_HANDLE_MODE_2:
+            hd->mode = VOICE_HANDLE_MODE_2;
 
             errorCode = __osVoiceGetStatus(hd->mq, hd->channel, &status);
             if (errorCode != 0) {
@@ -48,8 +54,8 @@ s32 osVoiceGetReadData(OSVoiceHandle* hd, OSVoiceData* result) {
                 return errorCode;
             }
             // fallthrough
-        case 3:
-            hd->mode = 3;
+        case VOICE_HANDLE_MODE_3:
+            hd->mode = VOICE_HANDLE_MODE_3;
 
             errorCode = __osVoiceGetStatus(hd->mq, hd->channel, &status);
             if (errorCode != 0) {
@@ -85,8 +91,8 @@ s32 osVoiceGetReadData(OSVoiceHandle* hd, OSVoiceData* result) {
                 break;
             }
             // fallthrough
-        case 4:
-            hd->mode = 4;
+        case VOICE_HANDLE_MODE_4:
+            hd->mode = VOICE_HANDLE_MODE_4;
 
             errorCode = __osVoiceGetStatus(hd->mq, hd->channel, &status);
             if (errorCode != 0) {
@@ -113,6 +119,6 @@ s32 osVoiceGetReadData(OSVoiceHandle* hd, OSVoiceData* result) {
             return CONT_ERR_INVALID;
     }
 
-    hd->mode = 0;
+    hd->mode = VOICE_HANDLE_MODE_0;
     return errorCode;
 }

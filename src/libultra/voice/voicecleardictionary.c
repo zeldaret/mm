@@ -1,6 +1,6 @@
-#include "global.h"
-
 /**
+ * file: voicecleardictionary.c
+ *
  * Initializes Voice Recognition System word registration dictionary.
  *
  * The dictionary is initialized so that the specified "numWords" can be
@@ -9,6 +9,10 @@
  * Words cannot be registered with the osVoiceSetWord before the dictionary
  * is initialized with the osVoiceClearDictionary function
  */
+
+#include "ultra64/controller_voice.h"
+#include "io/controller.h"
+
 s32 osVoiceClearDictionary(OSVoiceHandle* hd, u8 numWords) {
     s32 errorCode;
     u8 status;

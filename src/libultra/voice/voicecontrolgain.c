@@ -1,8 +1,15 @@
-#include "global.h"
+/**
+ * file: voicecontrolgain.c
+ *
+ * Adjusts the input gain of the Voice Recognition System
+ */
+
+#include "ultra64/controller_voice.h"
+#include "io/controller.h"
+#include "macros.h"
 
 u8 sDigitalTable[] = { 0x00, 0x80, 0x40, 0xC0, 0x20, 0xA0, 0x60, 0xE0 };
 
-// Adjusts the input gain of the Voice Recognition System
 s32 osVoiceControlGain(OSVoiceHandle* hd, s32 analog, s32 digital) {
     s32 errorCode;
     u8 cmd;

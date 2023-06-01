@@ -2610,7 +2610,6 @@ extern s32 D_801FD120;
 // extern UNK_TYPE1 D_801FD598;
 // extern UNK_TYPE1 D_801FD5A0;
 // extern UNK_TYPE1 D_801FD5A4;
-extern OSVoiceHandle gVoiceHandle;
 // extern UNK_TYPE1 D_801FD5C4;
 // extern UNK_TYPE1 D_801FD5C8;
 // extern UNK_TYPE1 D_801FD5E8;

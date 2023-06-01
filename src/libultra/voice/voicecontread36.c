@@ -1,4 +1,11 @@
-#include "global.h"
+/**
+ * voicecontread36.c
+ */
+
+#include "ultra64/controller_voice.h"
+#include "io/controller.h"
+#include "functions.h"
+#include "variables.h"
 
 #define READ36FORMAT(p) ((__OSVoiceRead36Format*)(ptr))
 

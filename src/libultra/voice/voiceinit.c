@@ -1,8 +1,16 @@
-#include "global.h"
+/**
+ * file: voiceinit.c
+ *
+ * Initializes Voice Recognition System control structure and hardware
+ */
+
+#include "ultra64/controller_voice.h"
+#include "io/controller.h"
+#include "functions.h"
+#include "macros.h"
 
 static u8 cmd[] = { 0x1E, 0x6E, 0x08, 0x56, 0x03 };
 
-// Initializes Voice Recognition System control structure and hardware
 s32 osVoiceInit(OSMesgQueue* mq, OSVoiceHandle* hd, s32 channel) {
     s32 errorCode;
     s32 i;
@@ -11,7 +19,7 @@ s32 osVoiceInit(OSMesgQueue* mq, OSVoiceHandle* hd, s32 channel) {
 
     hd->channel = channel;
     hd->mq = mq;
-    hd->mode = 0;
+    hd->mode = VOICE_HANDLE_MODE_0;
 
     errorCode = __osVoiceGetStatus(mq, channel, &status);
     if (errorCode != 0) {

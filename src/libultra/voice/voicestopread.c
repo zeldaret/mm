@@ -1,6 +1,12 @@
-#include "global.h"
+/**
+ * File: voicestopread.c
+ *
+ * Forcibly stops voice recognition processing by the Voice Recognition System
+ */
 
-// Forcibly stops voice recognition processing by the Voice Recognition System
+#include "ultra64/controller_voice.h"
+#include "io/controller.h"
+
 s32 osVoiceStopReadData(OSVoiceHandle* hd) {
     s32 errorCode;
     s32 i;
@@ -16,7 +22,7 @@ s32 osVoiceStopReadData(OSVoiceHandle* hd) {
         return CONT_ERR_VOICE_NO_RESPONSE;
     }
 
-    if (hd->mode == 0) {
+    if (hd->mode == VOICE_HANDLE_MODE_0) {
         return CONT_ERR_INVALID;
     }
 
@@ -36,12 +42,12 @@ s32 osVoiceStopReadData(OSVoiceHandle* hd) {
             if (errorCode & 0xFF00) {
                 if (((errorCode & 7) == 0) || ((errorCode & 7) == 7)) {
                     errorCode = 0;
-                    hd->mode = 0;
+                    hd->mode = VOICE_HANDLE_MODE_0;
                 } else {
                     errorCode = CONT_ERR_INVALID;
                 }
             } else {
-                hd->mode = 0;
+                hd->mode = VOICE_HANDLE_MODE_0;
             }
             i++;
         } while ((errorCode == CONT_ERR_VOICE_NO_RESPONSE) && (i < 20));

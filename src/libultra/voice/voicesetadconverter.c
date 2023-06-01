@@ -1,4 +1,11 @@
-#include "global.h"
+/**
+ * File: voicesetadconverter.c
+ */
+
+#include "ultra64/controller_voice.h"
+#include "io/controller.h"
+#include "functions.h"
+#include "variables.h"
 
 #define SWRITEFORMAT(p) ((__OSVoiceSWriteFormat*)(p))
 

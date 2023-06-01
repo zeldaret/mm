@@ -1,6 +1,14 @@
-#include "global.h"
+/**
+ * File: voicesetword.c
+ *
+ * Registers words to the Voice Recognition System dictionary
+ */
 
-// Registers words to the Voice Recognition System dictionary
+#include "ultra64/controller_voice.h"
+#include "io/controller.h"
+#include "functions.h"
+#include "macros.h"
+
 s32 osVoiceSetWord(OSVoiceHandle* hd, u8* word) {
     s32 i;
     s32 k;

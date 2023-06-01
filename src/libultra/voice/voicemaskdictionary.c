@@ -1,6 +1,14 @@
-#include "global.h"
+/**
+ * File: voicemaskdictionary.c
+ *
+ * Mask words registered in the voice recognition system
+ */
 
-// Mask words registered in the voice recognition system
+#include "ultra64/controller_voice.h"
+#include "io/controller.h"
+#include "functions.h"
+#include "macros.h"
+
 s32 osVoiceMaskDictionary(OSVoiceHandle* hd, u8* maskPattern, s32 size) {
     s32 errorCode;
     s32 i;

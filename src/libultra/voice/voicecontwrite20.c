@@ -1,4 +1,11 @@
-#include "global.h"
+/**
+ * File: voicecontwrite20.c
+ */
+
+#include "ultra64/controller_voice.h"
+#include "io/controller.h"
+#include "functions.h"
+#include "variables.h"
 
 #define WRITE20FORMAT(p) ((__OSVoiceWrite20Format*)(ptr))
 

@@ -1,4 +1,11 @@
-#include "global.h"
+/**
+ * File: voicecontread2.c
+ */
+
+#include "ultra64/controller_voice.h"
+#include "io/controller.h"
+#include "functions.h"
+#include "variables.h"
 
 #define READ2FORMAT(p) ((__OSVoiceRead2Format*)(ptr))
 
@@ -12,7 +19,6 @@ s32 __osVoiceContRead2(OSMesgQueue* mq, s32 channel, u16 address, u8 dst[2]) {
     __osSiGetAccess();
 
     do {
-
         ptr = (u8*)&__osPfsPifRam.ramarray;
 
         if ((__osContLastPoll != CONT_CMD_READ2_VOICE) || (channel != __osPfsLastChannel)) {

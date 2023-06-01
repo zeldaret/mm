@@ -1,7 +1,11 @@
-#include "global.h"
+/**
+ * file voicecheckwork.c
+ *
+ * Checks whether or not a word can be registered in the dictionary
+ */
+#include "io/controller.h"
 
 // TODO: SJIS support
-// Checks whether or not a word can be registered in the dictionary
 s32 osVoiceCheckWord(u8* word) {
     s32 i;
     s32 errorCode = 0;
