@@ -14,7 +14,7 @@ typedef enum OsVoiceHandleMode {
 
 typedef struct {
     /* 0x0 */ OSMesgQueue* mq;
-    /* 0x4 */ s32 channel; /* Controller port */
+    /* 0x4 */ s32 channel; // Controller port
     /* 0x8 */ OsVoiceHandleMode mode;
     /* 0xC */ u8 status;
 } OSVoiceHandle; // size = 0x10
