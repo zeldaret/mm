@@ -26,7 +26,7 @@ void EffectSsBomb2_DrawFade(PlayState* play, u32 index, EffectSs* this);
 void EffectSsBomb2_DrawLayered(PlayState* play, u32 index, EffectSs* this);
 void EffectSsBomb2_Update(PlayState* play, u32 index, EffectSs* this);
 
-const EffectSsInit Effect_Ss_Bomb2_InitVars = {
+EffectSsInit Effect_Ss_Bomb2_InitVars = {
     EFFECT_SS_BOMB2,
     EffectSsBomb2_Init,
 };
@@ -92,7 +92,7 @@ void EffectSsBomb2_DrawFade(PlayState* play, u32 index, EffectSs* this) {
 
     if (mtx != NULL) {
         gSPMatrix(POLY_XLU_DISP++, mtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        func_8012C974(gfxCtx);
+        Gfx_SetupDL60_XluNoCD(gfxCtx);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, this->rPrimColorR, this->rPrimColorG, this->rPrimColorB,
                         this->rPrimColorA);
         gDPSetEnvColor(POLY_XLU_DISP++, this->rEnvColorR, this->rEnvColorG, this->rEnvColorB, 0);
@@ -135,7 +135,7 @@ void EffectSsBomb2_DrawLayered(PlayState* play, u32 index, EffectSs* this) {
         mtx2 = SkinMatrix_MtxFToNewMtx(gfxCtx, &mfResult);
 
         if (mtx2 != NULL) {
-            func_8012C974(gfxCtx);
+            Gfx_SetupDL60_XluNoCD(gfxCtx);
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, this->rPrimColorR, this->rPrimColorG, this->rPrimColorB,
                             this->rPrimColorA);
             gDPSetEnvColor(POLY_XLU_DISP++, this->rEnvColorR, this->rEnvColorG, this->rEnvColorB, 0);

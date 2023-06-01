@@ -75,7 +75,7 @@ void BgCraceMovebg_Init(Actor* thisx, PlayState* play) {
         sHasInitializedIsLoaded = true;
     }
 
-    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
     DynaPolyActor_LoadMesh(play, &this->dyna, &gDekuShrineSlidingDoorCol);
 
     this->index = BG_CRACE_MOVEBG_GET_INDEX(&this->dyna.actor);
@@ -328,7 +328,7 @@ void BgCraceMovebg_ClosingDoor_Close(BgCraceMovebg* this, PlayState* play) {
     if (Math_StepToF(&this->doorHeight, 0.0f, 1.0f)) {
         if (!(this->stateFlags & BG_CRACE_MOVEBG_FLAG_PLAYER_IS_BEYOND_DOOR) &&
             !Flags_GetSwitch(play, BG_CRACE_MOVEBG_GET_SWITCH_FLAG(&this->dyna.actor) + 1)) {
-            play->unk_18845 = 1;
+            play->haltAllActors = true;
             func_80169FDC(&play->state);
             play_sound(NA_SE_OC_ABYSS);
         }
@@ -343,7 +343,7 @@ void BgCraceMovebg_ClosingDoor_SetupDoNothing(BgCraceMovebg* this, PlayState* pl
     this->targetDoorHeight = 0.0f;
     this->doorHeight = 0.0f;
     this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y;
-    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_STONEDOOR_STOP);
+    Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_STONEDOOR_STOP);
     this->actionFunc = BgCraceMovebg_ClosingDoor_DoNothing;
 }
 

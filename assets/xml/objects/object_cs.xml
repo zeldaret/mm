@@ -2,25 +2,25 @@
     <File Name="object_cs" Segment="6">
         <DList Name="object_cs_DL_000040" Offset="0x40" />
         <Texture Name="object_cs_Tex_0000C0" OutName="tex_0000C0" Format="ia8" Width="64" Height="64" Offset="0xC0" />
-        <Animation Name="object_cs_Anim_001708" Offset="0x1708" />
-        <Animation Name="object_cs_Anim_001A1C" Offset="0x1A1C" />
-        <Animation Name="object_cs_Anim_002044" Offset="0x2044" />
-        <Animation Name="object_cs_Anim_0026B0" Offset="0x26B0" />
-        <Animation Name="object_cs_Anim_002930" Offset="0x2930" />
-        <Animation Name="object_cs_Anim_0031C4" Offset="0x31C4" />
-        <Animation Name="object_cs_Anim_00349C" Offset="0x349C" />
-        <Animation Name="object_cs_Anim_0036B0" Offset="0x36B0" />
-        <Animation Name="object_cs_Anim_003EE4" Offset="0x3EE4" />
-        <Animation Name="object_cs_Anim_00433C" Offset="0x433C" />
-        <Animation Name="object_cs_Anim_00478C" Offset="0x478C" />
-        <Animation Name="object_cs_Anim_004960" Offset="0x4960" />
-        <Animation Name="object_cs_Anim_004C1C" Offset="0x4C1C" />
-        <Animation Name="object_cs_Anim_005128" Offset="0x5128" />
-        <Animation Name="object_cs_Anim_0053F4" Offset="0x53F4" />
-        <Animation Name="object_cs_Anim_0057C8" Offset="0x57C8" />
-        <Animation Name="object_cs_Anim_005DC4" Offset="0x5DC4" />
-        <Animation Name="object_cs_Anim_0060E8" Offset="0x60E8" />
-        <Animation Name="gBomberIdleAnim" Offset="0x64B8" />
+        <Animation Name="object_cs_Anim_001708" Offset="0x1708" /> <!-- Original name is "csn_atsume" ("to collect; to assemble; to gather​") -->
+        <Animation Name="object_cs_Anim_001A1C" Offset="0x1A1C" /> <!-- Original name is "csn_fly" -->
+        <Animation Name="object_cs_Anim_002044" Offset="0x2044" /> <!-- Original name is "csn_fukiya" ("blowgun; blowpipe; dart​") -->
+        <Animation Name="object_cs_Anim_0026B0" Offset="0x26B0" /> <!-- Original name is "csn_keirei" ("salute") -->
+        <Animation Name="object_cs_Anim_002930" Offset="0x2930" /> <!-- Original name is "csn_kinobori" ("tree climbing​") -->
+        <Animation Name="object_cs_Anim_0031C4" Offset="0x31C4" /> <!-- Original name is "csn_kyoro" (onomatopoeic for "looking around restlessly") -->
+        <Animation Name="object_cs_Anim_00349C" Offset="0x349C" /> <!-- Original name is "csn_odoroku" ("surprise") -->
+        <Animation Name="object_cs_Anim_0036B0" Offset="0x36B0" /> <!-- Original name is "csn_run03" -->
+        <Animation Name="object_cs_Anim_003EE4" Offset="0x3EE4" /> <!-- Original name is "csn_senakamise" ("senaka" = "back (of the body)​", "mise" = "to show; to display​") -->
+        <Animation Name="object_cs_Anim_00433C" Offset="0x433C" /> <!-- Original name is "csn_senakatalk" -->
+        <Animation Name="object_cs_Anim_00478C" Offset="0x478C" /> <!-- Original name is "csn_senakawait" -->
+        <Animation Name="object_cs_Anim_004960" Offset="0x4960" /> <!-- Original name is "csn_shagamu" ("to squat; to crouch​") -->
+        <Animation Name="object_cs_Anim_004C1C" Offset="0x4C1C" /> <!-- Original name is "csn_suwari" ("sitting") -->
+        <Animation Name="object_cs_Anim_005128" Offset="0x5128" /> <!-- Original name is "csn_suwaripiyo" ("piyo" = "weakly moving") -->
+        <Animation Name="object_cs_Anim_0053F4" Offset="0x53F4" /> <!-- Original name is "csn_talk01" -->
+        <Animation Name="object_cs_Anim_0057C8" Offset="0x57C8" /> <!-- Original name is "csn_talk02" -->
+        <Animation Name="object_cs_Anim_005DC4" Offset="0x5DC4" /> <!-- Original name is "csn_talk03" -->
+        <Animation Name="object_cs_Anim_0060E8" Offset="0x60E8" /> <!-- Original name is "csn_tome" -->
+        <Animation Name="gBomberIdleAnim" Offset="0x64B8" /> <!-- Original name is "csn_wait01" -->
         <DList Name="object_cs_DL_009130" Offset="0x9130" />
         <DList Name="object_cs_DL_009478" Offset="0x9478" />
         <DList Name="object_cs_DL_009578" Offset="0x9578" />
@@ -90,8 +90,8 @@
         <Limb Name="object_cs_Standardlimb_00F7C4" Type="Standard" EnumName="OBJECT_CS_LIMB_13" Offset="0xF7C4" />
         <Limb Name="object_cs_Standardlimb_00F7D0" Type="Standard" EnumName="OBJECT_CS_LIMB_14" Offset="0xF7D0" />
         <Skeleton Name="object_cs_Skel_00F82C" Type="Flex" LimbType="Standard" LimbNone="OBJECT_CS_LIMB_NONE" LimbMax="OBJECT_CS_LIMB_MAX" EnumName="ObjectCsLimb" Offset="0xF82C" />
-        <Animation Name="object_cs_Anim_00FAF4" Offset="0xFAF4" />
-        <Animation Name="object_cs_Anim_01007C" Offset="0x1007C" />
-        <Animation Name="object_cs_Anim_010B68" Offset="0x10B68" />
+        <Animation Name="object_cs_Anim_00FAF4" Offset="0xFAF4" /> <!-- Original name is "csn_wait02" -->
+        <Animation Name="object_cs_Anim_01007C" Offset="0x1007C" /> <!-- Original name is "csn_walk" -->
+        <Animation Name="object_cs_Anim_010B68" Offset="0x10B68" /> <!-- Original name is "csn_yarare" ("to suffer damage") -->
     </File>
 </Root>

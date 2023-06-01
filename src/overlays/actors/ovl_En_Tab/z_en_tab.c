@@ -323,9 +323,9 @@ s32 func_80BE0D60(EnTab* this, PlayState* play) {
 
     this->unk_320++;
     if (this->unk_320 == 1) {
-        play->setPlayerTalkAnim(play, &gPlayerAnim_link_demo_bikkuri, 2);
+        play->setPlayerTalkAnim(play, &gPlayerAnim_link_demo_bikkuri, ANIMMODE_ONCE);
     } else if (this->unk_320 > 20) {
-        play->setPlayerTalkAnim(play, NULL, 0);
+        play->setPlayerTalkAnim(play, NULL, ANIMMODE_LOOP);
         this->unk_320 = 0;
         ret = true;
     }
@@ -473,7 +473,7 @@ void func_80BE1224(EnTab* this, PlayState* play) {
 void func_80BE127C(EnTab* this, PlayState* play) {
     ScheduleOutput sp18;
 
-    this->unk_31A = REG(15) + ((void)0, gSaveContext.save.daySpeed);
+    this->unk_31A = R_TIME_SPEED + ((void)0, gSaveContext.save.timeSpeedOffset);
 
     if (!Schedule_RunScript(play, D_80BE18D0, &sp18) ||
         ((this->unk_1D8 != sp18.result) && !func_80BE1060(this, play, &sp18))) {
@@ -553,7 +553,7 @@ void EnTab_Update(Actor* thisx, PlayState* play) {
 
         func_8013C964(&this->actor, play, radius, height, PLAYER_IA_NONE, this->unk_2FC & 7);
         Actor_MoveWithGravity(&this->actor);
-        Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, 4);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
         func_80BE0620(this, play);
     }
 }
@@ -617,7 +617,7 @@ void EnTab_Draw(Actor* thisx, PlayState* play) {
     if (this->unk_1D8 != 0) {
         OPEN_DISPS(play->state.gfxCtx);
 
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
         gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80BE1B24[this->unk_31E]));
 

@@ -16,6 +16,8 @@
 #define SFX_FLAG_MASK 0xC00
 #define SFX_FLAG 0x800
 
+#define NA_SE_NONE 0
+
 // ------------ PLAYER ------------
 
 #define NA_SE_PL_WALK_GROUND 0x800

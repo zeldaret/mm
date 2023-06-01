@@ -26,7 +26,7 @@ typedef struct EnZos {
     /* 0x2B0 */ UNK_TYPE1 unk2B0[6];
     /* 0x2B6 */ u16 unk_2B6;
     /* 0x2B8 */ s16 animIndex;
-    /* 0x2BA */ s16 unk_2BA;
+    /* 0x2BA */ s16 cueId;
     /* 0x2BC */ s16 unk_2BC;
     /* 0x2C0 */ EnZosActionFunc actionFunc;
 } EnZos; // size = 0x2C4

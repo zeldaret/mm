@@ -113,7 +113,7 @@ void EnEncount2_Init(Actor* thisx, PlayState* play) {
 
     this->dyna.actor.targetMode = 6;
     this->dyna.actor.colChkInfo.health = 1;
-    this->scale = 0.1;
+    this->scale = 0.1f;
     this->switchFlag = ENCOUNT2_GET_SWITCH_FLAG(&this->dyna.actor);
 
     if (this->switchFlag == 0x7F) {
@@ -171,7 +171,7 @@ void EnEncount2_Popped(EnEncount2* this, PlayState* play) {
         EnEncount2_InitEffects(this, &curPos, 10);
     }
 
-    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_MUJURA_BALLOON_BROKEN);
+    Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_MUJURA_BALLOON_BROKEN);
     this->deathTimer = 30;
     this->actionFunc = EnEncount2_Die;
 }
@@ -270,24 +270,26 @@ void EnEncount2_DrawEffects(EnEncount2* this, PlayState* play) {
     GraphicsContext* gfxCtx = play->state.gfxCtx;
 
     OPEN_DISPS(gfxCtx);
+
     sPtr = this->effects;
-    func_8012C28C(gfxCtx);
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     for (i = 0; i < ARRAY_COUNT(this->effects); i++, sPtr++) {
         if (sPtr->isEnabled) {
             Matrix_Translate(sPtr->pos.x, sPtr->pos.y, sPtr->pos.z, MTXMODE_NEW);
             Matrix_Scale(sPtr->scale, sPtr->scale, sPtr->scale, MTXMODE_APPLY);
-            POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 20);
+            POLY_XLU_DISP = Gfx_SetupDL(POLY_XLU_DISP, SETUPDL_20);
             gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gSun1Tex));
             gSPDisplayList(POLY_XLU_DISP++, gSunSparkleMaterialDL);
             gDPPipeSync(POLY_XLU_DISP++);
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, 255);
             gDPSetEnvColor(POLY_XLU_DISP++, 250, 180, 255, sPtr->alpha);
             Matrix_Mult(&play->billboardMtxF, MTXMODE_APPLY);
-            Matrix_RotateZF(DEGF_TO_RADF(play->state.frames * 20.0f), MTXMODE_APPLY);
+            Matrix_RotateZF(DEG_TO_RAD(play->state.frames * 20.0f), MTXMODE_APPLY);
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_XLU_DISP++, gSunSparkleModelDL);
         }
     }
+
     CLOSE_DISPS(gfxCtx);
 }

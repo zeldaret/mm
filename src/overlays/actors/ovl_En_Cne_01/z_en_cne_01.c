@@ -234,7 +234,7 @@ void EnCne01_Update(Actor* thisx, PlayState* play) {
 
     EnCne01_TestIsTalking(this, play);
     this->enHy.actionFunc(&this->enHy, play);
-    Actor_UpdateBgCheckInfo(play, &this->enHy.actor, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->enHy.actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
     EnCne01_UpdateModel(this, play);
     func_809CB4A0(this, play);
 }
@@ -310,7 +310,7 @@ void EnCne01_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     gSPSegment(POLY_OPA_DISP++, 0x08, Gfx_EnvColor(play->state.gfxCtx, 160, 180, 255, 0));
     gSPSegment(POLY_OPA_DISP++, 0x09, Gfx_EnvColor(play->state.gfxCtx, 160, 180, 255, 0));
     gSPSegment(POLY_OPA_DISP++, 0x0A, Gfx_EnvColor(play->state.gfxCtx, 160, 180, 255, 0));

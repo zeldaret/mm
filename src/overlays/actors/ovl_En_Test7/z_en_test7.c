@@ -4,6 +4,7 @@
  * Description: Soaring effects (wings, sphere, etc)
  */
 
+#include "prevent_bss_reordering.h"
 #include "z_en_test7.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
@@ -330,7 +331,7 @@ void func_80AF14FC(PlayState* play2, EnTest7Struct2* arg1) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C1C0(play->state.gfxCtx);
+    Gfx_SetupDL26_Opa(play->state.gfxCtx);
 
     Matrix_Push();
 
@@ -412,12 +413,12 @@ void EnTest7_Init(Actor* thisx, PlayState* play2) {
         Audio_PlayBgm_StorePrevBgm(NA_BGM_SONG_OF_SOARING);
     }
 
-    if (play->playerActorCsIds[8] == -1) {
+    if (play->playerCsIds[PLAYER_CS_ID_SONG_WARP] == CS_ID_NONE) {
         Actor_Kill(&this->actor);
         return;
     }
 
-    ActorCutscene_SetIntentToPlay(play->playerActorCsIds[8]);
+    CutsceneManager_Queue(play->playerCsIds[PLAYER_CS_ID_SONG_WARP]);
     player2->stateFlags1 |= PLAYER_STATE1_20;
     Lights_PointNoGlowSetInfo(&this->lightInfo, (Math_SinS(this->unk_1E8E) * 90.0f) + player->actor.world.pos.x,
                               player->actor.world.pos.y + 10.0f,
@@ -428,17 +429,17 @@ void EnTest7_Init(Actor* thisx, PlayState* play2) {
 void EnTest7_Destroy(Actor* thisx, PlayState* play) {
     EnTest7* this = THIS;
 
-    ActorCutscene_Stop(play->playerActorCsIds[8]);
+    CutsceneManager_Stop(play->playerCsIds[PLAYER_CS_ID_SONG_WARP]);
     LightContext_RemoveLight(play, &play->lightCtx, this->lightNode);
 }
 
 void func_80AF19A8(EnTest7* this, PlayState* play) {
-    if (!ActorCutscene_GetCanPlayNext(play->playerActorCsIds[8])) {
-        ActorCutscene_SetIntentToPlay(play->playerActorCsIds[8]);
+    if (!CutsceneManager_IsNext(play->playerCsIds[PLAYER_CS_ID_SONG_WARP])) {
+        CutsceneManager_Queue(play->playerCsIds[PLAYER_CS_ID_SONG_WARP]);
     } else {
-        ActorCutscene_Start(play->playerActorCsIds[8], NULL);
+        CutsceneManager_Start(play->playerCsIds[PLAYER_CS_ID_SONG_WARP], NULL);
         func_80AF082C(this, func_80AF1A2C);
-        play->unk_18844 = 1;
+        play->unk_18844 = true;
     }
 }
 
@@ -452,7 +453,8 @@ void func_80AF1A2C(EnTest7* this, PlayState* play) {
     func_800FD698(play, 2000, 4000, sp2C);
 
     if (this->unk_1E54 >= 10) {
-        Camera* subCam = Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(play->playerActorCsIds[8]));
+        Camera* subCam =
+            Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(play->playerCsIds[PLAYER_CS_ID_SONG_WARP]));
 
         this->subCamEye = subCam->eye;
         this->subCamAt = subCam->at;
@@ -461,7 +463,7 @@ void func_80AF1A2C(EnTest7* this, PlayState* play) {
         func_80AF082C(this, func_80AF1CA0);
         this->unk_144 |= 0x20;
         Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_PL_WARP_WING_OPEN);
-        func_8016566C(0x78);
+        Play_EnableMotionBlur(120);
     }
 }
 
@@ -514,7 +516,8 @@ void func_80AF1CA0(EnTest7* this, PlayState* play) {
         }
 
         if (Rand_ZeroOne() < 0.3f) {
-            Camera* subCam = Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(play->playerActorCsIds[8]));
+            Camera* subCam =
+                Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(play->playerCsIds[PLAYER_CS_ID_SONG_WARP]));
             f32 rand = Rand_ZeroOne();
 
             sp34.x = ((subCam->eye.x - this->actor.world.pos.x) * rand) + this->actor.world.pos.x;
@@ -537,7 +540,7 @@ void func_80AF1E44(EnTest7* this, PlayState* play) {
     func_80AF1B68(this, play);
 
     if (Rand_ZeroOne() < 0.3f) {
-        subCam = Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(play->playerActorCsIds[8]));
+        subCam = Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(play->playerCsIds[PLAYER_CS_ID_SONG_WARP]));
         rand = Rand_ZeroOne();
         sp34.x = ((subCam->eye.x - this->actor.world.pos.x) * rand) + this->actor.world.pos.x;
         sp34.y = ((subCam->eye.y - this->actor.world.pos.y) * rand) + this->actor.world.pos.y;
@@ -585,7 +588,7 @@ void func_80AF2030(EnTest7* this, PlayState* play) {
     this->unk_148.unk_10 -= 0x2EE0;
     this->actor.world.pos.y += 100.0f;
 
-    subCam = Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(play->playerActorCsIds[8]));
+    subCam = Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(play->playerCsIds[PLAYER_CS_ID_SONG_WARP]));
     subCam->focalActor = NULL;
 
     subCam->eye.x = ((subCam->eye.x - this->subCamEye.x) * sp1C) + this->subCamEye.x;
@@ -599,10 +602,10 @@ void func_80AF2030(EnTest7* this, PlayState* play) {
         R_PLAY_FILL_SCREEN_G = 255;
         R_PLAY_FILL_SCREEN_B = 255;
         R_PLAY_FILL_SCREEN_ALPHA = 255;
-        play->unk_18844 = 0;
+        play->unk_18844 = false;
         this->unk_144 &= ~4;
         func_80AF082C(this, func_80AF21E8);
-        func_80165690();
+        Play_DisableMotionBlur();
     }
 }
 
@@ -667,16 +670,17 @@ void func_80AF2350(EnTest7* this, PlayState* play) {
         gSaveContext.respawnFlag = -6;
     } else {
         play->nextEntrance = D_80AF343C[ENTEST7_GET(&this->actor) - ENTEST7_1C];
-        if ((play->nextEntrance == ENTRANCE(SOUTHERN_SWAMP_POISONED, 10)) && CHECK_WEEKEVENTREG(WEEKEVENTREG_20_02)) {
+        if ((play->nextEntrance == ENTRANCE(SOUTHERN_SWAMP_POISONED, 10)) &&
+            CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_WOODFALL_TEMPLE)) {
             play->nextEntrance = ENTRANCE(SOUTHERN_SWAMP_CLEARED, 10);
         } else if ((play->nextEntrance == ENTRANCE(MOUNTAIN_VILLAGE_WINTER, 8)) &&
-                   CHECK_WEEKEVENTREG(WEEKEVENTREG_33_80)) {
+                   CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_SNOWHEAD_TEMPLE)) {
             play->nextEntrance = ENTRANCE(MOUNTAIN_VILLAGE_SPRING, 8);
         }
     }
 
     play->transitionTrigger = TRANS_TRIGGER_START;
-    play->transitionType = TRANS_TYPE_02;
+    play->transitionType = TRANS_TYPE_FADE_BLACK;
     gSaveContext.seqId = (u8)NA_BGM_DISABLED;
     gSaveContext.ambienceId = AMBIENCE_ID_DISABLED;
 }
@@ -685,7 +689,8 @@ void func_80AF24D8(EnTest7* this, PlayState* play, f32 arg2) {
     Vec3f sp3C;
     Vec3f* pos;
     Player* player = GET_PLAYER(play);
-    Camera* subCam = Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(play->playerActorCsIds[8]));
+    Camera* subCam =
+        Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(play->playerCsIds[PLAYER_CS_ID_SONG_WARP]));
 
     pos = &player->actor.world.pos;
     subCam->focalActor = NULL;
@@ -708,7 +713,7 @@ void func_80AF2654(EnTest7* this, PlayState* play, f32 arg2) {
     Camera* subCam;
     Vec3f sp30;
 
-    subCam = Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(play->playerActorCsIds[8]));
+    subCam = Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(play->playerCsIds[PLAYER_CS_ID_SONG_WARP]));
     subCam->focalActor = NULL;
 
     pos = &player->actor.world.pos;
@@ -762,7 +767,7 @@ void func_80AF2938(EnTest7* this, PlayState* play) {
     player->stateFlags2 |= PLAYER_STATE2_20000000;
     this->unk_144 |= 2;
     this->unk_148.unk_04 = 30.0f;
-    if (play->roomCtx.curRoom.unk3 != 1) {
+    if (play->roomCtx.curRoom.behaviorType1 != ROOM_BEHAVIOR_TYPE1_1) {
         func_80AF082C(this, func_80AF2AE8);
     } else {
         func_80AF082C(this, func_80AF2EC8);
@@ -777,7 +782,8 @@ void func_80AF29C0(EnTest7* this, PlayState* play) {
     s32 pad;
     Player* player = GET_PLAYER(play);
     Vec3f* pos = &player->actor.world.pos;
-    Camera* subCam = Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(play->playerActorCsIds[8]));
+    Camera* subCam =
+        Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(play->playerCsIds[PLAYER_CS_ID_SONG_WARP]));
 
     subCam->at.x = ((D_80AF3454 * Math_SinS(D_80AF3450[0]) * Math_CosS(D_80AF3450[1]))) + pos->x;
     subCam->at.y = (Math_SinS(D_80AF3450[1]) * D_80AF3454) + pos->y;
@@ -791,15 +797,15 @@ void func_80AF29C0(EnTest7* this, PlayState* play) {
 void func_80AF2AE8(EnTest7* this, PlayState* play) {
     Camera* subCam;
 
-    if (!ActorCutscene_GetCanPlayNext(play->playerActorCsIds[8])) {
-        ActorCutscene_SetIntentToPlay(play->playerActorCsIds[8]);
+    if (!CutsceneManager_IsNext(play->playerCsIds[PLAYER_CS_ID_SONG_WARP])) {
+        CutsceneManager_Queue(play->playerCsIds[PLAYER_CS_ID_SONG_WARP]);
         return;
     }
 
-    ActorCutscene_Start(play->playerActorCsIds[8], NULL);
+    CutsceneManager_Start(play->playerCsIds[PLAYER_CS_ID_SONG_WARP], NULL);
     func_80AF082C(this, func_80AF2C48);
 
-    subCam = Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(play->playerActorCsIds[8]));
+    subCam = Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(play->playerCsIds[PLAYER_CS_ID_SONG_WARP]));
     this->subCamEye = subCam->eye;
     this->subCamAt = subCam->at;
 
@@ -810,7 +816,8 @@ void func_80AF2BAC(EnTest7* this, PlayState* play, Vec3f* arg2, f32 arg3) {
     f32 x;
     f32 y;
     f32 z;
-    Camera* subCam = Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(play->playerActorCsIds[8]));
+    Camera* subCam =
+        Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(play->playerCsIds[PLAYER_CS_ID_SONG_WARP]));
 
     subCam->focalActor = NULL;
     x = ((subCam->at.x - arg2->x) * arg3) + arg2->x;
@@ -836,7 +843,7 @@ void func_80AF2C48(EnTest7* this, PlayState* play) {
     this->actor.world.pos.y = ((this->actor.world.pos.y - this->actor.home.pos.y) * sp24) + this->actor.home.pos.y;
     this->actor.world.pos.z = ((this->actor.world.pos.z - this->actor.home.pos.z) * sp24) + this->actor.home.pos.z;
 
-    subCam = Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(play->playerActorCsIds[8]));
+    subCam = Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(play->playerCsIds[PLAYER_CS_ID_SONG_WARP]));
     func_80AF2BAC(this, play, &this->actor.home.pos, sp24);
 
     subCam->at.x = this->actor.world.pos.x;
@@ -855,7 +862,7 @@ void func_80AF2DB4(EnTest7* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     Vec3f* pos = &player->actor.world.pos;
 
-    subCam = Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(play->playerActorCsIds[8]));
+    subCam = Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(play->playerCsIds[PLAYER_CS_ID_SONG_WARP]));
 
     subCam->eye.x = (Math_SinS(-player->actor.shape.rot.y) * 200.0f * -0.83907f) + pos->x;
     subCam->eye.y = pos->y + 108.8042f;
@@ -869,13 +876,13 @@ void func_80AF2DB4(EnTest7* this, PlayState* play) {
 void func_80AF2EC8(EnTest7* this, PlayState* play) {
     Camera* subCam;
 
-    if (!ActorCutscene_GetCanPlayNext(play->playerActorCsIds[8])) {
-        ActorCutscene_SetIntentToPlay(play->playerActorCsIds[8]);
+    if (!CutsceneManager_IsNext(play->playerCsIds[PLAYER_CS_ID_SONG_WARP])) {
+        CutsceneManager_Queue(play->playerCsIds[PLAYER_CS_ID_SONG_WARP]);
     } else {
-        ActorCutscene_Start(play->playerActorCsIds[8], NULL);
+        CutsceneManager_Start(play->playerCsIds[PLAYER_CS_ID_SONG_WARP], NULL);
         func_80AF082C(this, func_80AF2F98);
 
-        subCam = Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(play->playerActorCsIds[8]));
+        subCam = Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(play->playerCsIds[PLAYER_CS_ID_SONG_WARP]));
         this->subCamEye = subCam->eye;
         this->subCamAt = subCam->at;
         this->unk_1E54 = 40;

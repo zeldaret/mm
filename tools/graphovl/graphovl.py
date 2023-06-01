@@ -18,7 +18,7 @@ except ModuleNotFoundError:
 script_dir = os.path.dirname(os.path.realpath(__file__))
 config = ConfigParser()
 
-func_names = None
+func_names = list()
 func_definitions = list()
 line_numbers_of_functions = list()
 
@@ -68,6 +68,19 @@ def capture_setupaction_call_arg(content):
     transitionList = []
     for x in re.finditer(setupaction_regexpr, content):
         func = x.group().split(",")[1].strip().split(");")[0].strip()
+        if func not in transitionList:
+            transitionList.append(func)
+    return transitionList
+
+setaction_regexpr = re.compile(r"_SetAction+\([^\)]*\)(\.[^\)]*\))?;")
+
+def capture_setaction_calls(content):
+    return [x.group() for x in re.finditer(setaction_regexpr, content)]
+
+def capture_setaction_call_arg(content):
+    transitionList = []
+    for x in re.finditer(setaction_regexpr, content):
+        func = x.group().split(",")[2].strip().split(");")[0].strip()
         if func not in transitionList:
             transitionList.append(func)
     return transitionList
@@ -206,7 +219,11 @@ def addFunctionTransitionToGraph(dot, index: int, func_name: str, action_transit
     fontColor = config.get("colors", "fontcolor")
     bubbleColor = config.get("colors", "bubbleColor")
     indexStr = str(index)
-    funcIndex = str(index_of_func(action_transition))
+    try:
+        funcIndex = str(index_of_func(action_transition))
+    except ValueError:
+        print(f"Warning: function '{action_transition}' called by '{func_name}' was not found. Skiping...", file=sys.stderr)
+        return
 
     dot.node(indexStr, func_name, fontcolor=fontColor, color=bubbleColor)
     dot.node(funcIndex, action_transition, fontcolor=fontColor, color=bubbleColor)
@@ -230,7 +247,7 @@ def addCallNamesToGraph(dot, func_names: list, index: int, code_body: str, remov
         if call in removeList:
             continue
 
-        if setupAction and "_SetupAction" in call:
+        if setupAction and ("_SetupAction" in call or "_SetAction" in call):
             continue
         seen.add(call)
 
@@ -342,10 +359,11 @@ def main():
     actionIdentifier = "this->actionFunc"
 
     setupAction = func_prefix + "_SetupAction" in func_names
+    setAction = func_prefix + "_SetAction" in func_names
     arrayActorFunc = match_obj is not None
     rawActorFunc = actionIdentifier in contents
 
-    if not setupAction and not arrayActorFunc and not rawActorFunc:
+    if not setupAction and not setAction and not arrayActorFunc and not rawActorFunc:
         print("No actor action-based structure found")
         os._exit(1)
 
@@ -383,6 +401,8 @@ def main():
             Create all edges for SetupAction-based actors
             """
             transitionList = capture_setupaction_call_arg(code_body)
+        elif setAction:
+            transitionList = capture_setaction_call_arg(code_body)
         elif arrayActorFunc:
             """
             Create all edges for ActorFunc array-based actors

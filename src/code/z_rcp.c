@@ -1,758 +1,834 @@
 #include "global.h"
 #include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
 
-Gfx sSetupDL[438] = {
-    /* 0x00 */
-    gsDPPipeSync(),
-    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
-    gsDPSetCombineLERP(PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, PRIMITIVE, 0, TEXEL0, 0, 0, 0, 0, COMBINED, 0, 0, 0,
-                       COMBINED),
-    gsDPSetOtherMode(G_AD_NOISE | G_CD_NOISE | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
-                         G_TD_CLAMP | G_TP_PERSP | G_CYC_2CYCLE | G_PM_NPRIMITIVE,
-                     G_AC_NONE | G_ZS_PIXEL | G_RM_FOG_SHADE_A | G_RM_ZB_CLD_SURF2),
-    gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_CULL_BACK | G_FOG | G_SHADING_SMOOTH),
-    gsSPEndDisplayList(),
-
-    /* 0x01 */
-    gsDPPipeSync(),
-    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
-    gsDPSetCombineMode(G_CC_SHADE, G_CC_PASS2),
-    gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
-                         G_TD_CLAMP | G_TP_PERSP | G_CYC_2CYCLE | G_PM_NPRIMITIVE,
-                     G_AC_NONE | G_ZS_PIXEL | G_RM_FOG_SHADE_A | G_RM_AA_OPA_SURF2),
-    gsSPLoadGeometryMode(G_SHADE | G_CULL_BACK | G_FOG | G_LIGHTING | G_SHADING_SMOOTH),
-    gsSPEndDisplayList(),
-
-    /* 0x02 */
-    gsDPPipeSync(),
-    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
-    gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),
-    gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
-                         G_TD_CLAMP | G_TP_PERSP | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
-                     G_AC_NONE | G_ZS_PIXEL | G_RM_AA_ZB_OPA_SURF | G_RM_AA_ZB_OPA_SURF2),
-    gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_CULL_BACK | G_LIGHTING | G_SHADING_SMOOTH),
-    gsSPEndDisplayList(),
-
-    /* 0x03 */
-    gsDPPipeSync(),
-    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
-    gsDPSetCombineMode(G_CC_SHADE, G_CC_PASS2),
-    gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
-                         G_TD_CLAMP | G_TP_PERSP | G_CYC_2CYCLE | G_PM_NPRIMITIVE,
-                     G_AC_NONE | G_ZS_PIXEL | G_RM_FOG_SHADE_A | G_RM_AA_ZB_OPA_SURF2),
-    gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_CULL_BACK | G_FOG | G_LIGHTING | G_SHADING_SMOOTH),
-    gsSPEndDisplayList(),
-
-    /* 0x04 */
-    gsDPPipeSync(),
-    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
-    gsDPSetCombineLERP(PRIMITIVE, 0, SHADE, 0, 0, 0, 0, PRIMITIVE, PRIMITIVE, 0, SHADE, 0, 0, 0, 0, PRIMITIVE),
-    gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
-                         G_TD_CLAMP | G_TP_PERSP | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
-                     G_AC_NONE | G_ZS_PIXEL | G_RM_AA_ZB_XLU_SURF | G_RM_AA_ZB_XLU_SURF2),
-    gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_CULL_BACK | G_LIGHTING | G_SHADING_SMOOTH),
-    gsSPEndDisplayList(),
-
-    /* 0x05 */
-    gsDPPipeSync(),
-    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
-    gsDPSetCombineMode(G_CC_MODULATEI_PRIM, G_CC_MODULATEI_PRIM),
-    gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
-                         G_TD_CLAMP | G_TP_PERSP | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
-                     G_AC_NONE | G_ZS_PIXEL | G_RM_AA_ZB_XLU_SURF | G_RM_AA_ZB_XLU_SURF2),
-    gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_CULL_BACK | G_LIGHTING | G_SHADING_SMOOTH),
-    gsSPEndDisplayList(),
-
-    /* 0x06 */
-    gsDPPipeSync(),
-    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
-    gsDPSetCombineMode(G_CC_DECALRGBA, G_CC_PASS2),
-    gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
-                         G_TD_CLAMP | G_TP_PERSP | G_CYC_2CYCLE | G_PM_NPRIMITIVE,
-                     G_AC_NONE | G_ZS_PIXEL | G_RM_FOG_SHADE_A | G_RM_AA_TEX_EDGE2),
-    gsSPLoadGeometryMode(G_SHADE | G_FOG | G_LIGHTING | G_SHADING_SMOOTH),
-    gsSPEndDisplayList(),
-
-    /* 0x07 */
-    gsDPPipeSync(),
-    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
-    gsDPSetCombineMode(G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM),
-    gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
-                         G_TD_CLAMP | G_TP_PERSP | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
-                     G_AC_NONE | G_ZS_PIXEL | G_RM_AA_XLU_SURF | G_RM_AA_XLU_SURF2),
-    gsSPLoadGeometryMode(G_SHADE | G_LIGHTING | G_SHADING_SMOOTH),
-    gsSPEndDisplayList(),
-
-    /* 0x08 */
-    gsDPPipeSync(),
-    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
-    gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),
-    gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
-                         G_TD_CLAMP | G_TP_PERSP | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
-                     G_AC_NONE | G_ZS_PIXEL | G_RM_AA_OPA_SURF | G_RM_AA_OPA_SURF2),
-    gsSPLoadGeometryMode(G_SHADE | G_CULL_BACK | G_LIGHTING | G_SHADING_SMOOTH),
-    gsSPEndDisplayList(),
-
-    /* 0x09 */
-    gsDPPipeSync(),
-    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
-    gsDPSetCombineMode(G_CC_MODULATEIA, G_CC_MODULATEIA2),
-    gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
-                         G_TD_CLAMP | G_TP_PERSP | G_CYC_2CYCLE | G_PM_NPRIMITIVE,
-                     G_AC_NONE | G_ZS_PIXEL | G_RM_FOG_SHADE_A | G_RM_AA_XLU_SURF2),
-    gsSPLoadGeometryMode(G_SHADE | G_FOG | G_LIGHTING | G_SHADING_SMOOTH),
-    gsSPEndDisplayList(),
-
-    /* 0x0A */
-    gsDPPipeSync(),
-    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
-    gsDPSetCombineMode(G_CC_MODULATEIDECALA, G_CC_MODULATEIDECALA),
-    gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
-                         G_TD_CLAMP | G_TP_PERSP | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
-                     G_AC_NONE | G_ZS_PIXEL | G_RM_AA_OPA_SURF | G_RM_AA_OPA_SURF2),
-    gsSPLoadGeometryMode(G_SHADE | G_CULL_BACK | G_LIGHTING | G_SHADING_SMOOTH),
-    gsSPEndDisplayList(),
-
-    /* 0x0B */
-    gsDPPipeSync(),
-    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
-    gsDPSetCombineMode(G_CC_MODULATEIDECALA, G_CC_MODULATEIA_PRIM2),
-    gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
-                         G_TD_CLAMP | G_TP_PERSP | G_CYC_2CYCLE | G_PM_NPRIMITIVE,
-                     G_AC_NONE | G_ZS_PIXEL | G_RM_FOG_SHADE_A | G_RM_AA_OPA_SURF2),
-    gsSPLoadGeometryMode(G_SHADE | G_CULL_BACK | G_FOG | G_LIGHTING | G_SHADING_SMOOTH),
-    gsSPEndDisplayList(),
-
-    /* 0x0C */
-    gsDPPipeSync(),
-    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
-    gsDPSetCombineMode(G_CC_MODULATEI_PRIM, G_CC_MODULATEI_PRIM),
-    gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
-                         G_TD_CLAMP | G_TP_PERSP | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
-                     G_AC_NONE | G_ZS_PIXEL | G_RM_AA_OPA_SURF | G_RM_AA_OPA_SURF2),
-    gsSPLoadGeometryMode(G_SHADE | G_CULL_BACK | G_LIGHTING | G_SHADING_SMOOTH),
-    gsSPEndDisplayList(),
-
-    /* 0x0D */
-    gsDPPipeSync(),
-    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
-    gsDPSetCombineMode(G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM),
-    gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
-                         G_TD_CLAMP | G_TP_PERSP | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
-                     G_AC_NONE | G_ZS_PIXEL | G_RM_XLU_SURF | G_RM_XLU_SURF2),
-    gsSPLoadGeometryMode(G_SHADE | G_CULL_BACK | G_LIGHTING | G_SHADING_SMOOTH),
-    gsSPEndDisplayList(),
-
-    /* 0x0E */
-    gsDPPipeSync(),
-    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
-    gsDPSetCombineMode(G_CC_DECALRGBA, G_CC_DECALRGBA),
-    gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
-                         G_TD_CLAMP | G_TP_PERSP | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
-                     G_AC_NONE | G_ZS_PIXEL | G_RM_AA_ZB_TEX_EDGE | G_RM_AA_ZB_TEX_EDGE2),
-    gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_LIGHTING | G_SHADING_SMOOTH),
-    gsSPEndDisplayList(),
-
-    /* 0x0F */
-    gsDPPipeSync(),
-    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
-    gsDPSetCombineMode(G_CC_DECALRGBA, G_CC_PASS2),
-    gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
-                         G_TD_CLAMP | G_TP_PERSP | G_CYC_2CYCLE | G_PM_NPRIMITIVE,
-                     G_AC_NONE | G_ZS_PIXEL | G_RM_FOG_SHADE_A | G_RM_AA_ZB_TEX_EDGE2),
-    gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_FOG | G_LIGHTING | G_SHADING_SMOOTH),
-    gsSPEndDisplayList(),
-
-    /* 0x10 */
-    gsDPPipeSync(),
-    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
-    gsDPSetCombineMode(G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM2),
-    gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
-                         G_TD_CLAMP | G_TP_PERSP | G_CYC_2CYCLE | G_PM_NPRIMITIVE,
-                     G_AC_NONE | G_ZS_PIXEL | G_RM_FOG_SHADE_A | G_RM_AA_ZB_XLU_SURF2),
-    gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_FOG | G_LIGHTING | G_SHADING_SMOOTH),
-    gsSPEndDisplayList(),
-
-    /* 0x11 */
-    gsDPPipeSync(),
-    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
-    gsDPSetCombineMode(G_CC_MODULATEIDECALA, G_CC_MODULATEIDECALA),
-    gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
-                         G_TD_CLAMP | G_TP_PERSP | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
-                     G_AC_NONE | G_ZS_PIXEL | G_RM_AA_ZB_TEX_EDGE | G_RM_AA_ZB_TEX_EDGE2),
-    gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_LIGHTING | G_SHADING_SMOOTH),
-    gsSPEndDisplayList(),
-
-    /* 0x12 */
-    gsDPPipeSync(),
-    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
-    gsDPSetCombineMode(G_CC_MODULATEIDECALA, G_CC_PASS2),
-    gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
-                         G_TD_CLAMP | G_TP_PERSP | G_CYC_2CYCLE | G_PM_NPRIMITIVE,
-                     G_AC_NONE | G_ZS_PIXEL | G_RM_FOG_SHADE_A | G_RM_AA_ZB_TEX_EDGE2),
-    gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_CULL_BACK | G_FOG | G_LIGHTING | G_SHADING_SMOOTH),
-    gsSPEndDisplayList(),
-
-    /* 0x13 */
-    gsDPPipeSync(),
-    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
-    gsDPSetCombineMode(G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM),
-    gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
-                         G_TD_CLAMP | G_TP_PERSP | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
-                     G_AC_NONE | G_ZS_PIXEL | AA_EN | Z_CMP | IM_RD | CVG_DST_FULL | ZMODE_OPA | CVG_X_ALPHA |
-                         FORCE_BL | GBL_c1(G_BL_CLR_IN, G_BL_A_IN, G_BL_CLR_MEM, G_BL_1MA) |
-                         GBL_c2(G_BL_CLR_IN, G_BL_A_IN, G_BL_CLR_MEM, G_BL_1MA)),
-    gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_LIGHTING | G_SHADING_SMOOTH),
-    gsSPEndDisplayList(),
-
-    /* 0x14 */
-    gsDPPipeSync(),
-    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
-    gsDPSetCombineMode(G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM),
-    gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
-                         G_TD_CLAMP | G_TP_PERSP | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
-                     G_AC_THRESHOLD | G_ZS_PIXEL | G_RM_ZB_CLD_SURF | G_RM_ZB_CLD_SURF2),
-    gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_SHADING_SMOOTH),
-    gsSPEndDisplayList(),
-
-    /* 0x15 */
-    gsDPPipeSync(),
-    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
-    gsDPSetCombineMode(G_CC_MODULATEIA, G_CC_MODULATEIA),
-    gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
-                         G_TD_CLAMP | G_TP_PERSP | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
-                     G_AC_NONE | G_ZS_PIXEL | G_RM_AA_ZB_XLU_SURF | G_RM_AA_ZB_XLU_SURF2),
-    gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_LIGHTING | G_SHADING_SMOOTH),
-    gsSPEndDisplayList(),
-
-    /* 0x16 */
-    gsDPPipeSync(),
-    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
-    gsDPSetCombineMode(G_CC_MODULATEIA, G_CC_MODULATEIA2),
-    gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
-                         G_TD_CLAMP | G_TP_PERSP | G_CYC_2CYCLE | G_PM_NPRIMITIVE,
-                     G_AC_NONE | G_ZS_PIXEL | G_RM_FOG_SHADE_A | G_RM_AA_ZB_XLU_SURF2),
-    gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_LIGHTING | G_SHADING_SMOOTH),
-    gsSPEndDisplayList(),
-
-    /* 0x17 */
-    gsDPPipeSync(),
-    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
-    gsDPSetCombineMode(G_CC_MODULATEIDECALA, G_CC_MODULATEIDECALA),
-    gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
-                         G_TD_CLAMP | G_TP_PERSP | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
-                     G_AC_NONE | G_ZS_PIXEL | G_RM_AA_ZB_OPA_SURF | G_RM_AA_ZB_OPA_SURF2),
-    gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_CULL_BACK | G_LIGHTING | G_SHADING_SMOOTH),
-    gsSPEndDisplayList(),
-
-    /* 0x18 */
-    gsDPPipeSync(),
-    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
-    gsDPSetCombineMode(G_CC_MODULATEIDECALA, G_CC_MODULATEIA2),
-    gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
-                         G_TD_CLAMP | G_TP_PERSP | G_CYC_2CYCLE | G_PM_NPRIMITIVE,
-                     G_AC_NONE | G_ZS_PIXEL | G_RM_FOG_SHADE_A | G_RM_AA_ZB_OPA_SURF2),
-    gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_CULL_BACK | G_FOG | G_LIGHTING | G_SHADING_SMOOTH),
-    gsSPEndDisplayList(),
-
-    /* 0x19 */
-    gsDPPipeSync(),
-    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
-    gsDPSetCombineMode(G_CC_MODULATEIDECALA, G_CC_MODULATEIA_PRIM2),
-    gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
-                         G_TD_CLAMP | G_TP_PERSP | G_CYC_2CYCLE | G_PM_NPRIMITIVE,
-                     G_AC_NONE | G_ZS_PIXEL | G_RM_FOG_SHADE_A | G_RM_AA_ZB_OPA_SURF2),
-    gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_CULL_BACK | G_FOG | G_LIGHTING | G_SHADING_SMOOTH),
-    gsSPEndDisplayList(),
-
-    /* 0x1A */
-    gsDPPipeSync(),
-    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
-    gsDPSetCombineMode(G_CC_MODULATEIDECALA, G_CC_MODULATEIA_PRIM2),
-    gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
-                         G_TD_CLAMP | G_TP_PERSP | G_CYC_2CYCLE | G_PM_NPRIMITIVE,
-                     G_AC_NONE | G_ZS_PIXEL | G_RM_PASS | G_RM_AA_ZB_OPA_SURF2),
-    gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_CULL_BACK | G_LIGHTING | G_SHADING_SMOOTH),
-    gsSPEndDisplayList(),
-
-    /* 0x1B */
-    gsDPPipeSync(),
-    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
-    gsDPSetCombineMode(G_CC_MODULATEI_PRIM, G_CC_MODULATEI_PRIM),
-    gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
-                         G_TD_CLAMP | G_TP_PERSP | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
-                     G_AC_NONE | G_ZS_PIXEL | G_RM_AA_ZB_XLU_SURF | G_RM_AA_ZB_XLU_SURF2),
-    gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_CULL_BACK | G_SHADING_SMOOTH),
-    gsSPEndDisplayList(),
-
-    /* 0x1C */
-    gsDPPipeSync(),
-    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
-    gsDPSetCombineMode(G_CC_MODULATEIDECALA_PRIM, G_CC_MODULATEIDECALA_PRIM),
-    gsDPSetOtherMode(G_AD_DISABLE | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_RGBA16 | G_TL_TILE |
-                         G_TD_CLAMP | G_TP_NONE | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
-                     G_AC_THRESHOLD | G_ZS_PIXEL | G_RM_AA_TEX_EDGE | G_RM_AA_TEX_EDGE2),
-    gsSPLoadGeometryMode(G_SHADE | G_SHADING_SMOOTH),
-    gsSPEndDisplayList(),
-
-    /* 0x1D */
-    gsDPPipeSync(),
-    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
-    gsDPSetCombineLERP(TEXEL0, 0, SHADE, 0, TEXEL0, 0, SHADE, 0, NOISE, 0, COMBINED, 0, 0, 0, 0, COMBINED),
-    gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
-                         G_TD_CLAMP | G_TP_PERSP | G_CYC_2CYCLE | G_PM_NPRIMITIVE,
-                     G_AC_NONE | G_ZS_PIXEL | G_RM_PASS | G_RM_AA_ZB_OPA_SURF2),
-    gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_CULL_BACK | G_LIGHTING | G_SHADING_SMOOTH),
-    gsSPEndDisplayList(),
-
-    /* 0x1E */
-    gsDPPipeSync(),
-    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
-    gsDPSetCombineMode(G_CC_PRIMITIVE, G_CC_PRIMITIVE),
-    gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
-                         G_TD_CLAMP | G_TP_PERSP | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
-                     G_AC_NONE | G_ZS_PIXEL | G_RM_AA_ZB_XLU_LINE | G_RM_AA_ZB_XLU_LINE2),
-    gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_SHADING_SMOOTH),
-    gsSPEndDisplayList(),
-
-    /* 0x1F */
-    gsDPPipeSync(),
-    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
-    gsDPSetCombineMode(G_CC_HILITERGBA, G_CC_HILITERGBA),
-    gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
-                         G_TD_CLAMP | G_TP_PERSP | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
-                     G_AC_NONE | G_ZS_PIXEL | G_RM_AA_ZB_OPA_SURF | G_RM_AA_ZB_OPA_SURF2),
-    gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_CULL_BACK | G_LIGHTING | G_TEXTURE_GEN | G_SHADING_SMOOTH),
-    gsSPEndDisplayList(),
-
-    /* 0x20 */
-    gsDPPipeSync(),
-    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
-    gsDPSetCombineMode(G_CC_HILITERGBA, G_CC_HILITERGBA),
-    gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
-                         G_TD_CLAMP | G_TP_PERSP | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
-                     G_AC_NONE | G_ZS_PIXEL | G_RM_AA_ZB_OPA_SURF | G_RM_AA_ZB_OPA_SURF2),
-    gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_CULL_BACK | G_LIGHTING | G_TEXTURE_GEN | G_TEXTURE_GEN_LINEAR |
-                         G_SHADING_SMOOTH),
-    gsSPEndDisplayList(),
-
-    /* 0x21 */
-    gsDPPipeSync(),
-    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
-    gsDPSetCombineLERP(TEXEL0, 0, PRIMITIVE, SHADE, 1, 0, TEXEL0, SHADE, ENVIRONMENT, COMBINED, TEXEL0, COMBINED,
-                       ENVIRONMENT, COMBINED, TEXEL0, COMBINED),
-    gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
-                         G_TD_CLAMP | G_TP_PERSP | G_CYC_2CYCLE | G_PM_NPRIMITIVE,
-                     G_AC_NONE | G_ZS_PIXEL | G_RM_PASS | G_RM_AA_ZB_OPA_SURF2),
-    gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_CULL_BACK | G_LIGHTING | G_TEXTURE_GEN | G_TEXTURE_GEN_LINEAR |
-                         G_SHADING_SMOOTH),
-    gsSPEndDisplayList(),
-
-    /* 0x22 */
-    gsDPPipeSync(),
-    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
-    gsDPSetCombineMode(G_CC_DECALRGB, G_CC_DECALRGB),
-    gsDPSetOtherMode(G_AD_DISABLE | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
-                         G_TD_CLAMP | G_TP_NONE | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
-                     G_AC_THRESHOLD | G_ZS_PIXEL | G_RM_OPA_SURF | G_RM_OPA_SURF2),
-    gsSPLoadGeometryMode(G_SHADE | G_SHADING_SMOOTH),
-    gsSPEndDisplayList(),
-
-    /* 0x23 */
-    gsDPPipeSync(),
-    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
-    gsDPSetCombineMode(G_CC_DECALRGBA, G_CC_DECALRGBA),
-    gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
-                         G_TD_CLAMP | G_TP_PERSP | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
-                     G_AC_NONE | G_ZS_PIXEL | G_RM_AA_ZB_XLU_DECAL | G_RM_AA_ZB_XLU_DECAL2),
-    gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_CULL_BACK | G_SHADING_SMOOTH),
-    gsSPEndDisplayList(),
-
-    /* 0x24 */
-    gsDPPipeSync(),
-    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
-    gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),
-    gsDPSetOtherMode(G_AD_DISABLE | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
-                         G_TD_CLAMP | G_TP_NONE | G_CYC_FILL | G_PM_NPRIMITIVE,
-                     G_AC_THRESHOLD | G_ZS_PIXEL | G_RM_NOOP | G_RM_NOOP2),
-    gsSPLoadGeometryMode(G_SHADE | G_SHADING_SMOOTH),
-    gsSPEndDisplayList(),
-
-    /* 0x25 */
-    gsDPPipeSync(),
-    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
-    gsDPSetCombineLERP(PRIMITIVE, 0, SHADE, 0, 0, 0, 0, PRIMITIVE, 0, 0, 0, COMBINED, 0, 0, 0, COMBINED),
-    gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
-                         G_TD_CLAMP | G_TP_PERSP | G_CYC_2CYCLE | G_PM_NPRIMITIVE,
-                     G_AC_NONE | G_ZS_PIXEL | G_RM_FOG_SHADE_A | G_RM_AA_ZB_OPA_SURF2),
-    gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_CULL_BACK | G_FOG | G_LIGHTING | G_SHADING_SMOOTH),
-    gsSPEndDisplayList(),
-
-    /* 0x26 */
-    gsDPPipeSync(),
-    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
-    gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),
-    gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
-                         G_TD_CLAMP | G_TP_PERSP | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
-                     G_AC_NONE | G_ZS_PIXEL | G_RM_AA_ZB_XLU_SURF | G_RM_AA_ZB_XLU_SURF2),
-    gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_SHADING_SMOOTH),
-    gsSPEndDisplayList(),
-
-    /* 0x27 */
-    gsDPPipeSync(),
-    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
-    gsDPSetCombineMode(G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM),
-    gsDPSetOtherMode(G_AD_DISABLE | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
-                         G_TD_CLAMP | G_TP_NONE | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
-                     G_AC_THRESHOLD | G_ZS_PIXEL | G_RM_XLU_SURF | G_RM_XLU_SURF2),
-    gsSPLoadGeometryMode(G_SHADING_SMOOTH),
-    gsSPEndDisplayList(),
-
-    /* 0x28 */
-    gsDPPipeSync(),
-    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
-    gsDPSetCombineLERP(TEXEL1, TEXEL0, PRIMITIVE_ALPHA, TEXEL0, TEXEL1, TEXEL0, PRIMITIVE, TEXEL0, 0, 0, 0, COMBINED, 0,
-                       0, 0, COMBINED),
-    gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
-                         G_TD_CLAMP | G_TP_PERSP | G_CYC_2CYCLE | G_PM_NPRIMITIVE,
-                     G_AC_NONE | G_ZS_PIXEL | G_RM_OPA_SURF | G_RM_OPA_SURF2),
-    gsSPLoadGeometryMode(G_SHADE | G_CULL_FRONT | G_SHADING_SMOOTH),
-    gsSPEndDisplayList(),
-
-    /* 0x29 */
-    gsDPPipeSync(),
-    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
-    gsDPSetCombineMode(G_CC_MODULATEIA, G_CC_MODULATEIA),
-    gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
-                         G_TD_CLAMP | G_TP_PERSP | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
-                     G_AC_NONE | G_ZS_PIXEL | G_RM_ZB_XLU_SURF | G_RM_ZB_XLU_SURF2),
-    gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_SHADING_SMOOTH),
-    gsSPEndDisplayList(),
-
-    /* 0x2A */
-    gsDPPipeSync(),
-    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
-    gsDPSetCombineMode(G_CC_MODULATEIDECALA, G_CC_MODULATEIDECALA),
-    gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
-                         G_TD_CLAMP | G_TP_PERSP | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
-                     G_AC_NONE | G_ZS_PIXEL | G_RM_XLU_SURF | G_RM_XLU_SURF2),
-    gsSPLoadGeometryMode(G_SHADE | G_CULL_BACK | G_SHADING_SMOOTH),
-    gsSPEndDisplayList(),
-
-    /* 0x2B */
-    gsDPPipeSync(),
-    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
-    gsDPSetCombineMode(G_CC_MODULATEIDECALA_PRIM, G_CC_MODULATEIDECALA_PRIM),
-    gsDPSetOtherMode(G_AD_DISABLE | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_RGBA16 | G_TL_TILE |
-                         G_TD_CLAMP | G_TP_NONE | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
-                     G_AC_THRESHOLD | G_ZS_PIXEL | G_RM_XLU_SURF | G_RM_XLU_SURF2),
-    gsSPLoadGeometryMode(G_SHADE | G_SHADING_SMOOTH),
-    gsSPEndDisplayList(),
-
-    /* 0x2C */
-    gsDPPipeSync(),
-    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
-    gsDPSetCombineMode(G_CC_MODULATEIA_PRIM, G_CC_PASS2),
-    gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
-                         G_TD_CLAMP | G_TP_PERSP | G_CYC_2CYCLE | G_PM_NPRIMITIVE,
-                     G_AC_NONE | G_ZS_PIXEL | G_RM_FOG_SHADE_A | G_RM_ZB_OVL_SURF2),
-    gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_CULL_BACK | G_FOG | G_SHADING_SMOOTH),
-    gsSPEndDisplayList(),
-
-    /* 0x2D */
-    gsDPPipeSync(),
-    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
-    gsDPSetCombineLERP(0, 0, 0, PRIMITIVE, 0, 0, 0, TEXEL0, 0, 0, 0, PRIMITIVE, 0, 0, 0, TEXEL0),
-    gsDPSetOtherMode(G_AD_DISABLE | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
-                         G_TD_CLAMP | G_TP_NONE | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
-                     G_AC_THRESHOLD | G_ZS_PIXEL | G_RM_XLU_SURF | G_RM_XLU_SURF2),
-    gsSPLoadGeometryMode(G_SHADE | G_SHADING_SMOOTH),
-    gsSPEndDisplayList(),
-
-    /* 0x2E */
-    gsDPPipeSync(),
-    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
-    gsDPSetCombineLERP(0, 0, 0, PRIMITIVE, 0, 0, 0, TEXEL0, 0, 0, 0, PRIMITIVE, 0, 0, 0, TEXEL0),
-    gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
-                         G_TD_CLAMP | G_TP_PERSP | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
-                     G_AC_NONE | G_ZS_PIXEL | G_RM_XLU_SURF | G_RM_XLU_SURF2),
-    gsSPLoadGeometryMode(G_SHADE | G_SHADING_SMOOTH),
-    gsSPEndDisplayList(),
-
-    /* 0x2F */
-    gsDPPipeSync(),
-    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
-    gsDPSetCombineMode(G_CC_MODULATEI_PRIM, G_CC_MODULATEI_PRIM),
-    gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
-                         G_TD_CLAMP | G_TP_PERSP | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
-                     G_AC_NONE | G_ZS_PIXEL | G_RM_ZB_XLU_SURF | G_RM_ZB_XLU_SURF2),
-    gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_SHADING_SMOOTH),
-    gsSPEndDisplayList(),
-
-    /* 0x30 */
-    gsDPPipeSync(),
-    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
-    gsDPSetCombineMode(G_CC_PRIMITIVE, G_CC_PRIMITIVE),
-    gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
-                         G_TD_CLAMP | G_TP_PERSP | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
-                     G_AC_NONE | G_ZS_PIXEL | G_RM_AA_XLU_SURF | G_RM_AA_XLU_SURF2),
-    gsSPLoadGeometryMode(G_SHADE | G_CULL_BACK | G_SHADING_SMOOTH),
-    gsSPEndDisplayList(),
-
-    /* 0x31 */
-    gsDPPipeSync(),
-    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
-    gsDPSetCombineLERP(PRIMITIVE, 0, SHADE, 0, 0, 0, 0, PRIMITIVE, PRIMITIVE, 0, SHADE, 0, 0, 0, 0, PRIMITIVE),
-    gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
-                         G_TD_CLAMP | G_TP_PERSP | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
-                     G_AC_NONE | G_ZS_PIXEL | G_RM_AA_XLU_SURF | G_RM_AA_XLU_SURF2),
-    gsSPLoadGeometryMode(G_SHADE | G_CULL_BACK | G_LIGHTING | G_SHADING_SMOOTH),
-    gsSPEndDisplayList(),
-
-    /* 0x32 */
-    gsDPPipeSync(),
-    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
-    gsDPSetCombineMode(G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM),
-    gsDPSetOtherMode(G_AD_DISABLE | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
-                         G_TD_CLAMP | G_TP_NONE | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
-                     G_AC_THRESHOLD | G_ZS_PIXEL | G_RM_OPA_SURF | G_RM_OPA_SURF2),
-    gsSPLoadGeometryMode(G_CULL_BACK),
-    gsSPEndDisplayList(),
-
-    /* 0x33 */
-    gsDPPipeSync(),
-    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
-    gsDPSetCombineMode(G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM),
-    gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
-                         G_TD_CLAMP | G_TP_PERSP | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
-                     G_AC_NONE | G_ZS_PIXEL | G_RM_XLU_SURF | G_RM_XLU_SURF2),
-    gsSPLoadGeometryMode(G_CULL_BACK),
-    gsSPEndDisplayList(),
-
-    /* 0x34 */
-    gsDPPipeSync(),
-    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
-    gsDPSetCombineMode(G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM),
-    gsDPSetOtherMode(G_AD_DISABLE | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
-                         G_TD_CLAMP | G_TP_NONE | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
-                     G_AC_THRESHOLD | G_ZS_PIXEL | G_RM_XLU_SURF | G_RM_XLU_SURF2),
-    gsSPLoadGeometryMode(G_CULL_BACK),
-    gsSPEndDisplayList(),
-
-    /* 0x35 */
-    gsDPPipeSync(),
-    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
-    gsDPSetCombineLERP(TEXEL1, TEXEL0, ENV_ALPHA, TEXEL0, TEXEL1, TEXEL0, ENVIRONMENT, TEXEL0, PRIMITIVE, ENVIRONMENT,
-                       COMBINED, ENVIRONMENT, COMBINED, 0, PRIMITIVE, 0),
-    gsDPSetOtherMode(G_AD_DISABLE | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
-                         G_TD_CLAMP | G_TP_NONE | G_CYC_2CYCLE | G_PM_NPRIMITIVE,
-                     G_AC_THRESHOLD | G_ZS_PIXEL | G_RM_OPA_SURF | G_RM_OPA_SURF2),
-    gsSPLoadGeometryMode(G_CULL_BACK),
-    gsSPEndDisplayList(),
-
-    /* 0x36 */
-    gsDPPipeSync(),
-    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
-    gsDPSetCombineLERP(TEXEL1, TEXEL0, ENV_ALPHA, TEXEL0, TEXEL1, TEXEL0, ENVIRONMENT, TEXEL0, PRIMITIVE, ENVIRONMENT,
-                       COMBINED, ENVIRONMENT, COMBINED, 0, PRIMITIVE, 0),
-    gsDPSetOtherMode(G_AD_DISABLE | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
-                         G_TD_CLAMP | G_TP_NONE | G_CYC_2CYCLE | G_PM_NPRIMITIVE,
-                     G_AC_THRESHOLD | G_ZS_PIXEL | G_RM_PASS | G_RM_XLU_SURF2),
-    gsSPLoadGeometryMode(G_CULL_BACK),
-    gsSPEndDisplayList(),
-
-    /* 0x37 */
-    gsDPPipeSync(),
-    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
-    gsDPSetCombineLERP(TEXEL1, TEXEL0, ENV_ALPHA, TEXEL0, TEXEL1, TEXEL0, ENVIRONMENT, TEXEL0, PRIMITIVE, ENVIRONMENT,
-                       COMBINED, ENVIRONMENT, COMBINED, 0, PRIMITIVE, 0),
-    gsDPSetOtherMode(G_AD_DISABLE | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
-                         G_TD_CLAMP | G_TP_NONE | G_CYC_2CYCLE | G_PM_NPRIMITIVE,
-                     G_AC_THRESHOLD | G_ZS_PIXEL | G_RM_PASS | G_RM_XLU_SURF2),
-    gsSPLoadGeometryMode(G_CULL_BACK),
-    gsSPEndDisplayList(),
-
-    /* 0x38 */
-    gsDPPipeSync(),
-    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
-    gsDPSetCombineMode(G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM),
-    gsDPSetOtherMode(G_AD_DISABLE | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_POINT | G_TT_NONE | G_TL_TILE |
-                         G_TD_CLAMP | G_TP_NONE | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
-                     G_AC_THRESHOLD | G_ZS_PIXEL | G_RM_XLU_SURF | G_RM_XLU_SURF2),
-    gsSPLoadGeometryMode(G_SHADE | G_CULL_BACK | G_SHADING_SMOOTH),
-    gsSPEndDisplayList(),
-
-    /* 0x39 */
-    gsDPPipeSync(),
-    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
-    gsDPSetCombineMode(G_CC_PRIMITIVE, G_CC_PRIMITIVE),
-    gsDPSetOtherMode(G_AD_DISABLE | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
-                         G_TD_CLAMP | G_TP_NONE | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
-                     G_AC_THRESHOLD | G_ZS_PIXEL | G_RM_CLD_SURF | G_RM_CLD_SURF2),
-    gsSPLoadGeometryMode(G_SHADING_SMOOTH),
-    gsSPEndDisplayList(),
-
-    /* 0x3A */
-    gsDPPipeSync(),
-    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
-    gsDPSetCombineLERP(PRIMITIVE, 0, SHADE, 0, PRIMITIVE, 0, SHADE, 0, PRIMITIVE, 0, SHADE, 0, PRIMITIVE, 0, SHADE, 0),
-    gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
-                         G_TD_CLAMP | G_TP_PERSP | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
-                     G_AC_NONE | G_ZS_PIXEL | G_RM_CLD_SURF | G_RM_CLD_SURF2),
-    gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_CULL_BACK | G_SHADING_SMOOTH),
-    gsSPEndDisplayList(),
-
-    /* 0x3B */
-    gsDPPipeSync(),
-    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
-    gsDPSetCombineLERP(TEXEL0, 0, PRIMITIVE, SHADE, 1, 0, TEXEL0, SHADE, ENVIRONMENT, COMBINED, TEXEL0, COMBINED,
-                       ENVIRONMENT, COMBINED, TEXEL0, COMBINED),
-    gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
-                         G_TD_CLAMP | G_TP_PERSP | G_CYC_2CYCLE | G_PM_NPRIMITIVE,
-                     G_AC_NONE | G_ZS_PIXEL | G_RM_PASS | G_RM_AA_OPA_SURF2),
-    gsSPLoadGeometryMode(G_SHADE | G_CULL_BACK | G_LIGHTING | G_TEXTURE_GEN | G_TEXTURE_GEN_LINEAR | G_SHADING_SMOOTH),
-    gsSPEndDisplayList(),
-
-    /* 0x3C */
-    gsDPPipeSync(),
-    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
-    gsDPSetCombineLERP(PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, PRIMITIVE, 0, TEXEL0, 0, PRIMITIVE, ENVIRONMENT,
-                       TEXEL0, ENVIRONMENT, PRIMITIVE, 0, TEXEL0, 0),
-    gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
-                         G_TD_CLAMP | G_TP_PERSP | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
-                     G_AC_NONE | G_ZS_PIXEL | G_RM_ZB_CLD_SURF | G_RM_ZB_CLD_SURF2),
-    gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_CULL_BACK | G_SHADING_SMOOTH),
-    gsSPEndDisplayList(),
-
-    /* 0x3D */
-    gsDPPipeSync(),
-    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
-    gsDPSetCombineLERP(PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, PRIMITIVE, 0, TEXEL0, 0, PRIMITIVE, ENVIRONMENT,
-                       TEXEL0, ENVIRONMENT, PRIMITIVE, 0, TEXEL0, 0),
-    gsDPSetOtherMode(G_AD_NOISE | G_CD_NOISE | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
-                         G_TD_CLAMP | G_TP_PERSP | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
-                     G_AC_NONE | G_ZS_PIXEL | G_RM_ZB_CLD_SURF | G_RM_ZB_CLD_SURF2),
-    gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_CULL_BACK | G_SHADING_SMOOTH),
-    gsSPEndDisplayList(),
-
-    /* 0x3E */
-    gsDPPipeSync(),
-    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
-    gsDPSetCombineMode(G_CC_MODULATEIDECALA, G_CC_MODULATEIA_PRIM2),
-    gsDPSetOtherMode(G_AD_PATTERN | G_CD_DISABLE | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
-                         G_TD_CLAMP | G_TP_PERSP | G_CYC_2CYCLE | G_PM_NPRIMITIVE,
-                     G_AC_NONE | G_ZS_PIXEL | G_RM_FOG_SHADE_A | G_RM_AA_ZB_OPA_SURF2),
-    gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_CULL_BACK | G_FOG | G_LIGHTING | G_SHADING_SMOOTH),
-    gsSPEndDisplayList(),
-
-    /* 0x3F */
-    gsDPPipeSync(),
-    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
-    gsDPSetCombineMode(G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM),
-    gsDPSetOtherMode(G_AD_DISABLE | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
-                         G_TD_CLAMP | G_TP_NONE | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
-                     G_AC_THRESHOLD | G_ZS_PIXEL | Z_UPD | IM_RD | CVG_DST_SAVE | ZMODE_OPA | FORCE_BL |
-                         GBL_c1(G_BL_CLR_IN, G_BL_A_IN, G_BL_CLR_MEM, G_BL_1MA) |
-                         GBL_c2(G_BL_CLR_IN, G_BL_A_IN, G_BL_CLR_MEM, G_BL_1MA)),
-    gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_SHADING_SMOOTH),
-    gsSPEndDisplayList(),
-
-    /* 0x40 */
-    gsDPPipeSync(),
-    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
-    gsDPSetCombineMode(G_CC_DECALRGBA, G_CC_PASS2),
-    gsDPSetOtherMode(G_AD_DISABLE | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
-                         G_TD_CLAMP | G_TP_NONE | G_CYC_2CYCLE | G_PM_NPRIMITIVE,
-                     G_AC_THRESHOLD | G_ZS_PIXEL | G_RM_PASS | G_RM_XLU_SURF2),
-    gsSPLoadGeometryMode(G_SHADE | G_SHADING_SMOOTH),
-    gsSPEndDisplayList(),
-
-    /* 0x41 */
-    gsDPPipeSync(),
-    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
-    gsDPSetCombineMode(G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM),
-    gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
-                         G_TD_CLAMP | G_TP_PERSP | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
-                     G_AC_THRESHOLD | G_ZS_PIXEL | G_RM_CLD_SURF | G_RM_CLD_SURF2),
-    gsSPLoadGeometryMode(G_SHADE | G_SHADING_SMOOTH),
-    gsSPEndDisplayList(),
-
-    /* 0x42 */
-    gsDPPipeSync(),
-    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
-    gsDPSetCombineMode(G_CC_DECALRGBA, G_CC_DECALRGBA),
-    gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
-                         G_TD_CLAMP | G_TP_PERSP | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
-                     G_AC_THRESHOLD | G_ZS_PIXEL | Z_CMP | Z_UPD | CVG_DST_FULL | ZMODE_OPA | CVG_X_ALPHA |
-                         ALPHA_CVG_SEL | G_RM_PASS | GBL_c2(G_BL_CLR_IN, G_BL_0, G_BL_CLR_IN, G_BL_1)),
-    gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_SHADING_SMOOTH),
-    gsSPEndDisplayList(),
-
-    /* 0x43 */
-    gsDPPipeSync(),
-    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
-    gsDPSetCombineMode(G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM),
-    gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
-                         G_TD_CLAMP | G_TP_PERSP | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
-                     G_AC_THRESHOLD | G_ZS_PIXEL | Z_CMP | Z_UPD | CVG_DST_FULL | ZMODE_OPA | CVG_X_ALPHA |
-                         ALPHA_CVG_SEL | G_RM_PASS | GBL_c2(G_BL_CLR_IN, G_BL_0, G_BL_CLR_IN, G_BL_1)),
-    gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_SHADING_SMOOTH),
-    gsSPEndDisplayList(),
-
-    /* 0x44 */
-    gsDPPipeSync(),
-    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
-    gsDPSetCombineMode(G_CC_DECALRGBA, G_CC_DECALRGBA),
-    gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
-                         G_TD_CLAMP | G_TP_PERSP | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
-                     G_AC_THRESHOLD | G_ZS_PIXEL | Z_CMP | Z_UPD | IM_RD | CVG_DST_FULL | ZMODE_OPA | CVG_X_ALPHA |
-                         ALPHA_CVG_SEL | GBL_c1(G_BL_CLR_IN, G_BL_A_IN, G_BL_CLR_MEM, G_BL_A_MEM) |
-                         GBL_c2(G_BL_CLR_IN, G_BL_A_IN, G_BL_CLR_MEM, G_BL_A_MEM)),
-    gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_SHADING_SMOOTH),
-    gsSPEndDisplayList(),
-
-    /* 0x45 */
-    gsDPPipeSync(),
-    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
-    gsDPSetCombineMode(G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM),
-    gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
-                         G_TD_CLAMP | G_TP_PERSP | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
-                     G_AC_THRESHOLD | G_ZS_PIXEL | Z_CMP | Z_UPD | IM_RD | CVG_DST_FULL | ZMODE_OPA | CVG_X_ALPHA |
-                         ALPHA_CVG_SEL | GBL_c1(G_BL_CLR_IN, G_BL_A_IN, G_BL_CLR_MEM, G_BL_A_MEM) |
-                         GBL_c2(G_BL_CLR_IN, G_BL_A_IN, G_BL_CLR_MEM, G_BL_A_MEM)),
-    gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_SHADING_SMOOTH),
-    gsSPEndDisplayList(),
-
-    /* 0x46 */
-    gsDPPipeSync(),
-    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
-    gsDPSetCombineMode(G_CC_DECALRGBA, G_CC_DECALRGBA),
-    gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
-                         G_TD_CLAMP | G_TP_PERSP | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
-                     G_AC_THRESHOLD | G_ZS_PIXEL | Z_CMP | Z_UPD | CVG_DST_FULL | ZMODE_OPA | CVG_X_ALPHA |
-                         ALPHA_CVG_SEL | G_RM_PASS | GBL_c2(G_BL_CLR_IN, G_BL_0, G_BL_CLR_IN, G_BL_1)),
-    gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_FOG | G_SHADING_SMOOTH),
-    gsSPEndDisplayList(),
-
-    /* 0x47 */
-    gsDPPipeSync(),
-    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
-    gsDPSetCombineMode(G_CC_MODULATEIDECALA, G_CC_MODULATEIA_PRIM2),
-    gsDPSetOtherMode(G_AD_PATTERN | G_CD_BAYER | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
-                         G_TD_CLAMP | G_TP_PERSP | G_CYC_2CYCLE | G_PM_NPRIMITIVE,
-                     G_AC_NONE | G_ZS_PIXEL | G_RM_FOG_SHADE_A | G_RM_AA_ZB_XLU_SURF2),
-    gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_CULL_BACK | G_FOG | G_LIGHTING | G_SHADING_SMOOTH),
-    gsSPEndDisplayList(),
-
-    /* 0x48 */
-    gsDPPipeSync(),
-    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
-    gsDPSetCombineMode(G_CC_MODULATEIDECALA, G_CC_MODULATEIA_PRIM2),
-    gsDPSetOtherMode(G_AD_PATTERN | G_CD_BAYER | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
-                         G_TD_CLAMP | G_TP_PERSP | G_CYC_2CYCLE | G_PM_NPRIMITIVE,
-                     G_AC_NONE | G_ZS_PIXEL | G_RM_FOG_SHADE_A | G_RM_ZB_CLD_SURF2),
-    gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_FOG | G_LIGHTING | G_SHADING_SMOOTH),
-    gsSPEndDisplayList(),
+Gfx gSetupDLs[SETUPDL_MAX][6] = {
+    {
+        /* SETUPDL_0 */
+        gsDPPipeSync(),
+        gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
+        gsDPSetCombineLERP(PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, PRIMITIVE, 0, TEXEL0, 0, 0, 0, 0, COMBINED, 0,
+                           0, 0, COMBINED),
+        gsDPSetOtherMode(G_AD_NOISE | G_CD_NOISE | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
+                             G_TD_CLAMP | G_TP_PERSP | G_CYC_2CYCLE | G_PM_NPRIMITIVE,
+                         G_AC_NONE | G_ZS_PIXEL | G_RM_FOG_SHADE_A | G_RM_ZB_CLD_SURF2),
+        gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_CULL_BACK | G_FOG | G_SHADING_SMOOTH),
+        gsSPEndDisplayList(),
+    },
+    {
+        /* SETUPDL_1 */
+        gsDPPipeSync(),
+        gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
+        gsDPSetCombineMode(G_CC_SHADE, G_CC_PASS2),
+        gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
+                             G_TD_CLAMP | G_TP_PERSP | G_CYC_2CYCLE | G_PM_NPRIMITIVE,
+                         G_AC_NONE | G_ZS_PIXEL | G_RM_FOG_SHADE_A | G_RM_AA_OPA_SURF2),
+        gsSPLoadGeometryMode(G_SHADE | G_CULL_BACK | G_FOG | G_LIGHTING | G_SHADING_SMOOTH),
+        gsSPEndDisplayList(),
+    },
+    {
+        /* SETUPDL_2 */
+        gsDPPipeSync(),
+        gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
+        gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),
+        gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
+                             G_TD_CLAMP | G_TP_PERSP | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
+                         G_AC_NONE | G_ZS_PIXEL | G_RM_AA_ZB_OPA_SURF | G_RM_AA_ZB_OPA_SURF2),
+        gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_CULL_BACK | G_LIGHTING | G_SHADING_SMOOTH),
+        gsSPEndDisplayList(),
+    },
+    {
+        /* SETUPDL_3 */
+        gsDPPipeSync(),
+        gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
+        gsDPSetCombineMode(G_CC_SHADE, G_CC_PASS2),
+        gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
+                             G_TD_CLAMP | G_TP_PERSP | G_CYC_2CYCLE | G_PM_NPRIMITIVE,
+                         G_AC_NONE | G_ZS_PIXEL | G_RM_FOG_SHADE_A | G_RM_AA_ZB_OPA_SURF2),
+        gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_CULL_BACK | G_FOG | G_LIGHTING | G_SHADING_SMOOTH),
+        gsSPEndDisplayList(),
+    },
+    {
+        /* SETUPDL_4 */
+        gsDPPipeSync(),
+        gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
+        gsDPSetCombineLERP(PRIMITIVE, 0, SHADE, 0, 0, 0, 0, PRIMITIVE, PRIMITIVE, 0, SHADE, 0, 0, 0, 0, PRIMITIVE),
+        gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
+                             G_TD_CLAMP | G_TP_PERSP | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
+                         G_AC_NONE | G_ZS_PIXEL | G_RM_AA_ZB_XLU_SURF | G_RM_AA_ZB_XLU_SURF2),
+        gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_CULL_BACK | G_LIGHTING | G_SHADING_SMOOTH),
+        gsSPEndDisplayList(),
+    },
+    {
+        /* SETUPDL_5 */
+        gsDPPipeSync(),
+        gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
+        gsDPSetCombineMode(G_CC_MODULATEI_PRIM, G_CC_MODULATEI_PRIM),
+        gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
+                             G_TD_CLAMP | G_TP_PERSP | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
+                         G_AC_NONE | G_ZS_PIXEL | G_RM_AA_ZB_XLU_SURF | G_RM_AA_ZB_XLU_SURF2),
+        gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_CULL_BACK | G_LIGHTING | G_SHADING_SMOOTH),
+        gsSPEndDisplayList(),
+    },
+    {
+        /* SETUPDL_6 */
+        gsDPPipeSync(),
+        gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
+        gsDPSetCombineMode(G_CC_DECALRGBA, G_CC_PASS2),
+        gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
+                             G_TD_CLAMP | G_TP_PERSP | G_CYC_2CYCLE | G_PM_NPRIMITIVE,
+                         G_AC_NONE | G_ZS_PIXEL | G_RM_FOG_SHADE_A | G_RM_AA_TEX_EDGE2),
+        gsSPLoadGeometryMode(G_SHADE | G_FOG | G_LIGHTING | G_SHADING_SMOOTH),
+        gsSPEndDisplayList(),
+    },
+    {
+        /* SETUPDL_7 */
+        gsDPPipeSync(),
+        gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
+        gsDPSetCombineMode(G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM),
+        gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
+                             G_TD_CLAMP | G_TP_PERSP | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
+                         G_AC_NONE | G_ZS_PIXEL | G_RM_AA_XLU_SURF | G_RM_AA_XLU_SURF2),
+        gsSPLoadGeometryMode(G_SHADE | G_LIGHTING | G_SHADING_SMOOTH),
+        gsSPEndDisplayList(),
+    },
+    {
+        /* SETUPDL_8 */
+        gsDPPipeSync(),
+        gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
+        gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),
+        gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
+                             G_TD_CLAMP | G_TP_PERSP | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
+                         G_AC_NONE | G_ZS_PIXEL | G_RM_AA_OPA_SURF | G_RM_AA_OPA_SURF2),
+        gsSPLoadGeometryMode(G_SHADE | G_CULL_BACK | G_LIGHTING | G_SHADING_SMOOTH),
+        gsSPEndDisplayList(),
+    },
+    {
+        /* SETUPDL_9 */
+        gsDPPipeSync(),
+        gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
+        gsDPSetCombineMode(G_CC_MODULATEIA, G_CC_MODULATEIA2),
+        gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
+                             G_TD_CLAMP | G_TP_PERSP | G_CYC_2CYCLE | G_PM_NPRIMITIVE,
+                         G_AC_NONE | G_ZS_PIXEL | G_RM_FOG_SHADE_A | G_RM_AA_XLU_SURF2),
+        gsSPLoadGeometryMode(G_SHADE | G_FOG | G_LIGHTING | G_SHADING_SMOOTH),
+        gsSPEndDisplayList(),
+    },
+    {
+        /* SETUPDL_10 */
+        gsDPPipeSync(),
+        gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
+        gsDPSetCombineMode(G_CC_MODULATEIDECALA, G_CC_MODULATEIDECALA),
+        gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
+                             G_TD_CLAMP | G_TP_PERSP | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
+                         G_AC_NONE | G_ZS_PIXEL | G_RM_AA_OPA_SURF | G_RM_AA_OPA_SURF2),
+        gsSPLoadGeometryMode(G_SHADE | G_CULL_BACK | G_LIGHTING | G_SHADING_SMOOTH),
+        gsSPEndDisplayList(),
+    },
+    {
+        /* SETUPDL_11 */
+        gsDPPipeSync(),
+        gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
+        gsDPSetCombineMode(G_CC_MODULATEIDECALA, G_CC_MODULATEIA_PRIM2),
+        gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
+                             G_TD_CLAMP | G_TP_PERSP | G_CYC_2CYCLE | G_PM_NPRIMITIVE,
+                         G_AC_NONE | G_ZS_PIXEL | G_RM_FOG_SHADE_A | G_RM_AA_OPA_SURF2),
+        gsSPLoadGeometryMode(G_SHADE | G_CULL_BACK | G_FOG | G_LIGHTING | G_SHADING_SMOOTH),
+        gsSPEndDisplayList(),
+    },
+    {
+        /* SETUPDL_12 */
+        gsDPPipeSync(),
+        gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
+        gsDPSetCombineMode(G_CC_MODULATEI_PRIM, G_CC_MODULATEI_PRIM),
+        gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
+                             G_TD_CLAMP | G_TP_PERSP | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
+                         G_AC_NONE | G_ZS_PIXEL | G_RM_AA_OPA_SURF | G_RM_AA_OPA_SURF2),
+        gsSPLoadGeometryMode(G_SHADE | G_CULL_BACK | G_LIGHTING | G_SHADING_SMOOTH),
+        gsSPEndDisplayList(),
+    },
+    {
+        /* SETUPDL_13 */
+        gsDPPipeSync(),
+        gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
+        gsDPSetCombineMode(G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM),
+        gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
+                             G_TD_CLAMP | G_TP_PERSP | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
+                         G_AC_NONE | G_ZS_PIXEL | G_RM_XLU_SURF | G_RM_XLU_SURF2),
+        gsSPLoadGeometryMode(G_SHADE | G_CULL_BACK | G_LIGHTING | G_SHADING_SMOOTH),
+        gsSPEndDisplayList(),
+    },
+    {
+        /* SETUPDL_14 */
+        gsDPPipeSync(),
+        gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
+        gsDPSetCombineMode(G_CC_DECALRGBA, G_CC_DECALRGBA),
+        gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
+                             G_TD_CLAMP | G_TP_PERSP | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
+                         G_AC_NONE | G_ZS_PIXEL | G_RM_AA_ZB_TEX_EDGE | G_RM_AA_ZB_TEX_EDGE2),
+        gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_LIGHTING | G_SHADING_SMOOTH),
+        gsSPEndDisplayList(),
+    },
+    {
+        /* SETUPDL_15 */
+        gsDPPipeSync(),
+        gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
+        gsDPSetCombineMode(G_CC_DECALRGBA, G_CC_PASS2),
+        gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
+                             G_TD_CLAMP | G_TP_PERSP | G_CYC_2CYCLE | G_PM_NPRIMITIVE,
+                         G_AC_NONE | G_ZS_PIXEL | G_RM_FOG_SHADE_A | G_RM_AA_ZB_TEX_EDGE2),
+        gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_FOG | G_LIGHTING | G_SHADING_SMOOTH),
+        gsSPEndDisplayList(),
+    },
+    {
+        /* SETUPDL_16 */
+        gsDPPipeSync(),
+        gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
+        gsDPSetCombineMode(G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM2),
+        gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
+                             G_TD_CLAMP | G_TP_PERSP | G_CYC_2CYCLE | G_PM_NPRIMITIVE,
+                         G_AC_NONE | G_ZS_PIXEL | G_RM_FOG_SHADE_A | G_RM_AA_ZB_XLU_SURF2),
+        gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_FOG | G_LIGHTING | G_SHADING_SMOOTH),
+        gsSPEndDisplayList(),
+    },
+    {
+        /* SETUPDL_17 */
+        gsDPPipeSync(),
+        gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
+        gsDPSetCombineMode(G_CC_MODULATEIDECALA, G_CC_MODULATEIDECALA),
+        gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
+                             G_TD_CLAMP | G_TP_PERSP | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
+                         G_AC_NONE | G_ZS_PIXEL | G_RM_AA_ZB_TEX_EDGE | G_RM_AA_ZB_TEX_EDGE2),
+        gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_LIGHTING | G_SHADING_SMOOTH),
+        gsSPEndDisplayList(),
+    },
+    {
+        /* SETUPDL_18 */
+        gsDPPipeSync(),
+        gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
+        gsDPSetCombineMode(G_CC_MODULATEIDECALA, G_CC_PASS2),
+        gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
+                             G_TD_CLAMP | G_TP_PERSP | G_CYC_2CYCLE | G_PM_NPRIMITIVE,
+                         G_AC_NONE | G_ZS_PIXEL | G_RM_FOG_SHADE_A | G_RM_AA_ZB_TEX_EDGE2),
+        gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_CULL_BACK | G_FOG | G_LIGHTING | G_SHADING_SMOOTH),
+        gsSPEndDisplayList(),
+    },
+    {
+        /* SETUPDL_19 */
+        gsDPPipeSync(),
+        gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
+        gsDPSetCombineMode(G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM),
+        gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
+                             G_TD_CLAMP | G_TP_PERSP | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
+                         G_AC_NONE | G_ZS_PIXEL | AA_EN | Z_CMP | IM_RD | CVG_DST_FULL | ZMODE_OPA | CVG_X_ALPHA |
+                             FORCE_BL | GBL_c1(G_BL_CLR_IN, G_BL_A_IN, G_BL_CLR_MEM, G_BL_1MA) |
+                             GBL_c2(G_BL_CLR_IN, G_BL_A_IN, G_BL_CLR_MEM, G_BL_1MA)),
+        gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_LIGHTING | G_SHADING_SMOOTH),
+        gsSPEndDisplayList(),
+    },
+    {
+        /* SETUPDL_20 */
+        gsDPPipeSync(),
+        gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
+        gsDPSetCombineMode(G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM),
+        gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
+                             G_TD_CLAMP | G_TP_PERSP | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
+                         G_AC_THRESHOLD | G_ZS_PIXEL | G_RM_ZB_CLD_SURF | G_RM_ZB_CLD_SURF2),
+        gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_SHADING_SMOOTH),
+        gsSPEndDisplayList(),
+    },
+    {
+        /* SETUPDL_21 */
+        gsDPPipeSync(),
+        gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
+        gsDPSetCombineMode(G_CC_MODULATEIA, G_CC_MODULATEIA),
+        gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
+                             G_TD_CLAMP | G_TP_PERSP | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
+                         G_AC_NONE | G_ZS_PIXEL | G_RM_AA_ZB_XLU_SURF | G_RM_AA_ZB_XLU_SURF2),
+        gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_LIGHTING | G_SHADING_SMOOTH),
+        gsSPEndDisplayList(),
+    },
+    {
+        /* SETUPDL_22 */
+        gsDPPipeSync(),
+        gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
+        gsDPSetCombineMode(G_CC_MODULATEIA, G_CC_MODULATEIA2),
+        gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
+                             G_TD_CLAMP | G_TP_PERSP | G_CYC_2CYCLE | G_PM_NPRIMITIVE,
+                         G_AC_NONE | G_ZS_PIXEL | G_RM_FOG_SHADE_A | G_RM_AA_ZB_XLU_SURF2),
+        gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_LIGHTING | G_SHADING_SMOOTH),
+        gsSPEndDisplayList(),
+    },
+    {
+        /* SETUPDL_23 */
+        gsDPPipeSync(),
+        gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
+        gsDPSetCombineMode(G_CC_MODULATEIDECALA, G_CC_MODULATEIDECALA),
+        gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
+                             G_TD_CLAMP | G_TP_PERSP | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
+                         G_AC_NONE | G_ZS_PIXEL | G_RM_AA_ZB_OPA_SURF | G_RM_AA_ZB_OPA_SURF2),
+        gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_CULL_BACK | G_LIGHTING | G_SHADING_SMOOTH),
+        gsSPEndDisplayList(),
+    },
+    {
+        /* SETUPDL_24 */
+        gsDPPipeSync(),
+        gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
+        gsDPSetCombineMode(G_CC_MODULATEIDECALA, G_CC_MODULATEIA2),
+        gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
+                             G_TD_CLAMP | G_TP_PERSP | G_CYC_2CYCLE | G_PM_NPRIMITIVE,
+                         G_AC_NONE | G_ZS_PIXEL | G_RM_FOG_SHADE_A | G_RM_AA_ZB_OPA_SURF2),
+        gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_CULL_BACK | G_FOG | G_LIGHTING | G_SHADING_SMOOTH),
+        gsSPEndDisplayList(),
+    },
+    {
+        /* SETUPDL_25 */
+        gsDPPipeSync(),
+        gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
+        gsDPSetCombineMode(G_CC_MODULATEIDECALA, G_CC_MODULATEIA_PRIM2),
+        gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
+                             G_TD_CLAMP | G_TP_PERSP | G_CYC_2CYCLE | G_PM_NPRIMITIVE,
+                         G_AC_NONE | G_ZS_PIXEL | G_RM_FOG_SHADE_A | G_RM_AA_ZB_OPA_SURF2),
+        gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_CULL_BACK | G_FOG | G_LIGHTING | G_SHADING_SMOOTH),
+        gsSPEndDisplayList(),
+    },
+    {
+        /* SETUPDL_26 */
+        gsDPPipeSync(),
+        gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
+        gsDPSetCombineMode(G_CC_MODULATEIDECALA, G_CC_MODULATEIA_PRIM2),
+        gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
+                             G_TD_CLAMP | G_TP_PERSP | G_CYC_2CYCLE | G_PM_NPRIMITIVE,
+                         G_AC_NONE | G_ZS_PIXEL | G_RM_PASS | G_RM_AA_ZB_OPA_SURF2),
+        gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_CULL_BACK | G_LIGHTING | G_SHADING_SMOOTH),
+        gsSPEndDisplayList(),
+    },
+    {
+        /* SETUPDL_27 */
+        gsDPPipeSync(),
+        gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
+        gsDPSetCombineMode(G_CC_MODULATEI_PRIM, G_CC_MODULATEI_PRIM),
+        gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
+                             G_TD_CLAMP | G_TP_PERSP | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
+                         G_AC_NONE | G_ZS_PIXEL | G_RM_AA_ZB_XLU_SURF | G_RM_AA_ZB_XLU_SURF2),
+        gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_CULL_BACK | G_SHADING_SMOOTH),
+        gsSPEndDisplayList(),
+    },
+    {
+        /* SETUPDL_28 */
+        gsDPPipeSync(),
+        gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
+        gsDPSetCombineMode(G_CC_MODULATEIDECALA_PRIM, G_CC_MODULATEIDECALA_PRIM),
+        gsDPSetOtherMode(G_AD_DISABLE | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_RGBA16 | G_TL_TILE |
+                             G_TD_CLAMP | G_TP_NONE | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
+                         G_AC_THRESHOLD | G_ZS_PIXEL | G_RM_AA_TEX_EDGE | G_RM_AA_TEX_EDGE2),
+        gsSPLoadGeometryMode(G_SHADE | G_SHADING_SMOOTH),
+        gsSPEndDisplayList(),
+    },
+    {
+        /* SETUPDL_29 */
+        gsDPPipeSync(),
+        gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
+        gsDPSetCombineLERP(TEXEL0, 0, SHADE, 0, TEXEL0, 0, SHADE, 0, NOISE, 0, COMBINED, 0, 0, 0, 0, COMBINED),
+        gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
+                             G_TD_CLAMP | G_TP_PERSP | G_CYC_2CYCLE | G_PM_NPRIMITIVE,
+                         G_AC_NONE | G_ZS_PIXEL | G_RM_PASS | G_RM_AA_ZB_OPA_SURF2),
+        gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_CULL_BACK | G_LIGHTING | G_SHADING_SMOOTH),
+        gsSPEndDisplayList(),
+    },
+    {
+        /* SETUPDL_30 */
+        gsDPPipeSync(),
+        gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
+        gsDPSetCombineMode(G_CC_PRIMITIVE, G_CC_PRIMITIVE),
+        gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
+                             G_TD_CLAMP | G_TP_PERSP | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
+                         G_AC_NONE | G_ZS_PIXEL | G_RM_AA_ZB_XLU_LINE | G_RM_AA_ZB_XLU_LINE2),
+        gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_SHADING_SMOOTH),
+        gsSPEndDisplayList(),
+    },
+    {
+        /* SETUPDL_31 */
+        gsDPPipeSync(),
+        gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
+        gsDPSetCombineMode(G_CC_HILITERGBA, G_CC_HILITERGBA),
+        gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
+                             G_TD_CLAMP | G_TP_PERSP | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
+                         G_AC_NONE | G_ZS_PIXEL | G_RM_AA_ZB_OPA_SURF | G_RM_AA_ZB_OPA_SURF2),
+        gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_CULL_BACK | G_LIGHTING | G_TEXTURE_GEN | G_SHADING_SMOOTH),
+        gsSPEndDisplayList(),
+    },
+    {
+        /* SETUPDL_32 */
+        gsDPPipeSync(),
+        gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
+        gsDPSetCombineMode(G_CC_HILITERGBA, G_CC_HILITERGBA),
+        gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
+                             G_TD_CLAMP | G_TP_PERSP | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
+                         G_AC_NONE | G_ZS_PIXEL | G_RM_AA_ZB_OPA_SURF | G_RM_AA_ZB_OPA_SURF2),
+        gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_CULL_BACK | G_LIGHTING | G_TEXTURE_GEN | G_TEXTURE_GEN_LINEAR |
+                             G_SHADING_SMOOTH),
+        gsSPEndDisplayList(),
+    },
+    {
+        /* SETUPDL_33 */
+        gsDPPipeSync(),
+        gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
+        gsDPSetCombineLERP(TEXEL0, 0, PRIMITIVE, SHADE, 1, 0, TEXEL0, SHADE, ENVIRONMENT, COMBINED, TEXEL0, COMBINED,
+                           ENVIRONMENT, COMBINED, TEXEL0, COMBINED),
+        gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
+                             G_TD_CLAMP | G_TP_PERSP | G_CYC_2CYCLE | G_PM_NPRIMITIVE,
+                         G_AC_NONE | G_ZS_PIXEL | G_RM_PASS | G_RM_AA_ZB_OPA_SURF2),
+        gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_CULL_BACK | G_LIGHTING | G_TEXTURE_GEN | G_TEXTURE_GEN_LINEAR |
+                             G_SHADING_SMOOTH),
+        gsSPEndDisplayList(),
+    },
+    {
+        /* SETUPDL_34 */
+        gsDPPipeSync(),
+        gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
+        gsDPSetCombineMode(G_CC_DECALRGB, G_CC_DECALRGB),
+        gsDPSetOtherMode(G_AD_DISABLE | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
+                             G_TD_CLAMP | G_TP_NONE | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
+                         G_AC_THRESHOLD | G_ZS_PIXEL | G_RM_OPA_SURF | G_RM_OPA_SURF2),
+        gsSPLoadGeometryMode(G_SHADE | G_SHADING_SMOOTH),
+        gsSPEndDisplayList(),
+    },
+    {
+        /* SETUPDL_35 */
+        gsDPPipeSync(),
+        gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
+        gsDPSetCombineMode(G_CC_DECALRGBA, G_CC_DECALRGBA),
+        gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
+                             G_TD_CLAMP | G_TP_PERSP | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
+                         G_AC_NONE | G_ZS_PIXEL | G_RM_AA_ZB_XLU_DECAL | G_RM_AA_ZB_XLU_DECAL2),
+        gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_CULL_BACK | G_SHADING_SMOOTH),
+        gsSPEndDisplayList(),
+    },
+    {
+        /* SETUPDL_36 */
+        gsDPPipeSync(),
+        gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
+        gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),
+        gsDPSetOtherMode(G_AD_DISABLE | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
+                             G_TD_CLAMP | G_TP_NONE | G_CYC_FILL | G_PM_NPRIMITIVE,
+                         G_AC_THRESHOLD | G_ZS_PIXEL | G_RM_NOOP | G_RM_NOOP2),
+        gsSPLoadGeometryMode(G_SHADE | G_SHADING_SMOOTH),
+        gsSPEndDisplayList(),
+    },
+    {
+        /* SETUPDL_37 */
+        gsDPPipeSync(),
+        gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
+        gsDPSetCombineLERP(PRIMITIVE, 0, SHADE, 0, 0, 0, 0, PRIMITIVE, 0, 0, 0, COMBINED, 0, 0, 0, COMBINED),
+        gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
+                             G_TD_CLAMP | G_TP_PERSP | G_CYC_2CYCLE | G_PM_NPRIMITIVE,
+                         G_AC_NONE | G_ZS_PIXEL | G_RM_FOG_SHADE_A | G_RM_AA_ZB_OPA_SURF2),
+        gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_CULL_BACK | G_FOG | G_LIGHTING | G_SHADING_SMOOTH),
+        gsSPEndDisplayList(),
+    },
+    {
+        /* SETUPDL_38 */
+        gsDPPipeSync(),
+        gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
+        gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),
+        gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
+                             G_TD_CLAMP | G_TP_PERSP | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
+                         G_AC_NONE | G_ZS_PIXEL | G_RM_AA_ZB_XLU_SURF | G_RM_AA_ZB_XLU_SURF2),
+        gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_SHADING_SMOOTH),
+        gsSPEndDisplayList(),
+    },
+    {
+        /* SETUPDL_39 */
+        gsDPPipeSync(),
+        gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
+        gsDPSetCombineMode(G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM),
+        gsDPSetOtherMode(G_AD_DISABLE | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
+                             G_TD_CLAMP | G_TP_NONE | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
+                         G_AC_THRESHOLD | G_ZS_PIXEL | G_RM_XLU_SURF | G_RM_XLU_SURF2),
+        gsSPLoadGeometryMode(G_SHADING_SMOOTH),
+        gsSPEndDisplayList(),
+    },
+    {
+        /* SETUPDL_40 */
+        gsDPPipeSync(),
+        gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
+        gsDPSetCombineLERP(TEXEL1, TEXEL0, PRIMITIVE_ALPHA, TEXEL0, TEXEL1, TEXEL0, PRIMITIVE, TEXEL0, 0, 0, 0,
+                           COMBINED, 0, 0, 0, COMBINED),
+        gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
+                             G_TD_CLAMP | G_TP_PERSP | G_CYC_2CYCLE | G_PM_NPRIMITIVE,
+                         G_AC_NONE | G_ZS_PIXEL | G_RM_OPA_SURF | G_RM_OPA_SURF2),
+        gsSPLoadGeometryMode(G_SHADE | G_CULL_FRONT | G_SHADING_SMOOTH),
+        gsSPEndDisplayList(),
+    },
+    {
+        /* SETUPDL_41 */
+        gsDPPipeSync(),
+        gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
+        gsDPSetCombineMode(G_CC_MODULATEIA, G_CC_MODULATEIA),
+        gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
+                             G_TD_CLAMP | G_TP_PERSP | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
+                         G_AC_NONE | G_ZS_PIXEL | G_RM_ZB_XLU_SURF | G_RM_ZB_XLU_SURF2),
+        gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_SHADING_SMOOTH),
+        gsSPEndDisplayList(),
+    },
+    {
+        /* SETUPDL_42 */
+        gsDPPipeSync(),
+        gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
+        gsDPSetCombineMode(G_CC_MODULATEIDECALA, G_CC_MODULATEIDECALA),
+        gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
+                             G_TD_CLAMP | G_TP_PERSP | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
+                         G_AC_NONE | G_ZS_PIXEL | G_RM_XLU_SURF | G_RM_XLU_SURF2),
+        gsSPLoadGeometryMode(G_SHADE | G_CULL_BACK | G_SHADING_SMOOTH),
+        gsSPEndDisplayList(),
+    },
+    {
+        /* SETUPDL_43 */
+        gsDPPipeSync(),
+        gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
+        gsDPSetCombineMode(G_CC_MODULATEIDECALA_PRIM, G_CC_MODULATEIDECALA_PRIM),
+        gsDPSetOtherMode(G_AD_DISABLE | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_RGBA16 | G_TL_TILE |
+                             G_TD_CLAMP | G_TP_NONE | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
+                         G_AC_THRESHOLD | G_ZS_PIXEL | G_RM_XLU_SURF | G_RM_XLU_SURF2),
+        gsSPLoadGeometryMode(G_SHADE | G_SHADING_SMOOTH),
+        gsSPEndDisplayList(),
+    },
+    {
+        /* SETUPDL_44 */
+        gsDPPipeSync(),
+        gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
+        gsDPSetCombineMode(G_CC_MODULATEIA_PRIM, G_CC_PASS2),
+        gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
+                             G_TD_CLAMP | G_TP_PERSP | G_CYC_2CYCLE | G_PM_NPRIMITIVE,
+                         G_AC_NONE | G_ZS_PIXEL | G_RM_FOG_SHADE_A | G_RM_ZB_OVL_SURF2),
+        gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_CULL_BACK | G_FOG | G_SHADING_SMOOTH),
+        gsSPEndDisplayList(),
+    },
+    {
+        /* SETUPDL_45 */
+        gsDPPipeSync(),
+        gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
+        gsDPSetCombineLERP(0, 0, 0, PRIMITIVE, 0, 0, 0, TEXEL0, 0, 0, 0, PRIMITIVE, 0, 0, 0, TEXEL0),
+        gsDPSetOtherMode(G_AD_DISABLE | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
+                             G_TD_CLAMP | G_TP_NONE | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
+                         G_AC_THRESHOLD | G_ZS_PIXEL | G_RM_XLU_SURF | G_RM_XLU_SURF2),
+        gsSPLoadGeometryMode(G_SHADE | G_SHADING_SMOOTH),
+        gsSPEndDisplayList(),
+    },
+    {
+        /* SETUPDL_46 */
+        gsDPPipeSync(),
+        gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
+        gsDPSetCombineLERP(0, 0, 0, PRIMITIVE, 0, 0, 0, TEXEL0, 0, 0, 0, PRIMITIVE, 0, 0, 0, TEXEL0),
+        gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
+                             G_TD_CLAMP | G_TP_PERSP | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
+                         G_AC_NONE | G_ZS_PIXEL | G_RM_XLU_SURF | G_RM_XLU_SURF2),
+        gsSPLoadGeometryMode(G_SHADE | G_SHADING_SMOOTH),
+        gsSPEndDisplayList(),
+    },
+    {
+        /* SETUPDL_47 */
+        gsDPPipeSync(),
+        gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
+        gsDPSetCombineMode(G_CC_MODULATEI_PRIM, G_CC_MODULATEI_PRIM),
+        gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
+                             G_TD_CLAMP | G_TP_PERSP | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
+                         G_AC_NONE | G_ZS_PIXEL | G_RM_ZB_XLU_SURF | G_RM_ZB_XLU_SURF2),
+        gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_SHADING_SMOOTH),
+        gsSPEndDisplayList(),
+    },
+    {
+        /* SETUPDL_48 */
+        gsDPPipeSync(),
+        gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
+        gsDPSetCombineMode(G_CC_PRIMITIVE, G_CC_PRIMITIVE),
+        gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
+                             G_TD_CLAMP | G_TP_PERSP | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
+                         G_AC_NONE | G_ZS_PIXEL | G_RM_AA_XLU_SURF | G_RM_AA_XLU_SURF2),
+        gsSPLoadGeometryMode(G_SHADE | G_CULL_BACK | G_SHADING_SMOOTH),
+        gsSPEndDisplayList(),
+    },
+    {
+        /* SETUPDL_49 */
+        gsDPPipeSync(),
+        gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
+        gsDPSetCombineLERP(PRIMITIVE, 0, SHADE, 0, 0, 0, 0, PRIMITIVE, PRIMITIVE, 0, SHADE, 0, 0, 0, 0, PRIMITIVE),
+        gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
+                             G_TD_CLAMP | G_TP_PERSP | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
+                         G_AC_NONE | G_ZS_PIXEL | G_RM_AA_XLU_SURF | G_RM_AA_XLU_SURF2),
+        gsSPLoadGeometryMode(G_SHADE | G_CULL_BACK | G_LIGHTING | G_SHADING_SMOOTH),
+        gsSPEndDisplayList(),
+    },
+    {
+        /* SETUPDL_50 */
+        gsDPPipeSync(),
+        gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
+        gsDPSetCombineMode(G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM),
+        gsDPSetOtherMode(G_AD_DISABLE | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
+                             G_TD_CLAMP | G_TP_NONE | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
+                         G_AC_THRESHOLD | G_ZS_PIXEL | G_RM_OPA_SURF | G_RM_OPA_SURF2),
+        gsSPLoadGeometryMode(G_CULL_BACK),
+        gsSPEndDisplayList(),
+    },
+    {
+        /* SETUPDL_51 */
+        gsDPPipeSync(),
+        gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
+        gsDPSetCombineMode(G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM),
+        gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
+                             G_TD_CLAMP | G_TP_PERSP | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
+                         G_AC_NONE | G_ZS_PIXEL | G_RM_XLU_SURF | G_RM_XLU_SURF2),
+        gsSPLoadGeometryMode(G_CULL_BACK),
+        gsSPEndDisplayList(),
+    },
+    {
+        /* SETUPDL_52 */
+        gsDPPipeSync(),
+        gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
+        gsDPSetCombineMode(G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM),
+        gsDPSetOtherMode(G_AD_DISABLE | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
+                             G_TD_CLAMP | G_TP_NONE | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
+                         G_AC_THRESHOLD | G_ZS_PIXEL | G_RM_XLU_SURF | G_RM_XLU_SURF2),
+        gsSPLoadGeometryMode(G_CULL_BACK),
+        gsSPEndDisplayList(),
+    },
+    {
+        /* SETUPDL_53 */
+        gsDPPipeSync(),
+        gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
+        gsDPSetCombineLERP(TEXEL1, TEXEL0, ENV_ALPHA, TEXEL0, TEXEL1, TEXEL0, ENVIRONMENT, TEXEL0, PRIMITIVE,
+                           ENVIRONMENT, COMBINED, ENVIRONMENT, COMBINED, 0, PRIMITIVE, 0),
+        gsDPSetOtherMode(G_AD_DISABLE | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
+                             G_TD_CLAMP | G_TP_NONE | G_CYC_2CYCLE | G_PM_NPRIMITIVE,
+                         G_AC_THRESHOLD | G_ZS_PIXEL | G_RM_OPA_SURF | G_RM_OPA_SURF2),
+        gsSPLoadGeometryMode(G_CULL_BACK),
+        gsSPEndDisplayList(),
+    },
+    {
+        /* SETUPDL_54 */
+        gsDPPipeSync(),
+        gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
+        gsDPSetCombineLERP(TEXEL1, TEXEL0, ENV_ALPHA, TEXEL0, TEXEL1, TEXEL0, ENVIRONMENT, TEXEL0, PRIMITIVE,
+                           ENVIRONMENT, COMBINED, ENVIRONMENT, COMBINED, 0, PRIMITIVE, 0),
+        gsDPSetOtherMode(G_AD_DISABLE | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
+                             G_TD_CLAMP | G_TP_NONE | G_CYC_2CYCLE | G_PM_NPRIMITIVE,
+                         G_AC_THRESHOLD | G_ZS_PIXEL | G_RM_PASS | G_RM_XLU_SURF2),
+        gsSPLoadGeometryMode(G_CULL_BACK),
+        gsSPEndDisplayList(),
+    },
+    {
+        /* SETUPDL_55 */
+        gsDPPipeSync(),
+        gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
+        gsDPSetCombineLERP(TEXEL1, TEXEL0, ENV_ALPHA, TEXEL0, TEXEL1, TEXEL0, ENVIRONMENT, TEXEL0, PRIMITIVE,
+                           ENVIRONMENT, COMBINED, ENVIRONMENT, COMBINED, 0, PRIMITIVE, 0),
+        gsDPSetOtherMode(G_AD_DISABLE | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
+                             G_TD_CLAMP | G_TP_NONE | G_CYC_2CYCLE | G_PM_NPRIMITIVE,
+                         G_AC_THRESHOLD | G_ZS_PIXEL | G_RM_PASS | G_RM_XLU_SURF2),
+        gsSPLoadGeometryMode(G_CULL_BACK),
+        gsSPEndDisplayList(),
+    },
+    {
+        /* SETUPDL_56 */
+        gsDPPipeSync(),
+        gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
+        gsDPSetCombineMode(G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM),
+        gsDPSetOtherMode(G_AD_DISABLE | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_POINT | G_TT_NONE | G_TL_TILE |
+                             G_TD_CLAMP | G_TP_NONE | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
+                         G_AC_THRESHOLD | G_ZS_PIXEL | G_RM_XLU_SURF | G_RM_XLU_SURF2),
+        gsSPLoadGeometryMode(G_SHADE | G_CULL_BACK | G_SHADING_SMOOTH),
+        gsSPEndDisplayList(),
+    },
+    {
+        /* SETUPDL_57 */
+        gsDPPipeSync(),
+        gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
+        gsDPSetCombineMode(G_CC_PRIMITIVE, G_CC_PRIMITIVE),
+        gsDPSetOtherMode(G_AD_DISABLE | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
+                             G_TD_CLAMP | G_TP_NONE | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
+                         G_AC_THRESHOLD | G_ZS_PIXEL | G_RM_CLD_SURF | G_RM_CLD_SURF2),
+        gsSPLoadGeometryMode(G_SHADING_SMOOTH),
+        gsSPEndDisplayList(),
+    },
+    {
+        /* SETUPDL_58 */
+        gsDPPipeSync(),
+        gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
+        gsDPSetCombineLERP(PRIMITIVE, 0, SHADE, 0, PRIMITIVE, 0, SHADE, 0, PRIMITIVE, 0, SHADE, 0, PRIMITIVE, 0, SHADE,
+                           0),
+        gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
+                             G_TD_CLAMP | G_TP_PERSP | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
+                         G_AC_NONE | G_ZS_PIXEL | G_RM_CLD_SURF | G_RM_CLD_SURF2),
+        gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_CULL_BACK | G_SHADING_SMOOTH),
+        gsSPEndDisplayList(),
+    },
+    {
+        /* SETUPDL_59 */
+        gsDPPipeSync(),
+        gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
+        gsDPSetCombineLERP(TEXEL0, 0, PRIMITIVE, SHADE, 1, 0, TEXEL0, SHADE, ENVIRONMENT, COMBINED, TEXEL0, COMBINED,
+                           ENVIRONMENT, COMBINED, TEXEL0, COMBINED),
+        gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
+                             G_TD_CLAMP | G_TP_PERSP | G_CYC_2CYCLE | G_PM_NPRIMITIVE,
+                         G_AC_NONE | G_ZS_PIXEL | G_RM_PASS | G_RM_AA_OPA_SURF2),
+        gsSPLoadGeometryMode(G_SHADE | G_CULL_BACK | G_LIGHTING | G_TEXTURE_GEN | G_TEXTURE_GEN_LINEAR |
+                             G_SHADING_SMOOTH),
+        gsSPEndDisplayList(),
+    },
+    {
+        /* SETUPDL_60 */
+        gsDPPipeSync(),
+        gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
+        gsDPSetCombineLERP(PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, PRIMITIVE, 0, TEXEL0, 0, PRIMITIVE, ENVIRONMENT,
+                           TEXEL0, ENVIRONMENT, PRIMITIVE, 0, TEXEL0, 0),
+        gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
+                             G_TD_CLAMP | G_TP_PERSP | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
+                         G_AC_NONE | G_ZS_PIXEL | G_RM_ZB_CLD_SURF | G_RM_ZB_CLD_SURF2),
+        gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_CULL_BACK | G_SHADING_SMOOTH),
+        gsSPEndDisplayList(),
+    },
+    {
+        /* SETUPDL_61 */
+        gsDPPipeSync(),
+        gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
+        gsDPSetCombineLERP(PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, PRIMITIVE, 0, TEXEL0, 0, PRIMITIVE, ENVIRONMENT,
+                           TEXEL0, ENVIRONMENT, PRIMITIVE, 0, TEXEL0, 0),
+        gsDPSetOtherMode(G_AD_NOISE | G_CD_NOISE | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
+                             G_TD_CLAMP | G_TP_PERSP | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
+                         G_AC_NONE | G_ZS_PIXEL | G_RM_ZB_CLD_SURF | G_RM_ZB_CLD_SURF2),
+        gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_CULL_BACK | G_SHADING_SMOOTH),
+        gsSPEndDisplayList(),
+    },
+    {
+        /* SETUPDL_62 */
+        gsDPPipeSync(),
+        gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
+        gsDPSetCombineMode(G_CC_MODULATEIDECALA, G_CC_MODULATEIA_PRIM2),
+        gsDPSetOtherMode(G_AD_PATTERN | G_CD_DISABLE | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
+                             G_TD_CLAMP | G_TP_PERSP | G_CYC_2CYCLE | G_PM_NPRIMITIVE,
+                         G_AC_NONE | G_ZS_PIXEL | G_RM_FOG_SHADE_A | G_RM_AA_ZB_OPA_SURF2),
+        gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_CULL_BACK | G_FOG | G_LIGHTING | G_SHADING_SMOOTH),
+        gsSPEndDisplayList(),
+    },
+    {
+        /* SETUPDL_63 */
+        gsDPPipeSync(),
+        gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
+        gsDPSetCombineMode(G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM),
+        gsDPSetOtherMode(G_AD_DISABLE | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
+                             G_TD_CLAMP | G_TP_NONE | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
+                         G_AC_THRESHOLD | G_ZS_PIXEL | Z_UPD | IM_RD | CVG_DST_SAVE | ZMODE_OPA | FORCE_BL |
+                             GBL_c1(G_BL_CLR_IN, G_BL_A_IN, G_BL_CLR_MEM, G_BL_1MA) |
+                             GBL_c2(G_BL_CLR_IN, G_BL_A_IN, G_BL_CLR_MEM, G_BL_1MA)),
+        gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_SHADING_SMOOTH),
+        gsSPEndDisplayList(),
+    },
+    {
+        /* SETUPDL_64 */
+        gsDPPipeSync(),
+        gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
+        gsDPSetCombineMode(G_CC_DECALRGBA, G_CC_PASS2),
+        gsDPSetOtherMode(G_AD_DISABLE | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
+                             G_TD_CLAMP | G_TP_NONE | G_CYC_2CYCLE | G_PM_NPRIMITIVE,
+                         G_AC_THRESHOLD | G_ZS_PIXEL | G_RM_PASS | G_RM_XLU_SURF2),
+        gsSPLoadGeometryMode(G_SHADE | G_SHADING_SMOOTH),
+        gsSPEndDisplayList(),
+    },
+    {
+        /* SETUPDL_65 */
+        gsDPPipeSync(),
+        gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
+        gsDPSetCombineMode(G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM),
+        gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
+                             G_TD_CLAMP | G_TP_PERSP | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
+                         G_AC_THRESHOLD | G_ZS_PIXEL | G_RM_CLD_SURF | G_RM_CLD_SURF2),
+        gsSPLoadGeometryMode(G_SHADE | G_SHADING_SMOOTH),
+        gsSPEndDisplayList(),
+    },
+    {
+        /* SETUPDL_66 */
+        gsDPPipeSync(),
+        gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
+        gsDPSetCombineMode(G_CC_DECALRGBA, G_CC_DECALRGBA),
+        gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
+                             G_TD_CLAMP | G_TP_PERSP | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
+                         G_AC_THRESHOLD | G_ZS_PIXEL | Z_CMP | Z_UPD | CVG_DST_FULL | ZMODE_OPA | CVG_X_ALPHA |
+                             ALPHA_CVG_SEL | G_RM_PASS | GBL_c2(G_BL_CLR_IN, G_BL_0, G_BL_CLR_IN, G_BL_1)),
+        gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_SHADING_SMOOTH),
+        gsSPEndDisplayList(),
+    },
+    {
+        /* SETUPDL_67 */
+        gsDPPipeSync(),
+        gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
+        gsDPSetCombineMode(G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM),
+        gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
+                             G_TD_CLAMP | G_TP_PERSP | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
+                         G_AC_THRESHOLD | G_ZS_PIXEL | Z_CMP | Z_UPD | CVG_DST_FULL | ZMODE_OPA | CVG_X_ALPHA |
+                             ALPHA_CVG_SEL | G_RM_PASS | GBL_c2(G_BL_CLR_IN, G_BL_0, G_BL_CLR_IN, G_BL_1)),
+        gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_SHADING_SMOOTH),
+        gsSPEndDisplayList(),
+    },
+    {
+        /* SETUPDL_68 */
+        gsDPPipeSync(),
+        gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
+        gsDPSetCombineMode(G_CC_DECALRGBA, G_CC_DECALRGBA),
+        gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
+                             G_TD_CLAMP | G_TP_PERSP | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
+                         G_AC_THRESHOLD | G_ZS_PIXEL | Z_CMP | Z_UPD | IM_RD | CVG_DST_FULL | ZMODE_OPA | CVG_X_ALPHA |
+                             ALPHA_CVG_SEL | GBL_c1(G_BL_CLR_IN, G_BL_A_IN, G_BL_CLR_MEM, G_BL_A_MEM) |
+                             GBL_c2(G_BL_CLR_IN, G_BL_A_IN, G_BL_CLR_MEM, G_BL_A_MEM)),
+        gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_SHADING_SMOOTH),
+        gsSPEndDisplayList(),
+    },
+    {
+        /* SETUPDL_69 */
+        gsDPPipeSync(),
+        gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
+        gsDPSetCombineMode(G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM),
+        gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
+                             G_TD_CLAMP | G_TP_PERSP | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
+                         G_AC_THRESHOLD | G_ZS_PIXEL | Z_CMP | Z_UPD | IM_RD | CVG_DST_FULL | ZMODE_OPA | CVG_X_ALPHA |
+                             ALPHA_CVG_SEL | GBL_c1(G_BL_CLR_IN, G_BL_A_IN, G_BL_CLR_MEM, G_BL_A_MEM) |
+                             GBL_c2(G_BL_CLR_IN, G_BL_A_IN, G_BL_CLR_MEM, G_BL_A_MEM)),
+        gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_SHADING_SMOOTH),
+        gsSPEndDisplayList(),
+    },
+    {
+        /* SETUPDL_70 */
+        gsDPPipeSync(),
+        gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
+        gsDPSetCombineMode(G_CC_DECALRGBA, G_CC_DECALRGBA),
+        gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
+                             G_TD_CLAMP | G_TP_PERSP | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
+                         G_AC_THRESHOLD | G_ZS_PIXEL | Z_CMP | Z_UPD | CVG_DST_FULL | ZMODE_OPA | CVG_X_ALPHA |
+                             ALPHA_CVG_SEL | G_RM_PASS | GBL_c2(G_BL_CLR_IN, G_BL_0, G_BL_CLR_IN, G_BL_1)),
+        gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_FOG | G_SHADING_SMOOTH),
+        gsSPEndDisplayList(),
+    },
+    {
+        /* SETUPDL_71 */
+        gsDPPipeSync(),
+        gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
+        gsDPSetCombineMode(G_CC_MODULATEIDECALA, G_CC_MODULATEIA_PRIM2),
+        gsDPSetOtherMode(G_AD_PATTERN | G_CD_BAYER | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
+                             G_TD_CLAMP | G_TP_PERSP | G_CYC_2CYCLE | G_PM_NPRIMITIVE,
+                         G_AC_NONE | G_ZS_PIXEL | G_RM_FOG_SHADE_A | G_RM_AA_ZB_XLU_SURF2),
+        gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_CULL_BACK | G_FOG | G_LIGHTING | G_SHADING_SMOOTH),
+        gsSPEndDisplayList(),
+    },
+    {
+        /* SETUPDL_72 */
+        gsDPPipeSync(),
+        gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
+        gsDPSetCombineMode(G_CC_MODULATEIDECALA, G_CC_MODULATEIA_PRIM2),
+        gsDPSetOtherMode(G_AD_PATTERN | G_CD_BAYER | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
+                             G_TD_CLAMP | G_TP_PERSP | G_CYC_2CYCLE | G_PM_NPRIMITIVE,
+                         G_AC_NONE | G_ZS_PIXEL | G_RM_FOG_SHADE_A | G_RM_ZB_CLD_SURF2),
+        gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_FOG | G_LIGHTING | G_SHADING_SMOOTH),
+        gsSPEndDisplayList(),
+    },
 };
 
 Gfx sFillSetupDL[] = {
@@ -778,19 +854,19 @@ Gfx* Gfx_SetFog(Gfx* gfx, s32 r, s32 g, s32 b, s32 a, s32 n, s32 f) {
 
     if (n >= 997) {
         if (n >= 1000) {
-            gSPFogFactor(gfx + 1, 0, 0); // gSPFogPosition(gfx++, ?, ?)
+            gSPFogFactor(&gfx[1], 0, 0); // gSPFogPosition(gfx++, ?, ?)
         } else {
-            gSPFogFactor(gfx + 1, 0x7FFF, 0x8100); // gSPFogPosition(gfx++, ?, ?)
+            gSPFogFactor(&gfx[1], 0x7FFF, 0x8100); // gSPFogPosition(gfx++, ?, ?)
         }
     } else {
         if (n < 0) {
-            gSPFogFactor(gfx + 1, 0, 255); // gSPFogPosition(gfx++, ?, ?)
+            gSPFogFactor(&gfx[1], 0, 255); // gSPFogPosition(gfx++, ?, ?)
         } else {
-            gSPFogPosition(gfx + 1, n, f);
+            gSPFogPosition(&gfx[1], n, f);
         }
     }
 
-    return gfx + 2;
+    return &gfx[2];
 }
 
 Gfx* Gfx_SetFogWithSync(Gfx* gfx, s32 r, s32 g, s32 b, s32 a, s32 n, s32 f) {
@@ -814,297 +890,470 @@ Gfx* Gfx_SetFog2(Gfx* gfx, s32 r, s32 g, s32 b, s32 a, s32 n, s32 f) {
     return Gfx_SetFog(gfx, r, g, b, a, n, f);
 }
 
-Gfx* Gfx_CallSetupDLImpl(Gfx* gfx, u32 i) {
-    gSPDisplayList(gfx++, &sSetupDL[6 * i]);
+Gfx* Gfx_SetupDLImpl(Gfx* gfx, u32 i) {
+    s32 dListIndex = i * ARRAY_COUNT(gSetupDLs[i]);
+
+    // Equivalent to gSPDisplayList(gfx++, gSetupDLs[i])
+    gSPDisplayList(gfx++, &((Gfx*)gSetupDLs)[dListIndex]);
     return gfx;
 }
 
-Gfx* Gfx_CallSetupDL(Gfx* gfx, u32 i) {
-    return Gfx_CallSetupDLImpl(gfx, i);
+Gfx* Gfx_SetupDL(Gfx* gfx, u32 i) {
+    return Gfx_SetupDLImpl(gfx, i);
 }
 
-void Gfx_CallSetupDLAtPtr(Gfx** gfxp, u32 i) {
-    *gfxp = Gfx_CallSetupDL(*gfxp, i);
+void Gfx_SetupDLAtPtr(Gfx** gfxp, u32 i) {
+    *gfxp = Gfx_SetupDL(*gfxp, i);
 }
 
-Gfx* func_8012BFC4(Gfx* gfx) {
-    gSPDisplayList(gfx++, &sSetupDL[6 * 0x39]);
+Gfx* Gfx_SetupDL57(Gfx* gfx) {
+    gSPDisplayList(gfx++, gSetupDLs[SETUPDL_57]);
     return gfx;
 }
 
-Gfx* func_8012BFEC(Gfx* gfx) {
-    gSPDisplayList(gfx++, &sSetupDL[6 * 0x39]);
+Gfx* Gfx_SetupDL57_b(Gfx* gfx) {
+    gSPDisplayList(gfx++, gSetupDLs[SETUPDL_57]);
     return gfx;
 }
 
-Gfx* func_8012C014(Gfx* gfx) {
-    gSPDisplayList(gfx++, &sSetupDL[6 * 0x34]);
+Gfx* Gfx_SetupDL52_NoCD(Gfx* gfx) {
+    gSPDisplayList(gfx++, gSetupDLs[SETUPDL_52]);
     gDPSetColorDither(gfx++, G_CD_DISABLE);
     return gfx;
 }
 
-void func_8012C058(GraphicsContext* gfxCtx) {
-    gSPDisplayList(gfxCtx->polyOpa.p++, &sSetupDL[6 * 0x3A]);
+void Gfx_SetupDL58_Opa(GraphicsContext* gfxCtx) {
+    OPEN_DISPS(gfxCtx);
+
+    gSPDisplayList(POLY_OPA_DISP++, gSetupDLs[SETUPDL_58]);
+
+    CLOSE_DISPS(gfxCtx);
 }
 
-void func_8012C080(GraphicsContext* gfxCtx) {
-    gSPDisplayList(gfxCtx->polyOpa.p++, &sSetupDL[6 * 0x39]);
+void Gfx_SetupDL57_Opa(GraphicsContext* gfxCtx) {
+    OPEN_DISPS(gfxCtx);
+
+    gSPDisplayList(POLY_OPA_DISP++, gSetupDLs[SETUPDL_57]);
+
+    CLOSE_DISPS(gfxCtx);
 }
 
-void func_8012C0A8(GraphicsContext* gfxCtx) {
-    gSPDisplayList(gfxCtx->polyOpa.p++, &sSetupDL[6 * 0x32]);
+void Gfx_SetupDL50_Opa(GraphicsContext* gfxCtx) {
+    OPEN_DISPS(gfxCtx);
+
+    gSPDisplayList(POLY_OPA_DISP++, gSetupDLs[SETUPDL_50]);
+
+    CLOSE_DISPS(gfxCtx);
 }
 
-void func_8012C0D0(GraphicsContext* gfxCtx) {
-    gSPDisplayList(gfxCtx->polyOpa.p++, &sSetupDL[6 * 0x33]);
+void Gfx_SetupDL51_Opa(GraphicsContext* gfxCtx) {
+    OPEN_DISPS(gfxCtx);
+
+    gSPDisplayList(POLY_OPA_DISP++, gSetupDLs[SETUPDL_51]);
+
+    CLOSE_DISPS(gfxCtx);
 }
 
-void func_8012C0F8(GraphicsContext* gfxCtx) {
-    gSPDisplayList(gfxCtx->polyXlu.p++, &sSetupDL[6 * 0x34]);
+void Gfx_SetupDL52_Xlu(GraphicsContext* gfxCtx) {
+    OPEN_DISPS(gfxCtx);
+
+    gSPDisplayList(POLY_XLU_DISP++, gSetupDLs[SETUPDL_52]);
+
+    CLOSE_DISPS(gfxCtx);
 }
 
-void func_8012C120(GraphicsContext* gfxCtx) {
-    gSPDisplayList(gfxCtx->polyOpa.p++, &sSetupDL[6 * 0x35]);
+void Gfx_SetupDL53_Opa(GraphicsContext* gfxCtx) {
+    OPEN_DISPS(gfxCtx);
+
+    gSPDisplayList(POLY_OPA_DISP++, gSetupDLs[SETUPDL_53]);
+
+    CLOSE_DISPS(gfxCtx);
 }
 
-void func_8012C148(GraphicsContext* gfxCtx) {
-    gSPDisplayList(gfxCtx->polyOpa.p++, &sSetupDL[6 * 0x36]);
+void Gfx_SetupDL54_Opa(GraphicsContext* gfxCtx) {
+    OPEN_DISPS(gfxCtx);
+
+    gSPDisplayList(POLY_OPA_DISP++, gSetupDLs[SETUPDL_54]);
+
+    CLOSE_DISPS(gfxCtx);
 }
 
-void func_8012C170(GraphicsContext* gfxCtx) {
-    gSPDisplayList(gfxCtx->polyXlu.p++, &sSetupDL[6 * 0x37]);
+void Gfx_SetupDL55_Xlu(GraphicsContext* gfxCtx) {
+    OPEN_DISPS(gfxCtx);
+
+    gSPDisplayList(POLY_XLU_DISP++, gSetupDLs[SETUPDL_55]);
+
+    CLOSE_DISPS(gfxCtx);
 }
 
-Gfx* func_8012C198(Gfx* gfx) {
-    gSPDisplayList(gfx++, &sSetupDL[6 * 0x1A]);
+Gfx* Gfx_SetupDL26(Gfx* gfx) {
+    gSPDisplayList(gfx++, gSetupDLs[SETUPDL_26]);
     return gfx;
 }
 
-void func_8012C1C0(GraphicsContext* gfxCtx) {
-    gfxCtx->polyOpa.p = func_8012C198(gfxCtx->polyOpa.p);
+void Gfx_SetupDL26_Opa(GraphicsContext* gfxCtx) {
+    OPEN_DISPS(gfxCtx);
+
+    POLY_OPA_DISP = Gfx_SetupDL26(POLY_OPA_DISP);
+
+    CLOSE_DISPS(gfxCtx);
 }
 
-Gfx* func_8012C1EC(Gfx* gfx) {
-    gSPDisplayList(gfx++, &sSetupDL[6 * 0x17]);
+Gfx* Gfx_SetupDL23(Gfx* gfx) {
+    gSPDisplayList(gfx++, gSetupDLs[SETUPDL_23]);
     return gfx;
 }
 
-void func_8012C214(GraphicsContext* gfxCtx) {
-    gfxCtx->polyOpa.p = func_8012C1EC(gfxCtx->polyOpa.p);
+void Gfx_SetupDL23_Opa(GraphicsContext* gfxCtx) {
+    OPEN_DISPS(gfxCtx);
+
+    POLY_OPA_DISP = Gfx_SetupDL23(POLY_OPA_DISP);
+
+    CLOSE_DISPS(gfxCtx);
 }
 
-void func_8012C240(GraphicsContext* gfxCtx) {
-    gSPDisplayList(gfxCtx->polyXlu.p++, &sSetupDL[6 * 0x19]);
+void Gfx_SetupDL25_Xlu2(GraphicsContext* gfxCtx) {
+    OPEN_DISPS(gfxCtx);
+
+    gSPDisplayList(POLY_XLU_DISP++, gSetupDLs[SETUPDL_25]);
+
+    CLOSE_DISPS(gfxCtx);
 }
 
-void func_8012C268(PlayState* play) {
-    func_8012C28C(play->state.gfxCtx);
+void func_8012C268(GameState* gameState) {
+    Gfx_SetupDL25_Opa(gameState->gfxCtx);
 }
 
-void func_8012C28C(GraphicsContext* gfxCtx) {
-    gSPDisplayList(gfxCtx->polyOpa.p++, &sSetupDL[6 * 0x19]);
+void Gfx_SetupDL25_Opa(GraphicsContext* gfxCtx) {
+    OPEN_DISPS(gfxCtx);
+
+    gSPDisplayList(POLY_OPA_DISP++, gSetupDLs[SETUPDL_25]);
+
+    CLOSE_DISPS(gfxCtx);
 }
 
-Gfx* func_8012C2B4(Gfx* gfx) {
-    gSPDisplayList(gfx++, &sSetupDL[6 * 0x47]);
+Gfx* Gfx_SetupDL71(Gfx* gfx) {
+    gSPDisplayList(gfx++, gSetupDLs[SETUPDL_71]);
     return gfx;
 }
 
-void func_8012C2DC(GraphicsContext* gfxCtx) {
-    gSPDisplayList(gfxCtx->polyXlu.p++, &sSetupDL[6 * 0x19]);
+void Gfx_SetupDL25_Xlu(GraphicsContext* gfxCtx) {
+    OPEN_DISPS(gfxCtx);
+
+    gSPDisplayList(POLY_XLU_DISP++, gSetupDLs[SETUPDL_25]);
+
+    CLOSE_DISPS(gfxCtx);
 }
 
-Gfx* func_8012C304(Gfx* gfx) {
-    gSPDisplayList(gfx++, &sSetupDL[6 * 0x48]);
+Gfx* Gfx_SetupDL72(Gfx* gfx) {
+    gSPDisplayList(gfx++, gSetupDLs[SETUPDL_72]);
     return gfx;
 }
 
-void func_8012C32C(GraphicsContext* gfxCtx) {
-    gSPDisplayList(gfxCtx->polyOpa.p++, &sSetupDL[6 * 0x1F]);
+void Gfx_SetupDL31_Opa(GraphicsContext* gfxCtx) {
+    OPEN_DISPS(gfxCtx);
+
+    gSPDisplayList(POLY_OPA_DISP++, gSetupDLs[SETUPDL_31]);
+
+    CLOSE_DISPS(gfxCtx);
 }
 
-void func_8012C354(GraphicsContext* gfxCtx) {
-    gSPDisplayList(gfxCtx->polyOpa.p++, &sSetupDL[6 * 0x20]);
+void Gfx_SetupDL32_Opa(GraphicsContext* gfxCtx) {
+    OPEN_DISPS(gfxCtx);
+
+    gSPDisplayList(POLY_OPA_DISP++, gSetupDLs[SETUPDL_32]);
+
+    CLOSE_DISPS(gfxCtx);
 }
 
-void func_8012C37C(GraphicsContext* gfxCtx) {
-    gSPDisplayList(gfxCtx->polyOpa.p++, &sSetupDL[6 * 0x21]);
+void Gfx_SetupDL33_Opa(GraphicsContext* gfxCtx) {
+    OPEN_DISPS(gfxCtx);
+
+    gSPDisplayList(POLY_OPA_DISP++, gSetupDLs[SETUPDL_33]);
+
+    CLOSE_DISPS(gfxCtx);
 }
 
-Gfx* func_8012C3A4(Gfx* gfx) {
-    gSPDisplayList(gfx++, &sSetupDL[6 * 0x40]);
+Gfx* Gfx_SetupDL64(Gfx* gfx) {
+    gSPDisplayList(gfx++, gSetupDLs[SETUPDL_64]);
     return gfx;
 }
 
-Gfx* func_8012C3CC(Gfx* gfx) {
-    gSPDisplayList(gfx++, &sSetupDL[6 * 0x22]);
+Gfx* Gfx_SetupDL34(Gfx* gfx) {
+    gSPDisplayList(gfx++, gSetupDLs[SETUPDL_34]);
     return gfx;
 }
 
-void func_8012C3F4(GraphicsContext* gfxCtx) {
-    gfxCtx->polyOpa.p = func_8012C3CC(gfxCtx->polyOpa.p);
+void Gfx_SetupDL34_Opa(GraphicsContext* gfxCtx) {
+    OPEN_DISPS(gfxCtx);
+
+    POLY_OPA_DISP = Gfx_SetupDL34(POLY_OPA_DISP);
+
+    CLOSE_DISPS(gfxCtx);
 }
 
-void func_8012C420(GraphicsContext* gfxCtx) {
-    gSPDisplayList(gfxCtx->polyOpa.p++, &sSetupDL[6 * 0x23]);
+void Gfx_SetupDL35_Opa(GraphicsContext* gfxCtx) {
+    OPEN_DISPS(gfxCtx);
+
+    gSPDisplayList(POLY_OPA_DISP++, gSetupDLs[SETUPDL_35]);
+
+    CLOSE_DISPS(gfxCtx);
 }
 
-void func_8012C448(GraphicsContext* gfxCtx) {
-    gSPDisplayList(gfxCtx->polyXlu.p++, &sSetupDL[6 * 0x2C]);
+void Gfx_SetupDL44_Xlu(GraphicsContext* gfxCtx) {
+    OPEN_DISPS(gfxCtx);
+
+    gSPDisplayList(POLY_XLU_DISP++, gSetupDLs[SETUPDL_44]);
+
+    CLOSE_DISPS(gfxCtx);
 }
 
-void func_8012C470(GraphicsContext* gfxCtx) {
-    gSPDisplayList(gfxCtx->polyOpa.p++, &sSetupDL[6 * 0x24]);
+void Gfx_SetupDL36_Opa(GraphicsContext* gfxCtx) {
+    OPEN_DISPS(gfxCtx);
+
+    gSPDisplayList(POLY_OPA_DISP++, gSetupDLs[SETUPDL_36]);
+
+    CLOSE_DISPS(gfxCtx);
 }
 
-Gfx* func_8012C498(Gfx* gfx) {
-    gSPDisplayList(gfx++, &sSetupDL[6 * 0x1C]);
+Gfx* Gfx_SetupDL28(Gfx* gfx) {
+    gSPDisplayList(gfx++, gSetupDLs[SETUPDL_28]);
     return gfx;
 }
 
-void func_8012C4C0(GraphicsContext* gfxCtx) {
-    gSPDisplayList(gfxCtx->polyOpa.p++, &sSetupDL[6 * 0x1C]);
+void Gfx_SetupDL28_Opa(GraphicsContext* gfxCtx) {
+    OPEN_DISPS(gfxCtx);
+
+    gSPDisplayList(POLY_OPA_DISP++, gSetupDLs[SETUPDL_28]);
+
+    CLOSE_DISPS(gfxCtx);
 }
 
-void func_8012C4E8(GraphicsContext* gfxCtx) {
-    gSPDisplayList(gfxCtx->polyOpa.p++, &sSetupDL[6 * 0x2B]);
+void Gfx_SetupDL43_Opa(GraphicsContext* gfxCtx) {
+    OPEN_DISPS(gfxCtx);
+
+    gSPDisplayList(POLY_OPA_DISP++, gSetupDLs[SETUPDL_43]);
+
+    CLOSE_DISPS(gfxCtx);
 }
 
-void func_8012C510(GraphicsContext* gfxCtx) {
-    gSPDisplayList(gfxCtx->polyOpa.p++, &sSetupDL[6 * 0x2D]);
+void Gfx_SetupDL45_Opa(GraphicsContext* gfxCtx) {
+    OPEN_DISPS(gfxCtx);
+
+    gSPDisplayList(POLY_OPA_DISP++, gSetupDLs[SETUPDL_45]);
+
+    CLOSE_DISPS(gfxCtx);
 }
 
-void func_8012C538(GraphicsContext* gfxCtx) {
-    gSPDisplayList(gfxCtx->overlay.p++, &sSetupDL[6 * 0x2E]);
+void Gfx_SetupDL46_Overlay(GraphicsContext* gfxCtx) {
+    OPEN_DISPS(gfxCtx);
+
+    gSPDisplayList(OVERLAY_DISP++, gSetupDLs[SETUPDL_46]);
+
+    CLOSE_DISPS(gfxCtx);
 }
 
-void func_8012C560(GraphicsContext* gfxCtx) {
-    gSPDisplayList(gfxCtx->polyXlu.p++, &sSetupDL[6 * 0x26]);
+void Gfx_SetupDL38_Xlu(GraphicsContext* gfxCtx) {
+    OPEN_DISPS(gfxCtx);
+
+    gSPDisplayList(POLY_XLU_DISP++, gSetupDLs[SETUPDL_38]);
+
+    CLOSE_DISPS(gfxCtx);
 }
 
-void func_8012C588(GraphicsContext* gfxCtx) {
-    gSPDisplayList(gfxCtx->polyXlu.p++, &sSetupDL[6 * 0x4]);
+void Gfx_SetupDL4_Xlu(GraphicsContext* gfxCtx) {
+    OPEN_DISPS(gfxCtx);
+
+    gSPDisplayList(POLY_XLU_DISP++, gSetupDLs[SETUPDL_4]);
+
+    CLOSE_DISPS(gfxCtx);
 }
 
-void func_8012C5B0(GraphicsContext* gfxCtx) {
-    gSPDisplayList(gfxCtx->polyOpa.p++, &sSetupDL[6 * 0x25]);
+void Gfx_SetupDL37_Opa(GraphicsContext* gfxCtx) {
+    OPEN_DISPS(gfxCtx);
+
+    gSPDisplayList(POLY_OPA_DISP++, gSetupDLs[SETUPDL_37]);
+
+    CLOSE_DISPS(gfxCtx);
 }
 
-void func_8012C5D8(GraphicsContext* gfxCtx) {
-    gSPDisplayList(gfxCtx->polyOpa.p++, &sSetupDL[6 * 0x2]);
+void Gfx_SetupDL2_Opa(GraphicsContext* gfxCtx) {
+    OPEN_DISPS(gfxCtx);
+
+    gSPDisplayList(POLY_OPA_DISP++, gSetupDLs[SETUPDL_2]);
+
+    CLOSE_DISPS(gfxCtx);
 }
 
-Gfx* func_8012C600(Gfx* gfx) {
-    gSPDisplayList(gfx++, &sSetupDL[6 * 0x27]);
+Gfx* Gfx_SetupDL39(Gfx* gfx) {
+    gSPDisplayList(gfx++, gSetupDLs[SETUPDL_39]);
     return gfx;
 }
 
-void func_8012C628(GraphicsContext* gfxCtx) {
-    gfxCtx->polyOpa.p = func_8012C600(gfxCtx->polyOpa.p);
+void Gfx_SetupDL39_Opa(GraphicsContext* gfxCtx) {
+    OPEN_DISPS(gfxCtx);
+
+    POLY_OPA_DISP = Gfx_SetupDL39(POLY_OPA_DISP);
+
+    CLOSE_DISPS(gfxCtx);
 }
 
-void func_8012C654(GraphicsContext* gfxCtx) {
-    gfxCtx->overlay.p = func_8012C600(gfxCtx->overlay.p);
+void Gfx_SetupDL39_Overlay(GraphicsContext* gfxCtx) {
+    OPEN_DISPS(gfxCtx);
+
+    OVERLAY_DISP = Gfx_SetupDL39(OVERLAY_DISP);
+
+    CLOSE_DISPS(gfxCtx);
 }
 
-void func_8012C680(Gfx** gfxp) {
+void Gfx_SetupDL39_Ptr(Gfx** gfxp) {
     Gfx* gfx = *gfxp;
-    gSPDisplayList(gfx++, &sSetupDL[6 * 0x27]);
+
+    gSPDisplayList(gfx++, gSetupDLs[SETUPDL_39]);
     *gfxp = gfx;
 }
 
-void func_8012C6AC(GraphicsContext* gfxCtx) {
-    gSPDisplayList(gfxCtx->polyOpa.p++, &sSetupDL[6 * 0x28]);
+void Gfx_SetupDL40_Opa(GraphicsContext* gfxCtx) {
+    OPEN_DISPS(gfxCtx);
+
+    gSPDisplayList(POLY_OPA_DISP++, gSetupDLs[SETUPDL_40]);
+
+    CLOSE_DISPS(gfxCtx);
 }
 
-void func_8012C6D4(GraphicsContext* gfxCtx) {
-    gSPDisplayList(gfxCtx->polyOpa.p++, &sSetupDL[6 * 0x29]);
+void Gfx_SetupDL41_Opa(GraphicsContext* gfxCtx) {
+    OPEN_DISPS(gfxCtx);
+
+    gSPDisplayList(POLY_OPA_DISP++, gSetupDLs[SETUPDL_41]);
+
+    CLOSE_DISPS(gfxCtx);
 }
 
-void func_8012C6FC(GraphicsContext* gfxCtx) {
-    gSPDisplayList(gfxCtx->polyXlu.p++, &sSetupDL[6 * 0x2F]);
+void Gfx_SetupDL47_Xlu(GraphicsContext* gfxCtx) {
+    OPEN_DISPS(gfxCtx);
+
+    gSPDisplayList(POLY_XLU_DISP++, gSetupDLs[SETUPDL_47]);
+
+    CLOSE_DISPS(gfxCtx);
 }
 
-Gfx* func_8012C724(Gfx* gfx) {
-    gSPDisplayList(gfx++, &sSetupDL[6 * 0x42]);
+Gfx* Gfx_SetupDL66(Gfx* gfx) {
+    gSPDisplayList(gfx++, gSetupDLs[SETUPDL_66]);
     return gfx;
 }
 
-Gfx* func_8012C74C(Gfx* gfx) {
-    gSPDisplayList(gfx++, &sSetupDL[6 * 0x43]);
+Gfx* Gfx_SetupDL67(Gfx* gfx) {
+    gSPDisplayList(gfx++, gSetupDLs[SETUPDL_67]);
     return gfx;
 }
 
-Gfx* func_8012C774(Gfx* gfx) {
-    gSPDisplayList(gfx++, &sSetupDL[6 * 0x44]);
+Gfx* Gfx_SetupDL68_NoCD(Gfx* gfx) {
+    gSPDisplayList(gfx++, gSetupDLs[SETUPDL_68]);
     gDPSetColorDither(gfx++, G_CD_DISABLE);
     return gfx;
 }
 
-Gfx* func_8012C7B8(Gfx* gfx) {
-    gSPDisplayList(gfx++, &sSetupDL[6 * 0x45]);
+Gfx* Gfx_SetupDL69_NoCD(Gfx* gfx) {
+    gSPDisplayList(gfx++, gSetupDLs[SETUPDL_69]);
     gDPSetColorDither(gfx++, G_CD_DISABLE);
     return gfx;
 }
 
-Gfx* func_8012C7FC(Gfx* gfx) {
-    gSPDisplayList(gfx++, &sSetupDL[6 * 0x41]);
+Gfx* Gfx_SetupDL65_NoCD(Gfx* gfx) {
+    gSPDisplayList(gfx++, gSetupDLs[SETUPDL_65]);
     gDPSetColorDither(gfx++, G_CD_DISABLE);
     return gfx;
 }
 
-Gfx* func_8012C840(Gfx* gfx) {
-    gSPDisplayList(gfx++, &sSetupDL[6 * 0x46]);
+Gfx* Gfx_SetupDL70(Gfx* gfx) {
+    gSPDisplayList(gfx++, gSetupDLs[SETUPDL_70]);
     return gfx;
 }
 
-Gfx* func_8012C868(Gfx* gfx) {
-    gSPDisplayList(gfx++, &sSetupDL[6 * 0x14]);
+Gfx* Gfx_SetupDL20_NoCD(Gfx* gfx) {
+    gSPDisplayList(gfx++, gSetupDLs[SETUPDL_20]);
     gDPSetColorDither(gfx++, G_CD_DISABLE);
     return gfx;
 }
 
-void func_8012C8AC(GraphicsContext* gfxCtx) {
-    gSPDisplayList(gfxCtx->polyOpa.p++, &sSetupDL[6 * 0x2A]);
+void Gfx_SetupDL42_Opa(GraphicsContext* gfxCtx) {
+    OPEN_DISPS(gfxCtx);
+
+    gSPDisplayList(POLY_OPA_DISP++, gSetupDLs[SETUPDL_42]);
+
+    CLOSE_DISPS(gfxCtx);
 }
 
-void func_8012C8D4(GraphicsContext* gfxCtx) {
-    gSPDisplayList(gfxCtx->overlay.p++, &sSetupDL[6 * 0x2A]);
+void Gfx_SetupDL42_Overlay(GraphicsContext* gfxCtx) {
+    OPEN_DISPS(gfxCtx);
+
+    gSPDisplayList(OVERLAY_DISP++, gSetupDLs[SETUPDL_42]);
+
+    CLOSE_DISPS(gfxCtx);
 }
 
-void func_8012C8FC(GraphicsContext* gfxCtx) {
-    gSPDisplayList(gfxCtx->polyOpa.p++, &sSetupDL[6 * 0x30]);
+void Gfx_SetupDL48_Opa(GraphicsContext* gfxCtx) {
+    OPEN_DISPS(gfxCtx);
+
+    gSPDisplayList(POLY_OPA_DISP++, gSetupDLs[SETUPDL_48]);
+
+    CLOSE_DISPS(gfxCtx);
 }
 
-void func_8012C924(GraphicsContext* gfxCtx) {
-    gSPDisplayList(gfxCtx->polyXlu.p++, &sSetupDL[6 * 0x31]);
+void Gfx_SetupDL49_Xlu(GraphicsContext* gfxCtx) {
+    OPEN_DISPS(gfxCtx);
+
+    gSPDisplayList(POLY_XLU_DISP++, gSetupDLs[SETUPDL_49]);
+
+    CLOSE_DISPS(gfxCtx);
 }
 
-void func_8012C94C(GraphicsContext* gfxCtx) {
-    gSPDisplayList(gfxCtx->polyXlu.p++, &sSetupDL[6 * 0x1B]);
+void Gfx_SetupDL27_Xlu(GraphicsContext* gfxCtx) {
+    OPEN_DISPS(gfxCtx);
+
+    gSPDisplayList(POLY_XLU_DISP++, gSetupDLs[SETUPDL_27]);
+
+    CLOSE_DISPS(gfxCtx);
 }
 
-void func_8012C974(GraphicsContext* gfxCtx) {
-    gSPDisplayList(gfxCtx->polyXlu.p++, &sSetupDL[6 * 0x3C]);
-    gDPSetColorDither(gfxCtx->polyXlu.p++, G_CD_DISABLE);
+void Gfx_SetupDL60_XluNoCD(GraphicsContext* gfxCtx) {
+    OPEN_DISPS(gfxCtx);
+
+    gSPDisplayList(POLY_XLU_DISP++, gSetupDLs[SETUPDL_60]);
+    gDPSetColorDither(POLY_XLU_DISP++, G_CD_DISABLE);
+
+    CLOSE_DISPS(gfxCtx);
 }
 
-void func_8012C9BC(GraphicsContext* gfxCtx) {
-    gSPDisplayList(gfxCtx->polyXlu.p++, &sSetupDL[6 * 0x3D]);
+void Gfx_SetupDL61_Xlu(GraphicsContext* gfxCtx) {
+    OPEN_DISPS(gfxCtx);
+
+    gSPDisplayList(POLY_XLU_DISP++, gSetupDLs[SETUPDL_61]);
+
+    CLOSE_DISPS(gfxCtx);
 }
 
-void func_8012C9E4(GraphicsContext* gfxCtx) {
-    gSPDisplayList(gfxCtx->polyOpa.p++, &sSetupDL[6 * 0x38]);
+void Gfx_SetupDL56_Opa(GraphicsContext* gfxCtx) {
+    OPEN_DISPS(gfxCtx);
+
+    gSPDisplayList(POLY_OPA_DISP++, gSetupDLs[SETUPDL_56]);
+
+    CLOSE_DISPS(gfxCtx);
 }
 
-void func_8012CA0C(Gfx** gfxp) {
+void Gfx_SetupDL56_Ptr(Gfx** gfxp) {
     Gfx* gfx = *gfxp;
-    gSPDisplayList(gfx++, &sSetupDL[6 * 0x38]);
+
+    gSPDisplayList(gfx++, gSetupDLs[SETUPDL_56]);
     *gfxp = gfx;
 }
 
-void func_8012CA38(GraphicsContext* gfxCtx) {
-    gSPDisplayList(gfxCtx->polyOpa.p++, &sSetupDL[6 * 0x3B]);
+void Gfx_SetupDL59_Opa(GraphicsContext* gfxCtx) {
+    OPEN_DISPS(gfxCtx);
+
+    gSPDisplayList(POLY_OPA_DISP++, gSetupDLs[SETUPDL_59]);
+
+    CLOSE_DISPS(gfxCtx);
 }
 
 Gfx* Gfx_BranchTexScroll(Gfx** gfxp, u32 x, u32 y, s32 width, s32 height) {
@@ -1210,7 +1459,7 @@ void func_8012CF0C(GraphicsContext* gfxCtx, s32 clearFb, s32 clearZb, u8 r, u8 g
 
     gSPDisplayList(&masterGfx[0], D_0E000000.syncSegments);
     gSPDisplayList(&masterGfx[1], sFillSetupDL);
-    gDPSetColorImage(&masterGfx[2], G_IM_FMT_RGBA, G_IM_SIZ_16b, D_801FBBCC, D_0F000000);
+    gDPSetColorImage(&masterGfx[2], G_IM_FMT_RGBA, G_IM_SIZ_16b, gCfbWidth, D_0F000000);
     if (zbuffer != NULL) {
         gDPSetDepthImage(&masterGfx[3], zbuffer);
     } else {
@@ -1222,7 +1471,7 @@ void func_8012CF0C(GraphicsContext* gfxCtx, s32 clearFb, s32 clearZb, u8 r, u8 g
 
     masterGfx = gGfxMasterDL->setScissor;
 
-    gDPSetScissor(&masterGfx[0], G_SC_NON_INTERLACE, 0, 0, D_801FBBCC, D_801FBBCE);
+    gDPSetScissor(&masterGfx[0], G_SC_NON_INTERLACE, 0, 0, gCfbWidth, gCfbHeight);
     gSPEndDisplayList(&masterGfx[1]);
 
     // Clear Z-Buffer
@@ -1232,13 +1481,13 @@ void func_8012CF0C(GraphicsContext* gfxCtx, s32 clearFb, s32 clearZb, u8 r, u8 g
     if (zbuffer == NULL) {
         gSPEndDisplayList(&masterGfx[0]);
     } else {
-        gDPSetColorImage(&masterGfx[0], G_IM_FMT_RGBA, G_IM_SIZ_16b, D_801FBBCC, zbuffer);
+        gDPSetColorImage(&masterGfx[0], G_IM_FMT_RGBA, G_IM_SIZ_16b, gCfbWidth, zbuffer);
         gDPPipeSync(&masterGfx[1]);
         gDPSetCycleType(&masterGfx[2], G_CYC_FILL);
         gDPSetRenderMode(&masterGfx[3], G_RM_NOOP, G_RM_NOOP2);
         gDPSetFillColor(&masterGfx[4], (GPACK_RGBA5551(255, 255, 240, 0) << 16) | GPACK_RGBA5551(255, 255, 240, 0));
         gSPDisplayList(&masterGfx[5], D_0E000000.clearFillRect);
-        gDPSetColorImage(&masterGfx[6], G_IM_FMT_RGBA, G_IM_SIZ_16b, D_801FBBCC, D_0F000000);
+        gDPSetColorImage(&masterGfx[6], G_IM_FMT_RGBA, G_IM_SIZ_16b, gCfbWidth, D_0F000000);
         gSPEndDisplayList(&masterGfx[7]);
     }
 
@@ -1246,7 +1495,7 @@ void func_8012CF0C(GraphicsContext* gfxCtx, s32 clearFb, s32 clearZb, u8 r, u8 g
 
     masterGfx = gGfxMasterDL->clearFrameBuffer;
 
-    gDPSetColorImage(&masterGfx[0], G_IM_FMT_RGBA, G_IM_SIZ_16b, D_801FBBCC, D_0F000000);
+    gDPSetColorImage(&masterGfx[0], G_IM_FMT_RGBA, G_IM_SIZ_16b, gCfbWidth, D_0F000000);
     gDPSetCycleType(&masterGfx[1], G_CYC_FILL);
     gDPSetRenderMode(&masterGfx[2], G_RM_NOOP, G_RM_NOOP2);
     gDPSetFillColor(&masterGfx[3], (GPACK_RGBA5551(r, g, b, 1) << 16) | GPACK_RGBA5551(r, g, b, 1));
@@ -1256,7 +1505,7 @@ void func_8012CF0C(GraphicsContext* gfxCtx, s32 clearFb, s32 clearZb, u8 r, u8 g
 
     masterGfx = gGfxMasterDL->clearFillRect;
 
-    gDPFillRectangle(&masterGfx[0], 0, 0, D_801FBBCC - 1, D_801FBBCE - 1);
+    gDPFillRectangle(&masterGfx[0], 0, 0, gCfbWidth - 1, gCfbHeight - 1);
     gDPPipeSync(&masterGfx[1]);
     gSPEndDisplayList(&masterGfx[2]);
 
@@ -1264,7 +1513,7 @@ void func_8012CF0C(GraphicsContext* gfxCtx, s32 clearFb, s32 clearZb, u8 r, u8 g
 
     masterGfx = gGfxMasterDL->fillRect;
 
-    gDPFillRectangle(&masterGfx[0], 0, 0, D_801FBBCC, D_801FBBCE);
+    gDPFillRectangle(&masterGfx[0], 0, 0, gCfbWidth, gCfbHeight);
     gDPPipeSync(&masterGfx[1]);
     gSPEndDisplayList(&masterGfx[2]);
 
@@ -1299,7 +1548,7 @@ void func_8012CF0C(GraphicsContext* gfxCtx, s32 clearFb, s32 clearZb, u8 r, u8 g
 }
 
 void func_8012D374(GraphicsContext* gfxCtx, u8 r, u8 g, u8 b) {
-    if ((R_PAUSE_BG_PRERENDER_STATE <= PAUSE_BG_PRERENDER_SETUP) && (D_801F6D10 < 2)) {
+    if ((R_PAUSE_BG_PRERENDER_STATE <= PAUSE_BG_PRERENDER_SETUP) && (gTransitionTileState <= TRANS_TILE_SETUP)) {
         func_8012CF0C(gfxCtx, true, true, r, g, b);
     } else {
         func_8012CF0C(gfxCtx, false, false, r, g, b);

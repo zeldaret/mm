@@ -4,6 +4,7 @@
  * Description: Beaver Race Ring
  */
 
+#include "prevent_bss_reordering.h"
 #include "z_en_twig.h"
 #include "objects/object_twig/object_twig.h"
 
@@ -37,9 +38,9 @@ ActorInit En_Twig_InitVars = {
     (ActorFunc)EnTwig_Draw,
 };
 
-static s32 sCurrentRing;
-static s16 sRingCount;
-static s16 sRingNotCollected[25];
+s32 sCurrentRing;
+s16 sRingCount;
+s16 sRingNotCollected[25];
 
 static CollisionHeader* sColHeaders[] = {
     NULL,
@@ -63,15 +64,16 @@ void EnTwig_Init(Actor* thisx, PlayState* play2) {
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     this->unk_160 = RACERING_GET_PARAM_F(&this->dyna.actor);
-    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
     if (sColHeaders[this->unk_160] != NULL) {
         DynaPolyActor_LoadMesh(play, &this->dyna, sColHeaders[this->unk_160]);
     }
-    this->dyna.actor.bgCheckFlags |= 0x400;
+    this->dyna.actor.bgCheckFlags |= BGCHECKFLAG_PLAYER_400;
     switch (this->unk_160) {
         case 0:
             Actor_Kill(&this->dyna.actor);
             break;
+
         case 1:
             if (!sRingsHaveSpawned) {
                 sRingCount = CHECK_WEEKEVENTREG(WEEKEVENTREG_24_04) ? 25 : 20;
@@ -91,13 +93,17 @@ void EnTwig_Init(Actor* thisx, PlayState* play2) {
             }
             Actor_SetScale(&this->dyna.actor, 4.2f);
             this->dyna.actor.uncullZoneScale = this->dyna.actor.uncullZoneDownward = this->dyna.actor.scale.x * 60.0f;
-            func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+            DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
             func_80AC0A7C(this, play);
             break;
+
         case 2:
             Actor_SetScale(&this->dyna.actor, 1.0f);
             this->dyna.actor.uncullZoneScale = this->dyna.actor.uncullZoneDownward = this->dyna.actor.scale.x * 880.0f;
             func_80AC0A54(this, play);
+            break;
+
+        default:
             break;
     }
 }
@@ -149,9 +155,9 @@ void func_80AC0AC8(EnTwig* this, PlayState* play) {
         }
     } else {
         if (this->dyna.actor.xyzDistToPlayerSq <= SQ((this->dyna.actor.scale.x * 40.0f) + 40)) {
-            func_800C6314(play, &play->colCtx.dyna, this->dyna.bgId);
+            DynaPoly_EnableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
         } else {
-            func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+            DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
         }
         if (this->dyna.actor.xyzDistToPlayerSq >= (this->dyna.actor.scale.x * 10.0f * 40.0f * 40.0f)) {
             this->dyna.actor.shape.rot.y = this->dyna.actor.yawTowardsPlayer;
@@ -165,7 +171,7 @@ void func_80AC0CC4(EnTwig* this, PlayState* play) {
     this->unk_170 = 3458.0f;
     this->unk_174 = 0.2f;
     this->unk_16C |= 1;
-    func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
     this->actionFunc = func_80AC0D2C;
 }
 
@@ -198,7 +204,7 @@ void func_80AC0D2C(EnTwig* this, PlayState* play) {
                                             (s32)(Rand_ZeroOne() * 10.0f) + 20);
         }
         play_sound(NA_SE_SY_GET_ITEM);
-        play->interfaceCtx.unk_25C--;
+        play->interfaceCtx.minigamePoints--;
         sRingNotCollected[RACERING_GET_PARAM_FE0(&this->dyna.actor)] = true;
         if (sCurrentRing == RACERING_GET_PARAM_FE0(&this->dyna.actor)) {
             s32 i;

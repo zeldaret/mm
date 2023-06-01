@@ -133,7 +133,7 @@ void func_80863048(PlayState* play, EnTestStruct* arg1) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0x80, 255, 255, 255, 255);
     gDPSetEnvColor(POLY_OPA_DISP++, 255, 255, 255, 255);
@@ -161,18 +161,18 @@ void EnTest_Init(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     EnTest* this = THIS;
     MtxF sp38;
-    s32 sp34;
+    s32 bgId;
 
     this->unk_209 = 0;
     this->unk_174 = 0;
 
     if (thisx->params > 0) {
         Actor_SetScale(thisx, thisx->params / 100000.0f);
-        this->unk_20A = 0;
+        this->surfaceMaterial = SURFACE_MATERIAL_DIRT;
     } else {
         thisx->floorPoly = NULL;
         thisx->world.pos.y += 10.0f;
-        thisx->floorHeight = BgCheck_EntityRaycastFloor3(&play->colCtx, &thisx->floorPoly, &sp34, &thisx->world.pos);
+        thisx->floorHeight = BgCheck_EntityRaycastFloor3(&play->colCtx, &thisx->floorPoly, &bgId, &thisx->world.pos);
 
         if ((thisx->floorPoly == NULL) || (thisx->floorHeight == BGCHECK_Y_MIN)) {
             Actor_Kill(thisx);
@@ -183,7 +183,7 @@ void EnTest_Init(Actor* thisx, PlayState* play2) {
         func_800C0094(thisx->floorPoly, thisx->world.pos.x, thisx->floorHeight, thisx->world.pos.z, &sp38);
         Matrix_MtxFToYXZRot(&sp38, &thisx->shape.rot, true);
         thisx->world.rot = thisx->shape.rot;
-        this->unk_20A = func_800C9BB8(&play->colCtx, thisx->floorPoly, sp34);
+        this->surfaceMaterial = SurfaceType_GetMaterial(&play->colCtx, thisx->floorPoly, bgId);
     }
 
     func_80183430(&this->skeletonInfo, &gameplay_keep_Blob_06EB70, &gameplay_keep_Blob_06BB0C, this->unk_178,
@@ -257,7 +257,8 @@ void EnTest_Draw(Actor* thisx, PlayState* play) {
         sp2C = 29;
     }
 
-    if ((this->unk_20A == 15) || (this->unk_20A == 14)) {
+    //! @bug Checks for non-existent SURFACE_MATERIAL_MAX material
+    if ((this->surfaceMaterial == SURFACE_MATERIAL_MAX) || (this->surfaceMaterial == SURFACE_MATERIAL_SNOW)) {
         AnimatedMat_DrawStep(play, Lib_SegmentedToVirtual(gameplay_keep_Matanimheader_06B730), sp2C);
     } else {
         AnimatedMat_DrawStep(play, Lib_SegmentedToVirtual(gameplay_keep_Matanimheader_06B6A0), sp2C);
@@ -266,7 +267,7 @@ void EnTest_Draw(Actor* thisx, PlayState* play) {
     mtx = GRAPH_ALLOC(play->state.gfxCtx, this->skeletonInfo.unk_18->unk_1 * sizeof(Mtx));
 
     if (mtx != NULL) {
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         func_8018450C(play, &this->skeletonInfo, mtx, EnTest_OverrideKeyframeDraw, NULL, thisx);
         func_80863048(play, this->unk_20C);
     }

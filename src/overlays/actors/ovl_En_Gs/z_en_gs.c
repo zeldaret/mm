@@ -5,6 +5,7 @@
  */
 
 #include "z_en_gs.h"
+#include "overlays/actors/ovl_En_Bom/z_en_bom.h"
 #include "objects/object_gs/object_gs.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
@@ -112,7 +113,7 @@ s8 func_80997A90(s16 arg0, s16 arg1) {
     if ((arg0 == 0) || ((arg0 != 1) && (arg0 != 2) && (arg0 == 3))) {
         phi_v1 = 0;
     } else {
-        phi_v1 = (gSaveContext.save.unk_EC4 >> (arg1 * 3)) & 7;
+        phi_v1 = (gSaveContext.save.saveInfo.unk_EA0 >> (arg1 * 3)) & 7;
     }
     return phi_v1;
 }
@@ -156,7 +157,7 @@ void EnGs_Init(Actor* thisx, PlayState* play) {
     this->unk_1F4 = this->unk_1FA;
     Math_Vec3f_Copy(&this->unk_1B0[0], &gOneVec3f);
     Math_Vec3f_Copy(&this->unk_1B0[1], &gOneVec3f);
-    SubS_FillCutscenesList(&this->actor, this->unk_212, ARRAY_COUNT(this->unk_212));
+    SubS_FillCutscenesList(&this->actor, this->csIdList, ARRAY_COUNT(this->csIdList));
     func_801A5080(0);
     if (this->actor.params == ENGS_1) {
         Actor_SetScale(&this->actor, 0.15f);
@@ -170,7 +171,7 @@ void EnGs_Destroy(Actor* thisx, PlayState* play) {
     EnGs* this = THIS;
 
     Collider_DestroyCylinder(play, &this->collider);
-    func_80165690();
+    Play_DisableMotionBlur();
 }
 
 void func_80997D14(EnGs* this, PlayState* play) {
@@ -249,7 +250,7 @@ void func_80997E4C(EnGs* this, PlayState* play) {
                                 this->unk_210 = this->unk_195 + 0x20F7;
                                 break;
                         }
-                        func_80151938(play, this->unk_210);
+                        Message_ContinueTextbox(play, this->unk_210);
                         break;
 
                     default:
@@ -262,7 +263,8 @@ void func_80997E4C(EnGs* this, PlayState* play) {
 }
 
 void func_80997FF0(EnGs* this, PlayState* play) {
-    if (SubS_StartActorCutscene(&this->actor, play->playerActorCsIds[0], -1, SUBS_CUTSCENE_NORMAL)) {
+    if (SubS_StartCutscene(&this->actor, play->playerCsIds[PLAYER_CS_ID_ITEM_OCARINA], CS_ID_NONE,
+                           SUBS_CUTSCENE_NORMAL)) {
         func_80998040(this, play);
     }
 }
@@ -281,7 +283,7 @@ void func_8099807C(EnGs* this, PlayState* play) {
                     if (!Flags_GetSwitch(play, this->unk_196)) {
                         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ELF, this->actor.world.pos.x,
                                     this->actor.world.pos.y + 40.0f, this->actor.world.pos.z, 0, 0, 0, 2);
-                        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BUTTERFRY_TO_FAIRY);
+                        Actor_PlaySfx(&this->actor, NA_SE_EV_BUTTERFRY_TO_FAIRY);
                         Flags_SetSwitch(play, this->unk_196);
                     }
                     break;
@@ -290,7 +292,7 @@ void func_8099807C(EnGs* this, PlayState* play) {
                     if (!Flags_GetSwitch(play, this->unk_196)) {
                         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ELF, this->actor.world.pos.x,
                                     this->actor.world.pos.y + 40.0f, this->actor.world.pos.z, 0, 0, 0, 7);
-                        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BUTTERFRY_TO_FAIRY);
+                        Actor_PlaySfx(&this->actor, NA_SE_EV_BUTTERFRY_TO_FAIRY);
                         Flags_SetSwitch(play, this->unk_196);
                     }
                     break;
@@ -338,8 +340,8 @@ void func_8099807C(EnGs* this, PlayState* play) {
 }
 
 void func_80998300(EnGs* this, PlayState* play) {
-    if (this->actor.cutscene != -1) {
-        ActorCutscene_Stop(play->playerActorCsIds[0]);
+    if (this->actor.csId != CS_ID_NONE) {
+        CutsceneManager_Stop(play->playerCsIds[PLAYER_CS_ID_ITEM_OCARINA]);
     }
 }
 
@@ -349,8 +351,8 @@ f32 func_80998334(EnGs* this, PlayState* play, f32* arg2, f32* arg3, s16* arg4, 
 
     if (arg9 == 0) {
         sp2C = Math_SmoothStepToF(arg2, *arg3, arg5, arg6, arg7);
-        this->unk_1B0[0].x = (sinf(DEGF_TO_RADF((*arg4 % arg8) * (1.0f / arg8) * 360.0f)) * *arg2) + 1.0f;
-        this->unk_1B0[0].y = 1.0f - (sinf(DEGF_TO_RADF((*arg4 % arg8) * (1.0f / arg8) * 360.0f)) * *arg2);
+        this->unk_1B0[0].x = (sinf(DEG_TO_RAD((*arg4 % arg8) * (1.0f / arg8) * 360.0f)) * *arg2) + 1.0f;
+        this->unk_1B0[0].y = 1.0f - (sinf(DEG_TO_RAD((*arg4 % arg8) * (1.0f / arg8) * 360.0f)) * *arg2);
         (*arg4)++;
     }
     return sp2C;
@@ -372,7 +374,7 @@ void func_809984F4(EnGs* this, PlayState* play) {
         }
     } while (gossipStone != NULL);
 
-    func_800B7298(play, &this->actor, PLAYER_CSMODE_7);
+    func_800B7298(play, &this->actor, PLAYER_CSMODE_WAIT);
     this->actionFunc = func_809985B8;
 }
 
@@ -380,7 +382,7 @@ void func_809985B8(EnGs* this, PlayState* play) {
     EnGs* gossipStone;
     Vec3f sp38;
 
-    if (SubS_StartActorCutscene(&this->actor, this->unk_212[0], -1, SUBS_CUTSCENE_SET_UNK_LINK_FIELDS)) {
+    if (SubS_StartCutscene(&this->actor, this->csIdList[0], CS_ID_NONE, SUBS_CUTSCENE_WITH_PLAYER)) {
         Player* player = GET_PLAYER(play);
 
         Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_NEW);
@@ -388,8 +390,8 @@ void func_809985B8(EnGs* this, PlayState* play) {
         Math_Vec3f_Sum(&player->actor.world.pos, &sp38, &player->actor.world.pos);
         Math_Vec3f_Copy(&player->actor.prevPos, &player->actor.world.pos);
         this->unk_200 = 0.0f;
-        gSaveContext.save.unk_EC4 = ((u32)gSaveContext.save.unk_EC4 & ~(7 << (this->unk_198 * 3))) |
-                                    ((this->unk_194 & 7) << (this->unk_198 * 3));
+        gSaveContext.save.saveInfo.unk_EA0 = ((u32)gSaveContext.save.saveInfo.unk_EA0 & ~(7 << (this->unk_198 * 3))) |
+                                             ((this->unk_194 & 7) << (this->unk_198 * 3));
         gossipStone = NULL;
 
         do {
@@ -411,7 +413,7 @@ void func_809985B8(EnGs* this, PlayState* play) {
 void func_80998704(EnGs* this, PlayState* play) {
     this->unk_19D = 0;
     this->unk_19A &= ~(0x100 | 0x4);
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_G_STONE_CHANGE_COLOR);
+    Actor_PlaySfx(&this->actor, NA_SE_EV_G_STONE_CHANGE_COLOR);
     this->actionFunc = func_8099874C;
 }
 
@@ -446,11 +448,11 @@ void func_8099874C(EnGs* this, PlayState* play) {
         if ((this->unk_19C == 5) && (this->unk_194 != 0)) {
             s32 i;
 
-            ActorCutscene_Stop(this->unk_212[0]);
+            CutsceneManager_Stop(this->csIdList[0]);
             phi_v0 = 1;
 
             for (i = 0; i < 4; i++) {
-                if (((gSaveContext.save.unk_EC4 >> (i * 3)) & 7) != (u32)this->unk_194) {
+                if (((gSaveContext.save.saveInfo.unk_EA0 >> (i * 3)) & 7) != (u32)this->unk_194) {
                     phi_v0 = 0;
                 }
             }
@@ -500,7 +502,7 @@ void func_8099874C(EnGs* this, PlayState* play) {
 }
 
 void func_809989B4(EnGs* this, PlayState* play) {
-    Actor_PickUp(&this->actor, play, this->unk_20C, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
+    Actor_OfferGetItem(&this->actor, play, this->unk_20C, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
     this->actionFunc = func_809989F4;
 }
 
@@ -509,7 +511,7 @@ void func_809989F4(EnGs* this, PlayState* play) {
         this->actor.parent = NULL;
         func_80997D14(this, play);
     } else {
-        Actor_PickUp(&this->actor, play, this->unk_20C, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
+        Actor_OfferGetItem(&this->actor, play, this->unk_20C, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
     }
 }
 
@@ -518,12 +520,12 @@ s32 func_80998A48(EnGs* this, PlayState* play) {
 
     if (this->unk_19D == 0) {
         this->unk_216 = 200;
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKID_ATTACK);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_STALKID_ATTACK);
 
         this->unk_1D4 = 0;
         this->unk_19A |= 1;
-        this->unk_21C = 5;
-        this->unk_21E = 40;
+        this->quakeY = 5;
+        this->quakeDuration = 40;
         this->unk_197++;
         this->unk_197 &= 0xF;
         this->unk_19D = 1;
@@ -536,7 +538,7 @@ s32 func_80998A48(EnGs* this, PlayState* play) {
             if ((this->actor.params != ENGS_0) && !Play_InCsMode(play) &&
                 (Message_GetState(&play->msgCtx) == TEXT_STATE_NONE)) {
                 this->unk_216 = 0;
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_FAIVE_LUPY_COUNT);
+                Actor_PlaySfx(&this->actor, NA_SE_EV_FAIVE_LUPY_COUNT);
                 Message_StartTextbox(play, 0x20D2, NULL);
             }
             this->unk_19A &= ~1;
@@ -551,19 +553,19 @@ s32 func_80998BBC(EnGs* this, PlayState* play) {
 
     if (this->unk_19D == 0) {
         this->unk_216 = 200;
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKID_ATTACK);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_STALKID_ATTACK);
         this->unk_1DC = 0.3f;
         this->unk_1E0 = 0.0f;
 
         this->unk_1D4 = 0;
         this->unk_19A |= 1;
-        this->unk_21C = 5;
-        this->unk_21E = 40;
+        this->quakeY = 5;
+        this->quakeDuration = 40;
         this->unk_197--;
         this->unk_197 &= 0xF;
         this->unk_19D = 1;
     } else if (this->unk_19D == 1) {
-        this->unk_19E[0].z = (this->unk_1D4 % 8) * 0.125f * 360.0f * (0x10000 / 360.0f);
+        this->unk_19E[0].z = DEG_TO_BINANG((this->unk_1D4 % 8) * 0.125f * 360.0f);
         this->unk_19E[1].z = -this->unk_19E[0].z;
         if (func_80998334(this, play, &this->unk_1DC, &this->unk_1E0, &this->unk_1D4, 0.8f, 0.005f, 0.001f, 7, 0) ==
             0.0f) {
@@ -582,10 +584,10 @@ s32 func_80998D44(EnGs* this, PlayState* play) {
         this->unk_216 = 200;
         this->unk_1DC = this->unk_1B0[0].y - 1.0f;
         this->unk_1E0 = -0.8f;
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_G_STONE_CRUSH);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_G_STONE_CRUSH);
         this->unk_19A |= 1;
-        this->unk_21C = 40;
-        this->unk_21E = 11;
+        this->quakeY = 40;
+        this->quakeDuration = 11;
         this->unk_19D++;
     } else if (this->unk_19D == 1) {
         step = Math_SmoothStepToF(&this->unk_1DC, this->unk_1E0, 1.0f, 0.4f, 0.001f);
@@ -610,10 +612,10 @@ s32 func_80998D44(EnGs* this, PlayState* play) {
             this->unk_216 = 0;
             this->unk_1E0 = 0.0f;
             this->unk_1D4 = 0;
-            this->unk_21C = 10;
-            this->unk_21E = 10;
+            this->quakeY = 10;
+            this->quakeDuration = 10;
             this->unk_1DC = 0.5f;
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKID_ATTACK);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_STALKID_ATTACK);
             this->unk_19D += 1;
         }
     } else if ((this->unk_19D == 4) && (func_80998334(this, play, &this->unk_1DC, &this->unk_1E0, &this->unk_1D4, 1.0f,
@@ -640,15 +642,15 @@ s32 func_80998F9C(EnGs* this, PlayState* play) {
         this->unk_1EC = 0.0f;
 
         this->unk_19D = 1;
-        this->unk_21C = 2;
-        this->unk_21E = 40;
+        this->quakeY = 2;
+        this->quakeDuration = 40;
         this->unk_216 = 200;
     }
 
     if (this->unk_19D == 1) {
         Math_SmoothStepToF(&this->unk_1E4, this->unk_1E8, 1.0f, 0.1f, 0.001f);
         sp48 = Math_SmoothStepToF(&this->unk_1DC, this->unk_1E0, 1.0f, this->unk_1E4, 0.001f);
-        this->unk_19E[0].y += (s32)(this->unk_1DC * (0x10000 / 360.0f));
+        this->unk_19E[0].y += (s32)DEG_TO_BINANG_ALT3(this->unk_1DC);
         if (sp48 == 0.0f) {
             this->unk_1D4 = 0;
             this->unk_19D = 2;
@@ -656,13 +658,13 @@ s32 func_80998F9C(EnGs* this, PlayState* play) {
     }
 
     if (this->unk_19D == 2) {
-        this->unk_19E[0].y += (s32)(this->unk_1DC * (0x10000 / 360.0f));
+        this->unk_19E[0].y += (s32)DEG_TO_BINANG_ALT3(this->unk_1DC);
         if (this->unk_1D4++ > 40) {
             this->unk_1DC = this->unk_1B0[0].y - 1.0f;
             this->unk_1E0 = 1.5f;
             this->unk_1E4 = this->unk_1B0[1].y - 1.0f;
             this->unk_1E8 = -0.3f;
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_STONE_GROW_UP);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_STONE_GROW_UP);
             this->unk_19D = 3;
         }
     }
@@ -712,9 +714,9 @@ s32 func_80998F9C(EnGs* this, PlayState* play) {
             this->unk_1E8 = 0.0f;
             this->unk_1F0 = 0.0f;
             this->unk_1EC = 0.5f;
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKID_ATTACK);
-            this->unk_21C = 20;
-            this->unk_21E = 2;
+            Actor_PlaySfx(&this->actor, NA_SE_EN_STALKID_ATTACK);
+            this->quakeY = 20;
+            this->quakeDuration = 2;
             this->unk_19D = 6;
         }
     }
@@ -725,8 +727,8 @@ s32 func_80998F9C(EnGs* this, PlayState* play) {
         sp40 = Math_SmoothStepToF(&this->unk_1EC, this->unk_1F0, 0.8f, 0.02f, 0.001f);
         this->unk_1B0[0].x = this->unk_1E4 + 1.0f;
         this->unk_1B0[0].y = this->unk_1DC + 1.0f;
-        this->unk_1B0[0].x += sinf(DEGF_TO_RADF((this->unk_1D4 % 10) * 0.1f * 360.0f)) * this->unk_1EC;
-        this->unk_1B0[0].y += sinf(DEGF_TO_RADF((this->unk_1D4 % 10) * 0.1f * 360.0f)) * this->unk_1EC;
+        this->unk_1B0[0].x += sinf(DEG_TO_RAD((this->unk_1D4 % 10) * 0.1f * 360.0f)) * this->unk_1EC;
+        this->unk_1B0[0].y += sinf(DEG_TO_RAD((this->unk_1D4 % 10) * 0.1f * 360.0f)) * this->unk_1EC;
         this->unk_1D4++;
         if ((sp48 == 0.0f) && (sp44 == 0.0f) && (sp40 == 0.0f)) {
             this->unk_216 = 0;
@@ -735,7 +737,7 @@ s32 func_80998F9C(EnGs* this, PlayState* play) {
     }
 
     if ((u16)this->unk_19E[0].y < sp3A) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_STONE_ROLLING);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_STONE_ROLLING);
     }
 
     return sp4C;
@@ -799,8 +801,8 @@ s32 func_809995A4(EnGs* this, PlayState* play) {
 
         if (this->unk_1D4 <= 0) {
             this->unk_19A &= ~4;
-            this->unk_21C = 3;
-            this->unk_21E = 40;
+            this->quakeY = 3;
+            this->quakeDuration = 40;
             this->unk_1D4 = 0;
             this->unk_19D++;
         }
@@ -833,8 +835,8 @@ s32 func_809995A4(EnGs* this, PlayState* play) {
             this->unk_1DC = 0.0f;
 
             this->unk_19D++;
-            this->unk_21C = 5;
-            this->unk_21E = 20;
+            this->quakeY = 5;
+            this->quakeDuration = 20;
             this->unk_19A |= 1;
             this->unk_216 = 200;
             this->unk_1E0 = (this->unk_197 >> 2) * 0x444;
@@ -842,14 +844,14 @@ s32 func_809995A4(EnGs* this, PlayState* play) {
     }
 
     if (this->unk_19D == 4) {
-        Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 60.0f, 3);
-        if (this->actor.bgCheckFlags & (0x10 | 0x8)) {
+        Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 60.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_2);
+        if (this->actor.bgCheckFlags & (BGCHECKFLAG_WALL | BGCHECKFLAG_CEILING)) {
             Vec3f sp54;
 
             sp54.x = this->actor.world.pos.x;
             sp54.y = this->actor.world.pos.y;
             sp54.z = this->actor.world.pos.z;
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_BOMB_EXPLOSION);
+            Actor_PlaySfx(&this->actor, NA_SE_IT_BOMB_EXPLOSION);
             EffectSsBomb2_SpawnLayered(play, &sp54, &bomb2Velocity, &bomb2Accel, 100, 20);
             this->unk_1D4 = 10;
             this->unk_19A |= 8;
@@ -870,7 +872,7 @@ s32 func_809995A4(EnGs* this, PlayState* play) {
 
         if (this->actor.playerHeightRel < -12000.0f) {
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOM, this->actor.world.pos.x, this->actor.world.pos.y,
-                        this->actor.world.pos.z, 0, this->actor.world.rot.y, 0, 0);
+                        this->actor.world.pos.z, BOMB_EXPLOSIVE_TYPE_BOMB, this->actor.world.rot.y, 0, BOMB_TYPE_BODY);
             Actor_Kill(&this->actor);
             sp7C = 0;
         }
@@ -902,16 +904,16 @@ void func_80999AC0(EnGs* this) {
 void func_80999B34(EnGs* this) {
     if (this->unk_216 > 0) {
         if (this->unk_218 == 0) {
-            func_8016566C(this->unk_216);
+            Play_EnableMotionBlur(this->unk_216);
             this->unk_218 = this->unk_216;
         } else {
-            func_80165658(this->unk_218);
+            Play_SetMotionBlurAlpha(this->unk_218);
         }
     } else if (this->unk_218 > 0) {
         Math_StepToS(&this->unk_218, this->unk_216, 20);
-        func_80165658(this->unk_218);
+        Play_SetMotionBlurAlpha(this->unk_218);
         if (this->unk_218 <= 0) {
-            func_80165690();
+            Play_DisableMotionBlur();
         }
     }
 }
@@ -1012,7 +1014,7 @@ void EnGs_Update(Actor* thisx, PlayState* play) {
     } else if (func_800B8718(&this->actor, &play->state)) {
         this->unk_19A |= 0x200;
         this->collider.base.acFlags &= ~AC_HIT;
-        if (this->actor.cutscene != -1) {
+        if (this->actor.csId != CS_ID_NONE) {
             this->actionFunc = func_80997FF0;
         } else {
             func_80998040(this, play);
@@ -1027,8 +1029,8 @@ void EnGs_Update(Actor* thisx, PlayState* play) {
             if ((this->actor.xyzDistToPlayerSq > SQ(400.0f)) || (sp2E < 0) || (sp2E > SCREEN_WIDTH) || (sp2C < 0) ||
                 (sp2C > SCREEN_HEIGHT)) {
                 this->unk_216 = 0;
-            } else if (this->unk_21C > 0) {
-                func_800BC848(&this->actor, play, this->unk_21C, this->unk_21E);
+            } else if (this->quakeY > 0) {
+                Actor_RequestQuakeAndRumble(&this->actor, play, this->quakeY, this->quakeDuration);
             }
         } else {
             this->unk_216 = 0;
@@ -1047,8 +1049,8 @@ void EnGs_Update(Actor* thisx, PlayState* play) {
             }
         }
 
-        if (this->unk_21C > 0) {
-            this->unk_21C = 0;
+        if (this->quakeY > 0) {
+            this->quakeY = 0;
         }
 
         func_80999B34(this);
@@ -1068,7 +1070,7 @@ void EnGs_Draw(Actor* thisx, PlayState* play) {
 
     frames = play->gameplayFrames;
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     Matrix_Push();
 
     if (this->unk_19A & 1) {
@@ -1090,7 +1092,7 @@ void EnGs_Draw(Actor* thisx, PlayState* play) {
     Matrix_Pop();
 
     if (this->unk_19A & 2) {
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         Matrix_ReplaceRotation(&play->billboardMtxF);
         Matrix_Scale(0.05f, -0.05f, 1.0f, MTXMODE_APPLY);
 

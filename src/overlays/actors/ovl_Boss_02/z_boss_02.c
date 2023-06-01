@@ -550,10 +550,10 @@ void Boss02_Init(Actor* thisx, PlayState* play) {
     s32 i;
     s32 pad[2];
 
-    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_52_20) && (this->actor.params == TWINMOLD_RED)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_STONE_TOWER_TEMPLE) && (this->actor.params == TWINMOLD_RED)) {
         sBlueWarp = (DoorWarp1*)Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_DOOR_WARP1, 0.0f, 60.0f,
                                                    0.0f, 0, 0, 0, 1);
-        Actor_Spawn(&play->actorCtx, play, ACTOR_ITEM_B_HEART, 0.0f, 30.0f, -150.0f, 0, 1, 0, 0);
+        Actor_Spawn(&play->actorCtx, play, ACTOR_ITEM_B_HEART, 0.0f, 30.0f, -150.0f, 0, 1, 0, BHEART_PARAM_NORMAL);
     }
 
     this->actor.targetMode = 10;
@@ -709,10 +709,10 @@ void func_809DAB78(Boss02* this, PlayState* play) {
 
         this->unk_0168 = 2000.0f;
         if (this->unk_0195 != 0) {
-            this->actor.speedXZ = this->unk_01A8 * D_809DF5B0 * 1.25f;
+            this->actor.speed = this->unk_01A8 * D_809DF5B0 * 1.25f;
             this->skelAnime.playSpeed = 2.0f;
         } else {
-            this->actor.speedXZ = this->unk_01A8 * D_809DF5B0;
+            this->actor.speed = this->unk_01A8 * D_809DF5B0;
         }
 
         Actor_UpdateVelocityWithoutGravity(&this->actor);
@@ -731,7 +731,7 @@ void func_809DAB78(Boss02* this, PlayState* play) {
             this->unk_0170 = this->unk_017C;
             this->unk_0170.y = temp_f0;
             this->unk_016C = 120;
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_INBOSS_ROAR_OLD);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_INBOSS_ROAR_OLD);
         }
 
         this->actor.flags &= ~ACTOR_FLAG_1;
@@ -750,9 +750,9 @@ void func_809DAB78(Boss02* this, PlayState* play) {
         this->unk_01BC[this->unk_014E].y = this->actor.world.pos.y;
         this->unk_01BC[this->unk_014E].z = this->actor.world.pos.z;
 
-        this->unk_0B1C[this->unk_014E].x = BINANG_TO_RAD(this->actor.world.rot.x);
-        this->unk_0B1C[this->unk_014E].y = BINANG_TO_RAD(this->actor.world.rot.y);
-        this->unk_0B1C[this->unk_014E].z = BINANG_TO_RAD(this->actor.world.rot.z);
+        this->unk_0B1C[this->unk_014E].x = BINANG_TO_RAD_ALT(this->actor.world.rot.x);
+        this->unk_0B1C[this->unk_014E].y = BINANG_TO_RAD_ALT(this->actor.world.rot.y);
+        this->unk_0B1C[this->unk_014E].z = BINANG_TO_RAD_ALT(this->actor.world.rot.z);
     }
 
     if ((this->unk_0144 < 10) && (otherTwinmold->unk_0144 >= 20)) {
@@ -940,13 +940,13 @@ void func_809DAB78(Boss02* this, PlayState* play) {
                 sTwinmoldStatic->subCamAtVel = 0.0f;
                 play_sound(NA_SE_EN_INBOSS_DEAD_PRE2_OLD);
             } else if (!(this->unk_0146[1] & 0xF) && (Rand_ZeroOne() < 0.5f)) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_INBOSS_DAMAGE_OLD);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_INBOSS_DAMAGE_OLD);
             }
             return;
 
         case 21:
             this->unk_01A8 = 0.0f;
-            this->actor.speedXZ = 0.0f;
+            this->actor.speed = 0.0f;
             if (this->unk_0146[0] == 0) {
                 this->unk_0146[0] = 3;
 
@@ -968,20 +968,20 @@ void func_809DAB78(Boss02* this, PlayState* play) {
                     spCC = player->actor.world.pos.x - this->actor.world.pos.x;
                     spC4 = player->actor.world.pos.z - this->actor.world.pos.z;
                     if (sqrtf(SQ(spCC) + SQ(spC4)) < (400.0f * D_809DF5B0)) {
-                        this->actor.speedXZ = 15.0f * D_809DF5B0;
+                        this->actor.speed = 15.0f * D_809DF5B0;
                     }
 
                     spCC = this->actor.world.pos.x;
                     spC4 = this->actor.world.pos.z;
                     if (sqrtf(SQ(spCC) + SQ(spC4)) < (400.0f * D_809DF5B0)) {
-                        this->actor.speedXZ = 15.0f * D_809DF5B0;
+                        this->actor.speed = 15.0f * D_809DF5B0;
                     }
 
                     if (otherTwinmold->unk_0144 >= 10) {
-                        Audio_QueueSeqCmd(NA_BGM_CLEAR_BOSS | 0x8000);
+                        SEQCMD_PLAY_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 0, NA_BGM_CLEAR_BOSS | SEQ_FLAG_ASYNC);
                     }
 
-                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_INBOSS_DEAD_OLD);
+                    Actor_PlaySfx(&this->actor, NA_SE_EN_INBOSS_DEAD_OLD);
                 }
             }
             return;
@@ -993,11 +993,11 @@ void func_809DAB78(Boss02* this, PlayState* play) {
             this->unk_0B1C[i].y += this->unk_0164;
             Math_ApproachF(&this->unk_0B1C[i].x, -(M_PI / 2), 0.1f, 0.07f);
             Actor_MoveWithGravity(&this->actor);
-            Actor_UpdateBgCheckInfo(play, &this->actor, 50.0f, 150.0f, 100.0f, 4);
+            Actor_UpdateBgCheckInfo(play, &this->actor, 50.0f, 150.0f, 100.0f, UPDBGCHECKINFO_FLAG_4);
 
-            if (this->actor.bgCheckFlags & 1) {
+            if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
                 this->unk_0144 = 23;
-                this->actor.speedXZ = 0.0f;
+                this->actor.speed = 0.0f;
                 this->unk_0170 = this->unk_017C;
                 this->unk_016C = 30;
                 this->unk_0170.y = this->actor.floorHeight;
@@ -1074,7 +1074,7 @@ void func_809DBFB4(Boss02* this, PlayState* play) {
                 this->unk_0156 = 15;
 
                 if (i == 0) {
-                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_INBOSS_DAMAGE_OLD);
+                    Actor_PlaySfx(&this->actor, NA_SE_EN_INBOSS_DAMAGE_OLD);
                     this->unk_015C = 1;
                 } else {
                     Audio_PlaySfxAtPos(&this->unk_167C, NA_SE_EN_INBOSS_DAMAGE_OLD);
@@ -1104,7 +1104,7 @@ void func_809DBFB4(Boss02* this, PlayState* play) {
                         this->unk_0144 = 20;
 
                         if (otherTwinmold->unk_0144 >= 10) {
-                            Audio_QueueSeqCmd(0x100100FF);
+                            SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 1);
                         } else {
                             otherTwinmold->unk_0195 = 1;
                         }
@@ -1200,9 +1200,9 @@ void Boss02_Twinmold_Update(Actor* thisx, PlayState* play) {
 
         if (this->unk_016C != 0) {
             if ((this->unk_016C == 60) && (this->unk_0144 < 20)) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_INBOSS_ROAR_OLD);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_INBOSS_ROAR_OLD);
             }
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_INBOSS_SAND_OLD - SFX_FLAG);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_INBOSS_SAND_OLD - SFX_FLAG);
 
             if (this->unk_0144 > 20) {
                 sp3C.x = randPlusMinusPoint5Scaled(100.0f * D_809DF5B0) + this->unk_0170.x;
@@ -1287,17 +1287,17 @@ void Boss02_Static_Update(Actor* thisx, PlayState* play) {
         this->unk_1D74 = KREG(23) + -15.0f;
         D_801F4E30 = 0;
         play->envCtx.lightSettingOverride = 1;
-        play->skyboxId = 1;
+        play->skyboxId = SKYBOX_NORMAL_SKY;
     } else if (!sIsInGiantMode) {
         this->unk_1D74 = 0.0f;
         D_801F4E30 = this->unk_1D7C;
         play->envCtx.lightSettingOverride = 0;
-        play->skyboxId = 2;
+        play->skyboxId = SKYBOX_2;
     } else {
         this->unk_1D74 = KREG(23) + -15.0f;
         D_801F4E30 = ((KREG(24) * 0.1f) + 1.0f) * this->unk_1D7C;
         play->envCtx.lightSettingOverride = 1;
-        play->skyboxId = 1;
+        play->skyboxId = SKYBOX_NORMAL_SKY;
     }
 
     Math_ApproachS(&this->unk_1D7C, this->unk_1D7E, 1, 3);
@@ -1310,7 +1310,7 @@ void Boss02_Static_Update(Actor* thisx, PlayState* play) {
         if (sMusicStartTimer != 0) {
             sMusicStartTimer--;
             if (sMusicStartTimer == 0) {
-                Audio_QueueSeqCmd(NA_BGM_BOSS | 0x8000);
+                SEQCMD_PLAY_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 0, NA_BGM_BOSS | SEQ_FLAG_ASYNC);
             }
         }
     }
@@ -1349,7 +1349,7 @@ void Boss02_Twinmold_Draw(Actor* thisx, PlayState* play2) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     if (this->actor.params == 0) {
         gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(gTwinmoldRedSkinTex));
@@ -1390,7 +1390,7 @@ void Boss02_Twinmold_Draw(Actor* thisx, PlayState* play2) {
     }
 
     SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, NULL, NULL, &this->actor);
-    POLY_OPA_DISP = func_801660B8(play, POLY_OPA_DISP);
+    POLY_OPA_DISP = Play_SetFog(play, POLY_OPA_DISP);
 
     spA4 = 0.0f;
     spA0 = 0.0f;
@@ -1425,7 +1425,7 @@ void Boss02_Twinmold_Draw(Actor* thisx, PlayState* play2) {
             if (sp98 < this->unk_01BC[phi_v0].y) {
                 gSPDisplayList(POLY_OPA_DISP++, D_809DFA9C[i]);
             }
-            POLY_OPA_DISP = func_801660B8(play, POLY_OPA_DISP);
+            POLY_OPA_DISP = Play_SetFog(play, POLY_OPA_DISP);
         }
 
         if (i == 21) {
@@ -1521,8 +1521,8 @@ void Boss02_DrawEffects(PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     for (i = 0; i < ARRAY_COUNT(sEffects); i++, effect++) {
         if (effect->type == TWINMOLD_EFFECT_SAND) {
@@ -1631,11 +1631,11 @@ void func_809DD934(Boss02* this, PlayState* play) {
     switch (this->unk_1D18) {
         case 0:
             if (player->stateFlags1 & PLAYER_STATE1_100) {
-                Cutscene_Start(play, &play->csCtx);
+                Cutscene_StartManual(play, &play->csCtx);
                 this->subCamId = Play_CreateSubCamera(play);
                 Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
                 Play_ChangeCameraStatus(play, this->subCamId, CAM_STATUS_ACTIVE);
-                func_8016566C(150);
+                Play_EnableMotionBlur(150);
                 this->unk_1D14 = 0;
                 this->subCamAtVel = 0.0f;
                 this->unk_1D58 = 0.0f;
@@ -1751,11 +1751,11 @@ void func_809DD934(Boss02* this, PlayState* play) {
             this->unk_1D18 = 0;
             func_80169AFC(play, this->subCamId, 0);
             this->subCamId = SUB_CAM_ID_DONE;
-            Cutscene_End(play, &play->csCtx);
+            Cutscene_StopManual(play, &play->csCtx);
             this->actor.flags |= ACTOR_FLAG_1;
             player->stateFlags1 &= ~PLAYER_STATE1_100;
             this->unk_1D70 = 0.01f;
-            func_80165690();
+            Play_DisableMotionBlur();
             break;
     }
 
@@ -1957,7 +1957,7 @@ void func_809DD934(Boss02* this, PlayState* play) {
                 temp_a0_5->world.pos.x *= phi_f0_2;
                 temp_a0_5->world.pos.z *= phi_f0_2;
 
-                temp_a0_5->speedXZ *= phi_f0_2;
+                temp_a0_5->speed *= phi_f0_2;
 
                 temp_a0_5->velocity.x *= phi_f0_2;
                 temp_a0_5->velocity.y *= phi_f0_2;
@@ -1971,7 +1971,7 @@ void func_809DD934(Boss02* this, PlayState* play) {
                 temp_a0_5->scale.z *= phi_f0_2;
 
                 if (temp_a0_5->id == ACTOR_ITEM_B_HEART) {
-                    ((ItemBHeart*)temp_a0_5)->unk_168 *= phi_f0_2;
+                    ((ItemBHeart*)temp_a0_5)->baseScale *= phi_f0_2;
                 }
             }
             temp_a0_5 = temp_a0_5->next;
@@ -2050,10 +2050,11 @@ void func_809DEAC4(Boss02* this, PlayState* play) {
             break;
 
         case 1:
-            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_52_20) || ((u32)(KREG(13) + 15) >= this->unk_1D1C)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_STONE_TOWER_TEMPLE) ||
+                ((u32)(KREG(13) + 15) >= this->unk_1D1C)) {
                 break;
             }
-            Cutscene_Start(play, &play->csCtx);
+            Cutscene_StartManual(play, &play->csCtx);
             this->subCamId = Play_CreateSubCamera(play);
             Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
             Play_ChangeCameraStatus(play, this->subCamId, CAM_STATUS_ACTIVE);
@@ -2138,8 +2139,8 @@ void func_809DEAC4(Boss02* this, PlayState* play) {
             if (this->unk_1D1C == (u32)(BREG(27) + 335)) {
                 func_80169AFC(play, this->subCamId, 0);
                 this->subCamId = SUB_CAM_ID_DONE;
-                Cutscene_End(play, &play->csCtx);
-                func_800B7298(play, &this->actor, PLAYER_CSMODE_6);
+                Cutscene_StopManual(play, &play->csCtx);
+                func_800B7298(play, &this->actor, PLAYER_CSMODE_END);
                 this->actor.flags |= ACTOR_FLAG_1;
                 this->unk_1D20 = 0;
                 sRedTwinmold->unk_0144 = sBlueTwinmold->unk_0144 = 3;
@@ -2149,8 +2150,8 @@ void func_809DEAC4(Boss02* this, PlayState* play) {
             break;
 
         case 100:
-            if (ActorCutscene_GetCurrentIndex() == -1) {
-                Cutscene_Start(play, &play->csCtx);
+            if (CutsceneManager_GetCurrentCsId() == CS_ID_NONE) {
+                Cutscene_StartManual(play, &play->csCtx);
                 this->subCamId = Play_CreateSubCamera(play);
                 Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
                 Play_ChangeCameraStatus(play, this->subCamId, CAM_STATUS_ACTIVE);
@@ -2199,8 +2200,8 @@ void func_809DEAC4(Boss02* this, PlayState* play) {
             if (this->unk_1D1C == 30) {
                 func_80169AFC(play, this->subCamId, 0);
                 this->subCamId = SUB_CAM_ID_DONE;
-                Cutscene_End(play, &play->csCtx);
-                func_800B7298(play, &this->actor, PLAYER_CSMODE_6);
+                Cutscene_StopManual(play, &play->csCtx);
+                func_800B7298(play, &this->actor, PLAYER_CSMODE_END);
                 this->unk_1D20 = 0;
                 this->actor.flags |= ACTOR_FLAG_1;
                 sp68->unk_0144 = 10;
@@ -2209,10 +2210,12 @@ void func_809DEAC4(Boss02* this, PlayState* play) {
 
                     this->unk_1D7E = 0;
                     if (!sIsInGiantMode) {
-                        Actor_Spawn(&play->actorCtx, play, ACTOR_ITEM_B_HEART, 0.0f, 30.0f, -150.0f, 0, 1, 0, 0);
+                        Actor_Spawn(&play->actorCtx, play, ACTOR_ITEM_B_HEART, 0.0f, 30.0f, -150.0f, 0, 1, 0,
+                                    BHEART_PARAM_NORMAL);
                         phi_f0 = 60.0f;
                     } else {
-                        Actor_Spawn(&play->actorCtx, play, ACTOR_ITEM_B_HEART, 0.0f, 3153.0f, -15.0f, 0, 1, 0, 35);
+                        Actor_Spawn(&play->actorCtx, play, ACTOR_ITEM_B_HEART, 0.0f, 3153.0f, -15.0f, 0, 1, 0,
+                                    BHEART_PARAM_SMALL);
                         phi_f0 = 3155.0f;
                     }
                     sBlueWarp = (DoorWarp1*)Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_DOOR_WARP1,

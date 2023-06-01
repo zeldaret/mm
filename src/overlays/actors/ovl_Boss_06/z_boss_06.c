@@ -194,12 +194,12 @@ void func_809F24C8(Boss06* this, PlayState* play) {
 
     switch (this->unk_1C9) {
         case 0:
-            if (ActorCutscene_GetCurrentIndex() != -1) {
+            if (CutsceneManager_GetCurrentCsId() != CS_ID_NONE) {
                 break;
             }
 
-            Cutscene_Start(play, &play->csCtx);
-            func_800B7298(play, &this->actor, PLAYER_CSMODE_7);
+            Cutscene_StartManual(play, &play->csCtx);
+            func_800B7298(play, &this->actor, PLAYER_CSMODE_WAIT);
             this->subCamId = Play_CreateSubCamera(play);
             Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
             Play_ChangeCameraStatus(play, this->subCamId, CAM_STATUS_ACTIVE);
@@ -220,7 +220,7 @@ void func_809F24C8(Boss06* this, PlayState* play) {
         case 1:
             if (this->unk_1CA >= 10) {
                 Math_ApproachF(&this->unk_1E4, 30.0f, 0.2f, 1.0f);
-                play->envCtx.fillScreen = 1;
+                play->envCtx.fillScreen = true;
                 play->envCtx.screenFillColor[2] = 0;
                 play->envCtx.screenFillColor[1] = 0;
                 play->envCtx.screenFillColor[0] = 0;
@@ -233,7 +233,7 @@ void func_809F24C8(Boss06* this, PlayState* play) {
             }
 
             if (this->unk_1CA >= 60) {
-                play->envCtx.fillScreen = 0;
+                play->envCtx.fillScreen = false;
                 this->unk_1C8 = 0;
                 this->unk_1DC = 0.0f;
                 this->unk_1D8 = 0.0f;
@@ -331,8 +331,8 @@ void func_809F24C8(Boss06* this, PlayState* play) {
                 func_809F2ED0(this, play);
                 func_80169AFC(play, this->subCamId, 0);
                 this->subCamId = SUB_CAM_ID_DONE;
-                Cutscene_End(play, &play->csCtx);
-                func_800B7298(play, &this->actor, PLAYER_CSMODE_6);
+                Cutscene_StopManual(play, &play->csCtx);
+                func_800B7298(play, &this->actor, PLAYER_CSMODE_END);
                 D_809F4970->unk_151 = 0;
             }
             break;
@@ -515,8 +515,8 @@ void Boss06_Draw(Actor* thisx, PlayState* play2) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(play->state.gfxCtx);
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     temp_v0 = gSaveContext.save.time;
     if (temp_v0 > CLOCK_TIME(12, 0)) {

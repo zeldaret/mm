@@ -83,7 +83,7 @@ void EnGuruguru_Init(Actor* thisx, PlayState* play) {
         if (this->actor.params == 0) {
             func_80BC6E10(this);
         } else if (this->actor.params == 2) {
-            this->actor.flags |= ACTOR_FLAG_8000000;
+            this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
             this->actor.draw = NULL;
             this->actor.flags &= ~ACTOR_FLAG_1;
             this->actionFunc = EnGuruguru_DoNothing;
@@ -208,7 +208,7 @@ void func_80BC7068(EnGuruguru* this, PlayState* play) {
         }
     }
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-        func_801477B4(play);
+        Message_CloseTextbox(play);
         this->headZRotTarget = 0;
         if ((this->textIdIndex == 13) || (this->textIdIndex == 14)) {
             func_80151BB4(play, 0x13);
@@ -257,11 +257,11 @@ void func_80BC7068(EnGuruguru* this, PlayState* play) {
             }
             if ((this->unk268 != 0) && (this->textIdIndex >= 7)) {
                 this->skelAnime.playSpeed = 2.0f;
-                func_801A29D4(3, 1.18921f, 2);
+                Audio_SetSeqTempoAndFreq(3, 1.18921f, 2);
                 func_801A3B48(0);
             } else {
                 if (this->skelAnime.playSpeed == 2.0f) {
-                    func_801A29D4(3, 1.0f, 2);
+                    Audio_SetSeqTempoAndFreq(3, 1.0f, 2);
                 }
                 if (this->unk268 == 0) {
                     func_801A3B48(1);
@@ -271,7 +271,7 @@ void func_80BC7068(EnGuruguru* this, PlayState* play) {
                 this->skelAnime.playSpeed = 1.0f;
             }
             this->unk266 = 1;
-            func_80151938(play, textIDs[this->textIdIndex]);
+            Message_ContinueTextbox(play, textIDs[this->textIdIndex]);
             return;
         }
         func_801A3B48(0);
@@ -300,7 +300,7 @@ void func_80BC7440(EnGuruguru* this, PlayState* play) {
         SET_WEEKEVENTREG(WEEKEVENTREG_38_40);
         this->actionFunc = func_80BC7520;
     } else {
-        Actor_PickUp(&this->actor, play, GI_MASK_BREMEN, 300.0f, 300.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_MASK_BREMEN, 300.0f, 300.0f);
     }
 }
 
@@ -363,7 +363,9 @@ void EnGuruguru_Update(Actor* thisx, PlayState* play) {
     Actor_MoveWithGravity(&this->actor);
     Math_SmoothStepToS(&this->headXRot, this->headXRotTarget, 1, 3000, 0);
     Math_SmoothStepToS(&this->headZRot, this->headZRotTarget, 1, 1000, 0);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 50.0f, 0x1D);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 50.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                UPDBGCHECKINFO_FLAG_10);
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
 }
@@ -383,11 +385,13 @@ void EnGuruguru_Draw(Actor* thisx, PlayState* play) {
     EnGuruguru* this = THIS;
 
     OPEN_DISPS(play->state.gfxCtx);
-    func_8012C28C(play->state.gfxCtx);
-    func_8012C2DC(play->state.gfxCtx);
+
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     gSPSegment(POLY_OPA_DISP++, 0x08, SEGMENTED_TO_VIRTUAL(sEyeTextures[this->texIndex]));
     gSPSegment(POLY_OPA_DISP++, 0x09, SEGMENTED_TO_VIRTUAL(sMouthTextures[this->texIndex]));
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnGuruguru_OverrideLimbDraw, NULL, &this->actor);
+
     CLOSE_DISPS(play->state.gfxCtx);
 }

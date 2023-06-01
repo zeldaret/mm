@@ -29,7 +29,7 @@ void func_80977E6C(PlayState* play, u32 index, EffectSs* this);
 void func_80977F28(PlayState* play, u32 index, EffectSs* this);
 void EffectSsKirakira_Draw(PlayState* play, u32 index, EffectSs* this);
 
-const EffectSsInit Effect_Ss_Kirakira_InitVars = {
+EffectSsInit Effect_Ss_Kirakira_InitVars = {
     EFFECT_SS_KIRAKIRA,
     EffectSsKirakira_Init,
 };
@@ -108,7 +108,7 @@ void EffectSsKirakira_Draw(PlayState* play, u32 index, EffectSs* this) {
 
     if (mtx != NULL) {
         gSPMatrix(POLY_XLU_DISP++, mtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        func_8012C2DC(gfxCtx);
+        Gfx_SetupDL25_Xlu(gfxCtx);
         gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, this->rPrimColorR, this->rPrimColorG, this->rPrimColorB,
                         (((s8)((55.0f / this->rLifespan) * this->life) + 200)));
         gDPSetEnvColor(POLY_XLU_DISP++, this->rEnvColorR, this->rEnvColorG, this->rEnvColorB, this->rEnvColorA);

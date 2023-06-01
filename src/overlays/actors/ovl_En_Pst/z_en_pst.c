@@ -393,7 +393,7 @@ void EnPst_Init(Actor* thisx, PlayState* play) {
     this->actor.targetMode = 0;
     Actor_SetScale(&this->actor, 0.02f);
     this->actionFunc = EnPst_FollowSchedule;
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
 }
 
 void EnPst_Destroy(Actor* thisx, PlayState* play) {
@@ -436,7 +436,7 @@ void EnPst_Draw(Actor* thisx, PlayState* play) {
     EnPst* this = THIS;
 
     if (this->scheduleResult != POSTBOX_SCH_NONE) {
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
         SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                               EnPst_OverrideLimbDraw, NULL, &this->actor);
     }

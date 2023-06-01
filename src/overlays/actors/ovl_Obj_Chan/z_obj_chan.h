@@ -54,7 +54,7 @@ typedef struct ObjChan {
     /* 0x1D8 */ f32 flameSize;
     /* 0x1DC */ s16 rotationSpeed; // Main object only. Slowly ramps up under some circumstances. In other circumstances it's immediately set to maximum speed.
     /* 0x1DE */ s16 rotation; // Increases as the chandelier spins. Don't know why they didn't use the actor's rotation variable.
-    /* 0x1E0 */ s16 cutscenes[2];
+    /* 0x1E0 */ s16 csIdList[2];
 } ObjChan; // size = 0x1E4
 
 #endif // Z_OBJ_CHAN_H

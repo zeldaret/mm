@@ -87,14 +87,14 @@ static ColliderCylinderInit sCylinderInit = {
 
 void EnRz_Init(Actor* thisx, PlayState* play) {
     EnRz* this = THIS;
-    s16 tempCutscene = this->actor.cutscene;
+    s16 csId = this->actor.csId;
     s32 i;
 
-    for (i = 0; i < ARRAY_COUNT(this->cutscenes); i++) {
-        this->cutscenes[i] = tempCutscene;
-        if (tempCutscene != -1) {
-            this->actor.cutscene = tempCutscene;
-            tempCutscene = ActorCutscene_GetAdditionalCutscene(this->actor.cutscene);
+    for (i = 0; i < ARRAY_COUNT(this->csIdList); i++) {
+        this->csIdList[i] = csId;
+        if (csId != CS_ID_NONE) {
+            this->actor.csId = csId;
+            csId = CutsceneManager_GetAdditionalCsId(this->actor.csId);
         }
     }
 
@@ -156,12 +156,12 @@ void EnRz_Init(Actor* thisx, PlayState* play) {
     }
 
     if (EN_RZ_GET_SISTER(&this->actor) == EN_RZ_JUDO) {
-        this->csAction = 0x226;
+        this->cueType = CS_CMD_ACTOR_CUE_550;
     } else { // EN_RZ_MARILLA
-        this->csAction = 0x227;
+        this->cueType = CS_CMD_ACTOR_CUE_551;
     }
 
-    this->actionIndex = 0;
+    this->cueId = 0;
 }
 
 /**
@@ -203,7 +203,7 @@ void EnRz_ChangeAnim(PlayState* play, EnRz* this, s16 animIndex, u8 animMode, f3
         &gRosaSistersStandingAnim,   &gRosaSistersStandingAnim, &gRosaSistersWalkingAnim, &gRosaSistersSittingAnim,
         &gRosaSistersApplaudingAnim, &gRosaSistersOnKneesAnim,  &gRosaSistersDancingAnim,
     };
-    static LinkAnimationHeader* sLinkAnimations[] = {
+    static PlayerAnimationHeader* sPlayerAnimations[] = {
         &gPlayerAnim_link_normal_wait_free,
         &gPlayerAnim_alink_dance_loop,
     };
@@ -219,13 +219,15 @@ void EnRz_ChangeAnim(PlayState* play, EnRz* this, s16 animIndex, u8 animMode, f3
     if ((animIndex >= EN_RZ_ANIM_THINKING) && (animIndex < EN_RZ_ANIM_MAX) &&
         ((animIndex != this->animIndex) || (animMode != ANIMMODE_LOOP))) {
         if (animIndex >= ARRAY_COUNT(sJudoAnimations)) {
-            endFrame = Animation_GetLastFrame(sLinkAnimations[animIndex - ARRAY_COUNT(sJudoAnimations)]);
+            endFrame = Animation_GetLastFrame(sPlayerAnimations[animIndex - ARRAY_COUNT(sJudoAnimations)]);
             if (animMode == ANIMMODE_LOOP) {
-                LinkAnimation_Change(play, &this->skelAnime, sLinkAnimations[animIndex - ARRAY_COUNT(sJudoAnimations)],
-                                     2.0f / 3.0f, 0.0f, endFrame, ANIMMODE_LOOP, morphFrames);
+                PlayerAnimation_Change(play, &this->skelAnime,
+                                       sPlayerAnimations[animIndex - ARRAY_COUNT(sJudoAnimations)], 2.0f / 3.0f, 0.0f,
+                                       endFrame, ANIMMODE_LOOP, morphFrames);
             } else {
-                LinkAnimation_Change(play, &this->skelAnime, sLinkAnimations[animIndex - ARRAY_COUNT(sJudoAnimations)],
-                                     2.0f / 3.0f, 0.0f, endFrame, ANIMMODE_LOOP, morphFrames);
+                PlayerAnimation_Change(play, &this->skelAnime,
+                                       sPlayerAnimations[animIndex - ARRAY_COUNT(sJudoAnimations)], 2.0f / 3.0f, 0.0f,
+                                       endFrame, ANIMMODE_LOOP, morphFrames);
             }
         } else {
             Animation_Change(&this->skelAnime, animationPtr[animIndex], 1.0f, 0.0f,
@@ -325,7 +327,7 @@ s32 EnRz_UpdateSkelAnime(EnRz* this, PlayState* play) {
     if (this->animIndex < EN_RZ_ANIM_LINK_NORMAL_WAIT_FREE) {
         return SkelAnime_Update(&this->skelAnime);
     } else {
-        return LinkAnimation_Update(play, &this->skelAnime);
+        return PlayerAnimation_Update(play, &this->skelAnime);
     }
 }
 
@@ -357,18 +359,18 @@ void EnRz_Destroy(Actor* thisx, PlayState* play) {
 }
 
 s32 func_80BFBE70(EnRz* this, PlayState* play) {
-    u16 action;
+    u16 cueId;
 
     if ((EN_RZ_GET_SISTER(&this->actor) == EN_RZ_JUDO) && (this->animIndex == EN_RZ_ANIM_APPLAUDING)) {
         func_800B9010(&this->actor, NA_SE_EV_CLAPPING_2P - SFX_FLAG);
     }
 
-    if (Cutscene_CheckActorAction(play, this->csAction)) {
-        Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetActorActionIndex(play, this->csAction));
-        action = play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->csAction)]->action;
-        if (this->actionIndex != action) {
-            this->actionIndex = action;
-            switch (this->actionIndex) {
+    if (Cutscene_IsCueInChannel(play, this->cueType)) {
+        Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetCueChannel(play, this->cueType));
+        cueId = play->csCtx.actorCues[Cutscene_GetCueChannel(play, this->cueType)]->id;
+        if (this->cueId != cueId) {
+            this->cueId = cueId;
+            switch (this->cueId) {
                 case 1:
                     func_80BFBA1C(play, this, EN_RZ_ANIM_STANDING);
                     break;
@@ -393,18 +395,18 @@ s32 func_80BFBE70(EnRz* this, PlayState* play) {
 }
 
 s32 func_80BFBFAC(EnRz* this, PlayState* play) {
-    if (this->actor.cutscene == -1) {
+    if (this->actor.csId == CS_ID_NONE) {
         Message_StartTextbox(play, 0x2925, &this->actor);
         this->actionFunc = func_80BFC078;
-    } else if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-        ActorCutscene_Stop(0x7C);
-        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+    } else if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+        CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
+        CutsceneManager_Queue(this->actor.csId);
         return false;
-    } else if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
-        ActorCutscene_Start(this->actor.cutscene, &this->actor);
+    } else if (CutsceneManager_IsNext(this->actor.csId)) {
+        CutsceneManager_Start(this->actor.csId, &this->actor);
         return true;
     } else {
-        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+        CutsceneManager_Queue(this->actor.csId);
     }
     return false;
 }
@@ -423,12 +425,12 @@ void func_80BFC078(EnRz* this, PlayState* play) {
         switch (play->msgCtx.currentTextId) {
             case 0x2927:
             case 0x2928:
-                func_80151938(play, play->msgCtx.currentTextId + 1);
+                Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                 SET_WEEKEVENTREG(WEEKEVENTREG_77_04);
                 break;
 
             default:
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 this->actionFunc = func_80BFC3F8;
                 if (this->animIndex != EN_RZ_ANIM_LINK_DANCE) {
                     func_80BFB9E4(play, this, EN_RZ_ANIM_DANCE);
@@ -444,7 +446,7 @@ void func_80BFC078(EnRz* this, PlayState* play) {
         sp28.x = this->actor.projectedPos.x;
         sp28.y = this->actor.projectedPos.y;
         sp28.z = this->actor.projectedPos.z;
-        func_801A1FB4(3, &sp28, NA_BGM_ROSA_SISTERS, 900.0f);
+        func_801A1FB4(SEQ_PLAYER_BGM_SUB, &sp28, NA_BGM_ROSA_SISTERS, 900.0f);
     }
 }
 
@@ -473,15 +475,15 @@ void func_80BFC270(EnRz* this, PlayState* play) {
         this->actionFunc = func_80BFC214;
         func_80BFBDFC(play);
     } else {
-        Actor_PickUp(&this->actor, play, GI_HEART_PIECE, 2000.0f, 1000.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_HEART_PIECE, 2000.0f, 1000.0f);
     }
 }
 
 void func_80BFC2F4(EnRz* this, PlayState* play) {
     EnRz_UpdateSkelAnime(this, play);
     if (!func_80BFBE70(this, play)) {
-        func_801477B4(play);
-        Actor_PickUp(&this->actor, play, GI_HEART_PIECE, 2000.0f, 1000.0f);
+        Message_CloseTextbox(play);
+        Actor_OfferGetItem(&this->actor, play, GI_HEART_PIECE, 2000.0f, 1000.0f);
         this->actionFunc = func_80BFC270;
     }
 }
@@ -496,7 +498,7 @@ void func_80BFC36C(EnRz* this, PlayState* play) {
             this->actionFunc = func_80BFC2F4;
             SET_WEEKEVENTREG(WEEKEVENTREG_75_80);
         }
-        this->actor.cutscene = this->cutscenes[1];
+        this->actor.csId = this->csIdList[1];
     }
 }
 
@@ -516,7 +518,7 @@ void func_80BFC3F8(EnRz* this, PlayState* play) {
 
             if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_10000)) {
                 this->actionFunc = func_80BFC36C;
-                this->actor.cutscene = this->cutscenes[0];
+                this->actor.csId = this->csIdList[0];
                 this->actor.flags &= ~ACTOR_FLAG_10000;
             } else if (Player_GetMask(play) == PLAYER_MASK_KAMARO) {
                 if (CHECK_WEEKEVENTREG(WEEKEVENTREG_77_04)) {
@@ -545,7 +547,7 @@ void func_80BFC3F8(EnRz* this, PlayState* play) {
             bgmPos.x = this->actor.projectedPos.x;
             bgmPos.y = this->actor.projectedPos.y;
             bgmPos.z = this->actor.projectedPos.z;
-            func_801A1FB4(3, &bgmPos, NA_BGM_ROSA_SISTERS, 900.0f);
+            func_801A1FB4(SEQ_PLAYER_BGM_SUB, &bgmPos, NA_BGM_ROSA_SISTERS, 900.0f);
         }
     }
 }
@@ -554,7 +556,7 @@ void func_80BFC608(EnRz* this, PlayState* play) {
     EnRz_UpdateSkelAnime(this, play);
 
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-        func_801477B4(play);
+        Message_CloseTextbox(play);
         this->actionFunc = func_80BFC674;
     }
 }
@@ -578,7 +580,7 @@ void func_80BFC728(EnRz* this, PlayState* play) {
     EnRz_UpdateSkelAnime(this, play);
 
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-        func_801477B4(play);
+        Message_CloseTextbox(play);
         this->actionFunc = func_80BFC7E0;
         this->actor.textId++;
         if (EN_RZ_GET_SISTER(&this->actor) == EN_RZ_JUDO) {
@@ -604,7 +606,7 @@ void func_80BFC7E0(EnRz* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->actionFunc = func_80BFC728;
         func_80BFB9E4(play, this, EN_RZ_ANIM_THINKING);
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
         func_80BFBDFC(play);
     } else if (EnRz_CanTalk(this, play)) {
         func_800B8614(&this->actor, play, 120.0f);
@@ -614,13 +616,13 @@ void func_80BFC7E0(EnRz* this, PlayState* play) {
 void EnRz_StopToThink(EnRz* this, PlayState* play) {
     this->timer = 100;
     this->actionFunc = func_80BFC7E0;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     func_80BFB9E4(play, this, EN_RZ_ANIM_THINKING);
 }
 
 void EnRz_Walk(EnRz* this, PlayState* play) {
     EnRz_UpdateSkelAnime(this, play);
-    this->actor.speedXZ = 1.5f;
+    this->actor.speed = 1.5f;
 
     switch (EnRz_GetPathStatus(this)) {
         case EN_RZ_PATHSTATUS_END:
@@ -639,7 +641,7 @@ void EnRz_Walk(EnRz* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->actionFunc = func_80BFC728;
         func_80BFB9E4(play, this, EN_RZ_ANIM_THINKING);
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
         func_80BFBDFC(play);
     } else if (EnRz_CanTalk(this, play)) {
         func_800B8614(&this->actor, play, 120.0f);
@@ -653,7 +655,7 @@ void EnRz_Update(Actor* thisx, PlayState* play) {
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 40.0f, 25.0f, 40.0f, 5);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 40.0f, 25.0f, 40.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
 
     this->actionFunc(this, play);
 
@@ -684,7 +686,7 @@ void EnRz_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     if (EN_RZ_GET_SISTER(&this->actor) == EN_RZ_JUDO) {
         AnimatedMat_DrawStepOpa(play, Lib_SegmentedToVirtual(&object_rz_Matanimheader_00D768), 0);

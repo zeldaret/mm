@@ -93,8 +93,8 @@ s32 EnJcMato_CheckForHit(EnJcMato* this, PlayState* play) {
     this->collider.dim.worldSphere.center.z = this->pos.z;
     if ((this->collider.base.acFlags & AC_HIT) && !this->hitFlag && (this->actor.colChkInfo.damageEffect == 0xF)) {
         this->collider.base.acFlags &= ~AC_HIT;
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_TRE_BOX_APPEAR);
-        play->interfaceCtx.unk_25C = 1;
+        Actor_PlaySfx(&this->actor, NA_SE_SY_TRE_BOX_APPEAR);
+        play->interfaceCtx.minigamePoints = 1;
         this->hitFlag = true;
         return 1;
     } else {
@@ -150,9 +150,11 @@ void EnJcMato_Draw(Actor* thisx, PlayState* play) {
     EnJcMato* this = THIS;
 
     OPEN_DISPS(play->state.gfxCtx);
-    func_8012C28C(play->state.gfxCtx);
+
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, gKoumeTargetDL);
     Matrix_MultVec3f(&sOffset, &this->pos);
+
     CLOSE_DISPS(play->state.gfxCtx);
 }

@@ -108,7 +108,7 @@ void BgCtowerGear_Splash(BgCtowerGear* this, PlayState* play) {
                 }
             }
         }
-        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_WATERWHEEL_LEVEL);
+        Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_WATERWHEEL_LEVEL);
     }
 }
 
@@ -127,12 +127,12 @@ void BgCtowerGear_Init(Actor* thisx, PlayState* play) {
         Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     }
     if (type == BGCTOWERGEAR_WATER_WHEEL) {
-        DynaPolyActor_Init(&this->dyna, 3);
+        DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS | DYNA_TRANSFORM_ROT_Y);
         DynaPolyActor_LoadMesh(play, &this->dyna, &gClockTowerWaterWheelCol);
     } else if (type == BGCTOWERGEAR_ORGAN) {
         DynaPolyActor_Init(&this->dyna, 0);
         DynaPolyActor_LoadMesh(play, &this->dyna, &gClockTowerOrganCol);
-        func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+        DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
     }
 }
 
@@ -163,18 +163,23 @@ void BgCtowerGear_Update(Actor* thisx, PlayState* play) {
 void BgCtowerGear_UpdateOrgan(Actor* thisx, PlayState* play) {
     BgCtowerGear* this = THIS;
 
-    if (Cutscene_CheckActorAction(play, 104)) {
-        switch (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 104)]->action) {
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_104)) {
+        switch (play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_104)]->id) {
             case 1:
                 this->dyna.actor.draw = NULL;
-                func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+                DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
                 break;
+
             case 2:
                 this->dyna.actor.draw = BgCtowerGear_DrawOrgan;
-                func_800C6314(play, &play->colCtx.dyna, this->dyna.bgId);
+                DynaPoly_EnableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
                 break;
+
             case 3:
                 Actor_Kill(&this->dyna.actor);
+                break;
+
+            default:
                 break;
         }
     }
@@ -186,10 +191,10 @@ void BgCtowerGear_Draw(Actor* thisx, PlayState* play) {
 
 void BgCtowerGear_DrawOrgan(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, gClockTowerOrganDL);
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_XLU_DISP++, gClockTowerOrganPipesDL);
     CLOSE_DISPS(play->state.gfxCtx);

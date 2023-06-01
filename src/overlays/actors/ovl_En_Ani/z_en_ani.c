@@ -211,7 +211,7 @@ void EnAni_FallToGround(EnAni* this, PlayState* play) {
     s32 pad;
     s16 quakeIndex;
 
-    if (this->actor.bgCheckFlags & 1) { // hit the ground
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         this->actor.flags &= ~ACTOR_FLAG_10;
         this->actionFunc = EnAni_LandOnFoot;
         this->actor.velocity.x = 0.0f;
@@ -220,12 +220,12 @@ void EnAni_FallToGround(EnAni* this, PlayState* play) {
         Animation_Change(&this->skelAnime, &gAniLandingThenStandingUpAnim, 1.0f, 0.0f, 16.0f, ANIMMODE_ONCE, 0.0f);
         this->stateFlags |= ANI_STATE_WRITHING;
 
-        quakeIndex = Quake_Add(play->cameraPtrs[CAM_ID_MAIN], QUAKE_TYPE_3);
+        quakeIndex = Quake_Request(play->cameraPtrs[CAM_ID_MAIN], QUAKE_TYPE_3);
         Quake_SetSpeed(quakeIndex, 27000);
-        Quake_SetQuakeValues(quakeIndex, 7, 0, 0, 0);
-        Quake_SetCountdown(quakeIndex, 20);
+        Quake_SetPerturbations(quakeIndex, 7, 0, 0, 0);
+        Quake_SetDuration(quakeIndex, 20);
 
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_HAMMER_HIT);
+        Actor_PlaySfx(&this->actor, NA_SE_IT_HAMMER_HIT);
     }
 
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0x2, 0x7D0, 0x100);
@@ -291,7 +291,7 @@ void EnAni_Update(Actor* thisx, PlayState* play) {
     }
 
     Actor_UpdatePos(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
     this->actionFunc(this, play);
     if (this->actor.xzDistToPlayer < 100.0f && !(this->stateFlags & ANI_STATE_CLIMBING)) {
         Actor_TrackPlayer(play, &this->actor, &this->headRot, &this->chestRot, this->actor.focus.pos);
@@ -305,15 +305,15 @@ void EnAni_Update(Actor* thisx, PlayState* play) {
 
     this->blinkFunc(this);
     if (this->stateFlags & ANI_STATE_FALLING) {
-        if (this->actor.cutscene == -1) {
+        if (this->actor.csId == CS_ID_NONE) {
             this->stateFlags &= ~ANI_STATE_FALLING;
-        } else if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
-            ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
-            this->actor.cutscene = ActorCutscene_GetAdditionalCutscene(this->actor.cutscene);
-            Camera_SetToTrackActor(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(this->actor.cutscene)),
-                                   &this->actor);
+        } else if (CutsceneManager_IsNext(this->actor.csId)) {
+            CutsceneManager_StartWithPlayerCs(this->actor.csId, &this->actor);
+            this->actor.csId = CutsceneManager_GetAdditionalCsId(this->actor.csId);
+            Camera_SetFocalActor(Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(this->actor.csId)),
+                                 &this->actor);
         } else {
-            ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+            CutsceneManager_Queue(this->actor.csId);
         }
     }
 }
@@ -345,7 +345,7 @@ void EnAni_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     Matrix_Translate(0.0f, 0.0f, -1000.0f, MTXMODE_APPLY);
-    func_8012C5B0(play->state.gfxCtx);
+    Gfx_SetupDL37_Opa(play->state.gfxCtx);
 
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyeTextures[this->eyeState]));
 

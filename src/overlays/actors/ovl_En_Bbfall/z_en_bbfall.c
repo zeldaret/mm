@@ -194,7 +194,7 @@ void EnBbfall_Freeze(EnBbfall* this) {
     this->timer = 80;
     this->drawDmgEffAlpha = 1.0f;
     this->actor.flags &= ~ACTOR_FLAG_200;
-    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 80);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 80);
 }
 
 void EnBbfall_Thaw(EnBbfall* this, PlayState* play) {
@@ -211,9 +211,9 @@ void EnBbfall_Thaw(EnBbfall* this, PlayState* play) {
  */
 s32 EnBbfall_IsTouchingLava(EnBbfall* this, PlayState* play) {
     if (!SurfaceType_IsWallDamage(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId)) {
-        u32 floorType = func_800C99D4(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
+        FloorType floorType = SurfaceType_GetFloorType(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
 
-        if ((floorType == 2) || (floorType == 3) || (floorType == 9)) {
+        if ((floorType == FLOOR_TYPE_2) || (floorType == FLOOR_TYPE_3) || (floorType == FLOOR_TYPE_9)) {
             return true;
         }
     }
@@ -223,7 +223,7 @@ s32 EnBbfall_IsTouchingLava(EnBbfall* this, PlayState* play) {
 
 void EnBbfall_PlaySfx(EnBbfall* this) {
     if (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 5.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BUBLE_MOUTH);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_BUBLE_MOUTH);
     }
 
     func_800B9010(&this->actor, NA_SE_EN_BUBLEFALL_FIRE - SFX_FLAG);
@@ -237,14 +237,14 @@ void EnBbfall_PlaySfx(EnBbfall* this) {
 void EnBbfall_CheckForWall(EnBbfall* this) {
     s16 yawDiff;
 
-    if (this->actor.bgCheckFlags & 8) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
         yawDiff = this->actor.shape.rot.y - this->actor.wallYaw;
 
         if (ABS_ALT(yawDiff) > 0x4000) {
             this->actor.shape.rot.y = ((this->actor.wallYaw * 2) - this->actor.shape.rot.y) - 0x8000;
         }
 
-        this->actor.bgCheckFlags &= ~8;
+        this->actor.bgCheckFlags &= ~BGCHECKFLAG_WALL;
     }
 }
 
@@ -273,7 +273,7 @@ void EnBbfall_SetupWaitForPlayer(EnBbfall* this) {
     this->actor.colChkInfo.health = sColChkInfoInit.health;
     this->actor.colorFilterTimer = 0;
     this->isBgCheckCollisionEnabled = false;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actor.gravity = 0.0f;
     this->actor.velocity.y = 0.0f;
     Math_Vec3f_Copy(&this->actor.world.pos, &this->actor.home.pos);
@@ -283,7 +283,7 @@ void EnBbfall_SetupWaitForPlayer(EnBbfall* this) {
         this->flamePos[i].y -= 47.0f;
     }
 
-    this->actor.bgCheckFlags &= ~1;
+    this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND;
     this->actor.flags &= ~ACTOR_FLAG_1;
     this->actionFunc = EnBbfall_WaitForPlayer;
 }
@@ -306,7 +306,7 @@ void EnBbfall_SetupEmerge(EnBbfall* this) {
     this->actor.velocity.y = 17.0f;
     EnBbfall_EnableColliders(this);
     this->actor.flags |= ACTOR_FLAG_1;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BUBLEFALL_APPEAR);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_BUBLEFALL_APPEAR);
     this->actionFunc = EnBbfall_Emerge;
 }
 
@@ -322,8 +322,8 @@ void EnBbfall_Emerge(EnBbfall* this, PlayState* play) {
 void EnBbfall_SetupFly(EnBbfall* this) {
     this->flameOpacity = 255;
     this->isBgCheckCollisionEnabled = true;
-    this->actor.bgCheckFlags &= ~1;
-    this->actor.speedXZ = 5.0f;
+    this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND;
+    this->actor.speed = 5.0f;
     this->actor.gravity = -1.0f;
     this->actionFunc = EnBbfall_Fly;
 }
@@ -333,7 +333,7 @@ void EnBbfall_Fly(EnBbfall* this, PlayState* play) {
     Math_StepToF(&this->flameScaleY, 0.8f, 0.1f);
     Math_StepToF(&this->flameScaleX, 1.0f, 0.1f);
     EnBbfall_CheckForWall(this);
-    if (this->actor.bgCheckFlags & 1) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         if (EnBbfall_IsTouchingLava(this, play)) {
             EnBbfall_SetupSinkIntoLava(this);
         } else {
@@ -343,7 +343,7 @@ void EnBbfall_Fly(EnBbfall* this, PlayState* play) {
             this->actor.shape.rot.y += (s16)randPlusMinusPoint5Scaled(73728.0f);
         }
 
-        this->actor.bgCheckFlags &= ~1;
+        this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND;
     }
 
     this->actor.world.rot.y = this->actor.shape.rot.y;
@@ -372,11 +372,11 @@ void EnBbfall_SetupDown(EnBbfall* this) {
     this->timer = 200;
     this->flameOpacity = 0;
     this->collider.base.acFlags |= AC_ON;
-    this->actor.speedXZ = 2.0f;
+    this->actor.speed = 2.0f;
     this->flameScaleY = 0.0f;
     this->flameScaleX = 0.0f;
     this->actor.gravity = -2.0f;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BUBLE_DOWN);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_BUBLE_DOWN);
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->actionFunc = EnBbfall_Down;
 }
@@ -385,15 +385,15 @@ void EnBbfall_Down(EnBbfall* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     EnBbfall_CheckForWall(this);
 
-    if (this->actor.bgCheckFlags & 1) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         if (EnBbfall_IsTouchingLava(this, play)) {
             EnBbfall_SetupSinkIntoLava(this);
             return;
         }
 
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_EYEGOLE_ATTACK);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_EYEGOLE_ATTACK);
         if (this->timer == 0) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BUBLE_UP);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_BUBLE_UP);
             EnBbfall_EnableColliders(this);
             this->actor.velocity.y = 8.0f;
             EnBbfall_SetupFly(this);
@@ -406,14 +406,14 @@ void EnBbfall_Down(EnBbfall* this, PlayState* play) {
             this->actor.velocity.y = 10.0f;
         }
 
-        this->actor.bgCheckFlags &= ~1;
+        this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND;
         Actor_SpawnFloorDustRing(play, &this->actor, &this->actor.world.pos, 7.0f, 2, 2.0f, 0, 0, 0);
         Math_ScaledStepToS(&this->actor.shape.rot.y, BINANG_ADD(this->actor.yawTowardsPlayer, 0x8000), 0xBB8);
     }
 
     this->actor.world.rot.y = this->actor.shape.rot.y;
     if (Animation_OnFrame(&this->skelAnime, 5.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BUBLE_WING);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_BUBLE_WING);
     }
 
     if (this->timer > 0) {
@@ -430,11 +430,11 @@ void EnBbfall_SetupDead(EnBbfall* this, PlayState* play) {
     func_800BE5CC(&this->actor, &this->collider, 0);
     this->timer = 15;
     this->actor.shape.rot.x += 0x4E20;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 40, NA_SE_EN_BUBLE_DEAD);
     Item_DropCollectibleRandom(play, &this->actor, &this->actor.world.pos, 0x70);
     this->actor.velocity.y = 0.0f;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->bodyPartDrawStatus = BBFALL_BODY_PART_DRAW_STATUS_DEAD;
     this->actor.gravity = -1.5f;
 
@@ -478,30 +478,30 @@ void EnBbfall_Dead(EnBbfall* this, PlayState* play) {
 
 void EnBbfall_SetupDamage(EnBbfall* this) {
     this->collider.base.acFlags &= ~AC_ON;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BUBLE_DAMAGE);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_BUBLE_DAMAGE);
     func_800BE5CC(&this->actor, &this->collider, 0);
 
     if (this->actor.colChkInfo.damageEffect == EN_BBFALL_DMGEFF_ZORA_MAGIC) {
-        Actor_SetColorFilter(&this->actor, 0, 255, 0, 40);
+        Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 255, COLORFILTER_BUFFLAG_OPA, 40);
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_LARGE;
         this->drawDmgEffAlpha = 2.0f;
         this->drawDmgEffScale = 0.4f;
     } else if (this->actor.colChkInfo.damageEffect == EN_BBFALL_DMGEFF_STUN) {
-        Actor_SetColorFilter(&this->actor, 0, 255, 0, 20);
-        this->actor.speedXZ = 0.0f;
+        Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 255, COLORFILTER_BUFFLAG_OPA, 20);
+        this->actor.speed = 0.0f;
     } else if (this->actor.colChkInfo.damageEffect == EN_BBFALL_DMGEFF_HOOKSHOT) {
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
     } else {
-        Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 20);
-        this->actor.speedXZ = 7.0f;
+        Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 20);
+        this->actor.speed = 7.0f;
     }
 
     this->actionFunc = EnBbfall_Damage;
 }
 
 void EnBbfall_Damage(EnBbfall* this, PlayState* play) {
-    Math_SmoothStepToF(&this->actor.speedXZ, 0.0f, 1.0f, 0.5f, 0.0f);
-    if ((this->actor.bgCheckFlags & 1) && (this->actor.speedXZ < 0.1f)) {
+    Math_SmoothStepToF(&this->actor.speed, 0.0f, 1.0f, 0.5f, 0.0f);
+    if ((this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) && (this->actor.speed < 0.1f)) {
         if (EnBbfall_IsTouchingLava(this, play)) {
             EnBbfall_SetupSinkIntoLava(this);
         } else {
@@ -511,7 +511,7 @@ void EnBbfall_Damage(EnBbfall* this, PlayState* play) {
 }
 
 void EnBbfall_SetupFrozen(EnBbfall* this) {
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     if (this->actor.velocity.y > 0.0f) {
         this->actor.velocity.y = 0.0f;
     }
@@ -600,7 +600,8 @@ void EnBbfall_Update(Actor* thisx, PlayState* play) {
     if (this->actionFunc != EnBbfall_Dead) {
         Actor_MoveWithGravity(&this->actor);
         if (this->isBgCheckCollisionEnabled) {
-            Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 25.0f, 20.0f, 7);
+            Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 25.0f, 20.0f,
+                                    UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_2 | UPDBGCHECKINFO_FLAG_4);
         }
 
         for (i = ARRAY_COUNT(this->flamePos) - 1; i >= 2; i--) {
@@ -717,13 +718,13 @@ void EnBbfall_Draw(Actor* thisx, PlayState* play2) {
     OPEN_DISPS(play->state.gfxCtx);
 
     gfx = POLY_OPA_DISP;
-    gSPDisplayList(&gfx[0], &sSetupDL[6 * 25]);
+    gSPDisplayList(&gfx[0], gSetupDLs[SETUPDL_25]);
     POLY_OPA_DISP = &gfx[1];
     SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, EnBbfall_OverrideLimbDraw,
                       EnBbfall_PostLimbDraw, &this->actor);
 
     if (this->flameOpacity > 0) {
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         Matrix_RotateYS(((Camera_GetCamDirYaw(GET_ACTIVE_CAM(play)) - this->actor.shape.rot.y) + 0x8000),
                         MTXMODE_APPLY);
         Matrix_Scale(this->flameScaleX, this->flameScaleY, 1.0f, MTXMODE_APPLY);

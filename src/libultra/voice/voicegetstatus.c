@@ -14,9 +14,7 @@ s32 __osVoiceGetStatus(OSMesgQueue* mq, s32 port, u8* status) {
         if (errorCode != CONT_ERR_CONTRFAIL) {
             __osContPifRam.status = CONT_CMD_READ_BUTTON;
 
-            for (i = 0; i < port; i++, *ptr++ = 0) {
-                ;
-            }
+            for (i = 0; i < port; i++, *ptr++ = 0) {}
 
             *ptr++ = 1;
             *ptr++ = 3;

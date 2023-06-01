@@ -21,7 +21,7 @@ u32 EffectSsDFire_Init(PlayState* play, u32 index, EffectSs* this, void* initPar
 void EffectSsDFire_Update(PlayState* play, u32 index, EffectSs* this);
 void EffectSsDFire_Draw(PlayState* play, u32 index, EffectSs* this);
 
-const EffectSsInit Effect_Ss_D_Fire_InitVars = {
+EffectSsInit Effect_Ss_D_Fire_InitVars = {
     EFFECT_SS_D_FIRE,
     EffectSsDFire_Init,
 };
@@ -83,7 +83,7 @@ void EffectSsDFire_Draw(PlayState* play, u32 index, EffectSs* this) {
         Matrix_Mult(&play->billboardMtxF, MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        func_8012C974(gfxCtx);
+        Gfx_SetupDL60_XluNoCD(gfxCtx);
         gDPSetEnvColor(POLY_XLU_DISP++, 255, 0, 0, 0);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 50, this->rAlpha);
 

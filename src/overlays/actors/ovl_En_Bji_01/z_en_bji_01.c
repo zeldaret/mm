@@ -114,7 +114,7 @@ void func_809CCEE8(EnBji01* this, PlayState* play) {
 }
 
 void func_809CD028(EnBji01* this, PlayState* play) {
-    f32 timeBeforeMoonCrash;
+    f32 timeUntilMoonCrash;
 
     switch (this->actor.params) {
         case SHIKASHI_TYPE_DEFAULT:
@@ -177,11 +177,8 @@ void func_809CD028(EnBji01* this, PlayState* play) {
                             this->textId = 0x5EA;
                             break;
                         case 3:
-                            // Calculates the time left before the moon crashes.
-                            // The day begins at CLOCK_TIME(6, 0) so it must be offset.
-                            timeBeforeMoonCrash = (4 - CURRENT_DAY) * DAY_LENGTH -
-                                                  (u16)(((void)0, gSaveContext.save.time) - CLOCK_TIME(6, 0));
-                            if (timeBeforeMoonCrash < CLOCK_TIME_F(1, 0)) {
+                            timeUntilMoonCrash = TIME_UNTIL_MOON_CRASH;
+                            if (timeUntilMoonCrash < CLOCK_TIME_F(1, 0)) {
                                 this->textId = 0x5E8;
                             } else {
                                 this->textId = 0x5EB;
@@ -211,21 +208,21 @@ void EnBji01_DialogueHandler(EnBji01* this, PlayState* play) {
                 switch (play->msgCtx.choiceIndex) {
                     case 0:
                         func_8019F208();
-                        func_801477B4(play);
+                        Message_CloseTextbox(play);
                         func_809CD634(this, play);
                         break;
                     case 1:
                         func_8019F230();
                         switch (gSaveContext.save.playerForm) {
                             case PLAYER_FORM_DEKU:
-                                func_80151938(play, 0x5F0);
+                                Message_ContinueTextbox(play, 0x5F0);
                                 break;
                             case PLAYER_FORM_HUMAN:
-                                func_80151938(play, 0x5F8);
+                                Message_ContinueTextbox(play, 0x5F8);
                                 break;
                             case PLAYER_FORM_GORON:
                             case PLAYER_FORM_ZORA:
-                                func_80151938(play, 0x5E1);
+                                Message_ContinueTextbox(play, 0x5E1);
                                 break;
                         }
                         break;
@@ -238,16 +235,16 @@ void EnBji01_DialogueHandler(EnBji01* this, PlayState* play) {
                 switch (play->msgCtx.currentTextId) {
                     case 0x5DE:
                         SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo, 3, &this->animIndex);
-                        func_80151938(play, 0x5DF);
+                        Message_ContinueTextbox(play, 0x5DF);
                         break;
                     case 0x5E4:
-                        func_80151938(play, 0x5E7);
+                        Message_ContinueTextbox(play, 0x5E7);
                         break;
                     case 0x5E5:
-                        func_80151938(play, 0x5E0);
+                        Message_ContinueTextbox(play, 0x5E0);
                         break;
                     case 0x5E7:
-                        func_80151938(play, 0x5E5);
+                        Message_ContinueTextbox(play, 0x5E5);
                         break;
                     case 0x5DC:
                     case 0x5DD:
@@ -257,11 +254,11 @@ void EnBji01_DialogueHandler(EnBji01* this, PlayState* play) {
                     case 0x5EE:
                     case 0x5F2:
                     case 0x5F5:
-                        func_80151938(play, play->msgCtx.currentTextId + 1);
+                        Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                         break;
                     case 0x5F0:
                     case 0x5F6:
-                        func_80151938(play, 0x5EF);
+                        Message_ContinueTextbox(play, 0x5EF);
                         break;
                     case 0x5E1:
                     case 0x5E8:
@@ -273,7 +270,7 @@ void EnBji01_DialogueHandler(EnBji01* this, PlayState* play) {
                     case 0x5F4:
                     case 0x5F7:
                     case 0x5F8:
-                        func_801477B4(play);
+                        Message_CloseTextbox(play);
                         this->actor.flags &= ~ACTOR_FLAG_10000;
                         this->actor.params = SHIKASHI_TYPE_FINISHED_CONVERSATION;
                         func_809CCE98(this, play);
@@ -295,7 +292,7 @@ void EnBji01_DialogueHandler(EnBji01* this, PlayState* play) {
 void func_809CD634(EnBji01* this, PlayState* play) {
     AudioSfx_MuteBanks((1 << BANK_PLAYER) | (1 << BANK_ITEM) | (1 << BANK_ENV) | (1 << BANK_ENEMY) |
                        (1 << BANK_OCARINA) | (1 << BANK_VOICE));
-    Audio_QueueSeqCmd(0xE0000101);
+    SEQCMD_DISABLE_PLAY_SEQUENCES(true);
     play->nextEntrance = ENTRANCE(TERMINA_FIELD, 10); /* Telescope entrance */
     gSaveContext.respawn[RESPAWN_MODE_DOWN].entrance = play->nextEntrance;
     func_80169EFC(&play->state); /* Load new entrance? */
@@ -340,7 +337,7 @@ void EnBji01_Init(Actor* thisx, PlayState* play) {
     this->animIndex = -1;
 
     Actor_SetScale(&this->actor, 0.01f);
-    SubS_FillCutscenesList(&this->actor, this->cutscenes, ARRAY_COUNT(this->cutscenes));
+    SubS_FillCutscenesList(&this->actor, this->csIdList, ARRAY_COUNT(this->csIdList));
     this->moonsTear = (ObjMoonStone*)SubS_FindActor(play, NULL, ACTORCAT_PROP, ACTOR_OBJ_MOON_STONE);
 
     switch (gSaveContext.save.entrance) {
@@ -349,13 +346,15 @@ void EnBji01_Init(Actor* thisx, PlayState* play) {
             this->actor.params = SHIKASHI_TYPE_DEFAULT;
             func_809CCE98(this, play);
             break;
+
         case ENTRANCE(ASTRAL_OBSERVATORY, 2): /* Telescope entrance */
             this->actor.flags |= ACTOR_FLAG_10000;
             AudioSfx_MuteBanks(0);
-            Audio_QueueSeqCmd(0xE0000100);
+            SEQCMD_DISABLE_PLAY_SEQUENCES(false);
             this->actor.params = SHIKASHI_TYPE_LOOKED_THROUGH_TELESCOPE;
             func_809CCE98(this, play);
             break;
+
         default:
             Actor_Kill(&this->actor);
             break;
@@ -374,7 +373,7 @@ void EnBji01_Update(Actor* thisx, PlayState* play) {
     s32 pad;
 
     this->actionFunc(this, play);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
     SkelAnime_Update(&this->skelAnime);
 
     if (this->blinkTimer-- <= 0) {
@@ -435,9 +434,11 @@ void EnBji01_Draw(Actor* thisx, PlayState* play) {
     EnBji01* this = THIS;
 
     OPEN_DISPS(play->state.gfxCtx);
-    func_8012C28C(play->state.gfxCtx);
+
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyeTextures[this->eyeTexIndex]));
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnBji01_OverrideLimbDraw, EnBji01_PostLimbDraw, &this->actor);
+
     CLOSE_DISPS(play->state.gfxCtx);
 }

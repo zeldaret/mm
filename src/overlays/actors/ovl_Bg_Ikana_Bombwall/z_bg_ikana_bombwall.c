@@ -235,8 +235,8 @@ void BgIkanaBombwall_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     BgIkanaBombwall* this = THIS;
     s32 sp2C = BGIKANABOMBWALL_GET_100(&this->dyna.actor);
-    s32 sp28;
-    s32 sp24;
+    CollisionHeader* colHeader;
+    ColliderCylinderInit* cylinderInit;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, 0);
@@ -248,15 +248,15 @@ void BgIkanaBombwall_Init(Actor* thisx, PlayState* play) {
     }
 
     if (sp2C == 0) {
-        sp28 = &object_ikana_obj_Colheader_000488;
-        sp24 = &sCylinderInit1;
+        colHeader = &object_ikana_obj_Colheader_000488;
+        cylinderInit = &sCylinderInit1;
     } else {
-        sp28 = &object_ikana_obj_Colheader_000128;
-        sp24 = &sCylinderInit2;
+        colHeader = &object_ikana_obj_Colheader_000128;
+        cylinderInit = &sCylinderInit2;
     }
 
-    DynaPolyActor_LoadMesh(play, &this->dyna, sp28);
-    Collider_SetCylinder(play, &this->collider, &this->dyna.actor, sp24);
+    DynaPolyActor_LoadMesh(play, &this->dyna, colHeader);
+    Collider_SetCylinder(play, &this->collider, &this->dyna.actor, cylinderInit);
     Collider_UpdateCylinder(&this->dyna.actor, &this->collider);
 
     if (sp2C == 0) {
@@ -319,13 +319,13 @@ void func_80BD4F9C(BgIkanaBombwall* this, PlayState* play) {
 
 void func_80BD4FF8(BgIkanaBombwall* this) {
     this->dyna.actor.flags |= ACTOR_FLAG_10;
-    ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+    CutsceneManager_Queue(this->dyna.actor.csId);
     this->actionFunc = func_80BD503C;
 }
 
 void func_80BD503C(BgIkanaBombwall* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
+    if (CutsceneManager_IsNext(this->dyna.actor.csId)) {
+        CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
         if (!BGIKANABOMBWALL_GET_100(&this->dyna.actor)) {
             func_80BD4720(this, play);
         } else {
@@ -335,11 +335,11 @@ void func_80BD503C(BgIkanaBombwall* this, PlayState* play) {
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->dyna.actor.world.pos, 60, NA_SE_EV_WALL_BROKEN);
         Flags_SetSwitch(play, BGIKANABOMBWALL_GET_SWITCHFLAG(&this->dyna.actor));
         if (!BGIKANABOMBWALL_GET_100(&this->dyna.actor)) {
-            func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+            DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
         }
         func_80BD5118(this);
     } else {
-        ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+        CutsceneManager_Queue(this->dyna.actor.csId);
     }
 }
 
@@ -352,11 +352,11 @@ void func_80BD5134(BgIkanaBombwall* this, PlayState* play) {
     if (!BGIKANABOMBWALL_GET_100(&this->dyna.actor)) {
         this->unk_1AC--;
         if (this->unk_1AC <= 0) {
-            ActorCutscene_Stop(this->dyna.actor.cutscene);
+            CutsceneManager_Stop(this->dyna.actor.csId);
             Actor_Kill(&this->dyna.actor);
         }
-    } else if (this->dyna.actor.cutscene >= 0) {
-        if (ActorCutscene_GetCurrentIndex() != this->dyna.actor.cutscene) {
+    } else if (this->dyna.actor.csId >= 0) {
+        if (CutsceneManager_GetCurrentCsId() != this->dyna.actor.csId) {
             Actor_Kill(&this->dyna.actor);
         }
     } else {

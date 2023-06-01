@@ -47,13 +47,13 @@ void BgOpenSpot_Destroy(Actor* thisx, PlayState* play) {
 
 void BgOpenSpot_Update(Actor* thisx, PlayState* play) {
     BgOpenSpot* this = THIS;
-    u32 action;
+    u32 cueId;
 
-    if (Cutscene_CheckActorAction(play, 0x7D)) {
-        action = play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 0x7D)]->action;
-        if (action == 1) {
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_125)) {
+        cueId = play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_125)]->id;
+        if (cueId == 1) {
             this->actor.draw = NULL;
-        } else if (action == 2) {
+        } else if (cueId == 2) {
             this->actor.draw = BgOpenSpot_Draw;
         }
     }
@@ -66,7 +66,7 @@ void BgOpenSpot_Draw(Actor* thisx, PlayState* play) {
     AnimatedMat_Draw(play, this->texScrolls);
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_MODELVIEW | G_MTX_LOAD);
     gDPSetColorDither(POLY_XLU_DISP++, G_CD_BAYER);
     gSPDisplayList(POLY_XLU_DISP++, gSpotlightLeftDL);

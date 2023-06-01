@@ -8,24 +8,24 @@ struct EnPoSisters;
 
 typedef void (*EnPoSistersActionFunc)(struct EnPoSisters*, PlayState*);
 
-#define ENPOSISTERS_GET_OBSERVER_FLAG(thisx) ((thisx)->params & 0x1000)
-#define ENPOSISTERS_GET_MEG_CLONE_ID(thisx) (((thisx)->params >> 0xA) & 3)
-#define ENPOSISTERS_GET_TYPE(thisx) (((thisx)->params >> 8) & 3)
+#define POE_SISTERS_GET_OBSERVER_FLAG(thisx) ((thisx)->params & 0x1000)
+#define POE_SISTERS_GET_MEG_CLONE_ID(thisx) (((thisx)->params >> 0xA) & 3)
+#define POE_SISTERS_GET_TYPE(thisx) (((thisx)->params >> 8) & 3)
 
-#define ENPOSISTERS_PARAMS(observerFlag, megClone, type) (((observerFlag) << 0xC) | ((megClone & 3) << 0xA) | ((type & 3) << 8))
+#define POE_SISTERS_PARAMS(observerFlag, megClone, type) (((observerFlag) << 0xC) | ((megClone & 3) << 0xA) | ((type & 3) << 8))
 
 typedef enum {
-    /* 0 */ POSISTER_TYPE_MEG,   // purple
-    /* 1 */ POSISTER_TYPE_JO,    // red
-    /* 2 */ POSISTER_TYPE_BETH,  // blue
-    /* 3 */ POSISTER_TYPE_AMY,   // green
+    /* 0 */ POE_SISTERS_TYPE_MEG,   // purple
+    /* 1 */ POE_SISTERS_TYPE_JO,    // red
+    /* 2 */ POE_SISTERS_TYPE_BETH,  // blue
+    /* 3 */ POE_SISTERS_TYPE_AMY,   // green
 } EnPoSisterType;
 
 typedef enum {
-    /* 0 */ POSISTER_MEG_REAL,
-    /* 1 */ POSISTER_MEG_CLONE1,
-    /* 2 */ POSISTER_MEG_CLONE2,
-    /* 3 */ POSISTER_MEG_CLONE3,
+    /* 0 */ POE_SISTERS_MEG_REAL,
+    /* 1 */ POE_SISTERS_MEG_CLONE1,
+    /* 2 */ POE_SISTERS_MEG_CLONE2,
+    /* 3 */ POE_SISTERS_MEG_CLONE3,
 } EnPoSisterMegCloneID;
 
 typedef struct EnPoSisters {
@@ -54,8 +54,8 @@ typedef struct EnPoSisters {
                 s16 megAttackTimer; // delay until meg spin attacks player (negative frames counting up to 0) 
                 s16 megClonesRemaining; // positive count of meg clones remaining
     };
-    /* 0x196 */ Vec3s jointTable[POSISTERS_LIMB_MAX];
-    /* 0x1DE */ Vec3s morphTable[POSISTERS_LIMB_MAX];
+    /* 0x196 */ Vec3s jointTable[POE_SISTERS_LIMB_MAX];
+    /* 0x1DE */ Vec3s morphTable[POE_SISTERS_LIMB_MAX];
     /* 0x226 */ Color_RGBA8 color;
     /* 0x22C */ Vec3f firePos[8];
     /* 0x28C */ Vec3f limbPos[8]; // passed to Actor_DrawDamageEffects

@@ -99,7 +99,7 @@ void ObjTree_Init(Actor* thisx, PlayState* play) {
         this->dyna.actor.uncullZoneForward = 4000.0f;
     } else {
         Actor_SetScale(&this->dyna.actor, 0.1f);
-        DynaPolyActor_Init(&this->dyna, 1);
+        DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
         CollisionHeader_GetVirtual(&object_tree_Colheader_001B2C, &colHeader);
         this->dyna.bgId = DynaPoly_SetBgActor(play, &play->colCtx.dyna, &this->dyna.actor, colHeader);
     }
@@ -141,7 +141,7 @@ void ObjTree_SetupSway(ObjTree* this) {
     this->timer = 0;
     this->swayAmplitude = 546.0f;
     this->swayVelocity = 35 * 0x10000 / 360;
-    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_TREE_SWING);
+    Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_TREE_SWING);
     this->actionFunc = ObjTree_Sway;
 }
 
@@ -185,7 +185,7 @@ void ObjTree_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, object_tree_DL_000680);
 

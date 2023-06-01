@@ -301,7 +301,7 @@ void func_80BC2150(EnJa* this, PlayState* play) {
 void func_80BC21A8(EnJa* this, PlayState* play) {
     ScheduleOutput sp18;
 
-    this->unk_35C = REG(15) + ((void)0, gSaveContext.save.daySpeed);
+    this->unk_35C = R_TIME_SPEED + ((void)0, gSaveContext.save.timeSpeedOffset);
     if (!Schedule_RunScript(play, D_80BC35F0, &sp18) ||
         ((this->unk_1D8.unk_00 != sp18.result) && !func_80BC20D0(this, play, &sp18))) {
         this->actor.shape.shadowDraw = NULL;
@@ -389,7 +389,7 @@ void EnJa_Update(Actor* thisx, PlayState* play) {
 
         if (this->unk_1D8.unk_00 != 2) {
             Actor_MoveWithGravity(&this->actor);
-            Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, 4);
+            Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
         }
         func_80BC1984(this, play);
     }
@@ -594,7 +594,7 @@ void EnJa_Draw(Actor* thisx, PlayState* play) {
     if (this->unk_1D8.unk_00 != 0) {
         OPEN_DISPS(play->state.gfxCtx);
 
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
         gSPSegment(POLY_OPA_DISP++, 0x08,
                    Gfx_EnvColor(play->state.gfxCtx, D_80BC37AC[phi_t2].r, D_80BC37AC[phi_t2].g, D_80BC37AC[phi_t2].b,
