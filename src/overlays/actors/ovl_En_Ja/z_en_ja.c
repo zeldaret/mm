@@ -594,7 +594,7 @@ void EnJa_Draw(Actor* thisx, PlayState* play) {
     if (this->unk_1D8.unk_00 != 0) {
         OPEN_DISPS(play->state.gfxCtx);
 
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
         gSPSegment(POLY_OPA_DISP++, 0x08,
                    Gfx_EnvColor(play->state.gfxCtx, D_80BC37AC[phi_t2].r, D_80BC37AC[phi_t2].g, D_80BC37AC[phi_t2].b,

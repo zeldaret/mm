@@ -42,6 +42,7 @@
  *          -Y                      +Z                      -Y
  *
  */
+
 #include "global.h"
 #include "z64quake.h"
 #include "z64shrink_window.h"
@@ -465,13 +466,13 @@ s32 func_800CBA7C(Camera* camera) {
     }
 }
 
-s32 func_800CBAAC(Camera* camera) {
+PlayerMeleeWeaponState func_800CBAAC(Camera* camera) {
     Actor* focalActor = camera->focalActor;
 
     if (camera->focalActor == &GET_PLAYER(camera->play)->actor) {
         return ((Player*)focalActor)->meleeWeaponState;
     } else {
-        return 0;
+        return PLAYER_MELEE_WEAPON_STATE_0;
     }
 }
 
@@ -506,13 +507,13 @@ s32 func_800CBB88(Camera* camera) {
     Actor* focalActor = camera->focalActor;
 
     if (camera->focalActor == &GET_PLAYER(camera->play)->actor) {
-        if ((((Player*)focalActor)->meleeWeaponState != 0) &&
+        if ((((Player*)focalActor)->meleeWeaponState != PLAYER_MELEE_WEAPON_STATE_0) &&
             (((Player*)focalActor)->meleeWeaponAnimation == PLAYER_MWA_GORON_PUNCH_BUTT)) {
             return 3;
         }
 
         if ((((Player*)focalActor)->stateFlags2 & PLAYER_STATE2_20000) ||
-            ((((Player*)focalActor)->meleeWeaponState != 0) &&
+            ((((Player*)focalActor)->meleeWeaponState != PLAYER_MELEE_WEAPON_STATE_0) &&
              (((Player*)focalActor)->meleeWeaponAnimation == PLAYER_MWA_ZORA_PUNCH_KICK))) {
             return 1;
         }
@@ -3958,7 +3959,7 @@ s32 Camera_Battle1(Camera* camera) {
     }
 
     camera->roll = Camera_ScaledStepToCeilS(sp88, camera->roll, 0.06f, 5);
-    if (func_800CBAAC(camera) != 0) {
+    if (func_800CBAAC(camera) != PLAYER_MELEE_WEAPON_STATE_0) {
         phi_f12 = ((camera->play->state.frames & 8) != 0) ? roData->unk_20 - (roData->unk_20 * 0.5f) : roData->unk_20;
     } else {
         phi_f12 = ((gSaveContext.save.saveInfo.playerData.health <= 16) ? 0.8f : 1.0f) * (sp78 - (sp78 * 0.05f * spEC));

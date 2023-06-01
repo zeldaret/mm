@@ -345,7 +345,7 @@ void KaleidoScope_DrawInventoryEditor(PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C628(play->state.gfxCtx);
+    Gfx_SetupDL39_Opa(play->state.gfxCtx);
 
     gDPSetRenderMode(POLY_OPA_DISP++, G_RM_XLU_SURF, G_RM_XLU_SURF2);
     gDPSetCombineMode(POLY_OPA_DISP++, G_CC_PRIMITIVE, G_CC_PRIMITIVE);
@@ -605,7 +605,7 @@ void KaleidoScope_DrawInventoryEditor(PlayState* play) {
     KaleidoScope_DrawDigit(play, gSaveContext.save.saveInfo.playerData.doubleDefense, 44, 202);
 
     // Magic
-    //! @bug should be gSaveContext.save.saveInfo.playerData.doubleMagic
+    //! @bug should be gSaveContext.save.saveInfo.playerData.isDoubleMagicAcquired
     KaleidoScope_DrawDigit(play, gSaveContext.save.saveInfo.playerData.doubleDefense, 75, 202);
 
     // Lottery
