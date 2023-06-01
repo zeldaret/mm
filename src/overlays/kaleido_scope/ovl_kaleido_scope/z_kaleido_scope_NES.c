@@ -5,11 +5,11 @@
  */
 
 #include "z_kaleido_scope.h"
-#include "overlays/gamestates/ovl_opening/z_opening.h"
-#include "interface/icon_item_gameover_static/icon_item_gameover_static.h"
-#include "interface/icon_item_jpn_static/icon_item_jpn_static.h"
 #include "z64view.h"
 #include "overlays/gamestates/ovl_opening/z_opening.h"
+
+#include "interface/icon_item_gameover_static/icon_item_gameover_static.h"
+#include "interface/icon_item_jpn_static/icon_item_jpn_static.h"
 #include "interface/icon_item_gameover_static/icon_item_gameover_static.h"
 #include "interface/icon_item_jpn_static/icon_item_jpn_static.h"
 #include "interface/icon_item_vtx_static/icon_item_vtx_static.h"
@@ -22,83 +22,83 @@ extern TexturePtr D_08064340; // gPauseMenuCursorTex
 // Numbered by column/row.
 TexturePtr sMaskPageBgTextures[] = {
     // Column 0
-    0x08064440, // gPauseMasks00Tex
-    0x0806E440, // gPauseMasks01Tex
-    0x08077A40, // gPauseMasks02Tex
-    0x08081040, // gPauseMasks03Tex
-    0x0808A640, // gPauseMasks04Tex
+    (TexturePtr)0x08064440, // gPauseMasks00Tex
+    (TexturePtr)0x0806E440, // gPauseMasks01Tex
+    (TexturePtr)0x08077A40, // gPauseMasks02Tex
+    (TexturePtr)0x08081040, // gPauseMasks03Tex
+    (TexturePtr)0x0808A640, // gPauseMasks04Tex
     // Column 1
     gPauseMasks10ENGTex,
-    0x0806EE40, // gPauseMasks11Tex
-    0x08078440, // gPauseMasks12Tex
-    0x08081A40, // gPauseMasks13Tex
-    0x0808B040, // gPauseMasks14Tex
+    (TexturePtr)0x0806EE40, // gPauseMasks11Tex
+    (TexturePtr)0x08078440, // gPauseMasks12Tex
+    (TexturePtr)0x08081A40, // gPauseMasks13Tex
+    (TexturePtr)0x0808B040, // gPauseMasks14Tex
     // Column 2
-    0x08065840, // gPauseMasks20Tex
-    0x0806F840, // gPauseMasks21Tex
-    0x08078E40, // gPauseMasks22Tex
-    0x08082440, // gPauseMasks23Tex
-    0x0808BA40, // gPauseMasks24Tex
+    (TexturePtr)0x08065840, // gPauseMasks20Tex
+    (TexturePtr)0x0806F840, // gPauseMasks21Tex
+    (TexturePtr)0x08078E40, // gPauseMasks22Tex
+    (TexturePtr)0x08082440, // gPauseMasks23Tex
+    (TexturePtr)0x0808BA40, // gPauseMasks24Tex
 };
 TexturePtr sItemPageBgTextures[] = {
     // Column 0
     gPauseSelectItem00ENGTex,
-    0x08070240, // gPauseSelectItem01Tex
-    0x08079840, // gPauseSelectItem02Tex
-    0x08082E40, // gPauseSelectItem03Tex
-    0x0808C440, // gPauseSelectItem04Tex
+    (TexturePtr)0x08070240, // gPauseSelectItem01Tex
+    (TexturePtr)0x08079840, // gPauseSelectItem02Tex
+    (TexturePtr)0x08082E40, // gPauseSelectItem03Tex
+    (TexturePtr)0x0808C440, // gPauseSelectItem04Tex
     // Column 1
     gPauseSelectItem10ENGTex,
-    0x08070C40, // gPauseSelectItem11Tex
-    0x0807A240, // gPauseSelectItem12Tex
-    0x08083840, // gPauseSelectItem13Tex
-    0x0808CE40, // gPauseSelectItem14Tex
+    (TexturePtr)0x08070C40, // gPauseSelectItem11Tex
+    (TexturePtr)0x0807A240, // gPauseSelectItem12Tex
+    (TexturePtr)0x08083840, // gPauseSelectItem13Tex
+    (TexturePtr)0x0808CE40, // gPauseSelectItem14Tex
     // Column 2
     gPauseSelectItem20ENGTex,
-    0x08071640, // gPauseSelectItem21Tex
-    0x0807AC40, // gPauseSelectItem22Tex
-    0x08084240, // gPauseSelectItem23Tex
-    0x0808D840, // gPauseSelectItem24Tex
+    (TexturePtr)0x08071640, // gPauseSelectItem21Tex
+    (TexturePtr)0x0807AC40, // gPauseSelectItem22Tex
+    (TexturePtr)0x08084240, // gPauseSelectItem23Tex
+    (TexturePtr)0x0808D840, // gPauseSelectItem24Tex
 };
 TexturePtr sMapPageBgTextures[] = {
     // Column 0
-    0x08068040, // gPauseMap00Tex
-    0x08072040, // gPauseMap01Tex
-    0x0807B640, // gPauseMap02Tex
-    0x08084C40, // gPauseMap03Tex
-    0x0808E240, // gPauseMap04Tex
+    (TexturePtr)0x08068040, // gPauseMap00Tex
+    (TexturePtr)0x08072040, // gPauseMap01Tex
+    (TexturePtr)0x0807B640, // gPauseMap02Tex
+    (TexturePtr)0x08084C40, // gPauseMap03Tex
+    (TexturePtr)0x0808E240, // gPauseMap04Tex
     // Column 1
     gPauseMap10ENGTex,
-    0x08072A40, // gPauseMap11Tex
-    0x0807C040, // gPauseMap12Tex
-    0x08085640, // gPauseMap13Tex
-    0x0808EC40, // gPauseMap14Tex
+    (TexturePtr)0x08072A40, // gPauseMap11Tex
+    (TexturePtr)0x0807C040, // gPauseMap12Tex
+    (TexturePtr)0x08085640, // gPauseMap13Tex
+    (TexturePtr)0x0808EC40, // gPauseMap14Tex
     // Column 2
-    0x08069440, // gPauseMap20Tex
-    0x08073440, // gPauseMap21Tex
-    0x0807CA40, // gPauseMap22Tex
-    0x08086040, // gPauseMap23Tex
-    0x0808F640, // gPauseMap24Tex
+    (TexturePtr)0x08069440, // gPauseMap20Tex
+    (TexturePtr)0x08073440, // gPauseMap21Tex
+    (TexturePtr)0x0807CA40, // gPauseMap22Tex
+    (TexturePtr)0x08086040, // gPauseMap23Tex
+    (TexturePtr)0x0808F640, // gPauseMap24Tex
 };
 TexturePtr sQuestPageBgTextures[] = {
     // Column 0
     gPauseQuestStatus00ENGTex,
-    0x08073E40, // gPauseQuestStatus01Tex
-    0x0807D440, // gPauseQuestStatus02Tex
-    0x08086A40, // gPauseQuestStatus03Tex
-    0x08090040, // gPauseQuestStatus04Tex
+    (TexturePtr)0x08073E40, // gPauseQuestStatus01Tex
+    (TexturePtr)0x0807D440, // gPauseQuestStatus02Tex
+    (TexturePtr)0x08086A40, // gPauseQuestStatus03Tex
+    (TexturePtr)0x08090040, // gPauseQuestStatus04Tex
     // Column 1
     gPauseQuestStatus10ENGTex,
-    0x08074840, // gPauseQuestStatus11Tex
-    0x0807DE40, // gPauseQuestStatus12Tex
-    0x08087440, // gPauseQuestStatus13Tex
-    0x08090A40, // gPauseQuestStatus14Tex
+    (TexturePtr)0x08074840, // gPauseQuestStatus11Tex
+    (TexturePtr)0x0807DE40, // gPauseQuestStatus12Tex
+    (TexturePtr)0x08087440, // gPauseQuestStatus13Tex
+    (TexturePtr)0x08090A40, // gPauseQuestStatus14Tex
     // Column 2
     gPauseQuestStatus20ENGTex,
-    0x08075240, // gPauseQuestStatus21Tex
-    0x0807E840, // gPauseQuestStatus22Tex
-    0x08087E40, // gPauseQuestStatus23Tex
-    0x08091440, // gPauseQuestStatus24Tex
+    (TexturePtr)0x08075240, // gPauseQuestStatus21Tex
+    (TexturePtr)0x0807E840, // gPauseQuestStatus22Tex
+    (TexturePtr)0x08087E40, // gPauseQuestStatus23Tex
+    (TexturePtr)0x08091440, // gPauseQuestStatus24Tex
 };
 
 s16 gVtxPageMapWorldQuadsWidth[VTX_PAGE_MAP_WORLD_QUADS] = {
@@ -2864,7 +2864,7 @@ void KaleidoScope_Update(PlayState* play) {
 
             for (itemId = 0; itemId <= ITEM_BOW_ARROW_FIRE; itemId++) {
                 if (!gPlayerFormItemRestrictions[(void)0, gSaveContext.save.playerForm][(s32)itemId]) {
-                    KaleidoScope_GrayOutTextureRGBA32(Lib_SegmentedToVirtual((TexturePtr)gItemIcons[(s32)itemId]),
+                    KaleidoScope_GrayOutTextureRGBA32(Lib_SegmentedToVirtual(gItemIcons[(s32)itemId]),
                                                       0x400);
                 }
             }

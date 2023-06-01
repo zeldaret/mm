@@ -16296,9 +16296,9 @@ void func_80851F18(PlayState* play, Player* this) {
         temp_v0 = &this->unk_B10[this->unk_B86[i]];
 
         AnimationContext_SetLoadFrame(play, temp->unk_4, *temp_v0, this->skelAnime.limbCount,
-                                      ALIGN16((uintptr_t)this->blendTableBuffer));
+                                      (void*)ALIGN16((uintptr_t)this->blendTableBuffer));
         AnimationContext_SetCopyTrue(play, this->skelAnime.limbCount, this->skelAnime.jointTable,
-                                     ALIGN16((uintptr_t)this->blendTableBuffer), D_8085BA20);
+                                     (void*)ALIGN16((uintptr_t)this->blendTableBuffer), D_8085BA20);
     }
 
     temp_v0 = this->unk_B10;
@@ -19240,7 +19240,7 @@ void func_80859C60(PlayState* play, Player* this, void* arg2) {
     PlayerAnimation_Update(play, &this->skelAnime);
 }
 
-void func_80859CA0(PlayState* play, Player* this, s32 arg2) {
+void func_80859CA0(PlayState* play, Player* this, UNK_TYPE arg2) {
     func_8082E514(play, this, D_8085BE84[PLAYER_ANIMGROUP_43][this->modelAnimType]);
     Player_StopHorizontalMovement(this);
 }
@@ -19702,7 +19702,7 @@ void func_8085A364(PlayState* play, Player* this, void* arg2) {
 
 void func_8085A40C(PlayState* play, Player* this, void* arg2) {
     if (PlayerAnimation_Update(play, &this->skelAnime)) {
-        func_80859CA0(play, this, arg2);
+        func_80859CA0(play, this, (UNK_TYPE)arg2);
     } else if (this->skelAnime.animation == &gPlayerAnim_al_fuwafuwa_modori) {
         Player_PlayAnimSfx(this, D_8085DA88);
     } else if (this->skelAnime.animation == &gPlayerAnim_cl_jibun_miru) {

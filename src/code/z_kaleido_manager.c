@@ -17,7 +17,7 @@ KaleidoMgrOverlay* gKaleidoMgrCurOvl = NULL;
 FaultAddrConvClient sKaleidoMgrFaultAddrConvClient;
 
 void* KaleidoManager_FaultAddrConv(void* address, void* param) {
-    uintptr_t addr = address;
+    uintptr_t addr = (uintptr_t)address;
     KaleidoMgrOverlay* kaleidoMgrOvl = gKaleidoMgrCurOvl;
     size_t ramConv;
     void* ramStart;
@@ -30,7 +30,7 @@ void* KaleidoManager_FaultAddrConv(void* address, void* param) {
 
         if (ramStart != NULL) {
             if ((addr >= (uintptr_t)ramStart) && (addr < (uintptr_t)ramStart + diff)) {
-                return addr + ramConv;
+                return (void*)(addr + ramConv);
             }
         }
     }

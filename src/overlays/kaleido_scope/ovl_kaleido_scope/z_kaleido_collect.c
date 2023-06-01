@@ -117,8 +117,8 @@ void KaleidoScope_DrawQuestStatus(PlayState* play) {
         255, // QUEST_SONG_SUN
     };
     static TexturePtr sQuestUpgradeTextures[][3] = {
-        { 0x08053000, 0x08054000, 0x08055000 }, // UPG_QUIVER
-        { 0x08056000, 0x08057000, 0x08058000 }, // UPG_BOMB_BAG
+        { (TexturePtr)0x08053000, (TexturePtr)0x08054000, (TexturePtr)0x08055000 }, // UPG_QUIVER
+        { (TexturePtr)0x08056000, (TexturePtr)0x08057000, (TexturePtr)0x08058000 }, // UPG_BOMB_BAG
     };
     static u8 sQuestUpgrades[] = { UPG_QUIVER, UPG_BOMB_BAG };
     PauseContext* pauseCtx = &play->pauseCtx;

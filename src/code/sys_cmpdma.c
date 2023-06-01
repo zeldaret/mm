@@ -43,7 +43,7 @@ void func_80178AC0(u16* src, void* dst, size_t size) {
     }
 }
 
-void CmpDma_GetFileInfo(u8* segmentRom, s32 id, uintptr_t* outFileRom, size_t* size, s32* flag) {
+void CmpDma_GetFileInfo(uintptr_t segmentRom, s32 id, uintptr_t* outFileRom, size_t* size, s32* flag) {
     u32 dataStart;
     u32 refOff;
 
