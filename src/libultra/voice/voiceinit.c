@@ -9,7 +9,9 @@
 #include "functions.h"
 #include "macros.h"
 
-static u8 cmd[] = { 0x1E, 0x6E, 0x08, 0x56, 0x03 };
+static u8 sCmds[] = {
+    0x1E, 0x6E, 0x08, 0x56, 0x03,
+};
 
 s32 osVoiceInit(OSMesgQueue* mq, OSVoiceHandle* hd, s32 channel) {
     s32 errorCode;
@@ -30,8 +32,8 @@ s32 osVoiceInit(OSMesgQueue* mq, OSVoiceHandle* hd, s32 channel) {
         return CONT_ERR_CONTRFAIL;
     }
 
-    for (i = 0; i < ARRAY_COUNT(cmd); i++) {
-        errorCode = __osVoiceSetADConverter(mq, channel, cmd[i]);
+    for (i = 0; i < ARRAY_COUNT(sCmds); i++) {
+        errorCode = __osVoiceSetADConverter(mq, channel, sCmds[i]);
         if (errorCode != 0) {
             return errorCode;
         }
