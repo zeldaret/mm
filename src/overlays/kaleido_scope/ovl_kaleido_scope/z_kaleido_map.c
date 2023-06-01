@@ -75,11 +75,10 @@ void KaleidoScope_DrawDungeonStrayFairyCount(PlayState* play) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-// TODO: TexturePtr
-uintptr_t sDungeonItemTextures[] = {
-    0x09003600, // `gBossKeyIconTex`: DUNGEON_BOSS_KEY
-    0x09003F00, // `gCompassIconTex`: DUNGEON_COMPASS
-    0x09004800, // `gDungeonMapIconTex`: DUNGEON_MAP
+TexturePtr sDungeonItemTextures[] = {
+    (TexturePtr)0x09003600, // `gBossKeyIconTex`: DUNGEON_BOSS_KEY
+    (TexturePtr)0x09003F00, // `gCompassIconTex`: DUNGEON_COMPASS
+    (TexturePtr)0x09004800, // `gDungeonMapIconTex`: DUNGEON_MAP
 };
 
 TexturePtr sDungeonTitleTextures[] = {
