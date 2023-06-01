@@ -1,64 +1,58 @@
 #include "global.h"
 
-// Initializes Voice Recognition System control structure and hardware
-s32 osVoiceInit(OSMesgQueue* siMessageQ, OSVoiceHandle* hd, s32 channel) {
-    s32 errorCode;
-    u8* phi_s0;
-    u8 status = 0;
-    union {
-        u32 data32;
-        u8 data[4];
-    } u;
-    s32 pad;
+static u8 cmd[] = { 0x1E, 0x6E, 0x08, 0x56, 0x03 };
 
-    hd->port = channel;
-    hd->mq = siMessageQ;
+// Initializes Voice Recognition System control structure and hardware
+s32 osVoiceInit(OSMesgQueue* mq, OSVoiceHandle* hd, s32 channel) {
+    s32 errorCode;
+    s32 i;
+    u8 status = 0;
+    u8 data[4];
+
+    hd->channel = channel;
+    hd->mq = mq;
     hd->mode = 0;
 
-    errorCode = __osVoiceGetStatus(siMessageQ, channel, &status);
+    errorCode = __osVoiceGetStatus(mq, channel, &status);
     if (errorCode != 0) {
         return errorCode;
     }
 
-    if (__osContChannelReset(siMessageQ, channel) != 0) {
+    if (__osContChannelReset(mq, channel) != 0) {
         return CONT_ERR_CONTRFAIL;
     }
 
-    for (phi_s0 = &D_80097FA0;;) {
-        errorCode = __osVoiceSetADConverter(siMessageQ, channel, *phi_s0);
-
-        phi_s0++;
+    for (i = 0; i < ARRAY_COUNT(cmd); i++) {
+        errorCode = __osVoiceSetADConverter(mq, channel, cmd[i]);
         if (errorCode != 0) {
             return errorCode;
         }
-
-        if (phi_s0 == &D_80097FA5) {
-            errorCode = __osVoiceGetStatus(siMessageQ, channel, &status);
-            if (errorCode != 0) {
-                return errorCode;
-            }
-            if (status & 2) {
-                return CONT_ERR_VOICE_NO_RESPONSE;
-            }
-
-            /**
-             * data[0] = 0
-             * data[1] = 0
-             * data[2] = 1
-             * data[3] = 0
-             */
-            u.data32 = 0x100;
-            errorCode = __osVoiceContWrite4(siMessageQ, channel, 0, u.data);
-            if (errorCode != 0) {
-                return errorCode;
-            }
-
-            errorCode = __osVoiceCheckResult(hd, &status);
-            if (errorCode & 0xFF00) {
-                errorCode = CONT_ERR_INVALID;
-            }
-
-            return errorCode;
-        }
     }
+
+    errorCode = __osVoiceGetStatus(mq, channel, &status);
+    if (errorCode != 0) {
+        return errorCode;
+    }
+    if (status & 2) {
+        return CONT_ERR_VOICE_NO_RESPONSE;
+    }
+
+    /**
+     * data[0] = 0
+     * data[1] = 0
+     * data[2] = 1
+     * data[3] = 0
+     */
+    *(u32*)data = 0x100;
+    errorCode = __osVoiceContWrite4(mq, channel, 0, data);
+    if (errorCode != 0) {
+        return errorCode;
+    }
+
+    errorCode = __osVoiceCheckResult(hd, &status);
+    if (errorCode & 0xFF00) {
+        errorCode = CONT_ERR_INVALID;
+    }
+
+    return errorCode;
 }

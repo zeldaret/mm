@@ -1,6 +1,8 @@
 #include "global.h"
 
-s32 __osVoiceContRead2(OSMesgQueue* mq, s32 port, u16 arg2, u8 dst[2]) {
+#define READ2FORMAT(p) ((__OSVoiceRead2Format*)(ptr))
+
+s32 __osVoiceContRead2(OSMesgQueue* mq, s32 channel, u16 address, u8 dst[2]) {
     s32 errorCode;
     u8 status;
     u8* ptr;
@@ -11,48 +13,50 @@ s32 __osVoiceContRead2(OSMesgQueue* mq, s32 port, u16 arg2, u8 dst[2]) {
 
     do {
 
-        ptr = (u8*)&__osPfsPifRam;
+        ptr = (u8*)&__osPfsPifRam.ramarray;
 
-        if ((__osContLastPoll != 0xB) || (port != __osPfsLastChannel)) {
-            __osContLastPoll = 0xB;
-            __osPfsLastChannel = port;
+        if ((__osContLastPoll != CONT_CMD_READ2_VOICE) || (channel != __osPfsLastChannel)) {
+            __osContLastPoll = CONT_CMD_READ2_VOICE;
+            __osPfsLastChannel = channel;
 
-            for (i = 0; i < port; i++, *ptr++ = 0) {
-                ;
-            }
+            // clang-format off
+            for (i = 0; i < channel; i++) { *ptr++ = 0; }
+            // clang-format on
 
-            __osPfsPifRam.status = CONT_CMD_READ_BUTTON;
+            __osPfsPifRam.status = CONT_CMD_EXE;
 
-            ptr[0] = 0xFF;
-            ptr[1] = 3;
-            ptr[2] = 3;
-            ptr[3] = 0xB;
-            ptr[8] = 0xFF;
-            ptr[9] = 0xFE;
+            READ2FORMAT(ptr)->dummy = CONT_CMD_NOP;
+            READ2FORMAT(ptr)->txsize = CONT_CMD_READ2_VOICE_TX;
+            READ2FORMAT(ptr)->rxsize = CONT_CMD_READ2_VOICE_RX;
+            READ2FORMAT(ptr)->cmd = CONT_CMD_READ2_VOICE;
+            READ2FORMAT(ptr)->datacrc = 0xFF;
+
+            ptr[sizeof(__OSVoiceRead2Format)] = CONT_CMD_END;
         } else {
-            ptr = (u8*)&__osPfsPifRam + port;
+            ptr += channel;
         }
 
-        ptr[4] = arg2 >> 3;
-        ptr[5] = __osContAddressCrc(arg2) | (arg2 << 5);
+        READ2FORMAT(ptr)->addrh = address >> 3;
+        READ2FORMAT(ptr)->addrl = (address << 5) | __osContAddressCrc(address);
 
         __osSiRawStartDma(OS_WRITE, &__osPfsPifRam);
         osRecvMesg(mq, NULL, OS_MESG_BLOCK);
         __osSiRawStartDma(OS_READ, &__osPfsPifRam);
         osRecvMesg(mq, NULL, OS_MESG_BLOCK);
 
-        errorCode = (ptr[2] & 0xC0) >> 4;
+        errorCode = CHNL_ERR(*READ2FORMAT(ptr));
 
         if (errorCode == 0) {
-            if (ptr[8] != __osVoiceContDataCrc(&ptr[6], 2)) {
-                errorCode = __osVoiceGetStatus(mq, port, &status);
+            if (__osVoiceContDataCrc(READ2FORMAT(ptr)->data, ARRAY_COUNT(READ2FORMAT(ptr)->data)) !=
+                READ2FORMAT(ptr)->datacrc) {
+                errorCode = __osVoiceGetStatus(mq, channel, &status);
                 if (errorCode != 0) {
                     break;
                 }
 
                 errorCode = CONT_ERR_CONTRFAIL;
             } else {
-                bcopy(&ptr[6], dst, 2);
+                bcopy(READ2FORMAT(ptr)->data, dst, ARRAY_COUNT(READ2FORMAT(ptr)->data));
             }
         } else {
             errorCode = CONT_ERR_NO_CONTROLLER;

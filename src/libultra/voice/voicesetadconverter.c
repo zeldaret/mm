@@ -1,53 +1,53 @@
 #include "global.h"
 
-s32 __osVoiceSetADConverter(OSMesgQueue* mq, s32 port, u8 arg2) {
+#define SWRITEFORMAT(p) ((__OSVoiceSWriteFormat*)(p))
+
+s32 __osVoiceSetADConverter(OSMesgQueue* mq, s32 channel, u8 data) {
     s32 errorCode;
-    u8* ptr;
-    s32 retryCount = 2;
-    u8 status;
-    u16 sp48;
     s32 i;
+    u8* ptr;
+    u8 status;
+    s32 retryCount = 2;
 
     __osSiGetAccess();
 
-    sp48 = arg2 * 8;
-
     do {
 
-        ptr = (u8*)&__osPfsPifRam;
+        ptr = (u8*)&__osPfsPifRam.ramarray;
 
-        if ((__osContLastPoll != 0xD) || (port != __osPfsLastChannel)) {
-            __osContLastPoll = 0xD;
-            __osPfsLastChannel = port;
+        if ((__osContLastPoll != CONT_CMD_SWRITE_VOICE) || (channel != __osPfsLastChannel)) {
+            __osContLastPoll = CONT_CMD_SWRITE_VOICE;
+            __osPfsLastChannel = channel;
 
-            for (i = 0; i < port; i++, *ptr++ = 0) {
-                ;
-            }
+            // clang-format off
+            for (i = 0; i < channel; i++) { *ptr++ = 0; }
+            // clang-format on
 
-            __osPfsPifRam.status = CONT_CMD_READ_BUTTON;
+            __osPfsPifRam.status = CONT_CMD_EXE;
 
-            ptr[0] = 3;
-            ptr[1] = 1;
-            ptr[2] = 0xD;
+            ptr[0] = CONT_CMD_SWRITE_VOICE_TX;
+            ptr[1] = CONT_CMD_SWRITE_VOICE_RX;
+            ptr[2] = CONT_CMD_SWRITE_VOICE;
             ptr[5] = 0;
-            ptr[6] = 0xFE;
+
+            ptr[sizeof(__OSVoiceSWriteFormat)] = CONT_CMD_END;
         } else {
-            ptr = (u8*)&__osPfsPifRam + port;
+            ptr += channel;
         }
 
-        ptr[3] = arg2;
-        ptr[4] = __osContAddressCrc(sp48);
+        SWRITEFORMAT(ptr)->data = data;
+        SWRITEFORMAT(ptr)->scrc = __osContAddressCrc(data << 3);
 
         __osSiRawStartDma(OS_WRITE, &__osPfsPifRam);
         osRecvMesg(mq, NULL, OS_MESG_BLOCK);
         __osSiRawStartDma(OS_READ, &__osPfsPifRam);
         osRecvMesg(mq, NULL, OS_MESG_BLOCK);
 
-        errorCode = (ptr[1] & 0xC0) >> 4;
+        errorCode = CHNL_ERR(*SWRITEFORMAT(ptr));
 
         if (errorCode == 0) {
-            if (ptr[5] & 1) {
-                errorCode = __osVoiceGetStatus(mq, port, &status);
+            if (SWRITEFORMAT(ptr)->datacrc & 1) {
+                errorCode = __osVoiceGetStatus(mq, channel, &status);
                 if (errorCode != 0) {
                     break;
                 }

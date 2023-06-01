@@ -1,5 +1,6 @@
 #include "global.h"
 
+// TODO: SJIS support
 // Checks whether or not a word can be registered in the dictionary
 s32 osVoiceCheckWord(u8* word) {
     s32 i;

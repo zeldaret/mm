@@ -3,12 +3,12 @@
 // Registers words to the Voice Recognition System dictionary
 s32 osVoiceSetWord(OSVoiceHandle* hd, u8* word) {
     s32 i;
-    s32 sp50;
+    s32 k;
     s32 errorCode;
     u8 status;
     u8 data[40];
 
-    errorCode = __osVoiceGetStatus(hd->mq, hd->port, &status);
+    errorCode = __osVoiceGetStatus(hd->mq, hd->channel, &status);
     if (errorCode != 0) {
         return errorCode;
     }
@@ -17,29 +17,29 @@ s32 osVoiceSetWord(OSVoiceHandle* hd, u8* word) {
         return CONT_ERR_VOICE_NO_RESPONSE;
     }
 
-    sp50 = 0;
+    k = 0;
 
-    while (word[sp50] != 0) {
-        sp50 += 2;
+    while (word[k] != 0) {
+        k += 2;
     }
 
-    bzero(&data, 40);
+    bzero(data, ARRAY_COUNT(data));
 
-    for (i = 0; i < sp50; i += 2) {
-        data[39 - sp50 + i] = word[i];
-        data[39 - sp50 + i - 1] = word[i + 1];
+    for (i = 0; i < k; i += 2) {
+        data[ARRAY_COUNT(data) - 1 - k + i] = word[i];
+        data[ARRAY_COUNT(data) - 1 - k + i - 1] = word[i + 1];
     }
 
-    data[39 - i - 5] = 3;
+    data[ARRAY_COUNT(data) - 1 - i - 5] = 3;
 
-    if (sp50 >= 0xF) {
-        errorCode = __osVoiceContWrite20(hd->mq, hd->port, 0, &data[0]);
+    if (k >= 15) {
+        errorCode = __osVoiceContWrite20(hd->mq, hd->channel, 0, data);
         if (errorCode != 0) {
             return errorCode;
         }
     }
 
-    errorCode = __osVoiceContWrite20(hd->mq, hd->port, 0, &data[20]);
+    errorCode = __osVoiceContWrite20(hd->mq, hd->channel, 0, data + 20);
     if (errorCode != 0) {
         return errorCode;
     }

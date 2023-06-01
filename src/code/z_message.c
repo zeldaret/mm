@@ -225,6 +225,7 @@ void Message_LoadChar(PlayState* play, u16 codePointIndex, s32* offset, f32* arg
     *arg3 = temp2;
 }
 
+// TODO: SJIS support
 // Message_LoadRupees JPN ?
 void func_8014CCB4(PlayState* play, s16* decodedBufPos, s32* offset, f32* arg3) {
     MessageContext* msgCtx = &play->msgCtx;
@@ -240,7 +241,7 @@ void func_8014CCB4(PlayState* play, s16* decodedBufPos, s32* offset, f32* arg3) 
     k += FONT_CHAR_TEX_SIZE;
     msgCtx->decodedBuffer.wchar[t] = 0x8373;
     t += 1;
-    Font_LoadChar(play, 0x815C, k); // Ox815C = ― in JISX0213
+    Font_LoadChar(play, 0x815C, k); // 0x815C = ― in JISX0213
     k += FONT_CHAR_TEX_SIZE;
     msgCtx->decodedBuffer.wchar[t] = 0x815C;
 

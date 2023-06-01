@@ -4,12 +4,9 @@
 s32 osVoiceStartReadData(OSVoiceHandle* hd) {
     s32 errorCode;
     u8 status;
-    union {
-        u32 data32;
-        u8 data[4];
-    } u;
+    u8 data[4];
 
-    errorCode = __osVoiceGetStatus(hd->mq, hd->port, &status);
+    errorCode = __osVoiceGetStatus(hd->mq, hd->channel, &status);
     if (errorCode != 0) {
         return errorCode;
     }
@@ -28,8 +25,8 @@ s32 osVoiceStartReadData(OSVoiceHandle* hd) {
      * data[2] = 0
      * data[3] = 0
      */
-    u.data32 = 0x5000000;
-    errorCode = __osVoiceContWrite4(hd->mq, hd->port, 0, u.data);
+    *(u32*)data = 0x5000000;
+    errorCode = __osVoiceContWrite4(hd->mq, hd->channel, 0, data);
 
     if (errorCode == 0) {
         errorCode = __osVoiceCheckResult(hd, &status);
