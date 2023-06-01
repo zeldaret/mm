@@ -2,13 +2,13 @@
  * File: voicecheckresult.c
  */
 #include "ultra64/controller_voice.h"
+#include "ultra64/os_voice.h"
 #include "io/controller.h"
 
 s32 __osVoiceCheckResult(OSVoiceHandle* hd, u8* status) {
-    s32 errorCode;
+    s32 errorCode = __osVoiceGetStatus(hd->mq, hd->channel, status);
     u8 data[2];
 
-    errorCode = __osVoiceGetStatus(hd->mq, hd->channel, status);
     if (errorCode == 0) {
         if (*status & 1) {
             errorCode = CONT_ERR_VOICE_NO_RESPONSE;

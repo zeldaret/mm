@@ -11,6 +11,7 @@
  */
 
 #include "ultra64/controller_voice.h"
+#include "ultra64/os_voice.h"
 #include "io/controller.h"
 
 s32 osVoiceClearDictionary(OSVoiceHandle* hd, u8 numWords) {

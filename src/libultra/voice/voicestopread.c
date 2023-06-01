@@ -5,6 +5,7 @@
  */
 
 #include "ultra64/controller_voice.h"
+#include "ultra64/os_voice.h"
 #include "io/controller.h"
 
 s32 osVoiceStopReadData(OSVoiceHandle* hd) {
