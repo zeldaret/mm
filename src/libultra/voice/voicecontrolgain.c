@@ -25,7 +25,7 @@ s32 osVoiceControlGain(OSVoiceHandle* hd, s32 analog, s32 digital) {
         return errorCode;
     }
 
-    if (((digital < ARRAY_COUNT(sDigitalTable)) && (digital >= 0))) {
+    if ((digital < ARRAY_COUNT(sDigitalTable)) && (digital >= 0)) {
         cmd = sDigitalTable[digital] + 2;
     } else {
         return CONT_ERR_INVALID;

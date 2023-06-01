@@ -33,7 +33,7 @@ s32 osVoiceMaskDictionary(OSVoiceHandle* hd, u8* maskPattern, s32 size) {
 
     bzero(&data, ARRAY_COUNT(data));
 
-    data[18 - j] = 4;
+    data[ARRAY_COUNT(data) - 2 - j] = 4;
 
     for (i = 0; i < j; i += 2) {
         data[i + ARRAY_COUNT(data) - j] = maskPattern[i];

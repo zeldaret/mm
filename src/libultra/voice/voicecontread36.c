@@ -19,16 +19,13 @@ s32 __osVoiceContRead36(OSMesgQueue* mq, s32 channel, u16 address, u8 dst[36]) {
     __osSiGetAccess();
 
     do {
-
         ptr = (u8*)&__osPfsPifRam.ramarray;
 
         if ((__osContLastPoll != CONT_CMD_READ36_VOICE) || (channel != __osPfsLastChannel)) {
             __osContLastPoll = CONT_CMD_READ36_VOICE;
             __osPfsLastChannel = channel;
 
-            // clang-format off
-            for (i = 0; i < channel; i++) { *ptr++ = 0; }
-            // clang-format on
+            for (i = 0; i < channel; i++, *ptr++ = 0) {}
 
             __osPfsPifRam.status = CONT_CMD_EXE;
 

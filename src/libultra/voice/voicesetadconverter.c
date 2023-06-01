@@ -19,16 +19,13 @@ s32 __osVoiceSetADConverter(OSMesgQueue* mq, s32 channel, u8 data) {
     __osSiGetAccess();
 
     do {
-
         ptr = (u8*)&__osPfsPifRam.ramarray;
 
         if ((__osContLastPoll != CONT_CMD_SWRITE_VOICE) || (channel != __osPfsLastChannel)) {
             __osContLastPoll = CONT_CMD_SWRITE_VOICE;
             __osPfsLastChannel = channel;
 
-            // clang-format off
-            for (i = 0; i < channel; i++) { *ptr++ = 0; }
-            // clang-format on
+            for (i = 0; i < channel; i++, *ptr++ = 0) {}
 
             __osPfsPifRam.status = CONT_CMD_EXE;
 

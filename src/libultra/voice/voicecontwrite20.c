@@ -20,16 +20,13 @@ s32 __osVoiceContWrite20(OSMesgQueue* mq, s32 channel, u16 address, u8 dst[20]) 
     __osSiGetAccess();
 
     do {
-
         ptr = (u8*)&__osPfsPifRam.ramarray;
 
         if ((__osContLastPoll != CONT_CMD_WRITE20_VOICE) || (channel != __osPfsLastChannel)) {
             __osContLastPoll = CONT_CMD_WRITE20_VOICE;
             __osPfsLastChannel = channel;
 
-            // clang-format off
-            for (i = 0; i < channel; i++) { *ptr++ = 0; }
-            // clang-format on
+            for (i = 0; i < channel; i++, *ptr++ = 0) {}
 
             __osPfsPifRam.status = CONT_CMD_EXE;
 

@@ -25,9 +25,7 @@ s32 __osVoiceContRead2(OSMesgQueue* mq, s32 channel, u16 address, u8 dst[2]) {
             __osContLastPoll = CONT_CMD_READ2_VOICE;
             __osPfsLastChannel = channel;
 
-            // clang-format off
-            for (i = 0; i < channel; i++) { *ptr++ = 0; }
-            // clang-format on
+            for (i = 0; i < channel; i++, *ptr++ = 0) {}
 
             __osPfsPifRam.status = CONT_CMD_EXE;
 
