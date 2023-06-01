@@ -25,7 +25,7 @@
 #define SEGMENT_SIZE(segment) ((uintptr_t)SEGMENT_END(segment) - (uintptr_t)SEGMENT_START(segment))
 
 #define SEGMENT_ROM_START(segment) ((uintptr_t) _ ## segment ## SegmentRomStart)
-#define SEGMENT_ROM_START_OFFSET(segment, offset) ((uintptr_t) (( _ ## segment ## SegmentRomStart ) + offset))
+#define SEGMENT_ROM_START_OFFSET(segment, offset) ((uintptr_t) (( _ ## segment ## SegmentRomStart ) + (offset)))
 #define SEGMENT_ROM_END(segment) ((uintptr_t) _ ## segment ## SegmentRomEnd)
 #define SEGMENT_ROM_SIZE(segment) (SEGMENT_ROM_END(segment) - SEGMENT_ROM_START(segment))
 
