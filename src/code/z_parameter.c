@@ -7133,7 +7133,8 @@ void Interface_Init(PlayState* play) {
 
     interfaceCtx->doActionSegment = THA_AllocTailAlign16(&play->state.heap, 0xC90);
     DmaMgr_SendRequest0(interfaceCtx->doActionSegment, SEGMENT_ROM_START(do_action_static), 0x300);
-    DmaMgr_SendRequest0(interfaceCtx->doActionSegment + 0x300, SEGMENT_ROM_START_OFFSET(do_action_static, 0x480), 0x180);
+    DmaMgr_SendRequest0(interfaceCtx->doActionSegment + 0x300, SEGMENT_ROM_START_OFFSET(do_action_static, 0x480),
+                        0x180);
 
     Interface_NewDay(play, CURRENT_DAY);
 

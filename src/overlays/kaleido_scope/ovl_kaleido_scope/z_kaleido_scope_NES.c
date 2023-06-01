@@ -2864,15 +2864,13 @@ void KaleidoScope_Update(PlayState* play) {
 
             for (itemId = 0; itemId <= ITEM_BOW_ARROW_FIRE; itemId++) {
                 if (!gPlayerFormItemRestrictions[(void)0, gSaveContext.save.playerForm][(s32)itemId]) {
-                    KaleidoScope_GrayOutTextureRGBA32(Lib_SegmentedToVirtual(gItemIcons[(s32)itemId]),
-                                                      0x400);
+                    KaleidoScope_GrayOutTextureRGBA32(Lib_SegmentedToVirtual(gItemIcons[(s32)itemId]), 0x400);
                 }
             }
 
             pauseCtx->iconItem24Segment = (void*)ALIGN16((uintptr_t)pauseCtx->iconItemSegment + size0);
             size1 = SEGMENT_ROM_SIZE(icon_item_24_static_old);
-            CmpDma_LoadAllFiles(SEGMENT_ROM_START(icon_item_24_static_test), pauseCtx->iconItem24Segment,
-                                size1);
+            CmpDma_LoadAllFiles(SEGMENT_ROM_START(icon_item_24_static_test), pauseCtx->iconItem24Segment, size1);
 
             pauseCtx->iconItemAltSegment = (void*)ALIGN16((uintptr_t)pauseCtx->iconItem24Segment + size1);
             if (func_8010A0A4(play)) {
