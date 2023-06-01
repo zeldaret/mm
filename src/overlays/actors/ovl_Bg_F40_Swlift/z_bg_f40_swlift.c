@@ -43,24 +43,27 @@ void BgF40Swlift_Init(Actor* thisx, PlayState* play) {
     s32 pad;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
     index = BG_F40_SWLIFT_GET_INDEX(thisx);
     if ((index < 0) || (index >= 5)) { //! @bug An index greater than 3 will cause an out of bounds array access.
         Actor_Kill(&this->dyna.actor);
-    } else {
-        sHeights[index] = this->dyna.actor.world.pos.y;
-        sSwitchFlags[index] = BG_F40_SWLIFT_GET_SWITCHFLAG(thisx);
-        if (index != 0) {
-            Actor_Kill(&this->dyna.actor);
-        } else {
-            DynaPolyActor_LoadMesh(play, &this->dyna, &gStoneTowerVerticallyOscillatingPlatformCol);
-            this->dyna.actor.params = 0;
-        }
+        return;
     }
+
+    sHeights[index] = this->dyna.actor.world.pos.y;
+    sSwitchFlags[index] = BG_F40_SWLIFT_GET_SWITCHFLAG(thisx);
+    if (index != 0) {
+        Actor_Kill(&this->dyna.actor);
+        return;
+    }
+
+    DynaPolyActor_LoadMesh(play, &this->dyna, &gStoneTowerVerticallyOscillatingPlatformCol);
+    this->dyna.actor.params = 0;
 }
 
 void BgF40Swlift_Destroy(Actor* thisx, PlayState* play) {
     BgF40Swlift* this = THIS;
+
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
 
@@ -87,8 +90,8 @@ void BgF40Swlift_Update(Actor* thisx, PlayState* play2) {
             heightOffset = CLAMP(heightOffset, -15.0f, -0.5f);
         }
 
-        if ((Math_StepToF(&this->dyna.actor.speed, heightOffset, 1.0f) != 0) && (fabsf(heightOffset) <= 0.5f)) {
-            if (Math_StepToF(&this->dyna.actor.world.pos.y, sHeights[i], fabsf(this->dyna.actor.speed)) != 0) {
+        if (Math_StepToF(&this->dyna.actor.speed, heightOffset, 1.0f) && (fabsf(heightOffset) <= 0.5f)) {
+            if (Math_StepToF(&this->dyna.actor.world.pos.y, sHeights[i], fabsf(this->dyna.actor.speed))) {
                 this->dyna.actor.params = i;
                 this->timer = 48;
                 this->dyna.actor.speed = 0.0f;

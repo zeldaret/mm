@@ -41,7 +41,7 @@ void BgF40Flift_Init(Actor* thisx, PlayState* play) {
     BgF40Flift* this = THIS;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
     DynaPolyActor_LoadMesh(play, &this->dyna, &gStoneTowerTempleSquareElevatorCol);
     this->dyna.actor.params = 1;
     this->actionFunc = func_808D75F0;

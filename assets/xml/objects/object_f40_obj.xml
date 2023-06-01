@@ -11,11 +11,11 @@
         <Texture Name="gStoneTowerBlockPatternTex" OutName="stone_tower_block_pattern" Format="i4" Width="32" Height="128" Offset="0x2800" />
         <Texture Name="gStoneTowerBlockSidesTex" OutName="stone_tower_block_sides" Format="i4" Width="64" Height="64" Offset="0x3000" />
         
-        <DList Name="gStoneTowerEmpty1DL" Offset="0x3B00" />
+        <DList Name="gStoneTowerVerticallyOscillatingPlatformEmptyDL" Offset="0x3B00" />
         <DList Name="gStoneTowerVerticallyOscillatingPlatformDL" Offset="0x3B08" /> <!-- Unused -->
         <Collision Name="gStoneTowerVerticallyOscillatingPlatformCol" Offset="0x3E80" /> <!-- Unused -->
         
-        <DList Name="gStoneTowerEmpty2DL" Offset="0x4030" />
+        <DList Name="gStoneTowerTempleSquareElevatorEmptyDL" Offset="0x4030" />
         <DList Name="gStoneTowerTempleSquareElevatorDL" Offset="0x4038" /> <!-- Unused -->
         <Collision Name="gStoneTowerTempleSquareElevatorCol" Offset="0x4240" /> <!-- Unused -->
         
