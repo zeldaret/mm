@@ -1637,9 +1637,7 @@ beginseg
     name "ovl_Bg_F40_Swlift"
     compress
     include "build/src/overlays/actors/ovl_Bg_F40_Swlift/z_bg_f40_swlift.o"
-    include "build/data/ovl_Bg_F40_Swlift/ovl_Bg_F40_Swlift.data.o"
-    include "build/data/ovl_Bg_F40_Swlift/ovl_Bg_F40_Swlift.bss.o"
-    include "build/data/ovl_Bg_F40_Swlift/ovl_Bg_F40_Swlift.reloc.o"
+    include "build/src/overlays/actors/ovl_Bg_F40_Swlift/ovl_Bg_F40_Swlift_reloc.o"
 endseg
 
 beginseg
