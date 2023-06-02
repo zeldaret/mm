@@ -5,6 +5,7 @@
  */
 
 #include "z_en_horse_game_check.h"
+#include "z64horse.h"
 #include "objects/object_horse_game_check/object_horse_game_check.h"
 #include "libc/assert.h"
 
@@ -169,9 +170,9 @@ s32 func_808F8EB0(EnHorseGameCheck* this, PlayState* play) {
         gSaveContext.nextTransitionType = TRANS_TYPE_FADE_BLACK;
     }
 
-    D_801BDA9C = 0;
+    gHorseIsMounted = false;
     if (player->stateFlags1 & PLAYER_STATE1_800000) {
-        D_801BDAA0 = 1;
+        D_801BDAA0 = true;
     }
     play->nextEntrance = ENTRANCE(GORMAN_TRACK, 2);
     play->transitionTrigger = TRANS_TRIGGER_START;
