@@ -1501,8 +1501,7 @@ typedef enum {
 #define EVENTINF_47 0x47
 #define EVENTINF_50 0x50
 #define EVENTINF_51 0x51
-// Determines whether the Halfday Cutscene will be played or skipped
-#define EVENTINF_USE_HALFDAY_CS 0x52
+#define EVENTINF_52 0x52
 #define EVENTINF_53 0x53
 #define EVENTINF_54 0x54
 #define EVENTINF_55 0x55

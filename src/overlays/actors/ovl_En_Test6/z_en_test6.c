@@ -819,7 +819,7 @@ void EnTest6_DoubleSoTCutscene(EnTest6* this, PlayState* play) {
 
         case 1:
             EnTest6_DisableMotionBlur();
-            if (CHECK_EVENTINF(EVENTINF_USE_HALFDAY_CS)) {
+            if (CHECK_EVENTINF(EVENTINF_52)) {
                 this->cueId = SOTCS_CUEID_DOUBLE_END;
             }
             break;

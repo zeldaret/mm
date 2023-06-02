@@ -4308,7 +4308,7 @@
     0x8082EF54:("func_8082EF54",),
     0x8082EF9C:("func_8082EF9C",),
     0x8082EFE4:("func_8082EFE4",),
-    0x8082F02C:("Player_LerpZoraBarrierLighting",),
+    0x8082F02C:("Player_LerpEnvLighting",),
     0x8082F09C:("Player_ResetCylinder",),
     0x8082F0E4:("Player_SetCylinderForAttack",),
     0x8082F164:("func_8082F164",),

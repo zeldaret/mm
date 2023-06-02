@@ -299,10 +299,10 @@ void EnTest4_Init(Actor* thisx, PlayState* play) {
     if (csId >= 0) {
         ActorCutscene* csEntry = CutsceneManager_GetCutsceneEntry(sCsIdList[0]);
 
-        SET_EVENTINF(EVENTINF_USE_HALFDAY_CS);
+        SET_EVENTINF(EVENTINF_52);
         sCsIdList[1] = csEntry->additionalCsId;
     } else {
-        CLEAR_EVENTINF(EVENTINF_USE_HALFDAY_CS);
+        CLEAR_EVENTINF(EVENTINF_52);
         sCsIdList[1] = sCsIdList[0];
     }
 

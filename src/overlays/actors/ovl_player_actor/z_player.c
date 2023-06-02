@@ -472,7 +472,7 @@ typedef struct {
     /* 0x6 */ Color_RGB8 fogColor;
     /* 0xA */ s16 fogNear;
     /* 0xC */ s16 zFar;
-} ZoraBarrierLighting; // size = 0xE
+} PlayerEnvLighting; // size = 0xE
 
 typedef struct GetItemEntry {
     /* 0x0 */ u8 itemId;
@@ -2715,7 +2715,7 @@ PlayerAnimationHeader* func_8082EFE4(Player* this) {
     }
 }
 
-void Player_LerpZoraBarrierLighting(PlayState* play, ZoraBarrierLighting* lighting, f32 lerp) {
+void Player_LerpEnvLighting(PlayState* play, PlayerEnvLighting* lighting, f32 lerp) {
     Environment_LerpAmbientColor(play, &lighting->ambientColor, lerp);
     Environment_LerpDiffuseColor(play, &lighting->diffuseColor, lerp);
     Environment_LerpFogColor(play, &lighting->fogColor, lerp);
@@ -2787,7 +2787,7 @@ void func_8082F164(Player* this, u16 button) {
     }
 }
 
-ZoraBarrierLighting sZoraBarrierLighting = {
+PlayerEnvLighting sZoraBarrierLighting = {
     { 0, 0, 0 },       // ambientColor
     { 255, 255, 155 }, // diffuseColor
     { 20, 20, 50 },    // fogColor
@@ -2827,7 +2827,7 @@ void func_8082F1AC(PlayState* play, Player* this) {
 
         sp46 = play->gameplayFrames * 7000;
         sp44 = play->gameplayFrames * 14000;
-        Player_LerpZoraBarrierLighting(play, &sZoraBarrierLighting, this->unk_B62 / 255.0f);
+        Player_LerpEnvLighting(play, &sZoraBarrierLighting, this->unk_B62 / 255.0f);
 
         sp34 = Math_SinS(sp44) * 40.0f;
         sp40 = Math_CosS(sp44) * 40.0f;

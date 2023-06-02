@@ -1128,7 +1128,7 @@ void func_800FD538(Color_RGB8* param_1, Color_RGB8* param_2, f32 param_3, Vec3s*
 void Environment_LerpAmbientColor(PlayState* play, Color_RGB8* to, f32 lerp);
 void Environment_LerpDiffuseColor(PlayState* play, Color_RGB8* to, f32 lerp);
 void Environment_LerpFogColor(PlayState* play, Color_RGB8* to, f32 lerp);
-void Environment_LerpFog(PlayState* play, s16 fogNearTarget, s16 fogFarTarget, f32 lerp);
+void Environment_LerpFog(PlayState* play, s16 fogNearTarget, s16 zFarTarget, f32 lerp);
 // u32 get_days_elapsed(void);
 // void reset_days_elapsed(void);
 // u32 get_current_day(void);
