@@ -197,8 +197,8 @@ void func_809438F8(EnDaiku* this, PlayState* play) {
     }
 
     if (this->unk_278 == ENDAIKU_PARAMS_FF_3) {
-        f32 dist;
-        f32 yaw;
+        f32 xzDist;
+        f32 yawDiff;
 
         Math_ApproachF(&this->actor.world.pos.x, this->unk_26C.x, 0.5f,
                        fabsf(2.0f * Math_SinS(this->actor.world.rot.y)));
@@ -206,9 +206,9 @@ void func_809438F8(EnDaiku* this, PlayState* play) {
                        fabsf(2.0f * Math_CosS(this->actor.world.rot.y)));
         Math_SmoothStepToS(&this->actor.world.rot.y, this->unk_282, 1, 0x7D0, 0xA);
 
-        dist = sqrtf(SQ(this->actor.world.pos.x - this->unk_26C.x) + SQ(this->actor.world.pos.z - this->unk_26C.z));
-        yaw = fabsf(this->actor.world.rot.y - this->unk_282);
-        if ((dist < 4.0f) && (this->path != NULL) && (yaw < 10.0f)) {
+        xzDist = sqrtf(SQ(this->actor.world.pos.x - this->unk_26C.x) + SQ(this->actor.world.pos.z - this->unk_26C.z));
+        yawDiff = fabsf(this->actor.world.rot.y - this->unk_282);
+        if ((xzDist < 4.0f) && (this->path != NULL) && (yawDiff < 10.0f)) {
             this->unk_25C++;
             if (this->unk_25C >= this->path->count) {
                 this->unk_25C = 0;
@@ -326,7 +326,7 @@ void EnDaiku_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     switch (this->unk_278) {
         case 0:

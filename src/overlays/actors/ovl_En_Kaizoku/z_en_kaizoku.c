@@ -1531,7 +1531,7 @@ void func_80B88D6C(EnKaizoku* this, PlayState* play) {
         temp_ft4 = this->skelAnime.curFrame - this->skelAnime.playSpeed;
         temp_ft5 = this->skelAnime.curFrame + this->skelAnime.playSpeed;
         if (this->skelAnime.curFrame != 0.0f) {
-            if (((temp_ft4 < 0 && temp_ft5 > 0) || (temp_ft4 < 5 && temp_ft5 > 5))) {
+            if ((((temp_ft4 < 0) && (temp_ft5 > 0)) || ((temp_ft4 < 5) && (temp_ft5 > 5)))) {
                 Actor_PlaySfx(&this->picto.actor, NA_SE_EN_GERUDOFT_WALK);
             }
         }
@@ -2134,8 +2134,8 @@ void EnKaizoku_Draw(Actor* thisx, PlayState* play) {
     f32 drawDmgEffAlpha;
     EnKaizoku* this = THIS;
 
-    func_8012C2DC(play->state.gfxCtx);
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     OPEN_DISPS(play->state.gfxCtx);
 

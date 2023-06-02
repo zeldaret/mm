@@ -961,8 +961,8 @@ void EnRat_PostLimbDraw(PlayState* play2, s32 limbIndex, Gfx** dList, Vec3s* rot
 void EnRat_Draw(Actor* thisx, PlayState* play) {
     EnRat* this = THIS;
 
-    func_8012C28C(play->state.gfxCtx);
-    func_8012C974(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
+    Gfx_SetupDL60_XluNoCD(play->state.gfxCtx);
     func_800B8050(&this->actor, play, 0);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnRat_OverrideLimbDraw, EnRat_PostLimbDraw, &this->actor);

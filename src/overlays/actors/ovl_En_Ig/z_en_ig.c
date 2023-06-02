@@ -1036,7 +1036,7 @@ void EnIg_Draw(Actor* thisx, PlayState* play) {
     EnIg* this = THIS;
 
     if (this->scheduleResult != 0) {
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
         OPEN_DISPS(play->state.gfxCtx);
 

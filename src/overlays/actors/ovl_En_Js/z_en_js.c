@@ -1058,7 +1058,7 @@ void func_8096A9F4(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Acto
 void EnJs_Draw(Actor* thisx, PlayState* play) {
     EnJs* this = THIS;
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, NULL,
                           func_8096A9F4, &this->actor);
 }

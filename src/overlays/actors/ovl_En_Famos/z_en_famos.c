@@ -502,7 +502,7 @@ void EnFamos_Chase(EnFamos* this, PlayState* play) {
 
     surfaceType = SurfaceType_GetFloorProperty2(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
     if ((this->actor.xzDistToPlayer < 30.0f) && (this->actor.floorHeight > BGCHECK_Y_MIN) && // close enough
-        (surfaceType != FLOOR_PROPERTY_12 && surfaceType != FLOOR_PROPERTY_13)) {
+        ((surfaceType != FLOOR_PROPERTY_12) && (surfaceType != FLOOR_PROPERTY_13))) {
         EnFamos_SetupAttackAim(this);
 
     } else if ((Player_GetMask(play) == PLAYER_MASK_STONE) ||
@@ -545,7 +545,8 @@ void EnFamos_Attack(EnFamos* this, PlayState* play) {
 
     surfaceType = SurfaceType_GetFloorProperty2(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
     hitFloor = this->actor.bgCheckFlags & BGCHECKFLAG_GROUND;
-    if (hitFloor || (this->actor.floorHeight == BGCHECK_Y_MIN) || (surfaceType == 0xC) || (surfaceType == 0xD)) {
+    if (hitFloor || (this->actor.floorHeight == BGCHECK_Y_MIN) || (surfaceType == FLOOR_PROPERTY_12) ||
+        (surfaceType == FLOOR_PROPERTY_13)) {
         this->collider1.base.atFlags &= ~AT_ON;
         this->collider2.base.atFlags |= AT_ON;
         if (hitFloor) {
@@ -747,7 +748,7 @@ void EnFamos_Update(Actor* thisx, PlayState* play) {
     f32 oldHeight;
     s32 oldHoverTimer; // save old value to test if changed
 
-    if (this->debrisTimer <= 0 ||
+    if ((this->debrisTimer <= 0) ||
         (this->debrisTimer--, EnFamos_UpdateDebrisPosRot(this), (this->actionFunc != EnFamos_DeathFade))) {
         oldHoverTimer = this->hoverTimer;
         EnFamos_UpdateFlipStatus(this);
@@ -829,9 +830,10 @@ void EnFamos_DrawDebris(EnFamos* this, PlayState* play) {
         EnFamosRock* rock;
 
         OPEN_DISPS(play->state.gfxCtx);
+
         dispOpa = POLY_OPA_DISP;
 
-        gSPDisplayList(&dispOpa[0], &sSetupDL[6 * 0x19]);
+        gSPDisplayList(&dispOpa[0], gSetupDLs[SETUPDL_25]);
 
         gDPSetPrimColor(&dispOpa[1], 0, 0x80, 255, 255, 255, 255);
 
@@ -858,7 +860,7 @@ void EnFamos_DrawDebris(EnFamos* this, PlayState* play) {
 void EnFamos_Draw(Actor* thisx, PlayState* play) {
     EnFamos* this = THIS;
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     if (this->actionFunc != EnFamos_DeathFade) {
         AnimatedMat_Draw(play, sEmblemAnimatedMats[this->animatedMaterialIndex]);
         SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, EnFamos_OverrideLimbDraw,

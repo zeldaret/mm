@@ -549,7 +549,7 @@ void func_80B04350(ObjSnowball* this, PlayState* play) {
             this->unk_20A = 0;
         }
 
-        if (this->actor.csId < 0) {
+        if (this->actor.csId <= CS_ID_NONE) {
             func_80B03FF8(this, play);
             if (this->unk_20A == 0) {
                 func_80B04608(this, play);
@@ -818,7 +818,7 @@ void func_80B04D34(Actor* thisx, PlayState* play) {
             if ((ptr->unk_28 != NULL) && (ptr->unk_2C > 0)) {
                 OPEN_DISPS(play->state.gfxCtx);
 
-                func_8012C448(play->state.gfxCtx);
+                Gfx_SetupDL44_Xlu(play->state.gfxCtx);
 
                 gDPSetCombineLERP(POLY_XLU_DISP++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, COMBINED, 0, 0,
                                   0, COMBINED);

@@ -76,9 +76,9 @@ typedef enum {
 } PauseMainState;
 
 typedef enum {
-    /* 0x00 */ PAUSE_SAVEPROMPT_STATE_0,
+    /* 0x00 */ PAUSE_SAVEPROMPT_STATE_APPEARING,
     /* 0x01 */ PAUSE_SAVEPROMPT_STATE_1,
-    /* 0x02 */ PAUSE_SAVEPROMPT_STATE_2,
+    /* 0x02 */ PAUSE_SAVEPROMPT_STATE_RETURN_TO_MENU,
     /* 0x03 */ PAUSE_SAVEPROMPT_STATE_3,
     /* 0x04 */ PAUSE_SAVEPROMPT_STATE_4,
     /* 0x05 */ PAUSE_SAVEPROMPT_STATE_5,
@@ -303,8 +303,34 @@ typedef enum {
     /* 66 */ QUAD_MAP_PAGE_WORLD_MAX
 } WorldMapPageQuad;
 
+// === INFO PANEL === //
+
+/**
+ * infoPanelVtx
+ * 
+ * infoPanelVtx[0] name panel left texture
+ * infoPanelVtx[4] name panel right texture
+ * infoPanelVtx[8] Z Button icon
+ * infoPanelVtx[12] R Button icon
+ * infoPanelVtx[16] A button icon (or name segment)
+ * infoPanelVtx[20] pause-to-decide texture
+ * infoPanelVtx[24] (unused) oot remnant of Gold Skulltula Icon Texture
+ */
+
 #define PAUSE_NAME_COLOR_SET_WHITE 0
 #define PAUSE_NAME_COLOR_SET_GREY 1
+
+// === CURSOR === //
+
+/**
+ * cursorVtx
+ * 
+ * cursorVtx[0] cursor circle
+ * cursorVtx[4] (unused) oot remnant of top-right corner of cursor
+ * cursorVtx[8] (unused) oot remnant of bottom-left corner of cursor
+ * cursorVtx[12] (unused) oot remnant of bottom-right corner of cursor
+ * cursorVtx[16] equipping item icon (while moving)
+ */
 
 #define PAUSE_CURSOR_COLOR_SET_WHITE 0
 #define PAUSE_CURSOR_COLOR_SET_YELLOW 2
@@ -326,6 +352,36 @@ typedef enum {
     /* 5 */ PAUSE_QUAD_CURSOR_MAX
 } PauseCursorQuad;
 
+// === PROMPT === //
+
+/**
+ * promptPageVtx (unused in MM, inferred from OoT)
+ * 
+ * // PAGE_BG_QUADS
+ * promptPageVtx[0] prompt page background texture:  row 0, column 0
+ * promptPageVtx[4] prompt page background texture:  row 1, column 0
+ * promptPageVtx[8] prompt page background texture:  row 2, column 0
+ * promptPageVtx[12] prompt page background texture: row 3, column 0
+ * promptPageVtx[16] prompt page background texture: row 4, column 0
+ * promptPageVtx[20] prompt page background texture: row 0, column 1
+ * promptPageVtx[24] prompt page background texture: row 1, column 1
+ * promptPageVtx[28] prompt page background texture: row 2, column 1
+ * promptPageVtx[32] prompt page background texture: row 3, column 1
+ * promptPageVtx[36] prompt page background texture: row 4, column 1
+ * promptPageVtx[40] prompt page background texture: row 0, column 2
+ * promptPageVtx[44] prompt page background texture: row 1, column 2
+ * promptPageVtx[48] prompt page background texture: row 2, column 2
+ * promptPageVtx[52] prompt page background texture: row 3, column 2
+ * promptPageVtx[56] prompt page background texture: row 4, column 2
+ * 
+ * // QUAD_PROMPT_MAX
+ * promptPageVtx[60] message
+ * promptPageVtx[64] cursor left
+ * promptPageVtx[68] cursor right
+ * promptPageVtx[72] choice (yes)
+ * promptPageVtx[76] choice (no)
+ */
+
 #define PAUSE_PROMPT_YES 0
 #define PAUSE_PROMPT_NO 4
 
@@ -342,7 +398,7 @@ typedef enum {
 void KaleidoScope_MoveCursorToSpecialPos(PlayState* play, s16 cursorSpecialPos);
 void KaleidoScope_DrawTexQuadRGBA32(GraphicsContext* gfxCtx, TexturePtr texture, u16 width, u16 height, u16 point);
 void KaleidoScope_SetView(PauseContext* pauseCtx, f32 eyeX, f32 eyeY, f32 eyeZ);
-void func_80821A04(PlayState* play);
+void KaleidoScope_MoveCursorFromSpecialPos(PlayState* play);
 
 // Map
 void KaleidoScope_DrawDungeonMap(PlayState* play);

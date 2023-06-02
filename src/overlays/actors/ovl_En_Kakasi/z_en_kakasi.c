@@ -348,8 +348,8 @@ void EnKakasi_IdleStanding(EnKakasi* this, PlayState* play) {
     }
     if (play->actorCtx.flags & ACTORCTX_FLAG_PICTO_BOX_ON) {
         Actor_GetScreenPos(play, &this->picto.actor, &x, &y);
-        if (this->picto.actor.projectedPos.z > -20.0f && x > 0 && x < SCREEN_WIDTH && y > 0 && y < SCREEN_HEIGHT &&
-            this->animIndex != ENKAKASI_ANIM_SIDEWAYS_SHAKING) {
+        if ((this->picto.actor.projectedPos.z > -20.0f) && (x > 0) && (x < SCREEN_WIDTH) && (y > 0) &&
+            (y < SCREEN_HEIGHT) && (this->animIndex != ENKAKASI_ANIM_SIDEWAYS_SHAKING)) {
             // faster shaking
             EnKakasi_ChangeAnim(this, ENKAKASI_ANIM_SIDEWAYS_SHAKING);
             this->skelanime.playSpeed = 2.0f;
@@ -1153,7 +1153,7 @@ void EnKakasi_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* r
 
 void EnKakasi_Draw(Actor* thisx, PlayState* play) {
     EnKakasi* this = THIS;
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawFlexOpa(play, this->skelanime.skeleton, this->skelanime.jointTable, this->skelanime.dListCount, NULL,
                           EnKakasi_PostLimbDraw, &this->picto.actor);
 }

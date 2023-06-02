@@ -4,6 +4,7 @@
  */
 
 #include "global.h"
+#include "z64horse.h"
 #include "z64load.h"
 #include "z64quake.h"
 #include "z64rumble.h"
@@ -76,7 +77,7 @@ void ActorShadow_Draw(Actor* actor, Lights* lights, PlayState* play, Gfx* dlist,
 
             OPEN_DISPS(play->state.gfxCtx);
 
-            POLY_OPA_DISP = Gfx_CallSetupDL(POLY_OPA_DISP, 0x2C);
+            POLY_OPA_DISP = Gfx_SetupDL(POLY_OPA_DISP, SETUPDL_44);
 
             gDPSetCombineLERP(POLY_OPA_DISP++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, COMBINED, 0, 0, 0,
                               COMBINED);
@@ -218,7 +219,7 @@ void ActorShadow_DrawFeet(Actor* actor, Lights* mapper, PlayState* play) {
 
         OPEN_DISPS(play->state.gfxCtx);
 
-        POLY_OPA_DISP = Gfx_CallSetupDL(POLY_OPA_DISP, 0x2C);
+        POLY_OPA_DISP = Gfx_SetupDL(POLY_OPA_DISP, SETUPDL_44);
         actor->shape.feetFloorFlags = 0;
         spB8 = 2;
 
@@ -360,7 +361,7 @@ void func_800B4B50(Actor* actor, Lights* mapper, PlayState* play) {
 
             OPEN_DISPS(play->state.gfxCtx);
 
-            POLY_OPA_DISP = Gfx_CallSetupDL(POLY_OPA_DISP, 0x2C);
+            POLY_OPA_DISP = Gfx_SetupDL(POLY_OPA_DISP, SETUPDL_44);
 
             func_800C0094(actor->floorPoly, actor->world.pos.x, actor->floorHeight, actor->world.pos.z, &sp94);
             temp_f22 = (f32)actor->shape.shadowAlpha * (1.0f - (spEC * (1.0f / 30.0f)));
@@ -522,7 +523,7 @@ void Actor_DrawZTarget(TargetContext* targetCtx, PlayState* play) {
             Target_SetPos(targetCtx, targetCtx->unk4C, projectedPos.x, projectedPos.y, projectedPos.z);
 
             if ((!(player->stateFlags1 & PLAYER_STATE1_40)) || (actor != player->targetedActor)) {
-                OVERLAY_DISP = Gfx_CallSetupDL(OVERLAY_DISP, 0x39);
+                OVERLAY_DISP = Gfx_SetupDL(OVERLAY_DISP, SETUPDL_57);
 
                 for (spB0 = 0, spAC = targetCtx->unk4C; spB0 < spB8; spB0++, spAC = (spAC + 1) % 3) {
                     entry = &targetCtx->unk50[spAC];
@@ -564,7 +565,7 @@ void Actor_DrawZTarget(TargetContext* targetCtx, PlayState* play) {
         if ((actor != NULL) && !(actor->flags & ACTOR_FLAG_CANT_LOCK_ON)) {
             TatlColor* color = &sTatlColorList[actor->category];
 
-            POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 0x07);
+            POLY_XLU_DISP = Gfx_SetupDL(POLY_XLU_DISP, SETUPDL_7);
 
             Matrix_Translate(actor->focus.pos.x,
                              actor->focus.pos.y + (actor->targetArrowOffset * actor->scale.y) + 17.0f,
@@ -694,7 +695,7 @@ void func_800B5814(TargetContext* targetCtx, Player* player, Actor* actor, GameS
  * Tests if current scene switch flag is set.
  */
 s32 Flags_GetSwitch(PlayState* play, s32 flag) {
-    if (flag >= 0 && flag < 0x80) {
+    if ((flag >= 0) && (flag < 0x80)) {
         return play->actorCtx.sceneFlags.switches[(flag & ~0x1F) >> 5] & (1 << (flag & 0x1F));
     }
     return 0;
@@ -704,7 +705,7 @@ s32 Flags_GetSwitch(PlayState* play, s32 flag) {
  * Sets current scene switch flag.
  */
 void Flags_SetSwitch(PlayState* play, s32 flag) {
-    if (flag >= 0 && flag < 0x80) {
+    if ((flag >= 0) && (flag < 0x80)) {
         play->actorCtx.sceneFlags.switches[(flag & ~0x1F) >> 5] |= 1 << (flag & 0x1F);
     }
 }
@@ -713,7 +714,7 @@ void Flags_SetSwitch(PlayState* play, s32 flag) {
  * Unsets current scene switch flag.
  */
 void Flags_UnsetSwitch(PlayState* play, s32 flag) {
-    if (flag >= 0 && flag < 0x80) {
+    if ((flag >= 0) && (flag < 0x80)) {
         play->actorCtx.sceneFlags.switches[(flag & ~0x1F) >> 5] &= ~(1 << (flag & 0x1F));
     }
 }
@@ -792,7 +793,7 @@ void Flags_UnsetClearTemp(PlayState* play, s32 roomNumber) {
  * Tests if current scene collectible flag is set.
  */
 s32 Flags_GetCollectible(PlayState* play, s32 flag) {
-    if (flag > 0 && flag < 0x80) {
+    if ((flag > 0) && (flag < 0x80)) {
         return play->actorCtx.sceneFlags.collectible[(flag & ~0x1F) >> 5] & (1 << (flag & 0x1F));
     }
     return 0;
@@ -802,7 +803,7 @@ s32 Flags_GetCollectible(PlayState* play, s32 flag) {
  * Sets current scene collectible flag.
  */
 void Flags_SetCollectible(PlayState* play, s32 flag) {
-    if (flag > 0 && flag < 0x80) {
+    if ((flag > 0) && (flag < 0x80)) {
         play->actorCtx.sceneFlags.collectible[(flag & ~0x1F) >> 5] |= 1 << (flag & 0x1F);
     }
 }
@@ -849,17 +850,12 @@ void TitleCard_Draw(GameState* gameState, TitleCardContext* titleCtx) {
     if (titleCtx->alpha != 0) {
         s32 width = titleCtx->width;
         s32 height = titleCtx->height;
-        s32 unk1;
-        s32 spC0;
-        s32 sp38;
-        s32 spB8;
-        s32 spB4;
-        s32 temp;
-
-        temp = width * 2;
-        spC0 = (titleCtx->x * 4) - temp;
-        spB8 = (titleCtx->y * 4) - (height * 2);
-        sp38 = width * 2;
+        s32 doubleWidth = width * 2;
+        s32 titleX = (titleCtx->x * 4) - doubleWidth;
+        s32 doubleHeight = height * 2;
+        s32 titleY = (titleCtx->y * 4) - doubleHeight;
+        s32 titleSecondY;
+        s32 textureLanguageOffset;
 
         OPEN_DISPS(gameState->gfxCtx);
 
@@ -867,29 +863,30 @@ void TitleCard_Draw(GameState* gameState, TitleCardContext* titleCtx) {
             height = TMEM_SIZE / width;
         }
 
-        spB4 = spB8 + (height * 4);
+        titleSecondY = titleY + (height * 4);
 
-        OVERLAY_DISP = func_8012C014(OVERLAY_DISP);
+        OVERLAY_DISP = Gfx_SetupDL52_NoCD(OVERLAY_DISP);
 
         gDPSetPrimColor(OVERLAY_DISP++, 0, 0, (u8)titleCtx->intensity, (u8)titleCtx->intensity, (u8)titleCtx->intensity,
                         (u8)titleCtx->alpha);
 
-        gDPLoadTextureBlock(OVERLAY_DISP++, (s32*)titleCtx->texture, G_IM_FMT_IA, G_IM_SIZ_8b, width, height, 0,
+        gDPLoadTextureBlock(OVERLAY_DISP++, titleCtx->texture, G_IM_FMT_IA, G_IM_SIZ_8b, width, height, 0,
                             G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
                             G_TX_NOLOD);
 
-        gSPTextureRectangle(OVERLAY_DISP++, spC0, spB8, ((sp38 * 2) + spC0) - 4, spB8 + (height * 4) - 1,
+        gSPTextureRectangle(OVERLAY_DISP++, titleX, titleY, ((doubleWidth * 2) + titleX) - 4, titleY + (height * 4) - 1,
                             G_TX_RENDERTILE, 0, 0, 1 << 10, 1 << 10);
 
         height = titleCtx->height - height;
 
+        // If texture is bigger than 0x1000, display the rest
         if (height > 0) {
-            gDPLoadTextureBlock(OVERLAY_DISP++, (s32)titleCtx->texture + 0x1000, G_IM_FMT_IA, G_IM_SIZ_8b, width,
+            gDPLoadTextureBlock(OVERLAY_DISP++, (uintptr_t)titleCtx->texture + 0x1000, G_IM_FMT_IA, G_IM_SIZ_8b, width,
                                 height, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK,
                                 G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
-            gSPTextureRectangle(OVERLAY_DISP++, spC0, spB4, ((sp38 * 2) + spC0) - 4, spB4 + (height * 4) - 1,
-                                G_TX_RENDERTILE, 0, 0, 1 << 10, 1 << 10);
+            gSPTextureRectangle(OVERLAY_DISP++, titleX, titleSecondY, ((doubleWidth * 2) + titleX) - 4,
+                                titleSecondY + (height * 4) - 1, G_TX_RENDERTILE, 0, 0, 1 << 10, 1 << 10);
         }
 
         CLOSE_DISPS(gameState->gfxCtx);
@@ -1361,8 +1358,8 @@ s32 func_800B7200(Player* player) {
     return (player->stateFlags1 & (PLAYER_STATE1_80 | PLAYER_STATE1_20000000)) || (player->csMode != PLAYER_CSMODE_0);
 }
 
-void func_800B722C(GameState* gameState, Player* player) {
-    func_800F40A0(gameState, player);
+void Actor_SpawnHorse(PlayState* play, Player* player) {
+    Horse_Spawn(play, player);
 }
 
 s32 func_800B724C(PlayState* play, Actor* actor, u8 csMode) {
@@ -2308,7 +2305,7 @@ void Actor_InitContext(PlayState* play, ActorContext* actorCtx, ActorEntry* acto
     Actor_TargetContextInit(&actorCtx->targetContext, actorCtx->actorLists[ACTORCAT_PLAYER].first, play);
     Actor_InitHalfDaysBit(actorCtx);
     Fault_AddClient(&sActorFaultClient, (void*)Actor_PrintLists, actorCtx, NULL);
-    func_800B722C(&play->state, (Player*)actorCtx->actorLists[ACTORCAT_PLAYER].first);
+    Actor_SpawnHorse(play, (Player*)actorCtx->actorLists[ACTORCAT_PLAYER].first);
 }
 
 /**
@@ -2709,7 +2706,7 @@ void Actor_DrawLensActors(PlayState* play, s32 numLensActors, Actor** lensActors
         spA4 = play->unk_18E68;
 
         if (dbgVar2) {
-            PreRender_SetValues(&play->pauseBgPreRender, D_801FBBCC, D_801FBBCE, gfxCtx->curFrameBuffer, zbuffer);
+            PreRender_SetValues(&play->pauseBgPreRender, gCfbWidth, gCfbHeight, gfxCtx->curFrameBuffer, zbuffer);
 
             gfxTemp = gfx;
             func_80170200(&play->pauseBgPreRender, &gfxTemp, zbuffer, spA4);
@@ -3271,12 +3268,12 @@ void Actor_SpawnTransitionActors(PlayState* play, ActorContext* actorCtx) {
 
     for (i = 0; i < numTransitionActors; transitionActorList++, i++) {
         if (transitionActorList->id >= 0) {
-            if ((transitionActorList->sides[0].room >= 0 &&
-                 (play->roomCtx.curRoom.num == transitionActorList->sides[0].room ||
-                  play->roomCtx.prevRoom.num == transitionActorList->sides[0].room)) ||
-                (transitionActorList->sides[1].room >= 0 &&
-                 (play->roomCtx.curRoom.num == transitionActorList->sides[1].room ||
-                  play->roomCtx.prevRoom.num == transitionActorList->sides[1].room))) {
+            if (((transitionActorList->sides[0].room >= 0) &&
+                 ((play->roomCtx.curRoom.num == transitionActorList->sides[0].room) ||
+                  (play->roomCtx.prevRoom.num == transitionActorList->sides[0].room))) ||
+                ((transitionActorList->sides[1].room >= 0) &&
+                 ((play->roomCtx.curRoom.num == transitionActorList->sides[1].room) ||
+                  (play->roomCtx.prevRoom.num == transitionActorList->sides[1].room)))) {
                 s16 rotY = DEG_TO_BINANG((transitionActorList->rotY >> 7) & 0x1FF);
 
                 if (Actor_SpawnAsChildAndCutscene(actorCtx, play, transitionActorList->id & 0x1FFF,
@@ -3769,7 +3766,7 @@ void func_800BC620(Vec3f* pos, Vec3f* scale, u8 alpha, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    POLY_OPA_DISP = Gfx_CallSetupDL(POLY_OPA_DISP, 0x2C);
+    POLY_OPA_DISP = Gfx_SetupDL(POLY_OPA_DISP, SETUPDL_44);
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 0, 0, 0, alpha);
 
     adjustedPos.x = pos->x;
@@ -4373,26 +4370,30 @@ Gfx* func_800BD9A0(GraphicsContext* gfxCtx) {
 void func_800BD9E0(PlayState* play, SkelAnime* skelAnime, OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw,
                    Actor* actor, s16 alpha) {
     OPEN_DISPS(play->state.gfxCtx);
-    func_8012C28C(play->state.gfxCtx);
+
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, alpha);
     gSPSegment(POLY_OPA_DISP++, 0x0C, gEmptyDL);
 
     POLY_OPA_DISP = SkelAnime_DrawFlex(play, skelAnime->skeleton, skelAnime->jointTable, skelAnime->dListCount,
                                        overrideLimbDraw, postLimbDraw, actor, POLY_OPA_DISP);
+
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
 void func_800BDAA0(PlayState* play, SkelAnime* skelAnime, OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw,
                    Actor* actor, s16 alpha) {
     OPEN_DISPS(play->state.gfxCtx);
-    func_8012C2DC(play->state.gfxCtx);
+
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0, alpha);
     gSPSegment(POLY_XLU_DISP++, 0x0C, func_800BD9A0(play->state.gfxCtx));
 
     POLY_XLU_DISP = SkelAnime_DrawFlex(play, skelAnime->skeleton, skelAnime->jointTable, skelAnime->dListCount,
                                        overrideLimbDraw, postLimbDraw, actor, POLY_XLU_DISP);
+
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
@@ -4654,7 +4655,7 @@ void Actor_DrawDamageEffects(PlayState* play, Actor* actor, Vec3f limbPos[], s16
 
         OPEN_DISPS(play->state.gfxCtx);
 
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
         switch (type) {
             case ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX:

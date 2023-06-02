@@ -466,7 +466,7 @@ void EnDaiku2_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* r
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     if (limbIndex == 14) {
         Matrix_Scale(this->unk_260, this->unk_260, this->unk_260, MTXMODE_APPLY);
@@ -486,7 +486,7 @@ void EnDaiku2_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     gDPSetEnvColor(POLY_OPA_DISP++, 245, 155, 0, 255);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, NULL,
                           EnDaiku2_PostLimbDraw, &this->actor);
@@ -544,7 +544,7 @@ void func_80BE7718(EnDaiku2* this, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     objectIdx = Object_GetIndex(&play->objectCtx, OBJECT_BOMBIWA);
     if ((objectIdx >= 0) && Object_IsLoaded(&play->objectCtx, objectIdx)) {
