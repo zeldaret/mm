@@ -16,6 +16,8 @@ void EffStk_Destroy(Actor* thisx, PlayState* play);
 void EffStk_Update(Actor* thisx, PlayState* play);
 void EffStk_Draw(Actor* thisx, PlayState* play);
 
+void func_80BF0DE0(EffStk* this, PlayState* play);
+
 ActorInit Eff_Stk_InitVars = {
     ACTOR_EFF_STK,
     ACTORCAT_ITEMACTION,
@@ -28,10 +30,8 @@ ActorInit Eff_Stk_InitVars = {
     (ActorFunc)EffStk_Draw,
 };
 
-void func_80BF0DE0(EffStk* this, PlayState* play);
-
 void EffStk_Init(Actor* thisx, PlayState* play) {
-    EffStk* this = (EffStk*)thisx;
+    EffStk* this = THIS;
 
     Actor_SetScale(&this->actor, 0.2f);
     this->actionFunc = func_80BF0DE0;
@@ -42,11 +42,11 @@ void EffStk_Destroy(Actor* thisx, PlayState* play) {
 
 void func_80BF0DE0(EffStk* this, PlayState* play) {
     if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_512)) {
-        switch (play->csCtx.actorCues[Cutscene_GetCueChannel(play, 0x200U)]->id) {
+        switch (play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_512)]->id) {
             case 2:
                 this->actor.draw = EffStk_Draw;
                 if (this->unk146 < 0x3C00) {
-                    this->unk146 = this->unk146 + 0x400;
+                    this->unk146 += 0x400;
                     this->unk148 = Math_SinS(this->unk146) * -630.0f;
                 }
                 this->unk144++;
@@ -55,7 +55,7 @@ void func_80BF0DE0(EffStk* this, PlayState* play) {
             case 3:
                 this->actor.draw = EffStk_Draw;
                 if (this->unk146 < 0x3C00) {
-                    this->unk146 = this->unk146 + 0x400;
+                    this->unk146 += 0x400;
                     this->unk148 = Math_SinS(this->unk146) * -630.0f;
                 }
                 this->unk144--;
@@ -71,20 +71,19 @@ void func_80BF0DE0(EffStk* this, PlayState* play) {
 }
 
 void EffStk_Update(Actor* thisx, PlayState* play) {
-    EffStk* this = (EffStk*)thisx;
+    EffStk* this = THIS;
 
     this->actionFunc(this, play);
 }
 
 void EffStk_Draw(Actor* thisx, PlayState* play) {
-    EffStk* this = (EffStk*)thisx;
-
+    EffStk* this = THIS;
     s32 pad;
-    Camera* camera = play->cameraPtrs[play->activeCamId];
-    Vec3f eye = camera->eye;
+    Camera* activeCam = GET_ACTIVE_CAM(play);
+    Vec3f eye = activeCam->eye;
     Vec3f quakeOffset;
 
-    Camera_GetQuakeOffset(&quakeOffset, camera);
+    Camera_GetQuakeOffset(&quakeOffset, activeCam);
 
     OPEN_DISPS(play->state.gfxCtx);
 
