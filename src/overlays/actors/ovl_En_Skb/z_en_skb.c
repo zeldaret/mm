@@ -742,11 +742,11 @@ void func_809961E4(EnSkb* this, PlayState* play) {
 }
 
 void func_80996284(EnSkb* this, PlayState* play) {
-    if (this->unk_3D8 & 0x80) {
-        if (1) {}
-        Item_DropCollectibleRandom(play, &this->actor, &this->actor.world.pos, 0x10);
-        func_80996474(this);
+    if (!(this->unk_3D8 & 0x80)) {
+        return;
     }
+    Item_DropCollectibleRandom(play, &this->actor, &this->actor.world.pos, 0x10);
+    func_80996474(this);
 }
 
 void func_809962D4(EnSkb* this) {
@@ -982,22 +982,22 @@ void func_8099672C(EnSkb* this, PlayState* play) {
 }
 
 void func_80996AD0(EnSkb* this, PlayState* play) {
-    if (1) {}
+    if ((this->actionFunc == func_80996284) || (this->unk_3E2 == 1)) {
+        return;
+    }
 
-    if ((this->actionFunc != func_80996284) && (this->unk_3E2 != 1)) {
-        if (this->unk_3E4 != 0) {
-            CollisionCheck_SetAT(play, &play->colChkCtx, &this->collider.base);
-        }
+    if (this->unk_3E4 != 0) {
+        CollisionCheck_SetAT(play, &play->colChkCtx, &this->collider.base);
+    }
 
-        if (((this->unk_3DE != 0) || (this->unk_3D0 >= 11)) && (this->unk_3DE != 1) && (this->unk_3DE != 4) &&
-            (this->unk_3DE != 6) && (this->unk_3DE != 7) &&
-            ((this->actor.colorFilterTimer == 0) || !(this->actor.colorFilterParams & 0x4000))) {
-            CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
-        }
+    if (((this->unk_3DE != 0) || (this->unk_3D0 >= 11)) && (this->unk_3DE != 1) && (this->unk_3DE != 4) &&
+        (this->unk_3DE != 6) && (this->unk_3DE != 7) &&
+        ((this->actor.colorFilterTimer == 0) || !(this->actor.colorFilterParams & 0x4000))) {
+        CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
+    }
 
-        if ((this->actionFunc != func_80996284) && (this->actionFunc != func_809964A0)) {
-            CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
-        }
+    if ((this->actionFunc != func_80996284) && (this->actionFunc != func_809964A0)) {
+        CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
     }
 }
 
@@ -1131,7 +1131,7 @@ void EnSkb_Draw(Actor* thisx, PlayState* play) {
     EnSkb* this = THIS;
 
     this->limbCount = 0;
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, EnSkb_OverrideLimbDraw,
                       EnSkb_PostLimbDraw, &this->actor);
     if (this->drawDmgEffTimer > 0) {

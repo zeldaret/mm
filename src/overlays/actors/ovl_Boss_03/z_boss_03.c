@@ -51,6 +51,7 @@
 #include "z_boss_03.h"
 #include "overlays/actors/ovl_Door_Warp1/z_door_warp1.h"
 #include "overlays/actors/ovl_En_Water_Effect/z_en_water_effect.h"
+#include "overlays/actors/ovl_Item_B_Heart/z_item_b_heart.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 #include "objects/object_water_effect/object_water_effect.h"
 
@@ -451,7 +452,8 @@ void Boss03_Init(Actor* thisx, PlayState* play2) {
     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_GREAT_BAY_TEMPLE)) {
         Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_DOOR_WARP1, 0.0f, PLATFORM_HEIGHT, 200.0f, 0, 0,
                            0, ENDOORWARP1_FF_1);
-        Actor_Spawn(&play->actorCtx, play, ACTOR_ITEM_B_HEART, 0.0f, PLATFORM_HEIGHT, 0.0f, 0, 0, 0, 0);
+        Actor_Spawn(&play->actorCtx, play, ACTOR_ITEM_B_HEART, 0.0f, PLATFORM_HEIGHT, 0.0f, 0, 0, 0,
+                    BHEART_PARAM_NORMAL);
         Actor_Kill(&this->actor);
         return;
     }
@@ -1610,7 +1612,7 @@ void Boss03_DeathCutscene(Boss03* this, PlayState* play) {
                 Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_DOOR_WARP1, 0.0f, PLATFORM_HEIGHT, 200.0f,
                                    0, 0, 0, ENDOORWARP1_FF_1);
                 Actor_Spawn(&play->actorCtx, play, ACTOR_ITEM_B_HEART, this->actor.focus.pos.x, PLATFORM_HEIGHT,
-                            this->actor.focus.pos.z, 0, 0, 0, 0);
+                            this->actor.focus.pos.z, 0, 0, 0, BHEART_PARAM_NORMAL);
                 this->csTimer = 0;
                 Actor_SetScale(&this->actor, 0.0f);
                 AudioSfx_StopByPos(&this->actor.projectedPos);
@@ -1842,16 +1844,16 @@ void Boss03_UpdateCollision(Boss03* this, PlayState* play) {
         for (i = 0; i < ARRAY_COUNT(sHeadJntSphElementsInit); i++) {
             if (this->headCollider.elements[i].info.toucherFlags & TOUCH_HIT) {
                 this->headCollider.elements[i].info.toucherFlags &= ~TOUCH_HIT;
-                player->unk_B84 = this->actor.shape.rot.y;
-                player->unk_B80 = 20.0f;
+                player->pushedYaw = this->actor.shape.rot.y;
+                player->pushedSpeed = 20.0f;
             }
         }
 
         for (i = 0; i < ARRAY_COUNT(sBodyJntSphElementsInit); i++) {
             if (this->bodyCollider.elements[i].info.toucherFlags & TOUCH_HIT) {
                 this->bodyCollider.elements[i].info.toucherFlags &= ~TOUCH_HIT;
-                player->unk_B84 = this->actor.shape.rot.y;
-                player->unk_B80 = 20.0f;
+                player->pushedYaw = this->actor.shape.rot.y;
+                player->pushedSpeed = 20.0f;
             }
         }
     }
@@ -2263,7 +2265,7 @@ void Boss03_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     if (!this->unk_2D5) {
         if ((this->unk_25E % 2) != 0) {
@@ -2394,8 +2396,8 @@ void Boss03_DrawEffects(PlayState* play) {
 
     OPEN_DISPS(gfxCtx);
 
-    func_8012C2DC(play->state.gfxCtx);
-    func_8012C28C(gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(gfxCtx);
 
     for (i = 0; i < GYORG_EFFECT_COUNT; i++, eff++) {
         if (eff->type == GYORG_EFFECT_BUBBLE) {
@@ -2426,7 +2428,7 @@ void Boss03_DrawEffects(PlayState* play) {
         if ((eff->type == GYORG_EFFECT_DROPLET) || (eff->type == GYORG_EFFECT_SPLASH)) {
 
             if (!flag) {
-                POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 0);
+                POLY_XLU_DISP = Gfx_SetupDL(POLY_XLU_DISP, SETUPDL_0);
 
                 gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gEffDust1Tex));
                 gSPDisplayList(POLY_XLU_DISP++, object_water_effect_DL_004260);
@@ -2460,7 +2462,7 @@ void Boss03_DrawEffects(PlayState* play) {
     for (i = 0; i < GYORG_EFFECT_COUNT; i++, eff++) {
         if (eff->type == GYORG_EFFECT_WET_SPOT) {
             if (!flag) {
-                func_8012C448(gfxCtx);
+                Gfx_SetupDL44_Xlu(gfxCtx);
 
                 gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gEffDust1Tex));
                 gDPSetEnvColor(POLY_XLU_DISP++, 250, 250, 255, 0);
@@ -2597,7 +2599,7 @@ void Boss03_SeaweedDraw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     gSPSegment(POLY_OPA_DISP++, 0x0D, mtx);
 

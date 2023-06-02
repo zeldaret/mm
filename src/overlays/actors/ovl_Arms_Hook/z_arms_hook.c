@@ -141,6 +141,7 @@ void ArmsHook_Shoot(ArmsHook* this, PlayState* play) {
     if (this->timer != 0 && (this->collider.base.atFlags & AT_HIT) &&
         (this->collider.info.atHitInfo->elemType != ELEMTYPE_UNK4)) {
         Actor* touchedActor = this->collider.base.at;
+
         if ((touchedActor->update != NULL) && (touchedActor->flags & (ACTOR_FLAG_200 | ACTOR_FLAG_400))) {
             if (this->collider.info.atHitInfo->bumperFlags & BUMP_HOOKABLE) {
                 ArmsHook_AttachHookToActor(this, touchedActor);
@@ -314,7 +315,7 @@ void ArmsHook_Draw(Actor* thisx, PlayState* play) {
             Matrix_MultVec3f(&D_808C1C4C, &sp50);
         }
         func_80126440(play, &this->collider, &this->weaponInfo, &sp5C, &sp50);
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
         func_80122868(play, player);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

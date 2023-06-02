@@ -107,7 +107,7 @@ void EnNnh_Draw(Actor* thisx, PlayState* play) {
     GraphicsContext* gfxCtx = play->state.gfxCtx;
     s32 pad;
 
-    func_8012C28C(gfxCtx);
+    Gfx_SetupDL25_Opa(gfxCtx);
     gSPMatrix(gfxCtx->polyOpa.p++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(gfxCtx->polyOpa.p++, gButlerSonMainBodyDL);
 }

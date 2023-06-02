@@ -4,7 +4,6 @@
  * Description: Wave Created by Turtle Awakening
  */
 
-#include "prevent_bss_reordering.h"
 #include "z_eff_kamejima_wave.h"
 #include "objects/object_kamejima/object_kamejima.h"
 
@@ -160,7 +159,7 @@ void EffKamejimaWave_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     Matrix_Scale(6.0f, 5.0f, 5.0f, MTXMODE_APPLY);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     AnimatedMat_Draw(play, D_80BCF1C4);

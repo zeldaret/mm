@@ -1168,8 +1168,8 @@ void EnSlime_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     func_800B8118(&this->actor, play, 0);
     if (this->iceBlockTimer != ICE_BLOCK_UNUSED) {
         gSPSegment(POLY_XLU_DISP++, 10, D_801AEFA0);
@@ -1229,7 +1229,7 @@ void EnSlime_Draw(Actor* thisx, PlayState* play) {
 
     if ((this->actor.params != EN_SLIME_TYPE_BLUE) && (this->actor.scale.x > 0.0f)) {
         POLY_OPA_DISP = Play_SetFog(play, POLY_OPA_DISP);
-        POLY_OPA_DISP = func_8012C724(POLY_OPA_DISP);
+        POLY_OPA_DISP = Gfx_SetupDL66(POLY_OPA_DISP);
 
         Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y + (2000.0f * this->actor.scale.y),
                          this->actor.world.pos.z, MTXMODE_NEW);

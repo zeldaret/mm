@@ -405,7 +405,7 @@ void EnBubble_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     if (this->actionFunc != EnBubble_Disappear) {
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         Math_SmoothStepToF(&this->modelRotSpeed, 16.0f, 0.2f, 1000.0f, 0.0f);
         Math_SmoothStepToF(&this->modelEllipticity, 0.08f, 0.2f, 1000.0f, 0.0f);
         Matrix_ReplaceRotation(&play->billboardMtxF);

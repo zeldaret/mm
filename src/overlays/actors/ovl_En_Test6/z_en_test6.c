@@ -257,7 +257,7 @@ void EnTest6_DrawAmmoDropDefault(EnTest6* this, PlayState* play, SoTCsAmmoDrops*
                          MTXMODE_NEW);
         Matrix_Scale(ammoDrop->scale * 0.02f, ammoDrop->scale * 0.02f, ammoDrop->scale * 0.02f, MTXMODE_APPLY);
         POLY_OPA_DISP = Play_SetFog(play, POLY_OPA_DISP);
-        POLY_OPA_DISP = func_8012C724(POLY_OPA_DISP);
+        POLY_OPA_DISP = Gfx_SetupDL66(POLY_OPA_DISP);
 
         gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sSoTCsAmmoDropTextures[ammoDrop->type]));
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -273,7 +273,7 @@ void EnTest6_DrawAmmoDropDefault(EnTest6* this, PlayState* play, SoTCsAmmoDrops*
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 210, 210, 230, 128);
     gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 255, 0);
@@ -300,7 +300,7 @@ void EnTest6_DrawAmmoDropRupee(EnTest6* this, PlayState* play, SoTCsAmmoDrops* a
     OPEN_DISPS(play->state.gfxCtx);
 
     if (gfxHead != NULL) {
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
         //! FAKE: & 0xFFFF
         gDPSetTileSize(gfx++, 1, hilite->h.x1 & 0xFFFF, hilite->h.y1 & 0xFFFF, (hilite->h.x1 + 60) & 0xFFFF,
@@ -327,7 +327,7 @@ void EnTest6_DrawAmmoDropRupee(EnTest6* this, PlayState* play, SoTCsAmmoDrops* a
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 220, 220, 230, 192);
     gDPSetEnvColor(POLY_XLU_DISP++, 128, 128, 128, 0);
@@ -1396,7 +1396,7 @@ void EnTest6_DrawInvertedSoTCutscene(EnTest6* this, PlayState* play2) {
                     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 128, 128, 128, this->alpha >> 1);
                     gDPSetEnvColor(POLY_XLU_DISP++, 230, 230, 180, this->alpha);
 
-                    func_8012C2DC(play->state.gfxCtx);
+                    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
                     Matrix_Mult(&play->billboardMtxF, MTXMODE_APPLY);
                     Matrix_RotateZS(this->invSoTClockYaw + (i << 2), MTXMODE_APPLY);
 

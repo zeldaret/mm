@@ -729,11 +729,14 @@ s32 EnNeoReeba_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec
 void EnNeoReeba_Draw(Actor* thisx, PlayState* play) {
     EnNeoReeba* this = THIS;
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
+
     OPEN_DISPS(play->state.gfxCtx);
+
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0x01, 255, 255, 255, 255);
     SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, EnNeoReeba_OverrideLimbDraw, NULL,
                       &this->actor);
+
     CLOSE_DISPS(play->state.gfxCtx);
 
     if (this->stunTimer > 0) {

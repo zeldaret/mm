@@ -471,7 +471,7 @@ s32 func_80AECE60(EnTk* this, PlayState* play) {
     if ((door != NULL) && (this->unk_2CA & 0x400)) {
         Vec3f sp5C;
 
-        Actor_OffsetOfPointInActorCoords(&this->actor, &sp5C, &door->dyna.actor.world.pos);
+        Actor_OffsetOfPointInActorCoords(&this->actor, &sp5C, &door->knobDoor.dyna.actor.world.pos);
         door->unk_1A7 = 2;
         if (sp5C.z < -20.0f) {
             this->unk_2CA &= ~0x400;
@@ -1382,7 +1382,7 @@ void EnTk_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    POLY_OPA_DISP = Gfx_CallSetupDL(POLY_OPA_DISP, 25);
+    POLY_OPA_DISP = Gfx_SetupDL(POLY_OPA_DISP, SETUPDL_25);
 
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80AEFA90[this->unk_2C2]));
 

@@ -1291,7 +1291,7 @@ void EnBigpo_DrawMainBigpo(Actor* thisx, PlayState* play) {
     if ((this->mainColor.a == 255) || (this->mainColor.a == 0)) {
         // fully visible OR fully transparent
         dispHead = POLY_OPA_DISP;
-        gSPDisplayList(dispHead, &sSetupDL[6 * 0x19]);
+        gSPDisplayList(dispHead, gSetupDLs[SETUPDL_25]);
         gSPSegment(&dispHead[1], 0x0C, &D_801AEFA0); // empty display list for no transparency
         gSPSegment(&dispHead[2], 0x08,
                    Gfx_EnvColor(play->state.gfxCtx, this->mainColor.r, this->mainColor.g, this->mainColor.b,
@@ -1301,7 +1301,7 @@ void EnBigpo_DrawMainBigpo(Actor* thisx, PlayState* play) {
 
     } else {
         dispHead = POLY_XLU_DISP;
-        gSPDisplayList(dispHead, &sSetupDL[6 * 0x19]);
+        gSPDisplayList(dispHead, gSetupDLs[SETUPDL_25]);
         gSPSegment(&dispHead[1], 0x0C, &D_801AEF88); // transparency display list
         gSPSegment(&dispHead[2], 0x08,
                    Gfx_EnvColor(play->state.gfxCtx, this->mainColor.r, this->mainColor.g, this->mainColor.b,
@@ -1330,7 +1330,7 @@ void EnBigpo_DrawScoopSoul(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     gSPSegment(POLY_XLU_DISP++, 0x08,
                Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, 0, 0x20, 0x40, 1, 0, (play->gameplayFrames * -15) % 512, 0x20,
@@ -1382,7 +1382,7 @@ void EnBigpo_DrawLantern(Actor* thisx, PlayState* play) {
         dispHead = POLY_XLU_DISP;
     }
 
-    gSPDisplayList(&dispHead[0], &sSetupDL[6 * 0x19]);
+    gSPDisplayList(&dispHead[0], gSetupDLs[SETUPDL_25]);
 
     gSPSegment(&dispHead[1], 0x0A, Gfx_EnvColor(play->state.gfxCtx, 160, 0, 255, this->mainColor.a));
 
@@ -1418,7 +1418,7 @@ void EnBigpo_DrawCircleFlames(Actor* thisx, PlayState* play) {
     mtfxPtr = Matrix_GetCurrent();
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     Matrix_RotateYS(BINANG_ROT180(Camera_GetCamDirYaw(GET_ACTIVE_CAM(play))), MTXMODE_NEW);
     if (this->actionFunc == EnBigpo_SpawnCutsceneStage6) {
         Matrix_Scale(0.01f, 0.01f, 0.01f, MTXMODE_APPLY);
@@ -1458,7 +1458,7 @@ void EnBigpo_RevealedFire(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     gSPSegment(POLY_XLU_DISP++, 0x08,
                Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, 0, 0x20, 0x40, 1, 0, (play->gameplayFrames * -20) % 512, 0x20,

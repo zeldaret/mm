@@ -902,7 +902,8 @@ void func_80B872F4(EnKaizoku* this, PlayState* play) {
     if ((this->lookTimer == 0) && !func_80B85858(this, play) && !func_80B85A00(this, play, false)) {
         s16 yawDiff = this->picto.actor.yawTowardsPlayer - this->picto.actor.shape.rot.y;
 
-        if ((this->picto.actor.xzDistToPlayer < 100.0f) && (player->meleeWeaponState != 0) && (yawDiff >= 0x1F40)) {
+        if ((this->picto.actor.xzDistToPlayer < 100.0f) && (player->meleeWeaponState != PLAYER_MELEE_WEAPON_STATE_0) &&
+            (yawDiff >= 0x1F40)) {
             this->picto.actor.shape.rot.y = this->picto.actor.world.rot.y = this->picto.actor.yawTowardsPlayer;
             func_80B88CD8(this);
         } else if (Actor_IsFacingPlayer(&this->picto.actor, 0xBB8)) {
@@ -1285,7 +1286,8 @@ void func_80B88378(EnKaizoku* this, PlayState* play) {
 
         this->skelAnime.playSpeed = 1.0f;
         sp2A = ABS_ALT(player->actor.shape.rot.y - this->picto.actor.shape.rot.y);
-        if (this->picto.actor.xzDistToPlayer < 150.0f && player->meleeWeaponState != 0 && sp2A >= 0x2000) {
+        if ((this->picto.actor.xzDistToPlayer < 150.0f) && (player->meleeWeaponState != PLAYER_MELEE_WEAPON_STATE_0) &&
+            (sp2A >= 0x2000)) {
             this->picto.actor.shape.rot.y = this->picto.actor.world.rot.y = this->picto.actor.yawTowardsPlayer;
             if (Rand_ZeroOne() > 0.7f) {
                 func_80B88CD8(this);
@@ -1529,7 +1531,7 @@ void func_80B88D6C(EnKaizoku* this, PlayState* play) {
         temp_ft4 = this->skelAnime.curFrame - this->skelAnime.playSpeed;
         temp_ft5 = this->skelAnime.curFrame + this->skelAnime.playSpeed;
         if (this->skelAnime.curFrame != 0.0f) {
-            if (((temp_ft4 < 0 && temp_ft5 > 0) || (temp_ft4 < 5 && temp_ft5 > 5))) {
+            if ((((temp_ft4 < 0) && (temp_ft5 > 0)) || ((temp_ft4 < 5) && (temp_ft5 > 5)))) {
                 Actor_PlaySfx(&this->picto.actor, NA_SE_EN_GERUDOFT_WALK);
             }
         }
@@ -1938,8 +1940,8 @@ void func_80B89A08(EnKaizoku* this, PlayState* play) {
             pos.z = this->bodyCollider.info.bumper.hitPos.z;
 
             if (player->transformation != PLAYER_FORM_HUMAN) {
-                player->unk_B84 = this->picto.actor.yawTowardsPlayer;
-                player->unk_B80 = 15.0f;
+                player->pushedYaw = this->picto.actor.yawTowardsPlayer;
+                player->pushedSpeed = 15.0f;
             }
 
             this->bodyCollider.base.acFlags &= ~AC_HIT;
@@ -2132,8 +2134,8 @@ void EnKaizoku_Draw(Actor* thisx, PlayState* play) {
     f32 drawDmgEffAlpha;
     EnKaizoku* this = THIS;
 
-    func_8012C2DC(play->state.gfxCtx);
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     OPEN_DISPS(play->state.gfxCtx);
 
