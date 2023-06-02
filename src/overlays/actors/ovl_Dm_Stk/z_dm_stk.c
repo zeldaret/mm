@@ -843,9 +843,10 @@ void DmStk_PlaySfxForCutsceneAfterPlayingOathToOrder(DmStk* this, PlayState* pla
         case 594:
             Audio_PlaySfxAtPos(&this->oathToOrderCutsceneVoicePos, NA_SE_EN_STAL24_SCREAM2);
             break;
-    }
 
-    if (1) {}
+        default:
+            break;
+    }
 
     if ((play->csCtx.curFrame >= 62) && (play->csCtx.curFrame < 273)) {
         if ((Rand_ZeroOne() < 0.75f) && ((play->state.frames % 2) != 0)) {
@@ -2033,10 +2034,10 @@ void DmStk_Draw(Actor* thisx, PlayState* play) {
         OPEN_DISPS(play->state.gfxCtx);
 
         this->alpha = this->alpha;
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
         if (this->alpha < 255) {
-            func_8012C2DC(play->state.gfxCtx);
+            Gfx_SetupDL25_Xlu(play->state.gfxCtx);
             Scene_SetRenderModeXlu(play, 1, 2);
 
             gDPPipeSync(POLY_XLU_DISP++);

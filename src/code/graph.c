@@ -16,12 +16,12 @@ OSTime sGraphTaskStartTime;
 
 void Graph_FaultClient(void) {
     FaultDrawer_DrawText(30, 100, "ShowFrameBuffer PAGE 0/1");
-    osViSwapBuffer(SysCfb_GetFbPtr(0));
-    osViSetMode(D_801FBB88);
+    osViSwapBuffer(SysCfb_GetFramebuffer(0));
+    osViSetMode(gActiveViMode);
     osViSetSpecialFeatures(OS_VI_DITHER_FILTER_ON | OS_VI_GAMMA_OFF);
     Fault_WaitForInput();
-    osViSwapBuffer(SysCfb_GetFbPtr(1));
-    osViSetMode(D_801FBB88);
+    osViSwapBuffer(SysCfb_GetFramebuffer(1));
+    osViSetMode(gActiveViMode);
     osViSetSpecialFeatures(OS_VI_DITHER_FILTER_ON | OS_VI_GAMMA_OFF);
 }
 
@@ -50,7 +50,7 @@ void Graph_SetNextGfxPool(GraphicsContext* gfxCtx) {
     gfxCtx->workBuffer = pool->workBuffer;
     gfxCtx->debugBuffer = pool->debugBuffer;
 
-    gfxCtx->curFrameBuffer = SysCfb_GetFbPtr(gfxCtx->framebufferIndex % 2);
+    gfxCtx->curFrameBuffer = SysCfb_GetFramebuffer(gfxCtx->framebufferIndex % 2);
     gSegments[0x0F] = gfxCtx->curFrameBuffer;
 
     gfxCtx->zbuffer = SysCfb_GetZBuffer();
@@ -179,7 +179,7 @@ retry:
     task->dramStack = (u64*)gGfxSPTaskStack;
     task->dramStackSize = sizeof(gGfxSPTaskStack);
     task->outputBuff = gGfxSPTaskOutputBufferPtr;
-    task->outputBuffSize = gGfxSPTaskOutputBufferSize;
+    task->outputBuffSize = gGfxSPTaskOutputBufferEnd;
     task->dataPtr = (u64*)gGfxMasterDL;
     task->dataSize = 0;
     task->yieldDataPtr = (u64*)gGfxSPTaskYieldBuffer;
@@ -340,18 +340,19 @@ void Graph_ThreadEntry(void* arg) {
     u32 size;
     s32 pad[2];
 
-    gZBuffer = SystemArena_Malloc(sizeof(*gZBuffer) + sizeof(*gWorkBuffer) + 64 - 1);
-    gZBuffer = (void*)ALIGN64((u32)gZBuffer);
+    gZBufferLoRes = SystemArena_Malloc(sizeof(*gZBufferLoRes) + sizeof(*gWorkBufferLoRes) + 64 - 1);
+    gZBufferLoRes = (void*)ALIGN64((u32)gZBufferLoRes);
 
-    gWorkBuffer = (void*)((u8*)gZBuffer + sizeof(*gZBuffer));
+    gWorkBufferLoRes = (void*)((u8*)gZBufferLoRes + sizeof(*gZBufferLoRes));
 
-    gGfxSPTaskOutputBuffer2 = gGfxSPTaskOutputBuffer = SystemArena_Malloc(sizeof(*gGfxSPTaskOutputBuffer));
+    gGfxSPTaskOutputBufferHiRes = gGfxSPTaskOutputBufferLoRes =
+        SystemArena_Malloc(sizeof(*gGfxSPTaskOutputBufferLoRes));
 
-    gGfxSPTaskOutputBufferEnd = (u8*)gGfxSPTaskOutputBuffer + sizeof(*gGfxSPTaskOutputBuffer);
-    gGfxSPTaskOutputBufferEnd2 = (u8*)gGfxSPTaskOutputBuffer2 + sizeof(*gGfxSPTaskOutputBuffer2);
+    gGfxSPTaskOutputBufferEndLoRes = (u8*)gGfxSPTaskOutputBufferLoRes + sizeof(*gGfxSPTaskOutputBufferLoRes);
+    gGfxSPTaskOutputBufferEndHiRes = (u8*)gGfxSPTaskOutputBufferHiRes + sizeof(*gGfxSPTaskOutputBufferHiRes);
 
-    func_80178978();
-    Fault_SetFB(D_801FBB90, SCREEN_WIDTH, SCREEN_HEIGHT);
+    SysCfb_Init();
+    Fault_SetFB(gWorkBuffer, SCREEN_WIDTH, SCREEN_HEIGHT);
     Graph_Init(&gfxCtx);
 
     while (nextOvl) {

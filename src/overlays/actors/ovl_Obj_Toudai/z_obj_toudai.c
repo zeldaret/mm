@@ -36,7 +36,7 @@ void func_80A33B00(ObjToudai* this, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, object_f53_obj_DL_0024E8);
@@ -67,7 +67,7 @@ void func_80A33BB4(ObjToudai* this, PlayState* play) {
 
         OPEN_DISPS(play->state.gfxCtx);
 
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
         gSPSegment(POLY_XLU_DISP++, 0x08,
                    Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, sp57, 0x20, 0x80, 1, 0, sp56, 0x20, 0x20));

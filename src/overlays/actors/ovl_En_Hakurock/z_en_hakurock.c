@@ -279,8 +279,8 @@ void func_80B22500(EnHakurock* this, PlayState* play) {
         } else if ((&player->actor == this->collider.base.oc) &&
                    (player->stateFlags3 & (PLAYER_STATE3_1000 | PLAYER_STATE3_80000)) &&
                    (player->linearVelocity > 8.0f)) {
-            player->unk_B08[0] = player->linearVelocity = -5.0f;
-            player->unk_B08[1] += (player->linearVelocity * 0.05f);
+            player->unk_B08 = player->linearVelocity = -5.0f;
+            player->unk_B0C += (player->linearVelocity * 0.05f);
             player->actor.velocity.y = 5.0f;
             player->currentYaw = player->actor.world.rot.y;
             player->actor.home.rot.y = player->actor.world.rot.y;
@@ -342,19 +342,23 @@ void EnHakurock_Update(Actor* thisx, PlayState* play) {
 
 void func_80B228F4(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
-    func_8012C28C(play->state.gfxCtx);
+
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0x80, 255, 185, 24, 255);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_06AB30);
+
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
 void EnHakurock_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
-    func_8012C28C(play->state.gfxCtx);
+
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     Matrix_Translate(-100.0f, 0.0f, 0.0f, MTXMODE_APPLY);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, gGohtStalactiteMaterialDL);
     gSPDisplayList(POLY_OPA_DISP++, gGohtStalactiteModelDL);
+
     CLOSE_DISPS(play->state.gfxCtx);
 }

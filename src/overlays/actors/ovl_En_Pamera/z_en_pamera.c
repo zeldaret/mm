@@ -154,8 +154,6 @@ void EnPamera_Init(Actor* thisx, PlayState* play) {
         func_80BD8588(this, play);
         func_80BD8658(this);
 
-        if (1) {}
-
         if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_14_04) || CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_STONE_TOWER_TEMPLE) ||
             CHECK_WEEKEVENTREG(WEEKEVENTREG_75_20) || (gSaveContext.save.entrance == ENTRANCE(IKANA_CANYON, 9))) {
             Actor_Kill(&this->actor);
@@ -244,8 +242,8 @@ void func_80BD8758(EnPamera* this, PlayState* play) {
     if (this->hideInisdeTimer++ > 1800) {
         if (CutsceneManager_IsNext(this->csIdList[0]) && (this->csIdList[0] != -1)) {
             CutsceneManager_StartWithPlayerCs(this->csIdList[0], &this->actor);
-            Camera_SetToTrackActor(Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(this->csIdList[0])),
-                                   &this->actor);
+            Camera_SetFocalActor(Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(this->csIdList[0])),
+                                 &this->actor);
             this->actor.speed = 1.5f;
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 1);
             this->actor.shape.rot.y = this->actor.home.rot.y;
@@ -431,8 +429,8 @@ void func_80BD90AC(EnPamera* this, PlayState* play) {
           (Math_Vec3f_DistXZ(&this->actor.home.pos, &player->actor.world.pos) < 200.0f)))) {
         if ((CutsceneManager_IsNext(this->csIdList[1])) && ((this->csIdList[1] != -1))) {
             CutsceneManager_StartWithPlayerCs(this->csIdList[1], &this->actor);
-            Camera_SetToTrackActor(Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(this->csIdList[1])),
-                                   &this->actor);
+            Camera_SetFocalActor(Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(this->csIdList[1])),
+                                 &this->actor);
             EnPamera_LookDownWell(this);
         } else if (this->csIdList[1] != -1) {
             CutsceneManager_Queue(this->csIdList[1]);
@@ -556,12 +554,14 @@ void EnPamera_Draw(Actor* thisx, PlayState* play) {
     EnPamera* this = THIS;
 
     OPEN_DISPS(play->state.gfxCtx);
-    func_8012C28C(play->state.gfxCtx);
+
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     gSPSegment(POLY_OPA_DISP++, 0x08, SEGMENTED_TO_VIRTUAL(D_80BDA604[this->unk_312]));
     gSPSegment(POLY_OPA_DISP++, 0x09, SEGMENTED_TO_VIRTUAL(D_80BDA610[this->unk_314]));
     gSPSegment(POLY_OPA_DISP++, 0x0A, SEGMENTED_TO_VIRTUAL(D_80BDA5FC[this->unk_310]));
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnPamera_OverrideLimbDraw, EnPamera_PostLimbDraw, &this->actor);
+
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
@@ -599,7 +599,6 @@ void func_80BD9938(EnPamera* this) {
 void func_80BD994C(EnPamera* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         if (Player_GetMask(play) == PLAYER_MASK_GIBDO) {
-            if (1) {}
             func_80BD93CC(this, 0, 1);
             Message_StartTextbox(play, 0x15A8, &this->actor);
 

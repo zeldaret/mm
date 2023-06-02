@@ -50,7 +50,7 @@ void EffectSsStick_Draw(PlayState* play, u32 index, EffectSs* this) {
     Matrix_Scale(0.01f, 0.0025f, 0.01f, MTXMODE_APPLY);
     Matrix_RotateZYX(0, this->rYaw, 0, MTXMODE_APPLY);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    func_8012C28C(gfxCtx);
+    Gfx_SetupDL25_Opa(gfxCtx);
     gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.status[this->rObjBankIndex].segment);
     gSPSegment(POLY_OPA_DISP++, 0x0C, gCullBackDList);
     gSPDisplayList(POLY_OPA_DISP++, gDekuStickDL);

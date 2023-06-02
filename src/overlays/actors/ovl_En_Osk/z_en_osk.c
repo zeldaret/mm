@@ -512,7 +512,7 @@ void EnOsk_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     gSPSegment(POLY_OPA_DISP++, 0x08, Gfx_PrimColor(play->state.gfxCtx, 0x80, 255, 255, 255, 255));
 
@@ -542,7 +542,7 @@ void EnOsk_Draw(Actor* thisx, PlayState* play) {
                      MTXMODE_APPLY);
     }
 
-    gfx = func_8012C868(POLY_XLU_DISP);
+    gfx = Gfx_SetupDL20_NoCD(POLY_XLU_DISP);
 
     gSPSetOtherMode(gfx++, G_SETOTHERMODE_H, 4, 4, 0x00000080);
     if (1) {}

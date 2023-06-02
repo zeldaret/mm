@@ -938,7 +938,7 @@ s32 EnNiw_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
 void EnNiw_Draw(Actor* thisx, PlayState* play) {
     EnNiw* this = THIS;
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawFlexOpa(play, this->skelanime.skeleton, this->skelanime.jointTable, this->skelanime.dListCount,
                           EnNiw_OverrideLimbDraw, NULL, &this->actor);
     EnNiw_DrawFeathers(this, play);
@@ -1002,7 +1002,8 @@ void EnNiw_DrawFeathers(EnNiw* this, PlayState* play) {
     s16 i;
 
     OPEN_DISPS(gfxCtx);
-    func_8012C2DC(play->state.gfxCtx);
+
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     for (i = 0; i < ARRAY_COUNT(this->feathers); i++, feather++) {
         if (feather->isEnabled == true) {

@@ -371,7 +371,7 @@ s16 CutsceneManager_Start(s16 csId, Actor* actor) {
     Camera* retCam;
     s32 csType = 0;
 
-    if ((csId < 0) || (sCutsceneMgr.csId != CS_ID_NONE)) {
+    if ((csId <= CS_ID_NONE) || (sCutsceneMgr.csId != CS_ID_NONE)) {
         return csId;
     }
 
@@ -402,13 +402,13 @@ s16 CutsceneManager_Start(s16 csId, Actor* actor) {
             if (CutsceneManager_FindEntranceCsId() != csId) {
                 func_800E0348(retCam);
             } else {
-                Camera_ClearFlags(retCam, CAM_STATE_2);
+                Camera_UnsetStateFlag(retCam, CAM_STATE_2);
             }
         }
 
         memcpy(subCam, retCam, sizeof(Camera));
         subCam->camId = sCutsceneMgr.subCamId;
-        Camera_ClearFlags(subCam, CAM_STATE_6 | CAM_STATE_0);
+        Camera_UnsetStateFlag(subCam, CAM_STATE_6 | CAM_STATE_0);
 
         Play_ChangeCameraStatus(sCutsceneMgr.play, sCutsceneMgr.retCamId, CAM_STATUS_WAIT);
         Play_ChangeCameraStatus(sCutsceneMgr.play, sCutsceneMgr.subCamId, CAM_STATUS_ACTIVE);
@@ -422,7 +422,7 @@ s16 CutsceneManager_Start(s16 csId, Actor* actor) {
             sCutsceneMgr.length = csEntry->length;
         } else {
             if (csEntry->csCamId != CS_CAM_ID_NONE) {
-                Camera_ChangeDataIdx(subCam, csEntry->csCamId);
+                Camera_ChangeActorCsCamIndex(subCam, csEntry->csCamId);
             } else {
                 Camera_ChangeSetting(subCam, CAM_SET_FREE0);
             }
@@ -437,7 +437,7 @@ s16 CutsceneManager_Start(s16 csId, Actor* actor) {
 s16 CutsceneManager_Stop(s16 csId) {
     ActorCutscene* csEntry;
 
-    if (csId < 0) {
+    if (csId <= CS_ID_NONE) {
         return csId;
     }
 
@@ -468,28 +468,28 @@ ActorCutscene* CutsceneManager_GetCutsceneEntry(s16 csId) {
 }
 
 s16 CutsceneManager_GetAdditionalCsId(s16 csId) {
-    if (csId < 0) {
+    if (csId <= CS_ID_NONE) {
         return CS_ID_NONE;
     }
     return CutsceneManager_GetCutsceneEntryImpl(csId)->additionalCsId;
 }
 
 s16 CutsceneManager_GetLength(s16 csId) {
-    if (csId < 0) {
+    if (csId <= CS_ID_NONE) {
         return -1;
     }
     return CutsceneManager_GetCutsceneEntryImpl(csId)->length;
 }
 
 s16 CutsceneManager_GetCutsceneScriptIndex(s16 csId) {
-    if (csId < 0) {
+    if (csId <= CS_ID_NONE) {
         return -1;
     }
     return CutsceneManager_GetCutsceneEntryImpl(csId)->scriptIndex;
 }
 
 s16 CutsceneManager_GetCutsceneCustomValue(s16 csId) {
-    if (csId < 0) {
+    if (csId <= CS_ID_NONE) {
         return -1;
     }
     return CutsceneManager_GetCutsceneEntryImpl(csId)->customValue;

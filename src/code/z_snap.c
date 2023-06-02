@@ -42,9 +42,6 @@ s32 Snap_RecordPictographedActors(PlayState* play) {
                     break;
             }
 
-            //! FAKE:
-            if (1) {}
-
             // Actors which may be pictographed anywhere
             switch (actor->id) {
                 case ACTOR_EN_KAKASI:
@@ -71,15 +68,20 @@ s32 Snap_RecordPictographedActors(PlayState* play) {
                 case ACTOR_EN_GE2:
                     seen |= PICTO_SEEN_ANYWHERE;
                     break;
+
+                default:
+                    break;
+            }
+
+            if (!seen) {
+                continue;
             }
 
             // If actor is recordable, run its validity function and record if valid
-            if (seen) {
-                pictoActor = (PictoActor*)actor;
-                if (pictoActor->validationFunc != NULL) {
-                    if ((pictoActor->validationFunc)(play, actor) == 0) {
-                        validCount++;
-                    }
+            pictoActor = (PictoActor*)actor;
+            if (pictoActor->validationFunc != NULL) {
+                if (pictoActor->validationFunc(play, actor) == 0) {
+                    validCount++;
                 }
             }
         }

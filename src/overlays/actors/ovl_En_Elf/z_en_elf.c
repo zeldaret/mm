@@ -62,8 +62,10 @@ static Color_RGBAf sOuterColors[] = {
 };
 
 typedef struct {
-    u8 r, g, b;
-} FairyColorFlags;
+    /* 0x0 */ u8 r;
+    /* 0x1 */ u8 g;
+    /* 0x2 */ u8 b;
+} FairyColorFlags; // size = 0x3
 
 static FairyColorFlags sColorFlags[] = {
     { 0, 0, 0 }, { 1, 0, 0 }, { 1, 2, 0 }, { 1, 0, 2 }, { 0, 1, 0 }, { 2, 1, 0 }, { 0, 1, 2 },
@@ -1588,7 +1590,7 @@ void EnElf_Draw(Actor* thisx, PlayState* play) {
 
             OPEN_DISPS(play->state.gfxCtx);
 
-            func_8012C94C(play->state.gfxCtx);
+            Gfx_SetupDL27_Xlu(play->state.gfxCtx);
 
             envAlpha = (this->timer * 50) & 0x1FF;
             envAlpha = (envAlpha >= 0x100) ? 511 - envAlpha : envAlpha;

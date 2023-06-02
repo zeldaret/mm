@@ -5,6 +5,7 @@
  */
 
 #include "z_en_horse.h"
+#include "z64horse.h"
 #include "z64rumble.h"
 #include "overlays/actors/ovl_En_In/z_en_in.h"
 #include "overlays/actors/ovl_Obj_Um/z_obj_um.h"
@@ -107,18 +108,6 @@ typedef struct {
     s32 numWaypoints;
     RaceWaypoint* waypoints;
 } RaceInfo;
-
-typedef enum {
-    /* 0 */ ENHORSE_ANIM_IDLE,
-    /* 1 */ ENHORSE_ANIM_WHINNY,
-    /* 2 */ ENHORSE_ANIM_STOPPING,
-    /* 3 */ ENHORSE_ANIM_REARING,
-    /* 4 */ ENHORSE_ANIM_WALK,
-    /* 5 */ ENHORSE_ANIM_TROT,
-    /* 6 */ ENHORSE_ANIM_GALLOP,
-    /* 7 */ ENHORSE_ANIM_LOW_JUMP,
-    /* 8 */ ENHORSE_ANIM_HIGH_JUMP
-} EnHorseAnimation;
 
 static AnimationHeader* sEponaAnimations[] = {
     &object_horse_link_child_Anim_006D44, &object_horse_link_child_Anim_007468, &object_horse_link_child_Anim_005F64,
@@ -290,8 +279,8 @@ void EnHorse_RaceWaypointPos(RaceWaypoint* waypoints, s32 idx, Vec3f* pos) {
     pos->z = waypoints[idx].z;
 }
 
-void EnHorse_RotateToPoint(EnHorse* this, PlayState* play, Vec3f* pos, s16 turnAmount) {
-    func_800F415C(&this->actor, pos, turnAmount);
+void EnHorse_RotateToPoint(EnHorse* this, PlayState* play, Vec3f* pos, s16 turnYaw) {
+    Horse_RotateToPoint(&this->actor, pos, turnYaw);
 }
 
 void func_8087B7C0(EnHorse* this, PlayState* play, Path* path) {
@@ -594,15 +583,15 @@ s32 EnHorse_Spawn(EnHorse* this, PlayState* play) {
     f32 minDist = 1.0e+38;
     Player* player = GET_PLAYER(play);
     Vec3f spawnPos;
-    s32 pathIdx = func_800F3940(play);
+    s32 pathIndex = Horse_GetJumpingFencePathIndex(play);
     s32 pathCount;
     Vec3s* pathPoints;
 
-    if (pathIdx == -1) {
+    if (pathIndex == -1) {
         return false;
     }
 
-    path = &play->setupPathList[pathIdx];
+    path = &play->setupPathList[pathIndex];
     pathCount = path->count;
     pathPoints = Lib_SegmentedToVirtual(path->points);
 
@@ -703,7 +692,7 @@ void EnHorse_Init(Actor* thisx, PlayState* play2) {
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     EnHorse_ClearDustFlags(&this->dustFlags);
-    D_801BDAA4 = 0;
+    gHorsePlayedEponasSong = false;
     Skin_Setup(&this->skin);
     this->riderPos = thisx->world.pos;
     this->unk_52C = 0;
@@ -1886,8 +1875,8 @@ void EnHorse_InitInactive(EnHorse* this) {
 }
 
 void EnHorse_Inactive(EnHorse* this, PlayState* play) {
-    if ((D_801BDAA4 != 0) && (this->type == HORSE_TYPE_2)) {
-        D_801BDAA4 = 0;
+    if (gHorsePlayedEponasSong && (this->type == HORSE_TYPE_2)) {
+        gHorsePlayedEponasSong = false;
         if (EnHorse_Spawn(this, play)) {
             if (this->type == HORSE_TYPE_2) {
                 Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_EV_KID_HORSE_NEIGH);
@@ -1966,8 +1955,8 @@ void EnHorse_Idle(EnHorse* this, PlayState* play) {
     this->actor.speed = 0.0f;
     EnHorse_IdleAnimSounds(this, play);
 
-    if ((D_801BDAA4 != 0) && (this->type == HORSE_TYPE_2)) {
-        D_801BDAA4 = 0;
+    if (gHorsePlayedEponasSong && (this->type == HORSE_TYPE_2)) {
+        gHorsePlayedEponasSong = false;
         if (!func_8087C38C(play, this, &this->actor.world.pos)) {
             if (EnHorse_Spawn(this, play)) {
                 if (this->type == HORSE_TYPE_2) {
@@ -2062,7 +2051,7 @@ void EnHorse_SetFollowAnimation(EnHorse* this, PlayState* play) {
 void EnHorse_FollowPlayer(EnHorse* this, PlayState* play) {
     f32 distToPlayer;
 
-    D_801BDAA4 = 0;
+    gHorsePlayedEponasSong = false;
     distToPlayer = Actor_WorldDistXZToActor(&this->actor, &GET_PLAYER(play)->actor);
 
     if (((this->playerDir == PLAYER_DIR_BACK_R) || (this->playerDir == PLAYER_DIR_BACK_L)) && (distToPlayer > 300.0f) &&
@@ -2971,7 +2960,7 @@ void EnHorse_FleePlayer(EnHorse* this, PlayState* play) {
     s32 animFinished;
     s16 yaw;
 
-    if ((D_801BDAA4 != 0) || (this->type == HORSE_TYPE_HNI)) {
+    if (gHorsePlayedEponasSong || (this->type == HORSE_TYPE_HNI)) {
         EnHorse_StartIdleRidable(this);
         if (this->type == HORSE_TYPE_2) {
             Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_EV_KID_HORSE_NEIGH);
@@ -3330,7 +3319,7 @@ void func_808848C8(EnHorse* this, PlayState* play) {
 
     EnHorse_PlayWalkingSound(this);
     this->actor.speed = 4.0f;
-    func_800F415C(&this->actor, &sp24, 2000);
+    Horse_RotateToPoint(&this->actor, &sp24, 0x7D0);
     this->skin.skelAnime.playSpeed = this->actor.speed * 0.75f;
     SkelAnime_Update(&this->skin.skelAnime);
     if (Math3D_Distance(&sp24, &this->actor.world.pos) < 30.0f) {
@@ -4683,7 +4672,7 @@ void EnHorse_Draw(Actor* thisx, PlayState* play) {
     EnHorse* this = THIS;
 
     if (!(this->stateFlags & ENHORSE_INACTIVE) && (this->actor.update != func_8087D540)) {
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
         this->stateFlags |= ENHORSE_DRAW;
         if (!(this->unk_1EC & 1)) {
             if (this->stateFlags & ENHORSE_JUMPING) {
