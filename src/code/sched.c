@@ -396,7 +396,7 @@ void Sched_HandleRetrace(SchedContext* sched) {
         if (sched->curBuf->updateRate2 > 0) {
             sched->curBuf->updateRate2--;
         }
-        if (sched->curBuf->updateRate2 <= 0 && sched->pendingSwapBuf1 != NULL) {
+        if ((sched->curBuf->updateRate2 <= 0) && (sched->pendingSwapBuf1 != NULL)) {
             Sched_RetraceUpdateFramebuffer(sched, sched->pendingSwapBuf1);
         }
     }
