@@ -1057,17 +1057,6 @@ u16 QuestHint_GetTatlTextId(PlayState* play);
 
 u16 Text_GetFaceReaction(PlayState* play, u32 reactionSet);
 
-s32 func_800F3940(PlayState* play);
-// void func_800F39B4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
-// void func_800F3A64(void);
-void func_800F3B2C(PlayState* play);
-// void func_800F3B68(void);
-// void func_800F3C44(void);
-// void func_800F3ED4(void);
-void func_800F40A0(GameState* gameState, Player* player);
-void func_800F415C(Actor* actor, Vec3f* arg1, s16 arg2);
-UNK_TYPE func_800F41E4(PlayState* play, ActorContext* actorCtx);
-
 void func_800F4A10(PlayState* play);
 void KaleidoSetup_Update(PlayState* play);
 void KaleidoSetup_Init(PlayState* play);

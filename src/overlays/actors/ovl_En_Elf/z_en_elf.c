@@ -62,8 +62,10 @@ static Color_RGBAf sOuterColors[] = {
 };
 
 typedef struct {
-    u8 r, g, b;
-} FairyColorFlags;
+    /* 0x0 */ u8 r;
+    /* 0x1 */ u8 g;
+    /* 0x2 */ u8 b;
+} FairyColorFlags; // size = 0x3
 
 static FairyColorFlags sColorFlags[] = {
     { 0, 0, 0 }, { 1, 0, 0 }, { 1, 2, 0 }, { 1, 0, 2 }, { 0, 1, 0 }, { 2, 1, 0 }, { 0, 1, 2 },

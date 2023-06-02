@@ -126,7 +126,7 @@ void EnTrt_ChangeAnim(SkelAnime* skelAnime, AnimationInfoS* animationInfo, s32 a
 s32 EnTrt_TestItemSelected(PlayState* play) {
     MessageContext* msgCtx = &play->msgCtx;
 
-    if (msgCtx->unk12020 == 0x10 || msgCtx->unk12020 == 0x11) {
+    if ((msgCtx->unk12020 == 0x10) || (msgCtx->unk12020 == 0x11)) {
         return CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_A);
     }
     return CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_A) ||
@@ -274,10 +274,10 @@ void EnTrt_UpdateJoystickInputState(PlayState* play, EnTrt* this) {
     s8 stickY = CONTROLLER1(&play->state)->rel.stick_y;
 
     if (this->stickAccumX == 0) {
-        if (stickX > 30 || stickX < -30) {
+        if ((stickX > 30) || (stickX < -30)) {
             this->stickAccumX = stickX;
         }
-    } else if (stickX <= 30 && stickX >= -30) {
+    } else if ((stickX <= 30) && (stickX >= -30)) {
         this->stickAccumX = 0;
     } else if ((this->stickAccumX * stickX) < 0) { // Stick has swapped directions
         this->stickAccumX = stickX;
@@ -290,10 +290,10 @@ void EnTrt_UpdateJoystickInputState(PlayState* play, EnTrt* this) {
         }
     }
     if (this->stickAccumY == 0) {
-        if (stickY > 30 || stickY < -30) {
+        if ((stickY > 30) || (stickY < -30)) {
             this->stickAccumY = stickY;
         }
-    } else if (stickY <= 30 && stickY >= -30) {
+    } else if ((stickY <= 30) && (stickY >= -30)) {
         this->stickAccumY = 0;
     } else if ((this->stickAccumY * stickY) < 0) { // Stick has swapped directions
         this->stickAccumY = stickY;
@@ -351,10 +351,12 @@ void EnTrt_GetMushroom(EnTrt* this, PlayState* play) {
                 SET_WEEKEVENTREG(WEEKEVENTREG_53_08);
                 Player_UpdateBottleHeld(play, GET_PLAYER(play), ITEM_BOTTLE, PLAYER_IA_BOTTLE_EMPTY);
                 break;
+
             case 0x888:
                 this->textId = 0x889;
                 Message_StartTextbox(play, this->textId, &this->actor);
                 break;
+
             case 0x889:
                 if (this->cutsceneState == ENTRT_CUTSCENESTATE_PLAYING_SPECIAL) {
                     CutsceneManager_Stop(this->csId);
@@ -364,6 +366,7 @@ void EnTrt_GetMushroom(EnTrt* this, PlayState* play) {
                 play->msgCtx.stateTimer = 4;
                 this->actionFunc = EnTrt_PayForMushroom;
                 break;
+
             default:
                 this->cutsceneState = ENTRT_CUTSCENESTATE_PLAYING;
                 EnTrt_EndInteraction(play, this);
@@ -389,9 +392,13 @@ void EnTrt_Goodbye(EnTrt* this, PlayState* play) {
                 this->textId = 0x887;
                 Message_ContinueTextbox(play, this->textId);
                 break;
+
             case 0x887:
             case 0x88B:
                 EnTrt_EndInteraction(play, this);
+                break;
+
+            default:
                 break;
         }
     }
@@ -504,12 +511,15 @@ s32 EnTrt_FacingShopkeeperDialogResult(EnTrt* this, PlayState* play) {
             func_8019F208();
             EnTrt_SetupTalkToShopkeeper(play, this);
             return true;
+
         case 1:
             func_8019F230();
             EnTrt_EndInteraction(play, this);
             return true;
+
+        default:
+            return false;
     }
-    return false;
 }
 
 void EnTrt_FaceShopkeeper(EnTrt* this, PlayState* play) {
@@ -603,7 +613,7 @@ s32 EnTrt_HasPlayerSelectedItem(PlayState* play, EnTrt* this, Input* input) {
         return true;
     }
     if (EnTrt_TestItemSelected(play)) {
-        if (item->actor.params != SI_POTION_BLUE || (this->flags & ENTRT_GIVEN_MUSHROOM)) {
+        if ((item->actor.params != SI_POTION_BLUE) || (this->flags & ENTRT_GIVEN_MUSHROOM)) {
             this->prevActionFunc = this->actionFunc;
             Message_ContinueTextbox(play, EnTrt_GetItemChoiceTextId(this));
             play_sound(NA_SE_SY_DECIDE);
@@ -733,10 +743,14 @@ void EnTrt_SelectItem(EnTrt* this, PlayState* play) {
                     case 0:
                         EnTrt_HandleCanBuyItem(play, this);
                         break;
+
                     case 1:
                         func_8019F230();
                         this->actionFunc = this->prevActionFunc;
                         Message_ContinueTextbox(play, EnTrt_GetItemTextId(this));
+                        break;
+
+                    default:
                         break;
                 }
             }
@@ -904,18 +918,24 @@ void EnTrt_BeginInteraction(EnTrt* this, PlayState* play) {
                     this->actionFunc = EnTrt_StartRedPotionConversation;
                 }
                 break;
+
             case 0x83E:
                 func_8011552C(play, DO_ACTION_DECIDE);
                 this->stickLeftPrompt.isEnabled = false;
                 this->stickRightPrompt.isEnabled = true;
                 this->actionFunc = EnTrt_FaceShopkeeper;
                 break;
+
             case 0x850:
             case 0x890:
                 this->actionFunc = EnTrt_SetupEndInteraction;
                 break;
+
             case 0x88F:
                 this->actionFunc = EnTrt_StartRedPotionConversation;
+                break;
+
+            default:
                 break;
         }
     }
@@ -1015,16 +1035,20 @@ void EnTrt_ItemGiven(EnTrt* this, PlayState* play) {
             case 0x889:
                 this->textId = 0x88A;
                 break;
+
             case 0x881:
                 this->textId = 0x88C;
                 break;
+
             case 0x838:
             case 0x83C:
             case 0x88E:
             case 0x88F:
                 this->textId = 0x83A;
                 break;
+
             default:
+                //! FAKE:
                 if (1) {}
                 this->textId = 0x849;
                 break;
@@ -1048,8 +1072,8 @@ void EnTrt_ShopkeeperGone(EnTrt* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         Message_StartTextbox(play, this->textId, &this->actor);
     } else {
-        if ((player->actor.world.pos.x >= -50.0f && player->actor.world.pos.x <= 50.0f) &&
-            (player->actor.world.pos.z >= -19.0f && player->actor.world.pos.z <= 30.0f)) {
+        if ((player->actor.world.pos.x >= -50.0f) && (player->actor.world.pos.x <= 50.0f) &&
+            (player->actor.world.pos.z >= -19.0f) && (player->actor.world.pos.z <= 30.0f)) {
             func_800B8614(&this->actor, play, 200.0f);
         }
     }
@@ -1129,6 +1153,7 @@ void EnTrt_ContinueShopping(EnTrt* this, PlayState* play) {
                         EnTrt_SetupStartShopping(play, this, true);
                         func_800B85E0(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
                         break;
+
                     case 1:
                     default:
                         func_8019F230();
