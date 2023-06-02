@@ -1,5 +1,6 @@
 #include "prevent_bss_reordering.h"
 #include "global.h"
+#include "z64horse.h"
 #include "overlays/gamestates/ovl_file_choose/z_file_choose.h"
 
 void func_80146EBC(SramContext* sramCtx, s32 curPage, s32 numPages);
@@ -454,7 +455,7 @@ void Sram_SaveEndOfCycle(PlayState* play) {
     gSaveContext.jinxTimer = 0;
     gSaveContext.rupeeAccumulator = 0;
 
-    func_800F3B2C(play);
+    Horse_ResetHorseData(play);
 }
 
 void Sram_IncrementDay(void) {
@@ -884,8 +885,8 @@ void Sram_ResetSaveFromMoonCrash(SramContext* sramCtx) {
         gSaveContext.timerPausedOsTimes[i] = 0;
     }
 
-    D_801BDAA0 = 1;
-    D_801BDA9C = 0;
+    D_801BDAA0 = true;
+    gHorseIsMounted = false;
     gSaveContext.powderKegTimer = 0;
     gSaveContext.unk_1014 = 0;
     gSaveContext.jinxTimer = 0;

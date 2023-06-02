@@ -472,7 +472,6 @@ beginseg
     include "build/src/code/z_fireobj.o"
     include "build/src/code/z_game_dlftbls.o"
     include "build/src/code/z_horse.o"
-    include "build/data/code/z_horse.data.o"
     include "build/src/code/z_jpeg.o"
     include "build/src/code/z_kaleido_setup.o"
     include "build/src/code/z_kanfont.o"
@@ -1025,8 +1024,7 @@ beginseg
     name "ovl_Bg_Keikoku_Spr"
     compress
     include "build/src/overlays/actors/ovl_Bg_Keikoku_Spr/z_bg_keikoku_spr.o"
-    include "build/data/ovl_Bg_Keikoku_Spr/ovl_Bg_Keikoku_Spr.data.o"
-    include "build/data/ovl_Bg_Keikoku_Spr/ovl_Bg_Keikoku_Spr.reloc.o"
+    include "build/src/overlays/actors/ovl_Bg_Keikoku_Spr/ovl_Bg_Keikoku_Spr_reloc.o"
 endseg
 
 beginseg
@@ -1637,9 +1635,7 @@ beginseg
     name "ovl_Bg_F40_Swlift"
     compress
     include "build/src/overlays/actors/ovl_Bg_F40_Swlift/z_bg_f40_swlift.o"
-    include "build/data/ovl_Bg_F40_Swlift/ovl_Bg_F40_Swlift.data.o"
-    include "build/data/ovl_Bg_F40_Swlift/ovl_Bg_F40_Swlift.bss.o"
-    include "build/data/ovl_Bg_F40_Swlift/ovl_Bg_F40_Swlift.reloc.o"
+    include "build/src/overlays/actors/ovl_Bg_F40_Swlift/ovl_Bg_F40_Swlift_reloc.o"
 endseg
 
 beginseg
@@ -2402,11 +2398,7 @@ beginseg
     name "ovl_En_Go"
     compress
     include "build/src/overlays/actors/ovl_En_Go/z_en_go.o"
-#ifdef NON_MATCHING
     include "build/src/overlays/actors/ovl_En_Go/ovl_En_Go_reloc.o"
-#else
-    include "build/data/ovl_En_Go/ovl_En_Go.reloc.o"
-#endif
 endseg
 
 beginseg
