@@ -2787,7 +2787,7 @@ void func_8082F164(Player* this, u16 button) {
     }
 }
 
-PlayerEnvLighting sZoraBarrierLighting = {
+PlayerEnvLighting sZoraBarrierEnvLighting = {
     { 0, 0, 0 },       // ambientColor
     { 255, 255, 155 }, // diffuseColor
     { 20, 20, 50 },    // fogColor
@@ -2827,7 +2827,7 @@ void func_8082F1AC(PlayState* play, Player* this) {
 
         sp46 = play->gameplayFrames * 7000;
         sp44 = play->gameplayFrames * 14000;
-        Player_LerpEnvLighting(play, &sZoraBarrierLighting, this->unk_B62 / 255.0f);
+        Player_LerpEnvLighting(play, &sZoraBarrierEnvLighting, this->unk_B62 / 255.0f);
 
         sp34 = Math_SinS(sp44) * 40.0f;
         sp40 = Math_CosS(sp44) * 40.0f;
