@@ -722,7 +722,7 @@ typedef enum {
 
 // Player has spoken to Goron Graveyard's gravemaker while in Goron form.
 #define WEEKEVENTREG_TALKED_GORON_GRAVEMAKER_AS_GORON PACK_WEEKEVENTREG_FLAG(21, 0x04)
-// Goron outside Goron Graveyard has been thawed.
+// Player has spoken to formerly frozen Goron outside Goron Graveyard.
 #define WEEKEVENTREG_TALKED_THAWED_GRAVEYARD_GORON PACK_WEEKEVENTREG_FLAG(21, 0x08)
 
 #define WEEKEVENTREG_21_10 PACK_WEEKEVENTREG_FLAG(21, 0x10)
