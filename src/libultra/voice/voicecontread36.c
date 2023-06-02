@@ -7,7 +7,7 @@
 #include "functions.h"
 #include "variables.h"
 
-#define READ36FORMAT(p) ((__OSVoiceRead36Format*)(ptr))
+#define READ36FORMAT(ptr) ((__OSVoiceRead36Format*)(ptr))
 
 s32 __osVoiceContRead36(OSMesgQueue* mq, s32 channel, u16 address, u8 dst[36]) {
     s32 errorCode;

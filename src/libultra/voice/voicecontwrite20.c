@@ -7,7 +7,7 @@
 #include "functions.h"
 #include "variables.h"
 
-#define WRITE20FORMAT(p) ((__OSVoiceWrite20Format*)(ptr))
+#define WRITE20FORMAT(ptr) ((__OSVoiceWrite20Format*)(ptr))
 
 s32 __osVoiceContWrite20(OSMesgQueue* mq, s32 channel, u16 address, u8 dst[20]) {
     s32 errorCode;

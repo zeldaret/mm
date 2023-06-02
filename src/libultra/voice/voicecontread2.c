@@ -7,7 +7,7 @@
 #include "functions.h"
 #include "variables.h"
 
-#define READ2FORMAT(p) ((__OSVoiceRead2Format*)(ptr))
+#define READ2FORMAT(ptr) ((__OSVoiceRead2Format*)(ptr))
 
 s32 __osVoiceContRead2(OSMesgQueue* mq, s32 channel, u16 address, u8 dst[2]) {
     s32 errorCode;

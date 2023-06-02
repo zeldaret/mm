@@ -7,7 +7,7 @@
 #include "functions.h"
 #include "variables.h"
 
-#define WRITE4FORMAT(p) ((__OSVoiceWrite4Format*)(ptr))
+#define WRITE4FORMAT(ptr) ((__OSVoiceWrite4Format*)(ptr))
 
 s32 __osVoiceContWrite4(OSMesgQueue* mq, s32 channel, u16 address, u8 dst[4]) {
     s32 errorCode;
