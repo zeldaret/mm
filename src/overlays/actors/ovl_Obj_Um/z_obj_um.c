@@ -5,6 +5,7 @@
  */
 
 #include "z_obj_um.h"
+#include "z64horse.h"
 #include "overlays/actors/ovl_En_In/z_en_in.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
@@ -835,7 +836,7 @@ s32 func_80B795A0(PlayState* play, ObjUm* this, s32 arg2) {
                 SET_WEEKEVENTREG(WEEKEVENTREG_31_80);
                 play->nextEntrance = ENTRANCE(ROMANI_RANCH, 11);
                 if (player->stateFlags1 & PLAYER_STATE1_800000) {
-                    D_801BDAA0 = 1;
+                    D_801BDAA0 = true;
                 }
                 play->transitionType = TRANS_TYPE_64;
                 gSaveContext.nextTransitionType = TRANS_TYPE_FADE_WHITE;
@@ -1093,7 +1094,7 @@ ObjUmPathState ObjUm_UpdatePath(ObjUm* this, PlayState* play) {
 
     if (this->donkey != NULL) {
         this->dyna.actor.world.rot.y = Math_Vec3f_Yaw(&this->dyna.actor.world.pos, &sp50);
-        func_800F415C(&this->donkey->actor, &sp50, 0x190);
+        Horse_RotateToPoint(&this->donkey->actor, &sp50, 0x190);
 
         if (1) {}
 

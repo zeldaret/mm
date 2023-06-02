@@ -229,7 +229,7 @@ void BgF40Block_Init(Actor* thisx, PlayState* play) {
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
-    DynaPolyActor_LoadMesh(play, &this->dyna, &object_f40_obj_Colheader_004640);
+    DynaPolyActor_LoadMesh(play, &this->dyna, &gStoneTowerBlockCol);
 
     if (BGF40BLOCK_GET_PATH(&this->dyna.actor) != 0x3F) {
         this->path = &play->setupPathList[BGF40BLOCK_GET_PATH(&this->dyna.actor)];
@@ -373,5 +373,5 @@ void BgF40Block_Update(Actor* thisx, PlayState* play) {
 }
 
 void BgF40Block_Draw(Actor* thisx, PlayState* play) {
-    Gfx_DrawDListOpa(play, object_f40_obj_DL_0043D0);
+    Gfx_DrawDListOpa(play, gStoneTowerBlockDL);
 }

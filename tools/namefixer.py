@@ -785,6 +785,12 @@ wordReplace = {
 
     "func_80102544": "LightContext_SetFog",
 
+    "func_800F3A64": "Horse_IsValidSpawn",
+    "func_800F3B2C": "Horse_ResetHorseData",
+    "func_800F40A0": "Horse_Spawn",
+    "func_800F415C": "Horse_RotateToPoint",
+    "func_800F41E4": "Horse_IsActive",
+
     "Padmgr_GetControllerBitmask": "PadMgr_GetValidControllersMask",
     "func_80174F24": "PadMgr_SetRumbleRetraceCallback",
     "func_80174F44": "PadMgr_UnsetRumbleRetraceCallback",
@@ -1112,6 +1118,9 @@ wordReplace = {
     "D_801D1DE0": "gIdentityMtx",
     "D_801D1E20": "gIdentityMtxF",
     "sSetupDL": "gSetupDLs",
+
+    "D_801BDA9C": "gHorseIsMounted",
+    "D_801BDAA4": "gHorsePlayedEponasSong",
 
     # Macros
     "CUR_EQUIP_VALUE_VOID": "GET_CUR_EQUIP_VALUE",

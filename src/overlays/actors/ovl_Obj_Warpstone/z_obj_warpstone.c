@@ -97,7 +97,7 @@ s32 ObjWarpstone_ClosedIdle(ObjWarpstone* this, PlayState* play) {
 }
 
 s32 ObjWarpstone_BeginOpeningCutscene(ObjWarpstone* this, PlayState* play) {
-    if ((this->dyna.actor.csId < 0) || CutsceneManager_IsNext(this->dyna.actor.csId)) {
+    if ((this->dyna.actor.csId <= CS_ID_NONE) || CutsceneManager_IsNext(this->dyna.actor.csId)) {
         CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
         ObjWarpstone_SetupAction(this, ObjWarpstone_PlayOpeningCutscene);
         Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_OWL_WARP_SWITCH_ON);

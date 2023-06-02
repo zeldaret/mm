@@ -130,7 +130,7 @@ void func_80BA2514(ObjNozoki* this, PlayState* play) {
 }
 
 s32 func_80BA26A8(ObjNozoki* this) {
-    if (this->csId < 0) {
+    if (this->csId <= CS_ID_NONE) {
         return true;
     }
 

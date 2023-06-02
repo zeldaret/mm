@@ -843,9 +843,10 @@ void DmStk_PlaySfxForCutsceneAfterPlayingOathToOrder(DmStk* this, PlayState* pla
         case 594:
             Audio_PlaySfx_AtPos(&this->oathToOrderCutsceneVoicePos, NA_SE_EN_STAL24_SCREAM2);
             break;
-    }
 
-    if (1) {}
+        default:
+            break;
+    }
 
     if ((play->csCtx.curFrame >= 62) && (play->csCtx.curFrame < 273)) {
         if ((Rand_ZeroOne() < 0.75f) && ((play->state.frames % 2) != 0)) {
