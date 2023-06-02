@@ -71,7 +71,7 @@
     0x80097F70:("__osTimerList","OSTimer*","",0x4),
     0x80097F80:("D_80097F80","f32","",0x4),
     0x80097F90:("D_80097F90","f32","",0x4),
-    0x80097FA0:("sCmd","UNK_TYPE1","",0x1),
+    0x80097FA0:("sCmds","UNK_TYPE1","",0x1),
     0x80097FB0:("__osPfsLastChannel","s32","",0x4),
     0x80097FC0:("osViModeNtscLan1","OSViMode","",0x50),
     0x80098010:("osViModeMpalLan1","OSViMode","",0x50),

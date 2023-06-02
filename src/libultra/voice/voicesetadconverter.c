@@ -7,7 +7,7 @@
 #include "functions.h"
 #include "variables.h"
 
-#define SWRITEFORMAT(p) ((__OSVoiceSWriteFormat*)(p))
+#define SWRITEFORMAT(ptr) ((__OSVoiceSWriteFormat*)(ptr))
 
 s32 __osVoiceSetADConverter(OSMesgQueue* mq, s32 channel, u8 data) {
     s32 errorCode;
