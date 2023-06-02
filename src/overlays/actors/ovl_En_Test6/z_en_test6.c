@@ -461,7 +461,7 @@ Color_RGB8 sInvSoTCsFogColor = { 230, 230, 220 };
 Color_RGB8 sInvSoTCsAmbientColor = { 120, 120, 100 };
 Color_RGB8 sInvSoTCsDiffuseColor = { 0, 0, 0 };
 s16 sInvSoTCsFogNear = 500;
-s16 sInvSoTCsFogFar = 1500;
+s16 sInvSoTCsZFar = 1500;
 
 void EnTest6_InvertedSoTCutscene(EnTest6* this, PlayState* play) {
     Input* input = CONTROLLER1(&play->state);
@@ -470,9 +470,9 @@ void EnTest6_InvertedSoTCutscene(EnTest6* this, PlayState* play) {
     Camera* mainCam;
     Vec3f subCamAt;
     Vec3f subCamEye;
-    Vec3f sp54;
+    Vec3f eyeNext;
     s32 i;
-    f32 sp4C;
+    f32 temp;
     Camera* subCam;
 
     subCam = Play_GetCamera(play, this->subCamId);
@@ -482,7 +482,7 @@ void EnTest6_InvertedSoTCutscene(EnTest6* this, PlayState* play) {
     switch (this->cueId) {
         case SOTCS_CUEID_INV_INIT:
             this->drawType = SOTCS_DRAW_INVERTED_SOT;
-            this->invSotEnvLerp = 0.0f;
+            this->invSoTEnvLerp = 0.0f;
             this->speed = 0.1f;
             this->alpha = 0;
             this->invSoTClockYaw = 0;
@@ -490,22 +490,22 @@ void EnTest6_InvertedSoTCutscene(EnTest6* this, PlayState* play) {
             break;
 
         case SOTCS_CUEID_INV_SETUP_CLOCKS:
-            this->invSotEnvLerp += this->speed;
-            Environment_LerpAmbientColor(play, &sInvSoTCsAmbientColor, this->invSotEnvLerp);
-            Environment_LerpDiffuseColor(play, &sInvSoTCsDiffuseColor, this->invSotEnvLerp);
-            Environment_LerpFogColor(play, &sInvSoTCsFogColor, this->invSotEnvLerp);
-            Environment_LerpFog(play, sInvSoTCsFogNear, sInvSoTCsFogFar, this->invSotEnvLerp);
+            this->invSoTEnvLerp += this->speed;
+            Environment_LerpAmbientColor(play, &sInvSoTCsAmbientColor, this->invSoTEnvLerp);
+            Environment_LerpDiffuseColor(play, &sInvSoTCsDiffuseColor, this->invSoTEnvLerp);
+            Environment_LerpFogColor(play, &sInvSoTCsFogColor, this->invSoTEnvLerp);
+            Environment_LerpFog(play, sInvSoTCsFogNear, sInvSoTCsZFar, this->invSoTEnvLerp);
 
             if (this->timer == 90) {
                 this->alpha = 0;
                 if (SOTCS_GET_OCARINA_MODE(&this->actor) == OCARINA_MODE_APPLY_INV_SOT_FAST) {
                     this->clockAngle = 0x200;
                     this->clockDist = 0.0f;
-                    sp4C = -100.0f;
+                    temp = -100.0f;
                 } else {
                     this->clockAngle = 0x570;
                     this->clockDist = 110.0f;
-                    sp4C = 100.0f;
+                    temp = 100.0f;
                 }
                 this->speed = 1.0f;
 
@@ -521,7 +521,7 @@ void EnTest6_InvertedSoTCutscene(EnTest6* this, PlayState* play) {
                         (*this->invSoTParticles)[i].x = (((2.0f * Rand_ZeroOne()) - 1.0f) * 40.0f) + subCam->eye.x +
                                                         ((subCam->at.x - subCam->eye.x) * 0.2f);
                         (*this->invSoTParticles)[i].y = (((2.0f * Rand_ZeroOne()) - 1.0f) * 120.0f) + subCam->eye.y +
-                                                        ((subCam->at.y - subCam->eye.y) * 0.2f) + sp4C;
+                                                        ((subCam->at.y - subCam->eye.y) * 0.2f) + temp;
                         (*this->invSoTParticles)[i].z = (((2.0f * Rand_ZeroOne()) - 1.0f) * 40.0f) + subCam->eye.z +
                                                         ((subCam->at.z - subCam->eye.z) * 0.2f);
                     }
@@ -545,11 +545,10 @@ void EnTest6_InvertedSoTCutscene(EnTest6* this, PlayState* play) {
                 this->alpha -= 25;
             }
 
-            Environment_LerpAmbientColor(play, &sInvSoTCsAmbientColor, this->invSotEnvLerp);
-            Environment_LerpDiffuseColor(play, &sInvSoTCsDiffuseColor, this->invSotEnvLerp);
-            Environment_LerpFogColor(play, &sInvSoTCsFogColor, this->invSotEnvLerp);
-            Environment_LerpFog(play, sInvSoTCsFogNear + this->alpha, sInvSoTCsFogFar + this->alpha,
-                                this->invSotEnvLerp);
+            Environment_LerpAmbientColor(play, &sInvSoTCsAmbientColor, this->invSoTEnvLerp);
+            Environment_LerpDiffuseColor(play, &sInvSoTCsDiffuseColor, this->invSoTEnvLerp);
+            Environment_LerpFogColor(play, &sInvSoTCsFogColor, this->invSoTEnvLerp);
+            Environment_LerpFog(play, sInvSoTCsFogNear + this->alpha, sInvSoTCsZFar + this->alpha, this->invSoTEnvLerp);
 
             this->invSoTClockYaw -= this->clockAngle;
             clockYaw = this->invSoTClockYaw;
@@ -564,7 +563,7 @@ void EnTest6_InvertedSoTCutscene(EnTest6* this, PlayState* play) {
 
             for (i = 0; i < SOTCS_INV_NUM_CLOCKS; i++) {
                 //! FAKE:
-                if (player) {}
+                if (player != NULL) {}
 
                 clockYaw += 0x10000 / SOTCS_INV_NUM_CLOCKS;
                 this->invSoTClockPos[i].x = player->actor.world.pos.x + (Math_SinS(clockYaw) * this->clockDist);
@@ -603,11 +602,11 @@ void EnTest6_InvertedSoTCutscene(EnTest6* this, PlayState* play) {
             break;
 
         case SOTCS_CUEID_INV_END:
-            this->invSotEnvLerp -= this->speed;
-            Environment_LerpAmbientColor(play, &sInvSoTCsAmbientColor, this->invSotEnvLerp);
-            Environment_LerpDiffuseColor(play, &sInvSoTCsDiffuseColor, this->invSotEnvLerp);
-            Environment_LerpFogColor(play, &sInvSoTCsFogColor, this->invSotEnvLerp);
-            Environment_LerpFog(play, sInvSoTCsFogNear, sInvSoTCsFogFar, this->invSotEnvLerp);
+            this->invSoTEnvLerp -= this->speed;
+            Environment_LerpAmbientColor(play, &sInvSoTCsAmbientColor, this->invSoTEnvLerp);
+            Environment_LerpDiffuseColor(play, &sInvSoTCsDiffuseColor, this->invSoTEnvLerp);
+            Environment_LerpFogColor(play, &sInvSoTCsFogColor, this->invSoTEnvLerp);
+            Environment_LerpFog(play, sInvSoTCsFogNear, sInvSoTCsZFar, this->invSoTEnvLerp);
             break;
 
         default:
@@ -647,18 +646,18 @@ void EnTest6_InvertedSoTCutscene(EnTest6* this, PlayState* play) {
     if (this->timer > 80) {
         subCam->fov += (90.0f - subCam->fov) / (this->timer - 80);
     } else if (this->timer > 60) {
-        sp4C = 1.0f / (this->timer - 60);
+        temp = 1.0f / (this->timer - 60);
 
-        subCamAt.x = subCam->at.x + ((player->actor.world.pos.x - subCam->at.x) * sp4C);
-        subCamAt.y = subCam->at.y + (((player->actor.focus.pos.y - subCam->at.y) - 20.0f) * sp4C);
-        subCamAt.z = subCam->at.z + ((player->actor.world.pos.z - subCam->at.z) * sp4C);
+        subCamAt.x = subCam->at.x + ((player->actor.world.pos.x - subCam->at.x) * temp);
+        subCamAt.y = subCam->at.y + (((player->actor.focus.pos.y - subCam->at.y) - 20.0f) * temp);
+        subCamAt.z = subCam->at.z + ((player->actor.world.pos.z - subCam->at.z) * temp);
 
-        sp54.x = subCamAt.x + (Math_SinS(player->actor.world.rot.y) * 80.0f);
-        sp54.y = subCamAt.y + 20.0f;
-        sp54.z = subCamAt.z + (Math_CosS(player->actor.world.rot.y) * 80.0f);
-        sp4C *= 0.75f;
+        eyeNext.x = subCamAt.x + (Math_SinS(player->actor.world.rot.y) * 80.0f);
+        eyeNext.y = subCamAt.y + 20.0f;
+        eyeNext.z = subCamAt.z + (Math_CosS(player->actor.world.rot.y) * 80.0f);
+        temp *= 0.75f;
 
-        VEC3F_LERPIMPDST(&subCamEye, &subCam->eye, &sp54, sp4C);
+        VEC3F_LERPIMPDST(&subCamEye, &subCam->eye, &eyeNext, temp);
 
         Play_SetCameraAtEye(play, this->subCamId, &subCamAt, &subCamEye);
     } else if ((this->timer < 11) && (this->timer > 0)) {
@@ -695,7 +694,7 @@ void EnTest6_SetupDoubleSoTCutscene(EnTest6* this, PlayState* play) {
 
     this->timer = 120;
     this->screenFillAlpha = 0;
-    this->doubleSotEnvLerp = 0.0f;
+    this->doubleSoTEnvLerp = 0.0f;
     this->actor.home.pos = player->actor.world.pos;
     this->actor.home.rot = player->actor.shape.rot;
 }
@@ -718,7 +717,7 @@ Color_RGB8 sDoubleSoTCsFogColor = { 225, 230, 225 };
 Color_RGB8 sDoubleSoTCsAmbientColor = { 120, 120, 100 };
 Color_RGB8 sDoubleSoTCsDiffuseColor = { 0, 0, 0 };
 s16 sDoubleSoTCsFogNear = 940;
-s16 sDoubleSoTCsFogFar = 2000;
+s16 sDoubleSoTCsZFar = 2000;
 
 void EnTest6_DoubleSoTCutscene(EnTest6* this, PlayState* play) {
     Input* input = CONTROLLER1(&play->state);
@@ -729,32 +728,32 @@ void EnTest6_DoubleSoTCutscene(EnTest6* this, PlayState* play) {
     s16 pad2;
 
     if (this->timer > 115) {
-        this->doubleSotEnvLerp += 0.2f;
-        EnTest6_EnableWhiteFillScreen(play, this->doubleSotEnvLerp);
+        this->doubleSoTEnvLerp += 0.2f;
+        EnTest6_EnableWhiteFillScreen(play, this->doubleSoTEnvLerp);
     } else if (this->timer > 90) {
-        this->doubleSotEnvLerp -= 0.05f;
-        EnTest6_EnableWhiteFillScreen(play, this->doubleSotEnvLerp);
+        this->doubleSoTEnvLerp -= 0.05f;
+        EnTest6_EnableWhiteFillScreen(play, this->doubleSoTEnvLerp);
     } else if (this->timer == 90) {
-        this->doubleSotEnvLerp = 0.0f;
+        this->doubleSoTEnvLerp = 0.0f;
         EnTest6_DisableWhiteFillScreen(play);
     }
 
     if (this->timer == 1) {
-        this->doubleSotEnvLerp = 0.0f;
+        this->doubleSoTEnvLerp = 0.0f;
         EnTest6_DisableWhiteFillScreen(play);
     } else if (this->timer < 17) {
-        this->doubleSotEnvLerp -= 0.06666666f;
-        EnTest6_EnableWhiteFillScreen(play, this->doubleSotEnvLerp);
+        this->doubleSoTEnvLerp -= 0.06666666f;
+        EnTest6_EnableWhiteFillScreen(play, this->doubleSoTEnvLerp);
     } else if (this->timer < 22) {
-        this->doubleSotEnvLerp += 0.2f;
-        EnTest6_EnableWhiteFillScreen(play, this->doubleSotEnvLerp);
+        this->doubleSoTEnvLerp += 0.2f;
+        EnTest6_EnableWhiteFillScreen(play, this->doubleSoTEnvLerp);
     }
 
     if (this->timer == 115) {
         Environment_LerpAmbientColor(play, &sDoubleSoTCsAmbientColor, 1.0f);
         Environment_LerpDiffuseColor(play, &sDoubleSoTCsDiffuseColor, 1.0f);
         Environment_LerpFogColor(play, &sDoubleSoTCsFogColor, 1.0f);
-        Environment_LerpFog(play, sDoubleSoTCsFogNear, sDoubleSoTCsFogFar, 1.0f);
+        Environment_LerpFog(play, sDoubleSoTCsFogNear, sDoubleSoTCsZFar, 1.0f);
         play->unk_18844 = true;
     }
 
@@ -762,15 +761,15 @@ void EnTest6_DoubleSoTCutscene(EnTest6* this, PlayState* play) {
         Environment_LerpAmbientColor(play, &sDoubleSoTCsAmbientColor, 0.0f);
         Environment_LerpDiffuseColor(play, &sDoubleSoTCsDiffuseColor, 0.0f);
         Environment_LerpFogColor(play, &sDoubleSoTCsFogColor, 0.0f);
-        Environment_LerpFog(play, sDoubleSoTCsFogNear, sDoubleSoTCsFogFar, 0.0f);
+        Environment_LerpFog(play, sDoubleSoTCsFogNear, sDoubleSoTCsZFar, 0.0f);
         play->unk_18844 = false;
     }
 
     if (this->screenFillAlpha >= 20) {
-        Environment_LerpAmbientColor(play, &sDoubleSoTCsAmbientColor, this->doubleSotEnvLerp);
-        Environment_LerpDiffuseColor(play, &sDoubleSoTCsDiffuseColor, this->doubleSotEnvLerp);
-        Environment_LerpFogColor(play, &sDoubleSoTCsFogColor, this->doubleSotEnvLerp);
-        Environment_LerpFog(play, sDoubleSoTCsFogNear, sDoubleSoTCsFogFar, this->doubleSotEnvLerp);
+        Environment_LerpAmbientColor(play, &sDoubleSoTCsAmbientColor, this->doubleSoTEnvLerp);
+        Environment_LerpDiffuseColor(play, &sDoubleSoTCsDiffuseColor, this->doubleSoTEnvLerp);
+        Environment_LerpFogColor(play, &sDoubleSoTCsFogColor, this->doubleSoTEnvLerp);
+        Environment_LerpFog(play, sDoubleSoTCsFogNear, sDoubleSoTCsZFar, this->doubleSoTEnvLerp);
         play->unk_18844 = false;
     }
 
@@ -785,7 +784,7 @@ void EnTest6_DoubleSoTCutscene(EnTest6* this, PlayState* play) {
             EnTest6_EnableMotionBlur(20);
             Distortion_Request(DISTORTION_TYPE_SONG_OF_TIME);
             Distortion_SetDuration(90);
-            this->cueId = SOTCS_CUEID_DOUBLE_0;
+            this->cueId = SOTCS_CUEID_DOUBLE_INIT;
             break;
 
         case 110:
@@ -794,21 +793,21 @@ void EnTest6_DoubleSoTCutscene(EnTest6* this, PlayState* play) {
 
         case 38:
         case 114:
-            this->cueId = SOTCS_CUEID_DOUBLE_1;
+            this->cueId = SOTCS_CUEID_DOUBLE_WAIT;
             break;
 
         case 76:
-            this->cueId = SOTCS_CUEID_DOUBLE_2;
+            this->cueId = SOTCS_CUEID_DOUBLE_CLOCKS_INWARD;
             break;
 
         case 61:
             EnTest6_EnableMotionBlur(150);
-            this->cueId = SOTCS_CUEID_DOUBLE_3;
+            this->cueId = SOTCS_CUEID_DOUBLE_CLOCKS_SPIN;
             break;
 
         case 51:
             EnTest6_EnableMotionBlur(180);
-            this->cueId = SOTCS_CUEID_DOUBLE_4;
+            this->cueId = SOTCS_CUEID_DOUBLE_CLOCKS_OUTWARD;
             break;
 
         case 14:
@@ -821,7 +820,7 @@ void EnTest6_DoubleSoTCutscene(EnTest6* this, PlayState* play) {
         case 1:
             EnTest6_DisableMotionBlur();
             if (CHECK_EVENTINF(EVENTINF_USE_HALFDAY_CS)) {
-                this->cueId = SOTCS_CUEID_DOUBLE_5;
+                this->cueId = SOTCS_CUEID_DOUBLE_END;
             }
             break;
 
@@ -904,7 +903,7 @@ void EnTest6_DoubleSoTCutscene(EnTest6* this, PlayState* play) {
         this->screenFillAlpha++;
         if (this->screenFillAlpha >= 20) {
             this->timer = 15;
-            this->doubleSotEnvLerp = 0.9333333f;
+            this->doubleSoTEnvLerp = 0.9333333f;
         }
     } else if ((this->timer < 96) && (this->timer > 50) &&
                (CHECK_BTN_ALL(input->press.button, BTN_A) || CHECK_BTN_ALL(input->press.button, BTN_B))) {
@@ -935,15 +934,15 @@ void EnTest6_SharedSoTCutscene(EnTest6* this, PlayState* play) {
     s32 i;
     s32 cueChannel;
 
-    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_505)) {
-        cueChannel = Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_505);
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_SOTCS)) {
+        cueChannel = Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_SOTCS);
         this->cueId = play->csCtx.actorCues[cueChannel]->id;
 
         switch (this->cueId) {
-            case SOTCS_CUEID_DOUBLE_1:
+            case SOTCS_CUEID_DOUBLE_WAIT:
                 break;
 
-            case SOTCS_CUEID_DOUBLE_0:
+            case SOTCS_CUEID_DOUBLE_INIT:
                 this->drawType = SOTCS_DRAW_DOUBLE_SOT;
                 this->counter = 0;
                 this->clockAngle = 0;
@@ -968,7 +967,7 @@ void EnTest6_SharedSoTCutscene(EnTest6* this, PlayState* play) {
                 }
                 break;
 
-            case SOTCS_CUEID_DOUBLE_2:
+            case SOTCS_CUEID_DOUBLE_CLOCKS_INWARD:
                 if (play->csCtx.actorCues[cueChannel]->startPos.x != 0) {
                     this->clockSpeed += (u32)play->csCtx.actorCues[cueChannel]->startPos.x;
                 }
@@ -981,14 +980,14 @@ void EnTest6_SharedSoTCutscene(EnTest6* this, PlayState* play) {
                 }
 
                 if (play->csCtx.actorCues[cueChannel]->startPos.z != 0) {
-                    this->clockDistSpeed = (u32)play->csCtx.actorCues[cueChannel]->startPos.z;
+                    this->clockRadialSpeed = (u32)play->csCtx.actorCues[cueChannel]->startPos.z;
                 } else {
-                    this->clockDistSpeed = -32.0f;
+                    this->clockRadialSpeed = -32.0f;
                 }
-                this->clockDist += this->clockDistSpeed;
+                this->clockDist += this->clockRadialSpeed;
                 break;
 
-            case SOTCS_CUEID_DOUBLE_3:
+            case SOTCS_CUEID_DOUBLE_CLOCKS_SPIN:
                 if (play->csCtx.actorCues[cueChannel]->startPos.x != 0) {
                     this->clockSpeed += (u32)play->csCtx.actorCues[cueChannel]->startPos.x;
                 }
@@ -1000,7 +999,7 @@ void EnTest6_SharedSoTCutscene(EnTest6* this, PlayState* play) {
                 }
                 break;
 
-            case SOTCS_CUEID_DOUBLE_4:
+            case SOTCS_CUEID_DOUBLE_CLOCKS_OUTWARD:
                 if (play->csCtx.actorCues[cueChannel]->startPos.x != 0) {
                     this->clockSpeed += (u32)play->csCtx.actorCues[cueChannel]->startPos.x;
                 }
@@ -1012,19 +1011,19 @@ void EnTest6_SharedSoTCutscene(EnTest6* this, PlayState* play) {
                 }
 
                 if (play->csCtx.actorCues[cueChannel]->startPos.z != 0) {
-                    this->clockDistSpeed += (u32)play->csCtx.actorCues[cueChannel]->startPos.z;
+                    this->clockRadialSpeed += (u32)play->csCtx.actorCues[cueChannel]->startPos.z;
                 } else {
-                    this->clockDistSpeed += 20.0f;
+                    this->clockRadialSpeed += 20.0f;
                 }
 
-                this->clockDist += this->clockDistSpeed;
+                this->clockDist += this->clockRadialSpeed;
                 if (this->clockDist > 3500.0f) {
                     this->clockDist = 3500.0f;
                     this->cueId = SOTCS_CUEID_NONE;
                 }
                 break;
 
-            case SOTCS_CUEID_RESET_0:
+            case SOTCS_CUEID_RESET_INIT:
                 this->drawType = SOTCS_DRAW_RESET_CYCLE_SOT;
                 this->counter = 0;
                 this->clockAngle = 0;
@@ -1047,26 +1046,26 @@ void EnTest6_SharedSoTCutscene(EnTest6* this, PlayState* play) {
                 } else {
                     this->clockDist = 300.0f;
                 }
-                this->clockDistSpeed = 0.0f;
+                this->clockAccel = 0.0f;
                 break;
 
-            case SOTCS_CUEID_RESET_1:
+            case SOTCS_CUEID_RESET_CLOCKS_SLOW_DOWN:
                 if (play->csCtx.actorCues[cueChannel]->startPos.x != 0) {
-                    this->clockDistSpeed = (u32)play->csCtx.actorCues[cueChannel]->startPos.x;
+                    this->clockAccel = (u32)play->csCtx.actorCues[cueChannel]->startPos.x;
                 } else {
-                    this->clockDistSpeed = -5.0f;
+                    this->clockAccel = -5.0f;
                 }
-                this->clockSpeed += this->clockDistSpeed;
+                this->clockSpeed += this->clockAccel;
                 break;
 
-            case SOTCS_CUEID_RESET_2:
+            case SOTCS_CUEID_RESET_CLOCKS_SPEED_UP:
                 if (play->csCtx.actorCues[cueChannel]->startPos.x != 0) {
-                    this->clockDistSpeed += (u32)play->csCtx.actorCues[cueChannel]->startPos.x;
+                    this->clockAccel += (u32)play->csCtx.actorCues[cueChannel]->startPos.x;
                 } else {
-                    this->clockDistSpeed += 2.0f;
+                    this->clockAccel += 2.0f;
                 }
 
-                this->clockSpeed += this->clockDistSpeed;
+                this->clockSpeed += this->clockAccel;
                 if (this->clockSpeed > 10000.0f) {
                     this->clockSpeed = 10000.0f;
                     this->cueId = SOTCS_CUEID_NONE;
@@ -1078,7 +1077,7 @@ void EnTest6_SharedSoTCutscene(EnTest6* this, PlayState* play) {
                 this->drawType = SOTCS_DRAW_TYPE_NONE;
                 return;
 
-            case SOTCS_CUEID_DOUBLE_5:
+            case SOTCS_CUEID_DOUBLE_END:
                 Play_SetRespawnData(&play->state, 1, ((void)0, gSaveContext.save.entrance & 0xFFFF), player->unk_3CE,
                                     PLAYER_PARAMS(0xFF, PLAYER_INITMODE_B), &player->unk_3C0, player->unk_3CC);
                 this->drawType = SOTCS_DRAW_TYPE_NONE;
@@ -1096,7 +1095,7 @@ void EnTest6_SharedSoTCutscene(EnTest6* this, PlayState* play) {
         }
     } else {
         switch (this->cueId) {
-            case SOTCS_CUEID_DOUBLE_0:
+            case SOTCS_CUEID_DOUBLE_INIT:
                 this->drawType = SOTCS_DRAW_DOUBLE_SOT;
                 this->counter = 0;
                 this->clockAngle = 0;
@@ -1105,30 +1104,30 @@ void EnTest6_SharedSoTCutscene(EnTest6* this, PlayState* play) {
                 this->clockSpeed = 150.0f;
                 this->clockDist = 480.0f;
 
-            case SOTCS_CUEID_DOUBLE_1:
+            case SOTCS_CUEID_DOUBLE_WAIT:
                 break;
 
-            case SOTCS_CUEID_DOUBLE_2:
-                this->clockDistSpeed = -32.0f;
+            case SOTCS_CUEID_DOUBLE_CLOCKS_INWARD:
+                this->clockRadialSpeed = -32.0f;
                 this->clockColorGray += 6;
                 this->clockDist += -32.0f;
                 break;
 
-            case SOTCS_CUEID_DOUBLE_3:
+            case SOTCS_CUEID_DOUBLE_CLOCKS_SPIN:
                 this->clockColorGray -= 4;
                 break;
 
-            case SOTCS_CUEID_DOUBLE_4:
+            case SOTCS_CUEID_DOUBLE_CLOCKS_OUTWARD:
                 this->clockColorGray -= 8;
-                this->clockDistSpeed += 20.0f;
-                this->clockDist += this->clockDistSpeed;
+                this->clockRadialSpeed += 20.0f;
+                this->clockDist += this->clockRadialSpeed;
                 if (this->clockDist > 3500.0f) {
                     this->clockDist = 3500.0f;
                     this->cueId = SOTCS_CUEID_NONE;
                 }
                 break;
 
-            case SOTCS_CUEID_RESET_0:
+            case SOTCS_CUEID_RESET_INIT:
                 this->drawType = SOTCS_DRAW_RESET_CYCLE_SOT;
                 this->counter = 0;
                 this->clockAngle = 0;
@@ -1136,17 +1135,17 @@ void EnTest6_SharedSoTCutscene(EnTest6* this, PlayState* play) {
                 this->clockSpeed = 100.0f;
                 this->speed = 20.0f;
                 this->clockDist = 300.0f;
-                this->clockDistSpeed = 0.0f;
+                this->clockAccel = 0.0f;
                 break;
 
-            case SOTCS_CUEID_RESET_1:
-                this->clockDistSpeed = -5.0f;
+            case SOTCS_CUEID_RESET_CLOCKS_SLOW_DOWN:
+                this->clockAccel = -5.0f;
                 this->clockSpeed += -5.0f;
                 break;
 
-            case SOTCS_CUEID_RESET_2:
-                this->clockDistSpeed += 2.0f;
-                this->clockSpeed += this->clockDistSpeed;
+            case SOTCS_CUEID_RESET_CLOCKS_SPEED_UP:
+                this->clockAccel += 2.0f;
+                this->clockSpeed += this->clockAccel;
                 if (this->clockSpeed > 10000.0f) {
                     this->clockSpeed = 10000.0f;
                     this->cueId = SOTCS_CUEID_NONE;
@@ -1158,7 +1157,7 @@ void EnTest6_SharedSoTCutscene(EnTest6* this, PlayState* play) {
                 this->drawType = SOTCS_DRAW_TYPE_NONE;
                 return;
 
-            case SOTCS_CUEID_DOUBLE_5:
+            case SOTCS_CUEID_DOUBLE_END:
                 if (gSaveContext.save.time > CLOCK_TIME(12, 0)) {
                     Play_SetRespawnData(&play->state, 1, ((void)0, gSaveContext.save.entrance & 0xFFFF),
                                         player->unk_3CE, PLAYER_PARAMS(0xFF, PLAYER_INITMODE_B), &player->unk_3C0,
@@ -1212,7 +1211,7 @@ void EnTest6_DrawThreeDayResetSoTCutscene(EnTest6* this, PlayState* play) {
     clockPos.y = 0.0f;
 
     clock1Yaw = this->clockAngle;
-    clock2Yaw = clock1Yaw + DEG_TO_BINANG(109.865) + (s32)(Math_SinS(play->state.frames) * 12000.0f);
+    clock2Yaw = clock1Yaw + 0x4E20 + (s32)(0x2EE0 * Math_SinS(play->state.frames));
     angle = (play->state.frames & 0x3C) * 1024;
     angle *= this->clockSpeed / 200.0f;
     this->clockAngle += (s16)this->clockSpeed;
@@ -1287,7 +1286,7 @@ void EnTest6_DrawDoubleSoTCutscene(EnTest6* this, PlayState* play) {
     // Each turn rotates the clock 22.5 degrees (0x10000 / 64 * 4)
     // clockNormalAngle = (play->state.frames & 0x3C) * ((0x10000 / 64 * 4) / 4);
     clockNormalAngle = (play->state.frames & 0x3C) * (DEG_TO_BINANG(22.5f) / 4);
-    clockRotX = this->clockAngle + DEG_TO_BINANG(90);
+    clockRotX = this->clockAngle + 0x4000;
 
     // All cases have the exact same code
     switch (player->transformation) {
