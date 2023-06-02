@@ -502,7 +502,7 @@ void EnFamos_Chase(EnFamos* this, PlayState* play) {
 
     surfaceType = SurfaceType_GetFloorProperty2(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
     if ((this->actor.xzDistToPlayer < 30.0f) && (this->actor.floorHeight > BGCHECK_Y_MIN) && // close enough
-        (surfaceType != FLOOR_PROPERTY_12 && surfaceType != FLOOR_PROPERTY_13)) {
+        ((surfaceType != FLOOR_PROPERTY_12) && (surfaceType != FLOOR_PROPERTY_13))) {
         EnFamos_SetupAttackAim(this);
 
     } else if ((Player_GetMask(play) == PLAYER_MASK_STONE) ||
@@ -545,7 +545,8 @@ void EnFamos_Attack(EnFamos* this, PlayState* play) {
 
     surfaceType = SurfaceType_GetFloorProperty2(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
     hitFloor = this->actor.bgCheckFlags & BGCHECKFLAG_GROUND;
-    if (hitFloor || (this->actor.floorHeight == BGCHECK_Y_MIN) || (surfaceType == 0xC) || (surfaceType == 0xD)) {
+    if (hitFloor || (this->actor.floorHeight == BGCHECK_Y_MIN) || (surfaceType == FLOOR_PROPERTY_12) ||
+        (surfaceType == FLOOR_PROPERTY_13)) {
         this->collider1.base.atFlags &= ~AT_ON;
         this->collider2.base.atFlags |= AT_ON;
         if (hitFloor) {
@@ -747,7 +748,7 @@ void EnFamos_Update(Actor* thisx, PlayState* play) {
     f32 oldHeight;
     s32 oldHoverTimer; // save old value to test if changed
 
-    if (this->debrisTimer <= 0 ||
+    if ((this->debrisTimer <= 0) ||
         (this->debrisTimer--, EnFamos_UpdateDebrisPosRot(this), (this->actionFunc != EnFamos_DeathFade))) {
         oldHoverTimer = this->hoverTimer;
         EnFamos_UpdateFlipStatus(this);

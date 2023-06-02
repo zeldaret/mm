@@ -348,8 +348,8 @@ void EnKakasi_IdleStanding(EnKakasi* this, PlayState* play) {
     }
     if (play->actorCtx.flags & ACTORCTX_FLAG_PICTO_BOX_ON) {
         Actor_GetScreenPos(play, &this->picto.actor, &x, &y);
-        if (this->picto.actor.projectedPos.z > -20.0f && x > 0 && x < SCREEN_WIDTH && y > 0 && y < SCREEN_HEIGHT &&
-            this->animIndex != ENKAKASI_ANIM_SIDEWAYS_SHAKING) {
+        if ((this->picto.actor.projectedPos.z > -20.0f) && (x > 0) && (x < SCREEN_WIDTH) && (y > 0) &&
+            (y < SCREEN_HEIGHT) && (this->animIndex != ENKAKASI_ANIM_SIDEWAYS_SHAKING)) {
             // faster shaking
             EnKakasi_ChangeAnim(this, ENKAKASI_ANIM_SIDEWAYS_SHAKING);
             this->skelanime.playSpeed = 2.0f;
