@@ -11,12 +11,12 @@ void func_80147414(SramContext* sramCtx, s32 fileNum, s32 arg2);
     ((newf)[0] != 'Z' || (newf)[1] != 'E' || (newf)[2] != 'L' || (newf)[3] != 'D' || (newf)[4] != 'A' || \
      (newf)[5] != '3')
 
-typedef struct PersistentCycleFlags {
+typedef struct PersistentCycleSceneFlags {
     /* 0x0 */ u32 switch0;
     /* 0x4 */ u32 switch1;
     /* 0x8 */ u32 chest;
     /* 0xC */ u32 collectible;
-} PersistentCycleFlags; // size = 0x10
+} PersistentCycleSceneFlags; // size = 0x10
 
 #define PERSISTENT_CYCLE_FLAGS_SET(switch0, switch1, chest, collectible) { switch0, switch1, chest, collectible },
 #define PERSISTENT_CYCLE_FLAGS_NONE PERSISTENT_CYCLE_FLAGS_SET(0, 0, 0, 0)
@@ -28,58 +28,77 @@ typedef struct PersistentCycleFlags {
 /**
  * Array of bitwise flags which won't be turned off on a cycle reset (will persist between cycles)
  */
-PersistentCycleFlags sPersistentCycleFlags[SCENE_MAX] = {
+PersistentCycleSceneFlags sPersistentCycleSceneFlags[SCENE_MAX] = {
 #include "tables/scene_table.h"
 };
 
 #undef DEFINE_SCENE
 #undef DEFINE_SCENE_UNSET
 
-// TODO: figure out a way to use the WEEKEVENTREG defines here
+#define WEEK_FLG2(flg) (2 << (2 * BIT_FLAG_TO_SHIFT(flg)))
+#define WEEK_FLG(flg) (3 << (2 * BIT_FLAG_TO_SHIFT(flg)))
+
 // weekEventReg flags which will be not be cleared on a cycle reset
-u16 D_801C66D0[ARRAY_COUNT(gSaveContext.save.saveInfo.weekEventReg)] = {
-    /*  0 */ 0xFFFC,
-    /*  1 */ 0xFFFF,
-    /*  2 */ 0xFFFF,
-    /*  3 */ 0xFFFF,
+u16 sPersistentCycleWeekEventRegs[ARRAY_COUNT(gSaveContext.save.saveInfo.weekEventReg)] = {
+    /*  0 */ WEEK_FLG(WEEKEVENTREG_ENTERED_TERMINA_FIELD) | WEEK_FLG(WEEKEVENTREG_ENTERED_IKANA_GRAVEYARD) |
+        WEEK_FLG(WEEKEVENTREG_ENTERED_ROMANI_RANCH) | WEEK_FLG(WEEKEVENTREG_ENTERED_GORMAN_TRACK) |
+        WEEK_FLG(WEEKEVENTREG_ENTERED_MOUNTAIN_VILLAGE_WINTER) | WEEK_FLG(WEEKEVENTREG_ENTERED_GORON_SHRINE) |
+        WEEK_FLG(WEEKEVENTREG_ENTERED_SNOWHEAD),
+    /*  1 */ WEEK_FLG(WEEKEVENTREG_ENTERED_SOUTHERN_SWAMP_POISONED) | WEEK_FLG(WEEKEVENTREG_ENTERED_WOODFALL) |
+        WEEK_FLG(WEEKEVENTREG_ENTERED_DEKU_PALACE) | WEEK_FLG(WEEKEVENTREG_ENTERED_GREAT_BAY_COAST) |
+        WEEK_FLG(WEEKEVENTREG_ENTERED_PIRATES_FORTRESS) | WEEK_FLG(WEEKEVENTREG_ENTERED_ZORA_HALL) |
+        WEEK_FLG(WEEKEVENTREG_ENTERED_WATERFALL_RAPIDS) | WEEK_FLG(WEEKEVENTREG_ENTERED_IKANA_CANYON),
+    /*  2 */ WEEK_FLG(WEEKEVENTREG_ENTERED_IKANA_CASTLE) | WEEK_FLG(WEEKEVENTREG_ENTERED_STONE_TOWER) |
+        WEEK_FLG(WEEKEVENTREG_ENTERED_STONE_TOWER_INVERTED) | WEEK_FLG(WEEKEVENTREG_ENTERED_EAST_CLOCK_TOWN) |
+        WEEK_FLG(WEEKEVENTREG_ENTERED_WEST_CLOCK_TOWN) | WEEK_FLG(WEEKEVENTREG_ENTERED_NORTH_CLOCK_TOWN) |
+        WEEK_FLG(WEEKEVENTREG_ENTERED_WOODFALL_TEMPLE) | WEEK_FLG(WEEKEVENTREG_ENTERED_SNOWHEAD_TEMPLE),
+    /*  3 */ WEEK_FLG(WEEKEVENTREG_ENTERED_PIRATES_FORTRESS_EXTERIOR) |
+        WEEK_FLG(WEEKEVENTREG_ENTERED_STONE_TOWER_TEMPLE) | WEEK_FLG(WEEKEVENTREG_ENTERED_STONE_TOWER_TEMPLE_INVERTED) |
+        WEEK_FLG(WEEKEVENTREG_ENTERED_THE_MOON) | WEEK_FLG(WEEKEVENTREG_ENTERED_MOON_DEKU_TRIAL) |
+        WEEK_FLG(WEEKEVENTREG_ENTERED_MOON_GORON_TRIAL) | WEEK_FLG(WEEKEVENTREG_ENTERED_MOON_ZORA_TRIAL) |
+        WEEK_FLG(WEEKEVENTREG_03_80),
     /*  4 */ 0,
     /*  5 */ 0,
     /*  6 */ 0,
-    /*  7 */ 0xC000,
-    /*  8 */ 0xC00,
+    /*  7 */ WEEK_FLG(WEEKEVENTREG_ENTERED_WOODFALL_TEMPLE_PRISON),
+    /*  8 */ WEEK_FLG(WEEKEVENTREG_RECEIVED_DOGGY_RACETRACK_HEART_PIECE),
     /*  9 */ 0,
-    /* 10 */ 0xC0,
+    /* 10 */ WEEK_FLG(WEEKEVENTREG_10_08),
     /* 11 */ 0,
-    /* 12 */ 0x300,
-    /* 13 */ 0x3000,
-    /* 14 */ 0xC000,
-    /* 15 */ 0xC00,
+    /* 12 */ WEEK_FLG(WEEKEVENTREG_12_10),
+    /* 13 */ WEEK_FLG(WEEKEVENTREG_RECEIVED_OCEANSIDE_WALLET_UPGRADE),
+    /* 14 */ WEEK_FLG(WEEKEVENTREG_14_80),
+    /* 15 */ WEEK_FLG(WEEKEVENTREG_15_20),
     /* 16 */ 0,
     /* 17 */ 0,
     /* 18 */ 0,
     /* 19 */ 0,
     /* 20 */ 0,
     /* 21 */ 0,
-    /* 22 */ 0xC00C,
-    /* 23 */ 0xC00C,
-    /* 24 */ 0xC008,
-    /* 25 */ 3,
-    /* 26 */ 0x3000,
+    /* 22 */ WEEK_FLG(WEEKEVENTREG_22_02) | WEEK_FLG(WEEKEVENTREG_22_80),
+    /* 23 */ WEEK_FLG(WEEKEVENTREG_23_02) | WEEK_FLG(WEEKEVENTREG_23_80),
+    /* 24 */ WEEK_FLG2(WEEKEVENTREG_24_02) | WEEK_FLG(WEEKEVENTREG_24_80),
+    /* 25 */ WEEK_FLG(WEEKEVENTREG_25_01),
+    /* 26 */ WEEK_FLG(WEEKEVENTREG_26_40),
     /* 27 */ 0,
     /* 28 */ 0,
     /* 29 */ 0,
-    /* 30 */ 0xFF00,
-    /* 31 */ 0xC3F,
-    /* 32 */ 0x3F,
+    /* 30 */ WEEK_FLG(WEEKEVENTREG_30_10) | WEEK_FLG(WEEKEVENTREG_30_20) | WEEK_FLG(WEEKEVENTREG_30_40) |
+        WEEK_FLG(WEEKEVENTREG_30_80),
+    /* 31 */ WEEK_FLG(WEEKEVENTREG_31_01) | WEEK_FLG(WEEKEVENTREG_31_02) | WEEK_FLG(WEEKEVENTREG_31_04) |
+        WEEK_FLG(WEEKEVENTREG_31_20),
+    /* 32 */ WEEK_FLG(WEEKEVENTREG_32_01) | WEEK_FLG(WEEKEVENTREG_32_02) | WEEK_FLG(WEEKEVENTREG_32_04),
     /* 33 */ 0,
     /* 34 */ 0,
-    /* 35 */ 0xCFFF,
+    /* 35 */ WEEK_FLG(WEEKEVENTREG_35_01) | WEEK_FLG(WEEKEVENTREG_35_02) | WEEK_FLG(WEEKEVENTREG_35_04) |
+        WEEK_FLG(WEEKEVENTREG_35_08) | WEEK_FLG(WEEKEVENTREG_35_10) | WEEK_FLG(WEEKEVENTREG_35_20) |
+        WEEK_FLG(WEEKEVENTREG_35_80),
     /* 36 */ 0,
     /* 37 */ 0,
-    /* 38 */ 0xC00,
-    /* 39 */ 0xC00,
+    /* 38 */ WEEK_FLG(WEEKEVENTREG_38_20),
+    /* 39 */ WEEK_FLG(WEEKEVENTREG_39_20),
     /* 40 */ 0,
-    /* 41 */ 0xC0,
+    /* 41 */ WEEK_FLG(WEEKEVENTREG_41_08),
     /* 42 */ 0,
     /* 43 */ 0,
     /* 44 */ 0,
@@ -88,50 +107,66 @@ u16 D_801C66D0[ARRAY_COUNT(gSaveContext.save.saveInfo.weekEventReg)] = {
     /* 47 */ 0,
     /* 48 */ 0,
     /* 49 */ 0,
-    /* 50 */ 0x3C,
-    /* 51 */ 0x20,
+    /* 50 */ WEEK_FLG(WEEKEVENTREG_50_02) | WEEK_FLG(WEEKEVENTREG_50_04),
+    /* 51 */ WEEK_FLG2(WEEKEVENTREG_51_04),
     /* 52 */ 0,
-    /* 53 */ 0x300C,
-    /* 54 */ 0x3000,
+    /* 53 */ WEEK_FLG(WEEKEVENTREG_53_02) | WEEK_FLG(WEEKEVENTREG_53_40),
+    /* 54 */ WEEK_FLG(WEEKEVENTREG_54_40),
     /* 55 */ 0,
-    /* 56 */ 0xC,
-    /* 57 */ 0xC0,
+    /* 56 */ WEEK_FLG(WEEKEVENTREG_56_02),
+    /* 57 */ WEEK_FLG(WEEKEVENTREG_57_08),
     /* 58 */ 0,
-    /* 59 */ 0xFF0,
-    /* 60 */ 0x300,
+    /* 59 */ WEEK_FLG(WEEKEVENTREG_59_04) | WEEK_FLG(WEEKEVENTREG_59_08) | WEEK_FLG(WEEKEVENTREG_59_10) |
+        WEEK_FLG(WEEKEVENTREG_59_20),
+    /* 60 */ WEEK_FLG(WEEKEVENTREG_60_10),
     /* 61 */ 0,
     /* 62 */ 0,
-    /* 63 */ 0xC00,
+    /* 63 */ WEEK_FLG(WEEKEVENTREG_63_20),
     /* 64 */ 0,
     /* 65 */ 0,
-    /* 66 */ 0xFFFF,
-    /* 67 */ 0xFFFF,
-    /* 68 */ 0xFFFF,
-    /* 69 */ 0xFFFF,
-    /* 70 */ 0xFFFF,
-    /* 71 */ 0xFFFF,
-    /* 72 */ 0xFFFF,
-    /* 73 */ 0xC0,
+    /* 66 */ WEEK_FLG(WEEKEVENTREG_66_01) | WEEK_FLG(WEEKEVENTREG_66_02) | WEEK_FLG(WEEKEVENTREG_66_04) |
+        WEEK_FLG(WEEKEVENTREG_66_08) | WEEK_FLG(WEEKEVENTREG_66_10) | WEEK_FLG(WEEKEVENTREG_66_20) |
+        WEEK_FLG(WEEKEVENTREG_66_40) | WEEK_FLG(WEEKEVENTREG_66_80),
+    /* 67 */ WEEK_FLG(WEEKEVENTREG_67_01) | WEEK_FLG(WEEKEVENTREG_67_02) | WEEK_FLG(WEEKEVENTREG_67_04) |
+        WEEK_FLG(WEEKEVENTREG_67_08) | WEEK_FLG(WEEKEVENTREG_67_10) | WEEK_FLG(WEEKEVENTREG_67_20) |
+        WEEK_FLG(WEEKEVENTREG_67_40) | WEEK_FLG(WEEKEVENTREG_67_80),
+    /* 68 */ WEEK_FLG(WEEKEVENTREG_68_01) | WEEK_FLG(WEEKEVENTREG_68_02) | WEEK_FLG(WEEKEVENTREG_68_04) |
+        WEEK_FLG(WEEKEVENTREG_68_08) | WEEK_FLG(WEEKEVENTREG_68_10) | WEEK_FLG(WEEKEVENTREG_68_20) |
+        WEEK_FLG(WEEKEVENTREG_68_40) | WEEK_FLG(WEEKEVENTREG_68_80),
+    /* 69 */ WEEK_FLG(WEEKEVENTREG_69_01) | WEEK_FLG(WEEKEVENTREG_69_02) | WEEK_FLG(WEEKEVENTREG_69_04) |
+        WEEK_FLG(WEEKEVENTREG_69_08) | WEEK_FLG(WEEKEVENTREG_69_10) | WEEK_FLG(WEEKEVENTREG_69_20) |
+        WEEK_FLG(WEEKEVENTREG_69_40) | WEEK_FLG(WEEKEVENTREG_69_80),
+    /* 70 */ WEEK_FLG(WEEKEVENTREG_70_01) | WEEK_FLG(WEEKEVENTREG_70_02) | WEEK_FLG(WEEKEVENTREG_70_04) |
+        WEEK_FLG(WEEKEVENTREG_70_08) | WEEK_FLG(WEEKEVENTREG_70_10) | WEEK_FLG(WEEKEVENTREG_70_20) |
+        WEEK_FLG(WEEKEVENTREG_70_40) | WEEK_FLG(WEEKEVENTREG_70_80),
+    /* 71 */ WEEK_FLG(WEEKEVENTREG_71_01) | WEEK_FLG(WEEKEVENTREG_71_02) | WEEK_FLG(WEEKEVENTREG_71_04) |
+        WEEK_FLG(WEEKEVENTREG_71_08) | WEEK_FLG(WEEKEVENTREG_71_10) | WEEK_FLG(WEEKEVENTREG_71_20) |
+        WEEK_FLG(WEEKEVENTREG_71_40) | WEEK_FLG(WEEKEVENTREG_71_80),
+    /* 72 */ WEEK_FLG(WEEKEVENTREG_72_01) | WEEK_FLG(WEEKEVENTREG_72_02) | WEEK_FLG(WEEKEVENTREG_72_04) |
+        WEEK_FLG(WEEKEVENTREG_72_08) | WEEK_FLG(WEEKEVENTREG_72_10) | WEEK_FLG(WEEKEVENTREG_72_20) |
+        WEEK_FLG(WEEKEVENTREG_72_40) | WEEK_FLG(WEEKEVENTREG_72_80),
+    /* 73 */ WEEK_FLG(WEEKEVENTREG_73_08),
     /* 74 */ 0,
-    /* 75 */ 0xC000,
+    /* 75 */ WEEK_FLG(WEEKEVENTREG_75_80),
     /* 76 */ 0,
-    /* 77 */ 3,
+    /* 77 */ WEEK_FLG(WEEKEVENTREG_77_01),
     /* 78 */ 0,
-    /* 79 */ 0xC000,
+    /* 79 */ WEEK_FLG(WEEKEVENTREG_79_80),
     /* 80 */ 0,
-    /* 81 */ 0xC0,
-    /* 82 */ 0x300,
+    /* 81 */ WEEK_FLG(WEEKEVENTREG_81_08),
+    /* 82 */ WEEK_FLG(WEEKEVENTREG_82_10),
     /* 83 */ 0,
     /* 84 */ 0,
     /* 85 */ 0,
-    /* 86 */ 0xC000,
-    /* 87 */ 0xFFF0,
+    /* 86 */ WEEK_FLG(WEEKEVENTREG_86_80),
+    /* 87 */ WEEK_FLG(WEEKEVENTREG_87_04) | WEEK_FLG(WEEKEVENTREG_87_08) | WEEK_FLG(WEEKEVENTREG_87_10) |
+        WEEK_FLG(WEEKEVENTREG_87_20) | WEEK_FLG(WEEKEVENTREG_87_40) | WEEK_FLG(WEEKEVENTREG_87_80),
     /* 88 */ 0,
     /* 89 */ 0,
-    /* 90 */ 0x300,
+    /* 90 */ WEEK_FLG(WEEKEVENTREG_90_10),
     /* 91 */ 0,
-    /* 92 */ 0xC000,
-    /* 93 */ 0xF0,
+    /* 92 */ WEEK_FLG(WEEKEVENTREG_92_80),
+    /* 93 */ WEEK_FLG(WEEKEVENTREG_93_04) | WEEK_FLG(WEEKEVENTREG_93_08),
     /* 94 */ 0,
     /* 95 */ 0,
     /* 96 */ 0,
@@ -193,7 +228,10 @@ s32 D_801C6870[] = {
     offsetof(SaveContext, fileNum),
 };
 
-u8 D_801C6890[8] = { 1, 2, 4, 8, 0x10, 0x20, 0x40, 0x80 };
+// Bit Flag array in which sBitFlags8[n] is (1 << n)
+u8 sBitFlags8[] = {
+    (1 << 0), (1 << 1), (1 << 2), (1 << 3), (1 << 4), (1 << 5), (1 << 6), (1 << 7),
+};
 
 u16 D_801F6AF0;
 u8 D_801F6AF2;
@@ -253,21 +291,21 @@ void Sram_SaveEndOfCycle(PlayState* play) {
     sceneId = Play_GetOriginalSceneId(play->sceneId);
     Play_SaveCycleSceneFlags(&play->state);
 
-    play->actorCtx.sceneFlags.chest &= sPersistentCycleFlags[sceneId].chest;
-    play->actorCtx.sceneFlags.switches[0] &= sPersistentCycleFlags[sceneId].switch0;
-    play->actorCtx.sceneFlags.switches[1] &= sPersistentCycleFlags[sceneId].switch1;
-    play->actorCtx.sceneFlags.collectible[0] &= sPersistentCycleFlags[sceneId].collectible;
+    play->actorCtx.sceneFlags.chest &= sPersistentCycleSceneFlags[sceneId].chest;
+    play->actorCtx.sceneFlags.switches[0] &= sPersistentCycleSceneFlags[sceneId].switch0;
+    play->actorCtx.sceneFlags.switches[1] &= sPersistentCycleSceneFlags[sceneId].switch1;
+    play->actorCtx.sceneFlags.collectible[0] &= sPersistentCycleSceneFlags[sceneId].collectible;
     play->actorCtx.sceneFlags.clearedRoom = 0;
 
     for (i = 0; i < SCENE_MAX; i++) {
         gSaveContext.cycleSceneFlags[i].switch0 =
-            ((void)0, gSaveContext.cycleSceneFlags[i].switch0) & sPersistentCycleFlags[i].switch0;
+            ((void)0, gSaveContext.cycleSceneFlags[i].switch0) & sPersistentCycleSceneFlags[i].switch0;
         gSaveContext.cycleSceneFlags[i].switch1 =
-            ((void)0, gSaveContext.cycleSceneFlags[i].switch1) & sPersistentCycleFlags[i].switch1;
+            ((void)0, gSaveContext.cycleSceneFlags[i].switch1) & sPersistentCycleSceneFlags[i].switch1;
         gSaveContext.cycleSceneFlags[i].chest =
-            ((void)0, gSaveContext.cycleSceneFlags[i].chest) & sPersistentCycleFlags[i].chest;
+            ((void)0, gSaveContext.cycleSceneFlags[i].chest) & sPersistentCycleSceneFlags[i].chest;
         gSaveContext.cycleSceneFlags[i].collectible =
-            ((void)0, gSaveContext.cycleSceneFlags[i].collectible) & sPersistentCycleFlags[i].collectible;
+            ((void)0, gSaveContext.cycleSceneFlags[i].collectible) & sPersistentCycleSceneFlags[i].collectible;
         gSaveContext.cycleSceneFlags[i].clearedRoom = 0;
         gSaveContext.save.saveInfo.permanentSceneFlags[i].unk_14 = 0;
         gSaveContext.save.saveInfo.permanentSceneFlags[i].rooms = 0;
@@ -289,15 +327,15 @@ void Sram_SaveEndOfCycle(PlayState* play) {
         Inventory_DeleteItem(ITEM_MASK_FIERCE_DEITY, SLOT(ITEM_MASK_FIERCE_DEITY));
     }
 
-    for (i = 0; i < ARRAY_COUNT(D_801C66D0); i++) {
-        u16 phi_v1_3 = D_801C66D0[i];
+    for (i = 0; i < ARRAY_COUNT(sPersistentCycleWeekEventRegs); i++) {
+        u16 isPersistentBits = sPersistentCycleWeekEventRegs[i];
 
-        for (j = 0; j < ARRAY_COUNT(D_801C6890); j++) {
-            if ((phi_v1_3 & 3) == 0) {
+        for (j = 0; j < ARRAY_COUNT(sBitFlags8); j++) {
+            if (!(isPersistentBits & 3)) {
                 gSaveContext.save.saveInfo.weekEventReg[i] =
-                    ((void)0, gSaveContext.save.saveInfo.weekEventReg[i]) & (0xFF ^ D_801C6890[j]);
+                    ((void)0, gSaveContext.save.saveInfo.weekEventReg[i]) & (0xFF ^ sBitFlags8[j]);
             }
-            phi_v1_3 >>= 2;
+            isPersistentBits >>= 2;
         }
     }
 
