@@ -76,24 +76,26 @@ void EnWeatherTag_Init(Actor* thisx, PlayState* play) {
             this->unk158 = this->actor.world.rot.y;
             EnWeatherTag_SetupAction(this, func_80966A08);
             break;
+
         case WEATHERTAG_TYPE_UNK1:
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_STONE_TOWER_TEMPLE)) {
                 Actor_Kill(&this->actor);
             }
             EnWeatherTag_SetupAction(this, func_80966B08);
             break;
+
         case WEATHERTAG_TYPE_WINTERFOG:
             EnWeatherTag_SetupAction(this, func_80966E0C);
             break;
-        case WEATHERTAG_TYPE_UNK3:
-            //! FAKE: this can move to different locations and still match
-            if (1) {}
 
+        case WEATHERTAG_TYPE_UNK3:
             EnWeatherTag_SetupAction(this, func_80966EF0);
             break;
+
         case WEATHERTAG_TYPE_UNK4:
             EnWeatherTag_SetupAction(this, func_80966FEC);
             break;
+
         case WEATHERTAG_TYPE_UNK5:
             func_800BC154(play, &play->actorCtx, &this->actor, 7);
             play->skyboxId = SKYBOX_3;
@@ -102,6 +104,7 @@ void EnWeatherTag_Init(Actor* thisx, PlayState* play) {
             D_801F4E74 = 1.0f;
             EnWeatherTag_SetupAction(this, func_80966BF4);
             break;
+
         case WEATHERTAG_TYPE_WATERMURK:
             pathID = WEATHER_TAG_PATHID(&this->actor);
             path = &play->setupPathList[pathID];
@@ -109,8 +112,13 @@ void EnWeatherTag_Init(Actor* thisx, PlayState* play) {
             this->pathCount = path->count;
             EnWeatherTag_SetupAction(this, func_809672DC);
             break;
+
         case WEATHERTAG_TYPE_LOCALDAY2RAIN:
             EnWeatherTag_SetupAction(this, func_809674C8);
+            break;
+
+        default:
+            break;
     }
 }
 
@@ -260,9 +268,11 @@ void func_80966BF4(EnWeatherTag* this, PlayState* play) {
                 default:
                     changeLightNextConfig = 0;
                     break;
+
                 case 2:
                     changeLightNextConfig = 3;
                     break;
+
                 case 3:
                     changeLightNextConfig = 4;
                     break;
@@ -290,9 +300,11 @@ void func_80966D20(EnWeatherTag* this, PlayState* play) {
         default:
             newUnk20 = 0;
             break;
+
         case 2:
             newUnk20 = 3;
             break;
+
         case 3:
             newUnk20 = 4;
             break;

@@ -206,7 +206,7 @@ void _Putfld(_Pft* px, va_list* pap, unsigned char code, unsigned char* ac) {
         case 's':
             px->s = va_arg(*pap, char*);
             px->n1 = strlen(px->s);
-            if (px->prec >= 0 && px->n1 > px->prec) {
+            if ((px->prec >= 0) && (px->n1 > px->prec)) {
                 px->n1 = px->prec;
             }
             break;

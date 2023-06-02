@@ -6,8 +6,12 @@
  */
 void guPositionF(f32 mf[4][4], f32 rot, f32 pitch, f32 yaw, f32 scale, f32 x, f32 y, f32 z) {
     static f32 D_80134D00 = M_PI / 180.0f;
-    f32 sinr, sinp, sinh;
-    f32 cosr, cosp, cosh;
+    f32 sinr;
+    f32 sinp;
+    f32 sinh;
+    f32 cosr;
+    f32 cosp;
+    f32 cosh;
 
     rot *= D_80134D00;
     pitch *= D_80134D00;

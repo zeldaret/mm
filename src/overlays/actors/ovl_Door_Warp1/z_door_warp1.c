@@ -572,6 +572,9 @@ void func_808B9CE8(DoorWarp1* this, PlayState* play) {
             gSaveContext.save.saveInfo.unk_EA8[0] = (((void)0, gSaveContext.save.saveInfo.unk_EA8[0]) & 0x00FFFFFF) |
                                                     ((((u8)gSaveContext.save.saveInfo.unk_EA8[1]) & 0xFF) << 0x18);
             break;
+
+        default:
+            break;
     }
 
     gSaveContext.save.saveInfo.unk_EA8[1] = (gSaveContext.save.saveInfo.unk_EA8[1] & 0xFFFFFF00) |
@@ -809,6 +812,9 @@ void func_808BA550(DoorWarp1* this, PlayState* play) {
 
             case PLAYER_FORM_HUMAN:
                 temp_f0 = -25.0f;
+                break;
+
+            default:
                 break;
         }
 

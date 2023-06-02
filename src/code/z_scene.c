@@ -89,7 +89,7 @@ s32 Object_GetIndex(ObjectContext* objectCtx, s16 objectId) {
     s32 i;
 
     for (i = 0; i < objectCtx->num; i++) {
-        if ((objectCtx->status[i].id < 0 ? -objectCtx->status[i].id : objectCtx->status[i].id) == objectId) {
+        if (ABS_ALT(objectCtx->status[i].id) == objectId) {
             return i;
         }
     }
