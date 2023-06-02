@@ -41,9 +41,6 @@ void EffStk_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void func_80BF0DE0(EffStk* this, PlayState* play) {
-    s16 temp_v0;
-    u16 temp_v1;
-
     if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_512)) {
         switch (play->csCtx.actorCues[Cutscene_GetCueChannel(play, 0x200U)]->id) {
             case 2:
