@@ -369,7 +369,7 @@ void func_80BB5AAC(EnTanron1* this, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     for (i = 0; i < this->actor.params; i++, ptr++) {
         if (ptr->unk_24 == 1) {
@@ -390,26 +390,23 @@ void func_80BB5AAC(EnTanron1* this, PlayState* play) {
     flag = 0;
     ptr = ptrBase;
     for (i = 0; i < this->actor.params; i++, ptr++) {
-        if (ptr->unk_24 != 2) {
-            continue;
+        if (ptr->unk_24 == 2) {
+            if (!flag) {
+                gSPDisplayList(POLY_OPA_DISP++, ovl_En_Tanron1_DL_001888);
+                gDPLoadTextureBlock(POLY_OPA_DISP++, ovl_En_Tanron1_DL_001428, G_IM_FMT_RGBA, G_IM_SIZ_16b, 16, 32, 0,
+                                    G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, 4, 5, G_TX_NOLOD,
+                                    G_TX_NOLOD);
+                flag++;
+            }
+
+            Matrix_Translate(ptr->unk_00.x, ptr->unk_00.y, ptr->unk_00.z, MTXMODE_NEW);
+            Matrix_RotateYS(ptr->unk_1A, MTXMODE_APPLY);
+            Matrix_RotateXS(ptr->unk_18 * -1, MTXMODE_APPLY);
+            Matrix_Scale(1.0f, ptr->unk_2C, 1.0f, MTXMODE_APPLY);
+
+            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPDisplayList(POLY_OPA_DISP++, ovl_En_Tanron1_DL_001900);
         }
-
-        if (!flag) {
-            gSPDisplayList(POLY_OPA_DISP++, ovl_En_Tanron1_DL_001888);
-            gDPLoadTextureBlock(POLY_OPA_DISP++, ovl_En_Tanron1_DL_001428, G_IM_FMT_RGBA, G_IM_SIZ_16b, 16, 32, 0,
-                                G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, 4, 5, G_TX_NOLOD, G_TX_NOLOD);
-            flag++;
-        }
-
-        Matrix_Translate(ptr->unk_00.x, ptr->unk_00.y, ptr->unk_00.z, MTXMODE_NEW);
-        Matrix_RotateYS(ptr->unk_1A, MTXMODE_APPLY);
-        Matrix_RotateXS(ptr->unk_18 * -1, MTXMODE_APPLY);
-        Matrix_Scale(1.0f, ptr->unk_2C, 1.0f, MTXMODE_APPLY);
-
-        if (1) {}
-
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_OPA_DISP++, ovl_En_Tanron1_DL_001900);
     }
 
     CLOSE_DISPS(play->state.gfxCtx);

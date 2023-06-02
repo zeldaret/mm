@@ -1920,12 +1920,14 @@ s32 BgCheck_CheckWallImpl(CollisionContext* colCtx, u16 xpFlags, Vec3f* posResul
     s32 bgId;
     f32 temp_f0_2;
     f32 f32temp;
-    f32 nx2, nz2;
+    f32 nx2;
+    f32 nz2;
     Vec3f checkLineNext;
     Vec3f checkLinePrev;
     f32 n2XZDist;
     f32 n3XZDist;
-    f32 nx3, nz3;
+    f32 nx3;
+    f32 nz3;
     s32 bccFlags;
     Vec3f posIntersect2;
     s32 bgId2;

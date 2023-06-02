@@ -243,7 +243,8 @@ void EnPoSisters_MatchPlayerXZ(EnPoSisters* this, PlayState* play) {
     f32 dist;
 
     if (this->megCloneId == POE_SISTERS_MEG_REAL || this->actionFunc != EnPoSisters_DamageFlinch) {
-        if ((player->meleeWeaponState == 0 || player->meleeWeaponAnimation >= PLAYER_MWA_SPIN_ATTACK_1H) &&
+        if ((player->meleeWeaponState == PLAYER_MELEE_WEAPON_STATE_0 ||
+             player->meleeWeaponAnimation >= PLAYER_MWA_SPIN_ATTACK_1H) &&
             ((player->actor.world.pos.y - player->actor.floorHeight) < 1.0f)) {
             Math_StepToF(&this->megDistToPlayer, 110.0f, 3.0f);
         } else {
@@ -1204,8 +1205,8 @@ void EnPoSisters_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     EnPoSisters_UpdateColors(this);
-    func_8012C28C(play->state.gfxCtx);
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     if ((this->color.a == 255) || (this->color.a == 0)) {
         gDPSetEnvColor(POLY_OPA_DISP++, this->color.r, this->color.g, this->color.b, this->color.a);

@@ -126,7 +126,7 @@ static Vec3f sShopItemPositions[3] = {
 s32 EnFsn_TestItemSelected(PlayState* play) {
     MessageContext* msgCtx = &play->msgCtx;
 
-    if (msgCtx->unk12020 == 0x10 || msgCtx->unk12020 == 0x11) {
+    if ((msgCtx->unk12020 == 0x10) || (msgCtx->unk12020 == 0x11)) {
         return CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_A);
     }
     return CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_A) ||
@@ -138,13 +138,17 @@ u16 EnFsn_GetWelcome(PlayState* play) {
     switch (Player_GetMask(play)) {
         case PLAYER_MASK_NONE:
             return 0x29CC;
+
         case PLAYER_MASK_DEKU:
             return 0x29FC;
+
         case PLAYER_MASK_GORON:
         case PLAYER_MASK_ZORA:
             return 0x29FD;
+
         case PLAYER_MASK_KAFEIS_MASK:
             return 0x2364;
+
         default:
             return 0x29FE;
     }
@@ -159,8 +163,9 @@ void EnFsn_HandleConversationBackroom(EnFsn* this, PlayState* play) {
             } else {
                 this->textId = 0x29E4;
                 this->flags |= ENFSN_END_CONVERSATION;
-                break;
             }
+            break;
+
         case 0x29E0:
             if (INV_CONTENT(ITEM_MASK_KEATON) == ITEM_MASK_KEATON) {
                 this->flags |= ENFSN_GIVE_ITEM;
@@ -171,17 +176,20 @@ void EnFsn_HandleConversationBackroom(EnFsn* this, PlayState* play) {
                 break;
             } else {
                 this->textId = 0x29E1;
-                break;
             }
+            break;
+
         case 0x29E1:
             this->textId = 0x29E2;
             break;
+
         case 0x29E2:
             this->flags |= ENFSN_GIVE_ITEM;
             this->flags |= ENFSN_GAVE_KEATONS_MASK;
             this->getItemId = GI_MASK_KEATON;
             this->textId = 0x29E3;
             break;
+
         case 0x29E3:
             this->flags |= ENFSN_GIVE_ITEM;
             this->flags |= ENFSN_GAVE_LETTER_TO_MAMA;
@@ -189,9 +197,13 @@ void EnFsn_HandleConversationBackroom(EnFsn* this, PlayState* play) {
             SET_WEEKEVENTREG(WEEKEVENTREG_80_10);
             this->textId = 0x29F1;
             break;
+
         case 0x29F1:
             this->textId = 0x29E4;
             this->flags |= ENFSN_END_CONVERSATION;
+            break;
+
+        default:
             break;
     }
     Message_StartTextbox(play, this->textId, &this->actor);
@@ -210,7 +222,7 @@ void EnFsn_HandleConversationBackroom(EnFsn* this, PlayState* play) {
 
 void EnFsn_HandleSetupResumeInteraction(EnFsn* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_DONE) && Message_ShouldAdvance(play) &&
-        this->cutsceneState == ENFSN_CUTSCENESTATE_STOPPED) {
+        (this->cutsceneState == ENFSN_CUTSCENESTATE_STOPPED)) {
         Actor_ProcessTalkRequest(&this->actor, &play->state);
         func_800B85E0(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
         if (ENFSN_IS_SHOP(&this->actor)) {
@@ -301,7 +313,7 @@ void EnFsn_CursorLeftRight(EnFsn* this) {
 }
 
 s16 EnFsn_GetThirdDayItemId(void) {
-    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_33_04) && CURRENT_DAY == 3) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_33_04) && (CURRENT_DAY == 3)) {
         if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_33_08) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_79_40)) {
             return SI_BOMB_BAG_30_1;
         }
@@ -314,16 +326,22 @@ s16 EnFsn_GetStolenItemId(u32 stolenItem) {
     switch (stolenItem) {
         case ITEM_BOTTLE:
             return SI_BOTTLE;
+
         case ITEM_SWORD_GREAT_FAIRY:
             return SI_SWORD_GREAT_FAIRY;
+
         case ITEM_SWORD_KOKIRI:
             return SI_SWORD_KOKIRI;
+
         case ITEM_SWORD_RAZOR:
             return SI_SWORD_RAZOR;
+
         case ITEM_SWORD_GILDED:
             return SI_SWORD_GILDED;
+
+        default:
+            return SI_NONE;
     }
-    return SI_NONE;
 }
 
 s32 EnFsn_HasItemsToSell(void) {
@@ -450,6 +468,7 @@ s32 EnFsn_FacingShopkeeperDialogResult(EnFsn* this, PlayState* play) {
             }
             Message_StartTextbox(play, this->actor.textId, &this->actor);
             return true;
+
         case 1:
             func_8019F230();
             this->actor.textId = (CURRENT_DAY == 3) ? 0x29DF : 0x29D1;
@@ -457,8 +476,10 @@ s32 EnFsn_FacingShopkeeperDialogResult(EnFsn* this, PlayState* play) {
             func_80151BB4(play, 3);
             this->actionFunc = EnFsn_SetupEndInteraction;
             return true;
+
+        default:
+            return false;
     }
-    return false;
 }
 
 s32 EnFsn_HasPlayerSelectedItem(EnFsn* this, PlayState* play, Input* input) {
@@ -487,10 +508,10 @@ void EnFsn_UpdateJoystickInputState(EnFsn* this, PlayState* play) {
     s8 stickY = CONTROLLER1(&play->state)->rel.stick_y;
 
     if (this->stickAccumX == 0) {
-        if (stickX > 30 || stickX < -30) {
+        if ((stickX > 30) || (stickX < -30)) {
             this->stickAccumX = stickX;
         }
-    } else if (stickX <= 30 && stickX >= -30) {
+    } else if ((stickX <= 30) && (stickX >= -30)) {
         this->stickAccumX = 0;
     } else if ((this->stickAccumX * stickX) < 0) { // Stick has swapped directions
         this->stickAccumX = stickX;
@@ -503,10 +524,10 @@ void EnFsn_UpdateJoystickInputState(EnFsn* this, PlayState* play) {
         }
     }
     if (this->stickAccumY == 0) {
-        if (stickY > 30 || stickY < -30) {
+        if ((stickY > 30) || (stickY < -30)) {
             this->stickAccumY = stickY;
         }
-    } else if (stickY <= 30 && stickY >= -30) {
+    } else if ((stickY <= 30) && (stickY >= -30)) {
         this->stickAccumY = 0;
     } else if ((this->stickAccumY * stickY) < 0) { // Stick has swapped directions
         this->stickAccumY = stickY;
@@ -765,7 +786,7 @@ void EnFsn_Haggle(EnFsn* this, PlayState* play) {
         this->animIndex = FSN_ANIM_SLAM_COUNTER_LOOP;
         SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animIndex);
     } else {
-        if (this->animIndex == FSN_ANIM_SLAM_COUNTER_LOOP && Animation_OnFrame(&this->skelAnime, 18.0f)) {
+        if ((this->animIndex == FSN_ANIM_SLAM_COUNTER_LOOP) && Animation_OnFrame(&this->skelAnime, 18.0f)) {
             Actor_PlaySfx(&this->actor, NA_SE_EV_HANKO);
         }
         if (this->flags & ENFSN_CALM_DOWN) {
@@ -828,19 +849,25 @@ void EnFsn_StartBuying(EnFsn* this, PlayState* play) {
                 this->actor.textId = 0x29CD;
                 Message_StartTextbox(play, this->actor.textId, &this->actor);
                 break;
+
             case 0x29CD:
                 this->actor.textId = 0x29CE;
                 EnFsn_HandleLookToShopkeeperBuyingCutscene(this);
                 Message_StartTextbox(play, this->actor.textId, &this->actor);
                 break;
+
             case 0x29CE:
                 this->actor.textId = 0xFF;
                 Message_StartTextbox(play, this->actor.textId, &this->actor);
                 this->actionFunc = EnFsn_DeterminePrice;
                 break;
+
             case 0x29CF:
                 player->exchangeItemId = PLAYER_IA_NONE;
                 this->actionFunc = EnFsn_SetupDeterminePrice;
+                break;
+
+            default:
                 break;
         }
     }
@@ -860,6 +887,7 @@ void EnFsn_AskBuyOrSell(EnFsn* this, PlayState* play) {
                     }
                     Message_StartTextbox(play, this->actor.textId, &this->actor);
                     break;
+
                 case 0x29D2:
                     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_33_04)) {
                         this->actor.textId = 0x2A01;
@@ -870,12 +898,16 @@ void EnFsn_AskBuyOrSell(EnFsn* this, PlayState* play) {
                     }
                     Message_StartTextbox(play, this->actor.textId, &this->actor);
                     break;
+
                 case 0x29D3:
                 case 0x29D4:
                 case 0x29FA:
                 case 0x2A01:
                     this->actor.textId = 0x29D5;
                     Message_StartTextbox(play, this->actor.textId, &this->actor);
+                    break;
+
+                default:
                     break;
             }
         }
@@ -892,6 +924,7 @@ void EnFsn_AskBuyOrSell(EnFsn* this, PlayState* play) {
                     Message_StartTextbox(play, this->actor.textId, &this->actor);
                     this->actionFunc = EnFsn_FaceShopkeeperSelling;
                     break;
+
                 case 1:
                     func_8019F208();
                     this->isSelling = false;
@@ -899,6 +932,9 @@ void EnFsn_AskBuyOrSell(EnFsn* this, PlayState* play) {
                     EnFsn_HandleLookToShopkeeperBuyingCutscene(this);
                     Message_StartTextbox(play, this->actor.textId, &this->actor);
                     this->actionFunc = EnFsn_StartBuying;
+                    break;
+
+                default:
                     break;
             }
         }
@@ -965,21 +1001,29 @@ void EnFsn_MakeOffer(EnFsn* this, PlayState* play) {
                     case 5:
                         this->getItemId = GI_RUPEE_BLUE;
                         break;
+
                     case 10:
                         this->getItemId = GI_RUPEE_10;
                         break;
+
                     case 20:
                         this->getItemId = GI_RUPEE_RED;
                         break;
+
                     case 50:
                         this->getItemId = GI_RUPEE_PURPLE;
                         break;
+
                     case 200:
                         this->getItemId = GI_RUPEE_HUGE;
+                        break;
+
+                    default:
                         break;
                 }
                 this->actionFunc = EnFsn_GiveItem;
                 break;
+
             case 1:
                 func_8019F230();
                 player->exchangeItemId = PLAYER_IA_NONE;
@@ -1146,6 +1190,7 @@ void EnFsn_HandleCanPlayerBuyItem(EnFsn* this, PlayState* play) {
         case CANBUY_RESULT_SUCCESS_2:
             func_8019F208();
             SET_WEEKEVENTREG(WEEKEVENTREG_33_04);
+            // fallthrough
         case CANBUY_RESULT_SUCCESS_1:
             if (this->cutsceneState == ENFSN_CUTSCENESTATE_PLAYING) {
                 CutsceneManager_Stop(this->csId);
@@ -1171,15 +1216,20 @@ void EnFsn_HandleCanPlayerBuyItem(EnFsn* this, PlayState* play) {
             this->itemIds[this->cursorIndex] = -1;
             this->actionFunc = EnFsn_GiveItem;
             break;
+
         case CANBUY_RESULT_NEED_RUPEES:
             play_sound(NA_SE_SY_ERROR);
             Message_ContinueTextbox(play, 0x29F0);
             this->actionFunc = EnFsn_PlayerCannotBuy;
             break;
+
         case CANBUY_RESULT_CANNOT_GET_NOW:
             play_sound(NA_SE_SY_ERROR);
             Message_ContinueTextbox(play, 0x29DD);
             this->actionFunc = EnFsn_PlayerCannotBuy;
+            break;
+
+        default:
             break;
     }
 }
@@ -1211,10 +1261,15 @@ void EnFsn_SelectItem(EnFsn* this, PlayState* play) {
                 case 0:
                     EnFsn_HandleCanPlayerBuyItem(this, play);
                     break;
+
                 case 1:
                     func_8019F230();
                     this->actionFunc = this->prevActionFunc;
                     Message_ContinueTextbox(play, this->items[this->cursorIndex]->actor.textId);
+                    break;
+
+                default:
+                    break;
             }
         }
     }
@@ -1251,11 +1306,15 @@ void EnFsn_AskCanBuyMore(EnFsn* this, PlayState* play) {
                     Message_StartTextbox(play, this->actor.textId, &this->actor);
                     this->actionFunc = EnFsn_DeterminePrice;
                     break;
+
                 case 1:
                     func_8019F230();
                     this->actor.textId = (CURRENT_DAY == 3) ? 0x29DF : 0x29D1;
                     Message_StartTextbox(play, this->actor.textId, &this->actor);
                     func_80151BB4(play, 3);
+                    break;
+
+                default:
                     break;
             }
         }
@@ -1298,11 +1357,15 @@ void EnFsn_AskCanBuyAterRunningOutOfItems(EnFsn* this, PlayState* play) {
                     Message_StartTextbox(play, this->actor.textId, &this->actor);
                     this->actionFunc = EnFsn_StartBuying;
                     break;
+
                 case 1:
                     func_8019F230();
                     this->actor.textId = (CURRENT_DAY == 3) ? 0x29DF : 0x29D1;
                     Message_StartTextbox(play, this->actor.textId, &this->actor);
                     func_80151BB4(play, 3);
+                    break;
+
+                default:
                     break;
             }
         }
@@ -1341,6 +1404,7 @@ void EnFsn_FaceShopkeeperSelling(EnFsn* this, PlayState* play) {
     } else if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         this->actor.textId = 0x29D6;
         Message_StartTextbox(play, this->actor.textId, &this->actor);
+        //! FAKE:
         if (play) {}
     }
 }
@@ -1470,7 +1534,7 @@ void EnFsn_DrawCursor(EnFsn* this, PlayState* play, f32 x, f32 y, f32 z, u8 draw
     OPEN_DISPS(play->state.gfxCtx);
 
     if (drawCursor != 0) {
-        func_8012C654(play->state.gfxCtx);
+        Gfx_SetupDL39_Overlay(play->state.gfxCtx);
         gDPSetPrimColor(OVERLAY_DISP++, 0, 0, this->cursorColor.r, this->cursorColor.g, this->cursorColor.b,
                         this->cursorColor.a);
         gDPLoadTextureBlock_4b(OVERLAY_DISP++, gSelectionCursorTex, G_IM_FMT_IA, 16, 16, 0, G_TX_MIRROR | G_TX_WRAP,
@@ -1527,7 +1591,7 @@ void EnFsn_DrawStickDirectionPrompts(EnFsn* this, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     if (drawStickRightPrompt || drawStickLeftPrompt) {
-        func_8012C654(play->state.gfxCtx);
+        Gfx_SetupDL39_Overlay(play->state.gfxCtx);
         gDPSetCombineMode(OVERLAY_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
         gDPLoadTextureBlock(OVERLAY_DISP++, gArrowCursorTex, G_IM_FMT_IA, G_IM_SIZ_8b, 16, 24, 0,
                             G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, 4, G_TX_NOMASK, G_TX_NOLOD,
@@ -1576,12 +1640,15 @@ s32 EnFsn_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
             case FSN_LIMB_TORSO:
                 limbRotTableIdx = 0;
                 break;
+
             case FSN_LIMB_LEFT_HAND:
                 limbRotTableIdx = 1;
                 break;
+
             case FSN_LIMB_HEAD:
                 limbRotTableIdx = 2;
                 break;
+
             default:
                 limbRotTableIdx = 9;
                 break;
@@ -1622,7 +1689,7 @@ void EnFsn_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C5B0(play->state.gfxCtx);
+    Gfx_SetupDL37_Opa(play->state.gfxCtx);
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyeTextures[this->eyeTexIndex]));
     gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(sEyeTextures[this->eyeTexIndex]));
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,

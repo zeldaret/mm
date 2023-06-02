@@ -300,7 +300,7 @@ s32 EnMuto_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* 
 void EnMuto_Draw(Actor* thisx, PlayState* play) {
     EnMuto* this = THIS;
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnMuto_OverrideLimbDraw, NULL, &this->actor);
 }

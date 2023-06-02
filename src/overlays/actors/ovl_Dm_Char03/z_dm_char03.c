@@ -165,7 +165,7 @@ void DmChar03_Draw(Actor* thisx, PlayState* play) {
     if (!this->unk_18E) {
         if ((Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_136)) &&
             (play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_136)]->id != 1)) {
-            func_8012C28C(play->state.gfxCtx);
+            Gfx_SetupDL25_Opa(play->state.gfxCtx);
             SkelAnime_DrawTransformFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                            this->skelAnime.dListCount, DmChar03_OverrideLimbDraw, DmChar03_PostLimbDraw,
                                            DmChar03_TransformLimbDraw, &this->actor);

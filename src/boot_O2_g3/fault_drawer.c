@@ -57,7 +57,7 @@ void FaultDrawer_DrawRecImpl(s32 xStart, s32 yStart, s32 xEnd, s32 yEnd, u16 col
     s32 xSize = xEnd - xStart + 1;
     s32 ySize = yEnd - yStart + 1;
 
-    if (xDiff > 0 && yDiff > 0) {
+    if ((xDiff > 0) && (yDiff > 0)) {
         if (xDiff < xSize) {
             xSize = xDiff;
         }
@@ -127,11 +127,11 @@ void FaultDrawer_UpdatePrintColor() {
     if (sFaultDrawContext->osSyncPrintfEnabled) {
         osSyncPrintf(VT_RST);
         idx = FaultDrawer_ColorToPrintColor(sFaultDrawContext->foreColor);
-        if (idx >= 0 && idx < 8) {
+        if ((idx >= 0) && (idx < 8)) {
             osSyncPrintf(VT_SGR("3%d"), idx);
         }
         idx = FaultDrawer_ColorToPrintColor(sFaultDrawContext->backColor);
-        if (idx >= 0 && idx < 8) {
+        if ((idx >= 0) && (idx < 8)) {
             osSyncPrintf(VT_SGR("4%d"), idx);
         }
     }
@@ -180,7 +180,7 @@ void* FaultDrawer_FormatStringFunc(void* arg, const char* str, size_t count) {
     for (; count != 0; count--, str++) {
         if (sFaultDrawContext->escCode) {
             sFaultDrawContext->escCode = false;
-            if (*str >= '1' && *str <= '9') {
+            if ((*str >= '1') && (*str <= '9')) {
                 FaultDrawer_SetForeColor(sFaultDrawContext->printColors[*str - '0']);
             }
         } else {
@@ -192,9 +192,11 @@ void* FaultDrawer_FormatStringFunc(void* arg, const char* str, size_t count) {
 
                     sFaultDrawContext->cursorX = sFaultDrawContext->w;
                     break;
+
                 case '\x1A':
                     sFaultDrawContext->escCode = true;
                     break;
+
                 default:
                     if (sFaultDrawContext->osSyncPrintfEnabled) {
                         osSyncPrintf("%c", *str);

@@ -120,7 +120,7 @@ void EnDrs_PostLimbDraw(PlayState* play2, s32 limbIndex, Gfx** dList, Vec3s* rot
 void EnDrs_Draw(Actor* thisx, PlayState* play) {
     EnDrs* this = THIS;
 
-    func_8012C5B0(play->state.gfxCtx);
+    Gfx_SetupDL37_Opa(play->state.gfxCtx);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, NULL,
                           EnDrs_PostLimbDraw, &this->actor);
 }

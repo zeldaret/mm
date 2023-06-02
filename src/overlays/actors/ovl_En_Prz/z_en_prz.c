@@ -506,7 +506,7 @@ void EnPrz_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     if (this->unk_1EC == 255) {
         gDPPipeSync(POLY_OPA_DISP++);
