@@ -5,6 +5,7 @@
  */
 
 #include "z_en_in.h"
+#include "z64horse.h"
 #include "objects/object_in/object_in.h"
 #include "overlays/actors/ovl_En_Horse_Game_Check/z_en_horse_game_check.h"
 
@@ -1286,7 +1287,7 @@ void func_808F5A34(EnIn* this, PlayState* play) {
 }
 
 void func_808F5A94(EnIn* this, PlayState* play) {
-    if (func_800F41E4(play, &play->actorCtx)) {
+    if (Horse_IsActive(play, &play->actorCtx)) {
         if (gSaveContext.save.day == 3) {
             func_808F5728(play, this, 7, &this->unk48C);
         } else {
@@ -1302,7 +1303,7 @@ void func_808F5A94(EnIn* this, PlayState* play) {
 }
 
 void func_808F5B58(EnIn* this, PlayState* play) {
-    if (func_800F41E4(play, &play->actorCtx)) {
+    if (Horse_IsActive(play, &play->actorCtx)) {
         if ((Player_GetMask(play) == PLAYER_MASK_CIRCUS_LEADER && CHECK_WEEKEVENTREG(WEEKEVENTREG_63_40)) ||
             CHECK_WEEKEVENTREG(WEEKEVENTREG_56_08)) {
             if (gSaveContext.save.day == 3) {
@@ -1394,7 +1395,7 @@ void EnIn_Init(Actor* thisx, PlayState* play) {
                 this->unk4AC |= 2;
                 func_808F35AC(this, play);
                 this->unk23C = 0;
-                D_801BDAA0 = 0;
+                D_801BDAA0 = false;
 
                 if (GET_WEEKEVENTREG_HORSE_RACE_STATE == WEEKEVENTREG_HORSE_RACE_STATE_2) {
                     EnIn_ChangeAnim(&this->skelAnime, ENIN_ANIM_6);
