@@ -53,8 +53,8 @@ typedef struct EnBigpo {
     /* 0x338 */ EnBigpoFireEffect fires[3];
 } EnBigpo; // size = 0x398
 
-// well ver is regular, dampe basement ver is summoned
-// on spawn, 3/possible fires are turned into chosenfire
+// well version is "regular" (spawns automatically), dampe basement version is "summoned"
+// on room enter, 3 "possiblefire" are turned into "chosenfire" at random
 typedef enum EnBigpoType {
   /* 0 */ ENBIGPO_REGULAR,
   /* 1 */ ENBIGPO_SUMMONED,
