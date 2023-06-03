@@ -524,7 +524,7 @@ OSThread* Fault_FindFaultedThread(void) {
     OSThread* iter = __osGetActiveQueue();
 
     while (iter->priority != OS_PRIORITY_THREADTAIL) {
-        if (iter->priority > OS_PRIORITY_IDLE && iter->priority < OS_PRIORITY_APPMAX &&
+        if ((iter->priority > OS_PRIORITY_IDLE) && (iter->priority < OS_PRIORITY_APPMAX) &&
             (iter->flags & (OS_FLAG_CPU_BREAK | OS_FLAG_FAULT))) {
             return iter;
         }
