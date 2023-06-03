@@ -306,7 +306,7 @@ void EnTest4_Init(Actor* thisx, PlayState* play) {
         sCsIdList[1] = sCsIdList[0];
     }
 
-    if (sIsLoaded || (CHECK_EVENTINF(EVENTINF_TRIGGER_DAYTELOP))) {
+    if (sIsLoaded || CHECK_EVENTINF(EVENTINF_TRIGGER_DAYTELOP)) {
         Actor_Kill(&this->actor);
     } else {
         sIsLoaded = true;

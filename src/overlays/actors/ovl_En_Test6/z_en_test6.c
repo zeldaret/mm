@@ -1212,6 +1212,7 @@ void EnTest6_DrawThreeDayResetSoTCutscene(EnTest6* this, PlayState* play) {
 
     clock1Yaw = this->clockAngle;
     clock2Yaw = clock1Yaw + 0x4E20 + (s32)(0x2EE0 * Math_SinS(play->state.frames));
+    // The `& 0x3C` ensures the angle only updates once every 4 frames
     angle = (play->state.frames & 0x3C) * 1024;
     angle *= this->clockSpeed / 200.0f;
     this->clockAngle += (s16)this->clockSpeed;
