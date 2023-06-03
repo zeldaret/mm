@@ -757,8 +757,6 @@ void func_80B97E0C(EnZot* this, PlayState* play) {
 }
 
 void func_80B97E4C(EnZot* this, PlayState* play) {
-    if (1) {}
-
     if (this->unk_2F2 & 0x40) {
         func_80B96BEC(this, 0, ANIMMODE_LOOP);
     }
@@ -768,33 +766,38 @@ void func_80B97E4C(EnZot* this, PlayState* play) {
         this->actor.world.rot.y = this->actor.shape.rot.y;
     }
 
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-        switch (play->msgCtx.currentTextId) {
-            case 0x128C:
-                this->unk_2F2 &= ~4;
-                func_80B96BEC(this, 6, ANIMMODE_ONCE);
-                Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
-                break;
+    if ((Message_GetState(&play->msgCtx) != TEXT_STATE_5) || !Message_ShouldAdvance(play)) {
+        return;
+    }
 
-            case 0x128D:
-            case 0x128E:
-            case 0x128F:
-                Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
-                break;
+    switch (play->msgCtx.currentTextId) {
+        case 0x128C:
+            this->unk_2F2 &= ~4;
+            func_80B96BEC(this, 6, ANIMMODE_ONCE);
+            Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
+            break;
 
-            case 0x1290:
-                Message_CloseTextbox(play);
-                this->actionFunc = func_80B97D6C;
-                this->unk_2F2 |= 4;
-                func_80B96BEC(this, 3, ANIMMODE_LOOP);
-                SET_WEEKEVENTREG(WEEKEVENTREG_38_08);
-                break;
+        case 0x128D:
+        case 0x128E:
+        case 0x128F:
+            Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
+            break;
 
-            case 0x128B:
-                Message_CloseTextbox(play);
-                this->actionFunc = func_80B97FD0;
-                break;
-        }
+        case 0x1290:
+            Message_CloseTextbox(play);
+            this->actionFunc = func_80B97D6C;
+            this->unk_2F2 |= 4;
+            func_80B96BEC(this, 3, ANIMMODE_LOOP);
+            SET_WEEKEVENTREG(WEEKEVENTREG_38_08);
+            break;
+
+        case 0x128B:
+            Message_CloseTextbox(play);
+            this->actionFunc = func_80B97FD0;
+            break;
+
+        default:
+            break;
     }
 }
 

@@ -426,23 +426,24 @@ void func_80962340(EnFu* this, PlayState* play) {
 }
 
 void func_80962588(EnFu* this, PlayState* play) {
-    if (Message_ShouldAdvance(play) && (this->unk_552 == 0x2871)) {
-        if (1) {}
-        if (play->msgCtx.choiceIndex == 0) {
-            if (gSaveContext.save.saveInfo.playerData.rupees >= 10) {
-                func_8019F208();
-                Rupees_ChangeBy(-10);
-                func_80963DE4(this, play);
-            } else {
-                play_sound(NA_SE_SY_ERROR);
-                Message_StartTextbox(play, 0x2873, &this->actor);
-                this->unk_552 = 0x2873;
-            }
+    if (!Message_ShouldAdvance(play) || (this->unk_552 != 0x2871)) {
+        return;
+    }
+
+    if (play->msgCtx.choiceIndex == 0) {
+        if (gSaveContext.save.saveInfo.playerData.rupees >= 10) {
+            func_8019F208();
+            Rupees_ChangeBy(-10);
+            func_80963DE4(this, play);
         } else {
-            func_8019F230();
-            Message_StartTextbox(play, 0x2872, &this->actor);
-            this->unk_552 = 0x2872;
+            play_sound(NA_SE_SY_ERROR);
+            Message_StartTextbox(play, 0x2873, &this->actor);
+            this->unk_552 = 0x2873;
         }
+    } else {
+        func_8019F230();
+        Message_StartTextbox(play, 0x2872, &this->actor);
+        this->unk_552 = 0x2872;
     }
 }
 

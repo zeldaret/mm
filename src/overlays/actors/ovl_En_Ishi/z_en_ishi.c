@@ -685,7 +685,7 @@ void func_8095F180(EnIshi* this) {
 }
 
 void func_8095F194(EnIshi* this, PlayState* play) {
-    if (this->actor.csId < 0) {
+    if (this->actor.csId <= CS_ID_NONE) {
         Actor_Kill(&this->actor);
     } else if (CutsceneManager_GetCurrentCsId() != this->actor.csId) {
         Actor_Kill(&this->actor);

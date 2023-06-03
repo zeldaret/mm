@@ -64,7 +64,7 @@ void func_80C06B70(ObjMuPict* this, PlayState* play) {
     s16 yawDiff = this->actor.yawTowardsPlayer - this->actor.world.rot.y;
 
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-        if (this->actor.csId < 0) {
+        if (this->actor.csId <= CS_ID_NONE) {
             func_80C06DC8(this, play);
             func_80C06CC4(this);
         } else {

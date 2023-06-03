@@ -93,7 +93,10 @@ s32 func_80C0A95C(BgIkninSusceil* this, PlayState* play) {
     f32 new_var;
     Player* player = GET_PLAYER(play);
     Vec3f offset;
-    f32 temp1, temp2, temp3, temp4;
+    f32 temp1;
+    f32 temp2;
+    f32 temp3;
+    f32 temp4;
 
     Actor_OffsetOfPointInActorCoords(&this->dyna.actor, &offset, &player->actor.world.pos);
     for (i = 0; i < 7; i++) {

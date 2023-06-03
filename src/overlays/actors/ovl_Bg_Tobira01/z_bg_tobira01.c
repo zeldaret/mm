@@ -38,12 +38,12 @@ void BgTobira01_Action(BgTobira01* this, PlayState* play) {
             CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
         } else if (CutsceneManager_IsNext(csId)) {
             CutsceneManager_StartWithPlayerCs(csId, &this->dyna.actor);
-            SET_WEEKEVENTREG(WEEKEVENTREG_88_40);
+            SET_WEEKEVENTREG(WEEKEVENTREG_GATEKEEPER_OPENED_GORON_SHRINE);
             this->cutsceneRequested = false;
         } else {
             CutsceneManager_Queue(csId);
         }
-    } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_88_40) && (this->posYTick == 0) &&
+    } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_GATEKEEPER_OPENED_GORON_SHRINE) && (this->posYTick == 0) &&
                (play->actorCtx.playerImpact.timer != 0) &&
                (play->actorCtx.playerImpact.type == PLAYER_IMPACT_GORON_GROUND_POUND) &&
                (SurfaceType_GetSceneExitIndex(&play->colCtx, player->actor.floorPoly, player->actor.floorBgId) == 6)) {
@@ -52,7 +52,7 @@ void BgTobira01_Action(BgTobira01* this, PlayState* play) {
     }
 
     prevPosYTick = this->posYTick;
-    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_88_40)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_GATEKEEPER_OPENED_GORON_SHRINE)) {
         this->posYTick++;
     } else {
         this->posYTick--;
@@ -65,9 +65,9 @@ void BgTobira01_Action(BgTobira01* this, PlayState* play) {
         this->timer = 180;
     }
 
-    if (!(player->stateFlags1 & PLAYER_STATE1_40) && CHECK_WEEKEVENTREG(WEEKEVENTREG_88_40) &&
+    if (!(player->stateFlags1 & PLAYER_STATE1_40) && CHECK_WEEKEVENTREG(WEEKEVENTREG_GATEKEEPER_OPENED_GORON_SHRINE) &&
         (DECR(this->timer) == 0)) {
-        CLEAR_WEEKEVENTREG(WEEKEVENTREG_88_40);
+        CLEAR_WEEKEVENTREG(WEEKEVENTREG_GATEKEEPER_OPENED_GORON_SHRINE);
     }
 }
 
@@ -76,7 +76,7 @@ void BgTobira01_Init(Actor* thisx, PlayState* play) {
 
     DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
     DynaPolyActor_LoadMesh(play, &this->dyna, &gGoronDoorCol);
-    CLEAR_WEEKEVENTREG(WEEKEVENTREG_88_40);
+    CLEAR_WEEKEVENTREG(WEEKEVENTREG_GATEKEEPER_OPENED_GORON_SHRINE);
     Actor_SetScale(&this->dyna.actor, 1.0f);
     this->timer = gSaveContext.save.isNight;
     this->posYTick = 0;

@@ -671,6 +671,9 @@ void func_80B5CD40(EnOt* this, PlayState* play) {
                 func_80B5CE6C(this, play);
             }
             break;
+
+        default:
+            break;
     }
 }
 

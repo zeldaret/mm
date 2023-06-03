@@ -154,8 +154,6 @@ void EnPamera_Init(Actor* thisx, PlayState* play) {
         func_80BD8588(this, play);
         func_80BD8658(this);
 
-        if (1) {}
-
         if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_14_04) || CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_STONE_TOWER_TEMPLE) ||
             CHECK_WEEKEVENTREG(WEEKEVENTREG_75_20) || (gSaveContext.save.entrance == ENTRANCE(IKANA_CANYON, 9))) {
             Actor_Kill(&this->actor);
@@ -601,7 +599,6 @@ void func_80BD9938(EnPamera* this) {
 void func_80BD994C(EnPamera* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         if (Player_GetMask(play) == PLAYER_MASK_GIBDO) {
-            if (1) {}
             func_80BD93CC(this, 0, 1);
             Message_StartTextbox(play, 0x15A8, &this->actor);
 

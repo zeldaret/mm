@@ -185,23 +185,24 @@ void func_80BDC830(EnZowStruct* ptr, PlayState* play) {
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     for (i = 0; i < 15; i++, ptr++) {
-        if (ptr->unk_00 == 1) {
-            if (!flag) {
-                gDPPipeSync(POLY_XLU_DISP++);
-                gSPDisplayList(POLY_XLU_DISP++, gZoraRippleMaterialDL);
-                gDPSetEnvColor(POLY_XLU_DISP++, 155, 155, 155, 0);
-                if (1) {}
-                flag = true;
-            }
-
-            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, ptr->unk_0F);
-
-            Matrix_Translate(ptr->unk_14.x, ptr->unk_14.y, ptr->unk_14.z, MTXMODE_NEW);
-            Matrix_Scale(ptr->unk_04, 1.0f, ptr->unk_04, MTXMODE_APPLY);
-
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, gZoraRippleModelDL);
+        if (ptr->unk_00 != 1) {
+            continue;
         }
+
+        if (!flag) {
+            gDPPipeSync(POLY_XLU_DISP++);
+            gSPDisplayList(POLY_XLU_DISP++, gZoraRippleMaterialDL);
+            gDPSetEnvColor(POLY_XLU_DISP++, 155, 155, 155, 0);
+            flag = true;
+        }
+
+        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, ptr->unk_0F);
+
+        Matrix_Translate(ptr->unk_14.x, ptr->unk_14.y, ptr->unk_14.z, MTXMODE_NEW);
+        Matrix_Scale(ptr->unk_04, 1.0f, ptr->unk_04, MTXMODE_APPLY);
+
+        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPDisplayList(POLY_XLU_DISP++, gZoraRippleModelDL);
     }
 
     CLOSE_DISPS(play->state.gfxCtx);
@@ -216,23 +217,24 @@ void func_80BDC9DC(EnZowStruct* ptr, PlayState* play) {
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     for (i = 0; i < 15; i++, ptr++) {
-        if (ptr->unk_00 == 3) {
-            if (!flag) {
-                gSPDisplayList(POLY_XLU_DISP++, gZoraBubbleMaterialDL);
-                gDPPipeSync(POLY_XLU_DISP++);
-                gDPSetEnvColor(POLY_XLU_DISP++, 150, 150, 150, 0);
-                gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, 255);
-                if (1) {}
-                flag = true;
-            }
-
-            Matrix_Translate(ptr->unk_14.x, ptr->unk_14.y, ptr->unk_14.z, MTXMODE_NEW);
-            Matrix_ReplaceRotation(&play->billboardMtxF);
-            Matrix_Scale(ptr->unk_04, ptr->unk_04, 1.0f, MTXMODE_APPLY);
-
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, gZoraBubbleModelDL);
+        if (ptr->unk_00 != 3) {
+            continue;
         }
+
+        if (!flag) {
+            gSPDisplayList(POLY_XLU_DISP++, gZoraBubbleMaterialDL);
+            gDPPipeSync(POLY_XLU_DISP++);
+            gDPSetEnvColor(POLY_XLU_DISP++, 150, 150, 150, 0);
+            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, 255);
+            flag = true;
+        }
+
+        Matrix_Translate(ptr->unk_14.x, ptr->unk_14.y, ptr->unk_14.z, MTXMODE_NEW);
+        Matrix_ReplaceRotation(&play->billboardMtxF);
+        Matrix_Scale(ptr->unk_04, ptr->unk_04, 1.0f, MTXMODE_APPLY);
+
+        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPDisplayList(POLY_XLU_DISP++, gZoraBubbleModelDL);
     }
 
     CLOSE_DISPS(play->state.gfxCtx);
@@ -247,24 +249,25 @@ void func_80BDCB84(EnZowStruct* ptr, PlayState* play) {
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     for (i = 0; i < 15; i++, ptr++) {
-        if (ptr->unk_00 == 2) {
-            if (!flag) {
-                gSPDisplayList(POLY_XLU_DISP++, gZoraSplashMaterialDL);
-                gDPPipeSync(POLY_XLU_DISP++);
-                gDPSetEnvColor(POLY_XLU_DISP++, 200, 200, 200, 0);
-                if (1) {}
-                flag = true;
-            }
-
-            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 180, 180, 180, ptr->unk_0F);
-
-            Matrix_Translate(ptr->unk_14.x, ptr->unk_14.y, ptr->unk_14.z, MTXMODE_NEW);
-            Matrix_ReplaceRotation(&play->billboardMtxF);
-            Matrix_Scale(ptr->unk_04, ptr->unk_04, 1.0f, MTXMODE_APPLY);
-
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, gZoraSplashModelDL);
+        if (ptr->unk_00 != 2) {
+            continue;
         }
+
+        if (!flag) {
+            gSPDisplayList(POLY_XLU_DISP++, gZoraSplashMaterialDL);
+            gDPPipeSync(POLY_XLU_DISP++);
+            gDPSetEnvColor(POLY_XLU_DISP++, 200, 200, 200, 0);
+            flag = true;
+        }
+
+        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 180, 180, 180, ptr->unk_0F);
+
+        Matrix_Translate(ptr->unk_14.x, ptr->unk_14.y, ptr->unk_14.z, MTXMODE_NEW);
+        Matrix_ReplaceRotation(&play->billboardMtxF);
+        Matrix_Scale(ptr->unk_04, ptr->unk_04, 1.0f, MTXMODE_APPLY);
+
+        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPDisplayList(POLY_XLU_DISP++, gZoraSplashModelDL);
     }
 
     CLOSE_DISPS(play->state.gfxCtx);
