@@ -29,7 +29,7 @@ f32 D_801ED8D0;                // 2 funcs
 s32 D_801ED8D4;                // 2 funcs
 s32 D_801ED8D8;                // 2 funcs
 s16 D_801ED8DC;                // 2 funcs
-Mtx D_801ED8E0;                // 1 func
+Mtx sActorHiliteMtx;           // 1 func
 Actor* D_801ED920;             // 2 funcs. 1 out of z_actor
 
 // Internal forward declarations
@@ -1679,18 +1679,18 @@ void Actor_UpdateBgCheckInfo(PlayState* play, Actor* actor, f32 wallCheckHeight,
     }
 }
 
-Gfx* Hilite_Draw(Vec3f* object, Vec3f* eye, Vec3f* lightDir, GraphicsContext* gfxCtx, Gfx* dl, Hilite** hilite) {
+Gfx* Hilite_Draw(Vec3f* object, Vec3f* eye, Vec3f* lightDir, GraphicsContext* gfxCtx, Gfx* dl, Hilite** hiliteP) {
     LookAt* lookAt = GRAPH_ALLOC(gfxCtx, sizeof(LookAt));
     f32 correctedEyeX = (eye->x == object->x) && (eye->z == object->z) ? eye->x + 0.001f : eye->x;
 
-    *hilite = GRAPH_ALLOC(gfxCtx, sizeof(Hilite));
+    *hiliteP = GRAPH_ALLOC(gfxCtx, sizeof(Hilite));
 
-    guLookAtHilite(&D_801ED8E0, lookAt, *hilite, correctedEyeX, eye->y, eye->z, object->x, object->y, object->z, 0.0f,
-                   1.0f, 0.0f, lightDir->x, lightDir->y, lightDir->z, lightDir->x, lightDir->y, lightDir->z, 0x10,
+    guLookAtHilite(&sActorHiliteMtx, lookAt, *hiliteP, correctedEyeX, eye->y, eye->z, object->x, object->y, object->z,
+                   0.0f, 1.0f, 0.0f, lightDir->x, lightDir->y, lightDir->z, lightDir->x, lightDir->y, lightDir->z, 0x10,
                    0x10);
 
     gSPLookAt(dl++, lookAt);
-    gDPSetHilite1Tile(dl++, 1, *hilite, 0x10, 0x10);
+    gDPSetHilite1Tile(dl++, 1, *hiliteP, 0x10, 0x10);
 
     return dl;
 }

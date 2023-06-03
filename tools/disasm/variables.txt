@@ -3836,7 +3836,7 @@
     0x801ED8D4:("D_801ED8D4","UNK_TYPE1","",0x1),
     0x801ED8D8:("D_801ED8D8","UNK_TYPE1","",0x1),
     0x801ED8DC:("D_801ED8DC","UNK_TYPE1","",0x1),
-    0x801ED8E0:("D_801ED8E0","Mtx","",0x40),
+    0x801ED8E0:("sActorHiliteMtx","Mtx","",0x40),
     0x801ED920:("D_801ED920","Actor*","",0x1),
     0x801ED930:("D_801ED930","FaultClient","",0x10),
     0x801ED940:("sActorOverlayTableFaultAddrConvClient","FaultAddrConvClient","",0xC),
