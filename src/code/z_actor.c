@@ -36,7 +36,7 @@ Actor* D_801ED920;             // 2 funcs. 1 out of z_actor
 void Actor_KillAllOnHalfDayChange(PlayState* play, ActorContext* actorCtx);
 Actor* Actor_SpawnEntry(ActorContext* actorCtx, ActorEntry* actorEntry, PlayState* play);
 Actor* Actor_Delete(ActorContext* actorCtx, Actor* actor, PlayState* play);
-void func_800BB8EC(GameState* gameState, ActorContext* actorCtx, Actor** arg2, Actor** arg3, Player* player);
+void func_800BB8EC(PlayState* play, ActorContext* actorCtx, Actor** arg2, Actor** arg3, Player* player);
 s32 func_800BA2FC(PlayState* play, Actor* actor, Vec3f* projectedPos, f32 projectedW);
 void Actor_AddToCategory(ActorContext* actorCtx, Actor* actor, u8 actorCategory);
 Actor* Actor_RemoveFromCategory(PlayState* play, ActorContext* actorCtx, Actor* actorToRemove);
@@ -594,7 +594,7 @@ void func_800B5814(TargetContext* targetCtx, Player* player, Actor* actor, GameS
     if ((player->targetedActor != NULL) && (player->unk_AE3[player->unk_ADE] == 2)) {
         targetCtx->unk_94 = NULL;
     } else {
-        func_800BB8EC(gameState, &play->actorCtx, &sp68, &D_801ED920, player);
+        func_800BB8EC(play, &play->actorCtx, &sp68, &D_801ED920, player);
         targetCtx->unk_94 = sp68;
     }
 
@@ -1781,17 +1781,14 @@ PosRot* Actor_GetWorldPosShapeRot(PosRot* dest, Actor* actor) {
 }
 
 f32 func_800B82EC(Actor* actor, Player* player, s16 angle) {
-    f32 temp_f12;
-    s16 temp_v0 = BINANG_SUB(BINANG_SUB(actor->yawTowardsPlayer, 0x8000), angle);
-    s16 yaw = ABS_ALT(temp_v0);
+    s16 yaw = ABS_ALT(BINANG_SUB(BINANG_SUB(actor->yawTowardsPlayer, 0x8000), angle));
 
     if (player->targetedActor != NULL) {
-        if ((yaw > 0x4000) || ((actor->flags & ACTOR_FLAG_CANT_LOCK_ON))) {
+        if ((yaw > 0x4000) || (actor->flags & ACTOR_FLAG_CANT_LOCK_ON)) {
             return FLT_MAX;
         }
 
-        temp_f12 = actor->xyzDistToPlayerSq - ((actor->xyzDistToPlayerSq * 0.8f) * ((0x4000 - yaw) * (1.0f / 0x8000)));
-        return temp_f12;
+        return actor->xyzDistToPlayerSq - ((actor->xyzDistToPlayerSq * 0.8f) * ((0x4000 - yaw) * (1.0f / 0x8000)));
     }
 
     if (yaw >= 0x2AAB) {
@@ -3364,73 +3361,77 @@ s32 func_800BB59C(PlayState* play, Actor* actor) {
     return (x > -20) && (x < gScreenWidth + 20) && (y > -160) && (y < gScreenHeight + 160);
 }
 
-void func_800BB604(GameState* gameState, ActorContext* actorCtx, Player* player, s32 actorCategory) {
-    PlayState* play = (PlayState*)gameState;
-    f32 temp_f0_2;
-    Actor* targetedActor;
-    Actor* actor;
-    s32 phi_s2;
-    CollisionPoly* sp80;
-    s32 sp7C;
-    Vec3f sp70;
-    s32 phi_s2_2;
+void func_800BB604(PlayState* play, ActorContext* actorCtx, Player* player, s32 actorCategory) {
+    s32 pad;
+    Actor* actor = actorCtx->actorLists[actorCategory].first;
+    Actor* targetedActor = player->targetedActor;
 
-    actor = actorCtx->actorLists[actorCategory].first;
-    targetedActor = player->targetedActor;
-    while (actor != NULL) {
-        if ((actor->update != NULL) && ((Player*)actor != player)) {
-            if (actor->flags & (ACTOR_FLAG_40000000 | ACTOR_FLAG_1)) {
-                if ((actorCategory == ACTORCAT_ENEMY) && CHECK_FLAG_ALL(actor->flags, ACTOR_FLAG_4 | ACTOR_FLAG_1)) {
-                    if ((actor->xyzDistToPlayerSq < SQ(500.0f)) && (actor->xyzDistToPlayerSq < sBgmEnemyDistSq)) {
-                        actorCtx->targetContext.bgmEnemy = actor;
-                        sBgmEnemyDistSq = actor->xyzDistToPlayerSq;
-                    }
-                }
+    for (; actor != NULL; actor = actor->next) {
+        if ((actor->update == NULL) || ((Player*)actor == player)) {
+            continue;
+        }
 
-                if ((actor != targetedActor) || (actor->flags & ACTOR_FLAG_80000)) {
-                    temp_f0_2 = func_800B82EC(actor, player, D_801ED8DC);
-                    phi_s2_2 = (actor->flags & ACTOR_FLAG_1) != 0;
-                    if (phi_s2_2) {
-                        phi_s2_2 = temp_f0_2 < D_801ED8C8;
-                    }
-                    phi_s2 = phi_s2_2;
-                    phi_s2_2 = (actor->flags & ACTOR_FLAG_40000000) != 0;
-                    if (phi_s2_2) {
-                        phi_s2_2 = temp_f0_2 < D_801ED8D0;
-                    }
+        if (!(actor->flags & (ACTOR_FLAG_40000000 | ACTOR_FLAG_1))) {
+            continue;
+        }
 
-                    if (((phi_s2) || (phi_s2_2)) && (func_800B83BC(actor, temp_f0_2))) {
-                        if (func_800BB59C(play, actor)) {
-                            if (((!BgCheck_CameraLineTest1(&play->colCtx, &player->actor.focus.pos, &actor->focus.pos,
-                                                           &sp70, &sp80, true, true, true, true, &sp7C)) ||
-                                 (SurfaceType_IsIgnoredByProjectiles(&play->colCtx, sp80, sp7C)))) {
-                                if (actor->targetPriority != 0) {
-                                    if ((phi_s2 != 0) && (actor->targetPriority < D_801ED8D4)) {
-                                        D_801ED8BC = actor;
-                                        D_801ED8D4 = actor->targetPriority;
-                                    }
-                                    if ((phi_s2_2 != 0) && (actor->targetPriority < D_801ED8D8)) {
-                                        D_801ED8C4 = actor;
-                                        D_801ED8D8 = actor->targetPriority;
-                                    }
-                                } else {
-                                    if (phi_s2 != 0) {
-                                        D_801ED8B8 = actor;
-                                        D_801ED8C8 = temp_f0_2;
-                                    }
-                                    if (phi_s2_2 != 0) {
-                                        D_801ED8C0 = actor;
-                                        D_801ED8D0 = temp_f0_2;
-                                    }
-                                }
+        if ((actorCategory == ACTORCAT_ENEMY) && CHECK_FLAG_ALL(actor->flags, ACTOR_FLAG_4 | ACTOR_FLAG_1)) {
+            if ((actor->xyzDistToPlayerSq < SQ(500.0f)) && (actor->xyzDistToPlayerSq < sBgmEnemyDistSq)) {
+                actorCtx->targetContext.bgmEnemy = actor;
+                sBgmEnemyDistSq = actor->xyzDistToPlayerSq;
+            }
+        }
+
+        if ((actor != targetedActor) || (actor->flags & ACTOR_FLAG_80000)) {
+            f32 temp_f0_2 = func_800B82EC(actor, player, D_801ED8DC);
+            s32 phi_s2;
+            CollisionPoly* sp80;
+            s32 sp7C;
+            Vec3f sp70;
+            s32 phi_s2_2;
+
+            // Original:
+            phi_s2_2 = (actor->flags & ACTOR_FLAG_1) != 0;
+            if (phi_s2_2) {
+                phi_s2_2 = temp_f0_2 < D_801ED8C8;
+            }
+            phi_s2 = phi_s2_2;
+            phi_s2_2 = (actor->flags & ACTOR_FLAG_40000000) != 0;
+            if (phi_s2_2) {
+                phi_s2_2 = temp_f0_2 < D_801ED8D0;
+            }
+            // desired:
+            //phi_s2 = (actor->flags & ACTOR_FLAG_1) && (temp_f0_2 < D_801ED8C8);
+            //phi_s2_2 = (actor->flags & ACTOR_FLAG_40000000) && (temp_f0_2 < D_801ED8D0);
+
+            if ((phi_s2 || phi_s2_2) && func_800B83BC(actor, temp_f0_2)) {
+                if (func_800BB59C(play, actor)) {
+                    if ((!BgCheck_CameraLineTest1(&play->colCtx, &player->actor.focus.pos, &actor->focus.pos,
+                                                    &sp70, &sp80, true, true, true, true, &sp7C) ||
+                            SurfaceType_IsIgnoredByProjectiles(&play->colCtx, sp80, sp7C))) {
+                        if (actor->targetPriority != 0) {
+                            if ((phi_s2 != 0) && (actor->targetPriority < D_801ED8D4)) {
+                                D_801ED8BC = actor;
+                                D_801ED8D4 = actor->targetPriority;
+                            }
+                            if ((phi_s2_2 != 0) && (actor->targetPriority < D_801ED8D8)) {
+                                D_801ED8C4 = actor;
+                                D_801ED8D8 = actor->targetPriority;
+                            }
+                        } else {
+                            if (phi_s2 != 0) {
+                                D_801ED8B8 = actor;
+                                D_801ED8C8 = temp_f0_2;
+                            }
+                            if (phi_s2_2 != 0) {
+                                D_801ED8C0 = actor;
+                                D_801ED8D0 = temp_f0_2;
                             }
                         }
                     }
                 }
             }
         }
-
-        actor = actor->next;
     }
 }
 
@@ -3439,7 +3440,7 @@ u8 D_801AED8C[] = {
     ACTORCAT_CHEST, ACTORCAT_SWITCH, ACTORCAT_PROP, ACTORCAT_MISC,       ACTORCAT_DOOR, ACTORCAT_SWITCH,
 };
 
-void func_800BB8EC(GameState* gameState, ActorContext* actorCtx, Actor** arg2, Actor** arg3, Player* player) {
+void func_800BB8EC(PlayState* play, ActorContext* actorCtx, Actor** arg2, Actor** arg3, Player* player) {
     u8* actorCategories;
     s32 i;
 
@@ -3453,13 +3454,13 @@ void func_800BB8EC(GameState* gameState, ActorContext* actorCtx, Actor** arg2, A
     actorCategories = D_801AED8C;
 
     for (i = 0; i < 3; i++) {
-        func_800BB604(gameState, actorCtx, player, *actorCategories);
+        func_800BB604(play, actorCtx, player, *actorCategories);
         actorCategories++;
     }
 
     if (D_801ED8B8 == NULL) {
         for (; i < ARRAY_COUNT(D_801AED8C); i++) {
-            func_800BB604(gameState, actorCtx, player, *actorCategories);
+            func_800BB604(play, actorCtx, player, *actorCategories);
             actorCategories++;
         }
     }
