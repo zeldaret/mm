@@ -475,7 +475,6 @@ beginseg
     include "build/src/code/z_fireobj.o"
     include "build/src/code/z_game_dlftbls.o"
     include "build/src/code/z_horse.o"
-    include "build/data/code/z_horse.data.o"
     include "build/src/code/z_jpeg.o"
     include "build/src/code/z_kaleido_setup.o"
     include "build/src/code/z_kanfont.o"
@@ -1027,8 +1026,7 @@ beginseg
     name "ovl_Bg_Keikoku_Spr"
     compress
     include "build/src/overlays/actors/ovl_Bg_Keikoku_Spr/z_bg_keikoku_spr.o"
-    include "build/data/ovl_Bg_Keikoku_Spr/ovl_Bg_Keikoku_Spr.data.o"
-    include "build/data/ovl_Bg_Keikoku_Spr/ovl_Bg_Keikoku_Spr.reloc.o"
+    include "build/src/overlays/actors/ovl_Bg_Keikoku_Spr/ovl_Bg_Keikoku_Spr_reloc.o"
 endseg
 
 beginseg
@@ -1119,11 +1117,7 @@ beginseg
     name "ovl_Object_Kankyo"
     compress
     include "build/src/overlays/actors/ovl_Object_Kankyo/z_object_kankyo.o"
-#ifdef NON_MATCHING
     include "build/src/overlays/actors/ovl_Object_Kankyo/ovl_Object_Kankyo_reloc.o"
-#else
-    include "build/data/ovl_Object_Kankyo/ovl_Object_Kankyo.reloc.o"
-#endif
 endseg
 
 beginseg
@@ -1523,11 +1517,7 @@ beginseg
     name "ovl_En_Kanban"
     compress
     include "build/src/overlays/actors/ovl_En_Kanban/z_en_kanban.o"
-#ifdef NON_MATCHING
     include "build/src/overlays/actors/ovl_En_Kanban/ovl_En_Kanban_reloc.o"
-#else
-    include "build/data/ovl_En_Kanban/ovl_En_Kanban.reloc.o"
-#endif
 endseg
 
 beginseg
@@ -1647,9 +1637,7 @@ beginseg
     name "ovl_Bg_F40_Swlift"
     compress
     include "build/src/overlays/actors/ovl_Bg_F40_Swlift/z_bg_f40_swlift.o"
-    include "build/data/ovl_Bg_F40_Swlift/ovl_Bg_F40_Swlift.data.o"
-    include "build/data/ovl_Bg_F40_Swlift/ovl_Bg_F40_Swlift.bss.o"
-    include "build/data/ovl_Bg_F40_Swlift/ovl_Bg_F40_Swlift.reloc.o"
+    include "build/src/overlays/actors/ovl_Bg_F40_Swlift/ovl_Bg_F40_Swlift_reloc.o"
 endseg
 
 beginseg
@@ -2412,11 +2400,7 @@ beginseg
     name "ovl_En_Go"
     compress
     include "build/src/overlays/actors/ovl_En_Go/z_en_go.o"
-#ifdef NON_MATCHING
     include "build/src/overlays/actors/ovl_En_Go/ovl_En_Go_reloc.o"
-#else
-    include "build/data/ovl_En_Go/ovl_En_Go.reloc.o"
-#endif
 endseg
 
 beginseg
@@ -3195,8 +3179,7 @@ beginseg
     name "ovl_fbdemo_wipe3"
     compress
     include "build/src/overlays/fbdemos/ovl_fbdemo_wipe3/z_fbdemo_wipe3.o"
-    include "build/data/ovl_fbdemo_wipe3/ovl_fbdemo_wipe3.data.o"
-    include "build/data/ovl_fbdemo_wipe3/ovl_fbdemo_wipe3.reloc.o"
+    include "build/src/overlays/fbdemos/ovl_fbdemo_wipe3/ovl_fbdemo_wipe3_reloc.o"
 endseg
 
 beginseg
@@ -4619,8 +4602,7 @@ beginseg
     name "ovl_Eff_Stk"
     compress
     include "build/src/overlays/actors/ovl_Eff_Stk/z_eff_stk.o"
-    include "build/data/ovl_Eff_Stk/ovl_Eff_Stk.data.o"
-    include "build/data/ovl_Eff_Stk/ovl_Eff_Stk.reloc.o"
+    include "build/src/overlays/actors/ovl_Eff_Stk/ovl_Eff_Stk_reloc.o"
 endseg
 
 beginseg
@@ -4853,8 +4835,7 @@ beginseg
     name "ovl_Demo_Moonend"
     compress
     include "build/src/overlays/actors/ovl_Demo_Moonend/z_demo_moonend.o"
-    include "build/data/ovl_Demo_Moonend/ovl_Demo_Moonend.data.o"
-    include "build/data/ovl_Demo_Moonend/ovl_Demo_Moonend.reloc.o"
+    include "build/src/overlays/actors/ovl_Demo_Moonend/ovl_Demo_Moonend_reloc.o"
 endseg
 
 beginseg

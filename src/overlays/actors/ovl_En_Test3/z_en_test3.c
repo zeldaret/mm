@@ -1164,7 +1164,9 @@ void EnTest3_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList1, Gfx** dL
             func_80128640(play, &this->player, *dList1);
             if (this->player.stateFlags3 & PLAYER_STATE3_20000000) {
                 OPEN_DISPS(play->state.gfxCtx);
+
                 gSPDisplayList(POLY_OPA_DISP++, object_test3_DL_00EDD0);
+
                 CLOSE_DISPS(play->state.gfxCtx);
             }
         }
@@ -1200,7 +1202,9 @@ void EnTest3_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList1, Gfx** dL
                  (this->player.skelAnime.curFrame >= 12.0f))) {
                 if (func_80127438(play, &this->player, this->player.currentMask)) {
                     OPEN_DISPS(play->state.gfxCtx);
+
                     gSPDisplayList(POLY_OPA_DISP++, object_mask_ki_tan_DL_0004A0);
+
                     CLOSE_DISPS(play->state.gfxCtx);
                 }
             }
@@ -1219,7 +1223,9 @@ void EnTest3_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList1, Gfx** dL
             D_80A41D60 = true;
         } else {
             OPEN_DISPS(play->state.gfxCtx);
+
             gSPDisplayList(POLY_OPA_DISP++, object_test3_DL_00CB60);
+
             CLOSE_DISPS(play->state.gfxCtx);
         }
     } else {

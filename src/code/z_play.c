@@ -1509,7 +1509,7 @@ void Play_Main(GameState* thisx) {
 }
 
 s32 Play_InCsMode(PlayState* this) {
-    return (this->csCtx.state != 0) || Player_InCsMode(this);
+    return (this->csCtx.state != CS_STATE_IDLE) || Player_InCsMode(this);
 }
 
 f32 Play_GetFloorSurfaceImpl(PlayState* this, MtxF* mtx, CollisionPoly** poly, s32* bgId, Vec3f* pos) {

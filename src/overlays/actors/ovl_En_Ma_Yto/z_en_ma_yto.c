@@ -153,7 +153,7 @@ void EnMaYto_Init(Actor* thisx, PlayState* play) {
     this->unk320 = 0;
     this->eyeTexIndex = 0;
 
-    if (CURRENT_DAY == 1 || CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) {
+    if ((CURRENT_DAY == 1) || CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) {
         EnMaYto_SetFaceExpression(this, 0, 1);
     } else {
         EnMaYto_SetFaceExpression(this, 5, 2);
@@ -186,13 +186,13 @@ void EnMaYto_Init(Actor* thisx, PlayState* play) {
 s32 EnMaYto_CheckValidSpawn(EnMaYto* this, PlayState* play) {
     switch (this->type) {
         case MA_YTO_TYPE_DEFAULT:
-            if (CURRENT_DAY == 3 && !CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) {
+            if ((CURRENT_DAY == 3) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) {
                 return false;
             }
             break;
 
         case MA_YTO_TYPE_DINNER:
-            if (CURRENT_DAY != 1 && CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) {
+            if ((CURRENT_DAY != 1) && CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) {
                 return false;
             }
             break;
@@ -205,7 +205,7 @@ s32 EnMaYto_CheckValidSpawn(EnMaYto* this, PlayState* play) {
             } else if (((this->actor.params & 0x0F00) >> 8) == 0) {
                 return false;
             }
-            if (gSaveContext.save.time >= CLOCK_TIME(20, 0) && CURRENT_DAY == 3) {
+            if ((gSaveContext.save.time >= CLOCK_TIME(20, 0)) && (CURRENT_DAY == 3)) {
                 return false;
             }
             break;
@@ -218,6 +218,7 @@ s32 EnMaYto_CheckValidSpawn(EnMaYto* this, PlayState* play) {
             break;
 
         case MA_YTO_TYPE_4:
+        default:
             break;
     }
 
@@ -304,8 +305,8 @@ s32 EnMaYto_SearchRomani(EnMaYto* this, PlayState* play) {
             EnMaYts* romani = (EnMaYts*)npcActor;
             s16 romaniType = EN_MA_YTS_GET_TYPE(&romani->actor);
 
-            if ((this->type == MA_YTO_TYPE_DINNER && romaniType == MA_YTS_TYPE_SITTING) ||
-                (this->type == MA_YTO_TYPE_BARN && romaniType == MA_YTS_TYPE_BARN)) {
+            if (((this->type == MA_YTO_TYPE_DINNER) && (romaniType == MA_YTS_TYPE_SITTING)) ||
+                ((this->type == MA_YTO_TYPE_BARN) && (romaniType == MA_YTS_TYPE_BARN))) {
                 this->actor.child = &romani->actor;
                 romani->actor.parent = &this->actor;
                 return true;
@@ -394,8 +395,8 @@ void EnMaYto_DefaultWait(EnMaYto* this, PlayState* play) {
     s16 direction;
 
     direction = rotY - this->actor.yawTowardsPlayer;
-    if (Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.home.rot.y, 5, 0x3000, 0x100) == 0 &&
-        this->animIndex == 1) {
+    if (!Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.home.rot.y, 5, 0x3000, 0x100) &&
+        (this->animIndex == 1)) {
         this->animIndex = 11;
         EnMaYto_ChangeAnim(this, 11);
     }
@@ -439,7 +440,7 @@ void EnMaYto_DefaultDialogueHandler(EnMaYto* this, PlayState* play) {
     }
 
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 5, 0x3000, 0x100);
-    if (this->textId == 0x3395 && this->skelAnime.animation == &gCremiaSpreadArmsStartAnim &&
+    if ((this->textId == 0x3395) && (this->skelAnime.animation == &gCremiaSpreadArmsStartAnim) &&
         Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         EnMaYto_ChangeAnim(this, 4);
     }
@@ -490,12 +491,15 @@ void EnMaYto_DefaultChooseNextDialogue(EnMaYto* this, PlayState* play) {
                 this->textId = 0x3396;
                 Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_CREMIA);
                 break;
+
+            default:
+                break;
         }
     }
 }
 
 void EnMaYto_SetupDinnerWait(EnMaYto* this) {
-    if (CURRENT_DAY == 1 || CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) {
+    if ((CURRENT_DAY == 1) || CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) {
         func_80B90E50(this, 0);
         this->unk31E = 0;
     } else {
@@ -516,7 +520,7 @@ void EnMaYto_DinnerWait(EnMaYto* this, PlayState* play) {
     } else {
         Actor* child = this->actor.child;
 
-        if (child != NULL && Actor_ProcessTalkRequest(child, &play->state)) {
+        if ((child != NULL) && Actor_ProcessTalkRequest(child, &play->state)) {
             Actor_ChangeFocus(&this->actor, play, &this->actor);
             EnMaYto_DinnerStartDialogue(this, play);
             EnMaYto_SetupDinnerDialogueHandler(this);
@@ -524,7 +528,7 @@ void EnMaYto_DinnerWait(EnMaYto* this, PlayState* play) {
             func_800B8614(&this->actor, play, 120.0f);
 
             child = this->actor.child;
-            if (child != NULL && CURRENT_DAY != 2) {
+            if ((child != NULL) && (CURRENT_DAY != 2)) {
                 s16 childDirection = child->shape.rot.y - child->yawTowardsPlayer;
 
                 if (ABS_ALT(childDirection) < 0x4000) {
@@ -536,7 +540,7 @@ void EnMaYto_DinnerWait(EnMaYto* this, PlayState* play) {
 }
 
 void EnMaYto_SetupDinnerDialogueHandler(EnMaYto* this) {
-    if (CURRENT_DAY == 1 || CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) {
+    if ((CURRENT_DAY == 1) || CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) {
         func_80B90E50(this, 1);
     } else {
         func_80B90E50(this, 2);
@@ -682,12 +686,15 @@ void EnMaYto_DinnerChooseNextDialogue(EnMaYto* this, PlayState* play) {
                 this->textId = 0x33A8;
                 Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_CREMIA);
                 break;
+
+            default:
+                break;
         }
     }
 }
 
 void EnMaYto_SetupBarnWait(EnMaYto* this) {
-    if (CURRENT_DAY == 1 || CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) {
+    if ((CURRENT_DAY == 1) || CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) {
         EnMaYto_ChangeAnim(this, 13);
         func_80B90E50(this, 0);
         this->unk31E = 0;
@@ -711,11 +718,11 @@ void EnMaYto_BarnWait(EnMaYto* this, PlayState* play) {
     } else {
         Actor* child = this->actor.child;
 
-        if (child != NULL && Actor_ProcessTalkRequest(child, &play->state)) {
+        if ((child != NULL) && Actor_ProcessTalkRequest(child, &play->state)) {
             Actor_ChangeFocus(&this->actor, play, &this->actor);
             EnMaYto_BarnStartDialogue(this, play);
             EnMaYto_SetupBarnDialogueHandler(this);
-        } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM) || ABS_ALT(direction) < 0x2000) {
+        } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM) || (ABS_ALT(direction) < 0x2000)) {
             func_800B8614(&this->actor, play, 100.0f);
 
             child = this->actor.child;
@@ -727,7 +734,7 @@ void EnMaYto_BarnWait(EnMaYto* this, PlayState* play) {
 }
 
 void EnMaYto_SetupBarnDialogueHandler(EnMaYto* this) {
-    if (CURRENT_DAY == 1 || CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) {
+    if ((CURRENT_DAY == 1) || CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) {
         func_80B90E50(this, 1);
     } else {
         func_80B90E50(this, 2);
@@ -948,6 +955,9 @@ void EnMaYto_AfterMilkRunChooseNextDialogue(EnMaYto* this, PlayState* play) {
                 EnMaYto_SetupPostMilkRunGiveReward(this);
                 EnMaYto_PostMilkRunGiveReward(this, play);
                 break;
+
+            default:
+                break;
         }
     }
 }
@@ -1047,12 +1057,15 @@ void EnMaYto_WarmFuzzyFeelingCs(EnMaYto* this, PlayState* play) {
                     case 3:
                         EnMaYto_ChangeAnim(this, 22);
                         break;
+
+                    default:
+                        break;
                 }
             }
         }
 
         Cutscene_ActorTranslateAndYaw(&this->actor, play, cueChannel);
-        if (sCueId == 2 && this->skelAnime.animation == &gCremiaHugStartAnim &&
+        if ((sCueId == 2) && (this->skelAnime.animation == &gCremiaHugStartAnim) &&
             Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
             EnMaYto_ChangeAnim(this, 20);
         }
@@ -1066,14 +1079,14 @@ void EnMaYto_SetupPostMilkRunWaitDialogueEnd(EnMaYto* this) {
 }
 
 void EnMaYto_PostMilkRunWaitDialogueEnd(EnMaYto* this, PlayState* play) {
-    if (Message_GetState(&play->msgCtx) == TEXT_STATE_DONE || Message_GetState(&play->msgCtx) == TEXT_STATE_5) {
-        if (Message_ShouldAdvance(play) && Message_GetState(&play->msgCtx) == TEXT_STATE_5) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_DONE) || (Message_GetState(&play->msgCtx) == TEXT_STATE_5)) {
+        if (Message_ShouldAdvance(play) && (Message_GetState(&play->msgCtx) == TEXT_STATE_5)) {
             func_800B7298(play, &this->actor, PLAYER_CSMODE_WAIT);
             Message_CloseTextbox(play);
         }
     }
 
-    if (Message_GetState(&play->msgCtx) == TEXT_STATE_NONE && play->msgCtx.bombersNotebookEventQueueCount == 0) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_NONE) && (play->msgCtx.bombersNotebookEventQueueCount == 0)) {
         EnMaYto_SetupPostMilkRunEnd(this);
     }
 }
@@ -1096,7 +1109,7 @@ void EnMaYto_PostMilkRunEnd(EnMaYto* this, PlayState* play) {
 
 void EnMaYto_DefaultStartDialogue(EnMaYto* this, PlayState* play) {
     if (CURRENT_DAY == 1) {
-        if (Player_GetMask(play) != PLAYER_MASK_NONE && gSaveContext.save.playerForm == PLAYER_FORM_HUMAN) {
+        if ((Player_GetMask(play) != PLAYER_MASK_NONE) && (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN)) {
             switch (Player_GetMask(play)) {
                 case PLAYER_MASK_ROMANI:
                     Message_StartTextbox(play, 0x235D, &this->actor);
@@ -1155,7 +1168,7 @@ void EnMaYto_DefaultStartDialogue(EnMaYto* this, PlayState* play) {
 void EnMaYto_DinnerStartDialogue(EnMaYto* this, PlayState* play) {
     switch (CURRENT_DAY) {
         case 1:
-            if (Player_GetMask(play) != PLAYER_MASK_NONE && gSaveContext.save.playerForm == PLAYER_FORM_HUMAN) {
+            if ((Player_GetMask(play) != PLAYER_MASK_NONE) && (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN)) {
                 switch (Player_GetMask(play)) {
                     case PLAYER_MASK_ROMANI:
                         Message_StartTextbox(play, 0x235D, &this->actor);
@@ -1216,6 +1229,9 @@ void EnMaYto_DinnerStartDialogue(EnMaYto* this, PlayState* play) {
                 Message_StartTextbox(play, 0x33A7, &this->actor);
                 this->textId = 0x33A7;
             }
+            break;
+
+        default:
             break;
     }
 }
@@ -1324,7 +1340,7 @@ void EnMaYto_UpdateEyes(EnMaYto* this) {
 void func_80B90E50(EnMaYto* this, s16 arg1) {
     EnMaYts* romani = (EnMaYts*)this->actor.child;
 
-    if (romani != NULL && romani->actor.id == ACTOR_EN_MA_YTS) {
+    if ((romani != NULL) && (romani->actor.id == ACTOR_EN_MA_YTS)) {
         romani->unk_32C = arg1;
     }
 }
@@ -1344,7 +1360,7 @@ void EnMaYto_SetFaceExpression(EnMaYto* this, s16 overrideEyeTexIndex, s16 mouth
 }
 
 void EnMaYto_InitFaceExpression(EnMaYto* this) {
-    if (CURRENT_DAY == 1 || CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) {
+    if ((CURRENT_DAY == 1) || CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) {
         EnMaYto_SetFaceExpression(this, 0, 1);
         EnMaYto_SetRomaniFaceExpression(this, 0, 0);
     } else {
@@ -1372,27 +1388,33 @@ s32 EnMaYto_HasSpokenToPlayerToday(void) {
                 return true;
             }
             break;
+
+        default:
+            break;
     }
     return false;
 }
 
 s32 EnMaYto_HasSpokenToPlayer(void) {
-    // Please note no case here has a `break`.
     switch (CURRENT_DAY) {
         case 3:
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_13_10)) {
                 return true;
             }
-
+            // fallthrough
         case 2:
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_13_08)) {
                 return true;
             }
-
+            // fallthrough
         case 1:
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_13_04)) {
                 return true;
             }
+            break;
+
+        default:
+            break;
     }
     return false;
 }
@@ -1409,6 +1431,9 @@ void EnMaYto_SetTalkedFlag(void) {
 
         case 3:
             SET_WEEKEVENTREG(WEEKEVENTREG_13_10);
+            break;
+
+        default:
             break;
     }
 }
@@ -1458,7 +1483,8 @@ void EnMaYto_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
 
     OPEN_DISPS(play->state.gfxCtx);
-    if (this->type == MA_YTO_TYPE_BARN && CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) {
+
+    if ((this->type == MA_YTO_TYPE_BARN) && CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) {
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, gCremiaWoodenBoxDL);
     }
