@@ -564,7 +564,7 @@ void Target_Draw(TargetContext* targetCtx, PlayState* play) {
         }
     }
 
-    actor = targetCtx->unk_94;
+    actor = targetCtx->targetableOption;
     if ((actor != NULL) && !(actor->flags & ACTOR_FLAG_CANT_LOCK_ON)) {
         TatlColor* color = &sTatlColorList[actor->category];
 
@@ -586,52 +586,52 @@ void Target_Draw(TargetContext* targetCtx, PlayState* play) {
 // OoT: func_8002C7BC
 void Target_Update(TargetContext* targetCtx, Player* player, Actor* targetedActor, PlayState* play) {
     s32 pad;
-    Actor* sp68 = NULL;
+    Actor* actor = NULL;
     s32 category;
     Vec3f projectedPos;
     f32 invW;
 
     if ((player->targetedActor != NULL) && (player->unk_AE3[player->unk_ADE] == 2)) {
-        targetCtx->unk_94 = NULL;
+        targetCtx->targetableOption = NULL;
     } else {
-        Target_800BB8EC(play, &play->actorCtx, &sp68, &D_801ED920, player);
-        targetCtx->unk_94 = sp68;
+        Target_800BB8EC(play, &play->actorCtx, &actor, &D_801ED920, player);
+        targetCtx->targetableOption = actor;
     }
 
     if (targetCtx->unk8C != NULL) {
-        sp68 = targetCtx->unk8C;
+        actor = targetCtx->unk8C;
         targetCtx->unk8C = NULL;
     } else if (targetedActor != NULL) {
-        sp68 = targetedActor;
+        actor = targetedActor;
     }
 
-    if (sp68 != NULL) {
-        category = sp68->category;
+    if (actor != NULL) {
+        category = actor->category;
     } else {
         category = player->actor.category;
     }
 
-    if ((sp68 != targetCtx->arrowPointedActor) || (category != targetCtx->arrowPointedActorCategory)) {
-        targetCtx->arrowPointedActor = sp68;
+    if ((actor != targetCtx->arrowPointedActor) || (category != targetCtx->arrowPointedActorCategory)) {
+        targetCtx->arrowPointedActor = actor;
         targetCtx->arrowPointedActorCategory = category;
         targetCtx->unk40 = 1.0f;
     }
 
-    if (sp68 == NULL) {
-        sp68 = &player->actor;
+    if (actor == NULL) {
+        actor = &player->actor;
     }
 
     if (!Math_StepToF(&targetCtx->unk40, 0.0f, 0.25f)) {
         f32 temp_f0 = 0.25f / targetCtx->unk40;
-        f32 x = sp68->focus.pos.x - targetCtx->unk0.x;
-        f32 y = (sp68->focus.pos.y + (sp68->targetArrowOffset * sp68->scale.y)) - targetCtx->unk0.y;
-        f32 z = sp68->focus.pos.z - targetCtx->unk0.z;
+        f32 x = actor->focus.pos.x - targetCtx->unk0.x;
+        f32 y = (actor->focus.pos.y + (actor->targetArrowOffset * actor->scale.y)) - targetCtx->unk0.y;
+        f32 z = actor->focus.pos.z - targetCtx->unk0.z;
 
         targetCtx->unk0.x += x * temp_f0;
         targetCtx->unk0.y += y * temp_f0;
         targetCtx->unk0.z += z * temp_f0;
     } else {
-        Target_SetColors(targetCtx, sp68, category, play);
+        Target_SetColors(targetCtx, actor, category, play);
     }
 
     if ((targetedActor != NULL) && (targetCtx->unk4B == 0)) {
@@ -3443,7 +3443,7 @@ u8 D_801AED8C[] = {
     ACTORCAT_CHEST, ACTORCAT_SWITCH, ACTORCAT_PROP, ACTORCAT_MISC,       ACTORCAT_DOOR, ACTORCAT_SWITCH,
 };
 
-void Target_800BB8EC(PlayState* play, ActorContext* actorCtx, Actor** arg2, Actor** arg3, Player* player) {
+void Target_800BB8EC(PlayState* play, ActorContext* actorCtx, Actor** targetableP, Actor** arg3, Player* player) {
     u8* actorCategories;
     s32 i;
 
@@ -3469,9 +3469,9 @@ void Target_800BB8EC(PlayState* play, ActorContext* actorCtx, Actor** arg2, Acto
     }
 
     if (sTargetableNearestActor == NULL) {
-        *arg2 = sTargetableHighestPriorityActor;
+        *targetableP = sTargetableHighestPriorityActor;
     } else {
-        *arg2 = sTargetableNearestActor;
+        *targetableP = sTargetableNearestActor;
     }
 
     if (D_801ED8C0 == NULL) {

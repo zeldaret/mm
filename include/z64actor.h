@@ -373,7 +373,7 @@ typedef struct TargetContext {
     /* 0x50 */ TargetContextEntry unk50[3];
     /* 0x8C */ Actor* unk8C;
     /* 0x90 */ Actor* bgmEnemy;
-    /* 0x94 */ Actor* unk_94;
+    /* 0x94 */ Actor* targetableOption;
 } TargetContext; // size = 0x98
 
 typedef enum TargetMode {
