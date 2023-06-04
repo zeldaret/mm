@@ -480,7 +480,7 @@ void func_80BAFDB4(EnZod* this, PlayState* play) {
     EnZod_UpdateAnimation(this);
     if (CutsceneManager_IsNext(this->actor.csId)) {
         CutsceneManager_Start(this->actor.csId, &this->actor);
-        func_800B7298(play, NULL, 0x44);
+        func_800B7298(play, NULL, PLAYER_CSMODE_68);
         Message_StartTextbox(play, 0x103A, &this->actor);
         this->actionFunc = EnZod_SetupRehearse;
     } else {
